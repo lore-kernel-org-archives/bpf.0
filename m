@@ -1,88 +1,35 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A8937BE6F
-	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 19:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54AF3238159;
+	Sun, 29 Mar 2026 21:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774812597; cv=none; b=aFC+snED+vlUr+7+pSvzl1uyh+wWJuNJQ90d9qwgZeCYpqGZOGAKOOFmU0Khhy/PUO922Xwz5q1eYnYn/pUQx1APADIW5v1JIYULH1VXN00oFG0kx33/TTsdWtKG1+bK4oxnrWZ3fJNVxdoB3p1OtY66TmFWeVgyxudW19WZFtk=
+	t=1774819228; cv=none; b=Cxitx5tJXCje0CwFk5aGk1sIWMsXscxIyNWb0czTRkNLngd2AF0ZdUF9bd2xNJ5jqDKbCOSX0iHp6bw4meLE9wwHCTCjnFnqzGeCmXEFPxwqjPybGkIcXe7kpVPB3HDjwKl+1ZYn8oWCdrwNGzn/Y6qQTqETWvQrXUevc4zAz2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774812597; c=relaxed/simple;
-	bh=TVGIvwq7++r98D6MzS4FnxGtSITtMoooJkrNi7DUieM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bhVbHJ7gP59uody3WBiLeQR/oP4yHuzJxBIKw/gnJOZrQvzeWzaK8p1YqLup0Di31Rg9rZXckCC2q8be8gzQVyTOcN9l9TD8guzKvd5SsSi45DANwgukw/bCu/QtcT1CU5JHz5GAG9XjddZPICIyQuL+SdUr+vSzTctKIIVuoO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qLDMpSKo; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774819228; c=relaxed/simple;
+	bh=n6fENrOsfUQGSxoAz2iQL/xfQPCbNOjVsTxATEdu3Z8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rwjL+blBPrLJZ3Ko3uMvonv+BFWk5ru9fdhuAodRMJNrmT+eZ8WtJHrfuoBJsjLJ+YB9LsWfGuT/SrPYagEwvhCxs+B5R4RKIFg07WWtvQBeKREksya0lPJuLo+YXpf72RuqH0GaS7GOMzU/8rDS2WTU8xOxdUdaiRl3EPhU7Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UjWe39Lu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qLDMpSKo"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b0ba3bfe16so29685075ad.1
-        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 12:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774812594; x=1775417394; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CTz6k9vPuNqocM97eUGslil5NIJ+KRt/46MukpBHLQ8=;
-        b=qLDMpSKovunWsOxGdgNz/UsF7iACexAh3YBkrjiTziSN7bu6NglzLZ33u8Z1Pj2/1a
-         ZR52nko01rY5NwcNt8qy6SYDbAtb489lQKXz1uXMASVQCvs8sgxUriklFyvwgOl7poXc
-         lf+/inv8FU+q61SWkTQE+rFjLv76aiGHn/UaF+onC9PgVEgA1mn+c8JICLq/tkOidhzd
-         MIXLx1JuGapYXxaeSwa//2Q4KLfP5x5tuJEo1TfSsm+wl8qrJZyOKy1o1lLb4f0jZR2Q
-         AfyZTyVxz79rFjxJH4Tki3z54iECnYNnu/XZ9pAxaXa1LIaBcb0R9sWgEnb/wxVT+SAn
-         3Oaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774812594; x=1775417394;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CTz6k9vPuNqocM97eUGslil5NIJ+KRt/46MukpBHLQ8=;
-        b=eJ0MGzPX5JKygkA8fVXO9ZTB2cUCsHCpiX/s1F5+y3t4U0+70zLKmg4MU4Y1ypIt4K
-         GpIdIYbIcUASBwIKyhj+cZIyOvdeBLBZ/2/F3ofgx+M9QiD+ggUXJ6ephogI1or3Tnpc
-         x6WWEP7vYg/onAyaobkumAUofiT/wPnpNfQ9F/IyaWljj+EUCHdESVjTWoigz9v6cBCm
-         AZymmD15tdVO8nx9wO75UCJhk7TxHFPNyL9r3ekpRoJxCa599E2RzRfnNkTq25OxwGQ0
-         St6z6p0fMDZtS5rGpJMMB4cIIaPrtcuAYnFx3L7nXGyH7Beh3DzKlnm5bLREKfsk4mlx
-         1e+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW7Zh9TaBzl9TSfmBsF2okvL73J1fa2i7JZSyoLDS/LyNGzEBEbKbTz3rB9IkfAbGkF95Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3CZyBC5jhxbo3/qLMnkkEcY9BKLAhYJKZGr/kNCfQDpQbH2Ng
-	id3v5L7x4rVS0Kil16xO6POeR733Q2vVSoBxUxSB6LD6ikJVZpj+g1+4
-X-Gm-Gg: ATEYQzwm0sInMyjgZ8hmL60+/Q0G3rC2DHr2AkwY63rMVXv/X6HBLnUE2y4dSg9Yl7A
-	spDB4zGoa3bEyVIvPv2GtVu+JsZ9Akn6y00Ojz7heOHBiwmrS7dJpoek0uKwL4ODXTVjGBmPEUh
-	n6y1Jfm3G8NpfbFXIVdKnO6GVKqZJL0xge1vBmUAslqEMvoGMm+4Dk6WAjkGASEOHU0vVszQ0p7
-	2JTvxRPQdnol8VtBRWJ4/eiTuYtvXpqCeF84oFDdezhQxYj/7pKTiQHVTRKzn61ejV8ThlwvRPx
-	l5WuuVBtYeezUZ0RbkBOfj1w0KNQYkNTz+8ry2GjaakSwTd6sda9i8dryZYipSRuySLKqmg9uRc
-	qkNp472Cv0afUTh7Dy23bRmPMb/j2A8T9h4dgdvhVosg9VZv/I7XXj1yQeu7wmIiOW38fjpt4AB
-	s43La8c0Zau8x9mHSOpnbvLutjHTnnOCv1rngmQL3YvqiB5w==
-X-Received: by 2002:a17:902:ea08:b0:2b2:3eec:c75b with SMTP id d9443c01a7336-2b23eecd00cmr67930985ad.2.1774812594514;
-        Sun, 29 Mar 2026 12:29:54 -0700 (PDT)
-Received: from hyj0824TXAir.sustech.edu.cn ([2001:da8:201d:1103:b2f6:47fe:9572:b2af])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242642905sm68959585ad.17.2026.03.29.12.29.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 12:29:54 -0700 (PDT)
-From: Linpu Yu <linpu5433@gmail.com>
-To: magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: sdf@fomichev.me,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	bjorn@kernel.org,
-	linux-kernel@vger.kernel.org,
-	yuantan098@gmail.com,
-	yifanwucs@gmail.com
-Subject: [PATCH 1/1] xskmap: reject TX-only AF_XDP sockets
-Date: Mon, 30 Mar 2026 03:29:42 +0800
-Message-ID: <6584463e576b7bb3619dc302cfecfb8ca56bc86a.1774701288.git.linpu5433@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.1774701288.git.linpu5433@gmail.com>
-References: <cover.1774701288.git.linpu5433@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UjWe39Lu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34079C116C6;
+	Sun, 29 Mar 2026 21:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774819228;
+	bh=n6fENrOsfUQGSxoAz2iQL/xfQPCbNOjVsTxATEdu3Z8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=UjWe39LuQbr7D14zmz/hjLarrWuipJM9gIu1FqFpFcE02g7VINVtrm1ygdVlR7oBQ
+	 rgjZquPpPBevsx8RsvE2q2qpdhZQEsBqjqDDamImY8KSwCIytylZHxNQuDol//d6MZ
+	 yuZRVnzpU7paOB+ongoSg+1XFRoZp6OBt9lrZUrO9Wn/QC/CDr/FhEU9xdRn7SF7i3
+	 UUYN8O/Anm6bOpGEjl4IT+JYvDilb8/LzKJm0nTQaRbElrMg7Bwid1Ad98PAi9OXcf
+	 P9oJs2rlK2JjPGvJ3zYu5/h9fhYxxCrCqansxd2Fb4BDC3X7LeQoj+yNJ//IBXlfPz
+	 fZq17VNX3+3Kg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02C983930012;
+	Sun, 29 Mar 2026 21:20:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,41 +37,60 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v5 0/6] bnxt_en: Add XDP RSS hash metadata
+ support
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177481921279.467966.1212370025662172663.git-patchwork-notify@kernel.org>
+Date: Sun, 29 Mar 2026 21:20:12 +0000
+References: <20260325201139.2501937-1-carges@cloudflare.com>
+In-Reply-To: <20260325201139.2501937-1-carges@cloudflare.com>
+To: Chris J Arges <carges@cloudflare.com>
+Cc: netdev@vger.kernel.org, michael.chan@broadcom.com,
+ pavan.chebbi@broadcom.com, davem@davemloft.net, joe@dama.to,
+ gospo@broadcom.com, kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com
 
-Reject TX-only AF_XDP sockets from XSKMAP updates. Redirected
-packets always enter the Rx path, where the kernel expects the
-selected socket to have an Rx ring. A TX-only socket can
-currently be inserted into an XSKMAP, and redirecting a packet
-to it crashes the kernel in xsk_generic_rcv().
+Hello:
 
-Keep TX-only AF_XDP sockets valid for pure Tx use, but prevent
-them from being published through XSKMAP.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Fixes: fbfc504a24f5 ("bpf: introduce new bpf AF_XDP map type BPF_MAP_TYPE_XSKMAP")
-Reported-by: Juefei Pu <tomapufckgml@gmail.com>
-Reported-by: Yuan Tan <yuantan098@gmail.com>
-Signed-off-by: Xin Liu <bird@lzu.edu.cn>
-Signed-off-by: Yifan Wu <yifanwucs@gmail.com>
-Signed-off-by: Linpu Yu <linpu5433@gmail.com>
----
- net/xdp/xskmap.c | 4 ++++
- 1 file changed, 4 insertions(+)
+On Wed, 25 Mar 2026 15:09:46 -0500 you wrote:
+> This series adds XDP RSS hash metadata extraction support for the bnxt_en
+> driver and includes selftests to validate the functionality. I was able
+> to test this on a BCM57414 NIC.
+> 
+> Patches 1-4 implement the driver support:
+>   - Patch 1 adds bnxt_xdp_buff to wrap xdp_buff with
+>     pointers to the hardware RX completion descriptors and the
+>     completion type. This is similar to other driver implementations.
+>   - Patch 2 adds xmo_rx_hash callback for CMP_TYPE_RX_L2_CMP completions.
+>   - Patch 3 moves bnxt_rss_ext_op to bnxt.h
+>   - Patch 4 adds handling for CMP_TYPE_RX_L2_V3_CMP completions
+> 
+> [...]
 
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index afa457506274c..6dac59ebb5cf0 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -184,6 +184,10 @@ static long xsk_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	}
- 
- 	xs = (struct xdp_sock *)sock->sk;
-+	if (!READ_ONCE(xs->rx)) {
-+		sockfd_put(sock);
-+		return -EINVAL;
-+	}
- 
- 	map_entry = &m->xsk_map[i];
- 	node = xsk_map_node_alloc(m, map_entry);
+Here is the summary with links:
+  - [net-next,v5,1/6] bnxt_en: use bnxt_xdp_buff for xdp context
+    https://git.kernel.org/netdev/net-next/c/542d3ec4508f
+  - [net-next,v5,2/6] bnxt_en: Implement XDP RSS hash metadata extraction
+    https://git.kernel.org/netdev/net-next/c/e5648b08cbfc
+  - [net-next,v5,3/6] bnxt_en: Move bnxt_rss_ext_op into header
+    https://git.kernel.org/netdev/net-next/c/4a037aeb6bc8
+  - [net-next,v5,4/6] bnxt_en: Implement XDP RSS hash metadata extraction for V3_CMP
+    https://git.kernel.org/netdev/net-next/c/5ec22d5f2afc
+  - [net-next,v5,5/6] selftests: net: move common xdp.py functions into lib
+    https://git.kernel.org/netdev/net-next/c/4ce06406958b
+  - [net-next,v5,6/6] selftests: drv-net: xdp: Add rss_hash metadata tests
+    https://git.kernel.org/netdev/net-next/c/e3cdf6cf5fc6
+
+You are awesome, thank you!
 -- 
-2.53.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
