@@ -1,58 +1,79 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F48376472;
-	Sat, 28 Mar 2026 23:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1C076025
+	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 02:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774739186; cv=none; b=VmjplWSTZqsAMoBe42xyB72i8dYLulfZGSDiXeroQyVVzGlV1FuMDlmdyN7u5/xmYJ9qHWASKNC/CC7OcrA4eXprmEA7E7Q9a3bH1EJzeMfW6hyAqeE2/evFzdZO2aN4+w4+Z/2fdLjAsAKaLLDfwTm2XxpBtVysUTCyzRVYDnQ=
+	t=1774750078; cv=none; b=X6AzunhOyxFIjlFF/zlWtgn3+R5ValK971WH3BOJKVmer4v7+U2bpYFmwxbETbsnJrfiUGVAcDR4yBR/Zoood7671jkaFRUFgeb1mN/Q4hyKlu/UwjN/0YIplc8BrxVSavX3GGU3mtadKCA9rJmaFIrxBBfpXaqP2urawT23ujg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774739186; c=relaxed/simple;
-	bh=ddQu8CSa0I7jxFLa0WKmApTPUS6v4sR8UbmxjD+kxuw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T18/O0D2uC7EH+tqe5tXKrCJRdATrlWfZIDsWqog7T/Y59G1RlbQJcA5gp+4GzSC331oqkgtDws6oVvlIAOznisGY4NabmDet+tWJt8t4uGz7H7jQuFiN9/75LB0G+9YKQFUbuL2f3x/myoF951ohycRDkPKUeB6upXrABoHeXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=2FXZMexg; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1774750078; c=relaxed/simple;
+	bh=UrBw3OrCyzbCVVqeLEDrPOWj9cp3c+L/4qLj7+RldV4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X96tgLOBqXvIIC5nOwhiIzXYwER7aeE7eL9iqjBqRTgvVLH5E+0kbKPRDfnBZCPI7OAxtSvpZDY6Rjme3QUCG5tnEcE7xVSviO/TygTZIPf0BPHUsxpqL3C9QyyYjAa/+zkl3SVjlvttjdx0f2xCjoB3oA8vrykPf/euq63xhjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n+tF8Jmj; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="2FXZMexg"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BB993A5878;
-	Sun, 29 Mar 2026 00:06:22 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1774739183; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=XYuC3U0C4Bmt4rfQl8hUoMOen7Yhc3t7l8TDIPRipZY=;
-	b=2FXZMexgYqt0bLpZoyiTXsQzYUSn56m/0T11jxnXkH46UlgHU5/x4nJSE4yrWgA2vt4kQH
-	GPs4/69yaAo+qHC93tlIJZRciMHD4Jxx9CeunHumvplQ1pdL2F9xryOUU8X2pu8Id2GrPq
-	pjMUJnvI582lUfziAhizT/XsrTB0xiVfJD82dFNJ1Ew66Hgc6ASk9pYcC/2MCmeelPZk71
-	ZPT9fkwJdgEnrr0mqyeEKEmUV6wrb15Wi8IgYnKBckM25f29Jfg000JBZh3dlxHNr3qDyb
-	xvAPcZ5r9JU4EX7a60Pz0RzBcBJRauErGxVqcNJmtojq/rENITL6v0wExhP/Sg==
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: netdev@vger.kernel.org
-Cc: Justin Chen <justin.chen@broadcom.com>,
-	Simon Horman <horms@kernel.org>,
-	Nicolai Buchwitz <nb@tipi-net.de>,
-	Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v5 6/6] net: bcmgenet: add XDP statistics counters
-Date: Sun, 29 Mar 2026 00:05:09 +0100
-Message-ID: <20260328230513.415790-7-nb@tipi-net.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260328230513.415790-1-nb@tipi-net.de>
-References: <20260328230513.415790-1-nb@tipi-net.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n+tF8Jmj"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2aaf43014d0so22701655ad.2
+        for <bpf@vger.kernel.org>; Sat, 28 Mar 2026 19:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774750076; x=1775354876; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hiv8UpfCn7kyMWwzp6anyXzVhdhv6oz+YwTKUvhT6CM=;
+        b=n+tF8JmjKE/eTuBSly29kZkSv+QW459OwRwjoufKJMewAgJTdpAGhGTI9LNqTL6Lfb
+         wwGSIS72ilNuhStyv5qMIrdJXsZRC3eMzPHK9FMgJK8QqxKYYLqjMLRSaFaJyD2PfOxR
+         Kag7zAy1EgR++aVRZqvJw8UBOXvi5MLqnvySwGtpivTAbDKAtlFi+T6BA/FNY4ddMePN
+         PxrOkEgw0UrovvggHDgHswKoaKhKLEM37wpexzcXFkDqKmCGeU/NtY6pEcUlfQX8/Jhd
+         QrbAFNKd7RsD+7z7bC/6w2uDeMb+k2P19R2tS3/yeKskOO9qeKJwqCLbzuNFVrhAFe/M
+         O+sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774750076; x=1775354876;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hiv8UpfCn7kyMWwzp6anyXzVhdhv6oz+YwTKUvhT6CM=;
+        b=jTOpX47MnAA9y5lMde9N2BYJZU9Ta3q4fbPQR++9OmhWLACcUc8c1dQZ62YifIRQjP
+         1Fc6WlI1yS6YzU7VcnL+Nggn/9jqNmfH+GdJcN3v4N2di/3u4kYPB/KSphgE0aHxwOnu
+         T4GRU4EsHZYwyT/F4/uc3TezQjkjTQ5mc1Y1xC1PF/Sc7l4mn7QjBDBGFlBuLui86QhG
+         D7t/xmi3PF+ejmX0cngwun3tU44ooPmrYxwjciPIk1wlsafBfTpECbjRrvNp50mzNnmm
+         QVJvXBEaWR93sw/LjW5+JZiNqbP807FHLZa57E3zEUbcTJK5x+NxEhPwiSIr3Puku9Xn
+         Yd6w==
+X-Gm-Message-State: AOJu0Yz2dkrC1b/DYShXiYGPl/NCJuwyjO1CDgsXIoMM7zmtVSFmWsht
+	q6DtJ9/EV8E1Vorn7cvPVdiR7H7j/H57lZ2UxvFsk726Wqr22JRzGgFtQJ89Lj7r
+X-Gm-Gg: ATEYQzxP+yffXs2iVeE0P+k2cjQNlhWr4nbHTejFBnE970tQnjOLRaGTgwYzUzIH6L4
+	WntBXW/eG700xJtaGgMStCGGoKlEDfQnVzq4tmM9ciDzlCMz0OI72OS93IKE0uRQoX5cpnHSVK4
+	JXazNVbfyxEsDtIZ50twBEn3rHFPfS9209Ib/UBQuvNcSId7d/O8+sUeiRvf6Ss2PaDFCl7WlNn
+	nJCtBlUt2txbaDh167meqNmJtQqDkL/3pps1bvYd87S9xUJAuQ3BirP2foGe27FyI+298A4jo8w
+	3sGhvH8o5tgHUApZ41m9eFB0GOH+AWyu+h8jYAIb8veunGbNnFwzNbjYv4mkBxNvZaJK1GPGuNx
+	9HRFXK/U/uIb4xyRVcB4K9O2TTuU2qa4QsvtF2BQiwKA5tRDz3cA7mglXoswEbYtqMpqhHGOStW
+	fTD8NprmD84cO0hiSiaZU4SIBrB/Von+ee5/F0ehIxZO8S2/9Yk1DsS9yRGR9W7g==
+X-Received: by 2002:a17:902:e883:b0:2b0:6323:1758 with SMTP id d9443c01a7336-2b0cdd1ad56mr86655935ad.48.1774750075873;
+        Sat, 28 Mar 2026 19:07:55 -0700 (PDT)
+Received: from cps-manycore-1.. ([143.248.136.81])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427afa57sm43482695ad.71.2026.03.28.19.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Mar 2026 19:07:55 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz78@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	Sechang Lim <rhkrqnwk98@gmail.com>
+Subject: [PATCH bpf v2] bpf: Fix RCU stall in bpf_fd_array_map_clear()
+Date: Sun, 29 Mar 2026 02:07:48 +0000
+Message-ID: <20260329020748.3649741-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,104 +81,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Expose per-action XDP counters via ethtool -S: xdp_pass, xdp_drop,
-xdp_tx, xdp_tx_err, xdp_redirect, and xdp_redirect_err.
+Add a missing cond_resched() in bpf_fd_array_map_clear() loop.
+Other similar loops in the same file already have one.
 
-These use the existing soft MIB infrastructure and are incremented in
-bcmgenet_run_xdp() alongside the existing driver statistics.
+For PROG_ARRAY maps with many entries this loop calls
+prog_array_map_poke_run() per entry which can be expensive, and
+without yielding this can cause RCU stalls under load:
 
-Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+  rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+  rcu: 	(detected by 0, t=6502 jiffies, g=729293, q=305 ncpus=1)
+  rcu: All QSes seen, last rcu_preempt kthread activity 6502 (4295096514-4295090012), jiffies_till_next_fqs=1, root ->qsmask 0x0
+  rcu: rcu_preempt kthread starved for 6502 jiffies! g729293 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
+  rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+  rcu: RCU grace-period kthread stack dump:
+  task:rcu_preempt     state:R  running task     stack:0     pid:15    tgid:15    ppid:2      task_flags:0x208040 flags:0x00004000
+  Call Trace:
+   <TASK>
+   context_switch kernel/sched/core.c:5382 [inline]
+   __schedule+0x697/0x1430 kernel/sched/core.c:6767
+   __schedule_loop kernel/sched/core.c:6845 [inline]
+   schedule+0x10a/0x3e0 kernel/sched/core.c:6860
+   schedule_timeout+0x145/0x2c0 kernel/time/sleep_timeout.c:99
+   rcu_gp_fqs_loop+0x255/0x1350 kernel/rcu/tree.c:2046
+   rcu_gp_kthread+0x347/0x680 kernel/rcu/tree.c:2248
+   kthread+0x465/0x880 kernel/kthread.c:464
+   ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
+   ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
+   </TASK>
+  rcu: Stack dump where RCU GP kthread last ran:
+  CPU: 0 UID: 0 PID: 30932 Comm: kworker/0:2 Not tainted 6.14.0-13195-g967e8def1100 #2 PREEMPT(undef)
+  Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+  Workqueue: events prog_array_map_clear_deferred
+  RIP: 0010:write_comp_data+0x38/0x90 kernel/kcov.c:246
+  Call Trace:
+   <TASK>
+   prog_array_map_poke_run+0x77/0x380 kernel/bpf/arraymap.c:1096
+   __fd_array_map_delete_elem+0x197/0x310 kernel/bpf/arraymap.c:925
+   bpf_fd_array_map_clear kernel/bpf/arraymap.c:1000 [inline]
+   prog_array_map_clear_deferred+0x119/0x1b0 kernel/bpf/arraymap.c:1141
+   process_one_work+0x898/0x19d0 kernel/workqueue.c:3238
+   process_scheduled_works kernel/workqueue.c:3319 [inline]
+   worker_thread+0x770/0x10b0 kernel/workqueue.c:3400
+   kthread+0x465/0x880 kernel/kthread.c:464
+   ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
+   ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
+   </TASK>
+
+Fixes: da765a2f5993 ("bpf: Add poke dependency tracking for prog array maps")
+Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 15 +++++++++++++++
- drivers/net/ethernet/broadcom/genet/bcmgenet.h |  6 ++++++
- 2 files changed, 21 insertions(+)
+ kernel/bpf/arraymap.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 0a857625af4a..29703398d28c 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -1170,6 +1170,13 @@ static const struct bcmgenet_stats bcmgenet_gstrings_stats[] = {
- 	STAT_GENET_SOFT_MIB("tx_realloc_tsb", mib.tx_realloc_tsb),
- 	STAT_GENET_SOFT_MIB("tx_realloc_tsb_failed",
- 			    mib.tx_realloc_tsb_failed),
-+	/* XDP counters */
-+	STAT_GENET_SOFT_MIB("xdp_pass", mib.xdp_pass),
-+	STAT_GENET_SOFT_MIB("xdp_drop", mib.xdp_drop),
-+	STAT_GENET_SOFT_MIB("xdp_tx", mib.xdp_tx),
-+	STAT_GENET_SOFT_MIB("xdp_tx_err", mib.xdp_tx_err),
-+	STAT_GENET_SOFT_MIB("xdp_redirect", mib.xdp_redirect),
-+	STAT_GENET_SOFT_MIB("xdp_redirect_err", mib.xdp_redirect_err),
- 	/* Per TX queues */
- 	STAT_GENET_Q(0),
- 	STAT_GENET_Q(1),
-@@ -2425,6 +2432,7 @@ static unsigned int bcmgenet_run_xdp(struct bcmgenet_rx_ring *ring,
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 33de68c95..5e25e0353 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -1015,8 +1015,10 @@ static void bpf_fd_array_map_clear(struct bpf_map *map, bool need_defer)
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	int i;
  
- 	switch (act) {
- 	case XDP_PASS:
-+		priv->mib.xdp_pass++;
- 		return XDP_PASS;
- 	case XDP_TX:
- 		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
-@@ -2437,6 +2445,7 @@ static unsigned int bcmgenet_run_xdp(struct bcmgenet_rx_ring *ring,
- 		    sizeof(struct status_64)) {
- 			page_pool_put_full_page(ring->page_pool, rx_page,
- 						true);
-+			priv->mib.xdp_tx_err++;
- 			return XDP_DROP;
- 		}
- 		xdp->data -= sizeof(struct status_64);
-@@ -2456,19 +2465,24 @@ static unsigned int bcmgenet_run_xdp(struct bcmgenet_rx_ring *ring,
- 						      xdpf, false))) {
- 			spin_unlock(&tx_ring->lock);
- 			xdp_return_frame_rx_napi(xdpf);
-+			priv->mib.xdp_tx_err++;
- 			return XDP_DROP;
- 		}
- 		bcmgenet_xdp_ring_doorbell(priv, tx_ring);
- 		spin_unlock(&tx_ring->lock);
-+		priv->mib.xdp_tx++;
- 		return XDP_TX;
- 	case XDP_REDIRECT:
- 		if (unlikely(xdp_do_redirect(priv->dev, xdp, prog))) {
-+			priv->mib.xdp_redirect_err++;
- 			page_pool_put_full_page(ring->page_pool, rx_page,
- 						true);
- 			return XDP_DROP;
- 		}
-+		priv->mib.xdp_redirect++;
- 		return XDP_REDIRECT;
- 	case XDP_DROP:
-+		priv->mib.xdp_drop++;
- 		page_pool_put_full_page(ring->page_pool, rx_page, true);
- 		return XDP_DROP;
- 	default:
-@@ -2476,6 +2490,7 @@ static unsigned int bcmgenet_run_xdp(struct bcmgenet_rx_ring *ring,
- 		fallthrough;
- 	case XDP_ABORTED:
- 		trace_xdp_exception(priv->dev, prog, act);
-+		priv->mib.xdp_drop++;
- 		page_pool_put_full_page(ring->page_pool, rx_page, true);
- 		return XDP_ABORTED;
- 	}
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.h b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-index 8966d32efe2f..c4e85c185702 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-@@ -156,6 +156,12 @@ struct bcmgenet_mib_counters {
- 	u32	tx_dma_failed;
- 	u32	tx_realloc_tsb;
- 	u32	tx_realloc_tsb_failed;
-+	u32	xdp_pass;
-+	u32	xdp_drop;
-+	u32	xdp_tx;
-+	u32	xdp_tx_err;
-+	u32	xdp_redirect;
-+	u32	xdp_redirect_err;
- };
+-	for (i = 0; i < array->map.max_entries; i++)
++	for (i = 0; i < array->map.max_entries; i++) {
+ 		__fd_array_map_delete_elem(map, &i, need_defer);
++		cond_resched();
++	}
+ }
  
- struct bcmgenet_tx_stats64 {
+ static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
 -- 
-2.51.0
+2.43.0
 
