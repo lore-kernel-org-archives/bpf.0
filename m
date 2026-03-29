@@ -1,60 +1,62 @@
-Received: from mail-oo1-f65.google.com (mail-oo1-f65.google.com [209.85.161.65])
+Received: from mail-oa1-f65.google.com (mail-oa1-f65.google.com [209.85.160.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4BF21CA0D
-	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 21:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED2321CA0D
+	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 21:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774819538; cv=none; b=KCiOjH1ll1SHTj13lOt2hQc9efzpP/Z0A98Oo7rwxf5tOUQuiSG+93xZXiBptUv/jNpDvG9wkS7EAFmGSydqhOGYgQZQvpCTd481Ts8496KdsgxVrRn5H/ZkSXIwUoYwTjPinzsyEiuHjKDxnX2++/yC/25UtffUzmvY2DJ8GZ8=
+	t=1774819541; cv=none; b=oK7KJL1mo+FItQuGb7pqP1gWaIefao6P0pF39X5fwMjfxxs9QzScoR0qriMGQYNfmUhdzWlKx0fRAlO1VJg4IouZAjhlUlnsIaJhDf2qRJFcBnJsPp4AXbH3msX7pzaY0JvavcXpseytBJsKesKkjJBST5aSzGY4xoP/ckD8rdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774819538; c=relaxed/simple;
-	bh=S3/3gBJZ2h6FxiVPQhAy84nUWcUR6o02YrFnTV33i8w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LDrHHJer1yZWm2c41swfUcUnjCxY6xlGMHPwOYb9hKse9Du6zShJ53Sr+ZhpY+NZ/PwVRyRE7VCf1I/W+8toK8pQzotBA2y29N3NBoY1Hwyom4rz/0GEN2cFNRnua6Wzvr9rXF7AJiRlecxs796jRCDWkqxx9X5vtxsfpwVldTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aofhjWV9; arc=none smtp.client-ip=209.85.161.65
+	s=arc-20240116; t=1774819541; c=relaxed/simple;
+	bh=LQxkBYx6ebUIhWdWkc5U0RU1TpvgmYLfpkXku55n9WU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=L8W0tbUwdyr+Ih8YZV/80PJsE06J7ghK84GZkJTa5vTa0L/VxgE8RCHQA5Fj929/Bv8OosJSKClt1B2zs2ZhHHozllBY/ZdGsy6bfr7NmmiqE0Zsd9RL1OXRDk9oOYWy7KEE678KWIEiYQE8Q9D7lZPClkVXtZ0bNT6aS1bIYng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PotCsztH; arc=none smtp.client-ip=209.85.160.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aofhjWV9"
-Received: by mail-oo1-f65.google.com with SMTP id 006d021491bc7-662efd1bdd4so2201750eaf.0
-        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 14:25:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PotCsztH"
+Received: by mail-oa1-f65.google.com with SMTP id 586e51a60fabf-4043b909ed4so2358842fac.3
+        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 14:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774819535; x=1775424335; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aocmb4iOjN/9JNT9RoJxLadghsYK5qiExVd5fdGv1YE=;
-        b=aofhjWV9OM28O0YUop0sMGlXPHJtRWPS99/79HNoXwMM5aLvxSfhiduIVGsATaBXRL
-         jw+FV4SfgxxbQcJpdKgTXmBDcKkRja+Iftxd4uoYm9/0gPBnmUGo9qwwY/gHGtKQmD2D
-         ZdwY993L1tQyqhWXqb5CiszlgRLEDQuo5y+1hSm6Yd1FDdOCqYdufGCZR7ykNuWEXWSs
-         pyRoRo08K8ctv9oUDXpDpGQJCRwWKzKqNHqgP4yMTX/MG2DXy2GsUz1oG4yYw8Mo6pqs
-         lLxW452gfaz1beik310PE0Wi1gpDvgZWGDQqhBvwdXVqvySLGlqB1UMusGiposxvLJf1
-         mJFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774819535; x=1775424335;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774819538; x=1775424338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aocmb4iOjN/9JNT9RoJxLadghsYK5qiExVd5fdGv1YE=;
-        b=PlbTQrcAQqRB7BjrFcvU6f9vfeuHlrgqyOylTCTIGOKySfb/qrXn9Q2n7bZZQ/tx1K
-         7S/q86i8+O11fcW0+ocL91WIEroPh3xTYt3sdZYBWDWHXs1al++NaMBEVSrOCliSsFPI
-         JCt+oM5YOsrVh1NTcaM+/iBcv2DEANnNokPrwbH/hDUeGWydt7wh7h+Ds8AtOA2/+85D
-         mKo0XGrqOyDJpszDhZDNMFEy40UuBZuovIlzDnj0SP9kxdNLVVFpNAjXeWoMtMDBD39t
-         Dr7GFFPad/Ulbncl4u/OSQQteiAIOsz0YBu88BhmZ22LyafTXC6+psLdzFefcSygTReT
-         nLlQ==
-X-Gm-Message-State: AOJu0Yxkt2XJqwAx4hsU+oVzO/brVC+hS9GAQ6caQ7FSuFWmc/41nAJH
-	Jmr/S0a2wtjHI+NXVw3AI7bqIQZEy3sT9ZnvTxgnPRfYhcqqLYW0HVkqSbkM5o7yEUQ=
-X-Gm-Gg: ATEYQzxpKIrSF5Oj/Az2aN9BbwZ1qbJDkk/QQGJycCKfbLdfSzfxeRi6Rc8LE2nzT7D
-	UY0rJIdSZwvcFRxCFlNYAK1hfmqR3E82b05VnCc+1qi37GKxrAF9N8cbAbRwymFEcLrsGRmgY6y
-	7l8+VjhIMkO87p6H35twJoJUcc0smLXM94CfZA7eCNMYcb32yF1q3+msa4pCXbsZI6f+EEQDZHE
-	tv4JK2ZHXR185G21FY5mYH+agajYmyiR1s1Am/t+gfRbCHv/DAexfarPYSRGjzWtXjp6pQE3Hmw
-	cBliikVfzySM/PK4qqHbqjky41pcK21xtZ0o2QedrTvFNlOkkXFb3LIQKT0ZA1u3ZGdI4f8Arqs
-	lP9eODDn796JKYRAe9ZBIQtVglnZJwSeEpFdcMUcwtYBZL0B+Ew+vzbM0sDgJZm9fAu9iu75iHF
-	bk0R3wpgt4z0rkfapSCz3+SyHDiGIjBtxlXc2ILuIeEw8o
-X-Received: by 2002:a4a:e916:0:b0:67e:16d8:8107 with SMTP id 006d021491bc7-67e195e42f0mr3978045eaf.26.1774819535248;
-        Sun, 29 Mar 2026 14:25:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:45::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04cf9ceesm3903482fac.15.2026.03.29.14.25.34
+        bh=eUfSA2IQvTAaru/F4z57yDZzWlDoKJmaGeloF4DYKj8=;
+        b=PotCsztH8IuDMoT/xesRmcvsCGMcYpcSCzENeQRWdBp5Yxi2Xucp19yIFzXG6Ns0B/
+         e8GxqHu0/+5pJXx4nzPtzOZILEckf6ZSYxC5wj7ErA42JCPnZpx0nR6c6WFOoFJbra1l
+         aPxJEPUNNjMC03dvdDf/68B3hq55fJbSBNe/7ToQNXQ2nZz0+Mvav5ekOrz5ZljWf80C
+         /Q2maZ34Vqg6+KhjccXPaAFbEf25/VJEMenpyI9GjYmjqiGVr3MoKi6V03+4RuF16p99
+         nI0AS/wAGvn/oH4ONElV16Uw5/Xxwi5IDVlvKHZ9jl+SuGgEiY82qsHN25Bd6qGa3DDD
+         zc6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774819538; x=1775424338;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=eUfSA2IQvTAaru/F4z57yDZzWlDoKJmaGeloF4DYKj8=;
+        b=iG6ZJx0dlJOBHiuD1Zs3pa6Hcrq9h8BQsuDL/da4Lg6KvqhvFYlvTk511slPdRBNg9
+         FnqPpm6Gbllb7hTGNzhQcXxBEC04bLfoRYMCifeG4IdSq0umzXy1FgVYyDRXflKePq9l
+         JUx0UkBxjkTsHYRRWl1nwMWN1PAzRqeMjgWH8tCAmFBvUrJgldIQHCnd/vlYm2imKo9d
+         6yEYTDBvotsFPVbegu1+Fol3Z0tQdAXQxpOX/8AdGWS7ZxpwG8cPLQQVxJFv0fIMH3X+
+         q/CGmSzzwht9LpzE12aGJAuv5NpfWPeayLIsSiVA3p6J+ffrv0FJ7s3+pdzR43UJuRiR
+         S6dQ==
+X-Gm-Message-State: AOJu0Ywk/mk5LQJ/s5OY76auTQcNYZ1aVz3JYnDPgK+dkg++875aMvw5
+	Pya7DPkCmCyXFr4y98Nmwui+9aDPS57YKLdnWd7iCjaocVzmZWa1QXnF2mzuAnL4
+X-Gm-Gg: ATEYQzxtnMe9gpj9IuuzVeW0r16rlHL9zDH/vF047EnlDrq25ogbbF/MY4UicUuFkvl
+	pPYshjukhTmvVHfxwIsPCOf9jDsmbIXGKYdZIeXnrZf6Q8uPPUHSew2KYyVkx1Kfl4AQR7qda9V
+	H51ETMw/vcuizHNXB0vdjL3vTru3ejPKrz9yyIjAbaDOwp6qB5S3N13cFKIPl47hxoH6u2LQWiM
+	YHW1aIiCBbd1e6q9efZy/LW0ZAoScElEyDXhEcYZYVkGtXjB6DBR8OHdfBRXoZRHgbPz9Xw0k8p
+	iJmKJwKEKK+lnPrf8UUi4DKjKI2OVI2Ysh0ivvqjAqVYNSWSnjMkuqQqN4cXrtx+23m/0pF1bte
+	cVuoTe4CH+OBwMT8TET7guCifz26Pt3uR8dpFJzqo1BQyOKHRN8/Q6RPM3a84jnntXjZT2yG8Xc
+	j6/TF6I2CmNB2VyO4Nz7V3wqVpTe7AF/A2dkoFqO35wWA=
+X-Received: by 2002:a05:6871:4706:b0:3ec:5267:cb6e with SMTP id 586e51a60fabf-41cec2f9ccamr5154087fac.23.1774819538203;
+        Sun, 29 Mar 2026 14:25:38 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:3::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04501478sm3931158fac.0.2026.03.29.14.25.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 14:25:34 -0700 (PDT)
+        Sun, 29 Mar 2026 14:25:37 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -65,60 +67,95 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/3] Add support to emit verifier warnings
-Date: Sun, 29 Mar 2026 23:25:30 +0200
-Message-ID: <20260329212534.3270005-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 1/3] bpf: Extract bpf_get_linfo_file_line
+Date: Sun, 29 Mar 2026 23:25:31 +0200
+Message-ID: <20260329212534.3270005-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260329212534.3270005-1-memxor@gmail.com>
+References: <20260329212534.3270005-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1941; h=from:subject; bh=S3/3gBJZ2h6FxiVPQhAy84nUWcUR6o02YrFnTV33i8w=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPkdFWJqYHXpooks91q3tnGt2P+/GNz+ueJ1+9c7VYSdcCs O5Gho5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABNJcWRkmP+LXzdQa98R362TohxjZv I0v77tuW7bos5HCxcVlYVcu8vwV06qmPe38YbHi95GVrUU7G+89X73cg6jU142eziYzijs5gUA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2593; h=from:subject; bh=LQxkBYx6ebUIhWdWkc5U0RU1TpvgmYLfpkXku55n9WU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPkdFXfw3YrP1lqirK+jfn8eFdw3QwRfhH2wOOfhHk6Xuin OdR1lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCL/JRj+Fy5wi9qUe1lOMjPFU3XXHk Wxb8eT84XSBTvXBnbfcI2xYWQ4UGbDzyGxQ5STs9Fbi1FqdsLTxAXHW+7kt7h9nnPeaQYPAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Currently, there are only two ways of communicating information to the user
-when a program is verified, success or failure with a verbose verifier log.
-Some information is meant to be more discretionary, e.g. warning about use of
-kfuncs that are deprecated, and may be removed in future kernel releases.
+Extract bpf_get_linfo_file_line as its own function so that the logic to
+obtain the file, line, and line number for a given program can be shared
+in subsequent patches.
 
-For this purpose, we can make use of the program's stderr stream. Until the
-program is finished loading and actually attached somewhere, it cannot write to
-its own stream. This means that there is a point where all collected verifier
-warnings can be flushed and displayed to the user.
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf.h |  2 ++
+ kernel/bpf/core.c   | 32 +++++++++++++++++++++++---------
+ 2 files changed, 25 insertions(+), 9 deletions(-)
 
-An example is shown below.
-
-$ ./test_progs -t kfunc_implicit_args/test_kfunc_implicit_arg_legacy_impl -v
-...
-libbpf: prog 'test_kfunc_implicit_arg_legacy_impl': VERIFIER WARNINGS:
-WARNING: kfunc_implicit_args.c:40 calls deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
-WARNING: Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
-WARNING: For older kernels, choose the kfunc using bpf_ksym_exists(bpf_kfunc_implicit_arg_legacy).
-...
-
-Once GCC BTF tags are available this can be done by annotating kfuncs with
-appropriate tags containing the deprecation message, until then we put it in
-the verifier for _impl suffixed kfuncs that have been replaced with
-KF_IMPLICIT_ARGS variants.
-
-Kumar Kartikeya Dwivedi (3):
-  bpf: Extract bpf_get_linfo_file_line
-  bpf: Emit verifier warnings through prog stderr
-  libbpf: Wire up verifier warning display logic
-
- include/linux/bpf.h          | 11 ++++++++
- include/linux/bpf_verifier.h |  3 +-
- kernel/bpf/core.c            | 32 ++++++++++++++++------
- kernel/bpf/log.c             |  6 ++--
- kernel/bpf/verifier.c        | 53 ++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.c       | 23 ++++++++++++++++
- 6 files changed, 115 insertions(+), 13 deletions(-)
-
-
-base-commit: b6b5e0ebd429d66ce37ae5af649a74ea1f041d92
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 05b34a6355b0..2c4f92085d79 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3946,6 +3946,8 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
+ 	return prog->aux->func_idx != 0;
+ }
+ 
++int bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo,
++			    const char **filep, const char **linep, int *nump);
+ int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep,
+ 			   const char **linep, int *nump);
+ struct bpf_prog *bpf_prog_find_from_stack(void);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 1af5fb3f21d9..052dd78a2d81 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3313,6 +3313,28 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(xdp_bulk_tx);
+ 
+ #ifdef CONFIG_BPF_SYSCALL
+ 
++int bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo,
++			    const char **filep, const char **linep, int *nump)
++{
++	/* Get base component of the file path. */
++	if (filep) {
++		*filep = btf_name_by_offset(btf, linfo->file_name_off);
++		*filep = kbasename(*filep);
++	}
++
++	/* Obtain the source line, and strip whitespace in prefix. */
++	if (linep) {
++		*linep = btf_name_by_offset(btf, linfo->line_off);
++		while (isspace(**linep))
++			*linep += 1;
++	}
++
++	if (nump)
++		*nump = BPF_LINE_INFO_LINE_NUM(linfo->line_col);
++
++	return 0;
++}
++
+ int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep,
+ 			   const char **linep, int *nump)
+ {
+@@ -3347,15 +3369,7 @@ int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char *
+ 	if (idx == -1)
+ 		return -ENOENT;
+ 
+-	/* Get base component of the file path. */
+-	*filep = btf_name_by_offset(btf, linfo[idx].file_name_off);
+-	*filep = kbasename(*filep);
+-	/* Obtain the source line, and strip whitespace in prefix. */
+-	*linep = btf_name_by_offset(btf, linfo[idx].line_off);
+-	while (isspace(**linep))
+-		*linep += 1;
+-	*nump = BPF_LINE_INFO_LINE_NUM(linfo[idx].line_col);
+-	return 0;
++	return bpf_get_linfo_file_line(btf, &linfo[idx], filep, linep, nump);
+ }
+ 
+ struct walk_stack_ctx {
 -- 
 2.52.0
 
