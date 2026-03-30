@@ -1,164 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7B33E9F96;
-	Mon, 30 Mar 2026 22:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA603EC2C7
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 22:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774910365; cv=none; b=dgxntStS5+7kuey6BLkjmgpBYN2aUQnr1xj2e/9PJIRuag/VdLy+nz9TeVAlpdaJBkn0d3HkRG3TCm/gpktTisfYJWpK8jghu1ogO8UtEompAfY/iFTCURhYEmHqCBvE4f91GLrSAVPdSedZ13Z64WsvQUtVvQr6httAzZjv15Q=
+	t=1774911179; cv=none; b=tld7cUgrByG692RrmEsio+4tk9jmXHJvMZNUVO47cLrYRjAIfEw2ieO56/O5n64my3STkIyPR2tCsClN6OX1Bj3EsXUUYwuhSgg8UtcRqbZ3/iIPBS6L98ZmYoq7yAbEAqPBsdnkn4b4YXAtXHhwErmOM3ePHzYDkAsizxDgJ0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774910365; c=relaxed/simple;
-	bh=TwsrmNJ7QssX1MDhmOKLBLHVuRzzNYSq93LE55QsCVc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gvqnkI64DkpFZEoj8lXF+X1EpdZL2RUJ+eQI+7smwvaiOCXaCO37uhCXNzdtDP9cBAxJ2XsSAsHSvuz1w/LYCEI5S9w39nv1gYkM5A5a3QRdQzzjc3rxyWPqr7tWbyJjXsgFNtGn7Ll/Te4n36tq+6c/8epZYXP47h4HvKJSPyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GwdqFiTo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774911179; c=relaxed/simple;
+	bh=GlsvuczdAbPVycyTDaQJ9mijfxAn7/aMjggiH0GU16U=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ctzoXQmcqF4jPERCT7vihg/HMOF41fySeQz8uUy1zDBmGQuIHFlPbN9+wVST7+YGX+hROougJnLAa1IqF/2Znfsa8HZEaptfOvg52Ap5tAD1DTd7NmQYeILTSZQ5v/kh2HMchvbw0Sozidvc2v2QCqpE+hOI8w3Lxbe5RXXXyLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QrKY9O6w; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GwdqFiTo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC12C4CEF7;
-	Mon, 30 Mar 2026 22:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774910364;
-	bh=TwsrmNJ7QssX1MDhmOKLBLHVuRzzNYSq93LE55QsCVc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=GwdqFiTogc7F2gsU+gMrS6MyLFsi0Z2jZ+MtjuE3l52DlAaQgpBkftxgsoTTB9jSa
-	 PPzBO537tnppzqKFwmisVIe/ZjYklkkMTal7xkBy3EP3M1J+NPyxkNckpJFWYdtUzF
-	 rKToAB2AE11OqXOD3Ib3N47fuaPAVaw6hEvblflyrK7htesktJCcZqB2xcIKjs2nlP
-	 9HMTg1tHgfTUH1wSgz3urU6s4DEMpNwntLn7lMN7W+Pja2VG7Y2DXAKeDpuu7TeAUT
-	 x0Nvum+zUm3klepemH1UTsEDY0CHkQcl11AyBa0EtWN9QRO4f9jhRThx3YJbDXKBGh
-	 VK6Kr2w/eJ65Q==
-Date: Mon, 30 Mar 2026 16:38:18 -0600
-From: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org, Kees Cook <kees@kernel.org>
-Subject: [PATCH v2][next] bpf: Avoid thousands of
- -Wflex-array-members-not-at-end warnings
-Message-ID: <acr7Whmn0br3xeBP@kspp>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QrKY9O6w"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c76af79f029so106382a12.3
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 15:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774911169; x=1775515969; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GlsvuczdAbPVycyTDaQJ9mijfxAn7/aMjggiH0GU16U=;
+        b=QrKY9O6w8q9bADNrm7go5LaFhLZep9sNMEEGRc+GYuExvh1INF+JuoMpxyNTnd4ijB
+         45IlrkICOQEGjCf/MxfsEUPiZfnHBnD7yYnFHQ/Xk6aM0FdE+dSQdSL47GhPIgMFbLdg
+         1Ub4nAhWCO0VmsyuBFHyXsbwroQIUX+c6iC/neBGH+tfuXTDZBgVRmRqLU3m/hApCyvh
+         4XfOrG5DCqmaH94J0vfgxv/vxYwnN7+z9VH8Hnofp6nnCiEJr74mCar6UQRYRGVfLPB4
+         A2PlN89mmEMHkMNjjtSD3Bw5an+7eUwYw8r9pNXpSGH9LNJ2PPCxJ2dcxCPIY+r88IJT
+         S8MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774911169; x=1775515969;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GlsvuczdAbPVycyTDaQJ9mijfxAn7/aMjggiH0GU16U=;
+        b=OmGyDs4dUOeZmIwcXWz2Ocu4QxWQbzeWYUooyDqyORhJa/8fG1Ste/a/bXYVfRvtwv
+         /NQ1GaGA3oqR49O/c9DRhh7sMzJo7ufDO/0TdwqjyRBc1LHs8re4MQKG9Xc6EW93la2h
+         UoNJL39i2wC0rLiM39epjFnMjVjfjEAtLR4QC/OqfG3b1MAsszL8HxImF9z5af+D3gj/
+         2g8GTT/Lmu0iqaNbXIpwpJkEm8lEZ+DVc3pLlN/f1QHJMAEXV4P+nFpOWhIDGYoT3LvH
+         qGoqdq2VkOAwilFr6e51d20izNXUhlkH6HQ3EZT2tXlerjKFKRKfykUrIpHVWrTQbwbI
+         TPaA==
+X-Forwarded-Encrypted: i=1; AJvYcCXDUFWyTBXUpLGXuGMHKZ2BLU/o74wU88UHytOI+2q7leDFINzQhqXf1qGzu4hg/8V4QLM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO/6MTAOfDNsrRvlIEesOOYr9j3E3sFiFz1pAcUzF7JA3EDqnQ
+	8wL6eEw2QDTcVHEmVz+wLW+oENJA7yA2YEAkDBd4QS4zWy1WA3fe8lZF
+X-Gm-Gg: ATEYQzwYYp08vcv7NL1tA7wgwSFWfjiaLR+096z/HZJJvgB2a9C27de6HuUI5qavpy/
+	2DrgFysyaVpZGnEfmX/jWQsajVa5cjHQLW5ETiTnSU2iUTHEFXtfJqWcEiAHiGChM94Z3BP2lBG
+	ebJwhMwyjro4Xs/yF3Pg9hX1FK7mXR3v4JkZ3UlBuuwihLdolTq+KSW5QvIqxATN+YwZPAHV1gy
+	N3I683kXk/69Dd97CJAKlVMCE2VTtc9YshKj+xSE+nCeM3mnoOmfD8G4u96e/rqEqKCCeATOSYV
+	Dcb4BMx6HxuRSB+xv4HZOQGQkyY3Qq2fKuyfL+yffdqI0YdjRAXrZWnlYEGoQbqf1CxsG7WYlnP
+	p+7WrsVBkrNUZsUmFVzdkw5I1ACkkBX/A7JPu5gYGNBmZ2EEYumIWiWpDDFwYV9ghoh75f3OhiK
+	Vamb2daofA5+YlVLW6nG2XArCiVtELjFcAZuC7D5NNBXwIxpwUfX8=
+X-Received: by 2002:a17:903:13d0:b0:2b0:6df2:8cd8 with SMTP id d9443c01a7336-2b0cdd18cd6mr170216365ad.40.1774911168911;
+        Mon, 30 Mar 2026 15:52:48 -0700 (PDT)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24276689asm89875875ad.38.2026.03.30.15.52.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 15:52:48 -0700 (PDT)
+Message-ID: <2a1bd41bdcde117ba40bfe568d007a80a1ca5ab2.camel@gmail.com>
+Subject: Re: [PATCH 2/4] selftests/bpf: make str_has_pfx return pointer past
+ the prefix
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org,
+ ast@kernel.org, 	andrii@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, cupertino.miranda@oracle.com
+Date: Mon, 30 Mar 2026 15:52:45 -0700
+In-Reply-To: <m27bqtpc3z.fsf@kernel.org>
+References: 
+	<20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com>
+	 <20260326-selftests-global-tags-ordering-v1-2-5dd2ced5d9ad@gmail.com>
+	 <m27bqtpc3z.fsf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Apparently, struct bpf_empty_prog_array exists entirely to populate a
-single element of "items" in a global variable. "null_prog" is only
-used during the initializer.
-
-None of this is needed; globals will be correctly sized with an array
-initializer of a flexible-array member.
-
-So, remove struct bpf_empty_prog_array and adjust the rest of the code,
-accordingly. 
-
-With these changes, fix the following warnings:
-
-7659 ./include/linux/bpf.h:2369:31: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes in v2:
- - Remove struct bpf_empty_prog_array. (Kees)
-
-v1:
- -Link: https://lore.kernel.org/linux-hardening/aaZr2A1UPJq33127@kspp/
-
- include/linux/bpf-cgroup.h |  2 +-
- include/linux/bpf.h        |  7 +------
- kernel/bpf/core.c          | 12 +++++++-----
- 3 files changed, 9 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 2f535331f926..b2e79c2b41d5 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -184,7 +184,7 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
- 	struct bpf_prog_array *array;
- 
- 	array = rcu_access_pointer(cgrp->bpf.effective[type]);
--	return array != &bpf_empty_prog_array.hdr;
-+	return array != &bpf_empty_prog_array;
- }
- 
- /* Wrappers for __cgroup_bpf_run_filter_skb() guarded by cgroup_bpf_enabled. */
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b0..4f5b9e85a20c 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2365,18 +2365,13 @@ struct bpf_prog_array {
- 	struct bpf_prog_array_item items[];
- };
- 
--struct bpf_empty_prog_array {
--	struct bpf_prog_array hdr;
--	struct bpf_prog *null_prog;
--};
--
- /* to avoid allocating empty bpf_prog_array for cgroups that
-  * don't have bpf program attached use one global 'bpf_empty_prog_array'
-  * It will not be modified the caller of bpf_prog_array_alloc()
-  * (since caller requested prog_cnt == 0)
-  * that pointer should be 'freed' by bpf_prog_array_free()
-  */
--extern struct bpf_empty_prog_array bpf_empty_prog_array;
-+extern struct bpf_prog_array bpf_empty_prog_array;
- 
- struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags);
- void bpf_prog_array_free(struct bpf_prog_array *progs);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 67eb12b637a5..ca39d2e690b9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2613,8 +2613,10 @@ static struct bpf_prog_dummy {
- 	},
- };
- 
--struct bpf_empty_prog_array bpf_empty_prog_array = {
--	.null_prog = NULL,
-+struct bpf_prog_array bpf_empty_prog_array = {
-+	.items = {
-+		{ .prog = NULL },
-+	},
- };
- EXPORT_SYMBOL(bpf_empty_prog_array);
- 
-@@ -2625,14 +2627,14 @@ struct bpf_prog_array *bpf_prog_array_alloc(u32 prog_cnt, gfp_t flags)
- 	if (prog_cnt)
- 		p = kzalloc_flex(*p, items, prog_cnt + 1, flags);
- 	else
--		p = &bpf_empty_prog_array.hdr;
-+		p = &bpf_empty_prog_array;
- 
- 	return p;
- }
- 
- void bpf_prog_array_free(struct bpf_prog_array *progs)
- {
--	if (!progs || progs == &bpf_empty_prog_array.hdr)
-+	if (!progs || progs == &bpf_empty_prog_array)
- 		return;
- 	kfree_rcu(progs, rcu);
- }
-@@ -2653,7 +2655,7 @@ static void __bpf_prog_array_free_sleepable_cb(struct rcu_head *rcu)
- 
- void bpf_prog_array_free_sleepable(struct bpf_prog_array *progs)
- {
--	if (!progs || progs == &bpf_empty_prog_array.hdr)
-+	if (!progs || progs == &bpf_empty_prog_array)
- 		return;
- 	call_rcu_tasks_trace(&progs->rcu, __bpf_prog_array_free_sleepable_cb);
- }
--- 
-2.43.0
+T24gTW9uLCAyMDI2LTAzLTMwIGF0IDE2OjMyICswMTAwLCBQdXJhbmpheSBNb2hhbiB3cm90ZToK
+ClsuLi5dCgo+IE5pdDogT3RoZXIgdXNlcnMgb2Ygc3RyX2hhc19wZngoKSBjYW4gYWxzbyBiZSB1
+cGRhdGVkPzoKPiAKPiAtLQo+IDE0ODrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmICghaW5fcmVn
+ZXggJiYgc3RyX2hhc19wZngocGF0dGVybiwgInt7IikpIHsKPiAxNDktwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW5fcmVnZXggPSB0cnVlOwo+IDE1MC3CoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwYXR0ZXJuICs9IDI7Cj4gMTUxLcKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnRpbnVlOwo+IC0tCj4gMTUzOsKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgaWYgKGluX3JlZ2V4ICYmIHN0cl9oYXNfcGZ4KHBhdHRlcm4sICJ9
+fSIpKSB7Cj4gMTU0LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGluX3Jl
+Z2V4ID0gZmFsc2U7Cj4gMTU1LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHBhdHRlcm4gKz0gMjsKPiAxNTYtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgY29udGludWU7Cj4gLS0KCkFjawo=
 
