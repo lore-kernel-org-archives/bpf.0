@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9875E2EA171;
-	Mon, 30 Mar 2026 14:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6362EC0B4;
+	Mon, 30 Mar 2026 14:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774881612; cv=none; b=qnTLalc7jzt2raRLa3qDFedL5qMUjE9DG07i/T9d1Q0pLnqX4GlEJdH2HiD9Y7ypBtemelwE0/22NmBQvD+nC5629XC7NsiLWrYaNE8I4t6cZi4ZRfEJMYDu8ZODtlHsO+qQfBed6ZWokGEzC8E8HfaSJ9qeXDLYjqznaJOI9EI=
+	t=1774881666; cv=none; b=mWwYrPhMoLuLqteKa8SriJRH+uh9Ue5KFozZNQ0KMRDHUYYiziLa5JuiukJnjIpFGqs13z31a3H6EuVJ4lZSSeY/mEPNdhdZaFWL7tjCP4wlfkzZ1lccjKphu+gpb6UNLm8nEtUNkZBeuR6IbPby4ZeVFl7Wsv95e5dwCq9L1mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774881612; c=relaxed/simple;
-	bh=hPMlz0sv1WZCrJthrxFzLRZrCnBnLEucQe2yPiuFRrg=;
+	s=arc-20240116; t=1774881666; c=relaxed/simple;
+	bh=r8gBVMIG5Tt1MRP52sdyrMptt1JIP8UGDqO4QDt0jTE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=u1ICtz5o8Bgi5nbBrpfzn2YCnkruwx2wkpldYa5Pq2FHnXiLc7CSwFrPx19D3LCDQHYiTdPba/ZwfiZh85O0JBUuDS23PKL0jpT5CsKOiZEFjbM6pTasQ1T8ZdhbHc3Id834vlUjj+zFET30EOEMMvBCuZmT9PsXjo+XGdpdMVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mr0bhzOC; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=WTGgT3KBAOXQ8/iNStp7WcNjIi9OIjeXxjnnXoxWENPiLy8GUdbJiQKuJ4hDRYyMzAiVEd8MN41qzNrCIdqAOlB1BPH1tFOtWmhmk6/5QJPdqwx2AGevIgEj7+xjoweGHc2WiLtvYhA+IXaVqgvGMK2iUUgoBcq2rXDsWufF6cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ovkJLNeU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mr0bhzOC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D278C4CEF7;
-	Mon, 30 Mar 2026 14:40:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ovkJLNeU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D04C19423;
+	Mon, 30 Mar 2026 14:41:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774881612;
-	bh=hPMlz0sv1WZCrJthrxFzLRZrCnBnLEucQe2yPiuFRrg=;
+	s=k20201202; t=1774881666;
+	bh=r8gBVMIG5Tt1MRP52sdyrMptt1JIP8UGDqO4QDt0jTE=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=Mr0bhzOCM+faC9EzaczJiL6lHFEuQLvIE2LzMyEKb59F549f5zAO6cuVNhef6Y94A
-	 umPWez+Ixm9KqUIJqr1N7eT7qvPVcNO0BnancIKCUdXWoWmnjMmdu4zTRgDNcGa+So
-	 tByUeZ1VuYCakPMojk+PaOavsW1BWYQWin9KayJWElqkPFkT/d27+pPXj3rqDLUfXi
-	 CJx/PsfdJ1HfHIX6SXBTh0SHoRIcdfNsUqfo1c0DEK1sph6cnv8yhFKdlZHnE/paUN
-	 vJP4VJdCDPU/YIaExzxqN0m6H+2P6YLGSQjsNtMsPYqIUsYJ1MZOBPTle+35kLw0Lg
-	 RCtsJ4z4zLMtw==
-Message-ID: <10888c66-add3-4142-939a-8f4557566bd9@kernel.org>
-Date: Mon, 30 Mar 2026 16:40:07 +0200
+	b=ovkJLNeUr84JiMtcI+5WAr2G8F9gn2hqEyL/gCPmtpLtQ6gvn7uHEmPCINHpwdSq1
+	 KHmm4LGAWVuLRn0b7szwZPb57qduv9hEYOqeFWt4CLxELU8w4Htq+jCRTm2Nr8spiM
+	 1c15EVpJovbdySZ8d9sjru/hyJX/3TakNznuSl9W/VkqqkzkFz//amHfdNGpP0K0Yn
+	 kb5OvZeE0vjs++B7E2w4qcWgwlfQmiwuKD/zm3yFho6Bl2m1lPU8XzBhK4OdMQVVu2
+	 TQp1+E+ZOWdO0voZ2Sh9Q86tCe36AY0ehu8bdV8/rQS+Wx35deYr69l9mRTH8nFVbj
+	 bKU6gxTjQibvA==
+Message-ID: <ff7c26b2-0714-47da-b3e1-785e62391cb8@kernel.org>
+Date: Mon, 30 Mar 2026 16:41:01 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -162,9 +162,32 @@ On 3/27/26 13:57, Muhammad Usama Anjum wrote:
 > Suggested-by: Zi Yan <ziy@nvidia.com>
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > ---
+> Changes since v3:
+> - Use newly introduced __free_contig_range_common() as the pattern was
+>   very similar to __free_contig_range()
+> 
+> Changes since v2:
+> - Rework the loop to check for memory sections just like __free_contig_range()
+> - Didn't add reviewed-by tags because of rework
+> ---
+>  mm/page_alloc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 64be8a9019dca..110e912fa785e 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7059,8 +7059,7 @@ static int __alloc_contig_verify_gfp_mask(gfp_t gfp_mask, gfp_t *gfp_cc_mask)
+>  
+>  static void __free_contig_frozen_range(unsigned long pfn, unsigned long nr_pages)
+>  {
+> -	for (; nr_pages--; pfn++)
+> -		free_frozen_pages(pfn_to_page(pfn), 0);
+> +	__free_contig_range_common(pfn, nr_pages, true);
 
+Ah, might want to add a comment here as well
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+	/* is_frozen= */ true
 
 -- 
 Cheers,
