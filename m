@@ -1,77 +1,77 @@
-Received: from mail-oi1-f195.google.com (mail-oi1-f195.google.com [209.85.167.195])
+Received: from mail-oa1-f65.google.com (mail-oa1-f65.google.com [209.85.160.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 527D028468E
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 14:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9E8282F20
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 14:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774881071; cv=none; b=U2lDzLiTacUVPUmN0Jf43pQtoPXhqdA/omyScloJtvhez310q4DyGc6UWBUjV0Hlt8MZjeCHSm7oIkugzW0MiyOGVpqYxTjqkZhpkvVm+GhwqMqcq9SCjpUuxoWk89sLnw8yS89gINM1w7YWxGRBWQTkMvfmJDOi0FSIUpiajt8=
+	t=1774881074; cv=none; b=QGs9ooDpOyqS1G83Dq6qiYaW5DrU+5sOfp/4rXfU6vgEACg5sV/czzOlo+2K5TcA6UtykIouXUJDO21Pwf9VI0Un16aLoC9+O0OXgCaeTVMuO4Qm2Rhmll6A8gVovw+VveM/dy+CY9IDIgmj7SXpsLNraFFHI8+WjMAL+69yifA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774881071; c=relaxed/simple;
-	bh=S330uuhwqGR6c5L5uynn8F321smj9Os3CMV8MGJyjV0=;
+	s=arc-20240116; t=1774881074; c=relaxed/simple;
+	bh=bnBbRlTenAix/yOLsuLi2zgm1d0He5Qf8kUZ0BPi+6M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SuI+9ygmK2G/f1/aloxTPeLfHAs6pPawaq2cunGS+HKQABeUj8uzAlu7r6KtMxzMVLiWd/JWjEPehbEO2+CGCsGzxKsaephYBbSrrqfYvP7dq2mf+8WPVHoRSAtDjfcpZvT+d08/pYYBcm1bmCtitrmXnQ2dlAS9TS8hY2SjbPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QXc02aq+; arc=none smtp.client-ip=209.85.167.195
+	 MIME-Version; b=K4mtg8whBPj0MVnE0S3ixqSsBC7wb3jLt96KIkiNlfFsF1rzyCoHmia/QudYQ9mVct69QXdjL8blv6edaKAmCeEAbbRUwB48sVTYrgqQSeYyPYEbl8LotJYENrgB6trIASQ6Nd9dp9LmpsfISImHSsZWhMP+uxD8irs0g5vEVgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqQPXUq+; arc=none smtp.client-ip=209.85.160.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QXc02aq+"
-Received: by mail-oi1-f195.google.com with SMTP id 5614622812f47-466f1c3c627so2799427b6e.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 07:31:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqQPXUq+"
+Received: by mail-oa1-f65.google.com with SMTP id 586e51a60fabf-40974bf7781so4429137fac.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 07:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774881068; x=1775485868; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774881070; x=1775485870; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QIthRuOCwUQCxSqROdpcKtPB2dqjpNiztiyzPT+rVxo=;
-        b=QXc02aq+vKNavfJeBSxWszVuji7aLPcl12+2Zhz9YJX9uiEDbzX7R42MjFgTWlbMmn
-         T9PTFPJsb1/9U5EIuJqGuCwL/5w0u/BgrITS3t6ZRYg/h1R4wsqYh15cpDVg3unbL9wO
-         W8MoeEwurGoqWlM1C66Cik7E8UqvWqX5dHkzYSH/ZYPN+R0kvQ3nY932AZGz34R4PNuC
-         aZeaG6pS2Cj42UWP76vrMTqM73/Ou7e4Lzbe4gi6QUSykAHDn1Ej53P/hyUxOPtlVdsU
-         YqbIDqioA45I/ga3zM8uzbYfcrHF0kOTSYx5UikG/PDF9ImA1pLbRHSPPcOE814cQr+l
-         iSrw==
+        bh=y60MPJSl0ETCjEAGF4beWOWJyg3PunpEpCxZ9pS5PDU=;
+        b=nqQPXUq+rvyfG9JcBQkg+kCstojLCcMjt4Xf5+pAvRtYPm++7EiDSHsNeGJAIrgVz/
+         iHPUbBP5DFQzH5jpudpDr9HZXemvEv/To+PDBxPnWOmek01Luy9+T8t54tB22Zm9lxG6
+         45QF6lO9GKN39489AwGE+wX4lui+/ObEzC8BDfu8z4TdqHM3Vy2zP+l5tCIe79eHMOW+
+         3Z0CoIODfqibZ+R1EQpHnhJ1jleesJM8ZHSxaEmagxeY1dk+HXAHAhIKLkx8bZghtNPI
+         Mj9pFFcTPv8Lti596lgg7gtDNWIdbsB/nblKEXLRybi7xrmGbGNSWRXHHvJXBWWm2XWq
+         zVfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774881068; x=1775485868;
+        d=1e100.net; s=20251104; t=1774881070; x=1775485870;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=QIthRuOCwUQCxSqROdpcKtPB2dqjpNiztiyzPT+rVxo=;
-        b=OvcKPL6Y621X1yhRC973TcMK0bVZosKRF/yB29PeHNeJZe/hGwjSnJLRs5ojTkLt2q
-         bEvlERaisQN/8Vl7rRAsSFqeLBmJvm8a+34hRuXXVP0nIL0NG3jFM9e4LtM30+aoN8vm
-         MmsRDomvBSBrA3sKPjujXwqE6HLNFTAN4Tx1xqaR41JcEVEdLGrAxQV5aE3eCl5MeeZO
-         bHmB1GIpaCrxaN2AsY6YXNTVfSiEdr4knZpF9KAgI+QE5A6/z3Y5B9n3/csKFs9vlPMh
-         vLwfNiygVjjMNHy0UtcSm8my5eM0ypf+wWkbvCL4NSgJe0hXSR8oJZKph3H2cIdNEhIw
-         3z+w==
-X-Gm-Message-State: AOJu0YxmzVwHJLRodEQHyM0WOZQJD0ZYogJirLe0eEkG1YrHmM73poC3
-	6h9bNBhEoIhEKWgUW4JHa0VuAuvNVrcaawQPDPzdXbTGn67ELqatQqdkCrqGm2TeYgc=
-X-Gm-Gg: ATEYQzy5d68iN3+e/1yASKa5WzbhInvqXxGtCLdDLjO78bPLlBJ1PiXhlbJnIZWozA/
-	5aZYfya1ZiTmAbTEf6yLEOfDf2Yf+QHxlRM5uoC2W43wZV/JO9+qg/64ZTCC47Rp+eHHaQvFSZj
-	rCSGn7gbdaJFgLz21N6nkVB9KOLPFNKzydAiliUEJZyCmaPKxjO4LxBbK4s8a7vDxOSCqnIcIie
-	F/5TDB/OvadMp5musPjG09Dt/ySZtL+2uz2ryKr7j8rDGF7KmNCKSQvdtF8zsNW55XqILXhkYzo
-	yywj9SpwoEsKFiqptM0jes4k9TpBu07qex9bbpvpfLCplvBj9bZXSDK4WlS4y47sPDPp2dwUB+J
-	rOqnqi1KvsTq8sFppntD2Xbsj6bnUlC6A+DR/kapOtqLjB1xtUiYUVo/zTV/J+gC6OZ+weoaiea
-	0x7dgeQg7lNeseyajz6P0WZDLYCz4CMDaKyO54csyDW7QH
-X-Received: by 2002:a05:6808:199b:b0:467:f36d:a08a with SMTP id 5614622812f47-46a8a426d69mr5687580b6e.5.1774881067552;
-        Mon, 30 Mar 2026 07:31:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:58::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-46aa03d1d8asm4969750b6e.16.2026.03.30.07.31.06
+        bh=y60MPJSl0ETCjEAGF4beWOWJyg3PunpEpCxZ9pS5PDU=;
+        b=KuDURSFbXK6BpSqxLfRL+10lKUQmSMIWlt6uJjc2H+HsBj6fYnLjhDIAZUrHL8dimf
+         CXBKD8ss2TKMioaW2qe73zM00XaR/Mt2jr7NoqQZ9Vhq366Ag7S8NT9f3/j7n2x0EZwY
+         eufGaA0Eyogk3Y2PeAyi+SH9TUwNR/PEW0H0NTmZdNx/SitcB8BxwSpo7h9bMoyJDMWe
+         BCEzTD5J41HSkICzGTE+pKs7MTN4lekcOvk+2e/TnfPr/l21s+UELQ66dWeGn3uvwLU6
+         KZhLb9lrU6b3ASckPUserwqmtj0vV1wsYhamQ/KaYpkGrgUC8sHRX0i7DhSlS37W/NZq
+         ja8A==
+X-Gm-Message-State: AOJu0Yy36YpuN7UZIAgomY6ChCs3AfAnHgJeZm8Pq0rt5+ZptwXQki8r
+	I+dWSGg7Ij6Ry0qWZhTkWf46Z4BTdoCdNX66iBTf8i6pVuYz7selDpckhyRNMLfw
+X-Gm-Gg: ATEYQzzhMbNei6WQL9VI3xTABhqjC7TmN+7KNH2Z3FMQ+VS5U5MpUnGQf+C709ArI2z
+	lR7Ka15/8D6RB82qeLHoX0InNPzBYUF3ei5keerQuIDoYKlFlPmO+VTua/3twNg3b71Su9zVB2r
+	sRG9Tzhu4scz5JuqjqBxB56ldYyb0w1aEPEGTtbu6zs6yAwpp0c29eiBW21KaVYq47w8UpQKaZd
+	oSo0wp3X1zaXT/nDZd4wTaKPTzEgZlWaw84Fdx9KRYsODHUcmUBZqKfVaM629SH3hDeNth7dSsb
+	oQsO5SBu5OFKmpx6gI506RruczHPBg4b6S8a6st+PM9tGBxZ6gI+lgtthtqb6q8iMnLlfzV4vi7
+	ax41+Xc6I/g36g9/44iR5P8edgyYHkjs+p+GsdB63jpN9xin8wCfkGhkz0ZcuEqYXfeycmEL0dD
+	pHQORRaX0UCX4ByJj2T5ETV5ukRx+9hkO5de7VYsofEXc9
+X-Received: by 2002:a05:6870:70a0:b0:41c:24f3:7851 with SMTP id 586e51a60fabf-41cd7a6ded0mr7404636fac.3.1774881069650;
+        Mon, 30 Mar 2026 07:31:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5c::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04d95bcasm5398826fac.17.2026.03.30.07.31.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 07:31:06 -0700 (PDT)
+        Mon, 30 Mar 2026 07:31:08 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v2 1/2] bpf: Fix grace period wait for tracepoint bpf_link
-Date: Mon, 30 Mar 2026 16:31:01 +0200
-Message-ID: <20260330143102.1265391-2-memxor@gmail.com>
+Subject: [PATCH bpf v2 2/2] bpf: Retire rcu_trace_implies_rcu_gp()
+Date: Mon, 30 Mar 2026 16:31:02 +0200
+Message-ID: <20260330143102.1265391-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260330143102.1265391-1-memxor@gmail.com>
 References: <20260330143102.1265391-1-memxor@gmail.com>
@@ -81,123 +81,214 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5006; h=from:subject; bh=S330uuhwqGR6c5L5uynn8F321smj9Os3CMV8MGJyjV0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfNUx07eXfyPhE9eMvvB9zFl7/bv1/NXaJZmv9oR6JS7d0OK H+eKjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExEU57hf1DGwxtNUQ8OBu28ploUv/ Wxiova1oPnUm1e35q2R1dm/0RGhlkrvTdu3JaqJecgJH7lot3Zz7NlqzQNee/vsxPZLOrYyQEA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8162; h=from:subject; bh=bnBbRlTenAix/yOLsuLi2zgm1d0He5Qf8kUZ0BPi+6M=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfNUx84JPTuy5QQiS/tmuL1cmRfNsUHfhS8sQmWJstThZQcb 3l/oKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwETkgxn+x2/nnF2nlrn84csi/ZR1j1 cd8dktfLNmidvHB23v3B6y6DH8z0iNavLgPq5px/nlQsuv0D/5B8JeHtKO9dkWJmQw708zHwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Recently, tracepoints were switched from using disabled preemption
-(which acts as RCU read section) to SRCU-fast when they are not
-faultable. This means that to do a proper grace period wait for programs
-running in such tracepoints, we must use SRCU's grace period wait.
-This is only for non-faultable tracepoints, faultable ones continue
-using RCU Tasks Trace.
+RCU Tasks Trace grace period implies RCU grace period, and this
+guarantee is expected to remain in the future. Only BPF is the user of
+this predicate, hence retire the API and clean up all in-tree users.
 
-However, bpf_link_free() currently does call_rcu() for all cases when
-the link is non-sleepable (hence, for tracepoints, non-faultable). Fix
-this by doing a call_srcu() grace period wait.
+RCU Tasks Trace is now implemented on SRCU-fast and its grace period
+mechanism always has at least one call to synchronize_rcu() as it is
+required for SRCU-fast's correctness (it replaces the smp_mb() that
+SRCU-fast readers skip). So, RCU-tt GP will always imply RCU GP.
 
-As far RCU Tasks Trace gp -> RCU gp chaining is concerned, it is deemed
-unnecessary for tracepoint programs. The link and program are either
-accessed under RCU Tasks Trace protection, or SRCU-fast protection now.
-
-The earlier logic of chaining both RCU Tasks Trace and RCU gp waits was
-to generalize the logic, even if it conceded an extra RCU gp wait,
-however that is unnecessary for tracepoints even before this change.
-In practice no cost was paid since rcu_trace_implies_rcu_gp() was always
-true. Hence we need not chaing any RCU gp after the SRCU gp.
-
-For instance, in the non-faultable raw tracepoint, the RCU read section
-of the program in __bpf_trace_run() is enclosed in the SRCU gp, likewise
-for faultable raw tracepoint, the program is under the RCU Tasks Trace
-protection. Hence, the outermost scope can be waited upon to ensure
-correctness.
-
-Fixes: a46023d5616e ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
 Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/tracepoint.h |  8 ++++++++
- kernel/bpf/syscall.c       | 26 ++++++++++++++++++++++++--
- 2 files changed, 32 insertions(+), 2 deletions(-)
+ include/linux/rcupdate.h | 12 ------------
+ kernel/bpf/core.c        | 10 ++++------
+ kernel/bpf/helpers.c     |  2 +-
+ kernel/bpf/memalloc.c    | 33 ++++++++++-----------------------
+ kernel/bpf/syscall.c     | 24 ++++++------------------
+ 5 files changed, 21 insertions(+), 60 deletions(-)
 
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 22ca1c8b54f3..8227102a771f 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -113,6 +113,10 @@ void for_each_tracepoint_in_module(struct module *mod,
-  */
- #ifdef CONFIG_TRACEPOINTS
- extern struct srcu_struct tracepoint_srcu;
-+static inline struct srcu_struct *tracepoint_srcu_ptr(void)
-+{
-+	return &tracepoint_srcu;
-+}
- static inline void tracepoint_synchronize_unregister(void)
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index 04f3f86a4145..bfa765132de8 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -205,18 +205,6 @@ static inline void exit_tasks_rcu_start(void) { }
+ static inline void exit_tasks_rcu_finish(void) { }
+ #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
+ 
+-/**
+- * rcu_trace_implies_rcu_gp - does an RCU Tasks Trace grace period imply an RCU grace period?
+- *
+- * As an accident of implementation, an RCU Tasks Trace grace period also
+- * acts as an RCU grace period.  However, this could change at any time.
+- * Code relying on this accident must call this function to verify that
+- * this accident is still happening.
+- *
+- * You have been warned!
+- */
+-static inline bool rcu_trace_implies_rcu_gp(void) { return true; }
+-
+ /**
+  * cond_resched_tasks_rcu_qs - Report potential quiescent states to RCU
+  *
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7b675a451ec8..1984f061dcf4 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2641,14 +2641,12 @@ static void __bpf_prog_array_free_sleepable_cb(struct rcu_head *rcu)
  {
- 	synchronize_rcu_tasks_trace();
-@@ -123,6 +127,10 @@ static inline bool tracepoint_is_faultable(struct tracepoint *tp)
- 	return tp->ext && tp->ext->faultable;
- }
- #else
-+static inline struct srcu_struct *tracepoint_srcu_ptr(void)
-+{
-+	return NULL;
-+}
- static inline void tracepoint_synchronize_unregister(void)
- { }
- static inline bool tracepoint_is_faultable(struct tracepoint *tp)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 274039e36465..89fa8f00adfa 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3261,6 +3261,17 @@ static void bpf_link_defer_dealloc_rcu_gp(struct rcu_head *rcu)
- 	bpf_link_dealloc(link);
+ 	struct bpf_prog_array *progs;
+ 
+-	/* If RCU Tasks Trace grace period implies RCU grace period, there is
+-	 * no need to call kfree_rcu(), just call kfree() directly.
++	/*
++	 * RCU Tasks Trace grace period implies RCU grace period, there is no
++	 * need to call kfree_rcu(), just call kfree() directly.
+ 	 */
+ 	progs = container_of(rcu, struct bpf_prog_array, rcu);
+-	if (rcu_trace_implies_rcu_gp())
+-		kfree(progs);
+-	else
+-		kfree_rcu(progs, rcu);
++	kfree(progs);
  }
  
-+static bool bpf_link_is_tracepoint(struct bpf_link *link)
-+{
-+	/*
-+	 * Only these combinations support a tracepoint bpf_link.
-+	 * BPF_LINK_TYPE_TRACING raw_tp progs are hardcoded to use
-+	 * bpf_raw_tp_link_lops, see bpf_raw_tp_link_attach().
-+	 */
-+	return link->type == BPF_LINK_TYPE_RAW_TRACEPOINT ||
-+	       (link->type == BPF_LINK_TYPE_TRACING && link->attach_type == BPF_TRACE_RAW_TP);
-+}
-+
- static void bpf_link_defer_dealloc_mult_rcu_gp(struct rcu_head *rcu)
+ void bpf_prog_array_free_sleepable(struct bpf_prog_array *progs)
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 6eb6c82ed2ee..a5a7961f68ec 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1272,7 +1272,7 @@ static void bpf_async_cb_rcu_tasks_trace_free(struct rcu_head *rcu)
+ 		return;
+ 	}
+ 
+-	/* rcu_trace_implies_rcu_gp() is true and will remain so */
++	/* RCU Tasks Trace grace period implies RCU grace period. */
+ 	bpf_async_cb_rcu_free(rcu);
+ }
+ 
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index 682a9f34214b..e9662db7198f 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -284,17 +284,6 @@ static void __free_rcu(struct rcu_head *head)
+ 	atomic_set(&c->call_rcu_ttrace_in_progress, 0);
+ }
+ 
+-static void __free_rcu_tasks_trace(struct rcu_head *head)
+-{
+-	/* If RCU Tasks Trace grace period implies RCU grace period,
+-	 * there is no need to invoke call_rcu().
+-	 */
+-	if (rcu_trace_implies_rcu_gp())
+-		__free_rcu(head);
+-	else
+-		call_rcu(head, __free_rcu);
+-}
+-
+ static void enque_to_free(struct bpf_mem_cache *c, void *obj)
  {
- 	if (rcu_trace_implies_rcu_gp())
-@@ -3279,16 +3290,27 @@ static void bpf_link_free(struct bpf_link *link)
- 	if (link->prog)
- 		ops->release(link);
- 	if (ops->dealloc_deferred) {
--		/* Schedule BPF link deallocation, which will only then
-+		struct srcu_struct *tp_srcu = tracepoint_srcu_ptr();
-+
-+		/*
-+		 * Schedule BPF link deallocation, which will only then
- 		 * trigger putting BPF program refcount.
- 		 * If underlying BPF program is sleepable or BPF link's target
- 		 * attach hookpoint is sleepable or otherwise requires RCU GPs
- 		 * to ensure link and its underlying BPF program is not
- 		 * reachable anymore, we need to first wait for RCU tasks
--		 * trace sync, and then go through "classic" RCU grace period
-+		 * trace sync, and then go through "classic" RCU grace period.
+ 	struct llist_node *llnode = obj;
+@@ -326,12 +315,12 @@ static void do_call_rcu_ttrace(struct bpf_mem_cache *c)
+ 		return;
+ 	}
+ 
+-	/* Use call_rcu_tasks_trace() to wait for sleepable progs to finish.
+-	 * If RCU Tasks Trace grace period implies RCU grace period, free
+-	 * these elements directly, else use call_rcu() to wait for normal
+-	 * progs to finish and finally do free_one() on each element.
++	/*
++	 * Use call_rcu_tasks_trace() to wait for sleepable progs to finish.
++	 * RCU Tasks Trace grace period implies RCU grace period, so pass
++	 * __free_rcu directly as the callback.
+ 	 */
+-	call_rcu_tasks_trace(&c->rcu_ttrace, __free_rcu_tasks_trace);
++	call_rcu_tasks_trace(&c->rcu_ttrace, __free_rcu);
+ }
+ 
+ static void free_bulk(struct bpf_mem_cache *c)
+@@ -696,20 +685,18 @@ static void free_mem_alloc_no_barrier(struct bpf_mem_alloc *ma)
+ 
+ static void free_mem_alloc(struct bpf_mem_alloc *ma)
+ {
+-	/* waiting_for_gp[_ttrace] lists were drained, but RCU callbacks
++	/*
++	 * waiting_for_gp[_ttrace] lists were drained, but RCU callbacks
+ 	 * might still execute. Wait for them.
+ 	 *
+ 	 * rcu_barrier_tasks_trace() doesn't imply synchronize_rcu_tasks_trace(),
+ 	 * but rcu_barrier_tasks_trace() and rcu_barrier() below are only used
+-	 * to wait for the pending __free_rcu_tasks_trace() and __free_rcu(),
+-	 * so if call_rcu(head, __free_rcu) is skipped due to
+-	 * rcu_trace_implies_rcu_gp(), it will be OK to skip rcu_barrier() by
+-	 * using rcu_trace_implies_rcu_gp() as well.
++	 * to wait for the pending __free_by_rcu(), and __free_rcu(). RCU Tasks
++	 * Trace grace period implies RCU grace period, so all __free_rcu don't
++	 * need extra call_rcu() (and thus extra rcu_barrier() here).
+ 	 */
+ 	rcu_barrier(); /* wait for __free_by_rcu */
+ 	rcu_barrier_tasks_trace(); /* wait for __free_rcu */
+-	if (!rcu_trace_implies_rcu_gp())
+-		rcu_barrier();
+ 	free_mem_alloc_no_barrier(ma);
+ }
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 89fa8f00adfa..e27573614f12 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -941,14 +941,6 @@ static void bpf_map_free_rcu_gp(struct rcu_head *rcu)
+ 	bpf_map_free_in_work(container_of(rcu, struct bpf_map, rcu));
+ }
+ 
+-static void bpf_map_free_mult_rcu_gp(struct rcu_head *rcu)
+-{
+-	if (rcu_trace_implies_rcu_gp())
+-		bpf_map_free_rcu_gp(rcu);
+-	else
+-		call_rcu(rcu, bpf_map_free_rcu_gp);
+-}
+-
+ /* decrement map refcnt and schedule it for freeing via workqueue
+  * (underlying map implementation ops->map_free() might sleep)
+  */
+@@ -959,8 +951,9 @@ void bpf_map_put(struct bpf_map *map)
+ 		bpf_map_free_id(map);
+ 
+ 		WARN_ON_ONCE(atomic64_read(&map->sleepable_refcnt));
++		/* RCU tasks trace grace period implies RCU grace period. */
+ 		if (READ_ONCE(map->free_after_mult_rcu_gp))
+-			call_rcu_tasks_trace(&map->rcu, bpf_map_free_mult_rcu_gp);
++			call_rcu_tasks_trace(&map->rcu, bpf_map_free_rcu_gp);
+ 		else if (READ_ONCE(map->free_after_rcu_gp))
+ 			call_rcu(&map->rcu, bpf_map_free_rcu_gp);
+ 		else
+@@ -3272,14 +3265,6 @@ static bool bpf_link_is_tracepoint(struct bpf_link *link)
+ 	       (link->type == BPF_LINK_TYPE_TRACING && link->attach_type == BPF_TRACE_RAW_TP);
+ }
+ 
+-static void bpf_link_defer_dealloc_mult_rcu_gp(struct rcu_head *rcu)
+-{
+-	if (rcu_trace_implies_rcu_gp())
+-		bpf_link_defer_dealloc_rcu_gp(rcu);
+-	else
+-		call_rcu(rcu, bpf_link_defer_dealloc_rcu_gp);
+-}
+-
+ /* bpf_link_free is guaranteed to be called from process context */
+ static void bpf_link_free(struct bpf_link *link)
+ {
+@@ -3305,9 +3290,12 @@ static void bpf_link_free(struct bpf_link *link)
+ 		 * period wait instead when non-faultable tracepoint is used. We
+ 		 * don't need to chain SRCU grace period waits, however, for the
+ 		 * faultable case, since it exclusively uses RCU Tasks Trace.
 +		 *
-+		 * For tracepoint BPF links, we need to go through SRCU grace
-+		 * period wait instead when non-faultable tracepoint is used. We
-+		 * don't need to chain SRCU grace period waits, however, for the
-+		 * faultable case, since it exclusively uses RCU Tasks Trace.
++		 * RCU Tasks Trace grace period implies RCU grace period, hence
++		 * pass bpf_link_defer_dealloc_rcu_gp as callback directly.
  		 */
  		if (link->sleepable || (link->prog && link->prog->sleepable))
- 			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_mult_rcu_gp);
-+		/* We need to do a SRCU grace period wait for tracepoint-based BPF links. */
-+		else if (bpf_link_is_tracepoint(link) && tp_srcu)
-+			call_srcu(tp_srcu, &link->rcu, bpf_link_defer_dealloc_rcu_gp);
- 		else
- 			call_rcu(&link->rcu, bpf_link_defer_dealloc_rcu_gp);
- 	} else if (ops->dealloc) {
+-			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_mult_rcu_gp);
++			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_rcu_gp);
+ 		/* We need to do a SRCU grace period wait for tracepoint-based BPF links. */
+ 		else if (bpf_link_is_tracepoint(link) && tp_srcu)
+ 			call_srcu(tp_srcu, &link->rcu, bpf_link_defer_dealloc_rcu_gp);
 -- 
 2.52.0
 
