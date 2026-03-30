@@ -1,195 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6362EC0B4;
-	Mon, 30 Mar 2026 14:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946E52FC00D
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 14:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774881666; cv=none; b=mWwYrPhMoLuLqteKa8SriJRH+uh9Ue5KFozZNQ0KMRDHUYYiziLa5JuiukJnjIpFGqs13z31a3H6EuVJ4lZSSeY/mEPNdhdZaFWL7tjCP4wlfkzZ1lccjKphu+gpb6UNLm8nEtUNkZBeuR6IbPby4ZeVFl7Wsv95e5dwCq9L1mQ=
+	t=1774881678; cv=none; b=jCIlTCkZ5C0EDfn8Y87MgxUQ8EmmtJkxIPNHtOmwdCR5n0sIsSk6jteoX/FzEVY7Mi/cW+byrk+4DuMB4INhVYjAfdYCG7TvhIDscFcf3zFGGpNzp9iIu7dF1dRuLwv/11iFKTciuMNNKTi0Dk9OcqLYEdUJPI0tvQVcBex5Kh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774881666; c=relaxed/simple;
-	bh=r8gBVMIG5Tt1MRP52sdyrMptt1JIP8UGDqO4QDt0jTE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=WTGgT3KBAOXQ8/iNStp7WcNjIi9OIjeXxjnnXoxWENPiLy8GUdbJiQKuJ4hDRYyMzAiVEd8MN41qzNrCIdqAOlB1BPH1tFOtWmhmk6/5QJPdqwx2AGevIgEj7+xjoweGHc2WiLtvYhA+IXaVqgvGMK2iUUgoBcq2rXDsWufF6cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ovkJLNeU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774881678; c=relaxed/simple;
+	bh=/b+myYYhB8jzOrjcVz6JmjvgnFszRZARbcMB/w5G2pU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=UMJkEY0N9nP/Jmv4ZhBJcIMNG2KdZa8ejuXqGmQPQoCyDIl7xPLcZ0eMML9eOXfF5+rb0Wqbsc5zqR12X+E9noGExxjChd0oC+3wjTAb/gBu6UFxJywxaCq2uDyy+8ScZs94wtP/o56mfKehm7iCsyFGO5HKG/zWF/UIbOAzQRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpESy+ok; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ovkJLNeU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D04C19423;
-	Mon, 30 Mar 2026 14:41:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpESy+ok"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B7CC19423;
+	Mon, 30 Mar 2026 14:41:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774881666;
-	bh=r8gBVMIG5Tt1MRP52sdyrMptt1JIP8UGDqO4QDt0jTE=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=ovkJLNeUr84JiMtcI+5WAr2G8F9gn2hqEyL/gCPmtpLtQ6gvn7uHEmPCINHpwdSq1
-	 KHmm4LGAWVuLRn0b7szwZPb57qduv9hEYOqeFWt4CLxELU8w4Htq+jCRTm2Nr8spiM
-	 1c15EVpJovbdySZ8d9sjru/hyJX/3TakNznuSl9W/VkqqkzkFz//amHfdNGpP0K0Yn
-	 kb5OvZeE0vjs++B7E2w4qcWgwlfQmiwuKD/zm3yFho6Bl2m1lPU8XzBhK4OdMQVVu2
-	 TQp1+E+ZOWdO0voZ2Sh9Q86tCe36AY0ehu8bdV8/rQS+Wx35deYr69l9mRTH8nFVbj
-	 bKU6gxTjQibvA==
-Message-ID: <ff7c26b2-0714-47da-b3e1-785e62391cb8@kernel.org>
-Date: Mon, 30 Mar 2026 16:41:01 +0200
+	s=k20201202; t=1774881678;
+	bh=/b+myYYhB8jzOrjcVz6JmjvgnFszRZARbcMB/w5G2pU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=LpESy+okWjGORd+j/B5v4tjLLOcpp3A77bnVBRmGGUnSx/0+iuV7LmlgeorIfrBJO
+	 spta8sy7qgBz6E81PmnrnArJDoqj8sVnPx8h53yeF4AWyZ87VsNBMYafg6ONMAuUCo
+	 6pU1ulyaQg0glZSxvNY2E21bgvrar7qI1DAOiaGgdQpX3Q2uSMt0nYJDWPXSxSSEIA
+	 LdMM98E4j31WWormnX+ieF0CzR8hGOXK2p+J3Btf5gugdHqkbIn72S5le6yhPRYcCC
+	 1DJsgAV/gpKAH2P9Zccpi9JvAcQPyN3XeM4L8vhwFP7xMLois3Y8qncwk1rI8Pngq3
+	 iSzSjAtiaLAZA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>, eddyz87@gmail.com
+Cc: ast@kernel.org, bpf@vger.kernel.org, STAR Labs SG <info@starlabs.sg>
+Subject: Re: [PATCH bpf 1/2] bpf: Fix incorrect pruning due to atomic fetch
+ precision tracking
+In-Reply-To: <20260330132750.377862-1-daniel@iogearbox.net>
+References: <20260330132750.377862-1-daniel@iogearbox.net>
+Date: Mon, 30 Mar 2026 15:41:14 +0100
+Message-ID: <m2o6k5z8fp.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] mm/page_alloc: Optimize
- __free_contig_frozen_range()
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Zi Yan <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
- david.hildenbrand@arm.com
-References: <20260327125720.2270651-1-usama.anjum@arm.com>
- <20260327125720.2270651-4-usama.anjum@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <20260327125720.2270651-4-usama.anjum@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 3/27/26 13:57, Muhammad Usama Anjum wrote:
-> Apply the same batch-freeing optimization from free_contig_range() to the
-> frozen page path. The previous __free_contig_frozen_range() freed each
-> order-0 page individually via free_frozen_pages(), which is slow for the
-> same reason the old free_contig_range() was: each page goes to the
-> order-0 pcp list rather than being coalesced into higher-order blocks.
-> 
-> Rewrite __free_contig_frozen_range() to call free_pages_prepare() for
-> each order-0 page, then batch the prepared pages into the largest
-> possible power-of-2 aligned chunks via free_prepared_contig_range().
-> If free_pages_prepare() fails (e.g. HWPoison, bad page) the page is
-> deliberately not freed; it should not be returned to the allocator.
-> 
-> I've tested CMA through debugfs. The test allocates 16384 pages per
-> allocation for several iterations. There is 3.5x improvement.
-> 
-> Before: 1406 usec per iteration
-> After:   402 usec per iteration
-> 
+Daniel Borkmann <daniel@iogearbox.net> writes:
+
+> When backtrack_insn encounters a BPF_STX instruction with BPF_ATOMIC
+> and BPF_FETCH, the src register (or r0 for BPF_CMPXCHG) also acts as
+> a destination, thus receiving the old value from the memory location.
+>
+> The current backtracking logic does not account for this. It treats
+> atomic fetch operations the same as regular stores where the src
+> register is only an input. This leads the backtrack_insn to fail to
+> propagate precision to the stack location, which is then not marked
+> as precise!
+>
+> Later, the verifier's path pruning can incorrectly consider two states
+> equivalent when they differ in terms of stack state. Meaning, two
+> branches can be treated as equivalent and thus get pruned when they
+> should not be seen as such.
+>
+> Fix it as follows: When the fetch dst register is being tracked for
+> precision, clear it and propagate precision over to the stack slot.
+> This is similar to how BPF_LDX handles loads from the stack.
+>
 > Before:
-> 
->     70.89%     0.69%  cma              [kernel.kallsyms]      [.] free_contig_frozen_range
->             |
->             |--70.20%--free_contig_frozen_range
->             |          |
->             |          |--46.41%--__free_frozen_pages
->             |          |          |
->             |          |           --36.18%--free_frozen_page_commit
->             |          |                     |
->             |          |                      --29.63%--_raw_spin_unlock_irqrestore
->             |          |
->             |          |--8.76%--_raw_spin_trylock
->             |          |
->             |          |--7.03%--__preempt_count_dec_and_test
->             |          |
->             |          |--4.57%--_raw_spin_unlock
->             |          |
->             |          |--1.96%--__get_pfnblock_flags_mask.isra.0
->             |          |
->             |           --1.15%--free_frozen_page_commit
->             |
->              --0.69%--el0t_64_sync
-> 
+>
+>   0: (b7) r1 = 8                        ; R1=8
+>   1: (7b) *(u64 *)(r10 -8) = r1         ; R1=8 R10=fp0 fp-8=8
+>   2: (b7) r2 = 0                        ; R2=0
+>   3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)          ; R2=8 R10=fp0 fp-8=mmmmmmmm
+>   4: (bf) r3 = r10                      ; R3=fp0 R10=fp0
+>   5: (0f) r3 += r2
+>   mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1
+>   mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10
+>   mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)
+>   mark_precise: frame0: regs=r2 stack= before 2: (b7) r2 = 0
+>   6: R2=8 R3=fp8
+>   6: (b7) r0 = 0                        ; R0=0
+>   7: (95) exit
+>
 > After:
-> 
->     23.57%     0.00%  cma              [kernel.kallsyms]      [.] free_contig_frozen_range
->             |
->             ---free_contig_frozen_range
->                |
->                |--20.45%--__free_contig_frozen_range
->                |          |
->                |          |--17.77%--free_pages_prepare
->                |          |
->                |           --0.72%--free_prepared_contig_range
->                |                     |
->                |                      --0.55%--__free_frozen_pages
->                |
->                 --3.12%--free_pages_prepare
-> 
-> Suggested-by: Zi Yan <ziy@nvidia.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>
+>   0: (b7) r1 = 8                        ; R1=8
+>   1: (7b) *(u64 *)(r10 -8) = r1         ; R1=8 R10=fp0 fp-8=8
+>   2: (b7) r2 = 0                        ; R2=0
+>   3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)          ; R2=8 R10=fp0 fp-8=mmmmmmmm
+>   4: (bf) r3 = r10                      ; R3=fp0 R10=fp0
+>   5: (0f) r3 += r2
+>   mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1
+>   mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10
+>   mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)
+>   mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0
+>   mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1
+>   mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8
+>   6: R2=8 R3=fp8
+>   6: (b7) r0 = 0                        ; R0=0
+>   7: (95) exit
+>
+> Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
+> Fixes: 5ca419f2864a ("bpf: Add BPF_FETCH field / create atomic_fetch_add instruction")
+> Reported-by: STAR Labs SG <info@starlabs.sg>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+
+Athough not related to this patch but it made me think about how the
+conditional semantics of CMPXCHG could interact with precision tracking,
+because the CMPXCHG could write to a stack slot or not depending on the
+comparison and that slot could later be used for precision tracking. But
+I found that although check_atomic_rmw() set's INSN_F_STACK_ACCESS in
+the flags, it also makes the stack slot STACK_MISC, therefore
+instruction reading from it will not have INSN_F_STACK_ACCESS so the
+precision tracking will stop there.
+
+This patch looks correct to me.
+
+Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+
+
 > ---
-> Changes since v3:
-> - Use newly introduced __free_contig_range_common() as the pattern was
->   very similar to __free_contig_range()
-> 
-> Changes since v2:
-> - Rework the loop to check for memory sections just like __free_contig_range()
-> - Didn't add reviewed-by tags because of rework
-> ---
->  mm/page_alloc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 64be8a9019dca..110e912fa785e 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -7059,8 +7059,7 @@ static int __alloc_contig_verify_gfp_mask(gfp_t gfp_mask, gfp_t *gfp_cc_mask)
->  
->  static void __free_contig_frozen_range(unsigned long pfn, unsigned long nr_pages)
->  {
-> -	for (; nr_pages--; pfn++)
-> -		free_frozen_pages(pfn_to_page(pfn), 0);
-> +	__free_contig_range_common(pfn, nr_pages, true);
-
-Ah, might want to add a comment here as well
-
-	/* is_frozen= */ true
-
--- 
-Cheers,
-
-David
+>  kernel/bpf/verifier.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f108c01ff6d0..293aa957a5ff 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4474,6 +4474,31 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+>  			 * encountered a case of pointer subtraction.
+>  			 */
+>  			return -ENOTSUPP;
+> +
+> +		/* atomic fetch operation writes the old value into a
+> +		 * register (sreg or r0) and if it was tracked for
+> +		 * precision, propagate to the stack slot like we do
+> +		 * in ldx.
+> +		 */
+> +		if (class == BPF_STX && mode == BPF_ATOMIC &&
+> +		    (insn->imm & BPF_FETCH)) {
+> +			u32 load_reg = insn->imm == BPF_CMPXCHG ?
+> +				       BPF_REG_0 : sreg;
+> +
+> +			if (bt_is_reg_set(bt, load_reg)) {
+> +				bt_clear_reg(bt, load_reg);
+> +				/* atomic fetch from non-stack memory
+> +				 * can't be further backtracked, same
+> +				 * as for ldx.
+> +				 */
+> +				if (!hist || !(hist->flags & INSN_F_STACK_ACCESS))
+> +					return 0;
+> +				spi = insn_stack_access_spi(hist->flags);
+> +				fr = insn_stack_access_frameno(hist->flags);
+> +				bt_set_frame_slot(bt, fr, spi);
+> +				return 0;
+> +			}
+> +		}
+>  		/* scalars can only be spilled into stack */
+>  		if (!hist || !(hist->flags & INSN_F_STACK_ACCESS))
+>  			return 0;
+> -- 
+> 2.43.0
