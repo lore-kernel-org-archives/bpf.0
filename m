@@ -1,96 +1,187 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77ABF3A3E67
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 13:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774878940; cv=none; b=hot+iEUazmPnxkGMmewN6VEizQw8pcg17MkwS0dTp13cDFyTMUfKYaZjqwbSQaIQKBbz5lcl44n3qSq7Hlq058vGqacy1KF+C8jPl5ILgz2ol6Bu0JOLxE774Z6ev7sYt6xYCzOAYh+Igqrqe/K3+Sl+YH74TRU8HR0gTWNapJg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774878940; c=relaxed/simple;
-	bh=JuzlJXEAHGcSiF6n+n3yInCM4todvtFnYHvB3lvFcrs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C+JwKXiTaTF8WnKtlMbhL4Rwl8yZhCNBLnUn9+IjhW2MNpjQ/Ck6inV6a2o4scCJWGTUwufAFO8V6z/D5EkyYjJGcna7viivevApWE83q0q/qzT28KfN1FjEwScg7K9oR7C1ixIRfthx0SbkzacnRTbKbXhwhfOWQBuctecSG/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qDWaEm9+; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C802D3D4138
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 14:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774879362; cv=pass; b=YpmeDx3JGLJwB8PpzlK7r74RRSP71fNxEgjWU5T4+i6vO/TRmPpyiuna4QwOvrAQZ76vXap8u5jgAQq1MWzCofs9PQWr+r6WPNlnnrohRq6elb7Y5in2b0H1hrZja5sS+9VhMWXel/A13Wr6RsKob4dUK5BQ9cLmTGZcybVm5Sc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774879362; c=relaxed/simple;
+	bh=cOYNuyzwl97tt3swTkjE/ZnYXJjAP/MubIqZuyFxJRE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b3BiOTHLfDAJdOrvAQNyWWXHGHb4Nq9atozybpv7qxm6Z/lvlULD8PQhld+nKCNme/1y1gCloKPgQDYF+Dp4QRP2jEHsmcAVNoQxgnsjJQkIfpwCclkhcoW3FKcrKejD9I+m8kYpf+ScCBBc5csCuLSlk11Rh81yUiwCN1yvkpc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SzKE0Tin; arc=pass smtp.client-ip=209.85.221.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qDWaEm9+"
-Message-ID: <cd12a2fc-8fc4-40ab-a5bc-bf7b0f4ce766@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1774878926;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8Oe2X5q/5SHXJHJJnjteGS61bN/fIuINUCylSG5ydx4=;
-	b=qDWaEm9+oGVVjbVmrl8Z31/SC85DF2KQ+is//Zhbm9jWFgjFDtcN1k5WYLoJYlAPCQ3nWX
-	FjngGBEVHXsZJJk8hrVEpcw/2nL8IKi0tGg1wWcwXzbP8VUYsjW8JLP4m+SYaV9rTJvA1s
-	Nx7DGI+a+0EJn9VyWvlIZTMOOxOwuSs=
-Date: Mon, 30 Mar 2026 21:55:02 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SzKE0Tin"
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-439d8df7620so3235464f8f.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 07:02:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774879358; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MqegpjGkWJMdxUZceArbOXf/PgDnAhaMqg/LIqM+RE9p1kCy/PMV+VUelTzstEnswm
+         f7qtZYVDkNOVL3GjbHY5JVB6L+4xJi4rAEsuIiUJKnAKPdKh/PgWbCLUYGmqYO4ivxzw
+         8Z9NMn6TCUnc7wfM3K6Ss2LQXmIwYcJeR45ehVs40pMAj52cSO3zpNdW9LKzhWh9F7ut
+         xfuD/QJj+uSvH5BeEmMJEKZ9nXThm9P3mup6dPffS6H/mrj9z/NfUoZAU6odendJE3tu
+         FRjEaKIMcCUOaVAcfDEf+p8QPBEwbauqzSyCN0SNlCNIgwCgHbTCUFk8xAvfnqO4/czN
+         vfDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=KjB/UVz/vnJ23xIYfblwh45FQTiDMykH3MwZx75uAOM=;
+        fh=9d03gO6ZDIjrOrTeHaZeBUvVDHxN+aVkavLReq5lJ0A=;
+        b=IOz5usjOP1Bla/DRDoNMhsG+yKPxZ5SQKadygcW1UsVe12iR1XKy/a9gi3lWVPYZE/
+         5CRFW7/WU0cGTECCfaVatACzdhkpgNK41vZT9ycX2bgM3VNvHuZPCnbfEy9G8ZL2qhRH
+         Gu2yGvEMXrXwS7IqV23JKOdnuL1bdYU7xZQBEGu/itIbMAP31aVrMJrfzlo5ae2OH83S
+         zfAlcKsbG3deycryg50WL8XcvWRcQT13/QxF4sEXqmOJP8KWNGfmi6EKs0H2md0JU3HK
+         vuURoyjRF7g5ZbZN/WSaaVdkZz8R9/gkJJp0yqSmdKoCm8aUiwrW92/zR9rIyRNdzP/m
+         XAVw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774879358; x=1775484158; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KjB/UVz/vnJ23xIYfblwh45FQTiDMykH3MwZx75uAOM=;
+        b=SzKE0Tin7y8a4NBmDzUqlON50Izn/bvIXebm2hZuO7d8eStmzams8/QRhXSedy8/P3
+         rwqnEA5oFppT5Xq0uP4h1HDcdC1aAPB9OBnd4+o3QrfqL2icI9NGnirqhIYymH0HbXc/
+         k1k0ZqyHBbudMCf/XtrezmRp+aAaUL4znkgXUxjpYCPlBeRnzLnYRFEKV4LTi6PIKexi
+         r9jnPUg6lm2kLOIf2kf+Win9BTd1+DskWycqzSw0LjHwjcxkbNSBvcSvlQXuAAkY+pSN
+         zaaymsP2NyNny4UKYcgmFIJxYEs+gA84KKR5LXb1QDBpEGDCQOH2oSkRjS/NGjmQnmSI
+         2ivQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774879358; x=1775484158;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KjB/UVz/vnJ23xIYfblwh45FQTiDMykH3MwZx75uAOM=;
+        b=EL7kLuzAQzsPCYN48M4hr2IzNOuQ6PZwWQJ60ao+of64pI/7I0kkpz0yAIDSWgl/uY
+         OEFzPRzh3Yzrr9QROtIw+oym+aGA4aH5w5F8A6LqpuSBcxg+HE1j/oJn8zJZRBr2YH6A
+         g3g1bMuyp33bu92AmhGcrpF5kpEDlu/KWrGzcb8g6h6cciWcQdSuaoNQGKbS0W8bjkDn
+         i84FCTaxNP8bNKOX4NKqpUdCaeE30J523vKMlGAYzsx+TKcIlQfMtuOHSBF48LOIpK3I
+         pQjrpww0VstBAVjtnlb+RgLFjgOZIEcb7W3ObpEzaKpn5hkJhtI+yNnZ/q+1C2lm50oJ
+         mk0Q==
+X-Gm-Message-State: AOJu0YziYETmF9PBFV7G8VqmnzGIAVelw5xjXqTXLhGzxidOSHfIUBlc
+	mrvOzQyllOrZamz7jsnLepIyG4AkyagQT8u57PhgW8ahs9x3pB+/FSflPIqWhP9M4HbabbH7WOR
+	hc8m6VBmAt/Rws5rQAj2FeTgR5hlwFPE=
+X-Gm-Gg: ATEYQzzMk+h3JQ4Ej3+V09qX/5Qb9HLYtB2wrRTiQQWSvkYJ5nRisjsIcUmXdoN8Nsj
+	yAh+QEzLUswfbqjxx373AeLyEzG+WujjpTedrOwdwH95UKl13za3zfm5rw+YLubXHGTFjZmSN4i
+	4dorBU2ISvey8svUGEktJnCNVj/hSGHsPkt7A4tWW13a+OT1LCP54MqnusA3/8lWVEIImR+qVAm
+	M7Z+QAISR2tMbWSD+ZMb1Dhk4809pSFgja41xXZgfqJbtNqQj47nn8u1Nav1m9hiZGb5mz0ulIj
+	3oe32+GHysn0G0tGW27E4SHLbAcLQOvTLVLbnIWhXJAKA/Lv2szwwwTakrqU
+X-Received: by 2002:a5d:5489:0:b0:43b:a21e:9c19 with SMTP id
+ ffacd0b85a97d-43ba21e9c7bmr14963980f8f.38.1774879357807; Mon, 30 Mar 2026
+ 07:02:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add test to verify the fix
- of kprobe_write_ctx abuse
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Feng Yang <yangfeng@kylinos.cn>, Toke Hoiland-Jorgensen <toke@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260326141718.17731-1-leon.hwang@linux.dev>
- <20260326141718.17731-3-leon.hwang@linux.dev> <acpCWX6h-1IJtorN@krava>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <acpCWX6h-1IJtorN@krava>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260330032124.3141001-1-memxor@gmail.com> <20260330032124.3141001-2-memxor@gmail.com>
+ <m28qb91w6r.fsf@kernel.org>
+In-Reply-To: <m28qb91w6r.fsf@kernel.org>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Mon, 30 Mar 2026 16:02:00 +0200
+X-Gm-Features: AQROBzDpKGwX6F0CTM-N2Sile2tLaGHYutBcYpbqPZS2MtZQx9jiuM0J1cmCL38
+Message-ID: <CAP01T77PKKrejHXqTK3ojOo-GP_rO+oyUu=79LYj8_EBQ_4dUQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v1 1/2] bpf: Fix grace period wait for tracepoint bpf_link
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 2026/3/30 17:28, Jiri Olsa wrote:
-> On Thu, Mar 26, 2026 at 10:17:18PM +0800, Leon Hwang wrote:
-> 
-> SNIP
-> 
->> +	prog_fd = bpf_program__fd(skel_kprobe->progs.kprobe_write_ctx);
->> +	bpf_program__set_attach_target(prog_ext, prog_fd, "kprobe_write_ctx");
->> +
->> +	err = kprobe_write_ctx__load(skel_ext);
->> +	if (!ASSERT_OK(err, "kprobe_write_ctx__load ext"))
->> +		goto out;
->> +
->> +	prog_fd = bpf_program__fd(prog_kprobe);
->> +	link_ext = bpf_program__attach_freplace(prog_ext, prog_fd, "kprobe_dummy");
->> +	ASSERT_ERR_PTR(link_ext, "bpf_program__attach_freplace link");
->> +	ASSERT_EQ(errno, EINVAL, "bpf_program__attach_freplace errno");
-> 
-> nit, I prefer libbpf_get_error call instead, because it's not obvious
-> that ASSERT_ERR_PTR sets errno, smth like:
-> 
->         if (!ASSERT_EQ(libbpf_get_error(link_ext), -EINVAL, ..
-> 
+On Mon, 30 Mar 2026 at 11:52, Puranjay Mohan <puranjay@kernel.org> wrote:
+>
+> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+>
+> > Recently, tracepoints were switched from using disabled preemption
+> > (which acts as RCU read section) to SRCU-fast when they are not
+> > faultable. This means that to do a proper grace period wait for programs
+> > running in such tracepoints, we must use SRCU's grace period wait.
+> > This is only for non-faultable tracepoints, faultable ones continue
+> > using RCU Tasks Trace.
+> >
+> > However, bpf_link_free() currently does call_rcu() for all cases when
+> > the link is non-sleepable (hence, for tracepoints, non-faultable). Fix
+> > this by doing a call_srcu() grace period wait.
+> >
+> > As far RCU Tasks Trace gp -> RCU gp chaining is concerned, it is deemed
+> > unnecessary for tracepoint programs. The link and program are either
+> > accessed under RCU Tasks Trace protection, or SRCU-fast protection now.
+> >
+> > The earlier logic of chaining both RCU Tasks Trace and RCU gp waits was
+> > to generalize the logic, even if it conceded an extra RCU gp wait,
+> > however that is unnecessary for tracepoints even before this change.
+> > In practice no cost was paid since rcu_trace_implies_rcu_gp() was always
+> > true.
+> >
+> > Hence we need not chain any SRCU gp waits after RCU Tasks Trace.
+> >
+> > Fixes: a46023d5616e ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
+> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>
+> With a nit below which is mostly informational.
+>
+> Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+>
+> > ---
+> >  include/linux/tracepoint.h |  8 ++++++++
+> >  kernel/bpf/syscall.c       | 22 ++++++++++++++++++++--
+> >  2 files changed, 28 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> > index 22ca1c8b54f3..8227102a771f 100644
+> > --- a/include/linux/tracepoint.h
+> > +++ b/include/linux/tracepoint.h
+> > @@ -113,6 +113,10 @@ void for_each_tracepoint_in_module(struct module *mod,
+> >   */
+> >  #ifdef CONFIG_TRACEPOINTS
+> >  extern struct srcu_struct tracepoint_srcu;
+> > +static inline struct srcu_struct *tracepoint_srcu_ptr(void)
+> > +{
+> > +     return &tracepoint_srcu;
+> > +}
+> >  static inline void tracepoint_synchronize_unregister(void)
+> >  {
+> >       synchronize_rcu_tasks_trace();
+> > @@ -123,6 +127,10 @@ static inline bool tracepoint_is_faultable(struct tracepoint *tp)
+> >       return tp->ext && tp->ext->faultable;
+> >  }
+> >  #else
+> > +static inline struct srcu_struct *tracepoint_srcu_ptr(void)
+> > +{
+> > +     return NULL;
+> > +}
+> >  static inline void tracepoint_synchronize_unregister(void)
+> >  { }
+> >  static inline bool tracepoint_is_faultable(struct tracepoint *tp)
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 274039e36465..ab61a5ce35af 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3261,6 +3261,13 @@ static void bpf_link_defer_dealloc_rcu_gp(struct rcu_head *rcu)
+> >       bpf_link_dealloc(link);
+> >  }
+> >
+> > +static bool bpf_link_is_tracepoint(struct bpf_link *link)
+> > +{
+> > +     /* Only these combinations support a tracepoint bpf_link. */
+> > +     return link->type == BPF_LINK_TYPE_RAW_TRACEPOINT ||
+> > +            (link->type == BPF_LINK_TYPE_TRACING && link->attach_type == BPF_TRACE_RAW_TP);
+>
+> nit: this second check is never true here, because BPF_LINK_TYPE_TRACING
+> uses bpf_tracing_link_lops, which has .dealloc (not .dealloc_deferred)
+> and this function is only called from dealloc_deferred() path.
 
-Yeah, libbpf_get_error() is better. Will use it.
+bpf_raw_tp_link_attach has a special case for this, where this
+combination ends up using bpf_raw_tp_link_lops instead.
+I will add a comment since it's non-obvious. If you think about it, if
+this wasn't the case, we'd have another bug.
 
-> anyway lgtm
-> 
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> 
-
-Thanks for your review.
-
-Thanks,
-Leon
-
-[...]
-
+>
+> [...]
