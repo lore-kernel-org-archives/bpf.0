@@ -1,259 +1,137 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F146382291
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 19:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1940726B2AD
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 19:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774898470; cv=none; b=oqbQAC2yNkU/FUySkFOevl/Y+Y+NBt23dGIZeFqB64wXPrnBOXLwvMN6Sjebt0pj4qFREIJ/+s5pBiIAi8PPyYwK2tDEOqp0ZVQsoqwltN5795O56grtP1FoxI4YmUQIssIdP+R37CR+fhnK45fT4v07cu5UjNGU3N1xgUKqeNU=
+	t=1774900528; cv=none; b=Xb42T+bF4TnTHghR6hjje5h3Y/bUPXavYzXttrPYiUKVuO/KwWl5c8WTQBzRPXUZ7j3lRdDP7eSf2q+NsnNy/1asrDyZ1y+yR9V/ZMe2lgUYDA9W193gx1FcUJPCNFIge6eLFM1IN3tdmcEiIGK8ivefGUW0LrIqdy39zfwTLHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774898470; c=relaxed/simple;
-	bh=ArpY6bK4aQAVN5J1brAdI/ouH5uJd35S2Ob0xsC8sq8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LEmQmHIMvl8NAEmDwsc3rmsTuLE2HqNuVLMVjo9clMstvhsSMHP3PqpckA+VnKsG4W6JNHkyHhHSIyHQuSTAmJirLJujDdxtgAOtgN4Z1ZjYFBwyv6Usc5j5VxlFgMyQZzw2FrfQltR5cAh4m1HcHW5HPZg3ho+NmiURglPVSeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dWXEiPVt; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1774900528; c=relaxed/simple;
+	bh=F/7KlDqSeMVu6sM/czxRLTxBPfRX7IB7v8B/2Nccn5U=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WDNg05EFvpB0ClStRrz5VONdrZsEfRslZ8rN4RJdvzLKVi7+Y2kp7aCCp1eKLhElqrkQDpEJQE/EyXVF8E089f2KFAXEi5/CvQWFSeBuiG4DOEHcayEEQawl3dyY22abB+HYah7nNuwybEQrEhBQwuVMMIIYtn7GkXU7mQ9JOLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EqZzCkso; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dWXEiPVt"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62UAUtG33068935;
-	Mon, 30 Mar 2026 19:20:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=LaHGbyy3a+PyoQzYh
-	9/3THjoLQiOMnnzugao2tSRl8E=; b=dWXEiPVtEM0wCU8F+2hu4bTQcEbUn+jCB
-	p6w0VBrz/xTKtcJjBQnZThscbtsOnE2nQIAivFoeZbTW3NJuI99PYOyomcc2fyfT
-	efqpdvjwewOn4512E/KTj7yzcELcW/GGGl+IeStFV8dzwJZkpaI3NvqEU4yAVagG
-	7K9ZMOwKBldWxYISznGJqFRtBSWQ2Fr9WosYCOcCzagHexb7k6QKYfN3E32yw3ys
-	4fCRyIoyd3t2iYNP1mZAflqQWyrZQbBYr080T7JDOBT3+Du1cBkG8PRE8Bz+ZKSC
-	uFZ05d/cRARJfxxbo49Y57PvGMKngRWr6vJ3QYT4sb1P29ygICRSA==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d65dc80uk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Mar 2026 19:20:51 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62UJ56sl005980;
-	Mon, 30 Mar 2026 19:20:50 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6spxx8ky-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Mar 2026 19:20:50 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62UJKkBR52953574
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 30 Mar 2026 19:20:46 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A72F62004D;
-	Mon, 30 Mar 2026 19:20:46 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 24E8920043;
-	Mon, 30 Mar 2026 19:20:45 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 30 Mar 2026 19:20:44 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH v5 2/2] selftests/bpf: Enable private stack tests for powerpc64
-Date: Mon, 30 Mar 2026 19:20:34 -0400
-Message-ID: <20260330232034.44776-2-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260330232034.44776-1-adubey@linux.ibm.com>
-References: <20260330232034.44776-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EqZzCkso"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4852c9b4158so38465705e9.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 12:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774900525; x=1775505325; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BvecMkdZN7GJ1eMynnJGBnNnu5EUvC0Prs3Kd/u+xy0=;
+        b=EqZzCkso5cO72Gz0U7Vg4/pEWXkWqThhozO/aEH76P7tQ2SLrMqBJaKlBvOR+f39lk
+         Nh5dmJOKM61LWDLF7C6Qn9Zu+ZY5KpdELajEFS3VzbDDHBCZY7vFjZpJfm0sI6Kis8Ev
+         LAAvIXUVutTY8lZ5vKG8Hx4Hi3HvNkTjAo0bsajhOfNACgfV0FZCBZYMr+7MpH4c4Yri
+         izKa7IAcWLSAp8pvGRydeAyT1GTeUoUgYD7w/7g6msdG05rZ1YUMHN9kH7vP9hrLgim9
+         UF7XU+NbERf+Eg3X89aa8m1F+OFTat9G3HG3Rqzo/Bo+3ZfQs4CCcj7VlHTuol3UD6sZ
+         yW7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774900525; x=1775505325;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BvecMkdZN7GJ1eMynnJGBnNnu5EUvC0Prs3Kd/u+xy0=;
+        b=RMzVneNHdJDyLbYhLu/Ug1UvkNPuFpEhml6z9r7KU/KinebiRK8V4y2pSrzK+eQxQ9
+         frnARTW6WAd4uUL9ZIvId1Mp108Y7nOEIS6zCONa9lBVhffRvhHxYTww/XbocUASTX27
+         LGa82zxjQSOb7dwKlMw014OLSs+hWBM7sepDnbe9kolOIVyaANfMvo7izN83cWD16Q30
+         AkaAQNzmL8XuiMM7nqkrkj/AT6w/1UQwht+OwxSZ24g54jjN3VmYLBgfA/LpcEq7XeHE
+         J42pi30YfZqOkfNBbXKnTv0I85BmTcK/lZZE37eF9bEqmWeWQiSHj7AqOcpzlRmBxrSw
+         yXmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXoDRrpO8ZQwEz7ch8VSefZH/zxNoHWq/TUbpHnlGS0AncOuRXs++uQGxmqwUFpAKx2iWU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6lx6is1SiVSSQHMYzslGoWjdiKR9fS4Tw2lMaY44+Vzlr39/N
+	N/tjyfo72Dol9CqHTOx3ck4ELgJmvLRNlHtneERmRlmCLxaIIOzVanRj
+X-Gm-Gg: ATEYQzy2Sj+przR+ZEH3/6obLX2hjDGbEMrIKKjMrpDlFV01XCtIjbqFVLjngITBcK6
+	2YAnFe7xnORFF+FghREbzXV0/lDfl1J0ZizglE0nfg345KxlQtvLAafKEe5SezjRG7Cu8ZSfC1R
+	V0lqauX6hHc8NLR/i6yf7JsGk2nLFeESxFqCkYIfMwytoJYKo2AfjRt0+ECnBBP6m2SnKmRI8im
+	2KxueHoeYv5zbrtV/MxhcAV+yy5yVcjazHIowbke/1I+nCuz+IyQ6dFGyd7LmFWlYQgOwTCx7RG
+	HSo/I5gcIBovTMXHVfCUoL0ss9CdtrvqGydQ5QQjyRxjSQsVduvLmfOZRqa1UVuGEcRizsbLIWM
+	atHJgVfeG8BexhJBhf4tKfA8/H+X+SxUHdK106gXqhQtuH1tqohmgPDgFEE8pKn/ewD9To6nAd7
+	xiw8oXjwCJ1JpvHZmDk6HRWxCrYK7xFnGZMPWDWLfyiRNi3Omj5zZvcZjjCw==
+X-Received: by 2002:a05:600c:1f11:b0:480:1d0b:2d32 with SMTP id 5b1f17b1804b1-48727d638efmr242642785e9.12.1774900525175;
+        Mon, 30 Mar 2026 12:55:25 -0700 (PDT)
+Received: from krava (cust-west-par-46-193-1-135.cust.wifirst.net. [46.193.1.135])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722c95041sm277968485e9.6.2026.03.30.12.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 12:55:24 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 30 Mar 2026 21:55:21 +0200
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+	Christian Brauner <brauner@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+	Abhishek Dubey <adubey@linux.ibm.com>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>
+Subject: Re: [linux-next-20260327]resolve_btfids warnings for unresolved
+ bpf_lsm_bdev_* symbols
+Message-ID: <acrVKUy_EPiFFmV9@krava>
+References: <6ebc74b5-3dd8-4bb5-adac-fa32bf71eacd@linux.ibm.com>
+ <CAADnVQ+KpCZqjAhMBzDZqm14yaORK-PG2VHRnub1Q0gYTHKG=Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=RsjI7SmK c=1 sm=1 tr=0 ts=69cacd13 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=WRW5XrRV495NP23rXD4A:9
-X-Proofpoint-GUID: 4nFR3oUsB9ZqUDrwQQ2vqpwj1_ku6JFI
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzMwMDE2MSBTYWx0ZWRfX0XMmEGyK6CXu
- +PJViSH3DlvfdDTa7lXLYT6El2juIBKcrrlz0B8gex8e3VDfDorpf0DLT80qUBf/XsYX2T9KN60
- 4gLMv2OxVDgOHhxyg4bMcRI9vI4p49rqiLHdi8zmIdGBQfFnhU1N6QYW4GoLc4CJLkVSGtFk/os
- wWmLib/QgeVlyP5c8ds3Lp+P7PjeNf/igsLV0/tfNo4WgQeI0jyi51ZhYLOAsYaM8dRpLwtqIiY
- TtSraozKxF48l/ojSvCCzWb7ztDzOMLVsK8sB1svQYCp1mnLA9fT4IP68UVT1E1dc1+VQJtGzLm
- UNC/FXRDV02geLhKVZZjWQ5B2OOQdXuCM9Wmn4iFXfDt0Qm6gqh/Ia35Mwg97651dRaLoeh+/99
- pu6TtwUaDFKChC288gkMkOcWiBpHtX5SVGifgtMbzx8MVRtACSeszIecpnu6W5W7mL+5eV5VGrE
- XUeBpsVrIpbqNVf6S+A==
-X-Proofpoint-ORIG-GUID: 4nFR3oUsB9ZqUDrwQQ2vqpwj1_ku6JFI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-30_01,2026-03-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 malwarescore=0 spamscore=0 clxscore=1015 phishscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
- definitions=main-2603300161
+In-Reply-To: <CAADnVQ+KpCZqjAhMBzDZqm14yaORK-PG2VHRnub1Q0gYTHKG=Q@mail.gmail.com>
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+On Mon, Mar 30, 2026 at 07:42:18AM -0700, Alexei Starovoitov wrote:
+> On Mon, Mar 30, 2026 at 6:45 AM Venkat Rao Bagalkote
+> <venkat88@linux.ibm.com> wrote:
+> >
+> > Hi,
+> >
+> >
+> > While testing linux-next, I’m seeing the following warnings during the
+> > build:
+> >
+> >
+> > WARN: resolve_btfids: unresolved symbol bpf_lsm_bdev_free
+> >
+> > WARN: resolve_btfids: unresolved symbol bpf_lsm_bdev_alloc
+> >
+> 
+> Christian,
+> 
+> looks like those two need some #ifdef
+> 
 
-With support of private stack, relevant tests must pass
-on powerpc64.
+I think it's wrong hooks name, this fixes it for me
 
-#./test_progs -t struct_ops_private_stack
-#434/1   struct_ops_private_stack/private_stack:OK
-#434/2   struct_ops_private_stack/private_stack_fail:OK
-#434/3   struct_ops_private_stack/private_stack_recur:OK
-#434     struct_ops_private_stack:OK
-Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+jirka
 
-v4->v5:
-  Rebase over latest branch
-v3->v4:
-  No change
-v2->v3:
-  Enable testcase using __powerpc64__ instead of __TARGET_ARCH_powerpc,
-  to prevent it getting invoked on powerpc32
-v1->v2:
-  No change
 
-[v4]: https://lore.kernel.org/bpf/20260226031324.17352-1-adubey@linux.ibm.com
-[v3]: https://lore.kernel.org/bpf/20260226005440.9570-1-adubey@linux.ibm.com
-[v2]: https://lore.kernel.org/bpf/20260225153950.15331-1-adubey@linux.ibm.com
-[v1]: https://lore.kernel.org/bpf/20260216152234.36632-1-adubey@linux.ibm.com
-
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
 ---
- .../bpf/prog_tests/struct_ops_private_stack.c | 29 +++++++++----------
- .../bpf/progs/struct_ops_private_stack.c      |  6 ----
- .../bpf/progs/struct_ops_private_stack_fail.c |  6 ----
- .../progs/struct_ops_private_stack_recur.c    |  6 ----
- 4 files changed, 13 insertions(+), 34 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index d42123a0fb16..4c4421045dd0 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -5,6 +5,7 @@
- #include "struct_ops_private_stack_fail.skel.h"
- #include "struct_ops_private_stack_recur.skel.h"
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 119e3942cf5a..0e74325d96a6 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -383,7 +383,7 @@ BTF_ID(func, bpf_lsm_task_prctl)
+ BTF_ID(func, bpf_lsm_task_setscheduler)
+ BTF_ID(func, bpf_lsm_task_to_inode)
+ BTF_ID(func, bpf_lsm_userns_create)
+-BTF_ID(func, bpf_lsm_bdev_alloc)
++BTF_ID(func, bpf_lsm_bdev_alloc_security)
+ BTF_ID(func, bpf_lsm_bdev_setintegrity)
+ BTF_SET_END(sleepable_lsm_hooks)
  
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
- static void test_private_stack(void)
- {
- 	struct struct_ops_private_stack *skel;
-@@ -15,11 +16,6 @@ static void test_private_stack(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack__open"))
- 		return;
+@@ -397,8 +397,8 @@ BTF_ID(func, bpf_lsm_sk_alloc_security)
+ BTF_ID(func, bpf_lsm_sk_free_security)
+ #endif /* CONFIG_SECURITY_NETWORK */
+ BTF_ID(func, bpf_lsm_task_free)
+-BTF_ID(func, bpf_lsm_bdev_alloc)
+-BTF_ID(func, bpf_lsm_bdev_free)
++BTF_ID(func, bpf_lsm_bdev_alloc_security)
++BTF_ID(func, bpf_lsm_bdev_free_security)
+ BTF_SET_END(untrusted_lsm_hooks)
  
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack__load(skel);
- 	if (!ASSERT_OK(err, "struct_ops_private_stack__load"))
- 		goto cleanup;
-@@ -48,11 +44,6 @@ static void test_private_stack_fail(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack_fail__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack_fail__load(skel);
- 	ASSERT_ERR(err, "struct_ops_private_stack_fail__load");
- 
-@@ -70,11 +61,6 @@ static void test_private_stack_recur(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack_recur__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack_recur__load(skel);
- 	if (!ASSERT_OK(err, "struct_ops_private_stack_recur__load"))
- 		goto cleanup;
-@@ -93,7 +79,7 @@ static void test_private_stack_recur(void)
- 	struct_ops_private_stack_recur__destroy(skel);
- }
- 
--void test_struct_ops_private_stack(void)
-+static void __test_struct_ops_private_stack(void)
- {
- 	if (test__start_subtest("private_stack"))
- 		test_private_stack();
-@@ -102,3 +88,14 @@ void test_struct_ops_private_stack(void)
- 	if (test__start_subtest("private_stack_recur"))
- 		test_private_stack_recur();
- }
-+#else
-+static void __test_struct_ops_private_stack(void)
-+{
-+	test__skip();
-+}
-+#endif
-+
-+void test_struct_ops_private_stack(void)
-+{
-+	__test_struct_ops_private_stack();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-index dbe646013811..3cd0c1a55cbd 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-@@ -7,12 +7,6 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_2(void) __ksym;
- 
- int val_i, val_j;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-index 3d89ad7cbe2a..1442728f5604 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-@@ -7,12 +7,6 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_2(void) __ksym;
- 
- int val_i, val_j;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-index b1f6d7e5a8e5..faaa0f8d65a4 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-@@ -7,12 +7,6 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_1(void) __ksym;
- 
- int val_i, val_j;
--- 
-2.52.0
-
+ bool bpf_lsm_is_sleepable_hook(u32 btf_id)
