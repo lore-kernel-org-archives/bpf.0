@@ -1,112 +1,144 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8E038F957
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 16:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774889139; cv=none; b=Ux5is+hNlMNQjTXAt6EraHDnORAT5j2fKuonu8i/bYNDgVZHWbLYcpmDKWDVHcMmkBySHZ69jtP+WQTc8oFySYeZoxZVkYOh5uCCIqOmyqoWyuY8gxO/aVz5q3k9ZY0MEYjFpmO3MUl/joOg8lsSoekW8KyRgYavAqduubqYAyc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774889139; c=relaxed/simple;
-	bh=IpNnA9s1KINuamNfFsS2gV/eEu/pI6jxdZ/6/nT+doI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QwKoda7+HMPFFtZEp4HEzIAqez9wLVpjqGRnELDu4qphxnaGx6qjnbRczzzHpSVEnd5S+msMQ/nMJf+ITX9LM3H87yQPfJ7MLVhc+faCj+EuWSA/VvF8e2DOZCo8D7pQBBJRr6oXKmLzmE/i2FcaUATFixugBb4gAXATEr5LkTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b=LUUIu0Nn; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541693DA7E7
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 16:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774889184; cv=pass; b=BhNnXikfWN7kY5IkQf1nSERjxT5KzzM8Pcx4NWTFc7BLbbK4fJ0DrJkJgb5/wJKdjGLZlp5Yc16uPlr5Jq9Q7gx08/IS5Egl/wPwLX6YM/kqtOH9dAbzX085af8xOt4xPILx2QGWOu1lBcHCbB7Ysd0Hd7XhvgWL/0JysOk8h+4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774889184; c=relaxed/simple;
+	bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KQ1v6Af+ihBYacws/mF3djP+A7mvjCMybj0gdhFGtLTmLbJv4DJ6L6Xpcy3F6MkVt4R7a/JLptCiNs3eYKTEVOamiDmpY+QfpW87fCgtZB2oQjNZSyWmqaxVOXeCOnINiMLoFIgJO/XvcOUveGLIoXgwE76SeTh3Uwjl5c0etgM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qoSvMK+X; arc=pass smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20230601.gappssmtp.com header.i=@dama-to.20230601.gappssmtp.com header.b="LUUIu0Nn"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ad4d639db3so21451855ad.0
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 09:45:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qoSvMK+X"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b980b35534eso889578866b.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 09:46:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774889182; cv=none;
+        d=google.com; s=arc-20240605;
+        b=AmC8phpOUC1gskIezzYrLo5VTuYY10kvdtljxQwslxOKAlcoKja+7GokZII42Yiz3a
+         ESKj2gflUieozwbs/EphEMrSuRoAVhIHeEPFhnMcdKuFiIb92UqaNeEJ68tz9vI4wRtQ
+         nhdl3Pc7IKCARxwH7UcqGHtnozsQHKjU/HvAtEzvhgOUw+psWfZRfRR2qD/2rOCnPJk+
+         Yc9Utb3YCe4iTdt+w+JiRPP401MBWiuVBilcQE2XE3QeTG4zbzbkHY7B8P5xqKhZebZ4
+         M82+jOzSW9pw1XnvGwRQPorfLqvhlq5rjJiuscy0cpYoAMSxgjogR4mnA33uDB8JKczw
+         edlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
+        fh=l+sOHNGp0kHC4DTGgwcmkKWxb0J3N8enUjd4xjROCgw=;
+        b=Ou3YltSmQCwV4/yhSMEt/iNFUyEuCJNX5Kd/xJkBzgSC3q+Di5VgLdcIxAzqs8BlZV
+         iBKn0+OrDy8IOBkgiBBOlCod1pYtTjbpm77YOft9hCs3swf5rHKX3QDkgDaGF3Gv/O9n
+         kLRTyiUVWITJYA3AsOzyKX3ODNiEZpqdNHXdGPmiaR3UpD3pNgo01OC6yxoEheO4vm6J
+         1JI2jice6Y4WD4RVS095U/AwcHUXVHQfCaIZXQv9dY4nqEFSEycceMSISSi6SFfAxHAl
+         RRwh1BnB+7cd+cwJMccWZL9QfVGFITxG0LIsvBy32qCHTbNzAxeE4JukTePwvT91mYxg
+         z7oQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20230601.gappssmtp.com; s=20230601; t=1774889136; x=1775493936; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BwE++Vqw+CySglw+oPVi7SkePVFEszmRECwetM66l0k=;
-        b=LUUIu0NnPlqE2N6oFk9t68bzUuF/WGQ46GYjp/96iytW8uH1U+ElD8HGdhBpUqHzE0
-         SVYLQR3kd1yiH2vS3Jh1taoFYUI+Uv8HJ943nKTDUpfnWmCKW2OiSeibmIV9F8A7KbJB
-         omg3/kOpSdBX4WPX/49q+PgCMvt4Est6ljAKXDT9735B6QsOl2LF5CSDYJCbnfejABs9
-         ivPeE76fx3mRjix5/8nWUkjxqtDvjskmwxRh/W+TzR36ocXQLn/J+KiuirqFZRbGHJM8
-         JqbL638lreTaVI0Tfua4xM+FzSqTJ4DNl742AiWzjqFAMG0J69j22DshZZe7iec8EKeN
-         LZJw==
+        d=gmail.com; s=20251104; t=1774889182; x=1775493982; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
+        b=qoSvMK+XNKgfVyFNZd6tPDdaEAR3wx1K7boBb9miPG6p7aATYEp4D9idJtIzGMVrZS
+         jm+XmqNnDcydMEoJJVyEXqlWgvNQDMbJAlTOGA5LAuzhf1ProoNDo+R8tE+lUVbyNEZo
+         Jzx3KqxSrBmiCQhD6kbz0LZ10BRmFcZ0v+Dat+mcZUvxCkGwxIUAN0tToSW0+VLQvpua
+         dOm9ht0CC406u0iTWBnaC7U5cBzC5S9XmQiIIhxZcVl2XE9dTYtjPmOeZN7RlxCUQj/H
+         ebRTRfKIV20ZFHbpwh/25AiTt4SxDxLM9vn/mdjEAuKXchR5w1n+QbQBi+/hPdCWKoSi
+         yhjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774889136; x=1775493936;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BwE++Vqw+CySglw+oPVi7SkePVFEszmRECwetM66l0k=;
-        b=IPvti2tt7YoLwNfE55EolOwiIleeL/Ms7vqd7VOEUiFP1klzga7S75P7jXlvU//qLy
-         NVqoF8nXLBsuUyElJXn6rVKOR5l6dQ8pl5168p2EvF+z2k8RrDvkJLKEgWM4qmPzJSbf
-         NDR8YWmmBwGxZL3eGaSoA/WeDDmIPKbrxVWtAnvewrt8nEOGdfvBjR4q41rLZUwcsEoV
-         lUdPA4ewsjUJI2JXe2fLNnLD5zyFvTYZzK+aIT+HYZEoO+/gLAAiFUFOo51cs5/7PxhS
-         XQFSyYbNV44jE2Vt1v69JS+ViJ/MR39qidG69f3xT3BAU4yV1t/nVEa3JuFMmyN6VLT0
-         njLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbFetPuG3/SFMphlr5o8t0Cafb3/GiFIw/g5sdXQjtuLBcSgVfA32VTsYUd64hMfHqSTw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxK9dl5uJ3Eo6Sk1CqKR8R/t5J5dzmCBehn06y8zkopf1KSDD+F
-	sPsxJHqEFZXKk+DZG/TleOaoBUC/tUjYwk0dnDDBjZm5gGpi9cKu+a7nfN9tHwar6Is=
-X-Gm-Gg: ATEYQzy/j9QZapknRUlyizfrPiuZAdLKMBl3JWo8lS+09osL7Pf3cP+aZCopnpeqLU+
-	sNQnAHuFIUGDazcn7/GYxFqrNCaV4Wv9CIhz12EX0reEVhokDXxF+w/qhGwZ+kSjXn64ggGHO4y
-	nCQCqmE3r97yf/1mU0Fpim7GWWcM6WcBTz9XoiM6LjCvyP4b2uEwbpEC9199b3yyBiOTjtl8w81
-	nGWr8tKeog8tt/k26l4TJurLVaXPs2bbuucQm2jh1TQquM7UIWGzkOL3AUO6l/3kng+UvGR4zpt
-	W0poHhvicjziivD3hDo18fLP7e3lhBfw2rmWBQaqq675FEvgRvQupj6Ztf/zf5BFVYYZoPuaGWB
-	VsmOnWPXA2UIYRwf1Htj3sqeF56m8Z1D+Iyjmuhm+6jp1o291SCh396+hyAdTbWP4I2sNcWiNku
-	pg5qC46YhUkEtoRLs=
-X-Received: by 2002:a17:903:22d2:b0:2b2:58c7:2ce1 with SMTP id d9443c01a7336-2b258c733d1mr25360975ad.36.1774889135767;
-        Mon, 30 Mar 2026 09:45:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:43::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242765d3esm109007305ad.47.2026.03.30.09.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 09:45:35 -0700 (PDT)
-Date: Mon, 30 Mar 2026 09:45:34 -0700
-From: Joe Damato <joe@dama.to>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, andrew+netdev@lunn.ch,
-	horms@kernel.org, pavan.chebbi@broadcom.com,
-	linux-kernel@vger.kernel.org, leon@kernel.org, bpf@vger.kernel.org
-Subject: Re: [net-next v6 07/12] net: bnxt: Add boilerplate GSO code
-Message-ID: <acqorhF1vo1VQjO3@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-	Michael Chan <michael.chan@broadcom.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, andrew+netdev@lunn.ch,
-	horms@kernel.org, pavan.chebbi@broadcom.com,
-	linux-kernel@vger.kernel.org, leon@kernel.org, bpf@vger.kernel.org
-References: <20260326235238.2940471-1-joe@dama.to>
- <20260326235238.2940471-8-joe@dama.to>
- <20260329151230.7acacbb9@kernel.org>
+        d=1e100.net; s=20251104; t=1774889182; x=1775493982;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4feyuDqrUmgHeKROraJQ/+XkjdShpl24vAeEH6ljdSo=;
+        b=EvVlbtz0+v+nUhW2RwWMPzQ7A7pGAOR4yDQ4nMgmPTGsNCxki/cThSvRTpBZF6keEH
+         XTQ0KVQxAl1gVvFO/yPXBVxcgehfQyZXCC9mllSXYLoIQp5AqUM1+r/jSChoqc+3PfdM
+         Wqn9LHO2lDPaATXjuJ6DUA2SIGJQ8twdan4qZDSOlwn9ri6m5NkDqGt8WtHueZEqIgjO
+         xnUkVw6QrV6I7m5Mnw/nzzkzSyeul1RQ7vIlkEpmCUEcVzrVRvW74mhMns7TNnaIqb/U
+         xYK1O+tfU3jJu0GO/AmkNZi6l8cV0p7o6G64IUmj9Ii9VuZ3rgblGr1532nyPRP6dbS6
+         9dYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJnstfVdUgOkgKStNxF2O//rpXPz0GB65BEhHGSysJFnSXKvWWCMeWRsB6CsFfMU4QElo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAYdfuiDPADwsBKXWDxOJeXBFuWt5/wbGvxtsR+g7gipUriSl9
+	6tSZDdJk3brh9+z8LS56r73f0IMOGSATUHrnbucdVpe0Ebm7lNiBYh87av2R1Us7/6wDuScoYaE
+	GycSdvfXAn6zjdc5bNFA+oWifdG1q2TA=
+X-Gm-Gg: ATEYQzz9kGC/vdKUNXFnVM/k9QWtTZ/4jwaXfwk9bxGy7XYRpokpxzE+4klP352SRpx
+	NN5HKyXiCUfsVO/ABhg3+xFUndWBzqDn35cRNaDVFTvt5lj2AIJSfHnHSD/YzXcPeOMTQScSICN
+	Qv7C8V0EneqmDubNmoONwIgacyZ7jRlWzT1ya+MxhSk7kE7A7evsshWr+g9mC9kblOCZBjnRkJh
+	jqljz5IcQH6IVugBHRvD5TPi5UfDVY2miHQDVuRombMwymI+a+OKis+Ep5oJoB4RHhZu8V9nD7y
+	0gvzJfVtXqOEAXNURYIMYTJ9MfCVLOXJUCj/UCk=
+X-Received: by 2002:a17:907:1b09:b0:b8f:d2a0:c283 with SMTP id
+ a640c23a62f3a-b9be835abb3mr17283666b.1.1774889181445; Mon, 30 Mar 2026
+ 09:46:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260329151230.7acacbb9@kernel.org>
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com> <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
+ <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+ <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+ <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com> <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev>
+In-Reply-To: <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev>
+From: Takeru Hayasaka <hayatake396@gmail.com>
+Date: Tue, 31 Mar 2026 01:46:10 +0900
+X-Gm-Features: AQROBzCbYsF_0cVVV3z8GVQf9gn5AjGulzxIUzgv5Xjg0GCGvjjDqN_6nyl63fg
+Message-ID: <CADFiAc+4hKQGSEo9XRvrNuTTK4LXwCfAqPMR3AMxiNBtZTc4mw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	X86 ML <x86@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Mar 29, 2026 at 03:12:30PM -0700, Jakub Kicinski wrote:
-> On Thu, 26 Mar 2026 16:52:26 -0700 Joe Damato wrote:
-> > @@ -891,6 +891,7 @@ struct bnxt_sw_tx_bd {
-> >  	u8			is_ts_pkt;
-> >  	u8			is_push;
-> >  	u8			action;
-> > +	u8			is_sw_gso;
-> >  	unsigned short		nr_frags;
-> 
-> nit: maybe group the is_* together, IOW move new fields before @action?
+> Sounds like you are developing/maintaining an XDP project.
+>
+> If so, and the kernel carries the patches in
+> https://lore.kernel.org/all/20230912150442.2009-1-hffilwlqm@gmail.com/,
+> recommend modifying the XDP project using dispatcher like libxdp [1].
+> Then, you are able to trace the subprogs which aim to run tail calls;
+> meanwhile, you are able to filter packets using pcap-filter, and to
+> output packets using bpf_xdp_output() helper.
+>
+> [1]
+> https://github.com/xdp-project/xdp-tools/blob/main/lib/libxdp/xdp-dispatcher.c.in
 
-Sure, will do for the v7. Thanks for the review.
+Thank you very much for your wonderful comment, Leon.
+This was the first time I learned that such a mechanism exists.
+
+It is a very interesting ecosystem.
+If I understand correctly, the idea is to invoke a component that
+dumps pcap data as one of the tail-called components, right?
+Thank you very much for sharing this idea with me.
+If I have a chance to write a new XDP program in the future, I would
+definitely like to try it.
+
+On the other hand, I feel that it is somewhat difficult to apply this
+idea directly to existing codebases, or to cases where the code is
+written in Go using something like cilium/ebpf.
+Also, when it comes to code running in production environments, making
+changes itself can be difficult.
+
+For that reason, I prototyped a tool like this.
+It is something like a middle ground between xdpdump and xdpcap.
+I built it so that only packets matched by cbpf are sent up through
+perf, and while testing it, I noticed that it does not work well for
+targets invoked via tail call.
+This is what motivated me to send the patch.
+
+https://github.com/takehaya/xdp-ninja
+
+Once again, thank you for sharing the idea.
+Takeru
