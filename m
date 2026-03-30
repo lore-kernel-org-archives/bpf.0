@@ -1,129 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34EB3D47D7;
-	Mon, 30 Mar 2026 13:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F003E3C3BF5
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 13:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774877968; cv=none; b=QVuttHz3xfyIe8/V5fbckmpfJiuHG0ENbyBAOOzZmKmXXjNBhwHtblKHUBxAcZhwAKcY+r1N1YsogY2Cpz6A3SpCE1L7qvuFOfvMjlkEIqhPhytEmT/32D7ZFbZSbFDCt/mDNfyUAIVstg4jVJyEl/JabMtqU1gTpMCYjPOswAU=
+	t=1774878151; cv=none; b=Pnx1yGStLUmzeg40hcd1mG0bPmD3AsI0eETncvDHkUgqzdrTihOVn65SDnUpmN4FhksMaXS/pzjzucJtclu6OdmZsjRjx9OtzG9DxI2gA8sje9ZFsq+ORp8jneAnCpefGrlFO1kpvAy2SALtAmKOT9vhAynH5RyoFlT6f59aJ4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774877968; c=relaxed/simple;
-	bh=ceLRnkRsinQcpKB2cy45y5N3yqzsivrxz2l+aI9orws=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=frH+fr1yUUl6l9qlWRfgEcW+Aj0XxgyP+ki5ERWr+BqTliLLkYLGSrk3SMpanTg9sYkNmPOgBFrSZMI64W5n6eAMxj+sXlssEbxl8QlTCcs1HBPqYrvseqSzYUuRn19xCUn2CMZ05dn5/uea+08ipJ0N/ZIBiLyqHzLF4QGh1gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqRISqvf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774878151; c=relaxed/simple;
+	bh=OxeMDfIOeJPo0liFSF+iS4Bsty37kddULdD/aIXYKGE=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=DGD20JVL+kvCtwogqkAI2WnrxJPCK7mxyrqxGK5q6OHCU7kBtgXSGhZTLHZyM/sKt6RjmzQ1QmnEXZaRLBhz0djhwKdVgS+viDUkT5bcfzPBpaq3mGl3GV5btkj4w3XHgCaRMsImdlvfRte7kN7cpGIFh2IpP2oC4iHThK1ioBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P8f4jU1z; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqRISqvf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4B2C4CEF7;
-	Mon, 30 Mar 2026 13:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774877968;
-	bh=ceLRnkRsinQcpKB2cy45y5N3yqzsivrxz2l+aI9orws=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=MqRISqvf5FDoRAcIrxBgG6lRR6Er3HPAcRYbILkP+RjuczWxfDzzfDC7aVMHxR0aZ
-	 B2yYTeNz3j32fFvdkaP+zhmXo15OtiGmONTHja84/niY9886XCucOtJMPFi+ohRntO
-	 Qq0bdFMx6YaMAfPtFoStoKhs2sDmCflsVr50vX9oveaS2ylte9JoaLc6izWuoHDW3r
-	 iJfcfDlCN+r7m6lYw64IIwZm5oaPuxyCY8Zugodf1UAdEL3uw4Ixo5vUe9Lr17Flzu
-	 OhMBflfSNLjH8Bp33ypNTZyTUCVzAAn7/wkGJkIjOiexrpbJXdGukn+OjnKT6zAfZQ
-	 eIZgI3DlqvvdQ==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Eyal Birger <eyal.birger@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, paul.chaignon@gmail.com,
- chen.dylane@linux.dev, kpsingh@kernel.org, a.s.protopopov@gmail.com,
- yatsenko@meta.com, ameryhung@gmail.com, tklauser@distanz.ch,
- shmulik.ladkani@gmail.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, Eyal Birger
- <eyal.birger@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: warn against BPF_RB_NO_WAKEUP in
- bpf_ringbuf_discard()
-In-Reply-To: <20260330121732.1601352-1-eyal.birger@gmail.com>
-References: <20260330121732.1601352-1-eyal.birger@gmail.com>
-Date: Mon, 30 Mar 2026 14:39:23 +0100
-Message-ID: <m2qzp1zbas.fsf@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P8f4jU1z"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-6500040f172so4660415d50.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 06:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774878149; x=1775482949; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dReUoPRdYJoj/PVvzy5/qVwqlhgJ0D0SdiCFOdc0j84=;
+        b=P8f4jU1zWYaPeg2MbgI/MgQcMM4Di0TOPJMh+/7IXFzaq1Ve+FGzdTgr31JvePwvgX
+         j4L14uLya5lWF/Bu+aQzl/q5WzLnPg5WXC1xuG6SphyaD0HH6HtXRgGWXeeE4x/SNN0S
+         5OeSSorGYaonjJloIR3LOT6t89WXqT0y6W4eex8Eo86VKYJTg/ZnGSDUcNpDTGNj6v8a
+         RmbOVWQccJisKLHxwG181MKNxehwD0akU6h6a+SnBeKOKmwhwjkcRjKLnLCapcokL/Rj
+         4iqdNqqhoOCPz/bmy0/Bx0k/kC5sHmKXud5kKyNjjxhq9mh83zxmaTw0dYKpos8SNGhY
+         XQ4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774878149; x=1775482949;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dReUoPRdYJoj/PVvzy5/qVwqlhgJ0D0SdiCFOdc0j84=;
+        b=inlUaI2o7gXMaJn6IkinDlgdnFNjUdhhxs7+BjpmBiSTUq4FLVOpxs8xrLqQdi10BR
+         3m3qSbGgJS9z68D+dzbv7xEJZGyTckP5+cpZIJH78+PAZwzw/Maw7wBc9MNAPqBQECjp
+         ZOXwpZF62qWZo3lASHkP9FGBDGkwNCKAAW5eCO+iRX9cMHrJet60S2eVZzTBOZjl3J13
+         U57WlRcFM/h9nju4P7g0DA5wQShnMpBDi4PYfXiZAcyhxRETsI8Tp0LNuQdQ7ca/dKyl
+         RVwLao6h1VjPzhM5xqVcCf7kJaYF218JC39OrfjXcy6ZW4alcj7N/4SKuqoXH5UZNBAE
+         3gLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUSkDmH2DMhERnkkpvOYbymEQDskocrPfLlCNFZ0KFVhDOwGOQS4k6GuootwTfZN8o+p0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKuUOEdm4Z1RUXasT3JNF7KeHV7MQlBhuET1I48G/l4oDGRrEN
+	x+cetRrFhYDTrxwlSOGua7DWv6j21bNq3UIUhe6VbziZ26/aIO0J0vjK
+X-Gm-Gg: ATEYQzwjEaNGnO+hUgKi3DKVt9Ig/grWw1ghNMq5S7j86hne05LdkASZH4wyywdGJH8
+	kOi7bzyIos/CqvirLPB5TIgpEdH81KhOxL8zRFkMLpBeX4oGELB7+XFU+B9CVvOtz7i6V9hrDB5
+	QOIRXljzyaQJKmbXjTnnEMRNRtna84GJPzRZOqTlkUY/DZ1Zm4l/ow1D6n9CBorNe5DAZ2TcJ/n
+	dHTPCgys7UJK3uZqt68Ft0NtY2sUlHT2mfD0ArQAbxE/oAKTp4xLK7Du6TfruEW2465r032ZDWb
+	NePwbFqCQIT8DXtU6mAtUDtRFnsALJ16PNSq6zgXp8TsQx1dOuNrtWYON9vYF/7hO+G/Wp5LxSR
+	UjnlUPMetrN0xPTxMcd8DGhdQams8j/TTo05H/f/g1H+qjjVmkXgu9vWShVVBi64koLzUfLw7lR
+	Rxs+aqP5HkN5i7+I3rK7iHU7OCwJ/Wm3Z3BJNDKASHeHkeKNjmjt6iyCb5ncnRt3v2r1ANAadZq
+	rwT
+X-Received: by 2002:a53:d005:0:b0:650:1bc2:7e13 with SMTP id 956f58d0204a3-6501bc286e4mr3068003d50.7.1774878147225;
+        Mon, 30 Mar 2026 06:42:27 -0700 (PDT)
+Received: from gmail.com (180.134.85.34.bc.googleusercontent.com. [34.85.134.180])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65009200901sm4033085d50.1.2026.03.30.06.42.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 06:42:26 -0700 (PDT)
+Date: Mon, 30 Mar 2026 09:42:26 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ maze@google.com, 
+ willemdebruijn.kernel@gmail.com, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ andrii@kernel.org, 
+ martin.lau@linux.dev, 
+ eddyz87@gmail.com, 
+ song@kernel.org, 
+ yonghong.song@linux.dev, 
+ john.fastabend@gmail.com, 
+ kpsingh@kernel.org, 
+ sdf@fomichev.me, 
+ haoluo@google.com, 
+ jolsa@kernel.org
+Message-ID: <willemdebruijn.kernel.15a62f8f2870@gmail.com>
+In-Reply-To: <20260329180428.2657785-1-kuba@kernel.org>
+References: <20260329180428.2657785-1-kuba@kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/2] net: clear the dst when performing encap
+ / decap
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Eyal Birger <eyal.birger@gmail.com> writes:
+Jakub Kicinski wrote:
+> Commit ba9db6f907ac ("net: clear the dst when changing skb protocol")
+> added dst clearing when a BPF program changes the skb protocol
+> (e.g. IPv4 to IPv6). Since that was a fix we only cleared the dst when
+> the L3 protocol actually changes to keep it minimal. As suggested during
+> the discussion (see Link) encap or decap operation which wraps or unwraps
+> a same-protocol header may also render the existing dst incorrect - even
+> if that doesn't result in a crash, just the wrong route for the now-outermost
+> IP dst.
+> 
+> Make dropping dst unconditional for bpf_skb_change_proto() and all
+> L3 encap / decap ops.
+> 
+> Link: https://lore.kernel.org/CANP3RGfRaYwve_xgxH6Tp2zenzKn2-DjZ9tg023WVzfdJF3p_w@mail.gmail.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-> Document that BPF_RB_NO_WAKEUP is not recommended for
-> bpf_ringbuf_discard().
->
-> A discard done with BPF_RB_NO_WAKEUP can suppress a later adaptive
-> wakeup from a valid record, leaving an epoll-based userspace consumer
-> asleep even though data is available in the ring buffer.
->
-> Scenario:
->
-> epoll_wait(rb_fd);                     // blocks
->
-> rec = bpf_ringbuf_reserve(&rb, ...);
-> bpf_ringbuf_discard(rec, BPF_RB_NO_WAKEUP);
->
-> rec = bpf_ringbuf_reserve(&rb, ...);
-> bpf_ringbuf_submit(rec, 0);           // valid record, but no wakeup
->
-> This behavior is surprising in the context of bpf_ringbuf_discard()
-> as it seems natural not to want to wake userspace.
-
-It appears that once you do a submit or discard with NO_WAKEUP, you can
-never go back to adaptive mode. You will need to do an explicit
-BPF_RB_FORCE_WAKEUP to do a wakeup. 
-
-This looks like expected behaviour (by design) but for discard the
-programmer might think: "I'm discarding and there's no data, why would I
-wake anyone?  Let me pass BPF_RB_NO_WAKEUP to be a good citizen." 
-
-I am not sure if we just want to change the description of the helper or
-also fix the code to ignore the BPF_RB_NO_WAKEUP for discard?
-
-Or a better approach would be to add a wakeup_needed flag to struct
-bpf_ringbuf. When NO_WAKEUP suppresses a wakeup that would have fired
-(cons_pos == rec_pos), it sets the flag. Any subsequent adaptive commit
-sees the flag and sends the wakeup, clearing it. FORCE_WAKEUP also
-clears it. But this could change how the ringbuf behaves for existing
-programs.
-
-I will let others comment on this.
-
-> Reported-by: Shmulik Ladkani <shmulik.ladkani@gmail.com>
-> Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-> ---
->  include/uapi/linux/bpf.h       | 3 ++-
->  tools/include/uapi/linux/bpf.h | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index c8d400b7680a..c46b06d45904 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -4645,7 +4645,8 @@ union bpf_attr {
->   * 	Description
->   * 		Discard reserved ring buffer sample, pointed to by *data*.
->   * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
-> - * 		of new data availability is sent.
-> + * 		of new data availability is sent, which is not recommended as
-> + * 		it can suppress a later adaptive wakeup from a subsequent submit.
->   * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
->   * 		of new data availability is sent unconditionally.
->   * 		If **0** is specified in *flags*, an adaptive notification
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index 5e38b4887de6..96de37c3b896 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -4645,7 +4645,8 @@ union bpf_attr {
->   * 	Description
->   * 		Discard reserved ring buffer sample, pointed to by *data*.
->   * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
-> - * 		of new data availability is sent.
-> + * 		of new data availability is sent, which is not recommended as
-> + * 		it can suppress a later adaptive wakeup from a subsequent submit.
->   * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
->   * 		of new data availability is sent unconditionally.
->   * 		If **0** is specified in *flags*, an adaptive notification
+Reviewed-by: Willem de Bruijn <willemb@google.com>
