@@ -1,171 +1,148 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D52A22301
-	for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 23:51:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774828286; cv=none; b=GqVjQCYRnCpWIu4G/unHBHcl/aAMcxIkjBgETuCqb8KKHYKoHAdsWEvr18pVQ1uHK+oxo1t+zzhQ76xtxWdspMC1agGwfwhW6/UpRAWAllsC58t5s1SekCXfLoWLhm7+ceVw1we8NhkTTIB+1yuHajvuSmdIoi0EWziuElQ/IdE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774828286; c=relaxed/simple;
-	bh=jt13bEggq9NphlzoSlwJ5LQRzlgrPbtRDFY4lUp7wm4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bQJqCUKifXd55Xc1WRQwDNpPFR17LLUXxeemWjGDsZg9PEMFd2zS3CRC+X2emuZYZW0651RT9NiYio985W8tsppnl9XuFoqgWPg7v2mnNHuJZtm4IXyGmjFvuIhu6eNDBbjgXJgqfwS3myhD+oUngdep+vyC495k7MP8BOb2B3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XX6OCXhR; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBE8391841
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 02:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774837390; cv=pass; b=ofEwRar9aliqoipu4mdcwnwAQiwYzmI8MMGAmnkMVgDuKArvTZyjSdhaY34fAcyteOkCvXG5pPJTL+vFHrurZSnuj3L5Y2KwQgz7C+ram4X7/9pnGIleKcwVbB/jUOZTFYpaLBpwd3mxtX40CSeMJkqMmpcolc6/0ed6yhcXgxk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774837390; c=relaxed/simple;
+	bh=B5l17OTVu2cjpFOePRpq3p9C6pV9J6gN+48MxLiURD4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YrRDQzyBT22J/5pzKRUcmIltD8PB3A8Eq4oPkeH1LNOdeseKKbcpjWeIa8qDJs1EqPAkLEX4wz+ppnGgzU0lV145ybSljl+sz9C6sZ1T3INMGNfzMUdtYZcno2FLbTq2D8Yra/zClD8NSa3rEk2nAD81zFTXmQVHky/FJVY9RRY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FmRIGMgV; arc=pass smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XX6OCXhR"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82a7539851fso1723808b3a.1
-        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 16:51:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FmRIGMgV"
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-59dcdf60427so4332386e87.3
+        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 19:23:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774837386; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SPMhGSOgMa7FQKkvnJyJcQnXjLysiGqXvkk7LjYUmFblA9lOkkCo3NSbaxA02MQrjS
+         Gmz3bPheszuwNJOKEq4el0bNkjSbcRtRYp30h9HB04HOTPYx9rymwnux7wYK1DTjsCiN
+         m4mnzmllDhLZZ2mipnxLGEVTR0pi5k6Ypx9DJIXXL5PePDWPKhk5iqGyrOJe+LZo1zlA
+         REoi0Hb7DgZPEImQX2qflfU7BfpcLtK/xMbCBW3+RMXdSGa9170hYTCxM2q8Gyndo5Wg
+         G/im6cRgOwYdGj2tHUkDsolqcyTdx70fJ2S9wTGCAc/4gYzKTSKJPGam+Sf/n6vqXtH/
+         DjgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3ek5GIhyIQVD3wLj7CUw7tIfTz6hifMBva7KkCCkNds=;
+        fh=4Zhei73xmJ0mr0JoueGkLZoM4Mr6uF0qGCQ/pOqjoBU=;
+        b=ZUj3aS6d+zKB02um3R03E1u4/oUuMz7iG8Q+BTErIllSeib9dfa7kTiowDZDXOoJ1C
+         1IdISb6bgp6TXCGWiMtCq4cPfpL7ZRMF2IXbKC2P5Zey/BRjRQyA3Q0Zp/7aLS4gB5Jv
+         AygtQoPD4qLfUf91yYob7JCOa8xwUsdkQft10xTXNBtgqeOCnJtFbXi1185qyMczDvyq
+         qnwwN2Lstppu0DMgsuUVOVdaBpaHLpkXM1Iq6o4ZzAHO4GEapEXS67OhqKwbjmNWQ1lu
+         xWbXDkZD54RgcU7tZGKztok7CB8jGcnOJ39lUlfnTkS9Cs7OcHha/wNHrmqdmnRJ+4ZQ
+         gwkA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774828284; x=1775433084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y/hlFjLgmh1Rquk9APel0G4sGpiXC/TBoZHLaogvCIU=;
-        b=XX6OCXhRD8aV0Sm/Z3mAJbIaWGeSCKdCvnleeChBexmLJBxaDNOQGVrXdZuEDvSHRt
-         uYlT60jHrYWbFmH2UhfpaTfdSB5l2Pu07vzews02BhzNLh38evZBRmf6zVet6N+4i/ww
-         P1zy9UcEQoMlZAmZ8zxec2dGnx5CPNaoXbrIYyLuw4oG8NEeNK+JC4Uf8Pc7oIkv0CYE
-         x+O7WZNq882Weu1dkpe5BZj0lyCSznwyqTclietKOMCogQjSUeYcHjCPqwoZA2ltuU5W
-         jtCXKBvNWimdQi5cMKlfjN3j8BAfn9X/fmUKgizquBurinfLQH1+oCEKfG3V8N8c2q5W
-         SNzA==
+        d=gmail.com; s=20251104; t=1774837386; x=1775442186; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3ek5GIhyIQVD3wLj7CUw7tIfTz6hifMBva7KkCCkNds=;
+        b=FmRIGMgVrUJGcBtoP/133eOBuwfrg/TxHiOSLyvg7kTMxya3DQg1GF5HLNfb1sb9lj
+         B/QJprB8Emrp7pbGOBrpXHSQAehB+JnBLqtXLfSnRVJRHuH7IIYLPXQcebWQjR/3QKdq
+         pYaT+PTgdWL/tldY7VPwm5wjVvcrtB5xx+RbXBcxBLxZZTIVVW8uAOqyTY4ALlhfsO+2
+         X/nWwrHb1CVTliaC3HrtopttsG+SRlBLdzzMl+60MzUXLjUD759m42SluhuBmZXrXFRJ
+         VTPGiQSnM0plIEROQ6781PiJAaKACSA2dOCwKMHja1qrYnQHDfphRpI8clcDTAQBsOgD
+         OwcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774828284; x=1775433084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Y/hlFjLgmh1Rquk9APel0G4sGpiXC/TBoZHLaogvCIU=;
-        b=H5i4kVa/BsrMslL5Kwe5s8ojUYdrvBW79iWaXef1EL1emCABeOTJU63PJ8Do1soKhY
-         erjkLyCPXcWA+ZNM4XgVhcf2wqrZxgwF0HC9XxIUIh8zT7NktOj4erqkPrHyLmKaNbYE
-         6ooBG+jRb1ld6NxQhfsI5L/eJDL210qTl3YrAefyAHuDZXGAUeeqhMqhJtQIaULicVIy
-         op1eXcnlxbaipOfAkt8lRTAv7Z2gQGcpnvqVHkvhnY60eE3iqUe8zl8ydy5dbtZwQ6x8
-         hlvPHvp7rm03wXWf6waY5BdTNnd3Ova+zxlNseagu2wXAF2wR8lQFVj9+OA84dAISjQ6
-         eEhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBHt88J1wByj0SPeDmpxA25UJXqRMRdquU5/Pg0zlrDpNmYYe2C0bU3jFprGE3oDE7xaQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWJlv+5xgJFCOn+tZElCmOvN/NEDpkqXsq1Qipk93GaTc13T+8
-	0jADinbl1iD+zQu2Zt/IlbmwOgEPNosYGsGvg923MRlWVBdPhfqG+9Ul
-X-Gm-Gg: ATEYQzw9EqqIfghsdyx+41A2gh3FTVDBfYza6crn8mI2qdz1016YL1MNF1txUAkcptk
-	ZbU+xrCi02Rv4mdQ9lEyUreslb0jQPa5Zepyf+Wbt7SwCgAX5c0lwpyujrDzIEn2cD4LCT1x1Kw
-	nbEghwxkBJTEQuXt7Eh1qRffTeK/JDdgVHHrKgvE0Q4AVR8N9UqgV3eHpPCj5wNrd8NFJS+Pcwc
-	dLioiy+3VYqPIh2HhpTD+eOi36e6gfsGIDgbl0XT1Cv++DDVQNdVfgrBuJnmmGahk5QaeN0Y2qI
-	QNO7DrcE7ndWdvcrEzjgZcK+hl2ar9LQNamSQQY2O1Mm59EyjUlqmXbYSDTMSRyeBfSIcPr4PcX
-	7gf5/rICcRRbeFz0uHAd+eXNaQaH8tL+9I3ZDis97LBWoLZdQufJm3BK66EtCOaDtAscIr/rfve
-	qrvlcoFfvQ5vTYe0nZVmdjsF6JiVDlNvyqwfm4
-X-Received: by 2002:a05:6a00:3391:b0:81e:7496:f826 with SMTP id d2e1a72fcca58-82c96001c20mr8815092b3a.31.1774828283879;
-        Sun, 29 Mar 2026 16:51:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca85d0850sm5165945b3a.31.2026.03.29.16.51.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2026 16:51:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 29 Mar 2026 16:51:21 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Arnaud Lecomte <contact@arnaud-lcm.com>
-Cc: alexei.starovoitov@gmail.com, andrii.nakryiko@gmail.com,
-	andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com,
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@fomichev.me,
-	song@kernel.org,
-	syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Subject: Re: [PATCH V10 RESEND 2/2] bpf: fix stackmap overflow check in
- __bpf_get_stackid()
-Message-ID: <677adece-454c-4edb-9ea4-6bd24a3ede46@roeck-us.net>
-References: <20251025192858.31424-1-contact@arnaud-lcm.com>
- <20251025192941.1500-1-contact@arnaud-lcm.com>
+        d=1e100.net; s=20251104; t=1774837386; x=1775442186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3ek5GIhyIQVD3wLj7CUw7tIfTz6hifMBva7KkCCkNds=;
+        b=If86ttn+zLSFjBvGI16ssCdZWhRf8qpNBhUzxTz053tOZj30MD95/A1iUMU4lDbigw
+         99yDOoqnQR7NZCvfBP77y3RapUSvfH4OKLEzGpzoNzogcONdzJ1/0o3WedKeqc6XfC4p
+         LdI0fO6FYfbExRAR8T9VywEp8PGPGPw29kVsueg5+VSxhzr1O3DT81IYUgYvHRUo9p5Q
+         Z8/zly3lbacjBg0KaJeala7A/8vA/jCmGvAjt+f8MxDIN4C2lZI+dys0UnXh2LdBz7m6
+         nG7ilaPF75B3v5vOVyKRL0t7QyJ8eQHsVfpZdvaMGGwMzUB7gImp9c/y3e8sVOI7aPRS
+         cnfg==
+X-Forwarded-Encrypted: i=1; AJvYcCXTcvNF2Nv0owvmDxQRkvJDTqjwvDKBK9/Xb23Tk/DrWKRMsZFv07uNT5tcCCkkgZR7+2s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7wxUvpv/mu5KUk9gmmzt/8FZyOM0VOL+6wt6WY1hzwaeAwjeH
+	+9ABlqqwO6+mHFByvIBqcJU0cQyPjZTmA9BydjB4jpuKcRAoyj7nicP03r8nolfU9wTzQ2EuYqA
+	Sxt2wB8/XYT4Pw78fbufZc+3+EWbSTdc=
+X-Gm-Gg: ATEYQzwA2B5Q+jPOAH2WGd5LGaBVM5WZa4e3DVbfPOXoXR4MebBt10uLFkxaqUfydZP
+	I5D7W+vDR+dWZN9qSZdz3m35FqNHDUuZnsa1MaMAm7RqPdI6C3OXYTbHpksS7iy6ae/27/UsQnf
+	n6pQ98lj6WsVRhnclk0viDz9iynZVoSyoS0E/Q2ZXjPsiQ9/mNOlGqfDSu9QZ+UPeSVNGUTpKS+
+	nmKziiuPXxocCzogVERFxtyNgP7MrIZ/PJ1V7CyAVoC9t6r98x6LXyCb9RcYYymfXDvad+N47yH
+	FS4uKqzs
+X-Received: by 2002:a05:6512:39d1:b0:5a1:3d7f:8fab with SMTP id
+ 2adb3069b0e04-5a2ab7e8bcdmr3190406e87.6.1774837385352; Sun, 29 Mar 2026
+ 19:23:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251025192941.1500-1-contact@arnaud-lcm.com>
+References: <cover.1774701288.git.linpu5433@gmail.com> <6584463e576b7bb3619dc302cfecfb8ca56bc86a.1774701288.git.linpu5433@gmail.com>
+In-Reply-To: <6584463e576b7bb3619dc302cfecfb8ca56bc86a.1774701288.git.linpu5433@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Mon, 30 Mar 2026 10:22:27 +0800
+X-Gm-Features: AQROBzBGnDP9EEjcuGYNnnUp4mCdK5fKKNS026TLBUZX8qdJgLBo5d_G7k5Wzcs
+Message-ID: <CAL+tcoAVFuBF48fK5yQs+jksU1w_wpEbLX5G_nzCAMoPP9dJ+Q@mail.gmail.com>
+Subject: Re: [PATCH 1/1] xskmap: reject TX-only AF_XDP sockets
+To: Linpu Yu <linpu5433@gmail.com>
+Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, sdf@fomichev.me, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, bjorn@kernel.org, linux-kernel@vger.kernel.org, 
+	yuantan098@gmail.com, yifanwucs@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Mar 30, 2026 at 3:33=E2=80=AFAM Linpu Yu <linpu5433@gmail.com> wrot=
+e:
+>
+> Reject TX-only AF_XDP sockets from XSKMAP updates. Redirected
+> packets always enter the Rx path, where the kernel expects the
+> selected socket to have an Rx ring. A TX-only socket can
+> currently be inserted into an XSKMAP, and redirecting a packet
+> to it crashes the kernel in xsk_generic_rcv().
+>
+> Keep TX-only AF_XDP sockets valid for pure Tx use, but prevent
+> them from being published through XSKMAP.
+>
+> Fixes: fbfc504a24f5 ("bpf: introduce new bpf AF_XDP map type BPF_MAP_TYPE=
+_XSKMAP")
+> Reported-by: Juefei Pu <tomapufckgml@gmail.com>
+> Reported-by: Yuan Tan <yuantan098@gmail.com>
+> Signed-off-by: Xin Liu <bird@lzu.edu.cn>
+> Signed-off-by: Yifan Wu <yifanwucs@gmail.com>
+> Signed-off-by: Linpu Yu <linpu5433@gmail.com>
 
-On Sat, Oct 25, 2025 at 07:29:41PM +0000, Arnaud Lecomte wrote:
-> Syzkaller reported a KASAN slab-out-of-bounds write in __bpf_get_stackid()
-> when copying stack trace data. The issue occurs when the perf trace
->  contains more stack entries than the stack map bucket can hold,
->  leading to an out-of-bounds write in the bucket's data array.
-> 
-> Reported-by: syzbot+c9b724fbb41cf2538b7b@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=c9b724fbb41cf2538b7b
-> Fixes: ee2a098851bf ("bpf: Adjust BPF stack helper functions to accommodate skip > 0")
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Acked-by: Song Liu <song@kernel.org>
-> Signed-off-by: Arnaud Lecomte <contact@arnaud-lcm.com>
+Thanks for the exhaustive report and fix!
+
+Please use [patch net-next] or [patch bpf-next] as the targeted tree
+for maintainers to easily understand which tree to apply.
+
 > ---
-> Changes in v2:
->  - Fixed max_depth names across get stack id
-> 
-> Changes in v4:
->  - Removed unnecessary empty line in __bpf_get_stackid
-> 
-> Changes in v6:
->  - Added back trace_len computation in __bpf_get_stackid
-> 
-> Changes in v7:
->  - Removed usefull trace->nr assignation in bpf_get_stackid_pe
->  - Added restoration of trace->nr for both kernel and user traces
->    in bpf_get_stackid_pe
-> 
-> Changes in v9:
->  - Fixed variable declarations in bpf_get_stackid_pe
->  - Added the missing truncate of trace_nr in __bpf_getstackid
-> 
-> Changes in v10:
->  - Remove not required trace->nr = nr_kernel; in bpf_get_stackid_pe
-> 
-> Link to v9:
-> https://lore.kernel.org/all/20250912233558.75076-1-contact@arnaud-lcm.com/
-> ---
-> ---
->  kernel/bpf/stackmap.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 5e9ad050333c..2365541c81dd 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -251,8 +251,8 @@ static long __bpf_get_stackid(struct bpf_map *map,
->  {
->  	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
->  	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
-> +	u32 hash, id, trace_nr, trace_len, i, max_depth;
->  	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
-> -	u32 hash, id, trace_nr, trace_len, i;
->  	bool user = flags & BPF_F_USER_STACK;
->  	u64 *ips;
->  	bool hash_matches;
-> @@ -261,7 +261,8 @@ static long __bpf_get_stackid(struct bpf_map *map,
->  		/* skipping more than usable stack trace */
->  		return -EFAULT;
->  
-> -	trace_nr = trace->nr - skip;
-> +	max_depth = stack_map_calculate_max_depth(map->value_size, stack_map_data_size(map), flags);
-> +	trace_nr = min_t(u32, trace->nr - skip, max_depth - skip);
+>  net/xdp/xskmap.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
+> index afa457506274c..6dac59ebb5cf0 100644
+> --- a/net/xdp/xskmap.c
+> +++ b/net/xdp/xskmap.c
+> @@ -184,6 +184,10 @@ static long xsk_map_update_elem(struct bpf_map *map,=
+ void *key, void *value,
+>         }
+>
+>         xs =3D (struct xdp_sock *)sock->sk;
+> +       if (!READ_ONCE(xs->rx)) {
+> +               sockfd_put(sock);
+> +               return -EINVAL;
 
-I stumbled over this patch while researching a bpf related crash.
-I assume that the problem it tries to solve is to prevent the
-"skip > max_depth" condition.
+Can we use -ENOBUFS as well, like how xsk_recvmsg checks the rx ring?
 
-From the context, it is guaranteed that trace->nr > skip, so we know that
-trace->nr - skip is positive. If skip <= max_depth, the above then
-constraints trace_nr to the difference, and there is no problem. However,
-if skip > max_depth, "max_depth - skip" will be a large positive number,
-effectively making trace->nr - skip unrestricted.
-
-Is the condition "max_depth >= skip" guaranteed somewhere ? skip itself
-seems to be provided by userspace, and stack_map_calculate_max_depth()
-returns at most curr_sysctl_max_stack. What happens if skip is larger
-than curr_sysctl_max_stack ?
-
-My apologies for the noise if I am completely missing the point.
+Otherwise, it looks good to me.
 
 Thanks,
-Guenter
+Jason
