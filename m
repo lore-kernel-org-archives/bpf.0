@@ -1,46 +1,48 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF9235DA60
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899473876D5
 	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 13:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774877275; cv=none; b=Ng890nOskRtgncVwI+dDghwGgrFzFjEoJ2GTzIsnsOXaP281pZQLCeX+ASMiCWivStK5kF8YoLFl4N6pcHCF4UTScQgAD4DeH9EdbcVGPe4DIZ9AdTIx8bSiaG4ydjEwMbdVHq85/iE4spepQjBDhK+0YHZehhy5Az3hLmhtutw=
+	t=1774877276; cv=none; b=jQ3aOHVKqCe6iLt403SGQntGacOdO9GhZk4jpmiL4OdeqainlNjpzNL4q1cGDKkokzkUgTMR87YJaDd1D03mK9hrDbXK29SrdjVismoEqH3Bu52WXx4oLRNTXU4KArXi9bd9wgliM4stIR/aPp71eZ06qBnjOolRee9VdHqol1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774877275; c=relaxed/simple;
-	bh=tt8zMUSJG8L/+EekZNkmHtB+L8WdgnGQSqB5HboLnvo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jtCUjpwwIWYJCgHSDOLNjg913EbAaotkti3yVUKiqnrI+KTnowjobdaxfrPTaTbD+8nkiE8DPyR8fdoWdVepmABbhVcu2V4mI4gB6wTWm19RPvIqsp0CN/MLo02G7S/MW/kBnQ/O11xUIxDkm6bv+Qi3wx3cwvoAMlTIRn/toek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Ahc7v586; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1774877276; c=relaxed/simple;
+	bh=5nUlROCbAL+xpizKquUgoDLU7bGPLI5NLzU8G/Pt5Ss=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ntBi6gPQdCv9OHm+Nj6u5sbgnJLS35ceEHFJOuH8GM/RuRfblKnune3b81tiuOk9DN9DRs5ap35C5x8796Bif/HpkNCbsGykngLkeAFQLnR35246kMGz5pDkcajIQOwORcdCT0muLjU9WMIi06RUesDK5iySrFt1xf1TMyPBOoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=a2swfMQS; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Ahc7v586"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="a2swfMQS"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=q3NxgrtIPmeUTTCVEYwgYJROGXa6m8pnQgBEDBZDk4Y=; b=Ahc7v586eYIE4EBnQZ5sX8jq5D
-	SBJo0p4pHiWltH1HAob0Vspn8trb6yphJjyWAOiCsLShxqs5dAQR+Pip/W8+2rNVyfEaAEbLKMoQk
-	STCswDDqeK6Ddb30Hdqnx15IwNpR6thxCqUctY+fYhVfDv7aceDjMmZUilSTIT8N7qktnmBDfEq/O
-	dGPSmthHECiNAYV8dOhdra2JlcU4Ybo/nzZLtySYRVHvjKisKjlD6aQsLHtdRRPjhU4cYrnoicAgK
-	17eJlephcmfVexS9otZ9iuP5CiJ/76lAibqbhT0aPCc8Ool/GJdkKL+SbhfxJzCceuwKQI/l75DtP
-	qhBHu3cw==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=ZMumCpjFuEO8V5S834/Sn/m6Vv8MOnZHdvosVZoroA8=; b=a2swfMQSe4wEKE4Zjtc241yHti
+	sNVx0XPMcw+YKEZO0/eJ7uMvkeGR5ZWrnZKwg6pwxyHZxoovVKMV8EQnt/kzYJTSnCWQAcB6d72CR
+	ui1pGY/oDuCD+30P38TMGYPGufLossOQq1MIdKkG7qK4PQ6PB5HbfM9pS/PHNRRHaZPcjlflRzNX0
+	lAc/opw1c2HmC+DpSsu0yHfSppt37TnAhKK7u0erhBeYhVd7rxlJ6udmFXlxqK8qZsIjavneHAlFl
+	ia2eYUoiYNkgu+Cg9o+Tc0y6+hHFsVUHG7usJZkeFDqVqpspcTksRA8q0EUdCjOyNR+HGONX+xcuY
+	zMTaF5wQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w7Cel-000Hrt-0P;
-	Mon, 30 Mar 2026 15:27:51 +0200
+	id 1w7Cel-000Hs7-3B;
+	Mon, 30 Mar 2026 15:27:52 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: eddyz87@gmail.com
 Cc: ast@kernel.org,
-	bpf@vger.kernel.org,
-	STAR Labs SG <info@starlabs.sg>
-Subject: [PATCH bpf 1/2] bpf: Fix incorrect pruning due to atomic fetch precision tracking
-Date: Mon, 30 Mar 2026 15:27:49 +0200
-Message-ID: <20260330132750.377862-1-daniel@iogearbox.net>
+	bpf@vger.kernel.org
+Subject: [PATCH bpf 2/2] selftests/bpf: Add more precision tracking tests for atomics
+Date: Mon, 30 Mar 2026 15:27:50 +0200
+Message-ID: <20260330132750.377862-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260330132750.377862-1-daniel@iogearbox.net>
+References: <20260330132750.377862-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,103 +52,270 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27956/Mon Mar 30 08:24:32 2026)
 
-When backtrack_insn encounters a BPF_STX instruction with BPF_ATOMIC
-and BPF_FETCH, the src register (or r0 for BPF_CMPXCHG) also acts as
-a destination, thus receiving the old value from the memory location.
+Add verifier precision tracking tests for BPF atomic fetch operations.
+Validate that backtrack_insn correctly propagates precision from the
+fetch dst_reg to the stack slot for atomic64_{fetch_add,xchg,cmpxchg}.
 
-The current backtracking logic does not account for this. It treats
-atomic fetch operations the same as regular stores where the src
-register is only an input. This leads the backtrack_insn to fail to
-propagate precision to the stack location, which is then not marked
-as precise!
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_precision
+  [...]
+  + /etc/rcS.d/S50-startup
+  ./test_progs -t verifier_precision
+  [    1.697105] bpf_testmod: loading out-of-tree module taints kernel.
+  [    1.700220] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  [    1.777043] tsc: Refined TSC clocksource calibration: 3407.986 MHz
+  [    1.777619] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fc6d7268, max_idle_ns: 440795260133 ns
+  [    1.778658] clocksource: Switched to clocksource tsc
+  #623/1   verifier_precision/bpf_neg:OK
+  #623/2   verifier_precision/bpf_end_to_le:OK
+  #623/3   verifier_precision/bpf_end_to_be:OK
+  #623/4   verifier_precision/bpf_end_bswap:OK
+  #623/5   verifier_precision/bpf_load_acquire:OK
+  #623/6   verifier_precision/bpf_store_release:OK
+  #623/7   verifier_precision/state_loop_first_last_equal:OK
+  #623/8   verifier_precision/bpf_cond_op_r10:OK
+  #623/9   verifier_precision/bpf_cond_op_not_r10:OK
+  #623/10  verifier_precision/bpf_atomic_fetch_add_precision:OK
+  #623/11  verifier_precision/bpf_atomic_xchg_precision:OK
+  #623/12  verifier_precision/bpf_atomic_cmpxchg_precision:OK
+  #623/13  verifier_precision/bpf_atomic_fetch_add_dual_precision:OK
+  #623/14  verifier_precision/bpf_atomic_cmpxchg_dual_precision:OK
+  #623/15  verifier_precision/bpf_atomic_fetch_add_map_precision:OK
+  #623/16  verifier_precision/bpf_atomic_cmpxchg_map_precision:OK
+  #623/17  verifier_precision/bpf_neg_2:OK
+  #623/18  verifier_precision/bpf_neg_3:OK
+  #623/19  verifier_precision/bpf_neg_4:OK
+  #623/20  verifier_precision/bpf_neg_5:OK
+  #623     verifier_precision:OK
+  Summary: 1/20 PASSED, 0 SKIPPED, 0 FAILED
 
-Later, the verifier's path pruning can incorrectly consider two states
-equivalent when they differ in terms of stack state. Meaning, two
-branches can be treated as equivalent and thus get pruned when they
-should not be seen as such.
-
-Fix it as follows: When the fetch dst register is being tracked for
-precision, clear it and propagate precision over to the stack slot.
-This is similar to how BPF_LDX handles loads from the stack.
-
-Before:
-
-  0: (b7) r1 = 8                        ; R1=8
-  1: (7b) *(u64 *)(r10 -8) = r1         ; R1=8 R10=fp0 fp-8=8
-  2: (b7) r2 = 0                        ; R2=0
-  3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)          ; R2=8 R10=fp0 fp-8=mmmmmmmm
-  4: (bf) r3 = r10                      ; R3=fp0 R10=fp0
-  5: (0f) r3 += r2
-  mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1
-  mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10
-  mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)
-  mark_precise: frame0: regs=r2 stack= before 2: (b7) r2 = 0
-  6: R2=8 R3=fp8
-  6: (b7) r0 = 0                        ; R0=0
-  7: (95) exit
-
-After:
-
-  0: (b7) r1 = 8                        ; R1=8
-  1: (7b) *(u64 *)(r10 -8) = r1         ; R1=8 R10=fp0 fp-8=8
-  2: (b7) r2 = 0                        ; R2=0
-  3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)          ; R2=8 R10=fp0 fp-8=mmmmmmmm
-  4: (bf) r3 = r10                      ; R3=fp0 R10=fp0
-  5: (0f) r3 += r2
-  mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1
-  mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10
-  mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)
-  mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0
-  mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1
-  mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8
-  6: R2=8 R3=fp8
-  6: (b7) r0 = 0                        ; R0=0
-  7: (95) exit
-
-Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
-Fixes: 5ca419f2864a ("bpf: Add BPF_FETCH field / create atomic_fetch_add instruction")
-Reported-by: STAR Labs SG <info@starlabs.sg>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- kernel/bpf/verifier.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ .../selftests/bpf/progs/verifier_precision.c  | 207 ++++++++++++++++++
+ 1 file changed, 207 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f108c01ff6d0..293aa957a5ff 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4474,6 +4474,31 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 			 * encountered a case of pointer subtraction.
- 			 */
- 			return -ENOTSUPP;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
+index 1fe090cd6744..6dbd4feda337 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_precision.c
++++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
+@@ -5,6 +5,13 @@
+ #include "../../../include/linux/filter.h"
+ #include "bpf_misc.h"
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} precision_map SEC(".maps");
 +
-+		/* atomic fetch operation writes the old value into a
-+		 * register (sreg or r0) and if it was tracked for
-+		 * precision, propagate to the stack slot like we do
-+		 * in ldx.
-+		 */
-+		if (class == BPF_STX && mode == BPF_ATOMIC &&
-+		    (insn->imm & BPF_FETCH)) {
-+			u32 load_reg = insn->imm == BPF_CMPXCHG ?
-+				       BPF_REG_0 : sreg;
+ SEC("?raw_tp")
+ __success __log_level(2)
+ __msg("mark_precise: frame0: regs=r2 stack= before 3: (bf) r1 = r10")
+@@ -301,4 +308,204 @@ __naked int bpf_neg_5(void)
+ 	::: __clobber_all);
+ }
+ 
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
++__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)")
++__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
++__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
++__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__naked int bpf_atomic_fetch_add_precision(void)
++{
++	asm volatile (
++	"r1 = 8;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r2 = 0;"
++	".8byte %[fetch_add_insn];"	/* r2 = atomic_fetch_add(*(u64 *)(r10 - 8), r2) */
++	"r3 = r10;"
++	"r3 += r2;"			/* mark_precise */
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(fetch_add_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH, BPF_REG_10, BPF_REG_2, -8))
++	: __clobber_all);
++}
 +
-+			if (bt_is_reg_set(bt, load_reg)) {
-+				bt_clear_reg(bt, load_reg);
-+				/* atomic fetch from non-stack memory
-+				 * can't be further backtracked, same
-+				 * as for ldx.
-+				 */
-+				if (!hist || !(hist->flags & INSN_F_STACK_ACCESS))
-+					return 0;
-+				spi = insn_stack_access_spi(hist->flags);
-+				fr = insn_stack_access_frameno(hist->flags);
-+				bt_set_frame_slot(bt, fr, spi);
-+				return 0;
-+			}
-+		}
- 		/* scalars can only be spilled into stack */
- 		if (!hist || !(hist->flags & INSN_F_STACK_ACCESS))
- 			return 0;
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r2 stack= before 4: (bf) r3 = r10")
++__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_xchg((u64 *)(r10 -8), r2)")
++__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
++__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
++__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__naked int bpf_atomic_xchg_precision(void)
++{
++	asm volatile (
++	"r1 = 8;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r2 = 0;"
++	".8byte %[xchg_insn];"		/* r2 = atomic_xchg(*(u64 *)(r10 - 8), r2) */
++	"r3 = r10;"
++	"r3 += r2;"			/* mark_precise */
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(xchg_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_XCHG, BPF_REG_10, BPF_REG_2, -8))
++	: __clobber_all);
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r0 stack= before 5: (bf) r3 = r10")
++__msg("mark_precise: frame0: regs=r0 stack= before 4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2)")
++__msg("mark_precise: frame0: regs= stack=-8 before 3: (b7) r2 = 0")
++__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r0 = 0")
++__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
++__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__naked int bpf_atomic_cmpxchg_precision(void)
++{
++	asm volatile (
++	"r1 = 8;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r0 = 0;"
++	"r2 = 0;"
++	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u64 *)(r10 - 8), r0, r2) */
++	"r3 = r10;"
++	"r3 += r0;"			/* mark_precise */
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(cmpxchg_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, BPF_REG_10, BPF_REG_2, -8))
++	: __clobber_all);
++}
++
++/* Regression test for dual precision: Both the fetched value (r2) and
++ * a reread of the same stack slot (r3) are tracked for precision. After
++ * the atomic operation, the stack slot is STACK_MISC. Thus, the ldx at
++ * insn 4 does NOT set INSN_F_STACK_ACCESS. Precision for the stack slot
++ * propagates solely through the atomic fetch's load side (insn 3).
++ */
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r2,r3 stack= before 4: (79) r3 = *(u64 *)(r10 -8)")
++__msg("mark_precise: frame0: regs=r2 stack= before 3: (db) r2 = atomic64_fetch_add((u64 *)(r10 -8), r2)")
++__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r2 = 0")
++__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
++__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__naked int bpf_atomic_fetch_add_dual_precision(void)
++{
++	asm volatile (
++	"r1 = 8;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r2 = 0;"
++	".8byte %[fetch_add_insn];"	/* r2 = atomic_fetch_add(*(u64 *)(r10 - 8), r2) */
++	"r3 = *(u64 *)(r10 - 8);"
++	"r4 = r2;"
++	"r4 += r3;"
++	"r4 &= 7;"
++	"r5 = r10;"
++	"r5 += r4;"			/* mark_precise */
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(fetch_add_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH, BPF_REG_10, BPF_REG_2, -8))
++	: __clobber_all);
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r0,r3 stack= before 5: (79) r3 = *(u64 *)(r10 -8)")
++__msg("mark_precise: frame0: regs=r0 stack= before 4: (db) r0 = atomic64_cmpxchg((u64 *)(r10 -8), r0, r2)")
++__msg("mark_precise: frame0: regs= stack=-8 before 3: (b7) r2 = 0")
++__msg("mark_precise: frame0: regs= stack=-8 before 2: (b7) r0 = 8")
++__msg("mark_precise: frame0: regs= stack=-8 before 1: (7b) *(u64 *)(r10 -8) = r1")
++__msg("mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 8")
++__naked int bpf_atomic_cmpxchg_dual_precision(void)
++{
++	asm volatile (
++	"r1 = 8;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r0 = 8;"
++	"r2 = 0;"
++	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u64 *)(r10 - 8), r0, r2) */
++	"r3 = *(u64 *)(r10 - 8);"
++	"r4 = r0;"
++	"r4 += r3;"
++	"r4 &= 7;"
++	"r5 = r10;"
++	"r5 += r4;"			/* mark_precise */
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(cmpxchg_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, BPF_REG_10, BPF_REG_2, -8))
++	: __clobber_all);
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r1 stack= before 10: (57) r1 &= 7")
++__msg("mark_precise: frame0: regs=r1 stack= before 9: (db) r1 = atomic64_fetch_add((u64 *)(r0 +0), r1)")
++__not_msg("falling back to forcing all scalars precise")
++__naked int bpf_atomic_fetch_add_map_precision(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[precision_map] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 1f;"
++	"r1 = 0;"
++	".8byte %[fetch_add_insn];"	/* r1 = atomic_fetch_add(*(u64 *)(r0 + 0), r1) */
++	"r1 &= 7;"
++	"r2 = r10;"
++	"r2 += r1;"			/* mark_precise */
++	"1: r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(precision_map),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(fetch_add_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH, BPF_REG_0, BPF_REG_1, 0))
++	: __clobber_all);
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("mark_precise: frame0: regs=r0 stack= before 12: (57) r0 &= 7")
++__msg("mark_precise: frame0: regs=r0 stack= before 11: (db) r0 = atomic64_cmpxchg((u64 *)(r6 +0), r0, r1)")
++__not_msg("falling back to forcing all scalars precise")
++__naked int bpf_atomic_cmpxchg_map_precision(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[precision_map] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"if r0 == 0 goto 1f;"
++	"r6 = r0;"
++	"r0 = 0;"
++	"r1 = 0;"
++	".8byte %[cmpxchg_insn];"	/* r0 = atomic_cmpxchg(*(u64 *)(r6 + 0), r0, r1) */
++	"r0 &= 7;"
++	"r2 = r10;"
++	"r2 += r0;"			/* mark_precise */
++	"1: r0 = 0;"
++	"exit;"
++	:
++	: __imm_addr(precision_map),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_insn(cmpxchg_insn,
++		     BPF_ATOMIC_OP(BPF_DW, BPF_CMPXCHG, BPF_REG_6, BPF_REG_1, 0))
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
