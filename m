@@ -1,142 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F183C9453;
-	Mon, 30 Mar 2026 11:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001CE2D97B7
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 12:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774871247; cv=none; b=o+mxhhgGSPjAd0vIUQBatzOXkfK3SIRS7PruA+lQ96nAL3gSapgpaC3/G6Y6rpz6QS+FzCBT4LtkL/VyiEV+yz5HAaL1NuaxXp81y19/E6NoMJb4z9Wiw8OccThgInf9BFJmNMx6ItlimRM+PJLHTPPFESCC1OyLCh5diQI78JU=
+	t=1774872354; cv=none; b=dRZcmGOI1VFbytsQltX3Kkmy8VF7jI8ZCeGTY9fv+JhnsGJH/B/gEXTVhnfjci93aSORtFpAPnFvgcOTN2iqd50860dj9+gWt6hO3azLeczN79RLD3t502ra6AHi+Uh4BRX2VdBPDb5iyc2a5W/6BIJpZ2P2gBVQQYY7DK/N/Kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774871247; c=relaxed/simple;
-	bh=WEMKIeHZ724u6rP6iwEPboq1Qx2piqn13mD0Got0lBc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Hm5C5Cfc7TjTeiqXTJBG6imWGYHktBxj5Oh7hYtOIkddR5XQPGMglm0T/JH0jnPqzkvaZ+ztcTyiThFDtkLrLjfJJMlVXvkyjBkRtI6uR7JWPgUj26RpofJZj0ck6OngRo8npXPru1+WZY5pukXbkA15B/CQzFpZsof0SFBX4HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DtXazfOc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774872354; c=relaxed/simple;
+	bh=WwfoiDsGXEYee32x6vSfF/i54EZe1Z+Hf22yLLlr46E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H3BIAB23cUWLuH630R0oPtJsiOhX7QHPIxIT3jQpYBezw9PVhWxVtaoSCNARZouHXQ7v1DrgQTcsaOWQPiNMeNS23JPl96RQxKOm+bOqbwtsUZm4EooccOmefVk/0hx0zkPz02okYWxLzGuvvkOyLsZTdAKwuJP1YZgq6cRW9zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLl/7Dre; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DtXazfOc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE6FC4CEF7;
-	Mon, 30 Mar 2026 11:47:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774871247;
-	bh=WEMKIeHZ724u6rP6iwEPboq1Qx2piqn13mD0Got0lBc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=DtXazfOcDp/Yv+uWg/YMZ+fd862B+1BMAEuvxzIlk+MgSsWpEvC3ljLVHeH6KU/rg
-	 Uh4yoNWbOT6KetTSmG1WZklnfxnN61Cjj01NoaHZ0ruzxpw7HcFuUG4cTnk3xOZ9T8
-	 JYGTCrjfvnN5GPsK5Bb1R5KrUpTht66tBzNr0baotKuD3UaIe6rtht+7Pml4sfpe7E
-	 sCO2uzZdGhcqwrbjarmixlVk4a1FjIhl5IbODR1Pf8y4IILWB2edXJucu2jH5AJfjV
-	 o49NO+KV7mbClWXCOxMPEiYynr26Hffnc7QyqPQ9mHievWeN7VSTcNC2BPK26oYXUF
-	 CsnxNEN6Dz3NA==
-Content-Type: multipart/mixed; boundary="===============7669256081677238455=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLl/7Dre"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-486fd5360d4so58556715e9.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 05:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774872351; x=1775477151; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=do2NCSY/GmE1zYBgGX0yt+76FyjYYoU4ApNdaK6fwMQ=;
+        b=iLl/7Dre6iczWfyYZOt1ZBzcW/n1H2rJpSBo9xvXrWMOvv05y6sqFvaO0HvKd5PaGN
+         S4plgFy7+EmVbg4jY+4szcPANqffXVhpBZR6YjENynfzeoQ6StMVimy83aZ9hAhKW3kK
+         /j6pM4lIUoh8peGtMpj6dQM8uHg9wP75LflaMgsME0r89BDsE+QTlVKX3O+zEn+GdX7Q
+         oJ/sDU0XHoeLznCFv5LKhuvhLXqXBa8Llp9rkADo5ab3bDaHdArxEQPWQqDQHeuJS1eO
+         ux7E3EnzYKQk5rHxoBY3TrkiN6YxgxEsX8C0ow3E0dfzl/FC2FFOXuo8Fvfjjo5v74zg
+         Yo1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774872351; x=1775477151;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=do2NCSY/GmE1zYBgGX0yt+76FyjYYoU4ApNdaK6fwMQ=;
+        b=atKQsIhdysooCOPxg+K6sNygGF/F1rED3jvI+v9zD3HBwtrmdp51hLUeNRH2KSfEqK
+         tFfIpn705W4Qsc/nmnE7l+cib7RC2An1MT7Kq7X+aFe+ZQL+v+InBYpbpAqlDs4Ufwyb
+         HktZywis4Jbi4vKfb7E1f+zd0OSdHoEkhv1Dhyac5TTFEj26MIF1Y0CiG6MHQNB9jcNy
+         l8IKZ7S4JifESBRiaQ9uZwUJVbUrWLM+tOZagPzzrhj0N3Dh3oeD7wHHuda624owlkBe
+         QO6HL4gNAul7TAgfoXZCtIJXmhXgO654h4C4DXJe5w8/5EnjC0JREiwr1eKpUwCcGCkv
+         kENw==
+X-Forwarded-Encrypted: i=1; AJvYcCW/hkA9FKeYUCKqcWsbYLg5Xy2noPyYLkbTwwCnt0XENgO6MamvP3Eee6GZRPvO8HANIMc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqL15n19j1Mujx42l1xQHNur7eeWzzqPCK3IQLXphSBHnJxIfC
+	w1Q0D1BPtt6aVKbSQFqjbLKs85y53Qht9Rl+LoYlgSL7mukx/mFhAxjp
+X-Gm-Gg: ATEYQzx2bS39iJEtGUmXmMCR/WqfJSpiR4n5FZCwyc4ES43qzCEILmwetyC1g8TcgyP
+	aQy9CV0YgrgY8QhEktO4nJVW9siEKNQSTp7KKRdVpbTYk7X22243Yimc5c4Lh47PdtpRmOAW+kA
+	jIkcnjLmdDds+TTDdgVApkKfn6ZBkSR3k3aYFhHeeLe9nlF2d2sgzi8BDaRJ+KonnN8lcDTFy9x
+	WTuXVwkv4qAAunQ7yr8GwdsT3+wsuHUdsJguicXfse4mNLT3UNBJ/oxGo5HMpHnDHh+pmvyOJY5
+	fATSN0W+nEev5dkPOZY2od05hlAGcAwrAf+t3e7N4Qq/ADyW7nHp4o+oubbvxqBwsHxH08y/0CN
+	M0cK8E4xw2TwjvJ9Utnd3iO9CUy1990m71E9SKcuhdkiwHBleJaHsTH+kxLvhy4ogH1hUwwFpu3
+	/M3sVk5RAXmZg5O8kRIk5UCVzzlx6rlP8vWC9b7JoPThPOl0ddvVMcuwF9OrNb7cMZKBqoTzKH3
+	JEIb5ekM2i5u8Py+qDB4lPDIEbDI6QYNhNskJjSOlqU0w3ztzlo/1+YFf2EFxQsF1WuZR2oVdbP
+	9SknkMONvlY7HVeJnTQB1XB9EPAizW5QWwZyo/GaAJg=
+X-Received: by 2002:a05:600c:c109:b0:486:f9d0:aac8 with SMTP id 5b1f17b1804b1-48727ec776bmr154971425e9.18.1774872351135;
+        Mon, 30 Mar 2026 05:05:51 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e00c04fbae8c649ce1c.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:c04f:bae8:c649:ce1c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48737a73062sm39198795e9.34.2026.03.30.05.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 05:05:49 -0700 (PDT)
+Date: Mon, 30 Mar 2026 14:05:48 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: KaFai Wan <kafai.wan@linux.dev>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Subject: Re: [PATCH v2 bpf-next 2/6] bpf: Use bpf_verifier_env buffers for
+ reg_set_min_max
+Message-ID: <acpnHDASo5QGw7BZ@mail.gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+ <9fdf9830803fe3a5c4059341c84a03836105f5bf.1774025082.git.paul.chaignon@gmail.com>
+ <33c006d7275cb443b5750f062cb78c38449a7537.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d5f1a4484d26fbff3aaafd358025dffeb2ba3cbff9c35c1643e4b0ab503201d6@mail.kernel.org>
-In-Reply-To: <20260330110019.549079-4-varunrmallya@gmail.com>
-References: <20260330110019.549079-4-varunrmallya@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 3/3] libbpf: Auto-upgrade kprobes to multi-kprobes when supported
-From: bot+bpf-ci@kernel.org
-To: varunrmallya@gmail.com,andrii@kernel.org,alan.maguire@oracle.com,yonghong.song@linux.dev,song@kernel.org,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,eddyz87@gmail.com,martin.lau@linux.dev,jolsa@kernel.org,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,leon.hwang@linux.dev,varunrmallya@gmail.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 30 Mar 2026 11:47:26 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <33c006d7275cb443b5750f062cb78c38449a7537.camel@gmail.com>
 
---===============7669256081677238455==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Mar 23, 2026 at 11:42:11AM -0700, Eduard Zingerman wrote:
+> On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 056bc50a0bbb..7b5f83ce543e 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+[...]
 
-[ ... ]
+> > @@ -17196,30 +17192,23 @@ static int reg_set_min_max(struct bpf_verifier_env *env,
+> >  	 * variable offset from the compare (unless they were a pointer into
+> >  	 * the same object, but we don't bother with that).
+> >  	 */
+> > -	if (false_reg1->type != SCALAR_VALUE || false_reg2->type != SCALAR_VALUE)
+> > -		return 0;
+> > -
+> > -	/* We compute branch direction for same SCALAR_VALUE registers in
+> > -	 * is_scalar_branch_taken(). For unknown branch directions (e.g., BPF_JSET)
+> > -	 * on the same registers, we don't need to adjust the min/max values.
+> > -	 */
+> > -	if (false_reg1 == false_reg2)
+> 
+> A side note:
+> 
+> The above hunk was added as a part of [1] to mitigate some invariant
+> violation errors. Surprisingly, none of the tests added in [1] fail
+> on current master if above hunk is commented out. Probably due to
+> recent improvements in bounds deduction. Should we remove these
+> tests as a part of the series?
+> 
+> [1] https://lore.kernel.org/all/20251103063108.1111764-3-kafai.wan@linux.dev/
 
-> @@ -11815,6 +11835,25 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
->  	offset = OPTS_GET(opts, offset, 0);
->  	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
->
-> +	/* This provides backwards compatibility to programs using kprobe, but
-> +	 * have been auto-upgraded to multi kprobe.
-> +	 */
-> +	if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI &&
-> +	    offset == 0 && attach_mode == PROBE_ATTACH_MODE_DEFAULT) {
-> +		LIBBPF_OPTS(bpf_kprobe_multi_opts, multi_opts);
-> +		const char *syms[1] = { func_name };
-> +		__u64 bpf_cookie;
-> +
-> +		multi_opts.retprobe = OPTS_GET(opts, retprobe, false);
-> +		multi_opts.syms = syms;
-> +		multi_opts.cnt = 1;
-> +		bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-> +		if (bpf_cookie)
-> +			multi_opts.cookies = &bpf_cookie;
-> +
-> +		return bpf_program__attach_kprobe_multi_opts(prog, NULL, &multi_opts);
-> +	}
-> +
-> +	legacy = determine_kprobe_perf_type() < 0;
+Nice catch! Out of those five new tests, the three "jset on same
+register, scalar value unknown branch" never fail if you revert the
+commit they were testing, even at the time they were added. I believe
+these three tests were intended to cover the above "false_reg1 ==
+false_reg2" check and supposed to fail with an invariant violation when
+the check is missing.
 
-What happens when a program was auto-upgraded to
-BPF_TRACE_KPROBE_MULTI but the caller passes offset != 0 or
-attach_mode == PROBE_ATTACH_MODE_LINK?
+I believe this check was never actually needed. For an invariant
+violation to happen, we need regs_refine_cond_op to refine a register
+based on a incorrectly-detected branch being verified. For jset, that
+can only happen if one of the two registers is constant. In our case,
+that would mean both registers are constant. But if both registers are
+constant, then is_scalar_branch_taken is always able to precisely
+deduce the outcome of the jset. Hence, we wouldn't even reach this
+"false_reg1 == false_reg2" check.
 
-The redirect above is skipped, and the code falls through to the
-perf_event path, which eventually calls bpf_link_create() with
-BPF_PERF_EVENT. The kernel's bpf_prog_attach_check_attach_type()
-in link_create() rejects this:
+I think I'll remove this check in a preparatory commit, along with the
+related selftests and an explanation why it's all not-needed. Cc'ing
+KaFai Wan in case I missed something.
 
-kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type() {
-    case BPF_PROG_TYPE_KPROBE:
-        if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI &&
-            attach_type != BPF_TRACE_KPROBE_MULTI)
-            return -EINVAL;
-}
-
-This affects callers of the public API
-bpf_program__attach_kprobe_opts() who have a SEC("kprobe") program
-that was auto-upgraded but then manually attach with offset != 0
-(the get_func_ip_test.c case) or with PROBE_ATTACH_MODE_LINK (the
-test_attach_probe_manual.c case). The selftests were updated to use
-.single, but external users of the API would get a confusing
--EINVAL with no diagnostic.
-
-Would it make sense to add a pr_warn here for the fallthrough case
-when expected_attach_type == BPF_TRACE_KPROBE_MULTI, suggesting
-SEC("kprobe.single") as a workaround? Something like:
-
-    if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI) {
-        pr_warn("prog '%s': kprobe was auto-upgraded to multi but "
-                "offset or attach_mode is incompatible; "
-                "use SEC(\"kprobe.single\") instead\n",
-                prog->name);
-        return libbpf_err_ptr(-ENOTSUP);
-    }
-
-[ ... ]
-
-> @@ -12269,14 +12308,24 @@ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf
->  	*link = NULL;
->
->  	/* no auto-attach for SEC("kprobe") and SEC("kretprobe") */
-> +	if (strcmp(prog->sec_name, "kprobe") == 0 ||
-> +	    strcmp(prog->sec_name, "kretprobe") == 0 ||
-> +	    strcmp(prog->sec_name, "kprobe.single") == 0 ||
-> +	    strcmp(prog->sec_name, "kretprobe.single") == 0)
->  		return 0;
-
-This isn't a bug, but the comment above still says SEC("kprobe")
-and SEC("kretprobe") -- should it also mention the .single
-variants now that they are handled here?
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23741893093
---===============7669256081677238455==--
+> 
+> [...]
