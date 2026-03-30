@@ -1,138 +1,157 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001CE2D97B7
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 12:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC1C3C1415;
+	Mon, 30 Mar 2026 12:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774872354; cv=none; b=dRZcmGOI1VFbytsQltX3Kkmy8VF7jI8ZCeGTY9fv+JhnsGJH/B/gEXTVhnfjci93aSORtFpAPnFvgcOTN2iqd50860dj9+gWt6hO3azLeczN79RLD3t502ra6AHi+Uh4BRX2VdBPDb5iyc2a5W/6BIJpZ2P2gBVQQYY7DK/N/Kk=
+	t=1774872576; cv=none; b=Y8WfPrIf5Dc4uMALS+K5Akj1Ho2tDR0QTmQbBLdNld/oy83SpFl0qJX1Q/1xZPCMmpe/yMIvzMbRAMuIqL+RLVM840fLlAIvrCc8ChUEdPbm1MycPzUmD3IrD0ejq9tf1ltwUIyRJ3stQnpjDFgd6a14wjNZImFVdkxtb2M1sog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774872354; c=relaxed/simple;
-	bh=WwfoiDsGXEYee32x6vSfF/i54EZe1Z+Hf22yLLlr46E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H3BIAB23cUWLuH630R0oPtJsiOhX7QHPIxIT3jQpYBezw9PVhWxVtaoSCNARZouHXQ7v1DrgQTcsaOWQPiNMeNS23JPl96RQxKOm+bOqbwtsUZm4EooccOmefVk/0hx0zkPz02okYWxLzGuvvkOyLsZTdAKwuJP1YZgq6cRW9zY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLl/7Dre; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774872576; c=relaxed/simple;
+	bh=bAMR2VvQnY1wHO5Aay50HuiIUDYJz6WQd+15bmNhySg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=D9Gvh+j+GdyzILbEvbhAeOoPKgr2Wbsf/QbY/s5k12WPjnBbfT5SBKxP0+y/pvuJjjHrD6oqnC/NhSDA0SxaIrPDaADAnjSBe3IBKBlgmd8bmEWH85ZqI7QJsIxvt5nbcSF2z4m+R0SZiZ0Crs2DFmXMV3ZeOIgQwP5nRNUmYuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Z8G4l//I; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLl/7Dre"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-486fd5360d4so58556715e9.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 05:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774872351; x=1775477151; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=do2NCSY/GmE1zYBgGX0yt+76FyjYYoU4ApNdaK6fwMQ=;
-        b=iLl/7Dre6iczWfyYZOt1ZBzcW/n1H2rJpSBo9xvXrWMOvv05y6sqFvaO0HvKd5PaGN
-         S4plgFy7+EmVbg4jY+4szcPANqffXVhpBZR6YjENynfzeoQ6StMVimy83aZ9hAhKW3kK
-         /j6pM4lIUoh8peGtMpj6dQM8uHg9wP75LflaMgsME0r89BDsE+QTlVKX3O+zEn+GdX7Q
-         oJ/sDU0XHoeLznCFv5LKhuvhLXqXBa8Llp9rkADo5ab3bDaHdArxEQPWQqDQHeuJS1eO
-         ux7E3EnzYKQk5rHxoBY3TrkiN6YxgxEsX8C0ow3E0dfzl/FC2FFOXuo8Fvfjjo5v74zg
-         Yo1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774872351; x=1775477151;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=do2NCSY/GmE1zYBgGX0yt+76FyjYYoU4ApNdaK6fwMQ=;
-        b=atKQsIhdysooCOPxg+K6sNygGF/F1rED3jvI+v9zD3HBwtrmdp51hLUeNRH2KSfEqK
-         tFfIpn705W4Qsc/nmnE7l+cib7RC2An1MT7Kq7X+aFe+ZQL+v+InBYpbpAqlDs4Ufwyb
-         HktZywis4Jbi4vKfb7E1f+zd0OSdHoEkhv1Dhyac5TTFEj26MIF1Y0CiG6MHQNB9jcNy
-         l8IKZ7S4JifESBRiaQ9uZwUJVbUrWLM+tOZagPzzrhj0N3Dh3oeD7wHHuda624owlkBe
-         QO6HL4gNAul7TAgfoXZCtIJXmhXgO654h4C4DXJe5w8/5EnjC0JREiwr1eKpUwCcGCkv
-         kENw==
-X-Forwarded-Encrypted: i=1; AJvYcCW/hkA9FKeYUCKqcWsbYLg5Xy2noPyYLkbTwwCnt0XENgO6MamvP3Eee6GZRPvO8HANIMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqL15n19j1Mujx42l1xQHNur7eeWzzqPCK3IQLXphSBHnJxIfC
-	w1Q0D1BPtt6aVKbSQFqjbLKs85y53Qht9Rl+LoYlgSL7mukx/mFhAxjp
-X-Gm-Gg: ATEYQzx2bS39iJEtGUmXmMCR/WqfJSpiR4n5FZCwyc4ES43qzCEILmwetyC1g8TcgyP
-	aQy9CV0YgrgY8QhEktO4nJVW9siEKNQSTp7KKRdVpbTYk7X22243Yimc5c4Lh47PdtpRmOAW+kA
-	jIkcnjLmdDds+TTDdgVApkKfn6ZBkSR3k3aYFhHeeLe9nlF2d2sgzi8BDaRJ+KonnN8lcDTFy9x
-	WTuXVwkv4qAAunQ7yr8GwdsT3+wsuHUdsJguicXfse4mNLT3UNBJ/oxGo5HMpHnDHh+pmvyOJY5
-	fATSN0W+nEev5dkPOZY2od05hlAGcAwrAf+t3e7N4Qq/ADyW7nHp4o+oubbvxqBwsHxH08y/0CN
-	M0cK8E4xw2TwjvJ9Utnd3iO9CUy1990m71E9SKcuhdkiwHBleJaHsTH+kxLvhy4ogH1hUwwFpu3
-	/M3sVk5RAXmZg5O8kRIk5UCVzzlx6rlP8vWC9b7JoPThPOl0ddvVMcuwF9OrNb7cMZKBqoTzKH3
-	JEIb5ekM2i5u8Py+qDB4lPDIEbDI6QYNhNskJjSOlqU0w3ztzlo/1+YFf2EFxQsF1WuZR2oVdbP
-	9SknkMONvlY7HVeJnTQB1XB9EPAizW5QWwZyo/GaAJg=
-X-Received: by 2002:a05:600c:c109:b0:486:f9d0:aac8 with SMTP id 5b1f17b1804b1-48727ec776bmr154971425e9.18.1774872351135;
-        Mon, 30 Mar 2026 05:05:51 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e00c04fbae8c649ce1c.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:c04f:bae8:c649:ce1c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48737a73062sm39198795e9.34.2026.03.30.05.05.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 05:05:49 -0700 (PDT)
-Date: Mon, 30 Mar 2026 14:05:48 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: KaFai Wan <kafai.wan@linux.dev>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: Re: [PATCH v2 bpf-next 2/6] bpf: Use bpf_verifier_env buffers for
- reg_set_min_max
-Message-ID: <acpnHDASo5QGw7BZ@mail.gmail.com>
-References: <cover.1774025082.git.paul.chaignon@gmail.com>
- <9fdf9830803fe3a5c4059341c84a03836105f5bf.1774025082.git.paul.chaignon@gmail.com>
- <33c006d7275cb443b5750f062cb78c38449a7537.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Z8G4l//I"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Lx7YRXKJCWBCsErD1cu39z8DMl9eZkAIZO/j8HiaQCg=; b=Z8G4l//IHYvULS6gB1JauJrEtw
+	AjIx5BEWpsHQLzzni1ebLacBV+oM/lKD7PzgW4yaFtfG64jNKIINZHuvssct7WH4g/4xu/+OC0Mpi
+	ufsZvAFurtiC6+PDuvAJagqyR4Y3NvowwbVm/3oMMvPFvm+reaUzAKPxeL/Uw00638RBX85pOt69W
+	TUebJtQbnrtfnLkC8d4Soyvv7uEF28tAqg17vvz0znaxZdFBVvfdmKoEIPqRWYNG962tUYnMwzOuw
+	13i+cvREO+GX/ytmySMnKcOXIHL4vKNqSgz2HZjE1F7rKG4EIlP1ZiEPpEWP90vTakBcNL0KCcYgz
+	8pVfmmJA==;
+Received: from [187.106.45.161] (helo=[192.168.100.160])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1w7BQo-008xuJ-2D; Mon, 30 Mar 2026 14:09:22 +0200
+Message-ID: <7fb97184-baaa-4639-a0b9-ac289bf2e54d@igalia.com>
+Date: Mon, 30 Mar 2026 09:09:16 -0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33c006d7275cb443b5750f062cb78c38449a7537.camel@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpf: fix umin/umax when lower bits fall outside u32 range
+To: Eduard Zingerman <eddyz87@gmail.com>, andrii@kernel.org,
+ shung-hsi.yu@suse.com, yonghong.song@linux.dev, ast@kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+References: <20260327194849.855397-1-koike@igalia.com>
+ <74e65b463d1f992bc0e4846085394a440796f563.camel@gmail.com>
+Content-Language: en-US
+From: Helen Koike <koike@igalia.com>
+In-Reply-To: <74e65b463d1f992bc0e4846085394a440796f563.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 23, 2026 at 11:42:11AM -0700, Eduard Zingerman wrote:
-> On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
+Hi Eduard,
 
-[...]
+Thanks for your replies and pointers, please see my comments below.
 
-> > @@ -17196,30 +17192,23 @@ static int reg_set_min_max(struct bpf_verifier_env *env,
-> >  	 * variable offset from the compare (unless they were a pointer into
-> >  	 * the same object, but we don't bother with that).
-> >  	 */
-> > -	if (false_reg1->type != SCALAR_VALUE || false_reg2->type != SCALAR_VALUE)
-> > -		return 0;
-> > -
-> > -	/* We compute branch direction for same SCALAR_VALUE registers in
-> > -	 * is_scalar_branch_taken(). For unknown branch directions (e.g., BPF_JSET)
-> > -	 * on the same registers, we don't need to adjust the min/max values.
-> > -	 */
-> > -	if (false_reg1 == false_reg2)
-> 
-> A side note:
-> 
-> The above hunk was added as a part of [1] to mitigate some invariant
-> violation errors. Surprisingly, none of the tests added in [1] fail
-> on current master if above hunk is commented out. Probably due to
-> recent improvements in bounds deduction. Should we remove these
-> tests as a part of the series?
-> 
-> [1] https://lore.kernel.org/all/20251103063108.1111764-3-kafai.wan@linux.dev/
-
-Nice catch! Out of those five new tests, the three "jset on same
-register, scalar value unknown branch" never fail if you revert the
-commit they were testing, even at the time they were added. I believe
-these three tests were intended to cover the above "false_reg1 ==
-false_reg2" check and supposed to fail with an invariant violation when
-the check is missing.
-
-I believe this check was never actually needed. For an invariant
-violation to happen, we need regs_refine_cond_op to refine a register
-based on a incorrectly-detected branch being verified. For jset, that
-can only happen if one of the two registers is constant. In our case,
-that would mean both registers are constant. But if both registers are
-constant, then is_scalar_branch_taken is always able to precisely
-deduce the outcome of the jset. Hence, we wouldn't even reach this
-"false_reg1 == false_reg2" check.
-
-I think I'll remove this check in a preparatory commit, along with the
-related selftests and an explanation why it's all not-needed. Cc'ing
-KaFai Wan in case I missed something.
-
+On 3/27/26 5:46 PM, Eduard Zingerman wrote:
+> On Fri, 2026-03-27 at 16:48 -0300, Helen Koike wrote:
 > 
 > [...]
+> 
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index a965b2c45bbe..ddac09c8a9e5 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -2702,9 +2702,29 @@ static void __reg_deduce_mixed_bounds(struct bpf_reg_state *reg)
+>>   	__u64 new_umin, new_umax;
+>>   	__s64 new_smin, new_smax;
+>>   
+>> -	/* u32 -> u64 tightening, it's always well-formed */
+>> -	new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
+>> -	new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
+>> +	/*
+>> +	 * If (u32)umin > u32_max, no value in the current upper-32-bit block
+>> +	 * satisfies [u32_min, u32_max] while being >= umin; advance umin to
+>> +	 * the next block. Otherwise apply standard u32->u64 tightening.
+>> +	 */
+>> +	if ((u32)reg->umin_value > reg->u32_max_value)
+>> +		new_umin = (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) |
+>> +			   reg->u32_min_value;
+>> +	else
+>> +		new_umin = (reg->umin_value & ~0xffffffffULL) |
+>> +			   reg->u32_min_value;
+> 
+> What would happen if there is no next or previous 32-bit block?
+> E.g. if (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) wraps around.
+> I guess the argument is that if this happens, there is an invariant
+> violation already, will the final register still bin in invariant
+> violation state?
+
+I thought about it and my conclusion was that we would be in trouble 
+anyway and the error is elsewhere (unless my understanding is wrong).
+We could add a check here, but I guess reg_bounds_sanity_check() already 
+does that.
+
+> 
+> Useful picture:
+> 
+>   N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
+>   ||----|=====|--|----------||----|=====|-------------||--|-|=====|-------------||
+>         |< b >|  |                |< b >|                 | |< b >|
+>                  |                |     |                 |
+>                  |<---------------+- a -+---------------->|
+>                                   |     |
+>                                   |< t >| refined r0 range
+> 
+> Also, as this is based solely on unsigned ranges, the following case
+> is not covered, right?
+
+Right, this case is not covered.
+
+> 
+>   N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
+>   ||===|---------|------|===||===|----------------|===||===|---------|------|===||
+>    |b >|         |      |< b||b >|                |< b||b >|         |      |< b|
+>                  |      |                                  |         |
+>                  |<-----+----------------- a --------------+-------->|
+>                         |                                  |
+>                         |<---------------- t ------------->| refined r0 range
+> 
+> Would it be hard to implementing something in the same line as [2] to cover it?
+
+I'll check and get back to you.
+
+> 
+>> +
+>> +	/*
+>> +	 * Symmetrically, if (u32)umax < u32_min, retreat umax to the
+>> +	 * previous block. Otherwise apply standard u32->u64 tightening.
+>> +	 */
+>> +	if ((u32)reg->umax_value < reg->u32_min_value)
+>> +		new_umax = (reg->umax_value & ~0xffffffffULL) - (1ULL << 32) |
+>> +			   reg->u32_max_value;
+>> +	else
+>> +		new_umax = (reg->umax_value & ~0xffffffffULL) |
+>> +			   reg->u32_max_value;
+>> +
+>>   	reg->umin_value = max_t(u64, reg->umin_value, new_umin);
+>>   	reg->umax_value = min_t(u64, reg->umax_value, new_umax);
+>>   	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range validity */
+> 
+> I think we can move forward with this, as the fate of my RFC is
+> uncertain. Please add some selftests, e.g. from [1].
+
+Ack, I'll check the signed case, test against your selftests and 
+re-submit the patches.
+
+Thanks again!
+Helen
+
+> 
+> [1] https://lore.kernel.org/bpf/20260318-cnum-sync-bounds-v1-4-1f2e455ea711@gmail.com/
+> [2] https://github.com/eddyz87/cnum-verif/blob/master/cnum.c#L242
+
