@@ -1,116 +1,389 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6182E4247
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774895071; cv=pass; b=uY1Y70pBa5+B2JFj2VIdF0nmyFX5dt0UHMiSahYQC09/cPsEdpp62ZAJMhu+2M7TcMsi+5r2OuLl9dc54cD/8vyU2bpw2Df7q1kjyrGxlKVLvX4sZTZeeZ4fft3OhVBDVXZ9OYuMTPdjCCsI4q8B4kjCaiwy6jsdjtnslBMIaLA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774895071; c=relaxed/simple;
-	bh=IjjEjESPBoeuqWEOdgJ68RZQLoI//6qt+g/Spxhh23w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tqSPV5yecfjX9cRFbbLnv+ATQgBiUPkQdOPkjQiG4fyYMoN7a41pM99WxH7wnti9vAFQjes2As86sR2CgIfCSXJYiDPQegF5fwuIyWGpSu5qU5t2oHDhxCO615lhV0/wHIqDDG9Zat11MYZ+8/PrTSnmsxIuNP0sNQdT9j9EA2Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j2887gEU; arc=pass smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A8CE2E7F39
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 19:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774898463; cv=none; b=CmhnPWvVrbyFs9y95b3plcDy85Q/MCuWSz8x4wB2rTj+1fNSu/6WoF5WeVpPWIFysv1Ktoz0BKC+7+VYCt9ax7XgvVyJPfrzWJboEjVD7BaUXLZ4z3lsqBzHbPFcqOGgfvDXYQ1tU58DD1zVvv1Otn0oZcMFcKsiTYbbMmJhHLY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774898463; c=relaxed/simple;
+	bh=xHTz/9y4IDzJuIDg2lblgQ8WlciWxxE+t66gGvbKq0s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c6dFclauNaYYlHU3xB2jgBMmCEDWe1Dx/QAzy1z+zDct1p96nG2AgmS6Irg+EYlprPuZMboRiP6LYLBXr8692cm5Zc0MF7UCMVvig3NkOqiMNn+abDW6u3a6z9q+B5+ciG9XSkf6y55a0FxcEugYGLuKh0Poyq2ngx/T5sK+UxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=n1Jz+Dho; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j2887gEU"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-66bb4d4fcb4so3336752a12.2
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 11:24:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774895069; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Qh/MyXseg26zROnL5Z5X94mgwfKIFZlKV00INVvvLBAibeSjVJjt75PG1qaB38dGzO
-         sXurf4ZefHgbA6UduRLIAV+f1eVFv4Dy+pnEmEkRSkwz/REiIvAZQqabxasCGHBivubC
-         xc9NriuqBr+dRqd0rolwrLhGxnpMy8lMsAzkXm+2720DEptQfNuuS3kHgYS05kex+x0D
-         iWuI8+dDl3/nZJsvQSsGcsHBInu9LQsxOTxEmqAMsV3rmRaYL4EwiOSyjz+fCEOHv5Q1
-         xSSlhWe6HIiPCXUhs8JxCtHyuFdYk/0mYMDR1BYeADQlg8lXgfdAj7fzPaRAOKyNoCrt
-         bXKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=H2fCyQVduMiMLHCG7iMXqslB+KxrIKaXOc8AoYNYZto=;
-        fh=M42S78ZmWR0nJAKLU/RllquoXg5zbdcSUeqi8zY9Tpc=;
-        b=fw1MP3sfXoJpRlOgxjL7G4YrQ6N+PjIRl2G441aTLr0BAwxkDO5PSwEvm+ZeBSLd9j
-         q78lSLykso1wdf6d9D3DyAyErurIyJ721nKjBsv9lXTnU09alLC0fYDaTv41FajxT4wO
-         ox9fCUZhq9UBC68cNSccXnsi5iiq5n0hz/MMZ/ILDQeS6T3EH1gJbCF/6yiLxW9QPlv1
-         C1tVjl4QJMvzhLj2LHhkjRHxlXAh/9SNQC22okditZREBHTRvSozkiFNY1Zga3/+nbc4
-         4DGQA7WbqgxFFmsqiIP56eyfmvmceoNpcnVs2u+PqduaqZnj8tir5Eo2vkjIaVbffg+v
-         HslA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774895069; x=1775499869; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=H2fCyQVduMiMLHCG7iMXqslB+KxrIKaXOc8AoYNYZto=;
-        b=j2887gEUc81/EX3MH8u2giM1vZgTTS/gf8kHV8yd6XehuJ4rxej68kedz00vSNJHGk
-         chEajxSdUEJ8TTWW1lWv7NoMKRGToCxnR+C2nytkwgeGnAq7p1kpGjpiVflQzAjMuf/u
-         1HDvEf5gQddrfvDVLqeBWZ3xZKFx0C45Gh5dblXcqQCamdLEpoW5siwjbbtzjg4qdrJD
-         94QxjNB5z14kUUu83g2aT0EOCHSBUbrPnH7YboaMgv79KjeGRq5MYlRzAD+BJAB7OXCV
-         ieKDVvii7O1baCpTP4Hj4YZw2pgWEIerkh/iTlAo7b7sMm1/s+M+M4YD0YJWo1dDOGz0
-         zV5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774895069; x=1775499869;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H2fCyQVduMiMLHCG7iMXqslB+KxrIKaXOc8AoYNYZto=;
-        b=loEo6x0CBwm9jRfZuQHKwm8I5kzSucoKc4mytk511ukpRGqmbbHZT9/VxjGeoj9Ilo
-         ASGBOmgmnW2xmN8NBisNdI91vBpyKU44BRO+TKgSKb/BNDMpgsp12te2fDJhG4rJ15kO
-         vkqPxdZZWxyOivzU85t5fDfcXad0j23xWNsjE406qB7TfOnUXzV9SiprDRGJNvRueIP2
-         u3LB/tjMI3hsokVOjcrlgLbdpDlznLT8d3AcVVnUuXpFoMgYNCnkaYdngzQSXHtdHKj3
-         6qnuQ+T8/PjV5tyVkj5gQfDH1UdjaPYUbLVOkMjJcDgg7tyuNmcarTTpdHGvWwaPBeu6
-         yXAg==
-X-Forwarded-Encrypted: i=1; AJvYcCX5YPd7DRdorxkf9XRp8X0a441FpnN50vR1urarTJauaZ87zSijeqggfQ+dsRYuIN3XNWs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLHX39h5RrznTfB5hp/tNVGLwlrlLxcnLyW/gEo2YNTuUHVkz+
-	2S4eXnzhDLZA33CGrTKA7ZGgQsLdfctt1N/rKoDOLTqkaFqJeQwbMxgXzaZFA0Bdr6gTmPU8BsD
-	CDnA8jNQjLY4EN2fH8IXAhopCMQVJ+9M=
-X-Gm-Gg: ATEYQzwr1DazSHUn/wZ+dcfrDPpNIRYfzc1jTvcwagc3FHKm1PBdA/so3kfV43JeBW2
-	rPHnHoVyT+fJSWeEWdOQxUwi38rwDddiO8VVHoblN8a/chU7CaxsO42MCphjtpLoymjWFq0DGiy
-	yCKEBh/gnSwcbI4KlzvPTzDpBY2vwjNbIcuUJD6kGyaLMAr72M/SKBDY8e1gO+QeOeqAlNGMRUa
-	vi3I5E6foMID8xGRLt9ifYuCG8h0tlBOxNEE3fI1DSvumQhpERgVgXmeLK7ICE9kf0STlYkM+x4
-	ITR3
-X-Received: by 2002:a05:6402:144e:b0:66b:eb5a:36ba with SMTP id
- 4fb4d7f45d1cf-66beb5a36e2mr3030460a12.0.1774895068601; Mon, 30 Mar 2026
- 11:24:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="n1Jz+Dho"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62UCdMXN3518860;
+	Mon, 30 Mar 2026 19:20:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=WQTHjQmRHQvnnAals4FgnOvYl813B4AR+xav05TL2
+	I4=; b=n1Jz+DhoarhIuoKJrbcSekjqHp7DzcbPqqsCqQuxu3cQ1gAihhqSI5Vwm
+	7b7O+SeaTkbUPXOzs9PxUEft1enGc7MARb4MXFzRC3oAJmt+0Y2PXlMrS1vB2tEv
+	DHNEjsHwV26NQpCUYryGmMkj6hhGalgLJKPntEUnF/RsiTZ+DBw/amImLGJB+4dg
+	+4bDYRw7DqujvkfDJDWuORaQPYdwdSAglacS3f1lcEa5aobAxmUqLapSr43wJrB/
+	dA2EfyB6W7ZzIlS78DqsMbf+rQ8mqQD5gPh6CNjYsPCaoMryCASke3q4N0kRomYP
+	rbQ1OLshmE0jiwD2tJzFLBe3VaV6w==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q30a6f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Mar 2026 19:20:44 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62UEsO8Q022271;
+	Mon, 30 Mar 2026 19:20:43 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6tamx4yq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Mar 2026 19:20:43 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62UJKdPE48234932
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Mar 2026 19:20:39 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 07BA92004D;
+	Mon, 30 Mar 2026 19:20:39 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7916120040;
+	Mon, 30 Mar 2026 19:20:37 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 30 Mar 2026 19:20:37 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v5 1/2] powerpc64/bpf: Implement JIT support for private stack
+Date: Mon, 30 Mar 2026 19:20:33 -0400
+Message-ID: <20260330232034.44776-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323182823.5813-1-teknoraver@meta.com> <acp4BblnJfpVClct@boxer>
-In-Reply-To: <acp4BblnJfpVClct@boxer>
-From: Matteo Croce <technoboy85@gmail.com>
-Date: Mon, 30 Mar 2026 20:23:51 +0200
-X-Gm-Features: AQROBzCzCACh_-BLvnQFRTSbj2uJ0Jgxs7I76lfgNyafJtAFK8kadBcN3cI9nxM
-Message-ID: <CAFnufp3BRyJUH0J0Q14N0sj50YjC_OqmP49gZ=z75cYER2t-pA@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 0/2] e1000e: add XDP support
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>, 
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Mohsin Bashir <mohsin.bashr@gmail.com>, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: U0JzjsdA2ub83SF3OPWAk2fbUctDplQw
+X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69cacd0c cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=A8mRDSlWM7J1pTn1j8wA:9
+X-Proofpoint-ORIG-GUID: U0JzjsdA2ub83SF3OPWAk2fbUctDplQw
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzMwMDE2MSBTYWx0ZWRfX+k1gxar4XrQh
+ /4TPOhBtzIjgzJzSapN6D9JMO14BoNsES0Wh87CTEK9LGGc391VrvsPhMUcXf0R9BQ4RBm+PYz8
+ UXCwu+69M17qL6z5qJqAGktsN7QJqhYREuAX1HC9h4uPk7h63oHQwerfnVroJQtBu7uipVlnB+L
+ Y3udYpr3zIoZQtYGZ2P9AkWWxsViwv0DG80LT1oyWlbDch4ZmN1BD0579hI3SOBEl98D4DnLhrV
+ xzsjTNXNr7Lrs95vPCR1txNa74Lktmktso5pf2O9ukYmqQ+erf+HYKWUyE8VaiaaOjjld7lez0S
+ kMKcpOIyHtxiUMb1bD4HIcIGOSPaHzMc3EhRghVJwbvgxX/tUCuF+x4hylng3KNdMc6licqCY/Y
+ V+kyea4v0q53GOqZS0HqrRRBDeKk9h3QeoVw1U7Q/0Tma/lJOSK9CcXvWdWuBLWJdOEw/iIB7Wm
+ IFOuLqzOahjwTGgbdQQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-30_01,2026-03-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603300161
 
-Il giorno lun 30 mar 2026 alle ore 15:18 Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> ha scritto:
->
-> On Mon, Mar 23, 2026 at 07:28:21PM +0100, Matteo Croce wrote:
-> > Add XDP support to e1000e driver. First patch adds basic XDP support,
-> > while the second one adds support for AF_XDP.
->
-> This set has nothing to do with AF_XDP.
->
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-Should I mention XDP_REDIRECT instead?
+Provision the private stack as a per-CPU allocation during
+bpf_int_jit_compile(). Align the stack to 16 bytes and place guard
+regions at both ends to detect runtime stack overflow and underflow.
 
+Round the private stack size up to the nearest 16-byte boundary.
+Make each guard region 16 bytes to preserve the required overall
+16-byte alignment. When private stack is set, skip bpf stack size
+accounting in kernel stack.
+
+There is no stack pointer in powerpc. Stack referencing during JIT
+is done using frame pointer. Frame pointer calculation goes like:
+
+BPF frame pointer = Priv stack allocation start address +
+                    Overflow guard +
+                    Actual stack size defined by verifier
+
+Memory layout:
+
+High Addr          +--------------------------------------------------+
+                   |                                                  |
+                   | 16 bytes Underflow guard (0xEB9F12345678eb9fULL) |
+                   |                                                  |
+         BPF FP -> +--------------------------------------------------+
+                   |                                                  |
+                   | Private stack - determined by verifier           |
+                   | 16-bytes aligned                                 |
+                   |                                                  |
+                   +--------------------------------------------------+
+                   |                                                  |
+Lower Addr         | 16 byte Overflow guard (0xEB9F12345678eb9fULL)   |
+                   |                                                  |
+Priv stack alloc ->+--------------------------------------------------+
+start
+
+Update BPF_REG_FP to point to the calculated offset within the
+allocated private stack buffer. Now, BPF stack usage reference
+in the allocated private stack.
+
+v4->v5:
+  Rebasing over latest changes
+v3->v4:
+  Added new field to fix priv_stack allocation
+v2->v3:
+  Fix ci-bot bug targeting clobbered NVRs on stack rollback
+v1->v2:
+  Fix ci-bot warning for percpu pointer casting
+  Minor refactoring
+
+[v4]: https://lore.kernel.org/bpf/20260226031324.17352-1-adubey@linux.ibm.com
+[v3]: https://lore.kernel.org/bpf/20260226005440.9570-1-adubey@linux.ibm.com
+[v2]: https://lore.kernel.org/bpf/20260225153950.15331-1-adubey@linux.ibm.com
+[v1]: https://lore.kernel.org/bpf/20260216152234.36632-1-adubey@linux.ibm.com
+
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit.h        |  6 ++
+ arch/powerpc/net/bpf_jit_comp.c   | 97 +++++++++++++++++++++++++++++--
+ arch/powerpc/net/bpf_jit_comp64.c | 29 ++++++++-
+ 3 files changed, 124 insertions(+), 8 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 7354e1d72f79..a232f3fb73be 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -178,8 +178,14 @@ struct codegen_context {
+ 	bool is_subprog;
+ 	bool exception_boundary;
+ 	bool exception_cb;
++	void __percpu *priv_sp;
++	unsigned int priv_stack_size;
+ };
+ 
++/* Memory size & magic-value to detect private stack overflow/underflow */
++#define PRIV_STACK_GUARD_SZ    16
++#define PRIV_STACK_GUARD_VAL   0xEB9F12345678eb9fULL
++
+ #define bpf_to_ppc(r)	(ctx->b2p[r])
+ 
+ #ifdef CONFIG_PPC32
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index a62a9a92b7b5..2018260f56c6 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -129,25 +129,60 @@ bool bpf_jit_needs_zext(void)
+ 	return true;
+ }
+ 
++static void priv_stack_init_guard(void __percpu *priv_stack_ptr, int alloc_size)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		stack_ptr[0] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[1] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx + 1] = PRIV_STACK_GUARD_VAL;
++	}
++}
++
++static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int alloc_size,
++								struct bpf_prog *fp)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
++			pr_err("BPF private stack overflow/underflow detected for prog %s\n",
++			bpf_jit_get_prog_name(fp));
++			break;
++		}
++	}
++}
++
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ {
+ 	u32 proglen;
+ 	u32 alloclen;
+ 	u8 *image = NULL;
+-	u32 *code_base;
+-	u32 *addrs;
+-	struct powerpc_jit_data *jit_data;
++	u32 *code_base = NULL;
++	u32 *addrs = NULL;
++	struct powerpc_jit_data *jit_data = NULL;
+ 	struct codegen_context cgctx;
+ 	int pass;
+ 	int flen;
++	int priv_stack_alloc_size;
++	void __percpu *priv_stack_ptr = NULL;
+ 	struct bpf_binary_header *fhdr = NULL;
+ 	struct bpf_binary_header *hdr = NULL;
+ 	struct bpf_prog *org_fp = fp;
+-	struct bpf_prog *tmp_fp;
++	struct bpf_prog *tmp_fp = NULL;
+ 	bool bpf_blinded = false;
+ 	bool extra_pass = false;
+ 	u8 *fimage = NULL;
+-	u32 *fcode_base;
++	u32 *fcode_base = NULL;
+ 	u32 extable_len;
+ 	u32 fixup_len;
+ 
+@@ -173,6 +208,26 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		fp->aux->jit_data = jit_data;
+ 	}
+ 
++	priv_stack_ptr = fp->aux->priv_stack_ptr;
++	if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
++		/*
++		 * Allocate private stack of size equivalent to
++		 * verifier-calculated stack size plus two memory
++		 * guard regions to detect private stack overflow
++		 * and underflow.
++		 */
++		priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
++		if (!priv_stack_ptr) {
++			fp = org_fp;
++			goto out_priv_stack;
++		}
++
++		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
++		fp->aux->priv_stack_ptr = priv_stack_ptr;
++	}
++
+ 	flen = fp->len;
+ 	addrs = jit_data->addrs;
+ 	if (addrs) {
+@@ -209,6 +264,19 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	cgctx.is_subprog = bpf_is_subprog(fp);
+ 	cgctx.exception_boundary = fp->aux->exception_boundary;
+ 	cgctx.exception_cb = fp->aux->exception_cb;
++	cgctx.priv_sp = priv_stack_ptr;
++	cgctx.priv_stack_size = 0;
++	if (priv_stack_ptr) {
++		/*
++		 * priv_stack_size required for setting bpf FP inside
++		 * percpu allocation.
++		 * stack_size is marked 0 to prevent allocation on
++		 * general stack and offset calculation don't go for
++		 * a toss in bpf_jit_stack_offsetof() & bpf_jit_stack_local()
++		 */
++		cgctx.priv_stack_size = cgctx.stack_size;
++		cgctx.stack_size = 0;
++	}
+ 
+ 	/* Scouting faux-generate pass 0 */
+ 	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+@@ -306,6 +374,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		}
+ 		bpf_prog_fill_jited_linfo(fp, addrs);
+ out_addrs:
++		if (!image && priv_stack_ptr) {
++			fp->aux->priv_stack_ptr = NULL;
++			free_percpu(priv_stack_ptr);
++		}
++out_priv_stack:
+ 		kfree(addrs);
+ 		kfree(jit_data);
+ 		fp->aux->jit_data = NULL;
+@@ -419,6 +492,8 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 	if (fp->jited) {
+ 		struct powerpc_jit_data *jit_data = fp->aux->jit_data;
+ 		struct bpf_binary_header *hdr;
++		void __percpu *priv_stack_ptr;
++		int priv_stack_alloc_size;
+ 
+ 		/*
+ 		 * If we fail the final pass of JIT (from jit_subprogs),
+@@ -432,6 +507,13 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 		}
+ 		hdr = bpf_jit_binary_pack_hdr(fp);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
++		priv_stack_ptr = fp->aux->priv_stack_ptr;
++		if (priv_stack_ptr) {
++			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++			priv_stack_check_guard(priv_stack_ptr, priv_stack_alloc_size, fp);
++			free_percpu(priv_stack_ptr);
++		}
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+ 	}
+ 
+@@ -453,6 +535,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return IS_ENABLED(CONFIG_PPC64);
+ }
+ 
++bool bpf_jit_supports_private_stack(void)
++{
++	return IS_ENABLED(CONFIG_PPC64);
++}
++
+ bool bpf_jit_supports_arena(void)
+ {
+ 	return IS_ENABLED(CONFIG_PPC64);
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index c5e26d231cd5..8101e098d125 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -183,6 +183,22 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+ {
+ }
+ 
++static void emit_fp_priv_stack(u32 *image, struct codegen_context *ctx)
++{
++	/* Load percpu data offset */
++	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R13,
++			offsetof(struct paca_struct, data_offset)));
++	PPC_LI64(bpf_to_ppc(BPF_REG_FP), (__force long)ctx->priv_sp);
++	/*
++	 * Load base percpu pointer of private stack allocation.
++	 * Runtime per-cpu address = (base + data_offset) + (guard + stack_size)
++	 */
++	EMIT(PPC_RAW_ADD(bpf_to_ppc(BPF_REG_FP),
++			bpf_to_ppc(TMP_REG_1), bpf_to_ppc(BPF_REG_FP)));
++	EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), bpf_to_ppc(BPF_REG_FP),
++			PRIV_STACK_GUARD_SZ + round_up(ctx->priv_stack_size, 16)));
++}
++
+ /*
+  * For exception boundary & exception_cb progs:
+  *     return increased size to accommodate additional NVRs.
+@@ -307,9 +323,16 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 	 * Exception_cb not restricted from using stack area or arena.
+ 	 * Setup frame pointer to point to the bpf stack area
+ 	 */
+-	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+-		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+-			STACK_FRAME_MIN_SIZE + ctx->stack_size));
++	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP))) {
++		if (ctx->priv_sp) {
++			/* Set up fp in private stack */
++			emit_fp_priv_stack(image, ctx);
++		} else {
++			/* Setup frame pointer to point to the bpf stack area */
++			EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
++				STACK_FRAME_MIN_SIZE + ctx->stack_size));
++		}
++	}
+ 
+ 	if (ctx->arena_vm_start)
+ 		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
 -- 
-Matteo Croce
+2.52.0
 
-perl -e 'for($t=0;;$t++){print chr($t*($t>>8|$t>>13)&255)}' |aplay
