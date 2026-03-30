@@ -1,199 +1,142 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7330F3AB299;
-	Mon, 30 Mar 2026 08:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 411B13A9013
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 08:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774857833; cv=none; b=rjKY/aKGheMgincpN3XhdGg30Tm7h02lVLRMXk5MQtGxf/ElsFUM7UCLB+LtTmRVipuDQdeUWum1sNEw5LANSR8PlVJd0Ht6bJXqJ7QvFi0QeA6SZZRE7sBwiSkyiDcobQbLORbn3V/w4uXWzOBsEAlAO1rcbcoLcljGg13JjNM=
+	t=1774858092; cv=none; b=gyH5wf2+l+VHxFY6AYOTWow8T6K0mZFIQmsQs/wYJL7LUwXn6TPLYZaTM587h+6g8gMrkCuI8/LndjllZj9QrHQdJkUV9NnJO5ha3fyQLWu9YnSreaWeYkrjBi+I4F1cNtRqtv8L8RREj17rAkiVZtbgiD8Ri7/f0pLsg6YDi7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774857833; c=relaxed/simple;
-	bh=09C/OzGwqqMv+kkQJpECbI+iQQ6V2dADdMjc2ANykCE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UH4K00UCMAtvtlGqGV0ZXPIKqjOJ0B8jEdx+a+rti3/xtIr60imPQd7sTqKubM6lA6FVwDE7RATlDZhLmJYS29whlkEbls2ZON141YajX2NYjtAqpLyFWiUwstH85JI0Jie2QhIHgdZfApPwwF5ID8aDizu23esJZuDXY+Z3IAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=rMGJXaow; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1774858092; c=relaxed/simple;
+	bh=VYfo2JE7NvtABKnE9DEwIy/nZWzlK8oHOS54PxmISlY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KdAE8y8BQam3u33/S2O5s7HoRNg7O5Y/lFmcAyhfV3YbbsHxfibd+EqaCxZ7HBfJjdTQ63rKLvvj3vCAtPkNagJ2nS8NHkS5ocBqm1hhE9J2+X1JxqgFGca4NHzIWvOiMcx3NhC1xEQAesOtT9ZRzKE5Tl5bv1jyfziagTbOPTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R/O85a7x; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="rMGJXaow"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=GOWEtAf9N1qRA+nzgdIl4Ke886MQ7Kmtcy1GKvdhTK8=; b=rMGJXaowZjxvBAvapevPWez30t
-	G1BQn9KbtVWKCeWxJ3NN7imyu/PxsSfuJI0P+pHvvLsdJiRcS1+Q/ptitt4FsYosomNx2xL8WM48m
-	Szj0wg0SUrP8UmpVLTzkGxopT4zDrx+dmopoJMP5mgac49ZaZ5D2BNFTCPr7Ix6btbbRiAue/r1na
-	xxrqeDGqj2T5GfJk8AF/vKLE+Af3GRO7WrlJHiIGSEUpEzeESXn2t0jSM31K3KKvg+jRbvnzfr5oD
-	YrgtlI8YYGA8jSwh89zazCJHC+ovKCCVFZjY10K6JgBGnodve0h3ui3d6wpJ9wfzFP6+sPq8Yxuy3
-	EC9YCGUA==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w77b9-000MC3-2m;
-	Mon, 30 Mar 2026 10:03:47 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w77b8-0005Vi-2M;
-	Mon, 30 Mar 2026 10:03:46 +0200
-Message-ID: <3532664e-1f62-412c-9819-b048f62da010@iogearbox.net>
-Date: Mon, 30 Mar 2026 10:03:46 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R/O85a7x"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774858079;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EAKIwnjB5Oawmq89pgUvZeH/TVFj76rosWd2pW+3SXc=;
+	b=R/O85a7x/xGN1+2TpssGJvUqCmyRFAvzSQ7R4+op2aRaKPmXg4WhupfQVOncQEQ7pWeviI
+	Ksna5hWOmdGW8VfwzPYyV6JecLGumacZEFsXwb0O0n1F2d/qdSa47YTPSEPeKm9UPXmK49
+	ptCThBG/BpyY1rqLPA1J1MNu+bd7U1M=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v4 0/2] bpf: tcp: Fix null-ptr-deref in arbitrary SYN Cookie
+Date: Mon, 30 Mar 2026 16:07:24 +0800
+Message-ID: <20260330080746.319680-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: test that dst is cleared
- on same-protocol encap
-To: Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
- andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260329180428.2657785-1-kuba@kernel.org>
- <20260329180428.2657785-2-kuba@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260329180428.2657785-2-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27956/Mon Mar 30 08:24:32 2026)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 3/29/26 8:04 PM, Jakub Kicinski wrote:
-> Verify that bpf_skb_adjust_room() clears the routing dst even when
-> the encap L3 protocol matches the original packet (e.g. IPIP).
-> The dst selected for the inner packet is not valid for the
-> encapsulated result; a stale dst could lead to misrouting.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+bpf_sk_assign_tcp_reqsk() does not validate the L4 protocol of the skb,
+only checking skb->protocol (L3). A BPF program that calls this kfunc on
+a non-TCP skb (e.g. UDP) will succeed, attaching a TCP reqsk to the skb.
 
-For new tests we should ideally only be using tcx links and not the old
-qdisc approach unless there is specifc reason to. Any objections if I
-fold this in while applying?
+When the skb enters the UDP receive path, skb_steal_sock() returns the
+TCP listener socket from the reqsk. The UDP code then casts this TCP
+socket to udp_sock and accesses UDP-specific fields at invalid offsets,
+causing a null pointer dereference:
 
-  .../selftests/bpf/prog_tests/test_dst_clear.c | 23 ++++++-------------
-  .../selftests/bpf/progs/test_dst_clear.c      |  2 +-
-  2 files changed, 8 insertions(+), 17 deletions(-)
+  BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
+  Read of size 4 at addr 0000000000000008 by task test_progs/537
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
-index 8190c56556fb..c8e9c6947a2c 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
-@@ -15,11 +15,11 @@
-  
-  void test_dst_clear(void)
-  {
--	LIBBPF_OPTS(bpf_tc_hook, qdisc_hook, .attach_point = BPF_TC_EGRESS);
--	LIBBPF_OPTS(bpf_tc_opts, tc_attach);
-+	LIBBPF_OPTS(bpf_tcx_opts, tcx_opts);
-  	struct nstoken *nstoken = NULL;
-  	struct test_dst_clear *skel;
-  	struct sockaddr_in addr;
-+	struct bpf_link *link;
-  	socklen_t addrlen;
-  	char buf[128] = {};
-  	int sockfd, err;
-@@ -36,18 +36,11 @@ void test_dst_clear(void)
-  	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-  		goto fail;
-  
--	qdisc_hook.ifindex = if_nametoindex("lo");
--	if (!ASSERT_GT(qdisc_hook.ifindex, 0, "if_nametoindex lo"))
--		goto fail;
--
--	err = bpf_tc_hook_create(&qdisc_hook);
--	if (!ASSERT_OK(err, "create qdisc hook"))
--		goto fail;
--
--	tc_attach.prog_fd = bpf_program__fd(skel->progs.dst_clear);
--	err = bpf_tc_attach(&qdisc_hook, &tc_attach);
--	if (!ASSERT_OK(err, "attach filter"))
-+	link = bpf_program__attach_tcx(skel->progs.dst_clear,
-+				       if_nametoindex("lo"), &tcx_opts);
-+	if (!ASSERT_OK_PTR(link, "attach_tcx"))
-  		goto fail;
-+	skel->links.dst_clear = link;
-  
-  	addrlen = sizeof(addr);
-  	err = make_sockaddr(AF_INET, IPV4_IFACE_ADDR, UDP_TEST_PORT,
-@@ -66,10 +59,8 @@ void test_dst_clear(void)
-  	ASSERT_TRUE(skel->bss->dst_cleared, "dst_cleared");
-  
-  fail:
--	if (nstoken) {
--		bpf_tc_hook_destroy(&qdisc_hook);
-+	if (nstoken)
-  		close_netns(nstoken);
--	}
-  	SYS_NOFAIL("ip netns del " NS_TEST);
-  	test_dst_clear__destroy(skel);
-  }
-diff --git a/tools/testing/selftests/bpf/progs/test_dst_clear.c b/tools/testing/selftests/bpf/progs/test_dst_clear.c
-index 7ac9604fd99c..c22a6eeb4798 100644
---- a/tools/testing/selftests/bpf/progs/test_dst_clear.c
-+++ b/tools/testing/selftests/bpf/progs/test_dst_clear.c
-@@ -13,7 +13,7 @@ void *bpf_cast_to_kern_ctx(void *) __ksym;
-  bool had_dst = false;
-  bool dst_cleared = false;
-  
--SEC("tc")
-+SEC("tc/egress")
-  int dst_clear(struct __sk_buff *skb)
-  {
-  	struct sk_buff *kskb;
+  CPU: 1 UID: 0 PID: 537 Comm: test_progs Not tainted 7.0.0-rc4+ #46 PREEMPT
+  Call Trace:
+   <IRQ>
+   dump_stack_lvl (lib/dump_stack.c:123)
+   print_report (mm/kasan/report.c:487)
+   kasan_report (mm/kasan/report.c:597)
+   __kasan_check_read (mm/kasan/shadow.c:32)
+   __udp_enqueue_schedule_skb (net/ipv4/udp.c:1719)
+   udp_queue_rcv_one_skb (net/ipv4/udp.c:2370 net/ipv4/udp.c:2500)
+   udp_queue_rcv_skb (net/ipv4/udp.c:2532)
+   udp_unicast_rcv_skb (net/ipv4/udp.c:2684)
+   __udp4_lib_rcv (net/ipv4/udp.c:2742)
+   udp_rcv (net/ipv4/udp.c:2937)
+   ip_protocol_deliver_rcu (net/ipv4/ip_input.c:209)
+   ip_local_deliver_finish (./include/linux/rcupdate.h:879 net/ipv4/ip_input.c:242)
+   ip_local_deliver (net/ipv4/ip_input.c:265)
+   __netif_receive_skb_one_core (net/core/dev.c:6164 (discriminator 4))
+   __netif_receive_skb (net/core/dev.c:6280)
+
+Solution
+
+Patch 1: Add L4 protocol validation in bpf_sk_assign_tcp_reqsk(). Check
+ip_hdr(skb)->protocol (IPv4) and ipv6_hdr(skb)->nexthdr (IPv6) against
+IPPROTO_TCP, returning -EINVAL for non-TCP skbs.
+Patch 2: Add selftest that calls bpf_sk_assign_tcp_reqsk() on a UDP skb
+and verifies the kfunc rejects it.
+
+
+---
+v1: https://lore.kernel.org/bpf/20260323105510.51990-1-jiayuan.chen@linux.dev/
+v2: https://lore.kernel.org/bpf/20260326062657.88446-1-jiayuan.chen@linux.dev/
+v3: https://lore.kernel.org/bpf/20260327133915.286037-1-jiayuan.chen@linux.dev/
+
+Changes in v4:
+- Check if assign_ret is EINVAL instead of checking if it is 0. 
+  Suggested by Martin KaFai Lau
+
+Changes in v3:
+- Add IPv6 test coverage, reuse test_cases[] to iterate over both
+  address families
+- Share TCP/UDP port to simplify BPF program, remove unnecessary
+  global variables
+- Use connect_to_fd() + send()/recv() instead of manual sockaddr
+  construction
+- Suggested by Kuniyuki Iwashima
+
+Changes in v2:
+- Add Reviewed-by tag from Kuniyuki Iwashima for patch 1
+- Use UDP socket recv() instead of kern_sync_rcu() for synchronization
+  in selftest
+
+Jiayuan Chen (2):
+  bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
+  selftests/bpf: Add protocol check test for bpf_sk_assign_tcp_reqsk()
+
+ net/core/filter.c                             |   6 +
+ .../bpf/prog_tests/tcp_custom_syncookie.c     |  91 ++++++++++++++-
+ .../bpf/progs/test_tcp_custom_syncookie.c     | 109 ++++++++++++++++++
+ 3 files changed, 202 insertions(+), 4 deletions(-)
+
 -- 
 2.43.0
-
 
