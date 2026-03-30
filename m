@@ -1,184 +1,186 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD1936AB54;
-	Mon, 30 Mar 2026 23:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774914087; cv=none; b=kqAo6gsJzdji2QIMT9Ws9oElmDI4RVPU9DaduE1Ws9w50+7c14ehE6MdmhaSiPqeFAQCDZ2Uutr70cTAH2fHpWv1cOwv/2QLJP0aMu8HvtVmFRRHTzfkSVH/0TM0DIwWMdsSmivJZROx4zWvViXNLf/VCeYQj29CYJdIT9HLS6Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774914087; c=relaxed/simple;
-	bh=Wsb68vwebu5k5GbIZ4m7HzQHX0mtcKHGVK4H/spGrgw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JVnx6tlXPQvo2dfbgAG6ijzehOigNmcSt8KT0qksXaVH+jx9RcfhUcj38cOYqbcT9A3WdqAyl54ioP0wXa9nc4lDTZAsNU/baJ/ecHJkzICkW+uwD0Bk2BllpmsbaIdNBh0W3SpdRtpOSp/6AdYPLbRiwMH9azTwBtn0wwXq8nE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=MbuYaueX; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFCD3BB48
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 23:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774914405; cv=pass; b=mEGmA1viQadteC4DaqKAnbT+x80GGP3RpUaXR37ORyqJhLitYWDrO7oItEEbHgpbYbQdcxukAMCpss8rKxmTy6ptzWW+UCCi8bS4D5uyPCKLqCQ5Hoxg4mJVEyj6YLuJ35QiFs5ZznqmnB9VOBfIopndm+ibV/Q8a+JarZikykg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774914405; c=relaxed/simple;
+	bh=y3PpL15g3dDmoiG6yCSQbhX+COXSuw50MpsHP09kdbs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k6JM+6UWsNDuQgpR7qAKYsiLjXOhqLV2bL7ZNP0GzoPwVazDoPb2Ghpm2sAJck5X2owAZK74FHaD7S876rVKSEv9XE4339/zCfZ8jlmht08hdP9s+6tO5Fva+Nd9Ba3hIEyLmJTYNwisnC5OGpzTpxLFqrnw2kYHtL6hC9UNxAQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEVagPms; arc=pass smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="MbuYaueX"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1w7LeK-002rCb-89; Tue, 31 Mar 2026 01:04:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=SqFNvY1V+aOz8GRhxciZ/yNPa759gjISZHD7MtM/Fmg=; b=MbuYaueXdMQp3bLFmRL8FrrdFK
-	YG+4GryjUIHI3irD+p5oUWptBWhztRePe4mUiF0Tlx7WPDuWnEH3BSOBI2Hcvs8mUonnf5OJkC0e1
-	l4JStv8HZsIewiWqcI/kaFH7P9VDrh0tVvNiiXi8hw9ySV+yFlnf+JRTM3g7UEIdjgJ1LZaRYKHwq
-	4KlLft08Jvx8tiFmg7SSNIx7I77UCKTUX47sWwP0yAhGJgTNzT5PORenOwtVzi2aUIIWmiIjZB7/J
-	WWhQISfgt2cZvnDOqoptGzEWzHzaTqZtTEQO+nATgc/APm3MGVhcTJrtVxLUqzjTvTmyOKo05ZMvd
-	mHc9I1Bg==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1w7Le8-0006EB-KT; Tue, 31 Mar 2026 01:03:48 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1w7Ldp-007xmP-N0; Tue, 31 Mar 2026 01:03:29 +0200
-Message-ID: <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
-Date: Tue, 31 Mar 2026 01:03:23 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEVagPms"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c766a95a72dso3277330a12.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 16:46:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774914403; cv=none;
+        d=google.com; s=arc-20240605;
+        b=c6QJQx9pAjTgTebefjljl149d5p9bXhsPaRg0DCWCRZys9MHzbN14BYeCAtB36jbQY
+         Hd2OU8XSQOwkwaY4Lj+j+gg1wiOhlPD+FAv/rTXMP9SAmqw/SyUJxsKk1jD2wwk4ZqCE
+         D0M+nlMoasDNbVOxoYc/NWG63HSNBwlkZ85/fPa+wX9A3sKdNlMirYBrfitABPRZOuGR
+         sB+SlNeAEd7y47F/VYAA919UyHP5Cy8lQrnRl0oEKIz4KWLGXNBTxRNmQ+Me6Kh3jsYn
+         4xur1zHnAWDIpQ77yzz/UqlJGwIbfs772M1m9fLlYoYNTPGwB9Tdt8ELT1WfifaziF9g
+         smPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5FHVUhJQq8m7SEx+y6i/6ANk2A2z3JCf04DCLMufazM=;
+        fh=7Jb35+oq4UWQtjw/uXhMBPPTRMbe/LyoPELKcHXevv0=;
+        b=astfmPih0ZOYI6BV3Mtgy+/XxuGq2UAqadb24yWhub1vQvtfVuMI5Q9+ITgxl6v63/
+         JCsmFN2/a3NXuRx/wOxtXqCi7VYj5vOARwAI3lcSFWe1yUQEyFDgMyxMqQQI1elVjnhU
+         q+MVeeXOLXnyPnF7pBjrRmXy3fJOl813rtldcw1V1EHb8CN+Ms3R0Rh53+n3qlorovMA
+         U1ooNRzM7qnk6A5Vz2OpjVcjfMgRwpRI/eRTgmc0Fu3AORElLGFUTvCiPmlg1UHsrN1F
+         jhKVNpGwGsdFP2Rl0t8l3YLmxn6Pa/7r7HHqbeimA/cH37fZrzj9bcKsGUkBg+mr/ad2
+         G5Ug==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774914403; x=1775519203; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5FHVUhJQq8m7SEx+y6i/6ANk2A2z3JCf04DCLMufazM=;
+        b=KEVagPms1puUYSb+hLp1w8TvkuobtREcBMXXgGsVY91ANhVGJq/69vlK5eAdnQmydg
+         70phoawtRp0WiSmVEvLGmbGotDs6HNJ5aMWIGQW1484qF7IDVaMHd2M/PM5tC0MEYOgP
+         mP+5nvGAlqvu71TqQjolhJQ4KDRgT0QlEVDj1U6Q5mKaZf4E1lzhDfxaPbPC/eIqmd1M
+         0HpcwriFLU44naQNCxcLxmyU7FMPHRGkKdXXQ4jviY8/Wf80MB2eEqqylMBUJi/mjxEH
+         OF58In6pwF0ZMCrnivqQ09LkCFIAix5bDEh18P0oixYuxbg8xQyf1TZB0/k7hIFFLyv1
+         369A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774914403; x=1775519203;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5FHVUhJQq8m7SEx+y6i/6ANk2A2z3JCf04DCLMufazM=;
+        b=SFTSm0AjOj5HpqB8jZf8VJysM9x151WMMi5Cbuby7Yn1FujBb6CAqRrwfHtbgvwPSH
+         RUK0NQxXlV9CJH4p6j0YDRC+z79U2QNhhrYYcU529GLVC81BX7QaT+OFU4tID7jiUbRT
+         FveckKlxf+eP7Hj9dmAWECKAWaYtQYd/ntSfR/c/r7YmWSddMjiEog7qZsFrXtV27Zzh
+         nInDn5N41ZvFrZmJ8kmyo7Iowvrf05vzpD0auyKUHw6oE6VyVvpO+WfAUX4zXf9QVksb
+         hAaCQQQBPUUkXT/XyacvCrhI8tQVN5BNZZOdry+LFM/Ji9Fjp/XzPhYifIPASgulMDnC
+         oqTg==
+X-Gm-Message-State: AOJu0YxmoAczRR04yV7fyNzh60hDZ7ep3gG8T8mKDWvGqY/XsGT/MdPJ
+	zaBiBtIm1ve9U19e90zmAyHXvwVjXR+GRZLg0aYb23aNPFR1hPu/G6qehWuWum7sOWtmcOxN095
+	nHUbrKmN8kGezYQSfZDJARKNGzb6F2Ts=
+X-Gm-Gg: ATEYQzzh+DolkrAQYwtZz69d0U2XBr69kl05dndUxIKKAsaEE16X63n8JVcaQqQ2kwU
+	Eoaq/X8lfd/N2RRz7Nvaw3fMMD2FoNZeL1RbScjP1N+CN8vfwInWyiB66YArZ4NXB+MAO7CTBVG
+	OjW0HaYRPY2gClfcDBWwaqJ0G9QlkOCPk4+e/zF4ixdcYPfxFKCfAUZ34MZKPtMlAJxDXpY1EDu
+	yH0CgQucyfcEco6efhkJFOJaUZW5BhLcqlG7Rr6rwlLUttljMCcDfM/kt/ynqxudUAjrSU95qXw
+	egGx3475nPL4yunNxGNPWCzrL/G9hdwd/A==
+X-Received: by 2002:a05:6a20:2455:b0:39b:ba95:b127 with SMTP id
+ adf61e73a8af0-39c877ea601mr14114772637.4.1774914403400; Mon, 30 Mar 2026
+ 16:46:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jiayuan Chen <mrpre@163.com>, John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
- <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
- <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
- <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
- <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
- <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
- <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260329212534.3270005-1-memxor@gmail.com> <20260329212534.3270005-4-memxor@gmail.com>
+In-Reply-To: <20260329212534.3270005-4-memxor@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 30 Mar 2026 16:46:31 -0700
+X-Gm-Features: AQROBzBJQXDGhCaBs701YEA9DUTqIx2rCu4-eniXwjTjbb-fGX3lmfsFbvt4LUY
+Message-ID: <CAEf4BzbkRVWauUvoB5nMsbARrt_G_+ohYVth_tp1vz7SdNNH1Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/3] libbpf: Wire up verifier warning display logic
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/26/26 07:26, Martin KaFai Lau wrote:
-> On 3/15/26 4:58 PM, Michal Luczaj wrote:
->>> Beside, from looking at the may_update_sockmap(), I don't know if it is
->>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
->>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
->>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
->>> when the bpf_map_update_elem(sockmap) support was added iirc.
->>
->> What about a situation when unix_sk is stored in a sockmap, then tc prog
->> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
->> useful, but seems doable.
-> 
-> [ Sorry for the late reply ]
-> 
-> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible 
-> from tc :(
-> 
-> Then unix_state_lock() in its current form cannot be safely acquired in 
-> sock_map_update_elem(). It is currently a spin_lock() instead of 
-> spin_lock_bh().
+On Sun, Mar 29, 2026 at 2:25=E2=80=AFPM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> Wire up the flushing of all accumulated messages in a program's stderr
+> stream after verification is complete. An example is shown below of a
+> warning printed now about usage of deprecated kfuncs.
+>
+> $ ./test_progs -t kfunc_implicit_args/test_kfunc_implicit_arg_legacy_impl=
+ -v
+> ...
+> libbpf: prog 'test_kfunc_implicit_arg_legacy_impl': VERIFIER WARNINGS:
+> WARNING: kfunc_implicit_args.c:40 calls deprecated kfunc bpf_kfunc_implic=
+it_arg_legacy_impl(), which will be removed.
+> WARNING: Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
+> WARNING: For older kernels, choose the kfunc using bpf_ksym_exists(bpf_kf=
+unc_implicit_arg_legacy).
+> ...
+>
+> Note that test_progs overrides the default logging function, hence -v is
+> necessary. By default these messages would be printed for the user.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 9ea41f40dc82..f308bacd083f 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -7826,6 +7826,27 @@ static int libbpf_prepare_prog_load(struct bpf_pro=
+gram *prog,
+>
+>  static void fixup_verifier_log(struct bpf_program *prog, char *buf, size=
+_t buf_sz);
+>
+> +static void bpf_object_load_prog_emit_stderr(struct bpf_program *prog, i=
+nt prog_fd)
+> +{
+> +       char chunk[256];
+> +       bool emitted =3D false;
+> +       int ret;
+> +
+> +       while ((ret =3D bpf_prog_stream_read(prog_fd, BPF_STREAM_STDERR, =
+chunk,
+> +                                          sizeof(chunk), NULL)) > 0) {
+> +               if (!emitted) {
+> +                       pr_warn("prog '%s': VERIFIER WARNINGS:\n", prog->=
+name);
+> +                       emitted =3D true;
+> +               }
+> +               libbpf_print(LIBBPF_WARN, "%.*s", ret, chunk);
+> +       }
+> +
+> +       if (ret < 0) {
+> +               pr_debug("prog '%s': failed to read BPF stderr stream: %s=
+\n",
+> +                        prog->name, errstr(ret));
 
-Is there a specific deadlock you have in your mind?
+instead of potentially spamming debug logs with this, let's detect if
+streams are supported and not even try to read warnings?
 
->>> The only path left is bpf_iter, which I believe was the primary use case
->>> when adding bpf_map_update_elem(sockmap) support [1]. It would be nice
->>> to avoid bh_lock_sock() when calling from all bpf_iter (tcp/udp/unix)
->>> where lock_sock() has already been done. It is more for
->>> reading-correctness though. This just came to my mind.
->>> has_current_bpf_ctx() can be used to check this. sockopt_lock_sock() has
->>> been using it to conditionally take lock_sock() or not.
->>
->> [ One clarification: bh_lock_sock() is a sock_map_update_elem() thing,
->> which can only be called by a bpf prog. IOW, has_current_bpf_ctx() is
->> always `true` in sock_map_update_elem(), right? ]
-> 
-> For all the bpf prog types allowed by may_update_sockmap() to do 
-> bpf_map_update_elem(sockmap), only BPF_TRACE_ITER should have 
-> has_current_bpf_ctx() == true. The tc prog (and others allowed in 
-> may_update_sockmap()) will have has_current_bpf_ctx() == false when 
-> calling sock_map_update_elem().
+Also, why 256 byte buffer? 1-4KB isn't a big deal, it's user space
 
-OK, so let's take test_sockmap_update.c:copy_sock_map(). It is a tc prog
-and it calls bpf_map_update_elem() -> sock_map_update_elem(), right? But
-running `test_progs -t "sockmap_basic/sockmap update"` shows (pr_warn() in
-sock_map_update_elem()) that has_current_bpf_ctx() == true. That's expected
-and has_current_bpf_ctx() would be false if sock_map_update_elem() was ran
-via a hook?
+> +       }
+> +}
+> +
+>  static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_progr=
+am *prog,
+>                                 struct bpf_insn *insns, int insns_cnt,
+>                                 const char *license, __u32 kern_version, =
+int *prog_fd)
+> @@ -7950,6 +7971,8 @@ static int bpf_object_load_prog(struct bpf_object *=
+obj, struct bpf_program *prog
+>                                  prog->name, log_buf);
+>                 }
+>
+> +               bpf_object_load_prog_emit_stderr(prog, ret);
 
-> The tc case of bpf_map_update_elem(unix_sk) is unfortunate and requires 
-> going back to the drawing board. I think checking unix_peer(sk) for NULL 
-> without acquiring unix_state_lock() is needed for the 
-> sock_map_update_elem() path, since changing unix_state_lock() for this 
-> unknown use case seems overkill.
-> 
-> Whether sock_map_update_elem_"sys"() needs unix_state_lock() is up for 
-> debate.
+just inline this, we inline bind map logic, so why not this one?
 
-All right, I'll re-spin the series reverting back to v1.
-
-> For bpf_iter_unix_seq_show(), one thought is to add unix_state_lock() 
-> there before running the bpf iter prog. iiuc, it is what Kuniyuki has in 
-> mind also to allow bpf iter prog having a stable view of unix_sock. This 
-> could be a followup.
-> [fwiw, it was why I first thought of has_current_bpf_ctx() to avoid 
-> sock_map_update_elem() taking unix_state_lock() again if 
-> bpf_iter_unix_seq_show() acquires unix_state_lock() earlier. I later 
-> concluded (but proved to be incorrect) that tc cannot call 
-> bpf_map_update_elem(unix_sk).]
-> 
->>
->> Let me know if I'm correctly rephrasing your idea: assume all bpf-context
->> callers hold the socket locked or keep it "stable" (meaning: "sk won't
->> surprise sockmap update by some breaking state change coming from another
->> thread"). As you said, most bpf iters already take the sock_lock(), and I
-> 
-> Right, all bpf iter (udp, tcp, unix) has acquired the lock_sock() before 
-> running the bpf iter prog. afaik, the only exception is netlink bpf iter 
-> but it cannot be added to sock_map afaik.
-
-And sock_{map,hash}_seq_show() (being a part of bpf iter machinery) needs
-to take lock_sock() just as well? Would that require a special-casing
-(unix_state_lock()) for af_unix?
-
->> have a patch that fixes sock_{map,hash}_seq_show(). Then we could try
->> dropping that bh_lock_sock().
->>
->>> [ I would still keep patch 3 though. ]
->>
->> Right.
->>
->>> [1]: https://lore.kernel.org/bpf/20200821102948.21918-1-lmb@cloudflare.com/
->>>
->>>>
->>>> In a parallel thread I've asked Kuniyuki if it might be better to
->>>> completely drop patch 2/5, which would change how we interact with
->>>> sock_map_close(). Lets see how it goes.
->>>>
->>>
->>> If patch 2 is dropped, lock_sock() is always needed for unix_sk?
->>
->> For sock_map_update_elem_sys() I wanted to lock_sock()+unix_state_lock()
->> following Kuniyuki's suggestion to keep locking pattern/order (that repeats
->> when unix bpf iter prog invokes bpf_map_update_elem() ->
->> sock_map_update_elem()). For sock_map_update_elem() not, we can't sleep there.
-> 
-
+> +
+>                 if (obj->has_rodata && kernel_supports(obj, FEAT_PROG_BIN=
+D_MAP)) {
+>                         struct bpf_map *map;
+>                         int i;
+> --
+> 2.52.0
+>
