@@ -1,64 +1,64 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B0E33C50D
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 11:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FAB3C3C08
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 11:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774868461; cv=none; b=F4sv5nBpKAWcslef3ZodZyX3uiCUNG8pJOnl/vpRCL4nf0q3ZQ9XuEfgTgrd2ydsDoVCep0GU8FCbP4kVBVr7fXlsOVfUTj2KD5zYlKVakpTn61oLj+4KHV5gDB51x80VERx8+iW+LdG/rxPeZqU2Ihuc+260t8AhFzeaOQtGDo=
+	t=1774868468; cv=none; b=irIx/7YDRYosF250YtBvYr8a0BQWybCSdtKEVf/cD7ie8dE1HQS/jSjE46aZ8IABDcqG+WphEJotkfuLefwB5OKFRvLBPa/uvNXg+aqvh/MDNFU0OLrqGL7Ld+6KI37+UWK98M0sfyEjCqS4+bS4Gd75GGokj2FxExlAUSJb0SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774868461; c=relaxed/simple;
-	bh=BeYgyaBVMNH2YkkmIL4dka2nySItV+VavSBb7RGud1Q=;
+	s=arc-20240116; t=1774868468; c=relaxed/simple;
+	bh=ykB6GqSoBDVF8sQ3aMY5L/RsBwNhVVVqpjKX0IM3w4A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QvQE2/mTN4iqisvUkxXpbXDAmn1CcCqJel+9gseam5BPmeEsFp3lS64ecmNN9oTNDd0+POlUUFTaeDapYhIhGFDpRocp6zI8NfmRDIHsnlewmw8wazwgp8plhh8DPXxN/rFwjJzUiRGshjM2VRdPkKLfIMhIM/C+B/xhy5oqm48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dI/lEc2/; arc=none smtp.client-ip=209.85.215.181
+	 MIME-Version; b=upWdX3qCRrvoQWRK1RUW0gO/y1WfgeyIGh+Gc4tAdus/CN0HSWKWhXDdEbzTgmpKVQKchBsDZevQxyj6vCwHnVUgEX4IggUS9Zi3SBhnri/gHGjs09OW7ZgC9njSVQbJ9nPAEUeP9nfO8wLx5Xml1EVth3T2WO/FRpqGvRNpuiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cmDkcxLe; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dI/lEc2/"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c76864f4e58so1179247a12.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 04:00:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmDkcxLe"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c74244dc0b3so2759329a12.2
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 04:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774868455; x=1775473255; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774868463; x=1775473263; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tiAaielosONeq8lfjBldJ8eg8rZvO6xA8Ahk7S8YwtM=;
-        b=dI/lEc2/kBwloVOfEUgc+XnVL7MXykZJ9WuINJQlaDeqfE3dRYI9j9g/jPK61CVyxQ
-         P7C/c3hsBvSr9OKO/ZIIUyo84tBkH8kHTGOsw5Goil7n1EV7WjhuM2MNyuw0dYUq7JtX
-         QOCM0apREQ14H+mrSlUFZ1txa6SwLzIc2Fkfh8o9KXqoH6FCJkNTgOoi/ui5/Ge/5g0w
-         3F+wBJBGt8At4T4oEE1/IltU6usjM+6eqA2nPzEA2DLYyg76TCBe0yDv9ped6BfgD0/a
-         Hc1QBYZZqi31JLPw6aU/3uO0x8OVSNwMvMDEWNbWPQD25T+b2C7Oo+NE4OjG2I732jxh
-         FcWg==
+        bh=NZsO2ED3NriQaWk6RZB1AOBG85387YAVdW0BG1uStGY=;
+        b=cmDkcxLeZm+7kdfglxqXlANRCSG99/UAucFFMt7tCANxpHEa74+7unJFin1bxXdnEP
+         kzyxDpyLkeI01D54cAsH5bcHL6BDzzsu2WjfYVI+/6Nz1xa3RzetTh3zxqUXmXz0f3QG
+         h5yJTux28odn6L7P5lvHnr5KbwBCdOjCU/oRI904c6KqCvsHfT/cCT1klZprLYLsWp7Z
+         8DktjT7mMn9c2tRgNXjv79klKLb+P4JxPqCvkd9q4vIXIGvtVNywunY2bQZDnT3t3WnJ
+         FQ1cUh1yClLq0ut70wq7OsapOAHldNNx1Y+2UaRTkExrflIQZSYPRrO48kXa1CvjsB9G
+         gN1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774868455; x=1775473255;
+        d=1e100.net; s=20251104; t=1774868463; x=1775473263;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tiAaielosONeq8lfjBldJ8eg8rZvO6xA8Ahk7S8YwtM=;
-        b=Gg6BK21aXFA80oeR0xhV+0FCJeeYyMekINCpXFeFeMXLpDmsGMLxGSmf7c71ZvJh54
-         zEdlb5ELnP3KDy/TLolf2eP5Ui+rOlkJ19VXwMYtVM9JitH/g5Bq0gFrdR+jHbklHimJ
-         0Z5zi6S2cZ6KDu5RKxspibLO5j5YUe3jZOTa3OL8MyBDR7jUvrLiI7JUZhsu7Ukc76BD
-         tIfUqC/WruSS0jU/dtHYFJXJnZYvk33nrRbuytEbyGUbAZmhn9OIP2K5LizH3Wq/jXsL
-         /LK3ZH3DxHD2xcH1kT1IPVLtnqlHek0QEqSV2iRwyXEyoJ62PEZ9D29N81wi6yNPIGN1
-         /gug==
-X-Forwarded-Encrypted: i=1; AJvYcCWi7FF4RL3SCXGU5qiiZjJZN+xQ45NhAWikqQKqIhOhJa7lChwZQsiY2VxxMeXijjZmtJE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBezQ5FN1sm84FvR+zshryMrezueDc5F+MTt5EqiZBqg9ScqCn
-	UOZlToEFpgCIR6arE/SJkst1QpYBeKL2NWqB/iLwhlBb0z2N5kEp2psG
-X-Gm-Gg: ATEYQzzNCvEFsyH5sM7Wv0qYJFUxWVmQ5amBumC2tU9qK7dm5nYabLFSNFGVpudHYUn
-	tz4dYSwjQ8Yp1u9YHJRMZh+7Qf1EHwEHFFdcjFKZXlij5kYXu3o5Gei71aNSvBF4WCz45P+6+r2
-	zLvLLokL0+cE4GP4JtPdZlQnQVduPY7KnR8P/VQoXIYFqwU8hTPFIDsiTmlpT7DcrecagQg2V2V
-	PPDLYHk22HXMquaXZlmkLdBZtZy108eTZRVErpIf7BtEJuts2nT2/3/hjbu8tZefEeKtjXghxv0
-	8CEfL4Z9OP9l0bkbKb+gqvY8Mh8NDgUtwR2JiQrurlBhvBDl2KIEKuV/hYcSQJnwHltNSUueJp9
-	4HNEip8BIwLQGLB2J0SwLaCOjm53NKA8ROZD0Nd4prYixugtxv4T2Jew3odrgcD4ogX4mHvSwIh
-	KejwSSzqqktdCJeuKUCQ+t4xmoy+8Ur0BuIgq8DT4w+ElPRQdjwee4rLKQJTab0yeuKhNB9xI/h
+        bh=NZsO2ED3NriQaWk6RZB1AOBG85387YAVdW0BG1uStGY=;
+        b=NXpoIHl/eFgQ5jBmFhici0cPlx4oPxGHbLAX3YPeOlLt7n2snLo1W1wTCyi7hKgCRt
+         MdGb+KTrDUqfmKMNrhf8bULCFuv+yA5YLwnbOTMz04r/jnHwoRx6Z1qWgX2NXJLA37Iq
+         WYDlXC03AWW0PAfBHctQSKUGYSj0v21ea7krL2SBzKalTCBjWmeGi7nAsNqSDDLGdQYq
+         kzTv5V5v4tKWkZE0wDp8HFywb5q5IY2ElbioPBRrkSzqIlnx6/Wa1M+gbErPfnO00xwT
+         qC29rpMzyMzQrckM+WhEVwBxxr9Jf+AtIVxTOXlq2MKERCKXWwQzzLLc3xQgBa1dX2xs
+         Edvw==
+X-Forwarded-Encrypted: i=1; AJvYcCVoYAIrWW73nuCyqivz7+0FhczFA4VAaU3ica2ppU84zoB8jwAQbhBt9o9v/NEBE9X+AtQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0X1J3IuLj0fxsxSIKnEFHVoe99k5GdUj0GaE8K3F77ZZalLq5
+	EYIUKjghG6QD+cUAsloZPihFHgNhmPA8ivHuKpMw99kALI7VaSrldma3
+X-Gm-Gg: ATEYQzxJsCmr0NbY8bqcRiAvt+jM41//f6Fga3QIVbfB58uAZNh1I52b9cETMO+OhWA
+	HZnOFB33NxwnPEAFqX17g26t+I9UYemiwxo7V326Im8pFKtcMbHL4K8w+WTMqypidkbgeqNOakR
+	WQ+ZwLQkpWJ9iqCM9G7g7JrmjWX9916vzLgGzU/1CMESCQ+glMwihIW5NDagdanpdyzogo/ZFty
+	hwxqmOtv09eiglL5F0PK/qMHnD+OVezOWRvaDu7pvbLLBp5Qyt6LQGnyW6E/+UxilPyA/2hZb6a
+	L7J8lG66jvsxLaDrufZW3ZmOoSLRE5jW00PtmrUnIUI2DwiPPz+hIyW/gqWKM4IrDxZQxvftcFZ
+	BWxgdzAwUmeywV09U4i/+BmEfO3EET5FvfEsZd9Su2uqMslpHx5pDeXzPL38uxl/zJL3k5Xf57A
+	XaisQREl6EiGnraJV/aVm4YcgDZNlRiH3dQZDo2ORgR3zdmOOJpHE0O0r2UE1/2sdyb9nw1c2BQ
 	Q==
-X-Received: by 2002:a05:6a20:3d06:b0:398:aea8:a9c0 with SMTP id adf61e73a8af0-39c8780d9aamr12405100637.19.1774868455294;
-        Mon, 30 Mar 2026 04:00:55 -0700 (PDT)
+X-Received: by 2002:a05:6a20:a10d:b0:39b:c686:630c with SMTP id adf61e73a8af0-39c878bbaf7mr12969034637.22.1774868463171;
+        Mon, 30 Mar 2026 04:01:03 -0700 (PDT)
 Received: from eris-fedora.iitr.ac.in ([103.37.201.189])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76917d843esm6806615a12.29.2026.03.30.04.00.49
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76917d843esm6806615a12.29.2026.03.30.04.00.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 04:00:54 -0700 (PDT)
+        Mon, 30 Mar 2026 04:01:02 -0700 (PDT)
 From: Varun R Mallya <varunrmallya@gmail.com>
 To: andrii@kernel.org,
 	alan.maguire@oracle.com,
@@ -77,9 +77,9 @@ Cc: ast@kernel.org,
 	leon.hwang@linux.dev,
 	varunrmallya@gmail.com,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH bpf-next v2 1/3] libbpf: Auto-upgrade uprobes to multi-uprobes when supported
-Date: Mon, 30 Mar 2026 16:30:17 +0530
-Message-ID: <20260330110019.549079-2-varunrmallya@gmail.com>
+Subject: [RFC PATCH bpf-next v2 2/3] libbpf: Add FEAT_KPROBE_MULTI_LINK feature probe.
+Date: Mon, 30 Mar 2026 16:30:18 +0530
+Message-ID: <20260330110019.549079-3-varunrmallya@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260330110019.549079-1-varunrmallya@gmail.com>
 References: <20260330110019.549079-1-varunrmallya@gmail.com>
@@ -91,139 +91,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch modifies libbpf to automatically "upgrade" standard
-SEC("uprobe") and SEC("uretprobe") programs to use the multi-uprobe
-infrastructure (BPF_TRACE_UPROBE_MULTI) at load time if the kernel
-supports it, making them compatible with BPF tokens.
-
-To maintain backward compatibility and handle rare cases where singular
-uprobes are required, new SEC("uprobe.single") and SEC("uretprobe.single")
-section types are introduced. These force libbpf to use the legacy
-perf_event_open() attachment path.
-
-tools/testing/selftests/bpf/progs/test_fill_link_info.c has been
-modified to use SEC("uprobe.single") as it asserts the program type to be
-`BPF_LINK_TYPE_PERF_EVENT` and checks properties related to uprobes that
-use perf.
+Add FEAT_KPROBE_MULTI_LINK, similar to UPROBE_MULTI_LINK
+by loading and creating a link for a small BPF program with
+BPF_TRACE_KPROBE_MULTI as the expected attach type, and
+then checking the success of the operation.
 
 Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
 ---
- tools/lib/bpf/libbpf.c                        | 53 +++++++++++++++++--
- .../selftests/bpf/progs/test_fill_link_info.c |  2 +-
- 2 files changed, 51 insertions(+), 4 deletions(-)
+ tools/lib/bpf/features.c        | 37 +++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf_internal.h |  2 ++
+ 2 files changed, 39 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1eaa7527d4da..bd7b6f486430 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8248,6 +8248,23 @@ static int bpf_object_prepare_progs(struct bpf_object *obj)
- 
- 	for (i = 0; i < obj->nr_programs; i++) {
- 		prog = &obj->programs[i];
-+
-+		if (kernel_supports(obj, FEAT_UPROBE_MULTI_LINK)) {
-+			const char *sec_name = prog->sec_name;
-+			/* Here, we filter out for u[ret]probe or "u[ret]probe/"
-+			 * but we leave out anything with an '@'
-+			 * in it as uprobe_multi does not support versioned
-+			 * symbols yet, so we don't upgrade.
-+			 */
-+			if (((strncmp(sec_name, "uprobe", 6) == 0 &&
-+			      (sec_name[6] == '/' || sec_name[6] == '\0')) ||
-+			     (strncmp(sec_name, "uretprobe", 9) == 0 &&
-+			      (sec_name[9] == '/' || sec_name[9] == '\0'))) &&
-+			    !strchr(sec_name, '@')) {
-+				prog->expected_attach_type = BPF_TRACE_UPROBE_MULTI;
-+			}
-+		}
-+
- 		err = bpf_object__sanitize_prog(obj, prog);
- 		if (err)
- 			return err;
-@@ -9909,9 +9926,11 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("kprobe+",		KPROBE,	0, SEC_NONE, attach_kprobe),
- 	SEC_DEF("uprobe+",		KPROBE,	0, SEC_NONE, attach_uprobe),
- 	SEC_DEF("uprobe.s+",		KPROBE,	0, SEC_SLEEPABLE, attach_uprobe),
-+	SEC_DEF("uprobe.single+",	KPROBE,	0, SEC_NONE, attach_uprobe),
- 	SEC_DEF("kretprobe+",		KPROBE, 0, SEC_NONE, attach_kprobe),
- 	SEC_DEF("uretprobe+",		KPROBE, 0, SEC_NONE, attach_uprobe),
- 	SEC_DEF("uretprobe.s+",		KPROBE, 0, SEC_SLEEPABLE, attach_uprobe),
-+	SEC_DEF("uretprobe.single+",	KPROBE,	0, SEC_NONE, attach_uprobe),
- 	SEC_DEF("kprobe.multi+",	KPROBE,	BPF_TRACE_KPROBE_MULTI, SEC_NONE, attach_kprobe_multi),
- 	SEC_DEF("kretprobe.multi+",	KPROBE,	BPF_TRACE_KPROBE_MULTI, SEC_NONE, attach_kprobe_multi),
- 	SEC_DEF("kprobe.session+",	KPROBE,	BPF_TRACE_KPROBE_SESSION, SEC_NONE, attach_kprobe_session),
-@@ -12737,6 +12756,32 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
- 		func_offset += sym_off;
- 	}
- 
-+	/* This provides backwards compatibility to programs using uprobe, but
-+	 * have been auto-upgraded to multi uprobe.
-+	 */
-+	if (prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI) {
-+		LIBBPF_OPTS(bpf_uprobe_multi_opts, multi_opts);
-+		unsigned long offsets[1] = {func_offset};
-+		__u64 bpf_cookie;
-+
-+		multi_opts.retprobe = OPTS_GET(opts, retprobe, false);
-+		if (offsets[0] || func_name) {
-+			multi_opts.offsets = offsets;
-+			multi_opts.cnt = 1;
-+		}
-+		if (ref_ctr_off) {
-+			multi_opts.ref_ctr_offsets = &ref_ctr_off;
-+			multi_opts.cnt = 1;
-+		}
-+		bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-+		if (bpf_cookie) {
-+			multi_opts.cookies = &bpf_cookie;
-+			multi_opts.cnt = 1;
-+		}
-+
-+		return bpf_program__attach_uprobe_multi(prog, pid, binary_path,
-+							NULL, &multi_opts);
-+	}
- 	legacy = determine_uprobe_perf_type() < 0;
- 	switch (attach_mode) {
- 	case PROBE_ATTACH_MODE_LEGACY:
-@@ -12830,6 +12875,7 @@ static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf
- 	char *probe_type = NULL, *binary_path = NULL, *func_name = NULL, *func_off;
- 	int n, c, ret = -EINVAL;
- 	long offset = 0;
-+	bool is_retprobe;
- 
- 	*link = NULL;
- 
-@@ -12856,13 +12902,14 @@ static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf
- 			else
- 				offset = 0;
- 		}
--		opts.retprobe = strcmp(probe_type, "uretprobe") == 0 ||
--				strcmp(probe_type, "uretprobe.s") == 0;
--		if (opts.retprobe && offset != 0) {
-+		is_retprobe = strcmp(probe_type, "uretprobe") == 0 ||
-+			      strcmp(probe_type, "uretprobe.s") == 0;
-+		if (is_retprobe && offset != 0) {
- 			pr_warn("prog '%s': uretprobes do not support offset specification\n",
- 				prog->name);
- 			break;
- 		}
-+		opts.retprobe = is_retprobe;
- 		opts.func_name = func_name;
- 		*link = bpf_program__attach_uprobe_opts(prog, -1, binary_path, offset, &opts);
- 		ret = libbpf_get_error(*link);
-diff --git a/tools/testing/selftests/bpf/progs/test_fill_link_info.c b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-index fac33a14f200..8e47a818462f 100644
---- a/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-+++ b/tools/testing/selftests/bpf/progs/test_fill_link_info.c
-@@ -28,7 +28,7 @@ int BPF_PROG(kprobe_run)
- 	return 0;
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index adcad221c601..13227c9ea69d 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -424,6 +424,40 @@ static int probe_uprobe_multi_link(int token_fd)
+ 	return link_fd < 0 && err == -EINVAL;
  }
  
--SEC("uprobe")
-+SEC("uprobe.single")
- int BPF_PROG(uprobe_run)
++static int probe_kprobe_multi_link(int token_fd)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, load_opts,
++		    .expected_attach_type = BPF_TRACE_KPROBE_MULTI,
++		    .token_fd = token_fd,
++		    .prog_flags = token_fd ? BPF_F_TOKEN_FD : 0,
++	);
++	LIBBPF_OPTS(bpf_link_create_opts, link_opts);
++	struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	int prog_fd, link_fd, err;
++	const char *sym = "bpf_map_lookup_elem"; /* stable, always present */
++
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_KPROBE, NULL, "GPL",
++				insns, ARRAY_SIZE(insns), &load_opts);
++	if (prog_fd < 0)
++		return -errno;
++
++	/* attaching to a valid symbol should succeed */
++	link_opts.kprobe_multi.syms = &sym;
++	link_opts.kprobe_multi.cnt = 1;
++	link_fd = bpf_link_create(prog_fd, -1, BPF_TRACE_KPROBE_MULTI, &link_opts);
++	err = -errno;
++	if (link_fd >= 0)
++		close(link_fd);
++	close(prog_fd);
++	/* if kprobe_multi is supported, link creation either succeeds or
++	 * fails with something other than -EINVAL due to permissions,
++	 */
++	return link_fd >= 0 || (err != -EINVAL);
++}
++
+ static int probe_kern_bpf_cookie(int token_fd)
  {
- 	return 0;
+ 	struct bpf_insn insns[] = {
+@@ -658,6 +692,9 @@ static struct kern_feature_desc {
+ 	[FEAT_UPROBE_MULTI_LINK] = {
+ 		"BPF multi-uprobe link support", probe_uprobe_multi_link,
+ 	},
++	[FEAT_KPROBE_MULTI_LINK] = {
++		"BPF multi-kprobe link support", probe_kprobe_multi_link,
++	},
+ 	[FEAT_ARG_CTX_TAG] = {
+ 		"kernel-side __arg_ctx tag", probe_kern_arg_ctx_tag,
+ 	},
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 4bcb6ca69bb1..633106a687c7 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -388,6 +388,8 @@ enum kern_feature_id {
+ 	FEAT_SYSCALL_WRAPPER,
+ 	/* BPF multi-uprobe link support */
+ 	FEAT_UPROBE_MULTI_LINK,
++	/* BPF multi-kprobe link support */
++	FEAT_KPROBE_MULTI_LINK,
+ 	/* Kernel supports arg:ctx tag (__arg_ctx) for global subprogs natively */
+ 	FEAT_ARG_CTX_TAG,
+ 	/* Kernel supports '?' at the front of datasec names */
 -- 
 2.52.0
 
