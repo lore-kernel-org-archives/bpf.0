@@ -1,153 +1,183 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2253CA481
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 12:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774875424; cv=none; b=KuJPBe2FzuX7Mu/CngbArRZYoUacIXJmjJFKf0bcoolc2vupyLeXNwq9rxvUurqB7GkamMl+GVcMlumVJpeWaXSRrapV6YopmXD0JiruP1sstYX/AgDwTUc8A945T7P4hEHWBZee4ccA5E7tmPtQVEIibmbi+JoeLK5vpdlDhPM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774875424; c=relaxed/simple;
-	bh=g0oZREsmGiODs7/YG+QTv4JP9p/mr7Bg51WLVfEgLpQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Tt0NtrkRnZVReENTsh2nj5pzLc9kU4ElxUQMeFHcM8Qf3uB2jSUlp3ELVzbkyO2jNp7YU+Dpg/dHjl421hUuVf3zaPLaaq8S8moz1ms++owenNgdwRZkbyK35K5jSysZHT90qF8T2SHKEVHeh7URyN5iLfj14ml9eDeKRiKLMe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pIn7eEOQ; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424933D4116;
+	Mon, 30 Mar 2026 13:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774876694; cv=fail; b=Svp66g9p8bN/hvKXuNOuHbjkvkrocs2rmHi00iLpAK32aio+DiivX5G57E4Y4K333j1V6frvPHZu97ZFnKHlaC6UlRZecm/m7CKGjZfS/3J5Zx9O3iWCoxofazKubB21h9cO38ey1Z0hJaxCpFqa4DngN90kZY/9cSPwizpafQE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774876694; c=relaxed/simple;
+	bh=pRzVTOTS4UJjgyalL5JYfdmk0syJH8PQpIJRm79OrRs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=pwwYAgb+ksHyYoNeOe7gen3KeBJbOTWHwAkQWQ2sQ56GHcjCvfUUwcrLVWPs/esnDBH+Bp5E97dH4k8QIuDufACkYNq0KldHKdwtVMtJT3dRhaJUj44KgjieqM3HGfWmdNXhNYSevFmQe1a2zKjkQYSaPq+Bv1obe1d25KiJaFk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HLaDZIou; arc=fail smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pIn7eEOQ"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4873ce69ba9so9670575e9.2
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 05:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774875421; x=1775480221; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=B7/MeUh61MXZTylrwqC1wsXNYnHs1momA84SMjXKVBY=;
-        b=pIn7eEOQkxYs3CWSRhPlJ1vT2wPZYg82hf2Opp31GS+N2XtUaxFViHtiZsVJBdVxr7
-         SNfk6RQnFdHpab2X/B5koT1njIc8JbmllIOzZDCnI45aBE2+wsQA37WNIZUkx5nWzbQn
-         LkTseCyC5LAXvYh1DHkGG/JDSKhuoauX3YsKnLnW3NLgMhrWQy/RYZTDxPRq/XpaXCLU
-         8trLJwdH13MdyRjewde99QmKoywihuGp0TlQI1Srlpvkrvd9nKB3V3c5oGxdY0dq9nKD
-         P1r5TqnE8qAhi5NgkgIhzOAi3BHpw+je0UoLjmhdS2GueUafkLTPmY0lQHVwDh2xOHI3
-         a4MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774875421; x=1775480221;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B7/MeUh61MXZTylrwqC1wsXNYnHs1momA84SMjXKVBY=;
-        b=oOgopl4xEf7j/uD9YbUmtbdmzHCMmHzJ/CrOsbd66bLi1LAYQYMTS/lVskuo3dCQV0
-         IM8RQSs0U70DWX84dTs1vU8NiUZRb/XwcV+0pxL5C8XbLrm6jtZ8xkljzCjVIokDF8wf
-         3qxX+VJqB0iTDX7ZjsQ72YYjUuhndcJWXPzKix4L8jyDOasIn5uZjPKS4cCykZF7odib
-         9gUaTi6wITT/b6Tgp1bnsSMb6q1og5vgIUFyHV/DYVIsEg5aP55Q2x2ELuQjV8y6Es4a
-         LM2CPbG8w6WFIKHBvJd9Xj5mRUyGRoeCiI1yh8/3l7rNv5Dvj0yd0KKwy3Ddq0NHx4sP
-         izGg==
-X-Forwarded-Encrypted: i=1; AJvYcCXjB8mWl26BQLphLCUsYyRLGTtfgWM+oycx7kqZf+ww4dfG5xQuAwrMkxapl77gUCXLAKc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQxJ91IR/UlnlF8MYX+d9JnJTR1uH5x42HF+vvKPt5WaB9YYU7
-	XUoIX8WgoedDiFSg74g+bxtmMOUKxgxCw3Lb/T97E+W7Cx1BIAd5wHT0
-X-Gm-Gg: ATEYQzyNLl9QnG+DYWaw7ufy7abkMKWBSfrB14aPmpz2EYO2otC7wCTEW2sbAALtrG4
-	ICpUuHc7r+iadhw86+HAUx9dZy013oPFpcnCPH3bAfRJEk1Wt5Gi/kfPsJF0KnTI35PWcXlD4fh
-	md4NL8nWqU8eoDeg3tx8zwK8DI0MRRerYelW4W0snDtdlyfRVGz5wW+jEVsLj7obHiuN1p2JCOh
-	YKqwC/vppnx4Dw+d4P1XRDtBkD3QJtjEgk64ugqNO7qiC3x1o2G+U9sHGhYPXjiJBj8TThv5a05
-	D5SYVaxfazYTpYGMk0+dj2G7rFbIHuxmSrrkVXSafRcWmSgwENTHAE/hg76U39CmQNoZ4FizjuV
-	r8Txpb4x1fhRJm7+9bmi59iVdOWTZEqTTThKulYA/vB39jZT9H9pFU3N5FACchzfmw4iv6vWmvf
-	oWvu8xzM38yX1QL9M=
-X-Received: by 2002:a05:600c:4685:b0:480:20f1:7aa6 with SMTP id 5b1f17b1804b1-48727ef67f8mr219539535e9.21.1774875420831;
-        Mon, 30 Mar 2026 05:57:00 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:500::4:4b08])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4873881c195sm52375115e9.9.2026.03.30.05.57.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 05:57:00 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
- Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Ihor
- Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v1 3/3] libbpf: Wire up verifier warning
- display logic
-In-Reply-To: <20260329212534.3270005-4-memxor@gmail.com>
-References: <20260329212534.3270005-1-memxor@gmail.com>
- <20260329212534.3270005-4-memxor@gmail.com>
-Date: Mon, 30 Mar 2026 13:56:59 +0100
-Message-ID: <87ldf9h3vo.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLaDZIou"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774876692; x=1806412692;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=pRzVTOTS4UJjgyalL5JYfdmk0syJH8PQpIJRm79OrRs=;
+  b=HLaDZIouGcKfMU2s56BfgKlTRLjYGj/EWr5zeWBpRygkDiH1SCLx/kk1
+   9CHDL6iybRNPeA8OT3xmRrAoz4u8ujkJTn/ldrLflJclbhlLzoEOAz3P1
+   HwkBGrgezv7lRpPDnfYjKlwwl0Knj6/BZl6Bb7QldseV6BDUAMT1ffWGx
+   /ZWAe9uf4czos+Yu+XdO+0MJwn5aAnD/D3MfFtdZftTvDCer57Pri4jy4
+   iqZ3CHvvak2suttL+u+mwlkhPLhwb/bloVKgPZo+UFknpSLlwgL+162ko
+   v8oPUOyWaUGeZVJ3s4MKwiGHuc7sVwAov+UfPXS1g4DsAdlc2H1zxmE5w
+   g==;
+X-CSE-ConnectionGUID: gkhA/WbhRviIsoHl+xSw5A==
+X-CSE-MsgGUID: ybFJXm8ITBOHDOUaZBkmUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11743"; a="79769369"
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="79769369"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 06:18:11 -0700
+X-CSE-ConnectionGUID: Ltc/ZTR5QOGGLA6b5Wl3FQ==
+X-CSE-MsgGUID: +Qiqmo7gTwC+bOdmFb9IDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,150,1770624000"; 
+   d="scan'208";a="256562756"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2026 06:18:12 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 30 Mar 2026 06:18:10 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37 via Frontend Transport; Mon, 30 Mar 2026 06:18:10 -0700
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (40.93.195.34)
+ by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.37; Mon, 30 Mar 2026 06:18:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jCcYWCfQvOD9nntpgtaPCC0qAFqDGRR3m8z9YrmFVkP/VsAp2Q8FIwy2g7w9bXGdgxUyfcWLm+zNzbnU1M8eEBxDd9wPao///6n7HZeTluCo9+FpM9oyI83nYrflgB+M0lvrz2DRaEzZxQhTSYjHq0IzGIRaBrHTVi0EK4R7/QvDeCvaZdZNumwsReTXMWvcLdCS5pSudq3r20O8f43sZrdsO5UrBLGl52RSk4togxsCmNzi3/K7/7zu1PRMy4nNJfyD3692D+r6mEVWi7yXm93/iRMHv9w2DqItjgPo9LOisXetljHB5OjjJ6K3bEASBjGe9yOFISVkf70MrpNd8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=loPvIgAnZXzz/VjsbRFbreWa8/1mhG4iGY7D4RP38ug=;
+ b=ogDCXRsmIlEf4qGljnX4LN783WsHC16hB5wfQtWgOJlawr7ZRRdZ4Mhb24bA1Y79xbK8PsQjUc2PTEg6QtspfI58jMfZh71e4gv52UypY4q0VUAaY1K3z7WEAmBeAb3YiA+IBE2mErBEvmQjUnFqPVgYoFwIscSXAA4f9vqLLTYhXSn0w/BOCHFpP1bCIKXOR/NFzQNhtw87vkAkQ30ezWmj1rmgprYKs3H4Q6Lq/Xs16uLIgPJgwLNNYLz4ygixgU4UZLIME5PIjTcI/3qFW3xEDwbvb0KT4SEtGGXje0WFuOZplu+vbYo9x/m9NAudbLPIXRbv/vYuZUPATapJiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ MN2PR11MB4712.namprd11.prod.outlook.com (2603:10b6:208:264::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Mon, 30 Mar
+ 2026 13:18:05 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9769.014; Mon, 30 Mar 2026
+ 13:18:05 +0000
+Date: Mon, 30 Mar 2026 15:17:57 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Matteo Croce <technoboy85@gmail.com>
+CC: Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Mohsin Bashir <mohsin.bashr@gmail.com>,
+	<netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next v4 0/2] e1000e: add XDP support
+Message-ID: <acp4BblnJfpVClct@boxer>
+References: <20260323182823.5813-1-teknoraver@meta.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260323182823.5813-1-teknoraver@meta.com>
+X-ClientProxiedBy: VI1P190CA0021.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:802:2b::34) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|MN2PR11MB4712:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18735b26-db3d-4efc-6077-08de8e5ec6f7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info: skjVbsLk14u+H8n8JOBT1WjTCLEwLkmJdfqrLcW7ump8BJdRDrfIW9s25HW8Cw+ePE56WhWMkvrTEgJZGeVLn/KIbnb/fWQqVD1WfgQzRQZSN50Q9dMFCeL49G+bBgrwHXI58l7PDr/PND2H87NB/VDEpp4Aeq4O3d94aSejfTwEy+uxlMgQxoifcFToOESbRZFc2oTRgE8ce9Dm+IQlC0qPALIUzrTawgqmv6ojLknDTO5y3ZEupUmsFztJ8m2aLn1cVJahWlp/Nyya0SXL+AykH78JJQITWv4ha712AqXb/2hWdrLiKAqk6xiWbTXWf6qx4/m8c31Raog0kMQjKf7PtSVJmlRp8P3oW1JbNSrHSUSRwzrwaM/iG0K/eBaDUfSQTZfb0g0DUsU6V6eEJm6F7O8w6JBdydcr9wlkcGVPxWOOkOHNxwLSzqJMTM8U5fLlYgM6t4m54X2MK8Mni7fAjnYhKUT48YNgN2Z2n1Om36id5k7/0bjPHanF7oRMT3SDQCpaN9owRMg2T8UObUn8Se0kELGz60vLjNJu7LnXNMhqto6RM7yasYCs0HeNC3kVpZUcJxL7ym0hAOU11QGNpHDsYnlXGu2Yi129QfCiEB6mhr4jM6axiIM/jn+NkBnlzByWufkeL5UrX9rEl9u7iqbOraupPV5PkZMF1AbvVagHtZwnDij3y2nePvFurbxF1bxRWMDtalE3+s3sl4Z6HcVp+5+4qPExckCLtUU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5UnDnvYVQ3bOotVsLbgfN67cWQcXBzCJc31re+ek4uD1iJkWn9XkUSM1VXm/?=
+ =?us-ascii?Q?x8/Z8gDQMANdqE5EMp4QyS4jpBsz93bb/KgRS6tjkQ50RFtDeNBBEF1hoyyJ?=
+ =?us-ascii?Q?H0GbLylLgobftRlb7AQNya/8oqDtHJb9og6oUuERbmt5ImmuNVG83WYH1ydA?=
+ =?us-ascii?Q?ROs4VJwLQA+1fAtGe+ONmQ6PIiJlk7aZNzY7yce5GRqFHDAvztq4mPoHjhtM?=
+ =?us-ascii?Q?lfZRCSSmo73BL68OKX/nv26WA7pagnp3K6jaSLIZ5UBFVbTLGa7shsbbAArD?=
+ =?us-ascii?Q?7eusd5KnDolbtA36e8rVHzGCRGyHbVpbsTizBopbdgH5X4Pe1EE0StzLysTH?=
+ =?us-ascii?Q?BZYVmWbRPwuOah6Sq3DXTh2EeHElAHNb1hSqLvfpt3QRbEt8Wo2EWaTRVOEF?=
+ =?us-ascii?Q?NP/LFILowj7Q7+SSpt+REy9wrsapbLCrzRuvjABHSbGkdXUBdg63mN6clk17?=
+ =?us-ascii?Q?IMt3AewZ3Elf3ofDSQMhfFniQXrVkMRF8fzp7gVQ/ovKh7joa5fM9XtMJ1Or?=
+ =?us-ascii?Q?+aTvo5ZBp7XMPXsz/v5niu+41HZqaQlAHP0QrIDC+CzT7ycJMTtFOqyIAnS0?=
+ =?us-ascii?Q?dK9es0sAQ7vUQBFofhGLhQw43xfcVgNs+JyBgY6UFK9Tp1zLWElUcOJsbcKJ?=
+ =?us-ascii?Q?DlI3rWD050hOvYx6vmWyNwZqg/owIPyZ/gwLN1g4lMs0MAqSzmlD4MHqjj88?=
+ =?us-ascii?Q?Vin3Ra8a+ZuD+fszDJIiD09CTcWDSwC3Ka8X9jxrCRarNYmXbtgdTB1totwp?=
+ =?us-ascii?Q?zRB1El30v+sFHXeeeALnduWkGHHQGwPNQuJPaIMiQlLzPhXlMnDjz+vLcchg?=
+ =?us-ascii?Q?uwojFOv1gcOcYuDA9wCC+4FyC7rgW5NVxtWRThlkUDow/8oJ5cqz3YUGg5Yn?=
+ =?us-ascii?Q?lDcUkUDrPyIPIYUAlnj0nIOPUZM1me17smoARUQGI3p3wvoBYEBSkk2nWOH6?=
+ =?us-ascii?Q?8QMIzNkh4hA/RJ6doHYGhDAGHZwpGT2JzX4Ip0xwvJrhKQCMD8r+Px5FY4ni?=
+ =?us-ascii?Q?rl+KyBEj8ctaLaQg9TWcj50Ylu/DNz58GV6BuSbEwXCEQDZO3uu7FcdGscHE?=
+ =?us-ascii?Q?ETRlkCkAW6m4LCmhpFceN0K7f99YzRVleL6FvkI7jftnhudGRHfwH2abcD+/?=
+ =?us-ascii?Q?W0Ok5aF94aIZykO60BwyXYsqT2HkJbSq71h/J4FS3qch9mR2Q0hZH8qgjnxN?=
+ =?us-ascii?Q?NxFvBE6Aui9tfI1O98mFO4SrNBTL3EFMPrqim9KPxZ+cX2CLzS5dMGiJxvXR?=
+ =?us-ascii?Q?E2MQJ00QmfrBi0IspL7s4yaYH7Yx8rZ8M2Ra9E0MflohbyAIO9IcY2AFEISw?=
+ =?us-ascii?Q?w8Zfgi253fmggRcHc95cRRU2ENcOkm/ycfpzQIvX9r4GFndgNNwrKjA6snhr?=
+ =?us-ascii?Q?qpLWe2yFLYymsgvrnIUlNUjwFjtUHM30LyrVn6ZB+B83c8NAHAd9GC+FahTE?=
+ =?us-ascii?Q?bLVpGkWuHhH46uWEWnKTusr6MoMKCOLwIBRqc0uAnpHzIgClkhTh3mNB5vIH?=
+ =?us-ascii?Q?npkQZROK7HJwQxi7HAuzgi0nfQwnrbDnSsDtkNGID8h/QCUEduJxa8OZ4dqI?=
+ =?us-ascii?Q?uB9eHshojTZqneZH5fHU4GXcsF63a8PJ197ws+N4ScOkJBXSVuEad4dE2+zM?=
+ =?us-ascii?Q?1EskitDFQH9EJiYgGltueiR8oxkhiB/sgQPER+3W9WX/4XEH7NTg+/FEaavg?=
+ =?us-ascii?Q?P/hPq5bqeMVpl7gNwqEg8u7NnT0pHhHtQVmx3eWoENEY4lI1Z1RuObwzNy4p?=
+ =?us-ascii?Q?VS7fJlUpjjrN5hLSY+9PBnMa1jU9Nco=3D?=
+X-Exchange-RoutingPolicyChecked: v5pR35PIIv0LHyGv4xFW4HUFuq1JbjSpOrYgRiLvFKkJTKSpKxKV8Dus3aH/JG6meY4KdYSvVfSNF/MHFodv7vCrxKtuvusE6AEFKjp+s0sREw8GHuVUSNZnE4jLM1HCo2weSz0TLbTNNcCnu8YxuPfbG2JRYZR9FrGDaroa7DM2NSXMD354r/N9c+5r3HKgyL44IEG/SKH2u5bgQiN+ZHO8aEn57qzC5ar40OF2pBX5GNuD/20w8j01FCOhkEQT/U8LgQHxl6WSTeQoCSBx5VejHCUUaImXNiTfAaohrt+ajKZCq2RgjWursQC3AQFIFNMpFPOLvc7GiEEn5uN8kg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18735b26-db3d-4efc-6077-08de8e5ec6f7
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 13:18:05.0484
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: TM7fBXYwBykiTT5Z7btRRIJDlt/Z4Q9lZug2a/5OiiqZhRPo7QyMBy4bPs43pTxVxI5CDwygmvcvDZNg45ywWeKrcbofoThsuqND9Oitu5o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4712
+X-OriginatorOrg: intel.com
 
-Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+On Mon, Mar 23, 2026 at 07:28:21PM +0100, Matteo Croce wrote:
+> Add XDP support to e1000e driver. First patch adds basic XDP support,
+> while the second one adds support for AF_XDP.
 
-> Wire up the flushing of all accumulated messages in a program's stderr
-> stream after verification is complete. An example is shown below of a
-> warning printed now about usage of deprecated kfuncs.
->
-> $ ./test_progs -t kfunc_implicit_args/test_kfunc_implicit_arg_legacy_impl -v
-> ...
-> libbpf: prog 'test_kfunc_implicit_arg_legacy_impl': VERIFIER WARNINGS:
-> WARNING: kfunc_implicit_args.c:40 calls deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
-> WARNING: Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
-> WARNING: For older kernels, choose the kfunc using bpf_ksym_exists(bpf_kfunc_implicit_arg_legacy).
-> ...
->
-> Note that test_progs overrides the default logging function, hence -v is
-> necessary. By default these messages would be printed for the user.
->
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  tools/lib/bpf/libbpf.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 9ea41f40dc82..f308bacd083f 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -7826,6 +7826,27 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
->  
->  static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_sz);
->  
-> +static void bpf_object_load_prog_emit_stderr(struct bpf_program *prog, int prog_fd)
+This set has nothing to do with AF_XDP.
 
-nit: Not sure if this function name is a good choice: it does not take
-bpf object and does not load the program, I'd rather name it
-bpf_program_emit_verifier_stderr().
-
-The implementation looks correct.
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-
-> +{
-> +	char chunk[256];
-> +	bool emitted = false;
-> +	int ret;
-> +
-> +	while ((ret = bpf_prog_stream_read(prog_fd, BPF_STREAM_STDERR, chunk,
-> +					   sizeof(chunk), NULL)) > 0) {
-> +		if (!emitted) {
-> +			pr_warn("prog '%s': VERIFIER WARNINGS:\n", prog->name);
-> +			emitted = true;
-> +		}
-> +		libbpf_print(LIBBPF_WARN, "%.*s", ret, chunk);
-> +	}
-> +
-> +	if (ret < 0) {
-> +		pr_debug("prog '%s': failed to read BPF stderr stream: %s\n",
-> +			 prog->name, errstr(ret));
-> +	}
-> +}
-> +
->  static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog,
->  				struct bpf_insn *insns, int insns_cnt,
->  				const char *license, __u32 kern_version, int *prog_fd)
-> @@ -7950,6 +7971,8 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
->  				 prog->name, log_buf);
->  		}
->  
-> +		bpf_object_load_prog_emit_stderr(prog, ret);
-> +
->  		if (obj->has_rodata && kernel_supports(obj, FEAT_PROG_BIND_MAP)) {
->  			struct bpf_map *map;
->  			int i;
+> Tested on an Intel 82574L Gigabit card with xdp-bench and xdp-trafficgen
+> 
+> v2: added a missing 'select PAGE_POOL' which triggered a build failure
+> with some configurations.
+> v3: removed a leftover file.
+> v4: bugfixes
+> 
+> Matteo Croce (2):
+>   e1000e: add basic XDP support
+>   e1000e: add XDP_REDIRECT support
+> 
+>  drivers/net/ethernet/intel/Kconfig         |   1 +
+>  drivers/net/ethernet/intel/e1000e/e1000.h  |  18 +-
+>  drivers/net/ethernet/intel/e1000e/netdev.c | 610 ++++++++++++++++++++-
+>  3 files changed, 617 insertions(+), 12 deletions(-)
+> 
 > -- 
-> 2.52.0
+> 2.53.0
+> 
+> 
