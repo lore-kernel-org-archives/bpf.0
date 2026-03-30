@@ -1,186 +1,168 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195A22D1907
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 09:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0A6389E07
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 09:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774862943; cv=none; b=b+9TOfF3hnsfyNvM1IqXpreN34nY24gAzduntk1m/PVVAFC0QtNpf/YKTfgX0UWiEGa9KpRZiMxRAJlIm8vy5RkZhmNtxD/x6cqc9Yf28knzKyRpG2PNF8MRMeHthWnFoUzVA53M4hOXc3YAV0Kk2003CftBrXSq0D+pA1hFTJ4=
+	t=1774864344; cv=none; b=h+IknlwvjPTRLBO5GgyoNrOBVQKfzysnYKpWqnJQwjLh2PWEk1bfKIf6W4CctTGRTEvX0SBebZdJhU8e7AoX1lbtzzuJGonobL4XCZlkUHtiUL6pZiYYw+liPZ6R67G4uhFXzxlX//gHNrL0BQBwNwlcPSM4KB5dCPZItxQ7NN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774862943; c=relaxed/simple;
-	bh=e+FUhHbA4Jajf2W1lfzpcGpsDudB361fBC00sF1fM98=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ECbc54h2S2oTVkrlmv2NuSs67qzAY0DZ0q57GtKDur8Un9nk9zVrKwvjjjwppVvbBU9V4cUvUHKXcMH33U9V6GTsnhaJ5C/YEkD0VMYNo3f5KidNRc1wJuyp1dcX70X+n47CW71wa0oZW+YRFksqWTDBcvrCEMiSdPb8sYb1dPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jO8HRJI0; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774864344; c=relaxed/simple;
+	bh=hiIoq9Ln9VsRL/ENqU3EeKKAg4WKxeHoaYBZUOcG68w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qV4KjUO0lSIkxbbCuxBlYS46SWg2PYe5zUdmojKBP5ydLQgyFkSJHftZXffGbXi+OX1T8KvBsFzoOQy6ecMO9Hzz4jMvh7BL9/RaPYKHr34Hi9zV0uX59dcyA+TnwivISVKxA0KmyPg7bPFoQw5nbkhI1TUkDGKk3QhdViLz8LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KsAxub5B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jO8HRJI0"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-486ff201041so41817755e9.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 02:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774862940; x=1775467740; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rQABhxo3yPzOnvpgbdKYStGL1AIsTI3bONLS/eN3r+k=;
-        b=jO8HRJI0S05izMa8sJ2Rk6P08V/HCiBo4xBdt3UdoTWF/iDdVqVdUZ2u2SYqgkbvto
-         64sMPOaYIA4EtyqesWCNClmV8UBp/pm60n60E5ttX28mrG1TWRKj2DTw33pfnWkmdsyx
-         vFiAZO/dWtep8+tIcXe5yDMN5psiriwVLko5yqXGfM6RzmFVpTFnvJrL0Mjxf/wQqd4S
-         3Dsmhc2YbEk4kFiwYx+BsWQ9GqiKBIj9dF2PbwnCa6vITzcSH2gdGmMjVka5Tr6ERXm5
-         dcwytZSt6NzT5aB0b8RpVib+64jjmi2AtQb4qYsOl3CNLAVKXgXHtorGbDz/6lelPEKT
-         fugg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774862940; x=1775467740;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rQABhxo3yPzOnvpgbdKYStGL1AIsTI3bONLS/eN3r+k=;
-        b=e+kTeWA32wKLPgFDymlureywHpqeU7yrGl9txKhbNTOvBAl5u8Xyr3rnrWmOcE7n7d
-         +EbvgXS320wLf0e++kxERAnmwhEJXH13+nNUJxe0mgewXy/kEt2xbOHGqiAfQvTJA5/a
-         nfuxxSirty6gmeOIQG3oJUJruPYZ4hvJlqR/3gkhcFQA+gSLmxDhw6WGssxdOa9ZJvvt
-         nVEi4CmD0Wg1oAoOsgtNieotMjiXRzWEGipiaX72HM4zlsFqslSqcE754PVpIFHFpW3e
-         m0aBM2yVOhUjfjSA/gLq55jZdGYuuZ66Eh21DI6+gvGWJBR8/SUfuuz5chv8U/epRkp6
-         oPhA==
-X-Gm-Message-State: AOJu0YyA/r+B6WyuJTl2jzZESGz5sSLUPdVNOCzMacm2hwzsvHdm7v1L
-	NQih2GQKcG4fjYD9FD7D+LLtkwTGlJMLBKZPraYPTd38WauEZaH42sdG
-X-Gm-Gg: ATEYQzxO7aNKE+7Wo8s5xXJ+3AVQHDogCV8D+NmoIj9ly5Nk2L7zuH2enTKdn0aQXni
-	LP6ltIOhrA0edjKShnUS14xLV1qjaMj+0oP3AhMi111nLxTplQL5aN5taztIUsuwv8twK6DFPF1
-	qqGBZ1mb+XW8wtII/lEcwR6d6ZPRltvIRcyoUHVrGEDdRqr9dRJRT4BjPAtOuBTEGiyei9ERujH
-	3l2pT1hU0MgakURLESWLGpim/eyr0md5Rj3971RgX7RvvtI1C/KQQ6K3RejYF8tXPRVWPoQk2sI
-	1eNNDbL/fbUteHzm0m7opY/ztnx4E1ExrIjbX6I69iYtHkrmxv7D4wYevh2TM1GFSyoSVXVyUgD
-	zDOG+3rEf08GGHJUmApwVTBH+0pIgXUVDkfYyUec4/g8fKT1Gws2QyVPjViZFvmHlWODMFZi0jn
-	z4WNl7WMV2Dxw2d7oupr7MNdBv0s//489o0gA=
-X-Received: by 2002:a05:600c:4f53:b0:485:3692:e8f7 with SMTP id 5b1f17b1804b1-48727ede47amr193606995e9.25.1774862940141;
-        Mon, 30 Mar 2026 02:29:00 -0700 (PDT)
-Received: from krava (37-188-160-213.red.o2.cz. [37.188.160.213])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf2463dc2sm17668983f8f.23.2026.03.30.02.28.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 02:28:59 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 30 Mar 2026 11:28:57 +0200
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add test to verify the
- fix of kprobe_write_ctx abuse
-Message-ID: <acpCWX6h-1IJtorN@krava>
-References: <20260326141718.17731-1-leon.hwang@linux.dev>
- <20260326141718.17731-3-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KsAxub5B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F27F1C2BC9E;
+	Mon, 30 Mar 2026 09:52:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774864344;
+	bh=hiIoq9Ln9VsRL/ENqU3EeKKAg4WKxeHoaYBZUOcG68w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=KsAxub5BM8O9v/ZxUaEcK7dY5ZKx8wmeriCJsLMz6V2BieM0BeFQOWtUuLeFtc+iP
+	 1qbHD1NxOheTrG216IrRhJEzyZCgNd1kULdgCXHICU+zXS5xOiXIdmu/xxCyRLZmP6
+	 f4283f9SEDjDylq0o6Uz+kZPruHvbzuu5tIvGcmEe3J2XksceH9eClp+1M9DD80Xj1
+	 L1t//CV3AeUosT0bVdy9plzrz5OtQUnWl4lP8p2STVz3vYVUUoTr4gOhdT8p15m8yg
+	 d6UMXw3iwjpeomYMzWPHobDPvedUb1/kOXCij8c9JQbxIAYRVyOS4AGhJ7PkLyjRTN
+	 YtWPmdDCHTb8A==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
+ Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, "Paul
+ E. McKenney" <paulmck@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ kkd@meta.com, kernel-team@meta.com
+Subject: Re: [PATCH bpf v1 1/2] bpf: Fix grace period wait for tracepoint
+ bpf_link
+In-Reply-To: <20260330032124.3141001-2-memxor@gmail.com>
+References: <20260330032124.3141001-1-memxor@gmail.com>
+ <20260330032124.3141001-2-memxor@gmail.com>
+Date: Mon, 30 Mar 2026 10:52:12 +0100
+Message-ID: <m28qb91w6r.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260326141718.17731-3-leon.hwang@linux.dev>
+Content-Type: text/plain
 
-On Thu, Mar 26, 2026 at 10:17:18PM +0800, Leon Hwang wrote:
+Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
 
-SNIP
+> Recently, tracepoints were switched from using disabled preemption
+> (which acts as RCU read section) to SRCU-fast when they are not
+> faultable. This means that to do a proper grace period wait for programs
+> running in such tracepoints, we must use SRCU's grace period wait.
+> This is only for non-faultable tracepoints, faultable ones continue
+> using RCU Tasks Trace.
+>
+> However, bpf_link_free() currently does call_rcu() for all cases when
+> the link is non-sleepable (hence, for tracepoints, non-faultable). Fix
+> this by doing a call_srcu() grace period wait.
+>
+> As far RCU Tasks Trace gp -> RCU gp chaining is concerned, it is deemed
+> unnecessary for tracepoint programs. The link and program are either
+> accessed under RCU Tasks Trace protection, or SRCU-fast protection now.
+>
+> The earlier logic of chaining both RCU Tasks Trace and RCU gp waits was
+> to generalize the logic, even if it conceded an extra RCU gp wait,
+> however that is unnecessary for tracepoints even before this change.
+> In practice no cost was paid since rcu_trace_implies_rcu_gp() was always
+> true.
+>
+> Hence we need not chain any SRCU gp waits after RCU Tasks Trace.
+>
+> Fixes: a46023d5616e ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-> +	prog_fd = bpf_program__fd(skel_kprobe->progs.kprobe_write_ctx);
-> +	bpf_program__set_attach_target(prog_ext, prog_fd, "kprobe_write_ctx");
-> +
-> +	err = kprobe_write_ctx__load(skel_ext);
-> +	if (!ASSERT_OK(err, "kprobe_write_ctx__load ext"))
-> +		goto out;
-> +
-> +	prog_fd = bpf_program__fd(prog_kprobe);
-> +	link_ext = bpf_program__attach_freplace(prog_ext, prog_fd, "kprobe_dummy");
-> +	ASSERT_ERR_PTR(link_ext, "bpf_program__attach_freplace link");
-> +	ASSERT_EQ(errno, EINVAL, "bpf_program__attach_freplace errno");
+With a nit below which is mostly informational.
 
-nit, I prefer libbpf_get_error call instead, because it's not obvious
-that ASSERT_ERR_PTR sets errno, smth like:
+Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
 
-        if (!ASSERT_EQ(libbpf_get_error(link_ext), -EINVAL, ..
-
-anyway lgtm
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
-
-
-> +
-> +	link_kprobe = bpf_program__attach_kprobe_opts(prog_kprobe, "bpf_fentry_test1",
-> +						      &kprobe_opts);
-> +	if (!ASSERT_OK_PTR(link_kprobe, "bpf_program__attach_kprobe_opts"))
-> +		goto out;
-> +
-> +	err = bpf_prog_test_run_opts(bpf_program__fd(prog_fentry), &topts);
-> +	ASSERT_OK(err, "bpf_prog_test_run_opts");
-> +
-> +out:
-> +	bpf_link__destroy(link_ext);
-> +	bpf_link__destroy(link_kprobe);
-> +	kprobe_write_ctx__destroy(skel_ext);
-> +	kprobe_write_ctx__destroy(skel_kprobe);
+> ---
+>  include/linux/tracepoint.h |  8 ++++++++
+>  kernel/bpf/syscall.c       | 22 ++++++++++++++++++++--
+>  2 files changed, 28 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index 22ca1c8b54f3..8227102a771f 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -113,6 +113,10 @@ void for_each_tracepoint_in_module(struct module *mod,
+>   */
+>  #ifdef CONFIG_TRACEPOINTS
+>  extern struct srcu_struct tracepoint_srcu;
+> +static inline struct srcu_struct *tracepoint_srcu_ptr(void)
+> +{
+> +	return &tracepoint_srcu;
 > +}
->  #else
->  static void test_attach_kprobe_write_ctx(void)
+>  static inline void tracepoint_synchronize_unregister(void)
 >  {
->  	test__skip();
+>  	synchronize_rcu_tasks_trace();
+> @@ -123,6 +127,10 @@ static inline bool tracepoint_is_faultable(struct tracepoint *tp)
+>  	return tp->ext && tp->ext->faultable;
 >  }
-> +
-> +static void test_freplace_kprobe_write_ctx(void)
+>  #else
+> +static inline struct srcu_struct *tracepoint_srcu_ptr(void)
 > +{
-> +	test__skip();
+> +	return NULL;
 > +}
->  #endif
->  
->  static void test_attach_probe_auto(struct test_attach_probe *skel)
-> @@ -434,6 +496,8 @@ void test_attach_probe(void)
->  		test_attach_kprobe_long_event_name();
->  	if (test__start_subtest("kprobe-write-ctx"))
->  		test_attach_kprobe_write_ctx();
-> +	if (test__start_subtest("freplace-kprobe-write-ctx"))
-> +		test_freplace_kprobe_write_ctx();
->  
->  cleanup:
->  	test_attach_probe__destroy(skel);
-> diff --git a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-> index f77aef0474d3..adbf52afe490 100644
-> --- a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-> +++ b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
-> @@ -19,4 +19,23 @@ int kprobe_multi_write_ctx(struct pt_regs *ctx)
->  	ctx->ax = 0;
->  	return 0;
+>  static inline void tracepoint_synchronize_unregister(void)
+>  { }
+>  static inline bool tracepoint_is_faultable(struct tracepoint *tp)
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 274039e36465..ab61a5ce35af 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3261,6 +3261,13 @@ static void bpf_link_defer_dealloc_rcu_gp(struct rcu_head *rcu)
+>  	bpf_link_dealloc(link);
 >  }
-> +
-> +SEC("?kprobe")
-> +int kprobe_dummy(struct pt_regs *regs)
+>  
+> +static bool bpf_link_is_tracepoint(struct bpf_link *link)
 > +{
-> +	return 0;
+> +	/* Only these combinations support a tracepoint bpf_link. */
+> +	return link->type == BPF_LINK_TYPE_RAW_TRACEPOINT ||
+> +	       (link->type == BPF_LINK_TYPE_TRACING && link->attach_type == BPF_TRACE_RAW_TP);
+
+nit: this second check is never true here, because BPF_LINK_TYPE_TRACING
+uses bpf_tracing_link_lops, which has .dealloc (not .dealloc_deferred)
+and this function is only called from dealloc_deferred() path.
+
 > +}
 > +
-> +SEC("?freplace")
-> +int freplace_kprobe(struct pt_regs *regs)
-> +{
-> +	regs->di = 0;
-> +	return 0;
-> +}
+>  static void bpf_link_defer_dealloc_mult_rcu_gp(struct rcu_head *rcu)
+>  {
+>  	if (rcu_trace_implies_rcu_gp())
+> @@ -3279,16 +3286,27 @@ static void bpf_link_free(struct bpf_link *link)
+>  	if (link->prog)
+>  		ops->release(link);
+>  	if (ops->dealloc_deferred) {
+> -		/* Schedule BPF link deallocation, which will only then
+> +		struct srcu_struct *tp_srcu = tracepoint_srcu_ptr();
 > +
-> +SEC("?fentry/bpf_fentry_test1")
-> +int BPF_PROG(fentry)
-> +{
-> +	return 0;
-> +}
->  #endif
+> +		/*
+> +		 * Schedule BPF link deallocation, which will only then
+>  		 * trigger putting BPF program refcount.
+>  		 * If underlying BPF program is sleepable or BPF link's target
+>  		 * attach hookpoint is sleepable or otherwise requires RCU GPs
+>  		 * to ensure link and its underlying BPF program is not
+>  		 * reachable anymore, we need to first wait for RCU tasks
+> -		 * trace sync, and then go through "classic" RCU grace period
+> +		 * trace sync, and then go through "classic" RCU grace period.
+> +		 *
+> +		 * For tracepoint BPF links, we need to go through SRCU grace
+> +		 * period wait instead when non-faultable tracepoint is used. We
+> +		 * don't need to chain SRCU grace period waits, however, for the
+> +		 * faultable case, since it exclusively uses RCU Tasks Trace.
+>  		 */
+>  		if (link->sleepable || (link->prog && link->prog->sleepable))
+>  			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_mult_rcu_gp);
+> +		/* We need to do a SRCU grace period wait for tracepoint-based BPF links. */
+> +		else if (bpf_link_is_tracepoint(link) && tp_srcu)
+> +			call_srcu(tp_srcu, &link->rcu, bpf_link_defer_dealloc_rcu_gp);
+>  		else
+>  			call_rcu(&link->rcu, bpf_link_defer_dealloc_rcu_gp);
+>  	} else if (ops->dealloc) {
 > -- 
-> 2.53.0
-> 
+> 2.52.0
