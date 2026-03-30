@@ -1,148 +1,131 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA80C32D7D9
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 15:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774883281; cv=pass; b=H7w7z5SgvCffsvF9yA3WG91bluPTmllNG83o9i/zpcoIrHWyLwHytIYf+xZlnSZ8YvGbg+ATk3j1T2PD7uRkWucT2d7ecFKDAFiFc+5iM7kDpw7wKKDDDTOk4UEcAdUd1lNdos2cDNtGn1o8yj8kqYkafez4BVS3WR1gdpfSG28=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774883281; c=relaxed/simple;
-	bh=UK5ug1KBpeYJuJULbs8QD76RwgEKjrrIQ1Z/71R11EY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jMp5EQ0np8mBgy9iIrD3vdmbIEnwsbk3Oib1NvRi9ifeXlPgqD58By0WpLzIw7/VajPQHR5Upx+pVOUouqxvqP2tp+skmMyhFIQMBKnXkq5R5pWb5tgX7DLxJN/w0/WeGQWqIt3zSeX16iTxPwVLnxpkaSqkYPhHad5J+WuBgBI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c5GQmRSL; arc=pass smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FC5333730
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 15:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774884063; cv=none; b=GWnOILGiDERv5S0Huu7t/81caXtuQBrCz0JSwbLM936CJYpNWfyYSr0MA0GNfS3+ubjC6F+up91GJRajBQsj+pzgwGFSQJUN0lTdN7zVJ6AkRSgPCqEMtMYIRvqCQG8OFhi7ngGECqqjestHYoXTNfcR9tJecpehvS0+GS/tYhs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774884063; c=relaxed/simple;
+	bh=dDsO5uf2WRZSDWmo+4MqP6v9u8prPHyFuGugSzJiXms=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SOiq0M29OID21qnR0BEPi6gPudtRkd64HKTHEnFcY1yu56zNgtBNx0eH42qEKzr55Zzu3Qx/27YyD69TYmqYNo1VIFuhs/xWbTaBSm4+mlBK+f6CkjpS9wYOPzb8Th8rcWUgDHQNtg4oKU9nN7hfzuX83MpoexREHfsD497XtkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V4juGaDY; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c5GQmRSL"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d029f346eso601332f8f.3
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 08:07:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774883278; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZNXk/DDNYRqCez1EJ3W2qGkwzc2ur9biVvWdtsr/PCOAeanudjw8iYy9thPxQTNLpA
-         TtQdw42rFTdVDAeAXYREbuet21Igb4hx5RuUm7PGm9tlzCNHuXL4/89W5LSkasdgCoHZ
-         33d3X38CWJiuFF12ZmZ4XraHnNnUsk3Tl94IRutZr7dM5ay3uQQlg+exey3u84CwtQxS
-         nFa3Ts/QMYjKAGctcEoSPQ9FQMbGjosCEt86x/xHOrBSxwODor8X89HPGFymRNRbl7PU
-         6zTrehcLWxsjRj0PI0PhbBa9EIEri2B6m1T3S/hCYdgSE2s2Xz8qE3Qa/v/B1XnDQFwX
-         onCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kpAoifrbsExtwuyIxh8a3oPuRg+33Av8BEc/LUDWfPw=;
-        fh=dTfg0Za9rZfKCMgsmMpxvL7jzAmsUwM0lA5XC4HwOTM=;
-        b=MkS27yBTkqmY1/kklwNe7JxVeoSpI/2zy0Dh0RqetjPJnFPfBWtUSUu5ROBIZPmjgO
-         70kwfSF1Xl22QEaubCeomHei2Ks7ykfa9kMDfZJxX5bQAxQBDqr76JWN/xY1yarChMN2
-         RssqMsl5nzJf4FkO270rTQQ1W+iHOff5PNcKwosLk+PF6tOxFqcpiJdd8Clgu1CwaMuA
-         JrsFfTs3XbTgdUK1Xppirf6LNwmPi8Y7HO17jxWUUBWwSL3v+ebvrECBm0B1GIHcNLji
-         knAzWVevXygx7cGl77vj2E+eNa3mW8XlJ/6CVaraW46K3i0VWfgjxgPN2r/mpqOe7Uks
-         nMZQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V4juGaDY"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43b9d3ebed5so3247112f8f.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 08:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774883278; x=1775488078; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kpAoifrbsExtwuyIxh8a3oPuRg+33Av8BEc/LUDWfPw=;
-        b=c5GQmRSL3TZpOoRXd43vVtJ2jYorgOnNmUNBu4Vm0rL7PY9Yh7vpysrVZWEs30ry3X
-         PQGMRovZG0OP+jeC4TSFDXlKB8/ZjI1Vgg55eWWgSx415wBXWlhA4//gnHJmkAk22r7L
-         3I6/7bhR62xz7oripaTVfuQ6fKjS5tdgFcGeFVVHl/AHnJ+Q60hLqvMoap2IqT3rsuWq
-         mmzSCMLD8aG04BXNvL3n5hVU8cA+Smdoffy2DxM+I4Mtgsc6qtrjJRjwyEMsHxCuXOvk
-         x4U1bM4pe+QlwJEUtXNhbfuOAQrxVgoWSohm6xaA3s77XEY0hLqOPFORueZIEGOQR8qB
-         hduQ==
+        d=gmail.com; s=20251104; t=1774884060; x=1775488860; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WlR8hdQRwntlpv8tuo2N0ezyr91wv9YgNBgco65NDoE=;
+        b=V4juGaDY3c7eljcojk+PgfK2bI9WmRrM5/Lim8rxp+VArI7upsgdL8TYqCPbNCD+I5
+         UtwDRNtb6+QoXLBHv+M97MOML7Zlau3IZm9dcHxtHmoSLDK0vlIq8A7GCEOCl3DajzoM
+         koGKi+kxsQpLa/y6VH50RyQ9HGHRahhhcY5G17oVe8D6kZ6RKcXPLBht0eopXuPHXROn
+         hFhABuhoN1w4fZkPY3v/iCYjWCS0xOlYZX86/DSSC9W0/Bay/8BwB/D2NcYiB/5dUbaA
+         ylHt13UuM7w1W3apABnig9whNtKy6UUo+lqMtmfkfFauqQeV78WswT59ncblH5bvx12V
+         t/hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774883278; x=1775488078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kpAoifrbsExtwuyIxh8a3oPuRg+33Av8BEc/LUDWfPw=;
-        b=Py5YGJwsQ+kv3x56DrPzC2okKzKErKStzE1GKWLWcCT4/70Dl0aD2PRgJnbp2+XxAH
-         V6xCqUQADzMMt+5p/hm/rZY4mSg+lakDo38gKUUy/+7OoojSkX79ooUfNUWro5rQugPQ
-         Ew7CktB2dhXz1OK1Ru4TpOUb6jf3t+6rAlKo+hZlv2T6hPeoDFJp3n78MdLWuC52uvoS
-         u8HTJuJ/HJL8g3NrV+Oqsj0iRiKwNJEuHKyBQn4N8+2OWQQIUwj4Eu4jk0hIrASNS1PC
-         4jr/asK3Q0NJcZd8C55CW1ICu3WWvAmeBDnTGnIhJUXt+317fNkg2KwJ2hXpxJudAfes
-         EA0g==
-X-Gm-Message-State: AOJu0YzWRdsOA483CJUfaTSfYsmA4v6SnhE4gsrjDJHKjDempStYE3qq
-	uXUjEGpDMuqCmYx88090iqKJvBqTpRLRLbLR0k05N3g7vyF/DcRvNi2pI2CmhCpwzzX8qvW5vm1
-	qg5ZWkPKo6t6pc2hF2+QEOeXHF4PCi78=
-X-Gm-Gg: ATEYQzwzqsjTm4/gGVhxqe7a2CREskUqgEKPYcTdgTRJ0oOx7jyjTiUDOT8bk5LF3U3
-	aIe4wih+NIcFaP20vJ0OWHO1tAhJxzBwi4opk2YO62Q+dHLx4cOe1JtLGhPWeRmQLhZCu+3K77W
-	L+qOQ5K1oqPFHhqhZp0GVeJm953BYsZQS1gC246z+p8Sgo4VWxM+Yv467khPQM5CFYb+XglqyjY
-	5k2q8BAIbYLOmgJM1AeG7bm9ramMs2G/eayEE5QAVi2SlfzwMO2zb9FNB12T7YqIyR7s6oO2MF/
-	yYC5kEZUI9eDMEbxQSOsSG0I764jZUt/3LOCn5bLiXWckyaIPyLWUcybsPU8Of+tKdf3hpIM+pT
-	72XtS+gmVfJGI2M5VZRNg9IUkjw==
-X-Received: by 2002:a05:6000:2083:b0:43c:fd7e:72eb with SMTP id
- ffacd0b85a97d-43cfd7e754bmr9007143f8f.41.1774883277844; Mon, 30 Mar 2026
- 08:07:57 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774884060; x=1775488860;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WlR8hdQRwntlpv8tuo2N0ezyr91wv9YgNBgco65NDoE=;
+        b=REk97HLrj8kRje8st7k0ynl6rpshDpnLQe5+KHYJobKnc+DrbzemXTOwIBxssxi3Dx
+         wvJCOWLNFpAz8fsJYODhMHpsOCIG8JpL4XjwQ3Uwx579pyQna9Lc1xkZb2WnNqGEiOl7
+         oJsSVZTzpcytn0Lbc2GAJwZMGx1Y7TrZMWp3umH4ygPEPlkFG1CyOCRXde96dGZrEx8k
+         OngzxURAgBB9dtmAUTd4jhOtmarC9fcLBmO+W/xnOC0Jcgrv1whnxOaQox5zznk+eXn1
+         8P+VhYwnu7QcOlP4v5h99PWrJbbNVTw5R0/rHnsz4TQA7xi5kH0u6RtJSI1+od7JSVwi
+         6a1w==
+X-Gm-Message-State: AOJu0Yxd12dXi5FLU7yg+vgwQDtai020C6QzOJ/qIzh4+qh202Oq+KUR
+	5qosFGCEygMx2bESgl9OXZDQ6Ly1rgzRA89ucfY1HM9D92NnrIgFnW4h
+X-Gm-Gg: ATEYQzxW6k3VWosHE3Qbx1bu4Fdfm/dAwZeqL51lthLkZ8Du5Wox8+62KyBy1wSVw7U
+	ui8OiW5SLuvAKOmR+OZatJVmpyUhb1uyJZBG+F9Ng6cGbfQEyw457idADUf7dhrhWHYUiaDFnLO
+	1igZp0Waw9Vr1mY1KWJHHqRkcGllYu9gxCPfK6FndDGRDOV6tG+1+zVgvz7pq3WZLGofMb/5Wvd
+	6yBQq6l+AOKb1LeLaoT9sQ11SZxDd1R1VSiBD38ckx6aRcIUKdfsxTwQqrh7TBpoaQU63uTdKOh
+	h8tpyJr0rfrV7jBA3q979vDBpzNcqkMF1I5KZhP6Z4QG9XCKvV76atnrj6YSNSUBj/Lb8P5Kaf2
+	vWKMcmix4S0Ev6zOGYRGaQPZUz7ZAeUf1euNmHqMrO/EfGWR8rwcvWP6yvLHzFheKE3//5mBN65
+	yFwvlokl+BxOe+eCU=
+X-Received: by 2002:a5d:5d01:0:b0:43b:9c73:2933 with SMTP id ffacd0b85a97d-43b9ea34811mr22655564f8f.15.1774884056423;
+        Mon, 30 Mar 2026 08:20:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:500::4:4b08])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21e2487sm20593730f8f.5.2026.03.30.08.20.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 08:20:55 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Chengkaitao <pilgrimtao@gmail.com>, martin.lau@linux.dev,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+In-Reply-To: <20260329140506.9595-2-pilgrimtao@gmail.com>
+References: <20260329140506.9595-1-pilgrimtao@gmail.com>
+ <20260329140506.9595-2-pilgrimtao@gmail.com>
+Date: Mon, 30 Mar 2026 16:20:50 +0100
+Message-ID: <87ikadgx7x.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330143102.1265391-1-memxor@gmail.com> <20260330143102.1265391-3-memxor@gmail.com>
-In-Reply-To: <20260330143102.1265391-3-memxor@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 30 Mar 2026 08:07:46 -0700
-X-Gm-Features: AQROBzAMZrEGdWTlUh_7MruU_0oqzFbTePZaRBwxjrEQEFfQT0Wazn-1JydwKyA
-Message-ID: <CAADnVQL1AGZtdMtB4i6GAmNTVT==v941w7+uPaW2ESd0k49uNg@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] bpf: Retire rcu_trace_implies_rcu_gp()
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, kkd@meta.com, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Mon, Mar 30, 2026 at 7:31=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
+Chengkaitao <pilgrimtao@gmail.com> writes:
+
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
 >
-> RCU Tasks Trace grace period implies RCU grace period, and this
-> guarantee is expected to remain in the future. Only BPF is the user of
-> this predicate, hence retire the API and clean up all in-tree users.
+> Replace per-kfunc btf_id chains check with btf_id_in_kfunc_table() and
+> static kfunc tables for easier maintenance.
 >
-> RCU Tasks Trace is now implemented on SRCU-fast and its grace period
-> mechanism always has at least one call to synchronize_rcu() as it is
-> required for SRCU-fast's correctness (it replaces the smp_mb() that
-> SRCU-fast readers skip). So, RCU-tt GP will always imply RCU GP.
+> Prepare for future extensions to the bpf_list API family.
 >
-> Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
-> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 > ---
->  include/linux/rcupdate.h | 12 ------------
->  kernel/bpf/core.c        | 10 ++++------
->  kernel/bpf/helpers.c     |  2 +-
->  kernel/bpf/memalloc.c    | 33 ++++++++++-----------------------
->  kernel/bpf/syscall.c     | 24 ++++++------------------
->  5 files changed, 21 insertions(+), 60 deletions(-)
+
+I think old is_bpf_rbtree_api_kfunc(kfunc_btf_id) is more readable than new
+btf_id_in_kfunc_table(kfunc_btf_id, bpf_rbtree_api_kfuncs);
+Not sure if this change should be bundled with this series, it looks
+quite orthogonal.
+
+>  kernel/bpf/verifier.c | 261 +++++++++++++++++++++++-------------------
+>  1 file changed, 144 insertions(+), 117 deletions(-)
 >
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index 04f3f86a4145..bfa765132de8 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -205,18 +205,6 @@ static inline void exit_tasks_rcu_start(void) { }
->  static inline void exit_tasks_rcu_finish(void) { }
->  #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
->
-> -/**
-> - * rcu_trace_implies_rcu_gp - does an RCU Tasks Trace grace period imply=
- an RCU grace period?
-> - *
-> - * As an accident of implementation, an RCU Tasks Trace grace period als=
-o
-> - * acts as an RCU grace period.  However, this could change at any time.
-> - * Code relying on this accident must call this function to verify that
-> - * this accident is still happening.
-> - *
-> - * You have been warned!
-> - */
-> -static inline bool rcu_trace_implies_rcu_gp(void) { return true; }
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 4fbacd2149cd..f2d9863bb290 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -544,9 +544,6 @@ static bool is_async_callback_calling_kfunc(u32 btf_id);
+>  static bool is_callback_calling_kfunc(u32 btf_id);
+>  static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
+>  
+> -static bool is_bpf_wq_set_callback_kfunc(u32 btf_id);
+> -static bool is_task_work_add_kfunc(u32 func_id);
 > -
-
-This is not a fix, so respin to bpf-next, and probably as separate patch.
-
-pw-bot: cr
+>  static bool is_sync_callback_calling_function(enum bpf_func_id func_id)
+>  {
+>  	return func_id == BPF_FUNC_for_each_map_elem ||
+> @@ -586,7 +583,7 @@ static bool is_async_cb_sleepable(struct bpf_verifier_env *env, struct bpf_insn
+>  
+>  	/* bpf_wq and bpf_task_work callbacks are always sleepable. */
+>  	if (bpf_pseudo_kfunc_call(insn) && insn->off == 0 &&
+> -	    (is_bpf_wq_set_callback_kfunc(insn->imm) || is_task_work_add_kfunc(insn->imm)))
+> +	    is_async_callback_calling_kfunc(insn->imm))
+>  		return true;
+>  
+>  	verifier_bug(env, "unhandled async callback in is_async_cb_sleepable");
+> @@ -11203,31 +11200,6 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
+>  	return 0;
+>  }
+>  
+> ...
+> -- 
+> 2.50.1 (Apple Git-155)
