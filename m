@@ -1,174 +1,126 @@
-Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30AFD26B098;
-	Mon, 30 Mar 2026 06:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2646172623;
+	Mon, 30 Mar 2026 07:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774852400; cv=none; b=CfO4ngJwc/EDo8VZSSZYwQ1FQhp638g4XkdiiZcd8hKW5p1IL4ciLCkj717qruqz+r9q71uiRuLET2boAx9l5fPo0s6exDeZtJwSRbUq+yRJP2fO9LMFvqx1u4ZXLv6+qP5jaDjQ8U691yHAs58JQmgSH4IzM9vxOyYun6wgPYo=
+	t=1774856924; cv=none; b=QbhMhm+N999P3ugvNvOXuCYc/MQVTwIQr3I+2EpAWBb0OBrasmmfziODd5zxMEudszrCJ4EIG6WkPjXuzVSVYZnnqPMoMtjo4mjRtJHuf/Dj/J7ClI7MEVQzKmrR8phj17UvpH5c9yVbRNjfP/9oE2szbJxCKbXcHZOotQOB9mU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774852400; c=relaxed/simple;
-	bh=SR7zxWsSKRYukZRkcC+rvwKSONYGQ0d0HuqYql/cvmo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IfgJv0oCkUrsxyrbMBXc1CDY0tfmsK9PBylzt94FBfg+E3nFuGIzpmNMu3ZVP2UoReoN+4Z/sSNBwwu3hUUEPpXlSo1eWEiTgWtRBWET1IBWSajfgpR4sSM+zhxHBMbpUTychcwkOKpPxaAo8F/v8mhSLU40wuxt7vWsHyU8KNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=YsE3893j; arc=none smtp.client-ip=54.207.19.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1774856924; c=relaxed/simple;
+	bh=aDhUMEJ9z7sa3Ar3gcl5539YFInQhpyKyYNNjaTyXHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HFRWFEXThGN4V5siJxT1E5g0Ul2jn/gjb8t/HST44Z0E0LyN0iL28V+y071Nicjd9dZUPWLjfO7PjicJdWXF29lItldq/2+Mzjd/vEzSG1JtTxg61I9MStaR31IFSjYtnXB4InmAgfGtj/bvg8NVClLq1NueNM5qGFaYa71hdek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EiunZEx0; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="YsE3893j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1774852358;
-	bh=QwAwyPKEeRDtJEBiE0AKekE56B1N0I4QkoDJfGmybmM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=YsE3893jy9bb1qvWru/vHbbvw2zj+slgsotPPrh1efvLhWfUB33ppznQ5uzPski9l
-	 uYNqDwqxSffDYMFbuWZxiCHRKsS+XcI2xxRnVHA7w4Mf9r688JDPAFSQC5iFppM5+F
-	 YSELLEwoam79GzZATF2KhhLMG9/CUlRbnTubWlWI=
-X-QQ-mid: zesmtpip2t1774852351t5e113c33
-X-QQ-Originating-IP: FeHKKRC4d2NU+gWTFUbxjFQwFeEBtY9LeIJ55sXmoDE=
-Received: from xulang-PC ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Mon, 30 Mar 2026 14:32:28 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 10286967731782697204
-EX-QQ-RecipientCnt: 20
-From: xulang <xulang@uniontech.com>
-To: martin.lau@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	dzm91@hust.edu.cn,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kaiyanm@hust.edu.cn,
-	kernel@uniontech.com,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	paul.chaignon@gmail.com,
-	sdf@fomichev.me,
-	song@kernel.org,
-	xulang@uniontech.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf 1/2] bpf: Fix OOB in bpf_obj_memcpy for cgroup storage
-Date: Mon, 30 Mar 2026 14:32:27 +0800
-Message-ID: <FA0A9158227E9982+20260330063228.183119-1-xulang@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <6b534263-62d4-4a0b-abbb-69286ef689f4@linux.dev>
-References: <6b534263-62d4-4a0b-abbb-69286ef689f4@linux.dev>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EiunZEx0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=a5+hZawfd/GIwIr79hxwmDfEBJDfCzXxaknum3x1+jQ=; b=EiunZEx0Ix0cec2hQJYx282aq+
+	Qjd7WQ+exfgg/aSpMcUFOmT+mLThnYg1VHot82GJQfhG4SWf3EyZE8AcGJpy6EdKDdEBrRIN7hih2
+	zKb/RowuWjAtcXsz20lElQq8eJBIRrasO8KtMJP02utP0wOzUUGfUyDfyaGGIV9eta0L7nLxboOLL
+	zG6mB3Xiv8i9zk0twluYEMbYJ4084UJJW2hCthkk59P4F+drBCWrxVl7Feqkc9wzfJ3SEIxa6+wpN
+	YDxaLiyqYDrkWaWN0cQla8NKHfpwYengXRl5ggSpSfdP0x/q2GL2HKWG3HgjIJ4iyzoUwJLzpQj5r
+	4LE9VHow==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w77MB-000Jlv-2q;
+	Mon, 30 Mar 2026 09:48:19 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w77MA-000JC6-0v;
+	Mon, 30 Mar 2026 09:48:18 +0200
+Message-ID: <168347a2-993b-4267-902b-9fe17a58f483@iogearbox.net>
+Date: Mon, 30 Mar 2026 09:48:17 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: N2E4xZExQMe2s+0U8uDvoq471+XCwzl0mWPZ0keTKlLz5Tml2IKRsiXU
-	7l1/G6vGnjv9bZSNE9XjsUoazmCrdQ/fMlT9DR+4cevyK7YcSHLOrGmBtBG7U5PDNCFIyX+
-	mOVMc46ggTpVmyLBbdso8q7LVsTrGuMC8qZ0f4dStHTJhf+LfJNlTRQMBUdYu73vRn+VVGc
-	eBlHxwYrFULGMmHw3RtM/kHCblY1+2Kmp40Mwp8ZnW+9pu5M2NhugloV0n85v7EzKduQuy4
-	ooLsDdgsQh7XTrphlBcvi+gvW6/xXTZ7CXVs+cnSPSd4hXrWbK9lgHNYp0j2Zflnys7IfgA
-	/YA98RtPKBZZKf1vJTVtIg1B9SJTCy+4luSyCBlhbrmVb4DRttapeNLgAAUp5ycQbLn43up
-	25twYo9DlarYKuMaHo6mPP4c1dddZ/NIsx+cQYKxm7/W+lt6STMtRuuI7uOGcXsKugtUbOQ
-	kfKj8IxT5ybxhxhag+V2qyyKKObOi5mxy/wNogOdElq9vy6pAKWKCJ3AzFvlgIzr3kqrVT3
-	0QJEpB+lkUw42Mgpt0LEDzdo+9Wp0Wvl6lwgXx3ajiUOKnAZCAkjtxeDxahGpsmjLMnHnq9
-	Sm6Umj0TOAeaDxSywtWAPrRprD/raH2jtUsA61EwJv3ECYdOnBOfE5UnIAmze59r4Bz3Bw9
-	sz37drQqjQ47OUxMyN5XnL8ucp9XHH48psbFFl2d0TF1sfcxwQ5nfBqKwuhYzfUChjpKAMK
-	b3VH5kdL813XEChguZGDn+9kzfbPk4dbTP5CjLme3JkuBUtDIfCLcgG0mjKitYta4nhuTGb
-	GH1Rxz5wcSREA+p+DJmqxhs6mxzN26rbdwiFZ7FBVI9PxRAe2KLRkLD/ifUP4Axnii7NPOl
-	MAV4kZn3qQf90G7wmbNNFyRow5UE63lLx85hvDEzycJ/K+TH8em0xgP/h4gWL+MCYnLzgHc
-	atzUxnU2id7M96k0WYITnoz6YhlvDTefC6aptSmgPCk0zj0DrtvIBWpUYbmTECmn22wd7DZ
-	cwE2gtLoaOz7KRT+j+lenw4kZ1K3yftJ1kh4H29ZcDo9ge2AW6JjjcZblTa/DGmqaZQtQ0M
-	Fo36TgsprEnBVtV3i7ZJ+YnCw2gXH5rrlF3WxAg4qMYPj/TZDuZFcM=
-X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
-X-QQ-RECHKSPAM: 0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/2] net: clear the dst when performing encap
+ / decap
+To: Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, maze@google.com,
+ willemdebruijn.kernel@gmail.com, ast@kernel.org, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+References: <20260329180428.2657785-1-kuba@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260329180428.2657785-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27956/Mon Mar 30 08:24:32 2026)
 
->>> This is fixing the src side of the "copy_map_value_long(map, dst, src)".
->>> The src could also be from a skb? What is the value_size that the
->>> verifier is checking for bpf_map_update_elem?
->>
->> The value_size checked by verifier is exactly the size with which
->> the map is defined, i.e., not the size rounded up to 8-byte by kernel
->
->If the verifier ensures only 4-bytes, I am not sure if the helper should
->read 8-bytes.
->
->> As for bpf_map_update_elem->..->copy_map_value_long, 'src' couldn't be from
->> 'skb' which mismatches the expected ptr-type of 'bpf_map_update_elem',
->> I've tried codes like these:
->>
->> 1. bpf_map_update_elem(&lru_map, &key, skb, BPF_ANY);
->> 2. bpf_map_update_elem(&lru_map, &key, skb->sk, BPF_ANY);  // null checked
->> 3. bpf_map_update_elem(&lru_map, &key, skb->flow_keys, BPF_ANY);
->>
->> All these ptrs mismatch the expected ptr-type, which can be detected by the verifier.
->> The verifier complains with msg like 'R3 type=ctx expected=fp, pkt, pkt_meta, map_key,
->> map_value, mem, ringbuf_mem, buf, trusted_ptr'
->
->I meant the __sk_buff->data. Take a look at how skb->data can be used in
->the selftests. __sk_buff->data may not have readable bytes rounded up to
->8. Just one example that the src cannot always be fixed by allocating more.
->
->From looking at git history on pcpu_init_value, the issue should be
->introduced in commit d3bec0138bfb.
-
-Apologies, I missed that point. The 'src' could indeed be from a 'skb'.
-Here is my test code:
-
-SEC("cgroup_skb/ingress")
-int trigger_oob_skb(struct __sk_buff *skb)
-{
-	__u32 key = 0;
-	void *data, *data_end;
-	// try to adjust offset to trigger OOB
-	int data_len, offset = 64;
-
-	data = (void *)(long)skb->data;
-	data_end = (void *)(long)skb->data_end;
-
-	if (data + offset > (char *)data_end)
-		return 1;
-
-	data_len = (char *)data_end - (char *)data;
-	bpf_printk("data: %lx, len: %d, skb len: %d, skb: %lx",
-		(unsigned long)data, data_len, skb->len, (unsigned long)skb);
-	// the verifier rejects  using data_end - 4, so data + offset - 4 used instead.
-	bpf_map_update_elem(&lru_pcpu_map, &key, data + offset - 4, BPF_ANY);
-
-	return 1;
-}
-
-I've tried for several days, to adjust 'offset' to match the 'data_end', but couldn't
-reproduce this OOB since there seems to be always a 'tail room' after the 'data_end'.
-I've checked how the buffer of a 'skb' is alloced, take driver 'e1000' for example,
-it has many complicated round-up operations, in my test, when I send a UDP package
-with payload size less than 210, the alloced buffer size of a skb seems to be always
-448, I've also checked the validity of its KASAN shadow memory, it also says 448. when
-I go on increasing the payload size(over 210), for example, 211, the buffer size grows
-sharply, I haven't found out when the 'data_end' reaches the 'tail end' yet, different
-NIC driver may behave differently on the 'tail room'?
-
-So, for now, I'm not quite sure if the skb->data is affected by this OOB, but I will
-keep on testing and digging into the skb code.
-
->The cover letter did not reach the bpf list and patchwork — something is
->wrong with the reply-to. In general, avoid reply-to for multiple
->patches. This makes the thread unmanageable. The revision number is also
->missing in the subject.
->
->Please read submitting-patches.rst before posting again, in particular
->"The canonical patch format" and "In-Reply-To" sections. Test it with
->your inbox first.
-
-As for the patch format, I've reviewed the doc you mentioned, thanks for the correction, 
-I will resend the patch series as v3 in a new thread if I make it clear that the skb->data
-is not affected by this OOB, or, just make a new fix patch since the former patch can't
-work once and for all. In my opinion, 'pcpu_init_value' shouldn't read 8 bytes if it has
-no guarantee that the 'src' is rounded up to 8-bytes.
-
+On 3/29/26 8:04 PM, Jakub Kicinski wrote:
+> Commit ba9db6f907ac ("net: clear the dst when changing skb protocol")
+> added dst clearing when a BPF program changes the skb protocol
+> (e.g. IPv4 to IPv6). Since that was a fix we only cleared the dst when
+> the L3 protocol actually changes to keep it minimal. As suggested during
+> the discussion (see Link) encap or decap operation which wraps or unwraps
+> a same-protocol header may also render the existing dst incorrect - even
+> if that doesn't result in a crash, just the wrong route for the now-outermost
+> IP dst.
+> 
+> Make dropping dst unconditional for bpf_skb_change_proto() and all
+> L3 encap / decap ops.
+> 
+> Link: https://lore.kernel.org/CANP3RGfRaYwve_xgxH6Tp2zenzKn2-DjZ9tg023WVzfdJF3p_w@mail.gmail.com
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
