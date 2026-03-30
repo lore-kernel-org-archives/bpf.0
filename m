@@ -1,128 +1,111 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934B028C87C
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 03:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2387E311C2C
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 04:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774841826; cv=pass; b=pr3CZiAWEYYbbH1yNq3GSjRp/G7CJT4gdCa8l2kR2eUHVXZBHTvW4gwtwvj8w2ain8+5hTnszysnozufHmpP11GAaoOkBm0R284mQ6fnj8Y5V3W8ywsiYlW5HZPNmZkoj3HWx9bbJ878T7lu5/IwkhFhGteSSNKti5lAspeP908=
+	t=1774844634; cv=pass; b=O+8VS8aSa6ASo7cHl775PBvC9R16Qm7Bn8QpnTQ7kAO6n8k8uGAkspwpAvupYBtxfiwIwi4rTxwAlzxFi+T6qF0pRJufaGUGHsHKLJh1/ogY5P07wnJtZJAISihifso00LhJS9YylMKojhbcOOGxPgjH50j7ce6IqngNh2siJh8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774841826; c=relaxed/simple;
-	bh=G7Nlj6K5i6zCW/KKaz7tloA3TJ6yabT61LOu9o4dFi4=;
+	s=arc-20240116; t=1774844634; c=relaxed/simple;
+	bh=47k2KtJLFlgZV7BeavIm4W309ubp3tqc1s1bO+AnlXE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HYOY4M7lBgT+awQ3hi2yaoJ6a2l1pV0Ionk5nurtcDJtVhCU5ZUl845zoOQ7nVOK1aSvm4ucAMVLiTPW3cXMGDi0XJ6+4tbKXzDnrgwwedTYsUIqaLGsB8SMgosQK9d/p4nZF+OHHxxiqokLmoPEJv/LgIlk47qSLzDdqMtqw8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ddxH8XNE; arc=pass smtp.client-ip=209.85.221.67
+	 To:Cc:Content-Type; b=RjlSeIktvVMpUTd4TSsxNFOsiIEVVN2/OjYBYCYAPbkaOR+0oeHthsQnLzcvPeM9KAP5u67O3km3lj67vvHr63EgShvEAr1IMOngTCdpU9LgxY57uDIXsEXzc09VmSnjyUeyw61/Xah6+kfvu0Vv9e23ZpyNuotmzNEmumz3WPE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4IzGVJP; arc=pass smtp.client-ip=74.125.224.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ddxH8XNE"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43cfd96354aso316622f8f.1
-        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 20:37:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774841823; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4IzGVJP"
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-6501d242e2fso515094d50.3
+        for <bpf@vger.kernel.org>; Sun, 29 Mar 2026 21:23:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774844632; cv=none;
         d=google.com; s=arc-20240605;
-        b=eBPQkYZQPGQHMCNPQmxDpZ0Q+7pJ2YbT8u0lMCmm8upe+xOs4uU7GkRMrlXq49GXQt
-         HE7pAPz7ywRxNSQLkk/CE5Dpnyv6sizz6ypnDk5XyKfyC3t3F8ZW6ujBJh4Sw5M4MnCQ
-         Vu3WMzjDwhW2NlgQErGDbIBhyBKf9vE1mODYCQbpBloYaNpJwObwOI0WCEamItLPOu/9
-         m5Evf28/wEtbpWe+7Z0IG/zU/dzhcdyxZYa6HT4qi/MNJdHoRBH7YDR3oo4OWT0j1u5H
-         SL/6ZpOUTWtmcNxg20dOQxhpC2boY5fyn7K6Q9D7xMtSdnpst5M4T9U6H6lzjVFXP4sC
-         Cukg==
+        b=EZo5lm3M0WGUpFCZVtdCwxN5YKEN9hhS9puN+vl/TDzbrk+EvNcRWaDG+H9t9JKKc7
+         UEa5kxqcph8YgsxykpNJ0IkTH+i06bahunq2PhOxsmiKxQIbRhEOxAtcpi1ye8IOvAov
+         6KTC39BqdHZMGNjn/HqKd6s9paNeyTJ1x/zMIL3aBqadTLI4VXTNkaxuBrHgUIOaLZQp
+         wYVOTeYT8fC7KaMUsm4O8M/zWTPE3ZVJB9LBr+WqIw+mIfsQk1dwdZDDvz4DeXXIERRQ
+         lb/Oi82nXIMvQ2VhEKHvkqHVGCRwMHTEmNwPm2xoiS131ojC42pL/MnEKzrUw8gH/8tr
+         MDDg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=G7Nlj6K5i6zCW/KKaz7tloA3TJ6yabT61LOu9o4dFi4=;
-        fh=ma3un3fwOAapN3VYWTiGjplxti7OFe+6jYzqdBArgQY=;
-        b=eUSxsXImKaSPaLxH4sOxJYrMCk5JiY/vuvqJECcqJx9fhrEwAXv0s26GiNeAC/Fjuv
-         0kBOK3HNV0ymV+rWaWujLkVs5J0fiEOiHq4osVAwUR7Po/EIgGKpLZuAsC2MD23eG9lp
-         /BSKXtg5ZTEQweTX/25KOFUTNtB46EXQVFoIHpaDIaeOW0+vNx2rMIIMDqGaOparEgKt
-         r3dqn9fuATnL6f+sXegKFgDry1tzdY9SE5JaY3j1n1NZckaya28120KpGmtUAHQQPBY4
-         nckV4mE3FSstW2vGPj3VyuVLv0J3eSUA25yGbUCNNI0Fc0QVwSlqlqchb5M2giHth8BG
-         eCWg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=47k2KtJLFlgZV7BeavIm4W309ubp3tqc1s1bO+AnlXE=;
+        fh=tWp5l9su+Ihx+ASE7utZ346O65W4qgbBCWBKNw7rGVk=;
+        b=ACSJZeQ/PCeivoAPZaNGLzqjY1cYms+SlxTSWGykJUcs2ovuZb0NTE7NDii13Zbcan
+         FvxUfnPD6lpAehj7dV8K90X7yOu5UNYCn5VVJBM3+JzX18CQVv4CSgKIOQvLT9Kjd0WF
+         vfq1jSS2HFREFSmN7+EPo+nLowPJyuGUmiYDlWFpm5N1kLD3pRIvsGmDrL0ZfUyTmcgL
+         rQ9Qi1NvsCgZAvGZVnktVMKCVBCqRVOdOU/E/C3ikqLCc1EpQNzExCEMLWktX+Wkk8Ru
+         zIMaR5hdIZCZ3BRfJLvDbsBAv8NzGm1vFDNViYFSE/2NS1UK4IBhiuLfHz99NKLWghVT
+         zXvA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774841823; x=1775446623; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G7Nlj6K5i6zCW/KKaz7tloA3TJ6yabT61LOu9o4dFi4=;
-        b=ddxH8XNELl/WsW6WqiVNy26wqpTUJplV22dQcB6f6cFtTFOWE7WUn/R1vmUcEdpMjm
-         rw/KQQsseWXoUIjyOdqsVxH+rfHNSv67tIB3udAbKrjhlKyLqDJxz7l0uycAdOcZOrMU
-         pce61T7Wesa4/RHorSZCPy0fV+tSrORu7QjXjKk1aVQTUntK26eyL222ZM5CAfZzHJZm
-         ejgKn2N4Ak8BTOVetLaN2rDNhymG7yU1w2wDK+lNZbd9P4PT9zeBlE/Tmbqdwf+qAJ0F
-         069u+8USr2jbZoQE4QsazswIeuMYCs3jdQo8hxi80rMY8wgptHtfJbF9fwEACjQ9g7rI
-         m5xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774841823; x=1775446623;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774844632; x=1775449432; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=G7Nlj6K5i6zCW/KKaz7tloA3TJ6yabT61LOu9o4dFi4=;
-        b=lNnQl/JAL2vTxrZohkP4PutR+iyblQ2EYJL2pC21kafsvXp33VOP/iALvbov8lD4tk
-         xGr2X/n2sxa6leLRATJFIJMaw4mwJGZv1daPlN4M+No0lkBvBOrEpEYBkYJLF1iVdPSW
-         D3OZ9dmKxULXROw4kRmfmFi1mviLIol3fTzlUQNOPmUdkxwOMK5GzpYPjAAOiozBU73Q
-         peAF0n2PLPivi0azPnJ3j60DXgm/s72VSgUTdB4/EMB1L5gYwNwA7ewI7crJ4lcG4gAT
-         +CuF58M3aIcjcY+Sl9uLMEbNXbKk3C4bVvzsI+z4h2H1tW32gu9KAXmtrIu/ntTMEl9U
-         U7Mg==
-X-Gm-Message-State: AOJu0YwXAPVWc6C8oV4j8dXYKiVdm0u4DdsFwbFq91dJyEBAiYoEqeZ+
-	N7UJTPYdj6TWqIw0/4VaVQ569fPK1AkR4TzSWqYAfQupO7G5ABJMTeDvaCIIIWHHsS1u2anEM82
-	xqzghiByRJUqEIMWhVhP6wPmchfzR4F6xKGTT3ACMag==
-X-Gm-Gg: ATEYQzzg+u1FiE6UmegftCwFItE7+5rbsP+HPaOU+NZR+V7/XFVpkiaGrU+DBbEDRI1
-	TKsUP6IZ7qNDuk6tILTHWr5LaFyzKFhdN3SVhMwFIyvLcfll4uaHGESSlWm+MGDFNeTBtHJ+E23
-	6Kp/EzqL/BYwoDDnyrLAAZ6Qjp7z2rql4hVUx9TNdDQN0qo1q01fMKCOTnnMiEKiE0diWoYj9ZB
-	7cTG/H8eAnGOpySFL57fUPPjnwUtSDpIQw9cedaynhGq+7BQPLg4IhBpwSpRHJKiahHVQ6O8IWJ
-	Wbr0zIGTWUV7gO9bRPYMkLu68f2EGWMGbjBOjeUn/8bhf6xMYTa/Wirdpvz2
-X-Received: by 2002:a5d:5489:0:b0:43b:a21e:9c19 with SMTP id
- ffacd0b85a97d-43ba21e9c7bmr12515964f8f.38.1774841822421; Sun, 29 Mar 2026
- 20:37:02 -0700 (PDT)
+        bh=47k2KtJLFlgZV7BeavIm4W309ubp3tqc1s1bO+AnlXE=;
+        b=O4IzGVJPphyFOlthwcYwsJrrr22cGIHGWNjN3ZgCcYdeHDCpP3r+vz6lHrRxj3UxVm
+         gPr1oAXQ3OVnppktqAha3ZIWRj/nkmf/H+Eewu8rjtquRjhi8rPbQYxWKXP2iHSy7sco
+         jAih+k1Zd4M2PctyqRIS/toh+KpEklLv6wIAJoZM/IYHuh8HoxNzuSFypk1TJHUhqLL7
+         ipjqUv5ps33r0lKOcO7nq5W5eOSoHi8MHJaI+rwkCYguVrq0U7iTqQRuwbQakwYKucMI
+         uvlOxtb+rVymg4B71V3VekQ43NP2Ez6bFdL6kuy539RpSOLGDPwG0VCy6rvvManRudnK
+         pRmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774844632; x=1775449432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=47k2KtJLFlgZV7BeavIm4W309ubp3tqc1s1bO+AnlXE=;
+        b=dEoLGZh584+FAyV3posVtRR02dnJAnqGnA+6sQBUtA+LVpHMKN5P5JUEjAWy2u6mlw
+         FpEH8rrpvx29YITSLPn+wn1yb3zOt3tSBGVR7a7g+oKFoDPwNb3cvyT1iHt2gHhE/xw9
+         M56FHN5zdCQZG2vMaGiO6BAdy9K9G33FCkuQCfkNwzJ/hx+jbpnpmJrj+iDpAf5zDkph
+         xBYFl7ANUAnmwchdhVj0c5crcfRKoZwcPUlEKiAVdzrxTKo960FgRdlV1Jj7d5SnAziW
+         bpJl8eiNPwTT/b3csAspQjL94fTmbDGYHdWq5GIPzWOTU81IfJ6H+JAOkvpgqTUkEfSV
+         FqjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXp7C0Ynyx0jSf4rHPJh2AzB3IHE5m+OUCxSwMc76yWC+0zVGU63jKQVKKDwPIoIpZnEJE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpO7HbVfKIGzqzQHYyimuYE85UwL/+xLZrxLmE48N4RSTsYFTW
+	8Oajes2dVjaR7Lqvjw5y0gjPTtmE4G7wwHYJK01NzYdSQFRqzDQ6WCAuX4d11OXBwAzarOasMjm
+	FrSV8ReGMB1ZuiXGlouJf4Z9qiIdBEQQ=
+X-Gm-Gg: ATEYQzyXHkgd6PeHUVDhYQgX9f1zNWc14xJ51PzT0q07yNLG/XvdnZg92YdSL7BhKCW
+	zc6OEkpAw0vvUVeK0Mh3UHGiBgPG0BvaULhQE9/S5PXoho9W0I8z9zFOdCAh7UWZK+2HHehjJ2O
+	BFnKTflkG3DJPMb4YkUq/gdNEmF+cdcWazq5sl+tld5wGqNcbpOMxGrmqJYuqwqasTslremmNQt
+	j/ibJpC8Lox3FvKiaDj6ZC0UYQPIUINgIRrtNR/cmxRpqypgDJdEdQDvK/c6E+6x3tc+b+QPreg
+	6kF6zLyIB3Nh8fkmRtRcrFYTPYOoXWWSLelBqC5g9vW+qm2fWyuaZ1D7keI=
+X-Received: by 2002:a05:690c:18:b0:79a:b00d:c863 with SMTP id
+ 00721157ae682-79bde07ce0fmr108242067b3.47.1774844632115; Sun, 29 Mar 2026
+ 21:23:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330032124.3141001-1-memxor@gmail.com> <20260330032124.3141001-2-memxor@gmail.com>
-In-Reply-To: <20260330032124.3141001-2-memxor@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Mon, 30 Mar 2026 05:36:26 +0200
-X-Gm-Features: AQROBzB_G3mapjPE8QBXK1QnOTgSfC6JJJkvHpgb6i-bzAciaDy058kgqMh3CHc
-Message-ID: <CAP01T77HcqyBKZRzRbLbHuZeskJ7XJ+FU2GQpZX-WXTCPMyikw@mail.gmail.com>
-Subject: Re: [PATCH bpf v1 1/2] bpf: Fix grace period wait for tracepoint bpf_link
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, kkd@meta.com, kernel-team@meta.com
+References: <20260329161751.1914272-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260329161751.1914272-1-sun.jian.kdev@gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Mon, 30 Mar 2026 12:23:41 +0800
+X-Gm-Features: AQROBzDnXYc-BWZEQKIqLDNt8-oBOgGJ0Q32XePgq7J1_YTx1z8kBI9nA7aPypk
+Message-ID: <CABFUUZGmNR_xEsECjhF=WtitTHiSxM91-xDobo_h1AAYNADRvw@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: Reject malformed IPv4/IPv6 skb test input
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 30 Mar 2026 at 05:21, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
->
-> Recently, tracepoints were switched from using disabled preemption
-> (which acts as RCU read section) to SRCU-fast when they are not
-> faultable. This means that to do a proper grace period wait for programs
-> running in such tracepoints, we must use SRCU's grace period wait.
-> This is only for non-faultable tracepoints, faultable ones continue
-> using RCU Tasks Trace.
->
-> However, bpf_link_free() currently does call_rcu() for all cases when
-> the link is non-sleepable (hence, for tracepoints, non-faultable). Fix
-> this by doing a call_srcu() grace period wait.
->
-> As far RCU Tasks Trace gp -> RCU gp chaining is concerned, it is deemed
-> unnecessary for tracepoint programs. The link and program are either
-> accessed under RCU Tasks Trace protection, or SRCU-fast protection now.
->
-> The earlier logic of chaining both RCU Tasks Trace and RCU gp waits was
-> to generalize the logic, even if it conceded an extra RCU gp wait,
-> however that is unnecessary for tracepoints even before this change.
-> In practice no cost was paid since rcu_trace_implies_rcu_gp() was always
-> true.
->
-> Hence we need not chain any SRCU gp waits after RCU Tasks Trace.
+Hi,
 
-... or chaining RCP gp after SRCU gp, rather, the commit log should
-probably say that instead. The above might be confusing.
-But more eyes on this would be great, I went back and read a few
-discussions on why we were chaining RCU gp after RCU-tt gp and
-couldn't convince myself it was necessary for the tracepoint path.
+Syzbot has tested v2 and the reproducer did not trigger the issue.
+Tested-by: syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com
 
+On Mon, Mar 30, 2026 at 12:18=E2=80=AFAM Sun Jian <sun.jian.kdev@gmail.com>=
+ wrote:
 >
-> [...]
+> bpf_prog_test_run_skb() derives skb->protocol from the Ethernet header
+> through eth_type_trans(), but it does not verify that the provided
+> linear input is long enough to contain the corresponding L3 base header.
