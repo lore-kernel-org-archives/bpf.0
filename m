@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C472E7BB6;
-	Mon, 30 Mar 2026 14:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E83C2E717B;
+	Mon, 30 Mar 2026 14:36:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774881350; cv=none; b=uqZzS9rgsgQjBbkJ9Di72S6phGC3+QwAd9e41FD4msSXIXFRhoF+1rxu19aGZ8/b3D+KaKVyO4E0P0DvyKr7DS01W27G9XlpJWGNH8GPskfRkAbQbs3Hi0DrdBGLkU2HznmcTDtTiwWbq2TbU+GzTF4iNFazyOqMbtqXmeUlhLM=
+	t=1774881401; cv=none; b=gUDHtGVOph8nSLo+QYARXkNWYS1I+3ud2NutCNgoiuBUSuv0VMOiVWpkMMgO9px+7h2O6ef4+G6+/3Br/IqtimWULW16eWaoZqTvFL/q4/lHguUmEnCuqHN+mN973+9l0e88/pITwU97st2sXggv5xV2FYCjib/783+33XRARcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774881350; c=relaxed/simple;
-	bh=HHfxw1FEuQsMoLKCj7A+GvFmIFDI80BjaPMvstStO5I=;
+	s=arc-20240116; t=1774881401; c=relaxed/simple;
+	bh=UUzXjb9asDBbFYQ/P+S6mXqciBQgW6rkek8EtvcnmEA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=V955bUOQf+4l34Cd8OjT/grBwZZ02xndSjoz0/Rxm5qmXG8YdByot3pnXFsx8l+7SIl7+QjFlpjP8iyEu4XSmv9w+hICYAOMjBZAoq0IMsfI/wXSiaucsaW8pnSnSjNXqd5HNbQfGozScyH+mvYNW9LkjQrwzSqfqmVU+ZSfsMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UwtrSMPL; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=i2/U94hx81naL2qIli5ZzxlXnZdg8Ww53/LSYqnH/iQjpqlwMFRwpkULcwiAGy9sFMMAwVoLoTk4rYyCH8FP7wRNElXbWMOHZdyZ6/8eINeK1zsA9BJnrhrCVWhECk5EI3clORYA49YKdk/C0YZL8oaBD92pJ18ZWa5hmignztE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oUjt9ek5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UwtrSMPL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C51C4CEF7;
-	Mon, 30 Mar 2026 14:35:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oUjt9ek5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC07C19423;
+	Mon, 30 Mar 2026 14:36:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774881349;
-	bh=HHfxw1FEuQsMoLKCj7A+GvFmIFDI80BjaPMvstStO5I=;
+	s=k20201202; t=1774881401;
+	bh=UUzXjb9asDBbFYQ/P+S6mXqciBQgW6rkek8EtvcnmEA=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=UwtrSMPLZX3sohAGKTRw7Rso3hDmHASdR/K06e9EScHVjSlNJbQRK3zAxVH5T6fbc
-	 u4y0GylbOG7ifiUhJ5gp1pSTCaMIaObdgpx6uPaYWs94+YBnmSCQGKi0FZe+ktCDnz
-	 yzD4QPupNGMywdcJZs+SXCS37xW0OhNXwu1Oz6FhJGwo49hqY4L8MDgSy2V3DXZ7+V
-	 yFkRjEucGrmteUIMKO70hW3kCrAFhSs0mHSUKt7DmhMtrAJctkXDwnKLE4cMDTXR4m
-	 Iy+J2xvnVjLYWe53LyWI+YiwY2sYNiZb/s7Hfl4mi8tphOzmijb9M01CtzHJ6Qflwx
-	 9IHlTpT8wjjEg==
-Message-ID: <0039fdb2-b23d-4ada-8d83-595e7816521a@kernel.org>
-Date: Mon, 30 Mar 2026 16:35:44 +0200
+	b=oUjt9ek5UytYIOgdx2VGoInarZWYBW/OInxfrQunSF4g0xgDSRG8tL1vJ1MMYLx09
+	 znAh9a8Dg0WHt5KE0ZhCVD9hZ0EVoluGrE9kiHzt+LyqXcxOIE8WHwnwwAI1HDbmfl
+	 yHCYmwYJRFTPzbBzS8FelbBewo6uH1RBI5riq+upPasi9sfo6bxDCr87JYIH14yQTh
+	 OgAzqm94Ppz79bio8sBysAt1qiAuY1OfwloOGfAUwzQmFnVv/uqQn2l6JZO5ziM/F8
+	 L9cJCYqXaPv3H19VygcorNBXydcIE+NCeXaGyMXAAgJF4vxnL5BkEgy4dUTqZhjFgt
+	 eUAGSj1iIyiOw==
+Message-ID: <d6db5b93-8bcb-4a34-9e44-3ff948e64ce8@kernel.org>
+Date: Mon, 30 Mar 2026 16:36:35 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,7 +35,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] vmalloc: Optimize vfree
+Subject: Re: [PATCH v4 3/3] mm/page_alloc: Optimize
+ __free_contig_frozen_range()
 Content-Language: en-US
 To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>,
@@ -49,78 +50,100 @@ To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  Ryan.Roberts@arm.com, david.hildenbrand@arm.com
 References: <20260327125720.2270651-1-usama.anjum@arm.com>
- <20260327125720.2270651-3-usama.anjum@arm.com>
+ <20260327125720.2270651-4-usama.anjum@arm.com>
 From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <20260327125720.2270651-3-usama.anjum@arm.com>
+In-Reply-To: <20260327125720.2270651-4-usama.anjum@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 3/27/26 13:57, Muhammad Usama Anjum wrote:
-> From: Ryan Roberts <ryan.roberts@arm.com>
+> Apply the same batch-freeing optimization from free_contig_range() to the
+> frozen page path. The previous __free_contig_frozen_range() freed each
+> order-0 page individually via free_frozen_pages(), which is slow for the
+> same reason the old free_contig_range() was: each page goes to the
+> order-0 pcp list rather than being coalesced into higher-order blocks.
 > 
-> Whenever vmalloc allocates high order pages (e.g. for a huge mapping) it
-> must immediately split_page() to order-0 so that it remains compatible
-> with users that want to access the underlying struct page.
-> Commit a06157804399 ("mm/vmalloc: request large order pages from buddy
-> allocator") recently made it much more likely for vmalloc to allocate
-> high order pages which are subsequently split to order-0.
+> Rewrite __free_contig_frozen_range() to call free_pages_prepare() for
+> each order-0 page, then batch the prepared pages into the largest
+> possible power-of-2 aligned chunks via free_prepared_contig_range().
+> If free_pages_prepare() fails (e.g. HWPoison, bad page) the page is
+> deliberately not freed; it should not be returned to the allocator.
 > 
-> Unfortunately this had the side effect of causing performance
-> regressions for tight vmalloc/vfree loops (e.g. test_vmalloc.ko
-> benchmarks). See Closes: tag. This happens because the high order pages
-> must be gotten from the buddy but then because they are split to
-> order-0, when they are freed they are freed to the order-0 pcp.
-> Previously allocation was for order-0 pages so they were recycled from
-> the pcp.
+> I've tested CMA through debugfs. The test allocates 16384 pages per
+> allocation for several iterations. There is 3.5x improvement.
 > 
-> It would be preferable if when vmalloc allocates an (e.g.) order-3 page
-> that it also frees that order-3 page to the order-3 pcp, then the
-> regression could be removed.
+> Before: 1406 usec per iteration
+> After:   402 usec per iteration
 > 
-> So let's do exactly that; update stats separately first as coalescing is
-> hard to do correctly without complexity. Use free_pages_bulk() which uses
-> the new __free_contig_range() API to batch-free contiguous ranges of pfns.
-> This not only removes the regression, but significantly improves
-> performance of vfree beyond the baseline.
+> Before:
 > 
-> A selection of test_vmalloc benchmarks running on arm64 server class
-> system. mm-new is the baseline. Commit a06157804399 ("mm/vmalloc: request
-> large order pages from buddy allocator") was added in v6.19-rc1 where we
-> see regressions. Then with this change performance is much better. (>0
-> is faster, <0 is slower, (R)/(I) = statistically significant
-> Regression/Improvement):
+>     70.89%     0.69%  cma              [kernel.kallsyms]      [.] free_contig_frozen_range
+>             |
+>             |--70.20%--free_contig_frozen_range
+>             |          |
+>             |          |--46.41%--__free_frozen_pages
+>             |          |          |
+>             |          |           --36.18%--free_frozen_page_commit
+>             |          |                     |
+>             |          |                      --29.63%--_raw_spin_unlock_irqrestore
+>             |          |
+>             |          |--8.76%--_raw_spin_trylock
+>             |          |
+>             |          |--7.03%--__preempt_count_dec_and_test
+>             |          |
+>             |          |--4.57%--_raw_spin_unlock
+>             |          |
+>             |          |--1.96%--__get_pfnblock_flags_mask.isra.0
+>             |          |
+>             |           --1.15%--free_frozen_page_commit
+>             |
+>              --0.69%--el0t_64_sync
 > 
-> +-----------------+----------------------------------------------------------+-------------------+--------------------+
-> | Benchmark       | Result Class                                             |   mm-new          |  this series       |
-> +=================+==========================================================+===================+====================+
-> | micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |        1331843.33 |         (I) 67.17% |
-> |                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         415907.33 |             -5.14% |
-> |                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         755448.00 |         (I) 53.55% |
-> |                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1591331.33 |         (I) 57.26% |
-> |                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1594345.67 |         (I) 68.46% |
-> |                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |        1071826.00 |         (I) 79.27% |
-> |                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |        1018385.00 |         (I) 84.17% |
-> |                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        3970899.67 |         (I) 77.01% |
-> |                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        3821788.67 |         (I) 89.44% |
-> |                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        7795968.00 |         (I) 82.67% |
-> |                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        6530169.67 |        (I) 118.09% |
-> |                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         626808.33 |             -0.98% |
-> |                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         532145.67 |             -1.68% |
-> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         537032.67 |             -0.96% |
-> |                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        8805069.00 |         (I) 74.58% |
-> |                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         500824.67 |              4.35% |
-> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |        1637554.67 |         (I) 76.99% |
-> |                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        4556288.67 |         (I) 72.23% |
-> |                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         107371.00 |             -0.70% |
-> +-----------------+----------------------------------------------------------+-------------------+--------------------+
+> After:
 > 
-> Fixes: a06157804399 ("mm/vmalloc: request large order pages from buddy allocator")
-> Closes: https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com/
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+>     23.57%     0.00%  cma              [kernel.kallsyms]      [.] free_contig_frozen_range
+>             |
+>             ---free_contig_frozen_range
+>                |
+>                |--20.45%--__free_contig_frozen_range
+>                |          |
+>                |          |--17.77%--free_pages_prepare
+>                |          |
+>                |           --0.72%--free_prepared_contig_range
+>                |                     |
+>                |                      --0.55%--__free_frozen_pages
+>                |
+>                 --3.12%--free_pages_prepare
+> 
+> Suggested-by: Zi Yan <ziy@nvidia.com>
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 
 Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
 
+> ---
+> Changes since v3:
+> - Use newly introduced __free_contig_range_common() as the pattern was
+>   very similar to __free_contig_range()
+> 
+> Changes since v2:
+> - Rework the loop to check for memory sections just like __free_contig_range()
+> - Didn't add reviewed-by tags because of rework
+> ---
+>  mm/page_alloc.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 64be8a9019dca..110e912fa785e 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -7059,8 +7059,7 @@ static int __alloc_contig_verify_gfp_mask(gfp_t gfp_mask, gfp_t *gfp_cc_mask)
+>  
+>  static void __free_contig_frozen_range(unsigned long pfn, unsigned long nr_pages)
+>  {
+> -	for (; nr_pages--; pfn++)
+> -		free_frozen_pages(pfn_to_page(pfn), 0);
+> +	__free_contig_range_common(pfn, nr_pages, true);
+>  }
+>  
+>  /**
 
