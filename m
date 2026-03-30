@@ -1,67 +1,66 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A8D2253B0
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76920366056
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774895021; cv=none; b=GRTgdT3XrE9cAP98E+d1w6IA0Yl1+kr4+LnHFO3I7Gc+kmlv4eaLSMpxcwTL5wuSetfDjn+3j++kDVDPAVzO5HwjOtdv7V1vq3OcAW+bPn33dTcXx8dnQF/fdmJuKMSLWou+qRgu84l+L7f5lk20HyfDkT3V/e8PAUsABDc5u40=
+	t=1774895031; cv=none; b=nQdnNw5sDuKKKe4FWxX5z7lYogTuXoKQa+YW6Bz4qGoQkfVQujR4HznvrtH+4ZLtkmzTjS8itFYEjj0p3/v7JVZopEvdLccgcQE5VCgCqywC6ml33FfITJuBsOIctPqUeOE74/ZqonHwboY3QGtiAQQuVc518yceh54dZ2lzNzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774895021; c=relaxed/simple;
-	bh=NF9rRAKZzpSK64dSGd/aPJoDtJz9TsnSxpG9OXYxyr8=;
+	s=arc-20240116; t=1774895031; c=relaxed/simple;
+	bh=Pcgs5Hkr4phayDZ50JP7J5wb8LbRgXIBOs0UAGQXJLo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DTHne24LXbaTfiE9LZ+fyiaq6EVcavoGjxcqnliAssjkMu0h18aLIl2OB2tm3iLJiBw4bXTLPDUVgYEBrkmK3zJUFZGVKhgVhW6ZvaaSJsCfTTqk9gnRO/geYSU0Bcpj/FkZDhddl6dFTX3U2LchsQEdKNlI9Cd0uO4okaLkEYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tb28oQC1; arc=none smtp.client-ip=209.85.160.175
+	 In-Reply-To:Content-Type; b=hGe40/oV+tS9huysoxYhgOVveCpAzKqBWzlOdsck0wimCjlQn0VnAP3k5v0N44olOohvLBdo4EwjAGKT5Yx9Bmuu5NglXOsTLCxUCrJS2MVwfApR8EahUGeYXEWU1I9TgilKVGldegDXsnz8R4is0+2BCRxWfBEMJ5UmWByifO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X8udjpri; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tb28oQC1"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-5091ed02c54so57931cf.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 11:23:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X8udjpri"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-509069a7a7fso83331cf.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 11:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774895019; x=1775499819; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774895029; x=1775499829; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ijPPvOqIozHHCGCm1P4OC6DU69feRYcfC1IX42DFl4c=;
-        b=tb28oQC1Ak1RCQbcaZIigG/qWJjEWX5hg4CQIHlb+kNbR3+tomPGB+RuQ2oJjr8jRr
-         9tL/jcwZscEekOhQDmEJRu9JG4hHSyCpOUlmqlbc1YnKm2CarqY5ZAi0SYdZSSbUzZ2E
-         n+ORJjBE3Y3Me8oXu4CN+2kBF4c5x9YPORkfntbVXuhVhasgesOsXIyAshljwUlTuF8E
-         zKrmF4tME4KDt7boMc0zF0J3ARenEeCk3B1sgp0FTymn9kfs+mE8HzyceDniQ59pnORo
-         lULuetCj6YIKz+DNbBnuUdbLSdMU28pEpGDs7TJBCUdT5hh892meE6uH3HTKTlMqbQTo
-         qltg==
+        bh=Dn/bjNHe8mXuBFDqP6eCP0Ayq1fUbkFOeaQGMlTxTyY=;
+        b=X8udjpriK9nVmT+dASf9puGAAimxxqHtkjo1KfuZLuh3W+cIcfsZgkt+yMPpO773kX
+         Fv0nlIzeErk23hsUKO8/KeNgbNhL2k2x4LPVQcY9zyipNrJDJYIp8gac2x/jV9I6I9NV
+         bHxdDfgbmsogxiKrSu35YFmPvv/7/DIcnyjGF74OSOdXfTwfhZmTMTIl3p6ItcZ4yb2/
+         OWrMfnTkUeuDGhIH2RBPyhLWrxKls9Qilq41vrp6LRruEflzlx4KKjMZHC2APzz9e/y0
+         BupP5qiRmybiuw8JiM735w+OHJuoxiJKirzxYSG0crE4QqNIVrKhlG1FfhLb76VdmfVE
+         NytQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774895019; x=1775499819;
+        d=1e100.net; s=20251104; t=1774895029; x=1775499829;
         h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ijPPvOqIozHHCGCm1P4OC6DU69feRYcfC1IX42DFl4c=;
-        b=iIu5AZOWcME5tm3dDcVxYlKa4t1JIbtbC3ysUjIrWOpWDSb1UE1G3wcfCn23htJgn6
-         fEnT9tnbb8TgAfEmqMiu+Jnf56iKCtWfFqR9IBteqYHu/uhzwSTt6QfqGUPd1CgDHWEJ
-         eDelqGb9C9byZJemNwCEfA/JgW/q2GUt6jleXT/Gkqj0UaAJYu/SoPwEqqRnYYeARx9w
-         jcmttWGcask8CXVCye7851EJM9gFayFEd1Wn4aIYBIKtZqO8Bb8atYrLzWFKvwMBvrIy
-         TCmNenMwgb7bIiRcFpIHHcolDl1DaZ7XWtFAi/aEPwlNus4ndVjvORdi4lktbepM5NAC
-         124g==
-X-Forwarded-Encrypted: i=1; AJvYcCXIWJBHTwIFTzkeJD/fxLR3QZG4KuLTn4cPFhziJjxyzDU11ErzECmK5hlqKAm+ARk8aFc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTqpyasvST3muRmB58otA8KXtx/qteedl5e9KD8dx+DhtTpaFg
-	ZkMDtapF/4NN5ZYIHoeON1EtUL3X3nh+G+dRzOs/mbLTLUZ2kqO6cJFaZEleKpcKf8ogkELqhhz
-	Dnh8RXSqc
-X-Gm-Gg: ATEYQzy6BTaG3Yur5VFsiBsc1RrIlEEYHu9ae/ZaA6EkYjuQTVP0zSH4kkbD/iY0LcW
-	WvRL7PePt2+OEgFc4h4mzxPw2GtUOQ8OO2/JGaI+MQsK+tkinEMlSPqk8cadfYtrrkWqi/x1Hyc
-	p+384yZADk+A4C6VCl7DGDobndgYv8YQfGLzwaRBiTjC+pgBrZ2ptvf7Ywqpu7tWwUSam+TfEbJ
-	EYX9Hu6GdRWgFPnPF3OOuQWrNqnI7ksTqTjUGd5iK/LzeNKnfZeShtnMbL0nTWlCKiCjKR1ZwKr
-	4y7knIjUJsd2Ku5zrWaVJGafxQZqmLsQdEX+ODOxeI8916IzVbQX+6pr9DVgSYuT4VP+QPwYXZZ
-	fyBEHVpqfsp0jrgG1dc1GBEbpfc2BPoVuklH9z/zz78sU+L9iBTxFl6mnS+RMQsym+ai8/+G0sc
-	x6PkSOVfaZ7NsEf/OCCw1d5w==
-X-Received: by 2002:a05:622a:410b:b0:509:25c5:42b4 with SMTP id d75a77b69052e-50d2d7057bfmr1082091cf.13.1774895018813;
-        Mon, 30 Mar 2026 11:23:38 -0700 (PDT)
+        bh=Dn/bjNHe8mXuBFDqP6eCP0Ayq1fUbkFOeaQGMlTxTyY=;
+        b=pVSbUjULF6RkhIRJBOmzMFIKxARdataNOigrtZlwi9G3cs4xV48IsJgoii1PFZ7nHH
+         IfDV010maE1keVnWF66agoEWoe28GeMiwnTOGfxst/QB0gBipGatsz55kh1Zx7oAR7MN
+         /ec8YQ1BeTIAIEzBW+nUy4R0GuzHftO/bLko+9kb8rJwo18zCGOnASkya4f3JaWLp6Rf
+         yvbPGo9uaTnCMvsdQK1c1yQMcEWHSoiZCeJsvS5K20Z/OCQx74F7b6XHAb+qyDSuSMBz
+         f5UX6LMVAhEOVs4acLejp6yQCsqUa16mf6dB7W9Lusvur5z0bQliK4IvgF8KWAbwjDmu
+         pOzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXpG4hMvoQDpM4osVAtPis/D3fnj1pasX2DsJgFV3VRvIFR+S6Z3DT7Zj6ixAkkk+YTFlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4GDpXTH3LcChVprE9xzseBl4BJ7ZlLNNiqxTkfDLzyyBTxe1G
+	9KUnbnMYAqCFuJXAU8uUk12softFC6o+EZF+yhbOxIzyqecETq46kLEy1UtLoIPpyg==
+X-Gm-Gg: ATEYQzz/01eazxN+y/xnLK5vXHS/Dv286/aeifqDC+Dn4ktM9EXLAOIX+92K/t0vpWO
+	b88M72uyxeNP9xnKbFZAkNWb+o9h6GcwFmXnEZa9LaoW/dlqeKhm6AdQCC/Idmby2v8mWdoPoh4
+	Xe9PHC9B5ZoH1imNCoSHTEdZMK4zn0vbr2EV6J0mwGPXn19Dhpj1XapKnMRCR3CVxXMSOFVQCuI
+	w+ZpHTlberZbWuGIfqyM/fS7nTat1Zcz0J8TRHqryO3I/vG7uUygXoMX1m6BVguTdMe3bgwcq7m
+	ZWniNtcyH73SxfJYBBhinghKfaBUu0Ayanp/BGKSmOQu+60kKcfhC9YnQT319Q+beaV6dD8s0X8
+	i1k+RccqRiwsbZMVW9BTMdVunKM9dRiRQ1Pa9yzBoQdfPg3wUervzxfsPjg/q9VRDCTQ3hXUuYE
+	/HcT0u8lzLyOwa607f5gZSog==
+X-Received: by 2002:a05:622a:9d4:20b0:501:4eae:dbfc with SMTP id d75a77b69052e-50d2d70abecmr1067521cf.5.1774895028948;
+        Mon, 30 Mar 2026 11:23:48 -0700 (PDT)
 Received: from [192.168.1.27] ([130.44.176.244])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89f3ba99abbsm63723196d6.28.2026.03.30.11.23.37
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8d028073afesm655287485a.37.2026.03.30.11.23.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Mar 2026 11:23:38 -0700 (PDT)
-Message-ID: <bdb289c5-c52c-4124-961f-db42553a2893@google.com>
-Date: Mon, 30 Mar 2026 14:23:36 -0400
+        Mon, 30 Mar 2026 11:23:48 -0700 (PDT)
+Message-ID: <6a1fc935-2bf2-411a-8dd6-cb1ac4e85c1d@google.com>
+Date: Mon, 30 Mar 2026 14:23:47 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,63 +70,43 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/2] bpf: calls to bpf_loop() should have an SCC and
  accumulate backedges
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Levi Zim <i@kxxt.dev>, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
- kernel-team@fb.com, yonghong.song@linux.dev,
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Levi Zim <i@kxxt.dev>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
  Matt Bobrowski <mattbobrowski@google.com>, Josh Don <joshdon@google.com>
 References: <20251229-scc-for-callbacks-v1-0-ceadfe679900@gmail.com>
  <ed857a23-bd73-4915-b080-558b5934bc8f@kxxt.dev>
  <79ac0188db82c675e62c36c8ab036b45cef3f3f7.camel@gmail.com>
  <9a418287-f8e3-4064-8364-ff85793de74e@google.com>
- <b943320a099bc171a10e533935eef8dd06b30e2c.camel@gmail.com>
+ <1c7bfc3f-c327-4777-a70f-48144aa0864f@google.com>
+ <CAADnVQJqs-z00-m-Qdavv0bGSwqV2tUz+61+h-aw5ze_EPDoXw@mail.gmail.com>
 From: Barret Rhoden <brho@google.com>
 Content-Language: en-US
-In-Reply-To: <b943320a099bc171a10e533935eef8dd06b30e2c.camel@gmail.com>
+In-Reply-To: <CAADnVQJqs-z00-m-Qdavv0bGSwqV2tUz+61+h-aw5ze_EPDoXw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/27/26 4:10 PM, Eduard Zingerman wrote:?
-> If not, here are a few generic tips:
-> - If there is bpf_for or bpf_loop based loop and you hit 1M
->    instructions limit, this means that internal loop state does not
->    converge to some previously visited state from verifier point of
->    view.
-> - Most likely there is a pattern like this:
+On 3/27/26 9:29 PM, Alexei Starovoitov wrote:
 > 
->      v = 0;                            v = 0;
->      bpf_for(i, ...) {                 bpf_for(i, ...) {
->        ...                               ...
->        v += 1;                - or -     v += 1;
->      }                                   use v for memory access
->      use v for memory access.          }
-> 
->    Or its equivalent in bpf_loop terms.
->    'v' might also be a pointer incremented inside a loop.
->    Unfortunately, we don't have a simple way to identify which variable
->    is a culprit. We do have a way to identify which loop fails to converge:
->    the 'veristat' tool executed with --top-src-lines=N option will
->    print out C lines corresponding to instructions that verifier
->    visited most-often before giving up.
-> - There are several possible remedies for the pattern above:
->    - hide exact value of 'v' from verifier by initializing
->      it using a global, see tools/testing/selftests/bpf/progs/arena_htab.c
->      variable 'zero'.
->    - change the logic to rely on 'i' instead of 'v',
->      for 'i' verifier does not know exact value, but knows its range.
-> - Another generic advice is to split program into global subprograms.
->    Global subprograms called from the loop body won't inflate the callers
->    verification budget.
+> See Ed's reply.
 
-great tips, thanks!  i opted for the global function one; it's a common 
-sledgehammer in my "fight the verifier" toolkit.  =)
+thanks for the hints!
 
-the loop function was calling a very large function, so that was 
-probably the right tool for the job.  next time i'll take a look at 
-veristat.
+> I'll double down on request to share your prog that hits 1M.
+> We're working on removing the limit completely,
+> so the more tests the better.
+
+unfortunately, i can't easily do that since the program hooks into 
+ghost's BPF prog_types and not sched_ext's.
+
+that said, we're working on porting my "flux" framework (which is what 
+my scheduler uses) to sched_ext.  so one of these days we'll have 
+something you can build.
 
 thanks,
-
 barret
 
 
