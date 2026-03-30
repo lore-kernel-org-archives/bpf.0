@@ -1,68 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991EB3BFE41
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 10:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AFE3BE632
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 10:40:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774865854; cv=none; b=ZUFVjF78n+dfXOBSaYpfA+fE0YPnri3ScA0cwNObL9hTfB38np4YFtGXOK1+ZABAcRI9tf3kOxldRh/poc2U2a1vgYf0Lgf8uMiPsGgiDtZOwWE9iqzLPNL8gtL67XQyRoRBTLfKYUHfvfBn3tAJIF3S+PGjd3gh1P6krUsBGq8=
+	t=1774867232; cv=none; b=gjD1bLrsRpymZ29NvemGQlvmJfzq+jhP0Ec4WmexQULr9miBuvtePZE5uGlYCPlfu59acL60wMAA8P2fOtVn8D7QSTk40/YrRhjfyhG8PuoUFRRm1UhuwjM1BW521UZPzOnxvgnE9EjsyJMR+SMhzc2J99nr2U0cMDZ8MIRffQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774865854; c=relaxed/simple;
-	bh=OtfA84Zj/lq2aOKKMUUoWBMSb65SaBxUhvRV8QaH+WI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KFBBRU70ac9kWPF6NDLuQAgaTewcbNNRipMmIoONxiK5zJxl76NHJaKereY/OMNVoFdSlZuqZBQvUXwnA7wFPAhCwdzO8REOACsARh63MmKo6T1lDeIjIv3W7miP9U0EcHSPvSb8RHP5GWBozQ49NIrp8b1288SXS7Xne8bOXOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1IskXkj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774867232; c=relaxed/simple;
+	bh=WnLyeAAM9on9IVXBkgktEk5xgx77/bO2Y9714BTRwzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L64HLpG4VEvp7Y5SaTuNg0BhttmznJs+o+BscawX50/Jh9sVy1Pn88F9lyxkwB9G0sblZf96/tof3SScUe+PYO131wE171XEzJiFzxbnl5472be+5m+OiJA0kM/8rOu/Conuo64ZHC/tBq1dgg/hmmDW4EzgWqbg/c7Swbj4QAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZBgeGg7r; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1IskXkj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC5DDC4CEF7;
-	Mon, 30 Mar 2026 10:17:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZBgeGg7r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547B4C2BCB4;
+	Mon, 30 Mar 2026 10:40:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774865854;
-	bh=OtfA84Zj/lq2aOKKMUUoWBMSb65SaBxUhvRV8QaH+WI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=r1IskXkjoK1WLiUJfwMc5A4NXEtxnJ7DX7nlnI+rCD93nFZaVb9xrzknG4yeRBSaO
-	 xPpTGoJBUcWgRCg7bmHMP/GWCMy1FeZ1OjXV1uFqFDC6HJf2XQ8IGFkauk3QmLllVa
-	 /ptuK2Lmpzb04uCAJT5rnsRslcc5jetgQWQPtmHRz9zdY09hctz5BDFJc07tnWqMhp
-	 XoBeC4xFXR/tlaBAUbHVbaw1hZ/1G9rF8yethinU6mKLfKVDe8QI4SXWAPcKQIiHAp
-	 OK1pwOj+Rm9DSKMle/7pOaPqqZbqYwqyNL/X5duAfWosJXbrdFED6LV0eQwII27voM
-	 mTOSodlZ4AYIQ==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
- Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, "Paul
- E. McKenney" <paulmck@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- kkd@meta.com, kernel-team@meta.com
+	s=k20201202; t=1774867232;
+	bh=WnLyeAAM9on9IVXBkgktEk5xgx77/bO2Y9714BTRwzQ=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=ZBgeGg7rUxQqTUDOaT7h5iZ0WGciRIBzGkEIG5zpNYYQivlDHVkRMlMbsPSa8DTdd
+	 kLWNgLLMZGPoURtigDNmgqBZcrVe7vBvd13FjaxrqeLIXEENocVPD+0tFyzt+irERp
+	 eL6qXIXc3SRbjM+X2daaTlVP1AkNKMC4x3ZCnkwWtncgldH4z2DSCznGveoI1FHZzj
+	 +4bM/9+iY9ATA93LPYs05I/zom9fP4QAupwYBtVuY7ak7KhoF65bu1O0mm4/doLFdF
+	 St0EuJzPUFe002aOu2J/P9HW1Iqh6lpm91kbK1gCRA2IyXitoV5IPy8VfPoQ7PGWZ7
+	 3JUwKm2GVN1GA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 280D4CE0096; Mon, 30 Mar 2026 03:40:30 -0700 (PDT)
+Date: Mon, 30 Mar 2026 03:40:30 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>, kkd@meta.com,
+	kernel-team@meta.com
 Subject: Re: [PATCH bpf v1 2/2] bpf: Retire rcu_trace_implies_rcu_gp()
-In-Reply-To: <20260330032124.3141001-3-memxor@gmail.com>
+Message-ID: <485bfcec-2b88-4288-a244-a39802b100dd@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 References: <20260330032124.3141001-1-memxor@gmail.com>
  <20260330032124.3141001-3-memxor@gmail.com>
-Date: Mon, 30 Mar 2026 11:17:29 +0100
-Message-ID: <m2341h1v0m.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260330032124.3141001-3-memxor@gmail.com>
 
-Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
-
+On Mon, Mar 30, 2026 at 05:21:23AM +0200, Kumar Kartikeya Dwivedi wrote:
 > RCU Tasks Trace grace period implies RCU grace period, and this
 > guarantee is expected to remain in the future. Only BPF is the user of
 > this predicate, hence retire the API and clean up all in-tree users.
-
-RCU Tasks Trace is now implemented on SRCU-fast and its grace period
-mechanism always has atleast one call to synchronize_rcu() as it is
-required for SRCU-fast's correctness (it replaces the smp_mb() that
-SRCU-fast readers skip). So, RCU-tt GP will always imply RCU GP.
-
+> 
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-A nit below about a stale comment.
+For the RCU part, given that you guys are the only users of the late
+great rcu_trace_implies_rcu_gp() API:
 
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 
 > ---
 >  include/linux/rcupdate.h | 12 ------------
@@ -70,7 +71,7 @@ Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
 >  kernel/bpf/memalloc.c    | 33 ++++++++++-----------------------
 >  kernel/bpf/syscall.c     | 24 ++++++------------------
 >  4 files changed, 20 insertions(+), 59 deletions(-)
->
+> 
 > diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
 > index 04f3f86a4145..bfa765132de8 100644
 > --- a/include/linux/rcupdate.h
@@ -91,12 +92,6 @@ Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
 > - */
 > -static inline bool rcu_trace_implies_rcu_gp(void) { return true; }
 > -
-
-There is comment in helpers.c that needs to be dropped/updated:
-
-kernel/bpf/helpers.c:1275:      /* rcu_trace_implies_rcu_gp() is true and will remain so */
-
-
 >  /**
 >   * cond_resched_tasks_rcu_qs - Report potential quiescent states to RCU
 >   *
@@ -250,3 +245,4 @@ kernel/bpf/helpers.c:1275:      /* rcu_trace_implies_rcu_gp() is true and will r
 >  			call_srcu(tp_srcu, &link->rcu, bpf_link_defer_dealloc_rcu_gp);
 > -- 
 > 2.52.0
+> 
