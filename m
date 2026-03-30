@@ -1,223 +1,184 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BBD398905
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 23:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774913858; cv=pass; b=lJ3sPe7cRoOxFJSAX0cOZ8tmfu5fINEj+XVV+ZDEchIhxb8YpovkYn640EDX8xCOb3Ei0utRLI8I2bRqhRJjnBdIt1zFlpUgl2ejPxr6SR9pZSJ9Qj6sKlcTewZ0rXd1dxJ3t6uT3X707HhAFM+Q9R0F/+eecJzsDOeNSF+h4a4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774913858; c=relaxed/simple;
-	bh=+sYW0ZZf7O+EcEba7b1iFF9kRwjmqn9VUzOM6ybJquo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lky46D5uHeOd+RKhVpa8lW1f3rJxO3feogI9DXz6xU6T1wMQMyiNWvuR05HIOEws2/dmEnZA+IvLp9VCftyPtAEpv8sz6UvwbTYjw1ApbGW3FygFRA032erYOxIRcmCLfSWTjdBmlhaQZzot06F/q8vbklIof00xRcShUdFbLto=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aywVJr5o; arc=pass smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD1936AB54;
+	Mon, 30 Mar 2026 23:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774914087; cv=none; b=kqAo6gsJzdji2QIMT9Ws9oElmDI4RVPU9DaduE1Ws9w50+7c14ehE6MdmhaSiPqeFAQCDZ2Uutr70cTAH2fHpWv1cOwv/2QLJP0aMu8HvtVmFRRHTzfkSVH/0TM0DIwWMdsSmivJZROx4zWvViXNLf/VCeYQj29CYJdIT9HLS6Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774914087; c=relaxed/simple;
+	bh=Wsb68vwebu5k5GbIZ4m7HzQHX0mtcKHGVK4H/spGrgw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JVnx6tlXPQvo2dfbgAG6ijzehOigNmcSt8KT0qksXaVH+jx9RcfhUcj38cOYqbcT9A3WdqAyl54ioP0wXa9nc4lDTZAsNU/baJ/ecHJkzICkW+uwD0Bk2BllpmsbaIdNBh0W3SpdRtpOSp/6AdYPLbRiwMH9azTwBtn0wwXq8nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=MbuYaueX; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aywVJr5o"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-66bb66db39dso3176765a12.0
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 16:37:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774913855; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WXgPt4RaSmTsvcIsTsIzkwV25tEhx8+PyWgxPLMMrRxY/hYJHC8PpqG+okAbeR2qhW
-         exRwhWAIV9/M64DLr4NW5BKBM9iBEldk6IGvwZrzTg+p30wufhZkziohbQX+sOkr96No
-         8ufLMRnx1N4L1oaDWd/wrYxIBxk9b4CqnWS7woJK5l5mRqaRiLq21Oq+ow5LnqBXOj/G
-         lXV3YUIIhCQ06jAgtHa20wE+/k5Sq00ReCNCycf9Z2vW3mdo/LTuqPR1+Pom3k3pHgDX
-         pptBJ6OZO0dV6/cwKASGculw1ZN0GKDEGM33cuxiAzjwV+v0VHhH+rigIhljQodfUCYe
-         Efkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Rx2HAxz8KPE8ZaRYLuU4rVv3wiaVxPKThZAvSXlP2Uo=;
-        fh=s/U2tX1QyS+6Cr3UC+tsC37VXjN1NmMqAyctztF2ai4=;
-        b=Rsc9ZQIGDPT1eV3YBkMJtK4X/CrQNAmgZW6OU37DQAgD+1AzQCALcttJF6u4YGrrLQ
-         s46A+etWrB1VBUU4nF9lx/6HxBBKIciKIqhRckSW4NVnfMHRBY1So2/EtSP9dcnwA/PA
-         dJb9JSHAsFlyfxe9Fyc6IyeQBL5M5wLdf4fTw0/LxW223+oJF+fg5CGKZQR44GENEOfq
-         cgzUFFjT0CMsKMGL4HVybce0MPUFDoCoWt3gTgWoNjNuKEPL7Rreh6MHkTX1CQxm/c9c
-         1JWBVEoosPEUgEGbT4+lNydbS1HTc2++GUirS/fZztXUF+CPVEeLLS5Lq9WzwabZJB8d
-         ycQA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774913855; x=1775518655; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rx2HAxz8KPE8ZaRYLuU4rVv3wiaVxPKThZAvSXlP2Uo=;
-        b=aywVJr5owQpeBAWMzfBdSlzEjB5Skmz49LBpSpkPuvtTG1IbsX++B75aU32aSoENzN
-         LT7rkWu4ZmwX1tfb+Q+RKYd86OgRRN/5uxewXm4mtErC3yOCrYE5wFhixXhhojCRUbr8
-         Mt7SQ2R9llMHxgMauMQjGztN+vqjv/MUwVUUAJQfjb/TKlk1GRPlctYuDDmoHYtHvw5q
-         LRlGqmE277VVuN66l3Ics17o1mIz4PHGqTATBPV2A6Mlb0toA+KO5N1rvvOU/xrhz4Xf
-         JtC0ncFcHg7NI5Fm78MtMT+eZnQBItr5UBJDn13XK6tP1Hc1sTuModF7iqA57rj/ZTQr
-         P96A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774913855; x=1775518655;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Rx2HAxz8KPE8ZaRYLuU4rVv3wiaVxPKThZAvSXlP2Uo=;
-        b=d9kuXhtMNy3Ik9k5/6thRmtIJIliTBlbEPcXFmXTowIBzoeif8pkpev0cGt4u5+4C9
-         bVDdw6DYk65jKS+EoCwQiJQ6Qji5MrlD/3RsG4UYvR70rF7tVUJsmXnaAUCeI4d1qdim
-         qA9WbBEUns0IkMazrXNHjFpbA761quC9zDTSy9JrXsqBrgEWJxWRwGtV1UAY3vruEpHg
-         gLNOaDjx/RY4jSb5cUulu2PMgkSxWURddhqTvot+pPWv+juf5IdHszErry4SYuJxxSdj
-         dnYSQ2MR0oeSb06jy0J8VIZRa3yuTswMhhyOEdIut1jxiNWeUYseHKgieR85Zhf6sX1s
-         ymlQ==
-X-Gm-Message-State: AOJu0YznayBu+R8y96hx+x840Qo4OJv63aFQdNW/0qzVDnL4EwNXvLnu
-	cf7SENkS9WZiGFqyqGr+oBnxllIgWCfDDcWoTygJ8LeN0A/S/fsxCMXyq3CZDs3ui4CrcWPMra5
-	ZyHJqiuRO8F0PEwYvOOMAAVbXxaW85FA=
-X-Gm-Gg: ATEYQzwtyMn/jV6TE7r82FPgDQI5kbJKTUcpeVCVelcxWccAMv9XHcyYAwlahsGkF75
-	Q1/PzaDdU1koLYqCOG/HkRt7Onb02DIT56ZxtcVgZ0WX4jIfkDKCY4mYpqwlzvgSiVw1hPHbLv1
-	FHOIs+oInJ9VGGbh9qe0n76QAvqSvhHlc9ms9Vlin62PuWw5UMXhQXYYloJc0/35tWv0Pj/4ZVI
-	gwNnPgxxBrtKGR2yhzboIYL8LxVAUpoh2o4VSjgN48zv8OFHYBn896mSFDgM/tFgMxJKyGXI+m8
-	rx5ManrTzvrNNXRiJVI4uUgfwOZnMZ8rgPkByvzNlA==
-X-Received: by 2002:aa7:c4d8:0:b0:66b:aa56:ee5e with SMTP id
- 4fb4d7f45d1cf-66baa56f0d2mr3413745a12.24.1774913855216; Mon, 30 Mar 2026
- 16:37:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="MbuYaueX"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1w7LeK-002rCb-89; Tue, 31 Mar 2026 01:04:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=SqFNvY1V+aOz8GRhxciZ/yNPa759gjISZHD7MtM/Fmg=; b=MbuYaueXdMQp3bLFmRL8FrrdFK
+	YG+4GryjUIHI3irD+p5oUWptBWhztRePe4mUiF0Tlx7WPDuWnEH3BSOBI2Hcvs8mUonnf5OJkC0e1
+	l4JStv8HZsIewiWqcI/kaFH7P9VDrh0tVvNiiXi8hw9ySV+yFlnf+JRTM3g7UEIdjgJ1LZaRYKHwq
+	4KlLft08Jvx8tiFmg7SSNIx7I77UCKTUX47sWwP0yAhGJgTNzT5PORenOwtVzi2aUIIWmiIjZB7/J
+	WWhQISfgt2cZvnDOqoptGzEWzHzaTqZtTEQO+nATgc/APm3MGVhcTJrtVxLUqzjTvTmyOKo05ZMvd
+	mHc9I1Bg==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1w7Le8-0006EB-KT; Tue, 31 Mar 2026 01:03:48 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1w7Ldp-007xmP-N0; Tue, 31 Mar 2026 01:03:29 +0200
+Message-ID: <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
+Date: Tue, 31 Mar 2026 01:03:23 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260326151111.4002475-1-puranjay@kernel.org> <20260326151111.4002475-2-puranjay@kernel.org>
- <CAEf4BzbGhpWLb75OUN4BoEWZOn1g0mGbPPK-yw3WLN57DPxxEw@mail.gmail.com>
-In-Reply-To: <CAEf4BzbGhpWLb75OUN4BoEWZOn1g0mGbPPK-yw3WLN57DPxxEw@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Tue, 31 Mar 2026 00:37:24 +0100
-X-Gm-Features: AQROBzBHrEY4Eoef3Y5xKU4c8mhvvxfia3CgyaAhqOz9l2XcXMc20Diz2XttQ9o
-Message-ID: <CANk7y0hzGN-BW4L=1CchEz8cHGbrjESU-SAK+KGxGZiNWNcDjQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH bpf v5 1/3] bpf: fix mm lifecycle in open-coded
- task_vma iterator
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Jiayuan Chen <mrpre@163.com>, John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+ <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+ <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
+ <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 31, 2026 at 12:24=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Mar 26, 2026 at 8:11=E2=80=AFAM Puranjay Mohan <puranjay@kernel.o=
-rg> wrote:
-> >
-> > The open-coded task_vma iterator reads task->mm locklessly and acquires
-> > mmap_read_trylock() but never calls mmget(). If the task exits
-> > concurrently, the mm_struct can be freed as it is not
-> > SLAB_TYPESAFE_BY_RCU, resulting in a use-after-free.
-> >
-> > Use get_task_mm() to safely read task->mm under task_lock() and acquire
-> > an mm reference. Drop the reference via bpf_iter_mmput_async() in
-> > _destroy() and error paths. bpf_iter_mmput_async() is a local wrapper
-> > around mmput_async() with a fallback to mmput() on !CONFIG_MMU.
-> >
-> > Reject irqs-disabled contexts (including NMI) up front. Operations used
-> > by _next() and _destroy() (mmap_read_unlock, bpf_iter_mmput_async)
-> > take spinlocks with IRQs disabled (pool->lock, pi_lock). Running from
-> > NMI or from a tracepoint that fires with those locks held could
-> > deadlock. Disable IRQs around get_task_mm() to prevent raw tracepoint
-> > re-entrancy from deadlocking on task_lock().
-> >
-> > Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfunc=
-s")
-> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> > ---
-> >  kernel/bpf/task_iter.c | 45 +++++++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 40 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> > index 98d9b4c0daff..faf4d6197608 100644
-> > --- a/kernel/bpf/task_iter.c
-> > +++ b/kernel/bpf/task_iter.c
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/bpf_mem_alloc.h>
-> >  #include <linux/btf_ids.h>
-> >  #include <linux/mm_types.h>
-> > +#include <linux/sched/mm.h>
-> >  #include "mmap_unlock_work.h"
-> >
-> >  static const char * const iter_task_type_names[] =3D {
-> > @@ -794,6 +795,15 @@ const struct bpf_func_proto bpf_find_vma_proto =3D=
- {
-> >         .arg5_type      =3D ARG_ANYTHING,
-> >  };
-> >
-> > +static inline void bpf_iter_mmput_async(struct mm_struct *mm)
-> > +{
-> > +#ifdef CONFIG_MMU
-> > +       mmput_async(mm);
-> > +#else
-> > +       mmput(mm);
-> > +#endif
-> > +}
-> > +
-> >  struct bpf_iter_task_vma_kern_data {
-> >         struct task_struct *task;
-> >         struct mm_struct *mm;
-> > @@ -825,6 +835,18 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_i=
-ter_task_vma *it,
-> >         BUILD_BUG_ON(sizeof(struct bpf_iter_task_vma_kern) !=3D sizeof(=
-struct bpf_iter_task_vma));
-> >         BUILD_BUG_ON(__alignof__(struct bpf_iter_task_vma_kern) !=3D __=
-alignof__(struct bpf_iter_task_vma));
-> >
-> > +       /*
-> > +        * Reject irqs-disabled contexts including NMI. Operations used
-> > +        * by _next() and _destroy() (mmap_read_unlock, bpf_iter_mmput_=
-async)
-> > +        * can take spinlocks with IRQs disabled (pi_lock, pool->lock).
-> > +        * Running from NMI or from a tracepoint that fires with those
-> > +        * locks held could deadlock.
-> > +        */
-> > +       if (irqs_disabled()) {
-> > +               kit->data =3D NULL;
-> > +               return -EBUSY;
-> > +       }
-> > +
-> >         /* is_iter_reg_valid_uninit guarantees that kit hasn't been ini=
-tialized
-> >          * before, so non-NULL kit->data doesn't point to previously
-> >          * bpf_mem_alloc'd bpf_iter_task_vma_kern_data
-> > @@ -834,7 +856,13 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_i=
-ter_task_vma *it,
-> >                 return -ENOMEM;
-> >
-> >         kit->data->task =3D get_task_struct(task);
-> > -       kit->data->mm =3D task->mm;
-> > +       /*
-> > +        * Disable IRQs so that a raw tracepoint re-entering the
-> > +        * iterator on this CPU cannot deadlock on task_lock().
-> > +        */
-> > +       local_irq_disable();
-> > +       kit->data->mm =3D get_task_mm(task);
-> > +       local_irq_enable();
-> >         if (!kit->data->mm) {
-> >                 err =3D -ENOENT;
-> >                 goto err_cleanup_iter;
-> > @@ -842,17 +870,23 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_=
-iter_task_vma *it,
-> >
-> >         /* kit->data->work =3D=3D NULL is valid after bpf_mmap_unlock_g=
-et_irq_work */
-> >         irq_work_busy =3D bpf_mmap_unlock_get_irq_work(&kit->data->work=
-);
-> > -       if (irq_work_busy || !mmap_read_trylock(kit->data->mm)) {
-> > +       if (irq_work_busy) {
-> >                 err =3D -EBUSY;
-> > -               goto err_cleanup_iter;
-> > +               goto err_cleanup_mmget;
-> > +       }
-> > +
-> > +       if (!mmap_read_trylock(kit->data->mm)) {
-> > +               err =3D -EBUSY;
-> > +               goto err_cleanup_mmget;
-> >         }
->
-> what's the purpose of this split of single if into two equivalent if
-> (with the same cleanup handling and error code, as far as I can see)?
-> Plus you are removing it in the next patch anyways...
+On 3/26/26 07:26, Martin KaFai Lau wrote:
+> On 3/15/26 4:58 PM, Michal Luczaj wrote:
+>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
+>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
+>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
+>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
+>>> when the bpf_map_update_elem(sockmap) support was added iirc.
+>>
+>> What about a situation when unix_sk is stored in a sockmap, then tc prog
+>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
+>> useful, but seems doable.
+> 
+> [ Sorry for the late reply ]
+> 
+> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible 
+> from tc :(
+> 
+> Then unix_state_lock() in its current form cannot be safely acquired in 
+> sock_map_update_elem(). It is currently a spin_lock() instead of 
+> spin_lock_bh().
 
-Was trying something else earlier and missed un-doing this. Will
-change in the next version.
+Is there a specific deadlock you have in your mind?
+
+>>> The only path left is bpf_iter, which I believe was the primary use case
+>>> when adding bpf_map_update_elem(sockmap) support [1]. It would be nice
+>>> to avoid bh_lock_sock() when calling from all bpf_iter (tcp/udp/unix)
+>>> where lock_sock() has already been done. It is more for
+>>> reading-correctness though. This just came to my mind.
+>>> has_current_bpf_ctx() can be used to check this. sockopt_lock_sock() has
+>>> been using it to conditionally take lock_sock() or not.
+>>
+>> [ One clarification: bh_lock_sock() is a sock_map_update_elem() thing,
+>> which can only be called by a bpf prog. IOW, has_current_bpf_ctx() is
+>> always `true` in sock_map_update_elem(), right? ]
+> 
+> For all the bpf prog types allowed by may_update_sockmap() to do 
+> bpf_map_update_elem(sockmap), only BPF_TRACE_ITER should have 
+> has_current_bpf_ctx() == true. The tc prog (and others allowed in 
+> may_update_sockmap()) will have has_current_bpf_ctx() == false when 
+> calling sock_map_update_elem().
+
+OK, so let's take test_sockmap_update.c:copy_sock_map(). It is a tc prog
+and it calls bpf_map_update_elem() -> sock_map_update_elem(), right? But
+running `test_progs -t "sockmap_basic/sockmap update"` shows (pr_warn() in
+sock_map_update_elem()) that has_current_bpf_ctx() == true. That's expected
+and has_current_bpf_ctx() would be false if sock_map_update_elem() was ran
+via a hook?
+
+> The tc case of bpf_map_update_elem(unix_sk) is unfortunate and requires 
+> going back to the drawing board. I think checking unix_peer(sk) for NULL 
+> without acquiring unix_state_lock() is needed for the 
+> sock_map_update_elem() path, since changing unix_state_lock() for this 
+> unknown use case seems overkill.
+> 
+> Whether sock_map_update_elem_"sys"() needs unix_state_lock() is up for 
+> debate.
+
+All right, I'll re-spin the series reverting back to v1.
+
+> For bpf_iter_unix_seq_show(), one thought is to add unix_state_lock() 
+> there before running the bpf iter prog. iiuc, it is what Kuniyuki has in 
+> mind also to allow bpf iter prog having a stable view of unix_sock. This 
+> could be a followup.
+> [fwiw, it was why I first thought of has_current_bpf_ctx() to avoid 
+> sock_map_update_elem() taking unix_state_lock() again if 
+> bpf_iter_unix_seq_show() acquires unix_state_lock() earlier. I later 
+> concluded (but proved to be incorrect) that tc cannot call 
+> bpf_map_update_elem(unix_sk).]
+> 
+>>
+>> Let me know if I'm correctly rephrasing your idea: assume all bpf-context
+>> callers hold the socket locked or keep it "stable" (meaning: "sk won't
+>> surprise sockmap update by some breaking state change coming from another
+>> thread"). As you said, most bpf iters already take the sock_lock(), and I
+> 
+> Right, all bpf iter (udp, tcp, unix) has acquired the lock_sock() before 
+> running the bpf iter prog. afaik, the only exception is netlink bpf iter 
+> but it cannot be added to sock_map afaik.
+
+And sock_{map,hash}_seq_show() (being a part of bpf iter machinery) needs
+to take lock_sock() just as well? Would that require a special-casing
+(unix_state_lock()) for af_unix?
+
+>> have a patch that fixes sock_{map,hash}_seq_show(). Then we could try
+>> dropping that bh_lock_sock().
+>>
+>>> [ I would still keep patch 3 though. ]
+>>
+>> Right.
+>>
+>>> [1]: https://lore.kernel.org/bpf/20200821102948.21918-1-lmb@cloudflare.com/
+>>>
+>>>>
+>>>> In a parallel thread I've asked Kuniyuki if it might be better to
+>>>> completely drop patch 2/5, which would change how we interact with
+>>>> sock_map_close(). Lets see how it goes.
+>>>>
+>>>
+>>> If patch 2 is dropped, lock_sock() is always needed for unix_sk?
+>>
+>> For sock_map_update_elem_sys() I wanted to lock_sock()+unix_state_lock()
+>> following Kuniyuki's suggestion to keep locking pattern/order (that repeats
+>> when unix bpf iter prog invokes bpf_map_update_elem() ->
+>> sock_map_update_elem()). For sock_map_update_elem() not, we can't sleep there.
+> 
+
