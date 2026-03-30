@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2646172623;
-	Mon, 30 Mar 2026 07:48:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7330F3AB299;
+	Mon, 30 Mar 2026 08:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774856924; cv=none; b=QbhMhm+N999P3ugvNvOXuCYc/MQVTwIQr3I+2EpAWBb0OBrasmmfziODd5zxMEudszrCJ4EIG6WkPjXuzVSVYZnnqPMoMtjo4mjRtJHuf/Dj/J7ClI7MEVQzKmrR8phj17UvpH5c9yVbRNjfP/9oE2szbJxCKbXcHZOotQOB9mU=
+	t=1774857833; cv=none; b=rjKY/aKGheMgincpN3XhdGg30Tm7h02lVLRMXk5MQtGxf/ElsFUM7UCLB+LtTmRVipuDQdeUWum1sNEw5LANSR8PlVJd0Ht6bJXqJ7QvFi0QeA6SZZRE7sBwiSkyiDcobQbLORbn3V/w4uXWzOBsEAlAO1rcbcoLcljGg13JjNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774856924; c=relaxed/simple;
-	bh=aDhUMEJ9z7sa3Ar3gcl5539YFInQhpyKyYNNjaTyXHA=;
+	s=arc-20240116; t=1774857833; c=relaxed/simple;
+	bh=09C/OzGwqqMv+kkQJpECbI+iQQ6V2dADdMjc2ANykCE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HFRWFEXThGN4V5siJxT1E5g0Ul2jn/gjb8t/HST44Z0E0LyN0iL28V+y071Nicjd9dZUPWLjfO7PjicJdWXF29lItldq/2+Mzjd/vEzSG1JtTxg61I9MStaR31IFSjYtnXB4InmAgfGtj/bvg8NVClLq1NueNM5qGFaYa71hdek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EiunZEx0; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=UH4K00UCMAtvtlGqGV0ZXPIKqjOJ0B8jEdx+a+rti3/xtIr60imPQd7sTqKubM6lA6FVwDE7RATlDZhLmJYS29whlkEbls2ZON141YajX2NYjtAqpLyFWiUwstH85JI0Jie2QhIHgdZfApPwwF5ID8aDizu23esJZuDXY+Z3IAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=rMGJXaow; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EiunZEx0"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="rMGJXaow"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=a5+hZawfd/GIwIr79hxwmDfEBJDfCzXxaknum3x1+jQ=; b=EiunZEx0Ix0cec2hQJYx282aq+
-	Qjd7WQ+exfgg/aSpMcUFOmT+mLThnYg1VHot82GJQfhG4SWf3EyZE8AcGJpy6EdKDdEBrRIN7hih2
-	zKb/RowuWjAtcXsz20lElQq8eJBIRrasO8KtMJP02utP0wOzUUGfUyDfyaGGIV9eta0L7nLxboOLL
-	zG6mB3Xiv8i9zk0twluYEMbYJ4084UJJW2hCthkk59P4F+drBCWrxVl7Feqkc9wzfJ3SEIxa6+wpN
-	YDxaLiyqYDrkWaWN0cQla8NKHfpwYengXRl5ggSpSfdP0x/q2GL2HKWG3HgjIJ4iyzoUwJLzpQj5r
-	4LE9VHow==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
+	bh=GOWEtAf9N1qRA+nzgdIl4Ke886MQ7Kmtcy1GKvdhTK8=; b=rMGJXaowZjxvBAvapevPWez30t
+	G1BQn9KbtVWKCeWxJ3NN7imyu/PxsSfuJI0P+pHvvLsdJiRcS1+Q/ptitt4FsYosomNx2xL8WM48m
+	Szj0wg0SUrP8UmpVLTzkGxopT4zDrx+dmopoJMP5mgac49ZaZ5D2BNFTCPr7Ix6btbbRiAue/r1na
+	xxrqeDGqj2T5GfJk8AF/vKLE+Af3GRO7WrlJHiIGSEUpEzeESXn2t0jSM31K3KKvg+jRbvnzfr5oD
+	YrgtlI8YYGA8jSwh89zazCJHC+ovKCCVFZjY10K6JgBGnodve0h3ui3d6wpJ9wfzFP6+sPq8Yxuy3
+	EC9YCGUA==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w77MB-000Jlv-2q;
-	Mon, 30 Mar 2026 09:48:19 +0200
+	id 1w77b9-000MC3-2m;
+	Mon, 30 Mar 2026 10:03:47 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w77MA-000JC6-0v;
-	Mon, 30 Mar 2026 09:48:18 +0200
-Message-ID: <168347a2-993b-4267-902b-9fe17a58f483@iogearbox.net>
-Date: Mon, 30 Mar 2026 09:48:17 +0200
+	id 1w77b8-0005Vi-2M;
+	Mon, 30 Mar 2026 10:03:46 +0200
+Message-ID: <3532664e-1f62-412c-9819-b048f62da010@iogearbox.net>
+Date: Mon, 30 Mar 2026 10:03:46 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,16 +48,17 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/2] net: clear the dst when performing encap
- / decap
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: test that dst is cleared
+ on same-protocol encap
 To: Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, maze@google.com,
- willemdebruijn.kernel@gmail.com, ast@kernel.org, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
 References: <20260329180428.2657785-1-kuba@kernel.org>
+ <20260329180428.2657785-2-kuba@kernel.org>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -103,24 +104,96 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260329180428.2657785-1-kuba@kernel.org>
+In-Reply-To: <20260329180428.2657785-2-kuba@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27956/Mon Mar 30 08:24:32 2026)
 
 On 3/29/26 8:04 PM, Jakub Kicinski wrote:
-> Commit ba9db6f907ac ("net: clear the dst when changing skb protocol")
-> added dst clearing when a BPF program changes the skb protocol
-> (e.g. IPv4 to IPv6). Since that was a fix we only cleared the dst when
-> the L3 protocol actually changes to keep it minimal. As suggested during
-> the discussion (see Link) encap or decap operation which wraps or unwraps
-> a same-protocol header may also render the existing dst incorrect - even
-> if that doesn't result in a crash, just the wrong route for the now-outermost
-> IP dst.
+> Verify that bpf_skb_adjust_room() clears the routing dst even when
+> the encap L3 protocol matches the original packet (e.g. IPIP).
+> The dst selected for the inner packet is not valid for the
+> encapsulated result; a stale dst could lead to misrouting.
 > 
-> Make dropping dst unconditional for bpf_skb_change_proto() and all
-> L3 encap / decap ops.
-> 
-> Link: https://lore.kernel.org/CANP3RGfRaYwve_xgxH6Tp2zenzKn2-DjZ9tg023WVzfdJF3p_w@mail.gmail.com
 > Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
 Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+
+For new tests we should ideally only be using tcx links and not the old
+qdisc approach unless there is specifc reason to. Any objections if I
+fold this in while applying?
+
+  .../selftests/bpf/prog_tests/test_dst_clear.c | 23 ++++++-------------
+  .../selftests/bpf/progs/test_dst_clear.c      |  2 +-
+  2 files changed, 8 insertions(+), 17 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+index 8190c56556fb..c8e9c6947a2c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_dst_clear.c
+@@ -15,11 +15,11 @@
+  
+  void test_dst_clear(void)
+  {
+-	LIBBPF_OPTS(bpf_tc_hook, qdisc_hook, .attach_point = BPF_TC_EGRESS);
+-	LIBBPF_OPTS(bpf_tc_opts, tc_attach);
++	LIBBPF_OPTS(bpf_tcx_opts, tcx_opts);
+  	struct nstoken *nstoken = NULL;
+  	struct test_dst_clear *skel;
+  	struct sockaddr_in addr;
++	struct bpf_link *link;
+  	socklen_t addrlen;
+  	char buf[128] = {};
+  	int sockfd, err;
+@@ -36,18 +36,11 @@ void test_dst_clear(void)
+  	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
+  		goto fail;
+  
+-	qdisc_hook.ifindex = if_nametoindex("lo");
+-	if (!ASSERT_GT(qdisc_hook.ifindex, 0, "if_nametoindex lo"))
+-		goto fail;
+-
+-	err = bpf_tc_hook_create(&qdisc_hook);
+-	if (!ASSERT_OK(err, "create qdisc hook"))
+-		goto fail;
+-
+-	tc_attach.prog_fd = bpf_program__fd(skel->progs.dst_clear);
+-	err = bpf_tc_attach(&qdisc_hook, &tc_attach);
+-	if (!ASSERT_OK(err, "attach filter"))
++	link = bpf_program__attach_tcx(skel->progs.dst_clear,
++				       if_nametoindex("lo"), &tcx_opts);
++	if (!ASSERT_OK_PTR(link, "attach_tcx"))
+  		goto fail;
++	skel->links.dst_clear = link;
+  
+  	addrlen = sizeof(addr);
+  	err = make_sockaddr(AF_INET, IPV4_IFACE_ADDR, UDP_TEST_PORT,
+@@ -66,10 +59,8 @@ void test_dst_clear(void)
+  	ASSERT_TRUE(skel->bss->dst_cleared, "dst_cleared");
+  
+  fail:
+-	if (nstoken) {
+-		bpf_tc_hook_destroy(&qdisc_hook);
++	if (nstoken)
+  		close_netns(nstoken);
+-	}
+  	SYS_NOFAIL("ip netns del " NS_TEST);
+  	test_dst_clear__destroy(skel);
+  }
+diff --git a/tools/testing/selftests/bpf/progs/test_dst_clear.c b/tools/testing/selftests/bpf/progs/test_dst_clear.c
+index 7ac9604fd99c..c22a6eeb4798 100644
+--- a/tools/testing/selftests/bpf/progs/test_dst_clear.c
++++ b/tools/testing/selftests/bpf/progs/test_dst_clear.c
+@@ -13,7 +13,7 @@ void *bpf_cast_to_kern_ctx(void *) __ksym;
+  bool had_dst = false;
+  bool dst_cleared = false;
+  
+-SEC("tc")
++SEC("tc/egress")
+  int dst_clear(struct __sk_buff *skb)
+  {
+  	struct sk_buff *kskb;
+-- 
+2.43.0
+
+
