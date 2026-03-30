@@ -1,146 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5ACA3B0AEE;
-	Mon, 30 Mar 2026 11:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F183C9453;
+	Mon, 30 Mar 2026 11:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774871245; cv=none; b=dmq2LIfgxDB3xgcwRL+cdz13wgMR8AKN9c+PB6V5V1DVxTPD/FnEAKQU0t0DoewWR4emvG/UKjHTbKcNEZMc2ugIwEjHU6ObOd6bOQduU7j1kFEoq2zhnDqzNeBbOgvR3IjTd4Kg6vwDeyKP/NG6p+x/BGtcrTMlIIX8ooFmwzI=
+	t=1774871247; cv=none; b=o+mxhhgGSPjAd0vIUQBatzOXkfK3SIRS7PruA+lQ96nAL3gSapgpaC3/G6Y6rpz6QS+FzCBT4LtkL/VyiEV+yz5HAaL1NuaxXp81y19/E6NoMJb4z9Wiw8OccThgInf9BFJmNMx6ItlimRM+PJLHTPPFESCC1OyLCh5diQI78JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774871245; c=relaxed/simple;
-	bh=clntS1H3+5oPRN7KVb5bBCyEIIGwrQTDwAc3gHvnz1c=;
+	s=arc-20240116; t=1774871247; c=relaxed/simple;
+	bh=WEMKIeHZ724u6rP6iwEPboq1Qx2piqn13mD0Got0lBc=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=krvP7Dt6b4nKqbFykic1huFgG8JgO/MTYnrbS4v/+KmYIoIOFJH+G+UM4deWuFR5V+YvB3xLTiKPWMtIhNlIvMoQkHfvo44vb32mTJst8hzLCwO/m2yV54QZ1I5tlHCCnmws0biwc0yIvgHwNnYixBA0RgFQEDaAt0GYeJBZYz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S9zGHmYZ; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=Hm5C5Cfc7TjTeiqXTJBG6imWGYHktBxj5Oh7hYtOIkddR5XQPGMglm0T/JH0jnPqzkvaZ+ztcTyiThFDtkLrLjfJJMlVXvkyjBkRtI6uR7JWPgUj26RpofJZj0ck6OngRo8npXPru1+WZY5pukXbkA15B/CQzFpZsof0SFBX4HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DtXazfOc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9zGHmYZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0123C4CEF7;
-	Mon, 30 Mar 2026 11:47:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DtXazfOc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE6FC4CEF7;
+	Mon, 30 Mar 2026 11:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774871245;
-	bh=clntS1H3+5oPRN7KVb5bBCyEIIGwrQTDwAc3gHvnz1c=;
+	s=k20201202; t=1774871247;
+	bh=WEMKIeHZ724u6rP6iwEPboq1Qx2piqn13mD0Got0lBc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=S9zGHmYZTr1Wko6gmvrRWwvkyD4op65xV0pkrTtdZlnIswauU6bPrrrxCt7kJTdoD
-	 gKedcpjkZPCKVbckpWPl0HVGy7k7R8DaFU6zhkMacRqlcpWvePKFTNMsjshOzGxTXD
-	 q+E/sb0fobctdmfM4Ll1dEE/yJNg3yXRD288tRs3mPTdGOef7ah4mhx10Nlm8dCW05
-	 z00rW+U1BGc6NbDx/9SCwOS1r/kICger5tqpOlpPc+kdfU2eDMlEjooDQcj+xQ/lSu
-	 4x9u9SbT+CFLpiuG547bB7LxnmlRzR3d9N0vUKRgakmOvXZyboKeOUUVQLmFPKzzee
-	 R3r3VdhyG2GSQ==
-Content-Type: multipart/mixed; boundary="===============7468880571898843358=="
+	b=DtXazfOcDp/Yv+uWg/YMZ+fd862B+1BMAEuvxzIlk+MgSsWpEvC3ljLVHeH6KU/rg
+	 Uh4yoNWbOT6KetTSmG1WZklnfxnN61Cjj01NoaHZ0ruzxpw7HcFuUG4cTnk3xOZ9T8
+	 JYGTCrjfvnN5GPsK5Bb1R5KrUpTht66tBzNr0baotKuD3UaIe6rtht+7Pml4sfpe7E
+	 sCO2uzZdGhcqwrbjarmixlVk4a1FjIhl5IbODR1Pf8y4IILWB2edXJucu2jH5AJfjV
+	 o49NO+KV7mbClWXCOxMPEiYynr26Hffnc7QyqPQ9mHievWeN7VSTcNC2BPK26oYXUF
+	 CsnxNEN6Dz3NA==
+Content-Type: multipart/mixed; boundary="===============7669256081677238455=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3ccc2ca64709f1672ed40113f9dc4bd4b988f826eeda55009ea0b7ea6f7c2d20@mail.kernel.org>
-In-Reply-To: <20260330110019.549079-2-varunrmallya@gmail.com>
-References: <20260330110019.549079-2-varunrmallya@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 1/3] libbpf: Auto-upgrade uprobes to multi-uprobes when supported
+Message-Id: <d5f1a4484d26fbff3aaafd358025dffeb2ba3cbff9c35c1643e4b0ab503201d6@mail.kernel.org>
+In-Reply-To: <20260330110019.549079-4-varunrmallya@gmail.com>
+References: <20260330110019.549079-4-varunrmallya@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v2 3/3] libbpf: Auto-upgrade kprobes to multi-kprobes when supported
 From: bot+bpf-ci@kernel.org
 To: varunrmallya@gmail.com,andrii@kernel.org,alan.maguire@oracle.com,yonghong.song@linux.dev,song@kernel.org,bpf@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,eddyz87@gmail.com,martin.lau@linux.dev,jolsa@kernel.org,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,leon.hwang@linux.dev,varunrmallya@gmail.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 30 Mar 2026 11:47:24 +0000 (UTC)
+Date: Mon, 30 Mar 2026 11:47:26 +0000 (UTC)
 
---===============7468880571898843358==
+--===============7669256081677238455==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 9ea41f40dc82..056bc50a0bbb 100644
+> index 056bc50a0bbb..7b5f83ce543e 100644
 > --- a/tools/lib/bpf/libbpf.c
 > +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> @@ -12783,6 +12802,32 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
->  		func_offset += sym_off;
->  	}
+> @@ -11815,6 +11835,25 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+>  	offset = OPTS_GET(opts, offset, 0);
+>  	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
 >
-> +	/* This provides backwards compatibility to programs using uprobe, but
-> +	 * have been auto-upgraded to multi uprobe.
+> +	/* This provides backwards compatibility to programs using kprobe, but
+> +	 * have been auto-upgraded to multi kprobe.
 > +	 */
-> +	if (prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI) {
-> +		LIBBPF_OPTS(bpf_uprobe_multi_opts, multi_opts);
-> +		unsigned long offsets[1] = {func_offset};
+> +	if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI &&
+> +	    offset == 0 && attach_mode == PROBE_ATTACH_MODE_DEFAULT) {
+> +		LIBBPF_OPTS(bpf_kprobe_multi_opts, multi_opts);
+> +		const char *syms[1] = { func_name };
 > +		__u64 bpf_cookie;
 > +
 > +		multi_opts.retprobe = OPTS_GET(opts, retprobe, false);
-> +		if (offsets[0] || func_name) {
-> +			multi_opts.offsets = offsets;
-> +			multi_opts.cnt = 1;
-> +		}
-
-When func_offset is 0 and func_name is NULL, this condition is false
-and multi_opts.offsets and multi_opts.cnt are never set. The subsequent
-call to bpf_program__attach_uprobe_multi() then fails with -EINVAL
-because both func_pattern and cnt are 0:
-
-bpf_program__attach_uprobe_multi() {
-    ...
-    if (!func_pattern && cnt == 0)
-        return libbpf_err_ptr(-EINVAL);
-    ...
-}
-
-This can happen when callers use bpf_program__attach_uprobe() on an
-auto-upgraded program with offset 0:
-
-bpf_program__attach_uprobe() {
-    DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts, .retprobe = retprobe);
-    return bpf_program__attach_uprobe_opts(..., func_offset, &opts);
-}
-
-Here func_name is never set in opts. The old perf_event path handled
-offset 0 without issue. Should multi_opts.offsets and multi_opts.cnt
-always be set unconditionally, since offset 0 is a valid uprobe offset?
-
-> +		if (ref_ctr_off) {
-> +			multi_opts.ref_ctr_offsets = &ref_ctr_off;
-> +			multi_opts.cnt = 1;
-> +		}
+> +		multi_opts.syms = syms;
+> +		multi_opts.cnt = 1;
 > +		bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-> +		if (bpf_cookie) {
+> +		if (bpf_cookie)
 > +			multi_opts.cookies = &bpf_cookie;
-> +			multi_opts.cnt = 1;
-> +		}
 > +
-> +		return bpf_program__attach_uprobe_multi(prog, pid, binary_path,
-> +							NULL, &multi_opts);
+> +		return bpf_program__attach_kprobe_multi_opts(prog, NULL, &multi_opts);
 > +	}
+> +
+> +	legacy = determine_kprobe_perf_type() < 0;
+
+What happens when a program was auto-upgraded to
+BPF_TRACE_KPROBE_MULTI but the caller passes offset != 0 or
+attach_mode == PROBE_ATTACH_MODE_LINK?
+
+The redirect above is skipped, and the code falls through to the
+perf_event path, which eventually calls bpf_link_create() with
+BPF_PERF_EVENT. The kernel's bpf_prog_attach_check_attach_type()
+in link_create() rejects this:
+
+kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type() {
+    case BPF_PROG_TYPE_KPROBE:
+        if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI &&
+            attach_type != BPF_TRACE_KPROBE_MULTI)
+            return -EINVAL;
+}
+
+This affects callers of the public API
+bpf_program__attach_kprobe_opts() who have a SEC("kprobe") program
+that was auto-upgraded but then manually attach with offset != 0
+(the get_func_ip_test.c case) or with PROBE_ATTACH_MODE_LINK (the
+test_attach_probe_manual.c case). The selftests were updated to use
+.single, but external users of the API would get a confusing
+-EINVAL with no diagnostic.
+
+Would it make sense to add a pr_warn here for the fallthrough case
+when expected_attach_type == BPF_TRACE_KPROBE_MULTI, suggesting
+SEC("kprobe.single") as a workaround? Something like:
+
+    if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI) {
+        pr_warn("prog '%s': kprobe was auto-upgraded to multi but "
+                "offset or attach_mode is incompatible; "
+                "use SEC(\"kprobe.single\") instead\n",
+                prog->name);
+        return libbpf_err_ptr(-ENOTSUP);
+    }
 
 [ ... ]
 
-> @@ -12902,13 +12948,14 @@ static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf
->  			else
->  				offset = 0;
->  		}
-> -		opts.retprobe = strcmp(probe_type, "uretprobe") == 0 ||
-> -				strcmp(probe_type, "uretprobe.s") == 0;
-> -		if (opts.retprobe && offset != 0) {
-> +		is_retprobe = strcmp(probe_type, "uretprobe") == 0 ||
-> +			      strcmp(probe_type, "uretprobe.s") == 0;
+> @@ -12269,14 +12308,24 @@ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf
+>  	*link = NULL;
+>
+>  	/* no auto-attach for SEC("kprobe") and SEC("kretprobe") */
+> +	if (strcmp(prog->sec_name, "kprobe") == 0 ||
+> +	    strcmp(prog->sec_name, "kretprobe") == 0 ||
+> +	    strcmp(prog->sec_name, "kprobe.single") == 0 ||
+> +	    strcmp(prog->sec_name, "kretprobe.single") == 0)
+>  		return 0;
 
-Shouldn't this also match "uretprobe.single"? When auto-attaching
-with SEC("uretprobe.single/binary:func"), sscanf sets probe_type to
-"uretprobe.single", which doesn't match either "uretprobe" or
-"uretprobe.s". As a result is_retprobe is false and opts.retprobe
-stays false, so the program gets attached as a regular uprobe instead
-of a return probe.
+This isn't a bug, but the comment above still says SEC("kprobe")
+and SEC("kretprobe") -- should it also mention the .single
+variants now that they are handled here?
 
-Something like strncmp(probe_type, "uretprobe", 9) == 0 would cover
-all uretprobe variants ("uretprobe", "uretprobe.s", "uretprobe.single").
-
-> +		if (is_retprobe && offset != 0) {
->  			pr_warn("prog '%s': uretprobes do not support offset specification\n",
->  				prog->name);
->  			break;
->  		}
-> +		opts.retprobe = is_retprobe;
->  		opts.func_name = func_name;
->  		*link = bpf_program__attach_uprobe_opts(prog, -1, binary_path, offset, &opts);
->  		ret = libbpf_get_error(*link);
+[ ... ]
 
 
 ---
@@ -148,4 +139,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23741893093
---===============7468880571898843358==--
+--===============7669256081677238455==--
