@@ -1,199 +1,262 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011035.outbound.protection.outlook.com [52.101.65.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5897B37C113;
-	Mon, 30 Mar 2026 11:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.35
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774870119; cv=fail; b=aCf/nBEGUm7SeLkZ11j9LZvaamX/zuRVxoeg26xNDkgopg1N4c5tZeZBMAJKUPWC5vyxktrGf6Qz59yL2TbUNx0fBgstqu7wRfY74w+gTGf4reWitvtr1vqLg4O0h0YmupaNIaGipKeuoKfbAHlD6Yr6IaYJZPB93mDB4uMaM24=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774870119; c=relaxed/simple;
-	bh=DaALN+Ra6wPkKkWMyctqufLeFNZxXInW+2cm+nS98P8=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=HHZjKriyrFbFmyfMnb5mB3MHgqQGLOa6bHNhPhc0NPCJ+OWGJbz3KHhwPLhf0DaqkrKc3ZBNFglQVB6jb4QKCfxfNQvTyyvHM1fbCS8nP/HSQ1gLIlSsc3Ggx+G945wnDLDUjQZNPUNTodwH8oglzrJ/+k+glqscvqXVbKi8ZHE=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=f9DfSpg9; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=f9DfSpg9; arc=fail smtp.client-ip=52.101.65.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0C93BF68A
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 11:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774870754; cv=none; b=r9HUssOhKtMvA6RIrjBfbRRrPKtuCE2rFLnI5HD0wu3JBrRFst/Evp9Uoxc1kqVdZlOFthEeJ+JCOxH2dB8rtq4KY8RNfb+YYUCCmYgbxqNhI4ZcOdLU9FLS26GUOjSQlRsTA88atKrx1YHlGSJXd9num3NAbp3Msvr4OgUNAaM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774870754; c=relaxed/simple;
+	bh=ZYRJx/I5+1KfuQdPQQc0kQq0yncC1iZME1SDfw6Dnz4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=L8JZWWeNJIsL/BZsXKq569rSncfuCNoKT8TO4oMcB14Vl9TiBExfTUQmHOJI2fiVZeHeq68Q2LErKZO7IYKD6UDjPyFooXchUegNu2jHkBIQZf4s7kjn5nBjOfWcjfNoTGvspvknGGS9qC0+YVdBv/3N+bM7pObzBf0RNwGfpH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=le2de8bd; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="f9DfSpg9";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="f9DfSpg9"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=GLklLBZUCurHUwuEWmi8xk0ElcU81S8aVzq4muV5wHQunES14kYmWclyeYb3WDkg69QQbIK3w16w+Q5PVvJQpwyDmO+ggbxhLL1cosL6DJEGNZzCctw4CXXL07Oyuwvx6s8muew/8DlHQwaZ3TaUCUj9ac0PgIMreWE8nPEO72MPof4hI4430QQwtt79Z1WIEOQytu72SRqw5BHJZRCUk39w37BOfSfPsHpDzyo2GnOGVvZnXr/2y3kAmNPzTAybyDPb4iN89lAgR6zCaIP5GbHFknTlhvZhzsEz2+gdfgmIS24kYKenc+q7xi6EHMECgeddxIXmOqZ9VWwfKVykVg==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VePiXHT+bXiX2+1kXjfUmyOtdyP+0aliWn7ccyDjRbo=;
- b=v/sMpLOjZaVWzd6Z1qAM0yqcC3z8Q8J/YR+EgLnDyuOg899HlHskY+nWDUJwSrxZAPkJynlAPfCDITEe0uMZwnZYH+SbfFdOqVHK1KjHvunmO/DAxbsciaT2k9/SprY6NBKYIWAdItmC94A8CrjxKctaVbxdqiZJSxgjwW5a26wZD3XIR1vK9N8XSGJww9P46CdJGlsS5jA2Q6J6JOADFzEEncjXeCBwyty2VqyXilausBgqfNQgXMz8ZEFDT6pYme6fPcf7L+a1BtRBhkccSyofMsHnnetgOKQalIOwFy60fax6U5TXVgQ9NKxBjRtz8JiPj2cr/GLT52AQlvPBYA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VePiXHT+bXiX2+1kXjfUmyOtdyP+0aliWn7ccyDjRbo=;
- b=f9DfSpg9Oz/IbyYmVvyI0ssTshoZlFAP4vcjAhM23/z7TxwFOEVd0W4RJvWfYrmfVAUkZeeHSAlVw2F/SX8AB/L42RkAsLeFN+9H4jsAstdg81lkGX3J6ntw4jK5E3gebWJ3KoIHLXvuLi3bvq0RjrutrNSV7Cn5e0FD7S5etZs=
-Received: from CWLP123CA0187.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:19c::6)
- by DU0PR08MB9051.eurprd08.prod.outlook.com (2603:10a6:10:470::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
- 2026 11:28:31 +0000
-Received: from AMS0EPF000001A8.eurprd05.prod.outlook.com
- (2603:10a6:400:19c:cafe::1) by CWLP123CA0187.outlook.office365.com
- (2603:10a6:400:19c::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.28 via Frontend Transport; Mon,
- 30 Mar 2026 11:28:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS0EPF000001A8.mail.protection.outlook.com (10.167.16.148) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.21
- via Frontend Transport; Mon, 30 Mar 2026 11:28:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bIlpJQaqeufT4lF5hksmBwK5COYfndSYNQ8dL5TjJUgypDxnylBlN2m+04ncCl6Gdqgjmp3r87UU2ie42nf73UVPWVfsqI4FX5kehQjNUBMIO2lDPKilNM0cLOBBn65gPALgnwZIkZ3nKZN3x36SDVJDkA+jM3dEQdpyyCJaafOTshBvDTRQAA82byFOHD9MonfUfIZBM1mHA4eUGbSHCW1b/mlCMcgBNP9TrAS/D0Qe3y2cocqUzgRxt0W+Y+idU+QxdAGVoGj8jUjd2kf6THr+Hpg9Ytha9qvGRMTecD45NniAmmbPXXW7ClW18i4prj9MB5CpOJisqvE0PYu7hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VePiXHT+bXiX2+1kXjfUmyOtdyP+0aliWn7ccyDjRbo=;
- b=uxeZ/DDgJUddudY0yBhtATEfYJBCcawzNW4mMW2tAtpvgVN9iZ/kPAJbvVLwSFqvYJPkkiUnAhWduXTj3hlLhcU7KCxdRrtzxq95Kkhp5uXV6WwphFoxp9mpBbl3KNEb3ubmPSEIGdFp3uVgPX0+YojMHPqcDwnO3fcllzbJEHQXY/YMDNzUMwQz6MXHiAWkTxZN6Zv/zDtcYAMrWfz+OFTmyV6S+zBkkCtTTOYpFjax665KALzc18IkxXXHcLHntydesCnybelz8AWmwEh8Oawqy2JLbbDVxr+NU5+8yz2QwZY1AC3urN+JYYybvFXajeA4ao4wu5uJEOLHVKR9kg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VePiXHT+bXiX2+1kXjfUmyOtdyP+0aliWn7ccyDjRbo=;
- b=f9DfSpg9Oz/IbyYmVvyI0ssTshoZlFAP4vcjAhM23/z7TxwFOEVd0W4RJvWfYrmfVAUkZeeHSAlVw2F/SX8AB/L42RkAsLeFN+9H4jsAstdg81lkGX3J6ntw4jK5E3gebWJ3KoIHLXvuLi3bvq0RjrutrNSV7Cn5e0FD7S5etZs=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
- by VI0PR08MB11198.eurprd08.prod.outlook.com (2603:10a6:800:252::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Mon, 30 Mar
- 2026 11:27:26 +0000
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4%4]) with mapi id 15.20.9745.019; Mon, 30 Mar 2026
- 11:27:26 +0000
-Message-ID: <4c1c705e-503c-41f0-aaba-002ee5c69614@arm.com>
-Date: Mon, 30 Mar 2026 12:27:24 +0100
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Ryan.Roberts@arm.com, david.hildenbrand@arm.com
-Subject: Re: [PATCH v4 0/3] mm: Free contiguous order-0 pages efficiently
-To: Andrew Morton <akpm@linux-foundation.org>
-References: <20260327125720.2270651-1-usama.anjum@arm.com>
- <20260327124249.a8de2259cf3438c5f4216894@linux-foundation.org>
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <20260327124249.a8de2259cf3438c5f4216894@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PA7P264CA0342.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:102:39a::12) To VI1PR08MB3421.eurprd08.prod.outlook.com
- (2603:10a6:803:80::16)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="le2de8bd"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852c9b4158so34511415e9.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 04:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774870751; x=1775475551; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P5em8DwDaFkXA2YjHRd+fhMRb18sZEEB4ksg5SaFWGY=;
+        b=le2de8bdd9LDKe5VGUUvGeXsLy7qcMDjBRuSScfzmpK6LqazJjY4mJT3BgS50rHnaa
+         WihRtMhEqO0vLDSlopCHOmay09CNewY5NCRZH/+gOGLceofSPUQQRBmG4hQ+5UW6TiY7
+         QemCFNdmcIjMsVu1KfpLQX6qyH4Z/BqBqR2ZDOYK1sMJ4HtrsOJ7F9z3LPCtE+ZvsF8W
+         nosvUN/n//Riof8XtZbCweZjuFzOeMu0XDuhdCa2HHxndB4sn1+uuwO/AOKj3U9DF6bt
+         ZX60uljp6b74TjwDykmQ7Yn8LWNTofGtiUS/SBlG7cy+5OOPa9J25E+niDXLIy7PxbIr
+         vQkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774870751; x=1775475551;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P5em8DwDaFkXA2YjHRd+fhMRb18sZEEB4ksg5SaFWGY=;
+        b=N+7kSp6gr6IIHsAMCLGuIFxrxaI2nzCTuhFrDDnVOB19bsMdYyYZ56JtggjG63iOmG
+         C3wrygWhA2S2Awy5nypIob0zSfbbPHVtYL9K5lGn3WYnWQhvlxSKcElemUpiuaNEBF4z
+         p1N6Y2DaHXhAefZHYUHCh0ZKQLZMV7QKqa7oPOG8pWDOyztzC37Ciaepm0oing8IllKY
+         evFETlWsX4ivATtDEFev4hgd2eP+WGExmVNjHGuXcswknAIsMs5mAb9H+N9DeLPY4qQj
+         JCO3bOrY1KmHKv63W0dsMsfJEX0wY/4CnHYutThFbOelCBf+sup0tLyRTMCew1qnYFeB
+         RSEg==
+X-Forwarded-Encrypted: i=1; AJvYcCWyz/jy59HpUmFOUGYiEgx+WVeflKvu/YlPodPu90akhkzK5lUKwzYNa0OuCTyu61i+8a8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSED02+3kT25DHLJJxpxIZxHCUqkL5LkIEt3RWeB6RtGyuBcpC
+	g8NGcigI2vlv7qrpwNdD+QVR1dj13I6BRiCbl5gtgvrNfb4DnImLXNgp
+X-Gm-Gg: ATEYQzzMnhtq/Gj9wscvyVds1pB1tuUr8c/eW2Ru7rVRBf4mmx9QsCvclLMmkc6XePC
+	DElLKmbDWbx2S0WQjp/PmHlfMOsAR+wf/aJ7/2Q/7UiZG6uMdtZwMiT8Qhrg+sk8OfNByizxkJN
+	dkwQqNXeqfPWVcv3gbCMlEPBC86flyEArBHOtTY4eUy/yDcWn58o7fBKRly+NMH3Lw7LG14jmk2
+	pV2LyLC7A7rj8d91LwTQTfcip5YNg8Oc/FazQQ0Bef8BqAJ/WZTejf9MaM9X32zCn/jNgPVAacD
+	00KwYhyqNOqo3WvJj5Suj13T1NUXe8SUQn+WTr+zdBZ43Ra2TM7cR7siIm/yQ044aSI4UG4EydD
+	AeF/hlibP7UKLwKEd4Fesdt3rTahz6sTc0tdA5q/4W/CXDF+AA2XIH5JrpWxKIw6D40Sh92qKPl
+	6rN2U0OfqKNBJiEoY=
+X-Received: by 2002:a05:600c:a010:b0:485:ae14:8192 with SMTP id 5b1f17b1804b1-48727d4588cmr219566255e9.7.1774870750726;
+        Mon, 30 Mar 2026 04:39:10 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:500::4:4b08])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722c6b105sm534051655e9.1.2026.03.30.04.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 04:39:10 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
+ Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Ihor
+ Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v1 2/3] bpf: Emit verifier warnings through
+ prog stderr
+In-Reply-To: <20260329212534.3270005-3-memxor@gmail.com>
+References: <20260329212534.3270005-1-memxor@gmail.com>
+ <20260329212534.3270005-3-memxor@gmail.com>
+Date: Mon, 30 Mar 2026 12:39:09 +0100
+Message-ID: <87o6k5h7he.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI1PR08MB3421:EE_|VI0PR08MB11198:EE_|AMS0EPF000001A8:EE_|DU0PR08MB9051:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4a5e2c3a-ef4e-45f4-483b-08de8e4f78a4
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|376014|7416014|366016|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info-Original:
- jKBzTILhF8cEjz6gFJ7dYUCoBdQf7cnP7pEicyFHnpW0ITZVzNRzOtOTyLNwiP0C/KsrfG18QhnUv19xZLtorHuOcKl4j5o7EOchygHMqW/RZKVMJYU0IuJq4hNC4hJpC9zAiOb3NP+aMEUdBapZK10bigieKvuS9kcD02EeAQhimqpDDMb2o1sd5j+Fj3zlgAroQIJJzKFf88kli3mvLI4XvFSERMu/o3/N6VoSOX57PixpnJuXsJ7nWZfjaVK8lLm/hzfxbco/kp/BrN+hYBRgrgk5KxAymZ3nTLBrH5AQQIApTa1S1q+RZ3Znjq/ezvnw4Yq2TIbXDsq4nRgSl6e7M2b7IuY1v6FtMtDYqi4Ngh6qRNUM83QsxEd5HGdKQf9AW0DWmly1oTpeaZtVj4dM3U4xT9J16uKbOBgnRzMauLmzqfogHiyMF8ZtWvB8/0w8T5bdbS4XE24c73LtbMYgwcLkJXXWUD0Y4Lr1QDbzLpSsFTwT4o/jLz9KqtCFG3/fsb9xN3mdpvigJ+yUApL+MOzUsR5p2caMTzx852BfXCslTkFXFJDBleRiX7tD1I66PuNo4k3lmQM5d6tpZgS9R0U83OTS/MVTzlqOK6y/BwPI6s9H/S96cP5lvzik2PxMb8dOORorb8OOsySKdNQRIF0hRHl5EWMmsRv3vF5k3tIqWKWqPU8d3G3pJOKT
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- SV+jJHtZMNGUpYat/7L9xIny2DbGQlVaCJ1zDJfs7Zy4wPQDWeYeQx1lMmjg74FCYyvWMssgp7V4Wy3QwHuoK1+0k/n1yPJs3eWgXONO88QyCzxjMgAGwexE0fAkB2ADYXlaVWlWrKV5uiEjpb2Cv62hIWu+XREFYsLDkUx0o4WvygwoIREHWyCByhrmqa26b4c3fdEsBMudZ2RLUZ/DnrxYarGsgOrkhyQGHsr848kz8yNPd9bkM7r7zuLVB5wg/Qo5Bdc/lM2XL2Se+fjHBO4E1LpJ7UMj2p+CgD9xqwG1qEEYgXWQjJaTbZFN6F8kA8oew7ZTIUcZ490d4JvrJw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR08MB11198
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS0EPF000001A8.eurprd05.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	2813e4d7-4b3b-4125-61f7-08de8e4f51c2
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|14060799003|36860700016|35042699022|82310400026|7416014|1800799024|376014|13003099007|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	ZTdd1WQKBOLBvIOfBYQ5UAhA0HXh79Pob0q630+u2d31lQkhmyW/9QZNqmI5GuBFJx3hpqddCSV5a5S8zMaeUEYzMZUfgDNAaxSRyPYMVYB3evg0u6vU4zVmCur43rip5MHRG/xcNqSHe+SU11FwFhssJd+InNatDHeK4iqg/0uMb9KUHJ/7E9ZIbPH1CF7QnvxL9P1GiVZjWRcbTB76vaXcJPSEtz+/4tMXUTOEth2Pnf/W6V0EBP7VvbWAtepY8xNhpomFb4D/bdTuVHpbsEcTr7GG4bGSl7Y4PRCjr0ki4kNTVMHCzU260FrILMpUCAHcE7kfJVl6PtIeDSjgC5PQPan+ELQ/zD3gxHYaVPuRcfPuWbRTai6lmcE4IiH8gSpfQpSXEL1lvYmYXsGrC8AzEebO0HDg76Pczt0mywv9bTQl/ejGlTAVXEXMpdQ/yesQXKXwivqhwJu1Gm0GFopOrcKn8Bb5p1d50edeE+hFN1NGU8QqN5q05W70WYS84XeGZYrQOOIMJ5AfO/geQrbJgICBsuywxinz5SqhzRF/EIs2g6tgjDNMSUMJrYqzC3u+VRSl16SZ/1mlPHniuZPOdMlScXddYpOLMk0w1j3gqgWTviIvM2PE8ZRSJ9Un44yKpCd7e5nqMYGWK2tOU1TjnHYypm4dD8eh83FaN0JgDJFV1ThHEGOVqB5QySBHC8+7iIG2wEYCwHYt3c33/g==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(14060799003)(36860700016)(35042699022)(82310400026)(7416014)(1800799024)(376014)(13003099007)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	Tw6vs8JEGCJJt0fiLumpxEekoIe5FMoNfgOVKVxR9c+QPoHI1XJRPeiFKNiQy2ZZaSiBFzasgBsii9bd8dfDzPx7N/ozHk8lZzoI+QVkWGbw53WKfIa6Uxd2oufpKCxzEOKD7i5Dq2fuUadnZF0a6zTbgpnHQ8+LeZp2gkcmAfrzWxTGPZ3CF7+NVhdCshfOSPE5jqN4Akl9tE66vCuSlpxNy70TX74RfAFVBH/MFmoGKwwAdk6urZMPBDpK5nWT3S2MMlxMTzlTK4PecFF5LxJH7wE1dIoPf31ZmFjSiu2tz+69m/chYdxTe0PuN81H69O8DqxNL5uoI/7sEsrzkn5x0QGcpRI0kr7hZDA3Bu9fbGHt3sCmOeFTihvrL+cDnjN9twsHO5sjV1oF+RgyGclKFfVrKQxXlYSXVsxes/6HDpRg8iKAG+znEgCbsDuz
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Mar 2026 11:28:30.9747
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a5e2c3a-ef4e-45f4-483b-08de8e4f78a4
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS0EPF000001A8.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9051
+Content-Type: text/plain
 
-Hi Andrew,
+Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
 
-Thank you for reviewing.
-
-On 27/03/2026 7:42 pm, Andrew Morton wrote:
-> On Fri, 27 Mar 2026 12:57:12 +0000 Muhammad Usama Anjum <usama.anjum@arm.com> wrote:
-> 
->> A recent change to vmalloc caused some performance benchmark regressions (see
->> [1]). I'm attempting to fix that (and at the same time significantly improve
->> beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
->>
->> At the same time I observed that free_contig_range() was essentially doing the
->> same thing as vfree() so I've fixed it there too. While at it, optimize the
->> __free_contig_frozen_range() as well.
->>
->> Check that the contiguous range falls in the same section. If they aren't enabled,
->> the if conditions get optimized out by the compiler as memdesc_section() returns 0.
->> See num_pages_contiguous() for more details about it.
-> 
-> Thanks.  I'm seeing impressive speedups for microbenchmarks.  The
-> speedup in [3/3] may be a bit more real-worldy.
-Yeah, we are getting natural speedup as the vmalloc() allocated higher order
-page blocks and vfree() starts freeing into higher order blocks instead
-of order-0 blocks.
-
-> 
-> Do you have a feeling for how much difference these changes will make
-> for any real-world workload?
-I've not run any real world benchmarks. Considering these benchmarks
-we'll surely get speedups.
-
-> 
-> Also, AI review said things:
-> 	https://sashiko.dev/#/patchset/20260327125720.2270651-1-usama.anjum@arm.com
-> 
-> The can_free one (at least) seems legit.  I suggest that can_free be
-> made local to that for() loop - this would clear things up a bit.
-Other than unrelated things in the AI's review, this is the only real
-problem highlighted. I'll fix it.
-
-Thanks,
-Usama
-
-
+> There is a class of messages that aren't treated as hard errors, such
+> that the program must be rejected, but should be surfaced to the user to
+> make them aware that while the program succeeded, parts of their program
+> are exhibiting behavior that needs attention. One example is usage of
+> kfuncs that are supposed to be deprecated, and may be dropped in the
+> future, though are preserved for now for backwards compatibility.
+>
+> Add support for emitting a warning message to the BPF program's stderr
+> stream whenever we detect usage of a _impl suffixed kfunc, which have
+> now been replaced with KF_IMPLICIT_ARGS variants. For this purpose,
+> introduce bpf_stream_pr_warn() as a convenience wrapper, and then mark
+> bpf_find_linfo() as global to allow its usage in the verifier to find
+> the linfo corresponding to an instruction index.
+>
+> To make the message more helpful, recommend usage of bpf_ksym_exists()
+> as a way for the user to write backwards compatible BPF code that works
+> on older kernels offering _impl suffixed kfuncs.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+In the commit message: ..such that the program must __not__ be rejected..
+>  include/linux/bpf.h          |  9 ++++++
+>  include/linux/bpf_verifier.h |  3 +-
+>  kernel/bpf/log.c             |  6 ++--
+>  kernel/bpf/verifier.c        | 53 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 67 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 2c4f92085d79..d0158edd27b2 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3912,6 +3912,15 @@ int bpf_stream_stage_dump_stack(struct bpf_stream_stage *ss);
+>  		bpf_stream_stage_free(&ss);                    \
+>  	})
+>  
+> +#define bpf_stream_pr_warn(prog, fmt, ...)                              \
+> +	({                                                              \
+> +		struct bpf_stream_stage __ss;                           \
+> +									\
+> +		bpf_stream_stage(__ss, prog, BPF_STDERR, ({		\
+> +			bpf_stream_printk(__ss, fmt, ##__VA_ARGS__);	\
+> +		}));							\
+> +	})
+> +
+>  #ifdef CONFIG_BPF_LSM
+>  void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
+>  void bpf_cgroup_atype_put(int cgroup_atype);
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 090aa26d1c98..5683c06f5a90 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -873,7 +873,8 @@ int bpf_vlog_init(struct bpf_verifier_log *log, u32 log_level,
+>  		  char __user *log_buf, u32 log_size);
+>  void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos);
+>  int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual);
+> -
+> +const struct bpf_line_info *bpf_find_linfo(const struct bpf_verifier_env *env,
+> +					   u32 insn_off);
+>  __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
+>  				  u32 insn_off,
+>  				  const char *prefix_fmt, ...);
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index 37d72b052192..598b494ded36 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -329,8 +329,8 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
+>  }
+>  EXPORT_SYMBOL_GPL(bpf_log);
+>  
+> -static const struct bpf_line_info *
+> -find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
+> +const struct bpf_line_info *
+> +bpf_find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
+>  {
+>  	const struct bpf_line_info *linfo;
+>  	const struct bpf_prog *prog;
+> @@ -390,7 +390,7 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
+>  		return;
+>  
+>  	prev_linfo = env->prev_linfo;
+> -	linfo = find_linfo(env, insn_off);
+> +	linfo = bpf_find_linfo(env, insn_off);
+>  	if (!linfo || linfo == prev_linfo)
+>  		return;
+>  
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8c1cf2eb6cbb..f50e0ebd0ded 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3206,6 +3206,7 @@ struct bpf_kfunc_desc {
+>  	u32 func_id;
+>  	s32 imm;
+>  	u16 offset;
+> +	bool warned_deprecated;
+>  	unsigned long addr;
+>  };
+>  
+> @@ -14045,6 +14046,53 @@ static int fetch_kfunc_arg_meta(struct bpf_verifier_env *env,
+>  	return 0;
+>  }
+>  
+> +static bool get_insn_file_line(const struct bpf_verifier_env *env, u32 insn_off,
+> +			       const char **filep, int *linep)
+> +{
+> +	const struct bpf_line_info *linfo;
+> +
+> +	if (!env->prog->aux->btf)
+> +		return false;
+> +
+> +	linfo = bpf_find_linfo(env, insn_off);
+> +	if (!linfo)
+> +		return false;
+> +
+> +	if (bpf_get_linfo_file_line(env->prog->aux->btf, linfo, filep, NULL, linep))
+> +		return false;
+> +	return true;
+> +}
+> +
+> +static void warn_for_deprecated_kfuncs(struct bpf_verifier_env *env,
+> +				       struct bpf_kfunc_desc *desc,
+> +				       const char *func_name,
+> +				       int insn_idx)
+> +{
+> +	int repl_len, line;
+> +	const char *file;
+> +
+> +	if (desc->warned_deprecated)
+> +		return;
+> +
+> +	if (!func_name || !strends(func_name, KF_IMPL_SUFFIX))
+> +		return;
+> +
+> +	repl_len = strlen(func_name) - strlen(KF_IMPL_SUFFIX);
+> +
+> +	if (get_insn_file_line(env, insn_idx, &file, &line))
+> +		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s:%u", file, line);
+> +	else
+> +		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "insn #%d", insn_idx);
+> +
+> +	bpf_stream_pr_warn(env->prog,
+> +			   "WARNING: %s calls deprecated kfunc %s(), which will be removed.\n"
+> +			   "WARNING: Switch to kfunc %.*s() instead.\n"
+> +			   "WARNING: For older kernels, choose the kfunc using bpf_ksym_exists(%.*s).\n",
+> +			   env->tmp_str_buf, func_name, repl_len, func_name, repl_len, func_name);
+> +
+> +	desc->warned_deprecated = true;
+> +}
+Commit message suggests this is a generic functionality that we plan to
+use for all kinds of deprecations, but this function looks tightly
+coupled to KF_IMPL_SUFFIX functions. I think we can make it a bit
+friendlier to extending if split into 2 separate helpers:
+is_kfunc_deprecated() and warn_deprecated_kfunc(), so in future new
+logic for detecting deprecated funcs goes straight to
+is_kfunc_deprecated() and we make sure printing and file/line
+extractions are not changed. 
+> +
+>  /* check special kfuncs and return:
+>   *  1  - not fall-through to 'else' branch, continue verification
+>   *  0  - fall-through to 'else' branch
+> @@ -14231,6 +14279,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  {
+>  	bool sleepable, rcu_lock, rcu_unlock, preempt_disable, preempt_enable;
+>  	u32 i, nargs, ptr_type_id, release_ref_obj_id;
+> +	struct bpf_kfunc_desc *desc;
+>  	struct bpf_reg_state *regs = cur_regs(env);
+>  	const char *func_name, *ptr_type_name;
+>  	const struct btf_type *t, *ptr_type;
+> @@ -14253,6 +14302,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>  	func_name = meta.func_name;
+>  	insn_aux = &env->insn_aux_data[insn_idx];
+>  
+> +	desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
+> +	if (desc)
+> +		warn_for_deprecated_kfuncs(env, desc, func_name, insn_idx);
+> +
+>  	insn_aux->is_iter_next = is_iter_next_kfunc(&meta);
+>  
+>  	if (!insn->off &&
+> -- 
+> 2.52.0
