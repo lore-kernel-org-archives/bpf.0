@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67513D666A;
-	Mon, 30 Mar 2026 14:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E66F19ABD8;
+	Mon, 30 Mar 2026 14:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774880878; cv=none; b=ujBauiq6dwnj2t+F7ZMOj8UA7p7cA/x37YYCij2nsrEhszqpShl0FhoX+f7H4lmSW8z4CAI/K0tP92hnEfVJ+v8N98biqf+HK83QwL2+bt3Y0TPaN+CQRpah8LEw/2wEsA83isz1kRdwyAGga4OiZQlLFdiiIWzRTbCR1TPuTQQ=
+	t=1774881021; cv=none; b=bRP4MuvHid4CBma2XvPdf+/Pz0duPfI3wftC9SSOaD+4FPKqcYn+vUQI+3RbDubhz4IyDH2cZIrnv6CyDwGgD6Y0lF8MUfLRhNpP2ghZNWybxtpNSsORldE130U499zOKkbdAIPfJAxA0DoCSM7H96sTcz/UZ0orpsZOM1wuw6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774880878; c=relaxed/simple;
-	bh=DxOkyepqlRTRHob2py0zHTG/daww2DOCWW3Kz3YEkOk=;
+	s=arc-20240116; t=1774881021; c=relaxed/simple;
+	bh=ZS3OUwwq2nYZzMP99yXm6JGeU6JJqt9zFp2EiybodHA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=suNTv02RCissIAwcEzbyZpU91uhek6DH5oPGwZNnUOCATZahbgrOPZgv4CA+5rq7/SxZuEMppuWwwUZbbOtsS1HfXo67hfnyj8AnVwryuAxDnoYdg5aurcdXBNjYh8rdNR84RURcaffvO3+UGn/HLcV87z5RqwhU9ElX2CbTVkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UOxoe8rO; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=EFCVuN2WE3EzV0+4kWuXVdI0Tn1MKpxAtGVFcehFdu21ZHJmxoetJWgOo4Wf3Z9X5pLctega0tXFfwtmvuL3dNsM7H/9Td0hgcKQM43J8pVqcju+PztPLpdO0cBJkrYFrHVjlPpEkhBUmWy1+WgzDSaTlZuR2wWTe1wUEAcW/zQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/1qL4FW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UOxoe8rO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913D5C4CEF7;
-	Mon, 30 Mar 2026 14:27:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/1qL4FW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B67C4CEF7;
+	Mon, 30 Mar 2026 14:30:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774880878;
-	bh=DxOkyepqlRTRHob2py0zHTG/daww2DOCWW3Kz3YEkOk=;
+	s=k20201202; t=1774881021;
+	bh=ZS3OUwwq2nYZzMP99yXm6JGeU6JJqt9zFp2EiybodHA=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=UOxoe8rOMowhIGLCLfxX4c4eG4vSpFprLoYzYNaqyxJ7B8q2hQSKShHTqqWQpohn0
-	 WMTE79Vf25Z6ywgzhO/ee8rN1VkLSg11RqPvIU4tCx4RYFy+SGlhLA+FYrNjF9qdH+
-	 bvc5Rvw9Q4T4Zps7hmzlWT4DN5K9j5nkt/vl3nCM4jjmHr65QSNef/PcGyFPn9yAic
-	 CmkM0/zBW3/7bp3ZrRE1TDjW99DgbSqaG8DqU7JxBvZ9c/ati2Cqrv5ba105aQHEpE
-	 tzkh3Rg6tgK2RvGMa5jNNAzN45DP/HcMFQFb43EMGpjYqo2hYHwmUGRI8IOPnibYmi
-	 cfv6OOq3QBC7w==
-Message-ID: <3b2380d1-e4ca-4e44-b67c-06780354f806@kernel.org>
-Date: Mon, 30 Mar 2026 16:27:52 +0200
+	b=V/1qL4FWFPEzripEDi0iH0l1RG9W3igBF+HtPx6qB12DGhLLVltF/+epnEB0XG4cN
+	 A61LJ15IOYkyTTDd/hcTZNrcIndLgKJoQC1nQRzUR7t4bK6Q3eLdbKakpMX0EjXll5
+	 va8pz8LDQmpt10KjudDGpKj4bVdc2j/+/9Js9RsH8TeO9OdXy0sEsRPIbMEbfOAWB9
+	 VX9/BZqxXu2rS1k3fitd821mytXBQyW2rjwQpKf20EMS+mEPYuMGdClLFx9Wu7OgGI
+	 J95rFWZsJuSukLCBxB8+WsIHQuPbzF8yQIJlZKNh8Ku9BfQkAKVp8qzWD+/avl/yn8
+	 wYLTKOKFZYwdA==
+Message-ID: <b8bac0eb-17cc-4e0d-b7f0-a8e7e0da0d67@kernel.org>
+Date: Mon, 30 Mar 2026 16:30:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -226,6 +226,10 @@ On 3/27/26 13:57, Muhammad Usama Anjum wrote:
 >  static DEFINE_MUTEX(pcp_batch_high_lock);
 >  #define MIN_PERCPU_PAGELIST_HIGH_FRACTION (8)
 > @@ -1310,6 +1313,9 @@ __always_inline bool __free_pages_prepare(struct page *page,
+
+Hm I noticed the function isn't static, but it should be, and this is a good
+oportunity to make it so.
+
 >  	bool compound = PageCompound(page);
 >  	struct folio *folio = page_folio(page);
 >  
@@ -235,91 +239,9 @@ On 3/27/26 13:57, Muhammad Usama Anjum wrote:
 >  	VM_BUG_ON_PAGE(PageTail(page), page);
 >  
 >  	trace_mm_page_free(page, order);
-> @@ -6784,6 +6790,100 @@ void __init page_alloc_sysctl_init(void)
->  	register_sysctl_init("vm", page_alloc_sysctl_table);
->  }
->  
-> +static void free_prepared_contig_range(struct page *page,
-> +				       unsigned long nr_pages)
-> +{
-> +	while (nr_pages) {
-> +		unsigned int order;
-> +		unsigned long pfn;
-> +
-> +		pfn = page_to_pfn(page);
-> +		/* We are limited by the largest buddy order. */
-> +		order = pfn ? __ffs(pfn) : MAX_PAGE_ORDER;
-> +		/* Don't exceed the number of pages to free. */
-> +		order = min_t(unsigned int, order, ilog2(nr_pages));
-> +		order = min_t(unsigned int, order, MAX_PAGE_ORDER);
-> +
-> +		/*
-> +		 * Free the chunk as a single block. Our caller has already
-> +		 * called free_pages_prepare() for each order-0 page.
-> +		 */
-> +		__free_frozen_pages(page, order, FPI_PREPARED);
-> +
-> +		page += 1UL << order;
-> +		nr_pages -= 1UL << order;
-> +	}
-> +}
-> +
-> +static void __free_contig_range_common(unsigned long pfn, unsigned long nr_pages,
-> +				       bool is_frozen)
-> +{
-> +	struct page *page = pfn_to_page(pfn);
-> +	struct page *start = NULL;
-> +	unsigned long start_sec;
-> +	bool can_free = true;
-> +	unsigned long i;
-> +
-> +	/*
-> +	 * Contiguous PFNs might not have a contiguous "struct pages" in some
-> +	 * kernel config. Therefore, check memdesc_section(), and stop batching
-> +	 * once it changes, see num_pages_contiguous().
 
-num_pages_contiguous() starts with an array of struct page pointers,
-presumably all valid, and determines if they are from the same section.
+...
 
-> +	 */
-> +	for (i = 0; i < nr_pages; i++, page++) {
-
-Here we do page++ and then trust it to be a valid struct page pointer and
-use that to check if it's valid. But if struct pages are discontigous, we
-might crash on the first dereference? The section checks below won't help in
-this case AFAICS.
-
-> +		VM_WARN_ON_ONCE(PageHead(page));
-> +		VM_WARN_ON_ONCE(PageTail(page));
-> +
-> +		if (!is_frozen)
-> +			can_free = put_page_testzero(page);
-> +
-> +		if (can_free)
-> +			can_free = free_pages_prepare(page, 0);
-> +
-> +		if (!can_free) {
-> +			if (start) {
-> +				free_prepared_contig_range(start, page - start);
-> +				start = NULL;
-> +			}
-> +			continue;
-> +		}
-> +
-> +		if (start && memdesc_section(page->flags) != start_sec) {
-> +			free_prepared_contig_range(start, page - start);
-> +			start = page;
-> +			start_sec = memdesc_section(page->flags);
-> +		} else if (!start) {
-> +			start = page;
-> +			start_sec = memdesc_section(page->flags);
-> +		}
-> +	}
-> +
-> +	if (start)
-> +		free_prepared_contig_range(start, page - start);
-> +}
-> +
 > +/**
 > + * __free_contig_range - Free contiguous range of order-0 pages.
 > + * @pfn: Page frame number of the first page in the range.
@@ -342,6 +264,9 @@ this case AFAICS.
 > +	__free_contig_range_common(pfn, nr_pages, false);
 > +}
 > +EXPORT_SYMBOL(__free_contig_range);
+
+I don't think the export is necessary for anything? Please drop.
+
 > +
 >  #ifdef CONFIG_CONTIG_ALLOC
 >  /* Usage: See admin-guide/dynamic-debug-howto.rst */
