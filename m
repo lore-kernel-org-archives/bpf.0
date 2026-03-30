@@ -1,65 +1,65 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52E283A6EEC
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 22:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA9F3E4C9C
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 22:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774909704; cv=none; b=WLaa4SfRHrfk0PG6GEECFLA9V1g4jukn0sQtMpL5rcX7TC7BM6zZR65S4Ntl2PYFTTVxlyJtTYWLrF+VfipJGvbhleTOd+W19EXgmpMzSEYzUeqZPrhCG+UOIQvDG/3YC5HxUzYOaQxPU6oxIjh6GYYbusNmey2X6HNiBbDABns=
+	t=1774909707; cv=none; b=YHjFK0k13/aQU77ePhkG/fOMwjKhzc+MSbhqbzJguk/peVr/XEcsYU1uXCHbECZxQ/9p/Pq3sSZcSFuXCdceuSnSxJUE4KcnfUf6gsGi0xLWq6ahk+eUc2++/JCwND+dUyha7UVMbQJ+3VD4jnEvCd2I76HMtHi/2kfMu7thwhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774909704; c=relaxed/simple;
-	bh=7QEjGhfSPlAzaMjkMkQH1BfcJww+f8sPaC3t0pVGZK4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=blpsbUljlCizjT01hPThUOoAeaxn7phiP4VF8CHvDc3ND70fs8yfl7rndzkunENmWkDYaAtGY2O8Rjd2lKZo437uAorGrCEbm9vQL8vscTgZ7JXU19qFJSJGkyhNa6YtzCc3hOEZSFvpQ68X1XNAY/QyQZRX0t3Ie28o3u4GiGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pfElevUK; arc=none smtp.client-ip=209.85.221.49
+	s=arc-20240116; t=1774909707; c=relaxed/simple;
+	bh=xRFzeXb8OcThR7/nUbRNk1bpe2n2BQWkLMUCWVdk3/k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=R3JgU7VTEbii7LgoaxK4kG6n7/RgGfgoQAY3CctRAdrpUmXPnjC9HpdF6b92Q2naOFRS96OdGRToUrCKucVp6NgRRlojuVAQdHGaWSMK4WhhelrSvsb8Wjuj4I9KOSc418JVBRKs2bHbsUx0VDcyHHQwptkLDY2p2ImV0PgUei4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=flydKomy; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pfElevUK"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43cf7683a28so1053502f8f.2
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 15:28:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="flydKomy"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43b9d3ebed5so3605423f8f.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 15:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774909694; x=1775514494; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3A8XHM7BXGtT2655xQYZ+LtG7Guhc4UjpZU+DOxye3k=;
-        b=pfElevUK0Vn1HOTtlHFVACDqZcgqURbcQCiEv3wAoHhg924BtaMd/KZRbMveM77B0p
-         D2VhaZCfmpycjyo3c6/3BE+Tf85X9Ll6asKCo2D0dleViVlTF04RSRgs5NXE9+Y3IRhk
-         pepic2nQzULFO/lO7Nvl07vp0O6BP/YhJCA0jJvRZT22BQm4ybx3772Evkg1Nkb0hNeB
-         X+8OBESkan7Rb/qn3zbEAYLY57yUKa9NM6Zfd4eZgO4j4LcWbmlovyfs6iosDtM2hxEk
-         6s83M1sty1fvKLDcxJqBuk7kuH4qI8+nfVB0yvLMdOfmFO9pVVl795VyI0vp7gAtbmZ5
-         TxLg==
+        d=gmail.com; s=20251104; t=1774909697; x=1775514497; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GlTvjl0jnMyKfBpiVdyA5AX+1qeYZqK9Ubxjau7FmRQ=;
+        b=flydKomyIKbZxrTPxacyUGWvO1vBZ/DTcvtgCIDJ1LeykbN95CwuwY24ck5gJrX1Ak
+         uoYL/na89Bj9VEtUn0I7HQyDhkkTolzMJ/NXAG07bbE31N0xxvVXPR5eSjYKsRF4Ob+A
+         0fib0LF5fKR1bhg+QV/dZO2JQsvgz3WQEKWYWsAAoKF6Gx1gP4s3JNYniuWNx8YCF21j
+         Mir+Rgg935aY+0YIeXbcS9Cg3bWWev2rW5OSN1aywlxjwFEaAjQiXwu60bUKlWpXfSJr
+         zMPF0q4NIZZKnxWz4w9sKkU0k8IsniH9T6rGeGJArqXKpTRq/G6jK63gNdlezHxHQkQ4
+         I0kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774909694; x=1775514494;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3A8XHM7BXGtT2655xQYZ+LtG7Guhc4UjpZU+DOxye3k=;
-        b=sN6iCHWKEYFgt0FsvHPAV06p+iZ/U9FNBPeAzhUXJB81vgHDSTkWyfkW9nrxywUXcC
-         YujvGfxG+qCjh41I/VudAN7xIJoGdliK88DITseEEn5R9hUJoq10kbmQ711tnBDt8aKU
-         km7yHqIwJQSbe2K2STpa1ucykdrTub7Mqdc7WKJ4EwuLIUMqEd3SpkWu3K2e4gp7Fnsp
-         gh9nDKOo4aTCDE3SlBisDB79ylGO7CaRJneGswVRAY5tBsMJekC9vde/2/SzudXxIIEW
-         jrIFkLLbgiu9id9C1/6gDsdSJUdkg9adj2cYqe4aY9huM0laFc/bm8ktNQxJHG/IeFtO
-         IlSQ==
-X-Gm-Message-State: AOJu0Yz5IY/A85YEeDoc5F9FsMc6yRyBv6W5Mte+soG5tMV1K7g5fe4H
-	V9FOzdxHZMeE0kFiQkYibBO/pkAX3dNuEqAhMpWWdNlg/lSFShY8LJs1
-X-Gm-Gg: ATEYQzwRW+L65KDjX2RkIh/tHp9vsCgw9QjYIogMHvy//RlOtLLkbmfj+k+Zc+evE0K
-	uw6MT467YdEKyz68E+1u4MyEX0vEcJnuFvcveORbUPRMrs3zIZrWo+y+0Fa46b3kuVWN01OvRzX
-	JTYi3/x6ynX9V6krXKibXwsW07fUmfTmSXNzi8NdR5i3TwdgnKXDJU/Z0w93MDzcolXwqWkyZ65
-	YGACpvuUFrf4sfv6N3rz6BkCA4NdAEr47bVtHMmvi7dG8970O/ErnTTS4Rs9EyoYAlGaH8D9qcC
-	qTHF9CxkCkd/rtbd4OIcGCK9PEnjKIEsqz+mlB5r+99dF5MYMXh87o4Yqa/xOs3YWfS+JCYJ/Ii
-	O00g4usYn+C1//KphD9IDnkagHmFlxqD9XPGSf1soHtADsjUSh+amY6AO9hrsJU5MeZRwPyIbfy
-	rjF2tFgA8jFw5x
-X-Received: by 2002:a05:6000:1847:b0:43c:fd92:f432 with SMTP id ffacd0b85a97d-43cfd92f54dmr11467284f8f.2.1774909694061;
-        Mon, 30 Mar 2026 15:28:14 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:4::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf247472csm19128280f8f.28.2026.03.30.15.28.13
+        d=1e100.net; s=20251104; t=1774909697; x=1775514497;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GlTvjl0jnMyKfBpiVdyA5AX+1qeYZqK9Ubxjau7FmRQ=;
+        b=Uyw4ImWdfYZh4/kzRNVFq/Q9pIPu1KHTYEWPtUiWKmhkHeVhhQvH1aKYTJ5zvAFzK2
+         jPG6ddY3NhY67TjOYTWDOAq8rm8MfhX8+YPIcppo0bfQS7OpcwgQSqd4a5jKA1xRHcn9
+         y+ymko9a/OPZmUiqfHfVX62/POOJmQmgvaSC8gxmxd7iZVwH/zejzj+1PbuYOIQjzvdD
+         JyvV09TKPOA7uHrrbP6smzurtBlpjoHTJhjMOm2SFQpXv4ReXM1iYRQDTV0w0tToqatT
+         nczwjUAD/f3QYvlk3Q5Os5yqCS0Em+7ZTecfSVPoyxM3+IVaRvHDXpx+j1JRB0jYp8eO
+         6tPg==
+X-Gm-Message-State: AOJu0YyOl12MQ3cvoah6U1VJvnyKsjhRVncfRUxDMJsB9I4xmoHHBtUq
+	v/o/p/4HMlni0EAx2XSDiq5VZKNTxqWB2/mby1/0L6cj/W6Z0TLgpKtU
+X-Gm-Gg: ATEYQzywnuY6WU7/5yp74J18Hz2tUJv1rntJmZ+GpBj6D+FUXR1h84ZsBncuBo6NQTz
+	okD0IKrS3V4YTKzeZeHOk+ppKEArUG2alDobigyT197/kb0gpB6dCCS6q+EQZzCCp8BajsN1Kq7
+	iRiF7gfPJQM4qjZDRWXw1BLlF72MmFYdnBh2PZF7Hbads873UiZyJRyura+f9ckxH6P6gybLgtm
+	COGNHPX5WMA9AYTEx36IuxofUG4Zt1o30Z7v/A1Ka/PAxSxIWPbNr1Aw+fJAfswXsiXoiInFs6B
+	TLP5B5j/kVHrBealQY7j7yI+gbfRvXjtBFoDNAPD8acZmitz7OnF9U/bhK/Su59ehmkZNVMDd8b
+	CJZjyKvkXBVe+Jtjv5AmUharXpQ0o9X/ScztD/J60zd63eB5hHqSuqm1tWNSVOdN8VeLj1Ihnij
+	El5zSBnPYhWm98DzvsxfnwGilA
+X-Received: by 2002:a5d:5f85:0:b0:43b:4ec7:f90b with SMTP id ffacd0b85a97d-43b9ea9b2cbmr23631349f8f.27.1774909697412;
+        Mon, 30 Mar 2026 15:28:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:75::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf245f87esm21109094f8f.22.2026.03.30.15.28.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 15:28:13 -0700 (PDT)
+        Mon, 30 Mar 2026 15:28:17 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v2 0/2] bpf: Migrate bpf_task_work and file dynptr
- to kmalloc_nolock
-Date: Mon, 30 Mar 2026 15:27:55 -0700
-Message-Id: <20260330-kmalloc_special-v2-0-c90403f92ff0@meta.com>
+Date: Mon, 30 Mar 2026 15:27:57 -0700
+Subject: [PATCH bpf-next v2 2/2] bpf: Migrate dynptr file to kmalloc_nolock
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,64 +67,61 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOz4ymkC/x3MYQrCMAwG0KuE7/cKI90UexURqVmmwdqVVmQwd
- veB7wBvQ9Nq2hBoQ9WfNVsyAnFHkFfMT3U2IRC451PP7N37E1Na5N6KisXkLt6rDDIOfjqjI5S
- qs63/8YpHmV3W9Yvbvh/Ktt5uawAAAA==
-X-Change-ID: 20260223-kmalloc_special-933ec4c543d7
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260330-kmalloc_special-v2-2-c90403f92ff0@meta.com>
+References: <20260330-kmalloc_special-v2-0-c90403f92ff0@meta.com>
+In-Reply-To: <20260330-kmalloc_special-v2-0-c90403f92ff0@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
  eddyz87@gmail.com, memxor@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1774909692; l=1613;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774909692; l=1260;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=7QEjGhfSPlAzaMjkMkQH1BfcJww+f8sPaC3t0pVGZK4=;
- b=mtFtiqEDTlwZa5gmuex5C8E8/3SMKoJ/l7/Xvt+cbBOcpdUXIMf5MXnpDKb42tWp5qLAInJgX
- /HvO2An7+4QBpGnFff0WJKQU1tFg+wSIKEAJHdzNCU9UfNeX1u+VsE3
+ bh=dis0Qq1Yzn9VxVcYVHcHfEAxMzIU10KId9Ri0KaElM4=;
+ b=8xSpR5pxtPXEewoaH2X+wWvNEP/aLoMrtWgFLhfdti+mw/cEAciYv7KHiAt3rURMdjQlvbSM0
+ ZGYcRPotvnJCf3ipru6cPGIy04Rd8M9/6rawq6v1+XYvpQJKrY5Xfol
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-Now that kmalloc can be used from NMI context via kmalloc_nolock(),
-migrate BPF internal allocations away from bpf_mem_alloc to use the
-standard slab allocator.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Use kfree_rcu() for deferred freeing, which waits for a regular RCU
-grace period before the memory is reclaimed. Sleepable BPF programs
-hold rcu_read_lock_trace but not regular rcu_read_lock, so patch 1
-adds explicit rcu_read_lock/unlock around the pointer-to-refcount
-window to prevent kfree_rcu from freeing memory while a sleepable
-program is still between reading the pointer and acquiring a
-reference.
+Replace bpf_mem_alloc/bpf_mem_free with kmalloc_nolock/kfree_nolock for
+bpf_dynptr_file_impl, continuing the migration away from bpf_mem_alloc
+now that kmalloc can be used from NMI context.
 
-Patch 1 migrates bpf_task_work_ctx from bpf_mem_alloc/bpf_mem_free to
-kmalloc_nolock/kfree_rcu.
-
-Patch 2 migrates bpf_dynptr_file_impl from bpf_mem_alloc/bpf_mem_free
-to kmalloc_nolock/kfree.
+freader_cleanup() runs before kfree_nolock() while the dynptr still
+holds exclusive access, so plain kfree_nolock() is safe — no concurrent
+readers can access the object.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Changes in v2:
-- Switch to scoped_guard in patch 1 (Kumar)
-- Remove rcu gp wait in patch 2 (Kumar)
-- Defer to irq_work when irqs disabled in patch 1
-- use bpf_map_kmalloc_nolock() for bpf_task_work
-- use kmalloc_nolock() for file dynptr
-- Link to v1: https://lore.kernel.org/all/20260325-kmalloc_special-v1-0-269666afb1ea@meta.com/
+ kernel/bpf/helpers.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
----
-Mykyta Yatsenko (2):
-      bpf: Migrate bpf_task_work to kmalloc_nolock
-      bpf: Migrate dynptr file to kmalloc_nolock
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 4c3011ef631f..7bb8b1339e2f 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4435,7 +4435,7 @@ static int make_file_dynptr(struct file *file, u32 flags, bool may_sleep,
+ 		return -EINVAL;
+ 	}
+ 
+-	state = bpf_mem_alloc(&bpf_global_ma, sizeof(struct bpf_dynptr_file_impl));
++	state = kmalloc_nolock(sizeof(*state), 0, NUMA_NO_NODE);
+ 	if (!state) {
+ 		bpf_dynptr_set_null(ptr);
+ 		return -ENOMEM;
+@@ -4467,7 +4467,7 @@ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr)
+ 		return 0;
+ 
+ 	freader_cleanup(&df->freader);
+-	bpf_mem_free(&bpf_global_ma, df);
++	kfree_nolock(df);
+ 	bpf_dynptr_set_null(ptr);
+ 	return 0;
+ }
 
- kernel/bpf/helpers.c | 60 ++++++++++++++++++++++++++++++++++------------------
- 1 file changed, 39 insertions(+), 21 deletions(-)
----
-base-commit: 9f7d8fa6817e2709846fc7f5c9f60254e536d138
-change-id: 20260223-kmalloc_special-933ec4c543d7
-
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+-- 
+2.52.0
 
