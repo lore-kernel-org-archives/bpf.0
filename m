@@ -1,88 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E601737F749;
-	Mon, 30 Mar 2026 09:00:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B063B8943;
+	Mon, 30 Mar 2026 09:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774861241; cv=none; b=nkzJajWy+Uxe5CZbXKv0LXMML86Z7xzTyu4zYD2mTkGPbIrvl6ML1JRRPlZWhrw+d8cmi2p94xN+JUySzYu2nqAGmK1YFnG40M3E6xKs69IyqhYFSi+U9MD/VWYzQwv39+2MqhOEON4yYwPgi+ns+cqhxiNf69i2d+ym843zLOc=
+	t=1774861666; cv=none; b=OeY0eXiLoDx11SVFw+bKRvXvclHuZfduR+kwrGwxD6A/YWN6vkTqUgyO5VBD0fzOXFz2DLT3GiLLh03tHKTlhSjqjgmJ9+M42k6phV8WLh9eVRumI/6SNR/xk0nzI0fN5T4YJmywac2FczWs/5xeWwMiYuEKnc7JGMOrXSjMqOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774861241; c=relaxed/simple;
-	bh=vuKopLxiQ6DJEOs3R1LaTxwbfB5g3ZLWVX3uJgUva1E=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=QYg1S3Cx1Udr0pVjsBosAvjxGHa1VRFroq8ELY2UUYky0bYeXekRHOKCx8ZvxaNEJlKfVIuvGkZKiMMc7PJpArYFi3UYLGkIVmo1/NjLlVW+HUG6ijGnItNEsQecrn6q1FB50n6dKsNNk++GRjOTKscO/vtBZy65ZQJQmyOko6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHMUigPl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1774861666; c=relaxed/simple;
+	bh=B6PZfVeG7snpqwW2Dj2BcofsI5G8BWCMHmjYcpSMZ8I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KS1Bv7rRHj6k7iLoDTM1BPChwT/EA8nW1MKOpBJAFXKjLGvjP0GZTK5WAEJ8E1vTAYgdWejMp7wedUKlP8H6slki/OI3RpqgPXyHN4nYkLy1o4zYjwd2MxsAlimGN5rcxUPTtIUz5eObJtEGgNZLV3kR/qMqcTJLk+fVK0SkSfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wKcebj5x; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHMUigPl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2207CC2BC9E;
-	Mon, 30 Mar 2026 09:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774861240;
-	bh=vuKopLxiQ6DJEOs3R1LaTxwbfB5g3ZLWVX3uJgUva1E=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=VHMUigPlUFNhup3Q8tTS1MS7lj7/20UFqlyXIfptK98y5aziKtJyz/uHsaQEsNCGu
-	 IUkhSpQUvwuHqMfpPIp0MCDF+0BhpVCX9TTIvZQzqJJJjlvivKlGujy2nzDBVTA4PH
-	 YgJS9/uWKYdhk4b22jC2z1v+U4DQHSy7wP0zc6LBgHCWnzMNMPgyr5ckfTwOxozg0Z
-	 AssDLPyaNqK5Vqe6NCPcn+HWIVs60cNK/gy9VTF3uWEkl3PzOysR5iaI79XgpTnM1r
-	 mmFeqKXAEErXq9BE16lc1h2Hf1UhKIlLFVVYDFQOpLP2bqh9TWQ4XySdyQBobZ2JBt
-	 9GYyECWECxYVg==
-Content-Type: multipart/mixed; boundary="===============6759854404622828131=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wKcebj5x"
+Message-ID: <4b0e7341-f2e2-4ad2-8c9e-b482a1b1cbfb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774861662;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eedqsRaw3mwJSZ/9l+mCaxc+9OYTIiN/zRg8cpwfdus=;
+	b=wKcebj5xfXxM1Fw495xOyB2jzCiJKB9ou6uzKzTaLVi9/bz6ODPm2dfB2gI90j2p/qzLPv
+	6BHDPN/DWoFGuFswV1e/BU/ctuwpx5ObQtV/ktCTdan0S29tEqbOFV/B6Eo06i9McyJQB8
+	TE4AWlgw0sHXvx7QGwN9qFajMww6L0Y=
+Date: Mon, 30 Mar 2026 17:07:34 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6ee24770a2b014219d86839b2243e1b7bad4dc4f520457269d5e8ca2b21c2cb8@mail.kernel.org>
-In-Reply-To: <20260330080746.319680-2-jiayuan.chen@linux.dev>
-References: <20260330080746.319680-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf v4 1/2] bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,kuniyu@google.com,martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,sdf@fomichev.me,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 30 Mar 2026 09:00:40 +0000 (UTC)
-
---===============6759854404622828131==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: patch tail-call fentry slot on
+ non-IBT JITs
+Content-Language: en-US
+To: Takeru Hayasaka <hayatake396@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf <bpf@vger.kernel.org>, X86 ML <x86@kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20260327141616.1961457-1-hayatake396@gmail.com>
+ <20260327141616.1961457-2-hayatake396@gmail.com>
+ <CAADnVQLh76CWYJCJXgOst43FcJOrPP2Y0wcwGPX71QqmiD+7pA@mail.gmail.com>
+ <CADFiAcLvdjE7zwqf-hpH01jnbxtnWQNoj4+zBwK0+RU80-k9bg@mail.gmail.com>
+ <CAADnVQLR6Y94wKo1G_4w0-xTPdR8ws38oGu3xfHOXxNKcqjyWA@mail.gmail.com>
+ <CADFiAcJtjVHYVQeYJ_znVsjiJkEBmLfOafp5srY0HQMGwVtiQQ@mail.gmail.com>
+ <CAADnVQ+0EwaJXgS1WSDf12+Ds2Uxbh9KMpDcyq+gyZjcQ_6+dw@mail.gmail.com>
+ <CADFiAcJFy-n5Zz+Wj1dWEH0WcK+PhKXi7cbvdsLnPhMXRcVktg@mail.gmail.com>
+ <CAADnVQJmqKVZC1gkvAaAmO9V=cnYPO0UYB6Wyp6Shko4tZeUQg@mail.gmail.com>
+ <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CADFiAcJCrS0wjkPcGU9sCYQukEoegeZG7JMkqhGDYq5C43nfXA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 78b548158fb0..fb975bcce804 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -12248,11 +12248,17 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
->
->  	switch (skb->protocol) {
+On 28/3/26 00:30, Takeru Hayasaka wrote:
+>> see how cilium did it. with pwru tool, etc.
+> 
+> Thank you for the suggestion.
+> As for pwru, I had thought it was not able to capture packet data such as pcap,
+> and understood it more as a tool to trace where a specific packet
+> enters the processing path and how it is handled.
+> 
+> For example, in an environment where systems are already
+> interconnected and running, I sometimes want to capture the actual
+> packets being sent for real processing.
+> On the other hand, if the goal is simply to observe processing safely
+> in a development environment, I think tools such as ipftrace2 or pwru
+> can be very useful.
+> 
 
-[ ... ]
+Sounds like you are developing/maintaining an XDP project.
 
-> #if IS_BUILTIN(CONFIG_IPV6)
->  	case htons(ETH_P_IPV6):
-> +		if (ipv6_hdr(skb)->nexthdr != IPPROTO_TCP)
-> +			return -EINVAL;
-> +
->  		ops = &tcp6_request_sock_ops;
+If so, and the kernel carries the patches in
+https://lore.kernel.org/all/20230912150442.2009-1-hffilwlqm@gmail.com/,
+recommend modifying the XDP project using dispatcher like libxdp [1].
+Then, you are able to trace the subprogs which aim to run tail calls;
+meanwhile, you are able to filter packets using pcap-filter, and to
+output packets using bpf_xdp_output() helper.
 
-For IPv6, ipv6_hdr(skb)->nexthdr gives the type of the header
-immediately following the base IPv6 header. If extension headers
-are present (hop-by-hop options, routing, etc.), nexthdr would be
-the extension header type rather than IPPROTO_TCP, even when the
-packet is a valid TCP segment.
-
-Would it be worth using ipv6_find_hdr() here, similar to
-bpf_update_srh_state() in the same file, to walk past any extension
-headers? The IPv4 check above is fine since ip_hdr(skb)->protocol
-always identifies the transport protocol directly.
-
-In practice this is very unlikely to matter since TCP SYN packets
-with IPv6 extension headers are essentially non-existent, but the
-check as written would reject them.
+[1]
+https://github.com/xdp-project/xdp-tools/blob/main/lib/libxdp/xdp-dispatcher.c.in
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Thanks,
+Leon
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23735111188
---===============6759854404622828131==--
