@@ -1,188 +1,359 @@
-Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1733D6486
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 14:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774879456; cv=pass; b=iV3Xhed5drhbsywaLnUUqApaRiCDw/J5MSP4wcUxHQGiDD20AcDeif70A01X5PKZ64OphYn4a1tNnVkHjfkX14eHeNtyyH3gcDQ7nAHspG4iXitTaEe7B8HpLDo/7U/ql8DG3cTY5KlA676CYoPcfVtQrXQXHkFmmtO9T+lvEv4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774879456; c=relaxed/simple;
-	bh=IwM6nia+w7O2Dw2MvtPP09/3GYS4kTAv9x+p/WQcg3o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B5R8A9+qW0xYZfq3WdWAVnDZsYicGytWfVpocCRttSYLn5h2GLAS7Mys1TWZsznh8VpbfZE+nCbOHrmD6qE9eF8CPzaMGlnWkd0RgI4Qe8OJLve/MiDGFLtWz/b7MlQCe7Q/XCA42Zu4fB9I/dqNOJNK6gs3lPKFp99QmPEKcwA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rcrHtazy; arc=pass smtp.client-ip=209.85.218.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67513D666A;
+	Mon, 30 Mar 2026 14:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774880878; cv=none; b=ujBauiq6dwnj2t+F7ZMOj8UA7p7cA/x37YYCij2nsrEhszqpShl0FhoX+f7H4lmSW8z4CAI/K0tP92hnEfVJ+v8N98biqf+HK83QwL2+bt3Y0TPaN+CQRpah8LEw/2wEsA83isz1kRdwyAGga4OiZQlLFdiiIWzRTbCR1TPuTQQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774880878; c=relaxed/simple;
+	bh=DxOkyepqlRTRHob2py0zHTG/daww2DOCWW3Kz3YEkOk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=suNTv02RCissIAwcEzbyZpU91uhek6DH5oPGwZNnUOCATZahbgrOPZgv4CA+5rq7/SxZuEMppuWwwUZbbOtsS1HfXo67hfnyj8AnVwryuAxDnoYdg5aurcdXBNjYh8rdNR84RURcaffvO3+UGn/HLcV87z5RqwhU9ElX2CbTVkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UOxoe8rO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rcrHtazy"
-Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-b932fe2e1a7so605186066b.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 07:04:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774879453; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RarE2e/JFKRJCRMwa/GD7nz19dX6heTu4UHzRguyuWpRb/JmX/nGOz9e3XMrnvzl0c
-         G271sxx1zPHgQL1shRcNZZIKBsA9rg1puiinS+GzzWwgyynIzxuUXps3Fov6Bj/CMufs
-         igj02h0H8lGVWeKIiF+AK3n0NV2HuVpiUlenNbYpar03MRz1bt8C/OkV2E5OsPJx5gX6
-         r/dlV6belRdDCEAGJX67p55rl+N7Ih0gsqL6fmb84RJbb6vXVcmoSP6VlPbd+xhR40ao
-         APlFv64Bw01D/Cs2EiISTJb9tSMLb8RF9Dw6sMjGrpRU/jva980Jx7HwCbUEMKvaMhTP
-         9enw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Rjv3OuZpcpnmMaWIQN6HkcsI8txYFraJbAbYCdTBvDU=;
-        fh=9d03gO6ZDIjrOrTeHaZeBUvVDHxN+aVkavLReq5lJ0A=;
-        b=duCkYS0O0/9pwFVjXk3K32TSN4/N2cKe3xafqaxNSMol77tr5xQSmQxaocrc8+9i88
-         Z1CU/3QeEABpt12wDJ/Wv4aqd5wewmFoCR7dG2TNae+bUkngcC9lW0U73zBWTmvuVOsf
-         HxrabEActaDDOhL+BVuCegv6lfi96dNNwyGqi1dxeQujClroSpDTXgLemnNF5PWHdgH/
-         OJpgWILvEjjMPuppuqJn/JIkVGTqeVCB/p+2XsQDgBoKJlcR2xq2m/Rd07wJ9hNejqR7
-         W0/Uq8NibWlplDuEpU9AmY7KYbYyVLBWGzNv0rCAxrXuLYtfJBQ2lzaden85oQEl5Pja
-         c39Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774879453; x=1775484253; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rjv3OuZpcpnmMaWIQN6HkcsI8txYFraJbAbYCdTBvDU=;
-        b=rcrHtazyvIAXeqDd0p4/vC//ByM2xY3c3zi0OTaui3dnONEFkkcjqfSZNskHo//AN3
-         x3nAiyi2MScrK5l60TdN+/ZZfHfqyQ84e43J6B0qI6pxpqgqT0y/PXPeSnejer+bXr8C
-         9ahPTAxFFLUeoLxPYuBe+kH066SZX/obN4AEb/a6kp3dYxw1JW63cBFeyyQ+6DNUq7FX
-         iXx0t6wg//z9TQqkRdnSIbifMcP4cyRWNndpwc2Xcx0DyMOPVNzOpiGGybDg0AhV/MxF
-         u6qhb4wYOUZaPGiBwWWtqnHQpmEYOVR/BS6MUpUoY6qCxnpCVTCZC5gVTl0PZCl/3QeK
-         /VgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774879453; x=1775484253;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rjv3OuZpcpnmMaWIQN6HkcsI8txYFraJbAbYCdTBvDU=;
-        b=JKc2liLSoqC97+LasFXM6ZhYyYgvjQkid03SoR+HLYAUyRub7bdM+0gnYj1UR8nQy0
-         ByYrGu+na35O6aO27nT7n4QeHaGIN+OqDEP/ygbo7lwckcLGs8ADEbzs1yBbwbDut5G+
-         iNaIjB3zZ6N4XRigg2irdaIVCW7oFN2+kBSVOzbOG63HHdHOfGt0OYX8aybBk+pW86rn
-         OAG5eJemtqrUMwwUMT4hmpyOS8OgMHoVGo+5XOIe0eM5I86yB4+bNQ44kNdMkAZVfXVy
-         TjEaZr9XTTbu8m5VuhJXzGG9dV0ETWXD+8/nXG2m6Q6sDgjNalgz4WnLYIRK/wm9wqFi
-         KMtA==
-X-Gm-Message-State: AOJu0YySL3bthPWS1EetOziAgYuocrN9mE9s9kYIJgzzTfJRbV1mR020
-	bmo+BcMPUlW+dczV4zUbCeHFtgWJn+0MqVsUkOVBep/axHOWlH7TumLf4pn6cNrkqjWnvkOh6cL
-	sO+xVFNhUzZLWYRqx5MDrSLb1c8fsHIs=
-X-Gm-Gg: ATEYQzzQTVHPvg3QCq/lh5WQhwbjHe9P2e9HHDqiIzXnBHCas7Gu+LdwsO3dl4ef4Hy
-	upXtNrVw9QPLUW+4sLf9g5Je6TJRcPZHf8r9P7GRICguzybw3GB7qnqpgi6Iu6vCVK1W0ketBBx
-	rfS5KuFsT+UfN7HlGs/z4UjjbfzZV1dsElpV5T2qBC8fHG/GDmuHpM3v7ZHTgUJK1PSR4G1yREq
-	x48Tpmz7CruYcWYzbnLfgeNCqtsiC3OLaRG6I+j/OXrVrjJU9NpKMytKD9M0FMXOGYyvKNSkrsk
-	lXCMmGrB3Wi5w2LRL5xJLfnXEFqN985mUCwSvbEXDUFPjosdkfP3UumHxVB7IdbwX45h86M=
-X-Received: by 2002:a17:907:7ba4:b0:b98:2c44:6631 with SMTP id
- a640c23a62f3a-b9b502c0086mr658415966b.14.1774879453093; Mon, 30 Mar 2026
- 07:04:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UOxoe8rO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 913D5C4CEF7;
+	Mon, 30 Mar 2026 14:27:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774880878;
+	bh=DxOkyepqlRTRHob2py0zHTG/daww2DOCWW3Kz3YEkOk=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=UOxoe8rOMowhIGLCLfxX4c4eG4vSpFprLoYzYNaqyxJ7B8q2hQSKShHTqqWQpohn0
+	 WMTE79Vf25Z6ywgzhO/ee8rN1VkLSg11RqPvIU4tCx4RYFy+SGlhLA+FYrNjF9qdH+
+	 bvc5Rvw9Q4T4Zps7hmzlWT4DN5K9j5nkt/vl3nCM4jjmHr65QSNef/PcGyFPn9yAic
+	 CmkM0/zBW3/7bp3ZrRE1TDjW99DgbSqaG8DqU7JxBvZ9c/ati2Cqrv5ba105aQHEpE
+	 tzkh3Rg6tgK2RvGMa5jNNAzN45DP/HcMFQFb43EMGpjYqo2hYHwmUGRI8IOPnibYmi
+	 cfv6OOq3QBC7w==
+Message-ID: <3b2380d1-e4ca-4e44-b67c-06780354f806@kernel.org>
+Date: Mon, 30 Mar 2026 16:27:52 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330032124.3141001-1-memxor@gmail.com> <20260330032124.3141001-2-memxor@gmail.com>
- <CAP01T77HcqyBKZRzRbLbHuZeskJ7XJ+FU2GQpZX-WXTCPMyikw@mail.gmail.com> <m25x6d1vsi.fsf@kernel.org>
-In-Reply-To: <m25x6d1vsi.fsf@kernel.org>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Mon, 30 Mar 2026 16:03:36 +0200
-X-Gm-Features: AQROBzBOzEMnKK_VI2QCfIu13WUcCUcM_DU23crI0vjPGjcRCCs6UwzEfjeh9YQ
-Message-ID: <CAP01T76f-M9ZnaCCtjXspk+XmRb4mbs7yMnZX6NybviOiiyo7g@mail.gmail.com>
-Subject: Re: [PATCH bpf v1 1/2] bpf: Fix grace period wait for tracepoint bpf_link
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, kkd@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] mm/page_alloc: Optimize free_contig_range()
+Content-Language: en-US
+To: Muhammad Usama Anjum <usama.anjum@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
+ Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
+ David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Ryan.Roberts@arm.com, david.hildenbrand@arm.com
+References: <20260327125720.2270651-1-usama.anjum@arm.com>
+ <20260327125720.2270651-2-usama.anjum@arm.com>
+From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <20260327125720.2270651-2-usama.anjum@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 30 Mar 2026 at 12:00, Puranjay Mohan <puranjay@kernel.org> wrote:
->
-> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
->
-> > On Mon, 30 Mar 2026 at 05:21, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> >>
-> >> Recently, tracepoints were switched from using disabled preemption
-> >> (which acts as RCU read section) to SRCU-fast when they are not
-> >> faultable. This means that to do a proper grace period wait for programs
-> >> running in such tracepoints, we must use SRCU's grace period wait.
-> >> This is only for non-faultable tracepoints, faultable ones continue
-> >> using RCU Tasks Trace.
-> >>
-> >> However, bpf_link_free() currently does call_rcu() for all cases when
-> >> the link is non-sleepable (hence, for tracepoints, non-faultable). Fix
-> >> this by doing a call_srcu() grace period wait.
-> >>
-> >> As far RCU Tasks Trace gp -> RCU gp chaining is concerned, it is deemed
-> >> unnecessary for tracepoint programs. The link and program are either
-> >> accessed under RCU Tasks Trace protection, or SRCU-fast protection now.
-> >>
-> >> The earlier logic of chaining both RCU Tasks Trace and RCU gp waits was
-> >> to generalize the logic, even if it conceded an extra RCU gp wait,
-> >> however that is unnecessary for tracepoints even before this change.
-> >> In practice no cost was paid since rcu_trace_implies_rcu_gp() was always
-> >> true.
-> >>
-> >> Hence we need not chain any SRCU gp waits after RCU Tasks Trace.
-> >
-> > ... or chaining RCP gp after SRCU gp, rather, the commit log should
-> > probably say that instead. The above might be confusing.
-> > But more eyes on this would be great, I went back and read a few
-> > discussions on why we were chaining RCU gp after RCU-tt gp and
-> > couldn't convince myself it was necessary for the tracepoint path.
->
-> Yeah the commit message is a bit hard to follow, let me try to lay out
-> why chaining isn't needed for either case, let me know if you agree with
-> this analysis:
->
-> For non-faultable tracepoints (the call_srcu path):
->
-> The tracepoint dispatch macro in __DECLARE_TRACE does:
->
->         guard(srcu_fast_notrace)(&tracepoint_srcu);
->         __DO_TRACE_CALL(name, args);
->
-> which calls into __bpf_trace_##call, which calls bpf_trace_runN, and
-> that ends up in __bpf_trace_run() where we have:
->
->         struct bpf_prog *prog = link->link.prog;
->         ...
->         rcu_read_lock_dont_migrate();
->         ...
->         run_ctx.bpf_cookie = link->cookie;
->         bpf_prog_run(prog, args);
->         ...
->         rcu_read_unlock_migrate();
->
-> Both the link dereference (link->link.prog) and the
-> rcu_read_lock_dont_migrate() happen inside the SRCU-fast read section
-> from the tracepoint macro. So classic RCU is nested inside SRCU-fast
-> here. When the SRCU grace period completes, all in-flight SRCU-fast
-> readers have finished, which means all their nested classic RCU read
-> sections have also finished. No need to chain a classic RCU GP after
-> the SRCU GP.
->
-> For faultable tracepoints (the call_rcu_tasks_trace path):
->
-> __DECLARE_TRACE_SYSCALL uses guard(rcu_tasks_trace)() instead of
-> SRCU-fast, so SRCU isn't involved at all on this path. The link and
-> program are accessed exclusively under RCU Tasks Trace protection.
-> A tasks trace GP is sufficient on its own, and since tasks trace GP
-> implies classic RCU GP, there's nothing to chain.
->
-> So in both cases, the outermost protection (SRCU-fast or tasks trace)
-> is what we wait for in bpf_link_free(), and the inner
-> rcu_read_lock_dont_migrate() in __bpf_trace_run() is subsumed by that
-> outer GP wait.
->
-> Am I missing something?
+On 3/27/26 13:57, Muhammad Usama Anjum wrote:
+> From: Ryan Roberts <ryan.roberts@arm.com>
+> 
+> Decompose the range of order-0 pages to be freed into the set of largest
+> possible power-of-2 size and aligned chunks and free them to the pcp or
+> buddy. This improves on the previous approach which freed each order-0
+> page individually in a loop. Testing shows performance to be improved by
+> more than 10x in some cases.
+> 
+> Since each page is order-0, we must decrement each page's reference
+> count individually and only consider the page for freeing as part of a
+> high order chunk if the reference count goes to zero. Additionally
+> free_pages_prepare() must be called for each individual order-0 page
+> too, so that the struct page state and global accounting state can be
+> appropriately managed. But once this is done, the resulting high order
+> chunks can be freed as a unit to the pcp or buddy.
+> 
+> This significantly speeds up the free operation but also has the side
+> benefit that high order blocks are added to the pcp instead of each page
+> ending up on the pcp order-0 list; memory remains more readily available
+> in high orders.
+> 
+> vmalloc will shortly become a user of this new optimized
+> free_contig_range() since it aggressively allocates high order
+> non-compound pages, but then calls split_page() to end up with
+> contiguous order-0 pages. These can now be freed much more efficiently.
+> 
+> The execution time of the following function was measured in a server
+> class arm64 machine:
+> 
+> static int page_alloc_high_order_test(void)
+> {
+> 	unsigned int order = HPAGE_PMD_ORDER;
+> 	struct page *page;
+> 	int i;
+> 
+> 	for (i = 0; i < 100000; i++) {
+> 		page = alloc_pages(GFP_KERNEL, order);
+> 		if (!page)
+> 			return -1;
+> 		split_page(page, order);
+> 		free_contig_range(page_to_pfn(page), 1UL << order);
+> 	}
+> 
+> 	return 0;
+> }
+> 
+> Execution time before: 4097358 usec
+> Execution time after:   729831 usec
+> 
+> Perf trace before:
+> 
+>     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthread
+>             |
+>             ---kthread
+>                0xffffb33c12a26af8
+>                |
+>                |--98.13%--0xffffb33c12a26060
+>                |          |
+>                |          |--97.37%--free_contig_range
+>                |          |          |
+>                |          |          |--94.93%--___free_pages
+>                |          |          |          |
+>                |          |          |          |--55.42%--__free_frozen_pages
+>                |          |          |          |          |
+>                |          |          |          |           --43.20%--free_frozen_page_commit
+>                |          |          |          |                     |
+>                |          |          |          |                      --35.37%--_raw_spin_unlock_irqrestore
+>                |          |          |          |
+>                |          |          |          |--11.53%--_raw_spin_trylock
+>                |          |          |          |
+>                |          |          |          |--8.19%--__preempt_count_dec_and_test
+>                |          |          |          |
+>                |          |          |          |--5.64%--_raw_spin_unlock
+>                |          |          |          |
+>                |          |          |          |--2.37%--__get_pfnblock_flags_mask.isra.0
+>                |          |          |          |
+>                |          |          |           --1.07%--free_frozen_page_commit
+>                |          |          |
+>                |          |           --1.54%--__free_frozen_pages
+>                |          |
+>                |           --0.77%--___free_pages
+>                |
+>                 --0.98%--0xffffb33c12a26078
+>                           alloc_pages_noprof
+> 
+> Perf trace after:
+> 
+>      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] __free_contig_range
+>             |
+>             |--5.52%--__free_contig_range
+>             |          |
+>             |          |--5.00%--free_prepared_contig_range
+>             |          |          |
+>             |          |          |--1.43%--__free_frozen_pages
+>             |          |          |          |
+>             |          |          |           --0.51%--free_frozen_page_commit
+>             |          |          |
+>             |          |          |--1.08%--_raw_spin_trylock
+>             |          |          |
+>             |          |           --0.89%--_raw_spin_unlock
+>             |          |
+>             |           --0.52%--free_pages_prepare
+>             |
+>              --2.90%--ret_from_fork
+>                        kthread
+>                        0xffffae1c12abeaf8
+>                        0xffffae1c12abe7a0
+>                        |
+>                         --2.69%--vfree
+>                                   __free_contig_range
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> ---
+> Changes since v3:
+> - Move __free_contig_range() to more generic __free_contig_range_common()
+>   which will used to free frozen pages as well
+> - Simplify the loop in __free_contig_range_common()
+> - Rewrite the comment
+> 
+> Changes since v2:
+> - Handle different possible section boundries in __free_contig_range()
+> - Drop the TODO
+> - Remove return value from __free_contig_range()
+> - Remove non-functional change from __free_pages_ok()
+> 
+> Changes since v1:
+> - Rebase on mm-new
+> - Move FPI_PREPARED check inside __free_pages_prepare() now that
+>   fpi_flags are already being passed.
+> - Add todo (Zi Yan)
+> - Rerun benchmarks
+> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
+> - Rework order calculation in free_prepared_contig_range() and use
+>   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
+>   be up to internal __free_frozen_pages() how it frees them
+> ---
+>  include/linux/gfp.h |   2 +
+>  mm/page_alloc.c     | 103 +++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 103 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+> index f82d74a77cad8..7c1f9da7c8e56 100644
+> --- a/include/linux/gfp.h
+> +++ b/include/linux/gfp.h
+> @@ -467,6 +467,8 @@ void free_contig_frozen_range(unsigned long pfn, unsigned long nr_pages);
+>  void free_contig_range(unsigned long pfn, unsigned long nr_pages);
+>  #endif
+>  
+> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages);
+> +
+>  DEFINE_FREE(free_page, void *, free_page((unsigned long)_T))
+>  
+>  #endif /* __LINUX_GFP_H */
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 75ee81445640b..18a96b51aa0be 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -91,6 +91,9 @@ typedef int __bitwise fpi_t;
+>  /* Free the page without taking locks. Rely on trylock only. */
+>  #define FPI_TRYLOCK		((__force fpi_t)BIT(2))
+>  
+> +/* free_pages_prepare() has already been called for page(s) being freed. */
+> +#define FPI_PREPARED		((__force fpi_t)BIT(3))
+> +
+>  /* prevent >1 _updater_ of zone percpu pageset ->high and ->batch fields */
+>  static DEFINE_MUTEX(pcp_batch_high_lock);
+>  #define MIN_PERCPU_PAGELIST_HIGH_FRACTION (8)
+> @@ -1310,6 +1313,9 @@ __always_inline bool __free_pages_prepare(struct page *page,
+>  	bool compound = PageCompound(page);
+>  	struct folio *folio = page_folio(page);
+>  
+> +	if (fpi_flags & FPI_PREPARED)
+> +		return true;
+> +
+>  	VM_BUG_ON_PAGE(PageTail(page), page);
+>  
+>  	trace_mm_page_free(page, order);
+> @@ -6784,6 +6790,100 @@ void __init page_alloc_sysctl_init(void)
+>  	register_sysctl_init("vm", page_alloc_sysctl_table);
+>  }
+>  
+> +static void free_prepared_contig_range(struct page *page,
+> +				       unsigned long nr_pages)
+> +{
+> +	while (nr_pages) {
+> +		unsigned int order;
+> +		unsigned long pfn;
+> +
+> +		pfn = page_to_pfn(page);
+> +		/* We are limited by the largest buddy order. */
+> +		order = pfn ? __ffs(pfn) : MAX_PAGE_ORDER;
+> +		/* Don't exceed the number of pages to free. */
+> +		order = min_t(unsigned int, order, ilog2(nr_pages));
+> +		order = min_t(unsigned int, order, MAX_PAGE_ORDER);
+> +
+> +		/*
+> +		 * Free the chunk as a single block. Our caller has already
+> +		 * called free_pages_prepare() for each order-0 page.
+> +		 */
+> +		__free_frozen_pages(page, order, FPI_PREPARED);
+> +
+> +		page += 1UL << order;
+> +		nr_pages -= 1UL << order;
+> +	}
+> +}
+> +
+> +static void __free_contig_range_common(unsigned long pfn, unsigned long nr_pages,
+> +				       bool is_frozen)
+> +{
+> +	struct page *page = pfn_to_page(pfn);
+> +	struct page *start = NULL;
+> +	unsigned long start_sec;
+> +	bool can_free = true;
+> +	unsigned long i;
+> +
+> +	/*
+> +	 * Contiguous PFNs might not have a contiguous "struct pages" in some
+> +	 * kernel config. Therefore, check memdesc_section(), and stop batching
+> +	 * once it changes, see num_pages_contiguous().
 
-No, this is my thinking as well, but thanks for laying it out so clearly.
-I think it was unnecessary before too but I think the purpose to chain
-them was to keep things generic and not tracepoint specific.
-I don't see a path to that here (or unnecessary chaining penalization
-with RCU gp after SRCU gp, which isn't implied unlike with RCU-tt gp),
-so I leaned toward the current change.
+num_pages_contiguous() starts with an array of struct page pointers,
+presumably all valid, and determines if they are from the same section.
 
->
-> Thanks,
-> Puranjay
+> +	 */
+> +	for (i = 0; i < nr_pages; i++, page++) {
+
+Here we do page++ and then trust it to be a valid struct page pointer and
+use that to check if it's valid. But if struct pages are discontigous, we
+might crash on the first dereference? The section checks below won't help in
+this case AFAICS.
+
+> +		VM_WARN_ON_ONCE(PageHead(page));
+> +		VM_WARN_ON_ONCE(PageTail(page));
+> +
+> +		if (!is_frozen)
+> +			can_free = put_page_testzero(page);
+> +
+> +		if (can_free)
+> +			can_free = free_pages_prepare(page, 0);
+> +
+> +		if (!can_free) {
+> +			if (start) {
+> +				free_prepared_contig_range(start, page - start);
+> +				start = NULL;
+> +			}
+> +			continue;
+> +		}
+> +
+> +		if (start && memdesc_section(page->flags) != start_sec) {
+> +			free_prepared_contig_range(start, page - start);
+> +			start = page;
+> +			start_sec = memdesc_section(page->flags);
+> +		} else if (!start) {
+> +			start = page;
+> +			start_sec = memdesc_section(page->flags);
+> +		}
+> +	}
+> +
+> +	if (start)
+> +		free_prepared_contig_range(start, page - start);
+> +}
+> +
+> +/**
+> + * __free_contig_range - Free contiguous range of order-0 pages.
+> + * @pfn: Page frame number of the first page in the range.
+> + * @nr_pages: Number of pages to free.
+> + *
+> + * For each order-0 struct page in the physically contiguous range, put a
+> + * reference. Free any page who's reference count falls to zero. The
+> + * implementation is functionally equivalent to, but significantly faster than
+> + * calling __free_page() for each struct page in a loop.
+> + *
+> + * Memory allocated with alloc_pages(order>=1) then subsequently split to
+> + * order-0 with split_page() is an example of appropriate contiguous pages that
+> + * can be freed with this API.
+> + *
+> + * Context: May be called in interrupt context or while holding a normal
+> + * spinlock, but not in NMI context or while holding a raw spinlock.
+> + */
+> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages)
+> +{
+> +	__free_contig_range_common(pfn, nr_pages, false);
+> +}
+> +EXPORT_SYMBOL(__free_contig_range);
+> +
+>  #ifdef CONFIG_CONTIG_ALLOC
+>  /* Usage: See admin-guide/dynamic-debug-howto.rst */
+>  static void alloc_contig_dump_pages(struct list_head *page_list)
+> @@ -7330,8 +7430,7 @@ void free_contig_range(unsigned long pfn, unsigned long nr_pages)
+>  	if (WARN_ON_ONCE(PageHead(pfn_to_page(pfn))))
+>  		return;
+>  
+> -	for (; nr_pages--; pfn++)
+> -		__free_page(pfn_to_page(pfn));
+> +	__free_contig_range(pfn, nr_pages);
+>  }
+>  EXPORT_SYMBOL(free_contig_range);
+>  #endif /* CONFIG_CONTIG_ALLOC */
+
