@@ -1,157 +1,148 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC1C3C1415;
-	Mon, 30 Mar 2026 12:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3E23C3437
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 12:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774872576; cv=none; b=Y8WfPrIf5Dc4uMALS+K5Akj1Ho2tDR0QTmQbBLdNld/oy83SpFl0qJX1Q/1xZPCMmpe/yMIvzMbRAMuIqL+RLVM840fLlAIvrCc8ChUEdPbm1MycPzUmD3IrD0ejq9tf1ltwUIyRJ3stQnpjDFgd6a14wjNZImFVdkxtb2M1sog=
+	t=1774873081; cv=none; b=otgk8PBddUvufKLgk5ewq0xfwGS2Djp1lW5kKQxM6dcoc7aVcKmltSv+BMP/5C/bSU3/jrFBQcWBMDulSLPJclE2HKOk491CsBzJlAkZzU+1dJuSFcbFjlcT2sidbQNd7qoVNT8yirN6nFAz9VKJWke/uqla4QmuEUynmLATDzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774872576; c=relaxed/simple;
-	bh=bAMR2VvQnY1wHO5Aay50HuiIUDYJz6WQd+15bmNhySg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=D9Gvh+j+GdyzILbEvbhAeOoPKgr2Wbsf/QbY/s5k12WPjnBbfT5SBKxP0+y/pvuJjjHrD6oqnC/NhSDA0SxaIrPDaADAnjSBe3IBKBlgmd8bmEWH85ZqI7QJsIxvt5nbcSF2z4m+R0SZiZ0Crs2DFmXMV3ZeOIgQwP5nRNUmYuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Z8G4l//I; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1774873081; c=relaxed/simple;
+	bh=HKP1+unkmlsUXuZbvqKdy3bzckwvgDpC2yh+SeHXOF8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=feyFc69vi2u72qxaY0N4aKTnO29o2ro+22X+5xfPiEg6I1YfRDmRROfXBJWYkPKg4HOyDgf/yuc7/cbAPaE+5zMAIFgJGWyJEQ3MAYAmGAOyiy0Gu10Ud/LI+DDfC8mtq5wp61zY63nJwXXyMW8AHCPQgd//fUnnHRO0n8v5RU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T2ztSMxF; arc=none smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Z8G4l//I"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Lx7YRXKJCWBCsErD1cu39z8DMl9eZkAIZO/j8HiaQCg=; b=Z8G4l//IHYvULS6gB1JauJrEtw
-	AjIx5BEWpsHQLzzni1ebLacBV+oM/lKD7PzgW4yaFtfG64jNKIINZHuvssct7WH4g/4xu/+OC0Mpi
-	ufsZvAFurtiC6+PDuvAJagqyR4Y3NvowwbVm/3oMMvPFvm+reaUzAKPxeL/Uw00638RBX85pOt69W
-	TUebJtQbnrtfnLkC8d4Soyvv7uEF28tAqg17vvz0znaxZdFBVvfdmKoEIPqRWYNG962tUYnMwzOuw
-	13i+cvREO+GX/ytmySMnKcOXIHL4vKNqSgz2HZjE1F7rKG4EIlP1ZiEPpEWP90vTakBcNL0KCcYgz
-	8pVfmmJA==;
-Received: from [187.106.45.161] (helo=[192.168.100.160])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1w7BQo-008xuJ-2D; Mon, 30 Mar 2026 14:09:22 +0200
-Message-ID: <7fb97184-baaa-4639-a0b9-ac289bf2e54d@igalia.com>
-Date: Mon, 30 Mar 2026 09:09:16 -0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T2ztSMxF"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-12776bebe9fso412008c88.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 05:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774873079; x=1775477879; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jZtJUBFKT2xiUVosjATVKuQj4x9H6qJm82elkbbuJNI=;
+        b=T2ztSMxFOpGv/B4Nm1G4qzLsqLWpLfiWpu7Gq6CVACS+oPWt8gKYC8vt+O1bVZuLki
+         DmyZvru3mEJDVLEgIvNiF2TsVLg8xEZobhdHpHzmTOxagRuqiVqxbuwMpdn2u8cjAwgo
+         WfAfHLxgS4Rd6axbM13Ju9Ceo+8TBBOwB7vaSdAZUZiXL32oo34Egx/xTDl4IHhBKEqL
+         yMracCYeUI4OJg3mNqQ6qq6drRbausxWiKPWkgFN2k5J+3y4JiIXqPDvQ1S/1FNqgBXI
+         0iIhsTP8wTyRJBmyki5iSDLk0d3KvMvWxTVR3+23A9GruOITjJAlY67TDxSUeV95sRu5
+         RrhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774873079; x=1775477879;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jZtJUBFKT2xiUVosjATVKuQj4x9H6qJm82elkbbuJNI=;
+        b=hw3mDfftytshA+uyUdmwwiHBNmtB4UAi79vXgsCWRB7ixDHGeaVy/XeonOthvgSRYC
+         Lac2gFcUGX0R8k3V3dyH4Bkl2xyTINAT1lAUPtYMAlLs0n2Ww1s/MMLTBDNGlphBk8i0
+         JW7hnG0JP0sg3sJnsW4OmY+3sQlWJ83XF9XYXeM1W09Y49g7U1f+NsDCzbpgVLbIf/aB
+         x6WicVOTnmP0lRLsmiyV4BmURv8D1zjAF2nz+6fxBBwTuoZSZpY2/UuWst/i8YuQLk0n
+         MVNBh0YBtvajJCWHkE1T1TGky6THa+Lq2WbQa2cn/2KwDBgpF96nJi4jJ4DsxLC4lgRb
+         /T9w==
+X-Gm-Message-State: AOJu0YxpMDsGE805bvEQVVRvrg10ENl4VMd4cSCygkKvLcxux1GQOxJE
+	SIf0IN8nSBXG9+qrW+cSkfknlLZd89av+Ajt2pha2SdooodY2LE+MA3X
+X-Gm-Gg: ATEYQzxOx6lnBnbU/K0CZMGbYpAze9bBa0t4iGUEl3224sp6lhZ2I77xA0vhDAHRfHz
+	uZ2YUW2bCNaD/Ny5KOTmpnQ7kfiwD61PnedrrCpo0yT3U5p3u7PCSoH4AfyFVTChudazkGrd0o+
+	gMAJohbLaF7JcO3tvQXejCRGjImBrNbyRtLsGuodEjUcZhvdP9hswrczVJd2OJfgE8kmBFGGrd5
+	bMjtFHMnTDBkGtHCpzVxI1Q9ms+pkfsc0BkmrGj8bq/161Hlg4uA3Zad/MbRNhhArs2bOXSKbQD
+	VRi+Zmi6nyIpVKiFPRyBPxsXPusiI2HQwpwChStJiQ7XKIB3W9ThjOzhQYeGXP/+BA7+rjPPJl6
+	lp0CBXOXaeiJyNOau9tfFBI7OfXhGBhc3kECR8VlIzXm1V+UAK7KTTSFKp/26F0W+iFqx15yVVp
+	PT5w7QEtj1ef6rXoPU91k=
+X-Received: by 2002:a05:7022:ea30:b0:128:d7a7:5261 with SMTP id a92af1059eb24-12ab28eba7bmr7986482c88.30.1774873079115;
+        Mon, 30 Mar 2026 05:17:59 -0700 (PDT)
+Received: from animal.. ([104.35.26.140])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12ab970da7fsm7623128c88.0.2026.03.30.05.17.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 05:17:58 -0700 (PDT)
+From: Eyal Birger <eyal.birger@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	paul.chaignon@gmail.com,
+	chen.dylane@linux.dev,
+	kpsingh@kernel.org,
+	a.s.protopopov@gmail.com,
+	yatsenko@meta.com,
+	ameryhung@gmail.com,
+	tklauser@distanz.ch,
+	shmulik.ladkani@gmail.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Eyal Birger <eyal.birger@gmail.com>
+Subject: [PATCH bpf-next] bpf: warn against BPF_RB_NO_WAKEUP in bpf_ringbuf_discard()
+Date: Mon, 30 Mar 2026 05:17:32 -0700
+Message-ID: <20260330121732.1601352-1-eyal.birger@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: fix umin/umax when lower bits fall outside u32 range
-To: Eduard Zingerman <eddyz87@gmail.com>, andrii@kernel.org,
- shung-hsi.yu@suse.com, yonghong.song@linux.dev, ast@kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-dev@igalia.com
-References: <20260327194849.855397-1-koike@igalia.com>
- <74e65b463d1f992bc0e4846085394a440796f563.camel@gmail.com>
-Content-Language: en-US
-From: Helen Koike <koike@igalia.com>
-In-Reply-To: <74e65b463d1f992bc0e4846085394a440796f563.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi Eduard,
+Document that BPF_RB_NO_WAKEUP is not recommended for
+bpf_ringbuf_discard().
 
-Thanks for your replies and pointers, please see my comments below.
+A discard done with BPF_RB_NO_WAKEUP can suppress a later adaptive
+wakeup from a valid record, leaving an epoll-based userspace consumer
+asleep even though data is available in the ring buffer.
 
-On 3/27/26 5:46 PM, Eduard Zingerman wrote:
-> On Fri, 2026-03-27 at 16:48 -0300, Helen Koike wrote:
-> 
-> [...]
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index a965b2c45bbe..ddac09c8a9e5 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -2702,9 +2702,29 @@ static void __reg_deduce_mixed_bounds(struct bpf_reg_state *reg)
->>   	__u64 new_umin, new_umax;
->>   	__s64 new_smin, new_smax;
->>   
->> -	/* u32 -> u64 tightening, it's always well-formed */
->> -	new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
->> -	new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
->> +	/*
->> +	 * If (u32)umin > u32_max, no value in the current upper-32-bit block
->> +	 * satisfies [u32_min, u32_max] while being >= umin; advance umin to
->> +	 * the next block. Otherwise apply standard u32->u64 tightening.
->> +	 */
->> +	if ((u32)reg->umin_value > reg->u32_max_value)
->> +		new_umin = (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) |
->> +			   reg->u32_min_value;
->> +	else
->> +		new_umin = (reg->umin_value & ~0xffffffffULL) |
->> +			   reg->u32_min_value;
-> 
-> What would happen if there is no next or previous 32-bit block?
-> E.g. if (reg->umin_value & ~0xffffffffULL) + (1ULL << 32) wraps around.
-> I guess the argument is that if this happens, there is an invariant
-> violation already, will the final register still bin in invariant
-> violation state?
+Scenario:
 
-I thought about it and my conclusion was that we would be in trouble 
-anyway and the error is elsewhere (unless my understanding is wrong).
-We could add a check here, but I guess reg_bounds_sanity_check() already 
-does that.
+epoll_wait(rb_fd);                     // blocks
 
-> 
-> Useful picture:
-> 
->   N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
->   ||----|=====|--|----------||----|=====|-------------||--|-|=====|-------------||
->         |< b >|  |                |< b >|                 | |< b >|
->                  |                |     |                 |
->                  |<---------------+- a -+---------------->|
->                                   |     |
->                                   |< t >| refined r0 range
-> 
-> Also, as this is based solely on unsigned ranges, the following case
-> is not covered, right?
+rec = bpf_ringbuf_reserve(&rb, ...);
+bpf_ringbuf_discard(rec, BPF_RB_NO_WAKEUP);
 
-Right, this case is not covered.
+rec = bpf_ringbuf_reserve(&rb, ...);
+bpf_ringbuf_submit(rec, 0);           // valid record, but no wakeup
 
-> 
->   N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
->   ||===|---------|------|===||===|----------------|===||===|---------|------|===||
->    |b >|         |      |< b||b >|                |< b||b >|         |      |< b|
->                  |      |                                  |         |
->                  |<-----+----------------- a --------------+-------->|
->                         |                                  |
->                         |<---------------- t ------------->| refined r0 range
-> 
-> Would it be hard to implementing something in the same line as [2] to cover it?
+This behavior is surprising in the context of bpf_ringbuf_discard()
+as it seems natural not to want to wake userspace.
 
-I'll check and get back to you.
+Reported-by: Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
+---
+ include/uapi/linux/bpf.h       | 3 ++-
+ tools/include/uapi/linux/bpf.h | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-> 
->> +
->> +	/*
->> +	 * Symmetrically, if (u32)umax < u32_min, retreat umax to the
->> +	 * previous block. Otherwise apply standard u32->u64 tightening.
->> +	 */
->> +	if ((u32)reg->umax_value < reg->u32_min_value)
->> +		new_umax = (reg->umax_value & ~0xffffffffULL) - (1ULL << 32) |
->> +			   reg->u32_max_value;
->> +	else
->> +		new_umax = (reg->umax_value & ~0xffffffffULL) |
->> +			   reg->u32_max_value;
->> +
->>   	reg->umin_value = max_t(u64, reg->umin_value, new_umin);
->>   	reg->umax_value = min_t(u64, reg->umax_value, new_umax);
->>   	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range validity */
-> 
-> I think we can move forward with this, as the fate of my RFC is
-> uncertain. Please add some selftests, e.g. from [1].
-
-Ack, I'll check the signed case, test against your selftests and 
-re-submit the patches.
-
-Thanks again!
-Helen
-
-> 
-> [1] https://lore.kernel.org/bpf/20260318-cnum-sync-bounds-v1-4-1f2e455ea711@gmail.com/
-> [2] https://github.com/eddyz87/cnum-verif/blob/master/cnum.c#L242
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c8d400b7680a..c46b06d45904 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4645,7 +4645,8 @@ union bpf_attr {
+  * 	Description
+  * 		Discard reserved ring buffer sample, pointed to by *data*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+- * 		of new data availability is sent.
++ * 		of new data availability is sent, which is not recommended as
++ * 		it can suppress a later adaptive wakeup from a subsequent submit.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 		If **0** is specified in *flags*, an adaptive notification
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 5e38b4887de6..96de37c3b896 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4645,7 +4645,8 @@ union bpf_attr {
+  * 	Description
+  * 		Discard reserved ring buffer sample, pointed to by *data*.
+  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
+- * 		of new data availability is sent.
++ * 		of new data availability is sent, which is not recommended as
++ * 		it can suppress a later adaptive wakeup from a subsequent submit.
+  * 		If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, notification
+  * 		of new data availability is sent unconditionally.
+  * 		If **0** is specified in *flags*, an adaptive notification
+-- 
+2.43.0
 
