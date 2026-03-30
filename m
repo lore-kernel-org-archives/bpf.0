@@ -1,262 +1,151 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0C93BF68A
-	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 11:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5ACA3B0AEE;
+	Mon, 30 Mar 2026 11:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774870754; cv=none; b=r9HUssOhKtMvA6RIrjBfbRRrPKtuCE2rFLnI5HD0wu3JBrRFst/Evp9Uoxc1kqVdZlOFthEeJ+JCOxH2dB8rtq4KY8RNfb+YYUCCmYgbxqNhI4ZcOdLU9FLS26GUOjSQlRsTA88atKrx1YHlGSJXd9num3NAbp3Msvr4OgUNAaM=
+	t=1774871245; cv=none; b=dmq2LIfgxDB3xgcwRL+cdz13wgMR8AKN9c+PB6V5V1DVxTPD/FnEAKQU0t0DoewWR4emvG/UKjHTbKcNEZMc2ugIwEjHU6ObOd6bOQduU7j1kFEoq2zhnDqzNeBbOgvR3IjTd4Kg6vwDeyKP/NG6p+x/BGtcrTMlIIX8ooFmwzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774870754; c=relaxed/simple;
-	bh=ZYRJx/I5+1KfuQdPQQc0kQq0yncC1iZME1SDfw6Dnz4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=L8JZWWeNJIsL/BZsXKq569rSncfuCNoKT8TO4oMcB14Vl9TiBExfTUQmHOJI2fiVZeHeq68Q2LErKZO7IYKD6UDjPyFooXchUegNu2jHkBIQZf4s7kjn5nBjOfWcjfNoTGvspvknGGS9qC0+YVdBv/3N+bM7pObzBf0RNwGfpH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=le2de8bd; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1774871245; c=relaxed/simple;
+	bh=clntS1H3+5oPRN7KVb5bBCyEIIGwrQTDwAc3gHvnz1c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=krvP7Dt6b4nKqbFykic1huFgG8JgO/MTYnrbS4v/+KmYIoIOFJH+G+UM4deWuFR5V+YvB3xLTiKPWMtIhNlIvMoQkHfvo44vb32mTJst8hzLCwO/m2yV54QZ1I5tlHCCnmws0biwc0yIvgHwNnYixBA0RgFQEDaAt0GYeJBZYz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S9zGHmYZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="le2de8bd"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852c9b4158so34511415e9.0
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 04:39:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774870751; x=1775475551; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=P5em8DwDaFkXA2YjHRd+fhMRb18sZEEB4ksg5SaFWGY=;
-        b=le2de8bdd9LDKe5VGUUvGeXsLy7qcMDjBRuSScfzmpK6LqazJjY4mJT3BgS50rHnaa
-         WihRtMhEqO0vLDSlopCHOmay09CNewY5NCRZH/+gOGLceofSPUQQRBmG4hQ+5UW6TiY7
-         QemCFNdmcIjMsVu1KfpLQX6qyH4Z/BqBqR2ZDOYK1sMJ4HtrsOJ7F9z3LPCtE+ZvsF8W
-         nosvUN/n//Riof8XtZbCweZjuFzOeMu0XDuhdCa2HHxndB4sn1+uuwO/AOKj3U9DF6bt
-         ZX60uljp6b74TjwDykmQ7Yn8LWNTofGtiUS/SBlG7cy+5OOPa9J25E+niDXLIy7PxbIr
-         vQkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774870751; x=1775475551;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P5em8DwDaFkXA2YjHRd+fhMRb18sZEEB4ksg5SaFWGY=;
-        b=N+7kSp6gr6IIHsAMCLGuIFxrxaI2nzCTuhFrDDnVOB19bsMdYyYZ56JtggjG63iOmG
-         C3wrygWhA2S2Awy5nypIob0zSfbbPHVtYL9K5lGn3WYnWQhvlxSKcElemUpiuaNEBF4z
-         p1N6Y2DaHXhAefZHYUHCh0ZKQLZMV7QKqa7oPOG8pWDOyztzC37Ciaepm0oing8IllKY
-         evFETlWsX4ivATtDEFev4hgd2eP+WGExmVNjHGuXcswknAIsMs5mAb9H+N9DeLPY4qQj
-         JCO3bOrY1KmHKv63W0dsMsfJEX0wY/4CnHYutThFbOelCBf+sup0tLyRTMCew1qnYFeB
-         RSEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWyz/jy59HpUmFOUGYiEgx+WVeflKvu/YlPodPu90akhkzK5lUKwzYNa0OuCTyu61i+8a8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSED02+3kT25DHLJJxpxIZxHCUqkL5LkIEt3RWeB6RtGyuBcpC
-	g8NGcigI2vlv7qrpwNdD+QVR1dj13I6BRiCbl5gtgvrNfb4DnImLXNgp
-X-Gm-Gg: ATEYQzzMnhtq/Gj9wscvyVds1pB1tuUr8c/eW2Ru7rVRBf4mmx9QsCvclLMmkc6XePC
-	DElLKmbDWbx2S0WQjp/PmHlfMOsAR+wf/aJ7/2Q/7UiZG6uMdtZwMiT8Qhrg+sk8OfNByizxkJN
-	dkwQqNXeqfPWVcv3gbCMlEPBC86flyEArBHOtTY4eUy/yDcWn58o7fBKRly+NMH3Lw7LG14jmk2
-	pV2LyLC7A7rj8d91LwTQTfcip5YNg8Oc/FazQQ0Bef8BqAJ/WZTejf9MaM9X32zCn/jNgPVAacD
-	00KwYhyqNOqo3WvJj5Suj13T1NUXe8SUQn+WTr+zdBZ43Ra2TM7cR7siIm/yQ044aSI4UG4EydD
-	AeF/hlibP7UKLwKEd4Fesdt3rTahz6sTc0tdA5q/4W/CXDF+AA2XIH5JrpWxKIw6D40Sh92qKPl
-	6rN2U0OfqKNBJiEoY=
-X-Received: by 2002:a05:600c:a010:b0:485:ae14:8192 with SMTP id 5b1f17b1804b1-48727d4588cmr219566255e9.7.1774870750726;
-        Mon, 30 Mar 2026 04:39:10 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:500::4:4b08])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48722c6b105sm534051655e9.1.2026.03.30.04.39.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 04:39:10 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
- Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Ihor
- Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v1 2/3] bpf: Emit verifier warnings through
- prog stderr
-In-Reply-To: <20260329212534.3270005-3-memxor@gmail.com>
-References: <20260329212534.3270005-1-memxor@gmail.com>
- <20260329212534.3270005-3-memxor@gmail.com>
-Date: Mon, 30 Mar 2026 12:39:09 +0100
-Message-ID: <87o6k5h7he.fsf@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9zGHmYZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0123C4CEF7;
+	Mon, 30 Mar 2026 11:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774871245;
+	bh=clntS1H3+5oPRN7KVb5bBCyEIIGwrQTDwAc3gHvnz1c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=S9zGHmYZTr1Wko6gmvrRWwvkyD4op65xV0pkrTtdZlnIswauU6bPrrrxCt7kJTdoD
+	 gKedcpjkZPCKVbckpWPl0HVGy7k7R8DaFU6zhkMacRqlcpWvePKFTNMsjshOzGxTXD
+	 q+E/sb0fobctdmfM4Ll1dEE/yJNg3yXRD288tRs3mPTdGOef7ah4mhx10Nlm8dCW05
+	 z00rW+U1BGc6NbDx/9SCwOS1r/kICger5tqpOlpPc+kdfU2eDMlEjooDQcj+xQ/lSu
+	 4x9u9SbT+CFLpiuG547bB7LxnmlRzR3d9N0vUKRgakmOvXZyboKeOUUVQLmFPKzzee
+	 R3r3VdhyG2GSQ==
+Content-Type: multipart/mixed; boundary="===============7468880571898843358=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-Id: <3ccc2ca64709f1672ed40113f9dc4bd4b988f826eeda55009ea0b7ea6f7c2d20@mail.kernel.org>
+In-Reply-To: <20260330110019.549079-2-varunrmallya@gmail.com>
+References: <20260330110019.549079-2-varunrmallya@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v2 1/3] libbpf: Auto-upgrade uprobes to multi-uprobes when supported
+From: bot+bpf-ci@kernel.org
+To: varunrmallya@gmail.com,andrii@kernel.org,alan.maguire@oracle.com,yonghong.song@linux.dev,song@kernel.org,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,eddyz87@gmail.com,martin.lau@linux.dev,jolsa@kernel.org,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,leon.hwang@linux.dev,varunrmallya@gmail.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 30 Mar 2026 11:47:24 +0000 (UTC)
 
-Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
+--===============7468880571898843358==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> There is a class of messages that aren't treated as hard errors, such
-> that the program must be rejected, but should be surfaced to the user to
-> make them aware that while the program succeeded, parts of their program
-> are exhibiting behavior that needs attention. One example is usage of
-> kfuncs that are supposed to be deprecated, and may be dropped in the
-> future, though are preserved for now for backwards compatibility.
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 9ea41f40dc82..056bc50a0bbb 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+
+[ ... ]
+
+> @@ -12783,6 +12802,32 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
+>  		func_offset += sym_off;
+>  	}
 >
-> Add support for emitting a warning message to the BPF program's stderr
-> stream whenever we detect usage of a _impl suffixed kfunc, which have
-> now been replaced with KF_IMPLICIT_ARGS variants. For this purpose,
-> introduce bpf_stream_pr_warn() as a convenience wrapper, and then mark
-> bpf_find_linfo() as global to allow its usage in the verifier to find
-> the linfo corresponding to an instruction index.
->
-> To make the message more helpful, recommend usage of bpf_ksym_exists()
-> as a way for the user to write backwards compatible BPF code that works
-> on older kernels offering _impl suffixed kfuncs.
->
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
-In the commit message: ..such that the program must __not__ be rejected..
->  include/linux/bpf.h          |  9 ++++++
->  include/linux/bpf_verifier.h |  3 +-
->  kernel/bpf/log.c             |  6 ++--
->  kernel/bpf/verifier.c        | 53 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 67 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 2c4f92085d79..d0158edd27b2 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -3912,6 +3912,15 @@ int bpf_stream_stage_dump_stack(struct bpf_stream_stage *ss);
->  		bpf_stream_stage_free(&ss);                    \
->  	})
->  
-> +#define bpf_stream_pr_warn(prog, fmt, ...)                              \
-> +	({                                                              \
-> +		struct bpf_stream_stage __ss;                           \
-> +									\
-> +		bpf_stream_stage(__ss, prog, BPF_STDERR, ({		\
-> +			bpf_stream_printk(__ss, fmt, ##__VA_ARGS__);	\
-> +		}));							\
-> +	})
+> +	/* This provides backwards compatibility to programs using uprobe, but
+> +	 * have been auto-upgraded to multi uprobe.
+> +	 */
+> +	if (prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI) {
+> +		LIBBPF_OPTS(bpf_uprobe_multi_opts, multi_opts);
+> +		unsigned long offsets[1] = {func_offset};
+> +		__u64 bpf_cookie;
 > +
->  #ifdef CONFIG_BPF_LSM
->  void bpf_cgroup_atype_get(u32 attach_btf_id, int cgroup_atype);
->  void bpf_cgroup_atype_put(int cgroup_atype);
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 090aa26d1c98..5683c06f5a90 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -873,7 +873,8 @@ int bpf_vlog_init(struct bpf_verifier_log *log, u32 log_level,
->  		  char __user *log_buf, u32 log_size);
->  void bpf_vlog_reset(struct bpf_verifier_log *log, u64 new_pos);
->  int bpf_vlog_finalize(struct bpf_verifier_log *log, u32 *log_size_actual);
-> -
-> +const struct bpf_line_info *bpf_find_linfo(const struct bpf_verifier_env *env,
-> +					   u32 insn_off);
->  __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
->  				  u32 insn_off,
->  				  const char *prefix_fmt, ...);
-> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-> index 37d72b052192..598b494ded36 100644
-> --- a/kernel/bpf/log.c
-> +++ b/kernel/bpf/log.c
-> @@ -329,8 +329,8 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
->  }
->  EXPORT_SYMBOL_GPL(bpf_log);
->  
-> -static const struct bpf_line_info *
-> -find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
-> +const struct bpf_line_info *
-> +bpf_find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
->  {
->  	const struct bpf_line_info *linfo;
->  	const struct bpf_prog *prog;
-> @@ -390,7 +390,7 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
->  		return;
->  
->  	prev_linfo = env->prev_linfo;
-> -	linfo = find_linfo(env, insn_off);
-> +	linfo = bpf_find_linfo(env, insn_off);
->  	if (!linfo || linfo == prev_linfo)
->  		return;
->  
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8c1cf2eb6cbb..f50e0ebd0ded 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3206,6 +3206,7 @@ struct bpf_kfunc_desc {
->  	u32 func_id;
->  	s32 imm;
->  	u16 offset;
-> +	bool warned_deprecated;
->  	unsigned long addr;
->  };
->  
-> @@ -14045,6 +14046,53 @@ static int fetch_kfunc_arg_meta(struct bpf_verifier_env *env,
->  	return 0;
->  }
->  
-> +static bool get_insn_file_line(const struct bpf_verifier_env *env, u32 insn_off,
-> +			       const char **filep, int *linep)
-> +{
-> +	const struct bpf_line_info *linfo;
+> +		multi_opts.retprobe = OPTS_GET(opts, retprobe, false);
+> +		if (offsets[0] || func_name) {
+> +			multi_opts.offsets = offsets;
+> +			multi_opts.cnt = 1;
+> +		}
+
+When func_offset is 0 and func_name is NULL, this condition is false
+and multi_opts.offsets and multi_opts.cnt are never set. The subsequent
+call to bpf_program__attach_uprobe_multi() then fails with -EINVAL
+because both func_pattern and cnt are 0:
+
+bpf_program__attach_uprobe_multi() {
+    ...
+    if (!func_pattern && cnt == 0)
+        return libbpf_err_ptr(-EINVAL);
+    ...
+}
+
+This can happen when callers use bpf_program__attach_uprobe() on an
+auto-upgraded program with offset 0:
+
+bpf_program__attach_uprobe() {
+    DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts, .retprobe = retprobe);
+    return bpf_program__attach_uprobe_opts(..., func_offset, &opts);
+}
+
+Here func_name is never set in opts. The old perf_event path handled
+offset 0 without issue. Should multi_opts.offsets and multi_opts.cnt
+always be set unconditionally, since offset 0 is a valid uprobe offset?
+
+> +		if (ref_ctr_off) {
+> +			multi_opts.ref_ctr_offsets = &ref_ctr_off;
+> +			multi_opts.cnt = 1;
+> +		}
+> +		bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+> +		if (bpf_cookie) {
+> +			multi_opts.cookies = &bpf_cookie;
+> +			multi_opts.cnt = 1;
+> +		}
 > +
-> +	if (!env->prog->aux->btf)
-> +		return false;
-> +
-> +	linfo = bpf_find_linfo(env, insn_off);
-> +	if (!linfo)
-> +		return false;
-> +
-> +	if (bpf_get_linfo_file_line(env->prog->aux->btf, linfo, filep, NULL, linep))
-> +		return false;
-> +	return true;
-> +}
-> +
-> +static void warn_for_deprecated_kfuncs(struct bpf_verifier_env *env,
-> +				       struct bpf_kfunc_desc *desc,
-> +				       const char *func_name,
-> +				       int insn_idx)
-> +{
-> +	int repl_len, line;
-> +	const char *file;
-> +
-> +	if (desc->warned_deprecated)
-> +		return;
-> +
-> +	if (!func_name || !strends(func_name, KF_IMPL_SUFFIX))
-> +		return;
-> +
-> +	repl_len = strlen(func_name) - strlen(KF_IMPL_SUFFIX);
-> +
-> +	if (get_insn_file_line(env, insn_idx, &file, &line))
-> +		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s:%u", file, line);
-> +	else
-> +		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "insn #%d", insn_idx);
-> +
-> +	bpf_stream_pr_warn(env->prog,
-> +			   "WARNING: %s calls deprecated kfunc %s(), which will be removed.\n"
-> +			   "WARNING: Switch to kfunc %.*s() instead.\n"
-> +			   "WARNING: For older kernels, choose the kfunc using bpf_ksym_exists(%.*s).\n",
-> +			   env->tmp_str_buf, func_name, repl_len, func_name, repl_len, func_name);
-> +
-> +	desc->warned_deprecated = true;
-> +}
-Commit message suggests this is a generic functionality that we plan to
-use for all kinds of deprecations, but this function looks tightly
-coupled to KF_IMPL_SUFFIX functions. I think we can make it a bit
-friendlier to extending if split into 2 separate helpers:
-is_kfunc_deprecated() and warn_deprecated_kfunc(), so in future new
-logic for detecting deprecated funcs goes straight to
-is_kfunc_deprecated() and we make sure printing and file/line
-extractions are not changed. 
-> +
->  /* check special kfuncs and return:
->   *  1  - not fall-through to 'else' branch, continue verification
->   *  0  - fall-through to 'else' branch
-> @@ -14231,6 +14279,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  {
->  	bool sleepable, rcu_lock, rcu_unlock, preempt_disable, preempt_enable;
->  	u32 i, nargs, ptr_type_id, release_ref_obj_id;
-> +	struct bpf_kfunc_desc *desc;
->  	struct bpf_reg_state *regs = cur_regs(env);
->  	const char *func_name, *ptr_type_name;
->  	const struct btf_type *t, *ptr_type;
-> @@ -14253,6 +14302,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  	func_name = meta.func_name;
->  	insn_aux = &env->insn_aux_data[insn_idx];
->  
-> +	desc = find_kfunc_desc(env->prog, insn->imm, insn->off);
-> +	if (desc)
-> +		warn_for_deprecated_kfuncs(env, desc, func_name, insn_idx);
-> +
->  	insn_aux->is_iter_next = is_iter_next_kfunc(&meta);
->  
->  	if (!insn->off &&
-> -- 
-> 2.52.0
+> +		return bpf_program__attach_uprobe_multi(prog, pid, binary_path,
+> +							NULL, &multi_opts);
+> +	}
+
+[ ... ]
+
+> @@ -12902,13 +12948,14 @@ static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf
+>  			else
+>  				offset = 0;
+>  		}
+> -		opts.retprobe = strcmp(probe_type, "uretprobe") == 0 ||
+> -				strcmp(probe_type, "uretprobe.s") == 0;
+> -		if (opts.retprobe && offset != 0) {
+> +		is_retprobe = strcmp(probe_type, "uretprobe") == 0 ||
+> +			      strcmp(probe_type, "uretprobe.s") == 0;
+
+Shouldn't this also match "uretprobe.single"? When auto-attaching
+with SEC("uretprobe.single/binary:func"), sscanf sets probe_type to
+"uretprobe.single", which doesn't match either "uretprobe" or
+"uretprobe.s". As a result is_retprobe is false and opts.retprobe
+stays false, so the program gets attached as a regular uprobe instead
+of a return probe.
+
+Something like strncmp(probe_type, "uretprobe", 9) == 0 would cover
+all uretprobe variants ("uretprobe", "uretprobe.s", "uretprobe.single").
+
+> +		if (is_retprobe && offset != 0) {
+>  			pr_warn("prog '%s': uretprobes do not support offset specification\n",
+>  				prog->name);
+>  			break;
+>  		}
+> +		opts.retprobe = is_retprobe;
+>  		opts.func_name = func_name;
+>  		*link = bpf_program__attach_uprobe_opts(prog, -1, binary_path, offset, &opts);
+>  		ret = libbpf_get_error(*link);
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23741893093
+--===============7468880571898843358==--
