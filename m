@@ -1,128 +1,222 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFD32E091B;
-	Mon, 30 Mar 2026 14:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774881814; cv=none; b=k/xNPcQqd1q6hLBxyrR2m5Dpl72Bc3Rcqb2bbb6GKQB49qUxRlJKna1YG0fM3I8vPSGg2QsLDyUPxf8rzm7pckTN32+4ZFILmcR2T8IoSVMpNVUKCAwDtFwJwGvvluoTvz5kfhxmJ71jbK1u4cc8KT6Eg0OnPdNvQwIA7b+yH9Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774881814; c=relaxed/simple;
-	bh=TFDol533KxC1VeE5RR8wCQD8E1UShDJiXvOYReHds8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hYvw8UvSooIe/87j4EJHotDihF8tGdWVPDeIm42l8BNbrt2R+Ae2Iz3tKinah5rvGBYik1+xYePfjqY328n/1WvuYyn3l/8F0zIpTdU+TJOYfZKrjQ0TT5yI+kCJrHrtgZVL3OWMvFSLzbPXCeQaOpCQQq5VLCb6cyDcjeUS0ME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bKEN7Mnm; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A80322B74
+	for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 14:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774881970; cv=pass; b=ApZ/F/H/XE9EEZMevb0aHvGbdOBaMw5w9Vx9VoWuYSNldKTqUJhMui/GW/1w3WRbOt7hvxITd4xQ0xnP0zmDLbvil4R3/pwtiSCvLd2J6r6viARIvzSB2OiZMFnxic0Ae/c6FntzudYLj01l41H7MdfLkEf5qOS893uJHu5reAU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774881970; c=relaxed/simple;
+	bh=5MrZSHAXakbymRNUEFtIb9oqQvlqdFMD4jfogA8/bdA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VsRLfB5fwqHgD6YFHOFq6ikUFza0FQeHdCIUbpIee/n83ouFYy2G6ToxUSjYuF1T+7yiY4FbL0/t1tVg1+CkQYWGDsJcJgnScP5J8QvLAF4JaexeVxE955vwJMDTPcveS490VUtiCYd0Bw3hYr6lVner9RTBbuYYyQpjjnmx4x8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pwA5RscA; arc=pass smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bKEN7Mnm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0035EC4CEF7;
-	Mon, 30 Mar 2026 14:43:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774881813;
-	bh=TFDol533KxC1VeE5RR8wCQD8E1UShDJiXvOYReHds8Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bKEN7MnmA1NGA3X9xq722YzEDA48S4PaPqehA4Ae3TohxxAeA7x8PvvYJDCPVzKvl
-	 kp2PE/lfxoniYrgI6HaJsFM0nkMeQ7iNT7mYcheNHMOJAG92JF1jSetErfjbGt7Aj2
-	 PvhOdcNSXXsXYJ8HXh8pqhvKzEx7FDkzYcIbLS25Mon8+6C1v7tXY5ac0gdTLXzHXC
-	 i/DJZSxCQ2NKsgpA6YkDnNH0VdBO48gKZ8fZciFWuqwmJJm0IeN/ntyHuul4v1Kasf
-	 1LpTdF3GYiKnGExzu2BJqvuFmxIm96+cnr2hrvM02ks0hr4Zn6XXwCdoXuIHmXCj/M
-	 6uz+R02KRGg0w==
-Message-ID: <12d3b7dc-c0db-4964-99e2-6be6744b6a8f@kernel.org>
-Date: Mon, 30 Mar 2026 16:43:28 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pwA5RscA"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4852e9ca034so44007945e9.2
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 07:46:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774881967; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fsXpLZYATAyZ6aZD5gHrALW73b5GIUtmP6NKaE/BVx4mcuW3cg+T9WXVKBSamDMf/p
+         CuEanJ7nqmAneoT8ZqeEUQwFOtvgLwldH7szYZoWYdqdj2XyxKx5p+Z1bsQw5dsnfKJY
+         vgWX1fLZ96a6513+YrvdAp21VgN69EI8M+hp5mczOYXqAeb1vsPdgCx6hzTK6NXnqhm+
+         ojtXGMS3EeaLtHnVrfEwd4HDXzYsbyeauVX/NHbvfl99NPPj9SdcH4Gjiys0ErB83i29
+         gl0NQGifkkep25YQMfbifuJjGVmZeN/HWOT7Lg0num4KAhwegbtHmuklOPFx9tMFfqdi
+         16rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gzzaO1/xii/cLyXLLPNz07EbOxbyXWIYjMmx2SEjssw=;
+        fh=mggOYd+o9B6mV2d95yHOGJu5OXB1KjhM7EsZhOk1w4M=;
+        b=kJfBt2ITejsvPJolS1LEuoaZ83iD1ba1J1hHDvyTt0Pw882lWZti7OGJxbGSPj3Q6U
+         O4M8cy74tp3GSTQHH9UTrJTWQH4r1IZ+LQYjk2CZgk3lIOJeNsNM3EsbfvTlg87TtUHF
+         T2qpEbs6pL1gJCzZGF3vozIPKrSy1bafngLamb0mTXU0JLJHrWs0QUqMfrHIKfsUCZwf
+         BCkpN/QvQl2CX73nR4CaQ/QGDQcIrHEKTqzADJGpelf4CByxRG4U5ZFSlbiDPj2zn7dW
+         S/I7uz3F+SOvjKSskGmZQfQEKSh2x5id2yTNV1jnjZS1ufl0rc8T4xNdiLHzow/hEDkd
+         g8PA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774881967; x=1775486767; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gzzaO1/xii/cLyXLLPNz07EbOxbyXWIYjMmx2SEjssw=;
+        b=pwA5RscAcKhu8yb468xCV71NQAuUSs33QiQyrZOrhmj2oWcs8ex3ZIgDPlYc3tuimR
+         HgEQNDJHR6a1erh3NFjP4ZWByLieNzBKxGqTSk/dT7S2FtjM0TA4ooLdOJKv3O6CYqKC
+         z6HSX6kR6RsbwMAtk5876OMqHDhDvzAuH+qLUyiVOuiEWfw94lo3XUMCDtbl5hlCHjpi
+         CZSNvvaEeGLN1mJrqnAizB4VTGPN68pTygKV0b/D+xkjpjpfZkD+hIJq2CitT9UuZBJS
+         bq8BkpJkfWvaDvXdjzxAMu+gxFUXkq0YFbvFDve85/mCrmim4UbIpofNmPAOnoQNxVNu
+         wXAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774881967; x=1775486767;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gzzaO1/xii/cLyXLLPNz07EbOxbyXWIYjMmx2SEjssw=;
+        b=sxY0YtAaNrAW3FSVThTqEI7GFoy40nQ6aRIPmdC1d0KwcIU9RdJYFxZbIxLH/+Mtoc
+         MyNK9S69RqNJESdT0xVgX6dVg2e77K9IXhZZBpgVN1Fb23eynUQ4rwIavGNhM1m3QrAF
+         ZYSLDHPU+eSvHow+Oykt9mgIe8affPhk8ihcYq1qShqLCcvY8bHicSJerBgXy0lhb4QK
+         mE+/LJUo4Ct9sZmOluY1FzDQmNp2wVV2RJlYA7Nic0xRqn9lDPRJu8vtRlxUrUVgM6m2
+         brClSON4ODUdACvn7mTDDbEqxL14UgWfV9ah+Wh9F851tXPjavxqYW++ApZeU5qAHeh9
+         MM7w==
+X-Forwarded-Encrypted: i=1; AJvYcCXjD0JRGDR49SSv5iT1AJjC8lymbRZQY1B8cNkNJFbz06rYx7Bvjl/ZWwV//jxg4YewXo8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywpb9ZEEjkMe1d0X8AS2HwiUS5K+QhoEeVPpP9G3A+DfGoBXd9F
+	9TD28Ja5xaREfS5WD8wKIonW2gzsdHcHqC5fvrsT9YRLpU+/DNUhaEwp/D/rN81rZsBO0MdQcjC
+	V5ZiFxznDVTkekaQrgAY2GPOY60Lq3qo=
+X-Gm-Gg: ATEYQzz0cOn1tuAOT29BfbIi6EITp4UsRUSAo6TH/3v8p1nhtyACzwucAe1jApIP4Lc
+	C61qYzWKKcYKnDpxQp2m911ymlJ7n+ln/eQObraUPJ9CBkcCDpWQ7OJiqjFxbGZmGPOsl1APbg+
+	XuDAsi0kRapmaHrlM2jXuj4CCE9pMghdhcoBfzKsXqFnK3WJH65kzNTRiNp+ERmAoZHf954D7T9
+	Bq/a8joUylkMP+3DLkXZhFaHn3i4V+npVHlBRkTPNw8rz761+/p0A2r1XmxePgXar1hnES9d4g6
+	oTGWVlxzhladHmAMz2yPl8GOs5p8/vVW0+wFZgT/Py2S6vpDEWYM/fy8jHZp21IQmeUgQm7O0Re
+	fmWzFzhmT54QQTIRw+U/AAWIL0A==
+X-Received: by 2002:a05:600c:8b77:b0:486:ffa3:584 with SMTP id
+ 5b1f17b1804b1-48727f17035mr201012225e9.15.1774881967270; Mon, 30 Mar 2026
+ 07:46:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/3] mm: Free contiguous order-0 pages efficiently
-To: Andrew Morton <akpm@linux-foundation.org>,
- Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Zi Yan <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
- david.hildenbrand@arm.com
-References: <20260327125720.2270651-1-usama.anjum@arm.com>
- <20260327124249.a8de2259cf3438c5f4216894@linux-foundation.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260327124249.a8de2259cf3438c5f4216894@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260330132750.377862-1-daniel@iogearbox.net>
+In-Reply-To: <20260330132750.377862-1-daniel@iogearbox.net>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 30 Mar 2026 07:45:55 -0700
+X-Gm-Features: AQROBzAj0QI0Ks9UMidwlTkRnSADisw196KED9cNVReTx8ZpjBttOkBpA7ZhCT4
+Message-ID: <CAADnVQ+DtTmz2Z1mCQu31PaJKrWgOjt3FGydPfJtserwqVbuvw@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf: Fix incorrect pruning due to atomic fetch
+ precision tracking
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Eduard <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	STAR Labs SG <info@starlabs.sg>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/27/26 20:42, Andrew Morton wrote:
-> On Fri, 27 Mar 2026 12:57:12 +0000 Muhammad Usama Anjum <usama.anjum@arm.com> wrote:
-> 
->> A recent change to vmalloc caused some performance benchmark regressions (see
->> [1]). I'm attempting to fix that (and at the same time significantly improve
->> beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
->>
->> At the same time I observed that free_contig_range() was essentially doing the
->> same thing as vfree() so I've fixed it there too. While at it, optimize the
->> __free_contig_frozen_range() as well.
->>
->> Check that the contiguous range falls in the same section. If they aren't enabled,
->> the if conditions get optimized out by the compiler as memdesc_section() returns 0.
->> See num_pages_contiguous() for more details about it.
-> 
-> Thanks.  I'm seeing impressive speedups for microbenchmarks.  The
-> speedup in [3/3] may be a bit more real-worldy.
+On Mon, Mar 30, 2026 at 6:27=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
+>
+> When backtrack_insn encounters a BPF_STX instruction with BPF_ATOMIC
+> and BPF_FETCH, the src register (or r0 for BPF_CMPXCHG) also acts as
+> a destination, thus receiving the old value from the memory location.
+>
+> The current backtracking logic does not account for this. It treats
+> atomic fetch operations the same as regular stores where the src
+> register is only an input. This leads the backtrack_insn to fail to
+> propagate precision to the stack location, which is then not marked
+> as precise!
+>
+> Later, the verifier's path pruning can incorrectly consider two states
+> equivalent when they differ in terms of stack state. Meaning, two
+> branches can be treated as equivalent and thus get pruned when they
+> should not be seen as such.
+>
+> Fix it as follows: When the fetch dst register is being tracked for
+> precision, clear it and propagate precision over to the stack slot.
+> This is similar to how BPF_LDX handles loads from the stack.
+>
+> Before:
+>
+>   0: (b7) r1 =3D 8                        ; R1=3D8
+>   1: (7b) *(u64 *)(r10 -8) =3D r1         ; R1=3D8 R10=3Dfp0 fp-8=3D8
+>   2: (b7) r2 =3D 0                        ; R2=3D0
+>   3: (db) r2 =3D atomic64_fetch_add((u64 *)(r10 -8), r2)          ; R2=3D=
+8 R10=3Dfp0 fp-8=3Dmmmmmmmm
+>   4: (bf) r3 =3D r10                      ; R3=3Dfp0 R10=3Dfp0
+>   5: (0f) r3 +=3D r2
+>   mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1
+>   mark_precise: frame0: regs=3Dr2 stack=3D before 4: (bf) r3 =3D r10
+>   mark_precise: frame0: regs=3Dr2 stack=3D before 3: (db) r2 =3D atomic64=
+_fetch_add((u64 *)(r10 -8), r2)
+>   mark_precise: frame0: regs=3Dr2 stack=3D before 2: (b7) r2 =3D 0
+>   6: R2=3D8 R3=3Dfp8
+>   6: (b7) r0 =3D 0                        ; R0=3D0
+>   7: (95) exit
+>
+> After:
+>
+>   0: (b7) r1 =3D 8                        ; R1=3D8
+>   1: (7b) *(u64 *)(r10 -8) =3D r1         ; R1=3D8 R10=3Dfp0 fp-8=3D8
+>   2: (b7) r2 =3D 0                        ; R2=3D0
+>   3: (db) r2 =3D atomic64_fetch_add((u64 *)(r10 -8), r2)          ; R2=3D=
+8 R10=3Dfp0 fp-8=3Dmmmmmmmm
+>   4: (bf) r3 =3D r10                      ; R3=3Dfp0 R10=3Dfp0
+>   5: (0f) r3 +=3D r2
+>   mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1
+>   mark_precise: frame0: regs=3Dr2 stack=3D before 4: (bf) r3 =3D r10
+>   mark_precise: frame0: regs=3Dr2 stack=3D before 3: (db) r2 =3D atomic64=
+_fetch_add((u64 *)(r10 -8), r2)
+>   mark_precise: frame0: regs=3D stack=3D-8 before 2: (b7) r2 =3D 0
+>   mark_precise: frame0: regs=3D stack=3D-8 before 1: (7b) *(u64 *)(r10 -8=
+) =3D r1
+>   mark_precise: frame0: regs=3Dr1 stack=3D before 0: (b7) r1 =3D 8
+>   6: R2=3D8 R3=3Dfp8
+>   6: (b7) r0 =3D 0                        ; R0=3D0
+>   7: (95) exit
+>
+> Fixes: 5ffa25502b5a ("bpf: Add instructions for atomic_[cmp]xchg")
+> Fixes: 5ca419f2864a ("bpf: Add BPF_FETCH field / create atomic_fetch_add =
+instruction")
+> Reported-by: STAR Labs SG <info@starlabs.sg>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  kernel/bpf/verifier.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f108c01ff6d0..293aa957a5ff 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4474,6 +4474,31 @@ static int backtrack_insn(struct bpf_verifier_env =
+*env, int idx, int subseq_idx,
+>                          * encountered a case of pointer subtraction.
+>                          */
+>                         return -ENOTSUPP;
+> +
+> +               /* atomic fetch operation writes the old value into a
 
-This should speedup virtio-mem memory hotplug in cases where we end up
-calling free_contig_range() on MAX_PAGE_ORDER ranges to release
-hotplugged memory to the buddy!
+kernel comment style pls.
 
--- 
-Cheers,
+> +                * register (sreg or r0) and if it was tracked for
+> +                * precision, propagate to the stack slot like we do
+> +                * in ldx.
+> +                */
+> +               if (class =3D=3D BPF_STX && mode =3D=3D BPF_ATOMIC &&
+> +                   (insn->imm & BPF_FETCH)) {
+> +                       u32 load_reg =3D insn->imm =3D=3D BPF_CMPXCHG ?
+> +                                      BPF_REG_0 : sreg;
+> +
+> +                       if (bt_is_reg_set(bt, load_reg)) {
 
-David
+too much claude smell in here.
+remove unnecessary indent pls.
+
+> +                               bt_clear_reg(bt, load_reg);
+> +                               /* atomic fetch from non-stack memory
+> +                                * can't be further backtracked, same
+> +                                * as for ldx.
+> +                                */
+> +                               if (!hist || !(hist->flags & INSN_F_STACK=
+_ACCESS))
+> +                                       return 0;
+
+too much copy paste. I bet above can be combine with the same line below.
+
+> +                               spi =3D insn_stack_access_spi(hist->flags=
+);
+> +                               fr =3D insn_stack_access_frameno(hist->fl=
+ags);
+> +                               bt_set_frame_slot(bt, fr, spi);
+> +                               return 0;
+> +                       }
+> +               }
+>                 /* scalars can only be spilled into stack */
+>                 if (!hist || !(hist->flags & INSN_F_STACK_ACCESS))
+>                         return 0;
+
+Considering we're in rc6+, bpf-next is better.
+
+pw-bot: cr
