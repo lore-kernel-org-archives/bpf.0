@@ -1,66 +1,60 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3923A6B77
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 10:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A634C3A2546
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 10:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774952954; cv=none; b=BbJFabx5Ma7UpWm7OUd9ctTauZMDvPVfBM8T0+ZjXtc1/PxppnhfUTrxmS6iaeic612deUv7i74j5jj4gIyQQvP6AapZ2zNHQSI0cyY8dpRVobpJcE/piKkw/RQbsUtLvicQN4hL+Fn6IkfYObRDStePlq8005wljYRPup2u16s=
+	t=1774953518; cv=none; b=SXF0+On+PA1lK3SEnbEszBbB4YWreGDGc0JGwjBsIOPldck9jiPidgjT7II1eKZBb0XacHkFX44fY4dDeLhcIUNreDYHD9EMKlitcasXjNVrx8XP1iYrkU4w8u/O4GYyQB+jGcdH7S+7wxGDpfgu1erdplb72n+RHvu2aXazZfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774952954; c=relaxed/simple;
-	bh=XPt6ZtRRm9mckoywJg3SEn1T8ZpZc2AFjWWRyb2gRNA=;
+	s=arc-20240116; t=1774953518; c=relaxed/simple;
+	bh=NVOKFbUpnc/3wTL/VfnfdrM7zF3U2a/U6KfHDtyZAWg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ij3S1aFrusJ5/AWdTg49FMvwUOpXKYE/vmabDf/4MHn32UK1tynA+gIgMx8B+HaZKAcWr8bbr17K5Fuevk3ENRTAfQDKEUL5hfodtoNae3vAbQG2HPS6vb/XsZxwM/UIvGDc7XB9t+6iBlKLMwTGpZ9tPIGPYwM08NsmpCR3rKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U0wyEjO3; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=V+GtnSQ7ifdTfyZSAwSGgcKg+2EkHGNqK/eABdsuSuM7yQU4ETvgkUMfFb203nx6DPnun4bE1fNm7+BLkiPiCW02AzCYkEuSn0bFQwW4DkMp1iStutiw10v2gqn9ufWEK0hCzCA9tw3HXwflVenIqTP5aZ2/x3Q3aLIusZqnRNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RshvlOTn; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0wyEjO3"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43cf7683a28so1358574f8f.2
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 03:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774952951; x=1775557751; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3frjs3zyuX0VruCChgxSC3FmqulsRwza6g8Zija1SYk=;
-        b=U0wyEjO3+Bud7bz+AXbWUC3y6Mj8yH39bgEgA8msgJoVbZsB1qpk6RR35bC2iT8zjl
-         wZgbjPZMRl/0cLsij1qGPdDeSfqYUGgQkrZq3FeDzwh9urtSlXdsozfCT5tZUhFTLn8n
-         jQHfM0JivaRcgLXD2cJL1ekzakJk3S1aOtWBZRNgKY5XvATqhYw308iXVPrl3RK5hrf6
-         gEHkU+YLnd36drSYlrjg10eBndBIM6NsYJf0R/Vb2hja5zIkdXRG+iN6R7Y4Ce5IJjn7
-         0/8bs3Xwngs9FNyF3G6tUE+whE76wAfiGwoEQvQIb8Nd/Mgf1NtEFXt51VjAYIXFSD5P
-         3Caw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774952951; x=1775557751;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3frjs3zyuX0VruCChgxSC3FmqulsRwza6g8Zija1SYk=;
-        b=PE4rKsE0xbImM251Nq8u8eMmCgqMRRmFLyTH9BhOypec/l7OYYE7WN2R6Vvzx/nIyU
-         11n7mHC4lie1pb3WNg04kwLFQuhb70lJ2jjovkDLUPTTY3tWHoDLPEHd68KVg9lWDLpq
-         sFhS1ha6v7guiE11MlwKcgHb98kdaPjv7GBNUKaJLpkT5BvKqE3TcOXtWulWnrDeDsF+
-         xE8VTPHof5/jIb1LxiHI2dynuqbCmBVgo9acXvdjnZ/U5+Q7Wauu/YKBztHZmX2h3hHr
-         CRVSBfP/oiFRXq4hrxyB6fD1GjOwPmTpCtha9gV7fR2YYx6QNz9hNoJAXYje9TQw7Ij8
-         +c6A==
-X-Gm-Message-State: AOJu0YxO/QEM+f6vXXjyhgIbv6U6fIK1tlVWdBn/pPGm+PICwhYW+Oc9
-	0XpiczXxjhsqT4b8QJPKCNieydudo9R3cQueus1euxkUZvBQj+LV9zlx
-X-Gm-Gg: ATEYQzwYym2Mtq46F+Sb6D1ITsqLGuLOdPUaGuyL0+/MAEHbXBP8q47Aj5zv96luWls
-	og0k+EtrwFev3LJZUWH2lA2aQ4czj18Bs77C8yPi2o0EuYbZBx2fTktA5C5rXAG11I7QWPCsHkM
-	WLSn6aCiJIcxnxX/u4eeZZvD4cysYtANnz11HKnxkHBspXL190Vel2a2FkN1wR42XmfzPAH7HXQ
-	RnwILAYBy5qaZrBDnd37lP0k/SuojlSkWqn700UQ5CeKFqejPoSE7h8mcYbaA2gDIrRg9AEdDWU
-	TssbBChj+7Moqu9BVM/2wOdZQWZ6v1GD/XtWhT6VCDz5Agz45KLxf/z8WWVRV3cf1zFGUXJZOgm
-	8jy5WkYoCPPB/gi/55W9KD1nUqRAWWHM1/dVjr4WHrmXGY0bPnr0tFdUn5Oow8qofWuSxnf8yu/
-	9swFQ7ctJXYEzyXvpn0p3Qlhy3E2Q+EQuy7eHPATgSyKlBwQMT8m7Oh2xLLWbY93MZEbLxt9GR2
-	d0B68rge5s=
-X-Received: by 2002:a05:6000:2dc8:b0:43d:578:587d with SMTP id ffacd0b85a97d-43d05785b01mr9075705f8f.18.1774952950806;
-        Tue, 31 Mar 2026 03:29:10 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21e29b1sm24612479f8f.8.2026.03.31.03.29.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 03:29:10 -0700 (PDT)
-Message-ID: <cb4c2d10-8131-4166-92aa-882a182160d8@gmail.com>
-Date: Tue, 31 Mar 2026 11:29:09 +0100
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RshvlOTn"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62V8bErR449675;
+	Tue, 31 Mar 2026 10:38:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=xJCJW4
+	uKcvNQlqCwJnt5LcIwVKIpIhLOc/E2DQ21lRU=; b=RshvlOTnwBrqI/GgXDwKex
+	NB958ZgfD273WWndKCZO9b8s76BIDwZGb6AckPthZ6PxcGKCCcaoWttEwaoskFIM
+	Vl9I399YYSa70c2VBsYMLBt9UQu+MQjfR3tZhmsB9XqAjebx3o5gN2Nm8EmdJ+BC
+	/X6KQkqSmJ4M36IAMkfyE+CZheNWa0dsw95y9snPJVtID9wvRQipjpoF/mAUcCY4
+	7JPXXC+itCjfAkvrVlYh4UGsrH62lb4xJnr55y4HdGGUrx1jsMCUp6f+xY2V9Kgc
+	zCM2chleUBiNg4WnIW0zItNoY+7z8Rx39sau/d8uDBSW3EUgGuvQiVVqA5lWaxbQ
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66g1tt3g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 31 Mar 2026 10:38:19 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62V5uvsW021665;
+	Tue, 31 Mar 2026 10:38:18 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6sasgrxe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 31 Mar 2026 10:38:18 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62VAcE0M56754518
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 31 Mar 2026 10:38:14 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 690152004D;
+	Tue, 31 Mar 2026 10:38:14 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2BF0320043;
+	Tue, 31 Mar 2026 10:38:13 +0000 (GMT)
+Received: from [9.78.106.17] (unknown [9.78.106.17])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 31 Mar 2026 10:38:13 +0000 (GMT)
+Message-ID: <2fa9bd2a-6cee-4c59-a66d-049e503cea71@linux.ibm.com>
+Date: Tue, 31 Mar 2026 16:08:12 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,65 +62,95 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Migrate bpf_task_work to
- kmalloc_nolock
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, memxor@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260330-kmalloc_special-v2-0-c90403f92ff0@meta.com>
- <20260330-kmalloc_special-v2-1-c90403f92ff0@meta.com>
- <CAEf4BzahW744tL+0DvvB_4nhstRsgMui0xEX4+obQ4kYo77YyQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] powerpc64/bpf: Add support for instruction array
+To: adubey@linux.ibm.com, linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, maddy@linux.ibm.com
+References: <20260227014315.39980-1-adubey@linux.ibm.com>
+ <20260227014315.39980-2-adubey@linux.ibm.com>
 Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAEf4BzahW744tL+0DvvB_4nhstRsgMui0xEX4+obQ4kYo77YyQ@mail.gmail.com>
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260227014315.39980-2-adubey@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=Fdo6BZ+6 c=1 sm=1 tr=0 ts=69cba41b cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
+ a=LiiZRlpjulW5djIf0KoA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: 3vPS9-C3mv6Radad6FzExNAHTb7uM26i
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzMxMDA5OSBTYWx0ZWRfX2ifHvXnBtOez
+ j8I5lcv+qftHAmK71RdmaUYrc8CWsz107F4OF1SXyCtpK3C1sUOroQvkG+zYFXe3q/fitfYap/s
+ ZThB0CjnnlyFcRxepL/0SR3aUB+4h4YgN6Gn4nYLZ47iW3cBuIoLCezFoYtfFIHj8IFfLI+2Ij0
+ Od+otaYHZtb0vI+sFeUeA2OZDq8ID9MgLgOwGsMypOw1Wuylwl1OYffXqYrWAKMTfAfDHuJIiQl
+ 4Xsk2m7TvVtyvpmzY/W8oo6cTotllH09L5o2BYDFw7gFSncsR40rB87LBI4d/BNAw+6U3lLxMse
+ jP1/W01pDH5W0HyILXWCmTvUxNBewmwTipG/y9oYpxepFsqJGNTt+S6eNl2BlidkNMwNKPlKSTn
+ BlEp+dL4RcTu52gKXxNOjUaBnyi5C7o7Lk8wv2cyuH1nosqPw7ecPyHBwEGhDFn2FXNQ5aFsV/+
+ BQOyf6Z5HSFk0MEPdlw==
+X-Proofpoint-GUID: 3vPS9-C3mv6Radad6FzExNAHTb7uM26i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-31_02,2026-03-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 bulkscore=0 suspectscore=0 priorityscore=1501
+ adultscore=0 malwarescore=0 phishscore=0 spamscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603310099
 
-On 3/31/26 1:00 AM, Andrii Nakryiko wrote:
-> On Mon, Mar 30, 2026 at 3:28 PM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
->>
->> From: Mykyta Yatsenko <yatsenko@meta.com>
->>
->> Replace bpf_mem_alloc/bpf_mem_free with
->> kmalloc_nolock/kfree_rcu for bpf_task_work_ctx.
->>
->> Replace guard(rcu_tasks_trace)() with guard(rcu)() in
->> bpf_task_work_irq(). The function only accesses ctx struct members
->> (not map values), so tasks trace protection is not needed - regular
->> RCU is sufficient since ctx is freed via kfree_rcu. The guard in
->> bpf_task_work_callback() remains as tasks trace since it accesses map
->> values from process context.
+
+
+On 27/02/26 7:13 am, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
 > 
-> I didn't quite get if this change was necessary for correctness or
-> it's just an optimization?
+> On loading the BPF program, the verifier might adjust/omit some
+> instructions. The adjusted instruction offset is accounted in the
+> map containing original instruction -> xlated mapping. This patch
+> add ppc64 JIT support to additionally build the xlated->jitted
+> mapping for every instruction present in instruction array. This
+> change is needed to enable support for indirect jumps, added in a
+> subsequent patch.
+> 
+> Invoke bpf_prog_update_insn_ptrs() with offset pair of xlated_offset
+> and jited_offset. The offset mapping is already available, which is
+> being used for bpf_prog_fill_jited_linfo() and can be directly used
+> for bpf_prog_update_insn_ptrs() as well.
+> 
+> Additional details present at:
+> 
+> commit b4ce5923e780 ("bpf, x86: add new map type: instructions array")
 > 
 
-Correctness - ctx is freed via kfree_rcu(), so we need to hold rcu read 
-lock when we pass refcnt to the task_work_add() callback. It worked 
-before on tasks trace rcu because bpf_mem_alloc() used it (with normal 
-rcu chaining) before freeing the ctx.
+Looks good to me. Except for a minor nit below..
 
->>
->> Sleepable BPF programs hold rcu_read_lock_trace but not
->> regular rcu_read_lock. Since kfree_rcu
->> waits for a regular RCU grace period, the ctx memory can be freed
->> while a sleepable program is still running. Add scoped_guard(rcu)
->> around the pointer read and refcount tryget in
->> bpf_task_work_acquire_ctx to close this race window.
->>
->> Since kfree_rcu uses call_rcu internally which is not safe from
->> NMI context, defer destruction via irq_work when irqs are disabled.
->>
->> For the lost-cmpxchg path the ctx was never published, so
->> kfree_nolock is safe.
->>
->> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->> ---
->>   kernel/bpf/helpers.c | 56 ++++++++++++++++++++++++++++++++++------------------
->>   1 file changed, 37 insertions(+), 19 deletions(-)
->>
+Acked-by: Hari Bathini <hbathini@linux.ibm.com>
+
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit_comp.c | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
 > 
-> [...]
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 9ec5ab9b020e..620667c3400b 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -373,6 +373,16 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   			goto out_addrs;
+>   		}
+>   		bpf_prog_fill_jited_linfo(fp, addrs);
+> +		/*
+> +		 * On ABI V1, executable code starts after the function
+> +		 * descriptor, so adjust base accordingly.
+> +		 */
 
+> +#ifdef CONFIG_PPC64_ELF_ABI_V1
+> +		bpf_prog_update_insn_ptrs(fp, addrs,
+> +				(void *)fimage + FUNCTION_DESCR_SIZE);
+> +#else
+> +		bpf_prog_update_insn_ptrs(fp, addrs, fimage);
+> +#endif
+
+You don't need this ifdeffery as FUNCTION_DESCR_SIZE is already defined
+based on this CONFIG option.
+
+- Hari
