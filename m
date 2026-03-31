@@ -1,275 +1,157 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010014.outbound.protection.outlook.com [52.101.84.14])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA8940DFC6;
-	Tue, 31 Mar 2026 13:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.14
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774965212; cv=fail; b=YcJnIkcoJ/Fb6y5etCwinmclf49ZzTD7mrX+FPTi4bFmLVejEISvOaxcExxfIZRBayxh373eZxhzTEqMkg1RsTViCE+tbbZBozvpuXpeArkNodgxbZPA2PbvhIPnmsdDH49FUUTGbGJJ0ctQ4odUlftSBAojudRgEdIma6ixLac=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774965212; c=relaxed/simple;
-	bh=OBQQQqEbUWTZtG4GLVp8Hvcb47Zipw0TW9Ygif3JdIk=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=pj/78BqqJAtJX4H2wly03bvxdwClE/qWM662rvBy04PryUIyOzJLSu0QzK16ik2SIaoGjjMnX8ltYn3ensenHBSuvn1Eac4SOQ7cMNr264aSHFzy1N8TWEQHrZxj/iG7EDO7Y1IeYsE4/MoGlHBsMiF1/TnYX74eZ6CiP8iMJWo=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BVfVBaIR; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BVfVBaIR; arc=fail smtp.client-ip=52.101.84.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06384276041
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774967302; cv=none; b=ZRx58Cf2TOq75OMqgZqUhT3qORDGKEbwxqUvGnCLjceyuemKtn4ZkSgaxkChvwHCKBMitHmEcQIEDrCeDMtxmL29SHtwuVEuBc1jbnjPuRjCy+ag95/5iw30WuCxhta1IZpIg3FTl2rUSsfjCzbSd6JAuiImHoonHyS9sN1MEr4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774967302; c=relaxed/simple;
+	bh=CyesbJU0IJb+a/XsPUaA42BL3slCUqb3WoX1PKDSSW0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pkzi6DeA5A5sjcxwFAk/Vt4lSs+kYMCoBOgKic+O6ZiKIEYBZx8mHS3B4YdBxQrlgOhYdWnsvI4if424olxXD7N1bgxGpkpVXNUE+B2nv/TyhghjvgVaRw0N7JBaJy8YJsd0H7GXSV5loDYW/9uIjnB3ii6A5Zy9mDueMWEv654=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FZpN+UsA; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BVfVBaIR";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BVfVBaIR"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=d8mm3uuiRaglCOB5WjP2GvcduWWbGmk+dTy+ypVzDtQeuR/MwICEy9AT9fvp4xHKj7m4u34TzZVBEHxekS2LDM7950vrt5bp4uTnk91ArgfFGCwkHltrAwRCGTXdRDtyGfvh6TjL2kpDo5YvSQ1FdmTjAP7uCkgBddgxn/VWLO1IErZEQHNOQSRZJwxdeumGhwNcusn2Z+5ou57uC/DxNXZiEqhX3/AA+K3PRBa1HdfQgKYOmgBkbGBPg18dRKvog4KaWTom1EU4miJMQdbsCUX+geOrGqigpFq/A00sslbo5f3Hs2uO2rPBbvUPrmoctcaX1/xQVKKMWZa5JtnE+w==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LeB47XU79pdpnc9/PeYz3ejwkjvCuQ086xN6ItOBo18=;
- b=drMzDOZ7bR2IMsqBVzH1QcGHK+V4h8/1X4jtfhNLviFDs5On3PsnpzMabP+fFGnQ2kVe57fTpJiWl+amP5hBTw1+stDAHzVY9PPpGazKWIsGLyp7vBGs4N6RMzd3PIBEY6dO+245IYMnjV3P1dAJMkiGl38VcmY2Upz6NXC9tAZFy2GtSedkqQQ/Flqy7D9WVj/LiR0Jivgx/FjtVyO8FYx6FVLy4nxgC5t6VAnb7woms638oBMxD7CqJZF4MgXFbirZQceFacMzW/B/MvMR6G84JF0RqOhbdzGDHUmeYj77n8YlrBLVNNNdemljNV8CQINMovlcbF0dll1T/HohqQ==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeB47XU79pdpnc9/PeYz3ejwkjvCuQ086xN6ItOBo18=;
- b=BVfVBaIRzbKa1cqRqMQwzWq52LzD+iZ/y1aeAkRJVz4d64i2rg+8lfuFDYNT/bvy2T7xbIKXVDmvp+rxlgLOnr/jtDZxmudFVFnsn9rs8fDa06tqEVbboWCnEay1e/25utxY1f7recvV9Gqukg987gFgKcjNSbirFEl9Bthf6sc=
-Received: from DU2PR04CA0160.eurprd04.prod.outlook.com (2603:10a6:10:2b0::15)
- by DB4PR08MB10343.eurprd08.prod.outlook.com (2603:10a6:10:3fd::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Tue, 31 Mar
- 2026 13:53:24 +0000
-Received: from DU2PEPF00028D13.eurprd03.prod.outlook.com
- (2603:10a6:10:2b0:cafe::1b) by DU2PR04CA0160.outlook.office365.com
- (2603:10a6:10:2b0::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.28 via Frontend Transport; Tue,
- 31 Mar 2026 13:53:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU2PEPF00028D13.mail.protection.outlook.com (10.167.242.27) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9745.21
- via Frontend Transport; Tue, 31 Mar 2026 13:53:24 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=I+cqzgk650PBdmz48IkYrtCyOgVgdvcxjPig6jXdGaBT+99pHCJ9wJYbnjOlGRWJ9wCcSxtwzStfnP/YkWvFNiEfucoQIC42FZ3SlQMbSDE3ZQPkeNqrrQ9+Wb8a+0X2SFVD0yvP0fQVYVM54rdfs2t9UYwHEga912mCS292RDdxaIXgS7Zwwm4Sy52jfPHxnnZyhkWV3WGUdU5j6QgnxWRZYrTjLTibq2ZeOi8GSZtkY8zJ/3X4Y8IXH8C5uPTwFgidK+2ofPnnF90DrizIjNR17vpLO6pFERN1mZ37czcc1HMMLp9XFe/N3EwP0GP6Ky6UOR6hgOvXa2OVUqEfeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LeB47XU79pdpnc9/PeYz3ejwkjvCuQ086xN6ItOBo18=;
- b=FkVyetQ+zHf8WVS6N3Bf+7HtGkW9uaRDpDpc+f7CZZBSmoNkjSV8ZmnJgZUKi/2JjJyPbpJkZhROyi9sC8KfezT1FW6jKQU+rP3Di34sYksLgL4x8aAoGYihgae71PCbuWn8nTHqJLFRbRNi0oUWlp6R6ilX5mWBg+K7qh6fWFSMKv4Nhs6m4eTO/8c/r33VgC39mz1CVrKEZIFh3zE8OI4W0Omw4BhSJ9ovjEx7rv9XkXDWuM0X8k2dkzp0ANF6f39U0Aq1HzQY8ED5f9OGzGvwDDN5qdQoK4rCrv/Aq3eThkoqM1n/Y0ycxSUDvlgwK2YGyvULeAUXMRSnsE8DOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LeB47XU79pdpnc9/PeYz3ejwkjvCuQ086xN6ItOBo18=;
- b=BVfVBaIRzbKa1cqRqMQwzWq52LzD+iZ/y1aeAkRJVz4d64i2rg+8lfuFDYNT/bvy2T7xbIKXVDmvp+rxlgLOnr/jtDZxmudFVFnsn9rs8fDa06tqEVbboWCnEay1e/25utxY1f7recvV9Gqukg987gFgKcjNSbirFEl9Bthf6sc=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com (2603:10a6:803:80::16)
- by PAXPR08MB6718.eurprd08.prod.outlook.com (2603:10a6:102:134::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.28; Tue, 31 Mar
- 2026 13:52:21 +0000
-Received: from VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4]) by VI1PR08MB3421.eurprd08.prod.outlook.com
- ([fe80::e079:6bd:fbe0:89b4%4]) with mapi id 15.20.9745.019; Tue, 31 Mar 2026
- 13:52:21 +0000
-Message-ID: <6e2c9ff4-5c2f-4741-80ad-9ca2147c9689@arm.com>
-Date: Tue, 31 Mar 2026 14:52:19 +0100
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com
-Subject: Re: [PATCH v4 1/3] mm/page_alloc: Optimize free_contig_range()
-To: "David Hildenbrand (Arm)" <david@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Zi Yan <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
- david.hildenbrand@arm.com
-References: <20260327125720.2270651-1-usama.anjum@arm.com>
- <20260327125720.2270651-2-usama.anjum@arm.com>
- <8b3eae05-046a-4413-ae56-f70e1b1dfc83@kernel.org>
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <8b3eae05-046a-4413-ae56-f70e1b1dfc83@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0167.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:312::12) To VI1PR08MB3421.eurprd08.prod.outlook.com
- (2603:10a6:803:80::16)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FZpN+UsA"
+Message-ID: <d8129d6f3624bf6393952cfc5655701679478836.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774967298;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eJg8Kr3tvfd8HEmmNwY6slWzyibLikWYQ6p5SMniqxw=;
+	b=FZpN+UsAM9uABv+MFz+bQTMfXsEMmfXoBPxJLTKA4raFsx/aOt1KWV9JXUom2Pf2Z9ytQe
+	5twWGjQm234/R78oThzs4peY3y+G4lPXiqGGsa5FnEkNlBaVEj1P6x/dZ06uXtVdp2w3lx
+	8zgpnNs7xWLy+DGmnW1oGnQIDtXCwPM=
+Subject: Re: [PATCH v2 bpf-next 2/6] bpf: Use bpf_verifier_env buffers for
+ reg_set_min_max
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Paul Chaignon <paul.chaignon@gmail.com>, Eduard Zingerman
+	 <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu
+ <shung-hsi.yu@suse.com>, Srinivas Narayana <srinivas.narayana@rutgers.edu>,
+ Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Date: Tue, 31 Mar 2026 22:28:06 +0800
+In-Reply-To: <acpnHDASo5QGw7BZ@mail.gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+	 <9fdf9830803fe3a5c4059341c84a03836105f5bf.1774025082.git.paul.chaignon@gmail.com>
+	 <33c006d7275cb443b5750f062cb78c38449a7537.camel@gmail.com>
+	 <acpnHDASo5QGw7BZ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI1PR08MB3421:EE_|PAXPR08MB6718:EE_|DU2PEPF00028D13:EE_|DB4PR08MB10343:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35a9ba70-a3ac-4bcb-a2bc-08de8f2ce0a2
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|1800799024|366016|7416014|376014|921020|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original:
- WnTCmYquqOvBDTFC6uD6d31XgpiWbAUwu/OFrKHGj13X+SZIbUiwz0Lhj8X2zR1jfcS/IMgdUgRJtHIDtZte2wpk06egN5Rc99UqKG3jihqha5S0FbhceZ+mgKWvPKQEWu8fj+qzjoDj0T3xzo58aFD2DyTWz9iG+ewx7AtW2VaQcTMlwaqGMHK8TH29numA0JurVT5BfENaCvcjCA44a9rM8Y1uCHsSj3vcGM/SmPH8UXY9bIYa/rOVpccBEl7n9EYgMpkx0CMDjhplHP0qWH2vXQMFbqidp8C3jFse+ddivzWjJnfW9AUCDhQBtykTCbmR+pNH3MX3SJzYzD/3WXMRvIY11Z8Y40zUl5DlqC3aPJ4Mn00CRIjOZEGBB18kLWKExFTvC/78c8plvs7/oEfAPYvpWMcoixourAx+x6euAGADu8YKZE6wAHkOCvcUG5muuTFkYPJ+XQm4/YtuENkY9ZURMbR+r+mbamtaHCIq7ohve3ojNa5nRy+WzERpvK0Z4bFWToHSvFZsu3vmecpjyeOg8Cu4uCKEh0F12wEe+RPWj9+isylFNXh1Jgkoj7SMmwUR4Mwyk9pUJmrj16X5vQgwAuK83t8TTexEDGhgy9GGTkKHVxYKJHssKGd6P2eP7Fclx19ZTjpIVTlL6KSo5BCRxEabluIIwwSA3lg8HjsyKfBAL+GkehpJ9++ikw8gHspu16tIfCpTWxyNxF780VapUapf1TrzXCd55Vzgg10R75u5k1bhqB2CfYzlLPOcxYwxL3ldCqFNNw4h9A==
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3421.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(921020)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- sr5QJC6ZqgkTSFI+3yQCdWIqi1vVrSpERC3gCabB2YT/egbn8OmNkaJLUXI5oPzp98R3YpWRR9eGPKXoeMXfvEBdAHSlRbpcDAWMt4WXwCyOHq5sueduYTAKfOzPQu+zJz9hVfhvHRBPe+ABRxQIWGz5Nbjd6KHEJvQiiUWKC+RC2d1xahdOLE4VONCSyJ864QQ39onf/A071h/4KqdmLnUHs3/sdSidPiXjFPUm1IsVs62F+JXWFQFhnFO/mYEw5i4lFcsdHUw7JMVJQyaVaXRs8Lbtpwfp+lrpldgMpwMEWk1UqwJHaClJ5nIYyYhfBoMVwJhFeoS34TRy48R2Xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB6718
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU2PEPF00028D13.eurprd03.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	b31be0de-352f-4737-292a-08de8f2cbab2
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|35042699022|14060799003|36860700016|7416014|376014|22082099003|18002099003|56012099003|921020;
-X-Microsoft-Antispam-Message-Info:
-	nhtMeQhNizmPFOryxcxFl1X+Er637NDF7Icn4G34T+X52jLYZOIYvFSwFqOCDFxxfYMBmLxPW8WYV3BDpqCMh6OdKXw2GZ+aoUJ0JgFw1oJElxs6oGjcWjc/d+G5SrEhNyeEHshj+jpLz3vhNzZupI0/B6DAeZ7Cdm3e0SfT4nYmur61+/fns+tIV6rqnips7GnLAZOYsg/VKb2OWFHqsHuH0bjFDjtvgHXpYAzbS3El2G0OhE9UdXKfZ720nwIKWUQPD+QGd0nwh6zXgq1fr02U8L0nxs1Nyvw4QtEGVlMrflwcx9fvaSrWt0ZkT8Iot2hnKDtwQr9ICWHW7yTECj0eN+H16eAvXBb5p7o5PU19Jveq+I+pZ1Yg97z2CK80il63YHuGb5J12Xu/CSpy1RV+SXa1bPRvLS86eewbOX9AU6w1AHsR61HbJXpv9FZ38qwEMg9EvEvvTFk/9af3zlJx1bCKj5CqgocJMjipw9y6cXmZccD/EZWq9jGs2sB8cytCynSxO1XifiqQSoD5+mgSX7Ret+1dkNR+94pfybUzqW2zv2ue0DP97Xb7LNjxtWJlGFbfFDZ3hXmIfPQtRov3pzMRmMPE+MVv1agpi5zm5FqQ9yILhMLTWFjxeMnPeWyD4eBqtv9c9X5OmJinIEn4AuxfOrPb/LBKvdht+VsDwM+vu9A90NOWTqJciIDMB8bYIgtmNEDm1LpEkr1uRGiCrh94V7Wvz3FWxSmDO0Gi+RHcnL7HwsdLBKt57ux2f0gjWTH3uTE7p3EWM8uNCQ9Eoac1bgMYPFSE+YmCAVCeNOl4Vph6tBNiDWeg2nDe
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(35042699022)(14060799003)(36860700016)(7416014)(376014)(22082099003)(18002099003)(56012099003)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	SRy17DoTzeQhc6cw6PKewWHYxFrDYyH2qFSLZbiDmXMZ62pWYUxjRMLd5Bwnpfj+K9yQZgwJzzcgjdurQz934EZ+M95HN8HCAmgcIdH7YDPt9w1KCXk4oI6YDxLrkDsZP/HwYnue5HC8u3wsOTB67QuLkRZjgm/ztlnIEA8hHaFU5XqCihnkpYULY3t+DAWZLbd3zZ1GjIHWEqewhCrn69fNubKiJE56RVYMED00cSNUf0Ncdp3GpGroPaXvYJ9gugsKX/A0KxNoUgdCQZL+6Cu+8MytAxarrY8QuT1zud/2YBlmPBt224pt5nYjyBcPnCzvBxosfKdQiuhrDOEC6Lu2Z1MI4pBHVp9svGhl0WgC8jqYpSx/blNTXtjL8a1fy2czwTQjp98ZfeNRwLl/3hOmfJV3VmOaaaDJyB1L+j1Nok76LwXN18uQ3KPWkn8q
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 13:53:24.2287
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35a9ba70-a3ac-4bcb-a2bc-08de8f2ce0a2
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU2PEPF00028D13.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB10343
+X-Migadu-Flow: FLOW_OUT
 
-On 30/03/2026 3:33 pm, David Hildenbrand (Arm) wrote:
->>  
->> +static void free_prepared_contig_range(struct page *page,
->> +				       unsigned long nr_pages)
-> 
-> Prefer two-tab indent in MM land.
-> 
->> +{
->> +	while (nr_pages) {
->> +		unsigned int order;
->> +		unsigned long pfn;
->> +
->> +		pfn = page_to_pfn(page);
-> 
-> I'd just do above
-> 
-> 	const unsigned long pfn = page_to_pfn(page);
-> 	unsigned long order;
-> 
->> +		/* We are limited by the largest buddy order. */
->> +		order = pfn ? __ffs(pfn) : MAX_PAGE_ORDER;
->> +		/* Don't exceed the number of pages to free. */
->> +		order = min_t(unsigned int, order, ilog2(nr_pages));
->> +		order = min_t(unsigned int, order, MAX_PAGE_ORDER);
->> +
->> +		/*
->> +		 * Free the chunk as a single block. Our caller has already
->> +		 * called free_pages_prepare() for each order-0 page.
->> +		 */
->> +		__free_frozen_pages(page, order, FPI_PREPARED);
->> +
->> +		page += 1UL << order;
->> +		nr_pages -= 1UL << order;
->> +	}
->> +}
->> +
->> +static void __free_contig_range_common(unsigned long pfn, unsigned long nr_pages,
->> +				       bool is_frozen)
-> 
-> Dito.
-> 
->> +{
->> +	struct page *page = pfn_to_page(pfn);
->> +	struct page *start = NULL;
->> +	unsigned long start_sec;
->> +	bool can_free = true;
->> +	unsigned long i;
->> +
->> +	/*
->> +	 * Contiguous PFNs might not have a contiguous "struct pages" in some
->> +	 * kernel config. Therefore, check memdesc_section(), and stop batching
->> +	 * once it changes, see num_pages_contiguous().
->> +	 */
->> +	for (i = 0; i < nr_pages; i++, page++) {
-> 
-> As Vlasta says, page++ needs a thought. (you have to redo the
-> pfn_to_page with the next pfn in case the section changes).
-It'll be fixed in the next version along with other mentioned nits.
+On Mon, 2026-03-30 at 14:05 +0200, Paul Chaignon wrote:
+> On Mon, Mar 23, 2026 at 11:42:11AM -0700, Eduard Zingerman wrote:
+> > On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
+>=20
+> [...]
+>=20
+> > > @@ -17196,30 +17192,23 @@ static int reg_set_min_max(struct bpf_verif=
+ier_env *env,
+> > > =C2=A0	 * variable offset from the compare (unless they were a pointe=
+r into
+> > > =C2=A0	 * the same object, but we don't bother with that).
+> > > =C2=A0	 */
+> > > -	if (false_reg1->type !=3D SCALAR_VALUE || false_reg2->type !=3D SCA=
+LAR_VALUE)
+> > > -		return 0;
+> > > -
+> > > -	/* We compute branch direction for same SCALAR_VALUE registers in
+> > > -	 * is_scalar_branch_taken(). For unknown branch directions (e.g., B=
+PF_JSET)
+> > > -	 * on the same registers, we don't need to adjust the min/max value=
+s.
+> > > -	 */
+> > > -	if (false_reg1 =3D=3D false_reg2)
+> >=20
+> > A side note:
+> >=20
+> > The above hunk was added as a part of [1] to mitigate some invariant
+> > violation errors. Surprisingly, none of the tests added in [1] fail
+> > on current master if above hunk is commented out. Probably due to
+> > recent improvements in bounds deduction. Should we remove these
+> > tests as a part of the series?
+> >=20
+> > [1] https://lore.kernel.org/all/20251103063108.1111764-3-kafai.wan@linu=
+x.dev/
+>=20
+> Nice catch! Out of those five new tests, the three "jset on same
+> register, scalar value unknown branch" never fail if you revert the
+> commit they were testing, even at the time they were added. I believe
 
+the five tests in [1] were intended to test the code:
 
-> 
->> +		VM_WARN_ON_ONCE(PageHead(page));
->> +		VM_WARN_ON_ONCE(PageTail(page));
->> +
->> +		if (!is_frozen)
->> +			can_free = put_page_testzero(page);
->> +
->> +		if (can_free)
->> +			can_free = free_pages_prepare(page, 0);
->> +
->> +		if (!can_free) {
->> +			if (start) {
->> +				free_prepared_contig_range(start, page - start);
->> +				start = NULL;
->> +			}
->> +			continue;
->> +		}
->> +
->> +		if (start && memdesc_section(page->flags) != start_sec) {
->> +			free_prepared_contig_range(start, page - start);
->> +			start = page;
->> +			start_sec = memdesc_section(page->flags);
->> +		} else if (!start) {
->> +			start = page;
->> +			start_sec = memdesc_section(page->flags);
->> +		}
->> +	}
->> +
->> +	if (start)
->> +		free_prepared_contig_range(start, page - start);
->> +}
->> +
->> +/**
->> + * __free_contig_range - Free contiguous range of order-0 pages.
->> + * @pfn: Page frame number of the first page in the range.
->> + * @nr_pages: Number of pages to free.
->> + *
->> + * For each order-0 struct page in the physically contiguous range, put a
->> + * reference. Free any page who's reference count falls to zero. The
->> + * implementation is functionally equivalent to, but significantly faster than
->> + * calling __free_page() for each struct page in a loop.
->> + *
->> + * Memory allocated with alloc_pages(order>=1) then subsequently split to
->> + * order-0 with split_page() is an example of appropriate contiguous pages that
->> + * can be freed with this API.
->> + *
->> + * Context: May be called in interrupt context or while holding a normal
->> + * spinlock, but not in NMI context or while holding a raw spinlock.
-> 
-> Interesting that we didn't have a cond_resched() somewhere in there.
-> 
-> 
+	if (reg1 =3D=3D reg2) {
+		switch (opcode) {
+		case BPF_JGE:
+		case BPF_JLE:
+		case BPF_JSGE:
+		case BPF_JSLE:
+		case BPF_JEQ:
+			return 1;
+		case BPF_JGT:
+		case BPF_JLT:
+		case BPF_JSGT:
+		case BPF_JSLT:
+		case BPF_JNE:
+			return 0;
+		case BPF_JSET:
+			if (tnum_is_const(t1))
+				return t1.value !=3D 0;
+			else
+				return (smin1 <=3D 0 && smax1 >=3D 0) ? -1 : 1;
+		default:
+			return -1;
+		}
+	}
 
--- 
----
+Indeed, the three "jset on same register, scalar value unknown branch" test=
+s never fail.=20
+We always know if the branch taken or not on BPF_JSET, and `regs_refine_con=
+d_op` does not=20
+adjust the min/max values on BPF_JSET as it does for BPF_JLT.
+
+> these three tests were intended to cover the above "false_reg1 =3D=3D
+> false_reg2" check and supposed to fail with an invariant violation when
+> the check is missing.
+>=20
+> I believe this check was never actually needed. For an invariant
+
+this check can skip the pointless work on the same registers as Alexei said=
+ in [3].
+
+[3] https://lore.kernel.org/bpf/CAADnVQKdMcOkkqNa3LbGWqsz9iHAODFSinokj6htbG=
+i0N66h_Q@mail.gmail.com/
+
+> violation to happen, we need regs_refine_cond_op to refine a register
+> based on a incorrectly-detected branch being verified. For jset, that
+> can only happen if one of the two registers is constant. In our case,
+> that would mean both registers are constant. But if both registers are
+> constant, then is_scalar_branch_taken is always able to precisely
+> deduce the outcome of the jset. Hence, we wouldn't even reach this
+> "false_reg1 =3D=3D false_reg2" check.
+>=20
+> I think I'll remove this check in a preparatory commit, along with the
+> related selftests and an explanation why it's all not-needed. Cc'ing
+> KaFai Wan in case I missed something.
+>=20
+> >=20
+> > [...]
+
+--=20
 Thanks,
-Usama
-
+KaFai
