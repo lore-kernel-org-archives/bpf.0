@@ -1,450 +1,1103 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011008.outbound.protection.outlook.com [52.101.62.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EFD0421EE4;
-	Tue, 31 Mar 2026 16:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774973404; cv=fail; b=ls4MBCkvUm9l/9y9pBYPN+x6PEkHO5t48+SfMPbOQ+nSy6pPxKZ0VFfOqnuEzNwxWIqEq8x1eKPGfHJNXP34m/45jLiBZyuLLztLIDz0C5zQVJUMR8gzdzMRzdItlZoQG57oiP88Qp45t+UBTnTLrc9K8+e+b4hFOB++JFZ7CFs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774973404; c=relaxed/simple;
-	bh=2Vk1QJMRZJTOUQlZ/I5Q5eLOgBlknVmY5u0BL84jd58=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=re6OZ67Z+aQUxMdBlLoM5uxTZrxjAJIqGEaXoGwenPN+DLtcn98n1hNk4j+0Dn1k6XwKFIXOTAelUGf+CoOhvLYKZTAgQJl1LxA/E2DUZAWGLs7IU58fDh0AKeht+2cnZ2lmJucFnfUVvVR3TtpNAsDN897yavBZlGHI7RFnNsI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Dmlog0KA; arc=fail smtp.client-ip=52.101.62.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4EF3E4C6C;
+	Tue, 31 Mar 2026 16:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774973586; cv=none; b=eZGRi8+xxRiP9PMwroyRc/2B329jsdm+4Pc1xC8SpEm/fmI5zCGET9jjTcGl/kTurxo9o04V0YD44/gmnE0u4hqSbWvCE2PXeR6UbAkyefWUXYSSyzkWt0b00ZuvZ8mfx9/UQzgiVdSlvVdydiCHa8fTytIEeXN+tEtUK9GENwM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774973586; c=relaxed/simple;
+	bh=IqoVOn+XzcYv5SDI2a8ouTiux0mrpDJ55FqY5tUjS20=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f8vD7KPqPjUiaDlPYm3q3UxNXyOw/Jzga38QtwPNpNxPm0vce3sT2IB8uyRcGgxCLD9sNoh56sPjZJK9LmtFaoxYSf0LCLefU6niCCSsFbQMvS5hSqSmFkcMq3NDN3YFfZAVCc9I7HoSXxeHuU0XhiDLcNf0HBmdyoKroXUs0Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3EIlAG5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Dmlog0KA"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UeMWIm8I/vVxMPfNOH61cO3KmWeu/ph67F2R8vg+9zOhYgte4qn8h7qEef76iC4p022MNddmZtIm35La1Jn5daka88Q/nC9C/XpCt8Yu4vfDhhci6GugMQ9t0ZqFQ78S58QdLUfczOpfqmbUzBDkt8pPQGOY948qa9TurdYgqpmK5vQO18ktq9cKS1CXi4gTxrFI1CNvVNAmndUY+bwlpEni3dSrHIqeXXP2v1JgpJ/0xA16AjnLixhKGZav86caEub7EhLFdLkuGdGfRdNDi5Oct54OlhcqYZJbd/4rbzGP2bpfncooEognlFzve+pmqx10Ah+0HNA9ePhFB12X2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GNCAErXeMTh/0cRS5giuyfZ5PEwH8ltJJ+T+T3YgIwA=;
- b=adRGuGcVoUUzYyimntl6qCNAVyasg0qvA6F0W+LRAECDnBWrsdKW60rGnBqnw7649Ybflh7vNGMyuqCRFmFS2GqK27qx/YI8xj5+ITftIV+Y1S3LSigF/T20m8kr+jWfF4hiYlpyj4lG0CtDiEYiJoFLwtPZ5E2EGtP7ZyVAsv2w2qym1+ifTSpLpWZn4nLz3aSTVTsIPVdbY3fJXvmTxsL4S31bvVuvRWRRt1d5j1wOHjOXF4c11R3d6sqPc/mMei6+XXdyNdcXVQ/EMc+UfkHmTtMlwepvEZzcgossQZqiz6t1e7pMnHzG2amhsgaWfb9F90PcsnMQr9YIf/kfaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GNCAErXeMTh/0cRS5giuyfZ5PEwH8ltJJ+T+T3YgIwA=;
- b=Dmlog0KAhQ8VRRhfuYZYJCIMFOcbegXqlDWlFX9z1yecmIzpw17nRM3NzJERRc+k+KMguBJ7RunaKVDi3nDRc0CnaKaSE7At8hmVf2eFocmRXrBJzEzYkCC+7h25QUK46x0Q/GGwpdGC3LVt9bAK/vC07Mvjwqv4m1wcAZdrK2PAQZE1AV8HhnefejTkgtRUNt1Qx7CIK0oJIgKCldNa9xhiYb0iwH7MwFqEydVGZ3Nim3rCkgjHXiblxqAHW0C/3i0wpg6a3wI8MMmI2SGBj419KYSjIwzFulaopu/MNu5G7QU6b2SSrUt/g4c7axmaNMHtMgCnMuMX5H5EYFXpEg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- LV8PR12MB9666.namprd12.prod.outlook.com (2603:10b6:408:296::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Tue, 31 Mar
- 2026 16:09:54 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9769.014; Tue, 31 Mar 2026
- 16:09:54 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Ryan.Roberts@arm.com, david.hildenbrand@arm.com
-Subject: Re: [PATCH v5 1/3] mm/page_alloc: Optimize free_contig_range()
-Date: Tue, 31 Mar 2026 12:09:50 -0400
-X-Mailer: MailMate (2.0r6290)
-Message-ID: <808663DC-2C66-460A-81D0-2943B9B7CF69@nvidia.com>
-In-Reply-To: <20260331152208.975266-2-usama.anjum@arm.com>
-References: <20260331152208.975266-1-usama.anjum@arm.com>
- <20260331152208.975266-2-usama.anjum@arm.com>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: BN9P223CA0018.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:408:10b::23) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3EIlAG5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9E4C19423;
+	Tue, 31 Mar 2026 16:12:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774973585;
+	bh=IqoVOn+XzcYv5SDI2a8ouTiux0mrpDJ55FqY5tUjS20=;
+	h=From:To:Cc:Subject:Date:From;
+	b=h3EIlAG5t/ub+ghegp2jYRTkSunUO2eFE0Nuq8ZILQDIq6Of/jDBSe5FiyNkNOZNB
+	 TpsWqZTMsLN0ajFOcGoR/PW3yAGIllZAtFGn5xgfg7VNCgyrkgwDEN33gDp4mVOh/g
+	 CYKYni13KHMf4gBpxQYcHIRvXLZjdAvs3bCvjJq+ytwcxGWVDNx4pL+QAdMJSAqsPd
+	 bf6vUvgGjaBJqelH3iOzWk6mTNY39NaS6IoU6pTQCA6MugDD9zYNYt/6oI2z2t8r2S
+	 1b4hTLYakvTo6b7AcYdrKZkFDv3RMvyRALRXAmxxCAuQhgTVsfEjSdX3WNKy3uR6hh
+	 slu5D4Ua59XIQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Grygorii Strashko <grygorii.strashko@ti.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"Andrew F. Davis" <afd@ti.com>,
+	Basharath Hussain Khaja <basharath@couthit.com>,
+	Parvathi Pudi <parvathi@couthit.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Chintan Vankar <c-vankar@ti.com>,
+	Stefan Wiehler <stefan.wiehler@nokia.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] [v3, net-next] net: ethernet: ti-cpsw: fix linking built-in code to modules
+Date: Tue, 31 Mar 2026 18:12:35 +0200
+Message-Id: <20260331161254.3450606-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|LV8PR12MB9666:EE_
-X-MS-Office365-Filtering-Correlation-Id: 248844e0-3caa-498b-3cae-08de8f3ff207
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	b8fGdONG01bELWrJ/P2LwaPQcjleTPqvSrWnyqRslQlf8vyqCy5lNFljuwhE7E2oj3GuXJ9VSlC0Ol7RQBBL40OsS/1QWU9qCLS3c/hZp8tTRNtjSxdffSMnE73DUTnCWu8wMIdrNlrhAlF1hH8jMFi9T3REqerrzMnBRIv/S9DePX3lfC1dLo6X2cC4H0xJeJjPrJFveP4Sd/r48m2fV8l8i5A+6x59kVzWhEkga2vOW8xp3bjkhdO44k1exHq0Sq/ExRjVFTqtahlU2NPQTC1O7eHXABNTcyYjasmbe6orvhkgnf0fZj+r9ShJHcjWFpaTYQgoRhUi/kExhh/cnBWgAUnE/sD1ABYD6wQInRg/wMmHCQH9i26zaRCe7tCkHqJ/JV4/8Cdt0mMtEpMcL3RuTODlM0RIs0v2mRdiJLpTu2y6mPZMrbElFTiGtQsR3ZEi1XsPba0w4cXZhu6Ds9vByTOvmyyn2vDnImEfY/GUg2qR0UZTxkxaxEGPTMBApJ2hinaGId19cDjPfZx6sYPuzpy9mVrVOPqgsaqtiPhkzxXUv4C5c61aGu5xua7COhP7dfRyi9uuE5EiO9jaIl0yp/r7XUQZo6anJ1r+EBsZsznMRmqCYEcvo/sGJve3rJVMRpGYlpc/oSHhXOIJMAri5llaae7mJHGRwJCf56Pga5ollsIgnXAxzYeORucm+B81z35FwYjGrvjhEUCAwRLzRxF2A/R5kSLTK80caag=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?BoN2AAYl0vibfBjOAEw54VPvb2K+3N2kmj9KzzXqf+Pc2QBmzzkCQi3FAY4b?=
- =?us-ascii?Q?X7wiE4Y3xkUDBrqBjWLM0FY9V2RHNArxY1v7MhVHtri2zWCAA8FTWcla2/ov?=
- =?us-ascii?Q?mG/J2x4hSpObUQyqIips20XzeN++n8MhzEJLUXLfWz9lmksybaHcGGRtjdfe?=
- =?us-ascii?Q?+iki5qHck8Vq1FelMcs46BohAHnlUjXfgfR7fhygn7Rq49JboncxwT1o3HbE?=
- =?us-ascii?Q?Yn/MKWXb7otFQJnxSY02vzrcib/LnoY/wy+hi7wH/S0fMikVcrL0FY5IIAcb?=
- =?us-ascii?Q?HdApcneX/eAboM/6N3KlpOAp3q5N2DyRb45Og65PXpZrtYGbciNDPU/qWPeU?=
- =?us-ascii?Q?cbh0P3hdy8QbytbaSpwtxZ4VsEH+lObymmnFIldRTlW+UZEGU+WtdMMUi+Av?=
- =?us-ascii?Q?a94eb1VYYkzreihFiM5eN8capMQLgs9OuyipwvlnAihKMw0mMPitq/VBK2es?=
- =?us-ascii?Q?8AsjUDns3nLJpQYvD++dIDzU/g3NWhVwdk+1XI91TzY6LrH6j5S3vmli4LSE?=
- =?us-ascii?Q?yjhAWh4I5i9FAweri+trCmZ15MXNvKQg4EROKRSgxaHfkUSQgs07jI/5R9Cv?=
- =?us-ascii?Q?rQL/Jp3zkswvX1j8LiwrEqu/OK9JaV4Hvhc9VUJJU5q5kfyMnW94fT+Fh0Fb?=
- =?us-ascii?Q?gdw7sA1IDUErXzOqNZWBueIKmeXfE7kVjnUMXQiq6UZBLxBD1IcOX9MHnePW?=
- =?us-ascii?Q?LyFGrjezesXCxuxiUdNnYxiPEDxiFnFO3BG0ZfIxSXB49Hr6fFNgjE4EvdkS?=
- =?us-ascii?Q?GcFI1NLKbn0gbmL5SVZSeIweVgxHgB1wm4mPINoJM2eTp5QZ39vLln4kEEf8?=
- =?us-ascii?Q?FdUlSHxNoScaj6gg71pSwV9mtyHsztO2zA01hpt3NLPawHXFjOKSLTdwXlmH?=
- =?us-ascii?Q?vlAjfEGCgT3iwN5798+3NP28/dj05VU+Qj+s2bkKrLGQr0SL/lwWtAWloAuF?=
- =?us-ascii?Q?xjMtNm4rtxgFLqZTL5MJEg9w0eAHXZNawNzfwk8aQnuU7pvhW0y0K/V8Hnt5?=
- =?us-ascii?Q?8LKOSCUHW7jQuo8/eRZBhREWOX+RKDXyKF1L+TiIKwLMIlE1iQ2YSHVVCjG6?=
- =?us-ascii?Q?exe/S7Pv2NoOm8IxXJHpzNWKVnXSy4IKiMbbFbJWcANU6SknkJ8lQUxy6dP4?=
- =?us-ascii?Q?o+JmXVLrcnbpSQ2bsmDZoJJI8i2UMNWXJZ6yhqjvLfOX37h3L1FEeQiZM6FE?=
- =?us-ascii?Q?pkTgXRogTPRazoJrjzPYVQieh6pAqcQ1JhAeja/jMIP9Wu3rI3KzfMzcvhw6?=
- =?us-ascii?Q?p3CZWlZZJTo0HRViHxPGtmyH8tlVt3xQ/1ipUTx7wq0PVuXD0qKnhvJDl/Zy?=
- =?us-ascii?Q?20boC7zrDjYhXYIr/Sj9F162BCx0OLX9+/GXKZgnYpboNxse1fwwfvcOlGj1?=
- =?us-ascii?Q?+/EhVKR5L20+w/5UhSYmggKTATpQbE/EKUCpun9yBw6jzNYU0nV9wZA2E8Ly?=
- =?us-ascii?Q?VsOEbdcQbZcxktUfjsFVDBFGCHaMdlzTYnE+FOMT5vZEdxmC+gnxGKrHp2Fr?=
- =?us-ascii?Q?uRY/0TKYMzUPTES6tnJGVFdI+DQn/wAbgJlLjvTheKZGS3bEd7ujUc5P1oEt?=
- =?us-ascii?Q?ylBc41ufH9/VBk8e3fsW8Z7w6sPKYiT7t/Ao/69S8W+30YTtTjMHe+QB3Y2p?=
- =?us-ascii?Q?nA/b+2he69vZacMiEN+t5wSRDzJoFKVzjkxh7vNzKkFkUwzoBOaxIL5PbarL?=
- =?us-ascii?Q?UM1iMagQMouAfqxbgULmkT5Zy5ekIFddi+i6rsbf85h62+o/?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 248844e0-3caa-498b-3cae-08de8f3ff207
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 16:09:54.0932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RIiAptD6W/k4gVclw4lkdPK6grP1wVyHl4QRjSOaYo620DGdZ8cNNzYTfNLd6IM1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9666
+Content-Transfer-Encoding: 8bit
 
-On 31 Mar 2026, at 11:21, Muhammad Usama Anjum wrote:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> From: Ryan Roberts <ryan.roberts@arm.com>
->
-> Decompose the range of order-0 pages to be freed into the set of larges=
-t
-> possible power-of-2 size and aligned chunks and free them to the pcp or=
+There are six variants of the cpsw driver, sharing various parts of
+the code: davinci-emac, cpsw, cpsw-switchdev, netcp, netcp_ethss and
+am65-cpsw-nuss.
 
-> buddy. This improves on the previous approach which freed each order-0
-> page individually in a loop. Testing shows performance to be improved b=
-y
-> more than 10x in some cases.
->
-> Since each page is order-0, we must decrement each page's reference
-> count individually and only consider the page for freeing as part of a
-> high order chunk if the reference count goes to zero. Additionally
-> free_pages_prepare() must be called for each individual order-0 page
-> too, so that the struct page state and global accounting state can be
-> appropriately managed. But once this is done, the resulting high order
-> chunks can be freed as a unit to the pcp or buddy.
->
-> This significantly speeds up the free operation but also has the side
-> benefit that high order blocks are added to the pcp instead of each pag=
-e
-> ending up on the pcp order-0 list; memory remains more readily availabl=
-e
-> in high orders.
->
-> vmalloc will shortly become a user of this new optimized
-> free_contig_range() since it aggressively allocates high order
-> non-compound pages, but then calls split_page() to end up with
-> contiguous order-0 pages. These can now be freed much more efficiently.=
+I noticed that this means some files can be linked into more than
+one loadable module, or even part of vmlinux but also linked into
+a loadable module, both of which mess up assumptions of the build
+system, and causes warnings:
 
->
-> The execution time of the following function was measured in a server
-> class arm64 machine:
->
-> static int page_alloc_high_order_test(void)
-> {
-> 	unsigned int order =3D HPAGE_PMD_ORDER;
-> 	struct page *page;
-> 	int i;
->
-> 	for (i =3D 0; i < 100000; i++) {
-> 		page =3D alloc_pages(GFP_KERNEL, order);
-> 		if (!page)
-> 			return -1;
-> 		split_page(page, order);
-> 		free_contig_range(page_to_pfn(page), 1UL << order);
-> 	}
->
-> 	return 0;
-> }
->
-> Execution time before: 4097358 usec
-> Execution time after:   729831 usec
->
-> Perf trace before:
->
->     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthre=
-ad
->             |
->             ---kthread
->                0xffffb33c12a26af8
->                |
->                |--98.13%--0xffffb33c12a26060
->                |          |
->                |          |--97.37%--free_contig_range
->                |          |          |
->                |          |          |--94.93%--___free_pages
->                |          |          |          |
->                |          |          |          |--55.42%--__free_froze=
-n_pages
->                |          |          |          |          |
->                |          |          |          |           --43.20%--f=
-ree_frozen_page_commit
->                |          |          |          |                     |=
+scripts/Makefile.build:279: cpsw_ale.o is added to multiple modules: ti-am65-cpsw-nuss ti_cpsw ti_cpsw_new
+scripts/Makefile.build:279: cpsw_priv.o is added to multiple modules: ti_cpsw ti_cpsw_new
+scripts/Makefile.build:279: cpsw_sl.o is added to multiple modules: ti-am65-cpsw-nuss ti_cpsw ti_cpsw_new
+scripts/Makefile.build:279: cpsw_ethtool.o is added to multiple modules: ti_cpsw ti_cpsw_new
+scripts/Makefile.build:279: davinci_cpdma.o is added to multiple modules: ti_cpsw ti_cpsw_new ti_davinci_emac
 
->                |          |          |          |                      =
---35.37%--_raw_spin_unlock_irqrestore
->                |          |          |          |
->                |          |          |          |--11.53%--_raw_spin_tr=
-ylock
->                |          |          |          |
->                |          |          |          |--8.19%--__preempt_cou=
-nt_dec_and_test
->                |          |          |          |
->                |          |          |          |--5.64%--_raw_spin_unl=
-ock
->                |          |          |          |
->                |          |          |          |--2.37%--__get_pfnbloc=
-k_flags_mask.isra.0
->                |          |          |          |
->                |          |          |           --1.07%--free_frozen_p=
-age_commit
->                |          |          |
->                |          |           --1.54%--__free_frozen_pages
->                |          |
->                |           --0.77%--___free_pages
->                |
->                 --0.98%--0xffffb33c12a26078
->                           alloc_pages_noprof
->
-> Perf trace after:
->
->      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] __=
-free_contig_range
->             |
->             |--5.52%--__free_contig_range
->             |          |
->             |          |--5.00%--free_prepared_contig_range
->             |          |          |
->             |          |          |--1.43%--__free_frozen_pages
->             |          |          |          |
->             |          |          |           --0.51%--free_frozen_page=
-_commit
->             |          |          |
->             |          |          |--1.08%--_raw_spin_trylock
->             |          |          |
->             |          |           --0.89%--_raw_spin_unlock
->             |          |
->             |           --0.52%--free_pages_prepare
->             |
->              --2.90%--ret_from_fork
->                        kthread
->                        0xffffae1c12abeaf8
->                        0xffffae1c12abe7a0
->                        |
->                         --2.69%--vfree
->                                   __free_contig_range
->
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> ---
-> Changes since v4:
-> - Move can_free initialization inside the loop
-> - Make __free_pages_prepare() static on reviewer's request
-> - Remove export of __free_contig_range
-> - Use pfn_to_page() for each pfn instead of page++
->
-> Changes since v3:
-> - Move __free_contig_range() to more generic __free_contig_range_common=
-()
->   which will used to free frozen pages as well
-> - Simplify the loop in __free_contig_range_common()
-> - Rewrite the comment
->
-> Changes since v2:
-> - Handle different possible section boundries in __free_contig_range()
-> - Drop the TODO
-> - Remove return value from __free_contig_range()
-> - Remove non-functional change from __free_pages_ok()
->
-> Changes since v1:
-> - Rebase on mm-new
-> - Move FPI_PREPARED check inside __free_pages_prepare() now that
->   fpi_flags are already being passed.
-> - Add todo (Zi Yan)
-> - Rerun benchmarks
-> - Convert VM_BUG_ON_PAGE() to VM_WARN_ON_ONCE()
-> - Rework order calculation in free_prepared_contig_range() and use
->   MAX_PAGE_ORDER as high limit instead of pageblock_order as it must
->   be up to internal __free_frozen_pages() how it frees them
-> ---
->  include/linux/gfp.h |   2 +
->  mm/page_alloc.c     | 110 ++++++++++++++++++++++++++++++++++++++++++--=
+Change this back to having separate modules for each portion that
+can be linked standalone, exporting symbols as needed:
 
->  2 files changed, 108 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index f82d74a77cad8..7c1f9da7c8e56 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -467,6 +467,8 @@ void free_contig_frozen_range(unsigned long pfn, un=
-signed long nr_pages);
->  void free_contig_range(unsigned long pfn, unsigned long nr_pages);
->  #endif
->
-> +void __free_contig_range(unsigned long pfn, unsigned long nr_pages);
-> +
->  DEFINE_FREE(free_page, void *, free_page((unsigned long)_T))
->
->  #endif /* __LINUX_GFP_H */
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 75ee81445640b..6e8c79ea62f1c 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -91,6 +91,9 @@ typedef int __bitwise fpi_t;
->  /* Free the page without taking locks. Rely on trylock only. */
->  #define FPI_TRYLOCK		((__force fpi_t)BIT(2))
->
-> +/* free_pages_prepare() has already been called for page(s) being free=
-d. */
-> +#define FPI_PREPARED		((__force fpi_t)BIT(3))
-> +
->  /* prevent >1 _updater_ of zone percpu pageset ->high and ->batch fiel=
-ds */
->  static DEFINE_MUTEX(pcp_batch_high_lock);
->  #define MIN_PERCPU_PAGELIST_HIGH_FRACTION (8)
-> @@ -1301,8 +1304,8 @@ static inline void pgalloc_tag_sub_pages(struct a=
-lloc_tag *tag, unsigned int nr)
->
->  #endif /* CONFIG_MEM_ALLOC_PROFILING */
->
-> -__always_inline bool __free_pages_prepare(struct page *page,
-> -					  unsigned int order, fpi_t fpi_flags)
-> +static __always_inline bool __free_pages_prepare(struct page *page,
-> +		unsigned int order, fpi_t fpi_flags)
->  {
->  	int bad =3D 0;
->  	bool skip_kasan_poison =3D should_skip_kasan_poison(page);
-> @@ -1310,6 +1313,9 @@ __always_inline bool __free_pages_prepare(struct =
-page *page,
->  	bool compound =3D PageCompound(page);
->  	struct folio *folio =3D page_folio(page);
->
-> +	if (fpi_flags & FPI_PREPARED)
-> +		return true;
-> +
->  	VM_BUG_ON_PAGE(PageTail(page), page);
->
->  	trace_mm_page_free(page, order);
-> @@ -6784,6 +6790,103 @@ void __init page_alloc_sysctl_init(void)
->  	register_sysctl_init("vm", page_alloc_sysctl_table);
->  }
->
-> +static void free_prepared_contig_range(struct page *page,
-> +		unsigned long nr_pages)
-> +{
-> +	while (nr_pages) {
-> +		unsigned long pfn =3D page_to_pfn(page);
+ - ti-cpsw-common.ko now contains both cpsw-common.o and
+   davinci_cpdma.o as they are always used together
 
-pfn does not change after this assignment. That is why David suggested
-prefixing a const. You can send a fixup to this patch to change this
-if there is no substantial change needed for this series.
+ - ti-cpsw-priv.ko contains cpsw_priv.o, cpsw_sl.o and cpsw_ethtool.o,
+   which are the core of the cpsw and cpsw-new drivers.
 
-> +		unsigned int order;
-> +
-> +		/* We are limited by the largest buddy order. */
-> +		order =3D pfn ? __ffs(pfn) : MAX_PAGE_ORDER;
-> +		/* Don't exceed the number of pages to free. */
-> +		order =3D min_t(unsigned int, order, ilog2(nr_pages));
-> +		order =3D min_t(unsigned int, order, MAX_PAGE_ORDER);
-> +
-> +		/*
-> +		 * Free the chunk as a single block. Our caller has already
-> +		 * called free_pages_prepare() for each order-0 page.
-> +		 */
-> +		__free_frozen_pages(page, order, FPI_PREPARED);
-> +
-> +		page +=3D 1UL << order;
-> +		nr_pages -=3D 1UL << order;
-> +	}
-> +}
-> +
-> +static void __free_contig_range_common(unsigned long pfn, unsigned lon=
-g nr_pages,
-> +		bool is_frozen)
-> +{
-> +	struct page *page, *start =3D NULL;
-> +	unsigned long nr_start =3D 0;
-> +	unsigned long start_sec;
-> +	unsigned long i;
-> +
-> +	for (i =3D 0; i < nr_pages; i++) {
-> +		bool can_free =3D true;
-> +
-> +		/*
-> +		 * Contiguous PFNs might not have contiguous "struct pages"
-> +		 * in some kernel configs: page++ across a section boundary
-> +		 * is undefined. Use pfn_to_page() for each PFN.
-> +		 */
-> +		page =3D pfn_to_page(pfn + i);
+ - ti-cpsw-sl.ko contains the cpsw-sl.o object and is used on
+   ti-am65-cpsw-nuss.ko in addition to the two other cpsw variants.
 
-page is local to this loop. You probably can move its declaration here.
-But feel free to ignore this suggestion.
+ - ti-cpsw-ale.o is the one standalone module that is used by all
+   except davinci_emac.
 
-I was about to suggest make it const, but put_page_test_zero()
-and free_pages_prepare() do not accept const struct page yet.
+Each of these will be built-in if any of its users are built-in, otherwise
+it's a loadable module if there is at least one module using it. I did
+not bring back the separate Kconfig symbols for this, but just handle
+it using Makefile logic.
 
-> +
-> +		VM_WARN_ON_ONCE(PageHead(page));
-> +		VM_WARN_ON_ONCE(PageTail(page));
-> +
-> +		if (!is_frozen)
-> +			can_free =3D put_page_testzero(page);
-> +
-> +		if (can_free)
-> +			can_free =3D free_pages_prepare(page, 0);
-> +
-> +		if (!can_free) {
-> +			if (start) {
-> +				free_prepared_contig_range(start, i - nr_start);
-> +				start =3D NULL;
-> +			}
-> +			continue;
-> +		}
-> +
-> +		if (start && memdesc_section(page->flags) !=3D start_sec) {
-> +			free_prepared_contig_range(start, i - nr_start);
-> +			start =3D page;
-> +			nr_start =3D i;
-> +			start_sec =3D memdesc_section(page->flags);
-> +		} else if (!start) {
-> +			start =3D page;
-> +			nr_start =3D i;
-> +			start_sec =3D memdesc_section(page->flags);
-> +		}
-> +	}
-> +
-> +	if (start)
-> +		free_prepared_contig_range(start, nr_pages - nr_start);
-> +}
-> +
+Note: ideally this is something that Kbuild complains about, but usually
+we just notice when something using THIS_MODULE misbehaves in a way that
+a user notices.
 
-Otherwise, LGTM. Thanks.
+Fixes: 99f6297182729 ("net: ethernet: ti: cpsw: drop TI_DAVINCI_CPDMA config option")
+Link: https://lore.kernel.org/lkml/20240417084400.3034104-1-arnd@kernel.org/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v2: rebase on top of v6.9-rc
+v3: rebase on top of v7.0-rc
 
-Reviewed-by: Zi Yan <ziy@nvidia.com>
+It's been a while since I last posted this. Along with a similar patch
+I resent fo dpaa2, this should take care of all the last added multiple
+times' warnings I see in the tree in randconfig builds (x86, arm64, arm32),
+so I hope we can change that from W=1 to default when both patches
+are merged.
+---
+ drivers/net/ethernet/ti/Makefile        | 30 ++++++++++----------
+ drivers/net/ethernet/ti/cpsw_ale.c      | 25 +++++++++++++++++
+ drivers/net/ethernet/ti/cpsw_ethtool.c  | 24 ++++++++++++++++
+ drivers/net/ethernet/ti/cpsw_priv.c     | 37 +++++++++++++++++++++++++
+ drivers/net/ethernet/ti/cpsw_sl.c       | 11 ++++++++
+ drivers/net/ethernet/ti/davinci_cpdma.c | 27 ++++++++++++++++++
+ 6 files changed, 139 insertions(+), 15 deletions(-)
 
-Best Regards,
-Yan, Zi
+diff --git a/drivers/net/ethernet/ti/Makefile b/drivers/net/ethernet/ti/Makefile
+index 6da50f4b7c2e..f4276c9a7762 100644
+--- a/drivers/net/ethernet/ti/Makefile
++++ b/drivers/net/ethernet/ti/Makefile
+@@ -6,30 +6,30 @@
+ obj-$(CONFIG_TI_PRUETH) += icssm-prueth.o
+ icssm-prueth-y := icssm/icssm_prueth.o icssm/icssm_prueth_switch.o icssm/icssm_switchdev.o
+ 
+-obj-$(CONFIG_TI_CPSW) += cpsw-common.o
+-obj-$(CONFIG_TI_DAVINCI_EMAC) += cpsw-common.o
+-obj-$(CONFIG_TI_CPSW_SWITCHDEV) += cpsw-common.o
++ti-cpsw-common-y += cpsw-common.o davinci_cpdma.o
++ti-cpsw-priv-y += cpsw_priv.o cpsw_ethtool.o
++ti-cpsw-ale-y += cpsw_ale.o
++ti-cpsw-sl-y += cpsw_sl.o
+ 
+ obj-$(CONFIG_TLAN) += tlan.o
+-obj-$(CONFIG_TI_DAVINCI_EMAC) += ti_davinci_emac.o
+-ti_davinci_emac-y := davinci_emac.o davinci_cpdma.o
++obj-$(CONFIG_TI_DAVINCI_EMAC) += davinci_emac.o ti-cpsw-common.o
+ obj-$(CONFIG_TI_DAVINCI_MDIO) += davinci_mdio.o
+ obj-$(CONFIG_TI_CPSW_PHY_SEL) += cpsw-phy-sel.o
+ obj-$(CONFIG_TI_CPTS) += cpts.o
+-obj-$(CONFIG_TI_CPSW) += ti_cpsw.o
+-ti_cpsw-y := cpsw.o davinci_cpdma.o cpsw_ale.o cpsw_priv.o cpsw_sl.o cpsw_ethtool.o
+-obj-$(CONFIG_TI_CPSW_SWITCHDEV) += ti_cpsw_new.o
+-ti_cpsw_new-y := cpsw_switchdev.o cpsw_new.o davinci_cpdma.o cpsw_ale.o cpsw_sl.o cpsw_priv.o cpsw_ethtool.o
++obj-$(CONFIG_TI_CPSW) += ti_cpsw.o ti-cpsw-common.o ti-cpsw-priv.o ti-cpsw-ale.o ti-cpsw-sl.o
++ti_cpsw-y := cpsw.o
++obj-$(CONFIG_TI_CPSW_SWITCHDEV) += ti_cpsw_new.o ti-cpsw-common.o ti-cpsw-priv.o ti-cpsw-ale.o ti-cpsw-sl.o
++ti_cpsw_new-y := cpsw_switchdev.o cpsw_new.o
+ 
+-obj-$(CONFIG_TI_KEYSTONE_NETCP) += keystone_netcp.o
+-keystone_netcp-y := netcp_core.o cpsw_ale.o
+-obj-$(CONFIG_TI_KEYSTONE_NETCP_ETHSS) += keystone_netcp_ethss.o
+-keystone_netcp_ethss-y := netcp_ethss.o netcp_sgmii.o netcp_xgbepcsr.o cpsw_ale.o
++obj-$(CONFIG_TI_KEYSTONE_NETCP) += keystone_netcp.o ti-cpsw-ale.o
++keystone_netcp-y := netcp_core.o
++obj-$(CONFIG_TI_KEYSTONE_NETCP_ETHSS) += keystone_netcp_ethss.o ti-cpsw-ale.o
++keystone_netcp_ethss-y := netcp_ethss.o netcp_sgmii.o netcp_xgbepcsr.o
+ 
+ obj-$(CONFIG_TI_K3_CPPI_DESC_POOL) += k3-cppi-desc-pool.o
+ 
+-obj-$(CONFIG_TI_K3_AM65_CPSW_NUSS) += ti-am65-cpsw-nuss.o
+-ti-am65-cpsw-nuss-y := am65-cpsw-nuss.o cpsw_sl.o am65-cpsw-ethtool.o cpsw_ale.o
++obj-$(CONFIG_TI_K3_AM65_CPSW_NUSS) += ti-am65-cpsw-nuss.o ti-cpsw-sl.o ti-cpsw-ale.o
++ti-am65-cpsw-nuss-y := am65-cpsw-nuss.o am65-cpsw-ethtool.o
+ ti-am65-cpsw-nuss-$(CONFIG_TI_AM65_CPSW_QOS) += am65-cpsw-qos.o
+ ti-am65-cpsw-nuss-$(CONFIG_TI_K3_AM65_CPSW_SWITCHDEV) += am65-cpsw-switchdev.o
+ obj-$(CONFIG_TI_K3_AM65_CPTS) += am65-cpts.o
+diff --git a/drivers/net/ethernet/ti/cpsw_ale.c b/drivers/net/ethernet/ti/cpsw_ale.c
+index be7b69319221..e202bba49480 100644
+--- a/drivers/net/ethernet/ti/cpsw_ale.c
++++ b/drivers/net/ethernet/ti/cpsw_ale.c
+@@ -493,6 +493,7 @@ int cpsw_ale_flush_multicast(struct cpsw_ale *ale, int port_mask, int vid)
+ 	}
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_flush_multicast);
+ 
+ static inline void cpsw_ale_set_vlan_entry_type(u32 *ale_entry,
+ 						int flags, u16 vid)
+@@ -530,6 +531,7 @@ int cpsw_ale_add_ucast(struct cpsw_ale *ale, const u8 *addr, int port,
+ 	cpsw_ale_write(ale, idx, ale_entry);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_add_ucast);
+ 
+ int cpsw_ale_del_ucast(struct cpsw_ale *ale, const u8 *addr, int port,
+ 		       int flags, u16 vid)
+@@ -545,6 +547,7 @@ int cpsw_ale_del_ucast(struct cpsw_ale *ale, const u8 *addr, int port,
+ 	cpsw_ale_write(ale, idx, ale_entry);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_del_ucast);
+ 
+ int cpsw_ale_add_mcast(struct cpsw_ale *ale, const u8 *addr, int port_mask,
+ 		       int flags, u16 vid, int mcast_state)
+@@ -578,6 +581,7 @@ int cpsw_ale_add_mcast(struct cpsw_ale *ale, const u8 *addr, int port_mask,
+ 	cpsw_ale_write(ale, idx, ale_entry);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_add_mcast);
+ 
+ int cpsw_ale_del_mcast(struct cpsw_ale *ale, const u8 *addr, int port_mask,
+ 		       int flags, u16 vid)
+@@ -607,6 +611,7 @@ int cpsw_ale_del_mcast(struct cpsw_ale *ale, const u8 *addr, int port_mask,
+ 	cpsw_ale_write(ale, idx, ale_entry);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_del_mcast);
+ 
+ /* ALE NetCP NU switch specific vlan functions */
+ static void cpsw_ale_set_vlan_mcast(struct cpsw_ale *ale, u32 *ale_entry,
+@@ -676,6 +681,7 @@ int cpsw_ale_add_vlan(struct cpsw_ale *ale, u16 vid, int port_mask, int untag,
+ 	cpsw_ale_write(ale, idx, ale_entry);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_add_vlan);
+ 
+ static void cpsw_ale_vlan_del_modify_int(struct cpsw_ale *ale,  u32 *ale_entry,
+ 					 u16 vid, int port_mask)
+@@ -733,6 +739,7 @@ int cpsw_ale_vlan_del_modify(struct cpsw_ale *ale, u16 vid, int port_mask)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_vlan_del_modify);
+ 
+ int cpsw_ale_del_vlan(struct cpsw_ale *ale, u16 vid, int port_mask)
+ {
+@@ -767,6 +774,7 @@ int cpsw_ale_del_vlan(struct cpsw_ale *ale, u16 vid, int port_mask)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_del_vlan);
+ 
+ int cpsw_ale_vlan_add_modify(struct cpsw_ale *ale, u16 vid, int port_mask,
+ 			     int untag_mask, int reg_mask, int unreg_mask)
+@@ -806,6 +814,7 @@ int cpsw_ale_vlan_add_modify(struct cpsw_ale *ale, u16 vid, int port_mask,
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_vlan_add_modify);
+ 
+ void cpsw_ale_set_unreg_mcast(struct cpsw_ale *ale, int unreg_mcast_mask,
+ 			      bool add)
+@@ -833,6 +842,7 @@ void cpsw_ale_set_unreg_mcast(struct cpsw_ale *ale, int unreg_mcast_mask,
+ 		cpsw_ale_write(ale, idx, ale_entry);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_set_unreg_mcast);
+ 
+ static void cpsw_ale_vlan_set_unreg_mcast(struct cpsw_ale *ale, u32 *ale_entry,
+ 					  int allmulti)
+@@ -898,6 +908,7 @@ void cpsw_ale_set_allmulti(struct cpsw_ale *ale, int allmulti, int port)
+ 		cpsw_ale_write(ale, idx, ale_entry);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_set_allmulti);
+ 
+ struct ale_control_info {
+ 	const char	*name;
+@@ -1155,6 +1166,7 @@ int cpsw_ale_control_set(struct cpsw_ale *ale, int port, int control,
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_control_set);
+ 
+ int cpsw_ale_control_get(struct cpsw_ale *ale, int port, int control)
+ {
+@@ -1178,6 +1190,7 @@ int cpsw_ale_control_get(struct cpsw_ale *ale, int port, int control)
+ 	tmp = readl_relaxed(ale->params.ale_regs + offset) >> shift;
+ 	return tmp & BITMASK(info->bits);
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_control_get);
+ 
+ int cpsw_ale_rx_ratelimit_mc(struct cpsw_ale *ale, int port, unsigned int ratelimit_pps)
+ 
+@@ -1200,6 +1213,7 @@ int cpsw_ale_rx_ratelimit_mc(struct cpsw_ale *ale, int port, unsigned int rateli
+ 		port, val * ALE_RATE_LIMIT_MIN_PPS);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_rx_ratelimit_mc);
+ 
+ int cpsw_ale_rx_ratelimit_bc(struct cpsw_ale *ale, int port, unsigned int ratelimit_pps)
+ 
+@@ -1222,6 +1236,7 @@ int cpsw_ale_rx_ratelimit_bc(struct cpsw_ale *ale, int port, unsigned int rateli
+ 		port, val * ALE_RATE_LIMIT_MIN_PPS);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_rx_ratelimit_bc);
+ 
+ static void cpsw_ale_timer(struct timer_list *t)
+ {
+@@ -1311,6 +1326,7 @@ void cpsw_ale_start(struct cpsw_ale *ale)
+ 
+ 	cpsw_ale_aging_start(ale);
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_start);
+ 
+ void cpsw_ale_stop(struct cpsw_ale *ale)
+ {
+@@ -1318,6 +1334,7 @@ void cpsw_ale_stop(struct cpsw_ale *ale)
+ 	cpsw_ale_control_set(ale, 0, ALE_CLEAR, 1);
+ 	cpsw_ale_control_set(ale, 0, ALE_ENABLE, 0);
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_stop);
+ 
+ static const struct reg_field ale_fields_cpsw[] = {
+ 	/* CPSW_ALE_IDVER_REG */
+@@ -1618,6 +1635,7 @@ struct cpsw_ale *cpsw_ale_create(struct cpsw_ale_params *params)
+ 	cpsw_ale_control_set(ale, 0, ALE_CLEAR, 1);
+ 	return ale;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_create);
+ 
+ void cpsw_ale_dump(struct cpsw_ale *ale, u32 *data)
+ {
+@@ -1628,6 +1646,7 @@ void cpsw_ale_dump(struct cpsw_ale *ale, u32 *data)
+ 		data += ALE_ENTRY_WORDS;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_dump);
+ 
+ void cpsw_ale_restore(struct cpsw_ale *ale, u32 *data)
+ {
+@@ -1638,11 +1657,13 @@ void cpsw_ale_restore(struct cpsw_ale *ale, u32 *data)
+ 		data += ALE_ENTRY_WORDS;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_restore);
+ 
+ u32 cpsw_ale_get_num_entries(struct cpsw_ale *ale)
+ {
+ 	return ale ? ale->params.ale_entries : 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_get_num_entries);
+ 
+ /* Reads the specified policer index into ALE POLICER registers */
+ static void cpsw_ale_policer_read_idx(struct cpsw_ale *ale, u32 idx)
+@@ -1745,3 +1766,7 @@ void cpsw_ale_classifier_setup_default(struct cpsw_ale *ale, int num_rx_ch)
+ 						   1);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_ale_classifier_setup_default);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("TI N-Port Ethernet Switch Address Lookup Engine");
+diff --git a/drivers/net/ethernet/ti/cpsw_ethtool.c b/drivers/net/ethernet/ti/cpsw_ethtool.c
+index a43f75ee269e..3f2682c461f9 100644
+--- a/drivers/net/ethernet/ti/cpsw_ethtool.c
++++ b/drivers/net/ethernet/ti/cpsw_ethtool.c
+@@ -144,6 +144,7 @@ u32 cpsw_get_msglevel(struct net_device *ndev)
+ 
+ 	return priv->msg_enable;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_msglevel);
+ 
+ void cpsw_set_msglevel(struct net_device *ndev, u32 value)
+ {
+@@ -151,6 +152,7 @@ void cpsw_set_msglevel(struct net_device *ndev, u32 value)
+ 
+ 	priv->msg_enable = value;
+ }
++EXPORT_SYMBOL_GPL(cpsw_set_msglevel);
+ 
+ int cpsw_get_coalesce(struct net_device *ndev, struct ethtool_coalesce *coal,
+ 		      struct kernel_ethtool_coalesce *kernel_coal,
+@@ -161,6 +163,7 @@ int cpsw_get_coalesce(struct net_device *ndev, struct ethtool_coalesce *coal,
+ 	coal->rx_coalesce_usecs = cpsw->coal_intvl;
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_coalesce);
+ 
+ int cpsw_set_coalesce(struct net_device *ndev, struct ethtool_coalesce *coal,
+ 		      struct kernel_ethtool_coalesce *kernel_coal,
+@@ -220,6 +223,7 @@ int cpsw_set_coalesce(struct net_device *ndev, struct ethtool_coalesce *coal,
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_set_coalesce);
+ 
+ int cpsw_get_sset_count(struct net_device *ndev, int sset)
+ {
+@@ -234,6 +238,7 @@ int cpsw_get_sset_count(struct net_device *ndev, int sset)
+ 		return -EOPNOTSUPP;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_sset_count);
+ 
+ static void cpsw_add_ch_strings(u8 **p, int ch_num, int rx_dir)
+ {
+@@ -271,6 +276,7 @@ void cpsw_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
+ 		break;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_strings);
+ 
+ void cpsw_get_ethtool_stats(struct net_device *ndev,
+ 			    struct ethtool_stats *stats, u64 *data)
+@@ -303,6 +309,7 @@ void cpsw_get_ethtool_stats(struct net_device *ndev,
+ 		}
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_ethtool_stats);
+ 
+ void cpsw_get_pauseparam(struct net_device *ndev,
+ 			 struct ethtool_pauseparam *pause)
+@@ -313,6 +320,7 @@ void cpsw_get_pauseparam(struct net_device *ndev,
+ 	pause->rx_pause = priv->rx_pause ? true : false;
+ 	pause->tx_pause = priv->tx_pause ? true : false;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_pauseparam);
+ 
+ void cpsw_get_wol(struct net_device *ndev, struct ethtool_wolinfo *wol)
+ {
+@@ -326,6 +334,7 @@ void cpsw_get_wol(struct net_device *ndev, struct ethtool_wolinfo *wol)
+ 	if (cpsw->slaves[slave_no].phy)
+ 		phy_ethtool_get_wol(cpsw->slaves[slave_no].phy, wol);
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_wol);
+ 
+ int cpsw_set_wol(struct net_device *ndev, struct ethtool_wolinfo *wol)
+ {
+@@ -338,6 +347,7 @@ int cpsw_set_wol(struct net_device *ndev, struct ethtool_wolinfo *wol)
+ 	else
+ 		return -EOPNOTSUPP;
+ }
++EXPORT_SYMBOL_GPL(cpsw_set_wol);
+ 
+ int cpsw_get_regs_len(struct net_device *ndev)
+ {
+@@ -346,6 +356,7 @@ int cpsw_get_regs_len(struct net_device *ndev)
+ 	return cpsw_ale_get_num_entries(cpsw->ale) *
+ 	       ALE_ENTRY_WORDS * sizeof(u32);
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_regs_len);
+ 
+ void cpsw_get_regs(struct net_device *ndev, struct ethtool_regs *regs, void *p)
+ {
+@@ -357,6 +368,7 @@ void cpsw_get_regs(struct net_device *ndev, struct ethtool_regs *regs, void *p)
+ 
+ 	cpsw_ale_dump(cpsw->ale, reg);
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_regs);
+ 
+ int cpsw_ethtool_op_begin(struct net_device *ndev)
+ {
+@@ -370,6 +382,7 @@ int cpsw_ethtool_op_begin(struct net_device *ndev)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ethtool_op_begin);
+ 
+ void cpsw_ethtool_op_complete(struct net_device *ndev)
+ {
+@@ -377,6 +390,7 @@ void cpsw_ethtool_op_complete(struct net_device *ndev)
+ 
+ 	pm_runtime_put(priv->cpsw->dev);
+ }
++EXPORT_SYMBOL_GPL(cpsw_ethtool_op_complete);
+ 
+ void cpsw_get_channels(struct net_device *ndev, struct ethtool_channels *ch)
+ {
+@@ -391,6 +405,7 @@ void cpsw_get_channels(struct net_device *ndev, struct ethtool_channels *ch)
+ 	ch->tx_count = cpsw->tx_ch_num;
+ 	ch->combined_count = 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_channels);
+ 
+ int cpsw_get_link_ksettings(struct net_device *ndev,
+ 			    struct ethtool_link_ksettings *ecmd)
+@@ -405,6 +420,7 @@ int cpsw_get_link_ksettings(struct net_device *ndev,
+ 	phy_ethtool_ksettings_get(cpsw->slaves[slave_no].phy, ecmd);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_link_ksettings);
+ 
+ int cpsw_set_link_ksettings(struct net_device *ndev,
+ 			    const struct ethtool_link_ksettings *ecmd)
+@@ -418,6 +434,7 @@ int cpsw_set_link_ksettings(struct net_device *ndev,
+ 
+ 	return phy_ethtool_ksettings_set(cpsw->slaves[slave_no].phy, ecmd);
+ }
++EXPORT_SYMBOL_GPL(cpsw_set_link_ksettings);
+ 
+ int cpsw_get_eee(struct net_device *ndev, struct ethtool_keee *edata)
+ {
+@@ -430,6 +447,7 @@ int cpsw_get_eee(struct net_device *ndev, struct ethtool_keee *edata)
+ 	else
+ 		return -EOPNOTSUPP;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_eee);
+ 
+ int cpsw_nway_reset(struct net_device *ndev)
+ {
+@@ -442,6 +460,7 @@ int cpsw_nway_reset(struct net_device *ndev)
+ 	else
+ 		return -EOPNOTSUPP;
+ }
++EXPORT_SYMBOL_GPL(cpsw_nway_reset);
+ 
+ static void cpsw_suspend_data_pass(struct net_device *ndev)
+ {
+@@ -639,6 +658,7 @@ int cpsw_set_channels_common(struct net_device *ndev,
+ 	cpsw_fail(cpsw);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_set_channels_common);
+ 
+ void cpsw_get_ringparam(struct net_device *ndev,
+ 			struct ethtool_ringparam *ering,
+@@ -654,6 +674,7 @@ void cpsw_get_ringparam(struct net_device *ndev,
+ 	ering->rx_max_pending = cpsw->descs_pool_size - CPSW_MAX_QUEUES;
+ 	ering->rx_pending = cpdma_get_num_rx_descs(cpsw->dma);
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_ringparam);
+ 
+ int cpsw_set_ringparam(struct net_device *ndev,
+ 		       struct ethtool_ringparam *ering,
+@@ -700,6 +721,7 @@ int cpsw_set_ringparam(struct net_device *ndev,
+ 	cpsw_fail(cpsw);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_set_ringparam);
+ 
+ #if IS_ENABLED(CONFIG_TI_CPTS)
+ int cpsw_get_ts_info(struct net_device *ndev, struct kernel_ethtool_ts_info *info)
+@@ -720,6 +742,7 @@ int cpsw_get_ts_info(struct net_device *ndev, struct kernel_ethtool_ts_info *inf
+ 		(1 << HWTSTAMP_FILTER_PTP_V2_EVENT);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_ts_info);
+ #else
+ int cpsw_get_ts_info(struct net_device *ndev, struct kernel_ethtool_ts_info *info)
+ {
+@@ -729,4 +752,5 @@ int cpsw_get_ts_info(struct net_device *ndev, struct kernel_ethtool_ts_info *inf
+ 	info->rx_filters = 0;
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_get_ts_info);
+ #endif
+diff --git a/drivers/net/ethernet/ti/cpsw_priv.c b/drivers/net/ethernet/ti/cpsw_priv.c
+index c6eb6b785b0b..1f6f374551cb 100644
+--- a/drivers/net/ethernet/ti/cpsw_priv.c
++++ b/drivers/net/ethernet/ti/cpsw_priv.c
+@@ -32,6 +32,7 @@
+ #define CPTS_N_ETX_TS 4
+ 
+ int (*cpsw_slave_index)(struct cpsw_common *cpsw, struct cpsw_priv *priv);
++EXPORT_SYMBOL_GPL(cpsw_slave_index);
+ 
+ void cpsw_intr_enable(struct cpsw_common *cpsw)
+ {
+@@ -40,6 +41,7 @@ void cpsw_intr_enable(struct cpsw_common *cpsw)
+ 
+ 	cpdma_ctlr_int_ctrl(cpsw->dma, true);
+ }
++EXPORT_SYMBOL_GPL(cpsw_intr_enable);
+ 
+ void cpsw_intr_disable(struct cpsw_common *cpsw)
+ {
+@@ -48,6 +50,7 @@ void cpsw_intr_disable(struct cpsw_common *cpsw)
+ 
+ 	cpdma_ctlr_int_ctrl(cpsw->dma, false);
+ }
++EXPORT_SYMBOL_GPL(cpsw_intr_disable);
+ 
+ void cpsw_tx_handler(void *token, int len, int status)
+ {
+@@ -82,6 +85,7 @@ void cpsw_tx_handler(void *token, int len, int status)
+ 	ndev->stats.tx_packets++;
+ 	ndev->stats.tx_bytes += len;
+ }
++EXPORT_SYMBOL_GPL(cpsw_tx_handler);
+ 
+ irqreturn_t cpsw_tx_interrupt(int irq, void *dev_id)
+ {
+@@ -98,6 +102,7 @@ irqreturn_t cpsw_tx_interrupt(int irq, void *dev_id)
+ 	napi_schedule(&cpsw->napi_tx);
+ 	return IRQ_HANDLED;
+ }
++EXPORT_SYMBOL_GPL(cpsw_tx_interrupt);
+ 
+ irqreturn_t cpsw_rx_interrupt(int irq, void *dev_id)
+ {
+@@ -114,6 +119,7 @@ irqreturn_t cpsw_rx_interrupt(int irq, void *dev_id)
+ 	napi_schedule(&cpsw->napi_rx);
+ 	return IRQ_HANDLED;
+ }
++EXPORT_SYMBOL_GPL(cpsw_rx_interrupt);
+ 
+ irqreturn_t cpsw_misc_interrupt(int irq, void *dev_id)
+ {
+@@ -126,6 +132,7 @@ irqreturn_t cpsw_misc_interrupt(int irq, void *dev_id)
+ 
+ 	return IRQ_HANDLED;
+ }
++EXPORT_SYMBOL_GPL(cpsw_misc_interrupt);
+ 
+ int cpsw_tx_mq_poll(struct napi_struct *napi_tx, int budget)
+ {
+@@ -158,6 +165,7 @@ int cpsw_tx_mq_poll(struct napi_struct *napi_tx, int budget)
+ 
+ 	return num_tx;
+ }
++EXPORT_SYMBOL_GPL(cpsw_tx_mq_poll);
+ 
+ int cpsw_tx_poll(struct napi_struct *napi_tx, int budget)
+ {
+@@ -176,6 +184,7 @@ int cpsw_tx_poll(struct napi_struct *napi_tx, int budget)
+ 
+ 	return num_tx;
+ }
++EXPORT_SYMBOL_GPL(cpsw_tx_poll);
+ 
+ int cpsw_rx_mq_poll(struct napi_struct *napi_rx, int budget)
+ {
+@@ -208,6 +217,7 @@ int cpsw_rx_mq_poll(struct napi_struct *napi_rx, int budget)
+ 
+ 	return num_rx;
+ }
++EXPORT_SYMBOL_GPL(cpsw_rx_mq_poll);
+ 
+ int cpsw_rx_poll(struct napi_struct *napi_rx, int budget)
+ {
+@@ -226,6 +236,7 @@ int cpsw_rx_poll(struct napi_struct *napi_rx, int budget)
+ 
+ 	return num_rx;
+ }
++EXPORT_SYMBOL_GPL(cpsw_rx_poll);
+ 
+ void cpsw_rx_vlan_encap(struct sk_buff *skb)
+ {
+@@ -268,12 +279,14 @@ void cpsw_rx_vlan_encap(struct sk_buff *skb)
+ 		skb_pull(skb, VLAN_HLEN);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_rx_vlan_encap);
+ 
+ void cpsw_set_slave_mac(struct cpsw_slave *slave, struct cpsw_priv *priv)
+ {
+ 	slave_write(slave, mac_hi(priv->mac_addr), SA_HI);
+ 	slave_write(slave, mac_lo(priv->mac_addr), SA_LO);
+ }
++EXPORT_SYMBOL_GPL(cpsw_set_slave_mac);
+ 
+ void cpsw_soft_reset(const char *module, void __iomem *reg)
+ {
+@@ -286,6 +299,7 @@ void cpsw_soft_reset(const char *module, void __iomem *reg)
+ 
+ 	WARN(readl_relaxed(reg) & 1, "failed to soft-reset %s\n", module);
+ }
++EXPORT_SYMBOL_GPL(cpsw_soft_reset);
+ 
+ void cpsw_ndo_tx_timeout(struct net_device *ndev, unsigned int txqueue)
+ {
+@@ -305,6 +319,7 @@ void cpsw_ndo_tx_timeout(struct net_device *ndev, unsigned int txqueue)
+ 	netif_trans_update(ndev);
+ 	netif_tx_wake_all_queues(ndev);
+ }
++EXPORT_SYMBOL_GPL(cpsw_ndo_tx_timeout);
+ 
+ static int cpsw_get_common_speed(struct cpsw_common *cpsw)
+ {
+@@ -343,6 +358,7 @@ int cpsw_need_resplit(struct cpsw_common *cpsw)
+ 
+ 	return 1;
+ }
++EXPORT_SYMBOL_GPL(cpsw_need_resplit);
+ 
+ void cpsw_split_res(struct cpsw_common *cpsw)
+ {
+@@ -428,6 +444,7 @@ void cpsw_split_res(struct cpsw_common *cpsw)
+ 	if (budget)
+ 		cpsw->rxv[0].budget += budget;
+ }
++EXPORT_SYMBOL_GPL(cpsw_split_res);
+ 
+ int cpsw_init_common(struct cpsw_common *cpsw, void __iomem *ss_regs,
+ 		     int ale_ageout, phys_addr_t desc_mem_phys,
+@@ -548,6 +565,7 @@ int cpsw_init_common(struct cpsw_common *cpsw, void __iomem *ss_regs,
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_init_common);
+ 
+ #if IS_ENABLED(CONFIG_TI_CPTS)
+ 
+@@ -678,6 +696,7 @@ int cpsw_hwtstamp_set(struct net_device *dev,
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_hwtstamp_set);
+ 
+ int cpsw_hwtstamp_get(struct net_device *dev,
+ 		      struct kernel_hwtstamp_config *cfg)
+@@ -695,12 +714,14 @@ int cpsw_hwtstamp_get(struct net_device *dev,
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_hwtstamp_get);
+ #else
+ int cpsw_hwtstamp_get(struct net_device *dev,
+ 		      struct kernel_hwtstamp_config *cfg)
+ {
+ 	return -EOPNOTSUPP;
+ }
++EXPORT_SYMBOL_GPL(cpsw_hwtstamp_set);
+ 
+ int cpsw_hwtstamp_set(struct net_device *dev,
+ 		      struct kernel_hwtstamp_config *cfg,
+@@ -708,6 +729,7 @@ int cpsw_hwtstamp_set(struct net_device *dev,
+ {
+ 	return -EOPNOTSUPP;
+ }
++EXPORT_SYMBOL_GPL(cpsw_hwtstamp_get);
+ #endif /*CONFIG_TI_CPTS*/
+ 
+ int cpsw_ndo_set_tx_maxrate(struct net_device *ndev, int queue, u32 rate)
+@@ -758,6 +780,7 @@ int cpsw_ndo_set_tx_maxrate(struct net_device *ndev, int queue, u32 rate)
+ 	cpsw_split_res(cpsw);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_ndo_set_tx_maxrate);
+ 
+ static int cpsw_tc_to_fifo(int tc, int num_tc)
+ {
+@@ -782,6 +805,7 @@ bool cpsw_shp_is_off(struct cpsw_priv *priv)
+ 
+ 	return !val;
+ }
++EXPORT_SYMBOL_GPL(cpsw_shp_is_off);
+ 
+ static void cpsw_fifo_shp_on(struct cpsw_priv *priv, int fifo, int on)
+ {
+@@ -1043,6 +1067,7 @@ int cpsw_ndo_setup_tc(struct net_device *ndev, enum tc_setup_type type,
+ 		return -EOPNOTSUPP;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_ndo_setup_tc);
+ 
+ void cpsw_cbs_resume(struct cpsw_slave *slave, struct cpsw_priv *priv)
+ {
+@@ -1056,6 +1081,7 @@ void cpsw_cbs_resume(struct cpsw_slave *slave, struct cpsw_priv *priv)
+ 		cpsw_set_fifo_rlimit(priv, fifo, bw);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_cbs_resume);
+ 
+ void cpsw_mqprio_resume(struct cpsw_slave *slave, struct cpsw_priv *priv)
+ {
+@@ -1078,6 +1104,7 @@ void cpsw_mqprio_resume(struct cpsw_slave *slave, struct cpsw_priv *priv)
+ 
+ 	slave_write(slave, tx_prio_map, tx_prio_rg);
+ }
++EXPORT_SYMBOL_GPL(cpsw_mqprio_resume);
+ 
+ int cpsw_fill_rx_channels(struct cpsw_priv *priv)
+ {
+@@ -1123,6 +1150,7 @@ int cpsw_fill_rx_channels(struct cpsw_priv *priv)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_fill_rx_channels);
+ 
+ static struct page_pool *cpsw_create_page_pool(struct cpsw_common *cpsw,
+ 					       int size)
+@@ -1208,6 +1236,7 @@ void cpsw_destroy_xdp_rxqs(struct cpsw_common *cpsw)
+ 		cpsw->page_pool[ch] = NULL;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_destroy_xdp_rxqs);
+ 
+ int cpsw_create_xdp_rxqs(struct cpsw_common *cpsw)
+ {
+@@ -1240,6 +1269,7 @@ int cpsw_create_xdp_rxqs(struct cpsw_common *cpsw)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_create_xdp_rxqs);
+ 
+ static int cpsw_xdp_prog_setup(struct cpsw_priv *priv, struct netdev_bpf *bpf)
+ {
+@@ -1267,6 +1297,7 @@ int cpsw_ndo_bpf(struct net_device *ndev, struct netdev_bpf *bpf)
+ 		return -EINVAL;
+ 	}
+ }
++EXPORT_SYMBOL_GPL(cpsw_ndo_bpf);
+ 
+ int cpsw_xdp_tx_frame(struct cpsw_priv *priv, struct xdp_frame *xdpf,
+ 		      struct page *page, int port)
+@@ -1300,6 +1331,7 @@ int cpsw_xdp_tx_frame(struct cpsw_priv *priv, struct xdp_frame *xdpf,
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_xdp_tx_frame);
+ 
+ int cpsw_run_xdp(struct cpsw_priv *priv, int ch, struct xdp_buff *xdp,
+ 		 struct page *page, int port, int *len)
+@@ -1362,6 +1394,7 @@ int cpsw_run_xdp(struct cpsw_priv *priv, int ch, struct xdp_buff *xdp,
+ 	page_pool_recycle_direct(cpsw->page_pool[ch], page);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpsw_run_xdp);
+ 
+ static int cpsw_qos_clsflower_add_policer(struct cpsw_priv *priv,
+ 					  struct netlink_ext_ack *extack,
+@@ -1564,3 +1597,7 @@ void cpsw_qos_clsflower_resume(struct cpsw_priv *priv)
+ 		cpsw_ale_rx_ratelimit_mc(priv->cpsw->ale, port_id,
+ 					 priv->ale_mc_ratelimit.rate_packet_ps);
+ }
++EXPORT_SYMBOL_GPL(cpsw_qos_clsflower_resume);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("TI CPSW Ethernet Switch Driver");
+diff --git a/drivers/net/ethernet/ti/cpsw_sl.c b/drivers/net/ethernet/ti/cpsw_sl.c
+index 0c7531cb0f39..761719a348fa 100644
+--- a/drivers/net/ethernet/ti/cpsw_sl.c
++++ b/drivers/net/ethernet/ti/cpsw_sl.c
+@@ -200,6 +200,7 @@ u32 cpsw_sl_reg_read(struct cpsw_sl *sl, enum cpsw_sl_regs reg)
+ 	dev_dbg(sl->dev, "cpsw_sl: reg: %04X r 0x%08X\n", sl->regs[reg], val);
+ 	return val;
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_reg_read);
+ 
+ void cpsw_sl_reg_write(struct cpsw_sl *sl, enum cpsw_sl_regs reg, u32 val)
+ {
+@@ -212,6 +213,7 @@ void cpsw_sl_reg_write(struct cpsw_sl *sl, enum cpsw_sl_regs reg, u32 val)
+ 	dev_dbg(sl->dev, "cpsw_sl: reg: %04X w 0x%08X\n", sl->regs[reg], val);
+ 	writel(val, sl->sl_base + sl->regs[reg]);
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_reg_write);
+ 
+ static const struct cpsw_sl_dev_id *cpsw_sl_match_id(
+ 		const struct cpsw_sl_dev_id *id,
+@@ -252,6 +254,7 @@ struct cpsw_sl *cpsw_sl_get(const char *device_id, struct device *dev,
+ 
+ 	return sl;
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_get);
+ 
+ void cpsw_sl_reset(struct cpsw_sl *sl, unsigned long tmo)
+ {
+@@ -270,6 +273,7 @@ void cpsw_sl_reset(struct cpsw_sl *sl, unsigned long tmo)
+ 	if (cpsw_sl_reg_read(sl, CPSW_SL_SOFT_RESET) & CPSW_SL_SOFT_RESET_BIT)
+ 		dev_err(sl->dev, "cpsw_sl failed to soft-reset.\n");
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_reset);
+ 
+ u32 cpsw_sl_ctl_set(struct cpsw_sl *sl, u32 ctl_funcs)
+ {
+@@ -287,6 +291,7 @@ u32 cpsw_sl_ctl_set(struct cpsw_sl *sl, u32 ctl_funcs)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_ctl_set);
+ 
+ u32 cpsw_sl_ctl_clr(struct cpsw_sl *sl, u32 ctl_funcs)
+ {
+@@ -304,11 +309,13 @@ u32 cpsw_sl_ctl_clr(struct cpsw_sl *sl, u32 ctl_funcs)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_ctl_clr);
+ 
+ void cpsw_sl_ctl_reset(struct cpsw_sl *sl)
+ {
+ 	cpsw_sl_reg_write(sl, CPSW_SL_MACCONTROL, 0);
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_ctl_reset);
+ 
+ int cpsw_sl_wait_for_idle(struct cpsw_sl *sl, unsigned long tmo)
+ {
+@@ -326,3 +333,7 @@ int cpsw_sl_wait_for_idle(struct cpsw_sl *sl, unsigned long tmo)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpsw_sl_wait_for_idle);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("TI Ethernet Switch media-access-controller (MAC) submodule");
+diff --git a/drivers/net/ethernet/ti/davinci_cpdma.c b/drivers/net/ethernet/ti/davinci_cpdma.c
+index d2eab5cd1e0c..41e89a19be53 100644
+--- a/drivers/net/ethernet/ti/davinci_cpdma.c
++++ b/drivers/net/ethernet/ti/davinci_cpdma.c
+@@ -531,6 +531,7 @@ struct cpdma_ctlr *cpdma_ctlr_create(struct cpdma_params *params)
+ 		ctlr->num_chan = CPDMA_MAX_CHANNELS;
+ 	return ctlr;
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctlr_create);
+ 
+ int cpdma_ctlr_start(struct cpdma_ctlr *ctlr)
+ {
+@@ -591,6 +592,7 @@ int cpdma_ctlr_start(struct cpdma_ctlr *ctlr)
+ 	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctlr_start);
+ 
+ int cpdma_ctlr_stop(struct cpdma_ctlr *ctlr)
+ {
+@@ -623,6 +625,7 @@ int cpdma_ctlr_stop(struct cpdma_ctlr *ctlr)
+ 	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctlr_stop);
+ 
+ int cpdma_ctlr_destroy(struct cpdma_ctlr *ctlr)
+ {
+@@ -640,6 +643,7 @@ int cpdma_ctlr_destroy(struct cpdma_ctlr *ctlr)
+ 	cpdma_desc_pool_destroy(ctlr);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctlr_destroy);
+ 
+ int cpdma_ctlr_int_ctrl(struct cpdma_ctlr *ctlr, bool enable)
+ {
+@@ -660,21 +664,25 @@ int cpdma_ctlr_int_ctrl(struct cpdma_ctlr *ctlr, bool enable)
+ 	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctlr_int_ctrl);
+ 
+ void cpdma_ctlr_eoi(struct cpdma_ctlr *ctlr, u32 value)
+ {
+ 	dma_reg_write(ctlr, CPDMA_MACEOIVECTOR, value);
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctlr_eoi);
+ 
+ u32 cpdma_ctrl_rxchs_state(struct cpdma_ctlr *ctlr)
+ {
+ 	return dma_reg_read(ctlr, CPDMA_RXINTSTATMASKED);
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctrl_rxchs_state);
+ 
+ u32 cpdma_ctrl_txchs_state(struct cpdma_ctlr *ctlr)
+ {
+ 	return dma_reg_read(ctlr, CPDMA_TXINTSTATMASKED);
+ }
++EXPORT_SYMBOL_GPL(cpdma_ctrl_txchs_state);
+ 
+ static void cpdma_chan_set_descs(struct cpdma_ctlr *ctlr,
+ 				 int rx, int desc_num,
+@@ -802,6 +810,7 @@ int cpdma_chan_set_weight(struct cpdma_chan *ch, int weight)
+ 	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_set_weight);
+ 
+ /* cpdma_chan_get_min_rate - get minimum allowed rate for channel
+  * Should be called before cpdma_chan_set_rate.
+@@ -816,6 +825,7 @@ u32 cpdma_chan_get_min_rate(struct cpdma_ctlr *ctlr)
+ 
+ 	return DIV_ROUND_UP(divident, divisor);
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_get_min_rate);
+ 
+ /* cpdma_chan_set_rate - limits bandwidth for transmit channel.
+  * The bandwidth * limited channels have to be in order beginning from lowest.
+@@ -860,6 +870,7 @@ int cpdma_chan_set_rate(struct cpdma_chan *ch, u32 rate)
+ 	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_set_rate);
+ 
+ u32 cpdma_chan_get_rate(struct cpdma_chan *ch)
+ {
+@@ -872,6 +883,7 @@ u32 cpdma_chan_get_rate(struct cpdma_chan *ch)
+ 
+ 	return rate;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_get_rate);
+ 
+ struct cpdma_chan *cpdma_chan_create(struct cpdma_ctlr *ctlr, int chan_num,
+ 				     cpdma_handler_fn handler, int rx_type)
+@@ -931,6 +943,7 @@ struct cpdma_chan *cpdma_chan_create(struct cpdma_ctlr *ctlr, int chan_num,
+ 	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 	return chan;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_create);
+ 
+ int cpdma_chan_get_rx_buf_num(struct cpdma_chan *chan)
+ {
+@@ -943,6 +956,7 @@ int cpdma_chan_get_rx_buf_num(struct cpdma_chan *chan)
+ 
+ 	return desc_num;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_get_rx_buf_num);
+ 
+ int cpdma_chan_destroy(struct cpdma_chan *chan)
+ {
+@@ -964,6 +978,7 @@ int cpdma_chan_destroy(struct cpdma_chan *chan)
+ 	spin_unlock_irqrestore(&ctlr->lock, flags);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_destroy);
+ 
+ int cpdma_chan_get_stats(struct cpdma_chan *chan,
+ 			 struct cpdma_chan_stats *stats)
+@@ -976,6 +991,7 @@ int cpdma_chan_get_stats(struct cpdma_chan *chan,
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_get_stats);
+ 
+ static void __cpdma_chan_submit(struct cpdma_chan *chan,
+ 				struct cpdma_desc __iomem *desc)
+@@ -1100,6 +1116,7 @@ int cpdma_chan_idle_submit(struct cpdma_chan *chan, void *token, void *data,
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_idle_submit);
+ 
+ int cpdma_chan_idle_submit_mapped(struct cpdma_chan *chan, void *token,
+ 				  dma_addr_t data, int len, int directed)
+@@ -1125,6 +1142,7 @@ int cpdma_chan_idle_submit_mapped(struct cpdma_chan *chan, void *token,
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_idle_submit_mapped);
+ 
+ int cpdma_chan_submit(struct cpdma_chan *chan, void *token, void *data,
+ 		      int len, int directed)
+@@ -1150,6 +1168,7 @@ int cpdma_chan_submit(struct cpdma_chan *chan, void *token, void *data,
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_submit);
+ 
+ int cpdma_chan_submit_mapped(struct cpdma_chan *chan, void *token,
+ 			     dma_addr_t data, int len, int directed)
+@@ -1175,6 +1194,7 @@ int cpdma_chan_submit_mapped(struct cpdma_chan *chan, void *token,
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_submit_mapped);
+ 
+ bool cpdma_check_free_tx_desc(struct cpdma_chan *chan)
+ {
+@@ -1189,6 +1209,7 @@ bool cpdma_check_free_tx_desc(struct cpdma_chan *chan)
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 	return free_tx_desc;
+ }
++EXPORT_SYMBOL_GPL(cpdma_check_free_tx_desc);
+ 
+ static void __cpdma_chan_free(struct cpdma_chan *chan,
+ 			      struct cpdma_desc __iomem *desc,
+@@ -1289,6 +1310,7 @@ int cpdma_chan_process(struct cpdma_chan *chan, int quota)
+ 	}
+ 	return used;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_process);
+ 
+ int cpdma_chan_start(struct cpdma_chan *chan)
+ {
+@@ -1308,6 +1330,7 @@ int cpdma_chan_start(struct cpdma_chan *chan)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_start);
+ 
+ int cpdma_chan_stop(struct cpdma_chan *chan)
+ {
+@@ -1370,6 +1393,7 @@ int cpdma_chan_stop(struct cpdma_chan *chan)
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(cpdma_chan_stop);
+ 
+ int cpdma_chan_int_ctrl(struct cpdma_chan *chan, bool enable)
+ {
+@@ -1416,11 +1440,13 @@ int cpdma_get_num_rx_descs(struct cpdma_ctlr *ctlr)
+ {
+ 	return ctlr->num_rx_desc;
+ }
++EXPORT_SYMBOL_GPL(cpdma_get_num_rx_descs);
+ 
+ int cpdma_get_num_tx_descs(struct cpdma_ctlr *ctlr)
+ {
+ 	return ctlr->num_tx_desc;
+ }
++EXPORT_SYMBOL_GPL(cpdma_get_num_tx_descs);
+ 
+ int cpdma_set_num_rx_descs(struct cpdma_ctlr *ctlr, int num_rx_desc)
+ {
+@@ -1442,3 +1468,4 @@ int cpdma_set_num_rx_descs(struct cpdma_ctlr *ctlr, int num_rx_desc)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(cpdma_set_num_rx_descs);
+-- 
+2.39.5
+
