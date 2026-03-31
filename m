@@ -1,157 +1,211 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0FE1A5B8A
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 01:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774921868; cv=none; b=nt2mQ3JEYsNogrqs5q6wBcNV3Npz9ymlfjmHqLWgFAfQRk5I0FCD2dn+c9JSYnjRWpsVoxosn9xCH0w4DWkB6brtqlSCOwYCSdEqWDis/KGop3j5xxCeGqA+i6vaPwhhZxdfmWvxyZYYYK6kZD5HxSa+tgOggfio06xigLB9QEY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774921868; c=relaxed/simple;
-	bh=YSQllMGhQ3RJczQso5QKvR0T9W2OXtoo1V9ONhKYqFQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=G0ZkUYKGHqHgXADsHOHO2625Xc9cuMaDk3TY44Mu87W7xPyPxLxYrK4y32hs2WK7r0lUPVTk3msOJljhMO/2rrrAci/5v8ZaljPp2q1FRCefmGU1q6hU5rcQw9xuQyhbXGI0WKrwfoCqE7SGtG+eFbobi/KQrOpzd/sU4OqLYqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KiahWBin; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A3D192B75
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 02:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774922520; cv=pass; b=lTDaFqK4meGybFbSqP/skhB7Rm+nuBSaGDsx/YLxd1e9MqVxRVYoArXWmbKvxo9HSAwaokOQUplDuJ6BG3M19ZjEhaIRwThwB70d2VJALmH3WQlU2zR1EnOV0QXtNuf7OZL4F+LwQ3/t4S7AdwllZXp/rT42d2hOWcbPxNVwaXc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774922520; c=relaxed/simple;
+	bh=5BtMxuKQ9DexShkvI2pZkLDVdrz52htk8/hMj2EaJF4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BeHGWICg//v6ynwqWfVL2yIjba3g+LwGYb1X9YBw0jxhXvsAByo2Q5951V+X60h+bocWsHBuK4heLBfVEQOq9u6Ti8CtZ7ZtJJk5VWq/1cdLoVleWqNhDD2893K7keE6ZDBubSFOrG1XKj3VbeMDb+GLd40FDHhGZz2Rcb0WILA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WnPj/HCf; arc=pass smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KiahWBin"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a9296b3926so33441605ad.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:51:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WnPj/HCf"
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5a2a70bb66aso5072835e87.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 19:01:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774922517; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IISfnTTWp8SlOuFoHqah8wWJ8iCsSda8R9lw3f+ieYzyhCnhZHRqXeHc5PviR4vxNz
+         nMJreOETAmyyaAcXph4dooRchRDZD2Qz2KI3LKeHjGtP2Ffeu+hGEroMc1/Hbv9YxnJk
+         TWfDxvaql6cKPR1y8l5iVuHxkCMxJoC05mKOY4kLLlfOgHbmtU+CPhr3rcOqqr6Ub3Zn
+         GxSr2uHn5DYa3bSwe9mtCQ4HwB2iZQyl6jXOyqxMkslM7Op4rgidQZ5mG6azXRNW+eAa
+         oZjSY15m438tRb/kXjflfbrj1P947NPFrUMTwAe9DxwwlkyXOSE+mMzkWbutwLTM1LjJ
+         AvwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5/Ig/DGLQgf1ppLMDpJjT+8F/4O/vfBiYS4W92t7hC8=;
+        fh=Jv6LPkFCwewIfdV+duzJSG1bLq6ywnOshIwf61r9ypA=;
+        b=XQeyDJXt7cdqcIVZCRyblitIX0wRwWb/nCclu1JYIVqNQVGCFNUehKVezJNEfq6SXG
+         oOkrXan7G1l0l2zyIP4XNRiXRz0cnsdwQDwFwlYE7RMMZw3rzGc+Ly/wi0trKx3fiRth
+         wxgpjvFcOcgtS+2uIAzG+CGia5jtXviYamWpLRFiblWjhzXsFt//KLG095O89ozPaiAD
+         Xy/oUytI4UNMwYUjVOIVNi7efxg2SuF3wCUa8e2hMLVBVFjJ4rg97ItOKyTdO3Kmpka5
+         XIokigxlIxlGyuBxNqeYXmohOOMwRoTZ7zCX44AQ3jCgUcOMBMRUAHCPfy7joe/R1lhp
+         zm8Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774921867; x=1775526667; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=aTolLyEwLtHeb7v1wUJn8ow9+nJnaE99vjobiNhcyxk=;
-        b=KiahWBinHXhkwzR+lg4fF9nnv6u84cWPhdau/tGdJ6zSP9GsgapZk+MID0sxQqt5/K
-         QQcuMbJsiJQAU3ykfWXfHdMJYcX2Qa+wypbBx88k6p1STBrtyBUZIkJYqhnWK71aAo3z
-         YAzqDbR10EHRvLBoNoS8bAoMJWn/XQgQMykchK3Q4lgfe24aZLhVZ26vAsU5mdyWMZ43
-         QS2jhuELIaiLfl6RfOWQD/ugJ/y+Bs4lckKCV4G0Fu13yXXoep/pM+o+KbfzRhlDUYdi
-         MxKloBsiQyAKV8beUv6Fe21j3GwcIFnPhqQ8RcS0JXadIam2HIne40F/Ea8BfDKNWor7
-         v+6w==
+        d=suse.com; s=google; t=1774922517; x=1775527317; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5/Ig/DGLQgf1ppLMDpJjT+8F/4O/vfBiYS4W92t7hC8=;
+        b=WnPj/HCf0JP3WHw84ngdasnCEqMuZYeHl4loM3mXS66j0we/ueaFADSGnMp+4fLOSN
+         +O5pVzr45JstBseRKlB7igrA1DArnMEIPHdMGFYtWxpeQRqeosxYJk97uurbr/eOHXXg
+         qQixvQM9yV2UnHlVw2YJaBEF/Js9ebq+jKmu1qAC92EDtt0FSh/PdSLgbY7Oxm7KVipU
+         J8HyoH5w1hRQEki6iRXAOPTNT0TuiVRLTYkKNEHKPePXI/PRacntvjLbJ77+KJBTwOrS
+         QUb4M5WfVHXKl5TgSfX+5kZAUXk/PNkSGm4/M6eIARxIEHrMY1OFbJITE4WR94tClvDw
+         iGiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774921867; x=1775526667;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aTolLyEwLtHeb7v1wUJn8ow9+nJnaE99vjobiNhcyxk=;
-        b=FrI+eIa36BY6YUu8fvijylFHgGJ6raZWNb6SeqGITnbtW/hSFnb0THlCXga/j8e5cW
-         zTNLLoEQ2pc3M5HLQJlcT3oVa3iwqeo6RA9XCTGlrwlYvzpRAhOBW+8fxgmolDVt1uUK
-         ox5SjTvfqpNsPL9Byaic2zyJYewGi/bQtLByk0kzri+9Q1yOVRqVN3m4aAfXQcG58s+N
-         Q/E4VjRIfTC2YfFPPDrm0LqKcJwL6njxjQXdDTGI+IUkmr+m/cRicpk8RfvRzqPE8VNt
-         j4N4z2Gcu8xvNpgEzw1yXrrEDBQwzV8hbY5BQCad2+dFP1s34d/5bDhxNioVg5YnMhHb
-         bOHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdWbuV3V6q+iNNWf+bbx/6O7P0q0j8bxeKwjEhdM2HvYis684wfIefHWyYb4vSXlugZ6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSTwKH51goJjB8v1EPAqgs01PZHnAqdbS+6ZH8HlW9Ywq4pb4L
-	+a7NiINlX7Fj9rEhvf8EdGREPXVFIR60F9KI5QJQ4zaMGhA6BLbjZGO+
-X-Gm-Gg: ATEYQzxDekW31cG5DfiDcno33f1/WVRVm004bCbR2xwNbxdVbyybJFUBrdwIXADsN5h
-	SjCZH6kISHo970OXXuNuHd/nf4iUBcK9dXZtNnHR6usV1GzyNSNasMLcnjzl0Ar602P5iHiSglB
-	NobDk/XqtF26VMWEwDwqk1HZWdhTIioSQOPVkH5ymOCj09lQ1PBy//TbmL64hnELWCKT47jmw7M
-	f8evnulMmSANaXPXzkoaCh0uHSUDo8NSye4BLs7sTHhCiIrilT5d1w949S8bWwHU5yULaDEPyRl
-	cLO/dxxDUrHeI08g21l0mt1w0DhwPZanXVatfgI3hBZVtw/jOh7oP5k1okbeQ2QxIS9ZLqPtthK
-	0NiSTfvrzNiBQbxBO3kdEZKWfq/eTEmQlteSo5fGqQtnlKmlVfc4RkrdTdkYubfTQJ/12BXLuI8
-	qu0Ar3FDNCkZYkbs4JzZjCc8jBSIJqtXdlv6Ej4BcsQApqstVw2Ew=
-X-Received: by 2002:a17:903:240c:b0:2ae:c5fc:b2ef with SMTP id d9443c01a7336-2b0cdd3ec4emr136389525ad.30.1774921867179;
-        Mon, 30 Mar 2026 18:51:07 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24267397bsm102031685ad.27.2026.03.30.18.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 18:51:06 -0700 (PDT)
-Message-ID: <d766f85ad5617da8af16a64f8903edfa3442e6d7.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/6] bpf: Use bpf_verifier_env buffers for
- reg_set_min_max
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: KaFai Wan <kafai.wan@linux.dev>, bpf@vger.kernel.org, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko	
- <andrii@kernel.org>, Harishankar Vishwanathan	
- <harishankar.vishwanathan@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-  Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
- <santosh.nagarakatte@rutgers.edu>
-Date: Mon, 30 Mar 2026 18:51:04 -0700
-In-Reply-To: <acpnHDASo5QGw7BZ@mail.gmail.com>
-References: <cover.1774025082.git.paul.chaignon@gmail.com>
-	 <9fdf9830803fe3a5c4059341c84a03836105f5bf.1774025082.git.paul.chaignon@gmail.com>
-	 <33c006d7275cb443b5750f062cb78c38449a7537.camel@gmail.com>
-	 <acpnHDASo5QGw7BZ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1774922517; x=1775527317;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5/Ig/DGLQgf1ppLMDpJjT+8F/4O/vfBiYS4W92t7hC8=;
+        b=UwAkhVS82PrGwFYIKPdbHvMM6QfPoLReFyjRSYJXGtRpF2EK1eIFXMRpuxDAfCTF78
+         o2VlSbvEA6vQLIRN0NDz/zaIDg7jIDdgbtCNz7fAEXT/ISHecwbzHmfQJEju8VM0ux8m
+         kTQPurXbni4K1OWWrtGLjOiu7656LNnPBc6q6TaBcV0udh81kTN5esy/F9vVoOYvqCci
+         X89xA++wbQkwqVkQhmq68AH5SpAQAdedXWHXM+msY9+OPUyz3swf+X06pUAsiYj4ezWh
+         cf2ob6MjLJUDTt1FDC37MceocwKoEPhTBdcEu2g45kl6mRCPVEts5gUStrNQIWKeAiiD
+         GaTg==
+X-Gm-Message-State: AOJu0YycQ5eV3VUBJuFTcsJY0ZRgCGpleOCfMQin7JdWzVcBKFc6T+oB
+	B53TXvtWOFILJDOHjT+gqhn+u552VdkRS1YrW1WL24Hhmtr1VQ+BGpA16EKgkOdOuXw+qvL1INk
+	y9rUP9iJXy970uPCe0++46gRI35uqyisIcWWiHduvfIxng49WsXn8PSUmlA==
+X-Gm-Gg: ATEYQzzXqNmfUfwZlofFGxAE3Cy4vKGAXn5aIJCyoZu4Xx5sbrCEroT/l1Ui7X5JsB1
+	lQ5EbiHpXyr8VbFlNd8HbTsML3DyRwj0NwyOcgCBhDoZGzj8UwaKygVH/UURxPGwt97PdPJJkck
+	oez2C1a3WLYgoof27nNEEG37gbGju5DlKoj6mpmhpIk65OlCNwVx4YJh+P1J3Zc0xfQHV4FOD9v
+	lp3uMG90xd9NaWFa87P4/vw8GO4g4npnpZ3V1ZuChHaVjeQrHuXeJGef3zgdfLcWLvngQ4Znf6/
+	XiAe0srpPa/F4ig0l/Z7MpooYucJoIXN+b01+yYf2g==
+X-Received: by 2002:a05:6512:10d1:b0:5a2:a5f6:dfce with SMTP id
+ 2adb3069b0e04-5a2ab7ea285mr5096157e87.11.1774922517043; Mon, 30 Mar 2026
+ 19:01:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260329124429.689912-1-hoyeon.lee@suse.com> <20260329124429.689912-3-hoyeon.lee@suse.com>
+ <acpLlFg_UUmzp80f@krava>
+In-Reply-To: <acpLlFg_UUmzp80f@krava>
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+Date: Tue, 31 Mar 2026 11:01:41 +0900
+X-Gm-Features: AQROBzDg0qcd_MUjXbT6jLQeGM7P_6EVEMeqa7ZA9em-EgNqL92HBMqjpED8Yxk
+Message-ID: <CAK7-dKY+_wxF4X9pg8isQh_7+_T3vCX=BwgdJhP9wd9vMntZHg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add test for address-based
+ single kprobe attach
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	Feng Yang <yangfeng@kylinos.cn>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2026-03-30 at 14:05 +0200, Paul Chaignon wrote:
-> On Mon, Mar 23, 2026 at 11:42:11AM -0700, Eduard Zingerman wrote:
-> > On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
->=20
-> [...]
->=20
-> > > @@ -17196,30 +17192,23 @@ static int reg_set_min_max(struct bpf_verif=
-ier_env *env,
-> > > =C2=A0	 * variable offset from the compare (unless they were a pointe=
-r into
-> > > =C2=A0	 * the same object, but we don't bother with that).
-> > > =C2=A0	 */
-> > > -	if (false_reg1->type !=3D SCALAR_VALUE || false_reg2->type !=3D SCA=
-LAR_VALUE)
-> > > -		return 0;
-> > > -
-> > > -	/* We compute branch direction for same SCALAR_VALUE registers in
-> > > -	 * is_scalar_branch_taken(). For unknown branch directions (e.g., B=
-PF_JSET)
-> > > -	 * on the same registers, we don't need to adjust the min/max value=
-s.
-> > > -	 */
-> > > -	if (false_reg1 =3D=3D false_reg2)
-> >=20
-> > A side note:
-> >=20
-> > The above hunk was added as a part of [1] to mitigate some invariant
-> > violation errors. Surprisingly, none of the tests added in [1] fail
-> > on current master if above hunk is commented out. Probably due to
-> > recent improvements in bounds deduction. Should we remove these
-> > tests as a part of the series?
-> >=20
-> > [1] https://lore.kernel.org/all/20251103063108.1111764-3-kafai.wan@linu=
-x.dev/
->=20
-> Nice catch! Out of those five new tests, the three "jset on same
-> register, scalar value unknown branch" never fail if you revert the
-> commit they were testing, even at the time they were added.
+On Mon, Mar 30, 2026 at 7:08=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Sun, Mar 29, 2026 at 09:43:39PM +0900, Hoyeon Lee wrote:
+> > Currently, attach_probe covers manual single-kprobe attaches by
+> > func_name, but not by raw address. This commit adds address-based
+> > single-kprobe attach subtests for the two underlying attach paths,
+> > legacy tracefs/debugfs and PMU-based non-legacy. The new subtests
+> > resolve SYS_NANOSLEEP_KPROBE_NAME through kallsyms, pass the result
+> > through bpf_kprobe_opts.addr, and verify that kprobe and kretprobe are
+> > still triggered.
+> >
+> > Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+> > ---
+> >  .../selftests/bpf/prog_tests/attach_probe.c   | 49 +++++++++++++++++++
+> >  1 file changed, 49 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/to=
+ols/testing/selftests/bpf/prog_tests/attach_probe.c
+> > index 9e77e5da7097..64f2ed75779d 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> > @@ -123,6 +123,51 @@ static void test_attach_probe_manual(enum probe_at=
+tach_mode attach_mode)
+> >       test_attach_probe_manual__destroy(skel);
+> >  }
+> >
+> > +/* manual attach address-based kprobe/kretprobe testings */
+> > +static void test_attach_kprobe_by_addr(enum probe_attach_mode attach_m=
+ode)
+> > +{
+> > +     DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
+> > +     struct bpf_link *kprobe_link, *kretprobe_link;
+> > +     struct test_attach_probe_manual *skel;
+> > +     unsigned long func_addr;
+> > +
+> > +     if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+> > +             return;
+> > +
+> > +     func_addr =3D ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
+> > +     if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
+> > +             return;
+> > +
+> > +     skel =3D test_attach_probe_manual__open_and_load();
+> > +     if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
+> > +             return;
+> > +
+> > +     kprobe_opts.attach_mode =3D attach_mode;
+> > +     kprobe_opts.retprobe =3D false;
+> > +     kprobe_opts.addr =3D func_addr;
+> > +     kprobe_link =3D bpf_program__attach_kprobe_opts(skel->progs.handl=
+e_kprobe,
+> > +                                                   NULL, &kprobe_opts)=
+;
+> > +     if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_by_addr"))
+> > +             goto cleanup;
+> > +     skel->links.handle_kprobe =3D kprobe_link;
+>
+> we usually use skel->links.handle_kprobe directly, no need to use
+> kprobe_link or kretprobe_link
+>
 
-When I get back to [1] and revert [2] I see the following test failing:
+Thanks for the review! I'll change that in v3 and assign directly to
+skel->links.handle_kprobe and skel->links.handle_kretprobe.
 
-  verifier_bounds/jset on same register, scalar value branch taken
+> > +
+> > +     kprobe_opts.retprobe =3D true;
+> > +     kretprobe_link =3D bpf_program__attach_kprobe_opts(skel->progs.ha=
+ndle_kretprobe,
+> > +                                                      NULL, &kprobe_op=
+ts);
+> > +     if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe_by_addr"))
+> > +             goto cleanup;
+> > +     skel->links.handle_kretprobe =3D kretprobe_link;
+> > +
+> > +     /* trigger & validate kprobe && kretprobe */
+> > +     usleep(1);
+> > +
+> > +     ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res");
+> > +     ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res");
+> > +
+> > +cleanup:
+> > +     test_attach_probe_manual__destroy(skel);
+> > +}
+> > +
+> >  /* attach uprobe/uretprobe long event name testings */
+> >  static void test_attach_uprobe_long_event_name(void)
+> >  {
+> > @@ -416,6 +461,10 @@ void test_attach_probe(void)
+> >               test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
+> >       if (test__start_subtest("manual-link"))
+> >               test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
+> > +     if (test__start_subtest("kprobe-legacy-by-addr"))
+> > +             test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_LEGACY);
+> > +     if (test__start_subtest("kprobe-perf-by-addr"))
+> > +             test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_PERF);
+>
+> should we test PROBE_ATTACH_MODE_LINK mode as well?
+>
 
-The other two indeed pass.
+I covered only LEGACY and PERF here, because they test the two
+underlying single-kprobe attach paths, legacy tracefs/debugfs and
+PMU-based non-legacy.
 
-[1] 9f32bfec545c ("selftests/bpf: Add test for conditional jumps on same sc=
-alar register")
-[2] d43ad9da8052 ("bpf: Skip bounds adjustment for conditional jumps on sam=
-e scalar register")
+I treated LINK as duplicate coverage here. If you think explicit LINK
+coverage is still worth having, I can add it in v3.
 
-> I believe
-> these three tests were intended to cover the above "false_reg1 =3D=3D
-> false_reg2" check and supposed to fail with an invariant violation when
-> the check is missing.
->=20
-> I believe this check was never actually needed. For an invariant
-> violation to happen, we need regs_refine_cond_op to refine a register
-> based on a incorrectly-detected branch being verified. For jset, that
-> can only happen if one of the two registers is constant. In our case,
-> that would mean both registers are constant. But if both registers are
-> constant, then is_scalar_branch_taken is always able to precisely
-> deduce the outcome of the jset. Hence, we wouldn't even reach this
-> "false_reg1 =3D=3D false_reg2" check.
->=20
-> I think I'll remove this check in a preparatory commit, along with the
-> related selftests and an explanation why it's all not-needed. Cc'ing
-> KaFai Wan in case I missed something.
->=20
-> >=20
-> > [...]
+> jirka
+>
