@@ -1,84 +1,87 @@
-Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9933B6379
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 07:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75EF1EF09B
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 07:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774940697; cv=none; b=uMQs82qhCbLjBl/s7xXp5aUk9PIRoFGX0nPVQjg8QMFLZp1qTIGmeR1fzwgaBfXBsxKazpo36zy+8cJPoaT2IV/sJcQjJWlIrsGmd66WtjDhO62XPTD9YibCwVcYTpXV6SC6AEEQpF6kls13UkH6/VPrb/9o9dDegTChTdz8/TY=
+	t=1774941627; cv=none; b=cUYfSYXET2f07aGSmBHfi9jFNAa0R+fMYKxmdgw4sMLETzX7uvjo3NbTPUWMLxrfOtXHS8is0BGMm8tRwUZdrl7vwCnG2KbdKL9eezHZfvZiOCAsYv1JQluwqgFFizJUOZFOFxMVdmPZc8frd0cDqwjsRSkCr3yHDh8320gqZtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774940697; c=relaxed/simple;
-	bh=Ig4osFGayyTKiUDrdhynu9gUM5VDbzOye01+8vxPoP0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DxP6Ptmpk5dwZnGN2dJnGzlcmV2HU/fC0z8F82Cz3dDDzZzZW+b1VvXBdfhQg5UhqCihGZIcaZljB/icNmJxlQAjHO9Cq9005yjc79whhn2CrEait9UkkuegOl20Dd3B7VwVwdsjvZngC8v+0KlujFK8lXTpPPwKaJRprU52GR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjBMfmUN; arc=none smtp.client-ip=209.85.215.195
+	s=arc-20240116; t=1774941627; c=relaxed/simple;
+	bh=Ig09pmyQ1CVLjBTHm/qtTk/BGIGrjqWYEB43Rzj9xuQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nNVbplSgSWk+ufm/vfE0XTpOFz/lmI1WpazInAPqb0semkV26pAK6RVd7IU0QcZ8/IWaktNwB/dey7b8B0tWVucbgIjJLKo++BB7irtJAuF1pGsl2JtF6Lp+uCeIYkTrmwTCN6iplrLwWshumrDLMsfLaOkrhqf1+N+6SFSBV3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VO5UwGGr; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjBMfmUN"
-Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-c70ea5e9e9dso2232962a12.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 00:04:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VO5UwGGr"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a9296b3926so34829305ad.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 00:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774940695; x=1775545495; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6lbWXtnbhC1yTNbE69i6SmEZlVhDlB2Axaw0Jgrh2l8=;
-        b=XjBMfmUNPI4q+3Ewm7D1ZxWRm+6EmkOf/XHJEHk2nDdP4f1vAw45xRDslQBGhWUo90
-         0SYj/W+JrPMeAI9IVA/eprWoEm3D5UtQ9as+YUS5nqEyF0tYjUSiDsQmbuRLoNIKkDnj
-         dk7s6o9WcRwKdLICU/FczxrkPdRkdU+Y9ezL5TNcug4Ri8U/y6/+5N8DEgw3tbOHwlYj
-         3p2X4flkHyk/UceEB4S8bzeOjbdi3vlNOayzjnmSevqK5E5zzmO2HInvDJErKhrNIHaJ
-         21OT2/HbZfVdPpuXkD3Wo4ng1CFb1GGMe4FwBI38OcXNfoNZABslR90rXYojrIe88iTd
-         8aqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774940695; x=1775545495;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774941626; x=1775546426; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6lbWXtnbhC1yTNbE69i6SmEZlVhDlB2Axaw0Jgrh2l8=;
-        b=M4XxdWKXALPqsAfxiWBhjOMXjfR8Xy9rHJ/bYOWGt0njYYIjP1sSEV1uyuG43XdTpY
-         vZWGIg5jIhFBaHFYEHtJidbNZM16cOqlMnkT4IMhgMY+McJFfyVGbQQQSVI3REIrp86n
-         lGQVarDaYjFOeT4LGACLn+ZeN5UInwh/IQKh52SdHa4SVYuT7gKGkdPF6DR8PTECPQrg
-         HREGiW4ngkwl0S0R/rGOaA7cnk7H+m8Y2tQT7imW4EEV9sWjgJ3U0AqHwOqiqaNBDIEb
-         ApxTtjVnJzGwaK1YhrFb4jyyyeRdesn7tV2ved1xGXR2yfSzw7eE7aG5pt9Jmwgt2vz3
-         9gsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUbNstXlq+r3rYhaYtlkp3+x9V34dhzU6germLo7FKBQqnrZFanQ0sCgnww1WxUwD8+eAU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywlg6QWyAbpnh1ddjXNB2Tej7WK+vCKwML5sq9m5hY5eM16XziR
-	52F5kYoSWcJIg5N0Nk1518zrahDRlpR4wRwGP5Mk2Nqn+hgBBGbT7Z9+
-X-Gm-Gg: ATEYQzxmo3w03DQuPTG1pbtfd6SFB0TwjFEPs8cN2qrCKJm1ThuMaPpxoykw+1ejO4b
-	UzK0vlhrNj/L6yeWPaswwB68rj4jepRC5nV4kRG/lky6+dF/kHRMBf/OiJl/xg74z/lfUngYRji
-	/JVEmcWX+G52cBmjV3vsfLbAaYyHySW8oAT8hZQKquNPLLCZK/WNqAf/VEKd7G8bMgHDPep5Lme
-	SopK4KjoPnlocI5UNXwjoyjMzb/XT4sJe+u7gHJGhgqMR4ZePQhePu8a2XPhzPQuewN4h5TgVv9
-	YCR5dzeYXP658StRyh2kcCFgiAfwIdb4Rb2BJnCaBOX3hu/TJEz7G/GgMjqTlEZLpa097za6QTW
-	YyYNOw+hGYrKDzA/OQcE1AEwcfHzfAXIknWdA7r3vD1o89pLFt9esq0UAwRNwIxj2vKggxkfILa
-	wGfbyLaDxW7kzZNsGUbA2C
-X-Received: by 2002:a05:6a20:7f8d:b0:39b:c9ca:9736 with SMTP id adf61e73a8af0-39c87aea4d3mr15490809637.46.1774940695284;
-        Tue, 31 Mar 2026 00:04:55 -0700 (PDT)
-Received: from 7940hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76b78de2a7sm226149a12.13.2026.03.31.00.04.44
+        bh=Ig09pmyQ1CVLjBTHm/qtTk/BGIGrjqWYEB43Rzj9xuQ=;
+        b=VO5UwGGrPT7vXlCT60K5iaW8+8Ac1d9VFi9aFlZGJbuagR6/D9VkLZNFc6o5fhedfB
+         6IZKVrX7bVBrY8GjZDglCBkjq3MRNm6zf9U3gYzXQOaCIrCJgk0xGz55uqlHI4BIoa6t
+         xbJW0j3Y3/+49QTEHcTF94aKHGba2HuRaHhmooRQDlom3VQJyPLSzNhI3bOQpVG4HyKm
+         e9cwqh3Q1r0YHQIqx7u/nH1YAG2JehtVWwQScJJejzxrzXcuB173/oKKmy7nlrKj7CcK
+         dGgeGhThnxmzUqVBPfHZZtHt9N4EUsa06X3THevuCGyAgL1w/Jf+4Fe4H0i/hKzyx+AJ
+         4uyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774941626; x=1775546426;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ig09pmyQ1CVLjBTHm/qtTk/BGIGrjqWYEB43Rzj9xuQ=;
+        b=ElACcrN0RxXagZqn+dS1uzIigXhg7GGL+sjAp9ruxg/GU2FuSycJkoC2cydlI7r0SB
+         I4bFgE/uLSNb12mWe+5K5UlOt7PZsQCxZkwVZmobrtVayTCKAQnHboa3p47bmNDuJoms
+         gMgVl78im2XjImD/qsVb1mShCFozn9yRWhv+RoWQ6pyS6gcKl0B1na7o5mDttWNTFuBZ
+         OTkhYCISQqBsg+BLJWMjG3o7S+CmQcBXOZPKxT617fPt2gW5JA+n+bRXVGAiS8H5Ql4R
+         ebmb1CcHCOxbDzQW0OQpamg9ObAilApBt19zO+U47R0ASnTCWbUthPSy9/tbs/UYwcNk
+         cu/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXNSzECm0UUXUSxXSszjzdnW72C0DEysKsQLoXCDyEFX/uc579rP3G3t1ziUWZmcpFxF98=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2yV/y15ioR2zqC09z8EkVxZ2xZ+RRkaRwGVwkR12gcdscKFAM
+	TuX7seSI9NznbdFcMcXTDoevanPK9zOUjt+TiIzX+T/Cfqox0stx0LEY
+X-Gm-Gg: ATEYQzzzoD6Yb5arkaisXsr46ZqDiUtnzH1JmFn8m1XzjAWE5H0mwVSlSRoD+bALcYl
+	Zg1CnC/TKXVcTC0aVnJ7HIGjdxuwHmDkxJ3dcT2cBiXC6MyizKZ9RdEW0Uk28DpZn1c7u2/8rqo
+	4WrWrSty84W0OdSiTdYBo6QFVTy5lS3ckk+UrsciHIdnpaMSQk+JidKkezcSqtPzo0+PGOIjxhb
+	5ExXY+NGmHuu2gsPkS17gF538Gcy7+JRTaai+6wGYdHnZtPyFxY1wC4RwqqVJwHM+PUvzwMDbtZ
+	pcyes8LX6o8uF1+9WjZO3JPipyvuC3bSr3Cc6p6FNprwIvB+L/Rr1TwU4GM2YL7q1aMGcnifElK
+	3e+ENf1ET4TUoFBZxlhfB5bItSm8mDNVU9NWpcGPEZ3oqpjwghsQgiSqkYQdpuJQ6eEdcb5fy/A
+	Io6BNAQQdxwiCLNMtfeQ1h7dCwDpC5B+Rrye9Jo3cnhABvhFcx6Y7Xuv5TefqkdA==
+X-Received: by 2002:a17:903:19c7:b0:2b0:5be9:f423 with SMTP id d9443c01a7336-2b0cdd927afmr156997855ad.43.1774941626067;
+        Tue, 31 Mar 2026 00:20:26 -0700 (PDT)
+Received: from cps-manycore-1.. ([143.248.136.81])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24267397bsm110018405ad.27.2026.03.31.00.20.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 00:04:54 -0700 (PDT)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: ast@kernel.org,
-	olsajiri@gmail.com
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
+        Tue, 31 Mar 2026 00:20:25 -0700 (PDT)
+From: Sechang Lim <rhkrqnwk98@gmail.com>
+To: leon.hwang@linux.dev
+Cc: andrii@kernel.org,
+	ast@kernel.org,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3] selftests/bpf: test access to ringbuf position with map pointer
-Date: Tue, 31 Mar 2026 15:04:34 +0800
-Message-ID: <20260331070434.10037-1-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.53.0
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	rhkrqnwk98@gmail.com,
+	sdf@fomichev.me,
+	song@kernel.org,
+	sun.jian.kdev@gmail.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf v3] bpf: Fix RCU stall in bpf_fd_array_map_clear()
+Date: Tue, 31 Mar 2026 07:20:19 +0000
+Message-ID: <20260331072019.880589-1-rhkrqnwk98@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <56b3dd26-4110-43c9-8bdb-abc3b7a78435@linux.dev>
+References: <56b3dd26-4110-43c9-8bdb-abc3b7a78435@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,68 +90,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the testing to access the bpf_ringbuf with the map pointer.
-"consumer_pos" and "producer_pos" is accessed in this testing. We reserve
-128 bytes in the ringbuf to test the producer_pos, which should be
-"128 + BPF_RINGBUF_HDR_SZ".
+On 31/3/26 13:19, Leon Hwang wrote:
+> After looking at v2, there's no functional change for v2 -> v3.
+>
+> I think, you should send a PING in v2 after some days instead of sending
+> v3. If v2 will be applied, the tag will be picked up btw.
+>
+> Besides, change logs are missing here.
 
-It will be helpful if we want to evaluate the usage of the ringbuf in bpf
-prog with the consumer and producer position.
+You're right, I should have just pinged v2 instead of sending v3.
+The only change was fixing a CC typo (eddyz78 -> eddyz87), no
+functional change. Apologies for the missing changelog as well.
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
----
-v3:
-- use BPF_RINGBUF_HDR_SZ instead of 8 in check_ringbuf()
+> Since bpf_fd_array_map_clear() is used across prog_array,
+> perf_event_array, cgroup_array, and array_of_map, and this patch aims to
+> avoid RCU stalls for prog_array, does this cond_resched() punish
+> perf_event_array, cgroup_array, and array_of_map?
 
-v2:
-- don't set the max_entries for the ringbuf map
-- add comment for the producer_pos
----
- .../testing/selftests/bpf/progs/map_ptr_kern.c  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+map_poke_run is only set in prog_array_map_ops, so the
+expensive path (poke_mutex + map_poke_run) in
+__fd_array_map_delete_elem() is exclusive to prog_array.
+For perf_event_array, cgroup_array, and array_of_map, each
+iteration is just xchg + put_ptr, which is lightweight enough
+that cond_resched() will not trigger rescheduling in practice.
 
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-index efaf622c28dd..373c8d17ea55 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -647,8 +647,14 @@ static inline int check_devmap_hash(void)
- 	return 1;
- }
- 
-+struct bpf_ringbuf {
-+	unsigned long consumer_pos;
-+	unsigned long producer_pos;
-+} __attribute__((preserve_access_index));
-+
- struct bpf_ringbuf_map {
- 	struct bpf_map map;
-+	struct bpf_ringbuf *rb;
- } __attribute__((preserve_access_index));
- 
- struct {
-@@ -659,9 +665,20 @@ static inline int check_ringbuf(void)
- {
- 	struct bpf_ringbuf_map *ringbuf = (struct bpf_ringbuf_map *)&m_ringbuf;
- 	struct bpf_map *map = (struct bpf_map *)&m_ringbuf;
-+	struct bpf_ringbuf *rb;
-+	void *ptr;
- 
- 	VERIFY(check(&ringbuf->map, map, 0, 0, page_size));
- 
-+	ptr = bpf_ringbuf_reserve(&m_ringbuf, 128, 0);
-+	VERIFY(ptr);
-+
-+	bpf_ringbuf_discard(ptr, 0);
-+	rb = ringbuf->rb;
-+	VERIFY(rb);
-+	VERIFY(rb->consumer_pos == 0);
-+	VERIFY(rb->producer_pos == 128 + BPF_RINGBUF_HDR_SZ);
-+
- 	return 1;
- }
- 
--- 
-2.53.0
-
+Thanks,
+Sechang
