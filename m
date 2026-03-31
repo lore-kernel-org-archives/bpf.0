@@ -1,164 +1,173 @@
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CEAC3590A9
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E843C872F
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774994665; cv=pass; b=NbvFTlQyC5K87WGOLmdAqcjZiin5SrL+JrgaoY1smiuXvLuxFezLu7TrmCOW6gcFaRFS+2WpoRSpcwJiyn5IzWbFR0MKFPVVv13pL4JxOUntIf4HOrArc9JYPzOClWM4I2LAG/Aq5NYZu9TAeMlaVCDOjGbsSTtT172Cug0YA/E=
+	t=1774994712; cv=pass; b=UPLAKHcLw23Ga+ekaHz0pG2qNts0z0sNqkq3dVVEcNkB7bQVwPDKuwcuIAfT/zLP5vuIFCpW91MAx2AUn6FjLWn/HArvKaMw7gj7/h8MtXwLCtoTsX4u0zrAONHnmk7GIRm1n5IVMNnLMfc/hHf1PYWhDo87rd39UqHSVHaXTRU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774994665; c=relaxed/simple;
-	bh=KXz8Z1YsAvBqjHVB5QBXZKVYV6oF9RS44FiMgG7zIIk=;
+	s=arc-20240116; t=1774994712; c=relaxed/simple;
+	bh=aVIpPJDxtVjGTfUw8kQm/EJ+Xr7PeRLNbyuFyTTwN3A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TCZntFlxhlzfZOPTjSOnSnMCbdTUpbBPyCFLC8WLi/huAMs1qcSleVNZmLakBiVnwG1/IDJYKpB37/+Jp3uLXLfQzI9KpHJ+ulWIG/sjiB/tlJOE78mWYn3CCegEWn3TzPg2N2dzs4e99ej4hR+57WxNqO3SvVQVxblszAEHAMU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HM6ab7h1; arc=pass smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=hJU7HWdOovKc3dE8e8OgXu4h821ANR+BPSH8FxTGx2acjb+fnL2xYH53Ayp/v18wg9u0Z3HEhzRhESWnkivMyz1nN0ljEw5FEDccx3rLJAFRNOdXCk89/Cm45epajessOWOkpBQCxihCu5UQSKuRXnWrlRllIvDw3TnLFDNNZV0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cK700kJE; arc=pass smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HM6ab7h1"
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-12776bebe9fso2116565c88.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 15:04:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774994662; cv=none;
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cK700kJE"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-35d99bae2ebso3053881a91.3
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 15:05:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774994710; cv=none;
         d=google.com; s=arc-20240605;
-        b=I9vMFh7ZCodhOXW0rPGcgE7+40AVOoAqviDfKJqjnKrM89G35NbJvARGmCDGn4FYOk
-         tcLGfJw8/BOkxvTpyniFavW856oZXh/S6u53EHBPXbdd1fP3MbBOeiltgdiaqEzZ4QP/
-         cVFYvSXc7IVaFIjAchtGGDXbWnxqTnHd5KDLmijuwCtzHXk5y5Q7ssv9QDm2YMcLUoCy
-         8hEUUk48MOZ3wB+trDzRb7sF5FEED24DfKYofhHCepvjGlVGuuHtdoOXBgks53OSt6I6
-         oC2XfXYpYq7dGNrukweg91e1qpheZD5Ij4YI4V2V1mctsmfK/8oQfb2UG96GI0VJjjeB
-         8f2w==
+        b=TQCR///mkJNMlmqoCoOlJMMi2h6g1ORPPFiPq1q6q3vlQVUevBFvXvRFpwR3FybTMQ
+         goKFOlELIWH74SfhlEOP8UoTVYPPq6ZoX6HOkFoGubcDI3xYWyUg3q1ucoWbd6iBED9W
+         DJHwiG22FNkJfjFpu8hit4dgG7FTTN8svtOCeeRe+D9dF69BXk30ds9xXro/YA/wKzmA
+         JagFmENYnS2EUc/KwNhYnMS9gLvz9mkD8VCO0RR94ZRmDiFq6J+9nsPNbc0GXMGeJjII
+         SwQFeJL/IzlA6FYNIsKtRRXSYz04Zj4FmBwFH+ELQwUapK0+99Cx+plw6PAgwSCNK450
+         5LkA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=r4kc3eBNKApVvBhR0MrUdh/NwLBBmhES3WTvFsU9iGI=;
-        fh=l2huh44s0HXq8QSWtSs9axHfMXtT5maiwLtudaepxN0=;
-        b=GRTZ+rrDHoE0XyD+PKzA6BX3E44DbKKd34KKQX33/bNjeHU71Z2u6Z462Sr+kWs2aV
-         aj6i1TpqQDYEFdFkJuWpU8kyTFybHmkcpxH3Odgn9uLAzZV3v5VaKKDjHqktzyoAwl+/
-         uJlL2dL2rPmZJr7CE/b6UbpQaC0jkXMLuALtcendbhUYc6ZyQYAG6wBdRQEQlwqRZqgr
-         xlC4R1Azv/SFze/SQVL3XJJEuArMI8bRwJhbVpDR54W3uZ5jJniW7EfuIA+p6fc7GYwq
-         O1w9f6HQefq/C0Bszb+PSSKyEdghbV83vacQJQC9/uhXWdRpvpvFIZ37QITNcCGLE32k
-         ikVA==;
+        bh=Ep4GCTgxX8JIYhXvMhkjfxUN+0Y0dj6DzLbtLvfj93U=;
+        fh=PrhBGfhRuyPzwihEcQNZzrXJ9s2AFk4rH3YSBKNGEgU=;
+        b=MOWZsoxM1WSFqXt3+Bp7htLGCCkYOpyxujsVntllCkuaogBG4kEN8Q2WxkXQnUMNMd
+         s+o1Byb/nQH4WnF1NLmL/3WqQ/bIy62X6kx6btY3lHOzPbnG5wrDT51G/ViIzYw0uU9c
+         LAt+l3FolxPSeYzT/IcRnr1pf/N+EwEd5Z0w+GJ3GAcsI94ujVEGs/fnYVAslNn0ztFw
+         nVYjJdiyufIciu+0A70cbx7dPGCsLTK8Wwb7fwG2lp1jD71V7fBTBVzKJ1KuidtOi1kX
+         p3TDIW+nJ2KM2Lnrk3Ig6asDn9TL7cE2+W5Q8pqfl/szMRk3DRvCGamCQ9R1EPJDZxkb
+         1nBw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774994662; x=1775599462; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1774994710; x=1775599510; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r4kc3eBNKApVvBhR0MrUdh/NwLBBmhES3WTvFsU9iGI=;
-        b=HM6ab7h1ilYQVfb/3UM4pRXH1ZputZepe+FLPcABlQtMy83+hm5vnj4MOLSP6EaR6u
-         t92P5IAkgNgly2CBF3mrNzm39DAeZtC3fiL9SZ+Fa8tU7RbB8vxqySEQWqTgk/n5QG+h
-         Ikzfa1+kZMkqLf+fO/3kC4aSAS6dNCawWSzQMrwswnQLFEjpjk/WyhT8HfOZnH+2biVC
-         V+Lt7BxvoXcwQJXM9deBF75sJLTo5KVsOINRt62RB/DbqbOxgTfavY2V4OlMXvGmkGop
-         qxBhvfEaN+mAU+EHemXchi+Q1vw0USBuh0pZ44o9JsV/I3tdaHPZv8QbzqUSYsvWlmUZ
-         PXow==
+        bh=Ep4GCTgxX8JIYhXvMhkjfxUN+0Y0dj6DzLbtLvfj93U=;
+        b=cK700kJErZ3XTR83YmrvrOIJGcQRkoNv5CKJH03tF81ANmsX/hERPsaUZd/aKmgsDL
+         pXZhznvHmYvHhAVhXorUiZMVGhSlfyWwn1eKv0qm3GNal9RN5hdxQaRNL4JUp3QK3/In
+         drPXv3+7h46+XLrbBuy9lMF1nivoEDVg2fKoOD3fjeIHVeNkC6eWlsSJDyotKhU8fh81
+         YubMJa0ZRLHhSe87QBGXDQcJO0CMIAp5THH7AYNeAoAD8Yd4hvh+d1BGUdD+hVkZOW6D
+         Zhd9DR3VXp3FClSrgOLhDXovflqcNSQyCLZ1/uao7PC1B/EdMq4WMC7hShMWZ9bBG4+s
+         yvHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774994662; x=1775599462;
+        d=1e100.net; s=20251104; t=1774994710; x=1775599510;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=r4kc3eBNKApVvBhR0MrUdh/NwLBBmhES3WTvFsU9iGI=;
-        b=GyTfuxOQkREfnfUW+ZOdV2yXvZBOx85aRy5fJ9JkGi5k5TzNTA9po7ETUu7dtA0sBy
-         he5dsF5b7HtDkkwILkxTiXfRgxMTXKn1wO8yE6egH8eVnr570T+wKUABIVutGdSIe3hQ
-         rOmEbesKTO29toxnxR+G3is70D2VzOc22Gr3F9uwO6c57xkZeto45nhxpBiVr7C3cKwO
-         7K2qH04VXipkv6OhGEm+lrOvWroGbGH25Kjru7EHuoJSBOLH3PX839uz9hoLTQevlAed
-         yHzQO4+UOWS/fC/IAMjE6i+Q112BAGvwDR1B5iwLnDWNwORxIvLbBHBBaiZyXnBK9fhy
-         xEwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWAsRu7nSSmZJg0fN6JhcF5Re+oCjU7fsERmNnTdxHc/ApXoK2sfScGmhRgwkF2MGgSJqk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yydr4f4Dblj4EyBN3GyzRiU65GC408PlAI+zAtV0bkyG+bSX5Oo
-	nWtaEW8As3/eiunlF98dQg3TIr/lQKop4K0pi1Rv8mFKcUSCD/OPe4z+Za/aTMO8M6Wnbsk6bp3
-	rmtGV33w3tntMpFowGVD6dIwJd/1WjpFgOVEWk8Lp
-X-Gm-Gg: ATEYQzxuxMs5P3l0M/SXzE1Cu3y3MZF5IFn2B0dr6MYRZr6j0SclQj80m4dzCr5qVtr
-	251NzzE+HwWXr/8WQBso7FCDUC4UbSz4ySnpKjg+0If0UihdEjShHPhgw1qlz/AY67RPXYhUrGZ
-	pwLNvwn3ocfelMe8yo+zx1/ByfvCtrr3wLTaCm0Vv3oCrnyCbizWpfkess5m7FZo8r9WwxrOs70
-	9kYhJiRFbS+82vmGeqkh+DudPIqtKl11X7v42/IzU3cudsCAI3ZUlnANdSp02kILLmASNZSfaIx
-	RYAwYjJDnqlPgo1SUWkIvta4q0v2DztnayUYgMaMJUGiqhvg4Lge4W3XvZl7Kpc43jzB0g==
-X-Received: by 2002:a05:7022:684:b0:123:2c98:f65d with SMTP id
- a92af1059eb24-12be6437dd6mr762968c88.13.1774994661813; Tue, 31 Mar 2026
- 15:04:21 -0700 (PDT)
+        bh=Ep4GCTgxX8JIYhXvMhkjfxUN+0Y0dj6DzLbtLvfj93U=;
+        b=V1ZGL9Xk/JAPCPwZ34Ho4DTyneIkxocEofssVMa2/bqwCpteFLmV3tADxR8pBy/wQQ
+         V0Z2Gee+MBnZjxLzBLZWYfqxsz0TvsiFl7/qJZIIGMBW7bqdhiFmxKyOyfX3kqffNeHa
+         QyIYADcmErtdI3zHju1iJXVrPn2N/uLJmgXLQC3eKDAgWeai8Vy5tP2rwzTb4WRtvW4+
+         5bp4iO4vc90TPNl3qPSLqyYiXYBopcwyMFKQH1KHbfI6TdLf23W4+m/eJ3wOCp0VhRAM
+         MJ301TLmUiVBcRdoFi3HPzYb4nLMCqciFBXJiEtIqoTetxVtNCrnansRBIlmnvt1MPnO
+         wAig==
+X-Forwarded-Encrypted: i=1; AJvYcCWF/cW8YHLTsd3GEjw8HAbRDkvH5BBONPfOrlNM8/z2qtic35ognww+4UV8Xd2zyk3K9KY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC7SABvyFHbhczNv8n1l4Nn81WzHdZHXZ8qZotJsYpJbCaIabD
+	q9vvjKZXGqlFvJDKZl7LhDK/NNzUMEV9sb3yJXhsdDe6VQjxMymOEI+/ppYhudvhq1D3UcTI9qR
+	HSEuIbWfTqtqoRRpWdFqqA2GyPqUYc7jeWYk/f2Ep
+X-Gm-Gg: ATEYQzzL59ywe7yEbps672BfSD9sOwoJL+v/Ajslbt6c6GXt9l3WRI4lwvQqaCtMBsm
+	A3fHylBUyA7v2J9/liQ1d2dy12KWwOYcwQbfaX4Sl3qhh4OZ4hN7mvUBen9zfYs78JRdEC1aYCc
+	T20rkFhalH2t+hM9tgJY/ft9g1cC5w4e9aTjRCTD3Zo52wAGo/WRQLXu9ntJSh5M8/694Q4Qgdo
+	TM2d14AGoD9B6An0pV7205LjANn2xjsloXH7QObIXdCylU0THBRwAnu5IlMA50dqv3T3hF8OOo8
+	463raZ4=
+X-Received: by 2002:a17:90b:3e4e:b0:35b:a170:f266 with SMTP id
+ 98e67ed59e1d1-35dc6e6d5d9mr852192a91.13.1774994710597; Tue, 31 Mar 2026
+ 15:05:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330080746.319680-2-jiayuan.chen@linux.dev>
- <6ee24770a2b014219d86839b2243e1b7bad4dc4f520457269d5e8ca2b21c2cb8@mail.kernel.org>
- <d1a739d2-c4ea-4fae-aeaf-f49e75dac0f3@linux.dev> <CAAVpQUD1n7L6LkP32H_Ct71RLNpJ2RQWFc8w08+c8h=U_tDjpQ@mail.gmail.com>
- <79805496-9996-40b6-8cbf-0beaf7dd5473@linux.dev>
-In-Reply-To: <79805496-9996-40b6-8cbf-0beaf7dd5473@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 31 Mar 2026 15:04:09 -0700
-X-Gm-Features: AQROBzAQ8y8qSCQrKpuNkixRyfIBAjxtkwpMokHCZ1Bvt_oQRokJ_pel-hcekD4
-Message-ID: <CAAVpQUBbAQO8rSE-WSS1M7kEcD_sQ_9zHTyJg-+v2FoVuHZ8Kw@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, bot+bpf-ci@kernel.org, bpf@vger.kernel.org, 
-	clm@meta.com, daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, haoluo@google.com, 
-	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	martin.lau@kernel.org, ihor.solodrai@linux.dev
+References: <20260326060655.2550595-1-bboscaccy@linux.microsoft.com>
+ <20260326060655.2550595-5-bboscaccy@linux.microsoft.com> <CAPhsuW6P-K=nTPxBk0_Wd0E1wDCBqb=uUQzmzpEg2NJub=L+dg@mail.gmail.com>
+ <871ph5f99z.fsf@microsoft.com> <CAPhsuW6fWG8674+LOAACqb1LDAz17w-CxvwBaTf7JXQL6ip5Pg@mail.gmail.com>
+In-Reply-To: <CAPhsuW6fWG8674+LOAACqb1LDAz17w-CxvwBaTf7JXQL6ip5Pg@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 31 Mar 2026 18:04:59 -0400
+X-Gm-Features: AQROBzCUIiXEj4VIIcZZGbFprLIdepai1hqVM7-_X8-rSxluuSgqIzTNSpqHed0
+Message-ID: <CAHC9VhSeRuQ0t+bU29o2z1xeC+g+6h9e+RWnfEKqpzT7rv2Vcg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/9] lsm: framework for BPF integrity verification
+To: Song Liu <song@kernel.org>
+Cc: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	"Dr. David Alan Gilbert" <linux@treblig.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	James.Bottomley@hansenpartnership.com, dhowells@redhat.com, 
+	Fan Wu <wufan@kernel.org>, Ryan Foster <foster.ryan.r@gmail.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, linux-security-module@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 30, 2026 at 8:19=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 3/30/26 6:35 PM, Kuniyuki Iwashima wrote:
-> > On Mon, Mar 30, 2026 at 2:26=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linu=
-x.dev> wrote:
-> >>
-> >>
-> >> On 3/30/26 5:00 PM, bot+bpf-ci@kernel.org wrote:
-> >>>> #if IS_BUILTIN(CONFIG_IPV6)
-> >>>>       case htons(ETH_P_IPV6):
-> >>>> +            if (ipv6_hdr(skb)->nexthdr !=3D IPPROTO_TCP)
-> >>>> +                    return -EINVAL;
-> >>>> +
-> >>>>               ops =3D &tcp6_request_sock_ops;
-> >>> For IPv6, ipv6_hdr(skb)->nexthdr gives the type of the header
-> >>> immediately following the base IPv6 header. If extension headers
-> >>> are present (hop-by-hop options, routing, etc.), nexthdr would be
-> >>> the extension header type rather than IPPROTO_TCP, even when the
-> >>> packet is a valid TCP segment.
-> >>>
-> >>> Would it be worth using ipv6_find_hdr() here, similar to
-> >>> bpf_update_srh_state() in the same file, to walk past any extension
-> >>> headers? The IPv4 check above is fine since ip_hdr(skb)->protocol
-> >>> always identifies the transport protocol directly.
-> >>>
-> >>> In practice this is very unlikely to matter since TCP SYN packets
-> >>> with IPv6 extension headers are essentially non-existent, but the
-> >>> check as written would reject them.
-> >>>
-> >>>
-> >>> ---
-> >>> AI reviewed your patch. Please fix the bug or email reply why it's no=
-t a bug.
-> >>> See:https://github.com/kernel-patches/vmtest/blob/master/ci/claude/RE=
-ADME.md
-> >>>
-> >>> CI run summary:https://github.com/kernel-patches/bpf/actions/runs/237=
-35111188
-> >>
-> >>
-> >> Thanks for the analysis.
-> >>
-> >> There are many places in the kernel that check nexthdr directly withou=
-t
-> >> walking extension headers.
-> >>
-> >> I'd prefer to keep it simple for now and leave ipv6_find_hdr() as a
-> >> potential future improvement if needed.
+On Fri, Mar 27, 2026 at 2:25=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+> On Fri, Mar 27, 2026 at 10:54=E2=80=AFAM Blaise Boscaccy
+> <bboscaccy@linux.microsoft.com> wrote:
 > >
-> > +1.
+> > Song Liu <song@kernel.org> writes:
 > >
-> > Given this feature is to create a reqsk to process on this running
-> > host, it does not make sense to support such ext options.
+> > > On Wed, Mar 25, 2026 at 11:07=E2=80=AFPM Blaise Boscaccy
+> > > <bboscaccy@linux.microsoft.com> wrote:
+> > > [...]
+> > >> The first new callback, bpf_prog_load_integrity(), located within th=
+e
+> > >> security_bpf_prog_load() hook, is necessary to ensure that the integ=
+rity
+> > >> verification callbacks are executed before any of the existing LSMs
+> > >> are executed via the bpf_prog_load() callback.  Reusing the existing
+> > >> bpf_prog_load() callback for integrity verification could result in =
+LSMs
+> > >> not having access to the integrity verification results when asked t=
+o
+> > >> authorize the BPF program load in the bpf_prog_load() callback.
+> > >>
+> > >> The new LSM hook, security_bpf_prog_load_post_integrity(), is intend=
+ed
+> > >> to be called from within LSMs performing BPF program integrity
+> > >> verification.  It is used to report the verdict of the integrity
+> > >> verification to other LSMs enforcing access control policy on BPF
+> > >> program loads.  LSMs enforcing such access controls should register =
+a
+> > >> bpf_prog_load_post_integrity() callback to receive integrity verdict=
+s.
+> > >
+> > > bpf_prog_load_post_integrity() is weird. Some questions about it:
+> > >
+> > > 1. Is it possible to call it from other LSMs (not hornet)? Specifical=
+ly, is it
+> > >    possible to call it from BPF LSM?
+> >
+> > There is nothing hornet exclusive about that security hook. If the BPF
+> > LSM folks wanted to use it they would probably need to implement a
+> > kfunc to invoke it.
 >
-> While at header reading, does it need a pskb_may_pull() before reading?
+> Please also include the kfunc in v4.
 
-Ah good point, now that we read skb->data, pskb_may_pull() is needed indeed=
-.
+Blaise is welcome to provide a kfunc for
+bpf_prog_load_post_integrity(), but I don't see that as a requirement
+for Hornet's acceptance.  If a developer wanted to write a service
+LSM, like Hornet, in BPF to verify a BPF program's integrity, that
+developer would be responsible for implementing the kfunc.  If you are
+interested in doing that, I suggest you talk with KP as he is the BPF
+LSM maintainer and I suspect he may have some concerns around
+supporting that (see prior discussions around BPF signature
+verification and his own implementation of BPF signature
+verification).
+
+As a reminder, if you want to apply security policy to a BPF program
+load operation without considering the program's integrity or
+provenance, you can do that today with the
+security_bpf_prog_load()/bpf_prog_load hook/callback combination.
+
+However, as you pointed out, we ultimately need to see at least one
+LSM providing a callback for the bpf_prog_load_post_integrity
+callback.  I wrote a toy SELinux implementation when I was playing
+with Hornet a couple of revisions ago, which could serve as the basis
+for a proper patch if needed, but my understanding is that Blaise has
+been working with Fan on an IPE implementation.
+
+--=20
+paul-moore.com
