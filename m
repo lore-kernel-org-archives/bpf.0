@@ -1,123 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9B943DA27;
-	Tue, 31 Mar 2026 17:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6918443E9C9
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 17:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774978976; cv=none; b=nNGu8rcA2YHsQGTZNfz+lyYcimUd0nwX87CcE5Ew53yl9kD4KUg5MvYmE/PvZllyu65MPp9q/rV5tKxEl16dY2iinOmYy1YIlCdNxVeXjfzPD0pgo7Z1W7sDGRt7MKKHDrQ46/7qraZHuySSEBJ7dijOQ7ip0uqFFn47cO+FaMI=
+	t=1774979416; cv=none; b=f1CFblp4/rKuQBdMCDlxaD1Al34MYDFXMon2tltAVYu29k+0jnM2s6DeKqJTxJw/dCYDLRVHC3aRwidzcpvsjH6M2igUC84u2oM4BNFtcT5NgNrv417sEV0yf9BGFyHbMrRRN7ca6breSdKXtjcHyoXUJG6O9+4LkVy6Z9LrfJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774978976; c=relaxed/simple;
-	bh=mZdGS/f/SYcwOsCwtcdESkfbxrPbR4QFcGm1edkc4tU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TfPxALIjJDIf61ohvxURUHYSO+l7cVlrftKYdnGEqNCEzgocWoEK+gvaTHDkQUG5Q7ZaEozYWwHpv0zRKLnFvlI1TW5Z36T7UAD/f3shMLzRjqT32SkVDa4qn0KPizy+B7BBB3MjuFJc0xtx+mcGVg0D6OGlEtJtVOE0ERBc0DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUdn4dA2; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1774979416; c=relaxed/simple;
+	bh=VgUis9s6Qpjfluu+1DI7P/hWgNf6BSkMHZzWmBjouEI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=W/Dv+1CzDska99u3169T0abodUtjw/sAC4hHUOB6N3eWeCo4lxBHKn3ZtADNVTsjhS58VJsEmjeF9Hqa5BI1OQ1XGwyBeSWGgpezi0K6OnJccYKPRdeFQwNd3rxGSMgaKIqhd7mDEPu04VakiUr7eQpyLWDJwFqo90bi1PkrQdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tUS2xhE4; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUdn4dA2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774978972; x=1806514972;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mZdGS/f/SYcwOsCwtcdESkfbxrPbR4QFcGm1edkc4tU=;
-  b=HUdn4dA2sGl+Cyaf1IaGExkMgCUSb2UIMTxMEJk9SFo4BD5PvQphwb/7
-   Rx4KJuXppSnrTJ9lCB+kA/PFevyGzNAtkCYv72fyoIP4osTRGvnfF6Sa6
-   m4uF6+TY3JvCBgW91DsvBVKLell2x4eGN2Y4lILXLtB2WgjoWi642fmJt
-   tXKsuXfHRL3kkb0nwhzOJhq+cFHM5tq1dwhbAw9LFtHJK6ynGArY69hst
-   C9sevywvzMVYJE7zGmyvreDfHqqpej+PCsJuBib0MDJU2jPbm1RQ0vupq
-   YXtgf3gSPomBxCio9aNYMikKnuPOJVb7LM3cmje6qM7GgQjEu0GgrIDrj
-   A==;
-X-CSE-ConnectionGUID: /4C31g3kTUGipVZoV6Vb8g==
-X-CSE-MsgGUID: aE1f1oClTCW0d9gnzSHKyg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="75036939"
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="75036939"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 10:42:50 -0700
-X-CSE-ConnectionGUID: 7D66jnOeQLi8AwqnmGuPNw==
-X-CSE-MsgGUID: kodmoxfISR25nyrOLuD2fQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="249645584"
-Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 31 Mar 2026 10:42:48 -0700
-Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1w7d6z-000000008Sr-3DXx;
-	Tue, 31 Mar 2026 17:42:45 +0000
-Date: Tue, 31 Mar 2026 19:42:42 +0200
-From: kernel test robot <lkp@intel.com>
-To: Jordan Rife <jrife@google.com>, netdev@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Jordan Rife <jrife@google.com>,
-	bpf@vger.kernel.org,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Yusuke Suzuki <yusuke.suzuki@isovalent.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>
-Subject: Re: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from
- the 4-tuple hash
-Message-ID: <202603311954.k4BkWpJN-lkp@intel.com>
-References: <20260330215707.2374657-3-jrife@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tUS2xhE4"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82a88a2704fso60150b3a.0
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 10:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774979415; x=1775584215; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RBeMy8Rw/5TjXCLG+UKpazz3KysoPcTZt6O2J4Vg6kM=;
+        b=tUS2xhE4G6sHOzS3dSEfRi88IwOQzU558/DD3p2JsuYOjcd776/U9PVI25VTBC4fo3
+         kLiQ22ChBW3e3TMBI8j9/qoouqK5aPXkruqVz+OjvTT7MpLLSAwYLuQ2Qju+YGK5l8+5
+         67WAJmGNsmcCeG6TeXyk+z/kS/9Wl7LB1cPH1MeaOROML/9ZlQ8PnfuDY1b1tV1sMgrM
+         Low6kvgAPWNsKauJM7qqC47LD48YtE/lJ//V5RNoPhnU7ck3eecr7S0+EkCFo1NXu3oZ
+         SqzjkM7hirh1nl9SG5CzmtGdAHOKkqSwZgQxiiklw7hgt3emG17C+Yj8JXb1GfLWs9fl
+         d/2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774979415; x=1775584215;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RBeMy8Rw/5TjXCLG+UKpazz3KysoPcTZt6O2J4Vg6kM=;
+        b=gXHtuRV9DTdJP91IGxcLBF8sAKUup6l2kohdsuwhYTt30KwTH6555li02Fek9+3EIV
+         FginUFIiRdtjIKLzuOoT8xClbbcjvRS49M40Jx4ltIWlt+E7ZwKsjySFX1X/fKzAEfwp
+         5MhM2QnwhsAvzMkIH/PKntMXiXqs5fEOj68Id1jhtisiR6AW3Ty7hoGHK6BYFEgqlpw8
+         qTp5QADsE8+WOBjaJmmVqEYB+yL2dtUJTRh31g85B373hja1j1WRyyQ7U2qqXJq/Cgce
+         bDEX9hjarVZjTSxfqhUlBwZ8buMtbyjcASNOdjWriIn23eRYl7wJ7yEXNoHi9x/kd1Wd
+         +4Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/JeH246P2Z3+9BXR2q7cNUJQd/SSh0AECRiowqptvoPGd3/WlwA2aRqlW0M/DOBwpbK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDzmn9lBmoE4G/DH0FI1gOaS9aiRyW9xoh7P0GAEv2tJszbuNx
+	A8W5W8P9QYNEJR7/uRs79HA24CjN2/FLS2NMsdUC7k2+yrJ7YCz5pfxJyIXa1han4UxoJXmpAta
+	YdSj6BA==
+X-Received: from pfbg26.prod.google.com ([2002:a05:6a00:ae1a:b0:829:7b74:e1a2])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2e97:b0:829:7a62:6a
+ with SMTP id d2e1a72fcca58-82ceaadcfc0mr197450b3a.22.1774979414552; Tue, 31
+ Mar 2026 10:50:14 -0700 (PDT)
+Date: Tue, 31 Mar 2026 10:50:13 -0700
+In-Reply-To: <20260324-vmscape-bhb-v8-4-68bb524b3ab9@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260330215707.2374657-3-jrife@google.com>
+Mime-Version: 1.0
+References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com> <20260324-vmscape-bhb-v8-4-68bb524b3ab9@linux.intel.com>
+Message-ID: <acwJVUeW9KoLft4d@google.com>
+Subject: Re: [PATCH v8 04/10] x86/vmscape: Rename x86_ibpb_exit_to_user to x86_predictor_flush_exit_to_user
+From: Sean Christopherson <seanjc@google.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	David Laight <david.laight.linux@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Jordan,
+On Tue, Mar 24, 2026, Pawan Gupta wrote:
+> With the upcoming changes x86_ibpb_exit_to_user will also be used when BHB
+> clearing sequence is used. Rename it cover both the cases.
+> 
+> No functional change.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> ---
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Rife/udp-Only-compare-daddr-dport-when-sk_state-TCP_ESTABLISHED/20260331-082300
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260330215707.2374657-3-jrife%40google.com
-patch subject: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from the 4-tuple hash
-config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260331/202603311954.k4BkWpJN-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260331/202603311954.k4BkWpJN-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603311954.k4BkWpJN-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   net/ipv4/udp.c: In function 'udp_disconnect_unhash4':
->> net/ipv4/udp.c:2182:38: error: implicit declaration of function 'udp_get_table_prot'; did you mean 'vm_get_page_prot'? [-Wimplicit-function-declaration]
-    2182 |         struct udp_table *udptable = udp_get_table_prot(sk);
-         |                                      ^~~~~~~~~~~~~~~~~~
-         |                                      vm_get_page_prot
->> net/ipv4/udp.c:2182:38: error: initialization of 'struct udp_table *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-
-
-vim +2182 net/ipv4/udp.c
-
-  2179	
-  2180	static int udp_disconnect_unhash4(struct sock *sk, int flags)
-  2181	{
-> 2182		struct udp_table *udptable = udp_get_table_prot(sk);
-  2183	
-  2184		udp_unhash4(udptable, sk);
-  2185		__udp_disconnect(sk, flags);
-  2186	
-  2187		return 0;
-  2188	}
-  2189	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Acked-by: Sean Christopherson <seanjc@google.com>
