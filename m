@@ -1,62 +1,62 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45DE3EC2E1
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB59450903
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774992965; cv=none; b=e6qUSxPNRS+y8YAjLFxx00Tcg01rEsLkqcxVuqzrDxw6JzvD/AMPMg7rh46V7XuGXEtbFQrs+B54RTzSdkV2+NUh20RkaWWoqrGoVezgk6vvcUHwyLxCJccVreVspO4u1x6GQv62XUBstPQmp3EpSyAV/obCl4IWss0xnlZLh0A=
+	t=1774992966; cv=none; b=oMLv3iWOpl0+O1H3f+FefaVUBgvIGouxaSZDxaf7N/yEoE75unKuUChasK3xSUqcHe9JZ+8MOZcHtBvRfhIBY+GQjSriK+OcpqNZQlHu/pedBHb5wUXtI4nZRX4OVj6/umiDCb7aBnjlXoD06C28x9voJ258XCl6FZIQdUSruqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774992965; c=relaxed/simple;
-	bh=B957ddM31Zahw8V//QtJ/0ii7TPZNU/wYhc0JowkEio=;
+	s=arc-20240116; t=1774992966; c=relaxed/simple;
+	bh=XG3Ko+TiaAsO38YXfVIZ8ztcLOJRACa4EKxVspX6XAU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yw3qSa88Wz9xqdlZp5+exROZCTJkERwXuqaFgQSdkZc1rlPzDj0gJL67dDd5njsbwpJ5bVmFFIfWh+2V/IaeLcLJRu40AtbYbC2LqtoMs/y1VyCLPfm2/nhw7SyVfEzhWFRo8eVruHrHU1zFr5z9hZmYHNBmjKXEoD/D/uz5B0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y6xoi6HV; arc=none smtp.client-ip=209.85.215.173
+	 MIME-Version; b=L3aei/RzCqWmJUWNGI92R4xlZe7VSDWK3+q2FNnK9apQUftjcPhIt3RMb6evsRSJwqL61Jul8d9OGr0zZYaeIJ3PL8mUBKj+Z/aLAvv2xhcwa6aPQkNxKP3Ng901qDHwEKeZo6nLGSpFnw/JhO97VCRBNLaSriKi73GgBNmfqBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mFdPBIpO; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y6xoi6HV"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c76b0cda2aeso570474a12.2
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:36:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mFdPBIpO"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35d94f4ee36so2192335a91.3
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774992963; x=1775597763; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774992964; x=1775597764; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+NZ3rbLtYIC+OsfIp8yl3gPRxf4HwgIR8326w2D8YeE=;
-        b=Y6xoi6HVSlANMAo/sn2zEJ2mxD8ntC/MI7f7Bzy00Ktxk5Op72RTL7iARSakRecypw
-         zs+iT1mBBlmrZ6n34Ji2MlufjZ5zWQenqMJeugYxFjDU2HAUkvDPk5rVCjirhpy0YCtx
-         G6hhGLgr4/3TfCjtoedUcf4TQOsj3o7y02OA7yJQ+CxEj3X7w5C16y3LSr4/lJS+qyPs
-         RHc/8IXSpFHtRczFKaxJn2Tq4SgURBJ38qK5x7lmRbJyaCHD+V0WcKxai5ALKJnLJe2S
-         hdkUy9BGeVgbX7N97Hp/ObpeszND3e6mgsIA5KB/RjgZ+XFrtH6RV3VfcnxpDteaTGZ8
-         VZgw==
+        bh=umNVLkKdeST432Jn7RU/5GJ63Qjob+WuV+wYnVktEIk=;
+        b=mFdPBIpO9OYuqRfkrkiBchIDeOMDd7xF3t0jGT3Xn/8KRg45E9Skmd+9ypzDxof+E+
+         hqWVS24gjzPfdmFR7XbTjD3YMuESoSMMh0UmgXs+SBFc0ZNHN8bY7Gw5+U7aEpyTeGFE
+         gV/RDtQKhbZV5AE53607okequ9z9e9VpqjPm7XzJJGpkawQFdRhNLT+X5wOw0PuK1NfR
+         s9JdWyYeGhUzgl/WEN+wySRzYIBKzvuDg8cg56qsTZUg9FupKRpFI/4e6QFIxfvQ8IMW
+         oQqFl0oqZ1ZH2VNE6qre4Tx2hbNUj4+wCdtIj1VEeSSCb6qGdqE1ZjUsA3mt1R32Fh7D
+         rseQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774992963; x=1775597763;
+        d=1e100.net; s=20251104; t=1774992964; x=1775597764;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+NZ3rbLtYIC+OsfIp8yl3gPRxf4HwgIR8326w2D8YeE=;
-        b=MhMLcMPa6VQnzUyorFcLOjNJ/MbDia9WkSAD8uH0LEr5KSrsreQDDXV4yVxwMlw9a1
-         RwZPdkFUS8qEtW3Ui+hA+tP446ZLXLM/Dka59IJvnD9pGyGtSFoc98Ag2v9Ka6SCVPHB
-         5AJOY8v7FRdTfggQFe7eDtRHe2HQKpRbKa07BlSpUn4wy1PlQ/U3eUXlo8/HLgJQCxwa
-         sG/j6u1dC5AvPmZ4B0Bm/kcdeO8KeQnH6pvGidCfRSE9gJQ94vONiteptA7N1mZ+xtb7
-         XYIB5aMu1W1YbN7KHuClGNMKW+ZI9e86QE+vxcHO+Xaq/y21pFGZdjSs79arKIPJ9LVf
-         qPOQ==
-X-Gm-Message-State: AOJu0Yz7DUC8eHpdo3WhnnT0DNMsf0zBYv6TU/8+S5ndpyq36fb0cHIT
-	SxROKsIzzmaihnzWpJFayNyXq8TYvYRgx7GOv33XjtXeeY4bhjcIdJTS3s3vSw==
-X-Gm-Gg: ATEYQzzl8PzGcz1FszuZnSjRJSdDPBOjZMzadAqIcrgRhB06WRKeGez3BQIgtkuN5Ko
-	dwIqz44Lcit52zz92Z1IVUhwYqAkl3B8rGsb7mG/IAnGHTuBZKDclRUyureqPUJSTLnV5jjcMeJ
-	n2Bed1rTcuXvtHUQC9DANBOfXHZnUCosWByNYemheeEvlYUfJLLe5KHKL5L7tg74re4xyM9yrft
-	q+t51yh0FlhXWfHzf8cmaC9vSI4BDmBLOWg8xJfeUiTK28hkw3TyI7TzofnDdWBANCQ+YtobBiW
-	F0LygqUMApLdQ8F4BBTjCKfhYp0xzysP+aqrhFb3UrKFUFT8MGwBhaJbP3lx4PMAczqSSozco0v
-	KU74GwaL7O6xnrhBXCQbKj4iBzeu4TtG7jhEq03ESKVSxnHGhDJDrZ85ZNeWqk9qm0pzWCpXPYk
-	f1OJMErtoV8dhm1Q==
-X-Received: by 2002:a17:903:fa6:b0:2ae:a928:f544 with SMTP id d9443c01a7336-2b269cffde4mr6920725ad.45.1774992963138;
-        Tue, 31 Mar 2026 14:36:03 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:10::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24ae15201sm91966615ad.84.2026.03.31.14.36.02
+        bh=umNVLkKdeST432Jn7RU/5GJ63Qjob+WuV+wYnVktEIk=;
+        b=DN5RiSSeiskii65QD0zqHW6hQn9rrhmjyEv9L7duF0ezxXbzUKdzm/2hXekdypgiUE
+         y93perq5KrUm+KGebkAztPlBH/8WTNsPuuTTIjIn6RMu0gyZzqJIrILhQ4L9zOLJaVAP
+         142/eeLdPe1N4/6kkYJPFhw+niPGcgIWD0Mp5RsKtjohC5zQKMPNwY0queSjHD5dekfa
+         k7U30mktBURp0C5D9qEYzg/ypMig+ChopIM1yVm+54LLVHgVt+8O5FpqcGhE0ZGyt3n8
+         /ErRSyPn351ih6V+Q4bV1rLc+x/RfeLBWquRR33aoiGZHfws11SZ10l7mMGehbPr0zlk
+         VApA==
+X-Gm-Message-State: AOJu0Yw5S0XHRYKK9duyB3coDCF1m3ncCSCbvw7K36ef4T7NtZOozfpb
+	xy47JRpWIEcuKsXEHlaed7kXOmU8WUFIRT3I8EV1jTKIpwxtsP2NEWQyELZX5w==
+X-Gm-Gg: ATEYQzwcmNiO0ebP+VV5oBbcZX0Xu3GeFepQA0hPj9gOMcIc3FVQN5+dI32ytRy1vet
+	F7ZEcRucKDUzQtkPW5XYF0f0r/t+Fp7Tz2HhJ+cvmRtcwq/6Ni8dzfL50TlZFZvP4M49lRWt0JC
+	qjvOzJ7daw11u/6nAPDzZrewYN3oZ7bHtCjIQNvKk5jF0mXjgzRzL60VWLHmZHQp31bHlYIQ+mY
+	wsM6b7nHy4+2kg4+i9O99wzc0HCviK11eKU8Uh4AAXzeho6hWcCMWPWw9abRQC9OQTpLrWDdHEn
+	fSd99hBjGRI4ecqyyVti5sorgHpFnq3VTyFm4pbadyXO1PSfCYIJ9asGXfqY8ZWrqfGZYrHZgV7
+	qiYKg7bDC6ZHogP9orAPCZSAmGlRrILI1vKejr3LOcBN9rrmnajoI5zNsQaos5sG/e5RTtSgJnN
+	k7koJk2lh18gYdVA==
+X-Received: by 2002:a17:90b:4e88:b0:35d:a2aa:3b05 with SMTP id 98e67ed59e1d1-35dc6e7ab50mr769543a91.5.1774992964555;
+        Tue, 31 Mar 2026 14:36:04 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:40::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe937925sm3633255a91.12.2026.03.31.14.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 14:36:02 -0700 (PDT)
+        Tue, 31 Mar 2026 14:36:03 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -67,9 +67,9 @@ Cc: alexei.starovoitov@gmail.com,
 	yatsenko@meta.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 4/5] selftests/bpf: Remove TLD_READ_ONCE() in the user space header
-Date: Tue, 31 Mar 2026 14:35:54 -0700
-Message-ID: <20260331213555.1993883-5-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Improve task local data documentation and fix potential memory leak
+Date: Tue, 31 Mar 2026 14:35:55 -0700
+Message-ID: <20260331213555.1993883-6-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260331213555.1993883-1-ameryhung@gmail.com>
 References: <20260331213555.1993883-1-ameryhung@gmail.com>
@@ -81,69 +81,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-TLD_READ_ONCE() is redundant as the only reference passed to it is
-defined as _Atomic. The load is guaranteed to be atomic in C11 standard
-(6.2.6.1). Drop the macro.
+If TLD_FREE_DATA_ON_THREAD_EXIT is not enabled in a translation unit
+that calls __tld_create_key() first, another translation unit that
+enables it will not get the auto cleanup feature as pthread key is only
+created once when allocation metadata. Fix it by always try to create
+the pthread key when __tld_create_key() is called.
+
+Also improve the documentation:
+- Discourage user from using different options in different translation
+  units
+- Specify calling tld_free() before thread exit as undefined behavior
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/task_local_data.h  | 8 +++-----
- .../selftests/bpf/prog_tests/test_task_local_data.c       | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ .../bpf/prog_tests/task_local_data.h          | 25 +++++++++++++------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-index e242c455ddae..91f3486439bf 100644
+index 91f3486439bf..1e5c67c78ffb 100644
 --- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
 +++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-@@ -67,8 +67,6 @@
+@@ -22,14 +22,17 @@
+ /*
+  * OPTIONS
+  *
+- *   Define the option before including the header
++ *   Define the option before including the header. Using different options in
++ *   different translation units is strongly discouraged.
+  *
+  *   TLD_FREE_DATA_ON_THREAD_EXIT - Frees memory on thread exit automatically
+  *
+  *   Thread-specific memory for storing TLD is allocated lazily on the first call to
+  *   tld_get_data(). The thread that calls it must also call tld_free() on thread exit
+  *   to prevent memory leak. Pthread will be included if the option is defined. A pthread
+- *   key will be registered with a destructor that calls tld_free().
++ *   key will be registered with a destructor that calls tld_free(). Enabled only when
++ *   the option is defined and TLD_DEFINE_KEY/tld_create_key() is called in the same
++ *   translation unit.
+  *
+  *
+  *   TLD_DYN_DATA_SIZE - The maximum size of memory allocated for TLDs created dynamically
+@@ -47,7 +50,7 @@
+  *   TLD_NAME_LEN - The maximum length of the name of a TLD (default: 62)
+  *
+  *   Setting TLD_NAME_LEN will affect the maximum number of TLDs a process can store,
+- *   TLD_MAX_DATA_CNT.
++ *   TLD_MAX_DATA_CNT. Must be consistent with task_local_data.bpf.h.
+  *
+  *
+  *   TLD_DONT_ROUND_UP_DATA_SIZE - Don't round up memory size allocated for data if
+@@ -110,6 +113,7 @@ struct tld_meta_u * _Atomic tld_meta_p __attribute__((weak));
+ __thread struct tld_data_u *tld_data_p __attribute__((weak));
  
- #define TLD_ROUND_UP_POWER_OF_TWO(x) (1UL << (sizeof(x) * 8 - __builtin_clzl(x - 1)))
+ #ifdef TLD_FREE_DATA_ON_THREAD_EXIT
++bool _Atomic tld_pthread_key_init __attribute__((weak));
+ pthread_key_t tld_pthread_key __attribute__((weak));
  
--#define TLD_READ_ONCE(x) (*(volatile typeof(x) *)&(x))
--
- #ifndef TLD_DYN_DATA_SIZE
- #define TLD_DYN_DATA_SIZE 64
- #endif
-@@ -184,7 +182,7 @@ static int __tld_init_data_p(int map_fd)
- 	 */
- 	map_val.data = (void *)(TLD_PAGE_MASK & (intptr_t)data);
- 	data->start = (~TLD_PAGE_MASK & (intptr_t)data) + sizeof(struct tld_data_u);
--	map_val.meta = TLD_READ_ONCE(tld_meta_p);
-+	map_val.meta = tld_meta_p;
+ static void tld_free(void);
+@@ -140,9 +144,6 @@ static int __tld_init_meta_p(void)
+ 		goto out;
+ 	}
  
- 	err = bpf_map_update_elem(map_fd, &tid_fd, &map_val, 0);
- 	if (err) {
-@@ -207,7 +205,7 @@ static tld_key_t __tld_create_key(const char *name, size_t size, bool dyn_data)
+-#ifdef TLD_FREE_DATA_ON_THREAD_EXIT
+-	pthread_key_create(&tld_pthread_key, __tld_thread_exit_handler);
+-#endif
+ out:
+ 	return err;
+ }
+@@ -203,6 +204,7 @@ static int __tld_init_data_p(int map_fd)
+ static tld_key_t __tld_create_key(const char *name, size_t size, bool dyn_data)
+ {
  	int err, i, sz, off = 0;
++	bool uninit = false;
  	__u16 cnt;
  
--	if (!TLD_READ_ONCE(tld_meta_p)) {
-+	if (!tld_meta_p) {
- 		err = __tld_init_meta_p();
- 		if (err)
+ 	if (!tld_meta_p) {
+@@ -211,6 +213,14 @@ static tld_key_t __tld_create_key(const char *name, size_t size, bool dyn_data)
  			return (tld_key_t){(__s16)err};
-@@ -338,7 +336,7 @@ static inline int tld_key_err_or_zero(tld_key_t key)
- __attribute__((unused))
- static void *tld_get_data(int map_fd, tld_key_t key)
- {
--	if (!TLD_READ_ONCE(tld_meta_p))
-+	if (!tld_meta_p)
- 		return NULL;
+ 	}
  
- 	/* tld_data_p is allocated on the first invocation of tld_get_data() */
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-index 9556ad3d986f..e219ff506b56 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-@@ -26,7 +26,7 @@ TLD_DEFINE_KEY(value0_key, "value0", sizeof(int));
++#ifdef TLD_FREE_DATA_ON_THREAD_EXIT
++	if (atomic_compare_exchange_strong(&tld_pthread_key_init, &uninit, true)) {
++		err = pthread_key_create(&tld_pthread_key, __tld_thread_exit_handler);
++		if (err)
++			return (tld_key_t){(__s16)err};
++	}
++#endif
++
+ 	for (i = 0; i < (int)TLD_MAX_DATA_CNT; i++) {
+ retry:
+ 		cnt = atomic_load(&tld_meta_p->cnt);
+@@ -353,7 +363,8 @@ static void *tld_get_data(int map_fd, tld_key_t key)
+  *
+  * Users must call tld_free() on thread exit to prevent memory leak. Alternatively,
+  * define TLD_FREE_DATA_ON_THREAD_EXIT and a thread exit handler will be registered
+- * to free the memory automatically.
++ * to free the memory automatically. Calling tld_free() before thread exit is
++ * undefined behavior, which may lead to null-pointer dereference.
   */
- static void reset_tld(void)
- {
--	if (TLD_READ_ONCE(tld_meta_p)) {
-+	if (tld_meta_p) {
- 		/* Remove TLDs created by tld_create_key() */
- 		tld_meta_p->cnt = 1;
- 		tld_meta_p->size = TLD_DYN_DATA_SIZE;
+ __attribute__((unused))
+ static void tld_free(void)
 -- 
 2.52.0
 
