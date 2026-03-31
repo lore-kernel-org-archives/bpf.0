@@ -1,90 +1,114 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6918443E9C9
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 17:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86C7441048
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 17:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774979416; cv=none; b=f1CFblp4/rKuQBdMCDlxaD1Al34MYDFXMon2tltAVYu29k+0jnM2s6DeKqJTxJw/dCYDLRVHC3aRwidzcpvsjH6M2igUC84u2oM4BNFtcT5NgNrv417sEV0yf9BGFyHbMrRRN7ca6breSdKXtjcHyoXUJG6O9+4LkVy6Z9LrfJw=
+	t=1774979459; cv=none; b=nS3F4bI2BP/eFTV9BgpN1hN+6xhiFejNL6HVg58B//KMKNyQApfjvbvZYpBXdy75hX0fG3TzESSiFX6b5t8gmzp9DHQgVJ0F7tbxbgG023DYeWNOfF9ByPwVIC0M7AkfZFNiuhI4xtNpYdRMagxJRwdwWPFjSgBexLXFyx94Mw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774979416; c=relaxed/simple;
-	bh=VgUis9s6Qpjfluu+1DI7P/hWgNf6BSkMHZzWmBjouEI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=W/Dv+1CzDska99u3169T0abodUtjw/sAC4hHUOB6N3eWeCo4lxBHKn3ZtADNVTsjhS58VJsEmjeF9Hqa5BI1OQ1XGwyBeSWGgpezi0K6OnJccYKPRdeFQwNd3rxGSMgaKIqhd7mDEPu04VakiUr7eQpyLWDJwFqo90bi1PkrQdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tUS2xhE4; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1774979459; c=relaxed/simple;
+	bh=vyqjmHbzGT9/NMRea5kg7rnFU5rJExDxfDVl3Z2LR9o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uCbu0kDhkngkb68sPNPCnv7laysRGMeD1466g+c63aMGc5bAVgNxRtUC8t5jt18H9V7XNnF9sikw9NW9JUjHS6wN9x6dTVRcj2nNgkbgW5SSMbZMTIK852XEoojX2pTVCYqrptd6IvBDUjWhwHNp6Bhgf5o7sPEmyHnqzs6VB1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COENj0ty; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tUS2xhE4"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82a88a2704fso60150b3a.0
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 10:50:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COENj0ty"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c757a9251faso2336951a12.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 10:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774979415; x=1775584215; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBeMy8Rw/5TjXCLG+UKpazz3KysoPcTZt6O2J4Vg6kM=;
-        b=tUS2xhE4G6sHOzS3dSEfRi88IwOQzU558/DD3p2JsuYOjcd776/U9PVI25VTBC4fo3
-         kLiQ22ChBW3e3TMBI8j9/qoouqK5aPXkruqVz+OjvTT7MpLLSAwYLuQ2Qju+YGK5l8+5
-         67WAJmGNsmcCeG6TeXyk+z/kS/9Wl7LB1cPH1MeaOROML/9ZlQ8PnfuDY1b1tV1sMgrM
-         Low6kvgAPWNsKauJM7qqC47LD48YtE/lJ//V5RNoPhnU7ck3eecr7S0+EkCFo1NXu3oZ
-         SqzjkM7hirh1nl9SG5CzmtGdAHOKkqSwZgQxiiklw7hgt3emG17C+Yj8JXb1GfLWs9fl
-         d/2g==
+        d=gmail.com; s=20251104; t=1774979458; x=1775584258; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=v5iG3uF4phLJUqmslcwf6Mn7DKllp1JowzxrcVyo/do=;
+        b=COENj0ty7Tn7ocDY5Q6Q4h/XIJB3Zz6FJazMW5F91tKZLR2Xrb/ql/NlOaAOeEZoQK
+         pjEHzz2yS118fXOJlJhFzxem1WEpN3pljbHHuiUqv1MJakjbOlsh5Kfw/C3yfqI0Z9WB
+         pWCOyxdNvaho0WzyUNVt7WWr3DDuYqmwCvcwzfdsnWLq3aeaV4jiUgmcbDXcsF36iMUb
+         Sf9YFpiXZtOrg8j3XDVEebUo0nXExSQv+Pcf16irB2ddM4xJzQgqW42FxattbFCm9ivR
+         POPG+rFvrrn7ncrtNktPe53md+7iAfL22l19sVCuWeX8k3UYBdt4L33nsa1Z1hABJUG0
+         whlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774979415; x=1775584215;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBeMy8Rw/5TjXCLG+UKpazz3KysoPcTZt6O2J4Vg6kM=;
-        b=gXHtuRV9DTdJP91IGxcLBF8sAKUup6l2kohdsuwhYTt30KwTH6555li02Fek9+3EIV
-         FginUFIiRdtjIKLzuOoT8xClbbcjvRS49M40Jx4ltIWlt+E7ZwKsjySFX1X/fKzAEfwp
-         5MhM2QnwhsAvzMkIH/PKntMXiXqs5fEOj68Id1jhtisiR6AW3Ty7hoGHK6BYFEgqlpw8
-         qTp5QADsE8+WOBjaJmmVqEYB+yL2dtUJTRh31g85B373hja1j1WRyyQ7U2qqXJq/Cgce
-         bDEX9hjarVZjTSxfqhUlBwZ8buMtbyjcASNOdjWriIn23eRYl7wJ7yEXNoHi9x/kd1Wd
-         +4Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/JeH246P2Z3+9BXR2q7cNUJQd/SSh0AECRiowqptvoPGd3/WlwA2aRqlW0M/DOBwpbK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDzmn9lBmoE4G/DH0FI1gOaS9aiRyW9xoh7P0GAEv2tJszbuNx
-	A8W5W8P9QYNEJR7/uRs79HA24CjN2/FLS2NMsdUC7k2+yrJ7YCz5pfxJyIXa1han4UxoJXmpAta
-	YdSj6BA==
-X-Received: from pfbg26.prod.google.com ([2002:a05:6a00:ae1a:b0:829:7b74:e1a2])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2e97:b0:829:7a62:6a
- with SMTP id d2e1a72fcca58-82ceaadcfc0mr197450b3a.22.1774979414552; Tue, 31
- Mar 2026 10:50:14 -0700 (PDT)
-Date: Tue, 31 Mar 2026 10:50:13 -0700
-In-Reply-To: <20260324-vmscape-bhb-v8-4-68bb524b3ab9@linux.intel.com>
+        d=1e100.net; s=20251104; t=1774979458; x=1775584258;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v5iG3uF4phLJUqmslcwf6Mn7DKllp1JowzxrcVyo/do=;
+        b=FDw4iQp9GAjEiNEUvKD55CbSakdEIf5P5tC6M7YgcvSm4y2inw9o6H4l9mac6wb4Vo
+         juX++ZqJiM37duPw1P6HUBHNqNGwsJE+VSZVwaLRnduzB1DZLUAgEhnX0el5VfQAdtZ+
+         zRxWACHuKkfUzU78FLraUza382zf5SJxki5DyY2XmxnyO2SYZRHZP7x3mpQ5RMb4DN2P
+         u3bTnTNn/DNS1wPEKM6qhupBTJls6ImeAkV5mEKJwWC+YOSnmb7SW67SQSIDGqbsznws
+         4MXFBk0+5sxX4ceTVQFN86mquVZCUXvlGyalOTRFpr8oT7coxysETUO5vN/q4o6Tzdis
+         DW+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXqmle8w1O1Td1A1/fwJHHeReTSk0BVT/9H3bf58X4ieQaLKXAa47gJi0bI2MEWpDOeRjQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjZjql16O5y7hpdTovKRx36xsHLUz5zULIeoRNSsUcEBOnx5J0
+	2UNx97mPJGFulcHTw0huJJVDQ2rrcwIGG/GZm2OjwsYkRlZqv2NxN6p3
+X-Gm-Gg: ATEYQzyXgcTsdUXdu737+hkCeg6nu1O93f4CZG2oncTvN8qitEHAkBjP4yjRFs5qBA8
+	FdI2HdeE5Zvdvwgz3mx0nMzJAo2DiJySyBdQKdZqktlpSAMwfd5dhyYPCbd8uyIZqRYGHpgNZ9r
+	eEQeQl8gEqcnZG1gInjzytRoy2I377dwSydhSyF9YbGkDM3HJZWeYWH4BU4G9IfmjMxd1k//Ci+
+	ITlgEvG5aTKtfvmu5+PKZZRn5WF4glRSQQ/MsQkumTpPf3TZ7WebsgiFlp4h99/43m7IIOtT7xZ
+	M7M7mlKsfU7s+1M8rttGkiXfklOO02Cs4jWIvTwJOEx1Sw+QNsekihh2voGce919+DMQeKaaC6Y
+	FOwoZepIu9DG1Ba+zG5Qm5iTATmxtmwPyHIy3cDBkQwTQ/cKfbe1fl1KBsl9KGeXFtQ2sY29rhG
+	QawmxVa9eK39Fsthj/635bntRH3jwuTlXfEUXJtAH4Erech0q2QzPs
+X-Received: by 2002:a05:6a20:244c:b0:398:c2d8:153 with SMTP id adf61e73a8af0-39ef777bf0bmr158611637.56.1774979457855;
+        Tue, 31 Mar 2026 10:50:57 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76917db770sm9256192a12.32.2026.03.31.10.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 10:50:57 -0700 (PDT)
+Message-ID: <9594e5fdeaae8f81edd3b73ff7e263c535d74c7c.camel@gmail.com>
+Subject: Re: [PATCH] bpf: reject direct access to nullable PTR_TO_BUF
+ pointers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Qi Tang <tpluszz77@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>,  John Fastabend <john.fastabend@gmail.com>, Song
+ Liu <song@kernel.org>, bpf@vger.kernel.org
+Date: Tue, 31 Mar 2026 10:50:54 -0700
+In-Reply-To: <20260331172720.29938-1-tpluszz77@gmail.com>
+References: <20260331172720.29938-1-tpluszz77@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com> <20260324-vmscape-bhb-v8-4-68bb524b3ab9@linux.intel.com>
-Message-ID: <acwJVUeW9KoLft4d@google.com>
-Subject: Re: [PATCH v8 04/10] x86/vmscape: Rename x86_ibpb_exit_to_user to x86_predictor_flush_exit_to_user
-From: Sean Christopherson <seanjc@google.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	David Laight <david.laight.linux@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 
-On Tue, Mar 24, 2026, Pawan Gupta wrote:
-> With the upcoming changes x86_ibpb_exit_to_user will also be used when BHB
-> clearing sequence is used. Rename it cover both the cases.
-> 
-> No functional change.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+On Wed, 2026-04-01 at 01:27 +0800, Qi Tang wrote:
+> check_mem_access() matches PTR_TO_BUF via base_type() which strips
+> PTR_MAYBE_NULL, allowing direct dereference without a null check.
+>=20
+> Map iterator ctx->key and ctx->value are PTR_TO_BUF | PTR_MAYBE_NULL.
+> On stop callbacks these are NULL, causing a kernel NULL dereference.
+>=20
+> Add a type_may_be_null() guard to the PTR_TO_BUF branch, matching the
+> existing PTR_TO_BTF_ID pattern.
+>=20
+>   BUG: kernel NULL pointer dereference, address: 0000000000000000
+>   Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+>   RIP: 0010:bpf_prog_5f0e2be830ac3243_null_deref_iter+0x10/0x25
+>   Call Trace:
+>    bpf_iter_run_prog+0x1c2/0x2e0
+>    __bpf_hash_map_seq_show+0x120/0x180
+>    bpf_seq_read+0x29c/0x530
+>    vfs_read+0x179/0x930
+>    ksys_read+0xef/0x1c0
+>    do_syscall_64+0xe0/0x1290
+>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>   Kernel panic - not syncing: Fatal exception
+>=20
+> Fixes: 20b2aff4bc15 ("bpf: Introduce MEM_RDONLY flag")
+> Signed-off-by: Qi Tang <tpluszz77@gmail.com>
 > ---
 
-Acked-by: Sean Christopherson <seanjc@google.com>
+Hi Qi Tang,
+
+Could you please add a selftest for this change?
+
+[...]
