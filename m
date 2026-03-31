@@ -1,154 +1,234 @@
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FDA364949
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 01:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6955419D074
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 01:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774921511; cv=pass; b=gMcnv1dKGP+Hcq55RhrqL6y2shQxbqSWpziMzcx6/qtO5hzEMqshENR/D7AFLdv9cgbyZq5n6qtbpOPBvq5V1dAP8in/HGEhCXUcYAC24BUQ42ab2wMyz40RvoKBSw6q7gRl0o8q4Y7WXR3kGUF1accMu+KSBWmkWaUfkmT6IkA=
+	t=1774921679; cv=pass; b=UYoI5GRhwBTdZlzOcTSfMp+6u0CPJRlnOzgibzBUfczHDJtBUzDc4TDRbX6nzoGfVGLB/0LJxyqMBngg7eP2IlzUOKPva/dIgfskN+Jv5gLWMht1NKgF39hF2efMrDOSyXJEKs+5wM+KdrVpUhfNkXZbYaspBrmiQkyGSTiqmgI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774921511; c=relaxed/simple;
-	bh=Fd6QAcJI16f3MqUm0f9PMci/8jTCJThqTHKrceWrBx0=;
+	s=arc-20240116; t=1774921679; c=relaxed/simple;
+	bh=uOwufVDMxYCsZYUk9KcPLNbgRBhNOcycbb+P2ZuFK40=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vD2E/d1fCBqstTxDGJLb2dwc7FFX5Q5GU0n5Kxb5FPbwUI41VhXlKLoAbPyRjVVKg0iceqQPdlz1ukTYx1fY7OBWUc+ynVYi8oqnyCJ56j/ZXQn8nRfzOqbdyis3TOJAzs8MBocQX/470YRw7tuCAkwr2en0Jh/AJak2cwWpS5M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jcE0HBLK; arc=pass smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=tY0eeRZTO06vzpMbkmI6n3p9VdMxJt8AEMOhpzKckTW1RGC4g8VwwOTud+zxr61CCmTGqyd5BqNWTBNGmMY0EUdGQYxS3wZnFykVsnHtwvdWch6xSDsH7d8ePxGRxbc6hUKxmclvA+ag7aAc0J5UGvwR6d8l91uVOXuXLIziH0o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=a4bQtYA/; arc=pass smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jcE0HBLK"
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-67c20ed3076so2755349eaf.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:45:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774921509; cv=none;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="a4bQtYA/"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5a133b686f7so5973402e87.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:47:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774921677; cv=none;
         d=google.com; s=arc-20240605;
-        b=Vf2xN2YoZQKW9HrnQVUfXjzzZXKSVsw9kT3tVmRjdhLoNm4mmMOQIVyswurAqUFLNi
-         ysonHMOMFHbElH/mXknDzylbjxvFOEyMkF3Q9eym3CSklDzOKVBT6tW3/uoPwcRgjlIj
-         TnCoZFUkAZhtOyl/9XVCLXLZ5N2miYI8n04JNu3YUff+dwsVSVq7y23Wu814+LRRyrER
-         zmd1vMuIyp3HO4T8OrK5ljRZMaXpvpvfWNq0DF+uxcWEj7olK5d69aQXCWcNspZuIn/S
-         DKFyUmCzg0k5iHxE+/qn+4KcqYyex0iHn2t67/MvHelqfBmZplOvGH+GkwwgfaGZnat6
-         nKdQ==
+        b=YaB+ncy+0EDmJA2wx4DSMmaB8dNruzY6A0z5pcdRgQ/Vjk+cPU4Akwz4Iccdt3QU1q
+         5T0lbgXR6jre8HvTGxxw2Eb3gCGqAJrg0QISsVMIMX9myFlhbYc/+Q/N3rj6IG5aO+ee
+         P240XCzSQWwVNeo8QQHJy/Cm093NHvcibL8/H0vj/boCYCX/IXT3Yb5Xtgn4Nb63cKzf
+         Y455J7+wVbIbaUY7H/RffBi6U6jjvAMboDrW+gwtcB1G2OM0mb5+B2+pVz8ZEkdh+CE9
+         KS7THaExDr7XIwB+6knVBOeADUthSc6RSgv/SGPSXC9kLn0IRUbitfMpHHeqTHpz9LwC
+         ZJyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=65uWDB0Qv6BzU+J5GLRhSZeSW/d9SMCtWTbJ9K48rfo=;
-        fh=A807bsOnFkkDFqqTT3UVbKAfJmnuI/X17ik43FN4iog=;
-        b=J+xXOn2zUIA3tPx65bPojRbfUJrcEhiQzonJ1DlnL27UDtAhji9SQvHtV1edzaiiMC
-         L64wEg1qkvbJLZaf1E9t5NsVWD3zlrqCkydSLVKFUwtB7om3IhjNBzfLNys5/YZGU2GG
-         /5Sr8Rhyv1tTC4ZEfDn5tIlBeWnLfQWtNgLU5pTApgmJlphb+AHOFBoyk4IO8IPeKgzx
-         rjyhydsSnkw/NXFNHhczkR9Wfg8ooXqL6SNf+Ir8sm+jx+OYT6+EomRe35u2/gWBGt63
-         yj20Hr7TCgE2Ag+HniCpdg7iPiOAWSJc7YdjDd3OWz8neBliTgz9QVvGKhLp2OAF77Bh
-         a/mA==;
+        bh=21ttnbUgN39YeO+81bfZoJgf8ewTVFP1OWSVQFAPReE=;
+        fh=Jv6LPkFCwewIfdV+duzJSG1bLq6ywnOshIwf61r9ypA=;
+        b=kWthECT4PZtyfPkc8isZfVY9RUgn/h5z75kZfVjtm7ZPHqb4/mM9+3s8L9HFpK8rv3
+         hWeRUsiWUqWYxAHSFkE5CiNNitStff+dsIQ56cP/rLmaZGKHE92Kl/rNpGa9TqkfY/k8
+         aorwLvA+ynYUUpKL1nocghC+i9mgsRq4zDWk1BEAdZJ/KpFFjoY5T1WuvunTrkg/fLJ8
+         WetAd9XVg5/lvGQNMBzJxQQ+yq7z5QVFPZWwYle+k+S159zu0m4AhBgZv23tyBFxn6Ro
+         Mi91OKqPx3N7Xa4hjPoz8Xk1IX5oEuCPWq5VurZEstlxEQjwB94Q5gKUsuBrJDkuLbHX
+         TNQQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774921509; x=1775526309; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1774921676; x=1775526476; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=65uWDB0Qv6BzU+J5GLRhSZeSW/d9SMCtWTbJ9K48rfo=;
-        b=jcE0HBLK4MaIisG+4dNnZ+0hmn1BLlRA0tM/9bYf7lNTOiWaiLr/sh1k767qfzqhmN
-         6X8Z/KDHIo3Ysyoj6TZk6nIsdQKD5HB1xhWbNAmfqx4rVCZW9Qhwqyk0Oy+4BY9D/f8W
-         4K7d7NC+cFHyfvZk/ACCK6XE7NuXyjRWg4FtWS3l6U2rp3x8BtAoplAPgtKpWIw0h678
-         Psedbiy+85C/Q3Qfz6BPwmemyX7DV3xoIQJ1CggsiebNzqwE+4sKJGV/jx068FyXlUYd
-         6hpHWOR1GkFuuXzPfULLVEFlo8lvXIVLeIuCwY+2ej/gRjWlDUrww7TdEtb7fQWYe1pS
-         Mcfw==
+        bh=21ttnbUgN39YeO+81bfZoJgf8ewTVFP1OWSVQFAPReE=;
+        b=a4bQtYA/XsOYuxaYoj6CLEmGO5LycdosIJV24HlqhJVsaWMdxL+ls2mXFl2ob+QtaH
+         gpcLWzC5Ed2fsrufoXbJIigz4W38EB2SxVzH0j4VmPtJ0NGwmQEeLEQ3H8JUmUG/2FUu
+         XixHyeLVajISsGIKMsDNpEN2j90l+XYIdJmR6jLxE0o4aRZM39oie5UZ+2MDeruANwCx
+         eyR3XLkseQX2IUWWccaCBfTyQKQBBbUD+58Z6G+cp2NH6wVVRhW7FNAdi8Iz2JUu7dpk
+         DxRErX91lbK48BQL663dThxOCQdGA8lwJjasXuFBKDoLbcYXt1leAR/Vn8xcnTgoqbwq
+         hR1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774921509; x=1775526309;
+        d=1e100.net; s=20251104; t=1774921676; x=1775526476;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=65uWDB0Qv6BzU+J5GLRhSZeSW/d9SMCtWTbJ9K48rfo=;
-        b=buK8fJ4NWiWkiMnYcf2gicT2/2pPQK6VulLqBGnlnpY0UFfcXfmsTo9UD/BY8408l0
-         RB2ZInu9vu+mgcZueQLFS/OQTB5Wfl26ov2SFXGbq2vv3yTnU4KDN1Hb0HJvDXsiCTTr
-         mrgNJXeDJyCWPmyHrHbT57p1x6Whj+g/p1r1O4XkREhiE+x7Y+lUnInZK+n8jry667Fh
-         e13OYlgpVaYiB7paDpq+IsqAkrIayFpFOh5YWMMAlHR+SpKFOcayrAeUfiSMVSLGhcew
-         SvN5R41HnrhQB591DT4yy9CXpvHAfXRw26utlgXKGawZ3+jwA9xArf76lsDkEebUBQmZ
-         LJMA==
-X-Forwarded-Encrypted: i=1; AJvYcCVaz99xvghBuhrjAXvEJU9MZY54HY844/hG5VyfdZoazXElF3/qnYXr2LnJvACiySYm98o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqyAEvZCPMQb7RtvviarxacpZzdiwBDyu4WE43h3lV/wGKzbeh
-	yvmeh2ZY3Xx9tLNvHsKoGohk7mUeBONbMZwQSJQ7pt4z+dKcItCL3F6S7crGcbu9J8EeUsNztXY
-	0euoHqdRtpaCCVLHbv9W70Ds+0Z+PHEk4xXQUqFvx9gkKClK1KQjyIWCP
-X-Gm-Gg: ATEYQzxPZLMx4BydHgxLAIRsqeN8Sm5YFYI7Ihel0LX8jXpBJZpm3N/DquckTHxgjKY
-	pauCiM9MeiTv37rxm3pgxE00sk03pkv2o1MqVEqnamCFnHDZYU9DxbGmmycZIwbaaGC7bZd61kz
-	jcrrdMatDtNi49X8Ue/z7/EPRQ4w9m9YiIJdMJzS31yKkFgoIZrCqQzzP6YwU/V7uuNNPI16U3A
-	n6677B52Pd03MI0ybcHNF/6I8zfSCQ3furQETObEblZRxKHQC5PwBqVDRnzgjFtWU1PdXGHRIsI
-	PQwnFLs3m9efgl9HHAqyL4mxMGsDUra2voVE1qwyoOjZLG8F52atGebwMGdlRrCKnr0TFovy
-X-Received: by 2002:a05:7022:220a:b0:12a:6c4b:9cf0 with SMTP id
- a92af1059eb24-12ab284bbddmr7115803c88.3.1774920966145; Mon, 30 Mar 2026
- 18:36:06 -0700 (PDT)
+        bh=21ttnbUgN39YeO+81bfZoJgf8ewTVFP1OWSVQFAPReE=;
+        b=oYTproo12fRYEBUPcXoYK8XCNyMS93Ykz3QSDgnyxXuseJLopQKYv8A3xMyG4ddh1H
+         MDQJ5beDwUpJOUoLUCNSc7K/hES6W0X0mGGCyYTSTmQW3I0rqJ/fdhB0gmO2iRsjSf6B
+         Pmf/sq4MWmPhZ62k6gRHN3QhaMrqLXOMPhFLyMsW1UXxk0/aZnd6oDqS1TdRIIsYQnlZ
+         QeyYWbcK9fgJMwSu80XOi//w9jllLb1Rsqbty3Fo1QWKZudchvF4ibZYRLK9hg1j7nyG
+         D5nRWBIQWhqDW48XTiTAlun9WA+Fltz1xz4Sy1lMtlkG3OkVg/ViX3mXaGBJrbyeLbyl
+         cWbQ==
+X-Gm-Message-State: AOJu0Yxyr8W3ELZwJeWwZd3RtVL46wDWtFrJ52Cb+k+Lhcn0uglMqfgD
+	KRHDPxsZLBnxD2wSM90ImBvtlLl7ECbezb9EnY3B/OGOvF3XMsqVKXOe7fGogCDGGiB8a70QasB
+	LPaI8CeENPpbxLSDST/J3fYa2RNdvUKxlP0q0DWxRsQ==
+X-Gm-Gg: ATEYQzyzkFlobTjEK3Ry4QEQ7saGOy5hyTOtk4zi550jR8tZdcsgacLVRiKhwk6mSNA
+	KCzeLo1uwvtiec4R650IocP+dRGQfs3o7v0eMV3TBtx5+JkRY7bdmfGhqR1FNaIAPMQZv/0nRkD
+	ZwJOFbZst0Wu34vjYodDu7yIfRq24NRldkKf9ACtbc/yM/4/kqj0sjnjbSmoMKYpEJnHhz5uvAp
+	YSb6THoBJMTYF9DD/bp/irOjtu026htH6z8ZF5Txcz3Y5YjQFS2jq1aBqAn9NXqyN3z6CqjdXbt
+	lhaHCDb5d5ZxvOzOqxm8nhMmJEB40QxoLXjh2IRq7w==
+X-Received: by 2002:a05:6512:1108:b0:5a1:1e44:8682 with SMTP id
+ 2adb3069b0e04-5a2ab9294a9mr4352365e87.34.1774921676487; Mon, 30 Mar 2026
+ 18:47:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330080746.319680-2-jiayuan.chen@linux.dev>
- <6ee24770a2b014219d86839b2243e1b7bad4dc4f520457269d5e8ca2b21c2cb8@mail.kernel.org>
- <d1a739d2-c4ea-4fae-aeaf-f49e75dac0f3@linux.dev>
-In-Reply-To: <d1a739d2-c4ea-4fae-aeaf-f49e75dac0f3@linux.dev>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 30 Mar 2026 18:35:55 -0700
-X-Gm-Features: AQROBzAoWaoGMz8lgwUE4cc5pzeu3Q6dad4Ef9SHjpneA1fRPQ9yGPYn9pz2kSE
-Message-ID: <CAAVpQUD1n7L6LkP32H_Ct71RLNpJ2RQWFc8w08+c8h=U_tDjpQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, clm@meta.com, 
-	martin.lau@linux.dev, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	sdf@fomichev.me, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, 
-	haoluo@google.com, jolsa@kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, martin.lau@kernel.org, 
-	ihor.solodrai@linux.dev
+References: <20260329124429.689912-1-hoyeon.lee@suse.com> <20260329124429.689912-2-hoyeon.lee@suse.com>
+ <acpLiCDwAtn8xLjs@krava>
+In-Reply-To: <acpLiCDwAtn8xLjs@krava>
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+Date: Tue, 31 Mar 2026 10:47:40 +0900
+X-Gm-Features: AQROBzAeGQUXighGkOirYDW9eQNKDx11DdyYoeCc-y1CtUFPhi-4ktpsLwrcXa8
+Message-ID: <CAK7-dKabFLTs1tTeynHMnp8MzM_cg6QMH6Lg6oj_7e9_bhNsRA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] libbpf: allow address-based single kprobe attach
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	Feng Yang <yangfeng@kylinos.cn>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 30, 2026 at 2:26=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
+On Mon, Mar 30, 2026 at 7:08=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
 >
->
-> On 3/30/26 5:00 PM, bot+bpf-ci@kernel.org wrote:
-> >> #if IS_BUILTIN(CONFIG_IPV6)
-> >>      case htons(ETH_P_IPV6):
-> >> +            if (ipv6_hdr(skb)->nexthdr !=3D IPPROTO_TCP)
-> >> +                    return -EINVAL;
-> >> +
-> >>              ops =3D &tcp6_request_sock_ops;
-> > For IPv6, ipv6_hdr(skb)->nexthdr gives the type of the header
-> > immediately following the base IPv6 header. If extension headers
-> > are present (hop-by-hop options, routing, etc.), nexthdr would be
-> > the extension header type rather than IPPROTO_TCP, even when the
-> > packet is a valid TCP segment.
+> On Sun, Mar 29, 2026 at 09:43:38PM +0900, Hoyeon Lee wrote:
+> > bpf_program__attach_kprobe_opts() currently attaches a single kprobe on=
+ly
+> > by func_name, with an optional offset. This covers only the symbol-
+> > based form, not the raw-address form that the kernel already supports
+> > for both kprobe PMU events and legacy tracefs/debugfs kprobes. Callers
+> > that already have a target IP still have to drop down to
+> > perf_event_open() or direct tracefs writes.
 > >
-> > Would it be worth using ipv6_find_hdr() here, similar to
-> > bpf_update_srh_state() in the same file, to walk past any extension
-> > headers? The IPv4 check above is fine since ip_hdr(skb)->protocol
-> > always identifies the transport protocol directly.
-> >
-> > In practice this is very unlikely to matter since TCP SYN packets
-> > with IPv6 extension headers are essentially non-existent, but the
-> > check as written would reject them.
-> >
-> >
-> > ---
-> > AI reviewed your patch. Please fix the bug or email reply why it's not =
-a bug.
-> > See:https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READ=
-ME.md
-> >
-> > CI run summary:https://github.com/kernel-patches/bpf/actions/runs/23735=
-111188
+> > libbpf already exposes address-based attach for kprobe_multi through
+> > bpf_kprobe_multi_opts.addrs. This commit adds bpf_kprobe_opts.addr so
+> > that single kprobes can be attached either by func_name + offset or by
+> > raw address.
 >
+> curious, is this change just for the api to be complete or you do have
+> a usecase where you can't use kprobe_multi and need to attach kprobe
+> by address?
 >
-> Thanks for the analysis.
->
-> There are many places in the kernel that check nexthdr directly without
-> walking extension headers.
->
-> I'd prefer to keep it simple for now and leave ipv6_find_hdr() as a
-> potential future improvement if needed.
 
-+1.
+The main motivation was to fill the single-kprobe API gap, not to
+replace kprobe_multi. There is also a case where kprobe_multi is not a
+drop-in replacement. bpf_task_fd_query() operates on perf event fds and
+does not support generic link fds, while kprobe_multi returns a link fd.
+That link fd can be queried through bpf_link_get_info_by_fd(), but it
+still cannot be used as a drop-in replacement here.
 
-Given this feature is to create a reqsk to process on this running
-host, it does not make sense to support such ext options.
+For PMU-based non-legacy attach, Andrii is right that func_name =3D NULL
+with opts.offset =3D <raw-address> already works today. However, this does
+not work for legacy tracefs/debugfs kprobes, because the tracefs event
+string formatting still expects symbol-based input.
+
+So I think the better direction for v3 is to avoid adding a new field to
+bpf_kprobe_opts(), document that offset is treated as an absolute
+address when func_name =3D NULL, and make the legacy path support the
+same raw-address form as well.
+
+> SNIP
+>
+> >  static void gen_probe_legacy_event_name(char *buf, size_t buf_sz,
+> > -                                     const char *name, size_t offset)
+> > +                                     const char *name,
+> > +                                     uint64_t offset_or_addr)
+> >  {
+> >       static int index =3D 0;
+> >       int i;
+> >
+> > -     snprintf(buf, buf_sz, "libbpf_%u_%d_%s_0x%zx", getpid(),
+> > -              __sync_fetch_and_add(&index, 1), name, offset);
+> > +     snprintf(buf, buf_sz, "libbpf_%u_%d_%s_0x%" PRIx64, getpid(),
+> > +              __sync_fetch_and_add(&index, 1), name ?: "addr",
+> > +              offset_or_addr);
+> >
+> >       /* sanitize name in the probe name */
+> >       for (i =3D 0; buf[i]; i++) {
+> > @@ -11648,13 +11651,28 @@ static void gen_probe_legacy_event_name(char =
+*buf, size_t buf_sz,
+> >       }
+> >  }
+> >
+> > +static void gen_kprobe_target(char *buf, size_t buf_sz, const char *na=
+me,
+> > +                           uint64_t offset_or_addr)
+> > +{
+> > +     if (name)
+> > +             snprintf(buf, buf_sz, "%s+0x%" PRIx64, name, offset_or_ad=
+dr);
+> > +     else
+> > +             snprintf(buf, buf_sz, "0x%" PRIx64, offset_or_addr);
+> > +}
+> > +
+> >  static int add_kprobe_event_legacy(const char *probe_name, bool retpro=
+be,
+> > -                                const char *kfunc_name, size_t offset)
+> > +                                const char *kfunc_name,
+> > +                                uint64_t offset_or_addr)
+> >  {
+> > -     return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s+0x%zx=
+",
+> > +     char probe_target[128];
+> > +
+> > +     gen_kprobe_target(probe_target, sizeof(probe_target), kfunc_name,
+> > +                       offset_or_addr);
+> > +
+>
+> it seems like it'd be easier to get probe_target (via gen_kprobe_target)
+> in bpf_program__attach_kprobe_opts and pass it down instead of generating
+> it over and over again
+>
+
+Good point. I'll simplify this in v3 and build probe_target once in
+bpf_program__attach_kprobe_opts(), then pass it down.
+
+> > +     return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s",
+> >                             retprobe ? 'r' : 'p',
+> >                             retprobe ? "kretprobes" : "kprobes",
+> > -                           probe_name, kfunc_name, offset);
+> > +                           probe_name, probe_target);
+> >  }
+> >
+> >  static int remove_kprobe_event_legacy(const char *probe_name, bool ret=
+probe)
+> > @@ -11674,25 +11692,29 @@ static int determine_kprobe_perf_type_legacy(=
+const char *probe_name, bool retpro
+> >  }
+> >
+> >  static int perf_event_kprobe_open_legacy(const char *probe_name, bool =
+retprobe,
+> > -                                      const char *kfunc_name, size_t o=
+ffset, int pid)
+> > +                                      const char *kfunc_name,
+> > +                                      uint64_t offset_or_addr, int pid=
+)
+> >  {
+> >       const size_t attr_sz =3D sizeof(struct perf_event_attr);
+> >       struct perf_event_attr attr;
+> >       int type, pfd, err;
+> > +     char probe_target[128];
+>
+> we need bigger buffer as explained by sashiko [1]
+>
+
+Thanks for the pointer! I'll switch this to a larger buffer in v3.
+
+
+> [1] https://sashiko.dev/#/patchset/20260329124429.689912-1-hoyeon.lee%40s=
+use.com
+>
+> jirka
+>
+> SNIP
