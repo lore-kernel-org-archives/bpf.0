@@ -1,62 +1,62 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D3D44B67E
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1573F787B
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774992961; cv=none; b=X2P/yg6O/IhvLK6/JvHsvCOBtH0b00TydLI6M+Qdq16FvUKP37yaPz03MzWmlGNQyn5hEA4YrHiWuComM5AlbBARP+Hbv0+Bh+uwV0k0FRBHaE3ST3rxHtzG+tPfpDe2YEojPl4RbTLttKFrvNhUT8LVWGD84oc4E1k/UvojUgc=
+	t=1774992962; cv=none; b=mp5qemjc3sTFW9JTS02kw/Ubf0fphlzAO5Mi44g3Twco3wc2HaWyH+5/yHg3HYbmt8pLlv1gUIoXPoPaSGA8fWkvF4AWtACgKvN3rJV8FGpe+HVrB+iHOIsrYVNxHAzN4DF9SdU/wlJN+rbSno9z0aM5tjFGHi9L5BaBNDkqSBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774992961; c=relaxed/simple;
-	bh=kPGcHcs0fqywSVt59i/2lh6t66WzWodKo0oSAhlIuY0=;
+	s=arc-20240116; t=1774992962; c=relaxed/simple;
+	bh=N0z+iOgnUpZcR0PR9xBIKBcM60dzWmlW1AX1IsrHgr0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eSk0rRGDIIJpcF6PWM0SkpODIqPHh3vJhUS3gCUqO1WLMeA+DnQvxwd3HNRLlsefqvdDc9oMqt6MrEHChOKXyZqioUS00QNlq+9zTmbM2M/To5Jdcivko+B1gZ7mema0mEffs+Gyks9gYIUUd4HblaA+xesX2EgkuYM1pcGBv0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d9tDVFD2; arc=none smtp.client-ip=209.85.214.179
+	 MIME-Version; b=FdNHwuMKkKlHGysenbKVI4yx//1drVGkSyqG2MAu0AO4IGd3L7QIPMjvB7k6W1C98f0eNgZ61vtHLfGFMSew7N1zM8nfVtHJEwAmS+Hi/LOZLnEVDS9EA1ALD2idP51jzJQqRMgeLmJQ/B8IVz6jkly2p1OlCyE0PH7jWDjGQ3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qNTRVQAx; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d9tDVFD2"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ab077e3f32so26220055ad.3
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:35:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qNTRVQAx"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35d99031e4eso2222185a91.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774992959; x=1775597759; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774992960; x=1775597760; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zt5cPR74jSvXwDYFVJuLyAp5aI0ADQDmLH6axOJXgDM=;
-        b=d9tDVFD2+p413wPlCimTqjay9A744HPC8Z0CWsIWUerZS/nWw2hFCMOrUiYShdAn3G
-         6w1LLmdNIGUzUel+gR64BnW5ooDlsUXkgP6jzMaIBidJYggWkxOyjhpotmC9Ih1Q470C
-         OYqAXISGmXR3YteoP7dq/sXdCj4qxaMVw6X5vrZeL9irZg/JZ7Ohz8pKnvHD27fz73KD
-         FEi79x/xzkICYC1GW3tiKoAE/Wdaizsej0KOrhpvOdmxX8OG1O+nh6cqXGeAbBD1qVIo
-         jiykzOUHoeFn0pdUcOlZ25OqgjX/q9KbbEVPEn6atrjTCvWeuz+8c/qii/Z9eNUeBKLS
-         SOeg==
+        bh=zVXUr8D+l0ObA6lwaJJ/rqnWu9Wd+yhlgQ59VMrWnqg=;
+        b=qNTRVQAxLwm7OQ0zRxil/nkqBKG9FSqzF+8e5qaVdE/d5dJeQedVBKDX1pT84HGIKs
+         5zGv2COibogEze98bJlqFQkicOISipMwbHlORw5XyoTZ12owcigAeFAgVTe2S8b0Cigo
+         8a0BwlZpGOk4YM61HQzAQlrmOKIecdsON3+mKXY7c3SE6MTTIYs0KTOoQZfFeXnAUY91
+         LAmVxhUoafhYoqbKP/J1cVejQuaShkBy8UIHCDLGMVjIW4huDV2ElcVjDn1vibzc73cZ
+         FgW30JYK+VELpGE06VeDmBdwUv3ZrdG9vfDGjpTec/fZcKOwqPktZG0TkkmiwkkEajLt
+         EMmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774992959; x=1775597759;
+        d=1e100.net; s=20251104; t=1774992960; x=1775597760;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Zt5cPR74jSvXwDYFVJuLyAp5aI0ADQDmLH6axOJXgDM=;
-        b=UZI/vBmi4UqfhNHFOIibliCf780tylJTCtVj9ZCVx0WZgaYNmUICIaywcMhESSS18w
-         Jc2Hy9nqBsm68maY/t1FHnzmAM94T4kA7MLzZ0I8mQXxjT3Gg/mcvY1VP2vXmykwFU+f
-         i9Zhf1WvMLcDzBrC9kTd2aqfLwLxB3ZyfCVLs4dWPmygOEycgAzfurbGiepUC4288Mrg
-         ZmUWD3UAszRycI+BYPSrMh4tjKWEj+wZ+3rFy2flcQyeZXan/5C2UxZRLGbg1fMn+yp3
-         7SOHit0Mzc7kxqehx3TL3KBTJEv2KE9QesALydDeRlAb6jBs/YNOMXqYbbWePQKDgvS3
-         LkRw==
-X-Gm-Message-State: AOJu0YwGC8rPUSDzleESPgrXOC4dhPSzKmf+v8D+mLn/2+n2MBFYf6T5
-	33wmAdWY5PZ5JElGMX9Z1Ohr4ClirDrICmxCjcb9xgj9VstBuEv2SRT1mf0jRg==
-X-Gm-Gg: ATEYQzwqh4e7FnIFqzkPc6zfZnIyZmkKfGaJbjoRF2Qx3j76ygZCmM2mdRN1Leanr2w
-	TzYBxgNDNDVOrLW6D7jGSWa+Uwe3Cj8NeMOf9b4wWxHU6G8dAJcJkJIipwKIZ6zKSIEjIMbkodd
-	xgpIKzwkTLNCrF/7iTrEFbkyYsaBSTui2Q8+41mHGmM48RbYeVM3PapFwjEU57VAzLYeUoIeJaH
-	zr2UoPMg/dREVt/WHVM5qyFMHnI+u2VNwPNs93ncwvgD3gjM1H9JaeQ1oasg8VRM79iqO3ntNFI
-	hXF1YgzE1JgxpxcIdkViMp706NUOJPeeruMkniB5u9/FEqYR0Y0j8ZDo8XBAXLiRSBvTqed5XQd
-	WvcfdLG2Fa2WgdKMfvHuMcnSpg1zq59w0kfPm07k946sgzOnCO/R71sFJLtF8cDc2xc88TC4qSU
-	4/BnIvx3dfCyKcnQ==
-X-Received: by 2002:a17:903:4b0c:b0:2b2:5091:1c1c with SMTP id d9443c01a7336-2b269b06116mr6726605ad.18.1774992958969;
-        Tue, 31 Mar 2026 14:35:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:56::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24ae15201sm91965475ad.84.2026.03.31.14.35.57
+        bh=zVXUr8D+l0ObA6lwaJJ/rqnWu9Wd+yhlgQ59VMrWnqg=;
+        b=BR7VfZ8qveiBZgisJUbXbNP8zEp+S55J6dDze1j7pHLN90NYrrCDZVFsi1SPnyhogQ
+         O1VWpc8Sag0eLGdrFzSQkOCLt1IlD1JAv0FISMPMXu8uc1WAU73g6upYm9S0nA0GFJBi
+         aBr2v38aSAqqwI11px66E81dQWMVPpRcM6eW5DVsCtGYCq6XWrZLL+QJFhFFkCLRRys2
+         ptEGdOVx09dlGeK+pfn3YFIrpr/q+2ZmwmidM8++WT2Wobe0UadkfjsZJ8ERdyZVgjED
+         9hTrFjoeqAiYHAOEMDsJtuuBHd7SAG8ZD/4P+JdVmxvjiY5HtMNRgvo1/RF42jjNQTti
+         oZMg==
+X-Gm-Message-State: AOJu0Yyp3wU9zPOtMWj4vKYyQTeX/1J7ZO3kqA091NhKY94G2X33O1QC
+	1H420jKzotgufElFzFf6amDWr4q68HeorgSV8c5dSFGz6mdXLBzLbyZEzKrB4A==
+X-Gm-Gg: ATEYQzzJT2B5urpT1wSNQ/2mfW+TSRDPZq3+D638NGb7942W1BZ8ExVx3JrzmzqDFBs
+	Wf3ePYhlc8zHklFk9/FYGg6du2lDEWPVCLW1Z4dOAb7HypUa7wlYRhusoSPAkW9mjUFbXwtYIHA
+	KpVdtO+wwKnnozQfD3xF/oLcG0yoy/dZwiVal1sLnAYxE11hs6vLD297TauIvv7gSVdR34qXtPz
+	UaKYJ+fqWRTriKAeQNxy7ZDe7p0eG8PuFCzAYREdb8FkUlH0kJwmGo1eX98mM5Hf5SgTG4pAHAw
+	UebqXuK8UAD1IWfvI+vUfLGkPrUzaAecwH7irMs9QEPb7YArgs6r9dRj7yrjPg8y9UVfYlW1ZJq
+	3H+wxcibwfak6qkNPAJAVvR7MRjxnIBN3s8i0M7NalH4IX/NdNPecvqJXO1pbIB0ZlGwTvADFBo
+	IO+nNZCmwH1EeKOQ==
+X-Received: by 2002:a17:903:40cf:b0:2b0:68d1:2537 with SMTP id d9443c01a7336-2b269cf051fmr6937325ad.42.1774992960316;
+        Tue, 31 Mar 2026 14:36:00 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:57::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242765d49sm152410715ad.54.2026.03.31.14.35.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 14:35:58 -0700 (PDT)
+        Tue, 31 Mar 2026 14:35:59 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -67,9 +67,9 @@ Cc: alexei.starovoitov@gmail.com,
 	yatsenko@meta.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 1/5] selftests/bpf: Fix task_local_data data allocation size
-Date: Tue, 31 Mar 2026 14:35:51 -0700
-Message-ID: <20260331213555.1993883-2-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 2/5] selftests/bpf: Simplify task_local_data memory allocation
+Date: Tue, 31 Mar 2026 14:35:52 -0700
+Message-ID: <20260331213555.1993883-3-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260331213555.1993883-1-ameryhung@gmail.com>
 References: <20260331213555.1993883-1-ameryhung@gmail.com>
@@ -81,79 +81,169 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, when allocating memory for data, size of tld_data_u->start
-is not taken into account. This may cause OOB access. Fixed it by adding
-the non-flexible array part of tld_data_u.
+Simplify data allocation by always using aligned_alloc() and passing
+size_pot, size rounded up to the closest power of two to alignment.
 
-Besides, explicitly align tld_data_u->data to 8 bytes in case some
-fields are added before data in the future. It could break the
-assumption that every data field is 8 byte aligned and
-sizeof(tld_data_u) will no longer be equal to
-offsetof(struct tld_data_u, data), which we use interchangeably.
+Currently, aligned_alloc(page_size, size) is only intended to be used
+with memory allocators that can fulfill the request without rounding
+size up to page_size to conserve memory. This is enabled by defining
+TLD_DATA_USE_ALIGNED_ALLOC. The reason to align to page_size is due to
+the limitation of UPTR where only a page can be pinned to the kernel.
+Otherwise, malloc(size * 2) is used to allocate memory for data.
+
+However, we don't need to call aligned_alloc(page_size, size) to get
+a contiguous memory of size bytes within a page. aligned_alloc(size_pot,
+...) will also do the trick. Therefore, just use aligned_alloc(size_pot,
+...) universally.
+
+As for the size argument, create a new option,
+TLD_DONT_ROUND_UP_DATA_SIZE, to specify not rounding up the size.
+This preserves the current TLD_DATA_USE_ALIGNED_ALLOC behavior, allowing
+memory allocators with low overhead aligned_alloc() to not waste memory.
+To enable this, users need to make sure it is not an undefined behavior
+for the memory allocator to have size not being an integral multiple of
+alignment.
+
+Compared to the current implementation, !TLD_DATA_USE_ALIGNED_ALLOC
+used to always waste size-byte of memory due to malloc(size * 2).
+Now the worst case becomes size - 1 and the best case is 0 when the size
+is already a power of two.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- .../selftests/bpf/prog_tests/task_local_data.h       | 12 +++++++-----
- .../selftests/bpf/progs/task_local_data.bpf.h        |  2 +-
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ .../bpf/prog_tests/task_local_data.h          | 60 +++++++------------
+ 1 file changed, 22 insertions(+), 38 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-index 7819f318b2fb..a52d8b549425 100644
+index a52d8b549425..366a6739c086 100644
 --- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
 +++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-@@ -90,7 +90,7 @@ typedef struct {
+@@ -50,16 +50,13 @@
+  *   TLD_MAX_DATA_CNT.
+  *
+  *
+- *   TLD_DATA_USE_ALIGNED_ALLOC - Always use aligned_alloc() instead of malloc()
++ *   TLD_DONT_ROUND_UP_DATA_SIZE - Don't round up memory size allocated for data if
++ *   the memory allocator has low overhead aligned_alloc() implementation.
+  *
+- *   When allocating the memory for storing TLDs, we need to make sure there is a memory
+- *   region of the X bytes within a page. This is due to the limit posed by UPTR: memory
+- *   pinned to the kernel cannot exceed a page nor can it cross the page boundary. The
+- *   library normally calls malloc(2*X) given X bytes of total TLDs, and only uses
+- *   aligned_alloc(PAGE_SIZE, X) when X >= PAGE_SIZE / 2. This is to reduce memory wastage
+- *   as not all memory allocator can use the exact amount of memory requested to fulfill
+- *   aligned_alloc(). For example, some may round the size up to the alignment. Enable the
+- *   option to always use aligned_alloc() if the implementation has low memory overhead.
++ *   For some memory allocators, when calling aligned_alloc(alignment, size), size
++ *   does not need to be an integral multiple of alignment and it can be fulfilled
++ *   without using round_up(size, alignment) bytes of memory. Enable this option to
++ *   reduce memory usage.
+  */
  
- struct tld_metadata {
- 	char name[TLD_NAME_LEN];
--	_Atomic __u16 size;
-+	_Atomic __u16 size; /* size of tld_data_u->data */
- };
+ #define TLD_PAGE_SIZE getpagesize()
+@@ -68,6 +65,8 @@
+ #define TLD_ROUND_MASK(x, y) ((__typeof__(x))((y) - 1))
+ #define TLD_ROUND_UP(x, y) ((((x) - 1) | TLD_ROUND_MASK(x, y)) + 1)
  
- struct tld_meta_u {
-@@ -101,7 +101,7 @@ struct tld_meta_u {
++#define TLD_ROUND_UP_POWER_OF_TWO(x) (1UL << (sizeof(x) * 8 - __builtin_clzl(x - 1)))
++
+ #define TLD_READ_ONCE(x) (*(volatile typeof(x) *)&(x))
  
- struct tld_data_u {
- 	__u64 start; /* offset of tld_data_u->data in a page */
--	char data[];
-+	char data[] __attribute__((aligned(8)));
- };
+ #ifndef TLD_DYN_DATA_SIZE
+@@ -111,7 +110,6 @@ struct tld_map_value {
  
- struct tld_map_value {
-@@ -158,6 +158,7 @@ static int __tld_init_data_p(int map_fd)
+ struct tld_meta_u * _Atomic tld_meta_p __attribute__((weak));
+ __thread struct tld_data_u *tld_data_p __attribute__((weak));
+-__thread void *tld_data_alloc_p __attribute__((weak));
+ 
+ #ifdef TLD_FREE_DATA_ON_THREAD_EXIT
+ pthread_key_t tld_pthread_key __attribute__((weak));
+@@ -153,12 +151,10 @@ static int __tld_init_meta_p(void)
+ 
+ static int __tld_init_data_p(int map_fd)
+ {
+-	bool use_aligned_alloc = false;
+ 	struct tld_map_value map_val;
  	struct tld_data_u *data;
- 	void *data_alloc = NULL;
+-	void *data_alloc = NULL;
  	int err, tid_fd = -1;
-+	size_t size;
+-	size_t size;
++	size_t size, size_pot;
  
  	tid_fd = syscall(SYS_pidfd_open, sys_gettid(), O_EXCL);
  	if (tid_fd < 0) {
-@@ -173,9 +174,10 @@ static int __tld_init_data_p(int map_fd)
+@@ -166,48 +162,37 @@ static int __tld_init_data_p(int map_fd)
+ 		goto out;
+ 	}
+ 
+-#ifdef TLD_DATA_USE_ALIGNED_ALLOC
+-	use_aligned_alloc = true;
+-#endif
+-
+ 	/*
  	 * tld_meta_p->size = TLD_DYN_DATA_SIZE +
  	 *          total size of TLDs defined via TLD_DEFINE_KEY()
  	 */
--	data_alloc = (use_aligned_alloc || tld_meta_p->size * 2 >= TLD_PAGE_SIZE) ?
--		aligned_alloc(TLD_PAGE_SIZE, tld_meta_p->size) :
--		malloc(tld_meta_p->size * 2);
-+	size = tld_meta_p->size + sizeof(struct tld_data_u);
-+	data_alloc = (use_aligned_alloc || size * 2 >= TLD_PAGE_SIZE) ?
-+		aligned_alloc(TLD_PAGE_SIZE, size) :
-+		malloc(size * 2);
- 	if (!data_alloc) {
+ 	size = tld_meta_p->size + sizeof(struct tld_data_u);
+-	data_alloc = (use_aligned_alloc || size * 2 >= TLD_PAGE_SIZE) ?
+-		aligned_alloc(TLD_PAGE_SIZE, size) :
+-		malloc(size * 2);
+-	if (!data_alloc) {
++	size_pot = TLD_ROUND_UP_POWER_OF_TWO(size);
++#ifdef TLD_DONT_ROUND_UP_DATA_SIZE
++	data = (struct tld_data_u *)aligned_alloc(size_pot, size);
++#else
++	data = (struct tld_data_u *)aligned_alloc(size_pot, size_pot);
++#endif
++	if (!data) {
  		err = -ENOMEM;
  		goto out;
-diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-index 8b6f7af43648..1f396711f487 100644
---- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-+++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-@@ -87,7 +87,7 @@ struct tld_meta_u {
+ 	}
  
- struct tld_data_u {
- 	__u64 start; /* offset of tld_data_u->data in a page */
--	char data[__PAGE_SIZE - sizeof(__u64)];
-+	char data[__PAGE_SIZE - sizeof(__u64)] __attribute__((aligned(8)));
- };
+ 	/*
+ 	 * Always pass a page-aligned address to UPTR since the size of tld_map_value::data
+-	 * is a page in BTF. If data_alloc spans across two pages, use the page that contains large
+-	 * enough memory.
++	 * is a page in BTF.
+ 	 */
+-	if (TLD_PAGE_SIZE - (~TLD_PAGE_MASK & (intptr_t)data_alloc) >= tld_meta_p->size) {
+-		map_val.data = (void *)(TLD_PAGE_MASK & (intptr_t)data_alloc);
+-		data = data_alloc;
+-		data->start = (~TLD_PAGE_MASK & (intptr_t)data_alloc) +
+-			      offsetof(struct tld_data_u, data);
+-	} else {
+-		map_val.data = (void *)(TLD_ROUND_UP((intptr_t)data_alloc, TLD_PAGE_SIZE));
+-		data = (void *)(TLD_ROUND_UP((intptr_t)data_alloc, TLD_PAGE_SIZE));
+-		data->start = offsetof(struct tld_data_u, data);
+-	}
++	map_val.data = (void *)(TLD_PAGE_MASK & (intptr_t)data);
++	data->start = (~TLD_PAGE_MASK & (intptr_t)data) + sizeof(struct tld_data_u);
+ 	map_val.meta = TLD_READ_ONCE(tld_meta_p);
  
- struct tld_map_value {
+ 	err = bpf_map_update_elem(map_fd, &tid_fd, &map_val, 0);
+ 	if (err) {
+-		free(data_alloc);
++		free(data);
+ 		goto out;
+ 	}
+ 
+ 	tld_data_p = data;
+-	tld_data_alloc_p = data_alloc;
+ #ifdef TLD_FREE_DATA_ON_THREAD_EXIT
+ 	pthread_setspecific(tld_pthread_key, (void *)1);
+ #endif
+@@ -375,9 +360,8 @@ static void *tld_get_data(int map_fd, tld_key_t key)
+ __attribute__((unused))
+ static void tld_free(void)
+ {
+-	if (tld_data_alloc_p) {
+-		free(tld_data_alloc_p);
+-		tld_data_alloc_p = NULL;
++	if (tld_data_p) {
++		free(tld_data_p);
+ 		tld_data_p = NULL;
+ 	}
+ }
 -- 
 2.52.0
 
