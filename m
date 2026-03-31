@@ -1,149 +1,156 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3483440DFBD
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 00:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774915305; cv=pass; b=sagXGLvOLf8Aai9ZIiBTdEAWC3qJzqwck1mYl34gpyfwI2L/FCt7jr4fPRJt3AEGOreBm3Jo7YEF2+HiaO4O5LC5PBlpohaz1PIG6+LX0E7PoM0gjqRsnn5+ookhCRyEA73frvqHzT562/h+L/yn3JZCArrUx664LYEVt8FTne8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774915305; c=relaxed/simple;
-	bh=d1dAOL0LZPAkvvghsbCJEAfRHchndH0E4XolojjvAn0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qYN2Xr00mOou/jamMF7GBjqgnf0RY0RY65JkHdhspRyxw6zMFuqtre8U+us9kjXQMJv5uR6yjdtprDFcwihmeIVve+btUJyXYM1gUov5+cll+rGlWTyRbwEEBBBTXJMeXt4lgMJvDRyEUPmKDTl8+St0GPF64zV4Zy1WAlStapc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Up3bkFwA; arc=pass smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473C01A9B46
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 00:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774916445; cv=none; b=gtLHxzsA5Z+rF7qHTBycPQXfGNenWOhq4TAYh4mCYq2Xk53fI2WrmhiENYHlgqTG6bSeaDk8hEe+I2zOkoz1ii+z/VufpFkmgsUKlnGTP3UJg42K2LwqDOmgq704mJ4lw9DfOjX68l/dzFYWfCpjonT2T6rNYwTkzFy9oBOsWxM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774916445; c=relaxed/simple;
+	bh=L2uLLXPaR8dsFwaj0M/VqP16tI9GfgjDnm6HAXw1oyc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VjtwGse+nI6Bfc5zelierLFu4n3dOqlQGLV2WFctmn3GFeXkBCWT4ALQMbg/75iiakkYZgegQTUozKCmY54P8uOwlfkqwkP1klou5qiDfvq/1Khl69cCg2b2ZBWUmjgGwOjruEDdCT+fdHCOwLdlQa4c6BxxMQ/xHFsIHkSQKaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qmpOb70Q; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Up3bkFwA"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c76af7b0f94so214869a12.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 17:01:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774915303; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VYFTW3Yf0mF1j7PIe+4L9uiqZVmD/wHkrJVyYrkq3qwdgybjQYA7oktC544uF2V/VD
-         /6IVcG5AyUq/luwLVto2Me+A3zhwpRP6VwbcwfD5Er50EisUJxssUd9gLvPKZwndgpsY
-         sdKT/5P0rfCJQ5i6+VmKlf2nIlHuT5khwbgi0l03VB2R7xPZxGgZhZ4shnTDQpvGQFW6
-         oVlFEbVDsxLu+gVqQuKx4G79I3ejfU2BmjM9w1k+k8fnaNXkJnyktOTv9gh+Ip2zNV0V
-         ToQIUQj2m4INcKoVWmXk8u67Kgb/gkAUAOXOCywLKiYo2wmLZ2Z7Qz1+hhKu+UbA7p6O
-         Xqqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=inmnSok5FOieG8UOQOyMnZeXDdgg96/7Qg/Nmaf/Xus=;
-        fh=YXhxD3wyK33+PQ10KTCk2H4vVOOakTCPA9bwY3a/OaM=;
-        b=AgRu4QqhEFhrF1Z533Y4+1mcdLykcu8hWpEtsOl8bzSM37rx07wuTnrvijZfRICZWD
-         1hqQvbE9Qj6xFMSkghMiM2ke3iEC+lrpHXGv1QoxQchg4kj3916OkHE9j9CgOYdRjZdE
-         RxIBI2lknE3s5kVEy2UeeZOflGVGLHBtML2Q54xongOKOmCzUHkJeYArrYbSH12OsaKN
-         P6OsAQ+a2zuR6eKs0icHXXWskE6+FrOqYlEbkI4gKF9jCG6eU8ev/D4JMKuGV54lW45m
-         /auFTbUXA6FRurbW2omfU1FK0QbzXJYnuA0m6poTB9eDBuz5XP+Wkkf+julMv/9fTx2X
-         hUHQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774915303; x=1775520103; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=inmnSok5FOieG8UOQOyMnZeXDdgg96/7Qg/Nmaf/Xus=;
-        b=Up3bkFwAnwPOqtVVUO6xV9M1Z0mO/cFZGtUE8UDYPgaCVcYfv+o6I0Jjy9fCm5qN+K
-         JCZ2Tap+HxXgfCZxBSofPieXCVip/ZC2pmxTtWyovMM7sEPEVkpgqu8jGinJTcQ79qvy
-         JtCg+EiCu4hPiZLNEp92CAqWnmH2pMA0FCX1D8S81I/WQgK6AaRRq4hlxW5gbVbg7cE7
-         AcqzPItwx634KUaRQE78sJn8afCnqCiudQV7+6OL+yKOgpA1xA5lCnDP0XMOgKRhTDma
-         p8nQWkZP1lG6hVD82qkgUNjQ/KC0KYu7+FaSMDfsgjbUFcx7S1UyNOLWsQCEEVE656Vz
-         dqQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774915303; x=1775520103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=inmnSok5FOieG8UOQOyMnZeXDdgg96/7Qg/Nmaf/Xus=;
-        b=GjkmkDGcUbW0o7U+mxJhpTrTzywLdRkcXfbIPR6nYCKKbSTlOj7SLi1lvTpJK1auqq
-         8J/HGs6+oPeOTyGcrMNO0uhwmlh+CxGkQLOX/e0jFiGTF5p9Q4cy8RdYxghNtFsic2/E
-         iIF16C08YNVwldyHD4HjyzvqBFsa3AooiL2oeApCg+sTxP+5huOYXHxFI8djVeuOvsts
-         iOuqylg06pzgL2dDQvgNzGhnHncB/hZTA4xM4GVjiujabKQ8xUeeQSCNp2RZksQbjaBk
-         8oh09a+k3PYFcm7fxrDwgBhqUI3URcI3xOQJ17pjjl2NDs7JmQf8xPPEBk50qCdvE56b
-         PaRw==
-X-Gm-Message-State: AOJu0YwGP67jgD0G37Jx1cVfTxNxiCuoh5u8jfFsuYonh4b+j8vzPTNb
-	TTQzyR3wAfrN4U/GdKOwJ2epwTsu3tHL/Qz0Yg9hx9WigKnh99iqJ88453BFs7upFUNDWmEcjQS
-	8D0lubtWow1W245Noq0GxmcSXFZYDcM4=
-X-Gm-Gg: ATEYQzzAZYqE2XsHpG5Eg3O8RNbNpmknbKXVs/LdP8zMeKxR1DHDBC1UdfCOyA+k+Id
-	6OzzE4m9CujvfDQH+KknbJoV5y6uEcWD4gQxf/fIlKm3lM6pYhgUvEKAlXJGFBOZcdh8OuVYtYF
-	0p4rDb0EgFSkHAhq9sJc/PNhUtO3o4uiJLI93j1fU2XsirAUDhbGz8zaZ+PexisoEQf/yIxncuG
-	8p9Ifts8SQlcrXM8YVSfwBF3FG5JkPcU6eTheJwHo2W4bSIsdYie/Ueg54XnJHK2CwOoco1TJuY
-	6HL4bsE9wRNt5RlOw5QpTZs=
-X-Received: by 2002:a05:6a20:6a22:b0:39c:1f90:2867 with SMTP id
- adf61e73a8af0-39c87bdaf84mr16344116637.59.1774915303447; Mon, 30 Mar 2026
- 17:01:43 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qmpOb70Q"
+Message-ID: <ae86a1e5-769c-44d8-ad7e-ad724800e9e4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1774916430;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0Bz8w74PmbsgI9Uedv6J256JzSoyommswdXAjHRd59I=;
+	b=qmpOb70QRGs7gvusJS+sGUC9jM/NNXyorjbHR4eLo6P+ev+i7drne7q9OdIjKTbCWHdYWB
+	YKV6QjQTWzdt7cT7aAd3cyY5nImw0s8v6crA1Sq2Tf+e2F99ZGRcNCDHYwkhKZY04AwRln
+	P6kgiKIr6hdNNFPtOUR7Qv50SM/llyY=
+Date: Mon, 30 Mar 2026 17:20:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330-kmalloc_special-v2-0-c90403f92ff0@meta.com> <20260330-kmalloc_special-v2-2-c90403f92ff0@meta.com>
-In-Reply-To: <20260330-kmalloc_special-v2-2-c90403f92ff0@meta.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 30 Mar 2026 17:01:28 -0700
-X-Gm-Features: AQROBzCiqZVlLYzaBKfIcE16uLxTwHe39o5aNemYccW-HKJjYuuTDhm4jW41Zvc
-Message-ID: <CAEf4BzaWJiokp=D6dK6Rma02iQ-GoDJnOqZUQuHJ02jsz=n1iQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: Migrate dynptr file to kmalloc_nolock
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	memxor@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+To: Michal Luczaj <mhal@rbox.co>
+Cc: Jiayuan Chen <mrpre@163.com>, John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+ <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+ <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
+ <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
+ <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Mar 30, 2026 at 3:28=E2=80=AFPM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Replace bpf_mem_alloc/bpf_mem_free with kmalloc_nolock/kfree_nolock for
-> bpf_dynptr_file_impl, continuing the migration away from bpf_mem_alloc
-> now that kmalloc can be used from NMI context.
->
-> freader_cleanup() runs before kfree_nolock() while the dynptr still
-> holds exclusive access, so plain kfree_nolock() is safe =E2=80=94 no conc=
-urrent
-> readers can access the object.
->
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  kernel/bpf/helpers.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
+On 3/30/26 4:03 PM, Michal Luczaj wrote:
+> On 3/26/26 07:26, Martin KaFai Lau wrote:
+>> On 3/15/26 4:58 PM, Michal Luczaj wrote:
+>>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
+>>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
+>>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
+>>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
+>>>> when the bpf_map_update_elem(sockmap) support was added iirc.
+>>>
+>>> What about a situation when unix_sk is stored in a sockmap, then tc prog
+>>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
+>>> useful, but seems doable.
+>>
+>> [ Sorry for the late reply ]
+>>
+>> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible
+>> from tc :(
+>>
+>> Then unix_state_lock() in its current form cannot be safely acquired in
+>> sock_map_update_elem(). It is currently a spin_lock() instead of
+>> spin_lock_bh().
+> 
+> Is there a specific deadlock you have in your mind?
 
-LGTM
+e.g. unix_stream_connect() is taking unix_state_lock(). Can a tc's 
+ingress bpf prog call unix_state_lock()?
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> 
+>>>> The only path left is bpf_iter, which I believe was the primary use case
+>>>> when adding bpf_map_update_elem(sockmap) support [1]. It would be nice
+>>>> to avoid bh_lock_sock() when calling from all bpf_iter (tcp/udp/unix)
+>>>> where lock_sock() has already been done. It is more for
+>>>> reading-correctness though. This just came to my mind.
+>>>> has_current_bpf_ctx() can be used to check this. sockopt_lock_sock() has
+>>>> been using it to conditionally take lock_sock() or not.
+>>>
+>>> [ One clarification: bh_lock_sock() is a sock_map_update_elem() thing,
+>>> which can only be called by a bpf prog. IOW, has_current_bpf_ctx() is
+>>> always `true` in sock_map_update_elem(), right? ]
+>>
+>> For all the bpf prog types allowed by may_update_sockmap() to do
+>> bpf_map_update_elem(sockmap), only BPF_TRACE_ITER should have
+>> has_current_bpf_ctx() == true. The tc prog (and others allowed in
+>> may_update_sockmap()) will have has_current_bpf_ctx() == false when
+>> calling sock_map_update_elem().
+> 
+> OK, so let's take test_sockmap_update.c:copy_sock_map(). It is a tc prog
+> and it calls bpf_map_update_elem() -> sock_map_update_elem(), right? But
+> running `test_progs -t "sockmap_basic/sockmap update"` shows (pr_warn() in
+> sock_map_update_elem()) that has_current_bpf_ctx() == true. That's expected
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 4c3011ef631f..7bb8b1339e2f 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -4435,7 +4435,7 @@ static int make_file_dynptr(struct file *file, u32 =
-flags, bool may_sleep,
->                 return -EINVAL;
->         }
->
-> -       state =3D bpf_mem_alloc(&bpf_global_ma, sizeof(struct bpf_dynptr_=
-file_impl));
-> +       state =3D kmalloc_nolock(sizeof(*state), 0, NUMA_NO_NODE);
->         if (!state) {
->                 bpf_dynptr_set_null(ptr);
->                 return -ENOMEM;
-> @@ -4467,7 +4467,7 @@ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_=
-dynptr *dynptr)
->                 return 0;
->
->         freader_cleanup(&df->freader);
-> -       bpf_mem_free(&bpf_global_ma, df);
-> +       kfree_nolock(df);
->         bpf_dynptr_set_null(ptr);
->         return 0;
->  }
->
-> --
-> 2.52.0
->
+I think it is because of the bpf_prog_test_run_skb() code path used by 
+the test_sockmap_update() test. This would need to be addressed if 
+has_current_bpf_ctx() was used in sock_map_update_elem().
+
+> and has_current_bpf_ctx() would be false if sock_map_update_elem() was ran
+> via a hook?
+
+It should be false when the bpf prog is run by tc instead of 
+bpf_prog_test_run_skb().
+
+>>> Let me know if I'm correctly rephrasing your idea: assume all bpf-context
+>>> callers hold the socket locked or keep it "stable" (meaning: "sk won't
+>>> surprise sockmap update by some breaking state change coming from another
+>>> thread"). As you said, most bpf iters already take the sock_lock(), and I
+>>
+>> Right, all bpf iter (udp, tcp, unix) has acquired the lock_sock() before
+>> running the bpf iter prog. afaik, the only exception is netlink bpf iter
+>> but it cannot be added to sock_map afaik.
+> 
+> And sock_{map,hash}_seq_show() (being a part of bpf iter machinery) needs
+> to take lock_sock() just as well? Would that require a special-casing
+> (unix_state_lock()) for af_unix?
+
+I would think so for lock_sock() considering the current bh_lock_sock 
+without !sock_owned_by_user() usage is incorrect in 
+sock_map_update_elem(). [ this probably should be a separate issue for 
+another patch ]
+
+Some more side-tracking... from looking at the code, the bpf_iter of 
+sock_{map,hash} can do bpf_map_lookup_elem(&sock_map, ...). This 
+bpr_iter program probably will be failed to load because the 
+bpf_sk_release() is not available.
+
+I still don't have good idea what to do with the tc's prog calling 
+sock_map_update_elem().
+
