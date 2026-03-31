@@ -1,60 +1,62 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E8F24728F
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D3D44B67E
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:35:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774992959; cv=none; b=tMNyzjVv0pP/RyZXZB0nPTfgHF6WnzN1/Cq7YezEq4eOXop4BTg1V1u5RcKOemE6Gx3nsjcIcT9owLMX3wUF8bu++u8ASkwpWJ4aH6kR/PyJcSPnk5BfMD1cIo3KPP4yQiah4eNK70Ldsn5meAXXCQArIqG5b93czvXpplz/+zk=
+	t=1774992961; cv=none; b=X2P/yg6O/IhvLK6/JvHsvCOBtH0b00TydLI6M+Qdq16FvUKP37yaPz03MzWmlGNQyn5hEA4YrHiWuComM5AlbBARP+Hbv0+Bh+uwV0k0FRBHaE3ST3rxHtzG+tPfpDe2YEojPl4RbTLttKFrvNhUT8LVWGD84oc4E1k/UvojUgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774992959; c=relaxed/simple;
-	bh=4pYEruskr2d5VFzGjNuVUe7W6mzTa0jzLorw+2jLBZs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZDOfhyE+CteypOtOyJU/pgufbz8ZDwcsjMEeCHh4a5lDU6ekCCmGcWmciY2oJfxxHDJskeGBpYJrZ6nybE0/MN5C6+/LzHK0aWMiWjALj95Py37G/U1HKu+vKNf7gAflxp9oadguqmbL+iWITm7yeZGZ1BjwvJjHMaFERUyxtdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RpZQA/h5; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1774992961; c=relaxed/simple;
+	bh=kPGcHcs0fqywSVt59i/2lh6t66WzWodKo0oSAhlIuY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eSk0rRGDIIJpcF6PWM0SkpODIqPHh3vJhUS3gCUqO1WLMeA+DnQvxwd3HNRLlsefqvdDc9oMqt6MrEHChOKXyZqioUS00QNlq+9zTmbM2M/To5Jdcivko+B1gZ7mema0mEffs+Gyks9gYIUUd4HblaA+xesX2EgkuYM1pcGBv0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d9tDVFD2; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RpZQA/h5"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b23f90f53aso37884945ad.0
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:35:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d9tDVFD2"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2ab077e3f32so26220055ad.3
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774992957; x=1775597757; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3y2Y+nTHjjkMqGWc9KTbb9zChmURp4PZDO2SmaDULME=;
-        b=RpZQA/h5wuHg/ZKDU+6gQar1K65OXJ+52+fUf7I70GQata4PerOvM2XeBL4QRhMncR
-         2ZzHtgwIBPouQdX05TeN+j+82gnLWhNhQEJo7OYZY4tuETZgWyPw5uBSO8CRbClvHyaX
-         GE0XZNhhs8ABbaxiHNhO5tcEb3c9RznO2IvE/BELGArYiLF773elsTRGkZcqEUw+cq/z
-         0EbbqbnBA4JlO+jSHOE5nnxgsFw+wmTBuSz+669C73QkTJFp33cIKpX29RKTxLqyRZqN
-         mqoWfd5IDRkkHvMgbgmvaAMaSfSY/PNzjDUk4Y0aENCXjq9lboM/SiopJfvXYUrWp8A5
-         R1Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774992957; x=1775597757;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774992959; x=1775597759; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3y2Y+nTHjjkMqGWc9KTbb9zChmURp4PZDO2SmaDULME=;
-        b=qXtvT4rkw18Xrp9DW+f7Uw88F2DuYWYi7rkrdKxjOopi5wDTnpSDHbfBaRyogzEqSo
-         bYhPv1eweRa/vx9r2AAco9VPGY580Zw8UU9ilvIhpoPVTYOzoqqLgnpgBO0Zo5ki3zx/
-         6ibSeKKr8QH2TAZL1mn168B6dwbjoiYmXftngrQX0jo+UYwjf5Je6yy81SgTasx8STrd
-         kSAD6zphY3Ttwv/4oFvjWm+CmBWIyxCHR4XWkwVQxhkO2AXNMqYIo/Tmw38EU7+G9DVI
-         dbOAI5uZqgS8gJ9GvM4ov1WfHY9F9sml3oQrJhHsZemVX8l00QAmmbjDOFEFvK5JW/gh
-         DgHw==
-X-Gm-Message-State: AOJu0YwE87CKrESpQHRI9WjqfHPhUkzQev9LTFOvZ+0ldKrDa+926a9z
-	xjIFSel/ZeEUDE4bgQlzcrqFfu1DL5M8fgUKZSS6BlcN5lr9OW7jSB0HjKnPmA==
-X-Gm-Gg: ATEYQzyqhpFENmZxpcnkCA8maWOAueYCMSH+Kb9z/PRTOdEc1DX6GBCgRjnp09Dx7Sz
-	YWDNPp7XaKtAIHbRvPfxibqiaQJwkZbd3yXpd2Tc1S30qaPU3UsTxSdjhJ6EjvNN0Zjrc6nl8QZ
-	nmbTYv7RhXA5+ZUnui1G/ybBCSBck02iCRe5huuyP//l4SGw9W/kKLACgHf7sWjIZ2dIwl2By58
-	i62PmVWEdsBRpLYDIzFfJ1gdJd7MgGY65AmcM+NI1zsFkLOpzoHQFXOUCoGSxccpbXb07bCo+hH
-	Y34iDN0zXkndFw8gZ6F7JvQ2CXlGeIK8zgR2lQnc7Nz94COH4RKMbUSC0FyrQfCEajif+BNejLe
-	x/CxSnA20ORFpPP7T1NkJGamOQFQ67qF2ZHyq61oxvUi49W847remLqWwxMAxOCsbQet6t0/BXi
-	ofeWkfWEef6MonUg==
-X-Received: by 2002:a17:902:d58b:b0:2b0:6f21:8289 with SMTP id d9443c01a7336-2b269cffcdbmr7677175ad.25.1774992957516;
-        Tue, 31 Mar 2026 14:35:57 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:14::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24279a428sm158469155ad.66.2026.03.31.14.35.56
+        bh=Zt5cPR74jSvXwDYFVJuLyAp5aI0ADQDmLH6axOJXgDM=;
+        b=d9tDVFD2+p413wPlCimTqjay9A744HPC8Z0CWsIWUerZS/nWw2hFCMOrUiYShdAn3G
+         6w1LLmdNIGUzUel+gR64BnW5ooDlsUXkgP6jzMaIBidJYggWkxOyjhpotmC9Ih1Q470C
+         OYqAXISGmXR3YteoP7dq/sXdCj4qxaMVw6X5vrZeL9irZg/JZ7Ohz8pKnvHD27fz73KD
+         FEi79x/xzkICYC1GW3tiKoAE/Wdaizsej0KOrhpvOdmxX8OG1O+nh6cqXGeAbBD1qVIo
+         jiykzOUHoeFn0pdUcOlZ25OqgjX/q9KbbEVPEn6atrjTCvWeuz+8c/qii/Z9eNUeBKLS
+         SOeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774992959; x=1775597759;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Zt5cPR74jSvXwDYFVJuLyAp5aI0ADQDmLH6axOJXgDM=;
+        b=UZI/vBmi4UqfhNHFOIibliCf780tylJTCtVj9ZCVx0WZgaYNmUICIaywcMhESSS18w
+         Jc2Hy9nqBsm68maY/t1FHnzmAM94T4kA7MLzZ0I8mQXxjT3Gg/mcvY1VP2vXmykwFU+f
+         i9Zhf1WvMLcDzBrC9kTd2aqfLwLxB3ZyfCVLs4dWPmygOEycgAzfurbGiepUC4288Mrg
+         ZmUWD3UAszRycI+BYPSrMh4tjKWEj+wZ+3rFy2flcQyeZXan/5C2UxZRLGbg1fMn+yp3
+         7SOHit0Mzc7kxqehx3TL3KBTJEv2KE9QesALydDeRlAb6jBs/YNOMXqYbbWePQKDgvS3
+         LkRw==
+X-Gm-Message-State: AOJu0YwGC8rPUSDzleESPgrXOC4dhPSzKmf+v8D+mLn/2+n2MBFYf6T5
+	33wmAdWY5PZ5JElGMX9Z1Ohr4ClirDrICmxCjcb9xgj9VstBuEv2SRT1mf0jRg==
+X-Gm-Gg: ATEYQzwqh4e7FnIFqzkPc6zfZnIyZmkKfGaJbjoRF2Qx3j76ygZCmM2mdRN1Leanr2w
+	TzYBxgNDNDVOrLW6D7jGSWa+Uwe3Cj8NeMOf9b4wWxHU6G8dAJcJkJIipwKIZ6zKSIEjIMbkodd
+	xgpIKzwkTLNCrF/7iTrEFbkyYsaBSTui2Q8+41mHGmM48RbYeVM3PapFwjEU57VAzLYeUoIeJaH
+	zr2UoPMg/dREVt/WHVM5qyFMHnI+u2VNwPNs93ncwvgD3gjM1H9JaeQ1oasg8VRM79iqO3ntNFI
+	hXF1YgzE1JgxpxcIdkViMp706NUOJPeeruMkniB5u9/FEqYR0Y0j8ZDo8XBAXLiRSBvTqed5XQd
+	WvcfdLG2Fa2WgdKMfvHuMcnSpg1zq59w0kfPm07k946sgzOnCO/R71sFJLtF8cDc2xc88TC4qSU
+	4/BnIvx3dfCyKcnQ==
+X-Received: by 2002:a17:903:4b0c:b0:2b2:5091:1c1c with SMTP id d9443c01a7336-2b269b06116mr6726605ad.18.1774992958969;
+        Tue, 31 Mar 2026 14:35:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:56::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24ae15201sm91965475ad.84.2026.03.31.14.35.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 14:35:56 -0700 (PDT)
+        Tue, 31 Mar 2026 14:35:58 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -65,10 +67,12 @@ Cc: alexei.starovoitov@gmail.com,
 	yatsenko@meta.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 0/5] Task local data bug fixes and improvement
-Date: Tue, 31 Mar 2026 14:35:50 -0700
-Message-ID: <20260331213555.1993883-1-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 1/5] selftests/bpf: Fix task_local_data data allocation size
+Date: Tue, 31 Mar 2026 14:35:51 -0700
+Message-ID: <20260331213555.1993883-2-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260331213555.1993883-1-ameryhung@gmail.com>
+References: <20260331213555.1993883-1-ameryhung@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,36 +81,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Currently, when allocating memory for data, size of tld_data_u->start
+is not taken into account. This may cause OOB access. Fixed it by adding
+the non-flexible array part of tld_data_u.
 
-This patchset fixed three task local data bugs, improved the
-memory allocation code, and dropped unnecessary TLD_READ_ONCE. Please
-find the detail in each patch's commit msg.
+Besides, explicitly align tld_data_u->data to 8 bytes in case some
+fields are added before data in the future. It could break the
+assumption that every data field is 8 byte aligned and
+sizeof(tld_data_u) will no longer be equal to
+offsetof(struct tld_data_u, data), which we use interchangeably.
 
-One thing worth mentioning is that Patch 3 allows us to renable task
-local data selftests as the library now always calls aligned_alloc()
-with size matching alignment under default configuration.
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ .../selftests/bpf/prog_tests/task_local_data.h       | 12 +++++++-----
+ .../selftests/bpf/progs/task_local_data.bpf.h        |  2 +-
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-
-v1 -> v2
- - Fix potential memory leak
- - Drop TLD_READ_ONCE()
- Link: https://lore.kernel.org/bpf/20260326052437.590158-1-ameryhung@gmail.com/
-
-
-Amery Hung (5):
-  selftests/bpf: Fix task_local_data data allocation size
-  selftests/bpf: Simplify task_local_data memory allocation
-  selftests/bpf: Make sure TLD_DEFINE_KEY runs first
-  selftests/bpf: Remove TLD_READ_ONCE() in the user space header
-  selftests/bpf: Improve task local data documentation and fix potential
-    memory leak
-
- .../bpf/prog_tests/task_local_data.h          | 97 +++++++++----------
- .../bpf/prog_tests/test_task_local_data.c     |  2 +-
- .../selftests/bpf/progs/task_local_data.bpf.h |  2 +-
- 3 files changed, 48 insertions(+), 53 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+index 7819f318b2fb..a52d8b549425 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+@@ -90,7 +90,7 @@ typedef struct {
+ 
+ struct tld_metadata {
+ 	char name[TLD_NAME_LEN];
+-	_Atomic __u16 size;
++	_Atomic __u16 size; /* size of tld_data_u->data */
+ };
+ 
+ struct tld_meta_u {
+@@ -101,7 +101,7 @@ struct tld_meta_u {
+ 
+ struct tld_data_u {
+ 	__u64 start; /* offset of tld_data_u->data in a page */
+-	char data[];
++	char data[] __attribute__((aligned(8)));
+ };
+ 
+ struct tld_map_value {
+@@ -158,6 +158,7 @@ static int __tld_init_data_p(int map_fd)
+ 	struct tld_data_u *data;
+ 	void *data_alloc = NULL;
+ 	int err, tid_fd = -1;
++	size_t size;
+ 
+ 	tid_fd = syscall(SYS_pidfd_open, sys_gettid(), O_EXCL);
+ 	if (tid_fd < 0) {
+@@ -173,9 +174,10 @@ static int __tld_init_data_p(int map_fd)
+ 	 * tld_meta_p->size = TLD_DYN_DATA_SIZE +
+ 	 *          total size of TLDs defined via TLD_DEFINE_KEY()
+ 	 */
+-	data_alloc = (use_aligned_alloc || tld_meta_p->size * 2 >= TLD_PAGE_SIZE) ?
+-		aligned_alloc(TLD_PAGE_SIZE, tld_meta_p->size) :
+-		malloc(tld_meta_p->size * 2);
++	size = tld_meta_p->size + sizeof(struct tld_data_u);
++	data_alloc = (use_aligned_alloc || size * 2 >= TLD_PAGE_SIZE) ?
++		aligned_alloc(TLD_PAGE_SIZE, size) :
++		malloc(size * 2);
+ 	if (!data_alloc) {
+ 		err = -ENOMEM;
+ 		goto out;
+diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+index 8b6f7af43648..1f396711f487 100644
+--- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
++++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+@@ -87,7 +87,7 @@ struct tld_meta_u {
+ 
+ struct tld_data_u {
+ 	__u64 start; /* offset of tld_data_u->data in a page */
+-	char data[__PAGE_SIZE - sizeof(__u64)];
++	char data[__PAGE_SIZE - sizeof(__u64)] __attribute__((aligned(8)));
+ };
+ 
+ struct tld_map_value {
 -- 
 2.52.0
 
