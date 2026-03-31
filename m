@@ -1,198 +1,178 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED9C3E928B;
-	Tue, 31 Mar 2026 15:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774969932; cv=fail; b=h95GgjjQppUCMESs7gsCH5bkWu+dFIoodneTVXNs2fsJXr798AMgLRsjU+AhiDffkXpTrL5DEhxAnwuyYV1336i2TSMh//VBhYeK2A0rvOceAVDid+yUMf4DSg1ka6J8LhWL0Ifx7M2m3EUydcNA5u9AiGhuO/lHI+FXVToVdQ0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774969932; c=relaxed/simple;
-	bh=P3NfRrXRu4A2uwufNRrroIlIzqATdJTbXI36HlnlAI0=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=QDn6NftmSohch1y7PmHMlhRlv29p+ypfED4DvKt1lrkyEWImdm8uTgDzL1FBbBBNA3k2CZNeEPiG33qQwDcAyZBnz3vIMwuuSyNm/ZZb7q8aRsokTZuGH9gAUlvpTzcz/tmnHAXyk39FYwy5TF9Ovd2dTehWdoVagge6uSLLKt4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I7GmJGYu; arc=fail smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DE03B6343;
+	Tue, 31 Mar 2026 15:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774970539; cv=none; b=cnOgqZJBTfs5cF9b8dK+yIblQGz3y7/z4w7+R3eYrv8cRd9nIpuayvNfQ0Jtfz+Ci3h8ooRAQcVAUUT0ixpBuBZoAu2cl9fG4D89nowyOutMs3rv1fhdJV36c4O/oMrENxxdpShXlgL7ltVH67uVmGs7xqsnh/73S6GtetWQXlw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774970539; c=relaxed/simple;
+	bh=76AReawEblF9zwLAiLT7vjcTU5NOi5gm84ErlbSFzuo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oxgZrQoSV2A6s+P25K9UOknb2JSd5AKJbj6S+aZXOOR0Tq38JP9ay7Q9NvgOdIEt2fyeRQgdf+nB9ssa6Z90phNW7IYbS5ydiwkhzdMxL1dNSyuObnUGhShx1mV3XNRxf6KoOpQ2gmyU9tTIouX0lnYbZKgd3pWeiDDqgGBGBJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BhEkNpUP; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I7GmJGYu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774969931; x=1806505931;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=P3NfRrXRu4A2uwufNRrroIlIzqATdJTbXI36HlnlAI0=;
-  b=I7GmJGYu7YjbOHFiTNLpoC6B9GjZ37tCJADeycUIfKB7FdowajJHFpE6
-   ph7MyHn0/qY2uuH3ugBJSpHVuQYKHrc8QTLao4kCfY77S/OUfkn23bjvZ
-   JMuJT9cM219Ma0Iuf5ZMuO82XXIIvXbP8BxGUNcrSzbzkoAwrqiSBQNSy
-   FLnX3dfaBOX/Io547PTDPy7RrRIyJ8xalcmg2r6URUeGIeNTikZxWGiGf
-   tKF7Tkvb721W7XzWTz5qo6/VQx3VZEF7gEpXXZgZuTQ41HxSjpsFkv03w
-   bi1Dc4pnbCm8rQmL8gsQtJQ6Xyit7ewK5RvS3oTHsjow8FVpz6q0H0fGR
-   w==;
-X-CSE-ConnectionGUID: 457Xr3z4QQ2GKlkzLGbm6w==
-X-CSE-MsgGUID: g7yGZtavSTaGNWKzCgT6LA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="79880441"
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="79880441"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 08:12:10 -0700
-X-CSE-ConnectionGUID: sTPhQLesQKKxYFWwt46vEw==
-X-CSE-MsgGUID: VOvZqFwKTjuCxUwIIV7gYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="249603701"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 08:12:09 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 31 Mar 2026 08:12:08 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Tue, 31 Mar 2026 08:12:08 -0700
-Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.29) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 31 Mar 2026 08:12:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=J/RHDgmIZv/F4Rzx97MaghY/EZIAFvkJjtjZco/VYiN6vQxJIQooekjVBlLDG6yEI51WIyl5kWCBWsthttbct235f90Rnsqdo8kS371iYh6JaoWvPR1br7BLHsnAGbE8NEtlKqz5wZwDG9ErF/jOoD8VQHVQFv97otyzPKzURG4hL8VWGd+rLGyljfg9pwefLWFw4h8uqaTCG7p0FodSe1p1/FnTv6o6PickyTPXV7vv9hWcX+m0WVzPqq6PWx8mBDaOetay4uuLoiHQ3gtx/GCMZAB6b4hwbp7z/qYKDkEeDtQziiF1fLsm+dNFfReudUNlJ7FcGWOUIqJRwYkw8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P3NfRrXRu4A2uwufNRrroIlIzqATdJTbXI36HlnlAI0=;
- b=XVz+HsIMoZ8/xu4swWCCOYoP6GOSmlzh1jbriuGyGqSkZZZUOZNjXI6GSRz1t93h4yUmRdXBUl/ykHtjWw+sjqp3NaXJWssWNc++LEFTWBg7U3QUaesh1lH3mn4b/iehIKobKQ8n1lOIaAHxkbqqIrSumt6w4VM8xs3W/Jxwbu6SWJTxy4O2dpkVpGTrGxrb02pAFxJnazcDr1J87NbXN5CDkeGdo9E63OA0PZ8vyeDmJ3d/OGXliU9RsVVUeNlhdkZSV5Zr9LWEehY1UnLS6i/bQOadO5EMGI/ZCztD4gtQzn9fcFmA2OG7NuJFJEbFCHN/5wjEVWqkzVeNF/9N4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
- by CY5PR11MB6281.namprd11.prod.outlook.com (2603:10b6:930:23::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Tue, 31 Mar
- 2026 15:12:06 +0000
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::6aa:411d:4bfa:619c%5]) with mapi id 15.20.9769.016; Tue, 31 Mar 2026
- 15:12:06 +0000
-Message-ID: <bff33e56-d1eb-4291-a3af-121fe54b1539@intel.com>
-Date: Tue, 31 Mar 2026 17:09:07 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 3/5] ice: migrate to netdev ops lock
-To: Kohei Enju <kohei@enjuk.jp>, Simon Horman <horms@kernel.org>
-CC: Tony Nguyen <anthony.l.nguyen@intel.com>, <davem@davemloft.net>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <edumazet@google.com>,
-	<andrew+netdev@lunn.ch>, <netdev@vger.kernel.org>,
-	<jacob.e.keller@intel.com>, <nxne.cnse.osdt.itp.upstreaming@intel.com>,
-	<horms@kernel.org>, <maciej.fijalkowski@intel.com>,
-	<magnus.karlsson@intel.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<hawk@kernel.org>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
-	<bpf@vger.kernel.org>, Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-References: <20260325200644.2528726-1-anthony.l.nguyen@intel.com>
- <20260325200644.2528726-4-anthony.l.nguyen@intel.com> <aclmhA5yjXfzX_Jk@x1>
-Content-Language: en-US
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <aclmhA5yjXfzX_Jk@x1>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TL0P290CA0006.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:5::9)
- To DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BhEkNpUP"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 086C32364;
+	Tue, 31 Mar 2026 08:22:11 -0700 (PDT)
+Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.1.194.63])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 71EB73F641;
+	Tue, 31 Mar 2026 08:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1774970536; bh=76AReawEblF9zwLAiLT7vjcTU5NOi5gm84ErlbSFzuo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BhEkNpUP/+8uC6lI5Ab17iUM9+kpj5uey6UHxZP0PKUHKfHZtnCoHc6HYpk0mBube
+	 GIXymS/d4x/Nty4hMHA6KJ2e51fruiORAu5ewN+dUx0WKYIpYt3f91RxOn4bfZ97VO
+	 OIX4VkcwvPDNJqv6I8MdbYCDHtXck+Yjnlvqpa98=
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Nick Terrell <terrelln@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Vishal Moola <vishal.moola@gmail.com>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Ryan.Roberts@arm.com,
+	david.hildenbrand@arm.com
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
+Subject: [PATCH v5 0/3] mm: Free contiguous order-0 pages efficiently
+Date: Tue, 31 Mar 2026 16:21:58 +0100
+Message-ID: <20260331152208.975266-1-usama.anjum@arm.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|CY5PR11MB6281:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3178feb3-b10f-45da-86dc-08de8f37def0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info: 6slimocX/D0zzjGiRU3G8hFyYUq+/sqS25s+0De9Hm1wHRUiFrwduqgBfi5qzwz41iXgjb8XCItBdxDAsl3I11SFaEtP0c5CFVEWxG6q/IVUPJ9Yl8gGHmdqwTj1eyaXoNEWfy4LuxGnXBLjILtjG9Gm1BVO5wx02QUlUhcMuQTDICNATGTmlmdk+V2sUDMrlugKnFk168YwzzafXe0XVeMTbi6fzJALjcFAUCthtpjBWQ+g0k3CUPbJ3XTvcM17DbGL9TI4HQgrLuIlXcnMmGF7H9+6SzV163OgS06GU0LGXW05Ro9BYnEkG+AGeuxTpGK1x9cwqnnW2qVUfHRpIy6YebyUvBleIsmfWXNJgFuVAT/touiiPISXGdcMEz9Yj9nJx6O6LKO0iIVG41d8E4K3K7wX0GHR9Ed5BO/nMuacj6tCmmOsZ6B6sMyw4vHJYafBgbuaGAihYtNikJjL8b117WeGErD8TJ6OuqusArCsRiILYh1aWZBQSI2NKKOg/kVlMXwB+4EpXY4Ntu37To3gPt30Qx4X1FaaPWr0oW2FhmZdjVMWx+3MabqCpu86Jq2lKSGrRL8O+yA9X6FYkfKhTt/JlpwgBWDFu8aScl8FsRsQ+5PssxMTcE1xeASS++Xxz2YRlYOnDp6H34TD4t/LDdTMk33MmU0Qa53LDebii5m5c+Nen4qCny50yPxQytw8pIj6dB6LBltVdItmk7Dq/zpUMH1ikcXVRljiukY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ODdTZGNyeXh0VmJwN2xNK1FXeDFZL25lTmVaTjJtTEIxbUw2Z25CNjJjRkhN?=
- =?utf-8?B?cHRhKzZEbHFMMkNmcmNqOXR5aVowcDFuRi80V29oQ1VPRTErNTJuM05BeWxB?=
- =?utf-8?B?dkJFelJjSHEwQW9yWlhoRVl0V0lIRE1GUjVxa3pJOGNxTGRhbWlUeWlzUG52?=
- =?utf-8?B?Y08rY3M1S1JCVjM5cFltV1hDbmlTQi9CWnAzdHVaYkEvUjZzRVZCY29rYnJh?=
- =?utf-8?B?c0dJK25qc2dBY1RncTRnTEo5ckVaYlExOTRHYTZLL1UreERiV0E5cnFnNzJo?=
- =?utf-8?B?QXdCVDdmSFE5NkJLNmxoeURmbGlTRWJYRDN4dWVBL3VheDRLRlRvb3E0YjR2?=
- =?utf-8?B?c2xwWTZ4akQyRm5jcHFYUUpYYXVIZEpHUmd5Y1RpeEE0eW9iZnZCR0x6RWF2?=
- =?utf-8?B?UUIyQ1N2NVhzb1UreHVhREFZOFJtYXN1US9sUEdkeld3alJQRmg4a2RIRXVW?=
- =?utf-8?B?c25uemZRT1U5R09hMk01VEppZldjbkRVWld2OFRWKzB2NGsvTVRGdnVqSCt1?=
- =?utf-8?B?bnRCUWo5R3gzbm9FdzJXVmp5U1MrWjc4dmNTckIzbm16czJKZzBHTG1KZ0U4?=
- =?utf-8?B?dlBlK2RtbjVaMHd6a2dIVUQ0WDMyclZ5NVlOUm51cnM3WVRsbVoyMXZUWWMy?=
- =?utf-8?B?R1FkdWRVUTJubVJBSThmeDNBY1Z5akxHNFRZN0x0UjRUWUxScjFLSzhSWEd0?=
- =?utf-8?B?S0lBZmdpS01OV3dMSlZJQ1VQTnhSeVp6SlRmTkowT2h4TVBNb0JreitTVnVw?=
- =?utf-8?B?b0x0cTZVaDMrdEl1SFhheG9HeTUxM0FDbXlRaWRWdFRsUFd3SGdLWW1VT1NE?=
- =?utf-8?B?d3B1K29tSnJWY243R2hlaWdVVEM3OElBelRURUc1RWE3OC9NNXhQUDJXdldv?=
- =?utf-8?B?L2V4Tk0rTE4zMFRGaXpEMEFibGsxTnhpQWEzeC81L2ZIRVY1ZkJRWkprNG56?=
- =?utf-8?B?cUI3K25oMS9YZ2NTbk8zV1dkaUpvQWVpNGxVS3V1ZURoQjZkQmZCUDYySEpt?=
- =?utf-8?B?Znl2UUlHelVVa0lKTHhFYk9HaEtyeWFNYjNObzd2QVAvUUxpVVlvZmpMeWtV?=
- =?utf-8?B?WUdBQ080SHkxb3Exb0p3OFArSWx2VklyRWJQVVE0cEw3cjNudzVMYzdGaEJX?=
- =?utf-8?B?dEwzSFdYRnhuOXlMRVJjb3Jjc0lEVjBzVGFXUjc0NjVsd3p6U3BzV09YY3VS?=
- =?utf-8?B?d2xwdFdKWk5adGp5Z09ZVzNubXdBM2MrSDdaMFlMRFl0QUVsZGpHS21nczhT?=
- =?utf-8?B?TTF2ejVQQldVd2NoRDF4SFQxejYrYk1iWDFUSTdCaHg3S01RSUVsREhCTmlS?=
- =?utf-8?B?UytacHlhSUxjYXF6Sm0xOFFoREhvSENlRjZ0SG1VcGpKMmRvWi8xTnBsbW4z?=
- =?utf-8?B?SWpsM3RhV1haVWRqdDF4K01uRUR2VS9TeEt2M0JhTkxLZ0hraUp5aEtnTjBP?=
- =?utf-8?B?VldmOFJZMlB1ZHJIZ1Nab3J3Q2RXcURWOTh2ZEZ2d1dpTnBLVzF6a2lkNzY2?=
- =?utf-8?B?ck5WN21Ta2lBWkVIT3NYbko3MTRGNWNZaGlKakhRRHVNV0hqbjdMM253djZM?=
- =?utf-8?B?cXFuM1hWTnF0b1l6YkkvQ1JkQTM0b0ZrVTRDSWh3bGhpSG1yUDNzT2lpU1NP?=
- =?utf-8?B?NDhQdDFXQ2RvZ2J4S1U0bnJrenZ1RDNmamVOZUJzdiswZUlLdzRPRlZuUTZu?=
- =?utf-8?B?TGV4a0RaK2R0dFVkSmtOTC9WaHhwUWJnUHZsdklDeGdOd1gvY0Y3eTBYRHFF?=
- =?utf-8?B?dkg0cjFBaUZlR2kwajVQUm9odnlaZTdrUTZrbUFPaWNtK0NzeEtWQlAzNGRP?=
- =?utf-8?B?WWlFNWkybWJJQ1hXSTdTazQ2cEtDVFJVM0xRcG5MQzVxcmhwYjZZeHdRcmlJ?=
- =?utf-8?B?Y1NnVUpSdjU1ZTdlR2pwWmlBb2FaTGJJZnhjMUdlbGl3SzZDNDkySS81dmlH?=
- =?utf-8?B?dDREd2tncVlYN0FTa3J6ZHhXdytjYTBkZUJ3QzFvODR5TlVQMGdZbmxVY2xR?=
- =?utf-8?B?QllPUFIvODVVZkNCcW1scjBmc0psWHc2R0tRLzBEL3VFM3pjdkFGU3J6bkpQ?=
- =?utf-8?B?Tm1YUjhoai8rSTFPREQzSG44NTdVMXZmMXA0cWFNUUtvSlpyUHZWdHlzVDJL?=
- =?utf-8?B?MmFyc1FXWGhkL1IxRVNubU5RVWNJTGhoNFRqYUNHc0hGUGRSMFlIZ1dHQkpC?=
- =?utf-8?B?eFkvZi9hQlVzdlVhYnhWQldjSE9VbnVETEdTSE9kSFFtZW52N1NnZGxiVUtz?=
- =?utf-8?B?eGhKQWc5S0NSUXNGSkJvd05ocVBYbElmRkZtdWkraytyK0JTZkZraVo3NWs0?=
- =?utf-8?B?V0JYMmEwRDBxVlNPV0QweXp2K1duTTQ5aVFVdmMydzVob1lqcXFINGlneHMv?=
- =?utf-8?Q?MKypcqEwt6qOBsOY=3D?=
-X-Exchange-RoutingPolicyChecked: ev859LABoXxZj5iS6SG/zBEgxNcRthbV1r/EmJ1DLWlib2VFOYEBWMrR+FOAXkxyxNkcmvcoRq5Zlx0OltIdRlY0JMexUXGdn8KoWWkLAYtvLyqfB2qD7PhNzEziStQX9+xnXk+GN4pRZqfAy5Hcozgl6KvKyIYpv5rYop04/T50CIs9Azj5kyw8Yt6Ki7zwqVNa/wwCPRChlvjfPqf/UYJmcmGkSSfrkfXttrHnFkb1JOcEs0Aaj+PGKqEY1D417hJK3/32oNmUQM4fvGoCkJvvv3B8L1Zxubj+2E257t5TT39GCRQf81LOF1M10vDwmMO0lejCmYOk4hiPeKECog==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3178feb3-b10f-45da-86dc-08de8f37def0
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 15:12:06.2254
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qwNva+/KnAiqErQh3oSYPxxGyo93qg4rW1WgOR+jHXs1qr/B6SS+dq97aXpXI+z3RoZX8d4YMU9UpnIlEbELCs8tY0gCYau3y0xQQ3DbQV0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6281
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 
-From: Kohei Enju <kohei@enjuk.jp>
-Date: Mon, 30 Mar 2026 03:01:04 +0900
+Hi All,
 
-> On 03/25 13:06, Tony Nguyen wrote:
->> From: Alexander Lobakin <aleksander.lobakin@intel.com>
->>
->> Queue management ops unconditionally enable netdev locking. The same
->> lock is taken by default by several NAPI configuration functions,
->> such as napi_enable() and netif_napi_set_irq().
->> Request ops locking in advance and make sure we use the _locked
->> counterparts of those functions to avoid deadlocks, taking the lock
->> manually where needed (suspend/resume, queue rebuild and resets).
-To Simon:
+A recent change to vmalloc caused some performance benchmark regressions (see
+[1]). I'm attempting to fix that (and at the same time significantly improve
+beyond the baseline) by freeing a contiguous set of order-0 pages as a batch.
 
-Yes, the DCB code was reported earlier and I fixed it already in this
-series. The DCB core takes RTNL, not netdev, so now ice calls the
-functions which take the netdev lock.
+At the same time I observed that free_contig_range() was essentially doing the
+same thing as vfree() so I've fixed it there too. While at it, optimize the
+__free_contig_frozen_range() as well.
 
-But seems like the E-Switch code should take the lock, yeah.
+Check that the contiguous range falls in the same section. If they aren't enabled,
+the if conditions get optimized out by the compiler as memdesc_section() returns 0.
+See num_pages_contiguous() for more details about it.
 
-To Kohei:
+[1] https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com
 
-Ufff, I'm sorry I missed one more part, this RTNL -> netdev lock
-transition is when you change one bit of the code and then the whole
-cascade in some other part breaks...
+v6.18      - Before the patch causing regression was added
+mm-new     - current latest code
+this series - v2 series of these patches
 
-I'll send a new rev once I fix and test both.
+(>0 is faster, <0 is slower, (R)/(I) = statistically significant
+Regression/Improvement)
 
-Thanks!
-Olek
+v6.18 vs mm-new
++-----------------+----------------------------------------------------------+-------------------+-------------+
+| Benchmark       | Result Class                                             |   v6.18    (base) |    mm-new   |
++=================+==========================================================+===================+=============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 | (R) -50.92% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 | (R) -11.96% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 | (R) -35.21% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 | (R) -36.45% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 | (R) -31.83% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 | (R) -38.62% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 | (R) -24.84% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 | (R) -37.83% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 | (R) -26.32% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 | (R) -37.76% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 | (R) -31.15% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |      -8.97% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |      -5.88% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |      -6.95% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 | (R) -40.19% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |      -2.10% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 | (R) -48.03% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 | (R) -40.48% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |       3.52% |
++-----------------+----------------------------------------------------------+-------------------+-------------+
+
+v6.18 vs mm-new with patches
++-----------------+----------------------------------------------------------+-------------------+--------------+
+| Benchmark       | Result Class                                             |   v6.18 (base)    |  this series |
++=================+==========================================================+===================+==============+
+| micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |         653643.33 |      -14.02% |
+|                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         366167.33 |       -7.23% |
+|                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         489484.00 |       -1.57% |
+|                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1011250.33 |        1.57% |
+|                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1086812.33 |   (I) 15.75% |
+|                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |         657940.00 |    (I) 9.05% |
+|                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |         765422.00 |   (I) 38.45% |
+|                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        2468585.00 |   (I) 12.56% |
+|                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        2815758.33 |   (I) 38.61% |
+|                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        4851969.00 |   (I) 13.43% |
+|                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        4496257.33 |   (I) 49.21% |
+|                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         570605.00 |       -8.47% |
+|                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         500866.00 |       -8.17% |
+|                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         499733.00 |       -5.54% |
+|                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        5266237.67 |    (I) 4.63% |
+|                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         490284.00 |        1.53% |
+|                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |         850986.33 |       -0.00% |
+|                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        2712106.00 |        1.22% |
+|                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         111151.33 |    (I) 4.98% |
++-----------------+----------------------------------------------------------+-------------------+--------------+
+
+mm-new vs vmalloc_2 results are in 2/3 patch.
+
+So this series is mitigating the regression on average as results show -14% to 49% improvement.
+
+Thanks,
+Muhammad Usama Anjum
+
+---
+Changes since v4: (summary)
+- Patch 1: move can_free initialization inside the loop
+- Patch 1: Use pfn_to_page() for each pfn instead of page++
+- Patch 2: Use num_pages_contiguous() instead of raw loop
+
+Chagnes since v3: (summary)
+- Introduce __free_contig_range_common() in first patch  and use it in
+  3rd patch as well
+- Cosmetic changes related to comments and kerneldoc
+
+Changes since v2: (summary)
+- Patch 1 and 3:  Rework the loop to check for memory sections
+- Patch 2: Rework by removing the BUG on and add helper free_pages_bulk()
+
+Changes since v1:
+- Update description
+- Rebase on mm-new and rerun benchmarks/tests
+- Patch 1: move FPI_PREPARED check and add todo
+- Patch 2: Rework catering newer changes in vfree()
+- New Patch 3: optimizes __free_contig_frozen_range()
+
+Muhammad Usama Anjum (1):
+  mm/page_alloc: Optimize __free_contig_frozen_range()
+
+Ryan Roberts (2):
+  mm/page_alloc: Optimize free_contig_range()
+  vmalloc: Optimize vfree
+
+ include/linux/gfp.h |   4 ++
+ mm/page_alloc.c     | 141 ++++++++++++++++++++++++++++++++++++++++++--
+ mm/vmalloc.c        |  16 ++---
+ 3 files changed, 144 insertions(+), 17 deletions(-)
+
+-- 
+2.47.3
+
