@@ -1,97 +1,94 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B7D4534A7
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26160453486
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774992144; cv=none; b=J0TChQCLEdHuGDyzFNfBuWhaBDfx0SpUYNQcqVO98oiqqQX9ecoyqKJESoZeHlf8Iqy8NbNpyDaN/FGkYyS0BaWDXPbkbI9mLPXi85zR9UowUcWvjtbRUmhHheJsLYjXujR4KIpCwaCpnCUou6wNiAXAlIzFZubbg8Sbrh5fGsM=
+	t=1774992250; cv=none; b=AdLl//F8FuiMgRT+SHdq7j/U43f0GJYYKDlQ+/+wf6ZPaGEcVyDZAQViopLl3Jo1bO+c0OuqmXvtIlh2r1hHHL6J47kBxSXlVJitXMFnYC3zMwSKQgvpW/VDjQcjlWbDzHZzXHlukFCnV1KReM9O7dxZ0Bttoj8P0TjBmBP1L/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774992144; c=relaxed/simple;
-	bh=EZ7tPFFANhVnKv4dmklpztXjIblw3xLvgaaNWmfIM8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pns6prh37pKk9idztTYbNaRMryKhQKQelYTMJ9fId9F5f06dtwkUpWK94i8LnREhOwuTNZegPqYWx2gdM+6TGj6SCC/6baJX5AMKDhVK1sIsCkcstSehhD3A7liAR7auP2HtSr4wxhvCa6QvrTJPYudkxCFpDPRG5A9aBR8RHik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 42F0713AB1A;
-	Tue, 31 Mar 2026 21:22:21 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id ADCF960010;
-	Tue, 31 Mar 2026 21:22:18 +0000 (UTC)
-Date: Tue, 31 Mar 2026 17:23:17 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Sun Jian <sun.jian.kdev@gmail.com>, Puranjay Mohan
- <puranjay@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, kkd@meta.com,
- kernel-team@meta.com
-Subject: Re: [PATCH bpf v4 1/1] bpf: Fix grace period wait for tracepoint
- bpf_link
-Message-ID: <20260331172317.227da913@gandalf.local.home>
-In-Reply-To: <20260331211021.1632902-2-memxor@gmail.com>
-References: <20260331211021.1632902-1-memxor@gmail.com>
-	<20260331211021.1632902-2-memxor@gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1774992250; c=relaxed/simple;
+	bh=oI12tvnlm1mx0WilenuSzqGDFwjcJCBjb3kR2aQ+aQw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uR416wzraw1hMTPqONC2BQd4vhfuJOTj7VSwx8YbFnk5y6WQjuuW0XzM6pHiAwVA8uCGX4fIQfGI97bKo6lLJ9/bU7J4qlKKoe+/T2yc3N3buuxUOKLj9eiY8r40sUS6mGGvFdFJwHztPRfGb0KtTvQlCWYJLY8z1AGloo3N4wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XybGe79S; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XybGe79S"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2adff872068so26007665ad.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774992248; x=1775597048; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=oI12tvnlm1mx0WilenuSzqGDFwjcJCBjb3kR2aQ+aQw=;
+        b=XybGe79STFg4KGNloClMIAtnOa279rr2MfvTZpPEtKM9u6OgrLHFE14mmMBNq7wGP0
+         MMmsy2seSfO7ByPuvzyjCoCIHKP/G7oG/fnMrr1b+MF1vuq9cXXPPAsEnPgcvl4gR3gi
+         IRMtGTpP8iC+eK4mle4U4NBwJ4A7YmIC2GUt/eO57lhE+7kv/ou8lqCppXG5iV9Us3Yz
+         f3prANgUzxwtjd1WdEuqkjEGZfrv2k59vkuga9EzSwnINBB8g6+ExSDwqnwdey7pK1QH
+         Zw6D9yzIgH5xusYbBMZJu9xz254ZetWQ4f28WuwvraTGAyTHAuRbFE91+IqZSO6Qg90d
+         YuDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774992248; x=1775597048;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oI12tvnlm1mx0WilenuSzqGDFwjcJCBjb3kR2aQ+aQw=;
+        b=ER63SkWF/uYHFRIyJX+pdm3pXxLNVnRsvP4mG0PHo68D6Ub3zGYkAeMqjPSzdbHiMF
+         NKnvjC+KGPNaDzYUp/typa8HZOX2ITYc7lLHaB7Xm8pgNMvObZcDnI6CK2OIgQQr2kL0
+         6FYmv6rocv+w4Dp5HPeRNYYyYMy2HrpxUV85NVa1Foqia8D2NEKNMHTOZCPcLV2oM5ng
+         qM98HqCkGZBEfkD6g6llVH6cyG9RssscJNMRRQP4WClN2jQfAYVzbnwlCxm7K1F9FSVN
+         Ihhp7F5OD/1bEDold1LhPAIdhZHakynNXOUuRJ8P8/crlszgcbB1BXAx8yrqHXdeg767
+         8k/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVxnlAZ39dRzoYGhVREmFj87kl+FeFToBVCYeL/vBohXZ0Hl5wuNpicHQvVVpgL/vgo5Rk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuyYaH1ve9Jplqr6hdbDzuDLW0Cb3uvjlOwJoW0Ngw6Fb+Kqnc
+	4xaqw8Lej7TWTxJ7snM7MOHyPsnmjGrVf/OT/a2AcegSJPT4qe0/CTDl
+X-Gm-Gg: ATEYQzxnUtMM8F2VJZRoLf2Xpqe7PAIXQNIW++xIR8RMG+nhKtsYlQy7C5YZ107+MLp
+	0B81KJ0ZPheBOkuYIF8FzOUCyaAX88lvuMn1dciw0+81RGbdgVtvA7HlrdTYfhiCFqZpBXvAeu3
+	9ewrgFRpoZZY2E5TIdJQ+zzl8KTq0yyT4C62fEg8IHGFr30n9+CKvLqtdijUMn6b8/PpUPKsNSq
+	kwYj9n4OstUWEw76vcWH/nQSAuRzGcNC0d/z/vszdYz3HffvZ2LfMkQepvctwCumdmVYK82w4IG
+	DOqFVpStHnTs3LNVR5ihDUPzIRkXUCJUyeBJ1ci44xyf9ErKRECQlD3Fq69ZTYcV9DAuNCOMCLk
+	M+/OKax8kfHBoxwqGjgRYoUfZtQykc6hN7cTLomwm2slr+kaoZQZSH0rDfuUAPEH4zQlNPRQxqr
+	gt/ts5WSpz9nLw2iTtCjiF+YeNFOUdzLllWPxhXLfkYDWnLyxgUmO2
+X-Received: by 2002:a17:903:32cc:b0:2b0:5cb4:d89d with SMTP id d9443c01a7336-2b269c7c402mr6627185ad.29.1774992248485;
+        Tue, 31 Mar 2026 14:24:08 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b242676e13sm126381775ad.28.2026.03.31.14.24.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 14:24:08 -0700 (PDT)
+Message-ID: <836d55be42874adb0583de3d9e96cb2eb884ebc9.camel@gmail.com>
+Subject: Re: [PATCH bpf] bpf: Fix regsafe() for pointers to packet
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
+	memxor@gmail.com
+Date: Tue, 31 Mar 2026 14:24:05 -0700
+In-Reply-To: <20260331204228.26726-1-alexei.starovoitov@gmail.com>
+References: <20260331204228.26726-1-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: ry19w97h7z5a5edbhy7wq9b493dzemys
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: ADCF960010
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/C3iChBZNa3LQ+bmHl7Av1HHyge1/G6Zk=
-X-HE-Tag: 1774992138-534293
-X-HE-Meta: U2FsdGVkX19rXonYyQg8vbYdzdgR9vURdQiObPdLAaPG5TCPe4s5DzhpdF+U4RhwY6FW9jsxDacfvSog0ZUUX4cbN1nz8rGhdWHpXhuwwpFymsAWtKcMOKt1KXB8ILbdNQbvUT9MM2iFQaVHXG5MlXwTEotHvoAaVLAFq7lq3sdJXlIGlQXwbN60NcfRiWj7PVBDoHKETWJFfoMbNyujTVFfXrHWZiPHcnzruHNGdRyHGHJprzUHKwctK7jFMNzKQyazOx2OODDJNNOoUUXCUIKS4NrHOtLQyH8cPwMWHkCKskb95jZdlXe3qPq16b/UmqfgUv1x94q4JzWMLIv8DkCWV2wlMKq6+ztR0mr+M6QVGKNPqOyEgteu+TJtPLg8cA4FgVDN+lCFRoxIBvg3VA==
 
-On Tue, 31 Mar 2026 23:10:20 +0200
-Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+On Tue, 2026-03-31 at 13:42 -0700, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>=20
+> In case rold->reg->range =3D=3D BEYOND_PKT_END && rcur->reg->range =3D=3D=
+ N
+> regsafe() may return true which may lead to current state with
+> valid packet range not being explored. Fix the bug.
+>=20
+> Fixes: 6d94e741a8ff ("bpf: Support for pointers beyond pkt_end.")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-> index 22ca1c8b54f3..1d7f29f5e901 100644
-> --- a/include/linux/tracepoint.h
-> +++ b/include/linux/tracepoint.h
-> @@ -122,6 +122,22 @@ static inline bool tracepoint_is_faultable(struct tracepoint *tp)
->  {
->  	return tp->ext && tp->ext->faultable;
->  }
-> +/*
-> + * Run RCU callback with the appropriate grace period wait for non-faultable
-> + * tracepoints, e.g., those used in atomic context.
-> + */
-> +static inline void call_tracepoint_unregister_atomic(struct rcu_head *rcu, rcu_callback_t func)
-> +{
-> +	call_srcu(&tracepoint_srcu, rcu, func);
-> +}
-> +/*
-> + * Run RCU callback with the appropriate grace period wait for faultable
-> + * tracepoints, e.g., those used in syscall context.
-> + */
-> +static inline void call_tracepoint_unregister_syscall(struct rcu_head *rcu, rcu_callback_t func)
-> +{
-> +	call_rcu_tasks_trace(rcu, func);
-> +}
->  #else
->  static inline void tracepoint_synchronize_unregister(void)
->  { }
-> @@ -129,6 +145,10 @@ static inline bool tracepoint_is_faultable(struct tracepoint *tp)
->  {
->  	return false;
->  }
-> +static inline void call_tracepoint_unregister_atomic(struct rcu_head *rcu, rcu_callback_t func)
-> +{  }
-> +static inline void call_tracepoint_unregister_syscall(struct rcu_head *rcu, rcu_callback_t func)
-> +{  }
->  #endif
->  
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+[...]
