@@ -1,207 +1,177 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C3440626B
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 15:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774970729; cv=none; b=ksKtHHmOB0vjtpd72MorDb6x4TyyLCDqE1fiWpCMSQc44ovBfvkDMJx5mn2gJfNeUPM2rufE22fL9KBTQMT2qFJeYfbBBGG8OdkjxjV70ZR/PPFrctZx6To4kAgS6KCj47rk6RM9EHtbX13mVosPU9lZS7DU7o2PxjBDUjAJG70=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774970729; c=relaxed/simple;
-	bh=rQBh02MaAajKMfKDC8YMNgw3hVbVvfm1kxuP49DEQG4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HRe6itUCUoTrqDCSglgZjpn15o2xmcNuBV1QqPaf0HI/JoqfUIt9CWfeRlnXBi4G/3e71h0PNrXwqTNlEye4YdFxyFOj6fxDR0tpqWvsJMLSYlfn3CCUgx1TRtjUaKlXp2z3yXw30jShKLFt3/BbOcvLEvclpleF736nM5IQ+Bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ckLFKafb; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3952FD69E
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 15:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774970857; cv=pass; b=h6KKOTW2aAUe7qAbgDUQa01MvcdLzGqFHxFPTXTbdqntmjrPUytZeQNS7NREoeFtLJWN5+gVGJRL86IHcp0XVquDTKHj9ALDMAFOAF9NhkQFGM6aSwWMzmttIuF6Bv+IG5LeJIaWatruvuRNsjTYKSkKwsKNO+W1pCDZFiJjC8Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774970857; c=relaxed/simple;
+	bh=cPFk5LiS24XRB7lAHu6mk6qRe0o6w9nj+ckT8UvB7xw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K9g2kkRMT5/gg5m+WQttBSi/5lv4miIk7C8JhIo/FAWdpyZoOaKjKe7wPX+38Rv54a/JKTsi4cyfhhFSta8WM3Xx4Brmw0KusCFnEHdl7rV0hX3ys1zygBJ2WjmTWmllPKR659aLKdKR71/B7be5cs2Ix5RtFNZVc9WhVr/9E7I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gmrOG8Fq; arc=pass smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ckLFKafb"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b982b0889d8so707436066b.2
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 08:25:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gmrOG8Fq"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-486fc4725f0so59775485e9.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 08:27:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774970854; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RG/U5tRzSeyvSDE2bUh+Q26xEhH742qurb9E2yL0wIfc4X1RLYBtfR5LJSKwJkyQVE
+         o3B+6vARV02D/wR920VLq9f9rxbMCbVtglFsTX6+7PdFFxwy4ams56bZ+gd34Ufq00o8
+         AdFu4QgAOos6TSJ0DYatDxB5feqwQ0I2VfrNLgyeaVETvhlPMk1+X2nMmC/b3hbov1gx
+         ALyYgKMNAAOyM4vZF7gEN/4RynLOihSUHlJaLmFFDTqqe3/dc+7/LwnImAZLy5d72mmq
+         u4doy0vtomAth00gtiaW18JXsDMIyNwV4DU37ZgjQ+rcwk5dQFsyc/2lp+Q/sep2eI7W
+         gpSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VXe9X+tFn4u72QIwhQGxlx7HiHQ83CyWQwXaiSNqjv0=;
+        fh=8ZESvcmFg0Oow24nQQqJujEOooHHzecBYPPnYm4NyC4=;
+        b=Mh10yaz5pT6Wxspem9yIQQX9H/suexKxmOIwWebaTnBx29LwwLJsHHhgCY1Mq8N9AE
+         sJMODgZaaJzB96U9IapIy1mlqB8Lw8CeJFIbeRIuXtCXHloKXYQN+o0YShqdSTnzLpl8
+         jykkpB9wAOWYT8DOMPTWsFOI5+JBm1/HcudzKaA0EcdFuzxRxuDjwJcEe/CiDrKFWPRv
+         oMp6mTz/+huxDVE8G35qL/69qy6cHwHkE+D4h60kJrOyghh9lmBDXJ3drWr1boLPj46n
+         +n/cpph17HEl4VQHWG01xXmpHdFzmujuE4wF3DEEtTjM8Hk68hs1CBhrRjyumU8zbxgt
+         8rWw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1774970723; x=1775575523; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1774970854; x=1775575654; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SsziD70VgpPgjTdfHcq7GvG3ra662CqVO4P1uVRU6Ec=;
-        b=ckLFKafbvdz9cqr2ZRSkVDQVXu744rMOuN/MlVSTqcJf3JfvDMtLKm/hC6k00tkChi
-         WE4IsezwxptukObTtAGC53RKlI6pDTJL8lbB7mMXGA8UdgmB1mQ8Eh/b4lQcgUmyO9ln
-         SAGI1OxBpPmBqP2itNU18rq1EUBVxlFPDdBgJDf1uDiDeeGjjUmdhNTnHtWh+mJHKBYS
-         REHEaX842O5YaUaUkNg6AqOVpFTWBPtaZdzAj9C/7skHmX1mfv3nLqlMcFtA8/L74HG1
-         Sq4ZCTorh4igPwV2ZTTr2LJ4oMqDF6zOL9+d4K6Zsquz65Jhx+8jneeXo41WwvpJiQpR
-         M1vg==
+        bh=VXe9X+tFn4u72QIwhQGxlx7HiHQ83CyWQwXaiSNqjv0=;
+        b=gmrOG8FqTOUwEt84inGYTAoXkXdPKUKhJ/v6bd1ySZmiUbC/dVga27aq3CiTaIvoKP
+         UVByzQRxKZ5tZ8ioc/eA3Rz+j/pavQ+My+U3zIX9KbdvLGF6oPIodQjrlNMEeGONxCXg
+         GawZkIZNyyYMERIU9+dcsDVlkXp/dK8N3fuUNkCwUnVs0/p+YGe2Wj8EbsRM4MQhhbeJ
+         YH/V7b+mzoiGdDohW35ZLeUNpl9ISGuNO+dmjAjPKecVVN38h39m3F25W22BKdaZctjm
+         H+AHdAnPFNaEPk9XnLYNme0MNDliBG52KOZUpJsOuXv484/9PL06D0g1FRFaK+6hrLQI
+         4l7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774970723; x=1775575523;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1774970854; x=1775575654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=SsziD70VgpPgjTdfHcq7GvG3ra662CqVO4P1uVRU6Ec=;
-        b=J6EYf1L6V+5W47SH2tcekD1037E0yjTcHA1sBa6eY4gM1SxeLJuReE2CuP/TI0FhZt
-         vuWfOK+Pso1BpmMHou8noKiMffxHFBkGdnSsgdoG3GuRmf+XLiYVwlNy6zCSpAQqyvAC
-         X3mJaUf2lXWcraigivLTGeMYBkVdLyl/8i3WoiAN1z4Jrvt+vhDSHDlah2okFX3RMw2E
-         ofOG5hOdMGVMbl9JohE14+moPSKIOQvjsV1h+CjZ5En/v/Ia7EsIrOWHbICgqNk5CT3F
-         A46dBnDs69cv6m/qWW1J1JPWU69gzEgD83ecSI7sgg2B/3jxBNrZOt9du/xbGAmPdGbZ
-         JriA==
-X-Gm-Message-State: AOJu0YxDIccTNwGM5niVMe7H7FbmIuC1XPVeaAiLo2yCRP4Jdx157stI
-	rHRC8ALvW4IiKscSMsUD/lne5sWzKGXK8XT0jfSZA6c8DbvRQp6CyJdldieoyY0sj1IyeofaYfS
-	1rvrknHo=
-X-Gm-Gg: ATEYQzwM3XgB1UyyR+KWmviBH4Oy0YYrvQ+0qGtsEqliOs0+mlQaul6qfUbY5XTDiFo
-	FAHCYwG5Kro8HCs0Nz9I5TYbdtIl5DG41X8Eyh6Amr0C+sl2zdU6Bu6wjezVMEA1ZNhEV+XgYWC
-	6j1r/fDSdUod1wSYEMLGD3+RbdO0zcvr5QPlaV7ac5KobPLM2VkZKm7JGbdEUTFapHaOhXu7kAk
-	BZu1L+7QKIirmlE9+2FE2Idc1YDyIo9SAwbotIiDOn+636+roO/Y4ucILx3q5IfoF1y78HtTc1h
-	bWYTI+fF15JrlszT30crX/2MwlvlYuPpSrlBXnhepPE5iqamqPaT8KtZElPgHu7NkKStbr0AJYL
-	OgNf1HAJjIgEsQd+tHvu7g0zj3/GR3pb17ta+WXFi7L5O6SkyBiMi8xgLG8Jij5xEYidoMlHJhP
-	d6YV3GYHMefD0BnEnxeIyg/Os2oC02TyWpdqdVwWmix7EkHHwc6lJPwLp9WfQBCw==
-X-Received: by 2002:a17:907:e8a:b0:b97:eae9:d45e with SMTP id a640c23a62f3a-b9c13cc4dd3mr1812466b.50.1774970722671;
-        Tue, 31 Mar 2026 08:25:22 -0700 (PDT)
-Received: from f16.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dba558226sm1264003a91.2.2026.03.31.08.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 08:25:21 -0700 (PDT)
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: add test for raw-address single kprobe attach
-Date: Wed,  1 Apr 2026 00:24:36 +0900
-Message-ID: <20260331152509.70468-3-hoyeon.lee@suse.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260331152509.70468-1-hoyeon.lee@suse.com>
-References: <20260331152509.70468-1-hoyeon.lee@suse.com>
+        bh=VXe9X+tFn4u72QIwhQGxlx7HiHQ83CyWQwXaiSNqjv0=;
+        b=l39hHmV5BlLYAWYS6UgnqT3MowwbwwSAOlBSxqvgd4hwPPPOp4GlqoGjzdt46EFa8H
+         WA5DcezfWzqPtsxosNt6EEAKtVTxoJqIVlrei0puLVOwQuRsSnPiikVq7mX75+T4TIvi
+         +sD9w8dcDr7fTmWS6yQ35yypbJZ9uTMi/SmPLFAOAIiSs5YUCt7O+FStXT013jlDE8xP
+         imLyVuIsYCDLl3uQrAEOiYXk6eaeAgEx44PDs5c/nVq+HePOFUoJC1oUf5OSikuyvQxn
+         r5CTMNs/xMUKHbd1HKIRNc7Ns4ek2E8+OQpl4SiUbMTRnfx3Y0ztAWq00Xczt7apEyoW
+         3rhw==
+X-Gm-Message-State: AOJu0YysWGchGeLSuDKYFyyo1OYzA1C4x3TDCb00ss6S1IlNaMmftyCz
+	seLQrVYE5JGb3ET099Dvs6LIIQljnxNkzID5g8YbRfl5MmQcnXzVFV527O9c+/SphBZamO5FCkz
+	RDfIv2e5+4RIC/atxTioFkNLOVUCye+aBCw==
+X-Gm-Gg: ATEYQzwYtMPiloJ+1Gs/GQQxxVrMb6jo7UXn5zFKI5EmpJQl89rNZmaoYztAdZS/FhP
+	balxRXerpGeIzSsRRX2rUWBjrRyQjvXx88d+Aggr3ejpH7YVij/TKsRMbP/6aghuN6QV87MCyYs
+	0GNcxe8kenEbQQeIz6RULe7UKiYqwxfSVIyw40Uy23lcw3/NUdFaSbcuyMzHn2TsBXzU7PbRS5p
+	fKZkRqG7BZWA8g0bF/w+lmGDLdAsZKrEAtSMSjCDdUcjcXBaYp9hmGZCNbDusLLpmBVLTsy9RX6
+	SzrvE/PlFuySahvm/vfhfDbcx/O6SaPQumNctusiIAcXI/usxQfWJS6kIVLZyTPOqsY5T/YfNRA
+	ij/HS60c8MEWzhroeTh0W83H3XA==
+X-Received: by 2002:a05:600c:c0ca:b0:486:f893:56c6 with SMTP id
+ 5b1f17b1804b1-48878397374mr48590485e9.10.1774970853919; Tue, 31 Mar 2026
+ 08:27:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260331005215.2813492-1-memxor@gmail.com> <20260331005215.2813492-2-memxor@gmail.com>
+In-Reply-To: <20260331005215.2813492-2-memxor@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 31 Mar 2026 08:27:22 -0700
+X-Gm-Features: AQROBzC3wVvP7NZmscfs3jasgSylBrbgTbK2duClcmZ2_q2c2V4jfWhI4RPi3PI
+Message-ID: <CAADnVQKP3bmuDP2NzKYhU776RFVuN4fOs3y-kyQ8AFzsoK3_2A@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 1/1] bpf: Fix grace period wait for tracepoint bpf_link
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, kkd@meta.com, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently, attach_probe covers manual single-kprobe attaches by
-func_name, but not the raw-address form that the PMU-based
-single-kprobe path can accept.
+On Mon, Mar 30, 2026 at 5:52=E2=80=AFPM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> Recently, tracepoints were switched from using disabled preemption
+> (which acts as RCU read section) to SRCU-fast when they are not
+> faultable. This means that to do a proper grace period wait for programs
+> running in such tracepoints, we must use SRCU's grace period wait.
+> This is only for non-faultable tracepoints, faultable ones continue
+> using RCU Tasks Trace.
+>
+> However, bpf_link_free() currently does call_rcu() for all cases when
+> the link is non-sleepable (hence, for tracepoints, non-faultable). Fix
+> this by doing a call_srcu() grace period wait.
+>
+> As far RCU Tasks Trace gp -> RCU gp chaining is concerned, it is deemed
+> unnecessary for tracepoint programs. The link and program are either
+> accessed under RCU Tasks Trace protection, or SRCU-fast protection now.
+>
+> The earlier logic of chaining both RCU Tasks Trace and RCU gp waits was
+> to generalize the logic, even if it conceded an extra RCU gp wait,
+> however that is unnecessary for tracepoints even before this change.
+> In practice no cost was paid since rcu_trace_implies_rcu_gp() was always
+> true. Hence we need not chaing any RCU gp after the SRCU gp.
+>
+> For instance, in the non-faultable raw tracepoint, the RCU read section
+> of the program in __bpf_trace_run() is enclosed in the SRCU gp, likewise
+> for faultable raw tracepoint, the program is under the RCU Tasks Trace
+> protection. Hence, the outermost scope can be waited upon to ensure
+> correctness.
+>
+> Fixes: a46023d5616e ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_=
+CALL() with SRCU-fast")
+> Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  include/linux/bpf.h        |  4 ++++
+>  include/linux/tracepoint.h |  8 ++++++++
+>  kernel/bpf/syscall.c       | 25 +++++++++++++++++++++++--
+>  3 files changed, 35 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 05b34a6355b0..35b1e25bd104 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1854,6 +1854,10 @@ struct bpf_link_ops {
+>          * target hook is sleepable, we'll go through tasks trace RCU GP =
+and
+>          * then "classic" RCU GP; this need for chaining tasks trace and
+>          * classic RCU GPs is designated by setting bpf_link->sleepable f=
+lag
+> +        *
+> +        * For non-sleepable tracepoint links we go through SRCU gp inste=
+ad,
+> +        * since RCU is not used in that case. Sleepable tracepoints stil=
+l
+> +        * follow the scheme above.
+>          */
+>         void (*dealloc_deferred)(struct bpf_link *link);
+>         int (*detach)(struct bpf_link *link);
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index 22ca1c8b54f3..8d6df1e7b5da 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -122,6 +122,11 @@ static inline bool tracepoint_is_faultable(struct tr=
+acepoint *tp)
+>  {
+>         return tp->ext && tp->ext->faultable;
+>  }
+> +static inline void call_tracepoint_unregister_non_faultable(struct rcu_h=
+ead *rcu,
+> +                                                           rcu_callback_=
+t func)
 
-This commit adds PERF and LINK raw-address subtests by resolving
-SYS_NANOSLEEP_KPROBE_NAME through kallsyms, passing the absolute address
-in bpf_kprobe_opts.offset with func_name = NULL, and verifying that
-kprobe and kretprobe are still triggered. It also verifies that LEGACY
-rejects the same form.
+The name is too long. imo.
+call_tracepoint_srcu() ?
 
-Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9e77e5da7097..817c4794d54e 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -123,6 +123,82 @@ static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
- 	test_attach_probe_manual__destroy(skel);
- }
- 
-+/* manual attach address-based kprobe/kretprobe testings */
-+static void test_attach_kprobe_by_addr(enum probe_attach_mode attach_mode)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct test_attach_probe_manual *skel;
-+	unsigned long func_addr;
-+
-+	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
-+		return;
-+
-+	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
-+	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
-+		return;
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
-+		return;
-+
-+	kprobe_opts.attach_mode = attach_mode;
-+	kprobe_opts.retprobe = false;
-+	kprobe_opts.offset = func_addr;
-+	skel->links.handle_kprobe =
-+		bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						NULL, &kprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.handle_kprobe, "attach_kprobe_by_addr"))
-+		goto cleanup;
-+
-+	kprobe_opts.retprobe = true;
-+	skel->links.handle_kretprobe =
-+		bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+						NULL, &kprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.handle_kretprobe,
-+			   "attach_kretprobe_by_addr"))
-+		goto cleanup;
-+
-+	/* trigger & validate kprobe && kretprobe */
-+	usleep(1);
-+
-+	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res");
-+	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res");
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
-+}
-+
-+/* reject legacy address-based kprobe attach */
-+static void test_attach_kprobe_legacy_by_addr_reject(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct test_attach_probe_manual *skel;
-+	unsigned long func_addr;
-+
-+	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
-+		return;
-+
-+	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
-+	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
-+		return;
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
-+		return;
-+
-+	kprobe_opts.attach_mode = PROBE_ATTACH_MODE_LEGACY;
-+	kprobe_opts.offset = func_addr;
-+	skel->links.handle_kprobe =
-+		bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						NULL, &kprobe_opts);
-+	if (ASSERT_ERR_PTR(skel->links.handle_kprobe,
-+			   "attach_kprobe_legacy_by_addr"))
-+		ASSERT_EQ(libbpf_get_error(skel->links.handle_kprobe), -ENOTSUP,
-+			  "attach_kprobe_legacy_by_addr_err");
-+
-+	test_attach_probe_manual__destroy(skel);
-+}
-+
- /* attach uprobe/uretprobe long event name testings */
- static void test_attach_uprobe_long_event_name(void)
- {
-@@ -416,6 +492,12 @@ void test_attach_probe(void)
- 		test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
- 	if (test__start_subtest("manual-link"))
- 		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
-+	if (test__start_subtest("kprobe-perf-by-addr"))
-+		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_PERF);
-+	if (test__start_subtest("kprobe-link-by-addr"))
-+		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_LINK);
-+	if (test__start_subtest("kprobe-legacy-by-addr-reject"))
-+		test_attach_kprobe_legacy_by_addr_reject();
- 
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
--- 
-2.52.0
-
+Steven ?
