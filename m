@@ -1,137 +1,214 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38B13AEF33;
-	Tue, 31 Mar 2026 12:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774961837; cv=none; b=oqQNTRdx8zfsPTgXE+cF2MfijW5P+8X0uM4Bh1cZMar4yQGpNcKzHlXh1Kqv++e3rH3ayVDZeWvfWQFw59gPgS8KLRcqlPaT96lBMPvseyhez/tBtjOxzJMygnTEZMVHV085hBug845RfFfPYJTnXYfleombItiJT1Os2GxRTy8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774961837; c=relaxed/simple;
-	bh=0U25bYtFjVVWOw0Fyb+E9vbcnPC+AThYCcohTtmdMdk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=jKOOfa/E3heUIAD3jL2OjUHXGDUvqMhCUoA4PkYdYDbaCbKB4cHWuwWFNo3IhXYWqZGkA2ceVvbgukELshJsM6gxuFKL4hBsBnVdgDq/Pt7Zkk5h+UjFVTAnDs0Obxe4029SzrfcoBniz2KjeBO0sf/gqDuSNY89EdJJfr2yVSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YShCU8gQ; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941323E3D88
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 12:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774961851; cv=pass; b=qAkwQIFZ3r4kzQa4B6qfzBfavBgKCY51T/+SQCnZtguvq6uH5SyZjbHzfo9J3m8bMcyIE93jy7GyTqeJcoHrR+4TayDZvb7vrLv8P2fxVYfmavc3PL6V/kWID3AuiS9hGAfO3BlRTyXlx7ij0NeBnZz3+uoJCINSIfSZS8Qq/8E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774961851; c=relaxed/simple;
+	bh=YUl4gyK6/e7FfbOW1z9y5JbPYdtrBVvIHyTKNDhIfJ8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hamfWRym7VoGkHKdPG18TO1qdgfNdm4dvTWa/we7Fk8W2I/2kFVTtDImyZKPdw5TrUYV08LquXNVD5bZKsRuAD/dFrbm2p3BbAysIEyS+lvMdVj8n6x5Fgn9T8nn76g6b12jJX/ut6wQu+NSotnxRPPbuBTImmjU5gJFLv+vOhU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=chw3eSyr; arc=pass smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YShCU8gQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	Subject:From:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=wt6DiEMteCEm1lhgoNFvSLYoFznRlgRcQ6OPddERu2k=; b=YShCU8gQvPDkVEjKYzf3B+jHjU
-	RXAJwAU+tJQO3JKFQqadVzLm1K/PW1hSpzdiA0ZwD/5js9IjvA14tyB8E/vUH3ldBbL0Rg/SK5tbQ
-	cKzqzylen2SjjOB9WDUd3SczzO3F0MMfD7wRQVi3ONW9DK59+rosVLyAPwSiQKiiRcxYXuMMxeBOV
-	1YI03Z8ID2oqD3DOO04P5qFSXQ2v5i2VvgHMTKexSei+eq1DUUY0cHgzFljgPf8XGEHMVq3aZgXS/
-	GyXDfKHtdp5+Z7iFKowGFa78L5zrN8jqB1KmVm06SbQI4gCwpAKMLgNV6gP2poiJr0Hetclnr5QW1
-	QD858xQA==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w7YeY-000EQY-3B;
-	Tue, 31 Mar 2026 14:57:07 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w7YeY-000EU1-1U;
-	Tue, 31 Mar 2026 14:57:06 +0200
-Message-ID: <70b21729-7c07-49a8-ace7-c67ec985ba8c@iogearbox.net>
-Date: Tue, 31 Mar 2026 14:57:06 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="chw3eSyr"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-46704177543so3766675b6e.2
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 05:57:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774961848; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GGsX30NB6WQmRtIJ77QKYMVTsbL0VbqKeql+lgZ3EOhyJuDzlDPhzkuUQ0fKZL4SSI
+         YltByXbWx1WR/crYhGXR73I5hhAyq4Tm5AHwinQk1t/l7ua6vziLWnzAu2jzVPgwLe0+
+         ZeV9KWZlGrLEh1jO9AxmcQxly42Y64fJFdfBJfQ9TbLIGSCHaHRmacHJiuOMUFEqbayO
+         WAA6H7h/JWTdEf5IHvmOl0rI4fyZ6Hdm0gN9snGMs0AMsPendCb2/qHMt0s941KGDmig
+         Bx6tRu/K4JZlhfGU9/mYatji5NhhMNnt8TjiT/ElYKMeIbCObuwfgRjovw7F7kVpAEAA
+         7jwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1i/IWNKmQViYlpNZcHjjgV2r5bCSVKhRNI2n0Z4OVes=;
+        fh=700IbvxiHUJGJxk6FBc4SWfdhh/4hfZf0GNwzmBVKas=;
+        b=PT4oZwexf+3k4Yx83e9CWWesE7yrTVaK/Acz7tVcQwuS1RsrJftm2rYVy9M4on9sR3
+         NKkPBOKpAKJQ+6zcIng0K3q9UutPzYQfEPvjhseiPnzhDqr+BnADmV8r+mStsCh6H2yF
+         gZCWHkmcpTNsApIM+yGFK7eRcS3LLGHeW8f8q6YEvcSE8dHDVXutrDgMsKzEzkKK2HQo
+         ktLxq1+/KFsfyCxykEhXaZYRZ3gcDTB3M33Fneq27VoSZmFZy+Y7/K8FwYqID674Yb29
+         x6dhQB+q9yRkzPEFEfG6ttmftl/KuJnqsLd/CYGa4sN6BahncFU1M4PRl+Wr8TgdQJkT
+         i34w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774961848; x=1775566648; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1i/IWNKmQViYlpNZcHjjgV2r5bCSVKhRNI2n0Z4OVes=;
+        b=chw3eSyrS8uLLDOLiP6PTrMa8rS8jNRWfJAK7sbOYESudZtHupYJ2L6htlLLlZHuvS
+         s4OHMB4D+rBt+IMFqqen9om8fbCGipL7fP/VLRq3nzO3HGxTsQ5oq3c8BiP2SDmFIcG6
+         9xFalUbxkpGQCV0Cx3LeYk4ZThsfZt0fW6NgjJZ6JZtz2UBMC5Hlt9v4zsGCcLrbRPhp
+         O+5PCyHMRQv0Iu6TDXUaXwhHczgfmVa3/b88dOhPTRWEp+zMwHPXdjAYwixkABNp9viv
+         4ALXoIOULl+nB023a41cmcgxR+OrnHYKGZsjsZ2Qo/0dD2os1odCfSj51O6FJIaXjjl3
+         8HTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774961848; x=1775566648;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1i/IWNKmQViYlpNZcHjjgV2r5bCSVKhRNI2n0Z4OVes=;
+        b=ouxTVxDQd9/q03pGm3VbrmDStF4QQTmb3e6WqEW4zwUI1fEtkaAMM0LWElgLljEG7M
+         1uwIlwEhyHN/VVbxCiljkE+AqFr6F3wM6lDYyTNPinG0Z6KZ1gjG3/FBWdAwkZgfybzg
+         s41r14hem/OQnldIA8KUUFWuzvheHdgvYYCQsMymqFMXetoGgA9XcB+sVD1og4+F0rgJ
+         AZE5830pJisPytLfotlhXfRAdEvjynTDFTU5rChdmOJK5USIY9gpqv/PkyzSu3Hqlnk7
+         GUVLYBBq0HazFPOFlCdBKCdLVOmhMGc1sxpSO6JUDr0gydPwCKnXM4M/rknn7AfUpF9G
+         XICQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZqnCGLYBFOGct6N1jRrvl50ORx2hFvipzLZQCIwrzOt1PwuAH9kiCafloitkljCy1YS4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTPTYEL1t3Zv3TAkiiQkrI7segHO07WcPARQtP95/zr+nqPPsK
+	Fagt3YgR5VerskJVub0tn9ID529HygXxwiwqwXCBKq5Xp+QS0bOP6lrSGCje1hxryG451cvElD4
+	syvxKJWKhLg3eGER7zfjIupfsMILwkcU=
+X-Gm-Gg: ATEYQzxe/P+fF+9eFKWuQUqIcZZQQn1kV90rYK2DSZLCqTRGk1Hr/D2al3xR2eY3TiO
+	XOpfrw64eOvpP5MdP/k4yJNUZ2mxAjnMKK+bu05tX3Y+cK3QjYQbYTd6tS3N/pHgFsuqawkLD60
+	SVvtd89Lw+YM96Zldwp4MStnO6vtrnD8wAzXeW8JLJQl3+zqMVeNI3W5LAeyQ4KXE2r87ovWC3O
+	XGdmH8vW/ZmwBRiSYoaDB+AJC++To/Y48/Rbgly5yVNEQ436hdBWEAeCYwVgN7GVNivsCezWTze
+	Y5qheIM=
+X-Received: by 2002:a05:6808:130f:b0:45f:13fe:4a3d with SMTP id
+ 5614622812f47-46a8a390638mr8325719b6e.7.1774961848385; Tue, 31 Mar 2026
+ 05:57:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: bpf@vger.kernel.org
-Cc: xdp-newbies@vger.kernel.org
-From: Daniel Borkmann <daniel@iogearbox.net>
-Subject: [ANNOUNCEMENT] LPC 2026 BPF Track CFP
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27957/Tue Mar 31 08:24:30 2026)
+References: <20260330121732.1601352-1-eyal.birger@gmail.com> <CAEf4BzbEMuUMZZwhPMEkOpxLxue26EhjUUYNYnDyUzMAMX6GwA@mail.gmail.com>
+In-Reply-To: <CAEf4BzbEMuUMZZwhPMEkOpxLxue26EhjUUYNYnDyUzMAMX6GwA@mail.gmail.com>
+From: Eyal Birger <eyal.birger@gmail.com>
+Date: Tue, 31 Mar 2026 05:57:06 -0700
+X-Gm-Features: AQROBzCFqPgo4MzzeJZkX-mtUUic_knLFIoAj5yOYf1kt3AtgoRSvViNfspwlu8
+Message-ID: <CAHsH6GvKcJc2-P9tG=KzUEAy2T=GmW+xVOJ7q92ZF2Dp7hnzKg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: warn against BPF_RB_NO_WAKEUP in bpf_ringbuf_discard()
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, paul.chaignon@gmail.com, 
+	chen.dylane@linux.dev, kpsingh@kernel.org, a.s.protopopov@gmail.com, 
+	yatsenko@meta.com, ameryhung@gmail.com, tklauser@distanz.ch, 
+	shmulik.ladkani@gmail.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-We are pleased to announce the Call for Proposals (CFP) for the BPF track at
-the 2026 edition of the Linux Plumbers Conference (LPC), which is taking place
-in Prague, Czechia, from October 5th to 7th, 2026.
+Hi,
 
-Note that the conference is planned to be primarily in person. CFP submitters
-should be able to give their presentation in person to minimize technical issues,
-although presenting remotely will be possible as a last resort.
+On Mon, Mar 30, 2026 at 5:27=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Mon, Mar 30, 2026 at 5:18=E2=80=AFAM Eyal Birger <eyal.birger@gmail.co=
+m> wrote:
+> >
+> > Document that BPF_RB_NO_WAKEUP is not recommended for
+> > bpf_ringbuf_discard().
+> >
+> > A discard done with BPF_RB_NO_WAKEUP can suppress a later adaptive
+> > wakeup from a valid record, leaving an epoll-based userspace consumer
+> > asleep even though data is available in the ring buffer.
+> >
+> > Scenario:
+> >
+> > epoll_wait(rb_fd);                     // blocks
+> >
+> > rec =3D bpf_ringbuf_reserve(&rb, ...);
+> > bpf_ringbuf_discard(rec, BPF_RB_NO_WAKEUP);
+> >
+> > rec =3D bpf_ringbuf_reserve(&rb, ...);
+> > bpf_ringbuf_submit(rec, 0);           // valid record, but no wakeup
+> >
+> > This behavior is surprising in the context of bpf_ringbuf_discard()
+> > as it seems natural not to want to wake userspace.
+>
+> why? discarded record still takes space in ringbuf and needs to be
+> consumed by user-space. So all the same concerns apply here whether
+> it's discarded or submitted ringbuf record.
 
-The BPF track technical committee consists of:
+Right, but sadly this isn't obvious to someone who hasn't carefully
+inspected the implementation.
 
-       Alexei Starovoitov <ast@kernel.org>
-       Daniel Borkmann <daniel@iogearbox.net>
-       Andrii Nakryiko <andrii@kernel.org>
+>
+> >
+> > Reported-by: Shmulik Ladkani <shmulik.ladkani@gmail.com>
+> > Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
+> > ---
+> >  include/uapi/linux/bpf.h       | 3 ++-
+> >  tools/include/uapi/linux/bpf.h | 3 ++-
+> >  2 files changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index c8d400b7680a..c46b06d45904 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -4645,7 +4645,8 @@ union bpf_attr {
+> >   *     Description
+> >   *             Discard reserved ring buffer sample, pointed to by *dat=
+a*.
+> >   *             If **BPF_RB_NO_WAKEUP** is specified in *flags*, no not=
+ification
+> > - *             of new data availability is sent.
+> > + *             of new data availability is sent, which is not recommen=
+ded as
+> > + *             it can suppress a later adaptive wakeup from a subseque=
+nt submit.
+>
+> NAK, it's not "not recommended". If you are using NO_WAKEUP you
+> normally would use it with FORCE_WAKEUP as well. It's not a rule, but
+> that's the most practical combination. But if you are fancy and know
+> what you are doing, you are free to combine NO_WAKEUP, FORCE_WAKEUP
+> and "adaptive wakeup" in any form or shape you want.
 
-We are seeking proposals of 30 minutes in length (including Q&A discussion).
+There are still possible corner cases - for example, multiple silent
+discards might fill the ringbuf preventing a later placement of a
+valid record - even if it's meant to use "force".
+Point is, the user should be extra careful, that fact is documented
+in other places, and imho should be noted here too.
 
-The gathering is designed to foster collaboration and face to face discussion
-of ongoing development topics as well as to encourage bringing new ideas into
-the development community for the advancement of the BPF subsystem.
+>
+>
+> If anything, instead, it might maybe help to emphasize that
+> bpf_ringbuf_discard() does live data in the ringbuf that needs to be
+> consumed by user-space code (normally transparently in libbpf or other
+> BPF libraries), and the only distinction between submitted and
+> discarded record is whether application's user code sees that record
+> or it's silently skipped.
 
-Proposals can cover a wide range of topics related to BPF covering improvements
-in areas such as (but not limited to) BPF infrastructure and its use in tracing,
-security, networking, scheduling and beyond, as well as non-kernel components
-like libraries, compilers, testing infra and tools.
+Ack. Will send a v2 in that spirit.
 
-Please submit your proposals through the official LPC website at:
-
-       https://lpc.events/event/20/abstracts/
-
-Make sure to select "eBPF Track" in the track pull-down menu.
-
-Proposals must be submitted by July 24, and submitters will be notified of
-acceptance by July 31st. Final slides (as PDF) are due on the first day of
-the conference.
-
-We are very much looking forward to a great conference and seeing you all!
+Eyal.
+>
+> >   *             If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, not=
+ification
+> >   *             of new data availability is sent unconditionally.
+> >   *             If **0** is specified in *flags*, an adaptive notificat=
+ion
+> > diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/=
+bpf.h
+> > index 5e38b4887de6..96de37c3b896 100644
+> > --- a/tools/include/uapi/linux/bpf.h
+> > +++ b/tools/include/uapi/linux/bpf.h
+> > @@ -4645,7 +4645,8 @@ union bpf_attr {
+> >   *     Description
+> >   *             Discard reserved ring buffer sample, pointed to by *dat=
+a*.
+> >   *             If **BPF_RB_NO_WAKEUP** is specified in *flags*, no not=
+ification
+> > - *             of new data availability is sent.
+> > + *             of new data availability is sent, which is not recommen=
+ded as
+> > + *             it can suppress a later adaptive wakeup from a subseque=
+nt submit.
+> >   *             If **BPF_RB_FORCE_WAKEUP** is specified in *flags*, not=
+ification
+> >   *             of new data availability is sent unconditionally.
+> >   *             If **0** is specified in *flags*, an adaptive notificat=
+ion
+> > --
+> > 2.43.0
+> >
