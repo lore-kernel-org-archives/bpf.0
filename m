@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22AF401A2A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4249401A30;
 	Tue, 31 Mar 2026 15:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774969372; cv=none; b=k6yrDP9tIIfwqygnMPOIW4G/Bba+AsobZLxhStgL3jEUbylQhgkv9UbkztFLMzlztjWb1xLY1sIMUKfccdNWgLYOTLD6yXeDzKuk0hmw8RbAlc82sjMaIGuywo4TuI6N0vyg2XkPaWTpcBn196PgwqW1IJQF30bPAjvCk+Q4y6w=
+	t=1774969372; cv=none; b=U0QYaQmbuMXWjoRCmrOFa8eJSPeCOmqTDJ234xbT57BNN9GmRDmTUOR+d2YPikWbShxznZGgOrgeW2fB9YuG8aZcUOcE2MvJ047weiHGa+JP4bfA1KgRB3RYQ+BKhiGELHEQp9DyXejncUTUZej2xHaCxBv5q/q9U7iEhhsCLGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774969372; c=relaxed/simple;
-	bh=VeLm4vxHSdRnkJZF6B1RLT0XaykufOd6fbmITIKKYfc=;
+	bh=qV+KGO787iVQA6q+LeGiudsVWzWKdh1iKu/pKa7i5zE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UPt3utA6knXV0M3pYDB/5j5wqXlM5gnuIrnm0XVluq4+a66XqstxnDxuEbu8MQVcftawHQs1fLcXOfgVZZzDyBrEMubA0gjcwP8b0Za31xGVsgAM9WuFad4j5UP+mo2bsVFJboRDB3fGYM4Ezk48WOTfUSPxajd6lCY2sW/ZlVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JlDA/b9r; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version:Content-Type; b=Jgb75qfizOpZ0l+ggep7rCP4kgW8iDCcUJyW8ICCsrtduchSUJamTCgnBn5tm4dZAY+C6SbSeyrJGGq6jBk3ZdnCU+xfI5pO9tW3hOyIyXsIquC+u8vhYsIlWijulEcSfcV0tUU0rMaWaYjJdDN+tAUIcVq/y6uk9NJqZxBYzEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C2rk2BQC; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JlDA/b9r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C2rk2BQC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1774969371; x=1806505371;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VeLm4vxHSdRnkJZF6B1RLT0XaykufOd6fbmITIKKYfc=;
-  b=JlDA/b9r1R2peCKsoPNOfBW1rzE+WZIICw/d5OI5gfhLHTpngYN9oi/Z
-   +sNtbs+ZLY+zv/OfYcknzRx42smZiyOSZU8nZY8eYXY6eduBVc5+/ZdxC
-   1ckGXD3i+pLF3Q0RDVKObbDNnw7rOOZOybOXqgbD2RqIHMj0Se3K3d2fv
-   M9A/Kq2DUr3krgTzqG75099pYJw7q9pfWcdoPsB5c4J3CnkMfO8yrBuZp
-   zwB4AYYAa6oBlMd7Ck6lLnNlvXUN+J2dS5TJ1p/1NKLnpAXP2zWP2DW2T
-   iBG5A4oDsSX4ympnbXCW3CKpGxnLtccafp0T0i0Pi85X4dez1rvYmI+iF
-   w==;
-X-CSE-ConnectionGUID: 1+KcpU3VS9qIRrNypYGJBw==
-X-CSE-MsgGUID: 1lm4G4sRSyeoQ5CSkKJiwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76046205"
+  bh=qV+KGO787iVQA6q+LeGiudsVWzWKdh1iKu/pKa7i5zE=;
+  b=C2rk2BQCEN9gTBR1g09Sz8w578Hu0DKiY4dldIfDV05aJHN1cOX9qzic
+   Uip+I3ydnowM7e8OSOi0DH/14VeIdQTq7VKRuDng9F9VeZ15FZ9vJQG/S
+   krGhMDBLkQmmnrUfsiAP4LEo/aiKxTAjKd/IXU2u8gcXQtsu8/4DX3uMC
+   R2EJ1V3Fi46flDA3bpZIsOGb+Wcnc02ujL/Q+NQVjLcXosJJZ6uKye3bl
+   ICGtpvyiJYv7quuE5ehDeGJVyYt8gx4MNcuii/A74Fz/SCikUzV8LDrkg
+   OAm99W2LSOKRB5u7rmov4j6tqZzrH5nhfz64lynpYSL9hJXI3zrASacZw
+   A==;
+X-CSE-ConnectionGUID: AuM7gH6uR9C/FdfPy8qX1w==
+X-CSE-MsgGUID: Xrnep1aaT/mm4NTUW3CXJw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76046218"
 X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="76046205"
+   d="scan'208";a="76046218"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 08:02:45 -0700
-X-CSE-ConnectionGUID: 5+O3Igi9RM2SmlbNGuZFBQ==
-X-CSE-MsgGUID: 16AeA5nqQzC2Ebsc1PDFWA==
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 08:02:48 -0700
+X-CSE-ConnectionGUID: LpLd4fErQja/d/K6zFlFoA==
+X-CSE-MsgGUID: IuAasp0QRNS7xAuZcnUpew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="219735643"
+   d="scan'208";a="219735653"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by fmviesa009.fm.intel.com with ESMTP; 31 Mar 2026 08:02:42 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 31 Mar 2026 08:02:45 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: bpf@vger.kernel.org,
 	aleksander.lobakin@intel.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v5 net 09/11] idpf: remove xsk frame size check against alignment
-Date: Tue, 31 Mar 2026 17:02:11 +0200
-Message-Id: <20260331150213.550797-10-maciej.fijalkowski@intel.com>
+Subject: [PATCH v5 net 10/11] igc: remove home-grown xsk's frame size validation
+Date: Tue, 31 Mar 2026 17:02:12 +0200
+Message-Id: <20260331150213.550797-11-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20260331150213.550797-1-maciej.fijalkowski@intel.com>
 References: <20260331150213.550797-1-maciej.fijalkowski@intel.com>
@@ -70,36 +70,43 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-We provide alignment within xsk_pool_get_rx_frame_size() now, so this
-validation is redundant.
+Since this check is now present in core in xp_assign_dev(), remove
+redundant statement from igc_xdp_enable_pool().
 
 Reviewed-by: Björn Töpel <bjorn@kernel.org>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/idpf/xsk.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_xdp.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/idpf/xsk.c b/drivers/net/ethernet/intel/idpf/xsk.c
-index d95d3efdfd36..a5b6177fd44c 100644
---- a/drivers/net/ethernet/intel/idpf/xsk.c
-+++ b/drivers/net/ethernet/intel/idpf/xsk.c
-@@ -558,16 +558,6 @@ int idpf_xsk_pool_setup(struct idpf_vport *vport, struct netdev_bpf *bpf)
- 	bool restart;
- 	int ret;
+diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
+index 9eb47b4beb06..4126173a0226 100644
+--- a/drivers/net/ethernet/intel/igc/igc_xdp.c
++++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
+@@ -61,23 +61,12 @@ static int igc_xdp_enable_pool(struct igc_adapter *adapter,
+ 	struct igc_ring *rx_ring, *tx_ring;
+ 	struct napi_struct *napi;
+ 	bool needs_reset;
+-	u32 frame_size;
+ 	int err;
  
--	if (pool && !IS_ALIGNED(xsk_pool_get_rx_frame_size(pool),
--				LIBETH_RX_BUF_STRIDE)) {
--		NL_SET_ERR_MSG_FMT_MOD(bpf->extack,
--				       "%s: HW doesn't support frames sizes not aligned to %u (qid %u: %u)",
--				       netdev_name(vport->netdev),
--				       LIBETH_RX_BUF_STRIDE, qid,
--				       xsk_pool_get_rx_frame_size(pool));
--		return -EINVAL;
+ 	if (queue_id >= adapter->num_rx_queues ||
+ 	    queue_id >= adapter->num_tx_queues)
+ 		return -EINVAL;
+ 
+-	frame_size = xsk_pool_get_rx_frame_size(pool);
+-	if (frame_size < ETH_FRAME_LEN + VLAN_HLEN * 2) {
+-		/* When XDP is enabled, the driver doesn't support frames that
+-		 * span over multiple buffers. To avoid that, we check if xsk
+-		 * frame size is big enough to fit the max ethernet frame size
+-		 * + vlan double tagging.
+-		 */
+-		return -EOPNOTSUPP;
 -	}
 -
- 	restart = idpf_xdp_enabled(vport) && netif_running(vport->netdev);
- 	if (!restart)
- 		goto pool;
+ 	err = xsk_pool_dma_map(pool, dev, IGC_RX_DMA_ATTR);
+ 	if (err) {
+ 		netdev_err(ndev, "Failed to map xsk pool\n");
 -- 
 2.43.0
 
