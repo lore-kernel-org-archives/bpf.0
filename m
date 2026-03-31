@@ -1,156 +1,214 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEF4199D8
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 23:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774999766; cv=pass; b=hfLbs9jCA3UjEIMsKPcADIy/CluwEjQXtcjyMcTQF4gwtz/+2OHktQLyW4zExf2JCP/VgixNBxPupZPEq2XAImAi4Lbx9P2ZasUWdRwwCrGtOIj/fZeBxQaoxj0d465MLdVUS3y8EtuENfkFK8h0RJ3SUiDT2J5s9jmCWJXSWV0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774999766; c=relaxed/simple;
-	bh=DGtcnL1ZHkwcAqZL5SPxl5pFOsWzbDPKt2araBMqUi4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bmfei4BxDQkc9Yt6945Uo+ZQcrY2Lgv1k1uViarkymofHzWKEYocXGSLHKxhjSzcwno1qfrlmaICfOFgqRSytzEGg0aohySCRlVMvRpaBHf6cOQGn/n4h8sOfF9yoPI8CReBWXfrhVFJTnVa6yjssA6sLr5590krQ14jlOSVgYc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=roXEN2d9; arc=pass smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56ED52BDC2F
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 23:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775000972; cv=none; b=j0zWPT2xzTSwwQ/tV7QFT42hes10w1JW1B8rddAQkf7jHndvwVn4rv10Q+EdeFgHQjrIHo6dp749K/09GvpOMQ8lbf3q2MNiJSrn2jgtSN0bZIDcwcucc6ZeR/U9YOUIioTQa39HJKIj4Wk49cyb2SDjWLay5Vi70AZzVDCdgIY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775000972; c=relaxed/simple;
+	bh=b6F5Wol1rmdIAxCBSR/1o0L6e0zkmGyQDRLJXJLm1hU=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Subject:
+	 References:In-Reply-To; b=kW2U9p1goa1x4+JftAL/g9pOvvyqCujRQsPCbUVTAkMlgwc93A3jD0vjP8ipvCyDUSAh4hLSTokXm+K7wSgV1MRdlcsmz9DN6OURq0VzkcZhIbpBJ++GhyRijiklwxIGMe+DaQLYoFEV8NCYSBiDydwtDDLj9yMNBSP8a4vMAXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=gHZGo6lb; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="roXEN2d9"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43d01d6b50cso1969928f8f.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 16:29:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774999763; cv=none;
-        d=google.com; s=arc-20240605;
-        b=I+PeamwioYnvd3TQrbTw4k6d5U7WfURkCF4JQNqqo4c7VbdCSbd5tObY3GxGgC9Onx
-         d9cfX29ZdPfjlMl86fLze8XZ1xarcfovqyWmRIvrpleqMnXtIJqeixISTegXdYkQJ5K6
-         jGfQ6utevMtuyHhMYWvemLu2Uq+FNZGaZrKIW6tacZcId6iSI3xPFjrzKDsk71/+cVE9
-         Ye2NAPATgLOHSpgjk6E4ykFU4r39K8lncbVAbZmrTgPAZeoks94vc1tkAjn+n6ZWc4a8
-         qRybJYbeMZpbxusfrdt1yvGuIcqsz+Moev/b9ri2gIOj5qf1IeS2IX2k+lqxe6KZz+7J
-         MvBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=DGtcnL1ZHkwcAqZL5SPxl5pFOsWzbDPKt2araBMqUi4=;
-        fh=mfCH6ySoPI60ahOZm9SJKKpFB+lQgUzAD9SKmxYfC7k=;
-        b=CCnfuCrfS+92CvObpOZFvktL3eY4l+sIA2hmORLzWp+2DBKZcYUT3VwWGvfUYPefhl
-         dTkBtbMkWVb6ZeJTIBi06pzuid5qmnm3ZfHJn6yAYkJAOuIqdKdtI6iNGCATdpNry3AI
-         +ioY6UNsqX6BdHiZZADjLpet2LAbNd3FZL5X5k2lFw3eo2+C0B6MAoIPzCTTVj61n/z4
-         fELtIjLm7hyx34J/QVdIxEFe0cbDLVI+3ypu/1Gk6iEoSER8fXeTs696Z1lnRLYO2hFa
-         qpvHN/S0WNcLrpYClBK1tCmbC4zT4nadYGwplKtBj7x+9bGKXNRt23dbKmcRnhAqw2EF
-         FdlA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="gHZGo6lb"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-506a747448dso48655131cf.0
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 16:49:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774999763; x=1775604563; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DGtcnL1ZHkwcAqZL5SPxl5pFOsWzbDPKt2araBMqUi4=;
-        b=roXEN2d9FpjR7ot60qmEByNw+ElujLOO1/PIvLekMbguvmsYDCB7QjP4X/m/xMcBq8
-         cvtO7b2Iti3PXgm29tT6x55QQXbwwxYLZTdt7HOuaVgS0BSCbNF8qGyGFJAU8Rl1gnGj
-         zBLnJWvziX6kCzUOZ5pMTmvzdJ8Chkn1Xy3ZJAaIxwQ0FJuJ5TJwlXiHz6T+z4kAJaQE
-         ItlwMh2Wc2tv/sbSuNwDKOi46V1udl9cts5RPQeW4DTFKK1omHzg+ZXmUVcPuc7mw5Ml
-         8JQClgpfSSM69eIrd1McG6ugwdjrIr136ah8o4PYK1vhzlHzLc5dE5JhNxvEQPkn8sxz
-         ViiQ==
+        d=paul-moore.com; s=google; t=1775000969; x=1775605769; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FYbvdnLCMnXdYzHfn2HH+3PkoNRX+uMbCDYvoiIgkxg=;
+        b=gHZGo6lbZiKz7X5sTNABvDHfU6h7W3mQT8CQgjlXVIWsi3bGaD6daAjUE4VaSLj6Bb
+         huHSGF5LhKgtDgIP4SiCbHP/4EolqyPQuJDzAUgKjNWpuWbs+hMC+cr88mqkNqtLQhf6
+         Kho3KK1vSTuJzfOEqLobBtGRE7TMEsmxJTEcFFmFLR57iNFPv6Lk4UHcTdkVpeoP6EJ/
+         GHGG3X/2uAEiCGSWYdG+avjDURQql4o/AXzLLAk/DxO676KAvDUaNT0u5ZjkrkMDqqE/
+         m7fn3F6i5pYqOjtfuEXO7eVy3/xgDEjv5RL6XZmjIx3rfKFOrYspKoXzXh386q47C3GK
+         MNLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774999763; x=1775604563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DGtcnL1ZHkwcAqZL5SPxl5pFOsWzbDPKt2araBMqUi4=;
-        b=WNM8LbIoz+OmJ1rC0rJyKbN14s07HLTGJvWjU0mxJNZALMyOWLM0rapWkugN4m0O4k
-         AtLI752X7d+OR3mn98Za70ywqjgoTHR/Yt3rFvMAgkZ6YpknfYi3Dj85dZ+RR4obosHe
-         gssDAwUnUdeOg6s55ne1hvYIKZf8QSwxbKUbB4JScx2YHcn+E4k8nkJkNely++h/V2qm
-         4zn/Vkavxisn3oa9Ume7F/17p9xcUgnIJpLfEg9Q2zHVnMvUHoBosCE9L5SDgu77aAr2
-         rBCUwJoy0mdy7xNTHenHO5WPDyP2IABl1tRaFBbmkPgY7Bhh1bWXX4HpmMrT/RyptOJQ
-         ddNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWRJElYq0DiiOUrBmzzVMvSO2C9crDMXohtuXsttIotNXFEFzYfsMKNJNJx0HW87zCn4Yg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydC3vNZaW6I8U1SO7jxiP7HA8s3Ohi9Dc/WdL0cSBh13Zzwsdu
-	V8xgJf749R3zw3DIKdeHVcjKwTVn6opjRJWbDSmDB8qqSf3A/v4tcEV/a2wJToAb1hVdXR++eu5
-	Z18nVANcC9kKYXJlI0i8Esz6DnVaU22E=
-X-Gm-Gg: ATEYQzzhGod0mzBdnXBhkxC/2h1o2T0fNG3bGpH1RJHKYPDPKUnXbwooJEPVgcFjA4i
-	48q3cTJQx2LWkzt8KKPPF4r57OPFLSXsk+Wn4z2v7M9YlUtk5pCtUJiv24oRcv6KIPxr05MYXtP
-	HH60+KK400WaVoDeoCqEDKljn42n81Wt7uaOd2l2s87Ra4b5DtqA1HGJsxW9MJa1QKcTuTrcRBv
-	hPGuKPF4suvvc4ZvnLbWupn04ebp6TD3htkMQ1rVVxF9lTKGBfAaRAXKTc0weSaLFLTLkRwZgyx
-	FAX0fXpQELUUanrUK4uxRSH89mmh8NbTVwi/pCtIaArFd0o2wwM2zZzA+7UdTTSKMsxgVjfqgeE
-	0W3/PHuPlzcY+OdeVNHQh5Mxrdw==
-X-Received: by 2002:a05:6000:1788:b0:43c:fb48:6851 with SMTP id
- ffacd0b85a97d-43d1506c682mr2912280f8f.21.1774999762634; Tue, 31 Mar 2026
- 16:29:22 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775000969; x=1775605769;
+        h=in-reply-to:references:subject:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FYbvdnLCMnXdYzHfn2HH+3PkoNRX+uMbCDYvoiIgkxg=;
+        b=Mm6u7xSGXjurJ/+9ThbxYiu0IexGb9fSNpm/iaGnIRIC4CKbLRBf/shQxAudaoC7/g
+         hCmZ/ascMjdIKLg6+YQ8ng1mlQj+hVpHurjbfEYGCqw1PKd2R3xyk/NnwxQh8uPbjtul
+         s3m75cdKt8JK/1cGiNDq/8XFt30D0sfjgHXkzmVMomrCNBobxdRANL9xNALdxPjW0sAc
+         fMxNXS3esZAWfvg/iwfBnuIAFHbIQ5PObGaJRJ79tqno9f1p91cqPkWsVceTO8AK0Ga+
+         uDofjQ+jacLclkwValtdEDKtEh9eIJJTvZYH+mHpuVk+2A0aT1EzFudWX66v6eNhotyv
+         3USA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7At1KH3+dA7fmk17Za9Ax00jxFoVrn4DXcjglYUvnZ6Tg/Q6LMPErWlGdR0FFDdh1k0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywpz8gJkCHgB1l9ZKc2Pd2i0owGrV9DiVNcCgL+jwTUhn5rsSQv
+	klh6Xk3CFf4JbaB0z/cokKYVNov7IZC3JBoUsq0gMkxZI5vRj2CsAv5XblS6CSbWtw==
+X-Gm-Gg: ATEYQzxSo5ctlrCwNdv4e3gA1HvXo4TJ+HuoG26QrPOIIVGMQbAD+Gc4O6X3PVKhKH9
+	xdcFudcUbiXYeqPFYXvW5FcBgcFy2+VbAfhLpnteDDxJrwDnUi/2ZRMJxiiVqjhNpcfVzBXsla6
+	NchMekgPVUyylC6jhOBb0Ljpa6bZdmaL52k/fKKTSyNKMeAXRVGwshONlGe2BcH/QM6FH8nmpvX
+	MJqLNV4gWxg/hR+zt427BhkQz2t/edj9pcyzZ6QOsF7kno4ds4hsE3nfvbmLNVDnFrRZ9dsJ0Xl
+	1YENiwmOSAcU+BUzeS4FtHR5W5idzineme/gwVO8IjXAV6eiy+0pZnUrSta/L34CbnAvKrKa7X2
+	GND2F+emg07051DfDXdVvP8eAslfCW/6ouCKJuSWP02OwuftsmepjdDPRyzAglbQo8eGAxPR7/J
+	DYq0La8yT4feTs7Te6pGY5k2vmzZfPDTwFRe1ic8oChK7I2xgnYNL9TGZRx436mMRFiWcK
+X-Received: by 2002:ac8:5e10:0:b0:501:3ccd:cb3e with SMTP id d75a77b69052e-50d3bd6369emr22793691cf.66.1775000969032;
+        Tue, 31 Mar 2026 16:49:29 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50bb2c96a5asm97285841cf.10.2026.03.31.16.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 16:49:27 -0700 (PDT)
+Date: Tue, 31 Mar 2026 19:49:26 -0400
+Message-ID: <667eb53aa7425c115055e354a6df2bdb@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
- <20260326090133.221957-2-tangyazhou@zju.edu.cn> <319906e9-3b47-472f-9a11-a0da60626144@huaweicloud.com>
- <9a61d64e-7943-4e39-8c82-c79bb9ac65b4@zju.edu.cn> <fa28e388-fbd4-43af-982a-828f5c0456eb@huaweicloud.com>
-In-Reply-To: <fa28e388-fbd4-43af-982a-828f5c0456eb@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 31 Mar 2026 16:29:11 -0700
-X-Gm-Features: AQROBzA2OI9_9JHqL5hDKPR2m8IJkE61nj2uS5qNfM1_rulR904WCl0jBfEOqNg
-Message-ID: <CAADnVQL5MKCqiEpa+vHA9TByBy0K-CPpSoJQ1_PF68kE6gxAwg@mail.gmail.com>
-Subject: Re: [PATCH bpf v5 1/3] bpf: Reject bpf-to-bpf call with large offset
- in interpreter
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: Yazhou Tang <tangyazhou@zju.edu.cn>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Yazhou Tang <tangyazhou518@outlook.com>, Shenghao Yuan <shenghaoyuan0928@163.com>, 
-	Tianci Cao <ziye@zju.edu.cn>, Emil Tsalapatis <emil@etsalapatis.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260331_1732/pstg-lib:20260331_1626/pstg-pwork:20260331_1732
+From: Paul Moore <paul@paul-moore.com>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Jonathan Corbet <corbet@lwn.net>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>, =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>, "Dr. David Alan Gilbert" <linux@treblig.org>, Andrew Morton <akpm@linux-foundation.org>, James.Bottomley@HansenPartnership.com, dhowells@redhat.com, Fan Wu <wufan@kernel.org>, Ryan Foster <foster.ryan.r@gmail.com>, Randy Dunlap <rdunlap@infradead.org>, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v3 6/9] security: Hornet LSM
+References: <20260326060655.2550595-7-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260326060655.2550595-7-bboscaccy@linux.microsoft.com>
 
-On Fri, Mar 27, 2026 at 7:05=E2=80=AFPM Xu Kuohai <xukuohai@huaweicloud.com=
-> wrote:
->
-> On 3/27/2026 5:37 PM, Yazhou Tang wrote:
-> > Hi Kuohai,
-> >
-> > On 3/26/26 21:45, Xu Kuohai wrote:
-> >> Maybe I=E2=80=99m missing something, but since interpreters_args is a =
-small array, why not
-> >> just store the index (round_up(stack_depth, 32) / 32) - 1 in insn->off=
-?
-> >>
-> >> That way, the interpreter could directly use this index to find the fu=
-nction address,
-> >> without needing insn->imm to record the address offset, thus avoiding =
-the need to use
-> >> another field like insn->off in the instruction to back up the origina=
-l insn->imm.
-> >
-> > Thanks for the suggestion! Conceptually, storing the array index in ins=
-n->off and keeping the 32-bits insn->imm unchanged is a very elegant way to=
- solve this problem.
-> > But I think it will introduce a performance regression in the interpret=
-er's hot path (___bpf_prog_run).
-> >
-> > Currently, the array lookup is done once during verification. The resul=
-ting offset is stored in insn->imm, allowing the runtime to use a fast ALU =
-addition: __bpf_call_base_args + insn->imm.
-> >
-> > However, If we store the index in insn->off instead, we force the runti=
-me to perform a memory load (interpreters_args[insn->off]) on every single =
-bpf-to-bpf call.
-> >
-> > Because of this overhead, rejecting out-of-bounds offsets at load time =
-with -EINVAL (as done in v5) seems to be the safer and more performant trad=
-e-off.
-> >
-> > What are your thoughts on this?
-> >
->
-> Do you have any performance data?
-> TBH, I am curious if the overhead is even measurable.
+On Mar 26, 2026 Blaise Boscaccy <bboscaccy@linux.microsoft.com> wrote:
+> 
+> This adds the Hornet Linux Security Module which provides enhanced
+> signature verification and data validation for eBPF programs. This
+> allows users to continue to maintain an invariant that all code
+> running inside of the kernel has actually been signed and verified, by
+> the kernel.
+> 
+> This effort builds upon the currently excepted upstream solution. It
+> further hardens it by providing deterministic, in-kernel checking of
+> map hashes to solidify auditing along with preventing TOCTOU attacks
+> against lskel map hashes.
+> 
+> Target map hashes are passed in via PKCS#7 signed attributes. Hornet
+> determines the extent which the eBFP program is signed and defers to
+> other LSMs for policy decisions.
+> 
+> Signed-off-by: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+> Nacked-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> ---
+>  Documentation/admin-guide/LSM/Hornet.rst | 321 ++++++++++++++++++++++
+>  Documentation/admin-guide/LSM/index.rst  |   1 +
+>  MAINTAINERS                              |   9 +
+>  include/linux/oid_registry.h             |   3 +
+>  include/uapi/linux/lsm.h                 |   1 +
+>  security/Kconfig                         |   3 +-
+>  security/Makefile                        |   1 +
+>  security/hornet/Kconfig                  |  11 +
+>  security/hornet/Makefile                 |   7 +
+>  security/hornet/hornet.asn1              |  13 +
+>  security/hornet/hornet_lsm.c             | 333 +++++++++++++++++++++++
+>  11 files changed, 702 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+>  create mode 100644 security/hornet/Kconfig
+>  create mode 100644 security/hornet/Makefile
+>  create mode 100644 security/hornet/hornet.asn1
+>  create mode 100644 security/hornet/hornet_lsm.c
 
-I think it's a great idea. interpreter is a slow path.
-The interpreters_args[insn->off] approach will let use remove
-__bpf_call_base_args too.
+...
 
-Pls respin
+> +static int hornet_check_program(struct bpf_prog *prog, union bpf_attr *attr,
+> +				struct bpf_token *token, bool is_kernel,
+> +				enum lsm_integrity_verdict *verdict)
+> +{
+> +	struct hornet_maps maps = {0};
+> +	bpfptr_t usig = make_bpfptr(attr->signature, is_kernel);
+> +	struct pkcs7_message *msg;
+> +	struct hornet_parse_context *ctx;
+> +	void *sig;
+> +	int err;
+> +	const void *authattrs;
+> +	size_t authattrs_len;
+> +
+> +	if (!attr->signature) {
+> +		*verdict = LSM_INT_VERDICT_UNSIGNED;
+> +		return 0;
+> +	}
+> +
+> +	ctx = kzalloc(sizeof(struct hornet_parse_context), GFP_KERNEL);
+> +	if (!ctx)
+> +		return -ENOMEM;
+> +
+> +	maps.fd_array = make_bpfptr(attr->fd_array, is_kernel);
+> +	sig = kzalloc(attr->signature_size, GFP_KERNEL);
+> +	if (!sig) {
+> +		err = -ENOMEM;
+> +		goto out;
+> +	}
+> +	err = copy_from_bpfptr(sig, usig, attr->signature_size);
+> +	if (err != 0)
+> +		goto cleanup_sig;
+> +
+> +	msg = pkcs7_parse_message(sig, attr->signature_size);
+> +	if (IS_ERR(msg)) {
+> +		err = LSM_INT_VERDICT_BADSIG;
+> +		goto cleanup_sig;
+> +	}
+> +
+> +	if (verify_pkcs7_message_sig(prog->insnsi, prog->len * sizeof(struct bpf_insn), msg,
+> +				     VERIFY_USE_SECONDARY_KEYRING,
+> +				     VERIFYING_BPF_SIGNATURE,
+> +				     NULL, NULL)) {
+> +		err = LSM_INT_VERDICT_UNKNOWNKEY;
+> +		goto cleanup_msg;
+> +	}
 
-pw-bot: cr
+Given that kernel module signatures are verified with
+VERIFY_USE_SECONDARY_KEYRING it's reasonable to do the same here in
+Hornet.  I suspect most users concerned about code integrity, especially
+code running in the kernel's context, will likely want to verify BPF
+programs with the secondary keyring.
+
+However, as we've seen from prior discussions, there is a desire among
+some users to support arbitrary keyrings, and we should find a way to
+support that in some configuration.
+
+If we take a similar approach to bpf_verify_pkcs7_signature() and take
+the keyring from attr->keyring_id, LSMs that provide enforcement via the
+bpf_prog_load_post_integrity callback should be able to check the
+keyring_id as part of their decision making and respond accordingly.  Do
+we need to worry about a malicious userspace modifying attr at this
+point?  I think the answer is "no", but I didn't chase it through the
+code to be sure.
+
+I suppose there might be a need for a yama-esque LSM which only provides
+a bpf_prog_load_post_integrity callback and ensures a valid signature
+verified against the VERIFY_USE_SECONDARY_KEYRING without the need for
+any other policy or tunables, but let's see what the v4 revision looks
+like first.  We can always add this later if needed, and it could live
+within the Hornet dir (similar to how the integrity directory hosts
+both the IMA and EVM LSMs).
+
+> +	if (pkcs7_get_authattr(msg, OID_hornet_data,
+> +			       &authattrs, &authattrs_len) == -ENODATA) {
+> +		err = LSM_INT_VERDICT_PARTIALSIG;
+> +		goto cleanup_msg;
+> +	}
+> +
+> +	err = asn1_ber_decoder(&hornet_decoder, ctx, authattrs, authattrs_len);
+> +	if (err < 0 || authattrs == NULL) {
+> +		err = LSM_INT_VERDICT_BADSIG;
+> +		goto cleanup_msg;
+> +	}
+> +
+> +	err = hornet_verify_hashes(&maps, ctx, prog);
+> +
+> +cleanup_msg:
+> +	pkcs7_free_message(msg);
+> +cleanup_sig:
+> +	kfree(sig);
+> +out:
+> +	kfree(ctx);
+> +	return err;
+> +}
+
+--
+paul-moore.com
