@@ -1,311 +1,273 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289DE3016F1
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 01:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774918844; cv=none; b=r3Q52IjDmr+lqWq3tyFHC0w+LEz9xJLRTzosspWVbCmJ8KdRjtaEm3lYGljaJL2QxogrE6Daqwdc0h2ppScp0PqWHXurG+XQWJKQE1l6oarESB79qS/XcuRWWGsfz0n3NORFwBrXUTMjImkgS3jYZidPyYUq72zEzNWzasUzfng=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774918844; c=relaxed/simple;
-	bh=gqOG2H9tIzjXCbBiXNqszJkk8lgegHfRVYL42rIwta0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tUrcA/klBiXO+BKsD986GV6XdqkdgXebw1/nlkWLNAxXN/WjgoeTVfa+mw2OyvYHnLHrcyjhJxHkkFnXCGh/Ow5F2zjHK8Mujhh6DmBf1zLeruaa9iWR0OvESYeS47vLPNp/eD/RpwLex0MsZONaN9lqmr1pXnC7UbvYF3OuEe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r5UFSGXV; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C5D2FE566
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 01:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774920113; cv=pass; b=hRLR0/Kk+7QimHy6O9GIZW9geKP0hr4HLA9V0Y2sdWREBSShZMLZ8rbfkBxbmkNXxniaglJWMXJjTX2zXhoL3RbXyTbvkyhlrqC+2rdA007CpKo145cFfo3+JNu8cwMRaXPltq4oHPTNa0CUQQJ7zF9T+U5jiyzJhHkimQ2fXE8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774920113; c=relaxed/simple;
+	bh=fvTz1IRpJxhKnPo++V+kL9b5IKkpiz5dUGWbBQKfCKs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A7i07W1YT3R1hLEUlS5tw35jW5xhTHT7x7YUI2NCCb8qQOC1oVSaG3q3tN63+sU3AndptXssBOZInftaJM0tBcPvgHgoj2cAmqUWca3VmElGK2fZYJWwbNVk+QmNatcMAV71u5eUoXTA5KdurVfMNZNaODt/8WfhYFs2SRcGoog=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qYX41Z4M; arc=pass smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r5UFSGXV"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2b2469e5117so12575555ad.1
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:00:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qYX41Z4M"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12732165d1eso7082907c88.1
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:21:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774920111; cv=none;
+        d=google.com; s=arc-20240605;
+        b=N8Qv+RjqoYYlTfsqkLIQe7Ja8HKkeQfRHZnlVhIJEBXNOXsZEazYsEd86qlS12jgJT
+         wswDZq1MlTwUipY+B8STa5gwz4pfoN/9/FRH72/ZyPlnp5l7aO4DavrzqlyuE7m/p9XA
+         JOzTN9EQOhkeJXBpx0G31EooWtAdMXrjRKccN9iRguSnYHEsy1ZVsbPEAmkqqj2FhU7C
+         NP3bHajYnGLGfVf8N8Q5VoybYN6YZtqwcVdX7e+LdqNQzwXd0E2+vOtwZ7W1RSh9JOpx
+         Z0lutvsijU4SyFPyPXk6KVSQ/mgWryomD9idsuw7KDDbWtS3+EhyvbADAfty/x59cdR4
+         KJ2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=asBUfDtRMKucrOKQSzjBlvbQiLLd54e8FYUI/VhTDuw=;
+        fh=WN6UgUcY94ROilPZ6A3nXIlh/fdTiz+2icgdzOqr4oQ=;
+        b=kmloGG19WptqluudGDi9NlbgaJOrHbeT2LbxJzNYMUKkB6VtDDZQ8WozxJIlLnAcrC
+         0kgXPtm8ro9yPzZU+rkECmU1ijVNANh9OwjMJFNLHIrr9M9K9PkjEidTYwplYYAsfurM
+         p9p6bOHxiaYWdDkSBudcMlnKxmV5jMw69R+0c0x6ml29zHhYUzSp4bOI6ONGd0TRhIeQ
+         usjQqychiYvMoWA36dB/xkYIYGOanPLm5bArgIj7YDkLa2KSWEgNMREra08w8tlLTS+L
+         8A96SI2g5XBj7EgOa1/noS8bQQbfF8JiIlxNLicl6A8MrGtZz8tu7WeYLXNFXeSfnnoE
+         VJKA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774918842; x=1775523642; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1774920111; x=1775524911; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+0D6AGZNWSqk4ee4mBNXimtW9mQuxwZj3WYAzDfyk6I=;
-        b=r5UFSGXVbUm4hQZT4k435WcrA0GURyg73LZ/COmBCtzC10KdrIpSS8v6eHKJmHarLK
-         ZgVd92/YNrOGpkOrPpBWmJMfZR5LtwszBm205EIeWjLYW8PCuBExGRslWQEdS8DiVjTs
-         Q0i78Etjgk9YfQEdw1/GFAWv17cM42nKaSHTnbiSYQDHfES2+3X17GC3acnb5522Hx1b
-         n93hx4ZXY/n1mVeZXEvVLhEhR9Vgp69jUEKIiJbf77xSkAPrs4I7E7bsUgLIJO/sniKa
-         NsWXC6/jp7ahdisZ4HEFEp0mel4CA1rua64vHRofcXm5QAqpHL5CWYIouHMnz1/lPOXk
-         s7Jg==
+        bh=asBUfDtRMKucrOKQSzjBlvbQiLLd54e8FYUI/VhTDuw=;
+        b=qYX41Z4Mo42xNMxlacd/QMopWmBw2APmtSbMo86UKr+17KCS50DAH57KCPkzRj/hu6
+         vjltyH/8A6Mx9etEFr/jS4C53PjM4gu8op3BYB8fMv5b86Npzg629XRdXEvcaBm4E/vH
+         PqlndsB8FgDaLZCssx3g3WVSkbDscAxDX85hzK2qPJ1KckNx532zDhryjKEJ97D39U+u
+         3WSyYh/pEgv3sPpc+HcsnOspEFJilUePV4LqgnAImvQvJfFXR9ucs92mGk/INa0WIV8x
+         OnN3pe1F2aknW2Ey4LN92RMY81u5l6Y8PS5Xdht1Tz62EsXfYZhIi33qKhe5ZGmW4dSN
+         DcaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774918842; x=1775523642;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1774920111; x=1775524911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+0D6AGZNWSqk4ee4mBNXimtW9mQuxwZj3WYAzDfyk6I=;
-        b=ZsHC9euSAaVCThQkusiDjiYqWJPMUvG/o1fnXpdiif9eJic+wGTM+Kml9MyK8ysnPy
-         h4m3Fpt7SIKZm+R7gNYO1ayLcvrZaKNczgWIYzqq5HyLrqRI/tDi4sLIxFuTGNQobHu4
-         e9o89qKIFTFpZLsfx8iuurn4SeTmHz9BnDiQNS1SbnIrAEOZJPch/RH/8PeLuygZ1ysQ
-         w1vRU/NICmvClxZyFIOltKspB8sCV4K5jTGwtiRa2c3wrcroCNguSNob6soQaEj3FUOB
-         7Niwl84dtKKT2BA8rhrxG34nfgHz4qhyGoqQ3hH2W+KC2FhCA8KIx9qzdKZUnIbE2VO7
-         d1ow==
-X-Gm-Message-State: AOJu0YyXY2LORg0lHHWkq76fIGgfzJSZCrz1ovMGDcMyXn9xrzgOuPQP
-	+QKWRDYDEV1PTtO66gHlh4kJft1IWeAF3/FD3rVOA7CYc788dBU0Ql3S6/vcyw==
-X-Gm-Gg: ATEYQzz9iiByMFjZ1aQpC9N7W0Qh39XMaxX/TtwBeEwM+lYLkG2ueCtPp2Z/uZ51wow
-	PTgjHDLb4SMfvt74mACwu7Et0N1VjZ0r1pa/NUAqs+90iygLtd/8FnqSagz/p6ok1yYwGWTNhwP
-	BBFlc3L9wR4CNLrpeI1NaI0/TZtmhjKan8CEKQPWVUhGaqaWCC2Qy3B+w5w8srlibDifg7ZwUzG
-	kvaUXqs/ZXPurtHw8HvX5OOc/C8wX8xjLZ5d+PwALKV9K62Hk06CNIb/JQhUgI6Xarsj9Q0JZEh
-	gkMDBHUXtlFo+UUBllJAg9PWmGbw37AqM6ciW9Doo4VjWVq7aWNd11j4qaQLwIcbf3t5VFB3mOH
-	dmFvby1GKIWbi7Tqw+0gT09Q202SlJ1RiwsGtqMrkMaliilgemz6iCJSyczB0KtjSqHrR6DfMUg
-	aYA2BxZeGunLzL6u+BiFRqD2BA4AG7QnqQMrgNfAAcl1LJxBbJLY5z3kRhP5E=
-X-Received: by 2002:a17:903:2291:b0:2ae:5350:3a4e with SMTP id d9443c01a7336-2b25ef4149bmr12441765ad.21.1774918842129;
-        Mon, 30 Mar 2026 18:00:42 -0700 (PDT)
-Received: from honey-badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427a27f2sm125226405ad.67.2026.03.30.18.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2026 18:00:41 -0700 (PDT)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: inline TEST_TAG constants in test_loader.c
-Date: Mon, 30 Mar 2026 17:59:27 -0700
-Message-ID: <20260330-selftests-global-tags-ordering-v2-4-c0ac61e81098@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260330-selftests-global-tags-ordering-v2-0-c0ac61e81098@gmail.com>
-References: <20260330-selftests-global-tags-ordering-v2-0-c0ac61e81098@gmail.com>
+        bh=asBUfDtRMKucrOKQSzjBlvbQiLLd54e8FYUI/VhTDuw=;
+        b=hHMIbde7cezDJNMvfmt8V9ccFiQAnNOUhvGwVdTR5P1E+WWL3jhjqv4ukK+8V8i3BJ
+         z4I7lb3leJdWhHHGVqGpV+mZZHn1/UDmK2Y7RuwgYR0siESOHQvsthZ3YjhqwFeMbC/t
+         2hZxh46pmWN6tb/WtX8jS0M7v4qjB/zNHNXUzJJtLp2cScnnvaZ5W7oUgoMEEWu1fTjz
+         JeW97UdtVGwdvnCLRzGu1HiuzbuMojsWNzgOAk6f0ywzb4DURBg6Zp4ur7npSZqXuY5h
+         8fVaGJZMganaYlbMAd/1UhOLepy48/vFkWjlTqkIq27BI9BsYrxAEbT/iPqI8r0yzsZN
+         0CmA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3pntBta7qCQRUTrF25LZgi9OFI5R9p5Utot+CrsBIOlS0oWLcEW+UGYyiG7ea0kIZghY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywszum7M9ryHEK6aX9YPFME3ycAeOO5HAhUjVkDT/OjAnoOCtet
+	4HzelCjGVPX+SOBNJ+sxD2T/TFBPwqHt/z6eeH4vscB05W7BkHAN15fn3c5XK0wlmOX/0vnnpZy
+	t/hm9R8o55WJZRL7D2WC/ipwMNz5ShT18eoWRVt5t
+X-Gm-Gg: ATEYQzzmUPp2lH1OqjVyzr7KociXMB5RCdkt1SoniuQAcrAY84xilwU/TqAFcIn4a8t
+	UwahLf67rpFCi2nLntRf0U0x/ZUupkszZLP9hqiU+vAhgRvtvh/H5TyytReggWtCGXzhGgrR+hd
+	yRGrEiErRosoCdbjAsBEhAbFTDxQpjLn/z+71anCkMEU5FaNCB1ULjLaNZXn9zVYJYlYHR+Bxk+
+	izGvPWUJQlFML4sdTWPz7DAHqmdxxgFKTeqPad4f3P5IIWmCUOMEowkmWAWJ/AleGVzGNS0wgYz
+	YUejD4eTiT7kF3i2MjYifItNXCCmM5t5r3J6h7DlV03O2Z3gOjSzcg+7NZlGpZaqOqD9pIQy
+X-Received: by 2002:a05:7022:2209:b0:128:ea68:27f6 with SMTP id
+ a92af1059eb24-12ab28fda86mr8134739c88.36.1774920110404; Mon, 30 Mar 2026
+ 18:21:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20260330215707.2374657-1-jrife@google.com> <20260330215707.2374657-2-jrife@google.com>
+In-Reply-To: <20260330215707.2374657-2-jrife@google.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Mon, 30 Mar 2026 18:21:39 -0700
+X-Gm-Features: AQROBzCDjrWJyJmfSCXtFAx4PFUj1XlE0JIrlHyoRlyN8IxuQEL9bzRmPAc5E0k
+Message-ID: <CAAVpQUDk1ywgsuCtreVCV4yVJRm_mcjsnC-+LuUwLRLHWavtZA@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/4] udp: Only compare daddr/dport when
+ sk_state == TCP_ESTABLISHED
+To: Jordan Rife <jrife@google.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Eric Dumazet <edumazet@google.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+	Yusuke Suzuki <yusuke.suzuki@isovalent.com>, Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-After str_has_pfx() refactoring each TEST_TAG_* / TEST_BTF_PATH
-constant is used exactly once. Since constant definitions are not
-shared between BPF-side bpf_misc.h and userspace side test_loader.c,
-there is no need in the additional redirection layer.
+On Mon, Mar 30, 2026 at 2:57=E2=80=AFPM Jordan Rife <jrife@google.com> wrot=
+e:
+>
+> Adjust lookups and scoring to keep their results equivalent to before
+> even if inet_daddr+inet_dport are left intact after disconnecting a
+> socket (sk_state =3D=3D TCP_CLOSE). sk_state =3D=3D TCP_ESTABLISHED impli=
+es that
+> *daddr is non-zero, so remove redundant checks for that at the same
+> time. Note that __udp6_lib_demux_lookup already checks if sk_state =3D=3D
+> TCP_ESTABLISHED, so no change was needed there [1].
+>
+> I could find no discernible difference in performance in
+> udp4_lib_lookup2 before and after the change in compute_score.
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- tools/testing/selftests/bpf/test_loader.c | 84 +++++++++++--------------------
- 1 file changed, 28 insertions(+), 56 deletions(-)
+What workload did you test the series with ?
 
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 3f784cc76f8f532b1c110ae3b784cd8ec1ebcf9b..f55410e478ce1f4e0352cb2a0c05a493178ec756 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -21,34 +21,6 @@ static inline const char *str_has_pfx(const char *str, const char *pfx)
- 
- #define TEST_LOADER_LOG_BUF_SZ 2097152
- 
--#define TEST_TAG_EXPECT_FAILURE "test_expect_failure"
--#define TEST_TAG_EXPECT_SUCCESS "test_expect_success"
--#define TEST_TAG_EXPECT_MSG_PFX "test_expect_msg="
--#define TEST_TAG_EXPECT_NOT_MSG_PFX "test_expect_not_msg="
--#define TEST_TAG_EXPECT_XLATED_PFX "test_expect_xlated="
--#define TEST_TAG_EXPECT_FAILURE_UNPRIV "test_expect_failure_unpriv"
--#define TEST_TAG_EXPECT_SUCCESS_UNPRIV "test_expect_success_unpriv"
--#define TEST_TAG_EXPECT_MSG_PFX_UNPRIV "test_expect_msg_unpriv="
--#define TEST_TAG_EXPECT_NOT_MSG_PFX_UNPRIV "test_expect_not_msg_unpriv="
--#define TEST_TAG_EXPECT_XLATED_PFX_UNPRIV "test_expect_xlated_unpriv="
--#define TEST_TAG_LOG_LEVEL_PFX "test_log_level="
--#define TEST_TAG_PROG_FLAGS_PFX "test_prog_flags="
--#define TEST_TAG_DESCRIPTION_PFX "test_description="
--#define TEST_TAG_RETVAL_PFX "test_retval="
--#define TEST_TAG_RETVAL_PFX_UNPRIV "test_retval_unpriv="
--#define TEST_TAG_AUXILIARY "test_auxiliary"
--#define TEST_TAG_AUXILIARY_UNPRIV "test_auxiliary_unpriv"
--#define TEST_BTF_PATH "test_btf_path="
--#define TEST_TAG_ARCH "test_arch="
--#define TEST_TAG_JITED_PFX "test_jited="
--#define TEST_TAG_JITED_PFX_UNPRIV "test_jited_unpriv="
--#define TEST_TAG_CAPS_UNPRIV "test_caps_unpriv="
--#define TEST_TAG_LOAD_MODE_PFX "load_mode="
--#define TEST_TAG_EXPECT_STDERR_PFX "test_expect_stderr="
--#define TEST_TAG_EXPECT_STDERR_PFX_UNPRIV "test_expect_stderr_unpriv="
--#define TEST_TAG_EXPECT_STDOUT_PFX "test_expect_stdout="
--#define TEST_TAG_EXPECT_STDOUT_PFX_UNPRIV "test_expect_stdout_unpriv="
--#define TEST_TAG_LINEAR_SIZE "test_linear_size="
- 
- /* Warning: duplicated in bpf_misc.h */
- #define POINTER_VALUE	0xbadcafe
-@@ -473,49 +445,49 @@ static int parse_test_spec(struct test_loader *tester,
- 		s = skip_decl_tag_pfx(tags[i]);
- 		if (!s)
- 			continue;
--		if ((val = str_has_pfx(s, TEST_TAG_DESCRIPTION_PFX))) {
-+		if ((val = str_has_pfx(s, "test_description="))) {
- 			description = val;
--		} else if (strcmp(s, TEST_TAG_EXPECT_FAILURE) == 0) {
-+		} else if (strcmp(s, "test_expect_failure") == 0) {
- 			spec->priv.expect_failure = true;
- 			spec->mode_mask |= PRIV;
--		} else if (strcmp(s, TEST_TAG_EXPECT_SUCCESS) == 0) {
-+		} else if (strcmp(s, "test_expect_success") == 0) {
- 			spec->priv.expect_failure = false;
- 			spec->mode_mask |= PRIV;
--		} else if (strcmp(s, TEST_TAG_EXPECT_FAILURE_UNPRIV) == 0) {
-+		} else if (strcmp(s, "test_expect_failure_unpriv") == 0) {
- 			spec->unpriv.expect_failure = true;
- 			spec->mode_mask |= UNPRIV;
- 			has_unpriv_result = true;
--		} else if (strcmp(s, TEST_TAG_EXPECT_SUCCESS_UNPRIV) == 0) {
-+		} else if (strcmp(s, "test_expect_success_unpriv") == 0) {
- 			spec->unpriv.expect_failure = false;
- 			spec->mode_mask |= UNPRIV;
- 			has_unpriv_result = true;
--		} else if (strcmp(s, TEST_TAG_AUXILIARY) == 0) {
-+		} else if (strcmp(s, "test_auxiliary") == 0) {
- 			spec->auxiliary = true;
- 			spec->mode_mask |= PRIV;
--		} else if (strcmp(s, TEST_TAG_AUXILIARY_UNPRIV) == 0) {
-+		} else if (strcmp(s, "test_auxiliary_unpriv") == 0) {
- 			spec->auxiliary = true;
- 			spec->mode_mask |= UNPRIV;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_msg="))) {
- 			err = push_msg(msg, false, &spec->priv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= PRIV;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_NOT_MSG_PFX))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_not_msg="))) {
- 			err = push_msg(msg, true, &spec->priv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= PRIV;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX_UNPRIV))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_msg_unpriv="))) {
- 			err = push_msg(msg, false, &spec->unpriv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_NOT_MSG_PFX_UNPRIV))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_not_msg_unpriv="))) {
- 			err = push_msg(msg, true, &spec->unpriv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_JITED_PFX))) {
-+		} else if ((msg = str_has_pfx(s, "test_jited="))) {
- 			if (arch_mask == 0) {
- 				PRINT_FAIL("__jited used before __arch_*");
- 				goto cleanup;
-@@ -527,7 +499,7 @@ static int parse_test_spec(struct test_loader *tester,
- 					goto cleanup;
- 				spec->mode_mask |= PRIV;
- 			}
--		} else if ((msg = str_has_pfx(s, TEST_TAG_JITED_PFX_UNPRIV))) {
-+		} else if ((msg = str_has_pfx(s, "test_jited_unpriv="))) {
- 			if (arch_mask == 0) {
- 				PRINT_FAIL("__unpriv_jited used before __arch_*");
- 				goto cleanup;
-@@ -539,36 +511,36 @@ static int parse_test_spec(struct test_loader *tester,
- 					goto cleanup;
- 				spec->mode_mask |= UNPRIV;
- 			}
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_XLATED_PFX))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_xlated="))) {
- 			err = push_disasm_msg(msg, &xlated_on_next_line,
- 					      &spec->priv.expect_xlated);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= PRIV;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_XLATED_PFX_UNPRIV))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_xlated_unpriv="))) {
- 			err = push_disasm_msg(msg, &unpriv_xlated_on_next_line,
- 					      &spec->unpriv.expect_xlated);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
--		} else if ((val = str_has_pfx(s, TEST_TAG_RETVAL_PFX))) {
-+		} else if ((val = str_has_pfx(s, "test_retval="))) {
- 			err = parse_retval(val, &spec->priv.retval, "__retval");
- 			if (err)
- 				goto cleanup;
- 			spec->priv.execute = true;
- 			spec->mode_mask |= PRIV;
--		} else if ((val = str_has_pfx(s, TEST_TAG_RETVAL_PFX_UNPRIV))) {
-+		} else if ((val = str_has_pfx(s, "test_retval_unpriv="))) {
- 			err = parse_retval(val, &spec->unpriv.retval, "__retval_unpriv");
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
- 			spec->unpriv.execute = true;
- 			has_unpriv_retval = true;
--		} else if ((val = str_has_pfx(s, TEST_TAG_LOG_LEVEL_PFX))) {
-+		} else if ((val = str_has_pfx(s, "test_log_level="))) {
- 			err = parse_int(val, &spec->log_level, "test log level");
- 			if (err)
- 				goto cleanup;
--		} else if ((val = str_has_pfx(s, TEST_TAG_PROG_FLAGS_PFX))) {
-+		} else if ((val = str_has_pfx(s, "test_prog_flags="))) {
- 			clear = val[0] == '!';
- 			if (clear)
- 				val++;
-@@ -593,7 +565,7 @@ static int parse_test_spec(struct test_loader *tester,
- 					goto cleanup;
- 				update_flags(&spec->prog_flags, flags, clear);
- 			}
--		} else if ((val = str_has_pfx(s, TEST_TAG_ARCH))) {
-+		} else if ((val = str_has_pfx(s, "test_arch="))) {
- 			if (strcmp(val, "X86_64") == 0) {
- 				arch = ARCH_X86_64;
- 			} else if (strcmp(val, "ARM64") == 0) {
-@@ -611,14 +583,14 @@ static int parse_test_spec(struct test_loader *tester,
- 			collect_jit = get_current_arch() == arch;
- 			unpriv_jit_on_next_line = true;
- 			jit_on_next_line = true;
--		} else if ((val = str_has_pfx(s, TEST_BTF_PATH))) {
-+		} else if ((val = str_has_pfx(s, "test_btf_path="))) {
- 			spec->btf_custom_path = val;
--		} else if ((val = str_has_pfx(s, TEST_TAG_CAPS_UNPRIV))) {
-+		} else if ((val = str_has_pfx(s, "test_caps_unpriv="))) {
- 			err = parse_caps(val, &spec->unpriv.caps, "test caps");
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
--		} else if ((val = str_has_pfx(s, TEST_TAG_LOAD_MODE_PFX))) {
-+		} else if ((val = str_has_pfx(s, "load_mode="))) {
- 			if (strcmp(val, "jited") == 0) {
- 				load_mask = JITED;
- 			} else if (strcmp(val, "no_jited") == 0) {
-@@ -628,27 +600,27 @@ static int parse_test_spec(struct test_loader *tester,
- 				err = -EINVAL;
- 				goto cleanup;
- 			}
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDERR_PFX))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_stderr="))) {
- 			err = push_disasm_msg(msg, &stderr_on_next_line,
- 					      &spec->priv.stderr);
- 			if (err)
- 				goto cleanup;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDERR_PFX_UNPRIV))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_stderr_unpriv="))) {
- 			err = push_disasm_msg(msg, &unpriv_stderr_on_next_line,
- 					      &spec->unpriv.stderr);
- 			if (err)
- 				goto cleanup;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDOUT_PFX))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_stdout="))) {
- 			err = push_disasm_msg(msg, &stdout_on_next_line,
- 					      &spec->priv.stdout);
- 			if (err)
- 				goto cleanup;
--		} else if ((msg = str_has_pfx(s, TEST_TAG_EXPECT_STDOUT_PFX_UNPRIV))) {
-+		} else if ((msg = str_has_pfx(s, "test_expect_stdout_unpriv="))) {
- 			err = push_disasm_msg(msg, &unpriv_stdout_on_next_line,
- 					      &spec->unpriv.stdout);
- 			if (err)
- 				goto cleanup;
--		} else if ((val = str_has_pfx(s, TEST_TAG_LINEAR_SIZE))) {
-+		} else if ((val = str_has_pfx(s, "test_linear_size="))) {
- 			switch (bpf_program__type(prog)) {
- 			case BPF_PROG_TYPE_SCHED_ACT:
- 			case BPF_PROG_TYPE_SCHED_CLS:
+I think we want to see results under DDoS.
 
--- 
-2.53.0
+
+>
+> (AMD Ryzen 9 9900X)
+>
+> kprobe:udp4_lib_lookup2 {
+>         @start[cpu] =3D nsecs;
+> }
+> kretprobe:udp4_lib_lookup2 {
+>         @lookup[cpu] =3D hist(nsecs - @start[cpu], 2);
+> }
+>
+> BEFORE
+> =3D=3D=3D=3D=3D=3D
+> @lookup[11]:
+> [80, 96)         1387077 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@@@|
+> [96, 112)         364973 |@@@@@@@@@@@@@                                  =
+     |
+> [112, 128)         34261 |@                                              =
+     |
+> [128, 160)          7246 |                                               =
+     |
+> [160, 192)           215 |                                               =
+     |
+> [192, 224)           126 |                                               =
+     |
+>
+> AFTER
+> =3D=3D=3D=3D=3D
+> @lookup[11]:
+> [80, 96)         1408594 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@=
+@@@@@|
+> [96, 112)         340568 |@@@@@@@@@@@@                                   =
+     |
+> [112, 128)         30753 |@                                              =
+     |
+> [128, 160)          8019 |                                               =
+     |
+> [160, 192)           231 |                                               =
+     |
+> [192, 224)           157 |                                               =
+     |
+>
+> [1]: https://lore.kernel.org/netdev/20170623222537.130493-1-tracywwnj@gma=
+il.com/
+>
+> Signed-off-by: Jordan Rife <jrife@google.com>
+> ---
+>  net/ipv4/udp.c | 20 +++++++++++---------
+>  net/ipv6/udp.c | 18 +++++++++---------
+>  2 files changed, 20 insertions(+), 18 deletions(-)
+>
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index b60fad393e18..d91c587c3657 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -385,16 +385,16 @@ static int compute_score(struct sock *sk, const str=
+uct net *net,
+>         score =3D (sk->sk_family =3D=3D PF_INET) ? 2 : 1;
+>
+>         inet =3D inet_sk(sk);
+> -       if (inet->inet_daddr) {
+> +       if (sk->sk_state =3D=3D TCP_ESTABLISHED) {
+>                 if (inet->inet_daddr !=3D saddr)
+>                         return -1;
+>                 score +=3D 4;
+> -       }
+>
+> -       if (inet->inet_dport) {
+> -               if (inet->inet_dport !=3D sport)
+> -                       return -1;
+> -               score +=3D 4;
+> +               if (inet->inet_dport) {
+> +                       if (inet->inet_dport !=3D sport)
+> +                               return -1;
+> +                       score +=3D 4;
+> +               }
+>         }
+>
+>         dev_match =3D udp_sk_bound_dev_eq(net, sk->sk_bound_dev_if,
+> @@ -796,8 +796,9 @@ static inline bool __udp_is_mcast_sock(struct net *ne=
+t, const struct sock *sk,
+>
+>         if (!net_eq(sock_net(sk), net) ||
+>             udp_sk(sk)->udp_port_hash !=3D hnum ||
+> -           (inet->inet_daddr && inet->inet_daddr !=3D rmt_addr) ||
+> -           (inet->inet_dport !=3D rmt_port && inet->inet_dport) ||
+> +           (sk->sk_state =3D=3D TCP_ESTABLISHED &&
+> +            (inet->inet_daddr !=3D rmt_addr ||
+> +            (inet->inet_dport !=3D rmt_port && inet->inet_dport))) ||
+>             (inet->inet_rcv_saddr && inet->inet_rcv_saddr !=3D loc_addr) =
+||
+>             ipv6_only_sock(sk) ||
+>             !udp_sk_bound_dev_eq(net, sk->sk_bound_dev_if, dif, sdif))
+> @@ -2854,7 +2855,8 @@ static struct sock *__udp4_lib_demux_lookup(struct =
+net *net,
+>         ports =3D INET_COMBINED_PORTS(rmt_port, hnum);
+>
+>         udp_portaddr_for_each_entry_rcu(sk, &hslot2->head) {
+> -               if (inet_match(net, sk, acookie, ports, dif, sdif))
+> +               if (sk->sk_state =3D=3D TCP_ESTABLISHED &&
+> +                   inet_match(net, sk, acookie, ports, dif, sdif))
+>                         return sk;
+>                 /* Only check first socket in chain */
+>                 break;
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index 010b909275dd..b93a9a3e7678 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -147,16 +147,16 @@ static int compute_score(struct sock *sk, const str=
+uct net *net,
+>         score =3D 0;
+>         inet =3D inet_sk(sk);
+>
+> -       if (inet->inet_dport) {
+> +       if (sk->sk_state =3D=3D TCP_ESTABLISHED) {
+>                 if (inet->inet_dport !=3D sport)
+>                         return -1;
+>                 score++;
+> -       }
+>
+> -       if (!ipv6_addr_any(&sk->sk_v6_daddr)) {
+> -               if (!ipv6_addr_equal(&sk->sk_v6_daddr, saddr))
+> -                       return -1;
+> -               score++;
+> +               if (!ipv6_addr_any(&sk->sk_v6_daddr)) {
+
+This looks unnecessary.
+
+
+> +                       if (!ipv6_addr_equal(&sk->sk_v6_daddr, saddr))
+> +                               return -1;
+> +                       score++;
+> +               }
+>         }
+>
+>         bound_dev_if =3D READ_ONCE(sk->sk_bound_dev_if);
+> @@ -949,9 +949,9 @@ static bool __udp_v6_is_mcast_sock(struct net *net, c=
+onst struct sock *sk,
+>
+>         if (udp_sk(sk)->udp_port_hash !=3D hnum ||
+>             sk->sk_family !=3D PF_INET6 ||
+> -           (inet->inet_dport && inet->inet_dport !=3D rmt_port) ||
+> -           (!ipv6_addr_any(&sk->sk_v6_daddr) &&
+> -                   !ipv6_addr_equal(&sk->sk_v6_daddr, rmt_addr)) ||
+> +           (sk->sk_state =3D=3D TCP_ESTABLISHED &&
+> +            ((inet->inet_dport && inet->inet_dport !=3D rmt_port) ||
+> +            !ipv6_addr_equal(&sk->sk_v6_daddr, rmt_addr))) ||
+>             !udp_sk_bound_dev_eq(net, READ_ONCE(sk->sk_bound_dev_if), dif=
+, sdif) ||
+>             (!ipv6_addr_any(&sk->sk_v6_rcv_saddr) &&
+>                     !ipv6_addr_equal(&sk->sk_v6_rcv_saddr, loc_addr)))
+> --
+> 2.53.0.1118.gaef5881109-goog
+>
