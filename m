@@ -1,125 +1,109 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8883A382E
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 19:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B078D4418FC
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 20:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774983949; cv=none; b=jPz+FutiuFQMZiaLDAkcensP1iu5qsCZHMACqzq4ZbkV4jxQh9At4ObYYBF9SgklqyLU/ey8GgAACys8Wf9QFHnb9aDo6Hz+FQmMlcc3jv3oJ82qjdQAfAzeoXQWImJJlrz1rdQuWNhTW651v4d0KvRnm4SZdVPqT8YCsqqQBVk=
+	t=1774989753; cv=none; b=XxoU8p4wa6ftqyT3blJrNsHP/LF3b/0HvkyPHPkeUI1HYrgE493KKf0iwVfS+eH39T01tNKUrvKxXP3hSLe9bVYSQxS4RexZkdnbfmnn+19RixEYfQKzIHH3t4I2yBznlY99klsBw8VGEC1hoqqpIm+rPWvVcEttmbCHznLJEds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774983949; c=relaxed/simple;
-	bh=oSZ8g1bjCkqJwY2DGBThusr7FfkICvf91cOTag38RKs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VxzJrPkndfPko5CiFC1FjUqpUNqANnSbUyHr/pwlqYt4ufxWyaHSrPPv4ctW64nsfDzy8wKTIKLKYQ6YhGzG7gKMd9KOCINAb2G1AoNdY33memB5El+zVULG9d1w+ym7C+DFcbfRb7/RlHU5Ypgzo7AXLWG2qLRq2pL3P45kNDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NmDgE3Wr; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1774989753; c=relaxed/simple;
+	bh=vssmHa+T7bAA4ZAilJAyWMcbHY9cYUjiolG0Gse1JWc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S3LLmRX4Q5r65jcXCXUqB31XZrQgOmg6PoECIz0NLsn8EOrD38ptAZ43I7pYNJ+KYD2H27RyH2X9xSExEQDDFEaNC/fyu4W2GwUj5R5XjIFvpsbG2cnKlta0oMoj8gbdpfMFplRXHJ4qwWFtNCWhBmn0vPxMvcfhrLZtpyg0wa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rk7aBoJw; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NmDgE3Wr"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43cff5dafc3so2116219f8f.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 12:05:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rk7aBoJw"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2b23fcf90b2so39188135ad.3
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 13:42:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774983946; x=1775588746; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5QVbd5e5IqxdCExscwZLPm+SOmPoSjytCCtpJN/kv3g=;
-        b=NmDgE3WramdG96P5l0vBf1ub8ZHRTZt28jfpwlDw+9H+BFAJ/PsSLbD0BVNN9CP9JG
-         dHyscL6+nmKCUrVGNOMRHYSzerKcjNzhLh/fgsjfW3CKXRBkozq0ssBlBnw90D3rO1va
-         kO0X0QWl1QcITvJk2I43hc0xmAN9OFm6IpXoNMaeOMIufom4pxqZR/qKLPDFBVSzUW1U
-         TpixxGT2OnPB7/DJZ39q9Kjh69uBms6fZwFACHadSZxck1VJfpON/l8y/d6+n0RS+NVV
-         ATRvXQFHw/IqWSO65wuFYP4f7xuT/Z+N/fmfMb3ZeahCoLXOAICBl0U9tFV/ksJNxElf
-         zQ6Q==
+        d=gmail.com; s=20251104; t=1774989751; x=1775594551; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3jeKcPy/ZXologvjSOFsDlDYOtk7c/GfbQ3C0JvgJVU=;
+        b=Rk7aBoJwdftqL9MrS7/9WEezQI/rahwGlD+yZ23E1Hn0QIJuzJrfHWZ9GVJJ+wpnZY
+         5XjsZhfRms9eqOiI/eXCXirDuh4juubiGNPLPQjZRNG7D1aq27EhLx/EJk6HA3TVAdFd
+         KhbQtARp7OGqBa4Yl+EeBwCe10WyX2KT7Qi+C/a92Sn+EvXm3jp/ahh5iZckYHsBtihS
+         tacCDGpsoMo0HOX2rqi8tSZVGFe1zXvaX2jAsYnvkxHyZeksGm4sHURZCJt6trgurEsQ
+         xyTzFv7QXHXeaSTGofHueVB42TlXO7WhjdhodWOK4t2NtCq5+9ugcwJluPez3o+0udsX
+         uulA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774983946; x=1775588746;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5QVbd5e5IqxdCExscwZLPm+SOmPoSjytCCtpJN/kv3g=;
-        b=Iz20fvV3gXO3nkIMPdx61jZROYfCjA7xvOPNXs4oEKvXdVGDbyifdKNFBorkrzDftJ
-         O7utFAqYOIcNbeVc6hA0i6IXyJ8bumUcNnIqdRTvfZAT8R1+8CnMu+9y1uhg0GuL6hmC
-         9duiKujMsVpf1i8Vve+vOSabQscK2ryMbv2IXBTGCsH2/4RZaMne6PhT8cTr6qAeFR5n
-         iEuUu0b4EF8aE8jcclXsysHqQawu4YDir/8X9fEUD85e6AKLepIfy/rmaYhQvAwlmU0V
-         LY0E3BLKsFwXhIS5+dufRx6JoyXyojeS8Qp7JHliYFWQxBa9J/x2PVkapH7a8sYoziRC
-         /J2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUEUGImZEsQgA+lTT027WGjGD2tGjUv3OV18ldJRZOxenO5nxDyqIH36iUKiGnUDypDn6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfoxJ5cSl9e3QyPEd9XThQUryh9zumXo/h6itoLAR/RypgT4B2
-	0btKpw2YLyZfmyllzH2Jybg/qoGy9H189hB0vVBM4dCfDtQw2awJWWCx
-X-Gm-Gg: ATEYQzx46WusXPs/olQ0rWdEsbYFSvjnLeI6gR9EaP2fuR6SiocX4aOyEYk8h3kql+a
-	n0BAsADP+WYXBshjg6EfZl3eZ0OyQkTCaUYasIVB1AXsn0aYNOQc46ZfP10oDbpvR1JcfYlMHkR
-	f4gvOlCAf7gsAgYXMMcVmSS2gDt3ft5HIhC/l+F0TcZZPHOWyasiI9YmNpl7mjsgImYKfWtoJzA
-	3jlsaULYbTHS3ZzOGfaAK76n5Jd6StZkjHryQXP+EOPKTVsreV5s/9VvAvcGU4mnE4EW2p3nWPO
-	hRDU+bIn63k778kmeITUdAlNkZdfy4Mtvn6fwvI84Y4MCJ2FbfV7ZeWuCCu5UwXVcBrlQobVOV1
-	MfJD5gKppzYnnpR0qYJcTvvgNUhXDSXuwJwBRAST7PjEP79w73JVllopNMxx7XHoo3x/Rq8INIv
-	uWeM7qBTcZ9SLZBenPcqCNAIpH5RlcFKVOXIg8Ssio+Bihj9mpfA2ZR532CRnYxK9YZJ8Nu0snp
-	0CkfDD1kRE=
-X-Received: by 2002:a5d:64e7:0:b0:43b:45d1:f449 with SMTP id ffacd0b85a97d-43d150ee9c2mr1472415f8f.51.1774983945735;
-        Tue, 31 Mar 2026 12:05:45 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21eba4dsm32151422f8f.11.2026.03.31.12.05.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Mar 2026 12:05:45 -0700 (PDT)
-Message-ID: <f48518a3-091a-4af7-a420-bee4d124f9a9@gmail.com>
-Date: Tue, 31 Mar 2026 20:05:44 +0100
+        d=1e100.net; s=20251104; t=1774989751; x=1775594551;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3jeKcPy/ZXologvjSOFsDlDYOtk7c/GfbQ3C0JvgJVU=;
+        b=o/irUy6OWbYRzTc2/024IHUD8A+Lv33q3zNOV1CK7GOgKtXlnfMcM3j/FAGXdIRJHW
+         gJbgh7MFNJLA1JvKJQUzfbDjnbagjHsR4Gvb0MHOv3tWd5putd2LV20cUy72KdKA//ZE
+         LlpnZBPytfj3oXq2viZYTFsveJK36eIFf4eSqu9wl+oXpRoYYICzNXuz9Nzg7di82cBK
+         4mb4AnuZa9zrnzBv8A5YWQlw1rnTAMsBYxR0de6507G1Cwd+ebe5tY6GftI+SOiyU6an
+         tY6Esbtis/RcMN6q7z0l4g8CgzZhlHme1N8Lhdtof9dQmLWKfRw+3ZtxkKXguZ0Ddt3O
+         o6OQ==
+X-Gm-Message-State: AOJu0Yx3Ww0/+Gk/hBs/eZ56BAHegBXH8GaEPTkNvAb5v6B4SOEXyMIU
+	ZPg8i1iOLP6WQyU86imEWlyLqdph1osEE4ggdb0Ew7eR7qA3ifROUOdEhRbQVQ==
+X-Gm-Gg: ATEYQzyXKKsDtyj0ka/AJItpG5HNK9frJv4UGkU4fRU6WqAL/AGrSpAhr6VMNBi9yRk
+	dk1/V9hg6uZsC9xsvCE254ac2sxCxbm5VXPS8PhJvSu5HVWNz5Q7H+KD9Nl/gzTKI4udNkh3xQL
+	J1I56M3wKPbK5+xr+q7M5UhrwPCiCR7quZKRADQkcGwIRoy1jXVsAyTlk0RCBv6JcKMdnpPcG2X
+	fkhM1yovcV9pQ8aLAPtC6wUX5JCHGLHD6NjeZqrPThOgSRe5twp4Nb/I6JVQa5uTyd986xW6jGz
+	ASEMOoKMDUwAJH+r3Z06uhnU0kG375OIN+/pLJIRLbQJtLebmgvWjDVDnLvF9dHrcQ83XlXY/+D
+	j+9ZhjMjRqbWJHFCytXWMKYAma3L76TX9gOlND6PVcOhciMpVsxw3wJqi+1sUka2NJ1/MZiVg5l
+	YU5eit6RyNVbeEKd+nUZtsESCHJjNhRAbAv0+l5l6eff0MenYW7BilYlOFt6iiuTUgQIYqV8I+g
+	00sDv4uNMLofDSIzMQea1kRDCh4TBnl/t6DeyZmrZDwb2jtWvxMz/yW6d87TQ==
+X-Received: by 2002:a17:903:b90:b0:2b2:4f43:b48c with SMTP id d9443c01a7336-2b269ab23c7mr5191735ad.14.1774989750718;
+        Tue, 31 Mar 2026 13:42:30 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2426896edsm122610005ad.34.2026.03.31.13.42.29
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 31 Mar 2026 13:42:30 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH bpf] bpf: Fix regsafe() for pointers to packet
+Date: Tue, 31 Mar 2026 13:42:28 -0700
+Message-ID: <20260331204228.26726-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Fix BTF handling in
- bpf_program__clone()
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com
-Cc: yatsenko@meta.com, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260331172634.57402-1-mykyta.yatsenko5@gmail.com>
- <29afc1f08868691fee1ea4273e01ee669cfdbb2ca960fc1ee71fc4ed486cd069@mail.kernel.org>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <29afc1f08868691fee1ea4273e01ee669cfdbb2ca960fc1ee71fc4ed486cd069@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Alexei Starovoitov <ast@kernel.org>
 
+In case rold->reg->range == BEYOND_PKT_END && rcur->reg->range == N
+regsafe() may return true which may lead to current state with
+valid packet range not being explored. Fix the bug.
 
-On 3/31/26 7:35 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
-> 
-> [ ... ]
-> 
->> -	/* BTF func/line info */
->> -	if (obj->btf && btf__fd(obj->btf) >= 0) {
->> -		attr.prog_btf_fd = OPTS_GET(opts, prog_btf_fd, 0) ?: btf__fd(obj->btf);
->> +	prog_btf_fd = OPTS_GET(opts, prog_btf_fd, 0);
->> +	if (!prog_btf_fd && obj->btf)
->> +		prog_btf_fd = btf__fd(obj->btf);
->> +
->> +	/* BTF func/line info: only pass if kernel supports it */
->> +	if (kernel_supports(obj, FEAT_BTF_FUNC) && prog_btf_fd > 0) {
-> 
-> The commit message says this aligns with bpf_object_load_prog(), but
-> that function checks btf__fd(obj->btf) >= 0:
-> 
->      if (obj->btf && btf__fd(obj->btf) >= 0 && kernel_supports(obj, FEAT_BTF_FUNC)) {
-> 
-> Should the check here be prog_btf_fd >= 0 rather than prog_btf_fd > 0,
-> to match the reference implementation?
+Fixes: 6d94e741a8ff ("bpf: Support for pointers beyond pkt_end.")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/verifier.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-this is intentional because 0 is a default value for the prog_btf_fd, 
-that the field takes when it's unset, so to detect that situation, I'm 
-filtering out fd = 0, even though it is a valid fd.
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23811027187
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f108c01ff6d0..658b24341df9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19915,7 +19915,11 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		 * since someone could have accessed through (ptr - k), or
+ 		 * even done ptr -= k in a register, to get a safe access.
+ 		 */
+-		if (rold->range > rcur->range)
++		if (rold->range < 0 || rcur->range < 0) {
++			/* special case for [BEYOND|AT]_PKT_END */
++			if (rold->range != rcur->range)
++				return false;
++		} else if (rold->range > rcur->range)
+ 			return false;
+ 		/* If the offsets don't match, we can't trust our alignment;
+ 		 * nor can we be sure that we won't fall out of range.
+-- 
+2.52.0
 
