@@ -1,171 +1,116 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-oa1-f65.google.com (mail-oa1-f65.google.com [209.85.160.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE66273D9F
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 00:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774917997; cv=pass; b=i4jsUpbaF8XAxB+B99Oqf/24E896liq99DavwtopERbuH1cf4gf6HMdxoa/88bx7SbGfBUctqJeYmQ9+ac8Iw/qDV/wxySD5v2WWHrmtwt7BcIyWjqPuzDkaw6b8Xi2lReT/QTveAPXJerJ2Aqj4t+5pnGWKxDZNiDxqQ8EfRcY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774917997; c=relaxed/simple;
-	bh=zYiszaDVBQy4JGrPLFGDXXS8lpJrvJLcXJGrvXbxUv4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=moFwG2lg9zB+hzJ/NtQ1JX/V9URZaTfUFxtO8L4ZecejnUpK/wD3VlOW7UwlpgtJp1As4qGpkDxNc7zZn6jfyODdXUdu6+eqM2aqoAVtiPnmAtQ1/eAduh7drFp/ndDT8ORPQHlOA3rQnpCMyvYNHNE2C8laHVfCX9kgQNMpsNo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qgJGMF+g; arc=pass smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BA02857FA
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 00:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.65
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774918341; cv=none; b=qZNcn9O8DDsNtspaqtNAM94hRGB+gS0RFswMjrlsdPSJoF8upsMIBdcpqWZDF6U3C8xhQUzT/OBJhQQ1j/06PsP5npcsZHNWxfTSD8Gj+0ioEwXOfFd0rjwpSa8oyNXGFmb/eyKnYwpLqcpBceQv2DEXQohZKpTTmaSuZeRLzVw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774918341; c=relaxed/simple;
+	bh=WGsXhbcDCOxX86jowP+Jo934kiLHJCr1kdCZ//0kuyQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fqOvEVl0TAV4SazW94sIHNevgqKhOqC/6wKLvJB+iQ1Y7MVEQaCoRRa6ETqj/4TvjNYclaR9Thg/9u/drAquFIpZUoSXHH/lJqdscNFHBarEHB4p9egfTP0mMiAIa96zPxWcurgk/fxqgoRlW4iT1RbEprJOFo9JgQQ3L70TnT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TC0fgm6d; arc=none smtp.client-ip=209.85.160.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qgJGMF+g"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b6ce6d1d3dcso1848275a12.3
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 17:46:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774917995; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RrTLf8ZQxkfwqC+C0j+3wbZrR3UYCoe7XaXcUr0GSk/Peh9Q7xqI2SF7trVMWu4fAg
-         10TQ0nJhKmn7p65kJqfDq3IcPkh7o3fqv3DFVGSF8d5/ue8VTRpV3B9aXx7qiI6WX6gR
-         ywxyAgWyq0oq6EdV5jLnx4hIFS0xobCHs8vtxkHzsOuFj0BEMI1i7AB9jhTtc9u3hK7I
-         8rf7GNTaAcQWgNOpGzh8qULEsOVZc0Ddjfur66RVfCAdVWmoLIPvl71/5x3uTTvuF/Lw
-         KhuS4j0BCKYZz06iYZupb4grbnVHHm9tEjvtHrUqCzolij+92It3C/kK1mKfS4TcbCDk
-         4pYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=COoQNEmPiIycrQ64MYlTsehjwuDi8RDPJhSWNlgSaPg=;
-        fh=w6YSdmtOf1NKX3w5wFeTCSc6scNeUu2+rBxyHKz+iAw=;
-        b=RhbTB/m9A1aoVJXxlW+YoCl29CvnAYJqpa28F1Jg7h0jDGATpY7lGGFtoltgu+YS4Y
-         t1V0E3BkuUOsRFJtO9l2FMRqSrci/DYYKneUoX83OQEH2G27zbPYCQQqHsN8IBMVtZXu
-         kRH0nJ2dcgaDqcK9xiTHEy818ZM6hTJho81UShiCJRctomLQ2wSIa/R+M/E6xZL1Pn+F
-         8gyxFs86PUV5+8N2TqmzWLVLHLO9EIEwzqZRewiedobKpqwSAQHsa2lhUk79gqCBx3sD
-         bE1d7SHi2gkuYEguW7IJ500YYQcR6iY0WS+uHCCxeV1/vvjQX1B95fRVvCxTzOmU3fkj
-         AWTA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TC0fgm6d"
+Received: by mail-oa1-f65.google.com with SMTP id 586e51a60fabf-40ea36b56b7so4160023fac.3
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 17:52:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774917995; x=1775522795; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=COoQNEmPiIycrQ64MYlTsehjwuDi8RDPJhSWNlgSaPg=;
-        b=qgJGMF+giaYPL48C+GpnLLTd0FMxILHo/pwkcPBHai9YRKv6lJV8DRpAgkAGxnhoVb
-         pe4xT+k/uHRbX6JOwFKakRq97Goq5OZoWG00+lwZy4QYgm88FcG3OZCetnSENaLnBoax
-         Y+fSS7r+QmXmmfWoRVQQ0Ne99pzYjdU4Bnmx3sQCYPwuoSN4vn5nPuWzz9PEevjkBQDg
-         QfflEhEQyFQFeKG+Xsz11SKE/I4zCpwKumWNEAxNb1vCWeCXgVqGoklgNgtfVTdnfMCE
-         E7++JseNcni7imCWcIqnj9kvbAYBn4n0iu/CTkoxyyps0c6pG+sgz6p/A1orHW3hXMiO
-         LanA==
+        d=gmail.com; s=20251104; t=1774918338; x=1775523138; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lSsjObgyc7c+XXFa2kSWmFf91DtU1SQveWJj3ZYSdxY=;
+        b=TC0fgm6d0tAjJfNAb3P94sIPWLefMZNo6rUrynw83blFykr5/MZ9XiTmDksbo5bcCH
+         UYro7F9J67QGlptIkP7MD3mJ+Q2H+vIQbJCDCAQHmixyWeNcT68eu27Hmd+HdcEewz92
+         yxeV75FoaOHgwzQmOYNhfl6tPepKfY0ABDex3hxpcsui4KE43XJpo9CNa14+fZibrDfZ
+         P0QnnplMKtrm4pc+QQZT1zInGoLCnZI/GebGgvZqmgsjZzODjQqny77lrnFIufidnG6Q
+         Ur8t6h17FePQRdk5ixXVyIrRgzZjb0r7wzS1w7EzVxoOBLdGTAYxenyscx04csMwn7t8
+         TdBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774917995; x=1775522795;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=COoQNEmPiIycrQ64MYlTsehjwuDi8RDPJhSWNlgSaPg=;
-        b=kp1bWJYwW4RBEUslkaKuPEB2Z8lBwWIbol49q//kZxf1yUFFfXipvYY66I9a/YV+dg
-         u7TTTytSaQtSHB3FYml6LSAX/wpDwGm6E5AOGIEm9jlWmlYM7yqKCslunj+3czMM8HIS
-         Bf6hnHbUonlleWpw2JgCnu37iPvwpg6YxarMfVSRFWaAoaOwv8tv09kn3h/WDlZKaIIJ
-         c2hub9NLKWHiwI9bsVkHPhtRjuSlmi1NDF4YGuZTuXXtcncMJpiRQ2bGnUJUVFYRzcr2
-         Cw8vKC2OzjdDAHeLYPN6+YmVFByQa1lBXNbDADrT0/lF/tsUrFVKrdP3/qzVC8QEgBLO
-         X0XQ==
-X-Gm-Message-State: AOJu0Yw1y8TciBz1VV+FmO3PPTyCNq2AC+XLzUF7qrXJNwu/KqLdoor4
-	uHtT1MmG1AP2j9TAR19okXN4UeY359LPJRu34Zc0P1ex9ed9ETkyGyG8DvGUghT0DHF0JMP+wEW
-	92g6Tc8VLTf/uzLaztHpX4vZYC0KsLD8=
-X-Gm-Gg: ATEYQzyJQkl93HBo8IEDlvhRjvHbEQThkzbwwVwjtSm4IHc2w3NhwHhYJNOQ8Ht4n5N
-	0QCg9WAhLkxNlmDwOzfvYc0/8P2wHGSOHPv9X66n1icmDKZAOj+ImbQcEr5Itn89Nj3NC6IuPfC
-	Eflfb85C+RpxlnSd86Gi1kR25CQlGfSh5+jeHdmUawi674eu2AaPg9/OEy0eT7NZG8xcxqo/tLS
-	3Y3EUhU3IS8wB9XY/acYPJ3wrqrXxil1auR1KgKSUxq5E1ehYxrY0b+Ktr9siut4ssgjjUoclpt
-	k+/vn5DivuOVROMXIzWiW8k=
-X-Received: by 2002:a05:6a20:938e:b0:398:a128:d463 with SMTP id
- adf61e73a8af0-39c87a3c214mr15366070637.35.1774917994898; Mon, 30 Mar 2026
- 17:46:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774918338; x=1775523138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lSsjObgyc7c+XXFa2kSWmFf91DtU1SQveWJj3ZYSdxY=;
+        b=JB9DvDQchc/wOA9v1jRbV8auF+r1XbZUIFOF6U1OVdUusdFuHFgbxJC0IIG5S73bxG
+         VGbBP8UFAotSXrHPAWvAaOGAN9o/pbVtsyz/W3iScLnblBu9rcHZHQYkHCEceoOSIEWs
+         FREQXjW9K8yYqfn8R6D7ueUMWyUQGl06J0+zZvKCQZUvUU480a04wPMhzZJQ2iJuB5EE
+         AJQ28liM81fcWOOSy5jJW7jDmJ0a+KwYwLwGTFn/kedoRmSl9PY1G6VQ6VhsxHa7rOR6
+         GDv3pPAV1+Vcsn9Yo20cMER2oMWSg4jfZ+nQ1+sn/kFZsiks/OlNcSPi0wOtyQRarhD2
+         OXpg==
+X-Gm-Message-State: AOJu0YwReAnusRdZbdGkLEEx79Jgk3JNyCFULWUXsn5yZWgh/nYfsGrr
+	Z+Phrw2fdJE3u1afuSP8zzO7tXAml0wrjJfd9YBrje3rM/5arFBBDKRYUv/EVXau
+X-Gm-Gg: ATEYQzzWRREKBiff8i4Rj+hgGk2XWdz4wTqNoEr5NWN61Uwxj4JO9tbXUM0OgelppK6
+	du1m5B9+yNUyyslR5gNcfPtrIVAhf7H5sjQxK3jR2YUVnGSTIYTs4sWif7qF0+6rokijeo8mA4v
+	6dnL/mFNo6DqRtzk2mofcsaSz3btVQVDSDipkLI1SEn0BgR8casQaWjPdlxyEbGvEG+VX4QMQpL
+	jaxKyihSRCp7USz6SKZRlOaUpjStT5RO34WiBREkOKuHgtnzh/Z9w/8uYXwDpJpCIRxkRx/9So1
+	djg1dqTInf1kjjJsoysopRLRgxDYi8qSjZuE6Ex0XtaVEkjb8dVT2KFlpQgExzbmaXSr90po2Zw
+	iZDriENG8iG9t8dBmmQBlwJMw/wpknD72N9HSikk1zXPlKCh50gwFJtWoCsLqTgbVFSoibPGg/W
+	YR9mxEfMCpwk6AaPCxuVKIJo0VM9eBLX59Qnd23wtcnT6A
+X-Received: by 2002:a05:6870:e195:b0:417:3936:1c7a with SMTP id 586e51a60fabf-41cec2c69famr8552200fac.24.1774918338358;
+        Mon, 30 Mar 2026 17:52:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:58::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41d04cf9ceesm6369607fac.15.2026.03.30.17.52.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 17:52:17 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v3 0/1] Fix bpf_link grace period wait for tracepoints
+Date: Tue, 31 Mar 2026 02:52:13 +0200
+Message-ID: <20260331005215.2813492-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330-sleepable_tracepoints-v8-0-2e323467f3a0@meta.com> <20260330-sleepable_tracepoints-v8-2-2e323467f3a0@meta.com>
-In-Reply-To: <20260330-sleepable_tracepoints-v8-2-2e323467f3a0@meta.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 30 Mar 2026 17:46:22 -0700
-X-Gm-Features: AQROBzC-VT-xZKwcUFjjqPWkErz_dBlX8TaFYHPCff8Xp8jTHtc6I0I7oZ-lV0o
-Message-ID: <CAEf4BzamwGd=_q4aHiWDx5cyRWPNHpH=9JwpsHeFrxCv0AFg7g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 2/6] bpf: Rename bpf_prog_run_array_uprobe()
- to bpf_prog_run_array_sleepable()
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	memxor@gmail.com, peterz@infradead.org, rostedt@goodmis.org, 
-	Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1150; h=from:subject; bh=WGsXhbcDCOxX86jowP+Jo934kiLHJCr1kdCZ//0kuyQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfO0lJpo4O5fO6YHWO5fPWcLQ3Gs+ZspByfrHorRyNU2ks3W vHm8o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABN5kcjI0Fn7TpLhNxfjWf2m+Ml6tp 8KVkvbndJda2WTx6okZsnHycgwj8tz6uTvJQWL3t28axYhcNF6euUFi+O+v9I0588vuP+SCQA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 30, 2026 at 3:20=E2=80=AFPM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> bpf_prog_run_array_uprobe() will be used by both uprobes and faultable
-> classic tracepoints. Rename it to bpf_prog_run_array_sleepable()
-> to reflect its general purpose:
-> per-program RCU flavor selection for sleepable program support.
->
-> Add a bool is_uprobe parameter instead of hardcoding
-> run_ctx.is_uprobe =3D true. This flag controls bpf_get_func_ip_kprobe()
-> address resolution and should only be set for actual uprobe callers.
->
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  include/linux/bpf.h         | 7 ++++---
->  kernel/trace/trace_uprobe.c | 2 +-
->  2 files changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 05b34a6355b0..9fe19ab21cfc 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -2487,8 +2487,9 @@ bpf_prog_run_array(const struct bpf_prog_array *arr=
-ay,
->   * rcu-protected dynamically sized maps.
->   */
->  static __always_inline u32
-> -bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
-> -                         const void *ctx, bpf_prog_run_fn run_prog)
-> +bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
-> +                            const void *ctx, bpf_prog_run_fn run_prog,
-> +                            bool is_uprobe)
->  {
->         const struct bpf_prog_array_item *item;
->         const struct bpf_prog *prog;
-> @@ -2504,7 +2505,7 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_arr=
-ay *array,
->
->         migrate_disable();
->
-> -       run_ctx.is_uprobe =3D true;
-> +       run_ctx.is_uprobe =3D is_uprobe;
->
+A recent change to non-faultable tracepoints switched from
+preempt-disabled critical sections to SRCU-fast, which breaks
+assumptions in the bpf_link_free() path. Use call_srcu() to fix the
+breakage. While at it, retire rcu_trace_implies_rcu_gp() and clean up
+all in-tree users.
 
-nah, we can't make it into generic "run_array_sleepable", it's clearly
-uprobe-specific due to this
+Changelog:
+----------
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260330143102.1265391-1-memxor@gmail.com
 
->         old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
->         item =3D &array->items[0];
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index 2cabf8a23ec5..eb4d78e689ac 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -1402,7 +1402,7 @@ static void __uprobe_perf_func(struct trace_uprobe =
-*tu,
->
->                 rcu_read_lock_trace();
->                 array =3D rcu_dereference_check(call->prog_array, rcu_rea=
-d_lock_trace_held());
-> -               ret =3D bpf_prog_run_array_uprobe(array, regs, bpf_prog_r=
-un);
-> +               ret =3D bpf_prog_run_array_sleepable(array, regs, bpf_pro=
-g_run, true);
->                 rcu_read_unlock_trace();
->                 if (!ret)
->                         return;
->
-> --
-> 2.52.0
->
+ * Introduce and switch to call_tracepoint_unregister_non_faultable(). (Steven)
+ * Address Andrii's comment and add Acked-by. (Andrii)
+ * Drop rcu_trace_implies_rcu_gp() conversion. (Alexei)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260330032124.3141001-1-memxor@gmail.com
+
+ * Add Reviewed-by tags. (Paul, Puranjay)
+ * Adjust commit descriptions and comments to clarify intent. (Puranjay)
+
+Kumar Kartikeya Dwivedi (1):
+  bpf: Fix grace period wait for tracepoint bpf_link
+
+ include/linux/bpf.h        |  4 ++++
+ include/linux/tracepoint.h |  8 ++++++++
+ kernel/bpf/syscall.c       | 25 +++++++++++++++++++++++--
+ 3 files changed, 35 insertions(+), 2 deletions(-)
+
+
+base-commit: c369299895a591d96745d6492d4888259b004a9e
+-- 
+2.52.0
+
