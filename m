@@ -1,139 +1,128 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF5631714F
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 16:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774975457; cv=pass; b=SWyaCveLfG7NI9ZFLDmh2BsfhHxAdp5cDjDPhIlAyRd60nPSnDrNLYy7hFV7O1fqTfTzAY2J+MAdJXIySkcPkwjP5kq4l7NMYNMBeoF3zLQ2vVWK+AI+aZhPd8SSk78TmbcKd7p9WVipkcZAoPYFH0rxLY/rUNxEHnVXEImVhUM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774975457; c=relaxed/simple;
-	bh=ltBDgRFacxBRou1eKvg76+HSeAEoZdE6n4vIYVTg10c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YxzejB2d+tceS2aasWV5Ev54UVo9xRWFP465eDRaB3aHXf0uyj8freNGEHW6THLi3WNZZbwnkQsTNlP8K92DSOZVkGdznTf7Ld6+BNFtS2/PkNp3OiYkqeyDydpUkz3VVGWMFzDyyfaZioqfziVfUkRaLhrLboZdmaJtrLh0pQs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abbUNpHz; arc=pass smtp.client-ip=209.85.221.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5A0426D20;
+	Tue, 31 Mar 2026 16:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774975972; cv=none; b=bO48wH9/IwxI/IvDs9veF12o3hYtN+4Y6F9uLjOpo96YlVXW0T8Jn3yB2YZl4j8pJFONNLdN1qFwS5gUJqz7jz7buFRz0rM+57sSdadufeJ4EvmAQw3SKAomS8GPwkJKhw0yVzzXTB1Ksq+v+LX8heKOQ0z5pP34xLh4nvvsG+g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774975972; c=relaxed/simple;
+	bh=Lfkw22piQF1Hnab39FNJQNBXwCljMCpCQxPx6A77SCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UspMfp0SHQ7fT+k7tEhHgZYQ4YmzJ/Hwu603MCquCWqJgXe88I7aaFegQaYOpVY1VyHKKk6PO3AZTtA+lk64Tw3EBngPIsdvFZ0LOQik1aCeCIwrqEmYxWqTG5RD897FhBwWhKHKaYFDbCb8kbOLbra+KivjsUpFJBnepqAKDo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X4AZlpVN; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abbUNpHz"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-43cfbd17589so2569228f8f.0
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 09:44:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774975454; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BrZi+lMXMiyfyszNE101xZX5US6s+d5J0hs52f2F4e+VnQsW2J4pdx6ayQx/7HObJI
-         ytUHS7r81yidKSL7NN+RdvtoHXiz5ZerO33CMNnn1oB9zqhcWdLzfFCRsRhvj7ukjnRG
-         7dym1skc5rpy5kHXpIklFr8KkBG+B/C334y/hvmfYLEcer4gIq8QMvH0yt5i5ZGLrIsn
-         NNhalfjaEcm9HrEfvZhN3AR0xY2g/2r5tc3f+aEeQXBhbJotsd0MSspLTxmCR5ezOpQ2
-         Bz3qXDDYTw31fBBoAS/pFZ8Wj7QzmzZPRWxlvo+O2Wvg9G4SpTEjz/bcQGsx2rLEZ7W2
-         81GQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tKpq1PwlxkS+Kiofv5/jMfXrD5ec4T7YUgeyKP9XuCc=;
-        fh=4ddQ53xfGaqY60AR+Tgktx3IzGbQ7VXha4SwKAIOI4o=;
-        b=Tr/3dU6IVQDJ0k1cN8gXHyp/w7BSa+JzWakLPnAAQkuPbZql/zPnTLcSjaxlOo/SUa
-         YBQQgEnHRw3Iqrmc4M0Gga0QsTfieyPGyvwDhxCKBoRY7indbeSMWmguRuOlz6muTsSZ
-         g3Vv5+cqUJu868fC28VOsT2RQF5tJOn72pSBaPYnEQ11FZdNk7JZ8GZXzUA9VC2/mhTG
-         qvanG8ZVuJ7k8gfvLceYku+UR+YGdxhjmfqjDAWPL/4ypSBUZwE7qU+Em0OVkEOcar6B
-         SPb/nQS++8i43qakO2yhE4bPKU90nIrjrYgAGuVfHY9z4u1pnM9qrmqga2O3izDCl5wp
-         BIUQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774975454; x=1775580254; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tKpq1PwlxkS+Kiofv5/jMfXrD5ec4T7YUgeyKP9XuCc=;
-        b=abbUNpHzgor5sO1Bf3ucXTVEGw/t1b9Jsmg8jo5GgzCAFYza5Iz5a06IQlSfv/ktqo
-         lB5iEjVkF66TNZmz7+28PzuLo+dpzZcvJbTEVNgJHTkteoyAhHdlKHfjY3ZYSO8Acbvl
-         V1TB+hyNVRkn/3VyvowjgXsQO9sROuHK5yQoScxe9zwkKiG55wJeFo2LZokI+GsXQ0KS
-         qOut30jMun9rutj7JLmX1gjDg+kJFZDeszLyr9z68H1VYbw7ooW41o/U9uWcV4WOeA4Y
-         NSdGBeiPmCJwabFkX4urC+5GARY9o7t88oW4kcpbX6tqx3/kLykE9dI0g4RkLCXupFMz
-         +6nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774975454; x=1775580254;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tKpq1PwlxkS+Kiofv5/jMfXrD5ec4T7YUgeyKP9XuCc=;
-        b=WcG2ODUMnaMGSBogw8BApHb8t2oioAUKL7zXaVx+mssKPDkJMRLeK4lYUkeQmr4oFA
-         Wer7tc+KcWJYmaasLoCios6CF7Oz1aGxry0gMYllxP004IzAzoLrPZGnMa8obcDmxRO/
-         jWA9d1hTdAo4wEdIsOLdT6dig9t07XJ1PoSiKefBQs/Kd7z7MDvcQpklNJ+Jip7/4AvM
-         sJlLUSY3DN9ZjMrMNGspnv5kDpXZ0dTH2G3lDhE8FHyvj4iDP3idzaTZamRYItLxgmDO
-         6/WF/sYQsonak4HP9F1aBY04e8GodiwXatmpS7M/QjwMRjj8AK7It6bpmVL4d/VqeNj0
-         gdng==
-X-Forwarded-Encrypted: i=1; AJvYcCVlvQj++oUBRR2U0AQZW5tJlkjKi3hyo89w12nBVNvbqzibtUrwIpmHlRSFJ33qp9UocuU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT4US+9Xw9didEi6l6nUPHnfcACSJMVDdEymeSh66f7Kvb+Le+
-	MQRxiOzgQIgEEpf1HGlVxOWVA3eC+F1AQoGYdud9pEdPY3szTpAzNKx0ioZPu1F33BZ0VyKx43B
-	unJ970+pdBpEl5T6uxrF8F5XTy7lABVY=
-X-Gm-Gg: ATEYQzyyzAHiEhmTuTFFOnE9Dcfqmglu04C4tpg/igTj5zgarMz2vuK4NFPsr5+M4g+
-	5lnQ7/gzlAutPnX9WxFz86hG8Z/XjkEhuejdh857e+K06fTZXxf2s7/oeXh5BfgdZtNLn0qfJh1
-	JjRBZzJYDHDhzvfV7pqYDRLpLHXoye/Rcl9Hv02PIi5tuJgc2FuYIizaBXgEAQrqANIujtCm/sp
-	lI5uaqDLQf39k6B0kkNYgPxiiuLab+V2f6jkB4QTkEg34UfDUBXdSxhmc4JIBxm2A9lLpoZuU2K
-	GefHafLGlL1MN5mnAz4ziEuwWb5/1cEZ69HG5gzmH3C2rABrjfhSycvNwpp91HNvVQgU9XA=
-X-Received: by 2002:a05:6000:240b:b0:43d:262:c97b with SMTP id
- ffacd0b85a97d-43d150f76c6mr554770f8f.41.1774975454129; Tue, 31 Mar 2026
- 09:44:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X4AZlpVN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774975971; x=1806511971;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lfkw22piQF1Hnab39FNJQNBXwCljMCpCQxPx6A77SCo=;
+  b=X4AZlpVNWWEAMWpb8hPKHQ9n1/Xn4xhzARuhzxyqTBO2IH0Pdq26JOAy
+   23Iv56tok36Hzak2WC7PiD8WZnjK+8d1Lm1CP52OcDscpurMtqBtJlGMC
+   w1s2OqME/lu6E9tWSq9Md1Vmo2FhyjGwVh08hKnydlTyVSZlITHfP6cXE
+   YafgvteVsh4TOfwatUoU2LYZAEus8DC/NBDw8cl4G1m3MEKpL8k2p87fE
+   /oHdq0lL09/kK/rf3fKr4U++S6yNZH8RlTFdTkOhnKj/naDjev6IUXHVw
+   6qGOELv6g5OlJ1xu0rIe0JpnsGKNbJJAs4p2vFmFWd37ogDht0k0QC9U+
+   A==;
+X-CSE-ConnectionGUID: ukq2CRnSTay4pUpuHlBsog==
+X-CSE-MsgGUID: nU0uPXOERPGuff0qYuiDcQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="76011992"
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="76011992"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 09:52:50 -0700
+X-CSE-ConnectionGUID: wmrsDVQhSdaqqR9AcLAxQw==
+X-CSE-MsgGUID: Q6H8HRIDSP+9SoiiVpzixw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
+   d="scan'208";a="230863703"
+Received: from igk-lkp-server01.igk.intel.com (HELO 9958d990ccf2) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 31 Mar 2026 09:52:46 -0700
+Received: from kbuild by 9958d990ccf2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w7cKb-000000008SD-12F6;
+	Tue, 31 Mar 2026 16:52:45 +0000
+Date: Tue, 31 Mar 2026 18:51:52 +0200
+From: kernel test robot <lkp@intel.com>
+To: Jordan Rife <jrife@google.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jordan Rife <jrife@google.com>, bpf@vger.kernel.org,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yusuke Suzuki <yusuke.suzuki@isovalent.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>
+Subject: Re: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from
+ the 4-tuple hash
+Message-ID: <202603311827.nefybt0I-lkp@intel.com>
+References: <20260330215707.2374657-3-jrife@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331005215.2813492-1-memxor@gmail.com> <20260331005215.2813492-2-memxor@gmail.com>
- <CAADnVQKP3bmuDP2NzKYhU776RFVuN4fOs3y-kyQ8AFzsoK3_2A@mail.gmail.com>
- <20260331120329.7126fe6a@gandalf.local.home> <CAADnVQLjsJCyPBXdEy5A0r_es8wyDJVFXJh+PNU2dMVUMD0DJA@mail.gmail.com>
- <20260331122727.7283e589@gandalf.local.home> <CAADnVQ+d6zfXFtQ+7eiPSkrxWhh8srk_X+Cuf9=Y4D1+fHTF9w@mail.gmail.com>
-In-Reply-To: <CAADnVQ+d6zfXFtQ+7eiPSkrxWhh8srk_X+Cuf9=Y4D1+fHTF9w@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 31 Mar 2026 18:43:37 +0200
-X-Gm-Features: AQROBzDbOrR7k2ahLH2swdSoIR7-OgNqdTGVQRRUyCreA2xrJNR_eQL_tctIwFw
-Message-ID: <CAP01T74Hs4zcOjhpzPrzn2A8JGjJe5yMMFkXBOdG2XefY40-LQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 1/1] bpf: Fix grace period wait for tracepoint bpf_link
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>, 
-	Puranjay Mohan <puranjay@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, kkd@meta.com, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260330215707.2374657-3-jrife@google.com>
 
-On Tue, 31 Mar 2026 at 18:36, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Mar 31, 2026 at 9:26=E2=80=AFAM Steven Rostedt <rostedt@goodmis.o=
-rg> wrote:
-> >
-> > On Tue, 31 Mar 2026 09:04:33 -0700
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> >
-> > > > I don't want "srcu" involved in the API. That's the internal workin=
-gs and
-> > > > who knows, it may change in the future (like it did going from RCU =
-to SRCU).
-> > >
-> > > so? When it changes we can rename it to.
-> > > I don't think "srcu" part of the name leaking anything.
-> >
-> > I prefer to have a API describe what it's doing and not "how" it's doin=
-g it.
-> >
-> > We can have:
-> >
-> >   call_tracepoint_unregister_atomic(...)
-> >
-> > and
-> >
-> >   call_tracepoint_unregister_syscall()
-> >
-> > The "atomic" describes tracepoints that can be used in atomic sections,
-> > where as "syscall" means the tracepoint are safer for syscall context o=
-nly
-> > (faulting, etc).
->
-> These two names work for me.
+Hi Jordan,
 
-Just to confirm, do we want to add
-call_tracepoint_unregister_syscall() without any users?
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Rife/udp-Only-compare-daddr-dport-when-sk_state-TCP_ESTABLISHED/20260331-082300
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260330215707.2374657-3-jrife%40google.com
+patch subject: [PATCH net-next v3 2/4] udp: Remove disconnected sockets from the 4-tuple hash
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260331/202603311827.nefybt0I-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260331/202603311827.nefybt0I-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603311827.nefybt0I-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/ipv4/udp.c:2182:31: error: call to undeclared function 'udp_get_table_prot'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2182 |         struct udp_table *udptable = udp_get_table_prot(sk);
+         |                                      ^
+   net/ipv4/udp.c:2182:31: note: did you mean 'vm_get_page_prot'?
+   include/linux/mm.h:4105:10: note: 'vm_get_page_prot' declared here
+    4105 | pgprot_t vm_get_page_prot(vm_flags_t vm_flags);
+         |          ^
+>> net/ipv4/udp.c:2182:20: error: incompatible integer to pointer conversion initializing 'struct udp_table *' with an expression of type 'int' [-Wint-conversion]
+    2182 |         struct udp_table *udptable = udp_get_table_prot(sk);
+         |                           ^          ~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/udp_get_table_prot +2182 net/ipv4/udp.c
+
+  2179	
+  2180	static int udp_disconnect_unhash4(struct sock *sk, int flags)
+  2181	{
+> 2182		struct udp_table *udptable = udp_get_table_prot(sk);
+  2183	
+  2184		udp_unhash4(udptable, sk);
+  2185		__udp_disconnect(sk, flags);
+  2186	
+  2187		return 0;
+  2188	}
+  2189	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
