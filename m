@@ -1,47 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53873E1217
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 13:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EFF3E3D88
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 13:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774962147; cv=none; b=ih75BS64Ye3nCnNht0fLFgd9IVU4vfpmDuNhv7SZ+aGIScZo1j9Z0e8U6YrZgoMnQxPNdsoGFs3VQgREjJSZfuwYF5jj2wRlCn47dQH/OQpqRoQ2+Eko/x2Z4GcR1Dkg2EekmANoNTSHuN6vaz7e5iQBDGjYjxI3ba9NoMVgQQk=
+	t=1774962195; cv=none; b=KJKOiqcPKJa8kM8Dt/GpKPSXcxNk0MlOMI89weMuQw1Rz3lxG0R7fOrtfE6uGSGP/Z3Qc8Rzgrs5d7klUOct6yyPOvkDl4iZBkr1dfkp6iexbDmS2GO/Lgp2hWAS6E9tO6KxRwlMrfO8ETGRo8rTzXfC9uiZIKOtduf/26qnX+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774962147; c=relaxed/simple;
-	bh=3T5Z5zgqiJwwwvdf2hpNzGcVRiEyF17pTxhs+i8PQKM=;
+	s=arc-20240116; t=1774962195; c=relaxed/simple;
+	bh=4CzW7YOhBRI2wVd9ytSmK78s7UjO/Lsx99E+wCnu+o4=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jq4Up5uFya1wJe4d+LUcxWqxEI2go981qxlTGOzzmlnM7jVXeM17cK5LInFfV4/TsG/VSqIJHEYjbiv9CHSN32p15Ft4pt5YFxBb7pCar7WHcVaR3yjp1/dsAMjDvIdLJ9lHM1oRLB0oNGGsApFRfWtbdaS+eL2SFX3p6AeUfq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Az80eKlp; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=enQpT1Tu3zcVnR6Z6tLOzJ7iHZSQm+5KCQ96c95zw6cBho/Wi1hUCHfXbvFDHwPolwu40Oad9njjKSQ2dDoNgzJPzjE74EutwYaY7ITTBtsaGeQfYn/nrtOEJnn1eNRDVjUyNuti6LAGrnWD968lucgJL/W1QZo26fztireMVUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=il2eu5Mz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Az80eKlp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9BF5C19423;
-	Tue, 31 Mar 2026 13:02:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="il2eu5Mz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D13AC19423;
+	Tue, 31 Mar 2026 13:03:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774962147;
-	bh=3T5Z5zgqiJwwwvdf2hpNzGcVRiEyF17pTxhs+i8PQKM=;
+	s=k20201202; t=1774962194;
+	bh=4CzW7YOhBRI2wVd9ytSmK78s7UjO/Lsx99E+wCnu+o4=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Az80eKlpB30Sz2dscF5ufjN5+p6fCWzkX9/CnavlRsEYLCH/20NveUdKNLjtNsQom
-	 ZuK6ABEBJqs3PYaVzll7gc6IYV2CmxblCkfZLZ3bQQW7hBl4DTG8VgNXsf4HwvRkhD
-	 F92Z3Qz9VVWmzMJRRviRId+YvutQnecmEQUCRHjUXR5vKKbd7rmuLMbEV8l6+9YYJc
-	 mlJfx6/067f6sR21L9N19vahOaUrjxoNV7p0TXIJf/HYqnp+MhK5d315IzTVv5ipzO
-	 0rN5mrCUiTzX6RYko8hs9RdN+zUXDZj97n6NYgcuRCgtqHww6CGtqVBV5V5EZDtvK7
-	 lU/tQ9M7jePOQ==
+	b=il2eu5MzKbO9eQuDOsbMnNWPfT7CdGXd+iBXofIIcUZelJiZbn47o2a+983lUSGWg
+	 skKcAj/GkjtI2Pz/ecI4S4WW456K0q8Wk8cFxgnWBctcQS7yc3kL4dd/N3A2cxYCnS
+	 NfN8R1fiTwFYjmVcQab25kHQkgo0M/8MUAbtxAhrNH8OdeoZ4PkpZ2uvByIewIN0DS
+	 ohxglEUlzhDxf96BpFwzYi9mIEIIc6SP4DNnxjyYKq0WE1xzz9EIHjuHAX9AEfJUkt
+	 siltuWm+t02hMO3qVF52lBiXdUsSf8qSZztuXqEthBLqoACXwpCxTqT6VQ0VB2RCWL
+	 3IIdR6zsqxyWQ==
 From: Puranjay Mohan <puranjay@kernel.org>
-To: bot+bpf-ci@kernel.org, eddyz87@gmail.com, bpf@vger.kernel.org,
- ast@kernel.org
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, ast@kernel.org
 Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
- kernel-team@fb.com, yonghong.song@linux.dev, eddyz87@gmail.com,
- cupertino.miranda@oracle.com, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev, Puranjay
- Mohan <puranjay12@gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: impose global ordering
+ kernel-team@fb.com, yonghong.song@linux.dev, Eduard Zingerman
+ <eddyz87@gmail.com>, Puranjay Mohan <puranjay12@gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/4] selftests/bpf: impose global ordering
  for test decl_tags
-In-Reply-To: <fdf52b7b106f1747fc2e4bf11fa34b28f140b5abb1c698c6800ad167130c10b6@mail.kernel.org>
-References: <20260330-selftests-global-tags-ordering-v2-3-c0ac61e81098@gmail.com>
- <fdf52b7b106f1747fc2e4bf11fa34b28f140b5abb1c698c6800ad167130c10b6@mail.kernel.org>
-Date: Tue, 31 Mar 2026 14:02:13 +0100
-Message-ID: <m2mrzo17ai.fsf@kernel.org>
+In-Reply-To: <20260330-selftests-global-tags-ordering-v2-0-c0ac61e81098@gmail.com>
+References: <20260330-selftests-global-tags-ordering-v2-0-c0ac61e81098@gmail.com>
+Date: Tue, 31 Mar 2026 14:03:10 +0100
+Message-ID: <m2jyus178x.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,35 +45,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-bot+bpf-ci@kernel.org writes:
+Eduard Zingerman <eddyz87@gmail.com> writes:
 
->> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
->> index 50ca1b6ec8150..3f784cc76f8f5 100644
->> --- a/tools/testing/selftests/bpf/test_loader.c
->> +++ b/tools/testing/selftests/bpf/test_loader.c
+> Impose global ordering for all decl tags used by test_loader.c based
+> tests: __success, __failure, __msg, etc. The tags are now sorted by
+> testing framework to be processed in the same order they appear in the
+> C source code of the test.
 >
-> [ ... ]
+> The ordering is necessary for gcc-bpf. Neither GCC nor the C standard
+> defines the order in which function attributes are consumed.
+> While Clang tends to preserve tags definition order in the output BTF,
+> GCC does not. This inconsistency causes BPF tests with multiple __msg
+> entries to fail when compiled with GCC.
 >
->> +static const char **collect_decl_tags(struct btf *btf, int id, int *cnt)
->> +{
->> +	const char **tmp, **tags = NULL;
->> +	const struct btf_type *t;
->> +	int i;
->> +
->> +	*cnt = 0;
->> +	for (i = 1; i < btf__type_cnt(btf); i++) {
->> +		t = btf__type_by_id(btf, i);
->> +		if (!btf_is_decl_tag(t) || t->type != id || btf_decl_tag(t)->component_idx != -1)
->> +			continue;
->> +		tmp = realloc(tags, (*cnt + 1) * sizeof(*tags));
->> +		if (!tmp) {
->> +			free(tmp);
->> +			return ERR_PTR(-ENOMEM);
->> +		}
+> This is based on a patch [1] from Cupertino Miranda (see patch #3) and
+> includes some additional cleanups for test_loader.c decl tags
+> declaration and processing (see patches #1, #2, #4).
 >
-> Should free(tmp) be free(tags) here? When realloc fails, tmp is NULL,
-> so free(tmp) is a no-op. The previously allocated tags array would be
-> leaked.
+> [1] https://lore.kernel.org/bpf/20260305130035.192080-1-cupertino.miranda@oracle.com/
 >
+> Changelog:
+> v1 -> v2:
+> - updated remaining str_has_pfx() usages (Puranjay)
+> - removed realloc_or_free() (Andrii)
+> - fixed qsort(NULL, ...) usage (Puranjay)
+> - skip_decl_tag_pfx() returns NULL if tag does not start from
+>   "comment:" (Puranjay)
+>
+> v1: https://lore.kernel.org/bpf/20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com/
+> ---
+> Eduard Zingerman (4):
+>       selftests/bpf: fix __jited_unpriv tag name
+>       selftests/bpf: make str_has_pfx return pointer past the prefix
+>       selftests/bpf: impose global ordering for test decl_tags
+>       selftests/bpf: inline TEST_TAG constants in test_loader.c
+>
+>  tools/testing/selftests/bpf/progs/bpf_misc.h |  60 ++++----
+>  tools/testing/selftests/bpf/test_loader.c    | 202 +++++++++++++--------------
+>  2 files changed, 125 insertions(+), 137 deletions(-)
+> ---
+> base-commit: b6b5e0ebd429d66ce37ae5af649a74ea1f041d92
+> change-id: 20260326-selftests-global-tags-ordering-8f324323d9c8
 
-This is correct, realloc() will return NULL on failure, we should do free(tags)
+
+This set looks good to me, after changing the free path of realloc():
+
+Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
