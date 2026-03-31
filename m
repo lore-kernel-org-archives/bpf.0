@@ -1,117 +1,112 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A514D384236
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E8F24728F
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:35:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774992721; cv=none; b=W7B1tQfz43cq+b+rrTfFtojFy9/j8gmBzM9Z2ofDDItb+IVyIwcwYPKYegKzTvAX9eG/7NIdI2+4oG42J6n43HsPr5jeKnmCUGM5y2iIGspUa+ihB0hK2S1UmcnZdjTtEtrmr2Z+5sXnlerq5/wlD+cAg28SdKm/7RWCpPhmj/4=
+	t=1774992959; cv=none; b=tMNyzjVv0pP/RyZXZB0nPTfgHF6WnzN1/Cq7YezEq4eOXop4BTg1V1u5RcKOemE6Gx3nsjcIcT9owLMX3wUF8bu++u8ASkwpWJ4aH6kR/PyJcSPnk5BfMD1cIo3KPP4yQiah4eNK70Ldsn5meAXXCQArIqG5b93czvXpplz/+zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774992721; c=relaxed/simple;
-	bh=kXynKaJERHU8Yq9CTK7FgnxmUvZVVrEpK7b97GVi4yo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MJLyIQnvtldATHp/KRrEpIASaTnE64t//DPbqCFs2E//kVZnVafGWtDA1hYQl5DIz794hoolVw7vwSw78aPYxxh6Aso9AcTCDTcqaIj1AlCcn949gCMRoqvXCa+E331ZcU+Xg2ppTSuk6zQaXT6ljp/fK63MXaWaEKmwGgq2uoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=HhF0YW/H; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1774992959; c=relaxed/simple;
+	bh=4pYEruskr2d5VFzGjNuVUe7W6mzTa0jzLorw+2jLBZs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZDOfhyE+CteypOtOyJU/pgufbz8ZDwcsjMEeCHh4a5lDU6ekCCmGcWmciY2oJfxxHDJskeGBpYJrZ6nybE0/MN5C6+/LzHK0aWMiWjALj95Py37G/U1HKu+vKNf7gAflxp9oadguqmbL+iWITm7yeZGZ1BjwvJjHMaFERUyxtdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RpZQA/h5; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="HhF0YW/H"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=rZzQqokHy4yoNXC3RtuFBwWcgpQCh9chhCy59pQS7oE=; b=HhF0YW/Hwq7W2rEQz+VPGvG7pH
-	hHMqpW6IshHBNoTh2z5n6wDLX9A1ZEKGluvOTrq4ImdLuExh762CIvw/bCt0R9GSfIOQL9qySxsT7
-	I9QPpsGusfV47mYYTIq+G0NPb/2MZ4vZE8XqHdl4q2TC7iK9IOt/NfYvFOf6durKE0mBYwznmtNWq
-	e3Xw1ughjhq1Rb6i4vxQIiskPaLO71ZIAUZcjangX++0CScyRWbk5X32f84QpWYi8lVV7TfeYGhge
-	3LjlH8hM6jTsLcwzoW3M7Zk/Fb70rmsQU3ODXLJh/BIZbb9tZp4pMA7tSrSgkBLfXiEXL4PVT1e90
-	OLNJ6w8g==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w7ggl-000BtC-1x;
-	Tue, 31 Mar 2026 23:31:55 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w7ggk-000FW3-2Q;
-	Tue, 31 Mar 2026 23:31:55 +0200
-Message-ID: <28001693-1c02-46cc-adbc-a0487f03f36f@iogearbox.net>
-Date: Tue, 31 Mar 2026 23:31:54 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RpZQA/h5"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b23f90f53aso37884945ad.0
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774992957; x=1775597757; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3y2Y+nTHjjkMqGWc9KTbb9zChmURp4PZDO2SmaDULME=;
+        b=RpZQA/h5wuHg/ZKDU+6gQar1K65OXJ+52+fUf7I70GQata4PerOvM2XeBL4QRhMncR
+         2ZzHtgwIBPouQdX05TeN+j+82gnLWhNhQEJo7OYZY4tuETZgWyPw5uBSO8CRbClvHyaX
+         GE0XZNhhs8ABbaxiHNhO5tcEb3c9RznO2IvE/BELGArYiLF773elsTRGkZcqEUw+cq/z
+         0EbbqbnBA4JlO+jSHOE5nnxgsFw+wmTBuSz+669C73QkTJFp33cIKpX29RKTxLqyRZqN
+         mqoWfd5IDRkkHvMgbgmvaAMaSfSY/PNzjDUk4Y0aENCXjq9lboM/SiopJfvXYUrWp8A5
+         R1Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774992957; x=1775597757;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3y2Y+nTHjjkMqGWc9KTbb9zChmURp4PZDO2SmaDULME=;
+        b=qXtvT4rkw18Xrp9DW+f7Uw88F2DuYWYi7rkrdKxjOopi5wDTnpSDHbfBaRyogzEqSo
+         bYhPv1eweRa/vx9r2AAco9VPGY580Zw8UU9ilvIhpoPVTYOzoqqLgnpgBO0Zo5ki3zx/
+         6ibSeKKr8QH2TAZL1mn168B6dwbjoiYmXftngrQX0jo+UYwjf5Je6yy81SgTasx8STrd
+         kSAD6zphY3Ttwv/4oFvjWm+CmBWIyxCHR4XWkwVQxhkO2AXNMqYIo/Tmw38EU7+G9DVI
+         dbOAI5uZqgS8gJ9GvM4ov1WfHY9F9sml3oQrJhHsZemVX8l00QAmmbjDOFEFvK5JW/gh
+         DgHw==
+X-Gm-Message-State: AOJu0YwE87CKrESpQHRI9WjqfHPhUkzQev9LTFOvZ+0ldKrDa+926a9z
+	xjIFSel/ZeEUDE4bgQlzcrqFfu1DL5M8fgUKZSS6BlcN5lr9OW7jSB0HjKnPmA==
+X-Gm-Gg: ATEYQzyqhpFENmZxpcnkCA8maWOAueYCMSH+Kb9z/PRTOdEc1DX6GBCgRjnp09Dx7Sz
+	YWDNPp7XaKtAIHbRvPfxibqiaQJwkZbd3yXpd2Tc1S30qaPU3UsTxSdjhJ6EjvNN0Zjrc6nl8QZ
+	nmbTYv7RhXA5+ZUnui1G/ybBCSBck02iCRe5huuyP//l4SGw9W/kKLACgHf7sWjIZ2dIwl2By58
+	i62PmVWEdsBRpLYDIzFfJ1gdJd7MgGY65AmcM+NI1zsFkLOpzoHQFXOUCoGSxccpbXb07bCo+hH
+	Y34iDN0zXkndFw8gZ6F7JvQ2CXlGeIK8zgR2lQnc7Nz94COH4RKMbUSC0FyrQfCEajif+BNejLe
+	x/CxSnA20ORFpPP7T1NkJGamOQFQ67qF2ZHyq61oxvUi49W847remLqWwxMAxOCsbQet6t0/BXi
+	ofeWkfWEef6MonUg==
+X-Received: by 2002:a17:902:d58b:b0:2b0:6f21:8289 with SMTP id d9443c01a7336-2b269cffcdbmr7677175ad.25.1774992957516;
+        Tue, 31 Mar 2026 14:35:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:14::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24279a428sm158469155ad.66.2026.03.31.14.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 14:35:56 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	yatsenko@meta.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/5] Task local data bug fixes and improvement
+Date: Tue, 31 Mar 2026 14:35:50 -0700
+Message-ID: <20260331213555.1993883-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: Fix regsafe() for pointers to packet
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, martin.lau@kernel.org, memxor@gmail.com,
- eddyz87@gmail.com
-References: <20260331204228.26726-1-alexei.starovoitov@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260331204228.26726-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27957/Tue Mar 31 08:24:30 2026)
+Content-Transfer-Encoding: 8bit
 
-On 3/31/26 10:42 PM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> In case rold->reg->range == BEYOND_PKT_END && rcur->reg->range == N
-> regsafe() may return true which may lead to current state with
-> valid packet range not being explored. Fix the bug.
-> 
-> Fixes: 6d94e741a8ff ("bpf: Support for pointers beyond pkt_end.")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-oh well, lgtm!
+Hi,
 
-Reviewed-by: Daniel Borkmann <daniel@iogearbox.net>
+This patchset fixed three task local data bugs, improved the
+memory allocation code, and dropped unnecessary TLD_READ_ONCE. Please
+find the detail in each patch's commit msg.
+
+One thing worth mentioning is that Patch 3 allows us to renable task
+local data selftests as the library now always calls aligned_alloc()
+with size matching alignment under default configuration.
+
+
+v1 -> v2
+ - Fix potential memory leak
+ - Drop TLD_READ_ONCE()
+ Link: https://lore.kernel.org/bpf/20260326052437.590158-1-ameryhung@gmail.com/
+
+
+Amery Hung (5):
+  selftests/bpf: Fix task_local_data data allocation size
+  selftests/bpf: Simplify task_local_data memory allocation
+  selftests/bpf: Make sure TLD_DEFINE_KEY runs first
+  selftests/bpf: Remove TLD_READ_ONCE() in the user space header
+  selftests/bpf: Improve task local data documentation and fix potential
+    memory leak
+
+ .../bpf/prog_tests/task_local_data.h          | 97 +++++++++----------
+ .../bpf/prog_tests/test_task_local_data.c     |  2 +-
+ .../selftests/bpf/progs/task_local_data.bpf.h |  2 +-
+ 3 files changed, 48 insertions(+), 53 deletions(-)
+
+-- 
+2.52.0
+
