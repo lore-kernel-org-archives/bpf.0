@@ -1,244 +1,117 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB9D33B6E3
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774992500; cv=pass; b=M0Kk/MTZsS6f1Q2sIUoxFpgh7bhAjFyW6PgFDxkqA1Vah0MfdQE4bJg4e0zLgYaPSzquvFaUdge2M2maeMLDCzV6WmQo7X5jpiS3G330calLvQJXrI8pI25z5s1WoiJIt2u18c6DMVt4C443MLm5fzLV9R38egUu0X4GiDL1mYc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774992500; c=relaxed/simple;
-	bh=sRgBMZ3M2uPrOgfZT1tgj6ndieG3ibGSb+9UWbjJn/k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jw8UMWpoyhPot+QprninZGcJfXNGAyAX6Ge9WICk0RNw95bDETP4bPVRieZGTPSQ7IbTU17FuA//GaJNUhNX5/K459czquNFOXS3GT9XYqbbiV7V+dPc+yUcG6lD8Ch5XNp9nJmuHX1EikeWGBQOQGyd+7MiECH4L7TmRuUz/x4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=em8XPdQM; arc=pass smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A514D384236
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 21:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774992721; cv=none; b=W7B1tQfz43cq+b+rrTfFtojFy9/j8gmBzM9Z2ofDDItb+IVyIwcwYPKYegKzTvAX9eG/7NIdI2+4oG42J6n43HsPr5jeKnmCUGM5y2iIGspUa+ihB0hK2S1UmcnZdjTtEtrmr2Z+5sXnlerq5/wlD+cAg28SdKm/7RWCpPhmj/4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774992721; c=relaxed/simple;
+	bh=kXynKaJERHU8Yq9CTK7FgnxmUvZVVrEpK7b97GVi4yo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MJLyIQnvtldATHp/KRrEpIASaTnE64t//DPbqCFs2E//kVZnVafGWtDA1hYQl5DIz794hoolVw7vwSw78aPYxxh6Aso9AcTCDTcqaIj1AlCcn949gCMRoqvXCa+E331ZcU+Xg2ppTSuk6zQaXT6ljp/fK63MXaWaEKmwGgq2uoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=HhF0YW/H; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="em8XPdQM"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c76af79f029so687595a12.3
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 14:28:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774992499; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kweZm1pyTuXsKlFXcsoEW3ndhtMTqpsXXK9CrZlxMQx7OXDVgBYvp7+zxB31IQMDUO
-         mZwqCeW+GHWVXXIgIFkToKaSBhmVgCeGk8cC4UjVURjfSkUVPbvoyomKyLKhifERphNU
-         0odkuVaYD89cP98yjCQ/zABa1jT0ji+HltG+KPngtc+u5al1Wo/8RS5Mce6a1INUYbqr
-         6lKhUkjMMkYS2KSiLNtWTxvyqS9fGrpmJGplS+m2t19th4lLORbG4yPC9P30rn8d7BFI
-         osjXNQdJyH9jjhwWJu+3ARnnAcc8Mw9Z1dAoTD0wldX/aEsPZlUWWbhzjukDrrXFdooq
-         Muhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kKIspEKqIilGus4ZlXNUBmXjyuQCqv6BcoyjUgXPRJ4=;
-        fh=w6YSdmtOf1NKX3w5wFeTCSc6scNeUu2+rBxyHKz+iAw=;
-        b=Ua87xuQoAZnvGV8XLHkKa1uHL5SPMDNs5ykkiYWKIXfNGXHajDatr9fIcGbypmdkEI
-         71qnqmk0/YPGAJ+IBMRYTMAuNke9bn43bPDMyXwWDry++8zUShSxOLWzU1kFao0quWox
-         V3tL3x3YfZ2LK5lzLTjPNICR+EN2rgGc/TdcSUAOv+nQW31KEzkkCZCVU5hCbIz5LpcS
-         rUlZJtaQaWkE3jicMeEOjRStN0ykgJnjIRmmqtASn/36XCzZ8lrsDWTDH3BbObQ4NAas
-         AHkH2vlcmp/L8XlJA7fTxiSfRQbeXrMOJ7t2Sk1h8rt/fmHDU6C0/6Nr5lhsRWLy0fD7
-         ATJw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774992499; x=1775597299; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kKIspEKqIilGus4ZlXNUBmXjyuQCqv6BcoyjUgXPRJ4=;
-        b=em8XPdQMMDLFAxhkmzxI9fpsIznrSWjIbUQN90Gb2iKZcukbTP4eJzNtDfe3KQ61+P
-         z8hBukR2+ezgM/7jCzC0z5ZlRBqqD5iWR6h+WjP3dqAjx6N69m07zMxf9KP6tTg9Vhj9
-         Psdw/ShanbIHcX1oaCgcYsm9jIYfzOhy3mUzqDfen68CiPbWvB2c90Xf7SZuBg5CZ+U7
-         QmLvvvyIG0t7f7PAy9CZktaRsNJlKqjI2qJF1fhnuF4ynd/loOnVardR39Newk6rUdxa
-         zQkDpfR5hckItIl6wrzs+7m/VwUelxuwjjyXCijYd1UzVsTaKoQI0Dzs175EN8PlsmaG
-         SWdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774992499; x=1775597299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kKIspEKqIilGus4ZlXNUBmXjyuQCqv6BcoyjUgXPRJ4=;
-        b=dS2AXGpummF+WGA/xNxIf3tcBo7At+UERpHOtIwXzdi+Z6e9u+ytLbb5JF8hST7RWC
-         dokE6SaASxwuC86LAXM+xuxiJM9I87rRQ1/aOi+h/4Hh4F0U+QNKMy7yzOC5rZxby5sJ
-         MmCyVV7NBf9qqbHeCeSOQMOev91zF65ihiKtjPaNEF51UvFILONAREkM6fb1B60b8Msk
-         jeukpOg1s07r9k5JydtC5vBH2/iRIZNxXqJ92r1y7Ai67m71XWMSLWn2J7B+KlMQngop
-         +Gvct/fVXb4esQLqh1jYh++ETyGr0n7VKmlhAkdwQC+coFZXBsXoldrvaZf6CLOPmL3U
-         VN+Q==
-X-Gm-Message-State: AOJu0YzQGw1NO4T0GX9BoQz2c6s5bDKMwZ5ZnIBkBer2yN1+JKBoGEzz
-	IiQmistwm/8ej8OeHNfIwBZcjf2pZINkW3MCa9nqeBsmrCYpJihCHgYfGN3gdrHDtlHED8zoI1H
-	u2awFnNXJpb7hZvlhOEmTAUaAjFdo9j8=
-X-Gm-Gg: ATEYQzxi0QzSAJ/Rv9K1DbrEoLaU6yUao854zfA+yYMdbzFCwfmzg33q0jXLKXfXHMJ
-	utE84AW8NLjSl/w943S+TqwAqabolP4b7EalRKrAXDLd7GCTRL74+3heGxeVfmG0b2okJy0JOI/
-	CdfuzW/z7MzRClrP/FK5OHe1+//4hN8B7Egh1lBGt4Xikhk3d9Twkow4u9r8WJdRJ1yiP/bjOhV
-	uayR8qOJhFNrBxDkHy3Mzzy5R+2DXU8FUwoNFlzq2HlCUCJa/RbD2bv+aulKpz1YsK46genkzQb
-	3YL99KgbOcpVNfMux14lbHo=
-X-Received: by 2002:a05:6a20:9145:b0:398:7855:1596 with SMTP id
- adf61e73a8af0-39ef71fc84bmr810112637.10.1774992498758; Tue, 31 Mar 2026
- 14:28:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="HhF0YW/H"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=rZzQqokHy4yoNXC3RtuFBwWcgpQCh9chhCy59pQS7oE=; b=HhF0YW/Hwq7W2rEQz+VPGvG7pH
+	hHMqpW6IshHBNoTh2z5n6wDLX9A1ZEKGluvOTrq4ImdLuExh762CIvw/bCt0R9GSfIOQL9qySxsT7
+	I9QPpsGusfV47mYYTIq+G0NPb/2MZ4vZE8XqHdl4q2TC7iK9IOt/NfYvFOf6durKE0mBYwznmtNWq
+	e3Xw1ughjhq1Rb6i4vxQIiskPaLO71ZIAUZcjangX++0CScyRWbk5X32f84QpWYi8lVV7TfeYGhge
+	3LjlH8hM6jTsLcwzoW3M7Zk/Fb70rmsQU3ODXLJh/BIZbb9tZp4pMA7tSrSgkBLfXiEXL4PVT1e90
+	OLNJ6w8g==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w7ggl-000BtC-1x;
+	Tue, 31 Mar 2026 23:31:55 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w7ggk-000FW3-2Q;
+	Tue, 31 Mar 2026 23:31:55 +0200
+Message-ID: <28001693-1c02-46cc-adbc-a0487f03f36f@iogearbox.net>
+Date: Tue, 31 Mar 2026 23:31:54 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330-sleepable_tracepoints-v8-0-2e323467f3a0@meta.com> <20260330-sleepable_tracepoints-v8-6-2e323467f3a0@meta.com>
-In-Reply-To: <20260330-sleepable_tracepoints-v8-6-2e323467f3a0@meta.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 31 Mar 2026 14:28:04 -0700
-X-Gm-Features: AQROBzBIg7HB2qtDOZqqUfLV4NqYaxDFl477F6TYqZLT2vujlLAcAdJFpIO573E
-Message-ID: <CAEf4BzZ_YOb1MNpUxuhFESqRWARFiBJ6yGZ-Z8xBqdCvqi_Bow@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 6/6] selftests/bpf: Add tests for sleepable
- tracepoint programs
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	memxor@gmail.com, peterz@infradead.org, rostedt@goodmis.org, 
-	Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf: Fix regsafe() for pointers to packet
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, martin.lau@kernel.org, memxor@gmail.com,
+ eddyz87@gmail.com
+References: <20260331204228.26726-1-alexei.starovoitov@gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260331204228.26726-1-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27957/Tue Mar 31 08:24:30 2026)
 
-On Mon, Mar 30, 2026 at 3:20=E2=80=AFPM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Add functional tests for sleepable tracepoint programs that attach to
-> the nanosleep syscall and use bpf_copy_from_user() to read user memory:
->  * BTF-based raw tracepoint using SEC("tp_btf.s/sys_enter")
->  * Classic raw tracepoint using SEC("raw_tp.s/sys_enter")
->  * Classic tracepoint using
->    SEC("tp.s/syscalls/sys_enter_nanosleep") receiving
->    struct syscall_trace_enter with direct access to args[].
->  * Sleepable raw_tp executed via bpf_prog_test_run_raw_tp()
->
-> Add a negative test (handle_sched_switch) that verifies sleepable
-> programs are rejected on non-faultable tracepoints (sched_switch).
->
-> Update verifier/sleepable.c tests:
->   - Add "sleepable raw tracepoint accept" test for sys_enter.
->   - Rename reject test and update error message to match the new
->     descriptive "Sleepable program cannot attach to non-faultable
->     tracepoint" message.
->
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  .../bpf/prog_tests/sleepable_tracepoints.c         | 153 +++++++++++++++=
-++++++
->  .../bpf/progs/test_sleepable_tracepoints.c         | 128 +++++++++++++++=
-++
->  .../bpf/progs/test_sleepable_tracepoints_fail.c    |  18 +++
->  tools/testing/selftests/bpf/verifier/sleepable.c   |  17 ++-
->  4 files changed, 314 insertions(+), 2 deletions(-)
->
+On 3/31/26 10:42 PM, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> In case rold->reg->range == BEYOND_PKT_END && rcur->reg->range == N
+> regsafe() may return true which may lead to current state with
+> valid packet range not being explored. Fix the bug.
+> 
+> Fixes: 6d94e741a8ff ("bpf: Support for pointers beyond pkt_end.")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+oh well, lgtm!
 
-[...]
-
-> +void test_sleepable_tracepoints(void)
-> +{
-> +       struct test_sleepable_tracepoints *skel;
-> +       struct bpf_link *link;
-> +       int err;
-> +
-> +       skel =3D test_sleepable_tracepoints__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-> +               return;
-> +
-> +       /* Primary functional tests: full bpf_copy_from_user exercise */
-> +
-> +       if (test__start_subtest("tp_btf"))
-> +               run_auto_attach_test(skel->progs.handle_sys_enter_tp_btf,=
- skel);
-> +
-> +       if (test__start_subtest("raw_tp"))
-> +               run_auto_attach_test(skel->progs.handle_sys_enter_raw_tp,=
- skel);
-> +
-> +       if (test__start_subtest("tracepoint"))
-> +               run_auto_attach_test(skel->progs.handle_sys_enter_tp, ske=
-l);
-> +
-> +       /* Alias SEC variants: verify libbpf prefix parsing */
-> +
-> +       if (test__start_subtest("tracepoint_alias")) {
-> +               link =3D bpf_program__attach(skel->progs.handle_sys_enter=
-_tp_alias);
-> +               if (ASSERT_OK_PTR(link, "tp_alias_attach"))
-> +                       bpf_link__destroy(link);
-> +       }
-> +
-> +       if (test__start_subtest("raw_tracepoint_alias")) {
-> +               link =3D bpf_program__attach(skel->progs.handle_sys_enter=
-_raw_tp_alias);
-> +               if (ASSERT_OK_PTR(link, "raw_tp_alias_attach"))
-> +                       bpf_link__destroy(link);
-> +       }
-
-
-why alias tests are different? and why not have an array
-
-struct { const char *name; struct bpf_program *prog } cases[] =3D {
-   { "tp_btf", skel->progs.handle_sys_enter_tp_btf},
-    ...
-}
-
-and then do the tests in a loop?
-> +
-> +       /* Bare SEC variants: verify manual attach */
-> +
-> +       if (test__start_subtest("raw_tp_bare")) {
-> +               link =3D bpf_program__attach_raw_tracepoint(skel->progs.h=
-andle_raw_tp_bare,
-> +                                                         "sys_enter");
-> +               if (ASSERT_OK_PTR(link, "raw_tp_bare_attach"))
-> +                       bpf_link__destroy(link);
-> +       }
-> +
-> +       if (test__start_subtest("tp_bare")) {
-> +               link =3D bpf_program__attach_tracepoint(skel->progs.handl=
-e_tp_bare, "syscalls",
-> +                                                     "sys_enter_nanoslee=
-p");
-> +               if (ASSERT_OK_PTR(link, "tp_bare_attach"))
-> +                       bpf_link__destroy(link);
-> +       }
-> +
-
-[...]
-
-> +
-> +static __always_inline bool is_target_nanosleep(long id)
-> +{
-> +       return (bpf_get_current_pid_tgid() >> 32) =3D=3D target_pid &&
-> +              id =3D=3D __NR_nanosleep;
-> +}
-> +
-> +/* Primary functional tests: full bpf_copy_from_user exercise */
-> +
-> +SEC("tp_btf.s/sys_enter")
-> +int BPF_PROG(handle_sys_enter_tp_btf, struct pt_regs *regs, long id)
-> +{
-> +       if (!is_target_nanosleep(id))
-
-inline the check
-
-> +               return 0;
-> +
-> +       return copy_nanosleep_arg((void *)PT_REGS_PARM1_SYSCALL(regs));
-> +}
-> +
-> +SEC("raw_tp.s/sys_enter")
-> +int BPF_PROG(handle_sys_enter_raw_tp, struct pt_regs *regs, long id)
-> +{
-> +       if (!is_target_nanosleep(id))
-
-same, just takes longer to find what is_target_nanosleep() does for no
-added benefit
-
-> +               return 0;
-> +
-> +       return copy_nanosleep_arg((void *)PT_REGS_PARM1_CORE_SYSCALL(regs=
-));
-> +}
-> +
-
-[...]
+Reviewed-by: Daniel Borkmann <daniel@iogearbox.net>
