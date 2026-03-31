@@ -1,92 +1,93 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6475B3A5E89
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF7D38B121
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774997711; cv=pass; b=BpKKEOVn8u2rnAzJwg+rslcZJKRiJ8xZFCQqzaQCQksZKEvjmXhDR+D1YGKyjK6EAwaBCJYXWZipfu0jA10wVyZdhowy5YYdcg9RcSN0mWPrZRoAqdv0NXF1Z0c0c7sSb6j2zbaz21cBCFU8bcVS8INFi+3JdfnW1XL+wsANrgQ=
+	t=1774997834; cv=pass; b=mIz2yoC4qzOcWXx+KoIBOm5ihesvj+JTOrRuhd2oL++zTJvmb7apIJUWZauJPCBiuLxQ0vd1c/4TsA81HPNZ9MFmy7noW0K5jDcfIhK1rsAn78o/I1uaqWw9vTkSsNQLxx00tjpKw6AcW6jFIEkzd4T5oYZYVkLM5D9BWMc6Yb0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774997711; c=relaxed/simple;
-	bh=G+kkfsLAg0SEnCn6gx0FYnpxG49cmhHD8ouYg4dsDJI=;
+	s=arc-20240116; t=1774997834; c=relaxed/simple;
+	bh=j4Cee+P2ST9aXYF+z9ZM/jNAIu9eoJZlO9A7sv/Z9rY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hus84f187JSsd9+Dfx5SKuHMTiQalcKn20IGvDmo2A++oCIoNGMIEYGo3aatuz028Ek788Xsu3gyjlymOPe/M7edFdr/KzpaVbEMneu6U5epA3oBArESA/GpdX6hHNC8KeKV+T5eXMaYxOFhpnrDkqc/cEPO6LfoBhSxNq31Fy4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DpmokfB3; arc=pass smtp.client-ip=209.85.215.180
+	 To:Cc:Content-Type; b=oe5bGStSl8zepo3XS+PiV5gE1Gi0kYJ8HeGfB5oxWS9S2pjFouOvchlLl0asD/I0aRRvHyy6xt98UjQBeewY899tvrk474yLYhzEheedNqBRBhQaCUPbeOXftQ4s7/5WMDHbns29IqwalsrNrF9DOCcuP3ApKDNfTCMFc2v7+pg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GZNGatqA; arc=pass smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DpmokfB3"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c76b070f109so913937a12.0
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 15:55:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774997710; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GZNGatqA"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c76b0cda2aeso589582a12.2
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 15:57:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774997832; cv=none;
         d=google.com; s=arc-20240605;
-        b=gf8nZvfqPZr0PL2U/dK72b3MddSpBO5syERNweJcAUtHgAPRpWyMs+7liLlFtjp/TB
-         4wwERPyR54ZZia/iGl6gCrQlZYYesXS5Vw2AATeoMARFoJA9+h1v+tR1OfVn+evGRXZK
-         Y5jcHtJ1Zcw2uDBfj/0XbvzXtfdBiS05yatZQDS9EpCNzsLJO3mw5IGeXuHwdOg1ZVc5
-         VHGSGivFHUONXxX6R4Ujbw2VcY3+uE4b9iSwUMwszckHd7h1Sir2B13wOvM4OIfKkDHH
-         F+GFQSUCS4htTCU35mmL0jQwrwZ6IKEtY3G5EmPZ4VWo8Md1XCkb5a3kKJs0FaTB/dpZ
-         BBrA==
+        b=CD2Xle0yw9twUmTXyZsjSdMiH3wYRSwaTt+9g9XwFLhPbCIJ1Kwrllqmq0w2Cesnbc
+         IAtfgoLUVdSlQx6xICNBypgM1Wr5kQEeR2MmFivyQhOKBwgqwqsA0/mfUPvqffAqgQlQ
+         3BX/MNgegYwWFwRRPy7bU3igqw9Xy/0NW5Z3CqwYB1/N5BIfoNGikuD+RHZBb2+wVsmf
+         AXp6QWDYt+oqwvOwynrgRyygqD4hTbis7H4lL28rCqZPNnPPEp6CoN4cOS0w1OV+9fi1
+         sZhP4Oamvnz2Yl+veKMcFXetNUzng7/lRqviM3u8tEnuqTNPVsA4xRczanGGeZ+SB92d
+         2kBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=PJWSb4M2QD4XlrwnVx/vLxmzMpHpIANjSEqk5kfISIg=;
+        bh=QoJNa5vke00uW6MzDwfWaxg2r22ZBjrVX7VB5Kxvd3E=;
         fh=0z7eV0SVrdGestYsQW/vHe7NOeLecbF3mybNQIacMZE=;
-        b=KoMsULQmRhFLNViRUB2z9xVYivfWiag4JXryu0bYrqZimp8A/MJmmNx/jh1xM+hAqp
-         gJ7plhJugAPfbLmwqmQvwm94cQzEjBqlNNB1BL4qNVyQ/nXL2YRy+DH2m/LerwP6gTsJ
-         OUU+iNn1y9qjI0E7QdnEC2jwuTV0/ilwXYzapR6iGnK0m+KyG81tFJcOv4g/BSjhjJko
-         J2uDvOsiEa7ONNnp8274bjnjvjXXrJruVFfkJcRtmhNp6RiWzbCC7lH0UmHTV1YmeHaz
-         6F0MIXhIObCqGa8hAG165VSWCKUiy/z5JRvM6mVePTs5ySqFiTM9weL0L/wTcTDRAz9x
-         27hg==;
+        b=Nk01HcPb4X7S0H4s4+kvwVITdIfHlfU9NBKmZBTs+GWziz6Oai/mdk8LfOaddkdxkd
+         vZQw4IsXjNomoy2xBNnikuYuefbJt3+yoidiURyyVzEl2vWFwdKF3OEYxQyLr7bGQgBS
+         N/aj8+dcGY6KywEK1jU/AeO78XmI5uSgMumAvc8XcPk6miguPFAVJJH7LeNBkAglTID6
+         jo6ucRVMY3ODMBcQz2nPmMmuJjYpIDcOs/SBuXMBF7efzO+dJnlUZ1SQs3Cc6xFCOpNv
+         pQFoqyaVvjP3VV6WjIKgrwlVyEao0RGOjn6Gv0Rv5xYWSyasDaAlmex/RMluHhTLQyh0
+         XHDA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774997710; x=1775602510; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774997832; x=1775602632; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PJWSb4M2QD4XlrwnVx/vLxmzMpHpIANjSEqk5kfISIg=;
-        b=DpmokfB3T7ZlIh7WpEBR6TxImpunLPhcPCHuwJnLI4sIRcjvYd1uKaTDyfT17jTruV
-         dE/okTNpeJlZhRb92Rj4Pr70fvUlpkMp2j11jopRMPwQvNemqRn8drlbKj/rjTF2/URZ
-         iEeKVRfRE016CHTbEr8tPq5p1xgxSuP+pItZ2oKVTFmSPlNckX75MzMmgMVyczEp9oz8
-         OVmyRleHNwKzHIWH5Kn4DsHOAy2jb22TPavdr1+e570Uz8V2ho9nLyDh1A7qNlYx5O+4
-         ygjqRD5NXbM6yPERDKyXveDDjtcm4dM+/DNAGR49FQBSuNXK0j1Cg6YB8Dqw72R110Pf
-         pa4Q==
+        bh=QoJNa5vke00uW6MzDwfWaxg2r22ZBjrVX7VB5Kxvd3E=;
+        b=GZNGatqAM7D2bcbALCwqhtZH8D0MaQT87mkUZCM7XyAI5pWgvO5V0fF6IzcCyxRbVt
+         lXigcIFb5EIi9/MN/QJUBwLoVQeIOByMmDhr3HNuuyh8ZDakzquV88EZ55R0+SLeUMap
+         HxhiGNLzaFRLovZd6eUxi/EZStlgrhbBzj38a5bgVSPrRYhz9NfhSWoaSd1l0B85ArGC
+         jwutKjvctUlfCMjZ+2/wPPi21CvWKQJARg9rSLS7+KWkwxJa+S7Kj4r0o1OmgJWcpe/T
+         NDPRmSb13CVpZOnxio1w8UOvPyqcTQ/MbQZ3g6gqg/MGv2CENlpDKKtdfGUrIooebeiv
+         IxKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774997710; x=1775602510;
+        d=1e100.net; s=20251104; t=1774997832; x=1775602632;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=PJWSb4M2QD4XlrwnVx/vLxmzMpHpIANjSEqk5kfISIg=;
-        b=YgiYPSU0j+G34wccqbFEMhlbgtQTEgBfdOTWEB6AyVVGF6UeWUaqEaIN+tQHurZxgs
-         FowqUD7PBAgwhKlh7bjtRWjYWTd7Y+/H9cxydHQofEcN1TaOi6BpzjzDNqBOLg00YVYB
-         7VmJUuZKi+pCkGcdydalt4XI+D2//f8aPRu1UsmG4/BGN2jG/M1dkZirWzUv4OAo/OfX
-         fU5vOoviCHkokadRZKmQRAcSaUjNe2IfmmIurBNABxed/Jvj7Xssv36aLvZOPOGDSboG
-         F4i8SBxzJV2cMA9HMDai/FiAXAGKQZQxCeNmFImxlJ89bxv7VXbVNkJZ8hXiPAPX1lFx
-         WNnQ==
-X-Gm-Message-State: AOJu0Yx9NO6JO2phgdmDT+I9A4kezoqlzRWcbVhclJ6Ms7Fmc8eN+YqN
-	83WvnBljNjcKljP6Ao4mgrZcTlVeDoG7Rnk0aozuRkV+o8dy4HNZgC9jjD0wgYj5oZTxi8+WvYe
-	PnU3A3RBzd/msyHh9tW99JGL77k9/S7w=
-X-Gm-Gg: ATEYQzx2H09j9Lv288/HM4VgNv1OXHYzHdezeQxR6Gu6y9xb/UZkape18g+bIC/jl99
-	WL+q+Nu1ZJpqe0b1vLGfiD9PcvWEEDvL3BhstRYJ5vXT4hgVAnw7d4qCriqxbPxv5xMHqEaVUvI
-	Ai27xuekoDRy6vpKfDX8FZHwdaRmrn/xV0exn0MmVFdPequ52F4pRMu7MFQ1jUOeI8FrzkcV5qi
-	HxAI71xWyF/S4jat3FcwgwdWv1b0M+jbOJQNaCOrlmzY7URoIaFcmZwo9rKfI7UM+rUixh4wDUi
-	VJh9eDugY5CmoJhMaMHBzG8=
-X-Received: by 2002:a05:6a20:1582:b0:398:7874:35d3 with SMTP id
- adf61e73a8af0-39ef721768dmr1063136637.10.1774997709515; Tue, 31 Mar 2026
- 15:55:09 -0700 (PDT)
+        bh=QoJNa5vke00uW6MzDwfWaxg2r22ZBjrVX7VB5Kxvd3E=;
+        b=Tx6He/BYGMp5wG4roMbsYS+WNkQpAQl1k6OpUUbZ30zlK2Enp2AArkjUvx2ixfw/NW
+         NhVTcb65IhI8CWJXzbNysITWn1xpAlOlDkXYwZy7U4l1YSgLFQZ4XF808egusL5gLrif
+         fhUqomMAczffu2or5bUFWxrd+PG9wjvFF4OjNg1cTokeCRfrONRfm/WVq52fzS+2xWrs
+         j9m+zEnoxsQw2ZDQcCRyMO0zzJjE3JwScUYmexwnhSaWimDn4J5phpBE3AddpQwjsi53
+         x+mSbZhsSwBvihXOacyHHMr4NdEitnXEFPGRLKjhJm2TOUmM0okU0Wj3d2bskl+FXMyF
+         1lig==
+X-Gm-Message-State: AOJu0YzkThx0aXbN/PtTxICmCU3i4Qbg7e15lbycz2mKLPlueKIOkgeY
+	jF+Y8R8TxRQCiYhyO8NYOV0mWRl1tL9u5FVNLpbVmpExGgrk7QDiliydQT2UFd1+yBRjMiFM+Kz
+	TtdUjDXnTM2sOcbG2/PE51qTsAKpq7T4=
+X-Gm-Gg: ATEYQzxb8JQQeAg9CYfFhFO5mMDnYEeKVbY8ZejOoRrFhpDDtzvyjXmJWyoiQYY1me5
+	4ZW984GQuYXFtFrQEyhZnxnuS/7TKA+fYq7k4bm9axf/Xq1cQaHTzHnVykysKdbAHfq2w8kVYrL
+	fcFvsUyalw78I2wJhKJxtlGSSI30WKPBc9pbYGHn3IzL1wceh5U9SyWGgHslja7O44s9prLCsPZ
+	nb4EPtz+XJbJhg7LkKeKcpyHPgUQdQRsVwepTG1/IE+QANFO/y7gqt0GcwYWrj55VcZa4OzO64n
+	JRoBxQlZ/hmqDASCFe7epls=
+X-Received: by 2002:a05:6a20:918e:b0:398:7973:277e with SMTP id
+ adf61e73a8af0-39ef76be325mr1066560637.31.1774997832468; Tue, 31 Mar 2026
+ 15:57:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331172634.57402-1-mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260331172634.57402-1-mykyta.yatsenko5@gmail.com>
+References: <20260331172634.57402-1-mykyta.yatsenko5@gmail.com> <20260331172634.57402-2-mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260331172634.57402-2-mykyta.yatsenko5@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 31 Mar 2026 15:54:57 -0700
-X-Gm-Features: AQROBzCD4BzDgRFKJAnMydUAwV9oSbN0VFvXVQAUsiDzsj8hzkcCMt5ty4k34l0
-Message-ID: <CAEf4BzYfQ_E+JA8PMma5-vg3+3=Sz9HZBM5Ew26D-caqE-WdzA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Fix BTF handling in bpf_program__clone()
+Date: Tue, 31 Mar 2026 15:57:00 -0700
+X-Gm-Features: AQROBzClPeA1P6MO7xLQALoY_G4fJw_MJQrEEGLd_so3qB8bdau-dfRYgq3otg8
+Message-ID: <CAEf4Bza69ph4CnvvD8+zosMMDc6Yz6puvB7V_aOVTw-M-97+Zw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Suppress veristat error
+ messages in non-verbose mode
 To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
 	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
@@ -99,192 +100,48 @@ On Tue, Mar 31, 2026 at 10:26=E2=80=AFAM Mykyta Yatsenko
 >
 > From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> Align bpf_program__clone() with bpf_object_load_prog() by gating
-> BTF func/line info on FEAT_BTF_FUNC kernel support, and resolve
-> caller-provided prog_btf_fd before checking obj->btf so that callers
-> with their own BTF can use clone() even when the object has no BTF
-> loaded.
+> When running veristat across many BPF objects, expected load failures
+> produce noisy stderr output that obscures actual issues. Gate these
+> diagnostic messages behind --verbose.
 >
-> While at it, treat func_info and line_info fields as atomic groups
-> to prevent mismatches between pointer and count from different sources.
->
-> Move bpf_program__clone() to libbpf 1.8.
->
-> Fixes: 970bd2dced35 ("libbpf: Introduce bpf_program__clone()")
 > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 > ---
->  tools/lib/bpf/libbpf.c   | 66 ++++++++++++++++++++++++++--------------
->  tools/lib/bpf/libbpf.map |  2 +-
->  2 files changed, 45 insertions(+), 23 deletions(-)
+>  tools/testing/selftests/bpf/veristat.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 >
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 9ea41f40dc82..d1358ca0a15a 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -9852,7 +9852,7 @@ int bpf_program__clone(struct bpf_program *prog, co=
-nst struct bpf_prog_load_opts
->  {
->         LIBBPF_OPTS(bpf_prog_load_opts, attr);
->         struct bpf_object *obj;
-> -       int err, fd;
-> +       int err, fd, prog_btf_fd;
->
->         if (!prog)
->                 return libbpf_err(-EINVAL);
-> @@ -9865,8 +9865,9 @@ int bpf_program__clone(struct bpf_program *prog, co=
-nst struct bpf_prog_load_opts
->                 return libbpf_err(-EINVAL);
->
->         /*
-> -        * Caller-provided opts take priority; fall back to
-> -        * prog/object defaults when the caller leaves them zero.
-> +        * Caller-provided opts take priority; fall back to prog/object d=
-efaults when the
-> +        * caller leaves them zero. 0/NULL means "use default". Callers c=
-annot explicitly
-> +        * clear an inherited non-zero value by passing 0.
->          */
->         attr.attach_prog_fd =3D OPTS_GET(opts, attach_prog_fd, 0) ?: prog=
-->attach_prog_fd;
->         attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0) ?: prog->prog_f=
-lags;
-> @@ -9878,27 +9879,45 @@ int bpf_program__clone(struct bpf_program *prog, =
-const struct bpf_prog_load_opts
->         if (attr.token_fd)
->                 attr.prog_flags |=3D BPF_F_TOKEN_FD;
->
-> -       /* BTF func/line info */
-> -       if (obj->btf && btf__fd(obj->btf) >=3D 0) {
-> -               attr.prog_btf_fd =3D OPTS_GET(opts, prog_btf_fd, 0) ?: bt=
-f__fd(obj->btf);
-> -               attr.func_info =3D OPTS_GET(opts, func_info, NULL) ?: pro=
-g->func_info;
-> -               attr.func_info_cnt =3D OPTS_GET(opts, func_info_cnt, 0) ?=
-: prog->func_info_cnt;
-> -               attr.func_info_rec_size =3D
-> -                       OPTS_GET(opts, func_info_rec_size, 0) ?: prog->fu=
-nc_info_rec_size;
-> -               attr.line_info =3D OPTS_GET(opts, line_info, NULL) ?: pro=
-g->line_info;
-> -               attr.line_info_cnt =3D OPTS_GET(opts, line_info_cnt, 0) ?=
-: prog->line_info_cnt;
-> -               attr.line_info_rec_size =3D
-> -                       OPTS_GET(opts, line_info_rec_size, 0) ?: prog->li=
-ne_info_rec_size;
-> +       prog_btf_fd =3D OPTS_GET(opts, prog_btf_fd, 0);
-> +       if (!prog_btf_fd && obj->btf)
-> +               prog_btf_fd =3D btf__fd(obj->btf);
-> +
-> +       /* BTF func/line info: only pass if kernel supports it */
-> +       if (kernel_supports(obj, FEAT_BTF_FUNC) && prog_btf_fd > 0) {
-> +               attr.prog_btf_fd =3D prog_btf_fd;
-> +
-> +               /* Treat func_info fields as an atomic group */
-> +               if (OPTS_GET(opts, func_info, NULL)) {
 
-let's actually validate that either all three related fields are
-specified or not, and error out otherwise
+applied this individual patch to bpf-next
 
-same for line_info group
-
-
-pw-bot: cr
-
-> +                       attr.func_info =3D OPTS_GET(opts, func_info, NULL=
-);
-> +                       attr.func_info_cnt =3D OPTS_GET(opts, func_info_c=
-nt, 0);
-> +                       attr.func_info_rec_size =3D OPTS_GET(opts, func_i=
-nfo_rec_size, 0);
-> +               } else {
-> +                       attr.func_info =3D prog->func_info;
-> +                       attr.func_info_cnt =3D prog->func_info_cnt;
-> +                       attr.func_info_rec_size =3D prog->func_info_rec_s=
-ize;
-> +               }
-> +
-> +               /* Treat line_info fields as an atomic group */
-> +               if (OPTS_GET(opts, line_info, NULL)) {
-> +                       attr.line_info =3D OPTS_GET(opts, line_info, NULL=
-);
-> +                       attr.line_info_cnt =3D OPTS_GET(opts, line_info_c=
-nt, 0);
-> +                       attr.line_info_rec_size =3D OPTS_GET(opts, line_i=
-nfo_rec_size, 0);
-> +               } else {
-> +                       attr.line_info =3D prog->line_info;
-> +                       attr.line_info_cnt =3D prog->line_info_cnt;
-> +                       attr.line_info_rec_size =3D prog->line_info_rec_s=
-ize;
-> +               }
+> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selft=
+ests/bpf/veristat.c
+> index 9652649171ce..5c82950e6978 100644
+> --- a/tools/testing/selftests/bpf/veristat.c
+> +++ b/tools/testing/selftests/bpf/veristat.c
+> @@ -1673,7 +1673,8 @@ static int process_prog(const char *filename, struc=
+t bpf_object *obj, struct bpf
+>         fd =3D bpf_program__clone(prog, &opts);
+>         if (fd < 0) {
+>                 err =3D fd;
+> -               fprintf(stderr, "Failed to load program %s %d\n", prog_na=
+me, err);
+> +               if (env.verbose)
+> +                       fprintf(stderr, "Failed to load program %s %d\n",=
+ prog_name, err);
+>         }
+>         mem_peak_b =3D cgroup_memory_peak();
+>         if (!cgroup_err && mem_peak_a >=3D 0 && mem_peak_b >=3D 0)
+> @@ -2247,7 +2248,7 @@ static int process_obj(const char *filename)
 >         }
 >
-> +       /* Logging is caller-controlled; no fallback to prog/obj log sett=
-ings */
->         attr.log_buf =3D OPTS_GET(opts, log_buf, NULL);
->         attr.log_size =3D OPTS_GET(opts, log_size, 0);
->         attr.log_level =3D OPTS_GET(opts, log_level, 0);
+>         err =3D bpf_object__prepare(obj);
+> -       if (err) /* run process_prog() anyway to output per program failu=
+res */
+> +       if (err && env.verbose) /* run process_prog() anyway to output pe=
+r program failures */
+>                 fprintf(stderr, "Failed to prepare BPF object for loading=
+ %d\n", err);
 >
->         /*
-> -        * Fields below may be mutated by prog_prepare_load_fn:
-> -        * Seed them from prog/obj defaults here;
-> -        * Later override with caller-provided opts.
-> +        * Fields below may be mutated by prog_prepare_load_fn(). Seed th=
-em from prog/obj
-> +        * defaults here; re-apply caller overrides afterwards
->          */
->         attr.expected_attach_type =3D prog->expected_attach_type;
->         attr.attach_btf_id =3D prog->attach_btf_id;
-> @@ -9910,16 +9929,19 @@ int bpf_program__clone(struct bpf_program *prog, =
-const struct bpf_prog_load_opts
->                         return libbpf_err(err);
->         }
->
-> -       /* Re-apply caller overrides for output fields */
-> +       /* Re-apply caller overrides for fields that prog_prepare_load_fn=
- may have modified */
->         if (OPTS_GET(opts, expected_attach_type, 0))
-> -               attr.expected_attach_type =3D
-> -                       OPTS_GET(opts, expected_attach_type, 0);
-> +               attr.expected_attach_type =3D OPTS_GET(opts, expected_att=
-ach_type, 0);
->         if (OPTS_GET(opts, attach_btf_id, 0))
->                 attr.attach_btf_id =3D OPTS_GET(opts, attach_btf_id, 0);
->         if (OPTS_GET(opts, attach_btf_obj_fd, 0))
-> -               attr.attach_btf_obj_fd =3D
-> -                       OPTS_GET(opts, attach_btf_obj_fd, 0);
-> +               attr.attach_btf_obj_fd =3D OPTS_GET(opts, attach_btf_obj_=
-fd, 0);
->
-> +       /*
-> +        * Unlike bpf_object_load_prog(), we intentionally do not call bp=
-f_prog_bind_map()
-> +        * for RODATA maps here to avoid mutating the object's state. Cal=
-lers can bind the
-> +        * required maps themselves using bpf_prog_bind_map().
-> +        */
->         fd =3D bpf_prog_load(prog->type, prog->name, obj->license, prog->=
-insns, prog->insns_cnt,
->                            &attr);
->
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 346fd346666b..dfed8d60af05 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -452,12 +452,12 @@ LIBBPF_1.7.0 {
->                 bpf_map__set_exclusive_program;
->                 bpf_map__exclusive_program;
->                 bpf_prog_assoc_struct_ops;
-> -               bpf_program__clone;
->                 bpf_program__assoc_struct_ops;
->                 btf__permute;
->  } LIBBPF_1.6.0;
->
->  LIBBPF_1.8.0 {
->         global:
-> +               bpf_program__clone;
->                 btf__new_empty_opts;
->  } LIBBPF_1.7.0;
+>         bpf_object__for_each_program(prog, obj) {
 > --
 > 2.52.0
 >
