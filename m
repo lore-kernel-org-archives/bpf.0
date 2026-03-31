@@ -1,116 +1,119 @@
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D403C40DFA6
-	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 00:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774918757; cv=pass; b=JljkL3pDHXJbjHxzn7jdyzQaSr3Ja755fFe3Tg2XzGGFQmV1ZCflwH1hvYD4mMHqbG+Sm3dnpGqGtXBFEhkpm2TVpnrPfDvrPByso4MPdgmJ5oAgfI0JGYO2hojrQJH7h1ooLnAjVzgMZs1Az4lSnGzNLpITtd04pwofYZJ/McQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774918757; c=relaxed/simple;
-	bh=8o3RxRm1dnKFXXdTQnq001ks7TiVKBBf9qD/9lLjrlk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CFgcxRMVrcQXGDgVSAjeLCIf+YKI4U7rify5lCKqrI/BdIxChOK1PhqHX76yCQdr0myL+lW0HXc8YoM8YLqCcrnwoGhcY3joLrP78JICaHm2as6FWyxwd1YaOBtO2pFZ6FxVpsFXSHmfYXXN0hy2Ba2gJ3DBnCCUETTbM5DM+24=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GPM+UZv1; arc=pass smtp.client-ip=209.85.221.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3841F1917F0
+	for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 01:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774918841; cv=none; b=RZJDCUVd0XQKH9rjbNVGtuUm0pfG3Ww8J4EivRbtD30wn8IYgZcYbQTKI/yW9h5Kx2WCnwl7OkDrCJf7iKCeqMF5vu3yeoPFz7gywIRI+AxuhEEw6uzVcpjGz49PEFZ9XMRiNM8N0/omkOMXKQ+yqCO/uUjGv//OxYAOILu42C4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774918841; c=relaxed/simple;
+	bh=SawlFV/36D1JqQ/y0RUlch+39uFiQY0ebUeyp5bgoX0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sBjphHqVgyUHc4Y4js/Dwcsigd8ydSywsGnY/wyKU4yKpxAAybPL9b9B5evxQ7ghWA8sHVmzHnK09BdaAaw9BjCz3ZXs9RVOMTuQqZhAfm9FCZCy9wD9qcim4PmmtKHjnYFK9xPumEU4EMb2Oui2ifQ1sxolrHRyKenwiWHmuKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oBcT8wcg; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GPM+UZv1"
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-43cfb723698so1317744f8f.3
-        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 17:59:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774918754; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lUxqrWguMXFrIRDllD0sifIyoufVMgzVYoWcT1THR7PpB0qwhKBCcmy75pxGgxTWfz
-         qaQDJTBYTdAjaBk8ehgJRXozfFXNMkx/3kH9ke93p9tcV+Lq2nt6PXCnMa7XquVdbtc5
-         q7CeKHBTL5yuTNc4LUa8g6OCKr1cYrialGJxC+0ukS0O2X7g/DATxUWCDVSweRZ4cPGZ
-         BghEdgzVOb5SKqJExRB6pxb7hc6XyDWDF5Zv8VGmyU3ItFkxBHJB9TxZNaec3TVbuoGM
-         yn2ED2EGbcObnPwsnq5ka5HXBqFi88Ms+MjKz8Epuov4VXktR5rEfjCL+TriumljOOLV
-         GDqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8o3RxRm1dnKFXXdTQnq001ks7TiVKBBf9qD/9lLjrlk=;
-        fh=mV8Uwy03aTQpEc71kkKqimIDFbwq2oIhKiU5zAUO9K0=;
-        b=P9seMHXaT+5JvEj7gLGZnapaojsB2QT7syXF1KM5CFQCUoLM6bDtCCirXMpYtDXyRl
-         Z4+bmjiDePzpteXyv9fg96TSDXA8UcYPN/qzqUm51HgJPqtE5Rajg+hira9Qo3w8ks0q
-         fYfU6mIz9p5+j0g1ln3z87qY5VxoMcS0uwXvjLRzrlrDJ9+9vIt3E9eBEj7rLErK7iKM
-         dvfDEpeN2aKnVTrM9zSu127rbW0Cj72/svlA81UMZwT5xRHmXTf7mkdtN9GITkkVGsw5
-         IpH53zFE9PaVqgW3/TXUto0nxPpCYtF4kestGq64MtB4p17YkHFHy8XSOI8oPsio4mkJ
-         +Uog==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oBcT8wcg"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ab46931cf1so44335885ad.0
+        for <bpf@vger.kernel.org>; Mon, 30 Mar 2026 18:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774918754; x=1775523554; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8o3RxRm1dnKFXXdTQnq001ks7TiVKBBf9qD/9lLjrlk=;
-        b=GPM+UZv1FH5XRrP0okxKajQqs/CiiSGUQQ8meOmnHta3xpSZKXnTwJd/OJ5tLlm0Ds
-         jBk1fWDeVDpFKA2WJMoZ9fPUJm/CbC76jB2hDs6KmyVLBmLn5e2HnKEv3BcCscZ80ajI
-         0NbRRm2xW1ZCMdylfUzX0ie7kkW+j/9u088m9efoo7SgdvpvA0tuenWUqPa3VsvzZdpJ
-         pg99Lm8VninCupGOGB1RWudO1gsxUexQ1elkz8tQe5DsH6MElHr4vvsPMUjcW3Vmgf1F
-         XWXXqEQcLfHSlut5Om3xy/WJNvcD/Sl+C/HhB1EBKNpxRQzrt+AqaDrQ7+T+hupEUNRJ
-         l39w==
+        d=gmail.com; s=20251104; t=1774918839; x=1775523639; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QGiNmeiXRNBFwa+/3IrMEZ7pBA4tm8B5bHx0Wb0ZeIg=;
+        b=oBcT8wcgCXebtRPksmdUwaQ52KFmObMJMQJsjljzhZYWCeAK/69uCfxLayhQ8XEM7r
+         Ya3ZpgiYp9mv14/FZ51YKMbUZ7uJzMNHGZkHlySoJsflUx8SelF/Z9liId8ulpP0UQbt
+         p0NKaSwfPAd8K9cngZqpnWoTQXJ5DapL1QTxEw9W+0yW5o1C3Ix7bAUNXCPId/XWniNQ
+         nt74xnM47/FXUaBMo/RvcpRA28Ik3AqyqtDsJFNEprWL7Qz0hC3Tz4nVr36zoCh9hy54
+         gQXnhaGVoy4E/1z+8gI5j2aUcvHYcykqSGdplqmBA8J2qZB8S+HIAqrYLbO8JdKvZveF
+         Tw9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774918754; x=1775523554;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8o3RxRm1dnKFXXdTQnq001ks7TiVKBBf9qD/9lLjrlk=;
-        b=RDmb/oxdVO4ZpsZHcKkG9Idsrdet1Cl+RawOFRkl/ZeSh/LA82IFc4zhgGCXYAf2AD
-         xZpePkKXj21iB1YaFtoM5hVub8+Ck3GYHcWT/vQF2R/ged8mHdZtR8zLKgpxGhMx/tj2
-         gLgCIiZrcQ941wCsOqUS2BdL187aZfE8v2uLOygtPjfp4ThkaBhVvzR40wSWJMI/SldP
-         YuKxDMRIgubU+WCCbY3Yg78ubBtnR1b40cmSXHw/UhpJ5Ld6eq5ppOcgfRK26ruLvqHv
-         +2QCBX6taPZ0kkxUD1rD3vfo/1zUGqjycFpzE5CH3phSXxOjNBkPRcUq86OMAU3514lK
-         mU9w==
-X-Gm-Message-State: AOJu0Yy07yN2kqyGOj+wGZ5yBxieHoeoIR0KdpXmmKnM5EPeIVeGFA5t
-	gmo0Ewuya9JJKurBHhRjzhNuhT40v9ByTj9vOdx9V7U6TITpecQuSLE24zGZ9oHOmKoGn0hmhh2
-	ieGyrOw7wCkirLTiJI0vVvnq/5V3LyJU=
-X-Gm-Gg: ATEYQzx90iJMQT98eciBOZRjxOK8LUlUZ1D7NJHno2HimNzorThjEMyVWJDXo3bviA3
-	VpML/Q7PeCnSMj7ehdk2jFVnvunuYKTRzV6yDFtoJsZo+OU2NTftqpO3dn9EbSgOa3MU82/xfNf
-	o3Mjj+bx9Uu/coHjY0baOXEb8kMFo13N2fiZ8UNjPAHSusTyZZ4thf8j+SCpWU4cMItroh2o4f+
-	Yqf6j/ZUkFiirja9pwhXuxC2QnuMR8q070hfkNv1yMqcNf9fTuTwq/8mXqfhk07RNK6+aMdOLjy
-	vpHLuG18fPHH9rgGWyHP2ilnJXH0Aq/KNgNpbJXjnJOrwN6dvYJbtZBDp1vm
-X-Received: by 2002:a05:6000:2f85:b0:43c:f66e:f2d with SMTP id
- ffacd0b85a97d-43cf66e113cmr15873614f8f.27.1774918754114; Mon, 30 Mar 2026
- 17:59:14 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774918839; x=1775523639;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QGiNmeiXRNBFwa+/3IrMEZ7pBA4tm8B5bHx0Wb0ZeIg=;
+        b=pSZZW1j8hyu9jfXDGY/GGSurP0QMEpYPXc2DmLOjVXRZ0pZGdaihLkat58a3Ildjic
+         nUn6owGrSmURmcA20Nw2hSEdv0OurY3y9IUIwA60a+2CN0efNW+0TStvlzMQOh3dbBm3
+         ChoLOangsOGHFYe6sLtzF+1b3GVwq11RyaZyTW35F7my6VJ4No7Al3LywZNlHVYBAUtf
+         AmN1d6uXuQImbFHKbJ6+ffsdtNNs41+yQpMMz39tpJW0iDAQCHZHP73VVMVXqMxNSmZI
+         IzCcTvLfDQCFPlrSsPq5MY/rnO9Fh6+iu1QxgB/Bt8b8EI7w+O7peue15Ql8YdBe4Sp4
+         a/1g==
+X-Gm-Message-State: AOJu0YySY9MNbnm+xApwiuLMgvreR1JaLFaXyn5VmudMKbQS4qReIf4d
+	XXIvEayFxZ4qYIrGiOQlQZbPTOswPhbQWyMGAT5tyrRaYDK2AAj8dZLze2piiQ==
+X-Gm-Gg: ATEYQzxUbMpt1kEjg4W+iVHJNyitmgjAaqA2+/oJ9gtYAy595w76+sRFZ7W8mu/y285
+	LgkQUOpWWsZ2yic8EY6W163XpK/xXYFaiwawh2G8flfadS8RVAabqRobjQliEx1+CIs5/PiSHPO
+	MkhCPDi64cuZeCqCgv4mkF7DJccnDhIcYZR3V776iNIkZeLB+19ITG87XAxzI95P8bbzdaRdJcs
+	jYQ5hRl15sqkBWBfrQRk1IPW8HNJXFaol9Gw3wtBC8I80+NhIAXtYY+QNO6eJ0qFVXECyDX7sIE
+	ph9DOihyoVlYKnzaOOlB/686bi6CXoblhIFPsweGrt27DLGa+jbJup/rSOU1+GKUtJla3WI/axm
+	EGq3zOvc0qE2gfbRHKSAZqq/kexbZMibuaO9fj3xstpNc+XYjXCfiledvC7OBzRDHCgomjwYw/L
+	byGyjOMb+0UAx7h0aWZfRuB6T2z3Vx7jToxg7FvLNZ8dsg1DGx
+X-Received: by 2002:a17:903:1a2e:b0:2b2:3eec:c75b with SMTP id d9443c01a7336-2b25ee90436mr12940455ad.2.1774918839039;
+        Mon, 30 Mar 2026 18:00:39 -0700 (PDT)
+Received: from honey-badger ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2427a27f2sm125226405ad.67.2026.03.30.18.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2026 18:00:38 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next v2 0/4] selftests/bpf: impose global ordering for test decl_tags
+Date: Mon, 30 Mar 2026 17:59:23 -0700
+Message-ID: <20260330-selftests-global-tags-ordering-v2-0-c0ac61e81098@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260330-kmalloc_special-v2-0-c90403f92ff0@meta.com> <20260330-kmalloc_special-v2-2-c90403f92ff0@meta.com>
-In-Reply-To: <20260330-kmalloc_special-v2-2-c90403f92ff0@meta.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 31 Mar 2026 02:58:37 +0200
-X-Gm-Features: AQROBzClBDIlS_Nf6I1J2QZBFiNRAsdHm80bGZEScP6NNG_LNbXl8UAMapHOojw
-Message-ID: <CAP01T74oVmU4H0xBS=Su-Xo-b8hkx6gHg2k-aF5Unx+pNjLkRA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: Migrate dynptr file to kmalloc_nolock
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260326-selftests-global-tags-ordering-8f324323d9c8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 31 Mar 2026 at 00:28, Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
-> From: Mykyta Yatsenko <yatsenko@meta.com>
->
-> Replace bpf_mem_alloc/bpf_mem_free with kmalloc_nolock/kfree_nolock for
-> bpf_dynptr_file_impl, continuing the migration away from bpf_mem_alloc
-> now that kmalloc can be used from NMI context.
->
-> freader_cleanup() runs before kfree_nolock() while the dynptr still
-> holds exclusive access, so plain kfree_nolock() is safe =E2=80=94 no conc=
-urrent
-> readers can access the object.
->
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
+Impose global ordering for all decl tags used by test_loader.c based
+tests: __success, __failure, __msg, etc. The tags are now sorted by
+testing framework to be processed in the same order they appear in the
+C source code of the test.
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+The ordering is necessary for gcc-bpf. Neither GCC nor the C standard
+defines the order in which function attributes are consumed.
+While Clang tends to preserve tags definition order in the output BTF,
+GCC does not. This inconsistency causes BPF tests with multiple __msg
+entries to fail when compiled with GCC.
 
-> [...]
+This is based on a patch [1] from Cupertino Miranda (see patch #3) and
+includes some additional cleanups for test_loader.c decl tags
+declaration and processing (see patches #1, #2, #4).
+
+[1] https://lore.kernel.org/bpf/20260305130035.192080-1-cupertino.miranda@oracle.com/
+
+Changelog:
+v1 -> v2:
+- updated remaining str_has_pfx() usages (Puranjay)
+- removed realloc_or_free() (Andrii)
+- fixed qsort(NULL, ...) usage (Puranjay)
+- skip_decl_tag_pfx() returns NULL if tag does not start from
+  "comment:" (Puranjay)
+
+v1: https://lore.kernel.org/bpf/20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com/
+---
+Eduard Zingerman (4):
+      selftests/bpf: fix __jited_unpriv tag name
+      selftests/bpf: make str_has_pfx return pointer past the prefix
+      selftests/bpf: impose global ordering for test decl_tags
+      selftests/bpf: inline TEST_TAG constants in test_loader.c
+
+ tools/testing/selftests/bpf/progs/bpf_misc.h |  60 ++++----
+ tools/testing/selftests/bpf/test_loader.c    | 202 +++++++++++++--------------
+ 2 files changed, 125 insertions(+), 137 deletions(-)
+---
+base-commit: b6b5e0ebd429d66ce37ae5af649a74ea1f041d92
+change-id: 20260326-selftests-global-tags-ordering-8f324323d9c8
