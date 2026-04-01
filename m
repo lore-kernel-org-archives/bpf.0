@@ -1,235 +1,265 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609EF258CCC
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 20:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5037D35CBD7
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 20:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775074866; cv=none; b=C44/PngjhJaq+JPd1KnemcD9JHYo2IkgOH4jWmUXFq9m9cVkOPt+6snzUUNXauAqXk+xDMgEs2rXh5ShyJRStQJVK07KvztgwuoqSlUYVJ5kKBK8Mx3AirNIGZTvwedi42epCrFAKK8BAynthrTFukrIPqOp5dsYB/4lcV5MJms=
+	t=1775076648; cv=none; b=HulWmNZ23buSqMzyA+HRivtz48RCaB1BwkBLttGJu5M1YSngpNtySpAPS8PvyBia9DP1nz1I59HDo1s+4pEEWS1QWDoV1W8cyTNnPadZFZOxQV3i29o9uOrSjd/dgO2WnbtC0ZkdGXrgaFi0BB+ulyA9nsUgFtnz3aag6tSNtmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775074866; c=relaxed/simple;
-	bh=dXePsgt3I84BTIZVuWaWr+rCHIWzcf1icC2KnE7CsFs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UK+krFujCfrshV46Ccjw4ExypbPf19PoRZPEGbWjfJ0jnNjAB0DF1FEe6qa5jkB0/tBJDI1bh9e84znH9nc4PtwtLWxmDgiqD96WlzbW/5qdbJVNb7PmdMWh0lp+wpUReOmDfWZHKvdHBZxgybdAPEBbHeE/79j5PpU0H3MSXMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qVWTf4wZ; arc=none smtp.client-ip=74.125.82.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775076648; c=relaxed/simple;
+	bh=ktMqHT24bw1r5kmyz2JATopbIzzfJb9qr1AXckVYhVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k+3VwHFJrhCcNci8TNkRKcYPbxK//iI4UdYJ7yrjrdJ2EZNFja3QMGZIW86z8x8RobRnqAI7ScHT1W3RRQ/69D+yqMr+tGWnGkZRk3//E8sThRYZzfkiqAcA0raM3EIGJLu9xPUld54u6UN5OrqLD3rxxjoizJ37Z9fJKI1hSWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d+08gWj6; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qVWTf4wZ"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-126ea4b77adso347543c88.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 13:21:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d+08gWj6"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b0c12be0ecso11975ad.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 13:50:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775074864; x=1775679664; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=J0z9rScOSZuhMaGGxz02o1IoKtcga7FBCQq7jPU0rHs=;
-        b=qVWTf4wZD0hPyDaMzcAREH/Oe57g4fLHth/MGUawZFnOc59BhpNZxNvHbOM1esKQR3
-         IN/dqmSQ6SqqHxgilY6FvLiSLE3e9i4HNkk1R4jJTXxkuSGlAsTTYkF64jfS6OFVviSO
-         j3sLONsWV/0Xi6g/Ed6kct0ppogqxCkHGxEiMoe199Cz23Cz3dB1T1WQIu49Aw/AsDbM
-         GA5PJwG6ZT7sVlzG15zORoQolNlFIC1OyxaFBSIFzdqMPwOFzev6IbgMNusUzB1AGDz+
-         mKfcZDnEmFtU5ql8g/ibIJqN1Dtngjlbe0WgCfzb3mwcrGq09q0fes2zs7np+IQCx5bj
-         4I4g==
+        d=google.com; s=20251104; t=1775076647; x=1775681447; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LjEEKe36C/xvbCnEOY0kz8sYomKUfM5nFzyVZeOUVCo=;
+        b=d+08gWj6n+QbnRIVgoQZ5iByhY4Kfj5C/oFvF2eKZighWMDVV4sLlyVpVfOSihBdnA
+         rwLBGt7OpJASaXLIBI4dCq7RZBr3iuXIUrQ1awjr+aBYHzLA6TKD5A/ceDD5DjX92yq4
+         aE34cqe81HE1e1ubyH73Qb+OJUr93FkUJOHfHfRTHp6DA9Q36vsz5ZyayKB7EazMCYju
+         VPUqFCcPkgH2db3XjdJY94FIPeOl/S1zJuDb7xDn8YqkQpQK5J8xwWMVavCB09hBgs/z
+         yDHmrCGD62wFW0cy3xu3cbBgd9pjQhTxgJT2qJsMMrieosFWi+XYtSWZjcV5wOi1rLdX
+         ZNZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775074864; x=1775679664;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1775076647; x=1775681447;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J0z9rScOSZuhMaGGxz02o1IoKtcga7FBCQq7jPU0rHs=;
-        b=GCP9Xh/rE9ABUXcWIWwvd/oFFsx0u/oh+uVJe6J/BlW1JwlmKN3V1yfYIfkTXkgczr
-         5h8XPxh2RgAH7FzRRjnYVkR60RKJOmdTxFK8wvO99ah1F+hcqKaeTu7INv9Niofjn3jK
-         7islhpEWK1CqjEDdqb79Q3e5LJLF5GEHt/JDKj7cFdYVGiJMdLx/kHrIOwgr/nyqn3OD
-         l5X/Voa3vMFyi+I0cIFoBcsP7fmpX93InoSZX58R4oADnemAONLvL9hU9+b47gNBKsrH
-         aWuAPb2o5AP6JCwq9YdJcS+3KRCwmuKeBvETebWQsrRK/HuEU/vSYYCtY0rWQ8dSOBcZ
-         el0g==
-X-Forwarded-Encrypted: i=1; AJvYcCXRwblhH04Hm5rQSdFhKqLB3JHareq/ET7qC3dizOSu12rVON80OBcAtWz1PPodoKA1niI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzI06FblkGPdq5YnzuoeVmTuUaQnX9FfMgpk4uhytnMLppMuWJs
-	GMYSs1Muh4m05Gdgx4kt0qVlsUFF2gidp0CQHFrM0TkdflAn4Y9fc5Ip
-X-Gm-Gg: ATEYQzxQ7C7ywmwpdijTNmk0aPSiS/1F3uXzv5WePmXhNf+bon9eKOt2vsqOlgSN6oG
-	GfRJ+MKEwvEifaImH62dITE6Pn9OHADvkFv+Sy7jiwaOi3vpcSPw+6fEFWCvw324RBTDxiyEjJ4
-	I/gutgTlEphQNiTKGz+8iIFHIUwU62kUDuYe7/pVq6bFt25lV4LZjbW8BPjHAsITrH1IXxvjbAn
-	vLHfVZEST74MkSHsrjKWI5KGWOahVAWg1F7SkEfbDLLAIoRC6E8llBGn+TPJlTYLJdjcddeAA5W
-	jLB0l3FPA020HJQgqSPy2dIewhjYCnRfj+mXS2U5jRdvhABHBy3St2V14S/7DfiP/Xtc0JFfSN7
-	AM4QBPeg81GGKEzA6+LMIoUaFn3hb2er1spuTNuzjib+VhyWSAA5WlIW4CRDDDznoek/zxOz3Lr
-	aXn4Tz4UbL+MP6oukwIwhg0k29n3d6lS7lUXwqMeYOLq5QhfRRcP52YEK5SqyXE20VqDWEOJ/eC
-	3pGzy+Y
-X-Received: by 2002:a05:7022:922:b0:11b:82b8:40ae with SMTP id a92af1059eb24-12bee6d3612mr456083c88.18.1775074864271;
-        Wed, 01 Apr 2026 13:21:04 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:7aba:8184:a91b:bf1f? ([2620:10d:c090:500::3:f883])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12bedd920b9sm586652c88.8.2026.04.01.13.21.03
+        bh=LjEEKe36C/xvbCnEOY0kz8sYomKUfM5nFzyVZeOUVCo=;
+        b=YAqfZeSxGwO9BBQJImBiLoFYKR/VrOzou5Z1m+xGyrCI3c4EiwRbSxdFgNcxpZLYqs
+         Cys4x5ZJZaRdJdShJEGWXGtt5xm3siY/CSgvcEvaWa+Fu1kJKHuyAkO7RCGUYOos/Abk
+         WlTMYlMzZdIYvgexQwF+8ZDCaACB1x/bJiHcchfvPjMLOqbS+YxXO9FdaPivb2q/UANw
+         f9467bmJH0NbQLGWIyg4ugHEVTTsH4cejVKJKxGkG5fzBUFBBJdSxMH1cwyIMdLD3iw/
+         C0i2Z0gQV8xJsaKSUsJh7+NjTQr0I3rDnCO5Nryp3UsDq6QLbgwGKoVb/UeELbl42tr7
+         3Sxw==
+X-Forwarded-Encrypted: i=1; AJvYcCXTwtoANUikOyzBHOeMW+MROELnoCgMuHTsnSmrdcebZoJVD788kzPuLeTyzWQfbshQ9Cc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS91VzUANtrbh3dM791H/TVrf0vNxTl7EDZG0ln9F+P7u8YypS
+	xpPqvq0Ign7EYS70ePbtO5dU+kE8+mcrTNhnExEZ9tlIgkb3o933pnhqjjM4dmWo3A==
+X-Gm-Gg: ATEYQzxWGDlbihxlVOaXywq6jhqUdH9z4AP4LGULe+Voag8EsSUL7XEpESlF/7dGNE9
+	grMFNaIdvLr+aftexy0eFeqKm+I6QyKuYm6PtrVrjR1vXunR1cnc098HBOx8wpV4OAaLCAEe1Va
+	i+y0cIx+chU26X8aLaVelFVQBZuxdO2T7XhF8mqakCijfVtCbvfvvaBKSPFQgamMtl6fxYMxqY8
+	1tyepxLLBLkPDvqgf9D67tf0soPMPZZD4c/ZDgt9/1/4Myfe7PvPo/rGJqLOudUvccvM+e4uRwO
+	hwE7xD5GvgaO2noxy4ThTIpps3rcVVYCPSKKyLzF7kt+RI8f4WiyMxuzhek9NFmsIgx5RncFmFS
+	mrWsudcJKnXmk5QdWPmthrfA2LdD5SUnrIWbGMSzTgJXK7pJI7ifj6RI6tX6gdv7Z1/AWuwSsQV
+	k514+z1TvL2oVYamq6iknPUksgGtqMuZDi1t95cKTmca7PFx6ZjcnjfX0zbPrTON4nwn7Z
+X-Received: by 2002:a17:903:1ac3:b0:2b0:5cc5:9405 with SMTP id d9443c01a7336-2b276aa3b35mr504265ad.1.1775076645947;
+        Wed, 01 Apr 2026 13:50:45 -0700 (PDT)
+Received: from google.com (127.200.82.34.bc.googleusercontent.com. [34.82.200.127])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dd36a1d04sm831961a91.17.2026.04.01.13.50.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 13:21:03 -0700 (PDT)
-Message-ID: <4343ab08efc55d52b95f1618dbd367952f8e6a1b.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 3/6] bpf: Exit early if reg_bounds_sync gets
- invalid inputs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
-	paul.chaignon@gmail.com
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, 	santosh.nagarakatte@rutgers.edu,
- shung-hsi.yu@suse.com, 	srinivas.narayana@rutgers.edu
-Date: Wed, 01 Apr 2026 13:21:02 -0700
-In-Reply-To: <20260401193637.14694-1-harishankar.vishwanathan@gmail.com>
-References: <ac0NvOIc7AhifyNM@mail.gmail.com>
-	 <20260401193637.14694-1-harishankar.vishwanathan@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        Wed, 01 Apr 2026 13:50:45 -0700 (PDT)
+Date: Wed, 1 Apr 2026 20:50:41 +0000
+From: Jordan Rife <jrife@google.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Eric Dumazet <edumazet@google.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+	Yusuke Suzuki <yusuke.suzuki@isovalent.com>, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH net-next v3 1/4] udp: Only compare daddr/dport when
+ sk_state == TCP_ESTABLISHED
+Message-ID: <ac1qqMc8M96aDORI@google.com>
+References: <20260330215707.2374657-1-jrife@google.com>
+ <20260330215707.2374657-2-jrife@google.com>
+ <CAAVpQUDk1ywgsuCtreVCV4yVJRm_mcjsnC-+LuUwLRLHWavtZA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAVpQUDk1ywgsuCtreVCV4yVJRm_mcjsnC-+LuUwLRLHWavtZA@mail.gmail.com>
 
-On Wed, 2026-04-01 at 15:36 -0400, Harishankar Vishwanathan wrote:
-> On Wed, Apr 1, 2026 at 8:21=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail=
-.com> wrote:
-> > On Tue, Mar 24, 2026 at 12:33:51PM -0700, Eduard Zingerman wrote:
-> > > On Tue, 2026-03-24 at 15:28 -0400, Harishankar Vishwanathan wrote:
-> > > > On Mon, Mar 23, 2026 at 2:47=E2=80=AFPM Eduard Zingerman <eddyz87@g=
-mail.com> wrote:
-> > > > >=20
-> > > > > On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
-> > > > >=20
-> > > > > [...]
-> > > > >=20
-> > > > > > @@ -2786,8 +2786,13 @@ static void __reg_bound_offset(struct bp=
-f_reg_state *reg)
-> > > > > >       reg->var_off =3D tnum_or(tnum_clear_subreg(var64_off), va=
-r32_off);
-> > > > > >  }
-> > > > > >=20
-> > > > > > +static bool range_bounds_violation(struct bpf_reg_state *reg);
-> > > > > > +
-> > > > > >  static void reg_bounds_sync(struct bpf_reg_state *reg)
-> > > > > >  {
-> > > > > > +     /* If the input reg_state is invalid, we can exit early *=
-/
-> > > > > > +     if (range_bounds_violation(reg))
-> > > > > > +             return;
-> > > > > >       /* We might have learned new bounds from the var_off. */
-> > > > > >       __update_reg_bounds(reg);
-> > > > > >       /* We might have learned something about the sign bit. */
-> > > > >=20
-> > > > > Is it possible for the invariants violation to manifest after
-> > > > > __update_reg{32,64}_bounds() calls, once cross domain boundaries =
-are
-> > > > > propagated?
-> > > >=20
-> > > > The short answer is yes.
-> > > >=20
-> > > > The sub-sync functions, i.e. __update_reg_bounds, __reg_deduce_boun=
-ds,
-> > > > __reg_bound_offset are individually sound (checked by Agni).
-> > > > This means that they preserve any concrete value x that is containe=
-d in all
-> > > > the range bounds and tnum inputs, after refinement.
-> > > >=20
-> > > > But if in the input, there is no concrete value x that is contained=
- in
-> > > > ALL the range bounds and tnum, then an invariant violation can
-> > > > manifest. Note that this can happen in the presence
-> > > > of the current early exit commit, i.e., even if
-> > > > range_bounds_violation(reg) is false.
-> > > >=20
-> > > > For example,
-> > > >=20
-> > > > before reg_bounds_sync: s64=3D[1, 1], tnum=3D0
-> > > > after reg_bounds_sync: s64=3D[1, 0] tnum=3D0
-> > > >=20
-> > > > Could you elaborate on your concern? Did you perhaps imply that we =
-should
-> > > > be checking for reg_bounds_violation in
-> > > > simulate_both_branches_taken after each sub-sync function?
-> > >=20
-> > > My main concern is that we might loose useful signal.
-> > > It would be nice to adjust reg_bounds_sync() such
-> > > that it would stop (e.g. return false, as you suggested previously)
-> > > if it hits invariant violation mid-step.
-> >=20
-> > We discussed this with Hari and agree it would be good to use
-> > transient/mid-step invariant violations as a signal to improve
-> > precision. I'd however prefer to implement that as a follow-up, to keep
-> > the current patchset small and focused on fixing the invariant
-> > violations that cause kernel warnings and program rejections. It sounds
-> > like we may want to backport this at some point, so it's easier if it
-> > keeps a restrained scope.
-> >=20
-> > The "transient" invariant violations already exist today and using them
-> > will only improve precision (potentially allow the verifier to accept
-> > more program than it does today). I would see that as an improvement
-> > rather than a fix we'd want to backport.
-> >=20
-> > Hari thinks we can also use the empty intersection checks he mentioned
-> > in the other thread [1] to avoid/use these transient invariant
-> > violations. It would allow us to use this as a signal to improve
-> > precision without making reg_bounds_sync more complex (and harder for
-> > Agni to verify). I'll let him explain, but as mentioned in the other
-> > thread, it still needs a bit of benchmarking.
->=20
-> The idea is that since reg_bounds_sync() and its sub-functions are sound,
-> invariant violations (I'll call these range_bound_violations) can occur o=
-nly
-> when the *inputs* to these functions themselves have (i) range_bounds_vio=
-lations
-> (ii) an empty intersection, i.e. there does not exist a concrete value x =
-that is
-> contained in all the 5 abstract values. Let's say we have a way to detect=
- empty
-> intersections (as discussed in the other thread). We early return on empt=
-y
-> intersections in reg_bounds_sync():
->=20
-> reg_bounds_sync(reg) {
->     if (empty_intersection(reg) || range_bounds_violation(reg))
->         return;
->=20
->     __update_reg_bounds(reg);
->     // ...
-> }
->=20
-> That way reg_bounds_sync() preserves empty intersections and
-> range_bounds_violations, rather than allowing the intermediate sub-sync
-> functions to "fix" them. It's equivalent to the idea of returning every t=
-ime we
-> hit an invariant violation midstep, without the extensive code changes
+On Mon, Mar 30, 2026 at 06:21:39PM -0700, Kuniyuki Iwashima wrote:
+> On Mon, Mar 30, 2026 at 2:57 PM Jordan Rife <jrife@google.com> wrote:
+> >
+> > Adjust lookups and scoring to keep their results equivalent to before
+> > even if inet_daddr+inet_dport are left intact after disconnecting a
+> > socket (sk_state == TCP_CLOSE). sk_state == TCP_ESTABLISHED implies that
+> > *daddr is non-zero, so remove redundant checks for that at the same
+> > time. Note that __udp6_lib_demux_lookup already checks if sk_state ==
+> > TCP_ESTABLISHED, so no change was needed there [1].
+> >
+> > I could find no discernible difference in performance in
+> > udp4_lib_lookup2 before and after the change in compute_score.
+> 
+> What workload did you test the series with ?
 
-This makes sense.
+These measurements were taken on the server side while running a netperf
+UDP_STREAM test over a 100 Gbps link.
 
->=20
-> As Paul mentioned we were discussing empty intersection checks in the oth=
-er
-> thread, and I agree the two ideas are probably better combined in a follo=
-w
-> up that:=20
-> (1) Introduces empty intersection checks=20
-> (2) Uses them in simulate_branches in addition to range_bounds_violation,=
- as
-> discussed in the other thread=20
-> (3) Uses them to exit early in reg_bounds_sync()
->=20
-> That way we can keep this patchset focused on fixing the invariant violat=
-ions.
+> I think we want to see results under DDoS.
 
-Ok, we can go with a follow-up.
-What are remaining steps for this patch-set?
-Here are outstanding comments:
-1. https://lore.kernel.org/bpf/33c006d7275cb443b5750f062cb78c38449a7537.cam=
-el@gmail.com/
-   resolved as noop
-2. https://lore.kernel.org/bpf/ed85ac25cd315ac4273de335943f9f3a2c1f36e8.cam=
-el@gmail.com/
-   resolved, only if inputs are in bogus state, will be handled by a follow=
--up.
-3. https://lore.kernel.org/bpf/7vwyzvy7cwy2n4c52fcurg4dnv4bqijtovmkeh3zgu6e=
-y266vc@dtt3r5usvev5/
-   Some wording nits, do you intend to fix those?
-4. https://lore.kernel.org/bpf/847173114a13630e1512ad05375c6b407720a916.cam=
-el@gmail.com/
-   Will be resolved as a follow-up.
-5. https://lore.kernel.org/bpf/87ikamjv5q.fsf@gmail.com/
-   resolved as noop.
+Intuitively, it seems like the performance should be similar.
+sk_state resides in the same cache line as inet_daddr, inet_dport, and
+sk_v6_daddr, and we trade a comparison with inet_daddr/sk_v6_daddr for
+one with sk_state. Of course, code-level intuition can be wrong, so I'm
+happy to do some more extensive testing if you feel it's warranted to
+make sure that performance isn't regressing.
+ 
+> >
+> > (AMD Ryzen 9 9900X)
+> >
+> > kprobe:udp4_lib_lookup2 {
+> >         @start[cpu] = nsecs;
+> > }
+> > kretprobe:udp4_lib_lookup2 {
+> >         @lookup[cpu] = hist(nsecs - @start[cpu], 2);
+> > }
+> >
+> > BEFORE
+> > ======
+> > @lookup[11]:
+> > [80, 96)         1387077 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> > [96, 112)         364973 |@@@@@@@@@@@@@                                       |
+> > [112, 128)         34261 |@                                                   |
+> > [128, 160)          7246 |                                                    |
+> > [160, 192)           215 |                                                    |
+> > [192, 224)           126 |                                                    |
+> >
+> > AFTER
+> > =====
+> > @lookup[11]:
+> > [80, 96)         1408594 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> > [96, 112)         340568 |@@@@@@@@@@@@                                        |
+> > [112, 128)         30753 |@                                                   |
+> > [128, 160)          8019 |                                                    |
+> > [160, 192)           231 |                                                    |
+> > [192, 224)           157 |                                                    |
+> >
+> > [1]: https://lore.kernel.org/netdev/20170623222537.130493-1-tracywwnj@gmail.com/
+> >
+> > Signed-off-by: Jordan Rife <jrife@google.com>
+> > ---
+> >  net/ipv4/udp.c | 20 +++++++++++---------
+> >  net/ipv6/udp.c | 18 +++++++++---------
+> >  2 files changed, 20 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> > index b60fad393e18..d91c587c3657 100644
+> > --- a/net/ipv4/udp.c
+> > +++ b/net/ipv4/udp.c
+> > @@ -385,16 +385,16 @@ static int compute_score(struct sock *sk, const struct net *net,
+> >         score = (sk->sk_family == PF_INET) ? 2 : 1;
+> >
+> >         inet = inet_sk(sk);
+> > -       if (inet->inet_daddr) {
+> > +       if (sk->sk_state == TCP_ESTABLISHED) {
+> >                 if (inet->inet_daddr != saddr)
+> >                         return -1;
+> >                 score += 4;
+> > -       }
+> >
+> > -       if (inet->inet_dport) {
+> > -               if (inet->inet_dport != sport)
+> > -                       return -1;
+> > -               score += 4;
+> > +               if (inet->inet_dport) {
+> > +                       if (inet->inet_dport != sport)
+> > +                               return -1;
+> > +                       score += 4;
+> > +               }
+> >         }
+> >
+> >         dev_match = udp_sk_bound_dev_eq(net, sk->sk_bound_dev_if,
+> > @@ -796,8 +796,9 @@ static inline bool __udp_is_mcast_sock(struct net *net, const struct sock *sk,
+> >
+> >         if (!net_eq(sock_net(sk), net) ||
+> >             udp_sk(sk)->udp_port_hash != hnum ||
+> > -           (inet->inet_daddr && inet->inet_daddr != rmt_addr) ||
+> > -           (inet->inet_dport != rmt_port && inet->inet_dport) ||
+> > +           (sk->sk_state == TCP_ESTABLISHED &&
+> > +            (inet->inet_daddr != rmt_addr ||
+> > +            (inet->inet_dport != rmt_port && inet->inet_dport))) ||
+> >             (inet->inet_rcv_saddr && inet->inet_rcv_saddr != loc_addr) ||
+> >             ipv6_only_sock(sk) ||
+> >             !udp_sk_bound_dev_eq(net, sk->sk_bound_dev_if, dif, sdif))
+> > @@ -2854,7 +2855,8 @@ static struct sock *__udp4_lib_demux_lookup(struct net *net,
+> >         ports = INET_COMBINED_PORTS(rmt_port, hnum);
+> >
+> >         udp_portaddr_for_each_entry_rcu(sk, &hslot2->head) {
+> > -               if (inet_match(net, sk, acookie, ports, dif, sdif))
+> > +               if (sk->sk_state == TCP_ESTABLISHED &&
+> > +                   inet_match(net, sk, acookie, ports, dif, sdif))
+> >                         return sk;
+> >                 /* Only check first socket in chain */
+> >                 break;
+> > diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> > index 010b909275dd..b93a9a3e7678 100644
+> > --- a/net/ipv6/udp.c
+> > +++ b/net/ipv6/udp.c
+> > @@ -147,16 +147,16 @@ static int compute_score(struct sock *sk, const struct net *net,
+> >         score = 0;
+> >         inet = inet_sk(sk);
+> >
+> > -       if (inet->inet_dport) {
+> > +       if (sk->sk_state == TCP_ESTABLISHED) {
+> >                 if (inet->inet_dport != sport)
+> >                         return -1;
+> >                 score++;
+> > -       }
+> >
+> > -       if (!ipv6_addr_any(&sk->sk_v6_daddr)) {
+> > -               if (!ipv6_addr_equal(&sk->sk_v6_daddr, saddr))
+> > -                       return -1;
+> > -               score++;
+> > +               if (!ipv6_addr_any(&sk->sk_v6_daddr)) {
+> 
+> This looks unnecessary.
 
-Is the above assessment correct?
-Beside (3) is there anything you'd like to change or should we go with v2?
+Yep, thanks. This is inverted. It should have been similar to the ipv4
+logic where the unnecessary `if (inet->inet_daddr)` check was removed
+after adding if `(sk->sk_state == TCP_ESTABLISHED)`:
+
+	if (sk->sk_state == TCP_ESTABLISHED) {
+		if (inet->inet_dport) {
+			if (inet->inet_dport != sport)
+				return -1;
+			score++;
+		}
+
+		if (!ipv6_addr_equal(&sk->sk_v6_addr, saddr))
+			return -1;
+		score++;
+	}
+ 
+> 
+> > +                       if (!ipv6_addr_equal(&sk->sk_v6_daddr, saddr))
+> > +                               return -1;
+> > +                       score++;
+> > +               }
+> >         }
+> >
+> >         bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
+> > @@ -949,9 +949,9 @@ static bool __udp_v6_is_mcast_sock(struct net *net, const struct sock *sk,
+> >
+> >         if (udp_sk(sk)->udp_port_hash != hnum ||
+> >             sk->sk_family != PF_INET6 ||
+> > -           (inet->inet_dport && inet->inet_dport != rmt_port) ||
+> > -           (!ipv6_addr_any(&sk->sk_v6_daddr) &&
+> > -                   !ipv6_addr_equal(&sk->sk_v6_daddr, rmt_addr)) ||
+> > +           (sk->sk_state == TCP_ESTABLISHED &&
+> > +            ((inet->inet_dport && inet->inet_dport != rmt_port) ||
+> > +            !ipv6_addr_equal(&sk->sk_v6_daddr, rmt_addr))) ||
+> >             !udp_sk_bound_dev_eq(net, READ_ONCE(sk->sk_bound_dev_if), dif, sdif) ||
+> >             (!ipv6_addr_any(&sk->sk_v6_rcv_saddr) &&
+> >                     !ipv6_addr_equal(&sk->sk_v6_rcv_saddr, loc_addr)))
+> > --
+> > 2.53.0.1118.gaef5881109-goog
+> >
+
+Thanks,
+Jordan
