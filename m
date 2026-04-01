@@ -1,63 +1,63 @@
 Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12D23806B8
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 05:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE9837DE9F
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 05:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775021157; cv=none; b=dzqSedIl71QjfefHoG+lI00lPuWbruKZEmBFJNUiFnQAEHDvVrADHXliEkhaRDyKAdmKcF8uOhUIlOojFyQ2oeal+/cC7l+KFVdSElSGfSjTmW/yZgYfPQpjutgPIUSU0ByVmh4KUMDto8w/W1GPPJN5zCUZfU03w67Ih1JAAhw=
+	t=1775021160; cv=none; b=upYOkVd5l8W7ATbaxyTUPMZo4D1ZAGPdCpx4YS4vtKLojTKvfO1NuSHrIxf5OADU7kulZHP7EoPmAzIw+3cqAQKzsUz8FZhmA6+vqj35OgptSIH8C3BAP+VRqSV0aQEl72RGLjlLej8QTpB8+xM2EBkA6uWu4XnOkmUgGV/Gak0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775021157; c=relaxed/simple;
-	bh=qmeQHRkGzK4lii5ZAyRn9mbpws0lEvcKha0BrFEw8H4=;
+	s=arc-20240116; t=1775021160; c=relaxed/simple;
+	bh=Bx7ZKiCR+YTeCEb1pdcIvvplXe6zg+4+eQLydO/doHo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kPMTWfA+kApFZTPltxP8mk3UbvQRKGJoiG/PP1mv5KPfT/BoAGKuw4hUQuTWvZLIEwncLLiFyyPn0D1wZA5Ur9uLGjLgC2YyoooROvHD4NFGdn91TU+57XH+lxNbjRPrbnGq1aGUWULuzYDQO2NDcDMLtkH+NaRWP2Yoj0pQybY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Y5fUQ68p; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=poEX0WInr/ZQMV94F9Ffjj2d94kIUf7o1YG3+uI4A/s1hp+Yp4UtTcD4Mte1PeydgYhDfrqXcYoj8MdeND89i5N0PChgXO6AICT9wZIHASUl7F98f5MA9YrIEcvJSljnh2JbsMqepK5Jwk3CwM+bMmlhpH1Wj87ENlAIskaWHSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KI7+qQko; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Y5fUQ68p"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso57206045e9.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:25:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KI7+qQko"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-486ff201041so63039545e9.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775021154; x=1775625954; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1775021157; x=1775625957; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=agD2j9lHJEiH0O0fE306beCiWzd2jKbZSkmxgbBvFK8=;
-        b=Y5fUQ68p7FTx4FgxBYQq2M0MpOq4AIxi42KmcWYRnOFJO9pSENMSWW3LYsT2GdiOj7
-         8OxhB5ggvxUVMyF8uu7dRK1ZvZtKlrBHR0q4rwrsHC5IwQSg1Rn0wXVgkHAkJIq3C1zR
-         ZBC6MOXu3C4cwSImYnVnh++Xln7PxJ93TYsPr1DePLpBsATGakuzAxnxuVBKGPHLdjK+
-         7x5/zYJQJB35iovFcLqZvUo7W7zxsAKlwLuxVrbuRXMj9n8EdOb7ePIOgD5CLtTDnDnX
-         SGreWq4Z7cKpXPoGvVbCqXBu2nA8ifwPv9dD5rc3LimrxeNem4yZiYDfJyINqODeG3f+
-         UtYQ==
+        bh=HqiSmwJgQ4+uNqG6p5uMKmapSGc5Bt2MrHRQWhazOtk=;
+        b=KI7+qQkoOiS7ZG4ZywCKk4keIhNQYAsdsEzC6ou6emWJgkYF41M9q8WoSNmGxWWgkN
+         VSD6Ih4GXXlS2/SII4MT9cY1tRXNhq4q0VKn15/F2dop4nY9h2k3q0oVhlip//yM6GR5
+         NrGZR8/bR8v1TQKkOYPdGh0S4Kc0sZgZVdHng1xVjLPGBv8dqJQbMbqKKqZauoPmvh9I
+         0uuyn2U6IeWIuwPVh2RSFgaXXheo/5uTbe6XsOstwRV8t2IH7yfo999TjNst8tdLIfnd
+         QWW1boXsyXJcukwaRzpfBGuvdV9mLvtnDOEcFjywRjJGmTEWZn8UeWJp0jQTPiWTJSPs
+         Zwcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775021154; x=1775625954;
+        d=1e100.net; s=20251104; t=1775021157; x=1775625957;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=agD2j9lHJEiH0O0fE306beCiWzd2jKbZSkmxgbBvFK8=;
-        b=s48hdm5i0dj6Ip9YB5YsTfEKKuP6GRLOPHwJxZXIOxoqCuk42E19qFZcXlYzB6lll3
-         Nf4EYmAqsZsJMTC6CbH/T6gAlBv1Wzxxhnp1fOWdwZp76vE1PPFUIuArkUhdWaiharSI
-         /2yOUOBWILe8GyWou1lKqR/zUel5liOtYNesIj9Kg+ZLHKa6y192sSwIvRAqhlGVWBr7
-         5Chw5Apezcu+QPCZKHmFrbaYWG7Q2El6mTqFvUZepOPWwBsBEE8DhvPoZ7Pam5W+HGJX
-         Wx7/sXucJb/ePDotnNNAfnFuSFqZ98C1ylCIS+7B8fpCcDOqNp3oRlLFElVaSYC8SpWl
-         MnFQ==
-X-Gm-Message-State: AOJu0Yy3gcDe/PtGTLzvxNHSgzAR8LUgnQiw3PCxZo3N/0qFGBWtdyNp
-	mT/EZMrb1SQmc5AqUCvVgjb5t1L3gTRuZQa2tIAAjWt9/9XU/etrS9KVp2AxlonUlI0mVqpYshL
-	r/ss7834=
-X-Gm-Gg: ATEYQzzqonJoPiqa12vLslYQ7A/14xfW7Ek2i2jSnP8M2eRFUdnnAguW1HrMzHNjO8H
-	whNzgFqJRJ9ymrKQPHChiVBe0fV6/SjFxoBIcRsAlGiW9rzaFZXWDFz+ua3vReG5a0keR2UFrAm
-	p0mJIv6TTxOhJyPexqs5yHcuNbV94XVTFe4E2/Zt+OtlRtDkbqkxHFsBj4OE/PzKRIytdeXRRTh
-	rbYAdkIj4D5kwt3GsIr92LlmSA7MDOnMgOIhqULcP6nCdN6whFznvxIALAJtO09WbIW+fK/UBvK
-	qpnN+VpIWhtsm/JgIt1JlJ0MwIXGZFkBq5vLFpCnCrilcCBnE3XzbwfruzFu8i9lad609sV2xLV
-	469nJ/Rddc8o6kO9DyH1zGPiU5SpeLbkx6THloQBhfUDqnO2DyDpQzmBP/mJUq6oRg/IFrI8Xwy
-	WkwfCanbtop/qKxOwVEvaa2yZX1Eko9Jg+c1PU3IhBbB+extKeD/w8EwNwPoITMw==
-X-Received: by 2002:a05:600c:3ba5:b0:471:700:f281 with SMTP id 5b1f17b1804b1-4888359db41mr30178075e9.25.1775021153781;
-        Tue, 31 Mar 2026 22:25:53 -0700 (PDT)
+        bh=HqiSmwJgQ4+uNqG6p5uMKmapSGc5Bt2MrHRQWhazOtk=;
+        b=KYK1k2llsoTI/yStdJ9FcNR7xRaSW75wpvDqQS+gVThJFWfV/IgnnopxPd4A1PFE/p
+         owCVKLNWYeNkFifRljuONMH3N0FpXEezCW9VEPsXSiECpdLWk/IvuP9W9murAfR4rGRA
+         kTa1aM8Zt6cTu7AruC9GDuRw3W8+5fqyLjnvdsklBjQZNqB3iALgAVoAyrb1YOEABfVI
+         tZk98sjDdDO9SWTtYqruUISF2fSW1rvxJq0gsa4AXQsGdpNn6sn91tvZ+feC2q/FS4Gi
+         zp3VD+XGYbZS2oSaA0k8JNiNBiLEssEpbqnHbNV0ow9HgDBUWVXyd56GZ7IhDX9apb4F
+         W9Ng==
+X-Gm-Message-State: AOJu0Ywzl55WGluFCyjtdWSrJoZRDdT5w8i/f4v6UzSVkUn4ex6mB81m
+	CbT+PNUVIwTYG/6Eri+OzJYyuYUIKmtm/CZqPheUG9kPzXWk4LTja7WfOd67lNoFvfLyyTSGYAR
+	xsY2Shmc=
+X-Gm-Gg: ATEYQzzIFOPpJvUa+IoFrG12vUlajtoWeOWQYBzVm7u9IKpNkjYKh04z6jUthOnlTDf
+	9M0GxvVkoDo24KAB3hZ2nHX4+AJFgRSpS0QpyKVgwVjr4vZmCahjwgIy6913XQSgLEcdZWs2dlO
+	6zBJNOmQma/6z6G2l0F91/UAP/WibvgZF7U4lEWnOe0g3RwbYTXO7iALhNPOW3n2DwLlF1NcAQh
+	6hITB0fIAse8pXYO9tT1xy/CUoDVYHfLVxlIoHVvTWW/vKTueEmwhx9SslkOvq24jC5PUuUnZuu
+	SKXsXGrk9/T4mPGStJscs6sSAs1O5qhotdJ8Pb/ePang7NRXsgkn/4GvzgJTzFcPMbNpMuaqiW3
+	rPsAKhARBdrpK7ED8zbmxUR2o6iKHIP1aqWU4Uoq0Y6bIjAzHWIz3oPZcS9HPpcukUNsKM3X+CC
+	boMD3rOy6a5hvBxsFY1flmPRU7JckKiHbeCjXErRQTz7jsHXc4PZKBzXga9YIvVw==
+X-Received: by 2002:a05:600c:4f95:b0:477:a1a2:d829 with SMTP id 5b1f17b1804b1-4888356754dmr32735925e9.13.1775021157359;
+        Tue, 31 Mar 2026 22:25:57 -0700 (PDT)
 Received: from f16.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca843b818sm15308214b3a.6.2026.03.31.22.25.50
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca843b818sm15308214b3a.6.2026.03.31.22.25.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 22:25:52 -0700 (PDT)
+        Tue, 31 Mar 2026 22:25:56 -0700 (PDT)
 From: Hoyeon Lee <hoyeon.lee@suse.com>
 To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -73,9 +73,9 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	Feng Yang <yangfeng@kylinos.cn>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 1/2] libbpf: clarify raw-address single kprobe attach behavior
-Date: Wed,  1 Apr 2026 14:25:10 +0900
-Message-ID: <20260401052544.100968-2-hoyeon.lee@suse.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: add test for raw-address single kprobe attach
+Date: Wed,  1 Apr 2026 14:25:11 +0900
+Message-ID: <20260401052544.100968-3-hoyeon.lee@suse.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260401052544.100968-1-hoyeon.lee@suse.com>
 References: <20260401052544.100968-1-hoyeon.lee@suse.com>
@@ -87,114 +87,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_program__attach_kprobe_opts() documents single-kprobe attach
-through func_name, with an optional offset. For the PMU-based path,
-func_name = NULL with an absolute address in offset already works as
-well, but that is not described in the API.
+Currently, attach_probe covers manual single-kprobe attaches by
+func_name, but not the raw-address form that the PMU-based
+single-kprobe path can accept.
 
-This commit clarifies this existing behavior by documenting it in
-bpf_program__attach_kprobe() and bpf_program__attach_kprobe_opts(),
-and rejecting this form explicitly for legacy tracefs/debugfs kprobes.
+This commit adds PERF and LINK raw-address subtests by resolving
+SYS_NANOSLEEP_KPROBE_NAME through kallsyms, passing the absolute address
+in bpf_kprobe_opts.offset with func_name = NULL, and verifying that
+kprobe and kretprobe are still triggered. It also verifies that LEGACY
+rejects the same form.
 
 Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
 ---
- tools/lib/bpf/libbpf.c | 16 +++++++++-------
- tools/lib/bpf/libbpf.h | 29 ++++++++++++++++++++++++++++-
- 2 files changed, 37 insertions(+), 8 deletions(-)
+ .../selftests/bpf/prog_tests/attach_probe.c   | 82 +++++++++++++++++++
+ 1 file changed, 82 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9ea41f40dc82..b27832ff6051 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11816,6 +11816,8 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 	default:
- 		return libbpf_err_ptr(-EINVAL);
- 	}
-+	if (!func_name && legacy)
-+		return libbpf_err_ptr(-EOPNOTSUPP);
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index 9e77e5da7097..a41542f4b35d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -123,6 +123,82 @@ static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
+ 	test_attach_probe_manual__destroy(skel);
+ }
  
- 	if (!legacy) {
- 		pfd = perf_event_open_probe(false /* uprobe */, retprobe,
-@@ -11835,21 +11837,21 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 						    offset, -1 /* pid */);
- 	}
- 	if (pfd < 0) {
--		err = -errno;
--		pr_warn("prog '%s': failed to create %s '%s+0x%zx' perf event: %s\n",
-+		err = pfd;
-+		pr_warn("prog '%s': failed to create %s '%s%s0x%zx' perf event: %s\n",
- 			prog->name, retprobe ? "kretprobe" : "kprobe",
--			func_name, offset,
--			errstr(err));
-+			func_name ?: "", func_name ? "+" : "",
-+			offset, errstr(err));
- 		goto err_out;
- 	}
- 	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
- 	err = libbpf_get_error(link);
- 	if (err) {
- 		close(pfd);
--		pr_warn("prog '%s': failed to attach to %s '%s+0x%zx': %s\n",
-+		pr_warn("prog '%s': failed to attach to %s '%s%s0x%zx': %s\n",
- 			prog->name, retprobe ? "kretprobe" : "kprobe",
--			func_name, offset,
--			errstr(err));
-+			func_name ?: "", func_name ? "+" : "",
-+			offset, errstr(err));
- 		goto err_clean_legacy;
- 	}
- 	if (legacy) {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 0be34852350f..f691f05aa68c 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -557,7 +557,7 @@ struct bpf_kprobe_opts {
- 	size_t sz;
- 	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
- 	__u64 bpf_cookie;
--	/* function's offset to install kprobe to */
-+	/* function offset, or raw address if func_name == NULL */
- 	size_t offset;
- 	/* kprobe is return probe */
- 	bool retprobe;
-@@ -565,11 +565,38 @@ struct bpf_kprobe_opts {
- 	enum probe_attach_mode attach_mode;
- 	size_t :0;
- };
++/* manual attach address-based kprobe/kretprobe testings */
++static void test_attach_kprobe_by_addr(enum probe_attach_mode attach_mode)
++{
++	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
++	struct test_attach_probe_manual *skel;
++	unsigned long func_addr;
 +
- #define bpf_kprobe_opts__last_field attach_mode
++	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
++		return;
++
++	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
++	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
++		return;
++
++	skel = test_attach_probe_manual__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
++		return;
++
++	kprobe_opts.attach_mode = attach_mode;
++	kprobe_opts.retprobe = false;
++	kprobe_opts.offset = func_addr;
++	skel->links.handle_kprobe =
++		bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
++						NULL, &kprobe_opts);
++	if (!ASSERT_OK_PTR(skel->links.handle_kprobe, "attach_kprobe_by_addr"))
++		goto cleanup;
++
++	kprobe_opts.retprobe = true;
++	skel->links.handle_kretprobe =
++		bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
++						NULL, &kprobe_opts);
++	if (!ASSERT_OK_PTR(skel->links.handle_kretprobe,
++			   "attach_kretprobe_by_addr"))
++		goto cleanup;
++
++	/* trigger & validate kprobe && kretprobe */
++	usleep(1);
++
++	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res");
++	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res");
++
++cleanup:
++	test_attach_probe_manual__destroy(skel);
++}
++
++/* reject legacy address-based kprobe attach */
++static void test_attach_kprobe_legacy_by_addr_reject(void)
++{
++	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
++	struct test_attach_probe_manual *skel;
++	unsigned long func_addr;
++
++	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
++		return;
++
++	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
++	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
++		return;
++
++	skel = test_attach_probe_manual__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
++		return;
++
++	kprobe_opts.attach_mode = PROBE_ATTACH_MODE_LEGACY;
++	kprobe_opts.offset = func_addr;
++	skel->links.handle_kprobe =
++		bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
++						NULL, &kprobe_opts);
++	if (ASSERT_ERR_PTR(skel->links.handle_kprobe,
++			   "attach_kprobe_legacy_by_addr"))
++		ASSERT_EQ(libbpf_get_error(skel->links.handle_kprobe),
++			  -EOPNOTSUPP, "attach_kprobe_legacy_by_addr_err");
++
++	test_attach_probe_manual__destroy(skel);
++}
++
+ /* attach uprobe/uretprobe long event name testings */
+ static void test_attach_uprobe_long_event_name(void)
+ {
+@@ -416,6 +492,12 @@ void test_attach_probe(void)
+ 		test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
+ 	if (test__start_subtest("manual-link"))
+ 		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
++	if (test__start_subtest("kprobe-perf-by-addr"))
++		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_PERF);
++	if (test__start_subtest("kprobe-link-by-addr"))
++		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_LINK);
++	if (test__start_subtest("kprobe-legacy-by-addr-reject"))
++		test_attach_kprobe_legacy_by_addr_reject();
  
-+/**
-+ * @brief **bpf_program__attach_kprobe()** attaches a BPF program to a
-+ * kernel function entry or return.
-+ *
-+ * @param prog BPF program to attach
-+ * @param retprobe Attach to function return
-+ * @param func_name Name of the kernel function to attach to
-+ * @return Reference to the newly created BPF link; or NULL is returned on
-+ * error, error code is stored in errno
-+ */
- LIBBPF_API struct bpf_link *
- bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
- 			   const char *func_name);
-+
-+/**
-+ * @brief **bpf_program__attach_kprobe_opts()** is just like
-+ * bpf_program__attach_kprobe() except with an options struct
-+ * for various configurations.
-+ *
-+ * @param prog BPF program to attach
-+ * @param func_name Name of the kernel function to attach to. If NULL,
-+ * opts->offset is treated as a raw kernel address. This form is
-+ * supported with PROBE_ATTACH_MODE_PERF and PROBE_ATTACH_MODE_LINK,
-+ * and can fail with PROBE_ATTACH_MODE_DEFAULT if libbpf falls back to
-+ * legacy attach.
-+ * @param opts Options for altering program attachment
-+ * @return Reference to the newly created BPF link; or NULL is returned on
-+ * error, error code is stored in errno
-+ */
- LIBBPF_API struct bpf_link *
- bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
-                                 const char *func_name,
+ 	if (test__start_subtest("auto"))
+ 		test_attach_probe_auto(skel);
 -- 
 2.52.0
