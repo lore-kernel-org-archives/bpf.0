@@ -1,400 +1,267 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2563C1991
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 22:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775082789; cv=pass; b=NeLfdurhCc7gIlEbzqihPD4KjnxI8zcSbGxw3LSyirDDfSK02v0zuZ6rsIlOJrEb0F3k31aQrHnAVR03VtwtDXGT/T0itMENlvp9RukzwLGHHlqZzWH+qpt6XFYM7VcfS/TZUkHLnRftX1/+BYCD6tRESh6FiBKZnzpY0dAW7mg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775082789; c=relaxed/simple;
-	bh=ajaWsEgVfRfBpsXhxGQAQWHTssFj0NAei0JLYPhbRig=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EpcwhnbX09GH2ayooTrTP49V+xBaaJrpiBxuCK6PsXrLGo4HBCAwqhxeaQzwn9qzhJoaVXOQc3vCbK0pkvE7H5Ni23HRAYJBf0nSNgKMcN3GHIv0fmFMoa/QhEg+9Hdminb/yPLjvBck9FaRW4xrJVDsmW+ypbS1H582+VBrJyQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EI/bE4dZ; arc=pass smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A02B3E275C
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 22:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775083095; cv=none; b=ZXM1NpOPa+caO6nTaQapbBrQT0An2ZzMEn2kpqdBewdRhiIVipCMvXipEEUzCafnZhAddT+A/mf2qHtHGiN4n/bid+md452GOHFstfmo8Rg25PHGbqqdTTJnzWaJg+tg4IVCTWCtolwPlpEh6ctJnqjxwq69b+4y/bnuuVCnEts=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775083095; c=relaxed/simple;
+	bh=VEopQ6sXn2fWBMK64oy+ORJ79nDXHlb9oCXBznWQpVY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=mxtRkkA1ycT+cjMP2am/RNI/13UiLC4slrBzo9+TDpq93EhSNWEpJH0rPmd2BD3PtD1ZlSsf8vcM7fdHiwcumItqh4N0NaQBga0xSWMQounHm1rzNvOLTRTFoB5olYPovAfUo0GpkavhVlCLHTQIhfQu8UrGu3d3VSRNU1QMku8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fn8kDPFw; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EI/bE4dZ"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48541edecf9so2363385e9.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 15:32:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775082777; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eQ15nafJ5L9s4nJGZtIxoN5CglZdh3M1MHfMgcuUMgIv+nUWAR46dlcOMiqKDZwu6h
-         vqwmubX/boud0YxX2VdlzHjHJrZSq+Qfj6BpyrxFS/nS617Sh9k7p56VB76O4YWVYdrC
-         +HS7p5Plfuu7VEEYzFxfE8i7IJKxMghpgNVjaNIma5KWBJ/U6IJO3fNRSXHc2/sEOWza
-         T0m6JW5Go7CC7Y/faor+zAITtRLgXVdENi8EckmMj2INMud2J5U9ljj/8H1pl3e5xt/r
-         6NppUjVZ1426fFwb/7e3NdF4VjXNcwhT20aSxxahzP2JU8o8tB1qAZZOUkLriMfNcRsE
-         uKZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=B3VfjVME7Yw+jYEXtfoUkrvbamDb8yApBSTnhoz4Zog=;
-        fh=UcZqnkcPYPCJuBeofOOObWQTYZ2DVO/Q2yzEycpMUlQ=;
-        b=SUm5ZqVLLJsEWVGVVaFtQqfU3YJoj1iN9MR9HLjIPIUDEYqJKTvWGrLuR2eFRRZoq7
-         mPFfar+YZb2MmcdF0mWUBOpJ0t5In/E3kNSljwE0BFVrmb193dQKTs3OQzgl/d8oLclo
-         Qp1FqMunvx3z7yfbwt+BEe6tz+VgqHZs4jf7JQfuxX5DmbtSPLSK+VaKkPyZgOzVJUPC
-         OV4niLAt0WeGI6VL/qHzVpSUiTAK8ejjs2PAtrA6bHpe9CKeYcJW6cZdJjTit+nENn1n
-         o2S5fKycuMOtojZbqnICUBWmtlNgDi38T6W2Dnt9AwJ7HJZBfIBIvHTDXrssgbj15p9A
-         Fzyw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fn8kDPFw"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4888375f735so1619785e9.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 15:38:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775082777; x=1775687577; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B3VfjVME7Yw+jYEXtfoUkrvbamDb8yApBSTnhoz4Zog=;
-        b=EI/bE4dZVpXjN1xKM4N9/FjThzs07+3WzQ4ZMReX8KPQQXDKQt79yg7uEjVnA/V/3F
-         jkRWB7isO0MSbVmURiEkHlzeE+cAx6/Cvf0DiJwVQJMOwqPO2nJ/XxEGEu/8+LYF3/5H
-         +HkUstU+snLFJ+2PGlpt/U0VZ0LcOvEkHgssit4HkrpSj4pE0g4n0QGnqn9PW8GlJy1+
-         33Dyzi4Pm24mQOJIlqwT4boiNyko/iaK05N71Vx+VYm3POBA2bx3XFecktCIoXFOklCB
-         z38S6JOA23lYyHtFfPrLXfprvfySfawe3t4oXNc3oGR5994eR4KvjeiJjd12nZzoIVwa
-         BbUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775082777; x=1775687577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=gmail.com; s=20251104; t=1775083090; x=1775687890; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=B3VfjVME7Yw+jYEXtfoUkrvbamDb8yApBSTnhoz4Zog=;
-        b=LDCzCRz4gSCGC1wqg4IBkEQWREcUHN7if+4Q6q5DhSpPvt9KiLMNA7SeIrjDTS692h
-         oQIuhVoK0r5Wf2gwG6EhcC4IVAAAz1T+D550seiM7YbB4WRI3eQCnEBEHzSR0erloaJ5
-         r1LCr9+fggKneRk76wBJ3Xiba/RTAsNO2bpoWv+iLHcXNPyJI2K+a8Xgbz+9JgAbYPtS
-         tHaK1o2Avso6fXE4TT/ARpz/LTJfKy9lnRcordPwe3NJdpOxSPHdMvsG1V0tR87VtOkK
-         3Mj61qos2YJvTlX9bEox3HI2h9gUn3C0wyIu8lfaSTr7mRT9TGeZw32xq768yfOFHcKy
-         w9TA==
-X-Gm-Message-State: AOJu0YzpUkO44LkNZy7LBwzUlkPFe8S1Eoj3P7DHktkLQcbZiMEOGOJ9
-	Gj3quJtYCDMKyAd9zeeNeYgyLoNVlyC76J0QgWuzVyLagTq47bmu+0r6KJfvpEGByUnMNSBjBSC
-	+p8kvLD3gyrzlqaU9VpZVoS/Fe6e9wEPIKw==
-X-Gm-Gg: ATEYQzzqQHMPfMtWXWq9ru94wvb8/GFPq3b6Ttxt4HsHkRYZ2HFN3/PwfkFPHJ+6fzN
-	marfsvn8nVPRCCQu25N91CED4yFaabc/kdXM/YxGRDfOyL6ckNn1qsKf517ITns6h8ySzw8QRBS
-	Dsy+XeJ7+yKMgeDOSbWzT8tVcw+KSlVcH8KbTCtEpQKV4/yXUtMlwMVVg5vgaPWulHa6QY6PknW
-	AXBJ7eF/sMZBmkS8VYcgTtbe9qn7AoyxUHNtGyDf9TLev0jy4QTNpEx6KjShVBhA7xIX7lj2LpL
-	S3k8LOoV3hVDfPw9bqCbE88r/szKlq9Ya4pOiMxaytUn2cA9bmSFC+VL/c51ys0+8AQgPQZ6lbi
-	imkwYgsNxCTBBKTda6dew/KhVPw==
-X-Received: by 2002:a05:600c:1f11:b0:485:4278:2558 with SMTP id
- 5b1f17b1804b1-48883569dcamr89140845e9.6.1775082776386; Wed, 01 Apr 2026
- 15:32:56 -0700 (PDT)
+        bh=ZEI0lu5ovAeU6GbsH63w7tJK6jkkYtH4a4Zc5Kuvujc=;
+        b=Fn8kDPFwzJI8OtQVVUz5y7ro0OUl89z8lUcT+vJcEqa7wyXRkzdS6U2tcG11ZDPDa7
+         8B/jDkofFijlyvCL6bmXuoAIaOhHzyLV7KjvZ071eJircYl7tnJH2lfnT8H/sKc0A/Cu
+         EtILZBW/2RBlgFGJio+cXOsavcA2qxtttfgMApb7ecCQ+wkuspK0zzD5Ww4oecAv14Fk
+         9M0rrgoOh7wakMVxdH3VO8rTdUn1gXRDkiCxzr3BfELtUeyM6boraWhUi4bI9d3ltcWa
+         cBryxJz0wcCY/OKZvuE/UWY/nlSn5bxqJ2UuCHfWQQ/Fpx3Bs5MJ81FPnYWSA5I/RdGx
+         rPdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775083090; x=1775687890;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZEI0lu5ovAeU6GbsH63w7tJK6jkkYtH4a4Zc5Kuvujc=;
+        b=jJxF0jiEpDiS8b3F4j+w1uWrFYjZvQWSOJDLlFQJVDzL9JnAj3y3OTM8/obkegAEPf
+         AN4+Y9L8tdepZ9VDSUxqJfOVL3k3/dF8UruEWKfibGTCJpA3UWJ50mEwBkZpGfeI/Cgm
+         qrqUnpl6cs/PZm8PVAtffUaqniaSM/Nz8sdffSrxF/ME7h9SIyNN+7K0EMFY+isl96LF
+         XGNHxJzjJmJl+4hv2ttxLd/oCptMoDr/kEa9QdaateZxWCyzoBm+kdmLbEkfohA2MZcD
+         YU6nWf4RTQV//LhJYOq3vsTqGobmv9vG6L5Qnwk141+h4FsXjvTdpN3FC0ICRVHZbRKG
+         651A==
+X-Forwarded-Encrypted: i=1; AJvYcCXUdd8s6SSMGtQ4oFDk8WwvUk+WmLs1pHeVfk/biNAPrIQbTyWPdMz4g6w9ZYHsJqMSuUo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3YtQHkjLJOqdm/QEPIwtCjtK+qt8NQfz33Rl8rEVCAwNs/6IY
+	cP4aWqtbKG1nkgRUhTSZ4C21pYyeBnlq5O1JCj/P6jJTH3KZyn39yrRo
+X-Gm-Gg: ATEYQzwcHLotKHtvMDl/+8QObmbpVrS21AzpYVqRmcyi+1Ukso+gOG0SzyiVyGir3kN
+	mCg2Oxw+rTt5HZMQoM1oMDyGl7SKNd73Y8tEVaX+2tjLGsRXSZdPABlsx3qCQ08VYlgsNNFajxh
+	Kdu8YxJD3rrso4TKkh4pS464eF5q06c4cth/Hu95TTHSnWGg832stQtfb48ShNkm8B4u/uuLG0x
+	z7Vm3d4UrKu5VHLOWdXQLltmUJWsSq8EiAYiZffAmqnLken2BAlmhqly8XYNssM7sSO1idihFr7
+	5p1cG3g2zRSSgdtmhS9q1/tXR92xth3qoUiMzeTsaosKwdIDxtqHb/8ABGLez9xiz8j/lrqSLP0
+	M6FrdsFv0Rukyvto/6IHhQy3CmqmjzHB9QCNRtllSeaTmmoYlJ/JQlWeGKvIcQuqqrjiXTogCKg
+	apmczfOzPwyLUr77bTTnY/e0QUcm6lqvUo3Oi/FMRQ6iI0oXnpqfEaoHs8ZdyikUKzSEsM1s4YG
+	/VHDUvdvN0=
+X-Received: by 2002:a05:600c:c87:b0:485:3c8f:e4d9 with SMTP id 5b1f17b1804b1-488835b7813mr80740505e9.26.1775083090010;
+        Wed, 01 Apr 2026 15:38:10 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e9630ddsm136102055e9.13.2026.04.01.15.38.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Apr 2026 15:38:09 -0700 (PDT)
+Message-ID: <680e35d1-04bd-403c-9aca-f2b8a0af9af3@gmail.com>
+Date: Wed, 1 Apr 2026 23:38:09 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
- <20260401021635.34636-5-alexei.starovoitov@gmail.com> <3c091ab744676990e90469a89a4f0110d724ce19.camel@gmail.com>
-In-Reply-To: <3c091ab744676990e90469a89a4f0110d724ce19.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 1 Apr 2026 15:32:45 -0700
-X-Gm-Features: AQROBzAIlkirjROntXtIfKqGcsElMiLx5NHI8abCaC4f9VFC0JtU2JDUz6vmf4w
-Message-ID: <CAADnVQJtw5A4GbknXoA-BtobOVMiBc+pC8nUQZ+1zX5wbj3ipg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/6] bpf: Add compute_const_regs() and
- prune_dead_branches() passes
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add more tests for loading
+ insn arrays with offsets
+To: Anton Protopopov <a.s.protopopov@gmail.com>, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiyong Yang <ksur673@gmail.com>
+References: <20260401161529.681755-1-a.s.protopopov@gmail.com>
+ <20260401161529.681755-3-a.s.protopopov@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260401161529.681755-3-a.s.protopopov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 1, 2026 at 2:07=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
- wrote:
->
-> On Tue, 2026-03-31 at 19:16 -0700, Alexei Starovoitov wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
-> >
-> > Add two passes before the main verifier pass:
-> >
-> > compute_const_regs() is a forward dataflow analysis that tracks
-> > register values in R0-R9 across the program using fixed-point
-> > iteration in reverse postorder. Each register is tracked with
-> > a six-state lattice:
-> >
-> >   UNVISITED -> CONST(val) / MAP_PTR(map_index) /
-> >                MAP_VALUE(map_index, offset) / SUBPROG(num) -> UNKNOWN
-> >
-> > At merge points, if two paths produce the same state and value for
-> > a register, it stays; otherwise it becomes UNKNOWN.
-> >
-> > The analysis handles:
-> >  - MOV, ADD, SUB, AND with immediate or register operands
-> >  - LD_IMM64 for plain constants, map FDs, map values, and subprogs
-> >  - LDX from read-only maps: constant-folds the load by reading the
-> >    map value directly via bpf_map_direct_read()
-> >
-> > Results that fit in 32 bits are stored per-instruction in
-> > insn_aux_data and bitmasks.
-> >
-> > prune_dead_branches() uses the computed constants to evaluate
-> > conditional branches. When both operands of a conditional jump are
-> > known constants, the branch outcome is determined statically and the
-> > instruction is rewritten to an unconditional jump.
-> > The CFG postorder is then recomputed to reflect new control flow.
-> > This eliminates dead edges so that subsequent liveness analysis
-> > doesn't propagate through dead code.
-> >
-> > Also add runtime sanity check to validate that precomputed
-> > constants match the verifier's tracked state.
-> >
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> > ---
->
-> Besides issues found by bot this patch lgtm.
->
-> [...]
->
-> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
-h
-> > index 4f492eaad5c2..0d797de30a3a 100644
-> > --- a/include/linux/bpf_verifier.h
-> > +++ b/include/linux/bpf_verifier.h
->
-> [...]
->
-> > @@ -1086,6 +1102,13 @@ struct bpf_iarray *bpf_insn_successors(struct bp=
-f_verifier_env *env, u32 idx);
-> >  void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
-> >  bool bpf_calls_callback(struct bpf_verifier_env *env, int insn_idx);
-> >
-> > +int find_subprog(struct bpf_verifier_env *env, int off);
-> > +int compute_const_regs(struct bpf_verifier_env *env);
-> > +int prune_dead_branches(struct bpf_verifier_env *env);
-> > +int compute_postorder(struct bpf_verifier_env *env);
-> > +bool insn_is_cond_jump(u8 code);
-> > +bool is_may_goto_insn(struct bpf_insn *insn);
-> > +
->
-> Q: What is the policy regarding naming exported functions?
->    So far I always used "bpf_..." prefix assuming that this
->    is a requirement, was I wrong?
 
-It's nice to have but not mandatory.
-imo the names are unique enough, so unlikely to clash.
 
-> >  int bpf_stack_liveness_init(struct bpf_verifier_env *env);
-> >  void bpf_stack_liveness_free(struct bpf_verifier_env *env);
-> >  int bpf_update_live_stack(struct bpf_verifier_env *env);
->
-> [...]
->
-> > diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-> > new file mode 100644
-> > index 000000000000..9e5abc6ab46a
-> > --- /dev/null
-> > +++ b/kernel/bpf/const_fold.c
->
-> [...]
->
-> > +/* Transfer function: compute output register state from instruction. =
-*/
-> > +static void const_reg_xfer(struct bpf_verifier_env *env, struct const_=
-arg_info *ci_out,
-> > +                        struct bpf_insn *insn, struct bpf_insn *insns,=
- int idx)
-> > +{
-> > +     struct const_arg_info unknown =3D { .state =3D CONST_ARG_UNKNOWN,=
- .val =3D 0 };
-> > +     struct const_arg_info *dst =3D &ci_out[insn->dst_reg];
-> > +     struct const_arg_info *src =3D &ci_out[insn->src_reg];
-> > +     u8 class =3D BPF_CLASS(insn->code);
-> > +     u8 opcode =3D BPF_OP(insn->code) | BPF_SRC(insn->code);
-> > +     int r;
-> > +
-> > +     switch (class) {
-> > +     case BPF_ALU:
-> > +     case BPF_ALU64:
-> > +             switch (opcode) {
-> > +             case BPF_MOV | BPF_K:
-> > +                     dst->state =3D CONST_ARG_CONST;
-> > +                     dst->val =3D (s64)insn->imm;
-> > +                     break;
-> > +             case BPF_MOV | BPF_X:
-> > +                     *dst =3D *src;
-> > +                     if (!insn->off)
-> > +                             break;
-> > +                     if (!ci_is_const(dst)) {
-> > +                             *dst =3D unknown;
-> > +                             break;
-> > +                     }
-> > +                     switch (insn->off) {
-> > +                     case 8:  dst->val =3D (s8)dst->val; break;
-> > +                     case 16: dst->val =3D (s16)dst->val; break;
-> > +                     case 32: dst->val =3D (s32)dst->val; break;
-> > +                     default: *dst =3D unknown; break;
-> > +                     }
-> > +                     break;
-> > +             case BPF_ADD | BPF_K:
-> > +                     if (!ci_is_const(dst) && !ci_is_map_value(dst)) {
-> > +                             *dst =3D unknown;
-> > +                             break;
-> > +                     }
-> > +                     dst->val +=3D insn->imm;
-> > +                     break;
-> > +             case BPF_SUB | BPF_K:
-> > +                     if (!ci_is_const(dst) && !ci_is_map_value(dst)) {
-> > +                             *dst =3D unknown;
-> > +                             break;
-> > +                     }
-> > +                     dst->val -=3D insn->imm;
-> > +                     break;
-> > +             case BPF_AND | BPF_K:
-> > +                     if (!ci_is_const(dst)) {
-> > +                             if (!insn->imm) {
-> > +                                     dst->state =3D CONST_ARG_CONST;
-> > +                                     dst->val =3D 0;
-> > +                             } else {
-> > +                                     *dst =3D unknown;
-> > +                             }
-> > +                             break;
-> > +                     }
-> > +                     dst->val &=3D (s64)insn->imm;
-> > +                     break;
-> > +             case BPF_AND | BPF_X:
-> > +                     if (ci_is_const(dst) && dst->val =3D=3D 0)
-> > +                             break; /* 0 & x =3D=3D 0 */
-> > +                     if (ci_is_const(src) && src->val =3D=3D 0) {
-> > +                             dst->state =3D CONST_ARG_CONST;
-> > +                             dst->val =3D 0;
-> > +                             break;
-> > +                     }
-> > +                     if (!ci_is_const(dst) || !ci_is_const(src)) {
-> > +                             *dst =3D unknown;
-> > +                             break;
-> > +                     }
-> > +                     dst->val &=3D src->val;
-> > +                     break;
->
-> Just curious, why does this function deal with `0 & reg` cases,
-> but not the e.g. `0 | reg` cases? Was it something that came up
-> during testing the static analysis?
+On 4/1/26 5:15 PM, Anton Protopopov wrote:
+> A typical series of load instructions for a gotox looks like
+> 
+>     r1 = &map + offset1
+>     r1 += offset2
+>     r1 = *(r1 + offset3)
+>     gotox r1
+> 
+> Here offset3 is, normally, equal to zero; but this is not guaranteed.
+> Extend selftests with tests for non-zero offset3 and, while here, also
+> add tests for negative offsets (the offset1 and the sum of three offsets
+> still have to be non-negative).
+> 
+> Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> ---
+>   .../selftests/bpf/prog_tests/bpf_gotox.c      | 114 +++++++++++-------
+>   1 file changed, 73 insertions(+), 41 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> index 75b0cf2467ab..594adf698fdb 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> @@ -317,7 +317,7 @@ static void check_ldimm64_off_load(struct bpf_gotox *skel __always_unused)
+>   
+>   static int __check_ldimm64_gotox_prog_load(struct bpf_insn *insns,
+>   					   __u32 insn_cnt,
+> -					   __u32 off1, __u32 off2)
+> +					   int off1, int off2, int off3)
+>   {
+>   	const __u32 values[] = {5, 7, 9, 11, 13, 15};
+>   	const __u32 max_entries = ARRAY_SIZE(values);
+> @@ -349,16 +349,46 @@ static int __check_ldimm64_gotox_prog_load(struct bpf_insn *insns,
+>   	/* r1 += off2 */
+>   	insns[2].imm = off2;
+>   
+> +	/* r1 = *(r1 + off3) */
+> +	insns[3].off = off3;
+> +
+>   	ret = prog_load(insns, insn_cnt);
+>   	close(map_fd);
+>   	return ret;
+>   }
+>   
+> -static void reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, __u32 off1, __u32 off2)
+> +static void
+> +allow_offsets(struct bpf_insn *insns, __u32 insn_cnt, int off1, int off2, int off3)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+> +	int prog_fd, err;
+> +	char s[128] = "";
+> +
+> +	prog_fd = __check_ldimm64_gotox_prog_load(insns, insn_cnt, off1, off2, off3);
+> +	snprintf(s, sizeof(s), "__check_ldimm64_gotox_prog_load(%u,%u,%u)", off1, off2, off3);
 
-right. rx &=3D ry is real sched-ext code
-where 0 in rx came from rdonly map.
+here offsets are int, but printed with %u.
 
-> > +             default:
-> > +                     *dst =3D unknown;
-> > +                     break;
-> > +             }
-> > +             if (class =3D=3D BPF_ALU) {
-> > +                     if (ci_is_const(dst))
-> > +                             dst->val =3D (u32)dst->val;
-> > +                     else if (!ci_is_unknown(dst))
-> > +                             *dst =3D unknown;
-> > +             }
-> > +             break;
-> > +     case BPF_LD:
-> > +             if (BPF_MODE(insn->code) !=3D BPF_IMM || BPF_SIZE(insn->c=
-ode) !=3D BPF_DW)
->
-> Should this reset r0-r5 in case of opcode is  BPF_LD|BPF_ABS or BPF_LD|BP=
-F_IND?
+> +	if (!ASSERT_GE(prog_fd, 0, s))
+> +		return;
+> +
+> +	err = bpf_prog_test_run_opts(prog_fd, &topts);
+> +	if (!ASSERT_OK(err, "test_run_opts err")) {
+> +		close(prog_fd);
+> +		return;
+> +	}
+> +
+> +	if (!ASSERT_EQ(topts.retval, (off1 + off2 + off3) / 8, "test_run_opts retval")) {
+> +		close(prog_fd);
+> +		return;
+> +	}
+> +
+> +	close(prog_fd);
+> +}
+> +
+> +static void
+> +reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, __u32 off1, __u32 off2, __u32 off3)
 
-great catch!
-codex and claude never thought of that.
+If offsets can be negative, should these arguments be int rather than 
+__u32, also matching reject_offsets?
 
->
-> > +                     break;
-> > +             if (insn->src_reg =3D=3D BPF_PSEUDO_FUNC) {
-> > +                     int subprog =3D find_subprog(env, idx + insn->imm=
- + 1);
-> > +
-> > +                     if (subprog >=3D 0) {
-> > +                             dst->state =3D CONST_ARG_SUBPROG;
-> > +                             dst->val =3D subprog;
-> > +                     } else {
-> > +                             *dst =3D unknown;
-> > +                     }
-> > +             } else if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE ||
-> > +                        insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE)=
- {
-> > +                     dst->state =3D CONST_ARG_MAP_VALUE;
-> > +                     dst->map_index =3D env->insn_aux_data[idx].map_in=
-dex;
-> > +                     dst->val =3D env->insn_aux_data[idx].map_off;
-> > +             } else if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
-> > +                        insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX) {
-> > +                     dst->state =3D CONST_ARG_MAP_PTR;
-> > +                     dst->map_index =3D env->insn_aux_data[idx].map_in=
-dex;
-> > +             } else if (insn->src_reg =3D=3D 0) {
-> > +                     dst->state =3D CONST_ARG_CONST;
-> > +                     dst->val =3D (u64)(u32)insn->imm | ((u64)(u32)ins=
-ns[idx + 1].imm << 32);
-> > +             } else {
-> > +                     *dst =3D unknown;
-> > +             }
-> > +             break;
-> > +     case BPF_LDX:
-> > +             if (!ci_is_map_value(src)) {
-> > +                     *dst =3D unknown;
-> > +                     break;
-> > +             }
-> > +             struct bpf_map *map =3D env->used_maps[src->map_index];
-> > +             int size =3D bpf_size_to_bytes(BPF_SIZE(insn->code));
-> > +             bool is_ldsx =3D BPF_MODE(insn->code) =3D=3D BPF_MEMSX;
-> > +             int off =3D src->val + insn->off;
-> > +             u64 val =3D 0;
-> > +
-> > +             if (!bpf_map_is_rdonly(map) || !map->ops->map_direct_valu=
-e_addr ||
-> > +                 bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
->
-> Nit: Similar sequence in verifier.c also checks for map->map_type !=3D BP=
-F_MAP_TYPE_INSN_ARRAY.
+>   {
+>   	int prog_fd;
+>   
+> -	prog_fd = __check_ldimm64_gotox_prog_load(insns, insn_cnt, off1, off2);
+> +	prog_fd = __check_ldimm64_gotox_prog_load(insns, insn_cnt, off1, off2, off3);
+>   	if (!ASSERT_EQ(prog_fd, -EACCES, "__check_ldimm64_gotox_prog_load"))
+>   		close(prog_fd);
+>   }
+> @@ -376,7 +406,7 @@ static void check_ldimm64_off_gotox(struct bpf_gotox *skel __always_unused)
+>   		 * The program rewrites the offsets in the instructions below:
+>   		 *     r1 = &map + offset1
+>   		 *     r1 += offset2
+> -		 *     r1 = *r1
+> +		 *     r1 = *(r1 + offset3)
+>   		 *     gotox r1
+>   		 */
+>   		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
+> @@ -403,43 +433,45 @@ static void check_ldimm64_off_gotox(struct bpf_gotox *skel __always_unused)
+>   		BPF_MOV64_IMM(BPF_REG_0, 5),
+>   		BPF_EXIT_INSN(),
+>   	};
+> -	int prog_fd, err;
+> -	__u32 off1, off2;
+> -
+> -	/* allow all combinations off1 + off2 < 6 */
+> -	for (off1 = 0; off1 < 6; off1++) {
+> -		for (off2 = 0; off1 + off2 < 6; off2++) {
+> -			LIBBPF_OPTS(bpf_test_run_opts, topts);
+> -
+> -			prog_fd = __check_ldimm64_gotox_prog_load(insns, ARRAY_SIZE(insns),
+> -								  off1 * 8, off2 * 8);
+> -			if (!ASSERT_GE(prog_fd, 0, "__check_ldimm64_gotox_prog_load"))
+> -				return;
+> -
+> -			err = bpf_prog_test_run_opts(prog_fd, &topts);
+> -			if (!ASSERT_OK(err, "test_run_opts err")) {
+> -				close(prog_fd);
+> -				return;
+> -			}
+> -
+> -			if (!ASSERT_EQ(topts.retval, off1 + off2, "test_run_opts retval")) {
+> -				close(prog_fd);
+> -				return;
+> -			}
+> -
+> -			close(prog_fd);
+> -		}
+> -	}
+> -
+> -	/* reject off1 + off2 >= 6 */
+> -	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 8 * 3);
+> -	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 7, 8 * 0);
+> -	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 0, 8 * 7);
+> -
+> -	/* reject (off1 + off2) % 8 != 0 */
+> -	reject_offsets(insns, ARRAY_SIZE(insns), 3, 3);
+> -	reject_offsets(insns, ARRAY_SIZE(insns), 7, 0);
+> -	reject_offsets(insns, ARRAY_SIZE(insns), 0, 7);
+> +	int off1, off2, off3;
+> +
+> +	/* allow all combinations off1 + off2 + off3 < 6 */
+> +	for (off1 = 0; off1 < 6; off1++)
+> +		for (off2 = 0; off1 + off2 < 6; off2++)
+> +			for (off3 = 0; off1 + off2 + off3 < 6; off3++)
+> +				allow_offsets(insns, ARRAY_SIZE(insns),
+> +					      off1 * 8, off2 * 8, off3 * 8);
+> +
+> +	/* allow for some offsets to be negative */
+> +	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 0, -(8 * 3));
+> +	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 3, -(8 * 3), 0);
+> +	allow_offsets(insns, ARRAY_SIZE(insns), 0, 8 * 3, -(8 * 3));
+> +	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 4, 0, -(8 * 2));
+> +	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 4, -(8 * 2), 0);
+> +	allow_offsets(insns, ARRAY_SIZE(insns), 0, 8 * 4, -(8 * 2));
+> +
+> +	/* disallow negative sums of offsets */
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 0, -(8 * 4));
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, -(8 * 4), 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 0, 8 * 3, -(8 * 4));
+> +
+> +	/* disallow the off1 to be negative in any case */
+> +	reject_offsets(insns, ARRAY_SIZE(insns), -8 * 1, 0, 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), -8 * 1, 8 * 1, 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), -8 * 1, 8 * 1, 8 * 1);
+> +
+> +	/* reject off1 + off2 + off3 >= 6 */
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 8 * 3, 8 * 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 7, 8 * 0, 8 * 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 0, 8 * 7, 8 * 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 8 * 0, 8 * 3);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 0, 8 * 3, 8 * 3);
+> +
+> +	/* reject (off1 + off2) % 8 != 0, off3 % 8 != 0 */
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 3, 3, 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 7, 0, 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 0, 7, 0);
+> +	reject_offsets(insns, ARRAY_SIZE(insns), 0, 0, 7);
+>   }
+>   
+>   void test_bpf_gotox(void)
 
-ack
-
->      Maybe move this to a helper function?
-
-it's not exactly the same.
-maybe later.
-
-> > +                     *dst =3D unknown;
-> > +                     break;
-> > +             }
-> > +             dst->state =3D CONST_ARG_CONST;
-> > +             dst->val =3D val;
-> > +             break;
-> > +     case BPF_JMP:
-> > +             if (opcode !=3D BPF_CALL)
-> > +                     break;
-> > +             for (r =3D BPF_REG_0; r <=3D BPF_REG_5; r++)
-> > +                     ci_out[r] =3D unknown;
-> > +             break;
-> > +     case BPF_STX:
-> > +             if (BPF_MODE(insn->code) !=3D BPF_ATOMIC)
-> > +                     break;
-> > +             if (insn->imm =3D=3D BPF_CMPXCHG)
-> > +                     ci_out[BPF_REG_0] =3D unknown;
-> > +             else if (insn->imm =3D=3D BPF_LOAD_ACQ)
-> > +                     *dst =3D unknown;
-> > +             else if (insn->imm & BPF_FETCH)
-> > +                     *src =3D unknown;
-> > +             break;
-> > +     }
-> > +}
->
-> [...]
->
-> > +static bool eval_const_branch(u8 opcode, u64 dst_val, u64 src_val)
-> > +{
-> > +     switch (BPF_OP(opcode)) {
-> > +     case BPF_JEQ:   return dst_val =3D=3D src_val;
-> > +     case BPF_JNE:   return dst_val !=3D src_val;
-> > +     case BPF_JGT:   return dst_val > src_val;
-> > +     case BPF_JGE:   return dst_val >=3D src_val;
-> > +     case BPF_JLT:   return dst_val < src_val;
-> > +     case BPF_JLE:   return dst_val <=3D src_val;
-> > +     case BPF_JSGT:  return (s64)dst_val > (s64)src_val;
-> > +     case BPF_JSGE:  return (s64)dst_val >=3D (s64)src_val;
-> > +     case BPF_JSLT:  return (s64)dst_val < (s64)src_val;
-> > +     case BPF_JSLE:  return (s64)dst_val <=3D (s64)src_val;
-> > +     case BPF_JSET:  return dst_val & src_val;
-> > +     default:        return false;
->
-> Do we want to validate that the above are the only opcodes possible,
-> e.g. in patch #1?
-
-I felt it's too much defensive programming,
-but, on a second thought..
-will return -1 and deal with it in the caller.
