@@ -1,192 +1,163 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E973D31715F
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 19:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775070447; cv=pass; b=o0Q3dBGdsvqLj+VPNRjYhJ0Mq417uy2X5PQN7t7GVuwiUSqh08sRgCNr4niV59PunhmfRxYheO87FtwTYPTouP+Io+/WjYcqcxeK3PdlfBfphD89ZIisQkdpRSgAgdF357WFmK+eMk6ne0Clt44S/WrEgUJ15qUPkJLMQWE8C7g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775070447; c=relaxed/simple;
-	bh=oPmpGJgra+J/X4ds4wcUHLxA6Eg7GvkHp+DXASeWwJc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nb2bGhrOw5rLkWxnpyhgeMKbfj9pu/AWn991L+nmHLCf/55RWmJtemKeRL5jROIYWdgReqk2PVcMtNekRIQuRfQH/1GzPASG1lRh0/3MeRP9SC9UQNjuWld3ol5kpEVB11PmJdL3PwsVMG8ynigp8JaHVGFlAruIMvIXzZAxhf4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a1//AZe5; arc=pass smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB1A47DD58
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 19:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775070506; cv=none; b=pSoailO5ywgJtYeN++W/YxeQcLR6VWd+B/qe67mCLGQQ/LoJpMz4A3IlgzOkBarIHfHVLZipAUfP3Hb3W0HfU1GqTGYzsMcEXwqxcGz3s2X4MHknPhWo4rPMMKau9Cy/e0ZcztSo+s2d1EVCwfBqYofcaKDtb0Ux36G5JrQSts8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775070506; c=relaxed/simple;
+	bh=D0w8JR3OU7Za/9RyF4NM2qbAJQQDMQfpQpdp19t3HmQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AxGVeJwAB2LB7LsAvgLsmO1I/qXe/XhmHhF9ivT8Q5oVPvQswPUdmn6u7/a+okCCnXJlymeojeOjQETTPR2FTmsvWz4dPbRdtNwTwvJ5PPjhcvrfq9X/d/XcWBVqYMX0L5Rg5nW0Lz67Mqrr8A0cas9NrVElerAjD95AkZxqMO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gCaTgogx; arc=none smtp.client-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a1//AZe5"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b982d56dac4so11204766b.3
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 12:07:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775070444; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QxNB0KMKMEsY5Uzh9pz3qz6y8WJGCgF4L+guRRbHRu2R5EFKvBXKDSLSM4qdIWMxPt
-         KCJ4au0glpTB3EcaEQ4fuS/cH0L8TQdAIm1AibVf0ppkvO3mMPT8dEvvTkzJ8x929Umy
-         vJY+Uwhd5Azplr1Nn6UFR3RLF1MNHNSTl4FSnwCOSmL6+ymhz4TTs4uHadYHrRuaOVrt
-         WQqzqxnB/QfsGRDB4Y4NzNJsF/hEoz9eXraYoHxRPqSskNngjQXoQ4CsEaHdBbkwFAoT
-         dN6yAo1sxSYYqdcwOKgrkshkHIUQ4StXBaiIh2tkT4LJ01uPqLF+ldopRLMGNcxe00cU
-         PB+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
-        fh=CyYR0A8UYPV7vG1fj87gUb0Dhg6dGwjJci+W33Y7OC8=;
-        b=G10WZ7DrIl6kbrJ0SYUj3yXvWaTq5rvC9Mew4y41vH3gV7cjE1DQfTGDBZebd+aRTB
-         19McSiZj37Q9ho1jTL/Cml15zZfNCemjmTHnHkCryUVlRi8nltFVZWHPNDvBDBSa5CjQ
-         HdzxwduLHYfYWmzADPEVQFKEWknCFWMj+M7X24DTM1Anv8dFsfdrianPMBeCj6D7dpOH
-         +Gm4U2Nc53Xtg0h/gzFuopYx3eQ21BpzSGksGogiC1TVe80Exd0ueM1iY3U9QHTioriU
-         VzawHnO4D4DJFdy+66O7Qj+3+PU3wdE5sr7nQizmEvcJv3UNQf3yMJJPy+ZNbcpsU3EN
-         iXOg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gCaTgogx"
+Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-1273349c56bso239155c88.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 12:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775070444; x=1775675244; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
-        b=a1//AZe5DdgS5fEZq0/0QEqk9mG6WFqo1M2mVCPIGwJratfVF9Q8YNqsXDe1cUWJax
-         fsuZz6klosQzCNo9xAyYm3I1UogQscr6pdkjOPiNqV4//KkaFAj90Sm5wF5p2I27SLCb
-         aQcLgWyAXcEZjyAknqF176bxnWUWElv1qfbL+4lqrCKOCdMejByVmHZTb9qYr9fyiFly
-         c4yarJIxvfSV96KdkRV6sIVyDg8aalM9zaMEXYjhHTnwwWGJl6ZuMT0sghhzAHb2OkMZ
-         6sDqT6BulxNVCVECJVB09GPwU0xos9b3u+D0FOtstJidKEivN2T0LfuTJAKj5YkwEl2h
-         otRg==
+        d=gmail.com; s=20251104; t=1775070505; x=1775675305; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A3ab/iiGCmE4MuEkob3dAyeKEJiYiNNjinBJ0RlkEeM=;
+        b=gCaTgogxQQButansowav/1ZloN1v6phvlibma1K7eLO9wJIz34Qz6VH+8g9Zac3tOj
+         lUDydnHywpdsn1GB7dL4j/3YcF9h9P1kReuJv2gugrVNyD3OzA4JzKUgpOTutIji32Bz
+         112sYNba9LnNMxlDBSp+2OYwluGWgIwDXvMUSJ+7L7rkE2L/yO1vdLw0vkw1uw8IRTEo
+         jZDhFUiP9QnOrZmTLR9+HBrBDHJ6NPSiQce5/XlO0iNjKIIDo4ozdczi1nOF5h081rXL
+         7LBw0tXpEmI9+6M5MGQ1e6GFYDECBfTJS29RInoclPy73ASdcHkl5ocKHjh+/cFbyD8c
+         u4MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775070444; x=1775675244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
-        b=rr485SDUjv2UiOvquyHWHCfKlcsvtZqiNHkhtsGj+gH+0BNyKwrgpAWCh30yfkk2ZX
-         uvk6hEtpYlZgYu8H0F7YStCdRplqGWxnnWc83cEpF7zckGQxw4nLXjSgIgNcPTlIIWC6
-         Kn2xDFZ05cKplwQxLvG3CQH0OsuGa+L+JyOBUYtMM2sii/PNBF9mJ54ZDq6paoA/yGuk
-         lBoR4dEtb1MhI+Pbv/V3/3NeZ2gK0DsUBW/kgq3nQ6veAkNjDMd6Se4wVrdDxdJJlxhn
-         Bpc3B9mRtUMalzd/0BvjwYQvo+tnITwUT7dpanWwxe73V10TgudE6EMGHHI7ROych3MT
-         2v5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUKCeVcIJDoWP8GehDzQOhMRFJ+iU1Pss+AGZil8GJ8QOmMbNm5/AwNwh5ZXld8PuDXDWk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxzWodgKJStBiuyX/e4wKTsN9ulFnk0upDmk8GJhJM5B3YY95G
-	jd+5te766tRGqDqWtFM+Z6wjGiFnYyMIQ7RQEVuflNskkS1MfGk3SmXCQ/WeT9KI+A1SZOvSkqy
-	dQQOb1ajMXge3tb3JNWb4PDS0EPdYCAVF91scCJOS
-X-Gm-Gg: ATEYQzzT8g1UqsYiHA2sQJjIHvKobTHCACaiEJ2CO/N7mP+OsN6rel/5CJjWjc4Yjdv
-	Bo2IRZmnLeD56qlxt0C1Q704BLSRHbPOSMvzML0ZhivVba5ec39JG+G92tnPLNyeOkEoOWZpuxx
-	qDDYwCOUIEYL66mjS2x8nc4CTR1dj+r/ym5gbMKe80AdQqWA2tIEw6PlI0goevH9sZl/axFvN6n
-	pOs4F7TFo83uSRACX49IbYiynFMhmXzHS+gXp6NLDgsVUOSAUY/ArIIuyEkqG5oGftoO4HDCVeL
-	EHPFQoIAWdOFgRYxoeCzrN8kkK3Zl9EtG5LnRQ==
-X-Received: by 2002:a17:906:194a:b0:b9b:e5d:71df with SMTP id
- a640c23a62f3a-b9c1390345cmr238853766b.19.1775070443780; Wed, 01 Apr 2026
- 12:07:23 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775070505; x=1775675305;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A3ab/iiGCmE4MuEkob3dAyeKEJiYiNNjinBJ0RlkEeM=;
+        b=EDN6tCKUcwk8CA41y4cHV+xXXoWeEXvOlzfDJwEHHBIhgDCvxu0vXEVizn8yGoOeYu
+         F8RkptcF4I4WhmmCq8WuPLDOtaOgYTolLt9wXlCtuvxuyt8iWabwtX+/0IiFb872wuSv
+         wu7+hoyuWxcaCdBjiIeT5l0kcn8DsBNztK4Xjb7D3eXcwY5F1AybdXUlJeTajlsK8vCm
+         5VPezGS4pNNBC+iU/JDDQ4PkfRzCrvvhJeYoI0GIWrryPhujgypAifcJmGzouPZgswrB
+         YlTZysRaXRnJC/708g06+OxeGYhcwFgOGDqCcdGpHNO9h7tvhMlwElFDNTIcoQfORkt8
+         NaNg==
+X-Forwarded-Encrypted: i=1; AJvYcCXY/Q0rEbwtuo8HL6jHu2da9/Pn3wRf74K7YLOM5ejgBNklVZFSXl/2lx/sYK6FEIfDoFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWsYXIAgHtEQfcfJ4fK/GLIjLsk989ZREzi3wz6OX7cem3BSgG
+	G9me6T28/nO0EMDtxHOunSWhSrykAnmdtdomYfmh7neZHPuadnvvA4J/
+X-Gm-Gg: ATEYQzww93iP214O5cBm/uxsTqbyczfvkrlWTy66QjgFR6jLuewkwarQdI/xR6IwU4x
+	PUfEXIMF4aBYy/iSybcrKHgX2QMBtAiTBa2JQJtQnXorOJb1ziGb0HZgoTpLue4eISEuXmsu8lR
+	TC21LiPMZ0l2b93OjH9bO4U7IM26Eq6bFdC3OQd8XxtHEaSeCqKiP+cIDqdrk0z6hEVempxRbhp
+	bA8RLyCTbvcLrJ02VVP3jZRfUvRMG+gtAJ1xZIAp54H8J6yE+pR2EyrImvYidwLgKdD9/C/S/GV
+	q5Wf84hcei+55FTNLsueOrkVzva7Zwff4W4mBktWJRhfb91V7y9LaYLLl5mlxfXuEXJrhaS6yHf
+	6Rl6ZyGdarb4RPY147G8YUYxOgmfPZdT0Divq+vGTk0bc4RUsRoIO0atDMaAZKFZ/bkOuE0IZOQ
+	rJS8MWpw1hgY+lpYKJdXmbicPz8/uuAptw1cUqX80G29gLkNrGcLcnu3sKRkTeKa11tNBNQq2oA
+	PbJ1i4u
+X-Received: by 2002:a05:7022:2508:b0:123:2d38:928e with SMTP id a92af1059eb24-12be653cdf3mr2430885c88.35.1775070504488;
+        Wed, 01 Apr 2026 12:08:24 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:7aba:8184:a91b:bf1f? ([2620:10d:c090:500::3:f883])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12bedd920b9sm477035c88.8.2026.04.01.12.08.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 12:08:24 -0700 (PDT)
+Message-ID: <32efe62013c49a332fc1c6ae6e4690a2f271b92f.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 6/6] bpf: Add helper and kfunc stack access
+ size resolution
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
+	memxor@gmail.com
+Date: Wed, 01 Apr 2026 12:08:22 -0700
+In-Reply-To: <20260401021635.34636-7-alexei.starovoitov@gmail.com>
+References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
+	 <20260401021635.34636-7-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331153413.2469218-1-wusamuel@google.com> <2026040136-ocelot-simply-8981@gregkh>
-In-Reply-To: <2026040136-ocelot-simply-8981@gregkh>
-From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 1 Apr 2026 12:07:12 -0700
-X-Gm-Features: AQROBzDAv1zFg2qxt-3Ch7XBslSJIDWmAx0yiNuGqnKyk-N-jI_iMZvmNf44ICs
-Message-ID: <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 1, 2026 at 2:15=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
-> > This patchset adds requisite kfuncs for BPF programs to safely traverse
-> > wakeup_sources, and puts a config flag around the sysfs interface.
-> >
-> > Currently, a traversal of wakeup sources require going through
-> > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to qu=
-ery
-> > sysfs is inefficient, as there can be hundreds of wakeup_sources, with =
-each
-> > wakeup source also having multiple attributes. debugfs is unstable and
-> > insecure.
->
-> Describe "inefficient" please?
+On Tue, 2026-03-31 at 19:16 -0700, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>=20
+> The static stack liveness analysis needs to know how many bytes a
+> helper or kfunc accesses through a stack pointer argument, so it can
+> precisely mark the affected stack slots as stack 'def' or 'use'.
+>=20
+> Add bpf_helper_stack_access_bytes() and bpf_kfunc_stack_access_bytes()
+> which resolve the access size for a given call argument.
+>=20
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-Ack; I=E2=80=99ll provide a more detailed breakdown in the v4 cover letter.=
- To
-summarize: the "inefficiency" isn't just the number of sources (150),
-but the fact that each source has 10 attributes. We are looking at
-1,500+ sysfs nodes to get a full snapshot of the system.
+(Please see below, I think a few cases can be slightly improved).
 
->
-> And if you really think that doing an open/read/close on a virtual
-> filesystem is inefficient, then I have the syscall for you!
->
-> I've been trying to get readfile() accepted every few years, looks like
-> I last tried in 2020:
->         https://lore.kernel.org/r/20200704140250.423345-1-gregkh@linuxfou=
-ndation.org
-> but I keep the patchset up to date in my local tree all the time.
->
-> Would that help you out here instead?
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-`readfile()` seems like it would be a great optimization for many
-usecases, but it doesn't solve the context switch bottleneck.
-Additionally, current userspace implementations attempt to speed up
-this traversal by caching fds, so this new syscall wouldn't help as
-much as one might initially expect.
+[...]
 
-> > Adding kfuncs to lock/unlock wakeup sources allows BPF program to safel=
-y
-> > traverse the wakeup sources list. The head address of wakeup_sources ca=
-n
-> > safely be resolved through BPF helper functions or variable attributes.
->
-> Who is going to be calling this?
+> +s64 bpf_helper_stack_access_bytes(struct bpf_verifier_env *env, struct b=
+pf_insn *insn,
+> +				  int arg, int insn_idx)
+> +{
 
-BPF programs call the new kfuncs. I realized I left some stale text in
-the v2 cover letter regarding the interface; I'll clean that up for
-the next version to make this point clearer.
+[...]
 
-> > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
-> > speedup (sampled 75 times in table below). For a device under load, the
-> > speedup is greater.
-> > +-------+----+----------+----------+
-> > |       | n  | AVG (ms) | STD (ms) |
-> > +-------+----+----------+----------+
-> > | sysfs | 75 | 44.9     | 12.6     |
-> > +-------+----+----------+----------+
-> > | BPF   | 75 | 1.3      | 0.7      |
-> > +-------+----+----------+----------+
->
-> 150 sysfs calls in 44.9 ms feels very slow.  but really, what are you
-> expecting here, sysfs should NEVER be on a "fast path" that you care
-> about performance.  Why are you hammering on sysfs here?  What HAS to
-> have this type of performance?
->
-> In other words, what problem are you trying to solve that having access
-> to 150+ sysfs files all at once in a faster way is going to fix?
+> +	case ARG_PTR_TO_MEM:
+> +		if (at & MEM_FIXED_SIZE) {
+> +			size =3D fn->arg_size[arg];
+> +			goto out;
+> +		}
+> +		if (arg + 1 < ARRAY_SIZE(fn->arg_type) &&
+> +		    arg_type_is_mem_size(fn->arg_type[arg + 1])) {
+> +			int size_reg =3D BPF_REG_1 + arg + 1;
+> +
+> +			if (aux->const_reg_mask & BIT(size_reg)) {
+> +				size =3D (s64)aux->const_reg_vals[size_reg];
+> +				goto out;
 
-The 44.9ms is the cost of reading ~1,500 sysfs nodes (150 sources * 10
-attributes). This is even worse on wearables, where the compute and
-power constrained platform exacerbates performance sensitivity even
-more.
+if `at & MEM_WRITE`, I think it would be correct to `return 0;` here.
 
-On these platforms, the CPU is suspended as much as possible. A
-byproduct of this is that the wakeup source traversal occurs on a
-user-perceptible path, which impacts battery life and UI
-responsiveness.
+> +			}
+> +			/*
+> +			 * Size arg is const on each path but differs across
+> +			 * merged paths.  512 is a safe upper bound for reads.
+> +			 */
+> +			if (at & MEM_UNINIT)
+> +				return S64_MIN;
+> +			return 512;
 
-Beyond the performance improvement, moving to BPF offers other benefits:
-1. Reduce Memory: Drop the fd caching logic
-2. Simplify Security: Consolidate SELinux permissions rather than
-managing labels for every single *possible* wakeup_source
+Nit: `return MAX_BPF_STACK;`
 
-Thanks Greg!
+> +		}
+> +		return S64_MIN;
+> +	case ARG_PTR_TO_DYNPTR:
+> +		return BPF_DYNPTR_SIZE;
+> +	case ARG_PTR_TO_STACK:
+> +		/*
+> +		 * Only used by bpf_calls_callback() helpers. The helper itself
+> +		 * doesn't access stack. The callback subprog does and it's
+> +		 * analyzed separately.
+> +		 */
+> +		return 0;
+> +	default:
+> +		return S64_MIN;
+> +	}
+> +out:
+> +	/*
+> +	 * MEM_UNINIT args are write-only: the helper initializes the
+> +	 * buffer without reading it.
+> +	 */
+> +	if (size > 0 && at & MEM_UNINIT)
+> +		return -size;
 
--- Sam
+Same question about MEM_WRITE here, might be possible to `return 0` in
+some cases.
+
+> +	return size;
+> +}
+
+[...]
