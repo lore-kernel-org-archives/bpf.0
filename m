@@ -1,205 +1,167 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434FC35BDA8
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 12:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E492ECD1D
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 12:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775045525; cv=none; b=ILjn7z537EUqWgTph34tYxs7MTKb4m7WSK293zFAinKHgHivMk7aTwuuKZSiljlZa8ugZf+QQoogh03H+Cdi/4YlBhiWiug1zDZjdiwe1cTl+8+G+m3kVjhkkBLZ2Yk8rjlkM5c+Z419AIHdDS2OsJcA1B+/UZtF0vDK+O5YlMY=
+	t=1775046081; cv=none; b=QxY30vk/J89yMDikjAY6Xk9neH/mDmtpDClNJkUU7o1pneHtEGSNyWzORAQ5fABRrCTjAd/NM6vnCtVYg0QtQO/Pa55zlc9US58ZdFvSNyubCrzwFYTXiHnqAbgft5r016kxRGIqhJzP59ho53FsL99VSwKUvJlcnwaOeTyESos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775045525; c=relaxed/simple;
-	bh=RRbaxAYXdv2fiqKy2vJkyf1F8zK3ArPwza9TbqSNda4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f4aHofS6RFBcJ4TeuMEWP5RPKDVZrtT1HsaQOM0727cSRfdsflQASmD+o5XHySVEtm7MtS+WHla3YkmaVDct1gw6EA539WoUu3aCoNazEqyG08IIuvf+GxnkG+OtDwtyHH8pc0gym0a6gvGjZ0HVpZ2jQj0EIuJ2XQCTsoN3ltw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RwfY36we; arc=none smtp.client-ip=209.85.128.54
+	s=arc-20240116; t=1775046081; c=relaxed/simple;
+	bh=TVi9AXhLMPnTnGyLiKcf0IUsC1dU0rVXFtU4+M4Kcd4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eWKsXMUFy37hmCl1lt1KtywQKiXhN8ov3697O+mGAWzfvhbi5X2WaKbxGft3y13ly72fIvt213ZUDNXvLWdIvJqytQwYDePF+eaiaRoiptLfUV+KrR07c1hbB1+3DX0fvqxcO3Y41SV7Qt/oJC+RK7UjhoaEbCzGLYhHzO13V5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NhL2W+Xi; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwfY36we"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48700b1ba53so62865175e9.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 05:12:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NhL2W+Xi"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43cf8d550bdso3056740f8f.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 05:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775045522; x=1775650322; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xA8xkB+x68FQ2GGpQjIcEOEvx2XB1iVTerDmhnNuTjY=;
-        b=RwfY36weLstqHNFD5sXJSP1AB1LTuVmueLvSJhXPayrhWbwq68z/wEzMhV4c1dAn2p
-         lX4yxZoRTfeoLfVy5SFes12OQ5NTDHloZj6fvQ6CQNH0Uqo1kbOYPD5b8uNBzVuQxwEj
-         zw1kxcpaCOy1f+dD1aibwdlq5zk6sr3H0TOG9+eQSjFfakYD0AmOZL5o44gxy1Pq/zUA
-         TZb2JGi3QIp7g7nC0lpfn/9OK2x4VhFhlyj6wGIwOgbYyIyV4KCNtJmy/EKLRQEL6ssK
-         NlzZq9EdRcZ0h3rfNX2BR2Lw9G71uT00LMB3OvoA6RqLCmTW0dgMqrRr1sC3BeM76rTN
-         NZ2w==
+        d=gmail.com; s=20251104; t=1775046078; x=1775650878; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AMiw21os2snzNIGKTIgB9VuujhFz0NgidhbOk6QUkhY=;
+        b=NhL2W+XinW/EyVbKZhJKPvSDi4qO6V6JIkvAi/e2hGqdNtB1WiPwgPjJ1N5bqaA+2g
+         dDq18v0K2bp2spIC1syX/mAIx+Jlq/wU8zQmD7vmBCO4++BiLoHYzuyUli27VVtaxGdK
+         wBBjMOve3TeBQnNb3zTQ53ru+Zk15ctF80vCdDHQteSzfaEeWxH4RhBePIFOaV3EBo7d
+         nkIGAyxsrm3ohlGi2aQV3mXH7MxQfRj6sfOB46vXHZOxuxCZXcNwBybzkksxUF3yKpOf
+         6NrHfXlaaAGAKK2XDdeJrCvF6crweAbh8ZkiwkzFINeuUqbtsIgiv6wnvKpfmp9IUjOd
+         hdfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775045522; x=1775650322;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xA8xkB+x68FQ2GGpQjIcEOEvx2XB1iVTerDmhnNuTjY=;
-        b=HAhWP/ao1hzDbLhvPr5F6kf7+AJoL92mt/AEIu36iYDN9e4Z3bwpnVya3J7VvBb4jp
-         s8aqdP+yNPFJCiupA5Spr+3RpHhoUHJ9GCOWG51jKHp3u2CdPprNylLwmRp2yk549sTp
-         hvEntsMr34i2THA8CtcU7MP1+Pa/+DrZFFhAtROx0LNGThQPuXwCcmgW4I19EQ9gYeRw
-         +R89cLjDVgYeN9oPoCVmr+OIotD4MnvyPCbX0tpcXLeEHnFJed/J9yeTfmsBV8x7ruO4
-         zPu5Gh/0+hlxIV6p35OaQ5FOkpgINHPhYMvYHGeB/HKikqlYNxUKgcpbhCc+USJA/TLY
-         oUEw==
-X-Gm-Message-State: AOJu0YwkC0v60Dmql7gckm3MR15GW1hFna7ZNHAjw/XanNgWXSVmFuPf
-	TDFaYa0ZdHxozrnITp4eo64/z1TsLvmXOqOVLZrCfbDmUGFgJvW1itdh
-X-Gm-Gg: ATEYQzxCErIMr99/ZbzY9ydJivD7fksrLXSeyVxKJPbP5He8oRR5kHDuN2nG2ywSZ89
-	pMFOju784WekZCDpR68hYy1H+KE7hgkPd5AbUhtTAN3UMqkGasG/hwv+ctYnFf+33+3c1Ntj0qr
-	BDhuDZC0KAprQLjepnzhDi+nWS7HUFfh+FT3giIP9OXLtfOW6jGphX6WLJnUUmO2mpfl3zmAlXw
-	m85sa0TTCkobRzjyC3pT79Ji4zzORyosBcB4xO9X8oXmvYFACmVs95gY9B1xrpY7vtnAuGBTJwR
-	+UeJFjmSACoXVVD9+8Elkx+T0D/gkXU1pAB8F8e+oflm9Ce1WOGZKfAxlehOwPZfU/fPRgZhjhC
-	ejwZC3rcLvx/YLLV1O1d5gD5802P5ATQGVFL8RwQaZKoWqZN+B4x4Gd5g4C9BSEU6LxKXZ/ZpsR
-	pXDz5410eCdJY97lQ1kevL7PtnViU3bL+qLRbVP8sEmHWVrz/ldPOakjyHlbA2
-X-Received: by 2002:a05:600c:4f53:b0:486:fb5c:3b20 with SMTP id 5b1f17b1804b1-4888358be65mr54013995e9.13.1775045522266;
-        Wed, 01 Apr 2026 05:12:02 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:ff4a:fb29:5217:3697? ([2620:10d:c092:500::7:b4a4])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e86ecf6sm119318805e9.14.2026.04.01.05.12.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Apr 2026 05:12:01 -0700 (PDT)
-Message-ID: <3236c8a4-66fb-4db9-9a14-c7aaf519e73f@gmail.com>
-Date: Wed, 1 Apr 2026 13:12:00 +0100
+        d=1e100.net; s=20251104; t=1775046078; x=1775650878;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AMiw21os2snzNIGKTIgB9VuujhFz0NgidhbOk6QUkhY=;
+        b=WQ+HKrJBKiwoJKXT59VVz6iL5ByTWIr+Jia8Cg1Pn0hvzfTn0FGWKtSoUnyGevw4j9
+         xoQjPxZBzc1OvLM4nF6iJH7FtN/vIVlL2wQtPmELSH3TY+TsA/rDZUSR9BBkzAlQQ+is
+         ZkGIf+4mpfzloZ+Ep4H/paf77/KbL+wTG1ZmdnEPUg3AbO81ha4QccuqNL10Yuia1iXp
+         Fwp2f3ahDCvUrkzy7PDRuucIpzOk+Iiu/M9OpCQe9zkJgg7WNzFm9ZGZ/Ok/RRAXLMS+
+         FFU03IblEstS501vb3XBvySQiX+iTI5ZaxIad08e8qyWv48x5wUVI1gtBdY/8DsdIp43
+         G4bA==
+X-Forwarded-Encrypted: i=1; AJvYcCUR/F9Q5Gz7WCTxtz+sJVO1mdBKtDuBdrQO8BohxQnp+TJ/lbXIEMgSYPgCixzyDsav9mE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQXJRpdpozQj/Ne+l2hBWmPZsonnUIEzoGSh+QP8aDDqxADtfx
+	kewRqJHXYDDbCEWIkGCWj5pu4eS+stXVrNNSYFoDOcIHK2/gFlcxz2t3
+X-Gm-Gg: ATEYQzyAd2Zc7iOt4Da5/cObJneadERjE8pfX9UXGOjafkxXpFBuULCy/mryCoHRZpX
+	LvmgGFSPygB6kh5aEcyuGi3F10wtRokXCbUxkRX6stcgtVoSHnJpOccukWXcnoN1S2bI1YfA2n0
+	EbsKPNrqv/Qa5QMRJ0W5aAxvXBJHg1Jw9YfyZuOwXp0galkAKnJt4ijGY6SuX3bXOSAZ98LcT7K
+	URY/bF8qb3QInEiWJfNBqYNf46I4SByuxXQ4/7pxgzHwSCHCq3mBR7+6cZXIqKs39ANgPqbnjIr
+	FEBob/Yxq1V06g7TFq4eG6TJSTMPEZbQ2+KyYsIi2KditQNB44NW/i0AJY8nkD+PA9MY3FnaUic
+	xxZawSvjm4YnQ81cKjg0YfHmH+U6aYTTiE86vToO6aQSEGoAQ0M9gRfw1RPERgVKoxcZ6ZT0ddH
+	hhEf601cq8ii2u7bA+eRpwyDqcYdoXobTi9kOEE/5b235nEpnANOEJ07uNaOttgGS50aUdBFAdg
+	0sdGHdNRIuX8ug+QwRSN9qq1tvyVWZFdXLOVkGHaLqtDK5Z6IN8bu32TdQS7mJ4ivQHpJhob22Z
+	DZU9b1xxQa3Zv1wGb4iNA8gU+6ZWVuN5jE7COXQcX75AVCbffoVKkA==
+X-Received: by 2002:a05:6000:1a89:b0:43b:436d:77f6 with SMTP id ffacd0b85a97d-43d150d62f1mr6681399f8f.37.1775046078066;
+        Wed, 01 Apr 2026 05:21:18 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e0077853c1cf79fe628.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:7785:3c1c:f79f:e628])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21e26basm33049409f8f.3.2026.04.01.05.21.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 05:21:17 -0700 (PDT)
+Date: Wed, 1 Apr 2026 14:21:16 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Subject: Re: [PATCH v2 bpf-next 3/6] bpf: Exit early if reg_bounds_sync gets
+ invalid inputs
+Message-ID: <ac0NvOIc7AhifyNM@mail.gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+ <704bf39f66a98877f66a4982c77cddb42f14fc82.1774025082.git.paul.chaignon@gmail.com>
+ <ed85ac25cd315ac4273de335943f9f3a2c1f36e8.camel@gmail.com>
+ <CAM=Ch053GkzkXGxNbfE6Xo=bcR0di_DraDPLP-6y+YJ2rQ3DDg@mail.gmail.com>
+ <54d5347331905486d367542613b71b09fd81134c.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v8 5/6] libbpf: Add section handlers for
- sleepable tracepoints
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, memxor@gmail.com, peterz@infradead.org,
- rostedt@goodmis.org, Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260330-sleepable_tracepoints-v8-0-2e323467f3a0@meta.com>
- <20260330-sleepable_tracepoints-v8-5-2e323467f3a0@meta.com>
- <CAEf4Bzamw99OPiELzGysyYe-=Hq28-K_Q7n9Mkwf3kkQ11LHzA@mail.gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAEf4Bzamw99OPiELzGysyYe-=Hq28-K_Q7n9Mkwf3kkQ11LHzA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <54d5347331905486d367542613b71b09fd81134c.camel@gmail.com>
 
-On 3/31/26 10:21 PM, Andrii Nakryiko wrote:
-> On Mon, Mar 30, 2026 at 3:20 PM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
->>
->> From: Mykyta Yatsenko <yatsenko@meta.com>
->>
->> Add SEC_DEF entries for sleepable tracepoint variants:
->>    - "tp_btf.s+"     for sleepable BTF-based raw tracepoints
->>    - "raw_tp.s+"     for sleepable classic raw tracepoints
->>    - "raw_tracepoint.s+" (alias)
->>    - "tp.s+"         for sleepable classic tracepoints
->>    - "tracepoint.s+" (alias)
->>
->> Update attach_raw_tp() to recognize "raw_tp.s" and
->> "raw_tracepoint.s" prefixes when extracting the tracepoint name.
->>
->> Rewrite attach_tp() to use a prefix array including "tp.s/" and
->> "tracepoint.s/" variants for proper section name parsing.
->>
->> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->> ---
->>   tools/lib/bpf/libbpf.c | 39 ++++++++++++++++++++++++++++++++-------
->>   1 file changed, 32 insertions(+), 7 deletions(-)
->>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 9ea41f40dc82..a353dc7a4d41 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -9982,11 +9982,16 @@ static const struct bpf_sec_def section_defs[] = {
->>          SEC_DEF("netkit/peer",          SCHED_CLS, BPF_NETKIT_PEER, SEC_NONE),
->>          SEC_DEF("tracepoint+",          TRACEPOINT, 0, SEC_NONE, attach_tp),
->>          SEC_DEF("tp+",                  TRACEPOINT, 0, SEC_NONE, attach_tp),
->> +       SEC_DEF("tracepoint.s+",        TRACEPOINT, 0, SEC_SLEEPABLE, attach_tp),
->> +       SEC_DEF("tp.s+",                TRACEPOINT, 0, SEC_SLEEPABLE, attach_tp),
->>          SEC_DEF("raw_tracepoint+",      RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
->>          SEC_DEF("raw_tp+",              RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
->> +       SEC_DEF("raw_tracepoint.s+",    RAW_TRACEPOINT, 0, SEC_SLEEPABLE, attach_raw_tp),
->> +       SEC_DEF("raw_tp.s+",            RAW_TRACEPOINT, 0, SEC_SLEEPABLE, attach_raw_tp),
->>          SEC_DEF("raw_tracepoint.w+",    RAW_TRACEPOINT_WRITABLE, 0, SEC_NONE, attach_raw_tp),
->>          SEC_DEF("raw_tp.w+",            RAW_TRACEPOINT_WRITABLE, 0, SEC_NONE, attach_raw_tp),
->>          SEC_DEF("tp_btf+",              TRACING, BPF_TRACE_RAW_TP, SEC_ATTACH_BTF, attach_trace),
->> +       SEC_DEF("tp_btf.s+",            TRACING, BPF_TRACE_RAW_TP, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
->>          SEC_DEF("fentry+",              TRACING, BPF_TRACE_FENTRY, SEC_ATTACH_BTF, attach_trace),
->>          SEC_DEF("fmod_ret+",            TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF, attach_trace),
->>          SEC_DEF("fexit+",               TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF, attach_trace),
->> @@ -13109,23 +13114,41 @@ struct bpf_link *bpf_program__attach_tracepoint(const struct bpf_program *prog,
->>
->>   static int attach_tp(const struct bpf_program *prog, long cookie, struct bpf_link **link)
->>   {
->> +       static const char *const prefixes[] = {
->> +               "tp.s/",
->> +               "tp/",
->> +               "tracepoint.s/",
->> +               "tracepoint/",
->> +       };
->>          char *sec_name, *tp_cat, *tp_name;
->> +       size_t i;
->>
->>          *link = NULL;
->>
->> -       /* no auto-attach for SEC("tp") or SEC("tracepoint") */
->> -       if (strcmp(prog->sec_name, "tp") == 0 || strcmp(prog->sec_name, "tracepoint") == 0)
->> +       /* no auto-attach for bare SEC("tp"), SEC("tracepoint") and .s variants */
->> +       if (strcmp(prog->sec_name, "tp") == 0 ||
->> +           strcmp(prog->sec_name, "tracepoint") == 0 ||
->> +           strcmp(prog->sec_name, "tp.s") == 0 ||
->> +           strcmp(prog->sec_name, "tracepoint.s") == 0)
->>                  return 0;
+On Tue, Mar 24, 2026 at 12:33:51PM -0700, Eduard Zingerman wrote:
+> On Tue, 2026-03-24 at 15:28 -0400, Harishankar Vishwanathan wrote:
+> > On Mon, Mar 23, 2026 at 2:47 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
+> > > 
+> > > On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
+> > > 
+> > > [...]
+> > > 
+> > > > @@ -2786,8 +2786,13 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
+> > > >       reg->var_off = tnum_or(tnum_clear_subreg(var64_off), var32_off);
+> > > >  }
+> > > > 
+> > > > +static bool range_bounds_violation(struct bpf_reg_state *reg);
+> > > > +
+> > > >  static void reg_bounds_sync(struct bpf_reg_state *reg)
+> > > >  {
+> > > > +     /* If the input reg_state is invalid, we can exit early */
+> > > > +     if (range_bounds_violation(reg))
+> > > > +             return;
+> > > >       /* We might have learned new bounds from the var_off. */
+> > > >       __update_reg_bounds(reg);
+> > > >       /* We might have learned something about the sign bit. */
+> > > 
+> > > Is it possible for the invariants violation to manifest after
+> > > __update_reg{32,64}_bounds() calls, once cross domain boundaries are
+> > > propagated?
+> > 
+> > The short answer is yes.
+> > 
+> > The sub-sync functions, i.e. __update_reg_bounds, __reg_deduce_bounds,
+> > __reg_bound_offset are individually sound (checked by Agni).
+> > This means that they preserve any concrete value x that is contained in all
+> > the range bounds and tnum inputs, after refinement.
+> > 
+> > But if in the input, there is no concrete value x that is contained in
+> > ALL the range bounds and tnum, then an invariant violation can
+> > manifest. Note that this can happen in the presence
+> > of the current early exit commit, i.e., even if
+> > range_bounds_violation(reg) is false.
+> > 
+> > For example,
+> > 
+> > before reg_bounds_sync: s64=[1, 1], tnum=0
+> > after reg_bounds_sync: s64=[1, 0] tnum=0
+> > 
+> > Could you elaborate on your concern? Did you perhaps imply that we should
+> > be checking for reg_bounds_violation in
+> > simulate_both_branches_taken after each sub-sync function?
 > 
-> it makes no sense to hard-code explicit strcmp() literal strings here
-> while having prefixes array. why not do what attach_raw_tp() does and
-> use just prefixes uniformly?
-> 
-> pw-bot: cr
-> 
-> 
+> My main concern is that we might loose useful signal.
+> It would be nice to adjust reg_bounds_sync() such
+> that it would stop (e.g. return false, as you suggested previously)
+> if it hits invariant violation mid-step.
 
-Thanks for taking a look! I'll fix this and other comments for the next 
-version.
->>
->>          sec_name = strdup(prog->sec_name);
->>          if (!sec_name)
->>                  return -ENOMEM;
->>
->> -       /* extract "tp/<category>/<name>" or "tracepoint/<category>/<name>" */
->> -       if (str_has_pfx(prog->sec_name, "tp/"))
->> -               tp_cat = sec_name + sizeof("tp/") - 1;
->> -       else
->> -               tp_cat = sec_name + sizeof("tracepoint/") - 1;
->> +       /* extract "<prefix><category>/<name>" */
->> +       tp_cat = NULL;
->> +       for (i = 0; i < ARRAY_SIZE(prefixes); i++) {
->> +               if (str_has_pfx(prog->sec_name, prefixes[i])) {
->> +                       tp_cat = sec_name + strlen(prefixes[i]);
->> +                       break;
->> +               }
->> +       }
->> +       if (!tp_cat) {
->> +               free(sec_name);
->> +               return -EINVAL;
->> +       }
->> +
->>          tp_name = strchr(tp_cat, '/');
->>          if (!tp_name) {
->>                  free(sec_name);
->> @@ -13189,6 +13212,8 @@ static int attach_raw_tp(const struct bpf_program *prog, long cookie, struct bpf
->>                  "raw_tracepoint",
->>                  "raw_tp.w",
->>                  "raw_tracepoint.w",
->> +               "raw_tp.s",
->> +               "raw_tracepoint.s",
->>          };
->>          size_t i;
->>          const char *tp_name = NULL;
->>
->> --
->> 2.52.0
->>
+We discussed this with Hari and agree it would be good to use
+transient/mid-step invariant violations as a signal to improve
+precision. I'd however prefer to implement that as a follow-up, to keep
+the current patchset small and focused on fixing the invariant
+violations that cause kernel warnings and program rejections. It sounds
+like we may want to backport this at some point, so it's easier if it
+keeps a restrained scope.
+
+The "transient" invariant violations already exist today and using them
+will only improve precision (potentially allow the verifier to accept
+more program than it does today). I would see that as an improvement
+rather than a fix we'd want to backport.
+
+Hari thinks we can also use the empty intersection checks he mentioned
+in the other thread [1] to avoid/use these transient invariant
+violations. It would allow us to use this as a signal to improve
+precision without making reg_bounds_sync more complex (and harder for
+Agni to verify). I'll let him explain, but as mentioned in the other
+thread, it still needs a bit of benchmarking.
+
+1: https://lore.kernel.org/bpf/CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com/
 
