@@ -1,82 +1,67 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1596737E317
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 05:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B432022156C;
+	Wed,  1 Apr 2026 06:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775021282; cv=none; b=MVUtyak22u9qxlG/0Lt9JDmwjIb22wmMOy1n1H1IuhMWfXOZCa8BP43MBKkCUuryKCp3oyKq+b+s4vgcM0sqzxuFlGrrf5Tt3oOzd47nYqgczYJCh/n0hQGVrtjsEvHNMEr8cI0pLDj/7SJ///WOqwVMygDiHW2ZE/7cudJUX/0=
+	t=1775025172; cv=none; b=fhshZ5A1WCqjq9aegb0croVxDerkb8izXtl6OHmhXTmLfP6cZRyeaU9GYOKb0tYyOd/MgyUyeMtHsmVJk0CZLpnkekKRL+gtOAbxKCZFVnDFUQbSs5+0pedE4HuNy0iwjTEKnTthrBAT/0tp8uZW2tchOLaDqGFyhaKpdYy+0gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775021282; c=relaxed/simple;
-	bh=VD/BrkY+P9EZvzyKieGsPzn58utPMgfLt7RRVf8OBvg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MfAz7tziUlIjreD70MR3e3HwhAetavJ5RWNMvaBMi395QPP1WjPoy0KUQ5UU801Ni9ABsBmsTe4ZwMTuM674ThxBxWrguVJHYv/32bCofrJpzYJqx+T2AQHUGCd+tc/761j+TrvCT74w/J98lbcDDMEw4Gw9E6CiKr1scyn9Mgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com; spf=pass smtp.mailfrom=shopee.com; dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b=ktMLcu5X; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shopee.com
+	s=arc-20240116; t=1775025172; c=relaxed/simple;
+	bh=qH+4XzSQc8RVwVEjmnJ0dtFU4rqQlJq8653kkUwajQQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iw0nxMsQyFqRjwGVMoNLjqO+ha0TArEO1qbNuYpVLl85KTJZJydgcW4iT6+EYCfgkUCPjSbDhM/FCFOUaH/7vU+GURkVKTotKpGyjTzC2aMLj7Xr9Di5Oz9V23+QcrwaQZrdnwGvfieqXoeb4Ju/W3VZTztXTkhzxSaauaqMnMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fFOCfr3u; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b="ktMLcu5X"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c70ea5e9e9dso2721820a12.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1775021280; x=1775626080; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+dtnjV/UQsHz5i0eYil7AmCFv4jaBC0RE9vTuxD9kdg=;
-        b=ktMLcu5XPuPdlQoZ+w0ftcniQbvv+JariVNU6Q9c+4hnjfd7qsJzH4VG244gD0CNzD
-         80QtsygCSL1rH9gUYEBMBLGasR5zc9FYK7SlsZfopXTJYlLwfWqOU/VeD1fr0PX3VuwC
-         MwZq4Au2bOlLY4zxyEZAlnni5KIPcowzd9pDrBqB1jD93YldM35jpzbTazxnRasJMFDk
-         628k6FP+hlHSZJxkOMGFcxreOrW/CEMv77zwtrwv7MCJ/ofnuUaJcRSeFBUcUK5GZucA
-         T9AjwI6BjhSCTzGwjUj1Fkq9Q4t+6Vr2hJHi7QxTsCqqHSm91pB1pxFgk5bDs/Q6AbRF
-         Dsnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775021280; x=1775626080;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+dtnjV/UQsHz5i0eYil7AmCFv4jaBC0RE9vTuxD9kdg=;
-        b=mczvXSTdmCJlw0fcDW1GkHRsXdakBL5FFj5lkk9JxRxXE2NRDiPq0RoXqdlWu8t47w
-         mreSLiZ9jJ6fHnSs90gTyOM2KJ+arPOmtPwrUUipqdeolX98TODoRgC3KsGS64wQ8wm1
-         uoZSclzWDTprlvsWav3x4oGTtBIiMJBAVOvTN3zN5MFEAci8J17CoKl14iCPXjBsO5qx
-         Msp7ltMdM+hHlJW7QB8uFSETKBvJm57mDVfFmZL+AvhasIfiDANCDn7PSmRhVD+pE1R1
-         kxmH+YtWI7c7hYCoUnXe0aGRZ3bZXItUh9/m1xs0yDgJJNB7tB5NRnPtk0W4dPl0vbGP
-         O/Fg==
-X-Forwarded-Encrypted: i=1; AJvYcCUh6pcnBurtyulp0OEZdHj/VfyEGoh/doqWSE5mrheN/PugJRAe4nGiDL1/ZaKIhQIuI18=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrCmf2CZ5s7Pw04pZMpWSOvt51QF4y6R24BbE5mI4nCov+ID80
-	fqpEs+wJ1/YasXhg5NKtDeWV8tSauoxJEknCYOd67UYP3R2MjmOtnAFWve8ZJmpODdg=
-X-Gm-Gg: ATEYQzz/cnRT65RQ1iqGTMlNQhuFVRQ1DLwLEGYIjsfT8tOU3Stxn/YDiMIxOYDbtSC
-	kqB5fAV+Y8sPROiKq3NthEH/Xow5l813h9ljqNgDwXIlvPTuT35+F0x1vds2AjudZVhYXZQfzS3
-	r0IKA28ibACVUkZiplJPt63mDHQ5rW5iH3BiWecNJGWZps117rWqVFOaC9BgxUHtKa4sdqJF4iR
-	lk8nj7bi6x4/KSl4QmuevY6m9FP4xY5KXSfbmlrvopYLAOrRYz18BcWFtQc4gF91QQyhrO/gmd8
-	zbwKlnY1cwXP4MgPC7+VNPfx1YJ+f8vPxRtHqyhdBR2iraPESONywx+3tIELfDB9V7dU+T82hkB
-	QboCXTdN8p2QjeQyMroTKvvPB9RdnuhNn2JCRY3spsZjc9KtXJtqrFO+qNyhO3TZ4Mz2DyN2QJv
-	Dfs/gYDP7ZFKaNWj79Hzo6vq3qCNMKl7/VYI/1zx92JnbstCKNnw==
-X-Received: by 2002:a17:902:f708:b0:2b2:6cab:313c with SMTP id d9443c01a7336-2b26cab38b2mr12456065ad.20.1775021280346;
-        Tue, 31 Mar 2026 22:28:00 -0700 (PDT)
-Received: from bms-ytl-d1-app-10-251-178-27 ([147.136.157.1])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24266b92fsm134019025ad.23.2026.03.31.22.27.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 22:27:59 -0700 (PDT)
-From: Leon Hwang <leon.huangfu@shopee.com>
-To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Leon Hwang <leon.huangfu@shopee.com>
-Subject: [PATCH net-next] selftests/net: Add two xdp tests to xdp.py
-Date: Wed,  1 Apr 2026 13:27:46 +0800
-Message-ID: <20260401052746.314667-1-leon.huangfu@shopee.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fFOCfr3u"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62VIY8c44187356;
+	Wed, 1 Apr 2026 06:32:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=Ht5y3I7lUy2pHx2eUv287Am35xnFtXoqqFDjibAg8
+	O0=; b=fFOCfr3uFvTEP1HLXiTjDVBfoZu89i38X4cqHxAY6hINu83sYLSs1Y2wL
+	JOWMVKCCJSn21DhVbHrCTIaSRSF2DvW4RDjjhctrX7Dr4+iWEOXPBqP+UMAmzG/8
+	s7+57zdNDo/T662py5WpkGrsDwzHZ79S363H2u+f1faIscldvibBOWwwB0p6Xtpz
+	DzhX0tmSEFmSIHIxJMn91JEhHorggsegjibg1NvUWO830vg+Ilmac8IsXO8ERJeV
+	x07XKcy6XrK+DJEGgHYbKJTrPpsRF1cfKRsVaLIdlK0JFfS2nRuabMmfNVLFvKyX
+	fvtTKCq81Gm+cCHkd6I5+PaxqG3nw==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66ms644c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 06:32:31 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63168efs006362;
+	Wed, 1 Apr 2026 06:32:31 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6spy4g7g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 06:32:31 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6316WR8A51904968
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 Apr 2026 06:32:27 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3897C2004B;
+	Wed,  1 Apr 2026 06:32:27 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3E8942004D;
+	Wed,  1 Apr 2026 06:32:25 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 Apr 2026 06:32:25 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Abhishek Dubey <adubey@linux.ibm.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: [PATCH v7 1/2] powerpc64/bpf: Implement JIT support for private stack
+Date: Wed,  1 Apr 2026 06:32:14 -0400
+Message-ID: <20260401103215.104438-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,126 +69,335 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=J6enLQnS c=1 sm=1 tr=0 ts=69ccbbff cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=A8mRDSlWM7J1pTn1j8wA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDA1MyBTYWx0ZWRfX1aLs8KzBjDOZ
+ Q5ORE1oKKvSfufb7QPuA3qklDcdgbqZnFchbeCK+bFzVm2f1flQShm4Xw1S2EqabJyGKdetM+Uz
+ DI0dExDhg7ka401iHBHBQZLSUyHhys8m9YsERhY1K8yw45EUqUptmGejLo7cxRivAwEp8Ktxgas
+ mTrVLST9iYqEtrKCm76qcuxEYp/pwWe6C57bP3sPCAM4Z3S7bho5aaso8BafVREqgORAswd0Ou/
+ f/VHFCCVoS1ACatluX83OrvsAMzGnbt9AtxZAblepDhlf7dXfdyXLwoqilpR4/JiaLRFkoc+dYw
+ d4TobMwX3f6VjJI5BHap80VkKlp/Hc6yIToDMlmesy8q3QEqb7jfhiS5lSzoOKnHR9WOxWOBVv4
+ zMzEgTslCiL2grEkbfhvh6SHykuPIhSAiwJDoxvVm5eCkPi7Aet/1veVHfB17X3kfVymrgREls7
+ qK1teu27FtnePoIno4w==
+X-Proofpoint-GUID: zXASUtDI995Awp9vz-SeS3Rmgyal53Df
+X-Proofpoint-ORIG-GUID: zXASUtDI995Awp9vz-SeS3Rmgyal53Df
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_02,2026-03-31_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1011 adultscore=0 priorityscore=1501 bulkscore=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010053
 
-In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
-these two XDP tests are suggested to add to xdp.py.
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-1. Verify the failure of attaching non-frag-capable prog to mtu=9k driver.
-2. Verify the failure of updating frag-capable prog with non-frag-capable
-   prog, when the frag-capable prog attaches to mtu=9k driver.
+Provision the private stack as a per-CPU allocation during
+bpf_int_jit_compile(). Align the stack to 16 bytes and place guard
+regions at both ends to detect runtime stack overflow and underflow.
 
-They have been verified against Mellanox CX6 and Intel 82599ES NICs.
+Round the private stack size up to the nearest 16-byte boundary.
+Make each guard region 16 bytes to preserve the required overall
+16-byte alignment. When private stack is set, skip bpf stack size
+accounting in kernel stack.
 
-With dropping other tests, here are the test logs.
+There is no stack pointer in powerpc. Stack referencing during JIT
+is done using frame pointer. Frame pointer calculation goes like:
 
- # ethtool -i eth0
- driver: mlx5_core
- version: 6.19.0-061900-generic
+BPF frame pointer = Priv stack allocation start address +
+                    Overflow guard +
+                    Actual stack size defined by verifier
 
- # NETIF=eth0 python3 xdp.py
- TAP version 13
- 1..2
- ok 1 xdp.test_xdp_native_attach_sb_to_mb
- ok 2 xdp.test_xdp_native_update_mb_to_sb
- # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+Memory layout:
 
- # ethtool -i eth0
- driver: ixgbe
- version: 6.19.0-061900-generic
+High Addr          +--------------------------------------------------+
+                   |                                                  |
+                   | 16 bytes Underflow guard (0xEB9F12345678eb9fULL) |
+                   |                                                  |
+         BPF FP -> +--------------------------------------------------+
+                   |                                                  |
+                   | Private stack - determined by verifier           |
+                   | 16-bytes aligned                                 |
+                   |                                                  |
+                   +--------------------------------------------------+
+                   |                                                  |
+Lower Addr         | 16 byte Overflow guard (0xEB9F12345678eb9fULL)   |
+                   |                                                  |
+Priv stack alloc ->+--------------------------------------------------+
+start
 
- # NETIF=eth0 python3 xdp.py
- TAP version 13
- 1..2
- ok 1 xdp.test_xdp_native_attach_sb_to_mb # SKIP RTNETLINK answers: Invalid argument
- ok 2 xdp.test_xdp_native_update_mb_to_sb # SKIP RTNETLINK answers: Invalid argument
- # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:2 error:0
+Update BPF_REG_FP to point to the calculated offset within the
+allocated private stack buffer. Now, BPF stack usage reference
+in the allocated private stack.
 
-Links:
-[1] https://lore.kernel.org/bpf/20260326124205.1a3bb825@kernel.org/
-
-Signed-off-by: Leon Hwang <leon.huangfu@shopee.com>
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+Acked-by: Hari Bathini <hbathini@linux.ibm.com>
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 ---
- tools/testing/selftests/drivers/net/xdp.py | 53 +++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
-index d86446569f89..fe34b491778b 100755
---- a/tools/testing/selftests/drivers/net/xdp.py
-+++ b/tools/testing/selftests/drivers/net/xdp.py
-@@ -13,7 +13,7 @@ from enum import Enum
+v6->v7:
+  Handle SMP case when setting frame pointer
+  Pickup Acked-by and Tested-by tags
+v5->v6:
+  Remove unused label
+v4->v5:
+  Rebase over latest branch
+v3->v4:
+  No change
+v2->v3:
+  Enable testcase using __powerpc64__ instead of __TARGET_ARCH_powerpc,
+  to prevent it getting invoked on powerpc32
+v1->v2:
+  No change
+
+[v6]: https://lore.kernel.org/bpf/20260331080309.173612-1-adubey@linux.ibm.com    
+[v5]: https://lore.kernel.org/bpf/20260330232034.44776-1-adubey@linux.ibm.com
+[v4]: https://lore.kernel.org/bpf/20260226031324.17352-1-adubey@linux.ibm.com
+[v3]: https://lore.kernel.org/bpf/20260226005440.9570-1-adubey@linux.ibm.com
+[v2]: https://lore.kernel.org/bpf/20260225153950.15331-1-adubey@linux.ibm.com
+[v1]: https://lore.kernel.org/bpf/20260216152234.36632-1-adubey@linux.ibm.com
+
+ arch/powerpc/net/bpf_jit.h        |  6 ++
+ arch/powerpc/net/bpf_jit_comp.c   | 97 +++++++++++++++++++++++++++++--
+ arch/powerpc/net/bpf_jit_comp64.c | 31 +++++++++-
+ 3 files changed, 126 insertions(+), 8 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 7354e1d72f79..a232f3fb73be 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -178,8 +178,14 @@ struct codegen_context {
+ 	bool is_subprog;
+ 	bool exception_boundary;
+ 	bool exception_cb;
++	void __percpu *priv_sp;
++	unsigned int priv_stack_size;
+ };
  
- from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_ne, ksft_pr
- from lib.py import KsftNamedVariant, ksft_variants
--from lib.py import KsftFailEx, NetDrvEpEnv
-+from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv
- from lib.py import EthtoolFamily, NetdevFamily, NlError
- from lib.py import bkg, cmd, rand_port, wait_port_listen
- from lib.py import ip, defer
-@@ -693,6 +693,55 @@ def test_xdp_native_qstats(cfg, act):
-             ksft_ge(after['tx-packets'], before['tx-packets'])
++/* Memory size & magic-value to detect private stack overflow/underflow */
++#define PRIV_STACK_GUARD_SZ    16
++#define PRIV_STACK_GUARD_VAL   0xEB9F12345678eb9fULL
++
+ #define bpf_to_ppc(r)	(ctx->b2p[r])
  
+ #ifdef CONFIG_PPC32
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index a62a9a92b7b5..2018260f56c6 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -129,25 +129,60 @@ bool bpf_jit_needs_zext(void)
+ 	return true;
+ }
  
-+def _set_jumbo_mtu(cfg, mtu):
-+    ip(f"link set dev {cfg.ifname} mtu {mtu}")
-+    defer(ip, f"link set dev {cfg.ifname} mtu 1500")
++static void priv_stack_init_guard(void __percpu *priv_stack_ptr, int alloc_size)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
 +
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		stack_ptr[0] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[1] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx + 1] = PRIV_STACK_GUARD_VAL;
++	}
++}
 +
-+def _exec_cmd(cfg, obj, sec, ip_opts=""):
-+    return cmd(f"ip {ip_opts} link set dev {cfg.ifname} xdpdrv obj {obj} sec {sec}", shell=True, fail=False)
++static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int alloc_size,
++								struct bpf_prog *fp)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
 +
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
++			pr_err("BPF private stack overflow/underflow detected for prog %s\n",
++			bpf_jit_get_prog_name(fp));
++			break;
++		}
++	}
++}
 +
-+def test_xdp_native_attach_sb_to_mb(cfg):
-+    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-+    mtu = 9000
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ {
+ 	u32 proglen;
+ 	u32 alloclen;
+ 	u8 *image = NULL;
+-	u32 *code_base;
+-	u32 *addrs;
+-	struct powerpc_jit_data *jit_data;
++	u32 *code_base = NULL;
++	u32 *addrs = NULL;
++	struct powerpc_jit_data *jit_data = NULL;
+ 	struct codegen_context cgctx;
+ 	int pass;
+ 	int flen;
++	int priv_stack_alloc_size;
++	void __percpu *priv_stack_ptr = NULL;
+ 	struct bpf_binary_header *fhdr = NULL;
+ 	struct bpf_binary_header *hdr = NULL;
+ 	struct bpf_prog *org_fp = fp;
+-	struct bpf_prog *tmp_fp;
++	struct bpf_prog *tmp_fp = NULL;
+ 	bool bpf_blinded = false;
+ 	bool extra_pass = false;
+ 	u8 *fimage = NULL;
+-	u32 *fcode_base;
++	u32 *fcode_base = NULL;
+ 	u32 extable_len;
+ 	u32 fixup_len;
+ 
+@@ -173,6 +208,26 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		fp->aux->jit_data = jit_data;
+ 	}
+ 
++	priv_stack_ptr = fp->aux->priv_stack_ptr;
++	if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
++		/*
++		 * Allocate private stack of size equivalent to
++		 * verifier-calculated stack size plus two memory
++		 * guard regions to detect private stack overflow
++		 * and underflow.
++		 */
++		priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
++		if (!priv_stack_ptr) {
++			fp = org_fp;
++			goto out_priv_stack;
++		}
 +
-+    _set_jumbo_mtu(cfg, mtu)
++		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
++		fp->aux->priv_stack_ptr = priv_stack_ptr;
++	}
 +
-+    probe = _exec_cmd(cfg, obj, "xdp.frags")
-+    if probe.ret != 0:
-+        output = probe.stderr.strip() or probe.stdout.strip()
-+        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
+ 	flen = fp->len;
+ 	addrs = jit_data->addrs;
+ 	if (addrs) {
+@@ -209,6 +264,19 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	cgctx.is_subprog = bpf_is_subprog(fp);
+ 	cgctx.exception_boundary = fp->aux->exception_boundary;
+ 	cgctx.exception_cb = fp->aux->exception_cb;
++	cgctx.priv_sp = priv_stack_ptr;
++	cgctx.priv_stack_size = 0;
++	if (priv_stack_ptr) {
++		/*
++		 * priv_stack_size required for setting bpf FP inside
++		 * percpu allocation.
++		 * stack_size is marked 0 to prevent allocation on
++		 * general stack and offset calculation don't go for
++		 * a toss in bpf_jit_stack_offsetof() & bpf_jit_stack_local()
++		 */
++		cgctx.priv_stack_size = cgctx.stack_size;
++		cgctx.stack_size = 0;
++	}
+ 
+ 	/* Scouting faux-generate pass 0 */
+ 	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+@@ -306,6 +374,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		}
+ 		bpf_prog_fill_jited_linfo(fp, addrs);
+ out_addrs:
++		if (!image && priv_stack_ptr) {
++			fp->aux->priv_stack_ptr = NULL;
++			free_percpu(priv_stack_ptr);
++		}
++out_priv_stack:
+ 		kfree(addrs);
+ 		kfree(jit_data);
+ 		fp->aux->jit_data = NULL;
+@@ -419,6 +492,8 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 	if (fp->jited) {
+ 		struct powerpc_jit_data *jit_data = fp->aux->jit_data;
+ 		struct bpf_binary_header *hdr;
++		void __percpu *priv_stack_ptr;
++		int priv_stack_alloc_size;
+ 
+ 		/*
+ 		 * If we fail the final pass of JIT (from jit_subprogs),
+@@ -432,6 +507,13 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 		}
+ 		hdr = bpf_jit_binary_pack_hdr(fp);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
++		priv_stack_ptr = fp->aux->priv_stack_ptr;
++		if (priv_stack_ptr) {
++			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++			priv_stack_check_guard(priv_stack_ptr, priv_stack_alloc_size, fp);
++			free_percpu(priv_stack_ptr);
++		}
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+ 	}
+ 
+@@ -453,6 +535,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return IS_ENABLED(CONFIG_PPC64);
+ }
+ 
++bool bpf_jit_supports_private_stack(void)
++{
++	return IS_ENABLED(CONFIG_PPC64);
++}
 +
-+    ip(f"link set dev {cfg.ifname} xdpdrv off")
+ bool bpf_jit_supports_arena(void)
+ {
+ 	return IS_ENABLED(CONFIG_PPC64);
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index c5e26d231cd5..6670d8c69ade 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -183,6 +183,24 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+ {
+ }
+ 
++static void emit_fp_priv_stack(u32 *image, struct codegen_context *ctx)
++{
++	PPC_LI64(bpf_to_ppc(BPF_REG_FP), (__force long)ctx->priv_sp);
++	/*
++	 * Load base percpu pointer of private stack allocation.
++	 * Runtime per-cpu address = (base + data_offset) + (guard + stack_size)
++	 */
++#ifdef CONFIG_SMP
++	/* Load percpu data offset */
++	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R13,
++		offsetof(struct paca_struct, data_offset)));
++	EMIT(PPC_RAW_ADD(bpf_to_ppc(BPF_REG_FP),
++		bpf_to_ppc(TMP_REG_1), bpf_to_ppc(BPF_REG_FP)));
++#endif
++	EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), bpf_to_ppc(BPF_REG_FP),
++			PRIV_STACK_GUARD_SZ + round_up(ctx->priv_stack_size, 16)));
++}
 +
-+    probe = _exec_cmd(cfg, obj, "xdp")
-+    if probe.ret == 0:
-+        ip(f"link set dev {cfg.ifname} xdpdrv off")
-+        raise KsftFailEx(f"driver unexpectedly allows non-multi-buffer XDP at MTU {mtu}")
-+
-+
-+def test_xdp_native_update_mb_to_sb(cfg):
-+    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-+
-+    _set_jumbo_mtu(cfg, 9000)
-+
-+    attach = _exec_cmd(cfg, obj, "xdp.frags")
-+    if attach.ret != 0:
-+        output = attach.stderr.strip() or attach.stdout.strip()
-+        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
-+
-+    defer(ip, f"link set dev {cfg.ifname} xdpdrv off")
-+
-+    update1 = _exec_cmd(cfg, obj, "xdp.frags", "-force")
-+    if update1.ret != 0:
-+        raise KsftFailEx("device fails to update multi-buffer XDP")
-+
-+    update2 = _exec_cmd(cfg, obj, "xdp", "-force")
-+    if update2.ret == 0:
-+        raise KsftFailEx("device unexpectedly updates non-multi-buffer XDP")
-+
-+
- def main():
-     """
-     Main function to execute the XDP tests.
-@@ -718,6 +767,8 @@ def main():
-                 test_xdp_native_adjst_head_grow_data,
-                 test_xdp_native_adjst_head_shrnk_data,
-                 test_xdp_native_qstats,
-+                test_xdp_native_attach_sb_to_mb,
-+                test_xdp_native_update_mb_to_sb,
-             ],
-             args=(cfg,))
-     ksft_exit()
+ /*
+  * For exception boundary & exception_cb progs:
+  *     return increased size to accommodate additional NVRs.
+@@ -307,9 +325,16 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 	 * Exception_cb not restricted from using stack area or arena.
+ 	 * Setup frame pointer to point to the bpf stack area
+ 	 */
+-	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+-		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+-			STACK_FRAME_MIN_SIZE + ctx->stack_size));
++	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP))) {
++		if (ctx->priv_sp) {
++			/* Set up fp in private stack */
++			emit_fp_priv_stack(image, ctx);
++		} else {
++			/* Setup frame pointer to point to the bpf stack area */
++			EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
++				STACK_FRAME_MIN_SIZE + ctx->stack_size));
++		}
++	}
+ 
+ 	if (ctx->arena_vm_start)
+ 		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
 -- 
-2.53.0
+2.52.0
 
