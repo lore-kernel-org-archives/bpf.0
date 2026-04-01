@@ -1,148 +1,177 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF2D3E9298
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 22:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775083674; cv=none; b=Vb6JoHFzX2SVW8E5cqaLNxi0jiagiZqoSdWvqgNoMwxXd8A6Euhrjn4W/nZiSKvk1IZX0WbwMq1MucE5XnapFTPuAvP02svDWcKlHLdzVn2bIG/hPsQMvCO9LAP3sGHY1p/zNQNXen3e4ChjjmTwc9eE9j+HiZ6MtXWyOQhtb08=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775083674; c=relaxed/simple;
-	bh=DVDMDPjdqyX3oELaDLt5SJkowhZBzxqLNUOf1US1u6M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=uT3J/GyysIuwN6KecqGAMKXSmpYfJ6CDhDlD1pnmqu6iL0ZMTt3eeQBpXlRnmvr+g8r6UKkZn/1fgXgHhupuKutcKG/i+5NyHZXXY8u/XgG3sr2lQkpP8IXVnGBHc4Ri2y3ze2KmZFs5e32rVooAIbCEmr6/7Lh3AmVQfw6dudo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHyWEW4a; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF13A37E307
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 22:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775083859; cv=pass; b=SgKmy65Wd5BzwEYFXhcMxRIDUnZBw3R2XrEUNQfLH/yz9pbC/OY5gTQDRbsW03+K5qNRHJXHnmedQmEfpgScMmgzYBithxLUfIH6/hjdY13JugSwSBXwpobfufn8ukAa6WHUR2G5NWDwVnHqIUOcfK+sQJcRsfnMTKXqHQoaZU4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775083859; c=relaxed/simple;
+	bh=v4M8KMoXQgklC+cA2d0h0B28LBb6xOYosA8DjXrFB7w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D8vtYs885u2MTF6OR2VM8Dyard8fxJ5HNWCqVJoR3Y2nPrA8ck/YR/oUMTp4CP+DR2vAiNP/GHOjSQtMJwljOmd1jTLw/gGxcKhdpDvwYE7rfk3Xm0VZgW7qYqq08xvVxqp8vXqqEfXwM2uC+IJXBVzAAaGUQhUp+TIf1IgfDqU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M6LyGuPu; arc=pass smtp.client-ip=209.85.221.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHyWEW4a"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48374014a77so2450965e9.3
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 15:47:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6LyGuPu"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43d01d6b50cso226228f8f.1
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 15:50:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775083848; cv=none;
+        d=google.com; s=arc-20240605;
+        b=e89UOFT0YeExH04SnMYgKzHuqXF37CVVGSPc8RjDAzONopWBjIeUEgcYe6vFyXfA0J
+         vzFktFQr0ftfj4T9spzVGCN5BC011XT4sNLN5h3J2nJcVYcR9Y+EGFbqo/dKSz4xhXbR
+         14gXAnAq2hLxdqjVecm5t4XX0hN0/YBGFNaFBWPX9NV/mpt0m6xNfEmtR9Gr2PbGStpC
+         wEIZ8vyoQBpUNR1aIgnN1VUmxMStk4ZADFZ4ZKIoVjNsJv/MZieSr749UcejU574y7fO
+         OOvVCcXlJeqohskC06ORNC8RWykonnSeXqRhLLcaXwMICEDgnsAnRAysiwrT45sfwrjA
+         1gRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=YP1hjNEZjxmIPc8JMepwPHqQTyFtrx81oZfWBBr0Gok=;
+        fh=EdDJNFuvvaXJcXOExiesiTd7Q2Nck3mDgpZ8012B5HA=;
+        b=K7vIPxdfxS2MZuE0qqK76XSJ6rmU7vf9HJnsCkEgY3fr2OXEIDv5ocXd0+rVO5iKm2
+         N0QfBkaLZKBmj825KNo7IrJuTMni1cSPJitJ3UBA8HauExVhE6yNSg1goM37fVTL/qZF
+         idDSo/BJOTHBEsRaRNAF3hFeTyM+P7oMBZoxZXisaG3T0Tii2efyQp66WThAvADIwUNq
+         zpGpbKE2G22+EObUIxdCnC7opO57ecLdo++JQPCTvHe+foFB9FiDMM5TRxQEmMtWMDnM
+         EFsOoJKsRNYOb7hVQSw2UIttXAls2Wgbe630zchCQ0IxrZY+XEzHZsjboZs4+lzUwSji
+         pJ4w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775083667; x=1775688467; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6J9/1kd1+qCRGXP35oAvQNykSoHLsvfNVlWdG5t92JE=;
-        b=hHyWEW4ayg2fLRMMCHcZfS1Yy98jmcH3PC6fKWfYGcvOrcSZEUmLx30CroVyZ13ZZS
-         nMz4J30ebMw/qHnLux0PThzKN4T7sxwIszwqOMSl0jtVJb6FwKYdIyk6MpRHPWCT6t/k
-         Gd/ZF9SlDTUYRyJnHfEdXFfOVr38Z+i2T4FEybk2wiccOfKvq+bzjiImutZ1KR34L77t
-         AunHE/Vo8462/hbp/DiUS1MFtHnKzdpxZqsqb1qaUzE46W4Uq9CIOb3sJyu9+wbMv2aJ
-         iIG/q/nPztID1xT2vB9xEXDqpikFdIbzXeQ+3mS3KZ9NOHKOau9zbO4MuzUjEoaq5c6S
-         vg6w==
+        d=gmail.com; s=20251104; t=1775083848; x=1775688648; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YP1hjNEZjxmIPc8JMepwPHqQTyFtrx81oZfWBBr0Gok=;
+        b=M6LyGuPubn9CG7GKr5u+m8OeJsVUu1AMCpWfN3pfkONIvilTkoMuA/VXx+UgfFTdPi
+         SQI0YnWtd8FTboWAwZS5Y4lvnAra/pdVKB3Kz+11vowJZFMSws6V6fsv11BiFR09N1ma
+         0lb8vEt3qz75X4eiCKBNLmL3VxXUzUpTHaxjncM/UTMRiVWDTrbnTrz792y5wIUGqd5P
+         eEKhCLb1vMd9bH2szVHsFQo0cWGYZOaXylbM1uBOnm2aVgYzTbSF2f2p4ijqvWLEmvmR
+         xZu8w8lLJnCvLrQTZ3jihy3OxT9uZgCrCxEpl4Fj0pEeGSPWElYvqCcV0dg2hNrqkWdq
+         eINQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775083667; x=1775688467;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6J9/1kd1+qCRGXP35oAvQNykSoHLsvfNVlWdG5t92JE=;
-        b=JG1Nm7VtDqDbpmiwBFvga3vUwFKhSSix3cmNUAuPAXtEU57IpB2LuuBrpZXvWvuwVJ
-         vlx2jSlGnBzVHp/SlWxcWBEA8z7lIu2j25ybJJCSdO/lincKnuLN10Vcky38zOY9Ej3Q
-         j4XrwnlKzxrNoHyogPf7q9TOHuYIxr3MbUvYWL8EJqcE5fWMNn2wMr4GAmHWnntZr8Hx
-         mzqeEO/UQTjJ3bdPcnGPyqSOQXwDw2ORi61GerPpN9FK67OZJjJL8rwytKEv98dClMSN
-         1PMrKPT5HO+aIxs5EX7fD2XObdAfqfbe4nqrOKTNATeqNKC7RsdJRoebuOVrIWtS4KEr
-         7F5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWlI+0kUqav8vaBz0CSV7dDRMbZdCrO2/ylp0ixbc5pGgE9hBKNoNplFTuZfkdXwrK/oro=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxS+ccRHikgdaCeLeEY45j2t9UBTaGO0bJfGe85/i+tLihsmdSa
-	9HJhzlR36kNoOV3fgzWjAqn/6imVW0R/2k/tQsmRyiZOaqQ4EMLBvPyM
-X-Gm-Gg: ATEYQzyQZ24QHlB3Fpdqu0NE5c5Vy86IS5fuWR+4aDNCKWr0bxsoiw5ohGH0Q6F6IjH
-	AlZMtSWXELfnoaiF/P6FCHlncxsJe5plgvfGlBjotUuGmsWBYbjDZCxOnBcXaRbkBiF54haHnbi
-	bIjC8S3U9rZTAdILKJlE4tW03FezQlz/cZcUn13gjEAJjy1UmMlHC0DEicl4oGQsb2iBIpGFiWn
-	3+Nv4EvVwx3Wz5KYh56Rnd7OBHfU4Xn3VZxk2khzvO7EfT0CjuvGQ0PEwEqCr2w1KNwOv458hy1
-	14Nixt4N+hxSg+oRbpWxGf6XbQvwll6H4jc9WKyafkmq4WtO+BP1CeUxojU9Zf0HxgrZ7EItdz/
-	prkinI1aQkPA+YSlWZUcrsUBpyVUnbQ8/AQBJjmMBnrGkOoqCXAIC29p5zmwbklEr/D0UqDTpiP
-	Id92pi1OJDWbRQV37Tw5pZsbMOklecLA4R5V5XGVqbuFUuHIY3S/wkUqKxCxv/qILnr4+sxoALx
-	pyq4E73qmxtFSo9n+nSkQ==
-X-Received: by 2002:a05:600c:1603:b0:486:ff92:63e5 with SMTP id 5b1f17b1804b1-4888b6eab11mr11508665e9.6.1775083666447;
-        Wed, 01 Apr 2026 15:47:46 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4888a705ebdsm31048275e9.10.2026.04.01.15.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Apr 2026 15:47:46 -0700 (PDT)
-Message-ID: <823cfd94-a35d-4f99-afa3-238fb1e9862d@gmail.com>
-Date: Wed, 1 Apr 2026 23:47:45 +0100
+        d=1e100.net; s=20251104; t=1775083848; x=1775688648;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YP1hjNEZjxmIPc8JMepwPHqQTyFtrx81oZfWBBr0Gok=;
+        b=n09troG7neu+cHdOUwczV5+8BTDPHW7sYkAL3MHIem1ja79j4VkzvlZW2rpx5UrlcS
+         BTt1D8YiJN9JdpMHws4fty+EPw9R+txd72ArCeE8sslEikIG8eaAuRVKe6J/2Dyiel51
+         FSXqi8NGp+jmv+WdkvkyfHumkHv7l6J7svLP9IjhP5u6WHwLltf5SfiFeueHQOIdLrwF
+         /M27bEhH46MJhPcDcrn/DqQw2JRh4164RRyzIHPqbzhbz5tCVFamZubxCixc6aEszoEW
+         mNmqDsFx2T6VTSOvnTTItC54RuE3NsVzk2s1mTKjSxE0e1Tj7Ch6h8KZQWEdzHq4Zhrw
+         pG4g==
+X-Gm-Message-State: AOJu0Yy/EKUsuROL137+3ri94hk+R2Izl7+cTO9IZCkB0GgV2xMLDLcQ
+	xJtEPShBlmF34ACZsuRVrFJwxKu7gKgN2pxzw+oUutPRVXe0oPdsjpJdffwRCDvqfOaPFGeWTLV
+	nzVdNJYnlWzbKynd0b8re+ye16EihpVQ=
+X-Gm-Gg: ATEYQzyWpLqfe7G/SEnvvlDGd1bNdJWk6CU7U+mXk3zq8X98BMTC5Ht4u0mxpYhs/Lb
+	CNR79Cg4MEnVlzSSkA6p9i8pnaz/UpqTIXjGhQYPT3Qkp4A8Rkk0YigkjOYpRozmoD42gX1uOPK
+	fYOhDKxb8FaU4lu1jQraNoOjH84rwMZCAwZOTWumM5Sq7RzCNAexTHnx2NaxxCIfiMEllNAXKty
+	pvnXemQiqEx5sJMOdfiiqsNYmx0ZJqwvm8DbH0as2gwa9rj1I7swGSVmrvJcfwzzQnwpJ9tqlqs
+	CC1aRUvpO9QPhpIVzf6TtoZ75lO1IfjpaBTtyDD2oAUN3BbQWws2VlYJlwc=
+X-Received: by 2002:a05:6000:2689:b0:43b:447a:11b8 with SMTP id
+ ffacd0b85a97d-43d15045e2amr10280803f8f.6.1775083848125; Wed, 01 Apr 2026
+ 15:50:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/2] bpf: Do not ignore offsets for loads from
- insn_arrays
-To: Anton Protopopov <a.s.protopopov@gmail.com>, bpf@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiyong Yang <ksur673@gmail.com>
-References: <20260401161529.681755-1-a.s.protopopov@gmail.com>
- <20260401161529.681755-2-a.s.protopopov@gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260401161529.681755-2-a.s.protopopov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260401191126.440683-1-varunrmallya@gmail.com> <20260401191126.440683-2-varunrmallya@gmail.com>
+In-Reply-To: <20260401191126.440683-2-varunrmallya@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Thu, 2 Apr 2026 00:50:10 +0200
+X-Gm-Features: AQROBzD1-AIT4sIJv-J5BCUSlZzW71S_yOFNJ0PyY4p0C6cBjNf7hayAGjE8zSg
+Message-ID: <CAP01T74cudrCFGAJhhNUWdCS+D1Gn5yFNccaS85YcoX8vdgzBQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Add test to ensure kprobe_multi
+ is not sleepable
+To: Varun R Mallya <varunrmallya@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	yonghong.song@linux.dev, jolsa@kernel.org, rostedt@goodmis.org, 
+	mhiramat@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-
-
-On 4/1/26 5:15 PM, Anton Protopopov wrote:
-> When a pointer to PTR_TO_INSN is dereferenced it is possible to
-> specify an offset inside the load instruction. This is a bug,
-> because while the verifier ignores the field, JITs are not.
-> So, patch the verifier to not ignore this field.
-> 
-> Reported-by: Jiyong Yang <ksur673@gmail.com>
-> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
-> Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+On Wed, 1 Apr 2026 at 21:11, Varun R Mallya <varunrmallya@gmail.com> wrote:
+>
+> Add a selftest to ensure that kprobe_multi programs cannot be attached
+> using the BPF_F_SLEEPABLE flag. This test succeeds when the kernel
+> rejects attachment of kprobe_multi when the BPF_F_SLEEPABLE flag is set.
+>
+> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
 > ---
->   kernel/bpf/verifier.c | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8c1cf2eb6cbb..f1b1c8e9dc26 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -212,6 +212,8 @@ static int ref_set_non_owning(struct bpf_verifier_env *env,
->   static bool is_trusted_reg(const struct bpf_reg_state *reg);
->   static inline bool in_sleepable_context(struct bpf_verifier_env *env);
->   static const char *non_sleepable_context_description(struct bpf_verifier_env *env);
-> +static void scalar32_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
-> +static void scalar_min_max_add(struct bpf_reg_state *dst_reg, struct bpf_reg_state *src_reg);
->   
->   static bool bpf_map_ptr_poisoned(const struct bpf_insn_aux_data *aux)
->   {
-> @@ -7735,6 +7737,20 @@ static bool get_func_retval_range(struct bpf_prog *prog,
->   	return false;
->   }
->   
-> +static inline void add_scalar_to_reg(struct bpf_reg_state *dst_reg, s64 val)
 
-Why does it need to be manually inlined?
-Other than that the change looks good, the implementation of the 
-add_scalar_to_reg() is similar to a piece of code in sync_linked_regs().
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
+>  .../bpf/prog_tests/kprobe_multi_test.c        | 41 +++++++++++++++++++
+>  .../bpf/progs/kprobe_multi_sleepable.c        | 13 ++++++
+>  2 files changed, 54 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> index 78c974d4ea33..f02fec2b6fda 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> @@ -10,6 +10,7 @@
+>  #include "kprobe_multi_session_cookie.skel.h"
+>  #include "kprobe_multi_verifier.skel.h"
+>  #include "kprobe_write_ctx.skel.h"
+> +#include "kprobe_multi_sleepable.skel.h"
+>  #include "bpf/libbpf_internal.h"
+>  #include "bpf/hashmap.h"
+>
+> @@ -633,6 +634,44 @@ static void test_attach_write_ctx(void)
+>  }
+>  #endif
+>
+> +static void test_attach_multi_sleepable(void)
 > +{
-> +	struct bpf_reg_state fake_reg;
+> +       struct kprobe_multi_sleepable *skel;
+> +       int err;
 > +
-> +	fake_reg.type = SCALAR_VALUE;
-> +	__mark_reg_known(&fake_reg, val);
+> +       skel = kprobe_multi_sleepable__open();
+> +       if (!ASSERT_OK_PTR(skel, "kprobe_multi_sleepable__open"))
+> +               return;
 > +
-> +	scalar32_min_max_add(dst_reg, &fake_reg);
-> +	scalar_min_max_add(dst_reg, &fake_reg);
-> +	dst_reg->var_off = tnum_add(dst_reg->var_off, fake_reg.var_off);
+> +       err = bpf_program__set_flags(skel->progs.handle_kprobe_multi_sleepable,
+> +                                    BPF_F_SLEEPABLE);
+> +       if (!ASSERT_OK(err, "bpf_program__set_flags"))
+> +               goto cleanup;
 > +
-> +	reg_bounds_sync(dst_reg);
+> +       /* Load should succeed even with BPF_F_SLEEPABLE for KPROBE types */
+> +       err = kprobe_multi_sleepable__load(skel);
+> +       if (!ASSERT_OK(err, "kprobe_multi_sleepable__load"))
+> +               goto cleanup;
+> +
+> +       /* Attachment must fail for kprobe.multi + BPF_F_SLEEPABLE.
+> +        * Also chosen a stable symbol to send into opts
+> +        */
+> +       LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+> +       const char *sym = "vfs_read";
+> +
+> +       opts.syms = &sym;
+> +       opts.cnt = 1;
+> +
+> +       skel->links.handle_kprobe_multi_sleepable =
+> +               bpf_program__attach_kprobe_multi_opts(skel->progs.handle_kprobe_multi_sleepable,
+> +                                                     NULL, &opts);
+> +       ASSERT_ERR_PTR(skel->links.handle_kprobe_multi_sleepable,
+> +                      "bpf_program__attach_kprobe_multi_opts");
+
+Nit: While vfs_read will likely remain stable, the check could
+probably be stronger to distinguish an attach error from -EINVAL?
+I added a typo to vfs_read and it still passed, because it failed to
+attach instead of getting rejected on unfixed kernel.
+May not be a big deal since vfs_read is unlikely to break.
+I verified it works by adding bpf_copy_from_user to the program and
+attaching to SYS_PREFIX sys_getpid and invoking the splat though, so
+LGTM otherwise.
+
+> +
+> +cleanup:
+> +       kprobe_multi_sleepable__destroy(skel);
 > +}
 > +
->   /* check whether memory at (regno + off) is accessible for t = (read | write)
->    * if t==write, value_regno is a register which value is stored into memory
->    * if t==read, value_regno is a register which will receive the value from memory
-> @@ -7816,6 +7832,7 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
->   					return -EACCES;
->   				}
->   				copy_register_state(&regs[value_regno], reg);
-> +				add_scalar_to_reg(&regs[value_regno], off);
->   				regs[value_regno].type = PTR_TO_INSN;
->   			} else {
->   				mark_reg_unknown(env, regs, value_regno);
-
+> [...]
