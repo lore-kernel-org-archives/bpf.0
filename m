@@ -1,135 +1,116 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872A21F3B8A
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 02:16:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775009775; cv=pass; b=jAK2RWUmo5Ua2F9cA4QBK1VDudSKnefZUfnQdGPwOX6MvbTLNn2v/q6ygFtT1Kt6ja6Wq/AMnnUdZy8d4OwN7X/61XsoosKypezjY7GHltNlUnf7k5g+Gz7kqOt9w5nZh/RToQH33HRV+pUJ+LMzuWl9dQAST+MaSwg8383PE7w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775009775; c=relaxed/simple;
-	bh=BU1RL5F23wyVh+enLSpDdlRfp8D4irTR9/cZKaegia8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZFUel3MGZJ5UhVRo88ra2zAExvQIcxtr3Vrtl74+IOdzAEJ+kQpgeYZsywGaXWPz4SF8Rj0mymDjjJMrggcRzis9CA53RGMhhRyUmvZhkIcFWl8+bp7bBQbBnwBB/iLPIxf8G8sMKEawdEPHR1yHAuyI//S+xq4RGqce+4yatUQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=neWMN+gS; arc=pass smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049891F3B8A
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 02:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775009800; cv=none; b=fniiXgYOI9pgGXByBauS8nCdmnM/pb6WdeoDENBbxqIyctTXusCHFrbXZxIXaHxflVrq2dIGZm79TP2KnmdgVkHP5fMEF8CIdXZ5Hmsler187IS0+BXpcor9LurQSLxW4yYIeCSiZ9becnG/jw7/cTjnukighCP+OIvH+SJRJ30=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775009800; c=relaxed/simple;
+	bh=QOjvkpPnVdnNPqRn6t5aV8OfzKb8VmN3Sc9q1q3PMoY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DBhB9fR11dUxLvkCgVDqiBEehYh+JEvmE8v/momkRrNpVpSq+qCg1yIlBS3MEaiioO0+psM0L2HrYSgzDDmEJlwEN09DLwXD5eumrkfZfg0Hubjc00WdYL5CzQn1wYb3DKNZqjvmcjaBY4U1wTUrw3UIG/xs9JO0CnA21NbqQBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d6qGLzG6; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="neWMN+gS"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-79ee5037d44so5502877b3.0
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 19:16:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775009773; cv=none;
-        d=google.com; s=arc-20240605;
-        b=K33sPMDYFY471AUEBVgw1bM0W8c8Z1LoCfL/kOk7jJsPNhT2xVzlds7gqGEBfhlb7/
-         eviVuo2G4njqTeeCYKym/WsK9S7GWvNXjToVdZmkFUkzJPMAOjckpSEgJao3j6j5gk1Z
-         Ib6vogus0gZTJkRkIFxMGtxCG8W8ea/OITXD86WC9jNP6m5McRNjzIhncviUVCSy91aC
-         KLfQVS+dnAE8KH2pD22+6AIcm+gcXQ7TYN7zohUNwnbKBQkX3eW4LD+axW4UGM2ESGmb
-         l7CqGXjkpHlNKBz6j5rNCnd4CC38ijnHSo4PD6mvm0bx+5imzlYJlo7pFXlC/xTV30xL
-         woNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=G5rI53f8SyeuhRXg2C9FEQRhaD4VvqH6jVFUBF2+CmQ=;
-        fh=jLrlXpAN1N+6I2c7BxDrN4VK5iGiuQSN/y4zidXjizY=;
-        b=MJN+bIP7J1D4WX+Bevda7C9dbRYRUYtS5bIeOQzZeI0DRNI1IgOGkzSUsm1FwjSLy/
-         jMo32i0TyLNbWVQx1SLCX1nxL7NJ0mrkzG/opHF/CvdYqR5eSnEaH3ET6dsBejPTwjuw
-         nrvOLDSe91Ea9V9Ejh+OsCyb6KCUQUI+ZdLCH2xREuSeYd4Z5K/Fi+YQ6Igp68bmB3Jd
-         1bae2BojaLLgCX8rw3IWpCL1mbzmeJLZgOsdQD2FcnM9/z5cHB4gJqTRjvyMTPbfRfkc
-         qY0AFSko89M/wQTqhumEj03Zkrv90lu2sXvDXKqdRoYcQgDVCZrmpthYBbpLMEnP2ryM
-         tqOg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6qGLzG6"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82a67ce6969so4504285b3a.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 19:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775009773; x=1775614573; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G5rI53f8SyeuhRXg2C9FEQRhaD4VvqH6jVFUBF2+CmQ=;
-        b=neWMN+gSP7cgwDe2O3H2MhetRFApFAyu0intjLjBLsfEdt/MNLIU8eD5wW3VkIXQJP
-         Kb2NyOvDdH/CVgW0P3exnCZv7h+x5Geman5GSKu4c/5u38Vi+DXWFAI19RQTp8xPw6bn
-         0HzzT2Nws//clGDVAmxKsQM5HgjXIio3wSvY8F6shUs/96lLZAvreLoHYww5LMH7QxuQ
-         AoNpDi2Xc6eEgTz2fFivRaawYLVLylFU2aBkkYZ37I6/IBNup3U06kUB8S5wWJVVO5W/
-         EBpKyvm1qLlkqezWuPYvENO/BZiaB5fvS43QCqijbXggr1EzjD1yHO4PZ7197UHo0NB4
-         eQcg==
+        d=gmail.com; s=20251104; t=1775009798; x=1775614598; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6yh3YFRTa5fOoF0dNQ15cc8J+/d03d+MAZpaXTbClI=;
+        b=d6qGLzG6h9N6gbTJanxKhxGDGs2HOVAOO61PaTkCEWfPK/bxpZEdbC0xV2Vo3G5D3Z
+         Tv0A6KOJcmjmKs6a7asV1Gji/fGA2uiYj/smvVt0xkwuBkRfqqMeVBKDHjkuZTgh5XmG
+         CSx36PzlRKOFeHBbTm5AEb3B4++RheO64NSTBhKkFRtdr1XoMR9z3tQEKkf3xKpCgOlm
+         daCeV8MnnQtNNPCmlU+K/DxpT0TnDOS/DR2sOC4uXf6MgGBOmiPHuDw5Q2cbrgHzrKc7
+         LFFfMRrgLUXds4lj61RzsNwOyneDlP52vyuyWGnJL9cOIeg9LVyazPdIi22F7f8xg/Cl
+         K7Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775009773; x=1775614573;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=G5rI53f8SyeuhRXg2C9FEQRhaD4VvqH6jVFUBF2+CmQ=;
-        b=ro3piVBPIy0Xu2P7gScWurfzEEbN5F2gVYjr11SLuWuYAzLkB3i89weVXeWuFXAIQD
-         VOm2baAf9W9UmHM7FPKI3n8bXPZOnY5kdpw1XpYEaXKspQ7WIteYuWKjXCO5WoL8fMqe
-         vYRlqYfrUcNVmBn2TKgH9KiwjYGrrNXSYXuuuj4eyKZiVhZEkLBbmtph92Yi7/Ph6yb+
-         9afTdBdyWXsaTAd6QLpmfrxHOYuY/UV+wLrY3u3l5OmFGvWJ+GzetnD9JY91VJjquVKC
-         lAGUvsK5kAxJtTycHevl7uxnY2IFzfC9G+1k40KG6DfajcD07KcI6sC8pXcuVmbZBE5c
-         uepw==
-X-Gm-Message-State: AOJu0YzGbRzD1npTVEGrRS708lp0OJrSPZfH424yA+VnFB0e2biphmEv
-	fDL9pC3QW1VMuetTmXkYEGJWIePj5qY8V9O31m9DRE7Z5Y2Pm8Lzn9XwCw0usGvvkxmRr6R0ula
-	r02XarntWheCUm3yfCM8+Pegb37ojhl21WxoZPCXAx9NNVTc=
-X-Gm-Gg: ATEYQzyh7GBal+i+PQqM5go/OV1K37GnJOKD/E94irhri0q4v/KSaVxpGQ2jd1MJaFf
-	pdJRg1EWlgPLSjPa7I5EDRwtEjw603ixghWFHJOVo7B27yYpUJXYd8tPDPr2R8oU03/fgxenSlz
-	+yX3kqYcRsfihkPk7lUI7Nm2hgiDV4VaMdX8AEJCvm6Dr6lftNyFHME007Gk8RWEwexv2aFb0Nq
-	Z8p05C8Xa3aXLuSFz021RCXb0bNhI2xb/HU1djAD29KVjSeSZMQL+TKxXKvsVyxu5TyUvONdZkk
-	gdSOg9jhkomzIxyk3YigiZDpWXty9aFbSWcPX/qTbA/Q6cBcxOomombKSqR6+w==
-X-Received: by 2002:a05:690c:dc2:b0:79a:b8d6:110a with SMTP id
- 00721157ae682-7a20f2f9dc8mr19652897b3.5.1775009773562; Tue, 31 Mar 2026
- 19:16:13 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775009798; x=1775614598;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6yh3YFRTa5fOoF0dNQ15cc8J+/d03d+MAZpaXTbClI=;
+        b=sPJtqPUnxYMOe+NMZ+lJStC0nU3k2Uh6A77Tp1JdR5xuqaWlfT5UgaR0EeKUokoe+r
+         AVrnweheT1m7jqx8k1ln0GK/Ps/RLCl+BaspFWlddLHn8wZb3YaU4OKE5LyL1sVzL3Xd
+         jrztiqLX/F29LkpcvDoXhrIEZ8ZTkm3cGgXP8T6tCRdGkWVglLObTwv60HnMyaWNxd2d
+         nY9OLxD9OhTXJje7aeH7RzFsVG7dguBpuOVdvO94puRzfJfBKka6e3QSS5YJiZUFsZiK
+         CVgaNVILDsMZNX7bdU2yL1u2kvhrXV6Caetc+sZ/acgBnYGkJNfvTVhWXr9J9ArSzgz0
+         5eJA==
+X-Gm-Message-State: AOJu0Ywj5nNsD5N/Qc0mDWgA9dhzDvdiVe9isthDN963sJQc26m2PUiR
+	e47Dp+SoA9799yUOlnPLBNr9V4GmdJ9eop+kYpyvZ09+uFC5XVM5mnSJ/zoIyA==
+X-Gm-Gg: ATEYQzzQHjNHqdfUdPDKm7ntr362fyXLZwAlRbbCGW8dpyiYDk/NUzpBLShauc4QICV
+	+wsj/MptySE7YZE3ZW9zxlECJ9GeiINkBMMZeTpEOSMrTHyyemiSZ84jB/8RDebdQ5HgIw/dlvK
+	5rt4raMvKDbMlBTPlPbtXw83wqpk2JacVzgi20X4At43qFFsQzkKNkW5wu+/A4sWJHJvYnNSBPU
+	GimGOtZbEv6R8L+wMihVZq9b7Toa/f1EeoNiBIEV7Fn9a7O5VwIBkRH8ZifFhtqCVPk6QDRhZW5
+	8wMLnge8Dedu1w96iR05wpt+Yj5gAX7oypmY49ShLHIr8VBUvqF3s3boRzDuT4Xz4o4p3vcjxEf
+	eP1qjqlZmkNoQn82GgSqiJHBMyQyBfhbb74VleplCNIoMYmZxi5IwM75RdjNiGJnyso/uKdLj3b
+	05rOZ4S2TKtqf4AcS42rSoZpjE9+kGTBLGE8qsW+0Bw4IoI0fNKzV0xxnkMMHzp+AZ2mVwjzCWz
+	geAyQyiWsnK/if4quPn0tI4AxNfzawmbyxcMNZUP3HuksZ/pO41r0hhdtsMmA==
+X-Received: by 2002:a05:6a00:3390:b0:82c:d8c4:35d with SMTP id d2e1a72fcca58-82ce88e013dmr1869516b3a.14.1775009797943;
+        Tue, 31 Mar 2026 19:16:37 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca85d60c3sm10949907b3a.32.2026.03.31.19.16.37
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 31 Mar 2026 19:16:37 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH bpf-next 0/6] bpf: Prep patches for static stack liveness.
+Date: Tue, 31 Mar 2026 19:16:29 -0700
+Message-ID: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331213555.1993883-1-ameryhung@gmail.com> <20260331213555.1993883-4-ameryhung@gmail.com>
-In-Reply-To: <20260331213555.1993883-4-ameryhung@gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Wed, 1 Apr 2026 10:16:00 +0800
-X-Gm-Features: AQROBzDMsjT_FSpW1jxsMDkCsYcHuw26GF4zoUWN0JyXZDtvSSZGlBNtoQ6NiLs
-Message-ID: <CABFUUZGdwtqZNX7q5KsTgxUcX2SBtm0xgCo7GT1BeDQcYKFaBg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/5] selftests/bpf: Make sure TLD_DEFINE_KEY
- runs first
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, yatsenko@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 1, 2026 at 5:43=E2=80=AFAM Amery Hung <ameryhung@gmail.com> wro=
-te:
->
-> Without specifying constructor priority of the hidden constructor
-> function defined by TLD_DEFINE_KEY, __tld_create_key(..., dyn_data =3D
-> false) may run after tld_get_data() called from other constructors.
-> Threads calling tld_get_data() before __tld_create_key(..., dyn_data
-> =3D false) will not allocate enough memory for all TLDs and later result
-> in OOB access. Therefore, set it to the lowest value available to
-> users. Note that lower means higher priority and 0-100 is reserved to
-> the compiler.
->
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/task_local_data.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/t=
-ools/testing/selftests/bpf/prog_tests/task_local_data.h
-> index 366a6739c086..e242c455ddae 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> +++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-> @@ -278,7 +278,7 @@ static tld_key_t __tld_create_key(const char *name, s=
-ize_t size, bool dyn_data)
->  #define TLD_DEFINE_KEY(key, name, size)                        \
->  tld_key_t key;                                         \
->                                                         \
-> -__attribute__((constructor))                           \
-> +__attribute__((constructor(101)))                      \
->  void __tld_define_key_##key(void)                      \
->  {                                                      \
->         key =3D __tld_create_key(name, size, false);      \
-> --
-> 2.52.0
->
->
-Acked-by: Sun Jian <sun.jian.kdev@gmail.com>
+From: Alexei Starovoitov <ast@kernel.org>
+
+First 6 prep patches for static stack liveness.
+
+. do src/dst_reg validation early and remove defensive checks
+
+. sort subprog in topo order. We wanted to do this long ago
+  to process global subprogs this way and in other cases.
+
+. Add constant folding pass that computes map_ptr, subprog_idx,
+  loads from readonly maps, and other constants that fit into 32-bit
+
+. Use these constants to eliminate dead code. Replace predicted
+  conditional branches with "jmp always". That reduces JIT prog size.
+
+. Add two helpers that return access size from their arguments.
+
+Alexei Starovoitov (6):
+  bpf: Do register range validation early
+  bpf: Sort subprogs in topological order after check_cfg()
+  selftests/bpf: Add tests for subprog topological ordering
+  bpf: Add compute_const_regs() and prune_dead_branches() passes
+  bpf: Move verifier helpers to header
+  bpf: Add helper and kfunc stack access size resolution
+
+ include/linux/bpf_verifier.h                  |  61 +++
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/const_fold.c                       | 385 ++++++++++++++++++
+ kernel/bpf/verifier.c                         | 373 ++++++++++++++---
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_scalar_ids.c |  20 +-
+ .../bpf/progs/verifier_subprog_topo.c         | 226 ++++++++++
+ 7 files changed, 1000 insertions(+), 69 deletions(-)
+ create mode 100644 kernel/bpf/const_fold.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_topo.c
+
+-- 
+2.52.0
+
