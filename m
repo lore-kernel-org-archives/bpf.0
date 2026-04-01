@@ -1,93 +1,93 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6149335B63D
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 09:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2123CBE66
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 09:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775034707; cv=pass; b=etVI32gj3hgFQmt/dK9KX0+wea0Rxcf04JPrEGnLTpEj+83l27l4KlKXQEa2gr9tkPV5+cs7ZJd1BC8HFojyi8YagaTBYF2z13vizh01x/l1lXaT7jUCGmHx08AP4q/9XwuIkJ0S+sYiN0eqksWN31F/6fXFlyCLpla7KzoBtEA=
+	t=1775034901; cv=pass; b=M0py/CYVzosU0pWgnci/CsKar8augGCyehXxktsuTshTtdxi4vD40ai0RiL6tRj7QoRmfsn+ETVNl2vFpH3VNTKQYc3neam8tw4FgT4TjAWzf+o4eDXImyKVt/Af41XkLbKQBqwdJJi0YlTJKpXoqg281SheCJsK8Mwp0qA3LNg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775034707; c=relaxed/simple;
-	bh=dmaTcuAy6jfJ+bmzS1Jm/uyBrkTWgyDnScrFaQ2/nas=;
+	s=arc-20240116; t=1775034901; c=relaxed/simple;
+	bh=Px8VZ/mZa/wVBiSvlhUqswxvgLPunBza8vM2mBYbtJ0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kjq+JQmd7npsoyOsfajEAtMc0SqjcZNTpWyczVSG2ge+qzNEUPNJoRbH0BjBmO55pPTbsqp1BmCKLReRcxPmzWsQoWiCuqRvwMa8tBn6KSNoartKn8yRWz0TJT8fUFGfInV+jU3NzZoasoIqoLYO69SZv1wU3QfB3ShWqEU7Rrg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=twFnRIT8; arc=pass smtp.client-ip=209.85.160.174
+	 To:Cc:Content-Type; b=ND3vOCHk6MNKIxh0xZ/lG2DHhWD82OIq7uxy4RpSjIpUNmdgD4mMcm7PdOcLmuO2mP4OCN6mC5oOMEDlduCJHe2VrMcJ+1uAN56qgJbRzCVxdhQV/82GqzxD/wMYvENuSYrfqKSZ2t7HDoASoYux/2LRziXjuBtOvDDEMjQ1ANg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PcbMzFc1; arc=pass smtp.client-ip=209.85.160.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="twFnRIT8"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-509061dab77so56640591cf.2
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 02:11:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775034703; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PcbMzFc1"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-50baf2df711so43305351cf.2
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 02:14:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775034898; cv=none;
         d=google.com; s=arc-20240605;
-        b=EyRxaIsqlTR9BJ64MuqKfJK5M+Zb1dyPKqvnAENcrjOwazalC6A2MlCDxBIZ82IzpR
-         O+8vhR2T9v0MpX24Uk0XRcDN6wFypEkJWVlS3VJIdh08F0nFckUcrJKU2X3+Z6vEOt/Y
-         no7+8I/KeRH1l2Dosgn+dNK0cTOHZIzc689l9DcViSe5nMSsqF2fFk5l1bQBblfq7XV3
-         AETGk1qvLJarEm0akO/c3+3WxrA3wsKI3niumZifJvuU6rC9J28OJcmn18FREDAYLpRn
-         kLlrwsC+59AGiC6hxed22jRYCozvYHN0L4pOQf8bpcZ5h0epCAtkQKswsKAHlO8AtZaA
-         mqhw==
+        b=SKHpZuTIHPrERlw+dtki2S85D4f1YqAxXn/vCDo7kAqFJCrNIBmjLDzD0K2ZZuA7eU
+         RRSzizmQr2IPTclmyEnEWvyJiiWfpeb7DqAl4Y+cAE0zRZSnRjI9UWvw2XwSFGtMOK2/
+         zVEfb1VleDdHOwcyYYaXRfDEPK4OJWshRRYOhdo6iebKzReprsvUrSQ7J8dHvhYdl2jw
+         0HQjLRAO5VRePwo/7CQaMgwrgyXd6ZiWy3ONXudYeCeq17/SMTp9BHy304l780Y34YiI
+         3bzCZ8TtVdNz3+d4P4lyQ/AuPBz6yPauQIo4InESfhLGGTkVUY+ongaAwGPN1dJhxgDA
+         9jFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=lctUVgmnSzTUnScobr+jAtLkB/onmBi35F0YaMEt+UE=;
-        fh=NGqk7CD9Nx8VTgImWv152L6Stw215KUn9gaSSasBxHs=;
-        b=iIcRD3KYkSet1/BZP93zQjrLmGRLWmDmcN0dnxDOe6mJ3iG0hE6+FrfYh2gXVQ+4uT
-         LJTFWB32LNaHBeBLGGzmsYT7aIlbTeQRecGqhIHB6AAmpyoJjtWK7c5Fg+Bz4GNXUSwt
-         wg9Q3S7ssTtuBTnkL8zNI5g7OGjd8PQBXN7DAUVh8JC8HHjPL1am3ohtBHzUS3FRb+5H
-         vrhmuJ670Xxp86hagRmQ6//ji3LALNlO+ZVbFcev2sYpUJFyg/o1FaJ+4weSI7LFp1Fq
-         tGFq4UioS5ySA5BLOz7oQlsFufW8C+6rkFUmXi9DjF9gN3RZeM494glzW+79xmvwNlvo
-         pD8Q==;
+        bh=QNCKy3dqIhDpgGkChFZLtJKaP66u94+8Bb0TUa2FxLg=;
+        fh=JSmce9sldpjyPW53j7ggTa5/yF5gAvunPcuNjFaMyn8=;
+        b=YFC1Z3sJbCLqPySRbBz/+gA/1XyxJINS2syL40bwYavfVtBcdi5fevW0rT1sZ/S1kT
+         Iys/O4QswXqpW0hR/oJ+sMhnaHxqz787Fw1xA+NfSCutVaqOw2cAc+9BhYdR3RONIcAf
+         DMc7WKNoYfcqoW3qPvwltb463nQ3Wby5qWvjFlQaMcklyXUC/RUzIQ/U+ET2LoEFOJHs
+         2TvcTwpapp7sfwViMYc2aCHNbXo1zpKfBs9DuTMqY4hXlwf9UkcKkZAhOmAOYun4RcYA
+         9EUrSiT0qfGoqbRu235O2OYd6mCKJ9wYwzRAog35sJtUbFWb+9TbzWi0LrvFNHLb3pIy
+         RQKw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775034703; x=1775639503; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775034898; x=1775639698; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lctUVgmnSzTUnScobr+jAtLkB/onmBi35F0YaMEt+UE=;
-        b=twFnRIT8SirtW12uUCHs6hTeF/J2DOg5PKAmKI/mwRCncAk4AIvZwUq8xR7yTK0iJ+
-         4ImgI8xWhYvzAYMKo33ksmbew7TAwPlXPwRplqecw+NYSPwHcYD8NcIFmA0v/FzgmIrA
-         GlgznlRQinWJpsA4qp4IlnNYa4zu4LMzYJu3khv64uuDL3+ybWpc3gfaIp1N30uXymnh
-         o/KWJm7bZFr+X8f9bK2b9IBUwDPo2JrcV4mBBOIg3fqCL5h118wWZzw/mlpOg5YazSse
-         2pJzkr32Nm/rqUXZUcHdfdBBA5R+Rztx/u8eIHbmmnYHi26nHKuFO8CqGzwdfgZfHKXJ
-         VrAg==
+        bh=QNCKy3dqIhDpgGkChFZLtJKaP66u94+8Bb0TUa2FxLg=;
+        b=PcbMzFc143UJPNLa1IszL9pPW8NVryFgbF485R7GCAGuU6p+ZrBk02ECuyE3QGpPPR
+         s8PmzFSS1wArBXxvuc+UtXXMnAOwCJ+jq+1vNSV+UniMmd1Z5E8/yTmPY7jdYzGGTVr6
+         NzWp9TOvjIix3ogAaxIjggzONpWn1bnYrGEVP35Jv2A4mKUlB7v6q/VKR1ubhl2Awk3s
+         Kxcz59bI9slSkfdhXbqubS/KzGRsdYjcTJgVAK0tjaZi0oohw05fsUO/dcsMUFE+pl0E
+         aVByIpngrWTZAFOiI7hgEJOSTa3dRZmFq7KhzfK0ZJxLzy54WLBvphLnzo2fZIpudTwx
+         M7AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775034703; x=1775639503;
+        d=1e100.net; s=20251104; t=1775034898; x=1775639698;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lctUVgmnSzTUnScobr+jAtLkB/onmBi35F0YaMEt+UE=;
-        b=JEn6PhDa66F0NNKoj01FVH0mf+wTHaeATfANYE0d29sLktqC/46ltxB9eHbThdCpqK
-         hanF6n/DGGXoXZKQnAKj8jG7KkgQojuGzAICfxT9D/gO4M3/aritsuuCPkDiQTTiwh2H
-         Z1+iL4L1BCz3QrqkK1O5zvPWUKp6qBAAHW1IMDrnYZpSVGZhor8h3vwAkUqPR/0dFqv9
-         bod4hQUuSs9/xZnq4M+AIRXSnT+imLN7TQYrpWk6i+mdYxTRnO4pf8QStv0bcPme/Net
-         wRCPPfnpzSbl1LNKFjSvGJTKl8j6Lu9IK6q6bGXL0vp62rh9KSddfrg4Bt/tvxg3ZGKq
-         QVzw==
-X-Forwarded-Encrypted: i=1; AJvYcCX4e9UhsYOsb4JZPBqbBwWIq+syRTNBQ+vJjf4hhq64b2wZzaTM/QHM825n5Ljp8J6BeY8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5sf+ymt6i36tPwvARwEDHxrfYFNyFBXfT/lVPeoJnJHi4vy+T
-	G57FKWhJb/1t5rVqQwYwLh48KaeZ4voad5sMxzZdhg3OAwTjCxSuJdiGnsGqKaBKqelPsDyT+/c
-	/8V8P8448Bbj51BLsCfIKCn3XaMIZBzxn/fHsATY6
-X-Gm-Gg: ATEYQzxtBo9AHco/Mo9rERrYhXZrStjcAPAQITRiyX3EcRi7B3rIca1NQi5jToapPex
-	hUOmS/BJhi5J9tbHL7yOV2NtDgw/FCaiOH0AkPwvqc4pCCF6x+4DyMQ7EMyuJGoD6qkJit5cpMh
-	MnnUImmmer+KEqhoyu3p2FnZpfsgw+nCnXXXgm+aGXule+q3PgrdfPP2v+91w4f2KsezzQPcFQJ
-	RuDMyW/nxkWVMP8i0M3vbmv4O74NQdgBnj8A5nuWfzjPX84IinWS0+x0mFHI/pMQERkAnBWl2MG
-	d2/YUMwrhxORwfOi
-X-Received: by 2002:a05:622a:5909:b0:4ed:b2da:966f with SMTP id
- d75a77b69052e-50d3bd84b29mr44808651cf.31.1775034702251; Wed, 01 Apr 2026
- 02:11:42 -0700 (PDT)
+        bh=QNCKy3dqIhDpgGkChFZLtJKaP66u94+8Bb0TUa2FxLg=;
+        b=dAq0Rt/CEoU2cM6vGaSm+NOzE1OAGSYplLHbvATVgjN6XeW3X9pKF4s1TjpHymNeN1
+         oMPuZbSYYr055ensCGqX+7+K7sZqSOWWxiU5kz+yJfb7PRNeY4fwQVWoKNXweEbwVVYG
+         ScSKgWa9u9Cmj0DlWPHLKe7lPg5tM0vdutQeOayDBD6rQS2pQ1p5mpdNom8v3EzSBMZg
+         gYVxlzAVZ5MTAq7ONXNfexZ/pMcMOsL67hTIqn6wBHsy65+l4HgD3g9yk0Byp9XIzQ0+
+         u3ZZ+h1fwmT08EKV7XZAHsG/icv2Tqop5S9whkcAYuiz1JjkM/kcNgMn23jf/fFWZWAJ
+         g9ag==
+X-Forwarded-Encrypted: i=1; AJvYcCWlaibcVKSd3RzviqRinQ4ChssdiwkFyKWiQ7UaOjJzYAv7SO5NNxYgPJIAxNnFa9fWplI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXY9bB4ZcvWcwybNA7fxCBm6fLHvIdQgK3V/5ORTvhbqtZH6c+
+	rAF9BFsbca8XJZAgTvY3tv4nEkTULkFrLkGiO6l4ZxVCumikVVEquxSQfX6xhghamiqwoO803XR
+	w33Y2OY92g13/ysVZu0y5i8kuv+gr7O5MJS26ENrb
+X-Gm-Gg: ATEYQzzi1Rhu6takyTTo9CBieSZBCnwBt477bkxK72b3POehKtWdKNKntLc6tbhS1Qw
+	A8jm2MtEL+AYWSxcKBG2caHrrb9bkBsU04j4ijbKMANKESkugEEyyBSjKgZwIdJlVI9pnjBniN1
+	XOrzM/RSJBCqTiT0UkkbmE2BC+QW1uajgF8beWiioIJEHQO+Q7DzHDN1GyoxalHS2IAruEr9XDG
+	Ms7KMnk8B179t5nj7C3geTrH4uF36HuQ5px9hDvWp0TgJ52S/8B6B4zlRD+NbueyZWpbRxKHMTA
+	H3llPA==
+X-Received: by 2002:a05:622a:1c05:b0:509:2ef7:7034 with SMTP id
+ d75a77b69052e-50d3bcf5f5dmr36705111cf.50.1775034897967; Wed, 01 Apr 2026
+ 02:14:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260401074509.1897527-1-dwmw2@infradead.org> <20260401074509.1897527-7-dwmw2@infradead.org>
-In-Reply-To: <20260401074509.1897527-7-dwmw2@infradead.org>
+References: <20260401074509.1897527-1-dwmw2@infradead.org> <20260401074509.1897527-4-dwmw2@infradead.org>
+In-Reply-To: <20260401074509.1897527-4-dwmw2@infradead.org>
 From: Eric Dumazet <edumazet@google.com>
-Date: Wed, 1 Apr 2026 02:11:31 -0700
-X-Gm-Features: AQROBzDMpjzScINQf3v40GgXHFr7zNRIwe6Qb5aBvyyAycV5Up8H_bwJXHOzd_8
-Message-ID: <CANn89i+GHkkubJp3MTKZ_r4tde1qLejfsxUh+w0gPZ3ec+YdjQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] net: Warn when processes listen on AF_INET sockets
+Date: Wed, 1 Apr 2026 02:14:45 -0700
+X-Gm-Features: AQROBzAoGbAvZgGI1SP1QOjEPB9AfHu4JQqffzH3Pc3uWqwtvvbxFW3VGI6Tc4w
+Message-ID: <CANn89i+iRUgqtd+eirfSUM3k+keNZKzLwsHxZtwE+vHdv7H5PQ@mail.gmail.com>
+Subject: Re: [PATCH 3/6] net: Guard Legacy IP entry points with CONFIG_LEGACY_IP
 To: David Woodhouse <dwmw2@infradead.org>
 Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, 
 	Mark Bloch <mbloch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -116,28 +116,27 @@ g> wrote:
 >
 > From: David Woodhouse <dwmw@amazon.co.uk>
 >
-> There is no need to listen on AF_INET sockets; a modern application can
-> listen on IPv6 (without IPV6_V6ONLY) and will accept connections from
-> the 20th century via IPv4-mapped addresses (::ffff:x.x.x.x) on the IPv6
-> socket.
+> Wrap the IPv4-specific registrations in inet_init() with
+> CONFIG_LEGACY_IP guards. When LEGACY_IP is disabled, the kernel
+> will not:
+>  - Register the AF_INET socket family
+>  - Register the ETH_P_IP packet handler (ip_rcv)
+>  - Initialize ARP, ICMP, IGMP, or IPv4 routing
+>  - Register IPv4 protocol handlers (TCP/UDP/ICMP over IPv4)
+>  - Initialize IPv4 multicast routing, proc entries, or fragmentation
 >
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->  net/ipv4/af_inet.c | 3 +++
->  1 file changed, 3 insertions(+)
+> The shared INET infrastructure (tcp_prot, udp_prot, tcp_init, etc.)
+> remains initialized for use by IPv6.
 >
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index dc358faa1647..3838782a8437 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -240,6 +240,9 @@ int inet_listen(struct socket *sock, int backlog)
->         struct sock *sk =3D sock->sk;
->         int err =3D -EINVAL;
->
-> +       pr_warn_once("process '%s' (pid %d) is listening on an AF_INET so=
-cket. Consider using AF_INET6 with IPV6_V6ONLY=3D0 instead.\n",
-> +                    current->comm, task_pid_nr(current));
-> +
 
-Some kernels are built without CONFIG_IPV6, so this warning would be
-quite misleading.
+...
+
+>
+>         /* Add UDP-Lite (RFC 3828) */
+> -       udplite4_register();
+> +       if (IS_ENABLED(CONFIG_LEGACY_IP))
+> +               udplite4_register();
+
+udplite has been removed in net-next.
+
+I would think your patch series is net-next material ?
