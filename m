@@ -1,138 +1,155 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f66.google.com (mail-ot1-f66.google.com [209.85.210.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB6E2E8DEC;
-	Wed,  1 Apr 2026 12:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9F8405AC7
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 12:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775046263; cv=none; b=avbmpEGZZnecal/tbKJFIU2o3LHFG4CTaYzzHY8Z77MNJRRnAKr1UEPMFTuEmup+b8kUI5xQcEAhyGHqOMsZ9zxauAhz7KJflt2RhQqbAvLHg+NNnvGc5oyJaNnxCOlRRUAoPBkH9kBGuCa+35LeU53UvyOGV6zMGRSLMNwZr6A=
+	t=1775046503; cv=none; b=PspuDKGsJcQ21OspME8RqEaY+otMx3cd0mMkBzRBSyKeXcEvwEL4lr6PfzIF3TAVQgXrguxc1QdxwbELESn3QOWkgMNsjjcwpCMrzbu2FiVZxqOzoLlShYTTifIVOqvTQ1NjMwpi1IZST+8cMymCBP5aQY3WnX+xQCp19RI5YZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775046263; c=relaxed/simple;
-	bh=0Wf4DPMZIk9Be5bWwa+W75w20Pl3W3M0ANIftpiY1CI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=O6ZnTCcCsmCssS3/56BVX5vMZZSc2IeT6txTnsGDZHwSgkIDHtTtBZp3hizE32YXYC7fwCNRELl1kmjP5JrANiSiAZaODqlAWwYjJTWohx9ZFCOiWqFsJPFwi+S4EvA4lOGFUZ9hqbxCK5ntSIT+5pFsoniTPHfvRNSA4hPP/zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=B5UxFNul; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1775046503; c=relaxed/simple;
+	bh=nU3Z39NrXqbYOt2XKhPpVD4jKeMG3/JjxCQ8Jxy/Ohc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C1cSRNzgN9b2F775nXafYQ2cNZD/PomFIQiOxlHNzEdSd0XlLxZcHZojWzf1N7SbGPs+aRTjDFroBugvJkoIUInB/SgFiMzPzH5oldJCd+gxZmRTdwx321qVeRjC5bVEfL8k/WhOEfh9mYAS8rXCBEFcpq9E/jACzkylbQuEf8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2Out60I; arc=none smtp.client-ip=209.85.210.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="B5UxFNul"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=AtPBdLCBXTcM+5To5d5wUNl3QoncQ95q/HEmvGQ4mnc=; b=B5UxFNulXKHqHfUF+s3cZyNkJt
-	hbToGQZcN1M3SKlhQNTiPYGLA78ybO4VQcD9MfLuTKQ1w8RuwwyYmblMRe8ovfLENNJBaj9L4dqsB
-	tIVYAM12LOg+iqSAJIpH7O7Iq47KV9aWTWBzE1+8G9Ye1eg/Hhhzbr1O2gk0cQXS/S2moXUtBwRsQ
-	TO3REIKWorzTV7iOzrfklR5IqS5yOaaDbH7zOr0irn1u1/GiR9gunXew1okPNyi1Rsz6tUHo3goxK
-	L5TbulQV7lDAHISIImFWNyLG9xUaq2kY1QFVdJzc2vqKJFzrMvWysE+6MUNL85TMcKCWz/H5pRe6D
-	TYyCNgPw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w7uKP-0009Yr-2D;
-	Wed, 01 Apr 2026 14:05:45 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1w7uKO-000EMZ-0t;
-	Wed, 01 Apr 2026 14:05:44 +0200
-Message-ID: <d8b72cf2-470a-4a8c-bb9f-223f27939715@iogearbox.net>
-Date: Wed, 1 Apr 2026 14:05:43 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2Out60I"
+Received: by mail-ot1-f66.google.com with SMTP id 46e09a7af769-7d7e565c877so3294253a34.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 05:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775046500; x=1775651300; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2RU8CnW4BuHeiufgwjJtePtUfvMrUJkSI9yaJGHgH9c=;
+        b=f2Out60IvxEQjm5btuQLMNWRuikJ4rLzxbM2yFEmPN7QCr9pomNBGkoftxm4hr36lk
+         B65ywb7SERSJgRO5tk/eu9G1gaU7f6tRfhTYvckpn6SAWbtPn6ImgVEUb7/5y+RXpELD
+         q5s67qWZeje4SDYxIq9mfAzJgNoqfhf0ULS+JfgHoO4wp2J8e3ID1o4WSJw3lWCfr6za
+         IwKD6fe4xIRb7XQSO+UQyEa5wD/7uBAMPbk34q+V4QixxOoV+ayJYiEvbsRCecyvtXjl
+         tjpOnSXIzCvCUQC20EYgqra+mW1VdIHPpB8UE1eoCJa07kUqbG51K1EEazuv54Lmmgbf
+         KMmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775046500; x=1775651300;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2RU8CnW4BuHeiufgwjJtePtUfvMrUJkSI9yaJGHgH9c=;
+        b=OF5eMVmjIbwdWwL2b1ZrmEh8kd7aB5d2IEYLnvIUWKLrFslmaL188W3zVHenb6r+Y1
+         Zt9l18Mlus4JEqKfbXF/uegsX8EAmOe27y44P904V3keYS19gAHu9+iE+j5vJKWYeuCh
+         SuTfLqDTVNCKRgq+coigabvKWolatAphQVIbn+knQ6HuWvhOvqq9hzS+ubiE4L0BjWST
+         uuRoqGz2X3evy3kZ4mAhyWM5riV7fQCKtU138AfuK3wAckLdFdrakslVq/VVX+j3k+V2
+         MluzEJQDfBeDiNPA1yhEPCDxZ8IMGOfuM8eZ9s5NmT4bKqzCoHBIfHQjb2MacifCYXxi
+         3Ttg==
+X-Gm-Message-State: AOJu0YwqIos7BWHbQg46LXekNQwFKNXiAkPvpWfR2Cvxit9NYF/b9O/W
+	04++i1VsJhhTVnWuwJPpobozrgzmr+dny0SrUH+WeDjvgXycNDMf2KhtEzTK5PinjzU=
+X-Gm-Gg: ATEYQzwQbjbwKSdmeUGPj9Sb75YspJPyAu1sfEylCVbrgZ8Ep2v+OXMuUawJV7r9xD7
+	22uTyXKHMZeeg8T4EBu1WjRKEDiPVvck7c6QA/uGy99dOOSAuEB7JII4R3el1tSYNkLygQ4BxDP
+	e5JzPgrrUWXX41mz7N5mbcwT6qn8XRSfEhmcTfCqoqvKp/FMco6seixSo8fAK0+Ssd3q+XpdJHW
+	NURHRFtvE/nDpUU+hqMyGMc+j1FBcOah+pGe4dwGRi8lekT3XtbLMQ6R98JMcGmxc5aUmWEC8oM
+	SWf4EHHdSTTvb4VHki1QYcjU1lz50NkAYcAV1cHcyn1Rade8mweED0unV9opazocL1c/rnv/yHp
+	zfCro04aHoKWGcMSr7wHszi84ihG/4NXN9qeqwJ4MAOU9vyRXJxdXL6V34kpECtMn3/sVhVKw3B
+	AWhVfzVIIvJnshsHSCIykDnfwdqmyuCAM8eiJ6DXrh5zei
+X-Received: by 2002:a05:6830:3741:b0:7d9:add1:4399 with SMTP id 46e09a7af769-7db9942755amr1971918a34.27.1775046500303;
+        Wed, 01 Apr 2026 05:28:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:56::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7da0a814e0esm10375054a34.21.2026.04.01.05.28.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 05:28:19 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	Dan Schatzberg <dschatzberg@meta.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 0/7] Allow variable offsets for syscall PTR_TO_CTX
+Date: Wed,  1 Apr 2026 14:28:09 +0200
+Message-ID: <20260401122818.2240807-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v10 00/14] netkit: Support for io_uring zero-copy
- and AF_XDP
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
- john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
- maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
- toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20260327121049.334562-1-daniel@iogearbox.net>
-Content-Language: en-US
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260327121049.334562-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27958/Wed Apr  1 08:24:34 2026)
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2717; h=from:subject; bh=nU3Z39NrXqbYOt2XKhPpVD4jKeMG3/JjxCQ8Jxy/Ohc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfMs361tZ05dfnd/+v21e1+oK/6/sUus/u+h5V89OTbyiZ+N qfvf3FHKwiDGxSArpshS8n8fk/GJyt+Btsu4YeawMoEMYeDiFICJzPdjZHgpedJopWr3mtTVpja/oh OTJjzplQtMuL5uFwvnpx8fzbQZ/juv/d08/7TKtatB+nPPTWRc78HBafKpjZ/7jkl18i/J5ywA
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On 3/27/26 1:10 PM, Daniel Borkmann wrote:
-> Containers use virtual netdevs to route traffic from a physical netdev
-> in the host namespace. They do not have access to the physical netdev
-> in the host and thus can't use memory providers or AF_XDP that require
-> reconfiguring/restarting queues in the physical netdev.
-> 
-> This patchset adds the concept of queue leasing to virtual netdevs that
-> allow containers to use memory providers and AF_XDP at native speed.
-> Leased queues are bound to a real queue in a physical netdev and act
-> as a proxy.
-> 
-> Memory providers and AF_XDP operations take an ifindex and queue id,
-> so containers would pass in an ifindex for a virtual netdev and a queue
-> id of a leased queue, which then gets proxied to the underlying real
-> queue.
-> 
-> We have implemented support for this concept in netkit and tested the
-> latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
-> (bnxt_en) 100G NICs. For more details see the individual patches.
-> 
-> v9->v10:
-fyi, I'm planning to push a v11. I've investigated the latest sashiko
-run on this series [0] and 2 out of the 11 findings were correct and
-I've fixed them locally already.
+Enable pointer modification with variable offsets accumulated in the
+register for PTR_TO_CTX for syscall programs where it won't be
+rewritten, and the context is user-supplied and checked against the max
+offset. See patches for details. Fixed offset support landed in [0].
 
-Thanks,
-Daniel
+By combining this set with [0], examples like the one below should
+succeed verification now.
 
-   [0] https://sashiko.dev/#/patchset/20260327121049.334562-1-daniel%40iogearbox.net
+  SEC("syscall")
+  int prog(void *ctx) {
+	int *arr = ctx;
+	int i;
+
+	bpf_for(i, 0, 100)
+		arr[i] *= i;
+
+	return 0;
+  }
+
+  [0]: https://lore.kernel.org/bpf/20260227005725.1247305-1-memxor@gmail.com
+
+Changelog:
+----------
+v3 -> v4
+v3: https://lore.kernel.org/bpf/20260318103526.2590079-1-memxor@gmail.com
+
+ * Drop comment around describing choice of fixed or variable offsets. (Eduard)
+ * Simplify offset adjustment for different cases. (Eduard)
+ * Add PTR_TO_CTX case in __check_mem_access(). (Eduard)
+ * Drop aligned access constraint from syscall_prog_is_valid_access().
+ * Wrap naked checks for BPF_PROG_TYPE_SYSCALL in a utility function. (Eduard)
+ * Split tests into separate clean up and addition patches. (Eduard)
+ * Remove CAP_SYS_ADMIN changes. (Eduard)
+ * Enable unaligned access to syscall ctx, add tests.
+ * Add more tests for various corner cases.
+ * Add acks. (Puranjay, Mykyta)
+
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260318075133.1031781-1-memxor@gmail.com
+
+ * Prevent arg_type for KF_ARG_PTR_TO_CTX from applying to other cases
+   due to preceding fallthrough. (Gemini/Sashiko)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260317111850.2107846-2-memxor@gmail.com
+
+ * Harden check_func_arg_reg_off check with ARG_PTR_TO_CTX.
+ * Add tests for unmodified ctx into tail calls.
+ * Squash unmodified ctx change into base commit.
+ * Add Reviewed-by's from Emil.
+
+Kumar Kartikeya Dwivedi (7):
+  bpf: Support variable offsets for syscall PTR_TO_CTX
+  bpf: Enable unaligned accesses for syscall ctx
+  selftests/bpf: Convert ctx tests from ASM to C
+  selftests/bpf: Add syscall ctx variable offset tests
+  selftests/bpf: Test modified syscall ctx for ARG_PTR_TO_CTX
+  selftests/bpf: Add tests for unaligned syscall ctx accesses
+  selftests/bpf: Add tests for syscall ctx accesses beyond U16_MAX
+
+ kernel/bpf/syscall.c                          |   3 +-
+ kernel/bpf/verifier.c                         | 104 +--
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +-
+ .../selftests/bpf/progs/verifier_ctx.c        | 591 ++++++++++++++++--
+ .../bpf/progs/verifier_global_subprogs.c      |  95 ++-
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
+ 6 files changed, 704 insertions(+), 93 deletions(-)
+
+
+base-commit: 0eeb0094ba0321f0927806857b5f01c1577bc245
+-- 
+2.52.0
+
