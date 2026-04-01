@@ -1,316 +1,151 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9CE44105B
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 13:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775051491; cv=none; b=TD8k3whaqaMzXw+7fSnQ5PJ6jEzgWIs9NhsEl9BVZJzUbFVn+e6XdIy1VRscEaMssIollGS7lrL0V3EGk/q7rolnk+RRQ9GxnA++QraPUP5iE2C9jXRuw/ll6PtL3smVnTExL4AMRZ2jLBa27Tj3ioehjnrDTs/DodoXhacBGOY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775051491; c=relaxed/simple;
-	bh=W7b/pPPiD4RFNLg/CzzpNLn0ZtWiqWm/+bYntF4S3mw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cNgiIWCDH+5bIMRKlMB7Gj+u7eFXKQ71Dtf1qTVWEEYwgkSVxdcgxthYX9oUkGtL24SH3xD9h3lVZLc2G5GzpJSOR90Bs/CMXxQGaJ65Xg+Doql09Nd2QRhxWYk9L0kTQcEz8pG7ACboqZ4VzIgYcr/oGBJzEAe07vj00tkWMOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j8bWCLjg; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB6044D68A
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 14:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775052533; cv=pass; b=oacIP1hpvzUIRa8Rdo1sDHtv1RSScgW9+Xs2rmGnQzTOr47a9YAADooBGARpfsEKxNZoYxcx8YwZheUZUDegn33eGq8bmK2gYainUIgIq7GZmra6dcBupkVwyRJxX1bU9FEULmuj7ywUC4IEreUO+NVfTTGLyYFRoWTyrClrGxI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775052533; c=relaxed/simple;
+	bh=hirgCt1PZAXwyuuObnGxxAhuWbF5pVndJu+2sUatshc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FkgARIs+L84u3fqnxZjGCDCgw/Rf0rR94yPpC0zNI7/xE+9qQSdNRkk9Lwwq2da/uJGvaJWMHJ/eFy39lsT+I3k/IXo6iypl5hu7WNJ2KdWEICEEjq1DjR3wp1nEgjnm8NY1lpjUXD64K5Lok/syoIG4y25lyTjCQe2J/ENPOrI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QiHg6Se8; arc=pass smtp.client-ip=209.85.221.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j8bWCLjg"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48557c8ad47so54734815e9.0
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 06:51:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QiHg6Se8"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-43cfa33a983so2440870f8f.1
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 07:08:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775052529; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eOUX8bmcxN0FC6r3/3XjCupunKYRM64IcvbwP5iOmP0ZCh5qsttLK+rELm9NtP6100
+         0FKF8fe7eaRKx1UJImLniviN8uMN7/hkbi/8VLwZhJXHDuo1ggbiEEQP94cV/kxDvCRV
+         LkqDY9oiVdZXTVu4GWykpvBlsK+mmw1pVIGcaqGrBfS/FIPjLD9X8VTE046O6Bkhj8pZ
+         hpq2jmVjUexQKfliZCVUdr7IHO9KjFqyH8BMngkKbj3HCX9GB/oPOwB6TvGy5MPbo/HV
+         tozABNRhyMUh/CeboCx9UJzoB6Uh0hjyJYHmVrcUkMyVRgWVSW9ZpQ/iHqkDSWSsUVh9
+         G4ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=a1hIUDWQSXTMNI+xukBaLoexapmPDMcad1HRGKU7yJ0=;
+        fh=iPvzjKy5l7nIXRimA+yMgoQ1NjVgDn70PmhNy/EcPps=;
+        b=IP9DyFC+bkgT6JFLeurgqXRV+qgdr8wQlTP+pMwt4xMt0S6QtLOvvupM4QPJfnQ3j8
+         Y2d3Nxagj8kR0J72zTEl6GVXv0YcZdomIRHnKhzFZkPIu0qeHgfUIEXzfw2qFK1kpDEY
+         OfB/5Hz7NuUK5U/dkxMt4tCXlCjpq7yDaxrBRaAvkcZgvydwL2k9Y/8O0vSPFUpZsQ6M
+         T0k1EJFzLuOB5KJSpAmeXa5moldTXjh9oEHYXaVY79EgFc3WVC5MM2+aavJrdSQ+QeB1
+         B3EzP8YlGvufFGiqrhGoE+pmXE66oiLBuMAXvQX+F9kpejUUfgMYo+gzwBCf9w3Y7njG
+         D4Yw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775051488; x=1775656288; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k8I9WYnBfy6HTGWCjHpPWQRPspo43wY0V7PnrObm4Wc=;
-        b=j8bWCLjgwrkOKX89Ie4mwwxyEN3NDwxdlsKQMBWEtGC5y/iSRfDHUFI5qfmAvlv2xU
-         REwDCJlX9jPI1eCgGq98bzk5cBGy7A/1D342YV6luMkyOD0xHW3IOjgm4Va8xxdxwJ8Y
-         MdDoLuFbrh/Msl8eMWywsnmA7zeTSUhBq+rgswzptQ4r1mimTsAXJBrfx7Z3MAdTHDJJ
-         tTKfgIvaPRQSrFy6t37Ij5t3BMJI4X3Dqcpeba2kisxw7RhtuKUJpw7L+mlezJkWUf71
-         bW39+MsgfPIjEdzQ1sIsS0wQIbwUkL4oyJwt5cyu4xGsWuEdX9ohRwC1+W/2rSzAYzii
-         eZUQ==
+        d=gmail.com; s=20251104; t=1775052529; x=1775657329; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a1hIUDWQSXTMNI+xukBaLoexapmPDMcad1HRGKU7yJ0=;
+        b=QiHg6Se8TROA6PrwUEDZ40hAU/jZ8ZBH9/O3d5DS/Cdm4w5K474tLqfoNb/B6pdsGJ
+         QuNl/OLMoL3xcR6iBgwDIuYt14y2m78ruK2Tj1JtjzoyROsnjebTMVn8tMYC8OpQwXUi
+         HZ9dCUdKJGqXnJPcQCLGEH0I1PoU44d4eMDjHEXt9r7U3JC2vD9UHoj74m63mAeiUmoV
+         UgeNWK9R7Rd9LhKEDn8UEQJ1VPYKgGAO3fVEC4Av4DlDsfl0Wd1X0D1pZdxhcSYH3WC/
+         Ip5/9/jiY0Djn+byEckdkEShjH9mL+psGLU0prQaRf66W7G+FrlthFSuALE9PdE+qUl1
+         Yixw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775051488; x=1775656288;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k8I9WYnBfy6HTGWCjHpPWQRPspo43wY0V7PnrObm4Wc=;
-        b=K+dm5cGDWbTt12+wigNSXafvPNMAT3nAwovSKa7IU85y1B4nkhG1+1MC/IxZfk1ERj
-         n/eObiHVfQlwqKZ1nK4e4tB/H3ERpTrSX51093MPXGoBtXXdNam86DrkGs1Am3uvMvct
-         61ZsTINestgqWaL7CB9rzgrCyQsD2q1aNTEY6yHSJzwhbwPgSlDuluLk2ptg1UDQn/k0
-         lHG4twYBdzSWZ8rBeKuYH95XyH/+7mJrTSf8wt5BOVujm/MhHKQfF6BigVaBubYVneJ7
-         TqAZo92TQoxKkrzUa9PuOZJfqW1VYHasHdsHvAOTQNMaQbrcoq/YDgLTSeLSKLtgS2mz
-         uXNQ==
-X-Gm-Message-State: AOJu0YyWofrC2c5h341TvamhXezEBEB3JwAay96A9EzMc9Pc55lj1A/b
-	hbNksyNOz4hE79ApAIfRo6D7+Kfq3eUf668Xs+TJq4yjf7nnQjbfbshe
-X-Gm-Gg: ATEYQzy6FnYAQDWOQsyO2GDfNmXrLdbtL6LXsurDoVgcQLFIFY04U4n3kVrEVVsWpal
-	4+0n6b9xhn5yKuWFFjGDRJ7zTCA4X1/anK98cQEsm+s7ZGs6TRlzJ/3whupcrXBI0KDInrb6e8D
-	PH5nQ1WdrWEmtlpcfK6dd3RvA18MdsUPfg7XuaY0NVcdjPc+sbbkhzUo0Sqq88PGL5F5FT57Yjx
-	8gikB6m3Npk5YgqtCsL8dNgKxqxGflA7CRRNkinYrdGwUw/F5liv57qRgTWFZsVHq/nN7+A8GwE
-	XRp8EcHVKFzQ9IxIAn0ugx1HcRZ2FNIOmgAcK+ElVSwvMwYAgkXV9SlKZeiRPGPE2i9IRJmbOqz
-	P2DTcGMVBfbeF5WDJeTrgLsrGmZVQ+fI9DOvd44uidomNI2ZJiTC0L+BcwtCMPZ9PP48qvOeTu0
-	sZ2ylXIs5B1T0r2eltllMwrULQ
-X-Received: by 2002:a05:600c:6986:b0:477:b642:9dc1 with SMTP id 5b1f17b1804b1-48883595078mr61434225e9.20.1775051488136;
-        Wed, 01 Apr 2026 06:51:28 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:4c::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e952b0bsm108166835e9.12.2026.04.01.06.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 06:51:27 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 01 Apr 2026 06:50:37 -0700
-Subject: [PATCH 2/2] selftests/bpf: Add torn write detection test for htab
- BPF_F_LOCK
+        d=1e100.net; s=20251104; t=1775052529; x=1775657329;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a1hIUDWQSXTMNI+xukBaLoexapmPDMcad1HRGKU7yJ0=;
+        b=JAA7e0tRFvU0hL4MPBOi2KK8cSSarkCHDfOP80I7N4P5lsAn2mIIwNB4RjRK6JOous
+         /MkxE7lNaeHlztSDZz+Q34FVCQDe9iVGpbshFqycZfUERfgrdkPTrXko8UJqlQiI990z
+         hPzKR9K//4+CsL5/IYXBYgWd1fTVL8YdbHXeUvmDs+Os5TgtB8bpYKaBgluftlzYl5Tr
+         uMs7vQkol/1i6kZgKWTlF69BVCJ/cdhhQDBSe2Wbv5cfA6oW4Q3asGMcSD0luZ3MISec
+         7I7wuVpZnMvdK3xDPAjuSVVG22SUIb00cDXnX4iyMXAjXXdsY6+pIP6fPmw3N7hN/r5u
+         x+Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCXJCoykSF88mbHPbpHEb98cMUzXZGYBRVXvj9GQDmPuXhUbHDvmrSPabJTHctgYcdOSnKA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHfF5UHguA8G4W9fnOWCy6IiwVAln4PKr19NKsN49g6Q2NRJEW
+	j4xbuOYV8+lYR6SOr1c1fQbhe1ZahDI5pX8pRhxwXV6E29PEr/D5XUfoQAVV/fiDET5K7Z3omRO
+	CgB2zGf4chiovXMb9KGsf7nj/zWiYBsnOnUi8PSVy/3XT
+X-Gm-Gg: ATEYQzzHc+N3IQFvRqN2UD1Fn8mHA7prmdgl6Gt3UG2fuHQvnIOpWth6NklQ+PZ5L4/
+	puKZRyEVx6Cb7xHgRdU+3D/cjzZMEpGQSdgiWEFykye2AvoLMPZNtecKh3LTGtnKmpK8vK9BnfW
+	PggCGfqcuFMbiMMZ4E/aD0Ox522psB2mZSpDxSTDJ0EZyprAjJ1pVQEpZHW9IHlj9zmQTYF24vW
+	uHgNl1z1Uaxo81BbNaTRCpUv55loTxHZAQg3HNXsNThTkeuNYJ5xjI5GLVzSXcTHPkTTgVTVUTV
+	K05+OUKbbhwJbIpwrQg9z0Ynfh5tDcpgCi9FXs2YczzF5LCY5iTxFhVZSL8=
+X-Received: by 2002:a05:6000:2909:b0:43d:29a:e42a with SMTP id
+ ffacd0b85a97d-43d150c211dmr6936101f8f.29.1775052529247; Wed, 01 Apr 2026
+ 07:08:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260401-bpf_map_torn_writes-v1-2-782d071c55e7@meta.com>
-References: <20260401-bpf_map_torn_writes-v1-0-782d071c55e7@meta.com>
-In-Reply-To: <20260401-bpf_map_torn_writes-v1-0-782d071c55e7@meta.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
- eddyz87@gmail.com, memxor@gmail.com
-Cc: Aaron Esau <aaron1esau@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775051483; l=5898;
- i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=LsrU46IwQ/WkZJUo5rdzn1L60KvmtFhPiv3uoGPW4MA=;
- b=UvbX4KURex1NvHdFX7eMD4KLgLPEEd61e7jHeTGgSn9yDdvPzDkl83E7lZaWk4Qsp0S7Qqs7V
- R9PdU707Ex5CZGzf5J0PXWXXcSqvWspz4d+bXls+mh/yK2edmPp9jB2
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
+References: <ac0hLyMuPHiZfnVc@computer> <20260401134921.362148-1-varunrmallya@gmail.com>
+In-Reply-To: <20260401134921.362148-1-varunrmallya@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 1 Apr 2026 16:08:12 +0200
+X-Gm-Features: AQROBzAyPknqbXnEAJ3AwqA7IYVLrAYRqJiT7mIsqGERF9toiQ9NeCx7u4QvpN8
+Message-ID: <CAP01T75D7p2smSyoFvyZykgC5bJdobL_cqtk6-w+LmP4NP9SpQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Reject sleepable kprobe_multi programs at attach time
+To: Varun R Mallya <varunrmallya@gmail.com>, jolsa@kernel.org
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	martin.lau@linux.dev, mathieu.desnoyers@efficios.com, 
+	mattbobrowski@google.com, mhiramat@kernel.org, rostedt@goodmis.org, 
+	song@kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+On Wed, 1 Apr 2026 at 15:49, Varun R Mallya <varunrmallya@gmail.com> wrote:
+>
+> kprobe.multi programs run in atomic/RCU context and cannot sleep.
+> However, bpf_kprobe_multi_link_attach() did not validate whether the
+> program being attached had the sleepable flag set, allowing sleepable
+> helpers such as bpf_copy_from_user() to be invoked from a non-sleepable
+> context.
+>
+> This causes a "sleeping function called from invalid context" splat:
+>
+>   BUG: sleeping function called from invalid context at ./include/linux/uaccess.h:169
+>   in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1787, name: sudo
+>   preempt_count: 1, expected: 0
+>   RCU nest depth: 2, expected: 0
+>
+> Fix this by rejecting sleepable programs early in
+> bpf_kprobe_multi_link_attach(), before any further processing.
+>
+> Fixes: 0dcac272540613d41c05e89679e4ddb978b612f1 ("bpf: Add multi kprobe link")
 
-Add a consistency subtest to htab_reuse that detects torn writes
-caused by the BPF_F_LOCK lockless update racing with element
-reallocation in alloc_htab_elem().
+Please use the right format.
+Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
 
-The test uses three thread roles started simultaneously via a pipe:
- - locked updaters: BPF_F_LOCK|BPF_EXIST in-place updates
- - delete+update workers: delete then BPF_ANY|BPF_F_LOCK insert
- - locked readers: BPF_F_LOCK lookup checking value consistency
+You can add the follow to your .gitconfig to generate the fixes tag.
+[alias]
+    fixes = log -1 --format='Fixes: %h (\"%s\")'
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- .../testing/selftests/bpf/prog_tests/htab_reuse.c  | 169 ++++++++++++++++++++-
- tools/testing/selftests/bpf/progs/htab_reuse.c     |  16 ++
- 2 files changed, 184 insertions(+), 1 deletion(-)
+> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+> ---
+>  kernel/trace/bpf_trace.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 0b040a417442..af7079aa0f36 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2752,6 +2752,10 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>         if (!is_kprobe_multi(prog))
+>                 return -EINVAL;
+>
+> +       /* kprobe_multi is not allowed to be sleepable. */
+> +       if (prog->sleepable)
+> +               return -EINVAL;
+> +
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/htab_reuse.c b/tools/testing/selftests/bpf/prog_tests/htab_reuse.c
-index a742dd994d60..d7c3df165adc 100644
---- a/tools/testing/selftests/bpf/prog_tests/htab_reuse.c
-+++ b/tools/testing/selftests/bpf/prog_tests/htab_reuse.c
-@@ -59,7 +59,7 @@ static void *htab_update_fn(void *arg)
- 	return NULL;
- }
- 
--void test_htab_reuse(void)
-+static void test_htab_reuse_basic(void)
- {
- 	unsigned int i, wr_nr = 1, rd_nr = 4;
- 	pthread_t tids[wr_nr + rd_nr];
-@@ -99,3 +99,170 @@ void test_htab_reuse(void)
- 	}
- 	htab_reuse__destroy(skel);
- }
-+
-+/*
-+ * Writes consistency test for BPF_F_LOCK update
-+ *
-+ * The race:
-+ *   1. Thread A: BPF_F_LOCK|BPF_EXIST update
-+ *   2. Thread B: delete element then update it with BPF_ANY
-+ */
-+
-+struct htab_val_large {
-+	struct bpf_spin_lock lock;
-+	__u32 seq;
-+	__u64 data[256];
-+};
-+
-+struct consistency_ctx {
-+	int fd;
-+	int start_fd;
-+	int loop;
-+	volatile bool torn_write;
-+};
-+
-+static void wait_for_start(int fd)
-+{
-+	char buf;
-+
-+	read(fd, &buf, 1);
-+}
-+
-+static void *locked_update_fn(void *arg)
-+{
-+	struct consistency_ctx *ctx = arg;
-+	struct htab_val_large value;
-+	unsigned int key = 1;
-+	int i;
-+
-+	memset(&value, 0xAA, sizeof(value));
-+	wait_for_start(ctx->start_fd);
-+
-+	for (i = 0; i < ctx->loop; i++) {
-+		value.seq = i;
-+		bpf_map_update_elem(ctx->fd, &key, &value,
-+				    BPF_F_LOCK | BPF_EXIST);
-+	}
-+
-+	return NULL;
-+}
-+
-+/* Delete + update: removes the element then re-creates it with BPF_ANY. */
-+static void *delete_update_fn(void *arg)
-+{
-+	struct consistency_ctx *ctx = arg;
-+	struct htab_val_large value;
-+	unsigned int key = 1;
-+	int i;
-+
-+	memset(&value, 0xBB, sizeof(value));
-+
-+	wait_for_start(ctx->start_fd);
-+
-+	for (i = 0; i < ctx->loop; i++) {
-+		value.seq = i;
-+		bpf_map_delete_elem(ctx->fd, &key);
-+		bpf_map_update_elem(ctx->fd, &key, &value, BPF_ANY | BPF_F_LOCK);
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *locked_lookup_fn(void *arg)
-+{
-+	struct consistency_ctx *ctx = arg;
-+	struct htab_val_large value;
-+	unsigned int key = 1;
-+	int i, j;
-+
-+	wait_for_start(ctx->start_fd);
-+
-+	for (i = 0; i < ctx->loop && !ctx->torn_write; i++) {
-+		if (bpf_map_lookup_elem_flags(ctx->fd, &key, &value, BPF_F_LOCK))
-+			continue;
-+
-+		for (j = 0; j < 256; j++) {
-+			if (value.data[j] != value.data[0]) {
-+				ctx->torn_write = true;
-+				return NULL;
-+			}
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+static void test_htab_reuse_consistency(void)
-+{
-+	int threads_total = 6, threads = 2;
-+	pthread_t tids[threads_total];
-+	struct consistency_ctx ctx;
-+	struct htab_val_large seed;
-+	struct htab_reuse *skel;
-+	unsigned int key = 1, i;
-+	int pipefd[2];
-+	int err;
-+
-+	skel = htab_reuse__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "htab_reuse__open_and_load"))
-+		return;
-+
-+	if (!ASSERT_OK(pipe(pipefd), "pipe"))
-+		goto out;
-+
-+	ctx.fd = bpf_map__fd(skel->maps.htab_lock_consistency);
-+	ctx.start_fd = pipefd[0];
-+	ctx.loop = 100000;
-+	ctx.torn_write = false;
-+
-+	/* Seed the element so locked updaters have something to find */
-+	memset(&seed, 0xBB, sizeof(seed));
-+	err = bpf_map_update_elem(ctx.fd, &key, &seed, BPF_ANY);
-+	if (!ASSERT_OK(err, "seed_element"))
-+		goto close_pipe;
-+
-+	memset(tids, 0, sizeof(tids));
-+	for (i = 0; i < threads; i++) {
-+		err = pthread_create(&tids[i], NULL, locked_update_fn, &ctx);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			goto stop;
-+	}
-+	for (i = 0; i < threads; i++) {
-+		err = pthread_create(&tids[threads + i], NULL, delete_update_fn, &ctx);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			goto stop;
-+	}
-+	for (i = 0; i < threads; i++) {
-+		err = pthread_create(&tids[threads * 2 + i], NULL, locked_lookup_fn, &ctx);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			goto stop;
-+	}
-+
-+	/* Release all threads simultaneously */
-+	close(pipefd[1]);
-+	pipefd[1] = -1;
-+
-+stop:
-+	for (i = 0; i < threads_total; i++) {
-+		if (!tids[i])
-+			continue;
-+		pthread_join(tids[i], NULL);
-+	}
-+
-+	ASSERT_FALSE(ctx.torn_write, "no torn writes detected");
-+
-+close_pipe:
-+	if (pipefd[1] >= 0)
-+		close(pipefd[1]);
-+	close(pipefd[0]);
-+out:
-+	htab_reuse__destroy(skel);
-+}
-+
-+void test_htab_reuse(void)
-+{
-+	if (test__start_subtest("basic"))
-+		test_htab_reuse_basic();
-+	if (test__start_subtest("consistency"))
-+		test_htab_reuse_consistency();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/htab_reuse.c b/tools/testing/selftests/bpf/progs/htab_reuse.c
-index 7f7368cb3095..1c7fa7ee45ee 100644
---- a/tools/testing/selftests/bpf/progs/htab_reuse.c
-+++ b/tools/testing/selftests/bpf/progs/htab_reuse.c
-@@ -17,3 +17,19 @@ struct {
- 	__type(value, struct htab_val);
- 	__uint(map_flags, BPF_F_NO_PREALLOC);
- } htab SEC(".maps");
-+
-+#define HTAB_NDATA 256
-+
-+struct htab_val_large {
-+	struct bpf_spin_lock lock;
-+	__u32 seq;
-+	__u64 data[HTAB_NDATA];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 8);
-+	__type(key, unsigned int);
-+	__type(value, struct htab_val_large);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+} htab_lock_consistency SEC(".maps");
+Looks ok to me, Jiri, could you also take a look?
 
--- 
-2.52.0
-
+>         /* Writing to context is not allowed for kprobes. */
+>         if (prog->aux->kprobe_write_ctx)
+>                 return -EINVAL;
+> --
+> 2.53.0
+>
