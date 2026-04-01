@@ -1,161 +1,119 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEF139FCB1
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529A427E05F
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:34:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775061247; cv=none; b=SP3CZT0NvIFw+p0eIT16dJosTB4EW9h8DokCtgZnaYZbKrJ8vyl/emK0No3sNrmKJqzKCgMzQTyoRbSJpsmcox+m056aXWLWexW3yrcR0M8T5dfHnqZrw4211pgb7kCRPbmKlJkuN7Mm5SaqEjHplEt7xmSWschPxN3omAby0bg=
+	t=1775061263; cv=none; b=uU4JdxZIEecthelykKxllBMSrO4ukNitCLNpt2+6dW0ZsLYUVV3cfCZAraI9cfASB+unJWQGygtCjI+0TYZdNnA7Lm1qBiehE5DwS35iaIGSpTYPymzEhnJSQ6u6lkPxgjD7jde9TZ1CW6a8zEvUSQXlQR324R9z7BQv1RdFhu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775061247; c=relaxed/simple;
-	bh=+OcjdzbsVS5n2WpHiH5AzE1B2okZQS9quvYX7YODvQk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LiX1QcmRrDespPkMcMs4g5pbQiIzdtVhiM/8xTf5EbpNH+AbjqN3rN3U3rVJgDsH7TI+UvPUcY1AEWl2/qcobTTRooNFCXgcMrThoUGBR4IKI89G51i4Ea/gT1Ff/YUYyPTAH+6aJD8yVR2ziNBQNfoqsAcLk7nk2JNs/oSII58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bVZAsx50; arc=none smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775061263; c=relaxed/simple;
+	bh=ybEdMnj+IV21R50M/Nq06VgnFb302XMUbdzsNI1SGq0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=krvoc1bFU3s18ON9cBS3U/xnfmsY0zDU8ACBXQ14cwWfx94GAYlzIJ+BleTm6HBaeq/8U99howeNX0wGw59i8wuuTPQzzjmmTPlXBDbMgiw2sRONZHgwlJ03D3nITAJ/DUA1CfXzjLBxUXjGf9pJOFrace6YtUqf7Jqa9AQHdjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=BiVhvwcI; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bVZAsx50"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2c87871133dso2726eec.0
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:34:06 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="BiVhvwcI"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b9c01854477so352039366b.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775061245; x=1775666045; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdMpVTZuf6oWX3f0mlEuicX/hJ4K7vnvO6vekEBOAm0=;
-        b=bVZAsx50sgRISknFsJkBzeV0zBAw/Td1rUgrckv4kS0tndO45oAUoyNzfq0iBHX56b
-         mIRSSOaoVvcM2Xjb1jUm0o34D03dY7xyaRhiXKeBujDJ3C6FaoMMs9S7JQExVOqcBD4E
-         sqgTRR8Bih3BuCjEACOhVzJ072pPZHP85/4XcBNSYdCkWtJ57r6OApIIIsukNcSaNeeU
-         mN/qjEcNOHCCJAZZcrAuS0Jk/gtTlUhyDWp4VWXv2ySh0XEUJ4NWN1EEbK9fyvG8aJq0
-         D6IQ3QWq2U5rqWk0ZpMmG+bNt8OF8lQfz9TxygSC4gcOlXxAOHsl9/teDY6dS8d4Yf3/
-         NuhQ==
+        d=linux-foundation.org; s=google; t=1775061261; x=1775666061; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wMfn5M+yor9qcHDuzn1ye+wM03ph8KGxN0vfAlP2l30=;
+        b=BiVhvwcIr+JLr6v9XTi7LSqzRtB2J5oLC2w7L59HMIGYg8lnO5uLH8XXANWMBwUaMt
+         gcHx24kpgadoHBZurhBnYxKoCRLCdE0YV7y+laj3CztfUzjJ2yzXXCgm75h45CpPWP8o
+         Gs83UvOaUOpZp14zmgURgrgo4txa2noTgwb2g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775061245; x=1775666045;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zdMpVTZuf6oWX3f0mlEuicX/hJ4K7vnvO6vekEBOAm0=;
-        b=ZqcTRUxvmaiqGv+RFxrMAjLpCEeByi8uR0Fz3xowX40N8vlhpcvXklUP2D1r22sFXE
-         qsiB1wlh38EiSjcaaoFI5CZwOIF6pQ35q/trU+wiu7IdGPd0Kzxag9e/fW47z2KlxbJb
-         rgXPKN+W4nBQGHse3zsQPOZJDW0hFL8YlVVt+qa2s99U1ekSBEshKuUq+p/rUXob4Kxp
-         iiRLQTYQw9TrQk78DG6x6rboLxC4genhvQPJhIKrQ8E4jUB31svGuryw14pnKOpf8nRo
-         Jlj/R5H4i1EIf4Sq1t6Nl52a+SQp6adE4sI2CMRCCAuXfwIt62xx9McL0YqGGd94Iv5r
-         2dLA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6UM4BBgjf+o/8oCAodq1LBIPMgLoEFrgFMvILZVLOutIzmDnYlIXJuYwV5ceyiM2FpYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfB+4Pz2/N2Cfw2leC/tZF1JpgcCiq0dSHbtJ//YtkenMrWtXr
-	Mr+4bf428Fi+H+pNs3dWituWx+ucX/7lT5EKODmCf0pEz9j13YhW6yM=
-X-Gm-Gg: ATEYQzyex3/kqdi5tzL/29bR+znZxcerDCqsjshb7a898CViSt7grTcylOAVxi84TgF
-	R2fobu37A71pQ97weEcn6XaySAFFTQv5P68kN+hvC6CXbijzQVZk4l1gW8SFyhFBWbloDiyYpBx
-	MmeoxPNys/noGwpmKPwSRwPa0Dje+pyXJw9Kaj+Ww0wbn8Jppo4SIVnTyz1BmbwfvL6ctHk1QRY
-	2Q+V9+N452+nR0haxsO/7VC0UCFKwp6kOEBYLsizzRvzBcMN+F5EXubgea9GFikVlf5rSjk/d6y
-	epF/dp3TiZ9PDygraLsUKAYwLeBGZxQbeNlcHnKA05p87+6jZy1t3j/GHr8snfIDBQd3UhZRwrX
-	kSlw3fiiY6/atK8I1f3O45WqhVB0nhbBYkRVFa83PMgeI90d3LZmNSd43j1F+XrUCnIO3IY/QyI
-	B7jHQMvf2ogSNIYLLLSfblzuBxqJo7Fwms1UfagwRPUT6apRtKaZqXumw/vxQH7vWDDYphAQIpZ
-	DpQd833MIDq4KhRIMlcahUoE/Rk
-X-Received: by 2002:a05:7300:fd13:b0:2c1:161f:ac39 with SMTP id 5a478bee46e88-2c9325b1fddmr2057364eec.26.1775061244975;
-        Wed, 01 Apr 2026 09:34:04 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca7c3010e9sm237887eec.14.2026.04.01.09.34.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 09:34:04 -0700 (PDT)
-Date: Wed, 1 Apr 2026 09:34:04 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>, metze@samba.org,
-	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>,
-	io-uring@vger.kernel.org, bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 2/4] net: call getsockopt_iter if available
-Message-ID: <ac1I_CMr43XTpvHj@mini-arch>
-References: <20260401-getsockopt-v2-0-611df6771aff@debian.org>
- <20260401-getsockopt-v2-2-611df6771aff@debian.org>
+        d=1e100.net; s=20251104; t=1775061261; x=1775666061;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wMfn5M+yor9qcHDuzn1ye+wM03ph8KGxN0vfAlP2l30=;
+        b=kHyWLyyoeBCrkPHeQF/EGUM0DVeY9JAX9fMfFwLqmb8s60emaN9cbbY+AiNEd1yzSJ
+         /gVYv0N3SFXtVpUfXDvHZQjOQsCpeC+GWQy30JnPma5tfj64OuN0GR1idZ1vOhWDD90u
+         sTbC2RXHw/niBDLI4PEBaWcydCkiStD0Rlk2hQ5YpvVp3ab2u0yGTgVdRFbHi/rSGOe2
+         kFebpqrxoy7NBYgqF3mNbdtDa/2mxSSidgKHJ8iRc/X8vdpdTySxMjSOnV/E3g6bLS5a
+         WgfFPA75er2KaCZ1kZaAyw5meC7I2IPcNCkpH4iCyPTIFZUj5YIEy196Loyz39MxRahN
+         6HOA==
+X-Forwarded-Encrypted: i=1; AJvYcCXqATdkql5W8XuQWC7eGIr2VxPa+xJcGKdXcpF3kC+sKrL+dUGsDXmBuYULzOaL3XrU+IM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI0ATbOdXT4xEtnb3E/c8HF2UWVz7EGYOXeX/u0kVbnFtG9Cfv
+	PzBvsV1SNYzq26PVQ9E2gNHy7IN1KZJFzzR9NO4kvZkW4lPlWQg0bs0LB1IIhVuFz25cq3REbZg
+	k1AdxWZ66aw==
+X-Gm-Gg: ATEYQzweQG9ubiJVWkGGq2J3QxRl49clt6PcuEFqfovAvvyc7GBUOyntizyikloDUPc
+	LclOT6sy2YmcVDyXJ+ia5AAOEbx6l2lKHvlP7ZcmWN9mLOB8XOmi9FpaiU3t/jvOMo0flxT1rtb
+	AWC6MYCIMtUhtM149+lU22aaGd1N/LVIoAA4Vz2AFfhKmGIEfeCpun+lF2GJRuUV581douGrSiN
+	wCSV8K28r235XUCngVxDrQV0DvTHZQBQUaMhHfBlwTWLMNmAVUjE8O+EApio+b4TfpRVgCSpJml
+	zZ1hMST2T/b95m2IfZkzaih2Vuq80+wBe7ulhW4Y4/YI7sX9czSVWUHSMExkcIZbCR9QtsZ3Bb+
+	XLJfovNMuI1xJfpyHN55gAt6c0Hh2UvxHVdTQpy0sWQuVwcNa4bc5+5q1yvSjzWX2ebTPcdBiCX
+	O/e0JIy2o40bHTJeRDFrL5lO+3n0QTY8PSP358xGn6tVLlLU/bReRgzzfvE/ly+qrqFrMuDGE1
+X-Received: by 2002:a17:907:84d1:b0:b97:7d03:68c1 with SMTP id a640c23a62f3a-b9c13b0441bmr228322266b.30.1775061260405;
+        Wed, 01 Apr 2026 09:34:20 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9c3c97218esm6313366b.9.2026.04.01.09.34.20
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Apr 2026 09:34:20 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-66dd27d4465so1811164a12.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:34:20 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVgXywISTsAOBZk7bCwYz31xuZris0Rn7Ipgw3Qc0LKFX3sXd+kBYPLg1IbJ0XVKKhgGik=@vger.kernel.org
+X-Received: by 2002:a05:6402:35d0:b0:663:4315:7271 with SMTP id
+ 4fb4d7f45d1cf-66db0cfbdaamr2927572a12.23.1775060766098; Wed, 01 Apr 2026
+ 09:26:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260401-getsockopt-v2-2-611df6771aff@debian.org>
+References: <20260401074509.1897527-1-dwmw2@infradead.org> <20260401074509.1897527-7-dwmw2@infradead.org>
+ <CANn89i+GHkkubJp3MTKZ_r4tde1qLejfsxUh+w0gPZ3ec+YdjQ@mail.gmail.com>
+ <252823d75e9221647e7f8ccef6105432aabe8d6f.camel@infradead.org> <20260401080657.70cd9bd1@phoenix.local>
+In-Reply-To: <20260401080657.70cd9bd1@phoenix.local>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 1 Apr 2026 09:25:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj5KW97ZHUi_5kCwC+Lh53_sj2HJ1SnBU1pQAOtnk7oGw@mail.gmail.com>
+X-Gm-Features: AQROBzBuhMzLrgonz6WGspEvkWFhuj-ddiDGEYTFKbMu2F_LUT3de-t_k_EwsPU
+Message-ID: <CAHk-=wj5KW97ZHUi_5kCwC+Lh53_sj2HJ1SnBU1pQAOtnk7oGw@mail.gmail.com>
+Subject: Re: [PATCH 6/6] net: Warn when processes listen on AF_INET sockets
+To: Stephen Hemminger <stephen@networkplumber.org>
+Cc: David Woodhouse <dwmw2@infradead.org>, Eric Dumazet <edumazet@google.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	Mark Bloch <mbloch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, 
+	Guillaume Nault <gnault@redhat.com>, Kees Cook <kees@kernel.org>, Alexei Lazar <alazar@nvidia.com>, 
+	Gal Pressman <gal@nvidia.com>, Paul Moore <paul@paul-moore.com>, netdev@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	oss-drivers@corigine.com, bridge@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 04/01, Breno Leitao wrote:
-> Update do_sock_getsockopt() to use the new getsockopt_iter callback
-> when available. Add do_sock_getsockopt_iter() helper that:
-> 
-> 1. Reads optlen from user/kernel space
-> 2. Initializes a sockopt_t with the appropriate iov_iter (kvec for
->    kernel, ubuf for user buffers) and sets opt.optlen
-> 3. Calls the protocol's getsockopt_iter callback
-> 4. Writes opt.optlen back to user/kernel space
-> 
-> The optlen is always written back, even on failure. Some protocols
-> (e.g. CAN raw) return -ERANGE and set optlen to the required buffer
-> size so userspace knows how much to allocate.
-> 
-> The callback is responsible for setting opt.optlen to indicate the
-> returned data size.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  net/socket.c | 48 +++++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 45 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/socket.c b/net/socket.c
-> index ade2ff5845a0..4a74a4aa1bb4 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -77,6 +77,7 @@
->  #include <linux/mount.h>
->  #include <linux/pseudo_fs.h>
->  #include <linux/security.h>
-> +#include <linux/uio.h>
->  #include <linux/syscalls.h>
->  #include <linux/compat.h>
->  #include <linux/kmod.h>
-> @@ -2349,6 +2350,44 @@ SYSCALL_DEFINE5(setsockopt, int, fd, int, level, int, optname,
->  INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
->  							 int optname));
->  
-> +static int do_sock_getsockopt_iter(struct socket *sock,
-> +				   const struct proto_ops *ops, int level,
-> +				   int optname, sockptr_t optval,
-> +				   sockptr_t optlen)
+On Wed, 1 Apr 2026 at 08:07, Stephen Hemminger
+<stephen@networkplumber.org> wrote:
+>
+> On Wed, 01 Apr 2026 10:28:23 +0100
+> David Woodhouse <dwmw2@infradead.org> wrote:
+> >
+> > Maybe on this date next year, we could make it not possible to build
+> > the kernel *without* IPv6... ?
+>
+> There are some government agencies that used to require that IPV6 was disabled
+> for security reasons. Yes they had broken old firewalls
 
-If we want to eventually remove sockptr_t, why not make this new handler
-work with iov_iters from the beginning? The callers can have some new temporary
-sockptr_to_iter() or something?
+I think you missed the big clue here. "This date".
 
-> +{
-> +	struct kvec kvec;
-> +	sockopt_t opt;
-> +	int koptlen;
-> +	int err;
-> +
-> +	if (copy_from_sockptr(&koptlen, optlen, sizeof(int)))
-> +		return -EFAULT;
-> +
-> +	if (optval.is_kernel) {
-> +		kvec.iov_base = optval.kernel;
-> +		kvec.iov_len = koptlen;
-> +		iov_iter_kvec(&opt.iter, ITER_DEST, &kvec, 1, koptlen);
-> +	} else {
-> +		iov_iter_ubuf(&opt.iter, ITER_DEST, optval.user, koptlen);
-> +	}
-> +	opt.optlen = koptlen;
-> +
-> +	/* iter is initialized as ITER_DEST. Callbacks that need to read
-> +	 * from optval (e.g. PACKET_HDRLEN) must flip data_source to
-> +	 * ITER_SOURCE, then restore ITER_DEST before writing back.
-> +	 */
+Sigh. It's going to be a long long day.
 
-Have you considered creating two iters? opt.iter_in and opt.iter_out.
-That way you don't have to flip the source back and forth in the
-handlers.
+              Linus
