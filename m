@@ -1,66 +1,66 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E734547AF68
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3A647D923
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775060168; cv=none; b=grM+HjJ9zRKjOR3+HbH3/4InXrLP8yhbmV+tPAJlcLjIP7kgfoiRnH7w36IPm5iqlCMSpFfkKDi6QoNryPYwy1qvTp29qr8IeamDEAttSvkD+9bu4gf6iEMVlJhGAuhzgkpRDw173dDzSb6po45vYIdSausSAH5WqCTonmYAuSQ=
+	t=1775060172; cv=none; b=ZESj6dWfS8hj/slEiu6N8x+9GJEhYVkwpjaXOC5f9IGFfU6zDNIeOmW2blgty1YxnM3qhpTE79ZyeKUPn+omwMW0KnrbDjXuJf8Al28+u8hLSlTCMTwUlGl1bx3QsBnHruOIgrd8MgxEZPzuUIN8OA4XtiOorJxBtYhYyY82BSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775060168; c=relaxed/simple;
-	bh=yWoxoiBo89oC2LhotltqgA/PGRaDAqLvdHMOdKk7L1I=;
+	s=arc-20240116; t=1775060172; c=relaxed/simple;
+	bh=2f5aVKepAPVQ6QAMkIjSa6F59NytLhs5Yj9FO1U5vIg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IHBSnot5TZGD0OUbdsLa6DXs1CpQo/8mHN5j6EXM413xjMuaWARIZ3rGeaRs72eBZU8UF6wDHQG01L0mJHFGF2JHkbZkXvmGywSzoRSna4BYBg9v1hpW52sS6m6wZyBDy4ttuucGYeOfWA7guGqAZvRG7jjMdmoYtPRzuiYg/Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QPCGSLaR; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:To:Cc; b=B0FH3L817HYhA7o/7u8/GHNJN2z49+6cwY5QxaQme5WcK/kRRV3W3PM7OwWekE1mQ4H5mqZvKG+fFpYfAu/KBl+9iWAlAHiReAqGa4E8/eZyX7dTRXsiLlZmJVGKA7ZOu+yCuj1pjWDYrBqpbJnwcBByl4I0NIv0ut0M6exNt6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=D/MG1imU; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QPCGSLaR"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488879b2e6aso6351445e9.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:16:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="D/MG1imU"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4853c1ca73aso74169655e9.2
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:16:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775060163; x=1775664963; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1775060167; x=1775664967; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EXAbCHZXNBx8S2/Zadecwk5HUc11KM0fgEMsoxETngQ=;
-        b=QPCGSLaRzpO4JSgDY5Lc9vB3WCuDNOtbqRJxPE0DDZXrQKhPy/Q+Rj47O+VqJoKzMm
-         qKfzTViCx4Qav0Vch2dEUuoeqDZ4sytwsHuy9g4gw9fj4s9XS+QgMaP4ZCWGgVxL01x1
-         Xq/pOpbdOttPx8sUBQp2BzwqHMSatXkEWhh4qa1rDdI28B9pjkVqz8GUPbPEEvgEXZhe
-         CXh+r+v1FNgsYLDHIyNce7ahM14tw1oc6XZdqoF8SQm+Alt12qeYhIiS6vi1dM5IDbRH
-         tNYiPqYAfMQmej2Egxlu0vyMbjx82QJ6pZv9wB9bBhl2ZGkIZOmOTICYzo1LbKbuUxsO
-         Rh1g==
+        bh=GKDIAWuRtDFHvkwbDQCWFyTrBdJA4yobh9R3wJFKPAY=;
+        b=D/MG1imUISr8Lnimv0olSHqmMYOaRg2kJIHxlauBpB01snJrSXTyeUCZzupzeKZtAw
+         rSL8xj6PQ13CMb+IVrwFn3XbCQoz8RzNVGDEbaOA1TKzXRov5Ky5xL42XbaoODhKMH9d
+         Rj1xt3l25xsTUbHTuVMhqMPIhZmGyJ8/OZj3yu4HyT4AmMA5+Du2tiwY3EWl135tdYED
+         2BZFtZwHCqAUgHXk4sXuKNW1ErgIo5aFx1hB2BnP4pfqKnXDtzEBBDE8wx/E5hl81arj
+         tV4UUGN4P346Ahk2DUJkMFdeTYjZaKiIjJYx+tjIT3lhnoSxvG8yL2e5OUIYTRdgodO/
+         BabA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775060163; x=1775664963;
+        d=1e100.net; s=20251104; t=1775060167; x=1775664967;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=EXAbCHZXNBx8S2/Zadecwk5HUc11KM0fgEMsoxETngQ=;
-        b=QNlqongLR+kij0pojYil+B1Y2aapfVa3oUenaZ/vhtI6bXdRnRRpMriFfAxj7gcPza
-         jrb8NDclnE5MxU4k917n0rIk8fEsNILihaYSrwFB+l8U9c7n04GjV0OhhYEM5SqnOdwJ
-         r+1zOoTv8IUKhM6UQPVCN68BlrK1+uMu5WgjXGQIBbliePzn2p2OJ+zAoHzifPxnW9zO
-         wucF91+G5gZaZ8ORwA9FboPlO69aOy/P5ZLN/K0Fj9JXYp/Duv3zXxS0o86XdRFP4Wp4
-         qJD4RF8k/jaPt35GGStRAc+dR/hwBCtHMQ7czVX0VcYJtjQ/ljRBjV9aezD9RjOw33gw
-         2h3A==
-X-Gm-Message-State: AOJu0YyZihn6nuUdwM7lfgfbuQXy66NPslayWl2QG7nGXP+g1BXVcfhI
-	M9Q2LTwZOebBKHAH7qkBUmkYufv1oRqSHSd1pJepH5vL+bA3PgveGhSkWJBpmD8BY9w=
-X-Gm-Gg: ATEYQzzCp4vKEpN4Q3SgXs6Q4WMsg0UsvXaDXTmjFBA3xUcGFyJgjj86mK3BDfGa+os
-	fV4UASAODjPMWaXMQLDeyX3RUccg6k1RilTNJ5QEjqKRmNEYSD/Nn9ZeqW7SZ+34U3TGfZYWSoC
-	zK5MJ9hp0JCMjugTnCMkUyK603m4n8R4I0C65mkAfR5gzUIlv1LPn8gVUfiwfI8D34FxTAauOSR
-	jOB8MmvbsUkXs8WanbO+fGrc8Ul2AsSI6a8Su2ajtIT58q2uwyDaBfiCaf+vlei6r97puxmi3xs
-	jP0oLygt8IlKHm59VBfhvFe2Uar2yWmKmlW0T0aar7E7avYw4yX0ahLNhTxWTjFl34eiOHXNqFC
-	tc3FEXFzmiQKynSwi1UHHyJSqhmOVVvAEVD4c5tDQed6do1RKEfUo/9lyewpy4gOPZSg/Qlqx7q
-	lAmcXB8NZB4ITJwnvry9E=
-X-Received: by 2002:a05:600c:4e4b:b0:485:439b:683f with SMTP id 5b1f17b1804b1-48883595da7mr83858565e9.20.1775060162775;
-        Wed, 01 Apr 2026 09:16:02 -0700 (PDT)
+        bh=GKDIAWuRtDFHvkwbDQCWFyTrBdJA4yobh9R3wJFKPAY=;
+        b=eWmUAGRvO+DRccY0/Jk1gUDVqtk830A5ZSch21gDv/+5JBShYwx/tucfdMgJyZlneD
+         B8vcZ6qMl5EGBMM18U5s6PmpWQfkrWVY5lA7PvnlQr5HK3aTrI/26fGwxHOATZZGuiGj
+         Nu9Jqc8zEs4dt6xQRLAJsGFa33dDHLHmqop5aeg1ypwED8CQB80Zn8+UpEsMrh3ntc0e
+         cB/5nhOky2HR3nLa/I/zLA/EHyIjBgb+zLNfG/+wqYIXnTMdX8vNhkS2dKKH1LBneCfG
+         Stjv5k4sPSmCmoLeTdX3nULrjNNBdvc19RYoS2gPsUEDT4wn2f8aQNSzXSJvxTq5edwh
+         nrMQ==
+X-Gm-Message-State: AOJu0Yyr20u36Gpk6Mlg9yHmOC2bXfWWTmZmupMO0qUPPIGxGgxQYgvc
+	7OIiQkXs8QEuw/PSjipbbtl5U1ki4kHAhTml8O3n24G+rjnB4qdcmUv9qWUx3OMbcno=
+X-Gm-Gg: ATEYQzziZgDlD4V95yPoWtEdAF+JYErBlvTk/rl/IyMlfLsuQGTEuuyuj4Amh9JChSj
+	Yf4qaQuHd6sGB9VI2+VQ8zx0PI+ZWLNg7e6b9bcIhN1z5a9l+bbNMzIAVksSUC2tuiKjb1t4+C2
+	FX1yM1mTpEqtw+fen0Ucw+d+KEclg99G9zVQ4UYM/6WJeV1Ew6wFnAr4LkIC7/p0YRJDIPmkq8u
+	7Ak52ZbhfbHST92bQXTN8JmuemRRWy6ShMq3qbsC6QA62EB46NjFTCRemtTXFozRpUxlIFeekkh
+	TZZzT1W1DfLe99UWHUpQhfLaVa7YU+k4pQCKDJhlmGgJVsc4gOyM3YgwXIbnW2YMCdEe/i4G8o5
+	tJR2Xi0Sbi8PCcA2q3J3OmfiQoHdLzbE4mDrnRmcoAMZWANmtjX1S42CSZWnzAMKZ6nIGxnp/RI
+	NHm09AGf8L
+X-Received: by 2002:a05:600c:a016:b0:485:3f30:6250 with SMTP id 5b1f17b1804b1-4888359d87amr72407385e9.20.1775060166677;
+        Wed, 01 Apr 2026 09:16:06 -0700 (PDT)
 Received: from localhost ([189.99.238.3])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-60582e1d1edsm249913137.1.2026.04.01.09.16.01
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-60582e1cc7dsm248896137.2.2026.04.01.09.16.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 09:16:01 -0700 (PDT)
+        Wed, 01 Apr 2026 09:16:05 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 01 Apr 2026 13:15:15 -0300
-Subject: [PATCH 08/10] selftests/bpf: Provide weak definitions for
- cross-test uprobe functions
+Date: Wed, 01 Apr 2026 13:15:16 -0300
+Subject: [PATCH 09/10] selftests/bpf: Skip tests whose objects were not
+ built
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260401-selftests-bpf_misconfig-v1-8-3ae42c0af76f@suse.com>
+Message-Id: <20260401-selftests-bpf_misconfig-v1-9-3ae42c0af76f@suse.com>
 References: <20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com>
 In-Reply-To: <20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -85,52 +85,53 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
  =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
 X-Mailer: b4 0.15.1
-X-Developer-Signature: v=1; a=openssh-sha256; t=1775060128; l=1575;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1775060128; l=1739;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=yWoxoiBo89oC2LhotltqgA/PGRaDAqLvdHMOdKk7L1I=;
+ bh=2f5aVKepAPVQ6QAMkIjSa6F59NytLhs5Yj9FO1U5vIg=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QDNs03eVt3q2x4rs/lkb8sVn3NoxfdXggfjUMOSqo4BVJUx5+tTW3qaI4qr1t0JUqe1QddnBU6m
- EKk2iwqI2XwQ=
+ QESQ8jQYRTSBwqtN8EitrNVoaqkz400h/f5Q/b0EPyzDIcsKlqjHpAExkAHN4X0lp2TmRmgC7E0
+ kwIDQWtvo3A0=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-bpf_cookie.c references uprobe_multi_func_{1,2,3}() which are defined in
-uprobe_multi_test.c. When uprobe_multi_test.c is not compiled (e.g. because
-its BPF skeleton could not be generated), the link step fails with
-undefined reference errors.
+When Kconfig options or missing headers cause a .test.o not to be compiled,
+the corresponding prog_test_def entry in tests.h has NULL for both run_test
+and run_serial_test. The existing infrastructure check treats this case as
+a fatal coding error and calls exit().
 
-Replace the forward declarations with weak noinline stub definitions. The
-linker will prefer the strong definitions from uprobe_multi_test.o when
-that object is present, and fall back to the stubs otherwise.
+Separate the two failure modes: having both function pointers non-NULL is a
+genuine coding error and remains fatal. Having both NULL means the test
+object was intentionally omitted from the build; mark it should_run=false
+and continue so that the remaining tests are unaffected.
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_cookie.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_progs.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 35adc3f6d443..a1503e8e07c8 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -252,10 +252,13 @@ static void kprobe_multi_attach_api_subtest(void)
- 	kprobe_multi__destroy(skel);
- }
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 0929f4a7bda4..85ac25a51a8d 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -2022,12 +2022,15 @@ int main(int argc, char **argv)
+ 		test->should_run = should_run(&env.test_selector,
+ 					      test->test_num, test->test_name);
  
--/* defined in prog_tests/uprobe_multi_test.c */
--void uprobe_multi_func_1(void);
--void uprobe_multi_func_2(void);
--void uprobe_multi_func_3(void);
-+/*
-+ * Weak stubs; the noinline definitions in uprobe_multi_test.c take
-+ * precedence when that translation unit is compiled and linked.
-+ */
-+noinline __weak void uprobe_multi_func_1(void) {}
-+noinline __weak void uprobe_multi_func_2(void) {}
-+noinline __weak void uprobe_multi_func_3(void) {}
- 
- static void uprobe_multi_test_run(struct uprobe_multi *skel)
- {
+-		if ((test->run_test == NULL && test->run_serial_test == NULL) ||
+-		    (test->run_test != NULL && test->run_serial_test != NULL)) {
++		if (test->run_test && test->run_serial_test) {
+ 			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_test_%sl() defined.\n",
+ 				test->test_num, test->test_name, test->test_name, test->test_name);
+ 			exit(EXIT_ERR_SETUP_INFRA);
+ 		}
++		if (!test->run_test && !test->run_serial_test) {
++			test->should_run = false;
++			continue;
++		}
+ 		if (test->should_run)
+ 			test->should_tmon = should_tmon(&env.tmon_selector, test->test_name);
+ 	}
 
 -- 
 2.53.0
