@@ -1,175 +1,330 @@
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E94E3DE430
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 10:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD113390C81;
+	Wed,  1 Apr 2026 10:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775037755; cv=none; b=Fi2R1Kbqpy3PoYs8H/c4I497VwNrhGwmzaNyK8tdETsHqiZwN9Y4ZHHJHwep+S3rsFEc30Qa0DTp7KbE+UVKrQKsjxRUDS4gbbzMZO5okk2mrY3j5OyKLTis88m9DuSn6/eiEuyLU9YI+Ebh4k6dDOY1Oz6qg31xBW1hS+h2TZY=
+	t=1775038310; cv=none; b=QQcJRaeUMQNEBOb6FkHEMfM/S6iuTdbpO1u7wttlmVtcsKzVB+rgncDsq6WVA6+Jvf5dJyPUClfw+FR3XgLWj45+Yv7svetHM+gsfjG8kZqOWJXz1EeUmu9RwWTRGxyhJUGHEkY6FS/Ipy3lfOg2PREiRjW3g0GSkYBw9NG1uJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775037755; c=relaxed/simple;
-	bh=kqhomxdwlfA72G52s1CFHtNLGQBOoyy859CEMvQ4kmo=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=nL0R9OWavbidB5cvuu98gJ8Uv3rBVsL/ObxRRMe2BgmsIHSKu9JRT1eSVxOWoSdj/7pxSLeFVzyPHJyQUk6IDXL4Bi7Y9xtURknOwwVegLd9i6RstYk8nC7SZCwI43DtLhqVSWcNWHa2lnAoHxyWyhKklghhUjLLrMYClwSM7tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-67e282b93d1so9147322eaf.0
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 03:02:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775037751; x=1775642551;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WERYNT9aA6wIU9sei+2iFDHLFAktlUqnv9kGI7xSgG4=;
-        b=qrKq9gZschP/hE+bwZDbs+6pQN0eS9X33YsfspNTFF4eE+RSAE7Z1ur+oGg/nSVSjw
-         GGaw0+LLgV80kzHQkdy+Dao5a1VryXTDnkVmeNCqRIYLZfqYTwshhbSOQNf58JcSuGzq
-         +pqn7akaTSLwCAq2SQu9zU7BkWOur0S5OfVK28Fkwm3ydIFYKJsiYeS/pUJ/JIdGBENk
-         Pi1EIIoNmmQFao9uz9EEajlRARkvGbTFPKfjKuNSd19NTqPFa781fKhtZGZ9z4cM9dxo
-         L/cXxZ2bzmfKjRC1TU9azFxUf4pZFkd5X/hxkOQuOubPH0Jj+mlePYwRb6P0auMwNxCA
-         I/yg==
-X-Forwarded-Encrypted: i=1; AJvYcCWmzesdiOw9AkIhFP7oIuwa+Xj82o088iTSucBqw0N0B2AQ6MZj+TBbgnROCaw0j4yKFz8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFM1yS8LYypw2reRjuM4ipbcROOx2Ap3ESHx5fIxFSVXxC3T49
-	uJdTSMl9pc4zgaJTasGniYGSt2PyxPF6krhnRenC/1+yrGeUZaKi8nYbrxK6VCpQunkL2SdGr8q
-	GhKZJdrF9k+oXoGePvlwWjQTmsXheaPi/UX3DpPtbZBLA7Ob7rxeziUwwvLM=
+	s=arc-20240116; t=1775038310; c=relaxed/simple;
+	bh=EYB5toQ+a2gPT3p/vk/rLp+xwEczgs4V7hDyvgvQIcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P+X+1txSiXQfJ/S5godbJ00fofDrTH59Ltk7X5sbNY5e+ReJMEtYGHeGiIUV7A1j3U0QE+gyaTaQECcer7gXb+oiN7qr73jm/p/jLhxRGgNTNybNZZokr+RDe2y2ZlFORtbDfCbJnRIWEKNLD8wONgF6melEQ4GPkDDJ0i5B1QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mnLkOP4v; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mnLkOP4v"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62VIV9Js201661;
+	Wed, 1 Apr 2026 10:11:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=3mUbcxbKwm7xaMSKR/4qBN3+wZHiqAb74ixt34rZC
+	pY=; b=mnLkOP4vD7nndw6VtV+l4PBrfu4VT747tNdPt/bs3T7hdCwDAIUzzuqkq
+	tB1x76w/8dtc54jILHK04tgz8Y1rS2iu931SObDhwvcRmAg+c5hwTvYddFhXvi+o
+	g6Ql17N1f6nONsfwnKECGW8GbZwPjOhKI0ABlIwA7wxOrNnkyii5NUFknjmu+lVX
+	Uc8JykD6e4Yfm8Xz7y6lru2mPi8H0N8RBfvKLmD4pPRYdBCiP/NxFOpRG5VBm0+f
+	mjkeA3WqT4tsesG3LgL3ipcSeDdlnDDd10s4R3ckhd3fJXtfnHFH5xFb64TVUtMR
+	8SzYJCinkeywYAEm0FceixUuVqQcA==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d65dcew7w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 10:11:29 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6317Qwlq014339;
+	Wed, 1 Apr 2026 10:11:28 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6ttkmyrh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 01 Apr 2026 10:11:28 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 631ABODQ49152472
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 1 Apr 2026 10:11:24 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2EF1D2004B;
+	Wed,  1 Apr 2026 10:11:24 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 264162004D;
+	Wed,  1 Apr 2026 10:11:22 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  1 Apr 2026 10:11:21 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Abhishek Dubey <adubey@linux.ibm.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: [PATCH v3 1/2] powerpc64/bpf: Implement fsession support
+Date: Wed,  1 Apr 2026 10:10:42 -0400
+Message-ID: <20260401141043.41513-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1c94:b0:67e:36e9:79af with SMTP id
- 006d021491bc7-67fabc05dd9mr1445994eaf.17.1775037751034; Wed, 01 Apr 2026
- 03:02:31 -0700 (PDT)
-Date: Wed, 01 Apr 2026 03:02:31 -0700
-In-Reply-To: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69cced37.050a0220.183828.0043.GAE@google.com>
-Subject: [syzbot ci] Re: bpf: Prep patches for static stack liveness.
-From: syzbot ci <syzbot+cida569ba7b24f97a1@syzkaller.appspotmail.com>
-To: alexei.starovoitov@gmail.com, andrii@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
-	memxor@gmail.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=RsjI7SmK c=1 sm=1 tr=0 ts=69ccef51 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=p8F4Ghc8BiBnGImhoNcA:9
+X-Proofpoint-GUID: 1SAEDdbf5vHIk4kktIS0UPI61OTR8Bj4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDA4OSBTYWx0ZWRfXyyRbNbQ8O/9d
+ wMGZtWZQzwAy6odR4ylaKrplDbmlPeY8xMJd9isszxtDJ2srY7d5s2yBOJqf/6cIU51AcowCgsh
+ UL0bh5eElLZAWUNQNigUi26Oz5111qckwXTplGzWIoUseX2SJyWUbFV1bJA6h5MwCuLCBd3FgsA
+ ff5wxfeweq9jOTrBWJULdC+OEjdz0jhDVpaIv7YVxvWwdqWy9tbXZTY6gbJNo/gt7+di3yAWlZb
+ DLa5Eo1tu41weN0fjtPTCPymk0wme7l46DSENhBc4GPY9C6+Mk6KacgDA3vpvFxAODlrlJroqzG
+ Jj03rfd/dU5n1/6XcialGyjasVTLx3lucpvhdSJfymRzTSpUs7itbeaUIn8UFJLwtrrVVPguEYr
+ Ht63BXLDl7rmbYX/4ZR80uPzE8eokSGjPJu7Ug0SKEcEdwEVEF92p/YNnWxjvWvCbfxvf0x+rtS
+ une/hykPhvKZcJ9SxkQ==
+X-Proofpoint-ORIG-GUID: 1SAEDdbf5vHIk4kktIS0UPI61OTR8Bj4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-01_03,2026-04-01_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 clxscore=1015 phishscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2604010089
 
-syzbot ci has tested the following series
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-[v1] bpf: Prep patches for static stack liveness.
-https://lore.kernel.org/all/20260401021635.34636-1-alexei.starovoitov@gmail.com
-* [PATCH bpf-next 1/6] bpf: Do register range validation early
-* [PATCH bpf-next 2/6] bpf: Sort subprogs in topological order after check_cfg()
-* [PATCH bpf-next 3/6] selftests/bpf: Add tests for subprog topological ordering
-* [PATCH bpf-next 4/6] bpf: Add compute_const_regs() and prune_dead_branches() passes
-* [PATCH bpf-next 5/6] bpf: Move verifier helpers to header
-* [PATCH bpf-next 6/6] bpf: Add helper and kfunc stack access size resolution
+Implement JIT support for fsession in powerpc64 trampoline.
+The trampoline stack now accommodate session cookies and
+function metadata in place of function argument. fentry/fexit
+programs consume corresponding function metadata. This mirrors
+existing x86 behavior and enable session cookies on powerpc64.
 
-and found the following issue:
-UBSAN: array-index-out-of-bounds in do_check
+# ./test_progs -t fsession
+#135/1   fsession_test/fsession_test:OK
+#135/2   fsession_test/fsession_reattach:OK
+#135/3   fsession_test/fsession_cookie:OK
+#135     fsession_test:OK
+Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
 
-Full report is available here:
-https://ci.syzbot.org/series/3bdef783-321d-4d8d-9fbb-fd61f6cd92d5
-
-***
-
-UBSAN: array-index-out-of-bounds in do_check
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      0eeb0094ba0321f0927806857b5f01c1577bc245
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/925251e6-c091-44e6-a321-22bd3bffd780/config
-
-can: raw protocol
-can: broadcast manager protocol
-can: netlink gateway - max_hops=1
-can: SAE J1939
-can: isotp protocol (max_pdu_size 8300)
-Bluetooth: RFCOMM TTY layer initialized
-Bluetooth: RFCOMM socket layer initialized
-Bluetooth: RFCOMM ver 1.11
-Bluetooth: BNEP (Ethernet Emulation) ver 1.3
-Bluetooth: BNEP filters: protocol multicast
-Bluetooth: BNEP socket layer initialized
-Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-Bluetooth: HIDP socket layer initialized
-NET: Registered PF_RXRPC protocol family
-Key type rxrpc registered
-Key type rxrpc_s registered
-NET: Registered PF_KCM protocol family
-lec:lane_module_init: lec.c: initialized
-mpoa:atm_mpoa_init: mpc.c: initialized
-l2tp_core: L2TP core driver, V2.0
-l2tp_ppp: PPPoL2TP kernel driver, V2.0
-l2tp_ip: L2TP IP encapsulation support (L2TPv3)
-l2tp_netlink: L2TP netlink interface
-l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
-l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
-NET: Registered PF_PHONET protocol family
-8021q: 802.1Q VLAN Support v1.8
-sctp: Hash tables configured (bind 32/56)
-NET: Registered PF_RDS protocol family
-Registered RDS/infiniband transport
-Registered RDS/tcp transport
-tipc: Activated (version 2.0.0)
-NET: Registered PF_TIPC protocol family
-tipc: Started in single node mode
-smc: adding smcd device lo without pnetid
-NET: Registered PF_SMC protocol family
-9pnet: Installing 9P2000 support
-NET: Registered PF_CAIF protocol family
-NET: Registered PF_IEEE802154 protocol family
-Key type dns_resolver registered
-Key type ceph registered
-libceph: loaded (mon/osd proto 15/24)
-batman_adv: B.A.T.M.A.N. advanced 2025.5 (compatibility version 15) loaded
-openvswitch: Open vSwitch switching datapath
-NET: Registered PF_VSOCK protocol family
-mpls_gso: MPLS GSO support
-IPI shorthand broadcast: enabled
-sched_clock: Marking stable (25300061146, 122105816)->(25454415888, -32248926)
-registered taskstats version 1
-------------[ cut here ]------------
-UBSAN: array-index-out-of-bounds in kernel/bpf/verifier.c:21704:16
-index 10 is out of range for type 'u32[10]' (aka 'unsigned int[10]')
-CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150
- ubsan_epilogue+0xa/0x30
- __ubsan_handle_out_of_bounds+0xe8/0xf0
- do_check+0x77a1/0x11d50
- do_check_common+0x21ea/0x2dc0
- bpf_check+0x242f/0x1cd90
- bpf_prog_load+0x1484/0x1ae0
- __sys_bpf+0x618/0x950
- kern_sys_bpf+0x185/0x700
- load+0x488/0xad0
- do_one_initcall+0x250/0x8d0
- do_initcall_level+0x104/0x190
- do_initcalls+0x59/0xa0
- kernel_init_freeable+0x2a6/0x3e0
- kernel_init+0x1d/0x1d0
- ret_from_fork+0x51e/0xb90
- ret_from_fork_asm+0x1a/0x30
- </TASK>
----[ end trace ]---
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 ---
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
-To test a patch for this bug, please reply with `#syz test`
-(should be on a separate line).
+This patch is rebased over https://lore.kernel.org/bpf/20260401103215.104438-1-adubey@linux.ibm.com
 
-The patch should be attached to the email.
-Note: arguments like custom git repos and branches are not supported.
+v2->v3:
+  Rebased over latest changes
+  Collected Tested-by tag
+v1->v2:
+  No change since v1
+
+[v2]: https://lore.kernel.org/bpf/20260226041217.18059-1-adubey@linux.ibm.com
+[v1]: https://lore.kernel.org/bpf/20260216155310.38457-1-adubey@linux.ibm.com
+
+ arch/powerpc/net/bpf_jit.h        |  4 +-
+ arch/powerpc/net/bpf_jit_comp.c   | 69 ++++++++++++++++++++++++++-----
+ arch/powerpc/net/bpf_jit_comp64.c | 25 +++++++++++
+ 3 files changed, 87 insertions(+), 11 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index a232f3fb73be..f32de8704d4d 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -218,7 +218,9 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+ void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
+ void bpf_jit_realloc_regs(struct codegen_context *ctx);
+ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
+-
++void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
++								int cookie_off, int retval_off);
++void store_func_meta(u32 *image, struct codegen_context *ctx, u64 func_meta, int func_meta_off);
+ int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 *fimage, int pass,
+ 			  struct codegen_context *ctx, int insn_idx,
+ 			  int jmp_off, int dst_reg, u32 code);
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 2018260f56c6..16d15ff3145a 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -540,6 +540,11 @@ bool bpf_jit_supports_private_stack(void)
+ 	return IS_ENABLED(CONFIG_PPC64);
+ }
+ 
++bool bpf_jit_supports_fsession(void)
++{
++	return IS_ENABLED(CONFIG_PPC64);
++}
++
+ bool bpf_jit_supports_arena(void)
+ {
+ 	return IS_ENABLED(CONFIG_PPC64);
+@@ -812,12 +817,16 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 					 struct bpf_tramp_links *tlinks,
+ 					 void *func_addr)
+ {
+-	int regs_off, nregs_off, ip_off, run_ctx_off, retval_off, nvr_off, alt_lr_off, r4_off = 0;
++	int regs_off, func_meta_off, ip_off, run_ctx_off, retval_off;
++	int nvr_off, alt_lr_off, r4_off = 0;
+ 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+ 	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+ 	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+ 	int i, ret, nr_regs, retaddr_off, bpf_frame_size = 0;
+ 	struct codegen_context codegen_ctx, *ctx;
++	int cookie_off, cookie_cnt, cookie_ctx_off;
++	int fsession_cnt = bpf_fsession_cnt(tlinks);
++	u64 func_meta;
+ 	u32 *image = (u32 *)rw_image;
+ 	ppc_inst_t branch_insn;
+ 	u32 *branches = NULL;
+@@ -853,9 +862,11 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	 *                              [ reg argN          ]
+ 	 *                              [ ...               ]
+ 	 *       regs_off               [ reg_arg1          ] prog_ctx
+-	 *       nregs_off              [ args count        ] ((u64 *)prog_ctx)[-1]
++	 *       func_meta_off          [ args count        ] ((u64 *)prog_ctx)[-1]
+ 	 *       ip_off                 [ traced function   ] ((u64 *)prog_ctx)[-2]
++	 *                              [ stack cookieN     ]
+ 	 *                              [ ...               ]
++	 *       cookie_off             [ stack cookie1     ]
+ 	 *       run_ctx_off            [ bpf_tramp_run_ctx ]
+ 	 *                              [ reg argN          ]
+ 	 *                              [ ...               ]
+@@ -887,16 +898,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	run_ctx_off = bpf_frame_size;
+ 	bpf_frame_size += round_up(sizeof(struct bpf_tramp_run_ctx), SZL);
+ 
++	/* room for session cookies */
++	cookie_off = bpf_frame_size;
++	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
++	bpf_frame_size += cookie_cnt * 8;
++
+ 	/* Room for IP address argument */
+ 	ip_off = bpf_frame_size;
+ 	if (flags & BPF_TRAMP_F_IP_ARG)
+ 		bpf_frame_size += SZL;
+ 
+-	/* Room for args count */
+-	nregs_off = bpf_frame_size;
++	/* Room for function metadata, arg regs count */
++	func_meta_off = bpf_frame_size;
+ 	bpf_frame_size += SZL;
+ 
+-	/* Room for args */
++	/* Room for arg regs */
+ 	regs_off = bpf_frame_size;
+ 	bpf_frame_size += nr_regs * SZL;
+ 
+@@ -995,9 +1011,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 		EMIT(PPC_RAW_STL(_R3, _R1, retaddr_off));
+ 	}
+ 
+-	/* Save function arg count -- see bpf_get_func_arg_cnt() */
+-	EMIT(PPC_RAW_LI(_R3, nr_regs));
+-	EMIT(PPC_RAW_STL(_R3, _R1, nregs_off));
++	/* Save function arg regs count -- see bpf_get_func_arg_cnt() */
++	func_meta = nr_regs;
++	store_func_meta(image, ctx, func_meta, func_meta_off);
+ 
+ 	/* Save nv regs */
+ 	EMIT(PPC_RAW_STL(_R25, _R1, nvr_off));
+@@ -1011,10 +1027,28 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 			return ret;
+ 	}
+ 
+-	for (i = 0; i < fentry->nr_links; i++)
++	if (fsession_cnt) {
++		/*
++		 * Clear all the session cookies' values
++		 * Clear the return value to make sure fentry always get 0
++		 */
++		prepare_for_fsession_fentry(image, ctx, cookie_cnt, cookie_off, retval_off);
++	}
++
++	cookie_ctx_off = (regs_off - cookie_off) / 8;
++
++	for (i = 0; i < fentry->nr_links; i++) {
++		if (bpf_prog_calls_session_cookie(fentry->links[i])) {
++			u64 meta = func_meta | (cookie_ctx_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(image, ctx, meta, func_meta_off);
++			cookie_ctx_off--;
++		}
++
+ 		if (invoke_bpf_prog(image, ro_image, ctx, fentry->links[i], regs_off, retval_off,
+ 				    run_ctx_off, flags & BPF_TRAMP_F_RET_FENTRY_RET))
+ 			return -EINVAL;
++	}
+ 
+ 	if (fmod_ret->nr_links) {
+ 		branches = kcalloc(fmod_ret->nr_links, sizeof(u32), GFP_KERNEL);
+@@ -1076,12 +1110,27 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 		image[branches[i]] = ppc_inst_val(branch_insn);
+ 	}
+ 
+-	for (i = 0; i < fexit->nr_links; i++)
++	/* set the "is_return" flag for fsession */
++	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
++	if (fsession_cnt)
++		store_func_meta(image, ctx, func_meta, func_meta_off);
++
++	cookie_ctx_off = (regs_off - cookie_off) / 8;
++
++	for (i = 0; i < fexit->nr_links; i++) {
++		if (bpf_prog_calls_session_cookie(fexit->links[i])) {
++			u64 meta = func_meta | (cookie_ctx_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(image, ctx, meta, func_meta_off);
++			cookie_ctx_off--;
++		}
++
+ 		if (invoke_bpf_prog(image, ro_image, ctx, fexit->links[i], regs_off, retval_off,
+ 				    run_ctx_off, false)) {
+ 			ret = -EINVAL;
+ 			goto cleanup;
+ 		}
++	}
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		if (ro_image) /* image is NULL for dummy pass */
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 6670d8c69ade..d9038c468af6 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -179,6 +179,31 @@ static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
+ 	BUG();
+ }
+ 
++void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
++				int cookie_off, int retval_off)
++{
++	EMIT(PPC_RAW_LI(bpf_to_ppc(TMP_REG_1), 0));
++
++	for (int i = 0; i < cookie_cnt; i++)
++		EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, cookie_off + 8 * i));
++	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, retval_off));
++}
++
++void store_func_meta(u32 *image, struct codegen_context *ctx,
++					u64 func_meta, int func_meta_off)
++{
++	/*
++	 * Store func_meta to stack at [R1 + func_meta_off] = func_meta
++	 *
++	 * func_meta :
++	 *	bit[63]: is_return flag
++	 *	byte[1]: cookie offset from ctx
++	 *	byte[0]: args count
++	 */
++	PPC_LI64(bpf_to_ppc(TMP_REG_1), func_meta);
++	EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, func_meta_off));
++}
++
+ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+ {
+ }
+-- 
+2.52.0
+
