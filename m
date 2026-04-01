@@ -1,151 +1,175 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E4039281F
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 09:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E94E3DE430
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 10:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775037588; cv=none; b=W0SikedvZxT63SyeiKTQBsevvZvKpJCz4eJOpBdjR26s18boZyYJc/qvUnKUfNWElu23gsJ3Td02/fBHzntD8sbV5EdRawazpkRDX91NWXmVrt0fXg41O76zjPH976aaHygMG28DmCykiKv+CCAnTC2eWG8PTpo+V/+Ka5pgCwc=
+	t=1775037755; cv=none; b=Fi2R1Kbqpy3PoYs8H/c4I497VwNrhGwmzaNyK8tdETsHqiZwN9Y4ZHHJHwep+S3rsFEc30Qa0DTp7KbE+UVKrQKsjxRUDS4gbbzMZO5okk2mrY3j5OyKLTis88m9DuSn6/eiEuyLU9YI+Ebh4k6dDOY1Oz6qg31xBW1hS+h2TZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775037588; c=relaxed/simple;
-	bh=ycUEdA2x+MJTDT2g4Oi10cO8WuuS+tfm1q2PNLmAaS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EkeNCYEQNjgtKPPZ2vvPd4aebTJ9gozgC1cYejv18oImL4irE7RO3wZBfS4htRztLxYaRzZYWkRmE942nYm8dAl7BU+h43zs/lLhWRjm8KsV9TA8YsH8r+H109HNwQpYltg6ZTKqqPlmllLUYzV2iclf0yNXLdMmkxLUnRf8Pns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kafSk2Qd; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kafSk2Qd"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c06cb8004e8so2687242a12.0
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 02:59:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775037586; x=1775642386; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GGZSfzYmOxZUsSdlNf6ON97guqDpcO5sFhVaagpb4Kg=;
-        b=kafSk2QdjnznkIR2yZEwHrNhCWZZyuMXV8t12ZilUMr5N77bvOwmBHIXaKBS25T6Y9
-         X8pqAmfre8ZTUaJxSXh9EmzSlZm6DcgULm8iWY+ZbzhPG9VdBxBiLTrHpt75+9O6pj3j
-         9xNA0oyO+CXL/CzrooEHq9zBSUwz3xi7NN+R2afyFgQxKhA0u/hGLOb3X4AnxOhr+Aum
-         iBJ2eP0bInX4KzuZSqskak63N0X+6Z0/4vcvtyhswobZCs8egXZ7eDpPllKbmp2ZjOSJ
-         DET6CvnMd2SiZfZhYpTlKEMmY7LmWHeAf0DTa5taoDHTJRRJ3lSCYKQVAhPLTM25YDtr
-         I5uw==
+	s=arc-20240116; t=1775037755; c=relaxed/simple;
+	bh=kqhomxdwlfA72G52s1CFHtNLGQBOoyy859CEMvQ4kmo=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=nL0R9OWavbidB5cvuu98gJ8Uv3rBVsL/ObxRRMe2BgmsIHSKu9JRT1eSVxOWoSdj/7pxSLeFVzyPHJyQUk6IDXL4Bi7Y9xtURknOwwVegLd9i6RstYk8nC7SZCwI43DtLhqVSWcNWHa2lnAoHxyWyhKklghhUjLLrMYClwSM7tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-67e282b93d1so9147322eaf.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 03:02:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775037586; x=1775642386;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GGZSfzYmOxZUsSdlNf6ON97guqDpcO5sFhVaagpb4Kg=;
-        b=Ze1X8MmI9NKNb0H3kr0rOsY8Rc/bAI7ZG97w2/SC/RAkqdJkw12CMFMrg86S0wB2fh
-         aFB666P9x4/LDCvkdFNlW1P/b+9TeFzit+Yv5Db7LTxdo7TsLIDicIPUrAuZKW9hsF68
-         iKfn21aDiPn4kmQwUVJKUD34c0vmYFgrXhxHPiXzNeuSHg5ILIp/hmrA27XOHV4asBf/
-         8xuDnCZhAjJv8RyT51gyt3/6HYWUNoxAFNbRM4HkWjlRgwi9d+JE38iOYIinThS9GPRy
-         I8zhKNpksoVJesKhThBpO/WaUHw7xUCLT3Cz5RmOaZXUyXysyW93Jwphnb/6m8vPTY/E
-         h44Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXKiB7XCxnmRRwADYrl7ybAVRWISPcZc+mAk8rtOcoPUQ8hpVGnHTa5K5V/sCKwjulaIfo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+pDxlfoXW1KJAOzSv2XfCX8rmvD/AGTTBalW0+uOs+5S2x51k
-	6spir+AHkroL8gI5nfutK9x6oikg1oVIMktr/2eGPM7bOx3YxP1uNHKE
-X-Gm-Gg: ATEYQzwNHOsVQcrYmQM/DAVCbakRN8TrYFwtDb6jX8B86xocjvG1hgxFyUu/6DjtYJX
-	Dom9RrMc+cfR8/kaNG9bKGHw2tUWAyrTW82QL6njJLU2N2M/WhisM+bEM2pVAVOtgtuUgxsNAFi
-	/cJJYQ67lHCSkyCk3wvJt9muFewXpF/3dGVaWD4EBlsLnr7KdzMlQC1IaNHiPMbkkJh4P5hLuWr
-	wgAogIZods5a/vGkJ5I7f/b2MWa4+2CT1g+4Y719SpiwP1tPnOEZMxHbtS3SXPAztivMgYcyv0E
-	s9TO58PvEaYEedGCWCez5lrf66HLL97Tpse4Xe8zdoFA36Ecxkm0uPi+dyV8MPTljIVwTIYkCvX
-	Zp+UtspVOF4F9COcoaVgwWZbypFGSxBJVQVNO9x4ceGmcQW5Z1era4WSLzGrL5ywYG7KGYBsag7
-	Jzx8Q6ZJMM9Vn1ME91X5Fs/4U0yx8lqH5M73hN1AaF
-X-Received: by 2002:a05:6a20:94ca:b0:39b:f0a1:1495 with SMTP id adf61e73a8af0-39ef7754357mr2819652637.52.1775037586082;
-        Wed, 01 Apr 2026 02:59:46 -0700 (PDT)
-Received: from computer ([2a09:bac5:40b2:a82::10c:35])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76b9c20473sm4025536a12.24.2026.04.01.02.59.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 02:59:45 -0700 (PDT)
-Date: Wed, 1 Apr 2026 15:29:32 +0530
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: andrii@kernel.org, alan.maguire@oracle.com, yonghong.song@linux.dev, 
-	song@kernel.org, bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	memxor@gmail.com, eddyz87@gmail.com, martin.lau@linux.dev, jolsa@kernel.org, 
-	menglong8.dong@gmail.com, puranjay@kernel.org, bjorn@kernel.org, leon.hwang@linux.dev, 
-	linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [RFC PATCH bpf-next v2 3/3] libbpf: Auto-upgrade kprobes to
- multi-kprobes when supported
-Message-ID: <aczsYZo08vcha6Rt@computer>
-References: <20260330110019.549079-4-varunrmallya@gmail.com>
- <d5f1a4484d26fbff3aaafd358025dffeb2ba3cbff9c35c1643e4b0ab503201d6@mail.kernel.org>
+        d=1e100.net; s=20251104; t=1775037751; x=1775642551;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WERYNT9aA6wIU9sei+2iFDHLFAktlUqnv9kGI7xSgG4=;
+        b=qrKq9gZschP/hE+bwZDbs+6pQN0eS9X33YsfspNTFF4eE+RSAE7Z1ur+oGg/nSVSjw
+         GGaw0+LLgV80kzHQkdy+Dao5a1VryXTDnkVmeNCqRIYLZfqYTwshhbSOQNf58JcSuGzq
+         +pqn7akaTSLwCAq2SQu9zU7BkWOur0S5OfVK28Fkwm3ydIFYKJsiYeS/pUJ/JIdGBENk
+         Pi1EIIoNmmQFao9uz9EEajlRARkvGbTFPKfjKuNSd19NTqPFa781fKhtZGZ9z4cM9dxo
+         L/cXxZ2bzmfKjRC1TU9azFxUf4pZFkd5X/hxkOQuOubPH0Jj+mlePYwRb6P0auMwNxCA
+         I/yg==
+X-Forwarded-Encrypted: i=1; AJvYcCWmzesdiOw9AkIhFP7oIuwa+Xj82o088iTSucBqw0N0B2AQ6MZj+TBbgnROCaw0j4yKFz8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFM1yS8LYypw2reRjuM4ipbcROOx2Ap3ESHx5fIxFSVXxC3T49
+	uJdTSMl9pc4zgaJTasGniYGSt2PyxPF6krhnRenC/1+yrGeUZaKi8nYbrxK6VCpQunkL2SdGr8q
+	GhKZJdrF9k+oXoGePvlwWjQTmsXheaPi/UX3DpPtbZBLA7Ob7rxeziUwwvLM=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5f1a4484d26fbff3aaafd358025dffeb2ba3cbff9c35c1643e4b0ab503201d6@mail.kernel.org>
+X-Received: by 2002:a05:6820:1c94:b0:67e:36e9:79af with SMTP id
+ 006d021491bc7-67fabc05dd9mr1445994eaf.17.1775037751034; Wed, 01 Apr 2026
+ 03:02:31 -0700 (PDT)
+Date: Wed, 01 Apr 2026 03:02:31 -0700
+In-Reply-To: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69cced37.050a0220.183828.0043.GAE@google.com>
+Subject: [syzbot ci] Re: bpf: Prep patches for static stack liveness.
+From: syzbot ci <syzbot+cida569ba7b24f97a1@syzkaller.appspotmail.com>
+To: alexei.starovoitov@gmail.com, andrii@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
+	memxor@gmail.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Mar 30, 2026 at 11:47:26AM +0000, bot+bpf-ci@kernel.org wrote:
-> > +			multi_opts.cookies = &bpf_cookie;
-> > +
-> > +		return bpf_program__attach_kprobe_multi_opts(prog, NULL, &multi_opts);
-> > +	}
-> > +
-> > +	legacy = determine_kprobe_perf_type() < 0;
-> 
-> What happens when a program was auto-upgraded to
-> BPF_TRACE_KPROBE_MULTI but the caller passes offset != 0 or
-> attach_mode == PROBE_ATTACH_MODE_LINK?
-> 
-> The redirect above is skipped, and the code falls through to the
-> perf_event path, which eventually calls bpf_link_create() with
-> BPF_PERF_EVENT. The kernel's bpf_prog_attach_check_attach_type()
-> in link_create() rejects this:
-> 
-> kernel/bpf/syscall.c:bpf_prog_attach_check_attach_type() {
->     case BPF_PROG_TYPE_KPROBE:
->         if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI &&
->             attach_type != BPF_TRACE_KPROBE_MULTI)
->             return -EINVAL;
-> }
-> 
-> This affects callers of the public API
-> bpf_program__attach_kprobe_opts() who have a SEC("kprobe") program
-> that was auto-upgraded but then manually attach with offset != 0
-> (the get_func_ip_test.c case) or with PROBE_ATTACH_MODE_LINK (the
-> test_attach_probe_manual.c case). The selftests were updated to use
-> .single, but external users of the API would get a confusing
-> -EINVAL with no diagnostic.
-> 
-> Would it make sense to add a pr_warn here for the fallthrough case
-> when expected_attach_type == BPF_TRACE_KPROBE_MULTI, suggesting
-> SEC("kprobe.single") as a workaround? Something like:
-> 
->     if (prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI) {
->         pr_warn("prog '%s': kprobe was auto-upgraded to multi but "
->                 "offset or attach_mode is incompatible; "
->                 "use SEC(\"kprobe.single\") instead\n",
->                 prog->name);
->         return libbpf_err_ptr(-ENOTSUP);
->     }
-Nice catch! I've added a check for that now. 
-> [ ... ]
-> 
-> > @@ -12269,14 +12308,24 @@ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf
-> >  	*link = NULL;
-> >
-> >  	/* no auto-attach for SEC("kprobe") and SEC("kretprobe") */
-> > +	if (strcmp(prog->sec_name, "kprobe") == 0 ||
-> > +	    strcmp(prog->sec_name, "kretprobe") == 0 ||
-> > +	    strcmp(prog->sec_name, "kprobe.single") == 0 ||
-> > +	    strcmp(prog->sec_name, "kretprobe.single") == 0)
-> >  		return 0;
-> 
-> This isn't a bug, but the comment above still says SEC("kprobe")
-> and SEC("kretprobe") -- should it also mention the .single
-> variants now that they are handled here?
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23741893093
+syzbot ci has tested the following series
 
+[v1] bpf: Prep patches for static stack liveness.
+https://lore.kernel.org/all/20260401021635.34636-1-alexei.starovoitov@gmail.com
+* [PATCH bpf-next 1/6] bpf: Do register range validation early
+* [PATCH bpf-next 2/6] bpf: Sort subprogs in topological order after check_cfg()
+* [PATCH bpf-next 3/6] selftests/bpf: Add tests for subprog topological ordering
+* [PATCH bpf-next 4/6] bpf: Add compute_const_regs() and prune_dead_branches() passes
+* [PATCH bpf-next 5/6] bpf: Move verifier helpers to header
+* [PATCH bpf-next 6/6] bpf: Add helper and kfunc stack access size resolution
+
+and found the following issue:
+UBSAN: array-index-out-of-bounds in do_check
+
+Full report is available here:
+https://ci.syzbot.org/series/3bdef783-321d-4d8d-9fbb-fd61f6cd92d5
+
+***
+
+UBSAN: array-index-out-of-bounds in do_check
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      0eeb0094ba0321f0927806857b5f01c1577bc245
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/925251e6-c091-44e6-a321-22bd3bffd780/config
+
+can: raw protocol
+can: broadcast manager protocol
+can: netlink gateway - max_hops=1
+can: SAE J1939
+can: isotp protocol (max_pdu_size 8300)
+Bluetooth: RFCOMM TTY layer initialized
+Bluetooth: RFCOMM socket layer initialized
+Bluetooth: RFCOMM ver 1.11
+Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+Bluetooth: BNEP filters: protocol multicast
+Bluetooth: BNEP socket layer initialized
+Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+Bluetooth: HIDP socket layer initialized
+NET: Registered PF_RXRPC protocol family
+Key type rxrpc registered
+Key type rxrpc_s registered
+NET: Registered PF_KCM protocol family
+lec:lane_module_init: lec.c: initialized
+mpoa:atm_mpoa_init: mpc.c: initialized
+l2tp_core: L2TP core driver, V2.0
+l2tp_ppp: PPPoL2TP kernel driver, V2.0
+l2tp_ip: L2TP IP encapsulation support (L2TPv3)
+l2tp_netlink: L2TP netlink interface
+l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
+l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
+NET: Registered PF_PHONET protocol family
+8021q: 802.1Q VLAN Support v1.8
+sctp: Hash tables configured (bind 32/56)
+NET: Registered PF_RDS protocol family
+Registered RDS/infiniband transport
+Registered RDS/tcp transport
+tipc: Activated (version 2.0.0)
+NET: Registered PF_TIPC protocol family
+tipc: Started in single node mode
+smc: adding smcd device lo without pnetid
+NET: Registered PF_SMC protocol family
+9pnet: Installing 9P2000 support
+NET: Registered PF_CAIF protocol family
+NET: Registered PF_IEEE802154 protocol family
+Key type dns_resolver registered
+Key type ceph registered
+libceph: loaded (mon/osd proto 15/24)
+batman_adv: B.A.T.M.A.N. advanced 2025.5 (compatibility version 15) loaded
+openvswitch: Open vSwitch switching datapath
+NET: Registered PF_VSOCK protocol family
+mpls_gso: MPLS GSO support
+IPI shorthand broadcast: enabled
+sched_clock: Marking stable (25300061146, 122105816)->(25454415888, -32248926)
+registered taskstats version 1
+------------[ cut here ]------------
+UBSAN: array-index-out-of-bounds in kernel/bpf/verifier.c:21704:16
+index 10 is out of range for type 'u32[10]' (aka 'unsigned int[10]')
+CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150
+ ubsan_epilogue+0xa/0x30
+ __ubsan_handle_out_of_bounds+0xe8/0xf0
+ do_check+0x77a1/0x11d50
+ do_check_common+0x21ea/0x2dc0
+ bpf_check+0x242f/0x1cd90
+ bpf_prog_load+0x1484/0x1ae0
+ __sys_bpf+0x618/0x950
+ kern_sys_bpf+0x185/0x700
+ load+0x488/0xad0
+ do_one_initcall+0x250/0x8d0
+ do_initcall_level+0x104/0x190
+ do_initcalls+0x59/0xa0
+ kernel_init_freeable+0x2a6/0x3e0
+ kernel_init+0x1d/0x1d0
+ ret_from_fork+0x51e/0xb90
+ ret_from_fork_asm+0x1a/0x30
+ </TASK>
+---[ end trace ]---
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+
+To test a patch for this bug, please reply with `#syz test`
+(should be on a separate line).
+
+The patch should be attached to the email.
+Note: arguments like custom git repos and branches are not supported.
