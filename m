@@ -1,32 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8977246AEEF
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 17:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8711B47B410
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 17:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775062953; cv=none; b=IKgG8iJoSaLX+qycf5Gni1aIF0TYCK4MgXXlNPZYQGbiUM2/8Xuu8ug+KqbcipQj132R9N+QyWK/twOc3x1+7so7mZfj2VkoyjiaFtPSzLa1gixcTr/4i9JmMQ6yB2bGGUi6g8YcYWrBvrgYH9E5FHplppCxTB2uGZCm/COM8Xg=
+	t=1775062956; cv=none; b=mQCa+eKwEi+Zk1hlLdD4K19t/hY1Ww0qtA7tm/w52a3BDMn+juqTWBSWIW8Pj2CeNLirHb2bErnwmLX97O8XHxfsjsPDK6rnU1bbfHIxxcZ3mlknjVVRfC3CtYwOKVKJwrFgSuNj+xas4A8T5IUBusoiXUaf8jVefiGNPt+kep0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775062953; c=relaxed/simple;
-	bh=KvFgaUenGhcHckisN5OL8patG/WbMnCOux1WG8FDlvU=;
+	s=arc-20240116; t=1775062956; c=relaxed/simple;
+	bh=M2tR9aC9kmQvQuWSxUEUwl0CGDjpKVaBKYee6gkeVUs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CMMyBDpxfnvfuV17Xa3WV879usontcyGoJ4T6Ny3oDncEy4iPCgKQhTbO5Nhd6gTWjbLwtH+f6OfJn9CP0zbcMfl3SMRRlfWlnUwXCXUJVFcSjV3u7xdgf34+9aIpcS5nS5wMWoQo/odd/OEIRuLdQxztG17ahqEP0lKp8iCYU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Hb6lOjfi; arc=none smtp.client-ip=95.215.58.174
+	 MIME-Version; b=ZNiviRrcFFiA8w+Dtc4XUP6DjDtiznL7ii3bFTH/j0gt5W7+ye6ng+dmEHDJd9iVvG6X9fXsxb61xMcyeJGQE3O9A+KRyK/SZI/ZvosfY5KubmOF68/yJpkfrbjmGzFoTOK2jGiylcUC/EMHacw/PODWvaQ24mlQCBNV3x0Ys3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AoBQuaw0; arc=none smtp.client-ip=95.215.58.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Hb6lOjfi"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AoBQuaw0"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775062950;
+	t=1775062952;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AsH6R80TJDws4nl7LWonmHH9kxNvod9kW3v5xo68yik=;
-	b=Hb6lOjfigXwM5X44W1eUJpoEMAAo4NOi+UA+Witvr/lwggH9BFcolpyq5GEq5cSulZUlne
-	7QcWI1xYoI20r54N7ucyTyhNLm0K8QzxzH2aFfHGDjN9oSdUxoElp3PNQVrzca7mv19XcD
-	rDCW1tk5f0Otc0sIqzj8Tq4kbbhcMrY=
+	bh=B8QhmTGSa5Aa/fUb2FKnBR8mMCdn5SdQqaFfXWy8lso=;
+	b=AoBQuaw0La5qD8I/XtviNTe0W6ZHTg58fxHfQYi5zqGRCIScZ9IHbg43IkuCk3Zhx/X8wg
+	r1dQqTMQHZPaTN6u+XnVRDyYxargdNlQEDBN+e15v7x6PJzgwrtKgdQfafv3yRgCY63eXl
+	CBXyVPWhA9vufIH7e8DbTafuXBiooKY=
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
 Cc: bpf@gcc.gnu.org,
@@ -35,9 +35,9 @@ Cc: bpf@gcc.gnu.org,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH 1/2] bpf, doc: Clarify Pseudo-C notation and w vs r register usage
-Date: Wed,  1 Apr 2026 10:01:14 -0700
-Message-ID: <20260401170115.495836-2-vineet.gupta@linux.dev>
+Subject: [PATCH 2/2] bpf, doc: Improve MOV* documentation ...
+Date: Wed,  1 Apr 2026 10:01:15 -0700
+Message-ID: <20260401170115.495836-3-vineet.gupta@linux.dev>
 In-Reply-To: <20260401170115.495836-1-vineet.gupta@linux.dev>
 References: <20260401170115.495836-1-vineet.gupta@linux.dev>
 Precedence: bulk
@@ -49,46 +49,94 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-As a new comer to BPF ecosystem I was confused with Pseudo-C being the
-actual assembly. And while its obvious now that w and r forms represent
-32-bit and 64-bit regs respectively, its better to call this out in
-documentation explicity and make it more newbie-proof.
+ - Added some assembly (pseudo-C) snippets.
+
+ - Rearrange: MOV content comes before MOVSX.
+
+ - MOVSX content itself rearranged: canonical sign extension variant
+   for {8,16,32}-> 64 moved ahead of the special variant which only
+   sign extends to 32 and zeroes out the upper bits.
+
+ - Remove the hyphen '-' in "sign-extension" to make grep hit all
+   instances with one pattern.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- .../bpf/standardization/instruction-set.rst      | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ .../bpf/standardization/instruction-set.rst   | 33 +++++++++++++------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
 
 diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-index 39c74611752b..fd688c5d3f04 100644
+index fd688c5d3f04..ac61d3be7af2 100644
 --- a/Documentation/bpf/standardization/instruction-set.rst
 +++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -315,13 +315,21 @@ For arithmetic and jump instructions (``ALU``, ``ALU64``, ``JMP`` and
- Arithmetic instructions
- -----------------------
+@@ -414,25 +414,38 @@ etc. This specification requires that signed modulo MUST use truncated division
  
--``ALU`` uses 32-bit wide operands while ``ALU64`` uses 64-bit wide operands for
--otherwise identical operations. ``ALU64`` instructions belong to the
--base64 conformance group unless noted otherwise.
--The 'code' field encodes the operation as below, where 'src' refers to the
-+``ALU`` uses 32-bit wide operands ('w' registers in assembly) while
-+``ALU64`` uses 64-bit wide operands ('r' registers) for otherwise
-+identical operations. ``ALU64`` instructions belong to the base64
-+conformance group unless noted otherwise.
-+The 'code' field encodes the operation as below, where 'src' refers to
- the source operand and 'dst' refers to the value of the destination
- register.
+    a % n = a - n * trunc(a / n)
  
-+Note: BPF ISA is unique as it uses "Pseudo-C" notation for the assembly
-+      instructions. In the table below, the column name actually specifies
-+      the encodings. Assembly instructions (as generated by compilers) are
-+      specified in the description column for some cases. Description of
-+      ``?DIV``, ``?MOD`` includes additional logic part of semantics not
-+      actual assembly.
+-The ``MOVSX`` instruction does a move operation with sign extension.
+-``{MOVSX, X, ALU}`` :term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into
+-32-bit operands, and zeroes the remaining upper 32 bits.
+-``{MOVSX, X, ALU64}`` :term:`sign extends<Sign Extend>` 8-bit, 16-bit, and 32-bit
+-operands into 64-bit operands.  Unlike other arithmetic instructions,
+-``MOVSX`` is only defined for register source operands (``X``).
++For move operations, the ``MOV`` instruction has a few different forms.
 +
- .. table:: Arithmetic instructions
++``{MOV, X, ALU64}`` means::
++
++  dst = src  (e.g. r1 = r2)
  
-   =====  =====  =======  ===================================================================================
+ ``{MOV, K, ALU64}`` means::
+ 
+   dst = (s64)imm
+ 
+-``{MOV, X, ALU}`` means::
++e.g. r1 = -4; r5 = 9282009
++
++``{MOV, X, ALU}`` has zero extension semantics (upper 32 bits are zeroed)::
+ 
+   dst = (u32)src
+ 
++e.g. w5 = w9
++
++The ``MOVSX`` instruction does a move operation with sign extension.
++``{MOVSX, X, ALU64}`` :term:`sign extends<Sign Extend>` 8-bit, 16-bit, and 32-bit
++operands into 64-bit operands.
++
++The ``{MOVSX, X, ALU}`` form has slightly different semantics: it
++:term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into
++32-bit operands, and zeroes the remaining upper 32 bits (similar to ``MOV``).
++
+ ``{MOVSX, X, ALU}`` with 'offset' 8 means::
+ 
+   dst = (u32)(s32)(s8)src
+ 
++Unlike other arithmetic instructions,
++``MOVSX`` is only defined for register source operands (``X``).
+ 
+ The ``NEG`` instruction is only defined when the source bit is clear
+ (``K``).
+@@ -605,7 +618,7 @@ For load and store instructions (``LD``, ``LDX``, ``ST``, and ``STX``), the
+     ABS            1      legacy BPF packet access (absolute)   `Legacy BPF Packet access instructions`_
+     IND            2      legacy BPF packet access (indirect)   `Legacy BPF Packet access instructions`_
+     MEM            3      regular load and store operations     `Regular load and store operations`_
+-    MEMSX          4      sign-extension load operations        `Sign-extension load operations`_
++    MEMSX          4      sign extension load operations        `Sign extension load operations`_
+     ATOMIC         6      atomic operations                     `Atomic operations`_
+     =============  =====  ====================================  =============
+ 
+@@ -649,10 +662,10 @@ instructions that transfer data between a register and memory.
+ Where '<size>' is one of: ``B``, ``H``, ``W``, or ``DW``, and
+ 'unsigned size' is one of: u8, u16, u32, or u64.
+ 
+-Sign-extension load operations
++Sign extension load operations
+ ------------------------------
+ 
+-The ``MEMSX`` mode modifier is used to encode :term:`sign-extension<Sign Extend>` load
++The ``MEMSX`` mode modifier is used to encode :term:`sign extension<Sign Extend>` load
+ instructions that transfer data between a register and memory.
+ 
+ ``{MEMSX, <size>, LDX}`` means::
 -- 
 2.53.0
 
