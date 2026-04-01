@@ -1,146 +1,191 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B051936B06F
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 11:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426FB33FE02
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 11:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775042011; cv=none; b=qwjNbmQ6vvUMh81OxCz3gbwxGbPNztWi0LQpAIpqlGG4s8eIu9fTuvKfVFBSZleWqjOtHMzpEORTeDlJ2E2s0pAVnnzMPJitXkxjHlU2tHDoI0Yxykhn4gWnJOy75/omi4Q1+EdiDUiZx3cmvRbyaRSg5K/qBmKOMJhfhZQJ/9A=
+	t=1775042156; cv=none; b=NcOxKr2tiGVUvc+bsH9JOsXN98OC/eP0h35zoKiPXNynSpusX/+8pXh2bg40cAGBUw9U4CELN+R0uz2iu8D7SkqFITTIVMbW+r4dgxttI9PvD8A++oPQFKMLgnFtrj3jegKj7uWhAm0/mTzpkR1F4MQ8PygZI5RMAgy9T4dwaf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775042011; c=relaxed/simple;
-	bh=+EMaqmV5IGyRb6aXl8/mlfL+Ehdt6ysva3usNERfTSI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rmEa7mr6FwW/yUwZcZejnV9WxG+hVJUpgnFYPXpDeLrVlRqmCXAAPM0qp09pIKdscKB4XAhzOMvZU652O+cDxhdJS/71Q19hjROg9K5PkmZAaZDf+uBEO6lpVBexxASeR5/5ddINvoQPclminxlWMGdGEwf/vheQObsRW8zlVGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HKWUgFTj; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775042156; c=relaxed/simple;
+	bh=8mTYXRes3Yfdkzr/JUjuvw/y6b7+hTR3U862Qi4cdN4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qe/TBFGfb/BMeFWD1BV4qAQo1piRB0YskevJrmMUYR/YH4aYPTjXuuZKPZhDgvj9XFNXYe0GNXucwZ7YOWNY2BRLwQev8p/yTGJSBv3P3TGs91Sq0u6omUGE2Zx979A8owJ3/nlCDb/srTzKssZgxNEhdSsT9UXcup4+lyVicjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n4lPn0aN; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HKWUgFTj"
-Message-ID: <0a06dbbe-1039-48dc-8fa1-331dac63559c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775042007;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UCdKZSxuAD+d/u0f+cnJAQd8hizdkeJxdxVPMULokRQ=;
-	b=HKWUgFTjS42Gua+FSdX6+neyu9OP/spCiUK9iyVwSNKQNsZS7qJnpGTiSBU3DVFSSfA6/+
-	Y5kYGafC1umHXuY9uPEUNHTj98XiHTK/yr7Moc51ZQdsZSxKthTZxmanFg+fr1/Zc4ZpbY
-	aQU3MHcX7LNAnQwiw8B9ixUvzujKr4g=
-Date: Wed, 1 Apr 2026 19:13:17 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n4lPn0aN"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso60852515e9.1
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 04:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775042154; x=1775646954; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vKD2ABhNjMN1YKUJCJDYgbNmSPYy+yYAHHJE4J921DA=;
+        b=n4lPn0aN/uwOpyT0ziWImLPN857ebi4tgshatGCSclPoY7tmqcaQeGHxv2XXMjmtMU
+         LSaGMMhXqm2LLwHVL/6YCLnjmduhetxFa5wWHFhU83xCWVXXhnBF+YwGhfMB80Mf4Qqj
+         tMSCf9Gua/8Zamck/X7fN3aziawUKs4rILpPnFrXdxI/MfnCatfddnqkJ9kYSgmMs9m+
+         +jRZE3FhczBQt9GugQiqOK9XY+vl1t8sRJ2u+xedQDWgJXh5gohlgroNQep2EwVSVD0y
+         CQEEiprxInMJoBwf9mZpPJX5iztk3vdzLbk5u/mcxsNVBD9KgdSLAJnFQDevLeUaEwY3
+         V3Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775042154; x=1775646954;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vKD2ABhNjMN1YKUJCJDYgbNmSPYy+yYAHHJE4J921DA=;
+        b=C+0hJliMvi6SWyC5XCPt0uDfzW7rf/WAygr2KXR2zCiETTD5DLEeftktVlVogkqIRi
+         zavtH2PrxSgHjIzpKV+Uta+KNiHazRqQKVujc5W0A5crcfOJTwY4GZ9cKGIpf9mSKAGJ
+         E2oFAk2Q2xtDSlcIHsExsxTKlvHnYXB4qlKWk73aMdJguXyyfKg9hvfCTv/2JS1R+5Nk
+         gaeEsyTE7OanbZJ6wzU6thMZACszKA/PYYqjis3UYhJlJvHTSmHwB7oqP3iD3d692Wbt
+         YCEVNWQ2ZiREtNE3VrSX155W6NCjRwOV+r3gohdko0qBOKNmpIj+dY56tccaCMafgkD9
+         ETbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWrXDweq8iMnkKZ56FD+Qlhj6Jz/wN7CiRhkKjnBRb94igbP2wQdixUq5kNNu2JLfC5ZU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyf0mYOkdQV2E84z6ru7+z0LY9r3QhChZKGxY3B2RvP+KeX7j7M
+	pgNPaoYiXAIdziSN21cD/AMDbUEy9yZLmRBn5V/iRf5alZlEb1j/F2V0
+X-Gm-Gg: ATEYQzxQ9Ygi57xZBqA294lWH5QNweLflglwo2DZCjhMantAYt1ehIciVe2ZHe7pxHA
+	NBLJ0J3v8t3BgOJ7RfCL3oiwu5FD1oL0GO4h7IV+Eqs7YAEJFsVcyCjE1ZmgwXsVH7FJePRkc3K
+	y4goFc2yiUpOeEoXM04HReVpAJ1gIrb5Phy7du7VFXBMS2uVslO8cjPvX7YZt9LNBTl35pgL0Bt
+	RCId64TOZ5TINkHclozEIJhUl3QzQLi6KaJ+kpNGRjUlyUj99sAtDQMv5Ybe3iyk8UtKFRntlNA
+	T33ZYYczEqL2fxdyChu6TgvXQhF+sz65R37qgpYjiXZ7JtgP72zAS6c1xhCpESbyvMJy02doNFu
+	uKjyw3fnHAgMWzOT351MqMI0mJTn2GuQueh7E+PeXCsEofXH2Uq42p6c8xX6H+K1H4cso9mQNEA
+	mka8rYkSiXXMcCTQ3EpD2uyjCIUbEpAqbGGzk4z2y6lv0Uwvf4LtxQxH54TO27hOq2hJmEfU3pA
+	+D3GgttCZDAAlqWRzhZ6L0WpeqgFKXuCZt+P5ynMichIKil2O8Cep2dc/pj0F5OZME0MAIHoAn/
+	wKURATxK+vhpB0gSPo5WFAAMBScRRrmKpH4vNmcyyJ9HDsfsH1052A==
+X-Received: by 2002:a05:600c:a016:b0:485:3f30:6250 with SMTP id 5b1f17b1804b1-4888359d87amr51826715e9.20.1775042153408;
+        Wed, 01 Apr 2026 04:15:53 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e0077853c1cf79fe628.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:7785:3c1c:f79f:e628])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e86ecf6sm115086735e9.14.2026.04.01.04.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 04:15:52 -0700 (PDT)
+Date: Wed, 1 Apr 2026 13:15:51 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: KaFai Wan <kafai.wan@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Subject: Re: [PATCH v2 bpf-next 2/6] bpf: Use bpf_verifier_env buffers for
+ reg_set_min_max
+Message-ID: <acz-Z3SeC8jxwpVp@mail.gmail.com>
+References: <cover.1774025082.git.paul.chaignon@gmail.com>
+ <9fdf9830803fe3a5c4059341c84a03836105f5bf.1774025082.git.paul.chaignon@gmail.com>
+ <33c006d7275cb443b5750f062cb78c38449a7537.camel@gmail.com>
+ <acpnHDASo5QGw7BZ@mail.gmail.com>
+ <d8129d6f3624bf6393952cfc5655701679478836.camel@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 bpf] sockmap: Fix use-after-free of sk->sk_socket in
- sk_psock_verdict_data_ready().
-To: Kuniyuki Iwashima <kuniyu@google.com>,
- John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Cong Wang <cong.wang@bytedance.com>
-Cc: Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org,
- syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com
-References: <20260401005418.2452999-1-kuniyu@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260401005418.2452999-1-kuniyu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d8129d6f3624bf6393952cfc5655701679478836.camel@linux.dev>
 
+On Tue, Mar 31, 2026 at 10:28:06PM +0800, KaFai Wan wrote:
+> On Mon, 2026-03-30 at 14:05 +0200, Paul Chaignon wrote:
+> > On Mon, Mar 23, 2026 at 11:42:11AM -0700, Eduard Zingerman wrote:
+> > > On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
+> > 
+> > [...]
+> > 
+> > > > @@ -17196,30 +17192,23 @@ static int reg_set_min_max(struct bpf_verifier_env *env,
+> > > >  	 * variable offset from the compare (unless they were a pointer into
+> > > >  	 * the same object, but we don't bother with that).
+> > > >  	 */
+> > > > -	if (false_reg1->type != SCALAR_VALUE || false_reg2->type != SCALAR_VALUE)
+> > > > -		return 0;
+> > > > -
+> > > > -	/* We compute branch direction for same SCALAR_VALUE registers in
+> > > > -	 * is_scalar_branch_taken(). For unknown branch directions (e.g., BPF_JSET)
+> > > > -	 * on the same registers, we don't need to adjust the min/max values.
+> > > > -	 */
+> > > > -	if (false_reg1 == false_reg2)
+> > > 
+> > > A side note:
+> > > 
+> > > The above hunk was added as a part of [1] to mitigate some invariant
+> > > violation errors. Surprisingly, none of the tests added in [1] fail
+> > > on current master if above hunk is commented out. Probably due to
+> > > recent improvements in bounds deduction. Should we remove these
+> > > tests as a part of the series?
+> > > 
+> > > [1] https://lore.kernel.org/all/20251103063108.1111764-3-kafai.wan@linux.dev/
+> > 
+> > Nice catch! Out of those five new tests, the three "jset on same
+> > register, scalar value unknown branch" never fail if you revert the
+> > commit they were testing, even at the time they were added. I believe
+> 
+> the five tests in [1] were intended to test the code:
+> 
+> 	if (reg1 == reg2) {
+> 		switch (opcode) {
+> 		case BPF_JGE:
+> 		case BPF_JLE:
+> 		case BPF_JSGE:
+> 		case BPF_JSLE:
+> 		case BPF_JEQ:
+> 			return 1;
+> 		case BPF_JGT:
+> 		case BPF_JLT:
+> 		case BPF_JSGT:
+> 		case BPF_JSLT:
+> 		case BPF_JNE:
+> 			return 0;
+> 		case BPF_JSET:
+> 			if (tnum_is_const(t1))
+> 				return t1.value != 0;
+> 			else
+> 				return (smin1 <= 0 && smax1 >= 0) ? -1 : 1;
+> 		default:
+> 			return -1;
+> 		}
+> 	}
+> 
+> Indeed, the three "jset on same register, scalar value unknown branch" tests never fail. 
+> We always know if the branch taken or not on BPF_JSET, and `regs_refine_cond_op` does not 
+> adjust the min/max values on BPF_JSET as it does for BPF_JLT.
 
-On 4/1/26 8:54 AM, Kuniyuki Iwashima wrote:
-> syzbot reported use-after-free of AF_UNIX socket's sk->sk_socket
-> in sk_psock_verdict_data_ready(). [0]
->
-> In unix_stream_sendmsg(), the peer socket's ->sk_data_ready() is
-> called after dropping its unix_state_lock().
->
-> Although the sender socket holds the peer's refcount, it does not
-> prevent the peer's sock_orphan(), and the peer's sk_socket might
-> be freed after one RCU grace period.
->
-> Let's fetch the peer's sk->sk_socket and sk->sk_socket->ops under
-> RCU in sk_psock_verdict_data_ready().
->
-> [0]:
-> BUG: KASAN: slab-use-after-free in sk_psock_verdict_data_ready+0xec/0x590 net/core/skmsg.c:1278
-> Read of size 8 at addr ffff8880594da860 by task syz.4.1842/11013
->
-> CPU: 1 UID: 0 PID: 11013 Comm: syz.4.1842 Not tainted syzkaller #0 PREEMPT(full)
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-> Call Trace:
->   <TASK>
->   dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
->   print_address_description mm/kasan/report.c:378 [inline]
->   print_report+0xba/0x230 mm/kasan/report.c:482
->   kasan_report+0x117/0x150 mm/kasan/report.c:595
->   sk_psock_verdict_data_ready+0xec/0x590 net/core/skmsg.c:1278
->   unix_stream_sendmsg+0x8a3/0xe80 net/unix/af_unix.c:2482
->   sock_sendmsg_nosec net/socket.c:721 [inline]
->   __sock_sendmsg net/socket.c:736 [inline]
->   ____sys_sendmsg+0x972/0x9f0 net/socket.c:2585
->   ___sys_sendmsg+0x2a5/0x360 net/socket.c:2639
->   __sys_sendmsg net/socket.c:2671 [inline]
->   __do_sys_sendmsg net/socket.c:2676 [inline]
->   __se_sys_sendmsg net/socket.c:2674 [inline]
->   __x64_sys_sendmsg+0x1bd/0x2a0 net/socket.c:2674
->   do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
->   do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
->   entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7facf899c819
-> Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007facf9827028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 00007facf8c15fa0 RCX: 00007facf899c819
-> RDX: 0000000000000000 RSI: 0000200000000500 RDI: 0000000000000004
-> RBP: 00007facf8a32c91 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007facf8c16038 R14: 00007facf8c15fa0 R15: 00007ffd41b01c78
->   </TASK>
-[...]
->
-> Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
-> Reported-by: syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/bpf/69cc6b9f.a70a0220.128fd0.004b.GAE@google.com/
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+Ok, let's keep these tests then :)
 
+> 
+> > these three tests were intended to cover the above "false_reg1 ==
+> > false_reg2" check and supposed to fail with an invariant violation when
+> > the check is missing.
+> > 
+> > I believe this check was never actually needed. For an invariant
+> 
+> this check can skip the pointless work on the same registers as Alexei said in [3].
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+I see. So not intended to fix the invariant violation but just avoid
+unnecessary work. That makes sense, thanks!
 
-> ---
->   net/core/skmsg.c | 13 ++++++++-----
->   1 file changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 3261793abe83..6187a83bd741 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -1267,17 +1267,20 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
->   
->   static void sk_psock_verdict_data_ready(struct sock *sk)
->   {
-> -	struct socket *sock = sk->sk_socket;
-> -	const struct proto_ops *ops;
-> +	const struct proto_ops *ops = NULL;
-> +	struct socket *sock;
->   	int copied;
->   
->   	trace_sk_data_ready(sk);
->   
-> -	if (unlikely(!sock))
-> -		return;
-> -	ops = READ_ONCE(sock->ops);
-> +	rcu_read_lock();
-> +	sock = READ_ONCE(sk->sk_socket);
-> +	if (likely(sock))
-> +		ops = READ_ONCE(sock->ops);
-> +	rcu_read_unlock();
->   	if (!ops || !ops->read_skb)
->   		return;
-> +
->   	copied = ops->read_skb(sk, sk_psock_verdict_recv);
->   	if (copied >= 0) {
->   		struct sk_psock *psock;
+> 
+> [3] https://lore.kernel.org/bpf/CAADnVQKdMcOkkqNa3LbGWqsz9iHAODFSinokj6htbGi0N66h_Q@mail.gmail.com/
+> 
+> > violation to happen, we need regs_refine_cond_op to refine a register
+> > based on a incorrectly-detected branch being verified. For jset, that
+> > can only happen if one of the two registers is constant. In our case,
+> > that would mean both registers are constant. But if both registers are
+> > constant, then is_scalar_branch_taken is always able to precisely
+> > deduce the outcome of the jset. Hence, we wouldn't even reach this
+> > "false_reg1 == false_reg2" check.
+> > 
+> > I think I'll remove this check in a preparatory commit, along with the
+> > related selftests and an explanation why it's all not-needed. Cc'ing
+> > KaFai Wan in case I missed something.
+> > 
+> > > 
+> > > [...]
+> 
+> -- 
+> Thanks,
+> KaFai
