@@ -1,125 +1,153 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93C0401485
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 15:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE0A376BD3
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 15:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775057575; cv=pass; b=Wvgx09AfuUSmvSdqBeS8TNkmSoxva8BjjjLGeX2Bx3cXZ27FXEimA9rYb66S+hRb1rPbTxuWcp5oJVty86ib2Em/EeEVml8Hv/afJOxBTmzp6OJudQUXXd5+RKtQTyuyHlEYlFPwkfEFWaS450t51DK0eUYvaZla5XscYt+SZ3Q=
+	t=1775057603; cv=pass; b=Vz2RJ07o1wPPtby2/y1htBTJnDnvFmFAmqPs1qOzaLSc3L6xzBtuTMkdsUWQ53oGXxs9WZhdFqK1LYdy2Wq+Qtjy7JWLJaCAFji/dLpq4zoqYYmppSM3ZGWHNi9/ZJfARw3kEMwFDswLCSyMRsQjHU6tvNRzaobSMyWG+zEzNYM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775057575; c=relaxed/simple;
-	bh=WpZkwFPK4saKVkaEUfteVuf/s+gOKFi990nBEr23mvY=;
+	s=arc-20240116; t=1775057603; c=relaxed/simple;
+	bh=8u5XZht3wlu/tI/FPO6Hb70fUeiS2U27V7bw9d78LXs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JeeoYKwKyegz3tnMhhWev4rZ9M2i9rOkuWbwA1bX++qj1xKyDgP0sODd41E/9FuoVmjaxV76IVJLVYTkHMh4nt8dCy7xPhBNShivS7u/D5/AOdDkizdlRBo85pTM8vw8A03Kz5Gfj0qpFoI410TVN08WT3K64hSaT+jMfxw1NLY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dACMqkU1; arc=pass smtp.client-ip=209.85.128.68
+	 To:Cc:Content-Type; b=cLrq9XvA+IqS2rCg+pz0P8lO2Ws0KGtklSpQeP5OpHT1VW9MmID+S65n/B38CWrzUKqjCfn2jk7+HEKlV++Dl9NVGVnOL0AbF6Odhx5zGfPeOeVgGibGGTQFDT1q/AjqSCZeOWtIQ2sPyUUFEqOuDVGD5kqdF00kbXrhHTaYyck=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RHM8jhSP; arc=pass smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dACMqkU1"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-486fb14227cso93401165e9.3
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 08:32:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775057572; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RHM8jhSP"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d02a71526so1896182f8f.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 08:33:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775057600; cv=none;
         d=google.com; s=arc-20240605;
-        b=SuY/FsBW4wVYnkTj7khgYJCuTjNPO8lRUfcTUrVyvqxfrK8K6ThS8k4EfEgU4jp+qc
-         c8gna16jOQN9oT9LWaIqp23e2xgQmKY3+PrddLfhtuZu5/j9S3zRJV2DKIFqRqWXbFg3
-         VowDGS9D9TucYQsavUwGum/bXKg3qiESeF/bbwp/LZxgJTyVr1tIqqhEpS/FP3Vavnf6
-         DQdYHTKiyGFgvGAemZEiRrUoDgUL2E14jHATGg6TunDB/Xl0I9huxZnSgE4SHsIWYk7M
-         18pBchgZrCt3yD15ODhpK1hDdfbZ/+QI/2eUpesS93U6ysRPXdRZRgDZOoNq3I7fkjID
-         KIew==
+        b=Ek1MFXRAOG0y9dtpeneAAUi4gR0VMzdhQ5wbHn8J3Ti7DUhXrtco92+lrhwxIkCkrE
+         jKk/HvSff20cXQOivCxN2bl12TOmjDCPfbwGpokauAlnLDICraM5eNPhcmNa08xsuFUX
+         QYDlNnP/cty9n8auCbsLd+TAvaupMY17aXC55GfXgASi9OiI3uLZC9i9xla20OgQ02aH
+         LarIV6sQfwo8/+aZFPl+8rnMFs3VrD6X89F2rm85d2ZJTT3mvYRn9yH+nhnCkSPWYVAN
+         c7fHXyilllXP4PLrlvtTkaPKHQBwVjeCunWV/3KrPU60uzqx9PDnbXFQgvBW4gI0BTmQ
+         QzhQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=WpZkwFPK4saKVkaEUfteVuf/s+gOKFi990nBEr23mvY=;
-        fh=rLmqXxFwTjn3MWgMjMUWqTqF6NDtpW25XbYBZi4KECI=;
-        b=EVHIdsTksHQ6lGl4BnLBZ7RklLhzMhP+XBwXCYDjyOu+WTXNpH5ocNlG2cmWmZSB4u
-         OullR0AJdtGv+wS+v0UJ+6CTii7Ci4u43ka80vCJkC+LNLrmpPcYga8Pu2nVwt/GTiQG
-         sYcaAxc7uDlexAeDMoBKXtDG0ylj+267G+XqesCVR08LAZYeK0G311o8zNcy4cfDFiMO
-         pg/oNhcEKXb4VYD7erUx/JASbk1DI1N/sd88nlCgPdF6ixiAoiwJGQWwHnGSBOQB2Ycb
-         QCjqUb4k7eL926sMPa/aapTmMyJ7Qo+Pmw2rkv2Ki6Uvm9b3vVMvqZ4wbNVxjHzNBz4h
-         UGcg==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WYuJjcsCVjm+nUkvXwexXWFVMP4k/5PKgHBvz1iN5Io=;
+        fh=ZjZnlGJ4j6GsPbdN9KU7cNTEhuDuKixuJSySPsKlUQw=;
+        b=jADmoPnsnx3oEVvjxaEDSUiZ5Vx5y0wrY1qWmI/ppMj9hkPsIQXhi8OcMohk73rmY+
+         rDg/IBadHB+N99B4XqUiIAWuwnWbEKO+9YJ4q/eARLW0qXEtj8VupEGct7kf4zYnPZIQ
+         X7S414SMflc/6Q5JP/hhovpuz20JQHQJi46QCKcAMm5NwEYY51YT3u7ivGpWMPrLqDNv
+         BDIQ2S4DjyfpJIyX4WrNlVS46L7xUu/n5h/X6LWE6ztDaYPODiF5xyUOqtLEV2pXho4a
+         Dzk0j/Da3Eh6gk4oqOlQho1VSbf/WTagEfqvABn4zVnc+J0EgapVHDN12UbqkaIMQN46
+         YEFA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775057572; x=1775662372; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WpZkwFPK4saKVkaEUfteVuf/s+gOKFi990nBEr23mvY=;
-        b=dACMqkU1tHFqG98ZcmhYhb6L90l2Qs6DMFf0WgB6FEShNC4kKLjYGCNFByKHe2I80R
-         teM+0VCIAHDNXnT7sOlvAbo4Nl5YxzaEE8Uo8wlXRvwxOep2cRhjgNHZDCOSPsf2g8IT
-         FiJEX2l+Pdwe/N1IyWsw+uNgUkhx6KMCrSCVSdQLOLo+4dkBpc0Q0j2dS8TCXLFhalWG
-         uhnVG7g+NbNfmgsY2a5O+7g7QZBkDXHtmQ8vuwIRlKzNh1qGneqE+y6X+Q9Z8ukMCBEn
-         //PO9b2aCCRBl65XQclaOt/+lzxvIKqIXEWpy1znZKbEUFf0tZ29bNWjsMHFfV5mdMEj
-         dLqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775057572; x=1775662372;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775057600; x=1775662400; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WpZkwFPK4saKVkaEUfteVuf/s+gOKFi990nBEr23mvY=;
-        b=eazYFbmuTxUIUYNG8HDuVGjHLPcC+w7pkD1f3se8J5FrDK2oRlI8Z/mF7AalRWATlr
-         ikIrKHNV7XAvyjek7l6QHW8QwbSCm24DHEH+HumXGv0BH08kRoCiW/1ms0ggxi6v8/jM
-         nP8h+ZN3r266rc16eagoFZTmu00opltHbA97z5mwAHmw94toUmnwsx6dbGAm3CD5V3GF
-         melwKjeZlTKgdDyvRDJz4ceyPI+YhT8Lav48/d5rVKrihKp0FCZLoFeSJX+NmY9Pn8L9
-         X+JEUDN4VNfOpvfH+in0vGXvndVrj+r4n1hROOM4BBVmMwCHrOzPsQRKzVZUSkXtpuuq
-         8wSg==
-X-Gm-Message-State: AOJu0Yz6shTAGKKAs6SC7mIC8Z5af+y1mzbD8zqdr/mcMjRD+40kModN
-	PTJgD7f4T8eHWm09JjMjZUDEhv4HnsNTLP/w8YS1wI0wxfv8K1FanTMxgUhqbO6bRnCmdonh99r
-	NeRG7vIARjinPtCk2sgPHE/BDzZV2E/o=
-X-Gm-Gg: ATEYQzz5CGIKbdkiujFF3cXi9YSMr18/AevGbGNt1LWu9Bvv9vnMiiKZVPiQPY1tHpo
-	T3EsOaz0zDoB4PZn4Rt2GdwoZuvDxZpF+Xd9Iu7dqyR0NDUk1HpqI/4cy3Fyt1zQy0JZAM2CVn0
-	ls2dRRUmzMJyKtUFVr5Nnns/v8uIPy99Y4QFjI2OoRLu/TI1xSjrQ62C/7E8526ZM21AtUduShw
-	cixyFl2XzfBcJ1mldJMGOfVGHhH5df1cZcrYwDAbocVZUCEuSEgy2ltZTG7yid6tImYWOLHkmbJ
-	A5Jkuaht56DNwPJfozj5RVXR0wkDOD+hS8tZtGhNDfhHo6Sw3mff1+VONUU=
-X-Received: by 2002:a05:600c:848d:b0:488:8185:e672 with SMTP id
- 5b1f17b1804b1-488835cceaamr76731335e9.30.1775057572216; Wed, 01 Apr 2026
- 08:32:52 -0700 (PDT)
+        bh=WYuJjcsCVjm+nUkvXwexXWFVMP4k/5PKgHBvz1iN5Io=;
+        b=RHM8jhSPStndmYk7pPTVa6AE9qMQj8i2pjFjiSY8xDgQ9BEZ4fBfr6e0+Xc1o06ocB
+         lHEMenIpn3oFRC9/pSNxpIIO0W2c9Uc0Gj6IWogqdz1+YLAGpPZGd054hrqpGOqNeMBm
+         ShaulVJC9uNtGHDBtoBK9jTrw23aFp69E9gQlcCO9VcIp6wMcQUiWM5mA6zenwQ+RxY1
+         K2zXf9i18lr0ApLuVlbmwJ5Ginf2xWg7+ryaCgA1h+OK6W1bZyV3yBPa6No04wpmZB2J
+         OpKY42e82WTb/SLyaIJgzvqjQ5fFxTCd9zldVhJ7NxXUk3yn5zRkz84KSwb42dCvVpWw
+         1Wlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775057600; x=1775662400;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WYuJjcsCVjm+nUkvXwexXWFVMP4k/5PKgHBvz1iN5Io=;
+        b=RwzNEzPB2ehcmgI+b3jVREDEAo6mgMY4IzGVnMaXJM2QMJDRIeETlpgocLp951ydCq
+         dO2hCNXjm8SkT+TzF+xvUf4havWmZv0SAi37vEk3/xLMUYmvqrS8j/WkNZeXuaBm+8Yx
+         utXcpyZOym9IynvunRgj2dol9i02XcZj6wzC29v7rnuEUeOEzUw+rxPvnLMmevcLpsmz
+         5c40nvK19HiEA/U92OsUmw9gFxCVSo6EA+SZyHdpKE3eJwanmvNZ7VNUaZ4nxSsbcQzi
+         v4Ki/wIz72+3MO9pBf/Hvb+lTTA3Iec9HcMZ9oS7bOhbK7Wo/M/tMth/YzwvyMS9Kx3F
+         MNug==
+X-Gm-Message-State: AOJu0Yzk1eDQSiLPX61ubg6nlJHYz4qEK9mxMlSDAIOkagXh3zXZyUn6
+	vw1y6uZNMXRewRKicnBEe4P5I1fAcUfYpnzA+CWLggnbAyb9zF/kW4UvT6sv/RWBUHW2DsRYJkC
+	zCpW31jPVLucjKCsCIrW9pTXKswJSXEQ=
+X-Gm-Gg: ATEYQzw5qWkb7yxcCXSlR/p9kcPTlVyhscj5nXB0vAuZTbh91y4tTTjnsQWsIzoCudg
+	2OKxB47C6k8qXwwXlOBhTqCecNiH6w9dI/zvyLTV5YhDlbcCp+IX/AZJozcxMDlRF9/kLNa/ch9
+	G+nM44jWi68icY1lfiU5M3ILu53ORoqlcUfi6f5GWWXxId2r+P/oelmqFqAKru8/g3N4EpUoSjd
+	wmlm2q2At+fBzYuUaeaU+6NRyWO9WpMpXF5GJOd7oLsFmu2Yh7CO1X9aBJwJVqKKc3vyut/BfFr
+	uKvVkdE0O8kFNFFTDa9vF7FCtZlbq0dK6Zxrtb0nbo5h3fmxSoAHL0lEhssp5mY9U7Q5W7wFNzF
+	YgFJCgMCFTgdhtEsw6GQXuyeqsGJsF79f39f2
+X-Received: by 2002:a5d:5f85:0:b0:43a:16d8:96e8 with SMTP id
+ ffacd0b85a97d-43d14fc7248mr7971728f8f.0.1775057600370; Wed, 01 Apr 2026
+ 08:33:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331145353.87606-1-leon.hwang@linux.dev>
-In-Reply-To: <20260331145353.87606-1-leon.hwang@linux.dev>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 1 Apr 2026 17:32:15 +0200
-X-Gm-Features: AQROBzC6WUTGQAIQiz90MC8if1nS4J3sjsF-SZP_U8DhDtTW8ITNnwzplLstXW0
-Message-ID: <CAP01T74Ncg0Q9Fx=vbgLK0zuUitBQOE0jtJqzKGpu3Pn-fTQKQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/2] bpf: Fix abuse of kprobe_write_ctx via freplace
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260401021635.34636-2-alexei.starovoitov@gmail.com> <7d2a686a5bae52a650a378e26d84ccdee3cec258044119a1183c4fbda16dae8e@mail.kernel.org>
+In-Reply-To: <7d2a686a5bae52a650a378e26d84ccdee3cec258044119a1183c4fbda16dae8e@mail.kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 1 Apr 2026 08:33:08 -0700
+X-Gm-Features: AQROBzCyupCzw3wPlellmaLMXMk53Kd-UnyyxxRD7g7RnCsipzl05MpZZ0WiNSw
+Message-ID: <CAADnVQK+J+xXD_PJBjc3ePm5TKcrarfYqFkTnaqf_b=Bo4NooQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/6] bpf: Do register range validation early
+To: bot+bpf-ci@kernel.org
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Chris Mason <clm@meta.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 31 Mar 2026 at 16:54, Leon Hwang <leon.hwang@linux.dev> wrote:
+On Tue, Mar 31, 2026 at 8:38=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> The potential issue of kprobe_write_ctx+freplace was mentioned in
-> "bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs" [1].
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
 >
-> It is true issue, that the test in patch #2 verifies that kprobe_write_ctx=false
-> kprobe progs can be abused to modify struct pt_regs via kprobe_write_ctx=true
-> freplace progs.
+> [ ... mark_reg_known_zero, mark_reg_unknown, mark_reg_not_init
+>       WARN_ON guards removed ... ]
 >
-> When struct pt_regs is modified, bpf_prog_test_run_opts() gets -EFAULT instead
-> of 0.
+> > @@ -3957,11 +3936,6 @@ static int __check_reg_arg(...)
+> >       struct bpf_insn *insn =3D env->prog->insnsi + env->insn_idx;
+> >       struct bpf_reg_state *reg;
+> >       bool rw64;
+> > -
+> > -     if (regno >=3D MAX_BPF_REG) {
+> > -             verbose(env, "R%d is invalid\n", regno);
+> > -             return -EINVAL;
+> > -     }
+> >
+> >       mark_reg_scratched(env, regno);
 >
-> test_freplace_kprobe_write_ctx:FAIL:bpf_prog_test_run_opts unexpected error: -14 (errno 14)
+> [ ... ]
 >
-> We will disallow attaching freplace programs on kprobe programs with different
-> kprobe_write_ctx values.
+> > @@ -22070,6 +22044,14 @@
+> >                       verbose(env, "unknown opcode %02x\n", insn->code)=
+;
+> >                       return -EINVAL;
+> >               }
+> > +             if (insn->dst_reg >=3D MAX_BPF_REG) {
+> > +                     verbose(env, "R%d is invalid\n", insn->dst_reg);
+> > +                     return -EINVAL;
+> > +             }
+> > +             if (insn->src_reg >=3D MAX_BPF_REG) {
+> > +                     verbose(env, "R%d is invalid\n", insn->src_reg);
+> > +                     return -EINVAL;
+> > +             }
+> >       }
 >
-> Links:
-> [1] https://lore.kernel.org/bpf/CAP01T74w4KVMn9bEwpQXrk+bqcUxzb6VW1SQ_QvNy0A4EY-9Jg@mail.gmail.com/
+> These new checks are placed after the BPF_LD_IMM64 handling block
+> in resolve_pseudo_ldimm64(). That block exits via the next_insn
+> label:
 >
+>     next_insn:
+>             insn++;
+>             i++;
+>             continue;
+>
+> The continue skips the new dst_reg/src_reg validation for
+> BPF_LD_IMM64 instructions. Since insn->dst_reg is a 4-bit
+> field (range 0-15) and MAX_BPF_REG is 11, could a crafted
+> BPF_LD_IMM64 instruction with dst_reg >=3D 11 reach
+> check_ld_imm() without ever being validated?
 
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-Discussed offline with Leon to follow up on other cases and
-incorporate his fixes for tail calls.
-
-> [...]
+Nice one. Will fix.
