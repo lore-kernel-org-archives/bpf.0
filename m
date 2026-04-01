@@ -1,195 +1,116 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF57C12CDA5
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775060462; cv=none; b=rNP112W7wvo0N//fMsWGfwXSi7kqFIg9tLsvNcC0UaTSixOLsRyFskMh+IzwVjoZlq+xtDtZKBnoKZAioxkkS0/wKhrsEmmPpNTxBpn0A3HSBL9NZIzzvoJ3i6YMvp4ajBm19URNezAQ0ipDeTeQclljW81nVyEf1h1VhTfy9LM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775060462; c=relaxed/simple;
-	bh=vqf1PiQgIrSLvLOIqCuthN86/GGCYXPRBreHnHltp80=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=REbcPzipV86HYS1Okxeup1fQKXMZlcXKhXwYE0PZiY0JcVFG0XEpCzyQswGX/IOZrfqC2aQWx+zOfYK3B8XGS1Nz+D5+nvDXJQpWC88Rn6HEFBdJ+kluiR0JSsBqCXu/HXswYBIfS7eUtcFM/F1RZhU3wGrHjxKJhCqSh/BnzNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BNE45O+3; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6FE3A9DB2
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775060719; cv=pass; b=hccmxb8H7P3seRaurLa+MOgKQUl4LWuPA37oPRXZ9t1GLRHO+cBA0UK369aQJSl+/InYY9T+ifqGgpW6YQ9eW8h6/hSzYC5qz5vxMcG5qHkX4eGoScwQwrgG95X48/LruWKphKw1NqjyYX4k3738Pr7z2u3c3zzmmLZLdrezfgw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775060719; c=relaxed/simple;
+	bh=2SB5GTo4Zggtv8jaq60i7uEuYoXPHDlZQ+kv8eHrM4k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BRAnae45vkTHeUlNJVDCF72NQag5+6y01FS72tzWVd5NMpV/Gb+2ZX+xL05grhW2A6bx2Um9FPlC6nDcrQxdy6Mpc906pWTGRS+g4vwgbFIZJ+8iyCoDMeZKA9AeZJ5Gnk7CXUs5i9dkdNnaMQVh2VKfWdJa3vI70cwlaNC0QC4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWUdhato; arc=pass smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNE45O+3"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2c160cb021cso7419163eec.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:21:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWUdhato"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-486fba7ce4cso71754895e9.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:25:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775060715; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ay47fmiFuqcJwrcaW5sUcmbB/HM1oLDRwYlk4y09XXyAwAmUIU9+swclgU1RSz4txL
+         wOL8mYq/5/sAbiyO7aqSkNGXM1nt2Ycp/3sOXc15tnUDQK4a3/y+ES0h8ifGMbp6ndqh
+         mkz+kjxx0yDBgESXvlrGl4vMQpAxH1OlyrgFhk7wb3jVuRXYz19Txdc94vDqs8jEQmr8
+         cac22IDhMR8+AZVEPpGC14QKAE0RMiMcGibnZp83iMmeLNVJ6gLrJAGWCruzeRpExZd3
+         qOHtrctE0MoAzzIOnhzxx/7eHMJzwivOaJshz2EPdEvKkBBUQJ+y16yL018vp1bbATTG
+         6CnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2SB5GTo4Zggtv8jaq60i7uEuYoXPHDlZQ+kv8eHrM4k=;
+        fh=F49admYEmRlIS1ke38UDBFOEwZNK6v5qVKnMukXc4MM=;
+        b=YntguqEpATRKU7A/VUqrykZhMuoo9ojx9dMRJgYJhGLu4hjrhlK7I913a47DgwCFbj
+         8JGP/g/ZF77dbDhTcZvUvvwcnFLPGgCBaDrI1oqJ9VxLdxWlbeNHlmR+eNZLHt20RUuC
+         iINSA87T2H1ZLOb0B6getKPnZsKZg9lccmI4BBwwFKILv0hzTa+cS6H9nsUqsXmxPwj0
+         l1cEoxw60+iAXyxifS0Uc5X4T7BlIXDODp7In7IdpdN59V/D8yXoqEcMzTSzIjONf1Xz
+         gsp8+XkZQ+4rQGoa3TZ1H8YSaC5c8YEAgOPoNUI7QWs9E/mnzp7ugVggHFH5onE3gweR
+         bzlA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775060460; x=1775665260; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6brUS/+KN+QlXTcwRDDuVwUelenxIPcKdQxQmBulR1c=;
-        b=BNE45O+3NVsAQGgQj1RNyaCUlBChtmDeBTLHeVtYINkc/ccArh4lb3w+uEBU5yahai
-         UNh+Ndpqd9XuNVjqnqwdaq0xc3owzEU237n17YEGADTta8CUXIn4orZYlC/VrSxGpAOc
-         Eh7dFf533GJO+rWiGiSInXk+Rvhn0y+ff4K/agx0KF4vqXSGo69d3Ygbv4O1AWDlZsMw
-         GmTCjdKykQ7jVnwmcHACAXfMCThmI0Uc2wk1chAaWtIxoOnK2+oqHf1EwEl/7LxUjKyF
-         W69NDNTHjl8nO5VW2zh4JPFrs3uOmeVM3ecRgox7fv3HLKiqQ/f5YGhEG+9a53YqUjuJ
-         uBHw==
+        d=gmail.com; s=20251104; t=1775060715; x=1775665515; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2SB5GTo4Zggtv8jaq60i7uEuYoXPHDlZQ+kv8eHrM4k=;
+        b=NWUdhatojETtdn7tG92T/Q4gxnvbvX/hIt07AAHUVh5viklhAzip4uV1CdyVasxPES
+         m437HJTcY9SrAH/dmCFhk1yQrXM7xyi83po5EQnXdiiquW8AsJ5cQ/AsmGNEMM7iiN6f
+         BeHO1FByYpZapXKxM2KdFwiPaJB7oTQnHbKFnSwU7NK699EpK7IMHXTR6qSZlG3nKN5M
+         BrW1bfxcfvYPEzNPhZlXcel3PhEOAPvBFVJor41TMZsE1Hhg017QoNKw92Qr1FHP3YCu
+         XthwySICMQw/LRxTepmj0n6fQg+0WaS00wM79ntgojzTCicijfQ4YsHSaOdc+viHEBbf
+         MXsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775060460; x=1775665260;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6brUS/+KN+QlXTcwRDDuVwUelenxIPcKdQxQmBulR1c=;
-        b=BiFl/KNIOlRYpnXfQKBnDdxCc+O+Jn61BYB1t4k9rOmmS3LG2wosiDO4rLl+1pnb/F
-         RV8IAvO2ECZqS38D3ayVuxLmj8LfrgBfyF3urfJyrGCCniKD7hIjiO8qWxZCyzyEsPw8
-         RkkYg1USxDN98OL6MfMT7fiML4k7cjV8DWWhxN/ekDm+CZKLu4LvlFH9Sc/8YMLvXIjN
-         nivYUIPSIcujjoebZdrf9r+CRTZkVMbzNW+jBDcXsbIu6R7MrT2Pm0D/W6ojZeEkPNBa
-         F2SEv1HmPK0+3MYMdRmq0P5ak+EMD7e+xz7WTZUGoojs3TPu2lWS5k9bLeUZpZIzJKFn
-         108w==
-X-Forwarded-Encrypted: i=1; AJvYcCUE/nWMb6YlKbmlGVvydakwxY4PH0ZNVHLWfqe8erebsgoiEE1Fw2gB0Db8ljBYstr3TtA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqL9ej5oUKKvNLrIt8lm6hGQA7v6xxPsJNoDnSF/cNcDCPqBFY
-	oVEKd7m5B4fAp8zBHjpDEe1zjukd0omngJR/LBDSyoquJZx2qZ7DtOY=
-X-Gm-Gg: ATEYQzzcUFEpOFiFP3wKdNlLTzyd+3mTReRbUnanr5kEzu7ntrVh2hmki5UmSFbKSki
-	RxU/6tfSjwH6XVwOKapIIneQAj6kCoDt4whW3UJtS3GN71LCQJBYlOifK57MjUcVAJYPXX+8Iui
-	Jw6yoryCbV0+Wton/zPvEq2Sh9o3IElnJlhcCFefaLPFi6XE+PrYM/wL1aVD2midqlQUDBSDfqQ
-	5z7PFEJ4naCc6EyZ8ZPBlOIREeL0KW8wU6gtSmtZd5gKLcz6kySyCUdUxPOqs8sk1v5tZqviZ/o
-	hmtKvbVgnBixdCatB/EjcBE8+FLBAGpFfmAQsbIIBS1+XyJT+uYcN5riIdmsiFbDkma6BDhpSgU
-	pPKSJB06BD2FTxEEZN2tq3VCclt62lC8hzB9i7797a62/zxPUpfRVyVGlXZhJRsLYUZeh8kpVy2
-	8/CI3ggur5QlzzDCJ7qq9VbV/JJpAu0DjEmOm5vpVDhUktL4GqoNuvpqWvLxv5wU5JrwVYvxgl+
-	J+S1wn1F0BPsejefA==
-X-Received: by 2002:a05:7301:4090:b0:2c1:b26:8424 with SMTP id 5a478bee46e88-2c933d8e814mr2313816eec.33.1775060459420;
-        Wed, 01 Apr 2026 09:20:59 -0700 (PDT)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca792f3f54sm144003eec.7.2026.04.01.09.20.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 09:20:59 -0700 (PDT)
-Date: Wed, 1 Apr 2026 09:20:58 -0700
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	Guillaume Nault <gnault@redhat.com>,
-	David Woodhouse <dwmw@amazon.co.uk>, Kees Cook <kees@kernel.org>,
-	Alexei Lazar <alazar@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-	Paul Moore <paul@paul-moore.com>, netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-	oss-drivers@corigine.com, bridge@lists.linux.dev,
-	bpf@vger.kernel.org, linux-wireless@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	torvalds@linux-foundation.org, jon.maddog.hall@gmail.com
-Subject: Re: [PATCH 6/6] net: Warn when processes listen on AF_INET sockets
-Message-ID: <ac1F6hIHcoZo-soO@mini-arch>
-Mail-Followup-To: Stanislav Fomichev <stfomichev@gmail.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	Guillaume Nault <gnault@redhat.com>,
-	David Woodhouse <dwmw@amazon.co.uk>, Kees Cook <kees@kernel.org>,
-	Alexei Lazar <alazar@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-	Paul Moore <paul@paul-moore.com>, netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-	oss-drivers@corigine.com, bridge@lists.linux.dev,
-	bpf@vger.kernel.org, linux-wireless@vger.kernel.org,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	torvalds@linux-foundation.org, jon.maddog.hall@gmail.com
-References: <20260401074509.1897527-1-dwmw2@infradead.org>
- <20260401074509.1897527-7-dwmw2@infradead.org>
+        d=1e100.net; s=20251104; t=1775060715; x=1775665515;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2SB5GTo4Zggtv8jaq60i7uEuYoXPHDlZQ+kv8eHrM4k=;
+        b=nGpWqmIrF3xKOuZq14qYev8v1b+UcP+BkOZIc5eBQ5S02u1fyKqnNWXoV0cbojdgtm
+         W2sPxFuFFYmLCYAlhHUIBWc93x4jTqZamdSE3L5Z4O8DEsz6DkxUMqmzs9JyMg8D90ds
+         x5ido1fk+mtys2sY2mzbRhtDBgzfP3hMZsVJxO2atphCprvnUYwSC0Zv1NHipHHDMdip
+         pXaq8EekRiYvL1cXOA0crYabEVemeLiFfZSL8bBEF1ucPDxBF9o3lKLvhxzbM47jI798
+         4kg07u4cLSSArTmkuFI8kgELdEqpc4g4z9Zgzu+9AeMut33LzDdy5S9VYWvkilnsrIxf
+         BxnQ==
+X-Gm-Message-State: AOJu0YwTkaN5Y2hV/YDsD3k/NOdKz8JMQ+CIVgQF/qTnjkYe5Ea1QnnZ
+	sznRYcOVmdRsnqGUwkkCl54wbC3HU/jWYGU09j+heZOzHJhx8VE4iMr+NP8GMXu0uZ6V2nybpyR
+	j6of9Pc/5Ihhzhiq2Kogn6hynWaaGYUk=
+X-Gm-Gg: ATEYQzzI49ppw0Ik/9q3gAbRGwx++3SHsn6LGOdMJg2YlrNVf7+QFK5PzcrgSj47X+q
+	Q0sQ0GN2dX0748GcnlT1/fjYOUsOEafZC197y4kYeMixqckuoxKqlMIp8WvX9oOlZS2AGTF6cwA
+	8nYWO5idgLKYmpP4BWtcejluyiLyUrtESfMohvnC5Ygv/PnIk2YuRS80NqIwbUozzTbucdTSnzh
+	dcV502dfVxS/QdsJeMuokTQ2RhYO1T+2NwLMYkHC9MSiiq9fa858AvK8cnziFaR2Bs1TgDPCr5U
+	8xbZjPf1Ng+Zl0Fi/y0RbwMiSHELQ+i45wE7R0a/CaPpf6aS5fPDHJ85eM5T5lWsSjnVniRnd+5
+	cATVtRroax1ydfbJCi2i4UylD0M+zcCe5sLJH
+X-Received: by 2002:a05:600c:630f:b0:487:288:1198 with SMTP id
+ 5b1f17b1804b1-4888359da58mr62500725e9.22.1775060715299; Wed, 01 Apr 2026
+ 09:25:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260401074509.1897527-7-dwmw2@infradead.org>
+References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
+ <20260401021635.34636-2-alexei.starovoitov@gmail.com> <4f283d2c-dc06-4598-bb21-d4d2491a7fff@gmail.com>
+In-Reply-To: <4f283d2c-dc06-4598-bb21-d4d2491a7fff@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 1 Apr 2026 09:25:02 -0700
+X-Gm-Features: AQROBzAJS341ZvKqRiwTtEsTpjJGo_p2rGCkJseZd1si_zkzhesN5-_h56zrWPk
+Message-ID: <CAADnVQJWNfLFk58-jOZ5R+We1Kw-kEk5g+Q5PufsX=nBsqxPLg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/6] bpf: Do register range validation early
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 04/01, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> There is no need to listen on AF_INET sockets; a modern application can
-> listen on IPv6 (without IPV6_V6ONLY) and will accept connections from
-> the 20th century via IPv4-mapped addresses (::ffff:x.x.x.x) on the IPv6
-> socket.
-> 
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->  net/ipv4/af_inet.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index dc358faa1647..3838782a8437 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -240,6 +240,9 @@ int inet_listen(struct socket *sock, int backlog)
->  	struct sock *sk = sock->sk;
->  	int err = -EINVAL;
->  
-> +	pr_warn_once("process '%s' (pid %d) is listening on an AF_INET socket. Consider using AF_INET6 with IPV6_V6ONLY=0 instead.\n",
-> +		     current->comm, task_pid_nr(current));
-> +
->  	lock_sock(sk);
->  
->  	if (sock->state != SS_UNCONNECTED || sock->type != SOCK_STREAM)
-> -- 
-> 2.51.0
-> 
+On Wed, Apr 1, 2026 at 8:56=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> On 4/1/26 3:16 AM, Alexei Starovoitov wrote:
+> > From: Alexei Starovoitov <ast@kernel.org>
+> >
+> > Instead of checking src/dst range multiple times during
+> > the main verifier pass do them once.
+> >
+> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > ---
+> resolve_pseudo_ldimm64() runs earlier into verification, so it makes
+> sense to move this basic check there and remove from other places. Looks
+> good, other than issue that AI found.
 
-Does this also need to look at the proto? inet6_stream_ops seem to be
-using inet_listen as well.
-
-const struct proto_ops inet6_stream_ops = {
-        .family            = PF_INET6,
-        .owner             = THIS_MODULE,
-        .release           = inet6_release,
-        .bind              = inet6_bind,
-        .connect           = inet_stream_connect,       /* ok           */
-        .socketpair        = sock_no_socketpair,        /* a do nothing */
-        .accept            = inet_accept,               /* ok           */
-        .getname           = inet6_getname,
-        .poll              = tcp_poll,                  /* ok           */
-        .ioctl             = inet6_ioctl,               /* must change  */
-        .gettstamp         = sock_gettstamp,
-        .listen            = inet_listen,               /* ok           */
+btw as a next step I'll move all of the insn validation out of
+the main pass. We're wasting cycles revalidating the same insn
+multiple times.
