@@ -1,70 +1,80 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F992F12AF;
-	Wed,  1 Apr 2026 06:32:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504E035BDB7
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 07:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775025176; cv=none; b=D6dmFlIfa5HxKpSEhJbvIgPLzE5HsHfIDrlETThJ+q0BfXyILcGzhVjiRhM5yorA4y5UaOWjbvDj02apcqE6aXnr4Hrq2gVQ43l/jUZDTvM9aT15/srjKRSZbVPJo3q68E4KRsaXb6Gu201oyDz/V178HPOS3b8QqVlTept7dRc=
+	t=1775027275; cv=none; b=bW0WgAWzKCF6pu5Hh/gzzh2MYZ7jrgtsBYuefXO5mWO414RjFzXEy7drlYrUnYBSkF50Iow0OcV/SgaNbl3ukE/cUpnoiobWlZM+NdNyBj1K54l429n5XFmQmyWE71C3ciDpHC4oSKKHg/MHrVX4BzAJzCY/hZPaICTR76VcqQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775025176; c=relaxed/simple;
-	bh=w1WaWoiSLdNowk7HSwyYcdxyL6j1yO/+580kvuWduNA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gv4rcz1mz3M+xOmVxyTtoJOck0kFfEpRvZFq/My3x9IoNDgixWUFiLdTmvhmMPQmApHM+YufgcdZH3efyXxwRCIN5pSTYgy7Go/HFx5zVKIsBzW+jOK9DcLzgWjGoKV509pPjcx5RfPRBaFTo8zS9RkmN1GR8Y101hqwU/vvIBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Fm00lhsn; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1775027275; c=relaxed/simple;
+	bh=ARJth2pjCQlJeXMOXnHHMJU6DiAGOB8W+kVtGKy57EQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Uu2EMeV69L5qOHSN85YP3YslUcrhL3c1taZxWktSVdlCFTmRNtpDoSUTqzmSYnKlvhv073BVs40lpOujL2JFTVj7T9LCFYvESIfo8fjfUBxcFAcKe8Z8HmSLyAD8bzeAV+mno7wiCjWdA3KNHNFwVITghJXcMmO6oGKkrRWvk8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SBcic21k; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Fm00lhsn"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62VHoBrb3518860;
-	Wed, 1 Apr 2026 06:32:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=SkjwiZunDWK5fwEX6
-	amj6vO5RCISy1VVsllzfElLcGQ=; b=Fm00lhsnaKrFpnWP3aAZEIzZmydJUGqQo
-	bOILdhiSjUKa9yBrQLnDNntj4n61OBAiZSnApE6TNVsi3ybaHaKG3OAU9sr+Xtmo
-	eTaTBIkfPsGig775KQuyNJYwgA0mClwcS6e4LN0MrmU8h4cbWM7CeIwIzCTzTQlR
-	gjEgEsUc+8YZCMYH5cJytd+3ko+OUJjcctHxkZX48eM3cHcqHFweR4JvBX3U3Zed
-	lxEEc0aNW2JxtepXxSZWC2yArGU25/SCNZDR8XAfGvgzPSySfF0i70c6M6u2mj6e
-	m+6Rc26fP/flVUeLxplwwvRwqySWAq7S6dpP3iSCAxaN+U+Ctvq1g==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q36taw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 06:32:37 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6311krEN013898;
-	Wed, 1 Apr 2026 06:32:36 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d6ttkmaa6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 01 Apr 2026 06:32:36 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6316WWCb48038272
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 1 Apr 2026 06:32:32 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 47B7320040;
-	Wed,  1 Apr 2026 06:32:32 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4E13220043;
-	Wed,  1 Apr 2026 06:32:30 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  1 Apr 2026 06:32:30 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Abhishek Dubey <adubey@linux.ibm.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [PATCH v7 2/2] selftests/bpf: Enable private stack tests for powerpc64
-Date: Wed,  1 Apr 2026 06:32:15 -0400
-Message-ID: <20260401103215.104438-2-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SBcic21k"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4853c1ca73aso67146565e9.2
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 00:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775027271; x=1775632071; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NS41J+/f6Vz7WCv2ARKA/Hb3yrSpGQX+eQMfkJUzbbg=;
+        b=SBcic21kPID/TR8BrpDO8CElsW915ZQYL6GMSNw+O/uJpgTq/rZFcFd2Xk1E4lD9xh
+         N6ViKvag9+XbJqfxZ6bhEeXbZqDVdm/58BPP4BJvBoWHHxSuVQWUoBOhewsbRFqRRcjv
+         M38Og1nMHUQgFbajTTxgwAZ//MpTndcm8NdECya4G8a2jQLAMJn2o+n1PMkwT7ib8wF0
+         9gujX8VGLjYmv4/k1Qm1gn1eIS9ryZS2oDEIy3J8z/C1cKlYgjoRRiUT/DsWBGOqOLnq
+         caiOqwFh62re9suzxpMOGUMz8aT9ee5qyhKIokxSHj6fePGqF5YU0PCTcuhtPtT+wzQ0
+         +9/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775027271; x=1775632071;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NS41J+/f6Vz7WCv2ARKA/Hb3yrSpGQX+eQMfkJUzbbg=;
+        b=ma9sO/I9UJDm6Xhono3ynBCGsG+Nr/WupJBdCqa73J+dPFdSkZsiCPIYlnOKxkfz8g
+         Cr2jaEPtcfjAa3ItbsHhzkuGNzYhmVJdZK34O77hhRqGqYcTu7Uz0xRf3Y3Y5guWJfRT
+         n5PQ7oY0aJy7gll0x7PKx4t20t3RKXrCqwba/np8qPeSqp5iQLsHQTyv1my8a+AfiCmL
+         V1eIW2tIxJS6MUQ36QYT8VXYqm+cHatbcawfFRGs/uew2OolgAjCAkLTZ4O0xgcpiUOs
+         NCltKQOh6bUsKWfH+NNPYTyYCYQdPTeJxASW8/0VX1jEGX/HsCyEIjA7DPYvTNuWZkdD
+         8pBA==
+X-Gm-Message-State: AOJu0YyLqOe1/HO4wvqf7N/FNzav/kXZO7H14tP1VWyCPPNJs3cviYaO
+	e9Fn/URsvG7KyIGonOQt7zt0FuuaOyKoC2V6nmeFL+pEujdRt4sxQCuPfKqPTRIIL6nmvAeS1XS
+	tD7Yb6Ok=
+X-Gm-Gg: ATEYQzzJ57gtD8XEEb7rqe2pffOk0/uv11yj+swVB9vbM8D6UY1T+tvu4f2jc3hUNaM
+	o59P6GFLwyc599F35NH5y61vYJdPeUZWiV4z+9gTM91U9UW7aKzcCO61JHrm6rPz57D/GDkNtjB
+	ix0h5WTwAB/S6E8ZHJ2EqV8uodZVetwpgAYLd0ID2F9OmG1iJqIWWAa5fBpa7kZAH4RKi3SIH/Q
+	/5GbaV1jCI/rpOnJNxZaiMK0gy0JhgAxZEO9iW9HsChKE56U1pswaKJmV3gywhuPcI1Sa+o+vvo
+	eAXr3JxiUm71bZJyARVhiSY0LnEPc+JI4Dt8LwCnPxRfJky2sT1LootPosa6CcesKNHQzeur+X7
+	IatKMPOYc88iC23t9MF8aUzTeykowtf/jB33wjUg8ZmGZOYYELyZigqvEMBIeaEdc78y2kvqG9q
+	sbAseT5Iu+YgzehLWON6PdycSmlwBRmZCKNhrQXiV4ckXHCJzSTGUsG/qP
+X-Received: by 2002:a05:600c:630f:b0:487:288:1198 with SMTP id 5b1f17b1804b1-4888359da58mr31459045e9.22.1775027271355;
+        Wed, 01 Apr 2026 00:07:51 -0700 (PDT)
+Received: from f16.suse.cz ([121.167.230.140])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56d58a887e3sm15355778e0c.18.2026.04.01.00.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 00:07:49 -0700 (PDT)
+From: Hoyeon Lee <hoyeon.lee@suse.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Feng Yang <yangfeng@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v6 0/3] libbpf: clarify raw-address single kprobe attach behavior
+Date: Wed,  1 Apr 2026 16:05:01 +0900
+Message-ID: <20260401070738.122709-1-hoyeon.lee@suse.com>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260401103215.104438-1-adubey@linux.ibm.com>
-References: <20260401103215.104438-1-adubey@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,202 +82,45 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: b2lB-LmZi9c9hpyq2hg9RwL800Yi28Mp
-X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69ccbc05 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=Qsp4X0VqqGRFJZHKWwsA:9
-X-Proofpoint-ORIG-GUID: b2lB-LmZi9c9hpyq2hg9RwL800Yi28Mp
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDA1MyBTYWx0ZWRfX/uroTxCJThA5
- 5SPrz3z2sFmiF0CMTLFj3pjRTZltC+9nBCUicqF/5Kos/MHv/YY81fvu+kM2QFsIZSu1HRXZ4Oa
- syyuTJW7xEiUX5mYlM90jkicmdDNh6aw84O8yfvIU1RIShDG6XFi9M3MtKd2ILL3Esanx4HMXYK
- 52u8om3K1xsmNUIyRZYwGGqxHRVQm4SugBObN4KkaHgtoczN3ZKps9DZfMRFv654SoXND8KyM0f
- pcirUFq1PYo5aF20GISWuX50DSPfnOj/QNbULvNhf94Ox+IPz9Vsi7U1sfqaKVLlg0E2+TfSGdL
- e1OBOyVnfSTSGpXY3y14sDjKq6nEYhi/TZPhr5nv6tDIPtmLjrmC1GN5/WrdX9m2LWi1O8JGmME
- SshEiirV8HpI/hRNtJeTwvg8Fbrl9Pn4dSMY2cr5KTyJ0WH48SMKJ5F7tGVWJkpG43g1o2qbyXy
- BHAj7zJ4WX449qggvEA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-01_02,2026-03-31_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1011
- lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604010053
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+Today libbpf documents single-kprobe attach through func_name, with an
+optional offset. For the PMU-based path, func_name = NULL with an
+absolute address in offset already works as well, but that is not
+described in the API.
 
-With support of private stack, relevant tests must pass
-on powerpc64.
+This patchset clarifies this behavior. First commit fixes kprobe
+and uprobe attach error handling to use direct error codes. Next adds
+kprobe API comments for the raw-address form and rejects it explicitly
+for legacy tracefs/debugfs kprobes. Last adds PERF and LINK selftests
+for the raw-address form, and checks that LEGACY rejects it.
 
-#./test_progs -t struct_ops_private_stack
-#434/1   struct_ops_private_stack/private_stack:OK
-#434/2   struct_ops_private_stack/private_stack_fail:OK
-#434/3   struct_ops_private_stack/private_stack_recur:OK
-#434     struct_ops_private_stack:OK
-Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
-Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 ---
+Changes in v6:
+- Split the kprobe/uprobe direct error-code fix into a separate patch
 
-v6->v7:
-  Pickup tags
-v5->v6:
-  Remove unused label
-v4->v5:
-  Rebase over latest branch
-v3->v4:
-  No change
-v2->v3:
-  Enable testcase using __powerpc64__ instead of __TARGET_ARCH_powerpc,
-  to prevent it getting invoked on powerpc32
-v1->v2:
-  No change
+Changes in v5:
+- Add kprobe API docs, use -EOPNOTSUPP, and switch selftests to LIBBPF_OPTS
 
-[v6]: https://lore.kernel.org/bpf/20260331080309.173612-1-adubey@linux.ibm.com
-[v5]: https://lore.kernel.org/bpf/20260330232034.44776-1-adubey@linux.ibm.com
-[v4]: https://lore.kernel.org/bpf/20260226031324.17352-1-adubey@linux.ibm.com
-[v3]: https://lore.kernel.org/bpf/20260226005440.9570-1-adubey@linux.ibm.com
-[v2]: https://lore.kernel.org/bpf/20260225153950.15331-1-adubey@linux.ibm.com
-[v1]: https://lore.kernel.org/bpf/20260216152234.36632-1-adubey@linux.ibm.com
+Changes in v4:
+- Inline raw-address error formatting and remove the probe_target buffer
 
- .../bpf/prog_tests/struct_ops_private_stack.c | 30 ++++++++-----------
- .../bpf/progs/struct_ops_private_stack.c      |  6 ----
- .../bpf/progs/struct_ops_private_stack_fail.c |  6 ----
- .../progs/struct_ops_private_stack_recur.c    |  6 ----
- 4 files changed, 13 insertions(+), 35 deletions(-)
+Changes in v3:
+- Drop bpf_kprobe_opts.addr and reuse offset when func_name is NULL
+- Make legacy tracefs/debugfs kprobes reject the raw-address form
+- Update selftests to cover PERF/LINK raw-address attach and LEGACY reject
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index d42123a0fb16..98db9bafa44b 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -5,6 +5,7 @@
- #include "struct_ops_private_stack_fail.skel.h"
- #include "struct_ops_private_stack_recur.skel.h"
- 
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
- static void test_private_stack(void)
- {
- 	struct struct_ops_private_stack *skel;
-@@ -15,11 +16,6 @@ static void test_private_stack(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack__load(skel);
- 	if (!ASSERT_OK(err, "struct_ops_private_stack__load"))
- 		goto cleanup;
-@@ -48,15 +44,9 @@ static void test_private_stack_fail(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack_fail__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack_fail__load(skel);
- 	ASSERT_ERR(err, "struct_ops_private_stack_fail__load");
- 
--cleanup:
- 	struct_ops_private_stack_fail__destroy(skel);
- }
- 
-@@ -70,11 +60,6 @@ static void test_private_stack_recur(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack_recur__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack_recur__load(skel);
- 	if (!ASSERT_OK(err, "struct_ops_private_stack_recur__load"))
- 		goto cleanup;
-@@ -93,7 +78,7 @@ static void test_private_stack_recur(void)
- 	struct_ops_private_stack_recur__destroy(skel);
- }
- 
--void test_struct_ops_private_stack(void)
-+static void __test_struct_ops_private_stack(void)
- {
- 	if (test__start_subtest("private_stack"))
- 		test_private_stack();
-@@ -102,3 +87,14 @@ void test_struct_ops_private_stack(void)
- 	if (test__start_subtest("private_stack_recur"))
- 		test_private_stack_recur();
- }
-+#else
-+static void __test_struct_ops_private_stack(void)
-+{
-+	test__skip();
-+}
-+#endif
-+
-+void test_struct_ops_private_stack(void)
-+{
-+	__test_struct_ops_private_stack();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-index dbe646013811..3cd0c1a55cbd 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-@@ -7,12 +7,6 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_2(void) __ksym;
- 
- int val_i, val_j;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-index 3d89ad7cbe2a..1442728f5604 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-@@ -7,12 +7,6 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_2(void) __ksym;
- 
- int val_i, val_j;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-index b1f6d7e5a8e5..faaa0f8d65a4 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-@@ -7,12 +7,6 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_1(void) __ksym;
- 
- int val_i, val_j;
+Changes in v2:
+- Fix line wrapping and indentation
+
+Hoyeon Lee (3):
+  libbpf: use direct error codes for kprobe/uprobe attach
+  libbpf: clarify raw-address single kprobe attach behavior
+  selftests/bpf: add test for raw-address single kprobe attach
+
+ tools/lib/bpf/libbpf.c                        | 18 ++--
+ tools/lib/bpf/libbpf.h                        | 27 +++++-
+ .../selftests/bpf/prog_tests/attach_probe.c   | 82 +++++++++++++++++++
+ 3 files changed, 118 insertions(+), 9 deletions(-)
+
 -- 
 2.52.0
-
