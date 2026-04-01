@@ -1,201 +1,174 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4C23E5EF7
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 10:18:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6283E51C4;
+	Wed,  1 Apr 2026 10:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775038723; cv=none; b=DOY8bWQEwOz9UxtjvCGJN8ieMtL4hPdtz9S8BMo/XTkpdUYE7Oaej0fMnT75w2inx/0ihGt3b2L8TTLFNgr8KQjIM+CPEPrT2UDlgj3cw2XirdcpVoP9SSqmu3iIuoS4/WquVdRpMvISGHTDIdW0oZby2o58FJDKJZe/UCD7+5c=
+	t=1775038760; cv=none; b=klLJYtwFSjH4K1VMOAvBZDe7Hf96Cyokfh2/tLqah1BLVMhbwF5L0owu81i6pF9CcEWsELVoWCDFWlPmW/EAhYkiyITCTGxa6lddehZJjer/Ro6MozXdl7iAJkSFLgw0450aaTKjf0uC1kElcCedEiXtcD70s82g545SNvbQ+qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775038723; c=relaxed/simple;
-	bh=EyjYid29bAhw9hm/p8J3Ub+EF1bcpIqDrqHLvERCp1E=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rapHnOzAFUJqUjzD+zBKFwt//NDFEvOWI4Bmi217I2afKwMebEWVUG64s5OJ64nCW9MjWFqhpFUv9J8WTUtjWGAkBiBT7y7x9k3AgiiWDaaD2tsqFwrrfFc+oyoZMHfyNGmtI6hpz9Cxo7OMcjCiyrI2fWsKq35VARmRS1XX/VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NxEczZBG; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775038760; c=relaxed/simple;
+	bh=NWaWxPFYGt4QvWWCFBv3cLx1QXtfQJgttn7A5FsNLh0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=sw7SfNGvm0M/omQHS+DQ1zkbex7BK0CCvl/Rh9T47rEbkS/jMw24ioBUw6ZFsrj/CvTMWDFPzEmyTfxWH1Hlt3+2iv636eHwV7msKn4FRw4i97t8mnDsKlkY8ecUuRJGT6JHKvLy/qUb9U+FnuWm9A+AXgPczNCFOFVZ7Ts+VrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mgp5cEJV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NxEczZBG"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-486fba7ce4cso67528615e9.3
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 03:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775038712; x=1775643512; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7LdBImJvw09LuSxdczLfZcSvTflB+c8zMehtT9Cz5Bw=;
-        b=NxEczZBGqJgVX1z98c1EU45a7AKHpG34gubFAnuM3pDngaV+JpvVyBbMrthobo4PbY
-         uMAXTl2XLPhWyxkwmqGnx6aRd8UR0ECCRqWsWomxbeEs+hLWtKKrEenQnIk6luZw+rVK
-         TGNm5txitqq95jyC0ebS90rvhYgZM6WWvigGv1ES48YOZLbZcKN71iCO1dEiyxMQ2TNX
-         d8zF7ESJDybIKHcZNcZXdtqfYCoCFXscmAX1DY8GulFJwaVpWJbi0jaHbEBmc2+rgzFD
-         TY64lvjS0latJ/pIajS811HFFUA9VQ6ezg0TIQNzEZxj2mWQLI+6wCHmHLQu/J5QmSua
-         L/5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775038712; x=1775643512;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7LdBImJvw09LuSxdczLfZcSvTflB+c8zMehtT9Cz5Bw=;
-        b=H8f39mG5z8LFedZcPtnHa0skmAUFnHLw2FzMH23/an+WwKdONsc1RZ3Wb6POnNN73y
-         CfknHQcA5tjoZmTOqofkxq4Kjcml4x8d1HXp8HYcF75VH67nFMQ2qK8Ia8E3DhzA+o1A
-         9eUQg8qo1RZ3PmZrRBz02P6B9081Ovgm5GzB0G6GA31u/QXrBZ4p1Hw2Gh/vTziZ6pv1
-         SsIbuqXThM9bzkLeQnEZWgnJWR72+H2RP5y+XH5qTJq+Zwj9Z1lGSq1d0t9XbbPB/TXQ
-         vDh18Hfkvyr16/h7SHbdsr98oCUyjkeEK2bWBLcZxfr1SjvepAVjzlP2MHOFStGb7uh9
-         N/EQ==
-X-Gm-Message-State: AOJu0Yzj4HsCa5OVcmGZUU14NUjNuZ05StIceqiwo4o0b/6fp9wC43cw
-	myhurTFQlEV+KhupuW7iuBPyf/ATZiRwfD7crVqFeEfze8z0nwxTxLH2
-X-Gm-Gg: ATEYQzxrEjLw0ishZnRJg++PdYMfzbymH642CZpe/hQNvZZyfoe8gQLYmjKziOZ1Hnp
-	enrbCiFXUbTcZizw0FOsp6MgNmaD6UhFbeZoSWQWyYRHbpK6a9fZZfMYAfrv0kDDYz6mu0UsYeu
-	JaHMZybs70bNqjIgrJgyKSZPqGyzBXMB7SkHNbua3oyV3awsSDuuy1aXGKPyRDWKqm/yymqvA+r
-	MmDpb3JRf8xRktF1TZq8SBy3dB8g5zfylF16WnC2VDp9BcSyjCIqV2Rz4LP9kcomZjBRDAIQsy8
-	vD340tWshslq7Bu71eO+aZFmgLu4y321x5FoEvsmtQZrKjAhidoQ3erdH5ly50ob3nJXsoipqIu
-	i0uK9U4p4/82xYVkrZp+Kpu5BPpZuieS2wUYSRZxbiON7Bb8mO+kVgLPNI7WAcTRDjuVGSVzd
-X-Received: by 2002:a05:600c:3516:b0:480:690e:f14a with SMTP id 5b1f17b1804b1-48883597ccdmr44164355e9.14.1775038711170;
-        Wed, 01 Apr 2026 03:18:31 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e884dacsm150889635e9.15.2026.04.01.03.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 03:18:30 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 1 Apr 2026 12:18:29 +0200
-To: Hoyeon Lee <hoyeon.lee@suse.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v6 2/3] libbpf: clarify raw-address single
- kprobe attach behavior
-Message-ID: <aczw9RkZsAISupsP@krava>
-References: <20260401070738.122709-1-hoyeon.lee@suse.com>
- <20260401070738.122709-3-hoyeon.lee@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mgp5cEJV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61327C2BCB0;
+	Wed,  1 Apr 2026 10:19:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775038759;
+	bh=NWaWxPFYGt4QvWWCFBv3cLx1QXtfQJgttn7A5FsNLh0=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=mgp5cEJV6xB8gsye4gAENpIx1iElgAYjiSyfrr1MX3fgoAwcKN/WARjps/5rzXsZG
+	 QjdI/vAyQ48idT54+9s9p4d+cMQ1+95gI1iThWeTu9mqGcNEGCD9wfei8AMla83eGt
+	 b1gWesOKcEw7CK2rLexC0I6odvWKBwRkr575jXJWU9wde9/RMNzeu/Ows/NfKmJPh+
+	 7q/w8ip4U2ZCNN0vOjXBn5HE8iPrsP0nf/TimFGM3mk34ak0XlwzCpHC4WA9jpq5Ko
+	 2kTuimuhmu67gp3OGZDFetRSDfkpApKjpLz/YpMeToJINOpaHUFeBNYgWU6lWUsFfg
+	 hFge6PjUHLFbg==
+Message-ID: <7ace33f9-419c-4a25-906a-d78545d02a3a@kernel.org>
+Date: Wed, 1 Apr 2026 12:19:11 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401070738.122709-3-hoyeon.lee@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 2/3] vmalloc: Optimize vfree with free_pages_bulk()
+To: Muhammad Usama Anjum <usama.anjum@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Zi Yan <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
+ Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Ryan.Roberts@arm.com,
+ david.hildenbrand@arm.com
+References: <20260401101634.2868165-1-usama.anjum@arm.com>
+ <20260401101634.2868165-3-usama.anjum@arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260401101634.2868165-3-usama.anjum@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 01, 2026 at 04:05:03PM +0900, Hoyeon Lee wrote:
-> bpf_program__attach_kprobe_opts() documents single-kprobe attach
-> through func_name, with an optional offset. For the PMU-based path,
-> func_name = NULL with an absolute address in offset already works as
-> well, but that is not described in the API.
+On 4/1/26 12:16, Muhammad Usama Anjum wrote:
+> From: Ryan Roberts <ryan.roberts@arm.com>
 > 
-> This commit clarifies this existing non-legacy behavior. For PMU-based
-> attach, callers can use func_name = NULL with an absolute address in
-> offset as the raw-address form. For legacy tracefs/debugfs kprobes,
-> reject this form explicitly.
+> Whenever vmalloc allocates high order pages (e.g. for a huge mapping) it
+> must immediately split_page() to order-0 so that it remains compatible
+> with users that want to access the underlying struct page.
+> Commit a06157804399 ("mm/vmalloc: request large order pages from buddy
+> allocator") recently made it much more likely for vmalloc to allocate
+> high order pages which are subsequently split to order-0.
 > 
-> Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
-
-> ---
->  tools/lib/bpf/libbpf.c | 14 ++++++++------
->  tools/lib/bpf/libbpf.h | 27 ++++++++++++++++++++++++++-
->  2 files changed, 34 insertions(+), 7 deletions(-)
+> Unfortunately this had the side effect of causing performance
+> regressions for tight vmalloc/vfree loops (e.g. test_vmalloc.ko
+> benchmarks). See Closes: tag. This happens because the high order pages
+> must be gotten from the buddy but then because they are split to
+> order-0, when they are freed they are freed to the order-0 pcp.
+> Previously allocation was for order-0 pages so they were recycled from
+> the pcp.
 > 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 536c19c14d21..ebb965230bb4 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -11816,6 +11816,8 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
->  	default:
->  		return libbpf_err_ptr(-EINVAL);
->  	}
-> +	if (!func_name && legacy)
-> +		return libbpf_err_ptr(-EOPNOTSUPP);
->  
->  	if (!legacy) {
->  		pfd = perf_event_open_probe(false /* uprobe */, retprobe,
-> @@ -11836,20 +11838,20 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
->  	}
->  	if (pfd < 0) {
->  		err = pfd;
-> -		pr_warn("prog '%s': failed to create %s '%s+0x%zx' perf event: %s\n",
-> +		pr_warn("prog '%s': failed to create %s '%s%s0x%zx' perf event: %s\n",
->  			prog->name, retprobe ? "kretprobe" : "kprobe",
-> -			func_name, offset,
-> -			errstr(err));
-> +			func_name ?: "", func_name ? "+" : "",
-> +			offset, errstr(err));
->  		goto err_out;
->  	}
->  	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
->  	err = libbpf_get_error(link);
->  	if (err) {
->  		close(pfd);
-> -		pr_warn("prog '%s': failed to attach to %s '%s+0x%zx': %s\n",
-> +		pr_warn("prog '%s': failed to attach to %s '%s%s0x%zx': %s\n",
->  			prog->name, retprobe ? "kretprobe" : "kprobe",
-> -			func_name, offset,
-> -			errstr(err));
-> +			func_name ?: "", func_name ? "+" : "",
-> +			offset, errstr(err));
->  		goto err_clean_legacy;
->  	}
->  	if (legacy) {
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index 0be34852350f..bba4e8464396 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -557,7 +557,7 @@ struct bpf_kprobe_opts {
->  	size_t sz;
->  	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
->  	__u64 bpf_cookie;
-> -	/* function's offset to install kprobe to */
-> +	/* function offset, or raw address if func_name == NULL */
->  	size_t offset;
->  	/* kprobe is return probe */
->  	bool retprobe;
-> @@ -565,11 +565,36 @@ struct bpf_kprobe_opts {
->  	enum probe_attach_mode attach_mode;
->  	size_t :0;
->  };
-> +
->  #define bpf_kprobe_opts__last_field attach_mode
->  
-> +/**
-> + * @brief **bpf_program__attach_kprobe()** attaches a BPF program to a
-> + * kernel function entry or return.
-> + *
-> + * @param prog BPF program to attach
-> + * @param retprobe Attach to function return
-> + * @param func_name Name of the kernel function to attach to
-> + * @return Reference to the newly created BPF link; or NULL is returned on
-> + * error, error code is stored in errno
-> + */
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
->  			   const char *func_name);
-> +
-> +/**
-> + * @brief **bpf_program__attach_kprobe_opts()** is just like
-> + * bpf_program__attach_kprobe() except with an options struct
-> + * for various configurations.
-> + *
-> + * @param prog BPF program to attach
-> + * @param func_name Name of the kernel function to attach to. If NULL,
-> + * opts->offset is treated as a raw kernel address. Raw-address attach
-> + * is supported with PROBE_ATTACH_MODE_PERF and PROBE_ATTACH_MODE_LINK.
-> + * @param opts Options for altering program attachment
-> + * @return Reference to the newly created BPF link; or NULL is returned on
-> + * error, error code is stored in errno
-> + */
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
->                                  const char *func_name,
-> -- 
-> 2.52.0
+> It would be preferable if when vmalloc allocates an (e.g.) order-3 page
+> that it also frees that order-3 page to the order-3 pcp, then the
+> regression could be removed.
 > 
+> So let's do exactly that; update stats separately first as coalescing is
+> hard to do correctly without complexity. Use free_pages_bulk() which uses
+> the new __free_contig_range() API to batch-free contiguous ranges of pfns.
+> This not only removes the regression, but significantly improves
+> performance of vfree beyond the baseline.
+> 
+> A selection of test_vmalloc benchmarks running on arm64 server class
+> system. mm-new is the baseline. Commit a06157804399 ("mm/vmalloc: request
+> large order pages from buddy allocator") was added in v6.19-rc1 where we
+> see regressions. Then with this change performance is much better. (>0
+> is faster, <0 is slower, (R)/(I) = statistically significant
+> Regression/Improvement):
+> 
+> +-----------------+----------------------------------------------------------+-------------------+--------------------+
+> | Benchmark       | Result Class                                             |   mm-new          |  this series       |
+> +=================+==========================================================+===================+====================+
+> | micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |        1331843.33 |         (I) 67.17% |
+> |                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         415907.33 |             -5.14% |
+> |                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         755448.00 |         (I) 53.55% |
+> |                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1591331.33 |         (I) 57.26% |
+> |                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1594345.67 |         (I) 68.46% |
+> |                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |        1071826.00 |         (I) 79.27% |
+> |                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |        1018385.00 |         (I) 84.17% |
+> |                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        3970899.67 |         (I) 77.01% |
+> |                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        3821788.67 |         (I) 89.44% |
+> |                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        7795968.00 |         (I) 82.67% |
+> |                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        6530169.67 |        (I) 118.09% |
+> |                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         626808.33 |             -0.98% |
+> |                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         532145.67 |             -1.68% |
+> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         537032.67 |             -0.96% |
+> |                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        8805069.00 |         (I) 74.58% |
+> |                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         500824.67 |              4.35% |
+> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |        1637554.67 |         (I) 76.99% |
+> |                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        4556288.67 |         (I) 72.23% |
+> |                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         107371.00 |             -0.70% |
+> +-----------------+----------------------------------------------------------+-------------------+--------------------+
+> 
+> Fixes: a06157804399 ("mm/vmalloc: request large order pages from buddy allocator")
+> Closes: https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com/
+> Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+> Acked-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+-- 
+Cheers,
+
+David
