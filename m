@@ -1,84 +1,88 @@
-Received: from mail-ot1-f78.google.com (mail-ot1-f78.google.com [209.85.210.78])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9472AD03
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 00:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD69A230264
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 00:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775004578; cv=none; b=khI59Xh7ZoYKOxthpN79jCNZ0Tdb+UkYMf7bUL4OHfligUfU+pj/Y5abJUYhLvW303UDzy/Pc4OwXxuvHw/cnuarrUGQ8FychXyv7e8m5ZpUa/tR2CkiGNc3EdOEskzy10QGhkA/C7waXskkTg9nx86dOtfwmrcrMI0/3uonXMo=
+	t=1775004866; cv=none; b=Ttt0tkJiT1yiV4LvJwYh2U/QLVKOdo+sS/1cvViEkdUE/VNr8pbJPp30u7l6AWLqys+LDu7WivVyk0inatrog5BioqYE/bnYlYZltqFY7ebvRQt7QTW2XHhzWc2pznwdD2iCCdOfGynLg7vkXz82cDZ1X4fiq9704BGmwxI++pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775004578; c=relaxed/simple;
-	bh=f0/Ki9kd04MsHj/CxKsFJ8SgCuP0wMEIQVh2zPm6zHo=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=ZfJTK8/DQufXAWvHAQNfnZdf2QwC4OUEJ06v4ZMSNQJ1HY5HJ2KFfKKCdvo+n++5xmThXqUa44Qy0PB/SLHJ7uMq6SHpMc1lNG/vDNdO2vHAT/2vBc/NSnzAPKDJX6w9tTu1UVnMoSakM1P5CkU+h+1ubb5aD9Bd4Vgk4186+Z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f78.google.com with SMTP id 46e09a7af769-7d74211ff80so11256128a34.3
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 17:49:36 -0700 (PDT)
+	s=arc-20240116; t=1775004866; c=relaxed/simple;
+	bh=tX0nIUjtLQJ2shGr6GObNUwB/I/RDo+zxGCoTBv9OSk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=uYzeMD1Jg8VF9xLGLgGdiDXSa/+m0MnZgiwPRc2SmaZnPlYBQvuSC8aRv/ExJEmvWXYyvQdkV4emRGIkm2EeEU6qLuNLQQXjq7t6rJC6SYpeHeR3/uspzgiGNMyKrcwgNzBzoJeJbD6GE5L38KnrbzJgZ/Mt7Ho/g9fkQ3EU890=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gQwk3CTf; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gQwk3CTf"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82c714cb672so3562698b3a.0
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 17:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775004861; x=1775609661; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e9WJp97hv4LSl5Cv39KDRDRVZuQGlFifioMUhJvIsZk=;
+        b=gQwk3CTfEtSRk6EgW73R1IyYHt3Z1JiVW+SPrAO1V5BEgw9Gtfa3u0pFcg9m2fCmwo
+         MiKC/V7ZBIB84KBX6E2qwnI1IhfawhmD3IcL0P3LTx5nPMEgtGfX7E/O06eQSNRgh+y5
+         3ukpXRAdAPXKYt0XwKpS796etakpla8ub36+eekDawrXeoj9pXd4Ts8mq0ajCwPOxzQd
+         2JwCHezzCJ96T8Y3j3LmiDmW5KQiYy5T0WoJom56rWYpr3zTLTAjz5jjaOeDlEKzdlrg
+         Xc/uA06ZDOKb4Cj+u+77UXq1hEFS8Bp14KYY7i0rPXa+KUMlieSXArZpbwfPiITzHJR7
+         zYlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775004576; x=1775609376;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        d=1e100.net; s=20251104; t=1775004861; x=1775609661;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OW603Cxk894F3Ouf95KyFAztpwZtL3Wacj56EKyrEBA=;
-        b=VFtTj2ZHLWbmfmoJ/DNXf8GrUFxT2qCecz9YPo2wOYzhZ8camfVCp/eZmao+8FSDGo
-         4JFMAc96InsU+dZqjLDcIQCYJWZI9Mj7Vxdb6q30p5pJXU4Qtk75juMu8CipqrV3C9wO
-         OpUs253cHPei34oVVOnzqSxGEMv+niVP2Gy8Ytt98lbj8vLBOnp8H51ucc0cluXCqtlD
-         8cFxPorCu9VDE/NXdpaiIU6lePW3HN8at7WYAdZ/b2COIjFAStGKgrI1fcGddhATtRno
-         JEAF/u526xsiIthseCFw8G8KceeXuCoULnu8dJ4mYp/30TAyTrW7cZ53Dvgiz3BBm+WV
-         tVtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVP9ehhBmB2172cHxkPcwFcF61h8gP451W6ZTA4Fs10dsu92GZzYWw5xN/HsHjJ+GmBJOM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYDbCMLAFxgGmLoqzc8CMarUXHHL39Y7gQY2tApm/V4oBLRycU
-	DXxL4Tg6awDbmALsPcFCnF4U6WxpdL+VgP3wNwIDlbyp+VDcRYPJKKnVdNa/+6a4bwLeIjlUBF9
-	YLB1o5FyoswyBNcYn/XmsJAvNWTvbthbGO5zG5gtsQiwPYBgQKygKvCOKFjo=
+        bh=e9WJp97hv4LSl5Cv39KDRDRVZuQGlFifioMUhJvIsZk=;
+        b=SlzdfV0UGq3b4byOHH3KAyvJcQRYD+3iO8TB5hFQ1K2LuE9vR/jdK0mcK5ri5DGvtQ
+         8rNOdVGgpOH/tY2VGc6eqDJKryDIN4vv1bAcwUzc+gXu5kXLMmDNLwVn0gQnb602uKCt
+         KVnb6W+oh4z2cmLHzG9E/Os/6pXMAU9AGfUHa6EtQjSWOhRfvNk2/pCmFRnlBL8AWQwL
+         aDgu0PvasDyC+iQfAGQL3non3oAapMquv10hAnlC+C1No+dhSY4RKqcq+IAjX7ivKIbE
+         rXxgIH25SJ1xDNffygbXMdy/GPzF5QlWX0nXsfaSEgnptNB2NlCs7i8BaO435cvdJn23
+         nFLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW3gce7vtYBjgepgJ9J7Cb1rYTUw2hbhhDnIBegzz2oUtsAviiGhO3FW/CU6ycfXFkFJY8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyjoq256OFUk2elR2ljqQlUNqs7rsqS49TTLX3DHXBWmu7Myd9z
+	mfpufces6b9MPLA15u+hdbcIgtBQNlEKmhKXmy8PiTPugOcOwWwBEsz4PU3SzHFvw+aPCIch2Hh
+	/ZKZXbg==
+X-Received: from pfbfk3.prod.google.com ([2002:a05:6a00:3a83:b0:82c:213e:7964])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:188f:b0:82c:d6d3:31a1
+ with SMTP id d2e1a72fcca58-82ce89b9465mr1724889b3a.29.1775004861262; Tue, 31
+ Mar 2026 17:54:21 -0700 (PDT)
+Date: Wed,  1 Apr 2026 00:54:15 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1c94:b0:67e:36e9:79af with SMTP id
- 006d021491bc7-67fabc05dd9mr833106eaf.17.1775004575699; Tue, 31 Mar 2026
- 17:49:35 -0700 (PDT)
-Date: Tue, 31 Mar 2026 17:49:35 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69cc6b9f.a70a0220.128fd0.004b.GAE@google.com>
-Subject: [syzbot] [bpf?] [net?] KASAN: slab-use-after-free Read in
- sk_psock_verdict_data_ready (4)
-From: syzbot <syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
-	horms@kernel.org, jakub@cloudflare.com, john.fastabend@gmail.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1118.gaef5881109-goog
+Message-ID: <20260401005418.2452999-1-kuniyu@google.com>
+Subject: [PATCH v1 bpf] sockmap: Fix use-after-free of sk->sk_socket in sk_psock_verdict_data_ready().
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Cong Wang <cong.wang@bytedance.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+syzbot reported use-after-free of AF_UNIX socket's sk->sk_socket
+in sk_psock_verdict_data_ready(). [0]
 
-syzbot found the following issue on:
+In unix_stream_sendmsg(), the peer socket's ->sk_data_ready() is
+called after dropping its unix_state_lock().
 
-HEAD commit:    cf0d9080c6f7 Merge branch 'net-hsr-subsystem-cleanups-and-..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=10eab3d6580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71d49d824b43a0d9
-dashboard link: https://syzkaller.appspot.com/bug?extid=2184232f07e3677fbaef
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+Although the sender socket holds the peer's refcount, it does not
+prevent the peer's sock_orphan(), and the peer's sk_socket might
+be freed after one RCU grace period.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Let's fetch the peer's sk->sk_socket and sk->sk_socket->ops under
+RCU in sk_psock_verdict_data_ready().
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4271eafdaa2c/disk-cf0d9080.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/984de2c215cb/vmlinux-cf0d9080.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e03ead684811/bzImage-cf0d9080.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com
-
-==================================================================
+[0]:
 BUG: KASAN: slab-use-after-free in sk_psock_verdict_data_ready+0xec/0x590 net/core/skmsg.c:1278
 Read of size 8 at addr ffff8880594da860 by task syz.4.1842/11013
 
-CPU: 1 UID: 0 PID: 11013 Comm: syz.4.1842 Not tainted syzkaller #0 PREEMPT(full) 
+CPU: 1 UID: 0 PID: 11013 Comm: syz.4.1842 Not tainted syzkaller #0 PREEMPT(full)
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
 Call Trace:
  <TASK>
@@ -151,130 +155,44 @@ Freed by task 15:
  ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
 
-Last potentially related work creation:
- kasan_save_stack+0x3e/0x60 mm/kasan/common.c:57
- kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
- __call_rcu_common kernel/rcu/tree.c:3131 [inline]
- call_rcu+0xee/0x890 kernel/rcu/tree.c:3251
- destroy_inode fs/inode.c:402 [inline]
- evict+0x95b/0xb10 fs/inode.c:870
- __dentry_kill+0x1a2/0x5e0 fs/dcache.c:670
- finish_dput+0xc9/0x480 fs/dcache.c:879
- __fput+0x691/0xa70 fs/file_table.c:477
- task_work_run+0x1d9/0x270 kernel/task_work.c:233
- resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
- __exit_to_user_mode_loop kernel/entry/common.c:67 [inline]
- exit_to_user_mode_loop+0xed/0x480 kernel/entry/common.c:98
- __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
- syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:325 [inline]
- do_syscall_64+0x32d/0xf80 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-The buggy address belongs to the object at ffff8880594da840
- which belongs to the cache sock_inode_cache of size 1344
-The buggy address is located 32 bytes inside of
- freed 1344-byte region [ffff8880594da840, ffff8880594dad80)
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x594d8
-head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-memcg:ffff8880594dfe81
-flags: 0xfff00000000040(head|node=0|zone=1|lastcpupid=0x7ff)
-page_type: f5(slab)
-raw: 00fff00000000040 ffff888140af9dc0 dead000000000100 dead000000000122
-raw: 0000000000000000 0000000800160016 00000000f5000000 ffff8880594dfe81
-head: 00fff00000000040 ffff888140af9dc0 dead000000000100 dead000000000122
-head: 0000000000000000 0000000800160016 00000000f5000000 ffff8880594dfe81
-head: 00fff00000000003 ffffea0001653601 00000000ffffffff 00000000ffffffff
-head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Reclaimable, gfp_mask 0xd20d0(__GFP_RECLAIMABLE|__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5827, tgid 5827 (syz-executor), ts 157169026983, free_ts 137999783832
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x231/0x280 mm/page_alloc.c:1889
- prep_new_page mm/page_alloc.c:1897 [inline]
- get_page_from_freelist+0x24dc/0x2580 mm/page_alloc.c:3962
- __alloc_frozen_pages_noprof+0x18d/0x380 mm/page_alloc.c:5250
- alloc_slab_page mm/slub.c:3292 [inline]
- allocate_slab+0x77/0x660 mm/slub.c:3481
- new_slab mm/slub.c:3539 [inline]
- refill_objects+0x331/0x3c0 mm/slub.c:7175
- refill_sheaf mm/slub.c:2812 [inline]
- __pcs_replace_empty_main+0x2e6/0x730 mm/slub.c:4615
- alloc_from_pcs mm/slub.c:4717 [inline]
- slab_alloc_node mm/slub.c:4851 [inline]
- kmem_cache_alloc_lru_noprof+0x37c/0x640 mm/slub.c:4885
- sock_alloc_inode+0x28/0xc0 net/socket.c:316
- alloc_inode+0x6a/0x1b0 fs/inode.c:347
- new_inode_pseudo include/linux/fs.h:3003 [inline]
- sock_alloc net/socket.c:631 [inline]
- __sock_create+0x12d/0x9d0 net/socket.c:1562
- sock_create net/socket.c:1656 [inline]
- __sys_socket_create net/socket.c:1693 [inline]
- __sys_socket+0xd6/0x1b0 net/socket.c:1740
- __do_sys_socket net/socket.c:1754 [inline]
- __se_sys_socket net/socket.c:1752 [inline]
- __x64_sys_socket+0x7a/0x90 net/socket.c:1752
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-page last free pid 7484 tgid 7484 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- __free_pages_prepare mm/page_alloc.c:1433 [inline]
- __free_frozen_pages+0xc2b/0xdb0 mm/page_alloc.c:2978
- __slab_free+0x263/0x2b0 mm/slub.c:5573
- qlink_free mm/kasan/quarantine.c:163 [inline]
- qlist_free_all+0x97/0x100 mm/kasan/quarantine.c:179
- kasan_quarantine_reduce+0x148/0x160 mm/kasan/quarantine.c:286
- __kasan_slab_alloc+0x22/0x80 mm/kasan/common.c:350
- kasan_slab_alloc include/linux/kasan.h:253 [inline]
- slab_post_alloc_hook mm/slub.c:4538 [inline]
- slab_alloc_node mm/slub.c:4866 [inline]
- kmem_cache_alloc_noprof+0x2bc/0x650 mm/slub.c:4873
- vm_area_alloc+0x24/0x140 mm/vma_init.c:32
- __mmap_new_vma mm/vma.c:2517 [inline]
- __mmap_region mm/vma.c:2759 [inline]
- mmap_region+0x10eb/0x2240 mm/vma.c:2837
- do_mmap+0xc39/0x10c0 mm/mmap.c:559
- vm_mmap_pgoff+0x2c9/0x4f0 mm/util.c:581
- elf_map fs/binfmt_elf.c:400 [inline]
- elf_load+0x248/0x6a0 fs/binfmt_elf.c:423
- load_elf_interp+0x4ce/0xb60 fs/binfmt_elf.c:690
- load_elf_binary+0x1b2f/0x2980 fs/binfmt_elf.c:1255
- search_binary_handler fs/exec.c:1664 [inline]
- exec_binprm fs/exec.c:1696 [inline]
- bprm_execve+0x93d/0x1460 fs/exec.c:1748
- kernel_execve+0x844/0x930 fs/exec.c:1892
- call_usermodehelper_exec_async+0x20f/0x360 kernel/umh.c:109
-
-Memory state around the buggy address:
- ffff8880594da700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880594da780: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->ffff8880594da800: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
-                                                       ^
- ffff8880594da880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8880594da900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
+Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
+Reported-by: syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/bpf/69cc6b9f.a70a0220.128fd0.004b.GAE@google.com/
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ net/core/skmsg.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 3261793abe83..6187a83bd741 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -1267,17 +1267,20 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
+ 
+ static void sk_psock_verdict_data_ready(struct sock *sk)
+ {
+-	struct socket *sock = sk->sk_socket;
+-	const struct proto_ops *ops;
++	const struct proto_ops *ops = NULL;
++	struct socket *sock;
+ 	int copied;
+ 
+ 	trace_sk_data_ready(sk);
+ 
+-	if (unlikely(!sock))
+-		return;
+-	ops = READ_ONCE(sock->ops);
++	rcu_read_lock();
++	sock = READ_ONCE(sk->sk_socket);
++	if (likely(sock))
++		ops = READ_ONCE(sock->ops);
++	rcu_read_unlock();
+ 	if (!ops || !ops->read_skb)
+ 		return;
++
+ 	copied = ops->read_skb(sk, sk_psock_verdict_recv);
+ 	if (copied >= 0) {
+ 		struct sk_psock *psock;
+-- 
+2.53.0.1118.gaef5881109-goog
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
