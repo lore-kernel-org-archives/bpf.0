@@ -1,63 +1,63 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC76317146
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 02:16:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C860229408
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 02:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775009805; cv=none; b=HX9DwQh0NmZlN49jqoN7G7/vLlz7dQlVJHvHwwvpINM/Mlrx8zq/KNZhoH4pco6iHkDJYXEIo2djmKzIjc/f1ngx2bZqkw3cg3aQ/c0GCwrGhs14nc2rXCBvJe8Oj6mvavfnDBXcgLXTSLCESc3d6rt0QarjEUjwodDlkFokt5o=
+	t=1775009808; cv=none; b=JLO9br41pWCq3ggiwXNSizZhAlha+N4Nx+VPb/d+4zdtuTwpQO82kYb51G4JZMK7/lI3d9QdsnoM0c57Weeahe/e6uPG0Fb4QSD8sZtjbM9JVL1gc52YVc9Nkh4zbCxjdi3wqYbC2D/BENa3qc2ATEER1RooPADhhx2pLcaYAcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775009805; c=relaxed/simple;
-	bh=i8B9yIkS1W8tEM6jn3EmxPcfUM6ipKJr51YK9mxjZBw=;
+	s=arc-20240116; t=1775009808; c=relaxed/simple;
+	bh=60XQshgs3asXoEYBHbuEusYSMyHahAFSVqekL/D73BQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s5yliLN1sW71QT5sT0HlCcTzpfpeHMcS3OwpkfXxobIV//9D/GUioVSVGOAFxHmCYPIRPpdcq/kibXLpipmERJI3VDDkSAtZY9SI4GZKNFMQcYYCWN4Qsm4Q7oj78EOcRc14IAViABosYioru1sKm+BRvMGjvvueKNbm5wv7QGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nCQZcS0s; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=VUh7bs1boo2NLcsS6p3e1h65fJQ/RMxfasZ9bb06JO/iF/jja+Q9P39RJZBQoe1VO9ZaL5ceJglmkD6MpCctWzNg2oVTJltKrFjaLFw1BohWfLK6I9iCEVgX0eo0zsHJEve/uvetK/KvjZh7IicEtLgv8lVw+Uz96OH8QDyFVMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ru6Mni5K; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nCQZcS0s"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2b24fcc2b5dso20716525ad.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 19:16:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ru6Mni5K"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-35691a231a7so3860383a91.3
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 19:16:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775009803; x=1775614603; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775009806; x=1775614606; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qbVaNi9xipkI6fm1AC73pBoGGDwiX11ImiHcy2/jB0Q=;
-        b=nCQZcS0skB5W2B7qhlWPLb12KghRuKVNgpkzTjDfT4Kxgj0stFWm40BFqSp7uf1cKC
-         2ynEDdG7B9H7l7CNiJKRrUoj5tFSBHSQVwBFasYqsMLqpR6Rbs/5adbrcN3YCpOqo0TN
-         3mBr4qdlr5ukKwWD/SXlnG5CwUl1WKqZr9PoGbHXUE1J4pumCXJxhEjRwfcNELDD+7gV
-         CCBLYlf683VI8cRAHZXfgFG6qZF8S6aGzSnuCqvgnDLNDrYc0ETUrQTlOFmgGlD0bBqU
-         4HCkC+UG8yk+Aq+PCgR7s2ThIvPkC3fmGtNQESbqjIMAl34F6sEGuD8ltqdFjNeD3p0g
-         Hb1g==
+        bh=Q9VP3n029j4OryR/QOcxxxCrHoNnK5XiSetyhclPT1I=;
+        b=ru6Mni5KGA0L/07B0aKQF+bUiPrp0CyYucbWIx7UrWtZf0mh2oW1g+ucUG43DVYtOW
+         3HotInWUm/3mtZvW9B/WiR94EP3Ns8bWsYak1VgeWNp0ketqdgiGS0UahzTLh0CB7vHo
+         Ms4yJWTTfDMOoznfwowMtmfshzQ11gY0XTTTRUKWZEfGh8OLisG2+KBRAI+ukvKB9rwA
+         8rJnbcMNm9OCYS1xGgzE9lxlMKPzuRPNSbQAUyUXLggSUZ7GwhPQrhdVGmt0k3xJK3XK
+         JBGXS/wrAU8TnnYzov1uM61cR6vmT5DIh3gNaPrZsZEBsxYfj7HGvqUMc3Qz6fhG8lpp
+         wjTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775009803; x=1775614603;
+        d=1e100.net; s=20251104; t=1775009806; x=1775614606;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=qbVaNi9xipkI6fm1AC73pBoGGDwiX11ImiHcy2/jB0Q=;
-        b=Rmon0itLuyfnK1sAuA19VbjhLkUn49zwS8l+nLjpR18ZJfz+GqvHBiVtpXWsvo5+JQ
-         e9n8NxlXkIqw9zv4I0HjZhxgWYF+aaxbZuzfJrnHrIv2a9XV/qMLDCgi+N/N04x0ndcn
-         JreO/GVZWu6d+MXXXt6qVmF1KqSYfq62L7Ftz3P8zxY/Z8wcC+r9WCDpHZdupvsE7+NY
-         r55wTs2hd2Bt/KtvWP+po0SElek6g/pD1uBrRoUP6xAFi0ZWbZWh6PBGXAh8pscxG4ZB
-         h1rrM6JV/zi+xm6q4YQ92BuRZWtjo5XpVrXUWu2jAMJ+QLOIx+T92ht/uJZlT7VsAsmJ
-         cuXQ==
-X-Gm-Message-State: AOJu0YzFgq9g1DT9BhU9BA7JpEQYG+tHvU3aFgEKhrYGnLQU79kyp1mz
-	WF7Ht4064PVgV8pXlZ5RTHIj/bmdpHH6wnnHtHDwbhkb19Wy2jijAB9TMbpXag==
-X-Gm-Gg: ATEYQzzmnMRb9D7VXW3rd/Ry4TG8TrqL+pwJrK5a2vAzgl1lWHQVsAoGbLKt4svWwlS
-	H3lnNAoQ0ePfuUfvoos18vmZ/87WC6VO5F0vxVT/o0mKEIOW/IwMCTKUjYwOpXlp5eBMU5VbLWb
-	99f4RF0hbpz7dhH6Fzqa9Jae39DUz9EiDQuB4cEBnDlhzE99mgCiMPC24poHZq22fUq+xSi7Aht
-	6G+05PSJSoz6e7ZqcfIJ8l9BS/PlKUUiWwmxvUH32vi4wcM/nV4HvEh8NdzN87QYa8CZeZSECX+
-	YMWZRfsOOSJ7u0xMpVYZaM3Od+msyrubTbdZu2aqscb9MFlhoNmQVk8gB+6UmQ5ALtXfAruOfxZ
-	VQ10QBKnBBempr2xgVxYC41zoIoat8qLtBx218paQyT6frBBZv82LkEf26AYM2mUCvoOT05W4MQ
-	wUjhN0Zo0ZbNJNxiQ+0jPuFW35vw7uuLQwB1TF6OTwrtNYEO4RztcBAu59oShDHVr66C4NEAk+r
-	9evnpdyujdMxuS2D6+4eBzo3fHRzT/vyNsXj0Bsxo2BlrjhNg36peu3+JsMqhCJw2H9FqWq
-X-Received: by 2002:a17:903:3c2b:b0:2b0:5968:a6d5 with SMTP id d9443c01a7336-2b269ab5ffamr15119315ad.18.1775009803344;
-        Tue, 31 Mar 2026 19:16:43 -0700 (PDT)
+        bh=Q9VP3n029j4OryR/QOcxxxCrHoNnK5XiSetyhclPT1I=;
+        b=fQvE3Rca/+BeH3DaS1Rn7z0dVsXXZ+AStZOhXbYS9007YWf9GH5YPoZjUpOjrOz+Jm
+         5Seph7fioiswqw1dY9GEzP5EbLhqY/0rzl4QLXVoGqmaxmwgpSrNNsnfvSKHcOt+nTpu
+         oBsrqJu5lvSn7MV85OW2YWGfvOhgUt4guaNjt0DdXCeYTdoVzPMkL0HhdDfgkJpEliYl
+         bhVBk2fel1vg3TaExD1/dQoly/YvCn+fun0ZrYkgifUuMx9vFXwICEDZ1GT76uwrXhRW
+         YPZ4ROKlcMbe/zc7XujpiiNw5z7hRItqPBd3DJlrXjqWf+rlhLmSJcpyVzy2CdjaAIAA
+         BIxw==
+X-Gm-Message-State: AOJu0YybwV83qjp6ch0sr0qpyyKlG9VA6YPkIykaL+t4ai8a5ylyUPOD
+	Ti/f2nWivXLjZL5tViN++6ZwCYCuCeAYeV6CdvP8iFJNgVjzuYeXXsN/VFliYg==
+X-Gm-Gg: ATEYQzyX1bGYxsTLHYWA4gGIbAoAo10Ekhh0KRlp18s7ig+1hwo5BfYMVy8SIy/ZstS
+	nIMHyWPLeLjfqgNmwQ+yx2bq3MgMYOmzB2GrwaC/g0c1RkEJntcfLGWCv2CANK1u9hLshOrSpjM
+	cdaxOoYg4JaA1aMM3d/jgMQVWbVx2C47O8w9dgvvidoQ80wPMWsYj8PBc9cil4AgZmcan6Uws7t
+	FJK/C/5oIXdsmAwpASs7WdBIUNspToO2iEvpL81VHdNlRZ6IHKvD75+0EW2W3zB/BC/Jbj0FNtw
+	la9KOPL1u4ZO0UbAK6dbZXYQhtOMVkIyb3aswUiL7eEhBOxVJ2hHheEEhYIJMZggHrsCc7MAMiN
+	BFrHsOH8rrNuO7hlAawjDLhI2d6YeXdcP27xARBpCJu78y8oDHtJiMLMZfKOXf9rVR6tAAZmbRq
+	1e8ItMqu0ZiDQDUZw61O7HMKdW+bcr7qs/SCp66tF7xCBgh+gRVa2aWNZNCzK1X2kAkg08Festd
+	qHKIildb2E4dHVIzzKNd09561oBc32jDSe/rbcIRMPoAuhPHLhQStbNnBsZLA==
+X-Received: by 2002:a17:90b:35c6:b0:35d:ac4d:3cb7 with SMTP id 98e67ed59e1d1-35dc6e2d018mr1601326a91.6.1775009805912;
+        Tue, 31 Mar 2026 19:16:45 -0700 (PDT)
 Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24264292asm132158505ad.4.2026.03.31.19.16.42
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe624756sm4119635a91.5.2026.03.31.19.16.45
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 31 Mar 2026 19:16:43 -0700 (PDT)
+        Tue, 31 Mar 2026 19:16:45 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -65,9 +65,9 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	memxor@gmail.com,
 	eddyz87@gmail.com
-Subject: [PATCH bpf-next 2/6] bpf: Sort subprogs in topological order after check_cfg()
-Date: Tue, 31 Mar 2026 19:16:31 -0700
-Message-ID: <20260401021635.34636-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 3/6] selftests/bpf: Add tests for subprog topological ordering
+Date: Tue, 31 Mar 2026 19:16:32 -0700
+Message-ID: <20260401021635.34636-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
 References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
@@ -81,134 +81,273 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Add a pass that sorts subprogs in topological order so that iterating
-subprog_topo_order[] walks leaf subprogs first, then their callers.
-This is computed as a DFS post-order traversal of the CFG.
-
-The pass runs after check_cfg() to ensure the CFG has been validated
-before traversing and after postorder has been computed to avoid
-walking dead code.
+Add few tests for topo sort:
+- linear chain: main -> A -> B
+- diamond: main -> A, main -> B, A -> C, B -> C
+- mixed global/static: main -> global -> static leaf
+- shared callee: main -> leaf, main -> global -> leaf
+- duplicate calls: main calls same subprog twice
+- no calls: single subprog
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- include/linux/bpf_verifier.h |  2 +
- kernel/bpf/verifier.c        | 83 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 85 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_subprog_topo.c         | 226 ++++++++++++++++++
+ 2 files changed, 228 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_topo.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 090aa26d1c98..4f492eaad5c2 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -787,6 +787,8 @@ struct bpf_verifier_env {
- 	const struct bpf_line_info *prev_linfo;
- 	struct bpf_verifier_log log;
- 	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 for the fake and exception subprogs */
-+	/* subprog indices sorted in topological order: leaves first, callers last */
-+	int subprog_topo_order[BPF_MAX_SUBPROGS + 2];
- 	union {
- 		struct bpf_idmap idmap_scratch;
- 		struct bpf_idset idset_scratch;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3ec786361698..432806011d47 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3742,6 +3742,85 @@ static int check_subprogs(struct bpf_verifier_env *env)
- 	return 0;
- }
- 
-+/*
-+ * Sort subprogs in topological order so that leaf subprogs come first and
-+ * their callers come later. This is a DFS post-order traversal of the call
-+ * graph. Scan only reachable instructions (those in the computed postorder) of
-+ * the current subprog to discover callees (direct subprogs and sync
-+ * callbacks).
-+ */
-+static int sort_subprogs_topo(struct bpf_verifier_env *env)
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index bcf01cb4cfe4..1ac366fd4dae 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -93,6 +93,7 @@
+ #include "verifier_stack_ptr.skel.h"
+ #include "verifier_store_release.skel.h"
+ #include "verifier_subprog_precision.skel.h"
++#include "verifier_subprog_topo.skel.h"
+ #include "verifier_subreg.skel.h"
+ #include "verifier_tailcall.skel.h"
+ #include "verifier_tailcall_jit.skel.h"
+@@ -238,6 +239,7 @@ void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock); }
+ void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr); }
+ void test_verifier_store_release(void)        { RUN(verifier_store_release); }
+ void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_precision); }
++void test_verifier_subprog_topo(void)        { RUN(verifier_subprog_topo); }
+ void test_verifier_subreg(void)               { RUN(verifier_subreg); }
+ void test_verifier_tailcall(void)             { RUN(verifier_tailcall); }
+ void test_verifier_tailcall_jit(void)         { RUN(verifier_tailcall_jit); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_topo.c b/tools/testing/selftests/bpf/progs/verifier_subprog_topo.c
+new file mode 100644
+index 000000000000..e2b9d14bbc3d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_subprog_topo.c
+@@ -0,0 +1,226 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++/* linear chain main -> A -> B */
++__naked __noinline __used
++static unsigned long linear_b(void)
 +{
-+	struct bpf_subprog_info *si = env->subprog_info;
-+	int *insn_postorder = env->cfg.insn_postorder;
-+	struct bpf_insn *insn = env->prog->insnsi;
-+	int cnt = env->subprog_cnt;
-+	int *dfs_stack = NULL;
-+	int top = 0, order = 0;
-+	int i, ret = 0;
-+	u8 *color = NULL;
-+
-+	color = kcalloc(cnt, sizeof(*color), GFP_KERNEL);
-+	dfs_stack = kmalloc_array(cnt, sizeof(*dfs_stack), GFP_KERNEL);
-+	if (!color || !dfs_stack) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	/*
-+	 * DFS post-order traversal.
-+	 * Color values: 0 = unvisited, 1 = on stack, 2 = done.
-+	 */
-+	for (i = 0; i < cnt; i++) {
-+		if (color[i])
-+			continue;
-+		color[i] = 1;
-+		dfs_stack[top++] = i;
-+
-+		while (top > 0) {
-+			int cur = dfs_stack[top - 1];
-+			int po_start = si[cur].postorder_start;
-+			int po_end = si[cur + 1].postorder_start;
-+			bool pushed = false;
-+			int j;
-+
-+			for (j = po_start; j < po_end; j++) {
-+				int idx = insn_postorder[j];
-+				int callee;
-+
-+				if (!bpf_pseudo_call(&insn[idx]) && !bpf_pseudo_func(&insn[idx]))
-+					continue;
-+				callee = find_subprog(env, idx + insn[idx].imm + 1);
-+				if (callee < 0) {
-+					ret = -EFAULT;
-+					goto out;
-+				}
-+				if (color[callee])
-+					continue;
-+				color[callee] = 1;
-+				dfs_stack[top++] = callee;
-+				pushed = true;
-+				break;
-+			}
-+
-+			if (!pushed) {
-+				color[cur] = 2;
-+				env->subprog_topo_order[order++] = cur;
-+				top--;
-+			}
-+		}
-+	}
-+
-+	if (env->log.level & BPF_LOG_LEVEL2)
-+		for (i = 0; i < cnt; i++)
-+			verbose(env, "topo_order[%d] = %s\n",
-+				i, subprog_name(env, env->subprog_topo_order[i]));
-+out:
-+	kfree(dfs_stack);
-+	kfree(color);
-+	return ret;
++	asm volatile (
++		"r0 = 42;"
++		"exit;"
++	);
 +}
 +
- static int mark_stack_slot_obj_read(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 				    int spi, int nr_slots)
- {
-@@ -26274,6 +26353,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
- 	if (ret)
- 		goto skip_full_check;
- 
-+	ret = sort_subprogs_topo(env);
-+	if (ret < 0)
-+		goto skip_full_check;
++__naked __noinline __used
++static unsigned long linear_a(void)
++{
++	asm volatile (
++		"call linear_b;"
++		"exit;"
++	);
++}
 +
- 	ret = compute_scc(env);
- 	if (ret < 0)
- 		goto skip_full_check;
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = linear_b")
++__msg("topo_order[1] = linear_a")
++__msg("topo_order[2] = topo_linear")
++__naked int topo_linear(void)
++{
++	asm volatile (
++		"call linear_a;"
++		"exit;"
++	);
++}
++
++/* diamond main -> A, main -> B, A -> C, B -> C */
++__naked __noinline __used
++static unsigned long diamond_c(void)
++{
++	asm volatile (
++		"r0 = 1;"
++		"exit;"
++	);
++}
++
++__naked __noinline __used
++static unsigned long diamond_b(void)
++{
++	asm volatile (
++		"call diamond_c;"
++		"exit;"
++	);
++}
++
++__naked __noinline __used
++static unsigned long diamond_a(void)
++{
++	asm volatile (
++		"call diamond_c;"
++		"exit;"
++	);
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = diamond_c")
++__msg("topo_order[3] = topo_diamond")
++__naked int topo_diamond(void)
++{
++	asm volatile (
++		"call diamond_a;"
++		"call diamond_b;"
++		"exit;"
++	);
++}
++
++/* main -> global_a (global) -> static_leaf (static, leaf) */
++__naked __noinline __used
++static unsigned long static_leaf(void)
++{
++	asm volatile (
++		"r0 = 7;"
++		"exit;"
++	);
++}
++
++__noinline __used
++int global_a(int x)
++{
++	return static_leaf();
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = static_leaf")
++__msg("topo_order[1] = global_a")
++__msg("topo_order[2] = topo_mixed")
++__naked int topo_mixed(void)
++{
++	asm volatile (
++		"r1 = 0;"
++		"call global_a;"
++		"exit;"
++	);
++}
++
++/*
++ * shared static callee from global and main:
++ * main -> shared_leaf (static)
++ * main -> global_b (global) -> shared_leaf (static)
++ */
++__naked __noinline __used
++static unsigned long shared_leaf(void)
++{
++	asm volatile (
++		"r0 = 99;"
++		"exit;"
++	);
++}
++
++__noinline __used
++int global_b(int x)
++{
++	return shared_leaf();
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = shared_leaf")
++__msg("topo_order[1] = global_b")
++__msg("topo_order[2] = topo_shared")
++__naked int topo_shared(void)
++{
++	asm volatile (
++		"call shared_leaf;"
++		"r1 = 0;"
++		"call global_b;"
++		"exit;"
++	);
++}
++
++/* duplicate calls to the same subprog */
++__naked __noinline __used
++static unsigned long dup_leaf(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"exit;"
++	);
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = dup_leaf")
++__msg("topo_order[1] = topo_dup_calls")
++__naked int topo_dup_calls(void)
++{
++	asm volatile (
++		"call dup_leaf;"
++		"call dup_leaf;"
++		"exit;"
++	);
++}
++
++/* main calls bpf_loop() with loop_cb as the callback */
++static int loop_cb(int idx, void *ctx)
++{
++	return 0;
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = loop_cb")
++__msg("topo_order[1] = topo_loop_cb")
++int topo_loop_cb(void)
++{
++	bpf_loop(1, loop_cb, NULL, 0);
++	return 0;
++}
++
++/*
++ * bpf_loop callback calling another subprog
++ * main -> bpf_loop(callback=loop_cb2) -> loop_cb2 -> loop_cb2_leaf
++ */
++__naked __noinline __used
++static unsigned long loop_cb2_leaf(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"exit;"
++	);
++}
++
++static int loop_cb2(int idx, void *ctx)
++{
++	return loop_cb2_leaf();
++}
++
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = loop_cb2_leaf")
++__msg("topo_order[1] = loop_cb2")
++__msg("topo_order[2] = topo_loop_cb_chain")
++int topo_loop_cb_chain(void)
++{
++	bpf_loop(1, loop_cb2, NULL, 0);
++	return 0;
++}
++
++/* no calls (single subprog) */
++SEC("?raw_tp")
++__success __log_level(2)
++__msg("topo_order[0] = topo_no_calls")
++__naked int topo_no_calls(void)
++{
++	asm volatile (
++		"r0 = 0;"
++		"exit;"
++	);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.52.0
 
