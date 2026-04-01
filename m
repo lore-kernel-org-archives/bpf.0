@@ -1,269 +1,189 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE8A4F5E0;
-	Wed,  1 Apr 2026 09:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E5A2857EA;
+	Wed,  1 Apr 2026 09:11:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775034454; cv=none; b=rJyXvKB7wQ8clKvsRdDxUMKiPvWWjE+2o8+0LUi2qxEN97GGyPXJNWPP0dXbd6zdaTPm55FnxLS2bH+nsmREke+NpNTdeYmFIQnBZyHpEyl4wVx9aLEWLIcu4bd3STjoFJg6TBDsxUw9NR/S6N5G0JtxMbi5kj2vBqvpaXwUQLM=
+	t=1775034692; cv=none; b=rIIKv8wQvTwNPmgc3xpurQVQ+scdb7OfBzOlz54suIHlWKFnkXGTEtlnzuyqNH38kdH5hZ6fz/PiDpqT8ZhSv2WJVPF66Q1Lu+M5iXgG0AO0YoTg5qrlsvg14Frr6Yk0UM5EnuDXaDYxyqpyQ7sutViMYa1HCz+0fpRD3OmIL8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775034454; c=relaxed/simple;
-	bh=Ai0SUn3D0BgOXKunw85YnznITvntYENkG+BT90h3JJw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=p1sFNjnCqXN8/t4F+i9Gpce+59CzVjw0Ds77HpDy7K309ANXmxkhf6GM/3coSNPw1r9aIJU3xPQhs6LUxd2QNtGHqGrHZMqb6OrH4awUKOBxSfZbnHMTbIlEPe10ZJSMMzgB0F5OtXZQUfBeSs3/wFU/D/pk8ppRZd3yvrN1FcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQ9qN/q9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775034692; c=relaxed/simple;
+	bh=w7MTOz/QakdpD3/7WWwcxLbnWHxPxiLC90EH6FntTfI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JPuJZH+p7mIwnXA3Vq55qrUoqBkrwaDOMZ0Y3H7lbHn3FUe0ATrZU6pbOqR3LxA4RSQfhbeYRiVZdyXH0uutN4/2e0mZHLj3kjv7yfhUlbPuoPuFhAr8/C60us+dIbkKKQFZcX2eYaDjkJ/3uLY98mxmZZ/0WE9ToqAc2jF8imE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lHHLd6CQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQ9qN/q9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13DABC4CEF7;
-	Wed,  1 Apr 2026 09:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775034453;
-	bh=Ai0SUn3D0BgOXKunw85YnznITvntYENkG+BT90h3JJw=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=CQ9qN/q9y4FNLLtzCh9t3G0lfNYLNTTQbKnGgiICdJXULSK1z6Yx6WMQBAqlTLp+X
-	 owAXSJYhv1dl7eWTLwfo58G+DhR71jcau28Jc/wBXytG+cip8u7hZqtgCXamzxlitF
-	 CRm94ybj4QV4kSjoVcMq2K6Er5F0mSqK0EMp87IkyWqhnj86kzU675WNUSEaAD0lTm
-	 yTVmjnCXLgx+n620nMFTdYkgSrno6oGnSixsdiFUTehKaXt9K3JRhrI+VEj8XHQ6bC
-	 jF0SV8GBkhlH4TJe9n+ZHZI6N6QPO/YQNRn64G6FNHHhxGtmNK0+EK9gcVpyg9g+Fr
-	 apLueOKG/2e+g==
-Message-ID: <f61e0fa6-a716-405f-bce9-a2bf4ef0c045@kernel.org>
-Date: Wed, 1 Apr 2026 11:07:28 +0200
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lHHLd6CQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 958A7C4CEF7;
+	Wed,  1 Apr 2026 09:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1775034692;
+	bh=w7MTOz/QakdpD3/7WWwcxLbnWHxPxiLC90EH6FntTfI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lHHLd6CQQ3yDRpw3pg0btc+UgcMBdI5rl5tOI1Hp4xKdKqDaJDE0Hl93k7UWmaxZA
+	 z6uU7g7yERKJV3bDoQYekUYh8jpwT3qTlxw0xLT5ndOBnUNz1K5SFHpfPITBpPF7FT
+	 uuCQxx3QhZrZmYMU/wk2wRGlODVtIsnOfn0pQWIo=
+Date: Wed, 1 Apr 2026 11:11:29 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	kernel-team@android.com, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, driver-core@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] PM: wakeup: Add kfuncs to traverse over
+ wakeup_sources
+Message-ID: <2026040153-overpass-shanty-71a0@gregkh>
+References: <20260331153413.2469218-1-wusamuel@google.com>
+ <20260331153413.2469218-2-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/3] mm/page_alloc: Optimize free_contig_range()
-To: Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Ryan.Roberts@arm.com, david.hildenbrand@arm.com
-References: <20260331152208.975266-1-usama.anjum@arm.com>
- <20260331152208.975266-2-usama.anjum@arm.com>
-From: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20260331152208.975266-2-usama.anjum@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260331153413.2469218-2-wusamuel@google.com>
 
-On 3/31/26 17:21, Muhammad Usama Anjum wrote:
-> From: Ryan Roberts <ryan.roberts@arm.com>
-> 
-> Decompose the range of order-0 pages to be freed into the set of largest
-> possible power-of-2 size and aligned chunks and free them to the pcp or
-> buddy. This improves on the previous approach which freed each order-0
-> page individually in a loop. Testing shows performance to be improved by
-> more than 10x in some cases.
-> 
-> Since each page is order-0, we must decrement each page's reference
-> count individually and only consider the page for freeing as part of a
-> high order chunk if the reference count goes to zero. Additionally
-> free_pages_prepare() must be called for each individual order-0 page
-> too, so that the struct page state and global accounting state can be
-> appropriately managed. But once this is done, the resulting high order
-> chunks can be freed as a unit to the pcp or buddy.
-> 
-> This significantly speeds up the free operation but also has the side
-> benefit that high order blocks are added to the pcp instead of each page
-> ending up on the pcp order-0 list; memory remains more readily available
-> in high orders.
-> 
-> vmalloc will shortly become a user of this new optimized
-> free_contig_range() since it aggressively allocates high order
-> non-compound pages, but then calls split_page() to end up with
-> contiguous order-0 pages. These can now be freed much more efficiently.
-> 
-> The execution time of the following function was measured in a server
-> class arm64 machine:
-> 
-> static int page_alloc_high_order_test(void)
-> {
-> 	unsigned int order = HPAGE_PMD_ORDER;
-> 	struct page *page;
-> 	int i;
-> 
-> 	for (i = 0; i < 100000; i++) {
-> 		page = alloc_pages(GFP_KERNEL, order);
-> 		if (!page)
-> 			return -1;
-> 		split_page(page, order);
-> 		free_contig_range(page_to_pfn(page), 1UL << order);
-> 	}
-> 
-> 	return 0;
-> }
-> 
-> Execution time before: 4097358 usec
-> Execution time after:   729831 usec
-> 
-> Perf trace before:
-> 
->     99.63%     0.00%  kthreadd         [kernel.kallsyms]      [.] kthread
->             |
->             ---kthread
->                0xffffb33c12a26af8
->                |
->                |--98.13%--0xffffb33c12a26060
->                |          |
->                |          |--97.37%--free_contig_range
->                |          |          |
->                |          |          |--94.93%--___free_pages
->                |          |          |          |
->                |          |          |          |--55.42%--__free_frozen_pages
->                |          |          |          |          |
->                |          |          |          |           --43.20%--free_frozen_page_commit
->                |          |          |          |                     |
->                |          |          |          |                      --35.37%--_raw_spin_unlock_irqrestore
->                |          |          |          |
->                |          |          |          |--11.53%--_raw_spin_trylock
->                |          |          |          |
->                |          |          |          |--8.19%--__preempt_count_dec_and_test
->                |          |          |          |
->                |          |          |          |--5.64%--_raw_spin_unlock
->                |          |          |          |
->                |          |          |          |--2.37%--__get_pfnblock_flags_mask.isra.0
->                |          |          |          |
->                |          |          |           --1.07%--free_frozen_page_commit
->                |          |          |
->                |          |           --1.54%--__free_frozen_pages
->                |          |
->                |           --0.77%--___free_pages
->                |
->                 --0.98%--0xffffb33c12a26078
->                           alloc_pages_noprof
-> 
-> Perf trace after:
-> 
->      8.42%     2.90%  kthreadd         [kernel.kallsyms]         [k] __free_contig_range
->             |
->             |--5.52%--__free_contig_range
->             |          |
->             |          |--5.00%--free_prepared_contig_range
->             |          |          |
->             |          |          |--1.43%--__free_frozen_pages
->             |          |          |          |
->             |          |          |           --0.51%--free_frozen_page_commit
->             |          |          |
->             |          |          |--1.08%--_raw_spin_trylock
->             |          |          |
->             |          |           --0.89%--_raw_spin_unlock
->             |          |
->             |           --0.52%--free_pages_prepare
->             |
->              --2.90%--ret_from_fork
->                        kthread
->                        0xffffae1c12abeaf8
->                        0xffffae1c12abe7a0
->                        |
->                         --2.69%--vfree
->                                   __free_contig_range
-> 
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+On Tue, Mar 31, 2026 at 08:34:10AM -0700, Samuel Wu wrote:
+> Iterating through wakeup sources via sysfs or debugfs can be inefficient
+> or restricted. Introduce BPF kfuncs to allow high-performance and safe
+> in-kernel traversal of the wakeup_sources list.
 
-Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+What exactly is "inefficient"?  I think you might have some numbers in
+your 0/2 patch, but putting it in here would be best.
 
-Nit below:
+And who is going to be calling these functions, just ebpf scripts?
 
-> @@ -6784,6 +6790,103 @@ void __init page_alloc_sysctl_init(void)
->  	register_sysctl_init("vm", page_alloc_sysctl_table);
+> The new kfuncs include:
+> - bpf_wakeup_sources_get_head() to obtain the list head.
+> - bpf_wakeup_sources_read_lock/unlock() to manage the SRCU lock.
+
+Does this mean we can stop exporting wakeup_sources_read_lock() now?
+
+> For verifier safety, the underlying SRCU index is wrapped in an opaque
+> 'struct bpf_ws_lock' pointer. This enables the use of KF_ACQUIRE and
+> KF_RELEASE flags, allowing the BPF verifier to strictly enforce paired
+> lock/unlock cycles and prevent resource leaks.
+
+But it's an index, not a lock.  Is this just a verifier thing?
+
+> 
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+>  drivers/base/power/power.h  |  7 ++++
+>  drivers/base/power/wakeup.c | 72 +++++++++++++++++++++++++++++++++++--
+>  2 files changed, 77 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+> index 922ed457db19..8823aceeac8b 100644
+> --- a/drivers/base/power/power.h
+> +++ b/drivers/base/power/power.h
+> @@ -168,3 +168,10 @@ static inline void device_pm_init(struct device *dev)
+>  	device_pm_sleep_init(dev);
+>  	pm_runtime_init(dev);
 >  }
+> +
+> +#ifdef CONFIG_BPF_SYSCALL
+> +struct bpf_ws_lock { };
+
+An empty structure?  This is just an int, so you are casting an int to a
+pointer?  Can we make wakeup_sources_read_lock() actually use a
+structure instead to make this simpler?
+
+> +struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void);
+> +void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock);
+> +void *bpf_wakeup_sources_get_head(void);
+> +#endif
+> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> index b8e48a023bf0..8eda7d35d9cc 100644
+> --- a/drivers/base/power/wakeup.c
+> +++ b/drivers/base/power/wakeup.c
+> @@ -1168,11 +1168,79 @@ static const struct file_operations wakeup_sources_stats_fops = {
+>  	.release = seq_release_private,
+>  };
 >  
-> +static void free_prepared_contig_range(struct page *page,
-> +		unsigned long nr_pages)
+> -static int __init wakeup_sources_debugfs_init(void)
+> +#ifdef CONFIG_BPF_SYSCALL
+> +#include <linux/btf.h>
+> +
+> +__bpf_kfunc_start_defs();
+> +
+> +/**
+> + * bpf_wakeup_sources_read_lock - Acquire the SRCU lock for wakeup sources
+> + *
+> + * The underlying SRCU lock returns an integer index. However, the BPF verifier
+> + * requires a pointer (PTR_TO_BTF_ID) to strictly track the state of acquired
+> + * resources using KF_ACQUIRE and KF_RELEASE semantics. We use an opaque
+> + * structure pointer (struct bpf_ws_lock *) to satisfy the verifier while
+> + * safely encoding the integer index within the pointer address itself.
+> + *
+> + * Return: An opaque pointer encoding the SRCU lock index + 1 (to avoid NULL).
+> + */
+> +__bpf_kfunc struct bpf_ws_lock *bpf_wakeup_sources_read_lock(void)
 > +{
-> +	while (nr_pages) {
-> +		unsigned long pfn = page_to_pfn(page);
+> +	return (struct bpf_ws_lock *)(long)(wakeup_sources_read_lock() + 1);
 
-Sorry for not noticing earlier. I now realized that because here we are
-guaranteed to be restricted to the same section, we can do page_to_pfn()
-just once outside the loop and then "pfn += 1UL << order;" below?
+Why are you incrementing this by 1?
 
-> +		unsigned int order;
-> +
-> +		/* We are limited by the largest buddy order. */
-> +		order = pfn ? __ffs(pfn) : MAX_PAGE_ORDER;
-> +		/* Don't exceed the number of pages to free. */
-> +		order = min_t(unsigned int, order, ilog2(nr_pages));
-> +		order = min_t(unsigned int, order, MAX_PAGE_ORDER);
-> +
-> +		/*
-> +		 * Free the chunk as a single block. Our caller has already
-> +		 * called free_pages_prepare() for each order-0 page.
-> +		 */
-> +		__free_frozen_pages(page, order, FPI_PREPARED);
-> +
-> +		page += 1UL << order;
-> +		nr_pages -= 1UL << order;
-> +	}
 > +}
 > +
-> +static void __free_contig_range_common(unsigned long pfn, unsigned long nr_pages,
-> +		bool is_frozen)
+> +/**
+> + * bpf_wakeup_sources_read_unlock - Release the SRCU lock for wakeup sources
+> + * @lock: The opaque pointer returned by bpf_wakeup_sources_read_lock()
+> + *
+> + * The BPF verifier guarantees that @lock is a valid, unreleased pointer from
+> + * the acquire function. We decode the pointer back into the integer SRCU index
+> + * by subtracting 1 and release the lock.
+> + */
+> +__bpf_kfunc void bpf_wakeup_sources_read_unlock(struct bpf_ws_lock *lock)
 > +{
-> +	struct page *page, *start = NULL;
-> +	unsigned long nr_start = 0;
-> +	unsigned long start_sec;
-> +	unsigned long i;
-> +
-> +	for (i = 0; i < nr_pages; i++) {
-> +		bool can_free = true;
-> +
-> +		/*
-> +		 * Contiguous PFNs might not have contiguous "struct pages"
-> +		 * in some kernel configs: page++ across a section boundary
-> +		 * is undefined. Use pfn_to_page() for each PFN.
-> +		 */
-> +		page = pfn_to_page(pfn + i);
+> +	wakeup_sources_read_unlock((int)(long)lock - 1);
 
-Hm ideally we'd have some pfn+page iterator thingy that would just do a
-page++ on configs where it's contiguous and this more expensive operation
-otherwise. Wonder why we don't have it yet. But that's for a possible
-followup, not required now.
+Why decrementing by one?
 
-> +
-> +		VM_WARN_ON_ONCE(PageHead(page));
-> +		VM_WARN_ON_ONCE(PageTail(page));
-> +
-> +		if (!is_frozen)
-> +			can_free = put_page_testzero(page);
-> +
-> +		if (can_free)
-> +			can_free = free_pages_prepare(page, 0);
-> +
-> +		if (!can_free) {
-> +			if (start) {
-> +				free_prepared_contig_range(start, i - nr_start);
-> +				start = NULL;
-> +			}
-> +			continue;
-> +		}
-> +
-> +		if (start && memdesc_section(page->flags) != start_sec) {
-> +			free_prepared_contig_range(start, i - nr_start);
-> +			start = page;
-> +			nr_start = i;
-> +			start_sec = memdesc_section(page->flags);
-> +		} else if (!start) {
-> +			start = page;
-> +			nr_start = i;
-> +			start_sec = memdesc_section(page->flags);
-> +		}
-> +	}
-> +
-> +	if (start)
-> +		free_prepared_contig_range(start, nr_pages - nr_start);
+So it's really an int, but you are casting it to a pointer, incrementing
+it by one to make it a "fake" pointer value (i.e. unaligned mess), and
+then when unlocking casting the pointer back to an int, and then
+decrementing the value?
+
+This feels "odd" :(
+
+
 > +}
 > +
+> +/**
+> + * bpf_wakeup_sources_get_head - Get the head of the wakeup sources list
+> + *
+> + * Return: The head of the wakeup sources list.
+> + */
+> +__bpf_kfunc void *bpf_wakeup_sources_get_head(void)
+> +{
+> +	return &wakeup_sources;
+> +}
+> +
+> +__bpf_kfunc_end_defs();
+> +
+> +BTF_KFUNCS_START(wakeup_source_kfunc_ids)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_lock, KF_ACQUIRE)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_read_unlock, KF_RELEASE)
+> +BTF_ID_FLAGS(func, bpf_wakeup_sources_get_head)
+> +BTF_KFUNCS_END(wakeup_source_kfunc_ids)
+> +
+> +static const struct btf_kfunc_id_set wakeup_source_kfunc_set = {
+> +	.owner = THIS_MODULE,
 
+This isn't a module.
 
+thanks,
+
+greg k-h
