@@ -1,98 +1,95 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0F71D7E41;
-	Wed,  1 Apr 2026 17:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747972EDD6B
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 17:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775065426; cv=none; b=bPT4FZvrtarqmbPGi0zVbZ6cOE+PKrxhX97Jf9/wtMLy7EQTDn8iFXkw0rWO0K2OdoqktndvKrKYkuLpibguNkuKVvTVovS0Ut+9tuNXYVCXDYS0qrTdd9Cw7XF0Y1AAnJbDfm3etD9gV9YMhIzs3knQ8pWF/0us9blAnq/YAF0=
+	t=1775066356; cv=none; b=MkIfwOn8wi2neDapdrXggswFq2qa4jOM4aeTplYw1RZcGn8d+7SjftuQaU5Y3OgJeXVTwLE0rSfnRJhSXDT42A6fIyBlUi0YJwt0SK94Jt5tirCoW1epfm0dDB9b+EVrdHgwbyh6XtWV2Xtv8ozPTAdKvJNdj7BDhrue8SYwoTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775065426; c=relaxed/simple;
-	bh=jf/+fqzmXNiUBaLm7xRsAlJNstHg9Cqyf+RSomUr0h0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upvwUjEod+fieV078i0fRro9qspm0UxwGS9fAKVqifOrTwXYTlXFA1UMEXccWM/968XvifbPp01zq78PFW0FbSRgGbv4lkI5+q5gfO89NijF2ninezLhAHfw88mK+Xvc06Z2fIx5deUhpZAGSlDqUeOF++UEVqc+SkE7ksg/7o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=oDuLf1ZQ; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	s=arc-20240116; t=1775066356; c=relaxed/simple;
+	bh=klZfHNebcMrnNEzlQuQyI2EfsZX9F6GgXmJo9o+Xg8g=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Jm8FkcQhq3FQ4bONjIbsSk911Cxb5YudoJjandsNDF0vaAfQrIwFuHrKPa3hPCRQK8PBtxhPLViypOnI6yryFM337yWEjwezN5BUzhywWt4DUFWE4pLYma0WwPMp2Nm0Yn6ZjFpHQPZqBFZDDLFidMQGQ680Ft8D46nx9AOPROc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cCRttWxr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="oDuLf1ZQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=gDvOqA3KegP64c2/sDFkov6sRayaEdrePMAGlwCEHm8=; b=oDuLf1ZQtZDyyybFJbzqYety9Z
-	9/ya58lJZKD2xLRf9HfIz5Y6bRXU2tEmPrBaGgZBnq/CKfP6VjEXokgKwQqA16MPZvRXZC6V9D69x
-	vIOhE2PvvF2+FGKMOJA3Iv4oZdnenA6Op8CuyPj5vHiC6VdO+Uz1690aDjC1q3tIBdakZRztojkwP
-	70vMqbI498ud0HOvzJlzR4WOqO4iCasWfRr0QSP+NcKla81pYffBSqrY+UrwMfJ06LHHkYzYsJ1dA
-	7te7o3LaeaTdrH++RxN0c6pCVf/MXWHi/ggnDS1p8ca7kYK2i9oXCuC0hlUHuI/6iFuMzN9jVmy6X
-	eTrYm98w==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1w7zbI-0039mm-2z;
-	Wed, 01 Apr 2026 17:43:31 +0000
-Date: Wed, 1 Apr 2026 10:43:26 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, metze@samba.org, 
-	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>, io-uring@vger.kernel.org, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v2 2/4] net: call getsockopt_iter if available
-Message-ID: <ac1Pzt4tpt73SkC6@gmail.com>
-References: <20260401-getsockopt-v2-0-611df6771aff@debian.org>
- <20260401-getsockopt-v2-2-611df6771aff@debian.org>
- <ac1I_CMr43XTpvHj@mini-arch>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cCRttWxr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C182CC4CEF7;
+	Wed,  1 Apr 2026 17:59:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775066356;
+	bh=klZfHNebcMrnNEzlQuQyI2EfsZX9F6GgXmJo9o+Xg8g=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=cCRttWxryc7ZuoknFtT4c0P+CychxKhPoEWvx3WfAC9SbdP5XbiAk4e2JNx7EDQCm
+	 WODhijaHnSzK+ET/XQnn7atCE2IiKhABLpV0nujrHNpreSUDaxFfZEXXeadfQvzkSG
+	 iklxWqvUTgSBi6Pf9FouV548U/HPsfrbP1ah4xrqXY3BAQcTskCT2FPMzMi5lJVdvG
+	 EbVekq9hzCw8oOH/6dCj9LaveySWvJ6LkfPBzrktuZugRZMwuyTnMZu2lSZHFR+gkW
+	 2q+cNiQsP0a3N5yUW+dMATAS4qbZN/NxUfBotzG4DK8ga77R9wShP7IHJ1fg1vpGBS
+	 Prs6vt/1SiUHA==
+Content-Type: multipart/mixed; boundary="===============8873681574554380312=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac1I_CMr43XTpvHj@mini-arch>
-X-Debian-User: leitao
+Message-Id: <3ac88e05c887d679301e873b3968ebb41deaee08f9f41d7f225cd2268c7fc133@mail.kernel.org>
+In-Reply-To: <20260401170115.495836-3-vineet.gupta@linux.dev>
+References: <20260401170115.495836-3-vineet.gupta@linux.dev>
+Subject: Re: [PATCH 2/2] bpf, doc: Improve MOV* documentation ...
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,bpf@vger.kernel.org
+Cc: bpf@gcc.gnu.org,jose.marchesi@oracle.com,ast@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  1 Apr 2026 17:59:15 +0000 (UTC)
 
-On Wed, Apr 01, 2026 at 09:34:04AM -0700, Stanislav Fomichev wrote:
-> > +static int do_sock_getsockopt_iter(struct socket *sock,
-> > +				   const struct proto_ops *ops, int level,
-> > +				   int optname, sockptr_t optval,
-> > +				   sockptr_t optlen)
->
-> If we want to eventually remove sockptr_t, why not make this new handler
-> work with iov_iters from the beginning? The callers can have some new temporary
-> sockptr_to_iter() or something?
+--===============8873681574554380312==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The goal is to eliminate __user memory from the callbacks entirely, which
-would make sockptr_t unnecessary. This series removes the callbacks that
-originally necessitated sockptr_t's existence.
+> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+> index fd688c5d3f04d..ac61d3be7af21 100644
+> --- a/Documentation/bpf/standardization/instruction-set.rst
+> +++ b/Documentation/bpf/standardization/instruction-set.rst
 
-Therefore, working from the callbacks back to userspace seem to be a more
-logical approach than replacing the middle layers of the implementation,
-and then touching the callbacks.
+[ ... ]
 
-So, yes, the sockptr_t() is used here as temporary glue to be able to
-get rid of the elephant in the room.
+> +``{MOV, X, ALU64}`` means::
+> +
+> +  dst = src  (e.g. r1 = r2)
+> +
+> +``{MOV, K, ALU64}`` means::
+> +
+> +  dst = (s64)imm
+> +
+> +e.g. r1 = -4; r5 = 9282009
+> +
+> +``{MOV, X, ALU}`` has zero extension semantics (upper 32 bits are zeroed)::
+> +
+> +  dst = (u32)src
+> +
+> +e.g. w5 = w9
 
-> > +	/* iter is initialized as ITER_DEST. Callbacks that need to read
-> > +	 * from optval (e.g. PACKET_HDRLEN) must flip data_source to
-> > +	 * ITER_SOURCE, then restore ITER_DEST before writing back.
-> > +	 */
->
-> Have you considered creating two iters? opt.iter_in and opt.iter_out.
-> That way you don't have to flip the source back and forth in the
-> handlers.
+Should the example for {MOV, X, ALU64} be placed outside the code block,
+matching the style used by {MOV, K, ALU64} and {MOV, X, ALU} just below?
 
-That's a good suggestion I hadn't considered. My initial thought was to
-create a helper like sockopt_read_val() to handle the flip-read-flip
-dance.
+As written, the RST literal block renders "(e.g. r1 = r2)" as part of
+the formal pseudo-C definition.  The other two entries place their
+examples as separate paragraph text after the code block, which keeps
+the spec definition distinct from the illustrative examples.
 
-Would opt.iter_in and opt.iter_out be clearer than the helper approach?
+Something like this would be consistent:
 
-Thanks for the review,
---breno
+  ``{MOV, X, ALU64}`` means::
+
+    dst = src
+
+  e.g. r1 = r2
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23861455083
+--===============8873681574554380312==--
