@@ -1,215 +1,195 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF04838238B;
-	Wed,  1 Apr 2026 09:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08CD3B0ADB
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 09:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775037189; cv=none; b=nwR0HBFT0XxEY54hlavOrspjMzIjKyfxqs3934bd9PVPO4c+2MEMLT8fA0us7OE54pKrEhlX0oZgwJvcQ04wmH4v3rW8BnDBYtGrDqkyg9GsxYYTj6edIcO6EZJ9UPygkqmpIfRHk/pbTX9RpDPdRCpr6TjkozkOq2DLmsHb7Wc=
+	t=1775037384; cv=none; b=AsA6bBG5f7xpwMZhleWSB1UkK8L75i8ipFM247dbpt9k+Z76QraAEWBcbRPApGhdXwVUR6FHt7FktwHdoBY3gGkP0kOiHmAzqi9ebQ9No3Eyj+FNpsnjxh0iexy8JD1gTe0ZBdfH6ZVT3ZpvHvjwELUIkEEgqkw0tNPlvR1ZjAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775037189; c=relaxed/simple;
-	bh=WFHYDh2U7HFPigQp04LXq0XBtJrUxfoKQkJAsyQrpFs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=OQWv9jVD4+wZXWoGd4ehIN5hyySN7mZB8Y6XUVd2sUuMjX7hQd1EPlvFZxq90OPI9P3iBOOfKTbiIUyBkRozOvZXmty981pf940l2OFDIcA458SKGe8DtQbqptksKLGkulCd1lzWHDMzurQ6/cDU5Ju4O5U/qXgMIN572+qGBkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=piDryReG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775037384; c=relaxed/simple;
+	bh=8B3vJOPZb7/rn1u7I7i55sG7LiSYRyvb5TpVCfoY1GU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U3cdgMWzPnaOWDaxIWYV5MtwPj58RhLzDBQe1ljwWupqwtfovdhnBM6Jt+tmetIbcaUmwIso3IEnBLCHYI+YHP3DmrWwL9nnD+h67RdZOXni7yr+DPljO7PrxbfUUQvs7hlNGgbOkgfWfbG0R8WkcycXM6eLkqm/fw9Ygl0qVVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qomy3z93; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="piDryReG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80299C4CEF7;
-	Wed,  1 Apr 2026 09:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775037188;
-	bh=WFHYDh2U7HFPigQp04LXq0XBtJrUxfoKQkJAsyQrpFs=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=piDryReGF6P4KDpus41igVza7yiAw9WVtchLK+C0ibsvJZn2k97a1AqUVSN2ZFUi7
-	 WlsJ45S39aVfZg6DXRwGPPPuvON33H5bJRV8SfT0O7G+aOBbzmeazKQrAByN8eDMhp
-	 kOs8Q9415siUdz0PT+BMvSUMe4eGkz4n20+svF4iIZWDEFls367ChF4X/Mm5OHoI/g
-	 s5wdglo+gh9oO5u0khstCMi86A4FvrzBQU3LI9tW4w628P6rytplRHlJs+Ll3mq2MF
-	 3707TO8gxFhYXfHN4/HqYtxfRKjsY8SuuKoKoW+Z4/xxjTmkaVkKXIKiMYVPc/4LbF
-	 RPyB0plxDRy8A==
-Message-ID: <3c80a6f0-8626-4663-85d2-888572dce900@kernel.org>
-Date: Wed, 1 Apr 2026 11:53:02 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qomy3z93"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82735a41920so2202889b3a.2
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 02:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775037382; x=1775642182; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Th5pq1qyxZ39kb6RF1ERjw8ew05Ff4fiBhuPS0RJP2g=;
+        b=qomy3z93vNUmTnjPGeAnvhapZdwLBGXUdUSm7Wyn1PFZvIUIvhN583HpF3Fin7C1Cv
+         m8WCn44hTy+TFWuR75vP/aWrPajEjugsgmNQiser3l+OR/bvTgsMZBD31cKSeKEqBAR/
+         GLXOakrfL24u3X5ivuulays2dzoo/EQVoc60JEIoGjkQgqT2Ffm5yHB0dz4X1gUITeRh
+         pgi6yaFE/rxfrGoG6nP90atb5/CZRQRKKioIYoN3p2olfOLw3vWSQNqaLcPsOXqfXU4h
+         tmlOUYWm8Iw4aPsCU+95oODEdTV/00dMlAJ+KDQW+r1tn7pJAutzQbYeToCIbnYDJtdJ
+         umtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775037382; x=1775642182;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Th5pq1qyxZ39kb6RF1ERjw8ew05Ff4fiBhuPS0RJP2g=;
+        b=lTC2eHDiEjBLlcxCPc3N7YXHAZSnSmIHRWxXVFaoM78z5WXyzRYJbgLbt2Rsp4wuY5
+         gSlGI6C4HSoFx5dZB7gVE9tl/igtVJD7OK8wVDZadhZ8MTALU/ACSHeZVNBkz8yETyfe
+         02mfwlkKWO1aoeQDfxQVjPwUrz7Oet8BRp4wn867G35xsUcSxEINzS+JxiKbkssbFHoB
+         UMaUJDJCoRYvq8NHqRBIQ8hoxyd8I/bJLyBebWKql95uI2UDKB8Ai49+mFI0vgyFqsgp
+         QGW8hAvlKKBW1+S6vSfzGp+SxpaJDFJWIVqJpEPsfpMFgO6RJatvUBFAROnO2nOtmehd
+         888A==
+X-Forwarded-Encrypted: i=1; AJvYcCVsCLU9XI/ts2UrI+4hGbo8XCyi4lyzZ71fHwDD57GUetv9Xm6n3M6c5rxvKo6gDKhrrlc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxM5OrSyiSFg5aElp3OvLKOau/KZGxbnQTuwpLpc8UXy7/tYh9E
+	sv6xm+fF3cmWikEKOkEQiC2RMGe7fPAhzKkNwGf6k5lCE49g8DZ/Dlwb
+X-Gm-Gg: ATEYQzzsBzWYdy2yKtXPPOfNLArlESO0/yiD9bE0itaBfY6s27XwKFrQAZ3crr0h8xI
+	XaIErB15Jf58ph1hAuzTCvNWVF5BrXYOmv4tXkecGPUsNSdGNFAKALjOJQGfxKcpDQWpAU8WcK8
+	d9c9o3snRM/jLG+kVlIqmHXAUHsGaLprjQjuRr9rzzXWFNmWQ+PYVrjRM9/nPGbA0NI7ogZsTsW
+	DTZRXinSoQMI7vS56Jyv9JfwOin+4ttgYNc6hoeS7oTZ3ks/lIM6YaXZy1j1O4NZIvONzVnE9s1
+	0ZbtydCqD/VNZmp4ChLXxCyMLZIYcEzccRa52k/iakCVhFvyMlEYP+eY8G4yXEmoVi0qJLDklM5
+	pCp+DqAq/Uwsw1No8/GPcdnrAjvCRpQHfAJkXXAZKiQnTGoznvDNE2Ho+ifZb0IpDWI4ALonKxL
+	FkXQ3HC0MhlupTJD9G06oo6Hpbp4FVj5vA9KwUNZWq
+X-Received: by 2002:a05:6a00:1ac9:b0:82a:5d55:5807 with SMTP id d2e1a72fcca58-82ce88c385dmr3229496b3a.6.1775037382094;
+        Wed, 01 Apr 2026 02:56:22 -0700 (PDT)
+Received: from computer ([2a09:bac5:40b2:a82::10c:35])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ceb1de4edsm2161024b3a.39.2026.04.01.02.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 02:56:21 -0700 (PDT)
+Date: Wed, 1 Apr 2026 15:26:10 +0530
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: andrii@kernel.org, alan.maguire@oracle.com, yonghong.song@linux.dev, 
+	song@kernel.org, bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	memxor@gmail.com, eddyz87@gmail.com, martin.lau@linux.dev, 
+	menglong8.dong@gmail.com, puranjay@kernel.org, bjorn@kernel.org, leon.hwang@linux.dev, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next v2 1/3] libbpf: Auto-upgrade uprobes to
+ multi-uprobes when supported
+Message-ID: <aczqZPJKv4XAOS1i@computer>
+References: <20260330110019.549079-1-varunrmallya@gmail.com>
+ <20260330110019.549079-2-varunrmallya@gmail.com>
+ <acqOKws88JsU3riu@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/3] vmalloc: Optimize vfree
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>,
- Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
- Uladzislau Rezki <urezki@gmail.com>, Nick Terrell <terrelln@fb.com>,
- David Sterba <dsterba@suse.com>, Vishal Moola <vishal.moola@gmail.com>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Ryan.Roberts@arm.com, david.hildenbrand@arm.com
-References: <20260331152208.975266-1-usama.anjum@arm.com>
- <20260331152208.975266-3-usama.anjum@arm.com>
- <c52c0500-b255-41ee-a2fd-1caaba5499df@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <c52c0500-b255-41ee-a2fd-1caaba5499df@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acqOKws88JsU3riu@krava>
 
-On 4/1/26 11:19, Vlastimil Babka (SUSE) wrote:
+On Mon, Mar 30, 2026 at 04:52:27PM +0200, Jiri Olsa wrote:
+> On Mon, Mar 30, 2026 at 04:30:17PM +0530, Varun R Mallya wrote:
+> > +			const char *sec_name = prog->sec_name;
+> > +			/* Here, we filter out for u[ret]probe or "u[ret]probe/"
+> > +			 * but we leave out anything with an '@'
+> > +			 * in it as uprobe_multi does not support versioned
+> > +			 * symbols yet, so we don't upgrade.
+> > +			 */
 > 
-> Nit: the subject could be more specific, e.g. like this?
+> nice, I missed that uprobe.multi does not support versioned symbols,
+> I guess we should fix that
+
+Thanks! I intend to fix that after I am done with this patch.
+
+> > +			if (((strncmp(sec_name, "uprobe", 6) == 0 &&
 > 
-> vmalloc: Optimize vfree with free_pages_bulk()
+> str_has_pfx ?
 > 
-> On 3/31/26 17:22, Muhammad Usama Anjum wrote:
->> From: Ryan Roberts <ryan.roberts@arm.com>
->>
->> Whenever vmalloc allocates high order pages (e.g. for a huge mapping) it
->> must immediately split_page() to order-0 so that it remains compatible
->> with users that want to access the underlying struct page.
->> Commit a06157804399 ("mm/vmalloc: request large order pages from buddy
->> allocator") recently made it much more likely for vmalloc to allocate
->> high order pages which are subsequently split to order-0.
->>
->> Unfortunately this had the side effect of causing performance
->> regressions for tight vmalloc/vfree loops (e.g. test_vmalloc.ko
->> benchmarks). See Closes: tag. This happens because the high order pages
->> must be gotten from the buddy but then because they are split to
->> order-0, when they are freed they are freed to the order-0 pcp.
->> Previously allocation was for order-0 pages so they were recycled from
->> the pcp.
->>
->> It would be preferable if when vmalloc allocates an (e.g.) order-3 page
->> that it also frees that order-3 page to the order-3 pcp, then the
->> regression could be removed.
->>
->> So let's do exactly that; update stats separately first as coalescing is
->> hard to do correctly without complexity. Use free_pages_bulk() which uses
->> the new __free_contig_range() API to batch-free contiguous ranges of pfns.
->> This not only removes the regression, but significantly improves
->> performance of vfree beyond the baseline.
->>
->> A selection of test_vmalloc benchmarks running on arm64 server class
->> system. mm-new is the baseline. Commit a06157804399 ("mm/vmalloc: request
->> large order pages from buddy allocator") was added in v6.19-rc1 where we
->> see regressions. Then with this change performance is much better. (>0
->> is faster, <0 is slower, (R)/(I) = statistically significant
->> Regression/Improvement):
->>
->> +-----------------+----------------------------------------------------------+-------------------+--------------------+
->> | Benchmark       | Result Class                                             |   mm-new          |  this series       |
->> +=================+==========================================================+===================+====================+
->> | micromm/vmalloc | fix_align_alloc_test: p:1, h:0, l:500000 (usec)          |        1331843.33 |         (I) 67.17% |
->> |                 | fix_size_alloc_test: p:1, h:0, l:500000 (usec)           |         415907.33 |             -5.14% |
->> |                 | fix_size_alloc_test: p:4, h:0, l:500000 (usec)           |         755448.00 |         (I) 53.55% |
->> |                 | fix_size_alloc_test: p:16, h:0, l:500000 (usec)          |        1591331.33 |         (I) 57.26% |
->> |                 | fix_size_alloc_test: p:16, h:1, l:500000 (usec)          |        1594345.67 |         (I) 68.46% |
->> |                 | fix_size_alloc_test: p:64, h:0, l:100000 (usec)          |        1071826.00 |         (I) 79.27% |
->> |                 | fix_size_alloc_test: p:64, h:1, l:100000 (usec)          |        1018385.00 |         (I) 84.17% |
->> |                 | fix_size_alloc_test: p:256, h:0, l:100000 (usec)         |        3970899.67 |         (I) 77.01% |
->> |                 | fix_size_alloc_test: p:256, h:1, l:100000 (usec)         |        3821788.67 |         (I) 89.44% |
->> |                 | fix_size_alloc_test: p:512, h:0, l:100000 (usec)         |        7795968.00 |         (I) 82.67% |
->> |                 | fix_size_alloc_test: p:512, h:1, l:100000 (usec)         |        6530169.67 |        (I) 118.09% |
->> |                 | full_fit_alloc_test: p:1, h:0, l:500000 (usec)           |         626808.33 |             -0.98% |
->> |                 | kvfree_rcu_1_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         532145.67 |             -1.68% |
->> |                 | kvfree_rcu_2_arg_vmalloc_test: p:1, h:0, l:500000 (usec) |         537032.67 |             -0.96% |
->> |                 | long_busy_list_alloc_test: p:1, h:0, l:500000 (usec)     |        8805069.00 |         (I) 74.58% |
->> |                 | pcpu_alloc_test: p:1, h:0, l:500000 (usec)               |         500824.67 |              4.35% |
->> |                 | random_size_align_alloc_test: p:1, h:0, l:500000 (usec)  |        1637554.67 |         (I) 76.99% |
->> |                 | random_size_alloc_test: p:1, h:0, l:500000 (usec)        |        4556288.67 |         (I) 72.23% |
->> |                 | vm_map_ram_test: p:1, h:0, l:500000 (usec)               |         107371.00 |             -0.70% |
->> +-----------------+----------------------------------------------------------+-------------------+--------------------+
->>
->> Fixes: a06157804399 ("mm/vmalloc: request large order pages from buddy allocator")
->> Closes: https://lore.kernel.org/all/66919a28-bc81-49c9-b68f-dd7c73395a0d@arm.com/
->> Acked-by: Zi Yan <ziy@nvidia.com>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> Co-developed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+Implementing on v3. This looks much cleaner.
+
+> > @@ -9909,9 +9926,11 @@ static const struct bpf_sec_def section_defs[] = {
+> >  	SEC_DEF("kprobe+",		KPROBE,	0, SEC_NONE, attach_kprobe),
+> >  	SEC_DEF("uprobe+",		KPROBE,	0, SEC_NONE, attach_uprobe),
+> >  	SEC_DEF("uprobe.s+",		KPROBE,	0, SEC_SLEEPABLE, attach_uprobe),
+> > +	SEC_DEF("uprobe.single+",	KPROBE,	0, SEC_NONE, attach_uprobe),
 > 
-> Acked-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
+> should we add sleepable counterparts?
 > 
->> +void free_pages_bulk(struct page **page_array, unsigned long nr_pages)
->> +{
->> +	while (nr_pages) {
->> +		unsigned long nr_contig = num_pages_contiguous(page_array, nr_pages);
->> +
->> +		__free_contig_range(page_to_pfn(*page_array), nr_contig);
+
+> >  	SEC_DEF("kretprobe+",		KPROBE, 0, SEC_NONE, attach_kprobe),
+> >  	SEC_DEF("uretprobe+",		KPROBE, 0, SEC_NONE, attach_uprobe),
+> >  	SEC_DEF("uretprobe.s+",		KPROBE, 0, SEC_SLEEPABLE, attach_uprobe),
+> > +	SEC_DEF("uretprobe.single+",	KPROBE,	0, SEC_NONE, attach_uprobe),
 > 
-> I'll note that num_pages_contiguous() already handled crossing the section
-> boundaries and __free_contig_range() checks them again. But that's fine I
-> think, we don't have to optimize for !SPARSEMEM_VMEMMAP architectures and on
-> SPARSEMEM_VMEMMAP the checks should be compiled out, right.
+> just an idea for discussion.. I wonder if it'd be better to add new uprobe
+> section that will upgrade itself to uprobe.multi if it's present, instead
+> of changing the existing (expected) type
+> 
+> but I guess we want existing uprobe programs to benefit from that and
+> there's not really a reason anyone would want perf based uprobe when
+> uprobe_multi is supported
+> 
+> ok I talked myself out of it ;-)
+Yeah, that does seem like it's redundant. I think integrating this into
+uprobe and kprobe is the best we can do. I have tried my best to ensure
+that it does not really break any current functionality though.
 
-Yes, that was my reasoning.
+> > +		LIBBPF_OPTS(bpf_uprobe_multi_opts, multi_opts);
+> > +		unsigned long offsets[1] = {func_offset};
+> > +		__u64 bpf_cookie;
+> > +
+> > +		multi_opts.retprobe = OPTS_GET(opts, retprobe, false);
+> > +		if (offsets[0] || func_name) {
+> > +			multi_opts.offsets = offsets;
+> 
+> could we do the same as for ref_ctr_off case and drop the offsets array?
+> 
+>      multi_opts.offsets = &func_offset;
+> 
+An artifact from a previous version. Fixing this.
+> > +			multi_opts.cnt = 1;
+> > +		}
+> > +		if (ref_ctr_off) {
+> > +			multi_opts.ref_ctr_offsets = &ref_ctr_off;
+> > +			multi_opts.cnt = 1;
+> > +		}
+> > +		bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
+> > +		if (bpf_cookie) {
+> > +			multi_opts.cookies = &bpf_cookie;
+> > +			multi_opts.cnt = 1;
+> 
+> I think it's better just to set multi_opts.cnt = 1 once outside those if conditions
+Fixed this as well. I think it solves a part of the AI review as well.
+> > +		}
+> > +
+> > +		return bpf_program__attach_uprobe_multi(prog, pid, binary_path,
+> > +							NULL, &multi_opts);
+> > +	}
+> >  	legacy = determine_uprobe_perf_type() < 0;
+> >  	switch (attach_mode) {
+> >  	case PROBE_ATTACH_MODE_LEGACY:
+> > @@ -12830,6 +12875,7 @@ static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf
+> >  	char *probe_type = NULL, *binary_path = NULL, *func_name = NULL, *func_off;
+> >  	int n, c, ret = -EINVAL;
+> >  	long offset = 0;
+> > +	bool is_retprobe;
+> >  
+> >  	*link = NULL;
+> >  
+> > @@ -12856,13 +12902,14 @@ static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf
+> >  			else
+> >  				offset = 0;
+> >  		}
+> > -		opts.retprobe = strcmp(probe_type, "uretprobe") == 0 ||
+> > -				strcmp(probe_type, "uretprobe.s") == 0;
+> > -		if (opts.retprobe && offset != 0) {
+> > +		is_retprobe = strcmp(probe_type, "uretprobe") == 0 ||
+> > +			      strcmp(probe_type, "uretprobe.s") == 0;
+> > +		if (is_retprobe && offset != 0) {
+> >  			pr_warn("prog '%s': uretprobes do not support offset specification\n",
+> >  				prog->name);
+> >  			break;
+> >  		}
+> > +		opts.retprobe = is_retprobe;
+> 
+> is there any functional change above? looks like just opts.retprobe
+> is replaced with is_retprobe ?
+> 
+> jirka
+Again, sorry about that. It was an artifact from a previous version.
+Fixing it in v3.
 
-Note that we could have
-
-(a) Contiguous PFN ranges with a non-contiguous memmap
-
-(b) Contiguous memmap with non-contiguous PFN range
-
-
-So for an external interface that consumes pfns (free_contig_range()) we
-must check (a), for an external interface that consumes pages
-(free_pages_bulk()) we must check (b).
-
-As free_pages_bulk() uses the same internal as free_contig_range(), it
-will not only check (b), but also (a).
-
-So we cannot just optimize out either but would need a separate function
-for free_pages_bulk() to call.
-
-Not worth it :)
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
--- 
-Cheers,
-
-David
