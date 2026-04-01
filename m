@@ -1,148 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF99C47DD50;
-	Wed,  1 Apr 2026 18:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775069584; cv=none; b=ekyQm8GcfxchBVGPnINomACmJ7xMex9ipq2edn+klNM2n6RU6YC4uyHzgEuCyiJcuJh+TqBehhgCYxuMW19aXjwFimG5Fg9kEcBWk6kJpxofeCZPd/hFcJDaRZ1jbAQzIkcYZhcN8Sbkoti0lVovOQVWrDFA+vegf+edqunsOUo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775069584; c=relaxed/simple;
-	bh=ZdkptTRmZ1xWZy0UTX5CWn5xL1JL0Tsfe3zndQo+s+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CsfGYQbEbwNDb/HecaC2F6Ztmytk+gxbz7Usv4SNlzN2JTLxkaNKsG5L8hzWbAICoi/gRVli4lAyvtnFj4cYBfc7bD57WHdocgsy7DJFlb9CCvzRdMtBXB+63S3AZlFY8KV+4TDzmnAaFAXFTOWR78J5ne0Hdj9GXL1NHc2RddA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hou/2XiH; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E973D31715F
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 19:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775070447; cv=pass; b=o0Q3dBGdsvqLj+VPNRjYhJ0Mq417uy2X5PQN7t7GVuwiUSqh08sRgCNr4niV59PunhmfRxYheO87FtwTYPTouP+Io+/WjYcqcxeK3PdlfBfphD89ZIisQkdpRSgAgdF357WFmK+eMk6ne0Clt44S/WrEgUJ15qUPkJLMQWE8C7g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775070447; c=relaxed/simple;
+	bh=oPmpGJgra+J/X4ds4wcUHLxA6Eg7GvkHp+DXASeWwJc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nb2bGhrOw5rLkWxnpyhgeMKbfj9pu/AWn991L+nmHLCf/55RWmJtemKeRL5jROIYWdgReqk2PVcMtNekRIQuRfQH/1GzPASG1lRh0/3MeRP9SC9UQNjuWld3ol5kpEVB11PmJdL3PwsVMG8ynigp8JaHVGFlAruIMvIXzZAxhf4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a1//AZe5; arc=pass smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hou/2XiH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775069584; x=1806605584;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZdkptTRmZ1xWZy0UTX5CWn5xL1JL0Tsfe3zndQo+s+A=;
-  b=hou/2XiHpZmH5ITGsz34cC+y3nFNyxbDX2Xcw5pdK1vGIhnWPWGyDxgT
-   cDMJCym+uWCAD7LB4GWcU6DY78fa/BOJJt6Nzcp8eFz5v1gDqfOA1ipPw
-   e2/4J85pTmOUEc44Xpio9grTXa1tHVhKGXjdq/sQJMgZVMHNjUyaCsXlP
-   Ln8gsBnwRM5RMsvSFhYaNXP4niqQQ8e5BIUPlXgRfiIp1A+gjSC64I4Th
-   T5t+An64U8dClbMDszvrMwI0CBeLkZCR6rPz/hPeMR1ZNo7r4IgHvNfuS
-   LkwTKGcEZJuEHlwezW7eCdbNCB5MijDsdrOPTKa9iIo4irumtKgiGMti1
-   A==;
-X-CSE-ConnectionGUID: LPv6ZBgKQKKsNMN+Apkwbg==
-X-CSE-MsgGUID: MHprvaz+R+qh4RaJxP4amQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="98733266"
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="98733266"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 11:53:02 -0700
-X-CSE-ConnectionGUID: OJBGm0UASVyXcsCQ/xRU2w==
-X-CSE-MsgGUID: 2MDbFtqGQE2+9OO6MLo/wQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,153,1770624000"; 
-   d="scan'208";a="225749343"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Apr 2026 11:53:02 -0700
-Date: Wed, 1 Apr 2026 11:52:56 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-	Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v8 02/10] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-Message-ID: <20260401185256.f2ostywtxzddnwm2@desk>
-References: <20260324221308.7sh6afdy6r6tsf4w@desk>
- <20260325203759.GCacRHp2t8a7c4Bp6E@fat_crate.local>
- <20260326083934.fk4wyhe6rgiss34z@desk>
- <20260326100120.GAacUD8BVziYzLxZHB@fat_crate.local>
- <20260326104557.24295cbb@pumpkin>
- <20260326202931.wlggnd3nfj6hngpb@desk>
- <20260328004256.mm2ttj5iwvu5kdpa@desk>
- <20260328100837.7e6dc7fe@pumpkin>
- <20260401081236.3rjp2wigkr6w3nym@desk>
- <20260401100200.5b347628@pumpkin>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a1//AZe5"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b982d56dac4so11204766b.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 12:07:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775070444; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QxNB0KMKMEsY5Uzh9pz3qz6y8WJGCgF4L+guRRbHRu2R5EFKvBXKDSLSM4qdIWMxPt
+         KCJ4au0glpTB3EcaEQ4fuS/cH0L8TQdAIm1AibVf0ppkvO3mMPT8dEvvTkzJ8x929Umy
+         vJY+Uwhd5Azplr1Nn6UFR3RLF1MNHNSTl4FSnwCOSmL6+ymhz4TTs4uHadYHrRuaOVrt
+         WQqzqxnB/QfsGRDB4Y4NzNJsF/hEoz9eXraYoHxRPqSskNngjQXoQ4CsEaHdBbkwFAoT
+         dN6yAo1sxSYYqdcwOKgrkshkHIUQ4StXBaiIh2tkT4LJ01uPqLF+ldopRLMGNcxe00cU
+         PB+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
+        fh=CyYR0A8UYPV7vG1fj87gUb0Dhg6dGwjJci+W33Y7OC8=;
+        b=G10WZ7DrIl6kbrJ0SYUj3yXvWaTq5rvC9Mew4y41vH3gV7cjE1DQfTGDBZebd+aRTB
+         19McSiZj37Q9ho1jTL/Cml15zZfNCemjmTHnHkCryUVlRi8nltFVZWHPNDvBDBSa5CjQ
+         HdzxwduLHYfYWmzADPEVQFKEWknCFWMj+M7X24DTM1Anv8dFsfdrianPMBeCj6D7dpOH
+         +Gm4U2Nc53Xtg0h/gzFuopYx3eQ21BpzSGksGogiC1TVe80Exd0ueM1iY3U9QHTioriU
+         VzawHnO4D4DJFdy+66O7Qj+3+PU3wdE5sr7nQizmEvcJv3UNQf3yMJJPy+ZNbcpsU3EN
+         iXOg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775070444; x=1775675244; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
+        b=a1//AZe5DdgS5fEZq0/0QEqk9mG6WFqo1M2mVCPIGwJratfVF9Q8YNqsXDe1cUWJax
+         fsuZz6klosQzCNo9xAyYm3I1UogQscr6pdkjOPiNqV4//KkaFAj90Sm5wF5p2I27SLCb
+         aQcLgWyAXcEZjyAknqF176bxnWUWElv1qfbL+4lqrCKOCdMejByVmHZTb9qYr9fyiFly
+         c4yarJIxvfSV96KdkRV6sIVyDg8aalM9zaMEXYjhHTnwwWGJl6ZuMT0sghhzAHb2OkMZ
+         6sDqT6BulxNVCVECJVB09GPwU0xos9b3u+D0FOtstJidKEivN2T0LfuTJAKj5YkwEl2h
+         otRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775070444; x=1775675244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tbulKj8l3zNdTBhluioK0AGuzttA7TtmTV4oAVYitSw=;
+        b=rr485SDUjv2UiOvquyHWHCfKlcsvtZqiNHkhtsGj+gH+0BNyKwrgpAWCh30yfkk2ZX
+         uvk6hEtpYlZgYu8H0F7YStCdRplqGWxnnWc83cEpF7zckGQxw4nLXjSgIgNcPTlIIWC6
+         Kn2xDFZ05cKplwQxLvG3CQH0OsuGa+L+JyOBUYtMM2sii/PNBF9mJ54ZDq6paoA/yGuk
+         lBoR4dEtb1MhI+Pbv/V3/3NeZ2gK0DsUBW/kgq3nQ6veAkNjDMd6Se4wVrdDxdJJlxhn
+         Bpc3B9mRtUMalzd/0BvjwYQvo+tnITwUT7dpanWwxe73V10TgudE6EMGHHI7ROych3MT
+         2v5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUKCeVcIJDoWP8GehDzQOhMRFJ+iU1Pss+AGZil8GJ8QOmMbNm5/AwNwh5ZXld8PuDXDWk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxzWodgKJStBiuyX/e4wKTsN9ulFnk0upDmk8GJhJM5B3YY95G
+	jd+5te766tRGqDqWtFM+Z6wjGiFnYyMIQ7RQEVuflNskkS1MfGk3SmXCQ/WeT9KI+A1SZOvSkqy
+	dQQOb1ajMXge3tb3JNWb4PDS0EPdYCAVF91scCJOS
+X-Gm-Gg: ATEYQzzT8g1UqsYiHA2sQJjIHvKobTHCACaiEJ2CO/N7mP+OsN6rel/5CJjWjc4Yjdv
+	Bo2IRZmnLeD56qlxt0C1Q704BLSRHbPOSMvzML0ZhivVba5ec39JG+G92tnPLNyeOkEoOWZpuxx
+	qDDYwCOUIEYL66mjS2x8nc4CTR1dj+r/ym5gbMKe80AdQqWA2tIEw6PlI0goevH9sZl/axFvN6n
+	pOs4F7TFo83uSRACX49IbYiynFMhmXzHS+gXp6NLDgsVUOSAUY/ArIIuyEkqG5oGftoO4HDCVeL
+	EHPFQoIAWdOFgRYxoeCzrN8kkK3Zl9EtG5LnRQ==
+X-Received: by 2002:a17:906:194a:b0:b9b:e5d:71df with SMTP id
+ a640c23a62f3a-b9c1390345cmr238853766b.19.1775070443780; Wed, 01 Apr 2026
+ 12:07:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401100200.5b347628@pumpkin>
+References: <20260331153413.2469218-1-wusamuel@google.com> <2026040136-ocelot-simply-8981@gregkh>
+In-Reply-To: <2026040136-ocelot-simply-8981@gregkh>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 1 Apr 2026 12:07:12 -0700
+X-Gm-Features: AQROBzDAv1zFg2qxt-3Ch7XBslSJIDWmAx0yiNuGqnKyk-N-jI_iMZvmNf44ICs
+Message-ID: <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 01, 2026 at 10:02:00AM +0100, David Laight wrote:
-> > > As well as swapping %al <-> %ah try changing the outer loop decrement to
-> > > 	sub $0x100, %ax
-> > > since %al is zero that will set the z flag the same.  
-> > 
-> > Unfortunately, using "sub $0x100, %ax"(with %al as inner loop) isn't better
-> > than just using "sub $1, %ah" in the outer loop:
-> > 
-> >   Event                     %al inner      + sub %ax       Delta
-> >   ----------------------  -------------  -------------  ----------
-> >   cycles                    776,775,020    813,372,036     +4.7%
-> >   instructions/cycle               1.23           1.17     -4.5%
-> >   branch-misses               4,792,502      7,610,323    +58.8%
-> >   uops_issued.any           768,019,010    827,465,137     +7.7%
-> >   time elapsed                 0.1627s        0.1707s      +4.9%
-> 
-> That is even more interesting.
-> The 'sub %ax' version has more uops and more branch-misses.
-> Looks like the extra cost of the %ah access is less than the cost
-> of the extra mis-predicted branches.
-> 
-> Makes me wonder where a version that uses %cl fits?
-> (Or use a zero-extending read and %eax/%ecx - likely to be the same.)
-> I'll bet 'one beer' that is nearest the 'sub %ax' version.
+On Wed, Apr 1, 2026 at 2:15=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
+> > This patchset adds requisite kfuncs for BPF programs to safely traverse
+> > wakeup_sources, and puts a config flag around the sysfs interface.
+> >
+> > Currently, a traversal of wakeup sources require going through
+> > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to qu=
+ery
+> > sysfs is inefficient, as there can be hundreds of wakeup_sources, with =
+each
+> > wakeup source also having multiple attributes. debugfs is unstable and
+> > insecure.
+>
+> Describe "inefficient" please?
 
-%cl didn't make a noticeable difference, but ...
+Ack; I=E2=80=99ll provide a more detailed breakdown in the v4 cover letter.=
+ To
+summarize: the "inefficiency" isn't just the number of sources (150),
+but the fact that each source has 10 attributes. We are looking at
+1,500+ sysfs nodes to get a full snapshot of the system.
 
-    Event                      %al/%ah        %al/%cl        Delta
-                             (inner/outer)  (inner/outer)
-    ----------------------  -------------  -------------  ----------
-    cycles                    776,380,149    778,294,183     +0.2%
-    instructions/cycle               1.23           1.22     -0.4%
-    branch-misses               4,986,437      5,679,599    +13.9%
-    uops_issued.any           773,223,387    765,724,878     -1.0%
-    time elapsed                 0.1631s        0.1637s      +0.4%
+>
+> And if you really think that doing an open/read/close on a virtual
+> filesystem is inefficient, then I have the syscall for you!
+>
+> I've been trying to get readfile() accepted every few years, looks like
+> I last tried in 2020:
+>         https://lore.kernel.org/r/20200704140250.423345-1-gregkh@linuxfou=
+ndation.org
+> but I keep the patchset up to date in my local tree all the time.
+>
+> Would that help you out here instead?
 
-... there are meaningful gains with 32-bit registers:
+`readfile()` seems like it would be a great optimization for many
+usecases, but it doesn't solve the context switch bottleneck.
+Additionally, current userspace implementations attempt to speed up
+this traversal by caching fds, so this new syscall wouldn't help as
+much as one might initially expect.
 
-    Event                      %al/%ah        %eax/%ecx      Delta
-                             (inner/outer)  (inner/outer)
-    ----------------------  -------------  -------------  ----------
-    cycles                    776,380,149    706,331,177     -9.0%
-    instructions/cycle               1.23           1.35     +9.9%
-    branch-misses               4,986,437      6,089,306    +22.1%
-    uops_issued.any           773,223,387    774,539,522     +0.2%
-    time elapsed                 0.1631s        0.1482s      -9.1%
+> > Adding kfuncs to lock/unlock wakeup sources allows BPF program to safel=
+y
+> > traverse the wakeup sources list. The head address of wakeup_sources ca=
+n
+> > safely be resolved through BPF helper functions or variable attributes.
+>
+> Who is going to be calling this?
 
-These values are for userspace tests with immediates. Next, I will test how
-they perform with memory loads in kernel. Before we finalize these uarch
-nuances needs to be tested on a variety of CPUs.
+BPF programs call the new kfuncs. I realized I left some stale text in
+the v2 cover letter regarding the interface; I'll clean that up for
+the next version to make this point clearer.
+
+> > On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
+> > speedup (sampled 75 times in table below). For a device under load, the
+> > speedup is greater.
+> > +-------+----+----------+----------+
+> > |       | n  | AVG (ms) | STD (ms) |
+> > +-------+----+----------+----------+
+> > | sysfs | 75 | 44.9     | 12.6     |
+> > +-------+----+----------+----------+
+> > | BPF   | 75 | 1.3      | 0.7      |
+> > +-------+----+----------+----------+
+>
+> 150 sysfs calls in 44.9 ms feels very slow.  but really, what are you
+> expecting here, sysfs should NEVER be on a "fast path" that you care
+> about performance.  Why are you hammering on sysfs here?  What HAS to
+> have this type of performance?
+>
+> In other words, what problem are you trying to solve that having access
+> to 150+ sysfs files all at once in a faster way is going to fix?
+
+The 44.9ms is the cost of reading ~1,500 sysfs nodes (150 sources * 10
+attributes). This is even worse on wearables, where the compute and
+power constrained platform exacerbates performance sensitivity even
+more.
+
+On these platforms, the CPU is suspended as much as possible. A
+byproduct of this is that the wakeup source traversal occurs on a
+user-perceptible path, which impacts battery life and UI
+responsiveness.
+
+Beyond the performance improvement, moving to BPF offers other benefits:
+1. Reduce Memory: Drop the fd caching logic
+2. Simplify Security: Consolidate SELinux permissions rather than
+managing labels for every single *possible* wakeup_source
+
+Thanks Greg!
+
+-- Sam
