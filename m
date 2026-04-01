@@ -1,172 +1,154 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAE63FCB10;
-	Wed,  1 Apr 2026 12:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 068593F8DE5
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 13:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775047975; cv=none; b=V5HjywAdOlJ4jSwmAsC0rW4jmtxUJYsg9ON4N2EfacPLE7ROR5BnhrBUBZVJa+uSSWhiQtK8ia2+9CkH2WWFmrmNu7CZQB7vPdXFTr900KP7/AakxYm/jQKBRl6m9RMmo/s39xGt1i+x29XF9/kjVtOC+EYk9mQgttPZaDjjLqs=
+	t=1775051070; cv=none; b=DKwa5NKTnY8oR4QDJl5AeKqjEzovyt5wbUfOnDXAEWQ1J38D2xseWtVdl8t6UqGMTdQEwqbQS6MmoNjRGrGQLWQZNYZI+9leyIkyZ2IOB+C9jrE+fUQKz9KXf6hmyW0v9+78aUwPs7Snbxj5l6uyTO50fRSO3d6JyYjv04rAn+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775047975; c=relaxed/simple;
-	bh=qPwYNJVb98u9/MTZG4HqC635wtkgWN7FSxBwMahFlFM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CTdOjaK/WhhlSaWhft/KEghrzowBLXX9kAQ4aLGnq1h2PtfUtSespZLrdo99KUbn2JLkBMzMxxFeO+IIO1ol2xXWVQpLzrcXI+Yhuw/yPa98d8S0Ls01jNCHQsB/GXBWpnAndA7UlnUMwluV3IF7ZbTyNBvqL5tAkDAoS1yXS4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QhoiamnK; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1775051070; c=relaxed/simple;
+	bh=h2s8O28EcrY+1RSxqAEZnVYi429hS+7J6DOa2rif8Sw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QOFdpWBbM9m/EPC+ir+Hjifk2MAZFaF9gQ6C6quS7OQI719onl86yWSPvJPwYzruN4q8VdPFAQx9zFnzAy0bM4J921YpZDfO8IjiL0kPrgPrtswKLBZ8lbJje64wZiOIL+ngTuxHwQMIpRshme56pl/1rMBQy987m89RfatKnsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nt+M0dh9; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QhoiamnK"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=qPwYNJVb98u9/MTZG4HqC635wtkgWN7FSxBwMahFlFM=; b=QhoiamnKe1MNG5R1NElP5oVF4f
-	2qYfkm3puihUnBZWg+rT7oRH3N5jXCDLvWBpKwS3De1cOXUmpP60Usy3XWy7dH+9SMwfwLDEI0YN5
-	Xkd4GY0CXpaGqGrlq/NRxLaUp6PtovGHdlEE64B9+SQKUWlUWu3SRjPwZAQeofW0grO2/lapoPCIZ
-	Fv8vhTxWLK7OPRFcYjRqXF3E4O+KccC3+v7hyeVGKseTaXIritDc19n2xE7ZdN4EIbeCohE0+cjBv
-	31oj6kCfQ38ULNG+IuX4rAfPhIFN+owJ26gL5nYLnjS2FC1yZ9cUR+f/RSblHxpkW7xNgAGaC8HHV
-	EH9gOIpA==;
-Received: from [213.122.4.78] (helo=u09cd745991455d.ant.amazon.com)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w7v3u-00000000OXg-2RTn;
-	Wed, 01 Apr 2026 12:52:46 +0000
-Message-ID: <4a14d7826ce59562bfc685e49c70c75c3fd88ed1.camel@infradead.org>
-Subject: Re: [PATCH 02/10 net-next] ipv6: replace IS_BUILTIN(CONFIG_IPV6)
- with IS_ENABLED(CONFIG_IPV6)
-From: David Woodhouse <dwmw2@infradead.org>
-To: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>, David Ahern
- <dsahern@kernel.org>, Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>,  Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, "open list:BPF [GENERAL] (Safe Dynamic Programs and
- Tools)" <bpf@vger.kernel.org>
-Date: Wed, 01 Apr 2026 13:52:45 +0100
-In-Reply-To: <20260309022013.5199-3-fmancera@suse.de>
-References: <20260309022013.5199-1-fmancera@suse.de>
-	 <20260309022013.5199-3-fmancera@suse.de>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-nCk/MUAV9RvcHF+QcIjv"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nt+M0dh9"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c06cb8004e8so2777225a12.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 06:44:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775051068; x=1775655868; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5w6DoKofcUymqGz5unmMX3ysJ5+8CgZ32mudZsWBu6U=;
+        b=nt+M0dh9oROWkLqgGBTrGImD/wvqyPC5WrClIxvF8Qe2tiq0Aq+NWHeZdB5dOf+Yi7
+         e4sCIRUEADcHvh9Srpw9mIdrhVlZcUTiPSbGiNfBFVJ3bixYGXDG/3bRsunQy3FIIy7i
+         6P9VpVhW8riz7Z4iLH0BUteK8lDrflMun3kRfhheecVRBEVNIsOWB3WFSn73y5kAS0Qk
+         p0SrzvOy9hOUgRNTqK+PzdLqZZRGFk41dPSwxD3bJ+1mAoqHRifchD5Ylwg75GQjTBYx
+         UfwapeBsH1Uit9c4QVCvj8N/8ayY5L0oMON2a9hk0OkBaEEBrfYAVBhObmtc3TuajVf9
+         qUxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775051068; x=1775655868;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5w6DoKofcUymqGz5unmMX3ysJ5+8CgZ32mudZsWBu6U=;
+        b=nTatlvDc2tqxWie4dusMpDCPCjrTy3ZHSQ/5etH+0Ly1i0zhjk96Wpd62ZITn0aaio
+         0MDumteCn657fjhvp1GxzXugSKuGG+nGJGvcdOEx0AquRod83b7DxA+ipP7oeqb9LxkR
+         QCH+7Kz4meLxKwvDyh/rDVjZXJlCoVBb00uuAupR+Z5BMPCdyYiRjorKlZ5q3Kpx1Hwr
+         6l+GjhcGRvHkChW7U+lBw6c2zxc5HT5JFbNYNdYatA9Y3pWqdkCTwQ7CZHIlaeMOzEhC
+         ohczEoxIq4BOGFZSevvap30v+eGAn/bLa8u6lZDC31NjfsOSWyHJTt114tnU27Gb0pnv
+         FQkQ==
+X-Gm-Message-State: AOJu0Ywswb9urYLPanQ7TANUiXLWnnDQGGtl3BMFoNpYqHdDWJtohKXr
+	FLoH5zTLMq/9KHp79DrBRUV8p9W1Q3nptswN+OpR1+43NF2IREOoDyT05BwcxigsKgo=
+X-Gm-Gg: ATEYQzwwlbcHpGp8skp380QOOGCOpabiRIboXzDRfyWOayvuj3gWK9ymd60RMSqgzqP
+	A5fFS6WjDyeTPK/g2UXFCLjdAgMLjnCctynUzoW6JMrTXTA308CCLGGURRJod51kDJKMRnoHdRL
+	gcDb2JOaFlVTdU6uHzMVZPlriVyVVJ6CUfBrcoPcxA5OUqBqgmkQunsr3lsiHV8DhFfg8Io4TrH
+	lOsIuJBbBbEAfFBCq3XziCoY3To0QUIOaz2K10l+O+wlWvtiAGmfNZsyQQDAFxIoG6BuV/PIwvk
+	yb6kv8+u3JHoR0CbfL8mc88gEuiq2w6rsDNUNT8G+JCgPwqgkXX6ioP0Cg8pzGu39pvsWiBrCKT
+	CxDLsGxa6aS+CSSAh9rUQWQW4Bei7+Bnq4GTs8mYENoTRvlFPcE1slsZE8zI0CEq4PxCQHE28Xa
+	M0esPyK0Ww/etKdO7qQ1urxuGDxS56yFa6dBK4EjTt
+X-Received: by 2002:a05:6a20:3c8e:b0:398:9923:7492 with SMTP id adf61e73a8af0-39ef769cea2mr3798024637.39.1775051067806;
+        Wed, 01 Apr 2026 06:44:27 -0700 (PDT)
+Received: from computer ([2a09:bac5:40b2:a82::10c:35])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76917d843esm13795063a12.29.2026.04.01.06.44.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 06:44:27 -0700 (PDT)
+Date: Wed, 1 Apr 2026 19:14:15 +0530
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, kpsingh@kernel.org,
+	mattbobrowski@google.com, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org
+Subject: [BUG] bpf: kprobe_multi allows BPF_F_SLEEPABLE programs, causing
+ sleeping-in-atomic splat
+Message-ID: <ac0hLyMuPHiZfnVc@computer>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi,
 
---=-nCk/MUAV9RvcHF+QcIjv
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+I found a bug in the kprobe_multi BPF link creation path where the kernel
+fails to reject programs with BPF_F_SLEEPABLE set.
 
-On Mon, 2026-03-09 at 03:19 +0100, Fernando Fernandez Mancera wrote:
-> -#if IS_BUILTIN(CONFIG_IPV6)
-> +#if IS_ENABLED(CONFIG_IPV6)
+kprobe.multi programs run in an atomic/RCU context and cannot sleep.
+However, bpf_link_create() with BPF_TRACE_KPROBE_MULTI does not validate
+whether the program being attached has BPF_F_SLEEPABLE set. This allows
+sleepable helpers such as bpf_copy_from_user() to be invoked from a
+non-sleepable context, triggering a "sleeping function called from invalid
+context" splat.
 
-Couldn't this just be #ifdef CONFIG_IPV6?
+Reproducer:
 
+  /* crash.bpf.c */
+  SEC("kprobe.multi")
+  int handle_kprobe_multi_crash(struct pt_regs *ctx)
+  {
+      char buf[16];
+      int ret;
+      ret = bpf_copy_from_user(buf, sizeof(buf), (void *)ctx->sp);
+      bpf_printk("bpf_copy_from_user ret: %d\n", ret);
+      return 0;
+  }
 
---=-nCk/MUAV9RvcHF+QcIjv
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+  /* loader: manually set BPF_F_SLEEPABLE before load, then attach via
+     bpf_link_create() with BPF_TRACE_KPROBE_MULTI */
+  bpf_program__set_flags(prog, BPF_F_SLEEPABLE);
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDQwMTEyNTI0
-NVowLwYJKoZIhvcNAQkEMSIEIGme1mK9Qvp1BhVCu5EQ6bvSdoOen2KeidI0I6eVjWDPMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAjIBXt6qpZW0p
-6tnNCml6nY9wJxarGMR5apouyfRzSqe/u/4a0TJC8DysZMbfLXUUEgqjdg2A+m3Wh4fMm0MdtSZJ
-042QxfnowGF4QJ4RkFTN5r86FQ8A+ZzLAZOUzPFhPRkPSGXJQuOM0l6EV8WRsQG1OZmmO+T1pRM6
-ay0hAkxpTmIb+yFtPCjh5PDjXpf0cl+Jd9viFFvkYIIw+rpzdgFeZcc6TPcy1wcEP+zsJMBubWLs
-x31NKei6Ftg/K5ZCJIPAhZXMen2CllBMiDw6C5MrfOlZtVz5uDCcKKmeWc+C/B25J3ZYM6Xnm76R
-iHyN6VV+2ETdu5cMmWV+OUffM49vwsGD6A5yUDZ235xCR8xDGxV0J98RmS6Tchzyjx2wx/7Jr3Bx
-ZCvWtP3TnyUPQnov3+t+g9nNgT4H9A4Z0OQndLLka7wzfftXpF/VdUOe3ke/i6tAWhGjevnr9JHt
-xN6Acc7PBlYPkzfVMtJrrZvnvInVsgb7UOsa4Z3nMvysE4JO7pDbLduXDMmYaZU645bIdIiG9QKR
-VWM8WVbOD6yyrSkDzHjHvhNdYwvhYPE11lrPDbUhIt5T7/kzHMpdtS4Hn+yoJURuRaw3sNRGBAAB
-20/NyMZSMSBt0Lmi8rHEXVc6T2rsxoArAzo3chyavzSEnkvMs0Gk92AojMexhz0AAAAAAAA=
+Kernel output (bpf-next 7.0.0-rc5+):
 
+[  483.577248] BUG: sleeping function called from invalid context at ./include/linux/uaccess.h:
+169
+[  483.577364] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1787, name: sudo
+[  483.577420] preempt_count: 1, expected: 0
+[  483.577453] RCU nest depth: 2, expected: 0
+[  483.577486] INFO: lockdep is turned off.
+Attachment successful! The bug is confirmed.
+Check 'sudo dmesg -w' for BPF prints and warnings.
+Triggering v[  483.577569] CfsPU: 7 UID: 0 PID: 1787 Comm: sudo Tainted: G        W           _
+rea7.0.0-rc5+ #4 PREEMPT(full) 
+d[  483.577571] T.ainted: [W]=WARN..
 
---=-nCk/MUAV9RvcHF+QcIjv--
+Su[  483.577572] Hrvardware name: Bochs Bochs, BIOS iBochs 01/01/2011v
+[  483.577573] Call Trace:
+[  483.577575]  e<TASK>
+[  483.577578]  d!dump_stack_lvl+0x54/0x70
+ [  483.577582]  If __might_resched+b0x200/0x220
+p[  483.577585]  f__might_fault+0x_c2c/0x80
+o[  483.577587]  p_copy_from_user+y0x23/0x80
+_[  483.577591]  bpf_copy_from_user+0x27/0x50
+[  483.577594]  fbpf_prog_1906cf6roa66546b5e_handlem__kprobe_multi_crash+0x33/0x4d
+u[  483.577596]  skprobe_multi_linek_handler+0x15d/r re0x260
+[  483.577599]  t? kprobe_multi_lurink_handler+0x99n/0x260
+[  483.577602]  e? __pfx_vfs_readd +0x10/0x10
+0[  483.577604]   in? ksys_read+0x7c/0x100
+ [  483.577605]  dm? vfs_read+0x4/0esg, x360
+t[  483.577607]  fprobe_ftrace_entry+0x3b8/0x480
+[  483.577609]  h? ksys_read+0x7ce /0x100
+e[  483.577610]  x? fprobe_ftrace_pentry+0x93/0x480l
+o[  483.577612]  it? lock_release+0x42/0x330
+ [  483.577615]  ? vfs_read+0x9/0wx360
+o[  483.577616]  r? __x64_sys_rt_sigaction+0xde/0xke120
+[  483.577619]  ? vfs_read+0x9/0x360
+[  483.577620]  d? ksys_read+0x7c./0x100
+[  483.577622]  
+? do_syscall_64+0x143/0xf80
+[  483.577624]  ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[  483.577625]  ? trace_irq_disable+0x1d/0xc0
+[  483.577627]  ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[  483.577631]  </TASK>
+
+I am sending in a patch that fixes this.
+
+Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
