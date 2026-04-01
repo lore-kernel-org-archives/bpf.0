@@ -1,183 +1,150 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C9133F58A
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 19:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFA43218B3;
+	Wed,  1 Apr 2026 19:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775070706; cv=none; b=UjaFspNKBasuL2jNx8kBN0tfWIMZghwhNx8csJgR1GIwKyEgt3Sq0WzxE9aiGXiVbCy6+Caa2HMJ5N/9Dg5LGErdUeVPxbU7VC17fdnO0UOjU5IyMdI46Sio3TU0woM3VKLG1r5Lgot7Fdd0p2nw7YDLLD42ts0C6skxV3sNeFs=
+	t=1775071174; cv=none; b=Z2b6cHYWfBhut7KYLz6b6KTKpasQRCUCAWlVFh0moDLNZdwLmE7j3rPZqzRd1eXbyQjodhRtvaVkzTH2GIAfg0H1jlBCash3/gric4sPCH2x8W7FhzagCTk3u5r4po73k3UPo5KguXbqJfV1x15cC2u8qwH4MSxwnHbGpV2iY3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775070706; c=relaxed/simple;
-	bh=zreID7VlKz3sOwx4c4xLYDTLtsQVmx5niiZjOton9/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qBng98IHnJCvW5q0zxq9ODx+gg7OD8b8y+Qp+XUFFdh63M4oOB1ZMwsCPCUUK9ZdzLNh+0erP14ycbNI8WFTa5TSW1M4ZeAP52vqFHsnfv/6R/KrqgORcXyDehB9hFVh/RYUGooS/wazkejWp7JXkfj91YfU1NmtviF3YR/30Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kOLa6wA/; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775071174; c=relaxed/simple;
+	bh=04e6ONstFpXGyUCwmekTXD2mE3YtM61GhSA3gWjC5jI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I5FSE4is6WaYdrDIDkA2DaeSqnQVBIRgS3ZGNg8JLfw+ah3AfUnvBWxckOmGsOfG3Y2Sjv8UKZbyPeZb91YSpxZ69wY3yXvCoCm9GYmDEghmyHJ4kpG3Uu2YswTmTpjKhT0CwDQZzOQxHWsrRvIBG3OHrmFeeGDZWIUPcuQ7ijg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=lX16oQ8X; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kOLa6wA/"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2adff872068so254825ad.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 12:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775070704; x=1775675504; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hq94V4VxVCzdIEnjJH0P1icIANAAhuTjvKKe0p+pHxU=;
-        b=kOLa6wA/yheVe+rFDI+qOwktORz76Tgv3Um/kyZ5lwsCdYuXIukYGnLO3vDqLemS86
-         KZ4raew0UrTcR4/DSNZUCbCcPl4WRN7ymlVQA+dJnOoMxh1vMihgapgB7P5u3qbIKRQA
-         VLIhUvEo9utpMPvCHcKfK16EvD55dRRcEr8Djc+rUh4GAxCizBF0a8s9iddLrwRQop2w
-         YtsD3N2SPPFIUqxM459anghfEViaq2PRbXcfwtLr63Rz+kFwzK9hZoI2HFB3GFThCJNN
-         dg+vH7GxUJDESZer5JmZPuHULPkOR7vXrMOFZebd1WY4nNZLTrG4+q7xUuQNkeIshVtT
-         Uujw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775070704; x=1775675504;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hq94V4VxVCzdIEnjJH0P1icIANAAhuTjvKKe0p+pHxU=;
-        b=LctAgLWUJCMHo2WwT+7gY0tSdD7Y/YpM7Fx7HJEgUTu5hsLkmy2ZUT3xG07WTssdiD
-         e2J2u44oO8oXcW4swNp3waqqldgUwylV9TorLNYldeRbKES9EoYfXXDiYAW9fF5sxZbf
-         YTzeUho1/5JjhDNc1gLYx7K4dV3KaIcG0dafdz4qVc+s49yNp8UaKQy4MVrHN5AB9GHq
-         Jsms7gkh/8hbm7OEBI4/rDWJRSsgZAUyTpPYq/UO6/+uyaj/wTJZU8GcWYf3wkaDwkBp
-         XgVhZ3fI0UhSscbnG8xbi7g3erw/v8xw1gUN7df17F/cLzBZI8ug9YCX5lxZDefPKi3R
-         /7mQ==
-X-Gm-Message-State: AOJu0Yzrc722w3wkRIj8tsx9vIJQ0yNI+g9MsHMZ0MKWU6AzTEIhZV5M
-	kgoARDdIcXiQIphl0tM30cVoL6wgvtCJdf/t+ct0I0RssDD4lp8p9Lr0GoNLx2wH
-X-Gm-Gg: ATEYQzwPONvvfD2qtm8Dmzhr3CCkakRyyWSO6oRy8VpZwXVFOJYw58u25Lb00HEDANm
-	6C6tfIv4wZf9O0CyjB/B12xX6ucMHRiCYmepAtaIOrrJ/ZI55csu507GwTh04k+Ujun4gyfae0E
-	CGqv9X8rr/P+4ACmX4b5Ym8QlzWemefq0/LxWWG0N4GYaC75gMjT9otcIsfwVSfSseu46wxNQnt
-	ZilxN+8rRUOMZ2AwctJuOkFRoJOtDTbyKn4trCPgtqB5SwXj0KSmYU6+1CASkcJiuPLRsHja7SO
-	rALRgmBcwbKNoMKIU2ZyhHe6+IJRGhnOHEW4VwgDflnOfiykZxGvHuIu2PxGkdKnZbboR7jqXjQ
-	USvo4tl9T5JAElVGrOpLfXD9YniuiS+pEs1TETc2qt/uIHNz85vTlH5TW/gtzS+ySdPFQ2IfHUU
-	ntvpHUNtQ/EGB1d6uR3A9MrrUJB2JCFCujZaOAybP5fBPSzD07MCFP1sltZlTsQQyrSX6H
-X-Received: by 2002:a17:903:2acb:b0:2b0:6ce3:8f7 with SMTP id d9443c01a7336-2b269cee743mr46533815ad.43.1775070704223;
-        Wed, 01 Apr 2026 12:11:44 -0700 (PDT)
-Received: from computer.goose-salary.ts.net ([2a09:bac5:40b2:1a96::2a6:7a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27477c54bsm6805875ad.27.2026.04.01.12.11.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 12:11:43 -0700 (PDT)
-From: Varun R Mallya <varunrmallya@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	varunrmallya@gmail.com
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add test to ensure kprobe_multi is not sleepable
-Date: Thu,  2 Apr 2026 00:41:26 +0530
-Message-ID: <20260401191126.440683-2-varunrmallya@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260401191126.440683-1-varunrmallya@gmail.com>
-References: <20260401191126.440683-1-varunrmallya@gmail.com>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="lX16oQ8X"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1w815u-007P7K-CJ; Wed, 01 Apr 2026 21:19:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=aJ+/jWA2bg1c3IWd84F1W+Yb+GYd9TZfWYB4Twn+Wmc=; b=lX16oQ8X+N2wmoZDVUtyUwL08m
+	5lqZbmyzJ40LoehUNSkhhy35uGj+weS8/U91OQjf22bLpEK/rfeAJrGAX7QCSsgPlf0COFpwhD1ho
+	DED55vgRrvKgM9DgfWil3mN57OE/BUNKRGw20exiuDxbV4Q1+ksTWKQgbMl8jKjfpaTDSqOsQ0mbm
+	6IT4VJNkDGCayIoRW6bkZtkQ8h1YkfqBsOzL+gCgfDfOhMaq+s4OUr2IjXqOcPPvUIUI3Zh/NvRbe
+	lRUxYN7CiAZNXRRjlKkiFKVpzrjVIid7KpGtYZGbUZAu/4xGReHZ8CGZ5bvNFQuPQAacCWJyeO857
+	5ImMXUPg==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1w815d-00031g-Kh; Wed, 01 Apr 2026 21:18:57 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1w815c-00CE7n-Rw; Wed, 01 Apr 2026 21:18:56 +0200
+Message-ID: <aeebd6ef-279d-450f-9ebd-ee3aa24ed34d@rbox.co>
+Date: Wed, 1 Apr 2026 21:18:54 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Jiayuan Chen <mrpre@163.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+ <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+ <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
+ <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
+ <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
+ <CAAVpQUAtF29CPDAdEUchYOP=oy8D2-B3GH3fWs2pwTmnYoTu=w@mail.gmail.com>
+ <48bad987-a130-4fb0-b4de-e39deac80ab9@rbox.co>
+ <CAAVpQUAHijOMext28Gi10dSLuMzGYh+jK61Ujn+fZ-wvcODR2A@mail.gmail.com>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <CAAVpQUAHijOMext28Gi10dSLuMzGYh+jK61Ujn+fZ-wvcODR2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add a selftest to ensure that kprobe_multi programs cannot be attached
-using the BPF_F_SLEEPABLE flag. This test succeeds when the kernel
-rejects attachment of kprobe_multi when the BPF_F_SLEEPABLE flag is set.
+On 4/1/26 01:18, Kuniyuki Iwashima wrote:
+> On Tue, Mar 31, 2026 at 3:44 PM Michal Luczaj <mhal@rbox.co> wrote:
+>>
+>> On 3/31/26 01:27, Kuniyuki Iwashima wrote:
+>>> On Mon, Mar 30, 2026 at 4:04 PM Michal Luczaj <mhal@rbox.co> wrote:
+>>>> On 3/26/26 07:26, Martin KaFai Lau wrote:
+>>>>> On 3/15/26 4:58 PM, Michal Luczaj wrote:
+>>>>>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
+>>>>>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
+>>>>>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
+>>>>>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
+>>>>>>> when the bpf_map_update_elem(sockmap) support was added iirc.
+>>>>>>
+>>>>>> What about a situation when unix_sk is stored in a sockmap, then tc prog
+>>>>>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
+>>>>>> useful, but seems doable.
+>>>>>
+>>>>> [ Sorry for the late reply ]
+>>>>>
+>>>>> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible
+>>>>> from tc :(
+>>>>>
+>>>>> Then unix_state_lock() in its current form cannot be safely acquired in
+>>>>> sock_map_update_elem(). It is currently a spin_lock() instead of
+>>>>> spin_lock_bh().
+>>>>
+>>>> Is there a specific deadlock you have in your mind?
+>>>
+>>> lockdep would complain if we used the same lock from
+>>> different contexts.
+>>>
+>>> e.g.)
+>>> Process context holding unix_state_lock() with the normal spin_lock()
+>>> -> BH interrupt
+>>> -> tc prog trying to hold the same lock with spin_lock(). (_bh())
+>>> -> deadlock
+>>
+>> OK, I get it, thanks.
+>>
+>> So here's one more idea: the null-ptr-deref issue is connect() racing
+>> against sock_map_update_elem_*SYS*() coming from user-space, not the
+>> can-be-called-from-BH sock_map_update_elem() variant. So can't we assume
+>> that for any sock_map_update_elem(unix_sk) invoked by a tc prog, unix_sk
+>> will always be "stable", i.e. in a state that cannot lead to that
+>> null-ptr-deref?
+>>
+>> IOW, if for a tc prog the only way to get hold of unix_sk is look it up in
+>> a sockmap, then (by the fact that unix_sk _is_ in the sockmap) unix_sk will
+>> be already safe to use by sock_map_update_elem() without taking the af_unix
+>> state lock.
+>>
+>> Long story short: take the unix state lock in sock_map_update_elem_sys(),
+>> don't bother in sock_map_update_elem()?
+> 
+> but it will prevents bpf iter from taking unix_state_lock().
 
-Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
----
- .../bpf/prog_tests/kprobe_multi_test.c        | 41 +++++++++++++++++++
- .../bpf/progs/kprobe_multi_sleepable.c        | 13 ++++++
- 2 files changed, 54 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
+How come? bpf iter can take unix_state_lock() and the prog is free to
+invoke sock_map_update_elem(). It's the _sys variant that would be taking
+unix_state_lock() by itself. Or is there some other locking complexity I'm
+missing?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 78c974d4ea33..f02fec2b6fda 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -10,6 +10,7 @@
- #include "kprobe_multi_session_cookie.skel.h"
- #include "kprobe_multi_verifier.skel.h"
- #include "kprobe_write_ctx.skel.h"
-+#include "kprobe_multi_sleepable.skel.h"
- #include "bpf/libbpf_internal.h"
- #include "bpf/hashmap.h"
- 
-@@ -633,6 +634,44 @@ static void test_attach_write_ctx(void)
- }
- #endif
- 
-+static void test_attach_multi_sleepable(void)
-+{
-+	struct kprobe_multi_sleepable *skel;
-+	int err;
-+
-+	skel = kprobe_multi_sleepable__open();
-+	if (!ASSERT_OK_PTR(skel, "kprobe_multi_sleepable__open"))
-+		return;
-+
-+	err = bpf_program__set_flags(skel->progs.handle_kprobe_multi_sleepable,
-+				     BPF_F_SLEEPABLE);
-+	if (!ASSERT_OK(err, "bpf_program__set_flags"))
-+		goto cleanup;
-+
-+	/* Load should succeed even with BPF_F_SLEEPABLE for KPROBE types */
-+	err = kprobe_multi_sleepable__load(skel);
-+	if (!ASSERT_OK(err, "kprobe_multi_sleepable__load"))
-+		goto cleanup;
-+
-+	/* Attachment must fail for kprobe.multi + BPF_F_SLEEPABLE.
-+	 * Also chosen a stable symbol to send into opts
-+	 */
-+	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
-+	const char *sym = "vfs_read";
-+
-+	opts.syms = &sym;
-+	opts.cnt = 1;
-+
-+	skel->links.handle_kprobe_multi_sleepable =
-+		bpf_program__attach_kprobe_multi_opts(skel->progs.handle_kprobe_multi_sleepable,
-+						      NULL, &opts);
-+	ASSERT_ERR_PTR(skel->links.handle_kprobe_multi_sleepable,
-+		       "bpf_program__attach_kprobe_multi_opts");
-+
-+cleanup:
-+	kprobe_multi_sleepable__destroy(skel);
-+}
-+
- void serial_test_kprobe_multi_bench_attach(void)
- {
- 	if (test__start_subtest("kernel"))
-@@ -676,5 +715,7 @@ void test_kprobe_multi_test(void)
- 		test_unique_match();
- 	if (test__start_subtest("attach_write_ctx"))
- 		test_attach_write_ctx();
-+	if (test__start_subtest("attach_multi_sleepable"))
-+		test_attach_multi_sleepable();
- 	RUN_TESTS(kprobe_multi_verifier);
- }
-diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c b/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
-new file mode 100644
-index 000000000000..56973ad8779d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+SEC("kprobe.multi")
-+int handle_kprobe_multi_sleepable(struct pt_regs *ctx)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.53.0
+> I don't see a good reason to introduce a new locking rule by unnecessarily
+> wrapping the entire sockmap update with unix_state_lock() even though
+> the root bug can be avoided by a simple null check in a leaf function.
+
+Yeah, I get that point. I just assumed the root bug was indeed sockmap
+update missing a lock.
 
