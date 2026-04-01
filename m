@@ -1,66 +1,25 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF036390CA9
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 17:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FBC3F0A95
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 17:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775063175; cv=none; b=O/tdBLEXjGtr6oAmXhB/AriUiF61tKdEcz/YtAuVipOlQnF0o4gTwon4HluTqsCsWNgTyB0LB4r8jiU49BjPflTGjV3UhTeYJuUy63QTaDZfVU0dUMQItLBrzEkDbqiJ8Ot49aAswGkgDBmw/h1c/Ks28f4/NiXh2MI6YePKXh4=
+	t=1775064097; cv=none; b=OvU/IoUTb9vlFdyAJhKsffSO2/BvO4OPbbDw61bxTYs9RQcqrocE+X5nF7pwuDbzLHNHH2ilQDfOqI1sD8ZqElpdkzdixSfjcZ10Pz8Z8COxNjG2vmH0BgRFgMHMd4vQOpWr96eFfRtJznHCqP+84MSWn4Ps8UPUV9IDuiNYHhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775063175; c=relaxed/simple;
-	bh=ajkOXEKH73kt4DPUpKvbpi/n5AasuiLNVw2lzF41dAE=;
+	s=arc-20240116; t=1775064097; c=relaxed/simple;
+	bh=TdmYurIQ022Q2wOvF7OtevRG38Lbg29hY2RbIu9sJ3c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mErzMCaECYIhHsc2Hk/2q02Xe3+d72EnbeOkJfNLtmFEe2U1RCUlbgHcUoYPsavd5LmCI5f4UWB4cqBZd2mbIyVZbkeiNaUDWoBW/148kJ/ixo2zKbFgvVXODbO3+EOzX84rzapMXeqHucj0/lcc+9Uz2aYC0aV8SVVFEOkhwNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLmd6zo5; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLmd6zo5"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43cf8fe9c2aso5760f8f.2
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 10:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775063171; x=1775667971; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gZ3dStir4Do3x8LG44qHlbjbDwCzw8kuHr+WpBKDpYM=;
-        b=JLmd6zo5aLrc3auNeOjVNhGkdZO4Nmq9onye0PmX0pbr8oSCiSTjAgm3GEIGFdbp8s
-         nnp9/pjxol1LjMtUrPwK3IvQ4C8TpQTDuQ4gq9OtqlHYXWfmQZtCRVjin2QqxINaAuab
-         e3MuxkR8mC9QMTh/OGQVJf2tJmilDcx9I9eVsnxSP69g5SZ3v92Hh9B0UaqW/ycQWKNj
-         XcUL435bJzh8CafdRgFPWSwf4KRpBnAUaem9VQUfxLmFUv7evJkm4XuWFF3/CcPXhbPe
-         rsthR7iU0RyASJKlBe518kipC4MuhdpmxV4lbS/5Bz6bxQjoLnKfL5TScURD8GPMpbdu
-         8L1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775063171; x=1775667971;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gZ3dStir4Do3x8LG44qHlbjbDwCzw8kuHr+WpBKDpYM=;
-        b=LG4EatcVccXmHBH0zmONRAoJCUMffnJYQNblbwFXjnpZGlZzmQT3YGXc+Ejb0OYLAm
-         yTaH53NTrohBWp6SrTLslvWXLre2JScUTne2jzKueujVu2uA2wci5rKfizEPpFoiC7mS
-         LH6DKTB/jXwa4xUdsvcj0GhfQ1t/xIdjPXT1/EJKvm3d1z6/5PiMJuM0hon8y1fBBiBs
-         AR9X5wrYOUX+O1XgrovzwMp5HA2jLt/3dMtdALbVaj1gojTPI9q9lTOJLMDhhvXQ7UyT
-         ntN8xg5f0Dr69aJz4l7TzCAcMg+R0zxBFKEmaIWLTpeol0nA9cxA4KMoAgo4xbqVKDv2
-         4t+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU3XtF1NWG8dVN9CFYOvgY8HSpu/3JdOhrGJoW5EXEPLMi0xGTpRN1mldT0/cxd5O3pSLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/jE1NGunuoBFYNrghvfNZJ7TWpQQfdTTcY2vJ+3xt4/NbAvE/
-	IRgYW6eRxOvk4bwOkYC6SeFBBBKhZrNn05SLapnteF1cJahcjRCO9cgOvA+7sM0Z
-X-Gm-Gg: ATEYQzyf7TdqzATubv1Gy7uKBN5qHw2zMcmeYeytps24je4vx2dJ+Tax6jBJJnNWEPk
-	MTA/7b9qrvSLr4eWsG9Ta/vln1HUEvreDYW5fvLyHXebbeSKjk9F/iQkc2BCF2brwqgeqJjNZ/T
-	E6AIl1qYVPWB8pHh+WjS/r8+ZEi0GfjZB/ltLWyG+Yhmq9tbMOYBVniBzVa1dxp0b3qeob29Esy
-	yodVP+wyI/TBTOs8S/7SUII5vL7y7srygU+lyJie44r2NoaZ+bZMWaOSXy9vVFdB+HkhgWfBRkB
-	6ZRubthlReLvxf9GoGzzGdYKFT4ULN3LngaJbi+YDSBQG1obzEsgdyWsqrBeeis2FYy6lHuNCNT
-	+w9rhkNuny/33noQhOG+MnD1pf85dpRCXYMu1HixfvCDbJLTV3Cn2krvXfUPQ6pMshf8rWXLcB6
-	TMfySKhPh1xEGs8wx5259xgDdJEqJuvIltGWa7rs85aPanC/i4lA5iI39XKyaV
-X-Received: by 2002:a05:6000:3112:b0:43c:fd7a:e757 with SMTP id ffacd0b85a97d-43d150de778mr7388932f8f.45.1775063170771;
-        Wed, 01 Apr 2026 10:06:10 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:ff4a:fb29:5217:3697? ([2620:10d:c092:500::7:b4a4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4d27a8sm1166865f8f.17.2026.04.01.10.06.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Apr 2026 10:06:10 -0700 (PDT)
-Message-ID: <4e615056-b0a7-41dc-9560-8269cd3eafcd@gmail.com>
-Date: Wed, 1 Apr 2026 18:06:09 +0100
+	 In-Reply-To:Content-Type; b=ep5V7qSdO1pj3KqL+/fSyJMJunj6uaDJwd5yOM0KBql+GsP0FOZtbqgsahyV8Cm1fJuZSgsqtuTLKAV/sqBXbWDas/GBFHWSPOh2JJlTM1CN6zZl6PfvVel7FJ3PESy/a7AQl8do9KDKRJyvOOXhLV+LEw6cghlf5EwIW0qW/AM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [112.10.227.6])
+	by mtasvr (Coremail) with SMTP id _____wB3wJz1U81pbS01AA--.13959S3;
+	Thu, 02 Apr 2026 01:20:54 +0800 (CST)
+Received: from [192.168.0.104] (unknown [112.10.227.6])
+	by mail-app3 (Coremail) with SMTP id zS_KCgB3YnfxU81p6c0+AA--.45456S3;
+	Thu, 02 Apr 2026 01:20:51 +0800 (CST)
+Message-ID: <f120c3c4-6999-414a-b514-518bb64b4758@zju.edu.cn>
+Date: Thu, 2 Apr 2026 01:21:10 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,157 +27,125 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/6] bpf: Sort subprogs in topological order
- after check_cfg()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
- memxor@gmail.com, eddyz87@gmail.com
-References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
- <20260401021635.34636-3-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf v5 1/3] bpf: Reject bpf-to-bpf call with large offset
+ in interpreter
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Yazhou Tang <tangyazhou518@outlook.com>,
+ Shenghao Yuan <shenghaoyuan0928@163.com>, Tianci Cao <ziye@zju.edu.cn>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+References: <20260326090133.221957-1-tangyazhou@zju.edu.cn>
+ <20260326090133.221957-2-tangyazhou@zju.edu.cn>
+ <319906e9-3b47-472f-9a11-a0da60626144@huaweicloud.com>
+ <9a61d64e-7943-4e39-8c82-c79bb9ac65b4@zju.edu.cn>
+ <fa28e388-fbd4-43af-982a-828f5c0456eb@huaweicloud.com>
+ <CAADnVQL5MKCqiEpa+vHA9TByBy0K-CPpSoJQ1_PF68kE6gxAwg@mail.gmail.com>
 Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260401021635.34636-3-alexei.starovoitov@gmail.com>
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <CAADnVQL5MKCqiEpa+vHA9TByBy0K-CPpSoJQ1_PF68kE6gxAwg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zS_KCgB3YnfxU81p6c0+AA--.45456S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgAHCmnK0gwjnwADsN
+X-CM-DELIVERINFO: =?B?1ERJQwXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9JAoCNGA0NRqGkjYUoYU5m0UrG9BOIr+UAtDL0cRJbRzxf/DwATTX9bR0pB7YYAKSbPn
+	LplJXeUxFS0JoM8TTB9KSCVveemUcRgvIlz84M1gDXAzI02+RkRQCQ7mpLWGLg==
+X-Coremail-Antispam: 1Uk129KBj93XoWxZF15WF1DtrWUur4UZrW3CFX_yoW5Zr1fpF
+	W8Wa4Yyw1DArWay397Aw48Aw15Krsrt3WUWF45KryfZws8Gr1Y9F15KFZY9FnrCrn7C34j
+	qFWYv3s7Aas0kacCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x0262
+	8vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
+	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ
+	18PUUUUU=
 
-On 4/1/26 3:16 AM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+Hi Kuohai and Alexei,
+
+Sorry for the late reply.
+
+Kuohai, your intuition was absolutely right. And Alexei, thank you
+for pushing this direction.
+
+I ran a micro-benchmark (unrolling 1000 contiguous bpf-to-bpf calls,
+triggered via bpf_prog_test_run for 1M repeats) to measure the overhead
+with JIT disabled. To my surprise, the "interpreters_args[insn->off]"
+approach is actually ~19% FASTER than the original implementation.
+
+Performance Results (1 Billion calls):
+
+- Before (using "__bpf_call_base_args + imm"): 5.752 seconds
+- After (using "interpreters_args[insn->off]"): 4.644 seconds
+
+(Benchmark program: https://github.com/ADSWT518/linux-ebpf/commit/0bace08761b2ed41ba48244d973b2fcfb0ac3461 )
+
+Why it's faster?
+
+I guess the performance boost comes from better instruction-level parallelism.
+- In the old method, computing the target address required an explicit
+   calculation (via LEA) on the critical path, stalling the branch until the
+   arithmetic result was ready.
+- By switching to a static array lookup, the CPU can resolve the jump target
+   earlier and reduce pipeline stalls.
+
+This change elegantly fixes the 32KB limit, cleans up the code, and
+improves interpreter performance. I will send out v6 shortly.
+
+Thanks again for the brilliant suggestions!
+
+Best,
+Yazhou
+
+On 4/1/26 07:29, Alexei Starovoitov wrote:
+> On Fri, Mar 27, 2026 at 7:05 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>
+>> On 3/27/2026 5:37 PM, Yazhou Tang wrote:
+>>> Hi Kuohai,
+>>>
+>>> On 3/26/26 21:45, Xu Kuohai wrote:
+>>>> Maybe I’m missing something, but since interpreters_args is a small array, why not
+>>>> just store the index (round_up(stack_depth, 32) / 32) - 1 in insn->off?
+>>>>
+>>>> That way, the interpreter could directly use this index to find the function address,
+>>>> without needing insn->imm to record the address offset, thus avoiding the need to use
+>>>> another field like insn->off in the instruction to back up the original insn->imm.
+>>>
+>>> Thanks for the suggestion! Conceptually, storing the array index in insn->off and keeping the 32-bits insn->imm unchanged is a very elegant way to solve this problem.
+>>> But I think it will introduce a performance regression in the interpreter's hot path (___bpf_prog_run).
+>>>
+>>> Currently, the array lookup is done once during verification. The resulting offset is stored in insn->imm, allowing the runtime to use a fast ALU addition: __bpf_call_base_args + insn->imm.
+>>>
+>>> However, If we store the index in insn->off instead, we force the runtime to perform a memory load (interpreters_args[insn->off]) on every single bpf-to-bpf call.
+>>>
+>>> Because of this overhead, rejecting out-of-bounds offsets at load time with -EINVAL (as done in v5) seems to be the safer and more performant trade-off.
+>>>
+>>> What are your thoughts on this?
+>>>
+>>
+>> Do you have any performance data?
+>> TBH, I am curious if the overhead is even measurable.
 > 
-> Add a pass that sorts subprogs in topological order so that iterating
-> subprog_topo_order[] walks leaf subprogs first, then their callers.
-> This is computed as a DFS post-order traversal of the CFG.
+> I think it's a great idea. interpreter is a slow path.
+> The interpreters_args[insn->off] approach will let use remove
+> __bpf_call_base_args too.
 > 
-> The pass runs after check_cfg() to ensure the CFG has been validated
-> before traversing and after postorder has been computed to avoid
-> walking dead code.
+> Pls respin
 > 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->   include/linux/bpf_verifier.h |  2 +
->   kernel/bpf/verifier.c        | 83 ++++++++++++++++++++++++++++++++++++
->   2 files changed, 85 insertions(+)
-> 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 090aa26d1c98..4f492eaad5c2 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -787,6 +787,8 @@ struct bpf_verifier_env {
->   	const struct bpf_line_info *prev_linfo;
->   	struct bpf_verifier_log log;
->   	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 for the fake and exception subprogs */
-> +	/* subprog indices sorted in topological order: leaves first, callers last */
-> +	int subprog_topo_order[BPF_MAX_SUBPROGS + 2];
->   	union {
->   		struct bpf_idmap idmap_scratch;
->   		struct bpf_idset idset_scratch;
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 3ec786361698..432806011d47 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3742,6 +3742,85 @@ static int check_subprogs(struct bpf_verifier_env *env)
->   	return 0;
->   }
->   
-> +/*
-> + * Sort subprogs in topological order so that leaf subprogs come first and
-> + * their callers come later. This is a DFS post-order traversal of the call
-> + * graph. Scan only reachable instructions (those in the computed postorder) of
-> + * the current subprog to discover callees (direct subprogs and sync
-> + * callbacks).
-> + */
-> +static int sort_subprogs_topo(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_subprog_info *si = env->subprog_info;
-> +	int *insn_postorder = env->cfg.insn_postorder;
-> +	struct bpf_insn *insn = env->prog->insnsi;
-> +	int cnt = env->subprog_cnt;
-> +	int *dfs_stack = NULL;
-> +	int top = 0, order = 0;
-> +	int i, ret = 0;
-> +	u8 *color = NULL;
-> +
-> +	color = kcalloc(cnt, sizeof(*color), GFP_KERNEL);
-
-It looks like we are using GFP_KERNEL_ACCOUNT consistently in verifier, 
-should this be different?
-
-> +	dfs_stack = kmalloc_array(cnt, sizeof(*dfs_stack), GFP_KERNEL);
-> +	if (!color || !dfs_stack) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * DFS post-order traversal.
-> +	 * Color values: 0 = unvisited, 1 = on stack, 2 = done.
-> +	 */
-> +	for (i = 0; i < cnt; i++) {
-> +		if (color[i])
-> +			continue;
-> +		color[i] = 1;
-> +		dfs_stack[top++] = i;
-> +
-> +		while (top > 0) {
-> +			int cur = dfs_stack[top - 1];
-> +			int po_start = si[cur].postorder_start;
-> +			int po_end = si[cur + 1].postorder_start;
-> +			bool pushed = false;
-> +			int j;
-> +
-> +			for (j = po_start; j < po_end; j++) {
-
-Is there a chance that restarting this loop every time from po_start may 
-penalize performance? For example some very big BPF program with a lot 
-of different subprog calls, perhaps autogenerated.
-
-> +				int idx = insn_postorder[j];
-> +				int callee;
-> +
-> +				if (!bpf_pseudo_call(&insn[idx]) && !bpf_pseudo_func(&insn[idx]))
-> +					continue;
-> +				callee = find_subprog(env, idx + insn[idx].imm + 1);
-> +				if (callee < 0) {
-> +					ret = -EFAULT;
-> +					goto out;
-> +				}
-> +				if (color[callee])
-> +					continue;
-> +				color[callee] = 1;
-> +				dfs_stack[top++] = callee;
-> +				pushed = true;
-> +				break;
-> +			}
-> +
-> +			if (!pushed) {
-> +				color[cur] = 2;
-> +				env->subprog_topo_order[order++] = cur;
-> +				top--;
-> +			}
-> +		}
-> +	}
-> +
-> +	if (env->log.level & BPF_LOG_LEVEL2)
-> +		for (i = 0; i < cnt; i++)
-> +			verbose(env, "topo_order[%d] = %s\n",
-> +				i, subprog_name(env, env->subprog_topo_order[i]));
-> +out:
-> +	kfree(dfs_stack);
-> +	kfree(color);
-> +	return ret;
-> +}
-> +
->   static int mark_stack_slot_obj_read(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
->   				    int spi, int nr_slots)
->   {
-> @@ -26274,6 +26353,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
->   	if (ret)
->   		goto skip_full_check;
->   
-> +	ret = sort_subprogs_topo(env);
-> +	if (ret < 0)
-> +		goto skip_full_check;
-> +
->   	ret = compute_scc(env);
->   	if (ret < 0)
->   		goto skip_full_check;
+> pw-bot: cr
 
