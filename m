@@ -1,93 +1,172 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F42175A7C
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 20:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D7B258CCC;
+	Wed,  1 Apr 2026 20:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775074621; cv=none; b=hLBpTur+dEvL7SqAtbm04fdPQqYP2rL7ud0xWLHrPgEeeW/d57CIa5UgrFzK/3IedvPq2BsRXoIqCwiiQ+aiIhaju0AetlcRecWuDmUDNqeIXCnjqOOo63RHzFufudQ1IQhtE4NTGvcdnIsZHAFbzVkVOTeZD2cvV5fhZaiTJl8=
+	t=1775074859; cv=none; b=Hw7b+1PoYqmHTe6AmQky7uZojPWCQR9vpX24cXFzNw+eVfFQCrzgSiqpwkmZZPS1AnIvYpbmKs7tLQhHiBuj2bnzSY3SY7wEO2RYur6q4E7Dj7N5U8EMUXk9loJXLe/NIPDqvEp0X5yLqAtdLxYdFUgSOCeiTqp/jkyJD7S5sg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775074621; c=relaxed/simple;
-	bh=poyWPfpVFkHik/7LQxRzVsHnGJTp06MVc9m3rj0ZwQI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KzMF3S4A6UP61isfmv3gjan6EgMJIAhxnySzoMOGaFhJI9LTL7Yusq6GNMA1TqpDXquigemkaJ8rQ9MciXdwW2sTgXrA0q4cak0RjtSbxoaENbPBP/rXMupUQqppU8wt34Gh2d6wcRAZCXpMgBrj1S2vaovWf7+TPdbJtONsnyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R5wYEaa2; arc=none smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775074859; c=relaxed/simple;
+	bh=1RcjQtgv6nCPlXqgFOGsKwCHeaW7HAs7c6eK6eQtM3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=un2OhJwTcVgr20yHOKSV6FGjatbEQoOmUBEafvhoHMrbivv7wKAd5Tj2667cPMAT2EPbQlMQX/gFRxkCT/p/OpEZmO8YDJQtaRDIRlmcijdXtd3Pd0btV4RQBc/iC/zSLQmFt40uK0XJ5Z9j4E+smAzNKIWSgukC0MUBc4YSGTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PoUJueOW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R5wYEaa2"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2c88992d77dso729325eec.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 13:16:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775074619; x=1775679419; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=poyWPfpVFkHik/7LQxRzVsHnGJTp06MVc9m3rj0ZwQI=;
-        b=R5wYEaa2RurBq0xYC9EEMcN4FCOGyrkSxlAkIoqPwAQJtg25SOG2uV/86QULk4xlUn
-         ESWavDIZxNUMxpsblUO9eLNMt8u4rLAPpWp1bxn+z2b0Z3yp3nNylOqk2xEbrTo96Lgx
-         F0rewRYhN1CR6aNZxSy2NPpyA0vcEJQCcWGY/pdloD6og6QlvpuLAtENeNGJZC/thDrq
-         fkdxHqVYG1HZwvAvkZuHRJPDPnQ4qS5D/jG39mlJIrdE+pxmDsrFt2LSBYFRv8wdQGxk
-         NPR6TBRzXde7q6KKITsmmiGbNYEtcFRUOG2mASaWkKtEFNFIgR+fN0M47hClHfu/zxVV
-         sWwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775074619; x=1775679419;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=poyWPfpVFkHik/7LQxRzVsHnGJTp06MVc9m3rj0ZwQI=;
-        b=MWWal0/vPWJPndCUGH2SNuemnjSfX6fhKLPLP0gENLeG5qip/H8kNPMmIIPRSf0HHC
-         Jqe3rAz4Uae1SXtmGX5R0kNOqBzRwcgiPz57vy7wD9GiSzFDApw2BRdOThbK8KVXkqqi
-         cdp4x3qvv7NSYIkyyok0tEaSZHRbK91VTUTO8VAZ41gei8keR/jK3X8zwk8N5llYZ/zs
-         E3yRr4wSV6A7+G6Nna3l7mfj9VbyBKin+ll7NtkqtOL0Nn3wwN1iDK2ZpYZeCpsBS20Q
-         5TABse4YWItQfNR9pjqUItmHi5pr5rKlyJ7EXeoYGEb6j2N0ixm+XKgEDiopF0+WGgwi
-         787A==
-X-Forwarded-Encrypted: i=1; AJvYcCX3eOsocXCRw+qfWVxAbYT1ReaBcjQX7Up6DdjbsOYS35enr/IxSYDoFpFW7jAcIAwUBVs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmYY8V+a5OkTWWhPcsEAt1j7k0D6QFBYSaWscgTANb9d1VMSkA
-	M4u5rv8u2k9ITV1CHM3bafEa0he4LXFlBUQnNESA3kCRI7vgp/iABFwg
-X-Gm-Gg: ATEYQzwb5Z3BjuF8P42ujtPCyF2DVMozxl25F8B1VZqw+9wlkvEYQj6dGnPz447ZcrF
-	v4TKewB5v3PW0FUhAHhyzpuKG0Un/qJ4kd/Y3gaUsThfjasxdZZkkiM3WA8WZCTPoqEe/eCu9tD
-	+jVDhyATh9j83fvDrZVT1VUHr1CN/UV68IZycE8F6DGOYZe0fZfYGbwjANtIIv3mZUijrE3oTBT
-	1921nhOEy0dLKrq0ZVhIJfOq1zcEdQXHoAcP0B5S6qHhq1aYSm56HrllgjRiP4K8gzYEiivdu5I
-	7sAj0vMANfVPAX71iqusXaekKOYyg8VWdIcFPkJJvfVEAs2eq/5SchJEGDy9Da96zOd153l0fKX
-	+DufuPW1Dqnxri+1PRiYGBMO43FLceHy2zNaTegsqeZas5atkmpBhjcI07J3gR4b/ll4dyViTFR
-	Hl5mzX7HIDuzw//4wJOpFXkZ6kNVQxhyMSEeqwFCnxcZCsY528BqgXMwsMEe8wfLY2nSa7lwZYc
-	JwMUB5z
-X-Received: by 2002:a05:7301:1695:b0:2c6:67b6:3acc with SMTP id 5a478bee46e88-2c7bcf6d89emr4314488eec.15.1775074619024;
-        Wed, 01 Apr 2026 13:16:59 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:7aba:8184:a91b:bf1f? ([2620:10d:c090:500::3:f883])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca78df3b84sm641075eec.5.2026.04.01.13.16.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 13:16:58 -0700 (PDT)
-Message-ID: <ca4340d7205491169ad633efcd5c5fada90f4a28.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: Move verifier helpers to header
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
-	memxor@gmail.com
-Date: Wed, 01 Apr 2026 13:16:57 -0700
-In-Reply-To: <20260401021635.34636-6-alexei.starovoitov@gmail.com>
-References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
-	 <20260401021635.34636-6-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PoUJueOW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6ECEC4CEF7;
+	Wed,  1 Apr 2026 20:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775074859;
+	bh=1RcjQtgv6nCPlXqgFOGsKwCHeaW7HAs7c6eK6eQtM3A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PoUJueOWCtAX24oRzQgr4+Kz8BUXkTu1owpVMvmuyhXppoocE8K4iGslQ4C/t+b3+
+	 KDs6tywrF7ggrjf8gMeYW+/fReHcn1VfPCU6fsjFW5ru7UT7ycJZ+Y8Y+bvhS+ykzX
+	 LGwg+gXCmnxQ0KxfAVxWvHWfX0Rz4LtXp5f0O7ZOkhIfJEs5U+JEQOhzgnKrfDv/CV
+	 Gc0VZ9exDNN0inio2rXIOJSvhbWPr/W/VyLoNuhd1MIcDRPujZyyskZodfjn8JY8mj
+	 tQj9ZIjjP3GAJHdZFGEj93gVnA8dP36n0KvSy6IexKbvBvcnXNdreE8DY4ZbVRLCqa
+	 lYVX6KIZxM6gA==
+Date: Wed, 1 Apr 2026 13:20:48 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Leon Hwang <leon.huangfu@shopee.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests/net: Add two xdp tests to xdp.py
+Message-ID: <20260401132048.3a15601e@kernel.org>
+In-Reply-To: <20260401052746.314667-1-leon.huangfu@shopee.com>
+References: <20260401052746.314667-1-leon.huangfu@shopee.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 2026-03-31 at 19:16 -0700, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
->=20
-> Move several helpers to header as preparation for
-> the subsequent stack liveness patches.
->=20
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
+On Wed,  1 Apr 2026 13:27:46 +0800 Leon Hwang wrote:
+> In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
+> these two XDP tests are suggested to add to xdp.py.
+> 
+> 1. Verify the failure of attaching non-frag-capable prog to mtu=9k driver.
+> 2. Verify the failure of updating frag-capable prog with non-frag-capable
+>    prog, when the frag-capable prog attaches to mtu=9k driver.
+> 
+> They have been verified against Mellanox CX6 and Intel 82599ES NICs.
+> 
+> With dropping other tests, here are the test logs.
+> 
+>  # ethtool -i eth0
+>  driver: mlx5_core
+>  version: 6.19.0-061900-generic
+> 
+>  # NETIF=eth0 python3 xdp.py
+>  TAP version 13
+>  1..2
+>  ok 1 xdp.test_xdp_native_attach_sb_to_mb
+>  ok 2 xdp.test_xdp_native_update_mb_to_sb
+>  # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+>  # ethtool -i eth0
+>  driver: ixgbe
+>  version: 6.19.0-061900-generic
+> 
+>  # NETIF=eth0 python3 xdp.py
+>  TAP version 13
+>  1..2
+>  ok 1 xdp.test_xdp_native_attach_sb_to_mb # SKIP RTNETLINK answers: Invalid argument
+>  ok 2 xdp.test_xdp_native_update_mb_to_sb # SKIP RTNETLINK answers: Invalid argument
+>  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:2 error:0
+> 
+> Links:
+> [1] https://lore.kernel.org/bpf/20260326124205.1a3bb825@kernel.org/
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Thanks for working on it! 
 
-[...]
+> diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+> index d86446569f89..fe34b491778b 100755
+> --- a/tools/testing/selftests/drivers/net/xdp.py
+> +++ b/tools/testing/selftests/drivers/net/xdp.py
+> @@ -13,7 +13,7 @@ from enum import Enum
+>  
+>  from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_ne, ksft_pr
+>  from lib.py import KsftNamedVariant, ksft_variants
+> -from lib.py import KsftFailEx, NetDrvEpEnv
+> +from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv
+>  from lib.py import EthtoolFamily, NetdevFamily, NlError
+>  from lib.py import bkg, cmd, rand_port, wait_port_listen
+>  from lib.py import ip, defer
+> @@ -693,6 +693,55 @@ def test_xdp_native_qstats(cfg, act):
+>              ksft_ge(after['tx-packets'], before['tx-packets'])
+>  
+>  
+> +def _set_jumbo_mtu(cfg, mtu):
+> +    ip(f"link set dev {cfg.ifname} mtu {mtu}")
+> +    defer(ip, f"link set dev {cfg.ifname} mtu 1500")
+
+cfg records the original MTU, you can copy this line from here:
+https://elixir.bootlin.com/linux/v7.0-rc6/source/tools/testing/selftests/drivers/net/gro.py#L88
+
+> +def _exec_cmd(cfg, obj, sec, ip_opts=""):
+> +    return cmd(f"ip {ip_opts} link set dev {cfg.ifname} xdpdrv obj {obj} sec {sec}", shell=True, fail=False)
+
+We shouldn't need the shell=True where?
+Also it's probably cleaner to pass fail as optional argument here
+so that you can let this throw an exception in the cases we expect
+to succeed instead of having to check in the caller explicitly
+
+> +def test_xdp_native_attach_sb_to_mb(cfg):
+> +    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+> +    mtu = 9000
+> +
+> +    _set_jumbo_mtu(cfg, mtu)
+> +
+> +    probe = _exec_cmd(cfg, obj, "xdp.frags")
+> +    if probe.ret != 0:
+> +        output = probe.stderr.strip() or probe.stdout.strip()
+> +        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
+
+May be simpler and cleaner to print the whole command separately:
+	
+	if probe.ret != 0:
+		ksft_pr(probe)
+		raise KsftSkipEx("device does not support multi-buffer XDP")
+
+> +    ip(f"link set dev {cfg.ifname} xdpdrv off")
+> +
+> +    probe = _exec_cmd(cfg, obj, "xdp")
+> +    if probe.ret == 0:
+> +        ip(f"link set dev {cfg.ifname} xdpdrv off")
+> +        raise KsftFailEx(f"driver unexpectedly allows non-multi-buffer XDP at MTU {mtu}")
+
+Hm, TBH I don't think this sb_to_mb case is adding any coverage.
+Let's just add the test case below?
+
+
+> +def test_xdp_native_update_mb_to_sb(cfg):
+> +    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+> +
+> +    _set_jumbo_mtu(cfg, 9000)
+> +
+> +    attach = _exec_cmd(cfg, obj, "xdp.frags")
+> +    if attach.ret != 0:
+> +        output = attach.stderr.strip() or attach.stdout.strip()
+> +        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
+> +
+> +    defer(ip, f"link set dev {cfg.ifname} xdpdrv off")
+> +
+> +    update1 = _exec_cmd(cfg, obj, "xdp.frags", "-force")
+> +    if update1.ret != 0:
+> +        raise KsftFailEx("device fails to update multi-buffer XDP")
+> +
+> +    update2 = _exec_cmd(cfg, obj, "xdp", "-force")
+> +    if update2.ret == 0:
+> +        raise KsftFailEx("device unexpectedly updates non-multi-buffer XDP")
+-- 
+pw-bot: cr
