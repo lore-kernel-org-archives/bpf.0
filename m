@@ -1,167 +1,138 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E492ECD1D
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 12:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB6E2E8DEC;
+	Wed,  1 Apr 2026 12:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775046081; cv=none; b=QxY30vk/J89yMDikjAY6Xk9neH/mDmtpDClNJkUU7o1pneHtEGSNyWzORAQ5fABRrCTjAd/NM6vnCtVYg0QtQO/Pa55zlc9US58ZdFvSNyubCrzwFYTXiHnqAbgft5r016kxRGIqhJzP59ho53FsL99VSwKUvJlcnwaOeTyESos=
+	t=1775046263; cv=none; b=avbmpEGZZnecal/tbKJFIU2o3LHFG4CTaYzzHY8Z77MNJRRnAKr1UEPMFTuEmup+b8kUI5xQcEAhyGHqOMsZ9zxauAhz7KJflt2RhQqbAvLHg+NNnvGc5oyJaNnxCOlRRUAoPBkH9kBGuCa+35LeU53UvyOGV6zMGRSLMNwZr6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775046081; c=relaxed/simple;
-	bh=TVi9AXhLMPnTnGyLiKcf0IUsC1dU0rVXFtU4+M4Kcd4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eWKsXMUFy37hmCl1lt1KtywQKiXhN8ov3697O+mGAWzfvhbi5X2WaKbxGft3y13ly72fIvt213ZUDNXvLWdIvJqytQwYDePF+eaiaRoiptLfUV+KrR07c1hbB1+3DX0fvqxcO3Y41SV7Qt/oJC+RK7UjhoaEbCzGLYhHzO13V5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NhL2W+Xi; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775046263; c=relaxed/simple;
+	bh=0Wf4DPMZIk9Be5bWwa+W75w20Pl3W3M0ANIftpiY1CI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=O6ZnTCcCsmCssS3/56BVX5vMZZSc2IeT6txTnsGDZHwSgkIDHtTtBZp3hizE32YXYC7fwCNRELl1kmjP5JrANiSiAZaODqlAWwYjJTWohx9ZFCOiWqFsJPFwi+S4EvA4lOGFUZ9hqbxCK5ntSIT+5pFsoniTPHfvRNSA4hPP/zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=B5UxFNul; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NhL2W+Xi"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43cf8d550bdso3056740f8f.0
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 05:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775046078; x=1775650878; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AMiw21os2snzNIGKTIgB9VuujhFz0NgidhbOk6QUkhY=;
-        b=NhL2W+XinW/EyVbKZhJKPvSDi4qO6V6JIkvAi/e2hGqdNtB1WiPwgPjJ1N5bqaA+2g
-         dDq18v0K2bp2spIC1syX/mAIx+Jlq/wU8zQmD7vmBCO4++BiLoHYzuyUli27VVtaxGdK
-         wBBjMOve3TeBQnNb3zTQ53ru+Zk15ctF80vCdDHQteSzfaEeWxH4RhBePIFOaV3EBo7d
-         nkIGAyxsrm3ohlGi2aQV3mXH7MxQfRj6sfOB46vXHZOxuxCZXcNwBybzkksxUF3yKpOf
-         6NrHfXlaaAGAKK2XDdeJrCvF6crweAbh8ZkiwkzFINeuUqbtsIgiv6wnvKpfmp9IUjOd
-         hdfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775046078; x=1775650878;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AMiw21os2snzNIGKTIgB9VuujhFz0NgidhbOk6QUkhY=;
-        b=WQ+HKrJBKiwoJKXT59VVz6iL5ByTWIr+Jia8Cg1Pn0hvzfTn0FGWKtSoUnyGevw4j9
-         xoQjPxZBzc1OvLM4nF6iJH7FtN/vIVlL2wQtPmELSH3TY+TsA/rDZUSR9BBkzAlQQ+is
-         ZkGIf+4mpfzloZ+Ep4H/paf77/KbL+wTG1ZmdnEPUg3AbO81ha4QccuqNL10Yuia1iXp
-         Fwp2f3ahDCvUrkzy7PDRuucIpzOk+Iiu/M9OpCQe9zkJgg7WNzFm9ZGZ/Ok/RRAXLMS+
-         FFU03IblEstS501vb3XBvySQiX+iTI5ZaxIad08e8qyWv48x5wUVI1gtBdY/8DsdIp43
-         G4bA==
-X-Forwarded-Encrypted: i=1; AJvYcCUR/F9Q5Gz7WCTxtz+sJVO1mdBKtDuBdrQO8BohxQnp+TJ/lbXIEMgSYPgCixzyDsav9mE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQXJRpdpozQj/Ne+l2hBWmPZsonnUIEzoGSh+QP8aDDqxADtfx
-	kewRqJHXYDDbCEWIkGCWj5pu4eS+stXVrNNSYFoDOcIHK2/gFlcxz2t3
-X-Gm-Gg: ATEYQzyAd2Zc7iOt4Da5/cObJneadERjE8pfX9UXGOjafkxXpFBuULCy/mryCoHRZpX
-	LvmgGFSPygB6kh5aEcyuGi3F10wtRokXCbUxkRX6stcgtVoSHnJpOccukWXcnoN1S2bI1YfA2n0
-	EbsKPNrqv/Qa5QMRJ0W5aAxvXBJHg1Jw9YfyZuOwXp0galkAKnJt4ijGY6SuX3bXOSAZ98LcT7K
-	URY/bF8qb3QInEiWJfNBqYNf46I4SByuxXQ4/7pxgzHwSCHCq3mBR7+6cZXIqKs39ANgPqbnjIr
-	FEBob/Yxq1V06g7TFq4eG6TJSTMPEZbQ2+KyYsIi2KditQNB44NW/i0AJY8nkD+PA9MY3FnaUic
-	xxZawSvjm4YnQ81cKjg0YfHmH+U6aYTTiE86vToO6aQSEGoAQ0M9gRfw1RPERgVKoxcZ6ZT0ddH
-	hhEf601cq8ii2u7bA+eRpwyDqcYdoXobTi9kOEE/5b235nEpnANOEJ07uNaOttgGS50aUdBFAdg
-	0sdGHdNRIuX8ug+QwRSN9qq1tvyVWZFdXLOVkGHaLqtDK5Z6IN8bu32TdQS7mJ4ivQHpJhob22Z
-	DZU9b1xxQa3Zv1wGb4iNA8gU+6ZWVuN5jE7COXQcX75AVCbffoVKkA==
-X-Received: by 2002:a05:6000:1a89:b0:43b:436d:77f6 with SMTP id ffacd0b85a97d-43d150d62f1mr6681399f8f.37.1775046078066;
-        Wed, 01 Apr 2026 05:21:18 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0077853c1cf79fe628.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:7785:3c1c:f79f:e628])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43cf21e26basm33049409f8f.3.2026.04.01.05.21.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 05:21:17 -0700 (PDT)
-Date: Wed, 1 Apr 2026 14:21:16 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: Re: [PATCH v2 bpf-next 3/6] bpf: Exit early if reg_bounds_sync gets
- invalid inputs
-Message-ID: <ac0NvOIc7AhifyNM@mail.gmail.com>
-References: <cover.1774025082.git.paul.chaignon@gmail.com>
- <704bf39f66a98877f66a4982c77cddb42f14fc82.1774025082.git.paul.chaignon@gmail.com>
- <ed85ac25cd315ac4273de335943f9f3a2c1f36e8.camel@gmail.com>
- <CAM=Ch053GkzkXGxNbfE6Xo=bcR0di_DraDPLP-6y+YJ2rQ3DDg@mail.gmail.com>
- <54d5347331905486d367542613b71b09fd81134c.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="B5UxFNul"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=AtPBdLCBXTcM+5To5d5wUNl3QoncQ95q/HEmvGQ4mnc=; b=B5UxFNulXKHqHfUF+s3cZyNkJt
+	hbToGQZcN1M3SKlhQNTiPYGLA78ybO4VQcD9MfLuTKQ1w8RuwwyYmblMRe8ovfLENNJBaj9L4dqsB
+	tIVYAM12LOg+iqSAJIpH7O7Iq47KV9aWTWBzE1+8G9Ye1eg/Hhhzbr1O2gk0cQXS/S2moXUtBwRsQ
+	TO3REIKWorzTV7iOzrfklR5IqS5yOaaDbH7zOr0irn1u1/GiR9gunXew1okPNyi1Rsz6tUHo3goxK
+	L5TbulQV7lDAHISIImFWNyLG9xUaq2kY1QFVdJzc2vqKJFzrMvWysE+6MUNL85TMcKCWz/H5pRe6D
+	TYyCNgPw==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w7uKP-0009Yr-2D;
+	Wed, 01 Apr 2026 14:05:45 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1w7uKO-000EMZ-0t;
+	Wed, 01 Apr 2026 14:05:44 +0200
+Message-ID: <d8b72cf2-470a-4a8c-bb9f-223f27939715@iogearbox.net>
+Date: Wed, 1 Apr 2026 14:05:43 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <54d5347331905486d367542613b71b09fd81134c.camel@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 00/14] netkit: Support for io_uring zero-copy
+ and AF_XDP
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
+ toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260327121049.334562-1-daniel@iogearbox.net>
+Content-Language: en-US
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260327121049.334562-1-daniel@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27958/Wed Apr  1 08:24:34 2026)
 
-On Tue, Mar 24, 2026 at 12:33:51PM -0700, Eduard Zingerman wrote:
-> On Tue, 2026-03-24 at 15:28 -0400, Harishankar Vishwanathan wrote:
-> > On Mon, Mar 23, 2026 at 2:47 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
-> > > 
-> > > On Fri, 2026-03-20 at 17:49 +0100, Paul Chaignon wrote:
-> > > 
-> > > [...]
-> > > 
-> > > > @@ -2786,8 +2786,13 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
-> > > >       reg->var_off = tnum_or(tnum_clear_subreg(var64_off), var32_off);
-> > > >  }
-> > > > 
-> > > > +static bool range_bounds_violation(struct bpf_reg_state *reg);
-> > > > +
-> > > >  static void reg_bounds_sync(struct bpf_reg_state *reg)
-> > > >  {
-> > > > +     /* If the input reg_state is invalid, we can exit early */
-> > > > +     if (range_bounds_violation(reg))
-> > > > +             return;
-> > > >       /* We might have learned new bounds from the var_off. */
-> > > >       __update_reg_bounds(reg);
-> > > >       /* We might have learned something about the sign bit. */
-> > > 
-> > > Is it possible for the invariants violation to manifest after
-> > > __update_reg{32,64}_bounds() calls, once cross domain boundaries are
-> > > propagated?
-> > 
-> > The short answer is yes.
-> > 
-> > The sub-sync functions, i.e. __update_reg_bounds, __reg_deduce_bounds,
-> > __reg_bound_offset are individually sound (checked by Agni).
-> > This means that they preserve any concrete value x that is contained in all
-> > the range bounds and tnum inputs, after refinement.
-> > 
-> > But if in the input, there is no concrete value x that is contained in
-> > ALL the range bounds and tnum, then an invariant violation can
-> > manifest. Note that this can happen in the presence
-> > of the current early exit commit, i.e., even if
-> > range_bounds_violation(reg) is false.
-> > 
-> > For example,
-> > 
-> > before reg_bounds_sync: s64=[1, 1], tnum=0
-> > after reg_bounds_sync: s64=[1, 0] tnum=0
-> > 
-> > Could you elaborate on your concern? Did you perhaps imply that we should
-> > be checking for reg_bounds_violation in
-> > simulate_both_branches_taken after each sub-sync function?
+On 3/27/26 1:10 PM, Daniel Borkmann wrote:
+> Containers use virtual netdevs to route traffic from a physical netdev
+> in the host namespace. They do not have access to the physical netdev
+> in the host and thus can't use memory providers or AF_XDP that require
+> reconfiguring/restarting queues in the physical netdev.
 > 
-> My main concern is that we might loose useful signal.
-> It would be nice to adjust reg_bounds_sync() such
-> that it would stop (e.g. return false, as you suggested previously)
-> if it hits invariant violation mid-step.
+> This patchset adds the concept of queue leasing to virtual netdevs that
+> allow containers to use memory providers and AF_XDP at native speed.
+> Leased queues are bound to a real queue in a physical netdev and act
+> as a proxy.
+> 
+> Memory providers and AF_XDP operations take an ifindex and queue id,
+> so containers would pass in an ifindex for a virtual netdev and a queue
+> id of a leased queue, which then gets proxied to the underlying real
+> queue.
+> 
+> We have implemented support for this concept in netkit and tested the
+> latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
+> (bnxt_en) 100G NICs. For more details see the individual patches.
+> 
+> v9->v10:
+fyi, I'm planning to push a v11. I've investigated the latest sashiko
+run on this series [0] and 2 out of the 11 findings were correct and
+I've fixed them locally already.
 
-We discussed this with Hari and agree it would be good to use
-transient/mid-step invariant violations as a signal to improve
-precision. I'd however prefer to implement that as a follow-up, to keep
-the current patchset small and focused on fixing the invariant
-violations that cause kernel warnings and program rejections. It sounds
-like we may want to backport this at some point, so it's easier if it
-keeps a restrained scope.
+Thanks,
+Daniel
 
-The "transient" invariant violations already exist today and using them
-will only improve precision (potentially allow the verifier to accept
-more program than it does today). I would see that as an improvement
-rather than a fix we'd want to backport.
-
-Hari thinks we can also use the empty intersection checks he mentioned
-in the other thread [1] to avoid/use these transient invariant
-violations. It would allow us to use this as a signal to improve
-precision without making reg_bounds_sync more complex (and harder for
-Agni to verify). I'll let him explain, but as mentioned in the other
-thread, it still needs a bit of benchmarking.
-
-1: https://lore.kernel.org/bpf/CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com/
-
+   [0] https://sashiko.dev/#/patchset/20260327121049.334562-1-daniel%40iogearbox.net
