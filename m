@@ -1,201 +1,400 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A53C3C872D;
-	Wed,  1 Apr 2026 22:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2563C1991
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 22:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775082749; cv=fail; b=pWOBzRWXkHIeUYm8raHgECrnZT6V7hiTqhp4x3wC8J+p8CCKUCH5JGpAa7Dx+rxcJzqJumoF6TLzNE8LliKuVtGyEpfT67zsDJKN8pOGHPkegswFFK05vjw+q46YCSyXLi86KtzKhr7YYToxplInDyR+HNUtpdzNjiStwNyYcGw=
+	t=1775082789; cv=pass; b=NeLfdurhCc7gIlEbzqihPD4KjnxI8zcSbGxw3LSyirDDfSK02v0zuZ6rsIlOJrEb0F3k31aQrHnAVR03VtwtDXGT/T0itMENlvp9RukzwLGHHlqZzWH+qpt6XFYM7VcfS/TZUkHLnRftX1/+BYCD6tRESh6FiBKZnzpY0dAW7mg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775082749; c=relaxed/simple;
-	bh=n/sfOuHOoe8DbYlWSBTHtuWabD7HqWEKs10KtBsWAHA=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 Content-Type:MIME-Version; b=lKWMsLSPPunwhRAdXqe7Dx1+Ty7ceynHkkYii21jre4eHvm0SB2poTGpIp3S16eb1ZKLzNupYxhl5wRwOKZofeWm3tRobB3jthU4XQWKRQvw3clV2nIUFcVohE+DB8ZiPp6UKc1Fnp7C0WQuXIk1LlZ+IoVB/qI3zc9VIkrCf+g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=kp2eSY1l; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=UX+E6/qH; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1775082789; c=relaxed/simple;
+	bh=ajaWsEgVfRfBpsXhxGQAQWHTssFj0NAei0JLYPhbRig=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EpcwhnbX09GH2ayooTrTP49V+xBaaJrpiBxuCK6PsXrLGo4HBCAwqhxeaQzwn9qzhJoaVXOQc3vCbK0pkvE7H5Ni23HRAYJBf0nSNgKMcN3GHIv0fmFMoa/QhEg+9Hdminb/yPLjvBck9FaRW4xrJVDsmW+ypbS1H582+VBrJyQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EI/bE4dZ; arc=pass smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="kp2eSY1l";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="UX+E6/qH"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 631LEXxV050281;
-	Wed, 1 Apr 2026 22:31:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=n/sfOuHOoe8DbYlWSB
-	THtuWabD7HqWEKs10KtBsWAHA=; b=kp2eSY1l6ttI1YgOlHu2ZhCRWE0hAI3dKO
-	ZYLkzyJ6yZo+9cI/Wr/dDc6M10ZXZXCQrB4CMr2Infw8fMnHoaByGT6CL9K50JQX
-	0OUnRd7PdBG0dWykm3C2IHTkYs9DtbaJ8Z+DoObzsD/B8tngWV7E53rtyBXCzhEX
-	krYvgR2JWbzk+7i0hQymrjSavkvR378v7PF0Z42t8AxI6iwvrMr6YgcKS80+e80H
-	RH1S7Rn3WC0abOPpIIWZm6ET4ENCTtwCMji4x5HGL0i6qzwbENdqQxSzTC7gs1Eh
-	47XekjaHrYHosxGsChcTFQXRDUq/RtHtlwnDZzWNkyUaaUQHoVMQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d66v5qg62-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 01 Apr 2026 22:31:46 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 631KuK99023597;
-	Wed, 1 Apr 2026 22:31:45 GMT
-Received: from sj2pr03cu001.outbound.protection.outlook.com (mail-westusazon11012038.outbound.protection.outlook.com [52.101.43.38])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4d65ejh5qj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 01 Apr 2026 22:31:45 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wtAvPS0PdI5pM7kCdenccwFob8hPgsV5hK8Nu4pNyhkMWhmmoypn6xyeWEDp+elCF174rEK6Wbxb8SojtEZ/iYiqo+DyvDMWq0SmUJVoXqrvl6IXOv5jRVs4Ewlf/BUkJRp8ajaWLUqPqHFODBAfz7Wx1/o5H8EfpJx7BSrVtNSwBn/Ia3FER3458I/wkNuPEffl+7/c4QivWtEw2Hh3cjS+wWeheiq5DOhdO+xCISStZDdv5puxjqlEKS5uUnuaU6qAaMNzzUMMF3GX2EhIfXdKdb842LuVrlWs/immLldxyug3mRZMGG2XOLDD2i9w++vryRS/q5HxsZ6w8Temng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n/sfOuHOoe8DbYlWSBTHtuWabD7HqWEKs10KtBsWAHA=;
- b=AEDjc5a5STlCKC2GZVFAswT5BjjWd63ob9ldAyOVMwqFLBLz44Xq6rZDCd5HTDmHG/iCwjatwX1jJF+DZKuLCFfhKhOPgRyS8JhtYNvob2W5yef7FPyqr397EJQ9Vvx7qUns9cjOGJB/y+X+p1ot2neK9vgHJiN7dEz0/sy0qqKCST0NLp8SilI5t/lSEXKZYEV4smDz+IZ8jJt9Y8n1YRCpRhnIeFaUvNIM+szZerNrw/7qYKuguRfsQr67W5b9bJ1DcY0ZEmTMdlkFUqicsnvdMGcrE0FIxTk95SvmE/8QvQkqNKS0LkqjDqI46II38gV4SVatMgaKMmMMs1BK9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EI/bE4dZ"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48541edecf9so2363385e9.1
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 15:32:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775082777; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eQ15nafJ5L9s4nJGZtIxoN5CglZdh3M1MHfMgcuUMgIv+nUWAR46dlcOMiqKDZwu6h
+         vqwmubX/boud0YxX2VdlzHjHJrZSq+Qfj6BpyrxFS/nS617Sh9k7p56VB76O4YWVYdrC
+         +HS7p5Plfuu7VEEYzFxfE8i7IJKxMghpgNVjaNIma5KWBJ/U6IJO3fNRSXHc2/sEOWza
+         T0m6JW5Go7CC7Y/faor+zAITtRLgXVdENi8EckmMj2INMud2J5U9ljj/8H1pl3e5xt/r
+         6NppUjVZ1426fFwb/7e3NdF4VjXNcwhT20aSxxahzP2JU8o8tB1qAZZOUkLriMfNcRsE
+         uKZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=B3VfjVME7Yw+jYEXtfoUkrvbamDb8yApBSTnhoz4Zog=;
+        fh=UcZqnkcPYPCJuBeofOOObWQTYZ2DVO/Q2yzEycpMUlQ=;
+        b=SUm5ZqVLLJsEWVGVVaFtQqfU3YJoj1iN9MR9HLjIPIUDEYqJKTvWGrLuR2eFRRZoq7
+         mPFfar+YZb2MmcdF0mWUBOpJ0t5In/E3kNSljwE0BFVrmb193dQKTs3OQzgl/d8oLclo
+         Qp1FqMunvx3z7yfbwt+BEe6tz+VgqHZs4jf7JQfuxX5DmbtSPLSK+VaKkPyZgOzVJUPC
+         OV4niLAt0WeGI6VL/qHzVpSUiTAK8ejjs2PAtrA6bHpe9CKeYcJW6cZdJjTit+nENn1n
+         o2S5fKycuMOtojZbqnICUBWmtlNgDi38T6W2Dnt9AwJ7HJZBfIBIvHTDXrssgbj15p9A
+         Fzyw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n/sfOuHOoe8DbYlWSBTHtuWabD7HqWEKs10KtBsWAHA=;
- b=UX+E6/qHuKG7lOlisBIyOwvmthx+qRstGU6vyESKRudTLJavSDOvlT4Zm2MV0w5deyZPxbMYQoPg8lxXtTcwvWI/m48MIDpAA+vReFlfll6aFhzB8k8GQ63BNHbVWbRbmXshxJne4DUeDn2KTJm2GS1wAQpnS9uVsYamNClrOgs=
-Received: from DM8PR10MB5416.namprd10.prod.outlook.com (2603:10b6:8:3f::19) by
- DM4PR10MB6743.namprd10.prod.outlook.com (2603:10b6:8:10d::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.16; Wed, 1 Apr 2026 22:31:40 +0000
-Received: from DM8PR10MB5416.namprd10.prod.outlook.com
- ([fe80::c8c3:861e:be9b:fa6]) by DM8PR10MB5416.namprd10.prod.outlook.com
- ([fe80::c8c3:861e:be9b:fa6%6]) with mapi id 15.20.9745.024; Wed, 1 Apr 2026
- 22:31:40 +0000
-References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
- <20260316013651.3225328-5-ankur.a.arora@oracle.com>
- <acz3D1SkqDqyH0Dy@arm.com>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
-        will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
-        mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
-        ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        memxor@gmail.com, zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
-        rdunlap@infradead.org, david.laight.linux@gmail.com,
-        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v10 04/12] arm64: support WFET in
- smp_cond_load_relaxed_timeout()
-In-reply-to: <acz3D1SkqDqyH0Dy@arm.com>
-Date: Wed, 01 Apr 2026 15:31:37 -0700
-Message-ID: <87h5puqpme.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: YT4PR01CA0333.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:10a::21) To DM8PR10MB5416.namprd10.prod.outlook.com
- (2603:10b6:8:3f::19)
+        d=gmail.com; s=20251104; t=1775082777; x=1775687577; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B3VfjVME7Yw+jYEXtfoUkrvbamDb8yApBSTnhoz4Zog=;
+        b=EI/bE4dZVpXjN1xKM4N9/FjThzs07+3WzQ4ZMReX8KPQQXDKQt79yg7uEjVnA/V/3F
+         jkRWB7isO0MSbVmURiEkHlzeE+cAx6/Cvf0DiJwVQJMOwqPO2nJ/XxEGEu/8+LYF3/5H
+         +HkUstU+snLFJ+2PGlpt/U0VZ0LcOvEkHgssit4HkrpSj4pE0g4n0QGnqn9PW8GlJy1+
+         33Dyzi4Pm24mQOJIlqwT4boiNyko/iaK05N71Vx+VYm3POBA2bx3XFecktCIoXFOklCB
+         z38S6JOA23lYyHtFfPrLXfprvfySfawe3t4oXNc3oGR5994eR4KvjeiJjd12nZzoIVwa
+         BbUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775082777; x=1775687577;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=B3VfjVME7Yw+jYEXtfoUkrvbamDb8yApBSTnhoz4Zog=;
+        b=LDCzCRz4gSCGC1wqg4IBkEQWREcUHN7if+4Q6q5DhSpPvt9KiLMNA7SeIrjDTS692h
+         oQIuhVoK0r5Wf2gwG6EhcC4IVAAAz1T+D550seiM7YbB4WRI3eQCnEBEHzSR0erloaJ5
+         r1LCr9+fggKneRk76wBJ3Xiba/RTAsNO2bpoWv+iLHcXNPyJI2K+a8Xgbz+9JgAbYPtS
+         tHaK1o2Avso6fXE4TT/ARpz/LTJfKy9lnRcordPwe3NJdpOxSPHdMvsG1V0tR87VtOkK
+         3Mj61qos2YJvTlX9bEox3HI2h9gUn3C0wyIu8lfaSTr7mRT9TGeZw32xq768yfOFHcKy
+         w9TA==
+X-Gm-Message-State: AOJu0YzpUkO44LkNZy7LBwzUlkPFe8S1Eoj3P7DHktkLQcbZiMEOGOJ9
+	Gj3quJtYCDMKyAd9zeeNeYgyLoNVlyC76J0QgWuzVyLagTq47bmu+0r6KJfvpEGByUnMNSBjBSC
+	+p8kvLD3gyrzlqaU9VpZVoS/Fe6e9wEPIKw==
+X-Gm-Gg: ATEYQzzqQHMPfMtWXWq9ru94wvb8/GFPq3b6Ttxt4HsHkRYZ2HFN3/PwfkFPHJ+6fzN
+	marfsvn8nVPRCCQu25N91CED4yFaabc/kdXM/YxGRDfOyL6ckNn1qsKf517ITns6h8ySzw8QRBS
+	Dsy+XeJ7+yKMgeDOSbWzT8tVcw+KSlVcH8KbTCtEpQKV4/yXUtMlwMVVg5vgaPWulHa6QY6PknW
+	AXBJ7eF/sMZBmkS8VYcgTtbe9qn7AoyxUHNtGyDf9TLev0jy4QTNpEx6KjShVBhA7xIX7lj2LpL
+	S3k8LOoV3hVDfPw9bqCbE88r/szKlq9Ya4pOiMxaytUn2cA9bmSFC+VL/c51ys0+8AQgPQZ6lbi
+	imkwYgsNxCTBBKTda6dew/KhVPw==
+X-Received: by 2002:a05:600c:1f11:b0:485:4278:2558 with SMTP id
+ 5b1f17b1804b1-48883569dcamr89140845e9.6.1775082776386; Wed, 01 Apr 2026
+ 15:32:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR10MB5416:EE_|DM4PR10MB6743:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9ca4f179-b08e-4d0d-924d-08de903e716b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	OJBxXHz5yllWiTWKTjF2zIJZLtzBH2h1AJgjXW/3L6+XFeqYk0rcBS772I30a8DgClaU4b4dKPu4VRqRrYaduCIlbHpz1kTB8PpJEYQ4ZW1Bxv7aXchSWQ7t+BeAtE76GGdvTE4gsNMyFP5jEZFwMBcDwH1hX19gQnYYkeaHdOyIgAHfLBLgAxgdcLzz2NA3lQ9i2TbJTaC1S2ey5PQkzU5LLrB4AO1J/pvCebp3Ss44wHUwVBwd25W1oJ24q1c4xbOQGxYn5/DpYfdrXMgkMjB47BGeEUs7+y3ialOlf0TU8Gu7XWjgtB6EFSU7Et8yOqjcd4OOa9JSy9W+aS3x+c3zNfDuFbQ4sfZPp3KyPFJfsS/Akx0NhlOWv/e0SSPS9WlBbvOurzX/NWAQj5eIZwRSOFlGgscM1HRCHVACqUmBchAfzpDDyzqiABLyLYFgXqaS/ebqGC+/30Jrnt7ZtygSvMqbhpZZX9jv7PqMbpfD7/o66J/yzfLqKPbKXu28BOyW9R9eSX/Nei/UzbynredynTvTtsI4LzgZRYazTLsobKnPMKQzaq3EeX9Y25BOdj54v7JuWd60MZrGM+8XL5p+LwFOxtsWRRpzEC1Bt81ynLzpE/E4hLjjiop/aAkLNJq4J51yT1dX8uFSOAR4NMZQPsSspT7lIaWgqILMi7JGtjwETYGr812smQRYCeSM8EkHH6rebN5gUyL7ul+rD9mqA5Ac5GY4v40gb6e/OLk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR10MB5416.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?crIi/5M+h10v1SKTXJYcka3odbdgcJHUU8cHLGfPU+gy/diz+2d/aPcc/GAG?=
- =?us-ascii?Q?QGO+CtZ9ggNVz3ZmV1UQYLOAqB7FS5RCLhdqahF1n3MVkkjkFl1kmwHlicvq?=
- =?us-ascii?Q?oOMWU9hOAD8lHdSVzQrBPWUk8015gHPzYMAEu3INwwdp63nDnrpYnn4D3Qn5?=
- =?us-ascii?Q?qO9YO29KmX/hZn5/r/AauQfP7qNNbnI//rHS5spYeTkMxTFoPZCuDaj6fSpO?=
- =?us-ascii?Q?N2awTet/AYDL7gCwILcK+08tUkSbmt2YHP4cOeRp+CkEwJZVKdCkwDciDKGZ?=
- =?us-ascii?Q?U1+Q2rvQU4vEWySoFVvoMFiWKfF4famT6ktmlqwwcGQsxhvpZnQNWfRrqXan?=
- =?us-ascii?Q?paiZ1JmttV4QAsQy20ZVdw/F6foDF26TY5TV0z7LJmZ98vK3OAB4cPuKmj2l?=
- =?us-ascii?Q?ADQMWEf0fudpJwbv4dEmHQoVbsP3tH3jA+FIntaYN7JLJ0W8p1JDb/6bRUIx?=
- =?us-ascii?Q?AUChXWD8xbx+aFgmvDZG1lD9FaKdH0BDJsJkS0gdp4yz8e2x1lGM3Ul4K1sA?=
- =?us-ascii?Q?8SVjTisxye6tLmNsCEKlq6n39ALrKnHs7CxnRecyIikZTR4tgd9A7f/IQgXQ?=
- =?us-ascii?Q?tRwPpwYieGNivtA8fBIaNHVvTbvUvfP3FVPmykwd+ox5DWaqMv6ZvZmagwAh?=
- =?us-ascii?Q?9qBeroLVV4Hvttt+Cu/wCREbRI7aWOi+PVPONPKLyRNenNz8m22hNqsOBIRF?=
- =?us-ascii?Q?M2atCRPCwMrZ9+8d2UIb7nbUll+jr+/Rei+ZPL8aLeF3TJ8wBu9pYyw2SSpa?=
- =?us-ascii?Q?uH7P55l3Pk4mgfDboe4DzduT4Sijd+Wsj2ts9vWxCBLduS+3L1m+aK6N1L61?=
- =?us-ascii?Q?SssNx+0y4i7eF8YiHHDjDboGnpfCAdv9/lPEVTjYoWctiPblAtj9nLWB1/67?=
- =?us-ascii?Q?4uvx6wJl8Z62S9cc87oQw3qJJfIM1pnFUN/N0Cd81NlqWeQHbmbc8ea0vOgP?=
- =?us-ascii?Q?Bwn/icHR7jWzYEptK47RS9SEYaiHiNS/F8NHkdnGIlCvJGmHjVHqf0AigAkH?=
- =?us-ascii?Q?fgk3EPUhhDOuJmiosSsGElAJsECF8cJf656tf2amY1KVBMjnkQv8Js2GHwI6?=
- =?us-ascii?Q?vojFBgdd9+ec5tANnty1S0xtq4wqFKI4zMyfVHn160PCkKaKvQdzfN/A451t?=
- =?us-ascii?Q?6TF1PmyHOnT1eoSaDhwoOabny2AUlN8lnKtgxJKSn5bpn8iAZYxWw1gNZHTa?=
- =?us-ascii?Q?bZMQzJ5ySywJUMP3Tf+l9sl0tCKTXB2Oxmg82fQMndQ4mR54/1R+a4jZK5Vi?=
- =?us-ascii?Q?JHsG/NMktobRechtIaZX3F3bzBVjL8yh9hOxqcvFWvybe1XDCS5XgjXWcvE8?=
- =?us-ascii?Q?QCtbVI/cKTTqsL7a2cclpsRLLQIrEv3iWkXpu1BsL9x28xZjtC1slGEhCG6a?=
- =?us-ascii?Q?fVjPDtSQhKtEY7ySUM6R2R7IilpIAtqVkva5jJPF5Sd791Ols45ROI8x/KwD?=
- =?us-ascii?Q?18alxVIivRAGZPLxsp5nZe6/ysRWPGr3G+nq4fvGian4nOppL0q5Y0+jByZw?=
- =?us-ascii?Q?di9D27te5n7KG3S1okxuJ0jSHz6jnCGbJ0Wfz838F9DW3zaWVkMZ7rirnHKf?=
- =?us-ascii?Q?tZ2POuaFY8pxZZvlZD/Dmn2ElduxTi6f7Iqii9gRzVINC9+BUl46FR7ga/Nh?=
- =?us-ascii?Q?L4sjgMQvlMJAXlLyik+XkXs4vI1Sbw4HGWaD9rVHjWMgn02BwJTNVvj7IOfY?=
- =?us-ascii?Q?VcGvE3HdomniELsDoUB7Z2hhfDL3nPB6zYMquqLa65LNggcmvgDhnFa5H7oh?=
- =?us-ascii?Q?WtigGfpE8MlC6zz5pMzI8mNhICZ+kuE=3D?=
-X-Exchange-RoutingPolicyChecked:
-	tYCcCRDyKBd8lC5W5yO5S3bIESSoXd0Fv+XQ5SSEs6raFVLOKmSPA1kdM9w+iHnBwntJWFpOppqkwatCRLngpTP2vKM2Me9bYa0i2mLsuyT6Dp06NEb3JJN9VsjaxQ8frj2VC3ClMcPwJ8IatYJoJbUJpu4Z1XLxdxeD2xYSuEfl8kzNAoBJpxrDS4r240h4lLPaEvMidqYq6CkR7lfrr4eqN2VuVA5hVQbP9oOlJUTEAKADjexnmUBKsqswmBu/d5nMiDXYBgEoXHiERN8riBb2gIt6vE+W0se008SxotbsvhlPEsWFJZKVD+ZW/pC/UJ9LfGL5/iziH0Yh9yVesQ==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	S3Jv4yQJfUMvBGcb6Ew2LE1ptX0h4Qrp88Fih5D6rn17Z4hUfcDfk+ph8s66swc8ikegLzSF/o7S2+NBVFxfjr0+0xPKfl3No7W3Bg8JjzsYNhdbOll5LCSTMr5iKLk9MCnrsgVS0O0kgI1uOPFDf7iz/4fXDzOELt9oOC2G1xf51dIfiQcoYnBiqVrNTSDIBUEy4r4w7XLqIWJacf5YQbOSd7qVD2WARxkA0Sci0URWekNMyJ/PECIm+SMt17jPT+pmHWUbuzLdPvxOzcjLLIk1aAtf0/YvKFgIXyDbmB1A8Ea6sabLlTWN6cKE/Smrx/q7pG0QimR0j06+LAmAc+C2dKFcydB3+us1raEjia1sZtCTxrfrWpdlDUm32VGDoSm9AB3PVyCR9VS4+20dPOPY1ChisLlbPgHXkNPXDqIkqyifjqS/qMdpWy+kNo1Rxwj9EfWANvBQXZOoL7nlsO5+iRrpBcJ28QlCov08cFCrymUHmBnfd26NYJnnMDPsU/I1MfkAt71Sc1B1eEEMWyru6MXi09Ef+ycMCn7FRM5YPKMxaTc6xi26a9V712PmdtfrAvAzD+IvgZyqVMTIXck3jtDPGhMjj5rX3tbtYhc=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ca4f179-b08e-4d0d-924d-08de903e716b
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR10MB5416.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 22:31:40.2128
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p9x+4YAIm8lRWNYgXdOwmdEnt72bJwrubNjF5LHN6oaRlzjBxzGTO8AtTxSu3QIGxsW4JJi+VF9wFc3CuijPuH3VatHEkigULwrCEGQd48A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6743
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-01_04,2026-04-01_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- suspectscore=0 bulkscore=0 malwarescore=0 adultscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2603050001 definitions=main-2604010212
-X-Proofpoint-GUID: j2mqLq9iqQh_Mcl3O-ZMH3vBzwKo-4_I
-X-Authority-Analysis: v=2.4 cv=G7cR0tk5 c=1 sm=1 tr=0 ts=69cd9cd2 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=A5OVakUREuEA:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=EIcjfB9IiI4px24ztqRk:22 a=7CQSdrXTAAAA:8 a=VwQbUJbxAAAA:8 a=JfrnYn6hAAAA:8
- a=yPCof4ZbAAAA:8 a=pnmuM6TG8pbiPne0lAMA:9 a=a-qgeE7W1pNrGK8U0ZQC:22
- a=1CNFftbPRP8L7MoqJWF3:22 cc=ntf awl=host:13825
-X-Proofpoint-ORIG-GUID: j2mqLq9iqQh_Mcl3O-ZMH3vBzwKo-4_I
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAxMDIxMSBTYWx0ZWRfXwYjBCb3npq1f
- F+SuJAZqZpxaQGciZx7ygZ6887K5DK0GChUqB+Ae8gNpRYPKk7NtPeXNetbkUotiTDrrvTjnIg3
- /gDrlN7y/ZA6jju6BycONuZo6e5pkiFeFp+eCpmUmi4K23wEYjWciKGr63i81S38YaK5/GMCI+O
- jV4uWK/r7/j8idAQD4Z/ouXbTYEkaXg+wdkSWQwz72cOqbmpVaryL5bolDHWxojVUMdvNUZERU9
- UHA7V3WwmCyqhYPicVduWGuIKlDtQ1wnABIAL7CIFJ/fNN0Zwpp5y9ZCuW9m5RZTL4HpukLbZ/N
- cPitAVCOlYCxF7s0Iu1hQeM4hMFlZ8NeG19MuXyeZ9cXglzisf0q+TyVLURereURa+zODH3cNCo
- z1FGQq4DK65AuaS8gnzaHjZ7MUnwXVCk/Wigp6GMw8r6AcCS+S24q1U+C7KGFS6Yx3KbVjbt+LA
- DTSMF8Z72byjxWOquVMOmXV5kak7FY5H7FDrRbxA=
+References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
+ <20260401021635.34636-5-alexei.starovoitov@gmail.com> <3c091ab744676990e90469a89a4f0110d724ce19.camel@gmail.com>
+In-Reply-To: <3c091ab744676990e90469a89a4f0110d724ce19.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 1 Apr 2026 15:32:45 -0700
+X-Gm-Features: AQROBzAIlkirjROntXtIfKqGcsElMiLx5NHI8abCaC4f9VFC0JtU2JDUz6vmf4w
+Message-ID: <CAADnVQJtw5A4GbknXoA-BtobOVMiBc+pC8nUQZ+1zX5wbj3ipg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/6] bpf: Add compute_const_regs() and
+ prune_dead_branches() passes
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-Catalin Marinas <catalin.marinas@arm.com> writes:
-
-> On Sun, Mar 15, 2026 at 06:36:43PM -0700, Ankur Arora wrote:
->> To handle WFET use __cmpwait_timeout() similarly to __cmpwait(). These
->> call out to the respective __cmpwait_case_timeout_##sz(),
->> __cmpwait_case_##sz() functions.
->>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+On Wed, Apr 1, 2026 at 2:07=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
 >
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> On Tue, 2026-03-31 at 19:16 -0700, Alexei Starovoitov wrote:
+> > From: Alexei Starovoitov <ast@kernel.org>
+> >
+> > Add two passes before the main verifier pass:
+> >
+> > compute_const_regs() is a forward dataflow analysis that tracks
+> > register values in R0-R9 across the program using fixed-point
+> > iteration in reverse postorder. Each register is tracked with
+> > a six-state lattice:
+> >
+> >   UNVISITED -> CONST(val) / MAP_PTR(map_index) /
+> >                MAP_VALUE(map_index, offset) / SUBPROG(num) -> UNKNOWN
+> >
+> > At merge points, if two paths produce the same state and value for
+> > a register, it stays; otherwise it becomes UNKNOWN.
+> >
+> > The analysis handles:
+> >  - MOV, ADD, SUB, AND with immediate or register operands
+> >  - LD_IMM64 for plain constants, map FDs, map values, and subprogs
+> >  - LDX from read-only maps: constant-folds the load by reading the
+> >    map value directly via bpf_map_direct_read()
+> >
+> > Results that fit in 32 bits are stored per-instruction in
+> > insn_aux_data and bitmasks.
+> >
+> > prune_dead_branches() uses the computed constants to evaluate
+> > conditional branches. When both operands of a conditional jump are
+> > known constants, the branch outcome is determined statically and the
+> > instruction is rewritten to an unconditional jump.
+> > The CFG postorder is then recomputed to reflect new control flow.
+> > This eliminates dead edges so that subsequent liveness analysis
+> > doesn't propagate through dead code.
+> >
+> > Also add runtime sanity check to validate that precomputed
+> > constants match the verifier's tracked state.
+> >
+> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > ---
+>
+> Besides issues found by bot this patch lgtm.
+>
+> [...]
+>
+> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
+h
+> > index 4f492eaad5c2..0d797de30a3a 100644
+> > --- a/include/linux/bpf_verifier.h
+> > +++ b/include/linux/bpf_verifier.h
+>
+> [...]
+>
+> > @@ -1086,6 +1102,13 @@ struct bpf_iarray *bpf_insn_successors(struct bp=
+f_verifier_env *env, u32 idx);
+> >  void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
+> >  bool bpf_calls_callback(struct bpf_verifier_env *env, int insn_idx);
+> >
+> > +int find_subprog(struct bpf_verifier_env *env, int off);
+> > +int compute_const_regs(struct bpf_verifier_env *env);
+> > +int prune_dead_branches(struct bpf_verifier_env *env);
+> > +int compute_postorder(struct bpf_verifier_env *env);
+> > +bool insn_is_cond_jump(u8 code);
+> > +bool is_may_goto_insn(struct bpf_insn *insn);
+> > +
+>
+> Q: What is the policy regarding naming exported functions?
+>    So far I always used "bpf_..." prefix assuming that this
+>    is a requirement, was I wrong?
 
-Great. Thanks Catalin.
+It's nice to have but not mandatory.
+imo the names are unique enough, so unlikely to clash.
 
---
-ankur
+> >  int bpf_stack_liveness_init(struct bpf_verifier_env *env);
+> >  void bpf_stack_liveness_free(struct bpf_verifier_env *env);
+> >  int bpf_update_live_stack(struct bpf_verifier_env *env);
+>
+> [...]
+>
+> > diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+> > new file mode 100644
+> > index 000000000000..9e5abc6ab46a
+> > --- /dev/null
+> > +++ b/kernel/bpf/const_fold.c
+>
+> [...]
+>
+> > +/* Transfer function: compute output register state from instruction. =
+*/
+> > +static void const_reg_xfer(struct bpf_verifier_env *env, struct const_=
+arg_info *ci_out,
+> > +                        struct bpf_insn *insn, struct bpf_insn *insns,=
+ int idx)
+> > +{
+> > +     struct const_arg_info unknown =3D { .state =3D CONST_ARG_UNKNOWN,=
+ .val =3D 0 };
+> > +     struct const_arg_info *dst =3D &ci_out[insn->dst_reg];
+> > +     struct const_arg_info *src =3D &ci_out[insn->src_reg];
+> > +     u8 class =3D BPF_CLASS(insn->code);
+> > +     u8 opcode =3D BPF_OP(insn->code) | BPF_SRC(insn->code);
+> > +     int r;
+> > +
+> > +     switch (class) {
+> > +     case BPF_ALU:
+> > +     case BPF_ALU64:
+> > +             switch (opcode) {
+> > +             case BPF_MOV | BPF_K:
+> > +                     dst->state =3D CONST_ARG_CONST;
+> > +                     dst->val =3D (s64)insn->imm;
+> > +                     break;
+> > +             case BPF_MOV | BPF_X:
+> > +                     *dst =3D *src;
+> > +                     if (!insn->off)
+> > +                             break;
+> > +                     if (!ci_is_const(dst)) {
+> > +                             *dst =3D unknown;
+> > +                             break;
+> > +                     }
+> > +                     switch (insn->off) {
+> > +                     case 8:  dst->val =3D (s8)dst->val; break;
+> > +                     case 16: dst->val =3D (s16)dst->val; break;
+> > +                     case 32: dst->val =3D (s32)dst->val; break;
+> > +                     default: *dst =3D unknown; break;
+> > +                     }
+> > +                     break;
+> > +             case BPF_ADD | BPF_K:
+> > +                     if (!ci_is_const(dst) && !ci_is_map_value(dst)) {
+> > +                             *dst =3D unknown;
+> > +                             break;
+> > +                     }
+> > +                     dst->val +=3D insn->imm;
+> > +                     break;
+> > +             case BPF_SUB | BPF_K:
+> > +                     if (!ci_is_const(dst) && !ci_is_map_value(dst)) {
+> > +                             *dst =3D unknown;
+> > +                             break;
+> > +                     }
+> > +                     dst->val -=3D insn->imm;
+> > +                     break;
+> > +             case BPF_AND | BPF_K:
+> > +                     if (!ci_is_const(dst)) {
+> > +                             if (!insn->imm) {
+> > +                                     dst->state =3D CONST_ARG_CONST;
+> > +                                     dst->val =3D 0;
+> > +                             } else {
+> > +                                     *dst =3D unknown;
+> > +                             }
+> > +                             break;
+> > +                     }
+> > +                     dst->val &=3D (s64)insn->imm;
+> > +                     break;
+> > +             case BPF_AND | BPF_X:
+> > +                     if (ci_is_const(dst) && dst->val =3D=3D 0)
+> > +                             break; /* 0 & x =3D=3D 0 */
+> > +                     if (ci_is_const(src) && src->val =3D=3D 0) {
+> > +                             dst->state =3D CONST_ARG_CONST;
+> > +                             dst->val =3D 0;
+> > +                             break;
+> > +                     }
+> > +                     if (!ci_is_const(dst) || !ci_is_const(src)) {
+> > +                             *dst =3D unknown;
+> > +                             break;
+> > +                     }
+> > +                     dst->val &=3D src->val;
+> > +                     break;
+>
+> Just curious, why does this function deal with `0 & reg` cases,
+> but not the e.g. `0 | reg` cases? Was it something that came up
+> during testing the static analysis?
+
+right. rx &=3D ry is real sched-ext code
+where 0 in rx came from rdonly map.
+
+> > +             default:
+> > +                     *dst =3D unknown;
+> > +                     break;
+> > +             }
+> > +             if (class =3D=3D BPF_ALU) {
+> > +                     if (ci_is_const(dst))
+> > +                             dst->val =3D (u32)dst->val;
+> > +                     else if (!ci_is_unknown(dst))
+> > +                             *dst =3D unknown;
+> > +             }
+> > +             break;
+> > +     case BPF_LD:
+> > +             if (BPF_MODE(insn->code) !=3D BPF_IMM || BPF_SIZE(insn->c=
+ode) !=3D BPF_DW)
+>
+> Should this reset r0-r5 in case of opcode is  BPF_LD|BPF_ABS or BPF_LD|BP=
+F_IND?
+
+great catch!
+codex and claude never thought of that.
+
+>
+> > +                     break;
+> > +             if (insn->src_reg =3D=3D BPF_PSEUDO_FUNC) {
+> > +                     int subprog =3D find_subprog(env, idx + insn->imm=
+ + 1);
+> > +
+> > +                     if (subprog >=3D 0) {
+> > +                             dst->state =3D CONST_ARG_SUBPROG;
+> > +                             dst->val =3D subprog;
+> > +                     } else {
+> > +                             *dst =3D unknown;
+> > +                     }
+> > +             } else if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE ||
+> > +                        insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE)=
+ {
+> > +                     dst->state =3D CONST_ARG_MAP_VALUE;
+> > +                     dst->map_index =3D env->insn_aux_data[idx].map_in=
+dex;
+> > +                     dst->val =3D env->insn_aux_data[idx].map_off;
+> > +             } else if (insn->src_reg =3D=3D BPF_PSEUDO_MAP_FD ||
+> > +                        insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX) {
+> > +                     dst->state =3D CONST_ARG_MAP_PTR;
+> > +                     dst->map_index =3D env->insn_aux_data[idx].map_in=
+dex;
+> > +             } else if (insn->src_reg =3D=3D 0) {
+> > +                     dst->state =3D CONST_ARG_CONST;
+> > +                     dst->val =3D (u64)(u32)insn->imm | ((u64)(u32)ins=
+ns[idx + 1].imm << 32);
+> > +             } else {
+> > +                     *dst =3D unknown;
+> > +             }
+> > +             break;
+> > +     case BPF_LDX:
+> > +             if (!ci_is_map_value(src)) {
+> > +                     *dst =3D unknown;
+> > +                     break;
+> > +             }
+> > +             struct bpf_map *map =3D env->used_maps[src->map_index];
+> > +             int size =3D bpf_size_to_bytes(BPF_SIZE(insn->code));
+> > +             bool is_ldsx =3D BPF_MODE(insn->code) =3D=3D BPF_MEMSX;
+> > +             int off =3D src->val + insn->off;
+> > +             u64 val =3D 0;
+> > +
+> > +             if (!bpf_map_is_rdonly(map) || !map->ops->map_direct_valu=
+e_addr ||
+> > +                 bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
+>
+> Nit: Similar sequence in verifier.c also checks for map->map_type !=3D BP=
+F_MAP_TYPE_INSN_ARRAY.
+
+ack
+
+>      Maybe move this to a helper function?
+
+it's not exactly the same.
+maybe later.
+
+> > +                     *dst =3D unknown;
+> > +                     break;
+> > +             }
+> > +             dst->state =3D CONST_ARG_CONST;
+> > +             dst->val =3D val;
+> > +             break;
+> > +     case BPF_JMP:
+> > +             if (opcode !=3D BPF_CALL)
+> > +                     break;
+> > +             for (r =3D BPF_REG_0; r <=3D BPF_REG_5; r++)
+> > +                     ci_out[r] =3D unknown;
+> > +             break;
+> > +     case BPF_STX:
+> > +             if (BPF_MODE(insn->code) !=3D BPF_ATOMIC)
+> > +                     break;
+> > +             if (insn->imm =3D=3D BPF_CMPXCHG)
+> > +                     ci_out[BPF_REG_0] =3D unknown;
+> > +             else if (insn->imm =3D=3D BPF_LOAD_ACQ)
+> > +                     *dst =3D unknown;
+> > +             else if (insn->imm & BPF_FETCH)
+> > +                     *src =3D unknown;
+> > +             break;
+> > +     }
+> > +}
+>
+> [...]
+>
+> > +static bool eval_const_branch(u8 opcode, u64 dst_val, u64 src_val)
+> > +{
+> > +     switch (BPF_OP(opcode)) {
+> > +     case BPF_JEQ:   return dst_val =3D=3D src_val;
+> > +     case BPF_JNE:   return dst_val !=3D src_val;
+> > +     case BPF_JGT:   return dst_val > src_val;
+> > +     case BPF_JGE:   return dst_val >=3D src_val;
+> > +     case BPF_JLT:   return dst_val < src_val;
+> > +     case BPF_JLE:   return dst_val <=3D src_val;
+> > +     case BPF_JSGT:  return (s64)dst_val > (s64)src_val;
+> > +     case BPF_JSGE:  return (s64)dst_val >=3D (s64)src_val;
+> > +     case BPF_JSLT:  return (s64)dst_val < (s64)src_val;
+> > +     case BPF_JSLE:  return (s64)dst_val <=3D (s64)src_val;
+> > +     case BPF_JSET:  return dst_val & src_val;
+> > +     default:        return false;
+>
+> Do we want to validate that the above are the only opcodes possible,
+> e.g. in patch #1?
+
+I felt it's too much defensive programming,
+but, on a second thought..
+will return -1 and deal with it in the caller.
