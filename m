@@ -1,95 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747972EDD6B
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 17:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C322FD1AA
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 17:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775066356; cv=none; b=MkIfwOn8wi2neDapdrXggswFq2qa4jOM4aeTplYw1RZcGn8d+7SjftuQaU5Y3OgJeXVTwLE0rSfnRJhSXDT42A6fIyBlUi0YJwt0SK94Jt5tirCoW1epfm0dDB9b+EVrdHgwbyh6XtWV2Xtv8ozPTAdKvJNdj7BDhrue8SYwoTo=
+	t=1775066358; cv=none; b=DsspBgFlTKAYmjuZ2pwQSduE3HAruL7/v+x+TN3EexwYFQOHlpZjtIHrj1UN387sz8H8L/umJiVAtl1TKZ2bZ/xd9ybjYOnKSBILkucZx9EqoSLfP+4b+CHaAFuM/xfanQD2DAEyUL0Olfk14K1lUYXUI9gw1GEN47nlOSJ98w8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775066356; c=relaxed/simple;
-	bh=klZfHNebcMrnNEzlQuQyI2EfsZX9F6GgXmJo9o+Xg8g=;
+	s=arc-20240116; t=1775066358; c=relaxed/simple;
+	bh=c5xhpy0cSWg1bZkhg30zgO29idRXdOQBlw+jpC8ejFU=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Jm8FkcQhq3FQ4bONjIbsSk911Cxb5YudoJjandsNDF0vaAfQrIwFuHrKPa3hPCRQK8PBtxhPLViypOnI6yryFM337yWEjwezN5BUzhywWt4DUFWE4pLYma0WwPMp2Nm0Yn6ZjFpHQPZqBFZDDLFidMQGQ680Ft8D46nx9AOPROc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cCRttWxr; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=Bv55gNkD+zv/RF+H5uC8UI7CjQAs4eAfeJvp9UBRPFthwsbdxW/pqSvmN+yhsYL1OA0BqUZ8OhinVTZuT1wjhrByQ1vJ1juQ+HvoRSNjv4ngWEkUoHdvOa+w1np97INCqLb4njb36AvW+l20uN2mRsIdoPScWgeu5NLRTNVZ0jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXniUh8e; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cCRttWxr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C182CC4CEF7;
-	Wed,  1 Apr 2026 17:59:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXniUh8e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FAF1C4CEF7;
+	Wed,  1 Apr 2026 17:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775066356;
-	bh=klZfHNebcMrnNEzlQuQyI2EfsZX9F6GgXmJo9o+Xg8g=;
+	s=k20201202; t=1775066357;
+	bh=c5xhpy0cSWg1bZkhg30zgO29idRXdOQBlw+jpC8ejFU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=cCRttWxryc7ZuoknFtT4c0P+CychxKhPoEWvx3WfAC9SbdP5XbiAk4e2JNx7EDQCm
-	 WODhijaHnSzK+ET/XQnn7atCE2IiKhABLpV0nujrHNpreSUDaxFfZEXXeadfQvzkSG
-	 iklxWqvUTgSBi6Pf9FouV548U/HPsfrbP1ah4xrqXY3BAQcTskCT2FPMzMi5lJVdvG
-	 EbVekq9hzCw8oOH/6dCj9LaveySWvJ6LkfPBzrktuZugRZMwuyTnMZu2lSZHFR+gkW
-	 2q+cNiQsP0a3N5yUW+dMATAS4qbZN/NxUfBotzG4DK8ga77R9wShP7IHJ1fg1vpGBS
-	 Prs6vt/1SiUHA==
-Content-Type: multipart/mixed; boundary="===============8873681574554380312=="
+	b=IXniUh8e7N6nilya/8D3l7zyBAK7VHvVWnL97q3QzkBEclG9I0l6cFszWfC013bSp
+	 1sw3a5xVk3cUemr4GD3iaxGHmdZIYznuE7TomTZz7Ub/Bsi7JSdOuok61xkIalSZcg
+	 7MR7RiRfTV+qPW8i9lBb3gOZefRTBhz7KDEeDy3fFh5Ih88hEzIkLYjn9bIH22GMkn
+	 nFbOQU7W0BvabilpkYuC9npdioZW8kZ4j2bQVZenlmARGYd4IDnUGuLcas7DkPQJ0o
+	 ruJUtD5+n2QaV1sIZKJ8eRskYh3aK+1nsgPevwFWKWgZVe6jv3n6rnPRYBTPXx5pcx
+	 y8CrAOMT3nr9A==
+Content-Type: multipart/mixed; boundary="===============0268740566400898167=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3ac88e05c887d679301e873b3968ebb41deaee08f9f41d7f225cd2268c7fc133@mail.kernel.org>
-In-Reply-To: <20260401170115.495836-3-vineet.gupta@linux.dev>
-References: <20260401170115.495836-3-vineet.gupta@linux.dev>
-Subject: Re: [PATCH 2/2] bpf, doc: Improve MOV* documentation ...
+Message-Id: <73bde149f01fb8fc326b756ffbd51ba42d83b443880afa2854e75eff79c800d7@mail.kernel.org>
+In-Reply-To: <20260401170115.495836-2-vineet.gupta@linux.dev>
+References: <20260401170115.495836-2-vineet.gupta@linux.dev>
+Subject: Re: [PATCH 1/2] bpf, doc: Clarify Pseudo-C notation and w vs r register usage
 From: bot+bpf-ci@kernel.org
 To: vineet.gupta@linux.dev,bpf@vger.kernel.org
 Cc: bpf@gcc.gnu.org,jose.marchesi@oracle.com,ast@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  1 Apr 2026 17:59:15 +0000 (UTC)
+Date: Wed,  1 Apr 2026 17:59:17 +0000 (UTC)
 
---===============8873681574554380312==
+--===============0268740566400898167==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-> index fd688c5d3f04d..ac61d3be7af21 100644
+> index 39c74611752b6..fd688c5d3f04d 100644
 > --- a/Documentation/bpf/standardization/instruction-set.rst
 > +++ b/Documentation/bpf/standardization/instruction-set.rst
+> @@ -315,13 +315,21 @@ For arithmetic and jump instructions (``ALU``, ``ALU64``, ``JMP`` and
 
 [ ... ]
 
-> +``{MOV, X, ALU64}`` means::
-> +
-> +  dst = src  (e.g. r1 = r2)
-> +
-> +``{MOV, K, ALU64}`` means::
-> +
-> +  dst = (s64)imm
-> +
-> +e.g. r1 = -4; r5 = 9282009
-> +
-> +``{MOV, X, ALU}`` has zero extension semantics (upper 32 bits are zeroed)::
-> +
-> +  dst = (u32)src
-> +
-> +e.g. w5 = w9
+> +Note: BPF ISA is unique as it uses "Pseudo-C" notation for the assembly
+> +      instructions. In the table below, the column name actually specifies
+> +      the encodings. Assembly instructions (as generated by compilers) are
 
-Should the example for {MOV, X, ALU64} be placed outside the code block,
-matching the style used by {MOV, K, ALU64} and {MOV, X, ALU} just below?
+Looking at the arithmetic instructions table just below, the columns are
+"name", "code", "offset", and "description".  The "name" column contains
+mnemonics (ADD, SUB, MUL, etc.) while the "code" column has the actual
+numeric encodings (0x0, 0x1, 0x2, etc.).
 
-As written, the RST literal block renders "(e.g. r1 = r2)" as part of
-the formal pseudo-C definition.  The other two entries place their
-examples as separate paragraph text after the code block, which keeps
-the spec definition distinct from the illustrative examples.
+Does "the column name actually specifies the encodings" refer to the
+column titled "name"?  If so, those are mnemonic names rather than
+encodings.  The numeric encodings are in the "code" column.  Could this
+be reworded to avoid conflating mnemonics with encodings?
 
-Something like this would be consistent:
+> +      specified in the description column for some cases. Description of
+> +      ``?DIV``, ``?MOD`` includes additional logic part of semantics not
+> +      actual assembly.
 
-  ``{MOV, X, ALU64}`` means::
+The "?DIV" and "?MOD" notation appears to use '?' as a wildcard to
+match both DIV/SDIV and MOD/SMOD, but this convention is not defined
+anywhere in the document.  Would it be clearer to spell these out
+explicitly, e.g. "DIV/SDIV" and "MOD/SMOD"?
 
-    dst = src
+Also, "includes additional logic part of semantics not actual assembly"
+reads a bit rough.  Perhaps something like "includes additional semantic
+logic, not actual assembly" would be clearer.
 
-  e.g. r1 = r2
-
+> +
+> +.. table:: Arithmetic instructions
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23861455083
---===============8873681574554380312==--
+--===============0268740566400898167==--
