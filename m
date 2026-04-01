@@ -1,198 +1,124 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD69A230264
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 00:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775004866; cv=none; b=Ttt0tkJiT1yiV4LvJwYh2U/QLVKOdo+sS/1cvViEkdUE/VNr8pbJPp30u7l6AWLqys+LDu7WivVyk0inatrog5BioqYE/bnYlYZltqFY7ebvRQt7QTW2XHhzWc2pznwdD2iCCdOfGynLg7vkXz82cDZ1X4fiq9704BGmwxI++pA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775004866; c=relaxed/simple;
-	bh=tX0nIUjtLQJ2shGr6GObNUwB/I/RDo+zxGCoTBv9OSk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=uYzeMD1Jg8VF9xLGLgGdiDXSa/+m0MnZgiwPRc2SmaZnPlYBQvuSC8aRv/ExJEmvWXYyvQdkV4emRGIkm2EeEU6qLuNLQQXjq7t6rJC6SYpeHeR3/uspzgiGNMyKrcwgNzBzoJeJbD6GE5L38KnrbzJgZ/Mt7Ho/g9fkQ3EU890=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gQwk3CTf; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A18A1BF33
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 01:46:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775007986; cv=pass; b=JgZ61J9hVcEOIBtM+DjPRo6+7xUiqOHBwLHh5gcMgTklzV1Ht28egZBcLQ/gTRRFqEXZvlBeyfPYlIEOjJmCYibrMF4uBLgLgSjO5zNM+wMqNVUDpvukPl0g2M3bEtQZhD1N5TkloGWquEe7fi2mBc5E8gFR7QS3pYtR2NwG19I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775007986; c=relaxed/simple;
+	bh=pKG4ca6852OQxsYAnBo+tYEOJiLvVKZae5OfJRVU53A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PHpM8XmgZqXOCDKRNpHXTQEww+obZeLrZQxHT5n5B1DUdEJw2EO2GcMYA3YKW861VfAVP/i6avGIxLt4kiyyCyAtfJJN7VDZCP5R49L7ZFaaRtuV1dO107cotnLq6yeosKIT/GSCSxDDJ3z9GkBfllZVYwoMaBR1X+UvSBJ1znA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UxoqS3bW; arc=pass smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gQwk3CTf"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82c714cb672so3562698b3a.0
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 17:54:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UxoqS3bW"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-79c590026d0so9557327b3.0
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 18:46:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775007984; cv=none;
+        d=google.com; s=arc-20240605;
+        b=B5S1OCi1Bt7xPN02JQDOEZ6ctTBids8bHU+MPv+TOyZnZn29t6x+6eVbahQSSjfktZ
+         HctiGr6ECRDcVQJvX4LnoBbwCNniK4+66gLY8pS27oKtFviBnIt+SnwoHMvfS1umodkW
+         iJTP0krYpU37FCF89cY79ATCef8Y978ctoxiEXcYKPXfOp9lwZGeAWhdVyQ/jVOcVit2
+         h8C5k7W25gA3binkhfe45nnCjKYKDEIJgGYppvR8DPBjDtAtaRUJR+l9jDJeCn95WzD2
+         Ih+B7NQmWba6AuKyxWCmQ530CS3zkwLywP6VGL1zrB32ZQ7yQNLdHjf5haC4IR2Idnp/
+         +38w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=y4jL4JKUJqxGymiPtbbQvUh4UzMSHg/w7VUEVLrtaY0=;
+        fh=jLrlXpAN1N+6I2c7BxDrN4VK5iGiuQSN/y4zidXjizY=;
+        b=Pb4pu5LLVqvqME0W2MQbL+tNdwQHDT5edZHXiHRRT6chHSy9aTs5xEyQKca/Wdnv1w
+         483IIw2/mXWUBOrP4vsran3wPasTb0MADhCrORtRQGACHpSAPELS2sHu7PLXkG3bAT1i
+         fPoNYifXA/mHTXKJ1vkxPqxer5GVUJ3E+VBj4WRwSczJtoj7CWSiIRs1y+wRfszEiEiR
+         5CQZC2h/y7Qav7zJDDSk6EI6ZtylCKza090SMvP+RJroR8BRBo/Rs8muHCIg6WK0cHwo
+         u/5wSykvqO/gCVn7YJFO2iGVQHmTkA+fFGMjhU0Giqvu9xoLQepnBwFLsKP1oLdOcXsr
+         wT0w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775004861; x=1775609661; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e9WJp97hv4LSl5Cv39KDRDRVZuQGlFifioMUhJvIsZk=;
-        b=gQwk3CTfEtSRk6EgW73R1IyYHt3Z1JiVW+SPrAO1V5BEgw9Gtfa3u0pFcg9m2fCmwo
-         MiKC/V7ZBIB84KBX6E2qwnI1IhfawhmD3IcL0P3LTx5nPMEgtGfX7E/O06eQSNRgh+y5
-         3ukpXRAdAPXKYt0XwKpS796etakpla8ub36+eekDawrXeoj9pXd4Ts8mq0ajCwPOxzQd
-         2JwCHezzCJ96T8Y3j3LmiDmW5KQiYy5T0WoJom56rWYpr3zTLTAjz5jjaOeDlEKzdlrg
-         Xc/uA06ZDOKb4Cj+u+77UXq1hEFS8Bp14KYY7i0rPXa+KUMlieSXArZpbwfPiITzHJR7
-         zYlw==
+        d=gmail.com; s=20251104; t=1775007984; x=1775612784; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y4jL4JKUJqxGymiPtbbQvUh4UzMSHg/w7VUEVLrtaY0=;
+        b=UxoqS3bWb3sgX8EKXa+n1j2RJObCXLPoHQ9SzMFyF8Z5dc5+DThl99hRiIVJVE7/xT
+         NHT9Iy+D2DrPUCHDt/FDr8mUZcHm0b2WE57wC1rII0Yi8aUN35s3+IlM39kY4maHogAA
+         wQwsT2bs4XlZ3Q7NgjUk0jACp9lC3U8xqQvrxn/p7d1T3VC8OFjPk6xQXn/KoTRvU27W
+         UkIXxNyR/aN4llXjNkEw6mRLLG57s9MMKu+khRLjzA/nsx3Lr+fur2kTuxptqrut3OrO
+         RSZauX27MYf/cMf2HF9+xeVlFEBAsJy40H2gadE0r/0410t451SSDNOsS84Yb+AeebcN
+         lAuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775004861; x=1775609661;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e9WJp97hv4LSl5Cv39KDRDRVZuQGlFifioMUhJvIsZk=;
-        b=SlzdfV0UGq3b4byOHH3KAyvJcQRYD+3iO8TB5hFQ1K2LuE9vR/jdK0mcK5ri5DGvtQ
-         8rNOdVGgpOH/tY2VGc6eqDJKryDIN4vv1bAcwUzc+gXu5kXLMmDNLwVn0gQnb602uKCt
-         KVnb6W+oh4z2cmLHzG9E/Os/6pXMAU9AGfUHa6EtQjSWOhRfvNk2/pCmFRnlBL8AWQwL
-         aDgu0PvasDyC+iQfAGQL3non3oAapMquv10hAnlC+C1No+dhSY4RKqcq+IAjX7ivKIbE
-         rXxgIH25SJ1xDNffygbXMdy/GPzF5QlWX0nXsfaSEgnptNB2NlCs7i8BaO435cvdJn23
-         nFLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW3gce7vtYBjgepgJ9J7Cb1rYTUw2hbhhDnIBegzz2oUtsAviiGhO3FW/CU6ycfXFkFJY8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyjoq256OFUk2elR2ljqQlUNqs7rsqS49TTLX3DHXBWmu7Myd9z
-	mfpufces6b9MPLA15u+hdbcIgtBQNlEKmhKXmy8PiTPugOcOwWwBEsz4PU3SzHFvw+aPCIch2Hh
-	/ZKZXbg==
-X-Received: from pfbfk3.prod.google.com ([2002:a05:6a00:3a83:b0:82c:213e:7964])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:188f:b0:82c:d6d3:31a1
- with SMTP id d2e1a72fcca58-82ce89b9465mr1724889b3a.29.1775004861262; Tue, 31
- Mar 2026 17:54:21 -0700 (PDT)
-Date: Wed,  1 Apr 2026 00:54:15 +0000
+        d=1e100.net; s=20251104; t=1775007984; x=1775612784;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y4jL4JKUJqxGymiPtbbQvUh4UzMSHg/w7VUEVLrtaY0=;
+        b=DgJV3jw93mZ8DfF7PkjEzS+RmOMv2HjDqCAnnm4sfbTG670xsuAt7yCoB8vkcii3Cl
+         h8PC8YT2PnuP9/e8jKqqDrfAWpIAbAncOxNXfK3RzJXgeGCupo88L2h7szIEvpSmtx3o
+         XsElAiRrDPdcsFk+tIpSqOpEpyLQioMRbxnDzIMWbe0rk2mj/p0zRsORyPKqRfucvDR6
+         RYJ99piBiPC/BuFT7FGtaolMsvF8wzHIGHNtbF7DeJh2eSSkaDHwFgsSBF8KvNSInF/D
+         WNfZ/RC3K/BAVoXYkUeIinTyYJCBUfHi3lkY41Glx4KU6ZxCEnvoCYNC3B0RxygdziUV
+         2n5g==
+X-Gm-Message-State: AOJu0YwBgPPA6+NKHm0x2eAvnAvK9feKH8BlFgE2Dg6z/v6dTNCTy+g+
+	mX/OhGGGbNvoE5UScBmntD+gyY35a38zbxPAjTlGVLZQbdludv+uLcuvaTTUE5g8jlm+lUOEDAU
+	764BbsIezWEz6FTYMsig/8i7U9hdQZZY=
+X-Gm-Gg: ATEYQzypBBpD57+anVNLSwWALQ0XXi1SUYg5WlQHfqhkas0Xtr5qdwp+1ZkYVabL/kA
+	ZhxXka5hm/BrRe4C9qDzzO3NHxc8nJgtWEi2x0eRO8asX2DSf9sl9pwtxhslNIkq+V0mp4tzfaw
+	1b9/32NXYCWbfh1xULYCPsPfHtHORcQYwVHSrnZlkFy0BGFfQxnx8aSq+o8MISneJIE5SZBaZK2
+	33sMcOXHVzbZL0uhgaPqQ9xzEu0D6mgnxNrlR3h2i4Gwbnj/bQ8Zw76khFG06L2tTwetE1PsO+r
+	k36b+rttgtPx9vLfN89+cJQu825PctnUI6LurZJVi0EzU4YhwJJZfOg0gY3jTg==
+X-Received: by 2002:a05:690c:c504:b0:79e:8299:7522 with SMTP id
+ 00721157ae682-7a20ffcaaabmr21048467b3.17.1775007984189; Tue, 31 Mar 2026
+ 18:46:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0.1118.gaef5881109-goog
-Message-ID: <20260401005418.2452999-1-kuniyu@google.com>
-Subject: [PATCH v1 bpf] sockmap: Fix use-after-free of sk->sk_socket in sk_psock_verdict_data_ready().
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Cong Wang <cong.wang@bytedance.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com
+MIME-Version: 1.0
+References: <20260331213555.1993883-1-ameryhung@gmail.com> <20260331213555.1993883-3-ameryhung@gmail.com>
+In-Reply-To: <20260331213555.1993883-3-ameryhung@gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Wed, 1 Apr 2026 09:46:12 +0800
+X-Gm-Features: AQROBzChgloXjDFFT-ThI6KE73CKM70nCeotiyMd_wEnhOoSTSbyBhNsfhorydE
+Message-ID: <CABFUUZHYzJgaVvH71WvqU3HUakAOyTHb+HqRFZsTH9Z4=OYAcA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/5] selftests/bpf: Simplify task_local_data
+ memory allocation
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, yatsenko@meta.com, 
+	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot reported use-after-free of AF_UNIX socket's sk->sk_socket
-in sk_psock_verdict_data_ready(). [0]
+On Wed, Apr 1, 2026 at 5:41=E2=80=AFAM Amery Hung <ameryhung@gmail.com> wro=
+te:
+>
+> Simplify data allocation by always using aligned_alloc() and passing
+> size_pot, size rounded up to the closest power of two to alignment.
+>
+> Currently, aligned_alloc(page_size, size) is only intended to be used
+> with memory allocators that can fulfill the request without rounding
+> size up to page_size to conserve memory. This is enabled by defining
+> TLD_DATA_USE_ALIGNED_ALLOC. The reason to align to page_size is due to
+> the limitation of UPTR where only a page can be pinned to the kernel.
+> Otherwise, malloc(size * 2) is used to allocate memory for data.
+>
+> However, we don't need to call aligned_alloc(page_size, size) to get
+> a contiguous memory of size bytes within a page. aligned_alloc(size_pot,
+> ...) will also do the trick. Therefore, just use aligned_alloc(size_pot,
+> ...) universally.
+>
+> As for the size argument, create a new option,
+> TLD_DONT_ROUND_UP_DATA_SIZE, to specify not rounding up the size.
 
-In unix_stream_sendmsg(), the peer socket's ->sk_data_ready() is
-called after dropping its unix_state_lock().
+The default path looks right to me.
 
-Although the sender socket holds the peer's refcount, it does not
-prevent the peer's sock_orphan(), and the peer's sk_socket might
-be freed after one RCU grace period.
+I'd suggest dropping  TLD_DONT_ROUND_UP_DATA_SIZE, since it seems to
+rely on allocator-specific, non-portable aligned_alloc() behavior.
 
-Let's fetch the peer's sk->sk_socket and sk->sk_socket->ops under
-RCU in sk_psock_verdict_data_ready().
-
-[0]:
-BUG: KASAN: slab-use-after-free in sk_psock_verdict_data_ready+0xec/0x590 net/core/skmsg.c:1278
-Read of size 8 at addr ffff8880594da860 by task syz.4.1842/11013
-
-CPU: 1 UID: 0 PID: 11013 Comm: syz.4.1842 Not tainted syzkaller #0 PREEMPT(full)
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0xba/0x230 mm/kasan/report.c:482
- kasan_report+0x117/0x150 mm/kasan/report.c:595
- sk_psock_verdict_data_ready+0xec/0x590 net/core/skmsg.c:1278
- unix_stream_sendmsg+0x8a3/0xe80 net/unix/af_unix.c:2482
- sock_sendmsg_nosec net/socket.c:721 [inline]
- __sock_sendmsg net/socket.c:736 [inline]
- ____sys_sendmsg+0x972/0x9f0 net/socket.c:2585
- ___sys_sendmsg+0x2a5/0x360 net/socket.c:2639
- __sys_sendmsg net/socket.c:2671 [inline]
- __do_sys_sendmsg net/socket.c:2676 [inline]
- __se_sys_sendmsg net/socket.c:2674 [inline]
- __x64_sys_sendmsg+0x1bd/0x2a0 net/socket.c:2674
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7facf899c819
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007facf9827028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007facf8c15fa0 RCX: 00007facf899c819
-RDX: 0000000000000000 RSI: 0000200000000500 RDI: 0000000000000004
-RBP: 00007facf8a32c91 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007facf8c16038 R14: 00007facf8c15fa0 R15: 00007ffd41b01c78
- </TASK>
-
-Allocated by task 11013:
- kasan_save_stack mm/kasan/common.c:57 [inline]
- kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
- unpoison_slab_object mm/kasan/common.c:340 [inline]
- __kasan_slab_alloc+0x6c/0x80 mm/kasan/common.c:366
- kasan_slab_alloc include/linux/kasan.h:253 [inline]
- slab_post_alloc_hook mm/slub.c:4538 [inline]
- slab_alloc_node mm/slub.c:4866 [inline]
- kmem_cache_alloc_lru_noprof+0x2b8/0x640 mm/slub.c:4885
- sock_alloc_inode+0x28/0xc0 net/socket.c:316
- alloc_inode+0x6a/0x1b0 fs/inode.c:347
- new_inode_pseudo include/linux/fs.h:3003 [inline]
- sock_alloc net/socket.c:631 [inline]
- __sock_create+0x12d/0x9d0 net/socket.c:1562
- sock_create net/socket.c:1656 [inline]
- __sys_socketpair+0x1c4/0x560 net/socket.c:1803
- __do_sys_socketpair net/socket.c:1856 [inline]
- __se_sys_socketpair net/socket.c:1853 [inline]
- __x64_sys_socketpair+0x9b/0xb0 net/socket.c:1853
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Freed by task 15:
- kasan_save_stack mm/kasan/common.c:57 [inline]
- kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
- kasan_save_free_info+0x46/0x50 mm/kasan/generic.c:584
- poison_slab_object mm/kasan/common.c:253 [inline]
- __kasan_slab_free+0x5c/0x80 mm/kasan/common.c:285
- kasan_slab_free include/linux/kasan.h:235 [inline]
- slab_free_hook mm/slub.c:2685 [inline]
- slab_free mm/slub.c:6165 [inline]
- kmem_cache_free+0x187/0x630 mm/slub.c:6295
- rcu_do_batch kernel/rcu/tree.c:2617 [inline]
- rcu_core+0x7cd/0x1070 kernel/rcu/tree.c:2869
- handle_softirqs+0x22a/0x870 kernel/softirq.c:622
- run_ksoftirqd+0x36/0x60 kernel/softirq.c:1063
- smpboot_thread_fn+0x541/0xa50 kernel/smpboot.c:160
- kthread+0x388/0x470 kernel/kthread.c:436
- ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-
-Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
-Reported-by: syzbot+2184232f07e3677fbaef@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/69cc6b9f.a70a0220.128fd0.004b.GAE@google.com/
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- net/core/skmsg.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 3261793abe83..6187a83bd741 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -1267,17 +1267,20 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
- 
- static void sk_psock_verdict_data_ready(struct sock *sk)
- {
--	struct socket *sock = sk->sk_socket;
--	const struct proto_ops *ops;
-+	const struct proto_ops *ops = NULL;
-+	struct socket *sock;
- 	int copied;
- 
- 	trace_sk_data_ready(sk);
- 
--	if (unlikely(!sock))
--		return;
--	ops = READ_ONCE(sock->ops);
-+	rcu_read_lock();
-+	sock = READ_ONCE(sk->sk_socket);
-+	if (likely(sock))
-+		ops = READ_ONCE(sock->ops);
-+	rcu_read_unlock();
- 	if (!ops || !ops->read_skb)
- 		return;
-+
- 	copied = ops->read_skb(sk, sk_psock_verdict_recv);
- 	if (copied >= 0) {
- 		struct sk_psock *psock;
--- 
-2.53.0.1118.gaef5881109-goog
-
+Sun Jian
