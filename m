@@ -1,35 +1,91 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34084366057;
-	Wed,  1 Apr 2026 07:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370CC38552F;
+	Wed,  1 Apr 2026 07:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775027637; cv=none; b=ewDG0bxA5el6bjhIlRgophZC1rXeQu2xyPvaYgk/Ar4MUJT7ZF3hvVswSX9fm+6xKl/XWQka9NOU+er0pbPtbjaANgN2P8LAlc1BPRLDWpv3yu9hlcme+YfGAsPdzYku+IISkXTCuxjKnnPVh1zx8r9d4yHRSP4xhfxjGijuNhE=
+	t=1775029545; cv=none; b=DBF5fLoR5w3vQQqHSeQ6809h2L1zGT8ZcC3U0Xi45v0QJp705Chq53nTQ0a14THwgK/1vuYIOrYiAbdqHpmoGJKAqfFF8fFnNVIGEp8cmTo2H5VXAXG5wfMIHsnIlt4SVyxTkdYHSYIfXfvAir1SWmVoOydmHy1AHqy9j0gy8aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775027637; c=relaxed/simple;
-	bh=nGRv9O25sOM0ytqLOlRODw4amEi3+SWp4OsLNFhNF6A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ovvelD6oV2MZYxY/mAC+67Y12uDzbXXqJO85fQBtU9dl1fXqTLhy6KVGpCDIkP02E3nF+HMf1sN8QRQ81wlnbbOHt2lJiY3vhupxfDJSCYJcvu7y7IdZldn0WZmDIhhR3+nkLInfnrUGVFBNvpci38KZ+jPRFzq3QzY7HyF+hHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Dx88BWxcxpLbYgAA--.33339S3;
-	Wed, 01 Apr 2026 15:12:22 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJAxHMJHxcxppFpiAA--.55591S7;
-	Wed, 01 Apr 2026 15:12:22 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
+	s=arc-20240116; t=1775029545; c=relaxed/simple;
+	bh=qN7W5IBVBu/OQTCESu4Ceo7yTOnBD6XUujV3W2X5nu8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Fo8BJRKys1ArCG1GrCKGbO7v+uajmYkwBheiMH04hY6F2ybJtbQ4xxTY5s3uq+2Tkx+duq18CS0EwERyym2YuPI07Moj8Rj/APKNcvhC3NbmTJCqr/ZZ4eMH/xOVIG91ZlIxDOR62e2RJVFHbtJIFTd7w0Q+YTBawfB9fscvhMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=qppyHh4y; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qppyHh4y"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Cc:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=ocYqYAcgR1+/f5z2PeObgww9KvTkVcu5upOhy12M96c=; b=qppyHh4yVyPfuZinNmzNuvUo98
+	ZzIQLIAkGtEusEFCWJLH056dBP0ZGgDld2dbOncKsxuY3CdOjHfDNBojsMgurWLZKRZ2VEb3DZ6lI
+	RfsN1GcZUdsyEr5B7f5wp3K35mkdWnmyVDGQZSmA2Dl6j2mZNYm0KMTuEEl/7vMAvNs4ePewrI7FM
+	2O0TjqZhbd94Bc4ck74/suWRXQ1kS8kGuAZt/IXK5LxpTVyqsK5xpycHKG97uEHKkkxJzhThrDmJM
+	IuvFXMEMqWQbh3URIbtzq1ou7YPYh8Z6QUyTRAgNmBChGcFHdjPbAAcsH5RXTZWoNL3MngVsfUPBL
+	re9IFLlA==;
+Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w7qGN-0000000HLQO-0An7;
+	Wed, 01 Apr 2026 07:45:19 +0000
+Received: from dwoodhou by i7.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1w7qGM-00000007xe2-1Dj0;
+	Wed, 01 Apr 2026 08:45:18 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	Phil Sutter <phil@nwl.cc>,
+	Guillaume Nault <gnault@redhat.com>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Kees Cook <kees@kernel.org>,
+	Alexei Lazar <alazar@nvidia.com>,
+	Gal Pressman <gal@nvidia.com>,
+	Paul Moore <paul@paul-moore.com>,
+	netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	oss-drivers@corigine.com,
+	bridge@lists.linux.dev,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] selftests/bpf: Make CAN_USE_LOAD_ACQ_STORE_REL usable for LoongArch
-Date: Wed,  1 Apr 2026 15:12:06 +0800
-Message-ID: <20260401071206.5506-6-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20260401071206.5506-1-yangtiezhu@loongson.cn>
-References: <20260401071206.5506-1-yangtiezhu@loongson.cn>
+	linux-wireless@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	torvalds@linux-foundation.org,
+	jon.maddog.hall@gmail.com
+Subject: [PATCH 0/6] Deprecate Legacy IP
+Date: Wed,  1 Apr 2026 08:44:14 +0100
+Message-ID: <20260401074509.1897527-1-dwmw2@infradead.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,72 +93,57 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxHMJHxcxppFpiAA--.55591S7
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tF17GrW8JF1DArWxKFWkXwc_yoW8tFWrp3
-	WkuF90yr18Kr4a9FnxAFWUuF4rGFykXrW8AFW0vr47G3WDJFWxJr1qkFs0yFZ0ga9Yvrn5
-	Zwn2qw13Zr48ZwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv
-	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcCD7UUUUU
+Sender: David Woodhouse <dwmw2@infradead.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-In order to do the following load-acquire and store-release tests
-on LoongArch:
+RFC1883, the IPv6 standard, was published in the final decade of the 1900s.
+That's closer in time to the Apollo 11 moon landing than it was to today.
 
-  sudo ./test_progs -t verifier_load_acquire
-  sudo ./test_progs -t verifier_store_release
-  sudo ./test_progs -t verifier_precision/bpf_load_acquire
-  sudo ./test_progs -t verifier_precision/bpf_store_release
-  sudo ./test_progs -t compute_live_registers/atomic_load_acq_store_rel
+Even our esteemed Maddog has worked with computers for longer in the IPv6
+era, than he ever did before it.
 
-it needs to make CAN_USE_LOAD_ACQ_STORE_REL usable for LoongArch.
+Yet Linux still can't even be *built* with only IPv6 support and without
+support for Legacy IP. This long overdue patch series fixes that, and
+immediately marks Legacy IP for deprecation.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/progs/bpf_misc.h           | 4 ++--
- tools/testing/selftests/bpf/progs/verifier_precision.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+It also cleans up a few tautological "INET && IPV6" and "INET || IPV6"
+checks, since IPV6 (and now LEGACY_IP) cannot be selected without the
+overall CONFIG_INET option.
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index c9bfbe1bafc1..19f0bf44a9e1 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -257,8 +257,8 @@
- 
- #if __clang_major__ >= 18 && defined(ENABLE_ATOMICS_TESTS) &&		\
- 	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
--	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) || \
--	  (defined(__TARGET_ARCH_powerpc))
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
-+	defined(__TARGET_ARCH_powerpc) || defined(__TARGET_ARCH_loongarch))
- #define CAN_USE_LOAD_ACQ_STORE_REL
- #endif
- 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
-index 1fe090cd6744..8466175ce51e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
-@@ -68,8 +68,8 @@ __naked int bpf_end_to_be(void)
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
- 	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
--	defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390)) && \
--	__clang_major__ >= 18
-+	defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) || \
-+	defined(__TARGET_ARCH_loongarch)) && __clang_major__ >= 18
- 
- SEC("?raw_tp")
- __success __log_level(2)
--- 
-2.42.0
+For now, we only add a warning when a process *listens* on a Legacy IP
+socket (since you can listen on IPv6 and still accept connections which
+have come through a timewarp from the 20th century. Adding warnings for
+making outbound connections or *accepting* on Legacy IP can come later.
+
+  'I would be happy if "Legacy IP" ceased to be the "industry standard"
+   and IPv6 be the default, even if I had to beat IPv6 into the head of
+   every single network administrator's head with a shovel.' said Jon
+  'maddog' Hall, ancient supporter of Free and Open Source Software.
+
+David Woodhouse (6):
+      net: Simplify tautological CONFIG_INET/CONFIG_IPV6 guards
+      net: Add CONFIG_LEGACY_IP option
+      net: Guard Legacy IP entry points with CONFIG_LEGACY_IP
+      net: Make IPv4-only Kconfig options depend on LEGACY_IP
+      net: Change CONFIG_INET to CONFIG_LEGACY_IP for IPv4-only code
+      net: Warn when processes listen on AF_INET sockets
+
+ .../net/ethernet/mellanox/mlx5/core/en/tc_tun.c    |  6 ++--
+ .../net/ethernet/mellanox/mlx5/core/en/tc_tun.h    |  2 +-
+ .../ethernet/mellanox/mlx5/core/en/tc_tun_encap.c  |  2 +-
+ .../ethernet/netronome/nfp/flower/tunnel_conf.c    |  2 +-
+ include/linux/indirect_call_wrapper.h              |  4 ++-
+ net/bridge/br_arp_nd_proxy.c                       |  2 +-
+ net/bridge/br_private.h                            |  8 +++++
+ net/core/filter.c                                  | 12 +++----
+ net/core/secure_seq.c                              |  2 +-
+ net/core/sock.c                                    |  2 +-
+ net/ipv4/Kconfig                                   | 37 ++++++++++++++++++++++
+ net/ipv4/af_inet.c                                 | 23 +++++++++++---
+ net/ipv4/devinet.c                                 |  2 ++
+ net/ipv4/route.c                                   |  1 -
+ net/ipv4/tcp_ipv4.c                                | 30 ++++++++++--------
+ net/mac80211/main.c                                | 10 +++---
+ net/netfilter/nfnetlink_queue.c                    |  2 +-
+ 17 files changed, 105 insertions(+), 42 deletions(-)
 
