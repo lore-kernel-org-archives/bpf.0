@@ -1,238 +1,161 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4643B478E42
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775061105; cv=pass; b=jszOyPnr3JM7w+b0Y3GW8kCV3bbz1tWc191ucECJPNAwZHHX3uw6tE1qPE8yPUKZTgUgwvIXyExBv7jgsaHvJ8UJ77bLhZj/u3ZnkhpMkCDYGxos8TUk+EgYIfh2WZoKS3HzN3D7hiSVTdxdEQu1LrgFoArc9RcIh5KtyoGDyd4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775061105; c=relaxed/simple;
-	bh=vUWK6Mch/mIIa6f9eQkb3mv+zNUqTT1q1KRQ4lBDuWA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V2i2jLqrM9OuB/zVoho96Oa9XPuqxga9ys7jPRo8K9OES1OU34WdsFUIIn+e/iV4mG2Fob/ktnC2CM4HlQQuEvAZqZsMtNNWqbQIoutLLK2G71mvJWCkpfrcabXETf9NqXShfP1bwGDAFUzSN94NdmpInG7JykDT3oQroWnc16E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YgT3ebTi; arc=pass smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FEF139FCB1
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 16:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775061247; cv=none; b=SP3CZT0NvIFw+p0eIT16dJosTB4EW9h8DokCtgZnaYZbKrJ8vyl/emK0No3sNrmKJqzKCgMzQTyoRbSJpsmcox+m056aXWLWexW3yrcR0M8T5dfHnqZrw4211pgb7kCRPbmKlJkuN7Mm5SaqEjHplEt7xmSWschPxN3omAby0bg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775061247; c=relaxed/simple;
+	bh=+OcjdzbsVS5n2WpHiH5AzE1B2okZQS9quvYX7YODvQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LiX1QcmRrDespPkMcMs4g5pbQiIzdtVhiM/8xTf5EbpNH+AbjqN3rN3U3rVJgDsH7TI+UvPUcY1AEWl2/qcobTTRooNFCXgcMrThoUGBR4IKI89G51i4Ea/gT1Ff/YUYyPTAH+6aJD8yVR2ziNBQNfoqsAcLk7nk2JNs/oSII58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bVZAsx50; arc=none smtp.client-ip=74.125.82.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YgT3ebTi"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-486ff3a0fc1so65606195e9.2
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:31:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775061100; cv=none;
-        d=google.com; s=arc-20240605;
-        b=j7bURk2X7uBm0CpcUaF46jOkP+Zo5ea0cLcYJAoLuqCa6sfWOFQwKVwor998BjEjce
-         BoChQgKL6VaKpDmTKZhI6i1Un5ip4IRaLJk+Xl005NiA1UUUC+4W6UNFaKY+Ziz/hswn
-         kHGofmixnF+nVHRuzOyvBXhHZxBrtXFZN2CdHdZGyXOMEnvez3w3cXpJ0bJR2xxNTXuE
-         Z/LeqdOCkEzh4i0jo/VdBsN5lgNR4gdyuITVFW2tyiexXmNZ9FNBFYiUk1Jq8bZ/Aa0g
-         +2Vp+dXtu0yFEYfkC33jqZm8IxSnhDRp9X/FfDwiFLKUCy+E1iB6mU9tUU4bFzXWtKz3
-         KT/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=1gpwZ9cqCvOrR11tIHwgUSMSGPcazA0YBYH1IC9uu2Q=;
-        fh=f6zcVt/SalqZepWQ+uoBKmOc90TqZ6Ju9hBl/3ueRGg=;
-        b=WUgNol9t78ZzAWb3tFHbf10udmBqUM1oMaWB4qLnyat1zuk1QNg6uv6gegShO4I1cb
-         0haFk0YsQWXthDel3mTtHUXdiFE8/x24altTKRV76HG/RrLWCot8V0WudbPN7mEWC+zV
-         CwAotwDocwJmWfo5BgolGkNLacPBGIBezir1brjASYixU6G+NqzayZXFvGMqNUp0sTjw
-         1KQF69SKTFKkhWgCSA2vgM5yGcYkiXdDw/44sv3qhCtNukY5mGJWmndNZW+Cw3sucfIJ
-         piKemx4+SMVmAnJpeL/8y9yAXE9IQMDKCztODinV+03ekYPa56TSsYvgd5YX3/k1zM0N
-         s5jQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bVZAsx50"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2c87871133dso2726eec.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 09:34:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775061100; x=1775665900; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1gpwZ9cqCvOrR11tIHwgUSMSGPcazA0YBYH1IC9uu2Q=;
-        b=YgT3ebTiauqJCwcOeeINZgnKN8P92+08QmVVuaaxC8qjCFZEJexHBK+zYmMHQcrEIX
-         iCXvxaXmrEs+FL07j+bOu85KIncHVUsLUz4sO8PL3wmysrlweO209xP5+XBuNiQpgCIH
-         nuX9M1vbCK1pQ6Wr3TEr/7mNonbiljXzEDYklGLnysPW6a++QdTJ1eRlDUTyEUN8vd+8
-         FQmhP0f8dfI3JT7hstR6TzqlPjOy0hgmkMsUoq3x9qZCtOCSYDuVMtxCJzbvf3mbTwgq
-         PHAlz8HnbYvDSWG3PDtQE5D2SEex5W42S4k+VEAfpSnBOeflOlieM6IYodPzlSg+/fZH
-         QTSw==
+        d=gmail.com; s=20251104; t=1775061245; x=1775666045; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdMpVTZuf6oWX3f0mlEuicX/hJ4K7vnvO6vekEBOAm0=;
+        b=bVZAsx50sgRISknFsJkBzeV0zBAw/Td1rUgrckv4kS0tndO45oAUoyNzfq0iBHX56b
+         mIRSSOaoVvcM2Xjb1jUm0o34D03dY7xyaRhiXKeBujDJ3C6FaoMMs9S7JQExVOqcBD4E
+         sqgTRR8Bih3BuCjEACOhVzJ072pPZHP85/4XcBNSYdCkWtJ57r6OApIIIsukNcSaNeeU
+         mN/qjEcNOHCCJAZZcrAuS0Jk/gtTlUhyDWp4VWXv2ySh0XEUJ4NWN1EEbK9fyvG8aJq0
+         D6IQ3QWq2U5rqWk0ZpMmG+bNt8OF8lQfz9TxygSC4gcOlXxAOHsl9/teDY6dS8d4Yf3/
+         NuhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775061100; x=1775665900;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1gpwZ9cqCvOrR11tIHwgUSMSGPcazA0YBYH1IC9uu2Q=;
-        b=DJ64qMJpraerpM7GCwL7yWhZ/MRNeefvQUdMlxTnsEnVqdYH63Q+m7AdZDRC3arGJz
-         slsVa5D7AJ62yeTMgIT0Dnut+Qvh8r/gg8+ELMXvgLwBn2BiBuMJGwSa9jqpwEf6uvZN
-         0CK06Ek36sTyQSqqhzFIZnGprZk2pSp8PdLRWAeT8k6dZelTPA60E3Dqv/ZeT5ZJcbqW
-         Aj5Gukmye5MZ8xlWRoqYUJWyEhBNnoLudJPV7e06krh6bwWXEdrbR8BUnwdMV2REGlx/
-         oB7zsXuqvm1W1Wy14wFD2JvKSzIIhF3Lg2foTUoVaxzGzzVtgc7lHb/qslkV2oViJtZ6
-         T81Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXUxeUNNUgOQiLOBlGbd5OdcfrPiXCNgPEUAu25X2H5/7FoY1o9D8+wa/Bm/M6Qmb5TkYU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgtNJiSvXwpHq3+E+8jYOlSWudUL7pRamr82sHmtY9h+t0OeIU
-	Gbl+qjE61VvZjF6AfT6kF48Le0VIeFZhpyjkT03xHun5pv6JPHHE2mJ7ajA4+lvOpzJdDQ0Ife0
-	S+a/5LFUDQs2uuwgQAwBmwtPZrFJgNr8=
-X-Gm-Gg: ATEYQzylcScc0JfUNjc4Es5Mq7eyBIJvr1OFoNVCO7F3/H7QW9bIZmvWoaCeXJhOA0P
-	ABY6yzLOhw63fawQF8gVkzUe1F13W7cTWoqOn2UzniekgcGHvMMwg+vExVXpH1vTbokfoBMOsaI
-	VpXNxWFBPsCVbw9fDpadNEs9yMX5jPHMAXtOiCKtsoYKxIqGQ10Gthw0m8xMuK/HLeCbxxQ+uJ+
-	P0HsRUovzOpr/X81YE/KDHk7hQq3ikbA0MAAVrTDBxT2fbKWG9U+GALElNJqT42QJxlT7wRGwkE
-	LfwBViTX8ttxNxBKHUiZZP8f4RainNb0X4GgbES1u0Yqi44XAnGBUMPBg0CNWmeemMbVdQ==
-X-Received: by 2002:a05:600c:4c27:b0:487:1826:d89b with SMTP id
- 5b1f17b1804b1-4888b2edb80mr1278555e9.9.1775061100246; Wed, 01 Apr 2026
- 09:31:40 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775061245; x=1775666045;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zdMpVTZuf6oWX3f0mlEuicX/hJ4K7vnvO6vekEBOAm0=;
+        b=ZqcTRUxvmaiqGv+RFxrMAjLpCEeByi8uR0Fz3xowX40N8vlhpcvXklUP2D1r22sFXE
+         qsiB1wlh38EiSjcaaoFI5CZwOIF6pQ35q/trU+wiu7IdGPd0Kzxag9e/fW47z2KlxbJb
+         rgXPKN+W4nBQGHse3zsQPOZJDW0hFL8YlVVt+qa2s99U1ekSBEshKuUq+p/rUXob4Kxp
+         iiRLQTYQw9TrQk78DG6x6rboLxC4genhvQPJhIKrQ8E4jUB31svGuryw14pnKOpf8nRo
+         Jlj/R5H4i1EIf4Sq1t6Nl52a+SQp6adE4sI2CMRCCAuXfwIt62xx9McL0YqGGd94Iv5r
+         2dLA==
+X-Forwarded-Encrypted: i=1; AJvYcCW6UM4BBgjf+o/8oCAodq1LBIPMgLoEFrgFMvILZVLOutIzmDnYlIXJuYwV5ceyiM2FpYQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfB+4Pz2/N2Cfw2leC/tZF1JpgcCiq0dSHbtJ//YtkenMrWtXr
+	Mr+4bf428Fi+H+pNs3dWituWx+ucX/7lT5EKODmCf0pEz9j13YhW6yM=
+X-Gm-Gg: ATEYQzyex3/kqdi5tzL/29bR+znZxcerDCqsjshb7a898CViSt7grTcylOAVxi84TgF
+	R2fobu37A71pQ97weEcn6XaySAFFTQv5P68kN+hvC6CXbijzQVZk4l1gW8SFyhFBWbloDiyYpBx
+	MmeoxPNys/noGwpmKPwSRwPa0Dje+pyXJw9Kaj+Ww0wbn8Jppo4SIVnTyz1BmbwfvL6ctHk1QRY
+	2Q+V9+N452+nR0haxsO/7VC0UCFKwp6kOEBYLsizzRvzBcMN+F5EXubgea9GFikVlf5rSjk/d6y
+	epF/dp3TiZ9PDygraLsUKAYwLeBGZxQbeNlcHnKA05p87+6jZy1t3j/GHr8snfIDBQd3UhZRwrX
+	kSlw3fiiY6/atK8I1f3O45WqhVB0nhbBYkRVFa83PMgeI90d3LZmNSd43j1F+XrUCnIO3IY/QyI
+	B7jHQMvf2ogSNIYLLLSfblzuBxqJo7Fwms1UfagwRPUT6apRtKaZqXumw/vxQH7vWDDYphAQIpZ
+	DpQd833MIDq4KhRIMlcahUoE/Rk
+X-Received: by 2002:a05:7300:fd13:b0:2c1:161f:ac39 with SMTP id 5a478bee46e88-2c9325b1fddmr2057364eec.26.1775061244975;
+        Wed, 01 Apr 2026 09:34:04 -0700 (PDT)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca7c3010e9sm237887eec.14.2026.04.01.09.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 09:34:04 -0700 (PDT)
+Date: Wed, 1 Apr 2026 09:34:04 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>, metze@samba.org,
+	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>,
+	io-uring@vger.kernel.org, bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next v2 2/4] net: call getsockopt_iter if available
+Message-ID: <ac1I_CMr43XTpvHj@mini-arch>
+References: <20260401-getsockopt-v2-0-611df6771aff@debian.org>
+ <20260401-getsockopt-v2-2-611df6771aff@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ac0hLyMuPHiZfnVc@computer> <20260401162555.426867-1-varunrmallya@gmail.com>
-In-Reply-To: <20260401162555.426867-1-varunrmallya@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 1 Apr 2026 18:31:02 +0200
-X-Gm-Features: AQROBzBVfO752JX-VtB9VPdZLJOP2Hq_tKzfFd_W-hvYatioGx43o4rgHLoCLp4
-Message-ID: <CAP01T74YgnKop-dgwBToOcfg4_D44t1wUBopFYPMquirCmaLfg@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] bpf: Reject sleepable kprobe_multi programs at
- attach time
-To: Varun R Mallya <varunrmallya@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	martin.lau@linux.dev, mathieu.desnoyers@efficios.com, 
-	mattbobrowski@google.com, mhiramat@kernel.org, rostedt@goodmis.org, 
-	song@kernel.org, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260401-getsockopt-v2-2-611df6771aff@debian.org>
 
-On Wed, 1 Apr 2026 at 18:26, Varun R Mallya <varunrmallya@gmail.com> wrote:
->
-> kprobe.multi programs run in atomic/RCU context and cannot sleep.
-> However, bpf_kprobe_multi_link_attach() did not validate whether the
-> program being attached had the sleepable flag set, allowing sleepable
-> helpers such as bpf_copy_from_user() to be invoked from a non-sleepable
-> context.
->
-> This causes a "sleeping function called from invalid context" splat:
->
->   BUG: sleeping function called from invalid context at ./include/linux/uaccess.h:169
->   in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1787, name: sudo
->   preempt_count: 1, expected: 0
->   RCU nest depth: 2, expected: 0
->
-> Fix this by rejecting sleepable programs early in
-> bpf_kprobe_multi_link_attach(), before any further processing.
->
-> Also add a selftest that tries to load a sleepable kprobe_multi program
-> and it needs to be rejected for the test to pass.
->
-> Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
-> Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
+On 04/01, Breno Leitao wrote:
+> Update do_sock_getsockopt() to use the new getsockopt_iter callback
+> when available. Add do_sock_getsockopt_iter() helper that:
+> 
+> 1. Reads optlen from user/kernel space
+> 2. Initializes a sockopt_t with the appropriate iov_iter (kvec for
+>    kernel, ubuf for user buffers) and sets opt.optlen
+> 3. Calls the protocol's getsockopt_iter callback
+> 4. Writes opt.optlen back to user/kernel space
+> 
+> The optlen is always written back, even on failure. Some protocols
+> (e.g. CAN raw) return -ERANGE and set optlen to the required buffer
+> size so userspace knows how much to allocate.
+> 
+> The callback is responsible for setting opt.optlen to indicate the
+> returned data size.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 > ---
+>  net/socket.c | 48 +++++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 45 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/socket.c b/net/socket.c
+> index ade2ff5845a0..4a74a4aa1bb4 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -77,6 +77,7 @@
+>  #include <linux/mount.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/security.h>
+> +#include <linux/uio.h>
+>  #include <linux/syscalls.h>
+>  #include <linux/compat.h>
+>  #include <linux/kmod.h>
+> @@ -2349,6 +2350,44 @@ SYSCALL_DEFINE5(setsockopt, int, fd, int, level, int, optname,
+>  INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
+>  							 int optname));
+>  
+> +static int do_sock_getsockopt_iter(struct socket *sock,
+> +				   const struct proto_ops *ops, int level,
+> +				   int optname, sockptr_t optval,
+> +				   sockptr_t optlen)
 
-Looks ok, but please split kernel fix and tests into separate patches,
-and no need to reply to this thread.
+If we want to eventually remove sockptr_t, why not make this new handler
+work with iov_iters from the beginning? The callers can have some new temporary
+sockptr_to_iter() or something?
 
-pw-bot: cr
-
-
->  kernel/trace/bpf_trace.c                      |  4 ++
->  .../bpf/prog_tests/kprobe_multi_test.c        | 41 +++++++++++++++++++
->  .../bpf/progs/kprobe_multi_sleepable.c        | 13 ++++++
->  3 files changed, 58 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
->
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 0b040a417442..af7079aa0f36 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2752,6 +2752,10 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->         if (!is_kprobe_multi(prog))
->                 return -EINVAL;
->
-> +       /* kprobe_multi is not allowed to be sleepable. */
-> +       if (prog->sleepable)
-> +               return -EINVAL;
-> +
->         /* Writing to context is not allowed for kprobes. */
->         if (prog->aux->kprobe_write_ctx)
->                 return -EINVAL;
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> index 78c974d4ea33..f02fec2b6fda 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-> @@ -10,6 +10,7 @@
->  #include "kprobe_multi_session_cookie.skel.h"
->  #include "kprobe_multi_verifier.skel.h"
->  #include "kprobe_write_ctx.skel.h"
-> +#include "kprobe_multi_sleepable.skel.h"
->  #include "bpf/libbpf_internal.h"
->  #include "bpf/hashmap.h"
->
-> @@ -633,6 +634,44 @@ static void test_attach_write_ctx(void)
->  }
->  #endif
->
-> +static void test_attach_multi_sleepable(void)
 > +{
-> +       struct kprobe_multi_sleepable *skel;
-> +       int err;
+> +	struct kvec kvec;
+> +	sockopt_t opt;
+> +	int koptlen;
+> +	int err;
 > +
-> +       skel = kprobe_multi_sleepable__open();
-> +       if (!ASSERT_OK_PTR(skel, "kprobe_multi_sleepable__open"))
-> +               return;
+> +	if (copy_from_sockptr(&koptlen, optlen, sizeof(int)))
+> +		return -EFAULT;
 > +
-> +       err = bpf_program__set_flags(skel->progs.handle_kprobe_multi_sleepable,
-> +                                    BPF_F_SLEEPABLE);
-> +       if (!ASSERT_OK(err, "bpf_program__set_flags"))
-> +               goto cleanup;
+> +	if (optval.is_kernel) {
+> +		kvec.iov_base = optval.kernel;
+> +		kvec.iov_len = koptlen;
+> +		iov_iter_kvec(&opt.iter, ITER_DEST, &kvec, 1, koptlen);
+> +	} else {
+> +		iov_iter_ubuf(&opt.iter, ITER_DEST, optval.user, koptlen);
+> +	}
+> +	opt.optlen = koptlen;
 > +
-> +       /* Load should succeed even with BPF_F_SLEEPABLE for KPROBE types */
-> +       err = kprobe_multi_sleepable__load(skel);
-> +       if (!ASSERT_OK(err, "kprobe_multi_sleepable__load"))
-> +               goto cleanup;
-> +
-> +       /* Attachment must fail for kprobe.multi + BPF_F_SLEEPABLE.
-> +        * Also chosen a stable symbol to send into opts
-> +        */
-> +       LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
-> +       const char *sym = "vfs_read";
-> +
-> +       opts.syms = &sym;
-> +       opts.cnt = 1;
-> +
-> +       skel->links.handle_kprobe_multi_sleepable =
-> +               bpf_program__attach_kprobe_multi_opts(skel->progs.handle_kprobe_multi_sleepable,
-> +                                                     NULL, &opts);
-> +       ASSERT_ERR_PTR(skel->links.handle_kprobe_multi_sleepable,
-> +                      "bpf_program__attach_kprobe_multi_opts");
-> +
-> +cleanup:
-> +       kprobe_multi_sleepable__destroy(skel);
-> +}
-> +
->  void serial_test_kprobe_multi_bench_attach(void)
->  {
->         if (test__start_subtest("kernel"))
-> @@ -676,5 +715,7 @@ void test_kprobe_multi_test(void)
->                 test_unique_match();
->         if (test__start_subtest("attach_write_ctx"))
->                 test_attach_write_ctx();
-> +       if (test__start_subtest("attach_multi_sleepable"))
-> +               test_attach_multi_sleepable();
->         RUN_TESTS(kprobe_multi_verifier);
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c b/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
-> new file mode 100644
-> index 000000000000..56973ad8779d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
-> @@ -0,0 +1,13 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +SEC("kprobe.multi")
-> +int handle_kprobe_multi_sleepable(struct pt_regs *ctx)
-> +{
-> +       return 0;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-> --
-> 2.53.0
->
+> +	/* iter is initialized as ITER_DEST. Callbacks that need to read
+> +	 * from optval (e.g. PACKET_HDRLEN) must flip data_source to
+> +	 * ITER_SOURCE, then restore ITER_DEST before writing back.
+> +	 */
+
+Have you considered creating two iters? opt.iter_in and opt.iter_out.
+That way you don't have to flip the source back and forth in the
+handlers.
