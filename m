@@ -1,84 +1,82 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE9837DE9F
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 05:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1596737E317
+	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 05:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775021160; cv=none; b=upYOkVd5l8W7ATbaxyTUPMZo4D1ZAGPdCpx4YS4vtKLojTKvfO1NuSHrIxf5OADU7kulZHP7EoPmAzIw+3cqAQKzsUz8FZhmA6+vqj35OgptSIH8C3BAP+VRqSV0aQEl72RGLjlLej8QTpB8+xM2EBkA6uWu4XnOkmUgGV/Gak0=
+	t=1775021282; cv=none; b=MVUtyak22u9qxlG/0Lt9JDmwjIb22wmMOy1n1H1IuhMWfXOZCa8BP43MBKkCUuryKCp3oyKq+b+s4vgcM0sqzxuFlGrrf5Tt3oOzd47nYqgczYJCh/n0hQGVrtjsEvHNMEr8cI0pLDj/7SJ///WOqwVMygDiHW2ZE/7cudJUX/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775021160; c=relaxed/simple;
-	bh=Bx7ZKiCR+YTeCEb1pdcIvvplXe6zg+4+eQLydO/doHo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=poEX0WInr/ZQMV94F9Ffjj2d94kIUf7o1YG3+uI4A/s1hp+Yp4UtTcD4Mte1PeydgYhDfrqXcYoj8MdeND89i5N0PChgXO6AICT9wZIHASUl7F98f5MA9YrIEcvJSljnh2JbsMqepK5Jwk3CwM+bMmlhpH1Wj87ENlAIskaWHSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KI7+qQko; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1775021282; c=relaxed/simple;
+	bh=VD/BrkY+P9EZvzyKieGsPzn58utPMgfLt7RRVf8OBvg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MfAz7tziUlIjreD70MR3e3HwhAetavJ5RWNMvaBMi395QPP1WjPoy0KUQ5UU801Ni9ABsBmsTe4ZwMTuM674ThxBxWrguVJHYv/32bCofrJpzYJqx+T2AQHUGCd+tc/761j+TrvCT74w/J98lbcDDMEw4Gw9E6CiKr1scyn9Mgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com; spf=pass smtp.mailfrom=shopee.com; dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b=ktMLcu5X; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shopee.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KI7+qQko"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-486ff201041so63039545e9.1
-        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:25:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b="ktMLcu5X"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c70ea5e9e9dso2721820a12.1
+        for <bpf@vger.kernel.org>; Tue, 31 Mar 2026 22:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775021157; x=1775625957; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HqiSmwJgQ4+uNqG6p5uMKmapSGc5Bt2MrHRQWhazOtk=;
-        b=KI7+qQkoOiS7ZG4ZywCKk4keIhNQYAsdsEzC6ou6emWJgkYF41M9q8WoSNmGxWWgkN
-         VSD6Ih4GXXlS2/SII4MT9cY1tRXNhq4q0VKn15/F2dop4nY9h2k3q0oVhlip//yM6GR5
-         NrGZR8/bR8v1TQKkOYPdGh0S4Kc0sZgZVdHng1xVjLPGBv8dqJQbMbqKKqZauoPmvh9I
-         0uuyn2U6IeWIuwPVh2RSFgaXXheo/5uTbe6XsOstwRV8t2IH7yfo999TjNst8tdLIfnd
-         QWW1boXsyXJcukwaRzpfBGuvdV9mLvtnDOEcFjywRjJGmTEWZn8UeWJp0jQTPiWTJSPs
-         Zwcw==
+        d=shopee.com; s=shopee.com; t=1775021280; x=1775626080; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+dtnjV/UQsHz5i0eYil7AmCFv4jaBC0RE9vTuxD9kdg=;
+        b=ktMLcu5XPuPdlQoZ+w0ftcniQbvv+JariVNU6Q9c+4hnjfd7qsJzH4VG244gD0CNzD
+         80QtsygCSL1rH9gUYEBMBLGasR5zc9FYK7SlsZfopXTJYlLwfWqOU/VeD1fr0PX3VuwC
+         MwZq4Au2bOlLY4zxyEZAlnni5KIPcowzd9pDrBqB1jD93YldM35jpzbTazxnRasJMFDk
+         628k6FP+hlHSZJxkOMGFcxreOrW/CEMv77zwtrwv7MCJ/ofnuUaJcRSeFBUcUK5GZucA
+         T9AjwI6BjhSCTzGwjUj1Fkq9Q4t+6Vr2hJHi7QxTsCqqHSm91pB1pxFgk5bDs/Q6AbRF
+         Dsnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775021157; x=1775625957;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HqiSmwJgQ4+uNqG6p5uMKmapSGc5Bt2MrHRQWhazOtk=;
-        b=KYK1k2llsoTI/yStdJ9FcNR7xRaSW75wpvDqQS+gVThJFWfV/IgnnopxPd4A1PFE/p
-         owCVKLNWYeNkFifRljuONMH3N0FpXEezCW9VEPsXSiECpdLWk/IvuP9W9murAfR4rGRA
-         kTa1aM8Zt6cTu7AruC9GDuRw3W8+5fqyLjnvdsklBjQZNqB3iALgAVoAyrb1YOEABfVI
-         tZk98sjDdDO9SWTtYqruUISF2fSW1rvxJq0gsa4AXQsGdpNn6sn91tvZ+feC2q/FS4Gi
-         zp3VD+XGYbZS2oSaA0k8JNiNBiLEssEpbqnHbNV0ow9HgDBUWVXyd56GZ7IhDX9apb4F
-         W9Ng==
-X-Gm-Message-State: AOJu0Ywzl55WGluFCyjtdWSrJoZRDdT5w8i/f4v6UzSVkUn4ex6mB81m
-	CbT+PNUVIwTYG/6Eri+OzJYyuYUIKmtm/CZqPheUG9kPzXWk4LTja7WfOd67lNoFvfLyyTSGYAR
-	xsY2Shmc=
-X-Gm-Gg: ATEYQzzIFOPpJvUa+IoFrG12vUlajtoWeOWQYBzVm7u9IKpNkjYKh04z6jUthOnlTDf
-	9M0GxvVkoDo24KAB3hZ2nHX4+AJFgRSpS0QpyKVgwVjr4vZmCahjwgIy6913XQSgLEcdZWs2dlO
-	6zBJNOmQma/6z6G2l0F91/UAP/WibvgZF7U4lEWnOe0g3RwbYTXO7iALhNPOW3n2DwLlF1NcAQh
-	6hITB0fIAse8pXYO9tT1xy/CUoDVYHfLVxlIoHVvTWW/vKTueEmwhx9SslkOvq24jC5PUuUnZuu
-	SKXsXGrk9/T4mPGStJscs6sSAs1O5qhotdJ8Pb/ePang7NRXsgkn/4GvzgJTzFcPMbNpMuaqiW3
-	rPsAKhARBdrpK7ED8zbmxUR2o6iKHIP1aqWU4Uoq0Y6bIjAzHWIz3oPZcS9HPpcukUNsKM3X+CC
-	boMD3rOy6a5hvBxsFY1flmPRU7JckKiHbeCjXErRQTz7jsHXc4PZKBzXga9YIvVw==
-X-Received: by 2002:a05:600c:4f95:b0:477:a1a2:d829 with SMTP id 5b1f17b1804b1-4888356754dmr32735925e9.13.1775021157359;
-        Tue, 31 Mar 2026 22:25:57 -0700 (PDT)
-Received: from f16.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82ca843b818sm15308214b3a.6.2026.03.31.22.25.54
+        d=1e100.net; s=20251104; t=1775021280; x=1775626080;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+dtnjV/UQsHz5i0eYil7AmCFv4jaBC0RE9vTuxD9kdg=;
+        b=mczvXSTdmCJlw0fcDW1GkHRsXdakBL5FFj5lkk9JxRxXE2NRDiPq0RoXqdlWu8t47w
+         mreSLiZ9jJ6fHnSs90gTyOM2KJ+arPOmtPwrUUipqdeolX98TODoRgC3KsGS64wQ8wm1
+         uoZSclzWDTprlvsWav3x4oGTtBIiMJBAVOvTN3zN5MFEAci8J17CoKl14iCPXjBsO5qx
+         Msp7ltMdM+hHlJW7QB8uFSETKBvJm57mDVfFmZL+AvhasIfiDANCDn7PSmRhVD+pE1R1
+         kxmH+YtWI7c7hYCoUnXe0aGRZ3bZXItUh9/m1xs0yDgJJNB7tB5NRnPtk0W4dPl0vbGP
+         O/Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCUh6pcnBurtyulp0OEZdHj/VfyEGoh/doqWSE5mrheN/PugJRAe4nGiDL1/ZaKIhQIuI18=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrCmf2CZ5s7Pw04pZMpWSOvt51QF4y6R24BbE5mI4nCov+ID80
+	fqpEs+wJ1/YasXhg5NKtDeWV8tSauoxJEknCYOd67UYP3R2MjmOtnAFWve8ZJmpODdg=
+X-Gm-Gg: ATEYQzz/cnRT65RQ1iqGTMlNQhuFVRQ1DLwLEGYIjsfT8tOU3Stxn/YDiMIxOYDbtSC
+	kqB5fAV+Y8sPROiKq3NthEH/Xow5l813h9ljqNgDwXIlvPTuT35+F0x1vds2AjudZVhYXZQfzS3
+	r0IKA28ibACVUkZiplJPt63mDHQ5rW5iH3BiWecNJGWZps117rWqVFOaC9BgxUHtKa4sdqJF4iR
+	lk8nj7bi6x4/KSl4QmuevY6m9FP4xY5KXSfbmlrvopYLAOrRYz18BcWFtQc4gF91QQyhrO/gmd8
+	zbwKlnY1cwXP4MgPC7+VNPfx1YJ+f8vPxRtHqyhdBR2iraPESONywx+3tIELfDB9V7dU+T82hkB
+	QboCXTdN8p2QjeQyMroTKvvPB9RdnuhNn2JCRY3spsZjc9KtXJtqrFO+qNyhO3TZ4Mz2DyN2QJv
+	Dfs/gYDP7ZFKaNWj79Hzo6vq3qCNMKl7/VYI/1zx92JnbstCKNnw==
+X-Received: by 2002:a17:902:f708:b0:2b2:6cab:313c with SMTP id d9443c01a7336-2b26cab38b2mr12456065ad.20.1775021280346;
+        Tue, 31 Mar 2026 22:28:00 -0700 (PDT)
+Received: from bms-ytl-d1-app-10-251-178-27 ([147.136.157.1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24266b92fsm134019025ad.23.2026.03.31.22.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2026 22:25:56 -0700 (PDT)
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-To: bpf@vger.kernel.org,
+        Tue, 31 Mar 2026 22:27:59 -0700 (PDT)
+From: Leon Hwang <leon.huangfu@shopee.com>
+To: netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Feng Yang <yangfeng@kylinos.cn>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: add test for raw-address single kprobe attach
-Date: Wed,  1 Apr 2026 14:25:11 +0900
-Message-ID: <20260401052544.100968-3-hoyeon.lee@suse.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260401052544.100968-1-hoyeon.lee@suse.com>
-References: <20260401052544.100968-1-hoyeon.lee@suse.com>
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Leon Hwang <leon.huangfu@shopee.com>
+Subject: [PATCH net-next] selftests/net: Add two xdp tests to xdp.py
+Date: Wed,  1 Apr 2026 13:27:46 +0800
+Message-ID: <20260401052746.314667-1-leon.huangfu@shopee.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,120 +85,125 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, attach_probe covers manual single-kprobe attaches by
-func_name, but not the raw-address form that the PMU-based
-single-kprobe path can accept.
+In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
+these two XDP tests are suggested to add to xdp.py.
 
-This commit adds PERF and LINK raw-address subtests by resolving
-SYS_NANOSLEEP_KPROBE_NAME through kallsyms, passing the absolute address
-in bpf_kprobe_opts.offset with func_name = NULL, and verifying that
-kprobe and kretprobe are still triggered. It also verifies that LEGACY
-rejects the same form.
+1. Verify the failure of attaching non-frag-capable prog to mtu=9k driver.
+2. Verify the failure of updating frag-capable prog with non-frag-capable
+   prog, when the frag-capable prog attaches to mtu=9k driver.
 
-Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+They have been verified against Mellanox CX6 and Intel 82599ES NICs.
+
+With dropping other tests, here are the test logs.
+
+ # ethtool -i eth0
+ driver: mlx5_core
+ version: 6.19.0-061900-generic
+
+ # NETIF=eth0 python3 xdp.py
+ TAP version 13
+ 1..2
+ ok 1 xdp.test_xdp_native_attach_sb_to_mb
+ ok 2 xdp.test_xdp_native_update_mb_to_sb
+ # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+ # ethtool -i eth0
+ driver: ixgbe
+ version: 6.19.0-061900-generic
+
+ # NETIF=eth0 python3 xdp.py
+ TAP version 13
+ 1..2
+ ok 1 xdp.test_xdp_native_attach_sb_to_mb # SKIP RTNETLINK answers: Invalid argument
+ ok 2 xdp.test_xdp_native_update_mb_to_sb # SKIP RTNETLINK answers: Invalid argument
+ # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:2 error:0
+
+Links:
+[1] https://lore.kernel.org/bpf/20260326124205.1a3bb825@kernel.org/
+
+Signed-off-by: Leon Hwang <leon.huangfu@shopee.com>
 ---
- .../selftests/bpf/prog_tests/attach_probe.c   | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ tools/testing/selftests/drivers/net/xdp.py | 53 +++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9e77e5da7097..a41542f4b35d 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -123,6 +123,82 @@ static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
- 	test_attach_probe_manual__destroy(skel);
- }
+diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
+index d86446569f89..fe34b491778b 100755
+--- a/tools/testing/selftests/drivers/net/xdp.py
++++ b/tools/testing/selftests/drivers/net/xdp.py
+@@ -13,7 +13,7 @@ from enum import Enum
  
-+/* manual attach address-based kprobe/kretprobe testings */
-+static void test_attach_kprobe_by_addr(enum probe_attach_mode attach_mode)
-+{
-+	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct test_attach_probe_manual *skel;
-+	unsigned long func_addr;
-+
-+	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
-+		return;
-+
-+	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
-+	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
-+		return;
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
-+		return;
-+
-+	kprobe_opts.attach_mode = attach_mode;
-+	kprobe_opts.retprobe = false;
-+	kprobe_opts.offset = func_addr;
-+	skel->links.handle_kprobe =
-+		bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						NULL, &kprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.handle_kprobe, "attach_kprobe_by_addr"))
-+		goto cleanup;
-+
-+	kprobe_opts.retprobe = true;
-+	skel->links.handle_kretprobe =
-+		bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+						NULL, &kprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.handle_kretprobe,
-+			   "attach_kretprobe_by_addr"))
-+		goto cleanup;
-+
-+	/* trigger & validate kprobe && kretprobe */
-+	usleep(1);
-+
-+	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res");
-+	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res");
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
-+}
-+
-+/* reject legacy address-based kprobe attach */
-+static void test_attach_kprobe_legacy_by_addr_reject(void)
-+{
-+	LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct test_attach_probe_manual *skel;
-+	unsigned long func_addr;
-+
-+	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
-+		return;
-+
-+	func_addr = ksym_get_addr(SYS_NANOSLEEP_KPROBE_NAME);
-+	if (!ASSERT_NEQ(func_addr, 0UL, "func_addr"))
-+		return;
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_kprobe_manual_open_and_load"))
-+		return;
-+
-+	kprobe_opts.attach_mode = PROBE_ATTACH_MODE_LEGACY;
-+	kprobe_opts.offset = func_addr;
-+	skel->links.handle_kprobe =
-+		bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						NULL, &kprobe_opts);
-+	if (ASSERT_ERR_PTR(skel->links.handle_kprobe,
-+			   "attach_kprobe_legacy_by_addr"))
-+		ASSERT_EQ(libbpf_get_error(skel->links.handle_kprobe),
-+			  -EOPNOTSUPP, "attach_kprobe_legacy_by_addr_err");
-+
-+	test_attach_probe_manual__destroy(skel);
-+}
-+
- /* attach uprobe/uretprobe long event name testings */
- static void test_attach_uprobe_long_event_name(void)
- {
-@@ -416,6 +492,12 @@ void test_attach_probe(void)
- 		test_attach_probe_manual(PROBE_ATTACH_MODE_PERF);
- 	if (test__start_subtest("manual-link"))
- 		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
-+	if (test__start_subtest("kprobe-perf-by-addr"))
-+		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_PERF);
-+	if (test__start_subtest("kprobe-link-by-addr"))
-+		test_attach_kprobe_by_addr(PROBE_ATTACH_MODE_LINK);
-+	if (test__start_subtest("kprobe-legacy-by-addr-reject"))
-+		test_attach_kprobe_legacy_by_addr_reject();
+ from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_ne, ksft_pr
+ from lib.py import KsftNamedVariant, ksft_variants
+-from lib.py import KsftFailEx, NetDrvEpEnv
++from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv
+ from lib.py import EthtoolFamily, NetdevFamily, NlError
+ from lib.py import bkg, cmd, rand_port, wait_port_listen
+ from lib.py import ip, defer
+@@ -693,6 +693,55 @@ def test_xdp_native_qstats(cfg, act):
+             ksft_ge(after['tx-packets'], before['tx-packets'])
  
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
+ 
++def _set_jumbo_mtu(cfg, mtu):
++    ip(f"link set dev {cfg.ifname} mtu {mtu}")
++    defer(ip, f"link set dev {cfg.ifname} mtu 1500")
++
++
++def _exec_cmd(cfg, obj, sec, ip_opts=""):
++    return cmd(f"ip {ip_opts} link set dev {cfg.ifname} xdpdrv obj {obj} sec {sec}", shell=True, fail=False)
++
++
++def test_xdp_native_attach_sb_to_mb(cfg):
++    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
++    mtu = 9000
++
++    _set_jumbo_mtu(cfg, mtu)
++
++    probe = _exec_cmd(cfg, obj, "xdp.frags")
++    if probe.ret != 0:
++        output = probe.stderr.strip() or probe.stdout.strip()
++        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
++
++    ip(f"link set dev {cfg.ifname} xdpdrv off")
++
++    probe = _exec_cmd(cfg, obj, "xdp")
++    if probe.ret == 0:
++        ip(f"link set dev {cfg.ifname} xdpdrv off")
++        raise KsftFailEx(f"driver unexpectedly allows non-multi-buffer XDP at MTU {mtu}")
++
++
++def test_xdp_native_update_mb_to_sb(cfg):
++    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
++
++    _set_jumbo_mtu(cfg, 9000)
++
++    attach = _exec_cmd(cfg, obj, "xdp.frags")
++    if attach.ret != 0:
++        output = attach.stderr.strip() or attach.stdout.strip()
++        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
++
++    defer(ip, f"link set dev {cfg.ifname} xdpdrv off")
++
++    update1 = _exec_cmd(cfg, obj, "xdp.frags", "-force")
++    if update1.ret != 0:
++        raise KsftFailEx("device fails to update multi-buffer XDP")
++
++    update2 = _exec_cmd(cfg, obj, "xdp", "-force")
++    if update2.ret == 0:
++        raise KsftFailEx("device unexpectedly updates non-multi-buffer XDP")
++
++
+ def main():
+     """
+     Main function to execute the XDP tests.
+@@ -718,6 +767,8 @@ def main():
+                 test_xdp_native_adjst_head_grow_data,
+                 test_xdp_native_adjst_head_shrnk_data,
+                 test_xdp_native_qstats,
++                test_xdp_native_attach_sb_to_mb,
++                test_xdp_native_update_mb_to_sb,
+             ],
+             args=(cfg,))
+     ksft_exit()
 -- 
-2.52.0
+2.53.0
+
