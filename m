@@ -1,166 +1,204 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53531376BD3
-	for <bpf@vger.kernel.org>; Wed,  1 Apr 2026 15:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775058169; cv=pass; b=Fru8Q1BEzpYAewSMyiLAa1CLXaD0toa4saTQMImZTITsjaA74KVEpu7cn9oHtbfv6ozIqpr+LZQE5M/MQdBC0PtZ4bx/+LYj9MbNCHEKfOqJP8xPLk7HtBpf6wfVdiyqinqbtonF7NdL39Xrz8EhKGn4KEnLAAd51sw2gtiPqbk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775058169; c=relaxed/simple;
-	bh=kX98sxG++45eJbC7brkRJQm2nK+Yw6PFaAP4I6JBXf0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QdDDOcq4J6kMO0laoyR1V4XYnaf0gdXJWxVY9HtM6fm0x/IQSGScZMRkX8D3rcmU62WbDiCZ5Ga14KgPs50J2gpxQKZ9xtdMl8d5oec66u2xwaaz813WLCCeS1bFJAYYaVGNa8ZJMJD0MsY+hgMcpsRqtlEOZ3Mo7nc38VKMIdI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s5u/lfRa; arc=pass smtp.client-ip=209.85.128.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9322821257B;
+	Wed,  1 Apr 2026 15:44:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775058300; cv=none; b=CQredBvIxu0mBLH5+Miod5bJelKwY1qEsRYRJeDV6MQc7IdPKNcyB+cb3nFiFGpbDaHfr06aEhhaf5n6ENToHt+2lhyPG/crHmuR4Uwg2L1g5xzQsSt/4vvTuBMQs6TUqj26VtQTByKL/UkVIWScT2VDkBrxJf8theJH/ZOsUr8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775058300; c=relaxed/simple;
+	bh=A30oFn3i3XwkbKi5Z4CboB8jSWUWd5dBj/4qrotLwnM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mymGARqSzFev28Q6y1KB74Uu4WVlaIMp6YqC0f22XS4Bh0PnPw99OGQtfWPUEI7jAh9JDTb1Kt65vqBoYsPYLT08tJV/BvOsCXlnkvXeaKHcCHdMnK+LISxV1pNeWyOxxrOg/ffR2R99uKouZVJDO00eX0PvJ3wzm+SPMJyWCiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=eHh2Fpxt; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s5u/lfRa"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4887d4c6234so24195165e9.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 08:42:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775058167; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jcRSbyFbqyMl4SAAMNLHrNePwge0y4VTV+fUjHkwY58Cmc833ys/PbVKbFaDTYoPvA
-         VgvW/WwPrQV/Hagq1wEKPBlX9LEGzWkoCf4XeGMwYLskQqjykt7uwwiSsh97f77q38s8
-         wdIKOaVCuZcOzMmalahP+k9wG6UrG4hA9OuNFuDkIfiAh0vRI1yCDjwuIQ+U5VDy9dFe
-         phoMLO0TL+ba+pTCQxhX8LG2mJgXYIFtevfiBW3sXtVGR/eFZqqbFGG/DKGKJtLuQMwZ
-         yva1goe2MtFO/ytw9fsvxvNNoftzKqldXqS8Ate/vBbmq0Qh5gttjPmXYIvPu6WXbCr6
-         0bgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=kX98sxG++45eJbC7brkRJQm2nK+Yw6PFaAP4I6JBXf0=;
-        fh=qqv4dVk/6fgOZLiBoXqlNfpz0ftqMW1QU8bcbRd7o84=;
-        b=cQh+z8AMdNq4cdSE/OPrQGSTpU2obnYQeEIrGZaEcZmCbIscJpjfsu0rpO3ACDXc+9
-         qyHIejaBfqCAbHho8fXeshjfQweNQcfZzlQMJCjTkeG91gKSTJ16JNiDY61Z2Pdh47YX
-         5Ky2jObapa02FDRJ8PvFri/U/W6efxUnjVCRkL0fuY881XkF7rz7BectAk8ObdrbbwtF
-         LbARWBdcKGpph/WgZ/Is1fZrgLl4MM7W+Jb39Ocjh2sCbLyyJHL3o7MNHEyP8blaJJ/p
-         /A81SrcEhD4ktz7jtk/jQuVnvB9MG4c/6ZDEVghIEMC2XzBMnK/nJjJTh+oCZK8pMEWX
-         3zUA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775058167; x=1775662967; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kX98sxG++45eJbC7brkRJQm2nK+Yw6PFaAP4I6JBXf0=;
-        b=s5u/lfRa7pNfVjROQAkdzmTTMJkQND1f7nvbG27ghj1dXU1kQK9lwiiIK/vCRNE/ku
-         jb3EWVVAPoulH0GeOEx8jSMf1Z6J1+jDiUbwEKe3jg0djKsYgIXqdCwCs2uiTJQPiGUN
-         MyLMqH/1615z2XSJJFujt0JraMuMabiuTvSInHXhQ13Wjca/nrz/sYIi7RuIb2EpM9oa
-         8IDc/Swz3dOTIbqCA3/p0FNx4cgJI7p1a1Ba6FNNG03QRtqm/+waNENrwxXm0p5E6OIP
-         g1d9zb/vAasaUEEbjoaTLpp5MVd+0JQ7fUae4J1Nf+LRn6uDDEkUvoJ0B9WIVztISk3p
-         kRug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775058167; x=1775662967;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kX98sxG++45eJbC7brkRJQm2nK+Yw6PFaAP4I6JBXf0=;
-        b=DGDs8Mf6+bw00+086QZbqWd/Txa/VfRRW0IriU/pcx3KymQsOOjjmhnq68zWccMKND
-         vtkO63ssLxoxqv3/EyIgFJmX+HcG8Udo4zuW+Cyf2o7Idk/AAp2KTzc+YKdnq9gSG/XI
-         uSGSLrFjgEHWz3SJftWDa3jjpPnh/cFJc8pfCI0ojRaHYTgoFPAl6M/gOb0Fz8/YjIxc
-         sXewREttZ3vPnhrmOY3QTMhHbWXeRHensHKDzHwTBt8EwjJuJQzZwg1PWPVhtmHs08iy
-         DVOW6tY8WFgY26Up3VyVmjzWC1hwaxjXk42XyUa5rMOpALeW/OFhzOVbDVeKYTS+vW/A
-         Gi4g==
-X-Gm-Message-State: AOJu0YzDKVy2HbiPW5SHWLJSruxl+bNlFHYtcphmIDP4Jr2qqvR0gaiL
-	o//z9Xdx/7vmv/4EW+i1TmOxmVKEKOotOxZLnW0oa0A8bfcTNTo4zhl3ZWq252kgzlYkHUJfn0V
-	eLeCx5geItty9/6C5I26N9eCgdd/jj2s=
-X-Gm-Gg: ATEYQzwuTId/pfQv2mHTBZGGtksXs5pUviK0cDhgATunJOd7DZFnudKfMZcztO5GXjq
-	MHvEUeMf1kh59P8l1dV24vuGV7872jaZxkkRZoxViWi1SgB2bi5PZI4ZEQy1/0savszXVIpzJCA
-	fJKCGCuonNp1S9Twwgmh9dMe72vECPTSZQ9Hh+aOzZm4Ayg12zNg03dX+Yifs2l4cE0mwxCqPB4
-	nM6qAK5qf079neQLRJ22wL9T9P9ZyJ2LWh8NdOAGPQ+v4Rq3/6uckWj10Le13VEkH1RhxAMYa2m
-	kyejnP9aAL41vx6X3ua/nHH22vJXdWxUW4X+IrUPy6PzUctOJVEoHRK/olk=
-X-Received: by 2002:a05:600c:c04a:b0:485:5981:1423 with SMTP id
- 5b1f17b1804b1-4888355e82bmr53890345e9.3.1775058166591; Wed, 01 Apr 2026
- 08:42:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="eHh2Fpxt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=5QKW3/JXml+7tBXgZ6SvgOOOhlSastlScs8q9qXL1w0=; b=eHh2Fpxt4SMnhfAzFby4vBLBh7
+	LXpSTC5vgOuUT42A1ISnoHyeNSB15COUsX9w90WkTg467kQQbQSR1EiXy1m3fFmuHG36T9Yqnb7e0
+	gxDNe9X8CvJFkRi7V52XnnrGWqCURu/C01SYP4Jl7EplYaw99zMfABJHhvdoUOiWH5KcFVF0WJ6Gz
+	5vw6JMaRy/kamz60gKx0wrZC4LSezlrBI66xegBFN4xJhl4/Swb/wizDRjnVWVeC1lXNH8sfSU5Yb
+	eej6CCaUGtzteYEcKZTSG4Xq7FnMxbjVf0RGkybwel5E56uJ2L9XlTLK+bZRgBWAlKO8CojStpQSy
+	rstcvzdQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1w7xkR-0035cG-0Y;
+	Wed, 01 Apr 2026 15:44:50 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/4] net: move .getsockopt away from __user
+ buffers
+Date: Wed, 01 Apr 2026 08:44:25 -0700
+Message-Id: <20260401-getsockopt-v2-0-611df6771aff@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260401-bpf_map_torn_writes-v1-0-782d071c55e7@meta.com>
- <CAP01T74g_=jSJTNzS41VzK81n3kwkM8EOY=Xv=t0yM5b1-+Z4w@mail.gmail.com> <c83b9eac-f739-4743-af84-4bc54c311d53@gmail.com>
-In-Reply-To: <c83b9eac-f739-4743-af84-4bc54c311d53@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 1 Apr 2026 17:42:10 +0200
-X-Gm-Features: AQROBzA31jyGYjl13WuCfxoipYrJBijTCDwzFk1gGDvt1QN2vhoICk27OV5rL2A
-Message-ID: <CAP01T77X_PjfD0jFhMpcjn+sF2q1-xDmNbgHFU-xotwp4RhsAw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] bpf: Fix torn writes in non-prealloc htab with BPF_F_LOCK
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
-	Aaron Esau <aaron1esau@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFo9zWkC/22NwQ6DIBAFf4XsWRrASqKn/ofxILjotgkYoMbG+
+ O+N9NrzmzdzQMJImKBjB0TcKFHw0DFVMbDL6GfkNEHHQAmlhawFnzGnYF9hzbx1tdaqQZysgYr
+ BGtHRXmQ9eMzc455h+C3pbZ5o8+W62IVSDvFTupssj3+JTXLBW9ncnXVOu7Z5TGho9LcQZxjO8
+ /wCmuVjNMEAAAA=
+X-Change-ID: 20260130-getsockopt-9f36625eedcb
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ Willem de Bruijn <willemb@google.com>, metze@samba.org, axboe@kernel.dk, 
+ Stanislav Fomichev <sdf@fomichev.me>
+Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+ Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.16-dev-453a6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5092; i=leitao@debian.org;
+ h=from:subject:message-id; bh=A30oFn3i3XwkbKi5Z4CboB8jSWUWd5dBj/4qrotLwnM=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBpzT1sy5qPnN/bcUWwUiP6vHavgdHNrCVpO+Tht
+ WLQaI4tNUuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCac09bAAKCRA1o5Of/Hh3
+ bXg2D/96PuNkqd5ke9E4OICZTdj+8OyhH0MWyE54+kLBsDsOj7W6Sn8D/A33N0KFjKNkc4+5uJf
+ 8DuEg+3ApbctxPzSDvCaKfk/NziGUniSJxCzAJQf9ZdURkMwRlDNMj7xSw+zJGBHSYjQzTNoGqE
+ Dc8RODWKqsI0cr8OSgmq12DKWPFBPjTtPie/AsmcrU9ZfZJnA9Lh3Ff4UaTZC4bv46pQpRBCWS0
+ 2yjO1fwACpD3sE9tzrYS+x1e6Ww1nvNOUeaFago0RAej+jox1gBhtZmqqkfQFXhXnHSEof1FY8g
+ oy3ztaPFrCwjeIq1x6KSNu3bW4HWindLWPrjcJHylz3tj8JkF09NFMGRmHMPNueTQihXDcKEssV
+ vpz7YSkXIeRzFOf1EuLc47Nf78ZOKV6G/mJsPDdwUMJle6pjbnyl5+94iCbHBg0mBWEqZaA2ms1
+ j6C9qdqtqJ6txR9c0nG5//dfdi3T+SnoxuDkERwWbr0i/07WjvCo6Zj09wH/SrbqBbWHsRGXCLV
+ 7p6JyS8eKPTt/zDRAawEChddkRVTShUiJhC5Z0MpZ2glWbOgZ+kWEK9LWT6WLzp6aDoJo6/qXhc
+ 03i0bIhspzKdNG+aLY9dlux44qwGMHxBv/Nh0iaaN5wDJW0+t99RbmN8oEZDRQSn70HFiEr75cs
+ OcuypxXp+obxm3w==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Wed, 1 Apr 2026 at 17:33, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
->
-> On 4/1/26 4:21 PM, Kumar Kartikeya Dwivedi wrote:
-> > On Wed, 1 Apr 2026 at 15:51, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
-> >>
-> >> A torn write issue was reported in htab_map_update_elem() with
-> >> BPF_F_LOCK on hash maps. The BPF_F_LOCK fast path performs
-> >> a lockless lookup and copies the value under the element's embedded
-> >> spin_lock. A concurrent delete can free the element via
-> >> bpf_mem_cache_free(), which allows immediate reuse. When
-> >> alloc_htab_elem() recycles the same memory, it writes the value with
-> >> plain copy_map_value() without taking the spin_lock, racing with the
-> >> stale lock holder and producing torn writes.
-> >>
-> >> Patch 1 fixes alloc_htab_elem() to use copy_map_value_locked() when
-> >> BPF_F_LOCK is set.
-> >>
-> >> Patch 2 adds a selftest that reliably detects the torn writes on an
-> >> unpatched kernel.
-> >>
-> >> Reported-by: Aaron Esau <aaron1esau@gmail.com>
-> >> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> >> ---
-> >
-> > The fix looks correct, but I think the test needs more work.
-> >
-> > After reverting the test, it continues to pass for me the majority of
-> > the times, so it's not deterministic. If a fix is made in the kernel,
-> > it is essentially best-effort, so we cannot be confident whether
-> > trials that didn't produce a fault were due to our inability to
-> > reproduce the race or because the fix was correct.
-> >
-> > To be fair, I am not sure we can construct a deterministic test
-> > without controlling thread schedules, so it might not be worth it and
-> > we can continue with the best-effort test you have. It definitely has
-> > some value, since I don't observe any failures on repeated runs but
-> > can observe some without the fix.
-> >
-> > One way I considered strengthening the current test is to pin threads
-> > to two CPUs. One thread will constantly lookup and verify that all
-> > bytes are the same. This will use BPF_F_LOCK, ensuring serialization.
-> > On the other CPU we constantly do delete + update with BPF_F_LOCK, and
-> > keep changing the byte sequence we update. So aaaa -> bbbb -> cccc,
-> > etc. Set max_entries = 1 so that we ensure the same element keeps
-> > getting recycled constantly. I didn't try this but it might improve
-> > the chances of success, esp. if the map value is big, such that the
-> > window of reading and writing on either side can be long. We might
-> > also want to do repeat = 1000 or more and then handle this sequence
-> > copy in a tight loop inside the kernel in the program itself. This
-> > ensures that precious time on either side is not lost bouncing back
-> > and forth from user space to the kernel due to bpf_prog_test_run().
-> >
-> > Thoughts?
-> >
->
-> Yes, the test does not fail 100% of time on the baseline, but this
-> particular implementation fails most of the time for me (like 9-8 out of
-> 10). It passes consistently with the fix.
->
-> Yes, probably pinning threads and making map value bigger may increase
-> failure rate on the baseline. Thanks for checking the test on your setup
-> and suggestions, I'm happy to implement them for the next version.
->
+Currently, the .getsockopt callback requires __user pointers:
 
-Maybe try pinning and a bigger map value, but if that doesn't help
-much, I think the current thing is fine to go ahead with. The fix
-looks correct and it wouldn't make sense to waste more time on it.
+  int (*getsockopt)(struct socket *sock, int level,
+                    int optname, char __user *optval, int __user *optlen);
 
-> >> [...]
-> >>
->
+This prevents kernel callers (io_uring, BPF) from using getsockopt on
+levels other than SOL_SOCKET, since they pass kernel pointers.
+
+Following Linus' suggestion [0], this series introduces sockopt_t, a
+type-safe wrapper around iov_iter, and a getsockopt_iter callback that
+works with both user and kernel buffers. AF_PACKET and CAN raw are
+converted as initial users, with selftests covering the trickiest
+conversion patterns.
+
+[0] https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/
+
+Below are some questions raised during the RFC discussion:
+
+1) Should optlen be an iov_iter as well?
+  No. optlen can remain a plain kernel int since do_sock_getsockopt_iter() syncs
+  it back to userspace on both success and failure. The existing callback
+  patterns all work with this approach:
+
+  a) Most callbacks (roughly 2/3) always write back optlen.
+
+  b) Some callbacks read optlen but never update it. The original
+     value is written back unchanged.
+
+  c) CAN raw updates optlen even on error (-ERANGE) to report the
+     required buffer size:
+
+          err = -ERANGE;
+          if (put_user(fsize, optlen))
+                  err = -EFAULT;
+
+     No regression, since opt.optlen is always written back to
+     userspace by the wrapper.
+
+  d) Bluetooth uses put_user() with mixed sizes (u32, u16, u8) but
+     never updates optlen. Same as case (b).
+
+2) Can callbacks change iov_iter direction mid-flight?
+
+  Yes. Some protocols read from and then write back to optval in the same
+  getsockopt call. For example, PACKET_HDRLEN reads a tpacket version from optval
+  and writes back the corresponding header size.
+
+  The converted callback handles this by temporarily flipping the iter direction,
+  reverting the position, and writing back:
+
+          case PACKET_HDRLEN:
+                  // opt->iter.data_source is ITER_SOURCE;
+                  if (copy_from_iter(&val, len, &opt->iter) != len)
+                          return -EFAULT;
+		  // unroll the bytes
+                  iov_iter_revert(&opt->iter, len);
+                  opt->iter.data_source = ITER_DEST;
+                  // ... update val ...
+                  if (copy_to_iter(&val, len, &opt->iter) != len)
+                          return -EFAULT;
+
+  The callback needs to handle two things after reading from the iter:
+  reset the position with iov_iter_revert(), and flip data_source back
+  to ITER_DEST before writing.
+
+  - ITER_DEST — the iter is a destination (kernel writes to it).
+		copy_to_iter() works, copy_from_iter() refuses.
+  - ITER_SOURCE — the iter is a source (kernel reads from it).
+		copy_from_iter() works, copy_to_iter() refuses.
+
+3) In which case iov_iter_revert() needs to be called?
+
+  When a callback needs to read from and then write back to the same
+  buffer in a single getsockopt call. The iter advances its position on
+  copy_from_iter(), so you need iov_iter_revert() to reset the position
+  back to the start before you can copy_to_iter() into the same location.
+
+  Without the revert, copy_to_iter() would write past the end of the
+  buffer since the iter already advanced during the read.
+
+4) Do we have any selftest for this change?
+
+  Yes, I've created a commit that I am using to test it, but, I am not
+  sure how useful it is rigth now, so, not appending it here.
+
+  You can find it at
+  https://github.com/leitao/linux/commit/2d9311947061f1baa43858f597dd6c54d7ccc5d2
+
+Note: The dance regarding changes to iov_iter_revert() (2) and
+opt->iter.data_source (3) is a bit fragile. It will not be a bad idea to
+creaet a helper (e.g., sockopt_read_val()) would be safer to prevent
+others from getting it wrong.
+
+I am not adding it now, so, it is easier to read the bare bones of the
+change and helpers can come later.
+
+Link: https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/ [0]
+---
+Changes in v2:
+- Restore optlen even on error path (getsockopt_iter fails)
+- Move af_packet.c and can instead of netlink (given these are the most
+  complicate ones).
+- Link to v1: https://patch.msgid.link/20260130-getsockopt-v1-0-9154fcff6f95@debian.org
+
+---
+Breno Leitao (4):
+      net: add getsockopt_iter callback to proto_ops
+      net: call getsockopt_iter if available
+      af_packet: convert to getsockopt_iter
+      can: raw: convert to getsockopt_iter
+
+ include/linux/net.h    | 19 +++++++++++++++++++
+ net/can/raw.c          | 28 +++++++++++++---------------
+ net/packet/af_packet.c | 18 ++++++++++--------
+ net/socket.c           | 48 +++++++++++++++++++++++++++++++++++++++++++++---
+ 4 files changed, 87 insertions(+), 26 deletions(-)
+---
+base-commit: 2d9311947061f1baa43858f597dd6c54d7ccc5d2
+change-id: 20260130-getsockopt-9f36625eedcb
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
