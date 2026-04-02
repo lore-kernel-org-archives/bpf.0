@@ -1,61 +1,63 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B1035DA5B
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 21:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3393B389F
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 21:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775165340; cv=none; b=ixmesIZ6TNdZxJLmoSXjmTVQjGcTzow8C1iBJf6bapoRoOPWT12SNNQfjaPFoE8+urtwA3vfuRl7R8VJbU1mDFDKKkTUekh7IhdsOjuf5am8EcoT/EWUiqe4VUJkmrz9zdNzNyLjm+ZiC9IA8xkFQTV61floezr+ij2wCMJuhy8=
+	t=1775165343; cv=none; b=Ba5kROf6D0WOBOLaOVaSTyB9zDXILOa6/UQQWcY+sdQvbDVTqDMzETO2MxjqIRACUEa+mYNG9x+v+NShWEvJCItc4zE6GPF0wYPmClcBuu9GCA96syJ9EaIcQuN8CCLNWR8oOGt/HzDzDWjPdBeWK7RggA4f9yIIGmYHt4ZmrEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775165340; c=relaxed/simple;
-	bh=hB6vk7TOun8L3gF8GIIFvvpNX/x+SMOUgHXebLTfTRk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pPVFkNWFChhQMYIilD19Bq76hknrJ6dWC5hHPGvAgUq1isvhQzqeIVzd60HU/d1e+499R3NtPOvF6UNSOLpOcl3cccG4QZKTQscT0olP1sAZs3BSq9DU8oRlUWg+tQPrfZSnzTdtHpDD6gJi+OL1AhPIhiwYGCQlweOmbbyL0kY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lPYK2Wb3; arc=none smtp.client-ip=209.85.216.41
+	s=arc-20240116; t=1775165343; c=relaxed/simple;
+	bh=eH8zojZ3+sx/3ZMQPcmY+N2BAA63nZmLajpUHyqna60=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WPWDmRIv++8WUzTI0JIEQPW5Uh9VNP01ytwwUfPJCrYdGN3zbfr3JRkO30VsqiNVB9/9gacoGPCPI8jRl/TPXCXFmvhBY4XFf/+tBEuona7ZvEhCEWhISqlhPQSK7f+htqwD/xLj0PfnBcVh8LgPw9xtUC+SI0wOqCZzKHyhlvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XxEaCvl7; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lPYK2Wb3"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-35da1af3e10so1143433a91.3
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 14:28:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XxEaCvl7"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2addb31945aso9786225ad.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 14:29:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775165338; x=1775770138; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yqyWc5K9i9oCpGyKKrmxhsFyGFvbzy0nn/eV9JCzXU4=;
-        b=lPYK2Wb3jvsW6R30MyCEqGqQFGs5zw+QzpmqcxvFYm3HBNMxF+t8xJvu7LXReJyIik
-         HsRmBRY46boGtKwPJyCShX/ocQ27qDWrkaoLk7dYLR1v0Dzn9kM4nHq+3cfXC2vJ9jfY
-         ggKBziY/gzjHjuQ0YrpLHTqiyL9ZVW6b4nOVAeqKA0kolaq7T8KxvM7fTGE7S1qTKC0d
-         5IXOMSww4zyjD5dhJofmrGidIp6MQQuKdoot9MUS/AFOlKRwwLsFlFs2OhBkNukdHV3I
-         Lxvds83MOdoALvEqLjWLP1Wed/n01GX73DwWCq7z6NI7/UnZAXQ0GTon49MTuXRezK6T
-         bjzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775165338; x=1775770138;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775165341; x=1775770141; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yqyWc5K9i9oCpGyKKrmxhsFyGFvbzy0nn/eV9JCzXU4=;
-        b=mS0bbWdcXR3R2CMYqefJ1W80BBpAFb7fkJcSW1NHVXlERyLvLjVr13sfFwiqV8rMdn
-         n3ryJLCAgz+TxFqJTsjR6S50jTyTJSf8Z7UxYAa3Rhupf9HjZus8zUaqZsz1BtmU4Xr4
-         9eCIS81kmCxchYFV+K6khFKQYQdILBrBd8B1w1RWND1NrEIHOLMv5WhiARJdovo0zh5r
-         a+F+Q2vemHjZGakoiSov4g8Dyuc070E9CjseXp1a2oVnXbaaCxn1B3rcCoBR7Tm4HjLH
-         eKtnZFrGu8PfID7mN5tHW4LEbcSRWPugZTkU7cX9X8hskjSibXb4g5ql+ydaDwvExFwn
-         uf7w==
-X-Gm-Message-State: AOJu0YxA2DD9RLGHqDqr33b9xPxMrz+koczEmUADimF+4BoACfIsuhUH
-	tdZmdok72HvuAIM5kGPeOLMWZWKO46aMf2voRVAOXvchSuRDqiep7yFKD7J2PQ==
-X-Gm-Gg: AeBDieuf3Q5cwsgvi6RrzBsYWwcJqq2T6uK726f+AaI6AAl8RJh8QiGvSGl1Dyv2xKx
-	K2FYYWpkS+Nc+FDiAXlfJdtapFR36uV/O/PaO4bojzdVKi3wW10SkxiUPhU+WWSY4UuCvQy6YGX
-	chI/GPLDQSqdaScwHTUsVDX0FMs2QrAML93lq/T+Xw9VUvMs9fAaRaCrd35Yai96lMVPZC8SbBq
-	L7KfpfpwyX1cAUb9sr2eyX9cS9RUMkvxxNIGljVeMgNKKQ1b/P790mbU40KVnQPCObizc3UK0Qf
-	iZklMNlVNMtK2D1/YgfAW/CJ28eZwlldvk71PiV2qUsvwQFOd9jtie/rvygpPTSTrrlcbotRwOS
-	iNVmCw827GJyECYvxnFrUiE8c9lQN3MeZSwGvUNTf31ttxPGojAcW9/jUb+l//tM6UhA2liO0wv
-	Rav6+385WWGIDmYymm2tfJ88ZBFN0EyR3+3Hp6rBqNgjZ4fg9zvyIo+LITK2oOZrGifyFT6zQBj
-	xR0G0fq4+2uIsikgAR2V2VxzXHbxA3GfCRk8WYnzwTSGir9f1va30uxw/B3Yw==
-X-Received: by 2002:a17:90b:3851:b0:35d:9d4f:f58a with SMTP id 98e67ed59e1d1-35de67df975mr440480a91.9.1775165338503;
-        Thu, 02 Apr 2026 14:28:58 -0700 (PDT)
+        bh=ylTMPo7C/Mxi4W2xEwrnAvHsgYE+KYb+qesL2j3kHoc=;
+        b=XxEaCvl7T5kyts9zy6C4KzE4nT4D4gwydcK+ErJUrHY0EZrsSmrjHv8oa5X2NEHoY7
+         QPvfZjr8z/i4E1LoV2byHH/Do9/1fzxAc3OXRtKmlSEqWwvmVu257pWCMM6K4DEMqszf
+         sbsbQ0ZCc5lT60K1UG/uc94KIHivCLPc8gTf4OWwKKkiz8jVcPTMeHCX5Kh/uwQqB5Z1
+         oLnNFs0+GS366jjEYYttB6/7TAjqcKkVoKePyTiVMfeHWqr2qnIHrPIoyeox32qy2zV6
+         CRBfLuJMbjg9WFLcyk6QqngURo+TwToRKx3BrBLCJjxi+udcNByPwc+EQkmP8Ie0yjwp
+         gePQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775165341; x=1775770141;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ylTMPo7C/Mxi4W2xEwrnAvHsgYE+KYb+qesL2j3kHoc=;
+        b=fC8RtQSk2BiBS46yCq3asJXep7V9AY2DGaHZJTLeu6NiT5O1LKFmSJKjHYmWSLlE7y
+         Bizb9w1zaZ0mpqzw7WO9Pf54v9ujIOowl7QfhgmwPMD127mW5BmegAaLC/nGbvNxlSF7
+         qxmjupmMlFDGW+dZPPAr70tvSji+3cKR9jSSWLnGGY4DOhV0HZEwXmYU8j+hhN6Taddt
+         JE3SD/t+DZss0GTOp/F9ggal9DgJD5dS01sBwYLPmCECD1bxdQMciAayLvIEfT2A1/eR
+         Iu30lZw0J8LpCqRREkW4kiluLGOTXVW7jcJMUjUidwvW+j/+SqbubSgsNZeXScC+D5MG
+         ZNZg==
+X-Gm-Message-State: AOJu0YzzmDL+mGy5eOkW5sZTltg552brNkYNYXagqvv353sDck0RU2sY
+	544g02uePAS3dpmq6JOEUh88EP0XSaL1qFYmpCp2C67b64NkaPfBJ/kv+yLujA==
+X-Gm-Gg: AeBDiesJBvcEtr3EwZSHlQ0MSw6g0gTo+BNwEJU/kuov2GZra9DKoyuIEVCfHpNxdFa
+	1Pkts3roD5hAbKt9wBuxKh0Or4VTSDH5tXJXZEziHMCHCqyHuoOsMHW71j/7r5aHnJLOToehijO
+	UytcawQtTS/Q4PeHxJiKf87C3M/pig4LA36Ed7JFsOhQzTtpcwWw7q9N3/F0MXlWNoXI3vma4aF
+	QvH6WSqmR11BrrnOugjuYSgiIl44HNqhz/2nxK0h09Frw+eUlMIw6Qk8NJCK6NQNUY1lpgqX29X
+	XJFsi4Jqn7xwjSE7d3cPKUXGEIkHnezSl74lIXKv2Fpt2siXqXh7ejnKd0HESvJObGDehlkUFc8
+	rBdIfUB58BYI9GYQ/nF4OsXxo3sGi46teyw9V92W+G60d2sa8LoYNc49sYWR9y/LQUaLkE0AGfr
+	LjE1bnYVu1y2VDx3QvwkLKvpjDTqE8ej/eNKOA/OxevZtAWd3PyABgkDD4+G3xr8y9YvkD1rBG4
+	VMLU25SMNz5ac/1zHgQxfFeuch8lHItK2TUORKm/oPM0TJ/gFUSKUEhVHdu+jeFXrqyQtIu
+X-Received: by 2002:a17:902:ef4f:b0:2b0:60f1:de58 with SMTP id d9443c01a7336-2b281999af3mr7025605ad.45.1775165341102;
+        Thu, 02 Apr 2026 14:29:01 -0700 (PDT)
 Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dd369064asm3756214a91.13.2026.04.02.14.28.57
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27478b658sm41419065ad.31.2026.04.02.14.29.00
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 02 Apr 2026 14:28:57 -0700 (PDT)
+        Thu, 02 Apr 2026 14:29:00 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -63,10 +65,12 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	memxor@gmail.com,
 	eddyz87@gmail.com
-Subject: [PATCH v3 bpf-next 0/6] bpf: Prep patches for static stack liveness.
-Date: Thu,  2 Apr 2026 14:28:50 -0700
-Message-ID: <20260402212856.86606-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH v3 bpf-next 1/6] bpf: Do register range validation early
+Date: Thu,  2 Apr 2026 14:28:51 -0700
+Message-ID: <20260402212856.86606-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260402212856.86606-1-alexei.starovoitov@gmail.com>
+References: <20260402212856.86606-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,58 +81,111 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-v2->v3:
-- added recursive call detection
-- fixed ubsan warning
-- removed double declaration in the header
-- added Acks
+Instead of checking src/dst range multiple times during
+the main verifier pass do them once.
 
-v2: https://lore.kernel.org/bpf/20260402061744.10885-1-alexei.starovoitov@gmail.com/
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/verifier.c                         | 34 +++++--------------
+ .../selftests/bpf/verifier/junk_insn.c        |  4 +--
+ 2 files changed, 10 insertions(+), 28 deletions(-)
 
-v1->v2:
-. fixed bugs spotted by Eduard, Mykyta, claude and gemini
-. fixed selftests that were failing in unpriv
-. gemini(sashiko) found several precision improvements in patch 6,
-  but they made no difference in real programs.
-
-v1: https://lore.kernel.org/bpf/20260401021635.34636-1-alexei.starovoitov@gmail.com/
-First 6 prep patches for static stack liveness.
-
-. do src/dst_reg validation early and remove defensive checks
-
-. sort subprog in topo order. We wanted to do this long ago
-  to process global subprogs this way and in other cases.
-
-. Add constant folding pass that computes map_ptr, subprog_idx,
-  loads from readonly maps, and other constants that fit into 32-bit
-
-. Use these constants to eliminate dead code. Replace predicted
-  conditional branches with "jmp always". That reduces JIT prog size.
-
-. Add two helpers that return access size from their arguments.
-
-Alexei Starovoitov (6):
-  bpf: Do register range validation early
-  bpf: Sort subprogs in topological order after check_cfg()
-  selftests/bpf: Add tests for subprog topological ordering
-  bpf: Add bpf_compute_const_regs() and bpf_prune_dead_branches() passes
-  bpf: Move verifier helpers to header
-  bpf: Add helper and kfunc stack access size resolution
-
- include/linux/bpf_verifier.h                  |  59 +++
- kernel/bpf/Makefile                           |   2 +-
- kernel/bpf/const_fold.c                       | 396 ++++++++++++++++
- kernel/bpf/verifier.c                         | 429 ++++++++++++++----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_loops1.c     |   3 +-
- .../selftests/bpf/progs/verifier_scalar_ids.c |  20 +-
- .../bpf/progs/verifier_subprog_topo.c         | 226 +++++++++
- .../selftests/bpf/progs/verifier_unpriv.c     |   6 +-
- .../selftests/bpf/verifier/junk_insn.c        |   4 +-
- 10 files changed, 1052 insertions(+), 95 deletions(-)
- create mode 100644 kernel/bpf/const_fold.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_topo.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8c1cf2eb6cbb..8234d80b892a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2249,13 +2249,6 @@ static void __mark_reg_const_zero(const struct bpf_verifier_env *env, struct bpf
+ static void mark_reg_known_zero(struct bpf_verifier_env *env,
+ 				struct bpf_reg_state *regs, u32 regno)
+ {
+-	if (WARN_ON(regno >= MAX_BPF_REG)) {
+-		verbose(env, "mark_reg_known_zero(regs, %u)\n", regno);
+-		/* Something bad happened, let's kill all regs */
+-		for (regno = 0; regno < MAX_BPF_REG; regno++)
+-			__mark_reg_not_init(env, regs + regno);
+-		return;
+-	}
+ 	__mark_reg_known_zero(regs + regno);
+ }
+ 
+@@ -2908,13 +2901,6 @@ static void __mark_reg_unknown(const struct bpf_verifier_env *env,
+ static void mark_reg_unknown(struct bpf_verifier_env *env,
+ 			     struct bpf_reg_state *regs, u32 regno)
+ {
+-	if (WARN_ON(regno >= MAX_BPF_REG)) {
+-		verbose(env, "mark_reg_unknown(regs, %u)\n", regno);
+-		/* Something bad happened, let's kill all regs except FP */
+-		for (regno = 0; regno < BPF_REG_FP; regno++)
+-			__mark_reg_not_init(env, regs + regno);
+-		return;
+-	}
+ 	__mark_reg_unknown(env, regs + regno);
+ }
+ 
+@@ -2947,13 +2933,6 @@ static void __mark_reg_not_init(const struct bpf_verifier_env *env,
+ static void mark_reg_not_init(struct bpf_verifier_env *env,
+ 			      struct bpf_reg_state *regs, u32 regno)
+ {
+-	if (WARN_ON(regno >= MAX_BPF_REG)) {
+-		verbose(env, "mark_reg_not_init(regs, %u)\n", regno);
+-		/* Something bad happened, let's kill all regs except FP */
+-		for (regno = 0; regno < BPF_REG_FP; regno++)
+-			__mark_reg_not_init(env, regs + regno);
+-		return;
+-	}
+ 	__mark_reg_not_init(env, regs + regno);
+ }
+ 
+@@ -3958,11 +3937,6 @@ static int __check_reg_arg(struct bpf_verifier_env *env, struct bpf_reg_state *r
+ 	struct bpf_reg_state *reg;
+ 	bool rw64;
+ 
+-	if (regno >= MAX_BPF_REG) {
+-		verbose(env, "R%d is invalid\n", regno);
+-		return -EINVAL;
+-	}
+-
+ 	mark_reg_scratched(env, regno);
+ 
+ 	reg = &regs[regno];
+@@ -21953,6 +21927,14 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 		return err;
+ 
+ 	for (i = 0; i < insn_cnt; i++, insn++) {
++		if (insn->dst_reg >= MAX_BPF_REG) {
++			verbose(env, "R%d is invalid\n", insn->dst_reg);
++			return -EINVAL;
++		}
++		if (insn->src_reg >= MAX_BPF_REG) {
++			verbose(env, "R%d is invalid\n", insn->src_reg);
++			return -EINVAL;
++		}
+ 		if (BPF_CLASS(insn->code) == BPF_LDX &&
+ 		    ((BPF_MODE(insn->code) != BPF_MEM && BPF_MODE(insn->code) != BPF_MEMSX) ||
+ 		    insn->imm != 0)) {
+diff --git a/tools/testing/selftests/bpf/verifier/junk_insn.c b/tools/testing/selftests/bpf/verifier/junk_insn.c
+index 89d690f1992a..7d10b0a48f51 100644
+--- a/tools/testing/selftests/bpf/verifier/junk_insn.c
++++ b/tools/testing/selftests/bpf/verifier/junk_insn.c
+@@ -28,7 +28,7 @@
+ {
+ 	"junk insn4",
+ 	.insns = {
+-	BPF_RAW_INSN(-1, -1, -1, -1, -1),
++	BPF_RAW_INSN(-1, 0, 0, -1, -1),
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.errstr = "unknown opcode ff",
+@@ -37,7 +37,7 @@
+ {
+ 	"junk insn5",
+ 	.insns = {
+-	BPF_RAW_INSN(0x7f, -1, -1, -1, -1),
++	BPF_RAW_INSN(0x7f, 0, 0, -1, -1),
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.errstr = "BPF_ALU uses reserved fields",
 -- 
 2.52.0
 
