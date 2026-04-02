@@ -1,76 +1,185 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD1937BE86
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 05:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+Received: from outbound.baidu.com (jpmx.baidu.com [119.63.196.201])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id AC23A2FE582;
+	Thu,  2 Apr 2026 05:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=119.63.196.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775108848; cv=none; b=Sn5W3yXq/H9KDn/QtTDNGr63INyXOZMxhq5DSicLbZGB2yGdKuyLWQYbhq7EtyQyVtPFLbyDrBzprmlXGf0cbtMsjhkBge/JOzz+defNkHl5ToL+7Ot0qtnZQK4AuWOPTF1uXDL1mTPgXD5gpAJRN9n9D3iYQzNQfw37hHiPJ2I=
+	t=1775109159; cv=none; b=a4vX6z7L5kCoMd9iqzAHfwqgPQmQU7vMm7SdNy2ZH76ySmSACQsigwwdhQyCk1F8byhdcas9jmBi5sYVCzpQYQQSO1QwGUpu+wDsRkMTJwxIHXQKKxAv6hVkcYZY0cNVcU19aYzfJe6BqR5u8p+XYJy2pnxrdd8HDvRo+lcn/dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775108848; c=relaxed/simple;
-	bh=ePE2E+AdpjzDX1Dv/2T3Ptj9iazcYPXbEFUDKn34kIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aYCEn1fUwZ7vtH0MYZMS9PNwa/iDGwbdb6NAc3hVR8JvtgkftDn4j7krQKYqp/Fu9akkMG/BMcxPF1OahsyIeJme6seE0ohO4P7+KuHbuXdTRg9DjORrUhy78VwpmMDZ4TW1sC+9J8n+IDkzausVSZlxYFOifoIltIEeYoLl2Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eHnxBlpl; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775109159; c=relaxed/simple;
+	bh=PQppXGaETl7HsBl4FNqbEK6u0tJ+4rAmM7mQIV1pMso=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FabLClXTWZ9XJNsfqQs7NWE1m+BZ2RvUBpM1d6JudHwyS4gw0Ngu1vN6YspCYXHDX2vZT1/3FhL4VC10OazojjINdA4wc6w5XNzJGX2IKSdeIrbKP0sTL4oVIpEto0MQV5DOe/87x6d29QBZtBwgisqiSnlc69CC/lYgRWGuSIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; dkim=pass (2048-bit key) header.d=baidu.com header.i=@baidu.com header.b=lnwnmM1U; arc=none smtp.client-ip=119.63.196.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eHnxBlpl"
-Date: Wed, 1 Apr 2026 22:47:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775108841;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4Vtgi/Z4gP8WecPRIsC4VJpf13leM+WQF79E0/GqHtY=;
-	b=eHnxBlplQyLxLgkR4ElenGlRnbh0IYrqzk/tlwlTaiy3H5lwK3EhKulsEm272L7AWghqW+
-	vBLEoNkLuXay3W6BxcxvKDg5g1HjbBjSaT2etBoB7lZfBpAaBWAYU2u1mh8PI8spIb5kZ4
-	14y7f4HSrIw8jfPy25OF69PlIbZUWDU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v5 1/2] bpf: tcp: Reject non-TCP skb in
-  bpf_sk_assign_tcp_reqsk()
-Message-ID: <ac3_SCbLAwVOFKDC@devbig1721.ftw5.facebook.com>
-References: <20260401110511.73355-1-jiayuan.chen@linux.dev>
- <20260401110511.73355-2-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=baidu.com header.i=@baidu.com header.b="lnwnmM1U"
+X-MD-Sfrom: lirongqing@baidu.com
+X-MD-SrcIP: 172.31.50.47
+From: lirongqing <lirongqing@baidu.com>
+To: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	Boris Pismenny <borisp@nvidia.com>, Richard Cochran
+	<richardcochran@gmail.com>, Cosmin Ratiu <cratiu@nvidia.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>, Carolina Jubran <cjubran@nvidia.com>, Li RongQing
+	<lirongqing@baidu.com>, Kees Cook <kees@kernel.org>, Akiva Goldberger
+	<agoldberger@nvidia.com>, Simon Horman <horms@kernel.org>,
+	<netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH net-next] net/mlx5: Use dma_wmb() for completion queue doorbell updates
+Date: Thu, 2 Apr 2026 01:52:06 -0400
+Message-ID: <20260402055206.2311-1-lirongqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260401110511.73355-2-jiayuan.chen@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-ClientProxiedBy: bjkjy-exc13.internal.baidu.com (172.31.51.13) To
+ bjkjy-exc3.internal.baidu.com (172.31.50.47)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=baidu.com;
+	s=selector1; t=1775109140;
+	bh=OkYJlBEhGU26NMF/nb5A1ytM4XV7GIufN+Se8VGdGyc=;
+	h=From:To:Subject:Date:Message-ID:Content-Type;
+	b=lnwnmM1UPi9HcCJlunM4oqGJy6xxHBysvOaX/ybrWHhwb82H+z3eM5+AEQtwK0wPW
+	 fqvG+O8pY4jziu04XNiwfmelBPvqcXue/lyQmgL3CVXBzB6s6IxtIXwGdeoaQ/nMgB
+	 Bkx6PNGY/OZZgt/EusO6WFgnbIWRQ+jZdnt+OiMLJgUugz8KV7sfgQRYNCaYN5l6r+
+	 t4aVAEt0g7mlp1DhdAa66UK2G7z5M2qsQc2HecvvvNP87yTvK+eXyITob2zyel5kHU
+	 4MxZ2lvw+nj0OkhaaRycMZvz1PNoBvDcqAVRyua5wECOYmRLSZfgUVVlI3BmRGfzZo
+	 eV5xDsaL1JkKw==
 
-On Wed, Apr 01, 2026 at 07:04:49PM +0800, Jiayuan Chen wrote:
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 78b548158fb0..f251744025e2 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -12248,11 +12248,23 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
->
->  	switch (skb->protocol) {
->  	case htons(ETH_P_IP):
-> +		if (!pskb_may_pull(skb, sizeof(struct iphdr)))
+From: Li RongQing <lirongqing@baidu.com>
 
-The ai-review [1] is correct. skb_header_pointer() should be used.
-pskb_may_pull() could invalidate the skb->data[_end] pointers
-in the bpf prog.
+dma_wmb() barriers are specifically for ordering writes to DMA
+coherent memory that is accessible to both the CPU and DMA capable
+devices.
 
-[1]: https://sashiko.dev/#/patchset/20260401110511.73355-1-jiayuan.chen%40linux.dev
+The dma_wmb() barrier is lighter than wmb() on some architectures
+because it only ensures ordering for DMA writes, not for all writes
+including MMIO accesses.
 
-It needs one more spin. Thanks.
+In the MLX5 driver, completion queue (CQ) doorbell records are
+allocated as DMA coherent memory via mlx5_dma_zalloc_coherent_node().
+The CQ update pattern is:
+  1. Update CQ space (device reads via DMA)
+  2. Update doorbell record (device reads via DMA)
+  3. Memory barrier
+  4. Enable more CQEs
 
-pw-bot: cr
+Since only DMA coherent memory accesses are involved (no MMIO accesses
+follow), can safely use dma_wmb() instead of wmb().
+
+This change improves performance slightly on architectures where
+dma_wmb() is lighter than wmb().
+
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c    | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c    | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c     | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_tx.c     | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c   | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/wc.c        | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+index 1b76647..7bd6dfc 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+@@ -259,7 +259,7 @@ static bool mlx5e_ptp_poll_ts_cq(struct mlx5e_cq *cq, int napi_budget)
+ 	mlx5_cqwq_update_db_record(cqwq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	while (metadata_buff_sz > 0)
+ 		mlx5e_ptp_metadata_fifo_push(&ptpsq->metadata_freelist,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index 80f9fc1..dde8856 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -805,7 +805,7 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
+ 	mlx5_cqwq_update_db_record(&cq->wq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	sq->cc = sqcc;
+ 	return (i == MLX5E_TX_CQ_POLL_BUDGET);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 268e208..f17e7f1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -2447,7 +2447,7 @@ int mlx5e_poll_rx_cq(struct mlx5e_cq *cq, int budget)
+ 	mlx5_cqwq_update_db_record(cqwq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	return work_done;
+ }
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+index 9f02726..7ba319f 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+@@ -849,7 +849,7 @@ bool mlx5e_poll_tx_cq(struct mlx5e_cq *cq, int napi_budget)
+ 	mlx5_cqwq_update_db_record(&cq->wq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	sq->dma_fifo_cc = dma_fifo_cc;
+ 	sq->cc = sqcc;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+index 1f6bde5..1341874 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+@@ -384,7 +384,7 @@ static inline void mlx5_fpga_conn_cqes(struct mlx5_fpga_conn *conn,
+ 
+ 	mlx5_fpga_dbg(conn->fdev, "Re-arming CQ with cc# %u\n", conn->cq.wq.cc);
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 	mlx5_fpga_conn_arm_cq(conn);
+ }
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+index 614cd57..8f7a89a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+@@ -421,7 +421,7 @@ int mlx5_aso_poll_cq(struct mlx5_aso *aso, bool with_data)
+ 	mlx5_cqwq_update_db_record(&cq->wq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	if (with_data)
+ 		aso->cc += MLX5_ASO_WQEBBS_DATA;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/wc.c b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+index 7d3d4d7..1afbdd19 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/wc.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+@@ -314,7 +314,7 @@ static void mlx5_wc_post_nop(struct mlx5_wc_sq *sq, unsigned int *offset,
+ 	/* ensure doorbell record is visible to device before ringing the
+ 	 * doorbell
+ 	 */
+-	wmb();
++	dma_wmb();
+ 
+ 	mlx5_iowrite64_copy(sq, mmio_wqe, sizeof(mmio_wqe), *offset);
+ 
+-- 
+2.9.4
+
