@@ -1,362 +1,236 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E57282F0F;
-	Thu,  2 Apr 2026 13:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775135808; cv=none; b=WYA8qIKGYx6OaYHp6eQK8At+8juZ1BCBqvj8hf5kF1dO5vuVsN5GrNN155cxvLhdkySRhAWckJz+KTlXj3KeWTdrBPT6e/6cFU9kSjs7JbbSwcgjSc8Rcg+418gLiUWUVwlEt5MTE+Z6WYfTAJJECsfpPRfhltzIwLcSpjo/16k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775135808; c=relaxed/simple;
-	bh=g7dDUn+yP9ANVNbrrrBBZaNmVckr4ZupvOn/OO7O6qg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XVJHj8ZB2DpWFIThw3rlBp+njWpwdnnPOuyGvJtbqQ4RonwCWNIsFfhdtOOkUa0MjmyoNiDqzssG36ndGjBly6piM4QV+xXwJbu/SbC2vQ0tCcMiRTeDsdi9PvnM3B2eckEoYeSkf15DQjveEAFLy3vpBYGJqt53QiqBnmKZXkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Zfw5Zl8o; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA023009CB
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 13:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775136095; cv=pass; b=QBpHjrO9d1STFDQX1OeRvpPWcoEhLVAERIA9YvGsjBNvvLlUA9oYPvXvroku4F8dzYZ+38DV99WO4XCiFxY/XYqMriSqpb1vXmDYc3MRIoBKumNVm5cVZMXo225P+2KmrtOZp2HTfEUU++wZn+nsm7EbFs/rHUkPs5wmOF2v9VY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775136095; c=relaxed/simple;
+	bh=92ifLkSB1QdWZYuCe2bJNqdGfTWsYwdd5FnM5cH+Uek=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M0pqorzJiW3Vm+uAtf1eeQc2GA0ZPP0bWIRPyhafpgW2Zh/CadW5TwlbpLS0wkmJFbfFMa9b231YMKE/T4rJ/7wRuBe7RlfmrTbBLQt0fBXNiHroX714xfyzwcsdclmdZLFSHlEnCc1X1v187ZA0NGCSPT4qquHZUFWeetG0XVQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bm440UxV; arc=pass smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Zfw5Zl8o"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6327PhDJ2679500;
-	Thu, 2 Apr 2026 13:16:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=JgbOLZ
-	tZTnGQzeKA0c8+hTYUkEa0VzumKm4KZiICbm0=; b=Zfw5Zl8oQrDtWsAT9J+Cr/
-	XQBADNPZ6wnndoLvRNp+yLGN0IfUjPac4H0kFXpewIjNLe9D3QCTzOnexSOXbIG5
-	9sEh7sTi/BcT1sqj4WxeAJAUog2MPgmBFWAwu7g4SzlSiVtWgopLX1zNz1QdjH/E
-	rKeeWuCGvKxFGTLWyNmvUu4/v+A90nqQl78f0MIy9lS2syrZmNtXjBhJmzgKVv49
-	v7oEZExF0LMkjEc+MdbPY4Ei/HCyF7i/vee+esRMgDwxDLkA9j02Kx0U5/jS/6Gi
-	hs6umJ6aYR4OpDsE54c79/YPreSNcBGO2ST1JvcNUfatLU9GEy0Eubwr7+zohaPA
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66q3cusf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 02 Apr 2026 13:16:03 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 632CIeBv008703;
-	Thu, 2 Apr 2026 13:16:02 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6v11swb4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 02 Apr 2026 13:16:02 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 632DFwmS54723026
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 2 Apr 2026 13:15:58 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2CB2F20073;
-	Thu,  2 Apr 2026 13:15:58 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5D5DE2006C;
-	Thu,  2 Apr 2026 13:15:54 +0000 (GMT)
-Received: from [9.124.211.83] (unknown [9.124.211.83])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  2 Apr 2026 13:15:54 +0000 (GMT)
-Message-ID: <d8c9c8dd-a544-4f5d-81c6-6041b5e806b1@linux.ibm.com>
-Date: Thu, 2 Apr 2026 18:45:53 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bm440UxV"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64ee82e853cso655162d50.3
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 06:21:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775136092; cv=none;
+        d=google.com; s=arc-20240605;
+        b=DCgyQoie/iGEtBCkLIGNkxlv75misnJJji0yaRAs6gU6zX0saxYubHCy7Vy8S19LlD
+         SfXWSzpOVJU1ARScx8MaTWoafZmUnWiBcXAvX3DhjgMYmFANMBLHyRGb3wH0routxNWU
+         mav8Ti+aC+oWXGFj6/tAj1TusG5BdaTsGQ6Wpx7l+49Lf0rING6XznGfk4ujxR/Gtld7
+         Od8PZ/n75hXMCSu901S9dGhkp5MWQz3bRBJ+YJWlHcX+yvkhDidMhD59JQ5g7a4uZHIF
+         EWkutZA1XVkxuYYQw1lxGvaGBKrj2ejLhgA8TkarOEPKu4pi6Q+CYX++eX0EytJ4AzIJ
+         P+cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=P/+RvF4sr+15hFwCy/1QY5L6R+YF2MZZgsand9uX2p8=;
+        fh=gssCAjqGyG6J0K6pUJfxMkisdYl+sxSjGThHJo71v3o=;
+        b=Or4K0GR+xJUE2ZRyCbM5z33JK1OcUJW8Q7lHwddNNqS4VzuYKMQVRK7tWrnmBViecl
+         +0yaTpjfcrZm2QQo5yczzsG4SHzr23Y5BfAq5sMYXBhWmYn0S9I+HoQ3R9jOvjgrdbH/
+         24k9KXlKxOQGws9Y2e78NetUqU3Or/LKo7yvYQsGpbQStKY+st6LEchOT2raRhcfonXJ
+         4vim4xGGSNOosw9yZOUJxVEJtppfSYcaEPQg3xOVtehFhh4zKuoHmSYvRDO+hEKgA184
+         SC3v+AXiudp76h+cSySOrffvuQcZjTlXomRW2JeoHfY9mFAIMpfbB3G7po4mwZppB24G
+         Vxiw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775136092; x=1775740892; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P/+RvF4sr+15hFwCy/1QY5L6R+YF2MZZgsand9uX2p8=;
+        b=bm440UxVqOnXh6b79oWalrfPhYQW4Z4WKNgYdrdUK1TF6rlQ+wO//yT5nDSYwBpe3M
+         3MYDe4jfdPdbEl7PS44Kgmpq8yYKdubvQ47hwwMqs53YJ80dz4kjNeLojz5hgjx3XwTU
+         gJaFWlU6BeYPAubFhHOeQxQ2cuypCd4CETGTOo0weQaD/vJX41vy10Sc9AtyZyljjU+r
+         rLorbuhQ4KlOzPJRLkwqiSgpLGB+PKnB6jKEE8KraTzJfylZ1LVZ7FOcedxsx40wpDEl
+         L4qV9CCZs7MVqHczcsg5xWjAXt48v3RGnbBt9YoZ0YiMnmCIkOjkqIKWS3OZwkje6GRN
+         JbGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775136092; x=1775740892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=P/+RvF4sr+15hFwCy/1QY5L6R+YF2MZZgsand9uX2p8=;
+        b=stzzZAFRJaXfc6L7TrFs2cRec1khal9TTKToRu0owx8yIsABac+6ya5lTTdPrMV/R8
+         UFvzZJQWCh3U++4CyjizjPEnV/cN78W65cAIK5LAOZLgjakY+a55jfveXNeaQ6lqn+on
+         pudhzzgRty8/TnyGy+C0cJwwE1Q8O4iW1zUuN+y9CC0HnmOEYFP0kE3Eeez/eq4hTRpR
+         RvWSgPSIM/uJUC6Ewe/6etZNBaWUY5jcsFAMyYIsWYUSI//Xy+UqCjL3uZJWt4Rhyefv
+         RL6Dc5u2KWyQxHn3FWx7fldLuzuvj72zDOLvlYcIBFN+eh42jU1YGLirjmCTcsQwCtIs
+         bAGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUvrFGdnS+tvF5YxPaXI1o6hgH+IJEjE/QGEeBVv49g2JewYqbvqOYRdjornNoI91TxnuE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwhAkHDWc+KqnklDUIzAwrMeCvdAPv463VXzkObnO5EAiK1Tqx
+	AALvNVIpZDDE+E+LVLnxe96mfjHEI6hQIs/j6j1INzA8T8vIK7UhrY+9Hq5yQmMvQ+w22Uxt6G7
+	UmBhv0DcJOh84foEQsqrHSf6nNaOf86o=
+X-Gm-Gg: AeBDietCUS8LZq/YnVYhr7sMV/73Fw3dQyiOTe3BWS53nuGty+iWgKgx2YzCvt37CDv
+	FqneJXYoVQi+69WHNs3nKO5KEYWPR5EMFyd8ORwHPK5rCSi/IQwl8Gf9GejE6PojYE6Vdl4ceYb
+	6JcaBtgA9QwTVbtAq7Zq/mlAD+gGPr64VHD9ydgJ10FpWmYweCh0PlZfcx9nLYXvbMQ7K587xjy
+	l2N+7PBQcKnrcNcIIJYxWoGq9FDBslC0JvGyV+hZamziJtbnN2RkR4DHUZG9fVZycb7tzdgUX37
+	SjkKpWOn
+X-Received: by 2002:a05:690e:144b:b0:649:bbf4:121b with SMTP id
+ 956f58d0204a3-6502fd9534cmr7636575d50.2.1775136092404; Thu, 02 Apr 2026
+ 06:21:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] powerpc64/bpf: Add powerpc64 JIT support for timed
- may_goto
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc: sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-        haoluo@google.com, jolsa@kernel.org, chleroy@kernel.org,
-        maddy@linux.ibm.com, mpe@ellerman.id.au, adubey@linux.ibm.com
-References: <20260402054249.28801-1-skb99@linux.ibm.com>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <20260402054249.28801-1-skb99@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: Zm4SQeeocor-YrMLtjR7rk28-DXVJAs8
-X-Authority-Analysis: v=2.4 cv=frzRpV4f c=1 sm=1 tr=0 ts=69ce6c13 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=sjD7eUQVPW1qbSBmM3gA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: 8JgscKiQBGn9pYynFAGYJa9FQLJ7T3-4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDExNiBTYWx0ZWRfX9Hek6HY48SI5
- 05g4BuM1uw0Vf8NcCs8jZpawdT+1K4+CiI38uBsLc8FNUyBbZfwKH26K5X/FDMAjDwDkJcFxlON
- 2D86zoZX90MhkAu+QNldZD8nmO9H0uek0U7LPHBe3XZKpzd7Rtf0tw06Ei7KKdgj0Ui9kQI/S0T
- mosXXiuSTczfNQHNupEwMW2zzuj12t9yiCEd9RTKZsJJolEru+mFt7lK44b+QDcEUuENtZfo+gU
- oXSrQEOBTa7MOg6T/mBpkjE3OYegwsbz5jM2HyNgWThvgmPaCv6SrLe89Cz2ciSsS1H6f7VgmpD
- Sb4MT3uDoLZrNzkRFbWNJmb/6aQUEUWqcVWs0/9K8y+Vdxdbe7gmOL3B+Q+R00rb7bVag3tj4rG
- 2Ijx8tjpEhRAs3Xjc02N39zkT5v7J6UPKa7C8BoTkYXGYxnd/WfP2rAtCNe2t4O7z9jKq8B3f4x
- YczbcbQ9bD/ZnIFLVAA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-02_01,2026-04-02_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604020116
+References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-3-laoar.shao@gmail.com>
+ <2261072.irdbgypaU6@7950hx>
+In-Reply-To: <2261072.irdbgypaU6@7950hx>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Thu, 2 Apr 2026 21:20:55 +0800
+X-Gm-Features: AQROBzCq379oCyNjtOYZmuBoMyOqOT1_VV-wnZMWv4kRMd3OjGsW1s1XAyz2G-0
+Message-ID: <CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh1gy5hy9Yqgeo4C0iA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/4] trace: Allow kprobes to override livepatched functions
+To: Menglong Dong <menglong.dong@linux.dev>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
+	song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Apr 2, 2026 at 8:48=E2=80=AFPM Menglong Dong <menglong.dong@linux.d=
+ev> wrote:
+>
+> On 2026/4/2 17:26, Yafang Shao wrote:
+> > Introduce the ability for kprobes to override the return values of
+> > functions that have been livepatched. This functionality is guarded by =
+the
+> > CONFIG_KPROBE_OVERRIDE_KLP_FUNC configuration option.
+>
+> Hi, Yafang. This is a interesting idea.
+>
+> For now, the bpf_override_return() can only be used on the kernel
+> functions that allow error injection to prevent the BPF program from
+> crash the kernel. If we use it on the kernel functions that patched
+> by the KLP, we can crash the kernel easily by return a invalid value
+> with bpf_override_return(), right? (Of course, we can crash the kernel
+> easily with KLP too ;)
 
+Right.
+Livepatch already grants the power to modify the kernel at will;
+allowing BPF to override a patched function simply adds a layer of
+runtime programmability to an existing modification.
 
-On 02/04/26 11:12 am, Saket Kumar Bhaskar wrote:
-> When verifier sees a timed may_goto instruction, it emits a call to
-> arch_bpf_timed_may_goto() with a stack offset in BPF_REG_AX
-> (powerpc64 R12) and expects the refreshed count value to be returned
-> in the same register. The verifier doesn't save or restore any registers
-> before emitting this call.
-> 
-> arch_bpf_timed_may_goto() should act as a trampoline to call
-> bpf_check_timed_may_goto() with powerpc64 ELF ABI calling convention.
-> 
-> To support this custom calling convention, implement
-> arch_bpf_timed_may_goto() in assembly and make sure BPF caller saved
-> registers are preserved, then call bpf_check_timed_may_goto with
-> the powerpc64 ABI calling convention where first argument and return
-> value both are in R3. Finally, move the result back into BPF_REG_AX(R12)
-> before returning.
-> 
-> Also, introduce bpf_jit_emit_func_call() that computes the offset from
-> kernel_toc_addr(), validates that the target and emits the ADDIS/ADDI
-> sequence to load the function address before performing the indirect
-> branch via MTCTR/BCTRL. The existing code in bpf_jit_emit_func_call_rel()
-> is refactored to use this function.
-> 
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> ---
->   arch/powerpc/net/Makefile             |  2 +-
->   arch/powerpc/net/bpf_jit_comp.c       |  5 +++
->   arch/powerpc/net/bpf_jit_comp64.c     | 59 ++++++++++++++++++++++-----
->   arch/powerpc/net/bpf_timed_may_goto.S | 57 ++++++++++++++++++++++++++
->   4 files changed, 111 insertions(+), 12 deletions(-)
->   create mode 100644 arch/powerpc/net/bpf_timed_may_goto.S
-> 
-> diff --git a/arch/powerpc/net/Makefile b/arch/powerpc/net/Makefile
-> index 8e60af32e51e..204fc57ac56e 100644
-> --- a/arch/powerpc/net/Makefile
-> +++ b/arch/powerpc/net/Makefile
-> @@ -2,4 +2,4 @@
->   #
->   # Arch-specific network modules
->   #
-> -obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o bpf_jit_comp$(BITS).o
-> +obj-$(CONFIG_BPF_JIT) += bpf_jit_comp.o bpf_jit_comp$(BITS).o bpf_timed_may_goto.o
+>
+> I haven't figure out the use case yet. Can KLP be used together with
+> the BPF program that use bpf_override_return()?
 
-As this is currently only enabled for CONFIG_PPC64, bpf_timed_may_goto.o
-should be compiled conditionally for PPC64:
+The two mechanisms do not target the same entry point: whileKLP
+modifies the original kernel function, bpf_override_return() is
+applied to the newly patched function provided by the KLP module.
 
-ifdef CONFIG_PPC64
-obj-$(CONFIG_BPF_JIT) += bpf_timed_may_goto.o
-endif
+> The KLP will modify
+> the RIP on the stack, and the bpf_override_return() will modify it too.
+> AFAIK, there can't be two ftrace_ops that both have the
+> FTRACE_OPS_FL_IPMODIFY flag. Did I miss something?
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 50103b3794fb..9b2b456b0765 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -537,6 +537,11 @@ bool bpf_jit_supports_subprog_tailcalls(void)
->   	return IS_ENABLED(CONFIG_PPC64);
->   }
->   
-> +bool bpf_jit_supports_timed_may_goto(void)
-> +{
-> +	return IS_ENABLED(CONFIG_PPC64);
-> +}
-> +
->   bool bpf_jit_supports_kfunc_call(void)
->   {
->   	return IS_ENABLED(CONFIG_PPC64);
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index db364d9083e7..d39241444cd9 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -451,10 +451,28 @@ void arch_bpf_stack_walk(bool (*consume_fn)(void *, u64, u64, u64), void *cookie
->   	}
->   }
->   
-> +static int bpf_jit_emit_func_call(u32 *image, struct codegen_context *ctx, u64 func_addr, int reg)
-> +{
+Correct, but as noted, they target different functions
 
-> +	long reladdr;
-> +
-> +	reladdr = func_addr - kernel_toc_addr();
+>
+> It will be helpful for me to understand the use case if a selftests is
+> offered :)
 
-long reladdr = func_addr - kernel_toc_addr();
+Here is a recent use case from our production environment.
 
-> +	if (reladdr > 0x7FFFFFFF || reladdr < -(0x80000000L)) {
-> +		pr_err("eBPF: address of %ps out of range of kernel_toc.\n", (void *)func_addr);
-> +		return -ERANGE;
-> +	}
-> +
-> +	EMIT(PPC_RAW_ADDIS(reg, _R2, PPC_HA(reladdr)));
-> +	EMIT(PPC_RAW_ADDI(reg, reg, PPC_LO(reladdr)));
-> +	EMIT(PPC_RAW_MTCTR(reg));
-> +	EMIT(PPC_RAW_BCTRL());
-> +
-> +	return 0;
-> +}
-> +
->   int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
->   {
->   	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
-> -	long reladdr;
-> +	int ret;
->   
->   	/* bpf to bpf call, func is not known in the initial pass. Emit 5 nops as a placeholder */
->   	if (!func) {
-> @@ -469,6 +487,7 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
->   	}
->   
->   #ifdef CONFIG_PPC_KERNEL_PCREL
+- The livepatch
 
-> +	long reladdr;
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_mai=
+n.c
+index e378bbe5705f..047e937bfa6d 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -5175,12 +5175,22 @@ int bond_update_slave_arr(struct bonding
+*bond, struct slave *skipslave)
+        return ret;
+ }
 
-While this works with modern C standard, I would be conservative and let
-this be at the start of the function itself..
++/* noclone to avoid bond_get_slave_hook.constprop.0 */
++__attribute__((__noclone__, __noinline__))
++int bond_get_slave_hook(struct sk_buff *skb, u32 hash, unsigned int count)
++{
++       return -1;
++}
 
->   	reladdr = func_addr - local_paca->kernelbase;
->   
->   	/*
-> @@ -507,16 +526,9 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
->   	EMIT(PPC_RAW_BCTRL());
->   #else
->   	if (core_kernel_text(func_addr)) {
-> -		reladdr = func_addr - kernel_toc_addr();
-> -		if (reladdr > 0x7FFFFFFF || reladdr < -(0x80000000L)) {
-> -			pr_err("eBPF: address of %ps out of range of kernel_toc.\n", (void *)func);
-> -			return -ERANGE;
-> -		}
-> -
-> -		EMIT(PPC_RAW_ADDIS(_R12, _R2, PPC_HA(reladdr)));
-> -		EMIT(PPC_RAW_ADDI(_R12, _R12, PPC_LO(reladdr)));
-> -		EMIT(PPC_RAW_MTCTR(_R12));
-> -		EMIT(PPC_RAW_BCTRL());
-> +		ret = bpf_jit_emit_func_call(image, ctx, func_addr, _R12);
-> +		if (ret)
-> +			return ret;
->   	} else {
->   		if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V1)) {
->   			/* func points to the function descriptor */
-> @@ -1755,6 +1767,31 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
->   			if (ret < 0)
->   				return ret;
->   
-> +			/*
-> +			 * Call to arch_bpf_timed_may_goto() is emitted by the
-> +			 * verifier and called with custom calling convention with
-> +			 * first argument and return value in BPF_REG_AX (_R12).
-> +			 *
-> +			 * The generic helper or bpf function call emission path
-> +			 * may use the same scratch register as BPF_REG_AX to
-> +			 * materialize the target address. This would clobber AX
-> +			 * and break timed may_goto semantics.
-> +			 *
-> +			 * Emit a minimal indirect call sequence here using a temp
-> +			 * register and skip the normal post-call return-value move.
-> +			 */
-> +
-> +			if (func_addr == (u64)arch_bpf_timed_may_goto) {
+ static struct slave *bond_xmit_3ad_xor_slave_get(struct bonding *bond,
+                                                 struct sk_buff *skb,
+                                                 struct bond_up_slave *slav=
+es)
+ {
+        struct slave *slave;
+        unsigned int count;
++       int slave_idx;
+        u32 hash;
 
-> +#ifdef CONFIG_PPC_KERNEL_PCREL
-> +				PPC_LI_ADDR(tmp1_reg, func_addr);
-> +				EMIT(PPC_RAW_MTCTR(tmp1_reg));
-> +				EMIT(PPC_RAW_BCTRL());
-> +#else
-> +				bpf_jit_emit_func_call(image, ctx, func_addr, tmp1_reg);
+        hash =3D bond_xmit_hash(bond, skb);
+@@ -5188,6 +5198,13 @@ static struct slave
+*bond_xmit_3ad_xor_slave_get(struct bonding *bond,
+        if (unlikely(!count))
+                return NULL;
 
-The error check is missing for the above function..
-Actually, how about:
++       /* Try BPF hook first - returns slave index directly */
++       slave_idx =3D bond_get_slave_hook(skb, hash, count);
++       /* If BPF hook returned valid slave index, use it */
++       if (slave_idx >=3D 0 && slave_idx < count) {
++               slave =3D slaves->arr[slave_idx];
++               return slave;
++       }
+        slave =3D slaves->arr[hash % count];
+        return slave;
+ }
 
-	ret = 0;
-	if (!IS_ENABLED(CONFIG_PPC_KERNEL_PCREL))
-		ret = bpf_jit_emit_func_call(image, ctx, func_addr, tmp1_reg);
+- The BPF program
 
-	if (ret || IS_ENABLED(CONFIG_PPC_KERNEL_PCREL)) {
-		PPC_LI_ADDR(tmp1_reg, func_addr);
-		EMIT(PPC_RAW_MTCTR(tmp1_reg));
-		EMIT(PPC_RAW_BCTRL());
-	}
+SEC("kprobe/bond_get_slave_hook")
+int BPF_KPROBE(slave_selector, struct sk_buff *skb, u32 hash, u32 count)
+{
+        unsigned short net_hdr_off;
+        unsigned char *head;
+        struct iphdr iph;
+        int *slave_idx;
+        __u32 daddr;
 
-> +#endif
-> +				break;
-> +			}
-> +
->   			/* Take care of powerpc ABI requirements before kfunc call */
->   			if (insn[i].src_reg == BPF_PSEUDO_KFUNC_CALL) {
->   				if (prepare_for_kfunc_call(fp, image, ctx, &insn[i]))
-> diff --git a/arch/powerpc/net/bpf_timed_may_goto.S b/arch/powerpc/net/bpf_timed_may_goto.S
-> new file mode 100644
-> index 000000000000..0b9afe3cfa1f
-> --- /dev/null
-> +++ b/arch/powerpc/net/bpf_timed_may_goto.S
-> @@ -0,0 +1,57 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (c) 2025 IBM Corporation, Saket Kumar Bhaskar <skb99@linux.ibm.com> */
-> +
-> +#include <linux/linkage.h>
-> +#include <asm/ppc_asm.h>
-> +
-> +/*
-> + * arch_bpf_timed_may_goto() trampoline for powerpc64
-> + *
-> + * Custom BPF convention (verifier/JIT):
-> + *	- input:  stack offset in BPF_REG_AX (r12)
-> + *	- output: updated count in BPF_REG_AX (r12)
-> + *
-> + * Call bpf_check_timed_may_goto(ptr) with normal powerpc64 ABI:
-> + * 	- r3 = ptr, return in r3
-> + *
-> + * Preserve BPF regs R0-R5 (mapping: r8, r3-r7).
-> + */
-> +
-> +SYM_FUNC_START(arch_bpf_timed_may_goto)
-> +	/* Prologue: save LR, allocate frame */
-> +	mflr    r0
-> +	std     r0, 16(r1)
-> +	stdu    r1, -112(r1)
-> +
-> +	/* Save BPF registers R0 - R5 (r8, r3-r7) */
+        __u16 proto =3D BPF_CORE_READ(skb, protocol);
+        if (proto !=3D bpf_htons(0x0800))
+                return 0;
 
-> +	std     r3, 24(r1)
+        head =3D BPF_CORE_READ(skb, head);
+        net_hdr_off =3D BPF_CORE_READ(skb, network_header);
 
-May not matter much for this handwritten function but can we use
-32 and on instead, as 32 is the MIN_FRAME_SIZE on ABIv2?
+        if (bpf_probe_read_kernel(&iph, sizeof(iph), head + net_hdr_off) !=
+=3D 0)
+                return 0;
 
-> +	std     r4, 32(r1)
-> +	std     r5, 40(r1)
-> +	std     r6, 48(r1)
-> +	std     r7, 56(r1)
-> +	std     r8, 64(r1)
-> +
-> +	/*
-> +	 * r3 = BPF_REG_FP + BPF_REG_AX
-> +	 * BPF_REG_FP is r31; BPF_REG_AX is r12 (stack offset in bytes).
-> +	 */
-> +	add     r3, r31, r12
-> +	bl      bpf_check_timed_may_goto
-> +
-> +	/* Put return value back into AX */
-> +	mr      r12, r3
-> +
-> +	/* Restore BPF registers R0 - R5 (r8, r3-r7) */
-> +	ld      r3, 24(r1)
-> +	ld      r4, 32(r1)
-> +	ld      r5, 40(r1)
-> +	ld      r6, 48(r1)
-> +	ld      r7, 56(r1)
-> +	ld      r8, 64(r1)
-> +
-> +	/* Epilogue: pop frame, restore LR, return */
-> +	addi    r1, r1, 112
-> +	ld      r0, 16(r1)
-> +	mtlr    r0
-> +	blr
-> +SYM_FUNC_END(arch_bpf_timed_may_goto)
+        daddr =3D iph.daddr;
+        slave_idx =3D bpf_map_lookup_elem(&ip_slave_map, &daddr);
+        if (slave_idx) {
+                int idx =3D *slave_idx;
 
-- Hari
+                if (idx >=3D 0 && idx < (int)count)
+                        bpf_override_return(ctx, idx);
+        }
+        return 0;
+}
+
+>
+> BTW, if we allow the usage of bpf_override_return() on the KLP patched
+> function, we should allow the usage of BPF_MODIFY_RETURN on this
+> case too, right?
+
+It's a possibility, but I haven't tested that specifically yet.
+
+--=20
+Regards
+Yafang
