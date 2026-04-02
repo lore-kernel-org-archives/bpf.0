@@ -1,231 +1,159 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C709037F72E
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 19:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FB1372ECA
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 19:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775158704; cv=none; b=rpif4SVKVKidQgXINn0iwoRkVH8Mg6KgSFGfuePhe/tha9i55UrcMsBo2OZpuX3MnTa3LtpFsOlCEEzsnv3Tp+/R/OENR9OTHjm9KOH4dAbEn3BYrGjvsOCRxpF3wPz5Ed5UtNFUZDzAtLuW1qMJV23HhQhhP6y2uPkRM2EhrtU=
+	t=1775158769; cv=none; b=cVKGMjJg8+GX8iNCpS9J4/3wJUCq16Bp8iJeIx9Ikw47uuMbVZ49DHaTaFdaBECon/iC536voy7qKgdpQZPj+XMQ9d7T7Y/joC6Q+QPU1+c9iwKPOjYJvdP36r31xRFEo1/k31IC78EpVlmpmyIeAzA/mKzIkz4PK6OIxdPNFgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775158704; c=relaxed/simple;
-	bh=gH1srPYnUtB99eDiaygGMvUt391mWRFrgM6G954YoEI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=opvhwCpCKl6Sj73adbVDHKDMSi189QVPRxI/yEbLt5eg8x64WI3pK746kraMhXtFgney/CHJvzz777e/4zPNrypy0SHIauHQ78f+mtmYT2lweExKPJ+l4klIhrfcE/xNX5rR3J+p/feIctT6cG7eNhHEYnH61e3dGm7w8xL+PZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mx1LHpUP; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mx1LHpUP"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2b256a4c6b5so7492305ad.0
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 12:38:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775158702; x=1775763502; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xTckKeD3brFK6cmBCQFzGboCQ4kBNeW+JHlcu0YSo2w=;
-        b=Mx1LHpUPZEVINWAfCKOTThBbOOyeGOU4lEcClKXw/rWQRRguMNqBnTyREHvCgYwqOI
-         JLl/iibwxKuIvA5N6aIodXCYI/i1VZXx/vcFu3ifmOfq/qleucQAtttxqKyuwfjiamhl
-         Cr5EzA5mkfMwuGBFejV44VLf7bSvbRbjn3vyWL1gFGjj4urPE8+ItHOJSVHYvlNgVXaf
-         BDLuBMgp+3VpKnHl7MneDUDpyhA4Cy84k89wQhCUTfW7Bt/WDqNtGfz7IHmv8RHmHm0X
-         nBJeyNEpSZLja9FvOohd/3vY+g8PckIskww/+SkGz2G3/4Ba1U3SP/ftX/isTi1k/SUg
-         zlkw==
+	s=arc-20240116; t=1775158769; c=relaxed/simple;
+	bh=owzoiyg5uMTi9jBSGwi2a4AWQjD/nULb9+63KUm3krM=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=Zi102Vte12L+IQXx04E1C2jyZ+OeyMvE2bko6mUpNvT1aSu0sL2S9lOUJmKqRMaAgjarTshHpXZ5L7ViWG9cyzjvyi0GEPkzanaCz7QxglU0T8wemj1NyzmkmrwInA6DJS0BxSQ6ktr8Ti2Qd2pqOALEigEOYNyKq3L+azJBmX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-67deac23e02so2120125eaf.2
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 12:39:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775158702; x=1775763502;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xTckKeD3brFK6cmBCQFzGboCQ4kBNeW+JHlcu0YSo2w=;
-        b=iEkt4FbGECECHs3pSsl8+3AItUWDhj1DOXJfUN+d36Zk8hoSGp3ZZQT+8wV6aiXRig
-         Jm4ryOBc9wdMFOMb6yRFUYbu6n21kNErqhVh/a+7ylpwZP3nqjyKBK5U4jZQuCY965RJ
-         n+XgPf613vBxdYiZLXs5evXA9J5VFtnVxjkHZWVoHvaufNaelO33x8AvVpvYfHlAoIFE
-         U8ACkYGVsOoSXu9mvzpgO/GAapRJGhSnSHmto887nMy/RVvm841ECYyCqzzqce6L7NRt
-         cg+UiFyAn6er7IZpdmQSrpw/zje93h3VBb9Ul4DrNyLZFij3WXr0HOIW1wneKQYoCtE0
-         Tilg==
-X-Forwarded-Encrypted: i=1; AJvYcCXefGHb9/7Hmuy6+zlhN/BQ96HZVDzYVm5RfMo4s18B5mbniQb1qQOTpBU5979Vlia7yWw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7ezmtzaqyC3gT/5cS1Whysp5oShRb5w8BqtISTejRJGXoZAeN
-	m7+gxi98L5CzfzXdpyE9ZJgnjDfEHmS3UxYNQ2UCLwgnMMR8pvgtEHDMO4ijLOuu
-X-Gm-Gg: AeBDieutGnC5363+e827QKMSpEEdL4eaUOY1PiZu6DPhsX1mbZ4zr6wp5kt7KeUUv+x
-	K2bU6UVrtH6141/xGERMuqz6VAb+ty5KZAR8kpv3EXrxkQgWqXMMbo9Mlp4R2kxjkxhDOeBakGc
-	qPFEWp8z2kZxomgN+GRCfWX7RD5+Cje8L4cPuC3K6+bo1EZPe+nkrq+syALipDLXGI3quyTtukR
-	x4kGfqGtE+v3HwodG0e9QxGa6IO3ZSRWP7hB58gVr3+ZywRo9ZH3yT5UsQ1d1MnzSYoUAmLe0NI
-	vbnCU6io8dU9mzP0SLVwN/Yw2ctZW0Jk1X9d5MfhWnkOJSqLx4bbafq47dK5Q0iiHKLr7NMUIVg
-	xYzzd5GOU8f40tbaM3eocdaPHMcKQY7Wm+xTSy4/R1tIC+r1DZcH4FWR06GA2hU9CWjRWNm+Lpm
-	Y/2Ae0qOM52MgAVVRroG593IskWSLe6K+nrIX222P87sylIh8YzGcy
-X-Received: by 2002:a17:903:38c5:b0:2b0:49e6:9622 with SMTP id d9443c01a7336-2b2817ac962mr5242325ad.37.1775158702118;
-        Thu, 02 Apr 2026 12:38:22 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27478bc96sm37787545ad.33.2026.04.02.12.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 12:38:21 -0700 (PDT)
-Message-ID: <a3e2bab6b8e74f27f779f3fae68e409fe90aa291.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/6] bpf: Sort subprogs in topological order
- after check_cfg()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
-	memxor@gmail.com
-Date: Thu, 02 Apr 2026 12:38:19 -0700
-In-Reply-To: <20260402061744.10885-3-alexei.starovoitov@gmail.com>
-References: <20260402061744.10885-1-alexei.starovoitov@gmail.com>
-	 <20260402061744.10885-3-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1775158767; x=1775763567;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LmNMSticwwy68bmYI4NP8/nV4Ff79a42KYPUtfiNNJ0=;
+        b=HTmgKc7VetVosQGM0pS2dl6tznlrzy/0ue/PRn4/My/Zqz8PpRdnnx7KfUKbxbxuaf
+         VGlV06gibTkt3L92QFL3zCp21QmnU0zpkMzdq6B91uta9f6vdvMGgbqXmeGGwlxckli/
+         ouQjzbEluktX7hlqU8P0TovsqzCegoNZasvQi7WuOLYiukWgd01C+Qtr/tEaf1+6A1Kh
+         uOF3/2zF7gksA5QLn6a1OYauuc6nNHOCjBY8paeI7sJ5cYm144x3vZJ1EGHtESxB23yn
+         v2CmUA7Dk6ludcynHRX0sjEJiIhO0fwEPP5w0jVP+ZLxxoW+bFssP/HXqGwPEk2RE83Y
+         AGFA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJBWG0n+joJYqx3J40TfzWAbKlGV5nM19VH5JGMqgfOdx2OdRloTGfS+ArJnt6VjZr7aM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcZVL0c37MT/2rxhD3+PSGgZJcWbOTuHPIc3j/AA4tlic6WJk+
+	Cg+ve5Apc3ZdzvQXpMw5W/n1PWHModh2f0RVeUNUZD8B5hiI34I40cgwFt+QCuzODv1ipcaTto8
+	Z7OY9v3I1Wmy83XKEHWW+WUh/JtKv0vOF+4YVwtB3ZSWErEchNP/YPMj5rks=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Received: by 2002:a05:6820:6ac5:b0:67e:370e:d5f1 with SMTP id
+ 006d021491bc7-682200594e9mr271107eaf.48.1775158767131; Thu, 02 Apr 2026
+ 12:39:27 -0700 (PDT)
+Date: Thu, 02 Apr 2026 12:39:27 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69cec5ef.050a0220.2dbe29.0009.GAE@google.com>
+Subject: [syzbot] [net?] [bpf?] WARNING in sock_map_destroy (3)
+From: syzbot <syzbot+b0842d38af58376d1fdc@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	horms@kernel.org, jakub@cloudflare.com, jiayuan.chen@linux.dev, 
+	john.fastabend@gmail.com, kuba@kernel.org, kuniyu@amazon.com, 
+	kuniyu@google.com, linux-kernel@vger.kernel.org, martin.lau@kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, syzkaller-bugs@googlegroups.com, 
+	willemb@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2026-04-01 at 23:17 -0700, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
->=20
-> Add a pass that sorts subprogs in topological order so that iterating
-> subprog_topo_order[] walks leaf subprogs first, then their callers.
-> This is computed as a DFS post-order traversal of the CFG.
->=20
-> The pass runs after check_cfg() to ensure the CFG has been validated
-> before traversing and after postorder has been computed to avoid
-> walking dead code.
->=20
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
+Hello,
 
-I disagree with assessment regarding stack of pairs being ugly.
-Can be implemented as two stacks and we do it in e.g. check_cfg().
-Other than that, I don't see any logical issues with the patch.
+syzbot found the following issue on:
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+HEAD commit:    1b237f190eb3 Linux 6.17-rc3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13551c42580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e1e1566c7726877e
+dashboard link: https://syzkaller.appspot.com/bug?extid=b0842d38af58376d1fdc
+compiler:       Debian clang version 20.1.7 (++20250616065708+6146a88f6049-1~exp1~20250616065826.132), Debian LLD 20.1.7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=168d6ef0580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f57862580000
 
->  include/linux/bpf_verifier.h |  2 +
->  kernel/bpf/verifier.c        | 83 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 85 insertions(+)
->=20
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 090aa26d1c98..4f492eaad5c2 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -787,6 +787,8 @@ struct bpf_verifier_env {
->  	const struct bpf_line_info *prev_linfo;
->  	struct bpf_verifier_log log;
->  	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 =
-for the fake and exception subprogs */
-> +	/* subprog indices sorted in topological order: leaves first, callers l=
-ast */
-> +	int subprog_topo_order[BPF_MAX_SUBPROGS + 2];
->  	union {
->  		struct bpf_idmap idmap_scratch;
->  		struct bpf_idset idset_scratch;
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8234d80b892a..c0630691c32d 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3742,6 +3742,85 @@ static int check_subprogs(struct bpf_verifier_env =
-*env)
->  	return 0;
->  }
-> =20
-> +/*
-> + * Sort subprogs in topological order so that leaf subprogs come first a=
-nd
-> + * their callers come later. This is a DFS post-order traversal of the c=
-all
-> + * graph. Scan only reachable instructions (those in the computed postor=
-der) of
-> + * the current subprog to discover callees (direct subprogs and sync
-> + * callbacks).
-> + */
-> +static int sort_subprogs_topo(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_subprog_info *si =3D env->subprog_info;
-> +	int *insn_postorder =3D env->cfg.insn_postorder;
-> +	struct bpf_insn *insn =3D env->prog->insnsi;
-> +	int cnt =3D env->subprog_cnt;
-> +	int *dfs_stack =3D NULL;
-> +	int top =3D 0, order =3D 0;
-> +	int i, ret =3D 0;
-> +	u8 *color =3D NULL;
-> +
-> +	color =3D kvzalloc_objs(*color, cnt, GFP_KERNEL_ACCOUNT);
-> +	dfs_stack =3D kvmalloc_objs(*dfs_stack, cnt, GFP_KERNEL_ACCOUNT);
-> +	if (!color || !dfs_stack) {
-> +		ret =3D -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * DFS post-order traversal.
-> +	 * Color values: 0 =3D unvisited, 1 =3D on stack, 2 =3D done.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d708c97252af/disk-1b237f19.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3b964889e9fe/vmlinux-1b237f19.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2d05741e1ef1/bzImage-1b237f19.xz
 
-Nit: it appears that the actual color value is never checked, only `if (col=
-or[*])`.
+The issue was bisected to:
 
-> +	 */
-> +	for (i =3D 0; i < cnt; i++) {
-> +		if (color[i])
-> +			continue;
-> +		color[i] =3D 1;
-> +		dfs_stack[top++] =3D i;
-> +
-> +		while (top > 0) {
-> +			int cur =3D dfs_stack[top - 1];
-> +			int po_start =3D si[cur].postorder_start;
-> +			int po_end =3D si[cur + 1].postorder_start;
-> +			bool pushed =3D false;
-> +			int j;
-> +
-> +			for (j =3D po_start; j < po_end; j++) {
-> +				int idx =3D insn_postorder[j];
-> +				int callee;
-> +
-> +				if (!bpf_pseudo_call(&insn[idx]) && !bpf_pseudo_func(&insn[idx]))
-> +					continue;
-> +				callee =3D find_subprog(env, idx + insn[idx].imm + 1);
-> +				if (callee < 0) {
-> +					ret =3D -EFAULT;
-> +					goto out;
-> +				}
-> +				if (color[callee])
-> +					continue;
-> +				color[callee] =3D 1;
-> +				dfs_stack[top++] =3D callee;
-> +				pushed =3D true;
-> +				break;
-> +			}
-> +
-> +			if (!pushed) {
-> +				color[cur] =3D 2;
-> +				env->subprog_topo_order[order++] =3D cur;
-> +				top--;
-> +			}
-> +		}
-> +	}
-> +
-> +	if (env->log.level & BPF_LOG_LEVEL2)
-> +		for (i =3D 0; i < cnt; i++)
-> +			verbose(env, "topo_order[%d] =3D %s\n",
-> +				i, subprog_name(env, env->subprog_topo_order[i]));
-> +out:
-> +	kvfree(dfs_stack);
-> +	kvfree(color);
-> +	return ret;
-> +}
-> +
->  static int mark_stack_slot_obj_read(struct bpf_verifier_env *env, struct=
- bpf_reg_state *reg,
->  				    int spi, int nr_slots)
->  {
-> @@ -26274,6 +26353,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr, __u3
->  	if (ret)
->  		goto skip_full_check;
-> =20
-> +	ret =3D sort_subprogs_topo(env);
-> +	if (ret < 0)
-> +		goto skip_full_check;
-> +
->  	ret =3D compute_scc(env);
->  	if (ret < 0)
->  		goto skip_full_check;
+commit 8259eb0e06d8f64c700f5fbdb28a5c18e10de291
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+Date:   Fri May 16 14:17:12 2025 +0000
+
+    bpf, sockmap: Avoid using sk_socket after free when sending
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17fbce62580000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1407ce62580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1007ce62580000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b0842d38af58376d1fdc@syzkaller.appspotmail.com
+Fixes: 8259eb0e06d8 ("bpf, sockmap: Avoid using sk_socket after free when sending")
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 8459 at net/core/sock_map.c:1667 sock_map_destroy+0x28b/0x2b0 net/core/sock_map.c:1667
+Modules linked in:
+CPU: 1 UID: 0 PID: 8459 Comm: syz.0.1109 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+RIP: 0010:sock_map_destroy+0x28b/0x2b0 net/core/sock_map.c:1667
+Code: 8b 36 49 83 c6 38 4c 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 93 62 22 f9 4d 8b 3e e9 79 ff ff ff e8 a6 2b c3 f8 90 <0f> 0b 90 eb 9c e8 9b 2b c3 f8 4c 89 e7 be 03 00 00 00 e8 0e 4e bc
+RSP: 0018:ffffc9000d067be8 EFLAGS: 00010293
+RAX: ffffffff88fb30aa RBX: ffff888024832000 RCX: ffff888024283b80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: ffffed100862e946 R12: dffffc0000000000
+R13: ffff888024832000 R14: ffffffff995b2208 R15: ffffffff88fb2e20
+FS:  0000555579a7d500(0000) GS:ffff8881269c2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00002000000048c0 CR3: 000000003713a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ inet_csk_destroy_sock+0x166/0x3a0 net/ipv4/inet_connection_sock.c:1294
+ __tcp_close+0xcc1/0xfd0 net/ipv4/tcp.c:3262
+ tcp_close+0x28/0x110 net/ipv4/tcp.c:3274
+ inet_release+0x144/0x190 net/ipv4/af_inet.c:435
+ __sock_release net/socket.c:649 [inline]
+ sock_close+0xc0/0x240 net/socket.c:1439
+ __fput+0x45b/0xa80 fs/file_table.c:468
+ task_work_run+0x1d4/0x260 kernel/task_work.c:227
+ resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+ exit_to_user_mode_loop+0xec/0x110 kernel/entry/common.c:43
+ exit_to_user_mode_prepare include/linux/irq-entry-common.h:225 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:175 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:210 [inline]
+ do_syscall_64+0x2bd/0x3b0 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f265847ebe9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd158dfbd8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
+RAX: 0000000000000000 RBX: 000000000002ddb0 RCX: 00007f265847ebe9
+RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
+RBP: 00007f26586a7da0 R08: 0000000000000001 R09: 0000000e158dfecf
+R10: 0000001b30a20000 R11: 0000000000000246 R12: 00007f26586a5fac
+R13: 00007f26586a5fa0 R14: ffffffffffffffff R15: 00007ffd158dfcf0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
