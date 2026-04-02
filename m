@@ -1,585 +1,402 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C738E32E6B8
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 06:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775112618; cv=none; b=YkklATEmGGQiEHkZb4NScVftCCTbwbS8OT6NwhuojN8bPVF7IIzsNXl9xT9HKZTV7pjNz8GiXdWNJq4O14Tpq/yJt1vbeeZtzJaDXkS612wQg1p6JW0tnhqQC1sQXS86Vp3SeQxdzqLlP4s0HkFOqpBK75/baYsW4NDxKxKrg6Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775112618; c=relaxed/simple;
-	bh=tfsnQcI8nGTXrkXcYyvGGs3QQ29Qn5gDWrOfcu+BhE8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X79ZHzcOQP60W+OylSouES7Of11xHd2HOUZaaefiFVTNgZdV+KX4wuaHeIbUbrjmWM4/VPErlzmx6kgPICPFGqbum0J6UWLrGgUf5Lv6pDv7hkMeLs3zHTYEIxnrFRhzCbZD4BieMYUwT5vMBf5U2tcygxtLfJPjWfEuHxb7qF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1eHXZkp; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A006B244665;
+	Thu,  2 Apr 2026 07:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775113358; cv=fail; b=eN4QCdshor2EAoJl9xxfJazpiG/rMx9CJYQlkrF3dvXp+gVdjDtoYapuNbfRtkcKysI63M/2kDKqXI95VFWrcNGMSR2rN63vjdO9VflrfyTGZo38c5CV4ae6V5V30bQx7C/R+kwwrkVZvwYdR6W8mDC6pjOkK2fNQDghnpSXGW8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775113358; c=relaxed/simple;
+	bh=7mymCDXreXtenHcG6ZaO4hTll64on3VOmCuHcUcnm/4=;
+	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
+	 Content-Type:MIME-Version; b=klXs05XGjOjeLqB1ugQjIbEyH/lafNYTzd4GHwJRr/YsWF7AoQ6VI5p9vMmnqKw35bFhDsT5GDgXEhLxr1bmtxcQhdOF1+iYpuviXX639evtZytRktHLo9kDh5OQH/UQWvktHrE2hwVAP9jNLY6tITi51qtGS4ss24WNTG43pJA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ExaPv28B; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=gxlL+Xbq; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1eHXZkp"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82a7539851fso245402b3a.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 23:50:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ExaPv28B";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="gxlL+Xbq"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6320TL7a897391;
+	Thu, 2 Apr 2026 07:01:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=iYAl1fvFqOQ8GHN/37
+	KbIWRIR6B2/lwLHHZ+lUgrqew=; b=ExaPv28BouTW70SaXWt68/42LRHbZKGSAt
+	h1FONS6/fA11EXpbJ0ButJ1XSnL+tCqDXIRS/DYTE5tZcJ26izr8/0WwcBtKxHqb
+	6iYYYfQ0zlGuxfCgrmMw0keCw0qSe/LLzUJBk+o82bkGDLCZ/uTuNG2Sxk0lXdQC
+	Fahpq49iLbD5jKZYMIgIhbScJq4OyJAfSvh/NYacLik2Q6KlormUzSxeXfcJPk3c
+	XomhUBGFEQuTFk7I5uT1ZPoAjKJAo1wpEemBAV4KifdVGur4zzTZ7IypRohKTbvf
+	ONT/2dam8+C+ejcMIoVsbwbO/h3pNfCmObzgVPgSZd7AlYrAuW0w==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4d65daftcx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 07:01:39 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 6326INZ1027511;
+	Thu, 2 Apr 2026 07:01:38 GMT
+Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011023.outbound.protection.outlook.com [52.101.52.23])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4d65eccyhb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 02 Apr 2026 07:01:38 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xgRPSIZ7pDlvjGBYksFpIL6vExjHh1fJEOU4pu4OwtBb93sxNiITiZ+PG42rurq2UrWlFEpvb8NEhAu6Ac/lbtNs5yQOKtpEKRNdKgM1gYJuuWcw0sQbfjme95/Ls/pOzGWOj823ChOkCJkSeqEwJOfSrq5ooLH3OqyK4vU/EgmyQOeRzyLABgieUL3AZbkIzg4eJd/tfEWGM2ap8Nj9BpY7kzgiOp/YFYuSXmDJMKH3rmdLjjRnNTCgG30Pr7isie9VFTq6/EeAmK8vK2HJ4PSzUbh4Wrfm51GmD/3zCqw2y46Nd3ZjzL10tdou5lWhmJBgjRm2RLVjuxojsaNBjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iYAl1fvFqOQ8GHN/37KbIWRIR6B2/lwLHHZ+lUgrqew=;
+ b=eJs1/hVlfq9MU6WQqXg9/LRQvvdl5FLvWYGpTp1J3dlo8fXxb4UFa1kFebuyj/6jRjFH/Lm3R4kJKZzv2Tj91Yk27n8w8ZH+H6P8asqT0lOIY9WUtOZhXrpBpa7pxM2EXiLNJvR+FSVmZ7r6TBijYTJyNmBCgLoyMFf/B76YTGABrBjsZEAWaGA1bCtdOSZOqX4HF5sthMY8jEDfJuRP0vMLV4VkIDhMN7LRZ4nSfLCELwkrrHHnSzEvZ9jMk9LT26Yg1AlWlIW+i9x95Vla3yeAJM/sWUVdLVg8+9Ndw7h1WgWCPp5Qgm4n38vRs/CXedfae6vp4O4O/Kez6YZObA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775112616; x=1775717416; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FOiWNRYRxWaEOm9OUDhJNfjUlo9TYXsCAcxTq4vXJYM=;
-        b=g1eHXZkpb2o7VIsT7tjaFSPw8diFL3v14uX9IFPwSv0Ts+dN7cgFo8QjoCQVuwDtdt
-         IbiMi7LZGD7xvMO/f/gefQhvXkLApNZwIHMWkD+CK5VknIVoTfreYRajY4FOoVxlx/X4
-         bTjO+Ps5Ub5pwusPreCbHFsyfKIEnANLZIh+/W98HCPyhmLvxJVpqzX4H8kcZ6AH4G4A
-         dEFVFw32fZJCwoiv6yg7dDAulAcHN1ORdf0B0K9MIZbZjudjFbhi9d6s40BFHaeFwjkG
-         Bm9D+aL6t1cNytlb/2uZaJ7LROhybDwPu00n370eg1XKRVLiePVsJpp3MaBV1s8RyEHs
-         KYHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775112616; x=1775717416;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FOiWNRYRxWaEOm9OUDhJNfjUlo9TYXsCAcxTq4vXJYM=;
-        b=FFQ5xUD7JaCRgNpgT5jwMFaoyiw94TJfoYg6BPDXGTRZwzBl3vNm1nQYm6fU/TVMo2
-         9krTad1lEfJzFNjv0IAqhrncXkPXWDE43G9H/ydu9AqsWrFQ/u4ajJed1laDpYQ0pdOX
-         /XsbDZFI4Us4AyWydRcOj/0+2oDqLk7bJdCn1SgNo7QEM68F0/PlFIxfT6SHBOQPKKyJ
-         0jdC9HO2hV5c2Ly/ipl+ewHpbAIur/034b/CG6jJ+jrBDHR1VwXLoa7zveBZWjcCL45F
-         Of2S4yCvtb6ASgfbbzxU8G9EchqfnwLAoih76AzdaTxip5aGD/5rbH0GS+MYdk6XwNtu
-         sV3g==
-X-Gm-Message-State: AOJu0Yzoof76xd3bAKAfer31VrOo3JfBv2/dglfET1cOaxGRcfrw4fVG
-	TSK5qcWp8b7pzNQDu5TXXuyOKlKKVvq8bthJOxMCXRrtH6MxoOdYZTfiB9nySA==
-X-Gm-Gg: ATEYQzwSr9IVG/6cH2EIJfjHM5E9xBNXQ6YfiWkMobQ4FRNfHoM3xjZl9Qm5fpNKu7q
-	59HuxFmBnXC/y4RUyQL8DvPKSxjmR6xz+TzeSwrXc/Cz24d+HSE/nlTAB4N2xE/5K9frkGC/fkd
-	RHImQt0DWZ244oOqgIpFmQYgry89WcVv903rQKZqsKfu4ZFfGBQ+5fxRJ+eG/0e4nb1qr8VDVJR
-	JS3dZmREhYN5iSdO+EyuLj9WbckfZS7fBnd76EKI2PYKSX7vQGjJ2dECnTECMR0AzUbPuB/7jrC
-	5wk7rI/4C242RJvXpCshF9Q7iQ2VB13yH1gi/F/UySFtAsjtwHKom6bmskAkRpORjwWPPi+FstJ
-	E7CbZgd6KG+vJMCbYJ53kHtPue/iDkU0p5vVaC4/vQpnwBnGGld8zH+9WSLnEdoFPWkXnaS4HfZ
-	ItogZjivT9d3Ur
-X-Received: by 2002:a05:6a00:419b:b0:82c:7767:5bb2 with SMTP id d2e1a72fcca58-82cfb87e5bamr2398887b3a.21.1775112615693;
-        Wed, 01 Apr 2026 23:50:15 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:4::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9c3e5d7sm1867676b3a.39.2026.04.01.23.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2026 23:50:15 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	eddyz87@gmail.com,
-	yatsenko@meta.com,
-	martin.lau@kernel.org,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 1/1] bpf: Refactor dynptr mutability tracking
-Date: Wed,  1 Apr 2026 23:50:13 -0700
-Message-ID: <20260402065013.884228-2-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260402065013.884228-1-ameryhung@gmail.com>
-References: <20260402065013.884228-1-ameryhung@gmail.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iYAl1fvFqOQ8GHN/37KbIWRIR6B2/lwLHHZ+lUgrqew=;
+ b=gxlL+XbqNsm1xv7reHEI9FKHaIqA7z5nGmdyjXf5FVDbspX8Lf2gtQH46sLelm1kXtQgc8m1mjYqcbnOWmvYftvB7qJRf3V8km27wvr+bd5Vp3gBhLFKkbCElswDzH+uL6mgehCP6xZGGucxRsejXis8NmIVqmrF3YXFmRa++zQ=
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
+ by CH3PR10MB6713.namprd10.prod.outlook.com (2603:10b6:610:143::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Thu, 2 Apr
+ 2026 07:01:33 +0000
+Received: from CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
+ ([fe80::3c92:21f3:96a:b574%6]) with mapi id 15.20.9723.022; Thu, 2 Apr 2026
+ 07:01:33 +0000
+References: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
+User-agent: mu4e 1.4.10; emacs 27.2
+From: Ankur Arora <ankur.a.arora@oracle.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+        will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+        mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
+        ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        memxor@gmail.com, zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
+        rdunlap@infradead.org, david.laight.linux@gmail.com,
+        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v10 00/12] barrier: Add
+ smp_cond_load_{relaxed,acquire}_timeout()
+In-reply-to: <20260316013651.3225328-1-ankur.a.arora@oracle.com>
+Date: Thu, 02 Apr 2026 00:01:28 -0700
+Message-ID: <875x69rgl3.fsf@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: YT4PR01CA0142.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d5::17) To CO6PR10MB5409.namprd10.prod.outlook.com
+ (2603:10b6:5:357::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|CH3PR10MB6713:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0285f331-79a3-49e3-5a0a-08de9085ab5a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|13003099007|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	0Q9tu7vC29X5XTDtrf1hjCXqaY0ti+3YyMB89iFS7E/MHNYiFt5Klf5XmLdS/CJoyPC9hejlw9QpIQd0NnPDNw0/FK14yzQIfWTY/TCP1B84x5QQVnHStm8+WSByztIBsXxWmZv+tUboNn7UrbE0FOY9oF1H3fmK60+qxvuvQ/NWTrrNcj93LqYpvpMy3YLpCjhgQ/QGG0vWbsNNwVxf4jkwJNCMESjnPIAJUMKkeFg2B0whwB+wRYMUzwm4gJgpnA8YYtHF5U8Z6AK1VDhHfI9k1KnwBogc+UggTMdV1aTXPw7uTZWHxzzJCID+UrzmyDZaVpwJTBTkZHquuVbfdwIRxC/9vbEZVT2Y3TNpO/OsfHTJ/Qi6tMMx/BsRz7ZIaKNUykYVKWtwPgfyfQgX3qyZN25aMSb348PPQ8LDyiLjuRHGnR9zjyukASCpXGqUdwArlHeHhLmNCHMK7YJuSWMC9pJ2f0XcbdfNopKNBTzI5HV4MFgrJO67iHk+IajpenqTcvOio9nz9Tp9+reOF/O5rTzXcT5EJ9D3VyQhOy/nQdaX5SpRsYNQic08mFnD0QqgH2JPZhZe+21zcKUeJh1ybtVyW2ItXJlhXM/CB6m/E3llAPyqnIUupZ7H8orqpcQPTqJGLLeqNmF74/bbMFGb/HzwY0o8RHwUQHQ+Ru1NPov14z8G05bu89DrIo3US6rckm5V8cwyx70yATZxZMXvSF5SD77tZnf5q+ojNbfPTEtnsdILpyG3paDGIjRo
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(13003099007)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?pO68AoM7+8G2JeY14nqoLVSyCx7TLUuTMRXo/t2gjmJY+WOaJ+e3pbjI+Q1S?=
+ =?us-ascii?Q?kWXjhd983I/4VJMGWnLakEN6Cm4iA0UMObPNyHT6Q4cqCDAOpEGYmq9JObKc?=
+ =?us-ascii?Q?0yX9xL0fhri4rfmxEDhlq/j/Ux+bEPydfIFTAniAK5nIBY8J/pmU3kEa9XRb?=
+ =?us-ascii?Q?V67a08nCK+VmUPj+45Wn704hOXPo40pzvjA6U6ihTjIGI575BA1gs+S+zZXw?=
+ =?us-ascii?Q?R/RUJ+7Kfyyw5d1Ju/oCoY+fxKDwJpuEMXPY6d4ZZ94CLZBxPzMew3MDecUz?=
+ =?us-ascii?Q?8lCWAi6V0w6Y3/Z+cH39NBXUZGB4fOkBN5L/4t9/gFMDTz+X+GrAMcEyCpaz?=
+ =?us-ascii?Q?odTaaYhV6oSrX/3ZZRhoGv/fgG/5Qu+ULemtlE4Wg9Jirf2lIDxSa7PkYtof?=
+ =?us-ascii?Q?6Cj8EzQE6cvuT1P0U8pFy6Ij++YTkCPh7STvwuzYDhdfXvgVPvOhqJhhwAEj?=
+ =?us-ascii?Q?G2b0SYsiNmqSKbFZ8oVW5qeVar7gMN7oVIhdapoahnxCxmkW/uHp1ReVa5zW?=
+ =?us-ascii?Q?iSft62NsuviKSe0+FhcB0y/P0H0Zhr8ByJQQqbNQpfTeOPlWaf6GrTpS497B?=
+ =?us-ascii?Q?60eXPZR+Sbi8fgAFf/1OgYu1TX/OWfCIulMFORqP0MH/zSa5I7JFyn1eJGjh?=
+ =?us-ascii?Q?TJwbw+NS7Z/FGNs3qgS2q/dSuCK7bPzUu5r1hrQljAYfpCVU7cw5HsI49lku?=
+ =?us-ascii?Q?OMOyzHDHiOA0cmaCS9sY0nVArQeIApOlYCPSJikX7xqQSJNxCHjFqoJEcoep?=
+ =?us-ascii?Q?NHX+ojlMPPTb1wu62hiMfkuad93m0GFqZfJyfuuQsMx/eX0K6RWi5WIEPfxy?=
+ =?us-ascii?Q?W8zXyarEuexFe5o+Jevcsn6RJI4DABESva7j3xd9kgman8uJJ06BeLd9xQ1y?=
+ =?us-ascii?Q?NRKlOoz2bs/284adA+GDG6WgQ8QYOHiuvc3FhafgVLAZ9No32/JCBmUAlkHm?=
+ =?us-ascii?Q?KGT7Xhe3RH4bheMEhNwJxFPJr+EMP+naNsgoRSoMuLwjnKbXm9QaRlWzYNaP?=
+ =?us-ascii?Q?WaYda+F4nNgCxojaNRhoTaPAs+W/0GOkvI6XBWmhWw5tV7iIhEQKy+tnuCn4?=
+ =?us-ascii?Q?gxWZgJ+fS+PW5IUBZtpnf4PGre3nd79uhqsH9QolgitA739DqaUcTfQ34p1N?=
+ =?us-ascii?Q?iVJ+vfp5e83pWxs7gyX7LerNXrYvBYqOnFfcXS+kkLpMEczilY0X19MvCHG5?=
+ =?us-ascii?Q?XGPCEBmG+AqE0tfcMY7WNL2LrfSR2nTji6m3fF7eqC+KTRur/0pUmklvp8Z/?=
+ =?us-ascii?Q?vo5oMpEkVgZRbd9GFzH7RANlK8TRoARiL4zbH2kgbR+lIrfEDAfFDuLdi6Gt?=
+ =?us-ascii?Q?Xvft/IfEj9udns3kFlgz79OFwEuSfYQiePcOhp9dHzsHPC2nX3NHBREHxmIm?=
+ =?us-ascii?Q?SkLZS5/JBE20tNRU47r8P3+Yq1wqWWS9Sxf3B/dm4C+TKmL3prix4RQp7SSs?=
+ =?us-ascii?Q?EPvyVa1q/XoN7IFHTbxt1F0OqBzMFykx7b0DYbDJyZbIk//2yw9D9DPZF7WH?=
+ =?us-ascii?Q?kKQe4KdB7Biz+I416adNz1QF/jfkGDWRoD10dGgCRLD7G1hajplp9rR2dLVP?=
+ =?us-ascii?Q?CfHmJ/TP3KAjokOyW8Bne1VMGSqd6J2SHtqCW/A5xk9GysNZEKztOJcKmrmT?=
+ =?us-ascii?Q?26zdwiZBa0spRNYe+CBkwS1fcpYvAGYE4JhOku2QvGD5UK5EPg8Ff6pwmsN/?=
+ =?us-ascii?Q?SsHcX3vg+fZeyIDErwMallv1zScf8G531re+6dX9Y4ki+fokns/SUI9ajoLi?=
+ =?us-ascii?Q?eGgG3m/lsyc/CZFqQxrg8VCSWJBvQnI=3D?=
+X-Exchange-RoutingPolicyChecked:
+	grp0+YkeKGCMOrFDwTpMBz4W0W8CHa2VLDvhVFTOr4o0pXMjRPcPQZbChcutQ28FxUTAAzOcAZBoOKIfYn70hhlr797oLinor12y3Ravx/MhNySGtE7zPzkpbEctvAmvaGsuF5l71CfZzPPPQBvnjQuX1FCwQ/VSoad0Gr7bUmFdaA1KSui1dIeVhdGQ+7dXlqf02yuZD8JbPX7+cTHY+tGdgTI6RolP7Z+aCNekGqanACVWTdKWaDy8xS3LE3hlHaI4xGYfgDdvi4gcq1uwujJ6nl45Cqbhl9eJ2y4zxJQxg6Kv8LFqUYQ44KXdnL5ijrXFCOlVvgBSfxCv7VztFQ==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	YPRYMWBJNhOfjsRgjwjep1Jpv/BbgMQulzvEW0G1zwHwBuV1N7kTJbph+gYnc4mRsuh3m/8TIgDgAN6ssLAb8FCsod1ocQClIr9GBObTsOh2uQKSjD6WIjR/Go3MdyMgaLdiW4GxEiE9ihUBwqJymO0zc1p3D174U6p71T4jODZrIQgQ06DGFqzEO1WQ4X8ggYqXxPIquj20hQTyaEVw4nValTIiLVDe/jc2ibeXATJINg26OcOp4GAH/iq2UC/LfiOMtbehYJg/6fj0lR3YWIm1hCbVKi2223PPQNMu8Z8VGDenf+IK9TK9w/9yB7LYqQKQKxa72+nKt4Z9JDWMrf5b3HgQVNYASsdlhVJDztbB/wYHY7tQLvFzgyfNEl3Ml+au+D1lIy8Bx+ZTfu1+8uZXDnLQNFkqDrDqLoNBP1vVVddvMwRFctNwIQwKYnDYLXpReVIRgiHrb9d4P8kRbwOPn02c+/8UTPGAgN2MVNHifxo/abHybO3pbFPJlCnnCnshACILtyCbQbUeeUXCIn8T4NGCLdTCgmntmHWjqLRoOqZcPouYANijfk3vxCtI637qnMgDa1RXyeb/5CGIonpCzRMnPtubphEKOBxFA4c=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0285f331-79a3-49e3-5a0a-08de9085ab5a
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 07:01:33.2215
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wz4/RGPVdhv8Y4M2N5LCq1Sko0R5S3gvNwl1tnLXDR9eBxKe8TPGef3K0fm+2Rfyd9nQWwlX+p5iM6llleVd8BAeSm/Td5rdm0JkR6MWn3o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6713
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-02_01,2026-04-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2603050001 definitions=main-2604020060
+X-Authority-Analysis: v=2.4 cv=IPwPywvG c=1 sm=1 tr=0 ts=69ce1453 cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=A5OVakUREuEA:10
+ a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=x4eqshVgHu-cdnggieHk:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=vggBfdFIAAAA:8
+ a=7CQSdrXTAAAA:8 a=JfrnYn6hAAAA:8 a=KKAkSRfTAAAA:8 a=pGLkceISAAAA:8
+ a=KPwNAUb5YfN-6pBwkm0A:9 a=a-qgeE7W1pNrGK8U0ZQC:22 a=1CNFftbPRP8L7MoqJWF3:22
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-ORIG-GUID: cdIo-3ZcycYqeX-M2mp24vor2vusGf4f
+X-Proofpoint-GUID: cdIo-3ZcycYqeX-M2mp24vor2vusGf4f
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDA2MCBTYWx0ZWRfX2V87hIR3nw8g
+ XWyantuT5emXOIvduouWEgGhf0WoezYiaZlTUwCYAZ1XgAnT+CDl3C4djJ+NZzNa+0PGGe8yvJB
+ 9eTfYtdyPP2Wns6U1Uiuk2L0F4i2N3alzR6+xBQQm8396mc/xeYk43CDYKPpBwghIGpMy8LhPQx
+ eRAphAFKkqnvOw+XAQ+A8fzfm61XdyTEtOZXp6zF/FmSdNTbrnAiFCWlT8hINWwsgd66gGWx9LM
+ mQcgtXOMd5ArS6kGaS0w28z4mdRLQUGXOdp8dbFDEgIPgU6M/5oKEMA3c9sgGHkgRdpcKU8xIdf
+ S44OuRFQTpCeI4M9MeYnpfAk5OW79VbaQCFduGeqJaTHyGIosgEn21URWcFBey1sIGWwWPjcbnU
+ 8exqgldUZGEEBX178ZqUzKTOw7rwAZovyQISJItlxsgkz/I++/IxJs9MINoqntuSKbAUXEhD/im
+ KnqyZWSUa5DU2dyrwIg==
 
-Redefine dynptr mutability and fix inconsistency in the verifier and
-kfunc signatures. Dynptr mutability is at two levels. The first is
-the bpf_dynptr structure and the second is the memory the dynptr points
-to. The verifer currently tracks the mutability of the bpf_dynptr struct
-through helper and kfunc prototypes, where "const struct bpf_dynptr *"
-means the structure itself is immutable. The second level is tracked
-in upper bit of bpf_dynptr->size in runtime and is not changed in this
-patch.
 
-There are two type of inconsistency in the verfier regarding the
-mutability of the bpf_dynptr struct. First, there are many existing
-kfuncs whose prototypes are wrong. For example, bpf_dynptr_adjust()
-mutates a dynptr's start and offset but marks the argument as a const
-pointer. At the same time many other kfuncs that does not mutate the
-dynptr but mark themselves as mutable. Second, the verifier currently
-does not honor the const qualifier in kfunc prototypes as it determines
-whether tagging the arg_type with MEM_RDONLY or not based on the register
-state.
+Ankur Arora <ankur.a.arora@oracle.com> writes:
 
-Since all the verifier care is to prevent CONST_PTR_TO_DYNPTR from
-being destroyed in callback and global subprogram, redefine the
-mutability at the bpf_dynptr level to just bpf_dynptr_kern->data. Then,
-explicitly prohibit passing CONST_PTR_TO_DYNPTR to an argument tagged
-with MEM_UNINIT or OBJ_RELEASE. The mutability of a dynptr's view is not
-really interesting so drop MEM_RDONLY annotation for dynptr from the
-helpers and kfuncs. Plus, if the mutability of the entire bpf_dynptr
-were to be done correctly, it would kill the bpf_dynptr_adjust() usage
-in callback and global subporgram.
+> Hi,
+>
+> This series adds waited variants of the smp_cond_load() primitives:
+> smp_cond_load_relaxed_timeout(), and smp_cond_load_acquire_timeout().
+>
+> With this version, the main remaining things are:
+>
+>   - Review by PeterZ of the new interface tif_need_resched_relaxed_wait()
+>     (patch 11, "sched: add need-resched timed wait interface").
+>
+>   - Review of the BPF changes. This version simplifies the rqspinlock
+>     changes by reusing the original error handling path
+>     (patches 9, 10 "bpf/rqspinlock: switch check_timeout() to a clock
+>     interface", "bpf/rqspinlock: Use smp_cond_load_acquire_timeout()").
+>
+>   - Review of WFET handling. (patch 4, "arm64: support WFET in
+>     smp_cond_load_relaxed_timeout()").
 
-Implementation wise
+Received Acks/R-bys for the two above.
 
-- First, make sure all kfunc arg are correctly tagged: Tag the dynptr
-  argument of bpf_dynptr_file_discard() with OBJ_RELEASE.
-- Then, in process_dynptr_func(), make sure CONST_PTR_TO_DYNPTR cannot
-  be passed to argument tagged with MEM_UNINIT or OBJ_RELEASE. For
-  MEM_UNINIT, it is already checked by is_dynptr_reg_valid_uninit().
-  For OBJ_RELEASE, check against OBJ_RELEASE instead of MEM_RDONLY and
-  drop a now identical check in umark_stack_slots_dynptr().
-- Remove the mutual exclusive check between MEM_UNINIT and MEM_RDONLY,
-  but don't add a MEM_UNINIT and OBJ_RELEASE version as it is obviously
-  wrong.
+Will send out an updated v11 which adds a testcase and a comment
+mentioning that smp_cond_load_*_timeout on MMIO addresses might
+break in interesting platform specific ways.
 
-Note that while this patch stops following the C semantic for the
-mutability of bpf_dynptr, the prototype of kfuncs are still fixed to
-maintain the correct C semantics in the helper implementation. Adding or
-removing the const qualifier does not break backward compatibility.
+Thanks
+Ankur
 
-In test_kfunc_dynptr_param.c, initialize dynptr to 0 to avoid
--Wuninitialized-const-pointer warning.
+> The new interfaces are meant for contexts where you want to wait on a
+> condition variable for a finite duration. This is easy enough to do with
+> a loop around cpu_relax(). There are, however, architectures (ex. arm64)
+> that allow waiting on a cacheline instead.
+>
+> So, these interfaces handle a mixture of spin/wait with a
+> smp_cond_load() thrown in. The interfaces are:
+>
+>    smp_cond_load_relaxed_timeout(ptr, cond_expr, time_expr, timeout)
+>    smp_cond_load_acquire_timeout(ptr, cond_expr, time_expr, timeout)
+>
+> The parameters, time_expr, timeout determine when to bail out.
+>
+> Also add tif_need_resched_relaxed_wait() which wraps the pattern used
+> in poll_idle() and abstracts out details of the interface and those
+> of the scheduler.
+>
+> In addition add atomic_cond_read_*_timeout(), atomic64_cond_read_*_timeout(),
+> and atomic_long wrappers to the interfaces.
+>
+> Finally update poll_idle() and resilient queued spinlocks to use them.
+>
+> Changelog:
+>   v9 [9]:
+>    - s/@cond/@cond_expr/ (Randy Dunlap)
+>    - Clarify that SMP_TIMEOUT_POLL_COUNT is only around memory
+>      addresses. (David Laight)
+>    - Add the missing config ARCH_HAS_CPU_RELAX in arch/arm64/Kconfig.
+>      (Catalin Marinas).
+>    - Switch to arch_counter_get_cntvct_stable() (via __delay_cycles())
+>      in the cmpwait path instead of using arch_timer_read_counter().
+>      (Catalin Marinas)
+>
+>   v8 [0]:
+>    - Defer evaluation of @time_expr_ns to when we hit the slowpath.
+>       (comment from Alexei Starovoitov).
+>
+>    - Mention that cpu_poll_relax() is better than raw CPU polling
+>      only where ARCH_HAS_CPU_RELAX is defined.
+>      - also define ARCH_HAS_CPU_RELAX for arm64.
+>       (Came out of a discussion with Will Deacon.)
+>
+>    - Split out WFET and WFE handling. I was doing both of these
+>      in a common handler.
+>      (From Will Deacon and in an earlier revision by Catalin Marinas.)
+>
+>    - Add mentions of atomic_cond_read_{relaxed,acquire}(),
+>      atomic_cond_read_{relaxed,acquire}_timeout() in
+>      Documentation/atomic_t.txt.
+>
+>    - Use the BIT() macro to do the checking in tif_bitset_relaxed_wait().
+>
+>    - Cleanup unnecessary assignments, casts etc in poll_idle().
+>      (From Rafael Wysocki.)
+>
+>    - Fixup warnings from kernel build robot
+>
+>
+>   v7 [1]:
+>    - change the interface to separately provide the timeout. This is
+>      useful for supporting WFET and similar primitives which can do
+>      timed waiting (suggested by Arnd Bergmann).
+>
+>    - Adapting rqspinlock code to this changed interface also
+>      necessitated allowing time_expr to fail.
+>    - rqspinlock changes to adapt to the new smp_cond_load_acquire_timeout().
+>
+>    - add WFET support (suggested by Arnd Bergmann).
+>    - add support for atomic-long wrappers.
+>    - add a new scheduler interface tif_need_resched_relaxed_wait() which
+>      encapsulates the polling logic used by poll_idle().
+>      - interface suggested by (Rafael J. Wysocki).
+>
+>
+>   v6 [2]:
+>    - fixup missing timeout parameters in atomic64_cond_read_*_timeout()
+>    - remove a race between setting of TIF_NEED_RESCHED and the call to
+>      smp_cond_load_relaxed_timeout(). This would mean that dev->poll_time_limit
+>      would be set even if we hadn't spent any time waiting.
+>      (The original check compared against local_clock(), which would have been
+>      fine, but I was instead using a cheaper check against _TIF_NEED_RESCHED.)
+>    (Both from meta-CI bot)
+>
+>
+>   v5 [3]:
+>    - use cpu_poll_relax() instead of cpu_relax().
+>    - instead of defining an arm64 specific
+>      smp_cond_load_relaxed_timeout(), just define the appropriate
+>      cpu_poll_relax().
+>    - re-read the target pointer when we exit due to the time-check.
+>    - s/SMP_TIMEOUT_SPIN_COUNT/SMP_TIMEOUT_POLL_COUNT/
+>    (Suggested by Will Deacon)
+>
+>    - add atomic_cond_read_*_timeout() and atomic64_cond_read_*_timeout()
+>      interfaces.
+>    - rqspinlock: use atomic_cond_read_acquire_timeout().
+>    - cpuidle: use smp_cond_load_relaxed_tiemout() for polling.
+>    (Suggested by Catalin Marinas)
+>
+>    - rqspinlock: define SMP_TIMEOUT_POLL_COUNT to be 16k for non arm64
+>
+>
+>   v4 [4]:
+>     - naming change 's/timewait/timeout/'
+>     - resilient spinlocks: get rid of res_smp_cond_load_acquire_waiting()
+>       and fixup use of RES_CHECK_TIMEOUT().
+>     (Both suggested by Catalin Marinas)
+>
+>   v3 [5]:
+>     - further interface simplifications (suggested by Catalin Marinas)
+>
+>   v2 [6]:
+>     - simplified the interface (suggested by Catalin Marinas)
+>        - get rid of wait_policy, and a multitude of constants
+>        - adds a slack parameter
+>       This helped remove a fair amount of duplicated code duplication and in
+>       hindsight unnecessary constants.
+>
+>   v1 [7]:
+>      - add wait_policy (coarse and fine)
+>      - derive spin-count etc at runtime instead of using arbitrary
+>        constants.
+>
+> Haris Okanovic tested v4 of this series with poll_idle()/haltpoll patches. [8]
+>
+> Comments appreciated!
+>
+> Thanks
+> Ankur
+>
+>  [0] https://lore.kernel.org/lkml/20251215044919.460086-1-ankur.a.arora@oracle.com/
+>  [1] https://lore.kernel.org/lkml/20251028053136.692462-1-ankur.a.arora@oracle.com/
+>  [2] https://lore.kernel.org/lkml/20250911034655.3916002-1-ankur.a.arora@oracle.com/
+>  [3] https://lore.kernel.org/lkml/20250911034655.3916002-1-ankur.a.arora@oracle.com/
+>  [4] https://lore.kernel.org/lkml/20250829080735.3598416-1-ankur.a.arora@oracle.com/
+>  [5] https://lore.kernel.org/lkml/20250627044805.945491-1-ankur.a.arora@oracle.com/
+>  [6] https://lore.kernel.org/lkml/20250502085223.1316925-1-ankur.a.arora@oracle.com/
+>  [7] https://lore.kernel.org/lkml/20250203214911.898276-1-ankur.a.arora@oracle.com/
+>  [8] https://lore.kernel.org/lkml/2cecbf7fb23ee83a4ce027e1be3f46f97efd585c.camel@amazon.com/
+>  [9] https://lore.kernel.org/lkml/20260209023153.2661784-1-ankur.a.arora@oracle.com/
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: bpf@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+>
+> Ankur Arora (12):
+>   asm-generic: barrier: Add smp_cond_load_relaxed_timeout()
+>   arm64: barrier: Support smp_cond_load_relaxed_timeout()
+>   arm64/delay: move some constants out to a separate header
+>   arm64: support WFET in smp_cond_load_relaxed_timeout()
+>   arm64: rqspinlock: Remove private copy of
+>     smp_cond_load_acquire_timewait()
+>   asm-generic: barrier: Add smp_cond_load_acquire_timeout()
+>   atomic: Add atomic_cond_read_*_timeout()
+>   locking/atomic: scripts: build atomic_long_cond_read_*_timeout()
+>   bpf/rqspinlock: switch check_timeout() to a clock interface
+>   bpf/rqspinlock: Use smp_cond_load_acquire_timeout()
+>   sched: add need-resched timed wait interface
+>   cpuidle/poll_state: Wait for need-resched via
+>     tif_need_resched_relaxed_wait()
+>
+>  Documentation/atomic_t.txt           | 14 +++--
+>  arch/arm64/Kconfig                   |  3 +
+>  arch/arm64/include/asm/barrier.h     | 23 +++++++
+>  arch/arm64/include/asm/cmpxchg.h     | 62 +++++++++++++++----
+>  arch/arm64/include/asm/delay-const.h | 27 +++++++++
+>  arch/arm64/include/asm/rqspinlock.h  | 85 --------------------------
+>  arch/arm64/lib/delay.c               | 15 ++---
+>  drivers/cpuidle/poll_state.c         | 21 +------
+>  drivers/soc/qcom/rpmh-rsc.c          |  8 +--
+>  include/asm-generic/barrier.h        | 90 ++++++++++++++++++++++++++++
+>  include/linux/atomic.h               | 10 ++++
+>  include/linux/atomic/atomic-long.h   | 18 +++---
+>  include/linux/sched/idle.h           | 29 +++++++++
+>  kernel/bpf/rqspinlock.c              | 77 +++++++++++++++---------
+>  scripts/atomic/gen-atomic-long.sh    | 16 +++--
+>  15 files changed, 320 insertions(+), 178 deletions(-)
+>  create mode 100644 arch/arm64/include/asm/delay-const.h
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- fs/verity/measure.c                           |  2 +-
- include/linux/bpf.h                           |  8 +--
- kernel/bpf/btf.c                              |  2 +-
- kernel/bpf/helpers.c                          | 18 ++---
- kernel/bpf/verifier.c                         | 68 +++++--------------
- kernel/trace/bpf_trace.c                      | 18 ++---
- tools/testing/selftests/bpf/bpf_kfuncs.h      |  8 +--
- .../selftests/bpf/progs/dynptr_success.c      |  6 +-
- .../bpf/progs/test_kfunc_dynptr_param.c       |  9 +--
- 9 files changed, 51 insertions(+), 88 deletions(-)
 
-diff --git a/fs/verity/measure.c b/fs/verity/measure.c
-index 6a35623ebdf0..3840436e4510 100644
---- a/fs/verity/measure.c
-+++ b/fs/verity/measure.c
-@@ -118,7 +118,7 @@ __bpf_kfunc_start_defs();
-  *
-  * Return: 0 on success, a negative value on error.
-  */
--__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, struct bpf_dynptr *digest_p)
-+__bpf_kfunc int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynptr *digest_p)
- {
- 	struct bpf_dynptr_kern *digest_ptr = (struct bpf_dynptr_kern *)digest_p;
- 	const struct inode *inode = file_inode(file);
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b0..329b78940b79 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3621,8 +3621,8 @@ static inline int bpf_fd_reuseport_array_update_elem(struct bpf_map *map,
- struct bpf_key *bpf_lookup_user_key(s32 serial, u64 flags);
- struct bpf_key *bpf_lookup_system_key(u64 id);
- void bpf_key_put(struct bpf_key *bkey);
--int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
--			       struct bpf_dynptr *sig_p,
-+int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_p,
-+			       const struct bpf_dynptr *sig_p,
- 			       struct bpf_key *trusted_keyring);
- 
- #else
-@@ -3640,8 +3640,8 @@ static inline void bpf_key_put(struct bpf_key *bkey)
- {
- }
- 
--static inline int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
--					     struct bpf_dynptr *sig_p,
-+static inline int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_p,
-+					     const struct bpf_dynptr *sig_p,
- 					     struct bpf_key *trusted_keyring)
- {
- 	return -EOPNOTSUPP;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index a62d78581207..3c2aaa3c5004 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7973,7 +7973,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
- 				bpf_log(log, "arg#%d has invalid combination of tags\n", i);
- 				return -EINVAL;
- 			}
--			sub->args[i].arg_type = ARG_PTR_TO_DYNPTR | MEM_RDONLY;
-+			sub->args[i].arg_type = ARG_PTR_TO_DYNPTR;
- 			continue;
- 		}
- 		if (tags & ARG_TAG_TRUSTED) {
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 2d8538bf4cfa..98a76f28b76e 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1929,7 +1929,7 @@ static const struct bpf_func_proto bpf_dynptr_read_proto = {
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
- 	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
--	.arg3_type	= ARG_PTR_TO_DYNPTR | MEM_RDONLY,
-+	.arg3_type	= ARG_PTR_TO_DYNPTR,
- 	.arg4_type	= ARG_ANYTHING,
- 	.arg5_type	= ARG_ANYTHING,
- };
-@@ -1986,7 +1986,7 @@ static const struct bpf_func_proto bpf_dynptr_write_proto = {
- 	.func		= bpf_dynptr_write,
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
--	.arg1_type	= ARG_PTR_TO_DYNPTR | MEM_RDONLY,
-+	.arg1_type	= ARG_PTR_TO_DYNPTR,
- 	.arg2_type	= ARG_ANYTHING,
- 	.arg3_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
- 	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
-@@ -2029,7 +2029,7 @@ static const struct bpf_func_proto bpf_dynptr_data_proto = {
- 	.func		= bpf_dynptr_data,
- 	.gpl_only	= false,
- 	.ret_type	= RET_PTR_TO_DYNPTR_MEM_OR_NULL,
--	.arg1_type	= ARG_PTR_TO_DYNPTR | MEM_RDONLY,
-+	.arg1_type	= ARG_PTR_TO_DYNPTR,
- 	.arg2_type	= ARG_ANYTHING,
- 	.arg3_type	= ARG_CONST_ALLOC_SIZE_OR_ZERO,
- };
-@@ -3057,7 +3057,7 @@ __bpf_kfunc void *bpf_dynptr_slice_rdwr(const struct bpf_dynptr *p, u64 offset,
- 	return bpf_dynptr_slice(p, offset, buffer__nullable, buffer__szk);
- }
- 
--__bpf_kfunc int bpf_dynptr_adjust(const struct bpf_dynptr *p, u64 start, u64 end)
-+__bpf_kfunc int bpf_dynptr_adjust(struct bpf_dynptr *p, u64 start, u64 end)
- {
- 	struct bpf_dynptr_kern *ptr = (struct bpf_dynptr_kern *)p;
- 	u64 size;
-@@ -3130,8 +3130,8 @@ __bpf_kfunc int bpf_dynptr_clone(const struct bpf_dynptr *p,
-  * Copies data from source dynptr to destination dynptr.
-  * Returns 0 on success; negative error, otherwise.
-  */
--__bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr *dst_ptr, u64 dst_off,
--				struct bpf_dynptr *src_ptr, u64 src_off, u64 size)
-+__bpf_kfunc int bpf_dynptr_copy(const struct bpf_dynptr *dst_ptr, u64 dst_off,
-+				const struct bpf_dynptr *src_ptr, u64 src_off, u64 size)
- {
- 	struct bpf_dynptr_kern *dst = (struct bpf_dynptr_kern *)dst_ptr;
- 	struct bpf_dynptr_kern *src = (struct bpf_dynptr_kern *)src_ptr;
-@@ -3185,7 +3185,7 @@ __bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr *dst_ptr, u64 dst_off,
-  * at @offset with the constant byte @val.
-  * Returns 0 on success; negative error, otherwise.
-  */
--__bpf_kfunc int bpf_dynptr_memset(struct bpf_dynptr *p, u64 offset, u64 size, u8 val)
-+__bpf_kfunc int bpf_dynptr_memset(const struct bpf_dynptr *p, u64 offset, u64 size, u8 val)
- {
- 	struct bpf_dynptr_kern *ptr = (struct bpf_dynptr_kern *)p;
- 	u64 chunk_sz, write_off;
-@@ -4199,8 +4199,8 @@ __bpf_kfunc void bpf_key_put(struct bpf_key *bkey)
-  *
-  * Return: 0 on success, a negative value on error.
-  */
--__bpf_kfunc int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
--			       struct bpf_dynptr *sig_p,
-+__bpf_kfunc int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_p,
-+			       const struct bpf_dynptr *sig_p,
- 			       struct bpf_key *trusted_keyring)
- {
- #ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8c1cf2eb6cbb..15543252e15c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -864,15 +864,6 @@ static int unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_re
- 	struct bpf_func_state *state = func(env, reg);
- 	int spi, ref_obj_id, i;
- 
--	/*
--	 * This can only be set for PTR_TO_STACK, as CONST_PTR_TO_DYNPTR cannot
--	 * be released by any dynptr helper. Hence, unmark_stack_slots_dynptr
--	 * is safe to do directly.
--	 */
--	if (reg->type == CONST_PTR_TO_DYNPTR) {
--		verifier_bug(env, "CONST_PTR_TO_DYNPTR cannot be released");
--		return -EFAULT;
--	}
- 	spi = dynptr_get_spi(env, reg);
- 	if (spi < 0)
- 		return spi;
-@@ -8873,23 +8864,12 @@ static int process_kptr_func(struct bpf_verifier_env *env, int regno,
-  * bytes as STACK_DYNPTR in case of PTR_TO_STACK. In case of
-  * CONST_PTR_TO_DYNPTR, we are guaranteed to get the beginning of the object.
-  *
-- * Mutability of bpf_dynptr is at two levels, one is at the level of struct
-- * bpf_dynptr itself, i.e. whether the helper is receiving a pointer to struct
-- * bpf_dynptr or pointer to const struct bpf_dynptr. In the former case, it can
-- * mutate the view of the dynptr and also possibly destroy it. In the latter
-- * case, it cannot mutate the bpf_dynptr itself but it can still mutate the
-- * memory that dynptr points to.
-- *
-- * The verifier will keep track both levels of mutation (bpf_dynptr's in
-- * reg->type and the memory's in reg->dynptr.type), but there is no support for
-- * readonly dynptr view yet, hence only the first case is tracked and checked.
-- *
-- * This is consistent with how C applies the const modifier to a struct object,
-- * where the pointer itself inside bpf_dynptr becomes const but not what it
-- * points to.
-- *
-- * Helpers which do not mutate the bpf_dynptr set MEM_RDONLY in their argument
-- * type, and declare it as 'const struct bpf_dynptr *' in their prototype.
-+ * Mutability of bpf_dynptr is at two levels: the dynptr and the memory the
-+ * dynptr points to. At the first level, the verifier will make sure a
-+ * CONST_PTR_TO_DYNPTR cannot be reinitialized or destroyed. The mutability of
-+ * a dynptr's view (i.e., start and offset) is not tracked as there is not such
-+ * use case. The second level is tracked using the upper bit of bpf_dynptr->size
-+ * and checked dynamically during runtime.
-  */
- static int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn_idx,
- 			       enum bpf_arg_type arg_type, int clone_ref_obj_id)
-@@ -8904,14 +8884,6 @@ static int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn
- 		return -EINVAL;
- 	}
- 
--	/* MEM_UNINIT and MEM_RDONLY are exclusive, when applied to an
--	 * ARG_PTR_TO_DYNPTR (or ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_*):
--	 */
--	if ((arg_type & (MEM_UNINIT | MEM_RDONLY)) == (MEM_UNINIT | MEM_RDONLY)) {
--		verifier_bug(env, "misconfigured dynptr helper type flags");
--		return -EFAULT;
--	}
--
- 	/*  MEM_UNINIT - Points to memory that is an appropriate candidate for
- 	 *		 constructing a mutable bpf_dynptr object.
- 	 *
-@@ -8919,13 +8891,12 @@ static int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn
- 	 *		 pointing to a region of at least 16 bytes which doesn't
- 	 *		 contain an existing bpf_dynptr.
- 	 *
--	 *  MEM_RDONLY - Points to a initialized bpf_dynptr that will not be
--	 *		 mutated or destroyed. However, the memory it points to
--	 *		 may be mutated.
-+	 *  OBJ_RELEASE - Points to a initialized bpf_dynptr that will be
-+	 *		  destroyed.
- 	 *
--	 *  None       - Points to a initialized dynptr that can be mutated and
--	 *		 destroyed, including mutation of the memory it points
--	 *		 to.
-+	 *  None       - Points to a initialized dynptr that cannot be
-+	 *		 reinitialized or destroyed. However, the view of the
-+	 *		 dynptr and the memory it points to may be mutated.
- 	 */
- 	if (arg_type & MEM_UNINIT) {
- 		int i;
-@@ -8944,10 +8915,10 @@ static int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn
- 		}
- 
- 		err = mark_stack_slots_dynptr(env, reg, arg_type, insn_idx, clone_ref_obj_id);
--	} else /* MEM_RDONLY and None case from above */ {
-+	} else /* OBJ_RELEASE and None case from above */ {
- 		/* For the reg->type == PTR_TO_STACK case, bpf_dynptr is never const */
--		if (reg->type == CONST_PTR_TO_DYNPTR && !(arg_type & MEM_RDONLY)) {
--			verbose(env, "cannot pass pointer to const bpf_dynptr, the helper mutates it\n");
-+		if (reg->type == CONST_PTR_TO_DYNPTR && (arg_type & OBJ_RELEASE)) {
-+			verbose(env, "CONST_PTR_TO_DYNPTR cannot be released");
- 			return -EINVAL;
- 		}
- 
-@@ -8958,7 +8929,7 @@ static int process_dynptr_func(struct bpf_verifier_env *env, int regno, int insn
- 			return -EINVAL;
- 		}
- 
--		/* Fold modifiers (in this case, MEM_RDONLY) when checking expected type */
-+		/* Fold modifiers (in this case, OBJ_RELEASE) when checking expected type */
- 		if (!is_dynptr_type_expected(env, reg, arg_type & ~MEM_RDONLY)) {
- 			verbose(env,
- 				"Expected a dynptr of type %s as arg #%d\n",
-@@ -10803,7 +10774,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env, int subprog,
- 				bpf_log(log, "R%d is not a pointer to arena or scalar.\n", regno);
- 				return -EINVAL;
- 			}
--		} else if (arg->arg_type == (ARG_PTR_TO_DYNPTR | MEM_RDONLY)) {
-+		} else if (arg->arg_type == ARG_PTR_TO_DYNPTR) {
- 			ret = check_func_arg_reg_off(env, reg, regno, ARG_PTR_TO_DYNPTR);
- 			if (ret)
- 				return ret;
-@@ -13718,9 +13689,6 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			enum bpf_arg_type dynptr_arg_type = ARG_PTR_TO_DYNPTR;
- 			int clone_ref_obj_id = 0;
- 
--			if (reg->type == CONST_PTR_TO_DYNPTR)
--				dynptr_arg_type |= MEM_RDONLY;
--
- 			if (is_kfunc_arg_uninit(btf, &args[i]))
- 				dynptr_arg_type |= MEM_UNINIT;
- 
-@@ -13733,7 +13701,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_file]) {
- 				dynptr_arg_type |= DYNPTR_TYPE_FILE;
- 			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_file_discard]) {
--				dynptr_arg_type |= DYNPTR_TYPE_FILE;
-+				dynptr_arg_type |= DYNPTR_TYPE_FILE | OBJ_RELEASE;
- 				meta->release_regno = regno;
- 			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_clone] &&
- 				   (dynptr_arg_type & MEM_UNINIT)) {
-@@ -24785,7 +24753,7 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
- 			} else if (arg->arg_type == ARG_ANYTHING) {
- 				reg->type = SCALAR_VALUE;
- 				mark_reg_unknown(env, regs, i);
--			} else if (arg->arg_type == (ARG_PTR_TO_DYNPTR | MEM_RDONLY)) {
-+			} else if (arg->arg_type == ARG_PTR_TO_DYNPTR) {
- 				/* assume unspecial LOCAL dynptr type */
- 				__mark_dynptr_reg(reg, BPF_DYNPTR_TYPE_LOCAL, true, ++env->id_gen);
- 			} else if (base_type(arg->arg_type) == ARG_PTR_TO_MEM) {
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 0b040a417442..5f35ecdd5341 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -3393,7 +3393,7 @@ typedef int (*copy_fn_t)(void *dst, const void *src, u32 size, struct task_struc
-  * direct calls into all the specific callback implementations
-  * (copy_user_data_sleepable, copy_user_data_nofault, and so on)
-  */
--static __always_inline int __bpf_dynptr_copy_str(struct bpf_dynptr *dptr, u64 doff, u64 size,
-+static __always_inline int __bpf_dynptr_copy_str(const struct bpf_dynptr *dptr, u64 doff, u64 size,
- 						 const void *unsafe_src,
- 						 copy_fn_t str_copy_fn,
- 						 struct task_struct *tsk)
-@@ -3535,49 +3535,49 @@ __bpf_kfunc int bpf_send_signal_task(struct task_struct *task, int sig, enum pid
- 	return bpf_send_signal_common(sig, type, task, value);
- }
- 
--__bpf_kfunc int bpf_probe_read_user_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_probe_read_user_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 					   u64 size, const void __user *unsafe_ptr__ign)
- {
- 	return __bpf_dynptr_copy(dptr, off, size, (const void __force *)unsafe_ptr__ign,
- 				 copy_user_data_nofault, NULL);
- }
- 
--__bpf_kfunc int bpf_probe_read_kernel_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_probe_read_kernel_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 					     u64 size, const void *unsafe_ptr__ign)
- {
- 	return __bpf_dynptr_copy(dptr, off, size, unsafe_ptr__ign,
- 				 copy_kernel_data_nofault, NULL);
- }
- 
--__bpf_kfunc int bpf_probe_read_user_str_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_probe_read_user_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 					       u64 size, const void __user *unsafe_ptr__ign)
- {
- 	return __bpf_dynptr_copy_str(dptr, off, size, (const void __force *)unsafe_ptr__ign,
- 				     copy_user_str_nofault, NULL);
- }
- 
--__bpf_kfunc int bpf_probe_read_kernel_str_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_probe_read_kernel_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 						 u64 size, const void *unsafe_ptr__ign)
- {
- 	return __bpf_dynptr_copy_str(dptr, off, size, unsafe_ptr__ign,
- 				     copy_kernel_str_nofault, NULL);
- }
- 
--__bpf_kfunc int bpf_copy_from_user_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_copy_from_user_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 					  u64 size, const void __user *unsafe_ptr__ign)
- {
- 	return __bpf_dynptr_copy(dptr, off, size, (const void __force *)unsafe_ptr__ign,
- 				 copy_user_data_sleepable, NULL);
- }
- 
--__bpf_kfunc int bpf_copy_from_user_str_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_copy_from_user_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 					      u64 size, const void __user *unsafe_ptr__ign)
- {
- 	return __bpf_dynptr_copy_str(dptr, off, size, (const void __force *)unsafe_ptr__ign,
- 				     copy_user_str_sleepable, NULL);
- }
- 
--__bpf_kfunc int bpf_copy_from_user_task_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_copy_from_user_task_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 					       u64 size, const void __user *unsafe_ptr__ign,
- 					       struct task_struct *tsk)
- {
-@@ -3585,7 +3585,7 @@ __bpf_kfunc int bpf_copy_from_user_task_dynptr(struct bpf_dynptr *dptr, u64 off,
- 				 copy_user_data_sleepable, tsk);
- }
- 
--__bpf_kfunc int bpf_copy_from_user_task_str_dynptr(struct bpf_dynptr *dptr, u64 off,
-+__bpf_kfunc int bpf_copy_from_user_task_str_dynptr(const struct bpf_dynptr *dptr, u64 off,
- 						   u64 size, const void __user *unsafe_ptr__ign,
- 						   struct task_struct *tsk)
- {
-diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
-index 7dad01439391..ae71e9b69051 100644
---- a/tools/testing/selftests/bpf/bpf_kfuncs.h
-+++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
-@@ -40,7 +40,7 @@ extern void *bpf_dynptr_slice(const struct bpf_dynptr *ptr, __u64 offset,
- extern void *bpf_dynptr_slice_rdwr(const struct bpf_dynptr *ptr, __u64 offset, void *buffer,
- 				   __u64 buffer__szk) __ksym __weak;
- 
--extern int bpf_dynptr_adjust(const struct bpf_dynptr *ptr, __u64 start, __u64 end) __ksym __weak;
-+extern int bpf_dynptr_adjust(struct bpf_dynptr *ptr, __u64 start, __u64 end) __ksym __weak;
- extern bool bpf_dynptr_is_null(const struct bpf_dynptr *ptr) __ksym __weak;
- extern bool bpf_dynptr_is_rdonly(const struct bpf_dynptr *ptr) __ksym __weak;
- extern __u64 bpf_dynptr_size(const struct bpf_dynptr *ptr) __ksym __weak;
-@@ -70,13 +70,13 @@ extern void *bpf_rdonly_cast(const void *obj, __u32 btf_id) __ksym __weak;
- 
- extern int bpf_get_file_xattr(struct file *file, const char *name,
- 			      struct bpf_dynptr *value_ptr) __ksym;
--extern int bpf_get_fsverity_digest(struct file *file, struct bpf_dynptr *digest_ptr) __ksym;
-+extern int bpf_get_fsverity_digest(struct file *file, const struct bpf_dynptr *digest_ptr) __ksym;
- 
- extern struct bpf_key *bpf_lookup_user_key(__s32 serial, __u64 flags) __ksym;
- extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
- extern void bpf_key_put(struct bpf_key *key) __ksym;
--extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
--				      struct bpf_dynptr *sig_ptr,
-+extern int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_ptr,
-+				      const struct bpf_dynptr *sig_ptr,
- 				      struct bpf_key *trusted_keyring) __ksym;
- 
- struct dentry;
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
-index e0d672d93adf..e0745b6e467e 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_success.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -914,7 +914,7 @@ void *user_ptr;
- char expected_str[384];
- __u32 test_len[7] = {0/* placeholder */, 0, 1, 2, 255, 256, 257};
- 
--typedef int (*bpf_read_dynptr_fn_t)(struct bpf_dynptr *dptr, u64 off,
-+typedef int (*bpf_read_dynptr_fn_t)(const struct bpf_dynptr *dptr, u64 off,
- 				    u64 size, const void *unsafe_ptr);
- 
- /* Returns the offset just before the end of the maximum sized xdp fragment.
-@@ -1106,7 +1106,7 @@ int test_copy_from_user_str_dynptr(void *ctx)
- 	return 0;
- }
- 
--static int bpf_copy_data_from_user_task(struct bpf_dynptr *dptr, u64 off,
-+static int bpf_copy_data_from_user_task(const struct bpf_dynptr *dptr, u64 off,
- 					u64 size, const void *unsafe_ptr)
- {
- 	struct task_struct *task = bpf_get_current_task_btf();
-@@ -1114,7 +1114,7 @@ static int bpf_copy_data_from_user_task(struct bpf_dynptr *dptr, u64 off,
- 	return bpf_copy_from_user_task_dynptr(dptr, off, size, unsafe_ptr, task);
- }
- 
--static int bpf_copy_data_from_user_task_str(struct bpf_dynptr *dptr, u64 off,
-+static int bpf_copy_data_from_user_task_str(const struct bpf_dynptr *dptr, u64 off,
- 					    u64 size, const void *unsafe_ptr)
- {
- 	struct task_struct *task = bpf_get_current_task_btf();
-diff --git a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-index d249113ed657..1c6cfd0888ba 100644
---- a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-+++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-@@ -11,12 +11,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include "bpf_misc.h"
--
--extern struct bpf_key *bpf_lookup_system_key(__u64 id) __ksym;
--extern void bpf_key_put(struct bpf_key *key) __ksym;
--extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
--				      struct bpf_dynptr *sig_ptr,
--				      struct bpf_key *trusted_keyring) __ksym;
-+#include "bpf_kfuncs.h"
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_RINGBUF);
-@@ -38,7 +33,7 @@ SEC("?lsm.s/bpf")
- __failure __msg("cannot pass in dynptr at an offset=-8")
- int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr, unsigned int size, bool kernel)
- {
--	unsigned long val;
-+	unsigned long val = 0;
- 
- 	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
- 					  (struct bpf_dynptr *)&val, NULL);
--- 
-2.52.0
-
+--
+ankur
