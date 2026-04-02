@@ -1,218 +1,158 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B0A366060;
-	Thu,  2 Apr 2026 04:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647BA273D6D
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 05:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775104958; cv=none; b=mnLs4aWBf6iOK7W4i6wBW9ej7d3FmqI5bph6FmEyeKmf2mVz8CeTJ+yLQCzTF2LqLi/8ClIXMxFlJhOyfDIVucLggw0CrBETgEmtjcDncqFILJQ5vHAGICqhceV0nr88xY5ZxBj0HlR/x4u+s9CVVfa7rk4cK7vbpukG/hMGaH0=
+	t=1775106582; cv=none; b=DJe0boMbO/uY70UCJmezufhANEv24VM+KeP6UZZsdY95ZXqUi8TWEcG11jdq37iHYPK97wf9NBqtHd1cTfu5xYUdVa4ptCh/TZsGW9BeKqkrt/u/DVqCgP1QdU1+m/KVSQL1PnVUeocilf+vFVVdijVJWOxdlCkNjyRUEV8gqU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775104958; c=relaxed/simple;
-	bh=XIVO2rDhF7vl2myZmgFd67wiPZXQ7C/T7hTBVST245I=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qqxidG+4BXu2XvZDrPu/kW1j/CZm8ACOXyr5JdH7OUkRyfSYdPMypDCNxROD0IQJgWAQwbnfCyTuOjFSlci0gtMvtf2JGmcxmHT7WGEFzs246daPgWWyUjEaRvRw8Rv6L9brHJ83YchcHAagrpNHjeczxoZvGInxYL9CG7psk5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vWXGzyn1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IurlPxyt; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1775106582; c=relaxed/simple;
+	bh=x6EXvLd1wUC7SvCNDTvMHc1kTSqHTF4xEughUeks0d8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oVO8tHB0VICrHKwkNiL+DySqzwIWhEB/dMjNi/UhVZLC6N6SmWGdCHImz8tJFp+WlB0+ST8VANtd5Z9Gv0rnPgxkw/rvI7apZ8tmemR2lFfRJW0Mf6VqVFJrMYBSIhb8joVz8NV3D/RNL3SAOG99Dyph6OxcS3+MCMkPBPSCdyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PfirjlRf; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vWXGzyn1";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IurlPxyt"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1775104955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MJvxgmla7GJ40kGY75h8wil3XQl50FCUl05/E1jznUo=;
-	b=vWXGzyn1Ah4NVW1Mlx6bVWLSBj6AYX9pCd9DrDOplQTmbGujEMKDfVdk9UuQSy4q/EB+8j
-	JbSoHM0OO3CXsGn4pqDs8ysla/YeDW81rKvL9oMlDSU/wJwEwNXBwVEXmKQxttdHCCtWHo
-	7bMByldcwMuRdSwyAqbIbVhr09Nh5iOZuF3dTgEvAYv8muo0576uG3wW0ftYbyCT+1GWyq
-	gsQhjmiz6dYjOVC7gzheLv3qXVvheTKJr8qE9ktdT2m9XlyVi9m5J2OKt1IAYR7+G81PSc
-	Ccn6ATCGsbpr6A2imtJGqLjtn/4UiXtw+q2mleqWmx/aU5fGJJjqJADChxr5xg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1775104955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MJvxgmla7GJ40kGY75h8wil3XQl50FCUl05/E1jznUo=;
-	b=IurlPxyt1Bfb+kV3Q+c8hoyBvdrj8JLeMIg7p9Kgwjh781UgDqCuCKKy/ODbWXkRUht4Vn
-	3iR/ddfJc1aykxAQ==
-To: "Ionut Nechita (Wind River)" <ionut.nechita@windriver.com>,
- jan.kiszka@siemens.com
-Cc: crwood@redhat.com, florian.bezdeka@siemens.com,
- ionut.nechita@windriver.com, brauner@kernel.org,
- linux-fsdevel@vger.kernel.org, linux-rt-users@vger.kernel.org,
- stable@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- frederic@kernel.org, vschneid@redhat.com, gregkh@linuxfoundation.org,
- chris.friesen@windriver.com, viorel-catalin.rapiteanu@windriver.com,
- iulian.mocanu@windriver.com
-Subject: Re: [REGRESSION] osnoise: "eventpoll: Replace rwlock with spinlock"
- causes ~50us noise spikes on isolated PREEMPT_RT cores
-In-Reply-To: <20260401165841.532687-1-ionut.nechita@windriver.com>
-References: <22ffc044-4cc7-468c-b11d-9b838c92e82b@siemens.com>
- <20260401165841.532687-1-ionut.nechita@windriver.com>
-Date: Thu, 02 Apr 2026 06:42:32 +0200
-Message-ID: <878qb6x9af.fsf@yellow.woof>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfirjlRf"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a871daa98fso3242805ad.1
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 22:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775106581; x=1775711381; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U8puRGWeANdZKsMbyIk9XwB9F11o8slKWtfPbwiNQgs=;
+        b=PfirjlRfUZH60fEIyygrq48fRE0EKnWvYu5PWSyqy3HtCrFBo7+z7/hRZHtIZIy/bf
+         0njlegEDg9rO2ibsMo5d94L6fk2QvQzpEhexwuoYUPynjvYVjN857jhL1WVwMRFdcjBs
+         pMWbDmU1rkuveVd6w4TtoNXzpp+5lppByvkWili3TUiQinEWvFeH/vP+zWmXgiIpvLvl
+         tkemErttn/ZucHuYlSj1Iny50SY+riOiuDrE8stolSTlJfEzn5/8GrLJKC4a71Ro3M2N
+         4eXXvaCK98a+iAVcCvtNYy4uqUiIxuXbwZ/884UZajOsMQI8JR5QSM3XyPU6DjvmhXAE
+         HpBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775106581; x=1775711381;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U8puRGWeANdZKsMbyIk9XwB9F11o8slKWtfPbwiNQgs=;
+        b=NnVit3t+2qU7Bar/xMxFFOn0/QC5c9aDmiKerWiorNXvoEH2yYQRqxxxyOkjfBDJwP
+         fB6zaLTiOcPPNVnh5bcHIsvSltgPe8dMQKCm5/9wvz49p7OyONjbzo+kiNz4EDoUSdzn
+         lg9lNkd8blX1ASVFxkODAjIherspylxGBszovXsFO+jVqQqgvLJo/mJWaG4jn9cBPqYJ
+         ShABDiW8aqWUEXR/+NOvqnOzYwFRb93/X8lILY/F9OHmQG5V43fNsl1BWubEBGxCmJ5c
+         PiZqxjd82/kEDtreB7bNYqXRkHO/7+obbUwEFqRMlks5Q3sPLqCrUHDyxFWFKShlftUx
+         yo/A==
+X-Forwarded-Encrypted: i=1; AJvYcCW1jnYA5zPEMf6waewtYrzZTVpdHZVeewgg0ZC5Auumnk2THXu57U4seUXgmrd31D0QQho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQX3gWE8XpkGPcgZsAV3+xq1nNRg1+xK8NKQ4Xn/g+/MYHadr1
+	Kbp5CRgsz5jDrEohqHPZ489f+6QEbAsJUlnwEtvC5yyLi8BGJ0gSFdpQ
+X-Gm-Gg: AeBDievIpHI6DFdK+HIQbzQCVMw0FcjJBi1Mko7nLJoC0Es5PQ0CAanuwZwY6Zx30o7
+	RTU6FtsfOu9rgsPf1LtNTwfgd0YHFOC6PLaV/DL5TpxAvB2UuDyKa8YqAcBk9qTkzTjObSV1hgm
+	kQ05G1hO0flKSn+w7JoSxSmZxydzHoke3xqULCndIwis4+CFqUYwGFXqjScVP1dHb414qrdO6j1
+	vJ9CMtUyZFLTuv0QY21m1M0IJ7UL1B/OKNTq5ciYvILrEiXvCpRjSaeqdEKflazaO4NZs6iaPZE
+	VOMQVancgsgQgFSqLuV7gd00KboYIhZ0YBXvrH46bdirewRZy7RhiXlpeP9yOiVC3tMTHwLtlje
+	fQVGZiJBZPJ72xnMEw6Eli4hnQgpnjCaKXQS0gb/os9WW1qDBNFMEHKWutz71vBAG5rsSh3zioM
+	BZRSH9y4ScVyFhb4ugXFoAdkxQGwCRWYDSpidrSU9KK9707j43mfGTz5l+wprPvAAnfQO51ynj+
+	0cX+sM=
+X-Received: by 2002:a17:903:b84:b0:2b2:4029:d781 with SMTP id d9443c01a7336-2b269ac7f68mr61839905ad.20.1775106580712;
+        Wed, 01 Apr 2026 22:09:40 -0700 (PDT)
+Received: from deepanshu-kernel-hacker.. ([2405:201:682f:389d:2c0b:3bf4:b5e1:33f1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27478b64csm15219615ad.30.2026.04.01.22.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 22:09:40 -0700 (PDT)
+From: Deepanshu Kartikey <kartikey406@gmail.com>
+To: john.fastabend@gmail.com,
+	jakub@cloudflare.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org
+Cc: ast@kernel.org,
+	cong.wang@bytedance.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Deepanshu Kartikey <kartikey406@gmail.com>,
+	syzbot+431f9a9e3f5227fbb904@syzkaller.appspotmail.com
+Subject: [PATCH] udp_bpf: fix use-after-free in udp_bpf_recvmsg()
+Date: Thu,  2 Apr 2026 10:39:28 +0530
+Message-ID: <20260402050928.32946-1-kartikey406@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-"Ionut Nechita (Wind River)" <ionut.nechita@windriver.com> writes:
-> Crystal, Jan, Florian, thanks for the detailed feedback. I've redone
-> all testing addressing each point raised. All tests below use HT
-> disabled (sibling cores offlined), as Jan requested.
->
-> Setup:
->   - Hardware: Intel Xeon Gold 6338N (Ice Lake, single socket,
->     32 cores, HT disabled via sibling cores offlined)
->   - Boot: nohz_full=3D1-16 isolcpus=3Dnohz,domain,managed_irq,1-16
->     rcu_nocbs=3D1-31 kthread_cpus=3D0 irqaffinity=3D17-31
->     iommu=3Dpt nmi_watchdog=3D0 intel_pstate=3Dnone skew_tick=3D1
->   - eosnoise run with: ./osnoise -c 1-15
->   - Duration: 120s per test
->
-> Tested kernels (all vanilla, built from upstream sources):
->   - 6.18.20-vanilla      (non-RT, PREEMPT_DYNAMIC)
->   - 6.18.20-vanilla      (PREEMPT_RT, with and without rwlock revert)
->   - 7.0.0-rc6-next-20260331 (PREEMPT_RT, with and without rwlock revert)
->
-> I tested 6 configurations to isolate the exact failure mode:
->
->   #  Kernel          Config   Tool            Revert  Result
->   -- --------------- -------- --------------- ------- ----------------
->   1  6.18.20         non-RT   eosnoise        no      clean (100%)
->   2  6.18.20         RT       eosnoise        no      D state (hung)
->   3  6.18.20         RT       eosnoise        yes     clean (100%)
->   4  6.18.20         RT       kernel osnoise  no      clean (99.999%)
->   5  7.0-rc6-next    RT       eosnoise        no      93% avail, 57us
->   6  7.0-rc6-next    RT       eosnoise        yes     clean (99.99%)
+udp_bpf_recvmsg() calls sk_msg_recvmsg() without holding lock_sock(),
+unlike tcp_bpf_recvmsg() which properly acquires lock_sock() before
+calling __sk_msg_recvmsg(). This allows concurrent tasks to race inside
+sk_msg_recvmsg() on the same psock ingress queue, where one task can
+free msg_rx via kfree_sk_msg() while another task is still reading it
+via sk_msg_elem(), causing a slab-use-after-free.
 
-Thanks for the detailed analysis.
+Fix this by adding lock_sock()/release_sock() around the sk_msg_recvmsg()
+path in udp_bpf_recvmsg(), consistent with tcp_bpf_recvmsg(). Also make
+udp_msg_wait_data() release lock_sock() before sleeping and reacquire it
+after waking, so it can be called with the socket lock held, consistent
+with how tcp_msg_wait_data() uses sk_wait_event() which does the same
+internally.
 
-> Key findings:
->
-> 1. On 6.18.20-rt with spinlock, eosnoise hangs permanently in D state.
->
->    The process blocks in do_epoll_ctl() during perf_buffer__new() setup
->    (libbpf's perf_event_open + epoll_ctl loop). strace shows progressive
->    degradation as fds are added to the epoll instance:
->
->      CPU  0-13:  epoll_ctl  ~8 us     (normal)
->      CPU 14:     epoll_ctl  16 ms     (2000x slower)
->      CPU 15:     epoll_ctl  80 ms     (10000x slower)
->      CPU 16:     epoll_ctl  80 ms
->      CPU 17:     epoll_ctl  20 ms
->      CPU 18:     epoll_ctl  -- hung, never returns --
->
->    Kernel stack of the hung process (3+ minutes in D state):
->
->      [<0>] do_epoll_ctl+0xa57/0xf20
->      [<0>] __x64_sys_epoll_ctl+0x5d/0xa0
->      [<0>] do_syscall_64+0x7c/0xe30
->      [<0>] entry_SYSCALL_64_after_hwframe+0x76/0x7e
->
-> 2. On 7.0-rc6-next-rt with spinlock, eosnoise runs but with severe
->    noise. The difference from 6.18 is likely additional fixes in
->    linux-next that prevent the complete deadlock but not the contention.
->
-> 3. Kernel osnoise tracer (test #4) shows zero noise on the same
->    6.18.20-rt+spinlock kernel where eosnoise hangs. This confirms the
->    issue is specifically in the epoll rt_mutex path, not in osnoise
->    measurement methodology.
->
->    Kernel osnoise output (6.18.20-rt, spinlock, no revert):
->      99.999% availability, 1-4 ns max noise, RES=3D6 total in 120s
->
-> 4. Non-RT kernel (test #1) with the same spinlock change shows zero
->    noise. This confirms the issue is the spinlock-to-rt_mutex conversion
->    on PREEMPT_RT, not the spinlock change itself.
->
-> IRQ deltas on isolated CPU1 (120s):
->
->                     6.18.20-rt   6.18.20-rt   6.18.20      6.18.20-rt
->                     spinlock     rwlock(rev)  non-RT       kernel osnoise
->   RES (IPI):        (D state)    3            1            6
->   LOC (timer):      (D state)    3,325        1,185        245
->   IWI (irq work):   (D state)    565,988      1,433        121
->
->                     7.0-rc6-rt   7.0-rc6-rt
->                     spinlock     rwlock(rev)
->   RES (IPI):        330,000+     2
->   LOC (timer):      120,585      120,585
->   IWI (irq work):   585,785      585,785
->
-> The mechanism, refined:
->
-> Crystal was right that this is specific to the BPF perf_event_output +
-> epoll pattern, not any arbitrary epoll user. I verified this: a plain
-> perf_event_open + epoll_ctl program without BPF does not trigger the
-> issue.
->
-> What triggers it is libbpf's perf_buffer__new(), which creates one
-> PERF_COUNT_SW_BPF_OUTPUT perf_event per CPU, mmaps the ring buffer,
-> and adds all fds to a single epoll instance. When BPF programs are
-> attached to high-frequency tracepoints (irq_handler_entry/exit,
-> softirq_entry/exit, sched_switch), every interrupt on every CPU calls
-> bpf_perf_event_output() which invokes ep_poll_callback() under
-> ep->lock.
->
-> On PREEMPT_RT, ep->lock is an rt_mutex. With 15+ CPUs generating
-> callbacks simultaneously into the same epoll instance, the rt_mutex
-> PI mechanism creates unbounded contention.  On 6.18 this results in
-> a permanent D state hang. On 7.0 it results in ~330,000 reschedule
-> IPIs hitting isolated cores over 120 seconds (~2,750/s per core).
->
-> With rwlock, ep_poll_callback() uses read_lock which allows concurrent
-> readers without cross-CPU contention =E2=80=94 the callbacks execute in
-> parallel without generating IPIs.
+Note: syzbot testing shows a separate pre-existing warning:
+  sk->sk_forward_alloc
+  WARNING: net/ipv4/af_inet.c:162 inet_sock_destruct
+This warning triggers from the idle CPU path (pv_native_safe_halt)
+and is unrelated to this patch. It appears to be a pre-existing
+memory accounting issue in the UDP sockmap path that requires
+separate investigation.
 
-These IPIs do not exist without eosnoise running. eosnoise introduces
-these noises into the system. For a noise tracer tool, it is certainly
-eosnoise's responsibility to make sure it does not measure noises
-originating from itself.
 
-> This pattern (BPF tracepoint programs + perf ring buffer + epoll) is
-> the standard architecture used by BCC tools (opensnoop, execsnoop,
-> biolatency, tcpconnect, etc.), bpftrace, and any libbpf-based
-> observability tool. A permanent D state hang when running such tools
-> on PREEMPT_RT is a significant regression.
+Reported-by: syzbot+431f9a9e3f5227fbb904@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=431f9a9e3f5227fbb904
+Fixes: 1f5be6b3b063 ("udp: Implement udp_bpf_recvmsg() for sockmap")
+Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+---
+ net/ipv4/udp_bpf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-7.0-rc6-next is still using spin lock but has no hang problem. Likely
-you are hitting a different problem here which appears when spin lock is
-used, which has been fixed somewhere between 6.18.20 and 7.0-rc6-next.
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+index 9f33b07b1481..f924b255cee6 100644
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@ -50,7 +50,9 @@ static int udp_msg_wait_data(struct sock *sk, struct sk_psock *psock,
+ 	sk_set_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+ 	ret = udp_msg_has_data(sk, psock);
+ 	if (!ret) {
++		release_sock(sk);
+ 		wait_woken(&wait, TASK_INTERRUPTIBLE, timeo);
++		lock_sock(sk);
+ 		ret = udp_msg_has_data(sk, psock);
+ 	}
+ 	sk_clear_bit(SOCKWQ_ASYNC_WAITDATA, sk);
+@@ -79,6 +81,7 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		goto out;
+ 	}
+ 
++	lock_sock(sk);
+ msg_bytes_ready:
+ 	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
+ 	if (!copied) {
+@@ -90,12 +93,14 @@ static int udp_bpf_recvmsg(struct sock *sk, struct msghdr *msg, size_t len,
+ 		if (data) {
+ 			if (psock_has_data(psock))
+ 				goto msg_bytes_ready;
++			release_sock(sk);
+ 			ret = sk_udp_recvmsg(sk, msg, len, flags);
+ 			goto out;
+ 		}
+ 		copied = -EAGAIN;
+ 	}
+ 	ret = copied;
++	release_sock(sk);
+ out:
+ 	sk_psock_put(sk, psock);
+ 	return ret;
+-- 
+2.43.0
 
-If you still have the energy for it, a git bisect between 6.18.20 and
-7.0-rc6-next will tell us which commit made the hang issue disappear.
-
-> I'm not proposing a specific fix -- the previous suggestions
-> (raw_spinlock trylock, lockless path) were rightly rejected. But the
-> regression exists and needs to be addressed. The ep->lock contention
-> under high-frequency BPF callbacks on PREEMPT_RT is a new problem
-> that the rwlock->spinlock conversion introduced.
->
-> Separate question: could eosnoise itself be improved to avoid this
-> contention? For example, using one epoll instance per CPU instead of
-> a single shared one, or using BPF ring buffer (BPF_MAP_TYPE_RINGBUF)
-> instead of the per-cpu perf buffer which requires epoll. If the
-> consensus is that the kernel side is working as intended and the tool
-> should adapt, I'd like to understand what the recommended pattern is
-> for BPF observability tools on PREEMPT_RT.
-
-I am not familiar with eosnoise, I can't tell you. I tried compiling
-eosnoise but that failed. I managed to fix the compile failure, then I
-got run-time failure.
-
-It depends on what eosnoise is using epoll for. If it is just waiting
-for PERF_COUNT_SW_BPF_OUTPUT to happen, perhaps we can change to some
-sort of polling implementation (e.g. wake up every 100ms to check for
-data).
-
-Best regards,
-Nam
