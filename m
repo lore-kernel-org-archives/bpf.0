@@ -1,128 +1,231 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD2A33F5B3
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 20:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D703061FFE
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 20:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775162690; cv=none; b=TWtnqkXy0D90aJf4WOWpNPWgNftGYGZwI6qjyMyXUKFFR3rDr36L1G9bliHXS/nV0YCrQVY8x82VuSsWQAzTSqKCHWgXGp8O7Ov/hHGiXHAFnOHmT7rIoFjbugmbbHqJpiCIwKRkgPWiWUM5RNYE7fHm0GykhdTKgbgTh8nxMlg=
+	t=1775162773; cv=none; b=Mqyf6Am64p63HfY0rysZW4VaycGU5SoYSZRMdXWFT7vY9sgimlv1uFoTzq9P/7sXAC04CnwjT+sVpB6U+scObKXgjmFHfsMwoLt8mj1ljBYD1J9kwNp9p0RwBdJW/+JK6unGh+11dIR9tvgS84x8yrebvuuSlkzBngBZhr8SM3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775162690; c=relaxed/simple;
-	bh=5SNh/uGvNGVjEqj2LQxejglNP3RLCHa+qX2MIbBP6Bw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=obmHUEnILxBqJ8KeslR6SKN1Df5PsMoIiZA1kn5oFICH6588Vv/9n+3QuFYMLf+IlqVeBitWaMa3DN9S/zYL66ct+/Ue/3WdLiaGdb7fdBlW8b7QiCcEqnbaNyJvhahG0pnyIzonTzS46tWQ4UG7dKPhiVp9P4cy0wC4vINGJSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aPw93izA; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775162773; c=relaxed/simple;
+	bh=7sL7vV5/1Zkwt3qipB+meQutiNWdLrQQz7Yk5AIFcZs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HGRf1yzZ2WU/4kGlJ6hchu1xhq7BoLphd6SBbhmh/w+VbNoNO2+EVWpuQiNQdVI47D1xvUA53kywZoYOlP1Itw3SukPjokpbKnWiqPn9CtYddAcKQMFXuniyNCi+rM7SKiiui2lC97vJxMP69/o1PVSYYsCdQynTHbhw93bxr08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dy/GQWg2; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aPw93izA"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48896199cbaso4833145e9.1
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 13:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775162687; x=1775767487; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iTGXQBjXFLpryPY8+0yQpJpKFXA84v3ocDTQ3PH6W9Q=;
-        b=aPw93izAdfJvAcJNDCjnNZDnI9a+m/xI12tr77r2N+As/HTFJhKHDiNcwCHHLNbo3r
-         oXg8EqXGuupID/Hjtu23ngY8GjSBQFmiRaA7OLCnp+quehLPtD2OlF9JUj2dD73sjmZU
-         z7gx7atC4Tc9Dqq7IwACGrPbeN87buAO+Q9zTxFPp7L4PyFjz4nCpKr6zhObjVgwXSem
-         F+9Y4b5yOU+skVYpuwqBeRG3Owedlgz4ZOpoa8YMCOxBDfm+alOEzx9CJfgNsS8g775i
-         bUYdG01tvhAdilbVuJdzrEG+5vL/JqkLh/0YjPWiGTuDhT6AXZ6bxCk4qOgl0js3UIP0
-         EMeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775162687; x=1775767487;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iTGXQBjXFLpryPY8+0yQpJpKFXA84v3ocDTQ3PH6W9Q=;
-        b=AFm+r61Dk4l1C6YOQErWYIbno9LTlHosx8hhevjiBg2k0yY+Ct1WpvG/jzKSXg34Fu
-         empckDmox49Z46tA9w1af4qzAcFcz2dSyTbSnCHXxIsncRvVlgnocDEynBepkIXTuRl+
-         WfIxXyQIl1ajF4nJzE6jcYNmq2pNSFKu0FqjWBFMV9sTdL0/D+RLSB/k/kuj8xiwSB93
-         hccqS6tGsmOiikMSawskuVV9riSyB/tqm6LZRbHtQ1DC9vz/NN/la2sLpzOxLyap08gP
-         +ghxQnlqJATkHwXbH2dm0AfQuwVSDYmU61ttLhZgsJ+Ww5QmOeB7b5u0hLyf+SPa7BS9
-         /gjw==
-X-Gm-Message-State: AOJu0YyYZucHau7iDdsKDsOqmF5ZlR3KEjDdyvtzMeTsrfIyPPqu2b6k
-	4cVa7rooscNu/Zjwwo668RerDzR070Qpacw/KG/WupKciXVkRXF/yDtY7uANzg==
-X-Gm-Gg: ATEYQzxxdMEUa90ifcEKhHhXFFcvlKPyO+vhc6aRGwZZtWZebRCwkWN3hU66HVxWfoB
-	TgRJUWP0IPd4CyIzs/2oSxMjn4K+YwxiqvwOOOqZZQlz4vs8Rg8g5xf9O2MDcZyZUx2OWoVLlAK
-	bXS365u8TGv5jVBh0et94YhuMDgURVSOy9YI6TQMdwTNj1cmYCc0Aqg7XU8nX5db5amFjRYTQTc
-	lZ5iLyTzh7B5yYvlBv085MfsrGa5offR0qVJKXqegzAn2w3GyIBuoPZWdz8SQP/aiIRI0QcXnRA
-	fEvnfSWbhj55i3fHSxwENdwNuN3ltccaAnUUjsvAdrYkTyVLP8f2khGBfXE9Floh0ovaeUIgGgH
-	qyhGGQvwYtIRTWiWZ5pq/vUQQPAPcgk/APN4bqpMI0tfNbAh+O/6HvbxvMUDKZAhZ8iSoJcItJv
-	GsokLChs+zGfWIzB1sHrKwqwVL7Fvl/0UiixQMA+AwyOM=
-X-Received: by 2002:a05:600c:638e:b0:47e:e48b:506d with SMTP id 5b1f17b1804b1-488997b21f4mr7710905e9.16.1775162687002;
-        Thu, 02 Apr 2026 13:44:47 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4888a72baa8sm89312145e9.15.2026.04.02.13.44.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 13:44:46 -0700 (PDT)
-Date: Thu, 2 Apr 2026 20:53:30 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Jiyong Yang <ksur673@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Do not ignore offsets for loads
- from insn_arrays
-Message-ID: <ac7XSg6AsJq99WvT@mail.gmail.com>
-References: <20260402184647.988132-1-a.s.protopopov@gmail.com>
- <20260402184647.988132-2-a.s.protopopov@gmail.com>
- <CAADnVQKUJYsPJa8HP9E-pguQeuShXfuaEs4Z_zJAVYWeEUvHBg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dy/GQWg2"
+Message-ID: <0474abcd-79e6-4eaf-b459-c8e3d8cdbf8a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775162767;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iI6e4ohrsR+tSDHyLOXyCnAPT78pLAsed0A6p/IJa8w=;
+	b=dy/GQWg2jq4IhFWR2FGHCqVlq8g1zwU5UxIOpbH2lM00K+kJl/qzH9QlItGQ7vTwdwNrp4
+	HtWPhaNb4FbpL69u/rfZg1swQZ2d79to2astzOXDZBCms5+wETV+MWhsAFUmvJvgHPfOCL
+	iJu0a+f8SKuWlm/6eCZA/kXSLQ9M97A=
+Date: Thu, 2 Apr 2026 13:45:58 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH bpf-next 03/10] bpf: Support stack arguments for bpf
+ functions
+Content-Language: en-GB
+To: Amery Hung <ameryhung@meta.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260402012727.3916819-1-yonghong.song@linux.dev>
+ <20260402012742.3917613-1-yonghong.song@linux.dev>
+ <CAP17u3OdrYpJpx2z0gQ9OosuA-cj6etc0CwX4FyBCmM-PEn_-A@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAP17u3OdrYpJpx2z0gQ9OosuA-cj6etc0CwX4FyBCmM-PEn_-A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKUJYsPJa8HP9E-pguQeuShXfuaEs4Z_zJAVYWeEUvHBg@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 26/04/02 12:00PM, Alexei Starovoitov wrote:
-> On Thu, Apr 2, 2026 at 11:38 AM Anton Protopopov
-> <a.s.protopopov@gmail.com> wrote:
-> >
-> > When a pointer to PTR_TO_INSN is dereferenced it is possible to
-> > specify an offset inside the load instruction. This is a bug,
-> > because while the verifier ignores the field, JITs are not.
-> > So, patch the verifier to not ignore this field.
-> 
-> This is too terse to understand.
-> In 2nd patch you're saying:
-> 
->    r1 = &map + offset1
->    r1 += offset2
->    r1 = *(r1 + offset3)
->    gotox r1
-> 
-> Here offset3 is, normally, equal to zero; but this is not guaranteed.
-> 
-> What is this 'offset3'? Where did it come from?
 
-The offset3 is the .off field of the BPF_LDX_MEM instruction.
-The BPF assembler will correctly work with non-zero offsets:
 
-    r1 = &map;
-    r1 = *(r1 + offset)
+On 4/2/26 11:55 AM, Amery Hung wrote:
+> On Wed, Apr 1, 2026 at 6:27 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> Currently BPF functions (subprogs) are limited to 5 register arguments.
+>> With [1], the compiler can emit code that passes additional arguments
+>> via a dedicated stack area through bpf register
+>> BPF_REG_STACK_ARG_BASE (r12), introduced in the previous patch.
+>>
+>> The following is an example to show how stack arguments are saved
+>> and transferred between caller and callee:
+>>
+>>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
+>>      ...
+>>      bar(a1, a2, a3, a4, a5, a6, a7, a8);
+>>      ...
+>>    }
+>>
+>> The following is a illustration of stack allocation:
+>>
+>>     Caller (foo)                           Callee (bar)
+>>     ============                           ============
+>>     r12-relative stack arg area:           r12-relative stack arg area:
+>>
+>>     r12-8:  [incoming arg 6]          +--> r12-8:  [incoming arg 6] (from caller's outgoing r12-24)
+>>     r12-16: [incoming arg 7]          |+-> r12-16: [incoming arg 7] (from caller's outgoing r12-32)
+>>                                       ||+> r12-24: [incoming arg 8] (from caller's outgoing r12-40)
+>>     ---- incoming/outgoing boundary   |||  ---- incoming/outgoing boundary
+>>     r12-24: [outgoing arg 6 to callee]+||   ...
+>>     r12-32: [outgoing arg 7 to callee]-+|
+>>     r12-40: [outgoing arg 8 to callee]--+
+>>
+>>    The caller writes outgoing args past its own incoming area.
+>>    At the call site, the verifier transfers the caller's outgoing
+>>    slots into the callee's incoming slots.
+>>
+>> The verifier tracks stack arg slots separately from the regular r10
+>> stack. A new 'bpf_stack_arg_state' structure mirrors the existing stack
+>> slot tracking (spilled_ptr + slot_type[]) but lives in a dedicated
+>> 'stack_arg_slots' array in bpf_func_state. This separation keeps the
+>> stack arg area from interfering with the normal stack and frame pointer
+>> (r10) bookkeeping.
+>>
+>> If the bpf function has more than one calls, e.g.,
+>>
+>>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
+>>      ...
+>>      bar1(a1, a2, a3, a4, a5, a6, a7, a8);
+>>      ...
+>>      bar2(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+>>      ...
+>>    }
+>>
+>> The following is an illustration:
+>>
+>>     Caller (foo)                           Callee (bar1)
+>>     ============                           =============
+>>     r12-relative stack arg area:           r12-relative stack arg area:
+>>
+>>     r12-8:  [incoming arg 6]          +--> r12-8:  [incoming arg 6] (from caller's outgoing r12-24)
+>>     r12-16: [incoming arg 7]          |+-> r12-16: [incoming arg 7] (from caller's outgoing r12-32)
+>>                                       ||+> r12-24: [incoming arg 8] (from caller's outgoing r12-40)
+>>     ---- incoming/outgoing boundary   |||  ---- incoming/outgoing boundary
+>>     r12-24: [outgoing arg 6 to callee]+||  ...
+>>     r12-32: [outgoing arg 7 to callee]-+|
+>>     r12-40: [outgoing arg 8 to callee]--+
+>>     ...
+>>     Back from bar1
+>>     ...                                     Callee (bar2)
+>>     ===                                     =============
+>>                                       +---> r12-8:  [incoming arg 6] (from caller's outgoing r12-24)
+>>                                       |+--> r12-16: [incoming arg 7] (from caller's outgoing r12-32)
+>>                                       ||+-> r12-24: [incoming arg 8] (from caller's outgoing r12-40)
+>>                                       |||+> r12-32: [incoming arg 9] (from caller's outgoing r12-48)
+>>     ---- incoming/outgoing boundary   ||||  ---- incoming/outgoing boundary
+>>     r12-24: [outgoing arg 6 to callee]+|||  ...
+>>     r12-32: [outgoing arg 7 to callee]-+||
+>>     r12-40: [outgoing arg 8 to callee]--+|
+>>     r12-48: [outgoing arg 9 to callee]---+
+>>
+>> Global subprogs with >5 args are not yet supported.
+>>
+>>    [1] https://github.com/llvm/llvm-project/pull/189060
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   include/linux/bpf.h          |   2 +
+>>   include/linux/bpf_verifier.h |  15 ++-
+>>   kernel/bpf/btf.c             |  14 +-
+>>   kernel/bpf/verifier.c        | 248 ++++++++++++++++++++++++++++++++---
+>>   4 files changed, 257 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index e24c4a2e95f7..a0a1e14e4394 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1666,6 +1666,8 @@ struct bpf_prog_aux {
+>>          u32 max_pkt_offset;
+>>          u32 max_tp_access;
+>>          u32 stack_depth;
+>> +       u16 incoming_stack_arg_depth;
+>> +       u16 stack_arg_depth; /* both incoming and max outgoing of stack arguments */
+>>          u32 id;
+>>          u32 func_cnt; /* used by non-func prog as the number of func progs */
+>>          u32 real_func_cnt; /* includes hidden progs, only used for JIT and freeing progs */
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 090aa26d1c98..a260610cd1c1 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -268,6 +268,11 @@ struct bpf_retval_range {
+>>          bool return_32bit;
+>>   };
 
-> What do you mean JIT handles it?
+...
 
-JIT will issue a memory load with this offset,
-but verifier will ignore it (before this patch).
+>> +
+>> +/*
+>> + * Write a value to the stack arg area.
+>> + * off is the negative offset from the stack arg frame pointer.
+>> + * Callers ensures off is 8-byte aligned and size is BPF_REG_SIZE.
+>> + */
+>> +static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_state *state,
+>> +                                int off, int value_regno)
+>> +{
+>> +       int spi = (-off - 1) / BPF_REG_SIZE;
+>> +       struct bpf_func_state *cur;
+>> +       struct bpf_reg_state *reg;
+>> +       int i, err;
+>> +       u8 type;
+>> +
+>> +       err = grow_stack_arg_slots(env, state, -off);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       cur = env->cur_state->frame[env->cur_state->curframe];
+>> +       if (value_regno >= 0) {
+>> +               reg = &cur->regs[value_regno];
+>> +               state->stack_arg_slots[spi].spilled_ptr = *reg;
+>> +               type = is_spillable_regtype(reg->type) ? STACK_SPILL : STACK_MISC;
+> It seems any spillable register can be passed to the callee, so reg
+> containing ref_obj_id can be spilled to stack_arg_slots. However,
+> release_reference() does not invalidate ref_obj_id in stack_arg_slots.
+> Can this cause UAF like below?
+>
+> a6 = bpf_task_acquire(t);
+> if (!a6)
+>          goto err;
+>
+> // a6 now has a valid ref_obj_id
+> // foo1 calls bpf_task_release(a6);
+> foo1(a1, a2, a3, a4, a5, a6);
+>
+> // a6 still has a valid ref_obj_id
+> // foo2 dereference a6 -> UAF
+> foo2(a1, a2, a3, a4, a5, a6);
+>
+> Since stack_arg_slots is separated from the normal stack slots, other
+> types of stale registers may exist in the outgoing stack slots. For
+> example:
+> - stale pkt pointer after calling clear_all_pkt_pointers() in callee
+> - register with inprecise nullness after calling
+> mark_ptr_or_null_regs() in callee
 
-> can llvm ever generate such code?
-> if not, reject it early ?
+Thanks for pointing this out. Indeed, a lot of checking are needed
+for stack arguments. Looks like I need to add something like
+	bpf_for_each_spilled_stack_arg
+in bpf_for_each_reg_in_vstate_mask for full coverage.
 
-LLVM can generate code with non-zero offset in BPF_LDX_MEM,
-say, if one jumps to a structure field, like in `goto *p->j`
-(see CurDAG->isBaseWithConstantOffset(Addr) check in
-BPFDAGToDAGISel::SelectAddr). Realistically, for now
-this doesn't make too much sense (looks like switches and goto *jt[i]
-will not emit such code), but one future use-case might be
-smth like a function pointer in a struct.
+Will fix in the next resivion.
+
+>
+>
+>> +               for (i = 0; i < BPF_REG_SIZE; i++)
+>> +                       state->stack_arg_slots[spi].slot_type[i] = type;
+>> +       } else {
+>> +               /* BPF_ST: store immediate, treat as scalar */
+
