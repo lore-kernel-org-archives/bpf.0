@@ -1,76 +1,80 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.smtp-ext.broadcom.com (lpdvsmtp10.broadcom.com [192.19.144.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C65A36D9E0
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 21:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBF539EF2C;
+	Thu,  2 Apr 2026 21:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775165746; cv=none; b=FJxzi/BI/5iRHh15rWfB89R9aKfMJY2BsZIZxrOvtOv57lEFL0xi52rGoD207Qs9PGF5n/TmqUgAyO9ygIgFhRwjFh9OYq9mXI0xbJjpkm7KSLFAToSG3ks6lFR1SWbHzA9PAYMFlI8CJc6PbguVNq9RFFnPGCFV0G70IB4pj9o=
+	t=1775165809; cv=none; b=qo5hCwVzCDmLhPME1pHsoU43zT53pPq5mHSL1+8PUnMDYfIFGSorHhEcpn+h65vQ1vDVcVa+4Af0DcLrYtVT0By3SosoXbPjxqTW0T+ynOdlE0hCQEWwcMQCYLU0GcfzGdzZxP4y/GkdxXC4QI7NN50pyfni+isRq3SRZCs7Jlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775165746; c=relaxed/simple;
-	bh=TYEcUJo4vQSWYngckrpOYszLLIorcBlsSP6TOwAss3A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sArVxfE4cdAExMKZ/4DVn0xvmRGvneE5osk5ycxb/9lOcnsG8foMz7G03ZRVupnB5sKMq45mKyOSzOjXAQOQGizsAnFPevzcdwIUsr4Ndq5TgYghzi54AAUuj+5zAEDzPLMVlnc2DMUfpO7goBT40aav8NocNUVK6NxhYTncars=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ryUl07TV; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775165809; c=relaxed/simple;
+	bh=HvdvXJgypGzk3PPjN04z4zH2UxZcYBxrtLHm7UTDijw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D9Xct1FUipcS5R413fx5O9BruY29XO8k2AXnbF0hxDlZaZr5k11Q+Xmj62lyf+z6avIywNDC5ESKTZBz2HWGZsjL5T2NUldlRQ1CTyH5cmpnxHojeKG28oaM1A/6vqjmxZG1AKbbIk7U2GBNS5hILsQL9P4i9d87ry/CZxlaDC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=nQb428Pl; arc=none smtp.client-ip=192.19.144.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ryUl07TV"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-50d63635d80so1662131cf.0
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 14:35:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775165743; x=1775770543; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DpjJXD58ECPdfY5emk+dA7ebtQdgiJMUBOng/Yn3wls=;
-        b=ryUl07TVUWDEVVk5j40p74Ci35FVOi3F95NF2GOeoGCjAyvACsYIypCKrLk5RqW8bC
-         nKkw5ya/viuXNQC6kC6j9j9UnU/KF0W9tLZ/KCGzsJmwVEK/UcIYu2yUdlV73W+BtnLq
-         THQTfxJk9tHkJzJA/VzUvcYbh0GN4su1o4N1VL3Pi+Iy527U7enq10wm1VjD9pqBU7ux
-         D/vNJtn3smVY2cMZYW2v5/D5+xfor56HJp+AKaQz4R7ciLxwS+kCH84aMA0a0xEaPlN5
-         PBBoyV5ehGygpalRKjf5CIBSVy5CgjPtKKJ/tAyUolXK4eFal4ByFlqG+r5rlc89uUb9
-         KUNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775165743; x=1775770543;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DpjJXD58ECPdfY5emk+dA7ebtQdgiJMUBOng/Yn3wls=;
-        b=hF/RjcGCgHH/fluIInV/ON4NBc4vyZvJjyLoWlZQGmWsoRTHdKBPuEC0jDppauzojC
-         mibL5R3HXbjoBM4+LTPjudFTh9kexeBHBGSeL/BUfrSJMxMwMOlT0OgWwwfNGo9st6lr
-         n76LV0qb5V9whqxMV6wN3Fx7uiPWPojtDOSx9VGfzy2SJOnv/eZOc/tqXpx/Dd51Klsu
-         Y79JXW1s3xQl9UVHc7fbnzrG57uIcE6quOazsO5d70kcbFI2elFIe0ssd+R4ij7IL9hA
-         wzi68xisHDoVemB4N71lm8wVgjgjZYh5y8VW84oH1GTOU4fdgV4ZoKB1IKe2eY8bFM0z
-         E/6A==
-X-Gm-Message-State: AOJu0YzJIWkp+wuxIlWYlDnt5LsrMQT4UKsO0LFZBv7ggq5dD/jZ6aXa
-	SJIv22YynwNbP7WL7TL6X285yoDH93NGlxRsGvHz8ePlFb3cw6lXp1m6hkQomA==
-X-Gm-Gg: ATEYQzyxOu8iNV0kt11Pb+MpBFPQg8r6OAgEDN4NkDFFoqQjOoyPY9ZVo6uamkNQnNb
-	DqQpv672LKelaCSFsYSFKddscOqucDCbfYfKB3gWBAoB37ID1ORDs9Tqm+UqZ+gS4bR6MWw7rwt
-	3ixILEcTFKNt0uT7PbZhxq5f7mUzlyEG3/td0PIRx4Pf0NcUie9U4mygCdxollOgZVJ2dOHTXcO
-	prBQsbypjFZCDxC+4wCzPcclW/F+z38eCqnisVVk2Urz+cWXplosKl22LtSraNjjQwOsc2EZiJa
-	9RHAqpAr/d1y7oAewL9lFl90fjARvzS2EgGPOYTaz9Ugdx+tWdSHn81NccyC4WYwfx6MSj/5v/3
-	15q3ofn2wvQPl1C2JPGdHB2/4xBens97N4r8qfrK/oSsuhNFnSvnJX89Kt+IcX6qdD4y6vLjlSi
-	aL8WZbf8kVFm/8Uz08XJro7dOkA1j9DMql3b8Fm7ZoRyUK6Yg9jJEUOVQvncG7SOYS6I8v0g88Q
-	AtaGlLlgpD1tEqW3b3wz0XaheZUQdfmZdmRybefKcrQdmJ/t/REOHhNVQEPDA==
-X-Received: by 2002:a17:903:1968:b0:2b2:4fc1:f657 with SMTP id d9443c01a7336-2b2817d8be9mr7872065ad.6.1775165351473;
-        Thu, 02 Apr 2026 14:29:11 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749a3a1asm38193815ad.62.2026.04.02.14.29.10
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 02 Apr 2026 14:29:10 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com
-Subject: [PATCH v3 bpf-next 5/6] bpf: Move verifier helpers to header
-Date: Thu,  2 Apr 2026 14:28:55 -0700
-Message-ID: <20260402212856.86606-6-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260402212856.86606-1-alexei.starovoitov@gmail.com>
-References: <20260402212856.86606-1-alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="nQb428Pl"
+Received: from mail-acc-it-01.broadcom.com (mail-acc-it-01.acc.broadcom.net [10.35.36.83])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id B8951C001A1F;
+	Thu,  2 Apr 2026 14:36:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com B8951C001A1F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1775165800;
+	bh=HvdvXJgypGzk3PPjN04z4zH2UxZcYBxrtLHm7UTDijw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=nQb428Pl7IPm/qvKbRU8ECdZlEeZ03Ncz9cxTjOppNe6P94myN5quDmdhFiqMdLPZ
+	 RLiBOAQpmyYkF+0froOXcRAhN9M05m9E/Z1hYXuIR2xZ5RZqzU+j/Har8Uq+TZWOw8
+	 uvVeWKXUInxU9mBnSh3e8Q0X7HpqyD1/o69EYVU0=
+Received: from lvnvdb8054.lvn.broadcom.net (lvnvdb8054.lvn.broadcom.net [10.17.214.29])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-acc-it-01.broadcom.com (Postfix) with ESMTPSA id 73F6BAE80;
+	Thu,  2 Apr 2026 17:36:38 -0400 (EDT)
+From: "Jitendra Vegiraju" <jitendra.vegiraju@broadcom.com>
+To: netdev@vger.kernel.org
+Cc: alexandre.torgue@foss.st.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	mcoquelin.stm32@gmail.com,
+	jitendra.vegiraju@broadcom.com,
+	bcm-kernel-feedback-list@broadcom.com,
+	richardcochran@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	rmk+kernel@armlinux.org.uk,
+	rohan.g.thomas@altera.com,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	bpf@vger.kernel.org,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	sdf@fomichev.me,
+	me@ziyao.cc,
+	siyanteng@cqsoftware.com.cn,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	weishangjuan@eswincomputing.com,
+	wens@kernel.org,
+	vladimir.oltean@nxp.com,
+	lizhi2@eswincomputing.com,
+	boon.khai.ng@altera.com,
+	maxime.chevallier@bootlin.com,
+	chenchuangyu@xiaomi.com,
+	yangtiezhu@loongson.cn,
+	ovidiu.panait.rb@renesas.com,
+	chenhuacai@kernel.org,
+	florian.fainelli@broadcom.com,
+	quic_abchauha@quicinc.com
+Subject: [PATCH net-next v9 0/4] net: stmmac: Add PCI driver support for BCM8958x
+Date: Thu,  2 Apr 2026 14:36:25 -0700
+Message-ID: <20260402213629.1996133-1-jitendra.vegiraju@broadcom.com>
+X-Mailer: git-send-email 2.45.4
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,182 +83,208 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
 
-Move several helpers to header as preparation for
-the subsequent stack liveness patches.
+This patchset adds basic PCI ethernet device driver support for Broadcom
+BCM8958x Automotive Ethernet switch SoC devices.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- include/linux/bpf_verifier.h | 28 +++++++++++++++++++++++
- kernel/bpf/verifier.c        | 44 ++++++++----------------------------
- 2 files changed, 38 insertions(+), 34 deletions(-)
+This SoC device has PCIe ethernet MAC attached to an integrated ethernet
+switch using XGMII interface. The PCIe ethernet controller is presented to
+the Linux host as PCI network device.
+Management of integrated ethernet switch on this SoC is not handled via
+the PCIe interface.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 1c0b430f92ec..76f62c8907bf 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -877,6 +877,30 @@ static inline struct bpf_subprog_info *subprog_info(struct bpf_verifier_env *env
- 	return &env->subprog_info[subprog];
- }
- 
-+struct bpf_call_summary {
-+	u8 num_params;
-+	bool is_void;
-+	bool fastcall;
-+};
-+
-+static inline bool bpf_helper_call(const struct bpf_insn *insn)
-+{
-+	return insn->code == (BPF_JMP | BPF_CALL) &&
-+	       insn->src_reg == 0;
-+}
-+
-+static inline bool bpf_pseudo_call(const struct bpf_insn *insn)
-+{
-+	return insn->code == (BPF_JMP | BPF_CALL) &&
-+	       insn->src_reg == BPF_PSEUDO_CALL;
-+}
-+
-+static inline bool bpf_pseudo_kfunc_call(const struct bpf_insn *insn)
-+{
-+	return insn->code == (BPF_JMP | BPF_CALL) &&
-+	       insn->src_reg == BPF_PSEUDO_KFUNC_CALL;
-+}
-+
- __printf(2, 0) void bpf_verifier_vlog(struct bpf_verifier_log *log,
- 				      const char *fmt, va_list args);
- __printf(2, 3) void bpf_verifier_log_write(struct bpf_verifier_env *env,
-@@ -1109,6 +1133,10 @@ int bpf_compute_postorder(struct bpf_verifier_env *env);
- bool bpf_insn_is_cond_jump(u8 code);
- bool bpf_is_may_goto_insn(struct bpf_insn *insn);
- 
-+void bpf_verbose_insn(struct bpf_verifier_env *env, struct bpf_insn *insn);
-+bool bpf_get_call_summary(struct bpf_verifier_env *env, struct bpf_insn *call,
-+			  struct bpf_call_summary *cs);
-+
- int bpf_stack_liveness_init(struct bpf_verifier_env *env);
- void bpf_stack_liveness_free(struct bpf_verifier_env *env);
- int bpf_update_live_stack(struct bpf_verifier_env *env);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 35fab402f168..55f82fba2f6e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -256,24 +256,6 @@ static void bpf_map_key_store(struct bpf_insn_aux_data *aux, u64 state)
- 			     (poisoned ? BPF_MAP_KEY_POISON : 0ULL);
- }
- 
--static bool bpf_helper_call(const struct bpf_insn *insn)
--{
--	return insn->code == (BPF_JMP | BPF_CALL) &&
--	       insn->src_reg == 0;
--}
--
--static bool bpf_pseudo_call(const struct bpf_insn *insn)
--{
--	return insn->code == (BPF_JMP | BPF_CALL) &&
--	       insn->src_reg == BPF_PSEUDO_CALL;
--}
--
--static bool bpf_pseudo_kfunc_call(const struct bpf_insn *insn)
--{
--	return insn->code == (BPF_JMP | BPF_CALL) &&
--	       insn->src_reg == BPF_PSEUDO_KFUNC_CALL;
--}
--
- struct bpf_map_desc {
- 	struct bpf_map *ptr;
- 	int uid;
-@@ -4267,7 +4249,7 @@ static const char *disasm_kfunc_name(void *data, const struct bpf_insn *insn)
- 	return btf_name_by_offset(desc_btf, func->name_off);
- }
- 
--static void verbose_insn(struct bpf_verifier_env *env, struct bpf_insn *insn)
-+void bpf_verbose_insn(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
- 	const struct bpf_insn_cbs cbs = {
- 		.cb_call	= disasm_kfunc_name,
-@@ -4491,7 +4473,7 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 		bpf_fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN, bt_stack_mask(bt));
- 		verbose(env, "stack=%s before ", env->tmp_str_buf);
- 		verbose(env, "%d: ", idx);
--		verbose_insn(env, insn);
-+		bpf_verbose_insn(env, insn);
- 	}
- 
- 	/* If there is a history record that some registers gained range at this insn,
-@@ -18539,17 +18521,11 @@ static bool verifier_inlines_helper_call(struct bpf_verifier_env *env, s32 imm)
- 	}
- }
- 
--struct call_summary {
--	u8 num_params;
--	bool is_void;
--	bool fastcall;
--};
--
- /* If @call is a kfunc or helper call, fills @cs and returns true,
-  * otherwise returns false.
-  */
--static bool get_call_summary(struct bpf_verifier_env *env, struct bpf_insn *call,
--			     struct call_summary *cs)
-+bool bpf_get_call_summary(struct bpf_verifier_env *env, struct bpf_insn *call,
-+			  struct bpf_call_summary *cs)
- {
- 	struct bpf_kfunc_call_arg_meta meta;
- 	const struct bpf_func_proto *fn;
-@@ -18670,12 +18646,12 @@ static void mark_fastcall_pattern_for_call(struct bpf_verifier_env *env,
- 	struct bpf_insn *insns = env->prog->insnsi, *stx, *ldx;
- 	struct bpf_insn *call = &env->prog->insnsi[insn_idx];
- 	u32 clobbered_regs_mask;
--	struct call_summary cs;
-+	struct bpf_call_summary cs;
- 	u32 expected_regs_mask;
- 	s16 off;
- 	int i;
- 
--	if (!get_call_summary(env, call, &cs))
-+	if (!bpf_get_call_summary(env, call, &cs))
- 		return;
- 
- 	/* A bitmask specifying which caller saved registers are clobbered
-@@ -21530,7 +21506,7 @@ static int do_check(struct bpf_verifier_env *env)
- 			verbose_linfo(env, env->insn_idx, "; ");
- 			env->prev_log_pos = env->log.end_pos;
- 			verbose(env, "%d: ", env->insn_idx);
--			verbose_insn(env, insn);
-+			bpf_verbose_insn(env, insn);
- 			env->prev_insn_print_pos = env->log.end_pos - env->prev_log_pos;
- 			env->prev_log_pos = env->log.end_pos;
- 		}
-@@ -25837,7 +25813,7 @@ static void compute_insn_live_regs(struct bpf_verifier_env *env,
- 				   struct bpf_insn *insn,
- 				   struct insn_live_regs *info)
- {
--	struct call_summary cs;
-+	struct bpf_call_summary cs;
- 	u8 class = BPF_CLASS(insn->code);
- 	u8 code = BPF_OP(insn->code);
- 	u8 mode = BPF_MODE(insn->code);
-@@ -25952,7 +25928,7 @@ static void compute_insn_live_regs(struct bpf_verifier_env *env,
- 		case BPF_CALL:
- 			def = ALL_CALLER_SAVED_REGS;
- 			use = def & ~BIT(BPF_REG_0);
--			if (get_call_summary(env, insn, &cs))
-+			if (bpf_get_call_summary(env, insn, &cs))
- 				use = GENMASK(cs.num_params, 1);
- 			break;
- 		default:
-@@ -26052,7 +26028,7 @@ static int compute_live_registers(struct bpf_verifier_env *env)
- 				else
- 					verbose(env, ".");
- 			verbose(env, " ");
--			verbose_insn(env, &insns[i]);
-+			bpf_verbose_insn(env, &insns[i]);
- 			if (bpf_is_ldimm64(&insns[i]))
- 				i++;
- 		}
+The following block diagram gives an overview of the application.
+             +=================================+
+             |       Host CPU/Linux            |
+             +=================================+
+                        || PCIe
+                        ||
+        +==========================================+
+        |           +--------------+               |
+        |           | PCIE Endpoint|               |
+        |           | Ethernet     |               |
+        |           | Controller   |               |
+        |           |   DMA        |               |
+        |           +--------------+               |
+        |           |   MAC        |   BCM8958X    |
+        |           +--------------+   SoC         |
+        |               || XGMII                   |
+        |               ||                         |
+        |           +--------------+               |
+        |           | Ethernet     |               |
+        |           | switch       |               |
+        |           +--------------+               |
+        |             || || || ||                  |
+        +==========================================+
+                      || || || || More external interfaces
+
+The MAC block on BCM8958x is based on Synopsis XGMAC 4.00a core. This
+MAC IP introduces new DMA architecture called Hyper-DMA for virtualization
+scalability.
+
+Driver functionality specific to new MAC (DW25GMAC) is implemented in
+new file dw25gmac.c.
+
+v8->v9:
+   Patch1:
+       Merged patch1 and patch2 to avoid patchwork warning (Simon Horman)
+   Patch2:
+       Patch3 from v8.
+   Patch3:
+       Merged patch4 and patch5 from v8 (Russell King).
+       Addressed review comments from Russell King.
+       Removed redundant initialization of zero-initialized variables.
+       Allocate sequential interrupt vectors for per channel interrupts.
+       Remove device id based setup function in glue driver as currently
+       a single device id is supported.
+   Patch4:
+       Following the recent upstream patch, removed "depends on STMMAC_ETH"
+       statment in Kconfig.
+
+v7->v8:
+   Addressed review comments from v7.
+   Patch2:
+       Add a helper function with common code for three setup functions
+       in dwxgmac2_core.c (Russell King).
+   Patch4:
+       Use stmmac_plat_dat_alloc() to allocate memory for
+       :plat_stmmacenet_data: (Russell King).
+       Changed few bool variable initialization to bool types in
+       dwxgmac_brcm_default_data().
+   Patch5:
+       Make use of plat->init, plat->exit handlers to cleanup
+       probe function error handling path (Russell King).
+       Use managed API to free irq vectors.
+v6->v7:
+   Minor changes to v6 patchset adapting to recent changes net-next.
+   Patch1:
+       Make use of the core_type variable for MAC core identification.
+       Define enum value DWMAC_CORE_25GMAC and discard previous proposal to
+       add new variables in struct plat_stmmacenet_data.
+   Patch2:
+       Updated patch to latest net-next branch code base.
+   Patch3:
+       Modified hwif entry matching to use core_type DWMAC_CORE_25GMAC.
+   Patch4:
+       Adapted glue driver to match recent stmmac core changes.
+       Changed susped/resume functionality to use common framework.
+   https://lore.kernel.org/netdev/20260313222206.778760-1-jitendra.vegiraju@broadcom.com/
+v5->v6:
+   Change summary to address comments/suggestions by Serge Semin.
+   Patch1:
+     Removed the complexity of hdma mapping in previous patch series and
+     use static DMA mapping.
+     Renamed plat_stmmacenet_data::snps_dev_id as dev_id and moved to
+     the beginning of the struct.
+   Patch2:
+     Added dw25gmac_get_hw_feature() for dw25gmac.
+     Use static one-to-one VDMA-TC-PDMA mapping.
+   Patch4:
+     Remove usage of plat_stmmacenet_data::msi_*_vec variables for
+     interrupt vector initialization.
+     Change phy_interface type to XGMII.
+     Cleanup unused macros.
+   https://lore.kernel.org/netdev/20241018205332.525595-1-jitendra.vegiraju@broadcom.com/
+
+v4->v5:
+   Summary of changes in this patch series:
+   As suggested by Serge Semin, defined common setup function for dw25gmac.
+   To accommodate early adopter DW25GMAC used in BCM8958x device, provide
+   a mechanism to override snps_id and snps_dev_id used for driver entry
+   matching in hwif.c
+
+   Patch1:
+     Added plat_stmmacenet_data::snps_id,snps_dev_id fields - Serge Semin
+   Patch2:
+     Define common setup function for dw25gmac_setup() - Serge Semin
+     Support DW25GMAC IPs with varying VDMA/PDMA count - Abhishek Chauhan
+     Allocate and initialize hdma mapping configuration data dynamically
+     based on device's VDMA/PDMA feature capabilities in dw25gmac_setup().
+     Spelling errors in commit log, lower case 0x for hex -Amit Singh Tomar
+   Patch3:
+     Glue support in hwif.c for DW25GMAC in hwif.c - Serge Semin
+     Provide an option to override snps_id and snps_dev_id when the device
+     reports version info not conformant with driver's expectations as is
+     the case with BCM8958x device. - Serge Semin
+   Patch4:
+     Remove setup function in the glue driver - Serge Semin
+     Remove unnecessary calls pci_enable_device() and pci_set_master()
+     in dwxgmac_brcm_pci_resume() - Jakub Kicinski
+     Merge variable definitions to single line - Amit Singh Tomar
+    https://lore.kernel.org/netdev/20240904054815.1341712-1-jitendra.vegiraju@broadcom.com/
+   
+v3->v4:
+   Based on Serge's questions, received a confirmation from Synopsys that
+   the MAC IP is indeed the new 25GMAC design.
+   Renamed all references of XGMAC4 to 25GMAC.
+   The patch series is rearranged slightly as follows.
+   Patch1 (new): Define HDMA mapping data structure in kernel's stmmac.h
+   Patch2 (v3 Patch1): Adds dma_ops for dw25gmac in stmmac core
+       Renamed new files dwxgmac4.* to dw25gmac.* - Serge Semin
+       Defined new Synopsis version and device id macros for DW25GMAC.
+       Converted bit operations to FIELD_PREP macros - Russell King
+       Moved hwif.h to this patch, Sparse flagged warning - Simon Horman
+       Defined macros for hardcoded values TDPS etc - Serge Semin
+       Read number of PDMAs/VDMAs from hardware - Serge Semin
+   Patch3 (v3 Patch2): Hooks in hardware interface handling for dw25gmac
+       Resolved user_version quirks questions - Serge, Russell, Andrew
+       Added new stmmac_hw entry for DW25GMAC. - Serge
+       Added logic to override synopsis_dev_id by glue driver.
+   Patch4 (v3 Patch3): Adds PCI driver for BCM8958x device
+       Define bitmmap macros for hardcoded values - Andrew Lunn
+       Added per device software node - Andrew Lunn
+   Patch5(new/split): Adds BCM8958x driver to build system
+   https://lore.kernel.org/netdev/20240814221818.2612484-1-jitendra.vegiraju@broadcom.com/
+
+v2->v3:
+   Addressed v2 comments from Andrew, Jakub, Russel and Simon.
+   Based on suggestion by Russel and Andrew, added software node to create
+   phylink in fixed-link mode.
+   Moved dwxgmac4 specific functions to new files dwxgmac4.c and dwxgmac4.h
+   in stmmac core module.
+   Reorganized the code to use the existing glue logic support for xgmac in
+   hwif.c and override ops functions for dwxgmac4 specific functions.
+   The patch is split into three parts.
+     Patch#1 Adds dma_ops for dwxgmac4 in stmmac core
+     Patch#2 Hooks in the hardware interface handling for dwxgmac4
+     Patch#3 Adds PCI driver for BCM8958x device
+   https://lore.kernel.org/netdev/20240802031822.1862030-1-jitendra.vegiraju@broadcom.com/
+
+v1->v2:
+   Minor fixes to address coding style issues.
+   Sent v2 too soon by mistake, without waiting for review comments.
+   Received feedback on this version.
+   https://lore.kernel.org/netdev/20240511015924.41457-1-jitendra.vegiraju@broadcom.com/
+
+v1:  
+   https://lore.kernel.org/netdev/20240510000331.154486-1-jitendra.vegiraju@broadcom.com/
+
+Jitendra Vegiraju (4):
+  Add DW25GMAC support in stmmac core driver
+  Integrate dw25gmac into hwif handling
+  Add PCI driver support for BCM8958x
+  Add BCM8958x driver to build system
+
+ MAINTAINERS                                   |   8 +
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 +
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   3 +-
+ drivers/net/ethernet/stmicro/stmmac/common.h  |  12 +-
+ .../net/ethernet/stmicro/stmmac/dw25gmac.c    | 161 ++++++++
+ .../net/ethernet/stmicro/stmmac/dw25gmac.h    |  92 +++++
+ .../net/ethernet/stmicro/stmmac/dwmac-brcm.c  | 360 ++++++++++++++++++
+ .../net/ethernet/stmicro/stmmac/dwxgmac2.h    |   1 +
+ .../ethernet/stmicro/stmmac/dwxgmac2_core.c   |  59 +--
+ .../ethernet/stmicro/stmmac/dwxgmac2_dma.c    |  51 +++
+ drivers/net/ethernet/stmicro/stmmac/hwif.c    |  20 +
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    |   1 +
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  35 ++
+ include/linux/stmmac.h                        |   1 +
+ 14 files changed, 791 insertions(+), 24 deletions(-)
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dw25gmac.c
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dw25gmac.h
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-brcm.c
+
 -- 
-2.52.0
+2.34.1
 
