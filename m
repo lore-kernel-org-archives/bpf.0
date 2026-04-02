@@ -1,159 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D9E287263;
-	Thu,  2 Apr 2026 03:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2EE35AC30
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 03:32:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775100445; cv=none; b=BV3vUCDqE2PDr8Z/hMHKgzXr1tLl6CswCnBzvVnZrMTUOKxXlclgw98vUaV/4W6bbFW3mY4dyrRDH8ua1VLZwfCiQEtkb+IP9X23W7xCbwGjLAoSxYAH5ZAonbDolj5GofaT+07eDaxpwbM+zQPm7f7C/NnO6j0qW8sAyRDA11E=
+	t=1775100732; cv=none; b=twLBZzWQMRWdW6X19RcSL6pPu+WUNtGvwN6GH0fp23SvMnVszroAX4YpCVjppf7BOeMaD/dVa7DNswbXUSuWj1tyRMJaslHgHSpjfYlhrFXxEbQS3hp5GosWvSY9Fp4GI+Sr7lTSEE+1sx5u6KEJxAmMBcnLghG/fDSrGjr49kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775100445; c=relaxed/simple;
-	bh=qJWv9KrDea6c7T2o8i+rQnp2JrBZDqEJPBpIfIVHAPE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rlMMrLsPHDCZAAmdTVmBsHMhdy2U1JCo0VAAh8OyIwiEmEM8ldWWAlsTLGjHwS7E6mLV4+VwkeLEOcYVMlkxYCxXOSv2h75aYEwsyLipcH/yv1YG6YXf3eiymiYUP9AEZImE4g0tShd7Zbggs7/cTGpAHqwJrnt3/woVyXL5bBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p5apt1OP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775100732; c=relaxed/simple;
+	bh=DDYL00tsA5dVafrHYaZ2fX3qZJ9OYC4SIx9vshfJkO4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rUIxolX6xOKyGpW+bmUJ16AlffgloCTxWxPW95a3P5sLA7EGicdy6pZbm6GR2YfOrrNWSNkWN3MhPTUaqrjQjGxWDyS+AmYyKEhXJL6cAZiL8yZ1/ythS5nPqSKGMepIya+s2SDX4W6hzOFkMX2rWgPZNl/S8Kqt0zNY1MT0np4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AjBkHBHl; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p5apt1OP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E7AC4CEF7;
-	Thu,  2 Apr 2026 03:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775100444;
-	bh=qJWv9KrDea6c7T2o8i+rQnp2JrBZDqEJPBpIfIVHAPE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p5apt1OPKa8bvJxPAu8pcm3t/hwRWm7kwWiMfPD9QX0Dt31WvoNpFpAa3cnGtUuOu
-	 N/w5493gsKLkl+IdBbeRV6InHpv3r4ac5EUQpiuu5zOp85Jpvm9DkuDHtqhOTne+Q5
-	 GCcc2QWGPni3pNinxzjk9sRx36iJWLDjN6kC8DK1WWOd71jiRUFhrFy0HQs4kdElYc
-	 6LzqgvnhCE1lCjWg5cwd5g6HdxJKbj5VCBhEJR4kfoC2YMsDKtUkRWpLCB4lNPRpTE
-	 L2GqUpDcLieq4goxgsnCuA2kRCEV2ZQWSiLwCRNt+L2KLZHJT4KNikaOPpplYcPjZy
-	 D2pCgraMmpQRA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: nb@tipi-net.de
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	justin.chen@broadcom.com,
-	horms@kernel.org,
-	opendmb@gmail.com,
-	florian.fainelli@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AjBkHBHl"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775100718;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CA5IhrV4IVVDrsGLYwbUCdRv82E13FPWvHWrhHjIK9Y=;
+	b=AjBkHBHls0y0rxzZbnZfQbgiwEpjsNse17M7S4vQbf1r20yX5r8nWzk67BmOUxXJqYlAP1
+	OEx9JwbznzRu7hMB2iK/E7dMydBNbKuCKCr5c9d9+6TiZqumRoafyZQe68bxjLD7DJpO/F
+	JtHQ+OPuTGQsRp7QhZEKfxWrlWAhyzs=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Antonius <antonius@bluedragonsec.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Michal Luczaj <mhal@rbox.co>,
+	Mina Almasry <almasrymina@google.com>,
+	Eric Biggers <ebiggers@google.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Soheil Hassas Yeganeh <soheil@google.com>,
+	Alexander Duyck <alexanderduyck@fb.com>,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v5 4/6] net: bcmgenet: add XDP_TX support
-Date: Wed,  1 Apr 2026 20:27:22 -0700
-Message-ID: <20260402032722.905829-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260328230513.415790-5-nb@tipi-net.de>
-References: <20260328230513.415790-5-nb@tipi-net.de>
+Subject: [PATCH net v1] net: skb: fix cross-cache free of KFENCE-allocated skb head
+Date: Thu,  2 Apr 2026 11:31:33 +0800
+Message-ID: <20260402033138.388574-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+SKB_SMALL_HEAD_CACHE_SIZE is intentionally set to a non-power-of-2
+value (e.g. 704 on x86_64) to avoid collisions with generic kmalloc
+bucket sizes. This ensures that skb_kfree_head() can reliably use
+skb_end_offset to distinguish skb heads allocated from
+skb_small_head_cache vs. generic kmalloc caches.
+
+However, when KFENCE is enabled, kfence_ksize() returns the exact
+requested allocation size instead of the slab bucket size. If a caller
+(e.g. bpf_test_init) allocates skb head data via kzalloc() and the
+requested size happens to equal SKB_SMALL_HEAD_CACHE_SIZE, then
+slab_build_skb() → ksize() returns that exact value. After subtracting
+skb_shared_info overhead, skb_end_offset ends up matching
+SKB_SMALL_HEAD_HEADROOM, causing skb_kfree_head() to incorrectly free
+the object to skb_small_head_cache instead of back to the original
+kmalloc cache, resulting in a slab cross-cache free:
+
+  kmem_cache_free(skbuff_small_head): Wrong slab cache. Expected
+  skbuff_small_head but got kmalloc-1k
+
+Fix this by adding an is_kfence_address() check in skb_kfree_head().
+When the head is a KFENCE object, we skip the kmem_cache_free() path
+and fall through to kfree(), which correctly handles KFENCE objects
+via kfence_free(). The check compiles away when CONFIG_KFENCE is
+disabled.
+
+Fixes: bf9f1baa279f ("net: add dedicated kmem_cache for typical/small skb->head")
+Reported-by: Antonius <antonius@bluedragonsec.com>
+Closes: https://lore.kernel.org/netdev/CAK8a0jxC5L5N7hq-DT2_NhUyjBxrPocoiDazzsBk4TGgT1r4-A@mail.gmail.com/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
-net: bcmgenet: add XDP_TX support
+ net/core/skbuff.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-This commit implements XDP_TX using ring 16, which is dedicated to XDP TX
-for isolation from SKB TX queues. It also changes the page_pool DMA
-direction to bidirectional to allow TX reuse of the existing DMA mapping.
-
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> index b45ba2c2857e..687c3b12d44f 100644
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-[ ... ]
-> @@ -2299,11 +2328,96 @@ static struct sk_buff *bcmgenet_xdp_build_skb(struct bcmgenet_rx_ring *ring,
->  	return skb;
->  }
->  
-> +static bool bcmgenet_xdp_xmit_frame(struct bcmgenet_priv *priv,
-> +				     struct xdp_frame *xdpf, bool dma_map)
-> +{
-[ ... ]
-> +	} else {
-> +		struct page *page = virt_to_page(xdpf->data);
-> +
-> +		/* For local XDP_TX the caller already prepended the TSB
-> +		 * into xdpf->data/len, so dma_len == xdpf->len.
-> +		 */
-> +		dma_len = xdpf->len;
-> +		mapping = page_pool_get_dma_addr(page) +
-> +			  sizeof(*xdpf) + xdpf->headroom;
-
-When the RX page pool is created in bcmgenet_rx_ring_create_pool(), it is
-initialized with .offset = GENET_XDP_HEADROOM. Does the DMA address
-calculation here need to include this GENET_XDP_HEADROOM offset? Without it,
-it appears the hardware might be given a DMA address that is 256 bytes
-before the actual packet data, transmitting uninitialized memory.
-
-[ ... ]
-> @@ -2311,14 +2425,42 @@ static unsigned int bcmgenet_run_xdp(struct bcmgenet_rx_ring *ring,
->  	switch (act) {
->  	case XDP_PASS:
->  		return XDP_PASS;
-> +	case XDP_TX:
-> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
-> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
-> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
-> +		 * up xdp->data into the RSB area (which is no longer needed
-> +		 * after the BPF program ran) and zero it.
-> +		 */
-> +		if (xdp->data - xdp->data_hard_start <
-> +		    sizeof(struct status_64)) {
-> +			page_pool_put_full_page(ring->page_pool, rx_page,
-> +						true);
-> +			return XDP_DROP;
-> +		}
-> +		xdp->data -= sizeof(struct status_64);
-> +		xdp->data_meta -= sizeof(struct status_64);
-> +		memset(xdp->data, 0, sizeof(struct status_64));
-> +
-> +		xdpf = xdp_convert_buff_to_frame(xdp);
-
-Does this headroom check account for the additional sizeof(struct xdp_frame)
-required by xdp_convert_buff_to_frame()? 
-
-If metadata is present, xdp->data_meta could potentially underflow 
-xdp->data_hard_start. If the remaining headroom minus metasize becomes
-negative in xdp_convert_buff_to_frame(), could it undergo integer promotion
-to a large unsigned value and bypass the internal safety check? This might
-cause the struct xdp_frame to overwrite the newly zeroed status_64 block.
-
-[ ... ]
-> @@ -2556,9 +2698,15 @@ static int bcmgenet_rx_poll(struct napi_struct *napi, int budget)
->  {
->  	struct bcmgenet_rx_ring *ring = container_of(napi,
->  			struct bcmgenet_rx_ring, napi);
-> +	struct bcmgenet_priv *priv = ring->priv;
->  	struct dim_sample dim_sample = {};
->  	unsigned int work_done;
->  
-> +	/* Reclaim completed XDP TX frames (ring 16 has no interrupt) */
-> +	if (priv->xdp_prog)
-> +		bcmgenet_tx_reclaim(priv->dev,
-> +				    &priv->xdp_tx_ring, false);
-> +
-
-What happens to in-flight frames if the XDP program is detached at runtime
-and priv->xdp_prog becomes NULL? Will this permanently lose track of the
-page pool buffers and DMA mappings since the NAPI poll stops reclaiming
-them?
-
-Additionally, if the interface is the target of an XDP_REDIRECT from another
-device, a local XDP program is not required and priv->xdp_prog could be
-NULL. Does this mean the transmitted frames for redirected traffic will
-never be reclaimed, eventually filling the TX ring?
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 0e217041958a..87cecd40381b 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -91,6 +91,7 @@
+ #include <linux/user_namespace.h>
+ #include <linux/indirect_call_wrapper.h>
+ #include <linux/textsearch.h>
++#include <linux/kfence.h>
+ 
+ #include "dev.h"
+ #include "devmem.h"
+@@ -1083,7 +1084,8 @@ static int skb_pp_frag_ref(struct sk_buff *skb)
+ 
+ static void skb_kfree_head(void *head, unsigned int end_offset)
+ {
+-	if (end_offset == SKB_SMALL_HEAD_HEADROOM)
++	if (end_offset == SKB_SMALL_HEAD_HEADROOM &&
++	    !is_kfence_address(head))
+ 		kmem_cache_free(net_hotdata.skb_small_head_cache, head);
+ 	else
+ 		kfree(head);
 -- 
-pw-bot: cr
+2.43.0
+
