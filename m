@@ -1,63 +1,63 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B25391E68
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 09:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1DE388363
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 09:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775122009; cv=none; b=opZ7xjfwhTszxpkcPeqnnOf/F/ZZWhcRNMGhbAdAQihYUHYkHxJj9jFtusGbUrNnZTlWlCzzSv9fBCP30efAIDzQoeM6F4vgDuk6gLVUO+dIMOrpZjQ+sUIVabJC2yugwv36oSvHqe8pV/KohPToQo21cR9+jzZ3PVztgBa2ovY=
+	t=1775122014; cv=none; b=lEufqaoUIUiZPbNkOGFk9Eyw0/CyW0rGIzr3pTFHUXU3o4FdEGetRa/a6Ax1azfFJhz4cOMSjYE18B68khLHT/bN4wkJpodhgtS696CTxbfNWzc6xK5zfHQtd/v/jfke+Z/eiS+7/JSNNw707ITFO8EjC11/j/8L7MuPdHLzA9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775122009; c=relaxed/simple;
-	bh=5nMc9qAcFEsGx3C7PmryTlLfGSZTMZVInAVBgvQtejY=;
+	s=arc-20240116; t=1775122014; c=relaxed/simple;
+	bh=fg9gtssW70rqBjzjZemwy81+H2Jd6oM+l/xkQy5zuS0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=raJTj3gCMRMyAd5vwUWYZyqz8jSjxSJpSYqxzn0FJT+0WsHuOMKi/QzeHDnPMlR9epHz4UDx/XOrhNISNNch50B8V/4stQQThGFyzBHSKAfFBrtYs6m15C0Jo7UVkwV066fei1WCQloceaJLhRXxk9/hwHDN0ApvhlyUjEXmCq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZG7MGOBv; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=sSFw2DPa7ZcvtaAJimHPQGpPzL+MnOhIKrSdkHLkFLFlC800vuwTvVuGjgO0jWWE1cCBFvy1Cy0XbfCGyenTbT7iboNqop+GjFATetjVav5yLPOFZw4X3eRXVmYlXXLHUhE2IjJMwaWLFl0cl0htfxbMyyCstJqrMwH/Re8Ioi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NwjBuQCg; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZG7MGOBv"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35c124d2613so347763a91.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 02:26:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NwjBuQCg"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-35d971fbcddso353176a91.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 02:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775121997; x=1775726797; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775122004; x=1775726804; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=81j40jm7xzkIDR0AUEs06y3jjZUfu/jUEFBO6OwZcOw=;
-        b=ZG7MGOBvrOPdrSlJltkWWUZi7E2sgqmqfiuTaPjkWBNPF5s7PnyiRm36zvCIDtr6uX
-         +c5B60RkEJue0Rewey+xsrKzgSWEJ3RGtrBQSHwstOEDhxuaxQbAklu3VtBcvAY/QGit
-         MQKvw1sQbldvJBtUXOyLOcODIUqy+W5uIiM/TcJtYVKAbG97W9VcasXGLAXlbpv5HZay
-         kq+BMPmCzbj4Vtes57fdyohUNWJbkjQW7gH737dCD/A7vXXgzFUMRFjTipV5Th0MRj3G
-         e849m1pvOVsB132tO5tWgEHQa0DMaoiVDR2OLgv4xW+TLnnWTqXxY1bRkVL5sXDVOjhZ
-         Fcpg==
+        bh=CcS6+ltlajemy60nMyxmGDon25GNRE0B5Cl/4uAqhyI=;
+        b=NwjBuQCg+b08pUjtJ4kKR6QxL3EofbU+P1etAguRY5SkyGw65JUgXjogeGYGpXAacV
+         N2UDTdgGH9KEx4RsQJ1sx654k6ZKfMOxAssT7RmifOy3UF7MmhNdppcmSe5eu+ycS92o
+         VgOuVvYdMw/Qjz7qLB1LosBadeghQhTHXkyyxKSWWIuFyYiO0rIBYNxWYcLy87KijYqF
+         J6nEjtHYuHfygTZF4dGZK9wZruYwpNEieAuNUD6Z+F7V1AjJCLD9+5dKfMHjG+E4SvFt
+         1bP2XQy4J2We3hdie9ogx7N266tIguejWg+kF8jS+kL/Kz0Wx3pg2JQ8H2GuBiSyMMRy
+         BtAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775121997; x=1775726797;
+        d=1e100.net; s=20251104; t=1775122004; x=1775726804;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=81j40jm7xzkIDR0AUEs06y3jjZUfu/jUEFBO6OwZcOw=;
-        b=MwFdIwHWyEmsiX24LUcklFM/hglHBf4kWEldG5prA5km5Be/Gt7nydxWGKhaXLjSKt
-         3Njo8eD4BfaRGtUsLNicfFNwYyQcdFBw2e55jcQ07g0hhLZTqNyYbpI7ex8R1dsSQ1xh
-         2Xd8jaODkMwJ1m2+p550s7QxcZyKL/ppkcsKsJr6njbN2cmq4XkcXfG4ZBlA7sBvFVYF
-         poAEkMCneF1DBc/zJCaJD2kUts4drusiglbr5SrkFhnd94B9ZEjz4DFNYcWJLlVJxV4m
-         k1NsjgzK5fTMcR1luaJwBanW6zrhW5QQ2gv68xp7cVnN7bmbiDpRsJgZspCiReD2xdat
-         Jxug==
-X-Forwarded-Encrypted: i=1; AJvYcCVOgx5UPG4nzIiCJFm6dAp1Vc6zIB78dXbAgCY0p355Ms8X5fHLf9Rq6oEnraNWzBsAvNM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy84asYXdhdd5x//kEosLOy5yaiT3WuTpoBX38N2U2zyeSmpLLn
-	lei41G5gF8XV3sluL313Fg48oZAMaQc+asemyVaKw+OUs9T+tUE+Regw
-X-Gm-Gg: AeBDievW25R33ur69P4XjdqCPXRPyzAcTd4T3GIK+NIICwjJOB1Zmev0mLqWWmF6w+2
-	mqcsfgI/3LqI1/M9K3oNxCs8YbVzRjpz/75fyrlVpDkH8Kh1uJZ1ybVJDsjVvW2Yq+sCdh8WS62
-	QMqUGAaHkF3w64PpeaDGBekew5dfTzEHHXvsHtejdXKTTCRDrq8L6JFbp57EoYdjSflqn2cK1F9
-	pZVHoFfwupT5kTq7ZsYZhYwBichNpTFAKEHzhhFCqWWUtFmblRj90op33cPhuC4eQTT4geEMFDL
-	JKT2RVGWfg7kFx5L4qL8gS11/TJNOlnziIeERN20CWoCqpuR+RSxF4cwAJQrAMOupEgTqFdYAmB
-	fpXVsQAZQR6EeLsQTJ/4Z5J2anU7gLQ+DJEVTVBf0i2DV/FiDYc2+P72QmuNpaXNP1Wuo74dbgB
-	exXmYwL8CqUK/YvtnL2phzF7zqLp+HpNmMhulHA8jykeH0
-X-Received: by 2002:a17:90b:5350:b0:359:8dfd:64c8 with SMTP id 98e67ed59e1d1-35dc6f3b854mr6703431a91.24.1775121996713;
-        Thu, 02 Apr 2026 02:26:36 -0700 (PDT)
+        bh=CcS6+ltlajemy60nMyxmGDon25GNRE0B5Cl/4uAqhyI=;
+        b=pGEd7jSjNmjrPt/l1gilEr9teVpvLl7hqHPKP7DazHoeynXYjNGHDVyzkllE2CcqHS
+         NAVJHhp//AY9imyWAhuhyU41UXM865vgbM9KY2ZMD42EW/Afqm+3oDtuiyyMs+ArnWv1
+         ME1dv8nS88rLeEaJV7Brl0p7JSTlOqHEXI+gmr6BxnC/C7Bk5WrJ69beN2Ok2Q303tJS
+         Zor5TW+NgjrYXZgVGMCwIANNDHXjTE/v2HoWyw2omEB/9nYSpEVP4xrLr/aac17nypAM
+         lhvzHtydK3YWoWgMgkyrcf8yfxJUQnzZA87y1pztX854oPGzb+8NYfiLSnZhTnfd9cy8
+         mDzA==
+X-Forwarded-Encrypted: i=1; AJvYcCVZFpeYZliwvPg6ILlt4GkJiOegCRTW8CwmZ92nlYC7Fg5M/uAXqXz8W08LWnFaTL0h5M0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbQdMbLa7rxgWzZUlkdNnAXSaQCogbPYClzBLJcqAFG1Sacu45
+	cHKf9/0FMIdHZ47L+laJZD1CkD5VxN0812W4OY7VC1m7f+x/d3DGn1Eg
+X-Gm-Gg: AeBDiev1wMICqZKCkxZs7ZLpLX65G7tDciswlWF2jlE08drzPcRZyKNzFmNjBAadmo3
+	0ayKNn0WWNbOTxqwF3mCy8BDvKFRwUgpfBvjLpkEu8wCGlQIbejf4Y0aQfPnMreTwAjJl2vSfXk
+	5yWVn5Ph543DGaEecDOxXVXpoc+dGXJ/ldsf+glwt7XOdu8xEW4xkkYUCCsampzZVJOLiOYfpWj
+	mUmKMSUDdJvmwariZLHqTPHYsI+kizb8ahJosw+D9JutpLbaJY1I/cUcd77COX5A6D7Bo5TFJGc
+	a6G56mFi2CbMLnrMKyVVGsX/ctQRX9xwbFILHiwwqPeU5PxjUazlCQCFgjD0PyVZTuBfz/mCOmo
+	/76bHnQ5RiYZrzl8eY3lMyuZnm56qMHkMun0KhqjgjqV5tvPW9vd8tZ3pNHcmXDLre0ltjhOzP1
+	IWFu9FGJc3QdgxgkjBdly+lBdqoASOgskiCWci4gUJvhjI
+X-Received: by 2002:a17:90b:4a48:b0:35d:9fe9:f830 with SMTP id 98e67ed59e1d1-35dd684eacamr1324687a91.12.1775122003834;
+        Thu, 02 Apr 2026 02:26:43 -0700 (PDT)
 Received: from yafangs-Air ([2409:891f:1aa0:8613:19f3:7bee:2e41:149e])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dd35f50e9sm2227645a91.6.2026.04.02.02.26.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dd35f50e9sm2227645a91.6.2026.04.02.02.26.37
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 02 Apr 2026 02:26:36 -0700 (PDT)
+        Thu, 02 Apr 2026 02:26:43 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: jpoimboe@kernel.org,
 	jikos@kernel.org,
@@ -83,9 +83,9 @@ Cc: live-patching@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH 2/4] trace: Allow kprobes to override livepatched functions
-Date: Thu,  2 Apr 2026 17:26:05 +0800
-Message-ID: <20260402092607.96430-3-laoar.shao@gmail.com>
+Subject: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
+Date: Thu,  2 Apr 2026 17:26:06 +0800
+Message-ID: <20260402092607.96430-4-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260402092607.96430-1-laoar.shao@gmail.com>
 References: <20260402092607.96430-1-laoar.shao@gmail.com>
@@ -97,108 +97,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce the ability for kprobes to override the return values of
-functions that have been livepatched. This functionality is guarded by the
-CONFIG_KPROBE_OVERRIDE_KLP_FUNC configuration option.
+Add a new replaceable attribute to allow the coexistence of both
+atomic-replace and non-atomic-replace livepatches. If replaceable is set to
+0, the livepatch will not be replaced by a subsequent atomic-replace
+operation.
+
+This is a preparatory patch for following changes.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- kernel/trace/Kconfig        | 14 ++++++++++++++
- kernel/trace/bpf_trace.c    |  3 ++-
- kernel/trace/trace_kprobe.c | 17 +++++++++++++++++
- kernel/trace/trace_probe.h  |  5 +++++
- 4 files changed, 38 insertions(+), 1 deletion(-)
+ include/linux/livepatch.h |  2 ++
+ kernel/livepatch/core.c   | 44 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 49de13cae428..db712c8cb745 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -1279,6 +1279,20 @@ config HIST_TRIGGERS_DEBUG
+diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
+index ba9e3988c07c..d88a6966e5f2 100644
+--- a/include/linux/livepatch.h
++++ b/include/linux/livepatch.h
+@@ -124,6 +124,7 @@ struct klp_state {
+  * @objs:	object entries for kernel objects to be patched
+  * @states:	system states that can get modified
+  * @replace:	replace all actively used patches
++ * @replaceable:	whether this patch can be replaced or not
+  * @list:	list node for global list of actively used patches
+  * @kobj:	kobject for sysfs resources
+  * @obj_list:	dynamic list of the object entries
+@@ -138,6 +139,7 @@ struct klp_patch {
+ 	struct klp_object *objs;
+ 	struct klp_state *states;
+ 	bool replace;
++	bool replaceable;
  
-           If unsure, say N.
- 
-+config KPROBE_OVERRIDE_KLP_FUNC
-+	bool "Allow kprobes to override livepatched functions"
-+	depends on KPROBES && LIVEPATCH
-+	help
-+	  This option allows BPF programs to use kprobes to override functions
-+	  that have already been patched by Livepatch (KLP).
-+
-+	  Enabling this provides a mechanism to dynamically control execution
-+	  flow without requiring a reboot or a new livepatch module. It
-+	  effectively combines the persistence of livepatching with the
-+	  programmability of BPF.
-+
-+	  If unsure, say N.
-+
- source "kernel/trace/rv/Kconfig"
- 
- endif # FTRACE
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index c901ace836cb..08ae2b1a912c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1935,7 +1935,8 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
- 		if (!tp)
- 			return -EINVAL;
- 		if (!trace_kprobe_on_func_entry(tp) ||
--		    !trace_kprobe_error_injectable(tp))
-+		    (!trace_kprobe_error_injectable(tp) &&
-+		     !trace_kprobe_klp_func_overridable(tp)))
- 			return -EINVAL;
- 	}
- 
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 768702674a5c..6f05451fbc76 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -213,6 +213,23 @@ bool trace_kprobe_error_injectable(struct trace_kprobe *tp)
- 	return within_error_injection_list(trace_kprobe_address(tp));
+ 	/* internal */
+ 	struct list_head list;
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 28d15ba58a26..04f9e84f114f 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -351,6 +351,7 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+  * /sys/kernel/livepatch/<patch>/transition
+  * /sys/kernel/livepatch/<patch>/force
+  * /sys/kernel/livepatch/<patch>/replace
++ * /sys/kernel/livepatch/<patch>/replaceable
+  * /sys/kernel/livepatch/<patch>/stack_order
+  * /sys/kernel/livepatch/<patch>/<object>
+  * /sys/kernel/livepatch/<patch>/<object>/patched
+@@ -478,17 +479,60 @@ static ssize_t stack_order_show(struct kobject *kobj,
+ 	return sysfs_emit(buf, "%d\n", stack_order);
  }
  
-+bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp)
++static ssize_t replaceable_store(struct kobject *kobj, struct kobj_attribute *attr,
++				const char *buf, size_t count)
 +{
-+	bool overridable = false;
-+#ifdef CONFIG_KPROBE_OVERRIDE_KLP_FUNC
-+	struct module *mod;
-+	unsigned long addr;
++	struct klp_patch *patch;
++	bool replaceable;
++	int ret;
 +
-+	addr = trace_kprobe_address(tp);
-+	rcu_read_lock();
-+	mod = __module_address(addr);
-+	if (mod && mod->klp)
-+		overridable = true;
-+	rcu_read_unlock();
-+#endif
-+	return overridable;
++	ret = kstrtobool(buf, &replaceable);
++	if (ret)
++		return ret;
++
++	patch = container_of(kobj, struct klp_patch, kobj);
++
++	mutex_lock(&klp_mutex);
++
++	if (patch->replaceable == replaceable)
++		goto out;
++
++	if (patch == klp_transition_patch) {
++		ret = -EAGAIN;
++		goto out;
++	}
++
++	patch->replaceable = replaceable;
++
++out:
++	mutex_unlock(&klp_mutex);
++
++	if (ret)
++		return ret;
++	return count;
++}
++static ssize_t replaceable_show(struct kobject *kobj,
++			       struct kobj_attribute *attr, char *buf)
++{
++	struct klp_patch *patch;
++
++	patch = container_of(kobj, struct klp_patch, kobj);
++	return sysfs_emit(buf, "%d\n", patch->replaceable);
 +}
 +
- static int register_kprobe_event(struct trace_kprobe *tk);
- static int unregister_kprobe_event(struct trace_kprobe *tk);
- 
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 958eb78a9068..84bd2617db7c 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -271,6 +271,7 @@ struct trace_kprobe {
- #ifdef CONFIG_KPROBE_EVENTS
- bool trace_kprobe_on_func_entry(struct trace_kprobe *tp);
- bool trace_kprobe_error_injectable(struct trace_kprobe *tp);
-+bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp);
- #else
- static inline bool trace_kprobe_on_func_entry(struct trace_kprobe *tp)
- {
-@@ -281,6 +282,10 @@ static inline bool trace_kprobe_error_injectable(struct trace_kprobe *tp)
- {
- 	return false;
- }
-+static inline bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp)
-+{
-+	return false;
-+}
- #endif /* CONFIG_KPROBE_EVENTS */
- 
- static inline unsigned int trace_probe_load_flag(struct trace_probe *tp)
+ static struct kobj_attribute enabled_kobj_attr = __ATTR_RW(enabled);
+ static struct kobj_attribute transition_kobj_attr = __ATTR_RO(transition);
+ static struct kobj_attribute force_kobj_attr = __ATTR_WO(force);
+ static struct kobj_attribute replace_kobj_attr = __ATTR_RO(replace);
+ static struct kobj_attribute stack_order_kobj_attr = __ATTR_RO(stack_order);
++static struct kobj_attribute replaceable_kobj_attr = __ATTR_RW(replaceable);
+ static struct attribute *klp_patch_attrs[] = {
+ 	&enabled_kobj_attr.attr,
+ 	&transition_kobj_attr.attr,
+ 	&force_kobj_attr.attr,
+ 	&replace_kobj_attr.attr,
+ 	&stack_order_kobj_attr.attr,
++	&replaceable_kobj_attr.attr,
+ 	NULL
+ };
+ ATTRIBUTE_GROUPS(klp_patch);
 -- 
 2.47.3
 
