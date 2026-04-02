@@ -1,165 +1,231 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359D835E953
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 19:37:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775158647; cv=pass; b=W6wdwOUSV6IpHHF4qKk0vtJuzx1hz6KhbcoqvvxXQEsDfJlUV9temVr0wtBD4yYBkxFdKhELzb34qy7tFMJCQvgrH19enS/aVHrHZTZlr4Hg+AY5E+nM3Bv/QYEaSHyXAhU2KnJ9XGiQ+hIrfHYRUZqayad574cel1nws5/9qW4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775158647; c=relaxed/simple;
-	bh=doMwYSTuXe/JETZRl1N7Raoz/ERAK0foPnDNZyFizSk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tXF0CLscuJxHHdKHaeC2WuPdSfLTFJTfDCeMu/o8Nr7XiWQr2PjyGbmJb5HFjgpac8kuZmswG4WJfsaeypwejAMoaKu4VPNDNp9bFLvQ4ZLF8A5tVCpVEn33VHz/4bXyNyF/COWF43aXRq2WMjKO0Zn3yGWKeW5VgDv2xysPD2I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JODTMHvv; arc=pass smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C709037F72E
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 19:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775158704; cv=none; b=rpif4SVKVKidQgXINn0iwoRkVH8Mg6KgSFGfuePhe/tha9i55UrcMsBo2OZpuX3MnTa3LtpFsOlCEEzsnv3Tp+/R/OENR9OTHjm9KOH4dAbEn3BYrGjvsOCRxpF3wPz5Ed5UtNFUZDzAtLuW1qMJV23HhQhhP6y2uPkRM2EhrtU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775158704; c=relaxed/simple;
+	bh=gH1srPYnUtB99eDiaygGMvUt391mWRFrgM6G954YoEI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=opvhwCpCKl6Sj73adbVDHKDMSi189QVPRxI/yEbLt5eg8x64WI3pK746kraMhXtFgney/CHJvzz777e/4zPNrypy0SHIauHQ78f+mtmYT2lweExKPJ+l4klIhrfcE/xNX5rR3J+p/feIctT6cG7eNhHEYnH61e3dGm7w8xL+PZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mx1LHpUP; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JODTMHvv"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b7cf4a975d2so163320166b.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 12:37:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775158644; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WU+hG0TMY4Q8APpyIi0V2vO5X+XwSDL+kL21KP5DxJILgIT9Qm0Ti9GY6Y/ILe4hDh
-         kBt6dgXId6hQL7EKND7tzWYS2fQYuFVtg7jIZ4xK2zfLatstN90cymLNt4ObX7tcgNmy
-         vLublqxknEPtM+Gi4WwTIZE7C1/7qv3L9nwXDmWGqx08sbUGafJd6BMPnTwTw4bAMCnU
-         BleQicP5RZ3qipQnSVPEakc/steB6Uff+qvjw42GUhP7Qpcuf7gN1y4bW80JPy7Z34qf
-         wQJqlirB6XPsVlsnIfzlxHGjctEKSmmfeX2OBjfDqiL4lTavOayrxMEk+fQV1HdjAGFW
-         HpBg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VvxBK4KP6iOeP3Xbm2ZCHQUuUvym2Uan3OJJLKtWlWc=;
-        fh=rAMHdh7MRXcFxydS3Pi6JwAQD3NZentisk2Z4fR6a3I=;
-        b=MKgBI58/1C8CzJ6J+seFZS0SgNcWBoBTbKaP99I7cVCss7NppSAWB4kIwivGH2zcsr
-         opB3wlESb84ptz4EntBZCLMkPqGlsbO8pxv5DbpRA8Dpfr1wHI8iuoXqQFI2epJaBg/m
-         YglyCFl1jEWWHdJujdYd8z21BhNFXhOHtnpVU08Xf/YL6xaoVEgMbca5kg7aUd4w/dc9
-         yQLwprSp1lrSCxD90+RoJWslF+Q9g08ICULn5oyQLursC6Fkj1d9exZZJcd4sL4nJCza
-         thaLYuIJeN5GOGHb2lmyCWlO9mNrJiS6dHmcbzbrXMEHt2eIwwvmbXNDit1S5yVMufCv
-         NuAA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mx1LHpUP"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2b256a4c6b5so7492305ad.0
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 12:38:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775158644; x=1775763444; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VvxBK4KP6iOeP3Xbm2ZCHQUuUvym2Uan3OJJLKtWlWc=;
-        b=JODTMHvvyZqxvt1TS85u6XFqiirfBpBno+oIjSasOSVMES9Ugs6IIdMyDMzgvaY0rU
-         qHlFkrSgW4attLx/GnfXy1VtKquehTbbtUPwnot0S9Le2Hy3Cou1OCysyB6/8vqnYuTB
-         SLs74p1eieESlFXQ3d7mQQ3JAI3CYWXwFmxyBqiRb6AwSLYWDkkDMSHWfEPSfxjF/7KH
-         CBsYDXyYhqug6UdzOqYVdbVN+cXfZV8jYCR4d9p15s3trB5hhytMS7L9VGnbs5K6cn2H
-         JQdlyO8Kodqo5shWMien+4CWf3WqPGdDzEsy/tcIW1y4/YVWVT9Oa9Lau0AF8fuFpeqU
-         2Qfg==
+        d=gmail.com; s=20251104; t=1775158702; x=1775763502; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xTckKeD3brFK6cmBCQFzGboCQ4kBNeW+JHlcu0YSo2w=;
+        b=Mx1LHpUPZEVINWAfCKOTThBbOOyeGOU4lEcClKXw/rWQRRguMNqBnTyREHvCgYwqOI
+         JLl/iibwxKuIvA5N6aIodXCYI/i1VZXx/vcFu3ifmOfq/qleucQAtttxqKyuwfjiamhl
+         Cr5EzA5mkfMwuGBFejV44VLf7bSvbRbjn3vyWL1gFGjj4urPE8+ItHOJSVHYvlNgVXaf
+         BDLuBMgp+3VpKnHl7MneDUDpyhA4Cy84k89wQhCUTfW7Bt/WDqNtGfz7IHmv8RHmHm0X
+         nBJeyNEpSZLja9FvOohd/3vY+g8PckIskww/+SkGz2G3/4Ba1U3SP/ftX/isTi1k/SUg
+         zlkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775158644; x=1775763444;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VvxBK4KP6iOeP3Xbm2ZCHQUuUvym2Uan3OJJLKtWlWc=;
-        b=p4anyN9DcBroznrxEQzvpWmZoJbECYy7v2L0HMji43omaA0x6gddcnFDhIgAaBUyJp
-         VhVC/XO8g1Lg/PvEmey3llx3bazhfa7qoEAkEju/ErI8hm1K7VPoXoEk01VTOQtBNh9/
-         7lqmACF9w39PTvt0MVyMXh5Br8sJ1IoKGpdpMe2NCuqT1QnCtOdPKUCgpRXeMFagOxmz
-         kiN1jgv6SWDoRIADe55Y0uIv7if9sfK0cDIJ1GgcEolBjEV+0v1mxj4H586Kf7siKkPK
-         Ys/vlhpF3heF+MCQcTWjkVmfIZKempnguXleIMn6INw2VlzceelkHO7X1DA6UrtoTgQF
-         eQLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWq1kZw+uw0l11PzcCVlAb84EvoP3FNhd61kOdAWCHIT4+HRl+GRINmeL96mQoh12x97Rg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQ3/ultzLbiz6wEyUC6QMoVrCyB+xIrm+5Hv0cGe43JsMEnEHp
-	u/e4VcUrdM1ys2bOB6hGcyEMKjY/KuDRmazMadz9ROvpzAp2HxRyVUufXjM31Loxom+OIoPSBzQ
-	0eOirmT6Oh3fA4vV2zkJqkOvByFq6bkvvLJJzkX3T
-X-Gm-Gg: ATEYQzzWhweHsFGX3lrqxysBI1nRtrIyvr9EiNiJLxBVKRsUpZ1bJOUXt+nPCbPz/v5
-	cLI9bOwYms846HxA4TLL9ES7EjfNQybl/YJzKCqbY7bowL0ScR7DeSFlNCgiITvDWUTVuWpXSXX
-	bD5GxyCMNvvXWIEdtmbW49jvIIpHhukflnTMyZu7LZr69Pkw5zHpoapz/ZDQBGTi0/GjmF1KUjL
-	Meaf0TdD717hcrsgmksiNJns+WD4/pUJNs+dE9qIx7Kx2Po0+FNhOQlbn9cgQleAxcmndNffiUV
-	PzGThuKaH++buD+0NN9E1YZDsN2fxVnWXjcjJEAYqdbCUr1u
-X-Received: by 2002:a17:906:9fc5:b0:b94:cfd:f37b with SMTP id
- a640c23a62f3a-b9c67b99e79mr7310666b.45.1775158643949; Thu, 02 Apr 2026
- 12:37:23 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775158702; x=1775763502;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xTckKeD3brFK6cmBCQFzGboCQ4kBNeW+JHlcu0YSo2w=;
+        b=iEkt4FbGECECHs3pSsl8+3AItUWDhj1DOXJfUN+d36Zk8hoSGp3ZZQT+8wV6aiXRig
+         Jm4ryOBc9wdMFOMb6yRFUYbu6n21kNErqhVh/a+7ylpwZP3nqjyKBK5U4jZQuCY965RJ
+         n+XgPf613vBxdYiZLXs5evXA9J5VFtnVxjkHZWVoHvaufNaelO33x8AvVpvYfHlAoIFE
+         U8ACkYGVsOoSXu9mvzpgO/GAapRJGhSnSHmto887nMy/RVvm841ECYyCqzzqce6L7NRt
+         cg+UiFyAn6er7IZpdmQSrpw/zje93h3VBb9Ul4DrNyLZFij3WXr0HOIW1wneKQYoCtE0
+         Tilg==
+X-Forwarded-Encrypted: i=1; AJvYcCXefGHb9/7Hmuy6+zlhN/BQ96HZVDzYVm5RfMo4s18B5mbniQb1qQOTpBU5979Vlia7yWw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7ezmtzaqyC3gT/5cS1Whysp5oShRb5w8BqtISTejRJGXoZAeN
+	m7+gxi98L5CzfzXdpyE9ZJgnjDfEHmS3UxYNQ2UCLwgnMMR8pvgtEHDMO4ijLOuu
+X-Gm-Gg: AeBDieutGnC5363+e827QKMSpEEdL4eaUOY1PiZu6DPhsX1mbZ4zr6wp5kt7KeUUv+x
+	K2bU6UVrtH6141/xGERMuqz6VAb+ty5KZAR8kpv3EXrxkQgWqXMMbo9Mlp4R2kxjkxhDOeBakGc
+	qPFEWp8z2kZxomgN+GRCfWX7RD5+Cje8L4cPuC3K6+bo1EZPe+nkrq+syALipDLXGI3quyTtukR
+	x4kGfqGtE+v3HwodG0e9QxGa6IO3ZSRWP7hB58gVr3+ZywRo9ZH3yT5UsQ1d1MnzSYoUAmLe0NI
+	vbnCU6io8dU9mzP0SLVwN/Yw2ctZW0Jk1X9d5MfhWnkOJSqLx4bbafq47dK5Q0iiHKLr7NMUIVg
+	xYzzd5GOU8f40tbaM3eocdaPHMcKQY7Wm+xTSy4/R1tIC+r1DZcH4FWR06GA2hU9CWjRWNm+Lpm
+	Y/2Ae0qOM52MgAVVRroG593IskWSLe6K+nrIX222P87sylIh8YzGcy
+X-Received: by 2002:a17:903:38c5:b0:2b0:49e6:9622 with SMTP id d9443c01a7336-2b2817ac962mr5242325ad.37.1775158702118;
+        Thu, 02 Apr 2026 12:38:22 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27478bc96sm37787545ad.33.2026.04.02.12.38.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 12:38:21 -0700 (PDT)
+Message-ID: <a3e2bab6b8e74f27f779f3fae68e409fe90aa291.camel@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/6] bpf: Sort subprogs in topological order
+ after check_cfg()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org, 
+	memxor@gmail.com
+Date: Thu, 02 Apr 2026 12:38:19 -0700
+In-Reply-To: <20260402061744.10885-3-alexei.starovoitov@gmail.com>
+References: <20260402061744.10885-1-alexei.starovoitov@gmail.com>
+	 <20260402061744.10885-3-alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331153413.2469218-1-wusamuel@google.com> <2026040136-ocelot-simply-8981@gregkh>
- <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com> <2026040236-kiln-carat-bb6d@gregkh>
-In-Reply-To: <2026040236-kiln-carat-bb6d@gregkh>
-From: Samuel Wu <wusamuel@google.com>
-Date: Thu, 2 Apr 2026 12:37:12 -0700
-X-Gm-Features: AQROBzBlWCEOhUiKVBdAOMQhIYruKxtYmNT9c2ETd_EsKRwXfwQK638DgBnNr5M
-Message-ID: <CAG2Kctpr7vBm_=Xz4H5FHYAfFxg=bDt35j6B4EprfUGio=Ftew@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 1, 2026 at 9:06=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Apr 01, 2026 at 12:07:12PM -0700, Samuel Wu wrote:
-> > On Wed, Apr 1, 2026 at 2:15=E2=80=AFAM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
-> > > > This patchset adds requisite kfuncs for BPF programs to safely trav=
-erse
-> > > > wakeup_sources, and puts a config flag around the sysfs interface.
-> > > >
-> > > > Currently, a traversal of wakeup sources require going through
-> > > > /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls t=
-o query
-> > > > sysfs is inefficient, as there can be hundreds of wakeup_sources, w=
-ith each
-> > > > wakeup source also having multiple attributes. debugfs is unstable =
-and
-> > > > insecure.
-> > >
-> > > Describe "inefficient" please?
-> >
-> > Ack; I=E2=80=99ll provide a more detailed breakdown in the v4 cover let=
-ter. To
-> > summarize: the "inefficiency" isn't just the number of sources (150),
-> > but the fact that each source has 10 attributes. We are looking at
-> > 1,500+ sysfs nodes to get a full snapshot of the system.
->
-> Wait, no, something is wrong here.  You should NEVER be wanting to
-> combine multiple sysfs files at the same time into a "snapshot" of the
-> system because by virtue of how this works, it's going to change while
-> you are actually traversing all of those files!
+On Wed, 2026-04-01 at 23:17 -0700, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>=20
+> Add a pass that sorts subprogs in topological order so that iterating
+> subprog_topo_order[] walks leaf subprogs first, then their callers.
+> This is computed as a DFS post-order traversal of the CFG.
+>=20
+> The pass runs after check_cfg() to ensure the CFG has been validated
+> before traversing and after postorder has been computed to avoid
+> walking dead code.
+>=20
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-Agree, the current approach with sysfs might have stale values. The
-BPF approach holds a lock while traversing the list. It's not a
-perfect snapshot, but it's internally consistent and arguably better
-than the current sysfs implementation.
+I disagree with assessment regarding stack of pairs being ugly.
+Can be implemented as two stacks and we do it in e.g. check_cfg().
+Other than that, I don't see any logical issues with the patch.
 
-> Why are you trying to read 1500+ sysfs files at once, and what are you
-> doing with that information?  And if you really need it "all at once",
-> why can't we provide it for you in a sane manner, instead of being
-> forced to either walk the whole sysfs tree, or rely on a bpf script?
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
-The data is fundamental for debugging and improving power at scale.
-The original discussion and patch [1] provide more context of the
-intent. To summarize the history, debugfs was unstable and insecure,
-leading to the current sysfs implementation. However, sysfs has the
-constraint of one attribute per node, requiring 10 sysfs accesses per
-wakeup source.
+>  include/linux/bpf_verifier.h |  2 +
+>  kernel/bpf/verifier.c        | 83 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 85 insertions(+)
+>=20
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 090aa26d1c98..4f492eaad5c2 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -787,6 +787,8 @@ struct bpf_verifier_env {
+>  	const struct bpf_line_info *prev_linfo;
+>  	struct bpf_verifier_log log;
+>  	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 =
+for the fake and exception subprogs */
+> +	/* subprog indices sorted in topological order: leaves first, callers l=
+ast */
+> +	int subprog_topo_order[BPF_MAX_SUBPROGS + 2];
+>  	union {
+>  		struct bpf_idmap idmap_scratch;
+>  		struct bpf_idset idset_scratch;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8234d80b892a..c0630691c32d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3742,6 +3742,85 @@ static int check_subprogs(struct bpf_verifier_env =
+*env)
+>  	return 0;
+>  }
+> =20
+> +/*
+> + * Sort subprogs in topological order so that leaf subprogs come first a=
+nd
+> + * their callers come later. This is a DFS post-order traversal of the c=
+all
+> + * graph. Scan only reachable instructions (those in the computed postor=
+der) of
+> + * the current subprog to discover callees (direct subprogs and sync
+> + * callbacks).
+> + */
+> +static int sort_subprogs_topo(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_subprog_info *si =3D env->subprog_info;
+> +	int *insn_postorder =3D env->cfg.insn_postorder;
+> +	struct bpf_insn *insn =3D env->prog->insnsi;
+> +	int cnt =3D env->subprog_cnt;
+> +	int *dfs_stack =3D NULL;
+> +	int top =3D 0, order =3D 0;
+> +	int i, ret =3D 0;
+> +	u8 *color =3D NULL;
+> +
+> +	color =3D kvzalloc_objs(*color, cnt, GFP_KERNEL_ACCOUNT);
+> +	dfs_stack =3D kvmalloc_objs(*dfs_stack, cnt, GFP_KERNEL_ACCOUNT);
+> +	if (!color || !dfs_stack) {
+> +		ret =3D -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * DFS post-order traversal.
+> +	 * Color values: 0 =3D unvisited, 1 =3D on stack, 2 =3D done.
 
-That said, I completely agree that reading 1500+ sysfs files at once
-is unreasonable. Perhaps the sysfs approach was manageable at the time
-of [1], but moving forward we need a more scalable solution. This is
-the main motivator and makes BPF the sane approach, as it improves
-traversal in nearly every aspect (e.g. cycles, memory, simplicity,
-scalability).
+Nit: it appears that the actual color value is never checked, only `if (col=
+or[*])`.
 
-[1]: https://lore.kernel.org/all/20190715214348.81865-1-trong@android.com/
-
-Thanks!
-Sam
+> +	 */
+> +	for (i =3D 0; i < cnt; i++) {
+> +		if (color[i])
+> +			continue;
+> +		color[i] =3D 1;
+> +		dfs_stack[top++] =3D i;
+> +
+> +		while (top > 0) {
+> +			int cur =3D dfs_stack[top - 1];
+> +			int po_start =3D si[cur].postorder_start;
+> +			int po_end =3D si[cur + 1].postorder_start;
+> +			bool pushed =3D false;
+> +			int j;
+> +
+> +			for (j =3D po_start; j < po_end; j++) {
+> +				int idx =3D insn_postorder[j];
+> +				int callee;
+> +
+> +				if (!bpf_pseudo_call(&insn[idx]) && !bpf_pseudo_func(&insn[idx]))
+> +					continue;
+> +				callee =3D find_subprog(env, idx + insn[idx].imm + 1);
+> +				if (callee < 0) {
+> +					ret =3D -EFAULT;
+> +					goto out;
+> +				}
+> +				if (color[callee])
+> +					continue;
+> +				color[callee] =3D 1;
+> +				dfs_stack[top++] =3D callee;
+> +				pushed =3D true;
+> +				break;
+> +			}
+> +
+> +			if (!pushed) {
+> +				color[cur] =3D 2;
+> +				env->subprog_topo_order[order++] =3D cur;
+> +				top--;
+> +			}
+> +		}
+> +	}
+> +
+> +	if (env->log.level & BPF_LOG_LEVEL2)
+> +		for (i =3D 0; i < cnt; i++)
+> +			verbose(env, "topo_order[%d] =3D %s\n",
+> +				i, subprog_name(env, env->subprog_topo_order[i]));
+> +out:
+> +	kvfree(dfs_stack);
+> +	kvfree(color);
+> +	return ret;
+> +}
+> +
+>  static int mark_stack_slot_obj_read(struct bpf_verifier_env *env, struct=
+ bpf_reg_state *reg,
+>  				    int spi, int nr_slots)
+>  {
+> @@ -26274,6 +26353,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
+attr *attr, bpfptr_t uattr, __u3
+>  	if (ret)
+>  		goto skip_full_check;
+> =20
+> +	ret =3D sort_subprogs_topo(env);
+> +	if (ret < 0)
+> +		goto skip_full_check;
+> +
+>  	ret =3D compute_scc(env);
+>  	if (ret < 0)
+>  		goto skip_full_check;
