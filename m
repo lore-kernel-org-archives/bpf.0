@@ -1,81 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE48E3CF032;
-	Thu,  2 Apr 2026 16:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C5236606E
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 17:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775148625; cv=none; b=AgTeEM6AQ7ptE7S8PrKfen5ok8Fm+d+vjl+eK4MXiM84rIe+TaeQJMb3jwO2Oj6IVSSa4XzXY1kIvsNm3Q6AmP4yA+8XlvnQBlHzon8VcjLVoCjE7+niZ8l+fFX53RIR0+ya4ylyoGsn+uaePgnZhdpjbU7t3LqrsSMPWgGq1h4=
+	t=1775149315; cv=none; b=irZEI80hbdbHdZrrIdv0/tN6rPvddhxwCjzoLs1xrLH4f1HjXQ7sTX5h1AwklO2zfl5Jp6jLGfADEJM/WOXEYwVSsBgHm8XyYDWgrLELv/QBbmSjDwdJisu/Ik9dC7Y7en3YknfQTCHFfRqWEn5KkpjI2FBqri9oDb9VJZfrNlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775148625; c=relaxed/simple;
-	bh=HYSwEQAM3aluh/WR570HW3cZYoiqNzQfAvOELSl+2lQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=YsuxwqVAAuD0KdSfcHSt0YCN10DEkg9sw6Rh0eFVvEinxoU1whY5gg2CCg+31FbKOijv3enZRZ/lz9MIuYAerpaO+VCyDfwH00P4mQ5tS4ESG0sxdMADACdpQta/xH/+XVOUIQN3UD7KxkBBzcs8ctla3t+i9477acbz9I3EmnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OXbu/Wb2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775149315; c=relaxed/simple;
+	bh=yqumXcVR3q5lMN1WTcrSXHMqBHPGdTQKt4KuvtGlG2o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eImHnjlwnBRlsyWEnehbLcsL2OewTEwAgrB3PtJApne4UAnl0p4EivYMp8vkeWacJTN9y976UCuvIinfCMdMWz01P46U5Apm4dQ/69TwN0SmiFD6Vjq06nGnzHQO9kpJ7GKG+tI95fWMDQ/WPG1ioNWpnnYq7RWbipVupZkYsBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xl3kqRH7; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OXbu/Wb2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0269DC116C6;
-	Thu,  2 Apr 2026 16:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775148625;
-	bh=HYSwEQAM3aluh/WR570HW3cZYoiqNzQfAvOELSl+2lQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=OXbu/Wb2QIt3UFk/ojO+V9JV+3v2Hw3ZX+Nnrljznu2d77UIvhYB9qHRN40b7WSns
-	 AnLR67Da3w9ErTg6A0ir/RIAAjPu0D40CVa4XwGtr4Z7rfbITo0l9Bn2XIsB/ViX3O
-	 8WT3Ic7ZkPn/c826YgkXUNbxV9DQH/yXt3rqUUiDiBIrlZggMgzrXTU70wamaTM7Z2
-	 jAe2pawMK11B2wyy+kuT56/KKwC3KuvwFZcMisqKujn34M9NJ8DSyY3XeDKiX/hgIk
-	 3quD7EsuLc20vEEDdsN3RifMtQbOVb9lfPtcPwdKuzF2NYV4cGLHwT2rxWSSvcGwM7
-	 KrMveuOexIPpA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CD5F3809A08;
-	Thu,  2 Apr 2026 16:50:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xl3kqRH7"
+Date: Thu, 2 Apr 2026 10:01:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775149303;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=emrgkYOlDfhe8rH8ctFFL/DqqgvZg+1dTxJBJOlURGw=;
+	b=xl3kqRH7VAYFWis2iNQgVDHeXf32AnS+324xsxYf/C1Bp+v2Lkn8x11YIh3SoFhx1R/kFh
+	o1AXQ20/Bsm27sH3hUYYgX2uhcxiTxp+p7Qdd9toNHNHK2QS7SZowFoi4LywdG1+o+KGuC
+	6CqX9YeQyd+PbBROxqFWtpv1SY7MH2Y=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: xulang <xulang@uniontech.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard <eddyz87@gmail.com>, 
+	Hao Luo <haoluo@google.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	=?utf-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>, kernel@uniontech.com, KP Singh <kpsingh@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf v5 1/2] bpf: Fix OOB in pcpu_init_value
+Message-ID: <ac6ejZrcnfQfaTZS@devbig1721.ftw5.facebook.com>
+References: <7653EEEC2BAB17DF+20260402073948.2185396-1-xulang@uniontech.com>
+ <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
+ <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3 1/2] bpf: Reject sleepable kprobe_multi programs at
- attach time
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177514860732.529348.7826737904742910634.git-patchwork-notify@kernel.org>
-Date: Thu, 02 Apr 2026 16:50:07 +0000
-References: <20260401191126.440683-1-varunrmallya@gmail.com>
-In-Reply-To: <20260401191126.440683-1-varunrmallya@gmail.com>
-To: Varun R Mallya <varunrmallya@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- memxor@gmail.com, yonghong.song@linux.dev, jolsa@kernel.org,
- rostedt@goodmis.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
+In-Reply-To: <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu,  2 Apr 2026 00:41:25 +0530 you wrote:
-> kprobe.multi programs run in atomic/RCU context and cannot sleep.
-> However, bpf_kprobe_multi_link_attach() did not validate whether the
-> program being attached had the sleepable flag set, allowing sleepable
-> helpers such as bpf_copy_from_user() to be invoked from a non-sleepable
-> context.
+On Thu, Apr 02, 2026 at 07:17:17AM -0700, Alexei Starovoitov wrote:
+> On Thu, Apr 2, 2026 at 12:43 AM xulang <xulang@uniontech.com> wrote:
+> >
+> > From: Lang Xu <xulang@uniontech.com>
+> >
+> > An out-of-bounds read occurs when copying element from a
+> > BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
+> > same value_size that is not rounded up to 8 bytes.
+> >
+> > The issue happens when:
+> > 1. A CGROUP_STORAGE map is created with value_size not aligned to
+> >    8 bytes (e.g., 4 bytes)
+> > 2. A pcpu map is created with the same value_size (e.g., 4 bytes)
+> > 3. Update element in 2 with data in 1
+> >
+> > pcpu_init_value assumes that all sources are rounded up to 8 bytes,
+> > and invokes copy_map_value_long to make a data copy, However, the
+> > assumption doesn't stand since there are some cases where the source
+> > may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE,
 > 
-> This causes a "sleeping function called from invalid context" splat:
+> why? Just round it up there instead of penalizing perf everywhere.
 > 
-> [...]
+> > skb->data.
+> 
+> what that means?
+> 
+> pcpu_init_value() can access skb->data ?
 
-Here is the summary with links:
-  - [bpf,v3,1/2] bpf: Reject sleepable kprobe_multi programs at attach time
-    https://git.kernel.org/bpf/bpf/c/eb7024bfcc5f
-  - [bpf,v3,2/2] selftests/bpf: Add test to ensure kprobe_multi is not sleepable
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+After bound check, the skb->data can be used in
+bpf_map_update_elem(&percpu_lru_map, &key, skb_data, BPF_NOEXIST)
+which will call pcpu_init_value().
