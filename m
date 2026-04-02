@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466713EF65A;
-	Thu,  2 Apr 2026 15:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E453537E4;
+	Thu,  2 Apr 2026 15:50:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775145048; cv=none; b=HrrohfS8p2qAMBpcsWsWATUCjhKOb8Ls1f1MtgDhNojY1ob+HAV72h8J6M/oh5qvUoOamV60/GA/U0NjAcpY5TeLYtB2WbuIjvmvrHxfW0uzYX3XMW2iXCH2aX+aj8xrhuekfziVRiq9XfUWnmz0fmUAmZsvNUPrvua3ZCphgdU=
+	t=1775145049; cv=none; b=Zwomc+SzMJOVveEKkoKyKd6ZMNR7OzK8YqUGa55/KjyZ0k78ObEaIcv9h/+nlo3CRtBD/7Of84FTdS+AKT9Wb0OZ+jhaesFoiOzHevmHmI1X4oXK3npLGjXxPEStkVIyN4q+7W4q05xevLn5Uio4HTFiH5rR+OkKHNm8CVn1SuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775145048; c=relaxed/simple;
-	bh=J57BK9sBNCaQf7KgZJxvzeutVaG94MCuRhfmbZmW3+E=;
+	s=arc-20240116; t=1775145049; c=relaxed/simple;
+	bh=FaWQTqp6l2AkN18SDD7RryzwFhKgM6MciHDFXpG1hd8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q9sDfZ3wmIBDJSsgwE49zZNR6Xzah+wd6gHHbYwDkRIyOxTPSVWxOmhgC1scIGN4spg9ncXTR9c2rVuIHtxdX0ydtw5BgkWnKEt5FYpMVqzjScgKSeyWxBUBMoFSfAE+wQBJiD1JmD566mS0fAvOA0ZAuC/ak/aMbuy0OAX1lVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O/oMf/1S; arc=none smtp.client-ip=198.175.65.20
+	 MIME-Version:Content-Type; b=VWVKRI0RBqA/lfHqCUsyHrtc/n4X5tn2A+vZ0rVE0rrrXOx1QOnzlaYLWvxCPtAp0cP9d1LPloshNJmjzm1RoYq6omEupjZDeiXMkYWDSmBFLwr1VVrkOMscRyfC8jM5usTkqNGWuouO6qyo8TkpDckSIqcBNeGp+Q33lZ21cTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h43TaKXQ; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O/oMf/1S"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h43TaKXQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775145047; x=1806681047;
+  t=1775145049; x=1806681049;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=J57BK9sBNCaQf7KgZJxvzeutVaG94MCuRhfmbZmW3+E=;
-  b=O/oMf/1S/ywRtYXJ498lTqQCIl7PzUD8e/wA/xGWMimCI1ARrnqm21xD
-   D1RugUD3heoL1FIS8Lhn/XWx5ah0Cw2ArCMpsBeHKlnNRknBVWJMYqvpq
-   kCrCRxaG3rEQPNG+5NL37xRQObI8ECsdaMpy2760G35Ui2xZsUo1hAKU3
-   zRxIjyD88yAKuh2s6BW1PlEH4ksVU+BJWMwryc4n3oJ1RGzigSDRIzb2W
-   ZbgzdGB7t5sFTagMSgFYV97ANx10eZrdbWWhjA2qvocmfPbJ/FxMBvlm2
-   NSHwUfj2jZhTcAi5Wf9T81MkpMDEMx3UbLJQqYLemytmIcVzXcP2YVLNK
+  bh=FaWQTqp6l2AkN18SDD7RryzwFhKgM6MciHDFXpG1hd8=;
+  b=h43TaKXQAedeOCMuOVIK9tWOQ8CEddM+Soc2j008whlsPMAB9DvZAR+W
+   2NcNV1ObDcS96Pik+kbhzo1QJfGvXOXpExX0giOn96mNhuLNFFw7cDtT3
+   5N8giDi07UVtdCGWupqV0gnPU04d3Dr7yM8gBgryoWpNmailn9OPBnz2y
+   MATDs+F7DqbCYU22oRU1t8duQQcgeNDrwyDjcloWSNqjjFkRzoIhU5Gi5
+   0AVltGle3KQYznIsP0XzXVSJ0MLX/hj8JqSGR7xWoSWFFMq8Y14ErG/tc
+   rSndYquiEjhiqgKGbsMiVhqnYeYABGHrkZCnSLhHgXSg7G+qJWsF3kQav
    w==;
-X-CSE-ConnectionGUID: Fuq6ZriUSqePtQwGYSfmqA==
-X-CSE-MsgGUID: LYehvJAhSReHaGevecmlcw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="75927995"
+X-CSE-ConnectionGUID: irCtI054RXWQ98AMvDACOA==
+X-CSE-MsgGUID: J197k3rMSL+gJLQgGnt9OQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11747"; a="75927999"
 X-IronPort-AV: E=Sophos;i="6.23,156,1770624000"; 
-   d="scan'208";a="75927995"
+   d="scan'208";a="75927999"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 08:50:47 -0700
-X-CSE-ConnectionGUID: 9kqh3HVXQvGfGFb0/YUIeQ==
-X-CSE-MsgGUID: /sFYB3ZSSN+MXq8liRdERA==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 08:50:49 -0700
+X-CSE-ConnectionGUID: EeLdGdKqRMSGHYfxzxcTJA==
+X-CSE-MsgGUID: 18ArL703SgKCXhcasNU1NA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,156,1770624000"; 
-   d="scan'208";a="224157705"
+   d="scan'208";a="224157715"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by fmviesa008.fm.intel.com with ESMTP; 02 Apr 2026 08:50:43 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 02 Apr 2026 08:50:46 -0700
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: bpf@vger.kernel.org,
 	aleksander.lobakin@intel.com,
 	bjorn@kernel.org,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v6 net 6/8] selftests: bpf: fix pkt grow tests
-Date: Thu,  2 Apr 2026 17:49:56 +0200
-Message-Id: <20260402154958.562179-7-maciej.fijalkowski@intel.com>
+Subject: [PATCH v6 net 7/8] selftests: bpf: have a separate variable for drop test
+Date: Thu,  2 Apr 2026 17:49:57 +0200
+Message-Id: <20260402154958.562179-8-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20260402154958.562179-1-maciej.fijalkowski@intel.com>
 References: <20260402154958.562179-1-maciej.fijalkowski@intel.com>
@@ -70,65 +70,38 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Skip tail adjust tests in xskxceiver for SKB mode as it is not very
-friendly for it. multi-buffer case does not work as xdp_rxq_info that is
-registered for generic XDP does not report ::frag_size. The non-mbuf
-path copies packet via skb_pp_cow_data() which only accounts for
-headroom, leaving us with no tailroom and causing underlying XDP prog to
-drop packets therefore.
+Currently two different XDP programs share a static variable for
+different purposes (picking where to redirect on shared umem test &
+whether to drop a packet). This can be a problem when running full test
+suite - idx can be written by shared umem test and this value can cause
+a false behavior within XDP drop half test.
 
-For multi-buffer test on other modes, change the amount of bytes we use
-for growth, assume worst-case scenario and take care of headroom and
-tailroom.
+Introduce a dedicated variable for drop half test so that these two
+don't step on each other toes. There is no real need for using
+__sync_fetch_and_add here as XSK tests are executed on single CPU.
 
 Reviewed-by: Björn Töpel <bjorn@kernel.org>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- .../selftests/bpf/prog_tests/test_xsk.c       | 24 ++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/progs/xsk_xdp_progs.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index 62118ffba661..ee60bcc22ee4 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -2528,16 +2528,34 @@ int testapp_adjust_tail_shrink_mb(struct test_spec *test)
+diff --git a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
+index 683306db8594..023d8befd4ca 100644
+--- a/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
++++ b/tools/testing/selftests/bpf/progs/xsk_xdp_progs.c
+@@ -26,8 +26,10 @@ SEC("xdp.frags") int xsk_def_prog(struct xdp_md *xdp)
  
- int testapp_adjust_tail_grow(struct test_spec *test)
+ SEC("xdp.frags") int xsk_xdp_drop(struct xdp_md *xdp)
  {
-+	if (test->mode == TEST_MODE_SKB)
-+		return TEST_SKIP;
++	static unsigned int drop_idx;
 +
- 	/* Grow by 4 bytes for testing purpose */
- 	return testapp_adjust_tail(test, 4, MIN_PKT_SIZE * 2);
- }
+ 	/* Drop every other packet */
+-	if (idx++ % 2)
++	if (drop_idx++ % 2)
+ 		return XDP_DROP;
  
- int testapp_adjust_tail_grow_mb(struct test_spec *test)
- {
-+	u32 grow_size;
-+
-+	if (test->mode == TEST_MODE_SKB)
-+		return TEST_SKIP;
-+
-+	/* worst case scenario is when underlying setup will work on 3k
-+	 * buffers, let us account for it; given that we will use 6k as
-+	 * pkt_len, expect that it will be broken down to 2 descs each
-+	 * with 3k payload;
-+	 *
-+	 * 4k is truesize, 3k payload, 256 HR, 320 TR;
-+	 */
-+	grow_size = XSK_UMEM__MAX_FRAME_SIZE -
-+		    XSK_UMEM__LARGE_FRAME_SIZE -
-+		    XDP_PACKET_HEADROOM -
-+		    test->ifobj_tx->umem_tailroom;
- 	test->mtu = MAX_ETH_JUMBO_SIZE;
--	/* Grow by (frag_size - last_frag_Size) - 1 to stay inside the last fragment */
--	return testapp_adjust_tail(test, (XSK_UMEM__MAX_FRAME_SIZE / 2) - 1,
--				   XSK_UMEM__LARGE_FRAME_SIZE * 2);
-+
-+	return testapp_adjust_tail(test, grow_size, XSK_UMEM__LARGE_FRAME_SIZE * 2);
- }
- 
- int testapp_tx_queue_consumer(struct test_spec *test)
+ 	return bpf_redirect_map(&xsk, 0, XDP_DROP);
 -- 
 2.43.0
 
