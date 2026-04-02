@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4200A3F8809;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6F33F8814;
 	Thu,  2 Apr 2026 23:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775171463; cv=none; b=AuTUu8Vz/S9vDF95LwJGilsUc6XGxYkFmFfa/o2DkEmW4y1Q+5X+dyUNX14RU91906E7Qe8uC1bI9ksE91OO3MUWEEJyEoouq6RbC9XAjTacW+BOgUoWvAqzwU+wHEjw1xjw8Cl2TuZD/RrMKoowrjNeJna89IwwDf95F73Hjdk=
+	t=1775171464; cv=none; b=HX6euJ/xvC8eNcSqIdYncs5nZYN3u2cV2rqRDBp3lcr+QbJLWT1whhLr/fRmuW8+7skkH1Ep8qbgbgp0NpSqu+aNbywlzjpFqY2Zn/ehdaknd99oi4XeyjuhP0d1hNWdFoNo1Uh7SbCwdv6Qgc5Of67qfKT/BayW6eumdJehx/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775171463; c=relaxed/simple;
-	bh=qEL1WHnyMLupb89aYe7aVfVkfN0xk1C1/aIHns41CIA=;
+	s=arc-20240116; t=1775171464; c=relaxed/simple;
+	bh=Pos7Sm9kk44OOfbvR3Lha2uN3NP/5Qu2DVZFmbs+X1s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rv7M4VKz7fGq/fbXVBV0nyILL19flBEBNW9ik89Af/xveRBSt2RdDirYCpDVqQ6FOLxBsNC6L9vgVeXS0coiL/apFlYfNMEo2uoF4tpCJuK7JPWKVkwjdjq4zlZifOWTMb3uN5ByIPmHZ3V/OEmBT++/kwK3p+wFLJ1VDMoj1FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=l/GuXUWd; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=H1pWX5zt411nB3Yy++85dBU3J2YtmVGf4MUDGV2Ch9a3KN5XnDwmEibJjxqixKIFmXr0+IJ5+ezBcaVuAKDf10RvP0DkOYUsDgNMa2BAxOWPjgDkAU8gFvV1+bkCsBbId0RVyIl6Vb9r/wMzowQkZj5toYOgL2t7uIehSHbQYvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YyXipIva; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="l/GuXUWd"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YyXipIva"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=oMGApRAYIXv/6tn2pbPTWFFn930x9ka3EWkjD0AMmRo=; b=l/GuXUWdAwmvpjzR8LrVMtjtHy
-	m9g+uvsrHxkSN25z4Gk02Ghtr2ItC5BM4xYKkuomwmh9HavZWh9bD6VG4jNRicvY0UlaPYUU/MYEi
-	yS7z++CckMeV3zugw3MAvXMtYWLLa4AFcEw2hR/cbRbOoa6vyEm+tGf20RZUQJELjNnDmp/IrlUJN
-	XWdzl14B/l0QNxDK31pt1eaDziekTpL/ngFHISpRBuIf/5ydBm+YN2I8zBtnDliT5T4q2mnrvvKQ5
-	qQsX8vcG2R42D/9nFQm/6qLr1R6c/unYHeyrUcSIu6qFe57Z6RSXfUkMhdCJikuy5yPUTuk8A6F12
-	xoK4RBCQ==;
+	bh=qYmEvxD8y61zMVZCHahcPh20zlaLTeMRAJAFcw+oyis=; b=YyXipIvaO9O2FvcApmPkfj0hVQ
+	RXnRmST97pdeYF6vzP77knItVQQoae5eNlBwIqKV6pF21GHzvmTbvS9OBHFENfgN8RbjQ7bQiDdZI
+	Xiylfvwjyz+9zdA/yGSW5YAPFc1B97TbFcNoHeKK3RrwzOWY4HYUvPEFSQelYtMwDp0FW6fMleaT1
+	1jY1Sxuy2tKFToTD37Xd/nkggYmqcFImcUje8TD37O5p3EFwQUi/DKc5CB9BwwGsjn7f7daHoTv1J
+	RWGs/prwIyaZEQt5lLCxnZtCTFjUx0j6Ze+QYlf1Fc/a4/kc3a6gLt1HvteJIOR8NkSJQBDLsunIp
+	1Ae96rMg==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w8RBQ-0000ml-1c;
-	Fri, 03 Apr 2026 01:10:40 +0200
+	id 1w8RBX-0000nb-09;
+	Fri, 03 Apr 2026 01:10:47 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v11 06/14] net: Proxy netif_mp_{open,close}_rxq for leased queues
-Date: Fri,  3 Apr 2026 01:10:23 +0200
-Message-ID: <20260402231031.447597-7-daniel@iogearbox.net>
+Subject: [PATCH net-next v11 12/14] netkit: Add netkit notifier to check for unregistering devices
+Date: Fri,  3 Apr 2026 01:10:29 +0200
+Message-ID: <20260402231031.447597-13-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260402231031.447597-1-daniel@iogearbox.net>
 References: <20260402231031.447597-1-daniel@iogearbox.net>
@@ -66,212 +66,196 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27959/Thu Apr  2 08:25:45 2026)
 
-From: David Wei <dw@davidwei.uk>
+Add a netdevice notifier in netkit to watch for NETDEV_UNREGISTER events.
+If the target device is indeed NETREG_UNREGISTERING and previously leased
+a queue to a netkit device, then collect the related netkit devices and
+batch-unregister_netdevice_many() them.
 
-When a process in a container wants to setup a memory provider, it will
-use the virtual netdev and a leased rxq, and call netif_mp_{open,close}_rxq
-to try and restart the queue. At this point, proxy the queue restart on
-the real rxq in the physical netdev.
+If this were not done, then the netkit device would hold a reference on
+the physical device preventing it from going away. However, in case of
+both io_uring zero-copy as well as AF_XDP this situation is handled
+gracefully and the allocated resources are torn down.
 
-For memory providers (io_uring zero-copy rx and devmem), it causes the
-real rxq in the physical netdev to be filled from a memory provider that
-has DMA mapped memory from a process within a container.
+In the case where mentioned infra is used through netkit, the applications
+have a reference on netkit, and netkit in turn holds a reference on the
+physical device. In order to have netkit release the reference on the
+physical device, we need such watcher to then unregister the netkit ones.
 
-Signed-off-by: David Wei <dw@davidwei.uk>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+This is generally quite similar to the dependency handling in case of
+tunnels (e.g. vxlan bound to a underlying netdev) where the tunnel device
+gets removed along with the physical device.
+
+  # ip a
+  [...]
+  4: enp10s0f0np0: <BROADCAST,MULTICAST> mtu 1500 qdisc mq state DOWN group default qlen 1000
+      link/ether e8:eb:d3:a3:43:f6 brd ff:ff:ff:ff:ff:ff
+      inet 10.0.0.2/24 scope global enp10s0f0np0
+         valid_lft forever preferred_lft forever
+  [...]
+  8: nk@NONE: <BROADCAST,MULTICAST,NOARP> mtu 1500 qdisc noop state DOWN group default qlen 1000
+      link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+  [...]
+
+  # rmmod mlx5_ib
+  # rmmod mlx5_core
+  [...]
+  [  309.261822] mlx5_core 0000:0a:00.0 mlx5_0: Port: 1 Link DOWN
+  [  344.235236] mlx5_core 0000:0a:00.1: E-Switch: Unload vfs: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  344.246948] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  344.463754] mlx5_core 0000:0a:00.1: E-Switch: Disable: mode(LEGACY), nvfs(0), necvfs(0), active vports(0)
+  [  344.770155] mlx5_core 0000:0a:00.1: E-Switch: cleanup
+  [...]
+
+  # ip a
+  [...]
+  [ both enp10s0f0np0 and nk gone ]
+  [...]
+
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
 Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
 ---
- net/core/dev.c             |   4 +-
- net/core/dev.h             |   7 +++
- net/core/netdev_rx_queue.c | 104 +++++++++++++++++++++++++++++++------
- 3 files changed, 95 insertions(+), 20 deletions(-)
+ drivers/net/netkit.c      | 69 +++++++++++++++++++++++++++++++++++++--
+ include/linux/netdevice.h |  2 ++
+ net/core/dev.c            |  6 ++++
+ 3 files changed, 75 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index f0a83a09477e..f8cc8667dff4 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -12339,10 +12339,8 @@ static void dev_memory_provider_uninstall(struct net_device *dev)
- 
- 	for (i = 0; i < dev->real_num_rx_queues; i++) {
- 		struct netdev_rx_queue *rxq = &dev->_rx[i];
--		struct pp_memory_provider_params *p = &rxq->mp_params;
- 
--		if (p->mp_ops && p->mp_ops->uninstall)
--			p->mp_ops->uninstall(rxq->mp_params.mp_priv, rxq);
-+		__netif_mp_uninstall_rxq(rxq, &rxq->mp_params);
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index b22bd0b6508a..1ec21aef348f 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -983,7 +983,15 @@ static void netkit_del_link(struct net_device *dev, struct list_head *head)
+ 	if (peer) {
+ 		nk = netkit_priv(peer);
+ 		RCU_INIT_POINTER(nk->peer, NULL);
+-		unregister_netdevice_queue(peer, head);
++		/* Guard against the peer already being in an unregister
++		 * list (e.g. same-namespace teardown where the peer is
++		 * in the caller's dev_kill_list). list_move_tail() on an
++		 * already-queued device would otherwise corrupt that
++		 * list's iteration. This situation can occur via netkit
++		 * notifier, hence guard against this scenario.
++		 */
++		if (!unregister_netdevice_queued(peer))
++			unregister_netdevice_queue(peer, head);
  	}
  }
  
-diff --git a/net/core/dev.h b/net/core/dev.h
-index 6516ce2b5517..95edb2d4eff8 100644
---- a/net/core/dev.h
-+++ b/net/core/dev.h
-@@ -12,6 +12,7 @@ struct net;
- struct netlink_ext_ack;
- struct netdev_queue_config;
- struct cpumask;
-+struct pp_memory_provider_params;
- 
- /* Random bits of netdevice that don't need to be exposed */
- #define FLOW_LIMIT_HISTORY	(1 << 7)  /* must be ^2 and !overflow buckets */
-@@ -101,6 +102,12 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
- bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
- bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
- 
-+void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
-+			      const struct pp_memory_provider_params *p);
-+
-+void netif_rxq_cleanup_unlease(struct netdev_rx_queue *phys_rxq,
-+			       struct netdev_rx_queue *virt_rxq);
-+
- /* netdev management, shared between various uAPI entry points */
- struct netdev_name_node {
- 	struct hlist_node hlist;
-diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index 06ac3bd5507f..1d6e7e47bf0a 100644
---- a/net/core/netdev_rx_queue.c
-+++ b/net/core/netdev_rx_queue.c
-@@ -28,6 +28,8 @@ void netdev_rx_queue_unlease(struct netdev_rx_queue *rxq_dst,
- 	netdev_assert_locked(rxq_dst->dev);
- 	netdev_assert_locked(rxq_src->dev);
- 
-+	netif_rxq_cleanup_unlease(rxq_src, rxq_dst);
-+
- 	WRITE_ONCE(rxq_src->lease, NULL);
- 	WRITE_ONCE(rxq_dst->lease, NULL);
- 
-@@ -200,24 +202,15 @@ int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
- }
- EXPORT_SYMBOL_NS_GPL(netdev_rx_queue_restart, "NETDEV_INTERNAL");
- 
--int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
--		      const struct pp_memory_provider_params *p,
--		      struct netlink_ext_ack *extack)
-+static int __netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
-+			       const struct pp_memory_provider_params *p,
-+			       struct netlink_ext_ack *extack)
- {
- 	const struct netdev_queue_mgmt_ops *qops = dev->queue_mgmt_ops;
- 	struct netdev_queue_config qcfg[2];
- 	struct netdev_rx_queue *rxq;
- 	int ret;
- 
--	if (!netdev_need_ops_lock(dev))
--		return -EOPNOTSUPP;
--
--	if (rxq_idx >= dev->real_num_rx_queues) {
--		NL_SET_ERR_MSG(extack, "rx queue index out of range");
--		return -ERANGE;
--	}
--	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
--
- 	if (dev->cfg->hds_config != ETHTOOL_TCP_DATA_SPLIT_ENABLED) {
- 		NL_SET_ERR_MSG(extack, "tcp-data-split is disabled");
- 		return -EINVAL;
-@@ -264,16 +257,48 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 	return ret;
+@@ -1051,6 +1059,50 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
+ 	return 0;
  }
  
--void netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
--			const struct pp_memory_provider_params *old_p)
-+int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
-+		      const struct pp_memory_provider_params *p,
-+		      struct netlink_ext_ack *extack)
++static void netkit_check_lease_unregister(struct net_device *dev)
 +{
-+	struct net_device *orig_dev = dev;
++	LIST_HEAD(list_kill);
++	u32 q_idx;
++
++	if (READ_ONCE(dev->reg_state) != NETREG_UNREGISTERING ||
++	    !dev->dev.parent)
++		return;
++
++	netdev_lock_ops(dev);
++	for (q_idx = 0; q_idx < dev->real_num_rx_queues; q_idx++) {
++		struct net_device *tmp = dev;
++		struct netdev_rx_queue *rxq;
++		u32 tmp_q_idx = q_idx;
++
++		rxq = __netif_get_rx_queue_lease(&tmp, &tmp_q_idx,
++						 NETIF_PHYS_TO_VIRT);
++		if (rxq && tmp != dev &&
++		    tmp->netdev_ops == &netkit_netdev_ops) {
++			/* A single phys device can have multiple queues leased
++			 * to one netkit device. We can only queue that netkit
++			 * device once to the list_kill. Queues of that phys
++			 * device can be leased with different individual netkit
++			 * devices, hence we batch via list_kill.
++			 */
++			if (unregister_netdevice_queued(tmp))
++				continue;
++			netkit_del_link(tmp, &list_kill);
++		}
++	}
++	netdev_unlock_ops(dev);
++	unregister_netdevice_many(&list_kill);
++}
++
++static int netkit_notifier(struct notifier_block *this,
++			   unsigned long event, void *ptr)
++{
++	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
++
++	if (event == NETDEV_UNREGISTER)
++		netkit_check_lease_unregister(dev);
++	return NOTIFY_DONE;
++}
++
+ static size_t netkit_get_size(const struct net_device *dev)
+ {
+ 	return nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_POLICY */
+@@ -1127,18 +1179,31 @@ static struct rtnl_link_ops netkit_link_ops = {
+ 	.maxtype	= IFLA_NETKIT_MAX,
+ };
+ 
++static struct notifier_block netkit_netdev_notifier = {
++	.notifier_call	= netkit_notifier,
++};
++
+ static __init int netkit_mod_init(void)
+ {
 +	int ret;
 +
-+	if (!netdev_need_ops_lock(dev))
-+		return -EOPNOTSUPP;
-+
-+	if (rxq_idx >= dev->real_num_rx_queues) {
-+		NL_SET_ERR_MSG(extack, "rx queue index out of range");
-+		return -ERANGE;
-+	}
-+	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
-+
-+	if (!netif_rxq_is_leased(dev, rxq_idx))
-+		return __netif_mp_open_rxq(dev, rxq_idx, p, extack);
-+
-+	if (!netif_get_rx_queue_lease_locked(&dev, &rxq_idx)) {
-+		NL_SET_ERR_MSG(extack, "rx queue leased to a virtual netdev");
-+		return -EBUSY;
-+	}
-+	if (!dev->dev.parent) {
-+		NL_SET_ERR_MSG(extack, "rx queue belongs to a virtual netdev");
-+		ret = -EOPNOTSUPP;
-+		goto out;
-+	}
-+
-+	ret = __netif_mp_open_rxq(dev, rxq_idx, p, extack);
-+out:
-+	netif_put_rx_queue_lease_locked(orig_dev, dev);
+ 	BUILD_BUG_ON((int)NETKIT_NEXT != (int)TCX_NEXT ||
+ 		     (int)NETKIT_PASS != (int)TCX_PASS ||
+ 		     (int)NETKIT_DROP != (int)TCX_DROP ||
+ 		     (int)NETKIT_REDIRECT != (int)TCX_REDIRECT);
+ 
+-	return rtnl_link_register(&netkit_link_ops);
++	ret = rtnl_link_register(&netkit_link_ops);
++	if (ret)
++		return ret;
++	ret = register_netdevice_notifier(&netkit_netdev_notifier);
++	if (ret)
++		rtnl_link_unregister(&netkit_link_ops);
 +	return ret;
-+}
-+
-+static void __netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
-+				 const struct pp_memory_provider_params *old_p)
- {
- 	struct netdev_queue_config qcfg[2];
- 	struct netdev_rx_queue *rxq;
- 	int err;
- 
--	if (WARN_ON_ONCE(ifq_idx >= dev->real_num_rx_queues))
--		return;
--
- 	rxq = __netif_get_rx_queue(dev, ifq_idx);
- 
- 	/* Callers holding a netdev ref may get here after we already
-@@ -294,3 +319,48 @@ void netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
- 	err = netdev_rx_queue_reconfig(dev, ifq_idx, &qcfg[0], &qcfg[1]);
- 	WARN_ON(err && err != -ENETDOWN);
  }
+ 
+ static __exit void netkit_mod_exit(void)
+ {
++	unregister_netdevice_notifier(&netkit_netdev_notifier);
+ 	rtnl_link_unregister(&netkit_link_ops);
+ }
+ 
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index e8aa9cc4075d..47417b2d48a4 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3420,6 +3420,8 @@ static inline int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
+ int register_netdevice(struct net_device *dev);
+ void unregister_netdevice_queue(struct net_device *dev, struct list_head *head);
+ void unregister_netdevice_many(struct list_head *head);
++bool unregister_netdevice_queued(const struct net_device *dev);
 +
-+void netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
-+			const struct pp_memory_provider_params *old_p)
+ static inline void unregister_netdevice(struct net_device *dev)
+ {
+ 	unregister_netdevice_queue(dev, NULL);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index f8cc8667dff4..f66b0d27ba65 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -12373,6 +12373,12 @@ static void netif_close_many_and_unlock_cond(struct list_head *close_head)
+ #endif
+ }
+ 
++bool unregister_netdevice_queued(const struct net_device *dev)
 +{
-+	struct net_device *orig_dev = dev;
-+
-+	if (WARN_ON_ONCE(ifq_idx >= dev->real_num_rx_queues))
-+		return;
-+	if (!netif_rxq_is_leased(dev, ifq_idx))
-+		return __netif_mp_close_rxq(dev, ifq_idx, old_p);
-+
-+	if (WARN_ON_ONCE(!netif_get_rx_queue_lease_locked(&dev, &ifq_idx)))
-+		return;
-+
-+	__netif_mp_close_rxq(dev, ifq_idx, old_p);
-+	netif_put_rx_queue_lease_locked(orig_dev, dev);
++	ASSERT_RTNL();
++	return !list_empty(&dev->unreg_list);
 +}
 +
-+void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
-+			      const struct pp_memory_provider_params *p)
-+{
-+	if (p->mp_ops && p->mp_ops->uninstall)
-+		p->mp_ops->uninstall(p->mp_priv, rxq);
-+}
-+
-+/* Clean up memory provider state when a queue lease is torn down. If
-+ * a memory provider was installed on the physical queue via the lease,
-+ * close it now. The memory provider is a property of the queue itself,
-+ * and it was _guaranteed_ to be installed on the physical queue via
-+ * the lease redirection. The extra __netif_mp_close_rxq is needed
-+ * since the physical queue can outlive the virtual queue in the lease
-+ * case, so it needs to be reconfigured to clear the memory provider.
-+ */
-+void netif_rxq_cleanup_unlease(struct netdev_rx_queue *phys_rxq,
-+			       struct netdev_rx_queue *virt_rxq)
-+{
-+	struct pp_memory_provider_params *p = &phys_rxq->mp_params;
-+	unsigned int ifq_idx = get_netdev_rx_queue_index(phys_rxq);
-+
-+	if (!p->mp_ops)
-+		return;
-+
-+	__netif_mp_uninstall_rxq(virt_rxq, p);
-+	__netif_mp_close_rxq(phys_rxq->dev, ifq_idx, p);
-+}
+ void unregister_netdevice_many_notify(struct list_head *head,
+ 				      u32 portid, const struct nlmsghdr *nlh)
+ {
 -- 
 2.43.0
 
