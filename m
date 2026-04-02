@@ -1,149 +1,125 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201B535AC34
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 06:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801072FE582
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 06:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775110410; cv=none; b=px12HZu6QB0CkVf39s4nqySDp7HwzvMJ+U46Lba0V+j0Bl1zwEu4U1bwSkDo3Uj/91unTKdgBqKc17bZR22mOUSeNsMGfU19V/3FphqrDonIQ19SbAdd3vy4ab23na55BB2LppaQoqkjk0Mro0xao+0elPzyLOgwWhF+/DseCiE=
+	t=1775110668; cv=none; b=pULJr698DkNkIN5YILQffXtMfdz5DY0IflhTsrRybuGhfYBloCe1Hsj1H6P5vYcn0oaQL9KOERbG4EloZSvU5BR1YAtI80Ukp6Mw+cIFOb/fIYiJBwq3BpvBOJTQjLjlVfq9Zu7OV9RdtCf8UrVBW6ZelS7tn5PWf4Tdsxs5y1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775110410; c=relaxed/simple;
-	bh=xwROnB8ZHZwreos1FVUWmA9xvD2L+dNOy4XxTaASs7Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E3agF+ArKKLYEGl60uKNC5jqi4EwLQpwz+btfxw41VJFcxiLON332ploI0/uwWAHeqkZoG7MLg1IvZv6/CNZ9uO2UzSLt0OVIi1h2xWmjT9d0lMduFo6vbw1XFI+XPI8ox92553dXQpgw9cu6nc+VH/5C/gHEtl3LgYG6INafGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DvR7wtzy; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775110668; c=relaxed/simple;
+	bh=yWkcGi4UUALVzgfpUgHUSLrs1F8YJMFuW8/rau4pF6w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OYdxkFDQtzVxZl67W58EP7xeQ3dGiP5N1X/wMLwA2vaXFKJE5VDISf3h6hjJXNbr+uXngOjlkQX7M5x+sF95vpQQWcuYfmZ4KpKMGHBPwVuRU7AiMlOTPawkITouVdrT5vdbWzOzbkB5Zo+Ua8It1EmdbPtD3g7pdVpkS02uQXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HKNr/f9I; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DvR7wtzy"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775110396;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xlihXvEHaOsXUwuLdGN3XtJu9WHJhoFdD4aqE/VGw5M=;
-	b=DvR7wtzyf7HLbiFsO7vzzGV8m5fC3jA8QrDm2YzRIg7luXJU0cnp/yqmgPntYqWrIMwddZ
-	T5VSLSDM60q0Q+n2oMk9U01rKE2AxcCDYtlndMEVKr6naQ2JiL1n5pzu94N1/xh3Rz3JcW
-	iPFGswgGY3MWmSA2lzRruITkKkUS/tE=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: menglong8.dong@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	jiang.biao@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	mark.rutland@arm.com,
-	martin.lau@linux.dev,
-	mathieu.desnoyers@efficios.com,
-	mhiramat@kernel.org,
-	rostedt@goodmis.org,
-	sdf@fomichev.me,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v3 0/6] bpf trampoline support "jmp" mode
-Date: Thu,  2 Apr 2026 14:12:51 +0800
-Message-ID: <20260402061251.273705-1-leon.hwang@linux.dev>
-In-Reply-To: <20251118123639.688444-1-dongml2@chinatelecom.cn>
-References: <20251118123639.688444-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HKNr/f9I"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c76b87931b8so310982a12.2
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 23:17:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775110666; x=1775715466; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZmBUNXUuOTvapYQgn6kyZhVOe4AU+s3WJ4pJlYoq2vw=;
+        b=HKNr/f9IbOW8ftbsKK8JBQDVMyj7YtXwB9UqCcUyadGZ/DRNAlrCy6VHllmOO5MrHW
+         JA7dE9cPcqqPcvOLhDbv/5xRfqXnzuuiQSSLdAoxvhmTPqBL6qH+tICSmS6mlqajZl3N
+         MAshjzcXPo8f6rjgGIqsWZgD60wFQTtBGHq+PnrILwbI2UYcZNXCxF+iI1nHWoiwWxBY
+         EHydtUMRTzD2Fs3cldjPauHALMvKWqjcFoiPoyijJ9zyxmn88rZQeH72UiJbNOks62P/
+         CuX1Fs1rDu58H6JRJPjOf275BSMsE+ut0KrUfYOv30ThD5zMYMkMYnP1Zq4zThXMQ3YK
+         X48Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775110666; x=1775715466;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZmBUNXUuOTvapYQgn6kyZhVOe4AU+s3WJ4pJlYoq2vw=;
+        b=o0t2KuU99vEwjqKhkp+UBH2juU9evYoiahVhncp/JnPawXF7N31ekS038W0nFnuuRA
+         EnvV5QypdfjlGpBIf+4/izwNpkPpuOVyKP5YdgZWcilfMCgJ5pOqFCBidCjY5vjKg7sa
+         AqnmnK4GvME2zF0RsrygXwKegOxGV1MNYB2WT3KE/xFNjy5duSZJV50M+VZ7r4JDllEk
+         eA5vj2V9ecLzKORuEpRVvmwzOLdJv4kX1sgLB7YTvNdaRdinDbAGETukyCM6cTuJa08E
+         LAx6KNr7iKXCbpc1HMpvNpHcvJrcZdXb7KwQm9xL6EmqBt55D9jj91zkZXhsSYD0hctl
+         MnKA==
+X-Gm-Message-State: AOJu0Yw/Vr5GZ7mekubblFrh/UaYZB4ijAvTcjOrSEKAtpGBw9LnCmTF
+	gAtIDlGkugWtd/MZn/qMHXZ8q/P7OoPFlZfD/L1tlfeZD4zxdT0x6+OZ3yhMSQ==
+X-Gm-Gg: ATEYQzwpKDsPqG+DNroMIcpo6PFSmFQUMRMff80/coFwlu9/GQ1xwdxmH2Tt0Bc2wA7
+	XGU+zVq+4q9dTMZvetgrpx8vYnQgewzAopRRfTi1a6apeo7H33lhKMn4/zG0BeUqp0az/wW7z4E
+	miOsjn1lGJpYYnNvN04/JQ6gJXR2cXqUTgDRjvqKclt1o2vLefkGnxx3mYTC9vw/ODIiiiuI7sJ
+	N0gbv1UGlXNOLkyp5k5Lmb7Yt2U78DBouKQYh9FoxQlUk1q9asa/TYIc4VBKJA197005g8LQ4lG
+	fukjFUu8Mo49eaoEAKx0+Ior2uyRqbnP8iUnk/ZWXfDwgkaR8lFf4UujQ9UaF4EbvA/98cs5+1m
+	Fvon9qBzyZLr0ehNdo6o2bVOPj2qB+YasiE1SwbVoCjH6WfAK7hije+y6PY/ohcPS+lnisbkHGh
+	pCNjPwARfudKRftwlqJusIBt90BO/9FNFyHyIa3637n2tix24GhQrCP15/K+tL80yY8Xim6MqOO
+	LCo0g6i/zt6ra5t/kEYXmMQTcgwrEdA/5gGlJlS4Zx38q882p/kiiG8H1O80Q==
+X-Received: by 2002:a05:6a20:9190:b0:398:9662:110e with SMTP id adf61e73a8af0-39f108fc58amr2326487637.8.1775110666200;
+        Wed, 01 Apr 2026 23:17:46 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b60199sm1678503b3a.25.2026.04.01.23.17.45
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 01 Apr 2026 23:17:45 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH v2 bpf-next 0/6] bpf: Prep patches for static stack liveness.
+Date: Wed,  1 Apr 2026 23:17:38 -0700
+Message-ID: <20260402061744.10885-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On Tue, Nov 18, 2025 at 08:36:28PM +0800, Menglong Dong wrote:
->For now, the bpf trampoline is called by the "call" instruction. However,
->it break the RSB and introduce extra overhead in x86_64 arch.
->
->For example, we hook the function "foo" with fexit, the call and return
->logic will be like this:
->  call foo -> call trampoline -> call foo-body ->
->  return foo-body -> return foo
->
->As we can see above, there are 3 call, but 2 return, which break the RSB
->balance. We can pseudo a "return" here, but it's not the best choice,
->as it will still cause once RSB miss:
->  call foo -> call trampoline -> call foo-body ->
->  return foo-body -> return dummy -> return foo
->
->The "return dummy" doesn't pair the "call trampoline", which can also
->cause the RSB miss.
->
->Therefore, we introduce the "jmp" mode for bpf trampoline, as advised by
->Alexei in [1]. And the logic will become this:
->  call foo -> jmp trampoline -> call foo-body ->
->  return foo-body -> return foo
->
->As we can see above, the RSB is totally balanced after this series.
->
+From: Alexei Starovoitov <ast@kernel.org>
 
-Hi, this is a late footnote for this optimization.
+v1->v2:
+. fixed bugs spotted by Eduard, Mykyta, claude and gemini
+. fixed selftests that were failing in unpriv
+. gemini(sashiko) found several precision improvements in patch 6,
+  but they made no difference in real programs.
 
-As this optimization landed in the 6.19 kernel, the function graph feature
-of bpfsnoop [1] cannot work because of the missing tracee's FP/IP for
-fexit.
+v1: https://lore.kernel.org/bpf/20260401021635.34636-1-alexei.starovoitov@gmail.com/
+First 6 prep patches for static stack liveness.
 
-Before this optimization,
+. do src/dst_reg validation early and remove defensive checks
 
-caller
--> call icmp_rcv                caller IP/FP
-   -> call trampoline           icmp_rcv IP/FP
-      -> call icmp_rcv body     trampoline IP/FP
-      <- return to trampoline
-   <- return to caller
+. sort subprog in topo order. We wanted to do this long ago
+  to process global subprogs this way and in other cases.
 
-After this optimization,
+. Add constant folding pass that computes map_ptr, subprog_idx,
+  loads from readonly maps, and other constants that fit into 32-bit
 
-caller
--> call icmp_rcv                caller IP/FP
-   -> jump to trampoline
-      -> call icmp_rcv body     trampoline IP/FP
-      <- return to trampoline
-   <- return to caller
+. Use these constants to eliminate dead code. Replace predicted
+  conditional branches with "jmp always". That reduces JIT prog size.
 
-As a result, the function call stack entry for icmp_rcv has gone.
+. Add two helpers that return access size from their arguments.
 
-It can be confirmed by bpf_get_stack*() helpers.
+Alexei Starovoitov (6):
+  bpf: Do register range validation early
+  bpf: Sort subprogs in topological order after check_cfg()
+  selftests/bpf: Add tests for subprog topological ordering
+  bpf: Add bpf_compute_const_regs() and bpf_prune_dead_branches() passes
+  bpf: Move verifier helpers to header
+  bpf: Add helper and kfunc stack access size resolution
 
-$ sudo bpfsnoop -k icmp_rcv --output-stack -v
+ include/linux/bpf_verifier.h                  |  60 +++
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/const_fold.c                       | 396 ++++++++++++++++
+ kernel/bpf/verifier.c                         | 422 ++++++++++++++----
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_scalar_ids.c |  20 +-
+ .../bpf/progs/verifier_subprog_topo.c         | 226 ++++++++++
+ .../selftests/bpf/progs/verifier_unpriv.c     |   6 +-
+ .../selftests/bpf/verifier/junk_insn.c        |   4 +-
+ 9 files changed, 1045 insertions(+), 93 deletions(-)
+ create mode 100644 kernel/bpf/const_fold.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_subprog_topo.c
 
-In 6.14,
+-- 
+2.52.0
 
-0xffff8000802bda44:bpfsnoop_fn+0x6a4
-0xffff8000802bda44:bpfsnoop_fn+0x6a4
-0xffff8000802bd064:bpf_trampoline_6442573163+0xa4
-0xffffc7825c984df0:icmp_rcv+0x8
-0xffffc7825c91bcb8:ip_protocol_deliver_rcu+0x48
-0xffffc7825c91bfd4:ip_local_deliver_finish+0x8c
-0xffffc7825c91c0d0:ip_local_deliver+0x88
-
-In 6.19,
-
-0xffffffffc0209069:bpfsnoop_fn+0x449
-0xffffffffc01ef2a4:bpf_trampoline_6442568724+0x64
-0xffffffffb1085cda:ip_protocol_deliver_rcu+0x1ea
-0xffffffffb1085d96:ip_local_deliver_finish+0x86
-0xffffffffb1085e95:ip_local_deliver+0x65
-
-So, it would surprise users who care about the tracee entry.
-
-[1] https://github.com/bpfsnoop/bpfsnoop
-
-Thanks,
-Leon
-
-[...]
