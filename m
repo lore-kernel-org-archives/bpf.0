@@ -1,174 +1,229 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B545535F600
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 22:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775168778; cv=pass; b=nHF5EzjZpJAVfqHZUD4qHFRfVJkeXxn/7PUU5Gj9q5uMu4bO0vwtaS2hZrbqVfwpVwoCGdbkQXgv+5VOeENUq94B8Ag4QbyflQEyvV10gCXk8cnEEISBUJXO/RwXs0YGqSdStdqVQ3TOfzUenR2ZlFaqWSMU9OmSBWTQT3mww1Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775168778; c=relaxed/simple;
-	bh=ZqjNWJbJmQ8nL1bGclL7WbJjk1MqSuCTT8nfhtiSkcs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dAsHo4WGssUAwmNjnIWyxAIcQcAB6+2+DZbAz9XMUmN7b41pYJs0P+CcNHfNdCVdJOZNP7aZJMYggYw/yzVbS0OQrORp0B32+BFF7ZAUR4XKv+bUt8KGgW+4MWYIOrtGAnkkPQL5+pQ45TrnNCQ2xsR8yuLhmALxoBqzq5ROpGc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mv+oNrYM; arc=pass smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8353EF0DD
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 23:00:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775170833; cv=none; b=VVDjr6BuXUFyvhvFZZyVcu+yR9uascjM52lkp95e2TSoa74vYC2ZvA8nCWFfOWQelFUa3XvPPEZSsU/tt1LdM5TnPnxyP+5hOCSetuNMUf73szAUDz9ac5oQBGGYTFB+tksYlPqXLCxiV/d5wPEHqCCVp2axiZO3XvJwbV7Vh+U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775170833; c=relaxed/simple;
+	bh=UNP/i09LPDrr5ofwIWjeoZzvRploUuqwNY48RB4hwgE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E/9oPJE2+FNI3/xRJAQRicRRhb6aGk7zPHf09jlxyKu1XfP7Z1J/kHQVSCQCKr72WE4LMkZumonlXqgbm4lcgCFursoEdL0zE9fmLNAAeI+onxqonS8igwD+rt4cub8YP9AVccRb55VyyeukEYHWLEsCdBjnobtECaRZy8RrpXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RnMDDQpl; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mv+oNrYM"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-79a2ee65171so20778667b3.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 15:26:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775168776; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Gity2RfI+OXJXN311y0BIX509sQWrXpFMwWIgncSTq+PUyV7/IMjkLHJ/Isav25mvW
-         LH5MetISorlyC1CdDK1lckOm1YHyeLqeOPlEgfzJzh5H1ZNqB8I/nJPREQfDS+oPMre6
-         F6FqwIVuAu5ybFC1j7I4PRcAe8/BxA+qOriUH8S+00GPqwUtKLz5I3vrQv90rMMadKxq
-         IWD91SQ/EMVhx1Wl0MttI67JVA08KhvLxbuSotsDJUBHiV/eEGqaY2MoXu5D+KfjM53V
-         erVBT2IpS9QURWETSOePFUuNOWZlYDDz0h1ZkcB6QP7u2h5NqtTjGmIGyhW3gv50R2ca
-         PwAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6LHEI3WW8FiopucHtwh0ed4WUaNTj18F5QHAJf1RK/4=;
-        fh=PvYPcwWkAFTdNDlHuRMEXK4H0X8YFjGgiYsXgOFIKvA=;
-        b=GqGaudNJ4xt+vDaEb9q8IxorrJ8KrgWuHTbwwhZJ+9P2JS76+ZWTILgh8qwKZ1NDoK
-         KYUHRHtsCs4RZEYMVs5d+JvvUuDrKGE1VmIBH8w+zzBwJeL+9dAmZv+2i9aIJefu110D
-         gOVszf5/bsrBh50pB/EAB/M4HYzE09yX/WmhvWXDc9UwFQqLU2tX5zJkbkkl4LIpUD99
-         7OwBN6qSdaF/NBMBIjID8vS1FnwkdH1M7tgcarlPo3Wk3ByVv3FG1OroHoi+hlnDXr59
-         RVZ57fUpqO83FLI+K6XPWH9daX+jCxl3vYOotH8Iv8gg1hKoQCyQBqYI7DoE6h0UNgM6
-         tppw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RnMDDQpl"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2c5b3d8eab1so441882eec.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 16:00:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775168776; x=1775773576; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6LHEI3WW8FiopucHtwh0ed4WUaNTj18F5QHAJf1RK/4=;
-        b=mv+oNrYM1sC4mTs+8g4fYA9bwwWhc5WdyF+H6EHUegheLlA0r5LeDNu9xbEqnuR7cH
-         RRzKeAqJ5h5w3LX1dJof9htHpLkYr3EMpCvKj0LF6q4ecttkIoDNdeuEavOn7P98X+gJ
-         x9TC9jn/TckPFmwz8F3lWMt3ioxTqDd88cyCKPPk2wsRWoGzJ3RyzCv/poYA2slEU0Vd
-         J13z1xLMT5L0edJmtoOfPQIkZALH4caYH+3kOQHwyPTR4UJjSwU6EpDgYmP0TqvoxBn1
-         TrtGrAJN/sQJTK6VTHSlCIVOloBHIBkFk2yeUO+rfVIjk4V/wDEd4/xCiZsKFtL2NVmk
-         862g==
+        d=gmail.com; s=20251104; t=1775170829; x=1775775629; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yd3zShC3yJuODpByZ8XJoFDD8uo8tECYjo5Z5kbc02I=;
+        b=RnMDDQplJFelTDLkVqWYULFg4HJqfJYxcSmeq76s0gdV/9iJn6pjKLpNyL7MW+tYlN
+         39vLpNRUGW8/2WVX7xuxh0NBrulzo9XlK5bYAH3GdqaHRm/+q1rzcRq/5IFoID5tDw+W
+         plbuSbJCfdaqHiKl4HTMx17jIypgGSusMKnRzlqWedgW1KucD6frpZ+EAOpd+PYv/l72
+         N6H+lYDVwRF3CKeWv4yOutGQjCz4KRNqERvba2LBSscQaC2QXvRBp8To+A+SKLCm+ALx
+         6/iCJMvYP34UMMp23ZInHsZyjs8dZPBaH6zIlokcx/JXl2uwfOWlSYdd2HKY/DGKiEx/
+         ut2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775168776; x=1775773576;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6LHEI3WW8FiopucHtwh0ed4WUaNTj18F5QHAJf1RK/4=;
-        b=jVogK2xlj2UiGHsHhejV47NzIzeJ0zpqDYOf1esIKxm3yKTnmW6ShY4OeXDWISXDR4
-         1mJ/D+embWA4LIuHfSVBzqBeTD77V7LUUYyAxehuxVMs1bRZRp4Nbmw4fw+7LwcFfRLS
-         zpqlrZWRPRlPJk0T67ESQO9YJ1d2W5pNmAr+4FHl6ZI+y0JAJLzBB2PSMNACXZHYN2um
-         UXB+fGCcweroFcy6SJ+RUg+CcZ5/CehtpmFT0ET8HQSRz+M0Wd9rH9zVgXyda2K/frIf
-         jUoPk5KDc7x7Kfy1ZZTRdJAGErTKrSMNvWDBXqA444pvB3dDkFt4DbIPJbvzNA3SsoiT
-         RC4A==
-X-Gm-Message-State: AOJu0YxwRSJoYwP+En+pm4u0q2hn650LocpdF8X2f9Sc8Tr3fCvxuu3f
-	E3KQU7QrPidNFk+ok19TvUWZMmPTDyh4v++tEo+6OHS08PjDoEMXtQoUL7lpIX6sgjlvUu2BulA
-	DwuyoLYrOzh9bMmhHe41bitOl7B2W+l8=
-X-Gm-Gg: AeBDies2j/Sr127NScYAmgu7f0biBV+vBv62jdl/D5phVSIX2vabdPJjzieJaMJVngG
-	D55fnI1E3IF+FyAnfL9/G8Ezw+n1NThFkQomKNshoDd15reAb0TtW0LkFqukjubAZLUqVgq9a8a
-	bBskDWNC77AQnIN+f3HJHZDj627NFOIsqAUIy6X4EbyJMSdO4Af0/RvdxWuCjT9M/05nXvKfM8k
-	lrrocnFcRgS/kyyjW8yS4t7tF03gI4he5WrQ5azYPuBhGjMf9CDZ+2UA0dmcKeUVbNFMJSFlFcG
-	/L3fxEw=
-X-Received: by 2002:a05:690c:2609:b0:79a:b409:b62c with SMTP id
- 00721157ae682-7a4d3dc879cmr13014277b3.22.1775168776348; Thu, 02 Apr 2026
- 15:26:16 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775170829; x=1775775629;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yd3zShC3yJuODpByZ8XJoFDD8uo8tECYjo5Z5kbc02I=;
+        b=riLIinPBCXagv8uyn4c40hQjWXHRJOf9fb8v2g3Yv7IBN5C/Gd/ZidVU3YHLU2yA2v
+         vWjZvrxIFFGlOO5uXWHkSQtdr7cDrdWFiDXgPQJzib8VhJkVsXjQHeXXFAhQuDHKSXDw
+         oL8OqKvYZiHQUeVofevQRFmpNLTYvLw9LmJ4NGGs1iIY378eTmgY+PT5jS2uvOfnwcmB
+         xPnGBiirbsDF+fW0718nh+86ybFV5vzPtgWikqKe/iVIJXqv1+lDQu82jeZjXoW2a5mq
+         6E2mGsO5MMpsdMzr/YW3ChmINspjc/oJ9gpZbArqpPjkN1EMGoG0IV1WAPJknRloLBlV
+         dFmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJkXJ5ggnhHfTVyXqHbu5Tb5C7NNVv6UWXAXJ824w41PiITKNLJ/ASZb1DA9ZAnSqzkAM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfAQ345qhu+WUVbAa2op6DLrjEaC7Z8Wzm23Rhh+qESssW7Ohb
+	N+1nsFklwNh2IY8A1eF4y3MwQJ7k8VqGUDXTHK44Fp+Na2ncyu4fvS0=
+X-Gm-Gg: AeBDiesgwv82BXGDIJcytFKP10UqOQl4FZ1O3SaJJPvA/lys8vMgU7PIoUwT0iSFXm2
+	pqckmqok6RFWVSb/g4/s38PGnZejYsmdPfWzU9lNQv2E/MqhgwLYKifE47wK1llLasPEGViURMK
+	9rDdJhQSV0LSppgOV+VZzhOdUE+1OEzAjM/ZCB5DLsjWog4VvsW7U4WevVQ1f/D1AiO15EFanqK
+	a2v+bZvmIMd4xb1a5zTF/RtUB/w15nZ2A84Ud4Y/Vg4/9Z+u+ZSXhaflRy4rdhPQKiBkJ9oASbh
+	tHT0YWsHqB/8fgpb8uG97H7A+7fV4TZ1M3huIneRU/wY4UGhTuna3X5n0a/HeFhqge9cfs4Pm5X
+	TEWHT24UhHP0vkDsIA+oLfQ0mFwOK/LW8UiTZ9SOUXUV6FtJgouinXkKx4aDuf+PArVg2AgrOGQ
+	NixjNGjR2AzBKfyxsinuNdlvqEIkE+r8XcJtK+EtXe0GyAEj1+JacwCIMGlvAEZKgQdOysSRbHu
+	riGjiWY5umaOlHH4+r34eSJKk4/
+X-Received: by 2002:a05:7301:2b07:b0:2ca:f181:9b17 with SMTP id 5a478bee46e88-2cbfca5c3dfmr519556eec.33.1775170828604;
+        Thu, 02 Apr 2026 16:00:28 -0700 (PDT)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca7cae9e9esm3403523eec.23.2026.04.02.16.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 16:00:28 -0700 (PDT)
+Date: Thu, 2 Apr 2026 16:00:27 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>, metze@samba.org,
+	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>,
+	io-uring@vger.kernel.org, bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next v2 2/4] net: call getsockopt_iter if available
+Message-ID: <ac71Czwqzsyw0Lyd@mini-arch>
+References: <20260401-getsockopt-v2-0-611df6771aff@debian.org>
+ <20260401-getsockopt-v2-2-611df6771aff@debian.org>
+ <ac1I_CMr43XTpvHj@mini-arch>
+ <ac1Pzt4tpt73SkC6@gmail.com>
+ <ac1fjvVDfatpXwPY@mini-arch>
+ <ac6MAdYyuPGsB4am@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402012727.3916819-1-yonghong.song@linux.dev> <20260402012803.3920450-1-yonghong.song@linux.dev>
-In-Reply-To: <20260402012803.3920450-1-yonghong.song@linux.dev>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 2 Apr 2026 15:26:05 -0700
-X-Gm-Features: AQROBzBdJq2-XiLjLgt30VfVNynbwGHKWOM6xJF7qawMTZsea0kXEH08SiJQe-4
-Message-ID: <CAMB2axMGn8wWTWDiDQUTAS5A2Ey0FGMxEu-FryvaLAv_UBhrTA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 07/10] bpf,x86: Implement JIT support for stack arguments
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ac6MAdYyuPGsB4am@gmail.com>
 
-On Wed, Apr 1, 2026 at 6:28=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
-ev> wrote:
->
-
-[...]
-
->                 case BPF_JMP | BPF_CALL: {
-> +                       int off, base_off, n_stack_args, kfunc_stack_args=
- =3D 0, stack_args =3D 0;
-> +                       u16 outgoing_stack_args =3D stack_arg_depth - inc=
-oming_stack_arg_depth;
->                         u8 *ip =3D image + addrs[i - 1];
->
->                         func =3D (u8 *) __bpf_call_base + imm32;
-> @@ -2449,6 +2549,29 @@ st:                      if (is_imm8(insn->off))
->                         }
->                         if (!imm32)
->                                 return -EINVAL;
+On 04/02, Breno Leitao wrote:
+> Hello Stanislav,
+> 
+> On Wed, Apr 01, 2026 at 11:10:22AM -0700, Stanislav Fomichev wrote:
+> > So maybe something like this is better to communicate your long term intent?
+> > 
+> > 	} else if (ops->getsockopt_iter) {
+> > 		optval = sockptr_to_iter(optval)
+> > 		optlen = sockptr_to_iter(optlen)
+> > 		do_sock_getsockopt_iter(...) /* does not know what sockpt_t is */
+> > 	}
+> > 
+> > ?
+> > 
+> > Then your new do_sock_getsockopt_iter is sockptr-free from the beginning
+> > and at some point we'll just drop/move those sockptr_to_iter calls?
+> 
+> Sure, that would work as well. It would look like the following, from my
+> current implemention:
+> 
+> +static int sockptr_to_sockopt(sockopt_t *opt, sockptr_t optval,
+> +                             sockptr_t optlen, struct kvec *kvec)
+> +{
+> +       int koptlen;
 > +
-> +                       if (src_reg =3D=3D BPF_PSEUDO_CALL && outgoing_st=
-ack_args > 0) {
-> +                               n_stack_args =3D outgoing_stack_args / 8;
-> +                               base_off =3D -(prog_stack_depth + incomin=
-g_stack_arg_depth);
-> +                               ip +=3D push_stack_args(&prog, base_off, =
-n_stack_args, 1);
-> +                       }
+> +       if (copy_from_sockptr(&koptlen, optlen, sizeof(int)))
+> +               return -EFAULT;
 > +
-> +                       if (src_reg !=3D BPF_PSEUDO_CALL && insn->off > 0=
-) {
-> +                               kfunc_stack_args =3D insn->off;
-> +                               stack_args =3D kfunc_stack_args > 1 ? kfu=
-nc_stack_args - 1 : 0;
-> +                               base_off =3D -(prog_stack_depth + incomin=
-g_stack_arg_depth);
-> +                               ip +=3D push_stack_args(&prog, base_off, =
-kfunc_stack_args, 2);
+> +       if (optval.is_kernel) {
+> +               kvec->iov_base = optval.kernel;
+> +               kvec->iov_len = koptlen;
+> +               iov_iter_kvec(&opt->iter_out, ITER_DEST, kvec, 1, koptlen);
+> +               iov_iter_kvec(&opt->iter_in, ITER_SOURCE, kvec, 1, koptlen);
+> +       } else {
+> +               iov_iter_ubuf(&opt->iter_out, ITER_DEST, optval.user, koptlen);
+> +               iov_iter_ubuf(&opt->iter_in, ITER_SOURCE, optval.user,
+> +                             koptlen);
+> +       }
+> +       opt->optlen = koptlen;
 > +
-> +                               /* mov r9, [rbp + base_off - 8] */
-> +                               off =3D base_off - 8;
-> +                               if (is_imm8(off)) {
-> +                                       EMIT4(0x4C, 0x8B, 0x4D, off);
-> +                                       ip +=3D 4;
-> +                               } else {
-> +                                       EMIT3_off32(0x4C, 0x8B, 0x8D, off=
-);
-> +                                       ip +=3D 7;
-> +                               }
-> +                       }
+> +       return 0;
+> +}
+> +
+>  int do_sock_getsockopt(struct socket *sock, bool compat, int level,
+>                        int optname, sockptr_t optval, sockptr_t optlen)
+>  {
+> @@ -2366,15 +2390,31 @@ int do_sock_getsockopt(struct socket *sock, bool compat, int level,
+> 
+> +       } else if (ops->getsockopt_iter) {
+> +               struct kvec kvec;
+> +               sockopt_t opt;
+> +
+> +               err = sockptr_to_sockopt(&opt, optval, optlen, &kvec);
+> +               if (err)
+> +                       return err;
+> +
+> +               err = ops->getsockopt_iter(sock, level, optname, &opt);
+> +
+> +               /* Always write back optlen, even on failure. Some protocols
+> +                * (e.g. CAN raw) return -ERANGE and set optlen to the
+> +                * required buffer size so userspace can discover it.
+> +                */
+> +               if (copy_to_sockptr(optlen, &opt.optlen, sizeof(int)))
+> +                       return -EFAULT;
+> +       } else if (ops->getsockopt) {
+> ....
+> 
+> > I hope this way it will be easier to review protocol handler changes.
+> > 
+> > For example, looking at your AF_PACKET patch, you won't have to care
+> > about flipping the source and doing the revert. Most/all of the changes will
+> > be simple:
+> > - s/get_user(len, optlen)/len = opt->optlen/
+> > - s/put_user(len, optlen)/opt->optlen = len/
+> > - s/copy_from_user(xxx, optval, len)/copy_from_iter(xxx, len, &opt->iter_in)/
+> > - s/copy_to_user(optval, xxx, len)/copy_to_iter(xxx, len, &opt->iter_out)/
+> 
+> That is, in fact, a great proposal. It will make the protocol changes review
+> way easier.
+> 
+> This is what I have right now.
+> 
+> 	typedef struct sockopt {
+> 		struct iov_iter iter_out;
+> 		struct iov_iter iter_in;
+> 		int optlen;
+> 	} sockopt_t;
+> 
+> 
+> And then, the drivers change would be as simple as:
+> 
+>  static int packet_getsockopt(struct socket *sock, int level, int optname,
+> -                            char __user *optval, int __user *optlen)
+> +                            sockopt_t *opt)
+>  {
+>         int len;
+>         int val, lv = sizeof(val);
+> @@ -4065,8 +4066,7 @@ static int packet_getsockopt(struct socket *sock, int level, int optname,
+>         if (level != SOL_PACKET)
+>                 return -ENOPROTOOPT;
+> 
+> -       if (get_user(len, optlen))
+> -               return -EFAULT;
+> +       len = opt->optlen;
+> 
+>         if (len < 0)
+>                 return -EINVAL;
+> @@ -4115,7 +4115,7 @@ static int packet_getsockopt(struct socket *sock, int level, int optname,
+>                         len = sizeof(int);
+>                 if (len < sizeof(int))
+>                         return -EINVAL;
+> -               if (copy_from_user(&val, optval, len))
+> +               if (copy_from_iter(&val, len, &opt->iter_in) != len)
+>                         return -EFAULT;
+>                 switch (val) {
+>                 case TPACKET_V1:
+> @@ -4171,9 +4171,8 @@ static int packet_getsockopt(struct socket *sock, int level, int optname,
+> 
+>         if (len > lv)
+>                 len = lv;
+> -       if (put_user(len, optlen))
+> -               return -EFAULT;
+> -       if (copy_to_user(optval, data, len))
+> +       opt->optlen = len;
+> +       if (copy_to_iter(data, len, &opt->iter_out) != len)
+>                 return -EFAULT;
+>         return 0;
+> 
+> This is not fully tested yet, but, in case you want to see how this looks like
+> so far, I have it in https://github.com/leitao/linux/tree/b4/getsockopt_v3.
+> 
+> I will submit a newer version after I am done with the testing.
+> 
+> Thanks for the insights,
+> --breno
 
-Do we need to make sure RSP is 16-byte aligned before passing arg
-through stack per x86-64 ABI?
-
->                         if (priv_frame_ptr) {
->                                 push_r9(&prog);
->                                 ip +=3D 2;
-> @@ -2458,6 +2581,14 @@ st:                      if (is_imm8(insn->off))
->                                 return -EINVAL;
->                         if (priv_frame_ptr)
->                                 pop_r9(&prog);
-> +                       if (stack_args > 0) {
-> +                               /* add rsp, stack_args * 8 */
-> +                               EMIT4(0x48, 0x83, 0xC4, stack_args * 8);
-> +                       }
-> +                       if (src_reg =3D=3D BPF_PSEUDO_CALL && outgoing_st=
-ack_args > 0) {
-> +                               /* add rsp, outgoing_stack_args */
-> +                               EMIT4(0x48, 0x83, 0xC4, outgoing_stack_ar=
-gs);
-> +                       }
->                         break;
->                 }
->
-> --
-> 2.52.0
->
->
+LGTM, thanks!
