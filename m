@@ -1,36 +1,36 @@
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277033191BB;
-	Thu,  2 Apr 2026 06:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682333191BB;
+	Thu,  2 Apr 2026 06:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775109853; cv=none; b=STAujPE4AmDAQuEHaVQe5iBAR2pkky72rRSPc9GgSF7wnCKOtR3beS4aeTHG/sduSmUH3dI1UgnJb6vXZVkurbtoy3UAdfZWZDxHh+gmS7nfhp8NIHAVEuRnvGx8qemBAKcd6zzuSIX08pczP8I29if3XSx3ts4g0u34j9dUQuU=
+	t=1775109859; cv=none; b=ACvtzyCCbBW6DluKJPmgklTAGbHnhdz3tLB836eOaoTwia0vOSByQcGE1GiwGFXvKjDlyJla41qDcLs53Q9+5tdNyTN+iptzJJCLA0igfOuKqSAzg/3A4Ze7yAB7IJIzvuSKHAyJ59l62Nx+9PzXjHwS2hfMrFuYREWEEqxMYYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775109853; c=relaxed/simple;
-	bh=vr98BifwCZR7ddPRugqbqnMKsjEEt47aZ8P/B5wnW4w=;
+	s=arc-20240116; t=1775109859; c=relaxed/simple;
+	bh=YX13sLn6pbupoGA3DKDkyfLdyhL4r9A4RGREkwORFZs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sDBM6XAVcqJMMfqZY4CFb7WwJsfIoac2FPW5mdVlr7mMACZCBRD7CdemybIuysWLjQr+oEyI2OIUmGgUu0y7pBSF8A44ohtV7TtACSAQE2jW7cD8c7HM+BMYLFaZtSo/B/6DxEAJDa+Ex5CftdPMM9qPo8JXhGopXx3rMLG/HN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=cf1NmFq6; arc=none smtp.client-ip=54.254.200.92
+	 MIME-Version; b=nXfGvVmITKUqrp1b0lVbYCrNR/pOvb0syxvDKxTU2CzJtg4bSwuLAM8iKbx8X3E9khVcF94qmAuYgrtJ8biBFrw0QsFAdaWX82aJXKB5fq4skRZVzAVEdB+XSzrOg0ge9yypw2HAG1XFKt1qUIoPc/m5bSlSOBGCXTRbGZxIZz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=bnkOl+4z; arc=none smtp.client-ip=54.254.200.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="cf1NmFq6"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="bnkOl+4z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1775109821;
-	bh=3aGRFJphaUxd0Jn9c3ZHF1I5KiJsDbSpxhypActK2ow=;
+	s=onoh2408; t=1775109824;
+	bh=yJVKkdX5pQnrGRfKGg0vycfLU3Us3QpJnv9UWNiLO1Y=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=cf1NmFq6yUjTiMmIgBVGUICGROTGFyu/tpK0DwHJrO/lxlimmBsirbGsAGyL/NdLG
-	 UUTMU0TUApanbE2+Ngo+9/1UaMPePbH4MnFO3ne1QHw6rhaMhDqfuyb/TkOCRQDvFO
-	 Wer+sepPW10yymdUHBDr1VNgm4WDNOKAuKgXKQzk=
-X-QQ-mid: zesmtpip3t1775109815t2a2f4c98
-X-QQ-Originating-IP: 5VQu7i5lJBIvGpkFvQZjcyCQ0Bwq4HoTj9GxTdi6wIg=
+	b=bnkOl+4z5ispl4+DuE3QldUNGC2CFth3zDGQbzfJbPlcbmo7v6o9YOsb7+JvIWGS/
+	 /B/BzeQN1xB4fr7nlYEFjN+fhvDE5Nx1dUA2elJ6Fh32rGG/Fi42JtN+3LJO37MAty
+	 ZgCd6xqJtc7gEf4teQ0wLPLgOF9uOk/k7UsQ4JeU=
+X-QQ-mid: zesmtpip3t1775109811tec0d8b89
+X-QQ-Originating-IP: 1deptUJdddSIGEE04lN3IerCh2Q8X3KSeZ4XfiA50Hs=
 Received: from xulang-PC ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 02 Apr 2026 14:03:33 +0800 (CST)
+	id ; Thu, 02 Apr 2026 14:03:29 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 15171942429747109532
+X-BIZMAIL-ID: 15530819969611979821
 EX-QQ-RecipientCnt: 20
 From: xulang <xulang@uniontech.com>
 To: martin.lau@linux.dev
@@ -53,9 +53,9 @@ Cc: andrii@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	Lang Xu <xulang@uniontech.com>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Add test for cgroup storage OOB read
-Date: Thu,  2 Apr 2026 14:03:23 +0800
-Message-ID: <A9CDD4FD062FBDCD+20260402060323.1995132-3-xulang@uniontech.com>
+Subject: [PATCH bpf v3 1/2] bpf: Fix OOB in pcpu_init_value
+Date: Thu,  2 Apr 2026 14:03:22 +0800
+Message-ID: <979DE74421E5836D+20260402060323.1995132-2-xulang@uniontech.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260402060323.1995132-1-xulang@uniontech.com>
 References: <20260402060323.1995132-1-xulang@uniontech.com>
@@ -68,155 +68,68 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: Nfza43amelPGrH7cQlN+qASgAPqRII/nAQ/mIiPpJjGc2Puvu2FGj6Xu
-	X/AUopsxCS1NGrfyGA6/+hs5Xv15GHnbrOVgBi69eOt+f81L4gZdaUlCFXLC8EtTCIzo1UO
-	2+KJv08O8W1aTFb/f0M7oqNcKIeavYr6KaNfnR6zAIhLO0Q6d27nIqK3rgpIX/LE2y2TR3K
-	S8d390vSSf16lMZW31uVdDCqb4CewHS/jUoUL9VEhHK6DbGj7RPi8ECcQjnvCLBo3dQETA2
-	3QKpuniULQbU3DLf7S8wcV0B8pf+xmYU2xENE8Y6vn3mh6vNL1u9TIRAlxM3v3QN2gkaB9x
-	qzp9+mYDpfMMwx+AV1pFpmSA4lNW3EecBjnMBEH7BAvJ1U00ZWZYobDA4n6EnEaOrjqdV5m
-	1b1N/VrqGhDkUgrJAddgNdnctcOyR1mkj2a5YWQypTbElpdQy/44WtD/ZjRq677y5kjBg/o
-	N0G/4ea2H+1Fz4pH42KllhNbFD4hsi/De35JLXOo5YWN87Vm13BvX7oqCy7Rqbbg2RiQkda
-	9ikKlPhoX6AvtHdcJ+JcnvqJLrYeLVKYFtN7w+WfiiGStygUJ579wc9QE/LaQz/jflddH3/
-	Musa6DYMd4HV9N9nTq6sZcO4Dd1klH5vRlhzKKTy2kvfR5srDzO/HvkHwVm7MqDMy3S/owD
-	kT9bftWoVvumMeJF/sXLClunAq0k2YF4Ft+w9a060GY9ipDkF7O6qB4Umfc8Hu8C4K3/Tt7
-	WgXNwv3v8mZvV/6+3xztmOxQyfpSvgGTSjJuM7JtwEPIa6R+hGsFo4p1v3O5AyfDIty39p0
-	iv9aBijM3ah70wwlAKJbtCbk/hx6OPf9gnNhPeJpQkslDJYjIJ96aoqjRuyk76g9dmqW0eD
-	0JhJIKuvhqhWAhmiJ/Ix8dY/KwkC3uwuTh9MqXy+I0cFhIqtMZjFgENW5vEBT6j+60DK9+J
-	iXh4ZGFTvJctxa7nFTZoxw/6DFy97rkTEWgL+9qiMtOTWfnSMvG3F18fp21Xyw9WnKaTqsh
-	UMT+YqLW8KOACLLw9KLnF0e9QBHUhwEYsMUlwJHHJCA3gjmtPwGGh/KLeCe5BUOSiyFAWai
-	MmOGKFNjhGhH8b9KZe/JYlR2vZW5nGxCx3pBdpDJRruFx5C+7s9izE=
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+X-QQ-XMAILINFO: Mx4bSM6s4wfd2ph7+OKP/Q32A250a+33swQN3Weg6TfGQlrMl4/1DlTn
+	zH6nO2/MyGnTHT14QBCRM/zWUkoUZNCuaxFrXVhWlTGwrhJ0SyGZeXi5pwokqMBZ89JHOjP
+	o7+AHQJsBogqrIk/XsLKqaky+9/uCRRtRcC89b9OW17gWHCPRP5KOPiEPRXEXkcUM8I81jI
+	xkcp8cX/ood8+BW14g6wxXaONegOze1/57oKcrTJdz1PmTnPzIKnZ84ZOgZqkmTWt0/0dHg
+	afPkR2RL+a/5lpFqApMafvLSuRm407quGWFcU2OukZQ9+mySpR0Dx8WYtdGLX5AYhSZcEmm
+	q/wNzwU8oBgBdKFA9IKOp3mNa8+PqbSxdggR6Ru2FAAFIS6Z1YGzSvwZObMNrZoiN3+LKjY
+	h1tkrKJ2O17FUEbGEImK+TWnis9kyHvxz8wHbr39oSxXRPYPwKIrXCnfiSZFl7rbPIC7wUl
+	ZRpAAVP04KwHLfVFVWJ7jTdADtXs8cSO7y0+PPVVMSb3oXZxh987prB4p1y6vx7ZfQFhnCC
+	X6HOPChC/0mG35Wni0JinBzFUbzUORWQH0VOmzwW2iHZeBruwllCgEBCRUV0K/VkzF/oTOQ
+	MCDWX9+c31kgJ3b58F077kZ27eGGrKEurGfaw3Pnjjjx+F55Nqg+5CVsjL/B9co4Tj9pMfR
+	J+xEue8Gagbtiuz9tfBsvQHys7UopWgL2N1bqUUNBVPLTNnZ23yL9VXvXoChnibkTAtHVzi
+	+I5rdWLPTv5VbBj66Nmsyz/EUcdHenDGOu7RbdLY9PLG3wodBE1ZeAdMZchgW60QDOPBlku
+	kLUAuakxyFffRZgZdt/XWbACrQKoMn4oWNfVxZBXbvseSXZ2W7f1df2kTIkEcNHzYUxp1Yt
+	X+Q5c5qbUBFDPXHzkKszroq78iN4vpwx1YaudOjIM6YgiXaWoBGmExJBHQyr9f16TEJOeb7
+	dy1hD2ek2Qp4NrSln9x+xWo5of6XC1qWpg3aM1zUy5UjZK+J1mOTUlTZQM9+OZCfhcd3tIp
+	sYyVMkttFBT+6mXsRvSTknh4TNXCoFwwLcLIQd2y3vu0h2bu7OEUDghQOce11cRxCaR91HU
+	nNtaH7nkgtky180vd1ndQGTPg7Op+UPk65wrkzqQv6c5QrKuaH1Wl3ZBSe9aH7B0ojoUM48
+	ImJBp/7/pdRLcbY=
+X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
 X-QQ-RECHKSPAM: 0
 
 From: Lang Xu <xulang@uniontech.com>
 
-Add a test case to reproduce the out-of-bounds read issue when copying
-from cgroup storage maps with unaligned value_size.
+An out-of-bounds read occurs when copying element from a
+BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
+same value_size that is not rounded up to 8 bytes.
 
-The test creates:
-1. A CGROUP_STORAGE map with 4-byte value (not 8-byte aligned)
-2. A LRU_PERCPU_HASH map with 4-byte value (same size)
+The issue happens when:
+1. A CGROUP_STORAGE map is created with value_size not aligned to
+   8 bytes (e.g., 4 bytes)
+2. A pcpu map is created with the same value_size (e.g., 4 bytes)
+3. Update element in 2 with data in 1
 
-When a socket is created in the cgroup, the BPF program triggers
-bpf_map_update_elem() which calls copy_map_value_long(). This function
-rounds up the copy size to 8 bytes, but the cgroup storage buffer is
-only 4 bytes, causing an OOB read (before the fix).
+pcpu_init_value assumes that all sources are rounded up to 8 bytes,
+and invokes copy_map_value_long to make a data copy, However, the
+assumption doesn't stand since there are some cases where the source
+may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE, skb->data.
+the verifier verifies exactly the size that the source claims, not
+the size rounded up to 8 bytes by kernel, an OOB happens when the
+source has only 4 bytes while the copy size(4) is rounded up to 8.
 
-Link: https://lore.kernel.org/all/204030CBF30066BE+20260312052525.1254217-1-xulang@uniontech.com/
+Fixes: d3bec0138bfb ("bpf: Zero-fill re-used per-cpu map element")
+Reported-by: Kaiyan Mei <kaiyanm@hust.edu.cn>
+Closes: https://lore.kernel.org/all/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
 Signed-off-by: Lang Xu <xulang@uniontech.com>
 ---
- .../selftests/bpf/prog_tests/cgroup_storage.c | 42 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_storage.c      | 43 +++++++++++++++++++
- 2 files changed, 85 insertions(+)
+ kernel/bpf/hashtab.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-index cf395715ced4..5b56dc893e73 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index bc6bc8bb871d..fb8123cfa5ec 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1056,7 +1056,7 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
  
-+#include <unistd.h>
-+#include <sys/socket.h>
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
-@@ -94,3 +96,43 @@ void test_cgroup_storage(void)
- 	close(cgroup_fd);
- 	cleanup_cgroup_environment();
- }
-+
-+void test_cgroup_storage_oob(void)
-+{
-+	struct cgroup_storage *skel;
-+	int cgroup_fd, sock_fd;
-+
-+	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
-+	if (!ASSERT_OK_FD(cgroup_fd, "create cgroup"))
-+		return;
-+
-+	/* Load and attach BPF program */
-+	skel = cgroup_storage__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_storage__open_and_load"))
-+		goto cleanup_cgroup;
-+
-+	skel->links.trigger_oob = bpf_program__attach_cgroup(skel->progs.trigger_oob,
-+							      cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.trigger_oob, "attach_cgroup"))
-+		goto cleanup_skel;
-+
-+	/* Create a socket to trigger cgroup/sock_create hook.
-+	 * This will execute our BPF program and trigger the OOB read
-+	 * if the bug is present (before the fix).
-+	 */
-+	sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_OK_FD(sock_fd, "create socket"))
-+		goto cleanup_skel;
-+
-+	close(sock_fd);
-+
-+	/* If we reach here without a kernel panic or KASAN report,
-+	 * the test passes (the fix is working).
-+	 */
-+
-+cleanup_skel:
-+	cgroup_storage__destroy(skel);
-+cleanup_cgroup:
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_storage.c b/tools/testing/selftests/bpf/progs/cgroup_storage.c
-index db1e4d2d3281..59da1d95e5b9 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_storage.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_storage.c
-@@ -21,4 +21,47 @@ int bpf_prog(struct __sk_buff *skb)
- 	return (*counter & 1);
- }
- 
-+/* Maps for OOB test */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, __u32);  /* 4-byte value - not 8-byte aligned */
-+} cgroup_storage_oob SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);  /* 4-byte value - same as cgroup storage */
-+} lru_map SEC(".maps");
-+
-+SEC("cgroup/sock_create")
-+int trigger_oob(struct bpf_sock *sk)
-+{
-+	__u32 key = 0;
-+	__u32 *cgroup_val;
-+	__u32 value = 0x12345678;
-+
-+	/* Get cgroup storage value */
-+	cgroup_val = bpf_get_local_storage(&cgroup_storage_oob, 0);
-+	if (!cgroup_val)
-+		return 0;
-+
-+	/* Initialize cgroup storage */
-+	*cgroup_val = value;
-+
-+	/* This triggers the OOB read:
-+	 * bpf_map_update_elem() -> htab_map_update_elem() ->
-+	 * pcpu_init_value() -> copy_map_value_long() ->
-+	 * bpf_obj_memcpy(..., long_memcpy=true) ->
-+	 * bpf_long_memcpy(dst, src, round_up(4, 8))
-+	 *
-+	 * The copy size is rounded up to 8 bytes, but cgroup_val
-+	 * points to a 4-byte buffer, causing a 4-byte OOB read.
-+	 */
-+	bpf_map_update_elem(&lru_map, &key, cgroup_val, BPF_ANY);
-+
-+	return 1;
-+}
-+
- char _license[] SEC("license") = "GPL";
+ 		for_each_possible_cpu(cpu) {
+ 			if (cpu == current_cpu)
+-				copy_map_value_long(&htab->map, per_cpu_ptr(pptr, cpu), value);
++				copy_map_value(&htab->map, per_cpu_ptr(pptr, cpu), value);
+ 			else /* Since elem is preallocated, we cannot touch special fields */
+ 				zero_map_value(&htab->map, per_cpu_ptr(pptr, cpu));
+ 		}
 -- 
 2.51.0
 
