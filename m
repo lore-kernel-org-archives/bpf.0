@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FFC33FAE1D;
-	Thu,  2 Apr 2026 23:11:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40333EF678;
+	Thu,  2 Apr 2026 23:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775171465; cv=none; b=MWQZ7zYOxQYAcq7thVc6BgKZwJM7ZLt28QNup07jwAuLKR+JlSJhwTEfvwnpPHRJvDgQgLS+2HNvQd8KLKAK9TcVvNzQG29AJp/7aTDQCEEBbiUP2sKMnNMrGafDSkmCoud38uCA9R+YW0+NRbBrfUTxpEJHRGF0OEwPGvI6B1g=
+	t=1775171467; cv=none; b=hslYLWBRO/x4eY0CBuhYh/hHoAqpHGrkgPW++C9VvNp/nTP1KhPVTQPqs/EjzuDy2V0If1GoN0UrzTj1mo9yhme1vdEEewLGqSjBFjZLpjHvz4nMO9aI/X4F0aLxiL/mmFQySnphxhFfku76pVEf6ymc2e201H9mqklNFrQXbCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775171465; c=relaxed/simple;
-	bh=zR6c6mqY/6by1CIOazCE4ed1nsCvJhuIMrcjGxeVKzQ=;
+	s=arc-20240116; t=1775171467; c=relaxed/simple;
+	bh=A0k6D5pmzfHiA0YiiKxu/g7pg9r3TMcsyLuKDKF97Ng=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DkJrLyVQK7Gq8xxX0UI5DCPwMJi02LcK1if4QtRrMM9klnlU5GcbGD4GIaKrm0I1ck9Vuwe+1AD2aa7ZFERuVrquEib5TB4JpEe+/004XBEAKASOX7PwhyJT8OnjbBIo/xOMmrQtXwjFkfKwOzV6JNx4is10oEmXNS9VuVqB1/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Z4MgPpDB; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=hxF1h5Zs6lyTqCqWX1l0phIoryTkXLgEJydgEkIX3srAZMFGHe9NKeVy77EuQ0ixA1O+QgW1XzdhBEYEkxqwKJUktvPSVR1P0hCVJHMI67QkKMubSIYgDBx7dSC/vkQUC4RonyjjnTDNQweqTqz7vEhyQ/oHlDiTE5PUuFhi8+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=KyOBLQe+; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Z4MgPpDB"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="KyOBLQe+"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=xZ/YtbQlYYg59TdTJXxzZcV29zU0wyUCx8oQVBASr/M=; b=Z4MgPpDBwOVCbpgV/a6BCvuf7/
-	g32b6JOB5pPMLnjpEdXqVFWhosgAwKPRwKTNAEvXdnCHwY8vJ7QWbaVwsZvsQktFtEIB+8ScCPtpO
-	DIKP1hOMf+lm/9n1F+UcqmnIsufozRoSESTPTy2Q+jHsgjv4kQpu1/MReTjnNC20yCCE/eUeXDomQ
-	UOTvuq8SXVivmWs7C0V/U9uWKinj7+bBJE1HtBgN2n+C4MdDcFHvPWREh4i1beTV85o7b8lkLdBdD
-	53v9LE4IdSO2hkXIgUCkCgUQ1/LKaDoqJPsZb0whLjsplkBY7pqDSqMWrllac4FmOv5LcDHcYbe1P
-	Oz5KN+pQ==;
+	bh=vSWNL4ZsdVyxy7lJUvZZ8boDIZ/iMqlQ5pgxpJkU0a0=; b=KyOBLQe+DH5GLv+Fw0zDZHIFLq
+	GPj4MJUhaRCJv2R0UHQ2pPSJFCL1NYfkU9zA38KVES9ZmUCdIeO0z5tzc3khCOtp5AFYZx1Ksydsy
+	8EEr0Blg3/vf5ghEXbmzDk4MUwJRkTdHQvm5bEs4UA4RTgvUEdWOAN+IBNaoJXJSA15ojhAcY8dA8
+	dPZ3/miqD9Vfcv/MWLHYZ5gGmJ1/zueZ5OnXOlHrsp6o6AS4zWTk1jSQYEOVPSxZN97GaaR6sGkOY
+	KFydSyQlP1Ax9JQ3mfVA1wBLctFcw1vP0GO4l1HGvia6s/HTAJTPpp40864dlNWqgr3okpv09VRhX
+	wQjmjeAw==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1w8RBS-0000n5-21;
-	Fri, 03 Apr 2026 01:10:42 +0200
+	id 1w8RBY-0000o0-0T;
+	Fri, 03 Apr 2026 01:10:48 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v11 08/14] xsk: Extend xsk_rcv_check validation
-Date: Fri,  3 Apr 2026 01:10:25 +0200
-Message-ID: <20260402231031.447597-9-daniel@iogearbox.net>
+Subject: [PATCH net-next v11 13/14] netkit: Add xsk support for af_xdp applications
+Date: Fri,  3 Apr 2026 01:10:30 +0200
+Message-ID: <20260402231031.447597-14-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260402231031.447597-1-daniel@iogearbox.net>
 References: <20260402231031.447597-1-daniel@iogearbox.net>
@@ -66,70 +66,203 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27959/Thu Apr  2 08:25:45 2026)
 
-xsk_rcv_check tests for inbound packets to see whether they match
-the bound AF_XDP socket. Refactor the test into a small helper
-xsk_dev_queue_valid and move the validation against xs->dev and
-xs->queue_id there.
+Enable support for AF_XDP applications to operate on a netkit device.
+The goal is that AF_XDP applications can natively consume AF_XDP
+from network namespaces. The use-case from Cilium side is to support
+Kubernetes KubeVirt VMs through QEMU's AF_XDP backend. KubeVirt is a
+virtual machine management add-on for Kubernetes which aims to provide
+a common ground for virtualization. KubeVirt spawns the VMs inside
+Kubernetes Pods which reside in their own network namespace just like
+regular Pods.
 
-The fast-path case stays in place and allows for quick return in
-xsk_dev_queue_valid. If it fails, the validation is extended to
-check whether the AF_XDP socket is bound against a leased queue,
-and if so, the test is redone.
+Raw QEMU AF_XDP backend example with eth0 being a physical device with
+16 queues where netkit is bound to the last queue (for multi-queue RSS
+context can be used if supported by the driver):
+
+  # ethtool -X eth0 start 0 equal 15
+  # ethtool -X eth0 start 15 equal 1 context new
+  # ethtool --config-ntuple eth0 flow-type ether \
+            src 00:00:00:00:00:00 \
+            src-mask ff:ff:ff:ff:ff:ff \
+            dst $mac dst-mask 00:00:00:00:00:00 \
+            proto 0 proto-mask 0xffff action 15
+  [ ... setup BPF/XDP prog on eth0 to steer into shared xsk map ... ]
+  # ip netns add foo
+  # ip link add numrxqueues 2 nk type netkit single
+  # ynl --family netdev --output-json --do queue-create \
+        --json "{"ifindex": $(ifindex nk), "type": "rx", \
+                 "lease": { "ifindex": $(ifindex eth0), \
+                            "queue": { "type": "rx", "id": 15 } } }"
+  {'id': 1}
+  # ip link set nk netns foo
+  # ip netns exec foo ip link set lo up
+  # ip netns exec foo ip link set nk up
+  # ip netns exec foo qemu-system-x86_64 \
+          -kernel $kernel \
+          -drive file=${image_name},index=0,media=disk,format=raw \
+          -append "root=/dev/sda rw console=ttyS0" \
+          -cpu host \
+          -m $memory \
+          -enable-kvm \
+          -device virtio-net-pci,netdev=net0,mac=$mac \
+          -netdev af-xdp,ifname=nk,id=net0,mode=native,queues=1,start-queue=1,inhibit=on,map-path=$dir/xsks_map \
+          -nographic
+
+We have tested the above against a dual-port Nvidia ConnectX-6 (mlx5)
+100G NIC with successful network connectivity out of QEMU. An earlier
+iteration of this work was presented at LSF/MM/BPF [0] and more
+recently at LPC [1].
+
+For getting to a first starting point to connect all things with
+KubeVirt, bind mounting the xsk map from Cilium into the VM launcher
+Pod which acts as a regular Kubernetes Pod while not perfect, is not
+a big problem given its out of reach from the application sitting
+inside the VM (and some of the control plane aspects are baked in
+the launcher Pod already), so the isolation barrier is still the VM.
+Eventually the goal is to have a XDP/XSK redirect extension where
+there is no need to have the xsk map, and the BPF program can just
+derive the target xsk through the queue where traffic was received
+on.
+
+The exposure through netkit is because Cilium should not act as a
+proxy handing out xsk sockets. Existing applications expect a netdev
+from kernel side and should not need to rewrite just to implement
+against a CNI's protocol. Also, all the memory should not be accounted
+against Cilium but rather the application Pod itself which is consuming
+AF_XDP. Further, on up/downgrades we expect the data plane to being
+completely decoupled from the control plane; if Cilium would own the
+sockets that would be disruptive. Another use-case which opens up and
+is regularly asked from users would be to have DPDK applications on
+top of AF_XDP in regular Kubernetes Pods.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Co-developed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: David Wei <dw@davidwei.uk>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+Link: https://bpfconf.ebpf.io/bpfconf2025/bpfconf2025_material/lsfmmbpf_2025_netkit_borkmann.pdf [0]
+Link: https://lpc.events/event/19/contributions/2275/ [1]
 ---
- net/xdp/xsk.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+ drivers/net/netkit.c | 86 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 6149f6a79897..d638d7dbd7ed 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -330,14 +330,37 @@ static bool xsk_is_bound(struct xdp_sock *xs)
- 	return false;
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 1ec21aef348f..5619209329d5 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -12,6 +12,7 @@
+ #include <net/netdev_lock.h>
+ #include <net/netdev_queues.h>
+ #include <net/netdev_rx_queue.h>
++#include <net/xdp_sock_drv.h>
+ #include <net/netkit.h>
+ #include <net/dst.h>
+ #include <net/tcx.h>
+@@ -236,6 +237,86 @@ static void netkit_get_stats(struct net_device *dev,
+ 	stats->tx_dropped = DEV_STATS_READ(dev, tx_dropped);
  }
  
-+static bool xsk_dev_queue_valid(const struct xdp_sock *xs,
-+				const struct xdp_rxq_info *info)
++static bool netkit_xsk_supported_at_phys(const struct net_device *dev)
 +{
-+	struct net_device *dev = xs->dev;
-+	u32 queue_index = xs->queue_id;
-+	struct netdev_rx_queue *rxq;
-+
-+	if (info->dev == dev &&
-+	    info->queue_index == queue_index)
-+		return true;
-+
-+	if (queue_index < dev->real_num_rx_queues) {
-+		rxq = READ_ONCE(__netif_get_rx_queue(dev, queue_index)->lease);
-+		if (!rxq)
-+			return false;
-+
-+		dev = rxq->dev;
-+		queue_index = get_netdev_rx_queue_index(rxq);
-+
-+		return info->dev == dev &&
-+		       info->queue_index == queue_index;
-+	}
-+	return false;
++	if (!dev->netdev_ops->ndo_bpf ||
++	    !dev->netdev_ops->ndo_xdp_xmit ||
++	    !dev->netdev_ops->ndo_xsk_wakeup)
++		return false;
++	return true;
 +}
 +
- static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
++static int netkit_xsk(struct net_device *dev, struct netdev_bpf *xdp)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct netdev_bpf xdp_lower;
++	struct netdev_rx_queue *rxq;
++	struct net_device *phys;
++	bool create = false;
++	int ret = -EBUSY;
++
++	switch (xdp->command) {
++	case XDP_SETUP_XSK_POOL:
++		if (nk->pair == NETKIT_DEVICE_PAIR)
++			return -EOPNOTSUPP;
++		if (xdp->xsk.queue_id >= dev->real_num_rx_queues)
++			return -EINVAL;
++
++		rxq = __netif_get_rx_queue(dev, xdp->xsk.queue_id);
++		if (!rxq->lease)
++			return -EOPNOTSUPP;
++
++		phys = rxq->lease->dev;
++		if (!netkit_xsk_supported_at_phys(phys))
++			return -EOPNOTSUPP;
++
++		create = xdp->xsk.pool;
++		memcpy(&xdp_lower, xdp, sizeof(xdp_lower));
++		xdp_lower.xsk.queue_id = get_netdev_rx_queue_index(rxq->lease);
++		break;
++	case XDP_SETUP_PROG:
++		return -EOPNOTSUPP;
++	default:
++		return -EINVAL;
++	}
++
++	netdev_lock(phys);
++	if (create &&
++	    (phys->xdp_features & NETDEV_XDP_ACT_XSK) != NETDEV_XDP_ACT_XSK) {
++		ret = -EOPNOTSUPP;
++		goto out;
++	}
++	if (!create || !dev_get_min_mp_channel_count(phys))
++		ret = phys->netdev_ops->ndo_bpf(phys, &xdp_lower);
++out:
++	netdev_unlock(phys);
++	return ret;
++}
++
++static int netkit_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
++{
++	struct netdev_rx_queue *rxq, *rxq_lease;
++	struct net_device *phys;
++
++	if (queue_id >= dev->real_num_rx_queues)
++		return -EINVAL;
++
++	rxq = __netif_get_rx_queue(dev, queue_id);
++	rxq_lease = READ_ONCE(rxq->lease);
++	if (unlikely(!rxq_lease))
++		return -EOPNOTSUPP;
++
++	/* netkit_xsk already validated full xsk support, hence it's
++	 * fine to call into ndo_xsk_wakeup right away given this
++	 * was a prerequisite to get here in the first place. The
++	 * phys xsk support cannot change without tearing down the
++	 * device (which clears the lease first).
++	 */
++	phys = rxq_lease->dev;
++	return phys->netdev_ops->ndo_xsk_wakeup(phys,
++			get_netdev_rx_queue_index(rxq_lease), flags);
++}
++
+ static int netkit_init(struct net_device *dev)
  {
- 	if (!xsk_is_bound(xs))
- 		return -ENXIO;
--
--	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
-+	if (!xsk_dev_queue_valid(xs, xdp->rxq))
- 		return -EINVAL;
--
- 	if (len > xsk_pool_get_rx_frame_size(xs->pool) && !xs->sg) {
- 		xs->rx_dropped++;
- 		return -ENOSPC;
+ 	netdev_lockdep_set_classes(dev);
+@@ -256,6 +337,8 @@ static const struct net_device_ops netkit_netdev_ops = {
+ 	.ndo_get_peer_dev	= netkit_peer_dev,
+ 	.ndo_get_stats64	= netkit_get_stats,
+ 	.ndo_uninit		= netkit_uninit,
++	.ndo_bpf		= netkit_xsk,
++	.ndo_xsk_wakeup		= netkit_xsk_wakeup,
+ 	.ndo_features_check	= passthru_features_check,
+ };
+ 
+@@ -569,6 +652,9 @@ static int netkit_new_link(struct net_device *dev,
+ 	nk->headroom = headroom;
+ 	bpf_mprog_bundle_init(&nk->bundle);
+ 
++	if (pair == NETKIT_DEVICE_SINGLE)
++		xdp_set_features_flag(dev, NETDEV_XDP_ACT_XSK);
++
+ 	err = register_netdevice(dev);
+ 	if (err < 0)
+ 		goto err_configure_peer;
 -- 
 2.43.0
 
