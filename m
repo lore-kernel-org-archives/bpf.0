@@ -1,35 +1,36 @@
 Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C237C230BD9;
-	Thu,  2 Apr 2026 06:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B918C301471;
+	Thu,  2 Apr 2026 06:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775111222; cv=none; b=g1dzPBRap+ijVEG9lMm0r3WAonxdN/2xyPK3mgjFqdqSjMMvHu7f8/Bkth4X+aBhFE/FtKUO/ZRsbe8Y1m2M+hmes6RdShNTapePJztYIbDoR7EFd4dl9yiWxcbAXGSii8MhlUyEj9b3xYanw/D7bB/oedIwMhAdvl0RQ38OPkw=
+	t=1775111511; cv=none; b=utLs2i4d4aA5kxNjPSA/mPFUnx8qGLb1wlel8F3FycO+Fqkb6YD5vBAsmMMlF2Wz6jXQsS2wjQdpwWH4Gfx5r3ebfmJYvgRnvT13cdh1yrrI/DCcMEelEb+1NyK4X1RWFhVaLzaBhRTyxUQARf+ovCa75Oms+Ko5SNQUqNPUehA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775111222; c=relaxed/simple;
-	bh=hvElLuPRKq6RITIza7NpIgO7fG4l8Tw41DKqT5RqpZA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aGTci524bxplET9ypuFlSgoJIlJRYTlBdesJ4vskzu3Q8wp8xu6WnxWRTpddQN1WtmkVtO7Sd8tb+wZZ5kPlLD588MqPbV/8Hs1N6LUJCsSuwXXW3eSK8IRsjwINwQLCQ0kOsBuOjsrivUVyqFkmYIRIUuiNOKj16qwsZ2NuGk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=N+mh5I/F; arc=none smtp.client-ip=54.206.16.166
+	s=arc-20240116; t=1775111511; c=relaxed/simple;
+	bh=YX13sLn6pbupoGA3DKDkyfLdyhL4r9A4RGREkwORFZs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Khc9BFQXrb2DnGHRc45auFmEc8m23iw33jdLD4kGgeQbm/y/Y5bmlgLxDbwGwJ4kMbzPIV5ZZprqT8cGiYCba9fK3iGmN8+AxUMXR4DoXCaZ1uQehEiFLsLmoM3rJDNo9nm4/r2y0OhmOgZP6n16C56IZY53FpYDA4PHWktlyHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=lLNSiJuB; arc=none smtp.client-ip=54.206.16.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="N+mh5I/F"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="lLNSiJuB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1775111192;
-	bh=6qZqK3VDaT1rly6vHBTA8rCgdQJXr2JlN0JxU/c2BFM=;
+	s=onoh2408; t=1775111486;
+	bh=yJVKkdX5pQnrGRfKGg0vycfLU3Us3QpJnv9UWNiLO1Y=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=N+mh5I/F+LXJo6z1g3Zck9IuoxGWNy17YQJJYw2+4vHHW3OicIXD+s1/JM5p+DQBs
-	 7RUx3kEgmHBJ1WY+ZLdeXJQ2vpVj1NVYMBccOg4z8i9zYVh/gEDo1J9WwGjtXqZZR8
-	 awwfmY6rAR7kdwc+lJkM51j+34lFr5lOu1sHnGqI=
-X-QQ-mid: zesmtpip2t1775111184t34a60a93
-X-QQ-Originating-IP: OscYGYl4mbZM60gaasQYFPvXeK4eTkhOv/cy1AI8li4=
+	b=lLNSiJuBLJFJutlg5k7l3UQnpsu322I6Q1r9JsPxzNJfJU1mwW6JphTew7SFRm9JU
+	 clE+7f4CvpEFjaU9OAahNL6lephQtQAvjP+YoLunADIVLAiHtoRAZeqWj2CHY00TAu
+	 ttvOdFy/NiJcpEc7S6XJN8TufyX7FRqCA21zbh+g=
+X-QQ-mid: zesmtpip3t1775111479taf3f95ca
+X-QQ-Originating-IP: MxBasNAkbAgRwNaSzSnPfuiwsuQjUiKlc2gnbkHLLJs=
 Received: from xulang-PC ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 02 Apr 2026 14:26:21 +0800 (CST)
+	id ; Thu, 02 Apr 2026 14:31:16 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 11602306402719568296
+X-BIZMAIL-ID: 13942536573944880077
 EX-QQ-RecipientCnt: 20
 From: xulang <xulang@uniontech.com>
 To: martin.lau@linux.dev
@@ -52,10 +53,12 @@ Cc: andrii@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	Lang Xu <xulang@uniontech.com>
-Subject: [PATCH bpf v4 0/2] bpf: Fix OOB in pcpu_init_value
-Date: Thu,  2 Apr 2026 14:26:21 +0800
-Message-ID: <5CD977BE2CEFCF6F+20260402062621.2008939-1-xulang@uniontech.com>
+Subject: [PATCH bpf v4 1/2] bpf: Fix OOB in pcpu_init_value
+Date: Thu,  2 Apr 2026 14:31:15 +0800
+Message-ID: <392D7C70CC0B812D+20260402063116.2012398-1-xulang@uniontech.com>
 X-Mailer: git-send-email 2.51.0
+In-Reply-To: <5CD977BE2CEFCF6F+20260402062621.2008939-1-xulang@uniontech.com>
+References: <5CD977BE2CEFCF6F+20260402062621.2008939-1-xulang@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,63 +68,68 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: MxX5kg4KifQ2BO6Av/dnQaeudOHNZ+91H+U3U0BbBeaL8Nz6Fs5aqxCr
-	tDlZL9R80xKERHhooQD5iziQs5T83/xJQ6/u4uTIkbSTwbIEuDA+I13v5ABlDw2BfYFc1Eq
-	ukIwv1aI9oDHEf2ygHavjjHAGFGLKQz8SBvfw78+94QLwmeswyzqp9CO52qrSx2XyO7yrE6
-	mR3BcO17oSlJjg3VvHQQYOw2mGJTzfkyfTpajmxn9PEQsmmEhUvH6pvef/ks9wM/6G+0Pit
-	Nhm2fv6YCaRfb9eCSTiPVt1jub+qPX1EyZRFu0op065tDufr2/epUzE/HbJEHpg3Z/4jwon
-	THqXC2VUht5dH1uWIGkrd2CkxuLy+0hOFnjF7hWMmL5pGvFvU7SI5lueueOvLoEbZSXtrCx
-	cfJD5/g50Rau3u/THv0MI8M68adCPELnxnuzwRjbyJralTzq5nCTb5pQw0KoS2ip/eIHSzv
-	8IutpKhIaCeRaNvAobCF5y2hfEi2IqxDmzntH6gaT3cKrRC+98RQNddVaUeiEgdm1znqfhu
-	/hOvq/WVlAmHAy4YUhfHf9FSr4blHXTeqRjWSW6aw3+DzuIjNgdCTPrNbjnu5o9Za+ZoWGN
-	Gkb/HbqDenVdiSmFu7fPxjRa7hQOCqmbjCJEp6f0YIDIzCZ94atARnPaEctIxbOV0KIQgX4
-	W6zo1xUog5cFDA2Y0CgbfMlbVV+RyS50F4HPAp9gIm6h3YqkgfM/Ll43WT6zzXiiyupy49l
-	Nu7DV1so5g6O7o3hmOjlfqwjcCKhUTgOC747E3sLOHQfEEVjmQkxcBQ2oj1rVRoLbVkIVc9
-	Xwon9fGXh6sUfR3KMr4hHKXLyRzmy4Fcz5cq160DSrMXkrhhcbDJ1GaYCQuNsVLJkqClPhs
-	clufZHcAPDCS85k/mTf5x9NjrpoHP6pZ+z4yx2E4+A8QnvEdKTBgwuHM6ZcImV0lshr6VwK
-	iAyHUWle9sZ/sBnO/er2EAeG8l+iuDbiGRqjNmNz2exOE2SRAkh5605HOqhJztvJY2gXaYr
-	HEkjF4GhkEdbmt4L3VDAox7jyXqqTwCVfqekW1AA3cvERzNeZdhaQQpyru1vWzco9vmhZBK
-	a9WRz3JeK3OrvoiauPNjXUa4xb6FXUTP2qsRAHXnMsR6269grOEVSeBoUv47jMPPo4DegwA
-	3aA/
-X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-XMAILINFO: Mv9X8DgfILpCRnt2ZAfWJEs6eTHtrWkqsSPktxx+pCTVu46Foaa9A3rc
+	WqPq4vs4Nf+6ZSaQAdaz1in1jXhrUhh91P33+J1siVS7mBzFLRYq2ewBKcfrLng7s/QtoMD
+	iKiCqpYSl81JYCEr1FPQXQ5vJoSh29KuuH4exfXrB0rGj2THBmcAloF5HFRJ9Pz28zi227r
+	SqfadCgp4RDuACEkH1N/cNzXq9XX8htlgUl7T9gKI38kuFnOL+xtPRAdws0P4sdctaX4/5Q
+	vHAgH/EKjKIS9xPBp2rSUsqVNLKYenX3ElH/iQKbRXScujT3EvooFW3yvPYd4NT1ftg3+JP
+	IFN1+fvHXG+XpovMNx+HKwyA923cSfaNS4DxPm5LBPyy/s3IOHr1QSxEe5HabwrXEB2lEo6
+	GS8/ZlAwMCkHncSa5ektfG2BY3yRCk7xGuteIRT+HvdoMyC3GQQTL3tcVP+tBbpLWbPZph9
+	6FgTexg4uzkR5aCsRz2dIHRyqsvV8YELxk3d34zt/spOr0RxplTBoA81PcBsy55sH5MX7jh
+	820m27QngQabNxJdYleupupc7IM7EM6EG8Nnba83nAQfZI5EG6EbY55BSonHGJImfVO+uEc
+	N/hFqTroIloC4RA+zdPRFpdB9qlZGhxgApqkDgrqcoRKFXfP4b5SY/vUGXTllhW+OHKc+X6
+	leOjYv9+HSsc9m4YramkvrEymtFalE0y2pmI5EzM+BvMe+wf7Arl+0UAXrMVKBP/kEaatnP
+	5MKLZSOvJU+Kxr+KcJN4snmH8zIe6u1N7//yizOlDmkkd1wAGPdA6mUdAA7PISeBtQpNmbz
+	ZumAvDbPiHWBkCa51maLPQEEP+du+7i8Lr1bO6zFAYjZ1/GyV+8YgAjINDP8kDDCLBqX4wg
+	JyE/oRiOY/AWTwIio/arDTJrFZpAe3d/UJogNQjgulFXPR154q98vKnoZ46ne+sOJJqHjRd
+	Tj1w/bC9kMbSg+eZXO8nNL+pAfq2fbXQW8jT1RLzPyKyN6tyifmbJ5z/8ZP6iz+jvjFyh/e
+	yQ/4CY35Yti5txB23NQc9vSwWIDPj2lah6e1JJvpz6AKfC5syrBrxoUYbNmvSwz545Gi8ci
+	Lbf/yeYwA1BK+swyZ91MJSiAY94L5dG9Uh8FeC4C/rezuNVRIKloPH+C7HY4Iiy9hAIbBMz
+	G5wGLyehHABhUsiDXrfh3z3gng==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
 X-QQ-RECHKSPAM: 0
 
 From: Lang Xu <xulang@uniontech.com>
 
-Fix OOB read when copying element from a BPF_MAP_TYPE_CGROUP_STORAGE
-map to another pcpu map with the same value_size that is not rounded
-up to 8 bytes, and add a test case to reproduce the issue.
+An out-of-bounds read occurs when copying element from a
+BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
+same value_size that is not rounded up to 8 bytes.
 
-The root cause is that pcpu_init_value() uses copy_map_value_long() which
-rounds up the copy size to 8 bytes, but CGROUP_STORAGE map values are not
-8-byte aligned (e.g., 4-byte). This causes a 4-byte OOB read when
-the copy is performed.
+The issue happens when:
+1. A CGROUP_STORAGE map is created with value_size not aligned to
+   8 bytes (e.g., 4 bytes)
+2. A pcpu map is created with the same value_size (e.g., 4 bytes)
+3. Update element in 2 with data in 1
 
-Lang Xu (2):
-  bpf: Fix OOB in pcpu_init_value
-  selftests/bpf: Add test for cgroup storage OOB read
+pcpu_init_value assumes that all sources are rounded up to 8 bytes,
+and invokes copy_map_value_long to make a data copy, However, the
+assumption doesn't stand since there are some cases where the source
+may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE, skb->data.
+the verifier verifies exactly the size that the source claims, not
+the size rounded up to 8 bytes by kernel, an OOB happens when the
+source has only 4 bytes while the copy size(4) is rounded up to 8.
 
+Fixes: d3bec0138bfb ("bpf: Zero-fill re-used per-cpu map element")
+Reported-by: Kaiyan Mei <kaiyanm@hust.edu.cn>
+Closes: https://lore.kernel.org/all/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
 Signed-off-by: Lang Xu <xulang@uniontech.com>
 ---
-Changes since v3:
-- nothing changed, just resend the patch series mannually.
-  There is something wrong with my email server(Message-ID overrided).
+ kernel/bpf/hashtab.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v2:
-- Fix patch series format issues
-- Instead of aligning CGROUP_STORAGE allocation,
-  fix it by replacing copy_map_value_long with copy_map_value in
-  pcpu_init_value
-
-Changes since v1:
-- Add self-test program to reproduce the issue
-
-base-commit: 7aaa8047eafd ("Linux 7.0-rc6")
-
- kernel/bpf/hashtab.c                          |  2 +-
- .../selftests/bpf/prog_tests/cgroup_storage.c | 46 +++++++++++++++++-
- .../selftests/bpf/progs/cgroup_storage.c      | 43 +++++++++++++++++++
- 3 files changed, 90 insertions(+), 1 deletion(-)
-
---
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index bc6bc8bb871d..fb8123cfa5ec 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1056,7 +1056,7 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
+ 
+ 		for_each_possible_cpu(cpu) {
+ 			if (cpu == current_cpu)
+-				copy_map_value_long(&htab->map, per_cpu_ptr(pptr, cpu), value);
++				copy_map_value(&htab->map, per_cpu_ptr(pptr, cpu), value);
+ 			else /* Since elem is preallocated, we cannot touch special fields */
+ 				zero_map_value(&htab->map, per_cpu_ptr(pptr, cpu));
+ 		}
+-- 
 2.51.0
+
