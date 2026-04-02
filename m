@@ -1,101 +1,106 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79FDB331214;
-	Thu,  2 Apr 2026 02:48:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8481C1E0E14
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 02:49:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775098136; cv=none; b=EAZugfqP3rD1KHU5fFEDwMtLmoQ/eQ/pfrBjP1tcCHV1kDKp+xcvNwYdcBumeUkUSRueZV0zJT5Y+k4qg/+M8yl4XliAKq+W2YpKrMdIKVo9nBpQgvBZj3cSFW/b7DGHLWduTplnJDZGEimIGZ0aJl9FbixkgLLXape0LLvvHw4=
+	t=1775098157; cv=none; b=SeeuUSfcpHzeoIkzM5/FWWyoXfIjbvgQguP3I6fFucVEQxzKVfhNwG68kCUdYwV8HLbJeaMexpcwqlSy8iNfLlUPKxZg7WjHNL9N2LhisFM1zZ55S3/sLCdROSb2oU1zFQUca8TluCmuamYQDLQOraQQ2GKgZ0gsMcXNu5BDafY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775098136; c=relaxed/simple;
-	bh=nvdPCKZmii8Q5beKHgefCNimY7ElhJYekIGNQA4QKCM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=V+1Q75VQWRbe3wXi0VuxJN987OYB7P0UZChfYh8Qgdaq6B4UlC0FSER0y8tsSHZmPoA9de5JuBVtuOsXm/6mxKy6a9f3tJmbuYkH89/Vd/cOR5vMXE1uLuU3nVY3DkypnY6QWZWLU15JHOr8Syx3T+0oNO9jl91QE45hFX3myIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Cx48AR2c1p5RAhAA--.33981S3;
-	Thu, 02 Apr 2026 10:48:49 +0800 (CST)
-Received: from [10.130.40.83] (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJAxGMEH2c1p4CRjAA--.44258S3;
-	Thu, 02 Apr 2026 10:48:39 +0800 (CST)
-Subject: Re: [PATCH v1 1/5] LoongArch: Define format for AM{SWAP/ADD}.{B/H},
- DBAR and BSTRINS.D
-To: bot+bpf-ci@kernel.org, chenhuacai@kernel.org, hengqi.chen@gmail.com
-Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260401071206.5506-2-yangtiezhu@loongson.cn>
- <6089c3c90bd2f2cf2848a39fc0d30219d0f3f95f9c74257a19d01de053eb1c44@mail.kernel.org>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <3b8ef23a-e324-4ad8-430c-e02adca44a1c@loongson.cn>
-Date: Thu, 2 Apr 2026 10:48:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1775098157; c=relaxed/simple;
+	bh=4hXzQ57bqe8efvD6C7753GoZQM5ixjUvbDNFqvE1KnY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oWgEdrhTELXS3Vytg0zCfTEpaYozFUl5dbg90ZXUXIMDHWMkGaaGB9JTKyfxJXGv19uqQN807+x/cyUerJBpX+oMdu+VY8ZEEkGDTK8XPvPEFXJM6rLq6ueBO9toN7m8IOeijjSaixMXHJaWSXPDmqUnRIY2yZ0ov78Pfvo+t9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSOokBEg; arc=none smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSOokBEg"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2c15849aa2cso545393eec.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 19:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775098156; x=1775702956; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=b477warS+kAmNLttsa1TfMsRaPnmNljqFqWtpb08NvQ=;
+        b=ZSOokBEgVyISutK5cABdT4Iiw8qMBuW10cDqNA9BblNzElsF3vJC5OJVcZ2wtR8NWJ
+         Vd2mznH5RRzfQw/sj3L0Xm4hfFFlk5EbVVZeVuRTzxSi0g/YSf+I4LJKv7Cj3gHe9DDk
+         3JtLhTIdnQYyOGddbP+YvszwDBIGkz9d/twm9sPEse+W6UNH8g/vpQnR/QkdT+cR9IY/
+         iMwMSCuAGNtjEVE7VWgyzIZUku4iIrkJnnpvKLLr1aB3DQPtwOrPueRJ/gF3kab+7B7O
+         Hcp+5jyTJaBgDYNlJ2aKjE4J+7Wr7k07Hca07+/iR16dmQK9HcU+hYUEfg/dUjB+VpLI
+         IDFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775098156; x=1775702956;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b477warS+kAmNLttsa1TfMsRaPnmNljqFqWtpb08NvQ=;
+        b=B5hBRK6yjVXXhi+DFuT4WixeSgW3mStYkwkW4HmWEfoxOOCEbba21xXOranDj18Bai
+         Ibr2sGxfEitXzgB+mcqm5sORw1V3qP0IEzahc/Fq6pDaEah2KWLpllhEE0zK1AgjYDrH
+         iTczUnWXhau+kP4dMVaCYUTi+oNSaZqZNPR8sYrmHRX9jCwkInCnOdQ3bQWojVqWQ/Lh
+         J+c7Mtckro3O3IYz9MpmZ5qgkzjwTKQEiS6sokA6uMNjXIRxcyKp4J4AXUih76RvkRgn
+         k6CE78a5nN6lXruLjMnggWuwxHGTPkj3U2tjsoj7g8G7ht8kM2jAAPD5mMBEdQOh9+tx
+         qXVA==
+X-Gm-Message-State: AOJu0YzNRUw/SoaMy3Nv+Hgl2wzAwbc+ShpipwvFqit/E9HCgZGNn2FF
+	4Pkkdeqc1Hwl6X/OAib51N0QWzxwjQSnWnPXDnBz6MCNIY6hRDJ3d5nQ
+X-Gm-Gg: ATEYQzwm2V4EN5k1aVLh6r5WmiSmEx3IavF+0+07ibFX8vVunhlgsGkMBu/PitvK6sq
+	nIJ/l/EjABdAv/JZ8ZtWoOPVf4rAo4c+Q5cUKRO6BFsWsTfVb1iKi7fQ9Y1II9yTkfdf7blybw2
+	FSd1IIlWl71OZqEoVBCXuik3BBwr41OMe9+eiTJ6FoSahiLpUqEK1pYi0SUZ8XeHw3EyLDLJKSH
+	BIYc2vppVNutVqJlrDuaszWNNx9C3IVsfJiahQXFnOC2PCrh9a+xsk6hwfO3RPDF2uRTm4A0nTm
+	3ReWhytT2Tziuz5JDDPr9gouI2WVBaoN5iP4+ug0ahGoJqaW5wY5oAvBxwCp8NFBU6M/QIsjNQs
+	afWhKn2h6hQyVj8hJhf2WD5Vd+AeveDvIMEwRRrlmAfA6kj6JRKvsZ2wtJesLxr/7OQ2zj4h9wP
+	oeSuzDDcBHz/Ao81lZ1gEkfmgVa8iX3cPGEE1VUetJ1d5dj1nl1lNhkPKXupHwmTxwdtTyHetCR
+	et4RW3AmIqKXnGvwO4=
+X-Received: by 2002:a05:693c:2c88:b0:2be:171c:5048 with SMTP id 5a478bee46e88-2c930790b2cmr3131117eec.5.1775098155544;
+        Wed, 01 Apr 2026 19:49:15 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:7aba:8184:a91b:bf1f? ([2620:10d:c090:500::3:f883])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ca79e1d93bsm1286282eec.12.2026.04.01.19.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2026 19:49:15 -0700 (PDT)
+Message-ID: <657cd945186971fef9b30b856c0ca68e05839de5.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 4/6] bpf: Add compute_const_regs() and
+ prune_dead_branches() passes
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
+Date: Wed, 01 Apr 2026 19:49:13 -0700
+In-Reply-To: <CAADnVQJhXVri5XC8YScjUs1ShPiSokSCWt5F6LDJ-YDnivzb6g@mail.gmail.com>
+References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
+	 <20260401021635.34636-5-alexei.starovoitov@gmail.com>
+	 <3c091ab744676990e90469a89a4f0110d724ce19.camel@gmail.com>
+	 <CAADnVQJtw5A4GbknXoA-BtobOVMiBc+pC8nUQZ+1zX5wbj3ipg@mail.gmail.com>
+	 <CAADnVQJhXVri5XC8YScjUs1ShPiSokSCWt5F6LDJ-YDnivzb6g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <6089c3c90bd2f2cf2848a39fc0d30219d0f3f95f9c74257a19d01de053eb1c44@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAxGMEH2c1p4CRjAA--.44258S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrZF48Jr4ruF1rZF4fJF1DJwc_yoWkCrc_Cw
-	sFgFy5Gr48AanYvw1DG3Z5Xr45Aa1fKFnaya4DK39rAFy5Xr13twsxJa4fAryYqF1ftFZa
-	yw4xZFnF9w12qosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUceOJUUUUU
 
-On 2026/4/1 下午4:23, bot+bpf-ci@kernel.org wrote:
->> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
->> index 657bbae6c1c7..93466fc7d33d 100644
->> --- a/arch/loongarch/kernel/cpu-probe.c
->> +++ b/arch/loongarch/kernel/cpu-probe.c
->> @@ -177,6 +177,10 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
->>   		c->options |= LOONGARCH_CPU_LAM;
->>   		elf_hwcap |= HWCAP_LOONGARCH_LAM;
->>   	}
->> +	if (config & CPUCFG2_LAM_BH) {
->> +		c->options |= LOONGARCH_CPU_LAM_BH;
->> +		elf_hwcap |= HWCAP_LOONGARCH_LAM_BH;
->> +	}
-> 
-> Should there be a corresponding entry in the "Features" line of
-> /proc/cpuinfo for the new lam_bh capability?
-> 
-> Every other feature that sets elf_hwcap in cpu_probe_common() also
-> has a matching seq_puts() in show_cpuinfo() in proc.c:
-> 
-> arch/loongarch/kernel/proc.c:show_cpuinfo() {
->      ...
->      if (cpu_has_lam)
->              seq_puts(m, " lam");
->      if (cpu_has_scq)
->              seq_puts(m, " scq");
->      ...
-> }
-> 
-> The new cpu_has_lam_bh is missing from this list.
+On Wed, 2026-04-01 at 19:45 -0700, Alexei Starovoitov wrote:
 
-Yes, I think so, thank you.
-I will wait for more comments before sending v2.
+[...]
 
-Thanks,
-Tiezhu
+> > > Q: What is the policy regarding naming exported functions?
+> > >    So far I always used "bpf_..." prefix assuming that this
+> > >    is a requirement, was I wrong?
+> >=20
+> > It's nice to have but not mandatory.
+> > imo the names are unique enough, so unlikely to clash.
+>=20
+> This one I still think is ok, but the other patch does:
+>=20
+> -__printf(2, 3) static void verbose(void *private_data, const char *fmt, =
+...)
+> +__printf(2, 3) void verbose(void *private_data, const char *fmt, ...)
+>=20
+> and this is definitely too much.
 
+Let's do a bulk rename to bpf_verbose() it is super useful when moving
+some parts of the verifier outside of the verifier.c
