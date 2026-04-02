@@ -1,184 +1,184 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0572D738F
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 02:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C928B336887
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 02:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775097440; cv=pass; b=d4mG1Yf043tBtsxbiyZpNbLlogA4mbxoDBZ3wixj170CwASSBQ/wEkxw8EIlUUk1UN73XiLiRIk+t7SkKuWO3TckChp5CwCxKkA2i1BP3wyNJGk2OMdiVVwiv7IpqGSJbXdM4IYLokOkXOEAisPU8kjTiIuEFfuG4EHtgMt9VEQ=
+	t=1775097954; cv=pass; b=HPHTWQU6laJT5OGqe0PZFOTpKlFx3pST9jYXF7Z0hti+aFXkBrEQmPRjruwX3PvGCBE9UUmGvA307FbrvZbkJYA/Lhn855bcILYTBf8oYCdGEQOLW3vUL3e+TuL56aUPNXY2c9l1NLzlKKQpUPxPaiMlxP2DRqhR1caB+nYFJmY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775097440; c=relaxed/simple;
-	bh=E3aq4MIVImagcCUpa8436TXWFR4wLQ2P2TDB9Mbl4wo=;
+	s=arc-20240116; t=1775097954; c=relaxed/simple;
+	bh=jAV3ioP66vEkdufTxtj547qWgtXZ9FewVu2mtoZ3TEA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eqeuMi5jA+FWz43ruMQLVgHGigRr8/cD2NC5BGJ55R7S6TLLfe2e/R6a+2tLgwSbbBw8b9RKuxT/dUq3gL8eNVQ8XFQNXeDP+u96CtoOdcgDknGlcOWnBsCnfFymfwxdn14oL9nz1vVuDCs/kLYXXlObcOGRG3+re0SRzi9N8s4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rTvj5m/B; arc=pass smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=Brc0DqzEOdXBgLL40YXGG/hMpo/50MDQT/iuixGP5lMve0OK1htXPetEj3T9Rv5VFcmOwscWAvHGLNaNQJuEy7BqPJcz8wQvMOoa1RLUWsQfZnXfJJD23bCgc3DKIfSCiyk76XqeFaw2wWMZzOcia6owQlwisQ4mEw4mb3x32zU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Si2mbyTB; arc=pass smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rTvj5m/B"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79ea87af213so23625647b3.0
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 19:37:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775097438; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Si2mbyTB"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-486fb439299so2827585e9.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 19:45:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775097951; cv=none;
         d=google.com; s=arc-20240605;
-        b=LjB7xApnuQ5qAcuN3NpjlhUmPvxlHAQacH2c7pimV2W+rKvXsrAvjucdS/y46dTeUh
-         wh39KrcoP2UjyQ7lg2vykF7VHlyiuELDr0lphW1W+wHJ/w7fVWffPZr7uhHtCXQhvCuL
-         91q5OytAYaN2n38AKm17NJHsodvSn485BD5vnD/1xiX1lyEARuRzPKnPQUuWHBrBpEVM
-         UTCcFBiYfAn7Ss4DslsyJaIjIuiJmK/7jdhNfI0VFE2UBkcfcmAWGL30Onaauc72Fc5o
-         C0chDlLHYx2LIcuFEhRRxD16bBO9u4mjBAeIDEyVxVbT4rilDIsjzVA/3TG7pw1TM19P
-         Nb0g==
+        b=HbWXRGTd2jFASpBFrbR0p65/z2XL7aluccKbYPXCGAkdxTr+PZM8ZudBxaDuRstMTg
+         EllG4I/GP90YjSaBIQUfwDqjW4mGD4NR+w8J+hNOMDXcZstMFRIlHqwbzZp3oq6kc9q3
+         HmvHcMyhsxixFRjh9Q/evzVo8pcoKfaZzqjDaChiUUqdvUzkHxUb4yOWBMxA+rnlMyg+
+         qjWxm/Fbxnkea5bzbVMXjexgzJ/XlI447ee3uswLcA1mRThW+wEfkKt8aM30iU8g+TJB
+         bbZF3lOpoTQMyxk9b5BMAHsbGU8RoHBsLrv7MYmb/HPuSleD/xbkpuieMVOOpb62MWcF
+         HaCA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Qw7/+XgL7PQ477JBnRJZulwsXjBg/Kr6yDssBa0ri9s=;
-        fh=TZrgQJMM7lKIP4b1ILlKoebHT6uUxf/8PZOvkykdOEQ=;
-        b=hZXX3w0cmhqZthhjF1UAmHE1jt+OCTTvp77Azxw6Q33pBDGTyv+UY1IGBdesamXX9G
-         6IQTeIIGlsUKvBG52lbWniwQw1X8Jzoxjd+kwGxcZd8fMYux451oDQUPEMisfhWZgrsR
-         7urBRgMEFtywITn9LzC4aw6VSYXxogqtWxvUeWy5nspk5ISEE2Iy2N0/1WMPg4vUoSVl
-         calpcULf70ID5KCZK/vxPzkN/Jba8pXrDZ/WQM+Tej+vZr2xHAYMZ7TT4yisJDpIzLoc
-         sj9soK3XAeIGubT3w0FLlpfMddu+he3W7KlKbViCPl3u1HvyPxKIaUim+fG3fZerwFuC
-         E3GA==;
+        bh=0vBlHDle6WPXcMh/oPV6nFSh8kH2WHEIiXmRlHqfRKo=;
+        fh=UcZqnkcPYPCJuBeofOOObWQTYZ2DVO/Q2yzEycpMUlQ=;
+        b=ATbEYHU9/RGGaZazrhNasleLFCN3UmV1/4sYLcdZXpoYaB8Vg77Rm9S4v1ROAFeLEo
+         P1tG8iBnW+8U9illOsFpA7kIVuERjUXRdxc5FAoP86aNJkDpIUewpKXXKPKwGgpAF94t
+         pQY5o9Y2KzvgdrDit2KmfgGGuziek3lqIXQ8vvfrNG0tsewMq3JW+QIe/a0EahHZzMEJ
+         DHttkz/x4Mk2C1CQlusDKktfdQ4faEXIZCh1FMm8khgsfGgRTxtOlWsxcdui911wW/7P
+         MSpu46uiAdgv3odkF7ixtObW/XcRTJ9SSfqlUurXN6IaWpyRN8bcFnAN7a6Ff7d7GpwT
+         xmuw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775097438; x=1775702238; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775097951; x=1775702751; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qw7/+XgL7PQ477JBnRJZulwsXjBg/Kr6yDssBa0ri9s=;
-        b=rTvj5m/BajIr99uBd9XFljsXix7bjbBB6glq9bxe6lKeDUlpxnSip+N/yAHx/IE7L4
-         Q7Ts4hUaCJQ3qsJrVIBJG2AutdgPMKxUsvqK3opJPvuFYvhCFWwlqEaf+11lQBbZDw5g
-         hD7iF/V9pq1snoEppAmYFbGWswr27wE3DjKhh5Tx9IGaVnTO1jHaG47OXQM+g9EohUu0
-         nn6D1+LS8ZM3TEUh02ESEHvWlmTZKlBpOhJaFm/jsXz2DDCNwoFNsNImNab6hB7WjrYo
-         mKUOzA9OOrubNt60tOW0ngg+ia8D7PUsBdVwFGRxGrb5uFKqzDqKtrNNNYXIhwm3qxXx
-         7tzQ==
+        bh=0vBlHDle6WPXcMh/oPV6nFSh8kH2WHEIiXmRlHqfRKo=;
+        b=Si2mbyTBqvDzOZjQTuNMCQRDfo97xOjuOVPeOp/dbWURjKARFo2QC6gVcF6XvEk9oY
+         gbki4RijvF+13zYVpQ8Frm/z9gQbmoyqQnBt8U5zvd9DUz4efrATBYeSiL62HV+Y2iPe
+         JttWyDKdmI96f8QiwsmXlFGEeeOmdO8sgdtFssFWXjnVI9iMc2PasQuzsR4l6FpdYanS
+         ljkl+VtuV4oiPhgyHyFlNMhj63m893eCPKutnbnb3VqctdajEWh/Ht1oNHlKol/ELSEj
+         YulQu6mgm5rfdKPwiRvL7WwlHcNDTdg0LU9wGJitFkEgVkviHDSLDk//XBVkDcqrF/S3
+         kDGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775097438; x=1775702238;
+        d=1e100.net; s=20251104; t=1775097951; x=1775702751;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Qw7/+XgL7PQ477JBnRJZulwsXjBg/Kr6yDssBa0ri9s=;
-        b=VxlrWs1er79yLwNMZUmw/GKT67g6uncagku4kWcmB3ek+3soNctbEZVtx1fGW+o+e0
-         SraDwzPo8LhApjnOe2Qy3AQtDHvQQDnqUAw5gqV6yhqDouXClpLf2SxYgdyMxs9XawVI
-         ptRzMdPotcE0Am7M9wwcpeuEfkfOMREmgISoiaZbUjsV2S5U4lhcBXzPvbfdYEPLkwhA
-         I6Vo5TYZacpdYyuLcE2JBPaG3ArbfZXVc6qD554MLrv4G9xK4PYCMUgKq/z28ibOYcE8
-         8xM2j+GmBfUoxdM6MOzZ4IPO9FJaectOA3Wl5Fy1WtgDoIIkrpBMdIkU+JWbTX5+vlDj
-         D3AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpGKa0MfqvGIbaHdaVcgVuLEZlo57YHQdEeF5QrKzLy9lJp6yg9eFKX2FfNOkDlRuKqhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8dUpzDvnOhu6m1p5atRBwpyNaApg8fY6nwR1v4/Y5tNvW8Yym
-	u1b+BuLVAa88SUnlVhwmjDE2NaHenqTZJJszfBScOONnPdD6j+9OMtbBPtXUvjb/QNQ3yr0/baD
-	6H8Is3KkJhrbLteO8J73xLzdCzH0Riqw=
-X-Gm-Gg: AeBDieuYcj6f7oXZQvecKADcoMr1Q2CzJweEoGXtWMvLy0J7/zqrRaAOADpPnlV5SQp
-	bIUa5FY3R3hLxbX2n1TJsiw9dcCdf4qe7RBa3uu9W175J+bAvBtnW1E/9WrvZ0T+KwqJylLRxRr
-	nxXCS8FN9a8d5iIVQuBcgwkNDlNUt7ei/e9b3a+WR0z1lRyvUu4f9ZpD4SRWHaLxjjFNEKbvXMi
-	zmdXG04aLkliTZtJ5ab043geBEerDi/C98fcEVdnl33H3PNxKT8E5laKm3dQRtXbgD3T46WWLSP
-	ATNP7t7wdLJn3Wo81bfaRXSsfrj8ZHCQXFnIdEsffddW4mRCRxQAkkMlYfE=
-X-Received: by 2002:a05:690c:87:b0:794:c2fc:73b1 with SMTP id
- 00721157ae682-7a3bb916453mr5671407b3.2.1775097438132; Wed, 01 Apr 2026
- 19:37:18 -0700 (PDT)
+        bh=0vBlHDle6WPXcMh/oPV6nFSh8kH2WHEIiXmRlHqfRKo=;
+        b=cMeVDaJNopPWp2hmoJpvNmOqMGINNnNnF9VgnERHIL9PlU0HI/brOHg6iy3TzxJvfB
+         B+xLUSqAtun44UPBUp/obeO6QjXwesCwk3YOIlEbswfeqx6lGzWCix2KakJBMqJJb1kZ
+         gKf2kVs4HUFyWovcAVLwphYaG3EizOMh19d1KHlcYQZQvNQh7XGsSfkZJ3f6Px82qnS9
+         ZELQHpuZV+Kd6JVbXu2e2syFY71To5MkfgWcNl81cFr3DyPCSTVANOluOy9qgsUxPJ+p
+         l0maIjq2NQpapzcb+84Qqgcj+TsQ+doVNbPMIxk5TXARb56RawRHBccv7TZw/Sf54UFs
+         7Ljg==
+X-Gm-Message-State: AOJu0YwIhrxwifQ7gR3H64e/7+T4GNceVNscd3CwtAxotfAPjkwKkBG4
+	qJzzmfjogdTUiXM4pz5YU/fvYZ1W9iGMDhi9+Vj6Rvhw5Y/PmVl3UuQmD/D85kQVTKw3Ofnpr99
+	vwQBpmHpdHnsD7GR4AwXGifIst1GknL0=
+X-Gm-Gg: ATEYQzw/Cuer6484oqE9W5l4gQG8YaXB5viMFg5nzdfZcoou4uYGEIh72eEJuJjKXr8
+	89v63gY0AfqAP6Cms47dwr2Z61oi5bdoRpNnQxiV6pN7m1zX6GmcGGKGNk+lk7FozWTPt/OuijS
+	f1Hl+tZc8Z6zRjQ/mVNc+tidPNuAYaviwVDrfk7mCJaNyG1QeR265AgOcwaEODsJmEeKuCtaley
+	3Pp1nlhXcwuONZ7MDMOn5R+vWf4eSmKQ/XLXq6Vmq5v7ej6kAdoPG8ClL1ZbG8ELzBVxi8kQTXF
+	vAxrMrkKZr3lAoI6kR0Ww641jP+L5yKAGAltbVagVAjScKNu0yzHO+sbHEIDGmwhY3MXNSVJHsW
+	S2gwtmqqQvjsURqcmSJQpQtNzuQ==
+X-Received: by 2002:a05:600c:1f11:b0:486:fd3a:fd22 with SMTP id
+ 5b1f17b1804b1-48883568b21mr87984785e9.4.1775097950988; Wed, 01 Apr 2026
+ 19:45:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260401161529.681755-1-a.s.protopopov@gmail.com>
- <20260401161529.681755-2-a.s.protopopov@gmail.com> <823cfd94-a35d-4f99-afa3-238fb1e9862d@gmail.com>
-In-Reply-To: <823cfd94-a35d-4f99-afa3-238fb1e9862d@gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Thu, 2 Apr 2026 10:37:08 +0800
-X-Gm-Features: AQROBzCJHnH29qb2JQ8-NllTp5V_PM-9hiPCW-u56_I0DnByztAvKaTXz4GljAs
-Message-ID: <CABFUUZFZf5nUoQr7v-fp5k+Ef+q-XtzxVcsbYMfS-zsk2zdRbA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Do not ignore offsets for loads from insn_arrays
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: Anton Protopopov <a.s.protopopov@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiyong Yang <ksur673@gmail.com>
+References: <20260401021635.34636-1-alexei.starovoitov@gmail.com>
+ <20260401021635.34636-5-alexei.starovoitov@gmail.com> <3c091ab744676990e90469a89a4f0110d724ce19.camel@gmail.com>
+ <CAADnVQJtw5A4GbknXoA-BtobOVMiBc+pC8nUQZ+1zX5wbj3ipg@mail.gmail.com>
+In-Reply-To: <CAADnVQJtw5A4GbknXoA-BtobOVMiBc+pC8nUQZ+1zX5wbj3ipg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 1 Apr 2026 19:45:39 -0700
+X-Gm-Features: AQROBzAS5onjHX4joIB3F_U4AwhGHEIAxc1wFoqQssoUn7SYnjiw3MqAlK53mMw
+Message-ID: <CAADnVQJhXVri5XC8YScjUs1ShPiSokSCWt5F6LDJ-YDnivzb6g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/6] bpf: Add compute_const_regs() and
+ prune_dead_branches() passes
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 6:47=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
+On Wed, Apr 1, 2026 at 3:32=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
+> On Wed, Apr 1, 2026 at 2:07=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+> >
+> > On Tue, 2026-03-31 at 19:16 -0700, Alexei Starovoitov wrote:
+> > > From: Alexei Starovoitov <ast@kernel.org>
+> > >
+> > > Add two passes before the main verifier pass:
+> > >
+> > > compute_const_regs() is a forward dataflow analysis that tracks
+> > > register values in R0-R9 across the program using fixed-point
+> > > iteration in reverse postorder. Each register is tracked with
+> > > a six-state lattice:
+> > >
+> > >   UNVISITED -> CONST(val) / MAP_PTR(map_index) /
+> > >                MAP_VALUE(map_index, offset) / SUBPROG(num) -> UNKNOWN
+> > >
+> > > At merge points, if two paths produce the same state and value for
+> > > a register, it stays; otherwise it becomes UNKNOWN.
+> > >
+> > > The analysis handles:
+> > >  - MOV, ADD, SUB, AND with immediate or register operands
+> > >  - LD_IMM64 for plain constants, map FDs, map values, and subprogs
+> > >  - LDX from read-only maps: constant-folds the load by reading the
+> > >    map value directly via bpf_map_direct_read()
+> > >
+> > > Results that fit in 32 bits are stored per-instruction in
+> > > insn_aux_data and bitmasks.
+> > >
+> > > prune_dead_branches() uses the computed constants to evaluate
+> > > conditional branches. When both operands of a conditional jump are
+> > > known constants, the branch outcome is determined statically and the
+> > > instruction is rewritten to an unconditional jump.
+> > > The CFG postorder is then recomputed to reflect new control flow.
+> > > This eliminates dead edges so that subsequent liveness analysis
+> > > doesn't propagate through dead code.
+> > >
+> > > Also add runtime sanity check to validate that precomputed
+> > > constants match the verifier's tracked state.
+> > >
+> > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > > ---
+> >
+> > Besides issues found by bot this patch lgtm.
+> >
+> > [...]
+> >
+> > > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifie=
+r.h
+> > > index 4f492eaad5c2..0d797de30a3a 100644
+> > > --- a/include/linux/bpf_verifier.h
+> > > +++ b/include/linux/bpf_verifier.h
+> >
+> > [...]
+> >
+> > > @@ -1086,6 +1102,13 @@ struct bpf_iarray *bpf_insn_successors(struct =
+bpf_verifier_env *env, u32 idx);
+> > >  void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
+> > >  bool bpf_calls_callback(struct bpf_verifier_env *env, int insn_idx);
+> > >
+> > > +int find_subprog(struct bpf_verifier_env *env, int off);
+> > > +int compute_const_regs(struct bpf_verifier_env *env);
+> > > +int prune_dead_branches(struct bpf_verifier_env *env);
+> > > +int compute_postorder(struct bpf_verifier_env *env);
+> > > +bool insn_is_cond_jump(u8 code);
+> > > +bool is_may_goto_insn(struct bpf_insn *insn);
+> > > +
+> >
+> > Q: What is the policy regarding naming exported functions?
+> >    So far I always used "bpf_..." prefix assuming that this
+> >    is a requirement, was I wrong?
 >
->
-> On 4/1/26 5:15 PM, Anton Protopopov wrote:
-> > When a pointer to PTR_TO_INSN is dereferenced it is possible to
-> > specify an offset inside the load instruction. This is a bug,
-> > because while the verifier ignores the field, JITs are not.
-> > So, patch the verifier to not ignore this field.
-> >
-> > Reported-by: Jiyong Yang <ksur673@gmail.com>
-> > Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
-> > Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
-> > ---
-> >   kernel/bpf/verifier.c | 17 +++++++++++++++++
-> >   1 file changed, 17 insertions(+)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 8c1cf2eb6cbb..f1b1c8e9dc26 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -212,6 +212,8 @@ static int ref_set_non_owning(struct bpf_verifier_e=
-nv *env,
-> >   static bool is_trusted_reg(const struct bpf_reg_state *reg);
-> >   static inline bool in_sleepable_context(struct bpf_verifier_env *env)=
-;
-> >   static const char *non_sleepable_context_description(struct bpf_verif=
-ier_env *env);
-> > +static void scalar32_min_max_add(struct bpf_reg_state *dst_reg, struct=
- bpf_reg_state *src_reg);
-> > +static void scalar_min_max_add(struct bpf_reg_state *dst_reg, struct b=
-pf_reg_state *src_reg);
-> >
-> >   static bool bpf_map_ptr_poisoned(const struct bpf_insn_aux_data *aux)
-> >   {
-> > @@ -7735,6 +7737,20 @@ static bool get_func_retval_range(struct bpf_pro=
-g *prog,
-> >       return false;
-> >   }
-> >
-> > +static inline void add_scalar_to_reg(struct bpf_reg_state *dst_reg, s6=
-4 val)
->
-> Why does it need to be manually inlined?
-> Other than that the change looks good, the implementation of the
-> add_scalar_to_reg() is similar to a piece of code in sync_linked_regs().
-Agreed.
+> It's nice to have but not mandatory.
+> imo the names are unique enough, so unlikely to clash.
 
-nit: maybe this helper could be called from sync_linked_regs() too?
->
-> > +{
-> > +     struct bpf_reg_state fake_reg;
-> > +
-> > +     fake_reg.type =3D SCALAR_VALUE;
-> > +     __mark_reg_known(&fake_reg, val);
-> > +
-> > +     scalar32_min_max_add(dst_reg, &fake_reg);
-> > +     scalar_min_max_add(dst_reg, &fake_reg);
-> > +     dst_reg->var_off =3D tnum_add(dst_reg->var_off, fake_reg.var_off)=
-;
-> > +
-> > +     reg_bounds_sync(dst_reg);
-> > +}
+This one I still think is ok, but the other patch does:
 
-> > +
-> >   /* check whether memory at (regno + off) is accessible for t =3D (rea=
-d | write)
-> >    * if t=3D=3Dwrite, value_regno is a register which value is stored i=
-nto memory
-> >    * if t=3D=3Dread, value_regno is a register which will receive the v=
-alue from memory
-> > @@ -7816,6 +7832,7 @@ static int check_mem_access(struct bpf_verifier_e=
-nv *env, int insn_idx, u32 regn
-> >                                       return -EACCES;
-> >                               }
-> >                               copy_register_state(&regs[value_regno], r=
-eg);
-> > +                             add_scalar_to_reg(&regs[value_regno], off=
-);
-> >                               regs[value_regno].type =3D PTR_TO_INSN;
-> >                       } else {
-> >                               mark_reg_unknown(env, regs, value_regno);
->
->
+-__printf(2, 3) static void verbose(void *private_data, const char *fmt, ..=
+.)
++__printf(2, 3) void verbose(void *private_data, const char *fmt, ...)
+
+and this is definitely too much.
