@@ -1,460 +1,147 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49A3265CA8
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 01:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF6C27A476
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 01:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775093302; cv=none; b=IAnW9FZ1YG+GUAUBcdpjHBz1HG9MbWmjirRZa6pYanNGWtr3o+EKyP/6reWZWRVVjQ9idcJgJKIMudWKPEsiUYl+SLjAu8FiV2QHiB4PZdllA+9NKp4XiWJheM8zz03cFUno0P8c7HlUiSMkJoiWA9cUSlIZ0wDLtT7oUpLe/t4=
+	t=1775093699; cv=none; b=hnLU2xmBCxtIfEUTybTZc2dWtLBhNla+C8NjTlDU7qphZ5DbZmNz82+FHDIZdQBHIM28+vWhwLTgfOlKnC1rdOMQWNdkI1k75Rrz7JS9l89HtO3NLAhGRSmXEWtzma6XpCzpNRkVPCKb9HE3cDQXXYUb3WDtnNDOhaHOwIjbWdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775093302; c=relaxed/simple;
-	bh=CsxSKtAu8YK9gNjNfce/FvhNfPp7AUxq/IX7bP238wQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rBym9zzt6h32/nfccQA5kFHiwQ8o2d2PZOM7VyHD73/CfvWvX1R1HVshukQ1N4cINmAEacZcJ9qWo5A0GOAaIsdiA5FTpb0mnOi92F0LvzgKciABXsmUW2qa2cMF+bZuPqWU4tkbQ7v2kNkzZOyExdupcwt6vdRrjiWX0tiVW/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 84B3F3328054F; Wed,  1 Apr 2026 18:28:08 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 08/10] selftests/bpf: Add tests for BPF function stack arguments
-Date: Wed,  1 Apr 2026 18:28:08 -0700
-Message-ID: <20260402012808.3921472-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260402012727.3916819-1-yonghong.song@linux.dev>
-References: <20260402012727.3916819-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1775093699; c=relaxed/simple;
+	bh=m297v3GiOVxkqkQKNKsn0SSm2BRnx0wYfsw0+elhHng=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iSVWNMlt9FkL1uRSV4dm3spqswrAwSD+3/u8EOynvvBrkZOQE7feBGyLV9BFxOal01hxKUzqdb5bVRfuwuaKyNhjGVTFn/pmL4pWtqe4y4b1xPfK+EYY+FimaIh1OiNHfUPJdxlHBt4fWJaXF8VbD6nWoYZjFUzapDocrS92+oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uIDVavCa; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uIDVavCa"
+Date: Wed, 1 Apr 2026 18:34:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775093685;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QIoJDHbGUi2T/S0l/YZNFtyf9ayIGPFiBwet0GcLpco=;
+	b=uIDVavCa2u2MMjx4gA75IWMWn8CnNonvE3gYY8ZwaNY/D/b8Pru3oHsGl0/dAPjD1gxyqp
+	BMbIN6FIaEHgEr4rzTlUMqB5C3vy0QK/ntg/MFZzoyMAk7CdYmK2usVt4LaljM1PHjBTx+
+	hgoH7PNIK2wuRPEA/6jvvMUQpjTVlLU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: Jiayuan Chen <mrpre@163.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v3 5/5] bpf, sockmap: Adapt for af_unix-specific lock
+Message-ID: <ac2z6IqYyIxSZFPS@devbig1721.ftw5.facebook.com>
+References: <20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co>
+ <20260306-unix-proto-update-null-ptr-deref-v3-5-2f0c7410c523@rbox.co>
+ <2192e9ef-894f-4826-b296-4f90e973a31b@163.com>
+ <b9a956dd-ebb2-47ca-8b49-ccbba6ff9b26@rbox.co>
+ <b21fac4e-891b-481c-9734-e95290e49097@linux.dev>
+ <fa818820-c0c9-48dc-8ebc-661cb3349935@rbox.co>
+ <dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev>
+ <27fa6e91-02a5-46cd-8c95-b75fd2c5fa08@rbox.co>
+ <ae86a1e5-769c-44d8-ad7e-ad724800e9e4@linux.dev>
+ <08c824b0-cfbb-40ca-b976-9fbd41e5e855@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <08c824b0-cfbb-40ca-b976-9fbd41e5e855@rbox.co>
+X-Migadu-Flow: FLOW_OUT
 
-Add selftests covering stack argument passing for both BPF-to-BPF
-subprog calls and kfunc calls with more than 5 arguments. All tests
-are guarded by __BPF_FEATURE_STACK_ARGUMENT and __TARGET_ARCH_x86.
+On Wed, 01 Apr 2026 00:43:58 +0200, Michal Luczaj wrote:
+> On 3/31/26 02:20, Martin KaFai Lau wrote:
+> > On 3/30/26 4:03 PM, Michal Luczaj wrote:
+> >> On 3/26/26 07:26, Martin KaFai Lau wrote:
+> >>> On 3/15/26 4:58 PM, Michal Luczaj wrote:
+> >>>>> Beside, from looking at the may_update_sockmap(), I don't know if it is
+> >>>>> even doable (or useful) to bpf_map_update_elem(unix_sk) in
+> >>>>> tc/flow_dissector/xdp. One possible path is the SOCK_FILTER when looking
+> >>>>> at unix_dgram_sendmsg() => sk_filter(). It was not the original use case
+> >>>>> when the bpf_map_update_elem(sockmap) support was added iirc.
+> >>>>
+> >>>> What about a situation when unix_sk is stored in a sockmap, then tc prog
+> >>>> looks it up and invokes bpf_map_update_elem(unix_sk)? I'm not sure it's
+> >>>> useful, but seems doable.
+> >>>
+> >>> [ Sorry for the late reply ]
+> >>>
+> >>> It is a bummer that the bpf_map_update_elem(unix_sk) path is possible
+> >>> from tc :(
+> >>>
+> >>> Then unix_state_lock() in its current form cannot be safely acquired in
+> >>> sock_map_update_elem(). It is currently a spin_lock() instead of
+> >>> spin_lock_bh().
+> >>
+> >> Is there a specific deadlock you have in your mind?
+> > 
+> > e.g. unix_stream_connect() is taking unix_state_lock(). Can a tc's 
+> > ingress bpf prog call unix_state_lock()?
+> 
+> Ah, right, that's the problem, thanks for explaining.
+> 
+> But, as I've asked in the parallel thread, do we really need to take the
+> unix_state_lock() in sock_map_update_elem()? Taking it in
+> sock_map_update_elem_sys() fixes the null-ptr-deref and does not lead to a
+> deadlock. Taking unix_state_lock() in sock_map_update_elem() seems
+> unnecessary. Well, at least under the assumption progs can only access
+> unix_sk via the sockmap lookup.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/stack_arg.c      | 143 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/stack_arg.c | 111 ++++++++++++++
- .../selftests/bpf/progs/stack_arg_kfunc.c     |  59 ++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  22 +++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   7 +
- 5 files changed, 342 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+right, sock_map_update_elem_sys() should be safe to take
+unix_state_lock().
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg.c b/tools/t=
-esting/selftests/bpf/prog_tests/stack_arg.c
-new file mode 100644
-index 000000000000..86b8025f5541
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
-@@ -0,0 +1,143 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "stack_arg.skel.h"
-+#include "stack_arg_kfunc.skel.h"
-+
-+static void test_nesting(void)
-+{
-+	struct stack_arg *skel;
-+	int err, prog_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in =3D &pkt_v4,
-+		.data_size_in =3D sizeof(pkt_v4),
-+		.repeat =3D 1,
-+	);
-+
-+	skel =3D stack_arg__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+
-+	if (!skel->rodata->has_stack_arg) {
-+		test__skip();
-+		goto out;
-+	}
-+
-+	err =3D stack_arg__load(skel);
-+	if (!ASSERT_OK(err, "load"))
-+		goto out;
-+
-+	skel->bss->a =3D 0;
-+	skel->bss->b =3D 0;
-+	skel->bss->c =3D 0;
-+	skel->bss->d =3D 0;
-+	skel->bss->e =3D 0;
-+	skel->bss->f =3D 6;
-+	skel->bss->g =3D 7;
-+	skel->bss->i =3D 8;
-+
-+	prog_fd =3D bpf_program__fd(skel->progs.test);
-+	err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 29, "retval");
-+
-+out:
-+	stack_arg__destroy(skel);
-+}
-+
-+static void run_subtest(struct bpf_program *prog, int expected)
-+{
-+	int err, prog_fd;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in =3D &pkt_v4,
-+		.data_size_in =3D sizeof(pkt_v4),
-+		.repeat =3D 1,
-+	);
-+
-+	prog_fd =3D bpf_program__fd(prog);
-+	err =3D bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, expected, "retval");
-+}
-+
-+static void test_global_many(void)
-+{
-+	struct stack_arg *skel;
-+
-+	skel =3D stack_arg__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+
-+	if (!skel->rodata->has_stack_arg) {
-+		test__skip();
-+		goto out;
-+	}
-+
-+	if (!ASSERT_OK(stack_arg__load(skel), "load"))
-+		goto out;
-+
-+	run_subtest(skel->progs.test_global_many_args, 36);
-+
-+out:
-+	stack_arg__destroy(skel);
-+}
-+
-+static void test_async_cb_many(void)
-+{
-+	struct stack_arg *skel;
-+
-+	skel =3D stack_arg__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+
-+	if (!skel->rodata->has_stack_arg) {
-+		test__skip();
-+		goto out;
-+	}
-+
-+	if (!ASSERT_OK(stack_arg__load(skel), "load"))
-+		goto out;
-+
-+	run_subtest(skel->progs.test_async_cb_many_args, 0);
-+
-+out:
-+	stack_arg__destroy(skel);
-+}
-+
-+static void test_kfunc(void)
-+{
-+	struct stack_arg_kfunc *skel;
-+
-+	skel =3D stack_arg_kfunc__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+
-+	if (!skel->rodata->has_stack_arg) {
-+		test__skip();
-+		goto out;
-+	}
-+
-+	if (!ASSERT_OK(stack_arg_kfunc__load(skel), "load"))
-+		goto out;
-+
-+	run_subtest(skel->progs.test_stack_arg_scalar, 36);
-+	run_subtest(skel->progs.test_stack_arg_ptr, 45);
-+	run_subtest(skel->progs.test_stack_arg_mix, 51);
-+
-+out:
-+	stack_arg_kfunc__destroy(skel);
-+}
-+
-+void test_stack_arg(void)
-+{
-+	if (test__start_subtest("nesting"))
-+		test_nesting();
-+	if (test__start_subtest("global_many_args"))
-+		test_global_many();
-+	if (test__start_subtest("async_cb_many_args"))
-+		test_async_cb_many();
-+	if (test__start_subtest("kfunc"))
-+		test_kfunc();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testin=
-g/selftests/bpf/progs/stack_arg.c
-new file mode 100644
-index 000000000000..c139a699fc3c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/stack_arg.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <stdbool.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define CLOCK_MONOTONIC 1
-+
-+long a, b, c, d, e, f, g, i;
-+
-+struct timer_elem {
-+	struct bpf_timer timer;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct timer_elem);
-+} timer_map SEC(".maps");
-+
-+int timer_result;
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+const volatile bool has_stack_arg =3D true;
-+
-+__noinline static long func_b(long a, long b, long c, long d,
-+			      long e, long f, long g, long h)
-+{
-+	return a + b + c + d + e + f + g + h;
-+}
-+
-+__noinline static long func_a(long a, long b, long c, long d,
-+			      long e, long f, long g, long h)
-+{
-+	return func_b(a + 1, b + 1, c + 1, d + 1,
-+		      e + 1, f + 1, g + 1, h + 1);
-+}
-+
-+SEC("tc")
-+int test(void)
-+{
-+	return func_a(a, b, c, d, e, f, g, i);
-+}
-+
-+__noinline static int static_func_many_args(int a, int b, int c, int d,
-+					    int e, int f, int g, int h)
-+{
-+	return a + b + c + d + e + f + g + h;
-+}
-+
-+__noinline int global_calls_many_args(int a, int b, int c)
-+{
-+	return static_func_many_args(a, b, c, 4, 5, 6, 7, 8);
-+}
-+
-+SEC("tc")
-+int test_global_many_args(void)
-+{
-+	return global_calls_many_args(1, 2, 3);
-+}
-+
-+static int timer_cb_many_args(void *map, int *key, struct bpf_timer *tim=
-er)
-+{
-+	timer_result =3D static_func_many_args(10, 20, 30, 40, 50, 60, 70, 80);
-+	return 0;
-+}
-+
-+SEC("tc")
-+int test_async_cb_many_args(void)
-+{
-+	struct timer_elem *elem;
-+	int key =3D 0;
-+
-+	elem =3D bpf_map_lookup_elem(&timer_map, &key);
-+	if (!elem)
-+		return -1;
-+
-+	bpf_timer_init(&elem->timer, &timer_map, CLOCK_MONOTONIC);
-+	bpf_timer_set_callback(&elem->timer, timer_cb_many_args);
-+	bpf_timer_start(&elem->timer, 1, 0);
-+	return 0;
-+}
-+
-+#else
-+
-+const volatile bool has_stack_arg =3D false;
-+
-+SEC("tc")
-+int test(void)
-+{
-+	return 0;
-+}
-+
-+SEC("tc")
-+int test_global_many_args(void)
-+{
-+	return 0;
-+}
-+
-+SEC("tc")
-+int test_async_cb_many_args(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/=
-testing/selftests/bpf/progs/stack_arg_kfunc.c
-new file mode 100644
-index 000000000000..a440e9b42a4a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "../test_kmods/bpf_testmod_kfunc.h"
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+const volatile bool has_stack_arg =3D true;
-+
-+SEC("tc")
-+int test_stack_arg_scalar(struct __sk_buff *skb)
-+{
-+	return bpf_kfunc_call_stack_arg(1, 2, 3, 4, 5, 6, 7, 8);
-+}
-+
-+SEC("tc")
-+int test_stack_arg_ptr(struct __sk_buff *skb)
-+{
-+	struct prog_test_pass1 p =3D { .x0 =3D 10, .x1 =3D 20 };
-+
-+	return bpf_kfunc_call_stack_arg_ptr(1, 2, 3, 4, 5, &p);
-+}
-+
-+SEC("tc")
-+int test_stack_arg_mix(struct __sk_buff *skb)
-+{
-+	struct prog_test_pass1 p =3D { .x0 =3D 10 };
-+	struct prog_test_pass1 q =3D { .x1 =3D 20 };
-+
-+	return bpf_kfunc_call_stack_arg_mix(1, 2, 3, 4, 5, &p, 6, &q);
-+}
-+
-+#else
-+
-+const volatile bool has_stack_arg =3D false;
-+
-+SEC("tc")
-+int test_stack_arg_scalar(struct __sk_buff *skb)
-+{
-+	return 0;
-+}
-+
-+SEC("tc")
-+int test_stack_arg_ptr(struct __sk_buff *skb)
-+{
-+	return 0;
-+}
-+
-+SEC("tc")
-+int test_stack_arg_mix(struct __sk_buff *skb)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 061356f10093..d88ab1dc5106 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -824,6 +824,25 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u3=
-2 c)
- 	return 0;
- }
-=20
-+__bpf_kfunc u64 bpf_kfunc_call_stack_arg(u64 a, u64 b, u64 c, u64 d,
-+					 u64 e, u64 f, u64 g, u64 h)
-+{
-+	return a + b + c + d + e + f + g + h;
-+}
-+
-+__bpf_kfunc u64 bpf_kfunc_call_stack_arg_ptr(u64 a, u64 b, u64 c, u64 d,=
- u64 e,
-+					     struct prog_test_pass1 *p)
-+{
-+	return a + b + c + d + e + p->x0 + p->x1;
-+}
-+
-+__bpf_kfunc u64 bpf_kfunc_call_stack_arg_mix(u64 a, u64 b, u64 c, u64 d,=
- u64 e,
-+					     struct prog_test_pass1 *p, u64 f,
-+					     struct prog_test_pass1 *q)
-+{
-+	return a + b + c + d + e + p->x0 + f + q->x1;
-+}
-+
- static struct prog_test_ref_kfunc prog_test_struct =3D {
- 	.a =3D 42,
- 	.b =3D 108,
-@@ -1287,6 +1306,9 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_ptr)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_mix)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index aa0b8d41e71b..f93cf2db12b2 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -111,6 +111,13 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, _=
-_u32 b) __ksym;
- struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
- long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
- int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
-+__u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
-+			       __u64 e, __u64 f, __u64 g, __u64 h) __ksym;
-+__u64 bpf_kfunc_call_stack_arg_ptr(__u64 a, __u64 b, __u64 c, __u64 d, _=
-_u64 e,
-+				   struct prog_test_pass1 *p) __ksym;
-+__u64 bpf_kfunc_call_stack_arg_mix(__u64 a, __u64 b, __u64 c, __u64 d, _=
-_u64 e,
-+				   struct prog_test_pass1 *p, __u64 f,
-+				   struct prog_test_pass1 *q) __ksym;
-=20
- void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
- void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
---=20
-2.52.0
+If it is fixed by testing unix_peer(), is the TCPF_ESTABLISHED test
+in sock_map_sk_state_allowed() still useful and needed? Also,
+please explain in detail in the commit message why testing for NULL
+without unix_state_lock() is enough. For example, for the BPF iterator on
+sock_map, my understanding is that unix_release_sock() can still happen
+while the BPF iterator is iterating over a unix_sock. I guess a future
+unix_state_lock() in the iterator's seq_show() should be useful.
 
+It will also be useful to mention what was discovered about TC + lookup
++ update_elem(&sock_map, ...) and why it is not safe to take
+unix_state_lock() in that path. Thanks.
+
+> 
+> >> ...
+> >> And sock_{map,hash}_seq_show() (being a part of bpf iter machinery) needs
+> >> to take lock_sock() just as well? Would that require a special-casing
+> >> (unix_state_lock()) for af_unix?
+> > 
+> > I would think so for lock_sock() considering the current bh_lock_sock 
+> > without !sock_owned_by_user() usage is incorrect in 
+> > sock_map_update_elem(). [ this probably should be a separate issue for 
+> > another patch ]
+> 
+> All right, leaving that for later.
+> 
+> > Some more side-tracking... from looking at the code, the bpf_iter of 
+> > sock_{map,hash} can do bpf_map_lookup_elem(&sock_map, ...). This 
+> > bpr_iter program probably will be failed to load because the 
+> > bpf_sk_release() is not available.
+> 
+> I think ability to bpf_map_lookup_elem(sockmap) was added way before bpf
+> iter in
+> https://lore.kernel.org/bpf/20200429181154.479310-2-jakub@cloudflare.com/
+> and iter "allows" it somewhat accidentally. Would you rather have it
+> explicitly dropped?
+
+It is fine to leave it as is. It would be a bit nicer to reject map_lookup
+on sockmap instead of giving the confusing error that bpf_sk_release
+is not available. That is for another day. I was just wondering what else
+could go wrong with map_lookup.
