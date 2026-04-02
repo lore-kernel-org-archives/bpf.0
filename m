@@ -1,136 +1,191 @@
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7276236DA0F
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 12:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DF83CD8B2
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 12:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775132348; cv=none; b=aSYn2O2BOMJgDq7SD2kXjsz+eI0OL+POPgHQQO1ZVPI7TjBKiB0pA87PvW2g6OqkidPTXGP2SG2sq3AnBSi42o5n3d3Rj3rXohJxoOlZ8VEz86rzHApZ+G6debZlV/v3wey9MvDSGKOp4lNmLeva/cTTnxFe5fWRx6VQR0qPXm0=
+	t=1775134151; cv=none; b=oPV1W3XyfWHEQK6nNsxXZzKDp9OIcE9+APqjUlP4DDi1PDDFLXB+GIVjPpExVBwVoIDHc+uSAtE3mHhu+jNHIGen4O6mJx+/lAN2nBVsF7nuxH10EVd4VRg1e6YCtLo4V7ewpiRmoh6dBEy+YaTF8CA984heABXFEUbfKCWF2GU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775132348; c=relaxed/simple;
-	bh=9FODWdXDEBuA5ZUj9L56F+jEupBPZePwiw5kABSsSb0=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=PxWfZzK3S05/jTz1BoXJ1dkdxP7eQJ8ikNF2EGbc6fyWLnGyjg6FjeMkLbc+zpL158FJ9QTX+epSPvcaOGr1ZcUs+eEQNqPb8CL7U/Rkx3tJLFm9WwUY9/yk/ZuDEisZAbGckImWluiWoYRHUo0ij1GJDg1iknaCYr1+H4wfIws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=jzvI8BqM; arc=none smtp.client-ip=162.62.57.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1775134151; c=relaxed/simple;
+	bh=GwzbYHcb1qdCaSphuvTjE9xEXNlvYk0Sd0NL1Y8zGG8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F/CuA9T4f33JHFIQCDlUMzcIn9TaCvztEzJe2U+6fuhdq8GZ8Tng0zQW9G9SuuuPalZ6VGKQiPVJkbGWmpganb15WZdAv/T8XL4V0/eyFv/2HwfQWwwYhNxrfBLEDn40BDM/Z8Fw0/qwe6hjKq6xiGcp6RY5teL8XlF0IDR/x7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mdpsL6VZ; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="jzvI8BqM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1775132341; bh=YjjCmZOrW4REFAVBzGGbqDrfiq8sy+usJO2oakX7oVc=;
-	h=From:To:Cc:Subject:Date;
-	b=jzvI8BqM9LAEqj0I/ZA6jvi55l7+4vWvThY4AIQxde5+86ucTTaFzxlurxfvf7N6u
-	 htneIthfGgys4+8fOrvHl7RCzl3um8mYdanY8+TevL4ejnOGH1lMXNLDEe7xIQEmWb
-	 gDynbgQFYBNYQhSJ8utRc9IJXzSkehDrv6Abrces=
-Received: from localhost.localdomain ([14.116.239.36])
-	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
-	id 4B98B2DC; Thu, 02 Apr 2026 20:18:57 +0800
-X-QQ-mid: xmsmtpt1775132337t3vcv09eb
-Message-ID: <tencent_BCF692F45859CCE6C22B7B0B64827947D406@qq.com>
-X-QQ-XMAILINFO: ODafEzNm5Exjc75Go2l9u7Kntx5JFPywaNMbbiM0shFHskjksdMK18mmLdCtnE
-	 bv69tXHzX38KjpTcJmWlp9rB4sQWRQldw2NYs5g3sW87hH5xOuqWXiGzpQZ0FHR+oRH8VOxK2XLF
-	 abl4VdvSFr8ORCkGEjRi/pj7bl4OjOD8ivgx23b+0yaqFNhsZJChqkR3qaJn5+e2sD33jC9oqFc/
-	 V6VVxbjKeu+0WJ7AJ0Cr7HfXxUk93VfH/u7dgK216zF+bcPtK66s8g6m0FYeoP/8VmryoYk+QedS
-	 sMPOCAa2y8b30JE3wBc4JEPq2pAkz7kZi0QognbR2VRjt/IOJbtiRBp+GMDZc56Y4i+FRFJuMn6B
-	 AqLJLcO+P2FaIt8Su2ST0nFAvtn3Y2fOG6IvoUk3xig+X8Zkwve5ll280/E9+Ol4fR/owJMZvdJd
-	 TpX/tuxiXH02xvLIwbsZdjBxeJIES/dZ3xDL0kZCKdxz8jDYChG/SBGmxdLXAjzMg32HutUH2iUS
-	 A2MSanxjzHAJXYC6iaqcjsoqQWjs9QA6vmzSYjpywPw7e1pygaRd5SxDySy5G19YNxdmt1bxCDUm
-	 zB4s7aTwVLPzEBzTI18AHUcVk1737Z8TI9sP89D7rYjTmCNSneN58IOhYJG8C0kvhsAAysoMxV9S
-	 uPU1Zh80DDgcGGktkbJol4kESIYfmFRUeB1MPwmTUaACWUuLCekoRllTGE2blpOhAIhwWy4dONdr
-	 YFCs/WgAIJiAZWdC524YDMKYUXuS/2jEHCJE89tvKr4bA8VPjqlHZIrIqw7/OdAzgs/mjukCpSk7
-	 7NejiqyEYblmSNQyMzJ6ja/fPfbCY5/udvyfjJvYGMhc8YqHwMdYVCMyO3L9pYmLmMj9/GT8cwkp
-	 J44VxY0Y+X0/CKx/Dex94QDTEsa+9T0Q+gVfglokkTg4dmjXRpSaO2GHRypTZ12naGxSqX4rquVO
-	 nK1+gqJ7pwYRHkDuU9SvYvRwvxZcRXrNV+5oesao+OafzwfVh+e1Ay9LnUagRWjXlFe37PTKyzDi
-	 oQUEiB3CTRjOrHXGlxFqR3yvV7Qh0lVJFIR24mgxgdN90JRN8R2rlrw7LktBcgk2jBvTrX5nAf1u
-	 OeJCgfdFSE6EK+yITtrN5zxlzT0W01zphzmA9b
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
-From: MingTao Huang <1037827920@qq.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	MingTao Huang <mintaohuang@tencent.com>
-Subject: [PATCH bpf] bpf: Fix stale offload->prog pointer after constant blinding
-Date: Thu,  2 Apr 2026 20:18:50 +0800
-X-OQ-MSGID: <20260402121850.1382074-1-1037827920@qq.com>
-X-Mailer: git-send-email 2.43.7
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mdpsL6VZ"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775134132;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c83JoqeMLXdZmjzNRF6o7KLJNuH8aTVtb6ay845K+fk=;
+	b=mdpsL6VZN+fifI1A8+BQtMWCZ0245st3OemBQ8MKxSbtCsaGtZYnFyvxilr/SL9IC1rxUb
+	J4AXdSk7SC+7ha4PkKDfCv/7vPR5Jv1EVFa4q5FtLQDiLhO/EBprCD1HfJOf559bW1aTOq
+	ZwpkuR7+gnaTCFucQsOE68H34HuAzC4=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+ joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com,
+ song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ yonghong.song@linux.dev, Yafang Shao <laoar.shao@gmail.com>,
+ live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject:
+ Re: [RFC PATCH 2/4] trace: Allow kprobes to override livepatched functions
+Date: Thu, 02 Apr 2026 20:48:21 +0800
+Message-ID: <2261072.irdbgypaU6@7950hx>
+In-Reply-To: <20260402092607.96430-3-laoar.shao@gmail.com>
+References:
+ <20260402092607.96430-1-laoar.shao@gmail.com>
+ <20260402092607.96430-3-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-From: MingTao Huang <mintaohuang@tencent.com>
+On 2026/4/2 17:26, Yafang Shao wrote:
+> Introduce the ability for kprobes to override the return values of
+> functions that have been livepatched. This functionality is guarded by the
+> CONFIG_KPROBE_OVERRIDE_KLP_FUNC configuration option.
 
-When a dev-bound-only BPF program (BPF_F_XDP_DEV_BOUND_ONLY) undergoes
-JIT compilation with constant blinding enabled (bpf_jit_harden >= 2),
-bpf_jit_blind_constants() clones the program. The original prog is then
-freed in bpf_jit_prog_release_other(), which updates aux->prog to point
-to the surviving clone, but fails to update offload->prog.
+Hi, Yafang. This is a interesting idea.
 
-This leaves offload->prog pointing to the freed original program. When
-the network namespace is subsequently destroyed, cleanup_net() triggers
-bpf_dev_bound_netdev_unregister(), which iterates ondev->progs and calls
-__bpf_prog_offload_destroy(offload->prog). Accessing the freed prog
-causes a page fault:
+For now, the bpf_override_return() can only be used on the kernel
+functions that allow error injection to prevent the BPF program from
+crash the kernel. If we use it on the kernel functions that patched
+by the KLP, we can crash the kernel easily by return a invalid value
+with bpf_override_return(), right? (Of course, we can crash the kernel
+easily with KLP too ;)
 
-BUG: unable to handle page fault for address: ffffc900085f1038
-Workqueue: netns cleanup_net
-RIP: 0010:__bpf_prog_offload_destroy+0xc/0x80
-Call Trace:
-__bpf_offload_dev_netdev_unregister+0x257/0x350
-bpf_dev_bound_netdev_unregister+0x4a/0x90
-unregister_netdevice_many_notify+0x2a2/0x660
-...
-cleanup_net+0x21a/0x320
+I haven't figure out the use case yet. Can KLP be used together with
+the BPF program that use bpf_override_return()? The KLP will modify
+the RIP on the stack, and the bpf_override_return() will modify it too.
+AFAIK, there can't be two ftrace_ops that both have the
+FTRACE_OPS_FL_IPMODIFY flag. Did I miss something?
 
-The test sequence that triggers this reliably is:
+It will be helpful for me to understand the use case if a selftests is
+offered :)
 
-1. Set net.core.bpf_jit_harden=2 (echo 2 > /proc/sys/net/core/bpf_jit_harden)
-2. Run xdp_metadata selftest, which creates a dev-bound-only XDP
-   program on a veth inside a netns (./test_progs -t xdp_metadata)
-3. cleanup_net -> page fault in __bpf_prog_offload_destroy
+BTW, if we allow the usage of bpf_override_return() on the KLP patched
+function, we should allow the usage of BPF_MODIFY_RETURN on this
+case too, right?
 
-Dev-bound-only programs are unique in that they have an offload structure 
-but go through the normal JIT path instead of bpf_prog_offload_compile(). 
-This means they are subject to constant blinding's prog clone-and-replace, 
-while also having offload->prog that must stay in sync.
+Thanks!
+Menglong Dong
 
-Fix this by updating offload->prog in bpf_jit_prog_release_other(),
-alongside the existing aux->prog update. Both are back-pointers to
-the prog that must be kept in sync when the prog is replaced.
+> 
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> ---
+>  kernel/trace/Kconfig        | 14 ++++++++++++++
+>  kernel/trace/bpf_trace.c    |  3 ++-
+>  kernel/trace/trace_kprobe.c | 17 +++++++++++++++++
+>  kernel/trace/trace_probe.h  |  5 +++++
+>  4 files changed, 38 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 49de13cae428..db712c8cb745 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -1279,6 +1279,20 @@ config HIST_TRIGGERS_DEBUG
+>  
+>            If unsure, say N.
+>  
+> +config KPROBE_OVERRIDE_KLP_FUNC
+> +	bool "Allow kprobes to override livepatched functions"
+> +	depends on KPROBES && LIVEPATCH
+> +	help
+> +	  This option allows BPF programs to use kprobes to override functions
+> +	  that have already been patched by Livepatch (KLP).
+> +
+> +	  Enabling this provides a mechanism to dynamically control execution
+> +	  flow without requiring a reboot or a new livepatch module. It
+> +	  effectively combines the persistence of livepatching with the
+> +	  programmability of BPF.
+> +
+> +	  If unsure, say N.
+> +
+>  source "kernel/trace/rv/Kconfig"
+>  
+>  endif # FTRACE
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index c901ace836cb..08ae2b1a912c 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1935,7 +1935,8 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
+>  		if (!tp)
+>  			return -EINVAL;
+>  		if (!trace_kprobe_on_func_entry(tp) ||
+> -		    !trace_kprobe_error_injectable(tp))
+> +		    (!trace_kprobe_error_injectable(tp) &&
+> +		     !trace_kprobe_klp_func_overridable(tp)))
+>  			return -EINVAL;
+>  	}
+>  
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 768702674a5c..6f05451fbc76 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -213,6 +213,23 @@ bool trace_kprobe_error_injectable(struct trace_kprobe *tp)
+>  	return within_error_injection_list(trace_kprobe_address(tp));
+>  }
+>  
+> +bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp)
+> +{
+> +	bool overridable = false;
+> +#ifdef CONFIG_KPROBE_OVERRIDE_KLP_FUNC
+> +	struct module *mod;
+> +	unsigned long addr;
+> +
+> +	addr = trace_kprobe_address(tp);
+> +	rcu_read_lock();
+> +	mod = __module_address(addr);
+> +	if (mod && mod->klp)
+> +		overridable = true;
+> +	rcu_read_unlock();
+> +#endif
+> +	return overridable;
+> +}
+> +
+>  static int register_kprobe_event(struct trace_kprobe *tk);
+>  static int unregister_kprobe_event(struct trace_kprobe *tk);
+>  
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 958eb78a9068..84bd2617db7c 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -271,6 +271,7 @@ struct trace_kprobe {
+>  #ifdef CONFIG_KPROBE_EVENTS
+>  bool trace_kprobe_on_func_entry(struct trace_kprobe *tp);
+>  bool trace_kprobe_error_injectable(struct trace_kprobe *tp);
+> +bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp);
+>  #else
+>  static inline bool trace_kprobe_on_func_entry(struct trace_kprobe *tp)
+>  {
+> @@ -281,6 +282,10 @@ static inline bool trace_kprobe_error_injectable(struct trace_kprobe *tp)
+>  {
+>  	return false;
+>  }
+> +static inline bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp)
+> +{
+> +	return false;
+> +}
+>  #endif /* CONFIG_KPROBE_EVENTS */
+>  
+>  static inline unsigned int trace_probe_load_flag(struct trace_probe *tp)
+> 
 
-Fixes: 2b3486bc2d23 ("bpf: Introduce device-bound XDP programs")
-Signed-off-by: MingTao Huang <mintaohuang@tencent.com>
----
 
- kernel/bpf/core.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7b675a451ec8..048d275accae 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1487,6 +1487,8 @@ void bpf_jit_prog_release_other(struct bpf_prog *fp, struct bpf_prog *fp_other)
- 	 * know whether fp here is the clone or the original.
- 	 */
- 	fp->aux->prog = fp;
-+	if (fp->aux->offload)
-+		fp->aux->offload->prog = fp;
- 	bpf_prog_clone_free(fp_other);
- }
- 
--- 
-2.43.7
 
