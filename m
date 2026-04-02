@@ -1,116 +1,197 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7837B370D6F
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 08:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775117043; cv=pass; b=T4Zwf/LoNhqLz8EDtPZ9BPy/jKTBfeu1OSc/TjQtWdE5x0MibSzagV2QMTWfk+kUlFyHaWL1D2k1ESU0kYfMhQzpEfT4rqVDLANHukK+bfN4y+xHiZh6zL8hXsetTZONzeUTvF+pA5pFq9U2gUN5VVaaSEeEFXWuZWr02Ota2Es=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775117043; c=relaxed/simple;
-	bh=ZSJEDCqzQpNwg2Pez1uKarHOagG8B10XKu1G7yflVSc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fKUjx3oTwbyro6CNOqecMc2HUV6K/cu+gjOR/N7JM8Rsp9EAW/POUtrPi45XI8TrBd4T8OYhoSazi/wo22boxfALiNf10idVstloDlo3PRwuRxIvvRfqxMI4FGuF4lByveUTJGBRKrp9P5SeFTLnE5GsERgWV4y4Ved83VO4ahs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NTzCRsRd; arc=pass smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D404930276A;
+	Thu,  2 Apr 2026 08:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775117997; cv=none; b=PbXP+kPgSc5eW99+ieoS4gT6TsAGVwigT3ncA5cKzkmpVKsWzl6MW8/3SEDOVeIicPHWbWMDKNobTQMOBXDjPMYK1ZV663roof6lcZKupExAuGpwDkPvtRg3/f6Jlfc/KJwOwMyIL1FXuR6lQaJUctN9E5iEeZsK1ylwmtuEdOk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775117997; c=relaxed/simple;
+	bh=cHZTSUwDXfFNbumoLgzKe705GExS6CeHXehC56/l7oE=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=OHr9+6bjMdhnDLbQTWHCzUUgQiOt8jYQXgDU6lkiopIx7a8X4CK/tfr1xzYhzVsjNuKKSa/bPGZjEQz9QxmYGvv+0Ppv5WXVc/EaWzlb6lFQEZSYLSPboHE3m3P0asGBbVOP/Svx8VwvDdYW9bdYAThptZF9sYR8J301+OTNnRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=TDFOXP0y; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NTzCRsRd"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8a08fa355a1so9386276d6.0
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 01:04:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775117041; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HQGdj/ekqoqEljXwtMgtkOxYkoZuUGha0gnRCe5e4GlW3U/5WFi89PzXdYKQOq+dTB
-         fiNJXy27NSN4puGSLWdK9HyW5oPqWVSjosl9FsncV0Xg+twQcNBo8or3b6jgnO5arhyc
-         iQ8THurWxlqaHzXwRAEIDvLjqjYN/lmpsOg/eH2C6LLxtJFL2N9l7lyMh7FRjXlrE3gU
-         ZSKC3pAHk8C0tfVia+Q5mqTUn22MoY48j8GSoLXAPjLSEA7/9Vt8ZGvrK5YhZyU4qz2V
-         Bjok1mbevWxBgOB5Dx8UbGpCEwkYHvD9lE5OqQhgvcqCzX+HlNPxOTVgDaPA6toxVqCm
-         +R1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZSJEDCqzQpNwg2Pez1uKarHOagG8B10XKu1G7yflVSc=;
-        fh=403A50XH/BOKTPu/FMX8Dlzjfj/DMZqsRvofKePRJlQ=;
-        b=lwdj9H6Va2n5Ub5E5QoTT7QghIBlfrdKFydAeM4tUKrj7ZyxZ+1eifkJncOf5bA3jG
-         rSIGsdS+JJtLzYeggokQ+v2OMRtJX7ryoSXOl74rAf6G6ju64DRTl8OmHb+Myaw1XrQV
-         CP/Ymu+m15cec9E9l2OFLSo4hNWgV5Y4RoIaNLwzYFL9S5Hbhi1FZgxjsTI+Rj1RZYxl
-         6f12XyqQ0eL+PNTLctHz3Ndo5WViaHK8+BfNBJKVt8V4i+hGsTutLcNmTMgnVBWe+Ctf
-         9/fnZNSIg2DYRYiB48CjX0OYtGuOLjg/DlgOLCJxpacrFZLetrTkejP5iwY+cy3DGAgP
-         x8dw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775117041; x=1775721841; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZSJEDCqzQpNwg2Pez1uKarHOagG8B10XKu1G7yflVSc=;
-        b=NTzCRsRdumbqdN8cfcLLj2D6nbLedW3B85HzhykmZMiQ+PA4ePfugICmqRte5K5v2K
-         +GzUVOJHZZ9+1sgedJvD+MZV/NnpKa00aHpV+q8uagaR/4J9kEsTnvJ7NGXBK27ByxSz
-         braAX0GJcCswAYDdBBHB99ku9cznbi1EyJ5r6Bc2qx/HlJ9l5bGxEZxBwbmFUNPQ4HkW
-         RgFUeQE/NXNnFQtEzihDAFaD8CHXkfjoWBKpuphjgXYU/QivQWjePwQ+CIowLMP6IYrj
-         2qrwHR8/hKpyGdQm6CSBLEKdwYKZ0OUAwZKZN8Qbr/+1zIrnDattMrsNZDqf0IVfnY0X
-         DtmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775117041; x=1775721841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZSJEDCqzQpNwg2Pez1uKarHOagG8B10XKu1G7yflVSc=;
-        b=pGnC25vZ+FQ0xIIXyNgAflM2H1u0wtZSg427XgvoSMmaNSLdnhYdMkd1m8V6u5p7Um
-         q9lFcUQ2ZeY7P7gGix8vgYKWjBSOfTnrvUYYnCyyB+KXEbFNFwqi80rtnYY0JqRg+e8c
-         Yn6bl6eWd69fzrq3LtEHP2bDogOmyhl3hd7XFv0F59P9C4hPVpDfn2htR2A4caaepvM/
-         vdFmqymMIrpItPfWHgv7vVynOHpTq6iPY0ExRBzm+AnpFs/VAHVjLVDsH962yMDNQiu2
-         bxIMPcw7MrmGZ1utWbfMeyGpMULoNa2bfGRPvjpkQrbCJ6vtBwsbRD++4TAMEa12KyEx
-         Sz9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUcd64LPuDKNlLETqexgQDSbjbxTYu52d9UA64YcM1wBzjuEZwdPiu35XG/lhwVKTt4PPs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZpLl81QO18WSiHc2lYokqSgbdi9PwrKWMHf0FSqgi9bKBl+08
-	ddLc4Y7lv4DpJWT/aLpYQqRdqq5c1qwKmj705gpS6VxILmWopNRI9l4VdNyXrc1rkI0l0ucA1NV
-	QEyYxQ8gWSJv3K7NvB0tmLSaNkvP8o4Utow03fKSh
-X-Gm-Gg: ATEYQzxCScW/s7VV+ti2Vqn9NjQJFLZ39x0d7rFdmA77ALbITzUoqFHGQQDYC1SSuor
-	BUloelDyOZM9+lA0QCqFr9lMtRLMfqGwAomACIUmyM3/fXjSgHvcHvC11rqyiPMFUk+cV+gljzA
-	y7iE1UIUKuxpzOFcSJLxHhRaSP7NVEding+l/5aBenrjFeNH0lIIxG2b4rdHFwWlw7A/a4Nfk4w
-	XHd0Cz88zddKlC5mEC7fkE3j+NMCXDcvD8KYORA6bVpeWIcDiaEQj/cZHTJJLSq97PnUKjiEfwu
-	A/afFxdJzH7lmW7ArN4=
-X-Received: by 2002:a0c:f099:0:b0:89f:d316:2b01 with SMTP id
- 6a1803df08f44-8a437f104a5mr96099656d6.26.1775117040984; Thu, 02 Apr 2026
- 01:04:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="TDFOXP0y"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 70C46A5889;
+	Thu,  2 Apr 2026 10:19:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1775117990; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=7FmUTRudoDjBs2TfT2uUEICTUomf7L/YVLbRjYx6tJI=;
+	b=TDFOXP0ynnwrqV3WVem9dZiqeTilrjd/6e2EHtQ7/3LKacVF8ZZFAyYdtkBEdoQu/IFcW9
+	oHvMreYaERytp6zxDmulX+TZcgFrOkn0K9xyVaYMhqqslsoufdlCcun+4z6a4aQuNGpqSf
+	G4SDHEyd+shU9a7n53CfHG3YEoSLRN/7R+QO7n83/zOoStjjFWeJgZcXMG6uVOeO9i0yFO
+	bSLnrUFs6F7t16wGNEA84wFFwzBZCL63UAQuUE2J40qgT12fXrCFumD+5a88Fjsqe8UboV
+	Je4taX7DaZrgo9Hp8CcvjGZEFXIB1c22eGPJ4Z6UUgJfKRD1w6nBQDXMmepWmw==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402033138.388574-1-jiayuan.chen@linux.dev>
- <CANn89iLdRZd-qO4tRpSGamHpggh=r5vM4xes5npYCnkwcNG89A@mail.gmail.com> <ad90b2a9-0f67-4796-94bc-9dbb76a575af@linux.dev>
-In-Reply-To: <ad90b2a9-0f67-4796-94bc-9dbb76a575af@linux.dev>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 2 Apr 2026 01:03:49 -0700
-X-Gm-Features: AQROBzC4i4XqI4fo-eKWxUd2Cc5ktCNVV0BavblbpRz-nP4ApUgDItg-uyKcNc4
-Message-ID: <CANn89iLLwk9G6K8r=hOxsQQ2AsW751E+2pOoud9c-R+R-3i6hg@mail.gmail.com>
-Subject: Re: [PATCH net v1] net: skb: fix cross-cache free of KFENCE-allocated
- skb head
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Antonius <antonius@bluedragonsec.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Michal Luczaj <mhal@rbox.co>, Mina Almasry <almasrymina@google.com>, 
-	Eric Biggers <ebiggers@google.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Soheil Hassas Yeganeh <soheil@google.com>, Alexander Duyck <alexanderduyck@fb.com>, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date: Thu, 02 Apr 2026 10:19:46 +0200
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, justin.chen@broadcom.com, horms@kernel.org,
+ opendmb@gmail.com, florian.fainelli@broadcom.com,
+ bcm-kernel-feedback-list@broadcom.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v5 4/6] net: bcmgenet: add XDP_TX support
+In-Reply-To: <20260402032722.905829-1-kuba@kernel.org>
+References: <20260328230513.415790-5-nb@tipi-net.de>
+ <20260402032722.905829-1-kuba@kernel.org>
+Message-ID: <36659d94abbf4c9a078ce71f64b12bfa@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Apr 1, 2026 at 9:15=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
->
+On 2.4.2026 05:27, Jakub Kicinski wrote:
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> ---
+> net: bcmgenet: add XDP_TX support
+> 
+> This commit implements XDP_TX using ring 16, which is dedicated to XDP 
+> TX
+> for isolation from SKB TX queues. It also changes the page_pool DMA
+> direction to bidirectional to allow TX reuse of the existing DMA 
+> mapping.
+> 
+>> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c 
+>> b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+>> index b45ba2c2857e..687c3b12d44f 100644
+>> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+>> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> [ ... ]
+>> @@ -2299,11 +2328,96 @@ static struct sk_buff 
+>> *bcmgenet_xdp_build_skb(struct bcmgenet_rx_ring *ring,
+>>  	return skb;
+>>  }
+>> 
+>> +static bool bcmgenet_xdp_xmit_frame(struct bcmgenet_priv *priv,
+>> +				     struct xdp_frame *xdpf, bool dma_map)
+>> +{
+> [ ... ]
+>> +	} else {
+>> +		struct page *page = virt_to_page(xdpf->data);
+>> +
+>> +		/* For local XDP_TX the caller already prepended the TSB
+>> +		 * into xdpf->data/len, so dma_len == xdpf->len.
+>> +		 */
+>> +		dma_len = xdpf->len;
+>> +		mapping = page_pool_get_dma_addr(page) +
+>> +			  sizeof(*xdpf) + xdpf->headroom;
+> 
+> When the RX page pool is created in bcmgenet_rx_ring_create_pool(), it 
+> is
+> initialized with .offset = GENET_XDP_HEADROOM. Does the DMA address
+> calculation here need to include this GENET_XDP_HEADROOM offset? 
+> Without it,
+> it appears the hardware might be given a DMA address that is 256 bytes
+> before the actual packet data, transmitting uninitialized memory.
 
-> If we no longer care about the cost of accessing a struct page in the
-> free path, which the original commit was trying to avoid, this is
-> indeed the simplest fix =E2=80=94 kfree() correctly handles objects via
-> virt_to_slab.
+The DMA address calculation is correct. page_pool_get_dma_addr()
+returns the base DMA address of the page, not offset by the pool's
+.offset parameter. sizeof(*xdpf) + xdpf->headroom correctly offsets
+to xdpf->data where the TSB starts.
 
-We only have SLUB in modern kernels, kmem_cache_free() needs to touch it.
+> 
+> [ ... ]
+>> @@ -2311,14 +2425,42 @@ static unsigned int bcmgenet_run_xdp(struct 
+>> bcmgenet_rx_ring *ring,
+>>  	switch (act) {
+>>  	case XDP_PASS:
+>>  		return XDP_PASS;
+>> +	case XDP_TX:
+>> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
+>> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
+>> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
+>> +		 * up xdp->data into the RSB area (which is no longer needed
+>> +		 * after the BPF program ran) and zero it.
+>> +		 */
+>> +		if (xdp->data - xdp->data_hard_start <
+>> +		    sizeof(struct status_64)) {
+>> +			page_pool_put_full_page(ring->page_pool, rx_page,
+>> +						true);
+>> +			return XDP_DROP;
+>> +		}
+>> +		xdp->data -= sizeof(struct status_64);
+>> +		xdp->data_meta -= sizeof(struct status_64);
+>> +		memset(xdp->data, 0, sizeof(struct status_64));
+>> +
+>> +		xdpf = xdp_convert_buff_to_frame(xdp);
+> 
+> Does this headroom check account for the additional sizeof(struct 
+> xdp_frame)
+> required by xdp_convert_buff_to_frame()?
 
-Using is_kfence_address() in net/core/skbuff.c is pushing too hard in
-my opinion.
+The TSB headroom check doesn't account for sizeof(struct xdp_frame), but 
+xdp_update_frame_from_buff() has its own check that returns -ENOSPC if 
+headroom - metasize < sizeof(*xdp_frame). We handle the NULL return by 
+dropping the frame. I'll tighten the check to include sizeof(struct 
+xdp_frame) to fail early.
+
+> 
+> If metadata is present, xdp->data_meta could potentially underflow
+> xdp->data_hard_start. If the remaining headroom minus metasize becomes
+> negative in xdp_convert_buff_to_frame(), could it undergo integer 
+> promotion
+> to a large unsigned value and bypass the internal safety check? This 
+> might
+> cause the struct xdp_frame to overwrite the newly zeroed status_64 
+> block.
+
+xdp_update_frame_from_buff() handles this - it clamps metasize to >= 0 
+and checks (headroom - metasize) < sizeof(*xdp_frame), returning NULL on 
+insufficient space.
+
+> 
+> [ ... ]
+>> @@ -2556,9 +2698,15 @@ static int bcmgenet_rx_poll(struct napi_struct 
+>> *napi, int budget)
+>>  {
+>>  	struct bcmgenet_rx_ring *ring = container_of(napi,
+>>  			struct bcmgenet_rx_ring, napi);
+>> +	struct bcmgenet_priv *priv = ring->priv;
+>>  	struct dim_sample dim_sample = {};
+>>  	unsigned int work_done;
+>> 
+>> +	/* Reclaim completed XDP TX frames (ring 16 has no interrupt) */
+>> +	if (priv->xdp_prog)
+>> +		bcmgenet_tx_reclaim(priv->dev,
+>> +				    &priv->xdp_tx_ring, false);
+>> +
+> 
+> What happens to in-flight frames if the XDP program is detached at 
+> runtime
+> and priv->xdp_prog becomes NULL? Will this permanently lose track of 
+> the
+> page pool buffers and DMA mappings since the NAPI poll stops reclaiming
+> them?
+
+Good catch. The reclaim in rx_poll is gated on priv->xdp_prog, so
+in-flight frames on the TX ring would never be reclaimed after detach.
+I'll change the condition to check for pending frames on the ring
+instead.
+
+> 
+> Additionally, if the interface is the target of an XDP_REDIRECT from 
+> another
+> device, a local XDP program is not required and priv->xdp_prog could be
+> NULL. Does this mean the transmitted frames for redirected traffic will
+> never be reclaimed, eventually filling the TX ring?
+
+The redirect-without-local-prog case can't happen since
+xdp_features_set_redirect_target is tied to program attachment.
+But the detach race is real - will fix in v6.
+
+Thanks
+Nicolai
