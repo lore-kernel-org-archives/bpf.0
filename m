@@ -1,122 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B6B35A385
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 03:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5167E19D08F;
+	Thu,  2 Apr 2026 03:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775099921; cv=none; b=H3k3uycrLjkbxncINVhqG7Am1PGtKZ5+rWKvgqYiQuG6tKWigX2gWls+6bjrUva6/WmfpohGrceke8NEbQrJpOs6ifHXoI7Ep+g1IaQyjDsW5duhfFHkziLNBsqcs07jlN0098Cf2fwS9yqTI7ft4yVH5ebWLgEkkAhzJ/2KOWM=
+	t=1775100150; cv=none; b=gHXWEA4BMjlExrxPwFu3JLh0L9kAboYe72OJgLYajQiayp6DqJEuOw1UO9j2btJFrOM/IHqXAoHNwCKG/gsMCwO/qzJmoJM/zfzm3i1QmUTemihdMtIkVuJsMw95MEKm+LoJGfRaA/W75k6BxcNLJ4po/eMEWucbPuJvgaw6VEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775099921; c=relaxed/simple;
-	bh=i3vGogqgXMKaISHzlofu/93nGEMuUM31uP7ukuFVm+o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=nqTaODnOeDSHGU3DJQkb1dBntI9ct6RnBoAwCQ6c/iNmBxJLy4bsOnisDqc8TOoPuHR2IiAvAuRnP6YSgelHaGSLKxHcqOxQ193harPt1V821A6Xa+0063n6brNKHnXtf+8XyLKF9zJfipPZKcUCvlMFCX4sKiPp2OqiKbMhoY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQ0Fvx+R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775100150; c=relaxed/simple;
+	bh=NhDizPiEmSIbGAGuGI1X+OtUkY9TDnMHcZJDxJXZdcQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jztlXlYqBX+e7qaB30kfP+wGBOYkgs4rinmmsORL7eLVrtDHaGQP3ZeMRMbHC13ZjVANLFbLpaR3j+yEA+ub4kacIoj0V2HS7QVD2oXYkEzJ3H8W1AxA5/ZEb4NcFXrVjG5UsdzPW4ISpLK7l8OLwbmoaGKysORbMqehn8yGulQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rUMzJ7Nq; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQ0Fvx+R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2572FC4CEF7;
-	Thu,  2 Apr 2026 03:18:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775099921;
-	bh=i3vGogqgXMKaISHzlofu/93nGEMuUM31uP7ukuFVm+o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=oQ0Fvx+RezjTrHrjXA9O/H6Wy4LFBt2kj9Rxrm9GSEgy2jGJzMVThfA+sOmmJWJeM
-	 Wzfz64/CYUZVo68RbdIx6/J8wIj8I7fLVRumN03r+YLwEezEDpmi28BoNW6IXqeZSo
-	 LPp5WvBdEjzDoqBfu1o6eWZArCfnx4321QZ5X2Kki8pNH1PmrIJOvD56g4qdSzhTqk
-	 eEgengu6ZyKHHSdH7YeJcKVd6JOyqdAsHn0jOmMODTJStt84kiIm6y6z5DCBtLxuPg
-	 Xb4jAV3E+mAmSmaNC26Bh/YDE+wDs6VMjhZvipoOyVNy7UOS9pZQpTNRRPqfAIzu6r
-	 h/HKpyhYUKFqg==
-Content-Type: multipart/mixed; boundary="===============5041961370142310936=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rUMzJ7Nq"
+Message-ID: <6c1d6987-ca73-40de-adab-bc6f9fce67f6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775100147;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bYveJD6LxHD6hKNngQokJ/HPFuXMnyoAnNnr+LysDbo=;
+	b=rUMzJ7NqjEpjA/BUsJVc/rGqQOSQJXaRdiEhk9w3uf2igGz8YutUWH1KnQDJo+a9ShTsEd
+	apmk9RSVh0FSmAjBi85mmZ5jOaksUw7rYY0ed11UtVyZZaqi01gBqx7aaZ4T1uyAlX0raw
+	wkLJ5lgBSJ9ddi3ZedYWu23DAvT/29g=
+Date: Thu, 2 Apr 2026 11:22:15 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f8e301126ace0672841b6a9f9a8ee1e4dba2f6784817ec4d9ba9489518db3cce@mail.kernel.org>
-In-Reply-To: <20260402012747.3918081-1-yonghong.song@linux.dev>
-References: <20260402012747.3918081-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 04/10] bpf: Support stack arguments for kfunc calls
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  2 Apr 2026 03:18:41 +0000 (UTC)
-
---===============5041961370142310936==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH net-next] selftests/net: Add two xdp tests to xdp.py
+Content-Language: en-US
+To: Jakub Kicinski <kuba@kernel.org>, Leon Hwang <leon.huangfu@shopee.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260401052746.314667-1-leon.huangfu@shopee.com>
+ <20260401132048.3a15601e@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260401132048.3a15601e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d424fe611ef8..6579156486b8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+On 2/4/26 04:20, Jakub Kicinski wrote:
+> On Wed,  1 Apr 2026 13:27:46 +0800 Leon Hwang wrote:
+[...]
+>> +def _set_jumbo_mtu(cfg, mtu):
+>> +    ip(f"link set dev {cfg.ifname} mtu {mtu}")
+>> +    defer(ip, f"link set dev {cfg.ifname} mtu 1500")
+> 
+> cfg records the original MTU, you can copy this line from here:
+> https://elixir.bootlin.com/linux/v7.0-rc6/source/tools/testing/selftests/drivers/net/gro.py#L88
+> 
 
-[ ... ]
+Sure, will use cfg.dev['mtu'] instead of hard code 1500.
 
-> @@ -13687,13 +13694,41 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
->  	 * verifier sees.
->  	 */
->  	for (i = 0; i < nargs; i++) {
-> -		struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[i + 1];
-> +		struct bpf_reg_state *regs = cur_regs(env), *reg;
-> +		struct bpf_reg_state saved_reg;
+>> +def _exec_cmd(cfg, obj, sec, ip_opts=""):
+>> +    return cmd(f"ip {ip_opts} link set dev {cfg.ifname} xdpdrv obj {obj} sec {sec}", shell=True, fail=False)
+> 
+> We shouldn't need the shell=True where?
+> Also it's probably cleaner to pass fail as optional argument here
+> so that you can let this throw an exception in the cases we expect
+> to succeed instead of having to check in the caller explicitly
+> 
 
-[ ... ]
+Right, shell=True is unnecessary here. Will drop it.
 
-> +		if (i < MAX_BPF_FUNC_REG_ARGS) {
-> +			reg = &regs[i + 1];
-> +		} else {
-> +			/*
-> +			 * Retrieve the spilled reg state from the stack arg slot.
-> +			 * Reuse the existing type checking infrastructure which
-> +			 * reads from cur_regs(env)[regno], temporarily copy the
-> +			 * stack arg reg state into regs[BPF_REG_1] and restore
-> +			 * it after checking.
-> +			 */
+Will pass fail as optional arg to let it fail if fail=True.
 
-[ ... ]
+>> +def test_xdp_native_attach_sb_to_mb(cfg):
+>> +    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+>> +    mtu = 9000
+>> +
+>> +    _set_jumbo_mtu(cfg, mtu)
+>> +
+>> +    probe = _exec_cmd(cfg, obj, "xdp.frags")
+>> +    if probe.ret != 0:
+>> +        output = probe.stderr.strip() or probe.stdout.strip()
+>> +        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
+> 
+> May be simpler and cleaner to print the whole command separately:
+> 	
+> 	if probe.ret != 0:
+> 		ksft_pr(probe)
+> 		raise KsftSkipEx("device does not support multi-buffer XDP")
+> 
 
-> +			is_stack_arg = true;
-> +			regno = BPF_REG_1;
-> +			saved_reg = regs[BPF_REG_1];
-> +			regs[BPF_REG_1] = caller->stack_arg_slots[spi].spilled_ptr;
-> +			reg = &regs[BPF_REG_1];
-> +		}
-> +
->  		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
+Ack.
 
-[ ... ]
+>> +    ip(f"link set dev {cfg.ifname} xdpdrv off")
+>> +
+>> +    probe = _exec_cmd(cfg, obj, "xdp")
+>> +    if probe.ret == 0:
+>> +        ip(f"link set dev {cfg.ifname} xdpdrv off")
+>> +        raise KsftFailEx(f"driver unexpectedly allows non-multi-buffer XDP at MTU {mtu}")
+> 
+> Hm, TBH I don't think this sb_to_mb case is adding any coverage.
+> Let's just add the test case below?
+> 
 
-> -			continue;
-> +			goto next_arg;
->  		}
->
->  		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
->  			continue;
+Ok. Will drop this case.
 
-The is_kfunc_arg_prog_aux path above was converted from continue to
-goto next_arg so that regs[BPF_REG_1] gets restored via the next_arg
-label. The scalar path and the KF_ARG_PTR_TO_NULL path were also
-converted the same way.
+> 
+>> +def test_xdp_native_update_mb_to_sb(cfg):
+>> +    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
+>> +
+>> +    _set_jumbo_mtu(cfg, 9000)
+>> +
+>> +    attach = _exec_cmd(cfg, obj, "xdp.frags")
+>> +    if attach.ret != 0:
+>> +        output = attach.stderr.strip() or attach.stdout.strip()
+>> +        raise KsftSkipEx(output or "device does not support multi-buffer XDP")
+>> +
+>> +    defer(ip, f"link set dev {cfg.ifname} xdpdrv off")
+>> +
+>> +    update1 = _exec_cmd(cfg, obj, "xdp.frags", "-force")
+>> +    if update1.ret != 0:
+>> +        raise KsftFailEx("device fails to update multi-buffer XDP")
+>> +
+>> +    update2 = _exec_cmd(cfg, obj, "xdp", "-force")
+>> +    if update2.ret == 0:
+>> +        raise KsftFailEx("device unexpectedly updates non-multi-buffer XDP")
 
-Should this continue for is_kfunc_arg_ignore/is_kfunc_arg_implicit
-also be goto next_arg? When a stack arg (i >= MAX_BPF_FUNC_REG_ARGS)
-hits this continue, is_stack_arg is true but the next_arg restore is
-skipped, so regs[BPF_REG_1] keeps the spilled pointer from the
-current iteration. On the next iteration, saved_reg then captures that
-stale value instead of the original register state.
+From sashiko's review [1]:
 
-The comment above says "restore it after checking", which this continue
-path does not do. The impact is currently masked because each iteration
-independently overwrites regs[BPF_REG_1] and the caller_saved clearing
-in check_kfunc_call() resets R1 after the loop, but it breaks the
-save/restore invariant the rest of this patch establishes.
+On architectures with larger page sizes, such as 16KB or 64KB on ARM64 or
+PowerPC, a 9000-byte packet can fit entirely within a single buffer. In
+these environments, the driver might legally accept a non-frag XDP program,
+which would lead to a false positive failure here.
 
+WDYT?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[1]
+https://sashiko.dev/#/patchset/20260401052746.314667-1-leon.huangfu%40shopee.com
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23879588767
---===============5041961370142310936==--
+Thanks,
+Leon
+
