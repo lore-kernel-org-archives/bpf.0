@@ -1,152 +1,133 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C164C280318
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 14:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9C83E51F4
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 14:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775138617; cv=pass; b=uVCnVmyKEtnaqUi3ESfEhQ0bEt+Vvq1XcmwvB7+F6oBfuR6KgM5YKqoU+XwRX1ne1/hH9+hCyZf/OFUrBfoIAvpcf7VyH88NmMdlLGbbA+9R8z+H5rUea2dlRaPCCKIzarzY5wHRhXVcIWmiCDrSl7nsODl2mI5nA+VhcBSYe/k=
+	t=1775139452; cv=pass; b=LfejCDQ+yLtpxAcAtYt+CH0CfB2L7FlDKTgD8gs15CGxEgRnzS/OTxTUlpXmHRwl7tLTKdQmi8HMMBpU8aayBPy25uo3sbYrGr5qFmXOgDcQvUuq211XkN5GV2sbZYPDHuRj4RT3J4XRyInwgVl+LK7lJMzvXN7NH4wdNEl6Ric=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775138617; c=relaxed/simple;
-	bh=ZyBDNZT3tKZUZ7qDcwZh0zaNOQse6P3km81WUeBgAxc=;
+	s=arc-20240116; t=1775139452; c=relaxed/simple;
+	bh=SURcYKHTGeY420edRBwFMlG5Lhq0YY1jLS/thZEEVPk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UH9I8Y0eMxNbKOP5rTbJ/RUMSo3ELF1NNSYYv1wctUYobGG7yg9n5e54hHV0EO7OTdPCuPCZeXvH9KnKv4vzvf8Q6UYKghBGVd5dFTzjBWlJLwiXoOQmPg3l3wU6OS/unUWL/+EqzoQh/tuHClQlI75HtV+l5kXOg9h/Gj0Hw0U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hGl5chNo; arc=pass smtp.client-ip=209.85.221.50
+	 To:Cc:Content-Type; b=k/wadD41xP80kWJwYuT+qlSBu22XyGVQBi1scPFt69wGyqlGDNUW4IeeL/3L8zI2cBnIQIXJTVvSK+KuvyBlNJBBchrjVdBiOITlXXMMA+LEVW8r43eZZCA8+LCa9ic8gWHBeRv9QTUfgrjTb03LAWK5vq2RM45FYOXv/+SFUcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lE//TmXT; arc=pass smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hGl5chNo"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43b87970468so792556f8f.3
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 07:03:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775138614; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lE//TmXT"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-486507134e4so12243375e9.0
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 07:17:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775139449; cv=none;
         d=google.com; s=arc-20240605;
-        b=aXxbDJ5/BdCLA06ns1WC8mt9oG/w8PA77QATY4swjhNXAdPs9A4lJUX8FejT52grmC
-         d4tLnaaCPa4jcQIr2a7fibLJw4vU+GdH1Ez6AV/yvHSscGxGI+B+oSDjkfLdEJFg+HCZ
-         q/sabz59YNIkFFgq7Kmo7kQFkKKYDga/krMexcFFXXkfil9kE54zb3EoGkDQonHRJMAl
-         FNLfrPDo9ODteALDWNnZFyGw7I/wMuFqGbdm3pzKUUpa4OlAlFAGZ4DBhRqu7UQdYv5r
-         0KF4Aa0YamxgSZr+H5nc3XXiz4EL0CNNQgWJ4d109BOvNQrF+pe+oU2QmZO7PKZzE0O3
-         wjnA==
+        b=QkOTpImhwxVHkk8CsQnmM7//Xwd3Qv1VFUtkao3qMuod6kO8pxREpVEJSn8/aG6/ba
+         8IOCUAlVyMdNW5pqwBju4OuvPUOHw5DsbzomRzS0rau9sFAko6nXyZ9UVWKn+tdMk0ts
+         AMvr+iSd9CFpOULdT0HUVo/axF8rQM8CbMcGjf2fwIyTkp4gxxZ3yqnR699xDR083waQ
+         Z8Pso1b4BRa1lSnF1Ft1YUMgDxvYwL1Wa6oneZ5nxjgGa4HBNSL+mGYg6y/sOVTTjeOG
+         iFgYQxMr3kPAfBPV0hwgpIVBbZ0yUbk8zvahRRffYve/Wl4xoTsPev1gZTt1jDq6o8sv
+         Jt1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=H2Q1xAI7WKIB5uC/FrFV4Uhab7Dfj4POcaruiaTCtVI=;
-        fh=ANO5kx+OVpnM8wz/qPSMzLOxObf0ciI0U9bTzqPsl3Y=;
-        b=Bn3ZYtyH/10qugjCq+Vg/MgIfb8g8HpvtwkAP2mI2lrIATbf7tCuFVbdqOOf71HrN3
-         HgowL9wfugL1cvi4cS74AnqwPiolTiSbs+kxta1DKi04mdq8L12BGL2gtQt2m9ukccPD
-         B9p5TAR0meFsQITaxJCdue34i/PfkTl+WoX3CmWcio82dAUP31tERi/OvZfKOYTZHbFR
-         LPqoJrY6JXw29rEAoPKTGa3sSkEdS6oT4DBCkhVxl8xiscO77Eo4SlHPW/JH5Q8WoOzQ
-         /egMumAyLjiWZTbWHRGKAoEZNg11ymZ+b8csMzsdxQC8Nf/YyMm0iYrN/8fpuJy/45VM
-         S4ow==;
+        bh=d02dseYsue6RqQDed3Qbak8xxKACKmJGEDfYW7cOJ0k=;
+        fh=tsDqv3A2RBAexvnLqopkABwexBs5BQ34yuhFlSIGfkI=;
+        b=YsEZp4BkfWUeMhCcAPCT+d8ap4jhW7XuJI4KBsYtPMXxsXyv/S5RcVncTzeROgohqw
+         BT4GkmMHqddvVa7r5TUkjgooBYK1bS8MdxaiPrMJ2wT/e60TYSqEf8lsNlqmINdiOSI5
+         uyCYoOoNydEf8oANZa45XAvrkBW9Rv9sZCVFYTw8L9Bojom6y+fCrGzyWmm53DUKotcC
+         YbX8GvsJdnm9Q8DLpszz98Tu9Uqu9TNoW/7wtfsuNQGmEPBxNxgpBwGYCaxFKtOQafv+
+         xPh3L8mX/Fp5ZtjPosoeDBvzPFXpH7ARpRe4tj5tYIGIqzwZMa2xU6ehac/eAukDjdrX
+         VVSQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775138614; x=1775743414; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775139449; x=1775744249; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H2Q1xAI7WKIB5uC/FrFV4Uhab7Dfj4POcaruiaTCtVI=;
-        b=hGl5chNoqz3PsH30zOjS/V307lHsahG1n+DiONTGTfKLxImmaKSp9Cm53M2hKKPdMS
-         yMuK09lY94MMpgrUAorwhInvStLF+M669P7jm5kECl8yvOhGqKjeHEQUre4Md32wI9B6
-         BVT7P2v0XOC1az529bxAmOF2cJX1ThMrGdTA6ScJ4YzEmwiNm0yQ9V1Y9ieFnUfJN+VC
-         Q8ChTV4dOXXNnrnLghVKd+Le3kXEw2vIs4fCr6n1Kzv/DccP44SQC3fp0e5+rA3PcrqM
-         OOSQi+fy3cUBH4ahQ0svZ7ibTaxblSUa7I1axPbQ+eplzLsQ8jEpGqVbRMKK8Gmfs4de
-         scUg==
+        bh=d02dseYsue6RqQDed3Qbak8xxKACKmJGEDfYW7cOJ0k=;
+        b=lE//TmXTJ7IKfAML7iARBqS9YvfdkkrtpbsRmByY70seu3DvAML6TMVT8sWshilhJS
+         AMoPNpdlb/PB0HLhNv7WPovdIAWVQTNGp/oB3K2+XYqiTZ3KxUs6q/QCt/r58s4Qyq3H
+         x0s/HRP7Y81Js3KnjXt9O/c6O3IxwNuR1a56JRCnWq4YaY4vnqUDo/Cl/6kudDjyO/HQ
+         ryVjBWb+o+Z7QBPXqNZOlQ47LyYFHoliik9H0GEplxJSDeuBM78qxi28Q0j8k7HfbSZ3
+         iU309dy4y2JwGoTfmErWWyUakl18OwqGN8kXR9vzB2t+TaJ0tKA2ShgeHvHMZC/KlwY8
+         x6rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775138614; x=1775743414;
+        d=1e100.net; s=20251104; t=1775139449; x=1775744249;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=H2Q1xAI7WKIB5uC/FrFV4Uhab7Dfj4POcaruiaTCtVI=;
-        b=lR8OcnGw6rGAcOdVN1z96BpOE/+aag1afA+yMqjvqfhYOWOqFTl5s4lVyfjVyuV40S
-         Ms40BqrdrFqVbv50NmbJEeBi3LYUiIkBk8866Aj0xP/YYqL/3QFOYzgrf0ofgonUOXCF
-         m3jEUdjc6B0mN4TnjNjyhOTponzixd1OBJBwhOpG5MSAE/zd0LpdxSgPDYz32Y9FQvTj
-         EJlcuOuSjcqMVB/BPiPliX6DMg15rxTcCWhSFJYLu2mbtRSv7SwPiwCk+S7xKAcDJRfV
-         dCph0H35nvNrn/VvCmR1zY3n0Iu86t22w/8Ef3b+ysu3I36VjoHON7u0589c7vu/K4k6
-         335A==
-X-Forwarded-Encrypted: i=1; AJvYcCU7YAZ/1RQGMM/YC5NSlnnWZoM5E6ePKhx/eBiCFLwYWMJ0NN+XXDDq0kZwApPpYNA8bgU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxANKnag5K8D5gNtiLkUweZajanDQULXt0s4QpztQ6R+ruqe1q1
-	6l6fNOVLVfk7IkD1QEWaPGVRCJQdYpxhSKgUV4Jayg+PF26M+81vzdMyHAUD8jVmVXCNPWf+L1C
-	JSZmD8IgH4WufBbrGMsJucyCxogidk1k=
-X-Gm-Gg: AeBDieu70ZO2I3bD3aF5gtPJLRoVCSLRD49j+wLJpsbM1WnAlaEygX0ovh9UROdfC/J
-	WBFmIhmKmW9MFyguGd9MqsGV7dvDvUL63fr7SaBlP7B3GNtcXf8TF/7lR8goxq0uI4gHIQ0C6Vy
-	g96EBk0x9sP98jBXu1LzIjs1jWoSX2/qdX06YZt25TMS6T4PZZTYFm1eQKyo6YofCZBmX6KCTix
-	0cJE0zbZ7p/e+2lk95Kznc7UclRmD1dvXFiOWKNIkmusOD3K+tCg1cN7Jgq2Cl+NnsUuMMgofA8
-	0mxt5HnP47KGkJFasRCg/hZqSnV9A/eYGALra7Bv9xVM63T876iwF8jLg40ghJsMYOJFZ1lntr3
-	+Qy+yIsfuoyh7KDeU9qCkvoOQ3w==
-X-Received: by 2002:a05:6000:2586:b0:43c:f257:c6fc with SMTP id
- ffacd0b85a97d-43d15049fd3mr14986480f8f.10.1775138613931; Thu, 02 Apr 2026
- 07:03:33 -0700 (PDT)
+        bh=d02dseYsue6RqQDed3Qbak8xxKACKmJGEDfYW7cOJ0k=;
+        b=TgwAyIIsaG39/jawFROST0RWaNI2E5EnDkU1yWl6GH+5BUgTRgY6ZZeXpyLJjvX/xI
+         m/9laGcgsQupFXZRxAyxsvfarO/LpRTQoaPCYZAhmf/FvvAyRpKDnH9U8UTezU5N7Edb
+         DNdGUO4DuRoIwCm74V8LcIN76xhjdUIqvNHMRqZ2KXEevthdYAuVf4N5lbvj+X1Xs6Pj
+         wpbNco5gev6D2Mf5p0BTR8OYZJojizatmsG3CWC19NwqGjKOyIpoZ/C29siHcRRIYUOI
+         +4oXJN+w8Pdie0X/eIrp9ZCV2VyCRwR12SOplbRj/uPZOsP6ep6MhB8NzXoDHIWNyRzi
+         AkQg==
+X-Forwarded-Encrypted: i=1; AJvYcCWtutDV7lDZ0aBrbvnOumOaMgT1HdeRWExNS2L8lY2hizPZBXyfyFkLz4qe+LrfFjq/Sc0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUDQBAGAZGfU0nREfP9pejtEihfOcETKMu5HyMZfQObiRnZP7k
+	mZFoJ/jdEudX3mOT7pho8UK/tfT7RsMsulKqiiPOUtyymTGZhbQNe0PDvbU9+vDi1KI43ZXmNdE
+	G+zaiH0H5O0oq0gz3d1TzdcF5tk1VU6w=
+X-Gm-Gg: ATEYQzxKo+dagoG2RYQOfMkIbL61no6BbrY7aJDrLaBQThk5jr84hQkLEkvFGs1QJYF
+	0A6EgKo3hCCp50RTWH0tLz501zdGIYJvzID7OJjwap/lJAF/LVy9x6cNl/QK3kT29xvMUA0oOGK
+	YqvmapUDZCA6lN8VmFZ3cjgmOOOPHFGWlS7WKpq87zZAf2rH6abSnH9v0vlFLAE8yi5719QS+eT
+	THOWVbveL4iEL9mxp50jVDTlGAov5+0va5+EVxVgcjuukA4yVrr25+5+3WW68YN5/XMjQOTHV3X
+	wxGW9IbcpKf/gV1KSrZFW3xDwJTZObpFY4MqLyuraYNLfktGf7RwI8o24SZLzW8rzK7aMhS8sV4
+	okNf1xlxMlgVGNNnbJG5CuXsJFw==
+X-Received: by 2002:a05:600c:858e:b0:485:3ee1:eba5 with SMTP id
+ 5b1f17b1804b1-488835ccc9dmr113145145e9.27.1775139448943; Thu, 02 Apr 2026
+ 07:17:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260226085240.1908874-1-alan.maguire@oracle.com> <3da0919f-f8fd-4cc4-8e86-aa55604e923c@oracle.com>
-In-Reply-To: <3da0919f-f8fd-4cc4-8e86-aa55604e923c@oracle.com>
+References: <7653EEEC2BAB17DF+20260402073948.2185396-1-xulang@uniontech.com> <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
+In-Reply-To: <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 2 Apr 2026 07:03:22 -0700
-X-Gm-Features: AQROBzBasgf2AsC8zBYeCQj-zVL3P3HcSzo4m83GUp8nUho0cf5OPOiV1zncz7s
-Message-ID: <CAADnVQ+C=XBhXasNNrwrq7Y9=p0RyoQ882h9+k+LkOB8BtRNMA@mail.gmail.com>
-Subject: Re: [PATCH v3 dwarves 0/2] pahole: add BTF layout encoding feature
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Quentin Monnet <qmo@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, dwarves <dwarves@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>
+Date: Thu, 2 Apr 2026 07:17:17 -0700
+X-Gm-Features: AQROBzCJN6KLhJqu__wW0KrOg081-PAJ5P8_idZtDjyZtUY3LslIDvZlJbUtBto
+Message-ID: <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
+Subject: Re: [PATCH bpf v5 1/2] bpf: Fix OOB in pcpu_init_value
+To: xulang <xulang@uniontech.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard <eddyz87@gmail.com>, 
+	Hao Luo <haoluo@google.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	=?UTF-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>, kernel@uniontech.com, 
+	KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Paul Chaignon <paul.chaignon@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 1:01=E2=80=AFAM Alan Maguire <alan.maguire@oracle.co=
-m> wrote:
+On Thu, Apr 2, 2026 at 12:43=E2=80=AFAM xulang <xulang@uniontech.com> wrote=
+:
 >
-> On 26/02/2026 08:52, Alan Maguire wrote:
-> > A soon-to-arrive v9 series will add support to add BTF layout
-> > information to BTF; this describes the BTF kinds known about at
-> > time of encoding in order to support parsing even in cases where
-> > the kinds are not known to the parser; the layout relates a
-> > BTF kind to the amount of space it consumes via an optional single
-> > element following the BTF type or a set of vlen-specified objects.
-> >
-> > This series implements the support for the BTF "layout" feature
-> > but does not require the libbpf changes to support it; the feature
-> > test uses a weak declaration of btf__new_empty_opts() to handle the
-> > unsupported case.
-> >
-> > To test pahole with this feature, the following approach can be used;
-> >
-> > 1. Specify -DLIBBPF_EMBEDDED=3DOFF option to cmake
-> > 2. Install latest libbpf with associated patch series with layout suppo=
-rt
-> >
-> > Alternatively with embedded libbpf the changes can be applied to
-> > the embedded libbpf in lib/bpf/src.
-> >
-> > Changes since v2 [1]:
-> >
-> > - Resynced, renamed kind_layout -> layout
-> > - Avoid encoding layout info in split BTF since it is a waste of space
-> >
-> > Changes since v1 [2]:
-> >
-> >  - Resynced with latest pahole
-> >
-> > [1] https://lore.kernel.org/dwarves/20251210202752.813919-1-alan.maguir=
-e@oracle.com/
-> > [2] https://lore.kernel.org/dwarves/20250528095349.788793-1-alan.maguir=
-e@oracle.com/
-> >
+> From: Lang Xu <xulang@uniontech.com>
 >
-> Now that the kernel/libbpf side has landed, I'm aiming to land the pahole=
- side shortly.
-> We'll need to resync with libbpf when it is synced on github too, but for=
- now it would
-> be good to get these patches in; unless anyone objects I'll do this today=
-. Thanks!
+> An out-of-bounds read occurs when copying element from a
+> BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
+> same value_size that is not rounded up to 8 bytes.
+>
+> The issue happens when:
+> 1. A CGROUP_STORAGE map is created with value_size not aligned to
+>    8 bytes (e.g., 4 bytes)
+> 2. A pcpu map is created with the same value_size (e.g., 4 bytes)
+> 3. Update element in 2 with data in 1
+>
+> pcpu_init_value assumes that all sources are rounded up to 8 bytes,
+> and invokes copy_map_value_long to make a data copy, However, the
+> assumption doesn't stand since there are some cases where the source
+> may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE,
 
-Ship it. You could have landed it the same day kernel patches landed.
-There was no need for delay.
+why? Just round it up there instead of penalizing perf everywhere.
+
+> skb->data.
+
+what that means?
+
+pcpu_init_value() can access skb->data ?
+
+pw-bot: cr
