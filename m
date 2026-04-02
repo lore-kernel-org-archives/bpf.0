@@ -1,140 +1,152 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6258423EA85
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 14:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C164C280318
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 14:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775138559; cv=pass; b=j5J0OmYgXZ/R/pkfAHoZm0J46STOoQwqWm+M4PeGxiQUKS2r6NvyiJjeEouxlPmZmzSJ46wGiSg0Xyf+EXlgzwv7RDkIvG/hbANMsrujnRpqNvCTkDJ/m9cftk11wRDJpunq+cG/DhsIYyko67JyEnJR73PK2Zj0oYbjdtbmN3g=
+	t=1775138617; cv=pass; b=uVCnVmyKEtnaqUi3ESfEhQ0bEt+Vvq1XcmwvB7+F6oBfuR6KgM5YKqoU+XwRX1ne1/hH9+hCyZf/OFUrBfoIAvpcf7VyH88NmMdlLGbbA+9R8z+H5rUea2dlRaPCCKIzarzY5wHRhXVcIWmiCDrSl7nsODl2mI5nA+VhcBSYe/k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775138559; c=relaxed/simple;
-	bh=cYnJFMxi9EQzoukluL7y96raoZFW7insbY+YI76UzUo=;
+	s=arc-20240116; t=1775138617; c=relaxed/simple;
+	bh=ZyBDNZT3tKZUZ7qDcwZh0zaNOQse6P3km81WUeBgAxc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C3KeuVgVzDtM4x40XO39PL+pgMNdWler/K/R+i7hU9FmNnN5bHQ+wrQMl1wmKy25+0XkwmTf/p/vwXjCcNPxGKBz+fqzxpChnSVzhCKeB114lLPhaV04r9k4JkxAfloO1FiHKvxp0jG34CtuI1wTzCzfW/M42hILVuLO41/raQY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rzwnKUu2; arc=pass smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=UH9I8Y0eMxNbKOP5rTbJ/RUMSo3ELF1NNSYYv1wctUYobGG7yg9n5e54hHV0EO7OTdPCuPCZeXvH9KnKv4vzvf8Q6UYKghBGVd5dFTzjBWlJLwiXoOQmPg3l3wU6OS/unUWL/+EqzoQh/tuHClQlI75HtV+l5kXOg9h/Gj0Hw0U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hGl5chNo; arc=pass smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rzwnKUu2"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so565457f8f.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 07:02:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775138557; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hGl5chNo"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43b87970468so792556f8f.3
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 07:03:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775138614; cv=none;
         d=google.com; s=arc-20240605;
-        b=SXuxT3rYH+Z2RM2W+VFoJgo8cXfF1xP+pCFbJ5JwFhlRlTZEbmyaY3BjoJYTAnltAv
-         8DSrcqk4/yOiC1eFf0RB+tZ3k9lOlvk8lqZUY4nso+8IGxyGwIbO5KSNPLeihAJoUm/m
-         kv1aC04Jh3etAGaT+Pungm2AJHdq88jZjYsnjg1Yqy526o27JmOI5eyCP/64QTPH3hCf
-         GA0WQ4BWRbUYq/ZWItDCn2Q8c4xDAx4p1Ig72pN/RdBWEF9iKAOvLI/7FEmnYKCL9p5x
-         SH+wheuQh4RjSyEhcPS99Ma/9p3sDYNaH2IOevEg4vvpTnLtni6NnhZiLMGxy4a9mHUj
-         txBg==
+        b=aXxbDJ5/BdCLA06ns1WC8mt9oG/w8PA77QATY4swjhNXAdPs9A4lJUX8FejT52grmC
+         d4tLnaaCPa4jcQIr2a7fibLJw4vU+GdH1Ez6AV/yvHSscGxGI+B+oSDjkfLdEJFg+HCZ
+         q/sabz59YNIkFFgq7Kmo7kQFkKKYDga/krMexcFFXXkfil9kE54zb3EoGkDQonHRJMAl
+         FNLfrPDo9ODteALDWNnZFyGw7I/wMuFqGbdm3pzKUUpa4OlAlFAGZ4DBhRqu7UQdYv5r
+         0KF4Aa0YamxgSZr+H5nc3XXiz4EL0CNNQgWJ4d109BOvNQrF+pe+oU2QmZO7PKZzE0O3
+         wjnA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=+7rBDz4IiPLoVHa5kPrhaTo8Ds2C/LV1bZASn33O9cc=;
-        fh=ZjZnlGJ4j6GsPbdN9KU7cNTEhuDuKixuJSySPsKlUQw=;
-        b=GBcJa13KQw1SLI8/1V+//VfF91oSuSAN92d+BGuFp6SjwQgBljBHRodFx51GnOpc1m
-         Rz4skdavLOI+hh3f1VxpWK2bHaTBzEEF1ZnTAokUp52JcVhjcHGxoV7GGHhLsxFdzsfi
-         N10l7MC9KqHncSVrXs9smS+ucJNmPD7tvj21+6udLLAjXJzpEutZr/Vq1QGcc/990RoC
-         jGFYxiLzz08MyMJt77VVO7PC1cKDEipceGLqr8TZfWgbGOFaPbunQdZH/QqrjyxkBm7G
-         HriSTiryn47EFW+YPPCestZoM2nSSNGiGVA6HcogYtKwkFSWcik5NEHCExNHcEKLRm5i
-         iYjQ==;
+        bh=H2Q1xAI7WKIB5uC/FrFV4Uhab7Dfj4POcaruiaTCtVI=;
+        fh=ANO5kx+OVpnM8wz/qPSMzLOxObf0ciI0U9bTzqPsl3Y=;
+        b=Bn3ZYtyH/10qugjCq+Vg/MgIfb8g8HpvtwkAP2mI2lrIATbf7tCuFVbdqOOf71HrN3
+         HgowL9wfugL1cvi4cS74AnqwPiolTiSbs+kxta1DKi04mdq8L12BGL2gtQt2m9ukccPD
+         B9p5TAR0meFsQITaxJCdue34i/PfkTl+WoX3CmWcio82dAUP31tERi/OvZfKOYTZHbFR
+         LPqoJrY6JXw29rEAoPKTGa3sSkEdS6oT4DBCkhVxl8xiscO77Eo4SlHPW/JH5Q8WoOzQ
+         /egMumAyLjiWZTbWHRGKAoEZNg11ymZ+b8csMzsdxQC8Nf/YyMm0iYrN/8fpuJy/45VM
+         S4ow==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775138557; x=1775743357; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775138614; x=1775743414; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+7rBDz4IiPLoVHa5kPrhaTo8Ds2C/LV1bZASn33O9cc=;
-        b=rzwnKUu2UQSS8e9nG26hDZigoJU/nrElZlS75PUAHRqgVI7pRWvwcK+FIoMc7JezZC
-         b8ZX0zgJ8/BGkh1f1ha7Ezic2LAY3+Y9JOM3HztpNBD+prLYbyfhEesWhrskEFNMeDRM
-         Z82zE9ANJSBOwUiuXDxdnTlSExZxQW4WQg8AID7uA9l2QY9DoJNWBMQRLIHnEqnFYhJC
-         VEiD2q4Vo+QF5pTO8scSnzoF9KzvkvyYZOV5lCwjuWLfYxxu9j/w6fUWfhoYECzxf8g1
-         6dZ2TYuJUChxXWhyDbjUsXxenRa4MGwcWZZ8gYrVKAqAqQUMnJNRH80jxm13qKz0W341
-         cKRg==
+        bh=H2Q1xAI7WKIB5uC/FrFV4Uhab7Dfj4POcaruiaTCtVI=;
+        b=hGl5chNoqz3PsH30zOjS/V307lHsahG1n+DiONTGTfKLxImmaKSp9Cm53M2hKKPdMS
+         yMuK09lY94MMpgrUAorwhInvStLF+M669P7jm5kECl8yvOhGqKjeHEQUre4Md32wI9B6
+         BVT7P2v0XOC1az529bxAmOF2cJX1ThMrGdTA6ScJ4YzEmwiNm0yQ9V1Y9ieFnUfJN+VC
+         Q8ChTV4dOXXNnrnLghVKd+Le3kXEw2vIs4fCr6n1Kzv/DccP44SQC3fp0e5+rA3PcrqM
+         OOSQi+fy3cUBH4ahQ0svZ7ibTaxblSUa7I1axPbQ+eplzLsQ8jEpGqVbRMKK8Gmfs4de
+         scUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775138557; x=1775743357;
+        d=1e100.net; s=20251104; t=1775138614; x=1775743414;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+7rBDz4IiPLoVHa5kPrhaTo8Ds2C/LV1bZASn33O9cc=;
-        b=DGu6nZMWv4fRxeVGGLJesnS2SuFWWrzS82xMiD2Fs2OWbeYV2kQUiLIm7KU8P+8w7A
-         TEqOX38Tnlx9PGTl7F4eCGgieN+HBU5RfbnOUtVSlgH9p03zgattXDrvUsK6hyyx96iN
-         eoK7s1nohiBgO1h+sTsy9sfiwg93CjiksoNpdRJpncLoA2GGlRJEQyF1aWKYTOc+H4b9
-         NMbI//UbDkMyj9fvmBHTweXwyYBIU+g1lhgj6NPrpmIVE8yK8G+VWQnYYIdaZvY7zoVy
-         SN6Z9I/MVXbUbOraoLJTG7OWP3CT/CaNKJV83GhowU7Y+heu8UlCmNaRKkMQ2K7Cj6ZG
-         TupQ==
-X-Gm-Message-State: AOJu0YxQgP0FFtgd/tqyyqgImtBNAzwOXFUf370eijElb0UqLtDIo+JZ
-	w9ZyBcecpSk9xL4ezsyeJOgA6wEXHBBMZh37TdNpr+YQNNuZlzDtoWN9UmuuoBtQ9BVQwdpJNaJ
-	3CzigObI2jbKd2en9L+jwH2Vp1b1NqRE=
-X-Gm-Gg: AeBDietr/jPGJYyKe7tk/I9zcHxVQSL9DZWvLFOuat87jEd3mRhzE7iwX9IZeW31y3C
-	9XTJFEcwC9QgLWEl+F4xIol4a5rNSoVJAes8bYnkcDmY4Z/jxH6abrLTNNw0lqu4cSgPMGMRnHd
-	l+GRg+6wvtMW2ysgM8RZtcX2iFv6VtjoixWHMIhPtOMF8dj300xK38tiW2gf9LL2UwnaUYd05sR
-	qm+0kquZkrCj81lzl/LjYzBZbReAK4soo6tiS2syz5nCvb9KM7y16JEuY1+b4liImEmTZWp1iHf
-	S57qUuT6lQ8v9lzwkoC1o0OrUXSjG1ZQGRzEwrFshxZkWlB+XvfFQlPMrDzUM0q/OgItQE3HhOf
-	yoaSkomy3CvlJWHzBkVK6Cdii6Q==
-X-Received: by 2002:a05:6000:1847:b0:439:beee:43b5 with SMTP id
- ffacd0b85a97d-43d1f1b013fmr6697807f8f.3.1775138556513; Thu, 02 Apr 2026
- 07:02:36 -0700 (PDT)
+        bh=H2Q1xAI7WKIB5uC/FrFV4Uhab7Dfj4POcaruiaTCtVI=;
+        b=lR8OcnGw6rGAcOdVN1z96BpOE/+aag1afA+yMqjvqfhYOWOqFTl5s4lVyfjVyuV40S
+         Ms40BqrdrFqVbv50NmbJEeBi3LYUiIkBk8866Aj0xP/YYqL/3QFOYzgrf0ofgonUOXCF
+         m3jEUdjc6B0mN4TnjNjyhOTponzixd1OBJBwhOpG5MSAE/zd0LpdxSgPDYz32Y9FQvTj
+         EJlcuOuSjcqMVB/BPiPliX6DMg15rxTcCWhSFJYLu2mbtRSv7SwPiwCk+S7xKAcDJRfV
+         dCph0H35nvNrn/VvCmR1zY3n0Iu86t22w/8Ef3b+ysu3I36VjoHON7u0589c7vu/K4k6
+         335A==
+X-Forwarded-Encrypted: i=1; AJvYcCU7YAZ/1RQGMM/YC5NSlnnWZoM5E6ePKhx/eBiCFLwYWMJ0NN+XXDDq0kZwApPpYNA8bgU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxANKnag5K8D5gNtiLkUweZajanDQULXt0s4QpztQ6R+ruqe1q1
+	6l6fNOVLVfk7IkD1QEWaPGVRCJQdYpxhSKgUV4Jayg+PF26M+81vzdMyHAUD8jVmVXCNPWf+L1C
+	JSZmD8IgH4WufBbrGMsJucyCxogidk1k=
+X-Gm-Gg: AeBDieu70ZO2I3bD3aF5gtPJLRoVCSLRD49j+wLJpsbM1WnAlaEygX0ovh9UROdfC/J
+	WBFmIhmKmW9MFyguGd9MqsGV7dvDvUL63fr7SaBlP7B3GNtcXf8TF/7lR8goxq0uI4gHIQ0C6Vy
+	g96EBk0x9sP98jBXu1LzIjs1jWoSX2/qdX06YZt25TMS6T4PZZTYFm1eQKyo6YofCZBmX6KCTix
+	0cJE0zbZ7p/e+2lk95Kznc7UclRmD1dvXFiOWKNIkmusOD3K+tCg1cN7Jgq2Cl+NnsUuMMgofA8
+	0mxt5HnP47KGkJFasRCg/hZqSnV9A/eYGALra7Bv9xVM63T876iwF8jLg40ghJsMYOJFZ1lntr3
+	+Qy+yIsfuoyh7KDeU9qCkvoOQ3w==
+X-Received: by 2002:a05:6000:2586:b0:43c:f257:c6fc with SMTP id
+ ffacd0b85a97d-43d15049fd3mr14986480f8f.10.1775138613931; Thu, 02 Apr 2026
+ 07:03:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402061744.10885-7-alexei.starovoitov@gmail.com> <990f6097eb8184cc1895c622c8fa70d7aef9899d77b893ce4241825ba4fd5116@mail.kernel.org>
-In-Reply-To: <990f6097eb8184cc1895c622c8fa70d7aef9899d77b893ce4241825ba4fd5116@mail.kernel.org>
+References: <20260226085240.1908874-1-alan.maguire@oracle.com> <3da0919f-f8fd-4cc4-8e86-aa55604e923c@oracle.com>
+In-Reply-To: <3da0919f-f8fd-4cc4-8e86-aa55604e923c@oracle.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 2 Apr 2026 07:02:25 -0700
-X-Gm-Features: AQROBzBZ7t_5rDqW4Wz3PT9dUECzIpD4vWNoKCwFCnpMz9Kra-6DqO_slq8tqFo
-Message-ID: <CAADnVQKg6jgLX_OD=hFfQZ5eS-qLi7n07BJ-DkGJtNAxC27=Qw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 6/6] bpf: Add helper and kfunc stack access
- size resolution
-To: bot+bpf-ci@kernel.org
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
+Date: Thu, 2 Apr 2026 07:03:22 -0700
+X-Gm-Features: AQROBzBasgf2AsC8zBYeCQj-zVL3P3HcSzo4m83GUp8nUho0cf5OPOiV1zncz7s
+Message-ID: <CAADnVQ+C=XBhXasNNrwrq7Y9=p0RyoQ882h9+k+LkOB8BtRNMA@mail.gmail.com>
+Subject: Re: [PATCH v3 dwarves 0/2] pahole: add BTF layout encoding feature
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Quentin Monnet <qmo@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, dwarves <dwarves@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 12:56=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Thu, Apr 2, 2026 at 1:01=E2=80=AFAM Alan Maguire <alan.maguire@oracle.co=
+m> wrote:
 >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 2a5d862a82db..bca8129fd1ed 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
+> On 26/02/2026 08:52, Alan Maguire wrote:
+> > A soon-to-arrive v9 series will add support to add BTF layout
+> > information to BTF; this describes the BTF kinds known about at
+> > time of encoding in order to support parsing even in cases where
+> > the kinds are not known to the parser; the layout relates a
+> > BTF kind to the amount of space it consumes via an optional single
+> > element following the BTF type or a set of vlen-specified objects.
+> >
+> > This series implements the support for the BTF "layout" feature
+> > but does not require the libbpf changes to support it; the feature
+> > test uses a weak declaration of btf__new_empty_opts() to handle the
+> > unsupported case.
+> >
+> > To test pahole with this feature, the following approach can be used;
+> >
+> > 1. Specify -DLIBBPF_EMBEDDED=3DOFF option to cmake
+> > 2. Install latest libbpf with associated patch series with layout suppo=
+rt
+> >
+> > Alternatively with embedded libbpf the changes can be applied to
+> > the embedded libbpf in lib/bpf/src.
+> >
+> > Changes since v2 [1]:
+> >
+> > - Resynced, renamed kind_layout -> layout
+> > - Avoid encoding layout info in split BTF since it is a waste of space
+> >
+> > Changes since v1 [2]:
+> >
+> >  - Resynced with latest pahole
+> >
+> > [1] https://lore.kernel.org/dwarves/20251210202752.813919-1-alan.maguir=
+e@oracle.com/
+> > [2] https://lore.kernel.org/dwarves/20250528095349.788793-1-alan.maguir=
+e@oracle.com/
+> >
 >
-> [ ... ]
->
-> > +     /* ptr + __sz/__szk pair: size is in the next register */
-> > +     if (arg + 1 < nargs &&
-> > +         (btf_param_match_suffix(btf, &args[arg + 1], "__sz") ||
-> > +          btf_param_match_suffix(btf, &args[arg + 1], "__szk"))) {
-> > +             int size_reg =3D BPF_REG_1 + arg + 1;
-> > +
-> > +             if (aux->const_reg_mask & BIT(size_reg)) {
-> > +                     size =3D (s64)aux->const_reg_vals[size_reg];
-> > +                     goto out;
-> > +             }
-> > +             return MAX_BPF_STACK;
-> > +     }
->
-> Should this check is_kfunc_arg_uninit() before the return MAX_BPF_STACK
-> fallback?  When the size register is a known constant, the goto out path
-> handles uninit correctly by returning -size.  But when the size is not
-> constant, this return bypasses the out: label's uninit check entirely.
->
-> In bpf_helper_stack_access_bytes(), the equivalent path handles this:
->
->     if (at & MEM_UNINIT)
->         return 0;
->     return MAX_BPF_STACK;
->
-> If a kfunc with a __uninit pointer and a variable __sz companion is
-> added in the future, this would return MAX_BPF_STACK (indicating a
-> 512-byte read) for what is actually a write-only buffer.
+> Now that the kernel/libbpf side has landed, I'm aiming to land the pahole=
+ side shortly.
+> We'll need to resync with libbpf when it is synced on github too, but for=
+ now it would
+> be good to get these patches in; unless anyone objects I'll do this today=
+. Thanks!
 
-If it's ever added in the future, then yes.
-Right now __uninit is only used with dynptr-s.
-So I'm going to keep it as-is.
+Ship it. You could have landed it the same day kernel patches landed.
+There was no need for delay.
