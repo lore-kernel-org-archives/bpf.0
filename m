@@ -1,191 +1,175 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DF83CD8B2
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 12:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C453D9DC7
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 12:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775134151; cv=none; b=oPV1W3XyfWHEQK6nNsxXZzKDp9OIcE9+APqjUlP4DDi1PDDFLXB+GIVjPpExVBwVoIDHc+uSAtE3mHhu+jNHIGen4O6mJx+/lAN2nBVsF7nuxH10EVd4VRg1e6YCtLo4V7ewpiRmoh6dBEy+YaTF8CA984heABXFEUbfKCWF2GU=
+	t=1775134434; cv=none; b=uAmxLP2eYAI9CkJuWu19dYsc76LqVxEVJ/ofIFuenl4HlFTizddxoyoWPnmJ/Fpsu9udjy5XiHFHtUCYcWbsWgK3sVbU+E5/WtAnxieyZlaFAsR2tMw95myqqPxNfNTgsWX9GyXdxfNmExoS/lAkiMekvUKVfiUK/kbrFkmGCGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775134151; c=relaxed/simple;
-	bh=GwzbYHcb1qdCaSphuvTjE9xEXNlvYk0Sd0NL1Y8zGG8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F/CuA9T4f33JHFIQCDlUMzcIn9TaCvztEzJe2U+6fuhdq8GZ8Tng0zQW9G9SuuuPalZ6VGKQiPVJkbGWmpganb15WZdAv/T8XL4V0/eyFv/2HwfQWwwYhNxrfBLEDn40BDM/Z8Fw0/qwe6hjKq6xiGcp6RY5teL8XlF0IDR/x7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mdpsL6VZ; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mdpsL6VZ"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775134132;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c83JoqeMLXdZmjzNRF6o7KLJNuH8aTVtb6ay845K+fk=;
-	b=mdpsL6VZN+fifI1A8+BQtMWCZ0245st3OemBQ8MKxSbtCsaGtZYnFyvxilr/SL9IC1rxUb
-	J4AXdSk7SC+7ha4PkKDfCv/7vPR5Jv1EVFa4q5FtLQDiLhO/EBprCD1HfJOf559bW1aTOq
-	ZwpkuR7+gnaTCFucQsOE68H34HuAzC4=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
- joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org,
- mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com,
- song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- yonghong.song@linux.dev, Yafang Shao <laoar.shao@gmail.com>,
- live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject:
- Re: [RFC PATCH 2/4] trace: Allow kprobes to override livepatched functions
-Date: Thu, 02 Apr 2026 20:48:21 +0800
-Message-ID: <2261072.irdbgypaU6@7950hx>
-In-Reply-To: <20260402092607.96430-3-laoar.shao@gmail.com>
-References:
- <20260402092607.96430-1-laoar.shao@gmail.com>
- <20260402092607.96430-3-laoar.shao@gmail.com>
+	s=arc-20240116; t=1775134434; c=relaxed/simple;
+	bh=ciCWzp4i7M0EEgSvwJCN8MhlVMDFmp8QKXPKVV7o0eA=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=o/hh/ALza0zHWVBdyHjCSWNrBY1hyoX8lsPyuCCq/UtN0e+Z19oQTxxa7o+bd2tBXox8ipwzwIcZNtZktjZURDN1Lw+xNsFDFcTeBpcsARvyplLzNPfgJoJqKF4M4nhjVgiWuTIrfpRk5bB1PpHLZwbUiYSBoKVqTmfL15ZbECI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-7d74211ff80so964568a34.3
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 05:53:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775134426; x=1775739226;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QBgPDXy0CDc09Df8kPHI5V1lc4XrhEWV+2zpnUUOEFk=;
+        b=lpwBkqn5dGqoWyA6ESky2oWxK8obNJmohoZd1MFvTmHDSrApJH7XYJwbFOtH2mrY/D
+         a4M9xuiJHm42QJs48EWeXOud2xUyWbJRJpcYj57XNlNHefGx75XafjjFhtHPbBTmwU4B
+         1Aa8Xg0pIRly8YfnBW3qUSNOoEEoMSwkODB4cMB/Uzf46prgCzc3Of30JHSe4qv/tQdd
+         +IlTBH0n1HQBkllHTihLpP9qvvnjhyKl2t4QeArrpUdOrbY7aESNSk/9WtZedOswtHmD
+         hUvfNFhuPM0V+cxbbdSNX9hOL3TRObvPK408UXTqHQ9khOyrxHmihU5dacPAHg+lHS/6
+         Yjwg==
+X-Forwarded-Encrypted: i=1; AJvYcCXxrYgzI0D38qBgf1+VqEwZtlLv47dWUEKFq8JFaINoRJ15awPCYfMrhwGrUk8qhuJ4xHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw07hiQ6I2yilMlDLQUwBG04DgldE8Xg6wOATuiQMGE+rle6jvz
+	kxa/5UZQm+Quz8SV2U91R9tg/9CmXqCgPn75vnqiDuXfyXEUvSM1d0VNjLIrA49ODbZO+103q2k
+	iV0pkrPHRGE9vIuSAHrxroBZ4Xzb4hyva2g3dVmPTbfYm3T2uIGM/Jmy0fsw=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+X-Received: by 2002:a05:6820:1809:b0:67e:3e13:3315 with SMTP id
+ 006d021491bc7-67fabca40d9mr3488597eaf.34.1775134426172; Thu, 02 Apr 2026
+ 05:53:46 -0700 (PDT)
+Date: Thu, 02 Apr 2026 05:53:46 -0700
+In-Reply-To: <20260402061744.10885-1-alexei.starovoitov@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69ce66da.050a0220.2dbe29.0005.GAE@google.com>
+Subject: [syzbot ci] Re: bpf: Prep patches for static stack liveness.
+From: syzbot ci <syzbot+ci5d1af9c009034c4e@syzkaller.appspotmail.com>
+To: alexei.starovoitov@gmail.com, andrii@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
+	memxor@gmail.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 2026/4/2 17:26, Yafang Shao wrote:
-> Introduce the ability for kprobes to override the return values of
-> functions that have been livepatched. This functionality is guarded by the
-> CONFIG_KPROBE_OVERRIDE_KLP_FUNC configuration option.
+syzbot ci has tested the following series
 
-Hi, Yafang. This is a interesting idea.
+[v2] bpf: Prep patches for static stack liveness.
+https://lore.kernel.org/all/20260402061744.10885-1-alexei.starovoitov@gmail.com
+* [PATCH v2 bpf-next 1/6] bpf: Do register range validation early
+* [PATCH v2 bpf-next 2/6] bpf: Sort subprogs in topological order after check_cfg()
+* [PATCH v2 bpf-next 3/6] selftests/bpf: Add tests for subprog topological ordering
+* [PATCH v2 bpf-next 4/6] bpf: Add bpf_compute_const_regs() and bpf_prune_dead_branches() passes
+* [PATCH v2 bpf-next 5/6] bpf: Move verifier helpers to header
+* [PATCH v2 bpf-next 6/6] bpf: Add helper and kfunc stack access size resolution
 
-For now, the bpf_override_return() can only be used on the kernel
-functions that allow error injection to prevent the BPF program from
-crash the kernel. If we use it on the kernel functions that patched
-by the KLP, we can crash the kernel easily by return a invalid value
-with bpf_override_return(), right? (Of course, we can crash the kernel
-easily with KLP too ;)
+and found the following issue:
+UBSAN: array-index-out-of-bounds in do_check
 
-I haven't figure out the use case yet. Can KLP be used together with
-the BPF program that use bpf_override_return()? The KLP will modify
-the RIP on the stack, and the bpf_override_return() will modify it too.
-AFAIK, there can't be two ftrace_ops that both have the
-FTRACE_OPS_FL_IPMODIFY flag. Did I miss something?
+Full report is available here:
+https://ci.syzbot.org/series/472db170-a3e5-4e2f-992a-f066f3ec68a0
 
-It will be helpful for me to understand the use case if a selftests is
-offered :)
+***
 
-BTW, if we allow the usage of bpf_override_return() on the KLP patched
-function, we should allow the usage of BPF_MODIFY_RETURN on this
-case too, right?
+UBSAN: array-index-out-of-bounds in do_check
 
-Thanks!
-Menglong Dong
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      0eeb0094ba0321f0927806857b5f01c1577bc245
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/35679c0d-9085-497b-89c5-d447be366fc7/config
 
-> 
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> ---
->  kernel/trace/Kconfig        | 14 ++++++++++++++
->  kernel/trace/bpf_trace.c    |  3 ++-
->  kernel/trace/trace_kprobe.c | 17 +++++++++++++++++
->  kernel/trace/trace_probe.h  |  5 +++++
->  4 files changed, 38 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> index 49de13cae428..db712c8cb745 100644
-> --- a/kernel/trace/Kconfig
-> +++ b/kernel/trace/Kconfig
-> @@ -1279,6 +1279,20 @@ config HIST_TRIGGERS_DEBUG
->  
->            If unsure, say N.
->  
-> +config KPROBE_OVERRIDE_KLP_FUNC
-> +	bool "Allow kprobes to override livepatched functions"
-> +	depends on KPROBES && LIVEPATCH
-> +	help
-> +	  This option allows BPF programs to use kprobes to override functions
-> +	  that have already been patched by Livepatch (KLP).
-> +
-> +	  Enabling this provides a mechanism to dynamically control execution
-> +	  flow without requiring a reboot or a new livepatch module. It
-> +	  effectively combines the persistence of livepatching with the
-> +	  programmability of BPF.
-> +
-> +	  If unsure, say N.
-> +
->  source "kernel/trace/rv/Kconfig"
->  
->  endif # FTRACE
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index c901ace836cb..08ae2b1a912c 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1935,7 +1935,8 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
->  		if (!tp)
->  			return -EINVAL;
->  		if (!trace_kprobe_on_func_entry(tp) ||
-> -		    !trace_kprobe_error_injectable(tp))
-> +		    (!trace_kprobe_error_injectable(tp) &&
-> +		     !trace_kprobe_klp_func_overridable(tp)))
->  			return -EINVAL;
->  	}
->  
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index 768702674a5c..6f05451fbc76 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -213,6 +213,23 @@ bool trace_kprobe_error_injectable(struct trace_kprobe *tp)
->  	return within_error_injection_list(trace_kprobe_address(tp));
->  }
->  
-> +bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp)
-> +{
-> +	bool overridable = false;
-> +#ifdef CONFIG_KPROBE_OVERRIDE_KLP_FUNC
-> +	struct module *mod;
-> +	unsigned long addr;
-> +
-> +	addr = trace_kprobe_address(tp);
-> +	rcu_read_lock();
-> +	mod = __module_address(addr);
-> +	if (mod && mod->klp)
-> +		overridable = true;
-> +	rcu_read_unlock();
-> +#endif
-> +	return overridable;
-> +}
-> +
->  static int register_kprobe_event(struct trace_kprobe *tk);
->  static int unregister_kprobe_event(struct trace_kprobe *tk);
->  
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index 958eb78a9068..84bd2617db7c 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -271,6 +271,7 @@ struct trace_kprobe {
->  #ifdef CONFIG_KPROBE_EVENTS
->  bool trace_kprobe_on_func_entry(struct trace_kprobe *tp);
->  bool trace_kprobe_error_injectable(struct trace_kprobe *tp);
-> +bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp);
->  #else
->  static inline bool trace_kprobe_on_func_entry(struct trace_kprobe *tp)
->  {
-> @@ -281,6 +282,10 @@ static inline bool trace_kprobe_error_injectable(struct trace_kprobe *tp)
->  {
->  	return false;
->  }
-> +static inline bool trace_kprobe_klp_func_overridable(struct trace_kprobe *tp)
-> +{
-> +	return false;
-> +}
->  #endif /* CONFIG_KPROBE_EVENTS */
->  
->  static inline unsigned int trace_probe_load_flag(struct trace_probe *tp)
-> 
+can: raw protocol
+can: broadcast manager protocol
+can: netlink gateway - max_hops=1
+can: SAE J1939
+can: isotp protocol (max_pdu_size 8300)
+Bluetooth: RFCOMM TTY layer initialized
+Bluetooth: RFCOMM socket layer initialized
+Bluetooth: RFCOMM ver 1.11
+Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+Bluetooth: BNEP filters: protocol multicast
+Bluetooth: BNEP socket layer initialized
+Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+Bluetooth: HIDP socket layer initialized
+NET: Registered PF_RXRPC protocol family
+Key type rxrpc registered
+Key type rxrpc_s registered
+NET: Registered PF_KCM protocol family
+lec:lane_module_init: lec.c: initialized
+mpoa:atm_mpoa_init: mpc.c: initialized
+l2tp_core: L2TP core driver, V2.0
+l2tp_ppp: PPPoL2TP kernel driver, V2.0
+l2tp_ip: L2TP IP encapsulation support (L2TPv3)
+l2tp_netlink: L2TP netlink interface
+l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
+l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
+NET: Registered PF_PHONET protocol family
+8021q: 802.1Q VLAN Support v1.8
+sctp: Hash tables configured (bind 32/56)
+NET: Registered PF_RDS protocol family
+Registered RDS/infiniband transport
+Registered RDS/tcp transport
+tipc: Activated (version 2.0.0)
+NET: Registered PF_TIPC protocol family
+tipc: Started in single node mode
+smc: adding smcd device lo without pnetid
+NET: Registered PF_SMC protocol family
+9pnet: Installing 9P2000 support
+NET: Registered PF_CAIF protocol family
+NET: Registered PF_IEEE802154 protocol family
+Key type dns_resolver registered
+Key type ceph registered
+libceph: loaded (mon/osd proto 15/24)
+batman_adv: B.A.T.M.A.N. advanced 2025.5 (compatibility version 15) loaded
+openvswitch: Open vSwitch switching datapath
+NET: Registered PF_VSOCK protocol family
+mpls_gso: MPLS GSO support
+IPI shorthand broadcast: enabled
+sched_clock: Marking stable (24350040289, 119535998)->(24496627492, -27051205)
+registered taskstats version 1
+------------[ cut here ]------------
+UBSAN: array-index-out-of-bounds in kernel/bpf/verifier.c:21711:16
+index 10 is out of range for type 'u32[10]' (aka 'unsigned int[10]')
+CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150
+ ubsan_epilogue+0xa/0x30
+ __ubsan_handle_out_of_bounds+0xe8/0xf0
+ do_check+0x77a1/0x11d50
+ do_check_common+0x21ea/0x2dc0
+ bpf_check+0x242f/0x1cd90
+ bpf_prog_load+0x1484/0x1ae0
+ __sys_bpf+0x618/0x950
+ kern_sys_bpf+0x185/0x700
+ load+0x488/0xad0
+ do_one_initcall+0x250/0x8d0
+ do_initcall_level+0x104/0x190
+ do_initcalls+0x59/0xa0
+ kernel_init_freeable+0x2a6/0x3e0
+ kernel_init+0x1d/0x1d0
+ ret_from_fork+0x51e/0xb90
+ ret_from_fork_asm+0x1a/0x30
+ </TASK>
+---[ end trace ]---
 
 
+***
 
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
 
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+
+To test a patch for this bug, please reply with `#syz test`
+(should be on a separate line).
+
+The patch should be attached to the email.
+Note: arguments like custom git repos and branches are not supported.
