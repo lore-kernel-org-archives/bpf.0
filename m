@@ -1,133 +1,185 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9C83E51F4
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 14:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775139452; cv=pass; b=LfejCDQ+yLtpxAcAtYt+CH0CfB2L7FlDKTgD8gs15CGxEgRnzS/OTxTUlpXmHRwl7tLTKdQmi8HMMBpU8aayBPy25uo3sbYrGr5qFmXOgDcQvUuq211XkN5GV2sbZYPDHuRj4RT3J4XRyInwgVl+LK7lJMzvXN7NH4wdNEl6Ric=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775139452; c=relaxed/simple;
-	bh=SURcYKHTGeY420edRBwFMlG5Lhq0YY1jLS/thZEEVPk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k/wadD41xP80kWJwYuT+qlSBu22XyGVQBi1scPFt69wGyqlGDNUW4IeeL/3L8zI2cBnIQIXJTVvSK+KuvyBlNJBBchrjVdBiOITlXXMMA+LEVW8r43eZZCA8+LCa9ic8gWHBeRv9QTUfgrjTb03LAWK5vq2RM45FYOXv/+SFUcI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lE//TmXT; arc=pass smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D883DD510
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 14:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775139596; cv=none; b=jsYezI1NXfU+VBvtIA7CIjhEylNYMWjQgzjibr+1UNkRmnQMRJOWRtdbGmgIyAZIpvGvIvq6fhIfaTKLPuoUS1SHn5Amv12Sa38Du0Kg7f0pTw+fhJDnFF6mzo794K1+NCj2TypIz1Z5lHLXA6wGRED1filG97nuVcWzsZLiDDE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775139596; c=relaxed/simple;
+	bh=cyVMP9Kyo1scTrFB2LAaQ/90OVciv1KyB7OE0taNBB0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ikdamnMxTOkBjImVW70GAi2utDXdPIG3Bap3aJ1+xOxgFgKFmr+MJR3MA67S6yWrFHzpBNESHnFKirO5A7/KScAS96eM37ptuN8k6LPCDxa8A9s9UONEtK7H+aQbmTuF/+06j44IjX15R9wLaL48wyFxBsbWPU1qPIKuotqcnjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SdjdwZH7; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lE//TmXT"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-486507134e4so12243375e9.0
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 07:17:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775139449; cv=none;
-        d=google.com; s=arc-20240605;
-        b=QkOTpImhwxVHkk8CsQnmM7//Xwd3Qv1VFUtkao3qMuod6kO8pxREpVEJSn8/aG6/ba
-         8IOCUAlVyMdNW5pqwBju4OuvPUOHw5DsbzomRzS0rau9sFAko6nXyZ9UVWKn+tdMk0ts
-         AMvr+iSd9CFpOULdT0HUVo/axF8rQM8CbMcGjf2fwIyTkp4gxxZ3yqnR699xDR083waQ
-         Z8Pso1b4BRa1lSnF1Ft1YUMgDxvYwL1Wa6oneZ5nxjgGa4HBNSL+mGYg6y/sOVTTjeOG
-         iFgYQxMr3kPAfBPV0hwgpIVBbZ0yUbk8zvahRRffYve/Wl4xoTsPev1gZTt1jDq6o8sv
-         Jt1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=d02dseYsue6RqQDed3Qbak8xxKACKmJGEDfYW7cOJ0k=;
-        fh=tsDqv3A2RBAexvnLqopkABwexBs5BQ34yuhFlSIGfkI=;
-        b=YsEZp4BkfWUeMhCcAPCT+d8ap4jhW7XuJI4KBsYtPMXxsXyv/S5RcVncTzeROgohqw
-         BT4GkmMHqddvVa7r5TUkjgooBYK1bS8MdxaiPrMJ2wT/e60TYSqEf8lsNlqmINdiOSI5
-         uyCYoOoNydEf8oANZa45XAvrkBW9Rv9sZCVFYTw8L9Bojom6y+fCrGzyWmm53DUKotcC
-         YbX8GvsJdnm9Q8DLpszz98Tu9Uqu9TNoW/7wtfsuNQGmEPBxNxgpBwGYCaxFKtOQafv+
-         xPh3L8mX/Fp5ZtjPosoeDBvzPFXpH7ARpRe4tj5tYIGIqzwZMa2xU6ehac/eAukDjdrX
-         VVSQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SdjdwZH7"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43cfb723698so848033f8f.3
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 07:19:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775139449; x=1775744249; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d02dseYsue6RqQDed3Qbak8xxKACKmJGEDfYW7cOJ0k=;
-        b=lE//TmXTJ7IKfAML7iARBqS9YvfdkkrtpbsRmByY70seu3DvAML6TMVT8sWshilhJS
-         AMoPNpdlb/PB0HLhNv7WPovdIAWVQTNGp/oB3K2+XYqiTZ3KxUs6q/QCt/r58s4Qyq3H
-         x0s/HRP7Y81Js3KnjXt9O/c6O3IxwNuR1a56JRCnWq4YaY4vnqUDo/Cl/6kudDjyO/HQ
-         ryVjBWb+o+Z7QBPXqNZOlQ47LyYFHoliik9H0GEplxJSDeuBM78qxi28Q0j8k7HfbSZ3
-         iU309dy4y2JwGoTfmErWWyUakl18OwqGN8kXR9vzB2t+TaJ0tKA2ShgeHvHMZC/KlwY8
-         x6rA==
+        d=suse.com; s=google; t=1775139592; x=1775744392; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bkH+lobUTgIXjLrXq0Aorb2k1wsHUrp5cbKHFvjFzNY=;
+        b=SdjdwZH7ORwF0PTFgr47fahmbNTCkh8sH2yGbNg+Px3nxe6LufZXy4A1ljskE43AWZ
+         EeNOEV39EtEos49BEaOvJ+XtX5i+lryx9zHD+P22it0wBq54BbZqO7ax95SgtlvgYIEI
+         x0fXKDLmTuCXt0gGCgDcRQJJsl8jk7cXj1LMwYEzr1Roqo4ARb3AWSfVSTQ8sXDiG7fT
+         XF9iW2YiZ3pTDKdwmvGZhoZeEP9PaNc3k5QHvnE74HQptla3pQ3OuVnT3m91autnLkMP
+         n+DEKDLLoAZRvHDn+rOALzqXa91YJiB+tmXuYX94xBwklZsl2qI1UjTmWkxkwcGLPaQx
+         ehsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775139449; x=1775744249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=d02dseYsue6RqQDed3Qbak8xxKACKmJGEDfYW7cOJ0k=;
-        b=TgwAyIIsaG39/jawFROST0RWaNI2E5EnDkU1yWl6GH+5BUgTRgY6ZZeXpyLJjvX/xI
-         m/9laGcgsQupFXZRxAyxsvfarO/LpRTQoaPCYZAhmf/FvvAyRpKDnH9U8UTezU5N7Edb
-         DNdGUO4DuRoIwCm74V8LcIN76xhjdUIqvNHMRqZ2KXEevthdYAuVf4N5lbvj+X1Xs6Pj
-         wpbNco5gev6D2Mf5p0BTR8OYZJojizatmsG3CWC19NwqGjKOyIpoZ/C29siHcRRIYUOI
-         +4oXJN+w8Pdie0X/eIrp9ZCV2VyCRwR12SOplbRj/uPZOsP6ep6MhB8NzXoDHIWNyRzi
-         AkQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtutDV7lDZ0aBrbvnOumOaMgT1HdeRWExNS2L8lY2hizPZBXyfyFkLz4qe+LrfFjq/Sc0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUDQBAGAZGfU0nREfP9pejtEihfOcETKMu5HyMZfQObiRnZP7k
-	mZFoJ/jdEudX3mOT7pho8UK/tfT7RsMsulKqiiPOUtyymTGZhbQNe0PDvbU9+vDi1KI43ZXmNdE
-	G+zaiH0H5O0oq0gz3d1TzdcF5tk1VU6w=
-X-Gm-Gg: ATEYQzxKo+dagoG2RYQOfMkIbL61no6BbrY7aJDrLaBQThk5jr84hQkLEkvFGs1QJYF
-	0A6EgKo3hCCp50RTWH0tLz501zdGIYJvzID7OJjwap/lJAF/LVy9x6cNl/QK3kT29xvMUA0oOGK
-	YqvmapUDZCA6lN8VmFZ3cjgmOOOPHFGWlS7WKpq87zZAf2rH6abSnH9v0vlFLAE8yi5719QS+eT
-	THOWVbveL4iEL9mxp50jVDTlGAov5+0va5+EVxVgcjuukA4yVrr25+5+3WW68YN5/XMjQOTHV3X
-	wxGW9IbcpKf/gV1KSrZFW3xDwJTZObpFY4MqLyuraYNLfktGf7RwI8o24SZLzW8rzK7aMhS8sV4
-	okNf1xlxMlgVGNNnbJG5CuXsJFw==
-X-Received: by 2002:a05:600c:858e:b0:485:3ee1:eba5 with SMTP id
- 5b1f17b1804b1-488835ccc9dmr113145145e9.27.1775139448943; Thu, 02 Apr 2026
- 07:17:28 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775139592; x=1775744392;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bkH+lobUTgIXjLrXq0Aorb2k1wsHUrp5cbKHFvjFzNY=;
+        b=T3/pPBZ1iOHx5gAkxaFywb2RPWmq2cPN3Xu6uYHeuV9KLBYILOIJGhNknaQKfbtQk1
+         6e6vft4Wrw3m5H4lXQ/eZSBi8J5diIct37cHGMAe8O0tcbEDozitGxu+sdslpfUr2Q4V
+         +EMAaLzqq3i0LDyFLBqQtsixpk70thc28s28Bq/64bpA2Nry8kThvUTamYqqs0G6v1lz
+         GrAGiIrjRk37Bb+VkVSOdfAaUVvjcNyUa8B45JrUBkRNKEHTovMEbzsz1Cup86Ij7+/X
+         mnI3u1+Sl2UijUQlKRTmEhmmWlGini8IOX7udl/FbcuxNLA7srsMCdZ8tk1gEYMFqoD7
+         tr6g==
+X-Forwarded-Encrypted: i=1; AJvYcCVxyUioODm8q/rhG+KisHext//gBjGhTuBjwPFg3+y7+KUfY3ywUyybum3u19Ul3qJu6pw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4wSwClPZjzGr1bHIFZ7mEg5zdkSGBOs9OU6hgYJ/hJQSaYAxJ
+	gNkLN43c9zNDil3X/FgFrp+s94H9LT3P0m3MUsuLwfHEi5kXNP0eiBrhl1FNGwduDbs=
+X-Gm-Gg: AeBDietokIJnZT+mhepZRq+OGdnJrzXuiMUmsUYNHncjlXmzwJ9ALI/LJ9k1AJpwvPr
+	jfDxRoAYav3SXwq5DTOUPgjzmvLOy96RgfBNVp6lppyU8jS0htUPm4cvKoNk6huhUGIpim/9czx
+	ZcyK+3bRpqUfsaXcj/LnrW0S1dEPiWkwunw/DjaFGMnadPySQJd5Lej11khHqWLZrDPCi8RurFG
+	8BWQWNxCkQWm12dGqKd0KvsVmCPmR8j1seMGltGFtij/R91L0tbx267ae5iAXZO2oFCfKP3+3Th
+	GbfxEGNOrmOgY/upTop/A1UiHfvcT9AUxhbDFWyCA8XKhr49ovnCFQAvCb5AGvb2avzeQ1LYuQO
+	R9D+2Q6lHqkI9aGsdmoC00S5voqWhoROdhsoxMgyKOzYKzsyxuy/G0XVtGcvYw4WVV308U83sSL
+	u0FmCHZu0eFCTBa0tR3fBc4lj7UDkXR3q7+PQ6kj2J
+X-Received: by 2002:a05:6000:250a:b0:43d:4c:229f with SMTP id ffacd0b85a97d-43d150e161amr13806399f8f.44.1775139592291;
+        Thu, 02 Apr 2026 07:19:52 -0700 (PDT)
+Received: from zovi.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4e56fesm8459818f8f.27.2026.04.02.07.19.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 07:19:51 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH] kbuild/btf: Avoid relinking modules when only vmlinux changes
+Date: Thu,  2 Apr 2026 16:17:16 +0200
+Message-ID: <20260402141911.1577711-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <7653EEEC2BAB17DF+20260402073948.2185396-1-xulang@uniontech.com> <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
-In-Reply-To: <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 2 Apr 2026 07:17:17 -0700
-X-Gm-Features: AQROBzCJN6KLhJqu__wW0KrOg081-PAJ5P8_idZtDjyZtUY3LslIDvZlJbUtBto
-Message-ID: <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
-Subject: Re: [PATCH bpf v5 1/2] bpf: Fix OOB in pcpu_init_value
-To: xulang <xulang@uniontech.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard <eddyz87@gmail.com>, 
-	Hao Luo <haoluo@google.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	=?UTF-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>, kernel@uniontech.com, 
-	KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Paul Chaignon <paul.chaignon@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 2, 2026 at 12:43=E2=80=AFAM xulang <xulang@uniontech.com> wrote=
-:
->
-> From: Lang Xu <xulang@uniontech.com>
->
-> An out-of-bounds read occurs when copying element from a
-> BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
-> same value_size that is not rounded up to 8 bytes.
->
-> The issue happens when:
-> 1. A CGROUP_STORAGE map is created with value_size not aligned to
->    8 bytes (e.g., 4 bytes)
-> 2. A pcpu map is created with the same value_size (e.g., 4 bytes)
-> 3. Update element in 2 with data in 1
->
-> pcpu_init_value assumes that all sources are rounded up to 8 bytes,
-> and invokes copy_map_value_long to make a data copy, However, the
-> assumption doesn't stand since there are some cases where the source
-> may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE,
+Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
+and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
+to enable generation of split BTF for kernel modules. This change required
+the %.ko Makefile rule to additionally depend on vmlinux, which is used as
+a base for deduplication. The regular ld_ko_o command executed by the rule
+was then modified to be skipped if only vmlinux changes. This was done by
+introducing a new if_changed_except command and updating the original call
+to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
 
-why? Just round it up there instead of penalizing perf everywhere.
+Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
+in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
+from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
+previous logic to skip relinking modules if only vmlinux changes. The issue
+is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
+prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
+retains the raw './vmlinux'. As a result, if_changed_except doesn't
+correctly filter out vmlinux. Consequently, with
+CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
+changes.
 
-> skb->data.
+Additionally, commit 522397d05e7d ("resolve_btfids: Change in-place update
+with raw binary output") in 2025 reworked the method for patching BTF data
+into the resulting modules by using 'objcopy --add-section'. This command
+fails if a section already exists.
 
-what that means?
+Fix the unnecessary relinking issue by also excluding the normalized form
+'vmlinux' when invoking ld_ko_o. Adjust embed_btf_data() to first use the
+--remove-section option to remove the patched BTF section if it is already
+present.
 
-pcpu_init_value() can access skb->data ?
+Fixes: 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some in-kernel build artifacts")
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ scripts/Makefile.modfinal | 14 ++++++++++++--
+ scripts/gen-btf.sh        |  6 ++++--
+ 2 files changed, 16 insertions(+), 4 deletions(-)
 
-pw-bot: cr
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index adcbcde16a07..2981745a172f 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -54,9 +54,19 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+ 	$(cmd);                                                              \
+ 	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+ 
+-# Re-generate module BTFs if either module's .ko or vmlinux changed
++# Build final module objects.
++#
++# The *.ko files are usually independent of vmlinux. However, special handling
++# is required for module BTFs, which need to be regenerated if either the
++# module's .ko file or vmlinux has changed, as vmlinux is used as a base for
++# deduplication. Consequently, vmlinux is included in the rule prerequisites.
++#
++# The regular ld_ko_o call is conditional and is skipped if only vmlinux has
++# changed. The exclusion pattern used in the if_changed_except call contains
++# '$(objtree)/vmlinux' to match the exact prerequisite and plain 'vmlinux' to
++# cover the case when make normalizes './vmlinux' to 'vmlinux'.
+ %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+-	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
++	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux vmlinux)
+ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+ endif
+diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+index 8ca96eb10a69..6d4e629c79ca 100755
+--- a/scripts/gen-btf.sh
++++ b/scripts/gen-btf.sh
+@@ -104,12 +104,14 @@ gen_btf_o()
+ 
+ embed_btf_data()
+ {
+-	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF ${ELF_FILE}
++	${OBJCOPY} --remove-section .BTF \
++		--add-section .BTF=${ELF_FILE}.BTF ${ELF_FILE}
+ 
+ 	# a module might not have a .BTF_ids or .BTF.base section
+ 	btf_base="${ELF_FILE}.BTF.base"
+ 	if [ -f "${btf_base}" ]; then
+-		${OBJCOPY} --add-section .BTF.base=${btf_base} ${ELF_FILE}
++		${OBJCOPY} --remove-section .BTF.base \
++			--add-section .BTF.base=${btf_base} ${ELF_FILE}
+ 	fi
+ 	btf_ids="${ELF_FILE}.BTF_ids"
+ 	if [ -f "${btf_ids}" ]; then
+
+base-commit: 7aaa8047eafd0bd628065b15757d9b48c5f9c07d
+-- 
+2.53.0
+
