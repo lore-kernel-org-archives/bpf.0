@@ -1,223 +1,114 @@
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA3F31E82E;
-	Thu,  2 Apr 2026 06:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775111518; cv=none; b=BocFKRQF/EZREHzuLbVrB57wuZO7JuuHs9nz15QSJEMNGWWcjPISv4vENd0bJrfEUb1IYPHsN58F3NWB0evZTdfM3rXBFp4sg1Bw5hl80BH2WTdAWIchEupsymME2vEc2M0O+LZM2iNLZxdovSnC737LZdWXjlPwpZ4C3lsjvjQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775111518; c=relaxed/simple;
-	bh=vr98BifwCZR7ddPRugqbqnMKsjEEt47aZ8P/B5wnW4w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pj194ya+TmdyAb950qTtMplcy0AuovQiDgveJBlMo4OD3wc+r/DcIMBaZLE1G01ZDT0qx1g1VgYr+/Rh5c9ZuL5y+IAxGVzNPOcr/iBPiNk85V4Gyz8RPDQeswhbSm4/alk06IR5IUGvkg4ynjDxgSZtvZWoylBdcSlOZJLPq28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=glZd+aIc; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFC93148A3
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 06:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775111875; cv=pass; b=jY9M0vHaKQ18ugxxBUKg99g39D1/tynOxBnOOMVgEyPHNZ2OEf12i+wqrxeA5RSW1SoK4cgBsO6+VhMmfW5EpDvErOEhJ2v2kLBKr7ec8n7hHwQnmaiMaA8+b2mxcpeShN59UhrmuRPvn/FicLIpwTHWfT9oadoOhXXW/XUmFBY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775111875; c=relaxed/simple;
+	bh=NK7siyIJ/eEsJlUJu8OEqOJN6vumMIlBfcJjglJJkhA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MpXGXYAKisLAXEuluov9bLhZKcEI5E5AJIOBJBh4AyAfXXzzx0uHtnjC7WBA5t00kpDfpsEbtOj9QafKIz6tNt9G/43b4usWepH/Ey2MEQEK/bylWWvcSjcojWJ3ibmc4uc15Jk2dxW2XqvhUoPuJvhuWqjItzyAmkggA7nvKcw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JXmIDmr/; arc=pass smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="glZd+aIc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1775111491;
-	bh=3aGRFJphaUxd0Jn9c3ZHF1I5KiJsDbSpxhypActK2ow=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=glZd+aIceOMfIfy3O1rS2FVCR38xAvq/XNYiNkfb4N8VoSTYGeZfzCqMU2xICJ6DB
-	 90yjbTAZRJTA05B69NFdIaHA+cXJHTBaAUhMfn/ODMP6BSfAtEX1nKO9ntikSLEyYP
-	 3Y64EQVqkv5B4JjlYUVKRhEigW1LCuLiaNmLPYUE=
-X-QQ-mid: zesmtpip3t1775111483t81fe87b9
-X-QQ-Originating-IP: ujWLZzS029oV0y5qdr1WJ7vpgvVaHNTKp+G+weG+d5o=
-Received: from xulang-PC ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 02 Apr 2026 14:31:21 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9901766237094982486
-EX-QQ-RecipientCnt: 20
-From: xulang <xulang@uniontech.com>
-To: martin.lau@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	dzm91@hust.edu.cn,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kaiyanm@hust.edu.cn,
-	kernel@uniontech.com,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	paul.chaignon@gmail.com,
-	sdf@fomichev.me,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Lang Xu <xulang@uniontech.com>
-Subject: [PATCH bpf v4 2/2] selftests/bpf: Add test for cgroup storage OOB read
-Date: Thu,  2 Apr 2026 14:31:16 +0800
-Message-ID: <1D11C4C149BCD888+20260402063116.2012398-2-xulang@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <5CD977BE2CEFCF6F+20260402062621.2008939-1-xulang@uniontech.com>
-References: <5CD977BE2CEFCF6F+20260402062621.2008939-1-xulang@uniontech.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXmIDmr/"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7991db3dc98so6031947b3.0
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 23:37:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775111873; cv=none;
+        d=google.com; s=arc-20240605;
+        b=X2T0vmNPJsNMrsBdrL28UxSZtMoXxtrwTi3SxfZoL+bR0e63Z+hfoY1LZ4XclMh7JL
+         kEphW7R0ocD67Q7270vvKIt5zpgYB1+rwRxIcEY48CBp7ZvSJcz873yRcIAc2vy7ULpN
+         a6RA8WiFWpejS4/gmnTILE+3WeUX+B5KwWhG36f2nzNPHoW0B9VrDNvHHTqXpbqUbQFB
+         lYQ8ucSnVsaPpPVM3mdD/m1eKjGipi9g6Mb3gWJzWUXbSp7xfYmARAkxgvXHx62Ephwv
+         k3BlPsNEzJVPpNZGkna8cQ/RJnxdmcLgGWfzG3pIbGVJaFbpmiynNn65LWww1ICyODm3
+         qJBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=t+BrHQX+EQN9KTa01wtx2/XOg8PJ5fXoG4b7oExFqpc=;
+        fh=OTngedkmQGSVGUefPNiJCoC1LtTfviac4wu/YJv3vNI=;
+        b=T/EUtD8dntaIbu0r4LVlutLf1fHMVW7FLq7U2a8CcbhG1SMi5F5/YiCdAEaejTJLPZ
+         YWVkbuZA6PQGsKrezH2GTT5JkWXlNM16wVBmJo4rpipagVwSueKvaZ/CE9GqhrX6bOsq
+         mo55OrPghlvpbQEN1SwNvEABVgP2p710uxw/Hb9l9ZKckR/WJECqsMV9CZChs7nlcoXe
+         Xej+a53onystW9TcHOrhYo+iE2fC4BT65BLlUyBPfnE/Qs03/11OKUFgdmSy9XBMmRqd
+         oF3dQcdJ02gMToe0/Xrw21jVIIJmLUgD8jeuAAzVaaPdEByRkWua2KPAfX1KruRNi8xu
+         2qOw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775111873; x=1775716673; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t+BrHQX+EQN9KTa01wtx2/XOg8PJ5fXoG4b7oExFqpc=;
+        b=JXmIDmr/ELI/+iZecR5P2fGyW6zXm6pbMV2bFtt+59katsugdzNq7OANBRu7Whg/mr
+         PMR3jwfPOFdlnCoLhSI8PtKfXFaOMgkCn9ca4PnLG0KDcMPqLjlJnUs4q2knUtEfL1OV
+         TX92A5LlLpnjjl373IqR7lDaSg10A/sDI0dQ9/sO1kBFSQTlTRERK+Xk64OzC0uckHnq
+         pTkl34ICmj2GF//WVKORnyUGi8i09apgATUQgjO09TQCmUSbeO5ospSBt00exd/NzhaP
+         6q7AqYT6Mey8xzgO7hLDV6BifF6d5iFVxAZTVGHGbpVovRuYbCYwxktc7yv2zTCydupl
+         17dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775111873; x=1775716673;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=t+BrHQX+EQN9KTa01wtx2/XOg8PJ5fXoG4b7oExFqpc=;
+        b=cKSgupoNHt6Zjr1WKaVDWlqAGcJOw6BhBHhntdcJX8wirNhiWeB6SiSMk0bajpD1qc
+         Rn1KOwuKYqiAR9C/8eXl8ur+t6JLJE0ZcFdT7ZykSAz5xNaU4CXGapH8Z7DW2AZuPwZK
+         UFWDctaBLk7W5wNftAbsP40of6qeSXqWOPCt2UYq84MIQZ/NrYhoBRNYainKN1rXIOAS
+         Q/MjEWcD50HWnEiN6rA4+z9zbZ1ekVEfZGDRGper7eycG9VmSMMHcUw8idiggyYht9Wd
+         w5DKQ/LDnhTUUW81KVfC78xDsdS9Mjosb/N8z23YAyr7PT4Ql71XfpLLX3q+kwLKsSOy
+         0T8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX7NMO8jmuaDwBpmN5uzfAGVwMSmTRcYmHSf9IkurZS3K1jF7TJxQI+377CF8dX/k5yYFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzGtDI9Smvi9cR7mIxP8Xi1vLTD6MZ5KGgmawj0274eqX99HFO
+	TF771wINn4CjMGucBDrR5PMIC3fdeQ9ZaWJLXIKayO1UVKP21+SSpyqFIeXIQXnTMc9+l8LtsQX
+	qIaX7JqjNa4mtgsqiIP0CdXxVKAwcluY=
+X-Gm-Gg: AeBDiesUSNIH2I5GFQFjekN8+N1iX1gboA7UUhSnellfbW1+7RfhGTXX1pK8duXYWFn
+	dE9foHGbiBnOJn40+agEuobGikkBrkW4+QejwolWs2tgNqH3pOvbduzCVSgxcDnDeA/7nGBY7kz
+	QCN3JWCGqRiZVcRbWUp825it5KsyxVJCIVsK2iUIdhvrxa7cBHHFib9QpzH/NosR/DfI9B9HFPl
+	RIQGJ/ZM+sbytNiKsIDs+YjdTdiKEmfUsQi6aHJo7ODK/VVOaAAt9jPWaTaEDYAwKWGGh3WVso8
+	Ffsijaai4b/9gr7X1MElbNqzt61NWXk7ktdzjIkk8km1PE24IFqwG6uFn+A9VLCYMHQuidaX
+X-Received: by 2002:a05:690c:e3e4:b0:79a:d393:f8c4 with SMTP id
+ 00721157ae682-7a21184ba85mr73520507b3.34.1775111873430; Wed, 01 Apr 2026
+ 23:37:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: N2f7f/zo94Yu0d6+zRXywR92gZafKYnePpiLRcNUY/hoAK1WZTyLVuYQ
-	oPpkp8BoEO/jp9uIrOB+u1tqkxpkEt5YwuVPz8e2Y3b1kf8cDH+x8u3DCdvaJW5G9FwVBt+
-	z62cI13axeaqdxXabGJUoqz+ARncek9q14K1gDorxFyLq+q0WI04M52iZrcW/Bw37K3xQ7M
-	22gv9/JyY8U0UQe6RdSL1n9REz9LiQ/CBuxzcjTO+UQuKffnYpunV6tkvjEOsC64eOaPApX
-	2hCWuj9NiIrCy1jBpG9/NjtZrZyVqcH9gwJ+13STkse2JyfYBj6DcP1d00rGmK97BcgxyLB
-	bHTas7Eo6SRUCRRceJiOBgpUgVBIfibmzqHPwKJfRBlSfqaWPysN1RP+crU6Ezhb11BcOP1
-	qFTDBSawmW4jSISqyN2Kw6ATSltrBT0ZNZ0bvwTGJRRIoczH5+8RiKfDTei34WR3prQ6QEJ
-	ClZtOp0oEhetg5aGjCUnysMUVvnWS85lLnJhs9RO5lOZx9M0ceNBThMcEuoDXI/47Npote8
-	lvoSJZhJ7H66CtH8HTBLlhT+ehM2FIndRCisUBGZ5dEqvJmRk5iSAA3f5VR5q6Yg0p1Bn28
-	BqsNMdjp8KPH7HvPgF+JLJ8R6E9ghbVHEQGEkTvRqNsnJ9yu5FEsA1bgClDYf9UDFjKhd/E
-	4Jid+MyRZ3hdyZ+y2iF9qErPOsCLQzEL9liOUhd1X1GwYVZMg2g5BSKtTZqGqFl2AitUoJJ
-	UDsw7U0RlTkaq89hlzwQkPe8y/AYUOceX01Sb4jQsPRxFMam4VNX//cRAU2BQl9IngBbSmL
-	0TATnFdQ/U5vEyyCmM4Yt5ro9SJXXJNBrctz6WfCAUl1fyFN7IyC9GTQpmEae042e6oV2pI
-	nmRNifGSRv1WnyDD+/x7nSZKBbeHL9jnzPFeQTUJ0o1vEZ8FmIff7hK2yPKwyMhd4FJdaUe
-	FmE/Qftkpv1MweyvMUipEK8Qo98tdyO1Xa66vmpj0H1O/Vmy2L89nAf+pMtu6pp+HtAtDvT
-	+wsBCCNCEo49v4QzVdyG8FR08HLK1qdw1c7eR1uD6uag3HwZzekiOE+gDxakqtQt9LTGxRZ
-	QxeY+OWldo3+iLIFV7TqK+3T/dNVQpcZqUHvQsepLZutqVVEPssclAeNBaP96Sg9g5kdxd3
-	bc8e6Am2y0iPjUU=
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
-X-QQ-RECHKSPAM: 0
+References: <20260402050928.32946-1-kartikey406@gmail.com> <f64c57ad-c162-480e-910a-e7a5a3460104@linux.dev>
+In-Reply-To: <f64c57ad-c162-480e-910a-e7a5a3460104@linux.dev>
+From: Deepanshu Kartikey <kartikey406@gmail.com>
+Date: Thu, 2 Apr 2026 12:07:41 +0530
+X-Gm-Features: AQROBzBOLHhkvCg28iOe4f7E1n0WRMLHW1eN8Xhts2J1WaN6Wst9NNUVwAWVyeU
+Message-ID: <CADhLXY6-fto1jby-Hq4MgD5PkEQ7709V8+ivJ9oL=0iNZbmHmg@mail.gmail.com>
+Subject: Re: [PATCH] udp_bpf: fix use-after-free in udp_bpf_recvmsg()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: john.fastabend@gmail.com, jakub@cloudflare.com, davem@davemloft.net, 
+	dsahern@kernel.org, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, ast@kernel.org, 
+	cong.wang@bytedance.com, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	syzbot+431f9a9e3f5227fbb904@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Lang Xu <xulang@uniontech.com>
+On Thu, Apr 2, 2026 at 11:33=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+>
+> Kuniyuki  is already working on this. Please see the
+> existing discussion.
+>
+> https://lore.kernel.org/bpf/20260221233234.3814768-4-kuniyu@google.com/
+>
+>
 
-Add a test case to reproduce the out-of-bounds read issue when copying
-from cgroup storage maps with unaligned value_size.
+I was not aware of it. Thanks for sharing.
 
-The test creates:
-1. A CGROUP_STORAGE map with 4-byte value (not 8-byte aligned)
-2. A LRU_PERCPU_HASH map with 4-byte value (same size)
-
-When a socket is created in the cgroup, the BPF program triggers
-bpf_map_update_elem() which calls copy_map_value_long(). This function
-rounds up the copy size to 8 bytes, but the cgroup storage buffer is
-only 4 bytes, causing an OOB read (before the fix).
-
-Link: https://lore.kernel.org/all/204030CBF30066BE+20260312052525.1254217-1-xulang@uniontech.com/
-Signed-off-by: Lang Xu <xulang@uniontech.com>
----
- .../selftests/bpf/prog_tests/cgroup_storage.c | 42 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_storage.c      | 43 +++++++++++++++++++
- 2 files changed, 85 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-index cf395715ced4..5b56dc893e73 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include <unistd.h>
-+#include <sys/socket.h>
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
-@@ -94,3 +96,43 @@ void test_cgroup_storage(void)
- 	close(cgroup_fd);
- 	cleanup_cgroup_environment();
- }
-+
-+void test_cgroup_storage_oob(void)
-+{
-+	struct cgroup_storage *skel;
-+	int cgroup_fd, sock_fd;
-+
-+	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
-+	if (!ASSERT_OK_FD(cgroup_fd, "create cgroup"))
-+		return;
-+
-+	/* Load and attach BPF program */
-+	skel = cgroup_storage__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_storage__open_and_load"))
-+		goto cleanup_cgroup;
-+
-+	skel->links.trigger_oob = bpf_program__attach_cgroup(skel->progs.trigger_oob,
-+							      cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.trigger_oob, "attach_cgroup"))
-+		goto cleanup_skel;
-+
-+	/* Create a socket to trigger cgroup/sock_create hook.
-+	 * This will execute our BPF program and trigger the OOB read
-+	 * if the bug is present (before the fix).
-+	 */
-+	sock_fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_OK_FD(sock_fd, "create socket"))
-+		goto cleanup_skel;
-+
-+	close(sock_fd);
-+
-+	/* If we reach here without a kernel panic or KASAN report,
-+	 * the test passes (the fix is working).
-+	 */
-+
-+cleanup_skel:
-+	cgroup_storage__destroy(skel);
-+cleanup_cgroup:
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_storage.c b/tools/testing/selftests/bpf/progs/cgroup_storage.c
-index db1e4d2d3281..59da1d95e5b9 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_storage.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_storage.c
-@@ -21,4 +21,47 @@ int bpf_prog(struct __sk_buff *skb)
- 	return (*counter & 1);
- }
- 
-+/* Maps for OOB test */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, __u32);  /* 4-byte value - not 8-byte aligned */
-+} cgroup_storage_oob SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);  /* 4-byte value - same as cgroup storage */
-+} lru_map SEC(".maps");
-+
-+SEC("cgroup/sock_create")
-+int trigger_oob(struct bpf_sock *sk)
-+{
-+	__u32 key = 0;
-+	__u32 *cgroup_val;
-+	__u32 value = 0x12345678;
-+
-+	/* Get cgroup storage value */
-+	cgroup_val = bpf_get_local_storage(&cgroup_storage_oob, 0);
-+	if (!cgroup_val)
-+		return 0;
-+
-+	/* Initialize cgroup storage */
-+	*cgroup_val = value;
-+
-+	/* This triggers the OOB read:
-+	 * bpf_map_update_elem() -> htab_map_update_elem() ->
-+	 * pcpu_init_value() -> copy_map_value_long() ->
-+	 * bpf_obj_memcpy(..., long_memcpy=true) ->
-+	 * bpf_long_memcpy(dst, src, round_up(4, 8))
-+	 *
-+	 * The copy size is rounded up to 8 bytes, but cgroup_val
-+	 * points to a 4-byte buffer, causing a 4-byte OOB read.
-+	 */
-+	bpf_map_update_elem(&lru_map, &key, cgroup_val, BPF_ANY);
-+
-+	return 1;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.51.0
-
+Deepanshu
