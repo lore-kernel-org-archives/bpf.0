@@ -1,63 +1,63 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FAE2AE8D
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 06:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC4A2AE8D
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 06:17:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775110671; cv=none; b=eVp5J5FPXfZnfsAuunZyZrAW09IvyUJxT0cklJ08LTjTqv+poAEkDd2oul1RFUcS2iUXEdZmnkvxlqIkZ+hsEZGFx06o830S3CF5lxRjKHcmgNMuEJgzd+27/M88Vrld3FIzH9bfl6GPQssztNdVztYm6r8ghhpgnerEoUg4mQc=
+	t=1775110673; cv=none; b=igECPTpyO8iwh9+3k74wbJPXwxXcy16gqOy6tG5sqVsiLwYsR2IDk+lHzjgrYXxnCrbFkLbq0e8zyO9+mprgSevRaipbFo2BeL3e7h6eGF8kLk5Taz2361DNF7W1/dxUZ9vdmsG8TpkaDqX8M/aQLSH44C5E1YcZ3aZpRmRP+WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775110671; c=relaxed/simple;
-	bh=ICOm7SRfF51T6NB9HwxH/EDq4SZWQLbdXlbaLzDWnK0=;
+	s=arc-20240116; t=1775110673; c=relaxed/simple;
+	bh=tvuoPlNS8Hw3grwWZHpVFxJKs+BN1c1ZdROyyYSE3R0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IgTaxjVSd70+lNaCxpamt9rTw3td2qQxi1S8rWYbpGN8y6ip1MPFUwWFPioR3mcXDLOjptBs5gf6Ygj9Ss17ejm2RkdOzHlvz9gI/0lUkZR6bnfo3yhs9SPf6vcCyMD54obwQUYANRAHr1EMYipIEf6/bY0K0lWXYzJUTCxc17g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Po2v8fv+; arc=none smtp.client-ip=209.85.216.43
+	 MIME-Version; b=csBLDqKb/cgoJoudrNEckvNr1tjOfi+uGnnLphboVq1vHJyU80ynVKbCAVbV9wgL5pIwrPI41P9evyFILRPg/fxpK2JoRmEJqsEhj2CMlJ+n0yYDRZZxhS5I2qq9p8XCmupVRwU3Hw8YGx22E3mViMQM9Bmp6qqRoJbVCNA4Lb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKgvUWom; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Po2v8fv+"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35c1d101355so181731a91.1
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 23:17:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKgvUWom"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-35d99bae2ebso446737a91.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 23:17:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775110669; x=1775715469; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775110671; x=1775715471; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=66voDUVqfa1WT9lm//xs/hM1bmHKoUg/kMTrXgeZVX0=;
-        b=Po2v8fv+H6rDdloDTJXZzYHc/HqwS97zG8E3zZ2PagnY6v8uNjpzarouKlmzXEoYWQ
-         jLBL+GSYdv2ASm1GtmeiWcnzpZK8oS25qB4S/a8XQ+XkyFYMbMK5y/7xsEJWHDbwzMjO
-         UamMiQWOY59ok0qWWmzm+mVXFKPB8Q7ieJ5Elpu/IdXdeXalJGkuMW5iPz/3Mrcw944G
-         +OUaYPfktwh4vXiOZ7AfVEzFZqb+pFIuf2VoVWuAYCGvYvEAc2CLU27I87TLNRhS82yT
-         A+UYpDmHoiaX0+fnGsDEIPi85rooa1YWsEfNREiypRnzNlAu6eIqAO4Qne8558lnD9s4
-         J92g==
+        bh=0fcglLQuhyOVzoRirBpv1zuHG2MTwN9r4fczEVp3gww=;
+        b=VKgvUWomnyoC0PiUDA44HTrXWSVnaGSsO4ltddQMvZCpVDJKLYsD0hKH1jt3NK7PYc
+         l3es/pIj6axGb8RXKg/zBsj1YKNJpHISjZwGDRhwQIw4gtADOhOF5d+CS3KXwv1H8cpb
+         jTpJZ7n7VJj1QMTo7uj852c9PLybGK+8qCCrUEK5yJoHdCSh99D0qFB3lt4qX7GaySfE
+         0y6xDsqWGBxZeZ4g7J7FbdXmamc8fzCeQWEGbHAkMhfZobG9NAYgNR3gUlNh7KjS+NUz
+         pwBv8AJ61iC/eMhzaWa1Zi7OYJYDaF/LHvcS8mlMHwXpHkfRlSTwJbXZXHHvEm2J330t
+         qLdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775110669; x=1775715469;
+        d=1e100.net; s=20251104; t=1775110671; x=1775715471;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=66voDUVqfa1WT9lm//xs/hM1bmHKoUg/kMTrXgeZVX0=;
-        b=SWMmyaZqE6LfVWI+xSjIYEv7jMuSmbdIekrgRgk9ktRp0Cv67U9lWLiChuws1ZHLyY
-         ZnHNjwNyGsoIMsig5+46DjV3A1MOJl7BBZNQdgnYKfvLk+JJGmhW4r5WypxU09PbkcFw
-         y6hxEiqkMeBOSJUqlmcHmoAg5qBo2nsfxBU5eACYp6gCpCnzh0FczBAEplzITDGiF8vX
-         uzSYMD6q0R0vu5SqewrhzgeB1pmNSG38yea0g5xRDa9IOUJOWZyifs8RRRyC/FUqwpq+
-         TYR5wqgmcc76uBqAMI2OYx056QYOKVi5Hw1UTFVhhZY9CNfzqcLFlJj83ueT0LX3XOeg
-         GypA==
-X-Gm-Message-State: AOJu0Yy6sJxvqA7hB1/LsacLpa/MWk1yHAFhmohtZePX/datuberbsvR
-	izOXXnjJcZ1iRdhZpqzOvb9DMv8Jlj48Z/EsSUAKK4IvjZe7eOkB1iJgpCSjOQ==
-X-Gm-Gg: AeBDievc/ZjFX+4eyIXKP11llEil9xhPBktfolTDJGi39pWs1EPxIEH8eW3SWyQFX73
-	DzPFUlYYllLFvXp0Bt8J4KaQp6BRmiCrPCF8yekGjV+SV0BtmB6JJJ58W2cZTJfxb/13dyCC9fs
-	J6OY+AKKw8uca6dgFZwo5+TvHEv7QoeTyVOLONbQ6hEgXij8KYWsSKeIlqkB8/rgbC0sgD5dWy9
-	qKQfWwC7ng/I+GqII0iPoQZ56qSNiud9srHLvTL9WvEn8JvoWbCkylunM7N3eeWp/gpOZfs9tSx
-	6lZvKAXRMab6N2OExlG4ZHWo0Hs1WDoL/A7O/wostPaukvqRxKJ5TVjMJMuKIL8ihH1FNHhLBxx
-	sF/gmg/sR9bFnSP2Tp2Sxg0Djuupa9E8NB77eO4wxEoBAB3I7WAbBooEyouLH9aQFx4WhLws03w
-	5jXuWNjlVrPgL1BL9rDuy2Z61+uDRI1IsaDhqP+you/vjwlk4UKGra7E0ZQ/OI3oFoPQECFDqCf
-	XJBmSY+nd+AwZT3JAVlYdcxYjLwMW7Mr6fqyrpSU6LcZRBwA9b0r2INCAFAYw==
-X-Received: by 2002:a17:902:e785:b0:2b2:4fc1:f657 with SMTP id d9443c01a7336-2b269a9ce58mr65267655ad.6.1775110668820;
-        Wed, 01 Apr 2026 23:17:48 -0700 (PDT)
+        bh=0fcglLQuhyOVzoRirBpv1zuHG2MTwN9r4fczEVp3gww=;
+        b=OqZiYN+BP6We4p/WY0bDVLFn7cKpza4oTaZKxk1DLes5O3ti1yKTsvtlqRc0h5EYlW
+         DC652tpJZHXhf57Ja4wmdceK0TVY3I+FhQh01EE9MBSCjTIyj9K8t8sNEURGQ8TPPz0o
+         F8lqrwN7wSGKIgLFLZSRxezOuc0oE2lM2U2Eo9ZEvZH7kL52VZCRRdl+0i7NhXBeHypD
+         wOUTtJFrCtjl9Wlz6SeD7n9YtCUYMiiPKY4AtytHitf7r2Zod2WdjaVP6XhiaDbXWZN8
+         9vvPDxKoRWQjVlzZn9N6PjxhtltBp0LnzBToN05RGFvywoy/3UBZbdkXrAKeKNz/MuAU
+         FzCw==
+X-Gm-Message-State: AOJu0Yy+QDow9aSM2kA/7t4Ul2BW2Ylx4WOBq2qdxh19bkx1hy1qAXUk
+	uV+NOknJDPPIbFESVNkpgM0UqOxjvoUMMu6nNRcpxP957hcP/VlWhXTk6mDP3g==
+X-Gm-Gg: AeBDietmpP6DrpGS+XQp6twyVg6UBDtd1/eqSPdMidfmVeZ50Xjysv5SBvZ2/hT4XNq
+	lIvMDJRbG09u2OsbwyoTqw3cdMKnd+5ePpblfJ5MqmYtHxaa7QT8vXf/WTXCEH4ikZ6N9xno7iA
+	efj0u1EF3IXQyoedeTE9g9dBptqQgZOfUOugUPx/N3MReNuPoQkRNaIvf3m7yjOhQOU/pi17wOW
+	xwd+Fw22tkdRAV4cvUgc5Llh1lmFYVsVe0QWsv6g0fopQNBiWZ407OHzbTjTdYFwnvodDSAOflL
+	TZwHSKHnLZm6ANb1+uu/OanzmzbvG8OQVy9GU8BMzj7f/zoalSL4KcpnhoQfb4eJVrx/4w9qiBl
+	jsdb/7lsqLFClDCyFcPZALv08tFDRrKQuAZcKZRKglt3EJUF+7+jysoWKKGObyY2DOdGvBP/o8e
+	8AYAteSbKmeHBK/d+RRI+DJR07FmKwgdGdVhBFd1+w2BiDG0NTxTyVBsts53KasSSlvL/iZ5tyl
+	se1A0nrOmRJI3ZgaPyWY22DumwL8RQKwyfGzUG02Y2EJFwTrjYlI7Qcd4cDyw==
+X-Received: by 2002:a17:902:d509:b0:2b0:62dd:3a80 with SMTP id d9443c01a7336-2b2758b4263mr22674685ad.17.1775110671320;
+        Wed, 01 Apr 2026 23:17:51 -0700 (PDT)
 Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27497c0f3sm17217255ad.41.2026.04.01.23.17.48
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27472d1a2sm17905365ad.7.2026.04.01.23.17.50
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 01 Apr 2026 23:17:48 -0700 (PDT)
+        Wed, 01 Apr 2026 23:17:50 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -65,9 +65,9 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	memxor@gmail.com,
 	eddyz87@gmail.com
-Subject: [PATCH v2 bpf-next 1/6] bpf: Do register range validation early
-Date: Wed,  1 Apr 2026 23:17:39 -0700
-Message-ID: <20260402061744.10885-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf-next 2/6] bpf: Sort subprogs in topological order after check_cfg()
+Date: Wed,  1 Apr 2026 23:17:40 -0700
+Message-ID: <20260402061744.10885-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260402061744.10885-1-alexei.starovoitov@gmail.com>
 References: <20260402061744.10885-1-alexei.starovoitov@gmail.com>
@@ -81,110 +81,134 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Instead of checking src/dst range multiple times during
-the main verifier pass do them once.
+Add a pass that sorts subprogs in topological order so that iterating
+subprog_topo_order[] walks leaf subprogs first, then their callers.
+This is computed as a DFS post-order traversal of the CFG.
+
+The pass runs after check_cfg() to ensure the CFG has been validated
+before traversing and after postorder has been computed to avoid
+walking dead code.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c                         | 34 +++++--------------
- .../selftests/bpf/verifier/junk_insn.c        |  4 +--
- 2 files changed, 10 insertions(+), 28 deletions(-)
+ include/linux/bpf_verifier.h |  2 +
+ kernel/bpf/verifier.c        | 83 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 85 insertions(+)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 090aa26d1c98..4f492eaad5c2 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -787,6 +787,8 @@ struct bpf_verifier_env {
+ 	const struct bpf_line_info *prev_linfo;
+ 	struct bpf_verifier_log log;
+ 	struct bpf_subprog_info subprog_info[BPF_MAX_SUBPROGS + 2]; /* max + 2 for the fake and exception subprogs */
++	/* subprog indices sorted in topological order: leaves first, callers last */
++	int subprog_topo_order[BPF_MAX_SUBPROGS + 2];
+ 	union {
+ 		struct bpf_idmap idmap_scratch;
+ 		struct bpf_idset idset_scratch;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8c1cf2eb6cbb..8234d80b892a 100644
+index 8234d80b892a..c0630691c32d 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -2249,13 +2249,6 @@ static void __mark_reg_const_zero(const struct bpf_verifier_env *env, struct bpf
- static void mark_reg_known_zero(struct bpf_verifier_env *env,
- 				struct bpf_reg_state *regs, u32 regno)
- {
--	if (WARN_ON(regno >= MAX_BPF_REG)) {
--		verbose(env, "mark_reg_known_zero(regs, %u)\n", regno);
--		/* Something bad happened, let's kill all regs */
--		for (regno = 0; regno < MAX_BPF_REG; regno++)
--			__mark_reg_not_init(env, regs + regno);
--		return;
--	}
- 	__mark_reg_known_zero(regs + regno);
+@@ -3742,6 +3742,85 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 	return 0;
  }
  
-@@ -2908,13 +2901,6 @@ static void __mark_reg_unknown(const struct bpf_verifier_env *env,
- static void mark_reg_unknown(struct bpf_verifier_env *env,
- 			     struct bpf_reg_state *regs, u32 regno)
- {
--	if (WARN_ON(regno >= MAX_BPF_REG)) {
--		verbose(env, "mark_reg_unknown(regs, %u)\n", regno);
--		/* Something bad happened, let's kill all regs except FP */
--		for (regno = 0; regno < BPF_REG_FP; regno++)
--			__mark_reg_not_init(env, regs + regno);
--		return;
--	}
- 	__mark_reg_unknown(env, regs + regno);
- }
- 
-@@ -2947,13 +2933,6 @@ static void __mark_reg_not_init(const struct bpf_verifier_env *env,
- static void mark_reg_not_init(struct bpf_verifier_env *env,
- 			      struct bpf_reg_state *regs, u32 regno)
- {
--	if (WARN_ON(regno >= MAX_BPF_REG)) {
--		verbose(env, "mark_reg_not_init(regs, %u)\n", regno);
--		/* Something bad happened, let's kill all regs except FP */
--		for (regno = 0; regno < BPF_REG_FP; regno++)
--			__mark_reg_not_init(env, regs + regno);
--		return;
--	}
- 	__mark_reg_not_init(env, regs + regno);
- }
- 
-@@ -3958,11 +3937,6 @@ static int __check_reg_arg(struct bpf_verifier_env *env, struct bpf_reg_state *r
- 	struct bpf_reg_state *reg;
- 	bool rw64;
- 
--	if (regno >= MAX_BPF_REG) {
--		verbose(env, "R%d is invalid\n", regno);
--		return -EINVAL;
--	}
--
- 	mark_reg_scratched(env, regno);
- 
- 	reg = &regs[regno];
-@@ -21953,6 +21927,14 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 		return err;
- 
- 	for (i = 0; i < insn_cnt; i++, insn++) {
-+		if (insn->dst_reg >= MAX_BPF_REG) {
-+			verbose(env, "R%d is invalid\n", insn->dst_reg);
-+			return -EINVAL;
++/*
++ * Sort subprogs in topological order so that leaf subprogs come first and
++ * their callers come later. This is a DFS post-order traversal of the call
++ * graph. Scan only reachable instructions (those in the computed postorder) of
++ * the current subprog to discover callees (direct subprogs and sync
++ * callbacks).
++ */
++static int sort_subprogs_topo(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *si = env->subprog_info;
++	int *insn_postorder = env->cfg.insn_postorder;
++	struct bpf_insn *insn = env->prog->insnsi;
++	int cnt = env->subprog_cnt;
++	int *dfs_stack = NULL;
++	int top = 0, order = 0;
++	int i, ret = 0;
++	u8 *color = NULL;
++
++	color = kvzalloc_objs(*color, cnt, GFP_KERNEL_ACCOUNT);
++	dfs_stack = kvmalloc_objs(*dfs_stack, cnt, GFP_KERNEL_ACCOUNT);
++	if (!color || !dfs_stack) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	/*
++	 * DFS post-order traversal.
++	 * Color values: 0 = unvisited, 1 = on stack, 2 = done.
++	 */
++	for (i = 0; i < cnt; i++) {
++		if (color[i])
++			continue;
++		color[i] = 1;
++		dfs_stack[top++] = i;
++
++		while (top > 0) {
++			int cur = dfs_stack[top - 1];
++			int po_start = si[cur].postorder_start;
++			int po_end = si[cur + 1].postorder_start;
++			bool pushed = false;
++			int j;
++
++			for (j = po_start; j < po_end; j++) {
++				int idx = insn_postorder[j];
++				int callee;
++
++				if (!bpf_pseudo_call(&insn[idx]) && !bpf_pseudo_func(&insn[idx]))
++					continue;
++				callee = find_subprog(env, idx + insn[idx].imm + 1);
++				if (callee < 0) {
++					ret = -EFAULT;
++					goto out;
++				}
++				if (color[callee])
++					continue;
++				color[callee] = 1;
++				dfs_stack[top++] = callee;
++				pushed = true;
++				break;
++			}
++
++			if (!pushed) {
++				color[cur] = 2;
++				env->subprog_topo_order[order++] = cur;
++				top--;
++			}
 +		}
-+		if (insn->src_reg >= MAX_BPF_REG) {
-+			verbose(env, "R%d is invalid\n", insn->src_reg);
-+			return -EINVAL;
-+		}
- 		if (BPF_CLASS(insn->code) == BPF_LDX &&
- 		    ((BPF_MODE(insn->code) != BPF_MEM && BPF_MODE(insn->code) != BPF_MEMSX) ||
- 		    insn->imm != 0)) {
-diff --git a/tools/testing/selftests/bpf/verifier/junk_insn.c b/tools/testing/selftests/bpf/verifier/junk_insn.c
-index 89d690f1992a..7d10b0a48f51 100644
---- a/tools/testing/selftests/bpf/verifier/junk_insn.c
-+++ b/tools/testing/selftests/bpf/verifier/junk_insn.c
-@@ -28,7 +28,7 @@
++	}
++
++	if (env->log.level & BPF_LOG_LEVEL2)
++		for (i = 0; i < cnt; i++)
++			verbose(env, "topo_order[%d] = %s\n",
++				i, subprog_name(env, env->subprog_topo_order[i]));
++out:
++	kvfree(dfs_stack);
++	kvfree(color);
++	return ret;
++}
++
+ static int mark_stack_slot_obj_read(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 				    int spi, int nr_slots)
  {
- 	"junk insn4",
- 	.insns = {
--	BPF_RAW_INSN(-1, -1, -1, -1, -1),
-+	BPF_RAW_INSN(-1, 0, 0, -1, -1),
- 	BPF_EXIT_INSN(),
- 	},
- 	.errstr = "unknown opcode ff",
-@@ -37,7 +37,7 @@
- {
- 	"junk insn5",
- 	.insns = {
--	BPF_RAW_INSN(0x7f, -1, -1, -1, -1),
-+	BPF_RAW_INSN(0x7f, 0, 0, -1, -1),
- 	BPF_EXIT_INSN(),
- 	},
- 	.errstr = "BPF_ALU uses reserved fields",
+@@ -26274,6 +26353,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+ 	if (ret)
+ 		goto skip_full_check;
+ 
++	ret = sort_subprogs_topo(env);
++	if (ret < 0)
++		goto skip_full_check;
++
+ 	ret = compute_scc(env);
+ 	if (ret < 0)
+ 		goto skip_full_check;
 -- 
 2.52.0
 
