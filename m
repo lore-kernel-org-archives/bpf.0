@@ -1,111 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4E62DEA95;
-	Thu,  2 Apr 2026 20:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB551F7575;
+	Thu,  2 Apr 2026 20:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775161665; cv=none; b=pntrjYWW/Hgpk+ZLKtSyPAijfjrWeuKmm18sPh++jBriUXCbW7iXOZq1VbvtsCh0cZDxyenFoLpSGBq2NabmNu9JyvMxexMa2meip6MPjIOG9OOWPGIsm44yZuxQ2Xx06a5cE0DzDahGa7OTLGKdaXjP3OipoVLhI1gRk31Nfj0=
+	t=1775161827; cv=none; b=ji7j6jrRW+o6FMB4bCgRzUgk/tHJtou+O2q6hnWzgogVSjmINWHdMVMutx9TXvjk3GzvSqLgnRmnngvTF6Po+JPZrJSUbwJhVpxDK0Ns8Yi66MPOkJn8c7B3vxysTcP0U9b55M21O3ms71MVGkWGWB+xE4w5niVPuNnhnFSLBGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775161665; c=relaxed/simple;
-	bh=R2bUXwoiNKI+i8fhmS1mEypi+5XEE/H8JRhMIiJEbro=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CPMurbJnx3AJzFrZTM9QOy07KG6Vux3i5kC+oqwsIzFUJPQyBwG5M3lvPm5bhgKE1vKOJlpX9UDVV6vO1UOq0m7ryFciUDP7Ogb76+6vjh9VPYEGAw5biaVE31XLfg+rrrUlro4vrK24Qx+K2gqzQVvonwKequAhP/Str6SLiss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cQ1JVW3k; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775161827; c=relaxed/simple;
+	bh=onzn5soQ8SI5RtgTGNOpWEEtCO0mzbfi8iMp2h0fnj4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PVr34AmNqtnd39EIqFejzhf8lszJo4IlWcscGvawkwMtS/oW2a60CImVgLO5xdo9kQLBtYKqZATdWpAG2Ijd7MkhFMAvNbNZlsrDdTPbEl418PLu2XSC8uYa8IW7UIpwplV7J+vKpb4tbvfHICF1Yc/XPgNHEzxy3Z3ATs9S0Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R86BR4qW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cQ1JVW3k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88DD2C116C6;
-	Thu,  2 Apr 2026 20:27:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R86BR4qW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427AFC116C6;
+	Thu,  2 Apr 2026 20:30:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775161664;
-	bh=R2bUXwoiNKI+i8fhmS1mEypi+5XEE/H8JRhMIiJEbro=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cQ1JVW3kZ4q6yf/mrMXMcUmXb/SpqVqWgSGhAro2e6sakjWIO86wX+hLGyma+i3sQ
-	 zaRhaZLvr17NAdzRwaGEP+PSyz4ljYkGQtNf5OQXtI75Z+nyaA/H8bQkkSlwA2wlrV
-	 Wo8PesnE5LHxozZUlED43qosmVFTZmfwEAOSp8TEuCJh5J7ZAJ7Mnz+TsM6P45WLGT
-	 M+0j4JWhhRwjW7dRoK6F5CzU7AigiKguXJGZKt3EjrzHWe+rT3ipjNOhBesz9AYRxb
-	 H7HyqrsSyhHtW6dKYVG0oNwbTqHNRPuTCJsBK+BKS1oYCezp0qiFYW9uC5yN1he7Sp
-	 0K5mLfjwRIQFg==
-Date: Thu, 2 Apr 2026 22:27:32 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>, Saeed Mahameed
- <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Tariq Toukan
- <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Nikolay
- Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>, Martin
- KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
- <willemb@google.com>, David Ahern <dsahern@kernel.org>, Neal Cardwell
- <ncardwell@google.com>, Johannes Berg <johannes@sipsolutions.net>, Pablo
- Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, Phil
- Sutter <phil@nwl.cc>, Guillaume Nault <gnault@redhat.com>, Kees Cook
- <kees@kernel.org>, Alexei Lazar <alazar@nvidia.com>, Gal Pressman
- <gal@nvidia.com>, Paul Moore <paul@paul-moore.com>, netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- oss-drivers@corigine.com, bridge@lists.linux.dev, bpf@vger.kernel.org,
- linux-wireless@vger.kernel.org, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, torvalds@linux-foundation.org,
- jon.maddog.hall@gmail.com
-Subject: Re: [PATCH 0/6] Deprecate Legacy IP
-Message-ID: <20260402222558.6fe9bc0d@foz.lan>
-In-Reply-To: <2cb91533e22ed6cb11205dbc56b8aeedbbce0cca.camel@infradead.org>
-References: <20260401074509.1897527-1-dwmw2@infradead.org>
-	<42caa438-3854-449c-b0ee-4f40772e5c1b@suse.de>
-	<2cb91533e22ed6cb11205dbc56b8aeedbbce0cca.camel@infradead.org>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	s=k20201202; t=1775161827;
+	bh=onzn5soQ8SI5RtgTGNOpWEEtCO0mzbfi8iMp2h0fnj4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=R86BR4qWx8S0BqdfIYXKPY4f9Rfits/tisuHRSr3AES5KVJF7eB8R4nrDDhs6ni+D
+	 zAQjwA5buxDuj7RtazAYKB5Wy2ToEgOf+wOObILNK95JEAtTUz2bOvleoNL7MT8N2A
+	 jK9PtXa0sxSWZmKME0Re4KZmeKhlkhHti+5trc3rEHuwZTVWHGmtiG4zeQZmuBhhyq
+	 gGriiRlw1tTxe2dob2AqZGegiSe65NV7MRqimFawGroy3dpJt+BEAa8SVqid87v7vP
+	 KxIZ1ywgeyILEQ7FV1mEC4kmtYq7ikqR/iX4pAzbvKM0ly5aQQRB6EmA31YfjIRNLR
+	 WB9wLB3WTSPeA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F5D3809A09;
+	Thu,  2 Apr 2026 20:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v7 0/3] libbpf: clarify raw-address single kprobe
+ attach behavior
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177516180954.605612.3114427119348580758.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Apr 2026 20:30:09 +0000
+References: <20260401143116.185049-1-hoyeon.lee@suse.com>
+In-Reply-To: <20260401143116.185049-1-hoyeon.lee@suse.com>
+To: Hoyeon Lee <hoyeon.lee@suse.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ yangfeng@kylinos.cn, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Wed, 01 Apr 2026 09:25:08 +0100
-David Woodhouse <dwmw2@infradead.org> wrote:
+Hello:
 
-> On Wed, 2026-04-01 at 10:07 +0200, Fernando Fernandez Mancera wrote:
-> > =C2=A0
-> >=20
-> > Dammit, you've beaten me to it! This was my next step for 7.2.
-> >=20
-> > Fully-endorsed-by: Fernando Fernandez Mancera <fmancera@suse.de> =20
->=20
-> Yeah. The date notwithstanding,=20
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-You tricked me on this April fools day...
+On Wed,  1 Apr 2026 23:29:28 +0900 you wrote:
+> Today libbpf documents single-kprobe attach through func_name, with an
+> optional offset. For the PMU-based path, func_name = NULL with an
+> absolute address in offset already works as well, but that is not
+> described in the API.
+> 
+> This patchset clarifies this behavior. First commit fixes kprobe
+> and uprobe attach error handling to use direct error codes. Next adds
+> kprobe API comments for the raw-address form and rejects it explicitly
+> for legacy tracefs/debugfs kprobes. Last adds PERF and LINK selftests
+> for the raw-address form, and checks that LEGACY rejects it.
+> 
+> [...]
 
-Very funny!
+Here is the summary with links:
+  - [bpf-next,v7,1/3] libbpf: use direct error codes for kprobe/uprobe attach
+    https://git.kernel.org/bpf/bpf-next/c/f547cf79475f
+  - [bpf-next,v7,2/3] libbpf: clarify raw-address single kprobe attach behavior
+    https://git.kernel.org/bpf/bpf-next/c/e1621c752865
+  - [bpf-next,v7,3/3] selftests/bpf: add test for raw-address single kprobe attach
+    https://git.kernel.org/bpf/bpf-next/c/9d77cefe8fcd
 
-> I do actually think we should do most
-> of this for real.
->=20
-> Maybe we don't get away with the actual deprecation and the warnings on
-> use *just* yet, and *maybe* we won't even get away with calling the
-> config option CONFIG_LEGACY_IP, although I would genuinely like to see
-> us moving consistently towards saying "Legacy IP" instead of "IPv4"
-> everywhere.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-IPv4 is not legacy yet... Lots of configurations, service providers
-and corporations that requires the usage of VPN are IPv4 only still
-today. For instance, my paid VPN provider only grants IPv4 addresses
-(at least for those not using their proprietary software).
 
->=20
-> But we *should* clean up the separation of CONFIG_INET and
-> CONFIG_IPV[64] and make it possible to build with either protocol
-> alone.
-
-That makes sense on my eyes.
-
-Thanks,
-Mauro
