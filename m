@@ -1,254 +1,136 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF1C3BD22C;
-	Thu,  2 Apr 2026 11:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775128377; cv=fail; b=PNuXC07wKpa/Q4aMCzrigKBPOh3SN49QgmsfMvcXfSjf1VpeITSaLZxcU4vozzuP3fqyoyBkGDCsCFv2g2tmMEk8+BHsT4MN7rmfrrRCUA5yt3yJDgU2POvwqwqlC1jjcNvvntGxYVbIwX81c/lEYz2G0s/7dxmSUgMATlib9Ok=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775128377; c=relaxed/simple;
-	bh=tEzyAi/0oyE47kmddIYgJJzA4UCX9RTVzg0J6XB5vIQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=kc50tQCHh8azI+lxu1LuSwx5XXJ8+N+iERow0OIGFmaFhSTVdn/ZRTCyx6SkzJv+rPBWhj/3s7+PKayHpp97/V40TFdIhVfFZjJl370P9ZkA7RFLVYidpYhOi6ngg0RhoQzG7so0GV5w3cFBlgfFQEcaNlZkNZ8pYZcUyb6ljOg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fm+8TFVu; arc=fail smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7276236DA0F
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 12:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775132348; cv=none; b=aSYn2O2BOMJgDq7SD2kXjsz+eI0OL+POPgHQQO1ZVPI7TjBKiB0pA87PvW2g6OqkidPTXGP2SG2sq3AnBSi42o5n3d3Rj3rXohJxoOlZ8VEz86rzHApZ+G6debZlV/v3wey9MvDSGKOp4lNmLeva/cTTnxFe5fWRx6VQR0qPXm0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775132348; c=relaxed/simple;
+	bh=9FODWdXDEBuA5ZUj9L56F+jEupBPZePwiw5kABSsSb0=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=PxWfZzK3S05/jTz1BoXJ1dkdxP7eQJ8ikNF2EGbc6fyWLnGyjg6FjeMkLbc+zpL158FJ9QTX+epSPvcaOGr1ZcUs+eEQNqPb8CL7U/Rkx3tJLFm9WwUY9/yk/ZuDEisZAbGckImWluiWoYRHUo0ij1GJDg1iknaCYr1+H4wfIws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=jzvI8BqM; arc=none smtp.client-ip=162.62.57.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fm+8TFVu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775128374; x=1806664374;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=tEzyAi/0oyE47kmddIYgJJzA4UCX9RTVzg0J6XB5vIQ=;
-  b=fm+8TFVuzMHpNaVVfG7suaURFkxPue9z9r/t0in/e8pPu8P3WVC9xehH
-   /Qq/d6ODwkqk7AwCIzcoYLQpq9jjG888o6Hk+i30Wss8QtYK6i3jbBRMm
-   L2C3oX/Mhjyy0NxRxPqKCQ7LiFcbnnHn/crYD0lK/XbAJx+tnZbcROOwo
-   zt/tzO86VA5s/JaG6+E23wkqgEQQ7ldvYhFpPBTwICCScbJfw/XJ1bXz9
-   ZwrXGWEuwSHgmcZwfZIjSBCi7aOMNtyRPdKGEQcZscUGadvyDI8/+OeTm
-   2rwjqADWjhVtsYHzssSe9+a1P2mP+ouY+jpl6vReGofCGlSmLHmAyOp8n
-   A==;
-X-CSE-ConnectionGUID: VjqzmIDnTQ6/KmXuasGI5w==
-X-CSE-MsgGUID: zMiJRCkQSzCCqDeT8ME1ZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11746"; a="63735229"
-X-IronPort-AV: E=Sophos;i="6.23,155,1770624000"; 
-   d="scan'208";a="63735229"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 04:12:54 -0700
-X-CSE-ConnectionGUID: L2ZDNXS+SimsvPkLr/0hEg==
-X-CSE-MsgGUID: imDpeQiWTXCySPXsqRQ5eA==
-X-ExtLoop1: 1
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 04:12:54 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 2 Apr 2026 04:12:53 -0700
-Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Thu, 2 Apr 2026 04:12:53 -0700
-Received: from CH4PR04CU002.outbound.protection.outlook.com (40.107.201.0) by
- edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 2 Apr 2026 04:12:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=keLqs1zaf7wNbxEnCgcX52yxODsf4LtIbOc4GqmX0KQKYLA300A/7pleWaQeHUhHibB7zhVSfT6zYNnWMV9ncCkXTMaqzq+qe091qh2bhbXh3VaA8+FQT33awUoY13n9YnNsbEuDpte4HwMd/NYfYwa2ibA6JIJnIHm85GlgysLy34fpj78g2oKes800m+dAFccpOOUs8tPQXcylFp5W4t4PSzHnLWf3pVCy2C6xEoUjbv4Y5R3ic/fzzeDSuZfAZgAE1C0P9ku1SWam9piceXvrDt2TCK9e911ByCIpxyCsnxYfaWw/ZlEX/c4Grnhx8hBIoNXWCuJ0IG+Wjv7oJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oC2/PmtGCQdQpzYXKkhz9pJqRPPj3O64QgwKBHOt6dQ=;
- b=bAk27fQQHqwuUVVovWxcQqFqk2cjYy6k9if/xz2fzq35ccC7/TAPM/IXhEFzL4FUk3nxngYXjKQODaeCOSly/qy45eQ6NHdzKGORqld210Pe79L9qYkdXU8bmWRRBKviR3jsDPdnpgQW8Y5kE8DMJdfTRvoET1Ex8niUZIbyuWZ+nD7VNOIKoAd62oenZ/sZMbiG99U42XIMZ4g9iqXa2qug9Aau/tc6KjZ4bwneEy+QjE+hbWJxoA4ut7F31XqjhDPAtAUq/Egs+ZLMTW4u4b67ZfzGaKR1957n5NRuh3ZgE+PKF8GLbxf0ejDbCXLZwBtavFhFVNsoXX5puuZFjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- DSVPR11MB9555.namprd11.prod.outlook.com (2603:10b6:8:388::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.18; Thu, 2 Apr 2026 11:12:48 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9769.017; Thu, 2 Apr 2026
- 11:12:48 +0000
-Date: Thu, 2 Apr 2026 13:12:42 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: <netdev@vger.kernel.org>
-CC: <bpf@vger.kernel.org>, <magnus.karlsson@intel.com>,
-	<stfomichev@gmail.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<horms@kernel.org>, <larysa.zaremba@intel.com>,
-	<aleksander.lobakin@intel.com>, <bjorn@kernel.org>
-Subject: Re: [PATCH v5 net 00/11] xsk: tailroom reservation and MTU validation
-Message-ID: <ac5PKvH7ZGZTT5s6@boxer>
-References: <20260331150213.550797-1-maciej.fijalkowski@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260331150213.550797-1-maciej.fijalkowski@intel.com>
-X-ClientProxiedBy: VI1PR0502CA0013.eurprd05.prod.outlook.com
- (2603:10a6:803:1::26) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="jzvI8BqM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1775132341; bh=YjjCmZOrW4REFAVBzGGbqDrfiq8sy+usJO2oakX7oVc=;
+	h=From:To:Cc:Subject:Date;
+	b=jzvI8BqM9LAEqj0I/ZA6jvi55l7+4vWvThY4AIQxde5+86ucTTaFzxlurxfvf7N6u
+	 htneIthfGgys4+8fOrvHl7RCzl3um8mYdanY8+TevL4ejnOGH1lMXNLDEe7xIQEmWb
+	 gDynbgQFYBNYQhSJ8utRc9IJXzSkehDrv6Abrces=
+Received: from localhost.localdomain ([14.116.239.36])
+	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
+	id 4B98B2DC; Thu, 02 Apr 2026 20:18:57 +0800
+X-QQ-mid: xmsmtpt1775132337t3vcv09eb
+Message-ID: <tencent_BCF692F45859CCE6C22B7B0B64827947D406@qq.com>
+X-QQ-XMAILINFO: ODafEzNm5Exjc75Go2l9u7Kntx5JFPywaNMbbiM0shFHskjksdMK18mmLdCtnE
+	 bv69tXHzX38KjpTcJmWlp9rB4sQWRQldw2NYs5g3sW87hH5xOuqWXiGzpQZ0FHR+oRH8VOxK2XLF
+	 abl4VdvSFr8ORCkGEjRi/pj7bl4OjOD8ivgx23b+0yaqFNhsZJChqkR3qaJn5+e2sD33jC9oqFc/
+	 V6VVxbjKeu+0WJ7AJ0Cr7HfXxUk93VfH/u7dgK216zF+bcPtK66s8g6m0FYeoP/8VmryoYk+QedS
+	 sMPOCAa2y8b30JE3wBc4JEPq2pAkz7kZi0QognbR2VRjt/IOJbtiRBp+GMDZc56Y4i+FRFJuMn6B
+	 AqLJLcO+P2FaIt8Su2ST0nFAvtn3Y2fOG6IvoUk3xig+X8Zkwve5ll280/E9+Ol4fR/owJMZvdJd
+	 TpX/tuxiXH02xvLIwbsZdjBxeJIES/dZ3xDL0kZCKdxz8jDYChG/SBGmxdLXAjzMg32HutUH2iUS
+	 A2MSanxjzHAJXYC6iaqcjsoqQWjs9QA6vmzSYjpywPw7e1pygaRd5SxDySy5G19YNxdmt1bxCDUm
+	 zB4s7aTwVLPzEBzTI18AHUcVk1737Z8TI9sP89D7rYjTmCNSneN58IOhYJG8C0kvhsAAysoMxV9S
+	 uPU1Zh80DDgcGGktkbJol4kESIYfmFRUeB1MPwmTUaACWUuLCekoRllTGE2blpOhAIhwWy4dONdr
+	 YFCs/WgAIJiAZWdC524YDMKYUXuS/2jEHCJE89tvKr4bA8VPjqlHZIrIqw7/OdAzgs/mjukCpSk7
+	 7NejiqyEYblmSNQyMzJ6ja/fPfbCY5/udvyfjJvYGMhc8YqHwMdYVCMyO3L9pYmLmMj9/GT8cwkp
+	 J44VxY0Y+X0/CKx/Dex94QDTEsa+9T0Q+gVfglokkTg4dmjXRpSaO2GHRypTZ12naGxSqX4rquVO
+	 nK1+gqJ7pwYRHkDuU9SvYvRwvxZcRXrNV+5oesao+OafzwfVh+e1Ay9LnUagRWjXlFe37PTKyzDi
+	 oQUEiB3CTRjOrHXGlxFqR3yvV7Qh0lVJFIR24mgxgdN90JRN8R2rlrw7LktBcgk2jBvTrX5nAf1u
+	 OeJCgfdFSE6EK+yITtrN5zxlzT0W01zphzmA9b
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+From: MingTao Huang <1037827920@qq.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	MingTao Huang <mintaohuang@tencent.com>
+Subject: [PATCH bpf] bpf: Fix stale offload->prog pointer after constant blinding
+Date: Thu,  2 Apr 2026 20:18:50 +0800
+X-OQ-MSGID: <20260402121850.1382074-1-1037827920@qq.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DSVPR11MB9555:EE_
-X-MS-Office365-Filtering-Correlation-Id: 46f3b688-b398-4fa1-624d-08de90a8c605
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info: 8JLq6+h5iShLbRVNQt0KhShfzwwFBE+cgdS8h+O0XOaw4HRgNDyrlAur1hTNXiyIdc5ZY8Tzhf6vun6S34LJCGj0NhxMd3ya2JlMK6P7OWVwdNMp1tg2CyqCs3N0tiwj3cWHW0FK/i7yuW6oDwIcX8ZNbKlcpMrgMvzQfCnibGj6fyh6orFytqlbIpfMKnZh3B5XIbUlLZBDbjZ6td5ZtB6mQYKyrqruhw0MTwePG/XAb8BWGsAIP/D6fn7gmbRyVYEbye02kEuyU1ganirWnQ3immol/6QT/M/RyewIOXRzoe6DDxTIo1IDOLSOTaDiNdFuIZLuUcPrkaHI2taSlKti4OkMlj3rp1QgdHRwHV4OBze7h1DB0RMBH05cT99vNPdMRsJgJ1IvxUCx0Db1F0yY805KXojlT3EG8r176XaIkhmNqb2I6ya1VPNBK/D2LVk2vI1+BeJKeGzSngli+IyaHMLu9xdiAvQqoIq8izeda7cwQ7HVxtqqindVSnQILjKkJiFOzkZbhhEBQhvcu1zjuVmo66O7u9bSy8hhiYxcJMWJQn6Yf3vuA2ftI9NXcL/FlsN8BX1116tUIuuHY4X1fqjHi+LLVB/tCRwJrPWqydmpCQgrZ5Mhp/P4SNMW0dEfX99yGI13cOxTlQGcOi6NX3dQp6FX0RrlTAKxTUUc2Uk+FaXOC/I8e0jc2DXOYu4CjXspxdetV1xKpBEUe7WIYuYNu0lHHVQBqZcNZ1UB9yq4Tu0GJqZt6O1IN1ON
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BQ6PqoFC1UQy/KD+BLNaigs7A0R/EVmR4b6lQt8+Af1sDbqchgCdmYsNvDrC?=
- =?us-ascii?Q?KWnRaEVmism/btBCAlXzqaq6vQOjQ65uTvjj7c2thHLLs5oCDHCif9BvRq81?=
- =?us-ascii?Q?Xfr/qH2gt2yR+EsrI9JF1q9Tb2jFtiE364PFKl91P/luYQygv1KNTTq4BWpT?=
- =?us-ascii?Q?cI4SEORQolre2VOjDTGrhC5YNU8SurkgFmv7T536kdo6b3PI1J7dCHOVlbOy?=
- =?us-ascii?Q?A7nhaYVqIRPW39B9ZMT4r5gqdQ8rPl5ETE0JF1W7JnDDL0U0TcKgZ29TNZti?=
- =?us-ascii?Q?fzINF4/cBM+43V/aWEHlDMnRygrBJuQUJFmqbx9UoEr6La50uuTloN5BSmB6?=
- =?us-ascii?Q?32PNXbdd1RK6kYJht2+d8AzUucoxGH3ICJNmhqbO4kXByFH38RU7n7BW5uaw?=
- =?us-ascii?Q?iW4AETKDB1pUgSOtFIV2nxVFgf+qhOyju7RDzXcGzvIm1ONK0244L47S7mBx?=
- =?us-ascii?Q?mx9FnnkdOnAlIxlrZkvfct+TElyzD+D1cSk+j5CicmywP132DNS5ctMWPn4z?=
- =?us-ascii?Q?eQ48Omju5v/9xqFTepddnTHAVGlwUbYSlH+F/iYrXTnz8Xr5DIqe9S1Y8kHI?=
- =?us-ascii?Q?1c+SuQjyEMTCCM5kIz13ZoR4P1izUt2qBzlaYIAme4BC+OVzvVYOtvzAl70E?=
- =?us-ascii?Q?QUWRyiU01gIP7NFnqtP36lBIMEODAxvxsyV1xOOK6fbKYRy4TcKhqbILk3Ud?=
- =?us-ascii?Q?O2Zp/7U67dl3MWbmLhdeQNECdnxBLz800hiyZkOYxhyErIXY1kLFlQymx0nf?=
- =?us-ascii?Q?0jFJFB+K47nPmM2qVEDeE58ovEDRBonYsuWzAieRcUmZPYkyYksVwAVrGGaS?=
- =?us-ascii?Q?wEJcOEyijRWi9F2pUr4OApVFJhYguyCJtvVHxQcGyiEhdpLkgP6yiu3cxb6G?=
- =?us-ascii?Q?SNhT6bA03QMOsniyKpRxsBXf/xiAbi+Gtt8/G/LTHGl6RRvGnq2VaJWqO6rs?=
- =?us-ascii?Q?SjOD/DcgGsQinXpC4lNsnsHQTzUq6ScYVEdkdXDYmiV6IFkkQB00oWG4EHb0?=
- =?us-ascii?Q?w5dM7Cl0atRXobmBordUVI3gEld3ZpKB0idQZJsSUml2kwArJA8UENRVhbnS?=
- =?us-ascii?Q?KRv/UhgGK3phoH3rx7eUJadGkGzWA/cLzKTNHKF4QNlwO4LVWBMgctv9zazA?=
- =?us-ascii?Q?lEPkjd35gHB9awenLdJnEXTsGrXdGNWElghzKZdNIC/ZrZHboUKOuDkppIkW?=
- =?us-ascii?Q?/TXsUT1Ahjax11hPtNHD4MPKxUktruf+MkEjHU7oFCBWTXY0PC9Y/57jR0MB?=
- =?us-ascii?Q?jmKzELMbt7sQf1zGApdsptHu4Hkkt6zqgt62MCcDmbHjPrhMAEBjVwW7fTtf?=
- =?us-ascii?Q?zu53BBCPTex6l9woLZr41kpwtZ8QIiOkHmNjlgq4F6LCz2EGON64wzwS6wRn?=
- =?us-ascii?Q?eO+rwNaEH7LP3PoZKWmCqFGQweL2xJPQ6RW3lQBgKoqEVMf6fsJ2VJtySU5P?=
- =?us-ascii?Q?dYwtFZWWh5pWbEDtfyjmuza5ITV3UUcotALxpSGGijxHZUCDOymCjZfxiyv+?=
- =?us-ascii?Q?ZErDR32w8NFXh3cJFDOXfldVdSy1W8jW9IPkl55nkAzf9zYUrnF/Frke5jjc?=
- =?us-ascii?Q?zvnRMauT/TYHL8lSFY3pVCulpKOE8e36SbOsSLqthggwkrOkiUicgMzWKxpL?=
- =?us-ascii?Q?2CFpBm/XWoiAkzfKM6SXzGdRhdVIpFs5PhkC6jxgmFx5zGfRD+uYpiYnC99a?=
- =?us-ascii?Q?HIPwr0r/x2DMVt+U29vVMOYcac1oWFU+rz9iGDGpRLPGbn/IyUf+NrugLOkD?=
- =?us-ascii?Q?qx9qXISASAqB2xUXRHy7PAtHf7TlKR0=3D?=
-X-Exchange-RoutingPolicyChecked: ieX3iX1BuHM1SZjcPv3ADB/2wpjpiCfw41hea2t5fRPyRKDOrEogiz/TLptUH2ib5B85KLsD7rHfqQethOm9befmkk9BUtNeZywzgpFTJrGBIDRLB3rhxGvj7EKSzbs7tXO4wgIeN68p5SnzgV5J8Wf/JFE03HxUNe2w8jO9PlshyK0OS8xedfwgVztlSpWfNhYocNyUmjrcJJQnz0x840PPNIANswr1bm8sNFPrDKfsP5S6Rs0i4cWlTmctVkVRdktCRUz5yBNJt7y3Bhhybrz5eVjKQIipZYmXavppvg1N/99mAd3biacwQorOPG3HwlM3lzqNPbhzGzP5oIoXXQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46f3b688-b398-4fa1-624d-08de90a8c605
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Apr 2026 11:12:48.5570
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HECgIa7qlvl9wgaxrX9HYf8u9i4gVS0ahI3kdvMmxbFeRAuiJ/lFnJpw9pMvu9h8SxgsHvsWTd3wO+W1OV1PmO7xG3i6JYL8q/f4kRcu4D8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSVPR11MB9555
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 31, 2026 at 05:02:02PM +0200, Maciej Fijalkowski wrote:
+From: MingTao Huang <mintaohuang@tencent.com>
 
-FWIW I'll be sending v6 as I messed up refcounting scheme on error path
-for shared umem. I'm gonna also put on shelf driver cleanups as I got fed
-up with issues reported by Sashiko. I plan to get back to it if I get to
-work on forbidding mtu change feature on interfaces loaded with xsk
-sockets.
+When a dev-bound-only BPF program (BPF_F_XDP_DEV_BOUND_ONLY) undergoes
+JIT compilation with constant blinding enabled (bpf_jit_harden >= 2),
+bpf_jit_blind_constants() clones the program. The original prog is then
+freed in bpf_jit_prog_release_other(), which updates aux->prog to point
+to the surviving clone, but fails to update offload->prog.
 
-> v4->v5:
-> - add further review tags from Bjorn
-> - fix ./test_progs -t xsk
->  * do so by making the procfs reading common so test_xsk.c can use it
-> - get back to idea of relying on pool->umem->zc in
->   xsk_pool_get_tailroom(); that is because we now call its caller
->   (xsk_pool_get_rx_frame_size()) before getting down to driver via
->   ndo_bpf - we do it to rule out invalid setups in terms of MTU vs xsk
->   frame size/number of exposed segments by driver
-> - bring back explicit rejection of mbuf && segs == 1 combo
-> 
-> v3->v4:
-> - allow exact 128 bytes of space when user defined headroom is deducted
->   from total frame size
-> - provide a routine for reading procfs entries within xskxceiver
->   * use it to fetch cache line size and calculate skb_shared_info size
->     on our own
-> - clean up gve and igc xsk pool enablement routines
-> - include mtu vs frame size * max zc segments validation in
->   xp_assign_dev()
-> 
-> v2->v3:
-> - add tags from Bjorn/Stan
-> - provide at least 128 bytes instead ETH_ZLEN when validating frame
->   headroom
->   * this way we can get rid of i40e/ice changes
->   * make sure xsk_pool_get_rx_frame_size() returns value 128b-aligned
->   * and remove pre-check from idpf
-> - separate XDP_UMEM_SG_FLAG fixes from MTU validation in xsk_bind()
-> - make drop_idx a local variable in xsk's xdp drop prog
-> - adjust rx_dropped to new 128b related values
-> - move ugly placed define (Bjorn)
-> - remove READ_ONCE when fetching netdev->mtu (Bjorn)
-> 
-> v1->v2:
-> - remove xsk_pool_get_tailroom() definition for !CONFIG_XDP_SOCKETS
->   (Stan)
-> - do not rely on pool->umem->zc when configuring tailroom (Stan, Bjorn)
-> - simplify dbuff setting in ZC drivers (Bjorn)
-> - use defines for {head,tail}room in tests (Bjorn)
-> - return EINVAL instead of EOPNOTSUPP when mtu setting is wrong (Bjorn)
-> - include vlan headers and fcs length when validating mtu (Olek)
-> - tighten umem headroom validation when registering umem (Sashiko AI)
-> - set XDP_USE_SG in xp_assign_dev_shared() (Sashiko AI)
-> - adjust rx dropped xskxceiver test
-> 
-> Hi,
-> 
-> here we fix a long-standing issue regarding multi-buffer scenario in ZC
-> mode - we have not been providing space at the end of the buffer where
-> multi-buffer XDP works on skb_shared_info. This has been brought to our
-> attention via [0].
-> 
-> Unaligned mode does not get any specific treatment, it is user's
-> responsibility to properly handle XSK addresses in queues.
-> 
-> With adjustments included here in this set against xskxceiver I have
-> been able to pass the full test suite on ice.
-> 
-> Thanks,
-> Maciej
-> 
-> [0]: https://community.intel.com/t5/Ethernet-Products/X710-XDP-Packet-Corruption-Issue-DRV-MODE-Zero-Copy-Multi-Buffer/m-p/1724208
-> 
-> 
-> Maciej Fijalkowski (11):
->   xsk: tighten UMEM headroom validation to account for tailroom and min
->     frame
->   xsk: respect tailroom for ZC setups
->   xsk: fix XDP_UMEM_SG_FLAG issues
->   xsk: validate MTU against usable frame size on bind
->   selftests: bpf: introduce a common routine for reading procfs
->   selftests: bpf: fix pkt grow tests
->   selftests: bpf: have a separate variable for drop test
->   selftests: bpf: adjust rx_dropped xskxceiver's test to respect
->     tailroom
->   idpf: remove xsk frame size check against alignment
->   igc: remove home-grown xsk's frame size validation
->   gve: remove home-grown xsk's frame size validation
-> 
->  drivers/net/ethernet/google/gve/gve_main.c    |  5 --
->  drivers/net/ethernet/intel/idpf/xsk.c         | 10 ----
->  drivers/net/ethernet/intel/igc/igc_xdp.c      | 11 ----
->  include/net/xdp_sock.h                        |  2 +-
->  include/net/xdp_sock_drv.h                    | 17 +++++-
->  net/xdp/xdp_umem.c                            |  3 +-
->  net/xdp/xsk_buff_pool.c                       | 25 ++++++++-
->  .../selftests/bpf/prog_tests/test_xsk.c       | 55 +++++++++----------
->  .../selftests/bpf/prog_tests/test_xsk.h       | 23 ++++++++
->  tools/testing/selftests/bpf/prog_tests/xsk.c  | 19 +++++++
->  .../selftests/bpf/progs/xsk_xdp_progs.c       |  4 +-
->  tools/testing/selftests/bpf/xskxceiver.c      | 23 ++++++++
->  12 files changed, 135 insertions(+), 62 deletions(-)
-> 
-> -- 
-> 2.43.0
-> 
+This leaves offload->prog pointing to the freed original program. When
+the network namespace is subsequently destroyed, cleanup_net() triggers
+bpf_dev_bound_netdev_unregister(), which iterates ondev->progs and calls
+__bpf_prog_offload_destroy(offload->prog). Accessing the freed prog
+causes a page fault:
+
+BUG: unable to handle page fault for address: ffffc900085f1038
+Workqueue: netns cleanup_net
+RIP: 0010:__bpf_prog_offload_destroy+0xc/0x80
+Call Trace:
+__bpf_offload_dev_netdev_unregister+0x257/0x350
+bpf_dev_bound_netdev_unregister+0x4a/0x90
+unregister_netdevice_many_notify+0x2a2/0x660
+...
+cleanup_net+0x21a/0x320
+
+The test sequence that triggers this reliably is:
+
+1. Set net.core.bpf_jit_harden=2 (echo 2 > /proc/sys/net/core/bpf_jit_harden)
+2. Run xdp_metadata selftest, which creates a dev-bound-only XDP
+   program on a veth inside a netns (./test_progs -t xdp_metadata)
+3. cleanup_net -> page fault in __bpf_prog_offload_destroy
+
+Dev-bound-only programs are unique in that they have an offload structure 
+but go through the normal JIT path instead of bpf_prog_offload_compile(). 
+This means they are subject to constant blinding's prog clone-and-replace, 
+while also having offload->prog that must stay in sync.
+
+Fix this by updating offload->prog in bpf_jit_prog_release_other(),
+alongside the existing aux->prog update. Both are back-pointers to
+the prog that must be kept in sync when the prog is replaced.
+
+Fixes: 2b3486bc2d23 ("bpf: Introduce device-bound XDP programs")
+Signed-off-by: MingTao Huang <mintaohuang@tencent.com>
+---
+
+ kernel/bpf/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7b675a451ec8..048d275accae 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1487,6 +1487,8 @@ void bpf_jit_prog_release_other(struct bpf_prog *fp, struct bpf_prog *fp_other)
+ 	 * know whether fp here is the clone or the original.
+ 	 */
+ 	fp->aux->prog = fp;
++	if (fp->aux->offload)
++		fp->aux->offload->prog = fp;
+ 	bpf_prog_clone_free(fp_other);
+ }
+ 
+-- 
+2.43.7
+
