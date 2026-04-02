@@ -1,162 +1,127 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DB83B47E6
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 22:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775168040; cv=none; b=H1w8S5rjdabh1NI0hvXFO6/0Beh63wjPJTQQaOam2KkFGyFyGQiUfZK1QnFDCTcXJErcZRJY4NUGKTCr5JkcTS7E9zXJaD7736RGKl43teKrtGH/8XtSMklUoM5B+I0y9mwfJVHIVXi4yzavDVIlmhCEAomeI7qV34e+3WSb2bo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775168040; c=relaxed/simple;
-	bh=d0flCDweJ6azvon6D3f1ssDUKDKMpj3eCzU/JQZmYaw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lgQc7D3WdGmJqscgTlKZQ517Rsl9UrATNe5g4V4iSCEFpbtDLES86JTyX7rKLVo2eSx7y1GYWTsWqweKJa6joLt0Wqb4zN2wurYxKjvUiqX9tMXLArA9v8G2b7yS6cGfVEMC1ATUJBeT551cZVXhgJV0RO9xoEzfjovDNZpV5js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mYdaQsUp; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA1C3C1980
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 22:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775168227; cv=pass; b=exJIzXPW1CqoWBIgBezIr/gnDhhzwLx8gQ+lA4r5mTwuqHWL8BnFBvJ1K0s7hPUp1GnOV5Jwrt8CrS6w2MdyguHVHy7RfoZFMr1cXbW+VZ6P9XUPvuYxfCE54EDMy1XR7G1RZyUYQ4aSrET2dGpHG6oAuYOL+vwNxp+dObT4hHk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775168227; c=relaxed/simple;
+	bh=D74NIeqCV12XgacTeVqSlj7cfoOfDrGnIkkOLsDzhis=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MSEXMcC8EARYPGB2akCB3+GQ9W+P8BQrcvUbJ6pFAIchZoCdCc3y9+iLjudroOEf4U5XL8c1niqFdwHpnMbjrVtVDXpYVJizpY2/TduulGi/LWNfPaiLqBJXYmNLqlru1BEN3Ba2+LFUDt0+IKA6NY1mTZNw6n+7ewAPMKN3fXA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P0dKNO1J; arc=pass smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mYdaQsUp"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775168036;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LfNGEE2YngROfJt4lSAT/wybXAP+Gr89FK7fGOIdsXo=;
-	b=mYdaQsUpJ7U1bE7i55Y3WqZLqVplgfehRp9BsS6Rfr+Sq9CHem0cQeUcOvcqf3+MwYlXEa
-	Q7k+G9AczigoZDw5aZoiOlAVZ7LNly6g05pWRDIvJeXx2vv9iioEk/ZYBeQ4amkKlVyl9R
-	eroIIKUzaPqSnq6KtTj6y9wUiJOpaYQ=
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: bpf@vger.kernel.org
-Cc: bpf@gcc.gnu.org,
-	jose.marchesi@oracle.com,
-	ast@kernel.org,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH v2 2/2] bpf, doc: Improve MOV/MOVSX documentation and add examples
-Date: Thu,  2 Apr 2026 15:13:39 -0700
-Message-ID: <20260402221339.1614989-3-vineet.gupta@linux.dev>
-In-Reply-To: <20260402221339.1614989-1-vineet.gupta@linux.dev>
-References: <20260402221339.1614989-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P0dKNO1J"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43cfb723793so912575f8f.2
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 15:17:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775168224; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hCBiEELLH4TF/VAk8fID3IbWGF3oFdSq3gKbZYnxpG1i1MOP/gyzzRXKBW+psplRhs
+         jzkoZJMKTyaG2stHbJrmLJeUXozEu0lrk1NbZumWqF3+hkanW7+ru+VtIY/ObMZEPjDY
+         OIxpO8UvgARmac3XpsyKv3WPnFKSlkChAvSsvf32EoQ047EDhSwz4zkYezTLchcfg8o2
+         tZ+sOk1p7UJcN9a3kV7Et+miYYJJxny865T7gOvi0puo7xBINcjai6hIyKyuSxF3Xsp5
+         CptBfNNGMb+XNCyLwGtjT9tP9nnQqgpH0miXEuhq1BIV1i7+DQYUYKSLXC33iXM/FDyg
+         rTpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=amUReQ3ina2wYCV6xiNTIdpbjblXyyaKv313NH2tmJs=;
+        fh=bVZKQ0C9zZCVFVT8EGwyYXaHS8v2OVAOOqZR2PKjS4k=;
+        b=ScCkQq8H/1mxDU9raS6qjcN+10VqNf2r+jpWWwIpTkmylq+99W2iYrfNxaRD/iR/vj
+         f2QmPHu0C2G7T8n7HLTlJ2+8jVYlCT52VfjgX7YR3UvB9Lrhyw8muCxbod52C2zjZaEf
+         VRHlNsAyPvZPMoBCHUdrsHGDGmn+RQMzOkk2v3AUrULybp7n+0O14fs0PApOIdKFmS7E
+         1Z+E8mFANXBcSKsfnixT6WlEmlE80hBr/n13aurHJMRHPpi5j5DxKXRS3vLxHP9tcCDY
+         MO6Q18+E085Z06RW+a4r+Vo8jIIAaISB866SFlptihmc29JYcQ/KwYJADByzfKzJJItc
+         jyOg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775168224; x=1775773024; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=amUReQ3ina2wYCV6xiNTIdpbjblXyyaKv313NH2tmJs=;
+        b=P0dKNO1JwkUrGPdExcmDWbX9pndQjHO1iU3Vz/VfPbaH+yv6WZETtbqn1l9b8kAnb4
+         VW29h0KdBDYHVCQuLoWz/XsUN34EgXmT844esmG+TjdKb8AQvMnzqs2QRkOFfpojntlB
+         cmWTrJNWblXPhLmjVSkGWtsh9cgD3rqEhXV+AUzZj0/WvhMn26U2ZkgJsgsQFuhbrMfK
+         nL3K7nGKb6fmfbfXJfTxU8kPby9Ai2kbwIBPUNPfQiz57HebgCLtHrQbVgJ4Vec5hsoK
+         S1Vy+y2UMQUsykJCwlM0mXqrCQHbH9eB/pS8fJQKa38/fMlWEy74f2iNCA/XfG7+twIW
+         /ehw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775168224; x=1775773024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=amUReQ3ina2wYCV6xiNTIdpbjblXyyaKv313NH2tmJs=;
+        b=pA4LzPiXtnME2kRXhAYy/idTi+wt/ZMEQKQ6+vr1+0lWV+T+rLK/AJuw/R02C4H3Sz
+         zzcAcNvY+vkrx0/J5zi3lU82zHchJ8wjMfMq6C8lHssZVvswYmB44SbPVaNdOsqF7ur8
+         DHAPsoggrSZGrQH/INHlupPbL6iepLpOmlATc8J2x8mPpGnFucLIbF/1PztY8tFNHsUZ
+         JVSgup9oXOunY3Al2E3RPq7ygnk75rYkFB1XPEQS7ulJhDHNtVGrV63MlXLbxWkP9jw+
+         j7JLoasIKs+yVieO5XRBU0f+5inKITQ3AsWoQQie8E6zOc9F0BoEvKAMLRYXlNEkX/4q
+         9ohA==
+X-Gm-Message-State: AOJu0YwzI+YVVROKFC+endJotXDjx+Pqyviwbh9GyhVzopP5lR3uSFA0
+	6haS3B5HnsdXktzljFYOTnm8mzO21fZqFQDNW9VgwUe4OcNtX7+ZJTUuxgse+C3fLclw0g56VcE
+	9F69bjLKrc+0tfRNptmqIHs6GlMmU1RA=
+X-Gm-Gg: AeBDiethm23blIJhHvgCXhojDC37f0K6fjlCNzkcpwROmaLL2ZEoZRmGcrvxnTUryQJ
+	KZjlu8LUWuyr+Ye1BQyZSdWU+mTu6OX1x0otA0wkWMOJcVBI5vjKEh0r+oSFEk4EnQtZFRxsCji
+	GL6p9/yEZTxPXWTcQbyRbWqVw1PGG+3a0pkIKt1gHS5wa80Gup2E20ymfDMvstSN7LnJloBQ7Nu
+	LBmJQhPPb7d4KiJu+MCaz/Xt16NNZX9nBNzKjroj6a3uBjMWRgPJQJbrkkI3E3FHPzE2e9Pwsri
+	JQY+gaNBssHtV/2E2d5jNEj7vslUZgg6/BoVi4318Qt5sVi8GA1OT4rgt2s7/y9V8H+rurCTVo5
+	9a0t/rQ4YX0knn5JaB/5c16HzAQ==
+X-Received: by 2002:a05:6000:2885:b0:43d:1deb:a5da with SMTP id
+ ffacd0b85a97d-43d291e2378mr1111490f8f.0.1775168223755; Thu, 02 Apr 2026
+ 15:17:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260326205050.2826760-1-jmeng@fb.com>
+In-Reply-To: <20260326205050.2826760-1-jmeng@fb.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 2 Apr 2026 15:16:51 -0700
+X-Gm-Features: AQROBzBFdYPIvC-K1hkkL8GP9Ed-ropcjOBO0TdBJsUswR08jw6d6fPapKdjvKU
+Message-ID: <CAADnVQKXio6nh+3OLkJb3C5FyGS404ZAQEPpwxVD6Bsr444ahQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf/tests: Exhaustive test coverage for signed
+ division and modulo
+To: Jie Meng <jmeng@fb.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- - Add missing form {MOV, K, ALU}.
+On Thu, Mar 26, 2026 at 1:51=E2=80=AFPM Jie Meng <jmeng@fb.com> wrote:
+>
+> Extend lib/test_bpf.c to provide comprehensive test coverage for BPF
+> signed division (SDIV) and signed modulo (SMOD) instructions, both
+> 32-bit and 64-bit variants with immediate operands.
+>
+> Changes:
+> - __bpf_alu_result(): add off parameter to select signed vs unsigned
+>   div/mod semantics. When off !=3D 0, uses div64_s64() / s64 modulo with
+>   truncation toward zero, matching BPF signed division spec. Skips
+>   divisor =3D=3D -1 cases (handled by verifier).
 
- - Add some assembly (pseudo-C) snippets.
+isa is using 'off' in encoding, but that's not a reason to
+name variables in such a cryptic way.
 
- - Rearrange: MOV content comes before MOVSX.
+Add another bool for signed vs unsigned, or better yet
+convert bool alu32 into 'u32 flags' and have meaningful names
+enum {
+  F_ALU32,
+  F_SIGNED
+};
 
- - MOVSX content itself rearranged: canonical sign extension variant
-   for {8,16,32}-> 64 moved ahead of the special variant which only
-   sign extends to 32 and zeroes out the upper bits.
+then all of the callsites will be more readable too.
+true, 0
+true, 1
+false, 0
+false, 1
+are hard to read.
 
- - Remove the hyphen '-' in "sign-extension" to make grep hit all
-   instances with one pattern.
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
-Changes since v1
-  - Address review comments from AI CI-bot
-  - Added missing {MOV, K, ALU}
----
- .../bpf/standardization/instruction-set.rst   | 47 +++++++++++++++----
- 1 file changed, 37 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-index 96181565906f..c55628448898 100644
---- a/Documentation/bpf/standardization/instruction-set.rst
-+++ b/Documentation/bpf/standardization/instruction-set.rst
-@@ -414,25 +414,52 @@ etc. This specification requires that signed modulo MUST use truncated division
- 
-    a % n = a - n * trunc(a / n)
- 
--The ``MOVSX`` instruction does a move operation with sign extension.
--``{MOVSX, X, ALU}`` :term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into
--32-bit operands, and zeroes the remaining upper 32 bits.
--``{MOVSX, X, ALU64}`` :term:`sign extends<Sign Extend>` 8-bit, 16-bit, and 32-bit
--operands into 64-bit operands.  Unlike other arithmetic instructions,
--``MOVSX`` is only defined for register source operands (``X``).
-+For move operations, the ``MOV`` instruction has a few different forms.
-+
-+``{MOV, X, ALU64}`` means::
-+
-+  dst = src
-+
-+e.g. ``r1 = r2``
- 
- ``{MOV, K, ALU64}`` means::
- 
-   dst = (s64)imm
- 
--``{MOV, X, ALU}`` means::
-+e.g. ``r1 = -4``
-+     ``r5 = 9282009``
-+
-+``{MOV, K, ALU}`` means::
-+
-+  dst = (u32)imm
-+
-+e.g. ``w1 = -4``
-+     ``w5 = 7302004``
-+
-+``{MOV, X, ALU}`` has zero extension semantics (upper 32 bits are zeroed)::
- 
-   dst = (u32)src
- 
-+e.g. w5 = w9
-+
-+The ``MOVSX`` instruction does a move operation with sign extension and has
-+a couple of forms.
-+
-+``{MOVSX, X, ALU64}`` :term:`sign extends<Sign Extend>` 8-bit, 16-bit, and 32-bit
-+operands into 64-bit operands.
-+
-+e.g. ``r1 = (s8)r2``
-+
-+The ``{MOVSX, X, ALU}`` form has slightly different semantics: it
-+:term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into
-+32-bit operands, and zeroes the remaining upper 32 bits (similar to ``MOV``).
-+
- ``{MOVSX, X, ALU}`` with 'offset' 8 means::
- 
-   dst = (u32)(s32)(s8)src
- 
-+Unlike other arithmetic instructions,
-+``MOVSX`` is only defined for register source operands (``X``).
- 
- The ``NEG`` instruction is only defined when the source bit is clear
- (``K``).
-@@ -605,7 +632,7 @@ For load and store instructions (``LD``, ``LDX``, ``ST``, and ``STX``), the
-     ABS            1      legacy BPF packet access (absolute)   `Legacy BPF Packet access instructions`_
-     IND            2      legacy BPF packet access (indirect)   `Legacy BPF Packet access instructions`_
-     MEM            3      regular load and store operations     `Regular load and store operations`_
--    MEMSX          4      sign-extension load operations        `Sign-extension load operations`_
-+    MEMSX          4      sign extension load operations        `Sign extension load operations`_
-     ATOMIC         6      atomic operations                     `Atomic operations`_
-     =============  =====  ====================================  =============
- 
-@@ -649,10 +676,10 @@ instructions that transfer data between a register and memory.
- Where '<size>' is one of: ``B``, ``H``, ``W``, or ``DW``, and
- 'unsigned size' is one of: u8, u16, u32, or u64.
- 
--Sign-extension load operations
-+Sign extension load operations
- ------------------------------
- 
--The ``MEMSX`` mode modifier is used to encode :term:`sign-extension<Sign Extend>` load
-+The ``MEMSX`` mode modifier is used to encode :term:`sign extension<Sign Extend>` load
- instructions that transfer data between a register and memory.
- 
- ``{MEMSX, <size>, LDX}`` means::
--- 
-2.53.0
-
+pw-bot: cr
