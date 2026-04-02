@@ -1,247 +1,252 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C903242D7
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 20:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775162104; cv=pass; b=DEGzEqhpzpFBqt5DXfsaIbiqCXmhlNM7ZzUxWFc3vgkKC/pP2jsqmPBsPRkTubUx1bnczFJcplvE+YCx9W1nPPmNCn23qJtgE+1Wxv0fuG75q0lzst/29I6RRpgKSAAeJ3c0/jxrFhMGD0SwOw67b/1MH97aAnMti7c25zkCNac=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775162104; c=relaxed/simple;
-	bh=HYdTpVv9eNRR+zcQf91aaRXW81rdrCsgIjR0JkssmdM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BVb2iYGaqKx46WogySTULBB7CVhZC41ZU9rcQkyYz6Es83iIHK59YAhKN2d12XJ4Wg594FqrSbswo7FIWmODn3iNTyn5gLVrmG7oqf87hFh9g/dSHu2wUqE9PJkzV+SFQhxpz58dI/7n0uo00g2SdoZj+CGdWK/2+HoX7VtQlsY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmqP79YY; arc=pass smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BB63019BA
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 20:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775162279; cv=none; b=rDtBW0yaNvw7nU7ihn588aLRL267NlG2UBjLQgG1AYuyBkdsd7QBw2w4Gj9fIIodZ8Cnt432DBzvJ43OuEICaf3ADYlu7Yc9UgFGLOtOZgQbaRrcVyKj8I3aSWMxYCOceEWAgoAMpt9OClB5H6OE3yP1cc7tr4zgAoc0K2lGuno=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775162279; c=relaxed/simple;
+	bh=K6UeDia9sanUos9Mjkr7NnkAAtxeMCfMlhzE78+/mUE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Kvcmj1tP90uhuZkfzWXJpZyVMqw1B0XOTCUywE8Z/lFkovSYvuuBcCyb9tT+fnzOjRO+R2VUqSpVmrPJSYTRb8OC3+6MvhffXu6poFeRmCjIwQDt7/d/KH/euN9yzPUbBpBw1X78vX6KVmNBbZh2M90GcAtQvxKJ+ku+GwSw9SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QfMOSW6g; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmqP79YY"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-82748257f5fso1514155b3a.1
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 13:35:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775162101; cv=none;
-        d=google.com; s=arc-20240605;
-        b=iixtyf7zT5NCkpNtvGE+1nRuHXaOi9VCiojLnjWrTinI0P86wFxiOJ0Zvon6Dfgy8Q
-         pQ7qVjY9Y0zO3fBlMA+KJnz+tAH1dI+LF5OYfEeijXn7Hvu27w3t/f1oa9fpTWQjOnxq
-         /RzVXM3+viiFTT+NgE78mpdMO1modIhNEMgpHF4tgPW49+mLEVDfvvJzPZ6+dqXbEMFU
-         BWtSG/z6m0nC1Erlrz0kaIH270S4BAbA87AJXaFQF5st5yk59Nfs+rlFDam+YngjW3YM
-         glrkn9uCKUr2X7Bq338KGhivcAeYg+3ORrAYqL9VgtBNqlf0BxHmTOcAXvCCUC5aUVcj
-         +lSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sT4ErTbyK3L79X6F9nqmvUSoks5ZmZ96P1eUQm5LzR8=;
-        fh=2TDLiPR6zi8P67UZMssrnd3KSdDg/6ZLTvVVgw6gXng=;
-        b=G93hIVuvUmZ6eurdDGM4trPzyQgpN74RmcLMXBiGzfp79ZNWCfl9pHf3PsGyenq67b
-         6xtn6tIJHY/xAZ4euFuRUbdJablWg3t+WE4YMR/dFDf5NQ+GKnOLrnpsHDfDzjZMZ7K6
-         YFVnKlaCKxppfhbvdgYPcmOu18jgGvJuvfedBx+0MiihwR3IBQg0Sv5pxEaFhkcfcqvR
-         T2pwXWPHm45TpYl+B5WlANTFvF0mQLtYQFbkaZDtPK7Rb+w3MwUAX8Pt2hXY5Hixyqbt
-         30GQHhiwuXf+VeBvIkFs9slPqEKIf8luL6GEZpz7rYa8A/GhyaEb0pqfASEZZirWup/k
-         Wnsg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QfMOSW6g"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82a88a2704fso598874b3a.0
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 13:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775162101; x=1775766901; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sT4ErTbyK3L79X6F9nqmvUSoks5ZmZ96P1eUQm5LzR8=;
-        b=fmqP79YYEEp3wW1YQ4nKyzJ/z5ceq+GZWofFF6VWX5KAKdBGs5VX3wQW5cB3jvRoF4
-         VvzfRAv4+ellKblnRNvfYI7tXb4r3n78RBFPeXrSiLY/RI6w0JZzVh6HwJpwyPxOtq8T
-         laDSw87IrgRjhcG8eBISjlC6S8mEgp2b7f+l9HL4KmtXMiOg6RG7K8oVWS/A8ZjiI/mk
-         EwiZZWPB6jrY2/wZiwaOIap24DoJv1TgWMhAwmT/GYKmMSrK+YrCMcNr7GA+KA8/YXwF
-         ww7NgD0fKyFVJXP8WUx/I5sI0VOgSkNueEYqjrPYrg7/J1SqtYe+S9EfksbsEmKWxUPH
-         0a1g==
+        d=google.com; s=20251104; t=1775162277; x=1775767077; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iY/+kUa2oeDqlEImeMTWfoVrRsju1NxUYvhxVqSs/RM=;
+        b=QfMOSW6gfuGVgC/hlU6fSFblYOqiou/cB5dqEUPxvcAs8EFCWJXhNU6iPTcMA0x+ib
+         sQS/tQBpeX4u/X/P/pa/ka9ukUQRKgGlboMN0oEgBCXHZkd/t4hn4TED5mOLlIfM5/tz
+         RaN7AvxE2E/F3oijTPk/XAlIQvQ21hkReKLIUpqolJHF1l8JA7vSSXWpyyT/HEzEFYmz
+         UYuvwpHs5Z6n9uprXf/v9YJLP5syZT130ofCTfSw500izSCufzuEPrcN4csQuPZ0shgH
+         iIKGQZIzOl+Iq9+3+hzMAo5dKzlPW1IdnwPqF12VYdgF53YkmsVbZBnwzi2LlVvyHVGn
+         jQBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775162101; x=1775766901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sT4ErTbyK3L79X6F9nqmvUSoks5ZmZ96P1eUQm5LzR8=;
-        b=XrIk1OOo9o4J6flgTvnCvUiArwnmB6hxnjrtVr660yGng4iNwrbp5NoVnBJl6uYE0F
-         xMk3NwbOqEtyL2qqrk5pnN3ZOmj68AbW4/SSfAP6gIgXkwpjy2+JAO3fmRwfmddXbh+L
-         BFCSTcQcpMVcxKoyUITl8hYM7bqmZzJg/LHlrRCqb8JUrC2THHMzsod2yMEULxqvKN80
-         91YdaadaXXWcHVEvjmguNE2BBaR0Sx+INy4OIY+EI+H5GCB29jS/07tXaBL1agfKiTm1
-         I+H0TKKkSmH66FczhpZnDxcEopGWudEunIyLmdYziL0QRnN36u6qhJ3VuD+5EtWwkisV
-         7Rug==
-X-Forwarded-Encrypted: i=1; AJvYcCU1ojCtzpHZP5ZT1rbg/brY0wVBr+4eIJX8xAHYGw892uE15iNpEEdB/vKUJUM4Qm8xNHk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGzAS8wahABt/f0YmcJz/hp7/f+V6tUYlAt+NvkPUpUDzrJXyu
-	h5oZkZYlCFHo1tNx1V72nAT8i/kh9d89CDdratxmKti5XoVIXE6I02JrZqUDfDaGfnkl8/eQoKI
-	V0oczjR1iQuyB3cTF9Xo+zy55ywbYM20=
-X-Gm-Gg: ATEYQzxTIrhMDhX7xtU20EjVj2B9C2eYOalaFzmHvkkC8SHYkUtbbMi5MKc4k6t1qN0
-	BT6+yanbt68g0SoMSBFTbAdmxg7ERWklZHvbiewpSkLiq7pN+0KmYm/YpS1Fg+E9jeDaIKMlMhR
-	DR5zugVgbmrJtG0Q3he+jzP8IUOEPhpc0z7w1+R9/B0kPKcUKWrFB7rTlJ/OHN9QIiKbBcwEzft
-	Lsy1/3MWD5+kwy2QZdQWOhF+9kXDauqbxz+p3TICw1tuNrW9c9x0gKvi3OVm9nPN+T7DAFX2iq7
-	RVhfoXg=
-X-Received: by 2002:a05:6a21:6d9b:b0:39b:ff20:f4e5 with SMTP id
- adf61e73a8af0-39f16f3f5f7mr3782269637.12.1775162100816; Thu, 02 Apr 2026
- 13:35:00 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775162277; x=1775767077;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iY/+kUa2oeDqlEImeMTWfoVrRsju1NxUYvhxVqSs/RM=;
+        b=JgVSmxC6bEfrGNFieSUiegZBp6QsDT1PpoPRRo4SQbC2TDiCMmElcD6n9bS8NmIscR
+         9Sl/ucsG/eFANdb+OWtQ5b+FsvQ9UzfHcm/NQxCCw6RoG8htU8YzJ4wHy1klaK3YSFJJ
+         HcWMThqBOGBAMMZo8U+xjymJiiq6ckhxH3dTCJ8VXclNefjQdFEHb1/DCDuio6mRWYAz
+         7hCzeQ1um0b7uZ3n+Bfab5s6HwHxux/fIaauZDhfoz+PCxw+t6OsKij3HzZ1i0zze27+
+         WBwAiGoZV63RrOn4BcjpnGLiwDRv3B38yMsCNxtL2P6BE7Qr5h9/RFow4gSzM5vezIWh
+         EDKA==
+X-Forwarded-Encrypted: i=1; AJvYcCV3S7X1CI/X5Z3Np2jQJjimRYdaf14Fd3a7xZQhCebckF4rkXyFAHetf8Yn5TCB1qAFoIo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvY3cCBvHgqgnPKS6qKg1+FfkWLRFcBSJ72udZgF4ryIs14dyR
+	P0aZ24SJeXf6Gpj1Z+fpuo/HjbEVx/0nwKWtVUtudJS62COrA2aEYAgv5XL6lSkUVEULur+m/+d
+	EV5rvZg==
+X-Received: from pfcg17.prod.google.com ([2002:a05:6a00:23d1:b0:82c:70d1:f303])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:94f6:b0:82c:7420:82bf
+ with SMTP id d2e1a72fcca58-82d0dbfef49mr399978b3a.19.1775162277181; Thu, 02
+ Apr 2026 13:37:57 -0700 (PDT)
+Date: Thu,  2 Apr 2026 20:37:52 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260401164302.3844142-1-alan.maguire@oracle.com> <20260401164302.3844142-3-alan.maguire@oracle.com>
-In-Reply-To: <20260401164302.3844142-3-alan.maguire@oracle.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 2 Apr 2026 13:34:48 -0700
-X-Gm-Features: AQROBzC5oQ0cTlCcFKNugDJnGt_IuAmoIIKC9X-K0m6QUiDFO41ClTbAexXAj8w
-Message-ID: <CAEf4BzavmRrrPhyn8CyT0aQgJ+mg_+HPNpiCksv8CFp2S556zw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add BTF sanitize test
- covering BTF layout
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
+Message-ID: <20260402203754.280844-1-kuniyu@google.com>
+Subject: [PATCH v1 bpf] sockmap: Fix sk_psock_drop() race vs sock_map_{unhash,close,destroy}().
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Wang Yufen <wangyufen@huawei.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	syzbot+b0842d38af58376d1fdc@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 1, 2026 at 9:43=E2=80=AFAM Alan Maguire <alan.maguire@oracle.co=
-m> wrote:
->
-> Add test that fakes up a feature cache of supported BPF
-> features to simulate an older kernel that does not support
-> BTF layout information.  Ensure that BTF is sanitized correctly
-> to remove layout info between types and strings, and that all
-> offsets and lengths are adjusted appropriately.
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  .../selftests/bpf/prog_tests/btf_sanitize.c   | 103 ++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c b/tool=
-s/testing/selftests/bpf/prog_tests/btf_sanitize.c
-> new file mode 100644
-> index 000000000000..c18e59f4a8b7
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
-> @@ -0,0 +1,103 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026, Oracle and/or its affiliates. */
-> +#include <test_progs.h>
-> +#include <linux/btf.h>
-> +#include "bpf/libbpf_internal.h"
-> +#include "../test_btf.h"
-> +#include "kfree_skb.skel.h"
-> +
-> +#define TYPE_LEN       (sizeof(struct btf_type) + sizeof(__u32))
-> +#define MAX_NR_LAYOUT  2
-> +#define LAYOUT_LEN     (sizeof(struct btf_layout) * MAX_NR_LAYOUT)
-> +#define STR_LEN                sizeof("\0int")
-> +
-> +struct layout_btf {
-> +       struct btf_header hdr;
-> +       __u32 types[TYPE_LEN/sizeof(__u32)];
-> +       struct btf_layout layout[MAX_NR_LAYOUT];
-> +       char strs[STR_LEN];
-> +} __packed;
+syzbot reported a splat in sock_map_destroy() [0], where psock was
+NULL even though sk->sk_prot still pointed to tcp_bpf_prots[][].
 
-Do we need __packed? BTF layout is 4-byte aligned by design, we
-shouldn't need packed
+The root cause is a lack of synchronisation.
 
-pw-bot: cr
+Even if sk_psock_get() fails to bump psock->refcnt, it does not
+guarantee that sk_psock_drop() has finished, and thus sk->sk_prot
+might not have been restored to the original one.
 
+Commit 4b4647add7d3 ("sock_map: avoid race between sock_map_close
+and sk_psock_put") attempted to address this, but it was insufficient
+for two reasons.
 
-> +
-> +static const struct layout_btf layout_btf =3D {
-> +       .hdr =3D {
-> +               .magic          =3D BTF_MAGIC,
-> +               .version        =3D BTF_VERSION,
-> +               .hdr_len        =3D sizeof(struct btf_header),
-> +               .type_off       =3D 0,
-> +               .type_len       =3D TYPE_LEN,
-> +               .str_off        =3D TYPE_LEN + LAYOUT_LEN,
-> +               .str_len        =3D STR_LEN,
-> +               .layout_off     =3D TYPE_LEN,
-> +               .layout_len     =3D LAYOUT_LEN,
-> +       },
-> +       .types =3D {
-> +               BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
-> +       },
-> +       .layout =3D {
-> +               { .info_sz =3D 0,          .elem_sz =3D 0, .flags =3D 0 }=
-,
-> +               { .info_sz =3D sizeof(__u32), .elem_sz =3D 0, .flags =3D =
-0 },
-> +       },
-> +       .strs =3D "\0int",
-> +};
-> +
-> +void test_btf_sanitize_layout(void)
-> +{
-> +       struct btf *orig =3D NULL, *sanitized =3D NULL;
-> +       struct kfree_skb *skel =3D kfree_skb__open_and_load();
+It did not cover sock_map_unhash() and sock_map_destroy(), and
+it missed the corner case where sk_psock() is NULL.
 
-this is doing too much to be used in variable initialized, please move
-it closer to that ASSERT_OK_PTR(skel) check below
+On non-x86 platforms, sk_psock_restore_proto(sk, psock) and
+rcu_assign_sk_user_data(sk, NULL) can be reordered because there
+is no address dependency between sk->sk_prot and sk->sk_user_data.
 
-> +       struct kern_feature_cache *cache =3D NULL;
-> +       const struct btf_header *hdr;
-> +       const void *raw;
-> +       __u32 raw_sz;
-> +
-> +       if (!ASSERT_OK_PTR(skel, "kfree_skb_skel"))
-> +               return;
-> +       orig =3D btf__new(&layout_btf, sizeof(layout_btf));
-> +       if (!ASSERT_OK_PTR(orig, "btf_new_layout"))
-> +               return;
-> +
-> +       raw =3D btf__raw_data(orig, &raw_sz);
-> +       if (!ASSERT_OK_PTR(raw, "btf__raw_data_orig"))
-> +               goto out;
-> +       hdr =3D (struct btf_header *)raw;
-> +       ASSERT_EQ(hdr->layout_off, TYPE_LEN, "layout_off_nonzero");
-> +       ASSERT_EQ(hdr->layout_len, LAYOUT_LEN, "layout_len_nonzero");
-> +
-> +
+sk_psock_get() returning NULL implies nothing about sk->sk_prot,
+and we need a synchronisation.
 
-nit: extra empty line
+The possible options would be:
 
-> +       cache =3D calloc(1, sizeof(*cache));
-> +       if (!ASSERT_OK_PTR(cache, "alloc_feat_cache"))
-> +               goto out;
-> +       for (int i =3D 0; i < __FEAT_CNT; i++)
-> +               cache->res[i] =3D FEAT_SUPPORTED;
-> +       cache->res[FEAT_BTF_LAYOUT] =3D FEAT_MISSING;
-> +
-> +       feat_cache_set(skel->obj, cache);
-> +
-> +       if (!ASSERT_FALSE(kernel_supports(skel->obj, FEAT_BTF_LAYOUT),
-> +                         "layout_feature_missing"))
-> +               goto out;
-> +
-> +       if (!ASSERT_TRUE(kernel_supports(skel->obj, FEAT_BTF_FUNC),
-> +                        "other_feature_allowed"))
+  1) Put smp_wmb() and smp_rmb() properly
+  2) Put sk_callback_lock locking dance in the unlikely case
+  3) Retry sk_psock_get() in the unlikely case
 
-nit: single line probably fits under 100 characters? same ASSERT_FALSE abov=
-e?
+1) sounds straightforward but at the expense of the normal
+path for the super unlikely race.  The stack trace shows how badly
+the path was excercised, see inet_release() calls tcp_close(),
+not sock_map_close() yet, but finally reaching sock_map_destroy().
 
-> +               goto out;
-> +
-> +       sanitized =3D bpf_object__sanitize_btf(skel->obj, orig);
-> +
-> +       if (!ASSERT_OK_PTR(sanitized, "bpf_object__sanitize_btf"))
-> +               goto out;
-> +
-> +       raw =3D btf__raw_data(sanitized, &raw_sz);
-> +       if (!ASSERT_OK_PTR(raw, "btf__raw_data_sanitized"))
-> +               goto out;
-> +       hdr =3D (struct btf_header *)raw;
-> +
-> +       ASSERT_EQ(hdr->layout_off, 0, "layout_off_zero");
-> +       ASSERT_EQ(hdr->layout_len, 0, "layout_len_zero");
-> +       ASSERT_EQ(hdr->str_off, TYPE_LEN, "strs_after_types");
-> +       ASSERT_EQ(hdr->str_len, STR_LEN, "strs_len_unchanged");
-> +       ASSERT_EQ(raw_sz, hdr->hdr_len + hdr->type_len + hdr->str_len, "b=
-tf_raw_sz_reduced");
-> +out:
-> +       /* This will free the cache we allocated above */
-> +       kfree_skb__destroy(skel);
-> +       btf__free(sanitized);
-> +       btf__free(orig);
-> +}
-> --
-> 2.39.3
->
+3) could be lightweight but risk an unbounded loop in case the
+psock could hit WARN_ON_ONCE() below, so 2) seems preferable.
+
+Let's add the locking dance in sock_map_psock_get_checked() and
+use it in sock_map_{unhash,close,destroy}().
+
+[0]:
+WARNING: CPU: 1 PID: 8459 at net/core/sock_map.c:1667 sock_map_destroy+0x28b/0x2b0 net/core/sock_map.c:1667
+Modules linked in:
+CPU: 1 UID: 0 PID: 8459 Comm: syz.0.1109 Not tainted syzkaller #0 PREEMPT_{RT,(full)}
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
+RIP: 0010:sock_map_destroy+0x28b/0x2b0 net/core/sock_map.c:1667
+Code: 8b 36 49 83 c6 38 4c 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 93 62 22 f9 4d 8b 3e e9 79 ff ff ff e8 a6 2b c3 f8 90 <0f> 0b 90 eb 9c e8 9b 2b c3 f8 4c 89 e7 be 03 00 00 00 e8 0e 4e bc
+RSP: 0018:ffffc9000d067be8 EFLAGS: 00010293
+RAX: ffffffff88fb30aa RBX: ffff888024832000 RCX: ffff888024283b80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: ffffed100862e946 R12: dffffc0000000000
+R13: ffff888024832000 R14: ffffffff995b2208 R15: ffffffff88fb2e20
+FS:  0000555579a7d500(0000) GS:ffff8881269c2000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00002000000048c0 CR3: 000000003713a000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ inet_csk_destroy_sock+0x166/0x3a0 net/ipv4/inet_connection_sock.c:1294
+ __tcp_close+0xcc1/0xfd0 net/ipv4/tcp.c:3262
+ tcp_close+0x28/0x110 net/ipv4/tcp.c:3274
+ inet_release+0x144/0x190 net/ipv4/af_inet.c:435
+ __sock_release net/socket.c:649 [inline]
+ sock_close+0xc0/0x240 net/socket.c:1439
+ __fput+0x45b/0xa80 fs/file_table.c:468
+ task_work_run+0x1d4/0x260 kernel/task_work.c:227
+ resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+ exit_to_user_mode_loop+0xec/0x110 kernel/entry/common.c:43
+ exit_to_user_mode_prepare include/linux/irq-entry-common.h:225 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:175 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:210 [inline]
+ do_syscall_64+0x2bd/0x3b0 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f265847ebe9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd158dfbd8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
+RAX: 0000000000000000 RBX: 000000000002ddb0 RCX: 00007f265847ebe9
+RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
+RBP: 00007f26586a7da0 R08: 0000000000000001 R09: 0000000e158dfecf
+R10: 0000001b30a20000 R11: 0000000000000246 R12: 00007f26586a5fac
+R13: 00007f26586a5fa0 R14: ffffffffffffffff R15: 00007ffd158dfcf0
+ </TASK>
+
+Fixes: 1aa12bdf1bfb ("bpf: sockmap, add sock close() hook to remove socks")
+Fixes: b05545e15e1f ("bpf: sockmap, fix transition through disconnect without close")
+Fixes: d8616ee2affc ("bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues")
+Reported-by: syzbot+b0842d38af58376d1fdc@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/bpf/69cec5ef.050a0220.2dbe29.0009.GAE@google.com/
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+---
+ net/core/sock_map.c | 39 +++++++++++++++++++++++----------------
+ 1 file changed, 23 insertions(+), 16 deletions(-)
+
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index b0e96337a269..54bd5e3378c7 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -200,15 +200,25 @@ static struct sk_psock *sock_map_psock_get_checked(struct sock *sk)
+ 
+ 	rcu_read_lock();
+ 	psock = sk_psock(sk);
+-	if (psock) {
+-		if (sk->sk_prot->close != sock_map_close) {
+-			psock = ERR_PTR(-EBUSY);
++
++	if (READ_ONCE(sk->sk_prot)->close != sock_map_close) {
++		if (likely(!psock))
+ 			goto out;
+-		}
+ 
+-		if (!refcount_inc_not_zero(&psock->refcnt))
+-			psock = ERR_PTR(-EBUSY);
++		/* sock_map_init_proto() has not finished yet. */
++		psock = ERR_PTR(-EBUSY);
++		goto out;
+ 	}
++
++	if (likely(psock && refcount_inc_not_zero(&psock->refcnt)))
++		goto out;
++
++	/* sk_psock() being NULL or psock->refcnt being 0 does not
++	 * guarantee that sk_psock_restore_proto() has finished.
++	 */
++	read_lock_bh(&sk->sk_callback_lock);
++	read_unlock_bh(&sk->sk_callback_lock);
++	psock = ERR_PTR(-EBUSY);
+ out:
+ 	rcu_read_unlock();
+ 	return psock;
+@@ -1631,14 +1641,15 @@ void sock_map_unhash(struct sock *sk)
+ 	struct sk_psock *psock;
+ 
+ 	rcu_read_lock();
+-	psock = sk_psock(sk);
+-	if (unlikely(!psock)) {
++	psock = sock_map_psock_get_checked(sk);
++	if (IS_ERR_OR_NULL(psock)) {
+ 		rcu_read_unlock();
+ 		saved_unhash = READ_ONCE(sk->sk_prot)->unhash;
+ 	} else {
+ 		saved_unhash = psock->saved_unhash;
+ 		sock_map_remove_links(sk, psock);
+ 		rcu_read_unlock();
++		sk_psock_put(sk, psock);
+ 	}
+ 	if (WARN_ON_ONCE(saved_unhash == sock_map_unhash))
+ 		return;
+@@ -1653,8 +1664,8 @@ void sock_map_destroy(struct sock *sk)
+ 	struct sk_psock *psock;
+ 
+ 	rcu_read_lock();
+-	psock = sk_psock_get(sk);
+-	if (unlikely(!psock)) {
++	psock = sock_map_psock_get_checked(sk);
++	if (IS_ERR_OR_NULL(psock)) {
+ 		rcu_read_unlock();
+ 		saved_destroy = READ_ONCE(sk->sk_prot)->destroy;
+ 	} else {
+@@ -1678,13 +1689,10 @@ void sock_map_close(struct sock *sk, long timeout)
+ 
+ 	lock_sock(sk);
+ 	rcu_read_lock();
+-	psock = sk_psock(sk);
+-	if (likely(psock)) {
++	psock = sock_map_psock_get_checked(sk);
++	if (!IS_ERR_OR_NULL(psock)) {
+ 		saved_close = psock->saved_close;
+ 		sock_map_remove_links(sk, psock);
+-		psock = sk_psock_get(sk);
+-		if (unlikely(!psock))
+-			goto no_psock;
+ 		rcu_read_unlock();
+ 		sk_psock_stop(psock);
+ 		release_sock(sk);
+@@ -1692,7 +1700,6 @@ void sock_map_close(struct sock *sk, long timeout)
+ 		sk_psock_put(sk, psock);
+ 	} else {
+ 		saved_close = READ_ONCE(sk->sk_prot)->close;
+-no_psock:
+ 		rcu_read_unlock();
+ 		release_sock(sk);
+ 	}
+-- 
+2.53.0.1213.gd9a14994de-goog
+
