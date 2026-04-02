@@ -1,142 +1,218 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A272314B62;
-	Thu,  2 Apr 2026 04:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B0A366060;
+	Thu,  2 Apr 2026 04:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775103348; cv=none; b=OYH90j6ED0aCcQBn/suhkNm1++4f69fKL13jVDSzEsNDEWPpZ++ofJ3BbKgVnP4/H8WfT7xdFJfxPt5Cruz2xIErGWi3UBcmEmaVeJh/lNGnZDITRV3J8RTnXH4VKGxWSaHq5j8e5jzKZf8LoHRD9/ur8TDPKriSAcL72RHW4FE=
+	t=1775104958; cv=none; b=mnLs4aWBf6iOK7W4i6wBW9ej7d3FmqI5bph6FmEyeKmf2mVz8CeTJ+yLQCzTF2LqLi/8ClIXMxFlJhOyfDIVucLggw0CrBETgEmtjcDncqFILJQ5vHAGICqhceV0nr88xY5ZxBj0HlR/x4u+s9CVVfa7rk4cK7vbpukG/hMGaH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775103348; c=relaxed/simple;
-	bh=XQJE4Gn0KfowgirQDluRqeuQqW/CPd193d46pEtgYBM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T2st7jxyNk1NIL3KWqlHvtFIbytSN/7RQmb5NTjKWohCZVfgG4vH9Y3d+tsB/r3vq/wZAsREwg6HRFkVjPJ8jr8CZSHNOjloKDAcUrv/BUG3c6+rw0qCYKKXo5Yq8TTlP3qLYEHm0qcefAZz3NZA/dRUh7OBpz+fN4cinrwBUNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MZcgswfq; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775104958; c=relaxed/simple;
+	bh=XIVO2rDhF7vl2myZmgFd67wiPZXQ7C/T7hTBVST245I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qqxidG+4BXu2XvZDrPu/kW1j/CZm8ACOXyr5JdH7OUkRyfSYdPMypDCNxROD0IQJgWAQwbnfCyTuOjFSlci0gtMvtf2JGmcxmHT7WGEFzs246daPgWWyUjEaRvRw8Rv6L9brHJ83YchcHAagrpNHjeczxoZvGInxYL9CG7psk5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vWXGzyn1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IurlPxyt; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MZcgswfq"
-Message-ID: <ad90b2a9-0f67-4796-94bc-9dbb76a575af@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775103344;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vWXGzyn1";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IurlPxyt"
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1775104955;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=n5Io74XLqo3KNsgBYSXiYBVqhjr7FhR8/0nd+R5bTLU=;
-	b=MZcgswfqZ9iL6o+Q+tfn1Vy+DIC+L/Qt4TDqmK7oPt076dp+HIdN7SLrM7LbqA25ah72Up
-	V4hukdmWKqxWaJoaFvzri0feMqM+GVPcmQV5yBfPRTrJKGoaErOEcR2tEU8ikxr0cGDmSY
-	rvSkIXyEVEDsNKWWVlIO1raFA3OA8aY=
-Date: Thu, 2 Apr 2026 12:15:31 +0800
+	bh=MJvxgmla7GJ40kGY75h8wil3XQl50FCUl05/E1jznUo=;
+	b=vWXGzyn1Ah4NVW1Mlx6bVWLSBj6AYX9pCd9DrDOplQTmbGujEMKDfVdk9UuQSy4q/EB+8j
+	JbSoHM0OO3CXsGn4pqDs8ysla/YeDW81rKvL9oMlDSU/wJwEwNXBwVEXmKQxttdHCCtWHo
+	7bMByldcwMuRdSwyAqbIbVhr09Nh5iOZuF3dTgEvAYv8muo0576uG3wW0ftYbyCT+1GWyq
+	gsQhjmiz6dYjOVC7gzheLv3qXVvheTKJr8qE9ktdT2m9XlyVi9m5J2OKt1IAYR7+G81PSc
+	Ccn6ATCGsbpr6A2imtJGqLjtn/4UiXtw+q2mleqWmx/aU5fGJJjqJADChxr5xg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1775104955;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MJvxgmla7GJ40kGY75h8wil3XQl50FCUl05/E1jznUo=;
+	b=IurlPxyt1Bfb+kV3Q+c8hoyBvdrj8JLeMIg7p9Kgwjh781UgDqCuCKKy/ODbWXkRUht4Vn
+	3iR/ddfJc1aykxAQ==
+To: "Ionut Nechita (Wind River)" <ionut.nechita@windriver.com>,
+ jan.kiszka@siemens.com
+Cc: crwood@redhat.com, florian.bezdeka@siemens.com,
+ ionut.nechita@windriver.com, brauner@kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+ stable@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ frederic@kernel.org, vschneid@redhat.com, gregkh@linuxfoundation.org,
+ chris.friesen@windriver.com, viorel-catalin.rapiteanu@windriver.com,
+ iulian.mocanu@windriver.com
+Subject: Re: [REGRESSION] osnoise: "eventpoll: Replace rwlock with spinlock"
+ causes ~50us noise spikes on isolated PREEMPT_RT cores
+In-Reply-To: <20260401165841.532687-1-ionut.nechita@windriver.com>
+References: <22ffc044-4cc7-468c-b11d-9b838c92e82b@siemens.com>
+ <20260401165841.532687-1-ionut.nechita@windriver.com>
+Date: Thu, 02 Apr 2026 06:42:32 +0200
+Message-ID: <878qb6x9af.fsf@yellow.woof>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net v1] net: skb: fix cross-cache free of KFENCE-allocated
- skb head
-To: Eric Dumazet <edumazet@google.com>
-Cc: netdev@vger.kernel.org, Antonius <antonius@bluedragonsec.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jason Xing <kerneljasonxing@gmail.com>, Kuniyuki Iwashima
- <kuniyu@google.com>, Michal Luczaj <mhal@rbox.co>,
- Mina Almasry <almasrymina@google.com>, Eric Biggers <ebiggers@google.com>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Soheil Hassas Yeganeh <soheil@google.com>,
- Alexander Duyck <alexanderduyck@fb.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260402033138.388574-1-jiayuan.chen@linux.dev>
- <CANn89iLdRZd-qO4tRpSGamHpggh=r5vM4xes5npYCnkwcNG89A@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CANn89iLdRZd-qO4tRpSGamHpggh=r5vM4xes5npYCnkwcNG89A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-
-On 4/2/26 12:01 PM, Eric Dumazet wrote:
-> On Wed, Apr 1, 2026 at 8:32 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
->> SKB_SMALL_HEAD_CACHE_SIZE is intentionally set to a non-power-of-2
->> value (e.g. 704 on x86_64) to avoid collisions with generic kmalloc
->> bucket sizes. This ensures that skb_kfree_head() can reliably use
->> skb_end_offset to distinguish skb heads allocated from
->> skb_small_head_cache vs. generic kmalloc caches.
->>
->> However, when KFENCE is enabled, kfence_ksize() returns the exact
->> requested allocation size instead of the slab bucket size. If a caller
->> (e.g. bpf_test_init) allocates skb head data via kzalloc() and the
->> requested size happens to equal SKB_SMALL_HEAD_CACHE_SIZE, then
->> slab_build_skb() → ksize() returns that exact value. After subtracting
->> skb_shared_info overhead, skb_end_offset ends up matching
->> SKB_SMALL_HEAD_HEADROOM, causing skb_kfree_head() to incorrectly free
->> the object to skb_small_head_cache instead of back to the original
->> kmalloc cache, resulting in a slab cross-cache free:
->>
->>    kmem_cache_free(skbuff_small_head): Wrong slab cache. Expected
->>    skbuff_small_head but got kmalloc-1k
->>
->> Fix this by adding an is_kfence_address() check in skb_kfree_head().
->> When the head is a KFENCE object, we skip the kmem_cache_free() path
->> and fall through to kfree(), which correctly handles KFENCE objects
->> via kfence_free(). The check compiles away when CONFIG_KFENCE is
->> disabled.
->>
->> Fixes: bf9f1baa279f ("net: add dedicated kmem_cache for typical/small skb->head")
->> Reported-by: Antonius <antonius@bluedragonsec.com>
->> Closes: https://lore.kernel.org/netdev/CAK8a0jxC5L5N7hq-DT2_NhUyjBxrPocoiDazzsBk4TGgT1r4-A@mail.gmail.com/
->> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->> ---
->>   net/core/skbuff.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
->> index 0e217041958a..87cecd40381b 100644
->> --- a/net/core/skbuff.c
->> +++ b/net/core/skbuff.c
->> @@ -91,6 +91,7 @@
->>   #include <linux/user_namespace.h>
->>   #include <linux/indirect_call_wrapper.h>
->>   #include <linux/textsearch.h>
->> +#include <linux/kfence.h>
->>
->>   #include "dev.h"
->>   #include "devmem.h"
->> @@ -1083,7 +1084,8 @@ static int skb_pp_frag_ref(struct sk_buff *skb)
->>
->>   static void skb_kfree_head(void *head, unsigned int end_offset)
->>   {
->> -       if (end_offset == SKB_SMALL_HEAD_HEADROOM)
->> +       if (end_offset == SKB_SMALL_HEAD_HEADROOM &&
->> +           !is_kfence_address(head))
->>                  kmem_cache_free(net_hotdata.skb_small_head_cache, head);
->>          else
->>                  kfree(head);
-> Oh well, time to simply call kfree(head) ?
+"Ionut Nechita (Wind River)" <ionut.nechita@windriver.com> writes:
+> Crystal, Jan, Florian, thanks for the detailed feedback. I've redone
+> all testing addressing each point raised. All tests below use HT
+> disabled (sibling cores offlined), as Jan requested.
 >
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 3d6978dd0aa83f63984b994359d0c914c6427a00..6b35aed23b8936409f6b0d4ee8d378f726c569c6
-> 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -1072,10 +1072,7 @@ static int skb_pp_frag_ref(struct sk_buff *skb)
+> Setup:
+>   - Hardware: Intel Xeon Gold 6338N (Ice Lake, single socket,
+>     32 cores, HT disabled via sibling cores offlined)
+>   - Boot: nohz_full=3D1-16 isolcpus=3Dnohz,domain,managed_irq,1-16
+>     rcu_nocbs=3D1-31 kthread_cpus=3D0 irqaffinity=3D17-31
+>     iommu=3Dpt nmi_watchdog=3D0 intel_pstate=3Dnone skew_tick=3D1
+>   - eosnoise run with: ./osnoise -c 1-15
+>   - Duration: 120s per test
 >
->   static void skb_kfree_head(void *head, unsigned int end_offset)
->   {
-> -       if (end_offset == SKB_SMALL_HEAD_HEADROOM)
-> -               kmem_cache_free(net_hotdata.skb_small_head_cache, head);
-> -       else
-> -               kfree(head);
-> +       kfree(head);
->   }
+> Tested kernels (all vanilla, built from upstream sources):
+>   - 6.18.20-vanilla      (non-RT, PREEMPT_DYNAMIC)
+>   - 6.18.20-vanilla      (PREEMPT_RT, with and without rwlock revert)
+>   - 7.0.0-rc6-next-20260331 (PREEMPT_RT, with and without rwlock revert)
 >
->   static void skb_free_head(struct sk_buff *skb)
+> I tested 6 configurations to isolate the exact failure mode:
+>
+>   #  Kernel          Config   Tool            Revert  Result
+>   -- --------------- -------- --------------- ------- ----------------
+>   1  6.18.20         non-RT   eosnoise        no      clean (100%)
+>   2  6.18.20         RT       eosnoise        no      D state (hung)
+>   3  6.18.20         RT       eosnoise        yes     clean (100%)
+>   4  6.18.20         RT       kernel osnoise  no      clean (99.999%)
+>   5  7.0-rc6-next    RT       eosnoise        no      93% avail, 57us
+>   6  7.0-rc6-next    RT       eosnoise        yes     clean (99.99%)
 
+Thanks for the detailed analysis.
 
-If we no longer care about the cost of accessing a struct page in the
-free path, which the original commit was trying to avoid, this is
-indeed the simplest fix — kfree() correctly handles objects via 
-virt_to_slab.
+> Key findings:
+>
+> 1. On 6.18.20-rt with spinlock, eosnoise hangs permanently in D state.
+>
+>    The process blocks in do_epoll_ctl() during perf_buffer__new() setup
+>    (libbpf's perf_event_open + epoll_ctl loop). strace shows progressive
+>    degradation as fds are added to the epoll instance:
+>
+>      CPU  0-13:  epoll_ctl  ~8 us     (normal)
+>      CPU 14:     epoll_ctl  16 ms     (2000x slower)
+>      CPU 15:     epoll_ctl  80 ms     (10000x slower)
+>      CPU 16:     epoll_ctl  80 ms
+>      CPU 17:     epoll_ctl  20 ms
+>      CPU 18:     epoll_ctl  -- hung, never returns --
+>
+>    Kernel stack of the hung process (3+ minutes in D state):
+>
+>      [<0>] do_epoll_ctl+0xa57/0xf20
+>      [<0>] __x64_sys_epoll_ctl+0x5d/0xa0
+>      [<0>] do_syscall_64+0x7c/0xe30
+>      [<0>] entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>
+> 2. On 7.0-rc6-next-rt with spinlock, eosnoise runs but with severe
+>    noise. The difference from 6.18 is likely additional fixes in
+>    linux-next that prevent the complete deadlock but not the contention.
+>
+> 3. Kernel osnoise tracer (test #4) shows zero noise on the same
+>    6.18.20-rt+spinlock kernel where eosnoise hangs. This confirms the
+>    issue is specifically in the epoll rt_mutex path, not in osnoise
+>    measurement methodology.
+>
+>    Kernel osnoise output (6.18.20-rt, spinlock, no revert):
+>      99.999% availability, 1-4 ns max noise, RES=3D6 total in 120s
+>
+> 4. Non-RT kernel (test #1) with the same spinlock change shows zero
+>    noise. This confirms the issue is the spinlock-to-rt_mutex conversion
+>    on PREEMPT_RT, not the spinlock change itself.
+>
+> IRQ deltas on isolated CPU1 (120s):
+>
+>                     6.18.20-rt   6.18.20-rt   6.18.20      6.18.20-rt
+>                     spinlock     rwlock(rev)  non-RT       kernel osnoise
+>   RES (IPI):        (D state)    3            1            6
+>   LOC (timer):      (D state)    3,325        1,185        245
+>   IWI (irq work):   (D state)    565,988      1,433        121
+>
+>                     7.0-rc6-rt   7.0-rc6-rt
+>                     spinlock     rwlock(rev)
+>   RES (IPI):        330,000+     2
+>   LOC (timer):      120,585      120,585
+>   IWI (irq work):   585,785      585,785
+>
+> The mechanism, refined:
+>
+> Crystal was right that this is specific to the BPF perf_event_output +
+> epoll pattern, not any arbitrary epoll user. I verified this: a plain
+> perf_event_open + epoll_ctl program without BPF does not trigger the
+> issue.
+>
+> What triggers it is libbpf's perf_buffer__new(), which creates one
+> PERF_COUNT_SW_BPF_OUTPUT perf_event per CPU, mmaps the ring buffer,
+> and adds all fds to a single epoll instance. When BPF programs are
+> attached to high-frequency tracepoints (irq_handler_entry/exit,
+> softirq_entry/exit, sched_switch), every interrupt on every CPU calls
+> bpf_perf_event_output() which invokes ep_poll_callback() under
+> ep->lock.
+>
+> On PREEMPT_RT, ep->lock is an rt_mutex. With 15+ CPUs generating
+> callbacks simultaneously into the same epoll instance, the rt_mutex
+> PI mechanism creates unbounded contention.  On 6.18 this results in
+> a permanent D state hang. On 7.0 it results in ~330,000 reschedule
+> IPIs hitting isolated cores over 120 seconds (~2,750/s per core).
+>
+> With rwlock, ep_poll_callback() uses read_lock which allows concurrent
+> readers without cross-CPU contention =E2=80=94 the callbacks execute in
+> parallel without generating IPIs.
 
+These IPIs do not exist without eosnoise running. eosnoise introduces
+these noises into the system. For a noise tracer tool, it is certainly
+eosnoise's responsibility to make sure it does not measure noises
+originating from itself.
+
+> This pattern (BPF tracepoint programs + perf ring buffer + epoll) is
+> the standard architecture used by BCC tools (opensnoop, execsnoop,
+> biolatency, tcpconnect, etc.), bpftrace, and any libbpf-based
+> observability tool. A permanent D state hang when running such tools
+> on PREEMPT_RT is a significant regression.
+
+7.0-rc6-next is still using spin lock but has no hang problem. Likely
+you are hitting a different problem here which appears when spin lock is
+used, which has been fixed somewhere between 6.18.20 and 7.0-rc6-next.
+
+If you still have the energy for it, a git bisect between 6.18.20 and
+7.0-rc6-next will tell us which commit made the hang issue disappear.
+
+> I'm not proposing a specific fix -- the previous suggestions
+> (raw_spinlock trylock, lockless path) were rightly rejected. But the
+> regression exists and needs to be addressed. The ep->lock contention
+> under high-frequency BPF callbacks on PREEMPT_RT is a new problem
+> that the rwlock->spinlock conversion introduced.
+>
+> Separate question: could eosnoise itself be improved to avoid this
+> contention? For example, using one epoll instance per CPU instead of
+> a single shared one, or using BPF ring buffer (BPF_MAP_TYPE_RINGBUF)
+> instead of the per-cpu perf buffer which requires epoll. If the
+> consensus is that the kernel side is working as intended and the tool
+> should adapt, I'd like to understand what the recommended pattern is
+> for BPF observability tools on PREEMPT_RT.
+
+I am not familiar with eosnoise, I can't tell you. I tried compiling
+eosnoise but that failed. I managed to fix the compile failure, then I
+got run-time failure.
+
+It depends on what eosnoise is using epoll for. If it is just waiting
+for PERF_COUNT_SW_BPF_OUTPUT to happen, perhaps we can change to some
+sort of polling implementation (e.g. wake up every 100ms to check for
+data).
+
+Best regards,
+Nam
