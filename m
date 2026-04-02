@@ -1,89 +1,81 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C5236606E
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 17:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E501267386
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 17:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775149315; cv=none; b=irZEI80hbdbHdZrrIdv0/tN6rPvddhxwCjzoLs1xrLH4f1HjXQ7sTX5h1AwklO2zfl5Jp6jLGfADEJM/WOXEYwVSsBgHm8XyYDWgrLELv/QBbmSjDwdJisu/Ik9dC7Y7en3YknfQTCHFfRqWEn5KkpjI2FBqri9oDb9VJZfrNlI=
+	t=1775149825; cv=none; b=IZ0fnr5P8ZhqusPIaEbe1aK80nSTabJ792not8KxH4kXKZyXoZoP3EtAB07+G3QPnO0Gh5LSegvg7LuPZK6z9WWmcC76KN1s30TRqVjDPnaJtsc+rEUmA3epMi3ZBwIwIxSYDDSQUZ+XgWossB6/QgLj9MeMkPaM/QKlMBKJkks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775149315; c=relaxed/simple;
-	bh=yqumXcVR3q5lMN1WTcrSXHMqBHPGdTQKt4KuvtGlG2o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eImHnjlwnBRlsyWEnehbLcsL2OewTEwAgrB3PtJApne4UAnl0p4EivYMp8vkeWacJTN9y976UCuvIinfCMdMWz01P46U5Apm4dQ/69TwN0SmiFD6Vjq06nGnzHQO9kpJ7GKG+tI95fWMDQ/WPG1ioNWpnnYq7RWbipVupZkYsBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xl3kqRH7; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775149825; c=relaxed/simple;
+	bh=YPH3CLN7RcysFMW0LzeUbynAfnw0bDB8m+bEYMJmEQ4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=CRngX6vlkYt6kUIxAAkes26g3mcNGs47zbkiWsQ8yzSCnJrNfXvnB7N0oXQgSgBSX8uYvKrZXxPbw++jRWKUwucaRys6VxQwL1T92+dlXX7STvWHLgGAPW6tTAd8b5R7zPM8iZFDo21dpZH3Bi+gi9oH0e6NJoAFBDXo8La3pd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tb/NGVNr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xl3kqRH7"
-Date: Thu, 2 Apr 2026 10:01:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775149303;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=emrgkYOlDfhe8rH8ctFFL/DqqgvZg+1dTxJBJOlURGw=;
-	b=xl3kqRH7VAYFWis2iNQgVDHeXf32AnS+324xsxYf/C1Bp+v2Lkn8x11YIh3SoFhx1R/kFh
-	o1AXQ20/Bsm27sH3hUYYgX2uhcxiTxp+p7Qdd9toNHNHK2QS7SZowFoi4LywdG1+o+KGuC
-	6CqX9YeQyd+PbBROxqFWtpv1SY7MH2Y=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: xulang <xulang@uniontech.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard <eddyz87@gmail.com>, 
-	Hao Luo <haoluo@google.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	=?utf-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>, kernel@uniontech.com, KP Singh <kpsingh@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf v5 1/2] bpf: Fix OOB in pcpu_init_value
-Message-ID: <ac6ejZrcnfQfaTZS@devbig1721.ftw5.facebook.com>
-References: <7653EEEC2BAB17DF+20260402073948.2185396-1-xulang@uniontech.com>
- <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
- <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tb/NGVNr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC836C116C6;
+	Thu,  2 Apr 2026 17:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775149825;
+	bh=YPH3CLN7RcysFMW0LzeUbynAfnw0bDB8m+bEYMJmEQ4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Tb/NGVNrXZjaWnUtDqD3DMhk/jbleO4z/BFFy0+Ez73Oy2TIbDrNowZ76J/N6lj9p
+	 KieM5Gc/lpKViXyqPbTTMzRAEMjN+IlCR86cKKCvacY1206eykuLTDknLRVZis2CJk
+	 gvOhgz2z25i6NLos4+CCb4UJFtyNzGwNZCMgJMjbZOf56502ZQnfk2iSGWqbfDtSuz
+	 6r2+K37dXt6MaUgrQrrYnVnDwcksDr+UDzzPvnn8JYe+USV6urbcwp/9bobK4+x8cE
+	 H9niX//RQ7ko0trbfOY7KrtsG01XlrJq7eOe0zi/cmV9+/c8gHWLK9hZcbVuRWzgga
+	 Jv979cN1ZKmDA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CED83809A08;
+	Thu,  2 Apr 2026 17:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Fix incorrect pruning due to atomic
+ fetch precision tracking
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177514980704.537718.10686504392612421936.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Apr 2026 17:10:07 +0000
+References: <20260331222020.401848-1-daniel@iogearbox.net>
+In-Reply-To: <20260331222020.401848-1-daniel@iogearbox.net>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, puranjay@kernel.org, ast@kernel.org,
+ eddyz87@gmail.com, info@starlabs.sg
 
-On Thu, Apr 02, 2026 at 07:17:17AM -0700, Alexei Starovoitov wrote:
-> On Thu, Apr 2, 2026 at 12:43 AM xulang <xulang@uniontech.com> wrote:
-> >
-> > From: Lang Xu <xulang@uniontech.com>
-> >
-> > An out-of-bounds read occurs when copying element from a
-> > BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
-> > same value_size that is not rounded up to 8 bytes.
-> >
-> > The issue happens when:
-> > 1. A CGROUP_STORAGE map is created with value_size not aligned to
-> >    8 bytes (e.g., 4 bytes)
-> > 2. A pcpu map is created with the same value_size (e.g., 4 bytes)
-> > 3. Update element in 2 with data in 1
-> >
-> > pcpu_init_value assumes that all sources are rounded up to 8 bytes,
-> > and invokes copy_map_value_long to make a data copy, However, the
-> > assumption doesn't stand since there are some cases where the source
-> > may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE,
-> 
-> why? Just round it up there instead of penalizing perf everywhere.
-> 
-> > skb->data.
-> 
-> what that means?
-> 
-> pcpu_init_value() can access skb->data ?
+Hello:
 
-After bound check, the skb->data can be used in
-bpf_map_update_elem(&percpu_lru_map, &key, skb_data, BPF_NOEXIST)
-which will call pcpu_init_value().
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Wed,  1 Apr 2026 00:20:19 +0200 you wrote:
+> When backtrack_insn encounters a BPF_STX instruction with BPF_ATOMIC
+> and BPF_FETCH, the src register (or r0 for BPF_CMPXCHG) also acts as
+> a destination, thus receiving the old value from the memory location.
+> 
+> The current backtracking logic does not account for this. It treats
+> atomic fetch operations the same as regular stores where the src
+> register is only an input. This leads the backtrack_insn to fail to
+> propagate precision to the stack location, which is then not marked
+> as precise!
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2,1/2] bpf: Fix incorrect pruning due to atomic fetch precision tracking
+    https://git.kernel.org/bpf/bpf/c/179ee84a8911
+  - [bpf-next,v2,2/2] selftests/bpf: Add more precision tracking tests for atomics
+    https://git.kernel.org/bpf/bpf/c/e1b5687a862a
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
