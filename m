@@ -1,197 +1,167 @@
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D404930276A;
-	Thu,  2 Apr 2026 08:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7702DF137
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 08:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775117997; cv=none; b=PbXP+kPgSc5eW99+ieoS4gT6TsAGVwigT3ncA5cKzkmpVKsWzl6MW8/3SEDOVeIicPHWbWMDKNobTQMOBXDjPMYK1ZV663roof6lcZKupExAuGpwDkPvtRg3/f6Jlfc/KJwOwMyIL1FXuR6lQaJUctN9E5iEeZsK1ylwmtuEdOk=
+	t=1775118009; cv=none; b=dOTXSyvDpaCkh6CW6DiNlY2TtJvorVV00n38fCQD1N2zru0u5EVEmiP4/FMmcf3u/OTStT5L4xH+w2sblZ/ag17mVKbRlUW3REFMqRD0dz2aD32jpjSTMFSmgtolDJqN0cGdwz9essvtOr6BSljx8WaWu6q85NMjv2gu4MWPjJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775117997; c=relaxed/simple;
-	bh=cHZTSUwDXfFNbumoLgzKe705GExS6CeHXehC56/l7oE=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=OHr9+6bjMdhnDLbQTWHCzUUgQiOt8jYQXgDU6lkiopIx7a8X4CK/tfr1xzYhzVsjNuKKSa/bPGZjEQz9QxmYGvv+0Ppv5WXVc/EaWzlb6lFQEZSYLSPboHE3m3P0asGBbVOP/Svx8VwvDdYW9bdYAThptZF9sYR8J301+OTNnRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=TDFOXP0y; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+	s=arc-20240116; t=1775118009; c=relaxed/simple;
+	bh=2cbFc0+BSewLfqlOanrLpCFE/MzoXTbce6soA8EurIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qjSCzp3GV3zZWZ5ov17N8tMrQpnp/yuxk6CkijlZZuGpJnwvLI1gy3uvn0CZoiTN5Q+0j9k74l3O2p2aAjGyHJsO0v/F2Z0V5jeqIumdBuPwvniz9ol5mgjyGJdEGLWm5AaqDlkW/KJEB32c1++lkEkM+9i+ylArk6fWx0YSf8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Do+vKl0u; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="TDFOXP0y"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 70C46A5889;
-	Thu,  2 Apr 2026 10:19:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1775117990; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=7FmUTRudoDjBs2TfT2uUEICTUomf7L/YVLbRjYx6tJI=;
-	b=TDFOXP0ynnwrqV3WVem9dZiqeTilrjd/6e2EHtQ7/3LKacVF8ZZFAyYdtkBEdoQu/IFcW9
-	oHvMreYaERytp6zxDmulX+TZcgFrOkn0K9xyVaYMhqqslsoufdlCcun+4z6a4aQuNGpqSf
-	G4SDHEyd+shU9a7n53CfHG3YEoSLRN/7R+QO7n83/zOoStjjFWeJgZcXMG6uVOeO9i0yFO
-	bSLnrUFs6F7t16wGNEA84wFFwzBZCL63UAQuUE2J40qgT12fXrCFumD+5a88Fjsqe8UboV
-	Je4taX7DaZrgo9Hp8CcvjGZEFXIB1c22eGPJ4Z6UUgJfKRD1w6nBQDXMmepWmw==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Do+vKl0u"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso4792505e9.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 01:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775118006; x=1775722806; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fsHbwSzFqZ8lYk9WsN6hatiARTYkH9iqAVwT8NDlQ3w=;
+        b=Do+vKl0urjzYaQ1yyzN8pSKaq9uT6zNgD/965VAf51/+bnsNnu7nYUxbqwDJzH93z1
+         I9zczf9yllWT4IU6BybKdvxTUTURujfB1Hu6795OH1hDtwQk9jEcCHTRkmmzXoJrjoss
+         C2Gz+O83ZyqGOQOBT/13A12q4ShTHKCW4uU6PstllAx1jSFm3HkeJIUwrdhBZW0VaPmh
+         m14OxvnOdr1iq0DE+YXuXlAky4dT1a4+s2LUKx+0ohYIIi8YDs9o7V2cjygYj/GWJ3Ss
+         1QBclsw3ajiD5pJOiZXv5fgkciZ4Q2RV6CIeugkOObE8lukG56DO2DuPbzmiTC986bOt
+         RDpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775118006; x=1775722806;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fsHbwSzFqZ8lYk9WsN6hatiARTYkH9iqAVwT8NDlQ3w=;
+        b=pW76GNhHx/CN5bWn461f9FX9/mZRerijiOTO8OUE+Kb83sWMHKpdzM2/EilJMBjbbk
+         3OULmecfXqUKS7ua36lCQ5iA7Rw0Rj7WKv4iAjTr4eUvwVhx1qOG4Y3bcoukD+JAdohz
+         Yz/E2eFTSN99PuQSfPkzDXaDdfDrDpXM71hiNmn4bOxBVWxTWOuE+9oRMvkco0k7xNik
+         aKNdi3lGOhhyK625+DZtvlbE5zVQ1nUEre/tUm0KhCXRLrTvZywpD5H0u8Uxbflq5JJn
+         mIyVIRt+uFkIzr/okcf5DAhUcgmA+KsmLlWh30+S7yMlZKtVkdLEqTgTCIN9xxx3rMeg
+         CEQw==
+X-Gm-Message-State: AOJu0YwJYVjVIdN5hWTEfbzllW2bKE3xQZMXmYOD4CrzI+zicwYxpBGT
+	26WXYPeuzwncHhFh3NmZIXXd9h0oSDxA9kikh4n9GqJMGw9I/ysMDtzy
+X-Gm-Gg: ATEYQzx1w5X6+mz7VDPgHS1plctOqgLkv5QjBKm8ynUFm0gp0xi0O2CcoLNjOMNa22V
+	TNAq0dFRq51wUusRbF4wFadUDOYIgA0bBnmznUYbP5t0REAVgC9nOXE+MUGdNgr3DguF1uZRNqM
+	7mF6gVG9AN1+cOZBFLPeWwmre8c2yCtB5cltolE4bo6wVXW3wek3cMiVksb4uJVLAqpBkHe9FjZ
+	Mc45Prm4EsQ+temf8FlqTNmOX4QxgBYcDn7/+L5k+u+VUAONEMa7+BJqBaqKpw73rvdsQHdcpRU
+	P8b6izQF43Kmh32wHd4nDgrpiPDW9xBu2uEJS0gtFXaouigDocf72vrmLcPRognwFiFSS6cjtPR
+	RFGk1QB2pm7Gl1bzkHk8oYm2AxEU/2HrAjgAJGWgbYBB1c5E1Td2Tt6+m6Kbky0T2Xp+u89N+vD
+	AGKWSSst48z0+PWh4A82va3R156GZLE8JT
+X-Received: by 2002:a05:600c:3e14:b0:487:288:1199 with SMTP id 5b1f17b1804b1-488835b75e2mr118120215e9.28.1775118006251;
+        Thu, 02 Apr 2026 01:20:06 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887adc52b2sm62616225e9.12.2026.04.02.01.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 01:20:05 -0700 (PDT)
+Date: Thu, 2 Apr 2026 08:28:52 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jiyong Yang <ksur673@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add more tests for loading
+ insn arrays with offsets
+Message-ID: <ac4oxGJVRYN/K2co@mail.gmail.com>
+References: <20260401161529.681755-1-a.s.protopopov@gmail.com>
+ <20260401161529.681755-3-a.s.protopopov@gmail.com>
+ <680e35d1-04bd-403c-9aca-f2b8a0af9af3@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 02 Apr 2026 10:19:46 +0200
-From: Nicolai Buchwitz <nb@tipi-net.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, justin.chen@broadcom.com, horms@kernel.org,
- opendmb@gmail.com, florian.fainelli@broadcom.com,
- bcm-kernel-feedback-list@broadcom.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v5 4/6] net: bcmgenet: add XDP_TX support
-In-Reply-To: <20260402032722.905829-1-kuba@kernel.org>
-References: <20260328230513.415790-5-nb@tipi-net.de>
- <20260402032722.905829-1-kuba@kernel.org>
-Message-ID: <36659d94abbf4c9a078ce71f64b12bfa@tipi-net.de>
-X-Sender: nb@tipi-net.de
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <680e35d1-04bd-403c-9aca-f2b8a0af9af3@gmail.com>
 
-On 2.4.2026 05:27, Jakub Kicinski wrote:
-> This is an AI-generated review of your patch. The human sending this
-> email has considered the AI review valid, or at least plausible.
-> ---
-> net: bcmgenet: add XDP_TX support
+On 26/04/01 11:38PM, Mykyta Yatsenko wrote:
 > 
-> This commit implements XDP_TX using ring 16, which is dedicated to XDP 
-> TX
-> for isolation from SKB TX queues. It also changes the page_pool DMA
-> direction to bidirectional to allow TX reuse of the existing DMA 
-> mapping.
 > 
->> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c 
->> b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
->> index b45ba2c2857e..687c3b12d44f 100644
->> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
->> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> [ ... ]
->> @@ -2299,11 +2328,96 @@ static struct sk_buff 
->> *bcmgenet_xdp_build_skb(struct bcmgenet_rx_ring *ring,
->>  	return skb;
->>  }
->> 
->> +static bool bcmgenet_xdp_xmit_frame(struct bcmgenet_priv *priv,
->> +				     struct xdp_frame *xdpf, bool dma_map)
->> +{
-> [ ... ]
->> +	} else {
->> +		struct page *page = virt_to_page(xdpf->data);
->> +
->> +		/* For local XDP_TX the caller already prepended the TSB
->> +		 * into xdpf->data/len, so dma_len == xdpf->len.
->> +		 */
->> +		dma_len = xdpf->len;
->> +		mapping = page_pool_get_dma_addr(page) +
->> +			  sizeof(*xdpf) + xdpf->headroom;
+> On 4/1/26 5:15 PM, Anton Protopopov wrote:
+> > A typical series of load instructions for a gotox looks like
+> > 
+> >     r1 = &map + offset1
+> >     r1 += offset2
+> >     r1 = *(r1 + offset3)
+> >     gotox r1
+> > 
+> > Here offset3 is, normally, equal to zero; but this is not guaranteed.
+> > Extend selftests with tests for non-zero offset3 and, while here, also
+> > add tests for negative offsets (the offset1 and the sum of three offsets
+> > still have to be non-negative).
+> > 
+> > Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> > ---
+> >   .../selftests/bpf/prog_tests/bpf_gotox.c      | 114 +++++++++++-------
+> >   1 file changed, 73 insertions(+), 41 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> > index 75b0cf2467ab..594adf698fdb 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
+> > @@ -317,7 +317,7 @@ static void check_ldimm64_off_load(struct bpf_gotox *skel __always_unused)
+> >   static int __check_ldimm64_gotox_prog_load(struct bpf_insn *insns,
+> >   					   __u32 insn_cnt,
+> > -					   __u32 off1, __u32 off2)
+> > +					   int off1, int off2, int off3)
+> >   {
+> >   	const __u32 values[] = {5, 7, 9, 11, 13, 15};
+> >   	const __u32 max_entries = ARRAY_SIZE(values);
+> > @@ -349,16 +349,46 @@ static int __check_ldimm64_gotox_prog_load(struct bpf_insn *insns,
+> >   	/* r1 += off2 */
+> >   	insns[2].imm = off2;
+> > +	/* r1 = *(r1 + off3) */
+> > +	insns[3].off = off3;
+> > +
+> >   	ret = prog_load(insns, insn_cnt);
+> >   	close(map_fd);
+> >   	return ret;
+> >   }
+> > -static void reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, __u32 off1, __u32 off2)
+> > +static void
+> > +allow_offsets(struct bpf_insn *insns, __u32 insn_cnt, int off1, int off2, int off3)
+> > +{
+> > +	LIBBPF_OPTS(bpf_test_run_opts, topts);
+> > +	int prog_fd, err;
+> > +	char s[128] = "";
+> > +
+> > +	prog_fd = __check_ldimm64_gotox_prog_load(insns, insn_cnt, off1, off2, off3);
+> > +	snprintf(s, sizeof(s), "__check_ldimm64_gotox_prog_load(%u,%u,%u)", off1, off2, off3);
 > 
-> When the RX page pool is created in bcmgenet_rx_ring_create_pool(), it 
-> is
-> initialized with .offset = GENET_XDP_HEADROOM. Does the DMA address
-> calculation here need to include this GENET_XDP_HEADROOM offset? 
-> Without it,
-> it appears the hardware might be given a DMA address that is 256 bytes
-> before the actual packet data, transmitting uninitialized memory.
+> here offsets are int, but printed with %u.
 
-The DMA address calculation is correct. page_pool_get_dma_addr()
-returns the base DMA address of the page, not offset by the pool's
-.offset parameter. sizeof(*xdpf) + xdpf->headroom correctly offsets
-to xdpf->data where the TSB starts.
+Yes, thanks, fixed.
 
+> > +	if (!ASSERT_GE(prog_fd, 0, s))
+> > +		return;
+> > +
+> > +	err = bpf_prog_test_run_opts(prog_fd, &topts);
+> > +	if (!ASSERT_OK(err, "test_run_opts err")) {
+> > +		close(prog_fd);
+> > +		return;
+> > +	}
+> > +
+> > +	if (!ASSERT_EQ(topts.retval, (off1 + off2 + off3) / 8, "test_run_opts retval")) {
+> > +		close(prog_fd);
+> > +		return;
+> > +	}
+> > +
+> > +	close(prog_fd);
+> > +}
+> > +
+> > +static void
+> > +reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, __u32 off1, __u32 off2, __u32 off3)
 > 
-> [ ... ]
->> @@ -2311,14 +2425,42 @@ static unsigned int bcmgenet_run_xdp(struct 
->> bcmgenet_rx_ring *ring,
->>  	switch (act) {
->>  	case XDP_PASS:
->>  		return XDP_PASS;
->> +	case XDP_TX:
->> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
->> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
->> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
->> +		 * up xdp->data into the RSB area (which is no longer needed
->> +		 * after the BPF program ran) and zero it.
->> +		 */
->> +		if (xdp->data - xdp->data_hard_start <
->> +		    sizeof(struct status_64)) {
->> +			page_pool_put_full_page(ring->page_pool, rx_page,
->> +						true);
->> +			return XDP_DROP;
->> +		}
->> +		xdp->data -= sizeof(struct status_64);
->> +		xdp->data_meta -= sizeof(struct status_64);
->> +		memset(xdp->data, 0, sizeof(struct status_64));
->> +
->> +		xdpf = xdp_convert_buff_to_frame(xdp);
-> 
-> Does this headroom check account for the additional sizeof(struct 
-> xdp_frame)
-> required by xdp_convert_buff_to_frame()?
+> If offsets can be negative, should these arguments be int rather than __u32,
+> also matching reject_offsets?
 
-The TSB headroom check doesn't account for sizeof(struct xdp_frame), but 
-xdp_update_frame_from_buff() has its own check that returns -ENOSPC if 
-headroom - metasize < sizeof(*xdp_frame). We handle the NULL return by 
-dropping the frame. I'll tighten the check to include sizeof(struct 
-xdp_frame) to fail early.
+Fixed.
 
-> 
-> If metadata is present, xdp->data_meta could potentially underflow
-> xdp->data_hard_start. If the remaining headroom minus metasize becomes
-> negative in xdp_convert_buff_to_frame(), could it undergo integer 
-> promotion
-> to a large unsigned value and bypass the internal safety check? This 
-> might
-> cause the struct xdp_frame to overwrite the newly zeroed status_64 
-> block.
-
-xdp_update_frame_from_buff() handles this - it clamps metasize to >= 0 
-and checks (headroom - metasize) < sizeof(*xdp_frame), returning NULL on 
-insufficient space.
-
-> 
-> [ ... ]
->> @@ -2556,9 +2698,15 @@ static int bcmgenet_rx_poll(struct napi_struct 
->> *napi, int budget)
->>  {
->>  	struct bcmgenet_rx_ring *ring = container_of(napi,
->>  			struct bcmgenet_rx_ring, napi);
->> +	struct bcmgenet_priv *priv = ring->priv;
->>  	struct dim_sample dim_sample = {};
->>  	unsigned int work_done;
->> 
->> +	/* Reclaim completed XDP TX frames (ring 16 has no interrupt) */
->> +	if (priv->xdp_prog)
->> +		bcmgenet_tx_reclaim(priv->dev,
->> +				    &priv->xdp_tx_ring, false);
->> +
-> 
-> What happens to in-flight frames if the XDP program is detached at 
-> runtime
-> and priv->xdp_prog becomes NULL? Will this permanently lose track of 
-> the
-> page pool buffers and DMA mappings since the NAPI poll stops reclaiming
-> them?
-
-Good catch. The reclaim in rx_poll is gated on priv->xdp_prog, so
-in-flight frames on the TX ring would never be reclaimed after detach.
-I'll change the condition to check for pending frames on the ring
-instead.
-
-> 
-> Additionally, if the interface is the target of an XDP_REDIRECT from 
-> another
-> device, a local XDP program is not required and priv->xdp_prog could be
-> NULL. Does this mean the transmitted frames for redirected traffic will
-> never be reclaimed, eventually filling the TX ring?
-
-The redirect-without-local-prog case can't happen since
-xdp_features_set_redirect_target is tied to program attachment.
-But the detach race is real - will fix in v6.
-
-Thanks
-Nicolai
+> [...]
