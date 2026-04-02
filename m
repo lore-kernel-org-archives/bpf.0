@@ -1,296 +1,142 @@
-Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47819C2EA
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 00:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775090965; cv=none; b=IATDdxdbvtvSsMiS66dnohrpIZpVm5ZTbcKw5+tnG7DTl7gdPTM5FJpSNb8J5DWJA+p+xgKRRgeuT3ngWERY0QRZS6iiduck//+cPP8Hj6VpiEl5lPTSnG9L8rmaHzOIEHUBJ9V8BiXbLQP+lj4kL99CPr3/alIS2tcFOffN8as=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775090965; c=relaxed/simple;
-	bh=quIeK+Mo7MQBsJsAeqRrnJkkRUswjh2/gNO5H4ef/Tk=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=QcPVhg4XuX+97j3Rrfy1AKDnZlbozploxbbOaXfzTzMfCms9UYMqyef2eb7rOB4v6HDPCEj8lUSZ/FNf/XB81EwT7k7hksBslsX81GxeKARVl9CCs6tBWMLcUvZnwt9hn6aDU4RMlDpX4KAyfvaMolfOZbLLQ372EkpoeLdn4pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-67e0f16975dso1627249eaf.0
-        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 17:49:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EA42571D7
+	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 00:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775091380; cv=pass; b=JNIskfXu66z2nfy3CQeNJRoN/VAbK2dFrcI1bkCrkQzMstAe9r2slMj7VjM34t09R3Ns6WARR1I8Ddsx4lXprMvf4dM3LPA6M2dRbm/nM+EZLST/1ptJ4Bm9jtriwFn+obC6Mx+aUyWRN+1RKPpZqtgA5Owqesfm1GWA0H6CJ9s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775091380; c=relaxed/simple;
+	bh=nSW0pENPT1VOvv7pn4Z+NqKHMp6r0Gr5gVHgW8Hj4Lk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VnWUTtltl1J07UixwdUwzWpx1oBu+bqkwbVV7GLUUMpZ0AGQ6pZ2Nhq8m3rIW59fL6LqwmNaVXPEG5vmRj8rvCUtuC8G7/cvkfuhi0s6ly7MNmFi2+DmWEu2ACJG8a7cAdIQcOSgyosFDFO+Q2Kd6o8oXa/vhqMTD0WlMNFzvyA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ETOe7s0m; arc=pass smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ETOe7s0m"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-79a74765703so2624867b3.3
+        for <bpf@vger.kernel.org>; Wed, 01 Apr 2026 17:56:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775091378; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EZFs++n5jBbCrJ5xGRGAh5NaxtiW6UwesCPMqIonhTHLRfR5IoyBMgUPMSEkBZjJkP
+         Q7HAWyurg1N7xl5bV9J0Dm6CtZIM0Ug8HrLPu/lvzqbAQp4yZ/1m2kcUeAvbY5qVOz8e
+         OeaUieU/klyMDdTIUwrZtlRwC7Fy6XC8KWMRqI71CTIdoBQunwgA8kfftNMwth4wSGz6
+         lsm9sj5MmnIYzojhuaK90AySV94ef8c81BgwA4U57a+ILx9B9j97CZCiylcJiXIr/VgR
+         vVJgJHUzbu1tzQfCun7xXhbC6wUnDf+5Yv+euQELJTHWfgxNGUbh11/fqnmUkhPPD58Y
+         /lRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=o9elT+AFw/LdAc+ufjVDYxNJubwh8yJqZdh/dGlBGIA=;
+        fh=v0/mufKAUFoWgQroqb0e/REd+X2hnX2W+mexrweD1KQ=;
+        b=V7486FDIPrbHQzAPBXu30jDFXgmFECYRftdJgIdmfsbF9ZglsNLkx8MH0xk0hCTHEY
+         8CZwT2hgdbBarwxQQgKLWAxqpm+UCpiWR6UhMcbH4EY/85XNPh3Lxd7npX5b222thISj
+         Y1hkmiUygd0yw8NePwIUP1MevuytHEmeHggBQ6AwDkWNt2ehyg4j7FtmPQc56dwNSSkX
+         5frwBuivo/9YD7+x64HHEbtzNwTpxNr9M0hgO9BJnbE0pkf7VyKx6UH7n21E47wAM4+2
+         bmiytk9EmirjVK+uDHTgQTCUZzqiN0k4APiCXMcsQkADE/rJoLWUmeP4ZThIG72oDu/K
+         fdfA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775091378; x=1775696178; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o9elT+AFw/LdAc+ufjVDYxNJubwh8yJqZdh/dGlBGIA=;
+        b=ETOe7s0mlDof7bh0gR79GyEdn49dYazb0qFxPGmHiZ328nsOnGvjkmgoKtQ/seTTD/
+         0qdPB9TH3wGzpl8rvkgXHyzN93HTTt1CZ4b08AsO/ci9uA2u3RK5kRdDq6GqAUs2Du/B
+         y8F2wTCEMFw515QVf7G/qKIrPlNJOyDiWTuCnD45+hKbfcN4/e0tDy6i4WBbAkD4K7St
+         KLneSfTCYanSo8o79HS3Eg8+t2HWSkB9pKfFWCrLogjTLrDe8ERVC8f15KsByFLFWfNg
+         /ntQlMLCEjdAkdQcMeIXKuMheQ3ELg99ifZXilEdPZcRDZ/8niPki7h4Ha3hfYvH76tr
+         QQPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775090962; x=1775695762;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UZ9s30YRo/jePoB2r5BZAQsb8eyW6fRXRgrpJnfnwVw=;
-        b=ghSCmatzytYN7Xm9zdpjjDtdHpbeY1BmXEuhs3DaiqpUL/zZuX1G92F3osRMqp0Tej
-         /I3CridhD6nLIBHqPAgbJK9qyxwzRGpIzSe9EpWYG59VgF3qNfpTyOeMNTUoh1dcWBnt
-         ETTM5wQ0blfaTaeHcOpUewJmkfBYrb0LeqeHSaax/ymqUDinOFRFQkRMGNniqWjs5LM1
-         9lGYnk8zi4zZJOAVuc+m0+vKse91H46nCpqL/4a73SbMGMONdCDBdaOLpxgt/XHCi+XR
-         ErdSwPgV13WiE/cghzR1vX+X2FSnoVPX3PaiCBz1YKfDyiU4JXYkfxiyT8i7dMyNQM0C
-         QEuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWe7XeQC1WXYrvYcnbGRrZvR2bbdOLTeRRQiI5ZgnlHkwuBsAhg9Agpo1dSMOyKxKAiyfo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz98HtWPIOKIX6pqDPk/gag+JmhZ1qO8t32i+1g0+NY0Syr//eh
-	jr+XlFNucDq98wXSyXbcTQWgNNM6mHsutM8gATn+YYjhsNXx3aEOFFyRiOz99474K9CDVzW3KGM
-	RkUdycRrIVxWD0+ilY9qPVslse7j+PUjWaszGVCPsrTdpSoDBDOtIKlDllg4=
+        d=1e100.net; s=20251104; t=1775091378; x=1775696178;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=o9elT+AFw/LdAc+ufjVDYxNJubwh8yJqZdh/dGlBGIA=;
+        b=dxpdiZDtRyhbhYqX/JYb4qJjIrn6wm3l5b8IIiilulP0loMBEgWzml/daYvFajuM2O
+         RIocqIrLEw9OzAxFxSRhUTxHCm2X3+u7cAbKMa6x4gPmicUEYlVza2VyIVZ2oQqX8peZ
+         qCegzuPTk5stjH7KCDIP0ABErk5moYjsxEhAiovLJeCWjkRnK4hAJX4AuBg9DM6Y/fOJ
+         0xNn5BmrBkFlacrqifKDQjp6GB6L0x3EwE+CVYvjQduPCrURBazv6u1L7jElwa/y6EOg
+         p1lm9ECNvp0TzhH5wDg701gWhNz8KmKXJX2H6/ZwptjQBiEZJ9C1R+DT28nmSSJT3SiU
+         gLDg==
+X-Forwarded-Encrypted: i=1; AJvYcCXLjAaJWjy9hyKyjhFlxKo0KTNnpWmZ1kw8NWHAJKKD4hFlE6eanqSWSfWVv0Dy0ABSN3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4QZX7YfjNRq/JCSf6iLCYH8wbjuVbcKSzLNSwO73GzRYQAZbp
+	A34tlIbfn2qDoVF9eUmYhyI2dskYwsB/FF33O0mcUIMk5SV9CPNyoDe0bs0d2cofdX4zAP625Cz
+	WqhueFcD5OxEeYCXtqmAwiHwF41o6iig=
+X-Gm-Gg: ATEYQzyv8l+wq3WI0lXbrvmFN3YI88naHo1seWKitIaMQ/ygc86nXisYymw4aZZYF73
+	90Ch1pSEXuf8tKEzr55e+vSvdc/WhFFZEpeH4EAj9VBzDZcYbT5iKUl1ATvZ93nMy4VfwELGssS
+	9LTixilrgo120As5Ay24BAXGsymx+OdpMp9REr6/x2hMHP1u7h+w4/qHl0G1ewWVdfoKVvxR+Qg
+	p65nPuAlr2he/NR4xIkJfZVqAtFzpQYx7Z+2JAYgcpfLFAce4o2/azqi1sppFaXXPCvoENIc3MW
+	jKdfmRMUjMtiub/krufST/k25vIKfjm8AOiQQVOR2hJIwA49/Ww=
+X-Received: by 2002:a05:690c:6889:b0:7a2:3d38:3391 with SMTP id
+ 00721157ae682-7a23d3837b9mr57744517b3.34.1775091377855; Wed, 01 Apr 2026
+ 17:56:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1986:b0:67f:ab5d:1748 with SMTP id
- 006d021491bc7-67fabd020c7mr3101243eaf.48.1775090962240; Wed, 01 Apr 2026
- 17:49:22 -0700 (PDT)
-Date: Wed, 01 Apr 2026 17:49:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69cdbd12.050a0220.70c3a.0007.GAE@google.com>
-Subject: [syzbot] [net?] [bpf?] KASAN: slab-use-after-free Read in __sk_msg_recvmsg
-From: syzbot <syzbot+431f9a9e3f5227fbb904@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
-	horms@kernel.org, jakub@cloudflare.com, john.fastabend@gmail.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <20260401192615.3548627-2-bestswngs@gmail.com>
+In-Reply-To: <20260401192615.3548627-2-bestswngs@gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Thu, 2 Apr 2026 08:56:06 +0800
+X-Gm-Features: AQROBzDfy6sAxRALQZ74uN3RO872yt2rDNVPnBo_8Q2-QXTjVvJZJfQ0Z_-IL_4
+Message-ID: <CABFUUZH2COQ297MoyL5A8=Fo6eqbr7wdp=euqxFt4mY1xoMawA@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: fix end-of-list detection in cgroup_storage_get_next_key()
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, Xiang Mei <xmei5@asu.edu>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Thu, Apr 2, 2026 at 3:31=E2=80=AFAM Weiming Shi <bestswngs@gmail.com> wr=
+ote:
+>
+> list_next_entry() never returns NULL -- when the current element is the
+> last entry it wraps to the list head via container_of(). The subsequent
+> NULL check is therefore dead code and get_next_key() never returns
+> -ENOENT for the last element, instead reading storage->key from a bogus
+> pointer that aliases internal map fields and copying the result to
+> userspace.
+>
+> Replace it with list_entry_is_head() so the function correctly returns
+> -ENOENT when there are no more entries.
+>
+> Fixes: de9cbbaadba5 ("bpf: introduce cgroup storage maps")
+> Reported-by: Xiang Mei <xmei5@asu.edu>
+> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> ---
+>  kernel/bpf/local_storage.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+> index 8fca0c64f7b1..23267213a17f 100644
+> --- a/kernel/bpf/local_storage.c
+> +++ b/kernel/bpf/local_storage.c
+> @@ -270,7 +270,7 @@ static int cgroup_storage_get_next_key(struct bpf_map=
+ *_map, void *key,
+>                         goto enoent;
+>
+>                 storage =3D list_next_entry(storage, list_map);
+> -               if (!storage)
+> +               if (list_entry_is_head(storage, &map->list, list_map))
+>                         goto enoent;
+>         } else {
+>                 storage =3D list_first_entry(&map->list,
+> --
+> 2.43.0
+>
+>
+Looks correct to me. It might also be worth adding a selftest for this
+cornet case.
 
-syzbot found the following issue on:
-
-HEAD commit:    93d04e76bcf1 Merge branch 'r8152-add-helper-functions-for-..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14fde46a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=71d49d824b43a0d9
-dashboard link: https://syzkaller.appspot.com/bug?extid=431f9a9e3f5227fbb904
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b9baba580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152c5e26580000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/953c48b40f73/disk-93d04e76.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/edb39d99bd41/vmlinux-93d04e76.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/656d4ad35e4a/bzImage-93d04e76.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+431f9a9e3f5227fbb904@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: slab-use-after-free in __sk_msg_recvmsg+0x19b/0xe70 net/core/skmsg.c:431
-Read of size 8 at addr ffff88807eeac2b0 by task syz.0.31/6071
-
-CPU: 0 UID: 0 PID: 6071 Comm: syz.0.31 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/18/2026
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0xba/0x230 mm/kasan/report.c:482
- kasan_report+0x117/0x150 mm/kasan/report.c:595
- __sk_msg_recvmsg+0x19b/0xe70 net/core/skmsg.c:431
- udp_bpf_recvmsg+0x196/0xac0 net/ipv4/udp_bpf.c:83
- sock_recvmsg_nosec net/socket.c:1071 [inline]
- sock_recvmsg+0x155/0x1b0 net/socket.c:1093
- ____sys_recvmsg+0x1e6/0x4a0 net/socket.c:2805
- ___sys_recvmsg+0x215/0x590 net/socket.c:2847
- do_recvmmsg+0x334/0x800 net/socket.c:2942
- __sys_recvmmsg net/socket.c:3016 [inline]
- __do_sys_recvmmsg net/socket.c:3039 [inline]
- __se_sys_recvmmsg net/socket.c:3032 [inline]
- __x64_sys_recvmmsg+0x198/0x250 net/socket.c:3032
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f4a3579c819
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4a365f2028 EFLAGS: 00000246 ORIG_RAX: 000000000000012b
-RAX: ffffffffffffffda RBX: 00007f4a35a16180 RCX: 00007f4a3579c819
-RDX: 0000000000000012 RSI: 0000200000000400 RDI: 0000000000000003
-RBP: 00007f4a35832c91 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000040000021 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f4a35a16218 R14: 00007f4a35a16180 R15: 00007ffda3b0e6c8
- </TASK>
-
-Allocated by task 6069:
- kasan_save_stack mm/kasan/common.c:57 [inline]
- kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
- poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
- __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:415
- kasan_kmalloc include/linux/kasan.h:263 [inline]
- __kmalloc_cache_noprof+0x31c/0x660 mm/slub.c:5380
- kmalloc_noprof include/linux/slab.h:950 [inline]
- kzalloc_noprof include/linux/slab.h:1188 [inline]
- alloc_sk_msg net/core/skmsg.c:525 [inline]
- sk_psock_skb_ingress_self+0x5e/0x370 net/core/skmsg.c:627
- sk_psock_verdict_apply net/core/skmsg.c:1062 [inline]
- sk_psock_verdict_recv+0x7d9/0x8d0 net/core/skmsg.c:1260
- udp_read_skb+0x5d9/0x6b0 net/ipv4/udp.c:2014
- sk_psock_verdict_data_ready+0x12d/0x590 net/core/skmsg.c:1281
- __udp_enqueue_schedule_skb+0xc4b/0x12e0 net/ipv4/udp.c:1745
- __udp_queue_rcv_skb net/ipv4/udp.c:2311 [inline]
- udp_queue_rcv_one_skb+0x831/0x1230 net/ipv4/udp.c:2401
- __udp4_lib_mcast_deliver+0xad7/0xb70 net/ipv4/udp.c:2513
- udp_rcv+0xcc2/0x24c0 net/ipv4/udp.c:2638
- ip_protocol_deliver_rcu+0x282/0x440 net/ipv4/ip_input.c:207
- ip_local_deliver_finish+0x3bb/0x6f0 net/ipv4/ip_input.c:241
- NF_HOOK+0x336/0x3c0 include/linux/netfilter.h:318
- dst_input include/net/dst.h:480 [inline]
- ip_sublist_rcv_finish+0x1f0/0x240 net/ipv4/ip_input.c:623
- ip_list_rcv_finish net/ipv4/ip_input.c:667 [inline]
- ip_sublist_rcv+0x5c6/0xa70 net/ipv4/ip_input.c:683
- ip_list_rcv+0x3f1/0x450 net/ipv4/ip_input.c:717
- __netif_receive_skb_list_ptype net/core/dev.c:6233 [inline]
- __netif_receive_skb_list_core+0x7e5/0x810 net/core/dev.c:6280
- __netif_receive_skb_list net/core/dev.c:6332 [inline]
- netif_receive_skb_list_internal+0x995/0xcf0 net/core/dev.c:6423
- netif_receive_skb_list+0x55/0x4b0 net/core/dev.c:6475
- xdp_recv_frames net/bpf/test_run.c:269 [inline]
- xdp_test_run_batch net/bpf/test_run.c:350 [inline]
- bpf_test_run_xdp_live+0x1946/0x1cf0 net/bpf/test_run.c:379
- bpf_prog_test_run_xdp+0x81c/0x1160 net/bpf/test_run.c:1397
- bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4722
- __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6246
- __do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6339
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Freed by task 6070:
- kasan_save_stack mm/kasan/common.c:57 [inline]
- kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
- kasan_save_free_info+0x46/0x50 mm/kasan/generic.c:584
- poison_slab_object mm/kasan/common.c:253 [inline]
- __kasan_slab_free+0x5c/0x80 mm/kasan/common.c:285
- kasan_slab_free include/linux/kasan.h:235 [inline]
- slab_free_hook mm/slub.c:2685 [inline]
- slab_free mm/slub.c:6165 [inline]
- kfree+0x1c1/0x630 mm/slub.c:6483
- kfree_sk_msg include/linux/skmsg.h:418 [inline]
- __sk_msg_recvmsg+0xc7e/0xe70 net/core/skmsg.c:491
- udp_bpf_recvmsg+0x196/0xac0 net/ipv4/udp_bpf.c:83
- sock_recvmsg_nosec net/socket.c:1071 [inline]
- sock_recvmsg+0x155/0x1b0 net/socket.c:1093
- ____sys_recvmsg+0x1e6/0x4a0 net/socket.c:2805
- ___sys_recvmsg+0x215/0x590 net/socket.c:2847
- do_recvmmsg+0x334/0x800 net/socket.c:2942
- __sys_recvmmsg net/socket.c:3016 [inline]
- __do_sys_recvmmsg net/socket.c:3039 [inline]
- __se_sys_recvmmsg net/socket.c:3032 [inline]
- __x64_sys_recvmmsg+0x198/0x250 net/socket.c:3032
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-The buggy address belongs to the object at ffff88807eeac000
- which belongs to the cache kmalloc-1k of size 1024
-The buggy address is located 688 bytes inside of
- freed 1024-byte region [ffff88807eeac000, ffff88807eeac400)
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7eea8
-head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0xfff00000000040(head|node=0|zone=1|lastcpupid=0x7ff)
-page_type: f5(slab)
-raw: 00fff00000000040 ffff88813fea6dc0 dead000000000100 dead000000000122
-raw: 0000000000000000 0000000800100010 00000000f5000000 0000000000000000
-head: 00fff00000000040 ffff88813fea6dc0 dead000000000100 dead000000000122
-head: 0000000000000000 0000000800100010 00000000f5000000 0000000000000000
-head: 00fff00000000003 ffffea0001fbaa01 00000000ffffffff 00000000ffffffff
-head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd2820(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 176, tgid 176 (kworker/u8:7), ts 108779589894, free_ts 108254079914
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x231/0x280 mm/page_alloc.c:1889
- prep_new_page mm/page_alloc.c:1897 [inline]
- get_page_from_freelist+0x24dc/0x2580 mm/page_alloc.c:3962
- __alloc_frozen_pages_noprof+0x18d/0x380 mm/page_alloc.c:5250
- alloc_slab_page mm/slub.c:3292 [inline]
- allocate_slab+0x77/0x660 mm/slub.c:3481
- new_slab mm/slub.c:3539 [inline]
- refill_objects+0x331/0x3c0 mm/slub.c:7175
- refill_sheaf mm/slub.c:2812 [inline]
- __pcs_replace_empty_main+0x2e6/0x730 mm/slub.c:4615
- alloc_from_pcs mm/slub.c:4717 [inline]
- slab_alloc_node mm/slub.c:4851 [inline]
- __do_kmalloc_node mm/slub.c:5259 [inline]
- __kmalloc_noprof+0x474/0x760 mm/slub.c:5272
- kmalloc_noprof include/linux/slab.h:954 [inline]
- kzalloc_noprof include/linux/slab.h:1188 [inline]
- ieee802_11_parse_elems_full+0x159/0x2ab0 net/mac80211/parse.c:1051
- ieee802_11_parse_elems net/mac80211/ieee80211_i.h:2496 [inline]
- ieee80211_rx_mgmt_probe_beacon net/mac80211/ibss.c:1565 [inline]
- ieee80211_ibss_rx_queued_mgmt+0x4ca/0x2ce0 net/mac80211/ibss.c:1596
- ieee80211_iface_process_skb net/mac80211/iface.c:1757 [inline]
- ieee80211_iface_work+0x845/0x1380 net/mac80211/iface.c:1811
- cfg80211_wiphy_work+0x2ab/0x4a0 net/wireless/core.c:513
- process_one_work kernel/workqueue.c:3276 [inline]
- process_scheduled_works+0xb6e/0x18c0 kernel/workqueue.c:3359
- worker_thread+0xa53/0xfc0 kernel/workqueue.c:3440
- kthread+0x388/0x470 kernel/kthread.c:436
- ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-page last free pid 6064 tgid 6061 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- __free_pages_prepare mm/page_alloc.c:1433 [inline]
- __free_frozen_pages+0xc2b/0xdb0 mm/page_alloc.c:2978
- __slab_free+0x263/0x2b0 mm/slub.c:5573
- qlink_free mm/kasan/quarantine.c:163 [inline]
- qlist_free_all+0x97/0x100 mm/kasan/quarantine.c:179
- kasan_quarantine_reduce+0x148/0x160 mm/kasan/quarantine.c:286
- __kasan_slab_alloc+0x22/0x80 mm/kasan/common.c:350
- kasan_slab_alloc include/linux/kasan.h:253 [inline]
- slab_post_alloc_hook mm/slub.c:4538 [inline]
- slab_alloc_node mm/slub.c:4866 [inline]
- __do_kmalloc_node mm/slub.c:5259 [inline]
- __kmalloc_noprof+0x316/0x760 mm/slub.c:5272
- kmalloc_noprof include/linux/slab.h:954 [inline]
- iovec_from_user+0x87/0x250 lib/iov_iter.c:1321
- __import_iovec+0x163/0x7e0 lib/iov_iter.c:1375
- import_iovec+0x73/0xa0 lib/iov_iter.c:1440
- copy_msghdr_from_user net/socket.c:2522 [inline]
- recvmsg_copy_msghdr net/socket.c:2771 [inline]
- ___sys_recvmsg+0x4bd/0x590 net/socket.c:2843
- do_recvmmsg+0x334/0x800 net/socket.c:2942
- __sys_recvmmsg net/socket.c:3016 [inline]
- __do_sys_recvmmsg net/socket.c:3039 [inline]
- __se_sys_recvmmsg net/socket.c:3032 [inline]
- __x64_sys_recvmmsg+0x198/0x250 net/socket.c:3032
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Memory state around the buggy address:
- ffff88807eeac180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807eeac200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88807eeac280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                     ^
- ffff88807eeac300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807eeac380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Reviewed by Sun Jian <sun.jian.kdev@gmail.com>
