@@ -1,126 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519E73BD637;
-	Fri,  3 Apr 2026 13:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE98371064
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 13:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775223334; cv=none; b=K01ffCpHRDO9+/Hyq0Rj930fm+PR3ul5KKVLpIC+wEks8f/0E5TSmks1OH0m/0U9tgwtAnVyuoytK6RLB5bpRIRgrWrkUiAVyK/lxdrlsfWn02IdhRzwpEAo5Mpq5ayZK9l700UsnjdWVeWjXYF2E0T6Df8BCsbOp9HlVaH5mss=
+	t=1775223596; cv=none; b=mXwH+8DiJX6Spx1wWXvcq2W+xFjfsyCpDiUcNtWnpK94AJ78W1lDBZri1cqx0cVZu4l4lwH7OIeTwitV98GibxYAMDMcsrIEkbWaa0Pxl+Zb1hlSgkgtDl7gqTvD6rUDm0l/APZml++qu67+U+AZqovsDbhsFbYCmw28VOYNM58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775223334; c=relaxed/simple;
-	bh=Ovm9TZb/0nEL4GH7WWbcl90FXw3RSWm/2CqJCc2BVo0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=YRkbTv1822zWhyboUxsPSMv/OvFmej8EqEyi/2r1EAskFzNVkh60WbbcfY42RP9ck95Cor1I9zXxsSr00/WB69uC9BFNcquL7+j0iamO1zFuLxVn9xp62BZ/NzrSp81n4eTdE3nX6riXnNgtpwr4EvQ5/R3dfYvYhGqz25qAtT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vNZF/2Fp; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775223596; c=relaxed/simple;
+	bh=aKi9QvD4NSMtHGws7bjv0WFfGrz+D6piWg71vQX7Xb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h3i35UCaJ78hCYcEjQTv7Z0hMCYQXHBDv/KAtbAaA4YGGN5wZrqcQ9vLZ06MEpQBInJzl0t6QRyICbHhFOKurT/5Od++vZRVPTQG8JyWWCnVFZL7Qf+r/sdcTIXbalneKCsfT/UWZnsIUxHKYuZvEPnxkJzghOnkrAEHSAZmdE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V2cCLQsQ; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vNZF/2Fp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9FEDC4CEF7;
-	Fri,  3 Apr 2026 13:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775223334;
-	bh=Ovm9TZb/0nEL4GH7WWbcl90FXw3RSWm/2CqJCc2BVo0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=vNZF/2Fpe77R2ecNr7ciFtlCTxufRU3gIoVKiuu1TOCR/aBoHFZxYlpbeTLQXtGel
-	 f1SEYqNgk/N5J1jOQcI/5NC6OrsF+3NBoVV2NmH1ANxF4GR4Ul1W+I4FwQHYZqmCwf
-	 yPM7JXsBHhYKc8RNDJMOhGK0RHN3iOJr0eiXm0PjhdCqHcdwl40WuRR4i5438pu8X+
-	 PzxUKDcmn2c6fwsBquavfKbsb0jrkDk510zyJyiBCyE+QtPgUXiOLiFwG9idk+4dFA
-	 MMZCT4E30IOS4YNJCALrpTT+FJNJiEfsx8V7MERGfMO2Mt/BE2BsRqC8C6V/zoZF0E
-	 Y9414WMvq9wDA==
-Content-Type: multipart/mixed; boundary="===============4136821603026896866=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V2cCLQsQ"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35c1a131946so1783294a91.0
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 06:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775223594; x=1775828394; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nNGfa8v0Q0l6gW/7EM6e1IO9RvIGhdDmwz5p+PYWdJE=;
+        b=V2cCLQsQYTSAcHA6zUlwBZXvmwqRuuBR9l9tli1G+kkCxw6WAXA8c+2QC1fcGWu7Pd
+         kASpHyA68oaMzK1tOlXPs5CZylR2t0SwLFCLFuUjB0+98HQAyaDIAnRP0WlSCLkOczdS
+         tByoaAj25DJs4KqyjLY2t7Mzd3mSa3XBaFz+akvKrpAAv9VeTwZ5hqFwHPKR6MLyqg4M
+         rAyfWRE9MscZKBgWgfnKyCW6JkjX6MTwvJpx9WorGt7yJ7Rhm4mCVjvEU8BFlc1brizJ
+         C9ImWx2m5/4HWeI9aXm+KqwG0yKHYO6dqxENN1F+3W1hQj8Bq68O9Mf05z63RCa9/5DE
+         +kEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775223594; x=1775828394;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nNGfa8v0Q0l6gW/7EM6e1IO9RvIGhdDmwz5p+PYWdJE=;
+        b=UDbpXvcssR+tApsOtVZkrsEBfraMPMgTe4HqlhLd8C6Bg6gJ/MX5qVdkQcE/fA3Rus
+         KmiQtLFZMErEnvNhN9HBLoRn84s11Q51yXXwlnjaYXTJ/PbXxuKpCvPXkrIvYglUra86
+         f/r6uw2UEPIrIAkNxvgLr3Wgis+IjVW53WOYNcHsRmNVKZt70dvhy+fAyIm96fkwjv5a
+         VnQ4VI97FYVQVhRH/KujLpHxRD/zBpsx81oZVxJfYFu1aXGduWdTWU46UWDHMoLNPiIZ
+         ALmcqFjO/BD0m6fb0fT72QMFOdMH8uKfYa5GdqdRsmfoGd7VjYnssMuMb67TTDVkI4Pp
+         JfjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWLHPR1ZTR8/1K6/lksiPlo6s/4bd137vZ50UQspdFmVZzm5hJf90nL3r/pjUgA6OGyws0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf+6E04vdg3k0l2b5i3WT3AGYVJsa0oqvejAvDvynR1I+Zc6He
+	0ZO9GyB410NW48SjiagUw5mypUs6A67gHu7bhQpGE68K0A6eKeMB8M/d
+X-Gm-Gg: AeBDieubVXWF777GVx0dNktOfd3Da62GRMPnD1Db0cRDKcfesYaQdIxWUJSczyx6XXN
+	11mWxTy1dLb8c+VfYJ/TKFvkpzJ0M3QYxjll+JR188P3bknfA7uIMSQTijKzbKBx+bpR0lKg1Sc
+	eDG3TZN+94Zzf37m/JSBJwZyrUwGYu2MaRX1+koh3+H15sTSIoittpxpdVINFPg4ia0jjk479z7
+	7TAAjbJMsSzonuR2FVvNhFReMwIKTZj6xdLPqRoyY3XDyKqSxRkGHRGylNiNQbUXspdLVlITrt+
+	tjGaIo1RyGecMiP38XCGY/475v6eGQL0ZHv7k3Na2TgL5SYupXnMGO9U1wKW4zCScej59fT8Nl2
+	ZOjG88hC96SsTdguVUb52qC7Wa1Ug9W6DpnSxxHERpKVL6SZcahANBz5Mg7+niRna9E+9ok0B3G
+	0faHO2vAiq/EpcXgkxBfFc3E9DR63UY7sl0fJpGXzWBT3iYUkt67nKM3cy+XgW
+X-Received: by 2002:a17:90b:2f88:b0:35c:10e8:1a72 with SMTP id 98e67ed59e1d1-35dd67781a0mr5970803a91.7.1775223594387;
+        Fri, 03 Apr 2026 06:39:54 -0700 (PDT)
+Received: from SLSGDTSWING002 ([129.126.109.177])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe9377b7sm14215883a91.10.2026.04.03.06.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 06:39:53 -0700 (PDT)
+Date: Fri, 3 Apr 2026 21:39:47 +0800
+From: Weiming Shi <bestswngs@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, sun.jian.kdev@gmail.com
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org, Xiang Mei <xmei5@asu.edu>
+Subject: Re: [PATCH bpf] bpf: fix end-of-list detection in
+ cgroup_storage_get_next_key()
+Message-ID: <ac_DI5edNfHp8NOi@SLSGDTSWING002>
+References: <20260401192615.3548627-2-bestswngs@gmail.com>
+ <CABFUUZH2COQ297MoyL5A8=Fo6eqbr7wdp=euqxFt4mY1xoMawA@mail.gmail.com>
+ <ac-7FQM9UDm7tYxF@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6937abe448cc9370e4868f3148b73af303b47f96274b38da24a35aa975f3f3f3@mail.kernel.org>
-In-Reply-To: <20260403124412.37449-2-varunrmallya@gmail.com>
-References: <20260403124412.37449-2-varunrmallya@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v3 1/3] libbpf: Auto-upgrade uprobes to multi-uprobes when supported
-From: bot+bpf-ci@kernel.org
-To: varunrmallya@gmail.com,bpf@vger.kernel.org,jolsa@kernel.org,leon.hwang@linux.dev,andrii@kernel.org,alan.maguire@oracle.com
-Cc: ast@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,daniel@iogearbox.net,linux-kernel@vger.kernel.org,memxor@gmail.com,song@kernel.org,menglong8.dong@gmail.com,varunrmallya@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  3 Apr 2026 13:35:33 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ac-7FQM9UDm7tYxF@mail.gmail.com>
 
---===============4136821603026896866==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 42bdba4efd0c..bc749b9c291e 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -12812,6 +12830,27 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
->  		func_offset += sym_off;
->  	}
->
-> +	/* This provides backwards compatibility to programs using uprobe, but
-> +	 * have been auto-upgraded to multi uprobe.
-> +	 */
-> +	if (prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI) {
-> +		LIBBPF_OPTS(bpf_uprobe_multi_opts, multi_opts);
-> +		__u64 bpf_cookie;
+On 26-04-03 15:05, Paul Chaignon wrote:
+> On Thu, Apr 02, 2026 at 08:56:06AM +0800, sun jian wrote:
+> > On Thu, Apr 2, 2026 at 3:31 AM Weiming Shi <bestswngs@gmail.com> wrote:
+> > >
+> > > list_next_entry() never returns NULL -- when the current element is the
+> > > last entry it wraps to the list head via container_of(). The subsequent
+> > > NULL check is therefore dead code and get_next_key() never returns
+> > > -ENOENT for the last element, instead reading storage->key from a bogus
+> > > pointer that aliases internal map fields and copying the result to
+> > > userspace.
+> > >
+> > > Replace it with list_entry_is_head() so the function correctly returns
+> > > -ENOENT when there are no more entries.
+> > >
+> > > Fixes: de9cbbaadba5 ("bpf: introduce cgroup storage maps")
+> > > Reported-by: Xiang Mei <xmei5@asu.edu>
+> > > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> 
+> Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
+> 
+> > > ---
+> > >  kernel/bpf/local_storage.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+> > > index 8fca0c64f7b1..23267213a17f 100644
+> > > --- a/kernel/bpf/local_storage.c
+> > > +++ b/kernel/bpf/local_storage.c
+> > > @@ -270,7 +270,7 @@ static int cgroup_storage_get_next_key(struct bpf_map *_map, void *key,
+> > >                         goto enoent;
+> > >
+> > >                 storage = list_next_entry(storage, list_map);
+> > > -               if (!storage)
+> > > +               if (list_entry_is_head(storage, &map->list, list_map))
+> > >                         goto enoent;
+> > >         } else {
+> > >                 storage = list_first_entry(&map->list,
+> > > --
+> > > 2.43.0
+> > >
+> > >
+> > Looks correct to me. It might also be worth adding a selftest for this
+> > cornet case.
+> 
+> I agree, it would be good to cover this in selftests. You can use the
+> following diff for that:
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+> index cf395715ced4..5451a43b3563 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+> @@ -86,6 +86,11 @@ void test_cgroup_storage(void)
+>         err = SYS_NOFAIL(PING_CMD);
+>         ASSERT_OK(err, "sixth ping");
+> 
+> +       err = bpf_map__get_next_key(skel->maps.cgroup_storage, &key, &key,
+> +                                   sizeof(key));
+> +       ASSERT_ERR(err, "bpf_map__get_next_key should fail");
+> +       ASSERT_EQ(errno, ENOENT, "no second key");
 > +
-> +		multi_opts.cnt = 1;
-> +		multi_opts.retprobe = OPTS_GET(opts, retprobe, false);
-> +		if (func_offset || func_name)
-> +			multi_opts.offsets = &func_offset;
-> +		if (ref_ctr_off)
-> +			multi_opts.ref_ctr_offsets = &ref_ctr_off;
-> +
-> +		bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
-> +		if (bpf_cookie)
-> +			multi_opts.cookies = &bpf_cookie;
-> +
-> +		return bpf_program__attach_uprobe_multi(prog, pid, binary_path,
-> +							NULL, &multi_opts);
-> +	}
->  	legacy = determine_uprobe_perf_type() < 0;
->  	switch (attach_mode) {
->  	case PROBE_ATTACH_MODE_LEGACY:
+>  cleanup_progs:
+>         cgroup_storage__destroy(skel);
+>  cleanup_network:
+> 
+> 
+> > 
+> > Reviewed by Sun Jian <sun.jian.kdev@gmail.com>
+> > 
 
-Should the redirect to bpf_program__attach_uprobe_multi() take attach_mode
-into account?
-
-The attach_mode field is extracted from opts earlier in this function:
-
-    attach_mode = OPTS_GET(opts, attach_mode, PROBE_ATTACH_MODE_DEFAULT);
-
-but the multi-uprobe redirect returns before the switch(attach_mode) is
-ever reached. If a caller explicitly passes PROBE_ATTACH_MODE_LEGACY or
-PROBE_ATTACH_MODE_PERF, that request is silently ignored and the
-attachment goes through the multi-uprobe path regardless.
-
-The kernel's __perf_event_set_bpf_prog() does not check
-prog->expected_attach_type for KPROBE programs, so perf-event-based
-attachment would still work for auto-upgraded programs if the code were
-to fall through.
-
-For example, test_attach_probe_manual() in
-prog_tests/attach_probe.c calls bpf_program__attach_uprobe_opts()
-with PROBE_ATTACH_MODE_LEGACY and PROBE_ATTACH_MODE_PERF on programs
-using SEC("uprobe") and SEC("uretprobe") from
-progs/test_attach_probe_manual.c. After auto-upgrade, these tests
-would silently use multi-uprobe attachment instead of exercising the
-requested attachment modes.
-
-Would it make sense to skip the multi-uprobe redirect when attach_mode
-is explicitly set to a non-default value, something like:
-
-    if (prog->expected_attach_type == BPF_TRACE_UPROBE_MULTI &&
-        attach_mode == PROBE_ATTACH_MODE_DEFAULT) {
-
-This would preserve the transparent upgrade for the common case while
-still respecting explicit attachment mode requests.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23947048141
---===============4136821603026896866==--
+Thanks for the your review and the selftest suggestion! I've incorporated it in v2.
