@@ -1,64 +1,64 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4253C2C0F8C
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 13:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070EB2C0F8C
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 13:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775223046; cv=none; b=JSRgZ0l//18szI0md/a1VSsiuGqvGhX9nuBy4lpx2sMYiXFsJPNM8qzn0edhuFQDn8ucbcjjdl04kR00hUDVCZK/H937/2THt9x0JKu1EBdP5bhHjwPixTN+Txb1O5mS7cmeGJWvPgvTTDr14GZZD3/q3d64BoXi8xPff3xAb5k=
+	t=1775223058; cv=none; b=SJginSaJw2QVpgFuH5PxKFKdrq88ufqG0jjygdUind6cZF32ORr7pleNOIKnebCsHsa/C3tMlz14/z5uJgKeJO4p1FLxoaiESBn24FqYHbKR3oYW3Pl0XvVMkgD57s1fzGJwdMMfnhILbxTLndfVDXnOaLWeP8SNx+e7aBk40Zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775223046; c=relaxed/simple;
-	bh=XPW+jdegZbsSXUyY3E1GbCwVspcmnVrMIrTsdU2b2wg=;
+	s=arc-20240116; t=1775223058; c=relaxed/simple;
+	bh=NBAa8KvnhLAyM5tCDtL3eb8ZnD/4h9/mUW9crObTVAU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SZsXO9O5mHB4NE13mJ/pzY4tmo1HWvPldGvClZZkgVO4XDP0te14eykP25T4/gD4T1Q1RYZNe5rg9GfBNYg0rHaF+ypcH+sL0ZCL+d2VpVkJhJtPjGollziQLdTdzRHlFYLDcLwkgxzS6YTeyh/8DrSK/JbTK05ZbOoqPhnDocM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KarLpEEg; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=UjPZn+zMXlH6yXkoZtG/Iw0Hr+wm/QInnE5J9xZnyNGuJL2ZKjozcrQxJTjE/M07d6p5k0tj1JUJNDivQdURzucsnuBGe+IitSWOuCpwBrAwvJEMmbY1TK/3IKkEBiRuO1ULX4yJzT/Sd42z/wH7/eSJMXzRCVGbe2ifH/kkE+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QVxYjgld; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KarLpEEg"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a871daa98fso14767355ad.1
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 06:30:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QVxYjgld"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ad9a9be502so12489415ad.0
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 06:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775223044; x=1775827844; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775223055; x=1775827855; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7R3hTq3fpNtsEePkbDShk8jy4QoFXIwKgMQ+uHYCy7E=;
-        b=KarLpEEgBh9SlnBBPGuVxZeyqOiqIKmLg/bViBDi8nXleqe9qbt4Fvz7013EldTwxw
-         2jusLSj21syX4gsHXK8F94ruwjGkhmtEkaS0vu2+CQNgGcXd2QXQCfZ53AtvYIsW4yaj
-         BWINuABg1y5Oun8afz+8L+d0yIUBxplktUM8M1U4BHdYnwyCJ6Bsu73nO64tDZxcDYsC
-         f+1WVaZrZC25qG5U/vAM+sSPrV4Ilbf+giHCJqqu98CHSZQWV4qGX/cEsp+q+oQL1qXB
-         UbWc38TQtgsz2Olmok1hdn9H6E0NPmSFXNMa/G9pqRDImWUP8/IMtk1aBpaTFLymPwGB
-         yjKg==
+        bh=akaUaIjxJ8vFNIqWVod+KFW2az/YZHbrHCjTme00AdI=;
+        b=QVxYjgldWEaDBD/795nAuVLwBcnbbO1MQ+ZIGNAaNqO9UP30A7nuI0A/pikjJW7k7S
+         QItGCEKJQG/b0K4A56eKl+jUY97aXrGe1SENW4TjbDrkdmt7Ry/GZXmLAgxg6jwidHhr
+         P29ppE8679jsRbyEJQe25ysJdGZnAQzJAmd0SJW4F8yvPj7+GQwd9IFSTP3GM/G+UqI0
+         14EsPWn+Xh9dTAylLHm2hLCv0veqzTS8e2nfsAg0slx47b/OZTk/+s6vPseH7d/40wdM
+         JpkP4D4pnjW22kAWe4mN4L4XgyPVottnIRmWsvu6SPL+W1UBx2RNcVyBk/Agx91pFUgz
+         gS2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775223044; x=1775827844;
+        d=1e100.net; s=20251104; t=1775223055; x=1775827855;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7R3hTq3fpNtsEePkbDShk8jy4QoFXIwKgMQ+uHYCy7E=;
-        b=jifNfke+ueIZFpoVLU+I2FCfBSVgqxm7qY2LtVCeNS983Byy1GHZRlYDEZN5XthSgb
-         dXRr1e8++QeBFI3hpnvo0c6/z7bKZzhY/MesVE9E3cWM/UhwSFgCgHttw70QvD6OGQOx
-         qHY1oCkAS0trkONIVdwEYnTuc1kKI9JGOmQgE4hJzS/r4iMDGC4qrhPqaBDdld8m81Zd
-         BZsjhvDhPsDvZ0VtSreLRQzi60Ov7Wf1O53nlQiBkuOjZo9BWuvcPakfghZuSUi9VSX4
-         asQ3dKg6B6TLxLWJIkTcjndJENpsqKYuvszQhf55ZLUkNYoSp2Lu+JxO5SYSMiELgpED
-         Kl3w==
-X-Forwarded-Encrypted: i=1; AJvYcCXd6mkAckRrfYgQYiGBxMMtGQ1eHyOhG8FL5g0+P2fGGw903UWXjILPK5+ssdFaaJO/qoY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9hNJA9BZeCxzkgSH9kTsQhxhV7KhdrlRjpSEPvYHr99FGcCoo
-	4rM9SLm06MZJVUyNvZLkxEZ9OJomMmuqkF7RSJh+o3P2SxeEOLhZDLlm
-X-Gm-Gg: AeBDiet5o/mUA7YYBJaD2GKk55cW+9xAoPy8ck7qS6MD8YKz0tscH8ZDaxDsdZk7hpx
-	/uWuDVfV2zi9YfzMjnYb6MHqvfTR42eDpqLr506UdpYOpovW7qsfPnyhWuk9yWOtLhCRfA2dvuc
-	dehL0J9+TkpUEuzTQO1zaqzDj8b6oPLY+1HOZc+KkJg5i6q1+q02ZsmIWziMOSujA5XZTB5u3hN
-	CdnaPUJjvheX3XvFlGzF6Jf01+i0/OTaQcviioetIa5nahLYXURjYBI1JyaO4ZDbXjHJmMfORDr
-	DDkZ4BpJhw1IQthK0Ip5/0SZRkAOYqq+OTGyDQHs214qPvqUGkO+/IxztU612RrRh4DOk38UU3p
-	YvY1oByBucn77O1pOh6H37YBMXXMu8OJGlMvmA+xDhHy3gQkFLQYoAn3EEr58s1aW1U043y8x3x
-	GLQMBLCWqFhIHJq8pnIL6WPye/6NKbW5eOI/ukPB3dT+rI+SD3poCMTd5O0ZRZ4J6jvjwo1m3zL
-	5vYVvmEm0qU
-X-Received: by 2002:a17:902:c942:b0:2b2:42da:25cd with SMTP id d9443c01a7336-2b281889bbfmr36878255ad.45.1775223044279;
-        Fri, 03 Apr 2026 06:30:44 -0700 (PDT)
+        bh=akaUaIjxJ8vFNIqWVod+KFW2az/YZHbrHCjTme00AdI=;
+        b=tJ0fXoJGxNgwjY3KHi8iTyX56T4+KCQHT2NirYwGK/r6RQDsdLJLS/e3tlY6rsKWsG
+         IV+0xKizf5vZymUGieJj9MmJu3Itdmo0kpjD56pObDe6Uuq//Rz7e4UkT34ZrMqAnqMp
+         QV9gOI1wjms9p7h9zCFL/WUgYv6xIFqIi0/i5AZdF377jEFpyV8Y2vLxqYPIMV6wWzsl
+         TnGvu/qu5KSb0nB65w9lqVr6McoXwyjzPdqVcbUO727buFAZdEtnd7miu/ETpvrsEiWi
+         ZDju0PFcOgzUeP7pYg8JaAb5i+cUQQIOaSxfXpf8XduY2IJMQzTatuEXbH5S74mAovcd
+         JXjA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0S/QdQ71q8/XvMUT3lINjk++FGJMf6t8GFoofu265Aj1Kcb60Spg56cj/Whd/L5JhvF4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBWGeL0g7mIAUn1+eunxORxNXobHCEoXoWzBh5KpbLEnZ68/zg
+	YMTMhqDMPDJeH1Y6Ec8WY/1pDGnrbniSUB2dbJPd9btz6d14ZNEAEDP0
+X-Gm-Gg: AeBDievuyRZBkvTSITPFhx8Aa6y5J/KCQaQf+NRU1Clwnpf4xGuHifXJh46YwKsh8b3
+	p1yQZV1bSyo3y0b7aTp3kXv/mjTlnbNw/h7/eYmJCOJa3XIAVzm8m4UfdZpiUwNMmIiQic7ZxT1
+	9X+xu7/v/B4j0VNqQd9YqHIi4Z4HojIgXSK9t5iLkiEiW0ipHNWGPwEP3eVw7qfFx5SXBQxOelO
+	A0eC1U+dBtBlDvCifr1pCoHvKGd1w1qlnPKdyC7D9nBZCAMw+ay+2opOmr1rGuKj7Zz98k3rnUh
+	5boHp3Pb3VbJXA6HRUyuDnVL9U+xowBNehWJbgPtSOFDVE/VtrfGSP7MoaUM7bJcyGLiBJXWN2p
+	cP/0aOYxGoCQKuYNCCXkkp/SURTwVAiXMdqIYHUx2L+QBSjVrPRvTe89bz+M1wiKiguHM/taYSk
+	FiBIYy12XFjLB6gkjgPNK+AypMEnelfB2qtja4amVNjdkwFtAR1XeEIEKGg21z3Dyfh66/u03UV
+	stD1LWwedpc
+X-Received: by 2002:a17:902:f611:b0:2b2:470d:6d0d with SMTP id d9443c01a7336-2b281706f78mr35349155ad.9.1775223055210;
+        Fri, 03 Apr 2026 06:30:55 -0700 (PDT)
 Received: from SLSGDTSWING002.tail0ac356.ts.net ([129.126.109.177])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749a1e9csm64221225ad.55.2026.04.03.06.30.40
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749a1e9csm64221225ad.55.2026.04.03.06.30.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 06:30:43 -0700 (PDT)
+        Fri, 03 Apr 2026 06:30:54 -0700 (PDT)
 From: Weiming Shi <bestswngs@gmail.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -73,11 +73,10 @@ Cc: Song Liu <song@kernel.org>,
 	bpf@vger.kernel.org,
 	Xiang Mei <xmei5@asu.edu>,
 	Weiming Shi <bestswngs@gmail.com>,
-	Sun Jian <sun.jian.kdev@gmail.com>,
 	Paul Chaignon <paul.chaignon@gmail.com>
-Subject: [PATCH bpf v2 1/2] bpf: fix end-of-list detection in cgroup_storage_get_next_key()
-Date: Fri,  3 Apr 2026 21:29:50 +0800
-Message-ID: <20260403132951.43533-2-bestswngs@gmail.com>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: add get_next_key boundary test for cgroup_storage
+Date: Fri,  3 Apr 2026 21:29:51 +0800
+Message-ID: <20260403132951.43533-3-bestswngs@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260403132951.43533-1-bestswngs@gmail.com>
 References: <20260403132951.43533-1-bestswngs@gmail.com>
@@ -89,38 +88,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-list_next_entry() never returns NULL -- when the current element is the
-last entry it wraps to the list head via container_of(). The subsequent
-NULL check is therefore dead code and get_next_key() never returns
--ENOENT for the last element, instead reading storage->key from a bogus
-pointer that aliases internal map fields and copying the result to
-userspace.
+Verify that bpf_map__get_next_key() correctly returns -ENOENT when
+called on the last (and only) key in a cgroup_storage map. Before the
+fix in the previous patch, this would succeed with bogus key data
+instead of failing.
 
-Replace it with list_entry_is_head() so the function correctly returns
--ENOENT when there are no more entries.
-
-Fixes: de9cbbaadba5 ("bpf: introduce cgroup storage maps")
-Reported-by: Xiang Mei <xmei5@asu.edu>
+Suggested-by: Paul Chaignon <paul.chaignon@gmail.com>
 Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
-Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
- kernel/bpf/local_storage.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/cgroup_storage.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 8fca0c64f7b1c..23267213a17fb 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -270,7 +270,7 @@ static int cgroup_storage_get_next_key(struct bpf_map *_map, void *key,
- 			goto enoent;
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+index cf395715ced47..5451a43b3563e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+@@ -86,6 +86,11 @@ void test_cgroup_storage(void)
+ 	err = SYS_NOFAIL(PING_CMD);
+ 	ASSERT_OK(err, "sixth ping");
  
- 		storage = list_next_entry(storage, list_map);
--		if (!storage)
-+		if (list_entry_is_head(storage, &map->list, list_map))
- 			goto enoent;
- 	} else {
- 		storage = list_first_entry(&map->list,
++	err = bpf_map__get_next_key(skel->maps.cgroup_storage, &key, &key,
++				    sizeof(key));
++	ASSERT_ERR(err, "bpf_map__get_next_key should fail");
++	ASSERT_EQ(errno, ENOENT, "no second key");
++
+ cleanup_progs:
+ 	cgroup_storage__destroy(skel);
+ cleanup_network:
 -- 
 2.43.0
 
