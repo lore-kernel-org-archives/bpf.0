@@ -1,80 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8C637F8BC
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 15:28:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A192C3255;
+	Fri,  3 Apr 2026 15:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775230084; cv=none; b=KXJafIcGI/JWaWe87VjV4ryrFVQYXS65dT6Qc6kyiJwaWv4+510a1GzmTYHAYb00mlwZEyu9icT6vpcTZ2NqkKOrmi0UpW4WM9jb/car2Su+6+lFq2y5IPWO+WQs+ButQOLKJnkOETWF3ot0+aL0aoKbUnHXlDHo2Uy78o4IrNo=
+	t=1775230311; cv=none; b=mGxUvr51YWH8iIZTsw0ok1AL5Fl/V8UNS9p/WhHFR+7itmC6BqiWb+34pM7kma3Ao8ekmKg/+hUXWtxBwFvdFGjEYDbWT4TJcgnEXYCNzWP+qRXUxOy969//x/3i1FGflmzshI/qgLRlFJ2Mrfbtff07X55cySvjAS+sFoqXNSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775230084; c=relaxed/simple;
-	bh=epsUyzDlfkDtqt5c3mqnKgwh1BSdmKJV8iVWtUCTEI8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WJydT64hbJrP+xoj/s5OesGzP3ixcxlI/AJqqR84vPudfvBaelO6gbe2vZsOTuJAJXvmLEzs7FULlUXTNmDYU+d1qO93nvNrvvbu1snwtZ12qveCv+duWG5QJULme4APDVrRcfawu7XA25x+tlUFJsNRRo/oC07bS7CGfTm0rAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iV2l9TfI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775230311; c=relaxed/simple;
+	bh=agMln0ujWJSLy5SV56SLKyuGqXBTlsDf1LetTYGjGVY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lkLoWMe+vzJ4ZpJFKnbZ4svQu08yTccwmyGB+SAPlT9yIY4tRHVxcpkgxU4Stc8YyfXbrg+QDsKOseMPmAyAFItKSK3pLLL/t5jqWH2B2XOLwPhvYL1ZmILDRm1uMhsIYypuO9MQPA5UXW8P3yI/WkTDWaZju1ZEwaxZw5yrEP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOGJTs6t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iV2l9TfI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0973EC4CEF7;
-	Fri,  3 Apr 2026 15:28:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOGJTs6t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99222C4CEF7;
+	Fri,  3 Apr 2026 15:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775230084;
-	bh=epsUyzDlfkDtqt5c3mqnKgwh1BSdmKJV8iVWtUCTEI8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=iV2l9TfIaWlz/Xi/i/yN/I5dVTZKEHlspAklOOqYcvP6BNV6bed1H8xeD7m/Idklt
-	 djEMm9e/tc7HZ0PC/70YsGtvN2ic5eZ2JNzFWv111TnOsUth+eZge84NC6dUBNZ9B5
-	 lfB0/uEr8ZYuR0Xuy6gnN60pcz8Vi1WQ0Wxq1Wdj+wds56TOMoW0tcwpbpExmO3GAH
-	 UdPUe7MUFmuBjgGrqd3aVjRuq25EggyqPyO259kWJTKeOkwA7DZ39cnJCdGFr7esrs
-	 r5uD08zO60CjyEFjmNo14doXjG3oiyJjH7LYB0yBN3PgvmLGuIruAxj0s1zI5XuX+s
-	 7RjEw3GcklU5A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 031983809A13;
-	Fri,  3 Apr 2026 15:27:47 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1775230311;
+	bh=agMln0ujWJSLy5SV56SLKyuGqXBTlsDf1LetTYGjGVY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=TOGJTs6tfRz9Vpg2ljzZygZClY5fjXKpgQgTEUJ8qkyvPs+gx3ihDyRTd68n2YeAO
+	 FdLD7CRfPla9DEc7jKRvvt0RwfgXeJ/WatL9Ep36Z31T6aAtwTg8QH467fELeugfkv
+	 NYG3HjAaRV9/ChvYXvu3IkpFoq0/tPtQEbuN6Zg0UPGRSjZfax9KD5Bs+l8vcSdXDc
+	 3aN1ua8J0GuKPoPXVBWWS+d9J4GagucXPzCMWV44BECbUj/LWMeqc89jHYZFrKHmqI
+	 EIm//2fh0RKa1AVf41HUX61ICqi3T4wh07H8pMWX9vaiTeB9Fn3aEZtG4n44kMhNdN
+	 joA+nCk1fq8vA==
+Content-Type: multipart/mixed; boundary="===============5395896508885707630=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v4 0/2] bpf: reject direct access to nullable
- PTR_TO_BUF
- pointers
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177523006579.1344849.13798536246638210752.git-patchwork-notify@kernel.org>
-Date: Fri, 03 Apr 2026 15:27:45 +0000
-References: <20260403033828.18529-1-tpluszz77@gmail.com>
-In-Reply-To: <20260403033828.18529-1-tpluszz77@gmail.com>
-To: Qi Tang <tpluszz77@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com, eddyz87@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, john.fastabend@gmail.com,
- song@kernel.org, bpf@vger.kernel.org
+Message-Id: <e31cce2c29bdf1172acb1b8aff046729ef5b0b20ffed3c276fcf62261a94ccca@mail.kernel.org>
+In-Reply-To: <20260403-selftests-bpf_misconfig-v2-5-f06700380a9d@suse.com>
+References: <20260403-selftests-bpf_misconfig-v2-5-f06700380a9d@suse.com>
+Subject: Re: [PATCH v2 05/10] selftests/bpf: Tolerate test file compilation failures
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  3 Apr 2026 15:31:50 +0000 (UTC)
 
-Hello:
+--===============5395896508885707630==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 72f576a8236a..6a3835a58f87 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
 
-On Fri,  3 Apr 2026 11:38:26 +0800 you wrote:
-> check_mem_access() allows direct dereference of PTR_TO_BUF |
-> PTR_MAYBE_NULL without a null check, causing kernel NULL dereference
-> on map iterator stop callbacks.
-> 
-> Patch 1 adds the missing type_may_be_null() guard.
-> Patch 2 adds a selftest with a test runner.
-> 
-> [...]
+[ ... ]
 
-Here is the summary with links:
-  - [bpf,v4,1/2] bpf: reject direct access to nullable PTR_TO_BUF pointers
-    https://git.kernel.org/bpf/bpf-next/c/b0db1accbc73
-  - [bpf,v4,2/2] selftests/bpf: add test for nullable PTR_TO_BUF access
-    (no matching commit)
+> @@ -688,11 +688,14 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
+>  		      $(TRUNNER_TESTS_DIR)/%.c				\
+>  		      | $(TRUNNER_OUTPUT)/%.test.d
+>  	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
+> -	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
+> +	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F) || \
+> +		($(RM) $$(@F); printf '  %-12s %s\n' 'SKIP-TEST' '$$(notdir $$@)' 1>&2)
+>  	$$(if $$(TEST_NEEDS_BTFIDS),						\
+> +		if [ -f $$@ ]; then						\
+>  		$$(call msg,BTFIDS,$(TRUNNER_BINARY),$$@)			\
+>  		$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@;	\
+> -		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@)
+> +		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@;		\
+> +		fi)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+When TEST_NEEDS_BTFIDS is set (for resolve_btfids.test.o) and the
+object file exists, does the msg macro interact correctly with the
+new if guard?
+
+The msg macro in lib.mk expands to:
+
+    msg = @printf '  %-8s%s %s%s\n' ...;
+
+Before this change, $$(call msg,BTFIDS,...) was the first thing in the
+$(if) body, so the @ ended up at the start of the recipe line where
+make treats it as a "don't echo" prefix and strips it before passing
+the command to the shell.
+
+With the if [ -f $$@ ] guard inserted before the msg call, the recipe
+line now starts with "if" instead of "@".  Make passes the literal
+@printf to the shell, which tries to find a command named @printf:
+
+    /bin/sh -c "if [ -f file ]; then @printf '...' ...; resolve_btfids ...; fi"
+
+This produces a "command not found" error on stderr during every
+non-verbose build of resolve_btfids.test.o.  The BTFIDS processing
+itself still runs because the semicolons cause the subsequent commands
+to execute regardless, but the spurious error is confusing.
+
+One possible fix would be to move the msg call before the if guard,
+or strip the @ from the msg expansion when used inside shell control
+flow.
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23951016185
+--===============5395896508885707630==--
