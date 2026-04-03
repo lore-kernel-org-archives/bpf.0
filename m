@@ -1,112 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3FF36C0DC
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 21:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289F235F610
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 21:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775252168; cv=none; b=Fkm76hOn+Og2bQgJt9BrEBQNZ8BehJQ0uQWqWR/boM0oJhxp4MiZbtqCCVbKClL1+MeC9rJdKeyOdihYJiyZOVRE07ZUaqkQ5/NddI/oV9kDNUit8gtrusJ9cIuve5CH8XzF7rPxOmiquGW9yLFLh67tz0HcMb588+E8fjJVkhk=
+	t=1775253518; cv=none; b=PxfRFUs3GUMSL9jIMcg9mC8L3mBD6nY8bN0a9r11b/vEIudPDHbBERUT9auQr2hJAmjQwze/32O800hMCam1hjBUd5DQ2BY/kuAFcj+P3u25pju8fECVC1xrhri5LNuE/Qo5We/WQHdo31By66sCSgD+Xh25mdbp6ftUbqvc24k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775252168; c=relaxed/simple;
-	bh=zGyxR+hJJKYMVjsOFjmcaOeN6w6io3TO38Lk4RE3CKE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qv+xqqfy/YiWncF2Ew8fZzszA42yax/Oy9BIJUcZ0r/DuTg9wyMCZ3i6VLgu5amfOlaBfEDigvk59uYPMJduTYFgyGK8OE5hHDDXIvJz+Feux3JGDTqxSMwcjQmV51cMkGQm0BMSDeUTJaPz0M0tgncTh4Ghx1yRx0x2VtpDPp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFBC/7ie; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775253518; c=relaxed/simple;
+	bh=XRHNaWWABlnH8iQWN/EYIKOiW9FL7OxAiz7167VHFN0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=f7hz0ZHrBthZainnJ6kvoNgfWsyLTJWm80WoU8Pk0nT12RKWAxp5cmFLTGhQgeFUDkRUSkCZHzH3BDnS1atTWxqpGeHT/rmZipDzKTbNK8n0a/6CpcOHPv7vO96bQicKKPHprOJDhbQq6DqYQQk5OGklc9PyLX3is5xVqL9ugGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=RL/1P2Ca; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFBC/7ie"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D294C19424
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 21:36:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775252168;
-	bh=zGyxR+hJJKYMVjsOFjmcaOeN6w6io3TO38Lk4RE3CKE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mFBC/7iek1dCks1Ox5sgXGZyuOBizY+zyrM+GwZqjqVVJGsqJbwhX6TFhE3441CyG
-	 k19Xycm7o04yMkvkF/L1wrYLTg2NUoV4Fmq8CK5sN8gjtDZc1wYL72aHxS8npKkuDD
-	 AiA2jVrLKq1rcU1pK+TNmsjhSLwEacXy7sPPMxQOO67G7Gdx18Npsi/bdpumVUv/mA
-	 6wH3JveWdEgxLg5a1H/INhjsqKZEZx0TzVqXvbVVKc3lnm2plYHzdCDQHqFokpoU55
-	 mN4zW42iadpJM/XOlRuf+LGu0nSOBKozFPICpaKrLwg+17N0jj2pEOr7nnAgKvN1Og
-	 dkFRiPzxiCyOw==
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8a48deebe95so23070956d6.0
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 14:36:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXu74ucurIhV1uam3XFy+FLEQXalNfIn0DvrXBxQvJvQqpwvOXHdsH/Ykgaa4bqFf35pnM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyp+4jEEvqItkKA+Xd+Lweu5caxNn0wRJxOfEp1TDeS+/9yLm09
-	9WvBqPmQuxoYqeU89uZeTZsAwKq1bQqUl2LC0sxh2y7BlGnWvLqO2QkylF54BoZhTpttovmpiew
-	bg5Oxl1+eXxsv3M4qchui95w2/C1uqCA=
-X-Received: by 2002:ad4:5ce8:0:b0:89c:a2b2:8d44 with SMTP id
- 6a1803df08f44-8a7043f0335mr73145636d6.39.1775252167299; Fri, 03 Apr 2026
- 14:36:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="RL/1P2Ca"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-827270d50d4so2069739b3a.3
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 14:58:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775253515; x=1775858315; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vMukvJ2/B5HuRQ8wOl4+M/eHd9Dbd/Ma8y2SHf3n2BM=;
+        b=RL/1P2CaMqeiJTC5J6CB1NwZag2Mwf0Hu1x+6ENr17rHKBSeGdzakVATnonuxy7Hjn
+         6q7o7XnLerbbLpOU25aCyWSemqMehwIgP7529Z15N42xuw69XI1hih2w8jDEXzCaGU9O
+         fAdOif25o9iWJgAdq9jZ9U7vBro89DsyT97l8Zm1f2z4sRy6rqxHeXWpl87+kF45zIyF
+         LRBRR3s1f1/+15aENAq5cgofZBzX7CHIqOTkgkaSV2B2k2FOn0MqEmOrMzbjc6j99lq9
+         cnhLru/OfMPCAhiRzwaAhJFcWLW0Pmmu+K8cv9t75Orgk5RBtHmOEDBSW99s/I2qdMwK
+         xiVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775253515; x=1775858315;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vMukvJ2/B5HuRQ8wOl4+M/eHd9Dbd/Ma8y2SHf3n2BM=;
+        b=oJ5/b9dWpdnyn5sm/bhvoGa/LomLEQJ0sKZ4olm1XKnISIRh4zsvs1RR5GPn4sN2DF
+         AiN1jisKnLYAVl483oOt+/XW9wZ4QoXypahMGp2zk0veKxgSk7akl4mj9aceldBpkgps
+         Y/v0wE6bvC0I9aOcrNG/a07neDTZslPp+P1dlUohNfkZqQnUyQ2RNFsvPGoJ8aw42WCA
+         ZYFcxmX1WWbWKMo+Wm+4JDaRR84l/6PxeITGNkAJKRmPhp7Sc1GDqjPtZryxgEczzF4Q
+         1CZ/MfBIEp0yePuSy6oYKYdIDx0vhW7mAitOFHb3kucn8kgPcfffoDBSDZXy55d/e77G
+         BbQw==
+X-Forwarded-Encrypted: i=1; AJvYcCWMEnNAt5aMRyY8vyMBYaqeSDaxbkH+luk1kLrmb2Mzns34mwe1KxaipGLoVqMX1QqP/kg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjxIbW4USUu43q1u+I1ZqWHlH9ohglLJzP84c+RtNRIiLNz/K4
+	vADCBrGl2MqOxzbS52ckKXZ9cexCVtkBbLQS6jk0MJwqDgwobOOJ6KoSoTJrQcV+qcg=
+X-Gm-Gg: ATEYQzyV+sG9Jsx5N0vW09MGUCGVx7jMhuUaydvc/qPRmPQfs3N9XKEuL3DtuexKtKt
+	rcBQgtzrQY+I/ksVRDaFDO2SD+lkUdfODX81grODNln+WA0wdzF2db0xqqgWCJfxWrX3SwuZhWP
+	wg2Pfxr2xCdMv0Ba1KPalLhAbxniGg53jUaDSXTcw35/IX3CySMnAyUpiJLqY5Mc3oODKgoOIMR
+	CXAfIynd3MIualPmB4ld6IdzqC1whJX7ENyZPd0Z/onWfje2hUcgemL03rdUxMJoSgQo/+oFUSC
+	9dmuDYZWfNJYuwF+IL1XEy656VYmrV4vHeAIy6grd0lmZT64UU6NJXVbkEnhan+JVqcTYJikksP
+	hazJsk0S0aKp2h2mwKSMWvpnBxxBgsRm68F7F+X7Ih85XpnjQXpP4pzhAiJRGjFn1TBFk9Ij0uK
+	uW6pvabunQyX0qSIpC0w==
+X-Received: by 2002:a05:6a00:3011:b0:82c:6f07:2dc4 with SMTP id d2e1a72fcca58-82d0daa006bmr4285277b3a.21.1775253515123;
+        Fri, 03 Apr 2026 14:58:35 -0700 (PDT)
+Received: from localhost ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b76c0fsm6342771b3a.15.2026.04.03.14.58.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Apr 2026 14:58:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-4-laoar.shao@gmail.com>
- <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com> <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
-In-Reply-To: <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 3 Apr 2026 14:35:56 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
-X-Gm-Features: AQROBzCWuZIYMjONZTw9uWMOtylVgKHH2ypWe2SnfDeFDKuhv7JNMaWB-kMCMFk
-Message-ID: <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org, jikos@kernel.org, 
-	mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
-	rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	kpsingh@kernel.org, mattbobrowski@google.com, jolsa@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 03 Apr 2026 17:58:33 -0400
+Message-Id: <DHJUULDO4HLP.23SBEUOEAGN0M@etsalapatis.com>
+To: "Barret Rhoden" <brho@google.com>, "Eduard Zingerman"
+ <eddyz87@gmail.com>
+Cc: "Levi Zim" <i@kxxt.dev>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+ <andrii@kernel.org>, <daniel@iogearbox.net>, <martin.lau@linux.dev>,
+ <kernel-team@fb.com>, <yonghong.song@linux.dev>, "Matt Bobrowski"
+ <mattbobrowski@google.com>, "Josh Don" <joshdon@google.com>
+Subject: Re: [PATCH 0/2] bpf: calls to bpf_loop() should have an SCC and
+ accumulate backedges
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251229-scc-for-callbacks-v1-0-ceadfe679900@gmail.com>
+ <ed857a23-bd73-4915-b080-558b5934bc8f@kxxt.dev>
+ <79ac0188db82c675e62c36c8ab036b45cef3f3f7.camel@gmail.com>
+ <9a418287-f8e3-4064-8364-ff85793de74e@google.com>
+ <1c7bfc3f-c327-4777-a70f-48144aa0864f@google.com>
+In-Reply-To: <1c7bfc3f-c327-4777-a70f-48144aa0864f@google.com>
 
-On Fri, Apr 3, 2026 at 1:55=E2=80=AFPM Dylan Hatch <dylanbhatch@google.com>=
- wrote:
-[...]
-> > IIRC, the use case for this change is when multiple users load various
-> > livepatch modules on the same system. I still don't believe this is the
-> > right way to manage livepatches. That said, I won't really NACK this
-> > if other folks think this is a useful option.
+On Fri Mar 27, 2026 at 4:10 PM EDT, Barret Rhoden wrote:
+> On 3/27/26 3:41 PM, Barret Rhoden wrote:
+>> are there any tricks with this new SCC stuff to help with verification?
 >
-> In our production fleet, we apply exactly one cumulative livepatch
-> module, and we use per-kernel build "livepatch release" branches to
-> track the contents of these cumulative livepatches. This model has
-> worked relatively well for us, but there are some painpoints.
+> i was able to work around it, at least for now, by taking the guts of=20
+> whatever i was calling from within bpf_loop() and making it a global=20
+> function, thereby making the loop function easy to verify.
 >
-> We are often under pressure to selectively deploy a livepatch fix to
-> certain subpopulations of production. If the subpopulation is running
-> the same build of everything else, this would require us to introduce
-> another branching factor to the "livepatch release" branches --
-> something we do not support due to the added toil and complexity.
+> hope i don't run out of stack space or depth...  =3D)
 >
-> However, if we had the ability to build "off-band" livepatch modules
-> that were marked as non-replaceable, we could support these selective
-> patches without the additional branching factor. I will have to
-> circulate the idea internally, but to me this seems like a very useful
-> option to have in certain cases.
 
- IIUC, the plan is:
+Late reply, but while in bpf-next there are still stack space
+limitations, the maximum call depth of 8 is now gone as of commit
+6c8e1a9eee0.
 
-- The regular livepatches are cumulative, have the replace flag; and
-  are replaceable.
-- The occasional "off-band" livepatches do not have the replace flag,
-  and are not replaceable.
+> please let me know if you have any other tips for bpf_loop().
+>
+> thanks,
+>
+> barret
 
-With this setup, for systems with off-band livepatches loaded, we can
-still release a cumulative livepatch to replace the previous cumulative
-livepatch. Is this the expected use case?
-
-I think there are a few issues with this:
-1. The "off-band" livepatches cannot be replaced atomically. To upgrade
-   "off-band' livepatches, we will have to unload the old version and load
-   the new version later.
-2. Any conflict with the off-band livepatches and regular livepatches will
-   be difficult to manage. IOW, we kind removed the benefit of cumulative
-   livepatches. For example, what shall we do if we really need two fixes
-   to the same kernel functions: one from the original branch, the other
-   from the off-band branch?
-
-Thanks,
-Song
