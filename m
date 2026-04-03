@@ -1,160 +1,187 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE98371064
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 13:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADAF27F18B;
+	Fri,  3 Apr 2026 13:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775223596; cv=none; b=mXwH+8DiJX6Spx1wWXvcq2W+xFjfsyCpDiUcNtWnpK94AJ78W1lDBZri1cqx0cVZu4l4lwH7OIeTwitV98GibxYAMDMcsrIEkbWaa0Pxl+Zb1hlSgkgtDl7gqTvD6rUDm0l/APZml++qu67+U+AZqovsDbhsFbYCmw28VOYNM58=
+	t=1775224172; cv=none; b=lasBwzb2HoLfWIsf8qvJfceYjDZtA8MIdgV+urYjGvVHgxCB3q8M2y501siH3o648XQFtgdpUDsVGa+5HpBjeGH0TEtvPfD17kk3HjmfbYV95rqR44XHs586IefSQC5BAosKmRwnPbw4tWZQ2iwRG6eDC9dtEXLKrvSl7+w2Q10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775223596; c=relaxed/simple;
-	bh=aKi9QvD4NSMtHGws7bjv0WFfGrz+D6piWg71vQX7Xb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h3i35UCaJ78hCYcEjQTv7Z0hMCYQXHBDv/KAtbAaA4YGGN5wZrqcQ9vLZ06MEpQBInJzl0t6QRyICbHhFOKurT/5Od++vZRVPTQG8JyWWCnVFZL7Qf+r/sdcTIXbalneKCsfT/UWZnsIUxHKYuZvEPnxkJzghOnkrAEHSAZmdE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V2cCLQsQ; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V2cCLQsQ"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35c1a131946so1783294a91.0
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 06:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775223594; x=1775828394; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nNGfa8v0Q0l6gW/7EM6e1IO9RvIGhdDmwz5p+PYWdJE=;
-        b=V2cCLQsQYTSAcHA6zUlwBZXvmwqRuuBR9l9tli1G+kkCxw6WAXA8c+2QC1fcGWu7Pd
-         kASpHyA68oaMzK1tOlXPs5CZylR2t0SwLFCLFuUjB0+98HQAyaDIAnRP0WlSCLkOczdS
-         tByoaAj25DJs4KqyjLY2t7Mzd3mSa3XBaFz+akvKrpAAv9VeTwZ5hqFwHPKR6MLyqg4M
-         rAyfWRE9MscZKBgWgfnKyCW6JkjX6MTwvJpx9WorGt7yJ7Rhm4mCVjvEU8BFlc1brizJ
-         C9ImWx2m5/4HWeI9aXm+KqwG0yKHYO6dqxENN1F+3W1hQj8Bq68O9Mf05z63RCa9/5DE
-         +kEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775223594; x=1775828394;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nNGfa8v0Q0l6gW/7EM6e1IO9RvIGhdDmwz5p+PYWdJE=;
-        b=UDbpXvcssR+tApsOtVZkrsEBfraMPMgTe4HqlhLd8C6Bg6gJ/MX5qVdkQcE/fA3Rus
-         KmiQtLFZMErEnvNhN9HBLoRn84s11Q51yXXwlnjaYXTJ/PbXxuKpCvPXkrIvYglUra86
-         f/r6uw2UEPIrIAkNxvgLr3Wgis+IjVW53WOYNcHsRmNVKZt70dvhy+fAyIm96fkwjv5a
-         VnQ4VI97FYVQVhRH/KujLpHxRD/zBpsx81oZVxJfYFu1aXGduWdTWU46UWDHMoLNPiIZ
-         ALmcqFjO/BD0m6fb0fT72QMFOdMH8uKfYa5GdqdRsmfoGd7VjYnssMuMb67TTDVkI4Pp
-         JfjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWLHPR1ZTR8/1K6/lksiPlo6s/4bd137vZ50UQspdFmVZzm5hJf90nL3r/pjUgA6OGyws0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf+6E04vdg3k0l2b5i3WT3AGYVJsa0oqvejAvDvynR1I+Zc6He
-	0ZO9GyB410NW48SjiagUw5mypUs6A67gHu7bhQpGE68K0A6eKeMB8M/d
-X-Gm-Gg: AeBDieubVXWF777GVx0dNktOfd3Da62GRMPnD1Db0cRDKcfesYaQdIxWUJSczyx6XXN
-	11mWxTy1dLb8c+VfYJ/TKFvkpzJ0M3QYxjll+JR188P3bknfA7uIMSQTijKzbKBx+bpR0lKg1Sc
-	eDG3TZN+94Zzf37m/JSBJwZyrUwGYu2MaRX1+koh3+H15sTSIoittpxpdVINFPg4ia0jjk479z7
-	7TAAjbJMsSzonuR2FVvNhFReMwIKTZj6xdLPqRoyY3XDyKqSxRkGHRGylNiNQbUXspdLVlITrt+
-	tjGaIo1RyGecMiP38XCGY/475v6eGQL0ZHv7k3Na2TgL5SYupXnMGO9U1wKW4zCScej59fT8Nl2
-	ZOjG88hC96SsTdguVUb52qC7Wa1Ug9W6DpnSxxHERpKVL6SZcahANBz5Mg7+niRna9E+9ok0B3G
-	0faHO2vAiq/EpcXgkxBfFc3E9DR63UY7sl0fJpGXzWBT3iYUkt67nKM3cy+XgW
-X-Received: by 2002:a17:90b:2f88:b0:35c:10e8:1a72 with SMTP id 98e67ed59e1d1-35dd67781a0mr5970803a91.7.1775223594387;
-        Fri, 03 Apr 2026 06:39:54 -0700 (PDT)
-Received: from SLSGDTSWING002 ([129.126.109.177])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe9377b7sm14215883a91.10.2026.04.03.06.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 06:39:53 -0700 (PDT)
-Date: Fri, 3 Apr 2026 21:39:47 +0800
-From: Weiming Shi <bestswngs@gmail.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>, sun.jian.kdev@gmail.com
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
+	s=arc-20240116; t=1775224172; c=relaxed/simple;
+	bh=0Kiq2YjXRLV+PACeWrUG2/gG2/x/liTu0yUO6Zd9wyA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VgfeCHtQ0k89ernOuSRyecHcIsWVeoZtyQxb0UaIJjp28lls/5NFxdhAPPpKegY52m8rArpqAYjRw0Btc2W8xO1QamCu0pAeC/LFQ3QbdWxoMV5BPUs3JhWdU1Z/UanV2oFQPjzQxHVZNDV7wcdwt/AWLlXIUuVjP2q2nGQLAVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fnKnH1kfFzKHMWJ;
+	Fri,  3 Apr 2026 21:48:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 1A75240576;
+	Fri,  3 Apr 2026 21:49:28 +0800 (CST)
+Received: from localhost.huawei.com (unknown [10.67.174.243])
+	by APP3 (Coremail) with SMTP id _Ch0CgAnB1Rjxc9pPbfoDA--.34698S7;
+	Fri, 03 Apr 2026 21:49:27 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org, Xiang Mei <xmei5@asu.edu>
-Subject: Re: [PATCH bpf] bpf: fix end-of-list detection in
- cgroup_storage_get_next_key()
-Message-ID: <ac_DI5edNfHp8NOi@SLSGDTSWING002>
-References: <20260401192615.3548627-2-bestswngs@gmail.com>
- <CABFUUZH2COQ297MoyL5A8=Fo6eqbr7wdp=euqxFt4mY1xoMawA@mail.gmail.com>
- <ac-7FQM9UDm7tYxF@mail.gmail.com>
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+	Shahab Vahedi <list+bpf@vahedi.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Luke Nelson <luke.r.nels@gmail.com>,
+	Xi Wang <xi.wang@gmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Wang YanQing <udknight@gmail.com>
+Subject: [PATCH bpf-next v12 5/5] bpf, arm64: Emit BTI for indirect jump target
+Date: Fri,  3 Apr 2026 13:28:11 +0000
+Message-ID: <20260403132811.753894-6-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260403132811.753894-1-xukuohai@huaweicloud.com>
+References: <20260403132811.753894-1-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ac-7FQM9UDm7tYxF@mail.gmail.com>
+X-CM-TRANSID:_Ch0CgAnB1Rjxc9pPbfoDA--.34698S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8trW5XF45Cw1rWw4Uurg_yoW5tr4kpF
+	4DC3s0krWrGr4UWa1DXayDAFyakr4kGay3GFyFk3yIkrZIqFy5WF15KF12kFn3A3yrur1x
+	AayYkr17W34xJrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	vjxUI-eODUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 26-04-03 15:05, Paul Chaignon wrote:
-> On Thu, Apr 02, 2026 at 08:56:06AM +0800, sun jian wrote:
-> > On Thu, Apr 2, 2026 at 3:31 AM Weiming Shi <bestswngs@gmail.com> wrote:
-> > >
-> > > list_next_entry() never returns NULL -- when the current element is the
-> > > last entry it wraps to the list head via container_of(). The subsequent
-> > > NULL check is therefore dead code and get_next_key() never returns
-> > > -ENOENT for the last element, instead reading storage->key from a bogus
-> > > pointer that aliases internal map fields and copying the result to
-> > > userspace.
-> > >
-> > > Replace it with list_entry_is_head() so the function correctly returns
-> > > -ENOENT when there are no more entries.
-> > >
-> > > Fixes: de9cbbaadba5 ("bpf: introduce cgroup storage maps")
-> > > Reported-by: Xiang Mei <xmei5@asu.edu>
-> > > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> 
-> Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
-> 
-> > > ---
-> > >  kernel/bpf/local_storage.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-> > > index 8fca0c64f7b1..23267213a17f 100644
-> > > --- a/kernel/bpf/local_storage.c
-> > > +++ b/kernel/bpf/local_storage.c
-> > > @@ -270,7 +270,7 @@ static int cgroup_storage_get_next_key(struct bpf_map *_map, void *key,
-> > >                         goto enoent;
-> > >
-> > >                 storage = list_next_entry(storage, list_map);
-> > > -               if (!storage)
-> > > +               if (list_entry_is_head(storage, &map->list, list_map))
-> > >                         goto enoent;
-> > >         } else {
-> > >                 storage = list_first_entry(&map->list,
-> > > --
-> > > 2.43.0
-> > >
-> > >
-> > Looks correct to me. It might also be worth adding a selftest for this
-> > cornet case.
-> 
-> I agree, it would be good to cover this in selftests. You can use the
-> following diff for that:
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-> index cf395715ced4..5451a43b3563 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
-> @@ -86,6 +86,11 @@ void test_cgroup_storage(void)
->         err = SYS_NOFAIL(PING_CMD);
->         ASSERT_OK(err, "sixth ping");
-> 
-> +       err = bpf_map__get_next_key(skel->maps.cgroup_storage, &key, &key,
-> +                                   sizeof(key));
-> +       ASSERT_ERR(err, "bpf_map__get_next_key should fail");
-> +       ASSERT_EQ(errno, ENOENT, "no second key");
-> +
->  cleanup_progs:
->         cgroup_storage__destroy(skel);
->  cleanup_network:
-> 
-> 
-> > 
-> > Reviewed by Sun Jian <sun.jian.kdev@gmail.com>
-> > 
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Thanks for the your review and the selftest suggestion! I've incorporated it in v2.
+On CPUs that support BTI, the indirect jump selftest triggers a kernel
+panic because there is no BTI instructions at the indirect jump targets.
+
+Fix it by emitting a BTI instruction for each indirect jump target.
+
+For reference, below is a sample panic log.
+
+Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
+...
+Call trace:
+ bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x54/0xf8 (P)
+ bpf_prog_run_pin_on_cpu+0x140/0x468
+ bpf_prog_test_run_syscall+0x280/0x3b8
+ bpf_prog_test_run+0x22c/0x2c0
+
+Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 7212ec89dfe3..aa5cd240cdda 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1198,8 +1198,8 @@ static int add_exception_handler(const struct bpf_insn *insn,
+  * >0 - successfully JITed a 16-byte eBPF instruction.
+  * <0 - failed to JIT.
+  */
+-static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+-		      bool extra_pass)
++static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn *insn,
++		      struct jit_ctx *ctx, bool extra_pass)
+ {
+ 	const u8 code = insn->code;
+ 	u8 dst = bpf2a64[insn->dst_reg];
+@@ -1224,6 +1224,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	int ret;
+ 	bool sign_extend;
+ 
++	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
++		emit_bti(A64_BTI_J, ctx);
++
+ 	switch (code) {
+ 	/* dst = src */
+ 	case BPF_ALU | BPF_MOV | BPF_X:
+@@ -1899,7 +1902,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	return 0;
+ }
+ 
+-static int build_body(struct jit_ctx *ctx, bool extra_pass)
++static int build_body(struct bpf_verifier_env *env, struct jit_ctx *ctx, bool extra_pass)
+ {
+ 	const struct bpf_prog *prog = ctx->prog;
+ 	int i;
+@@ -1918,7 +1921,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
+ 		int ret;
+ 
+ 		ctx->offset[i] = ctx->idx;
+-		ret = build_insn(insn, ctx, extra_pass);
++		ret = build_insn(env, insn, ctx, extra_pass);
+ 		if (ret > 0) {
+ 			i++;
+ 			ctx->offset[i] = ctx->idx;
+@@ -2079,7 +2082,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	if (build_prologue(&ctx, was_classic))
+ 		goto out_off;
+ 
+-	if (build_body(&ctx, extra_pass))
++	if (build_body(env, &ctx, extra_pass))
+ 		goto out_off;
+ 
+ 	ctx.epilogue_offset = ctx.idx;
+@@ -2127,7 +2130,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	/* Dont write body instructions to memory for now */
+ 	ctx.write = false;
+ 
+-	if (build_body(&ctx, extra_pass))
++	if (build_body(env, &ctx, extra_pass))
+ 		goto out_free_hdr;
+ 
+ 	ctx.epilogue_offset = ctx.idx;
+@@ -2136,7 +2139,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	ctx.write = true;
+ 
+ 	/* Pass 3: Adjust jump offset and write final image */
+-	if (build_body(&ctx, extra_pass) ||
++	if (build_body(env, &ctx, extra_pass) ||
+ 		WARN_ON_ONCE(ctx.idx != ctx.epilogue_offset))
+ 		goto out_free_hdr;
+ 
+-- 
+2.43.0
+
