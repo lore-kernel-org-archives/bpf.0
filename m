@@ -1,142 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB27E3CCFC5;
-	Fri,  3 Apr 2026 16:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F603537D2
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 17:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775234779; cv=none; b=QTO8VLRJam+pIapfXlU9FWhpvaC+uPF/PXXGefSMO2UdhzvgrCoMTgVcsZeBPKHNfRyVnPUny+VLUsqIN/HukK8UUpxI3+a1yvUB+ZrfCS0vpZfI5JZtJ0KuX3Gf6DdoGOiku2k2hRP7cYs6YZuZR88ez9znIyglje7RaDX9Md8=
+	t=1775236154; cv=none; b=arXd+E32+u7Z3bQh1MnkqvyJk7Vtn9peOEUVF5GqNS1xlqsAb27oAupl4NEYNw6tTTpUhaxrnI7W0cjqG+Su1kRDYs3Fx8kB0ozUKa0CS+jpKcne17KCvhqXJ8pKWRyGmOom4B9zlT4XKnhYLtdfsweAjYnyVyu3xbNxkFmZE1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775234779; c=relaxed/simple;
-	bh=F+1A2IItb+OUo6yKq0bGWNUTEv593pDXelm7mkt0/YI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=crxP13fXqJcMImEJIatwEQvV+WYRpwCgzRlEzTt/1HG9FUDkoyYM+pPJbNAWW++ZAVjcmbhqHCnyNEbq0SVLh/lyoXDIqm9DLr45L+A2JHm5ZsFFha/0W+rAKMBbTOc2O9MOknpZNPcZd4HmNHmfFtPXzI9BbZqr4YKPDzHLkrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gGkts3DA; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1775236154; c=relaxed/simple;
+	bh=GklAvxgyBLgL/5Hju3ganWywKwn7WpBAHxlpoD0BMoc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=es77/2jYTzFKGyto4aMGhYgQ4uMEhng11fXFncAxS1cNutUSRfuboAF/GtyUba6G8xVmqgzyDwl2LlgydWVOqRa/HWAZ+WB91kDV1/LHzrNrrWxtsQoCN2r4Kfn5LbY8qLkjqpVxS5BfkCacmqDhMlaP/1pyEvUGoVfafQAYBtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKEKkcBW; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gGkts3DA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775234776; x=1806770776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F+1A2IItb+OUo6yKq0bGWNUTEv593pDXelm7mkt0/YI=;
-  b=gGkts3DAsbis6Jc7qr/ayYn8sjrYO8CBTwuybk/y8AofGIlIanAlwxiu
-   CdiziiPOaWA8OkS8nxH6QUFVPmPQp3uFZKyiUfMjbfqjQrqoo2kAKtHjP
-   J2z+9O6rPZH0viAbxYEdZeWc7aY4QFHCwk8RYq0qyQznM+Hb66Cn6xKXH
-   krzsINoO8TQ7j0E0Ajdy4JcR5zqpLy80SCGVLIqc0bk9soQciW+Tp0nhI
-   uxwynq2XANLIEEy/DyKgwl8IRcT+a1H7qiYlC33Sh8vbFZcf1toEPtd0X
-   3kuswUHQGOnv8Z2q7EOl4E9SOc5eSU8aO2nygwW66a+KBX8FFCrQGSfz9
-   g==;
-X-CSE-ConnectionGUID: vZhweHLZQw+wIBlDb4EPiw==
-X-CSE-MsgGUID: p3DcfVgiQoSisGNBIEXrlw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="86918559"
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="86918559"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 09:46:00 -0700
-X-CSE-ConnectionGUID: 9CtrSTgcRamYgbtQBb++5A==
-X-CSE-MsgGUID: y6DKFLp5SvqomrSFspNmxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="250514787"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 09:45:58 -0700
-Date: Fri, 3 Apr 2026 09:45:52 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v9 01/10] x86/bhi: x86/vmscape: Move LFENCE out of
- clear_bhb_loop()
-Message-ID: <20260403164552.chdvvmdfaufcgxzo@desk>
-References: <20260402-vmscape-bhb-v9-0-94d16bc29774@linux.intel.com>
- <20260402-vmscape-bhb-v9-1-94d16bc29774@linux.intel.com>
- <20260403151630.GWac_ZzhQZj5LUDlRf@fat_crate.local>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKEKkcBW"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82418b0178cso1021348b3a.1
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 10:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775236152; x=1775840952; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2gzhwRJQGIxN+mKtMWgTodgRGugr9lBgvbN6cnb6yxA=;
+        b=VKEKkcBWhgw4rSIms4fCmRYXq7+jZ/kBKdGctryKmZ0d+ojxvQGpq9SE88039pAZ6c
+         qlcqySUT92uvAQosO0D6ygnaV3OJHO6z3z4VQdnhVA/cFXwcHJcQ8wzMLASEvXN5g3Zt
+         gFCZiJgzc3iKzl1IUJT1/pwa0qNdaE4Zcvev3mN2xoeWRAQDUClMdDGmEUWm3Ep1kha3
+         hsJ45qYYJ54lQfvnJsW/ok5k5n25MKn2DezMjgspP/c2GsjvbzWrhYL1bCm13QIaiLe+
+         AgJKzUp9WhEeCHwNM9gIW2VlkV1i1qSNZ1Ll2xyOGPU1S8Al5qqFNR/1wU9zwKUjmg7E
+         7D8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775236152; x=1775840952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2gzhwRJQGIxN+mKtMWgTodgRGugr9lBgvbN6cnb6yxA=;
+        b=hDo6CRU1QCFwY+Klua3Us9gB+cYKfUfgiJotxhlAHjAyLxfDGY0SIh0K7Gh8Kyq5jz
+         hBET7vGy1+7zRQdk+rU/yQu+kmQcqUovfZvrU6hw7BFIhnbsgyz9r/RiASWh7uf2w8fT
+         uf+ZKC6Jpjo+HxXGlULJcHZOlrgW+FSEdb9SP5TxllesNfYSBjzIra1p80rnfqGrh4ss
+         WsUvwUfTRjFrjsfISgHFYPFiupgfXDQeOWHGsMlDXWqRvS689p/REEXzLN/ahbHugy+Z
+         0hCoUrTFX1vTzv+pBtHqV+BnPbXu42z6rfPJoXGYXupjBhrs62HetaMRCkV6HXnZJcLe
+         IiVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJ4gDFRBkpm7YJ0Uq+qls7luJPk5k5xUcxDRtmbTEilKLc+kaXsFm7ZnXXXJ55bYhqXOU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQZXovdlwcm/96iDskuaDv9J7RNhVxFKqAaRrv7klEnU96V+Ty
+	CqT/j1Or/3Hzt1Nb/uoZgCLpnE+3m4H+aYgmNhvEfsn+mlm3nFOwOLQVIgnDl0zS
+X-Gm-Gg: AeBDiesWEmtSX7x7D9Gn3H51zGMh07dr6FkrkuSpRFgBhyvoAjquDuP0kIQjizQ2oJ/
+	YEuxfoDAQWW0PCDQgMAgloxXo3weuyND83rgdaaZ81QIPXUZ+xa3LVDMOy9GIm57PkhVbYZXhyu
+	rgS2AxXF0fffK4JvBIoqmpodhQ2+7avhCAd/+NtaLha0bjmmi5L2KGa6ukbk5s2oYveVZCQciW/
+	LeN87mv2t+bBh4FOtUI5nsjiukO1oCeFb91l4F26mPyMVvfFZNZ5oBLOJbVwlPxKIrXGjQh2ju5
+	FN+ln5Jaq5HLDr9bmOwIPtEftUB9qzigMtZ3+bo+6xw8D8cH8UnvS8ecdi04ga/kJccxARHWWqk
+	/clwFZaK9F2C+O2UJjCjiMNGkw1FnGPIVABzw77pfir7YcxNnYyss3zTqAyJRnnZgZGerAty0sD
+	GgZqlsTPwuKtFTZQxLtbirGTq8NjMDfegl2SWJ1NcwhXFudexxuM/eCg==
+X-Received: by 2002:a05:6a00:ab87:b0:82c:ebae:3cb with SMTP id d2e1a72fcca58-82d0dbac75fmr3481262b3a.43.1775236152067;
+        Fri, 03 Apr 2026 10:09:12 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b3c930sm6588725b3a.17.2026.04.03.10.09.05
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 03 Apr 2026 10:09:11 -0700 (PDT)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: arnd@arndb.de,
+	ast@kernel.org,
+	ihor.solodrai@linux.dev,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	john.fastabend@gmail.com,
+	pengdonglin@xiaomi.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH bpf-next 0/3] bpf: Refactor how the verifier matches kfunc checks
+Date: Sat,  4 Apr 2026 01:08:54 +0800
+Message-ID: <20260403170900.58659-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260403151630.GWac_ZzhQZj5LUDlRf@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 03, 2026 at 05:16:30PM +0200, Borislav Petkov wrote:
-> On Thu, Apr 02, 2026 at 05:30:47PM -0700, Pawan Gupta wrote:
-> > Currently, the BHB clearing sequence is followed by an LFENCE to prevent
-> > transient execution of subsequent indirect branches prematurely. However,
-> > the LFENCE barrier could be unnecessary in certain cases. For example, when
-> > the kernel is using the BHI_DIS_S mitigation, and BHB clearing is only
-> > needed for userspace. In such cases, the LFENCE is redundant because ring
-> > transitions would provide the necessary serialization.
-> > 
-> > Below is a quick recap of BHI mitigation options:
-> > 
-> > On Alder Lake and newer
-> > 
-> >     BHI_DIS_S: Hardware control to mitigate BHI in ring0. This has low
-> >     performance overhead.
-> > 
-> >     Long loop: Alternatively, a longer version of the BHB clearing sequence
-> >     can be used to mitigate BHI. It can also be used to mitigate the BHI
-> >     variant of VMSCAPE. This is not yet implemented in Linux.
-> > 
-> > On older CPUs
-> > 
-> >     Short loop: Clears BHB at kernel entry and VMexit. The "Long loop" is
-> >     effective on older CPUs as well, but should be avoided because of
-> >     unnecessary overhead.
-> > 
-> > On Alder Lake and newer CPUs, eIBRS isolates the indirect targets between
-> > guest and host. But when affected by the BHI variant of VMSCAPE, a guest's
-> > branch history may still influence indirect branches in userspace. This
-> > also means the big hammer IBPB could be replaced with a cheaper option that
-> > clears the BHB at exit-to-userspace after a VMexit.
-> > 
-> > In preparation for adding the support for the BHB sequence (without LFENCE)
-> > on newer CPUs, move the LFENCE to the caller side after clear_bhb_loop() is
-> > executed. Allow callers to decide whether they need the LFENCE or not. This
-> > adds a few extra bytes to the call sites, but it obviates the need for
-> > multiple variants of clear_bhb_loop().
-> > 
-> > Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> > Tested-by: Jon Kohler <jon@nutanix.com>
-> > Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
-> > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> > ---
-> >  arch/x86/entry/entry_64.S            | 5 ++++-
-> >  arch/x86/include/asm/nospec-branch.h | 4 ++--
-> >  arch/x86/net/bpf_jit_comp.c          | 2 ++
-> >  3 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Thanks.
+The verifier contains a lot of logic like the following, scattered
+everywhere, which makes the code harder and harder to maintain:
+
+static bool is_bpf_rbtree_add_kfunc(u32 func_id)
+{
+	return func_id == special_kfunc_list[KF_bpf_rbtree_add] ||
+	       func_id == special_kfunc_list[KF_bpf_rbtree_add_impl];
+}
+
+This series introduces a new approach: each is_bpf_*-style set can
+place its entries in its own section (.BTF_ids.##sfx), and the linker
+script merges those per-set sections into the main .BTF_ids section.
+
+When merging subsections, the linker script inserts an end symbol
+for each one, so we can derive how many entries each subsection
+holds. The kernel can then walk the entries in a subsection and
+get the same effect as calling an is_bpf_* helper.
+
+With this we can drop the BTF_SET_END macro; BTF_ID-style macros
+can live anywhere in a C file and are no longer tied to a strict
+BTF_SET_START … BTF_ID … BTF_SET_END ordering. On top of that,
+all BTF_ID-style macros can eventually be consolidated in a uniform
+way.
+
+The current patch only partially migrates the rbtree kfuncs. If this
+direction looks reasonable, I can continue with further migrations.
+
+The end goal is something like module_init(): adding a new module
+(kfunc) would only need a single line at the end—like module_init
+(BPF_VERIF_KFUNC_DEF) to perform all the upfront wiring. Another
+benefit of BPF_VERIF_KFUNC_DEF is that it pushes us to untangle
+messy verifier safety cases and make them modular, so they can be
+expressed as parameters to BPF_VERIF_KFUNC_DEF.
+
+Reaching that goal may still need:
+
+1. Further migration of other kfuncs. One issue worth stating up front:
+there will be many .BTF_ids.##sfx subsections, and a large fraction may
+contain only a single entry. I think that is acceptable; avoiding it
+would mean keeping some logic on the old special_kfunc_list path for
+those cases.
+
+2. Trying to unify other macro families (BTF_ID_*, BTF_KFUNCS_*, …);
+the exact design still needs more thought.
+
+Kaitao Cheng (3):
+  bpf: Teach resolve_btfids about the setsc type
+  bpf: Introduce BTF_SET/ID_SUB and BPF_VERIF_KFUNC_DEF
+  bpf: classify rbtree kfuncs with BPF_VERIF_KFUNC_DEF sets
+
+ include/asm-generic/btf_ids.lds.h | 26 +++++++++
+ include/asm-generic/vmlinux.lds.h |  2 +
+ include/linux/btf_ids.h           | 92 +++++++++++++++++++++++++++----
+ kernel/bpf/helpers.c              |  7 +++
+ kernel/bpf/verifier.c             | 44 +++++----------
+ tools/bpf/resolve_btfids/main.c   | 89 +++++++++++++++++++++++++++++-
+ tools/include/linux/btf_ids.h     | 83 +++++++++++++++++++++++++---
+ 7 files changed, 292 insertions(+), 51 deletions(-)
+ create mode 100644 include/asm-generic/btf_ids.lds.h
+
+-- 
+2.43.0
+
