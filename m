@@ -1,30 +1,32 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CEF3B7A8
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 16:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7818D2248B9
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 16:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775234458; cv=none; b=dYkruabSFK0/urvYHPQ+XSTpMezpiDKqfe7+ndqoxA4gfGpPtgEIih+FTK4M0a7TQ8bwni31xGIS0tVqvlyLx4hEAQs/AjewmIlIv8Qu4RSGoz9dvJcC5Vk9nJIzBHJo7U6ViljHWG+/KMB3VWMaN0xJGsyg2Hc/SQHmLAtJopI=
+	t=1775234459; cv=none; b=d0aCtd0NWrU24VETEkcWnGSuzJqYVEoAw/3qn5O3afaQW7fPWSKcxhbtZdJAFBPM1NwbY0JYA/M5V3iVvXOUlCqibSVzVGNRTfPDlPPuSYctTLiaK8n67Kflfqb68t+XqcGe0F9QL87NsRpdj8g2EynTlfEuG8usS5W/8FUgdNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775234458; c=relaxed/simple;
-	bh=rjXTv/hZx/tI7XH8fMHLikg+Omjq60zaQYkDmGICMQs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lywBGuWE2q7+pcRVeV7GGKkB2n1KJZhjJOb6tdC7YwRJV4pzHn566O5m3hTEPAHlbs5ZcPJHt44i4FEH7EmB51ZYzJoHwJjvWpm3Ipa6nwwC2RvTVO9m8d/3hjUFI40kSSw+vbFPXHnrEnw8ZTdDvQJx3be35KdevwRsd3ukEL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QAoVYABo; arc=none smtp.client-ip=91.218.175.177
+	s=arc-20240116; t=1775234459; c=relaxed/simple;
+	bh=+xGM2FK81LHDSRSuLePPcG8fOPo5d7HKcEYGuaB7OOA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LgxQP9mu8wLGdkQLqkI5EzGaOKM0kKLyfH1U2E5ZwOKFfzZpnTWfR/AGcOpVjm3E9yxPEKkflhyQbzi8I2GjLHo7br58XbWtbeaPTVRU17oQcjPKM57eOVlGLt1k/r9tXOtasB2R4uKlBkaBzu0diT7/v+mQqVsukHdhNYAbCXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gzp7uPQg; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QAoVYABo"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gzp7uPQg"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775234454;
+	t=1775234456;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=BjcbDiBJUwziIaXx0sF2n89jR5J/y0R12kmDKcTEWkY=;
-	b=QAoVYABoDjux1tTPcCnCHEtVwkLDpUDRn4b3rKV9mD2d6bMItpjxZd988FqiE1+TU804+V
-	p9nJ/aw0AVJPJxQdwrn8KEjELBh8y8uo+oF10vURz48QncDRZtgAq6+YNUJX3Sld1oWTYi
-	3QQ4HiV2PEFBMlBVoa8RBqKyG/QUQDw=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jm7vmXnPdkLR0GNW0gH+mvDg07K+Fu8Sdlb6RCPXEtg=;
+	b=gzp7uPQgDnlX66DdfvqtzXoRbWsPNCH+/d11zNjgk8xJa7pXof2VrPsgK/y9rpmoz6yI4O
+	6N0GfvyhSqJVE1wygzYsZ8MLhhqEwJByHXBtN5qkAvYYqI1q+/kK8HhBaqy801umeWJC6p
+	NIM0YHplUzt+17CLuJIcwOpwueFTbuk=
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
 Cc: bpf@gcc.gnu.org,
@@ -33,9 +35,11 @@ Cc: bpf@gcc.gnu.org,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH v3 0/2] BPF documentation improvements
-Date: Fri,  3 Apr 2026 09:40:38 -0700
-Message-ID: <20260403164040.73269-1-vineet.gupta@linux.dev>
+Subject: [PATCH v3 1/2] bpf, doc: Clarify Pseudo-C notation and w vs r register usage
+Date: Fri,  3 Apr 2026 09:40:39 -0700
+Message-ID: <20260403164040.73269-2-vineet.gupta@linux.dev>
+In-Reply-To: <20260403164040.73269-1-vineet.gupta@linux.dev>
+References: <20260403164040.73269-1-vineet.gupta@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,21 +49,47 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Hi,
+As a newcomer to BPF ecosystem I was confused with Pseudo-C being the
+actual assembly. And while it's obvious now that w and r forms represent
+32-bit and 64-bit regs respectively, it's better to call this out in
+documentation explicitly and make it more newbie-proof.
 
-A couple of patches for documentation as I start to hack on gcc-bpf backend.
-Changes since v2 captured in individual patches.
+Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+---
+No changes since v2
+---
+ .../bpf/standardization/instruction-set.rst        | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-Thx,
--Vineet
-
-Vineet Gupta (2):
-  bpf, doc: Clarify Pseudo-C notation and w vs r register usage
-  bpf, doc: Improve MOV/MOVSX documentation and add examples
-
- .../bpf/standardization/instruction-set.rst   | 63 +++++++++++++++----
- 1 file changed, 50 insertions(+), 13 deletions(-)
-
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index 39c74611752b..96181565906f 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -315,13 +315,21 @@ For arithmetic and jump instructions (``ALU``, ``ALU64``, ``JMP`` and
+ Arithmetic instructions
+ -----------------------
+ 
+-``ALU`` uses 32-bit wide operands while ``ALU64`` uses 64-bit wide operands for
+-otherwise identical operations. ``ALU64`` instructions belong to the
++``ALU`` uses 32-bit wide operands ('w' registers in assembly) while
++``ALU64`` uses 64-bit wide operands ('r' registers) for otherwise
++identical operations. ``ALU64`` instructions belong to the
+ base64 conformance group unless noted otherwise.
+-The 'code' field encodes the operation as below, where 'src' refers to the
++The 'code' field encodes the operation as below, where 'src' refers to
+ the source operand and 'dst' refers to the value of the destination
+ register.
+ 
++.. note:: BPF ISA is unique as it uses "Pseudo-C" notation for the assembly
++          instructions. In the table below, the column "name" specifies the
++          encoding names. Assembly instructions (as generated by compilers)
++          are specified in the description column for some cases. Description
++          of ``DIV/SDIV``, ``MOD/SMOD`` includes additional semantic logic,
++          not actual assembly.
++
+ .. table:: Arithmetic instructions
+ 
+   =====  =====  =======  ===================================================================================
 -- 
 2.53.0
 
