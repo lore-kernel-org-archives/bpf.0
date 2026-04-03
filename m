@@ -1,105 +1,194 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F512343D2
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 04:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EB31AF4D5
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 04:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775189870; cv=none; b=jyja5/WqonUvNYsv35VXslRZlL8vjyi5kBnd52GXl+sb6e5+uwPtPgS17Jg9C2FCPFwyFgnQ6IOWb0iMg2Lr1O/76oXldChFbprhuEG/IrMoKP+76Y5oZmgciBqQurKcD51w7XwojmwUtaVNx0cHhcwcVZi/8/cbXVh8UHiNBWE=
+	t=1775190445; cv=none; b=ip90UYvnJkli+OkViSRBFTcJ3MoQCVD0BKRU0CtIwdCxOoGh6h0ypIYaBaWAHY0ZTamzBzrTS08Y9bCFYTXVQ1mz+D73LefrEp7KnU2DOlYqa48Fl/wnNuwiFrz9SjSGFPtScR9Y1CP1ndI4fiZMCfvBT9D8Vq7EHJMu4iWBUGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775189870; c=relaxed/simple;
-	bh=qyF3K26GuiWIXgM/zTMQciia4eCTzlAoNl0UT+wJS8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aPb0fmhaiV/3uW7Yy+a1qANA3SntPtxt81Z5BFD8Pkh+pxKkmlMm9D05w10yar8Ou/oGdh3i1/0Fc+NOrdgiwzgmMhpYvJrP2KUsObHKDXub/rv5ib6ehmOjQ4zxN9x6VvykQRGk8gBzoIkDd/m+4bb8EkV218UpUh9LJGORFTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RHYwpGMy; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775190445; c=relaxed/simple;
+	bh=zP5V0zFHmgypRo3IQYxrbohVDs3iX3fvd5yKgd+Tw3g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=my1t//NpGOw/zTY+37ubRNSWHCOrsDI0WXUj9gawKZ2vQF7kDhFTXMjcqPzSVtqIZeiYiuNL+jwPXICoG7H5QrTrmFol+fC6Svv/RJi0Q7Hd9RKRIdS5eUKgOgPGNd/DrG2J3Lud3spUQXbn9EghGcERCTbFe1ZZ2Msqby8hnuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hL8R8AVl; arc=none smtp.client-ip=209.85.216.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RHYwpGMy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775189868;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9dk4taWr5CSsrkYNbhI6aSxiSvpfoZSTEmGxFAQcCq0=;
-	b=RHYwpGMyfLOPwgoTXQHTZ8x1QwL2HunBY/cq5/UmqG3eNTxmicdDKG1Bc9kEbgChvZsx6Z
-	P+t9HTGDROfWTzV4ye+3vL7165Tqgor2iwZRsm+1CBTs4ly+Bw6bJcP77vX+t5v29St5kT
-	Ubp9QWzPnNs7hhSG4jjs0J2rq6VqY6U=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-FuR2_Tc5Mp2-NrVZItz6Fw-1; Fri,
- 03 Apr 2026 00:17:44 -0400
-X-MC-Unique: FuR2_Tc5Mp2-NrVZItz6Fw-1
-X-Mimecast-MFC-AGG-ID: FuR2_Tc5Mp2-NrVZItz6Fw_1775189863
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 09ED819560A7;
-	Fri,  3 Apr 2026 04:17:43 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.83])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C756D1978D41;
-	Fri,  3 Apr 2026 04:17:38 +0000 (UTC)
-Date: Fri, 3 Apr 2026 12:17:33 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, Caleb Sander Mateos <csander@purestorage.com>,
-	Akilesh Kailash <akailash@google.com>, bpf@vger.kernel.org,
-	Xiao Ni <xni@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH V3 05/12] io_uring: bpf: extend io_uring with bpf
- struct_ops
-Message-ID: <ac8_XZZiTmHi3mwq@fedora>
-References: <20260324163753.1900977-1-ming.lei@redhat.com>
- <20260324163753.1900977-6-ming.lei@redhat.com>
- <b7216cd5-68f4-4ab5-b1c8-b1c71f38fc00@kernel.dk>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hL8R8AVl"
+Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-35c238f1063so945636a91.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 21:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775190443; x=1775795243; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLMlfgEbHlrA9efay7Ul3rLEpDZ1ral/X6M/JlrJsxk=;
+        b=hL8R8AVlBseCKozdsV7j+pc9J8gkuVXGj8A2+n0etXa9KUdEVmGUwCSxochQhck5XI
+         wtqVduel2UHFaS6zVmuanmXF6cTdKX+fm9p03q02fKhCjzmrHAL4TaaEAhdN0djH2q3v
+         RrrZI6jwMLtSSIx/SU2OfkgxXLBrxoVMIuxO/xSz0JTLVqR8ZXVfEA5FVrBWAG4TgZR+
+         4rriC1sPA7UchXspsgupgk7bh/uWU8EguZbl5fDosYyxCpL5t0lZ7LFK/tirZg/4e+LR
+         ssqw5s++wL5WlX5VmAD2v8nZR6IYt/pen5gWZAbw7hJoXz+07oitM0RcixB0Yc+bdwf5
+         6gag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775190443; x=1775795243;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wLMlfgEbHlrA9efay7Ul3rLEpDZ1ral/X6M/JlrJsxk=;
+        b=TeaEk1yAxg/QfOb0ahwj8iFlDvUwuK5+LRBDdEjUS69eOk5oT0kRkLEjKeM03W0SdR
+         c/BaCerWUZMD1XPG5WR45LqD1jUaoNfiaitGbyHhgzRu5K7qXrR466kDORglsI0nfEG3
+         O77aJ/cXLy48GwqZI+Nqor2tv8bzeCAM8a+KLaF3kxTQ0GuEWAEn7oMaj+20aejAHIrS
+         9WmPBUQzdYBTjedoznIZSATSihUScNAa5cY7MRQYL+QckjjDJEglJLPMgrqhd9yo1y9I
+         0szr04sarTsL3DoYerjDpQZWnpKcJnSSyX+m3cWoyvTw+RjINnFlS15lZu5HBeFg7pmB
+         97LA==
+X-Gm-Message-State: AOJu0YwosvDxMkwDjHsNRBR8m/R+IvhKb+IP2D4mVgL3hfOAw3SUknKo
+	8CloDuyMCLY5pyMZZ5F9tA8nytpkdzngdujTA+SZTgbJQ9Gl26p2usF0smwPgXyWCF9LcY/FPQY
+	IE3NDVN8y9Ytl
+X-Gm-Gg: AeBDieuVcxBbeMZEWGDqq5HOkTPWk9yPK5RbYhj2Hnn5dSejvq9wctb8XcHpHYe/RiN
+	8fKEdFNc+pQcd2y7T2+VgTlyvymDxtQ4ov2xRx2mECQ1F+y+FFBy14Kr80Q+QeHoaRMNG+5h2XS
+	+wjMOl2GWlgqL6JmydbGZplZbl2KduISxQactG9IXF0qrX0uq7146iDXZ6ZuCZAoKfXqhf4fRy+
+	yT3yyUXVyGIJtK/ux6ta3fhaze2rM7dU47JMF5nIokSqc25k7S/gpU4UBkzU5AmH2xAi5Kix1sg
+	Q8eJTO2x2zdCZYhTdISLM25sWWhkFaKavVuG3GLKdDHSQ5jNNo8CPZuZEG97HizGpWSznwJVZCW
+	KBLoAreuwZVWHjshrhOHMJ6ZK5XX5FMcbFZQwlxeKnSNZWZ6aC3sFahlg+PVbQhUbMTr/R9xyLy
+	IQbQ==
+X-Received: by 2002:a17:90b:1e04:b0:35d:a2d3:5c31 with SMTP id 98e67ed59e1d1-35de6a01c54mr1329336a91.29.1775190443002;
+        Thu, 02 Apr 2026 21:27:23 -0700 (PDT)
+Received: from krios ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe937925sm12970449a91.12.2026.04.02.21.27.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 21:27:22 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 0/9] Introduce arena library and runtime
+Date: Fri,  3 Apr 2026 00:27:11 -0400
+Message-ID: <20260403042720.18862-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b7216cd5-68f4-4ab5-b1c8-b1c71f38fc00@kernel.dk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 25, 2026 at 08:09:03PM -0600, Jens Axboe wrote:
-> On 3/24/26 10:37 AM, Ming Lei wrote:
-> >  int io_uring_bpf_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-> >  {
-> > +	struct uring_bpf_data *data = io_kiocb_to_cmd(req, struct uring_bpf_data);
-> > +	u32 opf = READ_ONCE(sqe->bpf_op_flags);
-> > +	unsigned char bpf_op = uring_bpf_get_op(opf);
-> > +	const struct uring_bpf_ops *ops;
-> > +
-> > +	if (unlikely(!(req->ctx->flags & IORING_SETUP_BPF_EXT)))
-> > +		goto fail;
-> > +
-> > +	if (bpf_op >= IO_RING_MAX_BPF_OPS)
-> > +		return -EINVAL;
-> > +
-> > +	ops = req->ctx->bpf_ext_ops[bpf_op].ops;
-> > +	data->opf = opf;
-> > +	data->ops = ops;
-> > +	if (ops && ops->prep_fn)
-> > +		return ops->prep_fn(data, sqe);
-> > +fail:
-> >  	return -EOPNOTSUPP;
-> >  }
-> 
-> Any early exit should ensure 'data' is sane, so that the cleanup doesn't
-> potentially touch uninitialized crap. This is something that has bit us
-> in the past. Not an issue for this patch that adds the code, but it will
-> be once the next patch is applied. Better to clear ->opf/ops here
-> upfront, so that we never leave this function without 'data' being fully
-> initialized.
+Add a new subdirectory to tools/testing/selftests/bpf called libarena,
+along with programs useful for writing arena-based BPF code. This
+patchset adds the following:
 
-But ->cleanup() is only called in case of REQ_F_NEED_CLEANUP.
+1) libarena, a subdirectory where arena BPF code that is generally useful 
+to BPF arena programs can be easily added and tested.
 
-Or maybe you mean other cleanup instead of ->cleanup()?
+2) An ASAN runtime for BPF arena programs. BPF arenas allow for accessing 
+memory after it has been freed or if it is out of bounds, making it more 
+difficult to triage bugs combined to regular BPF. Use LLVM's recently added 
+support for address-space based sanitization to selectively sanitize just 
+the arena accesses.
 
+3) A buddy memory allocator that can be reused by BPF programs to handle
+memory allocation/deletion. The allocator uses the ASAN runtime to add 
+address sanitization if requested.
 
-Thanks,
-Ming
+The patch includes testing for the new allocators and ASAN features that
+can be built from the top directory using "make libarena_test" and
+"make libarena_test_asan". The generated binaries reside in libarena/.
+The patch also adds test-progs-based selftests to the codebase for the
+libarena code, so the new tests are run by ./test_progs.
+
+The patchset has the following stucture:
+
+1-2: Addresses a verification failure triggered by SCALAR += PTR_TO_ARENA
+instructions.
+
+3-4: Minor changes to selftest headers to prepare for the introduction
+of libarena.
+
+5-7: Add the libarena directory and testing scaffolding, and introduce
+the ASAN runtime.
+
+8-9: Add the new buddy memory allocator along with self-contained and
+prog-tests-based selftests.
+
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+HISTORY
+=======
+
+v2->v3 (https://lore.kernel.org/bpf/20260127181610.86376-1-emil@etsalapatis.com)
+Nonexhaustive due to significant patch rework.
+- Do not duplicate WRITE_ONCE macro (Mykyta, Kumar)
+- Add SPDX headers (Alexei)
+- Remove bump/stack allocators (Alexei)
+- Integrate testing with test_progs (Kumar)
+- Add short description of ASAN algorithm at the top of the file (Alexei)
+
+v1->v2 (https://lore.kernel.org/bpf/20260122160131.2238331-1-etsal@meta.com/)
+
+- Added missing format string argument (AI)
+- Fix outdated selftests prog name check (AI)
+- Fixed stack allocation check for segment creation (AI)
+- Fix errors in non-ASAN bump allocator selftests (AI)
+- Propagate error value from individual selftests in selftest.c
+- Removed embedded metadata from bump allocator as it was needlessly
+  complicating its behavior
+
+Emil Tsalapatis (9):
+  bpf: Upgrade scalar to PTR_TO_ARENA on arena pointer addition
+  selftests/bpf: Add test for scalar/arena pointer addition
+  selftests/bpf: Move bpf_arena_spin_lock.h to the top level
+  selftests/bpf: Deduplicate WRITE_ONCE macro between headers
+  selftests/bpf: Add basic libarena scaffolding
+  selftests/bpf: Add arena ASAN runtime to libarena
+  selftests/bpf: Add ASAN support for libarena selftests
+  selftests/bpf: Add buddy allocator for libarena
+  selftests/bpf: Add selftests for libarena buddy allocator
+
+ kernel/bpf/verifier.c                         |  18 +
+ tools/testing/selftests/bpf/.gitignore        |   2 +
+ tools/testing/selftests/bpf/Makefile          |  31 +-
+ .../testing/selftests/bpf/bpf_arena_common.h  |   4 -
+ .../bpf/{progs => }/bpf_arena_spin_lock.h     |   4 +-
+ tools/testing/selftests/bpf/bpf_atomic.h      |   4 -
+ .../testing/selftests/bpf/bpf_experimental.h  |   3 +
+ tools/testing/selftests/bpf/libarena/Makefile |  77 ++
+ .../selftests/bpf/libarena/include/asan.h     | 124 +++
+ .../selftests/bpf/libarena/include/buddy.h    |  64 ++
+ .../selftests/bpf/libarena/include/common.h   |  50 ++
+ .../bpf/libarena/include/selftest_helpers.h   | 109 +++
+ .../selftests/bpf/libarena/include/userapi.h  |  27 +
+ .../bpf/libarena/selftests/selftest.c         | 190 +++++
+ .../bpf/libarena/selftests/selftest.h         |  12 +
+ .../libarena/selftests/st_asan_buddy.bpf.c    | 251 ++++++
+ .../bpf/libarena/selftests/st_asan_common.h   |  46 +
+ .../bpf/libarena/selftests/st_buddy.bpf.c     | 229 +++++
+ .../selftests/bpf/libarena/src/asan.bpf.c     | 524 ++++++++++++
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 783 ++++++++++++++++++
+ .../selftests/bpf/libarena/src/common.bpf.c   |  66 ++
+ .../selftests/bpf/prog_tests/libarena.c       |  79 ++
+ .../selftests/bpf/progs/arena_spin_lock.c     |   2 +-
+ .../selftests/bpf/progs/verifier_arena.c      |  29 +
+ 24 files changed, 2716 insertions(+), 12 deletions(-)
+ rename tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h (99%)
+ create mode 100644 tools/testing/selftests/bpf/libarena/Makefile
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/asan.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/buddy.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/userapi.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/selftest.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/selftest.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/common.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena.c
+
+-- 
+2.53.0
 
