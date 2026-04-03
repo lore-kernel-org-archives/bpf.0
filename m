@@ -1,71 +1,52 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB101346795
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 01:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40DE346FBC
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 01:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775180676; cv=none; b=WW7PUmk5BTp5YgjjRGjO3QOoDZikf+p1MVGJ/IDJJpfK2dGQ2eURWjc2Yk9sBy+Q8JCt1Dgrsnb87ir32IZrbDqMuC7LXELjs/fzWQ9Pj2tjbrzwohjVvlmTqK+ig9A4a/JxYpzQik9KGkNzR57euMzgVvN69P4TYWWoc+eWWgM=
+	t=1775180731; cv=none; b=SIVxdXp7nAM4SkV98w5ErBw+5YRzULC1uCjpjBr+5+vPg+isHteKFUjJ8RfINSRiuDsE47mARp4w3dezvNomYWSAoeb7L2Q+8c59xVWn3sj8BxhAof5PTNx/Vzd/hMwjP3o7aFTlsyoM0BHq1Z9LISkHm2aEnSYQjV+Xlu1HPGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775180676; c=relaxed/simple;
-	bh=HNYcmEf7EiwkfDMvJpQg7PP+wKq4v1XKjnMsfGqn4Ok=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Io184BtRlFhlAIeVGEcX52BO7lJUNCNumnyGSAeAUf4snPhv/pc+9yiZ2nMIw2krY6x7LLUKUBpc+tq4BIcs80bh4la+JLL4LRJsiVb+V4oIzfgd/oTTEfTyE7MxvTvrQvMGWnCs0TD4vXsWa/YkZ+zRoblZ35fYJxLgAxG0I/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YVEL7NcP; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775180731; c=relaxed/simple;
+	bh=P7suTYjdTKQFqNxGneXVP9C7pxbbBFOIaA279vTubs8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ctD+//gRZb+ZouxdJRCwijtTuMWeKJ/UuCi43+TlAQMkn5sBNdlXGtcraXcbO+Wj4u+eaRuTt3NjOqb0jq2KpkAbAehokY3r2/UYHgXrzWrGqXRiujJUEoNNX8yfA1PZScGoOm24uPVW1N9rcgFxvM37yKBbZmrrDrrIKJfhsHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QxDcrfcP; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YVEL7NcP"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82ce0a9b3f7so672889b3a.0
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 18:44:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775180674; x=1775785474; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9dV+yx8nNSmq6oEE0Ah8bgFUDuF7POWFMUhV1AmL2kw=;
-        b=YVEL7NcPr9YE+EBxgPPrEvx0dywqQOOwp7Bsk2BgqBG7judiSmF4cQtoT2e+4rJekl
-         3wjwNAILrotYoBcu8xGbIwxPbJ8q0j7SzBnO+bWKFpNn8doyRym8cVghqmT0aUx/MlvQ
-         HT3rAMt1VGQVWyDSLAXfAMB6Z7VNK6g05md4kTW+cygUS6WQvFWsMazkAnhJR+KPqs+m
-         9zT/UC4/BWZSlWuYUNYp0k+eHgAWEHTV2yaMA3aKxUyFMYn0uLcbxpaFvjqsoqekIqs8
-         E8kovQ9kVKrxfbHnO+eIr3Zr7hQ5rUr5NOfYm+ki2kxuNoBbYC8BokBg5uCp8hABioad
-         AmSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775180674; x=1775785474;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9dV+yx8nNSmq6oEE0Ah8bgFUDuF7POWFMUhV1AmL2kw=;
-        b=mGE4xQy1PIhOw9lS5h/oNECQsqBN1Yudbrgqu0xibtY4BQud0aRfXk8jMmINb/RpqE
-         mZGW4at+TJKEcLUKCvqKcLy0l0cj6dteQb9gCCa61Or/r8W3m+staVi96+1S5zo8ts/G
-         h+EttzTovBJrOXnVXPphy6l0LQHwJ/omDe70s1+9Du4ISuRjfIHSG25mZEKYOeiwfc2S
-         uETiDbCg7h4LZXLCJsE8XTmK8gqyrGJe9bmVO/RxPHpV/ikuIB/DsLdSRJ0JNogOfNa+
-         v24z263JB8zeRJiFS9vP4JFWKm4HCXavns8j1rLxJgKD2xXYb2MizPrq9oXiyoJKhO3a
-         Xc1A==
-X-Gm-Message-State: AOJu0YztshYAT4gG8PMPQFNE5lIJOuWdtVqoqgGBUe+JsRP68Mb4Kbua
-	aX4V83fBODXMDCu1oRWQaF1CC+3kkNktgCi1IS01jIS7MI4gQirXhmJd4t4QoQ==
-X-Gm-Gg: ATEYQzx7UlTKGoQDrf+WheN+xTUmxQijo3UQfAqRyvVXydER3Q1MJH5E5QZdtfMeojv
-	/Z8ZqzKtmtKvtSUqiYW6ehnBYGH30nFwU2g5iZ+b1UqppzZBchzdiIU3tZsSRxr7YLAXRWG8+BW
-	0fHHWF8i3zVRdmLQbq3hrFmXkZh88U4P/MCvykTueYXaiwwx9AHNBig932RtOpqjmYhLBw5PpTF
-	DGahSGoA+PilMjQdem51WBtOWrqw5J5Qtngmrhf5zs46m/qWB8l9+OAUqE5CpqkLXV/sZEU1gWQ
-	d+sllr6Ob+fHeJtdNuB+UAzPZXeKJ9OSqgawwOh5OAUKQlvp8ibI5Bxnl8m1JxEJo42taaFw1dS
-	9uUKXjqNm/ka5e7YIKtKUn9kOqpry8XJsOupmupue7rLZceCaGrh7wFRGWGAUXt95pFlBelbOLi
-	8xTLmGUj5iIKSK8g3bk5LCydFfwHm3jOYm2ZeYlb4qvBuN9A3nQkX5Ap4AbMFVYdOhCS2rtFETE
-	rJzGjrJXJDH8eFV/tOGA2v71RNCimfaSI8s9Ni6bbGuO84dLOgfSAJXBgs9LfxANzFWycJ4
-X-Received: by 2002:a05:6a00:1405:b0:82c:e39d:b845 with SMTP id d2e1a72fcca58-82d0da3dd42mr1090097b3a.4.1775180674048;
-        Thu, 02 Apr 2026 18:44:34 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9ca4efesm4364634b3a.61.2026.04.02.18.44.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 02 Apr 2026 18:44:33 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org
-Subject: [GIT PULL] BPF fixes for 7.0-rc7
-Date: Thu,  2 Apr 2026 18:44:31 -0700
-Message-ID: <20260403014431.67976-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QxDcrfcP"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775180726;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=umW2Vm01x/TtS9j0msR8qy2xrPc+F174PwIyfAFMorQ=;
+	b=QxDcrfcPnIwYZ+GkdvLAm3cr2R9PYFBnYWL2dyWoeVQZkhJiYBLYTPfsJp4ldkqO0pNq/D
+	OZVqumFAqp7ZyLQ/dG6oKCHoeC8nmT0jk8EKZE8LXdaQMwJGuAiaxaq5EZLEnF+TIUWl9N
+	bL6LVwwVlyUYxevFnI8fPRSJrvT+nqY=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Antonius <antonius@bluedragonsec.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Michal Luczaj <mhal@rbox.co>,
+	Mina Almasry <almasrymina@google.com>,
+	Eric Biggers <ebiggers@google.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	Soheil Hassas Yeganeh <soheil@google.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net v2] net: skb: fix cross-cache free of KFENCE-allocated skb head
+Date: Fri,  3 Apr 2026 09:45:12 +0800
+Message-ID: <20260403014517.142550-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,63 +54,59 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Linus,
+SKB_SMALL_HEAD_CACHE_SIZE is intentionally set to a non-power-of-2
+value (e.g. 704 on x86_64) to avoid collisions with generic kmalloc
+bucket sizes. This ensures that skb_kfree_head() can reliably use
+skb_end_offset to distinguish skb heads allocated from
+skb_small_head_cache vs. generic kmalloc caches.
 
-The following changes since commit dbf00d8d23b43a7a1d717e704c50651731d01d71:
+However, when KFENCE is enabled, kfence_ksize() returns the exact
+requested allocation size instead of the slab bucket size. If a caller
+(e.g. bpf_test_init) allocates skb head data via kzalloc() and the
+requested size happens to equal SKB_SMALL_HEAD_CACHE_SIZE, then
+slab_build_skb() -> ksize() returns that exact value. After subtracting
+skb_shared_info overhead, skb_end_offset ends up matching
+SKB_SMALL_HEAD_HEADROOM, causing skb_kfree_head() to incorrectly free
+the object to skb_small_head_cache instead of back to the original
+kmalloc cache, resulting in a slab cross-cache free:
 
-  Merge tag 'fs_for_v7.0-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs (2026-03-31 10:28:08 -0700)
+  kmem_cache_free(skbuff_small_head): Wrong slab cache. Expected
+  skbuff_small_head but got kmalloc-1k
 
-are available in the Git repository at:
+Fix this by always calling kfree(head) in skb_kfree_head(). This keeps
+the free path generic and avoids allocator-specific misclassification
+for KFENCE objects.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+Fixes: bf9f1baa279f ("net: add dedicated kmem_cache for typical/small skb->head")
+Reported-by: Antonius <antonius@bluedragonsec.com>
+Closes: https://lore.kernel.org/netdev/CAK8a0jxC5L5N7hq-DT2_NhUyjBxrPocoiDazzsBk4TGgT1r4-A@mail.gmail.com/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-for you to fetch changes up to e1b5687a862a43429f1d9f69065b3bbc7780a97a:
+---
+v1->v2: https://lore.kernel.org/netdev/20260402033138.388574-1-jiayuan.chen@linux.dev/
+        - switch skb_kfree_head() to plain kfree(head)
+---
+ net/core/skbuff.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-  selftests/bpf: Add more precision tracking tests for atomics (2026-04-02 09:57:59 -0700)
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 0e217041958a..43ee86dcf2ea 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -1083,10 +1083,7 @@ static int skb_pp_frag_ref(struct sk_buff *skb)
+ 
+ static void skb_kfree_head(void *head, unsigned int end_offset)
+ {
+-	if (end_offset == SKB_SMALL_HEAD_HEADROOM)
+-		kmem_cache_free(net_hotdata.skb_small_head_cache, head);
+-	else
+-		kfree(head);
++	kfree(head);
+ }
+ 
+ static void skb_free_head(struct sk_buff *skb)
+-- 
+2.43.0
 
-----------------------------------------------------------------
-- Fix register equivalence for pointers to packet (Alexei Starovoitov)
-
-- Fix incorrect pruning due to atomic fetch precision tracking
-  (Daniel Borkmann)
-
-- Fix grace period wait for bpf_link-ed tracepoints
-  (Kumar Kartikeya Dwivedi)
-
-- Fix use-after-free of sockmap's sk->sk_socket (Kuniyuki Iwashima)
-
-- Reject direct access to nullable PTR_TO_BUF pointers (Qi Tang)
-
-- Reject sleepable kprobe_multi programs at attach time (Varun R Mallya) 
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Alexei Starovoitov (2):
-      bpf: Fix regsafe() for pointers to packet
-      Merge branch 'fix-bpf_link-grace-period-wait-for-tracepoints'
-
-Daniel Borkmann (2):
-      bpf: Fix incorrect pruning due to atomic fetch precision tracking
-      selftests/bpf: Add more precision tracking tests for atomics
-
-Kumar Kartikeya Dwivedi (1):
-      bpf: Fix grace period wait for tracepoint bpf_link
-
-Kuniyuki Iwashima (1):
-      bpf: sockmap: Fix use-after-free of sk->sk_socket in sk_psock_verdict_data_ready().
-
-Qi Tang (1):
-      bpf: reject direct access to nullable PTR_TO_BUF pointers
-
-Varun R Mallya (1):
-      bpf: Reject sleepable kprobe_multi programs at attach time
-
- include/linux/bpf.h                                |   4 +
- include/linux/tracepoint.h                         |  20 ++
- kernel/bpf/syscall.c                               |  25 +-
- kernel/bpf/verifier.c                              |  37 ++-
- kernel/trace/bpf_trace.c                           |   4 +
- net/core/skmsg.c                                   |  13 +-
- .../selftests/bpf/progs/verifier_precision.c       | 341 +++++++++++++++++++++
- 7 files changed, 432 insertions(+), 12 deletions(-)
