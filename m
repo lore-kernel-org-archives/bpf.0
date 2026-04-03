@@ -1,63 +1,63 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAD535BDC2
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 18:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC2C3368B4
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 18:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775239375; cv=none; b=uhfjIXVlIgMfVF3+QKT+6tq/yvKg93hnOjJ6SniA9qU6xDuBioePmRIbHu6nsaWZGXSnRlegd6LV5ECkLa8lqbgX+Q4FBD11B8HaAkGYwRy1hJPABP+pp0c9K/PNszh7bKwzjYte48eK8zKFQgkjGv5vrpqlQlBrDcbTWrksu+o=
+	t=1775239669; cv=none; b=ID5LQ98p2zWghvjnRAWuStLJJUIxPsjpChGiJWpiq0InuVx0KruO7WVLYUEs+rWVFSYVep2mpU7xNfn2Sy96fxT9Qsj1rOXuUTIB036u07n0KnhY1Y+7poVfJ32r8dMItQdX3UYYkA3arZirxbW/3AHuG9+MXLVEModAU63gQjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775239375; c=relaxed/simple;
-	bh=4MFs4qnlr4W46X0e5ZzkTT4N2qDHUmdeEw3UxBICydg=;
+	s=arc-20240116; t=1775239669; c=relaxed/simple;
+	bh=3LWK7fB7zVTrWUVVHfaqncumZYmP5FGmEnhV05wNv0Q=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=hyQ770NEWWlDKpian+Zt175VKzPUv6ktfLG+sVs4XwLBD9Q9kvKKhh5eDrBmBQo/hmsWkycNxOjDTywv29YFotvSByKb4NzJEHbAY655tQt3JAzQzm6twvqtwFmB0tSG5zaahV567TvPDEbK53Z+BFEmdw7g70ffmWdz18/nYo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=h2cj7u3E; arc=none smtp.client-ip=209.85.214.182
+	 References:In-Reply-To; b=JFjY7zrP9RPquNT5UoibdH4fNx17JpmJqPM70taETHIjMCy+nuTx9co7r6LBUxrbYMOt4o3W3nGC5HQ5BIijlZNUGD6MrjkI7fn16WUhl8EF2cGEZPYONChyvuVooMtEW/SXX+5clGQDjAwKT9Dd6ZCI6yxmavZU8Ppz1VuxvLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=mo1PK25P; arc=none smtp.client-ip=209.85.214.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="h2cj7u3E"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2b23f90f53aso19774355ad.0
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 11:02:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="mo1PK25P"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2aae4816912so13259285ad.2
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 11:07:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775239370; x=1775844170; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775239668; x=1775844468; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=St1Q+eC0G4ZneHNDCt55t0/J1pND9W4YSxEJDZNyi4U=;
-        b=h2cj7u3EdLjm27XssDIkLKUSuJ3Lwi1WF0prXmJkraoP8W4ptCl/wn77ridfTjTeal
-         H9bCpRvQftxXPWwRZeUuJahZkCA/HxA7MLZeXtjw8mJ2K890kd6ugLfPWe9TvJyT37J+
-         MqSPRB/vc0mkZHX1qazyWLB2olRWvmQqXcjxQXqKNodtlfRUuLjKj23M18Y5sej++xhc
-         ABygrt60UdDQz8/Lm8q4CAOCI9pqac3OQXg5XB1FJSohNe+i+vH/VZm5AoKef5qcg2ud
-         xau1nmhFhgEM6TC9mEBUWSuS+ZHQpMsow4Sk5IQSQwWsTNVUx29pixs+7eQzNQJt7TBu
-         LDzQ==
+        bh=e21/azQxOfprjIRCm4cyq4TRL+eiu3i4WJuJSrkzJoQ=;
+        b=mo1PK25Pn1b/+eb6kn8iS0WMR1oFPIRU4Ool81PNz3T4GftoFCsV6ooFsNs12zzqIL
+         /Fnp3AHAnwaKAz09gX4GOFqXca9CR5bVyIm/1RkS87vxqXlt61RfW4jbe32fEDMxxhTO
+         jOXFy1t6jFHyR+db2eimhZOYJe7UsXOqhPxG44V7nYkCc47dJp29u5kq8rxHOzq/Owwy
+         3IlPfFrWxGUlzUhkclR2u/7bBQuSgJostzA24yvajaMgEGPwdYu1nw5V9sS90YhBnauD
+         H7Dn7DUICFzgpOjT+9bHbk816ym32nsCheGi/N4Rvbu0tlBCC92Ioqde/UVIIaTTvodM
+         OPZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775239370; x=1775844170;
+        d=1e100.net; s=20251104; t=1775239668; x=1775844468;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=St1Q+eC0G4ZneHNDCt55t0/J1pND9W4YSxEJDZNyi4U=;
-        b=QIg7fkKfqN49YT9Cz3UgoHzQmNnGHZauYR8OU6XDG9ditNi6muD3EM4aEpTVAAu3/T
-         Ga2CRbQCtEqJIhySU6uHfRpfW4bPrbrCZJOViTRa0yWTIQ+JSilH5U2RtgisgtrIlAng
-         dI3p44YAVNnJt7oa0KguHPIxCOg4bNCwj9kMWf5FxheFqVJyQKo/0UGSP4CXfxxjcawJ
-         wCBOWclVCShEPIjxxoI4Iy6iNR9q9UG5Pi57Ov203vwVZTku46YQa9rA7uWr+WZNEXva
-         Cvv8zDUTe2fpZ9BzCMPvVr/hLWJ0RsVtYqlhlqKT4hstEh2ZOVyvVSr1GKwefgqXKtwt
-         vn/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWQegYsYEtnYl6bzDoAQ9xfjhEO2ra5zzaCTWWjyc3poYJ/tRIsADclujlTHSjLEhO3374=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/42tVvkRLKeb+e1cxp90VlHNDNIc73GLzKeZnAXJaeS7sKXvp
-	RCeFg99NBs5nyCwD408GaIhl1cPHK5rD0UP8M8LmF0ASjHOqoWpJDk5q/SnlUrvN5H0=
-X-Gm-Gg: AeBDievrgUdb9kglyzN73PUWjwj5Isv2q9bnnew5cvtKl/gDuiIVLcVXw+vKoNTMqvc
-	txn1UzkLHV7D+tDb079A380cfcGbXR90dp1/Fcxd2Ch7x9BcEMiQeTKsGhRFtn3BGTpfFsOQd/X
-	0OKBkIjDbkcmZGY4UW8RRQAvEa4wgkRn1hsQ3qEwsgEHy7FyRfTXsi/ppUcH237YGQexpPRU3Zb
-	HZDmhX4smDMf3nHCQQiQCPA0u3oZMYhViGJyICRgdM0hx3IsHdv7ByHAXRYWvddqCv8YAICGh3H
-	SZHh4JtSvLyMHg3s4SKt55zHlOIpeYfUmU+6Q6LelDC4sVhoI6uUBD0G8XVHXwykEpqCJ9JUA2c
-	gR+yhWFOb5hxIk9aSkD4Q0lQbhvCo4ztev7gnlX/Z4tM14Mr6OHVKXtv5fmxPYq9X9vA++3vZEV
-	8ZVmjka/U=
-X-Received: by 2002:a17:903:1b70:b0:2b0:bebb:1081 with SMTP id d9443c01a7336-2b281799025mr44217265ad.28.1775239369871;
-        Fri, 03 Apr 2026 11:02:49 -0700 (PDT)
+        bh=e21/azQxOfprjIRCm4cyq4TRL+eiu3i4WJuJSrkzJoQ=;
+        b=fEzfRmKZogVV1wGq1ksAgaYeM8twO2VLVACGTtVYq3QWKQqq9JB46A1o+OEhsZSFjq
+         Bf1dndixMw2tr4agfrP5Gjii/nw60CzdhD4RWNs0FHdrzBJ/7pikHfJa7CSIr696NEqv
+         qITrO+zxuMv7sovV4vyMEfZwTypaVPXRZwqfzQIrCfTHW1w/w1qOlAAx5GrVG3X6LaXH
+         cjb7cRSwl/aPf30TiXHX8D/Zo85eFGKCp/wQx+H16ExqByiivCdPjfAEbXQcQsn0QrPJ
+         2WDWUOVa/I7AYCrpKUDcbm928nFsv2jKZMliv6JFyPVtKRp7uXv0jls+K6sksBEev1Tz
+         DR0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUzNNtHupjuqBrV5th7jpN8pWqhKikkim9yI8ntX8f/ukf6AdLh/IKOS8Mwf8wsk/su2x4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8yNVTP8jol+KajEFJCtPNylPUrhFmIxIsG18g22rDVENHziP/
+	HDvGig3WSeVdvmA2Axw9GpodOsLmDCO+2XlkeKFupbGIoKjZ/VejdcwgBeBZWGOYIWc=
+X-Gm-Gg: AeBDietSfvrrbXz6wuspljXYMz67TGpKVTOoaUiNkz1sw3fms2jxdTeBK2BcgULhJhp
+	15xiJ3l+cAuSAbyyOwU93cWB7o8TtOFtO55HSz/uTtjyk1fo/W0k/3P1zErJVEXfzjK+K1PZlNH
+	LENaaDRpq3klpW1J49Mj0KMTFnIKNQgkIqS5ja3AKddbIle5Zxnb8qFDQWUhVj0muUlS+9Kz5Kf
+	8uXzzA8r0veMOtcnIPwX1c1LcTdGtfmyXgGwd4CCQqanmbcMWklH38addRxTl6iG4gqP3gKXBdU
+	dPYPBHrWuQ/EMINGaZ3RJiPhbANlmEy4vVBwL/iNS4nqZz2p1AA6yS27bFQOtDU5MGGqnbqdImn
+	N0jCbiymQdRuzSxHJopjSEYpdEEzLGP8OxnkJyNc3CzuvLTfD4NrYfAW+xtnyUp6y3QoZXGBFM9
+	ShyXcMNpxXKNyD+9Sj9w==
+X-Received: by 2002:a17:903:22d1:b0:2b0:7531:b61e with SMTP id d9443c01a7336-2b28188a0b6mr41119885ad.41.1775239667508;
+        Fri, 03 Apr 2026 11:07:47 -0700 (PDT)
 Received: from localhost ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27497af26sm63916025ad.49.2026.04.03.11.02.48
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27479d0fbsm83833725ad.35.2026.04.03.11.07.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Apr 2026 11:02:49 -0700 (PDT)
+        Fri, 03 Apr 2026 11:07:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,176 +66,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 03 Apr 2026 14:02:47 -0400
-Message-Id: <DHJPU2PATPEF.1QNVY25530KTK@etsalapatis.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Puranjay Mohan"
- <puranjay@kernel.org>, "Anton Protopopov" <a.s.protopopov@gmail.com>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Shahab
- Vahedi" <list+bpf@vahedi.org>, "Russell King" <linux@armlinux.org.uk>,
- "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Hengqi Chen"
- <hengqi.chen@gmail.com>, "Johan Almbladh"
- <johan.almbladh@anyfinetworks.com>, "Paul Burton" <paulburton@kernel.org>,
- "Hari Bathini" <hbathini@linux.ibm.com>, "Christophe Leroy"
- <chleroy@kernel.org>, "Naveen N Rao" <naveen@kernel.org>, "Luke Nelson"
- <luke.r.nels@gmail.com>, "Xi Wang" <xi.wang@gmail.com>,
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, "Pu Lehui"
- <pulehui@huawei.com>, "Ilya Leoshkevich" <iii@linux.ibm.com>, "Heiko
- Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "David
- S . Miller" <davem@davemloft.net>, "Wang YanQing" <udknight@gmail.com>
-Subject: Re: [PATCH bpf-next v12 3/5] bpf: Add helper to detect indirect
- jump targets
+Date: Fri, 03 Apr 2026 14:07:45 -0400
+Message-Id: <DHJPXVNL60NO.1RIVY1CBVEB9P@etsalapatis.com>
+Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
+ <daniel@iogearbox.net>, <eddyz87@gmail.com>, <etsal@meta.com>,
+ <martin.lau@kernel.org>, <yonghong.song@linux.dev>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v3 1/9] bpf: Upgrade scalar to PTR_TO_ARENA on
+ arena pointer addition
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Xu Kuohai" <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+To: <bot+bpf-ci@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260403132811.753894-1-xukuohai@huaweicloud.com>
- <20260403132811.753894-4-xukuohai@huaweicloud.com>
-In-Reply-To: <20260403132811.753894-4-xukuohai@huaweicloud.com>
+References: <20260403042720.18862-2-emil@etsalapatis.com>
+ <deb90258dc2746693419d66c4dda30b686a35434bdb8c1b85a6e6df059ccf4ae@mail.kernel.org>
+In-Reply-To: <deb90258dc2746693419d66c4dda30b686a35434bdb8c1b85a6e6df059ccf4ae@mail.kernel.org>
 
-On Fri Apr 3, 2026 at 9:28 AM EDT, Xu Kuohai wrote:
-> From: Xu Kuohai <xukuohai@huawei.com>
+On Fri Apr 3, 2026 at 1:04 AM EDT, bot+bpf-ci wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index a431b7d50e1b..a0e6522833ae 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -16354,6 +16354,24 @@ static int adjust_reg_min_max_vals(struct bpf_v=
+erifier_env *env,
+>>  				return -EACCES;
+>>  			} else {
+>> +				/*
+>> +				 * The compiler sometimes stores the result of
+>> +				 * PTR_TO_ARENA + SCALAR addition to the scalar
+>> +				 * register. Upgrade it to a PTR_TO_ARENA.
+>> +				 */
+>> +				if (src_reg->type =3D=3D PTR_TO_ARENA && opcode =3D=3D BPF_ADD) {
+>> +					struct bpf_insn_aux_data *aux =3D cur_aux(env);
+>> +
+>> +					__mark_reg_unknown(env, dst_reg);
+>> +					dst_reg->type =3D PTR_TO_ARENA;
+>> +					dst_reg->subreg_def =3D env->insn_idx + 1;
+>> +
+>> +					if (BPF_CLASS(insn->code) =3D=3D BPF_ALU64)
+>> +						aux->needs_zext =3D true;
+>> +
+>> +					return 0;
+>> +				}
 >
-> Introduce helper bpf_insn_is_indirect_target to check whether a BPF
-> instruction is an indirect jump target.
+> This appears to fix a gap in the original PTR_TO_ARENA support added by
+> commit 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the
+> verifier."), which handled arithmetic when the destination was already
+> PTR_TO_ARENA but missed the commutative case where the scalar register
+> is the destination.
 >
-> Since the verifier knows which instructions are indirect jump targets,
-> add a new flag indirect_target to struct bpf_insn_aux_data to mark
-> them. The verifier sets this flag when verifying an indirect jump target
-> instruction, and the helper checks the flag to determine whether an
-> instruction is an indirect jump target.
+> Should this carry a Fixes: tag?
+>
+> Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the v=
+erifier.")
+>
+Ack, I will add the tag in subsequent versions.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
 >
-> Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 > ---
->  include/linux/bpf.h          |  2 ++
->  include/linux/bpf_verifier.h |  9 +++++----
->  kernel/bpf/core.c            |  9 +++++++++
->  kernel/bpf/verifier.c        | 18 ++++++++++++++++++
->  4 files changed, 34 insertions(+), 4 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
 >
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 05b34a6355b0..90760e250865 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1541,6 +1541,8 @@ bool bpf_has_frame_pointer(unsigned long ip);
->  int bpf_jit_charge_modmem(u32 size);
->  void bpf_jit_uncharge_modmem(u32 size);
->  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
-> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
-st struct bpf_prog *prog,
-> +				 int insn_idx);
->  #else
->  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
->  					   struct bpf_trampoline *tr,
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index b129e0aaee20..cc53877639a5 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -578,16 +578,17 @@ struct bpf_insn_aux_data {
-> =20
->  	/* below fields are initialized once */
->  	unsigned int orig_idx; /* original instruction index */
-> -	bool jmp_point;
-> -	bool prune_point;
-> +	u32 jmp_point:1;
-> +	u32 prune_point:1;
->  	/* ensure we check state equivalence and save state checkpoint and
->  	 * this instruction, regardless of any heuristics
->  	 */
-> -	bool force_checkpoint;
-> +	u32 force_checkpoint:1;
->  	/* true if instruction is a call to a helper function that
->  	 * accepts callback function as a parameter.
->  	 */
-> -	bool calls_callback;
-> +	u32 calls_callback:1;
-> +	u32 indirect_target:1; /* if it is an indirect jump target */
->  	/*
->  	 * CFG strongly connected component this instruction belongs to,
->  	 * zero if it is a singleton SCC.
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 093ab0f68c81..439575fa6976 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1570,6 +1570,15 @@ struct bpf_prog *bpf_jit_blind_constants(struct bp=
-f_verifier_env *env, struct bp
->  	clone->blinded =3D 1;
->  	return clone;
->  }
-> +
-> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
-st struct bpf_prog *prog,
-> +				 int insn_idx)
-> +{
-> +	if (!env)
-> +		return false;
-> +	insn_idx +=3D prog->aux->subprog_start;
-> +	return env->insn_aux_data[insn_idx].indirect_target;
-> +}
->  #endif /* CONFIG_BPF_JIT */
-> =20
->  /* Base function for offset calculation. Needs to go into .text section,
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5084a754a748..e078e6ad5b00 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -4049,6 +4049,11 @@ static bool is_jmp_point(struct bpf_verifier_env *=
-env, int insn_idx)
->  	return env->insn_aux_data[insn_idx].jmp_point;
->  }
-> =20
-> +static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
-> +{
-> +	env->insn_aux_data[idx].indirect_target =3D true;
-> +}
-> +
->  #define LR_FRAMENO_BITS	3
->  #define LR_SPI_BITS	6
->  #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
-> @@ -21227,12 +21232,14 @@ static int check_indirect_jump(struct bpf_verif=
-ier_env *env, struct bpf_insn *in
->  	}
-> =20
->  	for (i =3D 0; i < n - 1; i++) {
-> +		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
->  		other_branch =3D push_stack(env, env->gotox_tmp_buf->items[i],
->  					  env->insn_idx, env->cur_state->speculative);
->  		if (IS_ERR(other_branch))
->  			return PTR_ERR(other_branch);
->  	}
->  	env->insn_idx =3D env->gotox_tmp_buf->items[n-1];
-> +	mark_indirect_target(env, env->insn_idx);
->  	return 0;
->  }
-> =20
-> @@ -22158,6 +22165,17 @@ static void adjust_insn_aux_data(struct bpf_veri=
-fier_env *env,
->  		data[i].seen =3D old_seen;
->  		data[i].zext_dst =3D insn_has_def32(insn + i);
->  	}
-> +
-> +	/* The indirect_target flag of the original instruction was moved to th=
-e last of the
-> +	 * new instructions by the above memmove and memset, but the indirect j=
-ump target is
-> +	 * actually the first instruction, so move it back. This also matches w=
-ith the behavior
-> +	 * of bpf_insn_array_adjust(), which preserves xlated_off to point to t=
-he first new
-> +	 * instruction.
-> +	 */
-> +	if (data[off + cnt - 1].indirect_target) {
-> +		data[off].indirect_target =3D 1;
-> +		data[off + cnt - 1].indirect_target =3D 0;
-> +	}
->  }
-> =20
->  static void adjust_subprog_starts(struct bpf_verifier_env *env, u32 off,=
- u32 len)
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/239341=
+76047
 
