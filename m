@@ -1,252 +1,241 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BB63019BA
-	for <bpf@vger.kernel.org>; Thu,  2 Apr 2026 20:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0912F9D98;
+	Thu,  2 Apr 2026 20:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775162279; cv=none; b=rDtBW0yaNvw7nU7ihn588aLRL267NlG2UBjLQgG1AYuyBkdsd7QBw2w4Gj9fIIodZ8Cnt432DBzvJ43OuEICaf3ADYlu7Yc9UgFGLOtOZgQbaRrcVyKj8I3aSWMxYCOceEWAgoAMpt9OClB5H6OE3yP1cc7tr4zgAoc0K2lGuno=
+	t=1775162403; cv=none; b=kBvLaVdTvjF0xSaidDopX+2mFaiiSJ9LmyfJufgiVz+ltkN88oLUPIQdsON5lltjM0VprDRwO3wsuy8G883Yx6puyZuUl6/ImZYiJvS929gQt9/RKI9jwtl8z+wYzZOGhZWdL2Nn19OlyNgARc55nGf8XFrcweB4qAnHtl6D5IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775162279; c=relaxed/simple;
-	bh=K6UeDia9sanUos9Mjkr7NnkAAtxeMCfMlhzE78+/mUE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Kvcmj1tP90uhuZkfzWXJpZyVMqw1B0XOTCUywE8Z/lFkovSYvuuBcCyb9tT+fnzOjRO+R2VUqSpVmrPJSYTRb8OC3+6MvhffXu6poFeRmCjIwQDt7/d/KH/euN9yzPUbBpBw1X78vX6KVmNBbZh2M90GcAtQvxKJ+ku+GwSw9SU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QfMOSW6g; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1775162403; c=relaxed/simple;
+	bh=sjXPYOrvtIeC49yMeTtElTapd3IcWjrRK3XgRYIEiNk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gA3FIPfhS4NjAr76JveQiJ0F77xDBUy49PiserfM95Q4S/fWvV5qT2/lF04hB+NblxOMDm/rf9zyJU+9SC6zi+79jO/AiyrT8RnCkbLZ1dvSfVs77q0w1y3lGlmG43AlKNVxPBJdgAExT3Q5AUe9jPzlTZ+v8r3tkWkr/WRbc7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=K4Wwvqzg; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QfMOSW6g"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82a88a2704fso598874b3a.0
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 13:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775162277; x=1775767077; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iY/+kUa2oeDqlEImeMTWfoVrRsju1NxUYvhxVqSs/RM=;
-        b=QfMOSW6gfuGVgC/hlU6fSFblYOqiou/cB5dqEUPxvcAs8EFCWJXhNU6iPTcMA0x+ib
-         sQS/tQBpeX4u/X/P/pa/ka9ukUQRKgGlboMN0oEgBCXHZkd/t4hn4TED5mOLlIfM5/tz
-         RaN7AvxE2E/F3oijTPk/XAlIQvQ21hkReKLIUpqolJHF1l8JA7vSSXWpyyT/HEzEFYmz
-         UYuvwpHs5Z6n9uprXf/v9YJLP5syZT130ofCTfSw500izSCufzuEPrcN4csQuPZ0shgH
-         iIKGQZIzOl+Iq9+3+hzMAo5dKzlPW1IdnwPqF12VYdgF53YkmsVbZBnwzi2LlVvyHVGn
-         jQBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775162277; x=1775767077;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iY/+kUa2oeDqlEImeMTWfoVrRsju1NxUYvhxVqSs/RM=;
-        b=JgVSmxC6bEfrGNFieSUiegZBp6QsDT1PpoPRRo4SQbC2TDiCMmElcD6n9bS8NmIscR
-         9Sl/ucsG/eFANdb+OWtQ5b+FsvQ9UzfHcm/NQxCCw6RoG8htU8YzJ4wHy1klaK3YSFJJ
-         HcWMThqBOGBAMMZo8U+xjymJiiq6ckhxH3dTCJ8VXclNefjQdFEHb1/DCDuio6mRWYAz
-         7hCzeQ1um0b7uZ3n+Bfab5s6HwHxux/fIaauZDhfoz+PCxw+t6OsKij3HzZ1i0zze27+
-         WBwAiGoZV63RrOn4BcjpnGLiwDRv3B38yMsCNxtL2P6BE7Qr5h9/RFow4gSzM5vezIWh
-         EDKA==
-X-Forwarded-Encrypted: i=1; AJvYcCV3S7X1CI/X5Z3Np2jQJjimRYdaf14Fd3a7xZQhCebckF4rkXyFAHetf8Yn5TCB1qAFoIo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvY3cCBvHgqgnPKS6qKg1+FfkWLRFcBSJ72udZgF4ryIs14dyR
-	P0aZ24SJeXf6Gpj1Z+fpuo/HjbEVx/0nwKWtVUtudJS62COrA2aEYAgv5XL6lSkUVEULur+m/+d
-	EV5rvZg==
-X-Received: from pfcg17.prod.google.com ([2002:a05:6a00:23d1:b0:82c:70d1:f303])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:94f6:b0:82c:7420:82bf
- with SMTP id d2e1a72fcca58-82d0dbfef49mr399978b3a.19.1775162277181; Thu, 02
- Apr 2026 13:37:57 -0700 (PDT)
-Date: Thu,  2 Apr 2026 20:37:52 +0000
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="K4Wwvqzg"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 632DF5eJ4120021;
+	Thu, 2 Apr 2026 20:39:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=kZCeFcCIi0X17MCEWkI15QCWUEMcn5r3CWz0xmNaE
+	vM=; b=K4WwvqzgylvQ2j6VEXjVOMljtjBFgrdn8iZIv8LOjTcaIaaswnIY9S6/G
+	cKCa0Y71+k/ITZoW+LnUQq4FiAF8/Q0zWoPI3QWw7qj6UA3VwkmS2Htog+4IUGC4
+	60jGk9dOqpePKMd0ud1LpL0jhGUrnK6jg3YeI/jyBwoD0jaX1YgU7WA+W4mXxrd9
+	sL0dnAl68YzienNVgWNoQbW2fYnkld+ZyGwuNxxDvFOilNahlq9+EjRi25pM+n6G
+	fELBNs8CTsOnvIwY7X6WWyyAQ7pNiS5VXCV3eTc6Z3OqHGirsufQDlomjIdg8ubv
+	TjkP2CB4kFX7aaRIRcKAPjtdGxsuQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d66nnxgxh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 02 Apr 2026 20:39:56 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 632Gh9Wu030990;
+	Thu, 2 Apr 2026 20:39:55 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d6uhk3fpj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 02 Apr 2026 20:39:55 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 632KdqGs29557088
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 2 Apr 2026 20:39:52 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E06AB20043;
+	Thu,  2 Apr 2026 20:39:51 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D8F6120040;
+	Thu,  2 Apr 2026 20:39:49 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  2 Apr 2026 20:39:49 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v2 0/5] powerpc/bpf: Add support for verifier selftest
+Date: Thu,  2 Apr 2026 20:40:06 -0400
+Message-ID: <20260403004011.44417-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
-Message-ID: <20260402203754.280844-1-kuniyu@google.com>
-Subject: [PATCH v1 bpf] sockmap: Fix sk_psock_drop() race vs sock_map_{unhash,close,destroy}().
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Wang Yufen <wangyufen@huawei.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	syzbot+b0842d38af58376d1fdc@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rHaXkN2ewF9hrlZWCQcyC5ObKmET-t4P
+X-Authority-Analysis: v=2.4 cv=KslAGGWN c=1 sm=1 tr=0 ts=69ced41c cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=UrLCjDVe54a93DmA31EA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDAyMDE4MSBTYWx0ZWRfX44zvfjXFj584
+ qpSrX54YOLMd8sieXdpI1LMW2twq+gkYTNjZfdZ2NYIEEvpAhs8aBQ5Vn6l7l2SnqgVnG/dDObK
+ KRZKI3bVy0VrbjivBwEV8OZzZU+XSvpVY6VbVuQJBw+vXPuRcVcchuzyF/o4HlqY3WFmLArdyyQ
+ 6b5b62V5oURryXwfFUh+zG6fGPi7D6HFUYN5ndxi86gJhe0cFiYZO4Y6ZJKfaOkRNZ5laZKu6ad
+ NaMcuzIUIOIZBPilvQjMyLO+GXld5EMPTD29Rzd0k7TIGWLjh1iEknPbm1y/ahcxotLyyUhXOZK
+ gjwExpawcIEp9bH9YRqb6/gVI0IqD+5VB50OLXOSP2B9//ioJrlclpTcI4SbcZRos+pwrcceUpQ
+ Nl87tr+YABwOod001pdD9FZSwhsgToFfTSJjiin+kkZHz14sTyQtIixAsbTUy47Yj6f9g3c9G92
+ 2wGuC+q6JNQgEN/Wb9A==
+X-Proofpoint-ORIG-GUID: rHaXkN2ewF9hrlZWCQcyC5ObKmET-t4P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-02_03,2026-04-02_05,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
+ phishscore=0 adultscore=0 bulkscore=0 impostorscore=0 clxscore=1015
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2604020181
 
-syzbot reported a splat in sock_map_destroy() [0], where psock was
-NULL even though sk->sk_prot still pointed to tcp_bpf_prots[][].
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-The root cause is a lack of synchronisation.
+The verifier selftest validates JITed instructions by matching expected
+disassembly output. The first two patches fix issues in powerpc instruction
+disassembly that were causing test flow failures. The fix is common for 
+64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
+architecture tag in the third patch, enabling proper test filtering in
+verifier test files. Introduce verifier testcases for tailcalls on powerpc64
+in the final patch.
 
-Even if sk_psock_get() fails to bump psock->refcnt, it does not
-guarantee that sk_psock_drop() has finished, and thus sk->sk_prot
-might not have been restored to the original one.
+Issue Details:
+--------------
 
-Commit 4b4647add7d3 ("sock_map: avoid race between sock_map_close
-and sk_psock_put") attempted to address this, but it was insufficient
-for two reasons.
+    The Long branch stub in the trampoline implementation[1] provides
+    flexibility to handles short as well as long branch distance to
+    actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
+    sitting before long branch stub leads to failure when enabling
+    verifier based seltest for ppc64.
+    
+    The verifier selftests require disassembing the final jited image
+    to get native instructions. Later the disassembled instruction
+    sequence is matched against sequence of instructions provided in
+    test-file under __jited() wrapper. The final jited image contains
+    Out-of-line stub and Long branch stub as part of epilogue jitting
+    for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
+    between both above mentioned stubs. These 8 bytes contain memory
+    address of dummy trampoline during trampoline invocation which don't
+    correspond to any powerpc instructions. So, disassembly fails
+    resulting in failure of verifier selftests.
+    
+    The following code snippet shows the problem with current arrangement
+    made for dummy_tramp_addr.
+    
+    /* Out-of-line stub */
+    mflr    r0  
+    [b|bl]  tramp
+    mtlr    r0 //only with OOL 
+    b       bpf_func + 4 
+    /* Long branch stub */
+    .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
+    mflr    r11 
+    bcl     20,31,$+4
+    mflr    r12 
+    ld      r12, -8-SZL(r12)
+    mtctr   r12 
+    mtlr    r11 //retain ftrace ABI 
+    bctr
 
-It did not cover sock_map_unhash() and sock_map_destroy(), and
-it missed the corner case where sk_psock() is NULL.
+    Consider test program binary of size 112 bytes:
+    0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
+    28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
+    56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
+    84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
 
-On non-x86 platforms, sk_psock_restore_proto(sk, psock) and
-rcu_assign_sk_user_data(sk, NULL) can be reordered because there
-is no address dependency between sk->sk_prot and sk->sk_user_data.
+    Disassembly output of above binary for ppc64le:
+    pc:0     left:112    00 00 00 60  :  nop
+    pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
+    pc:8     left:104    00 00 20 39  :  li 9, 0
+    pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
+    pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
+    pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
+    pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
+    pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
+    pc:32    left:80     2a 00 60 38  :  li 3, 42
+    pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
+    pc:40    left:72     00 00 00 39  :  li 8, 0
+    pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
+    pc:48    left:64     80 00 21 38  :  addi 1, 1, 128
+    pc:52    left:60     78 43 03 7d  :  mr    3, 8
+    pc:56    left:56     20 00 80 4e  :  blr
+    pc:60    left:52     a6 02 08 7c  :  mflr 0
+    pc:64    left:48     00 00 00 60  :  nop
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     c0 34 1d 00  :
+    ...
 
-sk_psock_get() returning NULL implies nothing about sk->sk_prot,
-and we need a synchronisation.
+    Failure log:
+    Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
+    --------------------------------------
 
-The possible options would be:
+    Observation:
+    Can't disasm instruction at offset 76 as this address has
+    ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
+    But valid instructions follow at offset 84 onwards.
 
-  1) Put smp_wmb() and smp_rmb() properly
-  2) Put sk_callback_lock locking dance in the unlikely case
-  3) Retry sk_psock_get() in the unlikely case
+    Move the long branch address space to the bottom of the long
+    branch stub. This allows uninterrupted disassembly until the
+    last 8 bytes. Exclude these last bytes from the overall
+    program length to prevent failure in assembly generation.
 
-1) sounds straightforward but at the expense of the normal
-path for the super unlikely race.  The stack trace shows how badly
-the path was excercised, see inet_release() calls tcp_close(),
-not sock_map_close() yet, but finally reaching sock_map_destroy().
+    Following is disassembler output for same test program with moved down
+    dummy_tramp_addr field:
+    .....
+    .....
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     a6 02 68 7d  :  mflr 11
+    pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+    pc:84    left:28     a6 02 88 7d  :  mflr 12
+    pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+    pc:92    left:20     a6 03 89 7d  :  mtctr 12
+    pc:96    left:16     a6 03 68 7d  :  mtlr 11
+    pc:100   left:12     20 04 80 4e  :  bctr
+    pc:104   left:8      c0 34 1d 00  :
 
-3) could be lightweight but risk an unbounded loop in case the
-psock could hit WARN_ON_ONCE() below, so 2) seems preferable.
+    Failure log:
+    Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+    ---------------------------------------
+    Disassembly logic can truncate at 104, ignoring last 8 bytes.
 
-Let's add the locking dance in sock_map_psock_get_checked() and
-use it in sock_map_{unhash,close,destroy}().
+    Update the dummy_tramp_addr field offset calculation from the end
+    of the program to reflect its new location, for bpf_arch_text_poke()
+    to update the actual trampoline's address in this field.
 
-[0]:
-WARNING: CPU: 1 PID: 8459 at net/core/sock_map.c:1667 sock_map_destroy+0x28b/0x2b0 net/core/sock_map.c:1667
-Modules linked in:
-CPU: 1 UID: 0 PID: 8459 Comm: syz.0.1109 Not tainted syzkaller #0 PREEMPT_{RT,(full)}
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/12/2025
-RIP: 0010:sock_map_destroy+0x28b/0x2b0 net/core/sock_map.c:1667
-Code: 8b 36 49 83 c6 38 4c 89 f0 48 c1 e8 03 42 80 3c 38 00 74 08 4c 89 f7 e8 93 62 22 f9 4d 8b 3e e9 79 ff ff ff e8 a6 2b c3 f8 90 <0f> 0b 90 eb 9c e8 9b 2b c3 f8 4c 89 e7 be 03 00 00 00 e8 0e 4e bc
-RSP: 0018:ffffc9000d067be8 EFLAGS: 00010293
-RAX: ffffffff88fb30aa RBX: ffff888024832000 RCX: ffff888024283b80
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
-R10: dffffc0000000000 R11: ffffed100862e946 R12: dffffc0000000000
-R13: ffff888024832000 R14: ffffffff995b2208 R15: ffffffff88fb2e20
-FS:  0000555579a7d500(0000) GS:ffff8881269c2000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00002000000048c0 CR3: 000000003713a000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- inet_csk_destroy_sock+0x166/0x3a0 net/ipv4/inet_connection_sock.c:1294
- __tcp_close+0xcc1/0xfd0 net/ipv4/tcp.c:3262
- tcp_close+0x28/0x110 net/ipv4/tcp.c:3274
- inet_release+0x144/0x190 net/ipv4/af_inet.c:435
- __sock_release net/socket.c:649 [inline]
- sock_close+0xc0/0x240 net/socket.c:1439
- __fput+0x45b/0xa80 fs/file_table.c:468
- task_work_run+0x1d4/0x260 kernel/task_work.c:227
- resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
- exit_to_user_mode_loop+0xec/0x110 kernel/entry/common.c:43
- exit_to_user_mode_prepare include/linux/irq-entry-common.h:225 [inline]
- syscall_exit_to_user_mode_work include/linux/entry-common.h:175 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:210 [inline]
- do_syscall_64+0x2bd/0x3b0 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f265847ebe9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd158dfbd8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
-RAX: 0000000000000000 RBX: 000000000002ddb0 RCX: 00007f265847ebe9
-RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
-RBP: 00007f26586a7da0 R08: 0000000000000001 R09: 0000000e158dfecf
-R10: 0000001b30a20000 R11: 0000000000000246 R12: 00007f26586a5fac
-R13: 00007f26586a5fa0 R14: ffffffffffffffff R15: 00007ffd158dfcf0
- </TASK>
+    [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com
 
-Fixes: 1aa12bdf1bfb ("bpf: sockmap, add sock close() hook to remove socks")
-Fixes: b05545e15e1f ("bpf: sockmap, fix transition through disconnect without close")
-Fixes: d8616ee2affc ("bpf, sockmap: Fix sk->sk_forward_alloc warn_on in sk_stream_kill_queues")
-Reported-by: syzbot+b0842d38af58376d1fdc@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/69cec5ef.050a0220.2dbe29.0009.GAE@google.com/
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
- net/core/sock_map.c | 39 +++++++++++++++++++++++----------------
- 1 file changed, 23 insertions(+), 16 deletions(-)
+v1->v2:
+  Added fix-patch to correct memory alignment in-place
+  Moved the optional alignmnet NOP before OOL stub
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index b0e96337a269..54bd5e3378c7 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -200,15 +200,25 @@ static struct sk_psock *sock_map_psock_get_checked(struct sock *sk)
- 
- 	rcu_read_lock();
- 	psock = sk_psock(sk);
--	if (psock) {
--		if (sk->sk_prot->close != sock_map_close) {
--			psock = ERR_PTR(-EBUSY);
-+
-+	if (READ_ONCE(sk->sk_prot)->close != sock_map_close) {
-+		if (likely(!psock))
- 			goto out;
--		}
- 
--		if (!refcount_inc_not_zero(&psock->refcnt))
--			psock = ERR_PTR(-EBUSY);
-+		/* sock_map_init_proto() has not finished yet. */
-+		psock = ERR_PTR(-EBUSY);
-+		goto out;
- 	}
-+
-+	if (likely(psock && refcount_inc_not_zero(&psock->refcnt)))
-+		goto out;
-+
-+	/* sk_psock() being NULL or psock->refcnt being 0 does not
-+	 * guarantee that sk_psock_restore_proto() has finished.
-+	 */
-+	read_lock_bh(&sk->sk_callback_lock);
-+	read_unlock_bh(&sk->sk_callback_lock);
-+	psock = ERR_PTR(-EBUSY);
- out:
- 	rcu_read_unlock();
- 	return psock;
-@@ -1631,14 +1641,15 @@ void sock_map_unhash(struct sock *sk)
- 	struct sk_psock *psock;
- 
- 	rcu_read_lock();
--	psock = sk_psock(sk);
--	if (unlikely(!psock)) {
-+	psock = sock_map_psock_get_checked(sk);
-+	if (IS_ERR_OR_NULL(psock)) {
- 		rcu_read_unlock();
- 		saved_unhash = READ_ONCE(sk->sk_prot)->unhash;
- 	} else {
- 		saved_unhash = psock->saved_unhash;
- 		sock_map_remove_links(sk, psock);
- 		rcu_read_unlock();
-+		sk_psock_put(sk, psock);
- 	}
- 	if (WARN_ON_ONCE(saved_unhash == sock_map_unhash))
- 		return;
-@@ -1653,8 +1664,8 @@ void sock_map_destroy(struct sock *sk)
- 	struct sk_psock *psock;
- 
- 	rcu_read_lock();
--	psock = sk_psock_get(sk);
--	if (unlikely(!psock)) {
-+	psock = sock_map_psock_get_checked(sk);
-+	if (IS_ERR_OR_NULL(psock)) {
- 		rcu_read_unlock();
- 		saved_destroy = READ_ONCE(sk->sk_prot)->destroy;
- 	} else {
-@@ -1678,13 +1689,10 @@ void sock_map_close(struct sock *sk, long timeout)
- 
- 	lock_sock(sk);
- 	rcu_read_lock();
--	psock = sk_psock(sk);
--	if (likely(psock)) {
-+	psock = sock_map_psock_get_checked(sk);
-+	if (!IS_ERR_OR_NULL(psock)) {
- 		saved_close = psock->saved_close;
- 		sock_map_remove_links(sk, psock);
--		psock = sk_psock_get(sk);
--		if (unlikely(!psock))
--			goto no_psock;
- 		rcu_read_unlock();
- 		sk_psock_stop(psock);
- 		release_sock(sk);
-@@ -1692,7 +1700,6 @@ void sock_map_close(struct sock *sk, long timeout)
- 		sk_psock_put(sk, psock);
- 	} else {
- 		saved_close = READ_ONCE(sk->sk_prot)->close;
--no_psock:
- 		rcu_read_unlock();
- 		release_sock(sk);
- 	}
+[v1]: https://lore.kernel.org/bpf/20260225013627.22098-1-adubey@linux.ibm.com
+
+The patch series is rebased on top of following patch in powerpc-next:
+https://lore.kernel.org/bpf/20260402161026.289827-1-skb99@linux.ibm.com
+
+Abhishek Dubey (5):
+  powerpc/bpf: fix alignment of long branch trampoline address
+  powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+  selftest/bpf: Fixing powerpc JIT disassembly failure
+  selftest/bpf: Enable verifier selftest for powerpc64
+  selftest/bpf: Add tailcall verifier selftest for powerpc64
+
+ arch/powerpc/net/bpf_jit.h                    |  4 +-
+ arch/powerpc/net/bpf_jit_comp.c               | 65 +++++++++++++----
+ arch/powerpc/net/bpf_jit_comp64.c             |  4 +-
+ .../selftests/bpf/jit_disasm_helpers.c        | 13 +++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
+ .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  5 ++
+ 7 files changed, 142 insertions(+), 19 deletions(-)
+
 -- 
-2.53.0.1213.gd9a14994de-goog
+2.52.0
 
