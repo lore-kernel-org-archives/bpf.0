@@ -1,269 +1,195 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D0E313298
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 17:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775238105; cv=pass; b=ZD12BWZvt0fPDSwjL8QdI/P3GDorMQ2xOIiviI0zg/oajOOvnzG4rj/9nsU0ObXD194kd3S7DslTBU4LsNYU7Al9LB+L7IdECuPuqUBkJ7m4JkFFbRlO7CAUvlKVQpg9TzjXS0d3p83hzZe3jh4Cby5bxrfwXDFTRGUVVAVDQlE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775238105; c=relaxed/simple;
-	bh=5lWVn8YMvYAwRs2zR285cHCiDnPH0plenXQD6VjDk7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NWQdVA2U2jjey3uTuFbcnNJhCjRZyZzdboO3WNS63eMpvr2v2hGURpbWWcxvqwPnBT+zqvsqMyK6hW64nf026FzTj60N1oAOb1eyY03yNHDPiolGWeLa1CTYmFCQ0wKMGGWvLTAPHCSCotc4TUQaF2u85YnT4Wo61o2joExY8i0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HSpv9MDk; arc=pass smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7592830F7EF
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 18:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775239294; cv=none; b=YpQCTs5XaZDjBgLmrrsSxIH4XZd75+OaTPwqJtxnUsyj6s7NoId4GnMk1KgS1sinnEzIZ72FvG277+rQ+uJkNNtpeNsDoReWJQSqEfh9S0rfeqgZMJKe5JJxD+l4DwXOfG5z1oToyf6PpE5mXZ61lAUCnLfzMFE9C2lFrmlpvdY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775239294; c=relaxed/simple;
+	bh=CgqdO3MoEdV6h1XvZvnp3xzwPDu9ksHhUwKVUiC110I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ElMXlVGKC4TYLoBcphKpIT9Ss0o16UKFT2acRMfnvd7cuENWaj+68i0NbNNwAy/6vcXSeWloDij9x2cfA1+xUUD3qBoAslM7NlBUvrV4qv5Wyu1tGayjKpDVA/N/gRfTpVLB3Tyl+5hgpWCJyrx6LTDifPDQMrtLmNJAE6MTdFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heXE3Toz; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HSpv9MDk"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b6ce6d1d3dcso802879a12.3
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 10:41:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775238103; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LZgV2mBpbOZC31tJo+LgcVzKGZw38DM0I8xuHMhwnEwgMk5ukQ/q5qbX9tQQA+ZKb3
-         245rA7QuXKjEHhD9DZLhXoCce65krgLM7PNUqzKLLOlrlvGknE7zBodCKBNGylU8fXrX
-         BHfO+L0A1xoufUMRZwmuoOyAyqZgAxV2nBe9/73B8ci95nJn3QZMELhtqFvl1gwNRqb4
-         jDyqSGwblIMAK7kS4z6J4sVJz8DzoVwSogOs0kd0mK6PpCCJrSGHQmtXk1ki6e90QIQE
-         7aSJjJVL9wNTpoFMDnaFH08fsYG+R6j2wKtXmVkPvDpv2hi7onmbfPtwqDWv6N916N6M
-         4Vfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0W7mSWaqi0MOT0pMvqxQVOJ9twswqNKYzff6Qr8i4JI=;
-        fh=dx8X3qN6Vxp0dyuQxQ/54FTA2lX5aRJWitqEDj7PX/k=;
-        b=DmCqCxJ3k8LP1d26egUAb8qDK25aVQzmR4JTbzwdsaEIelp5uMDCmCKG43QmpiwXGw
-         578cDhzrh977m+lCTqIGUr5jA8S5I3QMd+fCKjWJZMvVLDQO7waS1hvC4uIUoURpc1Ni
-         XF1UFv6CS063ybwJ9IWVGC7da8cjctMgpRVhkI49JAmc3yC4pY6lJ59jbjd5eRuVzOCa
-         +E2t5GamY+tbIzMf34/J73H8DBFbJIF0cwZxFfs9Rb7/FTcXcb3UrvAlXCuJ6DggcUbb
-         VEF8qSnLj/NMKmqGE8OhuC2OBl/2m96UW/tv6zC0Q0rCqEZemmCVgz14kfLlglZM7O9q
-         0bRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heXE3Toz"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso18898425e9.3
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 11:01:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775238103; x=1775842903; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0W7mSWaqi0MOT0pMvqxQVOJ9twswqNKYzff6Qr8i4JI=;
-        b=HSpv9MDkKT/viPLD0hFieh7xKUWoJGWqEL4KzchnVZm/cet9S9gFXgbUsl1JVDWB+F
-         sczg1985a16tvcxoYeurl9bj3T9tSN+GSSn+u7m6vY9EEZ2jKBuO/nddnNnZy4+u6yU4
-         BC3edVGDzPG23s6SbMqU6KiJcVeUWhWnKu80FN79xRQ96yWVQB2Sv/dImD47tIAb/CkN
-         d8dhgo6mpb79RF9/WufLOqPMTK82zv2YS++IpInoInWJ6RigAYum/tBAYLdQWZ+vVTA+
-         C/c1ziEuiN1tERPZ4ka0TJbcKa9QHCOCVd3JqkgSK4d0rq9wfpCsQibgLJC0P7fTDAfZ
-         +sUw==
+        d=gmail.com; s=20251104; t=1775239292; x=1775844092; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TJrBEs7DvDXPMf6HvY06bHlVrPZogp4C0m0gvlF+Db0=;
+        b=heXE3TozFwSB8EqMTkhp2Z9STgW0iuudN4CiLxcyuitcBFBMGpmU1bmwEP/DSuxjeb
+         7z8ehHTiT4kygFkHKbYU6OweMpKYEO2kM2b2kGMtx27IIF3qU1KOdkoJM7WOA1fC8l3l
+         FEGYqFcQbx988Rg5HtPhFcMcC6HZFigAF6drUHuBHn66vk88IkFdJvxfVetUnf4j9TAE
+         yxql+TO1gAWXfs0WwpRkq5DWnZz518v6gqE/leB4mRdF/yMskPVlyMQWWRiSqfroidyE
+         40Vfm5ZjE9U1hSalbc5Mqc+JPzdA418K5nZYPpAjsD9iDaCiPf0uqfur/Ztc8pa0Bmnp
+         7Ppw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775238103; x=1775842903;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0W7mSWaqi0MOT0pMvqxQVOJ9twswqNKYzff6Qr8i4JI=;
-        b=bN6aWRynaRF+S8GDlszNWAUqTnKzMyiVDWJqbTILsJ/ZAxHKv5m6h5H8lx45w3cuLk
-         R1Hz4bpPQQ+fVL0ttbj+5cJJn21Z30QUmQd+n0y1tq2QLlA2gXsyOLYALNcYt0Ir7JWn
-         2tgRlW7hybMKyO2DfqRe9y3sg5R9AQSi4y/efk8qWxJ3/OrQcVZNSTotGPOnq5tp9k99
-         ZYeRL0er3rjjN/9oNftHR0vm+8/s2pz0UcRM6m4JO0eG4o7yUe391o7gKxkB1c57TfBC
-         UhVl7gtOqW0XYF+9TEaCiO3UxA60HxZ8CLCnB0cQ2g0LOQxK7B7tfAPN1lnZ10t/33PI
-         QcwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnfCkt/hSDQkIOvy9+vqG43miPEPGDF8yDDeHhGbZtYFAequ/KB5cBB//tZKOwOanra24=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8GkJRew+kjGDsTcviMCsi1ME9Euls0Z9ME5Nfcwsv0ms+/4nf
-	m5n9XEu6yYVoPRmS90OaGLUyLv1niwAiwrLUijHyz1/GVOroGdT2TEDfWbNB3LWGYQhWHnzjVCS
-	lkBiCz5frXH5eiCuN8OPK6U7otlwFeNk=
-X-Gm-Gg: ATEYQzzIQBlIMBcN8TL779L1U7T8XXyBlqRaxa1hMY4/6ubVAdNv51oB9MtoCsdJHC7
-	gnn9r7cjQg9+fpSEtdVqR0WtrybUm/Kn57sgrLRG5rUs1Yqb2VfZFyNEQegfD+0mCBx/w5yjJjF
-	cP7O34Jup6KGO6W/B0xHp1IthTMGS3xpkVfQ06SjDNmQT1OvSEZcni4yj3SdhMwB1O7BwWNqSQh
-	7aXn/1PaXXY5LYrtK1SzFNRqp9ZZ4v0D+JBRcbDf/ZtZwUjkwuep735Q44QWJja6qoc3yQ/HIz/
-	S3xluw==
-X-Received: by 2002:a05:6a20:12c5:b0:39b:835f:1730 with SMTP id
- adf61e73a8af0-39f2eff3fc0mr3843834637.15.1775238103105; Fri, 03 Apr 2026
- 10:41:43 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775239292; x=1775844092;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TJrBEs7DvDXPMf6HvY06bHlVrPZogp4C0m0gvlF+Db0=;
+        b=Ho6+Fx1zBXqZTo8624Jl2/kV1QuGLF+MONg5Ut+kFuu9Y/foVo7c0MpkVlZmSCS49G
+         0ZGBuOHcoLjZEbgQ1ITzq9k5zAgGwMMQFpZjEie20cTs1cXeCTe5JiHHMdUXwxSs2quD
+         FkXxYJmCGAskiMDMwt4DQ97H1jexZMVaiYOQQRsYIJesvdaoJUeU6GlkLcK0GtLK1Z+u
+         H/xnYzIX9i0poK5aUfdKmipXPHu14d0gLZLJzGW1EVtAFw1sSwn/vBNvjssGEWVc9EZE
+         VVKp60QM7MPoQc6D7f8FHfam7H3Vac/KIcy9KOrfVZSfj6SDAHFiTXJJUtaE2yQOncU7
+         ubaw==
+X-Gm-Message-State: AOJu0YzxItqc+jciO638pinZCgBwipQhubuqMJApYIwgZKbjakExRVY9
+	WziEo0crdEunKpIsYuoWoicRzekK7Sdk0I7ZKKn+6Fv8MpKiJN8mNqrV
+X-Gm-Gg: ATEYQzzIGnEecPWG30tTo4LsIBVEUbWHHFYDBGwtU3x9iMWYRWk38aTIt69PJyvL06v
+	UORQEeqqdptogIJ0Tb9JaZwZL83Piygn8CNhzFKPJiV4/yilnepLmZFKfqWdRsBOK1gLik9h/57
+	UA7kBcoYzHCkAuEHJxVC7Kkh/uj4ObMOcKRVhCsGzdfh84CgYdI/NET9a00vh8oVeI9C8LRAi1l
+	jmRB7IbdD+zbkvpom9w0Zv/3Ibic9eynEPR+L0Oi2iihYM+RXQbzFfemg/E1ir6HFYvhYXFVHxx
+	vv8DY52VFWgvNHp/dTJkYWkFeYVN7AHQPuTetY1GXs2IoMiV9g2ufqR5NgQ8i/SjFi7tmctvQRA
+	hFa8//PLzrzdzACLaAryyV/Zymfpo2kSSQhPKN4ylnworoBy1MJJq/n+NiuT/cuS8Lurxg9NW+S
+	mKhwvSG8bCgHdDlJjbNTsL3x3+pLeNC4WC
+X-Received: by 2002:a05:600c:138f:b0:486:fbf6:abd4 with SMTP id 5b1f17b1804b1-488996f250dmr56537265e9.9.1775239291317;
+        Fri, 03 Apr 2026 11:01:31 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4888a626100sm266056245e9.1.2026.04.03.11.01.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 11:01:30 -0700 (PDT)
+Date: Fri, 3 Apr 2026 18:10:12 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jiyong Yang <ksur673@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Do not ignore offsets for loads
+ from insn_arrays
+Message-ID: <adAChK9+GVACl8ci@mail.gmail.com>
+References: <20260402184647.988132-1-a.s.protopopov@gmail.com>
+ <20260402184647.988132-2-a.s.protopopov@gmail.com>
+ <CAADnVQKUJYsPJa8HP9E-pguQeuShXfuaEs4Z_zJAVYWeEUvHBg@mail.gmail.com>
+ <ac7XSg6AsJq99WvT@mail.gmail.com>
+ <CAADnVQJ_e2fyODknJyMPRw4Z7ztu3-0ZrVM8jXpoO1g7bH52jA@mail.gmail.com>
+ <ac9yriPJX9RXa5tr@mail.gmail.com>
+ <CAADnVQK0mEAdZ3PEHv=wvbPUrEA7EPmU7w928JOd=143vt+kJA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260329140506.9595-1-pilgrimtao@gmail.com> <20260329140506.9595-2-pilgrimtao@gmail.com>
- <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
-In-Reply-To: <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
-From: Chengkaitao <pilgrimtao@gmail.com>
-Date: Sat, 4 Apr 2026 01:41:32 +0800
-X-Gm-Features: AQROBzAJduT_bxIDNRvRaGan1qOkkmaaMw5BmIuyvPDf4XREPWFaFbQgB8Axi24
-Message-ID: <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
- table-driven approach in verifier
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQK0mEAdZ3PEHv=wvbPUrEA7EPmU7w928JOd=143vt+kJA@mail.gmail.com>
 
-On Tue, Mar 31, 2026 at 1:05=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sun, Mar 29, 2026 at 7:05=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.com=
-> wrote:
+O 26/04/03 08:10AM, Alexei Starovoitov wrote:
+> On Fri, Apr 3, 2026 at 12:47 AM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
 > >
-> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> > On 26/04/02 02:32PM, Alexei Starovoitov wrote:
+> > > On Thu, Apr 2, 2026 at 1:44 PM Anton Protopopov
+> > > <a.s.protopopov@gmail.com> wrote:
+> > > >
+> > > > On 26/04/02 12:00PM, Alexei Starovoitov wrote:
+> > > > > On Thu, Apr 2, 2026 at 11:38 AM Anton Protopopov
+> > > > > <a.s.protopopov@gmail.com> wrote:
+> > > > > >
+> > > > > > When a pointer to PTR_TO_INSN is dereferenced it is possible to
+> > > > > > specify an offset inside the load instruction. This is a bug,
+> > > > > > because while the verifier ignores the field, JITs are not.
+> > > > > > So, patch the verifier to not ignore this field.
+> > > > >
+> > > > > This is too terse to understand.
+> > > > > In 2nd patch you're saying:
+> > > > >
+> > > > >    r1 = &map + offset1
+> > > > >    r1 += offset2
+> > > > >    r1 = *(r1 + offset3)
+> > > > >    gotox r1
+> > > > >
+> > > > > Here offset3 is, normally, equal to zero; but this is not guaranteed.
+> > > > >
+> > > > > What is this 'offset3'? Where did it come from?
+> > > >
+> > > > The offset3 is the .off field of the BPF_LDX_MEM instruction.
+> > > > The BPF assembler will correctly work with non-zero offsets:
+> > > >
+> > > >     r1 = &map;
+> > > >     r1 = *(r1 + offset)
+> > > >
+> > > > > What do you mean JIT handles it?
+> > > >
+> > > > JIT will issue a memory load with this offset,
+> > > > but verifier will ignore it (before this patch).
+> > > >
+> > > > > can llvm ever generate such code?
+> > > > > if not, reject it early ?
+> > > >
+> > > > LLVM can generate code with non-zero offset in BPF_LDX_MEM,
+> > > > say, if one jumps to a structure field, like in `goto *p->j`
+> > >
+> > > sorry, I still don't get it. What kind of syntax is that?
+> > > Could you share the godbolt link where llvm actually generates
+> > > such code? If the verifier will reject it anyway it's fine.
+> > > I just want to make sure we're fixing real problem.
 > >
-> > Replace per-kfunc btf_id chains check with btf_id_in_kfunc_table() and
-> > static kfunc tables for easier maintenance.
+> > I am not aware of any real-life code, only can construct
+> > some artificial examples:
 > >
-> > Prepare for future extensions to the bpf_list API family.
+> >         SEC("syscall")
+> >         int test(unsigned int n)
+> >         {
+> >                 struct {
+> >                         int i;
+> >                         void *j[3];
+> >                 } x = {
+> >                         .i = n,
+> >                         .j = { &&l1, &&l2, &&l3 },
+> >                 };
 > >
-> > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> > ---
-> >  kernel/bpf/verifier.c | 261 +++++++++++++++++++++++-------------------
-> >  1 file changed, 144 insertions(+), 117 deletions(-)
+> >                 if (n < 3)
+> >                         goto *x.j[n];
 > >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 4fbacd2149cd..f2d9863bb290 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -544,9 +544,6 @@ static bool is_async_callback_calling_kfunc(u32 btf=
-_id);
-> >  static bool is_callback_calling_kfunc(u32 btf_id);
-> >  static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
+> >                 return 0;
+> >         l1:
+> >                 return 1;
+> >         l2:
+> >                 return 3;
+> >         l3:
+> >                 return 5;
+> >         }
 > >
-> > -static bool is_bpf_wq_set_callback_kfunc(u32 btf_id);
-> > -static bool is_task_work_add_kfunc(u32 func_id);
-> > -
-> >  static bool is_sync_callback_calling_function(enum bpf_func_id func_id=
-)
-> >  {
-> >         return func_id =3D=3D BPF_FUNC_for_each_map_elem ||
-> > @@ -586,7 +583,7 @@ static bool is_async_cb_sleepable(struct bpf_verifi=
-er_env *env, struct bpf_insn
+> > It will compile into
 > >
-> >         /* bpf_wq and bpf_task_work callbacks are always sleepable. */
-> >         if (bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
-> > -           (is_bpf_wq_set_callback_kfunc(insn->imm) || is_task_work_ad=
-d_kfunc(insn->imm)))
-> > +           is_async_callback_calling_kfunc(insn->imm))
-> >                 return true;
-> >
-> >         verifier_bug(env, "unhandled async callback in is_async_cb_slee=
-pable");
-> > @@ -11203,31 +11200,6 @@ static int set_task_work_schedule_callback_sta=
-te(struct bpf_verifier_env *env,
-> >         return 0;
-> >  }
-> >
-> > -static bool is_rbtree_lock_required_kfunc(u32 btf_id);
-> > -
-> > -/* Are we currently verifying the callback for a rbtree helper that mu=
-st
-> > - * be called with lock held? If so, no need to complain about unreleas=
-ed
-> > - * lock
-> > - */
-> > -static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
-> > -{
-> > -       struct bpf_verifier_state *state =3D env->cur_state;
-> > -       struct bpf_insn *insn =3D env->prog->insnsi;
-> > -       struct bpf_func_state *callee;
-> > -       int kfunc_btf_id;
-> > -
-> > -       if (!state->curframe)
-> > -               return false;
-> > -
-> > -       callee =3D state->frame[state->curframe];
-> > -
-> > -       if (!callee->in_callback_fn)
-> > -               return false;
-> > -
-> > -       kfunc_btf_id =3D insn[callee->callsite].imm;
-> > -       return is_rbtree_lock_required_kfunc(kfunc_btf_id);
-> > -}
-> > -
-> >  static bool retval_range_within(struct bpf_retval_range range, const s=
-truct bpf_reg_state *reg)
-> >  {
-> >         if (range.return_32bit)
-> > @@ -12639,11 +12611,103 @@ BTF_ID(func, bpf_session_is_return)
-> >  BTF_ID(func, bpf_stream_vprintk)
-> >  BTF_ID(func, bpf_stream_print_stack)
-> >
-> > -static bool is_task_work_add_kfunc(u32 func_id)
-> > -{
-> > -       return func_id =3D=3D special_kfunc_list[KF_bpf_task_work_sched=
-ule_signal] ||
-> > -              func_id =3D=3D special_kfunc_list[KF_bpf_task_work_sched=
-ule_resume];
-> > -}
-> > +/* Kfunc family related to list. */
-> > +static const enum special_kfunc_type bpf_list_api_kfuncs[] =3D {
-> > +       KF_bpf_list_push_front_impl,
-> > +       KF_bpf_list_push_back_impl,
-> > +       KF_bpf_list_pop_front,
-> > +       KF_bpf_list_pop_back,
-> > +       KF_bpf_list_front,
-> > +       KF_bpf_list_back,
-> > +};
-> > +
-> > +/* Kfuncs that take a list node argument (bpf_list_node *). */
-> > +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
-> > +       KF_bpf_list_push_front_impl,
-> > +       KF_bpf_list_push_back_impl,
-> > +};
-> > +
-> > +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
-> > +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] =3D =
-{
-> > +       KF_bpf_rbtree_remove,
-> > +       KF_bpf_rbtree_add_impl,
-> > +       KF_bpf_rbtree_left,
-> > +       KF_bpf_rbtree_right,
-> > +};
-> > +
-> > +/* Kfunc family related to rbtree. */
-> > +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] =3D {
-> > +       KF_bpf_rbtree_add_impl,
-> > +       KF_bpf_rbtree_remove,
-> > +       KF_bpf_rbtree_first,
-> > +       KF_bpf_rbtree_root,
-> > +       KF_bpf_rbtree_left,
-> > +       KF_bpf_rbtree_right,
-> > +};
-> > +
-> > +/* Kfunc family related to spin_lock. */
-> > +static const enum special_kfunc_type bpf_res_spin_lock_api_kfuncs[] =
-=3D {
-> > +       KF_bpf_res_spin_lock,
-> > +       KF_bpf_res_spin_unlock,
-> > +       KF_bpf_res_spin_lock_irqsave,
-> > +       KF_bpf_res_spin_unlock_irqrestore,
-> > +};
->
-> I think it's a step in the wrong direction.
-> I'd wait for Ihor's BTF_ID_NAMED cleanup.
+> >         <test>:
+> >         ;               .j = { &&l1, &&l2, &&l3 },
+> >              160:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r2 = 0x0 ll
+> >                         0000000000000500:  R_BPF_64_64  BPF.JT.4.0
+> >              162:       79 23 10 00 00 00 00 00 r3 = *(u64 *)(r2 + 0x10)
+> >                                                                    ^ offet != 0
+> >              163:       7b 3a f8 ff 00 00 00 00 *(u64 *)(r10 - 0x8) = r3
+> >              164:       79 23 08 00 00 00 00 00 r3 = *(u64 *)(r2 + 0x8)
+> >              165:       7b 3a f0 ff 00 00 00 00 *(u64 *)(r10 - 0x10) = r3
+> 
+> Great, but where is an actual gotox that is using that r3?
+> Looks like it's spilled into stack at 163 ?
+> Does it pass the verifier?
+> Would be great to add it as C selftest.
 
-After reading Ihor's messages on the list, if I understand correctly,
-our two approaches seem to target different problems. What Ihor's
-work appears to achieve is the ability to remove the entire enum
-special_kfunc_type. My goal, on the other hand, is to replace many
-scattered func_id =3D=3D special_kfunc_list[...] comparisons with a
-table-driven approach.
+No, this one doesn't pass the verifier (it is spilled to stack, and when
+it is loaded back the error is "invalid unbounded variable-offset
+read from stack R2", because it is loaded back from stack as
+"scalar", not "insn"). All "normal" use cases from [C-level] selftests
+(a switch or a 'goto *j[i]') compile into code which accumulate
+offset into previous instructions.
 
-That said, once Ihor's solution lands, my approach would no longer
-be applicable as-is. So I have been thinking about an alternative,
-please see the patch linked below for details:
-https://lore.kernel.org/bpf/20260403170900.58659-1-pilgrimtao@gmail.com/
-
-> Kaitao Cheng,
->
-> also please start your part of code reviews.
-> Your patches are not going to be landing if you don't code review.
->
-> https://lore.kernel.org/bpf/CAADnVQ+TKKptnNB25V3=3Dbcdybh5G6c2DyW2sYtXvyR=
-aVnPN8MA@mail.gmail.com/
-
-I will do my best to carry this forward.
-
---=20
-Yours,
-Chengkaitao
+Do you want me to work on this example above to pass the verifier?
+Or, for now, the best thing is to just reject non-zero offsets?
+(The latter has the benefit that the patch will be auto-backportable
+to stable trees.)
