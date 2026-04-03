@@ -1,143 +1,133 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1D2221F20
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 02:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775183071; cv=none; b=jrp9b3LzlZ3pbgRo8Xg5/tnemMPn+uPvNxzidYLYuranzM7UhT2iMYDTIPSxCOCQcV3gwVSaVHKJ4YyTuivVEVIN8mYTABQrq6aEgzs74ApaU9poiNq7RAso1uaDAY3kHjERl48P4mQ2xgUFWFaPCprwiFaTqiIitycPb3GXQLE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775183071; c=relaxed/simple;
-	bh=toqBReqZo5ueBSBqWE/l2yyhM0fP9wyRzGZZECZiK8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3v2Qh80eDQGRbIra9nmaIlUZs67I5U+KjEqasMamTdeAh50unCZ6d1xmU28or60T7sBwGfUNgcl7deeFCN5Ef9wdstxd7Nclv3QlambmXWDobTUqvGw20KmH3euRS6MnZWncqSmLL8tVvqHMLOgZuQb+3FsoJS0UiKuS1hg/Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ODlLfJwj; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BCD273D76
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 02:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775183208; cv=pass; b=pTXvr0Ft81SCcgkj0pWNVvgcH4xRQ/EDMhT7iYDnQHxzrw5XK4+KZqUUxjK6utU4/+NJgfNbgLoYjWPIYJXlfCNL0050oMT3bSdYzAGvqEC0rN20Hvw8tJ4uJoYgoIp0jsv3xk89WI8jhuy16bSNYprFTQRdvy18x5cf/UcdCvg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775183208; c=relaxed/simple;
+	bh=vcJVYVcsjtujJhxPM2Hmf6GUicBFUB6Kawjcdbn0m+k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AlvWBwNXuNxsiJYcYu0+LYUoiqI2IfT+//hDj0JZpekoWZ8A9XKTzYQiQWY7MKB76Q9TN97uu/coZZvqSfp2nsompxtlPZrrZODeDOzAlfA7Qh/qAZXWuwKcZyLL8fuJKZx2IlfgsGOYVNdOfQa1X1QzaKvMrdB2Ub6oGXXZ7Ts=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pj9APJiX; arc=pass smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ODlLfJwj"
-Date: Thu, 2 Apr 2026 19:24:17 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775183066;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CBbN7o5sPUmFQlR1H7Sd6ZSgAFzsZVe8xnlxndxR16M=;
-	b=ODlLfJwjJxgvr54E+HhYgpM6P7+4N8vR5X1By/QLz5+bSSgAMnaHm1tgYB1ELO6TD07XrB
-	xi2uno81icwfvJpqFLT4On/EpSzWV08m+jP6IMtBet6hmShJLQw8EHywEW+nfNNKnqGW+t
-	V7iHKxr70bFDOMSYTG+v69R4ttk+S/c=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: xulang <xulang@uniontech.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard <eddyz87@gmail.com>, 
-	Hao Luo <haoluo@google.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	=?utf-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>, kernel@uniontech.com, KP Singh <kpsingh@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf v5 1/2] bpf: Fix OOB in pcpu_init_value
-Message-ID: <ac8jGJvsEHhwuMqI@devbig1721.ftw5.facebook.com>
-References: <7653EEEC2BAB17DF+20260402073948.2185396-1-xulang@uniontech.com>
- <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
- <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
- <ac6ejZrcnfQfaTZS@devbig1721.ftw5.facebook.com>
- <CAADnVQLSUU8Yo1Wmym4B05jam6qqUPEXUDJpBH+00kjqkrYigw@mail.gmail.com>
- <ac7Afa6_HDzyAxSt@devbig1721.ftw5.facebook.com>
- <CAADnVQJv5qNL+ssShZ043DVobO7ecfMuZxa-t-CGiGL-XyK=PA@mail.gmail.com>
- <ac8ODClxZ83KZf-V@devbig1721.ftw5.facebook.com>
- <CAADnVQJAYE9_KoNrWQhTz0UOX5dwmqKL-m6H0S_o2ZmdScVPfQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pj9APJiX"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-7986e0553bdso15329467b3.2
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 19:26:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775183206; cv=none;
+        d=google.com; s=arc-20240605;
+        b=X09F++dKkFZyW15RbiEwn3LkcscHiwjmulU/YEjz6yKjUXW2jPHiyskUpW0gaYJ+oz
+         m08BQ2alVmjXlXCL1EYLeZptnovLw9gjUsWj/o4eOMLWsPmzLoGyZSyWlHcN2/Gdcw8f
+         VZAouXgknHOHA/FuUd6DBCdh0HsryigGNRq/0u4+b2azGryTFrrWVFyqzbREwMPn8Q+Z
+         HEcDLFYQgwG1bZWslNnF9sdusDpIAKCQaKxpfZ05XlbKHK4/NZFieDf1UbJJrNgGt3cu
+         6rX20RGDYESIPkS1WLcmTNDzbZ0ODk25Wj31H7gKruqQdPKUQE0lF2slgA6xYrh08tBM
+         E/sw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
+        fh=MWJYJFxuQxxF2xd9iFemopavTXOaIU/6hnyvFFBUqIw=;
+        b=eBf73x2AfN19mOiM8crZJTAJ73l7h6X5iSRHNwhtvzaka5UpBT1dXocMKHx8okEV0k
+         WxxhO7VPns4hWN/90m+prIyXg4zEpvg1Yy4kVdyrLnHQ3FORTeC8BCGeo/ZRttIQUxZN
+         met4gJoqUE8PYPQhCRB6g+xcFTqU5MgZ2InXHvKs3MPrHRK1MvyGSN1vn9nR/+cWX+OE
+         eryikDcg8dgSjBCU/i7m27IK4PdgLUYfyIZFA3rEZpyElyetSa6qCE9VLBySSiJdX65b
+         dN4yTDHo63XNLOPXei7pR7tBQEFRBabVdePeLwyoSXJprKBPH5iBG6yd8DXvuLVp1/WI
+         PDnw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775183206; x=1775788006; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
+        b=pj9APJiXwPQpv2w/t6G6RTFnZEOcQthmzNUT0gh9/PMgPwKu0cOD8de4u4xK8MFJG8
+         rh5op5ZoOQFvio0wkCcf4oeMdLGXICbgT0ECbrVKn9uZwhLNNVYPQwgL24ik/wPbdw/n
+         u5KFOb+Tuizym1/1P+Di0L2Wwr5/HOANx9ZcMLCy5hDIEkFgBImB8ZQjW4sw1rsUWTh+
+         ByWNE7yg5BohdHOxBKMA0nSisf1YKIzKOw0bKPmn6LqpQctIK5vy7s2NhKCslkRlkNEY
+         zv+sYPBO1mzQuJNfw9rfaEIuFv6AuqLwyelA3QR4mlS0VGVbYGY9eIxKBaE6y/k5acem
+         nkfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775183206; x=1775788006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
+        b=ECTtVzkfLfsvH+o6DeJIROfjSuJ6ohnBq7rEyVcKXI2y+VF3hj45eM0LDdsz49xiT1
+         IqkEyWF4NtKLq451/jRpHYtApSCbBugjMe9BCst9SxCl37hZYTdcMnqsoACyws7C1mbx
+         Tr2pCzUpA7LrCxap0xJzdg7TChQ8aPDLL61ijJsvGVlvvSx+FpmAb60Y6w7R5ji0PNPn
+         yA7cui5VxkNHm8OI/RzsYJtH+GOBURKBcOS9IeelOt9+jt9WtXvMP4SbAXnRbvSlYv45
+         9iwwP09SzoL8YT+A8DeHNtSW8Wm5CIdwxNOW6XXYi//JDVXkAll/9gcjTFkNbQ9+x7dX
+         qN8w==
+X-Gm-Message-State: AOJu0YzazftAxRoILhNa5asucULmH/t4NHEkP1tJy+OxyeEzBe8HyO/Y
+	iMugS5+yBYRNKqpjti4A3Rp/mZM8SKkwZSRUVojX9gDR4jZkpMqJWy3bMLNSb/1I3kXqbx4VMGN
+	AlSLtHjcjP9lClLOkvwxjTbKKS1CbzDDQA+LCRui7SQRPD4XhRl0ZbT8B
+X-Gm-Gg: AeBDiesgHmVYIrKdg0sQnB8jGaBPgSPVb8iZ9CFm96yQTUGLQS8FBMonTuPDhNPFUis
+	7Oi2YokhYGJZg+DRLmksCEj5wCsXT5cbQhyCnZgvJAUFk1L7Fo5WdCObmFO80ew5N2Ei5f6JSzs
+	SZu5/eWQASvY07FY2ummVooMWA9rV8JTWI6QSg1qe7ccua5BJNoeza6gjsYG/9G0r8qZHanIWwb
+	vjs5z3nl9QbOPCOy0i8O0bHjRSE2R1kM6CPcOSrCbgpSSjTZgtq4bb/Tjf0pIymGRSSWnukX0UR
+	AAzlhYtrZOhazycG8A==
+X-Received: by 2002:a05:690c:90:b0:79a:c396:c01 with SMTP id
+ 00721157ae682-7a4d6732758mr17280927b3.55.1775183206003; Thu, 02 Apr 2026
+ 19:26:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJAYE9_KoNrWQhTz0UOX5dwmqKL-m6H0S_o2ZmdScVPfQ@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20260403015851.148209-1-jiayuan.chen@linux.dev> <20260403015851.148209-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260403015851.148209-2-jiayuan.chen@linux.dev>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 2 Apr 2026 19:26:34 -0700
+X-Gm-Features: AQROBzAh2Ysi0SF15X8q_e3XfU4X2ZmmJIBBcIrVoyrG5eWnijGl8DAlrd1gYkE
+Message-ID: <CANn89i+1VzG3KSv1NvhTbPm2EdG4Lvii256yZj_wq9jcB-qQ0A@mail.gmail.com>
+Subject: Re: [PATCH bpf v6 1/2] bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 02, 2026 at 07:09:03PM -0700, Alexei Starovoitov wrote:
-> On Thu, Apr 2, 2026 at 7:00 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
-> >
-> > On Thu, Apr 02, 2026 at 05:05:14PM -0700, Alexei Starovoitov wrote:
-> > > On Thu, Apr 2, 2026 at 12:59 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
-> > > >
-> > > > On Thu, Apr 02, 2026 at 11:36:04AM -0700, Alexei Starovoitov wrote:
-> > > > > On Thu, Apr 2, 2026 at 10:01 AM Martin KaFai Lau <martin.lau@linux.dev> wrote:
-> > > > > >
-> > > > > > On Thu, Apr 02, 2026 at 07:17:17AM -0700, Alexei Starovoitov wrote:
-> > > > > > > On Thu, Apr 2, 2026 at 12:43 AM xulang <xulang@uniontech.com> wrote:
-> > > > > > > >
-> > > > > > > > From: Lang Xu <xulang@uniontech.com>
-> > > > > > > >
-> > > > > > > > An out-of-bounds read occurs when copying element from a
-> > > > > > > > BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
-> > > > > > > > same value_size that is not rounded up to 8 bytes.
-> > > > > > > >
-> > > > > > > > The issue happens when:
-> > > > > > > > 1. A CGROUP_STORAGE map is created with value_size not aligned to
-> > > > > > > >    8 bytes (e.g., 4 bytes)
-> > > > > > > > 2. A pcpu map is created with the same value_size (e.g., 4 bytes)
-> > > > > > > > 3. Update element in 2 with data in 1
-> > > > > > > >
-> > > > > > > > pcpu_init_value assumes that all sources are rounded up to 8 bytes,
-> > > > > > > > and invokes copy_map_value_long to make a data copy, However, the
-> > > > > > > > assumption doesn't stand since there are some cases where the source
-> > > > > > > > may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE,
-> > > > > > >
-> > > > > > > why? Just round it up there instead of penalizing perf everywhere.
-> > > > > > >
-> > > > > > > > skb->data.
-> > > > > > >
-> > > > > > > what that means?
-> > > > > > >
-> > > > > > > pcpu_init_value() can access skb->data ?
-> > > > > >
-> > > > > > After bound check, the skb->data can be used in
-> > > > > > bpf_map_update_elem(&percpu_lru_map, &key, skb_data, BPF_NOEXIST)
-> > > > > > which will call pcpu_init_value().
-> > > > >
-> > > > > I see, but if we round up on cgroup storage size the problem is gone,
-> > > > > right?
-> > > >
-> > > > Right, it will fix the problem tested in patch 2 which
-> > > > passes cgroup_storage_value as the source to
-> > > > pcpu_init_value(). The bug should only manifest with BPF_NOEXIST.
-> > > > For BPF_EXIST, pcpu_copy_value() will be used and it
-> > > > currently uses copy_map_value() instead of copy_map_value_long().
-> > > >
-> > > > > Doesn't matter what the source of the copy is.
-> > > >
-> > > > I think the source (PTR_TO_*) matters here because the bug is about
-> > > > reading beyond the boundary of the source. A few other map types
-> > > > were audited when their values were used as the source.
-> > > >
-> > > > For skb->data, using skb->data to reproduce is practically
-> > > > not possible because there should be at least shinfo beyond data_end,
-> > > > so some of shinfo may get copied to the pcpu map in the extreme case.
-> > >
-> > > Yes, but also the verifier checks that ptr + value_size is accessible
-> > > in that source. In this case, that the value_size bytes are available in skb.
-> > > So if we round up early at cgroup storage creation time there is no overrun.
-> >
-> > The verifier checks that src_ptr + value_size is accessible but the
-> > percpu's map->value_size is not rounded up to 8 bytes. If the percpu_map
-> > is created with 4 bytes value_size, the percpu_map->value_size will stay at 4
-> > and verifier only checks that src + 4 is accessible.
-> 
-> I meant that we can do:
-> map->value_size = round_up(map->value_size, 8);
-> 
-> there is no promise that value_size at creation time is equal to
-> the one that the verifier uses and what is reported back to user space.
-> We could do that for hashmap too. I think...
+On Thu, Apr 2, 2026 at 6:59=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
+> wrote:
+>
+> bpf_sk_assign_tcp_reqsk() only validates skb->protocol (L3) but does not
+> check the L4 protocol in the IP header. A BPF program can call this kfunc
+> on a UDP skb with a valid TCP listener socket, which will succeed and
+> attach a TCP reqsk to the UDP skb.
+>
+> When the UDP skb enters the UDP receive path, skb_steal_sock() returns
+> the TCP listener from the reqsk. The UDP code then passes this TCP socket
+> to udp_unicast_rcv_skb() -> __udp_enqueue_schedule_skb(), which casts
+> it to udp_sock and accesses UDP-specific fields at invalid offsets,
+> causing a null pointer dereference and kernel panic:
+>
+>   BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
+>   Read of size 4 at addr 0000000000000008 by task test_progs/537
 
-hmm... would it break the existing bpf programs? For example, my earlier
-data/data_end example will be rejected now because the verifier is
-expecting 8 bytes instead of 4 bytes from src.
+
+>
+> Fix this by checking the IP header's protocol field in
+> bpf_sk_assign_tcp_reqsk() and rejecting non-TCP skbs with -EINVAL.
+>
+> Note that for IPv6, the nexthdr check does not walk extension headers.
+> This is uncommon for TCP SYN packets in practice, and keeping it simple
+> was agreed upon by Kuniyuki Iwashima.
+>
+> Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+
+Reviewed-by: Eric Dumazet <edumazet@google.com>
