@@ -1,221 +1,181 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E758929B799
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 14:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE9D3C5524
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 14:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775227947; cv=none; b=MzE36OFRd4Lw/L9d4yGksH+me7mG6cWlzax1+rP38a0y1t4DBxeF8pGBmBziXkETgRLcqxMoQdhwpn41ChCr62LIRw/+jx4NVj22WduNtyF0DaYJcDEoAWVSSfibXkMkWE1qHiAktu7vucg6fam46RkuVDkHC3nw3bzIMiLGnLQ=
+	t=1775228353; cv=none; b=NeMt0UqnYaOmKsKnnnn35hkB4+T9E7Zr3DIeoEf4cJNGPvKT+rUHlYwuQws5VdpGNz6eRwLtizskJ/NTKAoAhxKiKTZSdXBZfEBldaaAl/SrZ4n3HjmX+pq3Va0RCLSIfQsxxobOQycjM2gTC/6zlySYUKUsi4+EvPaIRtyTWl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775227947; c=relaxed/simple;
-	bh=CTRwpPkY5I/XQFDvpz3aZ16aVXK374cBhoFBuuzohBk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=MKDipIQooAXJF94wFL3yHgm+P+sv5hYef5hPm/Ed8VFa7UDC2x7nYCU+sJpm1yVT5s7znm6fnnE7IWFpQmZ9B68E+vTKsZw2hLMrzrKQm6LEsI/32u6dSFv4A0keUQRdu/AvxW+plvLEXUtn+ldoIi1UWtyUVSz2uLd9iK0YiR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pb/E0rBe; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1775228353; c=relaxed/simple;
+	bh=89ji6KrXytsoyroMrXYgsYDJJAfuNLm0CiKJEhTy/wQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RxMO0l4TNbiD3AhACQgCEPJKf+rUkcH48KCzJVxLK8eBJe5x+dsy3bRtwW1F13VBCi8FkBRsRv8IdgMg9yqpnLDRcIL53Gf+EI+3DJfC7wixnVkNAe9T85n9FS0BSe60/yv04IH506nn4F/m0S7Tar12n+oIgmhGZ+fhQL2n3nQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=B55YuYen; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pb/E0rBe"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c76b6db8bb2so949332a12.3
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 07:52:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="B55YuYen"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-486ff201041so19506715e9.1
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 07:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775227945; x=1775832745; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DiuRvpeeoOLs6ih2ypPx8qDY3zNqJzQtKD09MDbtleo=;
-        b=pb/E0rBe2VtJDHyiiYkaye+2q2uqM2fMcC9khj7OKTmr5qprdUk++Tut+pjMRLt58R
-         F1j36ZpLAIWzt5UGrKHpjMCtApP+pA1Rrxj/gNnDO4NGvswlLPXdB0M2JSfPqdHdrQla
-         tSdCpOhSCdnyNrxBkAysGyRY9TyS/1ohVDWbM1UHvCO2oQRLQ19THmeJVQFz9hDm2W/k
-         VnQwKp5SCVZrXNpfgdl25tY/Is9cQGsMk5Bx05GdKCp/3cxtt9OiWbqd+cKWQa8GLKpq
-         +vIn8GuWuFs6RWcBIBziKykrtBXXXnzkswWq3941XRcE2tMduMNmo5CP++qQ28eJxNK9
-         FpjQ==
+        d=suse.com; s=google; t=1775228349; x=1775833149; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H+OgrwFlApvpqkLRR93ZwtakkLIUZgZQlxVrJ4qAo4U=;
+        b=B55YuYenvg/+tnPpXdJS9gEtYREoR+eui7WCUdyVKpiFGF2Ib6T7YYsD/C8BVNws5j
+         4nrUK8ywH3z504cL5hmSXMSHapRp5YLadxpv5e4XFEwlXuE/ia29D4H7mwuuE1eD7cuX
+         l1FBXdthOsMEjvpjUpzy9zmxSmLF9PfsRhfzIQBy680tav0otNGblKJGrpEocJZnleGF
+         GkHVCMVu6hw/dMdZg7t3t9ZpJwymIcBbPIF7F0jgsWlNJFEXOl7/q8gWFfcEWo53HDuv
+         9iYUPDr4vXhGm3yxUtTvpf3xwc+RIXUMA0T06AHLUpaAlYqSvDqpyO1v9HP6gsRRUN+k
+         OyZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775227945; x=1775832745;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DiuRvpeeoOLs6ih2ypPx8qDY3zNqJzQtKD09MDbtleo=;
-        b=TeKwNr1WcmZRxDCjtT1fly+1HP2HgK9pDoi+53xW1sUHDdEsl1s4hvPhtwmgAnmY9U
-         9ViZXyJFvqaS5qQRbQiCeH9ytDPpgxycLUYqzmW46XJ4LDaoZ+CJvpBLtoy/5w/WT2LH
-         UsmplwoEoybipbfPYPH4LlZpT5t6wD70tiwVqT6hcSco5cQnDfC4wCaXsn4lvMI6ow87
-         VULOLk9UDRONcAhP4+8M7Rs7E0gGXLXGlH98kFNKc6u71iF0TNNcSVrPI0h+dg2M826f
-         n67l1AMRSlf1ySg1CXMv08wRC5yCeCusgJK1gOdH4yiFgTwErd9tb/Ju+cFXLMcPj5rN
-         7qig==
-X-Forwarded-Encrypted: i=1; AJvYcCUtZrukJRd1e+KlE3/P5ox3TzDh5SIjLM2er6Q+xVUPRp8IUM4SSeiBq2V/7N1nOt3p/t8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywm5L3TqNZZuJMYt4PJypI1hX6a1vQY+K/tj87cANjA/eunKkYQ
-	WNWImQQ0aSWSA8A0zH6IA41nPHVdVx2bW2qPF8XZMG1ihrgUDnjVn/hVpEJZ62tF6is0uX4HriO
-	D91/CPA==
-X-Received: from pjuf5.prod.google.com ([2002:a17:90a:ce05:b0:35c:2d1e:7123])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2fc3:b0:359:f825:5700
- with SMTP id 98e67ed59e1d1-35de68688f0mr3098585a91.10.1775227945130; Fri, 03
- Apr 2026 07:52:25 -0700 (PDT)
-Date: Fri, 3 Apr 2026 07:52:23 -0700
-In-Reply-To: <20260402-vmscape-bhb-v9-7-94d16bc29774@linux.intel.com>
+        d=1e100.net; s=20251104; t=1775228349; x=1775833149;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H+OgrwFlApvpqkLRR93ZwtakkLIUZgZQlxVrJ4qAo4U=;
+        b=XwpgJYrZaBjvfI6q73ktqyocB+TkGwDBBIMR3kwCbkrcm/X1o7XaYB98MkGXdy+ytY
+         6AUCfexHGsEOPTE+buxSPfNtyr1VBqCAZ+W2j3uAi+GsYmavxxRFhUFN6pkHA4gdzKb7
+         p7yceFIiVm/uEulo0Lp13Q6x7AWowhpa4UPG2tDZ+n2AygnsAdPIq1FwoNcyw1nm5KSe
+         oTEMMVGemUwkT1GyAWBQBSDTJ6ydWZQ1kF+PMZ/C2ZdXtsNCWClCVq4YO7+9EPy9lk8K
+         N2R9CMypUJCHxy70KCbJouIG0D69XZQPDIhKjlnDZk4RJZtVcJxMcuL32ag5WlexEDP7
+         oMLQ==
+X-Gm-Message-State: AOJu0YwYMJKSJL6kkU3RttVEerzjQAJhHA26pMMBYo7C0eDEdDVGO3XO
+	xmljNLqWOZdj5SuRQrbxTdeerCFD+eF3+unZZ4hEEQ2LiQRSXJshQKlhu70VeRvdHEA=
+X-Gm-Gg: ATEYQzz8j+JCtQmljG3fL7vu3mvJ9v0hOiU+ZW8oBmh+WlT1+tmYO3TK3laWo48ILA8
+	tvsbxzqQIvZTRmwMJQGN/gMATKfphQqS6tcjfIg86aHDrmWNFaNQcZW4uy7ITxujXInWdR/fQL6
+	RThMZbOAalg1C5rI5pQALRpyd/hkPLNphpd7c6TMQ+JaKeA2Ygkz/Lb2DMh9ID7KZfr/4oxLgPy
+	rGuOuflT4Pak/VQFHNS4Ly/Bb2mHB5BtlsHi6YOB3bk3MMpvfY96Wp6RmP9vQd1V7A6XvIx2HBI
+	53efF6RNjFBrdEoL434EgFejRsgxTZQLot1oHkLBboFPh6cXlb/ekK73vYqZ6iNPE9+U2990bU9
+	zF3T8iJ+FOsTgSxsWnvSzM+nm/I6xjdacxIzhLMty9bcQBbM2lalq7jKshMG87r98rJr9HZmwoN
+	OT+pXmqH89
+X-Received: by 2002:a05:600c:3e83:b0:485:2fc5:3a5 with SMTP id 5b1f17b1804b1-488997bd938mr55388085e9.26.1775228348640;
+        Fri, 03 Apr 2026 07:59:08 -0700 (PDT)
+Received: from localhost ([189.99.238.3])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56d9bc9bc41sm6877313e0c.11.2026.04.03.07.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 07:59:07 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH v2 00/10] selftests/bpf: Tolerate partial builds across
+ kernel configs
+Date: Fri, 03 Apr 2026 11:58:53 -0300
+Message-Id: <20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260402-vmscape-bhb-v9-0-94d16bc29774@linux.intel.com> <20260402-vmscape-bhb-v9-7-94d16bc29774@linux.intel.com>
-Message-ID: <ac_UJx99kDJY8j3t@google.com>
-Subject: Re: [PATCH v9 07/10] x86/vmscape: Use static_call() for predictor flush
-From: Sean Christopherson <seanjc@google.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	David Laight <david.laight.linux@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAK7Vz2kC/4WOWw6CMBREt0L67dVSHiZ+uQ9DTCm3UCMt6S0EQ
+ 9i7LS7AzzOZOZmNEXqDxG7ZxjwuhoyzEcQpY2qQtkcwXWQmuKh5yXMgfOuAFAjaST9HQ8pZbXo
+ oVVGgrlRVd5LF9eRRm/UwP5of09y+UIWkS41WEkLrpVVDiqIOLK7hMkoK6FNjMBSc/xznljyZ/
+ v9YcuBQSCyF4lJfa32nmfCs3Miafd+/mh4j1vEAAAA=
+X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+X-Mailer: b4 0.15.1
+X-Developer-Signature: v=1; a=openssh-sha256; t=1775228344; l=3685;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=89ji6KrXytsoyroMrXYgsYDJJAfuNLm0CiKJEhTy/wQ=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QOX84k2QeUwuO8dcrNzMtD1XuDwQUFz8m1vv5l9tXa8jO8hI0wgfABLN8BJzTmBx68QP3xhU36b
+ 527bSAbwGbg0=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-On Thu, Apr 02, 2026, Pawan Gupta wrote:
-> Adding more mitigation options at exit-to-userspace for VMSCAPE would
-> usually require a series of checks to decide which mitigation to use. In
-> this case, the mitigation is done by calling a function, which is decided
-> at boot. So, adding more feature flags and multiple checks can be avoided
-> by using static_call() to the mitigating function.
-> 
-> Replace the flag-based mitigation selector with a static_call(). This also
-> frees the existing X86_FEATURE_IBPB_EXIT_TO_USER.
+Currently the BPF selftests can only be built by using the minimum kernel
+configuration defined in tools/testing/selftests/bpf/config*. This poses a
+problem in distribution kernels that may have some of the flags disabled or
+set as module. For example, we have been running the tests regularly in
+openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+special package [3] that build the tests against an auxiliary vmlinux with
+the BPF Kconfig. We keep a list of known issues that may happen due to,
+amongst other things, configuration mismatches [4] [5].
 
-...
+The maintenance of this package is far from ideal, especially for
+enterprise kernels. The goal of this series is to enable the common usecase
+of running the following in any system:
 
-> @@ -3133,8 +3139,14 @@ static void __init vmscape_update_mitigation(void)
->  static void __init vmscape_apply_mitigation(void)
->  {
->  	if (vmscape_mitigation == VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER)
-> -		setup_force_cpu_cap(X86_FEATURE_IBPB_EXIT_TO_USER);
-> +		static_call_update(vmscape_predictor_flush, write_ibpb);
-> +}
-> +
-> +bool vmscape_mitigation_enabled(void)
-> +{
-> +	return !!static_call_query(vmscape_predictor_flush);
->  }
-> +EXPORT_SYMBOL_FOR_KVM(vmscape_mitigation_enabled);
->  
->  #undef pr_fmt
->  #define pr_fmt(fmt) fmt
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 45d7cfedc507..e204482e64f3 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11463,7 +11463,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	 * set for the CPU that actually ran the guest, and not the CPU that it
->  	 * may migrate to.
->  	 */
-> -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER))
-> +	if (vmscape_mitigation_enabled())
+```sh
+make -C tools/testing/selftests install \
+        SKIP_TARGETS= \
+        TARGETS=bpf \
+        O=/lib/modules/$(uname -r)/build
+```
 
-This is pretty lame.  It turns a statically patched MOV
+As an example, the following script targeting a minimal config can be used
+for testing:
 
-  11548		if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER))
-  11549			this_cpu_write(x86_ibpb_exit_to_user, true);
-     0x000000000003c57a <+858>:	movb   $0x1,%gs:0x0(%rip)        # 0x3c582 <vcpu_enter_guest+866>
+```sh
+make defconfig
+scripts/config --file .config \
+               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+               --enable DEBUG_INFO_BTF \
+               --enable BPF_SYSCALL \
+               --enable BPF_JIT
+make olddefconfig
+make -j$(nproc)
+make -j$(nproc) -C tools/testing/selftests SKIP_TARGETS= TARGETS=bpf install
+```
 
-into a function call and two sets of conditional branches.  And with mitigations
-enabled, that function call may trigger the wonderful unret insanity
+This produces a test_progs binary with 579 subtests, against the total of
+708. Many of them will still fail or be skipped at runtime due to lack of
+symbols, but at least there will be a clear way of building the tests.
 
-  11548		if (vmscape_mitigation_enabled())
-     0x000000000003c575 <+853>:	call   0x3c57a <vcpu_enter_guest+858>
-     0x000000000003c57a <+858>:	test   %al,%al
-     0x000000000003c57c <+860>:	je     0x3c586 <vcpu_enter_guest+870>
+[1]: https://openqa.opensuse.org/tests/5811715
+[2]: https://openqa.opensuse.org/tests/5811730
+[3]: https://src.opensuse.org/rmarliere/kselftests
+[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
+[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
 
-  11549			this_cpu_write(x86_predictor_flush_exit_to_user, true);
-     0x000000000003c57e <+862>:	movb   $0x1,%gs:0x0(%rip)        # 0x3c586 <vcpu_enter_guest+870>
+Assisted-by: {codex,claude}
+Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+---
+Changes in v2:
+- Skip test_kmods build/clean when KDIR directory does not exist
+- Use `Module.symvers` instead of `.config` for in-tree detection
+- Fix skeleton order-only prereqs commit message
+- Guard BTFIDS step when .test.o is absent
+- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
+- Link to v1: https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
 
+---
+Ricardo B. Marlière (10):
+      selftests/bpf: Fall back to distro build directory for test_kmods
+      selftests/bpf: Tolerate BPF and skeleton generation failures
+      selftests/bpf: Avoid rebuilds when running emit_tests
+      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+      selftests/bpf: Tolerate test file compilation failures
+      selftests/bpf: Allow test_progs to link with a partial object set
+      selftests/bpf: Tolerate benchmark build failures
+      selftests/bpf: Provide weak definitions for cross-test functions
+      selftests/bpf: Skip tests whose objects were not built
+      selftests/bpf: Tolerate missing files during install
 
-  3166	{
-     0xffffffff81285320 <+0>:	endbr64
-     0xffffffff81285324 <+4>:	call   0xffffffff812aa5a0 <__fentry__>
+ tools/testing/selftests/bpf/Makefile               | 111 ++++++++++++++-------
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  20 +++-
+ tools/testing/selftests/bpf/prog_tests/iters.c     |  10 +-
+ tools/testing/selftests/bpf/test_kmods/Makefile    |   8 +-
+ tools/testing/selftests/bpf/test_progs.c           |   7 +-
+ 5 files changed, 110 insertions(+), 46 deletions(-)
+---
+base-commit: 6f6c794d0ff05dab1fa4677f39043de8a6a80da3
+change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
 
-  3167		return !!static_call_query(vmscape_predictor_flush);
-     0xffffffff81285329 <+9>:	mov    0x13a4f30(%rip),%rax        # 0xffffffff8262a260 <__SCK__vmscape_predictor_flush>
-     0xffffffff81285330 <+16>:	test   %rax,%rax
-     0xffffffff81285333 <+19>:	setne  %al
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
 
-  3168	}
-     0xffffffff81285336 <+22>:	jmp    0xffffffff81db1e30 <__x86_return_thunk>
-
-While this isn't KVM's super hot inner run loop, it's still very much a hot path.
-Even more annoying, KVM will eat the function call on kernels with CPU_MITIGATIONS=n.
-
-I'd like to at least do something like the below to make the common case of
-multiple guest entry/exits more or less free, and to avoid the CALL+(UN)RET
-overhead, but trying to include linux/static_call.h in processor.h (or any other
-core x86 header) creates a cyclical dependency :-/
-
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 20ab4dd588c6..0dc0680a80f8 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -36,6 +36,7 @@ struct vm86;
- #include <linux/err.h>
- #include <linux/irqflags.h>
- #include <linux/mem_encrypt.h>
-+#include <linux/static_call.h>
- 
- /*
-  * We handle most unaligned accesses in hardware.  On the other hand
-@@ -753,7 +754,11 @@ enum mds_mitigations {
- };
- 
- extern bool gds_ucode_mitigated(void);
--extern bool vmscape_mitigation_enabled(void);
-+
-+static inline bool vmscape_mitigation_enabled(void)
-+{
-+       return !!static_call_query(vmscape_predictor_flush);
-+}
- 
- /*
-  * Make previous memory operations globally visible before
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 366ebe1e1fb9..02bf626f0773 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -148,6 +148,7 @@ DEFINE_STATIC_KEY_FALSE(switch_mm_cond_l1d_flush);
-  * sequence. This defaults to no mitigation.
-  */
- DEFINE_STATIC_CALL_NULL(vmscape_predictor_flush, write_ibpb);
-+EXPORT_STATIC_CALL_GPL(vmscape_predictor_flush);
- 
- #undef pr_fmt
- #define pr_fmt(fmt)    "mitigations: " fmt
-@@ -3162,12 +3163,6 @@ static void __init vmscape_apply_mitigation(void)
-                static_call_update(vmscape_predictor_flush, clear_bhb_loop_nofence);
- }
- 
--bool vmscape_mitigation_enabled(void)
--{
--       return !!static_call_query(vmscape_predictor_flush);
--}
--EXPORT_SYMBOL_FOR_KVM(vmscape_mitigation_enabled);
--
- #undef pr_fmt
- #define pr_fmt(fmt) fmt
- 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index a1fbbab08291..117c60d00758 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11545,7 +11545,9 @@ static noinline int vcpu_enter_guest(struct kvm_vcpu *vcpu)
-         * set for the CPU that actually ran the guest, and not the CPU that it
-         * may migrate to.
-         */
--       if (vmscape_mitigation_enabled())
-+       if (IS_ENABLED(CONFIG_CPU_MITIGATIONS) &&
-+           !this_cpu_read(x86_predictor_flush_exit_to_user) &&
-+           vmscape_mitigation_enabled())
-                this_cpu_write(x86_predictor_flush_exit_to_user, true);
- 
-        /*
