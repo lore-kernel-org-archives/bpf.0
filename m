@@ -1,228 +1,224 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137ED26CE11
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 18:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE561126F0A
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 18:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775239826; cv=pass; b=g1DQZ2N+fPNWu5USVgwTAx7CNYJrrI/A9gh2VQozckZk3vAY0hAIUUo85MwdmzgA/nxdTztSyjKLsuxpK1Pm1l7kuUL3e6LYUeT7Pz7wE3FUboRh4rF9LoQXfq0lAOMA5j8dqi85Ex6rQiIsf1Wgykdf5id3BqM+Dkmt5LnZUHo=
+	t=1775240560; cv=pass; b=WHnwu7bxN19m8giFh2A7VpAhHG6lC6XZwrPCF1osxFGsP9urRhPGxixOcI7DgrMN2R7jS78OmgmHj1vAjVWr1wIso9+qaEf2xYY9hD2kt0Vcwki8UuypYHIfJLgUHaslZrmXahABbQS8z777AcrMuYSDZULPs4UxLSIKjuzZ8EM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775239826; c=relaxed/simple;
-	bh=4wnkiw01drsb1mOeb4vmjM1GYWviZqJrvrwioV4gc0w=;
+	s=arc-20240116; t=1775240560; c=relaxed/simple;
+	bh=wO8Fu1eZwALl1MK9xM52l5aTIpj5CiOpObakHlchgFs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MLGEVaNExHO+dUOhPZmOFzMMjHc9hYLXESNK23xoS6jO5fUzRDXfmrLqKMl5iFQZ2qy2DcLx0T/4ea3agxQz7ZGkTBRUXMMsKDDUu+8EoiJTnRUKc1s76Sde+B1PwS3uw7Jtc9Rcg9hVEAm4jekCODpddiV9sWTu+zOP+pUWcos=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nEkp1iN2; arc=pass smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=lwWWQBfu0phvk0Ee9IKZdS1NRwNOGNNKvYouFboys09v/dJTVhGsHaHiVfnh4f9B+Mjn9xZHT6tuqc89TtXwB7SEn+6JzsAtoeVyUsmG4VYq+8D9ZSRAfmINueuYhYXXl6Nfe2t3hwfoM251CSzqJf/zLyau9REzLQRavELhaE8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RkHcjVXg; arc=pass smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nEkp1iN2"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-509062d829dso532491cf.1
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 11:10:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775239823; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RkHcjVXg"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43cf8fe9c2aso1221434f8f.2
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 11:22:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775240557; cv=none;
         d=google.com; s=arc-20240605;
-        b=eTvZIKEjA1NpfblWjPzUEq+W2zpnPvbtZ0GIxpcXWzgFILeE2UknzKMsbbV6gynPou
-         yFR9Y+3pUwORo6CzEZZDQrJUrJdLhq4CHix7Bu0lf1BwrDbAcrvS9LPgCvIhWo4oxBGE
-         SLzDeoSxFaa092IREJtEhV+pBC63ngdaG/c1WU05OHuObmDqzXjIUmGtCdAn0IU9FVdd
-         tv3w8bVz4LWEM0jdSGZL/D2q+lnPswnKQ7C7KUAek03EjH5hGj1ek2F/T93/SeXqC27z
-         ygkq+qnG2PwYKGXyjhESs/4qk+S1R1In81fYpb9H2kzZiTwf0uDJuwkHVvlnx4E3Evbi
-         3cgg==
+        b=Z2Fh3qU4/vw+qkJr1FF8l18hWJLFf4kiSscTDGdSnV6ZSPPe0iLHbieGeVwFCv2ex9
+         WILFPRjhLGZYvCOK3adHwP3eSbYrvSTmeIZQExbhEJhO5HyMFu0Wo8/1FdS0USoG6BHm
+         omJhzeO5q1lSaAj57UFmdxxRaLKmRuW1RpEPrJMJnFPz0HhEoRTqbehLAfFINr/cWz0T
+         xtLOpN+p6LNgVDmIazhVHPV3Xouba2tyTCqBm1kj/LobcZgQhNtRzAlsi84EDiEq+x1u
+         dcDdUYqo0s05fL4+vhNM3epEKowI0PtJWgVe+wwXVHRpRpTU15GfI9iCojrfrP3MPyBV
+         cQrw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=D3wHWIST+Psa9goPXbHlA48/ILBuz3wG5otAi6JiaL0=;
-        fh=DBncaw7w9NGFRZrTPQenw9IAFGUX0ws5a8sG2QMKn4I=;
-        b=fPOK+I1iP4zJlwsMF8v6jaHmqsKeerE4uBEf6jI0RCS3pYOb3sj9yAoPsv/dAL2XFf
-         VonrFPkyk6NyMSpINi2vHak9WEjM1c8yZlezwJSKHFBeg8aBOiPo0SAvScNM3V/hw2Ed
-         hcyBiJ0T4j7wEn/aa+91YyXXzhcAGb3aczDOoCnroQurZ4epZo4mp4tSIud/9s/i/Z5+
-         RFKCTAGcF0Njo9Ayx02kbkKK1d9tia30VQHEuMqgIJ0/obRsoRsTAvu2xfRXv02n5pqm
-         wYDMtktssyIwvUJOH56sIER1hMVA5QVnZPhtxavmsoQndVCff9QAt/pvdATJRNS+Syx6
-         JTww==;
+        bh=ADs9ABlkuaAh3THGOqCIZYzLgsQu/KNBtojuKFogrPo=;
+        fh=nK1sKfOAOlKgx9LOXsQrEFK5C3aJSpECzQWLF+tENHY=;
+        b=FZXQ7JwN/jAt3nOjZLT867gAFwaXioT9E25yH6YYk267hBvvTf56hVvOvr+LmBb+cI
+         QCMyDP7Qdl3Y9mr1fH9LpOW0Y2lgiPkZgV23x0b8MS7e1v6fDP5L7nhglUi9K6/OM/9d
+         v77ng++k25uwrNiEMwEAon0naGiIJ+FtyWUdDb0B3/JVsgjrf3+kq7EVnJoIVduaJ4dX
+         zHftTlFgE/czKIrpvPIAzbygqw7WO5rlth7gIisV8xEpmEVU41Gh6Nncc7VyvHWSNFAi
+         nrOkeumKAkx9r0NK5BdkLUx22FwD7eMNpJ8/xEkjinQQ7Zp23Eh8FPVPB0bS0hyfpGLr
+         MRDg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775239823; x=1775844623; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775240557; x=1775845357; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D3wHWIST+Psa9goPXbHlA48/ILBuz3wG5otAi6JiaL0=;
-        b=nEkp1iN2jyvw0DdQVmSe7j7ZXK37mB9ritAXbGlVoKn373Hph2yg3uVQpgw/kAv5jJ
-         QfqwJ0yAoPwN4aoHjuvxrhas9rm3bgGR8FtX5CRpF0PMcF5mjX53WBKzLCKp6E/K/tWO
-         pCENK0HP63nEta7+7Cu0f0FApSDOdCES8fRsJMVP73Xg+aJDuOkTzDyt70+f+aM2uuyg
-         MFCkgM/RZJBsfbYoLIQX36HHq+PsL6gbq31R9pNDbn+6jHXUMYaRyumxYhMyZxnN58AB
-         YQV200Wu2HfzoFSbxrj69c+B/9V/cl9pAejHgyFAlAAnrOBa9RrpYqZr/DH2FzJNvws6
-         uIcw==
+        bh=ADs9ABlkuaAh3THGOqCIZYzLgsQu/KNBtojuKFogrPo=;
+        b=RkHcjVXgZS/9Gv4Ac6d4V+gCkABWEcNVKGqzFO3qRZfXF5UPfH+akrdvSt69ihDYi3
+         3QXmASHk6it90TQJfWzTJjts0gRI0EJV8ZwQi2wMf3j52K/FYqbrtfCHFq3tmqqmTacL
+         R7MiRVcMmzz6OG45pvFVmukuBx2pEtQbjPx0ldQamPxp35Bzldb7DRiamwgXVU3B+67E
+         vuCtxgda1ouEPe9htpTzAPqBJWcj7jKK57If8WRBeQIzvn5oLW78m9hJ3PoWIYJR7MEj
+         22DYTDMbfkB2Cxs5cvCwv+POEjExUCw9y0scIHk8Z+MOW/SaF5F0M5htVMGlcdBydT56
+         P8wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775239823; x=1775844623;
+        d=1e100.net; s=20251104; t=1775240557; x=1775845357;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=D3wHWIST+Psa9goPXbHlA48/ILBuz3wG5otAi6JiaL0=;
-        b=cj62Zs0Bw0CF2iNwJVfhrtguFDZ5Lbxu/49eLOgi6UufTsujiREvgCJy2BQyl0aAnR
-         FMTdgbyrpSVz6x9IhRvv5box67UkBIaaSm6oBcrnOLiwjfF5SckuKqYrG3nn+dR1JfRv
-         x7Uj8Q0mV5HceB0Ij9hppZhxad4RkGTZNZZTo9ADFN/UWC2MW5AD7XoSzfpNdHOrU9LZ
-         rINUWd+F0eh81RL9WsoAlbQzhAq8mM1WVIgjErolisCUrMTj0t/N+Yl07jgAlVUUfkJx
-         5ccdUrhmkyQFa/ubTFLj6I1pWVjPDGJV43XjX9lHtUxyI/ExzteVWjMkzTgSzkFVMNOw
-         mlpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8BVT2n3cJRbe3W448FSJmDf8FrdhC2lG6WbJmxb2/mEMmxBCjKfemCwHu8XPjxTlLnNU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbaE/fKzEI+yY+ehhAJaQKbksBsbjc3lA/G705VdK0yBjOrFTI
-	1dp4tuPVR6hOwRbi8MEaLqXFKAk636IEbsAXzFXxU5tQ0cjwH3GSPMHbBZv1ESD0ahPJ2ZZvYXp
-	oJ8j0F+wrGGE49iQS7vVJHgd8H3qqtYpRdM90GrxW
-X-Gm-Gg: ATEYQzx6U8sha6Qg/k2xRT1wGhn4w0BwsE6JqhcJvQq6RCGsqYQAYhYZYg8T7hlYOxB
-	+prKnm/uhIMC0GTWoOQfBusj9pjAmvDepjBxm7mlZuHklqBrrjLoPvjFEZJftd/Na4Oe7Hl4h3p
-	bDuW6vs27/0RE1dglLDWKG816YUuNgZp+EPqD4ZvwzqKCwySuOC7iswsGvoi8iCV3eIjzzlUi6t
-	yAIAJKCSV58fmKU5T3FGlhiQPTVWDImZ4AngVIt0Z/iad2CSr8934G6kwTKp60+51HFJ8tVYUaS
-	T4GmYbA=
-X-Received: by 2002:a05:622a:5c9b:b0:509:15b6:f69f with SMTP id
- d75a77b69052e-50d63eb1e2amr16678631cf.2.1775239822510; Fri, 03 Apr 2026
- 11:10:22 -0700 (PDT)
+        bh=ADs9ABlkuaAh3THGOqCIZYzLgsQu/KNBtojuKFogrPo=;
+        b=QOsC3iItpY0HoXGbEARICANgebftpyU32wifaBkAqmI84DY0WkvBfl5LrNTpUNu4AC
+         0dxqE33n9p8O6Yr14OTP2TBfsjUyWsQTQzaFIsAYZnnwBWA/RDelrlwTS9MQdDJAyV1S
+         3SNJABiQylzlrLK0WGy3D5Nc/WlLPvhqEqU0tDJuUx+LkBYKIoekkkdF2FBLIYKp/EH8
+         NSeZYdHTqvQ1YJzmv0QT+p8TEqPr9N4uOxcCbcsnOE3E6r6IkC1EAbyAD9yUdBq6bzXF
+         iI+ksRDy9YP60cR7o3A9HqfGwRbKNi4X4GB7bddcQHS8nx5Mzg338pxPXgt8kz7+36hx
+         HDsQ==
+X-Gm-Message-State: AOJu0YwVTkolh0AwhDqM90SYtZtxc37Mkvis3aqh7edrOqMDx4VhQF2T
+	UDv7z+0IpWGDI5O+KDhh8OvOcAAnbJuQ+1nOwM986H/4K/AuLTTVz+JO9Xy8rJyWGNLo0AcD74L
+	1LwIgM56+PHlyPQ0Xn3AQIBaiQ6dUlE0=
+X-Gm-Gg: AeBDiesbmidqJ3Mktnl0SEeCT60JIHJJ9xKT35KvsvuWbq+m019etL7EfKdfj55lH8o
+	ZkJCefkA4x9mYnqVxUDP2cSo0wbGFDg170twwHAr41wxDTt4vRnvE2EbSvd94lyrMxJtATQdgWy
+	p3iJaRcQUAUoyEWgeSoydfgKhCmKg2rRxy94AjifhOqCfU1iSLB28TmIQk4LAIzfAFgHzmeoSTT
+	GkvSRXW/obTA09/aBi1YPv+l6Gwa8AWT4lnzEIjjDktR49bZqhL6bY4ei9ssIqiLRonCcL1y9Ox
+	RvvlvQ1X38bVjHhQYgOdUX38HRXf4Ay3jH0hS9tfXIvR0QMB6pEq3e+dot4TzOGA2TsoIvvEEI9
+	Az3YF8FtT46x4kJ678NCaffRICw==
+X-Received: by 2002:a05:6000:1a8d:b0:439:b440:b8a2 with SMTP id
+ ffacd0b85a97d-43d292e3addmr6014433f8f.28.1775240557008; Fri, 03 Apr 2026
+ 11:22:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402-vmscape-bhb-v9-0-94d16bc29774@linux.intel.com> <20260402-vmscape-bhb-v9-2-94d16bc29774@linux.intel.com>
-In-Reply-To: <20260402-vmscape-bhb-v9-2-94d16bc29774@linux.intel.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Fri, 3 Apr 2026 11:10:08 -0700
-X-Gm-Features: AQROBzCyrNR-vZ6JoZC9tdSShIePKIwW7s9m_Ym-DzdZtKevzbTyUKkIE4TY_-E
-Message-ID: <CALMp9eSLVvr00mJ0J2f2_SPeCW-VS58kxMcxHgUW6etML+_+QA@mail.gmail.com>
-Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
-	Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+References: <20260402184647.988132-1-a.s.protopopov@gmail.com>
+ <20260402184647.988132-2-a.s.protopopov@gmail.com> <CAADnVQKUJYsPJa8HP9E-pguQeuShXfuaEs4Z_zJAVYWeEUvHBg@mail.gmail.com>
+ <ac7XSg6AsJq99WvT@mail.gmail.com> <CAADnVQJ_e2fyODknJyMPRw4Z7ztu3-0ZrVM8jXpoO1g7bH52jA@mail.gmail.com>
+ <ac9yriPJX9RXa5tr@mail.gmail.com> <CAADnVQK0mEAdZ3PEHv=wvbPUrEA7EPmU7w928JOd=143vt+kJA@mail.gmail.com>
+ <adAChK9+GVACl8ci@mail.gmail.com>
+In-Reply-To: <adAChK9+GVACl8ci@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 3 Apr 2026 11:22:25 -0700
+X-Gm-Features: AQROBzA3dYKX3NYJ10xFj0ZaQl9PtOY6rD5OUGi2X2EPk2NnB_ug-QFR2i4aX-4
+Message-ID: <CAADnVQLq9X6K3_vwcsMEy_5AEk+y_gWbUHSibn5uGqbpdejirQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Do not ignore offsets for loads from insn_arrays
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiyong Yang <ksur673@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 5:32=E2=80=AFPM Pawan Gupta
-<pawan.kumar.gupta@linux.intel.com> wrote:
+On Fri, Apr 3, 2026 at 11:01=E2=80=AFAM Anton Protopopov
+<a.s.protopopov@gmail.com> wrote:
 >
-> As a mitigation for BHI, clear_bhb_loop() executes branches that overwrit=
-e
-> the Branch History Buffer (BHB). On Alder Lake and newer parts this
-> sequence is not sufficient because it doesn't clear enough entries. This
-> was not an issue because these CPUs use the BHI_DIS_S hardware mitigation
-> in the kernel.
+> O 26/04/03 08:10AM, Alexei Starovoitov wrote:
+> > On Fri, Apr 3, 2026 at 12:47=E2=80=AFAM Anton Protopopov
+> > <a.s.protopopov@gmail.com> wrote:
+> > >
+> > > On 26/04/02 02:32PM, Alexei Starovoitov wrote:
+> > > > On Thu, Apr 2, 2026 at 1:44=E2=80=AFPM Anton Protopopov
+> > > > <a.s.protopopov@gmail.com> wrote:
+> > > > >
+> > > > > On 26/04/02 12:00PM, Alexei Starovoitov wrote:
+> > > > > > On Thu, Apr 2, 2026 at 11:38=E2=80=AFAM Anton Protopopov
+> > > > > > <a.s.protopopov@gmail.com> wrote:
+> > > > > > >
+> > > > > > > When a pointer to PTR_TO_INSN is dereferenced it is possible =
+to
+> > > > > > > specify an offset inside the load instruction. This is a bug,
+> > > > > > > because while the verifier ignores the field, JITs are not.
+> > > > > > > So, patch the verifier to not ignore this field.
+> > > > > >
+> > > > > > This is too terse to understand.
+> > > > > > In 2nd patch you're saying:
+> > > > > >
+> > > > > >    r1 =3D &map + offset1
+> > > > > >    r1 +=3D offset2
+> > > > > >    r1 =3D *(r1 + offset3)
+> > > > > >    gotox r1
+> > > > > >
+> > > > > > Here offset3 is, normally, equal to zero; but this is not guara=
+nteed.
+> > > > > >
+> > > > > > What is this 'offset3'? Where did it come from?
+> > > > >
+> > > > > The offset3 is the .off field of the BPF_LDX_MEM instruction.
+> > > > > The BPF assembler will correctly work with non-zero offsets:
+> > > > >
+> > > > >     r1 =3D &map;
+> > > > >     r1 =3D *(r1 + offset)
+> > > > >
+> > > > > > What do you mean JIT handles it?
+> > > > >
+> > > > > JIT will issue a memory load with this offset,
+> > > > > but verifier will ignore it (before this patch).
+> > > > >
+> > > > > > can llvm ever generate such code?
+> > > > > > if not, reject it early ?
+> > > > >
+> > > > > LLVM can generate code with non-zero offset in BPF_LDX_MEM,
+> > > > > say, if one jumps to a structure field, like in `goto *p->j`
+> > > >
+> > > > sorry, I still don't get it. What kind of syntax is that?
+> > > > Could you share the godbolt link where llvm actually generates
+> > > > such code? If the verifier will reject it anyway it's fine.
+> > > > I just want to make sure we're fixing real problem.
+> > >
+> > > I am not aware of any real-life code, only can construct
+> > > some artificial examples:
+> > >
+> > >         SEC("syscall")
+> > >         int test(unsigned int n)
+> > >         {
+> > >                 struct {
+> > >                         int i;
+> > >                         void *j[3];
+> > >                 } x =3D {
+> > >                         .i =3D n,
+> > >                         .j =3D { &&l1, &&l2, &&l3 },
+> > >                 };
+> > >
+> > >                 if (n < 3)
+> > >                         goto *x.j[n];
+> > >
+> > >                 return 0;
+> > >         l1:
+> > >                 return 1;
+> > >         l2:
+> > >                 return 3;
+> > >         l3:
+> > >                 return 5;
+> > >         }
+> > >
+> > > It will compile into
+> > >
+> > >         <test>:
+> > >         ;               .j =3D { &&l1, &&l2, &&l3 },
+> > >              160:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 =
+00 r2 =3D 0x0 ll
+> > >                         0000000000000500:  R_BPF_64_64  BPF.JT.4.0
+> > >              162:       79 23 10 00 00 00 00 00 r3 =3D *(u64 *)(r2 + =
+0x10)
+> > >                                                                    ^ =
+offet !=3D 0
+> > >              163:       7b 3a f8 ff 00 00 00 00 *(u64 *)(r10 - 0x8) =
+=3D r3
+> > >              164:       79 23 08 00 00 00 00 00 r3 =3D *(u64 *)(r2 + =
+0x8)
+> > >              165:       7b 3a f0 ff 00 00 00 00 *(u64 *)(r10 - 0x10) =
+=3D r3
+> >
+> > Great, but where is an actual gotox that is using that r3?
+> > Looks like it's spilled into stack at 163 ?
+> > Does it pass the verifier?
+> > Would be great to add it as C selftest.
 >
-> Now with VMSCAPE (BHI variant) it is also required to isolate branch
-> history between guests and userspace. Since BHI_DIS_S only protects the
-> kernel, the newer CPUs also use IBPB.
+> No, this one doesn't pass the verifier (it is spilled to stack, and when
+> it is loaded back the error is "invalid unbounded variable-offset
+> read from stack R2", because it is loaded back from stack as
+> "scalar", not "insn"). All "normal" use cases from [C-level] selftests
+> (a switch or a 'goto *j[i]') compile into code which accumulate
+> offset into previous instructions.
 >
-> A cheaper alternative to the current IBPB mitigation is clear_bhb_loop().
-> But it currently does not clear enough BHB entries to be effective on new=
-er
-> CPUs with larger BHB. At boot, dynamically set the loop count of
-> clear_bhb_loop() such that it is effective on newer CPUs too. Use the
-> X86_FEATURE_BHI_CTRL feature flag to select the appropriate loop count.
->
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> ---
->  arch/x86/entry/entry_64.S            |  8 +++++---
->  arch/x86/include/asm/nospec-branch.h |  2 ++
->  arch/x86/kernel/cpu/bugs.c           | 13 +++++++++++++
->  3 files changed, 20 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index 3a180a36ca0e..bbd4b1c7ec04 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -1536,7 +1536,9 @@ SYM_FUNC_START(clear_bhb_loop)
->         ANNOTATE_NOENDBR
->         push    %rbp
->         mov     %rsp, %rbp
-> -       movl    $5, %ecx
-> +
-> +       movzbl    bhb_seq_outer_loop(%rip), %ecx
-> +
->         ANNOTATE_INTRA_FUNCTION_CALL
->         call    1f
->         jmp     5f
-> @@ -1556,8 +1558,8 @@ SYM_FUNC_START(clear_bhb_loop)
->          * This should be ideally be: .skip 32 - (.Lret2 - 2f), 0xcc
->          * but some Clang versions (e.g. 18) don't like this.
->          */
-> -       .skip 32 - 18, 0xcc
-> -2:     movl    $5, %eax
-> +       .skip 32 - 20, 0xcc
-> +2:     movzbl  bhb_seq_inner_loop(%rip), %eax
->  3:     jmp     4f
->         nop
->  4:     sub     $1, %eax
-> diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/=
-nospec-branch.h
-> index 70b377fcbc1c..87b83ae7c97f 100644
-> --- a/arch/x86/include/asm/nospec-branch.h
-> +++ b/arch/x86/include/asm/nospec-branch.h
-> @@ -548,6 +548,8 @@ DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
->  extern void update_spec_ctrl_cond(u64 val);
->  extern u64 spec_ctrl_current(void);
->
-> +extern u8 bhb_seq_inner_loop, bhb_seq_outer_loop;
-> +
->  /*
->   * With retpoline, we must use IBRS to restrict branch prediction
->   * before calling into firmware.
-> diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> index 83f51cab0b1e..2cb4a96247d8 100644
-> --- a/arch/x86/kernel/cpu/bugs.c
-> +++ b/arch/x86/kernel/cpu/bugs.c
-> @@ -2047,6 +2047,10 @@ enum bhi_mitigations {
->  static enum bhi_mitigations bhi_mitigation __ro_after_init =3D
->         IS_ENABLED(CONFIG_MITIGATION_SPECTRE_BHI) ? BHI_MITIGATION_AUTO :=
- BHI_MITIGATION_OFF;
->
-> +/* Default to short BHB sequence values */
-> +u8 bhb_seq_outer_loop __ro_after_init =3D 5;
-> +u8 bhb_seq_inner_loop __ro_after_init =3D 5;
-> +
->  static int __init spectre_bhi_parse_cmdline(char *str)
->  {
->         if (!str)
-> @@ -3242,6 +3246,15 @@ void __init cpu_select_mitigations(void)
->                 x86_spec_ctrl_base &=3D ~SPEC_CTRL_MITIGATIONS_MASK;
->         }
->
-> +       /*
-> +        * Switch to long BHB clear sequence on newer CPUs (with BHI_CTRL
-> +        * support), see Intel's BHI guidance.
-> +        */
-> +       if (cpu_feature_enabled(X86_FEATURE_BHI_CTRL)) {
-> +               bhb_seq_outer_loop =3D 12;
-> +               bhb_seq_inner_loop =3D 7;
-> +       }
-> +
+> Do you want me to work on this example above to pass the verifier?
+> Or, for now, the best thing is to just reject non-zero offsets?
+> (The latter has the benefit that the patch will be auto-backportable
+> to stable trees.)
 
-How does this work for VMs in a heterogeneous migration pool that
-spans the Alder Lake boundary? They can't advertise BHI_CTRL, because
-it isn't available on all hosts in the migration pool, but they need
-the long sequence when running on Alder Lake or newer.
+I wouldn't worry about backports. Size of the patch doesn't matter much.
 
-Previously, I considered such a migration pool infeasible, because of
-the change in MAXPHYADDR, but I now predict that I will lose that
-battle.
-
-
->         x86_arch_cap_msr =3D x86_read_arch_cap_msr();
->
->         cpu_print_attack_vectors();
->
-> --
-> 2.34.1
->
->
->
+Is spill issue just a matter of adding one line to is_spillable_regtype ?
+If so, let's do that and have a test in C (in addition to asm) that
+actually using the offset.
