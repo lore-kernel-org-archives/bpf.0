@@ -1,126 +1,114 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7F91A3166
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 02:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775184383; cv=pass; b=BOGQiKwMEDJFRL4frt596i5ffkryuBl2zDRfyLhRgz2VSKG7oMeEo18staj+qrv2czn/pS8ft/yH3WmyXbRp87TeLodKLIKoY5Sm9rH30JKbAbkvms3+Xwp2P+e7FYbLUuU9t/LXu3vurT8XhR/ASwvPAtvzStvXhtAnKvGEvqw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775184383; c=relaxed/simple;
-	bh=5xQYU1+LGCd6MVAvE6Mlt3Jb4+nGYPn6wMYwCdhezA4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PBW7qNUod3NfJA7fbPXHjSRExFkR7dmAYyawt7txjcEsGF9VF3dlOdJAojZD3QqmJ1UMCOKzno19CeOQB/3mABqd/EWKBHzAhr1DGS7/fvu18ITO1h1RVaK7VvUtXRK9YXey785MIkRecZ4LoRqih69nZ65y2O6Z17c1HB3zJ4Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ncCSr85V; arc=pass smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8AA2472A2
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 03:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775187520; cv=none; b=QZkqhCM4DLKYG5eLWkMXQXVXq94b7K+SOQm7kadmFskcwyCKNOwQ3USHT03LY+hULFpLhMFfikQAhO9IydC95XCeI0pTmQYeKDgOhdGK6adb5rbv8KnpMi5zVQW+BoVJVFBWu831lCZU9ADSLeAEJhwG+Im+nmhlMAa7xt5ScyE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775187520; c=relaxed/simple;
+	bh=tXSn6YO379IapqquTyj0/0EIkaCiWSQuCrQ0mx7HuDo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lN9JdqX3qmr4RKghZbISgme3jfJ/n7dtIhzaQIg7HUvLaomE6mFzltesFx6SggzMVic4sGhqpTmksEMy/Leik++9KIZORIRDupw5L3Bs5jwM+7pdIkkEzJiBX48uNOCURF0ad+EsoOjg3FLMvD7XqXQ2Wifi9pvXZgZXCIHR+vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CiX/K8Sd; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ncCSr85V"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43cfb723793so971755f8f.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 19:46:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775184381; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PFA1GWBX05o3gRhvYIk8I1qYRyKX2AoJY3jNg6fH91BQ4OAmduP076WscocqylRROj
-         O+dWjdeQlDLqArxSChV8scrJ4ND6/qEyTMd0n11Y9HB4ZeHZeBB8pcsaNI4whqCQDYKj
-         DUvCKqULqZT0yPxsHK5flymmuw6MNdtEoC8GUXBHT1CA0mgMRF2q826P971ExwN3C9Ov
-         Y4BBJmiHxUdN2jz0w2z46JUvSZzHrnwo23+3JXqrnPfAFbbUzH7N9cekrAqfQEg/Ktum
-         rKphn2yhP3YGNJj2iywzLGTU4EBJ8kSj0UaD4LgsnD65gbqZifMJ9pq/ednWgpCM1xOI
-         znOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5xQYU1+LGCd6MVAvE6Mlt3Jb4+nGYPn6wMYwCdhezA4=;
-        fh=h3m6LvtNf+eYg6E2ElJn5jTYmHoyPlDy/zzCvAojYZs=;
-        b=JrsJ7Zt9nBxSJrUG6ntoV1riN+S2kc5rN9D/9vV6uRXS3T7fXQmt7ualI5xcj7anQZ
-         oBve08iKflAVxbO5hUCNtCo4JvPfoXfLQSQWlD8nAwcPFZSxDBxMI9iYfTvmtiJriTnd
-         xHemm9zwhWZcmeqkzZeupPsswuGI/NSMEmfGkXNhrMRrFfUCYcaBVmNFQHqSY9Lj1UEF
-         funyKf2BH6fNLOsYA+qagRkre9lHawPA11b6uCrffKUADFCkWY6qUexLhS1jMzwP5m4Q
-         jd8kx5zDUVyRz0Db8celf6Jqkqw9sxH6Xl3RXfpM1VQ8dItGfuhBFn1U0FY4rNfEUX7Z
-         Y4tA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CiX/K8Sd"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c70bfef17a4so1108729a12.2
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 20:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775184381; x=1775789181; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5xQYU1+LGCd6MVAvE6Mlt3Jb4+nGYPn6wMYwCdhezA4=;
-        b=ncCSr85VTxhzMv9XC8yYgKK47nEbsD1MFq7UCUNCpF3XLnIa5N33lqgcxBdtK6/Nls
-         ER0hRh3wbJp41mtuBETir6tpNt34BdDKhmXUN3mD0VNRsUyk/2fKMlssI54gxqvqzdIj
-         AOyJCxFGeZ6+rDgXC9Mqhzjs4pbPK92R65NzeJg3zqVZImZwobRjj489tn77GV2byGW2
-         aUVaR3S7XKR3P9uZVN8ZAAAOL3CqG2KgJf7H/M6OtQEWYoswLOeY8lR/izSP6DQmZDiy
-         05yY9EygzTD61TEtgczR174L1NnYeE/cjP5z87W/wFxRKCm9Bjidlr1oL39o85L/t10T
-         KYSA==
+        d=gmail.com; s=20251104; t=1775187518; x=1775792318; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xxBED/dyO6OlnKVaDUEcT9OabMlvhwXlq+sWLTo9ip4=;
+        b=CiX/K8SdMC8xBplNEBbd3g2uxfOaDY2NsjS2BTmkf9YSpe+XlfIOaAdC/oBz82UvE8
+         0nt7PLr6+KabAG2HkWm4giJ/VnDmffASowZO/N7kBzoaZrUfQvFnTl0lQemWK8xjVo+P
+         Nf6iaczEIgIH8dVaz9S/yx7PNEcjVxlNYYeg/TtBi+YYdgFHtkR0FIlqUlwpF7fP0VF2
+         XecXlAXlLNeucs4TNLjG3wPpAbkKimJ3KmYINHT3eqq45lBfel/XnzfAj2/A+uoQipoW
+         MbX/2UBooMBJvG8G1/8g6tOWTXzH6AhLLP72E89M1rzkVTHbwatDpFXpYa6m+u9mXn88
+         PEOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775184381; x=1775789181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5xQYU1+LGCd6MVAvE6Mlt3Jb4+nGYPn6wMYwCdhezA4=;
-        b=Uf4XGDNOU0MmGWHVbrCjF/dFihyOygbxOYJY+5sMTmMF2/+ZE6GfAhxf/GmIcvNhLu
-         zDHUe/s9kus9rcs3nqXzWEA39fJ1Ie9kd1/BmwvEISuonnblkhPUozPgbrkc4t5D6y6+
-         PBmnuWfAtpt8Y+NFgGYAc2azJvlF+TAm0qixS9edch91lGd0dDb3s7AyldSDzUGja3O7
-         Y9WIFDH0WgDID81QUkjoGqcdBtAgU4aLzmqwrcErB4c1RlG9RKjKv/RygyTuXxt7HPcr
-         gZ1vxcWfDXvyC8BYgouMu0lz9eSNiExDiE5F5L4kdKWgKzAstkvifx5dvGKxn/BII7sR
-         W5nA==
-X-Forwarded-Encrypted: i=1; AJvYcCXiZ2tVl8YZC7Uv9HnH4m6X1OsG1stsAk89Jf5rQ396K626bxRFCULfz8hkoSSgK5dFqZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPXRj38wdcUZJ51tbYukb9iMl8rrQkk7ZH/IhHyWOAytyeJNAY
-	hbm8r4gsNEkeA2VsmLtAzxX6rl0muN7+ssvQgPZKIgMTWXPXd/l00SbfJ+n7MBimdEhh+s/YCMe
-	V6j87v42CMXnkW0ZqZw5Cqs6xLztvaOc=
-X-Gm-Gg: AeBDiesG+rYjZB21nZrQ75RR0AxhbDPOlL0YY5kyg4lDkvg9EdWci8Bqcypzad9QQfM
-	4cFnxXLiVRBAMrY7KUJyI69Yx5FhsmkfPjI65c9RVXWh2wOnm1yH4PR2C4XphnuuD6Cg/wBo3oS
-	vNmwIGJWcdIPQ2FT5CLjtHCGMDKPI400WYW0A7J0ZYmX8Hypvj7p5XdQInvU7Pv44M8nu1eDOGj
-	gQfuNA3pf/ZtrjXZng5VjLR51O1HETAqvHA+u9xiNnxnl68rYT8Iskvgi7wv5uEqTVs5qHQv+bn
-	rC8wNtI6kZ5ENXYVQ7wspDWi1xgm3CBm2UqDnzl4VJHf6aHuEmZk0SIQukTIAd8FNDdu4OtYHRb
-	pXt7D4VqEEX0adK6c+YUd4uoY1A==
-X-Received: by 2002:a05:6000:2893:b0:43d:650:25e9 with SMTP id
- ffacd0b85a97d-43d292ae505mr2216651f8f.20.1775184380914; Thu, 02 Apr 2026
- 19:46:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775187518; x=1775792318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xxBED/dyO6OlnKVaDUEcT9OabMlvhwXlq+sWLTo9ip4=;
+        b=DyJO93tT+G4YAzJZh7hg9wx27IbED39yXTjVk1lKfu1rSRysdivA5ZTDwgHkHagyyZ
+         GKTMTMuPGGhQMQyV7C4aCHp5h07FSCa/uoj449zqQiBi5q2N1ohX+1cQ3Q57fRFiCYCW
+         DGrbVuQAyYCwr2ZkkHXtpPlbFGkfxPPq+g19qtzc3arwOeb2kgo0tCVXDE2DbLz1kG87
+         E+iTx/ywbZIznP+c8JOFDk//nxQMCs4W6Io7eUXBPKTQikCHPw5QnD0yjJTqzYqfOQHy
+         doam+1b2lleNHkxv4uGZiqGWr4iy5EZ4RFxgz05EULT6heNs6NrwPvSaRwrN0Ki9SVJq
+         pMuA==
+X-Forwarded-Encrypted: i=1; AJvYcCXybq3g7XdmwNp4Mc0nFn6w17D8wq8r5f7tru2B9cUv+zWFDVvC4QIVnQ9kozydNa1kSXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8mmaPuKMbLc7+Lyb1eCmMArY1D2Fvhi5n77Ns9iqHCeg0M6sh
+	eDSPwdBfvP5goP/KQ5sp3EYFK3DWNEr1vkFHoyyiZbyqOWVgFXh1fOxJ
+X-Gm-Gg: ATEYQzx362GophgAFXRaLh79duhTHVNoKqzsrwG0X7BacSzpIrXSImxFeh/aBRg9C6y
+	dYPwEwt/NjZTK0y7z08QLihOyXS6T5wrM56PDwu/qI0eORfmwQh484CNJRhHEkFO/jOLQ9luOjL
+	UKuLqKV0j4OSV04uOflZN0QCdqW/wnIO330iodbojYv1nD8MR+uAdqq2T892S4NLWv+CB5stxl1
+	kp0+at9OVIQIakpQ81WLd4AFBoLks5SDOH7pZ82I15l5SlJSObWW6yxY8SuPXN8Wnnw07T5r8Yt
+	bUwW8iLX/fw6a3Q1IikAavFyFA1JKyTtNGd6FnO9+shoPzSwU6cQuwXIbtazT3FVQscmF4wQTup
+	nIN6WIbLHVIwkmWzqYCGealXhFUcxVXurh4rGEzX+MFe8IGLNFZfFSnc+6EUjcZ3+Go4iAhWdjB
+	924Dk2h4cenO/D+4FudNZBytZuX3Q4JoWe7uc=
+X-Received: by 2002:a05:6a20:430e:b0:398:6645:6f17 with SMTP id adf61e73a8af0-39f2ee10e1emr1409178637.19.1775187518392;
+        Thu, 02 Apr 2026 20:38:38 -0700 (PDT)
+Received: from localhost.localdomain ([47.236.127.140])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c659a218sm4172659a12.29.2026.04.02.20.38.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 20:38:38 -0700 (PDT)
+From: Qi Tang <tpluszz77@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org,
+	Qi Tang <tpluszz77@gmail.com>
+Subject: [PATCH bpf v4 0/2] bpf: reject direct access to nullable PTR_TO_BUF pointers
+Date: Fri,  3 Apr 2026 11:38:26 +0800
+Message-ID: <20260403033828.18529-1-tpluszz77@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
- <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
- <ac6ejZrcnfQfaTZS@devbig1721.ftw5.facebook.com> <CAADnVQLSUU8Yo1Wmym4B05jam6qqUPEXUDJpBH+00kjqkrYigw@mail.gmail.com>
- <ac7Afa6_HDzyAxSt@devbig1721.ftw5.facebook.com> <CAADnVQJv5qNL+ssShZ043DVobO7ecfMuZxa-t-CGiGL-XyK=PA@mail.gmail.com>
- <ac8ODClxZ83KZf-V@devbig1721.ftw5.facebook.com> <CAADnVQJAYE9_KoNrWQhTz0UOX5dwmqKL-m6H0S_o2ZmdScVPfQ@mail.gmail.com>
- <ac8jGJvsEHhwuMqI@devbig1721.ftw5.facebook.com> <CAADnVQ+RHa6JF2sp3ZsUzN0zM59L=deR2+k4k9ugLo27nJWKGA@mail.gmail.com>
- <ac8n3IbBFd3MtGtI@devbig1721.ftw5.facebook.com>
-In-Reply-To: <ac8n3IbBFd3MtGtI@devbig1721.ftw5.facebook.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 2 Apr 2026 19:46:08 -0700
-X-Gm-Features: AQROBzBlYVbu6AI1jFN0JnBU8RWbRQFSX_EHwOSb2b6sI1bzKVCiTHTpW4lseuM
-Message-ID: <CAADnVQL_hF1X2z1XspOqC1nEL6JVPU8G3G5zCDAY2zyzk3rV3w@mail.gmail.com>
-Subject: Re: [PATCH bpf v5 1/2] bpf: Fix OOB in pcpu_init_value
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: xulang <xulang@uniontech.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard <eddyz87@gmail.com>, 
-	Hao Luo <haoluo@google.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	=?UTF-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>, kernel@uniontech.com, 
-	KP Singh <kpsingh@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Paul Chaignon <paul.chaignon@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 2, 2026 at 7:41=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.d=
-ev> wrote:
->
-> > > hmm... would it break the existing bpf programs? For example, my earl=
-ier
-> > > data/data_end example will be rejected now because the verifier is
-> > > expecting 8 bytes instead of 4 bytes from src.
-> >
-> > Yes, but that is a broken bpf prog that accesses out of bounds.
-> > It just happens to "work" today.
->
-> It is a bold move. Sure, if the percpu's map->value_size has
-> the round_up(8), it should do.
+check_mem_access() allows direct dereference of PTR_TO_BUF |
+PTR_MAYBE_NULL without a null check, causing kernel NULL dereference
+on map iterator stop callbacks.
 
-I don't insist :) Just wanted to explore the options.
-The current patch is fine.
+Patch 1 adds the missing type_may_be_null() guard.
+Patch 2 adds a selftest with a test runner.
+
+Changes in v4:
+  - Add test runner in prog_tests/ so the test is actually
+    invoked by test_progs (Kumar)
+
+Changes in v3:
+  - Drop stack trace from commit log
+  - Split kernel fix and selftest into separate patches
+  - Use [PATCH bpf] prefix
+
+Changes in v2:
+  - Add selftest
+
+Link: https://lore.kernel.org/bpf/20260402092923.38357-1-tpluszz77@gmail.com/ (v3)
+Link: https://lore.kernel.org/all/20260401142316.2452-1-tpluszz77@gmail.com/ (v2)
+Link: https://lore.kernel.org/all/20260331172720.29938-1-tpluszz77@gmail.com/ (v1)
+
+Qi Tang (2):
+  bpf: reject direct access to nullable PTR_TO_BUF pointers
+  selftests/bpf: add test for nullable PTR_TO_BUF access
+
+ kernel/bpf/verifier.c                                       |  3 ++-
+ tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c  |  9 +++++++++
+ tools/testing/selftests/bpf/progs/iter_buf_null_fail.c       | 51 ++++++++++++
+ 3 files changed, 62 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
