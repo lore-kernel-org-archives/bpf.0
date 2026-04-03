@@ -1,149 +1,245 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC76D1A680E
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 04:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EFB18DB01
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 04:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775189142; cv=none; b=cwjn7XfSMvrJus2YTRXilIx/fG5C1c3qZg2LhD/nxD5/J367cpBClkqQmYAkt3R5FZHA1qAWUGg+AkudSk4M6rpS5WdyDF3PPxD5OrtoygtIcKfhNxCLyYPa1+zVVaXB/J6Rq6GJZS34gXAb3n2uQf/b1XodNOfn++jCPJzI73E=
+	t=1775189162; cv=none; b=ltWLDWz4P3WzT47FnTezYGWbdImCrPChhRV1C9mFwjAgb/oWvrpThY1AS6C8q31PipEXHjt1j+6pXqB5isuMh9X4kU/A4pQnk3MQ5qT2K5otgp3bFIaVOy/hgHJiMJ3mN+Y+9BV/hJwI8/iPOquMJu2HTlnELcI280M91vSfyaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775189142; c=relaxed/simple;
-	bh=rvZlay+4Su6LyFAw5n2XsrbJxnHHhZUcCzqVHKOP+/E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CgohRWYfv5RtcERNsIpGuYz1lERM+K/MYVvc8POCrn1LQnK5Swt00ekenMhN3vj/NwMV0J5cDGVhO0vSCyeboGgh/sVNdhkfknnRCmX99gD2y6G+ARvTTMAGeKeLV48CnVHP8rT8y0q4ETPVJWDFCkMo7yMs8yb325m8hAbQRaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FQUkQyAs; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1775189162; c=relaxed/simple;
+	bh=QTRz3EMVsb2meueHResObY5Ag0BQD865MyrZPmsywEg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a94sCWh/BI6SKJSLAChbQq8xMiJNp7SP/of8xGMzxN18DFvO07eZncBlzOrOtn3ND0rAj38LUsEM2HabTobNA+zI5vSG855wzSEbzWtZMi7sj40qD5BLankH2Sq/+K+kBIdJj8kJHFNojoNyd/6WD9dqnw/5LBK1CS1HQgo/EyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fsiA+YGH; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FQUkQyAs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775189139;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fsiA+YGH"
+Message-ID: <bd7fdec2-3a07-4dc9-be71-886e0bf176ed@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775189158;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=KTxEDmtAw7ivAjgPJXIYiT+IYRO03kGLboiJ11B4IOA=;
-	b=FQUkQyAsAtSpGAX+ULUMzyQAtsUGDB3vmcc8Pjabb3Lep+g+NC/Mza9RSkAx5MthEOADCA
-	i2BxqvhqE4O6oilBjcYuJfvjGZ0S5SYHEtb8Ddutwh0DUy559NBZ3A0bmFfWgwhU6irqhK
-	ypuJgG1yzhi0Pse4U8oXpElTckjZha0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-427-CnBMLc94PR-rEguroQZcuw-1; Fri,
- 03 Apr 2026 00:05:35 -0400
-X-MC-Unique: CnBMLc94PR-rEguroQZcuw-1
-X-Mimecast-MFC-AGG-ID: CnBMLc94PR-rEguroQZcuw_1775189134
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E0F0F1800561;
-	Fri,  3 Apr 2026 04:05:33 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.83])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CC19630002D2;
-	Fri,  3 Apr 2026 04:05:29 +0000 (UTC)
-Date: Fri, 3 Apr 2026 12:05:24 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, Caleb Sander Mateos <csander@purestorage.com>,
-	Akilesh Kailash <akailash@google.com>, bpf@vger.kernel.org,
-	Xiao Ni <xni@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH V3 05/12] io_uring: bpf: extend io_uring with bpf
- struct_ops
-Message-ID: <ac88hCYgrFXBX3-g@fedora>
-References: <20260324163753.1900977-1-ming.lei@redhat.com>
- <20260324163753.1900977-6-ming.lei@redhat.com>
- <5e8766d3-a801-48e0-8d27-60e75523ebd1@kernel.dk>
+	bh=VxCtDmcW+PYNWZYGao4CXe457GGVzkVY6yCZ0Fv51MY=;
+	b=fsiA+YGHdjfgPsxUG7zjwMXJRZTTq5xZqSMv2u/Xo4TnniBce70YDzwCubIj9NOjRDpQTH
+	rUcIq5zVLO0qHbqJamcJhwK5rhkHKRh4ak516xsnIHtAkl1NTvXpzLcDBO5td8XpCF7S+6
+	H7idGDARbJvPvrweZd+OFVl82qjp+Dg=
+Date: Thu, 2 Apr 2026 21:05:41 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5e8766d3-a801-48e0-8d27-60e75523ebd1@kernel.dk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-
-On Wed, Mar 25, 2026 at 07:49:22PM -0600, Jens Axboe wrote:
-> On 3/24/26 10:37 AM, Ming Lei wrote:
-> > @@ -493,7 +494,16 @@ struct io_ring_ctx {
-> >  	DECLARE_HASHTABLE(napi_ht, 4);
-> >  #endif
-> >  
-> > -	struct io_uring_bpf_ops		*bpf_ops;
-> > +	/*
-> > +	 * bpf_ops and bpf_ext_ops are mutually exclusive: bpf_ops is used
-> > +	 * for io_uring_bpf_ops struct_ops, while bpf_ext_ops provides
-> > +	 * per-opcode BPF extension operations (IORING_SETUP_BPF_EXT).
-> > +	 * The two cannot be active at the same time on the same ring.
-> > +	 */
-> > +	union {
-> > +		struct io_uring_bpf_ops		*bpf_ops;
-> > +		struct uring_bpf_ops_kern	*bpf_ext_ops;
-> > +	};
-> 
-> What am I missing here, why is this the case? What makes the use of both
-> at the same time impossible?
-
-Please see the following code:
-
-static inline bool io_has_loop_ops(struct io_ring_ctx *ctx)
-{
-        return data_race(ctx->loop_step);
-}
-
-io_uring_enter():
-	...
-	if (io_has_loop_ops(ctx)) {
-		ret = io_run_loop(ctx);
-		goto out;
-	}
-	...
-
-So if ->loop_step is assigned from io_install_bpf() called from bpf_ops
-registration, traditional userspace SQE submission and CQE reap are
-bypassed completely, then IORING_OP_BPF and any other OP can't be handled
-at all.
-
-> 
-> > diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
-> > index e4b244337aa9..e91c6964405c 100644
-> > --- a/io_uring/bpf-ops.c
-> > +++ b/io_uring/bpf-ops.c
-> > @@ -162,7 +162,6 @@ static int io_install_bpf(struct io_ring_ctx *ctx, struct io_uring_bpf_ops *ops)
-> >  		return -EOPNOTSUPP;
-> >  	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN))
-> >  		return -EOPNOTSUPP;
-> > -
-> >  	if (ctx->bpf_ops)
-> >  		return -EBUSY;
-> >  	if (WARN_ON_ONCE(!ops->loop_step))
-> 
-> Spurious whitespace change.
-
-Will remove it in next version.
-
-> 
-> > diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-> > index 91cf67b5d85b..1af33a89ed2f 100644
-> > --- a/io_uring/io_uring.h
-> > +++ b/io_uring/io_uring.h
-> > @@ -49,7 +49,8 @@ struct io_ctx_config {
-> >  			IORING_FEAT_RECVSEND_BUNDLE |\
-> >  			IORING_FEAT_MIN_TIMEOUT |\
-> >  			IORING_FEAT_RW_ATTR |\
-> > -			IORING_FEAT_NO_IOWAIT)
-> > +			IORING_FEAT_NO_IOWAIT |\
-> > +			IORING_FEAT_BPF)
-> 
-> Do we need this FEAT flag? If you think so, then it should at least be
-> dependent on whether the kernel supports this feature, eg if
-> CONFIG_IO_URING_BPF_EXT is set
-
-Good catch!
+Subject: Re: [PATCH bpf-next 03/10] bpf: Support stack arguments for bpf
+ functions
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260402012727.3916819-1-yonghong.song@linux.dev>
+ <20260402012742.3917613-1-yonghong.song@linux.dev>
+ <CAMB2axM+UaJU0NpmkdwquinVjmJKBXeb+Ch-MQk_YskSyvrb+A@mail.gmail.com>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAMB2axM+UaJU0NpmkdwquinVjmJKBXeb+Ch-MQk_YskSyvrb+A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
 
-Thanks,
-Ming
+On 4/2/26 4:38 PM, Amery Hung wrote:
+> On Wed, Apr 1, 2026 at 6:28 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> Currently BPF functions (subprogs) are limited to 5 register arguments.
+>> With [1], the compiler can emit code that passes additional arguments
+>> via a dedicated stack area through bpf register
+>> BPF_REG_STACK_ARG_BASE (r12), introduced in the previous patch.
+>>
+>> The following is an example to show how stack arguments are saved
+>> and transferred between caller and callee:
+>>
+>>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
+>>      ...
+>>      bar(a1, a2, a3, a4, a5, a6, a7, a8);
+>>      ...
+>>    }
+>>
+>> The following is a illustration of stack allocation:
+>>
+>>     Caller (foo)                           Callee (bar)
+>>     ============                           ============
+>>     r12-relative stack arg area:           r12-relative stack arg area:
+>>
+>>     r12-8:  [incoming arg 6]          +--> r12-8:  [incoming arg 6] (from caller's outgoing r12-24)
+>>     r12-16: [incoming arg 7]          |+-> r12-16: [incoming arg 7] (from caller's outgoing r12-32)
+>>                                       ||+> r12-24: [incoming arg 8] (from caller's outgoing r12-40)
+>>     ---- incoming/outgoing boundary   |||  ---- incoming/outgoing boundary
+>>     r12-24: [outgoing arg 6 to callee]+||   ...
+>>     r12-32: [outgoing arg 7 to callee]-+|
+>>     r12-40: [outgoing arg 8 to callee]--+
+>>
+>>    The caller writes outgoing args past its own incoming area.
+>>    At the call site, the verifier transfers the caller's outgoing
+>>    slots into the callee's incoming slots.
+>>
+>> The verifier tracks stack arg slots separately from the regular r10
+>> stack. A new 'bpf_stack_arg_state' structure mirrors the existing stack
+>> slot tracking (spilled_ptr + slot_type[]) but lives in a dedicated
+>> 'stack_arg_slots' array in bpf_func_state. This separation keeps the
+>> stack arg area from interfering with the normal stack and frame pointer
+>> (r10) bookkeeping.
+>>
+>> If the bpf function has more than one calls, e.g.,
+>>
+>>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
+>>      ...
+>>      bar1(a1, a2, a3, a4, a5, a6, a7, a8);
+>>      ...
+>>      bar2(a1, a2, a3, a4, a5, a6, a7, a8, a9);
+>>      ...
+>>    }
+>>
+>> The following is an illustration:
+>>
+>>     Caller (foo)                           Callee (bar1)
+>>     ============                           =============
+>>     r12-relative stack arg area:           r12-relative stack arg area:
+>>
+>>     r12-8:  [incoming arg 6]          +--> r12-8:  [incoming arg 6] (from caller's outgoing r12-24)
+>>     r12-16: [incoming arg 7]          |+-> r12-16: [incoming arg 7] (from caller's outgoing r12-32)
+>>                                       ||+> r12-24: [incoming arg 8] (from caller's outgoing r12-40)
+>>     ---- incoming/outgoing boundary   |||  ---- incoming/outgoing boundary
+>>     r12-24: [outgoing arg 6 to callee]+||  ...
+>>     r12-32: [outgoing arg 7 to callee]-+|
+>>     r12-40: [outgoing arg 8 to callee]--+
+>>     ...
+>>     Back from bar1
+>>     ...                                     Callee (bar2)
+>>     ===                                     =============
+>>                                       +---> r12-8:  [incoming arg 6] (from caller's outgoing r12-24)
+>>                                       |+--> r12-16: [incoming arg 7] (from caller's outgoing r12-32)
+>>                                       ||+-> r12-24: [incoming arg 8] (from caller's outgoing r12-40)
+>>                                       |||+> r12-32: [incoming arg 9] (from caller's outgoing r12-48)
+>>     ---- incoming/outgoing boundary   ||||  ---- incoming/outgoing boundary
+>>     r12-24: [outgoing arg 6 to callee]+|||  ...
+>>     r12-32: [outgoing arg 7 to callee]-+||
+>>     r12-40: [outgoing arg 8 to callee]--+|
+>>     r12-48: [outgoing arg 9 to callee]---+
+>>
+>> Global subprogs with >5 args are not yet supported.
+>>
+>>    [1] https://github.com/llvm/llvm-project/pull/189060
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   include/linux/bpf.h          |   2 +
+>>   include/linux/bpf_verifier.h |  15 ++-
+>>   kernel/bpf/btf.c             |  14 +-
+>>   kernel/bpf/verifier.c        | 248 ++++++++++++++++++++++++++++++++---
+>>   4 files changed, 257 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index e24c4a2e95f7..a0a1e14e4394 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1666,6 +1666,8 @@ struct bpf_prog_aux {
+>>          u32 max_pkt_offset;
+>>          u32 max_tp_access;
+>>          u32 stack_depth;
+>> +       u16 incoming_stack_arg_depth;
+>> +       u16 stack_arg_depth; /* both incoming and max outgoing of stack arguments */
+>>          u32 id;
+>>          u32 func_cnt; /* used by non-func prog as the number of func progs */
+>>          u32 real_func_cnt; /* includes hidden progs, only used for JIT and freeing progs */
+[...]
+>> @@ -8054,10 +8195,23 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   static int check_store_reg(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>                             bool strict_alignment_once)
+>>   {
+>> +       struct bpf_verifier_state *vstate = env->cur_state;
+>> +       struct bpf_func_state *state = vstate->frame[vstate->curframe];
+>>          struct bpf_reg_state *regs = cur_regs(env);
+>>          enum bpf_reg_type dst_reg_type;
+>>          int err;
+>>
+>> +       /* Handle stack arg write */
+>> +       if (insn->dst_reg == BPF_REG_STACK_ARG_BASE) {
+>> +               err = check_reg_arg(env, insn->src_reg, SRC_OP);
+>> +               if (err)
+>> +                       return err;
+>> +               err = check_stack_arg_access(env, insn, "write");
+>> +               if (err)
+>> +                       return err;
+>> +               return check_stack_arg_write(env, state, insn->off, insn->src_reg);
+>> +       }
+>> +
+>>          /* check src1 operand */
+>>          err = check_reg_arg(env, insn->src_reg, SRC_OP);
+>>          if (err)
+>> @@ -10940,8 +11094,10 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>                             int *insn_idx)
+>>   {
+>>          struct bpf_verifier_state *state = env->cur_state;
+>> +       struct bpf_subprog_info *caller_info;
+>>          struct bpf_func_state *caller;
+>>          int err, subprog, target_insn;
+>> +       u16 callee_incoming;
+>>
+>>          target_insn = *insn_idx + insn->imm + 1;
+>>          subprog = find_subprog(env, target_insn);
+>> @@ -10993,6 +11149,15 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>                  return 0;
+>>          }
+>>
+>> +       /*
+>> +        * Track caller's outgoing stack arg depth (max across all callees).
+>> +        * This is needed so the JIT knows how much stack arg space to allocate.
+>> +        */
+>> +       caller_info = &env->subprog_info[caller->subprogno];
+>> +       callee_incoming = env->subprog_info[subprog].incoming_stack_arg_depth;
+>> +       if (callee_incoming > caller_info->outgoing_stack_arg_depth)
+>> +               caller_info->outgoing_stack_arg_depth = callee_incoming;
+>> +
+>>          /* for regular function entry setup new frame and continue
+>>           * from that frame.
+>>           */
+>> @@ -11048,13 +11213,41 @@ static int set_callee_state(struct bpf_verifier_env *env,
+>>                              struct bpf_func_state *caller,
+>>                              struct bpf_func_state *callee, int insn_idx)
+>>   {
+> Taking note when reading the change to set_callee_state():
+>
+> The function is not called when handling callback function, which uses
+> push_callback_call() -> setup_func_entry() -> callback specific
+> set_callee_state_cb. So caller stack argument will not be transferred.
+>
+> This should be fine as callee's stack_arg_depth will remain zero and
+> then when callee tries to do r12 based load, check_stack_arg_read()
+> should reject the program. Not sure if this needs a selftest since
+> callbacks' set_callee_state_cb will also transfer register state very
+> intentionally.
+
+All callback functions are carefully designed in kernel. So far all
+callback functions are within 5 register parameters. I ignore them
+for now. If in the future, there is a need for callback functions
+with more than 5 arguments, we can deal with them at that time.
+
+>
+>> -       int i;
+>> +       struct bpf_subprog_info *callee_info;
+>> +       int i, err;
+>>
+>>          /* copy r1 - r5 args that callee can access.  The copy includes parent
+>>           * pointers, which connects us up to the liveness chain
+>>           */
+>>          for (i = BPF_REG_1; i <= BPF_REG_5; i++)
+>>                  callee->regs[i] = caller->regs[i];
+
+[...]
 
