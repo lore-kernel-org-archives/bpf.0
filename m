@@ -1,196 +1,269 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5EA2248A5;
-	Fri,  3 Apr 2026 17:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775237211; cv=none; b=uQS5JYSZ9ecAeixR8HWmug9E0zNIdGu3YqXrTzBlNSH4hAMa3QEH5aFw+d0i2VQwxHVl1X9en1qTkQ0mOV0282+l+RfY+w9+6+3dsyJPIJBRI+ewNlPFtr9RgC+ERG+7jnQrD/k/Bu704i64KhafhnzDSCXNCvEW6+B+/Smm8Uo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775237211; c=relaxed/simple;
-	bh=M6p3JmmzQexUHfSoR1LIGJcF55doBeHtQAVLzRfQu3I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o4LV5dUQ4OTSInssWc7zSt/OLYf9C9kxJToJe+uBorYHs9BV6POEjgdS6dgkt8dJj65rekHKlJc9y/z3B2yWboQH6+XqqpjILD4JN5U8hlWKRd1aUAv5gqlqqL9auXLkMCcYOGC45++tMqfmoBs7oJIGC/MzQwPT5emkQIDoCKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f+pEtDRk; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D0E313298
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 17:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775238105; cv=pass; b=ZD12BWZvt0fPDSwjL8QdI/P3GDorMQ2xOIiviI0zg/oajOOvnzG4rj/9nsU0ObXD194kd3S7DslTBU4LsNYU7Al9LB+L7IdECuPuqUBkJ7m4JkFFbRlO7CAUvlKVQpg9TzjXS0d3p83hzZe3jh4Cby5bxrfwXDFTRGUVVAVDQlE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775238105; c=relaxed/simple;
+	bh=5lWVn8YMvYAwRs2zR285cHCiDnPH0plenXQD6VjDk7Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NWQdVA2U2jjey3uTuFbcnNJhCjRZyZzdboO3WNS63eMpvr2v2hGURpbWWcxvqwPnBT+zqvsqMyK6hW64nf026FzTj60N1oAOb1eyY03yNHDPiolGWeLa1CTYmFCQ0wKMGGWvLTAPHCSCotc4TUQaF2u85YnT4Wo61o2joExY8i0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HSpv9MDk; arc=pass smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f+pEtDRk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775237210; x=1806773210;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M6p3JmmzQexUHfSoR1LIGJcF55doBeHtQAVLzRfQu3I=;
-  b=f+pEtDRkR/TJ/eJmCypB3iLE+2pnWMC8CkJ8RtyFaOr1NSz8iXNoB92c
-   kMaPgjWeiCq06QIQJdrP8n/XgKLXE9yCbWKUnFMjATPDzypCI9xEtXrKj
-   rIAzSrnFn8dm6oMNtAQM5KHOIipBAd2/cyASCWJSSrC+OHcLVO2KjRFVI
-   rv3ViW754DeDWfTTA2XtHl+a1VJLCRpA/qAFcoQDJNEndysY3NyWkONbE
-   KIqmwZlYi4rF7LAEkUBQ3gFY2y2mCQ5EdiNZNdpcHPShYFicev1nKREfb
-   5jlkBeGMKZS2Bz+rgOVQOcm1Crb7QkCvzpqS0QypyNf4+Tlh3BbPsFYM3
-   w==;
-X-CSE-ConnectionGUID: F9RSWatfTRi45C3ENY46uA==
-X-CSE-MsgGUID: WDZN+ZL2QG+S+DRiVQgSpA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76192441"
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="76192441"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 10:26:49 -0700
-X-CSE-ConnectionGUID: 8aLnb5V0QhqxJSY99LLsvw==
-X-CSE-MsgGUID: kWetgwjETliORgt530tEaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
-   d="scan'208";a="257775807"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 10:26:49 -0700
-Date: Fri, 3 Apr 2026 10:26:43 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v9 07/10] x86/vmscape: Use static_call() for predictor
- flush
-Message-ID: <20260403172643.fs2voyiy2kk6yzcx@desk>
-References: <20260402-vmscape-bhb-v9-0-94d16bc29774@linux.intel.com>
- <20260402-vmscape-bhb-v9-7-94d16bc29774@linux.intel.com>
- <ac_UJx99kDJY8j3t@google.com>
- <20260403164432.ltnr5oupddscwaqu@desk>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HSpv9MDk"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b6ce6d1d3dcso802879a12.3
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 10:41:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775238103; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LZgV2mBpbOZC31tJo+LgcVzKGZw38DM0I8xuHMhwnEwgMk5ukQ/q5qbX9tQQA+ZKb3
+         245rA7QuXKjEHhD9DZLhXoCce65krgLM7PNUqzKLLOlrlvGknE7zBodCKBNGylU8fXrX
+         BHfO+L0A1xoufUMRZwmuoOyAyqZgAxV2nBe9/73B8ci95nJn3QZMELhtqFvl1gwNRqb4
+         jDyqSGwblIMAK7kS4z6J4sVJz8DzoVwSogOs0kd0mK6PpCCJrSGHQmtXk1ki6e90QIQE
+         7aSJjJVL9wNTpoFMDnaFH08fsYG+R6j2wKtXmVkPvDpv2hi7onmbfPtwqDWv6N916N6M
+         4Vfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0W7mSWaqi0MOT0pMvqxQVOJ9twswqNKYzff6Qr8i4JI=;
+        fh=dx8X3qN6Vxp0dyuQxQ/54FTA2lX5aRJWitqEDj7PX/k=;
+        b=DmCqCxJ3k8LP1d26egUAb8qDK25aVQzmR4JTbzwdsaEIelp5uMDCmCKG43QmpiwXGw
+         578cDhzrh977m+lCTqIGUr5jA8S5I3QMd+fCKjWJZMvVLDQO7waS1hvC4uIUoURpc1Ni
+         XF1UFv6CS063ybwJ9IWVGC7da8cjctMgpRVhkI49JAmc3yC4pY6lJ59jbjd5eRuVzOCa
+         +E2t5GamY+tbIzMf34/J73H8DBFbJIF0cwZxFfs9Rb7/FTcXcb3UrvAlXCuJ6DggcUbb
+         VEF8qSnLj/NMKmqGE8OhuC2OBl/2m96UW/tv6zC0Q0rCqEZemmCVgz14kfLlglZM7O9q
+         0bRg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775238103; x=1775842903; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0W7mSWaqi0MOT0pMvqxQVOJ9twswqNKYzff6Qr8i4JI=;
+        b=HSpv9MDkKT/viPLD0hFieh7xKUWoJGWqEL4KzchnVZm/cet9S9gFXgbUsl1JVDWB+F
+         sczg1985a16tvcxoYeurl9bj3T9tSN+GSSn+u7m6vY9EEZ2jKBuO/nddnNnZy4+u6yU4
+         BC3edVGDzPG23s6SbMqU6KiJcVeUWhWnKu80FN79xRQ96yWVQB2Sv/dImD47tIAb/CkN
+         d8dhgo6mpb79RF9/WufLOqPMTK82zv2YS++IpInoInWJ6RigAYum/tBAYLdQWZ+vVTA+
+         C/c1ziEuiN1tERPZ4ka0TJbcKa9QHCOCVd3JqkgSK4d0rq9wfpCsQibgLJC0P7fTDAfZ
+         +sUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775238103; x=1775842903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0W7mSWaqi0MOT0pMvqxQVOJ9twswqNKYzff6Qr8i4JI=;
+        b=bN6aWRynaRF+S8GDlszNWAUqTnKzMyiVDWJqbTILsJ/ZAxHKv5m6h5H8lx45w3cuLk
+         R1Hz4bpPQQ+fVL0ttbj+5cJJn21Z30QUmQd+n0y1tq2QLlA2gXsyOLYALNcYt0Ir7JWn
+         2tgRlW7hybMKyO2DfqRe9y3sg5R9AQSi4y/efk8qWxJ3/OrQcVZNSTotGPOnq5tp9k99
+         ZYeRL0er3rjjN/9oNftHR0vm+8/s2pz0UcRM6m4JO0eG4o7yUe391o7gKxkB1c57TfBC
+         UhVl7gtOqW0XYF+9TEaCiO3UxA60HxZ8CLCnB0cQ2g0LOQxK7B7tfAPN1lnZ10t/33PI
+         QcwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnfCkt/hSDQkIOvy9+vqG43miPEPGDF8yDDeHhGbZtYFAequ/KB5cBB//tZKOwOanra24=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8GkJRew+kjGDsTcviMCsi1ME9Euls0Z9ME5Nfcwsv0ms+/4nf
+	m5n9XEu6yYVoPRmS90OaGLUyLv1niwAiwrLUijHyz1/GVOroGdT2TEDfWbNB3LWGYQhWHnzjVCS
+	lkBiCz5frXH5eiCuN8OPK6U7otlwFeNk=
+X-Gm-Gg: ATEYQzzIQBlIMBcN8TL779L1U7T8XXyBlqRaxa1hMY4/6ubVAdNv51oB9MtoCsdJHC7
+	gnn9r7cjQg9+fpSEtdVqR0WtrybUm/Kn57sgrLRG5rUs1Yqb2VfZFyNEQegfD+0mCBx/w5yjJjF
+	cP7O34Jup6KGO6W/B0xHp1IthTMGS3xpkVfQ06SjDNmQT1OvSEZcni4yj3SdhMwB1O7BwWNqSQh
+	7aXn/1PaXXY5LYrtK1SzFNRqp9ZZ4v0D+JBRcbDf/ZtZwUjkwuep735Q44QWJja6qoc3yQ/HIz/
+	S3xluw==
+X-Received: by 2002:a05:6a20:12c5:b0:39b:835f:1730 with SMTP id
+ adf61e73a8af0-39f2eff3fc0mr3843834637.15.1775238103105; Fri, 03 Apr 2026
+ 10:41:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260403164432.ltnr5oupddscwaqu@desk>
+References: <20260329140506.9595-1-pilgrimtao@gmail.com> <20260329140506.9595-2-pilgrimtao@gmail.com>
+ <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
+In-Reply-To: <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
+From: Chengkaitao <pilgrimtao@gmail.com>
+Date: Sat, 4 Apr 2026 01:41:32 +0800
+X-Gm-Features: AQROBzAJduT_bxIDNRvRaGan1qOkkmaaMw5BmIuyvPDf4XREPWFaFbQgB8Axi24
+Message-ID: <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 03, 2026 at 09:44:32AM -0700, Pawan Gupta wrote:
-> On Fri, Apr 03, 2026 at 07:52:23AM -0700, Sean Christopherson wrote:
-> > On Thu, Apr 02, 2026, Pawan Gupta wrote:
-> > > --- a/arch/x86/kvm/x86.c
-> > > +++ b/arch/x86/kvm/x86.c
-> > > @@ -11463,7 +11463,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
-> > >  	 * set for the CPU that actually ran the guest, and not the CPU that it
-> > >  	 * may migrate to.
-> > >  	 */
-> > > -	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER))
-> > > +	if (vmscape_mitigation_enabled())
-> > 
-> > This is pretty lame.  It turns a statically patched MOV
-> 
-> Yes it is, this was done ...
-> 
-> >   11548		if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER))
-> >   11549			this_cpu_write(x86_ibpb_exit_to_user, true);
-> >      0x000000000003c57a <+858>:	movb   $0x1,%gs:0x0(%rip)        # 0x3c582 <vcpu_enter_guest+866>
-> > 
-> > into a function call and two sets of conditional branches.  And with mitigations
-> > enabled, that function call may trigger the wonderful unret insanity
-> > 
-> >   11548		if (vmscape_mitigation_enabled())
-> >      0x000000000003c575 <+853>:	call   0x3c57a <vcpu_enter_guest+858>
-> >      0x000000000003c57a <+858>:	test   %al,%al
-> >      0x000000000003c57c <+860>:	je     0x3c586 <vcpu_enter_guest+870>
-> > 
-> >   11549			this_cpu_write(x86_predictor_flush_exit_to_user, true);
-> >      0x000000000003c57e <+862>:	movb   $0x1,%gs:0x0(%rip)        # 0x3c586 <vcpu_enter_guest+870>
-> > 
-> > 
-> >   3166	{
-> >      0xffffffff81285320 <+0>:	endbr64
-> >      0xffffffff81285324 <+4>:	call   0xffffffff812aa5a0 <__fentry__>
-> > 
-> >   3167		return !!static_call_query(vmscape_predictor_flush);
-> >      0xffffffff81285329 <+9>:	mov    0x13a4f30(%rip),%rax        # 0xffffffff8262a260 <__SCK__vmscape_predictor_flush>
-> >      0xffffffff81285330 <+16>:	test   %rax,%rax
-> >      0xffffffff81285333 <+19>:	setne  %al
-> > 
-> >   3168	}
-> >      0xffffffff81285336 <+22>:	jmp    0xffffffff81db1e30 <__x86_return_thunk>
-> > 
-> > While this isn't KVM's super hot inner run loop, it's still very much a hot path.
-> > Even more annoying, KVM will eat the function call on kernels with CPU_MITIGATIONS=n.
-> > 
-> > I'd like to at least do something like the below to make the common case of
-> > multiple guest entry/exits more or less free, and to avoid the CALL+(UN)RET
-> > overhead, but trying to include linux/static_call.h in processor.h (or any other
-> > core x86 header) creates a cyclical dependency :-/
-> > 
-> > diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-> > index 20ab4dd588c6..0dc0680a80f8 100644
-> > --- a/arch/x86/include/asm/processor.h
-> > +++ b/arch/x86/include/asm/processor.h
-> > @@ -36,6 +36,7 @@ struct vm86;
-> >  #include <linux/err.h>
-> >  #include <linux/irqflags.h>
-> >  #include <linux/mem_encrypt.h>
-> > +#include <linux/static_call.h>
-> >  
-> >  /*
-> >   * We handle most unaligned accesses in hardware.  On the other hand
-> > @@ -753,7 +754,11 @@ enum mds_mitigations {
-> >  };
-> >  
-> >  extern bool gds_ucode_mitigated(void);
-> > -extern bool vmscape_mitigation_enabled(void);
+On Tue, Mar 31, 2026 at 1:05=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Sun, Mar 29, 2026 at 7:05=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.com=
+> wrote:
+> >
+> > From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> >
+> > Replace per-kfunc btf_id chains check with btf_id_in_kfunc_table() and
+> > static kfunc tables for easier maintenance.
+> >
+> > Prepare for future extensions to the bpf_list API family.
+> >
+> > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> > ---
+> >  kernel/bpf/verifier.c | 261 +++++++++++++++++++++++-------------------
+> >  1 file changed, 144 insertions(+), 117 deletions(-)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 4fbacd2149cd..f2d9863bb290 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -544,9 +544,6 @@ static bool is_async_callback_calling_kfunc(u32 btf=
+_id);
+> >  static bool is_callback_calling_kfunc(u32 btf_id);
+> >  static bool is_bpf_throw_kfunc(struct bpf_insn *insn);
+> >
+> > -static bool is_bpf_wq_set_callback_kfunc(u32 btf_id);
+> > -static bool is_task_work_add_kfunc(u32 func_id);
+> > -
+> >  static bool is_sync_callback_calling_function(enum bpf_func_id func_id=
+)
+> >  {
+> >         return func_id =3D=3D BPF_FUNC_for_each_map_elem ||
+> > @@ -586,7 +583,7 @@ static bool is_async_cb_sleepable(struct bpf_verifi=
+er_env *env, struct bpf_insn
+> >
+> >         /* bpf_wq and bpf_task_work callbacks are always sleepable. */
+> >         if (bpf_pseudo_kfunc_call(insn) && insn->off =3D=3D 0 &&
+> > -           (is_bpf_wq_set_callback_kfunc(insn->imm) || is_task_work_ad=
+d_kfunc(insn->imm)))
+> > +           is_async_callback_calling_kfunc(insn->imm))
+> >                 return true;
+> >
+> >         verifier_bug(env, "unhandled async callback in is_async_cb_slee=
+pable");
+> > @@ -11203,31 +11200,6 @@ static int set_task_work_schedule_callback_sta=
+te(struct bpf_verifier_env *env,
+> >         return 0;
+> >  }
+> >
+> > -static bool is_rbtree_lock_required_kfunc(u32 btf_id);
+> > -
+> > -/* Are we currently verifying the callback for a rbtree helper that mu=
+st
+> > - * be called with lock held? If so, no need to complain about unreleas=
+ed
+> > - * lock
+> > - */
+> > -static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
+> > -{
+> > -       struct bpf_verifier_state *state =3D env->cur_state;
+> > -       struct bpf_insn *insn =3D env->prog->insnsi;
+> > -       struct bpf_func_state *callee;
+> > -       int kfunc_btf_id;
+> > -
+> > -       if (!state->curframe)
+> > -               return false;
+> > -
+> > -       callee =3D state->frame[state->curframe];
+> > -
+> > -       if (!callee->in_callback_fn)
+> > -               return false;
+> > -
+> > -       kfunc_btf_id =3D insn[callee->callsite].imm;
+> > -       return is_rbtree_lock_required_kfunc(kfunc_btf_id);
+> > -}
+> > -
+> >  static bool retval_range_within(struct bpf_retval_range range, const s=
+truct bpf_reg_state *reg)
+> >  {
+> >         if (range.return_32bit)
+> > @@ -12639,11 +12611,103 @@ BTF_ID(func, bpf_session_is_return)
+> >  BTF_ID(func, bpf_stream_vprintk)
+> >  BTF_ID(func, bpf_stream_print_stack)
+> >
+> > -static bool is_task_work_add_kfunc(u32 func_id)
+> > -{
+> > -       return func_id =3D=3D special_kfunc_list[KF_bpf_task_work_sched=
+ule_signal] ||
+> > -              func_id =3D=3D special_kfunc_list[KF_bpf_task_work_sched=
+ule_resume];
+> > -}
+> > +/* Kfunc family related to list. */
+> > +static const enum special_kfunc_type bpf_list_api_kfuncs[] =3D {
+> > +       KF_bpf_list_push_front_impl,
+> > +       KF_bpf_list_push_back_impl,
+> > +       KF_bpf_list_pop_front,
+> > +       KF_bpf_list_pop_back,
+> > +       KF_bpf_list_front,
+> > +       KF_bpf_list_back,
+> > +};
 > > +
-> > +static inline bool vmscape_mitigation_enabled(void)
-> > +{
-> > +       return !!static_call_query(vmscape_predictor_flush);
-> > +}
-> >  
-> >  /*
-> >   * Make previous memory operations globally visible before
-> > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-> > index 366ebe1e1fb9..02bf626f0773 100644
-> > --- a/arch/x86/kernel/cpu/bugs.c
-> > +++ b/arch/x86/kernel/cpu/bugs.c
-> > @@ -148,6 +148,7 @@ DEFINE_STATIC_KEY_FALSE(switch_mm_cond_l1d_flush);
-> >   * sequence. This defaults to no mitigation.
-> >   */
-> >  DEFINE_STATIC_CALL_NULL(vmscape_predictor_flush, write_ibpb);
-> > +EXPORT_STATIC_CALL_GPL(vmscape_predictor_flush);
-> 
-> ... to avoid exporting the static key, so that modules (other than KVM)
-> cannot do static_call_update(vmscape_predictor_flush).
-> 
-> Peter suggested changes that allowed adding EXPORT_STATIC_CALL_FOR_KVM():
-> 
->   https://lore.kernel.org/all/20260319214409.GL3738786@noisy.programming.kicks-ass.net/
+> > +/* Kfuncs that take a list node argument (bpf_list_node *). */
+> > +static const enum special_kfunc_type bpf_list_node_api_kfuncs[] =3D {
+> > +       KF_bpf_list_push_front_impl,
+> > +       KF_bpf_list_push_back_impl,
+> > +};
+> > +
+> > +/* Kfuncs that take an rbtree node argument (bpf_rb_node *). */
+> > +static const enum special_kfunc_type bpf_rbtree_node_api_kfuncs[] =3D =
+{
+> > +       KF_bpf_rbtree_remove,
+> > +       KF_bpf_rbtree_add_impl,
+> > +       KF_bpf_rbtree_left,
+> > +       KF_bpf_rbtree_right,
+> > +};
+> > +
+> > +/* Kfunc family related to rbtree. */
+> > +static const enum special_kfunc_type bpf_rbtree_api_kfuncs[] =3D {
+> > +       KF_bpf_rbtree_add_impl,
+> > +       KF_bpf_rbtree_remove,
+> > +       KF_bpf_rbtree_first,
+> > +       KF_bpf_rbtree_root,
+> > +       KF_bpf_rbtree_left,
+> > +       KF_bpf_rbtree_right,
+> > +};
+> > +
+> > +/* Kfunc family related to spin_lock. */
+> > +static const enum special_kfunc_type bpf_res_spin_lock_api_kfuncs[] =
+=3D {
+> > +       KF_bpf_res_spin_lock,
+> > +       KF_bpf_res_spin_unlock,
+> > +       KF_bpf_res_spin_lock_irqsave,
+> > +       KF_bpf_res_spin_unlock_irqrestore,
+> > +};
+>
+> I think it's a step in the wrong direction.
+> I'd wait for Ihor's BTF_ID_NAMED cleanup.
 
-Sorry, this is the correct link for EXPORT_STATIC_CALL_FOR_KVM():
+After reading Ihor's messages on the list, if I understand correctly,
+our two approaches seem to target different problems. What Ihor's
+work appears to achieve is the ability to remove the entire enum
+special_kfunc_type. My goal, on the other hand, is to replace many
+scattered func_id =3D=3D special_kfunc_list[...] comparisons with a
+table-driven approach.
 
-  https://lore.kernel.org/all/20260320062206.bdrnmnvho6lhmejw@desk/
+That said, once Ihor's solution lands, my approach would no longer
+be applicable as-is. So I have been thinking about an alternative,
+please see the patch linked below for details:
+https://lore.kernel.org/bpf/20260403170900.58659-1-pilgrimtao@gmail.com/
 
-> EXPORT_STATIC_CALL_FOR_KVM() seems to be a cleaner approach to me.
-> 
-> Boris, I know you didn't like exporting the static_key. But, as Sean said
-> this is a hot path, and avoiding the unnecessary call would benefit all
-> CPUs (affected or unaffected). Moreover, EXPORT_STATIC_CALL_FOR_KVM()
-> somewhat addresses your concern of exporting the static_key to the world.
-> Would you be okay with it?
+> Kaitao Cheng,
+>
+> also please start your part of code reviews.
+> Your patches are not going to be landing if you don't code review.
+>
+> https://lore.kernel.org/bpf/CAADnVQ+TKKptnNB25V3=3Dbcdybh5G6c2DyW2sYtXvyR=
+aVnPN8MA@mail.gmail.com/
+
+I will do my best to carry this forward.
+
+--=20
+Yours,
+Chengkaitao
