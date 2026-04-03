@@ -1,142 +1,98 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831AE23817E
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 00:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775176811; cv=pass; b=p89zGGi74GfYHnoTJ33wSs9TCPhMbO4Ou6Edca+vla70TAUL0Yss1Rr1MD2HDW4jumI9W5BXp0ZBuWUhs7LrBQ0ZWc2VPesHVnORCDaMz1dSa9NrtylMge5KZbMiXSswr9K2/9r+1Gl6cH59CMS34oNzAKfsSeZHw+10IZTQCC8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775176811; c=relaxed/simple;
-	bh=/w84oLty8p/81Rk4iB+DZc9tnQiU/i2ZF6s8sFFaK9o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fkEQExR8ogpGfK2LwmxmZd9u4F6iXh7BnYihe3OD570rH7Unah/IAqeQd73+g/0kyfXSKHSYGJ0uylEnOaR8xMQx+fE8mRbr5NZj3oz26A0gfB1VjWYC2QouKA1w+Yq/TNzRi4cGFV+h/fOn7f2Vsp06pX7vvIogWi0SlunGsN0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OdkzfQuR; arc=pass smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6057081A
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 00:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775177607; cv=none; b=iO6TYDVsl5k1wkAwhFQUo4sJXcPrar5gFWErbKo0WKVr6sznF8Xph3k+BgAxevE4/j8Rpd223/czU+0RmcRyzKeH2R67dowJlfBiTJ0ALycqBAJksph4pyC2oGoRrX3LDTsKmtIc6yBtshJFpEMCwtmMrSWmWYEwZVhlRfWLjFI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775177607; c=relaxed/simple;
+	bh=0OWIeqnDu1mQYbWbLff8G9a/sGUJ0QRhkoMFFttqY5I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Aq03b81ih24EZBrJKpT5SBUplMpZeFSHCcBSDcPJ6URR5udLrlpSIjsnNbNT65ikpQU7Z4RD14sk8XR2BwbOrqS8mJKsybO8dnUnpRCe0lCEqGJ3Bc68aQgq38JK+EGmv4Y2JRM4cVEArtokuVdYDM1W45LMj/XMQH4hd7AHTnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9irUHZ6; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OdkzfQuR"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-126ea4e9694so1027215c88.1
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 17:40:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775176810; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZyyFWJ+sQnT2Zf8CJqw24A58cA55D8aeSeYH0f4S2+RCx665bGufLWtH4bS6SrtVzc
-         bHiQsvH8oiNtMei9hAjuyxVXIEGwsrmdsp1sJvKUufDitGcJ6UyHUeU7bHHF6xc+LR+h
-         MLhQ1D+x4x8vbhuFKGGvcsXH1ksMULivPWJvKlCDlzqHFLT5xPvmHqITgPUqk21rnSZK
-         ixx3KmNfEQ4Rh50nurB2AhGQR8VjvJT+3MzLNky2w/C65bedbMHfDuwfu5yLvI37c2o+
-         EwqeRNE+dCKgj/wxKK6GTMyrSSUBRsVX+lVFsn5v4k90DcCvya4meUe/Nv+6YepVbCur
-         z42g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=aCdQQQIIvXE2+KXarP0M3agadIYQMXhGCfuVI+81ShM=;
-        fh=Mli8ByWCj/2UIxSVVUaBmMqxdDk+ZT/Y66Z9oU87Tj0=;
-        b=ZyzwvAeArK026G1lAwO0wt57uDdagKgO6ws/MA4h6u7glRAZkXWljCs5Bp5J1ygkc0
-         ZXd2fa1DPnClfb8EhuscmwUFTCBr4qzWeLee10fke02WbN5Ed9G8RNLjL1vfVjw6H9li
-         1F8k2V4KMT0h95NLI0v6cQLVTU0J5w2mWIKogqqEoC8zt5fPmWvBocCVb6MZ0w8NRLd5
-         +oFvcLie7BWlLOQrw+GhMGjBCYQu+kM1j6oWDdR0Z/SR+QUcvKQstWZeBit7dS96ILfY
-         bIdlamj/jb3B8oQvnSslXmZ1F/peB36QAsqBAvo+NPsu3x5J132a5z2BibYYyjuYEXWq
-         JInw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9irUHZ6"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ad617d5b80so7814825ad.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 17:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775176810; x=1775781610; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aCdQQQIIvXE2+KXarP0M3agadIYQMXhGCfuVI+81ShM=;
-        b=OdkzfQuReDCRCrrh0/4DqmM1BE7fYV+vZWoiNxFNnJtemy3sGC3serdtp/ZZvubifZ
-         9JcMTTCWUa9ZK9xpuVHmNI+isspj1T0rFo3eVLlJCb2teCcYrbYDG69R+MxUWjK0xJjO
-         dzux9iuSGPCUrDrFoL9UDq/OxzD6agGwbbkvqfhhxr2X2XmlDOpPmlDHWc/CvO/qa4qN
-         mdYlLc/5ZNepa3oPicHkwdZH1b7x/Pv+/JfAKmMQUckM0Dt6ZoBQUuSGw2qSVlH1M7CU
-         kbuu40SFu9zESVtvvfNd/3GHIQs+xDgB7mkcGKtXsYI5zvugRTQAbkk5yEFtu6dtmgfm
-         8rcw==
+        d=gmail.com; s=20251104; t=1775177605; x=1775782405; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0OWIeqnDu1mQYbWbLff8G9a/sGUJ0QRhkoMFFttqY5I=;
+        b=F9irUHZ6jpDkn4d6/zoljHeRfcSQVem3pRNi7GJxguVPShiH2qpKrs8mt0aLa0nr6Q
+         knGe9opt+K5FMmth+6qsCHNJLXUlljHx0T5gOZ6aiglkthwj1GMAQtzckp+ewpnAB0Gp
+         rIE+S5hCAMKb4DnbgynY9stWQpXbxqA3AeV0CCvXdkVmy1F4E5yVR4EV7JmX13G7kc6F
+         CyDZwiUaB+MAr7wyHpDuqjs1VDbpAdUSashq8okrVTWoTOCLGZKEXGSalCYbH/Y8tTEz
+         aFE04/nxAmW9VkySoARV/wK76LeBlF9QxR/gRq7dH2jDoNloowyJi7CuoaJxbSFrGz1V
+         gfFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775176810; x=1775781610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aCdQQQIIvXE2+KXarP0M3agadIYQMXhGCfuVI+81ShM=;
-        b=QYBCrxiaRDkqNs9PRKOtWZ8mMY3pT/27W0zN3oOKGGkVrwcui+3WHuFBqiIdD7iBnq
-         zFcQuloiIpb7xV0QqH/NsgXZel5XcbzxYKuZDwGWdoDMSK0BXigg/7r9RLXazN0mXC19
-         RSgf1DkExuPgXrDi+7bHdx+n+aIHQMg6jsDm3FD3KXZh2adLX+rVNqskSMS/NptfMChH
-         83R8FQUA0KVNNu5NUeHe0tMIjZ13ss5lz+TQydz4winDX2E/qVtFFWgHlkFIp1DQEJxU
-         MitAPmmOnd4apEUEP9tQCLXYOv54J6J8B9qLXpy9yQ3bC4KFQjucX1njWAI4rugsChjH
-         XALQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJstGK3XvHQ0YuKNPhjU4iG5zmUBGrpHaL0vOr0ijHCJBLGcZ9HbliUBiy/UDShb+tSZQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSeloPjmWjB/k82zFMbNP6CEZ6IUVP9hZlMu++0L3MNfDYVgkw
-	PcQGWpRF6Wj7egCBbUzWirGWdSSq4J3ryWl3mldPUXg2CHJo7eqXioLjBleve6cNgmjVBxMygWk
-	5eNbaM7ynZ2iGUoSXhGYBi21yyTgW/m6X2qnY4cAQ
-X-Gm-Gg: ATEYQzzcqbQXKarA4XyrNJfjph6bFOZ7J+Kg+pgKvv0hHAJCT6PIOri19bDKMXvpA5W
-	02j1ZqnKPh3kTC3RQXqbnGjcsYLNGF33NvDSqTQGocwsuKRnr1FwCZEkVaSx9waKJ8YEtQHZIWO
-	iEv8bcekBLaD+Ivpd/qjTjsq9r6QhW2kTP7Cs3ckQs/h0aBFf1Y6X8btVi3QODtaW/bnPS1GmJl
-	WtZJgtHAdUcZgeQXIwtbXA0vjw28Blwd/hUnIh3EYMwEj7s6Q7eiaF0ijt8GkCD8zkDfEDhJIv3
-	xBxq5zZblSmxlclDrPkjadnGjPmHcaz84y9w/20srnr64PL2pTEzd1t8bY5Fq1g/lfZg3ygnGw=
-	=
-X-Received: by 2002:a05:7022:41a3:b0:128:d5f1:d594 with SMTP id
- a92af1059eb24-12bfb6fb088mr617815c88.10.1775176809005; Thu, 02 Apr 2026
- 17:40:09 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775177605; x=1775782405;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0OWIeqnDu1mQYbWbLff8G9a/sGUJ0QRhkoMFFttqY5I=;
+        b=BBpWBXsuvwjV/Qbjdo9K1HhZzK58h/6AcpcZFI+BiSyEV/bSdzscD+vuy6JthFohu/
+         FaadAdIGYcNAEWS4Js5mi1Im06/keR3HWvImKNkK4iE8IpTptdyCpoGhduD0IGnuO933
+         Qlfayqv2shyRBQjxP8N5zDS4CGuoFF5vxO2PhAKeS4oYPGN7JlG8mFRzmiaMG9gJy9lL
+         I0rvgiOGlrXOluGo5yuxLVVMeDqsj4YVPSXLxrhv0ltDfYX0yK/TCoLMFI0xlYNl3hq/
+         lLUWVQ1oHEHeijnSgaYlGfoZHAgagdI0kwykwMNwypKa72QOtfrc23PWC/d02NvJpvzw
+         3fxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0wumWx7xI+PlDBdbZdXpURRy2G71NSrARlaIHlhpm56qhZXi5TvE6PySMGGt9S0CqUWM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQmLgBw7iELbM2CZFlbMPQWU+lDKHi0QCNE+0SHWA99uwoBPoJ
+	954lnRdHDXRvh7iTJueeS0J+bO85KS0FiWYZX/8Rt6CcBbkk6LbL0PPS
+X-Gm-Gg: AeBDievuBIheR+N5BWN/rxrypdYRtX36EEeP05DcbRqNFiBiXM/13eOB2PeaHsz3u1Z
+	+Cle/1/IHxEfk9KiFozlOatQ4MzAovx4v3h7TqwH7gI7lWofffFhYczeFb2ZuSYh0H6/TFM1Hqj
+	I8zVefCdaL2xZzdUQ91zAKsav4XDkj7o4psqCF0UWljWUAEoC+3K3XUAlXkNzz+5CvutcofShdm
+	K8GvfvsUrU0sdzZ1aocx/CeK4OGkz1C+wf3xZvlA4zSOLx+/8o1kwL1wkCZJdPpiuR29Qq+w/AZ
+	kd9BbP3x7iOAeh6ZuvjNKjuM375dwkS4h2LnxdnZrMFuLYCXdXVySSC6Nfj9RmeYFszXUlAPSFy
+	cnccHovKwhz7Goifivlj6RLSyotpcWqCySnRe1++1y9iM/l4nHUys+D3kFAn/NYmvEidMgm4QGP
+	5CpXCFTgI8cG93mLy2FkJYblnpRbyL8r/8xI29eLUcH0uIqMC5NrTz
+X-Received: by 2002:a17:902:c410:b0:2b2:4862:78e9 with SMTP id d9443c01a7336-2b281687c7fmr15226895ad.15.1775177605383;
+        Thu, 02 Apr 2026 17:53:25 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27497af0dsm39824405ad.47.2026.04.02.17.53.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2026 17:53:25 -0700 (PDT)
+Message-ID: <76c92bd4263566eb38ee41903a70ae1a0a1dce00.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/6] bpf: Refactor reg_bounds_sanity_check
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,  Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+ Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Date: Thu, 02 Apr 2026 17:53:22 -0700
+In-Reply-To: <198ec3e69343e2c46dc9cbe2b1bc9be9ae2df5bd.1775142354.git.paul.chaignon@gmail.com>
+References: <cover.1775142354.git.paul.chaignon@gmail.com>
+	 <198ec3e69343e2c46dc9cbe2b1bc9be9ae2df5bd.1775142354.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402203754.280844-1-kuniyu@google.com>
-In-Reply-To: <20260402203754.280844-1-kuniyu@google.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 2 Apr 2026 17:39:58 -0700
-X-Gm-Features: AQROBzCUbsqUMZVlPVwHX7XDocpK0nqdiJrfFLJB7S6UDmzKjAMAMqFW1nMKfmc
-Message-ID: <CAAVpQUBMhqMFN93dhphgXVsgn-6TmFqKmJ4hWNiCjLS_D3JHCw@mail.gmail.com>
-Subject: Re: [PATCH v1 bpf] sockmap: Fix sk_psock_drop() race vs sock_map_{unhash,close,destroy}().
-To: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Wang Yufen <wangyufen@huawei.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	syzbot+b0842d38af58376d1fdc@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 1:37=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.com=
-> wrote:
->
-> syzbot reported a splat in sock_map_destroy() [0], where psock was
-> NULL even though sk->sk_prot still pointed to tcp_bpf_prots[][].
->
-> The root cause is a lack of synchronisation.
->
-> Even if sk_psock_get() fails to bump psock->refcnt, it does not
-> guarantee that sk_psock_drop() has finished, and thus sk->sk_prot
-> might not have been restored to the original one.
->
-> Commit 4b4647add7d3 ("sock_map: avoid race between sock_map_close
-> and sk_psock_put") attempted to address this, but it was insufficient
-> for two reasons.
->
-> It did not cover sock_map_unhash() and sock_map_destroy(), and
-> it missed the corner case where sk_psock() is NULL.
->
-> On non-x86 platforms, sk_psock_restore_proto(sk, psock) and
-> rcu_assign_sk_user_data(sk, NULL) can be reordered because there
-> is no address dependency between sk->sk_prot and sk->sk_user_data.
->
-> sk_psock_get() returning NULL implies nothing about sk->sk_prot,
-> and we need a synchronisation.
->
-> The possible options would be:
->
->   1) Put smp_wmb() and smp_rmb() properly
->   2) Put sk_callback_lock locking dance in the unlikely case
->   3) Retry sk_psock_get() in the unlikely case
->
-> 1) sounds straightforward but at the expense of the normal
-> path for the super unlikely race.  The stack trace shows how badly
-> the path was excercised, see inet_release() calls tcp_close(),
-> not sock_map_close() yet, but finally reaching sock_map_destroy().
->
-> 3) could be lightweight but risk an unbounded loop in case the
-> psock could hit WARN_ON_ONCE() below, so 2) seems preferable.
+On Thu, 2026-04-02 at 17:08 +0200, Paul Chaignon wrote:
+> From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+>=20
+> This commit refactors reg_bounds_sanity_check to factor out the logic
+> that performs the sanity check from the logic that does the reporting.
+>=20
+> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.c=
+om>
+> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> ---
 
-Oh well, Sashiko pointed out 2) is still racy.
-https://sashiko.dev/#/patchset/20260402203754.280844-1-kuniyu%40google.com
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-pw-bot: cr
+[...]
