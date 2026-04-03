@@ -1,63 +1,63 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE26C34FF76
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 04:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B63B355F4D
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 04:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775190453; cv=none; b=BblKfGt/kjBd4yKzckS//TZOh+sqG4S5mm9525EUQOQT8VBHkb8w92/esso4MNJGQPvP2YQj4eaB5mj8ttqpVsd0o3M3e64/jl/wao6ckpUIiGQ3nJWrHZLDKGQi6Z2ARYSPLnscOOaGIJXYXXhM520fq+dm0d1T6Wh+RAjRU1c=
+	t=1775190456; cv=none; b=i5K8a5jne7Zv/xN2TXdehytm3od69iZIo/qzwA/LLtZFHB+mLBHIHhX11g9oMFiLJZEUQ1YfIlwM9Yc8scLTS7xBtXkC1k3AiYonGBpdFhZYMiJqiELX29NhWo02Dq0fsHXKBopqwfpeDj51bgSVJpZQ86CMhGi75FOoMTxXwEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775190453; c=relaxed/simple;
-	bh=xJChuHHncr9/Dsc6B4Y7sGxhrKPjXsrQiJ456kLf7U0=;
+	s=arc-20240116; t=1775190456; c=relaxed/simple;
+	bh=hcjskk/M9D9N4DvNnEmDf27t1gbyposNi1VR+FgGUog=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ftOg2AVWlbRABEdQr8Co8FencDZwWl3udTMqO1xO9zvQDZYvo+/3R1Xyfug3hf+60fJ9qVaOKn7yMHQ8Fc40YssrQNNU/5eOyb6A6tWmLdEMX3/lki6YCsQ5SGJXLa/00i6FGDKjSrZ+6MrrfoRBsl26+bfd54L8bN3jrXdLPsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=pLeStYZO; arc=none smtp.client-ip=209.85.216.49
+	 MIME-Version; b=M2J9MuDMnNYTkZ5Jaaf8QEs2OHxi7q7wlECsUHqMp2rS1VnmhOoDHrPdHYQ87e/BYljCx9brHUe0Hl8C67EZzu1U14TG89t73cnNtnf+MySGjuP8JAplRQv2W/P7lr3tKRKHBLOAKuwtKn0LW15Hgvjn4KZBn+d+rynn1Ky8bo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=AsxPxw4j; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="pLeStYZO"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35da01fc0baso1026533a91.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 21:27:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="AsxPxw4j"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-358ed696623so659080a91.0
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 21:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775190450; x=1775795250; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775190451; x=1775795251; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2Av6TS8iYX+ikxGsR2iaOu5ITQJfoCNcgoeCglHVudA=;
-        b=pLeStYZOGn6NI8DZQhLr0hFSoIqrNehW9zd2cHYVl8WYzp0jbwsWchCNQqOV603MLu
-         x8/i8mBA8TXqebiFU6yUe8vT8WBSle01OY4Qg1fXynmwPzEYTO0axDoIOEennxgXV/Yr
-         8NPrFJhCMUpUf1SZAHFoNyTW5y6UueY3DKcoafbhpbgRDKl2OgAXsJ5bWHBjmlTvdgGl
-         r7/ZCLJlrnC96nGsCN0HF/9G/ZH+IB+bcUG2wUINIXeTOy3YkYejHfpJ8IF5ncXd8kr1
-         BwqMDIgZvkcAbarQtCDUpMqF4QrhFPlZxrUysJ0eiFqDSIiKCbCF1nku0l5BegqFTn4f
-         q9rA==
+        bh=GzIY3WsWpHamytxVmHfMitAFOIm41VDRJyizKd9Yuso=;
+        b=AsxPxw4j9bewZRutENGW35D6HBkW3VgeO6/j2W+GpuoYfGiPfLAExhkvONG7EBB+82
+         zJ2JOrOqE+9ed10a0+QXLM4nOg55q776l3O7tFJBT2meIcyZRgGYMGJYVIfZEHF4AeZO
+         1uWgkqENnDKWSmlKr7PHMytDZHJ6Dd1Z/89qwV4JD9zp2YKnD0LkE3vedPBEu9urRh68
+         hJ9Lo5t/NhcXTHAP2x4oKsFrjOE8UTmk9TDh86JxaJ3h5kjMXpZfcFzqlr5oHc6LeHQc
+         r7ebWYvFcglKVxdwa3/uBrEHCEAAA9UobpCkKAoK/evMfst+FTxdypAmdZMj8933yrl+
+         3rjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775190450; x=1775795250;
+        d=1e100.net; s=20251104; t=1775190451; x=1775795251;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=2Av6TS8iYX+ikxGsR2iaOu5ITQJfoCNcgoeCglHVudA=;
-        b=oTf0S7m92U4sXoQarfhxfR/oxNN0b3GVmHtz4xbIAypFuUguCneTo73G/QImy0UFG1
-         YqBg6GvXSMbRGVGhBsKXK6qKLOVprAeMMHk1+j2/Adip1hy9Fp3/rQ7TA2183xZE9/WU
-         pbZFT6EqiUf/OSnteAJqU+j4oYBtEd6WU/C0pcID6pisnbgkkpP8j5aaTB22AyEV1VAx
-         F5jwvtcL1yr2trhfoZ5BLpDDYjZyFPDok5kKu/56TFlaFB3mX7BcAABu4fGVuR6/cAXK
-         2R2cdPZY+e8Trm4MCX2At4I2VQTUqG9hwgZFPRam07/3R5YLVIBJwVUlpbW0/WXYiT4L
-         jM/A==
-X-Gm-Message-State: AOJu0Yww9jo3wBQXgaVqumJO0VkS1Y8eFtKKnhRTxD6Ls1RzvfD/FK9r
-	vsdrpQIqguH9QSuI8eMgZITMlhzPOsvFRQTGh7w8r+aoI/f3m9SzshGxkBGiNUwoL6enSfKUy0r
-	BRluhZlSTFA==
-X-Gm-Gg: AeBDieuziVXUxuefjSgX5+woctg96R1b1rbyecOXFgGWSUcmjPlN2QZjJFF7SKJj+Jb
-	RGSea2uhfUgJzCamE05LfXcGD4Yoji/LBjEofYI7a084KA3b/jngmjdpZgKqvMwWVP3cZWi6OcW
-	5HNXlEtzQNndctALZxGubwe0lu2crNyqMGu/Qpk5PMospOVBWGGz9LlmDMR6yke1Z2tmjF1chzB
-	dDgQ+TtvaddIbsIlH6ISgjwb3OMbK9CrYWabGSUgEECEApwLhF5/aMAo/6WqBuL8JY6i3Shavy6
-	etNDWDXveTDuXpaNLG60lgl5uOvrH6ZCq3UROVbIdhEW7Wr6d3BZSq7suDTOcVk1yG/hpGXwZ3t
-	1CNy+kRTx4J1N7Zvbw1CPHSB3XxLjZ7cohXl9Y8RYMFwLis0TrZ78yQ/kWL89N7T+7yw+CRSpQR
-	D1tMnHN2MZIp6q
-X-Received: by 2002:a17:90b:39c4:b0:35d:a2d3:5c2e with SMTP id 98e67ed59e1d1-35de6956185mr1429033a91.20.1775190449918;
-        Thu, 02 Apr 2026 21:27:29 -0700 (PDT)
+        bh=GzIY3WsWpHamytxVmHfMitAFOIm41VDRJyizKd9Yuso=;
+        b=tDJEN3dIEADzSQ77jppJxxcuopUjRr4zSEJouaGlb00cLeY3B4Fzko9wcBMkdXnCH3
+         bmhmmXWUPkQ036qattSPCL3lFo3wnEFWRZZatMBMpJ8B/cAxGre5FKBnVkI9Vq7q5QSK
+         /LztkSOpSDTfX/SheEUGyRxVAGlrCPL1Agf/h37naGK3MU4E398J03sdaxZ55la/DOkn
+         toadU0/H9GXh2kstkKw2gN0pa1bIDowk81OVTIHDWhvfBwVdX5pTdbHMssufpC81tpgF
+         paeJ9KXCRZbHwNcy7X+RIr6jHlVuUCQ2aeEJgkLRSYRbIO0bM1AUF2Bt6ksg3LMTtp1R
+         lODg==
+X-Gm-Message-State: AOJu0YzxkqTtmZo8ZbbceqBrpM0+BAT3KU7rZqQikYbz1UwJ2WbedWfv
+	pSs0Hx74CrtvepjJn8k2TtLITTGhmiem7VQfjvPdvCvr6YdoR0TWcZ90KzoJGLByD9rsMikOc12
+	om3LCaWDApw==
+X-Gm-Gg: AeBDies4MvJNyNgSuoXzCMJ/ZGAbBMxe8rKOJucY2XwEWwPnY+85F9RPRvUjzRP8ujd
+	O7Z+0FwtJo9u/q3eA+fSC1RzXUUKWeIYrJhDaH/mBJoA2Ec3e8eUT7DDqDUfxBQXckPggyQnOGO
+	NQ1/dXUyFlimy74xFttZydVl4uHMFFUsUjnB+AXNfwha4ftAYBdKRWmPc3oGO+Nu3gxX6VJ5MEd
+	b8n/bvX5Lb1IKMGs7n88OJzTiC+e2Tmh2l+LPKEnssgHdIq+Ul3dHVJUm7u8eSOepIezHJ7AsrJ
+	odtuSfZl7jqWV3vUoa032ppZklsF9vJUGiCd/OnvBUMhVTqt4OwXfRMOHHWhZWR2B5os6VoOMC7
+	9NkUFraxy4k4WTvF1K3P1BV9ZJUb654paYYsKJWIZGlaXDMK6xCLV7oqSVICjwE0xYifisjAD2v
+	eF/qnr8L4JlY/J
+X-Received: by 2002:a17:90b:4ac7:b0:35d:a2aa:3b05 with SMTP id 98e67ed59e1d1-35de678f96fmr1482987a91.5.1775190450826;
+        Thu, 02 Apr 2026 21:27:30 -0700 (PDT)
 Received: from krios ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe937925sm12970449a91.12.2026.04.02.21.27.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe937925sm12970449a91.12.2026.04.02.21.27.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 21:27:29 -0700 (PDT)
+        Thu, 02 Apr 2026 21:27:30 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -65,10 +65,11 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	eddyz87@gmail.com,
+	Emil Tsalapatis <etsal@meta.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v3 8/9] selftests/bpf: Add buddy allocator for libarena
-Date: Fri,  3 Apr 2026 00:27:19 -0400
-Message-ID: <20260403042720.18862-9-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 9/9] selftests/bpf: Add selftests for libarena buddy allocator
+Date: Fri,  3 Apr 2026 00:27:20 -0400
+Message-ID: <20260403042720.18862-10-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260403042720.18862-1-emil@etsalapatis.com>
 References: <20260403042720.18862-1-emil@etsalapatis.com>
@@ -80,877 +81,631 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a byte-oriented buddy allocator for libarena. The buddy
-allocator provides an alloc/free interface for small arena
-allocations (down to 16 bytes).
+From: Emil Tsalapatis <etsal@meta.com>
+
+Introduce selftests for the buddy allocator with and without
+ASAN. Add the libarena selftests both to the libarena test
+runner and to test_progs, so that they are a) available when
+libarena is pulled as a standalone library, and b) exercised
+along with all other test programs in this directory.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- .../selftests/bpf/libarena/include/buddy.h    |  64 ++
- .../selftests/bpf/libarena/src/buddy.bpf.c    | 783 ++++++++++++++++++
- 2 files changed, 847 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/include/buddy.h
- create mode 100644 tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+ .../bpf/libarena/selftests/selftest.c         |  12 +
+ .../libarena/selftests/st_asan_buddy.bpf.c    | 251 ++++++++++++++++++
+ .../bpf/libarena/selftests/st_buddy.bpf.c     | 229 ++++++++++++++++
+ .../selftests/bpf/prog_tests/libarena.c       |  79 ++++++
+ 4 files changed, 571 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena.c
 
-diff --git a/tools/testing/selftests/bpf/libarena/include/buddy.h b/tools/testing/selftests/bpf/libarena/include/buddy.h
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+index 8b82fcdc3b7f..25af3aae868f 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
++++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+@@ -137,6 +137,12 @@ error_no_destroy:					\
+ 	return ret;					\
+ }
+ 
++TEST(test_buddy);
++
++#ifdef BPF_ARENA_ASAN
++TEST(asan_test_buddy);
++#endif
++
+ static void
+ banner(const char *progpath)
+ {
+@@ -174,5 +180,11 @@ int main(int argc, char *argv[])
+ 
+ 	libbpf_set_print(libbpf_print_fn);
+ 
++	run_test_buddy();
++
++#ifdef BPF_ARENA_ASAN
++	run_asan_test_buddy();
++#endif
++
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
 new file mode 100644
-index 000000000000..aa63752bc657
+index 000000000000..8d81b06b5362
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/include/buddy.h
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#pragma once
-+
-+/* Buddy allocator-related structs. */
-+
-+struct buddy_chunk;
-+typedef struct buddy_chunk __arena buddy_chunk_t;
-+
-+struct buddy_header;
-+typedef struct buddy_header __arena buddy_header_t;
-+
-+enum buddy_consts {
-+	BUDDY_MIN_ALLOC_SHIFT	= 4,
-+	BUDDY_MIN_ALLOC_BYTES	= 1 << BUDDY_MIN_ALLOC_SHIFT,
-+	BUDDY_CHUNK_NUM_ORDERS	= 1 << 4,	/* 4 bits per order */
-+	BUDDY_CHUNK_BYTES	= BUDDY_MIN_ALLOC_BYTES << BUDDY_CHUNK_NUM_ORDERS,
-+	BUDDY_HEADER_OFF	= 8, /* header byte offset, see buddy.bpf.c for details */
-+	BUDDY_CHUNK_PAGES	= BUDDY_CHUNK_BYTES / __PAGE_SIZE,
-+	BUDDY_CHUNK_ITEMS	= 1 << BUDDY_CHUNK_NUM_ORDERS,
-+	BUDDY_CHUNK_OFFSET_MASK	= BUDDY_CHUNK_BYTES - 1,
-+	BUDDY_VADDR_OFFSET	= BUDDY_CHUNK_BYTES,	/* Start aligning at chunk */
-+	BUDDY_VADDR_SIZE	= BUDDY_CHUNK_BYTES << 10 /* 1024 chunks maximum */
-+};
-+
-+struct buddy_header {
-+	u32 prev_index;	/* "Pointer" to the previous available allocation of the same size. */
-+	u32 next_index; /* Same for the next allocation. */
-+};
-+
-+/*
-+ * We bring memory into the allocator 1MiB at a time.
-+ */
-+struct buddy_chunk {
-+	/* The order of the current allocation for a item. 4 bits per order. */
-+	u8		orders[BUDDY_CHUNK_ITEMS / 2];
-+	/* 
-+	 * Bit to denote whether chunk is allocated. Size of the allocated/free
-+	 * chunk found from the orders array.
-+	 */
-+	u8		allocated[BUDDY_CHUNK_ITEMS / 8];
-+	/* Freelists for O(1) allocation. */
-+	u64		freelists[BUDDY_CHUNK_NUM_ORDERS];
-+	buddy_chunk_t	*prev;
-+	buddy_chunk_t	*next;
-+};
-+
-+struct buddy {
-+	buddy_chunk_t *first_chunk;		/* Pointer to the chunk linked list. */
-+	arena_spinlock_t __arena *lock;		/* Allocator lock */
-+	u64 vaddr;				/* Allocation into reserved vaddr */
-+};
-+
-+#ifdef __BPF__
-+
-+int buddy_init(struct buddy *buddy, arena_spinlock_t __arena *lock);
-+int buddy_destroy(struct buddy *buddy);
-+int buddy_free_internal(struct buddy *buddy, u64 free);
-+#define buddy_free(buddy, ptr) do { buddy_free_internal((buddy), (u64)(ptr)); } while (0)
-+u64 buddy_alloc_internal(struct buddy *buddy, size_t size);
-+#define buddy_alloc(alloc, size) ((void __arena *)buddy_alloc_internal((alloc), (size)))
-+
-+
-+#endif /* __BPF__  */
-diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-new file mode 100644
-index 000000000000..c7f6b8e32f53
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-@@ -0,0 +1,783 @@
++++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+@@ -0,0 +1,251 @@
 +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
 +#include <common.h>
++
 +#include <asan.h>
 +#include <buddy.h>
 +
-+enum {
-+	BUDDY_POISONED = (s8)0xef,
-+};
++#include "selftest.h"
 +
-+static inline int buddy_lock(struct buddy *buddy)
++
++#ifdef BPF_ARENA_ASAN
++
++#include "st_asan_common.h"
++
++private(ST_BUDDY) struct buddy st_buddy_asan;
++
++u64 __arena st_asan_buddy_lock;
++
++static __always_inline int asan_test_buddy_oob_single(size_t alloc_size)
 +{
-+	return arena_spin_lock(buddy->lock);
-+}
++	u8 __arena *mem;
++	int i;
 +
-+static inline void buddy_unlock(struct buddy *buddy)
-+{
-+	arena_spin_unlock(buddy->lock);
-+}
++	ASAN_VALIDATE();
 +
-+/*
-+ * Reserve part of the arena address space for the allocator. We use
-+ * this to get aligned addresses for the chunks, since the arena
-+ * page alloc kfuncs do not support alignment.
-+ */
-+static int buddy_reserve_arena_vaddr(struct buddy *buddy)
-+{
-+	buddy->vaddr = 0;
-+
-+	return bpf_arena_reserve_pages(&arena,
-+				       (void __arena *)BUDDY_VADDR_OFFSET,
-+				       BUDDY_VADDR_SIZE / __PAGE_SIZE);
-+}
-+
-+/*
-+ * Free up any unused address space. Used only during teardown.
-+ */
-+static void buddy_unreserve_arena_vaddr(struct buddy *buddy)
-+{
-+	bpf_arena_free_pages(
-+		&arena, (void __arena *)(BUDDY_VADDR_OFFSET + buddy->vaddr),
-+		(BUDDY_VADDR_SIZE - buddy->vaddr) / __PAGE_SIZE);
-+
-+	buddy->vaddr = 0;
-+}
-+
-+/* 
-+ * Carve out part of the reserved address space and hand it over
-+ * to the buddy allocator.
-+ *
-+ * We are assuming the buddy allocator is the only allocator in the
-+ * system, so there is no race between this function reserving a
-+ * page range and some other allocator actually making the BPF call
-+ * to really create and reserve it.
-+ */
-+__weak int buddy_alloc_arena_vaddr(struct buddy *buddy, u64 *vaddrp)
-+{
-+	u64 vaddr, old, new;
-+
-+	if (!buddy || !vaddrp)
-+		return -EINVAL;
-+
-+	do {
-+		vaddr = buddy->vaddr;
-+		new = vaddr + BUDDY_CHUNK_BYTES;
-+
-+		if (new > BUDDY_VADDR_SIZE)
-+			return -EINVAL;
-+
-+		old = __sync_val_compare_and_swap(&buddy->vaddr, vaddr, new);
-+	} while (old != vaddr && can_loop);
-+
-+	if (old != vaddr)
-+		return -EINVAL;
-+
-+	*vaddrp = BUDDY_VADDR_OFFSET + vaddr;
-+
-+	return 0;
-+}
-+
-+static u64 arena_next_pow2(__u64 n)
-+{
-+	n--;
-+	n |= n >> 1;
-+	n |= n >> 2;
-+	n |= n >> 4;
-+	n |= n >> 8;
-+	n |= n >> 16;
-+	n |= n >> 32;
-+	n++;
-+
-+	return n;
-+}
-+
-+__weak
-+int idx_set_allocated(buddy_chunk_t __arg_arena *chunk, u64 idx, bool allocated)
-+{
-+	if (unlikely(idx >= BUDDY_CHUNK_ITEMS)) {
-+		arena_stderr("setting state of of invalid idx (%d, max %d)\n", idx,
-+			     BUDDY_CHUNK_ITEMS);
-+		return -EINVAL;
-+	}
-+
-+	if (allocated)
-+		chunk->allocated[idx / 8] |= 1 << (idx % 8);
-+	else
-+		chunk->allocated[idx / 8] &= ~(1 << (idx % 8));
-+
-+	return 0;
-+}
-+
-+static int idx_is_allocated(buddy_chunk_t *chunk, u64 idx, bool *allocated)
-+{
-+	if (unlikely(idx >= BUDDY_CHUNK_ITEMS)) {
-+		arena_stderr("getting state of invalid idx (%llu, max %d)\n", idx,
-+			     BUDDY_CHUNK_ITEMS);
-+		return -EINVAL;
-+	}
-+
-+	*allocated = chunk->allocated[idx / 8] & (1 << (idx % 8));
-+	return 0;
-+}
-+
-+__weak
-+int idx_set_order(buddy_chunk_t __arg_arena *chunk, u64 idx, u8 order)
-+{
-+	u8 prev_order;
-+
-+	if (unlikely(order >= BUDDY_CHUNK_NUM_ORDERS)) {
-+		arena_stderr("setting invalid order %u\n", order);
-+		return -EINVAL;
-+	}
-+
-+	if (unlikely(idx >= BUDDY_CHUNK_ITEMS)) {
-+		arena_stderr("setting order of invalid idx (%d, max %d)\n", idx,
-+			     BUDDY_CHUNK_ITEMS);
-+		return -EINVAL;
-+	}
-+
-+	/* 
-+	 * We store two order instances per byte, one per nibble.
-+	 * Retain the existing nibble.
-+	 */
-+	prev_order = chunk->orders[idx / 2];
-+	if (idx & 0x1) {
-+		order &= 0xf;
-+		order |= (prev_order & 0xf0);
-+	} else {
-+		order <<= 4;
-+		order |= (prev_order & 0xf);
-+	}
-+
-+	chunk->orders[idx / 2] = order;
-+
-+	return 0;
-+}
-+
-+static u8 idx_get_order(buddy_chunk_t *chunk, u64 idx)
-+{
-+	u8 result;
-+
-+	_Static_assert(BUDDY_CHUNK_NUM_ORDERS <= 16,
-+		       "order must fit in 4 bits");
-+
-+	if (unlikely(idx >= BUDDY_CHUNK_ITEMS)) {
-+		arena_stderr("setting order of invalid idx\n");
-+		return BUDDY_CHUNK_NUM_ORDERS;
-+	}
-+
-+	result = chunk->orders[idx / 2];
-+
-+	return (idx & 0x1) ? (result & 0xf) : (result >> 4);
-+}
-+
-+static void __arena *idx_to_addr(buddy_chunk_t *chunk, size_t idx)
-+{
-+	u64 address;
-+
-+	if (unlikely(idx >= BUDDY_CHUNK_ITEMS)) {
-+		arena_stderr("setting order of invalid idx\n");
-+		return NULL;
-+	}
-+
-+	/*
-+	 * The data blocks start in the chunk after the metadata block.
-+	 * We find the actual address by indexing into the region at an
-+	 * BUDDY_MIN_ALLOC_BYTES granularity, the minimum allowed.
-+	 * The index number already accounts for the fact that the first
-+	 * blocks in the chunk are occupied by the metadata, so we do
-+	 * not need to offset it.
-+	 */
-+
-+	address = (u64)chunk + (idx * BUDDY_MIN_ALLOC_BYTES);
-+
-+	return (void __arena *)address;
-+}
-+
-+static buddy_header_t *idx_to_header(buddy_chunk_t *chunk, size_t idx)
-+{
-+	bool allocated;
-+	u64 address;
-+
-+	if (unlikely(idx_is_allocated(chunk, idx, &allocated))) {
-+		arena_stderr("accessing invalid idx 0x%lx\n", idx);
-+		return NULL;
-+	}
-+
-+	if (unlikely(allocated)) {
-+		arena_stderr("accessing allocated idx 0x%lx as header\n", idx);
-+		return NULL;
-+	}
-+
-+	address = (u64)idx_to_addr(chunk, idx);
-+
-+	/* 
-+	 * Offset the header within the block. This avoids accidental overwrites
-+	 * to the header because of off-by-one errors when using adjacent blocks.
-+	 *
-+	 * The offset has been chosen as a compromise between ASAN effectiveness
-+	 * and allocator granularity:
-+	 * 1) ASAN dictates valid data runs are 8-byte aligned.
-+	 * 2) We want to keep a low minimum allocation size (currently 16).
-+	 * 
-+	 * As a result, we have only two possible positions for the header: Bytes
-+	 * 0 and 8. Keeping the header in byte 0 means off-by-ones from the previous
-+	 * block touch the header, and, since the header must be accessible, ASAN
-+	 * will not trigger. Keeping the header on byte 8 means off-by-one errors from
-+	 * the previous block are caught by ASAN. Negative offsets are rarer, so 
-+	 * while accesses into the block from the next block are possible, they are
-+	 * less probable.
-+	 */
-+
-+	return (buddy_header_t *)(address + BUDDY_HEADER_OFF);
-+}
-+
-+static void header_add_freelist(buddy_chunk_t  *chunk,
-+				buddy_header_t *header, u64 idx, u8 order)
-+{
-+	buddy_header_t *tmp_header;
-+
-+	idx_set_order(chunk, idx, order);
-+
-+	header->next_index = chunk->freelists[order];
-+	header->prev_index = BUDDY_CHUNK_ITEMS;
-+
-+	if (header->next_index != BUDDY_CHUNK_ITEMS) {
-+		tmp_header = idx_to_header(chunk, header->next_index);
-+		tmp_header->prev_index = idx;
-+	}
-+
-+	chunk->freelists[order] = idx;
-+}
-+
-+static void header_remove_freelist(buddy_chunk_t  *chunk,
-+				   buddy_header_t *header, u8 order)
-+{
-+	buddy_header_t *tmp_header;
-+
-+	if (header->prev_index != BUDDY_CHUNK_ITEMS) {
-+		tmp_header = idx_to_header(chunk, header->prev_index);
-+		tmp_header->next_index = header->next_index;
-+	}
-+
-+	if (header->next_index != BUDDY_CHUNK_ITEMS) {
-+		tmp_header = idx_to_header(chunk, header->next_index);
-+		tmp_header->prev_index = header->prev_index;
-+	}
-+
-+	/* Pop off the list head if necessary. */
-+	if (idx_to_header(chunk, chunk->freelists[order]) == header)
-+		chunk->freelists[order] = header->next_index;
-+
-+	header->prev_index = BUDDY_CHUNK_ITEMS;
-+	header->next_index = BUDDY_CHUNK_ITEMS;
-+}
-+
-+static u64 size_to_order(size_t size)
-+{
-+	u64 order;
-+
-+	if (unlikely(!size)) {
-+		arena_stderr("size 0 has no order\n");
-+		return 64;
-+	}
-+
-+	/*
-+	 * To find the order of the allocation we find the first power of two
-+	 * >= the requested size, take the log2, then adjust it for the minimum
-+	 * allocation size by removing the minimum shift from it. Requests
-+	 * smaller than the minimum allocation size are rounded up.
-+	 */
-+	order = arena_fls(arena_next_pow2(size));
-+	if (order < BUDDY_MIN_ALLOC_SHIFT)
-+		return 0;
-+
-+	return order - BUDDY_MIN_ALLOC_SHIFT;
-+}
-+
-+__weak
-+int add_leftovers_to_freelist(buddy_chunk_t __arg_arena *chunk, u32 cur_idx,
-+		u64 min_order, u64 max_order)
-+{
-+	buddy_header_t *header;
-+	u64 ord;
-+	u32 idx;
-+
-+	for (ord = min_order; ord < max_order && can_loop; ord++) {
-+		/* Mark the buddy as free and add it to the freelists. */
-+		idx = cur_idx + (1 << ord);
-+
-+		header = idx_to_header(chunk, idx);
-+		if (unlikely(!header))
-+			return -EINVAL;
-+
-+		asan_unpoison(header, sizeof(*header));
-+
-+		idx_set_allocated(chunk, idx, false);
-+		header_add_freelist(chunk, header, idx, ord);
-+	}
-+
-+	return 0;
-+}
-+
-+static buddy_chunk_t *buddy_chunk_get(struct buddy *buddy)
-+{
-+	u64 order, ord, min_order, max_order;
-+	buddy_chunk_t  *chunk;
-+	size_t left;
-+	int power2;
-+	u64 vaddr;
-+	u32 idx;
-+	int ret;
-+
-+	buddy_unlock(buddy);
-+
-+	ret = buddy_alloc_arena_vaddr(buddy, &vaddr);
-+	if (ret)
-+		return NULL;
-+
-+	/* Addresses must be aligned to the chunk boundary. */
-+	if (vaddr % BUDDY_CHUNK_BYTES)
-+		return NULL;
-+
-+	/* Unreserve the address space. */
-+	bpf_arena_free_pages(&arena, (void __arena *)vaddr,
-+			     BUDDY_CHUNK_PAGES);
-+
-+	chunk = bpf_arena_alloc_pages(&arena, (void __arena *)vaddr,
-+				      BUDDY_CHUNK_PAGES, NUMA_NO_NODE, 0);
-+	if (!chunk) {
-+		arena_stderr("[ALLOC FAILED]");
-+		return NULL;
-+	}
-+
-+	if ((ret = buddy_lock(buddy))) {
-+		bpf_arena_free_pages(&arena, chunk, BUDDY_CHUNK_PAGES);
-+		return NULL;
-+	}
-+
-+	asan_poison(chunk, BUDDY_POISONED, BUDDY_CHUNK_PAGES * __PAGE_SIZE);
-+
-+	/* Unpoison the chunk itself. */
-+	asan_unpoison(chunk, sizeof(*chunk));
-+
-+	/* Mark all freelists as empty. */
-+	for (ord = zero; ord < BUDDY_CHUNK_NUM_ORDERS && can_loop; ord++)
-+		chunk->freelists[ord] = BUDDY_CHUNK_ITEMS;
-+
-+	/*
-+	 * Initialize the chunk by carving out a page range to hold the metadata
-+	 * struct above, then dumping the rest of the pages into the allocator.
-+	 */
-+
-+	_Static_assert(BUDDY_CHUNK_PAGES * __PAGE_SIZE >=
-+			       BUDDY_MIN_ALLOC_BYTES *
-+				       BUDDY_CHUNK_ITEMS,
-+		       "chunk must fit within the allocation");
-+
-+	/*
-+	 * Step 2: Reserve a chunk for the chunk metadata, then breaks
-+	 * the rest of the full allocation into the different buckets.
-+	 * We allocating the memory by grabbing blocks of progressively
-+	 * smaller sizes from the allocator, which are guaranteed to be
-+	 * continuous.
-+	 *
-+	 * This operation also populates the allocator.
-+	 *
-+	 * Algorithm:
-+	 *
-+	 * - max_order: The last order allocation we made
-+	 * - left: How many bytes are left to allocate
-+	 * - cur_index: Current index into the top-level block we are 
-+	 * allocating from.
-+	 * 
-+	 * Step:
-+	 * - Find the largest power-of-2 allocation still smaller than left (infimum)
-+	 * - Reserve a chunk of that size, along with its buddy
-+	 * - For every order from [infimum + 1, last order), carve out a block 
-+	 *   and put it into the allocator.
-+	 *
-+	 *  Example: Chunk size 0b1010000 (80 bytes)
-+	 *
-+	 *  Step 1:
-+	 *
-+	 *   idx  infimum			   1 << max_order
-+	 *   0 	      64	128		      1 << 20	
-+	 *   |________|_________|______________________|
-+	 *
-+	 *   Blocks set aside:
-+	 *   	[0, 64)		- Completely allocated
-+	 *   	[64, 128)	- Will be further split in the next iteration
-+	 *   
-+	 *   Blocks added to the allocator:
-+	 *   	[128, 256)
-+	 *   	[256, 512)
-+	 *   	...
-+	 *   	[1 << 18, 1 << 19)
-+	 *   	[1 << 19, 1 << 20)
-+	 *
-+	 *  Step 2:
-+	 *
-+	 *   idx  infimum			   idx + 1 << max_order
-+	 *   64	      80	96		   	64 + 1 << 6 = 128
-+	 *   |________|_________|______________________|
-+	 *
-+	 *   Blocks set aside:
-+	 *   	[64, 80)	- Completely allocated
-+	 *   
-+	 *   Blocks added to the allocator:
-+	 *      [80, 96) - left == 0 so the buddy is unused and marked as freed
-+	 *   	[96, 128)
-+	 */
-+	max_order = BUDDY_CHUNK_NUM_ORDERS;
-+	left = sizeof(*chunk);
-+	idx = 0;
-+	while (left && can_loop) {
-+		power2 = arena_fls(left);
-+		if (unlikely(power2 >= BUDDY_CHUNK_NUM_ORDERS)) {
-+			arena_stderr(
-+				"buddy chunk metadata require allocation of order %d\n",
-+				power2);
-+			arena_stderr(
-+				"chunk has size of 0x%lx bytes (left %lx bytes)\n",
-+				sizeof(*chunk), left);
-+
-+			buddy_unlock(buddy);
-+			return NULL;
-+		}
-+
-+		/* Round up allocations that are too small. */
-+
-+		left -= (power2 >= BUDDY_MIN_ALLOC_SHIFT) ? 1 << power2 : left;
-+		order = (power2 >= BUDDY_MIN_ALLOC_SHIFT) ? power2 - BUDDY_MIN_ALLOC_SHIFT : 0;
-+
-+		idx_set_allocated(chunk, idx, true);
-+
-+		/* 
-+		 * Starting an order above the one we allocated, populate
-+		 * the allocator with free blocks. If this is the last
-+		 * allocation (left == 0), also mark the buddy as free.
-+		 */
-+		min_order = left ? order + 1 : order;
-+		if (add_leftovers_to_freelist(chunk, idx, min_order, max_order)) {
-+			buddy_unlock(buddy);
-+			return NULL;
-+		}
-+
-+		/* Adjust the index. */
-+		idx += 1 << order;
-+		max_order = order;
-+	}
-+
-+	return chunk;
-+}
-+
-+__hidden int buddy_init(struct buddy *buddy, 
-+		arena_spinlock_t __arg_arena __arena *lock)
-+{
-+	buddy_chunk_t *chunk;
-+	int ret;
-+
-+	buddy->lock = lock;
-+
-+	if (!asan_ready())
-+		return -EINVAL;
-+
-+	/* 
-+	 * Reserve enough address space to ensure allocations are aligned.
-+	 */
-+	if ((ret = buddy_reserve_arena_vaddr(buddy)))
-+		return ret;
-+
-+	_Static_assert(BUDDY_CHUNK_PAGES > 0,
-+		       "chunk must use one or more pages");
-+
-+	/* Chunk is already properly unpoisoned if allocated. */
-+	if (buddy_lock(buddy))
-+		return -EINVAL;
-+
-+	chunk = buddy_chunk_get(buddy);
-+	if (!chunk) {
-+		buddy->first_chunk = NULL;
++	mem = buddy_alloc(&st_buddy_asan, alloc_size);
++	if (!mem) {
++		arena_stdout("buddy_alloc failed for size %lu", alloc_size);
 +		return -ENOMEM;
 +	}
 +
-+	/* Put the chunk at the beginning of the list. */
-+	chunk->next = buddy->first_chunk;
-+	chunk->prev = NULL;
-+	buddy->first_chunk = chunk;
++	ASAN_VALIDATE();
 +
-+	buddy_unlock(buddy);
++	for (i = zero; i < alloc_size && can_loop; i++) {
++		mem[i] = 0xba;
++		ASAN_VALIDATE_ADDR(false, &mem[i]);
++	}
++
++	mem[alloc_size] = 0xba;
++	ASAN_VALIDATE_ADDR(true, &mem[alloc_size]);
++
++	buddy_free(&st_buddy_asan, mem);
 +
 +	return 0;
 +}
 +
 +/*
-+ * Destroy the allocator. This does not check whether there are any allocations
-+ * currently in use, so any pages being accessed will start taking arena faults.
-+ * We do not take a lock because we are freeing arena pages, and nobody should
-+ * be using the allocator at that point in the execution.
++ * Factored out because ASAN_VALIDATE_ADDR is complex enough to cause
++ * verification failures if verified with the rest of asan_test_buddy_uaf_single.
 + */
-+__weak int buddy_destroy(struct buddy *buddy)
++__weak int asan_test_buddy_byte(u8 __arena __arg_arena *mem, int i, bool freed)
 +{
-+	buddy_chunk_t *chunk, *next;
++	/* The header in freed blocks doesn't get poisoned. */
++	if (freed && BUDDY_HEADER_OFF <= i &&
++		i < BUDDY_HEADER_OFF + sizeof(struct buddy_header))
++		return 0;
 +
-+	if (!buddy)
-+		return -EINVAL;
-+
-+	/*
-+	 * Traverse all buddy chunks and free them back to the arena
-+	 * with the same granularity they were allocated with.
-+	 */
-+	for (chunk = buddy->first_chunk; chunk && can_loop; chunk = next) {
-+		next = chunk->next;
-+
-+		/* Wholesale poison the entire block. */
-+		asan_poison(chunk, BUDDY_POISONED,
-+			    BUDDY_CHUNK_PAGES * __PAGE_SIZE);
-+		bpf_arena_free_pages(&arena, chunk, BUDDY_CHUNK_PAGES);
-+	}
-+
-+	/* Free up any part of the address space that did not get used. */
-+	buddy_unreserve_arena_vaddr(buddy);
-+
-+	/* Clear all fields. */
-+	buddy->first_chunk = NULL;
++	mem[i] = 0xba;
++	ASAN_VALIDATE_ADDR(freed, &mem[i]);
 +
 +	return 0;
 +}
 +
-+__weak u64 buddy_chunk_alloc(buddy_chunk_t __arg_arena *chunk,
-+				 int order_req)
++__weak int asan_test_buddy_uaf_single(size_t alloc_size)
 +{
-+	buddy_header_t *header, *tmp_header, *next_header;
-+	u32 idx, tmpidx, retidx;
-+	u64 address;
-+	u64 order = 0;
-+	u64 i;
++	u8 __arena *mem;
++	int ret;
++	int i;
 +
-+	for (order = order_req; order < BUDDY_CHUNK_NUM_ORDERS && can_loop; order++) {
-+		if (chunk->freelists[order] != BUDDY_CHUNK_ITEMS)
-+			break;
++	mem = buddy_alloc(&st_buddy_asan, alloc_size);
++	if (!mem) {
++		arena_stdout("buddy_alloc failed for size %lu", alloc_size);
++		return -ENOMEM;
 +	}
 +
-+	if (order >= BUDDY_CHUNK_NUM_ORDERS)
-+		return (u64)NULL;
++	ASAN_VALIDATE();
 +
-+	retidx = chunk->freelists[order];
-+	header = idx_to_header(chunk, retidx);
-+	chunk->freelists[order] = header->next_index;
-+
-+	if (header->next_index != BUDDY_CHUNK_ITEMS) {
-+		next_header = idx_to_header(chunk, header->next_index);
-+		next_header->prev_index = BUDDY_CHUNK_ITEMS;
++	for (i = zero; i < alloc_size && can_loop; i++) {
++		ret = asan_test_buddy_byte(mem, i, false);
++		if (ret)
++			return ret;
 +	}
 +
-+	header->prev_index = BUDDY_CHUNK_ITEMS;
-+	header->next_index = BUDDY_CHUNK_ITEMS;
-+	if (idx_set_order(chunk, retidx, order_req))
-+		return (u64)NULL;
++	ASAN_VALIDATE();
 +
-+	if (idx_set_allocated(chunk, retidx, true))
-+		return (u64)NULL;
++	buddy_free(&st_buddy_asan, mem);
 +
-+	/* 
-+	 * Do not unpoison the address yet, will be done by the caller
-+	 * because the caller has the exact allocation size requested.
-+	 */
-+	address = (u64)idx_to_addr(chunk, retidx);
-+
-+	/* If we allocated from a larger-order chunk, split the buddies. */
-+	for (i = order_req; i < order && can_loop; i++) {
-+		/*
-+		 * Flip the bit for the current order (the bit is guaranteed
-+		 * to be 0, so just add 1 << i). 
-+		 */
-+		idx = retidx + (1 << i);
-+
-+		/* Add the buddy of the allocation to the free list. */
-+		header = idx_to_header(chunk, idx);
-+		/* Unpoison the buddy header */
-+		asan_unpoison(header, sizeof(*header));
-+		if (idx_set_allocated(chunk, idx, false))
-+			return (u64)NULL;
-+
-+		if (idx_set_order(chunk, idx, i))
-+			return (u64)NULL;
-+
-+		/* Push the header to the beginning of the freelists list. */
-+		tmpidx = chunk->freelists[i];
-+
-+		header->prev_index = BUDDY_CHUNK_ITEMS;
-+		header->next_index = tmpidx;
-+
-+		if (tmpidx != BUDDY_CHUNK_ITEMS) {
-+			tmp_header = idx_to_header(chunk, tmpidx);
-+			tmp_header->prev_index = idx;
-+		}
-+
-+		chunk->freelists[i] = idx;
++	for (i = zero; i < alloc_size && can_loop; i++) {
++		ret = asan_test_buddy_byte(mem, i, true);
++		if (ret)
++			return ret;
 +	}
-+
-+	return address;
-+}
-+
-+__weak
-+u64 buddy_alloc_internal(struct buddy *buddy, size_t size)
-+{
-+	buddy_chunk_t *chunk;
-+	u64 address;
-+	int order;
-+
-+	if (!buddy)
-+		return (u64)NULL;
-+
-+	order = size_to_order(size);
-+	if (order >= BUDDY_CHUNK_NUM_ORDERS || order < 0) {
-+		arena_stderr("invalid order %d (sz %lu)\n", order, size);
-+		return (u64)NULL;
-+	}
-+
-+	if (buddy_lock(buddy))
-+		return (u64)NULL;
-+
-+	for (chunk = buddy->first_chunk; chunk != NULL && can_loop;
-+	     chunk = chunk->next) {
-+		address = buddy_chunk_alloc(chunk, order);
-+		if (address)
-+			goto done;
-+	}
-+
-+	/* Get a new chunk. */
-+	chunk = buddy_chunk_get(buddy);
-+	if (!chunk)
-+		return (u64)NULL;
-+
-+	/* Add the chunk into the allocator and retry. */
-+	chunk->next = buddy->first_chunk;
-+	chunk->prev = NULL;
-+	buddy->first_chunk = chunk;
-+
-+	address = buddy_chunk_alloc(buddy->first_chunk, order);
-+
-+done:
-+
-+	if (!address) {
-+		buddy_unlock(buddy);
-+		return (u64)NULL;
-+	}
-+
-+	/* 
-+	 * Unpoison exactly the amount of bytes requested. If the
-+	 * data is smaller than the header, we must poison any
-+	 * unused bytes that were part of the header.
-+	 */
-+	if (size < BUDDY_HEADER_OFF + sizeof(buddy_header_t))
-+		asan_poison((u8 __arena *)address + BUDDY_HEADER_OFF,
-+			    BUDDY_POISONED, sizeof(buddy_header_t));
-+
-+	asan_unpoison((u8 __arena *)address, size);
-+
-+	buddy_unlock(buddy);
-+
-+	return address;
-+}
-+
-+static __always_inline int buddy_free_unlocked(struct buddy *buddy, u64 addr)
-+{
-+	buddy_header_t *header, *buddy_header;
-+	u64 idx, buddy_idx, tmp_idx;
-+	buddy_chunk_t *chunk;
-+	bool allocated;
-+	u8 order;
-+
-+	if (!buddy)
-+		return -EINVAL;
-+
-+	if (addr & (BUDDY_MIN_ALLOC_BYTES - 1)) {
-+		arena_stderr("Freeing unaligned address %llx\n", addr);
-+		return -EINVAL;
-+	}
-+
-+	/* Get (chunk, idx) out of the address. */
-+	chunk = (void __arena *)(addr & ~BUDDY_CHUNK_OFFSET_MASK);
-+	idx = (addr & BUDDY_CHUNK_OFFSET_MASK) / BUDDY_MIN_ALLOC_BYTES;
-+
-+	/* Mark the block as unallocated so we can access the header. */
-+	idx_set_allocated(chunk, idx, false);
-+
-+	order  = idx_get_order(chunk, idx);
-+	header = idx_to_header(chunk, idx);
-+
-+	/* The header is in the block itself, keep it unpoisoned. */
-+	asan_poison((u8 __arena *)addr, BUDDY_POISONED,
-+		    BUDDY_MIN_ALLOC_BYTES << order);
-+	asan_unpoison(header, sizeof(*header));
-+
-+	/* 
-+	 * Coalescing loop. Merge with free buddies of equal order.
-+	 * For every coalescing step, keep the left buddy and 
-+	 * drop the right buddy's header.
-+	 */
-+	for (; order < BUDDY_CHUNK_NUM_ORDERS && can_loop; order++) {
-+		buddy_idx = idx ^ (1 << order);
-+
-+		/* Check if the buddy is actually free. */
-+		idx_is_allocated(chunk, buddy_idx, &allocated);
-+		if (allocated)
-+			break;
-+
-+		/* 
-+		 * If buddy is not the same order as the chunk
-+		 * being freed, then we're done coalescing.
-+		 */
-+		if (idx_get_order(chunk, buddy_idx) != order)
-+			break;
-+
-+		buddy_header = idx_to_header(chunk, buddy_idx);
-+		header_remove_freelist(chunk, buddy_header, order);
-+
-+		/* Keep the left header out of the two buddies, drop the other one. */
-+		if (buddy_idx < idx) {
-+			tmp_idx = idx;
-+			idx = buddy_idx;
-+			buddy_idx = tmp_idx;
-+		}
-+
-+		/* Remove the buddy from the freelists so that we can merge it. */
-+		idx_set_order(chunk, buddy_idx, order);
-+
-+		buddy_header = idx_to_header(chunk, buddy_idx);
-+		asan_poison(buddy_header, BUDDY_POISONED,
-+			    sizeof(*buddy_header));
-+	}
-+
-+	/* Header properly freed but not in any freelists yet .*/
-+	idx_set_order(chunk, idx, order);
-+
-+	header = idx_to_header(chunk, idx);
-+	header_add_freelist(chunk, header, idx, order);
 +
 +	return 0;
 +}
 +
-+__weak int buddy_free_internal(struct buddy *buddy, u64 addr)
++struct buddy_blob {
++	volatile u8 mem[48];
++	u8 oob;
++};
++
++static __always_inline int asan_test_buddy_blob_single(void)
++{
++	volatile struct buddy_blob __arena *blob;
++	const size_t alloc_size = sizeof(struct buddy_blob) - 1;
++
++	blob = buddy_alloc(&st_buddy_asan, alloc_size);
++	if (!blob)
++		return -ENOMEM;
++
++	blob->mem[0] = 0xba;
++	ASAN_VALIDATE_ADDR(false, &blob->mem[0]);
++
++	blob->mem[47] = 0xba;
++	ASAN_VALIDATE_ADDR(false, &blob->mem[47]);
++
++	blob->oob = 0;
++	ASAN_VALIDATE_ADDR(true, &blob->oob);
++
++	buddy_free(&st_buddy_asan, (void __arena *)blob);
++
++	return 0;
++}
++
++static __always_inline int asan_test_buddy_oob(void)
++{
++	size_t sizes[] = {
++		7, 8, 17, 18, 64, 256, 317, 512, 1024,
++	};
++	int ret, i;
++
++	ret = buddy_init(&st_buddy_asan,
++			     (arena_spinlock_t __arena *)&st_asan_buddy_lock);
++	if (ret) {
++		arena_stdout("buddy_init failed with %d", ret);
++		return ret;
++	}
++
++	for (i = zero; i < sizeof(sizes) / sizeof(sizes[0]) && can_loop; i++) {
++		ret = asan_test_buddy_oob_single(sizes[i]);
++		if (ret) {
++			arena_stdout("%s:%d Failed for size %lu", __func__,
++				   __LINE__, sizes[i]);
++			buddy_destroy(&st_buddy_asan);
++			return ret;
++		}
++	}
++
++	buddy_destroy(&st_buddy_asan);
++
++	ASAN_VALIDATE();
++
++	return 0;
++}
++
++__weak int asan_test_buddy_uaf(void)
++{
++	size_t sizes[] = { 16, 32, 64, 128, 256, 512, 128, 1024, 16384 };
++	int ret, i;
++
++	ret = buddy_init(&st_buddy_asan,
++			     (arena_spinlock_t __arena *)&st_asan_buddy_lock);
++	if (ret) {
++		arena_stdout("buddy_init failed with %d", ret);
++		return ret;
++	}
++
++	for (i = zero; i < 7 && can_loop; i++) {
++		ret = asan_test_buddy_uaf_single(sizes[i]);
++		if (ret) {
++			arena_stdout("%s:%d Failed for size %lu", __func__,
++				   __LINE__, sizes[i]);
++			buddy_destroy(&st_buddy_asan);
++			return ret;
++		}
++	}
++
++	buddy_destroy(&st_buddy_asan);
++
++	ASAN_VALIDATE();
++
++	return 0;
++}
++
++static __always_inline int asan_test_buddy_blob(void)
++{
++	const int iters = 10;
++	int ret, i;
++
++	ret = buddy_init(&st_buddy_asan,
++			     (arena_spinlock_t __arena *)&st_asan_buddy_lock);
++	if (ret) {
++		arena_stdout("buddy_init failed with %d", ret);
++		return ret;
++	}
++
++	for (i = zero; i < iters && can_loop; i++) {
++		ret = asan_test_buddy_blob_single();
++		if (ret) {
++			arena_stdout("%s:%d Failed on iteration %d", __func__,
++				   __LINE__, i);
++			buddy_destroy(&st_buddy_asan);
++			return ret;
++		}
++	}
++
++	buddy_destroy(&st_buddy_asan);
++
++	ASAN_VALIDATE();
++
++	return 0;
++}
++
++SEC("syscall")
++int asan_test_buddy(void)
 +{
 +	int ret;
 +
-+	if (!buddy)
-+		return -EINVAL;
++	ret = asan_test_buddy_oob();
++	if (ret) {
++		arena_stdout("%s:%d OOB test failed", __func__, __LINE__);
++		return ret;
++	}
 +
-+	if ((ret = buddy_lock(buddy)))
++	ret = asan_test_buddy_uaf();
++	if (ret) {
++		arena_stdout("%s:%d UAF test failed", __func__, __LINE__);
++		return ret;
++	}
++
++	ret = asan_test_buddy_blob();
++	if (ret) {
++		arena_stdout("%s:%d blob test failed", __func__, __LINE__);
++		return ret;
++	}
++
++	return 0;
++}
++
++#else
++
++SEC("syscall")
++int asan_test_buddy(void)
++{
++	return -EOPNOTSUPP;
++}
++
++#endif /* BPF_ARENA_ASAN */
++
++__weak char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+new file mode 100644
+index 000000000000..19d036ae83c5
+--- /dev/null
++++ b/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+@@ -0,0 +1,229 @@
++// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <common.h>
++
++#include <asan.h>
++#include <buddy.h>
++
++#include "selftest.h"
++
++
++private(ST_BUDDY) struct buddy st_buddy;
++static u64 __arena st_buddy_lock;
++
++struct segarr_entry {
++	u8 __arena *block;
++	size_t sz;
++	u8 poison;
++};
++
++typedef struct segarr_entry __arena segarr_entry_t;
++
++#define SEGARRLEN (512)
++static struct segarr_entry __arena segarr[SEGARRLEN];
++static void __arena *ptrs[17];
++size_t __arena alloc_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517 };
++size_t __arena alloc_multiple_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517, 2099 };
++size_t __arena alloc_free_sizes[] = { 3, 17, 64, 129, 256, 333, 512, 517 };
++size_t __arena alignment_sizes[] = { 1, 3, 7, 8, 9, 15, 16, 17, 31,
++				     32, 64, 100, 128, 255, 256, 512, 1000 };
++
++static int test_buddy_create(void)
++{
++	const int iters = 10;
++	int ret, i;
++
++	for (i = zero; i < iters && can_loop; i++) {
++		ret = buddy_init(
++			&st_buddy, (arena_spinlock_t __arena *)&st_buddy_lock);
++		if (ret)
++			return ret;
++
++		ret = buddy_destroy(&st_buddy);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int test_buddy_alloc(void)
++{
++	void __arena *mem;
++	int ret, i;
++
++	for (i = zero; i < 8 && can_loop; i++) {
++		ret = buddy_init(
++			&st_buddy, (arena_spinlock_t __arena *)&st_buddy_lock);
++		if (ret)
++			return ret;
++
++		mem = buddy_alloc(&st_buddy, alloc_sizes[i]);
++		if (!mem) {
++			buddy_destroy(&st_buddy);
++			return -ENOMEM;
++		}
++
++		buddy_destroy(&st_buddy);
++	}
++
++	return 0;
++}
++
++static int test_buddy_alloc_free(void)
++{
++	const int iters = 800;
++	void __arena *mem;
++	int ret, i;
++
++	ret = buddy_init(&st_buddy,
++			     (arena_spinlock_t __arena *)&st_buddy_lock);
++	if (ret)
 +		return ret;
 +
-+	buddy_free_unlocked(buddy, addr);
++	for (i = zero; i < iters && can_loop; i++) {
++		mem = buddy_alloc(&st_buddy, alloc_free_sizes[(i * 5) % 8]);
++		if (!mem) {
++			buddy_destroy(&st_buddy);
++			return -ENOMEM;
++		}
 +
-+	buddy_unlock(buddy);
++		buddy_free(&st_buddy, mem);
++	}
++
++	buddy_destroy(&st_buddy);
++
++	return 0;
++}
++
++static int test_buddy_alloc_multiple(void)
++{
++	int ret, j;
++	u32 i, idx;
++	u8 __arena *mem;
++	size_t sz;
++	u8 poison;
++
++	ret = buddy_init(&st_buddy,
++			     (arena_spinlock_t __arena *)&st_buddy_lock);
++	if (ret)
++		return ret;
++
++	/*
++	 * Cycle through each size, allocating an entry in the
++	 * segarr. Continue for SEGARRLEN iterations. For every
++	 * allocation write down the size, use the current index
++	 * as a poison value, and log it with the pointer in the
++	 * segarr entry. Use the poison value to poison the entire
++	 * allocated memory according to the size given.
++	 */
++	idx = 0;
++	for (i = zero; i < SEGARRLEN && can_loop; i++) {
++		sz = alloc_multiple_sizes[i % 9];
++		poison = (u8)i;
++
++		mem = buddy_alloc(&st_buddy, sz);
++		if (!mem) {
++			buddy_destroy(&st_buddy);
++			arena_stdout("%s:%d", __func__, __LINE__);
++			return -ENOMEM;
++		}
++
++		segarr[i].block = mem;
++		segarr[i].sz = sz;
++		segarr[i].poison = poison;
++
++		for (j = zero; j < sz && can_loop; j++) {
++			mem[j] = poison;
++			if (mem[j] != poison) {
++				buddy_destroy(&st_buddy);
++				return -EINVAL;
++			}
++		}
++	}
++
++	/*
++	 * For SEGARRLEN iterations, go to (i * 17) % SEGARRLEN, and free
++	 * the block pointed to. Before freeing, check all bytes have the
++	 * poisoned value corresponding to the element. If any values
++	 * are unexpected, return an error.
++	 */
++	for (i = 10; i < SEGARRLEN && can_loop; i++) {
++		idx = (i * 17) % SEGARRLEN;
++
++		mem = segarr[idx].block;
++		sz = segarr[idx].sz;
++		poison = segarr[idx].poison;
++
++		for (j = zero; j < sz && can_loop; j++) {
++			if (mem[j] != poison) {
++				buddy_destroy(&st_buddy);
++				arena_stdout("%s:%d %lx %u vs %u", __func__,
++					   __LINE__, &mem[j], mem[j], poison);
++				return -EINVAL;
++			}
++		}
++
++		buddy_free(&st_buddy, mem);
++	}
++
++	buddy_destroy(&st_buddy);
++
++	return 0;
++}
++
++static int test_buddy_alignment(void)
++{
++	int ret, i;
++
++	ret = buddy_init(&st_buddy,
++			     (arena_spinlock_t __arena *)&st_buddy_lock);
++	if (ret)
++		return ret;
++
++	/* Allocate various sizes and check alignment */
++	for (i = zero; i < 17 && can_loop; i++) {
++		ptrs[i] = buddy_alloc(&st_buddy, alignment_sizes[i]);
++		if (!ptrs[i]) {
++			arena_stdout("alignment test: alloc failed for size %lu",
++				   alignment_sizes[i]);
++			buddy_destroy(&st_buddy);
++			return -ENOMEM;
++		}
++
++		/* Check 8-byte alignment */
++		if ((u64)ptrs[i] & 0x7) {
++			arena_stdout(
++				"alignment test: ptr %llx not 8-byte aligned (size %lu)",
++				(u64)ptrs[i], alignment_sizes[i]);
++			buddy_destroy(&st_buddy);
++			return -EINVAL;
++		}
++	}
++
++	/* Free all allocations */
++	for (i = zero; i < 17 && can_loop; i++) {
++		buddy_free(&st_buddy, ptrs[i]);
++	}
++
++	buddy_destroy(&st_buddy);
++
++	return 0;
++}
++
++#define BUDDY_ALLOC_SELFTEST(suffix) ALLOC_SELFTEST(test_buddy_##suffix)
++
++SEC("syscall")
++__weak int test_buddy(void)
++{
++	BUDDY_ALLOC_SELFTEST(create);
++	BUDDY_ALLOC_SELFTEST(alloc);
++	BUDDY_ALLOC_SELFTEST(alloc_free);
++	BUDDY_ALLOC_SELFTEST(alloc_multiple);
++	BUDDY_ALLOC_SELFTEST(alignment);
 +
 +	return 0;
 +}
 +
 +__weak char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
+new file mode 100644
+index 000000000000..4e56f388c43a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
+@@ -0,0 +1,79 @@
++// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include <unistd.h>
++
++#define __arena
++typedef uint64_t u64;
++typedef uint8_t u8;
++
++#include "libarena/include/common.h"
++#include "libarena/include/asan.h"
++#include "libarena/include/selftest_helpers.h"
++
++#include "libarena/libarena.skel.h"
++#include "libarena/libarena_asan.skel.h"
++
++static void test_libarena_buddy(void)
++{
++	struct libarena *skel;
++	int ret;
++
++	skel = libarena__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	ret = libarena__attach(skel);
++	if (!ASSERT_OK(ret, "attach"))
++		goto out;
++
++	ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_alloc_reserve));
++	if (!ASSERT_OK(ret, "arena_alloc_reserve"))
++		goto out;
++
++	ret = libarena_run_prog(bpf_program__fd(skel->progs.test_buddy));
++	ASSERT_OK(ret, "test_buddy");
++
++out:
++	libarena__destroy(skel);
++}
++
++static void test_libarena_asan_buddy(void)
++{
++	struct libarena_asan *skel;
++	size_t arena_pages = (1UL << 32) / sysconf(_SC_PAGESIZE);
++	int ret;
++
++	skel = libarena_asan__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	ret = libarena_asan__attach(skel);
++	if (!ASSERT_OK(ret, "attach"))
++		goto out;
++
++	ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_alloc_reserve));
++	if (!ASSERT_OK(ret, "arena_alloc_reserve"))
++		goto out;
++
++	ret = libarena_asan_init(
++		bpf_program__fd(skel->progs.arena_get_base),
++		bpf_program__fd(skel->progs.asan_init),
++		arena_pages);
++	if (!ASSERT_OK(ret, "asan_init"))
++		goto out;
++
++	ret = libarena_run_prog(bpf_program__fd(skel->progs.asan_test_buddy));
++	ASSERT_OK(ret, "asan_test_buddy");
++
++out:
++	libarena_asan__destroy(skel);
++}
++
++void test_libarena(void)
++{
++	if (test__start_subtest("buddy"))
++		test_libarena_buddy();
++	if (test__start_subtest("asan_buddy"))
++		test_libarena_asan_buddy();
++}
 -- 
 2.53.0
 
