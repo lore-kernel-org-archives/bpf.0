@@ -1,61 +1,61 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B324351C3A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55673537EB
 	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 04:27:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775190447; cv=none; b=USqgBI025sg0bR5hGbLpkOtGzyA5d3MX+pi63Ej/lfJGOmOYx2WTAdb0J4f6nXxxjroJPfeiVQ3Rt00L6yGqCX1tOWlz3My8cwbmuIPF0tkyU5q0/lWd7N7MTl4yL6vP/t7r8yZ//BuVI7q+eMJDSfGJC+I8FT0O9GzphhZyXlI=
+	t=1775190448; cv=none; b=Axwu4Lj08aXdrFW/c8tIspVAR6UXuwNmn+Gucm/XtrwKFSb0LAq30TcWxb6hcJ2Y02+LW4YfzPBdbkjWlX0ozVwzTCyLhvXeenr7oyQH4EVHKva6LGwmpY7I1KVwIqH/nB6ts3cjYJePhpzY3oNrAGyXuyCaNEZqHr0QmhDF80k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775190447; c=relaxed/simple;
-	bh=097UkMgcK70HYJdiA41N+qwQqusBvK0AO00+DHjsy64=;
+	s=arc-20240116; t=1775190448; c=relaxed/simple;
+	bh=BHTqbEiHnbzQxoQMn59TAPgT96iXhsKokmUSRT6r4Qg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yn6EQzIhIKbiX7oXk6AIP0UnJJ7C0mJetEUcDONxQSOMxyDv4suK6YIBhVE5Q/bRAELUNg7KXcrZ9KhzB2Me3O12G7k1x+ISkopOlqJ5mPudH8w4lmYy+jcmQhpR3y5N5UE4dXJW1c68HUq0XBX5yYc4S2CpT9x5H/nAhPfdyuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=z7+jHzID; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version; b=Gvw9EE25vRDs5loy2ym9D8B4ffFUN8GsNk8aM/1giElbtm92YRg6mPmmlhZodoTR8nvSJE2O84SCudFlYyLVwca3QQVtCAjxYgRgd0ctxQ9blHxokcWrP6P12aeChkOLpI5R7Vo7nEBzSMBtr1DutY46ABN+CLWQDb7VpExV4mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=EY5DlKgT; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="z7+jHzID"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-35da9c0c007so1305368a91.2
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="EY5DlKgT"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-35da01fc0baso1026504a91.2
         for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 21:27:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775190445; x=1775795245; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775190446; x=1775795246; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Pl/Ti/FpHPPleZG4gMmW4J4qgPDrrOiRipIRLq9I2QQ=;
-        b=z7+jHzIDcr5PyuRCF6VkziRDkvi5re9z0YY3ACEb84nbkFWKvJpt+HCgrhQXVEowWx
-         QzkPrBSfW1sXD+GFzGXsY8UXr7K2YjN/eCYCd/aF+wmag/C2OFiunrbXDKY0JTi+jYR3
-         IWstIbpjEc62BkiU8vwaKwD59pTEE8C4Z6YA2FaaZfFqDAzwEO5zxhAaQCpC0bvRReBE
-         ugN8a4zPgGddw1wy3zrf+7NHnJ4VLQuVc5MCmxhU9OHAosPb7WFJTvvCzsz0Qerf3Jor
-         PujB0WU3s5LJ/6oUVd98kwdLxHxhl+BA/uCtaH9I2XIgOr8zed4QHRo2VoPe2WTsEXn4
-         C/hg==
+        bh=mFbRW0oU+ZYgAtOD3dNumn0ssd6LZXksBKtlQoftxLs=;
+        b=EY5DlKgTfEl+L41GIeL2Es8403RMxwwCR9grg6cpTugCb574Bu+p0MVRnzGcSeDk9g
+         YZRichTZZTxjLNZtr7wAGoiTdjIosQPKYxEcZaIHhMWreG6szAxwtY/qOMpzKU7tXDbL
+         liZyLZ188xLUvOrnGgWrmV1DcUDOATeC1V8Ay4eAvSgGHXJBiZ5PXICPFlQU0nfRJhec
+         hSuBQXXmx5JSu0nyFStyt/LX8LgiwZD/g0uYvHsDBymPshYQzNRxF4R/gsNmgs0veM68
+         SRXzVHJRS4+ZWiInNlMY2caaOMLl4JhAqGK0eqGKdP0s5TnOuEO72B6X+jZPq9zJOLbw
+         lnGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775190445; x=1775795245;
+        d=1e100.net; s=20251104; t=1775190446; x=1775795246;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Pl/Ti/FpHPPleZG4gMmW4J4qgPDrrOiRipIRLq9I2QQ=;
-        b=cKVj/GIZG52KWtvtDRMYnh4WeCO/1TDHc9QWZX7l4h3HvBQvS8ysgMPBX7go8+BEQC
-         Nl08pnOGKxKdZ4br281B9QYSjgx9uxW7rRNkN4Rr4uNoh59sXNbN6KRK10/RKRVilcoS
-         5rXs1rNUs6uyV4gizVV8H0IeLPwY+cUwmsQQ3E6jyxwiZgRJRwj2mKlM7l0SWjBo0apD
-         LV8fcQorRY3+O2q75klh6gwJLuEMBPDqPhEIt0m0rrpV3uPTJds+KBfHcnOMkNvJkMrb
-         b/HZHFnDsnm54+0FhJzOpLXyiZZhK2p1bh+V1vyrIzxyDErxPEvQ+LaklcbgJ3sdgbay
-         6JxA==
-X-Gm-Message-State: AOJu0YwnJtz+nD2WTYaBckwgOHBwFasuKhPHIu6JJZnzgiUFMRVnBXH2
-	5ptY2xUt+1NNV9UtEwTCdE2jQOCh1662sqQEDFYF8Pjq2QyaQo2Lf789pFrPuZcybTugL5mCbMo
-	aAx24VJOX8w==
-X-Gm-Gg: AeBDievJAruMm70UMq3INP8OILB/dZjsOf8YYXgCwDmTFCQ/IsrleKBtxAT+1UTPvRN
-	Sxpqbn3CTipX5ZZnWAO6TC1u+WzjW8stIFFZBRwTKEz0fUzqgvL5n5gJNJmW9QRRQPuTi4R2wS8
-	HRWa9UMX24cK0XanOetY3Jnw4mI4Xvqs5ap3FzFuFaHsw/uS1A9+6cyn0HU/S7TX1fAMSUhrSdE
-	znC5ttydcGM4VvHR3BczroKMkUBhaNDzG5/QZBrOELQzfLT/E80GRDgLFJZIO/wlNIIvwseYjgl
-	DD/y17VBFPF4y6kbCVHYZDf1ZbJlsM0s9VHkr0hLfabRN0AEJ8Tr5VrGhl2PG69B8z3SXlidFBF
-	CiABxk7yzwzHPGXsqro2+LCrnHVLqFGc/AfNc8suFTHVDwioDOPan8dunCoviK/z2DAeWHeWFyq
-	gCqA==
-X-Received: by 2002:a17:90b:384e:b0:359:8de8:1229 with SMTP id 98e67ed59e1d1-35de68f7b3cmr1340428a91.21.1775190445378;
-        Thu, 02 Apr 2026 21:27:25 -0700 (PDT)
+        bh=mFbRW0oU+ZYgAtOD3dNumn0ssd6LZXksBKtlQoftxLs=;
+        b=Ncqn7IFckWfVuho14urKJP0FciDK024GAHY+oT+ZHFd/xUI8RPCLy754WXBlr48tfC
+         8lrxcTWJGxyIBZBRubH15W33mh7liIDJOl9GkduV2i4S8K96gB8R+qy0h64qBxen1oIT
+         V5ub4yVhwzUWZOYgJYew0miw1vJmcOzRmhETQl4basNLNANUBlV6ow2Z8R1rJKsi6mkB
+         4Q+wuRsL7xKolgvGaYVXAAwX6M8tnVosMK7iMyaH/ZlxqPqXkHO28cO6cUCcRB/LehLK
+         2zEhnMph2G1hVTs9duonD7cAHKxyOhusu2HXeXYxmAsHNN1XR0ogcbGUvs0FkqvFMNOd
+         9xLw==
+X-Gm-Message-State: AOJu0YykFHXe8CqNhHJ/H2updhuUnHKxhqZFdDopVMHRURCpXEpLPh/Q
+	Ve4hSu4gcOb+JukZwczOQHCSszWiIVm0Do7aUwbUBiO5Ol6n4cuSjpAYa2jkWNX1emgcK2kRTJS
+	T6YHMZ61fhA==
+X-Gm-Gg: AeBDievQOL8INIGpY1hdCF9BX2KjFwCfyaadltXfcaPoODlB6H5d1oBsoUlf/R7Ph4p
+	MryajmWcq5aGMiHXl6cXgU7A6Tnw0mAQE+6I9JMVYS/jOxatybrczP4yzzRGTIJ3ADF8XwKnHjy
+	vfxidEOahjYcOXeo2GnMtu9CZIHtrhBOdrNTGU65MKe4+/UTx10r15CcPpkN7z5BxYnTKS04oAN
+	9d827FuqTmouJUYUkC/BtxUcxardolK4NCVaQIM6va8/702UGiFS+9ZZ50Hc0SOywf5tSl9G0R2
+	CTWEntvxi9Oz/bsWeK3tSyIsm8Pp/5C+MZ4WGqxz49FvjJUAra+HSWa7jYEwmaftlhS3NdsD9M5
+	Rt43VgprVq7kev5FP1PJJUpX9hDrFAakqRwdmYooi3tvtkXpGYT1wV4wzifB7QPESqro34rX1DO
+	PjdZRW8TBESxnT
+X-Received: by 2002:a17:90b:3b86:b0:35b:a8cf:7960 with SMTP id 98e67ed59e1d1-35de678fa63mr1363843a91.3.1775190446133;
+        Thu, 02 Apr 2026 21:27:26 -0700 (PDT)
 Received: from krios ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe937925sm12970449a91.12.2026.04.02.21.27.24
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe937925sm12970449a91.12.2026.04.02.21.27.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 02 Apr 2026 21:27:25 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
@@ -66,9 +66,9 @@ Cc: ast@kernel.org,
 	daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v3 3/9] selftests/bpf: Move bpf_arena_spin_lock.h to the top level
-Date: Fri,  3 Apr 2026 00:27:14 -0400
-Message-ID: <20260403042720.18862-4-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 4/9] selftests/bpf: Deduplicate WRITE_ONCE macro between headers
+Date: Fri,  3 Apr 2026 00:27:15 -0400
+Message-ID: <20260403042720.18862-5-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260403042720.18862-1-emil@etsalapatis.com>
 References: <20260403042720.18862-1-emil@etsalapatis.com>
@@ -80,56 +80,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The bpf_arena_spin_lock.h header is useful for all programs and not
-just the selftests. Move it to the top level of the BPF selftests
-to make it more readily accessible.
+The WRITE_ONCE macro is identically defined both in bpf_atomic.h
+and in bpf_arena_common.h. Deduplicate the definitions by moving
+the macro to the commonly used bpf_experimental.h header.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h | 4 ++--
- tools/testing/selftests/bpf/progs/arena_spin_lock.c           | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h (99%)
+ tools/testing/selftests/bpf/bpf_arena_common.h | 4 ----
+ tools/testing/selftests/bpf/bpf_atomic.h       | 4 ----
+ tools/testing/selftests/bpf/bpf_experimental.h | 3 +++
+ 3 files changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-similarity index 99%
-rename from tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-rename to tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-index f90531cf3ee5..680c9e6cb35d 100644
---- a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-@@ -107,7 +107,7 @@ struct arena_qnode {
- #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
- #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
+diff --git a/tools/testing/selftests/bpf/bpf_arena_common.h b/tools/testing/selftests/bpf/bpf_arena_common.h
+index 16f8ce832004..a0503ecbc315 100644
+--- a/tools/testing/selftests/bpf/bpf_arena_common.h
++++ b/tools/testing/selftests/bpf/bpf_arena_common.h
+@@ -2,10 +2,6 @@
+ /* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
+ #pragma once
  
--struct arena_qnode __arena qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-+struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
+-#ifndef WRITE_ONCE
+-#define WRITE_ONCE(x, val) ((*(volatile typeof(x) *) &(x)) = (val))
+-#endif
+-
+ #ifndef NUMA_NO_NODE
+ #define	NUMA_NO_NODE	(-1)
+ #endif
+diff --git a/tools/testing/selftests/bpf/bpf_atomic.h b/tools/testing/selftests/bpf/bpf_atomic.h
+index c550e5711967..d77338ac7e6b 100644
+--- a/tools/testing/selftests/bpf/bpf_atomic.h
++++ b/tools/testing/selftests/bpf/bpf_atomic.h
+@@ -40,10 +40,6 @@ extern bool CONFIG_X86_64 __kconfig __weak;
+ /* No-op for BPF */
+ #define cpu_relax() ({})
  
- static inline u32 encode_tail(int cpu, int idx)
- {
-@@ -240,7 +240,7 @@ static __always_inline int arena_spin_trylock(arena_spinlock_t __arena *lock)
- 	return likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL));
- }
+-#define READ_ONCE(x) (*(volatile typeof(x) *)&(x))
+-
+-#define WRITE_ONCE(x, val) ((*(volatile typeof(x) *)&(x)) = (val))
+-
+ #define cmpxchg(p, old, new) __sync_val_compare_and_swap((p), old, new)
  
--__noinline
-+__noinline __weak
- int arena_spin_lock_slowpath(arena_spinlock_t __arena __arg_arena *lock, u32 val)
- {
- 	struct arena_mcs_spinlock __arena *prev, *next, *node0, *node;
-diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-index 086b57a426cf..6c04e7707644 100644
---- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-@@ -4,7 +4,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
--#include "bpf_arena_spin_lock.h"
-+#include "../bpf_arena_spin_lock.h"
+ #define try_cmpxchg(p, pold, new)                                 \
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index 2234bd6bc9d3..56214f7051c6 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -11,6 +11,9 @@
+ /* Convenience macro to wrap over bpf_obj_new */
+ #define bpf_obj_new(type) ((type *)bpf_obj_new(bpf_core_type_id_local(type)))
  
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARENA);
++#define READ_ONCE(x) (*(volatile typeof(x) *)&(x))
++#define WRITE_ONCE(x, val) ((*(volatile typeof(x) *)&(x)) = (val))
++
+ /* Convenience macro to wrap over bpf_percpu_obj_new */
+ #define bpf_percpu_obj_new(type) ((type __percpu_kptr *)bpf_percpu_obj_new(bpf_core_type_id_local(type)))
+ 
 -- 
 2.53.0
 
