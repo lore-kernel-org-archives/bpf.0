@@ -1,159 +1,152 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD363D3D1F
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 20:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD951291C10
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 20:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775247969; cv=pass; b=Qj0gZ3iiug8OZscLj8Qjeo/1AsXhkxiZaxlO4pnHJfO6Y/pRF4gCfUYsoYZDebeSt7wDGvPV2uOIkEkkDH4edm7DHlj7ecVnRrSTDQOvZbS7Ou9yFRIZIV58/Zmv/yAQW+bOWlGBTDQYMI8bfOOgRFiaTFzGGQSrMPnyvAbXMkQ=
+	t=1775249740; cv=pass; b=gtnxODF9n6f+E8m+oyXr+Nhzc5/oZQq94FHraZ4N9J7O4KW1uPZtM3WYi9GxyWVz8JKS/W92MA5wjIVgaXieG+0VIfWxL/OTrSuy0Ju/DuQOU6z9T58QaEz29yRRNX7OIhhmKW95l+RHR2LJArQoMaBNtcAMrY69ehfG9A5DMAs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775247969; c=relaxed/simple;
-	bh=W2GxyFfqeFK1bTj4ewMZeHp6pVveLFR7SfnOf570b0k=;
+	s=arc-20240116; t=1775249740; c=relaxed/simple;
+	bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tjz9snqiTk580ENdWjo8mixPiNKT7mut9vTA7EJTELsH35u0hmHoOFP2yKxt2CX6DRlFkgoApPkM8MKNbHm6M0r0igWTxmmmFF6Zjo5qopm1taGf91l+50PlFQ58uP5cCnYseJl9QLldzbStwwefn7RiNfZ/2J7E+5qRLJt4hDQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iTr23dff; arc=pass smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=tQ/RiXvj+xryknqsW1IZ9zwiFox5AJkwjKLRFNWxnkk7m3zhlJrBOMlKUJdGAq650rmR6G6yCODN0VB6tZu9T3PvgTsKtTFCT5RDJWzIl5QIB6WoXGGZYQnNc3YF5jOqI8JNf4X17xGLa94XY28d+quUm0oKkidnJ73ofroaoVQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mUvAmWKp; arc=pass smtp.client-ip=209.85.222.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iTr23dff"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-487012ce896so12339395e9.0
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 13:26:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775247967; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mUvAmWKp"
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-94e2ad66abcso683995241.1
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 13:55:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775249738; cv=none;
         d=google.com; s=arc-20240605;
-        b=X9gOwHqL3nKWmsO5Ipja+1aGCo0R/i6D6P76zwp7sB6MPSYIIo/LLN/k396RQ5QtGN
-         PT1+4mMtYGWsGiK20c4tABNflyUwJkf1rDzCHODNga+LY6V14pxmoL0GdLaeIB4HbIf9
-         daruaXmqYIjicOx6HbLSYyAvC3wjPL3BNV9cGw4bCzGiIOGFYwMz/4hvUUiRqp6wMIXX
-         1pjgYq0Aq3Pjh+QSYKn2ta5RrG9r4oM2c94WOk9e3I2Qd8JDiWVjz29nUtOYPnYmlAt3
-         6jTRnDm8frX1ijGUUzh4awN4OVhOCefwe+bSuKrIn5dr3ZnvGoC130Gz7Rfe6N5IR6MQ
-         HUKg==
+        b=DEgcGKk5vi4xS8mjYOl0dqi3++8v72jLQ2nq+vKMPPTRVOpfrxn7U6wQv8WlnxBE7I
+         4xecjkjG6Xf+kDOhDOdgNev7POvnKIOi/5Mk4H5FHXa+d6VUq/YzEGObYXL2O8P2KOuN
+         2B9nlZmYwU3cCFiUNAAisLe9caO/ThlFGVYIScJP7PWZvUurjDsTEgm7NBdNjD3+FGMj
+         LIkjr6Jr2iZtLN2FtySDlek83+SdK6f3fN/BfYdkoapqFc3Wv0ASEExiRImJkalHRVDA
+         HqxCZifQhnyP/r2uLuUviBlbt1Nn5nahg0Nk9jE9jsJUxj36j+BvpP/L4xaCtTR65IoT
+         3ofw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=pd4izFmvYMUm9D4Yts9HvyIDEGVgM1np9//icQ2Fftk=;
-        fh=5K7LlmBDhJRYJ+zNVkHjN8Qzx0sx61+mt+UfNHVnWCo=;
-        b=BnbfzuwPeA4GGMLpJXcA1xGUFWNwqp29tSbT/dETX569F4trW8TKOFYOr5W1VH3pPt
-         TSQ7XHloFTl/DXxMxljQzlmu3Ab/NwCesiEIRPyNesH+GanRlpiqo3M5ARqAYYtl+FLh
-         WpRRGwRQosK5o4dSIZ3X2Vsl77KMboLcakSmw9q84Kq1kppvCKxhCNBNsSah/v0gE8Gc
-         xauuV9Uky5s8Nbn7Z3AbPGenUK5sSiF03Ag2sJsU3gqktlYGAVDjKsLAwG1SLdyFZaNo
-         nJ9kOYdKf55S0jcLfCBW6vJTx1fTxDY1r/da73zG8ErcFCISRNt38zvIxMUT2EL/plW7
-         7XIg==;
+        bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
+        fh=D0U7xkmrpq3vpbucBdB5oaK0w2+LJrL/wExdhlU6JuE=;
+        b=FspA7iqyQ0Nqv9kSmza2nMXK9BpEB+UEObQXA2gmtd3+ZKVWfbuaO+cXjP612xW1aV
+         AwBLeppFAV31+GRpkDf5ZtrKoRwsFAIySE0fTmn56IEVuqikH+CSYII5ZpNRlTQiarxD
+         BUxQ31+zx8iYlv9uRImNSyJBV3qWIoxSST4T9bMc9PxSaLVniVOX9Wf3bG9J43VIq9VX
+         xbfYAprbqHFu/VTpV/JufVbMkAsPqFyUeXKnLCZIIhOVM3UD1bLISXwoWAHRoXUX50/e
+         Dv0QmJFbkfHXYrGKmhPrSzWCUmOwUlBbke7UWTo2AxsL3pJb4+zreNoxwDjxcwe+BOWe
+         966A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775247967; x=1775852767; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775249738; x=1775854538; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pd4izFmvYMUm9D4Yts9HvyIDEGVgM1np9//icQ2Fftk=;
-        b=iTr23dffl9NDD3l6RkpsmG5tok1AxveQUsEyYXnWr9iDU7GOUAYVUpsuuhxcGbwX/U
-         ws4XYOXK0BjFBXhBzg/YmIKhbl7Q3q7IP2tVBCa/bGC3HfVT1ileiAaSnPbT8HW4dLI4
-         Du2C4mHy1KM8dd8Y0PFUfmGOqfjwIeyJVurXwq2Rh69A5ZOr7Pp0aiMMX9gMCOcok3Q8
-         0tTqlj0vwSMcjR8uRhI14dWFn8G1TamNhCxGPLcqp96KZaeSLjapLV8XCrMMyluaBiDN
-         hubOau9kLovFcj/U/2FfDTvxYAy23wsSWoLsjITVY4OUgdkeCV9ejQ05zv7oriUJ51Bv
-         Ie2w==
+        bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
+        b=mUvAmWKpvN/9LbApy+wztqY3qewQZwuDLW3ValldzBtNBP0+fu5uHtoGWZ0sGlTCwx
+         zOUMdcFVPwFvdyK8KbddaZIAHpbesm3s0VY857T9dH/eyQ+eEngRz69TwzB4n87ykIn6
+         LW02Lx4OSBBalkO9vXDfbfjppm1Si+yX7rfCULkaSsR50CAAcH/v0JZ3LGxROuxKkMvj
+         7dEEu+5JV57dqwxxbU61QqhHEW9jggHwG35XnJT0fzGIptpPPUdXIA0bCAIn2JXiYjp/
+         gqj3mgy668Npm0GmsrxL6t5fnF+FFAs8Fhr1IZBD4rp7LyfaoYgFG6oeuQstnpltgag5
+         5Wxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775247967; x=1775852767;
+        d=1e100.net; s=20251104; t=1775249738; x=1775854538;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=pd4izFmvYMUm9D4Yts9HvyIDEGVgM1np9//icQ2Fftk=;
-        b=PA7RZmVTYko1YqlDCTwJswnL7vpIHNELvYTb9tWByrw2CusmHWqms3LwdeNQVm4DHf
-         QRRVgmJr1QOCRQP+rN1tw68dIIQBbDJ8b+N40Aviw7tyrcKnoi2oigC+4Wykr3OVEcrd
-         k8rac1QL427rDUgJC+fdegAUfgwpDWL2IAevguDZeVQ1VRdvsdyAS1n7TX1BLgkncotj
-         /6qmGSO3NswqnrT4UkmLgi2bngsWEWLGlxwhxJUmH8kfmd4IhHb9XSDP5myDL+m9+T0z
-         yIL/VEDgOXNkHLErXqY619TxKrGijG9pC3OBtowGagzt6V7BU7ouiqf21L6iUHWoFJDu
-         hXjQ==
-X-Gm-Message-State: AOJu0YwQBQAIOCPcrUqs1/ijvqKca69zWd7Zn4nvaCzC3jWaVsOZWiJw
-	FfJcaB6VC1NdBOfAjX1zSeRnZpXAvrAKJi/Ton25I/dTauznh4KZDwzLUkaxcEZUbsXnE0pknzs
-	p+ljb9rhuwjsx80MldHhA71tdCd70LLQ=
-X-Gm-Gg: ATEYQzxA4cs46Y/I+GiDTqn+7RMr3Jbut1Wn3vcjKRRlplUvSoPGQU8upYLuo+g9Aao
-	U2/p6CLXyeiubveaNb26xYOFWaIQNYg07xhAtPU5DWOIUG2niEwMy9Ssa5JP/4OiYiy0Vma5uJR
-	NptmIPywH8oFpfHRuTYDPqrL2FXUW6OpD904j11e9Yp1F6bapCmK0E+8iz8kgLPyNbo5sGqferT
-	Bzl4zSWa3SmkJslrcsmrHSpi+iV2tiur7UuBdQcqxSpPFBCJlRSzhG0bJbdEtTj7dISLZ1S3BRr
-	qVNNrJ/2mzRR5tJ43NZe6NzqJHzXJo8yiwNzd+BlMXOjqZIXtN/Hdd3sDHFRwCj2eNb81CIF3O+
-	aBZ8sNBMASAo7Oxh7KnTz4iJTdg==
-X-Received: by 2002:a05:600c:3b18:b0:485:35d3:ce59 with SMTP id
- 5b1f17b1804b1-4889970dbc6mr59634425e9.10.1775247966577; Fri, 03 Apr 2026
- 13:26:06 -0700 (PDT)
+        bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
+        b=C+5ow18goTuXw13bc158cJ+MO55kXxp/mdIcg2+BYGRNmX5SEQew65p07HHA3qbia7
+         VbfWgoNzvxH71RfveIUE6AXm/axpzbwqBZZ3MdnpDhNQYPzJIAL3aGsm5cuvDcCkyIb0
+         MpNReDO5EBCyb3c86w3OOgygfz/vGFhGe0BVLae4RflS9ye52GLtSR7i3Xxd3wk/iwId
+         6CxokdPs49TSlev+tiw4OQKYB/rXINysKe1QFuUnKCrqod/ziYnup79NJdt2pcIw4TO+
+         0Q6CpM/cefUgpCYpxMS16/1sBpJ9Vx3EXeV5boN3qRXnSkgwcxjJPhhyZL77G10xpssM
+         89ow==
+X-Forwarded-Encrypted: i=1; AJvYcCX92mivomDODo0gb+6IJcvp6tV5zCiNJS/zqDyge7u4xwQD43BMA0rbkIB8C6aN7VTx4vc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6SiUlXqTtFGPQu59FeyKwtW760NP2Sidqki4SyffJKlXJn4+B
+	Iz9yWieVyEvxQti2BsGPXTzwysrFRd5htiTAR5H0vKHGQqKm1YOv7pU6h/CIDkaMPHue1HEaklK
+	ch+mMipfFkpqQhHK4n3ycdeTIk9T2FfjRo+v8oP2S
+X-Gm-Gg: AeBDietKTscCQ+NhRXCrT/exBEQ85Sz5fIuv7NG945Z/F+Byw8p64VQeuS8yMVZdL4E
+	qqiltkVdByQiOXgxH3YvCW3wTmGpcY4SnOC1mXdpTIl7kEhzanXIuHx/kkgsPAzyQZxhWqxAgaa
+	M2acx/ppR9CSvBDU5Tlx5UMPwkyt2+bDKh1U78MNCtA+sbhgBKAHWSPqc2nQRDIK9MEv6GQ2bpV
+	AH6QlMOSLflx5wumhN7mzYrBn1pkjXNDQyWWWL4sBwNKnl8BDrkr/vibY3oZKiHOyinbDxOqLl8
+	iImz3yEnDTo6QxfGxhQ=
+X-Received: by 2002:a05:6102:b14:b0:605:26eb:cc1a with SMTP id
+ ada2fe7eead31-605a512c49dmr1509501137.29.1775249737225; Fri, 03 Apr 2026
+ 13:55:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403042720.18862-1-emil@etsalapatis.com> <20260403042720.18862-3-emil@etsalapatis.com>
-In-Reply-To: <20260403042720.18862-3-emil@etsalapatis.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 3 Apr 2026 13:25:55 -0700
-X-Gm-Features: AQROBzD8m_Xst59hlHS6zRXcIcbSsaFZdJ0lkffFDHIvV2dRJv0j7GwPCS5vCoY
-Message-ID: <CAADnVQLGfsEsMp=yhn6wk03AwXkWgGf3KF9UL6U0-SbuhtbzJw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/9] selftests/bpf: Add test for scalar/arena
- pointer addition
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
-	Emil Tsalapatis <etsal@meta.com>
+References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-4-laoar.shao@gmail.com>
+ <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
+In-Reply-To: <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
+From: Dylan Hatch <dylanbhatch@google.com>
+Date: Fri, 3 Apr 2026 13:55:25 -0700
+X-Gm-Features: AQROBzDS37OjmfrI7p7dlg7HXRfbNYrPo6MbDjUEgtIBQmy-W82lfbmdNqsszdI
+Message-ID: <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
+To: Song Liu <song@kernel.org>
+Cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org, jikos@kernel.org, 
+	mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
+	rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
+	kpsingh@kernel.org, mattbobrowski@google.com, jolsa@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 9:27=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.co=
-m> wrote:
+On Fri, Apr 3, 2026 at 9:19=E2=80=AFAM Song Liu <song@kernel.org> wrote:
 >
-> From: Emil Tsalapatis <etsal@meta.com>
+> On Thu, Apr 2, 2026 at 2:26=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com>=
+ wrote:
+> >
+> > Add a new replaceable attribute to allow the coexistence of both
+> > atomic-replace and non-atomic-replace livepatches. If replaceable is se=
+t to
+> > 0, the livepatch will not be replaced by a subsequent atomic-replace
+> > operation.
+> >
+> > This is a preparatory patch for following changes.
 >
-> Add a selftest that ensures scalar +=3D ptr_to_arena instructions
-> are accepted by the verifier.
->
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->  .../selftests/bpf/progs/verifier_arena.c      | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
-esting/selftests/bpf/progs/verifier_arena.c
-> index c4b8daac4388..450e8f1181cd 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> @@ -477,4 +477,33 @@ int arena_kfuncs_under_bpf_lock(void *ctx)
->
->         return 0;
->  }
-> +/*
-> + * Test that scalar +=3D PTR_TO_ARENA correctly upgrades the
-> + * destination register to a PTR_TO_ARENA.
-> + */
-> +SEC("syscall")
-> +__success __retval(0)
-> +int scalar_add_arena_ptr(void *ctx)
-> +{
-> +#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+> IIRC, the use case for this change is when multiple users load various
+> livepatch modules on the same system. I still don't believe this is the
+> right way to manage livepatches. That said, I won't really NACK this
+> if other folks think this is a useful option.
 
-I think the #if can be removed, since the whole test is in asm?
+In our production fleet, we apply exactly one cumulative livepatch
+module, and we use per-kernel build "livepatch release" branches to
+track the contents of these cumulative livepatches. This model has
+worked relatively well for us, but there are some painpoints.
 
-> +       int __arena *result, *arena_ptr;
-> +
-> +       /* Needed for the verifier to link the arena to the subprog. */
-> +       volatile char __arena *base =3D arena_base(&arena);
-> +
-> +       /* Passing base here to avoid optimizing it out during compilatio=
-n. */
-> +       asm volatile (
-> +               "%[arena_ptr] =3D 8192;"
-> +               "%[arena_ptr] =3D addr_space_cast(%[arena_ptr], 0x0, 0x1)=
-;"
-> +               "%[result] =3D 12;"
-> +               "%[result] +=3D %[arena_ptr];"
-> +               : [result] "=3Dr"(result),
-> +                 [arena_ptr] "=3D&r"(arena_ptr)
-> +               : "r"(base)
-> +               :
-> +       );
-> +#endif
-> +       return 0;
-> +}
-> +
->  char _license[] SEC("license") =3D "GPL";
-> --
-> 2.53.0
+We are often under pressure to selectively deploy a livepatch fix to
+certain subpopulations of production. If the subpopulation is running
+the same build of everything else, this would require us to introduce
+another branching factor to the "livepatch release" branches --
+something we do not support due to the added toil and complexity.
+
+However, if we had the ability to build "off-band" livepatch modules
+that were marked as non-replaceable, we could support these selective
+patches without the additional branching factor. I will have to
+circulate the idea internally, but to me this seems like a very useful
+option to have in certain cases.
+
 >
+> In case we really want a feature like this, shall we add a replaceable
+> flag to each function (klp_func)? This will give us fine granularity
+> control. For example, user A has a non-replaceable livepatch on
+> func_a; later user B wants to patch another version of func_a. Then
+> some logic can detect such a conflict and reject the load of user B's
+> livepatch. Does this make sense?
+
+I agree with this. The ability to reject livepatches that try to
+change functions that have already been patched seems like an
+important safeguard.
+
+Thanks,
+Dylan
