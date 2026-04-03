@@ -1,92 +1,65 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013025.outbound.protection.outlook.com [40.107.201.25])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B5138C412;
-	Fri,  3 Apr 2026 09:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.25
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775207468; cv=fail; b=ORnya7o25An4yXsa6Li7Z6klLjYXw3QHHuY7ypuuBIZrmcU9AEIfMsZ6GIMZoPy2S8TkvhUgFvrtG5+GKJj94fKlX21t0yNen2fyXkJLlKLWcLERfn89uchz2DXvQQyjX9ZfWcJ78Y6q8ih1gnV/SHIB1HJJQtFOTX/v6PrQz3w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775207468; c=relaxed/simple;
-	bh=EkY8c2QQPzxv8j2oIGLfR3CYz+Ae/VCC9II+U8UcziU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZOH6oNKIkpplAv/gv8k8itgluaqDMVpicvfoes6xG9W0DBIDAoUiFdyzyHw8qwafzrfmW8/k7QW3X6ll5NdikS+6dipu8QuXBZ8iSQWN1WP8xls9C0q5mycSDMvfub6C1QIeZX+6KU6/XIsVGO+1LpKNF/wGhgquh+XKDn1LJeg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ZpFko8/l; arc=fail smtp.client-ip=40.107.201.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZpFko8/l"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bJrtHNA6TbJCx3BUBg3Yw+UtOTUfCxvDeAzUHfI+A1aqwnZG/UGz4iFTYA/n9sxP7b57gFNZ45iDSkzSP2AN+ODve7zKzJaHBteZVpe18GxZOIhF+dq/0aZLsdZbjGh+UtfIjpvyxy5RX6VJOoXWuKRrOiBpNs7sE4uSLViDdAi+hFgXFSQaHBZT0/T0fL7YBgUE8B2Osx42JYPMKc6a0V9JhbNzKVRDGB2G8nLl8vp1bRrCrclbZ78yo/3X6QGtKvZI01dafUtv4ynXolCxeTSKFqv+jYS3AdPdMZJocmlLpCVCQyVc2kSacxhNjcjYO54KaclPTDQ/vTXJXktAIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1sbWdnrjXMcAGaIUoY8btvw4kpvQh3helWrysZixPqs=;
- b=MEHQQf9GfXml2zqsIaRxiVYiFW5ERs376pB3ZHwNESOe+R0y1mCIIrRoZxIS2nQUjGUXIH+D+rGpPVXfsjyBnp1lR/0Ga1T5ynvuT5LPFHj0L+1ukVwGD9+H+n1hHjEijE/f2u0XbtrsmbPt+SiFZoUcg0dKM0jBEdUC84gT7TS95SG4d1jAPBOTU5Xws30fB1pj6cJSSgxiRvhrzFuyTO42Yhm2lRAQksLk8PxKkNvxpnYdC5WjhusJSvJcf8O6xCdZEKtBtbja+rBzXtVQRe1x8idg7KqGL3RujYkMWzMFZ185Ecq4J+h6y4LeBU+zA5xRl0Q7E5XrLZHbGwqjHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1sbWdnrjXMcAGaIUoY8btvw4kpvQh3helWrysZixPqs=;
- b=ZpFko8/lTUx5bYowBHyOiN3wT955aMfymRHDodXgGwzKJJzfTgWdHnGLjM+p4wTkHCuy1WbRPZdyCOMJpJLCdnD1P5MtHz4K8Ayx2f3/jrUbcIy/jYRm2jOeQJh7tSu4/GqZbfnoY9Cx4S/v+NvCMo2R/DY42L8eFRMiBb7SeW6M0DgJPhbweonmYsnKoIdUcByII8Lk+7zNn1ueV4aoHVtPrh0g/cSRvg5WSef6lbDOoosGCtj9nr0JsmK2swdySDtBuheYXtBoKgPu48CSnyu9XznxhNQbDdnGgRvy5wg89x1Sei+ZX9Api8MbzSREKGGaQ6ReE25VO3AUwMSF/A==
-Received: from BY3PR05CA0035.namprd05.prod.outlook.com (2603:10b6:a03:39b::10)
- by PH7PR12MB5656.namprd12.prod.outlook.com (2603:10b6:510:13b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Fri, 3 Apr
- 2026 09:10:59 +0000
-Received: from MWH0EPF000C618F.namprd02.prod.outlook.com
- (2603:10b6:a03:39b:cafe::71) by BY3PR05CA0035.outlook.office365.com
- (2603:10b6:a03:39b::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9769.17 via Frontend Transport; Fri,
- 3 Apr 2026 09:10:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- MWH0EPF000C618F.mail.protection.outlook.com (10.167.249.103) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.17 via Frontend Transport; Fri, 3 Apr 2026 09:10:58 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 3 Apr
- 2026 02:10:40 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 3 Apr
- 2026 02:10:39 -0700
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Fri, 3 Apr
- 2026 02:10:32 -0700
-From: Tariq Toukan <tariqt@nvidia.com>
-To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>
-CC: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Dragos
- Tatulea <dtatulea@nvidia.com>, Cosmin Ratiu <cratiu@nvidia.com>, Simon Horman
-	<horms@kernel.org>, "Jacob Keller" <jacob.e.keller@intel.com>, Lama Kayal
-	<lkayal@nvidia.com>, "Michal Swiatkowski"
-	<michal.swiatkowski@linux.intel.com>, Carolina Jubran <cjubran@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>, Daniel Zahka <daniel.zahka@gmail.com>,
-	Rahul Rameshbabu <rrameshbabu@nvidia.com>, "Raed Salem" <raeds@nvidia.com>,
-	<netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, Gal Pressman
-	<gal@nvidia.com>
-Subject: [PATCH net-next V2 5/5] net/mlx5e: XDP, Use page fragments for linear data in multibuf-mode
-Date: Fri, 3 Apr 2026 12:09:27 +0300
-Message-ID: <20260403090927.139042-6-tariqt@nvidia.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20260403090927.139042-1-tariqt@nvidia.com>
-References: <20260403090927.139042-1-tariqt@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6052F358389;
+	Fri,  3 Apr 2026 09:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775208637; cv=none; b=CSGuJK8JXPLyKPT1lRrWpRtKy1oIGqmWQNf/5LC3LTwXnVWOHnq1lyeT0yzk7/DYvZmce+4hheF/3j6aD0jZXTiR8KKxaGYKZf1o/BiH50vp/u21cUJImnpaM7IA/1APejq3UtfRk/q26zcoVkDO4jI8AS/49POx/SgIQN8UPYo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775208637; c=relaxed/simple;
+	bh=pbshwIl8hI0EgiSoGPHH3AwYAcRn9AVdXZ1/v9eamj4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=swvQooy8rbavLo9JygLvKofIqZWeZqHF7deZpfEtEOAHD90f30ESqIQBePsLQu+G2TYJqqOi+/AiGV0Hi2V6m7vlRVm1ei7JEvxa51ZkCYykTv01gyFM8/hJZiKxuWxjDvVuNlO8v7RQPJFf3OIifVL/MiKojAcbwA5CO8gMr/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fnD314lQxzYQttf;
+	Fri,  3 Apr 2026 17:30:05 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 13D864056E;
+	Fri,  3 Apr 2026 17:30:31 +0800 (CST)
+Received: from localhost.huawei.com (unknown [10.67.174.243])
+	by APP1 (Coremail) with SMTP id cCh0CgCXmdmziM9pq1_jDA--.17616S5;
+	Fri, 03 Apr 2026 17:30:30 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+	Shahab Vahedi <list+bpf@vahedi.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Luke Nelson <luke.r.nels@gmail.com>,
+	Xi Wang <xi.wang@gmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Wang YanQing <udknight@gmail.com>
+Subject: [PATCH bpf-next v11 3/5] bpf: Add helper to detect indirect jump targets
+Date: Fri,  3 Apr 2026 09:09:13 +0000
+Message-ID: <20260403090915.473493-4-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260403090915.473493-1-xukuohai@huaweicloud.com>
+References: <20260403090915.473493-1-xukuohai@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -94,280 +67,154 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000C618F:EE_|PH7PR12MB5656:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b14c3e9-bbef-4fb9-7b07-08de9160eb87
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700016|82310400026|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	b2o57Isp+Kwm6S9W8TXLWkXPEGKOqt3L7Fpqc0cQwg4C6QWOwD0FZ+biH9Vz2cXjN3ZiZLp0mXTSPGndMrYJ6/xsRzNyaQhRrM9JlPBVrJxnVY3+9PAO1rQoH2wIQFGe64PzY9a0NKW3vTgHw0CW/IJ/DP4JIwG8HfS01+exmpIe5QB+KKJGcxx2+UvdCA1kHVVUjFn3sBjY5/3QKlPvT1wmtMfYVc3DYLYk9+pSb+hgR/tvQ4Ou7H+bLb2kZSkKNZ1kpUX9aS67E+8wHWpQMbCffmyuHedqWpUmgZ7eRVMhDio7E28owKc91Y3UTcK4ACp7HTPyFwspGULdotgLjV0q560h/BUWPU2k1X6h57AmeUvJeslQZ/phrM+oUvcm3YzHJtJnqch5siWw48gjlaQ1T0nE4888/Qy/lwROHcWtKsMBB0aAE9pGEMdrlK3Ixkke1QwvVy6sBpTVoH0sTHWr4Lq+c7A6JQc83XhaJlPyCm4J44vpstjEb67lv7A6hIDn7VJNk4wmmJdBxlsr7xrY5FE071ePqd+oqfmaF92byMkiNy/5Xv1YEmmgboAWGCK8jlFaLfa64OMgau/tvrzfYrWuGO3NluvH8QnbPym+sCEHEG/awFK9XTfiBoyRHM0ZHHoys0oEgclWLOqwzH6jenjj9YQmeHi+AW6Ck2T9e9pZxRKb0AyOGRKvshjUdhhsWmzf3ukggiSgQN5eyAtSg6yTGbKXHy1T/mllywFx/6VnLkhvmA+C0nDcxCP//U3B8h3Wz/r9lyNVzDdHJg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700016)(82310400026)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	ugQjkdb1KIlpp+LeXBUosL8oaRufyBYSjmEgawx99UqSvf6rOvKXGV+9GN4+KWPi7wzDraaWKWy4sMgRPBWGbLPhNtvT6s9xcB+SACoYPqu3uUaVKHUnJu5GW3DLm7yuKGb929+SMmAFfmDd8Nt9SMnBO+pnOwgJb6hsuwLX/94HvpawyOYcHl5Cw3N0oJWLMTxpB7BGl0tmK+46f30Id21vEyqvPn4vhMk6oiWo7z/RATKMg0FlsF+L/jz3SvYEQUlDk3wsuaHfI0liAiDatBwiHph/kTF2N/uwMzyy/TzChYOpvWrc9zWZJA4yyjwqN78l+M9SznFlwpnAWZE3sTCvw5sTEKpMQkLmtvHuQEXzx+sI0Ujun1qd1YvOs7ZEaRDv+oDaw7JWIdXdqV+IibkA37oBcgAXbLPLPYqgfNYxuhwQV5qQX/CrZLiY5eUL
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Apr 2026 09:10:58.6049
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b14c3e9-bbef-4fb9-7b07-08de9160eb87
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000C618F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5656
+X-CM-TRANSID:cCh0CgCXmdmziM9pq1_jDA--.17616S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFWDGF4UZF17XF47Gw4fuFg_yoW7JFy7pF
+	4kWr93AF4kZFZrur9rAa1jyry3Ja1rW345CFWxC348AayYgr1vqFWFgr1avF95trWrC3WI
+	vF4jvr45WFyUZFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU
+	IF4iUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-From: Dragos Tatulea <dtatulea@nvidia.com>
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Currently in XDP multi-buffer mode for striding rq a whole page is
-allocated for the linear part of the XDP buffer. This is wasteful,
-especially on systems with larger page sizes.
+Introduce helper bpf_insn_is_indirect_target to check whether a BPF
+instruction is an indirect jump target.
 
-This change splits the page into fixed sized fragments. The page is
-replenished when the maximum number of allowed fragments is reached.
-When a fragment is not used, it will be simply recycled on next packet.
-This is great for XDP_DROP as the fragment can be recycled for the next
-packet. In the most extreme case (XDP_DROP everything), there will be 0
-fragments used => only one linear page allocation for the lifetime of
-the XDP program.
+Since the verifier knows which instructions are indirect jump targets,
+add a new flag indirect_target to struct bpf_insn_aux_data to mark
+them. The verifier sets this flag when verifying an indirect jump target
+instruction, and the helper checks the flag to determine whether an
+instruction is an indirect jump target.
 
-The previous page_pool size increase was too conservative (doubling the
-size) and now there are much fewer allocations (1/8 for a 4K page). So
-drop the page_pool size extension altogether when the linear side page
-is used.
-
-This small improvement is at most visible for XDP_DROP tests with small
-64B packets and a large enough MTU for Striding RQ to be in non-linear
-mode:
-+----------------------------------------------------------------------+
-| System               | MTU  | baseline   | this change | improvement |
-|----------------------+------+------------+-------------+-------------|
-| 4K page x86_64 [1]   | 9000 | 26.30 Mpps | 30.45 Mpps  | 15.80 %     |
-| 64K page aarch64 [2] | 9000 | 15.27 Mpps | 20.10 Mpps  | 31.62 %     |
-+----------------------------------------------------------------------+
-
-[1] Intel Xeon Platinum 8580
-[2] ARM Neoverse-N1
-
-Signed-off-by: Dragos Tatulea <dtatulea@nvidia.com>
-Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  6 ++
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 25 ++++++--
- .../net/ethernet/mellanox/mlx5/core/en_rx.c   | 60 +++++++++++++++----
- 3 files changed, 74 insertions(+), 17 deletions(-)
+ include/linux/bpf.h          |  2 ++
+ include/linux/bpf_verifier.h |  9 +++++----
+ kernel/bpf/core.c            |  9 +++++++++
+ kernel/bpf/verifier.c        | 18 ++++++++++++++++++
+ 4 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index 592234780f2b..2270e2e550dd 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -82,6 +82,9 @@ struct page_pool;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 05b34a6355b0..90760e250865 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1541,6 +1541,8 @@ bool bpf_has_frame_pointer(unsigned long ip);
+ int bpf_jit_charge_modmem(u32 size);
+ void bpf_jit_uncharge_modmem(u32 size);
+ bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
++bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
++				 int insn_idx);
+ #else
+ static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+ 					   struct bpf_trampoline *tr,
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 512f7becc3dd..3f55ecb0ffb5 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -578,16 +578,17 @@ struct bpf_insn_aux_data {
  
- #define MLX5E_PAGECNT_BIAS_MAX U16_MAX
- #define MLX5E_RX_MAX_HEAD (256)
-+#define MLX5E_XDP_LOG_MAX_LINEAR_SZ \
-+	order_base_2(MLX5_SKB_FRAG_SZ(XDP_PACKET_HEADROOM + MLX5E_RX_MAX_HEAD))
+ 	/* below fields are initialized once */
+ 	unsigned int orig_idx; /* original instruction index */
+-	bool jmp_point;
+-	bool prune_point;
++	u32 jmp_point:1;
++	u32 prune_point:1;
+ 	/* ensure we check state equivalence and save state checkpoint and
+ 	 * this instruction, regardless of any heuristics
+ 	 */
+-	bool force_checkpoint;
++	u32 force_checkpoint:1;
+ 	/* true if instruction is a call to a helper function that
+ 	 * accepts callback function as a parameter.
+ 	 */
+-	bool calls_callback;
++	u32 calls_callback:1;
++	u32 indirect_target:1; /* if it is an indirect jump target */
+ 	/*
+ 	 * CFG strongly connected component this instruction belongs to,
+ 	 * zero if it is a singleton SCC.
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 0327008ba5e3..2539ae1b4395 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1578,6 +1578,15 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bp
+ 		env->blinded_insn_aux_len = clone->len;
+ 	return clone;
+ }
 +
- #define MLX5E_SHAMPO_LOG_HEADER_ENTRY_SIZE (8)
- #define MLX5E_SHAMPO_WQ_HEADER_PER_PAGE \
- 	(PAGE_SIZE >> MLX5E_SHAMPO_LOG_HEADER_ENTRY_SIZE)
-@@ -596,6 +599,7 @@ struct mlx5e_mpw_info {
++bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
++				 int insn_idx)
++{
++	if (!env)
++		return false;
++	insn_idx += prog->aux->subprog_start;
++	return env->insn_aux_data[insn_idx].indirect_target;
++}
+ #endif /* CONFIG_BPF_JIT */
  
- struct mlx5e_mpw_linear_info {
- 	struct mlx5e_frag_page frag_page;
-+	u16 max_frags;
- };
+ /* Base function for offset calculation. Needs to go into .text section,
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3378b373a461..4d8b6dd56d80 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4049,6 +4049,11 @@ static bool is_jmp_point(struct bpf_verifier_env *env, int insn_idx)
+ 	return env->insn_aux_data[insn_idx].jmp_point;
+ }
  
- #define MLX5E_MAX_RX_FRAGS 4
-@@ -1081,6 +1085,8 @@ bool mlx5e_reset_rx_moderation(struct dim_cq_moder *cq_moder, u8 cq_period_mode,
- bool mlx5e_reset_rx_channels_moderation(struct mlx5e_channels *chs, u8 cq_period_mode,
- 					bool dim_enabled, bool keep_dim_state);
- 
-+void mlx5e_mpwqe_dealloc_linear_page(struct mlx5e_rq *rq);
++static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
++{
++	env->insn_aux_data[idx].indirect_target = true;
++}
 +
- struct mlx5e_sq_param;
- int mlx5e_open_xdpsq(struct mlx5e_channel *c, struct mlx5e_params *params,
- 		     struct mlx5e_sq_param *param, struct xsk_buff_pool *xsk_pool,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index aa8359a48b12..4ba198fb9d6c 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -371,11 +371,11 @@ static int mlx5e_rq_alloc_mpwqe_info(struct mlx5e_rq *rq, int node)
+ #define LR_FRAMENO_BITS	3
+ #define LR_SPI_BITS	6
+ #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
+@@ -21227,12 +21232,14 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
+ 	}
  
- static int mlx5e_rq_alloc_mpwqe_linear_info(struct mlx5e_rq *rq, int node,
- 					    struct mlx5e_params *params,
--					    struct mlx5e_rq_opt_param *rqo,
--					    u32 *pool_size)
-+					    struct mlx5e_rq_opt_param *rqo)
- {
- 	struct mlx5_core_dev *mdev = rq->mdev;
- 	struct mlx5e_mpw_linear_info *li;
-+	u32 linear_frag_count;
- 
- 	if (mlx5e_rx_mpwqe_is_linear_skb(mdev, params, rqo) ||
- 	    !params->xdp_prog)
-@@ -385,10 +385,22 @@ static int mlx5e_rq_alloc_mpwqe_linear_info(struct mlx5e_rq *rq, int node,
- 	if (!li)
- 		return -ENOMEM;
- 
-+	linear_frag_count =
-+		BIT(rq->mpwqe.page_shift - MLX5E_XDP_LOG_MAX_LINEAR_SZ);
-+	if (linear_frag_count > U16_MAX) {
-+		netdev_warn(rq->netdev,
-+			    "rq %d: linear_frag_count (%u) larger than expected (%u), page_shift: %u, log_max_linear_sz: %u\n",
-+			    rq->ix, linear_frag_count, U16_MAX,
-+			    rq->mpwqe.page_shift, MLX5E_XDP_LOG_MAX_LINEAR_SZ);
-+		kvfree(li);
-+		return -EINVAL;
-+	}
-+
-+	li->max_frags = linear_frag_count;
- 	rq->mpwqe.linear_info = li;
- 
--	/* additional page per packet for the linear part */
--	*pool_size *= 2;
-+	/* Set to max to force allocation on first run. */
-+	li->frag_page.frags = li->max_frags;
- 
+ 	for (i = 0; i < n - 1; i++) {
++		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+ 		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
+ 					  env->insn_idx, env->cur_state->speculative);
+ 		if (IS_ERR(other_branch))
+ 			return PTR_ERR(other_branch);
+ 	}
+ 	env->insn_idx = env->gotox_tmp_buf->items[n-1];
++	mark_indirect_target(env, env->insn_idx);
  	return 0;
  }
-@@ -955,8 +967,7 @@ static int mlx5e_alloc_rq(struct mlx5e_params *params,
- 		if (err)
- 			goto err_rq_mkey;
  
--		err = mlx5e_rq_alloc_mpwqe_linear_info(rq, node, params, rqo,
--						       &pool_size);
-+		err = mlx5e_rq_alloc_mpwqe_linear_info(rq, node, params, rqo);
- 		if (err)
- 			goto err_free_mpwqe_info;
- 
-@@ -1347,6 +1358,8 @@ void mlx5e_free_rx_descs(struct mlx5e_rq *rq)
- 			mlx5_wq_ll_pop(wq, wqe_ix_be,
- 				       &wqe->next.next_wqe_index);
- 		}
+@@ -22158,6 +22165,17 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
+ 		data[i].seen = old_seen;
+ 		data[i].zext_dst = insn_has_def32(insn + i);
+ 	}
 +
-+		mlx5e_mpwqe_dealloc_linear_page(rq);
- 	} else {
- 		struct mlx5_wq_cyc *wq = &rq->wqe.wq;
- 		u16 missing = mlx5_wq_cyc_missing(wq);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-index feb042d84b8e..5b60aa47c75b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@ -300,6 +300,35 @@ static void mlx5e_page_release_fragmented(struct page_pool *pp,
- 		page_pool_put_unrefed_netmem(pp, netmem, -1, true);
- }
- 
-+static int mlx5e_mpwqe_linear_page_refill(struct mlx5e_rq *rq)
-+{
-+	struct mlx5e_mpw_linear_info *li = rq->mpwqe.linear_info;
-+
-+	if (likely(li->frag_page.frags < li->max_frags))
-+		return 0;
-+
-+	if (likely(li->frag_page.netmem)) {
-+		mlx5e_page_release_fragmented(rq->page_pool, &li->frag_page);
-+		li->frag_page.netmem = 0;
-+	}
-+
-+	return mlx5e_page_alloc_fragmented(rq->page_pool, &li->frag_page);
-+}
-+
-+static void *mlx5e_mpwqe_get_linear_page_frag(struct mlx5e_rq *rq)
-+{
-+	struct mlx5e_mpw_linear_info *li = rq->mpwqe.linear_info;
-+	u32 frag_offset;
-+
-+	if (unlikely(mlx5e_mpwqe_linear_page_refill(rq)))
-+		return NULL;
-+
-+	frag_offset = li->frag_page.frags << MLX5E_XDP_LOG_MAX_LINEAR_SZ;
-+	WARN_ON(frag_offset >= BIT(rq->mpwqe.page_shift));
-+
-+	return netmem_address(li->frag_page.netmem) + frag_offset;
-+}
-+
- static inline int mlx5e_get_rx_frag(struct mlx5e_rq *rq,
- 				    struct mlx5e_wqe_frag_info *frag)
- {
-@@ -702,6 +731,22 @@ static void mlx5e_dealloc_rx_mpwqe(struct mlx5e_rq *rq, u16 ix)
- 	bitmap_fill(wi->skip_release_bitmap, rq->mpwqe.pages_per_wqe);
- }
- 
-+void mlx5e_mpwqe_dealloc_linear_page(struct mlx5e_rq *rq)
-+{
-+	struct mlx5e_mpw_linear_info *li = rq->mpwqe.linear_info;
-+
-+	if (!li || !li->frag_page.netmem)
-+		return;
-+
-+	mlx5e_page_release_fragmented(rq->page_pool, &li->frag_page);
-+
-+	/* Recovery flow can call this function and then alloc again, so leave
-+	 * things in a good state for re-allocation.
++	/* The indirect_target flag of the original instruction was moved to the last of the
++	 * new instructions by the above memmove and memset, but the indirect jump target is
++	 * actually the first instruction, so move it back. This also matches with the behavior
++	 * of bpf_insn_array_adjust(), which preserves xlated_off to point to the first new
++	 * instruction.
 +	 */
-+	li->frag_page.netmem = 0;
-+	li->frag_page.frags = li->max_frags;
-+}
-+
- INDIRECT_CALLABLE_SCOPE bool mlx5e_post_rx_wqes(struct mlx5e_rq *rq)
- {
- 	struct mlx5_wq_cyc *wq = &rq->wqe.wq;
-@@ -1899,18 +1944,17 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *w
- 		/* area for bpf_xdp_[store|load]_bytes */
- 		net_prefetchw(netmem_address(frag_page->netmem) + frag_offset);
++	if (data[off + cnt - 1].indirect_target) {
++		data[off].indirect_target = 1;
++		data[off + cnt - 1].indirect_target = 0;
++	}
+ }
  
--		linear_page = &rq->mpwqe.linear_info->frag_page;
--		if (unlikely(mlx5e_page_alloc_fragmented(rq->page_pool,
--							 linear_page))) {
-+		va = mlx5e_mpwqe_get_linear_page_frag(rq);
-+		if (!va) {
- 			rq->stats->buff_alloc_err++;
- 			return NULL;
- 		}
- 
--		va = netmem_address(linear_page->netmem);
- 		net_prefetchw(va); /* xdp_frame data area */
- 		linear_hr = XDP_PACKET_HEADROOM;
- 		linear_data_len = 0;
- 		linear_frame_sz = MLX5_SKB_FRAG_SZ(linear_hr + MLX5E_RX_MAX_HEAD);
-+		linear_page = &rq->mpwqe.linear_info->frag_page;
- 	} else {
- 		skb = napi_alloc_skb(rq->cq.napi,
- 				     ALIGN(MLX5E_RX_MAX_HEAD, sizeof(long)));
-@@ -1971,8 +2015,6 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *w
- 
- 				linear_page->frags++;
- 			}
--			mlx5e_page_release_fragmented(rq->page_pool,
--						      linear_page);
- 			return NULL; /* page/packet was consumed by XDP */
- 		}
- 
-@@ -1989,15 +2031,11 @@ mlx5e_skb_from_cqe_mpwrq_nonlinear(struct mlx5e_rq *rq, struct mlx5e_mpw_info *w
- 			rq, mxbuf->xdp.data_hard_start, linear_frame_sz,
- 			mxbuf->xdp.data - mxbuf->xdp.data_hard_start, len,
- 			mxbuf->xdp.data - mxbuf->xdp.data_meta);
--		if (unlikely(!skb)) {
--			mlx5e_page_release_fragmented(rq->page_pool,
--						      linear_page);
-+		if (unlikely(!skb))
- 			return NULL;
--		}
- 
- 		skb_mark_for_recycle(skb);
- 		linear_page->frags++;
--		mlx5e_page_release_fragmented(rq->page_pool, linear_page);
- 
- 		if (xdp_buff_has_frags(&mxbuf->xdp)) {
- 			struct mlx5e_frag_page *pagep;
+ static void adjust_subprog_starts(struct bpf_verifier_env *env, u32 off, u32 len)
 -- 
-2.44.0
+2.43.0
 
