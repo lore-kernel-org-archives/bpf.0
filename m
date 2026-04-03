@@ -1,133 +1,141 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BCD273D76
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 02:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD06C348875
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 02:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775183208; cv=pass; b=pTXvr0Ft81SCcgkj0pWNVvgcH4xRQ/EDMhT7iYDnQHxzrw5XK4+KZqUUxjK6utU4/+NJgfNbgLoYjWPIYJXlfCNL0050oMT3bSdYzAGvqEC0rN20Hvw8tJ4uJoYgoIp0jsv3xk89WI8jhuy16bSNYprFTQRdvy18x5cf/UcdCvg=
+	t=1775183336; cv=pass; b=dzPKgsxLc2NiNa81PJLTS3xMDtyoXKm2ZL+afqKB5wMP5k0vBdZb//vdIDMJmmMANmjL8UeTOv8W4WfoPZPuHTDC1XMG95JsfAqUBqAqFnKqncci/HVWBlr0tzJGGnsGXzMcI2q3UxQH6h/AiTo7BlBG+n2qe3T7FfRcd6wDUJY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775183208; c=relaxed/simple;
-	bh=vcJVYVcsjtujJhxPM2Hmf6GUicBFUB6Kawjcdbn0m+k=;
+	s=arc-20240116; t=1775183336; c=relaxed/simple;
+	bh=o76MnSdOtxs+ye4fRbLK45EupBuuE8+zJXQlKKJrCi0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AlvWBwNXuNxsiJYcYu0+LYUoiqI2IfT+//hDj0JZpekoWZ8A9XKTzYQiQWY7MKB76Q9TN97uu/coZZvqSfp2nsompxtlPZrrZODeDOzAlfA7Qh/qAZXWuwKcZyLL8fuJKZx2IlfgsGOYVNdOfQa1X1QzaKvMrdB2Ub6oGXXZ7Ts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pj9APJiX; arc=pass smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=J04BXAN7LPLm+Z0LDJVtPmD0h7cIBkBLvqThwS04I9YyZcEM6+IkdrcWT4rM8ZPlgGagMPQYz4QI1gTfLOOk2x9Wct2prcI1uXUVX8Jt14RzRkZB7ltcTVV6ZCakpxEz/gcl7AuTgXSXPtFcGguA41G4JV16PA6itf2sX2pSPLQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PzznTkGY; arc=pass smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pj9APJiX"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-7986e0553bdso15329467b3.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 19:26:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775183206; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PzznTkGY"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-79495b1aaa7so14966907b3.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 19:28:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775183334; cv=none;
         d=google.com; s=arc-20240605;
-        b=X09F++dKkFZyW15RbiEwn3LkcscHiwjmulU/YEjz6yKjUXW2jPHiyskUpW0gaYJ+oz
-         m08BQ2alVmjXlXCL1EYLeZptnovLw9gjUsWj/o4eOMLWsPmzLoGyZSyWlHcN2/Gdcw8f
-         VZAouXgknHOHA/FuUd6DBCdh0HsryigGNRq/0u4+b2azGryTFrrWVFyqzbREwMPn8Q+Z
-         HEcDLFYQgwG1bZWslNnF9sdusDpIAKCQaKxpfZ05XlbKHK4/NZFieDf1UbJJrNgGt3cu
-         6rX20RGDYESIPkS1WLcmTNDzbZ0ODk25Wj31H7gKruqQdPKUQE0lF2slgA6xYrh08tBM
-         E/sw==
+        b=GsfT2DA1yVXlRjOcfeXRV/FeQH+360sd21ZnFA4AvguoBkXnODz8+zKMwG6HCiHV+w
+         SxWqPm+Tjsof6EBzsd3cT+25es0VIIpkz2eRLYOacFfqfN7ONeodlhpciqWr+UliVZaA
+         BXhfd/uP20OepewKMUDEVIkyy9vNMB8VDTywyUfBn1XcZx5SunOX+TQA2XNT+2cAKqNq
+         CVSV6e9yH+tNFkFlr+S+L6neqpN4AxBQoTVoMWs0BfHGebVZxvKLPUssT/1bvGcc49ne
+         smb3LWibU7lIZeGDkVtw1fiqU5b6GZtFvVcHgEPrpyP+iTQfy6+zzd9IMnF3rRzNiVvW
+         b9+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
-        fh=MWJYJFxuQxxF2xd9iFemopavTXOaIU/6hnyvFFBUqIw=;
-        b=eBf73x2AfN19mOiM8crZJTAJ73l7h6X5iSRHNwhtvzaka5UpBT1dXocMKHx8okEV0k
-         WxxhO7VPns4hWN/90m+prIyXg4zEpvg1Yy4kVdyrLnHQ3FORTeC8BCGeo/ZRttIQUxZN
-         met4gJoqUE8PYPQhCRB6g+xcFTqU5MgZ2InXHvKs3MPrHRK1MvyGSN1vn9nR/+cWX+OE
-         eryikDcg8dgSjBCU/i7m27IK4PdgLUYfyIZFA3rEZpyElyetSa6qCE9VLBySSiJdX65b
-         dN4yTDHo63XNLOPXei7pR7tBQEFRBabVdePeLwyoSXJprKBPH5iBG6yd8DXvuLVp1/WI
-         PDnw==;
+        bh=0XS+D/tqgKAhfModL3S+q9k/U37BM3GfjpI6/nfGSkg=;
+        fh=y886F4/vmMCCgja6eabIk/UFNui2UGAzpxXLFdDaUpo=;
+        b=ABBIwUdm7QEuN2D3oA33nzsLJZ1nU1BF9qfzYSyfQW3Gc5AtSdMRg4nkmj+lsyaRfP
+         yXRzlhpTR+eFti5Gfe9BdVsW0qAiL1oFrgSw2H+AqyyYhL6j1xoi9N0/AjbhndymFOiq
+         xv4+JtpcztZjcBJI1A5Sp8PdoWeLvsmcKhOkDRwxn+2wU+Hec1dUdyW0bj1VVDHr6vtz
+         KaMIWi7+jt7g8HsUB1SiPYdsRL44kSkZT5IBSHMS190gCkD3Gl3eBWpVazjjFrfssQa+
+         Ft5p06IvO/ymU8tvRjy3LrlMHXIH4YF/S5mqFtQSKhdAbRDU13S2caEqyX4tDHD1nehB
+         pVcw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775183206; x=1775788006; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775183334; x=1775788134; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
-        b=pj9APJiXwPQpv2w/t6G6RTFnZEOcQthmzNUT0gh9/PMgPwKu0cOD8de4u4xK8MFJG8
-         rh5op5ZoOQFvio0wkCcf4oeMdLGXICbgT0ECbrVKn9uZwhLNNVYPQwgL24ik/wPbdw/n
-         u5KFOb+Tuizym1/1P+Di0L2Wwr5/HOANx9ZcMLCy5hDIEkFgBImB8ZQjW4sw1rsUWTh+
-         ByWNE7yg5BohdHOxBKMA0nSisf1YKIzKOw0bKPmn6LqpQctIK5vy7s2NhKCslkRlkNEY
-         zv+sYPBO1mzQuJNfw9rfaEIuFv6AuqLwyelA3QR4mlS0VGVbYGY9eIxKBaE6y/k5acem
-         nkfQ==
+        bh=0XS+D/tqgKAhfModL3S+q9k/U37BM3GfjpI6/nfGSkg=;
+        b=PzznTkGYb4+FXvYwI7suFA4D0rrVfWkQixhm3kKw0Oaf/618qixCvgppqqG+5oxwY4
+         vCAYWc8xf9EwuNgABchN891npHcJOEFQkQ8It28ehXh25VrJJCO9Yy4W1ozYn+2qm6of
+         XtIRKhTCLjc/eu46tbVoqKqFW1uqr7afssxxvKv33pPIxgLEk70NfWDfRVpFUIqmsoKL
+         Ac5o9V6R3ktxeCgsR639r+y4+0xdNZ0ZE3rC9x0F4yuT7EEWBRKIvPZLOS3ly6vh24fx
+         Vvcb/M+NGDPUwxtSfqTgDtH9Ked6zB3GzTLWiHF68LqyPjKqm2qRNamGJbgDGJSm3Tgs
+         Ky9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775183206; x=1775788006;
+        d=1e100.net; s=20251104; t=1775183334; x=1775788134;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=oDMKzHqeL/XyiO2Bewz0UeWrM+1zjaTUFq6LPDrd+SI=;
-        b=ECTtVzkfLfsvH+o6DeJIROfjSuJ6ohnBq7rEyVcKXI2y+VF3hj45eM0LDdsz49xiT1
-         IqkEyWF4NtKLq451/jRpHYtApSCbBugjMe9BCst9SxCl37hZYTdcMnqsoACyws7C1mbx
-         Tr2pCzUpA7LrCxap0xJzdg7TChQ8aPDLL61ijJsvGVlvvSx+FpmAb60Y6w7R5ji0PNPn
-         yA7cui5VxkNHm8OI/RzsYJtH+GOBURKBcOS9IeelOt9+jt9WtXvMP4SbAXnRbvSlYv45
-         9iwwP09SzoL8YT+A8DeHNtSW8Wm5CIdwxNOW6XXYi//JDVXkAll/9gcjTFkNbQ9+x7dX
-         qN8w==
-X-Gm-Message-State: AOJu0YzazftAxRoILhNa5asucULmH/t4NHEkP1tJy+OxyeEzBe8HyO/Y
-	iMugS5+yBYRNKqpjti4A3Rp/mZM8SKkwZSRUVojX9gDR4jZkpMqJWy3bMLNSb/1I3kXqbx4VMGN
-	AlSLtHjcjP9lClLOkvwxjTbKKS1CbzDDQA+LCRui7SQRPD4XhRl0ZbT8B
-X-Gm-Gg: AeBDiesgHmVYIrKdg0sQnB8jGaBPgSPVb8iZ9CFm96yQTUGLQS8FBMonTuPDhNPFUis
-	7Oi2YokhYGJZg+DRLmksCEj5wCsXT5cbQhyCnZgvJAUFk1L7Fo5WdCObmFO80ew5N2Ei5f6JSzs
-	SZu5/eWQASvY07FY2ummVooMWA9rV8JTWI6QSg1qe7ccua5BJNoeza6gjsYG/9G0r8qZHanIWwb
-	vjs5z3nl9QbOPCOy0i8O0bHjRSE2R1kM6CPcOSrCbgpSSjTZgtq4bb/Tjf0pIymGRSSWnukX0UR
-	AAzlhYtrZOhazycG8A==
-X-Received: by 2002:a05:690c:90:b0:79a:c396:c01 with SMTP id
- 00721157ae682-7a4d6732758mr17280927b3.55.1775183206003; Thu, 02 Apr 2026
- 19:26:46 -0700 (PDT)
+        bh=0XS+D/tqgKAhfModL3S+q9k/U37BM3GfjpI6/nfGSkg=;
+        b=KjLVfUjCMnh2H4M6okZrydefQ8JQ59/NGaYaaFj7rC11u6AEbdsXFOv/FbqOnNa3/C
+         ny0vmbqxFBh0t5bqwJ5JA4nJ8AKOubM5q21yhurQvNfKziUTvMovk9KaDVGQlTj9r9Wf
+         vF1i/ryI6zXAhpJTfne5F0svZ97WYeTwTBNHVYmZroLrxbfrT0Qy+UZtmAvmjN+Wn2b+
+         +oBGk2N9ZWaIchw/ysoHCIWoRVNyRbir5L6ThHa5YbysdSJU7xv+jI0+mVEclVbcUK+c
+         pij92H5AJLTO4xyoCN7iZw/UuS/gcfKcDhfk8asBwjiUcJT+7dZoAAb+SajUW2IV3AG4
+         Qdkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXh+v/efep2BwylPgApIc6ZAx/Xpz8sL4QPs5KoJ3KGArb0zKxCUexCK/eioK4MUfxKrlk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1UFyvW78s39POrEJ3GsFSR3+W48KDC/Q6WTBT87MqjlrAs1lQ
+	Bfgq6rJAd2UxwU5deasHfdfIt6wdsNvTr5U2kciEVuAwzbxnn+bSa48GtSPDwxUlplK+l+upySI
+	CJGaNBd1mp9doOwrJ6nvwoagC872tPURFuF4PFS/x
+X-Gm-Gg: AeBDiesKNVb2vgHNkEeGn9LCSwO35W8N2bqTyx5ImFEWxiILnQGhHGSvRLFmfyvOeOV
+	IcDa6tKJz70hX0+AE6Kz8EUku3AUinxTHrNNQU0FATjzeQcmeQPZ6bqOB0mpnsplr0YsSNQUFUk
+	ulOEjpQIXJT9hB0x8zhZDBjDbJQXEUuVgJnoEYSKPHvPOWTZH8tV8OaT+0xSVMNh9vWrzEavZPm
+	RCn5eEzFr0wZbkvrPUcrXkf1vwsY/N34y6dUN2bsvrzDeTQ83L9BZxq/kmWsPZ2LHCdb2eAywsY
+	z6HsgwZEx0elY9vqbg==
+X-Received: by 2002:a05:690c:dd4:b0:798:3051:2f06 with SMTP id
+ 00721157ae682-7a4d6544998mr18085867b3.53.1775183333311; Thu, 02 Apr 2026
+ 19:28:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403015851.148209-1-jiayuan.chen@linux.dev> <20260403015851.148209-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20260403015851.148209-2-jiayuan.chen@linux.dev>
+References: <20260403014517.142550-1-jiayuan.chen@linux.dev> <CANn89iJru14aPMCXMHmsek1S5TH+sLkczJKUPpcfZHnYxR9KEw@mail.gmail.com>
+In-Reply-To: <CANn89iJru14aPMCXMHmsek1S5TH+sLkczJKUPpcfZHnYxR9KEw@mail.gmail.com>
 From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 2 Apr 2026 19:26:34 -0700
-X-Gm-Features: AQROBzAh2Ysi0SF15X8q_e3XfU4X2ZmmJIBBcIrVoyrG5eWnijGl8DAlrd1gYkE
-Message-ID: <CANn89i+1VzG3KSv1NvhTbPm2EdG4Lvii256yZj_wq9jcB-qQ0A@mail.gmail.com>
-Subject: Re: [PATCH bpf v6 1/2] bpf: tcp: Reject non-TCP skb in bpf_sk_assign_tcp_reqsk()
+Date: Thu, 2 Apr 2026 19:28:42 -0700
+X-Gm-Features: AQROBzAvc4eSCrpxv7Dsz5Vt2of7OQ9lN3NLlQLvVJIiauIlJc71BlaoIe-DthU
+Message-ID: <CANn89i+f=3o66Mr-O-c_w6t92=xU=qo4-mOuADDHvT9Ezatmkw@mail.gmail.com>
+Subject: Re: [PATCH net v2] net: skb: fix cross-cache free of KFENCE-allocated
+ skb head
 To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+Cc: netdev@vger.kernel.org, Antonius <antonius@bluedragonsec.com>, 
 	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+	Simon Horman <horms@kernel.org>, Jason Xing <kerneljasonxing@gmail.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Michal Luczaj <mhal@rbox.co>, Mina Almasry <almasrymina@google.com>, 
+	Eric Biggers <ebiggers@google.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Alexander Duyck <alexanderduyck@fb.com>, Soheil Hassas Yeganeh <soheil@google.com>, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 6:59=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
+On Thu, Apr 2, 2026 at 7:23=E2=80=AFPM Eric Dumazet <edumazet@google.com> w=
+rote:
 >
-> bpf_sk_assign_tcp_reqsk() only validates skb->protocol (L3) but does not
-> check the L4 protocol in the IP header. A BPF program can call this kfunc
-> on a UDP skb with a valid TCP listener socket, which will succeed and
-> attach a TCP reqsk to the UDP skb.
+> On Thu, Apr 2, 2026 at 6:45=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.d=
+ev> wrote:
+> >
+> > SKB_SMALL_HEAD_CACHE_SIZE is intentionally set to a non-power-of-2
+> > value (e.g. 704 on x86_64) to avoid collisions with generic kmalloc
+> > bucket sizes. This ensures that skb_kfree_head() can reliably use
+> > skb_end_offset to distinguish skb heads allocated from
+> > skb_small_head_cache vs. generic kmalloc caches.
+> >
+> > However, when KFENCE is enabled, kfence_ksize() returns the exact
+> > requested allocation size instead of the slab bucket size. If a caller
+> > (e.g. bpf_test_init) allocates skb head data via kzalloc() and the
+> > requested size happens to equal SKB_SMALL_HEAD_CACHE_SIZE, then
+> > slab_build_skb() -> ksize() returns that exact value. After subtracting
+> > skb_shared_info overhead, skb_end_offset ends up matching
+> > SKB_SMALL_HEAD_HEADROOM, causing skb_kfree_head() to incorrectly free
+> > the object to skb_small_head_cache instead of back to the original
+> > kmalloc cache, resulting in a slab cross-cache free:
+> >
+> >   kmem_cache_free(skbuff_small_head): Wrong slab cache. Expected
+> >   skbuff_small_head but got kmalloc-1k
+> >
+> > Fix this by always calling kfree(head) in skb_kfree_head(). This keeps
+> > the free path generic and avoids allocator-specific misclassification
+> > for KFENCE objects.
+> >
+> > Fixes: bf9f1baa279f ("net: add dedicated kmem_cache for typical/small s=
+kb->head")
+> > Reported-by: Antonius <antonius@bluedragonsec.com>
+> > Closes: https://lore.kernel.org/netdev/CAK8a0jxC5L5N7hq-DT2_NhUyjBxrPoc=
+oiDazzsBk4TGgT1r4-A@mail.gmail.com/
+> > Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 >
-> When the UDP skb enters the UDP receive path, skb_steal_sock() returns
-> the TCP listener from the reqsk. The UDP code then passes this TCP socket
-> to udp_unicast_rcv_skb() -> __udp_enqueue_schedule_skb(), which casts
-> it to udp_sock and accesses UDP-specific fields at invalid offsets,
-> causing a null pointer dereference and kernel panic:
->
->   BUG: KASAN: null-ptr-deref in __udp_enqueue_schedule_skb+0x19d/0x1df0
->   Read of size 4 at addr 0000000000000008 by task test_progs/537
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-
->
-> Fix this by checking the IP header's protocol field in
-> bpf_sk_assign_tcp_reqsk() and rejecting non-TCP skbs with -EINVAL.
->
-> Note that for IPv6, the nexthdr check does not walk extension headers.
-> This is uncommon for TCP SYN packets in practice, and keeping it simple
-> was agreed upon by Kuniyuki Iwashima.
->
-> Fixes: e472f88891ab ("bpf: tcp: Support arbitrary SYN Cookie.")
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+Note: we can later in net-next remove skb_kfree_head() completely.
