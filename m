@@ -1,136 +1,143 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B5E301472
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 02:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775183006; cv=pass; b=PG9lo4JsGgP2Obq++/kaBqmrQuGUAhD3E457XABtTRFfytJU4XDxGRFY1zZd5Bd/jeNo82I5fBY2wj8KqWpAw5HcWL450ev9IRngv9yL12UJ5Cr3W25EsxrUme1BT7uWdYURQpk7Bs3nfh3p9wlL7KQw7UAy42lvHbUuvzvFnvg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775183006; c=relaxed/simple;
-	bh=QPNniyPcPD8NCEHVl1+tqiO6u9fwEmcwYqCSe4cH26w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lOtGA8rwLDWnobm8Ng4sHikF998vedfhTVnYXEM21Q8uWRP8XlL/bUVU9i6gdWeO8gCwOxLHEfghYzGMtu/UObx7jAmPdIlXfQXim5TCVTGo1qN3v6223Bct7rnsUzBDMaHMI/hYGxgCCQPpih2Ko9rcJFCnqO2sA32YNiO9HAY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IOVQiMgU; arc=pass smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1D2221F20
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 02:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775183071; cv=none; b=jrp9b3LzlZ3pbgRo8Xg5/tnemMPn+uPvNxzidYLYuranzM7UhT2iMYDTIPSxCOCQcV3gwVSaVHKJ4YyTuivVEVIN8mYTABQrq6aEgzs74ApaU9poiNq7RAso1uaDAY3kHjERl48P4mQ2xgUFWFaPCprwiFaTqiIitycPb3GXQLE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775183071; c=relaxed/simple;
+	bh=toqBReqZo5ueBSBqWE/l2yyhM0fP9wyRzGZZECZiK8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O3v2Qh80eDQGRbIra9nmaIlUZs67I5U+KjEqasMamTdeAh50unCZ6d1xmU28or60T7sBwGfUNgcl7deeFCN5Ef9wdstxd7Nclv3QlambmXWDobTUqvGw20KmH3euRS6MnZWncqSmLL8tVvqHMLOgZuQb+3FsoJS0UiKuS1hg/Og=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ODlLfJwj; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IOVQiMgU"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7a469383e0bso7305677b3.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 19:23:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775183004; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kt7vvDI8jmnLoAYSqhlbC5xEgB46dzGitbUgK2JLeN99VH/T2dufvc3bBel+rzW/YD
-         /Yualw6okGHthhnxSaTLTjk/r6k/+yLXR37rog7wV6f4JPhm75ZHoIYLWipL3jDJUdlk
-         dD8MdIJwwOj6GQ6clh4rn8jc7RcD7tFx210tEN2Tr02mOGEVVO7PmHrZw+kkruZLm4uc
-         LEtAQscqs5oiL2fBmkld2ODKLxF4C7zWK/rPbi4fZ6vRihwmrm3ttGs0dNqVOKdbE11o
-         pivMUUPXHSJIYNxsgyh2zM2hTcHjTlXyXMyoA6OlQ8l/VJwusUUlp0/GgH17pQjGRb93
-         1VbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HIy8iHuqOlscN7DzgEOqWCvFHIn3PjfNELBdpX/HHL4=;
-        fh=eb7oCUtX9Zrsl1pf7zQv7A9MBBUKpKPFUHganT0NmSA=;
-        b=UeLV8JnaIkiTJfgCqetSpwhM0Po39KWDREvMO3Bx19gglPvRbrA3PosZuIQI/pz1Zo
-         ulIVXyvXvPyQsBXbdlAo6DR1XTyJRR3gMJ1ET3T2cEm2hUMlZs9jcfpR9ebprf7S3B7s
-         zNC298T+ZWe/czjtNK3J5tg8WtgMGM/NhRdiVoxaI7jrGOXIkOVB+nJC1Tt7X61QhDUt
-         Mx3DYhTbbWz6VH7ZyeZosWm6iycPHcdKMuK3yvkan2DI6Yrj5/bdX99befQ/u1CNANy0
-         J0bdHvdE+dvjRgKrgLyA0gnv9SSck76KDTboWUm8SmQcR+t5AgmSZqrVa2rELzaH/JFS
-         42Iw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775183004; x=1775787804; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HIy8iHuqOlscN7DzgEOqWCvFHIn3PjfNELBdpX/HHL4=;
-        b=IOVQiMgU1KjvK0aa8Omw7nl/AzNXB758nAWINmMvo9ICxyN4yTqkaQywzfiuSpKPV2
-         FJTZjtKCPN9sAzdNOOxx7nlFNXCvrIthLdZxKe8QDsR0YyoZihiLlbb8040gSIYVPxjx
-         13Chk7Oob+9fUdOxe/rxmNsJa3Q9q1flGnNJOtoe8yps2mNn2jrI/cHNf4Pbe6ncWfSF
-         k6dLwT30b9orcCXYvUSfZ4MQWZhKOS/N7eN0XqFTtS8hfEgSYSbmNX7gaPRvj3DESkMA
-         eTFQ3Ph9sDM4sY4gVcaZAc7pQBeJh7SqjrDXhWPhTyPMbw6usUyRlL71QWYWsYIXG7qS
-         /8sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775183004; x=1775787804;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HIy8iHuqOlscN7DzgEOqWCvFHIn3PjfNELBdpX/HHL4=;
-        b=Yye+SsiOjcHjAPrXsMmeGAfmaWTA9Vsyvlp4JDRNdHvTV1yziDPkbPF8CtGMUfArG7
-         sPDpO8jvT03H4O1kYOfb/xXEEO+HCN1wOHGp/HrJsSnuEYnZAWsPyP80b1OiR6VAnEPI
-         m3Pj6MWWPWRsC9TF1NgHr+J8a55U/BKm+Q7eWXuggVJ9OV7PUTmZ/EU8LBgOuP1E+pj1
-         eKNjP4iOZS2EtAe4bK2wqa4DA+XQ3U9DhDHj0nBfT9rWQMN7ewV0mc4XIMh8dY81+3fz
-         HB11uxgWCIeB19JyKhphFbZ3o54FUkP30LocVY/vm53RNUrGOREUKDIfD0z/bY6K04rT
-         vQow==
-X-Forwarded-Encrypted: i=1; AJvYcCVkMrLpNI6zisE42z7pJULzkXF+qdw6ml/AI4T9TxvoZlLh7OqFq5yLic4UFUt3j8J/4Ak=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyhl+DbJv+imH4mJxI45pv4mdaSC8MyZwWCvRMRegj3gM/zo74z
-	1d4+imy1z3Fw8Vk2AGjORz/5IPbp5OeRsnSlGKaeIduL9NmaSCOtUc6RnUPnT4Cj8kQ4j812x0d
-	j7ruLY/pplrl789iCR6cX1YsXqZZ+4mGKE6Isthjx
-X-Gm-Gg: AeBDievjdAcIP8gbzvOwIusx4DgsUSh8rnmG6qjRbWeR9M3ck0VxgBm9atKS5Y1za2U
-	gj/EgTg6Y5CpEr3sz82b5uUeesi2SUif7eVfGDtYb3rnfuFsjbDxVxVkp54MAqoPKxl1+kmMrrQ
-	sJXZsztMwRMQ+V7MxHQkMn32Gl0/XBtyT30NBLhKmYE5A6pPx5KBODaOwP2+3jR4RC1VrUbwkv2
-	G0c29Ct28WmbXPIr8HPlCqT0kkEgkcBfCSKsZEZW4k+6KYzRydpiBRQenffc0eqfmGQOENJAyPB
-	RJVlSDo=
-X-Received: by 2002:a05:690c:dc9:b0:79b:e346:980c with SMTP id
- 00721157ae682-7a4d625504fmr16818907b3.12.1775183003286; Thu, 02 Apr 2026
- 19:23:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ODlLfJwj"
+Date: Thu, 2 Apr 2026 19:24:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775183066;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CBbN7o5sPUmFQlR1H7Sd6ZSgAFzsZVe8xnlxndxR16M=;
+	b=ODlLfJwjJxgvr54E+HhYgpM6P7+4N8vR5X1By/QLz5+bSSgAMnaHm1tgYB1ELO6TD07XrB
+	xi2uno81icwfvJpqFLT4On/EpSzWV08m+jP6IMtBet6hmShJLQw8EHywEW+nfNNKnqGW+t
+	V7iHKxr70bFDOMSYTG+v69R4ttk+S/c=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: xulang <xulang@uniontech.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Dongliang Mu <dzm91@hust.edu.cn>, Eduard <eddyz87@gmail.com>, 
+	Hao Luo <haoluo@google.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	=?utf-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>, kernel@uniontech.com, KP Singh <kpsingh@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf v5 1/2] bpf: Fix OOB in pcpu_init_value
+Message-ID: <ac8jGJvsEHhwuMqI@devbig1721.ftw5.facebook.com>
+References: <7653EEEC2BAB17DF+20260402073948.2185396-1-xulang@uniontech.com>
+ <420FEEDDC768A4BE+20260402074236.2187154-1-xulang@uniontech.com>
+ <CAADnVQJawYEk53kS9-w5EXU0GnUYWWW7AF_n02bUs-GPJ+4Raw@mail.gmail.com>
+ <ac6ejZrcnfQfaTZS@devbig1721.ftw5.facebook.com>
+ <CAADnVQLSUU8Yo1Wmym4B05jam6qqUPEXUDJpBH+00kjqkrYigw@mail.gmail.com>
+ <ac7Afa6_HDzyAxSt@devbig1721.ftw5.facebook.com>
+ <CAADnVQJv5qNL+ssShZ043DVobO7ecfMuZxa-t-CGiGL-XyK=PA@mail.gmail.com>
+ <ac8ODClxZ83KZf-V@devbig1721.ftw5.facebook.com>
+ <CAADnVQJAYE9_KoNrWQhTz0UOX5dwmqKL-m6H0S_o2ZmdScVPfQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403014517.142550-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260403014517.142550-1-jiayuan.chen@linux.dev>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 2 Apr 2026 19:23:12 -0700
-X-Gm-Features: AQROBzCrQfdIxhSDR4XDUfwsweTqox9rEdRUXCTR5rMIh44Ai2CNLoPe7QFj0bs
-Message-ID: <CANn89iJru14aPMCXMHmsek1S5TH+sLkczJKUPpcfZHnYxR9KEw@mail.gmail.com>
-Subject: Re: [PATCH net v2] net: skb: fix cross-cache free of KFENCE-allocated
- skb head
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Antonius <antonius@bluedragonsec.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Jason Xing <kerneljasonxing@gmail.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Michal Luczaj <mhal@rbox.co>, Mina Almasry <almasrymina@google.com>, 
-	Eric Biggers <ebiggers@google.com>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Alexander Duyck <alexanderduyck@fb.com>, Soheil Hassas Yeganeh <soheil@google.com>, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJAYE9_KoNrWQhTz0UOX5dwmqKL-m6H0S_o2ZmdScVPfQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 2, 2026 at 6:45=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
->
-> SKB_SMALL_HEAD_CACHE_SIZE is intentionally set to a non-power-of-2
-> value (e.g. 704 on x86_64) to avoid collisions with generic kmalloc
-> bucket sizes. This ensures that skb_kfree_head() can reliably use
-> skb_end_offset to distinguish skb heads allocated from
-> skb_small_head_cache vs. generic kmalloc caches.
->
-> However, when KFENCE is enabled, kfence_ksize() returns the exact
-> requested allocation size instead of the slab bucket size. If a caller
-> (e.g. bpf_test_init) allocates skb head data via kzalloc() and the
-> requested size happens to equal SKB_SMALL_HEAD_CACHE_SIZE, then
-> slab_build_skb() -> ksize() returns that exact value. After subtracting
-> skb_shared_info overhead, skb_end_offset ends up matching
-> SKB_SMALL_HEAD_HEADROOM, causing skb_kfree_head() to incorrectly free
-> the object to skb_small_head_cache instead of back to the original
-> kmalloc cache, resulting in a slab cross-cache free:
->
->   kmem_cache_free(skbuff_small_head): Wrong slab cache. Expected
->   skbuff_small_head but got kmalloc-1k
->
-> Fix this by always calling kfree(head) in skb_kfree_head(). This keeps
-> the free path generic and avoids allocator-specific misclassification
-> for KFENCE objects.
->
-> Fixes: bf9f1baa279f ("net: add dedicated kmem_cache for typical/small skb=
-->head")
-> Reported-by: Antonius <antonius@bluedragonsec.com>
-> Closes: https://lore.kernel.org/netdev/CAK8a0jxC5L5N7hq-DT2_NhUyjBxrPocoi=
-DazzsBk4TGgT1r4-A@mail.gmail.com/
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+On Thu, Apr 02, 2026 at 07:09:03PM -0700, Alexei Starovoitov wrote:
+> On Thu, Apr 2, 2026 at 7:00 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+> >
+> > On Thu, Apr 02, 2026 at 05:05:14PM -0700, Alexei Starovoitov wrote:
+> > > On Thu, Apr 2, 2026 at 12:59 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+> > > >
+> > > > On Thu, Apr 02, 2026 at 11:36:04AM -0700, Alexei Starovoitov wrote:
+> > > > > On Thu, Apr 2, 2026 at 10:01 AM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+> > > > > >
+> > > > > > On Thu, Apr 02, 2026 at 07:17:17AM -0700, Alexei Starovoitov wrote:
+> > > > > > > On Thu, Apr 2, 2026 at 12:43 AM xulang <xulang@uniontech.com> wrote:
+> > > > > > > >
+> > > > > > > > From: Lang Xu <xulang@uniontech.com>
+> > > > > > > >
+> > > > > > > > An out-of-bounds read occurs when copying element from a
+> > > > > > > > BPF_MAP_TYPE_CGROUP_STORAGE map to another pcpu map with the
+> > > > > > > > same value_size that is not rounded up to 8 bytes.
+> > > > > > > >
+> > > > > > > > The issue happens when:
+> > > > > > > > 1. A CGROUP_STORAGE map is created with value_size not aligned to
+> > > > > > > >    8 bytes (e.g., 4 bytes)
+> > > > > > > > 2. A pcpu map is created with the same value_size (e.g., 4 bytes)
+> > > > > > > > 3. Update element in 2 with data in 1
+> > > > > > > >
+> > > > > > > > pcpu_init_value assumes that all sources are rounded up to 8 bytes,
+> > > > > > > > and invokes copy_map_value_long to make a data copy, However, the
+> > > > > > > > assumption doesn't stand since there are some cases where the source
+> > > > > > > > may not be rounded up to 8 bytes, e.g., CGROUP_STORAGE,
+> > > > > > >
+> > > > > > > why? Just round it up there instead of penalizing perf everywhere.
+> > > > > > >
+> > > > > > > > skb->data.
+> > > > > > >
+> > > > > > > what that means?
+> > > > > > >
+> > > > > > > pcpu_init_value() can access skb->data ?
+> > > > > >
+> > > > > > After bound check, the skb->data can be used in
+> > > > > > bpf_map_update_elem(&percpu_lru_map, &key, skb_data, BPF_NOEXIST)
+> > > > > > which will call pcpu_init_value().
+> > > > >
+> > > > > I see, but if we round up on cgroup storage size the problem is gone,
+> > > > > right?
+> > > >
+> > > > Right, it will fix the problem tested in patch 2 which
+> > > > passes cgroup_storage_value as the source to
+> > > > pcpu_init_value(). The bug should only manifest with BPF_NOEXIST.
+> > > > For BPF_EXIST, pcpu_copy_value() will be used and it
+> > > > currently uses copy_map_value() instead of copy_map_value_long().
+> > > >
+> > > > > Doesn't matter what the source of the copy is.
+> > > >
+> > > > I think the source (PTR_TO_*) matters here because the bug is about
+> > > > reading beyond the boundary of the source. A few other map types
+> > > > were audited when their values were used as the source.
+> > > >
+> > > > For skb->data, using skb->data to reproduce is practically
+> > > > not possible because there should be at least shinfo beyond data_end,
+> > > > so some of shinfo may get copied to the pcpu map in the extreme case.
+> > >
+> > > Yes, but also the verifier checks that ptr + value_size is accessible
+> > > in that source. In this case, that the value_size bytes are available in skb.
+> > > So if we round up early at cgroup storage creation time there is no overrun.
+> >
+> > The verifier checks that src_ptr + value_size is accessible but the
+> > percpu's map->value_size is not rounded up to 8 bytes. If the percpu_map
+> > is created with 4 bytes value_size, the percpu_map->value_size will stay at 4
+> > and verifier only checks that src + 4 is accessible.
+> 
+> I meant that we can do:
+> map->value_size = round_up(map->value_size, 8);
+> 
+> there is no promise that value_size at creation time is equal to
+> the one that the verifier uses and what is reported back to user space.
+> We could do that for hashmap too. I think...
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+hmm... would it break the existing bpf programs? For example, my earlier
+data/data_end example will be rejected now because the verifier is
+expecting 8 bytes instead of 4 bytes from src.
