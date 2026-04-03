@@ -1,115 +1,204 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2132363C41
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 06:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B0B322B6D
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 06:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775197029; cv=pass; b=L8gNpkB0oqNEMLhqjRVHBJT26R5OvLsEVBhhJSyRvF9aZqSbQppmb2Khy7bY9dgBsPr9OU0JwdTLusgBRy7mFLWPc0YwndaXVigUCZZj3w0ko5F51ogTmvkBTsrBpzl5K2OgrG97SGgfn6hxT2QljXnmRodVjAZ2UH2WHY5/1kw=
+	t=1775197999; cv=pass; b=AqPmuffaoZEL3P20AbuFNB3tI/5hAnE9wzj36UF6YSuL5ICFvpiw+ZcwOoHGgw5NFASD7iijdt+wvFLYMcGDTaI+Gmj6LZgxaYY9jiNm7H84wGiwoTh/oszG3dDiUSLUEz5bn9V2KLAGtgV4YepZRNRoqgjO757bHyq/14qRuMA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775197029; c=relaxed/simple;
-	bh=As7MT0MXw0ZOZK2UiXFz75ar5i5jDU2ADYSEygzj7Js=;
+	s=arc-20240116; t=1775197999; c=relaxed/simple;
+	bh=7XyVqM3OP7aVREUb8TMPamvd/LiQ3M0zu1HVrbJEqGs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LNQ+ZXWcTV5FrYKGmi+2wjgeD5mwXzHAFk7089ldMVJFrXXciG8agv8RQkB6Ir64O8PsjfDNVArE+rL8jaN/EPh9QT9t4dy4W53TkbC1KBANP1toFgHuuzwAb7zsFcYL39sKf66vIi/xuKHLfpqb13wrdwjY7yhgogK1nzq6W5g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DK5iK2fS; arc=pass smtp.client-ip=209.85.128.171
+	 To:Cc:Content-Type; b=TwRjDBu36dG+g4dVIj9YbQVUXZljiwzv+yruCTLISFY5FQBYzeYNgNz1BeFh51CZy29+lX5bJtyGeQxhVU7g3diIZ3mrs/eIS4x3+QykTQ74sxHz7Jf2pGpBZV4kELBxHhY4OFRheTM/63EG7r0YUGgfn1AbqvH5N/nperAqcMY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sn9y4v5+; arc=pass smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DK5iK2fS"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7982c3b7da9so14873057b3.1
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 23:16:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775197016; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sn9y4v5+"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-79827d28fc4so14732987b3.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 23:33:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775197997; cv=none;
         d=google.com; s=arc-20240605;
-        b=OzChnWrW5IMlKdfSqB42xcSxS4z9wApfL1qw1xdu6Oe/zE5unoVqKefQh/xwKDp3wq
-         RCltHJjjqJ7PNR5XYZz3r10qlP1zyVNTcIkZSRmRQS6JtixRzKU6NunRYUR2sNYa6vkd
-         7ShJbr7VXmG/p4IQqp65RTF1wxt0Lk59zm6wIXXaNJhmzWfF7RWO8Wuy9eScq8nlx56A
-         IZmBw/fWJllnhWN8COkMz8hWU/GoxRV7zUc88YrQZwLt8jtpY7dKnTdUrZ9ZAbOmqLZc
-         ELVbU3vVEW7VrZDyV8n6+YDFZEi2efM+GDm1LlhSK04kyHhZ4vaNfgjaI/xtDEpTwitt
-         CQZA==
+        b=AEHv6BBDwnOak5sJ24Kv98n6Clf8O8IRfnwXnXdbraPVmdjvhPh9cpuib4uMqD7dY5
+         th832+PMamSpy7yHy/Rjmyb2mRJFk+kbmoUMwVYsaMnXTmAUtIAIuiXsrr+56lW/S5FS
+         uLIWcYTbLS7DSVce7gcAPwkUnJol2gOysfqGgLLS0O8LCI3hc/x+BAvbDl6hQyLih/mF
+         ifgeXGJ1htVnNkdrZqjaHQ9A53HQhm0Q8yZ5LDsTqMhrp41rsbyV5MluYT+V4nH9wb4v
+         vH9dgNqKy2u1Wd8b5uTBNC6YuFg/Yn0ufhrmdhn81Shsj+tAompTmplPPdteojWyE+uL
+         UyPw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=As7MT0MXw0ZOZK2UiXFz75ar5i5jDU2ADYSEygzj7Js=;
-        fh=OTURxmxghqmJjGMVYmb2sOVW9EunI56TAvfXu6vR49Y=;
-        b=XKiji0Ztko/7FzhITgDimaV4OFCIsod4g21DmT02YW02EKxhO98gKJebVkddYE4R2/
-         Yd+AWz7s3sQRpYTrmDL207tT+CjzjPjRV/AojLHJfI1EHDPsQKNLngy2f/g0Gg/Lvr0Z
-         NDQluD+CHG5o9RLb1r/errVAXeBahgNRKuhcj5ZARf617MV5KboYMWz0C8B5Ybsw2Ye8
-         LzFiZkEYlNhhoF76VgTkGZL3cA+BzSejbOQ/Nk9d58niqscYtLdr1troN3DDAnjOTcWR
-         7THfO5xtIs/XhJ40SQgd8h8hDJ6Ey+1mBlq2X9e+Z4OD07cx18gfskataOzT1iV/MXm9
-         3Zpw==;
+        bh=ikObTRDzmQCnpPn0SnC4F9o5QbKBAZOyRVtKSVzT42M=;
+        fh=yDocmaE12FZi/A+HZyKEe+TzX/jE1oa7mxrg2E+OYb8=;
+        b=ctzlKMQm+1+czD4C9doEBoDoobCNdCjmABaQo6H7a72r8YKLyaxAbXDFzVXnz8cAXa
+         LHI7BfwAvMfd8dENLDnKqF6rD7Xuoqnui3cGOb7FuYVaSgsnZvuj/AmcmQqcCdVVkf/U
+         YNFFHM8ElB0YUVmsw7T/wjrQTF1OqVshDTJfK2JMTqga0yVBAPCkZu7EFvTQY27oji1L
+         OTQ7shzr5nWgWTN7JU2PiKGQnIZ2N0XQIbQdFAmLPWvzKEXeAwjFppq9KubnkbnU6X6N
+         HPar6tZLL0nCZ0nK5jpFiQQ+3UTkpIBuGuogu2jqiDkCndQGlLLAvmyJe2b7IiIM9ukZ
+         ogrQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775197016; x=1775801816; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775197997; x=1775802797; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=As7MT0MXw0ZOZK2UiXFz75ar5i5jDU2ADYSEygzj7Js=;
-        b=DK5iK2fSV4RykmcRcQv2Pf4mlbw7GyVxAOUr/jJaf1ccRa8pDSsuGD2vCNCZdDtjAW
-         2EPNCHyd+FeDn7M1XGcHPbJqg91edgb0MZTkJpS440aL37pOYD6x2hOWGxrZFCnUndKi
-         mpulxnah4BZVwQm6Jwj2753NfvG5L05FgNbtCfV3xSn2xpsV2aDbJ1aAfukAndGmTMW5
-         1BHq7l0vAIGb1FEy5EqgO4L4HhNniUN0LgloTErC6ZPFOlV3JK7oF5g5hysO2gTD/QXn
-         UnL3+LDdB0VQIJI6CAslnENVX2g7c/+rbt/TwqP7t3+PMcwO1w4aj2LxdulNnR1kolT/
-         LnGA==
+        bh=ikObTRDzmQCnpPn0SnC4F9o5QbKBAZOyRVtKSVzT42M=;
+        b=Sn9y4v5+i7lVZFVkMeqXkS6rSc7GQrnTwamqLDMAajKBbu/lk6aB729YNE9sZcUTwR
+         Gkx1/rJuOf68CArGOk+BZ4rN1fpBOkRQENhmEUc8y60JKXu0RCCpL5jGK3DxqjPuKe5P
+         BPR+toRQtMJafmW45sOgE2i6djTx3ptL7XL+vjlWLu/tcd2B8M4vEmZu64p6hKz96nha
+         MU3f6YA1ozpUuwXKpS38jhiaoHnFV71g/Ks0VkcXtVmH6lLIDocvROMDLJ+wtfOMM5/Q
+         gHC3+uvoWnL2eZyy/Zy0vwtrPuTrneC1cxiNC2BlRmxXgiWZ44vkjj+l16+bhknl6WNk
+         oM4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775197016; x=1775801816;
+        d=1e100.net; s=20251104; t=1775197997; x=1775802797;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=As7MT0MXw0ZOZK2UiXFz75ar5i5jDU2ADYSEygzj7Js=;
-        b=d08i1ogaJHLDpHG8uZ7bNyiix0LnseFNOK+YQ71ZhrGrfen1t2T2VEJ2lnebrBI5/6
-         UeZTpLSqQ2/PTW2u1O7qiFta3DUi44IRvl79RKSyB25U94Nc00AvM6rUP7jJDgmyD5XE
-         4HI4og8s3M4L8JhnDzp31wpCCyF9PexCR5Ggd/sSnWAMyMl9GgbYzUmfNRzRw0G90anc
-         W7dZbzdvUDzjA8tsvduAYyJQx73QQsAUZYqslZBhvmU0zNfkSyuW/H2kIKYLoftS5MQF
-         6i4NL1L34Z/vwJTyksbezREFbvK9Yno056EWf05XQXHDwhLR5djPUtyrmsdOR9ioqSlM
-         LZIg==
-X-Forwarded-Encrypted: i=1; AJvYcCX46xoj4yR5PGSoQF2OtA6XJd4klSkzNl7z/KXtxdzJjlBgXfQLYQEwFXEyowYYEgrnD6U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywt/JQvcWm7pCU4OcXfV1K12IGatxi+th+lVQ3yg02IAIE0WOkF
-	DWyQDgXTkMGNtOl74dbgJE6qp2/sunSYTWReEW6Q5XUSaJ7IH6XH2hhVGI0LdpBDKlL8e+wqxHk
-	hu2u93cAt7hJOZwautEEk7hiL/pnfigI=
-X-Gm-Gg: AeBDietkPTGeGdUfgRLivMnKkUWKOLsiAZQcFoCUanc1N5QDCoF/GUhwv10+u6evF0E
-	zUFi58ehV3sqIR6DLHRW42XCGLaOOWEeFpcxm1lj6jwzDSToUWcOQtyACxAOCYnFRfKjH5/ZpqT
-	NTHkm10p7LHHccFD8o+BcLjL8SjWYDcJo1hWYh6Ct1vL5Pf7FQ6PvhHhbbYdfwF2C1UMCV0pm3y
-	zAJU1cygYOYQvU0G/SCt5iDLv0W1u5lm3CGKYo98id7QIwn4yLFxjgCI+Sj53KTqU5Qw6TAzTDn
-	VIm2vJc=
-X-Received: by 2002:a05:690c:c0d6:b0:79a:c98d:2ba7 with SMTP id
- 00721157ae682-7a4d68302c8mr17001167b3.58.1775197016426; Thu, 02 Apr 2026
- 23:16:56 -0700 (PDT)
+        bh=ikObTRDzmQCnpPn0SnC4F9o5QbKBAZOyRVtKSVzT42M=;
+        b=LCLS0VIloduE6dPDYM3aSKdNusxpKG1rAu1shLDNju5j/qhVAZFfx36pXm3eIX7tDq
+         zqzCdSr/5wgjM1e0cDCojjAcJNYN0l5ohuGUeOMtSGbZoriRL+NN2QW1i3BsZoOd5p9H
+         O3VlrsaQt1ipHLSKLyL9fL/kQwh5v0Hup9jvl7pBrb3+ChBmhCt9Z5zRV5ZVah73zCuW
+         BT0XjmSR9a/giCrCOJZkFd3d7pzcIKlacP6JKqD1naHuw8L3u1Hd9vv1OA8nRGZB/YBw
+         DbEf9dQHuYzq7pFV3VW4/D0okwL3z3/v/fW23LPBmMF0HicQ3mi65wfbw/CwAw2LwwXo
+         R08A==
+X-Forwarded-Encrypted: i=1; AJvYcCUT9f+26RDMvxYi/k++L9Tr7OjmkSknIr9CAvpz9tov9pTErVJYxyE3A6mJLQzFnbDSM3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWFOXe7c3ztX4qFrb/rDiCbvTHlbo5kyX3O5P5RPlcK15t3ADa
+	X+bIQKTrnS+ksbkqtuUvNVRRBcsG8MJC8X2RPkrrcPJbz1SHF9XpGbAUJEvn8fK52SUZPGN6ibF
+	u2meDeAjkpWdLxh9r3jJKa3CpEPuzA7Q=
+X-Gm-Gg: AeBDiesjZluL2V92Z4/iCsUPgmmyMt1iRCPopuJKFa0wGnP4yV8e4pZSuI9ZSOrv/uh
+	h6XSmLF8tbtnJn9aAFtv3BVlN31onkHjwf4+u3wH0ye5ctIV/1CX3NcKMRjZUBFte9wCMkcdE3f
+	rWjHg1CTNXQBTeXG6bOBv6RbpDwUNotaItAuDyrMQB1XXsQhq8BA9viQw1JE/SpOFNrY81I+3A1
+	aXOPxY4jrtGq28Pov/vAh4zH1QFKOagbLla8fq4W1dcbJrl77ElRfwmRrDhTjVquYdEI+R8UgG+
+	b+Rj7Dwzi0kepGNHEYyu8HuiDmg9y0K6QlPJadxcwsFuh6/+5RRO3/69mJejSlqAOXuQNg==
+X-Received: by 2002:a05:690c:e654:b0:79f:7972:f88c with SMTP id
+ 00721157ae682-7a4d64480eemr13226287b3.11.1775197997378; Thu, 02 Apr 2026
+ 23:33:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403033828.18529-1-tpluszz77@gmail.com> <20260403033828.18529-2-tpluszz77@gmail.com>
-In-Reply-To: <20260403033828.18529-2-tpluszz77@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 2 Apr 2026 23:16:44 -0700
-X-Gm-Features: AQROBzCTrmptyfsV_v3ikBXRdVjkaCBoKlwVMmC8toHkx7GK_P0VsdwCkPPJnns
-Message-ID: <CAMB2axMan4JTB8jqor6JsHOHmb1tsNnBRe9ZFbw43bdvSVkU5g@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: reject direct access to nullable
- PTR_TO_BUF pointers
-To: Qi Tang <tpluszz77@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Song Liu <song@kernel.org>, bpf@vger.kernel.org
+References: <20260402215727.980993-1-irogers@google.com>
+In-Reply-To: <20260402215727.980993-1-irogers@google.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Fri, 3 Apr 2026 14:33:03 +0800
+X-Gm-Features: AQROBzDHLi377LEU70OoLL7LQcZ2-j_I8HrwDSkBlgiNIkIIP9iu5gBB5h_oE8k
+Message-ID: <CABFUUZHVg6XQeVBrv8R22M-LNoJUoNEQQ3K_wA-TpTKT-Mr4Hw@mail.gmail.com>
+Subject: Re: [PATCH v1] perf cgroup: Update metric leader in evlist__expand_cgroup
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 2, 2026 at 8:38=E2=80=AFPM Qi Tang <tpluszz77@gmail.com> wrote:
+On Fri, Apr 3, 2026 at 5:58=E2=80=AFAM Ian Rogers <irogers@google.com> wrot=
+e:
 >
-> check_mem_access() matches PTR_TO_BUF via base_type() which strips
-> PTR_MAYBE_NULL, allowing direct dereference without a null check.
+> When the evlist is expanded the metric leader wasn't being updated. As
+> the original evsel is deleted this creates a use-after-free in
+> stat-shadow's prepare_metric. This was detected running the "perf stat
+> --bpf-counters --for-each-cgroup test" with sanitizers.
 >
-> Map iterator ctx->key and ctx->value are PTR_TO_BUF | PTR_MAYBE_NULL.
-> On stop callbacks these are NULL, causing a kernel NULL dereference.
+> The change itself puts the copied evsel into the priv field (known
+> unused because of evsel__clone use) and then in a second pass over the
+> list updates the copied values using the priv pointer.
 >
-> Add a type_may_be_null() guard to the PTR_TO_BUF branch, matching the
-> existing PTR_TO_BTF_ID pattern.
+> Fixes: d1c5a0e86a4e ("perf stat: Add --for-each-cgroup option")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/cgroup.c | 34 +++++++++++++++++++++++++++-------
+>  1 file changed, 27 insertions(+), 7 deletions(-)
 >
-> Fixes: 20b2aff4bc15 ("bpf: Introduce MEM_RDONLY flag")
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Qi Tang <tpluszz77@gmail.com>
+> diff --git a/tools/perf/util/cgroup.c b/tools/perf/util/cgroup.c
+> index 040eb75f0804..1e0fef283826 100644
+> --- a/tools/perf/util/cgroup.c
+> +++ b/tools/perf/util/cgroup.c
+> @@ -417,7 +417,6 @@ static bool has_pattern_string(const char *str)
+>  int evlist__expand_cgroup(struct evlist *evlist, const char *str, bool o=
+pen_cgroup)
+>  {
+>         struct evlist *orig_list, *tmp_list;
+> -       struct evsel *pos, *evsel, *leader;
+>         struct rblist orig_metric_events;
+>         struct cgroup *cgrp =3D NULL;
+>         struct cgroup_name *cn;
+> @@ -452,6 +451,7 @@ int evlist__expand_cgroup(struct evlist *evlist, cons=
+t char *str, bool open_cgro
+>                 goto out_err;
+>
+>         list_for_each_entry(cn, &cgroup_list, list) {
+> +               struct evsel *pos;
+>                 char *name;
+>
+>                 if (!cn->used)
+> @@ -467,21 +467,41 @@ int evlist__expand_cgroup(struct evlist *evlist, co=
+nst char *str, bool open_cgro
+>                 if (cgrp =3D=3D NULL)
+>                         continue;
+>
+> -               leader =3D NULL;
+> +               /* copy the list and set to the new cgroup. */
+>                 evlist__for_each_entry(orig_list, pos) {
+> -                       evsel =3D evsel__clone(/*dest=3D*/NULL, pos);
+> +                       struct evsel *evsel =3D evsel__clone(/*dest=3D*/N=
+ULL, pos);
+> +
+>                         if (evsel =3D=3D NULL)
+>                                 goto out_err;
+>
+> +                       /* stash the copy during the copying. */
+> +                       pos->priv =3D &evsel->core;
+>                         cgroup__put(evsel->cgrp);
+>                         evsel->cgrp =3D cgroup__get(cgrp);
+>
+> -                       if (evsel__is_group_leader(pos))
+> -                               leader =3D evsel;
+> -                       evsel__set_leader(evsel, leader);
+> -
+>                         evlist__add(tmp_list, evsel);
+>                 }
+> +               /* update leader information using stashed pointer to cop=
+y. */
+> +               evlist__for_each_entry(orig_list, pos) {
+> +                       struct evsel *evsel =3D pos->priv;
+nit: since pos->priv stores &evsel->core above, could we use container_of()=
+ here
+as well? Or just stash evsel directly into priv?
+> +
+> +                       if (evsel__leader(pos))
+> +                               evsel->core.leader =3D evsel__leader(pos)=
+->priv;
+> +
+> +                       if (pos->metric_leader) {
+> +                               evsel->metric_leader =3D
+> +                                       container_of(pos->metric_leader->=
+priv, struct evsel, core);
+> +                       }
+> +                       if (pos->first_wildcard_match) {
+> +                               evsel->first_wildcard_match =3D
+> +                                       container_of(pos->first_wildcard_=
+match->priv,
+> +                                                    struct evsel, core);
+> +                       }
+> +               }
+> +               /* the stashed copy is no longer used. */
+> +               evlist__for_each_entry(orig_list, pos)
+> +                       pos->priv =3D NULL;
+> +
+>                 /* cgroup__new() has a refcount, release it here */
+>                 cgroup__put(cgrp);
+>                 nr_cgroups++;
+> --
+> 2.53.0.1213.gd9a14994de-goog
+>
+>
+This patch makes sense to me, apart from the nit above.
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Acked-by: Sun Jian <sun.jian.kdev@gmail.com>
