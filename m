@@ -1,132 +1,150 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49B55230BDB
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 15:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8711F230BDB;
+	Fri,  3 Apr 2026 15:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775231197; cv=none; b=UyoHSxSTZZ03yj/6bmOXoRjj4LP0FPBp8Bs3jX4RNLZAxGU/2AK93ucExUp+BnOvIw17LHy6fygqUbNnF++nMsCHqr6cQnbtj+G82j3hks4SNWZvJmS1eotYjZuGUwgRqA3LyIvL4l/FXfSouRyu9Oj6AaASiRhtOVz3MO8Pvxs=
+	t=1775231677; cv=none; b=Xz/K6iGtinskl55KhH9fSyZT/PzJTWUde1u+FlT2sLFTL6uWM8dtUtW+TZLvmAGuvZZ1JkBOqM8VqFCQ5dHSn91i8ETq4AubViEirTa/Jk2KcK7bsbxu3bDkLZG9LPe8uqGL1V++9nqXiCkcOjEdA+mBkaPxFfD4AqQd1Zp4YP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775231197; c=relaxed/simple;
-	bh=1HwRQZ8lP8jZGh5b/FgAtpH3dI3DnAUhco17qeYKq+8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jQL5BxGAqjP4hJzxM+n/fTU8N7NhDlf5CqJVAAMFRT3DlU9KH5h3IeNzZ8mxsBqk9FMR9qwgd4cFAE/zAhjx3jvthM+qkajWeT9AGGLyCzdDqCyzybP5iAcn16f5V0N8fKxrYyzqEV8adniPgTdI881DNJmoeZED9AqH0bzYPAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=F0i5eEjQ; arc=none smtp.client-ip=209.85.210.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1775231677; c=relaxed/simple;
+	bh=taGDzVaqhYmXMFPSKm+ArXZcDQIHGJL6OcwO+HcC9cM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fp8ppExI2nOxljS9pZMK9lRmHyyF2bfMSHh7RYO7xnANDS2FOHWOszNk5ZAbjtR3Ddg4iXDExfq/r6sdgb7EfD1TeV2MUXHT3dXIYfcO72PRnHpP+PxusiAWfh8IGXG3Tvo7tkrT/IXbk3FWOd1d6Z789Prt8Y8sv0g5Duyc+gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OFvEZeOZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="F0i5eEjQ"
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7d1872504cbso1926309a34.0
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 08:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1775231195; x=1775835995; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K0c0DhKW2IhtOv8mkjVWIMAgeS4UtF/c2tQs3JYMSlA=;
-        b=F0i5eEjQLDzkNLh2xU5B1l+7cdqvLO/gaTxruFIO+bwxcslVc5friyGaZhghre0fo+
-         Y8UaIIAnO9Wc/iSGhhoYGuzxjMCzX6qZD2/SA3322EU3ojqjP9oos5Ya3zcnyTAuavm7
-         7NZCiLibeDM+NVrLQ+2zo7UWMrA22OQCP7o/dfNb/YkgJh8YXF4hp/J2hgz3Z4yF51pv
-         tutWvulLOaHXBSqKI2rX+6PA1glGT43B+1p7ejpbuugYUelzCyE+n5k0eolHr1HGV0dk
-         3jwQF6vRwGpe+NyCpt1Hf9XGqAunc2oxtNoKJZJ6x6/lN1lNd6DBwNn0GfH8AWTcPre2
-         tY2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775231195; x=1775835995;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K0c0DhKW2IhtOv8mkjVWIMAgeS4UtF/c2tQs3JYMSlA=;
-        b=flmPZWc9FsXrxFzrFTynDOpk49U9glJFSPpe+/ACjWCwxPPZ2oxX+w4gBqK/Z2CqTK
-         V97EiwagkMt+kFWWvbWMBlOfDBKIEJ+7sgGm1MXGpRmWc2+djQlW4RJ7ADdsAFLwWlhH
-         KxtTpmq7k7pLFsqwSLUrOqeMG2VTm5e3K1/Sjg27QSg6ekjmxe8L3w/PPCXn7t0H8rsA
-         y+HuSOE/WCS5AyGFHkJl6RVg9OVLbL8GfIxNqoaaUNszLMb253KEiRTC0BX9Ro/MXPKd
-         bwe9iUF+FgqPz/apdA2BPT7Qk9E06C1Oy5hRHzWLXPTcDoUhN1bNrSm5eP4YpZ4N35cz
-         kMoA==
-X-Forwarded-Encrypted: i=1; AJvYcCWynTvT6iSM5OrRXPRTaqwd6ApoNzlH3DLaYRLl+B+RF5Xdz4rKHKufV9qxfqK13rh2zOM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY90Nfw6qhUwPOlQtnzmRYzQVm5Ko7zIcxNT4a7lYY/7p5N/MH
-	uEm9pBTAzzwP/HlnVwkSVvN9zC4KK19xJ7FS2jE/OIHRXS/LwT3aHM9/7TSW0NIm9Nw=
-X-Gm-Gg: ATEYQzx04wWkdk1urgvzfYVdz0JDyg8/NFbudZJ8NMUTxVTa4bVjzgPWx80WojkqDML
-	O53U/XnN5ZTFG8Ow8JDsVHAIr8Herb54XtsF1UBZ0MG2Ko5cKsVJ1j/Lpq4zQTlBOTi+84AbPN1
-	ELROp+yC4Ix0dwyDX8bdDec24xVUKtJXM2GJvWzX4evqiPXlYdCYPfdDYF5yxxRzK5L9akFYqzK
-	GryDRRjPy2JEeTcBnLkob/Fp6QT6ZDcROnqjoTjq/YTUCD19cSv5WSiX3LlYZYxQHwipliShnVQ
-	+cZH4cnLdNafNY/PgSIN8r1LxWlNq+CqCAoRppU2ahy06xwhzesR/CfgUcVKznYuc4KLvsZTc4L
-	HBdbjYRoySS+I+oDZacajMQDSCJQkE0WgF4JzkhM8cYIhKkcEh4GzBSbcPOvu6y8FE+CY7leGtm
-	QnaBK5ZXr/UDqyhoPr+kNRjueskAF4e5OInU4oVgyV6am2IB/wjB0tFfXJ8n3nADwZXDCKUFnDp
-	FzHWY+v
-X-Received: by 2002:a05:6830:65c5:10b0:7db:9910:de8d with SMTP id 46e09a7af769-7dbabc2ee95mr2629346a34.7.1775231191605;
-        Fri, 03 Apr 2026 08:46:31 -0700 (PDT)
-Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dba7126f1bsm4609233a34.4.2026.04.03.08.46.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Apr 2026 08:46:30 -0700 (PDT)
-Message-ID: <cb3e52fc-3dad-4385-b9b7-ade9add5292f@kernel.dk>
-Date: Fri, 3 Apr 2026 09:46:29 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OFvEZeOZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D367C4CEF7;
+	Fri,  3 Apr 2026 15:54:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775231677;
+	bh=taGDzVaqhYmXMFPSKm+ArXZcDQIHGJL6OcwO+HcC9cM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OFvEZeOZ6WpNK2LXAoHgivcU4CpGINBjQe6IAf1Pmd1musmmohUGu/eKNb+ujo24v
+	 tTHxVGAR9KQR9M1pj9W1w/eX4xMI0bxXGQAiKY5l6vBMes1CNTHjAP2L5QGfaFAdUn
+	 2+f75VOAMfHEf/Aj45LkKZ9W575ozPUvtN1C/Nqzvfe0jmK7TqTFUtpDa0UiS0AzFj
+	 nr2qMC67NdY78pQ9Or/h/RjGQCITzoQ4vchaiDqPuI/9Icp+V8Ej/mTJ0gZb/KnsMd
+	 PPREzvainXb9MdfTAA5f+pjq7q9nuqnF1hFjpVNzhwRAdBjmH6gsgqlJclUovHFkgA
+	 kpKmLZkujBacw==
+Date: Fri, 3 Apr 2026 08:54:36 -0700
+From: Kees Cook <kees@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Sun Jian <sun.jian.kdev@gmail.com>,
+	Jiri Olsa <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, bpf <bpf@vger.kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4] libbpf: Replace strncpy() with strnlen()+memcpy() in
+ skel_map_create()
+Message-ID: <202604030852.D0F31E6@keescook>
+References: <20260401001130.it.781-kees@kernel.org>
+ <CAADnVQJ+uSCvtpv4A33YeRi=_LCnZRaxB_ejVgdxPDO5u3+oeg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V3 05/12] io_uring: bpf: extend io_uring with bpf
- struct_ops
-To: Ming Lei <ming.lei@redhat.com>
-Cc: io-uring@vger.kernel.org, Caleb Sander Mateos <csander@purestorage.com>,
- Akilesh Kailash <akailash@google.com>, bpf@vger.kernel.org,
- Xiao Ni <xni@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-References: <20260324163753.1900977-1-ming.lei@redhat.com>
- <20260324163753.1900977-6-ming.lei@redhat.com>
- <b7216cd5-68f4-4ab5-b1c8-b1c71f38fc00@kernel.dk> <ac8_XZZiTmHi3mwq@fedora>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ac8_XZZiTmHi3mwq@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJ+uSCvtpv4A33YeRi=_LCnZRaxB_ejVgdxPDO5u3+oeg@mail.gmail.com>
 
-On 4/2/26 10:17 PM, Ming Lei wrote:
-> On Wed, Mar 25, 2026 at 08:09:03PM -0600, Jens Axboe wrote:
->> On 3/24/26 10:37 AM, Ming Lei wrote:
->>>  int io_uring_bpf_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>  {
->>> +	struct uring_bpf_data *data = io_kiocb_to_cmd(req, struct uring_bpf_data);
->>> +	u32 opf = READ_ONCE(sqe->bpf_op_flags);
->>> +	unsigned char bpf_op = uring_bpf_get_op(opf);
->>> +	const struct uring_bpf_ops *ops;
->>> +
->>> +	if (unlikely(!(req->ctx->flags & IORING_SETUP_BPF_EXT)))
->>> +		goto fail;
->>> +
->>> +	if (bpf_op >= IO_RING_MAX_BPF_OPS)
->>> +		return -EINVAL;
->>> +
->>> +	ops = req->ctx->bpf_ext_ops[bpf_op].ops;
->>> +	data->opf = opf;
->>> +	data->ops = ops;
->>> +	if (ops && ops->prep_fn)
->>> +		return ops->prep_fn(data, sqe);
->>> +fail:
->>>  	return -EOPNOTSUPP;
->>>  }
->>
->> Any early exit should ensure 'data' is sane, so that the cleanup doesn't
->> potentially touch uninitialized crap. This is something that has bit us
->> in the past. Not an issue for this patch that adds the code, but it will
->> be once the next patch is applied. Better to clear ->opf/ops here
->> upfront, so that we never leave this function without 'data' being fully
->> initialized.
+On Thu, Apr 02, 2026 at 11:14:58AM -0700, Alexei Starovoitov wrote:
+> On Tue, Mar 31, 2026 at 5:11 PM Kees Cook <kees@kernel.org> wrote:
+> >
+> > BPF is the last user of the deprecated[1] strncpy() in the kernel.
+> > Replace it with a length check via strnlen() on the source followed
+> > by memcpy(). Normally strscpy() would be used in this case, but
+> > skel_internal.h is shared between kernel and userspace tools, and
+> > strscpy() is not available in the userspace build context.
+> >
+> > The source map_name is a NUL-terminated C string (the only caller
+> > passes the "__loader.map" 12 character string literal). The destination
+> > attr.map_name is char[BPF_OBJ_NAME_LEN] (16 bytes) in union bpf_attr,
+> > ultimately passed to the bpf() syscall.
+> >
+> > The bpf(BPF_MAP_CREATE) syscall, through bpf_obj_name_cpy(), requires a
+> > NUL terminator within this 16-byte array, rejecting names that use all 16
+> > bytes. Valid names are therefore at most 15 characters, but this wasn't
+> > being checked via the skel_map_create() path. Add a matching check and
+> > refuse 16+ character strings early, as they would be refused later by
+> > bpf_obj_name_cpy().
+> >
+> > The attr is pre-zeroed with memset() at the top of the function, so
+> > the last byte of attr.map_name is always NUL, meaning the memcpy()
+> > of just the non-NUL characters from the source will always produce a
+> > NUL-terminated destination string.
+> >
+> > Link: https://github.com/KSPP/linux/issues/90 [1]
+> > Suggested-by: Sun Jian <sun.jian.kdev@gmail.com>
+> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > ---
+> >  v4: Reformat commit log slightly, confirm last user of strnlen in -next
+> >  v3: https://lore.kernel.org/lkml/20260324161605.make.168-kees@kernel.org/
+> >  v2: https://lore.kernel.org/lkml/20260324053036.it.906-kees@kernel.org/
+> >  v1: https://lore.kernel.org/lkml/20260324040535.work.851-kees@kernel.org/
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Cc: sun jian <sun.jian.kdev@gmail.com>
+> > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > Cc: Eduard Zingerman <eddyz87@gmail.com>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > Cc: Song Liu <song@kernel.org>
+> > Cc: Yonghong Song <yonghong.song@linux.dev>
+> > Cc: John Fastabend <john.fastabend@gmail.com>
+> > Cc: KP Singh <kpsingh@kernel.org>
+> > Cc: Stanislav Fomichev <sdf@fomichev.me>
+> > Cc: Hao Luo <haoluo@google.com>
+> > Cc: <bpf@vger.kernel.org>
+> > ---
+> >  tools/lib/bpf/skel_internal.h | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+> > index 6a8f5c7a02eb..2d38c387f43c 100644
+> > --- a/tools/lib/bpf/skel_internal.h
+> > +++ b/tools/lib/bpf/skel_internal.h
+> > @@ -236,6 +236,7 @@ static inline int skel_map_create(enum bpf_map_type map_type,
+> >  {
+> >         const size_t attr_sz = offsetofend(union bpf_attr, excl_prog_hash_size);
+> >         union bpf_attr attr;
+> > +       size_t map_name_len;
+> >
+> >         memset(&attr, 0, attr_sz);
+> >
+> > @@ -243,7 +244,12 @@ static inline int skel_map_create(enum bpf_map_type map_type,
+> >         attr.excl_prog_hash = (unsigned long) excl_prog_hash;
+> >         attr.excl_prog_hash_size = excl_prog_hash_sz;
+> >
+> > -       strncpy(attr.map_name, map_name, sizeof(attr.map_name));
+> > +       /* attr.map_name must be NUL-terminated, like bpf_obj_name_cpy() */
+> > +       map_name_len = strnlen(map_name, sizeof(attr.map_name));
+> > +       if (map_name_len == sizeof(attr.map_name))
+> > +               return -EINVAL;
+> > +       memcpy(attr.map_name, map_name, map_name_len);
 > 
-> But ->cleanup() is only called in case of REQ_F_NEED_CLEANUP.
-> 
-> Or maybe you mean other cleanup instead of ->cleanup()?
+> this is plain ugly and inefficient.
+> Just #ifdef kernel and use strscpy in that branch.
 
-I do mean ->cleanup() - what I'm trying to say here is that we've had
-cases of REQ_F_NEED_CLEANUP being set late, and hence missing cleanup
-for easily hit error conditions, and non-initialized data being exposed
-in cleanup. It's very easy to miss for later patches that adds another
-error condition. My recommendation is to fully initialize 'data' and set
-REQ_F_NEED_CLEANUP early, which handily avoids that for future changes
-too.
+I think you're asking for:
+
+#ifdef __KERNEL__
+	if (strscpy(attr.map_name, map_name) < 0)
+		return -EINVAL;
+#else
+	strncpy(attr.map_name, map_name, sizeof(attr.map_name));
+#endif
+
+Is that right?
 
 -- 
-Jens Axboe
+Kees Cook
