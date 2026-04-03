@@ -1,195 +1,241 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7592830F7EF
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 18:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAD535BDC2
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 18:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775239294; cv=none; b=YpQCTs5XaZDjBgLmrrsSxIH4XZd75+OaTPwqJtxnUsyj6s7NoId4GnMk1KgS1sinnEzIZ72FvG277+rQ+uJkNNtpeNsDoReWJQSqEfh9S0rfeqgZMJKe5JJxD+l4DwXOfG5z1oToyf6PpE5mXZ61lAUCnLfzMFE9C2lFrmlpvdY=
+	t=1775239375; cv=none; b=uhfjIXVlIgMfVF3+QKT+6tq/yvKg93hnOjJ6SniA9qU6xDuBioePmRIbHu6nsaWZGXSnRlegd6LV5ECkLa8lqbgX+Q4FBD11B8HaAkGYwRy1hJPABP+pp0c9K/PNszh7bKwzjYte48eK8zKFQgkjGv5vrpqlQlBrDcbTWrksu+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775239294; c=relaxed/simple;
-	bh=CgqdO3MoEdV6h1XvZvnp3xzwPDu9ksHhUwKVUiC110I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ElMXlVGKC4TYLoBcphKpIT9Ss0o16UKFT2acRMfnvd7cuENWaj+68i0NbNNwAy/6vcXSeWloDij9x2cfA1+xUUD3qBoAslM7NlBUvrV4qv5Wyu1tGayjKpDVA/N/gRfTpVLB3Tyl+5hgpWCJyrx6LTDifPDQMrtLmNJAE6MTdFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=heXE3Toz; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775239375; c=relaxed/simple;
+	bh=4MFs4qnlr4W46X0e5ZzkTT4N2qDHUmdeEw3UxBICydg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hyQ770NEWWlDKpian+Zt175VKzPUv6ktfLG+sVs4XwLBD9Q9kvKKhh5eDrBmBQo/hmsWkycNxOjDTywv29YFotvSByKb4NzJEHbAY655tQt3JAzQzm6twvqtwFmB0tSG5zaahV567TvPDEbK53Z+BFEmdw7g70ffmWdz18/nYo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=h2cj7u3E; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="heXE3Toz"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso18898425e9.3
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 11:01:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="h2cj7u3E"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2b23f90f53aso19774355ad.0
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 11:02:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775239292; x=1775844092; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TJrBEs7DvDXPMf6HvY06bHlVrPZogp4C0m0gvlF+Db0=;
-        b=heXE3TozFwSB8EqMTkhp2Z9STgW0iuudN4CiLxcyuitcBFBMGpmU1bmwEP/DSuxjeb
-         7z8ehHTiT4kygFkHKbYU6OweMpKYEO2kM2b2kGMtx27IIF3qU1KOdkoJM7WOA1fC8l3l
-         FEGYqFcQbx988Rg5HtPhFcMcC6HZFigAF6drUHuBHn66vk88IkFdJvxfVetUnf4j9TAE
-         yxql+TO1gAWXfs0WwpRkq5DWnZz518v6gqE/leB4mRdF/yMskPVlyMQWWRiSqfroidyE
-         40Vfm5ZjE9U1hSalbc5Mqc+JPzdA418K5nZYPpAjsD9iDaCiPf0uqfur/Ztc8pa0Bmnp
-         7Ppw==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775239370; x=1775844170; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=St1Q+eC0G4ZneHNDCt55t0/J1pND9W4YSxEJDZNyi4U=;
+        b=h2cj7u3EdLjm27XssDIkLKUSuJ3Lwi1WF0prXmJkraoP8W4ptCl/wn77ridfTjTeal
+         H9bCpRvQftxXPWwRZeUuJahZkCA/HxA7MLZeXtjw8mJ2K890kd6ugLfPWe9TvJyT37J+
+         MqSPRB/vc0mkZHX1qazyWLB2olRWvmQqXcjxQXqKNodtlfRUuLjKj23M18Y5sej++xhc
+         ABygrt60UdDQz8/Lm8q4CAOCI9pqac3OQXg5XB1FJSohNe+i+vH/VZm5AoKef5qcg2ud
+         xau1nmhFhgEM6TC9mEBUWSuS+ZHQpMsow4Sk5IQSQwWsTNVUx29pixs+7eQzNQJt7TBu
+         LDzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775239292; x=1775844092;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJrBEs7DvDXPMf6HvY06bHlVrPZogp4C0m0gvlF+Db0=;
-        b=Ho6+Fx1zBXqZTo8624Jl2/kV1QuGLF+MONg5Ut+kFuu9Y/foVo7c0MpkVlZmSCS49G
-         0ZGBuOHcoLjZEbgQ1ITzq9k5zAgGwMMQFpZjEie20cTs1cXeCTe5JiHHMdUXwxSs2quD
-         FkXxYJmCGAskiMDMwt4DQ97H1jexZMVaiYOQQRsYIJesvdaoJUeU6GlkLcK0GtLK1Z+u
-         H/xnYzIX9i0poK5aUfdKmipXPHu14d0gLZLJzGW1EVtAFw1sSwn/vBNvjssGEWVc9EZE
-         VVKp60QM7MPoQc6D7f8FHfam7H3Vac/KIcy9KOrfVZSfj6SDAHFiTXJJUtaE2yQOncU7
-         ubaw==
-X-Gm-Message-State: AOJu0YzxItqc+jciO638pinZCgBwipQhubuqMJApYIwgZKbjakExRVY9
-	WziEo0crdEunKpIsYuoWoicRzekK7Sdk0I7ZKKn+6Fv8MpKiJN8mNqrV
-X-Gm-Gg: ATEYQzzIGnEecPWG30tTo4LsIBVEUbWHHFYDBGwtU3x9iMWYRWk38aTIt69PJyvL06v
-	UORQEeqqdptogIJ0Tb9JaZwZL83Piygn8CNhzFKPJiV4/yilnepLmZFKfqWdRsBOK1gLik9h/57
-	UA7kBcoYzHCkAuEHJxVC7Kkh/uj4ObMOcKRVhCsGzdfh84CgYdI/NET9a00vh8oVeI9C8LRAi1l
-	jmRB7IbdD+zbkvpom9w0Zv/3Ibic9eynEPR+L0Oi2iihYM+RXQbzFfemg/E1ir6HFYvhYXFVHxx
-	vv8DY52VFWgvNHp/dTJkYWkFeYVN7AHQPuTetY1GXs2IoMiV9g2ufqR5NgQ8i/SjFi7tmctvQRA
-	hFa8//PLzrzdzACLaAryyV/Zymfpo2kSSQhPKN4ylnworoBy1MJJq/n+NiuT/cuS8Lurxg9NW+S
-	mKhwvSG8bCgHdDlJjbNTsL3x3+pLeNC4WC
-X-Received: by 2002:a05:600c:138f:b0:486:fbf6:abd4 with SMTP id 5b1f17b1804b1-488996f250dmr56537265e9.9.1775239291317;
-        Fri, 03 Apr 2026 11:01:31 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4888a626100sm266056245e9.1.2026.04.03.11.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2026 11:01:30 -0700 (PDT)
-Date: Fri, 3 Apr 2026 18:10:12 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Jiyong Yang <ksur673@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Do not ignore offsets for loads
- from insn_arrays
-Message-ID: <adAChK9+GVACl8ci@mail.gmail.com>
-References: <20260402184647.988132-1-a.s.protopopov@gmail.com>
- <20260402184647.988132-2-a.s.protopopov@gmail.com>
- <CAADnVQKUJYsPJa8HP9E-pguQeuShXfuaEs4Z_zJAVYWeEUvHBg@mail.gmail.com>
- <ac7XSg6AsJq99WvT@mail.gmail.com>
- <CAADnVQJ_e2fyODknJyMPRw4Z7ztu3-0ZrVM8jXpoO1g7bH52jA@mail.gmail.com>
- <ac9yriPJX9RXa5tr@mail.gmail.com>
- <CAADnVQK0mEAdZ3PEHv=wvbPUrEA7EPmU7w928JOd=143vt+kJA@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1775239370; x=1775844170;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=St1Q+eC0G4ZneHNDCt55t0/J1pND9W4YSxEJDZNyi4U=;
+        b=QIg7fkKfqN49YT9Cz3UgoHzQmNnGHZauYR8OU6XDG9ditNi6muD3EM4aEpTVAAu3/T
+         Ga2CRbQCtEqJIhySU6uHfRpfW4bPrbrCZJOViTRa0yWTIQ+JSilH5U2RtgisgtrIlAng
+         dI3p44YAVNnJt7oa0KguHPIxCOg4bNCwj9kMWf5FxheFqVJyQKo/0UGSP4CXfxxjcawJ
+         wCBOWclVCShEPIjxxoI4Iy6iNR9q9UG5Pi57Ov203vwVZTku46YQa9rA7uWr+WZNEXva
+         Cvv8zDUTe2fpZ9BzCMPvVr/hLWJ0RsVtYqlhlqKT4hstEh2ZOVyvVSr1GKwefgqXKtwt
+         vn/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQegYsYEtnYl6bzDoAQ9xfjhEO2ra5zzaCTWWjyc3poYJ/tRIsADclujlTHSjLEhO3374=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/42tVvkRLKeb+e1cxp90VlHNDNIc73GLzKeZnAXJaeS7sKXvp
+	RCeFg99NBs5nyCwD408GaIhl1cPHK5rD0UP8M8LmF0ASjHOqoWpJDk5q/SnlUrvN5H0=
+X-Gm-Gg: AeBDievrgUdb9kglyzN73PUWjwj5Isv2q9bnnew5cvtKl/gDuiIVLcVXw+vKoNTMqvc
+	txn1UzkLHV7D+tDb079A380cfcGbXR90dp1/Fcxd2Ch7x9BcEMiQeTKsGhRFtn3BGTpfFsOQd/X
+	0OKBkIjDbkcmZGY4UW8RRQAvEa4wgkRn1hsQ3qEwsgEHy7FyRfTXsi/ppUcH237YGQexpPRU3Zb
+	HZDmhX4smDMf3nHCQQiQCPA0u3oZMYhViGJyICRgdM0hx3IsHdv7ByHAXRYWvddqCv8YAICGh3H
+	SZHh4JtSvLyMHg3s4SKt55zHlOIpeYfUmU+6Q6LelDC4sVhoI6uUBD0G8XVHXwykEpqCJ9JUA2c
+	gR+yhWFOb5hxIk9aSkD4Q0lQbhvCo4ztev7gnlX/Z4tM14Mr6OHVKXtv5fmxPYq9X9vA++3vZEV
+	8ZVmjka/U=
+X-Received: by 2002:a17:903:1b70:b0:2b0:bebb:1081 with SMTP id d9443c01a7336-2b281799025mr44217265ad.28.1775239369871;
+        Fri, 03 Apr 2026 11:02:49 -0700 (PDT)
+Received: from localhost ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27497af26sm63916025ad.49.2026.04.03.11.02.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Apr 2026 11:02:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQK0mEAdZ3PEHv=wvbPUrEA7EPmU7w928JOd=143vt+kJA@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 03 Apr 2026 14:02:47 -0400
+Message-Id: <DHJPU2PATPEF.1QNVY25530KTK@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Puranjay Mohan"
+ <puranjay@kernel.org>, "Anton Protopopov" <a.s.protopopov@gmail.com>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Shahab
+ Vahedi" <list+bpf@vahedi.org>, "Russell King" <linux@armlinux.org.uk>,
+ "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Hengqi Chen"
+ <hengqi.chen@gmail.com>, "Johan Almbladh"
+ <johan.almbladh@anyfinetworks.com>, "Paul Burton" <paulburton@kernel.org>,
+ "Hari Bathini" <hbathini@linux.ibm.com>, "Christophe Leroy"
+ <chleroy@kernel.org>, "Naveen N Rao" <naveen@kernel.org>, "Luke Nelson"
+ <luke.r.nels@gmail.com>, "Xi Wang" <xi.wang@gmail.com>,
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, "Pu Lehui"
+ <pulehui@huawei.com>, "Ilya Leoshkevich" <iii@linux.ibm.com>, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "David
+ S . Miller" <davem@davemloft.net>, "Wang YanQing" <udknight@gmail.com>
+Subject: Re: [PATCH bpf-next v12 3/5] bpf: Add helper to detect indirect
+ jump targets
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Xu Kuohai" <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260403132811.753894-1-xukuohai@huaweicloud.com>
+ <20260403132811.753894-4-xukuohai@huaweicloud.com>
+In-Reply-To: <20260403132811.753894-4-xukuohai@huaweicloud.com>
 
-O 26/04/03 08:10AM, Alexei Starovoitov wrote:
-> On Fri, Apr 3, 2026 at 12:47 AM Anton Protopopov
-> <a.s.protopopov@gmail.com> wrote:
-> >
-> > On 26/04/02 02:32PM, Alexei Starovoitov wrote:
-> > > On Thu, Apr 2, 2026 at 1:44 PM Anton Protopopov
-> > > <a.s.protopopov@gmail.com> wrote:
-> > > >
-> > > > On 26/04/02 12:00PM, Alexei Starovoitov wrote:
-> > > > > On Thu, Apr 2, 2026 at 11:38 AM Anton Protopopov
-> > > > > <a.s.protopopov@gmail.com> wrote:
-> > > > > >
-> > > > > > When a pointer to PTR_TO_INSN is dereferenced it is possible to
-> > > > > > specify an offset inside the load instruction. This is a bug,
-> > > > > > because while the verifier ignores the field, JITs are not.
-> > > > > > So, patch the verifier to not ignore this field.
-> > > > >
-> > > > > This is too terse to understand.
-> > > > > In 2nd patch you're saying:
-> > > > >
-> > > > >    r1 = &map + offset1
-> > > > >    r1 += offset2
-> > > > >    r1 = *(r1 + offset3)
-> > > > >    gotox r1
-> > > > >
-> > > > > Here offset3 is, normally, equal to zero; but this is not guaranteed.
-> > > > >
-> > > > > What is this 'offset3'? Where did it come from?
-> > > >
-> > > > The offset3 is the .off field of the BPF_LDX_MEM instruction.
-> > > > The BPF assembler will correctly work with non-zero offsets:
-> > > >
-> > > >     r1 = &map;
-> > > >     r1 = *(r1 + offset)
-> > > >
-> > > > > What do you mean JIT handles it?
-> > > >
-> > > > JIT will issue a memory load with this offset,
-> > > > but verifier will ignore it (before this patch).
-> > > >
-> > > > > can llvm ever generate such code?
-> > > > > if not, reject it early ?
-> > > >
-> > > > LLVM can generate code with non-zero offset in BPF_LDX_MEM,
-> > > > say, if one jumps to a structure field, like in `goto *p->j`
-> > >
-> > > sorry, I still don't get it. What kind of syntax is that?
-> > > Could you share the godbolt link where llvm actually generates
-> > > such code? If the verifier will reject it anyway it's fine.
-> > > I just want to make sure we're fixing real problem.
-> >
-> > I am not aware of any real-life code, only can construct
-> > some artificial examples:
-> >
-> >         SEC("syscall")
-> >         int test(unsigned int n)
-> >         {
-> >                 struct {
-> >                         int i;
-> >                         void *j[3];
-> >                 } x = {
-> >                         .i = n,
-> >                         .j = { &&l1, &&l2, &&l3 },
-> >                 };
-> >
-> >                 if (n < 3)
-> >                         goto *x.j[n];
-> >
-> >                 return 0;
-> >         l1:
-> >                 return 1;
-> >         l2:
-> >                 return 3;
-> >         l3:
-> >                 return 5;
-> >         }
-> >
-> > It will compile into
-> >
-> >         <test>:
-> >         ;               .j = { &&l1, &&l2, &&l3 },
-> >              160:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r2 = 0x0 ll
-> >                         0000000000000500:  R_BPF_64_64  BPF.JT.4.0
-> >              162:       79 23 10 00 00 00 00 00 r3 = *(u64 *)(r2 + 0x10)
-> >                                                                    ^ offet != 0
-> >              163:       7b 3a f8 ff 00 00 00 00 *(u64 *)(r10 - 0x8) = r3
-> >              164:       79 23 08 00 00 00 00 00 r3 = *(u64 *)(r2 + 0x8)
-> >              165:       7b 3a f0 ff 00 00 00 00 *(u64 *)(r10 - 0x10) = r3
-> 
-> Great, but where is an actual gotox that is using that r3?
-> Looks like it's spilled into stack at 163 ?
-> Does it pass the verifier?
-> Would be great to add it as C selftest.
+On Fri Apr 3, 2026 at 9:28 AM EDT, Xu Kuohai wrote:
+> From: Xu Kuohai <xukuohai@huawei.com>
+>
+> Introduce helper bpf_insn_is_indirect_target to check whether a BPF
+> instruction is an indirect jump target.
+>
+> Since the verifier knows which instructions are indirect jump targets,
+> add a new flag indirect_target to struct bpf_insn_aux_data to mark
+> them. The verifier sets this flag when verifying an indirect jump target
+> instruction, and the helper checks the flag to determine whether an
+> instruction is an indirect jump target.
 
-No, this one doesn't pass the verifier (it is spilled to stack, and when
-it is loaded back the error is "invalid unbounded variable-offset
-read from stack R2", because it is loaded back from stack as
-"scalar", not "insn"). All "normal" use cases from [C-level] selftests
-(a switch or a 'goto *j[i]') compile into code which accumulate
-offset into previous instructions.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Do you want me to work on this example above to pass the verifier?
-Or, for now, the best thing is to just reject non-zero offsets?
-(The latter has the benefit that the patch will be auto-backportable
-to stable trees.)
+>
+> Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  include/linux/bpf.h          |  2 ++
+>  include/linux/bpf_verifier.h |  9 +++++----
+>  kernel/bpf/core.c            |  9 +++++++++
+>  kernel/bpf/verifier.c        | 18 ++++++++++++++++++
+>  4 files changed, 34 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 05b34a6355b0..90760e250865 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1541,6 +1541,8 @@ bool bpf_has_frame_pointer(unsigned long ip);
+>  int bpf_jit_charge_modmem(u32 size);
+>  void bpf_jit_uncharge_modmem(u32 size);
+>  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
+> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
+st struct bpf_prog *prog,
+> +				 int insn_idx);
+>  #else
+>  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+>  					   struct bpf_trampoline *tr,
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index b129e0aaee20..cc53877639a5 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -578,16 +578,17 @@ struct bpf_insn_aux_data {
+> =20
+>  	/* below fields are initialized once */
+>  	unsigned int orig_idx; /* original instruction index */
+> -	bool jmp_point;
+> -	bool prune_point;
+> +	u32 jmp_point:1;
+> +	u32 prune_point:1;
+>  	/* ensure we check state equivalence and save state checkpoint and
+>  	 * this instruction, regardless of any heuristics
+>  	 */
+> -	bool force_checkpoint;
+> +	u32 force_checkpoint:1;
+>  	/* true if instruction is a call to a helper function that
+>  	 * accepts callback function as a parameter.
+>  	 */
+> -	bool calls_callback;
+> +	u32 calls_callback:1;
+> +	u32 indirect_target:1; /* if it is an indirect jump target */
+>  	/*
+>  	 * CFG strongly connected component this instruction belongs to,
+>  	 * zero if it is a singleton SCC.
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 093ab0f68c81..439575fa6976 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1570,6 +1570,15 @@ struct bpf_prog *bpf_jit_blind_constants(struct bp=
+f_verifier_env *env, struct bp
+>  	clone->blinded =3D 1;
+>  	return clone;
+>  }
+> +
+> +bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, con=
+st struct bpf_prog *prog,
+> +				 int insn_idx)
+> +{
+> +	if (!env)
+> +		return false;
+> +	insn_idx +=3D prog->aux->subprog_start;
+> +	return env->insn_aux_data[insn_idx].indirect_target;
+> +}
+>  #endif /* CONFIG_BPF_JIT */
+> =20
+>  /* Base function for offset calculation. Needs to go into .text section,
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5084a754a748..e078e6ad5b00 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4049,6 +4049,11 @@ static bool is_jmp_point(struct bpf_verifier_env *=
+env, int insn_idx)
+>  	return env->insn_aux_data[insn_idx].jmp_point;
+>  }
+> =20
+> +static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
+> +{
+> +	env->insn_aux_data[idx].indirect_target =3D true;
+> +}
+> +
+>  #define LR_FRAMENO_BITS	3
+>  #define LR_SPI_BITS	6
+>  #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
+> @@ -21227,12 +21232,14 @@ static int check_indirect_jump(struct bpf_verif=
+ier_env *env, struct bpf_insn *in
+>  	}
+> =20
+>  	for (i =3D 0; i < n - 1; i++) {
+> +		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
+>  		other_branch =3D push_stack(env, env->gotox_tmp_buf->items[i],
+>  					  env->insn_idx, env->cur_state->speculative);
+>  		if (IS_ERR(other_branch))
+>  			return PTR_ERR(other_branch);
+>  	}
+>  	env->insn_idx =3D env->gotox_tmp_buf->items[n-1];
+> +	mark_indirect_target(env, env->insn_idx);
+>  	return 0;
+>  }
+> =20
+> @@ -22158,6 +22165,17 @@ static void adjust_insn_aux_data(struct bpf_veri=
+fier_env *env,
+>  		data[i].seen =3D old_seen;
+>  		data[i].zext_dst =3D insn_has_def32(insn + i);
+>  	}
+> +
+> +	/* The indirect_target flag of the original instruction was moved to th=
+e last of the
+> +	 * new instructions by the above memmove and memset, but the indirect j=
+ump target is
+> +	 * actually the first instruction, so move it back. This also matches w=
+ith the behavior
+> +	 * of bpf_insn_array_adjust(), which preserves xlated_off to point to t=
+he first new
+> +	 * instruction.
+> +	 */
+> +	if (data[off + cnt - 1].indirect_target) {
+> +		data[off].indirect_target =3D 1;
+> +		data[off + cnt - 1].indirect_target =3D 0;
+> +	}
+>  }
+> =20
+>  static void adjust_subprog_starts(struct bpf_verifier_env *env, u32 off,=
+ u32 len)
+
