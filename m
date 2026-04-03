@@ -1,162 +1,246 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68C0303A37
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 22:13:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349EA358399;
+	Fri,  3 Apr 2026 23:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775254425; cv=none; b=R8YzUhniKX1Uv80eikYitkMuknYaQ1WP/KXBmw7HsVVq0+XijtInX+VXlhCYGQuJtREYt6OsvPWaIYaT1h618oC0iTT7IYrHi5mSwWcGIxhg/c5hjtCGfDWYsoNfJshLuPIWHIlwIAiJ6hyDz19RjnqMmehzK/jwgNiqnAvEtNo=
+	t=1775258179; cv=none; b=eR7rrs9JsENHKUWuFvC8M0ZvF79sVqKOWcJb7ITautg6hSgsVeWSJnzUY7w/dTztqZGNjxyn1B4tW/a0xhED+jVgwiM5ZZosuROd3G4EZxe3yG6e7X4U5x2IJ+hTCbiuHSK8i0dSSrajL4w1lA4W0HbXXnhpkbCy5AcXeFM3SGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775254425; c=relaxed/simple;
-	bh=i2stwrrYi3BJRej6viO3wQSpQKnMRQSGmOxZFtwf1pg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=hKtD0MjkBagcXGXkSdvR3pQULip8deqwErI3f9cBdM9ffamUJU5pG8dalDMI9HG01rifbp7O8MZp7whkCYb4mgNY4k9ehualuV/JXEN0whS8j95lr/mvudNxwG9x7nXLbvH71BN+8V19R+DSnVdNoZrex/mDkck+/OYU8koJQHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=bWARULfA; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1775258179; c=relaxed/simple;
+	bh=EHy9QxSViQcZhCLgN+aOsMYMH25suitkUYTNfE9PU18=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eF7yEOgh/XXiTh/ZUTTwtgtpa6Srb+oNcu7P7VU+jKrSf04pkGJpnL8m0p/YDkWr/pdnNGYbZxhFH73JGSmPEVoNTMzCuZvA6T2RYQhZWuqwEVg8AeVxFZK1Crnv2KHnfv1oe4QpevXwpR7is0nVMleCsCwhcy4QQkSW1NC5tDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aqhoIoYw; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="bWARULfA"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c76af7b0f94so1413874a12.1
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 15:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775254423; x=1775859223; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gdtPCPoOgnbaxywOs43fzhXUUBODqat19mF/GDkNglg=;
-        b=bWARULfA7L8/+B9Dh0DGb/lefyhbpW2bdkIvK0snLD4zGFcIKKmsXDo91SMP1ECxtR
-         ByBrqFwJzU07Fnm2mKr9TlT6l9uoHZpEsfekZTF0an4HquwjTLmB9bJVDBuXflzCLwIQ
-         gc9hp8Q7sXCpnRpGjJAXUtc3TBOvKy5BCMMTUkwha8jN+d7WZ4I0+Y/CLXqITrELZOPn
-         52okzs+1OLNHN6GyEAO/pls/kNuMBy6v1+UWjGCJlcZvjpUbSoIKxXFSWU9egxSaK1kE
-         0U3WBIdtAW5Q/dhqE0naR4D/hWcjTy4HY/fWd/FshOA1bFKbBQziG37PGBJU7+uKfY/w
-         OG5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775254423; x=1775859223;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gdtPCPoOgnbaxywOs43fzhXUUBODqat19mF/GDkNglg=;
-        b=keVN6jCTxuV6h+8j+BXOR9wfD0EzttuGluLmCv1G6UhPnOgFHkkU5p9RfFQ6QNk19Q
-         9D/dbnwzRNFyGzuXNCP9hdE4IqV2KvO0R0sxYFNozd1W60Kb9naLAQRJ1IqjnSRlg90q
-         5r328n6kyz3SwdNkaOZ2R+SNte720i5YDwf/dAdlQEZOpL5S1ZHw5WSSt0yrMq5+cwCE
-         rua3XdOWZQ0znzZfCw9R3NPYC2ekG0V+4PWdMWj+RoytgmpaNr9iDkT+ixZxegYnhdUM
-         cUGFzgiO2deGjoWdHKPG6Rhet6bmLsaIcTAbRaPZfGm4vRJ0HDKdyQHxe7YdmNhAjcGm
-         Dcag==
-X-Forwarded-Encrypted: i=1; AJvYcCXNAyJms9hVVbBQEGyMbDnqWPD4bj2yC9APbtmXeJ2zuKUdcCIcTB/y8HoIjAxwwvM10XE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLu8mEWfDBrAe3kmrrKMHx3IeDVVtrbZW9+sUZz7KvtD1IMcZ2
-	dokM9hNEga1HQqbUitkKOhkq0vFzpNfob9scazHn5cnUQ4fCUZ60RPbWBMsK7asTnd4=
-X-Gm-Gg: ATEYQzy8Tm7gEzSX5+J3W5RpY7/OEi1pc0WhT1Sv2GpqiS5Lg3HoMqHm+sBCeWrtUdD
-	7vft0Cpf1zU04vp44feky5vNTdgVMXTI11VKpB1KUZFiGcQCmOQ8s2PcZOxF9iRdnegfMM0hYvQ
-	56Q/0LiQZTAIyUhekAHBeb0kLAOXkHzUEnfbDdu8cEuvvRJ4sGyA/kqnkYoHZLiHW2JeSnISXUu
-	nr+1I+SC1/gJwQRtOBa1fyrrbLV2mkmW3GGcvMP1vaqXGPMtMIX8BPWi4PLmDE2DKseQqC2TU98
-	6oe5XuAI8Ak1oQlwY4cYIHZr0cBRbxtnMbDk1b0CwW+uSLKdQrGn3wmrDOpKe7klMCoEZ1/ng4f
-	cRS9tQzk6i+PuQdEMsInKLa40Dy0eie8YNql1a2fdFMTBIRPf1hYRQNUb++wFC1AmNb+CWSLgDr
-	qRpt28g4g=
-X-Received: by 2002:a05:6a20:430a:b0:395:ccae:d494 with SMTP id adf61e73a8af0-39f2ee10e34mr4634200637.20.1775254422915;
-        Fri, 03 Apr 2026 15:13:42 -0700 (PDT)
-Received: from localhost ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b3aaeesm7348618b3a.13.2026.04.03.15.13.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Apr 2026 15:13:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aqhoIoYw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775258177; x=1806794177;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=EHy9QxSViQcZhCLgN+aOsMYMH25suitkUYTNfE9PU18=;
+  b=aqhoIoYwBwzC0fUNdXe2r8IxupaGq8BzcVnGsiaVHwQ7dkO3VjrtNlqn
+   g7Hzx0MvG9QZcGSXS4PXh5FYdIxq6oj+U1dOhfYVANn+2wB2OgcvmlI8G
+   fpQX9jdqnFSSyyw8z18wCpalfXumP2YnmJim5UQUfGOR9u82iIE/RWxr9
+   FPUuBcydFMyVE14XY0n1W6VNIJArkV7GNu9IyWWGM97kyg47/IaYtIAru
+   5DX4VePb0fdgOmdkiyFaqFayLpUm9ldQdv/fD3jp7UOnRIoQleVmfLwAZ
+   Jhjd7EvMiTd0iCar7uKW5ycS4xl8Jdjjf1VtwfaAI3f8+shNAWaj5qPGs
+   w==;
+X-CSE-ConnectionGUID: wZTOm060QL6NQgAV3Qh8mw==
+X-CSE-MsgGUID: TSw6fX8vSSytdHavru1d2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76385873"
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="76385873"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 16:16:16 -0700
+X-CSE-ConnectionGUID: uQTi6Y1EQraWMGfyRqOYxg==
+X-CSE-MsgGUID: 19+LjM0GTjWYMq2dnjIdjA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="250587794"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 16:16:15 -0700
+Date: Fri, 3 Apr 2026 16:16:08 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+	chao.gao@intel.com
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260403231608.zopnhnypdclzqlx7@desk>
+References: <20260402-vmscape-bhb-v9-0-94d16bc29774@linux.intel.com>
+ <20260402-vmscape-bhb-v9-2-94d16bc29774@linux.intel.com>
+ <CALMp9eSLVvr00mJ0J2f2_SPeCW-VS58kxMcxHgUW6etML+_+QA@mail.gmail.com>
+ <20260403185236.sjgetnkha3o3a4d3@desk>
+ <CALMp9eSPkMpKQELTnsaj6=gXD+EyE0n2_p93n4maDc93bPFe+w@mail.gmail.com>
+ <20260403213445.xzb4rxbfbg5un7li@desk>
+ <CALMp9eSXfJvR=PHtttbqm3q3nH436T1eH4YdpVqxQeP-cxEPsA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 03 Apr 2026 18:13:41 -0400
-Message-Id: <DHJV66NESCIC.230BWL0DNXZ18@etsalapatis.com>
-To: "Weiming Shi" <bestswngs@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>, "KP
- Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
- Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>,
- <bpf@vger.kernel.org>, "Xiang Mei" <xmei5@asu.edu>
-Subject: Re: [PATCH bpf] bpf: reject negative CO-RE accessor indices in
- bpf_core_parse_spec()
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260403035111.4031084-2-bestswngs@gmail.com>
-In-Reply-To: <20260403035111.4031084-2-bestswngs@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALMp9eSXfJvR=PHtttbqm3q3nH436T1eH4YdpVqxQeP-cxEPsA@mail.gmail.com>
 
-On Thu Apr 2, 2026 at 11:51 PM EDT, Weiming Shi wrote:
-> CO-RE accessor strings are colon-separated indices that describe a path
-> from a root BTF type to a target field, e.g. "0:1:2" walks through
-> nested struct members. bpf_core_parse_spec() parses each component with
-> sscanf("%d"), so negative values like -1 are silently accepted.  The
-> subsequent bounds checks (access_idx >=3D btf_vlen(t)) only guard the
-> upper bound and always pass for negative values. When -1 reaches
-> btf_member_bit_offset() it gets cast to u32 0xffffffff, producing an
-> out-of-bounds read far past the members array.
->
-> A crafted BPF program with a negative CO-RE accessor on any struct that
-> exists in vmlinux BTF (e.g. task_struct) crashes the kernel during
-> BPF_PROG_LOAD:
->
->  BUG: unable to handle page fault for address: ffffed11818b6626
->  #PF: supervisor read access in kernel mode
->  #PF: error_code(0x0000) - not-present page
->  PGD 7f74e067 P4D 7f74e067 PUD 0
->  Oops: Oops: 0000 [#1] SMP KASAN NOPTI
->  CPU: 0 UID: 0 PID: 85 Comm: poc Not tainted 7.0.0-rc6 #18 PREEMPT(full)
->  Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 19=
-96), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
->  RIP: 0010:bpf_core_parse_spec (tools/lib/bpf/relo_core.c:348)
->  RAX: 00000000ffffffff RBX: ffff88800c5b3128 RCX: 0000000000000000
->  Call Trace:
->   <TASK>
->   bpf_core_calc_relo_insn (tools/lib/bpf/relo_core.c:1319)
->   bpf_core_apply (kernel/bpf/btf.c:9507)
->   bpf_check (kernel/bpf/verifier.c:26031)
->   bpf_prog_load (kernel/bpf/syscall.c:3089)
->   __sys_bpf (kernel/bpf/syscall.c:6228)
->   __x64_sys_bpf (kernel/bpf/syscall.c:6339)
->   do_syscall_64 (arch/x86/entry/syscall_64.c:94)
->   </TASK>
->
-> CO-RE accessor indices are inherently non-negative (field index, array
-> index, or enumerator index), so reject them after parsing.
->
-> Fixes: ddc7c3042614 ("libbpf: implement BPF CO-RE offset relocation algor=
-ithm")
-> Reported-by: Xiang Mei <xmei5@asu.edu>
-> igned-off-by: Weiming Shi <bestswngs@gmail.com>
+On Fri, Apr 03, 2026 at 02:59:33PM -0700, Jim Mattson wrote:
+> On Fri, Apr 3, 2026 at 2:34 PM Pawan Gupta
+> <pawan.kumar.gupta@linux.intel.com> wrote:
+> >
+> > On Fri, Apr 03, 2026 at 01:19:17PM -0700, Jim Mattson wrote:
+> > > On Fri, Apr 3, 2026 at 11:52 AM Pawan Gupta
+> > > <pawan.kumar.gupta@linux.intel.com> wrote:
+> > > >
+> > > > On Fri, Apr 03, 2026 at 11:10:08AM -0700, Jim Mattson wrote:
+> > > > > On Thu, Apr 2, 2026 at 5:32 PM Pawan Gupta
+> > > > > <pawan.kumar.gupta@linux.intel.com> wrote:
+> > > > > >
+> > > > > > As a mitigation for BHI, clear_bhb_loop() executes branches that overwrite
+> > > > > > the Branch History Buffer (BHB). On Alder Lake and newer parts this
+> > > > > > sequence is not sufficient because it doesn't clear enough entries. This
+> > > > > > was not an issue because these CPUs use the BHI_DIS_S hardware mitigation
+> > > > > > in the kernel.
+> > > > > >
+> > > > > > Now with VMSCAPE (BHI variant) it is also required to isolate branch
+> > > > > > history between guests and userspace. Since BHI_DIS_S only protects the
+> > > > > > kernel, the newer CPUs also use IBPB.
+> > > > > >
+> > > > > > A cheaper alternative to the current IBPB mitigation is clear_bhb_loop().
+> > > > > > But it currently does not clear enough BHB entries to be effective on newer
+> > > > > > CPUs with larger BHB. At boot, dynamically set the loop count of
+> > > > > > clear_bhb_loop() such that it is effective on newer CPUs too. Use the
+> > > > > > X86_FEATURE_BHI_CTRL feature flag to select the appropriate loop count.
+> > > > > >
+> > > > > > Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
+> > > > > > Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> > > > > > ---
+> > > > > >  arch/x86/entry/entry_64.S            |  8 +++++---
+> > > > > >  arch/x86/include/asm/nospec-branch.h |  2 ++
+> > > > > >  arch/x86/kernel/cpu/bugs.c           | 13 +++++++++++++
+> > > > > >  3 files changed, 20 insertions(+), 3 deletions(-)
+> > > > > >
+> > > > > > diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> > > > > > index 3a180a36ca0e..bbd4b1c7ec04 100644
+> > > > > > --- a/arch/x86/entry/entry_64.S
+> > > > > > +++ b/arch/x86/entry/entry_64.S
+> > > > > > @@ -1536,7 +1536,9 @@ SYM_FUNC_START(clear_bhb_loop)
+> > > > > >         ANNOTATE_NOENDBR
+> > > > > >         push    %rbp
+> > > > > >         mov     %rsp, %rbp
+> > > > > > -       movl    $5, %ecx
+> > > > > > +
+> > > > > > +       movzbl    bhb_seq_outer_loop(%rip), %ecx
+> > > > > > +
+> > > > > >         ANNOTATE_INTRA_FUNCTION_CALL
+> > > > > >         call    1f
+> > > > > >         jmp     5f
+> > > > > > @@ -1556,8 +1558,8 @@ SYM_FUNC_START(clear_bhb_loop)
+> > > > > >          * This should be ideally be: .skip 32 - (.Lret2 - 2f), 0xcc
+> > > > > >          * but some Clang versions (e.g. 18) don't like this.
+> > > > > >          */
+> > > > > > -       .skip 32 - 18, 0xcc
+> > > > > > -2:     movl    $5, %eax
+> > > > > > +       .skip 32 - 20, 0xcc
+> > > > > > +2:     movzbl  bhb_seq_inner_loop(%rip), %eax
+> > > > > >  3:     jmp     4f
+> > > > > >         nop
+> > > > > >  4:     sub     $1, %eax
+> > > > > > diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+> > > > > > index 70b377fcbc1c..87b83ae7c97f 100644
+> > > > > > --- a/arch/x86/include/asm/nospec-branch.h
+> > > > > > +++ b/arch/x86/include/asm/nospec-branch.h
+> > > > > > @@ -548,6 +548,8 @@ DECLARE_PER_CPU(u64, x86_spec_ctrl_current);
+> > > > > >  extern void update_spec_ctrl_cond(u64 val);
+> > > > > >  extern u64 spec_ctrl_current(void);
+> > > > > >
+> > > > > > +extern u8 bhb_seq_inner_loop, bhb_seq_outer_loop;
+> > > > > > +
+> > > > > >  /*
+> > > > > >   * With retpoline, we must use IBRS to restrict branch prediction
+> > > > > >   * before calling into firmware.
+> > > > > > diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+> > > > > > index 83f51cab0b1e..2cb4a96247d8 100644
+> > > > > > --- a/arch/x86/kernel/cpu/bugs.c
+> > > > > > +++ b/arch/x86/kernel/cpu/bugs.c
+> > > > > > @@ -2047,6 +2047,10 @@ enum bhi_mitigations {
+> > > > > >  static enum bhi_mitigations bhi_mitigation __ro_after_init =
+> > > > > >         IS_ENABLED(CONFIG_MITIGATION_SPECTRE_BHI) ? BHI_MITIGATION_AUTO : BHI_MITIGATION_OFF;
+> > > > > >
+> > > > > > +/* Default to short BHB sequence values */
+> > > > > > +u8 bhb_seq_outer_loop __ro_after_init = 5;
+> > > > > > +u8 bhb_seq_inner_loop __ro_after_init = 5;
+> > > > > > +
+> > > > > >  static int __init spectre_bhi_parse_cmdline(char *str)
+> > > > > >  {
+> > > > > >         if (!str)
+> > > > > > @@ -3242,6 +3246,15 @@ void __init cpu_select_mitigations(void)
+> > > > > >                 x86_spec_ctrl_base &= ~SPEC_CTRL_MITIGATIONS_MASK;
+> > > > > >         }
+> > > > > >
+> > > > > > +       /*
+> > > > > > +        * Switch to long BHB clear sequence on newer CPUs (with BHI_CTRL
+> > > > > > +        * support), see Intel's BHI guidance.
+> > > > > > +        */
+> > > > > > +       if (cpu_feature_enabled(X86_FEATURE_BHI_CTRL)) {
+> > > > > > +               bhb_seq_outer_loop = 12;
+> > > > > > +               bhb_seq_inner_loop = 7;
+> > > > > > +       }
+> > > > > > +
+> > > > >
+> > > > > How does this work for VMs in a heterogeneous migration pool that
+> > > > > spans the Alder Lake boundary? They can't advertise BHI_CTRL, because
+> > > > > it isn't available on all hosts in the migration pool, but they need
+> > > > > the long sequence when running on Alder Lake or newer.
+> > > >
+> > > > As we discussed elsewhere, support for migration pool is much more
+> > > > involved. It should be dealt in a separate QEMU/KVM focused series.
+> > > >
+> > > > A quickfix could be adding support for spectre_bhi=long that guests in a
+> > > > migration pool can use?
+> > >
+> > > The simplest solution is to add "|
+> > > cpu_feature_enabled(X86_FEATURE_HYPERVISOR)" to the condition above.
+> > > If that is unacceptable for the performance of pre-Alder Lake
+> >
+> > Yes, that would be unnecessary overhead.
+> >
+> > > migration pools, you could define a CPUID or MSR bit that says
+> > > explicitly, "long BHB flush sequence needed," rather than trying to
+> > > intuit that property from the presence of BHI_CTRL. Like
+> > > IA32_ARCH_CAPABILITIES.SKIP_L1DFL_VMENTRY, the bit would only be set
+> > > by a hypervisor.
+> >
+> > I will think about this more.
+> >
+> > > I am still skeptical of the need for MSR_VIRTUAL_ENUMERATION and
+> > > friends, unless there is a major guest OS out there that relies on
+> > > them.
+> >
+> > If we forget about MSR_VIRTUAL_ENUMERATION for a moment, userspace VMM is
+> > in the best position to decide whether a guest needs
+> > virtual.SPEC_CTRL[BHI_DIS_S]. Via a KVM interface userspace VMM can get
+> > BHI_DIS_S for the guests that are in migration pool?
+> 
+> That is not possible today, since KVM does not implement Intel's
+> IA32_SPEC_CTRL virtualization, and cedes the hardware IA32_SPEC_CTRL
+> to the guest after the first non-zero write to the guest's MSR.
 
-As mentioned by the bot, there is a missing S here.
+Yes, KVM doesn't support it yet. But, adding that support to give more
+control to userspace VMM helps this case, and probably many other in
+the future.
 
-For the patch itself:
-
-1) Please add a selftest for this. The offending CO:RE program should
-work.
-
-2) Judging from your description, the code below just band-aids the problem=
- on
-the libbpf side. This sounds like a bounds checking issue directly in
-the kernel.
-
-> ---
->  tools/lib/bpf/relo_core.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-> index 6eea5edba58a..0ccc8f548cba 100644
-> --- a/tools/lib/bpf/relo_core.c
-> +++ b/tools/lib/bpf/relo_core.c
-> @@ -292,6 +292,8 @@ int bpf_core_parse_spec(const char *prog_name, const =
-struct btf *btf,
->  			++spec_str;
->  		if (sscanf(spec_str, "%d%n", &access_idx, &parsed_len) !=3D 1)
->  			return -EINVAL;
-> +		if (access_idx < 0)
-> +			return -EINVAL;
->  		if (spec->raw_len =3D=3D BPF_CORE_SPEC_MAX_LEN)
->  			return -E2BIG;
->  		spec_str +=3D parsed_len;
-> --
-> 2.43.0
-
+I will check with Chao if he can prepare the next version of virtual
+SPEC_CTRL series (leaving out virtual mitigation MSRs).
