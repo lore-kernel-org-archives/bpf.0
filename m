@@ -1,63 +1,63 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D9034AAF2
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 03:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8662E2472A2
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 03:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775187524; cv=none; b=RgvNSwTKZSTRtqlBHAyNvRDRes09vOi4FJHzvxDV9h3aPnB1xOeUgZyUIGUwVmjyRBocaOv3y2GQuWCIPBZAZ8qVTLN+y3Fl0lhffLBKoFQsPl5NV1JG1bgjRd0yaq5UwcAhLWSLl+SBfevKnD2ipXN1FAsIqwCGFIcnOdP72B8=
+	t=1775187529; cv=none; b=eHmZZsPMJZJwLt0EcyhkL+pC1885RE7MyvTge04knwRDKux1SqNonNhRyqa9Yw5/snokq4ajQbESxYxZ+DSKy+VeLhQofve+0yDQ1dKLzb38o/j0ayKjGpFnmQPijkIk0tqZSW8zvI5VCstFKJN2RWWIy96fzWEcE1zecD9s3Eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775187524; c=relaxed/simple;
-	bh=rR3Sx3eq26oG8vFg+ttxzg4Q0S7O5ujIoOxehNo1UPI=;
+	s=arc-20240116; t=1775187529; c=relaxed/simple;
+	bh=PFSBaHIkiNBlJm4NYMvzoYFScI8vDaS2AkdfHYZS6ZM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UM6F8Gnr4bDU4zKtQIldpxLpfm2FTIiVORwJFrI/d++1cn8tIglwizesG0xSJ5rXXhIiCFkoHG6P2TjyMSlNSbBxRIjwij1P9MIf0JV0KwSSTGZn6OtTNh1bjNlx5DZma+3vT5vtwJ39tczWTKTjEuFuINMiX+826GLatlmwvN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WUnBXikW; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version; b=sRUD2T6o6md5gcZowKvybBFtrR93qbizs+lxheyRUb6W2bqeoFpQWNUrur/8P1dIv9QjrtO76oavrNF5eZNVG2k+zaF7mCpBh2TpORtrOXtAgT1vQo1iCr8LfSiwo6kQrNjZG9rekX6fRMKslh8w/WpIKL58Lz+zwjbw8+SNzSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h5267siS; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WUnBXikW"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35da01fc0baso1010193a91.2
-        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 20:38:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h5267siS"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35c2fe0d90fso887932a91.1
+        for <bpf@vger.kernel.org>; Thu, 02 Apr 2026 20:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775187523; x=1775792323; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775187528; x=1775792328; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I5dKGzqotJR8s6VIPztuh94aYfR2JwQ+zNu3iYERQ30=;
-        b=WUnBXikWFB4ZbXHhacdUCSvTQerDrroE5htgkI6yUyavts5bX9x2Fbb+MkcilD4tKA
-         v8GiS41cJs2gLBxAQzyLLYbNki0eZbqCjg7znwALiczRtczz9bni4UbQc2K3iTWWGH1V
-         YSgWtO0NyhU+BYF57uraYfbArEEHEDS/2UOZGXMrmO8eV3x8nKUcKRI0v4Uf2x3vGc8I
-         EHKVgOvyUgmHYt/OQ0BRcm27+k8QgqF9I6PAL8XeTpMFYq/QjfdGShGYUb/4mQWoRIz4
-         QCVlvS7ejc0S8rEdUdxY5GbF1X9hWjbwM2+m1MqYIyfYE/fA2QDp46/7FM4ZhM1x9uwM
-         g1Vg==
+        bh=oEgmFsj8gF0XD9kG+HS2VUBIH+kApaIshx+CSYEye9w=;
+        b=h5267siSOpxrWHWLPs9GoIxx0cJS3J66BfETWTAL2rvd6azBJ2XMpjlD+a1i4JLbYR
+         otrS4oUZsGN1u8UENxOIR0PYtAQJjdXg47O80s9MvOQAk5o0Tc6J5s5g/u2mXjpBUde6
+         tLgwDKuqKcKMOTF4LgCH8GgJqKevCDyCE2sZybfhA8q43DXG6VMEez7GkMzR5YjQlZk4
+         DHo62xhowweM5e1y22EojbKQ1/7+PKI1yPCFLbo3Ex0hMu2qklI7hzKuF652ORxHB/6C
+         Lmto11esE+149KQzvUNJM2Ojk8z5ooQDcokhg71oVkh3mhpq6a3oZcLeM8oUOBF+awFc
+         rEhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775187523; x=1775792323;
+        d=1e100.net; s=20251104; t=1775187528; x=1775792328;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=I5dKGzqotJR8s6VIPztuh94aYfR2JwQ+zNu3iYERQ30=;
-        b=UCrMiRLsZgIn1xQkyLeDrr23RS8BLj2EzxO1NUePXuepedPXMk9ukdeWz9Oo8i/11b
-         nlD4kG54/sekQR3KBq8aR3Rra7pAQtF8WyfkanK7UvkyMviXBkplZ8zpHFqSYvFqLXJh
-         i50f8yKZpYggH4j0nRl1N+kv6QHbkv8ZU4qX9E1MmBiTSFwMP/gWvzpVIcDkXg0AEcUU
-         fOpb7rmujfO2L9azryLJFhbPz94qILTU2P8/+OiDtGKhl/NZ751RVQF90SU4iX+6W9DT
-         gizdDFnXH0QQK4l3EIWJAovRauiIb3UGKDX72pdbUgo+RtXwltndBNDYpch+Z8i2nZ+5
-         ndwg==
-X-Forwarded-Encrypted: i=1; AJvYcCVF9Vd4V7Bw+ezcosTExMNIRinanHaefLZafbhHwpiwIwkjjQdK4K4m690Ut4fzwjdiHHw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyisSN+6UwKML7gIhBMKJGZWzfJY9VvaET+knlhpoI2S+kpg7b0
-	Goh4XUnYjHyxAb609eVpYzXJYFQX+yQ8/jpQfIB1duv+wnFbKn3p5Zvs
-X-Gm-Gg: AeBDieulMsUvFWxcnWBdEIgKggILQCLxeYDEcGMPNoRpKKueaBa1Bq1uxJ9GoU7sW0h
-	kT0ORySskWZv7gVf1eoiCGCxm5Zzs3bHHlEdkWWXR372JPBwBz+JHyuyCSabjS7dq9BHK/H5ezk
-	G7MpzVax8IpIvMaO9e9L0ElU+13FAns/F3IEq6L1ysuEfAOmeLtkrdtY8V4tckbtHaWty81HR+k
-	SJV8oR/oY+wAY9K9p6qMiL09/qI+TdsTIuKKZrsQlFPqnZiPDUqcYmZrIve47YYVWYgviLNbRzr
-	xBLDlKbc1EBpP8dZ5zdXPMfaJN3jUjiKsbdXJjUE8e11LCtmu/zIvfwSfBnzk2g6gkGaCo48OXC
-	zkFh1hl/WnwtRVtDyp32RWEuprPzlJk3i3PQ0sTm7988WffwuMNSaaJpKhC2rFrcqVBCYCJult7
-	Kz0D5jTe7VvH+zXIM2aclDWf/HPzPSLKchupA=
-X-Received: by 2002:a17:90b:2ccc:b0:35d:997c:8ebd with SMTP id 98e67ed59e1d1-35de6973c96mr1157403a91.22.1775187522941;
-        Thu, 02 Apr 2026 20:38:42 -0700 (PDT)
+        bh=oEgmFsj8gF0XD9kG+HS2VUBIH+kApaIshx+CSYEye9w=;
+        b=gH34CUuX1NMiFhOYA4t7adVHJJCKaIqsasstO4Li4aj5iTGvPcFrfocTzOP3F2aMsl
+         eelIo+ompdAjwTZwcI1jyvWhaKTRoJz6Y/WUUCvtRZ+9PZxUVriNQnbGqsaPlcCaGJJW
+         JheetuaQD+7zl2S5SUvL9ec7DWwC1kCx2Gahv0ItkfLyO5JHrzbov2jnr17T9Ykm/0s7
+         Ea9IDoDjZhhwUhmmDAixrIZDy3nq08KcVdMCMxI+le1HDqeZzGTrMcfnPaEKk2mC305D
+         HbMtYv1UmkqbeJABZk0jjZ22ywAQ6aso6pw05avSwU0Va+pvx4i9YmIKQMgZfRZ49AkU
+         lsdw==
+X-Forwarded-Encrypted: i=1; AJvYcCVU4q8f9ZOsVLbc+f5bbR780FtQyUeQLV3aHuH0z9SZAPdlLeQAv+RmHQOr9lzleIr0aUM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2FWOxlXawcEMwvP3ylRCJbc66qmHVZjqd4xrkMQ269gQXnYtQ
+	CrLwI5ugwGSMGUnIxYJSnflVTkzSljQdt5AiwxsTjc29mcwKjqyEEMvK
+X-Gm-Gg: AeBDiev99Golk11T/Y86dAmD4AjpFnqxPHixgKW4ELvZubbKjaubb6Hs8FMo1pd3R9C
+	tePKXDirzzF20B0OuZb5v3wnRD+QjC/dG/19OLCFk4MolA1VTEDjNUqRSRXQGkTOsffKAI4QxgJ
+	Rz+MXxatyrJln7dpvj8+pKR+anicfRawSMXKAWKdnsXdoRcFhVkQ9zEgpUbzvVNp/ZrE+yOArTX
+	ZGuArrn72MYl/luQvz5hSoWGseVK06vtpgNn//KzvxO6aVIQnqm+6eOfQq9YwXkhw0lJQLGNRA8
+	pcBA54ISy+9NizPdQTP6/BJiNfnZsUIXoDrSX/y8xN5gExcBtB4lZoPi/dWpS82Fcd1AvhAbp+s
+	2z0ShUkG+afUvOuq+9ACfshCG0IAPgv2rGos1/VXWDEnyv2ROfOqhps5vmnHvfvXYsTD5g/1FwT
+	GmAoKInXazUKOkFB6oqMqjnlqvxtJC1XfPK1A=
+X-Received: by 2002:a17:90b:314e:b0:35b:e551:90d2 with SMTP id 98e67ed59e1d1-35de69b28c7mr1125776a91.28.1775187527894;
+        Thu, 02 Apr 2026 20:38:47 -0700 (PDT)
 Received: from localhost.localdomain ([47.236.127.140])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c659a218sm4172659a12.29.2026.04.02.20.38.38
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c659a218sm4172659a12.29.2026.04.02.20.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 20:38:42 -0700 (PDT)
+        Thu, 02 Apr 2026 20:38:47 -0700 (PDT)
 From: Qi Tang <tpluszz77@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>
@@ -69,9 +69,9 @@ Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Song Liu <song@kernel.org>,
 	bpf@vger.kernel.org,
 	Qi Tang <tpluszz77@gmail.com>
-Subject: [PATCH bpf v4 1/2] bpf: reject direct access to nullable PTR_TO_BUF pointers
-Date: Fri,  3 Apr 2026 11:38:27 +0800
-Message-ID: <20260403033828.18529-2-tpluszz77@gmail.com>
+Subject: [PATCH bpf v4 2/2] selftests/bpf: add test for nullable PTR_TO_BUF access
+Date: Fri,  3 Apr 2026 11:38:28 +0800
+Message-ID: <20260403033828.18529-3-tpluszz77@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260403033828.18529-1-tpluszz77@gmail.com>
 References: <20260403033828.18529-1-tpluszz77@gmail.com>
@@ -83,36 +83,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_mem_access() matches PTR_TO_BUF via base_type() which strips
-PTR_MAYBE_NULL, allowing direct dereference without a null check.
+Add iter_buf_null_fail with two tests and a test runner:
+  - iter_buf_null_deref: verifier must reject direct dereference of
+    ctx->key (PTR_TO_BUF | PTR_MAYBE_NULL) without a null check
+  - iter_buf_null_check_ok: verifier must accept dereference after
+    an explicit null check
 
-Map iterator ctx->key and ctx->value are PTR_TO_BUF | PTR_MAYBE_NULL.
-On stop callbacks these are NULL, causing a kernel NULL dereference.
-
-Add a type_may_be_null() guard to the PTR_TO_BUF branch, matching the
-existing PTR_TO_BTF_ID pattern.
-
-Fixes: 20b2aff4bc15 ("bpf: Introduce MEM_RDONLY flag")
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Qi Tang <tpluszz77@gmail.com>
 ---
- kernel/bpf/verifier.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/iter_buf_null_fail.c       |  9 ++++
+ .../selftests/bpf/progs/iter_buf_null_fail.c  | 51 +++++++++++++++++++
+ 2 files changed, 60 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 937c9adf1b3d..17850836943b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7905,7 +7905,8 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
- 	} else if (reg->type == CONST_PTR_TO_MAP) {
- 		err = check_ptr_to_map_access(env, regs, regno, off, size, t,
- 					      value_regno);
--	} else if (base_type(reg->type) == PTR_TO_BUF) {
-+	} else if (base_type(reg->type) == PTR_TO_BUF &&
-+		   !type_may_be_null(reg->type)) {
- 		bool rdonly_mem = type_is_rdonly_mem(reg->type);
- 		u32 *max_access;
- 
+diff --git a/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c b/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
+new file mode 100644
+index 000000000000..ea97787b870d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include "iter_buf_null_fail.skel.h"
++
++void test_iter_buf_null_fail(void)
++{
++	RUN_TESTS(iter_buf_null_fail);
++}
+diff --git a/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c b/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
+new file mode 100644
+index 000000000000..963a4cfc33f3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Qi Tang */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} hashmap SEC(".maps");
++
++/*
++ * Verify that the verifier rejects direct access to nullable PTR_TO_BUF
++ * (ctx->key) without a null check.  On the iterator stop callback,
++ * ctx->key is NULL, so unconditional access would be a NULL deref.
++ */
++SEC("iter/bpf_map_elem")
++__failure __msg("invalid mem access")
++int iter_buf_null_deref(struct bpf_iter__bpf_map_elem *ctx)
++{
++	/* ctx->key is PTR_TO_BUF | PTR_MAYBE_NULL | MEM_RDONLY.
++	 * Direct access without null check must be rejected.
++	 */
++	volatile __u32 v = *(__u32 *)ctx->key;
++
++	(void)v;
++	return 0;
++}
++
++/*
++ * Verify that access after a null check is still accepted.
++ */
++SEC("iter/bpf_map_elem")
++__success
++int iter_buf_null_check_ok(struct bpf_iter__bpf_map_elem *ctx)
++{
++	__u32 *key = ctx->key;
++
++	if (!key)
++		return 0;
++
++	volatile __u32 v = *key;
++
++	(void)v;
++	return 0;
++}
 -- 
 2.43.0
 
