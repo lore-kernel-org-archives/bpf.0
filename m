@@ -1,150 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8711F230BDB;
-	Fri,  3 Apr 2026 15:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775231677; cv=none; b=Xz/K6iGtinskl55KhH9fSyZT/PzJTWUde1u+FlT2sLFTL6uWM8dtUtW+TZLvmAGuvZZ1JkBOqM8VqFCQ5dHSn91i8ETq4AubViEirTa/Jk2KcK7bsbxu3bDkLZG9LPe8uqGL1V++9nqXiCkcOjEdA+mBkaPxFfD4AqQd1Zp4YP0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775231677; c=relaxed/simple;
-	bh=taGDzVaqhYmXMFPSKm+ArXZcDQIHGJL6OcwO+HcC9cM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fp8ppExI2nOxljS9pZMK9lRmHyyF2bfMSHh7RYO7xnANDS2FOHWOszNk5ZAbjtR3Ddg4iXDExfq/r6sdgb7EfD1TeV2MUXHT3dXIYfcO72PRnHpP+PxusiAWfh8IGXG3Tvo7tkrT/IXbk3FWOd1d6Z789Prt8Y8sv0g5Duyc+gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OFvEZeOZ; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91B6277007
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 15:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775231903; cv=pass; b=iwmRgZN9vM5OyhBmXFXN8rqAUAkgmG+634vuYvnELJBWOQm/ot/lcBNkZ9bZQlAIGBoXU5LbdSWIL3m7oX/Vgx+fnVPA6T9c9K3HAviKUsP26V+T4g05cd+Kmnva+GUYMbsyI34Z3Q1k6L93nt8rjxn6u9fG1wDF1eD69E8ggL4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775231903; c=relaxed/simple;
+	bh=nI1iEGPoPDhrBGtUeSsTwShs2u+PpmiWdlssb+sfvwE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XZNh4tszQs3dpzJ0QBupGISsVCpOxYBGrB47YIeDJBzEfC26mnvmVRzry6gbEV+QKoY5HqGCasLBwJ9SEAHw+lkZVkx5OcDwlZxD4c9Xpcyy1QvP15f1wMNDbaW6a6DrvVonMD+ZnmsqcA6/EzcXRjKtbAd4RWvUj6J7pwrmk/s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bgp2ZYL2; arc=pass smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OFvEZeOZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D367C4CEF7;
-	Fri,  3 Apr 2026 15:54:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775231677;
-	bh=taGDzVaqhYmXMFPSKm+ArXZcDQIHGJL6OcwO+HcC9cM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OFvEZeOZ6WpNK2LXAoHgivcU4CpGINBjQe6IAf1Pmd1musmmohUGu/eKNb+ujo24v
-	 tTHxVGAR9KQR9M1pj9W1w/eX4xMI0bxXGQAiKY5l6vBMes1CNTHjAP2L5QGfaFAdUn
-	 2+f75VOAMfHEf/Aj45LkKZ9W575ozPUvtN1C/Nqzvfe0jmK7TqTFUtpDa0UiS0AzFj
-	 nr2qMC67NdY78pQ9Or/h/RjGQCITzoQ4vchaiDqPuI/9Icp+V8Ej/mTJ0gZb/KnsMd
-	 PPREzvainXb9MdfTAA5f+pjq7q9nuqnF1hFjpVNzhwRAdBjmH6gsgqlJclUovHFkgA
-	 kpKmLZkujBacw==
-Date: Fri, 3 Apr 2026 08:54:36 -0700
-From: Kees Cook <kees@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Sun Jian <sun.jian.kdev@gmail.com>,
-	Jiri Olsa <jolsa@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, bpf <bpf@vger.kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4] libbpf: Replace strncpy() with strnlen()+memcpy() in
- skel_map_create()
-Message-ID: <202604030852.D0F31E6@keescook>
-References: <20260401001130.it.781-kees@kernel.org>
- <CAADnVQJ+uSCvtpv4A33YeRi=_LCnZRaxB_ejVgdxPDO5u3+oeg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bgp2ZYL2"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2b0b260d309so63975ad.1
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 08:58:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775231901; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CqRBffUH5pNalQ0wZKYPhxXOCRkllF4HsK54AtuRaD7U4x9Ra1iOXalroQNwyLkGm6
+         93XBDrFTgoZxoAP7ZefcBa9UV8kNsn+aMfCnu4ZJsibKP4Gq7i+KCfWrncNuqUNcgXxj
+         FG+V1rSeOxg0R5Ve/cJfK0kFI1yHwTRel72FAe6R9PXYH5rF2eYK5+jbpUbjjhSpsYoN
+         L2Gr9BW+3wqpKUNR4RXWsl1p9410zk99adS13CQGakP2516nVXCAE8UXQSUvYMARb7e/
+         FC42xc4OQC4rP+zLmrKbz3AnKx32ww3KI02NMz4ig1PjrMSfaWcVpTv7Kbi9GQrFFSae
+         PBeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QTgAsrFsFs8UUmicUB8apvQD/a/IXWye6P5XWGjlyVI=;
+        fh=Rlt5QTEFHyd3a03Vem7gdCncENmVp+HX/ORgVANEoII=;
+        b=V4jD30Sl+F6T5g6IbeA+udYIucByc2LErtkdF5I35TTXFC02JISuN+hV/YVfbiyqVy
+         igL/X0/ODBfizaaUuRrr7OQUDQyem5Qx3lHm9/fqRaknCWJvuw+hNCzELvmN+21QzuZw
+         C/EfMSRayBRAVO5vspcFXCnJh7TxDN3gi6cKJOfReWwfNR73kfEGUJ+8ZmA9qZiQvoD/
+         RVyWpTwrbj8S3B8GqFVOrhCMQWH1xl0C6wbXJl7lIbLCD8GoT022SoqDmFu9DNybTm02
+         cX5U9fjfcC4tY46EVIQUI1t747WrPRVkFn7cPQdWBjyqcbkMCd8oPI+uASKE2Dzu7AtJ
+         hN2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775231901; x=1775836701; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QTgAsrFsFs8UUmicUB8apvQD/a/IXWye6P5XWGjlyVI=;
+        b=bgp2ZYL2XaL8jS+dZb7O74sTtTkZhFgcZ76ETWRzhFKqufgN0vhpuVt8pPQ/8QOrfe
+         j/FdmpekHrV+Hb5cTd6uxVhzz3iRocQV0VQNvNVTNeyrjQVPWEja2QWYtynNz/v+WMwC
+         eWVwvBMRP8VIh0E3M3tCFEDVGmG7KZ7XEdPKvaXvdaqRzv/Y5ldpi39urI+LnrS2WVRL
+         9BLG+h8shEA6RDBzrk/dvbscmdflTzq1Soi5hoR58FcP4Ht2iEaz4sEMTUBhYqr+cGdD
+         DbGvrSELvEmvuOnX+v03dJk8mEx0blSa0HZl0GLjEOiUOznVaAESTOG0Kw4H0uJqXJsh
+         4Mpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775231901; x=1775836701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QTgAsrFsFs8UUmicUB8apvQD/a/IXWye6P5XWGjlyVI=;
+        b=lRJWvitl7+/a6Y/62r72pXlOxCiND6f+k6pCgXH6osR55OynsIw6IDHyllwe2q4HP1
+         QD+1/cv15rUYCep0BV9F9mDvHTkZ9i7iuFHhHTRVQ8ZmcnEgSrTH1YOGm73KRJVKKMhq
+         IBQqFz4EcUuTOxNTA6/fNHlkHxIOvZ6ZN8Ei3aSpld5vc2S+a9n3QkaDmR2BnnfI4/KB
+         se7rq3uT8FSTMetcnO0Dp17IT4kdGOFtye+F3EwXuCyYZjNe62D0hjNhXjZn+thjBbj9
+         n5iU4YL6DAYZIzoXiwtAu+eK+HCPLNvvz2+hrwbkOkw/8y8c2S9FJ2Xq6+6C0EtdnQRT
+         WGbg==
+X-Forwarded-Encrypted: i=1; AJvYcCXw0pUN7upRA2IAq1Np/3uJ2+jI6fRo2eSud1K7i7p4m69UDAE3ubrSUfj9yPtMs3aAf4E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOqiLVz67D+8u230G6pxGoJobuvKBMXbtdfo+L7lQ188QaO4C2
+	yB7u+YxU4q7dLFh2JIvgVVSEffNGxOrU65v6MOKv+W9hUFk4rfj+VbXLC3C/OvpFhQ1z42aCVyq
+	5Bk0vje5MCEw3IFAUyjXd7CG60S5elZouNxy3wFCi
+X-Gm-Gg: AeBDieucP/VGKQcJlRzHEIzpCOq/E+WXKDIn47JlKpPQ+W0ohdnCiUMLSeBDCrXCySc
+	cUVwQ+uoNeVYZdC83oyhNPURFWYOJjG9UAltThpagv1rJkrGnsLecP2oTV2V9V6jsOrPviOcyWu
+	JZ0bQgy3a48bgMkJUx+tl3Olg7c10MN2GJLvv94eYnCDTxyY7d24ifIDsvHgWNFaMD0YGSL0J21
+	Gsl3ahqlZlbuuJUh9sbkXAKKXBFSgqh9NixzF0P7esISe/pw+deFx+y9qRmEFiJyg6H2suFBPym
+	zS5tG5FS
+X-Received: by 2002:a17:902:d584:b0:2a7:4151:2c74 with SMTP id
+ d9443c01a7336-2b282f49b59mr2451425ad.16.1775231900710; Fri, 03 Apr 2026
+ 08:58:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJ+uSCvtpv4A33YeRi=_LCnZRaxB_ejVgdxPDO5u3+oeg@mail.gmail.com>
+References: <20260402215727.980993-1-irogers@google.com> <CABFUUZHVg6XQeVBrv8R22M-LNoJUoNEQQ3K_wA-TpTKT-Mr4Hw@mail.gmail.com>
+In-Reply-To: <CABFUUZHVg6XQeVBrv8R22M-LNoJUoNEQQ3K_wA-TpTKT-Mr4Hw@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Fri, 3 Apr 2026 08:58:09 -0700
+X-Gm-Features: AQROBzAYe8ExiGqlU-TQ_5Ya_l_UNn7S3fy3_HzKDMFBPNiXN-zc1_TT-NJAxs0
+Message-ID: <CAP-5=fVbwwP6QBO+GrFoSVFxX1GM9rTJFqUwMVdsona_Gt6rug@mail.gmail.com>
+Subject: Re: [PATCH v1] perf cgroup: Update metric leader in evlist__expand_cgroup
+To: sun jian <sun.jian.kdev@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 02, 2026 at 11:14:58AM -0700, Alexei Starovoitov wrote:
-> On Tue, Mar 31, 2026 at 5:11 PM Kees Cook <kees@kernel.org> wrote:
+On Thu, Apr 2, 2026 at 11:33=E2=80=AFPM sun jian <sun.jian.kdev@gmail.com> =
+wrote:
+>
+> On Fri, Apr 3, 2026 at 5:58=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
+ote:
 > >
-> > BPF is the last user of the deprecated[1] strncpy() in the kernel.
-> > Replace it with a length check via strnlen() on the source followed
-> > by memcpy(). Normally strscpy() would be used in this case, but
-> > skel_internal.h is shared between kernel and userspace tools, and
-> > strscpy() is not available in the userspace build context.
+> > When the evlist is expanded the metric leader wasn't being updated. As
+> > the original evsel is deleted this creates a use-after-free in
+> > stat-shadow's prepare_metric. This was detected running the "perf stat
+> > --bpf-counters --for-each-cgroup test" with sanitizers.
 > >
-> > The source map_name is a NUL-terminated C string (the only caller
-> > passes the "__loader.map" 12 character string literal). The destination
-> > attr.map_name is char[BPF_OBJ_NAME_LEN] (16 bytes) in union bpf_attr,
-> > ultimately passed to the bpf() syscall.
+> > The change itself puts the copied evsel into the priv field (known
+> > unused because of evsel__clone use) and then in a second pass over the
+> > list updates the copied values using the priv pointer.
 > >
-> > The bpf(BPF_MAP_CREATE) syscall, through bpf_obj_name_cpy(), requires a
-> > NUL terminator within this 16-byte array, rejecting names that use all 16
-> > bytes. Valid names are therefore at most 15 characters, but this wasn't
-> > being checked via the skel_map_create() path. Add a matching check and
-> > refuse 16+ character strings early, as they would be refused later by
-> > bpf_obj_name_cpy().
-> >
-> > The attr is pre-zeroed with memset() at the top of the function, so
-> > the last byte of attr.map_name is always NUL, meaning the memcpy()
-> > of just the non-NUL characters from the source will always produce a
-> > NUL-terminated destination string.
-> >
-> > Link: https://github.com/KSPP/linux/issues/90 [1]
-> > Suggested-by: Sun Jian <sun.jian.kdev@gmail.com>
-> > Signed-off-by: Kees Cook <kees@kernel.org>
+> > Fixes: d1c5a0e86a4e ("perf stat: Add --for-each-cgroup option")
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> >  v4: Reformat commit log slightly, confirm last user of strnlen in -next
-> >  v3: https://lore.kernel.org/lkml/20260324161605.make.168-kees@kernel.org/
-> >  v2: https://lore.kernel.org/lkml/20260324053036.it.906-kees@kernel.org/
-> >  v1: https://lore.kernel.org/lkml/20260324040535.work.851-kees@kernel.org/
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: sun jian <sun.jian.kdev@gmail.com>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Eduard Zingerman <eddyz87@gmail.com>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yonghong.song@linux.dev>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Cc: Stanislav Fomichev <sdf@fomichev.me>
-> > Cc: Hao Luo <haoluo@google.com>
-> > Cc: <bpf@vger.kernel.org>
-> > ---
-> >  tools/lib/bpf/skel_internal.h | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >  tools/perf/util/cgroup.c | 34 +++++++++++++++++++++++++++-------
+> >  1 file changed, 27 insertions(+), 7 deletions(-)
 > >
-> > diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-> > index 6a8f5c7a02eb..2d38c387f43c 100644
-> > --- a/tools/lib/bpf/skel_internal.h
-> > +++ b/tools/lib/bpf/skel_internal.h
-> > @@ -236,6 +236,7 @@ static inline int skel_map_create(enum bpf_map_type map_type,
+> > diff --git a/tools/perf/util/cgroup.c b/tools/perf/util/cgroup.c
+> > index 040eb75f0804..1e0fef283826 100644
+> > --- a/tools/perf/util/cgroup.c
+> > +++ b/tools/perf/util/cgroup.c
+> > @@ -417,7 +417,6 @@ static bool has_pattern_string(const char *str)
+> >  int evlist__expand_cgroup(struct evlist *evlist, const char *str, bool=
+ open_cgroup)
 > >  {
-> >         const size_t attr_sz = offsetofend(union bpf_attr, excl_prog_hash_size);
-> >         union bpf_attr attr;
-> > +       size_t map_name_len;
+> >         struct evlist *orig_list, *tmp_list;
+> > -       struct evsel *pos, *evsel, *leader;
+> >         struct rblist orig_metric_events;
+> >         struct cgroup *cgrp =3D NULL;
+> >         struct cgroup_name *cn;
+> > @@ -452,6 +451,7 @@ int evlist__expand_cgroup(struct evlist *evlist, co=
+nst char *str, bool open_cgro
+> >                 goto out_err;
 > >
-> >         memset(&attr, 0, attr_sz);
+> >         list_for_each_entry(cn, &cgroup_list, list) {
+> > +               struct evsel *pos;
+> >                 char *name;
 > >
-> > @@ -243,7 +244,12 @@ static inline int skel_map_create(enum bpf_map_type map_type,
-> >         attr.excl_prog_hash = (unsigned long) excl_prog_hash;
-> >         attr.excl_prog_hash_size = excl_prog_hash_sz;
+> >                 if (!cn->used)
+> > @@ -467,21 +467,41 @@ int evlist__expand_cgroup(struct evlist *evlist, =
+const char *str, bool open_cgro
+> >                 if (cgrp =3D=3D NULL)
+> >                         continue;
 > >
-> > -       strncpy(attr.map_name, map_name, sizeof(attr.map_name));
-> > +       /* attr.map_name must be NUL-terminated, like bpf_obj_name_cpy() */
-> > +       map_name_len = strnlen(map_name, sizeof(attr.map_name));
-> > +       if (map_name_len == sizeof(attr.map_name))
-> > +               return -EINVAL;
-> > +       memcpy(attr.map_name, map_name, map_name_len);
-> 
-> this is plain ugly and inefficient.
-> Just #ifdef kernel and use strscpy in that branch.
+> > -               leader =3D NULL;
+> > +               /* copy the list and set to the new cgroup. */
+> >                 evlist__for_each_entry(orig_list, pos) {
+> > -                       evsel =3D evsel__clone(/*dest=3D*/NULL, pos);
+> > +                       struct evsel *evsel =3D evsel__clone(/*dest=3D*=
+/NULL, pos);
+> > +
+> >                         if (evsel =3D=3D NULL)
+> >                                 goto out_err;
+> >
+> > +                       /* stash the copy during the copying. */
+> > +                       pos->priv =3D &evsel->core;
+> >                         cgroup__put(evsel->cgrp);
+> >                         evsel->cgrp =3D cgroup__get(cgrp);
+> >
+> > -                       if (evsel__is_group_leader(pos))
+> > -                               leader =3D evsel;
+> > -                       evsel__set_leader(evsel, leader);
+> > -
+> >                         evlist__add(tmp_list, evsel);
+> >                 }
+> > +               /* update leader information using stashed pointer to c=
+opy. */
+> > +               evlist__for_each_entry(orig_list, pos) {
+> > +                       struct evsel *evsel =3D pos->priv;
+> nit: since pos->priv stores &evsel->core above, could we use container_of=
+() here
+> as well? Or just stash evsel directly into priv?
 
-I think you're asking for:
+You're right, the perf_evsel vs the evsel is out-of-sync here (and
+this was missed by Sashiko). I'll fix in v2.
 
-#ifdef __KERNEL__
-	if (strscpy(attr.map_name, map_name) < 0)
-		return -EINVAL;
-#else
-	strncpy(attr.map_name, map_name, sizeof(attr.map_name));
-#endif
+Thanks,
+Ian
 
-Is that right?
-
--- 
-Kees Cook
+> > +
+> > +                       if (evsel__leader(pos))
+> > +                               evsel->core.leader =3D evsel__leader(po=
+s)->priv;
+> > +
+> > +                       if (pos->metric_leader) {
+> > +                               evsel->metric_leader =3D
+> > +                                       container_of(pos->metric_leader=
+->priv, struct evsel, core);
+> > +                       }
+> > +                       if (pos->first_wildcard_match) {
+> > +                               evsel->first_wildcard_match =3D
+> > +                                       container_of(pos->first_wildcar=
+d_match->priv,
+> > +                                                    struct evsel, core=
+);
+> > +                       }
+> > +               }
+> > +               /* the stashed copy is no longer used. */
+> > +               evlist__for_each_entry(orig_list, pos)
+> > +                       pos->priv =3D NULL;
+> > +
+> >                 /* cgroup__new() has a refcount, release it here */
+> >                 cgroup__put(cgrp);
+> >                 nr_cgroups++;
+> > --
+> > 2.53.0.1213.gd9a14994de-goog
+> >
+> >
+> This patch makes sense to me, apart from the nit above.
+>
+> Acked-by: Sun Jian <sun.jian.kdev@gmail.com>
