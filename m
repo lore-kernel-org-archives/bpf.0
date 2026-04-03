@@ -1,152 +1,135 @@
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD951291C10
-	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 20:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775249740; cv=pass; b=gtnxODF9n6f+E8m+oyXr+Nhzc5/oZQq94FHraZ4N9J7O4KW1uPZtM3WYi9GxyWVz8JKS/W92MA5wjIVgaXieG+0VIfWxL/OTrSuy0Ju/DuQOU6z9T58QaEz29yRRNX7OIhhmKW95l+RHR2LJArQoMaBNtcAMrY69ehfG9A5DMAs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775249740; c=relaxed/simple;
-	bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tQ/RiXvj+xryknqsW1IZ9zwiFox5AJkwjKLRFNWxnkk7m3zhlJrBOMlKUJdGAq650rmR6G6yCODN0VB6tZu9T3PvgTsKtTFCT5RDJWzIl5QIB6WoXGGZYQnNc3YF5jOqI8JNf4X17xGLa94XY28d+quUm0oKkidnJ73ofroaoVQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mUvAmWKp; arc=pass smtp.client-ip=209.85.222.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7962290DBB
+	for <bpf@vger.kernel.org>; Fri,  3 Apr 2026 21:08:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775250521; cv=none; b=rRn900JFw84BhJ5B1fsz1WORGmx468ACGsQh6LKozLCxVqrIPf2DzinDwm6uW6Hnbceofu8z+2rLaxwJZuJsRTm6XM93jK/9xi7ZQDtClT4KXPq5zOfkMvfRQeX5+9HG6PEGoAX8T8iaiHR4NV7lSoXr9V/RdPFZS4dDqPVBl1o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775250521; c=relaxed/simple;
+	bh=sjrOcmBeonQeUKhF+7FaAXLL1ZCqKwAzenU3FPeT9aQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RftGctkO7bUDtgnzyfiwV28pcPhgYQeu7E2pG6zAoXEfNh/6fA5EhuoS/depCxTs1gVqs7XoRnfjxWKOs5gTfButTDEL9rpQvJAy+B2xyb3+nVhzF44Amr6sbJKZLf6KX0d7XVfXLEQDs5Bhsrfxx2ZsKJDdvkqGp0dFlcNo8TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWAKprnX; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mUvAmWKp"
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-94e2ad66abcso683995241.1
-        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 13:55:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775249738; cv=none;
-        d=google.com; s=arc-20240605;
-        b=DEgcGKk5vi4xS8mjYOl0dqi3++8v72jLQ2nq+vKMPPTRVOpfrxn7U6wQv8WlnxBE7I
-         4xecjkjG6Xf+kDOhDOdgNev7POvnKIOi/5Mk4H5FHXa+d6VUq/YzEGObYXL2O8P2KOuN
-         2B9nlZmYwU3cCFiUNAAisLe9caO/ThlFGVYIScJP7PWZvUurjDsTEgm7NBdNjD3+FGMj
-         LIkjr6Jr2iZtLN2FtySDlek83+SdK6f3fN/BfYdkoapqFc3Wv0ASEExiRImJkalHRVDA
-         HqxCZifQhnyP/r2uLuUviBlbt1Nn5nahg0Nk9jE9jsJUxj36j+BvpP/L4xaCtTR65IoT
-         3ofw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
-        fh=D0U7xkmrpq3vpbucBdB5oaK0w2+LJrL/wExdhlU6JuE=;
-        b=FspA7iqyQ0Nqv9kSmza2nMXK9BpEB+UEObQXA2gmtd3+ZKVWfbuaO+cXjP612xW1aV
-         AwBLeppFAV31+GRpkDf5ZtrKoRwsFAIySE0fTmn56IEVuqikH+CSYII5ZpNRlTQiarxD
-         BUxQ31+zx8iYlv9uRImNSyJBV3qWIoxSST4T9bMc9PxSaLVniVOX9Wf3bG9J43VIq9VX
-         xbfYAprbqHFu/VTpV/JufVbMkAsPqFyUeXKnLCZIIhOVM3UD1bLISXwoWAHRoXUX50/e
-         Dv0QmJFbkfHXYrGKmhPrSzWCUmOwUlBbke7UWTo2AxsL3pJb4+zreNoxwDjxcwe+BOWe
-         966A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWAKprnX"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-486fd3a577eso19703725e9.1
+        for <bpf@vger.kernel.org>; Fri, 03 Apr 2026 14:08:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775249738; x=1775854538; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
-        b=mUvAmWKpvN/9LbApy+wztqY3qewQZwuDLW3ValldzBtNBP0+fu5uHtoGWZ0sGlTCwx
-         zOUMdcFVPwFvdyK8KbddaZIAHpbesm3s0VY857T9dH/eyQ+eEngRz69TwzB4n87ykIn6
-         LW02Lx4OSBBalkO9vXDfbfjppm1Si+yX7rfCULkaSsR50CAAcH/v0JZ3LGxROuxKkMvj
-         7dEEu+5JV57dqwxxbU61QqhHEW9jggHwG35XnJT0fzGIptpPPUdXIA0bCAIn2JXiYjp/
-         gqj3mgy668Npm0GmsrxL6t5fnF+FFAs8Fhr1IZBD4rp7LyfaoYgFG6oeuQstnpltgag5
-         5Wxw==
+        d=gmail.com; s=20251104; t=1775250519; x=1775855319; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rtz6zW8ohpnkRnnbqIqGqsqLu4coVv09fBIfiINDmEw=;
+        b=NWAKprnXpeCbjmSke3StP87/3Jhk7PmdeZDTtAYiCRUddM0yZd3Y9Z+YMiADweIgPC
+         dkmsg3csqg4mXabTpzqWt/aDpV6A7vQRnaNeSx5uLOOW3rSwgG5cmIYhcsj2wP9t0For
+         yPwu/sOFjHze7VWqsNg7l+C596kBM/ZlHdQ8R7eqwVw21fkzjdy2kSRI8PkiUrxiDvDs
+         /37dor3A+yH733mgx/vbXqQMJCr9lijNABaSb07HQ17hZpZ+UwsRL45js7I8rdA6RIWv
+         G673ewd3ugMI4UvWJPvW5LkhsUVJLXgdeZNG2U9vRDlo8PEapIuJsTHLFSGrVB757OFu
+         Ej4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775249738; x=1775854538;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sTUwcd1bS2S1zzg6SweuuUmPEJiJW90biTuK7ZrcV0Y=;
-        b=C+5ow18goTuXw13bc158cJ+MO55kXxp/mdIcg2+BYGRNmX5SEQew65p07HHA3qbia7
-         VbfWgoNzvxH71RfveIUE6AXm/axpzbwqBZZ3MdnpDhNQYPzJIAL3aGsm5cuvDcCkyIb0
-         MpNReDO5EBCyb3c86w3OOgygfz/vGFhGe0BVLae4RflS9ye52GLtSR7i3Xxd3wk/iwId
-         6CxokdPs49TSlev+tiw4OQKYB/rXINysKe1QFuUnKCrqod/ziYnup79NJdt2pcIw4TO+
-         0Q6CpM/cefUgpCYpxMS16/1sBpJ9Vx3EXeV5boN3qRXnSkgwcxjJPhhyZL77G10xpssM
-         89ow==
-X-Forwarded-Encrypted: i=1; AJvYcCX92mivomDODo0gb+6IJcvp6tV5zCiNJS/zqDyge7u4xwQD43BMA0rbkIB8C6aN7VTx4vc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6SiUlXqTtFGPQu59FeyKwtW760NP2Sidqki4SyffJKlXJn4+B
-	Iz9yWieVyEvxQti2BsGPXTzwysrFRd5htiTAR5H0vKHGQqKm1YOv7pU6h/CIDkaMPHue1HEaklK
-	ch+mMipfFkpqQhHK4n3ycdeTIk9T2FfjRo+v8oP2S
-X-Gm-Gg: AeBDietKTscCQ+NhRXCrT/exBEQ85Sz5fIuv7NG945Z/F+Byw8p64VQeuS8yMVZdL4E
-	qqiltkVdByQiOXgxH3YvCW3wTmGpcY4SnOC1mXdpTIl7kEhzanXIuHx/kkgsPAzyQZxhWqxAgaa
-	M2acx/ppR9CSvBDU5Tlx5UMPwkyt2+bDKh1U78MNCtA+sbhgBKAHWSPqc2nQRDIK9MEv6GQ2bpV
-	AH6QlMOSLflx5wumhN7mzYrBn1pkjXNDQyWWWL4sBwNKnl8BDrkr/vibY3oZKiHOyinbDxOqLl8
-	iImz3yEnDTo6QxfGxhQ=
-X-Received: by 2002:a05:6102:b14:b0:605:26eb:cc1a with SMTP id
- ada2fe7eead31-605a512c49dmr1509501137.29.1775249737225; Fri, 03 Apr 2026
- 13:55:37 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775250519; x=1775855319;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rtz6zW8ohpnkRnnbqIqGqsqLu4coVv09fBIfiINDmEw=;
+        b=FPBT+5Vm1aE5+AYa4M1sYP7juz2qpLnK6l83hIM2qMmqV2pdedN6uuC5csJvwLSKnH
+         QlGV4H1IBMb94UEdc9T9hcCDFj5u4byvvKoSGpduHrXlinUskXUmaiR63qvkaXBDFNsn
+         vVPQgpeg1ubrDAdDaYGEEXfX9gnFCe96TI4+P+CuKSiFyF43hG+AA9iSFOJCbbHftsx+
+         n63MGeoCpNdE36RSRnLL/1+aKrpvK5yl4mcL5PB2o9xOh5ug2K2E62FVHVRJOdL5p/GO
+         papCUAfTzNUnajhKbNyNyGkEwpwoljz5oDko9y8+N/5Z4blTIGo8NNp6aayFc2FjAh/Z
+         eoWg==
+X-Forwarded-Encrypted: i=1; AJvYcCWpMIFyhOZc1aHLau+riCHNFJNhaepN7+kssoI3znixxzonV5FZeQHHNYAIbQy46XZ4RDE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yycsnnk9eiGMoYDkq2ZN3KhljLbtzob6UNCVE/6YCcSZmnSh4UR
+	s7gcHEjdWCNYIXBBKT9G0UhU0VtuW11G1NScNkIlkesnvR1A1UxgEuJZ
+X-Gm-Gg: ATEYQzy3edf23L62wGrrHp7b1fn5OLRelHAevZ1JBnuT5dN141oea41so1ClrHImx6g
+	A5YCTxe5hxHdhk3jIyDUYb1uLjf+G1s4xrTnmoTxQvdlfkaKpgEv4jFIitTdlxjj+aDsxN/zcuz
+	2nrfFjcXKFoYY+C0hco3PJlG9bg3E3O8/XtqD/uQT+r4jhNIDNpFtmKwKcs663rCWtJKRRqzRV9
+	9cinlLAOOez3PJACsnnc5gQnsXpJI73bYwcw5im34XE0bFmD0TOkAnwfmgf2DAEyISeGpF1izbe
+	cSGXcJunIfZShPfpjMmf28JDTHHZpOcPE71dJ7uGrxyd/K8olKSB00LTjwgRdVYQhrDMSMX3sSz
+	7iO5671vuWdxvmDIq2CkaSUlZEMLBPeeI3xwRuO4RV/HUwSFJ7sesJL2apJzM4sjqqzEpYvn/7B
+	uuKC6WseXTc3rOYuqgPcqlJEhVPW1q7aBxH+GgfkapFT0qaOSWZLnFh0A=
+X-Received: by 2002:a05:600c:5292:b0:486:fbd1:9dc0 with SMTP id 5b1f17b1804b1-488997a51b2mr71073585e9.22.1775250518655;
+        Fri, 03 Apr 2026 14:08:38 -0700 (PDT)
+Received: from krava (ip-94-113-247-31.net.vodafone.cz. [94.113.247.31])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2a720dsm18895321f8f.4.2026.04.03.14.08.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2026 14:08:38 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 3 Apr 2026 23:08:35 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	qmo@kernel.org, ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com,
+	dwarves@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v3 dwarves 0/2] pahole: add BTF layout encoding feature
+Message-ID: <adAsUx82TbLx4PfS@krava>
+References: <20260226085240.1908874-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-4-laoar.shao@gmail.com>
- <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
-In-Reply-To: <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
-From: Dylan Hatch <dylanbhatch@google.com>
-Date: Fri, 3 Apr 2026 13:55:25 -0700
-X-Gm-Features: AQROBzDS37OjmfrI7p7dlg7HXRfbNYrPo6MbDjUEgtIBQmy-W82lfbmdNqsszdI
-Message-ID: <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
-To: Song Liu <song@kernel.org>
-Cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org, jikos@kernel.org, 
-	mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
-	rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	kpsingh@kernel.org, mattbobrowski@google.com, jolsa@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260226085240.1908874-1-alan.maguire@oracle.com>
 
-On Fri, Apr 3, 2026 at 9:19=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> On Thu, Apr 2, 2026 at 2:26=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com>=
- wrote:
-> >
-> > Add a new replaceable attribute to allow the coexistence of both
-> > atomic-replace and non-atomic-replace livepatches. If replaceable is se=
-t to
-> > 0, the livepatch will not be replaced by a subsequent atomic-replace
-> > operation.
-> >
-> > This is a preparatory patch for following changes.
->
-> IIRC, the use case for this change is when multiple users load various
-> livepatch modules on the same system. I still don't believe this is the
-> right way to manage livepatches. That said, I won't really NACK this
-> if other folks think this is a useful option.
+On Thu, Feb 26, 2026 at 08:52:38AM +0000, Alan Maguire wrote:
+> A soon-to-arrive v9 series will add support to add BTF layout
+> information to BTF; this describes the BTF kinds known about at
+> time of encoding in order to support parsing even in cases where
+> the kinds are not known to the parser; the layout relates a
+> BTF kind to the amount of space it consumes via an optional single
+> element following the BTF type or a set of vlen-specified objects.
+> 
+> This series implements the support for the BTF "layout" feature
+> but does not require the libbpf changes to support it; the feature
+> test uses a weak declaration of btf__new_empty_opts() to handle the
+> unsupported case.
+> 
+> To test pahole with this feature, the following approach can be used;
+> 
+> 1. Specify -DLIBBPF_EMBEDDED=OFF option to cmake
+> 2. Install latest libbpf with associated patch series with layout support
+> 
+> Alternatively with embedded libbpf the changes can be applied to
+> the embedded libbpf in lib/bpf/src.
+> 
+> Changes since v2 [1]:
+> 
+> - Resynced, renamed kind_layout -> layout
+> - Avoid encoding layout info in split BTF since it is a waste of space
+> 
+> Changes since v1 [2]:
+> 
+>  - Resynced with latest pahole
+> 
+> [1] https://lore.kernel.org/dwarves/20251210202752.813919-1-alan.maguire@oracle.com/
+> [2] https://lore.kernel.org/dwarves/20250528095349.788793-1-alan.maguire@oracle.com/
+> 
+> Alan Maguire (2):
+>   pahole: Add "layout" BTF encoding feature
+>   man-pages: describe layout BTF feature
 
-In our production fleet, we apply exactly one cumulative livepatch
-module, and we use per-kernel build "livepatch release" branches to
-track the contents of these cumulative livepatches. This model has
-worked relatively well for us, but there are some painpoints.
+lgtm
 
-We are often under pressure to selectively deploy a livepatch fix to
-certain subpopulations of production. If the subpopulation is running
-the same build of everything else, this would require us to introduce
-another branching factor to the "livepatch release" branches --
-something we do not support due to the added toil and complexity.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-However, if we had the ability to build "off-band" livepatch modules
-that were marked as non-replaceable, we could support these selective
-patches without the additional branching factor. I will have to
-circulate the idea internally, but to me this seems like a very useful
-option to have in certain cases.
+jirka
 
->
-> In case we really want a feature like this, shall we add a replaceable
-> flag to each function (klp_func)? This will give us fine granularity
-> control. For example, user A has a non-replaceable livepatch on
-> func_a; later user B wants to patch another version of func_a. Then
-> some logic can detect such a conflict and reject the load of user B's
-> livepatch. Does this make sense?
-
-I agree with this. The ability to reject livepatches that try to
-change functions that have already been patched seems like an
-important safeguard.
-
-Thanks,
-Dylan
+> 
+>  btf_encoder.c      | 21 ++++++++++++++++++++-
+>  dwarves.h          |  4 ++++
+>  man-pages/pahole.1 |  2 ++
+>  pahole.c           |  6 ++++++
+>  4 files changed, 32 insertions(+), 1 deletion(-)
+> 
+> -- 
+> 2.39.3
+> 
