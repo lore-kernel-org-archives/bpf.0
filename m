@@ -1,62 +1,62 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBE83164D6
-	for <bpf@vger.kernel.org>; Sat,  4 Apr 2026 18:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BC733C198
+	for <bpf@vger.kernel.org>; Sat,  4 Apr 2026 19:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775327074; cv=none; b=ZMoUptA+CSijepNOUZIrH1fzYiaLcOH6mqcH8TomgFOuyTQEgaDYIjth/aSf04CKum9aBii4V3WuDDmBXP3dgr1IgTzFHiYm9eyny+v9mL9i4zCz2Yy10V4v0m1vNWr2bAYM/tIXUEdRyEz1yiTtbeO/WVgQdkVbNZL2GB3Mc9w=
+	t=1775329233; cv=none; b=uB6GW5YwO2n5J5cwf+gqbV5Vc4PjuzNzzR13qXull9E3ivNQvLjk//UWAFJv7mDZzc8DyOJmzXIUlxnS+JISv4fZ/vZPw3uJ0jg++1Zn58hDk0e3cIvJCamjaIsoL2bPUL6WZCKDM/+T3hP8j4au81XG6UxPJAyZFr4JZpgdUhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775327074; c=relaxed/simple;
-	bh=zKW2G6yrYQNgTY5yq+NbaxheqKwUgaZVUqXxANHS29I=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=FsJNKjeIlnBV5ykZ526Bgu7xH91v81vKzDQRxDmc44Si3YOvr9LpTox3XchZ8yYeZT6K5GO+k8Mv/0Zevj8flyHAKsJSliUfxzmU7hnNLjCExIquX9VjaRQZlDF3L8tN+kUh07B5uPn1byjqSaw+IVFvC1dx82kGED71t4XBDcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=VAZ/0dQ/; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1775329233; c=relaxed/simple;
+	bh=y/F9zJW116kqSCgX9tb7rttGKjeuesdxHbOUiOq9dkQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=smV12cc2Luts2rq4CZxg36LKgGGmEHj6XtLOVBkg+jcpnDeamRif0TdPOA/qzhnIm20CJuM3m0w7zFnHXisA8H9w9FvAdzywCbIWeKqs8mYQraiSxN4yyZv2+C7FqLw74UuAHqtlCCKxRybl1U5loDQ9Rw7b8WCaO4+rm1hGXX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=fQlEW8Il; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="VAZ/0dQ/"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c76bde70ec9so1045104a12.2
-        for <bpf@vger.kernel.org>; Sat, 04 Apr 2026 11:24:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="fQlEW8Il"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ab39b111b9so11905585ad.1
+        for <bpf@vger.kernel.org>; Sat, 04 Apr 2026 12:00:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775327072; x=1775931872; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775329225; x=1775934025; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LcSDQOwpneTnufVZJg0KVs8OnsBHV7c/HKQx0M9JyHQ=;
-        b=VAZ/0dQ/AIjmHXS/npbOm3OE7n2ZxgPp5DWVuR99SYVTNFV2BaAiF7w/wtGRyRvAQn
-         OxKF+8iXWM/je6t/PSL8FV7SsHL4rfBP/F6WT2TX11u/skZK7hPebHOkdJ8AyXXyKSTW
-         kv42EM4LEZZlvlNqDkFY5rEvZsAOxkcibkzyX6C9a/j7+hK9EmjgGsgYv2TH/e9578hk
-         D2IDalaxDuWRNAThBx8y/PcjLtZzkARLbxVxr/7NBVrKWML1ryvP7q1FfmDzt5gZRr6C
-         hfKTIu/MJIDA9JNJRndrUN9UFG+M27AplVDZyN21Qx/MuNXV17+Mc9fxBJX1vFc+WnAP
-         W5RA==
+        bh=g3Gdp6fln9VvllFuk7oFYv6Pa8/Q2Dlz68ibPkatf54=;
+        b=fQlEW8IlNwqkGi1/0LAVE0c3P85Wsfybye96JNFbtVXZJ2pMUP/9zIzrhN5OixJmYP
+         /FR2JrxVxgpL54cd+13BD7aMUKvezI4s5J/wDDI1Eon/CSoEKOOD2z8rqnuwgS8Ix3w/
+         dbr3Dh1M029cGawyMWJK7nX/eaxw87HfyMjLfPK8pN9g29G7git2n1kwn3MXhkygjrnL
+         Q91CiZqV0q7QJ2r9ov4s5bDzHrjiIQJQyNQzzp86SJ/wh0YqiK0tZwv7vLevVgGPDN6J
+         cQfS0VjOK7dd7UgDOvI/dUby4h69rBxAwMU5TggTLCWCctRS4ZZtSEtthe2uc3kU1shM
+         Mxjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775327072; x=1775931872;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1775329225; x=1775934025;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=LcSDQOwpneTnufVZJg0KVs8OnsBHV7c/HKQx0M9JyHQ=;
-        b=nGi/zokR94MOs/FOYZkyxN9Jk+GasOWztpFB4Tu3qIRByPW2KJeQvBBsYPx0uk+v2s
-         BoBS+UCa5tmipF4QT50p8ngoItfiCo+iXKORnrNbK788c0uyAanlyTcEzvSN5Qbxbc1O
-         YOITMMozm5xrdKITZhJ3V3r1Ngf3BkMeSh4rhQlJZlPWIr6obqVfAbBkWqxmuTw9BCPW
-         2O9mBFVNsgGpFve0mY4qw5FSI7R6nF/I4CcUWk/GUi9q26i31+us+e6Yfd64agrMaJAJ
-         O1h44xS7WzBpaRrUontr7Ce6IeMDuL99xouKMLKKBQG5mIaxSyXFZUTl2C4Plz+eo+86
-         /aLg==
-X-Gm-Message-State: AOJu0YygotHru08pVRzIZvIr1Odqq16/x6jhZ/mNzjUI5W150kaoPtco
-	SEM1l8h9PUVOybvy0SxMwJrVLLb671oDMmPypq9vBYwcDWIUqumjtV38nYx/f1rbdt4=
-X-Gm-Gg: AeBDieuoVjho7pAyrcfcccuQX3Y6YcUJcAZ3EmALPncmOj+XhSqp/ykvHPlFyM9BBBz
-	0+zW0IQkm9HehkhVKSfCgkz/w2jH/B5jaFPzyCImOYT2syzoYtXy3DbrOKHwLtozXron7lZOFbD
-	9pZ7Ge36fDoZcckb1L/YPWpYwL8xoV7/pbzMoCvc1gYKi+ZJ6+MmC9bqvQ/GAQFYPIuSjNALTya
-	sgQ+DJ1f8t497oGd34fU+I7Oxh/Xkan05/uh2c8hvIIHizT2ddvRtlTPZ9R7h4b6RPedv7DCLvn
-	Y/HxIcuaTZOENhq/2mYU2+zKnJFyC8NVELMEHI7x9PwJPZpZGeh0hfld8uOEYOxxmDYz40M+xmZ
-	WrnA8vUyKrZs5nwOCrTjSHZSo7p9BWt7kDNH2ArP7Mpcv4qB35xUHADAIPibnOJuutQbBkLJ4+q
-	+qsE8yfX8=
-X-Received: by 2002:a05:6a20:9145:b0:39f:21a8:1e1d with SMTP id adf61e73a8af0-39f2f046ab9mr7668870637.10.1775327071924;
-        Sat, 04 Apr 2026 11:24:31 -0700 (PDT)
+        bh=g3Gdp6fln9VvllFuk7oFYv6Pa8/Q2Dlz68ibPkatf54=;
+        b=XqDV+hGD3CrckXn8e9pCPYhz0lbkANZgNDTXxHWCsH0C6Gf1kCd1n0l1pwmh7pE/ou
+         JwHZUrKqgVYGTdeDd78h3K1nwUTdnqhx/A/4IcqZK58MV/k6TuXBk/fAg3D995qmBqSr
+         BTs/MaxfOvmPEN3kL0Chr3xRibBy0Wa5bzrGA3sbRSUS1HrYLToypIUx4H1JsDuaSigU
+         5YD31/dH+CNVfWfzT7gOex0NoZmsUIv+4/uCM9Su8uXmhPS0EjdIEI60cEOnXPmHNPcl
+         gwpBMQk5DGPc4quL4YPPdjYuhh/Fk2Gk9LeJLlqbSvDQRD01VuN4mhcUkxnbDVAhQQdx
+         7aHw==
+X-Gm-Message-State: AOJu0Yzb+qBvjQL1po1xr94X8OkiSVrGWIfKNvrv6e2j86HeWIciVpV2
+	HtgXIym0C//IeMjz9BKpCd/Jk8k1eeSzaDQfvEFsa3ubG03Nvahm4spjCa/bqpHrSM4=
+X-Gm-Gg: AeBDieuF6lJKGEarqPcwhccKmEziPV8uDD4K9YJE+rWIPULzEYJigio03+Z+WWQZAhQ
+	2pE51K9TOf/Xx99umRU9IHlrxxhLWB5/bk1mpzi67c7H/ueilOSliejYbK/L59udg2Fvo2SCQHg
+	mbyKJAeVdmW/oIq+l927BloP3ueXIr1EnBUXRaZUk3ZLVL12kwSzj8YsUB7yoXjptcgvfIOhx7C
+	+C9o4rJ09gdsedjuaZP/2hlKZH3Kg1Yn+2OQlf6XpJ7cNSzB4rvaJPzyJ5D88CbAedtu9YeWbQl
+	tDj03lFhqEN4MDSbbvnWN+caGX2a6OoXSAexpoPmAlXSw0YXKjweGJf890/DH5t+M64FZmEIIk1
+	HktP3jEcHGaNKu4gNfE6BK3hFLsbLZ0wnTDtQtjmnY86mMFCjKY3vxToToyD58ucbe10ABu9hTJ
+	vZKRiypnM=
+X-Received: by 2002:a17:903:1b2c:b0:2b2:5515:661c with SMTP id d9443c01a7336-2b28176a8a8mr75656905ad.31.1775329224119;
+        Sat, 04 Apr 2026 12:00:24 -0700 (PDT)
 Received: from localhost ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c6562018sm8235414a12.18.2026.04.04.11.24.30
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2749cbce2sm91044345ad.79.2026.04.04.12.00.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Apr 2026 11:24:31 -0700 (PDT)
+        Sat, 04 Apr 2026 12:00:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,104 +65,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 04 Apr 2026 14:24:30 -0400
-Message-Id: <DHKKX90W8XV7.116WMR48CDB2D@etsalapatis.com>
+Date: Sat, 04 Apr 2026 15:00:22 -0400
+Message-Id: <DHKLOPTK8IW9.KVASSDNT9UQJ@etsalapatis.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>
 Cc: "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
  "Andrii Nakryiko" <andrii@kernel.org>, "Kumar Kartikeya Dwivedi"
  <memxor@gmail.com>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard"
  <eddyz87@gmail.com>, "Emil Tsalapatis" <etsal@meta.com>
-Subject: Re: [PATCH bpf-next v3 1/9] bpf: Upgrade scalar to PTR_TO_ARENA on
- arena pointer addition
+Subject: Re: [PATCH bpf-next v3 2/9] selftests/bpf: Add test for
+ scalar/arena pointer addition
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260403042720.18862-1-emil@etsalapatis.com>
- <20260403042720.18862-2-emil@etsalapatis.com>
- <CAADnVQ+3WG0ed8Redsn0wbZ+kwHYH-pz2G9bmzVH5MRX-kp02g@mail.gmail.com>
-In-Reply-To: <CAADnVQ+3WG0ed8Redsn0wbZ+kwHYH-pz2G9bmzVH5MRX-kp02g@mail.gmail.com>
+ <20260403042720.18862-3-emil@etsalapatis.com>
+ <CAADnVQLGfsEsMp=yhn6wk03AwXkWgGf3KF9UL6U0-SbuhtbzJw@mail.gmail.com>
+In-Reply-To: <CAADnVQLGfsEsMp=yhn6wk03AwXkWgGf3KF9UL6U0-SbuhtbzJw@mail.gmail.com>
 
-On Fri Apr 3, 2026 at 4:24 PM EDT, Alexei Starovoitov wrote:
+On Fri Apr 3, 2026 at 4:25 PM EDT, Alexei Starovoitov wrote:
 > On Thu, Apr 2, 2026 at 9:27=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.=
 com> wrote:
 >>
 >> From: Emil Tsalapatis <etsal@meta.com>
 >>
->> The compiler sometimes stores the result of a PTR_TO_ARENA + SCALAR
->> addition into the scalar register rather than the pointer register.
->> Handle this case by upgrading the destination scalar register to
->> PTR_TO_ARENA, matching the existing handling when the destination is
->> already PTR_TO_ARENA.
+>> Add a selftest that ensures scalar +=3D ptr_to_arena instructions
+>> are accepted by the verifier.
 >>
 >> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 >> ---
->>  kernel/bpf/verifier.c | 18 ++++++++++++++++++
->>  1 file changed, 18 insertions(+)
+>>  .../selftests/bpf/progs/verifier_arena.c      | 29 +++++++++++++++++++
+>>  1 file changed, 29 insertions(+)
 >>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 8c1cf2eb6cbb..583121b9aa7e 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -16333,6 +16333,24 @@ static int adjust_reg_min_max_vals(struct bpf_v=
-erifier_env *env,
->>                                         bpf_alu_string[opcode >> 4]);
->>                                 return -EACCES;
->>                         } else {
->> +                               /*
->> +                                * The compiler sometimes stores the res=
-ult of
->> +                                * PTR_TO_ARENA + SCALAR addition to the=
- scalar
->> +                                * register. Upgrade it to a PTR_TO_AREN=
-A.
->> +                                */
->> +                               if (src_reg->type =3D=3D PTR_TO_ARENA &&=
- opcode =3D=3D BPF_ADD) {
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/=
+testing/selftests/bpf/progs/verifier_arena.c
+>> index c4b8daac4388..450e8f1181cd 100644
+>> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+>> @@ -477,4 +477,33 @@ int arena_kfuncs_under_bpf_lock(void *ctx)
+>>
+>>         return 0;
+>>  }
+>> +/*
+>> + * Test that scalar +=3D PTR_TO_ARENA correctly upgrades the
+>> + * destination register to a PTR_TO_ARENA.
+>> + */
+>> +SEC("syscall")
+>> +__success __retval(0)
+>> +int scalar_add_arena_ptr(void *ctx)
+>> +{
+>> +#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
 >
-> This is too specific and doesn't fully address the issue.
-> How about something like this:
+> I think the #if can be removed, since the whole test is in asm?
 
-Makes sense, and keeps the SCALAR -> PTR_TO_ARENA in a single site. My
-initial rationale for doing this just for ADD was that it was the only
-two-operand operation that would make sense in this context, but that
-is irrelevant to whether the instructions are safe.
+With Clang 18 the assembly fails to load for me with "Invalid operand for
+instruction". AFAICT this is because addr_space_cast is only recognized as =
+a
+valid instruction from the BPF backend starting Clang >=3D 19, which is
+also the first version that defines the feature flag.
 
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 84699a428077..457ac555da72 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -16572,11 +16572,16 @@ static int adjust_reg_min_max_vals(struct
-> bpf_verifier_env *env,
->         int err;
->
->         dst_reg =3D &regs[insn->dst_reg];
-> -       src_reg =3D NULL;
-> +       if (BPF_SRC(insn->code) =3D=3D BPF_X)
-> +               src_reg =3D &regs[insn->src_reg];
-> +       else
-> +               src_reg =3D NULL;
->
-> -       if (dst_reg->type =3D=3D PTR_TO_ARENA) {
-> +       if (dst_reg->type =3D=3D PTR_TO_ARENA || (src_reg && src_reg->typ=
-e
-> =3D=3D PTR_TO_ARENA)) {
->                 struct bpf_insn_aux_data *aux =3D cur_aux(env);
->
-> +               if (dst_reg->type !=3D PTR_TO_ARENA)
-> +                       *dst_reg =3D *src_reg;
->                 if (BPF_CLASS(insn->code) =3D=3D BPF_ALU64)
->                         /*
->                          * 32-bit operations zero upper bits automaticall=
-y.
-> @@ -16592,7 +16597,6 @@ static int adjust_reg_min_max_vals(struct
-> bpf_verifier_env *env,
->                 ptr_reg =3D dst_reg;
->
->         if (BPF_SRC(insn->code) =3D=3D BPF_X) {
-> -               src_reg =3D &regs[insn->src_reg];
->                 if (src_reg->type !=3D SCALAR_VALUE) {
->                         if (dst_reg->type !=3D SCALAR_VALUE) {
->                                 /* Combining two pointers by any ALU op y=
-ields
+>> +       int __arena *result, *arena_ptr;
+>> +
+>> +       /* Needed for the verifier to link the arena to the subprog. */
+>> +       volatile char __arena *base =3D arena_base(&arena);
+>> +
+>> +       /* Passing base here to avoid optimizing it out during compilati=
+on. */
+>> +       asm volatile (
+>> +               "%[arena_ptr] =3D 8192;"
+>> +               "%[arena_ptr] =3D addr_space_cast(%[arena_ptr], 0x0, 0x1=
+);"
+>> +               "%[result] =3D 12;"
+>> +               "%[result] +=3D %[arena_ptr];"
+>> +               : [result] "=3Dr"(result),
+>> +                 [arena_ptr] "=3D&r"(arena_ptr)
+>> +               : "r"(base)
+>> +               :
+>> +       );
+>> +#endif
+>> +       return 0;
+>> +}
+>> +
+>>  char _license[] SEC("license") =3D "GPL";
+>> --
+>> 2.53.0
+>>
 
