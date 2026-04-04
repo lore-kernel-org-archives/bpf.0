@@ -1,205 +1,259 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB3D3A5E7D;
-	Sat,  4 Apr 2026 10:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F288351C0C
+	for <bpf@vger.kernel.org>; Sat,  4 Apr 2026 10:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775297473; cv=fail; b=o84IRqQMds/mF28WOD6JsO8Ljli7sYunuWTGASvbWMb2MlAwG5ZCTuK9Bo7X3l6mBVQckbLbkbfgq7f5ruh5VuHtU6juz4+8/cAFDo77pZ9Bak+/XB0eN8yA+HxvpE8navMUyXHxgl3KsnurtyET7nNaCpZu0cl2IZ0mXei9Kxc=
+	t=1775299114; cv=pass; b=QyDqKViJnBLqr81oBtREbIUlSKQ680qnZ6qu5lyCgzF5rHdw/b3ZGt2ytlj3ffsO2FpMbDheDVZV1b3N4h056tVh6i5EUGMCRgdyrI25cC5khX8f/n2wXiTSryJ+RYTanbsQnBiM/pvvzvM2jAc5to/Bn3KVkIDk5lk2GSPGH/8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775297473; c=relaxed/simple;
-	bh=XuscLxGbkO5j4gFDlC7mJIyqidZ+PNg0+qnwEbA79/k=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=QcvMq0do1YQ4fIs5yueaAZwrGykfYYjIvSl2dvEISe+VkqtW6QuhuCkh5YiFbAk++4WKjZQgawUPZB7sH21xngF3Tpb3zgkd7rsnnUvgxAcr2pb7+5M5jkEpawNYJ+xdpDhIY8YWHYGsXnYsMUBIdRvdABD9aALL6LuPMnd11TY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h9tf9uyn; arc=fail smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775299114; c=relaxed/simple;
+	bh=rPYg7TpDFWwhe5RzRfbD5Fi94DA+blbzYv/IZpUpv7k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L3N14fXQCffQZ7/Us+PsCpmpo6gkJwf+1Vq3AAbbTKgupDadBD1WIOUYcvT98ht9XfC7naRKgIzv3hw/hDoJLF/59rQT2cvl2zD8YuC6StT7KVmRRVU6ALr2nAP2IXGPw+Y8zcoLp0OvPa7g6nlLTie9Oe2K2LA/aScHuomw32Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PER6PPnW; arc=pass smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h9tf9uyn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775297473; x=1806833473;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=XuscLxGbkO5j4gFDlC7mJIyqidZ+PNg0+qnwEbA79/k=;
-  b=h9tf9uyny6OYeiCofpTlkvhgRQyZsDIuQq3Gsh1asGZVzG3PIZcLvmBk
-   KpIGPMZIGqle9lc09Jums/T4zZdSuwLYElS9gfRjxeDGZE7S4aE0NwWyo
-   yYCyf8Q19mymufG6AghQeBBS1fcNKEt6aFOGk+J65+o+8mpAUi6Kuz/+Q
-   BK+rL2Zw4ihBlPLNl+SvVLCmbY3ZvrbZQuysvlyhrcdQM41rnihrQkoPP
-   ichfQFpjzYK9sNlSRajt+p+t3ktroCR3BZ8d2YvX3WJ/sfzkK5zddz+vF
-   rvovBN+zqJL3pHhitK14hSM3PxbjSUCDkD8OQ2ML4+sx9rAWiaMMFbpeO
-   w==;
-X-CSE-ConnectionGUID: JPkAx1VDSkGGwaZLUdwkMA==
-X-CSE-MsgGUID: Y4hgltS4TcmacF27Ayyzrw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76528732"
-X-IronPort-AV: E=Sophos;i="6.23,159,1770624000"; 
-   d="scan'208";a="76528732"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2026 03:11:12 -0700
-X-CSE-ConnectionGUID: V0ypWoqgQlS1ge68yThfmA==
-X-CSE-MsgGUID: su04fwtEQDK3zmCLruKtfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,159,1770624000"; 
-   d="scan'208";a="232260875"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2026 03:11:11 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Sat, 4 Apr 2026 03:11:10 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Sat, 4 Apr 2026 03:11:10 -0700
-Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.35) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Sat, 4 Apr 2026 03:11:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Inr7ltxauM1tkBi7d+WsNVY7FUb0zt6Wnj8EenZRIzXdFHlSx8ariMSzNuGT462+IjDcrK/H9OKQEZ7qsxFS05wQDt8zqpWBmCcrYU+0+984sR94dM5j14ud1OjRC05am8SeVtcbr1ysdDdcBLQIo89R/Wnpn/xUI2sUgyHxjz9f0I0jlYtEntFMM474/lYI2quNCKMrUAqPusk6sfU+BZt9Bx558/IfNc6LV+ciyjTPtJqWKCQmIwaWfvh0qJayWYzpIxDmVrdbyKJee6RoYNupr1ZdmxyNBYQxCojsdm49AjkdNZG4flphkLG1Bu1VXiFhXjyc38XNwHKCfbPfAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hbff+dxBK1qFlNYKW3gzdzPunaTDbdEGzKTKmbaq9es=;
- b=VMudvtnKwRa6ao/QxmlVDNrG0FJu3d92t90emES8EJoa4/cVPJAykZ2sa23bi+Z6VszgrMrX2EzELnhcRwVt6/QKiaGYvQKh8WY+5dgL5Xr28n51CtMGhBLtj8WvzfDremigViyi+1wOknyRlDw4+3OBfLa0I/tNZkRUh1Z7dk79b3LTi1Wef4SCXxSJAT8XGCraVMeG6wKUZ2E/SZnWWHcx8KZVXhwbe8+D+kzuO7Zti+ibiJowHGGEAs/kj42U+9wdmITCFyTQX5SxhPv+rttVfNjf+VB4XmifpmpxFs45P83B6A4sP2kWp1qHviLnYqzGdaCx05zze9AyGwHueg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- CO1PR11MB4945.namprd11.prod.outlook.com (2603:10b6:303:9c::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9769.20; Sat, 4 Apr 2026 10:11:07 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9769.017; Sat, 4 Apr 2026
- 10:11:07 +0000
-Date: Sat, 4 Apr 2026 12:11:01 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <pabeni@redhat.com>,
-	<horms@kernel.org>, <larysa.zaremba@intel.com>,
-	<aleksander.lobakin@intel.com>, <bjorn@kernel.org>
-Subject: Re: [PATCH v6 net 3/8] xsk: fix XDP_UMEM_SG_FLAG issues
-Message-ID: <adDjtUbNPSjffLSm@boxer>
-References: <20260402154958.562179-1-maciej.fijalkowski@intel.com>
- <20260402154958.562179-4-maciej.fijalkowski@intel.com>
- <20260403165636.1f4ee958@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260403165636.1f4ee958@kernel.org>
-X-ClientProxiedBy: VI1P194CA0029.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:803:3c::18) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PER6PPnW"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c648bc907ebso1841658a12.3
+        for <bpf@vger.kernel.org>; Sat, 04 Apr 2026 03:38:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775299113; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ghUAalE6iBXveJsRt1a3ZRCjs6cx6LJwlbSBsVz/R9TJGg4ZTmVib2IEa/G/CwpWoX
+         dES85Bz2GBuat0fVBSR97anhYHZSJKvYwtzmHyUikJ7QftS1OUuvTx5gJF7AxB6+saKN
+         STTtdxCqV4xgS39X7SW5wgDJm5x74nhMrYqAsN4LZQPZNIDSLf/BV22ntc1KHh2J0O+F
+         US3p0Lj7yspJnJZHgs3bR2JUYD2Whp06dukd4OYECfzIkUlwMstdQX6O0FTwlis2746c
+         YIJomm3eciETBh77bMJBmV9Sx2WXbb7kYLwuoaGMI6Z2I2WlgOd3SXdQ9z+jXVMCi9wj
+         NFbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bqvsUxiNr3YkUyIOE+Y6OHDSRkUfY+F/AiYEwjdurB4=;
+        fh=9iLXz+XOb3NepKMqzcFA3WOFiLNx215OIg3IDBJo0rM=;
+        b=EBLgRkGRVh0ZSQK9oRoIaZkdAVZubfwb9MO+COQ0X0bnAAcmRAQ2krMCPd4ohtBdsW
+         bIVS0b/fSXTvHFUENGGNU2Kp61NYK+12d7sAH598Wu23lydeuOvTnCErTbj233Av38q9
+         bdgoZxqTEb3FaNNGlTINtw6l9+pvEfAfFuotq0Bt8e9+XPZu6UdsibqBSpsTE37e6ZHX
+         DvtxAT0CL1ytow9COhQ+/NtQ1vpoeWkOlwyJo45PgLhfEpRqqTqY2II+mvVHeJ4GsKum
+         gKPQYnY94gP1X2nAT/F26a8v2scPDrdH/e+Q2rnlS+lwYlaTl4Ck0C+A1tleoCfMm7Di
+         KiKQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775299113; x=1775903913; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bqvsUxiNr3YkUyIOE+Y6OHDSRkUfY+F/AiYEwjdurB4=;
+        b=PER6PPnWSzc+H01zGgIQVMwZL+XRKLd3o08y+Uo/Kr60Yh3mGy4/SMgF5hIiepaIyw
+         9pK7XZnRw2jaHl4wydckSnvkDZaGbqaWk9g+ctB7HtY2b88KdB3aULQ2KkHhBfKTQrCL
+         TuUIgntI0AM8eVIrkuuJEPXH/Mlx9hCoGBok7tvg2sFqIphyFypIPMbfpI4v2Q4irqVZ
+         m7arestqDVHAxkXmaiOUvGQ4UrzjKQYw5YBwMqDFU42Csx01QBrrqWgYvWzZ4LgAm2S4
+         VogaGUrD2Oil2Qq3EAdKHMkvMyZA1wtyAbPji0dRvVFKAc14QjlO1aZUDWXP2II1zzHz
+         YVJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775299113; x=1775903913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bqvsUxiNr3YkUyIOE+Y6OHDSRkUfY+F/AiYEwjdurB4=;
+        b=Of2gXBov9Y5nBGP/CqwM0arNdPuvCMpB4jkLcOVR8avg1xbQRWNOuN4H+kEogzVu86
+         LAra+Yc9mTwyNQJnwOGsNa26X35D0yLx9Vw5ZFb4BurRJt8ZWbO4HYofYcqD7GnEse85
+         wPJMzZNopvcCzx3Mwo8bOLI7WLpxZL6MXbQayJHyGUmvexOZZcfM+1EOnX0rTJanMkLt
+         zdg1ieW7auNRsasTmSCY0l4/JlZUERmeUImHfKWc5UBH2qSeTKjzX1p+Q8F3juL4tgZb
+         gGi6JFX7kSOMLMUtVxCGZYaHSCPc5+99BjpkVraL3AHKhfjHnnu12ke8cBoFJ6AFc6X/
+         8xcg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3A2DSWPFRXXL6hyFGt5pPMlT05zPHKF/I9vj5j8+hR1z2X40jlGZndnCuVQ4wTnRgzr4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/Nz1UaQORkbYKLH07evUAv5EjyOfRvpOrs881963M7HqPAOeU
+	YgyR51Ak634cjEbjhoJazdb8Kcb9M6+IW2254z3kW3IDEyZ1dBzOuYLFw4kvZLoJ+SmlI2ryyQ0
+	QAdhdMwaZV2SLHibFAx1g9bfAe6oi7Uo=
+X-Gm-Gg: AeBDiett7S711vAoDOYuON9IUQpooy+fh5CQeXg72xZZSMgjlAsnpH2BLmrn0v1OxF5
+	I5cRp2iA4xTIhoyCuZlICSIG1c+7vJDo50TMAzkyMhvqM8kMos5ed3FmqI8ZP3aSjYEMW3pPDEQ
+	ESGCMPOZW7PN8GLGjB2+AQtc4OAfacywfvjVAVfaRA1KdyE9OezSMN76PBjF9UuWAxvcEfVqFwN
+	Bzrs/5i+Rpjh0Px+8+GTIzIH/aynzqrabkUig2gRiclr0pebWf3g12xfbFwoQXCmJAxkfLGAscm
+	HCal6g==
+X-Received: by 2002:a05:6a00:1804:b0:82a:768c:9a2c with SMTP id
+ d2e1a72fcca58-82d0da6c2aamr6214084b3a.22.1775299112820; Sat, 04 Apr 2026
+ 03:38:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|CO1PR11MB4945:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3e8a0db4-a43a-4bee-2c37-08de92327cfd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info: y7D/8ygS28JHOxrSGRsZtQPTQzWUTicUyvmDRYCRs0XMa6p5uE8ff39aK3faqsA4PrLv0jRt7CzyQsQBHgvWPssZb3qc91IvSmgn0dzav7ahL9aovn13/50OyNBSjA+LiSSl3STDWOVeu6urCB3LIuxuBWrdGdXVtokpVFW0TmIge2x3N+v6r6Oso0FY7C7FUtJnJ8m+3XxOUacJgPK+DagYfCkajmNrHEVMJZDocWa2p+tQxlQxyEdxDOZspvkbc540Do1jAU63J/uTk4V/6RyYOpzJlX/jrABjdvPkXG9Dgdzsq994+OxI8Qu1AXJ3/IViIiXl+FblaB+Rj0dCe2xLfBrGLOye+nqrmpLkH95MFhOJ0xna2SdNiz1m3gjs6D5UdZcYdwtjJDvbBH3a5jma75WAUO3tCzRgEZluyKh7PBGCZHYK5NGfwHUFXaXfcRGSAnqEpNFh6rQ+2nxAOo17ZbNv5HcXuxDS8Vewp+5DREwpRXZFIo9FcUSmlT2NLFk62W0Kbh/WLdkx5eXSxxQZJU2qCsDBOxE4HwviSNS/5fvZwzMh8Gt4E0/JCDVopZ11jn5vuqwYLl+T2Kz00ILavV/EO5tuWpoB4DmAXETJTYe6CX/u7/JTzu1d/Kj5sXOdM8IEdt6tlQTgTA96CDaveDpvKHvg4xfZ+EZjA/yr2R7bkAIfyLMWSQWCHzKLS0T/DGsUwz+VSfao4IbwM8nT7vdzYem37tENhVVqrAk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2HH6bZ9xznEC+m+U/39ClC692XYzByG4/vFL6oOLhC20KF9Yv7Aj10mfBpMt?=
- =?us-ascii?Q?QddkIBZkYgxWjPRR0JVw98ymqRPXkp/eKXrivaFChHzy40niVLSnmo6x8KLD?=
- =?us-ascii?Q?68f+dENKGdjag0zcn+3gVVwSzCnfmY6RYZrzjoGNqa88V7226OoPK8EJM1uq?=
- =?us-ascii?Q?5BcWrK5WbZgEgTcv/sH5DZBzHOgCgV+GrfKMfRs9PoBysJz7uepl/QB0CVub?=
- =?us-ascii?Q?CWZNm1F9gYgAbQ62ztvoshPWQqZaO5+nSH2P81BKAw6E0AUlcN12zsKZU30v?=
- =?us-ascii?Q?5IS3JBI011xEXJLN2R6N2kLWTcyZeXnlrvE3XtBqxwSurwWZuQ98STmdN0lD?=
- =?us-ascii?Q?PcRK0UgUusK1HhbvavnmBg7ukZNdUJH3CdYnQCNvb0S2Q/R1o3gXaLPdZkMj?=
- =?us-ascii?Q?L8lTZ1PCYfmNCdEJnEx8W5QHHp9FA4Dmm9d26pCpu2htXGJ7R8vRDW/sUjNq?=
- =?us-ascii?Q?TWzD8d3oT3i3GzHo5jKjvSNoZlRer2KVzrP4ITDo3wku6zVmcWO9BlJjfjNc?=
- =?us-ascii?Q?i14NNa2+U36HDflb/xIDUqbrXsOV5yGw5y/EviFm3Hbp6ZNSMt9K69K7hUNO?=
- =?us-ascii?Q?k0v3qSJYWbvQnXJkNMvZP9wJg8GpAsO3MXNd3ldlSA/dYu5F/xEfzJInRsOg?=
- =?us-ascii?Q?7A7FdMnWySzIBukGuJwTvxHslgvDvAg9x1Y3aPaT/0geqBj5AQhWiT/gduUQ?=
- =?us-ascii?Q?EAg25atIJVO1BEaKSySAz8koj/5sYs5K2mmxvU0jqTJtPSruxdAFB/40zVZx?=
- =?us-ascii?Q?db1cHCeLh8V/o+gFu5/2IleChY2YVqMKpIR+zkSvcnw2HotFY2QPlckCQTgq?=
- =?us-ascii?Q?dCYtAHcZc6mxGIqQVQ2WGBTRaMByyu3VNdpwCxmmtFl7kviFwW/66luk36w3?=
- =?us-ascii?Q?A/6cJttNmIGnSN1byFYePMA0iTfWSA53tKT6j/GbgiONBE/xyI9HRpb+pHsd?=
- =?us-ascii?Q?okY2gjNro+HwZMLDsyMDcw4NUy7fXst6D4MgDPXSa6dayHAV+5R7lTeOH1/x?=
- =?us-ascii?Q?866qZXTM0rM6YwtZrxVb2gDzsGwAENXGiJV22pg0TWNkUHhDq99cQ/AcR75/?=
- =?us-ascii?Q?uZIIhbr5G7SzD5PozJgDXs28wR/V23coxBVtRLEf+XbvcRwhGTEZQ7yXLbwK?=
- =?us-ascii?Q?UADjsfbi1RzdH6/HGQpZ0XB/0VmflzaoTrlpnrM1XYZHstnLnbP/w4ql+EA5?=
- =?us-ascii?Q?qmAP0atKOYPF/SYDp+fBHGBo6hYYoUYjSwysdxzJeHysdzXd0mr7d4t1Nnvi?=
- =?us-ascii?Q?rO9aPf205SK04vHof8p5Cey6rFE3X6dDVCCNCr8Xuj3dUuAX7bbB1eycRWH3?=
- =?us-ascii?Q?bN+Qyg/VrEt4QUAmp5EnFivF4xsWFfNi653ojh4T//t9WZie53LBgiOEuyJM?=
- =?us-ascii?Q?QmVeyDg+KESNMrA73uMgrbv799g5tcDveJgzkMTXNAIlE4/QToXMpkOAfoAJ?=
- =?us-ascii?Q?3TzJsPMrD07/aZ1ssg9KWtdpbXjdrQykGsFPDl++163nJr1Dr5mfagPSCqot?=
- =?us-ascii?Q?2OF9ZXXMdtWr/3z1AlqzIniMJAiacWqiuK0j/ltW1iZ89ORpCgxKqUlf8Paw?=
- =?us-ascii?Q?TXcmVm4F/YlbD90zQFydhaDMvrRJp5ZFLUGhu47nftpNF04CXuBfn7vSQh5E?=
- =?us-ascii?Q?KrSXxaoqxz86ERoa21Dc6GhWL71t5mBuiW5B96/aV2ooOtZcGIgxT9YEn8Ko?=
- =?us-ascii?Q?dGyl75Y9FHKjJbyjP2mzvA/2t7XWe9Df8osIbIrcHQApVTU/+lBbbtUhFNaH?=
- =?us-ascii?Q?ikGz8C9iwavzbr0FP8zgzSAP6r7xTx8=3D?=
-X-Exchange-RoutingPolicyChecked: CjzaUDexsC7/AbAj+aexZ7jLCY+eq9io7l2qz+ahssCQvJCUWHaaOOgDGiVF+67AAm8U1Z7BZ9eRUYa0qfgt5006bzyRwwgUjnkXtXKTdtRT5D03JDvdsR6UEqh8i8b6kD7NNnV6iYgQ0avzrD9kO4eVSJKrQycuBW3/Wmngmv2L7W/xSd2HBq1lWi4eJ+wfWpynf+XgHTdq9YbYbZedxLH23C+z2xpmfQh7wufKKFqGYfJPjKYGnPjguEGtG4VTgGDT4ZglKzA53GkueIgzctR5H0J0aPIohWyCB4H9yj6IWkSUqaDaJlE9p8xyUD2N3SrzMiUTNuQe1tVor95mnQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e8a0db4-a43a-4bee-2c37-08de92327cfd
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2026 10:11:07.7105
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5nn86Y5TEgMqTQdhrKX+y4qfT1Q/VpM6qyJ94Ioe34rbdNHBZW/sHAG+BuQ1HpcHvO18r2vH5aJZTRv2QJQ4PqJjLcB8POsbwRIwNEW8tFI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4945
-X-OriginatorOrg: intel.com
+References: <20260329140506.9595-1-pilgrimtao@gmail.com> <20260329140506.9595-2-pilgrimtao@gmail.com>
+ <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
+ <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com> <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev>
+In-Reply-To: <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev>
+From: Chengkaitao <pilgrimtao@gmail.com>
+Date: Sat, 4 Apr 2026 18:38:21 +0800
+X-Gm-Features: AQROBzBVuir0D7nKBJ5AeyVjTwhlTc_NLfpWFV4-GAP2nVZvUQpLNOXZ8a-J-BA
+Message-ID: <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Chengkaitao <chengkaitao@kylinos.cn>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 03, 2026 at 04:56:36PM -0700, Jakub Kicinski wrote:
-> On Thu,  2 Apr 2026 17:49:53 +0200 Maciej Fijalkowski wrote:
-> > Currently xp_assign_dev_shared() is missing XDP_USE_SG being propagated
-> > to flags so set it in order to preserve mtu check that is supposed to be
-> > done only when no multi-buffer setup is in picture.
-> > 
-> > Also, this flag has the same value as XDP_UMEM_TX_SW_CSUM so we could
-> > get unexpected SG setups for software Tx checksums. Since csum flag is
-> > UAPI, modify value of XDP_UMEM_SG_FLAG.
-> 
-> should we maybe add:
-> 
-> BUILD_BUG_ON(XDP_UMEM_SG_FLAG & XDP_UMEM_FLAGS_VALID)
-> 
-> somewhere or use a hack like this ?
-> 
-> #define XDP_UMEM_SG_FLAG	(XDP_UMEM_FLAGS_VALID + 1)
+On Sat, Apr 4, 2026 at 12:49=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
+dev> wrote:
+>
+>
+>
+> On 4/3/26 10:41 AM, Chengkaitao wrote:
+> > On Tue, Mar 31, 2026 at 1:05=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> >>
+> >> On Sun, Mar 29, 2026 at 7:05=E2=80=AFAM Chengkaitao <pilgrimtao@gmail.=
+com> wrote:
+> >>>
+> >>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+> >>>
+> >>> [...]
+> >>> +
+> >>> +/* Kfunc family related to spin_lock. */
+> >>> +static const enum special_kfunc_type bpf_res_spin_lock_api_kfuncs[] =
+=3D {
+> >>> +       KF_bpf_res_spin_lock,
+> >>> +       KF_bpf_res_spin_unlock,
+> >>> +       KF_bpf_res_spin_lock_irqsave,
+> >>> +       KF_bpf_res_spin_unlock_irqrestore,
+> >>> +};
+> >>
+> >> I think it's a step in the wrong direction.
+> >> I'd wait for Ihor's BTF_ID_NAMED cleanup.
+> >
+> > After reading Ihor's messages on the list, if I understand correctly,
+> > our two approaches seem to target different problems. What Ihor's
+> > work appears to achieve is the ability to remove the entire enum
+> > special_kfunc_type. My goal, on the other hand, is to replace many
+> > scattered func_id =3D=3D special_kfunc_list[...] comparisons with a
+> > table-driven approach.
+>
+> Hi Kaitao,
+>
+> I appreciate your efforts, however after a quick pass over the changes
+> you propose (both here and in the new series) with respect to BTF_ID
+> macros and special_kfuncs_list, I don't understand what problem you're
+> trying to solve.
+>
+> The inherent complexity is in the fact that the verifier must know
+> when a particular BTF id identifies a specific kfunc, or whether it
+> belongs to some pre-defined set of ids. This is why
+> special_kfuncs_list and other BTF_ID_SET/LIST-s exist.
+>
+> And so there is no way around defining those ids and sets *somewhere*,
+> and so far BTF_ID_* macros did a fine job of that, all things
+> considered.
+>
+> AFAICT your changes simply move around the same definitions from
+> functions with if statements to constant arrays with a runtime search
+> on them (which is slower by the way). What is the benefit of that vs
+> the current implementation? We still have to maintain those arrays in
+> the same way we have to maintain the is_foo_kfunc helpers.
+>
+> Your newer proposal [1] takes the same idea to the next level, by
+> introducing an entire new BTF kind, new ELF sections and a bunch of
+> macros that are no less complicated than existing. And all of that
+> just moves the same arrays "upstream" to the .BTF_ids section. Again,
+> I fail to see any benefits to that complexity. Having differentiation
+> between LIST and SET, and having to mark START and END is not a
+> problem that needs solving IMO.
 
-Good idea i'd lean towards the latter version. I can send v7 after easter
-or if there wouldn't be other issues related to set maybe maintainer could
-adjust it? ;)
+Your analysis of the code implementation for the new proposal is correct.
+Let me elaborate on the purpose behind my approach.
 
-> 
-> > diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-> > index 23e8861e8b25..ebac60a3d8a1 100644
-> > --- a/include/net/xdp_sock.h
-> > +++ b/include/net/xdp_sock.h
-> > @@ -14,7 +14,7 @@
-> >  #include <linux/mm.h>
-> >  #include <net/sock.h>
-> >  
-> > -#define XDP_UMEM_SG_FLAG (1 << 1)
-> > +#define XDP_UMEM_SG_FLAG BIT(3)
-> >  
-> >  struct net_device;
-> >  struct xsk_queue;
-> > diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-> > index 37b7a68b89b3..729602a3cec0 100644
-> > --- a/net/xdp/xsk_buff_pool.c
-> > +++ b/net/xdp/xsk_buff_pool.c
-> > @@ -247,6 +247,10 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_sock *umem_xs,
-> >  	struct xdp_umem *umem = umem_xs->umem;
-> >  
-> >  	flags = umem->zc ? XDP_ZEROCOPY : XDP_COPY;
-> > +
-> > +	if (umem->flags & XDP_UMEM_SG_FLAG)
-> > +		flags |= XDP_USE_SG;
-> > +
-> >  	if (umem_xs->pool->uses_need_wakeup)
-> >  		flags |= XDP_USE_NEED_WAKEUP;
-> >  
-> 
+****** Purpose 1 ******
+
+As described in this patch:
+https://lore.kernel.org/bpf/20260303135219.33726-4-pilgrimtao@gmail.com/
+
+If we want to add a new kfunc, bpf_list_add_impl, we would today have
+to add "btf_id =3D=3D special_kfunc_list[KF_bpf_list_back]" (or similar)
+five times in verifier.c. Under the newer proposal, that is no longer
+necessary: defining the kfunc and its verifier metadata in one place
+is enough, for example:
+
+__bpf_kfunc int bpf_list_add_impl(struct bpf_list_head *head,
+ struct bpf_list_node *new,
+ struct bpf_list_node *prev,
+ void *meta__ign, u64 off)
+{
+/* kfunc implementation */
+.......
+}
+BPF_VERIF_KFUNC_DEF(bpf_list_add_impl, list_api, graph_node_api, ... )
+
+If BPF_VERIF_KFUNC_DEF is extended further, BTF_ID(func, bpf_list_add_impl)
+and BTF_ID_FLAGS(func, bpf_list_add_impl) might also become unnecessary,
+so the snippet above could eventually be close to all the code required
+to add a new kfunc.
+
+****** Purpose 2 ******
+
+The kernel no longer needs enum special_kfunc_type to list every KF_bpf_*
+entry. That information is folded into the .BTF_ids.##sfx section instead,
+so kfunc authors do not have to touch or think about special_kfunc_type.
+
+****** Purpose 3 ******
+
+As described in this patch:
+https://lore.kernel.org/bpf/20260303135219.33726-6-pilgrimtao@gmail.com/
+
+In is_bpf_list_api_kfunc(u32 btf_id) there are on the order of eleven
+"btf_id =3D=3D special_kfunc_list[*]" comparisons. As more kfuncs are added=
+,
+every is_bpf_* helper will only grow longer and the verifier will get
+more repetitive. With the new design, those is_bpf_* helpers can be
+removed entirely, including the awkward scattered "btf_id =3D=3D *" checks.
+
+****** Purpose 4 ******
+
+It pushes us to untangle messy verifier safety cases and make them modular,
+so they can be expressed as parameters to BPF_VERIF_KFUNC_DEF
+
+> The work I was discussing with Alexei [2] is targeted: get rid of
+> constant enums that mirror existing kfunc symbols by making BTF_ID
+> internals a bit smarter. And the benefit is clear and simple.
+>
+> If you could explain what exact issue you're trying to address with
+> your BTF_ID refactoring patches, maybe we can try converging on a
+> reasonable approach to it.
+>
+> Thanks!
+>
+> [1] https://lore.kernel.org/bpf/20260403170900.58659-1-pilgrimtao@gmail.c=
+om/
+> [2] https://lore.kernel.org/bpf/21e5333c-0b57-46ce-99c8-f6c414270e70@linu=
+x.dev/
+>
+>
+> >
+> > That said, once Ihor's solution lands, my approach would no longer
+> > be applicable as-is. So I have been thinking about an alternative,
+> > please see the patch linked below for details:
+> > https://lore.kernel.org/bpf/20260403170900.58659-1-pilgrimtao@gmail.com=
+/
+> >
+> >> Kaitao Cheng,
+> >>
+> >> also please start your part of code reviews.
+> >> Your patches are not going to be landing if you don't code review.
+> >>
+> >> https://lore.kernel.org/bpf/CAADnVQ+TKKptnNB25V3=3Dbcdybh5G6c2DyW2sYtX=
+vyRaVnPN8MA@mail.gmail.com/
+> >
+> > I will do my best to carry this forward.
+
+--=20
+Yours,
+Chengkaitao
