@@ -1,66 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57C74C92;
-	Sat,  4 Apr 2026 00:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359F414B977;
+	Sat,  4 Apr 2026 00:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775261038; cv=none; b=fWJhR+Ij8sCxm+MB4Q7DXWpaNo9AkIrhiY1386Le+fsnr8H1DsIULQcA1Bf89EHG8ulSCKNmmG+xF/diYO5ho2fA8suLBfDoMA3Q5uTnI0lTLFD7c2UTs6CFOHc6bhgpbaAkxf87pQgQHAo4PerVu0mbh9wHH4G9wXpQIrPOzRg=
+	t=1775262120; cv=none; b=Uqj4vgPoor/5aGszZTW8K8k+U7fny5ksLG8dpIgs3McIYn7GJaGeG0O+ZEWDG/gkVqvbW0kyiI6RSRS9D9tSNBwywJvm7Hs8Cccl6KMHGoskypoTe+m8srj62auimkGuR1lgD0Nr1wrzkMzq7RnA2OPwsPH8eBX1bXHF0GUTDF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775261038; c=relaxed/simple;
-	bh=e8c7H+ZPoDWwwXYrkE7pEd5nu81cDoPtuLT9V6+iKl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nBn8+IP8n0TZLOz8caHL1hbXtKqkCS+8/YDlwX5GldmePRSjhop3Ngk2Hnz6v2j2Y/39V1gKx6JNG8evHaecNeFV7w57DxinqGi344HcFpqzCGw4tY/JEbaOZj9zwwrweYT5tbhiyhmUTtO14iYx4A5OsE+BQaqaoFF6dDZv2ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOWKtvK5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775262120; c=relaxed/simple;
+	bh=K4fQ8Le81jwgc4RkE1ZtctQHn7HYlHeLdMGdNNR+9jI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lVqH0PD/bAtZ+j/R5WADcLnS6o2qoCsHXThyZWyrxKSzqieMTtIHK6/WJcRnAjz0PaQY8BWcJYI+E7RXw/Z+MCM7B3Rd6Wpnv5O7Yuj8IcLI3enAaRLGPCQYPzqqJgLRnfnBu7W/P/Gd1mUiUFAyF5f9Eri4irFLtvQQM7ouHhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EizX9mIU; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOWKtvK5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E4FC4CEF7;
-	Sat,  4 Apr 2026 00:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775261038;
-	bh=e8c7H+ZPoDWwwXYrkE7pEd5nu81cDoPtuLT9V6+iKl8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YOWKtvK5OZrHHQuYf6H8v8YLAjx8R3WGOxIE9AkXN1bxrLesiW4HLLIrzdTTTycD7
-	 ZSeFa2y8BQetI7CJI2I9YTsCg0rpBj8CObuLf5Tk5wCSFy/5DWpU2G6kYWdg/0Ttxd
-	 ZpEtWxxWdhgpzdIhCAdh4kRulAGxXZzUVqhye1+ni/xdtmTephWKfW+OR4EdLrMqcM
-	 Oy30MuQe9zVDYgWO2VRG4aTuONXQXSd+tovC6l+lr+Md9i3UraZgsem1rTjbSYIH/e
-	 7ycVXls1PTxmi65TnMIhIpFyxlHUS6pEAJJmZmix2MBvwM7l+cOsdZlZbkj9cY/Ghv
-	 /cyjUdn1ovfzw==
-Date: Fri, 3 Apr 2026 17:03:57 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com,
- stfomichev@gmail.com, pabeni@redhat.com, horms@kernel.org,
- larysa.zaremba@intel.com, aleksander.lobakin@intel.com, bjorn@kernel.org
-Subject: Re: [PATCH v6 net 4/8] xsk: validate MTU against usable frame size
- on bind
-Message-ID: <20260403170357.14cb166a@kernel.org>
-In-Reply-To: <20260402154958.562179-5-maciej.fijalkowski@intel.com>
-References: <20260402154958.562179-1-maciej.fijalkowski@intel.com>
-	<20260402154958.562179-5-maciej.fijalkowski@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EizX9mIU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775262119; x=1806798119;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K4fQ8Le81jwgc4RkE1ZtctQHn7HYlHeLdMGdNNR+9jI=;
+  b=EizX9mIU+O95Qd0kn3+ufYfJ9tFv5bW44b383gGAYemtepzomUyF5K4y
+   Gc/EtITakYaLCGMZdeR6/i3o5IcQkkl7x7GVk83jCc3QCGUt5YLLr7lNm
+   S+zJSJt4tBFDggs6qubU+n2/AxTqvEDal5906Rh+Ls+0E4sCqFW1nghsD
+   BKpDvtHRFPDZCtXb9u0wPkwaRqODbrN9A5fzsK0YTwqMnZNLGatKmTzDh
+   xkVPwEeeMFJISHPaEmQ5pE2yB9WiM1pZRB1L8JjWtF1W0jrnYwL/Rj/RU
+   JkcIuEttkBnMBBtaTqqvimWjmUcVmfN26CB7V81f2YkyVvxUCkix+KTac
+   A==;
+X-CSE-ConnectionGUID: Iw4rPuOFR/mio6cRZbFRvw==
+X-CSE-MsgGUID: Y6r86Y3xQ76qprrJPqiyaQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="75368382"
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="75368382"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 17:21:58 -0700
+X-CSE-ConnectionGUID: Gjpti8vKSNWPaml6JO+/3A==
+X-CSE-MsgGUID: Wal5rm5WRziZs8ottwMk1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,158,1770624000"; 
+   d="scan'208";a="226377012"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 17:21:58 -0700
+Date: Fri, 3 Apr 2026 17:21:49 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+	chao.gao@intel.com
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260404002149.wtayv6a64vzuppgp@desk>
+References: <20260402-vmscape-bhb-v9-2-94d16bc29774@linux.intel.com>
+ <CALMp9eSLVvr00mJ0J2f2_SPeCW-VS58kxMcxHgUW6etML+_+QA@mail.gmail.com>
+ <20260403185236.sjgetnkha3o3a4d3@desk>
+ <CALMp9eSPkMpKQELTnsaj6=gXD+EyE0n2_p93n4maDc93bPFe+w@mail.gmail.com>
+ <20260403213445.xzb4rxbfbg5un7li@desk>
+ <CALMp9eSXfJvR=PHtttbqm3q3nH436T1eH4YdpVqxQeP-cxEPsA@mail.gmail.com>
+ <20260403231608.zopnhnypdclzqlx7@desk>
+ <CALMp9eT2vJBdLPY2uBYrPgVrhS_aYmfGfdXe6MZXG_gyryLHVA@mail.gmail.com>
+ <20260403233329.fb2ppifgwm3um6ny@desk>
+ <CALMp9eTpsenqsWjzmpXLEubn9uNjgZgzgrMwtZ72HDuV_2xgfg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALMp9eTpsenqsWjzmpXLEubn9uNjgZgzgrMwtZ72HDuV_2xgfg@mail.gmail.com>
 
-On Thu,  2 Apr 2026 17:49:54 +0200 Maciej Fijalkowski wrote:
-> AF_XDP bind currently accepts zero-copy pool configurations without
-> verifying that the device MTU fits into the usable frame space provided
-> by the UMEM chunk.
+On Fri, Apr 03, 2026 at 04:39:54PM -0700, Jim Mattson wrote:
+> > Since cloud providers have greater control over userspace, the decision to
+> > use BHI_DIS_S or not can be left to them. KVM would simply follow what it
+> > is asked to do by the userspace.
 > 
-> This becomes a problem since we started to respect tailroom which is
-> subtracted from chunk_size (among with headroom). 2k chunk size might
-> not provide enough space for standard 1500 MTU, so let us catch such
-> settings at bind time. Furthermore, validate whether underlying HW will
-> be able to satisfy configured MTU wrt XSK's frame size multiplied by
-> supported Rx buffer chain length (that is exposed via
-> net_device::xdp_zc_max_segs).
+> I feel like we've gone over this before, but if userspace tells KVM
+> not to enable BHI_DIS_S, how do we inform Windows that it needs to do
+> the longer clearing sequence, despite the fact that the virtual CPU is
+> masquerading as Ice Lake?
 
-For multi-buf - I suppose it's fine, but wouldn't this be potentially
-a regression for setups which use single buf? Suddenly we expect the
-user to provide space for shinfo which was not part of the initial
-AF_XDP design?
+IMO, if an OS is allergic to a hardware mitigation, and is also aware that
+it is virtualized, it should default to a sw mitigation that works everywhere.
+
+> I don't think the virtual mitigation MSRs address that issue.
+
+Virtual mitigation MSRs are meant to inform the VMM about the guest
+mitigation. Even if there was a way to tell the guest that it needs to use
+a different mitigation, it seems unrealistic for a guest to change its
+mitigation post-migration.
