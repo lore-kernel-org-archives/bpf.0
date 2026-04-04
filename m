@@ -1,62 +1,64 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76092512C8
-	for <bpf@vger.kernel.org>; Sat,  4 Apr 2026 16:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7D2374728
+	for <bpf@vger.kernel.org>; Sat,  4 Apr 2026 16:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775319160; cv=none; b=pf/z9ryrrWoRTbSHY39bkXmowhWqbAqZn9rLNo9UGJOvMBjNTQxTl67oYh/mDBDiQQCdRBuzi+zFBic6Wk4Vl8UABaEWomoHsJIi7VYEAe7pPNIScfxRLc1HnjyFgvy2fdtg+kHcatRENbxddlgoS5j/HMr0abaen4m8hTBDh7M=
+	t=1775319174; cv=none; b=hfw1GY8zo6RuREoyCvx5cLi1CEiqQGtaKdH6J0gphszSIp6a4O9IOSYI0wP7GP6eqA0ZjZPiJYxFBq8ZpC8r3ItoGgVXyQc2P/98UXEvDE90bYYMTIrr14ZHE+/TyEwOGUM9BzhSvG641K/MY0WDFDwsfKc0NFzPfbOHT/S3IeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775319160; c=relaxed/simple;
-	bh=ifsPVP/nvIT0V+xZyWyqn4vNzMPSqfXTNSXqgmdVhTk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cuRcnZf3Vvhkjty2t/AlZd4siPkmLFvlsc0C92RsKYjAC+SDlU6v6psly9QU1J+LUlb1c9c4BZ4Q7JMsv2QmVQhvCkpny9VR4E11gGbSmW72bFRn1J5Omzglow307B8sNdPxIyHIh0TkqBj6T9Xs8UiGiAr4eQRiNRTovz/kCr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0mFxZEG; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1775319174; c=relaxed/simple;
+	bh=rEpzQjxiKBNS+2ah60kayEFeuGx0+EAGNauxeEqHBm0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=N0SD+x8/js1Zau5x20Kv7RS9bST8GHoXoiVaal5H6j3y/kXI5i+YjLZSr4hcz1d2/044exT2JNDXGLZ8qQBGtdE07vyapGxFWhdX5IU3tGC9P/xxTShY0AaADjF6YwAjKGb4H8Ps4It8w2OOpx0kJG5t7PohFSQllUqH2Mm9qbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hc7Fog7O; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0mFxZEG"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82ce09b61beso1228726b3a.0
-        for <bpf@vger.kernel.org>; Sat, 04 Apr 2026 09:12:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hc7Fog7O"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82d029fd52eso1467210b3a.2
+        for <bpf@vger.kernel.org>; Sat, 04 Apr 2026 09:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775319158; x=1775923958; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UJ/JGvWssQchVcCi9iClRwdwzxxko9nnAawFufCcTgo=;
-        b=M0mFxZEG1XyXYETFhCv9yMo3R/AGFOix9L9VQ4wQa1ONzcQoij/tbZU4jVuJ+XDoes
-         be+di8yuJnUNPkIOfE2VSnkA8ulyYyPjZtcAynU3S/toeZC8WPK+il+cGWkW5UaENGou
-         APgoBPvr1oUnCBePsAETpmY3GEwT08YQu8o/6n2VT7D/LG/vrHVweRRcITLjRGYBLbQ2
-         gjSkXi0FIuBn/Sp4Gkib5mUQCHaxuf4MgeiHNSSOCUKbNCcVeAse9lO/1rjXHmxLghbl
-         j7Qu1yzX/iizrPXQmbPeGxt1l4KnvBcOtvAsm3P2VzGjSt3zme4/kIf3Pe0sd7nuQ9dV
-         DRIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775319158; x=1775923958;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775319173; x=1775923973; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UJ/JGvWssQchVcCi9iClRwdwzxxko9nnAawFufCcTgo=;
-        b=rDFE2AEt7tzLdm3qd31mioQDv1WXj6wcN2adVO+Gsv8cTWtRiVqzDmuEgguotBxxdJ
-         +ddW/EvvuhBzXkEyPIOtU8F3Ya6SiUsRVk319uz8y0tR0hC3Lr0gZYwYWl/Xr30ifi1m
-         v4JTjHRlQCY0j4C34s1lPwNlGjFHKzpj1R6eJJj+QlTCk/Vhas/wyyOQajq+ycDdtrk9
-         0ZK9vQISZDDU7qgQASoDMfAuzXVwEDjXLcZKC5YSzvbHf5JGjl8c95oQbmK0U3S2U4RN
-         miGS5EgZ87uFoqVu2fnuOZJvRQ9AIBlNyStPFLpw+Cmdpsv1oho6vc2OUAbcgsta7I4P
-         ZEhg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+SOv/Ink6McxLPGGzWdLiPLF2L0QU2p6vBC/Gy0eSwJG6eR+5cCchRk+4/7WTaVuIJyo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNzKFQ0eABewZ220W9aa8dnXzHytJABrqmmhgEq4OTvGTNbrKy
-	4FZpIED/c94O/y3lTIQmUD/XBjTeOczrBhYALMIdbJAEqoljrzxFazKn
-X-Gm-Gg: AeBDieun4ewCFGlEpuJSF/vBkNch7I3sfLyQh+M1DywrdRyRdvSL6eowxMdu9TYdH6p
-	ghTeVWemJ0xnhI5ZlLCZbPIRocFkZZdDDzn8Bg+J5Q6VBoqHxx2TV1bxtb9RLm/a/QZZxky/ON9
-	lvesuimGFqVkKh2vTGeAMp+4Sv6OcZFq33mDAfu49dnffdZ/qIzcvKejhz+M5XR7ToU76eastq1
-	AZU3T9d95AFqANgKs7L3NjyZIXYmp8ZWFZRTUMn74if0l202Gmpy6Ya7/Md1F3gsGL5OA4+QkpU
-	3m3fBiRilMwDmJKJiZe8TLNN3JKoSLZF9wWctieLLNKZeqmjgmAPGAEB/phpjTt1Cowivs9A3ZJ
-	ZouN6KkEv0Nx6fXVFQjHK0sLLbPYOnd/b0qHWn7i8AlnXkJfCsS2pR6x/TKf6cs3bjwwDbU8N6H
-	RokEx1pI/PkoyDdphXFmBnHjlfWdxEGTEjYRiKYLtRTRCxcw49CFyjeEPAXUo40y7BuL2wm5zvP
-	3K6GNBKWgPm
-X-Received: by 2002:a05:6a00:414b:b0:823:1d05:1660 with SMTP id d2e1a72fcca58-82d0dbd3061mr6998460b3a.52.1775319158118;
-        Sat, 04 Apr 2026 09:12:38 -0700 (PDT)
+        bh=H6zI9KtlAU159FX1onOk0hd1wMd/vmDiHA5vwrSEHVY=;
+        b=hc7Fog7Ob+BYNEU/6yKhCxBqY04WIz1zWu4rdo8TPjTHKY9jZCduLRWODY0x/VlssZ
+         4aura5djFn1DgV+4X2FuOx5qTP8T/+SsNud0xjDm5VoEln/4Gxc+EyKxAOfDCQ9Cv6yp
+         C8JxTQfoFH6GwWKZHVkW+IQMPNJgIhoKURznt7evHDqUrpQmbLExo7TGN1LOhzRKd9eD
+         Y6hSd+Abhd/6bR/qXfanovgMWhRZvEb9bh1raEmFP0JsN83mcrtcRIOOuBVtHolTN1IC
+         mNeiNv+XROJs1S5WqOGw+Qyr+/2vPa3u4WmfZuVnJ3WiqMD0ZV3I4OGsWvMDYhXnBLso
+         ELHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775319173; x=1775923973;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=H6zI9KtlAU159FX1onOk0hd1wMd/vmDiHA5vwrSEHVY=;
+        b=rhoJ38qukny0zUyHMWZcHqP9XIYYbgH6j+KAw5CuQ+jJykSoYSSA6nv4bOBg6nPy+x
+         3NLAkmubKst6IC7ysPDnfVZxys3oBlLC9AdJje07x2Od0Q3cbINcFnq3Gr78o++ZLXW+
+         LIHLOjY3c5kP+59N2fVZ1dvYiZuxZvZPCRK7e9HSQpK0RL2eKWWS6i9FIHTdnR8ZOwQV
+         oa6HFUtgm+CvJtOvaGG4lhlBc4dIio7nEoZlK8JCzGUOzeoGhv+RUzV/2ca4aDv6zQ15
+         gIelTWxQcIGZsF9pwN+nYGpW8b9xWqlh/hXrdKU8kiNIvZLoan1LexsswthXtss6eqRu
+         DCRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXqmAeATPqbrfeC+OTSPEKfIx/iI6yUMgW2sgQvhIc03ap4E7ZT+KUl6i5L0X4hrj4c+lg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSm5yqaCcJnDdDTP6b7wBKosG5mBvnmFySDZdQVH4u1wpvwPOI
+	Is2Co7qQEjS9YswjS+lv8F5YaqstMi0yZeNsDb1G8m8nLbYyW3AlPOKO
+X-Gm-Gg: AeBDieugunfqL5QB8sdnPR4V/B7TiL0d9AqStYVFT1hS98IMARJPWj5TLQC8MTaEKyF
+	/+AxQcWHjY8JpnS4pNafctfrqby2fOxzxoflsTVUQqYKjdr7wuhObLpF58sIk7Mlcd4110IWIug
+	iwxr9u3S++mBkS8S1D7erTEWu+qhxC+Ll2hdqeRTZ5mpHrNVmKagsSE80Qww8TazygIJwhu/9rh
+	cUjXpRnEp/FMiZuRBJ4wIDvBgJeEuX05zFIsQaJZALj1W581fhg3G6uEoxishFOHyQUr1k+pbxB
+	I8tPyPB00wSSW8XzY1BNdgESDV0ZwlKVReyBduBBrwOeJ8fEzD07zTB78fDsYp4twF3A81fv7OU
+	YFDyDAT+l3KbhFMsT7+0XG4J3dwRXWrw+ApEnkuV4sLOSnsQGMN1yewKCBZx7YB1aoV6GHgEQ+q
+	lhbGzPe60dTcMLBmom6WZLEAr44606TB9ff1qRmgkvac/0gphM232OLbjug7RdUZ4MtRp3f4T5S
+	L/qSFZBI5Hn
+X-Received: by 2002:a05:6a00:4b56:b0:82c:2647:eeea with SMTP id d2e1a72fcca58-82d0dba1083mr7169398b3a.38.1775319172729;
+        Sat, 04 Apr 2026 09:12:52 -0700 (PDT)
 Received: from SLSGDTSWING002.tail0ac356.ts.net ([129.126.109.177])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b6113dsm8301526b3a.23.2026.04.04.09.12.34
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b6113dsm8301526b3a.23.2026.04.04.09.12.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Apr 2026 09:12:37 -0700 (PDT)
+        Sat, 04 Apr 2026 09:12:52 -0700 (PDT)
 From: Weiming Shi <bestswngs@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -70,10 +72,12 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	bpf@vger.kernel.org,
 	Xiang Mei <xmei5@asu.edu>,
 	Weiming Shi <bestswngs@gmail.com>
-Subject: [PATCH bpf v3 0/2] bpf: reject negative CO-RE accessor indices
-Date: Sun,  5 Apr 2026 00:12:19 +0800
-Message-ID: <20260404161221.961828-1-bestswngs@gmail.com>
+Subject: [PATCH bpf v3 1/2] bpf: reject negative CO-RE accessor indices in bpf_core_parse_spec()
+Date: Sun,  5 Apr 2026 00:12:20 +0800
+Message-ID: <20260404161221.961828-2-bestswngs@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260404161221.961828-1-bestswngs@gmail.com>
+References: <20260404161221.961828-1-bestswngs@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,28 +86,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_core_parse_spec() parses CO-RE accessor strings with sscanf("%d"),
-which accepts negative values.  The downstream bounds checks only test
-the upper bound, so a negative index like -1 slips through, gets cast
-to u32 0xffffffff in btf_member_bit_offset(), and crashes the kernel.
+CO-RE accessor strings are colon-separated indices that describe a path
+from a root BTF type to a target field, e.g. "0:1:2" walks through
+nested struct members. bpf_core_parse_spec() parses each component with
+sscanf("%d"), so negative values like -1 are silently accepted.  The
+subsequent bounds checks (access_idx >= btf_vlen(t)) only guard the
+upper bound and always pass for negative values because C integer
+promotion converts the __u16 btf_vlen result to int, making the
+comparison (int)(-1) >= (int)(N) false for any positive N.
 
-To clarify the kernel-side concern from v2 review:
-tools/lib/bpf/relo_core.c is shared code -- the kernel compiles it
-directly via kernel/bpf/relo_core.c (#include).  So the fix does
-apply in the kernel's BPF_PROG_LOAD -> check_core_relo() ->
-bpf_core_apply() -> bpf_core_parse_spec() path.
+When -1 reaches btf_member_bit_offset() it gets cast to u32 0xffffffff,
+producing an out-of-bounds read far past the members array.  A crafted
+BPF program with a negative CO-RE accessor on any struct that exists in
+vmlinux BTF (e.g. task_struct) crashes the kernel deterministically
+during BPF_PROG_LOAD on any system with CONFIG_DEBUG_INFO_BTF=y
+(default on major distributions).  The bug is reachable with CAP_BPF:
 
-v3: added selftest (patch 2/2)
+ BUG: unable to handle page fault for address: ffffed11818b6626
+ #PF: supervisor read access in kernel mode
+ #PF: error_code(0x0000) - not-present page
+ Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+ CPU: 0 UID: 0 PID: 85 Comm: poc Not tainted 7.0.0-rc6 #18 PREEMPT(full)
+ RIP: 0010:bpf_core_parse_spec (tools/lib/bpf/relo_core.c:354)
+ RAX: 00000000ffffffff
+ Call Trace:
+  <TASK>
+  bpf_core_calc_relo_insn (tools/lib/bpf/relo_core.c:1321)
+  bpf_core_apply (kernel/bpf/btf.c:9507)
+  check_core_relo (kernel/bpf/verifier.c:19475)
+  bpf_check (kernel/bpf/verifier.c:26031)
+  bpf_prog_load (kernel/bpf/syscall.c:3089)
+  __sys_bpf (kernel/bpf/syscall.c:6228)
+  </TASK>
+
+CO-RE accessor indices are inherently non-negative (struct member index,
+array element index, or enumerator index), so reject them immediately
+after parsing.
+
+Fixes: ddc7c3042614 ("libbpf: implement BPF CO-RE offset relocation algorithm")
+Reported-by: Xiang Mei <xmei5@asu.edu>
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+---
+v3: added selftest 
 v2: fix typo Signed-off-by tag (missing leading 'S')
 
-Weiming Shi (2):
-  bpf: reject negative CO-RE accessor indices in bpf_core_parse_spec()
-  selftests/bpf: add test for negative CO-RE accessor index rejection
+ tools/lib/bpf/relo_core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- tools/lib/bpf/relo_core.c                     |  2 +
- .../selftests/bpf/prog_tests/core_reloc_raw.c | 94 +++++++++++++++++++
- 2 files changed, 96 insertions(+)
-
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index 6eea5edba58a..0ccc8f548cba 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -292,6 +292,8 @@ int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
+ 			++spec_str;
+ 		if (sscanf(spec_str, "%d%n", &access_idx, &parsed_len) != 1)
+ 			return -EINVAL;
++		if (access_idx < 0)
++			return -EINVAL;
+ 		if (spec->raw_len == BPF_CORE_SPEC_MAX_LEN)
+ 			return -E2BIG;
+ 		spec_str += parsed_len;
 -- 
 2.43.0
 
