@@ -1,119 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF6FE182D0
-	for <bpf@vger.kernel.org>; Sat,  4 Apr 2026 02:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517FF23C39A;
+	Sat,  4 Apr 2026 03:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775271300; cv=none; b=LmBGVOlHFm9zDnS4w/jxFcxhOC115g0ZW3w/gykMnhB3cmdT4JS3a2R5PESI4k4CGy2aHfdHu31HDFxNi0VJHLPtCIBW54fYkCYzb0WYAztNfEIFmV38yWUBGfZZ2tt+kIvj4/wttcnwrx+631At83DZikeW+2VIgB50+0UXAZc=
+	t=1775274603; cv=none; b=JnpPk7leDTAaV5u1J/EtFaxq5wXvJHxoa1/9IVsJVBqeolXeDPkP7sYoe6FBb+++ZSSY7Sg/Rd3NDb13n7tvcK9AjAUQVP/tTLlnqoJlbXxq//Dk9m5TlMN+Bb1Vh7lwg22MiCeS9QS7/ru0aewSpPswZPd1MDD1lK+ps2yrCMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775271300; c=relaxed/simple;
-	bh=+NVMGLiLbVKJzT4i2qJJ3xqz3ckvx4Z/RTLL6ALgXLg=;
+	s=arc-20240116; t=1775274603; c=relaxed/simple;
+	bh=G8xvmblWSQNkLBTEI/Rr+0xm3IE4VSDw5eOz4xX4E/o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TlbsAmUSbUMuHAKWXnT+bKHe3bgyiAC8Us/VcIG4whXWim49Yxt8ovb6FEA3PcKIb2XxxdZDH3edq+yTeSWBUTXfisgVa2QPYZ5ZkbktGnBidE4tQazGHFWf6HDEgaSmEblpHkBaNynrT36BqcGU6gAeWI9WyZT3+r/w2YXf09E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=blF0Nmht; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=IiOtqMoTrUkxPEMGETuAsaeCP2wUG/FLrzhssskP2preaAfnTtXCJiwot0Llois8yVmjeUD0VDIzE9dtDNjfsVIfBspBaqvuwVAzkktLgnfqKvllWKCHsC1KdlXu1DgoOdavvAUCHDzdW9BnqjwdztsPqrVBK8+DSOaKUewGhZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CgkeAZtg; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="blF0Nmht"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1775271297;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4YjKSQylRy3kG2NY70t36KXH3hh4sUAIIYuvtFISYzU=;
-	b=blF0Nmhto1MpfF9xXUeVGyghS1otVM2J6MyHKDiJIQx+iNWfMkCcheTYa30Fetxa4mCP3J
-	g4sL/Xxnxqd9frmmPh7Fjm76Qo6xgD1BTNMdDeZWAA4V9slT9z5z12uNyRmrNrjKYn7oAp
-	6xO5ChZw5/go9OsiNxigbrL5bHdutk4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-483-E3iSKoadOLqT_Ob4k5LoMw-1; Fri,
- 03 Apr 2026 22:54:56 -0400
-X-MC-Unique: E3iSKoadOLqT_Ob4k5LoMw-1
-X-Mimecast-MFC-AGG-ID: E3iSKoadOLqT_Ob4k5LoMw_1775271295
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D7AEB180049D;
-	Sat,  4 Apr 2026 02:54:54 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.24])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B02EC19560A6;
-	Sat,  4 Apr 2026 02:54:49 +0000 (UTC)
-Date: Sat, 4 Apr 2026 10:54:45 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, Caleb Sander Mateos <csander@purestorage.com>,
-	Akilesh Kailash <akailash@google.com>, bpf@vger.kernel.org,
-	Xiao Ni <xni@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH V3 05/12] io_uring: bpf: extend io_uring with bpf
- struct_ops
-Message-ID: <adB9dYjVAGFoIyTG@fedora>
-References: <20260324163753.1900977-1-ming.lei@redhat.com>
- <20260324163753.1900977-6-ming.lei@redhat.com>
- <b7216cd5-68f4-4ab5-b1c8-b1c71f38fc00@kernel.dk>
- <ac8_XZZiTmHi3mwq@fedora>
- <cb3e52fc-3dad-4385-b9b7-ade9add5292f@kernel.dk>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CgkeAZtg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775274602; x=1806810602;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=G8xvmblWSQNkLBTEI/Rr+0xm3IE4VSDw5eOz4xX4E/o=;
+  b=CgkeAZtg0w8ZFs2eqv2rOnQlT40DRN+98SS0rg0E2+VfvRTERWnviZTf
+   f7gSIwwU/U/ifVuapRxey0ITJbP7fT7NmAPZHBjRL8e9pASajudDPggnm
+   LzGIs+dqbkwOgb93xbR4mJ2UqGJkrHFCaSBctzGfLVZhk18sAp5+6Vw48
+   /iQwaHFsvK5nPkA7cAdRT2EIBYfTXEZht932uM7c+N9wRaBRVQEu4gV8W
+   imo3aMuaay7I8WQmjxYTxavuhh/4U8TYvi4Nk2J3L6exBQ6yHgfCSQ0D5
+   JG5Mr1UoXizFpRIEXNbJxgJh7MoKOeGJbs/bEUjoiPKz0cth3oujtPYr0
+   w==;
+X-CSE-ConnectionGUID: tqdQLgeaSO+QbzVVVnLqoA==
+X-CSE-MsgGUID: r5iayE5WTSau5yzA1xD18w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11748"; a="76445953"
+X-IronPort-AV: E=Sophos;i="6.23,159,1770624000"; 
+   d="scan'208";a="76445953"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 20:50:01 -0700
+X-CSE-ConnectionGUID: /hjoufSMQX2cxDG39zfWEA==
+X-CSE-MsgGUID: zjRESZ50Q3SdWCVtQZrIZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,159,1770624000"; 
+   d="scan'208";a="227335088"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2026 20:50:00 -0700
+Date: Fri, 3 Apr 2026 20:49:54 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+	chao.gao@intel.com
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260404034954.t7iapenzvhdpagxp@desk>
+References: <20260403185236.sjgetnkha3o3a4d3@desk>
+ <CALMp9eSPkMpKQELTnsaj6=gXD+EyE0n2_p93n4maDc93bPFe+w@mail.gmail.com>
+ <20260403213445.xzb4rxbfbg5un7li@desk>
+ <CALMp9eSXfJvR=PHtttbqm3q3nH436T1eH4YdpVqxQeP-cxEPsA@mail.gmail.com>
+ <20260403231608.zopnhnypdclzqlx7@desk>
+ <CALMp9eT2vJBdLPY2uBYrPgVrhS_aYmfGfdXe6MZXG_gyryLHVA@mail.gmail.com>
+ <20260403233329.fb2ppifgwm3um6ny@desk>
+ <CALMp9eTpsenqsWjzmpXLEubn9uNjgZgzgrMwtZ72HDuV_2xgfg@mail.gmail.com>
+ <20260404002149.wtayv6a64vzuppgp@desk>
+ <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cb3e52fc-3dad-4385-b9b7-ade9add5292f@kernel.dk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
 
-On Fri, Apr 03, 2026 at 09:46:29AM -0600, Jens Axboe wrote:
-> On 4/2/26 10:17 PM, Ming Lei wrote:
-> > On Wed, Mar 25, 2026 at 08:09:03PM -0600, Jens Axboe wrote:
-> >> On 3/24/26 10:37 AM, Ming Lei wrote:
-> >>>  int io_uring_bpf_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-> >>>  {
-> >>> +	struct uring_bpf_data *data = io_kiocb_to_cmd(req, struct uring_bpf_data);
-> >>> +	u32 opf = READ_ONCE(sqe->bpf_op_flags);
-> >>> +	unsigned char bpf_op = uring_bpf_get_op(opf);
-> >>> +	const struct uring_bpf_ops *ops;
-> >>> +
-> >>> +	if (unlikely(!(req->ctx->flags & IORING_SETUP_BPF_EXT)))
-> >>> +		goto fail;
-> >>> +
-> >>> +	if (bpf_op >= IO_RING_MAX_BPF_OPS)
-> >>> +		return -EINVAL;
-> >>> +
-> >>> +	ops = req->ctx->bpf_ext_ops[bpf_op].ops;
-> >>> +	data->opf = opf;
-> >>> +	data->ops = ops;
-> >>> +	if (ops && ops->prep_fn)
-> >>> +		return ops->prep_fn(data, sqe);
-> >>> +fail:
-> >>>  	return -EOPNOTSUPP;
-> >>>  }
-> >>
-> >> Any early exit should ensure 'data' is sane, so that the cleanup doesn't
-> >> potentially touch uninitialized crap. This is something that has bit us
-> >> in the past. Not an issue for this patch that adds the code, but it will
-> >> be once the next patch is applied. Better to clear ->opf/ops here
-> >> upfront, so that we never leave this function without 'data' being fully
-> >> initialized.
-> > 
-> > But ->cleanup() is only called in case of REQ_F_NEED_CLEANUP.
-> > 
-> > Or maybe you mean other cleanup instead of ->cleanup()?
+On Fri, Apr 03, 2026 at 07:21:02PM -0700, Jim Mattson wrote:
+> On Fri, Apr 3, 2026 at 5:22 PM Pawan Gupta
+> <pawan.kumar.gupta@linux.intel.com> wrote:
+> >
+> > On Fri, Apr 03, 2026 at 04:39:54PM -0700, Jim Mattson wrote:
+> > > > Since cloud providers have greater control over userspace, the decision to
+> > > > use BHI_DIS_S or not can be left to them. KVM would simply follow what it
+> > > > is asked to do by the userspace.
+> > >
+> > > I feel like we've gone over this before, but if userspace tells KVM
+> > > not to enable BHI_DIS_S, how do we inform Windows that it needs to do
+> > > the longer clearing sequence, despite the fact that the virtual CPU is
+> > > masquerading as Ice Lake?
+> >
+> > IMO, if an OS is allergic to a hardware mitigation, and is also aware that
+> > it is virtualized, it should default to a sw mitigation that works everywhere.
 > 
-> I do mean ->cleanup() - what I'm trying to say here is that we've had
-> cases of REQ_F_NEED_CLEANUP being set late, and hence missing cleanup
-> for easily hit error conditions, and non-initialized data being exposed
-> in cleanup. It's very easy to miss for later patches that adds another
-> error condition. My recommendation is to fully initialize 'data' and set
-> REQ_F_NEED_CLEANUP early, which handily avoids that for future changes
-> too.
+> Agreed. So, without any information to the contrary, VMs should assume
+> the long BHB clearing sequence is required.
+> 
+> Returning to my earlier comment, the test should be:
+> 
+> +       if (cpu_feature_enabled(X86_FEATURE_BHI_CTRL) ||
+> cpu_feature_enabled(X86_FEATURE_HYPERVISOR)) {
+> +               bhb_seq_outer_loop = 12;
+> +               bhb_seq_inner_loop = 7;
+> +       }
 
-OK, your recommendation is definitely clean & safe, will take it.
+To be clear, my comment was for an OS that doesn't want BHI_DIS_S
+under-the-hood with virtual-SPEC_CTRL. Linux doesn't have that problem,
+hardware mitigation on Linux is perfectly okay.
 
+Without virtual-SPEC_CTRL, the problem set is limited to guests that
+migrate accross Alder Lake generation CPUs. As you mentioned the change in
+MAXPHYADDR makes it unlikely.
 
-Thanks,
-Ming
-
+With virtual-SPEC_CTRL support, guests that fall into the subset that
+migrate inspite of MAXPHYADDR change would also be mitigated. Then, on top
+of hardware mitigation, deploying the long sequence in the guest would
+incur a significant performance penalty for no good reason.
