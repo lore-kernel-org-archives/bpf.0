@@ -1,151 +1,156 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBB5338597
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 22:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775427698; cv=pass; b=HImvwu8WxDx7lMKsAcZnoMm+plHl9biCBmfgaBVDbYstlseWjjCXpUiPmYOP6nHZ44wG5nQt3YzxAMyQIjfYimtE0WfGN6+gTViHoxKimMSySmMhvh2g3MXnKa7tWEstGRBNX2s7S+9RwKBXdy3YfHi8pGRiRmLBlYt+51k56tY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775427698; c=relaxed/simple;
-	bh=QKK6EU2jEDOISbwT7YSpyAryDWnQYAx6ztBY88B55kU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P64CM/7K8ngotlkmQCWQzOWYvV0T2faX2NNmGdc3LfazYWhO5uefhFxFH7iO+36h71tDk60Zun75nRT4K3AuoDgDzcjO14kmfbWdk2Od8FpbWow1hnDxrpSenqgeHMSRjyca5JmWGyHVvzsFM73IMrbuxx1HLlMBw7OlcSDtsM8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VSXD5M9v; arc=pass smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD90282F34
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 23:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775432995; cv=none; b=Omci77n94+MHUuBugeC5SW4zNx2B1MbzeaOSZPgKsLrGFYfUHffbhqiPa/8B6VGuoZufy4KP6Kx+sCA1m8VfB9tygVuvukPK2wxejcNdNxSJ6jfm33W5HlNpTUO5Hy7g7LWkJgFAT+wTucEKiQWWo1BO58XiDhBSKFG2dVQLjLY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775432995; c=relaxed/simple;
+	bh=UuxRCYBnHXVCIUC2lYpysNUxFrS3xTL1sRQnQsBThTI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=CK1lINaqd6yqBFBJiK4pHIhyCLRgc7uSfys7XI8QQcTt22UZsFSJTcElatnYvNt2Fsnw5AS7iB0lJgwf1ke/zboeol/Z1Vvulj4/Q0mE7ajF0j2IaE7bf8yIcIzbBF6lXxmP7skFoGhylleLAT47LibeKYdpkaeuSueIK4yAWyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=G2kMGy6p; arc=none smtp.client-ip=209.85.216.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VSXD5M9v"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-50d6b393d60so1050911cf.0
-        for <bpf@vger.kernel.org>; Sun, 05 Apr 2026 15:21:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775427696; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Bapv4L96CDEaZiB5+whfCqbQipPMGY5pY7kjK5On+t6Mj7MM1Vu3uxTiQWe2qGq/Ow
-         P7LfLbttzYC5PqV8WXFw+mmVxbhxzfFj6x4Cv0rk5FvOumKAcz7xqsMxN8xxkHqeoFEA
-         YEGRFWErNL+/bBy+BDb6Q1T41e+BjO6iHETVi5IWF6ZsEVs8yyWXi/BfitY55Zn1WS+l
-         9DCgRQZtL+lusoMoVkH5FQDFAJIUHgJrG/pgN0DlU3q/TEMHElFYLNuXmeXwKK3C6y6o
-         fLNejATjSUPIkQOHq6I6tE1XMkIUvNu8qSyn7PLkGQFThpdCVWlRKbVXG/8/oVtmcJkb
-         5p0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wU5c60oO9kgud17YgZ93g7RUPb33+yt1u19+FWTCl+Q=;
-        fh=MGQp2A73lKa8bk3SsmZqyXxRyPYjWMKGa1xcBapRpMo=;
-        b=FKGgEW6r9Rzek3AzJc/83+MFjo0MoSGIb1ayhwOLzxowqrS4sfLLgc8J7JdRCTsHEH
-         6YEO4/rLh9I0MkeJaKHcpI17IlphcMfVCo1Q9DYO0tVp/AlePJveXvCckF1manXIZkrv
-         kONCzsjEK6PXzDI5/gDVfO+N7MRAK2dn8Uv/Lmqa1DlguUwCrpdVQ5sdUzTx4UzLIPhp
-         8yOYT1fESnaeYpNw6lF2hG999fFaOYXYAcT8FEchjDBp1HO/XMt9/xMJUYAA3m0vSB7j
-         CkUhcoP3lzD6+zeCu6icJdYZoxUiQYTyyIy8WkUDsZE7F6GkdoNlNiLgmCwiNEWDeyKl
-         XWog==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="G2kMGy6p"
+Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-35da9692ec3so3080640a91.1
+        for <bpf@vger.kernel.org>; Sun, 05 Apr 2026 16:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775427696; x=1776032496; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775432993; x=1776037793; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wU5c60oO9kgud17YgZ93g7RUPb33+yt1u19+FWTCl+Q=;
-        b=VSXD5M9vpnlo/QbFJRKPIdqc5IJq0M7N4kw7Il+YloKDAGXXgmbUslF/pdWLk10u8e
-         LNUY75u8Mkv5z3NZ9Yn9KXMgKi/TWC9zwXe64o95xxgENvle/Jbw0DH5fiagt27UuPKd
-         vETukJCPTpkhZRG2J9x+9+/iNZklYtFs85fMVmLbNTKkHWkJRYideoIIsx6yc1jLk7EW
-         WM1h3BCxLOEj2JtxtiCPGFDyo3GqHPE4lSy+eagogifYuWjTuPEmYIDVNyAszm4nv0kF
-         b5Jzez1d/I9IJOuyiplMy8m3LT26KJdZx0X9sBTld+ZgynFHX9eTX+FmyoNpk6+s9ewX
-         82Iw==
+        bh=XUZVBN2VN4vnEw4Br5X4PEYZMIf8IsAQPOGK1gD3tCE=;
+        b=G2kMGy6pTcYp0CwkVO8L3CE0hricXF/suYcSyykCS+BPxGgSDM+3c8h0KqccPejTe8
+         ++gKJUAF9thas8dat8Mz//iUeIJUTMuCJn43PpPDo/OGVwWine0I617zjj79E3fwCp7O
+         /G7ZnRimr+1+cjxcIyAriRA+OUnYk1DQVlEBmG9dVn3ldNmVDzBH6oJpCCIwvR4p/Xvb
+         eGtzJO2o5T1Z8C42QhLWyrEu7A+JPL71qp2k6DL43/MxCfccVit1PWiad5yckV0+Zxy7
+         7jrO6+dy72lPkS53TNDcQ3qJSZy+9I8W0VdQ9qXSsrOLTC4q0gTtYHHzEwguCL7cmxjG
+         TDdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775427696; x=1776032496;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wU5c60oO9kgud17YgZ93g7RUPb33+yt1u19+FWTCl+Q=;
-        b=ZNIlfCR0Q8d48UU4SX3PgJmZXevP28rS4zybmEGlkN8O8QE39GTLSc5w8MwNxRO/YH
-         uTim9Lt0wfMpkKF4NtxCE1Hi7/VYknQiZ6al4BWW4lSG6qkhURrq5TIwZ1A8Y4AqOOVF
-         cjVYWOHFfZavYv0tJLW9ClNmMq5SPcSv4JMHdam2ipVrLATG3yNA1ORK2ZtJ4f4HyjC4
-         si/PgRY9SoRKjBzEV/jwL0Y3wd56kefkh2eqHP1wENd0nAqTt9MST/uSVDfPxsnj2c1E
-         jtyrLql2Z6R+ndX5y46O0OQJ8OW2XmcaqV3ZICseyfKirGqCta2bhQ/VXyMNS8Z2MoJ/
-         4iTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBoSMxZTQ5eyeycdVX80UfXqk+hfrDJU/LXfT1/XcpumyVIQ2hs57frn+0/tXbVM0ervY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybgMVlxuRfizmJaFrgStNstrb1Ll5sttRprkt9Clb+SU4MGEXF
-	+RuWE5dMnpr6PliOIfN39NWc0a3N5+j+HBFRbv13Pc+ie1Zw/M6AyckFFocMV7+0mOdWamIDxn8
-	Ts4I+8+ucy/agh9Ul08eL6iO7jeT+jTgtr+zYK4l1
-X-Gm-Gg: AeBDietxXsAJYR/MEXYJOiwuvo1Ca7MVL7k2ZzavalQzSO1i94+F2oQHB0BxGgpyN0A
-	U/H01P5FfEW/ZwXs9nve/JGE82l1cWAEiqmhEJXNqM7s1f/gfKwkB2ddNcCW3xPxVV573HT/VW6
-	WdCkgir9DUDg1tIGfinVdFK834W0o4xP/5HEYJX7jXX1R3atBMCEeu+bWLsiUX6ZvNmFbdZXAh8
-	TJQVFDMWPRDLWLZGQW4YMY8IRXDztlvp1etg8C7Q+c2VdQS4pPplVtoN+PUu4uI84evoTaWmWGF
-	8F19Hm9f3txYtMSqNdFvOlcUqdel3GjNriz7ow==
-X-Received: by 2002:ac8:59d4:0:b0:509:21ff:cd49 with SMTP id
- d75a77b69052e-50d63ea7eecmr31659121cf.4.1775427695747; Sun, 05 Apr 2026
- 15:21:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775432993; x=1776037793;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XUZVBN2VN4vnEw4Br5X4PEYZMIf8IsAQPOGK1gD3tCE=;
+        b=GOemD6dC3VfzN0RC3FBCZpNy2n0vzdJ2atjw58KASld7GwUNMDV3UhcxSyk5OB+8/k
+         SsYIsyTFSzgsT9AYliRB82iTmGWoV3J6kOslxb+jONWao2VfuHuDc5GaQ3+okITpmJs+
+         o+azhjKjZLfBTRtQRXuK8IpnKbA47rAhwcBhUhSguMcx+nMlKkaiLIZJGO5NXGCpgmtQ
+         F4ErY5h0fJi1NakzqQAS3twRdvnDHpzxej/dJCGGbgm6J49F/LRXOwo8GvXaxIriy6Jg
+         OCdz5qKPRszz57Xdd8grxhRkiYb56ZblSKxB5XFDf4tujQL+fg3uFu7r5A2m7+UrH9dH
+         Axyw==
+X-Forwarded-Encrypted: i=1; AJvYcCUyxijEppW+rTsJp+J66noqEe8PAo82JZgoF9xKAkdllHnwlLcXXXo1b7oCw2kUQ/kX9Qw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9SOqyaUrWfl2hzZuakmvtaGzihy6j2Ew1ZD7ATfzxQ0WgaiSA
+	lrTPZb+MTpqTI0FOAwr/e47noAWVdysZwr3naWKRK/dE3lDA3ciOqq1+iOL4+6uWw4g=
+X-Gm-Gg: AeBDiesnNtyXQf/FaVlfpL8H0Tw4pgda2bsq6x7cZ/h1erM0vTwnNOS1H6RRMt5ZABC
+	4aDN0IaD7LiCRd/QKChIO0srHX408kpASwFCfdYRnLRWByOuh8AHgfbas19IldFmGocHToitJLH
+	JsQhHLBgINQ2C9FKdDMBTXGSb7qc+G7xhFBkrErf6iAfcNDcEXzy49zhA+PC65Puwa1swava4DT
+	nBJSPUDbZ/ErIIC/XtCuCsxqTdfS/tSJxwYStDDoawdWNITXYxbFYISW4pC9quI5pfUEripBVaw
+	CIpnhz0oiIaUVyZhZM4m+RVzEhWmqUPV3DGCETuCFZlg6XyFUzd7UG00q2GHLrpkUtODP795h+g
+	ZHfmewAltod2zArNjXgk/RcUJ3BDSekGOqEHF8HOjL/dJotPntOItzLE9/4unKY3zDj63Q61dH0
+	Fhp7ZvWqM=
+X-Received: by 2002:a17:90a:d403:b0:359:3426:c60a with SMTP id 98e67ed59e1d1-35de67da841mr9588504a91.4.1775432993231;
+        Sun, 05 Apr 2026 16:49:53 -0700 (PDT)
+Received: from localhost ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dbe9377b7sm21338044a91.10.2026.04.05.16.49.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Apr 2026 16:49:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <CANP3RGcL+LFNBk-+9Z5W+8Nyj1+rxCkgR=EiQiLdHW22dSKvgg@mail.gmail.com>
- <230953f5-f64d-4f58-ad2e-f3ea9358aff0@linux.dev> <CANP3RGdf0ESYZBqrhjbZjQMQzTtms61M4DBdixP09h+EG6LP_g@mail.gmail.com>
- <CAADnVQLSBB4x7UsHsNSuEJEeckgiPp=idEY45ey3Lwafk7fTYw@mail.gmail.com>
-In-Reply-To: <CAADnVQLSBB4x7UsHsNSuEJEeckgiPp=idEY45ey3Lwafk7fTYw@mail.gmail.com>
-From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date: Sun, 5 Apr 2026 15:21:23 -0700
-X-Gm-Features: AQROBzBJ359OKxswxg60I4VHX2l3NskSQEva1GjFtzgID1nC_QdmjW-lpBshbn8
-Message-ID: <CANP3RGfZTXM_u=E_atoomPZXutoQJ02nOMkCCR-YBZbOm2suWA@mail.gmail.com>
-Subject: Re: bpf() system call writes out of bounds of user supplied buffer
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Jesper Dangaard Brouer <brouer@redhat.com>, KP Singh <kpsingh@google.com>, 
-	Neill Kapron <nkapron@google.com>, Carlos Llamas <cmllamas@google.com>, 
-	Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 05 Apr 2026 19:49:51 -0400
+Message-Id: <DHLMGWNKBI4K.3LM87NOU4XB3O@etsalapatis.com>
+Cc: "Quan Sun" <2022090917019@std.uestc.edu.cn>, "Yinhao Hu"
+ <dddddd@hust.edu.cn>, "Kaiyan Mei" <M202472210@hust.edu.cn>, "Dongliang Mu"
+ <dzm91@hust.edu.cn>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "David S.
+ Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf v1 1/2] bpf: Fix SOCK_OPS_GET_SK same-register OOB
+ read in sock_ops
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260404141010.247536-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260404141010.247536-1-jiayuan.chen@linux.dev>
 
-On Mon, Apr 6, 2026 at 7:00=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Sat Apr 4, 2026 at 10:09 AM EDT, Jiayuan Chen wrote:
+> When a BPF sock_ops program reads ctx->sk with dst_reg =3D=3D src_reg
+> (e.g., r1 =3D *(u64 *)(r1 + offsetof(sk))), the SOCK_OPS_GET_SK() macro
+> fails to zero the destination register in the is_fullsock =3D=3D 0 path.
 >
-> On Sun, Apr 5, 2026 at 2:46=E2=80=AFPM Maciej =C5=BBenczykowski <maze@goo=
-gle.com> wrote:
-> >
-> > On Mon, Apr 6, 2026 at 3:29=E2=80=AFAM Yonghong Song <yonghong.song@lin=
-ux.dev> wrote:
-> > >
-> > >
-> > >
-> > > On 4/3/26 4:22 PM, Maciej =C5=BBenczykowski wrote:
-> > > > Took a *while* to track this down, as it then results in random
-> > > > memory/heap/stack corruption and segfaults, but:
-> > > >
-> > > > kernel/bpf/cgroup.c -- __cgroup_bpf_query()
-> > > >
-> > > >         if (copy_to_user(&uattr->query.revision, &revision, sizeof(=
-revision)))
-> > > >
-> > > > doesn't verify this is in bounds of the uattr + length passed in fr=
-om userspace.
-> > >
-> > > If the uattr indeed has less than needed space, then for
-> > >          if (copy_to_user(&uattr->query.revision, &revision, sizeof(r=
-evision)))
-> > >                  return -EFAULT;
-> > > the kernel will return -EFAULT to user space.
-> > >
-> > > Maybe userspace didn't handle the return code properly and causing
-> > > user space corruption and segfaults. This shouldn't be a kernel issue=
-.
-> > > Maybe I missed something?
-> >
-> > That's not how that works at all.
-> >
-> > copy_to_user() will only fail and thus EFAULT will only be returned if
-> > the memory area copy_to_user() is trying to copy into isn't
-> > owned/mapped by the user (or perhaps is read-only protected, not sure
-> > about this last one).
-> >
-> > Because memory is mapped in (at least) 4K pages, the memory after a
-> > user buffer is almost always still valid memory.  It might be unused,
-> > or it might be something on the stack - like a return address, or it
-> > might be on the heap - metadata tracking, or a different memory
-> > allocation perhaps entirely.
+> The macro saves/restores a temporary register and checks is_fullsock.
+> When is_fullsock =3D=3D 0 (e.g., TCP_NEW_SYN_RECV state with a request_so=
+ck),
+> it should set dst_reg =3D 0 (NULL) so the verifier's PTR_TO_SOCKET_OR_NUL=
+L
+> type is correct at runtime. Instead, dst_reg retains the original ctx
+> pointer, which passes subsequent NULL checks and can be used as a bogus
+> socket pointer, leading to stack-out-of-bounds access in helpers like
+> bpf_skc_to_tcp6_sock().
 >
-> true, but Yonghong's point still stands. It's a userspace bug.
+> Fix by:
+>  - Changing JMP_A(1) to JMP_A(2) in the fullsock path to skip the
+>    added instruction.
+>  - Adding BPF_MOV64_IMM(si->dst_reg, 0) after the temp register
+>    restore in the !fullsock path, placed after the restore because
+>    dst_reg =3D=3D src_reg means we need src_reg intact to read ctx->temp.
+>
+> Fixes: 84f44df664e9 ("bpf: sock_ops sk access may stomp registers when ds=
+t_reg =3D src_reg")
+> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Closes: https://lore.kernel.org/bpf/6fe1243e-149b-4d3b-99c7-fcc9e2f75787@=
+std.uestc.edu.cn/T/#u
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-how?
+This patch only seems to fix the problem when dst_reg =3D=3D src_reg.
+Why is this not an issue when is_fullsock =3D=3D 0, but dst_reg !=3D src_re=
+g?
+In that case the dst_reg is unmodified by the whole macro but is still
+marked as PTR_TO_SOCKET_OR_NULL. Isn't that a problem? Can you add
+a test case for is_fullsock =3D=3D 0 but dst_reg !=3D src_reg in patch 2?
+
+> ---
+> Apologies for the Easter timing!
+> ---
+>  net/core/filter.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 78b548158fb05..8fee00e6adef4 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -10618,10 +10618,11 @@ static u32 sock_ops_convert_ctx_access(enum bpf=
+_access_type type,
+>  				      si->dst_reg, si->src_reg,		      \
+>  				      offsetof(struct bpf_sock_ops_kern, sk));\
+>  		if (si->dst_reg =3D=3D si->src_reg)	{			      \
+> -			*insn++ =3D BPF_JMP_A(1);				      \
+> +			*insn++ =3D BPF_JMP_A(2);				      \
+>  			*insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,	      \
+>  				      offsetof(struct bpf_sock_ops_kern,      \
+>  				      temp));				      \
+> +			*insn++ =3D BPF_MOV64_IMM(si->dst_reg, 0);	      \
+>  		}							      \
+>  	} while (0)
+> =20
+
