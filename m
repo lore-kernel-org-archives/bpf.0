@@ -1,148 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6596E1A0BD0
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 18:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F681A0BD0
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 18:20:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775413237; cv=none; b=ueCV6xtqigMYWLFwOl7s/ROUx87NDb8v1HjxS29j9UsEoRp5lW+EeFW0JxA4CQ8CAIXx2YwWJPRW9t+na/WvsfWtQOabBxddMENUsbCUer2uHEEl6lna1MUP1j6ghi4goJEw2UOnuOu9Km6ow+xWTenxotAs4QJT6CRhv4GGBX4=
+	t=1775413238; cv=none; b=BZA8F7XsQ0IRw08o6h1wnOnrsOcJHldnrx1YQBKW2RW9Rnsvy9CxIP6YFjgiGi92rcdwKmY3E7epioK68fNEYodnHZ4ClmMiPfjhJiUT3B8bUCdv6kLD97nhUKo3cXALZxg9YFeUutmXhLFkfB3aCPmOOin+T66PhHLGTq/FUoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775413237; c=relaxed/simple;
-	bh=FxTI/3jdoSLXYLABIMF1knD79Vi0zm7HHGkp+c/nymo=;
+	s=arc-20240116; t=1775413238; c=relaxed/simple;
+	bh=79XDv9G3lubUWiVOHGH6u301hScP4XQ071Wl3Bgbyzs=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Sfu7cDs7dSVCIfqDbPQQHIg5D0nAbn4PrKwXFqHQtTs/23zwfQIuGRr53ncF79QmazynrLgy8ieP3QfLoRj780HiiIU3OmvkAgirq6pYktE4YtZ8YWJ+GvtCc+KyofI2iYQYqTMKtLxWNmL2ZKHyhxI5VMyvcia5x26OVD1qgJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s4u2JZ0v; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=IwuR3ifHMg0gG2Etz/gEkKB4d2VcrSOqtb4dkhptkOYVrvHAsemAWxWiEkWOZYaOrHBav0Ol0hgUoF28poHSFlcZ2jeU9/40zNusCfsX16nL4qIToQROXMnGIopereNYac/x0qbGw1ZW2uOAEiz9In1Ot66a/Hnj8ayE3ZoEz5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GlV5b9Kh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s4u2JZ0v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8E8C116C6;
-	Sun,  5 Apr 2026 18:20:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GlV5b9Kh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59425C116C6;
+	Sun,  5 Apr 2026 18:20:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775413237;
-	bh=FxTI/3jdoSLXYLABIMF1knD79Vi0zm7HHGkp+c/nymo=;
+	s=k20201202; t=1775413238;
+	bh=79XDv9G3lubUWiVOHGH6u301hScP4XQ071Wl3Bgbyzs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=s4u2JZ0vf7FM4v+r1ogxqVDT/jJ1didEV5EjVTrmb4W8nDEr/5NrbYxSiITKYFed+
-	 rJsweOMNPYczbt1FMnaJQRTDKqorcmYyj3b/uT150SY5JCkVWxqjEQt2y7+NgiGagC
-	 pD53KmTeJK0qY9WKZHCBYR7WOzGYyMi2z9vC1tr8z25W3JpSdIIeMvhGp5dqqAz/bq
-	 l5vdXrwyD0YVSdBpH6skybBPo5Kupvaj8Ls0e7VoOljMVXCB6niShrsBT27+kIVF7d
-	 ECddaCofO9ws3yKpSIUdJ07qyLuXOX54/kMkAcY2A8wu69JQpjUqW4pQ3keGwKMwVf
-	 mJXxJO+kDZqrw==
-Content-Type: multipart/mixed; boundary="===============2356889937471946968=="
+	b=GlV5b9KhhL//iuaguJGb+JDbE9p/G/9jJns7u0isuDJ0fI5btjoZYJJkVmR6MFnQD
+	 D/waVZx7HOa1yCQXHN9MZlRTeM18SchdWX0Hnb3XmWa8bE6LfEyJjv7aBrLGCVxg6d
+	 1LjX+Yrb8S0krjtdI+6DmzPitgAP5CNEuYswb0j//H75S47W82MntaSoIeSeJp8ivG
+	 ZZj4y+9oL2zr7JWUWnRLoBEKJc8MNs0NFfsQn6yO+g1LZfvcfj7CGA4Zn+J9lfswGe
+	 WxQb1r5/FQJPP6uIzL5qeXXLyK1E4HVx/d60RBsQjHgCjz+3eIOjFEhdBvnATHcbSt
+	 1TcaVn+e20ylw==
+Content-Type: multipart/mixed; boundary="===============7270530951059331149=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <34107b0f560d5c960a2a55fef331b8bb728735e1e4d1155ed7ed9511c696a296@mail.kernel.org>
-In-Reply-To: <20260405172601.1331846-1-yonghong.song@linux.dev>
-References: <20260405172601.1331846-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v3 03/11] bpf: Support stack arguments for bpf functions
+Message-Id: <e093e4d67ae569dd8183db5affaa8ec67c3d20c7b9a46c0f78a223041efc0921@mail.kernel.org>
+In-Reply-To: <20260405172626.1337674-1-yonghong.song@linux.dev>
+References: <20260405172626.1337674-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 08/11] bpf,x86: Implement JIT support for stack arguments
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun,  5 Apr 2026 18:20:36 +0000 (UTC)
+Date: Sun,  5 Apr 2026 18:20:38 +0000 (UTC)
 
---===============2356889937471946968==
+--===============7270530951059331149==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 84699a428077..52a61021613b 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 32864dbc2c4e..206f342a0ca0 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
 
 [ ... ]
 
-> +/* Validate that a stack arg access is 8-byte sized and aligned. */
-> +static int check_stack_arg_access(struct bpf_verifier_env *env,
-> +				  struct bpf_insn *insn, const char *op)
-> +{
-> +	int size = bpf_size_to_bytes(BPF_SIZE(insn->code));
+> @@ -2449,6 +2529,41 @@ st:			if (is_imm8(insn->off))
+>  			}
+>  			if (!imm32)
+>  				return -EINVAL;
 > +
-> +	if (size != BPF_REG_SIZE) {
-> +		verbose(env, "stack arg %s must be %d bytes, got %d\n",
-> +			op, BPF_REG_SIZE, size);
-> +		return -EINVAL;
-> +	}
-> +	if (insn->off % BPF_REG_SIZE) {
-> +		verbose(env, "stack arg %s offset %d not aligned to %d\n",
-> +			op, insn->off, BPF_REG_SIZE);
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-
-Should this also reject non-negative offsets? The commit message and
-check_stack_arg_write() comment both state that off is a negative
-offset from the stack arg frame pointer, and the diagram shows only
-negative offsets (r12-8, r12-16, etc.).
-
-If a crafted BPF program uses a positive offset (e.g., off=+8), this
-function accepts it because +8 is 8-byte aligned. Then in
-check_stack_arg_write():
-
-    int spi = (-off - 1) / BPF_REG_SIZE;
-
-With off=+8, spi becomes (-8 - 1) / 8 = -1. The grow_stack_arg_slots()
-call receives a negative size, which round_up() turns to 0, so no
-allocation happens. The subsequent access to stack_arg_slots[-1] is
-an out-of-bounds write (heap underflow if previously allocated, or a
-crash if stack_arg_slots is NULL).
-
-The same issue applies to the read path in check_stack_arg_read()
-where -off becomes negative, passing the depth check, and spi
-again computes to -1.
-
-resolve_pseudo_ldimm64() explicitly allows BPF_REG_STACK_ARG_BASE
-in both src_reg and dst_reg positions, so a BPF program can encode
-these instructions.
-
-Something like the following may be sufficient:
-
-    if (insn->off >= 0) {
-        verbose(env, "stack arg %s offset must be negative\n", op);
-        return -EINVAL;
-    }
-
+> +			if (src_reg == BPF_PSEUDO_CALL && outgoing_stack_arg_depth > 0) {
+> +				s32 outgoing_base = -(prog_stack_depth + outgoing_stack_arg_depth);
+> +				int n_args = outgoing_stack_arg_depth / 8;
 > +
-> +/*
-> + * Write a value to the stack arg area.
-> + * off is the negative offset from the stack arg frame pointer.
-> + * Callers ensures off is 8-byte aligned and size is BPF_REG_SIZE.
-> + */
-> +static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_state *state,
-> +				 int off, int value_regno)
-> +{
-> +	int spi = (-off - 1) / BPF_REG_SIZE;
+> +				ip += push_stack_args(&prog, outgoing_base, n_args, 1);
+> +			}
+> +
+> +			if (src_reg != BPF_PSEUDO_CALL && insn->off > 0) {
+> +				/* Kfunc calls: arg 6 -> R9, args 7+ -> push. */
+> +				s32 outgoing_base = -(prog_stack_depth + outgoing_stack_arg_depth);
+> +				int kfunc_stack_args = insn->off;
+> +
+> +				stack_args = kfunc_stack_args > 1 ? kfunc_stack_args - 1 : 0;
+> +
+> +				/* Push args 7+ in reverse order */
+> +				if (stack_args > 0)
+> +					ip += push_stack_args(&prog, outgoing_base, kfunc_stack_args, 2);
+> +
+> +				/* mov r9, [rbp + outgoing_base] (arg 6) */
+> +				if (is_imm8(outgoing_base)) {
+> +					EMIT4(0x4C, 0x8B, 0x4D, outgoing_base);
+> +					ip += 4;
+> +				} else {
+> +					EMIT3_off32(0x4C, 0x8B, 0x8D, outgoing_base);
+> +					ip += 7;
+> +				}
+> +			}
+>  			if (priv_frame_ptr) {
+>  				push_r9(&prog);
+>  				ip += 2;
 
-[ ... ]
+When priv_frame_ptr is active (private stack in use), R9 holds the
+private frame pointer throughout the program. The existing push_r9 /
+pop_r9 around calls preserves R9 across the function call.
 
-> +	} else {
-> +		/* BPF_ST: store immediate, treat as scalar */
-> +		reg = &state->stack_arg_slots[spi].spilled_ptr;
-> +		reg->type = SCALAR_VALUE;
-> +		__mark_reg_known(reg, (u32)env->prog->insnsi[env->insn_idx].imm);
-> +		for (i = 0; i < BPF_REG_SIZE; i++)
-> +			state->stack_arg_slots[spi].slot_type[i] = STACK_MISC;
-> +	}
-> +	return 0;
-> +}
+With this new code, two issues arise when stack args and
+priv_frame_ptr are both active.
 
-Is the (u32) cast on the imm field intentional here? The regular
-stack path in check_stack_write_fixed_off() passes insn->imm
-directly to __mark_reg_known() without a cast:
+For kfunc calls with stack args: the MOV R9, [rbp + outgoing_base]
+overwrites the priv_frame_ptr in R9 with arg6 before push_r9 saves
+it. After the call, pop_r9 restores arg6 into R9 instead of the
+priv_frame_ptr, so subsequent BPF_REG_FP accesses (which map to R9
+when priv_frame_ptr is set) would reference the wrong memory.
 
-    __mark_reg_known(tmp_reg, insn->imm);
+For both kfunc and BPF-to-BPF calls: push_r9 inserts an extra 8
+bytes onto the stack between the pushed args and the CALL
+instruction. The callee then sees the wrong values for its stack
+arguments. For example, with a BPF-to-BPF call the callee's
+incoming arg formula expects [rbp + 16] to be the first stack arg,
+but instead it finds the caller's saved R9 value:
 
-Since insn->imm is __s32 and __mark_reg_known() takes u64, the
-regular path sign-extends (e.g., imm=-1 becomes 0xffffffffffffffff).
-The (u32) cast here zero-extends instead (imm=-1 becomes
-0x00000000ffffffff).
+    push_stack_args:  [RSP] = arg1, [RSP+8] = arg2
+    push_r9:          [RSP] = R9,   [RSP+8] = arg1, [RSP+16] = arg2
+    CALL:             [RSP] = ret,  [RSP+8] = R9 ...
+    callee prologue:  [rbp+16] = R9  (expected arg1)
 
-BPF_ST with BPF_DW stores the 32-bit immediate sign-extended to
-64 bits at runtime, so the verifier's tracked value would not match
-the actual runtime value for negative immediates.
+Both priv_stack_mode and stack_arg_depth are set independently per
+subprog in jit_subprogs(), so can this combination actually be
+reached?
+
+> @@ -2458,6 +2573,14 @@ st:			if (is_imm8(insn->off))
+>  				return -EINVAL;
+>  			if (priv_frame_ptr)
+>  				pop_r9(&prog);
+> +			if (stack_args > 0) {
+> +				/* add rsp, stack_args * 8 */
+> +				EMIT4(0x48, 0x83, 0xC4, stack_args * 8);
+> +			}
+> +			if (src_reg == BPF_PSEUDO_CALL && outgoing_stack_arg_depth > 0) {
+> +				/* add rsp, outgoing_stack_arg_depth */
+> +				EMIT4(0x48, 0x83, 0xC4, outgoing_stack_arg_depth);
+> +			}
+>  			break;
+>  		}
 
 
 ---
@@ -150,4 +140,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24006922024
---===============2356889937471946968==--
+--===============7270530951059331149==--
