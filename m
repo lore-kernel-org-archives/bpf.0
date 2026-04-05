@@ -1,400 +1,141 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1382312837
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 16:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AF63164D8
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 17:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775408114; cv=none; b=i+xPlTqWbakU1oJWmsmCBLw06wuseF9W0Ikitgv4vU9Y8u7sChFE6V/8DQ6I37NSnpQhWN20IJrSCAmWXXPhhoVloS40fweTyMhe9hSrxuandCO9ZtDYxVnn7loFDKhjplWTmmS3D2yB6HQlS2wvS1tCuJt3isI2fsVVbdCcmQw=
+	t=1775408947; cv=none; b=DhVok5AASLko7VMWRhH7CKPmDp1tJimDTlisuOSemx6sgLgv2EK782TXeu2cyAW56PembBUbXgPopr/q+aI0jgxKkpxIX8gxoWvkvBBwI4JMZjhYqbF8fcMkbBzjBSqL4jc+YwzDXu6DLHE/qatzMq/muoIAJtE1wSl6MbUhQO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775408114; c=relaxed/simple;
-	bh=YZUj4Iy24ciIANB+pYY33nSaO4a63g9AK7bWSrEodY0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OyWH9X246OACuEKPW9poeAyVJbhDURVAIhyoNHXFCccwkyJoCj9RvpCGHg/6KUyUypEVLFykE11xA5/mki+xWpXgHSIlQdQCSNwz0rO/6CBzQhdcQRH6Bc438wvynKoj+AHUKSrX1I6C/oVW+6JTufc5wTpNqzeXmZpMX0ctnZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 5E4A1361CF370; Sun,  5 Apr 2026 09:55:02 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 11/11] selftests/bpf: Add verifier tests for stack argument validation
-Date: Sun,  5 Apr 2026 09:54:54 -0700
-Message-ID: <20260405165502.838467-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260405165300.826241-1-yonghong.song@linux.dev>
-References: <20260405165300.826241-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1775408947; c=relaxed/simple;
+	bh=3oeH+xBIvUDB+3f28XJKJBZ6fQCeLQB0VBcm6GCdbiU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KLjzwH1l+oa49DCfVq3r3Hj5XY0I2PDPE1g3nBDdr52/z/fEA9hmkqLPdX2g93Gic8xRKMw5CN5G2B4HIqodxPvUj1XDqypotsyXMmLjJHM/Ou7KFAEMjZFHTiQ45k0sm4+dtkfl5XFbIc4jkiGoRTGU2l3YKTBK9b3iBBliSC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TDbQvWrt; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TDbQvWrt"
+Message-ID: <2251a12b-2c2c-4222-935f-0629f44ecc8a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775408943;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HYO4GzmZb7R1A++gV2+STnRC9rzuc7iaxfU4Fqf9RGM=;
+	b=TDbQvWrtNUyr8pq7doKWWEFMhJPUWi91EnA/aX2JeqKJwUuiq5W5P9vFR6DXlTLI071JAG
+	DJPwyZVhwU9fEtllqcgMmcv96Z/mhulME/Pkq6nQ50S1V9t5yRhdGl1Wz3PplWQIG8nGZX
+	s3/5ldLdT7FhSSwR1zp6wFDube4USfo=
+Date: Sun, 5 Apr 2026 10:08:57 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v2 00/11] bpf: Support stack arguments for BPF
+ functions and kfuncs
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260405165300.826241-1-yonghong.song@linux.dev>
+In-Reply-To: <20260405165300.826241-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Add inline-asm-based verifier tests that exercise the stack argument
-validation logic directly.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_stack_arg.c  | 302 ++++++++++++++++++
- 2 files changed, 304 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
-c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index 1ac366fd4dae..f39ed1f28a7b 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -90,6 +90,7 @@
- #include "verifier_sockmap_mutate.skel.h"
- #include "verifier_spill_fill.skel.h"
- #include "verifier_spin_lock.skel.h"
-+#include "verifier_stack_arg.skel.h"
- #include "verifier_stack_ptr.skel.h"
- #include "verifier_store_release.skel.h"
- #include "verifier_subprog_precision.skel.h"
-@@ -236,6 +237,7 @@ void test_verifier_sock_addr(void)            { RUN(v=
-erifier_sock_addr); }
- void test_verifier_sockmap_mutate(void)       { RUN(verifier_sockmap_mut=
-ate); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
-; }
- void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock);=
- }
-+void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg);=
- }
- void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr);=
- }
- void test_verifier_store_release(void)        { RUN(verifier_store_relea=
-se); }
- void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_pre=
-cision); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-new file mode 100644
-index 000000000000..921a9b3bee7f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -0,0 +1,302 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, long long);
-+} map_hash_8b SEC(".maps");
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+__noinline __used
-+static int subprog_6args(int a, int b, int c, int d, int e, int f)
-+{
-+	return a + b + c + d + e + f;
-+}
-+
-+__noinline __used
-+static int subprog_7args(int a, int b, int c, int d, int e, int f, int g=
-)
-+{
-+	return a + b + c + d + e + f + g;
-+}
-+
-+SEC("tc")
-+__description("stack_arg: subprog with 6 args")
-+__success
-+__arch_x86_64
-+__naked void stack_arg_6args(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 8) =3D 6;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: two subprogs with >5 args")
-+__success
-+__arch_x86_64
-+__naked void stack_arg_two_subprogs(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 8) =3D 10;"
-+		"call subprog_6args;"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 16) =3D 30;"
-+		"*(u64 *)(r12 - 8) =3D 20;"
-+		"call subprog_7args;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: read from uninitialized stack arg slot")
-+__failure
-+__arch_x86_64
-+__msg("invalid read from stack arg")
-+__naked void stack_arg_read_uninitialized(void)
-+{
-+	asm volatile (
-+		"r0 =3D *(u64 *)(r12 - 8);"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: gap at offset -8, only wrote -16")
-+__failure
-+__arch_x86_64
-+__msg("stack arg#6 not properly initialized")
-+__naked void stack_arg_gap_at_minus8(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 16) =3D 30;"
-+		"call subprog_7args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: incorrect size of stack arg write")
-+__failure
-+__arch_x86_64
-+__msg("stack arg write must be 8 bytes, got 4")
-+__naked void stack_arg_not_written(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u32 *)(r12 - 8) =3D 30;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+__noinline __used
-+static long subprog_stack_arg_pruning_deref(int a, int b, int c, int d, =
-int e, int f)
-+{
-+	long local =3D 0, *p, *ptr;
-+
-+	if (a <=3D 3) {
-+		/* Overwrite the stack arg slot with a pointer to local */
-+		p =3D &local;
-+		asm volatile ("*(u64 *)(r12 - 8) =3D %[p];" :: [p] "r"(p) : "memory");
-+	}
-+
-+	/* Read back the (possibly overwritten) stack arg slot */
-+	asm volatile ("%[ptr] =3D *(u64 *)(r12 - 8);" : [ptr] "=3Dr"(ptr) :: "m=
-emory");
-+
-+	/* Deref: safe for PTR_TO_STACK, unsafe for scalar */
-+	return *ptr;
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pruning with different stack arg types")
-+__failure
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__arch_x86_64
-+__msg("invalid mem access 'scalar'")
-+__naked void stack_arg_pruning_type_mismatch(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r1 =3D r0;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 8) =3D 42;"
-+		"call subprog_stack_arg_pruning_deref;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: release_reference invalidates stack arg slot")
-+__failure
-+__arch_x86_64
-+__msg("R0 invalid mem access 'scalar'")
-+__naked void stack_arg_release_ref(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		/* struct bpf_sock_tuple tuple =3D {} */
-+		"r2 =3D 0;"
-+		"*(u32 *)(r10 - 8) =3D r2;"
-+		"*(u64 *)(r10 - 16) =3D r2;"
-+		"*(u64 *)(r10 - 24) =3D r2;"
-+		"*(u64 *)(r10 - 32) =3D r2;"
-+		"*(u64 *)(r10 - 40) =3D r2;"
-+		"*(u64 *)(r10 - 48) =3D r2;"
-+		/* sk =3D bpf_sk_lookup_tcp(ctx, &tuple, sizeof(tuple), 0, 0) */
-+		"r1 =3D r6;"
-+		"r2 =3D r10;"
-+		"r2 +=3D -48;"
-+		"r3 =3D %[sizeof_bpf_sock_tuple];"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call %[bpf_sk_lookup_tcp];"
-+		/* r0 =3D sk (PTR_TO_SOCK_OR_NULL) */
-+		"if r0 =3D=3D 0 goto l0_%=3D;"
-+		/* spill sk to stack arg slot */
-+		"*(u64 *)(r12 - 8) =3D r0;"
-+		/* release the reference */
-+		"r1 =3D r0;"
-+		"call %[bpf_sk_release];"
-+		/* r0 and stack arg slot (r12 - 8) should be invalid now. */
-+		"r0 =3D *(u64 *)(r12 - 8);"
-+		"r0 =3D *(u8 *)(r0 + 0);"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_sk_lookup_tcp),
-+		  __imm(bpf_sk_release),
-+		  __imm_const(sizeof_bpf_sock_tuple, sizeof(struct bpf_sock_tuple))
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pkt pointer in stack arg slot invalidated afte=
-r pull_data")
-+__failure
-+__arch_x86_64
-+__msg("R0 invalid mem access 'scalar'")
-+__naked void stack_arg_stale_pkt_ptr(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		"r7 =3D *(u32 *)(r6 + %[__sk_buff_data]);"
-+		"r8 =3D *(u32 *)(r6 + %[__sk_buff_data_end]);"
-+		/* check pkt has at least 1 byte */
-+		"r0 =3D r7;"
-+		"r0 +=3D 1;"
-+		"if r0 > r8 goto l0_%=3D;"
-+		/* spill valid pkt pointer to stack arg slot */
-+		"*(u64 *)(r12 - 8) =3D r7;"
-+		/* bpf_skb_pull_data(skb, 0) =E2=80=94 invalidates all pkt pointers */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"call %[bpf_skb_pull_data];"
-+		/* read back the stale pkt pointer from stack arg slot */
-+		"r0 =3D *(u64 *)(r12 - 8);"
-+		/* dereferencing stale pkt pointer should fail */
-+		"r0 =3D *(u8 *)(r0 + 0);"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_skb_pull_data),
-+		  __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+		  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)=
-)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: null propagation rejects deref on null branch"=
-)
-+__failure
-+__arch_x86_64
-+__msg("R1 invalid mem access 'scalar'")
-+__naked void stack_arg_null_propagation_fail(void)
-+{
-+	asm volatile (
-+		"r1 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r1;"
-+		/* r0 =3D bpf_map_lookup_elem(&map_hash_8b, &key) */
-+		"r2 =3D r10;"
-+		"r2 +=3D -8;"
-+		"r1 =3D %[map_hash_8b] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		/* spill PTR_TO_MAP_VALUE_OR_NULL to stack arg slot */
-+		"*(u64 *)(r12 - 8) =3D r0;"
-+		/* null check on r0 */
-+		"if r0 !=3D 0 goto l0_%=3D;"
-+		/*
-+		 * on null branch, stack arg slot should be null (scalar 0).
-+		 * read it back and dereference should fail.
-+		 */
-+		"r1 =3D *(u64 *)(r12 - 8);"
-+		"r0 =3D *(u64 *)(r1 + 0);"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_hash_8b)
-+		: __clobber_all
-+	);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("stack_arg is not supported by compiler or jit, use a dumm=
-y test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.52.0
+On 4/5/26 9:53 AM, Yonghong Song wrote:
+> Currently, bpf function calls and kfunc's are limited by 5 reg-level
+> parameters. For function calls with more than 5 parameters,
+> developers can use always inlining or pass a struct pointer
+> after packing more parameters in that struct. But there is
+> no workaround for kfunc if more than 5 parameters is needed.
+>
+> This patch set lifts the 5-argument limit by introducing stack-based
+> argument passing for BPF functions and kfunc's, coordinated with
+> compiler support in LLVM [1]. The compiler emits loads/stores through
+> a new bpf register r12 (BPF_REG_STACK_ARG_BASE) to pass arguments beyond
+> the 5th, keeping the stack arg area separate from the r10-based program
+> stack. The maximum number of arguments is capped at MAX_BPF_FUNC_ARGS
+> (12), which is sufficient for the vast majority of use cases.
+>
+> The x86_64 JIT translates r12-relative accesses to RBP-relative
+> native instructions. Each function's stack allocation is extended
+> by 'max_outgoing' bytes to hold the outgoing arg area below the
+> program stack. This makes implementation easier as the r10 can be
+> reused for stack argument access. At BPF-to-BPF call sites, outgoing
+> args are pushed onto the native stack before CALL. The incoming
+> parameters can directly get the value from pushed native stack from
+> caller. For kfunc calls, args are marshaled per the x86_64 C calling
+> convention (arg 6 in R9, args 7+ on the native stack).
+>
+> Global subprogs with >5 args are not yet supported. Only x86_64
+> is supported for now.
+>
+> For the rest of patches, patches 1-6 added verifier support of
+> stack arguments for bpf-to-bpf functions and kfunc's. Patch 7
+> enables x86_64 for stack arguments. Patch 8 implemented JIT for
+> x86_64. Patches 9-11 are some selftests.
+>
+>    [1] https://github.com/llvm/llvm-project/pull/189060
+>
+> Changelogs:
+>    v1 -> v2:
+>      - v1: https://lore.kernel.org/bpf/20260402012727.3916819-1-yonghong.song@linux.dev/
+>      - Add stack_arg_safe() to do pruning for stack arguments.
+>      - Fix an issue with KF_ARG_PTR_TO_MEM_SIZE. Since a faked register is
+>        used, added verification log to indicate the start and end of such
+>        faked register usage.
+>      - For x86_64 JIT, copying incoming parameter values directly from caller's stack.
+>      - Add test cases with stack arguments e.g. mem, mem+size, dynptr, iter, etc.
+>
+> Yonghong Song (11):
+>    bpf: Introduce bpf register BPF_REG_STACK_ARG_BASE
+>    bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
+>    bpf: Support stack arguments for bpf functions
+>    bpf: Refactor process_iter_arg() to have proper argument index
+>    bpf: Support stack arguments for kfunc calls
+>    bpf: Reject stack arguments in non-JITed programs
+>    bpf: Enable stack argument support for x86_64
+>    bpf,x86: Implement JIT support for stack arguments
+>    selftests/bpf: Add tests for BPF function stack arguments
+>    selftests/bpf: Add negative test for greater-than-8-byte kfunc stack
+>      argument
+>    selftests/bpf: Add verifier tests for stack argument validation
+>
+>   arch/x86/net/bpf_jit_comp.c                   | 140 +++++-
+>   include/linux/bpf.h                           |   6 +
+>   include/linux/bpf_verifier.h                  |  31 +-
+>   include/linux/filter.h                        |   4 +-
+>   kernel/bpf/btf.c                              |  21 +-
+>   kernel/bpf/core.c                             |  12 +-
+>   kernel/bpf/verifier.c                         | 474 ++++++++++++++++--
+>   .../selftests/bpf/prog_tests/stack_arg.c      | 132 +++++
+>   .../selftests/bpf/prog_tests/stack_arg_fail.c |  24 +
+>   .../selftests/bpf/prog_tests/verifier.c       |   2 +
+>   tools/testing/selftests/bpf/progs/stack_arg.c | 212 ++++++++
+>   .../selftests/bpf/progs/stack_arg_fail.c      |  32 ++
+>   .../selftests/bpf/progs/stack_arg_kfunc.c     | 164 ++++++
+>   .../selftests/bpf/progs/verifier_stack_arg.c  | 302 +++++++++++
+>   .../selftests/bpf/test_kmods/bpf_testmod.c    |  72 +++
+>   .../bpf/test_kmods/bpf_testmod_kfunc.h        |  26 +
+>   16 files changed, 1594 insertions(+), 60 deletions(-)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg.c
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg_fail.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/stack_arg.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_fail.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+>
+Please ignore this patch set. Just discovered that there is a selftest failure
+and a couple of 'UTF-8' issues. I will fix these issues and send the next revision
+shortly.
 
