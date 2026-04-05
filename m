@@ -1,399 +1,212 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8F831A81C
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 17:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B222DCC05
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 18:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775410014; cv=none; b=e5+zXeudWP/wLLYiRTACHDPa7bvFdjjKARDWjxOwnZTGAtSz7IhECCfaFNrtRYkVjSPWNUEwkMNx1O6pgASmshN3/g2WTtREXJZh196GmloKEFZOAs/cmgNeDOOVGMNx8oS5F8w9T5brYY6t9fsoTnEh5rJ/XTOjg7HAdIviKBw=
+	t=1775412953; cv=none; b=aYWdcsf0N9n1qqy/bj52IoF7inTGZFb7zhds620huo2SUtQ6ZOB6Oqz90iXXHZORS7r6GQRvJLSP6YIK0VpDzsllWncYq7nomHVWz8CwlRQiVrqgkoHTbhv2K835VF+xtLT1VSMTmppQm8YkvGv2wW9gvkvQvosKh2vxn9F7fWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775410014; c=relaxed/simple;
-	bh=DWLHc71/hYqynxnU+jkmOlm0senWCSBbN8FJvHfwaTw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ll2YUa9lt/V5F6xPQQAcpaL3wBWa/ZdIv8I8inyVoKJL2aCW9tu7fQZbJDXiSdokuFdtbvQFLOTmxFhqONXpVcAxDF7BxCxmZnUPC5xsaV5TLelF+Nw6UKurQplWkHFWGG63X75CrGaUzmhrDup2LeusCn14B9H1LGv/LdTf5+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 42E6D361E5EF7; Sun,  5 Apr 2026 10:26:42 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+	s=arc-20240116; t=1775412953; c=relaxed/simple;
+	bh=daPaPqNUpta4Y37FCyzAQIb5thsUfz5tmMxENQuxMQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bQwVUnIlg7ciBesd+Q3RDEteAouH2YYnvYa2USIQ8wiqSLTD1VOUuzoEdMjnKxMli/vBoV+NO8g8GJr03WjKpssmVUvHPg02fv0uAMucGkrMZhV8nx3aI6BbgO1ChupWdfwtkqD7CVXRcGfeFRE4NrOz2SKVo8SqSD+AJwx0AXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oVzypw+n; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oVzypw+n"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4888244e9f9so30353895e9.0
+        for <bpf@vger.kernel.org>; Sun, 05 Apr 2026 11:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775412949; x=1776017749; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1BqCUPJk37vpaNHyGU+o45BpKaON0Cq4jW8fw5E5QNY=;
+        b=oVzypw+njb35NJZu1RQr6sf/81Xd5EjLRZkGZGsIpoZ4vDz9P7OjYIi2Y9El9KKxPd
+         O30N3+h0EDuahyKky7xUvO/NCP/AH4IZYfOR8/X9qfqFxgqx5TkjXh6p4tg4Ww7mxiM8
+         E6FAC+wkRS1a1wtXIPOKC9CUMowFM2peDq+C6FD0OteIIyf0uS0p9cxSyR/HeTn+GJZR
+         67oMlSpYzarLPMkeysjLYQZp3qnvzNfeVbJOb+ZYQFfxqAKu7hgrOPuPujSDGWH4FDDv
+         V/lEmq6+BmCveRImR/qX1KNratKoXQihLH4sgQKPd4txHsmKX8HHgBhvNrH8fJkq6fBs
+         MIOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775412949; x=1776017749;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1BqCUPJk37vpaNHyGU+o45BpKaON0Cq4jW8fw5E5QNY=;
+        b=cAYkmeXcdvuYsZjSVE+xjPwroxaTt1GN0UxSeQP9QCXzdPRjp+3PFxExAQUE/wLpYY
+         6r8rK7pp8N8HYMgh6Y2Swdv8hb3QKmQY0WPb9qulK90vFUsj37sY8pD3ZIWTiFiRuQcF
+         bxlkVH4BmBTUqkh5/XFA8bs0du5SAJSM7tGdQnZQ4NFfow7phkD5Lz3wNKbu6ri5wJSG
+         zPxKdTIxob/g0v36rC2yJgFU9qP+oyO2SPu0FlovCzidl9ST1UsB+xWu6GntwYwzkSk4
+         S4Hxg1suErBpAFa7Paa/BIDENvbSqS/bkKN5F0aLtihBGS4bRbI6Urr+ZV4liZD/MBdm
+         8xew==
+X-Gm-Message-State: AOJu0Yz0sOoTwWQmhks2BV4kDumwNc+0uC8aLgyddR6tn3fK72CyxK9Y
+	oe+ECZaM5ZC/6ztNYp74Eg+QmNg+q1vipUeM75B5ALm0nQaqcDWhEJ2c
+X-Gm-Gg: AeBDiesddZ7A/T/tVlHuj/ArHKYNtdIpG0Ia4IwBAeTYjOls3qT35DXvh57SPEqggyL
+	xtQfOChpVngGlWD2WguGncQecTW58qgycrjMqY9LH6NcirhnUdUu2hehwNpRolBYVWY1Vot7s3F
+	ZiTYO6CULcAHqndezDqZCvjDIh8qdxkEMkfq9EVwCXAnpqt6rR97eVDXpqQp6+RQoEAwGFtIWri
+	swfafWOejWAj5I9fZcLej1Lvq/XxX3QWKnyM+0xlKCp7Gs1RrFcPyQhpmfF/VRi/xl5RdUExSts
+	K8wHJF8sdhzWvHSZ8hu+TDLqY0Z/Iic+xDj0lRXmQGTQKyOr8xA7bwAf1qKJhyG4t2owkkaGPH1
+	70jVBKeIpRS3W32T0I60YHSOhWJk/kBEV78Ly0YlybJae6LhH5Z7aojyzRk0RvqpOsPT4rAGO3O
+	m5fp9Z9JvO2VKmH/doGYX4LDksyrDSNh08
+X-Received: by 2002:a05:600c:64cd:b0:487:1fbf:e0bb with SMTP id 5b1f17b1804b1-488996a1c9dmr159093185e9.6.1775412948988;
+        Sun, 05 Apr 2026 11:15:48 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488ab6bfc86sm23624425e9.11.2026.04.05.11.15.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Apr 2026 11:15:48 -0700 (PDT)
+Date: Sun, 5 Apr 2026 18:24:25 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 11/11] selftests/bpf: Add verifier tests for stack argument validation
-Date: Sun,  5 Apr 2026 10:26:42 -0700
-Message-ID: <20260405172642.1338721-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260405172505.1329392-1-yonghong.song@linux.dev>
-References: <20260405172505.1329392-1-yonghong.song@linux.dev>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jiyong Yang <ksur673@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Do not ignore offsets for loads
+ from insn_arrays
+Message-ID: <adKo2W5+uaRYFII0@mail.gmail.com>
+References: <20260402184647.988132-1-a.s.protopopov@gmail.com>
+ <20260402184647.988132-2-a.s.protopopov@gmail.com>
+ <CAADnVQKUJYsPJa8HP9E-pguQeuShXfuaEs4Z_zJAVYWeEUvHBg@mail.gmail.com>
+ <ac7XSg6AsJq99WvT@mail.gmail.com>
+ <CAADnVQJ_e2fyODknJyMPRw4Z7ztu3-0ZrVM8jXpoO1g7bH52jA@mail.gmail.com>
+ <ac9yriPJX9RXa5tr@mail.gmail.com>
+ <CAADnVQK0mEAdZ3PEHv=wvbPUrEA7EPmU7w928JOd=143vt+kJA@mail.gmail.com>
+ <adAChK9+GVACl8ci@mail.gmail.com>
+ <CAADnVQLq9X6K3_vwcsMEy_5AEk+y_gWbUHSibn5uGqbpdejirQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLq9X6K3_vwcsMEy_5AEk+y_gWbUHSibn5uGqbpdejirQ@mail.gmail.com>
 
-Add inline-asm-based verifier tests that exercise the stack argument
-validation logic directly.
+On 26/04/03 11:22AM, Alexei Starovoitov wrote:
+> On Fri, Apr 3, 2026 at 11:01 AM Anton Protopopov
+> <a.s.protopopov@gmail.com> wrote:
+> >
+> > O 26/04/03 08:10AM, Alexei Starovoitov wrote:
+> > > On Fri, Apr 3, 2026 at 12:47 AM Anton Protopopov
+> > > <a.s.protopopov@gmail.com> wrote:
+> > > >
+> > > > On 26/04/02 02:32PM, Alexei Starovoitov wrote:
+> > > > > On Thu, Apr 2, 2026 at 1:44 PM Anton Protopopov
+> > > > > <a.s.protopopov@gmail.com> wrote:
+> > > > > >
+> > > > > > On 26/04/02 12:00PM, Alexei Starovoitov wrote:
+> > > > > > > On Thu, Apr 2, 2026 at 11:38 AM Anton Protopopov
+> > > > > > > <a.s.protopopov@gmail.com> wrote:
+> > > > > > > >
+> > > > > > > > When a pointer to PTR_TO_INSN is dereferenced it is possible to
+> > > > > > > > specify an offset inside the load instruction. This is a bug,
+> > > > > > > > because while the verifier ignores the field, JITs are not.
+> > > > > > > > So, patch the verifier to not ignore this field.
+> > > > > > >
+> > > > > > > This is too terse to understand.
+> > > > > > > In 2nd patch you're saying:
+> > > > > > >
+> > > > > > >    r1 = &map + offset1
+> > > > > > >    r1 += offset2
+> > > > > > >    r1 = *(r1 + offset3)
+> > > > > > >    gotox r1
+> > > > > > >
+> > > > > > > Here offset3 is, normally, equal to zero; but this is not guaranteed.
+> > > > > > >
+> > > > > > > What is this 'offset3'? Where did it come from?
+> > > > > >
+> > > > > > The offset3 is the .off field of the BPF_LDX_MEM instruction.
+> > > > > > The BPF assembler will correctly work with non-zero offsets:
+> > > > > >
+> > > > > >     r1 = &map;
+> > > > > >     r1 = *(r1 + offset)
+> > > > > >
+> > > > > > > What do you mean JIT handles it?
+> > > > > >
+> > > > > > JIT will issue a memory load with this offset,
+> > > > > > but verifier will ignore it (before this patch).
+> > > > > >
+> > > > > > > can llvm ever generate such code?
+> > > > > > > if not, reject it early ?
+> > > > > >
+> > > > > > LLVM can generate code with non-zero offset in BPF_LDX_MEM,
+> > > > > > say, if one jumps to a structure field, like in `goto *p->j`
+> > > > >
+> > > > > sorry, I still don't get it. What kind of syntax is that?
+> > > > > Could you share the godbolt link where llvm actually generates
+> > > > > such code? If the verifier will reject it anyway it's fine.
+> > > > > I just want to make sure we're fixing real problem.
+> > > >
+> > > > I am not aware of any real-life code, only can construct
+> > > > some artificial examples:
+> > > >
+> > > >         SEC("syscall")
+> > > >         int test(unsigned int n)
+> > > >         {
+> > > >                 struct {
+> > > >                         int i;
+> > > >                         void *j[3];
+> > > >                 } x = {
+> > > >                         .i = n,
+> > > >                         .j = { &&l1, &&l2, &&l3 },
+> > > >                 };
+> > > >
+> > > >                 if (n < 3)
+> > > >                         goto *x.j[n];
+> > > >
+> > > >                 return 0;
+> > > >         l1:
+> > > >                 return 1;
+> > > >         l2:
+> > > >                 return 3;
+> > > >         l3:
+> > > >                 return 5;
+> > > >         }
+> > > >
+> > > > It will compile into
+> > > >
+> > > >         <test>:
+> > > >         ;               .j = { &&l1, &&l2, &&l3 },
+> > > >              160:       18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 r2 = 0x0 ll
+> > > >                         0000000000000500:  R_BPF_64_64  BPF.JT.4.0
+> > > >              162:       79 23 10 00 00 00 00 00 r3 = *(u64 *)(r2 + 0x10)
+> > > >                                                                    ^ offet != 0
+> > > >              163:       7b 3a f8 ff 00 00 00 00 *(u64 *)(r10 - 0x8) = r3
+> > > >              164:       79 23 08 00 00 00 00 00 r3 = *(u64 *)(r2 + 0x8)
+> > > >              165:       7b 3a f0 ff 00 00 00 00 *(u64 *)(r10 - 0x10) = r3
+> > >
+> > > Great, but where is an actual gotox that is using that r3?
+> > > Looks like it's spilled into stack at 163 ?
+> > > Does it pass the verifier?
+> > > Would be great to add it as C selftest.
+> >
+> > No, this one doesn't pass the verifier (it is spilled to stack, and when
+> > it is loaded back the error is "invalid unbounded variable-offset
+> > read from stack R2", because it is loaded back from stack as
+> > "scalar", not "insn"). All "normal" use cases from [C-level] selftests
+> > (a switch or a 'goto *j[i]') compile into code which accumulate
+> > offset into previous instructions.
+> >
+> > Do you want me to work on this example above to pass the verifier?
+> > Or, for now, the best thing is to just reject non-zero offsets?
+> > (The latter has the benefit that the patch will be auto-backportable
+> > to stable trees.)
+> 
+> I wouldn't worry about backports. Size of the patch doesn't matter much.
+> 
+> Is spill issue just a matter of adding one line to is_spillable_regtype ?
+> If so, let's do that and have a test in C (in addition to asm) that
+> actually using the offset.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_stack_arg.c  | 302 ++++++++++++++++++
- 2 files changed, 304 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
-c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index 1ac366fd4dae..f39ed1f28a7b 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -90,6 +90,7 @@
- #include "verifier_sockmap_mutate.skel.h"
- #include "verifier_spill_fill.skel.h"
- #include "verifier_spin_lock.skel.h"
-+#include "verifier_stack_arg.skel.h"
- #include "verifier_stack_ptr.skel.h"
- #include "verifier_store_release.skel.h"
- #include "verifier_subprog_precision.skel.h"
-@@ -236,6 +237,7 @@ void test_verifier_sock_addr(void)            { RUN(v=
-erifier_sock_addr); }
- void test_verifier_sockmap_mutate(void)       { RUN(verifier_sockmap_mut=
-ate); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
-; }
- void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock);=
- }
-+void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg);=
- }
- void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr);=
- }
- void test_verifier_store_release(void)        { RUN(verifier_store_relea=
-se); }
- void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_pre=
-cision); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-new file mode 100644
-index 000000000000..43a0636d995d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -0,0 +1,302 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, long long);
-+} map_hash_8b SEC(".maps");
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+__noinline __used
-+static int subprog_6args(int a, int b, int c, int d, int e, int f)
-+{
-+	return a + b + c + d + e + f;
-+}
-+
-+__noinline __used
-+static int subprog_7args(int a, int b, int c, int d, int e, int f, int g=
-)
-+{
-+	return a + b + c + d + e + f + g;
-+}
-+
-+SEC("tc")
-+__description("stack_arg: subprog with 6 args")
-+__success
-+__arch_x86_64
-+__naked void stack_arg_6args(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 8) =3D 6;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: two subprogs with >5 args")
-+__success
-+__arch_x86_64
-+__naked void stack_arg_two_subprogs(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 8) =3D 10;"
-+		"call subprog_6args;"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 16) =3D 30;"
-+		"*(u64 *)(r12 - 8) =3D 20;"
-+		"call subprog_7args;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: read from uninitialized stack arg slot")
-+__failure
-+__arch_x86_64
-+__msg("invalid read from stack arg")
-+__naked void stack_arg_read_uninitialized(void)
-+{
-+	asm volatile (
-+		"r0 =3D *(u64 *)(r12 - 8);"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: gap at offset -8, only wrote -16")
-+__failure
-+__arch_x86_64
-+__msg("stack arg#5 not properly initialized")
-+__naked void stack_arg_gap_at_minus8(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 16) =3D 30;"
-+		"call subprog_7args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: incorrect size of stack arg write")
-+__failure
-+__arch_x86_64
-+__msg("stack arg write must be 8 bytes, got 4")
-+__naked void stack_arg_not_written(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u32 *)(r12 - 8) =3D 30;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+__noinline __used
-+static long subprog_stack_arg_pruning_deref(int a, int b, int c, int d, =
-int e, int f)
-+{
-+	long local =3D 0, *p, *ptr;
-+
-+	if (a <=3D 3) {
-+		/* Overwrite the stack arg slot with a pointer to local */
-+		p =3D &local;
-+		asm volatile ("*(u64 *)(r12 - 8) =3D %[p];" :: [p] "r"(p) : "memory");
-+	}
-+
-+	/* Read back the (possibly overwritten) stack arg slot */
-+	asm volatile ("%[ptr] =3D *(u64 *)(r12 - 8);" : [ptr] "=3Dr"(ptr) :: "m=
-emory");
-+
-+	/* Deref: safe for PTR_TO_STACK, unsafe for scalar */
-+	return *ptr;
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pruning with different stack arg types")
-+__failure
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__arch_x86_64
-+__msg("invalid mem access 'scalar'")
-+__naked void stack_arg_pruning_type_mismatch(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r1 =3D r0;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r12 - 8) =3D 42;"
-+		"call subprog_stack_arg_pruning_deref;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: release_reference invalidates stack arg slot")
-+__failure
-+__arch_x86_64
-+__msg("R0 invalid mem access 'scalar'")
-+__naked void stack_arg_release_ref(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		/* struct bpf_sock_tuple tuple =3D {} */
-+		"r2 =3D 0;"
-+		"*(u32 *)(r10 - 8) =3D r2;"
-+		"*(u64 *)(r10 - 16) =3D r2;"
-+		"*(u64 *)(r10 - 24) =3D r2;"
-+		"*(u64 *)(r10 - 32) =3D r2;"
-+		"*(u64 *)(r10 - 40) =3D r2;"
-+		"*(u64 *)(r10 - 48) =3D r2;"
-+		/* sk =3D bpf_sk_lookup_tcp(ctx, &tuple, sizeof(tuple), 0, 0) */
-+		"r1 =3D r6;"
-+		"r2 =3D r10;"
-+		"r2 +=3D -48;"
-+		"r3 =3D %[sizeof_bpf_sock_tuple];"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call %[bpf_sk_lookup_tcp];"
-+		/* r0 =3D sk (PTR_TO_SOCK_OR_NULL) */
-+		"if r0 =3D=3D 0 goto l0_%=3D;"
-+		/* spill sk to stack arg slot */
-+		"*(u64 *)(r12 - 8) =3D r0;"
-+		/* release the reference */
-+		"r1 =3D r0;"
-+		"call %[bpf_sk_release];"
-+		/* r0 and stack arg slot (r12 - 8) should be invalid now. */
-+		"r0 =3D *(u64 *)(r12 - 8);"
-+		"r0 =3D *(u8 *)(r0 + 0);"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_sk_lookup_tcp),
-+		  __imm(bpf_sk_release),
-+		  __imm_const(sizeof_bpf_sock_tuple, sizeof(struct bpf_sock_tuple))
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pkt pointer in stack arg slot invalidated afte=
-r pull_data")
-+__failure
-+__arch_x86_64
-+__msg("R0 invalid mem access 'scalar'")
-+__naked void stack_arg_stale_pkt_ptr(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		"r7 =3D *(u32 *)(r6 + %[__sk_buff_data]);"
-+		"r8 =3D *(u32 *)(r6 + %[__sk_buff_data_end]);"
-+		/* check pkt has at least 1 byte */
-+		"r0 =3D r7;"
-+		"r0 +=3D 1;"
-+		"if r0 > r8 goto l0_%=3D;"
-+		/* spill valid pkt pointer to stack arg slot */
-+		"*(u64 *)(r12 - 8) =3D r7;"
-+		/* bpf_skb_pull_data(skb, 0) -- invalidates all pkt pointers */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"call %[bpf_skb_pull_data];"
-+		/* read back the stale pkt pointer from stack arg slot */
-+		"r0 =3D *(u64 *)(r12 - 8);"
-+		/* dereferencing stale pkt pointer should fail */
-+		"r0 =3D *(u8 *)(r0 + 0);"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_skb_pull_data),
-+		  __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+		  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)=
-)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: null propagation rejects deref on null branch"=
-)
-+__failure
-+__arch_x86_64
-+__msg("R1 invalid mem access 'scalar'")
-+__naked void stack_arg_null_propagation_fail(void)
-+{
-+	asm volatile (
-+		"r1 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r1;"
-+		/* r0 =3D bpf_map_lookup_elem(&map_hash_8b, &key) */
-+		"r2 =3D r10;"
-+		"r2 +=3D -8;"
-+		"r1 =3D %[map_hash_8b] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		/* spill PTR_TO_MAP_VALUE_OR_NULL to stack arg slot */
-+		"*(u64 *)(r12 - 8) =3D r0;"
-+		/* null check on r0 */
-+		"if r0 !=3D 0 goto l0_%=3D;"
-+		/*
-+		 * on null branch, stack arg slot should be null (scalar 0).
-+		 * read it back and dereference should fail.
-+		 */
-+		"r1 =3D *(u64 *)(r12 - 8);"
-+		"r0 =3D *(u64 *)(r1 + 0);"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_hash_8b)
-+		: __clobber_all
-+	);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("stack_arg is not supported by compiler or jit, use a dumm=
-y test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.52.0
-
+Ok, looks I've found a simple selftest which compiles to
+a non-zero offload from realistic C code (and triggers a NULL
+deref without this patch). So I will send the next version with
+that selftest added, and with a better commit description.
