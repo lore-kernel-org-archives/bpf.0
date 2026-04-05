@@ -1,159 +1,154 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2E12F3C18
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 21:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775423276; cv=pass; b=t4RTMj7ODf3wk7j99eGE5tqTfO76YhAkXvVvsXoDsMibiAllVO1J5hauklwXymEw+AjrjDYfCOQmL/hKlQIzeAFyRZJuo3MRUjnSBlmdn7UbGP1Nh3RTLFpVySKW8q71q9Dr/XMnyck9im9T6tmSlHzb6bT/k8sAW1T5uNulHOo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775423276; c=relaxed/simple;
-	bh=W1s3+BTCyDWU8RRXuqs7nN+nbf/gz094wub+edyVqKI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mXFv0gJ2spRZ2KDEmWhb87AOKpHQ6BFmIq4VdXG8D5iZMj2NJHO95Pn76/nWoERUpyajB5V/bcsBHCVkF2BWEd4OSq5lvI9Z0+I78bMfNH91cDE8nGz277pUHNW2xyJx5SomnD8Uu0HODjW2g7TEFegLEc8t2HvNmpURfPiFkjo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQIDFNXp; arc=pass smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE7417A30A
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 21:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775425548; cv=none; b=sO7GbsU2vX4NE3bEFnnoOX+bibn9fGtkMBmdwSfmUugzQ07440jAOgkrQzsbnpABhgpTgxKYGQ1sQaO3JDriiEx4KPX5xgEQeUODFbM7p/qwHr1jU5A583xCnmXI/OlBcWtVpXsfOLkA1fJf/1qIfwCtHLc3gLc0riL8mSUpO0s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775425548; c=relaxed/simple;
+	bh=Nuh5W6Dif1FcQuPWLzM1kFOsFdJJQjg6/xAFrToGiIw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HIjz5oCv4YXlBHNXBqw7IssiW/iqqGbZOzuJc8CQqgJA38nvZpExwCgl3povXXH7kK6WC4LKImbVk3/Z+oWdoYn/HOkC7lqF4cIASx7kRv51dFODmRNfUfxVDl505WFei/9SiPMK1wYy2Wuv00UuX8o4b95EW2WCKP0iu8BvZrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fYH8wH6r; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQIDFNXp"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so1978389f8f.2
-        for <bpf@vger.kernel.org>; Sun, 05 Apr 2026 14:07:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775423274; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AG5Og6EKbu6UtS2UmMR/rwnlp0IBVnR5s9wD5q6flPzxCY9nDYj4/DOexByIEgRkTy
-         5eyj8HegM1hmoTq0AExLF6wWa+uxDvIWA9OcMB8dduWxP27Kgd2VXAhW7Ta3SegxY9QD
-         JWx/nPKp9SLM7A+ql+efdp55JGr60tXtn5QRASxc9OsNeysfFvHTnRv08V9OPZz2JnjF
-         T0QcGEm7UiAWQeeDmN1DdTiwoSLZkk/MU614w2xlRYA5t7SeY/qtmFmPO2cibuAFXARf
-         xotTQa/sdGnu/3JwB7AN0f/17QhU1KRtDzOhAtsliZN32Bet8ixVospoLZ7nkNOh5LPc
-         6zgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GLj+ibKCkIIANJAGVwUNxNvmd87hkXg9ucEGkWnTYGg=;
-        fh=wi89WQjOF2HvnYB0v50Lj11/w784Fae/K3mXW7+OEdE=;
-        b=XEzXztPBzeNYQ3TbIUVUxvswGA6wGBW2ovlcG8cKJftIP95jmvoGF3Ho92NiBeUp5c
-         RjBbyZVIs1dXdDEcB7ZCifAPLS4veSUzVyRXkyUIi3AcWURv/tPaG1HVVuMxSqjCf6Oz
-         d7Upw5CYV5Gyk+3FoExEwp+vtTakSPaOnI2ztBCUWsJ501oELTur02s0+B+U4UHvYbGY
-         yGuXBAGpnW/zdWaefPnkb8Tsa9R+6qFUDNsxCGeYAwpK4ey2qibnGMja1kBU4n1i22nf
-         gilcnZjEEs/jHn4xa0dUiNEsJgDXBPWtDXM3HVd8Rpss59xCeV9ivF7d3pYgpdvPdmFR
-         2QgQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775423274; x=1776028074; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GLj+ibKCkIIANJAGVwUNxNvmd87hkXg9ucEGkWnTYGg=;
-        b=kQIDFNXpL9rSy1w0yHhDOTzParPXCHN2aKW9e5W/y2y1++IBUhnCdPRGIVcaithsVD
-         FJG85ohx07e5np9X9ziMfIw8+jsCDJq/teH7g3cTX8aCG1ImzesfJgGpdTszac4y9N4O
-         +iSWkDth6S6fIkZT813fqWzMbxmttPiskM99G5UZ01LF8H4u+9uVveNiCWF3CAIjsbR0
-         DIGOpWgWyEkUFzzdW5jQoxBuQmcdZTz5JaCoBFg+5tsSLxBT/8cU+sJewLSie8RZEq04
-         r54FqPwnfPXsX1AtFQXICe1YSxL6uBXpeMv4YAAVjh9CGTlin5z+RvJupgs+/4nG6iTn
-         88zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775423274; x=1776028074;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GLj+ibKCkIIANJAGVwUNxNvmd87hkXg9ucEGkWnTYGg=;
-        b=eCQKucQJbbrSEa/IqcdYdD+y0oeijdrCzVVDf/BRWq01eeBBkyyn7sgYJ+5Egw/S8U
-         p9zYeRDM4M444l5K9N4LKBHOrywBAiHD9Qh3xe2UF2uelrhcuAY9c/xeencYEr8TeS9P
-         x9vT/jTnRN5HT9IfyiNfsd0mtJNszd8V/Y8qn0q0D0KhwNdwAy8Ow4qfZQl1YKkOczve
-         VZlMp6rVYlNhqOBwRPMbzn7+5exTmqRedz8QxaV27jxbC6/9gkM4HQd65CD5rtqE5JHW
-         FnOyusQLw8hYwTz4OCjVUNtCqUkTsH3orqW3ANnNPkMZ80U5Dr9rR2RzMbFrSQND4oCb
-         OZ9w==
-X-Gm-Message-State: AOJu0YxY0dZaSNvFmqvbdA89CEHrtAZUN9CpAkE+VDvmrqcCISVpCE1h
-	kG40s7YFDoK5dW7nIaB5+sC4zzAm0F5mFtVnTifdZ1f7a20K6xyKkHeuaX+2keO3PfiGNQI94k7
-	3vikqWIeoVa16e/h0gKaKsmn0DjIEuk0=
-X-Gm-Gg: AeBDietAUVTE7lci/yT+GxW2FN5HAnG+qlMioNursTYbq5FzdEU0YOds9w7iSQFBndb
-	t4p+kptc/gyfW9tKqBf2fku5pGD/zorPTW0LbMsVmN5s5B0uRH6OwRi2pJh13xgtJNeooLinAfb
-	I5vTEj+/0+ekrarmzZVGoBbxr1SQvmCN4rDL9ZISxSbGqceF9dYbWi0TvUHfjYxyPHwrv1DU1ed
-	K/IhCsbt/URZxcJdj9b+1xyViLOVMxpl/ER0xymorxF1jY0aoUyz1JfabCWmlp05VOctlX88109
-	S5o4bGnNTIYPXBvxGQLgHXZKwbr/E5wSnQlOzLRsP1RT/uCdXgNyeDHS7X9w6ldUCSBA8P2KgeN
-	Um8+lQz/yDPW01NU+kdzlU8/cvA==
-X-Received: by 2002:a05:6000:1a8d:b0:43d:61:6525 with SMTP id
- ffacd0b85a97d-43d292f8aa8mr15319119f8f.46.1775423273965; Sun, 05 Apr 2026
- 14:07:53 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fYH8wH6r"
+Message-ID: <8b6c9b74-b132-4746-aced-a1fbb8f71885@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775425544;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=J7Q59gLIjHQtgAVWEvB23qA4/yMcSHSeqQV6Kq7EJTc=;
+	b=fYH8wH6rgZ3Mbge8f6SW5uCZomcJpO1AzP5G9yIAhNqEZNSBmYgRJiRdCqVj+sZBAZ7Qcu
+	K4ZjDlFVu5QC1SofTViKW9XtlDrW9Ew2k5E+dR/aAsvJ8zfn6nQ+bEkZCpZ2YSxroFlOJY
+	gthSI0nQqIVcpa4s1VgDTElg0qm5XVQ=
+Date: Sun, 5 Apr 2026 14:45:37 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402012727.3916819-1-yonghong.song@linux.dev>
- <20260402012742.3917613-1-yonghong.song@linux.dev> <CAADnVQ+y1jZZTyNcXghD0UQ+JzD0pEu=icSP7=+QY4b=9dzv7A@mail.gmail.com>
- <924fde92-d28f-471d-9f0a-0c176958139c@linux.dev>
-In-Reply-To: <924fde92-d28f-471d-9f0a-0c176958139c@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 5 Apr 2026 14:07:43 -0700
-X-Gm-Features: AQROBzDrSdMB4HVoyFT_f2WB8-AhPULUu-qCoB0WLhH_UxjLg6c973QU74y9_EY
-Message-ID: <CAADnVQJdTffT5sdqZVdWX9W-jG2vPjiPAA0OT3iMPPsY9-KFmA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 03/10] bpf: Support stack arguments for bpf functions
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>, Kernel Team <kernel-team@fb.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 2/2] bpf, doc: Improve MOV/MOVSX documentation and add
+ examples
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, bpf@gcc.gnu.org,
+ "Jose E. Marchesi" <jose.marchesi@oracle.com>,
+ Alexei Starovoitov <ast@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf@ietf.org, void@manifault.com
+References: <20260403164040.73269-1-vineet.gupta@linux.dev>
+ <20260403164040.73269-3-vineet.gupta@linux.dev>
+ <CAADnVQKOzLwz+V7CNgOYRZ+UykMrR-=OGMg0DjX_NM6B8dSr1g@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <CAADnVQKOzLwz+V7CNgOYRZ+UykMrR-=OGMg0DjX_NM6B8dSr1g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 2, 2026 at 9:11=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
-ev> wrote:
->
->
->
-> On 4/2/26 4:38 PM, Alexei Starovoitov wrote:
-> > On Wed, Apr 1, 2026 at 6:27=E2=80=AFPM Yonghong Song <yonghong.song@lin=
-ux.dev> wrote:
-> >> Currently BPF functions (subprogs) are limited to 5 register arguments=
-.
-> >> With [1], the compiler can emit code that passes additional arguments
-> >> via a dedicated stack area through bpf register
-> >> BPF_REG_STACK_ARG_BASE (r12), introduced in the previous patch.
-> >>
-> >> The following is an example to show how stack arguments are saved
-> >> and transferred between caller and callee:
-> >>
-> >>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
-> >>      ...
-> >>      bar(a1, a2, a3, a4, a5, a6, a7, a8);
-> >>      ...
-> >>    }
-> >>
-> >> The following is a illustration of stack allocation:
-> >>
-> >>     Caller (foo)                           Callee (bar)
-> >>     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D                           =3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>     r12-relative stack arg area:           r12-relative stack arg area=
-:
-> >>
-> >>     r12-8:  [incoming arg 6]          +--> r12-8:  [incoming arg 6] (f=
-rom caller's outgoing r12-24)
-> >>     r12-16: [incoming arg 7]          |+-> r12-16: [incoming arg 7] (f=
-rom caller's outgoing r12-32)
-> >>                                       ||+> r12-24: [incoming arg 8] (f=
-rom caller's outgoing r12-40)
-> >>     ---- incoming/outgoing boundary   |||  ---- incoming/outgoing boun=
-dary
-> >>     r12-24: [outgoing arg 6 to callee]+||   ...
-> >>     r12-32: [outgoing arg 7 to callee]-+|
-> >>     r12-40: [outgoing arg 8 to callee]--+
-> > I haven't looked at the patch itself only at this diagram.
-> > How does it suppose to map to x86 calling convention?
-> > The shift is unusual.
-> > x86 is using fp-N for outgoing and fp+N for incoming.
-> > Why can't we use the same?
-> >
-> This is not for jit. The above transfer is for verification purpose.
-> For example, for callee, a load 'rX =3D *(u64 *)(r12 - 8)' can easily
-> get the value rX in callee since the value is copied from caller to calle=
-e.
 
-There shouldn't be any extra copy.
-For 7th and higher argument:
-the caller does 'stx [r12 - N]' and the callee does 'ldx [r12 + M]'
-and JIT emits them as-is only adjusting N and M constants.
+On 4/4/26 20:33, Alexei Starovoitov wrote:
+> On Fri, Apr 3, 2026 at 9:41 AM Vineet Gupta <vineet.gupta@linux.dev> wrote:
+>>   - Add missing form {MOV, K, ALU}.
+>>
+>>   - Add some assembly (pseudo-C) snippets.
+>>
+>>   - Rearrange: MOV content comes before MOVSX.
+>>
+>>   - MOVSX content itself rearranged: canonical sign extension variant
+>>     for {8,16,32}-> 64 moved ahead of the special variant which only
+>>     sign extends to 32 and zeroes out the upper bits.
+>>
+>>   - Remove the hyphen '-' in "sign-extension" to make grep hit all
+>>     instances with one pattern.
+>>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>> ---
+>> Changes since v2:
+>>   - Fixed RST markup for asm example "w5 = w9"
+>>   - Added asm example "w5 = (s8)w9" for {MOVSX, X, ALU}
+>> ---
+>>   .../bpf/standardization/instruction-set.rst   | 49 +++++++++++++++----
+>>   1 file changed, 39 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+>> index 96181565906f..863a0cc22a75 100644
+>> --- a/Documentation/bpf/standardization/instruction-set.rst
+>> +++ b/Documentation/bpf/standardization/instruction-set.rst
+>> @@ -414,25 +414,54 @@ etc. This specification requires that signed modulo MUST use truncated division
+>>
+>>      a % n = a - n * trunc(a / n)
+>>
+>> -The ``MOVSX`` instruction does a move operation with sign extension.
+>> -``{MOVSX, X, ALU}`` :term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into
+>> -32-bit operands, and zeroes the remaining upper 32 bits.
+>> -``{MOVSX, X, ALU64}`` :term:`sign extends<Sign Extend>` 8-bit, 16-bit, and 32-bit
+>> -operands into 64-bit operands.  Unlike other arithmetic instructions,
+>> -``MOVSX`` is only defined for register source operands (``X``).
+>> +For move operations, the ``MOV`` instruction has a few different forms.
+>> +
+>> +``{MOV, X, ALU64}`` means::
+>> +
+>> +  dst = src
+>> +
+>> +e.g. ``r1 = r2``
+>>
+>>   ``{MOV, K, ALU64}`` means::
+>>
+>>     dst = (s64)imm
+>>
+>> -``{MOV, X, ALU}`` means::
+>> +e.g. ``r1 = -4``
+>> +     ``r5 = 9282009``
+>> +
+>> +``{MOV, K, ALU}`` means::
+>> +
+>> +  dst = (u32)imm
+>> +
+>> +e.g. ``w1 = -4``
+>> +     ``w5 = 7302004``
+>> +
+>> +``{MOV, X, ALU}`` has zero extension semantics (upper 32 bits are zeroed)::
+>>
+>>     dst = (u32)src
+>>
+>> +e.g. ``w5 = w9``
+>> +
+>> +The ``MOVSX`` instruction does a move operation with sign extension and has
+>> +a couple of forms.
+>> +
+>> +``{MOVSX, X, ALU64}`` :term:`sign extends<Sign Extend>` 8-bit, 16-bit, and 32-bit
+>> +operands into 64-bit operands.
+>> +
+>> +e.g. ``r1 = (s8)r2``
+>> +
+>> +The ``{MOVSX, X, ALU}`` form has slightly different semantics: it
+>> +:term:`sign extends<Sign Extend>` 8-bit and 16-bit operands into
+>> +32-bit operands, and zeroes the remaining upper 32 bits (similar to ``MOV``).
+> This reads too conversational. This is a spec. It's supposed to be dry.
 
-For 6th argument JIT emits these two stx/ldx as moves to/from x86's r9.
+Perhaps there is some extra commentary in this part which can be toned down.
+
+But I think the actual asm examples are warranted for, considering this 
+is an ISA doc. Just capturing the abstract operations doesn't give the 
+full picture, specially since this is considered single source of truth 
+for the ISA.
+
+e.g. consider dst = (u32)(s32)(s8)src
+I tried to feed this to assemblers, but neither llvm/gnu can grok it 
+since the actual insn is WN = (s8)wM
+
+> Overall I'm not sure it's an improvement.
+> Only (MOV, K, ALU) worth adding.
+> Please cc David Vernet in the future patches and bpf @ ietf.
+>
+> I feel that both patches are wiki or faq material than IETF spec.
+
+Thx,
+-Vineet
