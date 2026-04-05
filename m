@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F42313522
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 16:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A463F314D21
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 16:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775408081; cv=none; b=i3GFPBchcPJ1b0rCjTWDGOYYVtB3h04SXNT/7wuKz33m7iYFLo33OBwUrmuELdrRBuKlezAktgLMRmfvP37ZyPJs3Qx3IRFfJrhaAYhO9WDePA8OePXPJYkIcaJpX0eOarGN31v4GU5/o4fjtylPSJhfH3fur+5swZheI0QNKwU=
+	t=1775408086; cv=none; b=FbU4muA1gZ6IuTY4XKvL3H+QCkic0mW3CMlMowF/oPMASO/LD2wkgEh42qwp55aGThqmw26X06iX/PDj/ne05b7KUg180f3lnhbSASJG27OiXC7s3qsU8GKGvgWAO/01USAPeNyI5xRu4H2VKHL0PJt8CK+jWEOIt2muoDnHxKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775408081; c=relaxed/simple;
-	bh=OX1owFkWRuSMQaUzk3TGFU6LYnqU4I/JgooqDoRhw7c=;
+	s=arc-20240116; t=1775408086; c=relaxed/simple;
+	bh=85msIH2vxzUqmGN0fr8TiRKepHcejn8TRLA2/tAAuY0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OUnVlZ/aidf7X8fTaoAecSxrVGjdYS8JKbUQ0/L/7DgA6+MI1rVxW3idOALG8g/YZn57ZXb9y7JzNl7T/7HBnR9/xo0EX7rbbS1XrW883d5IwVN1hbDKvpDWyaJbWbB64aOaG93kXf8pPFwzTW5ji+B0TVQPq/I8J6swOM5hDCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=lp3LYl7DOmHUG5ROWwcVyNVpivq7CmUrACDSPunxiDDaBXMw9NeTfl16EvIKzyz9aLjcno25ocGaImyAAOXdSZwQ1tdLzVJ44YZD3sb08DCs/DdhNosirn4VmxrbiRDtc/F+prI4GCLwmGwww8N6M7U+meF2Mm4BQCdgnBsywYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 75DB0361CF291; Sun,  5 Apr 2026 09:54:28 -0700 (PDT)
+	id 9434B361CF2AC; Sun,  5 Apr 2026 09:54:33 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v2 06/11] bpf: Reject stack arguments in non-JITed programs
-Date: Sun,  5 Apr 2026 09:54:28 -0700
-Message-ID: <20260405165428.836022-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 07/11] bpf: Enable stack argument support for x86_64
+Date: Sun,  5 Apr 2026 09:54:33 -0700
+Message-ID: <20260405165433.836433-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260405165300.826241-1-yonghong.song@linux.dev>
 References: <20260405165300.826241-1-yonghong.song@linux.dev>
@@ -38,51 +38,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The interpreter does not understand the bpf register r12
-(BPF_REG_STACK_ARG_BASE) used for stack argument addressing. So
-reject interpreter usage if stack arguments are used either
-in the main program or any subprogram.
+Add stack argument support for x86_64.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/core.c     | 3 ++-
- kernel/bpf/verifier.c | 6 ++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ arch/x86/net/bpf_jit_comp.c | 5 +++++
+ include/linux/filter.h      | 1 +
+ kernel/bpf/btf.c            | 9 ++++++++-
+ kernel/bpf/core.c           | 5 +++++
+ 4 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 3520337a1c0e..a04b31eb4c49 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2553,7 +2553,8 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf=
-_prog *fp, int *err)
- 		goto finalize;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index e9b78040d703..32864dbc2c4e 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -3937,6 +3937,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
 =20
- 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--	    bpf_prog_has_kfunc_call(fp))
-+	    bpf_prog_has_kfunc_call(fp) ||
-+	    fp->aux->stack_arg_depth)
- 		jit_needed =3D true;
-=20
- 	if (!bpf_prog_select_interpreter(fp))
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f19398f628ba..010ef7fc6c72 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23944,6 +23944,12 @@ static int fixup_call_args(struct bpf_verifier_e=
-nv *env)
- 		verbose(env, "calling kernel functions are not allowed in non-JITed pr=
-ograms\n");
++bool bpf_jit_supports_stack_args(void)
++{
++	return true;
++}
++
+ void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+ {
+ 	if (text_poke_copy(dst, src, len) =3D=3D NULL)
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 68f018dd4b9c..a5035fb80a6b 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1160,6 +1160,7 @@ bool bpf_jit_inlines_helper_call(s32 imm);
+ bool bpf_jit_supports_subprog_tailcalls(void);
+ bool bpf_jit_supports_percpu_insn(void);
+ bool bpf_jit_supports_kfunc_call(void);
++bool bpf_jit_supports_stack_args(void);
+ bool bpf_jit_supports_far_kfunc_call(void);
+ bool bpf_jit_supports_exceptions(void);
+ bool bpf_jit_supports_ptr_xchg(void);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index c5f3aa05d5a3..1cbe0f2b0e41 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -20,6 +20,7 @@
+ #include <linux/btf.h>
+ #include <linux/btf_ids.h>
+ #include <linux/bpf.h>
++#include <linux/filter.h>
+ #include <linux/bpf_lsm.h>
+ #include <linux/skmsg.h>
+ #include <linux/perf_event.h>
+@@ -7897,8 +7898,14 @@ int btf_prepare_func_args(struct bpf_verifier_env =
+*env, int subprog)
+ 			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
  		return -EINVAL;
  	}
-+	for (i =3D 0; i < env->subprog_cnt; i++) {
-+		if (env->subprog_info[i].incoming_stack_arg_depth) {
-+			verbose(env, "stack args are not supported in non-JITed programs\n");
-+			return -EINVAL;
+-	if (nargs > MAX_BPF_FUNC_REG_ARGS)
++	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
++		if (!bpf_jit_supports_stack_args()) {
++			bpf_log(log, "JIT does not support function %s() with %d args\n",
++				tname, nargs);
++			return -ENOTSUPP;
 +		}
+ 		sub->incoming_stack_arg_depth =3D (nargs - MAX_BPF_FUNC_REG_ARGS) * BP=
+F_REG_SIZE;
 +	}
- 	if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
- 		/* When JIT fails the progs with bpf2bpf calls and tail_calls
- 		 * have to be rejected, since interpreter doesn't support them yet.
+=20
+ 	/* check that function is void or returns int, exception cb also requir=
+es this */
+ 	t =3D btf_type_by_id(btf, t->type);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index a04b31eb4c49..01de4f7f3a82 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3156,6 +3156,11 @@ bool __weak bpf_jit_supports_kfunc_call(void)
+ 	return false;
+ }
+=20
++bool __weak bpf_jit_supports_stack_args(void)
++{
++	return false;
++}
++
+ bool __weak bpf_jit_supports_far_kfunc_call(void)
+ {
+ 	return false;
 --=20
 2.52.0
 
