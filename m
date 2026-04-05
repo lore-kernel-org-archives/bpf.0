@@ -1,20 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094731DDC1D
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 17:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FEA3033FB
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 17:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775409919; cv=none; b=VWM0Jso3KC92QNP8lBnvz/L/KairGu4K2rtQVZrRfwLR2QgFemcL18QdHxJoEXsjSaFcy8iekiMCcGsGFXRA4X6raVde7Ake07OSZ9BCtTqsvNwlWG7pUI1aeuXU3RA1MkvkWgp156mcQ3Xmm6nXmzwgHjVhI34dIS2aVhqmzdk=
+	t=1775409924; cv=none; b=W5+FC5ARPtnjjFQZPQAfXFRlqkQLOHNmM370/gAaxd6QP334WrVAo7BLinwwQCyiFig3mMz+PWbUYE6ofBoL0P3yE5iovuN787afqlpk0clOaDdy1suIB6arPoaK05V+Ea++NsLBWzsiKcK0IA2FfVEYCvz7uZ5FLDrcQLDoZ6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775409919; c=relaxed/simple;
-	bh=BJJokoBnqkTVbySQ8K1c1MCzckOhKRHSB4p1yzytL+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gA8TTjLTgVCq5s2U1s8lbGySvimCVEhpPR45WJSLUErrwyTB+HQqgebAiilBdEWbpH4wJ8Q5s95tVWPDVdh9ygQZccVRguAMc9pxKiz1Az9MOnIzPAlm9x2L297Vyow83NM8Olal9Gnhj6/PxAv92CVlgNiVE3I14xP0qBKuTfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	s=arc-20240116; t=1775409924; c=relaxed/simple;
+	bh=l/bC/wgYy++kM9TY1fU/qQFSUAM26mFHC1X0WijeUDI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=krIuxaNixRJJW/nP9LIBw7m0OskCXJ4Se+Ucfu8GZPVn8FbQL7mHvf1b5w42IdGN7ywh6LRwtxqKiWJVmry+tNZGgVEbQJG2Trfk7qNVauE94+qDAuJEWxZVi3r1mVDMNeeJdpaRCrBgJoihKDaJoQosHvegQDLRnH8J76Fttj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 808F1361E5C01; Sun,  5 Apr 2026 10:25:05 -0700 (PDT)
+	id 99B1B361E5C6C; Sun,  5 Apr 2026 10:25:10 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,111 +24,62 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 00/11] bpf: Support stack arguments for BPF functions and kfuncs
-Date: Sun,  5 Apr 2026 10:25:05 -0700
-Message-ID: <20260405172505.1329392-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 01/11] bpf: Introduce bpf register BPF_REG_STACK_ARG_BASE
+Date: Sun,  5 Apr 2026 10:25:10 -0700
+Message-ID: <20260405172510.1330263-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260405172505.1329392-1-yonghong.song@linux.dev>
+References: <20260405172505.1329392-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Currently, bpf function calls and kfunc's are limited by 5 reg-level
-parameters. For function calls with more than 5 parameters,
-developers can use always inlining or pass a struct pointer
-after packing more parameters in that struct. But there is
-no workaround for kfunc if more than 5 parameters is needed.
-
-This patch set lifts the 5-argument limit by introducing stack-based
-argument passing for BPF functions and kfunc's, coordinated with
-compiler support in LLVM [1]. The compiler emits loads/stores through
-a new bpf register r12 (BPF_REG_STACK_ARG_BASE) to pass arguments beyond
-the 5th, keeping the stack arg area separate from the r10-based program
-stack. The maximum number of arguments is capped at MAX_BPF_FUNC_ARGS
-(12), which is sufficient for the vast majority of use cases.
-
-The x86_64 JIT translates r12-relative accesses to RBP-relative
-native instructions. Each function's stack allocation is extended
-by 'max_outgoing' bytes to hold the outgoing arg area below the
-program stack. This makes implementation easier as the r10 can be
-reused for stack argument access. At BPF-to-BPF call sites, outgoing
-args are pushed onto the native stack before CALL. The incoming
-parameters can directly get the value from pushed native stack from
-caller. For kfunc calls, args are marshaled per the x86_64 C calling
-convention (arg 6 in R9, args 7+ on the native stack).
-
-Global subprogs with >5 args are not yet supported. Only x86_64
-is supported for now.
-
-For the rest of patches, patches 1-6 added verifier support of
-stack arguments for bpf-to-bpf functions and kfunc's. Patch 7
-enables x86_64 for stack arguments. Patch 8 implemented JIT for
-x86_64. Patches 9-11 are some selftests.
+The newly-added register BPF_REG_STACK_ARG_BASE corresponds to bpf
+register R12 added by [1]. R12 is used as the base for stack arguments
+so it won't mess out R10 based stacks.
 
   [1] https://github.com/llvm/llvm-project/pull/189060
 
-Changelogs:
-  v2 -> v3:
-    - v2: https://lore.kernel.org/bpf/20260405165300.826241-1-yonghong.so=
-ng@linux.dev/
-    - Fix selftest stack_arg_gap_at_minus8().
-    - Fix a few 'UTF-8' issues.
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20260402012727.3916819-1-yonghong.s=
-ong@linux.dev/
-    - Add stack_arg_safe() to do pruning for stack arguments.
-    - Fix an issue with KF_ARG_PTR_TO_MEM_SIZE. Since a faked register is
-      used, added verification log to indicate the start and end of such
-      faked register usage.
-    - For x86_64 JIT, copying incoming parameter values directly from cal=
-ler's stack.
-    - Add test cases with stack arguments e.g. mem, mem+size, dynptr, ite=
-r, etc.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ include/linux/filter.h | 3 ++-
+ kernel/bpf/core.c      | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Yonghong Song (11):
-  bpf: Introduce bpf register BPF_REG_STACK_ARG_BASE
-  bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
-  bpf: Support stack arguments for bpf functions
-  bpf: Refactor process_iter_arg() to have proper argument index
-  bpf: Support stack arguments for kfunc calls
-  bpf: Reject stack arguments in non-JITed programs
-  bpf: Enable stack argument support for x86_64
-  bpf,x86: Implement JIT support for stack arguments
-  selftests/bpf: Add tests for BPF function stack arguments
-  selftests/bpf: Add negative test for greater-than-8-byte kfunc stack
-    argument
-  selftests/bpf: Add verifier tests for stack argument validation
-
- arch/x86/net/bpf_jit_comp.c                   | 140 +++++-
- include/linux/bpf.h                           |   6 +
- include/linux/bpf_verifier.h                  |  31 +-
- include/linux/filter.h                        |   4 +-
- kernel/bpf/btf.c                              |  21 +-
- kernel/bpf/core.c                             |  12 +-
- kernel/bpf/verifier.c                         | 474 ++++++++++++++++--
- .../selftests/bpf/prog_tests/stack_arg.c      | 132 +++++
- .../selftests/bpf/prog_tests/stack_arg_fail.c |  24 +
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- tools/testing/selftests/bpf/progs/stack_arg.c | 212 ++++++++
- .../selftests/bpf/progs/stack_arg_fail.c      |  32 ++
- .../selftests/bpf/progs/stack_arg_kfunc.c     | 164 ++++++
- .../selftests/bpf/progs/verifier_stack_arg.c  | 302 +++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  72 +++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  26 +
- 16 files changed, 1594 insertions(+), 60 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg_fail=
-.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
-c
-
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index e40d4071a345..68f018dd4b9c 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -59,7 +59,8 @@ struct ctl_table_header;
+=20
+ /* Kernel hidden auxiliary/helper register. */
+ #define BPF_REG_AX		MAX_BPF_REG
+-#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 1)
++#define BPF_REG_STACK_ARG_BASE	(MAX_BPF_REG + 1)
++#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
+ #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
+=20
+ /* unused opcode to mark special call to bpf_tail_call() helper */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 1af5fb3f21d9..3520337a1c0e 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1299,8 +1299,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn=
+ *from,
+ 	u32 imm_rnd =3D get_random_u32();
+ 	s16 off;
+=20
+-	BUILD_BUG_ON(BPF_REG_AX  + 1 !=3D MAX_BPF_JIT_REG);
+-	BUILD_BUG_ON(MAX_BPF_REG + 1 !=3D MAX_BPF_JIT_REG);
++	BUILD_BUG_ON(BPF_REG_AX + 2 !=3D MAX_BPF_JIT_REG);
++	BUILD_BUG_ON(BPF_REG_STACK_ARG_BASE + 1 !=3D MAX_BPF_JIT_REG);
+=20
+ 	/* Constraints on AX register:
+ 	 *
 --=20
 2.52.0
 
