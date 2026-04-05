@@ -1,94 +1,95 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3141B2C032E
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 20:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2E12F3C18
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 21:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775421402; cv=pass; b=AipzILMPumLlNhGBqd0zGqiEfBfguEZl08hufrs3uQ97yx365T3dC1WhxdtuLvBeKeekHgBSpq4fBRr6CdlNieeksO0UrILguSODYwzwENbW2W261hitmbc7i1Zfu7V0uJ0t5V/S6cnxYcMkTDVC+fmuOUhDg2VnkcJsh+3A7Cs=
+	t=1775423276; cv=pass; b=t4RTMj7ODf3wk7j99eGE5tqTfO76YhAkXvVvsXoDsMibiAllVO1J5hauklwXymEw+AjrjDYfCOQmL/hKlQIzeAFyRZJuo3MRUjnSBlmdn7UbGP1Nh3RTLFpVySKW8q71q9Dr/XMnyck9im9T6tmSlHzb6bT/k8sAW1T5uNulHOo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775421402; c=relaxed/simple;
-	bh=zMplxoeb9UtmMsFH6mUn1SlkC1CEpOAm0CAWJLWPXoY=;
+	s=arc-20240116; t=1775423276; c=relaxed/simple;
+	bh=W1s3+BTCyDWU8RRXuqs7nN+nbf/gz094wub+edyVqKI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H+M1A9v9Tgy7thI12rCxYUtojhsy1g8E0VgArnB4eNtJ2J+YkHX/kK4Zffy6zC9oKs1/pX9BYQlq+02R33P+QB0arnPzcEJi7vFWGTDIQrNOEhy6PjOk4/gV02rCON6NL+h3Fqx20/6vr4UKuas1R4oqweJq1elK1+A1TGRQvb8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=irFnOCw+; arc=pass smtp.client-ip=209.85.221.52
+	 To:Cc:Content-Type; b=mXFv0gJ2spRZ2KDEmWhb87AOKpHQ6BFmIq4VdXG8D5iZMj2NJHO95Pn76/nWoERUpyajB5V/bcsBHCVkF2BWEd4OSq5lvI9Z0+I78bMfNH91cDE8nGz277pUHNW2xyJx5SomnD8Uu0HODjW2g7TEFegLEc8t2HvNmpURfPiFkjo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQIDFNXp; arc=pass smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="irFnOCw+"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43d23305225so2747043f8f.2
-        for <bpf@vger.kernel.org>; Sun, 05 Apr 2026 13:36:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775421399; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQIDFNXp"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so1978389f8f.2
+        for <bpf@vger.kernel.org>; Sun, 05 Apr 2026 14:07:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775423274; cv=none;
         d=google.com; s=arc-20240605;
-        b=WoKGBQR5Mehv/0of6kIPp7yz+PxIGLszgjAqYgja7VC+VGYwLkXuAzJWgI/A7AQB1P
-         hoxZzHr6beKy4OhfOMG1BlW6XOTGZKmitR8XcOfW6uB7vLNlxc2HNgRxaEcWuyVcy9cn
-         E7BcFrtUQ8JoRP1w3xc4NIOvzk6gOm+9W3SALpqyK9jfGmb8t/Pw5WK+/XErF+89hIIv
-         6+ccww4a7hZJtEnLC4VRcSM2EId+92f2wXGrToU/sVHTt25uXZAspuW24KLB6BPsLn+5
-         STX5G/LqgFKwzJbzWLS/Uzzo+Ahr885+CvjElyQCFtAFhvUcGYOlxXFeY1sO5My0UE+U
-         B+8Q==
+        b=AG5Og6EKbu6UtS2UmMR/rwnlp0IBVnR5s9wD5q6flPzxCY9nDYj4/DOexByIEgRkTy
+         5eyj8HegM1hmoTq0AExLF6wWa+uxDvIWA9OcMB8dduWxP27Kgd2VXAhW7Ta3SegxY9QD
+         JWx/nPKp9SLM7A+ql+efdp55JGr60tXtn5QRASxc9OsNeysfFvHTnRv08V9OPZz2JnjF
+         T0QcGEm7UiAWQeeDmN1DdTiwoSLZkk/MU614w2xlRYA5t7SeY/qtmFmPO2cibuAFXARf
+         xotTQa/sdGnu/3JwB7AN0f/17QhU1KRtDzOhAtsliZN32Bet8ixVospoLZ7nkNOh5LPc
+         6zgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=CT/kJcGAfFxEGzKBJSVzjm7jaoVTWgA/wO/+3EAYdmI=;
+        bh=GLj+ibKCkIIANJAGVwUNxNvmd87hkXg9ucEGkWnTYGg=;
         fh=wi89WQjOF2HvnYB0v50Lj11/w784Fae/K3mXW7+OEdE=;
-        b=H/zNRx/2wNbdv5cvR62Gbo5DYYcg9vzHv5gYmwTEnQpMeqyWXyyp0Dzq1+3eHuR9Ug
-         qLW5jx+UlWire/1wSVc5u5hhIJBiptMFq/ONnPoQAzPqjIcfHYzWpubXSxY8oV7Fvdru
-         hOlZ1LNqP44L30sMMJhiRwUD7BCp7JoZ0bBuE+sGCQ7QuMDA0O6hxcuCZgbo7unnQ/8d
-         7g8tT/FgRV+bL7h+Uw3swiqkGqBdGe/5Hjq9jtZ3/JIrSHlaJ1UnmaFq+SMoSU4rX8dS
-         2e6r543hTLq9neEPdd+uz3mloOHiJioR5eoUBiBZIHu96QCfPSg1BFRa5Gjvi7nB69OV
-         nDhw==;
+        b=XEzXztPBzeNYQ3TbIUVUxvswGA6wGBW2ovlcG8cKJftIP95jmvoGF3Ho92NiBeUp5c
+         RjBbyZVIs1dXdDEcB7ZCifAPLS4veSUzVyRXkyUIi3AcWURv/tPaG1HVVuMxSqjCf6Oz
+         d7Upw5CYV5Gyk+3FoExEwp+vtTakSPaOnI2ztBCUWsJ501oELTur02s0+B+U4UHvYbGY
+         yGuXBAGpnW/zdWaefPnkb8Tsa9R+6qFUDNsxCGeYAwpK4ey2qibnGMja1kBU4n1i22nf
+         gilcnZjEEs/jHn4xa0dUiNEsJgDXBPWtDXM3HVd8Rpss59xCeV9ivF7d3pYgpdvPdmFR
+         2QgQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775421399; x=1776026199; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775423274; x=1776028074; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CT/kJcGAfFxEGzKBJSVzjm7jaoVTWgA/wO/+3EAYdmI=;
-        b=irFnOCw+z5yglf7PwZTm5z/jE4VkHFPQ2qex1dRbTf4Z5gw/LKs5yfZgbUM+ZxoAeS
-         qBRlSuMt3P/k2Bj5IrcQrEo6LjhyxKQ/HRoVRcR4GlWBfOumCy4ppgVWMJf7r5ElovNc
-         cV8XWplU3cITSmsIKnI/Q16lAmlnNL0qys8v7aPSo6QE9At4SeomygXvT4TAfv+Z5+9T
-         U1g8pb2zxIeIu+tM1+emUQE+p0lCyH8YgUP915cnekW0CSnx+Y3G1YL2lAxp4dLf1UIi
-         J68/+QcIoxrnhJeg7aReq/A5TSkqQwymzvLz0DFUqQR+SZM2o4OWavBWe25nKHB3p9ya
-         UCPw==
+        bh=GLj+ibKCkIIANJAGVwUNxNvmd87hkXg9ucEGkWnTYGg=;
+        b=kQIDFNXpL9rSy1w0yHhDOTzParPXCHN2aKW9e5W/y2y1++IBUhnCdPRGIVcaithsVD
+         FJG85ohx07e5np9X9ziMfIw8+jsCDJq/teH7g3cTX8aCG1ImzesfJgGpdTszac4y9N4O
+         +iSWkDth6S6fIkZT813fqWzMbxmttPiskM99G5UZ01LF8H4u+9uVveNiCWF3CAIjsbR0
+         DIGOpWgWyEkUFzzdW5jQoxBuQmcdZTz5JaCoBFg+5tsSLxBT/8cU+sJewLSie8RZEq04
+         r54FqPwnfPXsX1AtFQXICe1YSxL6uBXpeMv4YAAVjh9CGTlin5z+RvJupgs+/4nG6iTn
+         88zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775421399; x=1776026199;
+        d=1e100.net; s=20251104; t=1775423274; x=1776028074;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=CT/kJcGAfFxEGzKBJSVzjm7jaoVTWgA/wO/+3EAYdmI=;
-        b=iZ7sNzoXQxlUsi5OhJGhTcJ47coL+WuqFAzkKl7tfkwQ9HOKnpYeevJ8kMW944XZLC
-         6sMMyK08SjjQx9ap+H2eYfZnibRzcMsgbUTmeja8qj0oGJay2KLgnhLHJXr+QCU1Hbv3
-         lmpDZGtVJ1LdFr3YGIzWVBiIJnPyu6EiHHgpXdGFYD0KBOyrPDw2i5Bn8zfSlrWTquA6
-         b6JhLswGjvwLl4Ze3kjjpRmKEFZaqcCYSr9V0LmR4jDmAvqzZZnkv24IUiqB78VNnUId
-         Z2SpfS5IqpPFuXHwnNPzg5xX7BJTWWLBiYaikCE8A4bvlOsvfkD38YZiui795n8wZcHQ
-         9FHA==
-X-Gm-Message-State: AOJu0YzVPG+4ti2bsNhoSfDJymJXNE9S4bhYqng1zy5Zkf2IyLRtQBrm
-	8Qsx28d+iDoMbSOKhBfpi8r9l8i+yWfc//4FkUtGQqkn2HN86nU1V7btWvh8cZt8/rKNqnH/QSh
-	8uPTXkf4gOrrj+wjF54gau33n60Uv/LU=
-X-Gm-Gg: AeBDiesiYbW6KhFKst5NQJTFl36NzIzPxWNQBSd6k9kR4cBalz+XWuLlnvsd3S62UKp
-	oclyndUrchoPDqM/4iiP6GN0/wdPzvRWjJx2CwcYKELNKxQ4J5IAKNawJ5UMsNln8yIUnUV8FVN
-	/dCkNpq8OvmUUYQxKE1hVAQL+uPb91o+5t0PwsZPlzY2N7Lt40qsdujc4nc7bGSb0lND0gDMC0b
-	/vpTNszCLjLyzFzf3vjJv4O5WojXsvORA9gAcBSyUCZa8fzcHCMSkCzS3v66sLtXlF1u+ypEp2A
-	+qrnG2jbXvzfuOmzoTLf4kG4n2m2kZO/TQKAMtm40JB2yH//TPk1qCBlNDegDRNkZDH+byxNP+J
-	wFYao1cowIwq0qjlSnYOhCxehAg==
-X-Received: by 2002:a05:6000:420f:b0:43b:4a2c:ff4 with SMTP id
- ffacd0b85a97d-43d292d3a09mr16245883f8f.33.1775421399176; Sun, 05 Apr 2026
- 13:36:39 -0700 (PDT)
+        bh=GLj+ibKCkIIANJAGVwUNxNvmd87hkXg9ucEGkWnTYGg=;
+        b=eCQKucQJbbrSEa/IqcdYdD+y0oeijdrCzVVDf/BRWq01eeBBkyyn7sgYJ+5Egw/S8U
+         p9zYeRDM4M444l5K9N4LKBHOrywBAiHD9Qh3xe2UF2uelrhcuAY9c/xeencYEr8TeS9P
+         x9vT/jTnRN5HT9IfyiNfsd0mtJNszd8V/Y8qn0q0D0KhwNdwAy8Ow4qfZQl1YKkOczve
+         VZlMp6rVYlNhqOBwRPMbzn7+5exTmqRedz8QxaV27jxbC6/9gkM4HQd65CD5rtqE5JHW
+         FnOyusQLw8hYwTz4OCjVUNtCqUkTsH3orqW3ANnNPkMZ80U5Dr9rR2RzMbFrSQND4oCb
+         OZ9w==
+X-Gm-Message-State: AOJu0YxY0dZaSNvFmqvbdA89CEHrtAZUN9CpAkE+VDvmrqcCISVpCE1h
+	kG40s7YFDoK5dW7nIaB5+sC4zzAm0F5mFtVnTifdZ1f7a20K6xyKkHeuaX+2keO3PfiGNQI94k7
+	3vikqWIeoVa16e/h0gKaKsmn0DjIEuk0=
+X-Gm-Gg: AeBDietAUVTE7lci/yT+GxW2FN5HAnG+qlMioNursTYbq5FzdEU0YOds9w7iSQFBndb
+	t4p+kptc/gyfW9tKqBf2fku5pGD/zorPTW0LbMsVmN5s5B0uRH6OwRi2pJh13xgtJNeooLinAfb
+	I5vTEj+/0+ekrarmzZVGoBbxr1SQvmCN4rDL9ZISxSbGqceF9dYbWi0TvUHfjYxyPHwrv1DU1ed
+	K/IhCsbt/URZxcJdj9b+1xyViLOVMxpl/ER0xymorxF1jY0aoUyz1JfabCWmlp05VOctlX88109
+	S5o4bGnNTIYPXBvxGQLgHXZKwbr/E5wSnQlOzLRsP1RT/uCdXgNyeDHS7X9w6ldUCSBA8P2KgeN
+	Um8+lQz/yDPW01NU+kdzlU8/cvA==
+X-Received: by 2002:a05:6000:1a8d:b0:43d:61:6525 with SMTP id
+ ffacd0b85a97d-43d292f8aa8mr15319119f8f.46.1775423273965; Sun, 05 Apr 2026
+ 14:07:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260405172505.1329392-1-yonghong.song@linux.dev> <20260405172626.1337674-1-yonghong.song@linux.dev>
-In-Reply-To: <20260405172626.1337674-1-yonghong.song@linux.dev>
+References: <20260402012727.3916819-1-yonghong.song@linux.dev>
+ <20260402012742.3917613-1-yonghong.song@linux.dev> <CAADnVQ+y1jZZTyNcXghD0UQ+JzD0pEu=icSP7=+QY4b=9dzv7A@mail.gmail.com>
+ <924fde92-d28f-471d-9f0a-0c176958139c@linux.dev>
+In-Reply-To: <924fde92-d28f-471d-9f0a-0c176958139c@linux.dev>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 5 Apr 2026 13:36:27 -0700
-X-Gm-Features: AQROBzCl9rELB75pOOO4nxF6dbiRyJTCcSX89QmFx5rExQpGVzO9W7CNv01nVuw
-Message-ID: <CAADnVQLyoAS39gZvOzOT0qEAj4bzcZLVuupTAhyQSv6d5aQGWA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 08/11] bpf,x86: Implement JIT support for
- stack arguments
+Date: Sun, 5 Apr 2026 14:07:43 -0700
+X-Gm-Features: AQROBzDrSdMB4HVoyFT_f2WB8-AhPULUu-qCoB0WLhH_UxjLg6c973QU74y9_EY
+Message-ID: <CAADnVQJdTffT5sdqZVdWX9W-jG2vPjiPAA0OT3iMPPsY9-KFmA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 03/10] bpf: Support stack arguments for bpf functions
 To: Yonghong Song <yonghong.song@linux.dev>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -97,147 +98,62 @@ Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 5, 2026 at 10:26=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
+On Thu, Apr 2, 2026 at 9:11=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
+ev> wrote:
 >
-> Add x86_64 JIT support for BPF functions and kfuncs with more than
-> 5 arguments. The extra arguments are passed through a stack area
-> addressed by register r12 (BPF_REG_STACK_ARG_BASE) in BPF bytecode,
-> which the JIT translates to RBP-relative accesses in native code.
 >
-> The JIT follows the native x86_64 calling convention for stack
-> argument placement. Incoming stack args from the caller sit above
-> the callee's frame pointer at [rbp + 16], [rbp + 24], etc., exactly
-> where x86_64 expects them after CALL + PUSH RBP. Only the outgoing
-> stack arg area is allocated below the program stack in the prologue.
 >
-> The native x86_64 stack layout for a function with incoming and
-> outgoing stack args:
->
->   high address
->   =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=90
->   =E2=94=82 incoming stack arg N    =E2=94=82  [rbp + 16 + (N-1)*8]  (fro=
-m caller)
->   =E2=94=82 ...                     =E2=94=82
->   =E2=94=82 incoming stack arg 1    =E2=94=82  [rbp + 16]
->   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=A4
->   =E2=94=82 return address          =E2=94=82  [rbp + 8]
->   =E2=94=82 saved rbp               =E2=94=82  [rbp]
->   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=A4
->   =E2=94=82 BPF program stack       =E2=94=82  (stack_depth bytes)
->   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=A4
->   =E2=94=82 outgoing stack arg 1    =E2=94=82  [rbp - prog_stack_depth - =
-outgoing_depth]
->   =E2=94=82 ...                     =E2=94=82   (written via r12-relative=
- STX/ST)
->   =E2=94=82 outgoing stack arg M    =E2=94=82  [rbp - prog_stack_depth - =
-8]
->   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=A4
->   =E2=94=82 callee-saved regs ...   =E2=94=82  (pushed after sub rsp)
->   =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=98  rsp
->   low address
->
-> BPF r12-relative offsets are translated to native RBP-relative
-> offsets with two formulas:
->   - Incoming args (load: -off <=3D incoming_depth):
->       native_off =3D 8 - bpf_off  =E2=86=92  [rbp + 16 + ...]
->   - Outgoing args (store: -off > incoming_depth):
->       native_off =3D -(bpf_prog_stack + stack_arg_depth + 8) - bpf_off
->
-> Since callee-saved registers are pushed below the outgoing area,
-> outgoing args are not at [rsp] at call time. Therefore, for both BPF-to-B=
-PF
-> calls and kfunc calls, outgoing args are explicitly pushed from the
-> outgoing area onto the stack before CALL and rsp is restored after return=
+> On 4/2/26 4:38 PM, Alexei Starovoitov wrote:
+> > On Wed, Apr 1, 2026 at 6:27=E2=80=AFPM Yonghong Song <yonghong.song@lin=
+ux.dev> wrote:
+> >> Currently BPF functions (subprogs) are limited to 5 register arguments=
 .
->
-> For kfunc calls specifically, arg 6 is loaded into R9 and args 7+
-> are pushed onto the native stack, per the x86_64 calling convention.
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  arch/x86/net/bpf_jit_comp.c | 135 ++++++++++++++++++++++++++++++++++--
->  1 file changed, 129 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 32864dbc2c4e..206f342a0ca0 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -390,6 +390,28 @@ static void pop_callee_regs(u8 **pprog, bool *callee=
-_regs_used)
->         *pprog =3D prog;
->  }
->
-> +/* Push stack args from [rbp + outgoing_base + (k - 1) * 8] in reverse o=
-rder. */
-> +static int push_stack_args(u8 **pprog, s32 outgoing_base, int from, int =
-to)
-> +{
-> +       u8 *prog =3D *pprog;
-> +       int k, bytes =3D 0;
-> +       s32 off;
-> +
-> +       for (k =3D from; k >=3D to; k--) {
-> +               off =3D outgoing_base + (k - 1) * 8;
-> +               /* push qword [rbp + off] */
-> +               if (is_imm8(off)) {
-> +                       EMIT3(0xFF, 0x75, off);
-> +                       bytes +=3D 3;
-> +               } else {
-> +                       EMIT2_off32(0xFF, 0xB5, off);
-> +                       bytes +=3D 6;
-> +               }
-> +       }
+> >> With [1], the compiler can emit code that passes additional arguments
+> >> via a dedicated stack area through bpf register
+> >> BPF_REG_STACK_ARG_BASE (r12), introduced in the previous patch.
+> >>
+> >> The following is an example to show how stack arguments are saved
+> >> and transferred between caller and callee:
+> >>
+> >>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
+> >>      ...
+> >>      bar(a1, a2, a3, a4, a5, a6, a7, a8);
+> >>      ...
+> >>    }
+> >>
+> >> The following is a illustration of stack allocation:
+> >>
+> >>     Caller (foo)                           Callee (bar)
+> >>     =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D                           =3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >>     r12-relative stack arg area:           r12-relative stack arg area=
+:
+> >>
+> >>     r12-8:  [incoming arg 6]          +--> r12-8:  [incoming arg 6] (f=
+rom caller's outgoing r12-24)
+> >>     r12-16: [incoming arg 7]          |+-> r12-16: [incoming arg 7] (f=
+rom caller's outgoing r12-32)
+> >>                                       ||+> r12-24: [incoming arg 8] (f=
+rom caller's outgoing r12-40)
+> >>     ---- incoming/outgoing boundary   |||  ---- incoming/outgoing boun=
+dary
+> >>     r12-24: [outgoing arg 6 to callee]+||   ...
+> >>     r12-32: [outgoing arg 7 to callee]-+|
+> >>     r12-40: [outgoing arg 8 to callee]--+
+> > I haven't looked at the patch itself only at this diagram.
+> > How does it suppose to map to x86 calling convention?
+> > The shift is unusual.
+> > x86 is using fp-N for outgoing and fp+N for incoming.
+> > Why can't we use the same?
+> >
+> This is not for jit. The above transfer is for verification purpose.
+> For example, for callee, a load 'rX =3D *(u64 *)(r12 - 8)' can easily
+> get the value rX in callee since the value is copied from caller to calle=
+e.
 
-This is not any better than v1.
-It is still a copy.
-As I said earlier:
-https://lore.kernel.org/bpf/CAADnVQ+5Aqxpk1bTw47xZQ5E0HOtf0-HHjmDFHaay7CDJ-=
-7aKQ@mail.gmail.com/
-It has to be zero overhead. Copy pasting:
+There shouldn't be any extra copy.
+For 7th and higher argument:
+the caller does 'stx [r12 - N]' and the callee does 'ldx [r12 + M]'
+and JIT emits them as-is only adjusting N and M constants.
 
-"
-bpf calling convention for 6+ args needs to match x86.
-With an exception of 6th arg.
-All bpf insn need to remain as-is when calling another bpf prog
-or kfunc. There should be no additional moves.
-JIT should only special case 6th arg and convert bpf's STX [r12-N], src_reg
-into 'mov r9, src_reg', since r9 is used to pass 6th argument on x86.
-The rest of STX needs to be jitted pretty much as-is
-with a twist that bpf's r12 becomes %rbp on x86.
-And similar things in the callee.
-Instead of LDX [r12+N] it will be a 'mov dst_reg, r9' where r9 is x86's r9.
-Other LDX from [r12+M] will remain as-is, but r12->%rbp.
-On arm64 more of the STX/LDX insns become native 'mov'-s
-because arm64 has more registers for arguments.
-"
-
-Remapping in earlier patches is unnecessary.
-These STX [r12-N], src_reg emitted by LLVM will be JITed as-is into
-store of src_reg into %rbp-M slot.
-Only shift by 8 bytes is necessary for N to become M.
-where STX of 6th argument becomes 'mov' from one register to x86's r9.
-
-The feature has to be zero overhead to pass these args from bpf to native
-and from struct_ops hooks into bpf progs.
-All verifier considerations are secondary.
-
-pw-bot: cr
+For 6th argument JIT emits these two stx/ldx as moves to/from x86's r9.
