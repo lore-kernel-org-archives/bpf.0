@@ -1,146 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D946F2BEFFD
-	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 18:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A2626F46F
+	for <bpf@vger.kernel.org>; Sun,  5 Apr 2026 18:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775413240; cv=none; b=M7LocdkQbtoJVvaGn5tTzYy3pOrBpmcA8b1YOjo7d/yERhvIkcWQE33piyA44hHc//k9Bhpp4gkTlxLBc3JyScfpwK406ARybZA42GbQCZPc3TFqt8p6mrujEeXpQyGbt6SgPgEWAl6CiCuQBO/aYiQG2RKRBYHfnjAUe/5b7A4=
+	t=1775413788; cv=none; b=D42I7IG7kMrG1py77RKUeLFuQNvTuX5+VK8C7uW9bIdaSSpLU7H2IRU2iyBKUxurkt0uZYX+EAx1/SCUWAmyXMn6erGigHwt6mii9RGgbkTuZdnkor25JSmfOb827rpa28KKerWYnfGWrJm7NDlC8rLEqRrD0C2wWWjDkqtOBGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775413240; c=relaxed/simple;
-	bh=72fANRVZT0GqLvGh+kysEvTp+ZbmwfQeWlEiI9WOnaA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=K9OBsN3OzQ1xc+cA2OrqgTJKp9vgNJaUlgbm3BCJ8yQramikE1a2haaamQZ7sBTHMerHCICx9FRT2V/MbKqFXiU4BmjSelENmP+9yGdDL0SQKKde6MsVdJPbo+SA++/pzWrAD/A/iGCRI4T3oE+tSsVFm9imedQjfTMLms6jv5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BBtKGPvQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775413788; c=relaxed/simple;
+	bh=oAnv6ayjlBqwCrBysV75Y//wW0T2tMpCu9+isu7+q68=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CHoFUK0pUQqawu4HZVZZrikvbf8+4nZREnFwGH2NdBoE6jZ7FERLj4/rKZlIfx0Rd8jvUqHvFKNzCwRMspwKgrPwdbWnNq3mCDkNFVyv1Q/ysgtL87liuJCsUTlCkQBwqBk8lD41RvMIdUZLLxL/Qm8PtmXE7yAqvJg+exWXDz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aA/lRCgR; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BBtKGPvQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A714C116C6;
-	Sun,  5 Apr 2026 18:20:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775413240;
-	bh=72fANRVZT0GqLvGh+kysEvTp+ZbmwfQeWlEiI9WOnaA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=BBtKGPvQs2HLEafowjp8Y9RZ/bsu7Yuxay1Y5VK1pfG4MvzZV7Y1uUYFbN25IME/q
-	 kcgAHx5eVKjLxdw7ukXPQQ3bk1GrsLV9Ba+ci0XBd6ao7HFTe7IR68OMaex2U24FsR
-	 JAVCZ6mqvuzcNXeOV5sbofGtUCvW8raEv4mlhfx+V2P0jbAfbcyyhrSSs/r4IlG9YW
-	 wNJrVOWZghFTzag+L2nQvlkMFNUaMujQfgAMC+EmcrGf7btwXdhtkf5TL4nLpR9j2W
-	 /GzAifRSUiv5vlGwv40onfKb3JIA7xmVJfJ5lTCZwosde5M6d/XQFLJbdIhMWe9TgY
-	 6yDyjDKl59S2A==
-Content-Type: multipart/mixed; boundary="===============2017921023896144597=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aA/lRCgR"
+Message-ID: <230953f5-f64d-4f58-ad2e-f3ea9358aff0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775413784;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5LAexB/abfOf7YIEn7wchzPj5V35CrSOHhVRfPpRfnE=;
+	b=aA/lRCgRM+4nGS734YKIG0K89iPk2KlUcIUwTN30U14X1/lRibaZfGjPeNXj/gTRIuTL0N
+	QoY8xl++mmH43CUR758Gmop5fdQqecc6XmCuQNLI1p4Ta/OPj6B95/BhRDlqSQzisfepf3
+	D6oLbEBhD7bJhTsweae2Uc/2zFTYgFo=
+Date: Sun, 5 Apr 2026 11:29:22 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <adcc0eb54109467ffa3e970608a73ba0b39230928555d09663cd771441c010dd@mail.kernel.org>
-In-Reply-To: <20260405172611.1336162-1-yonghong.song@linux.dev>
-References: <20260405172611.1336162-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v3 05/11] bpf: Support stack arguments for kfunc calls
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun,  5 Apr 2026 18:20:40 +0000 (UTC)
-
---===============2017921023896144597==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> +static struct bpf_reg_state *get_kfunc_arg_reg(struct bpf_verifier_env *env, int argno)
-> +{
-> +	struct bpf_func_state *caller;
-> +	int spi;
-> +
-> +	if (argno < MAX_BPF_FUNC_REG_ARGS)
-> +		return &cur_regs(env)[argno + 1];
-> +
-> +	caller = cur_func(env);
-> +	spi = caller->incoming_stack_arg_depth / BPF_REG_SIZE + (argno - MAX_BPF_FUNC_REG_ARGS);
-> +	return &caller->stack_arg_slots[spi].spilled_ptr;
-> +}
-> +
->  static enum kfunc_ptr_arg_type
->  get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
->  		       struct bpf_kfunc_call_arg_meta *meta,
-
-[ ... ]
-
->  {
->  	u32 regno = argno + 1;
->  	struct bpf_reg_state *regs = cur_regs(env);
->  	struct bpf_reg_state *reg = &regs[regno];
-
-When check_kfunc_args() calls this function for a stack arg (argno >= 5),
-the stack arg state was placed into regs[BPF_REG_1], but this local
-reg reads regs[argno + 1] instead, which is a callee-saved register
-(BPF_REG_6 through BPF_REG_9) or the frame pointer (BPF_REG_10).
-
-For argno >= 10 (MAX_BPF_FUNC_ARGS is 12), this reads past
-regs[MAX_BPF_REG - 1] into adjacent struct fields, since
-bpf_func_state.regs[] only has 11 entries (BPF_REG_0..BPF_REG_10).
-
-This reg is used later for register_is_null() and base_type(reg->type),
-which would cause wrong argument type classification for pointer-typed
-stack args.  The is_kfunc_arg_mem_size() lookahead a few lines below
-was correctly updated to use get_kfunc_arg_reg() -- should this local
-reg use the same helper?
-
-> 	if (argno + 1 < nargs &&
-> -	    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1]) ||
-> -	     is_kfunc_arg_const_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1])))
-> +	    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], get_kfunc_arg_reg(env, argno + 1)) ||
-> +	     is_kfunc_arg_const_mem_size(meta->btf, &args[argno + 1], get_kfunc_arg_reg(env, argno + 1))))
->  		arg_mem_size = true;
-
-[ ... ]
-
-> 		case KF_ARG_PTR_TO_MEM_SIZE:
->  		{
->  			struct bpf_reg_state *buff_reg = &regs[regno];
->  			const struct btf_param *buff_arg = &args[i];
-> -			struct bpf_reg_state *size_reg = &regs[regno + 1];
-> +			struct bpf_reg_state *size_reg;
->  			const struct btf_param *size_arg = &args[i + 1];
-> +			struct bpf_reg_state saved_size_reg = {};
-> +			bool size_is_stack_arg = false;
-> +
-> +			if (i >= MAX_BPF_FUNC_REG_ARGS) {
-> +				size_is_stack_arg = true;
-> +				saved_size_reg = regs[regno + 1];
-> +				regs[regno + 1] = *get_kfunc_arg_reg(env, i + 1);
-> +				verbose(env, "Use reg %d to represent mem_size\n", regno + 1);
-> +			}
-> +			size_reg = &regs[regno + 1];
-
-Is there a missing case when the pointer arg is the last register arg
-(i == MAX_BPF_FUNC_REG_ARGS - 1, i.e. i == 4) and the size arg is
-the first stack arg (i + 1 == 5)?
-
-In that case i < MAX_BPF_FUNC_REG_ARGS, so is_stack_arg is false and
-regno is 5 (BPF_REG_5).  The condition "i >= MAX_BPF_FUNC_REG_ARGS"
-is false, so size_is_stack_arg stays false.  Then size_reg becomes
-&regs[6], which is BPF_REG_6 (a callee-saved register) instead of
-the stack arg slot for arg 5.
-
-The get_kfunc_ptr_arg_type() lookahead correctly handles this boundary
-with get_kfunc_arg_reg(env, argno + 1), so the arg gets classified as
-KF_ARG_PTR_TO_MEM_SIZE, but then the actual size check reads from the
-wrong register.
-
-Would something like "if (i + 1 >= MAX_BPF_FUNC_REG_ARGS)" be the
-right condition here?
+Subject: Re: bpf() system call writes out of bounds of user supplied buffer
+Content-Language: en-GB
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+ bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Stanislav Fomichev
+ <sdf@fomichev.me>, Jesper Dangaard Brouer <brouer@redhat.com>,
+ KP Singh <kpsingh@google.com>, Neill Kapron <nkapron@google.com>,
+ Carlos Llamas <cmllamas@google.com>, Eric Dumazet <edumazet@google.com>
+References: <CANP3RGcL+LFNBk-+9Z5W+8Nyj1+rxCkgR=EiQiLdHW22dSKvgg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CANP3RGcL+LFNBk-+9Z5W+8Nyj1+rxCkgR=EiQiLdHW22dSKvgg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24006922024
---===============2017921023896144597==--
+On 4/3/26 4:22 PM, Maciej Żenczykowski wrote:
+> Took a *while* to track this down, as it then results in random
+> memory/heap/stack corruption and segfaults, but:
+>
+> kernel/bpf/cgroup.c -- __cgroup_bpf_query()
+>
+>         if (copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
+>
+> doesn't verify this is in bounds of the uattr + length passed in from userspace.
+
+If the uattr indeed has less than needed space, then for
+         if (copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
+                 return -EFAULT;
+the kernel will return -EFAULT to user space.
+
+Maybe userspace didn't handle the return code properly and causing
+user space corruption and segfaults. This shouldn't be a kernel issue.
+Maybe I missed something?
+
+>
+> I *think* there's likely lots of other such copy_to_user() problems,
+> but this is the one that bit us on upgrade from 6.16 to 6.17
+>
+> It was added in:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/kernel/bpf/cgroup.c?h=1209339844601ec1766f4ff430673fbcfe42bb51
+> bpf: Implement mprog API on top of existing cgroup progs
+>
+> But it seems to be just generically bad style...
+
