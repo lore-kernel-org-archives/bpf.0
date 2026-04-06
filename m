@@ -1,236 +1,147 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013029.outbound.protection.outlook.com [52.101.72.29])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855DB30F94B;
-	Mon,  6 Apr 2026 20:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.29
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775508118; cv=fail; b=rRaU3PXPSbnrR3PrFiGMaYqNV5T7supl6t+zqbujrVgeKIaNsKa1IBf+Nzn7atAHkoWrh8ftBzp4PkxKB26kJeL5EdQVicOmFehOJczw+jWSrtm+wLxFaF1vWIiXEJZJ+svu9NKaio1NzWmXJ16Afwnkm9a9shYTaNxNwmcjl8k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775508118; c=relaxed/simple;
-	bh=zBw3Ylbwsj1kCY8qa7NH0oTZGTVuU4pdCpBZJAPEBi8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HIb/9FUT61bskS9WS0tWq7KFsvi1QsJj/0+4b+nfcUja1lOIdsppw9HxX9l5CzHztl7qomu/UddYvP3eNa0zvDggQL6tTl6SN5HWADe6dWhiSeIq2+gVV074P0R2Auk/To8saA7XFHwnULqIfD7qo5wvS5MkkanoiypNtA0qj7A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=FAk8uuNr; arc=fail smtp.client-ip=52.101.72.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37B31EF09B
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 21:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775509943; cv=none; b=EQQXu40BHLMEqNZIsb9VeCiFAGsm2OOpbjbcD/f/ZeeBWMIek4cAXdZS3NNQEgxP7iv1moI9Hkvz+tfXEvIZlbad32ha/OhSCLV/f5q7EVwbIhmBqWhYdrnfWGcEtGf76nledPuyDXMiIAElC7sv0hKIULgGjLDmqJRFVUcNVOY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775509943; c=relaxed/simple;
+	bh=l7vxEJgC+Ob793xoUL3efo8+VTg3EnXl8F+bVIOAC8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=skYgiqLrcGS2IUl2ObzblinACTewWnNzNK9mwptk+elO+xECuh1X3oFZ+p8MwSCJXFz3j77ARoNYGOIbhU9IN2fuJc+z37IJgHTaKvmLIxJCRm1gi+9f9zWczUKxM9vpeVbGlAifNlJtRzMtSd3Hmff0xNPiExma/edVJ2N9RdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eC7HvOJe; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="FAk8uuNr"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mvKMEir7Rfhip+2IMZZaEyAVE+uI2fJfQhsmgviwCTrmXqd9QrgsoHakernFoO0LXfjjYdjfTzeoC0kmgcqAXoL19cKW/NMGWF3WtY98ZEMhUyIM9k/psnuomnq6WbfIu0iIA75ydLqv2lU6T9LUE9Fe3iZ7VFSQ/rGtHPhVI50m9ltPMGzgG1yM9+K+dSR4ktbyupvwrQ3aOfui1hLTlU+jhQeINn4jFus7opSFZAo1OBMaOMUQI5XG+ud2BBJxA3XoYRUO1NxOE1cgulXtUDNZOdSSk/bdg41WwsYbmf4YZLpq3nPsheDCtjVP9ma0sFD1XtwEs7pjVghEWmGZNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ggx0MDj0n6q9KOp6w6WvkpbbvrIkB9SSZZXNJ85oWDE=;
- b=r9KLLV95E2+FVjtfVjvsXidYI5BJRioQBsp70XI7AnvERL+83b0tQxjqqCgDfw0YCEDPoLjvajA7btX4d1cphJJFn4/f3vyrxbcXRAX5lT0eJ0bpLiG9c45sK0sDlNfMKUKpCziX9ER45ObeTjWX3Z1mSnGc40+EvLplVXJ6qlyOa6a1XDO4iaXst7vqKOwykZvYjjCUZfKa7X2mPBvPFrlY8+K59ry8eSAdzwLDpQKINTJJBCnpjkYhTvdCjthZLTLA8OxvlX4N3SE/Yb+R+ZUZJxq0D/+7CtfiprwpOrpty7aMMj4obakWL3FYI+yTeLg194O+mITxpgGCd3QY/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ggx0MDj0n6q9KOp6w6WvkpbbvrIkB9SSZZXNJ85oWDE=;
- b=FAk8uuNrnX0RWrsyVSwRl6AKh5UlM0bVKaItmcxr8fRA92kSvJsuahWyuusWPUkQpnhAdoLmvp6Q3utIcFJVGXF6MN7ZudZXkqaQ62YKQnP7EcEeinZPI+41qtoEhqg1DjRbHMT56F+BhX1b9Zw2YJ/mMvFWZXrwCiuecKTZGAeoDJgxjWONjSubczH112e+o2S+9gIeKQxTnQzVgHWKOT4gNg9yB6c8o6joJpF1do+zGDZwjhwTH46ZbeJyqzm9Vcf3XsCvyUCTPd7p3jKBv46V4zRRi1OL7Z6pu0pXvff37QfWIJunN9UgF8+5kd6m5+ZYX3xEjKjLCLhjjibvUw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by DB9PR04MB8347.eurprd04.prod.outlook.com (2603:10a6:10:245::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.21; Mon, 6 Apr
- 2026 20:41:43 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9769.017; Mon, 6 Apr 2026
- 20:41:43 +0000
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: netdev@vger.kernel.org
-Cc: Zefir Kurtisi <zefir.kurtisi@westermo.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>,
-	Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Ioana Ciornei <ioana.ciornei@nxp.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Simon Horman <horms@kernel.org>,
-	bpf@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net 6/6] net: enetc: pad short XDP frames coming from devmap
-Date: Mon,  6 Apr 2026 23:41:22 +0300
-Message-ID: <20260406204122.167237-7-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260406204122.167237-1-vladimir.oltean@nxp.com>
-References: <20260406204122.167237-1-vladimir.oltean@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: WA0P291CA0015.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:1::20) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eC7HvOJe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1775509940;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sknxFjh3PzCtxEMIhDuCr7zygcrbfejjCpqHKn1w+TQ=;
+	b=eC7HvOJe2Ub3w4+TkjuVD91l2NTTuRKU8Zme0QrwqoSrxm3xEekXMQKBBlWzQlVrm+B27n
+	SjSPsU5QQ5DweCeyfC/clj2xAOJ7aFASDgNKrtqoGLlfkxzADG/6+y/GO3UvLWiNYn8UDG
+	FsYisamkCg/UHwcqm9w/AbmuD91SSjA=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-299-mXEQr5PIMhyg2dAXpnV_3w-1; Mon,
+ 06 Apr 2026 17:12:16 -0400
+X-MC-Unique: mXEQr5PIMhyg2dAXpnV_3w-1
+X-Mimecast-MFC-AGG-ID: mXEQr5PIMhyg2dAXpnV_3w_1775509933
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5AB91195608B;
+	Mon,  6 Apr 2026 21:12:12 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.80.40])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0BAF31800576;
+	Mon,  6 Apr 2026 21:12:06 +0000 (UTC)
+Date: Mon, 6 Apr 2026 17:12:04 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Song Liu <song@kernel.org>
+Cc: Yafang Shao <laoar.shao@gmail.com>,
+	Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org,
+	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+	rostedt@goodmis.org, mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org,
+	mattbobrowski@google.com, jolsa@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev,
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to
+ klp_patch
+Message-ID: <adQhpBC2W9I6QW-g@redhat.com>
+References: <20260402092607.96430-1-laoar.shao@gmail.com>
+ <20260402092607.96430-4-laoar.shao@gmail.com>
+ <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
+ <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
+ <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
+ <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+ <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|DB9PR04MB8347:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ca71c76-d5db-4136-46a1-08de941ce996
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|10070799003|366016|7416014|376014|1800799024|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	Z0szbtvcQoweGZypzfal4pnR8q9nVgP+BKUgQlqsGPQtw2Uj+19l29rxGQL4Z0JAGME5U+qibcDTW70yEcILbyqa3Xk7qihQIKI1zSYd0qkp5AO3SD9W+4H8y7EHBRvcav0+UgXrsoWs9rahoJa3o7tt0yObGmSwO3wWR8hVz1sqm+0E9ueW46QuopKzc7jKnq26x0IWLGkyMngefWO9iGVYB66BURL0xRexNWZcUs19JyZse5XKJdeGk9Ht2mJF78KpDdQHcBnquUHaKbxPpMO7jsomQz6oduACi5b29+sBVeg+jNKMWIs280N+JU4FdLIaa7U2dighLQ1WfE5XMq5tpY+Oh2fMWFeyZfvSLcbvsV14yQcLwi0orRsxNLTVPiNaqeaBmTkYy3bUXJ6Q8PuxDn7fqOlvw7gWusKWFwNJrPYC1qqiAqb8kybJytlM/amWfnogvncrqXqmWDzv375Vk38lqiKPrjwc0AzAy8zABfqp/TpaP3dpzb4T/oTURiN1VTRmkp4+5k1hubd6faBftScmOj+rpG8GxY4SC6mU34Gdno++vkenQK/69/S1ObuA9zDOH6BKc7F4orpLahvzBWyoJ1NJ68MNfpI+/7+cxj7j3chMmgnVDEo0mY2fkmarv0fnv8bSh0rIQoP7dzoK1SuQMfLtWMaZnnKSJslghFaGrp4e5FUlbdphKxlypSTtzleQw/fhw5LhJAkhhNlIj8BPRUIvrWghmqOQY94=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(10070799003)(366016)(7416014)(376014)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?aQWXjuoIR4p6MisQtUDh2wytmx7uYQJ2PNw8Y7s46keSDHLwwAwcFlYYjZrj?=
- =?us-ascii?Q?Hi4WyBBtao58+EfwrK2DYxaSypG4JkUlSclUhA6XMJQwWp80pj9FbwU+6Wrn?=
- =?us-ascii?Q?sgd15QJYNpptCTieCb9q3446+u/qxVWqHd/aoIa33lUv5w6BJK5G9TgUMu38?=
- =?us-ascii?Q?l0eFl2x/lLAlRhUMVzjv5teb0ePtvwgqHH/DZSlrmpYmK//+nb3865lIMyrJ?=
- =?us-ascii?Q?uG+3C5zPgQKDfucB2jFXgBrxsH3JH9dTvvuph6x5DmbnTTOATHjy7cbdxoqg?=
- =?us-ascii?Q?OGdkza50FAqbvx9+r85636L83OX7k753iNKY1zB9RGkb/Bd4q0fJM/6kPJ+O?=
- =?us-ascii?Q?8IjnnUxfpaHsdbsbNVfUNS79fP4KFvUw50m83KexPIFCFW4VqaHs/acl9ZHX?=
- =?us-ascii?Q?JtqYuWiBUwUwMbp6CWXk3vMzc4o3G0hFlTA9TGCka0+iM468rCHRcJBbArFc?=
- =?us-ascii?Q?Jou2Ri594RhCBpwQID23SBQ2A29/i3FzMOGvGGxVeySd+1X0z3i6xriywiGa?=
- =?us-ascii?Q?uigSkP5V4h/biNNJ3rHem85vk0xeqlfel/0y6aF1+2p0PBrYS7/ZSg5WZ7yv?=
- =?us-ascii?Q?jkCBq51s46KaGXMQD/YrOASu/sLKOMeVyyWFKe881YVT/sTcQW1ALIW95+2P?=
- =?us-ascii?Q?XDen07DRmD9JfifhwvS924uHYMBBvkh8pFKnXyBatVnzkf/jvqaW4CqMR+QE?=
- =?us-ascii?Q?SUXEYRSKazEolTwzwgjBFROjuuQ018x3bzxwzRqfu4d4iNty0mOqtdk/gBYB?=
- =?us-ascii?Q?e0/FPZqSShbGXn+Ndfpsq4zTDrkU91whbF1fF56g2IkzE9YQzea7hbkOlBKE?=
- =?us-ascii?Q?bQSDTUfLm/Q0zUmc+EwCtSL6xwCpKKxW6/boT5FAoZuOvp/K2Xur54TSbHqL?=
- =?us-ascii?Q?VRewsIxgWAggtTnKtzUB1TiMh/EqP8dwcUYMDwy1BMDSzj3FU5Yo1gopYWBF?=
- =?us-ascii?Q?kPWDy3oIzKYlbu0M6qH9cQTaiMYq/e+gtv5s0vAVP888x+afdraU2luRz9IK?=
- =?us-ascii?Q?caVVSSN5q+pYv9KmoZAZunnuUO9bUFFz6uDm+pPjK34aqGzDA74cDtrD4xJS?=
- =?us-ascii?Q?0O4uOYLx881XRVaDBNV8l6mARcBq7MxcaE+E2whPObbV/r0+ZNvahtIUni8z?=
- =?us-ascii?Q?JAi1fOTz1uN2Q3BXwVVSrwQNg4S888XAg16QsqOxZzpdLRFJ3EVY02uWdqJg?=
- =?us-ascii?Q?IYqKef19R43bWe2lMltCmSyh8y6Hp6vqqx0c4lt5eU8ShYi7KYYJoD/DcwTN?=
- =?us-ascii?Q?G3xWnOPGJPBgUDQeeGfOnufi4MASEnYud+nJnQTyEH0tBVSXAq0DDreDqQ9P?=
- =?us-ascii?Q?DxFw1KAAyJPuds8pNNEcTnLn1g05QDP5CUMdKFS/tlsOr/8+ffLie8BWlYAa?=
- =?us-ascii?Q?fHhJ31vms7IM6UMW4TsdrCo7tJHRxFilpTbBp0pAMCuLunWs4+JrQ+oHAXap?=
- =?us-ascii?Q?EhsLM3PvWN3B+Vnu3ow+mKa70Ob0lSmR5ZhSKQjzUZIZtw1qP0xC1zjUag3D?=
- =?us-ascii?Q?HrStGemeb3UxQCTDqvmBsOebV8T/GJmHZdBbuqoISjXWqzHhwyZANhimiOul?=
- =?us-ascii?Q?mxH7cdMhoGIjATXgYuy07t+I7/f7KxsTD7wIap8xW9okubMj4Ft8sFZthBlX?=
- =?us-ascii?Q?joKeIHdqg9XhAdQxlp/ETA0E1tnWo5oR56bItBG84XaatLVCHq371uLZbTKR?=
- =?us-ascii?Q?AJPSsGEqbpZLhAkgFBDhEZi6e91AO6p9bGEfrKx3jGzJDc2yGH6+/5kiD6bp?=
- =?us-ascii?Q?s1sowcK5Az3Y6oASUnr8c9MAl+P2CO0Mo80v19Y5JHgMvMvMoOzIIFj49HE8?=
-X-MS-Exchange-AntiSpam-MessageData-1: n8Y/hosDvSRH5LGpKivdJF0i4FjDkXJXg1M=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ca71c76-d5db-4136-46a1-08de941ce996
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2026 20:41:43.4264
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FMRq4/m833x6X3Mt6j0Cn/5cGUXeqtB5MMn+cSlF71trjwhYPC04h4C451xPsQ2+XPwC/dj0LBCCRJRQrXPoMA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8347
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Similar to the skb path issue explained in the previous change, ENETC
-could end up transmitting short frames coming from XDP.
+On Mon, Apr 06, 2026 at 11:11:27AM -0700, Song Liu wrote:
+> On Mon, Apr 6, 2026 at 4:08 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> >
+> > On Sat, Apr 4, 2026 at 5:36 AM Song Liu <song@kernel.org> wrote:
+> > >
+> > > On Fri, Apr 3, 2026 at 1:55 PM Dylan Hatch <dylanbhatch@google.com> wrote:
+> > > [...]
+> > > > > IIRC, the use case for this change is when multiple users load various
+> > > > > livepatch modules on the same system. I still don't believe this is the
+> > > > > right way to manage livepatches. That said, I won't really NACK this
+> > > > > if other folks think this is a useful option.
+> > > >
+> > > > In our production fleet, we apply exactly one cumulative livepatch
+> > > > module, and we use per-kernel build "livepatch release" branches to
+> > > > track the contents of these cumulative livepatches. This model has
+> > > > worked relatively well for us, but there are some painpoints.
+> > > >
+> > > > We are often under pressure to selectively deploy a livepatch fix to
+> > > > certain subpopulations of production. If the subpopulation is running
+> > > > the same build of everything else, this would require us to introduce
+> > > > another branching factor to the "livepatch release" branches --
+> > > > something we do not support due to the added toil and complexity.
+> > > >
+> > > > However, if we had the ability to build "off-band" livepatch modules
+> > > > that were marked as non-replaceable, we could support these selective
+> > > > patches without the additional branching factor. I will have to
+> > > > circulate the idea internally, but to me this seems like a very useful
+> > > > option to have in certain cases.
+> > >
+> > >  IIUC, the plan is:
+> > >
+> > > - The regular livepatches are cumulative, have the replace flag; and
+> > >   are replaceable.
+> > > - The occasional "off-band" livepatches do not have the replace flag,
+> > >   and are not replaceable.
+> > >
+> > > With this setup, for systems with off-band livepatches loaded, we can
+> > > still release a cumulative livepatch to replace the previous cumulative
+> > > livepatch. Is this the expected use case?
+> >
+> > That matches our expected use case.
+> 
+> If we really want to serve use cases like this, I think we can introduce
+> some replace tag concept: Each livepatch will have a tag, u32 number.
+> Newly loaded livepatch will only replace existing livepatch with the
+> same tag. We can even reuse the existing "bool replace" in klp_patch,
+> and make it u32: replace=0 means no replace; replace > 0 are the
+> replace tag.
+> 
+> For current users of cumulative patches, all the livepatch will have the
+> same tag, say 1. For your use case, you can assign each user a
+> unique tag. Then all these users can do atomic upgrades of their
+> own livepatches.
+> 
+> We may also need to check whether two livepatches of different tags
+> touch the same kernel function. When that happens, the later
+> livepatch should fail to load.
+> 
+> Does this make sense?
+> 
 
-The way in which this could happen is a bit contrived, but it involves
-XDP_REDIRECT from a veth interface pair.
+I haven't been following the thread carefully, but could the Livepatch
+system state API (see Documentation/livepatch/system-state.rst) be
+leveraged somehow instead of adding further replace semantics?
 
-As for enetc_xmit(), there are two separate limitations for the overall
-FRM_LEN and for the head BUFF_LEN. For the head BUFF_LEN, we add a
-direct restriction in enetc_xdp_xmit(), and for the overall FRM_LEN, we
-introduce a xdp_frame_pad() best-effort generic helper which we call
-from the same place.
-
-This helper alters the frame, but that should be safe, because
-ndo_xdp_xmit() is the hand-off function where the XDP frames become the
-responsibility of the driver. AFAIU, struct xdp_frame doesn't have
-multiple copies.
-
-I say best-effort because xdp_frame_pad() can only expand the head
-buffer of an XDP frame. It cannot expand the last fragment of a
-multi-buffer XDP frame, because, unlike bpf_xdp_frags_increase_tail(),
-it lacks access to the rxq->frag_size, aka the capacity of the chunk of
-memory being pointed to by the fragment.
-
-So, if the frame happens to be less than minimum Ethernet size, but
-fragmented, callers of this function will have to drop it.
-
-Fixes: 9d2b68cc108d ("net: enetc: add support for XDP_REDIRECT")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
-v1->v2:
-- handle multi-buffer frames instead of being unaware of their
-  multi-buffer quality
-- add separate restriction for BUFF_LEN
-- increment drop counter
----
- drivers/net/ethernet/freescale/enetc/enetc.c | 10 ++++++++-
- include/net/xdp.h                            | 23 ++++++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-index c70df45422e0..196b7828e2aa 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-@@ -1816,9 +1816,17 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
- 	prefetchw(ENETC_TXBD(*tx_ring, tx_ring->next_to_use));
- 
- 	for (k = 0; k < num_frames; k++) {
-+		struct xdp_frame *xdpf = frames[k];
-+
-+		if (unlikely(xdp_frame_pad(xdpf) ||
-+			     xdpf->len < ENETC_MIN_BUFF_SIZE)) {
-+			tx_ring->stats.xdp_tx_drops++;
-+			break;
-+		}
-+
- 		xdp_tx_bd_cnt = enetc_xdp_frame_to_xdp_tx_swbd(tx_ring,
- 							       xdp_redirect_arr,
--							       frames[k]);
-+							       xdpf);
- 		if (unlikely(xdp_tx_bd_cnt < 0)) {
- 			tx_ring->stats.xdp_tx_drops++;
- 			break;
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index aa742f413c35..276afc9aa21d 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -477,6 +477,29 @@ xdp_get_frame_len(const struct xdp_frame *xdpf)
- 	return len;
- }
- 
-+static inline int xdp_frame_pad(struct xdp_frame *xdpf)
-+{
-+	unsigned int total_len, pad;
-+	void *sinfo;
-+
-+	total_len = xdp_get_frame_len(xdpf);
-+	if (likely(total_len >= ETH_ZLEN))
-+		return 0;
-+
-+	if (unlikely(xdp_frame_has_frags(xdpf)))
-+		return -EOPNOTSUPP;
-+
-+	pad = ETH_ZLEN - total_len;
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	if (unlikely(xdpf->data + xdpf->len + pad > sinfo))
-+		return -ENOMEM;
-+
-+	memset(xdpf->data + xdpf->len, 0, pad);
-+	xdpf->len += pad;
-+
-+	return 0;
-+}
-+
- int __xdp_rxq_info_reg(struct xdp_rxq_info *xdp_rxq,
- 		       struct net_device *dev, u32 queue_index,
- 		       unsigned int napi_id, u32 frag_size);
--- 
-2.43.0
+--
+Joe
 
