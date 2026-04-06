@@ -1,152 +1,186 @@
-Received: from mail-yx1-f99.google.com (mail-yx1-f99.google.com [74.125.224.99])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86EE3390990
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 17:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.99
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775496022; cv=none; b=uMl7xQyWLom7OZTkx3Jg1EXcgjxE7UpNVJfkWsZN7YW0T5G4wcHmIM+zOoV1gt+W6JRBOfUj9ZqsWDnI8int9/EZClUJFjDYMF57VUTJcqB+oJs9eGHKtmhxBDgvydVbnb9ME2aXO+ITejjS8262ZARKehCiWdwJfS0BOHk2eNg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775496022; c=relaxed/simple;
-	bh=qzaH8m1FQQvseH1i2VcsREALPFcUfdY3t26JGB+mNQA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CluOokxwQYjRWa5yWtshluL3tTzKWleURPp4HM3Kl4z1IOh+MI0pDytCU0mFq+t7KYofwUrdHE1MF225/OQVkWooOEUdig7/qMZMZJnpOzpzHg2CjmKFI/voh2IevMKXNSTaYXvEFJtbBuE9YkN6RlPTxhhNoqZpEw9lXPGZfio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Mg0ch4EQ; arc=none smtp.client-ip=74.125.224.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8F638E5E6
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 17:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775496029; cv=pass; b=byte0LJzH9SjHo7qfC0WWZkodJ6zY+IWdX8tep+qQfhnJGJqJTzC/bYjppqG0dnY5DL+uEeNcW965Ct+RddkMlofGqgMU/khzlvLiY3C8C5xeytxbrEND3X8HFmMS6aM3KAn+c8PRNmzFatVzgw0zmfFIe6uRnaUldgHbdXmHkA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775496029; c=relaxed/simple;
+	bh=lEVBCbF6QFJjszOEOEjrEA3iMIh54Y/X+DBW0VL32jg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MGYdZStlPlLrNq9gC4eczsS+j38BLKCiNJ7bUgQ0PfQD4z1W6R41KbeeSrBQlBMFqdrKS5u5fLxHQ9r47B3qmu9TxqC5wPhARWmXym3qMNsl3ej0qUGB19Kf1430rJB4Iu8eHQ6YpUiErkMg69A8gbXLn4V7qRr48ubP7KVuXKs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IhMBbiaE; arc=pass smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Mg0ch4EQ"
-Received: by mail-yx1-f99.google.com with SMTP id 956f58d0204a3-64eaf8aa893so3466401d50.3
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 10:20:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775496020; x=1776100820;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ak/8YrDC0eJbLQIfMmaoVpPiz4Stv8t/FxXd5vdbs8M=;
-        b=UlSx+F3TzyDs7B/Vd/SAuqlriEF+DY/1NmF13QfT83SmrnfpYyjQw5kArVJbJGXaFs
-         F5L0SKJ4PxBmuq6AWzSlYZ3ltZDw7CbrhT39V31YzfLJvskbudzFnFYrKS/XRzLXYQQw
-         F5p+DBbog8wwp3Z0+bj8M6/hL70/RCl7hc3L9fWWDibWC2DCXFRjvf8ncScU39hyCqZ5
-         DD+8KVFGeGYY4RYWzI/HGUJF86S6SNBjwjQa+nVTKC8V3rfih1GlldDG++P7eU9X0aT1
-         ymzLlOZEgSEMVXQM8BPUB2dXvMm9uPvyLisF2zezdjLOd/d2plP/svvDPTtkuiMugIwQ
-         RIwA==
-X-Forwarded-Encrypted: i=1; AJvYcCXNJQ3jxUol98stE/BNbBkxWW8t/0Vp35Za65AxoUnaiO1XM+58eIKZDW8Osbc7IhMQwq8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxDZSqKG+3sGMCWLM0YaLYdQ2l1SzUYGY4cgpVvqVJv0e1Xgvv
-	0vA23iZPzi9/DGjAbgBLGhZCb8TvqbuKbWGDF6N+MocW/AFeUcZB4yV9rFskY4BtpL3D93JF2WL
-	2/vrLVYAUtGpDcYHI2q56VLkPVyD7tR+8hMVsaQ3YECB6buRSoPVWJsgGAZjNLC/495gcH9+22m
-	nnquG4aputAnrhMzrM4ZtvOD2KSizahZ1gCBugj5XiHRSFr6wYOvDpCwIosrGSus5LeRduuIvyr
-	9QE/6/1z8Pp
-X-Gm-Gg: AeBDieujsmSe/Gmj5Z2tCe4HP9PZV2qPkVIEn5qB0z39eZIEjL6zr/TtARfKUMSTOr3
-	RodaosKM5La5O6ZucRhGyttZWJAbgYb9HXJ/J1ZVaC5Gi0Oa4V+cP9agWXt8DdDsR6aqQ/JCOyy
-	RfAXVpnT2eFMMAdZX02uWs+6NkPLeQ+izQRV+0Gkxvv3DBU8bfFeRxhLl5arbxCjRryWz/TYq8A
-	VsksrwtsLq6Y/FcykEQiF7kQpT7AEGvhXMD+XnA/ZY6iczV4tODrDhaTLOj2kYqj0PmSHPQTfRF
-	BfpjSIhEgOr8DVhKRFAciyyOJICQY+Jne+ccFVGNB8+JERSGqIlm1Q+GV0lwXJsOusdf/xA5u9e
-	59A2jcG7zPwE4o9J0q8kzp7peXdHHVtif+qN1E5VOn7TULzS49ftgL6ePCxfRdzNxoWrowbXuu+
-	0OMR7g/g6Eer3Kmpzd0WuRmEJUB7a8aSRV3b28dKgzXBGFBKoAHjnn9iWhwnAFgA==
-X-Received: by 2002:a05:690e:43c1:b0:64e:ef47:83f1 with SMTP id 956f58d0204a3-650488fa4f7mr9458103d50.69.1775496020340;
-        Mon, 06 Apr 2026 10:20:20 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-24.dlp.protect.broadcom.com. [144.49.247.24])
-        by smtp-relay.gmail.com with ESMTPS id 956f58d0204a3-6503a834a70sm814881d50.11.2026.04.06.10.20.19
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 Apr 2026 10:20:20 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-1275c6fc58aso6337777c88.0
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 10:20:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IhMBbiaE"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so2461268f8f.2
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 10:20:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775496025; cv=none;
+        d=google.com; s=arc-20240605;
+        b=W2v92JWImPY1Avw59mnbUtd4z93BlYH6H/DQCKRrEc7v/YSwx2WiIeJ/cGB2Gaciez
+         qc1MsDZzEHLyaxgfokPN4S6dDcgddF1cYrJUSAXpaFF0bbXkdAqjskgXXSGnyJ3T0aFM
+         mGG86G2bvDb+8mWx+S7debkU08A92oTeb6OBBFYnhmI+wNE/sMkmwa2/SwgWA42u0Ahl
+         s/Kt4EbiKpGnGPquCVRzd+fsdzggl9cNK7AIR52U/DwkbB1uuyZkLKQ77OQG2EwAwqLb
+         ND3aG5ZaOfex3XAhCytByLlho20sxXOe6A9hjDzyXt6Q0ULjAsNqp6EZVnje4WfdDA0M
+         5kZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yjU+cEeids6ZXiki+2FnGVHWSPIFkcoVpANND97XwaE=;
+        fh=DKzUNIUqUP95TGag+Q0uDky206OkL75xDe4D+E/+wGU=;
+        b=eOgx1IspLOTP22VoFHME4K9UZVUAHJS9UNlQzBYvjf5BxqzFxmnxJ/+BSU7w1zxAZr
+         DBmLVmTNB+SItPPtQt8ry85+4WQBnt0tgNj6J7O/fqGoKMYkjnLqfk19aOu6evSJPbY0
+         jydPWyrbLveqjG6sUJfMBg5njIJLQ662f2DQA3/moknthKtnW/FwA68isvKpOr7eAwfF
+         wzSXpt7sNHsrih/VMg6c5X3XBglqZUKn1yZSq75dNWCqegE0cWsjUFy9Y+uT4aVD6cb2
+         Ote17uxTTYh8ALGMR468Y+pcorp1JXG8FV/PPgFWijJGqnVMx8gpPuH0u9m2cQrul4HP
+         wSnA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1775496019; x=1776100819; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ak/8YrDC0eJbLQIfMmaoVpPiz4Stv8t/FxXd5vdbs8M=;
-        b=Mg0ch4EQkcziAVMWB0Z5nM4tRAyHFRFxAmuDD+9sCySyBPgrQpwPMSNkCftaXXDPQ0
-         Z2lvQxrDyzRo6riYO45kmp0lj0+kA92sSh/J3Gl5ZMeNcCg4KFswQ73+5W93Qgq7u93W
-         Ux4kwsrdtcC0FT0ZIvlYlaxTRsWdjdcyuWmKw=
-X-Forwarded-Encrypted: i=1; AJvYcCWOqCi7cjO1UePaMONMQUjiOMfsK/ybT1vaHdUfNN82DCp9cGZ/GLqyIFRrUSWa/JRbB0A=@vger.kernel.org
-X-Received: by 2002:a05:7022:45a6:b0:12a:91fe:f5c0 with SMTP id a92af1059eb24-12bfb765de2mr5785166c88.32.1775496019084;
-        Mon, 06 Apr 2026 10:20:19 -0700 (PDT)
-X-Received: by 2002:a05:7022:45a6:b0:12a:91fe:f5c0 with SMTP id a92af1059eb24-12bfb765de2mr5785144c88.32.1775496018426;
-        Mon, 06 Apr 2026 10:20:18 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c14a371b1sm892890c88.13.2026.04.06.10.20.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Apr 2026 10:20:17 -0700 (PDT)
-Message-ID: <cfdadc60-367b-4bdb-9d00-40c24a4c92bc@broadcom.com>
-Date: Mon, 6 Apr 2026 10:20:15 -0700
+        d=gmail.com; s=20251104; t=1775496025; x=1776100825; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yjU+cEeids6ZXiki+2FnGVHWSPIFkcoVpANND97XwaE=;
+        b=IhMBbiaEQ3EaQiJN7tW1NgdYw5ws+vZ7VHOdosabxCGuqWGEBYD9BSXdamr7hXMhRd
+         5RAKArtmXYwE14so9z/IIgM5ft8VUZ9xIOfaxfUGmDcKyxqfH1byA9Y82PoJCT7PLaRJ
+         07pyuHehhGvQCl7v0Q1MnsFlLRj5+lLW5c1nDHIRujf3Yy38Q/vtBgW3mS6iUXBn/WWr
+         oc+8WK2S8TLPrzYQKfJEbqz5ZxLdsaCtQCWScr5wVOMUVBndoA6GFM8HazfIYHenKNWS
+         jyLq700zbVCaRiBoFVBniJK1O6LcDJkF0fUOQUUjeNf/C66ZOxcH29pQ7AJ2pgo+YRj9
+         dndA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775496025; x=1776100825;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yjU+cEeids6ZXiki+2FnGVHWSPIFkcoVpANND97XwaE=;
+        b=AVI4MG+HYQEMcBWvas/bX/jV7LQjX3SwTy2IYdooZNZdxOvvznFZg0IqM0dlOEdOQn
+         h/nI41v94I8YybDIxWKe/vHJB+7QMQMVYImZ1saadYsJI33cqr4grcx2zHcAFk7k5IQ9
+         AUl4KSIUJ1Yzth900UOOkZLgn9O9cD0fh1FRmLIaDg3o/LeQvIbqUCPz4lUqYZLJhiaI
+         oqsyW76RMxJXBReoLIZ78iKY7tSwZxINGmKABgyDbeaYYF4ntnAawhyFObPFeOvZu5Y5
+         Mhbqyp4Cd4eYughTFYdZlBobrevhh/C3sk3Uxd5Swd5CP0pZbGm+11ljR3c7/qcr4mnB
+         5tdg==
+X-Gm-Message-State: AOJu0Yxcdc3nEdVodb2yOBYtFwW8Spp9judJcq5zOPQhL7w18o6t3hnx
+	HQyLy3gxdFT5HYWkk6/1LFGqNYqYm4cQrjKYbAE6vwE6giV8sRd8srNWGYmRszOyJPzMF/1Rj7P
+	kjN09B4RhAbhqz9XhByAcB2l0jvC2k5g=
+X-Gm-Gg: AeBDietmMM0wu+oEq9TEZeCcVs3vb9J8sf7VG+2dvBofKSDYUYm5GVXmN7VK9pC+Gfn
+	IakqcxY9r0H8bWzFmAA2W7wXQ+z9xIsDo6XqF5IkVzGcdWAyI+pj2uJpajOGtP4GFB3fDAVMQl8
+	dLfZubLgcjSoVPvTvaJfAjrMrJTFx7aXcJCsgs5u7pWjG9t4h9WQPUpzCJwelpfwHH902W2OmjF
+	1pmFoTEqgRO9GRrvNJHG2KHSf2gAPEucsf0xAQfw9fykKzGi7IaxrYXCnRub3pEZTJjWVQRt7go
+	9e0Rx4TmBW/lMgejC21oiX+ujUwrkPSWuRkYW4XdZpEXZ3UnfvmTtPFD6OZK5OmEYyJqT57d50+
+	a03P4uIPP5xQXUfyUxja/xAWMSSaQ6iJMiQ9q
+X-Received: by 2002:a05:6000:40d9:b0:43b:a21e:9c19 with SMTP id
+ ffacd0b85a97d-43d292e285dmr19844678f8f.38.1775496024627; Mon, 06 Apr 2026
+ 10:20:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 6/7] net: bcmgenet: add XDP statistics
- counters
-To: Nicolai Buchwitz <nb@tipi-net.de>, netdev@vger.kernel.org
-Cc: Justin Chen <justin.chen@broadcom.com>, Simon Horman <horms@kernel.org>,
- Mohsin Bashir <mohsin.bashr@gmail.com>, Doug Berger <opendmb@gmail.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260406083536.839517-1-nb@tipi-net.de>
- <20260406083536.839517-7-nb@tipi-net.de>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20260406083536.839517-7-nb@tipi-net.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+References: <20260406171226.13325-1-adithalex29@gmail.com>
+In-Reply-To: <20260406171226.13325-1-adithalex29@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 6 Apr 2026 10:20:12 -0700
+X-Gm-Features: AQROBzCJrAIPjc1lNvUC2waSuVFGs8aY64CSTQYbWx5bOe0FKmdbvpEHR9AdD04
+Message-ID: <CAADnVQ+KGMhpsrc1PXVVwZMD3WXf2OqD43rFiADDryrNuCfA5Q@mail.gmail.com>
+Subject: Re: [PATCH] [RFC PATCH] bpf/xdp: propagate queue_index via xdp_frame
+ for cpumap
+To: Adith-Joshua <adithalex29@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/6/26 01:35, Nicolai Buchwitz wrote:
-> Expose per-action XDP counters via ethtool -S: xdp_pass, xdp_drop,
-> xdp_tx, xdp_tx_err, xdp_redirect, and xdp_redirect_err.
-> 
-> These use the existing soft MIB infrastructure and are incremented in
-> bcmgenet_run_xdp() alongside the existing driver statistics.
-> 
-> Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+On Mon, Apr 6, 2026 at 10:12=E2=80=AFAM Adith-Joshua <adithalex29@gmail.com=
+> wrote:
+>
+> cpu_map_bpf_prog_run_xdp() currently lacks queue_index information in
+> xdp_rxq_info, as struct xdp_frame does not preserve it across the
+> xdp_buff -> xdp_frame conversion.
+>
+> This results in loss of rx queue metadata when frames are redirected
+> via cpumap and later processed by XDP programs.
+>
+> Propagate queue_index by storing it in struct xdp_frame during
+> conversion and restoring it when reconstructing xdp_buff. All
+> relevant xdp_frame constructors have been updated to ensure the field is =
+consistently
+> initialized.
+>
+> This introduces a new field in struct xdp_frame, which may have
+> implications for structure size and layout. Field reordering was
+> considered to minimize padding, but is not included here to keep the
+> change focused and avoid unrelated modifications.
+>
+> Feedback is appreciated on whether this approach is acceptable or if a
+> different mechanism or struct layout would be preferred.
+>
+> Signed-off-by: Adith-Joshua <adithalex29@gmail.com>
+> ---
+>  include/net/xdp.h     |  4 ++++
+>  kernel/bpf/cpumap.c   |  2 +-
+>  kernel/bpf/verifier.c | 12 ++++++++----
+>  net/core/xdp.c        |  1 +
+>  4 files changed, 14 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index aa742f413c35..11aecf84a896 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -301,6 +301,7 @@ struct xdp_frame {
+>          */
+>         enum xdp_mem_type mem_type:32;
+>         struct net_device *dev_rx; /* used by cpumap */
+> +       u32 queue_index;
+>         u32 frame_sz;
+>         u32 flags; /* supported values defined in xdp_buff_flags */
+>  };
+> @@ -347,6 +348,7 @@ static inline void xdp_scrub_frame(struct xdp_frame *=
+frame)
+>  {
+>         frame->data =3D NULL;
+>         frame->dev_rx =3D NULL;
+> +       frame->queue_index =3D 0;
+>  }
+>
+>  static inline void
+> @@ -392,6 +394,7 @@ void xdp_convert_frame_to_buff(const struct xdp_frame=
+ *frame,
+>         xdp->data =3D frame->data;
+>         xdp->data_end =3D frame->data + frame->len;
+>         xdp->data_meta =3D frame->data - frame->metasize;
+> +       xdp->rxq->queue_index =3D frame->queue_index;
+>         xdp->frame_sz =3D frame->frame_sz;
+>         xdp->flags =3D frame->flags;
+>  }
+> @@ -419,6 +422,7 @@ int xdp_update_frame_from_buff(const struct xdp_buff =
+*xdp,
+>         xdp_frame->len  =3D xdp->data_end - xdp->data;
+>         xdp_frame->headroom =3D headroom - sizeof(*xdp_frame);
+>         xdp_frame->metasize =3D metasize;
+> +       xdp_frame->queue_index =3D xdp->rxq->queue_index;
+>         xdp_frame->frame_sz =3D xdp->frame_sz;
+>         xdp_frame->flags =3D xdp->flags;
+>
+> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+> index 32b43cb9061b..e475a732ceca 100644
+> --- a/kernel/bpf/cpumap.c
+> +++ b/kernel/bpf/cpumap.c
+> @@ -197,7 +197,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_ma=
+p_entry *rcpu,
+>
+>                 rxq.dev =3D xdpf->dev_rx;
+>                 rxq.mem.type =3D xdpf->mem_type;
+> -               /* TODO: report queue_index to xdp_rxq_info */
+> +               rxq.queue_index =3D xdpf->queue_index;
+>
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+nack. please do your homework and research the mailing list first.
+Other people already attempted removing this.
+
+pw-bot: cr
