@@ -1,82 +1,86 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1CE4A07;
-	Mon,  6 Apr 2026 05:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F742EDD70
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 06:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775453802; cv=none; b=h8YYfhtmIeG/PX63uwe8wNw+Qw4CGkXazhHM69ZWLf6sHzCeGP86YIMcC7MjmGa0miV7I/VuoqPflz2zdvxHzdi0PJ9LSwQ3/dACZoH7R9hHy7AbkWoF+W1mUwWYkW4r9MEbeETqixQXu/cwFuMB+GqMsQgMK7i2NA50vdCqpIk=
+	t=1775455425; cv=none; b=t33YsLGuAKt9C4SKHjdQUdqL9oqERKqfRCxY6GtOLLNl+9wHUmtH/UfworRmps6wmBH8ghVuMnbCBB3jd8BhmyScuUdOzsdo/kzAVPHbPbbU7tUngrC++xVT+U/SLDk8mx6vVlK506szQxcWk30euYR8EiTQb2dR58ALK9WMT/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775453802; c=relaxed/simple;
-	bh=+6M15O916TUMWzhDmnzXg/R/5LwcNdcZFuE9/ntikaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CxEdtfY491xYvyNWfCYwShw9f7iPIGEPs5cPN1Jg4zsWc6i2vwYlw92twoFu0pfW426DNkOYH1hQsYFdBfp8G8DveW1yIsOf6cgTcwOuY3h+73F2wASbpGl2r/68X84PCAyTcU1TcsXSYPvhwTmXNAIUwi+iq+25LbYF3x3EaSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZBzJWZ2d; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1775455425; c=relaxed/simple;
+	bh=EHv8UrosY+X4ihq4in2Gb3VnfbtgK3LHPrG7tapif9s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c+safJxyCwYgr7uH1KtFVOCb75ovkb+8ELGMGjThlHpbG+Altv202EU3GOA40lW9EJPXjyduuOcem+f97A9KvYSWC7pkc0nMlCHpasgS1DTrS3e/w+TQ81lWFKRlxQY7kA3zNWUheFr9x6VV+DM0TUU3PPxJASOpZ0nQzvXeu/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iz0PaxXz; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZBzJWZ2d"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=RGIYpWNa4i33V/14ZSVaKdY9xlfeN20xwvIS5EPGEHs=; b=ZBzJWZ2dHCgQmcYtF3M0ABW3e8
-	Uijea4y/vu8Giae5M6EKT3XWHdFKaQFfIBatXzkMDhWk72WiNT8huuh3MyrOgf97NohII7i3VNxPp
-	/XN75TO86neDII7NjYT/0PKOozlETrzwizjsewii4HMPElDOzPRAUdPOahs1pmRkFq4sWBjjbtkgZ
-	IFqxbJLemO9qKX3MMOXWcOLe+X0IDEJsgFpua9IgXwOXfRFxpvAu2lnEo3PyrEeiLHhg5XaHUeVtb
-	dhJ4iQo7Xmwtn0HML8xljZnoSEliq3gMrTQKdbTeMrO52UyqtIqjbDPCheeBsEw0zav8P447PsjXw
-	XHCbCLCw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1w9cdR-00000004oWG-31PD;
-	Mon, 06 Apr 2026 05:36:29 +0000
-Date: Sun, 5 Apr 2026 22:36:29 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, kpsingh@kernel.org,
-	mattbobrowski@google.com, song@kernel.org, jolsa@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	yonghong.song@linux.dev, live-patching@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return overriding
- for livepatched functions
-Message-ID: <adNGXfRI84mZrUSs@infradead.org>
-References: <20260402092607.96430-1-laoar.shao@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iz0PaxXz"
+Message-ID: <5f37fcf2-05f7-47d3-b412-1515ee19fbea@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775455421;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/f1oDTyiui/eYpNv9rpCuy7TBj7jb+o7n5doemsJKyQ=;
+	b=iz0PaxXz3U47q0LIzCTaXuhswhCHYfgrcMqtMFudEgfYyOolSQzSiX6rj3UJYUzH4NJsZk
+	/AlHSJew8LfGpSLhE8rbuQC8qJoIXGt4nzL0LcUqOMvhUK+WG4iyDHV9984prPJxi3ZR+o
+	52TG/Ss0Wg1cTVjJHCmdtS7zCaux1jE=
+Date: Sun, 5 Apr 2026 23:03:26 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260402092607.96430-1-laoar.shao@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Subject: Re: [PATCH bpf-next 03/10] bpf: Support stack arguments for bpf
+ functions
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+ Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260402012727.3916819-1-yonghong.song@linux.dev>
+ <20260402012742.3917613-1-yonghong.song@linux.dev>
+ <CAADnVQ+y1jZZTyNcXghD0UQ+JzD0pEu=icSP7=+QY4b=9dzv7A@mail.gmail.com>
+ <924fde92-d28f-471d-9f0a-0c176958139c@linux.dev>
+ <CAADnVQJdTffT5sdqZVdWX9W-jG2vPjiPAA0OT3iMPPsY9-KFmA@mail.gmail.com>
+ <074ee11d-3f63-4e6c-b66d-c60a834cbb25@linux.dev>
+ <CAADnVQ+9OdBFnUAXND-MW7epFnqwj9f2w-w0xPD7T73sTMj9Zw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQ+9OdBFnUAXND-MW7epFnqwj9f2w-w0xPD7T73sTMj9Zw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 02, 2026 at 05:26:03PM +0800, Yafang Shao wrote:
-> Livepatching allows for rapid experimentation with new kernel features
-> without interrupting production workloads.
 
-Myabe it allows, or based on the rest of the mail not quite.  But that
-is certainly not the intent at all, the intent is to fix critical
-bugs without downtime.
 
-> However, static livepatches lack
-> the flexibility required to tune features based on task-specific attributes,
-> such as cgroup membership, which is critical in multi-tenant k8s
-> environments. Furthermore, hardcoding logic into a livepatch prevents
-> dynamic adjustments based on the runtime environment.
-> 
-> To address this, we propose a hybrid approach using BPF. Our production use
-> case involves:
-> 
-> 1. Deploying a Livepatch function to serve as a stable BPF hook.
-> 
-> 2. Utilizing bpf_override_return() to dynamically modify the return value
->    of that hook based on the current task's context.
+On 4/5/26 9:51 PM, Alexei Starovoitov wrote:
+> On Sun, Apr 5, 2026 at 9:29 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>>
+>>> For 6th argument JIT emits these two stx/ldx as moves to/from x86's r9.
+>> For stx case, we should move the bottom stack value (6th argument)
+>> to r9 and pop the bottom stack slot (8 bytes).
+> That doesn't sound right.
+> Passing 6th argument should not involve stack manipulation at all.
+> No push and no pop.
 
-Whol f**. now.  Is this a delayed April 1st post?
+The following stack layout can avoid the above push/pop issue:
+
+    incoming stack arg N -> 1
+    return adderss
+    saved rbp
+    BPF program stack
+    tail call cnt <== if tail call reachable
+    callee-saved regs
+    r9 <== if priv_frame_ptr is not null
+    outgoing stack arg 1
+    outgoing stack arg M -> 2
+
+After the above pushing (outgoing stack arg M -> 2),
+if bpf-to-bpf, push the outgoing stack arg 1.
+If kfunc, move outgoing stack arg 1 to r9.
 
