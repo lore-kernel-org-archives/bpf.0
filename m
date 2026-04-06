@@ -1,67 +1,65 @@
-Received: from mail-oi1-f193.google.com (mail-oi1-f193.google.com [209.85.167.193])
+Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E5A3976A1
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 19:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E22C3976BD
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 19:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775504658; cv=none; b=jQuElsjGmZ3Ay9tRADLBsM84VzRBO/wlIneGCDPLJNNAK3NNVxOLdEONR1GZkPcpUWcwvoZPD9eC6VxP0ytlRObu1DlOhWQiXEbxlBqTJaSQrK/iOj+oEHh2lqQsx+qqsRn+tjpNvgjvb+aGj+LNQkPAzezrkRs8ypaEmbZBLy4=
+	t=1775504660; cv=none; b=HSvSqmrEo2POfZfXAWrIPQGrBi6qnkmniJ456C7J/968aQq9VSMxAUs120Hque3rBynnEMvW4mEXlPNDvDd64WxY0zsG8udNzgdVlE1BK7cIxqGbn8X+bCOYf196o0B5aYH05RlJu2qngV5oDUz156xqFUl3Erz/6ojtEccesCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775504658; c=relaxed/simple;
-	bh=pHXaA4TRkerCes8xwbidiOtyvg5MWGqYVLMO9rOw/Tk=;
+	s=arc-20240116; t=1775504660; c=relaxed/simple;
+	bh=wQrjZrw9/mrdayJSQsNWrwuSWWYAntM/yonGUlu09ko=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b8Pnbj3L+X4L6ITmRqc7pqXvbdMxY4HOp0CuWsA26hDhpWKijzHEfR1NyQ5n4pqwZ+8yrRS+tlNVNaX3s/uAfeZbnMft5ZkgGOv7HZAZ8CVzh3nrwBnW/BySeTbJT3iimBOOv3Qj86VcrsI7FSelEc9ctFrqY/mS3Q8nksrTpz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r6uH9nNo; arc=none smtp.client-ip=209.85.167.193
+	 MIME-Version; b=UaU9pPTg+vhkHrbTrNLJeNANbzlcd2M/vYtEecdj6emiRYxOXsLWrBIzXvYIl/I0jbfhc5y+abN8prpNStDXzNx8bGvei6E1acJPoOmxOwN2ImB5ydkhfro3ajg3n4TF8A4R9untppJWWo4lvQbmfTdHIt7QcB4sQPtuUli13Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KcmgWJ0g; arc=none smtp.client-ip=209.85.167.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r6uH9nNo"
-Received: by mail-oi1-f193.google.com with SMTP id 5614622812f47-470145d7e07so1340347b6e.1
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 12:44:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KcmgWJ0g"
+Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-470145d7df5so1774967b6e.0
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 12:44:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775504656; x=1776109456; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775504657; x=1776109457; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v+qpvKmDM+0CiBkwD7sz00oOIbxhplbERdAEFMRUTWs=;
-        b=r6uH9nNoLkx3xItheySyZTn7qkbF3gutAonAXO3e5WR8++pWNoqKjQ1TXOR6Cr9sQr
-         Lq8qBM4cPQA6nkoh+0ZlXFtC8b5corpgXM/2gSDV7AIzt00iZAWPSHDIQ2wPdLBBa3Uh
-         JI+mYScRq59dtD0tAy1bb6JK8RKMpxdGQ0+sb+e8hlV419X6Uz6Z8TZ2H2GpoFpP5/LD
-         xH7wiVqizaQX0llRGnJ9pLVFAQRZkQfcs/LohqM3FpYMcLc7O6LXcLdbSal1kJYHNpe9
-         q3yVc2JZmJFhNofTmCnOjD4IQcU4nKublFzo5XFNAZVJdhFOfliMybK9M8uTXmf0OqPE
-         SUfg==
+        bh=+G83gLFXj42ER0+OaQumxri0H+MvWxYOxkcS97a/FdA=;
+        b=KcmgWJ0ggOPmBLCxMGiUdzP0OBrRzStzvY4rV/eMYvx3DVTmjpGkaYigvww69nb3f8
+         uE04ddqtzuJb4jRUHBu62C3bCuDAobOOV7dmhPfAUm5QEv7EJrGsRMQLN2UEiG97HQFw
+         8EqLhPmMTy1htBLBFwVFdizJ1Cw76GpEzdrzsYJe+hbANkkdsJ+kgmgOFndTL66oMMI0
+         gSZKfl6uz5o1PJCciJsQxW1sUZuMGgvbtPesKeCMAGNCYZDwC846kTKSgCAhykaNzKDd
+         mtdUW87wP9UOKV8FXRMTQ+JpJX/w4QQTYxhAxlboB0Do46+KPHqOP4Za0c7YS37u7pGF
+         fryg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775504656; x=1776109456;
+        d=1e100.net; s=20251104; t=1775504657; x=1776109457;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=v+qpvKmDM+0CiBkwD7sz00oOIbxhplbERdAEFMRUTWs=;
-        b=jpmnw570DVKcQYBhNbcSnca/9Obah1zitOvLqHjVvvjPqwS+uDLCE8GioGSHnujTyY
-         KLNw7NIqQtm1U5q7z3/fxFOgzHq4TUANk5tX2cS/vNJh9TFVN5D1nNloMvakKV4TUuzZ
-         7vPbSwKsROYGYrM2W7+CGLUgAAVy1MkuI+E+j3DmDqXXWBV3HSpus4P95i8j4VfJO2/6
-         CqwYeHUC4cmr/GoJN7yXJFGXt5LYrF7lUvADgxA5S4nTTYvI2XXCXO6JbmATFGeCQrq+
-         17VCMQ25AnLNkQwhy9Vg/M+72rss/kAUzJM19YOiCmFcM8rlvmGuiAgLWSI9orA3hcqo
-         v1vg==
-X-Gm-Message-State: AOJu0YxZYGAVQw4kRAsK5GzJRsnApXInVjVE92Yzwo+XOtrOOInnUn3k
-	obhgjQlDkvknBnZGGGwE89K7MfKYGPVEL2r4/ulUnpLuxKzGfAQ5xPmnoCr2BGnrzaw=
-X-Gm-Gg: AeBDievO5cn98UC+pfAWy2W3DDbj6kKubqMOiPcXKvZRfg3a6e0wwBX8FuHNuiXrzMF
-	g15yYO3BP+8Bb7Z9bEi/VUVhddNL948Zw2AK4ZSMx9/zDztG8fIyy5msyExN/OkTJGX+cl/Ipxx
-	eB6RvPqrLTEfmppmJtuUarTb8L8xfhhcEA1qs194XVwod6SWJPYctCm1OcO8d2ltLdMe0tXxzY6
-	wYgJoVFRmLvGVYi7o/HnR9+mg3xIGc8AzG11ZNuQKhU5SxHwQm/a8/+UZeEBMskFtRjKjAxgnj4
-	+mcrz5VJyR2XbbeHbeR2LOQRUGmsztYAoLFsz63IDc7BWvRbz61PaNc/nDNUsnZGz6XvXRXiGDj
-	pXZhm9DTGX+ovjwOyP4Bh0lrV8PYi/PQbgeDmqDy3DOccmARTznVdYEC//rfng9prJ1/raPOZRF
-	541wzYCpyQEcnEzty/8mDalJxh2cCbj/dH1zT+1VSdi5YCF2MiI192fnY=
-X-Received: by 2002:a05:6808:138e:b0:467:4939:9674 with SMTP id 5614622812f47-46ef57f02a1mr7575054b6e.7.1775504656009;
-        Mon, 06 Apr 2026 12:44:16 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:72::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-47471f0ef63sm315584b6e.12.2026.04.06.12.44.13
+        bh=+G83gLFXj42ER0+OaQumxri0H+MvWxYOxkcS97a/FdA=;
+        b=Xrehp7ZukEl00oxSAKR075TAjJEfkynmbnKtxSlly8cnquYqZPkFDGT1odmjjNcTiN
+         8tAt4IoHhsAsHXjVjedVWIOdB2xXL2bkXEjry4uTepOas3ec+2kzWJw2weHbkv7an8a2
+         Sg9wlXQ5n/hRpF0cc64DnuUqsdZ+B2wisR+opbLvi60XYO89ASi4S9DRFW4JvfUln6Lj
+         g4kPbj9+6FuW+D1UT3YNozywa9pyseYJr4FJk6i3KMTApe1bcmPAL5HYECGyhcs/2DdN
+         D7YHfrdyHfzgYsVw36ZGsJhxSRrzStVn8XencaTWfhCdsqewlgTfbhyKYQWeGXeu7OCb
+         kj7A==
+X-Gm-Message-State: AOJu0YwyxjkVB8+25ZyC4DoAfyEQoFdBZSz0i7L7ORtoAHJri9Kluzg9
+	wbTjahnpSrooFzeq0yptoDRdz8OFSBq1roQTG3ROT2gHBhiaURoV4mDQpj/oZCo00mI=
+X-Gm-Gg: AeBDieve/Asf+jZabjs/KBVWf3D/CyYx25OiZfznRuuHGOM0i/5S+ffU6X5LwPEs6oU
+	mIEUZHvOlxmD3b0pqzhm+nD9AL9cCOrW9GGgfWRWVGt9540EgpSDviS8kFbsN7atVxAAm75/Bo2
+	6Ql97/bU5Iz87oqChibc+I+1lhXXjUAgzamHa/rL31nF1A2kj59QYIB90G8M4xdaN3AuYGMDIo1
+	NIDXwxqAawjuSdjikCZQukaHU3PL2OTMNuCxoJFOKkZMmnFBiIcZiSEfIqIcOHJGcjHbC2rLkzF
+	Dskd2tebSFV/Nd2M7s7/YEO7K+8GitAr1jbCHguueLdnSSI2ExNYi1vmxVExNsALKYXp2MAuKUW
+	6fRx3CH7w4Yl7q1EiOWt/NSj0s9pJ7eFpiNdR2iuocCV95b31oarz/YHmonAbrGk40jhdtz2xT1
+	SheN3i7ByQJ+pNAl7wKUj1CmwTgTgTtHziIUAcvIZDg8zbzDr1m2Y7IA==
+X-Received: by 2002:a05:6808:c1e9:b0:467:27d2:96a7 with SMTP id 5614622812f47-46ef904d90cmr7160976b6e.15.1775504657504;
+        Mon, 06 Apr 2026 12:44:17 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:6::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-46d8d109b69sm8523209b6e.0.2026.04.06.12.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 12:44:14 -0700 (PDT)
+        Mon, 06 Apr 2026 12:44:17 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Emil Tsalapatis <emil@etsalapatis.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -71,9 +69,9 @@ Cc: Emil Tsalapatis <emil@etsalapatis.com>,
 	Dan Schatzberg <dschatzberg@meta.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 5/7] selftests/bpf: Test modified syscall ctx for ARG_PTR_TO_CTX
-Date: Mon,  6 Apr 2026 21:43:59 +0200
-Message-ID: <20260406194403.1649608-6-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 6/7] selftests/bpf: Add tests for unaligned syscall ctx accesses
+Date: Mon,  6 Apr 2026 21:44:00 +0200
+Message-ID: <20260406194403.1649608-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260406194403.1649608-1-memxor@gmail.com>
 References: <20260406194403.1649608-1-memxor@gmail.com>
@@ -83,132 +81,191 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3225; h=from:subject; bh=pHXaA4TRkerCes8xwbidiOtyvg5MWGqYVLMO9rOw/Tk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfMKD9vT7mcNK2PkQ99JX5Ta833uUqGp7yS5+ERvBRxS3PJk vXVQRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbSYs7I8OhphdnpSZwpk2wjb2TbKZ 9RuHJ51lxhs9WpC8TWukoEzWZk2LMlWK/ios+FPcYnrkz2WX9A9fLD6UVMe7o0bjqFfA+qZQIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4449; h=from:subject; bh=wQrjZrw9/mrdayJSQsNWrwuSWWYAntM/yonGUlu09ko=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfMKD9u0R+uDhVYdf5/lyV/jE5K6jPmFsorBq0d8fott1Hl+ SB/uKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwESEyhn+pzc7vdy3aNV/vaPn721lqq 44Znz1bEq7Q1P+z4j+nMfb6xn+cOZf/q9l/+zas+CWIu67Og83yly2Fj0ozHbwxNbMteuWMwAA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Ensure that global subprogs and tail calls can only accept an unmodified
-PTR_TO_CTX for syscall programs. For all other program types, fixed or
-variable offsets on PTR_TO_CTX is rejected when passed into an argument
-of any call instruction type, through the unified logic of
-check_func_arg_reg_off.
-
-Finally, add a positive example of a case that should succeed with all
-our previous changes.
+Add coverage for unaligned access with fixed offsets and variable
+offsets, and through helpers or kfuncs.
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Acked-by: Puranjay Mohan <puranjay@kernel.org>
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/progs/verifier_global_subprogs.c      | 94 +++++++++++++++++++
- 1 file changed, 94 insertions(+)
+ .../selftests/bpf/progs/verifier_ctx.c        | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 2250fc31574d..1e08aff7532e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -357,6 +357,100 @@ int arg_tag_ctx_syscall(void *ctx)
- 	return tracing_subprog_void(ctx) + tracing_subprog_u64(ctx) + tp_whatever(ctx);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx.c b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+index 6e683dd8002a..887cd07ed885 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ctx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+@@ -320,6 +320,30 @@ int syscall_ctx_fixed_off_read(void *ctx)
+ 	return 0;
  }
  
-+__weak int syscall_array_bpf_for(void *ctx __arg_ctx)
++SEC("?syscall")
++__description("syscall: unaligned read ctx with fixed offset")
++__success
++int syscall_ctx_unaligned_fixed_off_read(void *ctx)
 +{
-+	int *arr = ctx;
-+	int i;
++	char *p = ctx;
++	volatile __u32 val;
 +
-+	bpf_for(i, 0, 100)
-+		arr[i] *= i;
-+
++	val = *(__u32 *)(p + 2);
++	(void)val;
 +	return 0;
 +}
 +
 +SEC("?syscall")
-+__success __log_level(2)
-+int arg_tag_ctx_syscall_bpf_for(void *ctx)
-+{
-+	return syscall_array_bpf_for(ctx);
-+}
-+
-+SEC("syscall")
-+__auxiliary
-+int syscall_tailcall_target(void *ctx)
-+{
-+	return syscall_array_bpf_for(ctx);
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(__u32));
-+	__array(values, int (void *));
-+} syscall_prog_array SEC(".maps") = {
-+	.values = {
-+		[0] = (void *)&syscall_tailcall_target,
-+	},
-+};
-+
-+SEC("?syscall")
-+__success __log_level(2)
-+int arg_tag_ctx_syscall_tailcall(void *ctx)
-+{
-+	bpf_tail_call(ctx, &syscall_prog_array, 0);
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__failure __log_level(2)
-+__msg("dereference of modified ctx ptr R1 off=8 disallowed")
-+int arg_tag_ctx_syscall_tailcall_fixed_off_bad(void *ctx)
++__description("syscall: unaligned write ctx with fixed offset")
++__success
++int syscall_ctx_unaligned_fixed_off_write(void *ctx)
 +{
 +	char *p = ctx;
 +
-+	p += 8;
-+	bpf_tail_call(p, &syscall_prog_array, 0);
++	*(__u32 *)(p + 2) = 0;
++	return 0;
++}
++
+ SEC("?syscall")
+ __description("syscall: read ctx with variable offset")
+ __success
+@@ -350,6 +374,38 @@ int syscall_ctx_var_off_write(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("?syscall")
++__description("syscall: unaligned read ctx with variable offset")
++__success
++int syscall_ctx_unaligned_var_off_read(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++	volatile __u32 val;
++
++	off &= 0xfc;
++	off += 2;
++	p += off;
++	val = *(__u32 *)p;
++	(void)val;
 +	return 0;
 +}
 +
 +SEC("?syscall")
-+__failure __log_level(2)
-+__msg("variable ctx access var_off=(0x0; 0x4) disallowed")
-+int arg_tag_ctx_syscall_tailcall_var_off_bad(void *ctx)
++__description("syscall: unaligned write ctx with variable offset")
++__success
++int syscall_ctx_unaligned_var_off_write(void *ctx)
 +{
 +	__u64 off = bpf_get_prandom_u32();
 +	char *p = ctx;
 +
-+	off &= 4;
++	off &= 0xfc;
++	off += 2;
 +	p += off;
-+	bpf_tail_call(p, &syscall_prog_array, 0);
++	*(__u32 *)p = 0;
 +	return 0;
 +}
 +
+ SEC("?syscall")
+ __description("syscall: reject negative variable offset ctx access")
+ __failure __msg("min value is negative")
+@@ -398,6 +454,28 @@ int syscall_ctx_helper_fixed_off_write(void *ctx)
+ 	return bpf_probe_read_kernel(p, 4, 0);
+ }
+ 
 +SEC("?syscall")
-+__failure __log_level(2)
-+__msg("dereference of modified ctx ptr R1 off=8 disallowed")
-+int arg_tag_ctx_syscall_fixed_off_bad(void *ctx)
++__description("syscall: helper unaligned read ctx with fixed offset")
++__success
++int syscall_ctx_helper_unaligned_fixed_off_read(void *ctx)
 +{
 +	char *p = ctx;
 +
-+	p += 8;
-+	return subprog_ctx_tag(p);
++	p += 2;
++	return bpf_strncmp(p, 4, ctx_strncmp_target);
 +}
 +
 +SEC("?syscall")
-+__failure __log_level(2)
-+__msg("variable ctx access var_off=(0x0; 0x4) disallowed")
-+int arg_tag_ctx_syscall_var_off_bad(void *ctx)
++__description("syscall: helper unaligned write ctx with fixed offset")
++__success
++int syscall_ctx_helper_unaligned_fixed_off_write(void *ctx)
++{
++	char *p = ctx;
++
++	p += 2;
++	return bpf_probe_read_kernel(p, 4, 0);
++}
++
+ SEC("?syscall")
+ __description("syscall: helper read ctx with variable offset")
+ __success
+@@ -424,6 +502,34 @@ int syscall_ctx_helper_var_off_write(void *ctx)
+ 	return bpf_probe_read_kernel(p, 4, 0);
+ }
+ 
++SEC("?syscall")
++__description("syscall: helper unaligned read ctx with variable offset")
++__success
++int syscall_ctx_helper_unaligned_var_off_read(void *ctx)
 +{
 +	__u64 off = bpf_get_prandom_u32();
 +	char *p = ctx;
 +
-+	off &= 4;
++	off &= 0xfc;
++	off += 2;
 +	p += off;
-+	return subprog_ctx_tag(p);
++	return bpf_strncmp(p, 4, ctx_strncmp_target);
 +}
 +
- __weak int subprog_dynptr(struct bpf_dynptr *dptr)
- {
- 	long *d, t, buf[1] = {};
++SEC("?syscall")
++__description("syscall: helper unaligned write ctx with variable offset")
++__success
++int syscall_ctx_helper_unaligned_var_off_write(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off &= 0xfc;
++	off += 2;
++	p += off;
++	return bpf_probe_read_kernel(p, 4, 0);
++}
++
+ SEC("?syscall")
+ __description("syscall: helper read zero-sized ctx access")
+ __success
+@@ -466,6 +572,33 @@ int syscall_ctx_kfunc_var_off(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("?syscall")
++__description("syscall: kfunc unaligned access ctx with fixed offset")
++__success
++int syscall_ctx_kfunc_unaligned_fixed_off(void *ctx)
++{
++	char *p = ctx;
++
++	p += 2;
++	bpf_kfunc_call_test_mem_len_pass1(p, 4);
++	return 0;
++}
++
++SEC("?syscall")
++__description("syscall: kfunc unaligned access ctx with variable offset")
++__success
++int syscall_ctx_kfunc_unaligned_var_off(void *ctx)
++{
++	__u64 off = bpf_get_prandom_u32();
++	char *p = ctx;
++
++	off &= 0xfc;
++	off += 2;
++	p += off;
++	bpf_kfunc_call_test_mem_len_pass1(p, 4);
++	return 0;
++}
++
+ SEC("?syscall")
+ __description("syscall: kfunc access zero-sized ctx")
+ __success
 -- 
 2.52.0
 
