@@ -1,120 +1,97 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535FD3947AC
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 18:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D416E39659F;
+	Mon,  6 Apr 2026 19:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775501917; cv=none; b=NyQWQOhXS9/ETVReErZSozHvWZLIru2IMHWKJ3mhMnCMgOVv0erBhiqJgFLC3imBMKkAIYJC+l1CaiILx8GE7iph9JNYgPeBkQJHjz2ZBGw4HwdIIMpV6l23v2QVVOSMKlHcmNTdECh/zf3h6/DL7Ea7DS6WXTtH6GU+Hsp5MDU=
+	t=1775502830; cv=none; b=WLfNM96t0qx7UKN6mlgjyiAvIkLI3x95HayG4VRBH0rWG8A+W3f724tth+0MeAUo/cc7SvYgBmTf3fELRwQ4KDaSQXIVE70HyuNrcVjKGhuyCY9y59YXPqW+GaCqRbT4kvdqbOiCjjd/BiP5PL9NxV0MLICOSRO3+aLFGFFJKQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775501917; c=relaxed/simple;
-	bh=hgw9sRfXdg6RT/7PmSCdsEyl8RCMBqe7LGIoW2bxXyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fHoksDR3tJb8UPvZduEGvD+m+O5ZZlDSj7W3rDECnrXECWpNR+7DryFCvqMuVIqDSSwwo/nUgykBavOGa9db2CkaLPbLVzI6vAgmcFN/qz4s17rFoBdIUIa+zur1iogLVf/1h/1RsMuz4VsKi/cuh/05tiZy6QsH1ZkEd9hxqcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ah/GrS9C; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775502830; c=relaxed/simple;
+	bh=QaqzdCmNeCrAhm1LRm0CqpLr2/dvKjSnKZXyn/9GohU=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=utJKwTOGXj6L1ijJtPAMu6qGfxv5ovYRTtPzpx/zxK4isVVDvmfVelbouARj/0U9M7PuUcI1xpPBljBJtawA7/MAhzK4NZi5EXljTJFGCJQrsL9rM2zLiaqIh98DY9F6kuz6OxJqUhDt1F3EzL+B0M2iCQiwmYpil+BobvSvGIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=Jn7UFP/I; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ah/GrS9C"
-Date: Mon, 6 Apr 2026 11:58:06 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775501903;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Mt8iv95JuZBHekXx21skkTZqy3R/vFa6V8nPNb1+4yc=;
-	b=ah/GrS9CgjCDFSW5REb/RKHUgvKDSzcv9kfWxpnqA1yjmqzr4DJceJKdIJ41Rgn/Af8fVu
-	wb2T+aZu/39nV/l1Bfny1frTN7v1uAdhcmk6ObZ7wcV+4Pkjm7GQFK8Yivf1FfycJRHbVy
-	ttRj6Hjs+2K/pctTC2NdmcVIt2rVR04=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
-	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
-	syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3] bpf: reject short IPv4/IPv6 inputs in
- bpf_prog_test_run_skb
-Message-ID: <202646183934.lJx5.martin.lau@linux.dev>
-References: <20260402160147.215499-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="Jn7UFP/I"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5CAB0A588B;
+	Mon,  6 Apr 2026 21:13:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1775502826; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=uVV2KW2xgBvLgMVhejwFXDN1mbWxSYXamGXWza39rVA=;
+	b=Jn7UFP/IPZrV2HA7qyedqJFoZsZwKQP47IoCc+HAOgyfbSc9fEKK9lO1Gj9sQyr/lEBe1c
+	rgZQgaCFL94ZUwW15o96PPPRZ9twjLyXZh03UAr6QWoHLamN/Cbcq0mH61qtmkqk/JjmbF
+	jh1uJf1UTzEVrfrs6gAutOVSRbCf6StjRNu7F0W5HfyTWsBoXGEJn/KN0wMlKYdisBzuEh
+	b7w8T0Qh081GbXeBYeF7YBSw+pm9kBpz9NTatkPHkKkyDiNIUjnKSqMpXUnxT5U3htDZcH
+	QfTPc0GfdRRz1Kw3ym+SBUjwEvyXggUCwuqTslLOkG/5fxJ5LBTJTH3KyIRIIg==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260402160147.215499-1-sun.jian.kdev@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Date: Mon, 06 Apr 2026 21:13:43 +0200
+From: Nicolai Buchwitz <nb@tipi-net.de>
+To: Mark Bloch <mbloch@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Dragos Tatulea <dtatulea@nvidia.com>,
+ Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Saeed Mahameed <saeedm@nvidia.com>, Leon
+ Romanovsky <leon@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Cosmin Ratiu <cratiu@nvidia.com>, Simon Horman
+ <horms@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, Lama Kayal
+ <lkayal@nvidia.com>, Michal Swiatkowski
+ <michal.swiatkowski@linux.intel.com>, Carolina Jubran <cjubran@nvidia.com>,
+ Nathan Chancellor <nathan@kernel.org>, Daniel Zahka
+ <daniel.zahka@gmail.com>, Rahul Rameshbabu <rrameshbabu@nvidia.com>, Raed
+ Salem <raeds@nvidia.com>, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Gal Pressman <gal@nvidia.com>
+Subject: Re: [PATCH net-next V2 4/5] net/mlx5e: XDP, Use a single linear page
+ per rq
+In-Reply-To: <e0ac9755-fd49-4620-92ce-0f5e4203a95e@nvidia.com>
+References: <20260403090927.139042-1-tariqt@nvidia.com>
+ <20260403090927.139042-5-tariqt@nvidia.com> <adH5yAsPJ8rNgT0k@x13>
+ <20260406084344.5d315f01@kernel.org>
+ <e0ac9755-fd49-4620-92ce-0f5e4203a95e@nvidia.com>
+Message-ID: <d7c247276e39d88e1cd9d86e21c74779@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Apr 03, 2026 at 12:01:47AM +0800, Sun Jian wrote:
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 178c4738e63b..300e2bfc5a62 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1120,19 +1120,23 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->  
->  	switch (skb->protocol) {
->  	case htons(ETH_P_IP):
-> -		sk->sk_family = AF_INET;
-> -		if (sizeof(struct iphdr) <= skb_headlen(skb)) {
-> -			sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
-> -			sk->sk_daddr = ip_hdr(skb)->daddr;
-> +		if (skb_headlen(skb) < sizeof(struct iphdr)) {
-> +			ret = -EINVAL;
-> +			goto out;
->  		}
-> +		sk->sk_family = AF_INET;
-> +		sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
-> +		sk->sk_daddr = ip_hdr(skb)->daddr;
->  		break;
->  #if IS_ENABLED(CONFIG_IPV6)
->  	case htons(ETH_P_IPV6):
-> -		sk->sk_family = AF_INET6;
-> -		if (sizeof(struct ipv6hdr) <= skb_headlen(skb)) {
-> -			sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
-> -			sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
-> +		if (skb_headlen(skb) < sizeof(struct ipv6hdr)) {
-> +			ret = -EINVAL;
-> +			goto out;
->  		}
-> +		sk->sk_family = AF_INET6;
-> +		sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
-> +		sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
->  		break;
->  #endif
->  	default:
-> diff --git a/tools/testing/selftests/bpf/prog_tests/empty_skb.c b/tools/testing/selftests/bpf/prog_tests/empty_skb.c
-> index 438583e1f2d1..d53567e9cd77 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/empty_skb.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/empty_skb.c
-> @@ -12,6 +12,8 @@ void test_empty_skb(void)
->  	struct bpf_program *prog;
->  	char eth_hlen_pp[15];
->  	char eth_hlen[14];
-> +	char ipv4_eth_hlen[14];
-> +	char ipv6_eth_hlen[14];
+On 6.4.2026 18:31, Mark Bloch wrote:
+> On 06/04/2026 18:43, Jakub Kicinski wrote:
+>> On Sun, 5 Apr 2026 08:08:06 +0200 Dragos Tatulea wrote:
+>>> sashiko says:
+>> 
+>> Thanks a lot for reviewing the review! It takes a lot of maintainer 
+>> time
 
-The eth_hlen_pp and eth_hlen needs to memset zero now.
+> [...]
 
-Instead of adding two more ethhdrs, just reuse the current eth_hlen and
-define it as 'struct ethhdr eth_hlen;' instead of a char array.
-Add 'h_proto' to the anonymous 'struct { } tests[]'.  Initialize
-the eth_hlen.h_proto based on the tests[i].h_proto.
+> 
+> For example:
+> 
+> “Before posting, authors could run a recommended baseline of review 
+> tools,
+> where available, to catch obvious issues early. During review, tools 
+> such
+> as review-prompts and Sashiko may be used to assist the reviewer.”
+> 
 
-Also, this test does not actually reproduce the reading uninit memeory.
-It needs a bpf prog to actually trigger it by calling bpf_skb_adjust_room()
-based on the report in the "Closes" link. The test should be able
-to trigger it without the change in test_run.c
+There is already https://netdev-ai.bots.linux.dev/ai-local.html which I 
+found really helpful.
+If this is still the preferred approach, I could draft a patch to add it 
+to Documentation/process/maintainer-netdev.rst
 
-The ai-review has flagged again that it is missing a "Fixes" tag. This
-probably started since the bpf_skb_adjust_room helper was introduced.
+> Mark
 
-The selftests should also be in a separate patch 2 following the patch 1
-changes in test_run.c.
-
-pw-bot: cr
+Thanks
+Nicolai
