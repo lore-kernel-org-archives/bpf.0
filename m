@@ -1,275 +1,161 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f66.google.com (mail-oo1-f66.google.com [209.85.161.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD62396593;
-	Mon,  6 Apr 2026 19:42:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AC3397682
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 19:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775504535; cv=none; b=N+zj012uJ1oOJRTKaqnoCj9lU/+kO6gcttjb67QnUWYIwYues/68eIKPX/areXhfIGVO6EriF3MjvGfDxE/wcUAsF+nVU4L/rsIvpZGLQt58Nuaix9sKwe6SIDJhoscr8UTtdEf8jOYTS8FIrK/teTIyHYHLJnyjEaNWgRhC97I=
+	t=1775504647; cv=none; b=M5mnlCj1wPkEeHoIYbffL90Btf4AIeIMgWda8P4WoPO4UVkabbnz5YmhN+d2Kmf8hM0IEK33YXzo5vmZXRbw93+XyDuBvwulk8qsdukg7OZ1rhi1DpPycob0cT5ImOa9ss+IW7geJ0MofPy6XRis0/CjXE9zZ6c+axx0E3adNXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775504535; c=relaxed/simple;
-	bh=0Ms61pnC2sFLJKN1U4YtyLlNwKvTQDfUnpsBuhHpKkk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MTXjCwhVnzQ5+nvxuH5LPdtW2XlDvculxooxhmiPY+57YVWPYR8Mnd32XQXrURm0irjrU6L5ug7Fa+8FhVaXwOxE2opPXwbqb2u9PXdVtMGOLTqUj1glTEFEG+5SE5tKxJrb2G9u0eVc1Eiz9YkYXykEObdqADZ4NhS19yztQMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=cOP72Rjb; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1775504647; c=relaxed/simple;
+	bh=JWNFnlyWu1XqMiB2DvWBa0jKLy5SRCtqfJdBBfqSAas=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mtE5RFM9tqyTeWgAk3Y3pc2HHxxwKgZrRyUP0xynYE1kWPgDar7qusKRD/Ee2A50FzVev1Z2qs3u6QaRZbURm/nzXG6e0uyZ5gxIhEtPIFhfjdav/ucf6Bxs2YDrEk1GMkVnWzS9HNShvYGVnpA2x3lF5pEH5tX6Yls1VqmK+yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eClbjbOr; arc=none smtp.client-ip=209.85.161.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="cOP72Rjb"
-Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 636GUoOc640908;
-	Mon, 6 Apr 2026 19:32:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=lQ9sKD5uXcXmFJrPuxK5nVPWBygGLM7uXdcbr7DE/xE=; b=cOP7
-	2RjbzwS6SiFHvLC/lhvXIZkYrKfwJ8Id4FvmPqayV8YZjGkwK8sofmOsgcOBpZqR
-	Y9p0Zl8F2lAOiCeT2Vehc9K2bNC5rcmGUmSst3h37YTabcm6gii7vfHKadaFNWS+
-	I9p/aXiTKJxpbtQ2DKrSwalcYVPtefAKBdJx84MdnmTRnASMuqk+f4Vp9MytYdR/
-	YbFPPvH3x5fmPe3KJbhcZkJ8ILfUtoqNx3OKHMsuJsI8PjU8qz2IeEP3bo8zPrFW
-	FBQU9opr3j4HLz1Q7L2W1DjAsLkgXvKGGcRiCGbOtsx1gnI7uZi5/lqDhlvrcC2C
-	ic0J+DVA5Qe0iwo5gg==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4dbdewqjmr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 06 Apr 2026 19:32:03 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 6 Apr 2026 19:32:01 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <jolsa@kernel.org>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <ihor.solodrai@linux.dev>, <emil@etsalapatis.com>,
-        <linux-open-source@crowdstrike.com>
-Subject: [RFC PATCH bpf-next v5 2/2] selftests/bpf: Add tests for duplicate kprobe symbol handling
-Date: Mon, 6 Apr 2026 15:31:58 -0400
-Message-ID: <20260406193158.754498-3-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260406193158.754498-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260406193158.754498-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eClbjbOr"
+Received: by mail-oo1-f66.google.com with SMTP id 006d021491bc7-6841e6a5e51so1015614eaf.3
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 12:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775504645; x=1776109445; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qWPrO4n7z3Vx5b4K7STUdMbAzzPkLY+HsPi1F88RPSg=;
+        b=eClbjbOrbnIqPh5vsHY+uQW+4DEAU8unlak/iHj/miL0FpppCnplHZ58MnrFRw5LD2
+         nhyLJG2ntP2Twpeei0zeW6um8RSLKVZUUS96yV3iavuYDK5wBEJCGBs1D+tuc3H3/3lg
+         Brd9vSqiHhabm4r8KnuajYFCzR/oYE/OemrTAYMXBHK/GnzZ/vBpcO4AF9fbthuKi/qs
+         gWmKD5pqkC+0sjGoe2FKahsq/W2QhOQX1SxqYUwqVLrXL/7DuJ5LEE36u4nys8+Ccmhz
+         PqtYwM9WWihYS+qebrkFCqyxn2M0HU4SBAn97DdaHw9udVo6/W3XGAM8+8P7p6s1ofVW
+         9UTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775504645; x=1776109445;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qWPrO4n7z3Vx5b4K7STUdMbAzzPkLY+HsPi1F88RPSg=;
+        b=Plra6c37AQTZiE0vNm0HUyyKFY9lvP2ecQGLX0Sp2CCKjc3pXxyns9/WyD8y5agRFo
+         Qa2OqYIqzgMP5u3fQnhBhnZ1WFsJIF0hKwZEQRxzYKthdxNImFNkz/Ayd9ifXt/VDZkV
+         8rtPKBtByBapIKLol9RZFxYRiPXX4uT8lefb5D1DP+7IBg4lLPsTijqLKjFfPFEqagHO
+         cCFDlOKQv4he43ZwNo2XcbhqsjmLi0/H2xFeQhTYxoC8WGOjRvqlydkWPEtcHjg4OJDc
+         Ni3j/DLitCyrpJNxouZ43Q59TBOP53CJTV6KnV7DyzHmpBNtEMTua2iIw83wx5LdkUH4
+         EhZQ==
+X-Gm-Message-State: AOJu0YwPv5tAbQ9eUoyIg92jFWQNJBHnmbXmsTw1JqkfkORHQsG/u0vC
+	pts/oU6wTqqHWHXyGTCTAEFahdujtZXq+czAOW6iGa9FaGBkpxksqILahw0QRwif
+X-Gm-Gg: AeBDiev7a6C5FJChWdLBi5tNarmKOYL5E8BdnarTvBPDyOss/UsEM0nY+NWkeNvFmaW
+	woRWF50ez8Nelve93SN6or2wkZONxxEOSHjrz6bxdlp7A2TV9/4FhN5AivRXavYKjuLGASt7v1P
+	Itr/vvZWKGAeNeyA+imI6rCSbY9T23y3iRsuM8FUo6pxsYltu1uvUhBTSCXxT6dUCKNe6LS3bHI
+	R850446hTNSNfLVTW5BRnxa0MvXfh4ak8ujZDVC///bBXWOO/zFz26dahRYwu3aHCa0/qb3M0Zn
+	mkJjnmp9Pk+s3M0Wgtvn54C7KrQSzoItVou3ANXDhvBiVES5SISUSiAdHiHdCiFQQ8oRrax4c3K
+	zT0wM6sMshzPxjLSZRY7ji4Us1W50M+A90kC5hZrLEka6Jmu2WYU8GLzMg8Fud4BelL6BTvLWlQ
+	G9aq2Z5gRAU3SxQ94Ljjvc8goBfuOF0oBc0zImY4Z0MzkU
+X-Received: by 2002:a05:6820:81c4:b0:67c:27a7:8c4b with SMTP id 006d021491bc7-682203485c3mr8410718eaf.54.1775504644808;
+        Mon, 06 Apr 2026 12:44:04 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4a::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-680a8d1d2cfsm8808318eaf.13.2026.04.06.12.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2026 12:44:04 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
+	Dan Schatzberg <dschatzberg@meta.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v5 0/7] Allow variable offsets for syscall PTR_TO_CTX
+Date: Mon,  6 Apr 2026 21:43:54 +0200
+Message-ID: <20260406194403.1649608-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2874; h=from:subject; bh=JWNFnlyWu1XqMiB2DvWBa0jKLy5SRCtqfJdBBfqSAas=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfMKD2tGb6xKRn+o5MfL34O3ak133hDWVrR4jvrmL8xnw1jV r23vKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwES6zzIy7LM4UlKkVTxf4N/mw6Y9Ct U/5HZyPW9jvFQ6X/BOtaDiBkaGt4oFF5neTJxaaSOcu6/43dt/W4Nfqh9qfL3HP7qSQ/g8OwA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Authority-Analysis: v=2.4 cv=ZdoQ98VA c=1 sm=1 tr=0 ts=69d40a33 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22 a=R_n4Uisa8axJ7jemP0ek:22
- a=pl6vuDidAAAA:8 a=hnS3fS_MpbIQOffReb4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: fzIDAaplwd-vT1-CPUgGhKPYvDMhRQVu
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA2MDE5MSBTYWx0ZWRfX1CSQGFw+m9ll
- 16Xp+S3Lfezmwu2iTi18VtsaPXRrJrykM7g4uFEHg8u7e2L0S9Kt3Fm5mDLHtxSTEYnVB5B1s1D
- DUQE3N+EjtH/nk5lYU+9Tl/D+wUkd50HnJBWJ5+GaLnl33CyCGqIFo+rgyUjHjAToUlIEQN6NR/
- u0rEj7GFjn6L1Vs7tMgAAjo+PtNNodYFzpSI8N40Cv7Mg81ehYW0KxR9YoX8aMYHAeMl/FdHEi1
- FoEvFH6Ny1gAfpkQm9LbJ5dDbF32Bgs/QPOFWI33m8ArgDHoKXN+V9zpcGyi8aeH+ANnI92zcu+
- CzEiItD1SaFJK26PFv/gFbkh8/2wZJ1vPujHfnJ560CtRV4Z/zVnXIK6L4M0QDXiuwixj0X8I33
- 5M+/kRPJcDeV/r+dXLE8XsFPZNBQ8BQwfgpeq/kj4MP8RFR2DLbisX6ToE0UcHcE0KmNxMM5GXC
- 6PAUcGFEnuCTVXOFqGQ==
-X-Proofpoint-GUID: fzIDAaplwd-vT1-CPUgGhKPYvDMhRQVu
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11751
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 spamscore=0 priorityscore=1501 clxscore=1011
- lowpriorityscore=0 bulkscore=0 impostorscore=0 suspectscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604060191
 
-Add bpf_testmod_dup_sym.ko test module that creates a duplicate
-nanosleep symbol to test kprobe attachment when a module exports
-a symbol with the same name as a vmlinux symbol.
+Enable pointer modification with variable offsets accumulated in the
+register for PTR_TO_CTX for syscall programs where it won't be
+rewritten, and the context is user-supplied and checked against the max
+offset. See patches for details. Fixed offset support landed in [0].
 
-Add test_attach_probe_dup_sym() to attach_probe tests that loads
-the duplicate symbol module and validates kprobe attachment succeeds
-across all four attach modes: default, legacy, perf_event_open, and
-link — relying on the kernel fix to vmlinux-prefer unqualified symbol
-resolution.
+By combining this set with [0], examples like the one below should
+succeed verification now.
 
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- tools/testing/selftests/bpf/Makefile          |  2 +-
- .../selftests/bpf/prog_tests/attach_probe.c   | 63 +++++++++++++++++++
- .../testing/selftests/bpf/test_kmods/Makefile |  2 +-
- .../bpf/test_kmods/bpf_testmod_dup_sym.c      | 48 ++++++++++++++
- 4 files changed, 113 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
+  SEC("syscall")
+  int prog(void *ctx) {
+	int *arr = ctx;
+	int i;
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index f75c4f52c028..cceb3fcc97a2 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -121,7 +121,7 @@ TEST_PROGS_EXTENDED := \
- 	ima_setup.sh verify_sig_setup.sh
- 
- TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
--	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-+	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko bpf_testmod_dup_sym.ko
- TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
- 
- # Compile but not part of 'make run_tests'
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 12a841afda68..04b177ee3adf 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -4,6 +4,7 @@
- #include "test_attach_probe_manual.skel.h"
- #include "test_attach_probe.skel.h"
- #include "kprobe_write_ctx.skel.h"
-+#include "testing_helpers.h"
- 
- /* this is how USDT semaphore is actually defined, except volatile modifier */
- volatile unsigned short uprobe_ref_ctr __attribute__((unused)) __attribute((section(".probes")));
-@@ -197,6 +198,59 @@ static void test_attach_kprobe_legacy_by_addr_reject(void)
- 	test_attach_probe_manual__destroy(skel);
- }
- 
-+/* Test kprobe attachment with duplicate symbols.
-+ * This test loads bpf_testmod_dup_sym.ko which creates a duplicate
-+ * __x64_sys_nanosleep symbol. The kernel fix should prefer the vmlinux
-+ * symbol over the module symbol when attaching kprobes.
-+ */
-+static void test_attach_probe_dup_sym(enum probe_attach_mode attach_mode)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct bpf_link *kprobe_link, *kretprobe_link;
-+	struct test_attach_probe_manual *skel;
-+	int err;
-+
-+	/* Load module with duplicate symbol */
-+	err = load_module("bpf_testmod_dup_sym.ko", false);
-+	if (!ASSERT_OK(err, "load_bpf_testmod_dup_sym")) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_dup_sym_open_and_load"))
-+		goto unload_module;
-+
-+	/* manual-attach kprobe/kretprobe with duplicate symbol present */
-+	kprobe_opts.attach_mode = attach_mode;
-+	kprobe_opts.retprobe = false;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						      SYS_NANOSLEEP_KPROBE_NAME,
-+						      &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_dup_sym"))
-+		goto cleanup;
-+	skel->links.handle_kprobe = kprobe_link;
-+
-+	kprobe_opts.retprobe = true;
-+	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+							 SYS_NANOSLEEP_KPROBE_NAME,
-+							 &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe_dup_sym"))
-+		goto cleanup;
-+	skel->links.handle_kretprobe = kretprobe_link;
-+
-+	/* trigger & validate kprobe && kretprobe */
-+	usleep(1);
-+
-+	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_dup_sym_res");
-+	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_dup_sym_res");
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
-+unload_module:
-+	unload_module("bpf_testmod_dup_sym", false);
-+}
-+
- /* attach uprobe/uretprobe long event name testings */
- static void test_attach_uprobe_long_event_name(void)
- {
-@@ -559,6 +613,15 @@ void test_attach_probe(void)
- 	if (test__start_subtest("kprobe-legacy-by-addr-reject"))
- 		test_attach_kprobe_legacy_by_addr_reject();
- 
-+	if (test__start_subtest("dup-sym-default"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_DEFAULT);
-+	if (test__start_subtest("dup-sym-legacy"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_LEGACY);
-+	if (test__start_subtest("dup-sym-perf"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_PERF);
-+	if (test__start_subtest("dup-sym-link"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_LINK);
-+
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
- 	if (test__start_subtest("kprobe-sleepable"))
-diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-index 63c4d3f6a12f..938c462a103b 100644
---- a/tools/testing/selftests/bpf/test_kmods/Makefile
-+++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-@@ -8,7 +8,7 @@ Q = @
- endif
- 
- MODULES = bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
--	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-+	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko bpf_testmod_dup_sym.ko
- 
- $(foreach m,$(MODULES),$(eval obj-m += $(m:.ko=.o)))
- 
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
-new file mode 100644
-index 000000000000..0e12f68afe3a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 CrowdStrike */
-+/* Test module for duplicate kprobe symbol handling */
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+
-+/* Duplicate symbol to test kprobe attachment with duplicate symbols.
-+ * This creates a duplicate of the syscall wrapper used in attach_probe tests.
-+ * The libbpf fix should handle this by preferring the vmlinux symbol.
-+ * This function should NEVER be called - kprobes should attach to vmlinux version.
-+ */
-+#ifdef __x86_64__
-+int __x64_sys_nanosleep(void);
-+noinline int __x64_sys_nanosleep(void)
-+#elif defined(__s390x__)
-+int __s390x_sys_nanosleep(void);
-+noinline int __s390x_sys_nanosleep(void)
-+#elif defined(__aarch64__)
-+int __arm64_sys_nanosleep(void);
-+noinline int __arm64_sys_nanosleep(void)
-+#elif defined(__riscv)
-+int __riscv_sys_nanosleep(void);
-+noinline int __riscv_sys_nanosleep(void)
-+#else
-+int sys_nanosleep(void);
-+noinline int sys_nanosleep(void)
-+#endif
-+{
-+	WARN_ONCE(1, "bpf_testmod_dup_sym: dummy nanosleep symbol called - this should never execute!\n");
-+	return -EINVAL;
-+}
-+
-+static int __init bpf_testmod_dup_sym_init(void)
-+{
-+	return 0;
-+}
-+
-+static void __exit bpf_testmod_dup_sym_exit(void)
-+{
-+}
-+
-+module_init(bpf_testmod_dup_sym_init);
-+module_exit(bpf_testmod_dup_sym_exit);
-+
-+MODULE_AUTHOR("Andrey Grodzovsky");
-+MODULE_DESCRIPTION("BPF selftest duplicate symbol module");
-+MODULE_LICENSE("GPL");
+	bpf_for(i, 0, 100)
+		arr[i] *= i;
+
+	return 0;
+  }
+
+  [0]: https://lore.kernel.org/bpf/20260227005725.1247305-1-memxor@gmail.com
+
+Changelog:
+----------
+v4 -> v5
+v4: https://lore.kernel.org/bpf/20260401122818.2240807-1-memxor@gmail.com
+
+ * Use is_var_ctx_off_allowed() consistently.
+ * Add acks. (Emil)
+
+v3 -> v4
+v3: https://lore.kernel.org/bpf/20260318103526.2590079-1-memxor@gmail.com
+
+ * Drop comment around describing choice of fixed or variable offsets. (Eduard)
+ * Simplify offset adjustment for different cases. (Eduard)
+ * Add PTR_TO_CTX case in __check_mem_access(). (Eduard)
+ * Drop aligned access constraint from syscall_prog_is_valid_access().
+ * Wrap naked checks for BPF_PROG_TYPE_SYSCALL in a utility function. (Eduard)
+ * Split tests into separate clean up and addition patches. (Eduard)
+ * Remove CAP_SYS_ADMIN changes. (Eduard)
+ * Enable unaligned access to syscall ctx, add tests.
+ * Add more tests for various corner cases.
+ * Add acks. (Puranjay, Mykyta)
+
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260318075133.1031781-1-memxor@gmail.com
+
+ * Prevent arg_type for KF_ARG_PTR_TO_CTX from applying to other cases
+   due to preceding fallthrough. (Gemini/Sashiko)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260317111850.2107846-2-memxor@gmail.com
+
+ * Harden check_func_arg_reg_off check with ARG_PTR_TO_CTX.
+ * Add tests for unmodified ctx into tail calls.
+ * Squash unmodified ctx change into base commit.
+ * Add Reviewed-by's from Emil.
+
+Kumar Kartikeya Dwivedi (7):
+  bpf: Support variable offsets for syscall PTR_TO_CTX
+  bpf: Enable unaligned accesses for syscall ctx
+  selftests/bpf: Convert ctx tests from ASM to C
+  selftests/bpf: Add syscall ctx variable offset tests
+  selftests/bpf: Test modified syscall ctx for ARG_PTR_TO_CTX
+  selftests/bpf: Add tests for unaligned syscall ctx accesses
+  selftests/bpf: Add tests for syscall ctx accesses beyond U16_MAX
+
+ kernel/bpf/syscall.c                          |   3 +-
+ kernel/bpf/verifier.c                         | 103 +--
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +-
+ .../selftests/bpf/progs/verifier_ctx.c        | 591 ++++++++++++++++--
+ .../bpf/progs/verifier_global_subprogs.c      |  95 ++-
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
+ 6 files changed, 703 insertions(+), 93 deletions(-)
+
+
+base-commit: a1aa9ef47c299c5bbc30594d3c2f0589edf908e6
 -- 
-2.34.1
+2.52.0
 
