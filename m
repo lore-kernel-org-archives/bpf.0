@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0D514B950;
-	Mon,  6 Apr 2026 01:50:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4C31DFDA1;
+	Mon,  6 Apr 2026 02:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775440236; cv=none; b=PA/6pMxaDm+hhcWBdl82QJehztkv/uKuhARFi1ROlI3I56Qk/W2prQdMvaZV/AuRjySsVIxgp+gHmfHvlxH20HpcxZrtYVUrb4kr1lzoPPHJDKt4wnCSQuvtyC0NRCIDqZDk2DTffH5byY+sSZuyF4+AJgIypcU3KshQ9SxlADE=
+	t=1775440826; cv=none; b=BKQbOUlGW5w7ijxu0vVORts/SVILNsIuS7q6wXomu5RmSEtan+tf8ul5XeW3ClDAf0Ihyy/Ucd/11fuGqZPSYukdboAhTrdpOHT0h9v9iDdoxN6wvM8SsC0zFCgcwqoJ1iSOhjA+ZCHFjyicK5VhS0RN1ywKKnnLVE0e9w1JuF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775440236; c=relaxed/simple;
-	bh=g8BnwzzCeYyGFbhSoR1n1j31GMxfH/XtciAEFACW9UE=;
+	s=arc-20240116; t=1775440826; c=relaxed/simple;
+	bh=cRGtH3iGiqJC3Zv3qXzjSRVQ3Q3fg92M0qSmevXaDu8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ABWMNlKgVMEGtd8GCMSQRS6fXbKZbDEufdaS+Mb7oykGsKS2Tx7CjZ5SeRynDfwEvUpuiAn2bVnHZzIJxtiud1XsdAaghoEHZ2ZF1w5HhsDTMhUTXQUPx/2eFztJdPD+haHjvASzIVZz8TqKmzbnzx8deoSXpnw91ZjebEq67cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e2qmDYtM; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=D/GnoYlyKNCApcfpGYHAh+3UDv2WGAKRESH08atCP0JTzCRyq75h9xPNtqCokhaNq+K4X23G0OcpcB4Du8dBKBf0t9VVCLYDHqwWYI6NecBsFnBy9qQ15WgqhBuZpfpuics2ICtKZi8wXwWeGYlz0dcWLLDVbcTB8FGPiOIoQfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d5WGEiox; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e2qmDYtM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D91C19425;
-	Mon,  6 Apr 2026 01:50:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d5WGEiox"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC008C116C6;
+	Mon,  6 Apr 2026 02:00:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775440235;
-	bh=g8BnwzzCeYyGFbhSoR1n1j31GMxfH/XtciAEFACW9UE=;
+	s=k20201202; t=1775440825;
+	bh=cRGtH3iGiqJC3Zv3qXzjSRVQ3Q3fg92M0qSmevXaDu8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=e2qmDYtMHDWlC7NcVwyzl3UzUudLDWmeTz0WzynM85lbgP6Z62Fn56J2kDEa6lsrI
-	 HMOxbzVj9/wEqvbwPpTV0ndI3mr5aa/q9TyqVqG49Z/4P0lP21gGR7DMZ0V1V295XM
-	 aAVIAOAxopzvMTpDjWSMgBIvaCqFwKnw7dKSbz8LR90k+b7m1Wx40fy+8/kRWB6A0P
-	 PXvptR8IyQZnRVLbLQJXlIg4HBNSEeGVYT/Eub4/ewT8vElcPdIlwbarqS4Pp6uu6E
-	 gr7pO/qcd3Vzsqe04/kdyThWMmHGdxmgpC+fZSFOm6XqFd8WtoCgCjWMw3J3iQt8Ud
-	 hUjoAgpdBPboA==
+	b=d5WGEioxIIKQvKpB5Y/eerKAfo2wrKFQLI9v1+1FIxO/hCseY2vjQmR2C3bnUFisA
+	 Uo3rJpcqYtyh+7k84k/95NdrivsLb2VcNNZqk3eQpfFx1gz7D9UD9qeEPROMnT7Sxn
+	 RduMiy4YqMJdDgPtcxtYuw9d5KU+nzabh9dWQrvExNSc4UkQM2PZcDnJpix1QEwpJZ
+	 k9uaeZafPjxng04cw47SMhSmwLTvE2zQ+hEXJNrwm+JAhGvqcGIr5mCSnm/W7bLSb5
+	 GRYRE6luEv5a/dh6RG/yw8AdCEy6Rvg6DjudlLWz6ZL1TJu6fqQ3+2aUIpsGKZ0PMd
+	 NHLCS1T1SIQ3A==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CE2E3809A22;
-	Mon,  6 Apr 2026 01:50:16 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CF133809A22;
+	Mon,  6 Apr 2026 02:00:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,43 +37,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: remove unused toggle in tc_tunnel
+Subject: Re: [PATCH bpf] bpf: Fix stale offload->prog pointer after constant
+ blinding
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177544021528.2520976.13295325774547515219.git-patchwork-notify@kernel.org>
-Date: Mon, 06 Apr 2026 01:50:15 +0000
-References: <20260403-tc_tunnel_cleanup-v1-1-4f1bb113d3ab@bootlin.com>
-In-Reply-To: <20260403-tc_tunnel_cleanup-v1-1-4f1bb113d3ab@bootlin.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org,
-	=?utf-8?q?otlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+ <177544080529.2523223.7238691313202506498.git-patchwork-notify@kernel.org>
+Date: Mon, 06 Apr 2026 02:00:05 +0000
+References: <tencent_BCF692F45859CCE6C22B7B0B64827947D406@qq.com>
+In-Reply-To: <tencent_BCF692F45859CCE6C22B7B0B64827947D406@qq.com>
+To: MingTao Huang <1037827920@qq.com>
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
- thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+ bpf@vger.kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ linux-kernel@vger.kernel.org, mintaohuang@tencent.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 03 Apr 2026 09:52:06 +0200 you wrote:
-> tc_tunnel test is based on a send_and_test_data function which takes a
-> subtest configuration, and a boolean indicating whether the connection
-> is supposed to fail or not. This boolean is systematically passed to
-> true, and is a remnant from the first (not integrated) attempts to
-> convert tc_tunnel to test_progs: those versions validated for
-> example that a connection properly fails when only one side of the
-> connection has tunneling enabled. This specific testing has not been
-> integrated because it involved large timeouts which increased quite a
-> lot the test duration, for little added value.
+On Thu,  2 Apr 2026 20:18:50 +0800 you wrote:
+> From: MingTao Huang <mintaohuang@tencent.com>
+> 
+> When a dev-bound-only BPF program (BPF_F_XDP_DEV_BOUND_ONLY) undergoes
+> JIT compilation with constant blinding enabled (bpf_jit_harden >= 2),
+> bpf_jit_blind_constants() clones the program. The original prog is then
+> freed in bpf_jit_prog_release_other(), which updates aux->prog to point
+> to the surviving clone, but fails to update offload->prog.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] selftests/bpf: remove unused toggle in tc_tunnel
-    https://git.kernel.org/bpf/bpf-next/c/f254fb58dde3
+  - [bpf] bpf: Fix stale offload->prog pointer after constant blinding
+    https://git.kernel.org/bpf/bpf-next/c/a1aa9ef47c29
 
 You are awesome, thank you!
 -- 
