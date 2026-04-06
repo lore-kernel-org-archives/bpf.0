@@ -1,177 +1,393 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013001.outbound.protection.outlook.com [40.93.196.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390F538B15D;
-	Mon,  6 Apr 2026 16:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682F138AC7C
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 16:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775493077; cv=fail; b=Qmtkb6R3ASLTNI37KMqNeTT6qwjjvnnw0ujjwE/0MTo/m0K14cNBTrHP6lYX1/gRPTV7ZjESanOrWh1JZTHsMFgt2x6hsM6JIGWiYtAdXlYZBCDrjMKWmvhK2tMS87LQB5ECI6naHpaqqlxwlGFupeudy3+uDTBlCmWoMM9SNtY=
+	t=1775494050; cv=pass; b=cgwosHfA/r68bX0seN/vmjoiZxf1phdajXfk8Z+pODh5gjM6+Xzp2ZIVeV+3afdXoR3oA1vdbN+BS5d+z0UIxrno/fpgpQeLo4v4SaHoB4cl9kr6KLY7j1eaoF+QALquKiqOjUiYLu+UFwYz5kvpKS0jbBp+kPokSw5XlVETo0g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775493077; c=relaxed/simple;
-	bh=atBguiDEKUomnGxYCdsJkRRZktKw+Y1iXzQjy+QoW88=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XK9DsCs1JMKUePLhzB19va9URf6iVShx5eNpUSoi9SxBdW9tTkQW252wLjwSL+OeRuGAg3dND8ip3clN0E+akZViT5MWdSG5z+i8RNfiCoN0lYrRi1sbTxI30v50RvGMR9TamK234HFZUhZpTTqDQLbyVuHiRap1mOVCy0I54yI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UV9HwU4Z; arc=fail smtp.client-ip=40.93.196.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1775494050; c=relaxed/simple;
+	bh=JEheAmjH7txXoyWWdiuTW//UqfiWfhwwACMbEcrWJ/4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S5VIf9A3TBo2d8KlqK2HN0zeGkUjTm07H0KL5GNFj6JV3OUsAQPsFe4B2YjzAXZwB+elNeWcTItndk8BBkq7US2w8HZQoQkef4sv/X6Ylvs6YcmOQaB/J3Qdt+11KL5lh9JMa+sUc6+PxduAgIUOdYXzoSk0CtjYb5Ge+rH9py4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BMgOFf2W; arc=pass smtp.client-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UV9HwU4Z"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bbzozwT65kmaGgYCilZB1oQnVIQnG4R7fwWyO9fjh3iIsKkpfgDzTEau2IaAZllkycOS+3+Kho+d9i/AvQzp4ehfW7Y5pShEUknT9auCWTVH7uD9VBGAj9+7EaOoVatxZbkAyPhw6bo5tv3nQMH6d8VjTAGS0Yz/t7QYnatw5l+lFwb8stc+/5aFsHD7sD7GQ/pXR0kppWR1Ouy8j+7d0vdrPijXZZBLAeohzymp8byf6HjQaV4IiP+bvVEuH9aZXa/2DTOk1lfqN+LakDWsXY0y0pKVyYgbw99F/LBINwEKhrL7jNMdVofIjWIHQSACrG2eYgXbeTpEdNu7pMKmuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JDQdFr5VgtjNsMdsuW51nME+G+9AvU+ZpCdf30e/1tk=;
- b=Uw1rY/SjqcxcmmmG6mEU/K9aR9sK2EqyGkdn2uUxXHsZUuZP8AFAfV0rmXyym//ATfh4HdqQqerlfiuozHsdIhuGtLITF0VUESwqO8vaDKSHy7rhQedMspDkTasry0USC3DBessMjNPQ4VDX1YQ6QYQ0wRG8097ljHu9UuFRGdP/+M0+xsW9eIuku3WSp2TP7Cjn+NYe7g+V8vR6MiVQWdE5vdN/yfmuhW+FldDuZmYhgDRe4WkJMvTwcEG+2hITM0eTx1+g9+CTtZFXjA5jsupC5bwKiYQ0Tiz415wlT+KUIlaT9aDh04d9Awm4moCZCmISqSQSr8hvOTzYiruQtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JDQdFr5VgtjNsMdsuW51nME+G+9AvU+ZpCdf30e/1tk=;
- b=UV9HwU4Z20UgHn0knZFiKfMW0cS4R3KFuH8+PHi8h74A4HWxnTmK355QLy/Wy9BaTmIHP/4k85cxYk/Hj0QwirlOSH2Gd+gsN/TITT1JCC6cQUrocTsrl2gWT+O0h+VKWyG5s50Gsd0BbBiu1q+nnqY0vfSe9QLriNU+UQwB41bwNoi/ixNwzobBAXZ+HqIg48Rjx/XTFNMuLmvB4+gjsL4eTrdXzQAd6EeNVkcZsO+cDGULNUXTpdC/OvrzsjS9a5ZoMHYtks2p4UeWvq7+n9MeDEy0sgZvod0eMzSx5iXK/D1thxBUh1B3OmRhNrifksRjtkNirDT1ItUJIAXE0A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB7548.namprd12.prod.outlook.com (2603:10b6:610:144::12)
- by BY5PR12MB4291.namprd12.prod.outlook.com (2603:10b6:a03:20c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.16; Mon, 6 Apr
- 2026 16:31:10 +0000
-Received: from CH3PR12MB7548.namprd12.prod.outlook.com
- ([fe80::b710:d6a1:ab16:76de]) by CH3PR12MB7548.namprd12.prod.outlook.com
- ([fe80::b710:d6a1:ab16:76de%5]) with mapi id 15.20.9769.018; Mon, 6 Apr 2026
- 16:31:09 +0000
-Message-ID: <e0ac9755-fd49-4620-92ce-0f5e4203a95e@nvidia.com>
-Date: Mon, 6 Apr 2026 19:31:03 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next V2 4/5] net/mlx5e: XDP, Use a single linear page
- per rq
-To: Jakub Kicinski <kuba@kernel.org>, Dragos Tatulea <dtatulea@nvidia.com>
-Cc: Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Saeed Mahameed <saeedm@nvidia.com>,
- Leon Romanovsky <leon@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Cosmin Ratiu <cratiu@nvidia.com>,
- Simon Horman <horms@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>,
- Lama Kayal <lkayal@nvidia.com>,
- Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
- Carolina Jubran <cjubran@nvidia.com>, Nathan Chancellor <nathan@kernel.org>,
- Daniel Zahka <daniel.zahka@gmail.com>,
- Rahul Rameshbabu <rrameshbabu@nvidia.com>, Raed Salem <raeds@nvidia.com>,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Gal Pressman <gal@nvidia.com>
-References: <20260403090927.139042-1-tariqt@nvidia.com>
- <20260403090927.139042-5-tariqt@nvidia.com> <adH5yAsPJ8rNgT0k@x13>
- <20260406084344.5d315f01@kernel.org>
-Content-Language: en-US
-From: Mark Bloch <mbloch@nvidia.com>
-In-Reply-To: <20260406084344.5d315f01@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TLZP290CA0015.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:9::11) To CH3PR12MB7548.namprd12.prod.outlook.com
- (2603:10b6:610:144::12)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BMgOFf2W"
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-650775f427eso423042d50.2
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 09:47:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775494047; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MNoiM2iH17xSAL67F7IJS8xBLtPmFeC9vR8BmgjNKTX3RFCw6ByHkxkjrDqmuL5ZzB
+         7h20ZAx4KcjJ0UQHCgR+9eJaoOCgQPN4B6RZtIqIQxfJI0Q8UgSqWLdqtiQIg1qNCWTq
+         nNyFCOnbcJn3hIx+PvHFC2KU0Dd+AJvX+FflS1TFVR/hMWiLtRxZRcA1977r8iTaRBF9
+         bKTCFxkeQUCiNzj8e9XZMBW4iPkxFhZONrJ7PnPC3WBcpl4RLu/Cb8fY93uXlmkb/66N
+         a4PnT4/NzCD5+lorPedTOAZT1U8oIKWodJSHxAkOglUmqChY3dAmaM9KPJl00i9joKDn
+         rOsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vlwIXPpKQ8CS4YOJauI+utRmeeM0eGhtuhmfjxQeuSA=;
+        fh=fxbt/nM1asSuyRP2wPI2JkcuLv5oKMWdcraI06NV8q0=;
+        b=jC6Ss9RU8BbGS7TvZsRUvr+fnA0fFi3e+LQgyj+FrhaaD9ifL48UT4hqsd+KqAWqLB
+         UrfljU4AABq8N1xGdmrPZ+oABn6+tUV/xgNcjsFoDQJmF3Toz2KZX1g+Wpcvs3G4O+i/
+         BeA8rDY64zolWOYFIhnCdFSdGSE1sD06G3e12uKnqraYjqelejwd+o1F5GS6BscGzC4b
+         CotanZEX3Uj9Sox1TLgAot/YSrNgtc5OWAiDLizDSJOWtBxcPPmYrI2TaqSwGoMFURuF
+         JhjkBtxn+IuO0E70k4EYc+E3fWBSaPGaZ6qRjrz9+SirKLV9gAkir4nbm3vW9ymxLgyi
+         j4Mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775494047; x=1776098847; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vlwIXPpKQ8CS4YOJauI+utRmeeM0eGhtuhmfjxQeuSA=;
+        b=BMgOFf2WIQSaNa3TGWSp1dIWiC0tls9tA91H0OFPsnyLaMIEQH01yT9/zBDnAvRZJF
+         SeM6tghq0G0bs0yvoW03z5aZg4bDj4ccu56NpXY0+pVf8EuqzCDW992PvLcwSHT4Vj1K
+         t2E3gUf0OK7GBaZcQUcJaBtRrbItvEXGT+DAvjMnMlOMv+iGrKqQHRD4+pLeKbd3+KMK
+         car9I4+29C9UwzhFlaxneeKWMelCh6Vz1EfDZuG0+NpNAZeq98WLnzCYic8c0ambQIUU
+         iTX36PAhjra07Nt3mjddAipbaQAtsCNOWIpPa2nBPB0ZmRbl49zD9aVG1EixIjiqThKo
+         xgvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775494047; x=1776098847;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=vlwIXPpKQ8CS4YOJauI+utRmeeM0eGhtuhmfjxQeuSA=;
+        b=ogTLoXr60WHroPLN3tDWJcgs3RpYA1oBse/cT/JupYrpgnRLiKo3JZpdCKhnnWmeQV
+         JXNMAcRks7Mrmrgt7FsCezAwuyafWbznKW1y8cTzUiEY/EqBaWzcEPcXIyPzQ+DQcJ/4
+         wojbLaL4MjhlpUbtNLLGqgiUwlKWApdZ3TzYsSSXps2WbqzH0NfaflyEh4jYIfsqh7WV
+         l1lfeHCAeRRKZ03lUKFxSBdxUyHs/Dtmw099aWFUoZ0DWHHf5JMfAojb7tlxur67hzun
+         JF4BPVyMATsGoYmF/iL70qe49+ryswMVBS3jPPTqGihCxI7tFtdO6l4iYzZlLrZWHAw1
+         Bx4A==
+X-Gm-Message-State: AOJu0Yx89kt6girz6WYy0u7dmLgIS+ZTCOXEw855rLlsTHgXYXSlXEAX
+	kypMJ2jqCJsNIQF+fc0i9q/fVLCQEHQ1lCL5O9A8sNe6wnaVLMjpaP7QJCcF/JEUY0LwpYfAO+T
+	w5MZJFIgRBEUuJzDiS9n7dqsJdp+No70=
+X-Gm-Gg: AeBDieugSzFec07OlqjpuGlfAqab2ppl3jrgRA+ACylhWvLw0zJOfuJDZkLdq+Atjt3
+	JM5rCzTHd4M367+clBX6C8cz0LzogXJ/A2fDItP3xSqcR4MxobJpC8eOw1Mgs8W5P+hQ4Eo3Yhr
+	7SsUAaQC5i+FwlgDQrD0KhWUQtuUTECpN8eURDx6G67r6oOqiKBpvdqKTjdNBO/P2CDc5oFTk9B
+	BytqGhD1sQHu13AN78b5iJLUTE9/QcOLGNbOiN9ue09Ab0viK5dpA7pA1TuJXWEj2oE9DxeeemR
+	/aUAQiUnI2023R8RueoTTNBeEhj+GjzjdjGFkYBD8KW0JbPQdoE=
+X-Received: by 2002:a05:690e:150f:b0:650:ea3:de9b with SMTP id
+ 956f58d0204a3-6504872e1b7mr14283427d50.21.1775494047483; Mon, 06 Apr 2026
+ 09:47:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB7548:EE_|BY5PR12MB4291:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ea3c531-b6de-4f21-e633-08de93f9e8d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|22082099003|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	ZvVrTX+sXMB/WCqjVvrK3s2k1OoH0FO2h6WPRmmrJLFlADNdAqIqiTpBIQYOcyISm8vZiOYHuBJOEtngRkVDenVm4kdWJnpLVQ6xT5C5q7fMsilRx5SVBoKuxMncLizOAYPIEAHNR3icb8Z2FbYudF770bZssI7ke0n1AR25UhiT9/vp4YXFbb81vahwVgvuAk2P8hXrOeLWQLNs4uFtnCEdiB7OOR+vVikTkNCE0GYo3bM369AuuJ+I2NWg/G9/rsHNdYHTol9n8q+aHjrTRykVXYHOR2QKLn36cUhCol8A/BdQzXABBlBn1YOcQosrUZ8IqkszTUb/8h/i3d87AvASVYiFZIGF+UnSg7pvB+17rSkGQk02Jz3rTGnn+eoMdClHQzaUH12D/xh7qiyIXdkoIIG0z4z2MOfr5aAdKtpvdsgNHXmRZWiLlNvI41zjpKdGqQBXTQvFPxL3M6KKyYh1cnkVoFB77FlPv6DTNzIUPVR4LdQGvTz5Kwr1dFfRcaC/jfNuxNPAS4o2YEYI0vDgltc32MJePBRt2HVERhkHCLRQDa92MM5poD1cpp8AVBAOKa/O5yQlX4BmFRwkKajrO5TG04YrLebCQKAZxUt0j5nUIetbn2wXyRr2PVWOcAnsvwvTSn81Z9SvUhrZck/pdV33S7cPOVh6DDAAMqsVhaQi9yGZjr8ppqX2C5uuKtRHNyVZu7A247q85bRc5+KB+HJFPAMXE9vEeqyyuow=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7548.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Yy9CNnIvcDhpVW55M3lKYU1WMG13OVZjT1NRN2t0di9RMkpOcDh4Z2VaNTdP?=
- =?utf-8?B?OXFUdjJzeDUvWFlKVWxOT1FCYUZmdW52STJ3b0h3allxV3MrNjU5M0taWWxF?=
- =?utf-8?B?YkhVVDRTSUIrUEp6dHRXZENNK2dsRVNZcDAvOGxrelZUeGRrSlZ4MitiSE5N?=
- =?utf-8?B?U2ZnV1c5ZXFHRGluMnlicGVJdXBVUnBEWFYveHFLUnNIQWFKZVhUOFVPb1Az?=
- =?utf-8?B?TittT1ZxRFBGcW5XbktJYzl6MnNsd1d4T2NFMkdBWFlLQ0FZNld4NnU5MzNs?=
- =?utf-8?B?NVdOZlFlaDZjL0FuNTYxNnBLendJS0xKZTF0UTBLcUcyeEpIOEdFVXFpUTdQ?=
- =?utf-8?B?T1JqZ1dFQXdrRFpocFUwaFNmNmc2VENxQ1J5R2lqK1l4ZUJoeXVjSEF4ejRn?=
- =?utf-8?B?SVNyZk1SNnZGSlJOOGlrV2xWLzlLL1ZVZmUyY29qT01wYkFIeW9jeVBYY0xn?=
- =?utf-8?B?enFQOUNCdExYaHJab3BzYzF0Y3diT05wK0QxNGR3VW5qKy84OVg4bldvUEcw?=
- =?utf-8?B?RkxnWTUzcDYwOXFrZzIrNzZqeGRoT3d6R1QwVFkrTzBYbk0wRFZoUUp6OWhS?=
- =?utf-8?B?T3pWMXJ1RUhxaXhhckhaZ2p4S1luMmc1blZ2SndTcXU2cExSakRtNUhIamVu?=
- =?utf-8?B?STJTUzVORi9qRTc2TTJZRDhIV3NBQVlyb3Uzano0cndHWEc2a2E1ZmdsSEs5?=
- =?utf-8?B?SllnQnA5VW1kN3g4aW82RHlxU21pcTJhci9RaTdGbVVJUW1QRlBxVWNTN1hm?=
- =?utf-8?B?TXBCaEQ3ZTZQZnM1NlFidVN0TWdYVE1EdXJOVEVaRjFyb1ZhSXMyVE8rQmg2?=
- =?utf-8?B?M2dyT2doWml6eHJLeWgzSytCbFZBd2N4YU1qM3lTUU9HY0lJYkMwbGlHbnN5?=
- =?utf-8?B?ek9nL0cwSWdsMUszZWZiNGRJMllJOWliM05EMThDQ2lIdnZkaGFNWjZZQU5E?=
- =?utf-8?B?aXBHNU9aYzdmOTRLSmRUcjZrOWdMYXYzR3F6dGY4V3dTdHVuOHd0NUtXTWZB?=
- =?utf-8?B?ejBIR2RnN2NRNnZlbU1FRVljNEFjbW0yaGZRZUhONlFzY3EzYmFldDFBM1dY?=
- =?utf-8?B?N3grQzFCL1pQc1doekRXUHMwK2o1bWR6cHFwTFZYRG1iZDViTjMxZnJDbEl6?=
- =?utf-8?B?cG95Qk1HRGQyd1RvN3kwT09IZFY5QnVrekR3U3JMaWF0cytFL3NYaEFEMkd3?=
- =?utf-8?B?K1pCcHZLZEZpekdUajdKbkxUcUpCT1o3Y2Z4WXNXTy94ejk2aTFQKzBvanVw?=
- =?utf-8?B?Q21wcmYwL3VjbGU2bDkxb0tjQ3R0UHlvbG9QZ0E2ZXc5MTRKUU5FWHplNC9l?=
- =?utf-8?B?NmtvdEdsM0N6a3llcWxJRnZCOTcrbVJGMlRFZStlaHNmQmFPSy9zODRVSzZ5?=
- =?utf-8?B?d0pWUkcwdXhQODYvdTcwRCszUDkvOUZiZmZycjl3YkFncnBaMGdRMXhBRWE1?=
- =?utf-8?B?RUZsN25wZys3R0t2SG9NMTJvRlJ6Z2hwSXFnRjhlN0JkWUQxYkZ2WGJ5UWh6?=
- =?utf-8?B?NmdmSDFEQlYxY1IrY3NRdDg5RklUeFZ4TTI0SzlqTU5pRTBhV0dYb3lJZEta?=
- =?utf-8?B?N0p2elVjWFRncXNTTVlKdUxXOVh5eEl5VytJRkVyVnFSdU1ZZEVMYll5elBC?=
- =?utf-8?B?WWxYNkZrbCtTQXMxemhkZ01kL3JtRk1qNFE3R2RaOWRTWWdFSlZ4SjBvWCto?=
- =?utf-8?B?RnNwcjU3ZTNER0syZXArMzBrY0JDWnhPU1IwcU9JNXVueFM3Q3BGdktnaFRM?=
- =?utf-8?B?MmI3aFVqdmU5Q0hyT3pML1MzY3NrMEMrTmtkbVJqRjMwVS9xVUxSZFR6b0k3?=
- =?utf-8?B?VU5hc1F0ZDVwK3preHNJaytrV1ZOZW5WODNXK1FkRlFqQ2tRTjZVakNBOUEw?=
- =?utf-8?B?d3R0M0RxSytBbHgrM1poN3JGMUI3bHgrR1BwcHByTk41ZnAvWnRNWnlFemsy?=
- =?utf-8?B?VFBITCthT3M0UUFWSG92TjJtWXJqbGJwY2tDUnhxLzU3b1BBSmRBL2wydE15?=
- =?utf-8?B?bndhYW1hQ3BHK3BPMkpIdlNRbFJPTHFyODJqOGdKVUcwME1Kenl6dk4xY0th?=
- =?utf-8?B?eittTzB4TWZSYVZnS2IvTm9YUlAvNUMyMzc1NjBHN1lnb0hhN0pSWkdyNS9v?=
- =?utf-8?B?Zjh3VVlHakZJVU9NSU1qVmFGdDBzb1FCR2pXUThoNGx0VDl5bHpCSTg4VEls?=
- =?utf-8?B?aS9XakdQSFBGMTZZRmVjMGdIakZSeWJVRjR1cXVsUEZQZkJKVHgraWs5Wmhk?=
- =?utf-8?B?dzBmZXNsVjRFbW1NNFE0TVdwOWQxbnZMTi80SDVYcEFWZk9kQUdXN2JJUEtB?=
- =?utf-8?B?OVc3dytES2dVYUM2YS9VK1M2dEw1SmVkUjJrRG9UN1RIR0w1MGI4QT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ea3c531-b6de-4f21-e633-08de93f9e8d5
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7548.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2026 16:31:09.7721
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NljCwySNUjV2raBCT7fLSnZCt10umaa+OTVE0bQaPN9619Df+GqkDYqscSQvrjVIy0WUPYCnxaRDMwV+ATidyg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4291
+References: <20260406031330.187630-1-jiayuan.chen@linux.dev> <20260406031330.187630-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260406031330.187630-2-jiayuan.chen@linux.dev>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Tue, 7 Apr 2026 00:47:15 +0800
+X-Gm-Features: AQROBzBtYrfK94OZcVbzSoNIXW4KYVJ4A_KLc369NruXQyIchCjNwuytdotI7XA
+Message-ID: <CABFUUZFfPWBoweKsDhKj4kKOjyZGwGZuBcB+GLu1LFVEZSzHpw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add tests for sock_ops ctx
+ access with same src/dst register
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Apr 6, 2026 at 11:15=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+> Add selftests to verify SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD()
+> correctly return NULL/zero when dst_reg =3D=3D src_reg and is_fullsock =
+=3D=3D 0.
+>
+> Three subtests are included:
+>  - get_sk: ctx->sk with same src/dst register (SOCK_OPS_GET_SK)
+>  - get_field: ctx->snd_cwnd with same src/dst register (SOCK_OPS_GET_FIEL=
+D)
+>  - get_sk_diff_reg: ctx->sk with different src/dst register (baseline)
+>
+> Each BPF program uses inline asm (__naked) to force specific register
+> allocation, reads is_fullsock first, then loads the field using the same
+> (or different) register. The test triggers TCP_NEW_SYN_RECV via a TCP
+> handshake and checks that the result is NULL/zero when is_fullsock =3D=3D=
+ 0.
+>
+> Test:
+>         ./test_progs -a sock_ops_get_sk -v
+>         test_sock_ops_get_sk:PASS:join_cgroup 0 nsec
+>         test_sock_ops_get_sk:PASS:skel_open_load 0 nsec
+>         run_sock_ops_test:PASS:prog_attach 0 nsec
+>         run_sock_ops_test:PASS:start_server 0 nsec
+>         run_sock_ops_test:PASS:connect_to_fd 0 nsec
+>         test_sock_ops_get_sk:PASS:null_seen 0 nsec
+>         test_sock_ops_get_sk:PASS:bug_not_detected 0 nsec
+>         #419/1   sock_ops_get_sk/get_sk:OK
+>         run_sock_ops_test:PASS:prog_attach 0 nsec
+>         run_sock_ops_test:PASS:start_server 0 nsec
+>         run_sock_ops_test:PASS:connect_to_fd 0 nsec
+>         test_sock_ops_get_sk:PASS:field_null_seen 0 nsec
+>         test_sock_ops_get_sk:PASS:field_bug_not_detected 0 nsec
+>         #419/2   sock_ops_get_sk/get_field:OK
+>         run_sock_ops_test:PASS:prog_attach 0 nsec
+>         run_sock_ops_test:PASS:start_server 0 nsec
+>         run_sock_ops_test:PASS:connect_to_fd 0 nsec
+>         test_sock_ops_get_sk:PASS:diff_reg_null_seen 0 nsec
+>         test_sock_ops_get_sk:PASS:diff_reg_bug_not_detected 0 nsec
+>         #419/3   sock_ops_get_sk/get_sk_diff_reg:OK
+>         #419     sock_ops_get_sk:OK
+>         Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  .../bpf/prog_tests/sock_ops_get_sk.c          |  77 ++++++++++++
+>  .../selftests/bpf/progs/sock_ops_get_sk.c     | 117 ++++++++++++++++++
+>  2 files changed, 194 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_ops_get_s=
+k.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/sock_ops_get_sk.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c b/t=
+ools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+> new file mode 100644
+> index 0000000000000..e086f7abb197e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+> @@ -0,0 +1,77 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include "cgroup_helpers.h"
+> +#include "network_helpers.h"
+> +#include "sock_ops_get_sk.skel.h"
+> +
+> +/* See progs/sock_ops_get_sk.c for the bug description. */
+> +static void run_sock_ops_test(struct sock_ops_get_sk *skel, int cgroup_f=
+d,
+> +                             int prog_fd)
+> +{
+> +       int server_fd, client_fd, err;
+> +
+> +       err =3D bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, =
+0);
+> +       if (!ASSERT_OK(err, "prog_attach"))
+> +               return;
+> +
+> +       server_fd =3D start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
+> +       if (!ASSERT_GE(server_fd, 0, "start_server"))
+> +               goto detach;
+> +
+> +       /* Trigger TCP handshake which causes TCP_NEW_SYN_RECV state wher=
+e
+> +        * is_fullsock =3D=3D 0 and is_locked_tcp_sock =3D=3D 0.
+> +        */
+> +       client_fd =3D connect_to_fd(server_fd, 0);
+> +       if (!ASSERT_GE(client_fd, 0, "connect_to_fd"))
+> +               goto close_server;
+> +
+> +       close(client_fd);
+> +
+> +close_server:
+> +       close(server_fd);
+> +detach:
+> +       bpf_prog_detach(cgroup_fd, BPF_CGROUP_SOCK_OPS);
+> +}
+> +
+> +void test_sock_ops_get_sk(void)
+> +{
+> +       struct sock_ops_get_sk *skel;
+> +       int cgroup_fd;
+> +
+> +       cgroup_fd =3D test__join_cgroup("/sock_ops_get_sk");
+> +       if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
+> +               return;
+> +
+> +       skel =3D sock_ops_get_sk__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "skel_open_load"))
+> +               goto close_cgroup;
+> +
+> +       /* Test SOCK_OPS_GET_SK with same src/dst register */
+> +       if (test__start_subtest("get_sk")) {
+> +               run_sock_ops_test(skel, cgroup_fd,
+> +                                 bpf_program__fd(skel->progs.sock_ops_ge=
+t_sk_same_reg));
+> +               ASSERT_EQ(skel->bss->null_seen, 1, "null_seen");
+> +               ASSERT_EQ(skel->bss->bug_detected, 0, "bug_not_detected")=
+;
+> +       }
+> +
+> +       /* Test SOCK_OPS_GET_FIELD with same src/dst register */
+> +       if (test__start_subtest("get_field")) {
+> +               run_sock_ops_test(skel, cgroup_fd,
+> +                                 bpf_program__fd(skel->progs.sock_ops_ge=
+t_field_same_reg));
+> +               ASSERT_EQ(skel->bss->field_null_seen, 1, "field_null_seen=
+");
+> +               ASSERT_EQ(skel->bss->field_bug_detected, 0, "field_bug_no=
+t_detected");
+> +       }
+> +
+> +       /* Test SOCK_OPS_GET_SK with different src/dst register */
+> +       if (test__start_subtest("get_sk_diff_reg")) {
+> +               run_sock_ops_test(skel, cgroup_fd,
+> +                                 bpf_program__fd(skel->progs.sock_ops_ge=
+t_sk_diff_reg));
+> +               ASSERT_EQ(skel->bss->diff_reg_null_seen, 1, "diff_reg_nul=
+l_seen");
+> +               ASSERT_EQ(skel->bss->diff_reg_bug_detected, 0, "diff_reg_=
+bug_not_detected");
+> +       }
+> +
+> +       sock_ops_get_sk__destroy(skel);
+> +close_cgroup:
+> +       close(cgroup_fd);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/sock_ops_get_sk.c b/tools/=
+testing/selftests/bpf/progs/sock_ops_get_sk.c
+> new file mode 100644
+> index 0000000000000..3a0689f8ce7ca
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/sock_ops_get_sk.c
+> @@ -0,0 +1,117 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +/*
+> + * Test the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros in
+> + * sock_ops_convert_ctx_access() when dst_reg =3D=3D src_reg.
+> + *
+> + * When dst_reg =3D=3D src_reg, the macros borrow a temporary register t=
+o load
+> + * is_fullsock / is_locked_tcp_sock, because dst_reg holds the ctx point=
+er
+> + * and cannot be clobbered before ctx->sk / ctx->field is read. If
+> + * is_fullsock =3D=3D 0 (e.g., TCP_NEW_SYN_RECV with a request_sock), th=
+e macro
+> + * must still zero dst_reg so the verifier's PTR_TO_SOCKET_OR_NULL /
+> + * SCALAR_VALUE type is correct at runtime. A missing clear leaves a sta=
+le
+> + * ctx pointer in dst_reg that passes NULL checks (GET_SK) or leaks a ke=
+rnel
+> + * address as a scalar (GET_FIELD).
+> + *
+> + * When dst_reg !=3D src_reg, dst_reg itself is used to load is_fullsock=
+, so
+> + * the JEQ (dst_reg =3D=3D 0) naturally leaves it zeroed on the !fullsoc=
+k path.
+> + */
+> +
+> +int bug_detected;
+> +int null_seen;
+> +
+> +SEC("sockops")
+> +__naked void sock_ops_get_sk_same_reg(void)
+> +{
+> +       asm volatile (
+> +               "r7 =3D *(u32 *)(r1 + %[is_fullsock_off]);"
+> +               "r1 =3D *(u64 *)(r1 + %[sk_off]);"
+> +               "if r7 !=3D 0 goto 2f;"
+> +               "if r1 =3D=3D 0 goto 1f;"
+> +               "r1 =3D %[bug_detected] ll;"
+> +               "r2 =3D 1;"
+> +               "*(u32 *)(r1 + 0) =3D r2;"
+> +               "goto 2f;"
+> +       "1:"
+> +               "r1 =3D %[null_seen] ll;"
+> +               "r2 =3D 1;"
+> +               "*(u32 *)(r1 + 0) =3D r2;"
+> +       "2:"
+> +               "r0 =3D 1;"
+> +               "exit;"
+> +               :
+> +               : __imm_const(is_fullsock_off, offsetof(struct bpf_sock_o=
+ps, is_fullsock)),
+> +                 __imm_const(sk_off, offsetof(struct bpf_sock_ops, sk)),
+> +                 __imm_addr(bug_detected),
+> +                 __imm_addr(null_seen)
+> +               : __clobber_all);
+> +}
+> +
+> +/* SOCK_OPS_GET_FIELD: same-register, is_locked_tcp_sock =3D=3D 0 path. =
+*/
+> +int field_bug_detected;
+> +int field_null_seen;
+> +
+> +SEC("sockops")
+> +__naked void sock_ops_get_field_same_reg(void)
+> +{
+> +       asm volatile (
+> +               "r7 =3D *(u32 *)(r1 + %[is_fullsock_off]);"
+> +               "r1 =3D *(u32 *)(r1 + %[snd_cwnd_off]);"
+> +               "if r7 !=3D 0 goto 2f;"
+> +               "if r1 =3D=3D 0 goto 1f;"
+> +               "r1 =3D %[field_bug_detected] ll;"
+> +               "r2 =3D 1;"
+> +               "*(u32 *)(r1 + 0) =3D r2;"
+> +               "goto 2f;"
+> +       "1:"
+> +               "r1 =3D %[field_null_seen] ll;"
+> +               "r2 =3D 1;"
+> +               "*(u32 *)(r1 + 0) =3D r2;"
+> +       "2:"
+> +               "r0 =3D 1;"
+> +               "exit;"
+> +               :
+> +               : __imm_const(is_fullsock_off, offsetof(struct bpf_sock_o=
+ps, is_fullsock)),
+> +                 __imm_const(snd_cwnd_off, offsetof(struct bpf_sock_ops,=
+ snd_cwnd)),
+> +                 __imm_addr(field_bug_detected),
+> +                 __imm_addr(field_null_seen)
+> +               : __clobber_all);
+> +}
+> +
+> +/* SOCK_OPS_GET_SK: different-register, is_fullsock =3D=3D 0 path. */
+> +int diff_reg_bug_detected;
+> +int diff_reg_null_seen;
+> +
+> +SEC("sockops")
+> +__naked void sock_ops_get_sk_diff_reg(void)
+> +{
+> +       asm volatile (
+> +               "r7 =3D r1;"
+> +               "r6 =3D *(u32 *)(r7 + %[is_fullsock_off]);"
+> +               "r2 =3D *(u64 *)(r7 + %[sk_off]);"
+> +               "if r6 !=3D 0 goto 2f;"
+> +               "if r2 =3D=3D 0 goto 1f;"
+> +               "r1 =3D %[diff_reg_bug_detected] ll;"
+> +               "r3 =3D 1;"
+> +               "*(u32 *)(r1 + 0) =3D r3;"
+> +               "goto 2f;"
+> +       "1:"
+> +               "r1 =3D %[diff_reg_null_seen] ll;"
+> +               "r3 =3D 1;"
+> +               "*(u32 *)(r1 + 0) =3D r3;"
+> +       "2:"
+> +               "r0 =3D 1;"
+> +               "exit;"
+> +               :
+> +               : __imm_const(is_fullsock_off, offsetof(struct bpf_sock_o=
+ps, is_fullsock)),
+> +                 __imm_const(sk_off, offsetof(struct bpf_sock_ops, sk)),
+> +                 __imm_addr(diff_reg_bug_detected),
+> +                 __imm_addr(diff_reg_null_seen)
+> +               : __clobber_all);
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
+> --
+> 2.43.0
+>
+>
 
-
-On 06/04/2026 18:43, Jakub Kicinski wrote:
-> On Sun, 5 Apr 2026 08:08:06 +0200 Dragos Tatulea wrote:
->> sashiko says:
-> 
-> Thanks a lot for reviewing the review! It takes a lot of maintainer time
-
-Just to add some context: we started running Sashiko internally,
-so hopefully trivial issues won’t be missed. I don’t know if
-you remember our on-list discussion from a few weeks ago, following that
-discussion right now we have three different internal AI tools reviewing each
-commit.
-
-At the moment this is still manageable, and I think developers should
-look over all comments from all tools. In our case that currently
-means three review outputs per commit. It would also be useful to have
-some official guidance on what authors are recommended to run before
-posting, so obvious issues can be caught earlier and less reviewer/maintainer
-time is spent on them.
-
-For example:
-
-“Before posting, authors could run a recommended baseline of review tools,
-where available, to catch obvious issues early. During review, tools such
-as review-prompts and Sashiko may be used to assist the reviewer.”
-
-Mark
-
+Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
