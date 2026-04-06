@@ -1,83 +1,54 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A053440DFD2
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 07:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F072BDF59;
+	Mon,  6 Apr 2026 08:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775460437; cv=none; b=Ck1cix+F2Pk7Voy2+DRAo0g1DcfnggbaY7FaudfZGP/PaEdIvWsBKTI5mYbV7aJXpgiR6B8ZWrIfGrGI61t0wlzc/TCUmxmVClNon7g59g/oNCDGbMHoIBvLCEG8L2Bh648RsIMDfh5JJr709IsH6G/c+rIh/3TvaTRSqmjpHlk=
+	t=1775464598; cv=none; b=iNYNiFtxuyLbBKrcqUOm6rHEjd6UZJHpxPj5reDGdGyiQzziAooXmxO5XpNxtO4ZCSEoq8KUdJ/5fohwluhvyDMh9nq2SINdB/WPoJaXXO1bYtsDJ+CsNI4TWep691aHgsubMWxjeAku/bFv0fxiNdc6EaYrMM9k4pkoQ0Qn5dE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775460437; c=relaxed/simple;
-	bh=5xf2bbceAjrL9Kn0yXbZUdc9u2qLSvuJAqr0yCPb/MY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Uv/kp3C5sKCRKZ7BZ+/gM93cNT6+MiB3crtXeiYIYAduhWfMxT6mCaxwVbSaOuKDRmcW6gQFu6a1FU7T96+zMe5QdfSeBZuVUc/agOtvH3hOLMcSfLcFYTwdaYGbOUepiBnwMhkKyvn0gXY16vIg+4HQGqtQtuyHgwj1dbcgQEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com; spf=pass smtp.mailfrom=shopee.com; dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b=fhl4ULzz; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shopee.com
+	s=arc-20240116; t=1775464598; c=relaxed/simple;
+	bh=OeLB3u3hU0cSTmDTYfAGoOEaiP5YiR8JOo7wSL7r33A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QhDbpqvblA0kHpNbdX5ZbTJnNXVTE01ssTXEkUN3SxHXHx1kfdzYFSrj3L/GlPbSbWGZfPVjr/9Sk8UIUtaKZaT5drObdF6dqGr3EwEzJtzIISX7yZfhRWIPXBRbXpoQMCoJsVmh+6oCgqAhNL3ixOW179lWZdS8nSijTWlvFxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=cEHCjmo9; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b="fhl4ULzz"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-358d80f60ccso2209024a91.3
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 00:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1775460434; x=1776065234; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/+l8xdJ81rnHVCDBCC4cOrkEDKbX4zpmL1qqNzt32Zg=;
-        b=fhl4ULzzM3JxbZouxPkKN/7rTjYPN3YEpC3ZB6OYTyX4Eb7eWdz0InUBJR2eUpHwBT
-         GM9n+s2IF8A8NQVlD4smGaMYzKRMZyryUeJCwH9cr5CXCNOTL/oJn/c2MLV5NJ8MsnH1
-         iGWWSCazM5+HYYH5YwgAqQt4dCjkwGCzGeYbQMoF7dlr5z2fJvhglH6j6TV1NdLvJBFo
-         lDoav5ssTuxyaOwadCG4QEu0zGH3Oqc/GNH96JjwPpBDcfKQKIAgOlVFn+FDSV0NbiPN
-         HL4dLsekBNrbAKSdbSxN9NCMwQQgP6JUAzECK7g6yZZfhpa0F9avoVHZrnmph4zfBLF3
-         BKdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775460434; x=1776065234;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/+l8xdJ81rnHVCDBCC4cOrkEDKbX4zpmL1qqNzt32Zg=;
-        b=XIXC9jAV/sXD3TWPpt7RHJrScUThZrPFG9GeOk/aO6vYJjKERml55NcdnpB2oR1spV
-         IFTtFq5IqDOyZRJX1orTv7optWhMWVuxKecDnBqdgpJCkwEbW9SE+Boy2FL7ZoQqZU4C
-         JsBfyx/ia5qbYKSqv86pdX32bI0tbUnf34YjHbLInHSszlHl6mqEIK+gIkxqpC+dtYRa
-         ZdDs3jieK0pQi1ip2ekMTIlyNzqfb8Z3pdzylA1oCfPEj8FpCa+P3puok64Qz503UX4J
-         3TV86E6Ud9NYGSWrw9BWBLivyw7dum6+nhgOkuVMCkuJxX29U3NleWtGAcsGKmPhqA7Y
-         7jsA==
-X-Forwarded-Encrypted: i=1; AJvYcCUegws9NHS1xpYIxkaVywY1tG+enFZb/+PO9SxwVMzaexsoxZIbV+rs4Upmyyb4ySb33VU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6Ar7eTMEqq0u7KslET50DGfk5dpD2G5rrgCPvLW7/YjYW+RZh
-	FVnQO+HJKEGdYrhbY+L7Ow89RSUx2cMKNIrBiO306vlOv+5BEsajOut5qxHJ1ghcvPc=
-X-Gm-Gg: AeBDieunqKrwWaWcbqhaegCBu8/lwRaQaCqm/sDXBqc8e8MHiYcHtfO6+QiiKzqQCaT
-	QPJCER3qFgEDG8SXVxgJzoCY3qqEJYvAo/Q5Sko1vvDqTirAuc4DiFC09yXjqJB/Qpa+2q5oBW4
-	chQ5nqBuoj9QcT8QLLaSSewB2woPAdotbdhIwR7xGyPvzWwIuPDrCTlwljZbMdXwk056ry8KEYX
-	lFSKoEInAPoUI25qf7Xkg/5/8Dm8koru5a+xgqmmNyc02XplgoYfB8SuG5d1ELzNnow9l3PAG4S
-	Vp76tN2jyMnrmHF5wV+nS7GZ4hdf1CyOeqRmuxReDJPZONzr8+2SAGzVpc1UdHfuq8xrFslFI3o
-	f7pSYzm1exnJ4cl4z7TnAAyNHYoSXdQVJlEInqRH4HNCGgc6bJOOAIG0COql+ZTMd7vid7JifVz
-	YNxshPdQOVGKKdyVDaevbB2ljoWii5u30TV5Et+MxCleOGOB3X3w==
-X-Received: by 2002:a17:90b:384e:b0:35c:d01:d3dc with SMTP id 98e67ed59e1d1-35de68ec479mr10327576a91.18.1775460433873;
-        Mon, 06 Apr 2026 00:27:13 -0700 (PDT)
-Received: from bms-ytl-d1-app-10-251-178-27 ([147.136.157.0])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35dd367bf24sm12920937a91.9.2026.04.06.00.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 00:27:13 -0700 (PDT)
-From: Leon Hwang <leon.huangfu@shopee.com>
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="cEHCjmo9"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8A750A26FD;
+	Mon,  6 Apr 2026 10:36:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1775464589; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=gywS/cJqCcJZuCFcZd+ncFv6nmplC2clIcSgdxsA4ng=;
+	b=cEHCjmo9QwIg/+7Ng8YrnskaPO6izfQ1Q2M2QkOyTB9R7TQlfDdPWPnim8QselPbsKXZgy
+	cChnrlS4DhcBjRSjzD0CnulcwDJnY1L+s8tsB5RtUdLK9eo464E1Bo1AnBGffkVAfPrCgu
+	IRSqVqq/Y/PKTs7t+IR3RqprtfgTtvXSaDYuxS2ub+EYq801AL4cPmKdU+wezJGaQ88rjc
+	FL/jrR5fP5AuWRUrT4/MMRqd0Cqz4JVAnpwj05yX8lgdcxSAPCoN76fe3jGOesyvByuR2l
+	IPTW4MXYPqo17m5NtphgBf065tUWTCxBvqlrDybNd1NAkftiy0dojEyzFWSemg==
+From: Nicolai Buchwitz <nb@tipi-net.de>
 To: netdev@vger.kernel.org
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
+Cc: Justin Chen <justin.chen@broadcom.com>,
+	Simon Horman <horms@kernel.org>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
+	Nicolai Buchwitz <nb@tipi-net.de>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Leon Hwang <leon.huangfu@shopee.com>,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH net-next v2] selftests/drivers/net: Add an xdp test to xdp.py
-Date: Mon,  6 Apr 2026 15:26:54 +0800
-Message-ID: <20260406072655.368173-1-leon.huangfu@shopee.com>
-X-Mailer: git-send-email 2.53.0
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v6 0/7] net: bcmgenet: add XDP support
+Date: Mon,  6 Apr 2026 10:35:24 +0200
+Message-ID: <20260406083536.839517-1-nb@tipi-net.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,112 +56,114 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
-this XDP test is suggested to add to xdp.py.
+Add XDP support to the bcmgenet driver, covering XDP_PASS, XDP_DROP,
+XDP_TX, XDP_REDIRECT, and ndo_xdp_xmit.
 
-1. Verify the failure of updating frag-capable prog with non-frag-capable
-   prog, when the frag-capable prog attaches to mtu=9k driver.
+The first patch converts the RX path from the existing kmalloc-based
+allocation to page_pool, which is a prerequisite for XDP. The remaining
+patches incrementally add XDP functionality and per-action statistics.
 
-The test has been verified against Mellanox CX6 and Intel 82599ES NICs.
+Tested on Raspberry Pi CM4 (BCM2711, bcmgenet, 1Gbps link):
+- XDP_PASS: 943 Mbit/s TX, 935 Mbit/s RX (no regression vs baseline)
+- XDP_PASS latency: 0.164ms avg, 0% packet loss
+- XDP_DROP: all inbound traffic blocked as expected
+- XDP_TX: TX counter increments (packet reflection working)
+- Link flap with XDP attached: no errors
+- Program swap under iperf3 load: no errors
+- Upstream XDP selftests (xdp.py): pass_sb, drop_sb, tx_sb passing
+- XDP-based EtherCAT master (~37 kHz cycle rate, all packet processing
+  in BPF/XDP), stable over multiple days
 
-With dropping other tests, here is the test log.
+Previous versions:
+  v5: https://lore.kernel.org/netdev/20260328230513.415790-1-nb@tipi-net.de/
+  v4: https://lore.kernel.org/netdev/20260323120539.136029-1-nb@tipi-net.de/
+  v3: https://lore.kernel.org/netdev/20260319115402.353509-1-nb@tipi-net.de/
+  v2: https://lore.kernel.org/netdev/20260315214914.1555777-1-nb@tipi-net.de/
+  v1: https://lore.kernel.org/netdev/20260313092101.1344954-1-nb@tipi-net.de/
 
- # ethtool -i eth0
- driver: mlx5_core
- version: 6.19.0-061900-generic
+Changes since v5:
+  - Refactored desc_rx: always prepare xdp_buff and use
+    bcmgenet_xdp_build_skb for both XDP and non-XDP paths, treating
+    no-prog as XDP_PASS. (Jakub Kicinski)
+  - Removed synchronize_net() before bpf_prog_put(), RCU handles
+    the grace period. (Jakub Kicinski)
+  - Save status->rx_csum before running XDP program to prevent
+    bpf_xdp_adjust_head from corrupting the RSB checksum.
+    (Jakub Kicinski)
+  - Tightened TSB headroom check to include sizeof(struct xdp_frame).
+    (Jakub Kicinski)
+  - Fixed reclaim gating: check for pending frames on the XDP TX ring
+    instead of priv->xdp_prog, so in-flight frames are still reclaimed
+    after XDP program detach. (Jakub Kicinski)
+  - Removed dead len -= ETH_FCS_LEN in patch 1. (Mohsin Bashir)
+  - Added patch 7: minimal ndo_change_mtu that rejects MTU values
+    incompatible with XDP when a program is attached. (Mohsin Bashir,
+    Florian Fainelli)
 
- # NETIF=eth0 python3 xdp.py
- TAP version 13
- 1..1
- ok 1 xdp.test_xdp_native_update_mb_to_sb
- # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+Changes since v4:
+  - Fixed unused variable warning: moved tx_ring declaration from
+    patch 4 to patch 5 where it is first used. (Jakub Kicinski)
 
- # ethtool -i eth0
- driver: ixgbe
- version: 6.19.0-061900-generic
+Changes since v3:
+  - Fixed xdp_prepare_buff() called with meta_valid=false, causing
+    bcmgenet_xdp_build_skb() to compute metasize=UINT_MAX and corrupt
+    skb meta_len. Now passes true. (Simon Horman)
+  - Removed bcmgenet_dump_tx_queue() for ring 16 in bcmgenet_timeout().
+    Ring 16 has no netdev TX queue, so netdev_get_tx_queue(dev, 16)
+    accessed beyond the allocated _tx array. (Simon Horman)
+  - Fixed checkpatch alignment warnings in patches 4 and 5.
 
- # NETIF=eth0 python3 xdp.py
- TAP version 13
- 1..1
- # CMD: ip  link set dev eth0 xdpdrv obj /path/to/tools/testing/selftests/net/lib/xdp_dummy.bpf.o sec xdp.frags
- #   EXIT: 2
- #   STDERR: RTNETLINK answers: Invalid argument
- ok 1 xdp.test_xdp_native_update_mb_to_sb # SKIP device does not support multi-buffer XDP
- # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+Changes since v2:
+  - Fixed page leak on partial bcmgenet_alloc_rx_buffers() failure:
+    free already-allocated rx_cbs before destroying page pool.
+    (Simon Horman)
+  - Fixed GENET_Q16_TX_BD_CNT defined as 64 instead of 32.
+    (Simon Horman)
+  - Moved XDP TX ring to a separate struct member (xdp_tx_ring)
+    instead of expanding tx_rings[] to DESC_INDEX+1. (Justin Chen)
+  - Added synchronize_net() before bpf_prog_put() in XDP prog swap.
+  - Removed goto drop_page inside switch; inlined page_pool_put
+    calls in each failure path. (Justin Chen)
+  - Removed unnecessary curly braces around case XDP_TX. (Justin Chen)
+  - Moved int err hoisting from patch 2 to patch 1. (Justin Chen)
+  - Kept return type on same line as function name, per driver
+    convention. (Justin Chen)
+  - XDP TX packets/bytes now counted in TX reclaim for standard
+    network statistics.
 
-Links:
-[1] https://lore.kernel.org/bpf/20260326124205.1a3bb825@kernel.org/
+Changes since v1:
+  - Fixed tx_rings[DESC_INDEX] out-of-bounds access. Expanded array
+    to DESC_INDEX+1 and initialized ring 16 with dedicated BDs.
+  - Use ring 16 (hardware default descriptor ring) for XDP TX,
+    isolating from normal SKB TX queues.
+  - Piggyback ring 16 TX completion on RX NAPI poll (INTRL2_1 bit
+    collision with RX ring 0).
+  - Fixed ring 16 TX reclaim: skip INTRL2_1 clear, skip BQL
+    completion, use non-destructive reclaim in RX poll path.
+  - Prepend zeroed TSB before XDP TX frame data (TBUF_64B_EN requires
+    64-byte struct status_64 prefix on all TX buffers).
+  - Tested with upstream XDP selftests (xdp.py): pass_sb, drop_sb,
+    tx_sb all passing. The multi-buffer tests (pass_mb, drop_mb,
+    tx_mb) fail because bcmgenet does not support jumbo frames /
+    MTU changes; I plan to add ndo_change_mtu support in a follow-up
+    series.
 
-Cc: Leon Hwang <leon.hwang@linux.dev>
-Signed-off-by: Leon Hwang <leon.huangfu@shopee.com>
----
-v1 -> v2:
-- Update the category in subject from selftests/net to selftests/drivers/net.
-- Drop _exec_cmd helper.
-- Recover the original MTU using cfg.dev['mtu'] (per Kuba).
-- Drop the unnecessary shell=True arg (per Kuba).
-- Print error using ksft_pr (per Kuba).
-- Drop the sb_to_mb case (per Kuba).
-- Skip test when device supports sb XDP with mtu 9000 (per Kuba,Gemini/sashiko).
-v1: https://lore.kernel.org/netdev/20260401052746.314667-1-leon.huangfu@shopee.com/
----
- tools/testing/selftests/drivers/net/xdp.py | 28 +++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+Nicolai Buchwitz (7):
+  net: bcmgenet: convert RX path to page_pool
+  net: bcmgenet: register xdp_rxq_info for each RX ring
+  net: bcmgenet: add basic XDP support (PASS/DROP)
+  net: bcmgenet: add XDP_TX support
+  net: bcmgenet: add XDP_REDIRECT and ndo_xdp_xmit support
+  net: bcmgenet: add XDP statistics counters
+  net: bcmgenet: reject MTU changes incompatible with XDP
 
-diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
-index d86446569f89..864ca4097b87 100755
---- a/tools/testing/selftests/drivers/net/xdp.py
-+++ b/tools/testing/selftests/drivers/net/xdp.py
-@@ -13,7 +13,7 @@ from enum import Enum
- 
- from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_ge, ksft_ne, ksft_pr
- from lib.py import KsftNamedVariant, ksft_variants
--from lib.py import KsftFailEx, NetDrvEpEnv
-+from lib.py import KsftFailEx, KsftSkipEx, NetDrvEpEnv
- from lib.py import EthtoolFamily, NetdevFamily, NlError
- from lib.py import bkg, cmd, rand_port, wait_port_listen
- from lib.py import ip, defer
-@@ -693,6 +693,31 @@ def test_xdp_native_qstats(cfg, act):
-             ksft_ge(after['tx-packets'], before['tx-packets'])
- 
- 
-+def test_xdp_native_update_mb_to_sb(cfg):
-+    obj = cfg.net_lib_dir / "xdp_dummy.bpf.o"
-+    mtu = 9000
-+
-+    ip(f"link set dev {cfg.ifname} mtu {mtu}")
-+    defer(ip, f"link set dev {cfg.ifname} mtu {cfg.dev['mtu']} xdpdrv off")
-+
-+    attach = cmd(f"ip link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp", fail=False)
-+    if attach.ret == 0:
-+        raise KsftSkipEx(f"device supports single-buffer XDP with mtu {mtu}")
-+
-+    attach = cmd(f"ip link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp.frags", fail=False)
-+    if attach.ret != 0:
-+        ksft_pr(attach)
-+        raise KsftSkipEx("device does not support multi-buffer XDP")
-+
-+    # Verify updating mb -> mb program works.
-+    cmd(f"ip -force link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp.frags")
-+
-+    # Verify updating mb -> sb program does not work.
-+    update = cmd(f"ip -force link set dev {cfg.ifname} xdpdrv obj {obj} sec xdp", fail=False)
-+    if update.ret == 0:
-+        raise KsftFailEx("device unexpectedly updates non-multi-buffer XDP")
-+
-+
- def main():
-     """
-     Main function to execute the XDP tests.
-@@ -718,6 +743,7 @@ def main():
-                 test_xdp_native_adjst_head_grow_data,
-                 test_xdp_native_adjst_head_shrnk_data,
-                 test_xdp_native_qstats,
-+                test_xdp_native_update_mb_to_sb,
-             ],
-             args=(cfg,))
-     ksft_exit()
--- 
-2.53.0
+ drivers/net/ethernet/broadcom/Kconfig         |   1 +
+ .../net/ethernet/broadcom/genet/bcmgenet.c    | 643 +++++++++++++++---
+ .../net/ethernet/broadcom/genet/bcmgenet.h    |  19 +
+ 3 files changed, 565 insertions(+), 98 deletions(-)
+
+--
+2.51.0
 
