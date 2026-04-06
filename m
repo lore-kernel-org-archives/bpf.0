@@ -1,87 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCFF283C82;
-	Mon,  6 Apr 2026 03:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20B540DFCB;
+	Mon,  6 Apr 2026 03:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775446056; cv=none; b=aydUvMPeDvvled3RUVQ3m1JVw7j3918RoxPuGK/TcK0dySe6Ho7liqGU6hxZkunEc7P5zo87zJbFxNTJXJ2qo7fhGDX4Dd+xVJo/GpZfwEIqzw29TXnAEiNvOA4g5S/tfnfKcmH2+pYCOl2F0REjAiCiHPxIRpfWyJUhMZj7cQc=
+	t=1775447264; cv=none; b=akIuHTWoP06Fo5eZyZ9o1QSlZhri9ky/vMTBR9M7pSRg/1m4HXBFsP0L0mdSCfQ0JoZZFAMfJIa8Wpou96mRkkmuGeh/ZkYp039Q3r4iv5lLeS5Gb2zBSFyQhyfwQlVwoiM4AMWIxFEYG2LLSvydLtw/tBbJr11r5iz2+CcY4B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775446056; c=relaxed/simple;
-	bh=1dVZhx7NWfZtsaqKnARXSq5UNb8tfSjOajEnYqOCrAc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qunG6NdxA9lkSdbd8OU3cYbDZ8qxwXUuP6fZ00ylyS8qEu3q1SqYIK8M9cF6smwsVJVNn2hwnZhkesHHIg4H/cnxe+qm9eFjWJwyscfSu1m7JEHJCL/fMj7oyGxZ6GGwNlA+tf1UJI9QOgwhdGTea0PN4qcJWU4jy4Z86CywqHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GYaGe//J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775447264; c=relaxed/simple;
+	bh=9BXHBOTCWdya0L5PFYubQfX2LAdXHzUD5zA97PeNOrc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=CLVDhJW+lhhmQM2T+ZCWWdqo115cSJd8IClPyG455aopVGVAcYJOPUVkyJLtMlWhcq8wKirstxPo8CCEqc3CaAViZnQsRxItDobVw9v8bWUa1IF6PawxvZuaO5AvNgoXJWbHt5sBt9Pu4q6Fc35KS2UVrbV1RqnqNEXVi1R9Y2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdKeFnTP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GYaGe//J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40A59C116C6;
-	Mon,  6 Apr 2026 03:27:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdKeFnTP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3420C4CEF7;
+	Mon,  6 Apr 2026 03:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775446056;
-	bh=1dVZhx7NWfZtsaqKnARXSq5UNb8tfSjOajEnYqOCrAc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GYaGe//JV/9N1tzeEJsTfSL2ujLmvnJHd26C6Ef6lJJTWcCNujW3cW2ResW5fEj1i
-	 VEXujtmKoJDdd+8LiQSO3Dwv64M6Hu6+RhVSqdly839g2jlZX/skvjyjJmBxMt1E8W
-	 7BKuXWsa1cUWDK2fOPSbtrXcLh+bdHDz2y7ZjFBpAlWCYMyXT+HpAHdYe9LXYnyFmM
-	 LgOC9zD6Nxi101Zy/h8mZ4wODvzBN4mBOaRf4Br61muA5PrSVF+dTqjruSymGVkIvm
-	 4e8NPb8BuGILnBhp1GTczknVl70r8e+JmnEYQ/IGYKWxgGtTNGUyM0Ra5ger7RYEh6
-	 9U0/WU76LNpUg==
-Date: Sun, 5 Apr 2026 20:27:35 -0700
-From: Kees Cook <kees@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2][next] bpf: Avoid thousands of
- -Wflex-array-members-not-at-end warnings
-Message-ID: <202604052007.4EF0560F@keescook>
-References: <acr7Whmn0br3xeBP@kspp>
- <CAADnVQL1kaAZE0L2k6svR4FK8UZvw44WXp=g+Df+SseMkc7xGA@mail.gmail.com>
+	s=k20201202; t=1775447264;
+	bh=9BXHBOTCWdya0L5PFYubQfX2LAdXHzUD5zA97PeNOrc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=mdKeFnTPqwDg8oZynH5Bsp/A8+T9rR8oExgKFXyorugo+FPs7P0jaq290hogvEkwh
+	 ssidxYtaOiFQCOK06/6ktGPuRTGi2kBw/kMkento77iZg6yuMNWsJQFvIRUBiCJWYi
+	 6MEBv2ImZjCq5sJKhopgGZLqunDjCbejC9le5kWCR5g7eMcV53XuO+xyGaODwr503E
+	 FvCXEnhPpaMk0rvaKjyWo59Hg0aZ9VRoiotkXxoQMaV6AZqZA6l/xdP6pC7gL9BcAZ
+	 o3j8/grlvbL+cOekq7JSLQ6ap2PAcFsuwNWqbzO6L7/RQn+DMY7TPc74YZ0t+804fW
+	 ELJV25H30flzg==
+Content-Type: multipart/mixed; boundary="===============2924377954232874562=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQL1kaAZE0L2k6svR4FK8UZvw44WXp=g+Df+SseMkc7xGA@mail.gmail.com>
+Message-Id: <913274772cd62d8d93e6cfb2c251c2388b73f24f90d05be3c9994207ac7048bf@mail.kernel.org>
+In-Reply-To: <20260406031330.187630-1-jiayuan.chen@linux.dev>
+References: <20260406031330.187630-1-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,2022090917019@std.uestc.edu.cn,dddddd@hust.edu.cn,M202472210@hust.edu.cn,dzm91@hust.edu.cn,emil@etsalapatis.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  6 Apr 2026 03:47:43 +0000 (UTC)
 
-On Sun, Apr 05, 2026 at 07:44:51PM -0700, Alexei Starovoitov wrote:
-> On Mon, Mar 30, 2026 at 3:39 PM Gustavo A. R. Silva
-> <gustavoars@kernel.org> wrote:
-> >
-> > Apparently, struct bpf_empty_prog_array exists entirely to populate a
-> > single element of "items" in a global variable. "null_prog" is only
-> > used during the initializer.
-> >
-> > None of this is needed; globals will be correctly sized with an array
-> > initializer of a flexible-array member.
-> >
-> > So, remove struct bpf_empty_prog_array and adjust the rest of the code,
-> > accordingly.
-> >
-> > With these changes, fix the following warnings:
-> >
-> > 7659 ./include/linux/bpf.h:2369:31: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
-> >
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
-> > Changes in v2:
-> >  - Remove struct bpf_empty_prog_array. (Kees)
-> 
-> Kees,
-> 
-> It really bothers me that you ask people to clean up
-> warnings for the sake of removing warnings.
+--===============2924377954232874562==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-It's not for the sake of warnings; this is to remove the ambiguously
-sized objects (i.e. structs that the compiler cannot reason about the
-size of).
+> Fixes: 84f44df664e9 ("bpf: sock_ops sk access may stomp registers when dst_reg = src_reg")
 
--- 
-Kees Cook
+This Fixes: tag covers the SOCK_OPS_GET_SK() portion of the fix,
+since 84f44df664e9 introduced that macro. However, the identical
+bug in SOCK_OPS_GET_FIELD() was introduced by an earlier commit:
+
+  fd09af010788 ("bpf: sock_ops ctx access may stomp registers in corner case")
+
+That commit added the dst_reg == src_reg handling to
+SOCK_OPS_GET_FIELD() with the same missing zeroing in the
+!fullsock path. Should this also carry:
+
+  Fixes: fd09af010788 ("bpf: sock_ops ctx access may stomp registers in corner case")
+
+Without it, kernels that have fd09af010788 but not 84f44df664e9
+would not receive the SOCK_OPS_GET_FIELD() fix via stable backport.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24017481706
+--===============2924377954232874562==--
