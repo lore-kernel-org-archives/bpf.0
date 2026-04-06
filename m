@@ -1,196 +1,71 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB8639B483
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 20:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775506438; cv=pass; b=KaKV3rv7dAMMb4XyqXeIdxbuT4+8I6TosA8Whv2a1GbB5Qlzy7tnR39WhHvRidwNQ5dTH68C59TwYsIP/LvOz/D0HvrZi0h+PEYyH2LtBU7gZ2HAr1Go3GCQ7g6u5XV9hgUIh49Q4WFS0nZWY5tq33k07qjaPq6TXvsskC2WeIo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775506438; c=relaxed/simple;
-	bh=CGgR+FVD5lDs8xv13oN6MactwOqh3eG3f1nO3sZKX8Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FtNGpcMe4YgzxMu7BKxIYCWqr4++7uyXNYI08tklU4rjzONWtLI/YIWphlsRH7mG4/Ye8bNsOzUDTjpA5GnIJiaJ+o4cQ2ncoydmxQ9HM7BTLWYuHpo+HVJa3/2Ys8BWdiZ7rNSWR+eem7uAfLkb4NPWfTvajG9SaGxYSbLqUk8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oz1F+CtF; arc=pass smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A1139C63C;
+	Mon,  6 Apr 2026 20:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775506511; cv=none; b=O30dvFoZKS3Qoiz5KbHC2vcZ3Gsd4q3vFyUUsn+k9CqDgu2YKdPtcYzpXxvHLMYASSTzzIBKFiMoHdN4AQmmygXgxFAI8TgozlVj7b6AMAYOuh6cuzllsNXCLQMZ1miH4+jYHRLKlf8NZd36pI2Di0q4O+7N5dFUXtBTPEGbKXg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775506511; c=relaxed/simple;
+	bh=B1dXs7ROSHPB7EUdsOFlheNNtZOl8UUlRNXbFuSLjjc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=YRbVFs2Swd+qKu0DXu3H5tH8t7F9ZCc6ZmYpTgHEmi3i+XwQqb4WDckixIwleZcQS4aKrUV9+fx7b1BmWFiaQrK9JNDxz7FXoeAWeIaQcCxuoLq6Okt3a9PxsRAD9Xiy+thAqkX04KrU0B99IZ2KO6AlV5neyh9LhF4LVy6A1Lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SG4+XkI1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oz1F+CtF"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-48374014a77so57014505e9.3
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 13:13:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775506435; cv=none;
-        d=google.com; s=arc-20240605;
-        b=e04KIAWAS56Xim5CQkzOiTq8hSj5YfBkbuVG5XN5MFKxMte48hI6+BjGmXgIDZfZ1t
-         OQYqSGIp2vHqGXUzOEe1VNRxmusFIe2l+SuYeYcoiLixnpE6xm65rUNQtkcqNRh0VzQn
-         uiS/SSq1/XgTvzxDMocpnRu8j+4oqFBze1Mqvn3VSKDvd0b1mQi6TDpsT+sb0joW1nVn
-         YVWA+NFfX4sybo8tkKpGboZJ0fJW9mzusyHdVlOafvhZxhnI1HmVMnhA6psGQCyWZfNB
-         OZ0QDcYtnfRCPq6KOqHC+OES3LjYEXWynPE690IPYyyhIXSu2HT+eZMHGuNLCt0rsOoK
-         905g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xXHEgF3EZiGGXRUO1lRHE/BRMXRolPTrHfUhOROvqA0=;
-        fh=lBu8Z3tEILZHa+uyVLczvcu/TKJDiHAp0NNAlgXJaag=;
-        b=ApwcmN5jYSjxEjP4J1V2Uxy6s/1X0GAh7iBBzmUs8jWftnK+0HaHXqmx2N0EKqHchB
-         qJX5nc5+tdJRbdCtIF1QhGmU3b0AjrG9ePw8nVE7TXYW53NsIS1g5y+lncHeX52u3d76
-         7jWmRLZXHkZtQ0H75HiVaA+fMAKbfg3GZxP8UWToXU+WgyzWvpfQkQJ50onsEjU7AZBI
-         pblTVMiGErI7bUmbYVE89XTRdf89XpVBUAfX6bDlc8PC9+xfiilwBTcln4zriUUhOjys
-         SGXyp0kbbwkdkFySTNRvNtfXWnBZUoPvFPBt/SBxQE05NPDVBvwHz7RTr0MFMJJWMS4k
-         D++A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775506435; x=1776111235; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xXHEgF3EZiGGXRUO1lRHE/BRMXRolPTrHfUhOROvqA0=;
-        b=Oz1F+CtFnynkVFBOUhH6jqsmMjKhdYRAnvlPM2vn3XAGeEvao1myHDXTKHuBYkMqRH
-         O7qYK0zje4x00NY+g/O+KBU6pxKYxwBcPohrEbWhlzqQA2tz2GztsK0TtxDC+qzTAXKc
-         U1ZT7212SJoBcG6zFzcm9PiHXMmKTZ2OSXA0oJxBUFJ+l61Z1Hc+2CYXKvKTKAfOc6v3
-         OfjCqaRqBhHMSKgGIFmnM9BB8GtNV7f5gpok+Owz+fWT/Z+oVBze5wZsyS+eKewJitaS
-         fQMQ7f++7G7QYcF1cW0a2PwXMAx3l1tUr4eGqLFcTHBAgE1E9fwqYJRhpqNQ+r5Keuiq
-         bxAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775506435; x=1776111235;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xXHEgF3EZiGGXRUO1lRHE/BRMXRolPTrHfUhOROvqA0=;
-        b=gG3mMPT97+VG4raHb4CO1R0Sg9emYrmorGXNz5w7tv+CNErorvyusNUamTSfJj9DMb
-         ccgCoGg8lqE7MLJCGP2hLaYPriFm74UVPlSxpS5OL1Vpm0qCYveczosKVkeZCuduX29/
-         wGwMzvrFlvCPlTMmAIc4WeKaUclBb1VlNNVBzvZqnq7MR/R20gzzwXuJxrFvyeTEVpua
-         W8CinQIY+SwHdsm12sDvSVpu/0CPOXVjY4z11Ni7c68vxoajvm1Gj0zsWcmNOrRyCqzr
-         mp7n7hfqpDavPX9TtjkGorUqQZqC4mfGjlR4oLuuXCueop8EhwMlfPQXxYRr2/r0gKvH
-         xQgg==
-X-Forwarded-Encrypted: i=1; AJvYcCVHyoAS9899iklPObIRIwgwEBYWtyCOt4tzuFT2kBp+jBY5KXaxdZ5n+CcAlyGCSqOUXAk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyvj/IRkE4ov6TicDRdpQ+GVvft+whFIB2KQ1EAOmKS999ZGn4T
-	j40lkywtRd6vlLzqwKBawgyxYmSSO1/Q7qq1lu5wg7s0CsrgWkI5Ipet5mQ8OFKXt9CiWMcSIXy
-	FHS9hy6F9xXzVSpsp91Na01SLq0NHe0w=
-X-Gm-Gg: AeBDievZrzxYY6663k//EnFgLQeEyHddKryysM0V7p70C6Myt9x6LhU5f0O12+ViWn5
-	PVV7ZiHYIq69s3cwSHsCCIBxnYpZwmCb2nh0qJwUYk4Wx3BuO5sfQyWvLWpsIJrC8I32vWaHnoR
-	BSIModCLtlIITPWTkGfRPFHWh6Jm/DZAIA6ArMpxoIw5HM3OUViQRsGrD+6dezLwxeDkXYnwMhW
-	udRGTlleI3xkG81fN4umFZf358znyft4UXzMnCDhULifGEMwXmzKMpBAkotjIfhmjuHrxIEbtK2
-	O0eke3BUj6qKrOexlwkydTNGaugBmDtdtRvMWJ8xCf8XWSRvGhrdZY1jzQjdbXv2bEvPqGK1
-X-Received: by 2002:a05:600c:2d8c:b0:488:a2ac:a34a with SMTP id
- 5b1f17b1804b1-488a2aca4ecmr82371215e9.10.1775506434593; Mon, 06 Apr 2026
- 13:13:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SG4+XkI1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726B3C4CEF7;
+	Mon,  6 Apr 2026 20:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775506510;
+	bh=B1dXs7ROSHPB7EUdsOFlheNNtZOl8UUlRNXbFuSLjjc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=SG4+XkI1h+QXHhQDSEIEYHIuF4pVlHjH7ISFqLIC7+USzu6Jz4PMXUGdMXgMmD4Q/
+	 lXWHsv5C+TsYxFM583GqRfRof+m523NwFkrdosnniYreYaGyN4jMyUR+MQCDWmXWjV
+	 GsLrn/kbjdAbw0C7mjtlm50PbV6zzJQQZukUhPPBA4P2VjeXx9zssjXIeCN37LW4GO
+	 f4O67VN++F4OGbUiEX/mhZF1T5k+rbBaOm9RX5gd8bNrb+Oo9qTltKcR2225zG/2Rj
+	 dO6zTA45L1/hmtyyvq1S3QpmeZjmqxA3+il1Rsh4CuvwB819wZqrvajjNFlZO0uKG6
+	 nQmIycnNRjQQw==
+Content-Type: multipart/mixed; boundary="===============3636165922822587918=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260403033828.18529-1-tpluszz77@gmail.com> <20260403033828.18529-3-tpluszz77@gmail.com>
- <CAMB2axM92J40zq2VejrMYMs-6vPcPEBkJ8WCuh_9ymT0ozhyUA@mail.gmail.com>
-In-Reply-To: <CAMB2axM92J40zq2VejrMYMs-6vPcPEBkJ8WCuh_9ymT0ozhyUA@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Mon, 6 Apr 2026 22:13:17 +0200
-X-Gm-Features: AQROBzCzROIYQnj1epFw7SQt0B32LfRC9614uD9sZqptejP-uEUmzjsqTP_4Fzo
-Message-ID: <CAP01T76uzZvbk7h4TAKC1t0Ls11CoGtj=TvhQ4ur=iprLvWFyA@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: add test for nullable
- PTR_TO_BUF access
-To: Amery Hung <ameryhung@gmail.com>
-Cc: Qi Tang <tpluszz77@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Song Liu <song@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <669779524c357c9790196e8e9ce8da8b21a71756c96e828252fead311fdc44c3@mail.kernel.org>
+In-Reply-To: <20260406193158.754498-2-andrey.grodzovsky@crowdstrike.com>
+References: <20260406193158.754498-2-andrey.grodzovsky@crowdstrike.com>
+Subject: Re: [RFC PATCH bpf-next v5 1/2] tracing: Prefer vmlinux symbols over module symbols for unqualified kprobes
+From: bot+bpf-ci@kernel.org
+To: andrey.grodzovsky@crowdstrike.com,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,jolsa@kernel.org,rostedt@goodmis.org,mhiramat@kernel.org,ihor.solodrai@linux.dev,emil@etsalapatis.com,linux-open-source@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  6 Apr 2026 20:15:10 +0000 (UTC)
 
-On Fri, 3 Apr 2026 at 08:16, Amery Hung <ameryhung@gmail.com> wrote:
->
-> On Thu, Apr 2, 2026 at 8:39=E2=80=AFPM Qi Tang <tpluszz77@gmail.com> wrot=
-e:
-> >
-> > Add iter_buf_null_fail with two tests and a test runner:
-> >   - iter_buf_null_deref: verifier must reject direct dereference of
-> >     ctx->key (PTR_TO_BUF | PTR_MAYBE_NULL) without a null check
-> >   - iter_buf_null_check_ok: verifier must accept dereference after
-> >     an explicit null check
-> >
-> > Signed-off-by: Qi Tang <tpluszz77@gmail.com>
-> > ---
-> >  .../bpf/prog_tests/iter_buf_null_fail.c       |  9 ++++
-> >  .../selftests/bpf/progs/iter_buf_null_fail.c  | 51 +++++++++++++++++++
-> >  2 files changed, 60 insertions(+)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/iter_buf_nul=
-l_fail.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/iter_buf_null_fai=
-l.c
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.=
-c b/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
-> > new file mode 100644
-> > index 000000000000..ea97787b870d
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
-> > @@ -0,0 +1,9 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <test_progs.h>
-> > +#include "iter_buf_null_fail.skel.h"
-> > +
-> > +void test_iter_buf_null_fail(void)
-> > +{
-> > +       RUN_TESTS(iter_buf_null_fail);
-> > +}
-> > diff --git a/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c b/t=
-ools/testing/selftests/bpf/progs/iter_buf_null_fail.c
-> > new file mode 100644
-> > index 000000000000..963a4cfc33f3
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
-> > @@ -0,0 +1,51 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2026 Qi Tang */
-> > +
-> > +#include <vmlinux.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +#include "bpf_misc.h"
-> > +
-> > +char _license[] SEC("license") =3D "GPL";
-> > +
-> > +struct {
-> > +       __uint(type, BPF_MAP_TYPE_HASH);
-> > +       __uint(max_entries, 1);
-> > +       __type(key, __u32);
-> > +       __type(value, __u64);
-> > +} hashmap SEC(".maps");
-> > +
->
-> hashmap is not used and can be removed.
->
-> > +/*
-> > + * Verify that the verifier rejects direct access to nullable PTR_TO_B=
-UF
-> > + * (ctx->key) without a null check.  On the iterator stop callback,
-> > + * ctx->key is NULL, so unconditional access would be a NULL deref.
-> > + */
-> > +SEC("iter/bpf_map_elem")
-> > +__failure __msg("invalid mem access")
-> > +int iter_buf_null_deref(struct bpf_iter__bpf_map_elem *ctx)
-> > +{
-> > +       /* ctx->key is PTR_TO_BUF | PTR_MAYBE_NULL | MEM_RDONLY.
-> > +        * Direct access without null check must be rejected.
-> > +        */
->
-> nit: consider kernel-style comment instead of netdev
->
-> > +       volatile __u32 v =3D *(__u32 *)ctx->key;
-> > +
-> > +       (void)v;
-> > +       return 0;
-> > +}
-> > +
-> > +/*
-> > + * Verify that access after a null check is still accepted.
-> > + */
->
-> nit: maybe just one line /* ... */ ?
->
-> Reviewed-by: Amery Hung <ameryhung@gmail.com>
+--===============3636165922822587918==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Qi, only the fix was applied, the test still needs to be resent.
-Please respin the selftest alone and send it against bpf-next.
-Thanks.
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> Suggested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
+This commit fixes a bug introduced when module symbol counting was
+added to number_of_same_symbols(). Would it be worth adding a
+Fixes: tag?
+
+Suggested:
+Fixes: 926fe783c8a6 ("tracing/kprobes: Fix symbol counting logic by looking at modules as well")
+
+That commit added module_kallsyms_on_each_symbol() to
+number_of_same_symbols(), which caused unqualified kprobe targets
+matching both vmlinux and a module to return count > 1 and fail
+with -EADDRNOTAVAIL.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24047967861
+--===============3636165922822587918==--
