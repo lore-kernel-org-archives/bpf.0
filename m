@@ -1,323 +1,207 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC822F12A5
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 15:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775490773; cv=none; b=oMV0GpNbXbjPHmuNCdQo9A0FeZ8Ylmw+r0ni5Ck6yPV3Ak/a2i2vv4FJaMjR9QhoYtp+idT+dbcaGSLCqSfiUmUzjpRN+WSrCQISAdBNZyc5hCTZ7xL+ADsWxO0MuSzE27SjEcDkGyHvBqZU6/HB4u2KaUoieXrrAHQ0vnpSch8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775490773; c=relaxed/simple;
-	bh=/gSGrY55gnVyWxSaAF3sGOkAA8TYsz1sM0KyKFwMHz4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i0VfR5aGdqp8UqzcXGTC94Fa5UUxAaRT/DQH5pZis6sYuoNuzKHmFnhaJZhE2ofqfPBOlNlNm8Qo/b20RLaFM3BQTs0kBgLR6hXwPzQiTp3E/1eUivhaMeTj5ch/9QM0S4QZuYmynLiNWkADO07q4+DvvXnltPAqZXkuEieLGMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JP5jtpel; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EB6343D85
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 16:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775491582; cv=pass; b=tM+FxT83/ad7HPbNM0d49zhu892672LgRKr887qgV0PDs5WY1gl8nT0Yv54FlW1AwQdjaULTyAcAHoKfRA3cWRxWYoLpzVvbChVhKjHLDHqZdr/BxzWP9P+TOuBB5NDSWBJaaV+VdSkNdx4TgfIiKigKTG6nskUpGhpcb6tHFSE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775491582; c=relaxed/simple;
+	bh=1Ao81rLLMJ9T3ZhPayNjrIz+C2kFvFVa1w9KQcaOTbE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=boVeIO7RzvAbtGK5KgUvn6RBb6FYIVFb45N1/3Pv+krsJSdkGzG/HVuyD5K6Ep2CyBvr2i5i15nVjnk5/NAl9po2cGYfU9nrmBQbVIzZ6Fc4pPhdNEiu+wfMvHfbMSfNAdc0ewkdDFJjtZVVOYEJzmWbZvIiIZbikyF608Yi/lo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcrVEnSB; arc=pass smtp.client-ip=74.125.224.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JP5jtpel"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d23305225so3258342f8f.2
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 08:52:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcrVEnSB"
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-6501418152cso3764624d50.0
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 09:06:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775491580; cv=none;
+        d=google.com; s=arc-20240605;
+        b=iIqC3obA7JL6tjUzgJo3EorI52PuCD/4GmfpaBT+BEBUC5PfBXxkOme2vGq1qf0zum
+         JkjSRAQ72yri4+xVsHv5z1eu8+nQcUDWtBSXYpxpbWO8CjZMENj6uJFGJ0kp4yaPgb8x
+         HWVzQATg6sheh4QHq3oPOs5KdKrF3cmRFAGAzwkUA/Mg/q2C4YLvmqarQnZ9iODiRDT9
+         okeoPVHvL3fSDkHzz6Rj6iwXTVx+f2JcBsGtobqX+rxjK8gFKzDPkpRdrIcJaRRtKew+
+         U91MHvb+nFO068h/XVjWVbhKXtTz7g7qINGJLRdZ1NWHUsxeeJ3gdJ+jBycRf0MZ6vf3
+         PzFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=r4k6iOIVi59Lg0iTaZk1dsAN/oP6YbMRjWJFQdPXIOs=;
+        fh=b3R+aVqOM4LdUW16FqF+p/6Vla/mrEioQ8C/6UdKCzI=;
+        b=HNlemk78Ky0a8MRwKsipkyn1zuXHhOnoM3d9BesvNQk0Ce6d8rdOQdWjNPtZBL8lA3
+         1FE8D6kzKQh3THA0w+HdnEiJHjOEb4AuNk0O7cvASWGikDrbVe7cevb574N8OBz6jXb8
+         I52z9d3m7Os+0Bso9PKDjDb/ilCI0fw9JFTpnyIwHugI5SUD4TsXUeQF3uvvlrdYz6U5
+         3l8K0JWh+fle/Lz18vYZHQAPeNldKEq7itHjcSrM5t/0mHh1ukN799Nz4W3GzX1Abqi4
+         8oroXFYxAmg1Ntl1rEiUPrRBsasZFzeh0mKsFm3vX2r8baIiTEzHAhFCQNGxKY5rSnms
+         ameA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775490770; x=1776095570; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775491580; x=1776096380; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bmGPaumtNSg1VKbbvXzlFoaQU8nrMYj+VPeqTl5z2KY=;
-        b=JP5jtpelj87+boUkKwAcoGvxebWrDOjylO4pTzs4/20Ymgl96V3JZm1/h8MTFFnIUT
-         3EkFANgDj0d55LFNenmvXsMmu1/q5OzM9HbMi8NhzMlcojJFwvTKh/gKCgdyNTdmx9hq
-         MKRAB/ERT+NfHkKQmsqGgEF2WR7CRnPWGjJbesFlqKI7LFt16jEoCOBXwE2rGmJ7ukJm
-         qj2xwVlPt8E+IzIxZzHQv2OOYtJa1mJo025c8ukmXpwwxvPpNIZ1JPrnfmN2eVFNrj7M
-         lPVabqY38kS2rbWpgOPv8ndrKp62K2VOec52td/rAgnAz61ynIUmienVZdAk2lSzCI6t
-         0yeg==
+        bh=r4k6iOIVi59Lg0iTaZk1dsAN/oP6YbMRjWJFQdPXIOs=;
+        b=XcrVEnSBzqObcxdel+GHkgInMaZKgb3qUAZaCNqoARA3InJt/2N/OC5rL6XKpYm30H
+         i4YjqyZTeAMeo4dMFr7uqDKq4cNp5CqMNBRf3d07RJONWe4xqXuyJhkH6DZiAEaztuDo
+         9DyW4Otfiv2xAv2T571/F3hVwN4iWYnL5zJof1XJgf2E7s27OLCozFIeJ4VHNyQ6uXIM
+         XLIWxCvaKhE3OFnCM4ZLO59m+Rv6rylnv7j1YOeFyuOFFJDtxVgrpQ431EDpzTOfdjmc
+         0jQs2XdHPp/6GxV947NB9N0x5dS3oGCkR9kZnyKPLcNh53mbSKg5CauAouJJEruZJjDw
+         /MvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775490770; x=1776095570;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1775491580; x=1776096380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=bmGPaumtNSg1VKbbvXzlFoaQU8nrMYj+VPeqTl5z2KY=;
-        b=ppGWezp7rMBrTGkX0VGNZ1qkj1VdNq+lwRnRmQUSCc+4CvwaKDhMtW0GRu2QoXC8WX
-         +kwB+Ykl2wKKMxR+ZdqrYfg8zHluga6f6dND+S2bALR+rT+FxxoOy0xR5ISk4eUwAUp+
-         9L1VKHVYBu78jHFSPjjOP0pDnEAJ/pUl+bVao7ew6ZflxKpjtg4ZUrRVryh+yVIujvZf
-         L4te+KUCrhF4MFLFCTFRUceZ2YL7Zi1tAyaFgSXjM+9LoqNr/1vhkb3idpWMZQm0pPkA
-         /GdQPjCw7iptiMbhdhNSygiqnGM2eF33c1xRlHeW2/YAiPf7jVYh+X16F0a+qasWByFF
-         gtCw==
-X-Gm-Message-State: AOJu0YwcyWzWJUnQUUkK33Lcn23y3RDxMW44ZDzl/ZNUSic5TGeotXGe
-	IMc8en7IRMijK44vgYPFaviwKImz9NPxHvMJB/GujE/bURYgszCNvTrC2J8cAw==
-X-Gm-Gg: AeBDiet4gk6ZoNN/XluQKOsxU6C6MwCH5GTSw/xy6ecApV6KLcigLP5vC3cXzRqKpPh
-	4Z5Y7UY/tYo1TA0PWZyWk/o0U/wJGV/mAvPiyjX0bFp+6oZIdLlvyHgetMzC75y8eb79tFbWNcA
-	4nsEfBCzeviChx34TRCi2/hAr2FOOktWExOQZ04t9khIejsz3vO5VYEParEy7nZgWL/rtXJbnP/
-	7KRKEM9R7hcjKPOmO3R/D5h0lCKql4/0Zl1c4Oo9pPqFuXbc42a8lz1U5JOFyleAQas3bs0NUEs
-	8AjkL1uwqNvFgukyik9TcyI1vnn3eu0jX3nrixvtOtbaR5W7gqdL1tfIso0kdUSdaf15GET360n
-	QYT4Fycn5ISBrExupNr7LXEqfOFaZfOfTBPQ7uowdDhR7Cq1VhJFW1gP17awy/89xiAMnKcg4WN
-	XJ5hYzkkoSvqBXU1UitmmsKjQtYlkuDC9VBhwjNEQNeA==
-X-Received: by 2002:a5d:5f42:0:b0:43d:1dfe:45b7 with SMTP id ffacd0b85a97d-43d292e2b48mr18851243f8f.46.1775490770184;
-        Mon, 06 Apr 2026 08:52:50 -0700 (PDT)
-Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2a720dsm42114802f8f.4.2026.04.06.08.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 08:52:49 -0700 (PDT)
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Jiyong Yang <ksur673@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: Add more tests for loading insn arrays with offsets
-Date: Mon,  6 Apr 2026 16:01:41 +0000
-Message-Id: <20260406160141.36943-3-a.s.protopopov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260406160141.36943-1-a.s.protopopov@gmail.com>
-References: <20260406160141.36943-1-a.s.protopopov@gmail.com>
+        bh=r4k6iOIVi59Lg0iTaZk1dsAN/oP6YbMRjWJFQdPXIOs=;
+        b=poh/+lgrPnrqlYgqToBwmae0P90yCPHKTmtjH6Kmtm+8QhqeWbcXGQhK6F7LT8OaeN
+         +WqKM4ezZW+s3JsQCv9wlNMXPD+9eTZ0Q7UgyG1G55px9aBkF0Y4lpLVVZ++1ZqXitK7
+         48FK1CgyYoCZg8xQaNLxMuEhjiADypHNvqMmUWuTTP02y0nLc0KJ5v5BPDp+WDH3wRtQ
+         1tEt/PcYS7/rhPuRuVMV4/fDtPoEnWIZ2Lvamo8UchT1QC682gmf2hrd2inyEIzTsl77
+         44NDJn5CrM2vFzjbHjhkC/ZDbZaYOosUiKiviRD8vpqZ7n0f5qO4LsyrxKb/isi6ih65
+         v7Rg==
+X-Gm-Message-State: AOJu0YyNYzkBRb7Ai6JkcCINMKgad5s4Bi5Yoolm3g2B6aaBFMRnoMSt
+	IN+QFwk05vHwO/N+DLb2Mj5Uo6ynnQ3oS3CUvf9rKTgkjm9drIcx5o1HjQElp9wBKx1R5GKij/5
+	gA+PRrQFucyVaAamLZvv57UpepArldZQ=
+X-Gm-Gg: AeBDievo09uzyQnPkVKPdhiliExpjC9tglYGu0XTXo/5mE65gjK7xLs06KZorMqcvV7
+	lXqYEoGFr4TWCdglfbExuR3wIxcwEqicqU/qVJRRd00iWIKzx4MPiI79sIekObq0OvYhU+KWRll
+	wd+7n6RGZ6jfzadG3xWkZRWwzOaTPjgI9FD3mNO0QfnbZQZrVbA9v23Pc1jx/QgqsWrOgAszSLJ
+	RF1A3WsbP7cqDmiA+ee6ZIdyFZ9slf52B2W59Z3YoKxaXGWO5/UawlvidJmW4erriNK396mk/si
+	E2hX1+vNFQutNyi61ULJi3D7XV+oTyOSNORHxirZ1g+qklK6rhU=
+X-Received: by 2002:a05:690e:4853:b0:650:39d6:69a1 with SMTP id
+ 956f58d0204a3-650486f2bedmr9450184d50.4.1775491579797; Mon, 06 Apr 2026
+ 09:06:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260406031330.187630-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260406031330.187630-1-jiayuan.chen@linux.dev>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Tue, 7 Apr 2026 00:06:07 +0800
+X-Gm-Features: AQROBzDlDluK28vEL2sKAYGrEn54l6_RzgjNnCFfO8DMO8cybYxLjy0EB75dedU
+Message-ID: <CABFUUZHFHFy8E11QVPxgkpdS16-f8ieTmHzJmEU-6pLUy2hWjw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix same-register dst/src OOB read and
+ pointer leak in sock_ops
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, Quan Sun <2022090917019@std.uestc.edu.cn>, 
+	Yinhao Hu <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>, 
+	Dongliang Mu <dzm91@hust.edu.cn>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A `gotox rX` instruction accepts only values of type PTR_TO_INSN.
-The only way to create such a value is to load it from a map of
-type insn_array:
-
-   rX = *(rY + offset) # rY was read from an insn_array
-   ...
-   gotox rX
-
-Add instruction-level and C-level selftests to validate loads
-with nonzero offsets.
-
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
----
- .../selftests/bpf/prog_tests/bpf_gotox.c      | 123 ++++++++++++------
- tools/testing/selftests/bpf/progs/bpf_gotox.c |  31 +++++
- 2 files changed, 115 insertions(+), 39 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-index 75b0cf2467ab..73dc63882b7d 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-@@ -317,7 +317,7 @@ static void check_ldimm64_off_load(struct bpf_gotox *skel __always_unused)
- 
- static int __check_ldimm64_gotox_prog_load(struct bpf_insn *insns,
- 					   __u32 insn_cnt,
--					   __u32 off1, __u32 off2)
-+					   int off1, int off2, int off3)
- {
- 	const __u32 values[] = {5, 7, 9, 11, 13, 15};
- 	const __u32 max_entries = ARRAY_SIZE(values);
-@@ -349,16 +349,46 @@ static int __check_ldimm64_gotox_prog_load(struct bpf_insn *insns,
- 	/* r1 += off2 */
- 	insns[2].imm = off2;
- 
-+	/* r1 = *(r1 + off3) */
-+	insns[3].off = off3;
-+
- 	ret = prog_load(insns, insn_cnt);
- 	close(map_fd);
- 	return ret;
- }
- 
--static void reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, __u32 off1, __u32 off2)
-+static void
-+allow_offsets(struct bpf_insn *insns, __u32 insn_cnt, int off1, int off2, int off3)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int prog_fd, err;
-+	char s[128] = "";
-+
-+	prog_fd = __check_ldimm64_gotox_prog_load(insns, insn_cnt, off1, off2, off3);
-+	snprintf(s, sizeof(s), "__check_ldimm64_gotox_prog_load(%d,%d,%d)", off1, off2, off3);
-+	if (!ASSERT_GE(prog_fd, 0, s))
-+		return;
-+
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	if (!ASSERT_OK(err, "test_run_opts err")) {
-+		close(prog_fd);
-+		return;
-+	}
-+
-+	if (!ASSERT_EQ(topts.retval, (off1 + off2 + off3) / 8, "test_run_opts retval")) {
-+		close(prog_fd);
-+		return;
-+	}
-+
-+	close(prog_fd);
-+}
-+
-+static void
-+reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, int off1, int off2, int off3)
- {
- 	int prog_fd;
- 
--	prog_fd = __check_ldimm64_gotox_prog_load(insns, insn_cnt, off1, off2);
-+	prog_fd = __check_ldimm64_gotox_prog_load(insns, insn_cnt, off1, off2, off3);
- 	if (!ASSERT_EQ(prog_fd, -EACCES, "__check_ldimm64_gotox_prog_load"))
- 		close(prog_fd);
- }
-@@ -376,7 +406,7 @@ static void check_ldimm64_off_gotox(struct bpf_gotox *skel __always_unused)
- 		 * The program rewrites the offsets in the instructions below:
- 		 *     r1 = &map + offset1
- 		 *     r1 += offset2
--		 *     r1 = *r1
-+		 *     r1 = *(r1 + offset3)
- 		 *     gotox r1
- 		 */
- 		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_VALUE, 0),
-@@ -403,43 +433,55 @@ static void check_ldimm64_off_gotox(struct bpf_gotox *skel __always_unused)
- 		BPF_MOV64_IMM(BPF_REG_0, 5),
- 		BPF_EXIT_INSN(),
- 	};
--	int prog_fd, err;
--	__u32 off1, off2;
--
--	/* allow all combinations off1 + off2 < 6 */
--	for (off1 = 0; off1 < 6; off1++) {
--		for (off2 = 0; off1 + off2 < 6; off2++) {
--			LIBBPF_OPTS(bpf_test_run_opts, topts);
--
--			prog_fd = __check_ldimm64_gotox_prog_load(insns, ARRAY_SIZE(insns),
--								  off1 * 8, off2 * 8);
--			if (!ASSERT_GE(prog_fd, 0, "__check_ldimm64_gotox_prog_load"))
--				return;
--
--			err = bpf_prog_test_run_opts(prog_fd, &topts);
--			if (!ASSERT_OK(err, "test_run_opts err")) {
--				close(prog_fd);
--				return;
--			}
--
--			if (!ASSERT_EQ(topts.retval, off1 + off2, "test_run_opts retval")) {
--				close(prog_fd);
--				return;
--			}
--
--			close(prog_fd);
--		}
--	}
-+	int off1, off2, off3;
-+
-+	/* allow all combinations off1 + off2 + off3 < 6 */
-+	for (off1 = 0; off1 < 6; off1++)
-+		for (off2 = 0; off1 + off2 < 6; off2++)
-+			for (off3 = 0; off1 + off2 + off3 < 6; off3++)
-+				allow_offsets(insns, ARRAY_SIZE(insns),
-+					      off1 * 8, off2 * 8, off3 * 8);
-+
-+	/* allow for some offsets to be negative */
-+	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 0, -(8 * 3));
-+	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 3, -(8 * 3), 0);
-+	allow_offsets(insns, ARRAY_SIZE(insns), 0, 8 * 3, -(8 * 3));
-+	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 4, 0, -(8 * 2));
-+	allow_offsets(insns, ARRAY_SIZE(insns), 8 * 4, -(8 * 2), 0);
-+	allow_offsets(insns, ARRAY_SIZE(insns), 0, 8 * 4, -(8 * 2));
-+
-+	/* disallow negative sums of offsets */
-+	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 0, -(8 * 4));
-+	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, -(8 * 4), 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 0, 8 * 3, -(8 * 4));
-+
-+	/* disallow the off1 to be negative in any case */
-+	reject_offsets(insns, ARRAY_SIZE(insns), -8 * 1, 0, 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), -8 * 1, 8 * 1, 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), -8 * 1, 8 * 1, 8 * 1);
-+
-+	/* reject off1 + off2 + off3 >= 6 */
-+	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 8 * 3, 8 * 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 7, 8 * 0, 8 * 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 0, 8 * 7, 8 * 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 8 * 0, 8 * 3);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 0, 8 * 3, 8 * 3);
-+
-+	/* reject (off1 + off2) % 8 != 0, off3 % 8 != 0 */
-+	reject_offsets(insns, ARRAY_SIZE(insns), 3, 3, 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 7, 0, 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 0, 7, 0);
-+	reject_offsets(insns, ARRAY_SIZE(insns), 0, 0, 7);
-+}
- 
--	/* reject off1 + off2 >= 6 */
--	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 3, 8 * 3);
--	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 7, 8 * 0);
--	reject_offsets(insns, ARRAY_SIZE(insns), 8 * 0, 8 * 7);
-+static void check_ldimm64_off_gotox_llvm(struct bpf_gotox *skel)
-+{
-+	__u64 in[]  = {0, 1, 2, 3, 4};
-+	__u64 out[] = {1, 1, 5, 1, 1};
-+	int i;
- 
--	/* reject (off1 + off2) % 8 != 0 */
--	reject_offsets(insns, ARRAY_SIZE(insns), 3, 3);
--	reject_offsets(insns, ARRAY_SIZE(insns), 7, 0);
--	reject_offsets(insns, ARRAY_SIZE(insns), 0, 7);
-+	for (i = 0; i < ARRAY_SIZE(in); i++)
-+		check_simple(skel, skel->progs.load_with_nonzero_offset, in[i], out[i]);
- }
- 
- void test_bpf_gotox(void)
-@@ -496,5 +538,8 @@ void test_bpf_gotox(void)
- 	if (test__start_subtest("check-ldimm64-off-gotox"))
- 		__subtest(skel, check_ldimm64_off_gotox);
- 
-+	if (test__start_subtest("check-ldimm64-off-gotox-llvm"))
-+		__subtest(skel, check_ldimm64_off_gotox_llvm);
-+
- 	bpf_gotox__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_gotox.c b/tools/testing/selftests/bpf/progs/bpf_gotox.c
-index 216c71b94c64..99b3c9c9a01c 100644
---- a/tools/testing/selftests/bpf/progs/bpf_gotox.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_gotox.c
-@@ -421,6 +421,36 @@ int use_nonstatic_global_other_sec(void *ctx)
- 	return __nonstatic_global(in_user);
- }
- 
-+SEC("syscall")
-+int load_with_nonzero_offset(struct simple_ctx *ctx)
-+{
-+	void *jj[] = { &&l1, &&l2, &&l3 };
-+
-+	/*
-+	 * This makes LLVM to generate a load from the jj map with an offset:
-+	 *      r1 = 0x0 ll
-+	 *      r1 = *(u64 *)(r1 + 0x10)
-+	 *      gotox r1
-+	 */
-+	if (ctx->x == 2)
-+		goto *jj[ctx->x];
-+
-+	ret_user = 1;
-+	return 1;
-+
-+l1:
-+	/* never reached, but leave it here to outsmart LLVM */
-+	ret_user = 0;
-+	return 0;
-+l2:
-+	/* never reached, but leave it here to outsmart LLVM */
-+	ret_user = 3;
-+	return 3;
-+l3:
-+	ret_user = 5;
-+	return 5;
-+}
-+
- #else /* __BPF_FEATURE_GOTOX */
- 
- #define SKIP_TEST(TEST_NAME)				\
-@@ -442,6 +472,7 @@ SKIP_TEST(use_static_global_other_sec);
- SKIP_TEST(use_nonstatic_global1);
- SKIP_TEST(use_nonstatic_global2);
- SKIP_TEST(use_nonstatic_global_other_sec);
-+SKIP_TEST(load_with_nonzero_offset);
- 
- #endif /* __BPF_FEATURE_GOTOX */
- 
--- 
-2.34.1
-
+On Mon, Apr 6, 2026 at 11:14=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+> When a BPF sock_ops program accesses ctx fields with dst_reg =3D=3D src_r=
+eg,
+> the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros fail to zero the
+> destination register in the !fullsock / !locked_tcp_sock path.
+>
+> Both macros borrow a temporary register to check is_fullsock /
+> is_locked_tcp_sock when dst_reg =3D=3D src_reg, because dst_reg holds the
+> ctx pointer. When the check is false (e.g., TCP_NEW_SYN_RECV state with
+> a request_sock), dst_reg should be zeroed but is not, leaving the stale
+> ctx pointer:
+>
+>  - SOCK_OPS_GET_SK: dst_reg retains the ctx pointer, passes NULL checks
+>    as PTR_TO_SOCKET_OR_NULL, and can be used as a bogus socket pointer,
+>    leading to stack-out-of-bounds access in helpers like
+>    bpf_skc_to_tcp6_sock().
+>
+>  - SOCK_OPS_GET_FIELD: dst_reg retains the ctx pointer which the
+>    verifier believes is a SCALAR_VALUE, leaking a kernel pointer.
+>
+> Fix both macros by:
+>  - Changing JMP_A(1) to JMP_A(2) in the fullsock path to skip the
+>    added instruction.
+>  - Adding BPF_MOV64_IMM(si->dst_reg, 0) after the temp register
+>    restore in the !fullsock path, placed after the restore because
+>    dst_reg =3D=3D src_reg means we need src_reg intact to read ctx->temp.
+>
+> Fixes: 84f44df664e9 ("bpf: sock_ops sk access may stomp registers when ds=
+t_reg =3D src_reg")
+> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Closes: https://lore.kernel.org/bpf/6fe1243e-149b-4d3b-99c7-fcc9e2f75787@=
+std.uestc.edu.cn/T/#u
+> Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+> ---
+>  net/core/filter.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 78b548158fb05..53ce06ed4a88e 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -10581,10 +10581,11 @@ static u32 sock_ops_convert_ctx_access(enum bpf=
+_access_type type,
+>                                       si->dst_reg, si->dst_reg,          =
+     \
+>                                       offsetof(OBJ, OBJ_FIELD));         =
+     \
+>                 if (si->dst_reg =3D=3D si->src_reg) {                    =
+         \
+> -                       *insn++ =3D BPF_JMP_A(1);                        =
+       \
+> +                       *insn++ =3D BPF_JMP_A(2);                        =
+       \
+>                         *insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,=
+       \
+>                                       offsetof(struct bpf_sock_ops_kern, =
+     \
+>                                       temp));                            =
+     \
+> +                       *insn++ =3D BPF_MOV64_IMM(si->dst_reg, 0);       =
+       \
+>                 }                                                        =
+     \
+>         } while (0)
+>
+> @@ -10618,10 +10619,11 @@ static u32 sock_ops_convert_ctx_access(enum bpf=
+_access_type type,
+>                                       si->dst_reg, si->src_reg,          =
+     \
+>                                       offsetof(struct bpf_sock_ops_kern, =
+sk));\
+>                 if (si->dst_reg =3D=3D si->src_reg) {                    =
+         \
+> -                       *insn++ =3D BPF_JMP_A(1);                        =
+       \
+> +                       *insn++ =3D BPF_JMP_A(2);                        =
+       \
+>                         *insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,=
+       \
+>                                       offsetof(struct bpf_sock_ops_kern, =
+     \
+>                                       temp));                            =
+     \
+> +                       *insn++ =3D BPF_MOV64_IMM(si->dst_reg, 0);       =
+       \
+>                 }                                                        =
+     \
+>         } while (0)
+>
+> --
+> 2.43.0
+>
+>
+Reviewed-by Sun Jian <sun.jian.kdev@gmail.com>
