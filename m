@@ -1,79 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC1B38C2A4;
-	Mon,  6 Apr 2026 18:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39AB390CB7
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 18:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775498459; cv=none; b=ojqfTBBU/THFf2YsxUwEIW+z4E/gNdiBTRxQQvkROxa0wvidF7gSJ+MImksx+ErcpFc1AXQO4xhGkLNDWfWsP95RipS3jCfmm7pOOB2Hl00lQBgKp7qtNGmx7FceF+630dzZ00TpzLXMz1XvlpaRERMIDMLlO9zL94Wc5nF/bAU=
+	t=1775499100; cv=none; b=b48nUMlxgu6PXK58+xxoQZr5s71gbyw6T6dyWEy+LGG0VI/9KVqNk4IkSkjmLlh1qk4fVtAJN5bCt3ib67QtQzrlLqOcwePu5ihUC/X6Oll+Uo63PXn6v0EXJz7MNo8GS9WOEzVZJsTor6VmwHlLjYUBjuCkyA8l+fBSFGGtH0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775498459; c=relaxed/simple;
-	bh=xcEhnR4W//A1ik8wSUJ08Up7GUS4GXGUPS1g+tFQ02Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L3ylxKFWQgaTSEAJhjtNNJLydYPSN7NFHWxFl+OlaheV5/aX1ycNL/CHQNxwyflCutWq0Ye7Lk6V7Skp7WUm3zamZWZKFNTLv73W7FksHhpIdI6ysSxSrA02ZEcIjUU5kTBMp+3W7xErVlOk6FlC1WzipkyEIr2KuROz20M6EOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKormZZO; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775499100; c=relaxed/simple;
+	bh=FCmiQ7qR/HkeyDQC1w5V/E7vD9N4Qx2dGVi6447g0h8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dl+JGIFv11N51+KeySX/Q110js41dOZi7OlmLVbS7h6io4K20m1URToQYa+qxI9xB+XNS6RX4IkIpcs4FfpvIgMr2k7Y9exMLfGCz7AtA93DeLiGjxIr4fFRjq1P7u/DAZ6nN62oC+uB0byC5DdAK3McO5Q9AUhG6vaChpeWG+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bpHAp4cb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKormZZO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C550DC4CEF7;
-	Mon,  6 Apr 2026 18:00:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bpHAp4cb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC77C2BCB0
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 18:11:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775498459;
-	bh=xcEhnR4W//A1ik8wSUJ08Up7GUS4GXGUPS1g+tFQ02Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BKormZZOIaxMcjbufXUOmz+OjmJ3Ht2Ob34DXi6NqlJwXdMw5O428aZfdgsObcJwx
-	 a3WcNYTNioq1JaoyU/N42ta2UlU+MAP3jkukClAAYzg8k2u8KTg9DKxim2JW+iMvG2
-	 ToJ9ZTvc8Kr8zi1zrvHpIzgrz4Gn+b4AH7bsKmy35QnQ9+K150j4nqXKWWvagikiD5
-	 uhbTgfzVsvStE5M5sIHnBqiuj+GgbGGC2ID/SjlZbCOsOHwVcmas3+yQKvF29g5kbf
-	 KPkGprPmNBvjTlYB8ykeQYasqUaB8qDZ1bC4U2f+tIqYQxO8kPx9Du3NyJ6IaaoN15
-	 fG48EBHC1pkfA==
-Date: Mon, 6 Apr 2026 11:00:57 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
- <magnus.karlsson@intel.com>, <stfomichev@gmail.com>, <pabeni@redhat.com>,
- <horms@kernel.org>, <larysa.zaremba@intel.com>,
- <aleksander.lobakin@intel.com>, <bjorn@kernel.org>
-Subject: Re: [PATCH v6 net 4/8] xsk: validate MTU against usable frame size
- on bind
-Message-ID: <20260406110057.49b61126@kernel.org>
-In-Reply-To: <adDhtBR9aairuaJr@boxer>
-References: <20260402154958.562179-1-maciej.fijalkowski@intel.com>
-	<20260402154958.562179-5-maciej.fijalkowski@intel.com>
-	<20260403170357.14cb166a@kernel.org>
-	<adDhtBR9aairuaJr@boxer>
+	s=k20201202; t=1775499100;
+	bh=FCmiQ7qR/HkeyDQC1w5V/E7vD9N4Qx2dGVi6447g0h8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bpHAp4cbwIEmS7F5pVu/nkAAmPhZce79LP8/ERCarEd6gM0oLbACKuGFTDgAuSCxT
+	 sXnMphvgGwshBACkOQzvtgjd4nIqQXwzlhakz+EUND+K7/EJk/EK6pdZUb6ELdkDoB
+	 KOOdl3tPRC/x/FsBn8OOEdq5A8+Ke2kN69+meklvxOxECwgynlLGf9YZ2Kg49QUTWi
+	 lEOa/m2mvrUiUlnwee3YyeVhzYcWi/Yvqln4IUkHCvoC36do67wCSwC3RDOd/pMDE7
+	 XN1dhvaMCG5Vs2uWiQ5SysGtnM0mRg8C45fy2eJSQsBbAg2k8WiGAyQNd8K3I+Ep5Y
+	 LgO0OX4XANIWw==
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8d6d5e45c43so217710985a.3
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 11:11:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWOn5eina++r35mi98Hozk1Hplb2L4ewrdMw92iu67bVI0bp0VcxG5xOn8C/Zs9B3BT9rw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1mqHzcueHUqasXUdMmDet4aXw4PkbBc2PwY8WNibivxBkjRCf
+	WSFK6GhuoS2ErpWLLENOQ4hSpZXIh1/93KUJpEbxx9lE5vsmTeMEZOeVQDXj7vFer7w4hb+xcqz
+	2sKjVuWpXGX1bY3sqk4vnDkFiIHCMU+Y=
+X-Received: by 2002:a05:620a:29c1:b0:8cd:b620:9be2 with SMTP id
+ af79cd13be357-8d41da571fcmr1912531885a.38.1775499099536; Mon, 06 Apr 2026
+ 11:11:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-4-laoar.shao@gmail.com>
+ <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
+ <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
+ <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com> <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+In-Reply-To: <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 6 Apr 2026 11:11:27 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
+X-Gm-Features: AQROBzCFxkHfl2egwPNA3sbElolh-AgrieM9ssltLgTibswoiE7pp6N7fR9JnT8
+Message-ID: <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org, jikos@kernel.org, 
+	mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
+	rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
+	kpsingh@kernel.org, mattbobrowski@google.com, jolsa@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 4 Apr 2026 12:02:28 +0200 Maciej Fijalkowski wrote:
-> On Fri, Apr 03, 2026 at 05:03:57PM -0700, Jakub Kicinski wrote:
-> > On Thu,  2 Apr 2026 17:49:54 +0200 Maciej Fijalkowski wrote:  
-> > > AF_XDP bind currently accepts zero-copy pool configurations without
-> > > verifying that the device MTU fits into the usable frame space provided
-> > > by the UMEM chunk.
-> > > 
-> > > This becomes a problem since we started to respect tailroom which is
-> > > subtracted from chunk_size (among with headroom). 2k chunk size might
-> > > not provide enough space for standard 1500 MTU, so let us catch such
-> > > settings at bind time. Furthermore, validate whether underlying HW will
-> > > be able to satisfy configured MTU wrt XSK's frame size multiplied by
-> > > supported Rx buffer chain length (that is exposed via
-> > > net_device::xdp_zc_max_segs).  
-> > 
-> > For multi-buf - I suppose it's fine, but wouldn't this be potentially
-> > a regression for setups which use single buf? Suddenly we expect the
-> > user to provide space for shinfo which was not part of the initial
-> > AF_XDP design?  
-> 
-> For single buf xsk_pool_get_tailroom() gives you 0 so it is not taken into
-> account when we do comparison of mtu vs xsk frame size (in this case frame
-> size is defined as chunk size minus headrooms (xdp and user provided
-> one)).
+On Mon, Apr 6, 2026 at 4:08=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> w=
+rote:
+>
+> On Sat, Apr 4, 2026 at 5:36=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+> >
+> > On Fri, Apr 3, 2026 at 1:55=E2=80=AFPM Dylan Hatch <dylanbhatch@google.=
+com> wrote:
+> > [...]
+> > > > IIRC, the use case for this change is when multiple users load vari=
+ous
+> > > > livepatch modules on the same system. I still don't believe this is=
+ the
+> > > > right way to manage livepatches. That said, I won't really NACK thi=
+s
+> > > > if other folks think this is a useful option.
+> > >
+> > > In our production fleet, we apply exactly one cumulative livepatch
+> > > module, and we use per-kernel build "livepatch release" branches to
+> > > track the contents of these cumulative livepatches. This model has
+> > > worked relatively well for us, but there are some painpoints.
+> > >
+> > > We are often under pressure to selectively deploy a livepatch fix to
+> > > certain subpopulations of production. If the subpopulation is running
+> > > the same build of everything else, this would require us to introduce
+> > > another branching factor to the "livepatch release" branches --
+> > > something we do not support due to the added toil and complexity.
+> > >
+> > > However, if we had the ability to build "off-band" livepatch modules
+> > > that were marked as non-replaceable, we could support these selective
+> > > patches without the additional branching factor. I will have to
+> > > circulate the idea internally, but to me this seems like a very usefu=
+l
+> > > option to have in certain cases.
+> >
+> >  IIUC, the plan is:
+> >
+> > - The regular livepatches are cumulative, have the replace flag; and
+> >   are replaceable.
+> > - The occasional "off-band" livepatches do not have the replace flag,
+> >   and are not replaceable.
+> >
+> > With this setup, for systems with off-band livepatches loaded, we can
+> > still release a cumulative livepatch to replace the previous cumulative
+> > livepatch. Is this the expected use case?
+>
+> That matches our expected use case.
 
-Ah, missed the xsk_pool_get_tailroom() magic. The rest can be a follow
-up, my main concern was adding stricter check for non-mbuf mode.
+If we really want to serve use cases like this, I think we can introduce
+some replace tag concept: Each livepatch will have a tag, u32 number.
+Newly loaded livepatch will only replace existing livepatch with the
+same tag. We can even reuse the existing "bool replace" in klp_patch,
+and make it u32: replace=3D0 means no replace; replace > 0 are the
+replace tag.
+
+For current users of cumulative patches, all the livepatch will have the
+same tag, say 1. For your use case, you can assign each user a
+unique tag. Then all these users can do atomic upgrades of their
+own livepatches.
+
+We may also need to check whether two livepatches of different tags
+touch the same kernel function. When that happens, the later
+livepatch should fail to load.
+
+Does this make sense?
+
+Thanks,
+Song
