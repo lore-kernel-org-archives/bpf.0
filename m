@@ -1,267 +1,189 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687B33191BD
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 12:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D1223806AD
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 14:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775478402; cv=pass; b=ulI3swaLuqD4NoZGQXSx/W7YzRziQPR5XyHZY4KXAdPafqiaRfWTqgbNfsm9XX4iSNrO+hBOf98eeOXFDkAwpIDS7I4bp1BD27LmF59zJZg1L8F0FriXCeUrEswUZUNmhLOB2xe6fb8WcgGAisRG6hnmeNobqaDzUDaT5S0gaIw=
+	t=1775485425; cv=pass; b=u3iU55MJMq3Jw00gnF/6FSKihXJfoVqarYrlVdY87c2eSgACU8XlOYJ6uit4L7WWEhWT46UECIh45SY/KMQ0M8/W/dze43wRwKzoZMqtOU362Xp1sdTWp4WGXQaY2GC8lsOBujYX6YFx5nW6GgNhr1MnTopXZrLpRA2b1tcfhDc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775478402; c=relaxed/simple;
-	bh=Z/CDbcWuE2J/SDaUeb3SFAxsaRLnVodNz2nY2wKc/uI=;
+	s=arc-20240116; t=1775485425; c=relaxed/simple;
+	bh=0oshv46xLuQzPLIPdH9A0EvaVpAKTWV20KUKhaXBiSk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m6kD/v2kNtF9VmZOfc0w179CZRTE3Q2123W/S7iYVgiHgaIZmvrH2vzUDDBsRgMdOXxQyEJqPKygejGshdxVqBao4GK17COPYpnw/6fzmkGn+hhgz0GnHlQ37Sv+tKAdl65rpdGON5GLwptLDu22UpXFiZK2adAFro3E6JQ+dtI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pA00TjKD; arc=pass smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=TEm7Crs8KWtPY9dA00angU+TsGzFBB+9llrTOve4WvFV9Lqsxg0UXTJHHpgP2Cm44kGIQYsM/MARKmHZgLR+G05erADeWI1sAGthPyRlmCAFDHW4oYxlfYg2A1M7/vwHFbxCOEQEKjz7tWr9PMJ2r0o21WjVCOHTTT+WZ2q8+OI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XeoTYTd5; arc=pass smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pA00TjKD"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5a2967e5de4so5204241e87.3
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 05:26:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775478398; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XeoTYTd5"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-66b0dc690bcso21585a12.1
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 07:23:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775485422; cv=none;
         d=google.com; s=arc-20240605;
-        b=Nvo+kHNk2m92k387nk2PaX+d0gTbIe6CCQSbSCKeiQflMwdsZ074sJZk1OvjNQKQRQ
-         hcAgQUhllYSxgLRBgXDrtYAV56Y8H9zOVEKoAwR/wPdA6iWfjjPpaznl7yYlfc+LcTxo
-         XGKhVnpnRVyt37Fmlz1LAgFdrVeSFqMrWYzW3xCaQef6UE6ElgHymQlI4pYuJqwZ0HXS
-         QVabmgTZLzXbAacnwh1DvL6Bg/o/z7/R1proMLDwCJHfGj74hpLzRDj71U5OYQTtNv9b
-         o/BoFe554shE5fqolzmYCQWcWq5fGWkTRbAMLTh0YyPXXFC4BYCHKZOTynYZP9eUcDJg
-         lzHQ==
+        b=Y0cUWOqJ5V+bLYdOtujPQEeM7x6cNCFhMJ545Fiz9/BpiU0L67jVeADZ7Tzix2FscB
+         wM49DBb6wCOpC0csDWlpNDMoxgGSu4I3mAHw8xgRKChDmO/jaa69xd1o8RR0AwIxpG+A
+         cLqZjdmL6dxJMXfxfAq3FXvvBCD4xE83cINYqaZXELZS1Vq6jpKOIHucwAm7O3rotDsd
+         pjOiq3/+Qo2zoNW3uhwp05a0J7uqqhH9aaoIqkQeLFov0jLRo0FiWeolBUEv7cwj+abK
+         4mcBg8J/3q9JIuUsO095pqN7/GHvcysPXE5xKP3+GiIM0lc5YsWrfGENX+VBNBgSyKQ7
+         hKzw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tN2kgEeuddHm624zpdzvfwyc6om3StRoXFX3peqADZ4=;
-        fh=eisZeaeoWE1/iwixgScdMgLsc7/a2FiTgI5m5daRSbg=;
-        b=NSN7HCWMP+0/5ozNjXfEWfeFFpzPwq2u6jwFwYvjzH4OOZJY0y1KvH0OS7wMBYiav4
-         8b1K1QirVacP6D76ggXanYcR07NV/9NrHSQr6PnHMjfCr9rknaiwt0YwZBJjxeTE+jR6
-         pc6CPVLA3GiXTzv3UQKAnJUEixeslGU8hMwfmCEd1aMK7JnSI1Npo0UBPdGdKg3Q6Clx
-         /IJzmu3lOKCaBAPPlvDZTsQ2tDPLA1cr/xTyR6omnpAoSfDqH0Pg1tY8PI6fV9864F/Q
-         aysMs/DJ5pUDuEKl64jNPzrDnZzTXjaJXsf/Gm98jWcEIJlb/SRnFhXy0EPYSJnWpFnv
-         uoiw==;
+        bh=4foAE2z+Q/MQv2J0mPBdcU98fqKB0vyTweCETb8dfag=;
+        fh=3Q3qZB/tUSSKa0jD/aXIaAQv9dbelhuCaD5sPrZdVrU=;
+        b=ClefidzQZ7zsCFi1a+UDAqVMCZ+oHYIJ/rdCKtMJqnq7wHLF+kRjb1Sn0Zo8XYiCav
+         ML2Kjm7IwCcsg7mFkl6jeRW+99lf1FxWO/bdwx+TvStIiAiOj9rEf0Wt8GOmRAyzegtD
+         UdEQydxQYhfE8YgGGLi9DAmdcTooklr2HUmQXoPn97j43DaVHbZZY7zIzmX0CMrsNKDf
+         uCb6BiflOpLRI7C8rVB90+WWKO2KFQjarH4TfKnBUe790rZ+wMX5tsfcJYUOZgb51KJ0
+         CWe/SEcaJzBYy3/MTKGuIXouY9SB8EaWWURQC8n1xS4GIa41kKH9VgdspXkr1dcc/x6j
+         stvw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775478398; x=1776083198; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775485422; x=1776090222; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tN2kgEeuddHm624zpdzvfwyc6om3StRoXFX3peqADZ4=;
-        b=pA00TjKDq4FE/RJh9y8RK2tmpRUDmjGDuxQ5einp5mZb0DDULGx1v+z1tDGx6mB6uP
-         gHE1GwjRFoE1Yuz6owMB91z9haE/YY7ZBGNBHB0Zb3N4xcTOXK30MDwM2xtSwuaUqPjU
-         cVKHZuWJnuXGZmkELj2tY6XDjQMg7EkE1MP9639C1CI08EYXKFdtyPyUQ8vrEjWC8nc5
-         hYjHv0JzU88k4jRcvqU5iubjnxx9EdOdgTzjzNKNGOKPg+FYFk+3N+4egwn4lNMdyVxb
-         IWw5zmPgg8MDzeODxtqHekct3i8GpWJoFheMg5xEKl7qCt3alTHWUZYNelL2sQ+7L0UU
-         EhZQ==
+        bh=4foAE2z+Q/MQv2J0mPBdcU98fqKB0vyTweCETb8dfag=;
+        b=XeoTYTd5wSE48JW8kaM0qv3ycrSE9eyeuCIskQwqlA84Ij2A9Xf6y3+NEG1J8FRvIQ
+         t6bHLyFisYQzufw6dVUDCO8+C3SQMB2M3WjdVqRea1tMTT1qZ12ijqURJCW5YdMxgO/U
+         0iX1FKr+yUwYvrYESOPuxPlwn8N0qKaPS2HrSIaYdfALRFDkTWB6DFUsYj2vLBsIzzdt
+         uxeS2dppQQhcpnblsFY4Z4BNYMbYJ5yQSZk4VljRhDO6MTvR1NaxLYhYgKToGQoccHBJ
+         uk0Miz7PmU3O0o3kStbFvFjYl8NPwzt9LvF2y0FdSXBEcd20f/V0vddkkgTmfWnI5ZQF
+         agZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775478398; x=1776083198;
+        d=1e100.net; s=20251104; t=1775485422; x=1776090222;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tN2kgEeuddHm624zpdzvfwyc6om3StRoXFX3peqADZ4=;
-        b=jGWlwwZi0JXOacH3YVMqV7dwkf2bZxgo93BO7NtNAtLdw5hScTQSWcwWpa5kSIp4rA
-         Pv4gXtJ0c8G4UVqV1EESVlATVzpMKTNJNe/WliID7sJckli/uOk0TkWjmXggnHZ087ve
-         L2QMG2YbdBC0qMSuvpOG5iY3jpCryqzkCF0CAL3BfY7Uoi9XDJEWEXG4sDvi8z36bA3M
-         JdnA6WYOM5G+sSlHpvdq8XIzfd/B6ZHDvRpL6PC8/nTIZ61VLzyzMcUprpIdpIcy1sml
-         GQwXN8lD+vd8mK9mfXmK9cuZpVp1srr6S4q9hhmTi+3zdUY6pYkJs0F33LHeJbJRjaYq
-         7pgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVpk0ABo5w6G2J1rqshAJErKPhB04eRo77JrulXBSCERt6DZnOvM14ynk62LlBpRQKN78I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRrXvuxw7feF9R6pV/EBpGVV8fYAn9vhGsG15e2Z6sKJK+tijC
-	AQaaMrnJK8OjpbdmmMk9wU1xsraEWMLU22GE5ra1SxUzVaRzSXHYly9gmuRxB+DwBmyiUeOvdpH
-	QXJGVE3msr/OS7lqMjhYl9BDHShAtMgA=
-X-Gm-Gg: AeBDiesxNPmHbBK5kh6dQHws9RNDbAUQA++fAjJDCPxX8UOvDZpIntlEdDqhCwuxXIm
-	Bt7Z4iPjd2iIr0yYOOyxqxO6bVUynN1/jL0lVYwlwiWk77XpdY7WP/9SVsSHexpBf/XOLRG2xKI
-	waCKYJulwyqLAL9nOIvjEMOSzD0nt7Bn3UE9AfvCHimAN/luAxqgXS7QyOvchsR9t3LhT0h0mUe
-	AWM/qUgPtB6G1h9YExMIyrOYDr7VvWr3Iu6tLoAvDDnsIOOg7eIQDFROiybKjGUGjUD0SF+iDu4
-	/+CA80E=
-X-Received: by 2002:a05:6512:a94:b0:5a2:a5a5:5247 with SMTP id
- 2adb3069b0e04-5a3375849dfmr3854740e87.32.1775478398126; Mon, 06 Apr 2026
- 05:26:38 -0700 (PDT)
+        bh=4foAE2z+Q/MQv2J0mPBdcU98fqKB0vyTweCETb8dfag=;
+        b=IbRy/zOp9FE5rsO722t0J5wSfZP0qL3cVT0fW2wvSdnK/VaeW0+vERF0UfV3USDO4R
+         S+3BGJypcMR/ws3889HKcMLG2avAbDr9UVXm/0+WONM+5RuSuXC0m2qr70op1kme8MGN
+         GVaIgzXIZBXKqYz7XJyWxko4yiYAqvqhv7VtMax2xMat0MAa/HgDFh+U8ZSyBvubgqMm
+         we4e0JQZjc2ps1kS8HZqGfCwQqv/OcV7Obrkgc9bKBMOJQVbC4inz5f0uDq1Nv3ezqYg
+         alvNK7RzreIb2CI4tr+H7FWqHJo8VbpZKOXru5S76RYMTb6oPFgza/9uG1x6IffSqjiz
+         mE9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUqFqywi/H9sn7Dq/SJb2xhUj8Nxqk6v4tERZ0apeHzhxRCsay9kj9ZSHf671USRXFnLhw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl8kRxmpfynUVoJw8CS3LZ/dF6lxuF/1zzBhpySC4nMcAPKKOg
+	fuvCVnrTRsGNjWKp/Y/59HPoRU5D09CuS88KgXiqtgaNupc5dDyqkscbXvkBkTJIUJh4SfpxYJA
+	qWAcX9TDmSCNg7D/oI0gyh2mJb0PHGU48tHMZz+N/
+X-Gm-Gg: AeBDievtXiR2z2X++ohgAofed2LZ/bpBbtf+pHB8CWxQe3VgScRc97AxNVjUM1HUHko
+	H93ZaaQJ1lbFk2CYr+buLgsCmbgZlg7FB9X697Q2W9kSgOqXZS+PWKvJ8AhDBskPxs4l9l74aGu
+	aQVSLZOQwbmwhWPfZfd5n8r8qn/nQp2w6Bj+YcOI0q81P41bFcuF5UWMIAQH99BBvOV1+eY2t2v
+	2oH1xFjjfLHt13dgqJwhKYPBlkkQRNz7j9m3cguGhMaVxe7cmhFJu1AwtIMMFht+nOzl6jTOs/R
+	eJ+UZzg+fiCvIdX4KA==
+X-Received: by 2002:aa7:c383:0:b0:66a:7b3d:f43a with SMTP id
+ 4fb4d7f45d1cf-66e43cdc3d3mr75635a12.1.1775485421479; Mon, 06 Apr 2026
+ 07:23:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260404150452.83904-1-kerneljasonxing@gmail.com> <willemdebruijn.kernel.2053d6bde1d3d@gmail.com>
-In-Reply-To: <willemdebruijn.kernel.2053d6bde1d3d@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Mon, 6 Apr 2026 20:25:59 +0800
-X-Gm-Features: AQROBzAkyAbdNPQICndZJGh_99XQNrNmvda_T-DEftWK4oIla1p5dml9GEDR0PY
-Message-ID: <CAL+tcoDuSyQdR83C-07bUpJfYdnrkkcA8gO+0qKZM8PTbiFofA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 0/4] bpf-timestamp: convert to push-level granularity
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, 
-	martin.lau@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
+References: <20260403185236.sjgetnkha3o3a4d3@desk> <CALMp9eSPkMpKQELTnsaj6=gXD+EyE0n2_p93n4maDc93bPFe+w@mail.gmail.com>
+ <20260403213445.xzb4rxbfbg5un7li@desk> <CALMp9eSXfJvR=PHtttbqm3q3nH436T1eH4YdpVqxQeP-cxEPsA@mail.gmail.com>
+ <20260403231608.zopnhnypdclzqlx7@desk> <CALMp9eT2vJBdLPY2uBYrPgVrhS_aYmfGfdXe6MZXG_gyryLHVA@mail.gmail.com>
+ <20260403233329.fb2ppifgwm3um6ny@desk> <CALMp9eTpsenqsWjzmpXLEubn9uNjgZgzgrMwtZ72HDuV_2xgfg@mail.gmail.com>
+ <20260404002149.wtayv6a64vzuppgp@desk> <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
+ <20260404034954.t7iapenzvhdpagxp@desk>
+In-Reply-To: <20260404034954.t7iapenzvhdpagxp@desk>
+From: Jim Mattson <jmattson@google.com>
+Date: Mon, 6 Apr 2026 07:23:25 -0700
+X-Gm-Features: AQROBzBKIPcP_H1GwuJoXUrRRJVPGk443GCqm_WEh0Cd97H-YqzPVn5MR8nDNUU
+Message-ID: <CALMp9eR70eE2U63gzNzTiic0PqJVGv3CBBuVUOVbi3nqbWKZkQ@mail.gmail.com>
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, chao.gao@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 6, 2026 at 10:17=E2=80=AFAM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
+On Fri, Apr 3, 2026 at 8:50=E2=80=AFPM Pawan Gupta
+<pawan.kumar.gupta@linux.intel.com> wrote:
 >
-> Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
+> On Fri, Apr 03, 2026 at 07:21:02PM -0700, Jim Mattson wrote:
+> > On Fri, Apr 3, 2026 at 5:22=E2=80=AFPM Pawan Gupta
+> > <pawan.kumar.gupta@linux.intel.com> wrote:
+> > >
+> > > On Fri, Apr 03, 2026 at 04:39:54PM -0700, Jim Mattson wrote:
+> > > > > Since cloud providers have greater control over userspace, the de=
+cision to
+> > > > > use BHI_DIS_S or not can be left to them. KVM would simply follow=
+ what it
+> > > > > is asked to do by the userspace.
+> > > >
+> > > > I feel like we've gone over this before, but if userspace tells KVM
+> > > > not to enable BHI_DIS_S, how do we inform Windows that it needs to =
+do
+> > > > the longer clearing sequence, despite the fact that the virtual CPU=
+ is
+> > > > masquerading as Ice Lake?
+> > >
+> > > IMO, if an OS is allergic to a hardware mitigation, and is also aware=
+ that
+> > > it is virtualized, it should default to a sw mitigation that works ev=
+erywhere.
 > >
-> > 1. Design of send-level granularity
-> > Originally, socket timestamping was designed to support tracing each
-> > sendmsg instead of per packet because application needs to issue
-> > multiple extra recvmsg() calls to get the skbs carrying the timestamp
-> > one by one if application chooses tag with different tags(SCHED/DRV/ACK=
-).
-> > It's an obvious huge burden if the application expects to see a finer
-> > grained behavior.
-> > Another point I mentioned a bit in Netdev 0x19[1], supposing the amount=
- of
-> > data that application tries to transfer at one time is split into 100
-> > smaller packets, recording the last skb's timestamps (SCHED/DRV/HARDWAR=
-E)
-> > is no longer meaningful because at the moment timestamping only records
-> > 1/100 packets. In this case, only the delta between when to send and wh=
-en
-> > to ack matters.
+> > Agreed. So, without any information to the contrary, VMs should assume
+> > the long BHB clearing sequence is required.
 > >
-> > 2. Known missing tag issues in TCP
-> > A critically important thing is that we can miss tagging the last packe=
-t
-> > in a few conditions as the patch 3/4 explains. That means we lose track
-> > of the send syscall. Digging into more into how tcp_sendmsg_locked work=
-s,
-> > I found it's not feasible to successfully identify the last skb before
-> > push functions get called. With that said, if we want to make the featu=
-re
-> > better to cover all of these cases, we inevitably needs to place
-> > tcp_bpf_tx_timestamp() function before each push function.
+> > Returning to my earlier comment, the test should be:
 > >
-> > 3. Practice at Tencent
-> > In production, we have a version that applies the packet basis policy t=
-o
-> > do the exhaustive profiling of each flow for months in order to:
-> > 1) 100% make sure to capture the jitter event. No sampling.
-> > 2) observe the performance, find the bottleneck and improve it.
-> > We're still collecting data and investigating how it helps us in all th=
-e
-> > potential aspects before upstreaming. My personal perspective on this i=
-s
-> > to replace tcpdump eventually. It's worth mentioning tcpdump no longer
-> > satisfies our micro observation in modern data center.
-> >
-> > 4. The tendency toward finer-grained observability
-> > As we're aware that there are already many various bpf scripts trying t=
-o
-> > implement the fine grained monitor of the packets, it's an unstoppable
-> > tendency for the future observability. We're faced with so many latency
-> > reports (like jitter, perf degradation) on a daily basis. Getting the
-> > root cause of each report is exactly what we pursue.
-> > After we know which request causes the problem, if it belongs to kernel=
-,
-> > we will dig into the packet behavior with more useful information
-> > included. This is the process of tracing down the jitter problem.
-> > Likewise, in BPF timestamping that mitigates the impact of calling extr=
-a
-> > syscalls, breaking the coarse granularity into smaller ones is a first
-> > good way to go. It shouldn't be the burden like before especially it's
-> > independent of application.
-> >
-> > 5. Details of the series
-> > Now it's time to convert BPF timestamping feature into push-level
-> > granularity by only recording the last skb in each push function, which
-> > is quite similar to how we previously treat each send syscall.
-> > Regarding each push function as a whole, we only care about
-> > the last skb from each push since the skb can be chunked into different
-> > smaller packets. BPF scripts like progs/net_timestamping.c has the
-> > ability to trace each tagged skb and calculate the latency:
-> > 1) delta between send and each tagged skb in tcp_sendmsg_locked()
-> > 2) delta between SCHED/DRV/ACK. Three timestamps are also correlated
-> >    with the sendmsg time.
-> >
-> > In conclusion, push-level is more of a compromise approach which covers
-> > those corner cases and further enhances the capabilities (like a finer
-> > grained observation of jitter and performance issues).
+> > +       if (cpu_feature_enabled(X86_FEATURE_BHI_CTRL) ||
+> > cpu_feature_enabled(X86_FEATURE_HYPERVISOR)) {
+> > +               bhb_seq_outer_loop =3D 12;
+> > +               bhb_seq_inner_loop =3D 7;
+> > +       }
 >
-> # push-level design
->
-> It it significantly less intuitive than per-syscall, which is under
-> user control. Or even than per-packet. As a fix for missing timestamps
-> I understand these two extensions, even with the unintended side
-> effect of reporting many unnecessary extra skbs in the common case.
-> As a model to advocate for, less so.
+> To be clear, my comment was for an OS that doesn't want BHI_DIS_S
+> under-the-hood with virtual-SPEC_CTRL. Linux doesn't have that problem,
+> hardware mitigation on Linux is perfectly okay.
 
-Thanks for your review!
+Today, BHI_DIS_S under-the-hood isn't offered. If the hypervisor
+doesn't offer the paravirtual mitigation MSRs, the guest must assume
+that the hypervisor will not set BHI_DIS_S on its behalf.
 
-Fair enough. One mode of our internal kernel module directly hijacks
-tcp_skb_entail() that handles the last skb of this skb if
-fragmentation happens.
+> Without virtual-SPEC_CTRL, the problem set is limited to guests that
+> migrate accross Alder Lake generation CPUs. As you mentioned the change i=
+n
+> MAXPHYADDR makes it unlikely.
 
->
-> Would it help if all skbs from the same sendmsg() can still be
-> identified as common from the same syscall? That allows the user
+I have been unable to make a compelling argument for not crossing this
+boundary. The only applications I can point to that are broken by the
+missing reserved bits are (nested) hypervisors using shadow-paging.
+Since both nVMX and nSVM support TDP, the niche cache isn't a concern.
+There are compelling business reasons to support seamless migration
+from pre-Alder Lake to post-Alder Lake. If you know of any other
+applications that will fail with a mis-emulated smaller MAXPHYADDR,
+please let me know.
 
-I have to add more comments about push level:
-the last skb from each push function will always be correlated with
-its own sendmsg. With the help of BPF_SOCK_OPS_TSTAMP_SENDMSG_CB, bpf
-script can do so.
+> With virtual-SPEC_CTRL support, guests that fall into the subset that
+> migrate inspite of MAXPHYADDR change would also be mitigated. Then, on to=
+p
+> of hardware mitigation, deploying the long sequence in the guest would
+> incur a significant performance penalty for no good reason.
 
-> to discard all but the last one (if they wish)
+Yes, but the guest needs a way to determine whether the hypervisor
+will do what's necessary to make the short sequence effective. And, in
+particular, no KVM hypervisor today is prepared to do that.
 
-Oh, I just replied with another reply. Let's start the discussion here.
-
-It would be great if we have a definite finer grained observability.
-
->
->
-> # ABI changes
->
-> For SO_TIMESTAMPING we would not be able to make this change
-> unconditionally as the behavior change would break existing
-> application expectations.
-
-Right.
-
->
-> That is why historically we have guarded new behabvior behind new
-> TS options flags.
->
-> The same may be true for BPF.
-
-How about adding a socket option for a per packet mode, say,
-BPF_SOCK_OPS_TSTAMP_TCP_PACKET_CB around tcp_skb_entail() which works
-very similarly to
-BPF_SOCK_OPS_TSTAMP_SENDMSG_CB. After that, users have a standalone
-option to decide whether to trace all the skbs from the sendmsg.
-
-If so, the origin BPF timestamping that works exactly like socket
-timestamping is the best effort (we don't 100% guarantee the timestamping
-feature captures every sendmsg call). With the new socket option
-involved, we provide a finer grained vision without harming users who
-favor the origin design with those two issues resolved.
-
-A kind reminder is that if the skb is fragmented, for instance, due to
-TSO being disabled, only the last smaller/child one will be monitored.
-
->
->
-> # SO_TIMESTAMPING and BPF timestamping differences
->
-> A related point is that this breaks the 1:1 relationship between
-> SO_TIMESTAMPING and BPF timestamping. As said before, I think that
-> is fine as BPF timestamping can be cheaper. But we should avoid the
-> two forking in incompatible ways. I suggest that BPF timestamping
-> becomes a superset of SO_TIMESTAMPING: it must have all features
-> of SO_TIMESTAMPING, and may offer more.
-
-Thanks for your insight. I agree with you! A new socket option should
-be fine, I suppose.
-
->
->
-> # Documentation and testing
->
-> Please also expand Documentation and include a test.
-
-Will update the doc in the next version.
-
-Sorry, a test for push-level is a bit difficult. Let me complete it
-after we reach a consensus on how we use it :)
-
-Thanks,
-Jason
+When running under a hypervisor, without BHI_CTRL and without any
+evidence to the contrary, the guest must assume that the longer
+sequence is necessary. At the very least, we need a CPUID or MSR bit
+that says, "the short BHB clearing sequence is adequate for this
+vCPU."
