@@ -1,114 +1,87 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FD4238C36
-	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 04:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775451112; cv=pass; b=rQoHRLdr13Y7tULsExwRXfzn6g4EyqVRYUhXSsQ80GsFZX863D30DxRIGN0rJacDaqyDr2NnCQndNQgraxMoNUrsTaUEeKYxRPMMRmgDyKcN1nteHVHES7NA2WQFXIuyI5vYAOULYhv62CIQaA2U+DRHdtLoohk6iqXpQF3Ufwc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775451112; c=relaxed/simple;
-	bh=lNz/Zp2Vrxz8A8k+nXWnEkP9tMA2yeLd4ut8OM18zfQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a4LyL5AXjRVtO+7Cjvw1mWZVGlvg8587pTrWzyGtQwG02fJaeAotLJzQuB1uqQ7295tNf5gqYBy6YaaYgoi9gk28emohPGyD0ljE4AbiHaqWsyaVtJtDzqztxdBHjPRsKbqBL8m3eRWl5lvvUbzdsqnELksqwM/kIT7muUYRRS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L2RZe7Wn; arc=pass smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F38A1427A
+	for <bpf@vger.kernel.org>; Mon,  6 Apr 2026 04:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775451270; cv=none; b=VieNq9nYEW9i6Km22O6ruEQz8AU1pBPix8S7/gohUQcVgneoncS0cutoQI82BtO5Ol/bUbuVNx3yXYVFZqMvtmYW+r+4blMyHQSBcRtE4G/5UXGg0D1MMqMkabmHo/9d2LGmftmeXTjRN3D3b4tbY1rMP6LzpAoukks7H9QljGI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775451270; c=relaxed/simple;
+	bh=i/M/U1Rs0FJn+opFy02cwva2q+VoShzETD0zYZFGZcs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DHRTaREzSFeC+ZE6r3FDxYLhQG1Lu7/ua53Cf/7I48bxUiARXNY/lL4A5RUiRSwh4J7IWaXFnB+KU86JlExiNm95nTsdqfr56xhHBf67Gfv5c69ua5plBWDy6hy41VdqrzhJU2kI6tlPatI2FUp/gqAVvfEAhQiK4Qug11R/GUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eH6SWGcH; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L2RZe7Wn"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488a29e6110so15252545e9.3
-        for <bpf@vger.kernel.org>; Sun, 05 Apr 2026 21:51:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775451109; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jHWucgrg2aQ55MqgUPC/y3W7ENvvUvrYRUU0WwpZ5lB2z2h1P/OKrMm45fsolAUE/m
-         9RtDi+enK7ibaKPo7o6f6RPxqH/Kc1Z2bTha38wElTZmh8dqsTV28OCk8k7jTKcujnod
-         ZcyHfus+06J7JW8v3Sr78yesi7LadA6EtygTeWmMNdJSIpnDoQKb1D/WfslanyhaO6f7
-         0/VvbolaQXduBY3TjDwXZsDrnrS7MIa68HKP/BnFHqGtCUTfDZ1pZyqdWZnTuIP8FCf1
-         bEDHqgFinQ9OwLExxU9Lq+PXtL8Ndj9ye9Tqb9RhO4qeLOLa2XtjOmxe5ihl0wM3BssK
-         Mlbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lNz/Zp2Vrxz8A8k+nXWnEkP9tMA2yeLd4ut8OM18zfQ=;
-        fh=wi89WQjOF2HvnYB0v50Lj11/w784Fae/K3mXW7+OEdE=;
-        b=Dyqw2l2EKXsJb1yjhnTIBNl0APLyp1TLQDnfIKyWV+Z8a/GR1nasSoLXfvWI5/OWH4
-         w1QYVhfEpf5pM1sFVgJ39RYBzy6zFdlzrU7Kfp7rRhirWB3MCH3adAcfdOCMs/S55FtI
-         S57utGFoiG5TL7MCQ6UtF7zf8zGk2EPKZG0rbQ3+xqprc+XYtCNoCPPV0w/AmhuVpDtS
-         kTT8/fqsnAedfLYj4c3JkveNrqjf4lXeDR/Ea2NNBq/PdmUPrCTmTmH2cn/Xr6eVzL1u
-         4eKv1wkZ3bXxqrDyZFopbVzGNkgDMMN/cwCRTNHk+9p3lgm0ylguB205u7Lpf+lkUwaY
-         hiZw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775451109; x=1776055909; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lNz/Zp2Vrxz8A8k+nXWnEkP9tMA2yeLd4ut8OM18zfQ=;
-        b=L2RZe7WnQr2Ztk9dUGOrIsPKSHG1PVb8iMDb4hFd5XZcasmsc1vbglaLl8NFlK4PgF
-         dw8VU5zjsHM0/c0LazMZQJ+yQVc/xSvTMbS9wUcPf21zCVBSoMfCGvG70OAjkpvq/MPv
-         jPWpibcRclg2EimviFfS+xQzA1ONg9iom7RUi/361VskAIQ9f+KNmb38yJw3gPIaf7SV
-         CfG5pW0k4AGF0DDFl2jU2+KgS9mUHrhfttJSbhJLQlrK43xacYPLrGOPV6u9d8QIFHp2
-         zqbIUDPQxswWBEZ181aoGHW5ThBgW9YPFoGvSwhQudOmCRstSQXVPALymeBahBTvZtYi
-         oj8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775451109; x=1776055909;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lNz/Zp2Vrxz8A8k+nXWnEkP9tMA2yeLd4ut8OM18zfQ=;
-        b=Fo1jMdgWGwMqC77fSEzMHEUFnBcKlrRPTvXl3mR2mqb8Z3/jQmboU4q5FZ+q969hmD
-         py0PlvsVTl8KANSpiy2AzhVwDZOgGnsLXU1MxpII6jfRqXjIHYZKH+DDRGbRRoEWlmjZ
-         nskSUzOBLlmvqYekh7d9ohB6C0fDXYvT2ODbYdq9PXTHCmoQMmlQeqtummheL4uUoRGX
-         Zwf0Sm3VYuMusg1pphxE9KZuBgW+ZW7XdEX6HMeQvTS/OZf6YAWBKtQQWgvMfDtqA36W
-         RnWTbFatbahuLDVwjAmVgnPH3GMlToxhkWTL15caWD9/r6DnMugUJ0kAs2v0recr3i+v
-         w+BA==
-X-Gm-Message-State: AOJu0Yw/80YW0d+GL9pIT4LMtxYzKs0dIo+jiy8vujOJ5K5+dnyruaa8
-	VblbqpELxt7LyE3yEMA/spYD6Kr0xcLwyynHAdJAzTpR1Ss+KZKQLbO7gKUsIuezK6PetzXPWgd
-	KSel0pn4g9BEVNs7jSZkavNMIzZ92IqQ=
-X-Gm-Gg: AeBDiesQa+vmpM7zxgBX82zL53JQictsUBKbu4LHw1c315x8md22qnZZFJbbz+uzWR1
-	Bj+ASBaIABmQ6todjveF4JC3uj5Po78E8PisjqeggW/WoD9T2Ut+BbOMBA3WHayX5hkoWdW7gLl
-	GNHkacJunj+KS4/jgdB5rW89K6UbRBg1ZNh/0RzlG40Meixd6R/37JXC8ZSwaKet0ZL4XL5KVAT
-	9/c6k2tkG9Wu3k+3iwuoK+mjjekCNmBED/+cVRJQ/RcgY6R6HoqVBgwd/MoXs8wVyl4UK0q3YjY
-	54VMAvWsh3PXE63APZIx9+VX2fH8GLst8gm9JJxcwvywU0Dp5cSEDDXNmr21Dxn3PJtk2nuhl0j
-	zH0lpt3KcVkXjqtyaDBjf3ia1VA==
-X-Received: by 2002:a05:6000:4020:b0:43c:f4df:923b with SMTP id
- ffacd0b85a97d-43d292ff5c4mr16211033f8f.50.1775451109064; Sun, 05 Apr 2026
- 21:51:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eH6SWGcH"
+Message-ID: <739cdd1f-1838-457d-9b71-f47c3eadb0fb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775451266;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tNbb8FX4JBbRHJzrlKceD/p+eg1E4vsexHkNHXJOTVg=;
+	b=eH6SWGcHg/XM9mk09g5me7tLM3qVV1qLzSSCdcCvmV3nCl4LqFDVfcMLm4clqMs6K7WZNk
+	d/qcdLWiTG+Hr41tmwrrx8Ta2SLTtwU4vpGQ3wRe7Wb8dNmiH7nkXeuhL2Q2r5KhIRNVil
+	7vKND561a5c5lVMyHwL7UGkhePEg/fM=
+Date: Mon, 6 Apr 2026 12:54:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402012727.3916819-1-yonghong.song@linux.dev>
- <20260402012742.3917613-1-yonghong.song@linux.dev> <CAADnVQ+y1jZZTyNcXghD0UQ+JzD0pEu=icSP7=+QY4b=9dzv7A@mail.gmail.com>
- <924fde92-d28f-471d-9f0a-0c176958139c@linux.dev> <CAADnVQJdTffT5sdqZVdWX9W-jG2vPjiPAA0OT3iMPPsY9-KFmA@mail.gmail.com>
- <074ee11d-3f63-4e6c-b66d-c60a834cbb25@linux.dev>
-In-Reply-To: <074ee11d-3f63-4e6c-b66d-c60a834cbb25@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 5 Apr 2026 21:51:37 -0700
-X-Gm-Features: AQROBzD5qp1TZU9lrnhR2W0zr3DK6u0xec2yz6CrJ9FtalfgpPrmAvZy1gwcJY8
-Message-ID: <CAADnVQ+9OdBFnUAXND-MW7epFnqwj9f2w-w0xPD7T73sTMj9Zw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 03/10] bpf: Support stack arguments for bpf functions
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>, Kernel Team <kernel-team@fb.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix same-register dst/src OOB read and
+ pointer leak in sock_ops
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: 2022090917019@std.uestc.edu.cn, dddddd@hust.edu.cn,
+ M202472210@hust.edu.cn, dzm91@hust.edu.cn, emil@etsalapatis.com,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260406031330.187630-1-jiayuan.chen@linux.dev>
+ <913274772cd62d8d93e6cfb2c251c2388b73f24f90d05be3c9994207ac7048bf@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <913274772cd62d8d93e6cfb2c251c2388b73f24f90d05be3c9994207ac7048bf@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Apr 5, 2026 at 9:29=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
-ev> wrote:
->
->
-> >
-> > For 6th argument JIT emits these two stx/ldx as moves to/from x86's r9.
->
-> For stx case, we should move the bottom stack value (6th argument)
-> to r9 and pop the bottom stack slot (8 bytes).
 
-That doesn't sound right.
-Passing 6th argument should not involve stack manipulation at all.
-No push and no pop.
+On 4/6/26 11:47 AM, bot+bpf-ci@kernel.org wrote:
+> This Fixes: tag covers the SOCK_OPS_GET_SK() portion of the fix,
+> since 84f44df664e9 introduced that macro. However, the identical
+> bug in SOCK_OPS_GET_FIELD() was introduced by an earlier commit:
+>
+>    fd09af010788 ("bpf: sock_ops ctx access may stomp registers in corner case")
+>
+> That commit added the dst_reg == src_reg handling to
+> SOCK_OPS_GET_FIELD() with the same missing zeroing in the
+> !fullsock path. Should this also carry:
+>
+>    Fixes: fd09af010788 ("bpf: sock_ops ctx access may stomp registers in corner case")
+>
+> Without it, kernels that have fd09af010788 but not 84f44df664e9
+> would not receive the SOCK_OPS_GET_FIELD() fix via stable backport.
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See:https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary:https://github.com/kernel-patches/bpf/actions/runs/24017481706
+Well, it's true. However, fd09af010788 and 84f44df664e9 are from the
+same patchset (same author, same minute), so any stable branch carrying
+one will have both. That's why I only included a single Fixes tag.
+
+But if you prefer carrying both explicitly, I'm happy to add it in next 
+version.
