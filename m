@@ -1,75 +1,160 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA12D33B95C;
-	Tue,  7 Apr 2026 14:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B974AEE2
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 14:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775573658; cv=none; b=U8kAmQ0d2x4y4KrhWdX5vAFe2JwGLXE7AvY/Iw5qotKTqqX1AsrKUOam6CJWkaIPsnr+EFN9brF2GHIWb6fFlgZNCkrnm45duboWCXprZEQA/pM1er1Ifz3hmDVZygzcxhIrr9wKP8Cot1r8JvKb0qDmRxzHHM0Kqr9tnxiDk8s=
+	t=1775573680; cv=none; b=IRuEPxZIPlsPAyStdGOALFZcGKOEje4twyvdCTBZWutVYcfgBZGNpdh+17PIm2l2tHnxcCarrfKCqqpk0kXy3fxNXm6BkBnrdAGFV9t32pI5dPV6np592V3I93J785YuAQRxsDEVi24OZr/NlnJVCWUzKvwLVMBCP0AhUQoFQjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775573658; c=relaxed/simple;
-	bh=RkaG3689Dfne+XM44UQiTKcfy5ESH998KqdJaxuhDO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rAO9ElBRig3ynglCwrfhheINiBcYns76iYKm9GfEZbHXxOfqtboL73sufLFfF+U50QX2jldjPzn0TivIjIxNDjqOYv2MikBYfTzgDTq6IZAYNqRvyBrjFAcIl6nGYzUwVRLr4Lz0Cu9fNDh9MyKcp/kwFqeDAqjgtLsu34Bhf8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lkbitBBG; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1775573680; c=relaxed/simple;
+	bh=AwxLupIt2BmepkAUp2LdB4nomF+wbPjJ8xcKlQf9WD0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O5w/t7PaXWGo4Fq76FhUzk/4piXeeggYcqU0V68MmIGgxXrnAApJyDbMo3XB99i0EUpvchmpNbpONA5XrGYNapFWFwfJhPOfGDWaGw/H4Df1PeKg1mUwxGuotJ1X75j8ElWoK+V7D1567UykOIUmFigRREthy4rt5WuT6BjtH2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFK0x8EK; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lkbitBBG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=I4Js2ohWZueRGJabplhLOOhsDw9WIffOuSiRzBa05HM=; b=lkbitBBGJM3CbpjW8o5AFwucvm
-	6OFjkYMOw3EZUCZAWFBqLFUSaCboA5mxZSZZh+fAIaGStZ/4id2bvEGkuVj5WQgMeqCa10Bi9EH9Y
-	vc+KaBS843kgj7FI0AV4zUdZuP/zxGUAwhrz+vEIOteTfbLtFci38lBiKbqxtk1NZzo1Qimc855jB
-	AbmY2p9aF1hzjCu2C5WTaC8qpbATXprH5pIwVNyWaE4U7uOfuCwZgVkELaOocgvZ2uxDJTm40UiuO
-	lNjTE8e738gWP8wFlvrDPTEEkYnGiN3MwTHGkfBKJGhTStYT4C43VqQexsamhr/o0X6hUT7gNSAJm
-	1zHYdPpg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wA7ok-00000006eeq-2lsy;
-	Tue, 07 Apr 2026 14:54:14 +0000
-Date: Tue, 7 Apr 2026 07:54:14 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: "Darrick J. Wong" <djwong@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
-Message-ID: <adUalnAyY9mm1LUr@infradead.org>
-References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
- <acYVjuDOD7NynO9m@infradead.org>
- <20260327060518.GP6202@frogsfrogsfrogs>
- <20260407-unmengen-wahltag-474557ec0c58@brauner>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFK0x8EK"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c76cce85bd9so1885521a12.1
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 07:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775573678; x=1776178478; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UXzZHHfnZlsWhHKejBKYXg/anr1Lvjvzk+lC/QUfMJU=;
+        b=MFK0x8EKQ+ypy7QVYKP2tKyJagzo/BoHmzXqw7GyGuU8EEg8BffSdYQcAJ8HloGrqz
+         0JapUZeD3q5/vCN8Cq57ck6Ju9JedrDU617ZzW3XH43Zi5vFoEaqH5TjqkBspX0NAkxp
+         K/9XndzogymTFi/YluPuHdnG/aKVs4nZCqojzA1noxoAlZ6Owk7w84Pd3YOMRkoWginy
+         wf0vPOD7W+2sAHSlv6nPW46JNiZ9yqHVYmJcsILfP4K6t/M35cYuCkF01+VWG1cyiYaG
+         Bvd8Xlgc2HC9iiNfvQxFayP6KWVFtd9nTT1IcDu9iAmmFN1hSus43FG5KMYcCkA+DUNW
+         taQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775573678; x=1776178478;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UXzZHHfnZlsWhHKejBKYXg/anr1Lvjvzk+lC/QUfMJU=;
+        b=bbt9ab/+FZBw6sTZPliW8MR7sdPOESmP9yAiuA+NMHKeTtP9vXd0zInFg36ZP5nByv
+         AM9faIYbssv1zOwlbioTUbq3/vbqgKend19fkc2Yl53BPc29fdhjeSEgi9yyQj/s/xZv
+         hGqHQBa4BkJzlJh2Z3wxIjFPzWC0h1FPJ9ZOggZa/OYHQWb9d+4quJGhb0COw9/sDnCH
+         GuMqzAB3eUUgx5buhnrMdp7uKG6ZUD5fSsZfsLUCR6ba3T3rsxgPWEemngjvtXl7ZPiD
+         jB3jdye+pkyu2fmCssmuUruow37bRoP5xGxHYHA4wpJTMjFTF1SseUNj6PAW3m968FJJ
+         Qtpw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDIrksSSEDcRjZ69w2nygOhbRoDvo76A9RbFsCCy3Ue+mAOj068M96KIU1xoMLFewt/sQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKZH9gJ3iX9V+fecWwOrL/s8KMKDFXVCY95cdu2pIHzmff/f2G
+	7SVvnIxTubbwE5e8RTlFFAT7kOBsEX7Q6m1VV7BOf15/VIZQ1Pr7nJ0x
+X-Gm-Gg: AeBDievn/lSEX6NutXPHDYDsP5XoLCzMpTjSVsi3DwZilQTKWLUPLOcBrxZtVBRT/Sh
+	qadvj09JGAFk+hIDciXMrlahGafDHd1DP3bVpcDfhrYfkNziB0Z0OSuxDzJMq2oO8YIJTMosaHk
+	xolLHS/HB6LjEDT9QBrm+7ZxG/Y/U84oOGC+qHMH2CylfYQpRa/iPnQr/HeyqKPJKks8x7t6tqa
+	A2VpG2htOEoNIpHXFAq7lgpYpE5ijr0rnPL1puv5PvE0xHJg7wh3NFn5VPFkMiX1RpRbMyU/O2S
+	pX5KeDTzu16euSBQ1+FTaLDquAMa8Of6yQaqXt7O8OiY7jTDFl7W73VTIKUS4zyCpLUJxCiL3ep
+	fAVieOsWwNawnhWk+5Bxe77G+S64lPSO6eQKY06LigA59RcN9thlqVNeSI2RhzL/K/utya8ggFh
+	/kjuXz3ujD6n3Kkb+E94zQfhXfuv1MjobUo5E=
+X-Received: by 2002:a05:6a21:3387:b0:39f:2b9e:e486 with SMTP id adf61e73a8af0-39f2f172c0dmr16465423637.58.1775573678023;
+        Tue, 07 Apr 2026 07:54:38 -0700 (PDT)
+Received: from localhost.localdomain ([47.236.127.140])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c76c6476a81sm15755650a12.7.2026.04.07.07.54.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 07:54:37 -0700 (PDT)
+From: Qi Tang <tpluszz77@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org,
+	Qi Tang <tpluszz77@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: add test for nullable PTR_TO_BUF access
+Date: Tue,  7 Apr 2026 22:54:21 +0800
+Message-ID: <20260407145421.4315-1-tpluszz77@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260407-unmengen-wahltag-474557ec0c58@brauner>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 07, 2026 at 12:25:29PM +0200, Christian Brauner wrote:
-> Yes, I'm aware of that limitation. In this case we know exactly what
-> type of filesystem is used. But thanks for reminding me that for btrfs
-> it's s_dev is never the actual block device.
->   
-> What I would ultimately would like in the future is to have a security
-> hook that allows bpf to reject mounting any block devices that aren't
-> dm-verity protected. Maybe we can chat about this at LSFMM as well. I
-> know you will love this idea.
+Add iter_buf_null_fail with two tests and a test runner:
+  - iter_buf_null_deref: verifier must reject direct dereference of
+    ctx->key (PTR_TO_BUF | PTR_MAYBE_NULL) without a null check
+  - iter_buf_null_check_ok: verifier must accept dereference after
+    an explicit null check
 
-I'd much rather go right to that, with a slight tweak to clearly
-specify the expected protection and not hard code dm-verity.  There's
-ways to do full file system verity [1] much more efficiently inside the
-file systems, and it would be good to not lock in a specific solution
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Signed-off-by: Qi Tang <tpluszz77@gmail.com>
+---
+ .../bpf/prog_tests/iter_buf_null_fail.c       |  9 +++++
+ .../selftests/bpf/progs/iter_buf_null_fail.c  | 39 +++++++++++++++++++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
 
-[1] not to be confused with the existing fsverity for certain read-only
-files.  Although a loopback image on that would probably also qualify.
+diff --git a/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c b/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
+new file mode 100644
+index 000000000000..ea97787b870d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/iter_buf_null_fail.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include "iter_buf_null_fail.skel.h"
++
++void test_iter_buf_null_fail(void)
++{
++	RUN_TESTS(iter_buf_null_fail);
++}
+diff --git a/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c b/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
+new file mode 100644
+index 000000000000..3daad40515e6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/iter_buf_null_fail.c
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Qi Tang */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* Verify that the verifier rejects direct access to nullable PTR_TO_BUF. */
++SEC("iter/bpf_map_elem")
++__failure __msg("invalid mem access")
++int iter_buf_null_deref(struct bpf_iter__bpf_map_elem *ctx)
++{
++	/*
++	 * ctx->key is PTR_TO_BUF | PTR_MAYBE_NULL | MEM_RDONLY.
++	 * Direct access without null check must be rejected.
++	 */
++	volatile __u32 v = *(__u32 *)ctx->key;
++
++	(void)v;
++	return 0;
++}
++
++/* Verify that access after a null check is still accepted. */
++SEC("iter/bpf_map_elem")
++__success
++int iter_buf_null_check_ok(struct bpf_iter__bpf_map_elem *ctx)
++{
++	__u32 *key = ctx->key;
++
++	if (!key)
++		return 0;
++
++	volatile __u32 v = *key;
++
++	(void)v;
++	return 0;
++}
+-- 
+2.43.0
+
