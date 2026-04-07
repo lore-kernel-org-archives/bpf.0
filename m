@@ -1,141 +1,93 @@
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF551F94F
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 00:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEB270830;
+	Tue,  7 Apr 2026 00:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775521412; cv=none; b=hXPXQdbzIV6OFDVzAOEriFLKyP4zdwdQ+2mY0xACLYRsjIuIpVNuQ4dKSMbZSyZds7tPPvFMO+GD7E3KX/WfqFRU7xnOfSBES04VSKjnZYKuvcJhAnS5EXsVJaKscsTys+lK2BHZh/EdzTzEAehdjcH0khLer4LUh6xhTVAMisA=
+	t=1775522606; cv=none; b=ue1fgAe3HkXp+Rmi79X8HzCn3b/OLSbl+5eKF9EQyZXYCsm04LJwLhJYjzXXm3KvUruvEBkqASoKQQGX5sJmjCLLdNxV4FueA7EDfMrvfvus5gHYqo92j/CJx1xbvs77aJL5wU2GOqjLc/DWCKr7cNCjHNzwTUSKADnQSftCLNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775521412; c=relaxed/simple;
-	bh=lW1h8GIW1G7Y8bB+cJ7RTj5puhWMR1ctHsFJC0k0lWg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o5qdmRHHS6UvwAHJUx245uUjdXgrm30Y+Y+nWEE1QAkE4HfHI4X8qSqiqTZrYbirldopakKliLG3dsU9Mu20FMRCd5XiSFhI0gcSkggUJ0aQ99NT+B7Qikuw/JIgF3qBapNB6eFDCKQe+L2dvjaIyHQwIpjK0z6Ne9nzCKGMEPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=yqKyYXrE; arc=none smtp.client-ip=35.89.44.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	s=arc-20240116; t=1775522606; c=relaxed/simple;
+	bh=JY9IxlluVwlJCAKpBGKd5NaRfJ6onloYtkTR64nerzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AM+qBPaEhWBAb0000soc8tjEThc/UdVAU5ohw6pyD9rQLbrE6b/FMMSH+gEpPNh9baflFq3XxGXqB1/OlBpvhQwzO20gp3TfhypLp7W83icc/JDAVwphPQuAt8xgGg+ykpgI+7awD18+D+dsNYY37Sk+4kfsixQ9FkuBFTbo9wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l1msI51X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="yqKyYXrE"
-Received: from eig-obgw-5007b.ext.cloudfilter.net ([10.0.29.167])
-	by cmsmtp with ESMTPS
-	id 9mBiwNpQNnwj29uE1wGjOL; Tue, 07 Apr 2026 00:23:25 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id 9uE0wRKV4xUZ29uE1wYdBa; Tue, 07 Apr 2026 00:23:25 +0000
-X-Authority-Analysis: v=2.4 cv=HJHDFptv c=1 sm=1 tr=0 ts=69d44e7d
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=chC0KcwHAXg1M6QkddG+Hg==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
- a=nBrjwPefxIf0sgGFksoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=2aFnImwKRvkU0tJ3nQRT:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=3xEoyAKUR0aMkxGmDAp9eHmMZqaIfxw1R+sbaa6gt5c=; b=yqKyYXrECCIzd1nuiz0Fa9Uaz1
-	ElyOACTfk2Liecd2KEU7+Pc9+b0j1yx69J5YW7cPTryfO4qJlN8mB0oJ1k+StPhqg4oDTTCYIMmZN
-	ejOUUFBQvdJ6Sw41fkgJtHyiNhuL3jo2/jgCuz/HzuJd8AmrKjPVN2WCFM2WLvlfn2iT3OgsmVCg7
-	soVNndT8lUzjhh/QgX1tHYv6eOueWJTJmAsMAsQthhMB77eUSPpvxdsBe03GoDEFace2RGHy1nPXI
-	+rv9c98NP991TadlMIBFyz0vpikQ8QCc+nD9L7fqYAagIuygzkY5VtRCUxLQXXam2jwXiAd8ph3RM
-	/vmQ1x0g==;
-Received: from [177.238.18.219] (port=36690 helo=[192.168.0.36])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.99.1)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1w9uE0-00000000ad4-0S8K;
-	Mon, 06 Apr 2026 19:23:24 -0500
-Message-ID: <05f45fbc-858e-41d3-95fc-67cd4956dc3f@embeddedor.com>
-Date: Mon, 6 Apr 2026 18:22:15 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l1msI51X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAE3C4CEF7;
+	Tue,  7 Apr 2026 00:43:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775522605;
+	bh=JY9IxlluVwlJCAKpBGKd5NaRfJ6onloYtkTR64nerzg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=l1msI51X7ofjKkDGEwZ7TwCpO6NGnXPJnQA1lhuTqtcWJfoR/UN5nciutx8NZY7x1
+	 88KESoAUzgoAVxwpeh3cqmpaVWHfK1NdIkub5nMFky1HOhcMMt6VIt9oMAliFWypky
+	 Y5CbN/7UsM5Qwo2xvW+Fb0DR4qytEphv36XqoIHIgqi1EZjg/ZmORgNyNZpby3AdNp
+	 xThrScd8bMR1/Ya+pQJEubcerHYHo2slzgW/sgvVoGuZEnVRkW+0rCI/jWtDXUlaR8
+	 76Csx3avtjyGJtd5JzmiJ/TtZo3lhSxFg+JJQrZ/BIuhFaGPJp2XXxhtMak+/6dV4J
+	 HfYV6BSzNY21w==
+Date: Mon, 6 Apr 2026 17:43:23 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nicolai Buchwitz <nb@tipi-net.de>
+Cc: Mark Bloch <mbloch@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
+ Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Saeed Mahameed <saeedm@nvidia.com>, Leon
+ Romanovsky <leon@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Cosmin Ratiu <cratiu@nvidia.com>, Simon Horman
+ <horms@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, Lama Kayal
+ <lkayal@nvidia.com>, Michal Swiatkowski
+ <michal.swiatkowski@linux.intel.com>, Carolina Jubran <cjubran@nvidia.com>,
+ Nathan Chancellor <nathan@kernel.org>, Daniel Zahka
+ <daniel.zahka@gmail.com>, Rahul Rameshbabu <rrameshbabu@nvidia.com>, Raed
+ Salem <raeds@nvidia.com>, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Gal Pressman <gal@nvidia.com>
+Subject: Re: [PATCH net-next V2 4/5] net/mlx5e: XDP, Use a single linear
+ page per rq
+Message-ID: <20260406174323.4597db58@kernel.org>
+In-Reply-To: <d7c247276e39d88e1cd9d86e21c74779@tipi-net.de>
+References: <20260403090927.139042-1-tariqt@nvidia.com>
+	<20260403090927.139042-5-tariqt@nvidia.com>
+	<adH5yAsPJ8rNgT0k@x13>
+	<20260406084344.5d315f01@kernel.org>
+	<e0ac9755-fd49-4620-92ce-0f5e4203a95e@nvidia.com>
+	<d7c247276e39d88e1cd9d86e21c74779@tipi-net.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2][next] bpf: Avoid thousands of
- -Wflex-array-members-not-at-end warnings
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Kees Cook <kees@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, linux-hardening@vger.kernel.org
-References: <acr7Whmn0br3xeBP@kspp>
- <CAADnVQL1kaAZE0L2k6svR4FK8UZvw44WXp=g+Df+SseMkc7xGA@mail.gmail.com>
- <202604052007.4EF0560F@keescook>
- <CAADnVQ+NMQMpkG8gZPnwBD1MMPsH+uJ65C9bMeGf_YH5Cchxpg@mail.gmail.com>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <CAADnVQ+NMQMpkG8gZPnwBD1MMPsH+uJ65C9bMeGf_YH5Cchxpg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 177.238.18.219
-X-Source-L: No
-X-Exim-ID: 1w9uE0-00000000ad4-0S8K
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.36]) [177.238.18.219]:36690
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfL+xHeA/WOnHFpaRYA3MAq3MgpdwK8vmnUrh5cwuaxelKoSBEPNod5TDOsIFcsOKcDkuO1UM3Rm2af40Tw8UnnE2ToK5jfr01jXsILU15FbLQcZOcxIZ
- 3/Rx3j13vRDXVuXvi6ls+KPnMe8PFf02e23bCyWjJwDEyBMNfjdTLzn9wtGJK+gFZsfIKe/AU0Ibsyl+HexFsHXUq+xPojgqxuM=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, 06 Apr 2026 21:13:43 +0200 Nicolai Buchwitz wrote:
+> On 6.4.2026 18:31, Mark Bloch wrote:
+> > On 06/04/2026 18:43, Jakub Kicinski wrote: =20
+> >> Thanks a lot for reviewing the review! It takes a lot of maintainer=20
+> >> time =20
+> > =E2=80=9CBefore posting, authors could run a recommended baseline of re=
+view=20
+> > tools,
+> > where available, to catch obvious issues early. During review, tools=20
+> > such
+> > as review-prompts and Sashiko may be used to assist the reviewer.=E2=80=
+=9D
+>=20
+> There is already https://netdev-ai.bots.linux.dev/ai-local.html which I=20
+> found really helpful.
+> If this is still the preferred approach, I could draft a patch to add it=
+=20
+> to Documentation/process/maintainer-netdev.rst
 
+Right, I'd like to have something similar and a bit of time to drive
+down the number of false positives from Sashiko. Compared to the
+NIPA's ai-reviews the Sashiko comments take a lot of time to validate
+and are often alarmist. The merge window starts next week so I'll have
+more spare cycles.
 
-On 4/6/26 17:24, Alexei Starovoitov wrote:
-> On Sun, Apr 5, 2026 at 8:27 PM Kees Cook <kees@kernel.org> wrote:
->>
->> On Sun, Apr 05, 2026 at 07:44:51PM -0700, Alexei Starovoitov wrote:
->>> On Mon, Mar 30, 2026 at 3:39 PM Gustavo A. R. Silva
->>> <gustavoars@kernel.org> wrote:
->>>>
->>>> Apparently, struct bpf_empty_prog_array exists entirely to populate a
->>>> single element of "items" in a global variable. "null_prog" is only
->>>> used during the initializer.
->>>>
->>>> None of this is needed; globals will be correctly sized with an array
->>>> initializer of a flexible-array member.
->>>>
->>>> So, remove struct bpf_empty_prog_array and adjust the rest of the code,
->>>> accordingly.
->>>>
->>>> With these changes, fix the following warnings:
->>>>
->>>> 7659 ./include/linux/bpf.h:2369:31: warning: structure containing a flexible array member is not at the end of another structure [-Wflex-array-member-not-at-end]
->>>>
->>>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->>>> ---
->>>> Changes in v2:
->>>>   - Remove struct bpf_empty_prog_array. (Kees)
->>>
->>> Kees,
->>>
->>> It really bothers me that you ask people to clean up
->>> warnings for the sake of removing warnings.
->>
->> It's not for the sake of warnings; this is to remove the ambiguously
->> sized objects (i.e. structs that the compiler cannot reason about the
->> size of).
-> 
-> I read through the AI debug logs. What steps it took to reason that
-> the fix is correct, and it convinced me that I'm wrong.
-
-What prompted you to think this was a "ticking time bomb"?
-
-> Applied.
-
-Thanks
-
--Gustavo
+Please share if you had success running Sashiko (https://sashiko.dev/)
+"locally"!
