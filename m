@@ -1,177 +1,157 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A3C3BAD80
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 13:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B8539A05E;
+	Tue,  7 Apr 2026 14:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775569929; cv=none; b=GFUDos+qeMSQjwwNgIiPaySJpTz6dnGWK1WAWKyt2iJkCKO/bp0/IMnnUdZZTdXJL+13VMKqVh31446+Aio089N0selGmBUgE7X2c5dsm20/9IKC6N+Xe1+VADVKJGQBjlQFlrF6Qbl8BTA+gM0tu0q/8xybcNUGONdSZat2A8U=
+	t=1775570998; cv=none; b=hR1lfD/zcPMX5oeFayhU54O56GR3jtK8QD0IdNGuvp+LgFM3L7Zd8IFuURTkHT6IUBVlVCII0uU+olAoN5kpSkaWz0R11HUebcSke308RoD2G4rUinN8yTJIy9Cn3nvQ0nmRIqDFqc1PAlgcoiUO0WChP6K2W/pJ6ZFcsGnVLOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775569929; c=relaxed/simple;
-	bh=sZK7slSStiXifygBueGYf8FwIze5xkgJ1HepAoo0Yt0=;
+	s=arc-20240116; t=1775570998; c=relaxed/simple;
+	bh=xMtCdr7WJHpOJDQDwTSSF/AZKyKCLw08CI+TTdGi1r0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KnV7QVzpVUHOyY9hDlLJhUZ7v6KVFBsEs+BNiPiS/eNrqlK5VH6O1M8OoG8aGP2Rf9IGyTNIeqZoEY7ISIuUSHcBJ42aOaqlm/R6X1XTzhxHihQz9kGFdj2sjD9cAsFZegzMP3L1RkfqShE6QLZq+8X1wbGeDwoJqhCQZaQEWww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CaTXx7l8; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=FYQYBWfeRWZOT75OHuWxyX4PsT0TBHy9/z28uZBIxCmETU/XVmErKdXuWrMxCP3jhwhc4ZbJDnC+wkl1ERlYfb6tZACzDkhTGNYrmNGH++y6zeKY60cB6OXdNbXCKTI1DPclOKGOmeTN6lGD9hAcDSwAWTF+4f39Pr4X8AjS9M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=TWW+DFii; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CaTXx7l8"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43cfb723698so4459779f8f.3
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 06:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775569926; x=1776174726; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9Rj0iJqaS4GtsGFAM2U1MRAy3OlGygjlwynVu1x1N0M=;
-        b=CaTXx7l8HvWAG6a+GaR1PCJsnZRuG1nKQ1Na5vl8yACtI2DLG+vYXeRG5OZUTYGI8D
-         As21YQRdoYqk3RaXvHYcbcvJa3MqrlTVx3XlZpLzl4FzKpuNOpDq8RdFkpz/lYZKqnNk
-         SdzNwjiRS51zUJFHsmvFRzGayGVsId9dis1pEHCq4hOU0wPPstP8BvXW4BfjbhDwPbw8
-         McjyCpuY5obJ+EctwPK3NyCV9iXk96lxFRYH3/KXu7GqUQrWF790QRTCEDRdBmn/lhfV
-         NrsQY1QGEs60/3rbweSty0SdMInRSXaTJaadJA98vjnOo52rkgTzaoyz7AaMBNLOus7g
-         hwSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775569926; x=1776174726;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Rj0iJqaS4GtsGFAM2U1MRAy3OlGygjlwynVu1x1N0M=;
-        b=KHc8UDpg+k4gwRqxb+gOzvTGtXItJ5nscsk0iZpqzlomLd+bQQmuboQfo8JfHXIYzV
-         4BZiipuJJUuCiRUwHm6pwCfHuaxkAQIEjAgHg6pZA7ZpAax/rBI4YtKqsiRhOwoos+Iy
-         jmFqytEXg2cjWgUaiEKYPUUoQZ56lgQB5bQ7yCJgY2w6dmhddBcNOLtPsbmob0PHHaSk
-         vJLHKeTY4CCcU/yFWXOAgb5TfOwoNUbb5n980t4jgO5ByGg6/tQ/FInWQotsGz2i5PU6
-         lWrLQb/AlvzTHFUl6abRiCrdzmPGH2AUztbDyP0exoYKgV3af3WbyRoldAlSYUmIBByz
-         Rcug==
-X-Forwarded-Encrypted: i=1; AJvYcCWv/nEbSDy7lXLywzglUghryX8VJQNmQF8d2ypirHHtxD6dVSytTfEf/HU+e4UYG5syrGI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPM4AxRNVEuhQFNZRbBv9YZ2jtP+mXq8MGatO1jA3AAYDK1IG2
-	7whnz7SXEdxc2o6zihO2owok96fIY0cF9DjkCu1okQ0SZ963XK6mJGUEU45kqi1jxXY=
-X-Gm-Gg: AeBDieu80KfYYCSKheQBlt801Gsb409RMoi2QjpjaG9OFDr/Gn+EGnjk7K/ifIVMMfr
-	HGrHVXfjxPVSLxEEOns0pXpEtv24pD+O9m5ndQQi4MjR13Fp3YdTjEKEebOLkLWHdsFmyuux7cl
-	+HCXXTNT5nsF1a8n9ho+0N6tmYxS98RTNaDOlIaKqw4UbGlRl+ewiAbgblH0FlPLhiDrHagH3pD
-	4HaowS5VziH4rPDrsx6c3xwSf97AP7bEdY6IIWh3H3lZDKMmYz3yT64nVr4RdfDL1h59voF/Sh5
-	bLmGN64x6xSnEdnsV4KkkIVSGgDQGOD44zWVv+wl1E8JWuL6Jwr9LevBu4JaAsRlNBxpPwHlf/Y
-	thJa6hllToawhcXd6PbZCLPlTjYCJl6gEALBapnjt0LpQm6Qi6ji+A8CE9HfqDRA7yX1FeHwNwl
-	TVTWjhWUkeEhEazL6jxJm0/Q6HzQ4YDHxN7Ku7vRjB
-X-Received: by 2002:a05:6000:4282:b0:43b:4352:1bdd with SMTP id ffacd0b85a97d-43d292df38bmr25373308f8f.39.1775569925715;
-        Tue, 07 Apr 2026 06:52:05 -0700 (PDT)
-Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2c637asm48288462f8f.14.2026.04.07.06.52.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 06:52:05 -0700 (PDT)
-Date: Tue, 7 Apr 2026 15:52:02 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: Song Liu <song@kernel.org>, Dylan Hatch <dylanbhatch@google.com>,
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com, kpsingh@kernel.org,
-	mattbobrowski@google.com, jolsa@kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev,
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to
- klp_patch
-Message-ID: <adUMAsZRAC3dDKsK@pathway.suse.cz>
-References: <20260402092607.96430-1-laoar.shao@gmail.com>
- <20260402092607.96430-4-laoar.shao@gmail.com>
- <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
- <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
- <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
- <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="TWW+DFii"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=MN6qzqxRs/zqrPwuVs2/6X79CviG+I8DWPs5lk/Ay2c=; b=TWW+DFiilpedgYEvtVyq7aTK32
+	O3BaEiUrFW1cKLzlvwnM8nb50GigIkogLZuJXkkCF0KkWw6k4YhEkMzSNRfhgRZ8AMZ8Shwam0edR
+	pWSEcMgEplZ7851y63OAhIgW3Unkzw0Ou8ZIWTzXZ59MnxmqFXbMt9h+suaD1LRDNLq2/DhwZRRDR
+	rWbqm+UTVyVUYtXuyK4cZmHgdSWSXe3Vu3WujAKjftI7mK2VTOHxaYr+Kp75Q9tkNYh1E/mkBi3AD
+	Zze+0VwODVD2NvONOkTLv91I3qahyeX7LH9AMPR1vxf5X/ODgy06Xn65DxLY6IqJ89NqCla1w3Hme
+	ERjpF/Nw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50812)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1wA77h-0000000010S-2pf6;
+	Tue, 07 Apr 2026 15:09:45 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1wA77U-000000002KF-1WoV;
+	Tue, 07 Apr 2026 15:09:32 +0100
+Date: Tue, 7 Apr 2026 15:09:32 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
+Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+	bcm-kernel-feedback-list@broadcom.com, richardcochran@gmail.com,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, rohan.g.thomas@altera.com,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me,
+	me@ziyao.cc, siyanteng@cqsoftware.com.cn,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	weishangjuan@eswincomputing.com, wens@kernel.org,
+	vladimir.oltean@nxp.com, lizhi2@eswincomputing.com,
+	boon.khai.ng@altera.com, maxime.chevallier@bootlin.com,
+	chenchuangyu@xiaomi.com, yangtiezhu@loongson.cn,
+	ovidiu.panait.rb@renesas.com, chenhuacai@kernel.org,
+	florian.fainelli@broadcom.com, quic_abchauha@quicinc.com
+Subject: Re: [PATCH net-next v9 1/4] net: stmmac: Add DW25GMAC support in
+ stmmac core driver
+Message-ID: <adUQHHBD0d3p1OSI@shell.armlinux.org.uk>
+References: <20260402213629.1996133-1-jitendra.vegiraju@broadcom.com>
+ <20260402213629.1996133-2-jitendra.vegiraju@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+In-Reply-To: <20260402213629.1996133-2-jitendra.vegiraju@broadcom.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon 2026-04-06 19:08:05, Yafang Shao wrote:
-> On Sat, Apr 4, 2026 at 5:36 AM Song Liu <song@kernel.org> wrote:
-> >
-> > On Fri, Apr 3, 2026 at 1:55 PM Dylan Hatch <dylanbhatch@google.com> wrote:
-> > [...]
-> > > > IIRC, the use case for this change is when multiple users load various
-> > > > livepatch modules on the same system. I still don't believe this is the
-> > > > right way to manage livepatches. That said, I won't really NACK this
-> > > > if other folks think this is a useful option.
-> > >
-> > > In our production fleet, we apply exactly one cumulative livepatch
-> > > module, and we use per-kernel build "livepatch release" branches to
-> > > track the contents of these cumulative livepatches. This model has
-> > > worked relatively well for us, but there are some painpoints.
-> > >
-> > > We are often under pressure to selectively deploy a livepatch fix to
-> > > certain subpopulations of production. If the subpopulation is running
-> > > the same build of everything else, this would require us to introduce
-> > > another branching factor to the "livepatch release" branches --
-> > > something we do not support due to the added toil and complexity.
-> > >
-> > > However, if we had the ability to build "off-band" livepatch modules
-> > > that were marked as non-replaceable, we could support these selective
-> > > patches without the additional branching factor. I will have to
-> > > circulate the idea internally, but to me this seems like a very useful
-> > > option to have in certain cases.
-> >
-> >  IIUC, the plan is:
-> >
-> > - The regular livepatches are cumulative, have the replace flag; and
-> >   are replaceable.
-> > - The occasional "off-band" livepatches do not have the replace flag,
-> >   and are not replaceable.
-> >
-> > With this setup, for systems with off-band livepatches loaded, we can
-> > still release a cumulative livepatch to replace the previous cumulative
-> > livepatch. Is this the expected use case?
+Not withstanding my comment about the other Synopsys xlgmac driver that
+we have in the kernel...
+
+On Thu, Apr 02, 2026 at 02:36:26PM -0700, Jitendra Vegiraju wrote:
+> From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
 > 
-> That matches our expected use case.
+> The DW25GMAC introduced a new DMA architecture called Hyper-DMA (HDMA) for
+> virtualization scalability. This is realized by decoupling physical DMA
+> channels(PDMA) from potentially large number of virtual DMA channels(VDMA).
+> The VDMAs provide software abstraction to driver that map to PDMAs for
+> frame transmission and reception.
+> Since 25GMAC is a derivative of XGMAC, majority of IP is common to both.
 > 
-> >
-> > I think there are a few issues with this:
-> > 1. The "off-band" livepatches cannot be replaced atomically. To upgrade
-> >    "off-band' livepatches, we will have to unload the old version and load
-> >    the new version later.
-> 
-> Right. That is how the non-atomic-replace patch works.
-> 
-> > 2. Any conflict with the off-band livepatches and regular livepatches will
-> >    be difficult to manage.
-> 
-> We need to manage this conflict with a complex user script. That said,
-> everything can be controlled from userspace.
->
-> > IOW, we kind removed the benefit of cumulative
-> >    livepatches. For example, what shall we do if we really need two fixes
-> >    to the same kernel functions: one from the original branch, the other
-> >    from the off-band branch?
-> 
-> We run tens of livepatches on our production servers and have never
-> run into this issue. It's an extremely rare case — and if it does
-> happen, a user script should be able to handle it just fine.
+> To add support for the HDMA in 25GMAC, a new instance of dma_ops,
+> dw25gmac400_dma_ops is introduced.
+> To support the current needs, a simple one-to-one mapping of dw25gmac's
+> logical VDMA (channel) to TC to PDMAs is used. Most of the other dma
+> operation functions in existing dwxgamc2_dma.c file are reused whereever
 
-Could you please share the script? Or at least summarize the situations
-when this script detect a conflict and refuse loading a livepatch?
+Typo: dwxgmac2_dma.c
 
-I believe that most/all of these checks can be implemented in the kernel.
-And if we agreed to add a hybrid mode than it should be added
-together with the checks.
+> applicable.
+> Added setup function for DW25GMAC's stmmac_hwif_entry in stmmac core.
 
-We have already invested a lot of effort into make the kernel
-livepatching as safe as possible. From my POV, the most important
-parts are:
+In a previous review, I questioned the use of DWMAC_CORE_25GMAC and
+asked about its version numberspace. I believe you indicated that the
+version numberspace is the same as the existing XGMAC core.
 
-  + consistency model: Tasks are transitioned separately when they
-       do not use any livepatched function.
+I'm going to question the value of adding DWMAC_CORE_25GMAC.
 
-  + atomic replace: Transition all livepatched functions at once.
+1. What is the value of splitting DWMAC_CORE_25GMAC from
+   DWMAC_CORE_XGMAC given that it's in the same versioning numberspace
+   as XGMAC, and most tests (via dwmac_is_xgmac()) test for XGMAC or
+   25GMAC?
 
-If we agree to add the hybrid model then we should add it with
-some safety belts as well. And it would be nice to get inspiration
-about the safety checks from your script.
+2. Have you reviewed all the places that explicitly test for
+   DWMAC_CORE_XGMAC, looking at their "false" paths (for non-XGMAC
+   cores) to determine whether they are suitable? For example:
 
-Best Regards,
-Petr
+        if (priv->plat->core_type == DWMAC_CORE_XGMAC)
+                ndev->max_mtu = XGMAC_JUMBO_LEN;
+        else if (priv->plat->enh_desc || priv->synopsys_id >= DWMAC_CORE_4_00)
+                ndev->max_mtu = JUMBO_LEN;
+        else
+                ndev->max_mtu = SKB_MAX_HEAD(NET_SKB_PAD + NET_IP_ALIGN);
+
+   XGMAC can handle a max MTU of 16368, but with your code using
+   DWMAC_CORE_25GMAC, we fall back to the next test, which tests the
+   IP version against 0x40, and uses a max MTU of 9000. Given that
+   DWMAC_CORE_4_00 is a different "version number space" this seems
+   wrong.
+
+3. Looking at the MDIO code, this looks very wrong if you're
+   introducing DWMAC_CORE_25GMAC. Have you tested MDIO accesses?
+
+   dwxgmac2_setup() is called for DWMAC_CORE_XGMAC core-type. In
+   stmmac_mdio_register(), DWMAC_CORE_XGMAC uses different functions
+   for MDIO bus access for C22 and C45 from other cores - it uses the
+   stmmac_xgmac2_mdio_* functions.
+
+   These use stmmac_xgmac2_c45_format() and stmmac_xgmac2_c22_format()
+   to format the register values which do not depend on mii.*_mask, but
+   do use mii.address and mii.data for the register offsets. Thus, is
+   there any point to setting mii.addr_mask and mii.reg_mask ?
+
+   For non-DWMAC_CORE_XGMAC cores, we fall back to the stmmac_mdio_*()
+   functions, which for non-DWMAC_CORE_GMAC4 will only support Clause
+   22 access, not Clause 45 - which would be very strange for a 25G
+   core.
+
+4. What about the feature printing in
+   stmmac_main.c::stmmac_dma_cap_show() ?
+
+5. What about similar tests in stmmac_est.c and stmmac_ethtool.c ?
+
+
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
