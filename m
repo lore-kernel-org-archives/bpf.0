@@ -1,80 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866CA388E5D
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 23:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6242F38CFF4
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 23:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775602828; cv=none; b=o3XT68QQOe4SvF5YOuZ5eJEwNLK0BIqSxzqmEShC/G3jpPmJmJap0Cy0qa+DHX/ub6YXX6LPWc1MEYgeYIAymEKbkqCwotEvdqciAKz7IEQXgVeUVsw6gUpCLdLWQW3BUeXljs6QKL2UPhRF5Pd/SLGRgDh1hNozAyTJ5LZf4nA=
+	t=1775603392; cv=none; b=jz3LhhuTWoQuJL4/nN5C3t0nkupcY87YeOrPNdBvdScO0nRDH0GUlqrqTYSNnsaKRFGGkwR2INe27vWnqHhgHPz1kbB5ILAGxXcuKQMUmQSkK3yvhLFAmrCjfOilV9rbQWHpViRbLxLrbumuZJ9SbspWJhtGgX+pjU/klvFbvpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775602828; c=relaxed/simple;
-	bh=xKzieA2ZSqWsniUMrq9v9gZzg9PpMFiqEIf58YmZpps=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Ik+ROh7uBT6OiW263J9KvbGbJX7mtYsmo9gWBECbbOCYXZXhKoUgqc46wBGvadZaPN+tUk8XtAle2yu3e1gLXyoL7iZyPKBwjuOMeeOnUwlXcZ5c4LYdssYuAVWWklxlJpUdhELeyNiMRpl9xXOHvv0Z+9ccq1A+LVyByhoab+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kf1DFH8g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775603392; c=relaxed/simple;
+	bh=zZ9xLkjMmNfDs9NIa8a7oJ+jGSEqS686JcL/OgeDwcM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RCnbCewYNZDBeg2ZzWl7PCmFp8wwkjaqgGURJHZM/lc9EZ/wodVvPZDwUDsq8xtOVmA7MDMxzrNJODYvJFb6iC/y8PYBEocCVtBwgJDYIYbpdavSbGSh7tNTaHMmlqQhgxkWPApoGw8jK360S7EpkobqSrwUI5lrHmsPEX3XACE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUgDdahx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kf1DFH8g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F22CC116C6;
-	Tue,  7 Apr 2026 23:00:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUgDdahx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D62C2BCB6
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 23:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775602828;
-	bh=xKzieA2ZSqWsniUMrq9v9gZzg9PpMFiqEIf58YmZpps=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Kf1DFH8gXmKfFVzp+jWM8fySqjDI5Hkhq/5yCQuPgAFpbZJRtCh4HQrq1QdLO9jBa
-	 SNh+iH2AJ37V9y5O+qsP7p9XcuXBhuCwPNcI0UShDqR1Kcly3k9br6P9XACiEkPfKI
-	 cDkaIFCSmUHEx5FJR09eCsqB3TRk/X1MWZUXirViJ++FBDzuzJVSxuaIt0QbtZUfj7
-	 EkeML2p9wnY1iO45CDrerqbqYVOwhcqlqtTuDYknOwZQ51GNyK5W3rwYErabv9CwGk
-	 lJFxSIj9dApNt3fWZ0oAS7rSBv+vjNcSC1kxeS4hwYibwlBeOJ9YOr/KO9TH59//+C
-	 mc55WbScmyvVQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9D623809A3D;
-	Tue,  7 Apr 2026 23:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1775603392;
+	bh=zZ9xLkjMmNfDs9NIa8a7oJ+jGSEqS686JcL/OgeDwcM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RUgDdahxIm2meNTl1uSPiCttHwtoOX2mL5gApK5HzN4g22ZyCow3gB+T9jElvxurK
+	 zrYVNodhnwnHATfWptUtvGeRyKWxbsyM9S5jJgj9Z5IRALYeW6xkjHtN82XSsohoKC
+	 l0DdDBaZTAacCa36t/OPBnyuotO2uZwdLFQAI5J5gVo91CJWnLVBAhL6+o3ZNa/cVx
+	 I4j1lTob5H6FU/tZUZjey025wpFpUgmxNnI9nx/GnVIww4IYiHOmfQPsjtBXVB9eT5
+	 KyEJwGe+80dUQsndSswuMUrPvYKPcO6OcDhO4YL91YfwmINMD2I12g8A+7if8Fu/tj
+	 naVn9wPmNoWow==
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8cd71fb9f06so359981885a.2
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 16:09:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXBlkX83aH1V8P0EnYkSGXPd/5ZVqP4B9VVHPHOO0EhtfsXq+ccv+rPBmZIogh29/n2e0g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVtKM3mgGmZPL8VMrYdmKNCyTzFUG4PblO5HNFNWWE60vxo/Im
+	Er56XSTZnZcYx6VaDKOxyZV5bEfoSvrq+LoY6EG9N+BT1WEsrHiYnhrcsAgYi2WNZyywpQ579AE
+	Vlvz3CFPFA3HxsoffZTLUz2UNXnEzcGQ=
+X-Received: by 2002:a05:6214:c69:b0:89c:d426:3cc9 with SMTP id
+ 6a1803df08f44-8a7049c6ff0mr323696996d6.35.1775603391153; Tue, 07 Apr 2026
+ 16:09:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: add test for nullable PTR_TO_BUF
- access
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177560280529.4188799.15135394423120356900.git-patchwork-notify@kernel.org>
-Date: Tue, 07 Apr 2026 23:00:05 +0000
-References: <20260407145421.4315-1-tpluszz77@gmail.com>
-In-Reply-To: <20260407145421.4315-1-tpluszz77@gmail.com>
-To: Qi Tang <tpluszz77@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, memxor@gmail.com,
- ameryhung@gmail.com, eddyz87@gmail.com, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, bpf@vger.kernel.org
+References: <20260402092607.96430-4-laoar.shao@gmail.com> <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
+ <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
+ <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
+ <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+ <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
+ <adQhpBC2W9I6QW-g@redhat.com> <CAPhsuW66tuF+QZ0pVheWb5sC4NQ-9CXikq=zMrPBXTHcsVPjdg@mail.gmail.com>
+ <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
+ <CALOAHbCxPA0dtsx7L2kYn8wwBdM=krZyOpfRTBiDW9qfA_zmzQ@mail.gmail.com> <adUd0Mojbtrwmeod@pathway.suse.cz>
+In-Reply-To: <adUd0Mojbtrwmeod@pathway.suse.cz>
+From: Song Liu <song@kernel.org>
+Date: Tue, 7 Apr 2026 16:09:39 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7JhtbniZHFWGMrzeqdS=-EjCySFPgiOBv0zKJNRwzONA@mail.gmail.com>
+X-Gm-Features: AQROBzAFcwWWu1p_HFEFrDKUgiZrKu-q9wX5X3PG5dELW_YDDexvEiXyk8M04QY
+Message-ID: <CAPhsuW7JhtbniZHFWGMrzeqdS=-EjCySFPgiOBv0zKJNRwzONA@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
+To: Petr Mladek <pmladek@suse.com>
+Cc: Yafang Shao <laoar.shao@gmail.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org, jikos@kernel.org, 
+	mbenes@suse.cz, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
+	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Tue, Apr 7, 2026 at 8:08=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrote=
+:
+[...]
+> > + * @replace:   replace tag:
+> > + *             =3D 0: Atomic replace is disabled; however, this patch =
+remains
+> > + *                  eligible to be superseded by others.
+>
+> This is weird semantic. Which livepatch tag would be allowed to
+> supersede it, please?
+>
+> Do we still need this category?
+>
+> > + *             > 0: Atomic replace is enabled. Only existing patches w=
+ith a
+> > + *                  matching replace tag will be superseded.
+> >   * @list:      list node for global list of actively used patches
+> >   * @kobj:      kobject for sysfs resources
+> >   * @obj_list:  dynamic list of the object entries
+> > @@ -137,7 +141,7 @@ struct klp_patch {
+> >         struct module *mod;
+> >         struct klp_object *objs;
+> >         struct klp_state *states;
+> > -       bool replace;
+> > +       unsigned int replace;
+>
+> This already breaks the backward compatibility by changing the type
+> and semantic of this field.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+I was thinking if replace=3D0 means no replace, it is still backward
+compatible. Did I miss something?
 
-On Tue,  7 Apr 2026 22:54:21 +0800 you wrote:
-> Add iter_buf_null_fail with two tests and a test runner:
->   - iter_buf_null_deref: verifier must reject direct dereference of
->     ctx->key (PTR_TO_BUF | PTR_MAYBE_NULL) without a null check
->   - iter_buf_null_check_ok: verifier must accept dereference after
->     an explicit null check
-> 
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Reviewed-by: Amery Hung <ameryhung@gmail.com>
-> Signed-off-by: Qi Tang <tpluszz77@gmail.com>
-> 
-> [...]
+Thanks,
+Song
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: add test for nullable PTR_TO_BUF access
-    https://git.kernel.org/bpf/bpf-next/c/a4985a1755ec
+> I would also change the name to better
+> match the new semantic. What about using:
+>
+>
+>   * @replace_set: Livepatch using the same @replace_set will get
+>                 atomically replaced, see also conflicts[*].
+>
+>         unsigned int replace_set;
+>
+> [*] A livepatch module, livepatching an already livepatches function,
+>     can be loaded only when it has the same @replace_set number.
+>
+>     By other words, two livepatches conflict when they have a different
+>     @replace_set number and have at least one livepatched version
+>     in common.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+[...]
