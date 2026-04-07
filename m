@@ -1,96 +1,69 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C288386C3C
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970EF37AA6D;
+	Tue,  7 Apr 2026 20:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775592175; cv=none; b=YXb2i/l5YbT1sj1M0JIlwSDDowWGBeEYpKihDyVaIQCrxTz5HRcFn6AQYs861lu8SpIw5ka/BjFqayCI3fcMlueNf0VMg6MX2IUM0IVvyvGPeDupksvwUHkF/orWCMV/S9JyVgsVHUp3GS4FXWSs+HDuQSrdygJ5d4OoWdhv6vI=
+	t=1775592175; cv=none; b=IJhctyRLGsFQm6wspPlOvDIxwoSAsj3VgKy1kSY/fgnVNeEnsGOkvJJRxgslBim/Bg+uu7HbBSJgGMKfLqSCAq/LGCvgMUG1yKYbKZZuSVzA84pybitk6d43c504ROGQ8Y/fRyEJCtOmpvoCTsJ9Q+qjgorVQC5hSsgd0pZPl44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775592175; c=relaxed/simple;
-	bh=vi5FjNFei0DMVU6UndsLw5X+Sug4/lpzBigVH5ACDgI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g0AdJPRj8qulzUGRNAZsBz5WOnNh4T/yvAYnMSAAnbE1mS+P24fbfOEMYOMBSRIEM1C0WNIml7QV32Tr+KLyPqQ9QK3/Yoo8LP+zR7wP8ULKMNYu7grm6kF7jKsQEk+b1ySJLy13SkRTZbv4Q5/6EHZrrSoAeBaasMKGDTuZyHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQD5IOG2; arc=none smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	bh=5H8uv55CdIEjsgjwTREHfEmz2xCo418XDDD+GfJSn5U=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KLpQ+UJiA1J2eeKeNcV8PyVvbhqrYk/xvIJuqbGvtlC0gxVgzq8RSse9UOZ9BV+3c8epEojkpabdl7Jx5+vfqnCbeUxEBah9OX7wmbnlp3MREZga2hVXuVXzDYnUb953BSqexpWy9NBr8j7Cmp8ERnz/etUaV/w6I5KKcgTpZcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JAOPmnft; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQD5IOG2"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-650789b22e3so1728157d50.1
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775592173; x=1776196973; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=67+cKnsUxsC8cUauaFfSWyXKAlrlKdFCay5MrA604yk=;
-        b=FQD5IOG2tWX0D59HiO4K9pEDlYxhmVP4MpXfrNIQSwpTgJpi90+YdCCZixnUArZKcU
-         L3wnhMNmFMRXeP+eMdZIimpxKcqGN7Za6dzqbYagzhJLsxNkkzN8Sq0qzpXA093l6Rmz
-         5H5A6p1AgkNRnUMO0K1NhxEJl8LsFvmbILHHXH3LKTSJEl/jXjM+LS3cep+M+xtsDPzZ
-         gfJEMffOVL0QVhSHcChaNnTKEF3SiDtCMugA2zOz6LxGvRRFIaFSE+C0+HMFfWWbX2K0
-         e/B5aZeSOFOOREdPWldZSjSrSr5ICMbWE3KKG2qmR++ITiu/mZCA5hKiaYc2dzL3x32l
-         QAkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775592173; x=1776196973;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=67+cKnsUxsC8cUauaFfSWyXKAlrlKdFCay5MrA604yk=;
-        b=d35w6BR0l91N5HmLgsGzXJlWECDYLSvZBa9R7/08FFSBE50pP6RLrKIKb1p3vB2X9n
-         hr8Q6hQQMXDMtDr4DAvUdxxTJAqhuVHcsMkMZSXa2W8LdhU6Wd8sPIGhgtbr9+BGq3Mx
-         XVHlPnvBHJL8M7lXIImvWMN/yyz2RyTuKenng157TJF5hDE2TR7gdXYh2WOIWNGkE589
-         YFOaN/eMRg6WmUaIcjnvsR9aT7JO0c/wzkxDIeHhDncABeobr3QoGN/8f+2RjnjgO0/S
-         mvGstv4MrJ+zlY6QIjEdT/uZK/DkXuZBHjrKGAaH2lYCnUbHB2JyAdDqewNcDRM1xnUn
-         9s5g==
-X-Forwarded-Encrypted: i=1; AJvYcCX7kR0oi3sNmaG/oVEfLbcp6XghaF31Zv0l9tXizophTuoX30S+kt9ZBD97piKndoAF/J0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4FhIYB1F/K8L0gbx/8R8Vww/7ef4Sjn2D/GH9f+iYmLuPu2xx
-	JPx9W/xPkf2OHVTSIJmi5k6cHuu+lrkKwGTSqARgsse5wD5chHLak5RV
-X-Gm-Gg: AeBDietlu+vLAPGYsY9ZdHOycg+mGdChZhO3TzDd//1oCQmlGY0VYWruck9upbIdahi
-	v0lNqiUrLReO5lLN1lDlDrxnFehS2jhVqdQPm5qHF5daTjhtLN1QBjDXzpeMPYqHxplXXenuzcb
-	WUXI0Vtmv2b++gFCw2V74J11o0WQwCnW4u37JGxOCbKBwfPRghfJm8yo1j/0xv1yODbybtcCJmk
-	5f1E1y3JFlKXTUCQO/k5PXqyVnA5lCfb5j0eeGLW8Rb3wgEexWV553kcILX/XjAOzNk6+ZxJZgT
-	1FV/Uox+lrn4MEmDyuV+NTNRGkBhz0MVVeVJhdKhVqjyY7fSmtYaLrLn9Pa0XeuVuDhB5hYSNd+
-	apnL240fLFqvr7dXPW/F0482tFm6dZY7CxFB8+tJpYsdhTKDtcqACz3sWHZcveyJQRcWxSsZDYR
-	wAOFy2ePbvvH9uqKqcxmZ51q5/u/WthH2uN2mNWysdmiYayvfVuS6CBbdMvYb1RS/ZvqbL4pgP
-X-Received: by 2002:a05:690e:11ca:b0:650:891d:e1a6 with SMTP id 956f58d0204a3-650891de307mr938379d50.51.1775592172595;
-        Tue, 07 Apr 2026 13:02:52 -0700 (PDT)
-Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:92f8:8594:e84e:1d9a])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a828f3csm8354078d50.3.2026.04.07.13.02.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 13:02:52 -0700 (PDT)
-From: Justin Suess <utilityemal77@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	kpsingh@kernel.org,
-	paul@paul-moore.com,
-	mic@digikod.net,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	kees@kernel.org
-Cc: gnoack@google.com,
-	jack@suse.cz,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	martin.lau@linux.dev,
-	m@maowtm.org,
-	eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	skhan@linuxfoundation.org,
-	bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JAOPmnft"
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+	by linux.microsoft.com (Postfix) with ESMTPSA id EBE7020B712B;
+	Tue,  7 Apr 2026 13:02:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EBE7020B712B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1775592173;
+	bh=u74eADCno/AFCuSqkMUCWBI9VPUeluydwikYKABjQ0o=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=JAOPmnftYB4cDoh6bKZiS28PLKXxzTRtRiWSRDXFvyGL+jqNznHJVBO7zMEvg5NOj
+	 /+n3Fl3VNP65Ab9oyxuhz0GbezfiD+MkUFA/9Lc+2p16aXqcn/SMpkLP0S1109+voE
+	 oJZ2BvPw94pIL7xHvPbTmNzrbyJseydowOSsraB8=
+From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+To: kys@microsoft.com,
+	haiyangz@microsoft.com,
+	wei.liu@kernel.org,
+	decui@microsoft.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	leon@kernel.org,
+	longli@microsoft.com,
+	kotaranov@microsoft.com,
+	horms@kernel.org,
+	shradhagupta@linux.microsoft.com,
+	ssengar@linux.microsoft.com,
+	ernis@linux.microsoft.com,
+	shirazsaleem@microsoft.com,
+	linux-hyperv@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	Justin Suess <utilityemal77@gmail.com>
-Subject: [RFC PATCH 18/20] landlock: Document LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS
-Date: Tue,  7 Apr 2026 16:01:40 -0400
-Message-ID: <20260407200157.3874806-19-utilityemal77@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260407200157.3874806-1-utilityemal77@gmail.com>
-References: <20260407200157.3874806-1-utilityemal77@gmail.com>
+	linux-rdma@vger.kernel.org,
+	stephen@networkplumber.org,
+	jacob.e.keller@intel.com,
+	leitao@debian.org,
+	kees@kernel.org,
+	john.fastabend@gmail.com,
+	hawk@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	sdf@fomichev.me,
+	dipayanroy@microsoft.com
+Subject: [PATCH net-next v6 2/2] net: mana: force full-page RX buffers via ethtool private flag
+Date: Tue,  7 Apr 2026 12:59:19 -0700
+Message-ID: <20260407200216.272659-3-dipayanroy@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.7
+In-Reply-To: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
+References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -99,64 +72,231 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document the new LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS flag, and explain
-how its designed primarily for BPF-side use cases for Landlock.
+On some ARM64 platforms with 4K PAGE_SIZE, page_pool fragment
+allocation in the RX refill path can cause 15-20% throughput
+regression under high connection counts (>16 TCP streams).
 
-Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+Add an ethtool private flag "full-page-rx" that allows the user to
+force one RX buffer per page, bypassing the page_pool fragment path.
+This restores line-rate (180+ Gbps) performance on affected platforms.
+
+Usage:
+  ethtool --set-priv-flags eth0 full-page-rx on
+
+There is no behavioral change by default. The flag must be explicitly
+enabled by the user or udev rule.
+
+The existing single-buffer-per-page logic for XDP and jumbo frames is
+consolidated into a new helper mana_use_single_rxbuf_per_page() which
+is now the single decision point for both the automatic and
+user-controlled paths.
+
+Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
 ---
- Documentation/userspace-api/landlock.rst | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 22 ++++-
+ .../ethernet/microsoft/mana/mana_ethtool.c    | 89 +++++++++++++++++++
+ include/net/mana/mana.h                       |  8 ++
+ 3 files changed, 117 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
-index fd8b78c31f2f..82c88d75ef21 100644
---- a/Documentation/userspace-api/landlock.rst
-+++ b/Documentation/userspace-api/landlock.rst
-@@ -204,7 +204,8 @@ similar backwards compatibility check is needed for the restrict flags
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+index 49c65cc1697c..59a1626c2be1 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_en.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+@@ -744,6 +744,25 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
+ 	return va;
+ }
  
-     __u32 restrict_flags =
-         LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON |
--        LANDLOCK_RESTRICT_SELF_TSYNC;
-+        LANDLOCK_RESTRICT_SELF_TSYNC |
-+        LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS;
-     switch (abi) {
-     case 1 ... 6:
-         /* Removes logging flags for ABI < 7 */
-@@ -223,10 +224,18 @@ similar backwards compatibility check is needed for the restrict flags
-          * children (and not for all threads, including parents and siblings).
-          */
-         restrict_flags &= ~LANDLOCK_RESTRICT_SELF_TSYNC;
-+        __attribute__((fallthrough));
-+    case 8:
-+    case 9:
-+        /* Removes no_new_privs convenience flag for ABI < 10 */
-+        restrict_flags &= ~LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS;
-     }
- 
- The next step is to restrict the current thread from gaining more privileges
--(e.g. through a SUID binary).  We now have a ruleset with the first rule
-+(e.g. through a SUID binary).  When supported, this can be folded into
-+``landlock_restrict_self()`` with ``LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS``;
-+otherwise, user space must still call :manpage:`prctl(2)` explicitly.  We now
-+have a ruleset with the first rule
- allowing read and execute access to ``/usr`` while denying all other handled
- accesses for the filesystem, and a second rule allowing HTTPS connections.
- 
-@@ -716,6 +725,15 @@ Starting with the Landlock ABI version 9, it is possible to restrict
- connections to pathname UNIX domain sockets (:manpage:`unix(7)`) using
- the new ``LANDLOCK_ACCESS_FS_RESOLVE_UNIX`` right.
- 
-+No New Privs flag (ABI < 10)
-+----------------------------------------
++static bool
++mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
++{
++	/* On some platforms with 4K PAGE_SIZE, page_pool fragment allocation
++	 * in the RX refill path (~2kB buffer) can cause significant throughput
++	 * regression under high connection counts. Allow user to force one RX
++	 * buffer per page via ethtool private flag to bypass the fragment
++	 * path.
++	 */
++	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
++		return true;
 +
-+Starting with the Landlock ABI version 10, it is possible to request
-+``no_new_privs`` as part of ``landlock_restrict_self()`` by passing the
-+``LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS`` flag.  This lets user space request
-+the prerequisite from the Landlock API itself, which is especially useful when
-+the restriction is applied from an external context such as BPF.
++	/* For xdp and jumbo frames make sure only one packet fits per page. */
++	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
++		return true;
 +
- .. _kernel_support:
++	return false;
++}
++
+ /* Get RX buffer's data size, alloc size, XDP headroom based on MTU */
+ static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
+ 			       int mtu, u32 *datasize, u32 *alloc_size,
+@@ -754,8 +773,7 @@ static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
+ 	/* Calculate datasize first (consistent across all cases) */
+ 	*datasize = mtu + ETH_HLEN;
  
- Kernel support
+-	/* For xdp and jumbo frames make sure only one packet fits per page */
+-	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc)) {
++	if (mana_use_single_rxbuf_per_page(apc, mtu)) {
+ 		if (mana_xdp_get(apc)) {
+ 			*headroom = XDP_PACKET_HEADROOM;
+ 			*alloc_size = PAGE_SIZE;
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+index a28ca461c135..0547c903f613 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+@@ -133,6 +133,10 @@ static const struct mana_stats_desc mana_phy_stats[] = {
+ 	{ "hc_tc7_tx_pause_phy", offsetof(struct mana_ethtool_phy_stats, tx_pause_tc7_phy) },
+ };
+ 
++static const char mana_priv_flags[MANA_PRIV_FLAG_MAX][ETH_GSTRING_LEN] = {
++	[MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF] = "full-page-rx"
++};
++
+ static int mana_get_sset_count(struct net_device *ndev, int stringset)
+ {
+ 	struct mana_port_context *apc = netdev_priv(ndev);
+@@ -144,6 +148,10 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
+ 		       ARRAY_SIZE(mana_phy_stats) +
+ 		       ARRAY_SIZE(mana_hc_stats)  +
+ 		       num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
++
++	case ETH_SS_PRIV_FLAGS:
++		return MANA_PRIV_FLAG_MAX;
++
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -192,6 +200,14 @@ static void mana_get_strings_stats(struct mana_port_context *apc, u8 **data)
+ 	}
+ }
+ 
++static void mana_get_strings_priv_flags(u8 **data)
++{
++	int i;
++
++	for (i = 0; i < MANA_PRIV_FLAG_MAX; i++)
++		ethtool_puts(data, mana_priv_flags[i]);
++}
++
+ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
+ {
+ 	struct mana_port_context *apc = netdev_priv(ndev);
+@@ -200,6 +216,9 @@ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
+ 	case ETH_SS_STATS:
+ 		mana_get_strings_stats(apc, &data);
+ 		break;
++	case ETH_SS_PRIV_FLAGS:
++		mana_get_strings_priv_flags(&data);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -590,6 +609,74 @@ static int mana_get_link_ksettings(struct net_device *ndev,
+ 	return 0;
+ }
+ 
++static u32 mana_get_priv_flags(struct net_device *ndev)
++{
++	struct mana_port_context *apc = netdev_priv(ndev);
++
++	return apc->priv_flags;
++}
++
++static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
++{
++	struct mana_port_context *apc = netdev_priv(ndev);
++	u32 changed = apc->priv_flags ^ priv_flags;
++	u32 old_priv_flags = apc->priv_flags;
++	bool schedule_port_reset = false;
++	int err = 0;
++
++	if (!changed)
++		return 0;
++
++	/* Reject unknown bits */
++	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
++		return -EINVAL;
++
++	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
++		apc->priv_flags = priv_flags;
++
++		if (!apc->port_is_up) {
++			/* Port is down, flag updated to apply on next up
++			 * so just return.
++			 */
++			return 0;
++		}
++
++		/* Pre-allocate buffers to prevent failure in mana_attach
++		 * later
++		 */
++		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
++		if (err) {
++			netdev_err(ndev,
++				   "Insufficient memory for new allocations\n");
++			apc->priv_flags = old_priv_flags;
++			return err;
++		}
++
++		err = mana_detach(ndev, false);
++		if (err) {
++			netdev_err(ndev, "mana_detach failed: %d\n", err);
++			apc->priv_flags = old_priv_flags;
++			goto out;
++		}
++
++		err = mana_attach(ndev);
++		if (err) {
++			netdev_err(ndev, "mana_attach failed: %d\n", err);
++			apc->priv_flags = old_priv_flags;
++			schedule_port_reset = true;
++		}
++	}
++
++out:
++	mana_pre_dealloc_rxbufs(apc);
++
++	if (err && schedule_port_reset)
++		queue_work(apc->ac->per_port_queue_reset_wq,
++			   &apc->queue_reset_work);
++
++	return err;
++}
++
+ const struct ethtool_ops mana_ethtool_ops = {
+ 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_CQE_FRAMES,
+ 	.get_ethtool_stats	= mana_get_ethtool_stats,
+@@ -608,4 +695,6 @@ const struct ethtool_ops mana_ethtool_ops = {
+ 	.set_ringparam          = mana_set_ringparam,
+ 	.get_link_ksettings	= mana_get_link_ksettings,
+ 	.get_link		= ethtool_op_get_link,
++	.get_priv_flags		= mana_get_priv_flags,
++	.set_priv_flags		= mana_set_priv_flags,
+ };
+diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+index 3336688fed5e..fd87e3d6c1f4 100644
+--- a/include/net/mana/mana.h
++++ b/include/net/mana/mana.h
+@@ -30,6 +30,12 @@ enum TRI_STATE {
+ 	TRI_STATE_TRUE = 1
+ };
+ 
++/* MANA ethtool private flag bit positions */
++enum mana_priv_flag_bits {
++	MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF = 0,
++	MANA_PRIV_FLAG_MAX,
++};
++
+ /* Number of entries for hardware indirection table must be in power of 2 */
+ #define MANA_INDIRECT_TABLE_MAX_SIZE 512
+ #define MANA_INDIRECT_TABLE_DEF_SIZE 64
+@@ -531,6 +537,8 @@ struct mana_port_context {
+ 	u32 rxbpre_headroom;
+ 	u32 rxbpre_frag_count;
+ 
++	u32 priv_flags;
++
+ 	struct bpf_prog *bpf_prog;
+ 
+ 	/* Create num_queues EQs, SQs, SQ-CQs, RQs and RQ-CQs, respectively. */
 -- 
-2.53.0
+2.43.0
 
