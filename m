@@ -1,130 +1,228 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6DA23B635F
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 12:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94643382E8;
+	Tue,  7 Apr 2026 13:20:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775566773; cv=none; b=mVmNQDV5na5r7HXQTsJXv3mzLjDj9ZT4X1/C0LPZRBlTjf8JdM2aQ8gzCenGUPT7Ixt/wns2OBVTwBu4hzbx/VBW3Um1II2S1DapLBhZcnjGqmZSMcAADulmDZxIqvRJEMeUpmEs/3P4VN3HUw4DmEaVzXpLL22mGUDwMmH5U90=
+	t=1775568053; cv=none; b=ZhqONrXYgGBoCeD2sS12MBWhuAT4/tjEa6RlrQOaiYEXlwjwdto7VCptpr4D8/CUyJn1HVrBQUuatj8H5z5G33aBtFXZl7GBs23egW27xsp8h1U6fIWipeidwH1EvHGTy8XBxc9ZHqyFa8nkaGmQWN2fh/g4YAnh/9r/USCc8xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775566773; c=relaxed/simple;
-	bh=Xgt0yKnI3R51jfRlpHewLRsZbOBbN1ll4V1KpUJWSZI=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AHjvqpSG4KwnU5CTtrmB6xCnoTK9FZO452WZartHH1Cb9XBjKHM2lWzkvpblzkCabWqQigFIgBnOQ4uAFQyj1UOarene+YkySz74PHqJJRSIRtcS/BXko/WnwUn8xLZUmJs7KX+QryiR/GOhTzoY2Z9hy7JGHyZcxY7ECeGl9Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FSmTs+G3; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775568053; c=relaxed/simple;
+	bh=pzM7QcrWkAZhZA1R6Gzk5BL0recEtgJSouEzuAt98Bs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LwVM72ButODLBeK93u5IF/Ow3qIuxnxgZZTrEA2kBS9avD5vpDRSph3bH4r3uWWHldjYWjwy/tVgzxfrs0YoLpdroYLwqRALCoIP7XZ0WeTRkGK0RRJ0OCWa8/bKMARwl8Q+Y9g3+obGJ3JmZMbrp1/2uPuzgj/z5RDiDCCTa3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=gjBF7WWT; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FSmTs+G3"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43cfb723698so4408418f8f.3
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 05:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775566770; x=1776171570; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RF2eQ/e3Z+XWoNNXFRS5Nhax4dGCTs+V8hdOEp9z2VY=;
-        b=FSmTs+G39Er3O63YqgSNXUAQ6zOrrylO0kBEbasKqcQFjI3KWxqeiEHVAfLawUanL2
-         bQVTgu6xVDqlB21+m4oVtqS7T/hpXtu/gjna4yhjYMJGHGxXyBn5Y+RDj+QZRr+vsPFB
-         aWhizCjRC7LEyFXl94ZKyJMHj8yFUL2UeOzW6fCX5pHRT3i8xyISYmDh+6kuEGsf/XVA
-         NIegkCxBlzhfppERcR1dWt0xoe50qvrMB70pQKf65aKBz2F7xzY0xSKpPRYAZlDtEmic
-         eKK/HzPQLDm5AErB+FSBuPxKN1frJAfcijYmG0KKeqrpw5mb3DmUimfbPiNNXTOEoP21
-         19yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775566770; x=1776171570;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RF2eQ/e3Z+XWoNNXFRS5Nhax4dGCTs+V8hdOEp9z2VY=;
-        b=aBzidINhmOXgHmpHXVEFF+qqpCT3BWAteGYrPGE1jYeLJSPfBidIur4EOaiEkyLj2v
-         WmaoPGpMSYmIX8xctISk7ThIP7h+Mu0r60QZeDPWjUR0dTGJwxss8mPoAwaVYo2jfC5c
-         p78te4l5Utut9KU5blqDAku1Do3QqF30tRUbf+GiIGMgfV8kh2UMjHiVQf2EnjfIYURb
-         zfAUtss5bxr8+B1qjC/IyLSSSs6fHljHr3Lxt7yKhaReDLxqGIeiHMqRhCMcsb9gUz9l
-         XRQWuVGRyzbKrQ48QG/iJWarUVnFDEGY0jJE3CJ9JeHLCPxALZTbTjL04Gl0U9pCg8Xz
-         Q+jA==
-X-Gm-Message-State: AOJu0YzgNT2FUn0aMKUorW5jmnM8t0nbVWIbCGDprlXIRVyHejR75Vdw
-	DRfVSO50jqMKv2zGBzSx6Ys/MEBzwbOqoggzEu0/u1XGkiYtPLXFXdr/
-X-Gm-Gg: AeBDievFr6b82ePR/RujYpEbfkPTX4G6lrDQrSGPxXQ8yMqWKZm3V5vME/QQAco0UUP
-	mktnqS7kuVJV0Y3rPzn9j0SpA4Gy17l2aE6dYH7hqrME7Gk7m5mIAFY3QONTB8kteZm5uetiXyu
-	zLIxEhn1hZwkWoLN7m4rQjsPnOaFAHkVwJbuLyJKF0lcKm/HpZBAVb7HOiGPHbRaYavwZJyNmLV
-	2+1vi+8owrV8rKtcZBI2JeK0h3qk9F3zw9SxC3pcw4ePIJ9cmsutvFN27gthsGWrbInNV4fsdgy
-	WG/VB5WjwOR7gD1JFrqMgm3i3rfK4Cl7XpF2jmzrGZ9HEOQJA++bHNTDft4+31a0Llx8VgBewlR
-	Qw/WR01tjbPC2W3upO/i/O4O3V/5FRbtY1ddPQ0R/UO24bqmCUNoMMX4dTDyPyoFULej/PEGHsA
-	3BT6btmgFY34SeMNEmK+L4TQ==
-X-Received: by 2002:a05:6000:1a8d:b0:43d:3ce:ecc1 with SMTP id ffacd0b85a97d-43d292e2501mr22709595f8f.43.1775566770076;
-        Tue, 07 Apr 2026 05:59:30 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4f52easm51273781f8f.36.2026.04.07.05.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 05:59:29 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 7 Apr 2026 14:59:28 +0200
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, rostedt@goodmis.org,
-	mhiramat@kernel.org, ihor.solodrai@linux.dev, emil@etsalapatis.com,
-	linux-open-source@crowdstrike.com
-Subject: Re: [RFC PATCH bpf-next v5 1/2] tracing: Prefer vmlinux symbols over
- module symbols for unqualified kprobes
-Message-ID: <adT_sBF_i_6oedFe@krava>
-References: <20260406193158.754498-1-andrey.grodzovsky@crowdstrike.com>
- <20260406193158.754498-2-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="gjBF7WWT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1775568051; x=1807104051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=pzM7QcrWkAZhZA1R6Gzk5BL0recEtgJSouEzuAt98Bs=;
+  b=gjBF7WWT+IAXa130oO8KRTbmLT2Ed8tnHg84VTY0cuXjZuWCyC9YTm1l
+   MBHF8sO4p1PUx7Zdt3p1Rs7U9V0qDoxsbYMfWPSDG42qP9pIX8whwoTZ2
+   3+/HnHgBA19gY9kOT7PelFYqTVpByO8f5GUSSn7uRmNoJvU6VUGh3ugLO
+   xsrI+l/DQt5i2W6KlYrgOqTbdYX1LosAp2FbKVt9A2oAsbxoIUDs9GeCb
+   t3HcU8uGO0juyNX8Mxpaq+X66mTWZs62CBt+l9jwAag1E+5xEbIWnAE1h
+   mXUvJx2trAvhQeBlcWOvT04qf2oWQE4KgdUnmgsp82rAuHBrkWDyLbIr6
+   w==;
+X-CSE-ConnectionGUID: aXGGLOy1RX28Pwd01XKozQ==
+X-CSE-MsgGUID: glKQK2BKREieQL8Sh1ogcw==
+X-IronPort-AV: E=Sophos;i="6.23,165,1770620400"; 
+   d="scan'208";a="55012776"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 06:20:50 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
+ chn-vm-ex4.mchp-main.com (10.10.87.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Tue, 7 Apr 2026 06:20:20 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Tue, 7 Apr 2026 06:20:17 -0700
+Date: Tue, 7 Apr 2026 15:20:16 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Herve Codina <herve.codina@bootlin.com>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Arnd
+ Bergmann <arnd@arndb.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next 00/10] net: lan966x: add support for PCIe FDMA
+Message-ID: <20260407132016.4cfivs24ljqneyu7@DEN-DL-M70577>
+References: <20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com>
+ <20260323155204.0321db13@bootlin.com>
+ <20260323172640.2669232d@bootlin.com>
+ <20260323194059.jjphkep4teq5rzbc@DEN-DL-M70577.microsemi.net>
+ <20260324090752.0799acb1@bootlin.com>
+ <20260326154833.jp6rx5x2rlpmwrg3@DEN-DL-M70577>
+ <20260327113337.0368eea3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Disposition: inline
-In-Reply-To: <20260406193158.754498-2-andrey.grodzovsky@crowdstrike.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260327113337.0368eea3@bootlin.com>
 
-On Mon, Apr 06, 2026 at 03:31:57PM -0400, Andrey Grodzovsky wrote:
-> When an unqualified kprobe target exists in both vmlinux and a loaded
-> module, number_of_same_symbols() returns a count greater than 1,
-> causing kprobe attachment to fail with -EADDRNOTAVAIL even though the
-> vmlinux symbol is unambiguous.
+Hi Hervé,
+
+> >
+> > As I remembered, doing rmmod on the lan966x_switch followed by modprobe
+> > lan966x_switch works fine. This is because neither the switch core, nor the FDMA
+> > engine is reset, so they remain in sync.
+> >
+> > When the lan966x_pci module is removed and reloaded (what you did), the DT
+> > overlay is re-applied, which causes the reset controller
+> > (reset-microchip-sparx5) to re-probe. During probe, it performs a GCB soft reset
+> > that resets the switch core, but protects the CPU domain from the reset. The
+> > FDMA engine is part of the CPU domain, so it is not reset.
+> >
+> > This leaves the switch core in a reset state while the FDMA
+> > retains state from the previous driver instance. When the switch driver
+> > subsequently probes and activates the FDMA channels, the two are out of
+> > sync, and the FDMA immediately reports extraction errors.
+> >
+> > Theres actually an FDMA register called NRESET that resets the FDMA controller
+> > state. Calling this in the FDMA init path causes traffic to work correctly on
+> > lan966x_pci reload, but it does not get rid of the FDMA splats you posted above.
+> > They get queued up between the switch core reset, in the reset controller, and
+> > the FDMA enabling. I tried different approaches to drain or flush queues, but
+> > they wont go away entirely.
+> >
+> > The only thing that seems to work consistently is to *not* do the soft reset in
+> > the reset controller for the PCI path. The soft reset is actually the problem:
+> > it only resets the switch core while protecting the CPU domain (including FDMA),
+> > causing a desync.
+> >
+> > A simple fix could be (in reset-microchip-sparx5.c):
+> >
+> > +static bool mchp_reset_is_pci(struct device *dev)
+> > +{
+> > +     for (dev = dev->parent; dev; dev = dev->parent) {
+> > +             if (dev_is_pci(dev))
+> > +                     return true;
+> > +     }
+> > +     return false;
+> > +}
+> >
+> > -     /* Issue the reset very early, our actual reset callback is a noop. */
+> > -     err = sparx5_switch_reset(ctx);
+> > -     if (err)
+> > -             return err;
+> > +     /* Issue the reset very early, our actual reset callback is a noop.
+> > +      *
+> > +      * On the PCI path, skip the reset. The endpoint is already in
+> > +      * power-on reset state on the first probe. On subsequent probes
+> > +      * (after driver reload), resetting the switch core while the FDMA
+> > +      * retains state (CPU domain is protected from the soft reset)
+> > +      * causes the two to go out of sync, leading to FDMA extraction
+> > +      * errors.
+> > +      */
+> > +     if (!mchp_reset_is_pci(&pdev->dev)) {
+> > +             err = sparx5_switch_reset(ctx);
+> > +             if (err)
+> > +                     return err;
+> > +     }
+> >
+> > Could you test it and see if it helps the problem on your side.
+> >
 > 
-> When no module qualifier is given and the symbol is found in vmlinux,
-> return the vmlinux-only count without scanning loaded modules. This
-> preserves the existing behavior for all other cases:
-> - Symbol only in a module: vmlinux count is 0, falls through to module
->   scan as before.
-> - Symbol qualified with MOD:SYM: mod != NULL, unchanged path.
-> - Symbol ambiguous within vmlinux itself: count > 1 is returned as-is.
+> I have tested it on my ARM and x86 system. It fixes the lan966x_pci module
+> unloading / reloading issue.
 > 
-> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> Suggested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
-lgtm, kprobe_multi seems to behave like that already, maybe you could add test for that as well
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
-jirka
-
-
-> ---
->  kernel/trace/trace_kprobe.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> However an other regression is present. After a reboot, without power
+> off/on, the board is not working (tested on both my ARM and x86 systems).
 > 
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index a5dbb72528e0..99c41ea8b6d7 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -765,6 +765,13 @@ static unsigned int number_of_same_symbols(const char *mod, const char *func_nam
->  	if (!mod)
->  		kallsyms_on_each_match_symbol(count_symbols, func_name, &ctx.count);
->  
-> +	/* If the symbol is found in vmlinux, use vmlinux resolution only.
-> +	 * This prevents module symbols from shadowing vmlinux symbols
-> +	 * and causing -EADDRNOTAVAIL for unqualified kprobe targets.
-> +	 */
-> +	if (!mod && ctx.count > 0)
-> +		return ctx.count;
-> +
->  	module_kallsyms_on_each_symbol(mod, count_mod_symbols, &ctx);
->  
->  	return ctx.count;
-> -- 
-> 2.34.1
+> According to your explanation, this makes sense.
 > 
+> IMHO, the problem is that we cannot make the assumption that "The endpoint
+> is already in power-on reset state on the first probe". That's not true
+> when you just call the reboot command.
+> 
+> Best regards,
+> Hervé
+
+The following diff should fix the FDMA traffic issue, and the FDMA error splat,
+when reloading the lan966x-pci driver, by:
+
+1. Resetting the FDMA engine on PCI init()
+
+2. Clearing any rogue FDMA errors that may latch due to the soft reset by the
+reset driver.
+
+  diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c                                                   
+  b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c                                                              
+  --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c                                                          
+  +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c                                                          
+  @@ -372,6 +372,9 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)                                            
+        if (!lan966x->fdma)                                                                                                
+                return 0;                                                                                                  
+                                                                                                                         
+  +     lan_wr(FDMA_CTRL_NRESET_SET(0), lan966x, FDMA_CTRL);                                                               
+  +     lan_wr(FDMA_CTRL_NRESET_SET(1), lan966x, FDMA_CTRL);                                                               
+  +                                                                                                                        
+        fdma_pci_atu_init(&lan966x->atu, lan966x->regs[TARGET_PCIE_DBI]);                                                  
+                                                            
+        lan966x->rx.lan966x = lan966x;                                                                                     
+  diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+  b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c                                                                  
+  --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c                                                              
+  +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c                                                              
+  @@ -1071,6 +1071,15 @@ static int lan966x_reset_switch(struct lan966x *lan966x)                                          
+                                                            
+        reset_control_reset(switch_reset);                                                                                 
+                                                                                                                           
+  +     /* When in PCI mode, the GCB soft reset issued by the reset
+  +      * controller can latch spurious bits in the FDMA error stickies.                                                  
+  +      * Clear them before request_irq hooks up the FDMA IRQ line,
+  +      * otherwise the handler fires immediately on probe.                                                               
+  +      */                                                 
+  +     lan_wr(lan_rd(lan966x, FDMA_ERRORS),   lan966x, FDMA_ERRORS);                                                      
+  +     lan_wr(lan_rd(lan966x, FDMA_INTR_ERR), lan966x, FDMA_INTR_ERR);                                                    
+  +     lan_wr(lan_rd(lan966x, FDMA_INTR_DB),  lan966x, FDMA_INTR_DB);                                                     
+  +                                                                                                                        
+        /* Don't reinitialize the switch core, if it is already initialized. In                                            
+         * case it is initialized twice, some pointers inside the queue system                                             
+         * in HW will get corrupted and then after a while the queue system gets                                           
+  diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h                                                       
+  b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h                                                                  
+  --- a/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h                                                              
+  +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_regs.h                                                              
+  @@ -1010,6 +1010,15 @@ enum lan966x_target {                                                                             
+   #define FDMA_CH_CFG_CH_MEM_GET(x)\                                                                                      
+        FIELD_GET(FDMA_CH_CFG_CH_MEM, x)                                                                                   
+                                                            
+  +/*      FDMA:FDMA:FDMA_CTRL */                                                                                          
+  +#define FDMA_CTRL                 __REG(TARGET_FDMA, 0, 1, 8, 0, 1, 428, 424, 0, 1, 4)                                  
+  +                                                                                                                        
+  +#define FDMA_CTRL_NRESET                         BIT(0)                                                                 
+  +#define FDMA_CTRL_NRESET_SET(x)\                                                                                        
+  +     FIELD_PREP(FDMA_CTRL_NRESET, x)                                                                                    
+  +#define FDMA_CTRL_NRESET_GET(x)\                         
+  +     FIELD_GET(FDMA_CTRL_NRESET, x)                                                                                     
+  +                                                         
+   /*      FDMA:FDMA:FDMA_PORT_CTRL */                                                                                     
+   #define FDMA_PORT_CTRL(r)         __REG(TARGET_FDMA, 0, 1, 8, 0, 1, 428, 376, r, 2, 4)
+
+Let me know if it works on your end.
+
+(Btw. I have noticed another issue where TX stops working on lan966x-pci reload.
+It happens more rarely, but is unrelated to this patch series, as it also
+happens in register-based INJ/XTR mode. Whenever that happens, you will see
+"Flush timeout chip port" in the logs. This should also be fixed, but sent as a
+separate fix commit, I believe.)
+
+/Daniel
