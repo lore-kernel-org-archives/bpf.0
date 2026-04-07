@@ -1,441 +1,265 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-002c1b01.pphosted.com (mx0a-002c1b01.pphosted.com [148.163.151.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED57389444
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 17:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467083CFF60;
+	Tue,  7 Apr 2026 17:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.151.68
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775581964; cv=pass; b=bpk34yzM5bHnWl1A23C0BH0Ac/IOfTo0RPg3XUUGZisvqYLXjl7Zt98nQKkyqMtq6s/9Vb737ik2GepK659V533WOjwJl5WUOM78KbRgO8wxwX2JEikaTfO/lXMY6nXlX6jbZN7Fed/WP468BTJmu9KFcYR91N7AtBqKSiyHRqM=
+	t=1775582005; cv=fail; b=nyB6DKqJ2+7pcoqQj4ND9oNd4VOt9iZslYWfzs8PRPhemEIj/lkEzOsz+lNjwGo0W2zVRGH0jWy193CcP8+A2XPniVuR6V4GiAIALoR/h2cvZ1VqHmRusgmQvFv239SzQnQuf5CHPkbCbgQ/Phd85tIFw1aMVUOLzKz11DipYs8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775581964; c=relaxed/simple;
-	bh=92Ml59fsGJ5zLxrx35D1mcnQEPbaXhUSGw9NbxZA+tM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jrlzpteH2k04SSPWz47Xu50l6a9xC58f+vRcrdw0JW/kYzHyiYfSqXAhsQGlm1mTBqQkhJcTfQiXnYZQdsUwPdmQxAaxV2zvBRBipGBhob29a/mmTPYea92b/3VCW2OiH+CrsR/WXow+dM/CPQwbLqpimc3fL0ddXiFcKZzK0oE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VR/Dzj0M; arc=pass smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775582005; c=relaxed/simple;
+	bh=5NFROCdmuk33adEF0HM4uX2LX6LPw0vyQhv5Gunxc5s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Ah7B/d7c4q6ZYlj4kc1GNRnwKSld7IY48XFSb6odyPKBnXoieL3bxUQYYqut3PWWXJXWq//8FYjGZ7T8QHA2+fS+aWW3e220Dt79+2Au1Vh5cDLmXnCHrEkT7K/45Q4LyOeZ7iwe85kdYRfZOQ2rboEmLI9W4l69QIvNgnIYB2s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nutanix.com; spf=pass smtp.mailfrom=nutanix.com; dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b=RM7JPo1d; dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b=iiSPhjYK; arc=fail smtp.client-ip=148.163.151.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nutanix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nutanix.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VR/Dzj0M"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso44500715e9.3
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 10:12:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775581961; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GB6pFgjp4nCxjXQI0hQksP2FoDIHPfIPNqD4utNhUmxVnHbb+5hnBapQek0pzGgEHC
-         S6J2x8UteXjDvkUWPZ5NW+pA4Ul71kNJ5bjNNVlUCbzRU3YUMtekWUyN3VgSiFEOAJ1R
-         VSX0JAOB6q2/EA/RAk9h+q6nQL5SQP3weoKK2w+YnBjxrj7S8ez8oyH+fgo3znq9A0oi
-         p1RT23FkqnAt+k5UdwbhNifUXiODsro/qqxL1LtFgI5y0pnlmUc1aJjoNNr5+YfX0281
-         lYM9kQyNj+pyNjxU5US8NCSTlHdzdzuIbG/SI/jAlRhMd4GgX1sVTK8a4C36Z7tSX0iz
-         VuDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9Sb3YGV2bObc5s9PidxbLzrdcEo+gkHzDilhu2uwcjA=;
-        fh=hfRje2veXRgnK/5UbF368BTRuTdPC/oA5JvW+CkXkIA=;
-        b=V2JyJfRRCKQ1QOoQsUYqClB1jpdLyX7bhD07Osntnlx91ZOLpuOlc3bys4XCHDpXRc
-         5tpyKNFFzfz87W+RlE7f6V0hzC6U/+ygeByAB6uaV8gRLJ4On3DG9WjxufqKTXRf3x1j
-         GMTBgUWHvOTOmRyNczcB5y2QjeYKpmdv0ncJIxxM+WThgnbO8b9G5xO/XW/TJ5iY4O8O
-         16LFJ7kK/kZFP/7dOzOJIIbfOlJckKls641LmGN31hgmrHRU89cU5cFpWEsTWFRsmZ6P
-         v2foFp9xaSDSI6RVkvTQNIKA/QQTCjTVEfhOglRqodPyjTAko5KZZvcs7+gAOwb0lzAZ
-         QhDg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775581961; x=1776186761; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Sb3YGV2bObc5s9PidxbLzrdcEo+gkHzDilhu2uwcjA=;
-        b=VR/Dzj0MqoZaeTT24j6/2+9rz9QYgfaHdNCxmKt7GwbO/SrraACAzYPEvoo4r1A0Pt
-         JKF6luajfrVcvhtFJLloQdUzvQxUIJsQPnoT7VrTafit95/fQQAt3qQvw8J7rmgHf3HC
-         xwCAz9ZkK6zpOkHmc3A72kXwgY0Hsss+XKBwOfHyYwmkn+/aieb3tEa2c/86VmjxYjKB
-         FDKWebFA3IbtngtRSHRWi4FdL3zPzMUKoQSiHIswJfWExiMLs9tM2zEQr0ElmanVb60g
-         QNOzMwhLqvaf39390x5c++LZLAZp8ZVeiVrOEL5WCUu8sXcMVJfK8crXI/bLSBl3D98y
-         kLhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775581961; x=1776186761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9Sb3YGV2bObc5s9PidxbLzrdcEo+gkHzDilhu2uwcjA=;
-        b=e2NNG/h04o34HOcv1xYiXBHD28uVhwjc19vZGzAmACJ/rZdNKTyxIVS1i0abnGaSHg
-         v2EQKxF62Fv/A5fiW6Yl2qcAiS8Ry46+kI4sRUDgMfJIF0OKZCPKExqGo+4L76BOLRCZ
-         vyVmtULdUSTQv2ZsYUzOF9Mjk0C++nzyu8SebDsJQHKIC+tvlAaKeQgVUbD/0ESBcQwJ
-         m/2jaJ9cMlTkimdpr/Ns41tTtRa0cHD+FiC56krlAdUY5TYO/haUjo7h/VsO4Gq4N53A
-         4169IPTSkebFxidB3BOYXsJFjD5o66D47ktzaV0ytGoGMqXn37pkkJySrstwuCQce+91
-         +SGg==
-X-Gm-Message-State: AOJu0Yzbw90dE0aDkz6eW2XFzOrB4lSIsJ7sxV5fpvFaX2OYN8AHQp8i
-	jJqKjfYoZsR+oy06Nn70ej7nWiK4aHYfVHgaZ/lwVIwHSQ5e2Z8LCKnMIDW/b1sRCCHrrQ0HB5x
-	v1HkOVHDtzysqO/I+0heGGJRDapE/joI=
-X-Gm-Gg: AeBDiesmqfD7XNHtHD8jPBeEPFqsRzLXqzZTpcKgm4HjVJAB3AP2Q357u3WwhgfpCx+
-	uHCc9AV6pYyCvoMZlTIJYg3+95ek6xrZx/+rsz24o/iH4Wlvc4rPDDk1AFrmSJTEjGFqT9eLg2F
-	edEDlTiTlLwGLAPGuWW0/lr3mxYWARUp0UtMoerNAYW7ZnAbKjeu5JzkahWjZpOI9KuRKEz2hqo
-	nZbsLmSVgoy0ZHrb9PeC4Hpt2m3OndI2FFWkclT9T+qd1Eb5o/MBImr/4jeKACiamc3NmiMuoGy
-	xwqT2F2LmLppLZ2HrMdbj/E8Is5cyTCLmI+WKS+7YMp217xvLQb1PYWhEc1PBbUDV7IszvBDCvW
-	/VdJUr0JXYav/WlO8vbfMam1sBA==
-X-Received: by 2002:a05:600c:4b23:b0:488:a723:ea53 with SMTP id
- 5b1f17b1804b1-488a723ebddmr100174425e9.7.1775581961042; Tue, 07 Apr 2026
- 10:12:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b="RM7JPo1d";
+	dkim=pass (2048-bit key) header.d=nutanix.com header.i=@nutanix.com header.b="iiSPhjYK"
+Received: from pps.filterd (m0127837.ppops.net [127.0.0.1])
+	by mx0a-002c1b01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63798cdD1756725;
+	Tue, 7 Apr 2026 10:12:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=
+	cc:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	proofpoint20171006; bh=5NFROCdmuk33adEF0HM4uX2LX6LPw0vyQhv5Gunxc
+	5s=; b=RM7JPo1dB7mVA1mTvNBThJECPWtAhEeNeX6gyPdPWpdI/gx4BBN7GG4Cc
+	FV8K7Nhrlhq2SHur3g6MECzgQQszNFk6ot6pbo8LoBcrfPAXMFKixzZDS+VXX4NG
+	ujEaGjQkkZ9pkYnAjx1HHKt29BnFT1rTBg+W3VlBsCYbzTE1T4jnzrj63dNt2dVW
+	ruLsZisxeChAKHPotHnjk2BRom3+6S7oh469F8Gbz0MjxQHl63477+J7xzyHfhR5
+	KQMhtIy0DQHJRMTSQOIw7QRJcZ36M/hnY4Bxc3JvBztLVvlo9HQ4eCi//xNdGAPX
+	huM2TUaf6plnuBjvxOHJuN0mceCKw==
+Received: from cy7pr03cu001.outbound.protection.outlook.com (mail-westcentralusazon11020073.outbound.protection.outlook.com [40.93.198.73])
+	by mx0a-002c1b01.pphosted.com (PPS) with ESMTPS id 4dcms6a9xr-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 07 Apr 2026 10:12:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=A1kJuzDPBO7Dr3EqEz31T9xdgy7zU4PK7YvRJY7iNVWg8iCZ6PZ6lL/UwWD9/g4jrHAUKOwMRxd391jyyGm+yEuil7pgjE3OvHoehE0kcbOnLMkGp6W9tpU9LawyEXxOwn1Ae5lh/y1oj83fUbqHBOfGRoi0jCHnsIsK44uLGEtZjxVa/TZyHVIkIQgW8NYMdDhhpv7wxl4x4f00+5ikqo69iGO0EwkD7pcZ/zrr0hbxM6M+ECfgA9RMg6KRjIh2GWcUdYnpVJcG92whoPIdY/VWfq+904uyUgqEomX7B9lvAW7wlCj6W56SRuPNP/RtOb2VPWCU2AICvARJPYT+LQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5NFROCdmuk33adEF0HM4uX2LX6LPw0vyQhv5Gunxc5s=;
+ b=SiKiRFnFj/7HkcCPpreM7K3QkaVeV9WjgHrjHwTAGHxxENciQU6eBAJ1vvi7BBujkmMPLWPdaaxZwTLKgBqRpL49VF7V7oy0I73NpHAxvEBf0lF6G7gOLNXKMR+WVGvft1jLjUKAZQjFoz7lG5e9iqYUCK7cinRWYul6OhGbakmpEeFs/I5HLk/94WdnjsrOBX0xAlQSYNP3rshXcBHy4iJfylOTtUqnpL+DHDnDwa96eZWmrF0pIRjrCrzJ/5lbLGLFFR4RBhoS1K1xy2MGTSkXEXvyIFcc+PwqyVfsLt1bQxMl0oz/JjJIwgNkXs+XC2M9DrzV7nWF76v4zpazxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5NFROCdmuk33adEF0HM4uX2LX6LPw0vyQhv5Gunxc5s=;
+ b=iiSPhjYKghGSX9+Veej6qCw8wrbwFm3xp2QODtuoDurDqpQFrQdo5gBG7dfygRzKOX/CVmjabBpDOPwyWPS7wGl27AKyUhE2CNj0ecUoag5ido3zGutem31XZ0e0TeCEluzYPf9KX1CFW1StlRLUSOUmsPZItwdomQ7Q8ELPu7xLW7RmLuLSM6rsxTdqDdoHqeL1yoZjRQFgedHtZoKIcJpE1N7MPr2sq3+abiC6h9v439j3yRg94qW/YYOsRVo/JpjwPYdrFUiGl9NHvCemm5U4QnOmYayfxlJ83W3U01wp9B6N0jdJ5scM1Ks2mWMRj74gDHDjRTrcL8MINVDHHg==
+Received: from LV0PR02MB11133.namprd02.prod.outlook.com
+ (2603:10b6:408:333::18) by SA1PR02MB8656.namprd02.prod.outlook.com
+ (2603:10b6:806:1ff::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Tue, 7 Apr
+ 2026 17:12:06 +0000
+Received: from LV0PR02MB11133.namprd02.prod.outlook.com
+ ([fe80::10e5:8031:1b1b:b2dc]) by LV0PR02MB11133.namprd02.prod.outlook.com
+ ([fe80::10e5:8031:1b1b:b2dc%3]) with mapi id 15.20.9769.016; Tue, 7 Apr 2026
+ 17:12:06 +0000
+From: Jon Kohler <jon@nutanix.com>
+To: Jim Mattson <jmattson@google.com>
+CC: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        "x86@kernel.org"
+	<x86@kernel.org>,
+        Nikolay Borisov <nik.borisov@suse.com>,
+        "H. Peter Anvin"
+	<hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        David Kaplan
+	<david.kaplan@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Borislav
+ Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter
+ Zijlstra <peterz@infradead.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel
+ Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, KP
+ Singh <kpsingh@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
+	<davem@davemloft.net>,
+        David Laight <david.laight.linux@gmail.com>,
+        Andy
+ Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+        Ingo Molnar
+	<mingo@redhat.com>, David Ahern <dsahern@kernel.org>,
+        Martin KaFai Lau
+	<martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+	<song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend
+	<john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+	<haoluo@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet
+	<corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Asit Mallick <asit.k.mallick@intel.com>,
+        Tao Zhang <tao1.zhang@intel.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>,
+        "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>,
+        "chao.gao@intel.com" <chao.gao@intel.com>
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Thread-Topic: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Thread-Index:
+ AQHcwwErFlQg+3SY+ESVBJhvwP0HBLXNpDMAgAAL3QCAABg4gIAAFRcAgAAG7YCAABVlAIAAAcUAgAADFICAAAHLAIAAC7aAgAAhTwCAABjVAIAD1aqAgAG4fACAAAG4gIAABzWA
+Date: Tue, 7 Apr 2026 17:12:06 +0000
+Message-ID: <FAA31092-E1CA-4D79-8CEC-3DB0F6F1C792@nutanix.com>
+References: <20260403213445.xzb4rxbfbg5un7li@desk>
+ <CALMp9eSXfJvR=PHtttbqm3q3nH436T1eH4YdpVqxQeP-cxEPsA@mail.gmail.com>
+ <20260403231608.zopnhnypdclzqlx7@desk>
+ <CALMp9eT2vJBdLPY2uBYrPgVrhS_aYmfGfdXe6MZXG_gyryLHVA@mail.gmail.com>
+ <20260403233329.fb2ppifgwm3um6ny@desk>
+ <CALMp9eTpsenqsWjzmpXLEubn9uNjgZgzgrMwtZ72HDuV_2xgfg@mail.gmail.com>
+ <20260404002149.wtayv6a64vzuppgp@desk>
+ <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
+ <20260404034954.t7iapenzvhdpagxp@desk>
+ <CALMp9eR70eE2U63gzNzTiic0PqJVGv3CBBuVUOVbi3nqbWKZkQ@mail.gmail.com>
+ <20260407163943.y6tkh26z2rfktn3y@desk>
+ <CALMp9eTA3cXxuOT4dq=6y1hx52gPH1ywwTEmPQ5-fA-vz6r3VQ@mail.gmail.com>
+In-Reply-To:
+ <CALMp9eTA3cXxuOT4dq=6y1hx52gPH1ywwTEmPQ5-fA-vz6r3VQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Apple Mail (2.3864.300.41.1.7)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: LV0PR02MB11133:EE_|SA1PR02MB8656:EE_
+x-ms-office365-filtering-correlation-id: 9bca6a6a-5b50-4f69-5d59-08de94c8cb77
+x-proofpoint-crosstenant: true
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700021|18002099003|56012099003|22082099003;
+x-microsoft-antispam-message-info:
+ U0S/B0PwJVOCvgEqVBmqU4aLaPsZFWj+o5AbHYI7SHuhFa7YWd5jQ9ArhSNS/1suJhnlAfwsJq2YgVmINvGBFCWXTQmOq0B6vpmw0UE19eCrXee03DzdzJg9gnm6gawVKg5IwurdjPBi46YRyQwPqBGgWhk9t4YGdTM15HbpkfOkh0LtwmXKAaFYK3rb4Y9YGQMwlosmsSClvjxw4RMAzQkSaC/ZwaBUaz5GuLUbPHk5tfHM27zp01zAUs4whIM8nP7pLd0YkF0hxk/RwpyYk0Yggt+wX+wBuu8R2TC787+4E/PygiUGbmIRlSvTOTMBq2bXReOcbEd/mcZd3vysM7K1ICOD5/Txn9o3cWWyacTGJx2k2AhyxG29tdgXTcG2PR89y/RJIKhglgxurnM8TY0emGjN7ah1nILkXM4sqZcjJeqc2b1bZYR4Hin6YIdTrncvZr9mMjbMxFzb9Dx7v81rZQO9lKiykRKPYzOThvHz5AMRwsoxguHvnkjMxSQkSv4x4ZoiplbUGc+9mVGOPS1itBtiVmHeZLnJ9L/tjeHZlXauWlZIMIPqlM9tfg14gfqpUG8C/pzOAHUtP3nIWP/Ttf3O3ILljL0r4CxYEb5kPJ0PodeZJv57+3JBHPcOxYWL/oGV53WEIny/0i0DlT5KKWn2WnoYk8fG0k6LhDrdv+ANl9Evp5hDlntMwusigvs7wsn5/AGGQwBWQF+Hg9s8vGdaJ643N22TtY7A34559/zierhCbIfDDPiaV689psIIwza6G3p8YaaNlrNY/dEOSkGye/0WPLLkpb/rm5c=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV0PR02MB11133.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700021)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?QURUb2dqclZOZDdaMkRtS1dtWkk5YmFVSmpSVjZLOXBQM3VPRG5rSXNLdi9r?=
+ =?utf-8?B?NFdsd2tEUkFMeDNjeGNkbHRuY3NPd1lJcWtQVXRjMy9TZ0Y4QUFRNlRmaXlR?=
+ =?utf-8?B?WDJkQWcwVG15ekdCS3lLNk5RWndnTFVtWXVDSkZZUTFITkxRZS9TL0hpNmdl?=
+ =?utf-8?B?TVZUUjVYS3BxMXdDV1hLMHBwa0EvTXFSYndtWm9qOVdKakVCOXlvK085M0Zk?=
+ =?utf-8?B?T0pIK0FVeENMYTh1dDlzMjMrdDV0TFYwRVRWS3M1MWdPZldzOGF3RlM4djFU?=
+ =?utf-8?B?MUZJV3gzV08rY1ZWdGNUTGorNXJVZ0xLdk5ITkZ3emw4ZmJZakVEL0x3ZWFB?=
+ =?utf-8?B?TkxpSGNkRVZtSXFpZUEvajdwWVlPS0NXOUZSUnNrTDR0c2hLd09PUUx1T2hY?=
+ =?utf-8?B?ZVBHWGw2SkpjU0kwVFdVVFpuYWFHeFFKd1R2NEVqSDgxd2ljUTZJOVJqazRv?=
+ =?utf-8?B?RnBFSVJrMTJvbHRGc09MdjZqT095M0o0Zy9peFBLc3oyRlppdUtZTVVySnNl?=
+ =?utf-8?B?MGxkbk00QkxYYmdIVUdhZVRLZjB4UGhrdmowMm0rdzZhMHN6SndsT28vMkFN?=
+ =?utf-8?B?NTBaQWJLTHRQOWFPZzErRHFYbXU4Kzk3QkhRaWZqbk1yWVJKck5SVjd5ZVdF?=
+ =?utf-8?B?Ky9nZkRGSXRUUGJRZEhEaDZjSFBqQ2FEOXI0bDYxWFVrSERYR1hUSWJpSmJH?=
+ =?utf-8?B?NlJuNWdodVNiakdKdmZYSVUyYXkrSzlPbUJ2alJrZEdwWm5yekZmYkxnMUts?=
+ =?utf-8?B?Q3NtZ20xWHRwa1E3YkJhMCsxNEJURmlQR2JWTGVIQ0wvSGNzY2ZiNEpPd1o5?=
+ =?utf-8?B?eFAwU2F4L1lWSmZYcW1nWmxBRlJQSEdYWU5vQ21zamdNM2hERU1XakZiTld3?=
+ =?utf-8?B?RFRhQmVvbG5MNjFwS3ZCamJDYnFlN05sL2E4MWtwSGUzV0d1SUlYeHRrVHYv?=
+ =?utf-8?B?YTRqa1c1NlYzZGlJWXAvZFZuRnU5cGhrSnVjR2V3cmo3dDhzaXJWeXFmbjNM?=
+ =?utf-8?B?QTQ2ZmI5NyszbFo3VUZsL2YxQnNFenhnNlRwai9GYTMrcktkRHZPTGRMMEZS?=
+ =?utf-8?B?YmltSStSek9iYzJlUkJwb3E5QUtMMCtCYUhyRGcvblRnM1g2eHY2cG5nZlRG?=
+ =?utf-8?B?aVI4NWN1V2IxUEVHYUt0aVJEN2pRRmlGWnhVc1dmemNaRDFKV002UHRTcUs1?=
+ =?utf-8?B?QzdsdW1janQ4aStzRTEvbHJlNnRwQ0xaOFJPNm1TNGwwU2NtRzJyWTQ5QThE?=
+ =?utf-8?B?QVpPVGZYL2E1Vml6U0U0bWxTdnVlZ3VOVk95ODJueXZQM3ZRZmFvcFBOdlNt?=
+ =?utf-8?B?aGhwRlNLK0dCNFBXLzV1MmwzbEpiWVJzVC84Y1NLQ01FYTFqUDJMUXlDbmRF?=
+ =?utf-8?B?Y3BVYkJGcWcxWnFvb25nU0F2TTRlTWZYVlUzTGd4Uy9JUVl2c1NnZjA0TDk5?=
+ =?utf-8?B?ckVxckthbVdHRXdiRVNUUHdXVnczMzJWelRQR2FYak5MRW5VTEdnODUxaWtY?=
+ =?utf-8?B?a2dOMW1FU28zZ1lVUW1IMUJVTFJFY0RsUU5qdkpLS3h2ZjM2RGhHT1Exdm5B?=
+ =?utf-8?B?cmxjY0JFbU8wbnZPaW80clM5WmI2T2dWTHlaQ0R6eGdsQWZxeCtrSHNHUkll?=
+ =?utf-8?B?TnFiR01SaklGS1BqRDFlV0NYdUxGYzhvZVFwZ3BXSHc0ZVJkdk85bG1tUXBI?=
+ =?utf-8?B?elZiM2hTVHhkMkFXVzJ0bzU5Rk9uMDllNy9VMnBjcGxkMERaU0wycFY5bE1n?=
+ =?utf-8?B?YlltemRMaHZrOWxXL2NKdkJjSDArMnlBYm9ZWEdNNkEwZjVpUDMvQkVFWHps?=
+ =?utf-8?B?ZXRTT1d1WHFsSnNhMnIyZTI4Y1hvMU5hQTkrTVVvUFZmK3ZsbHg0dEliYmR2?=
+ =?utf-8?B?SllDcXpNekVaZkVnK055YTFVc1Q2VjFFYm5BUU82dVdYK3JHSkZjSXhqQ1ZD?=
+ =?utf-8?B?UUtTSjFIaytidHJ4MlVCM3UvL1UrSlcyWDl6QnlrSUxFTkdVanplOXptSzFn?=
+ =?utf-8?B?c21LVVpqaWJ2aEhTRHFTQ3hJKzREWEQ1cXIxY0tLRThXdjAwVjZkSzBrOGtL?=
+ =?utf-8?B?RDhXcm1UeG9aMlp6VGlaOFFLdjdFYjRzenk5RXJUaTVtQkM2MVdrcGdFMEhp?=
+ =?utf-8?B?S3V4cUdMcDZSNEFDSWZDbWtJSzFhb2JvWjFPcGlrOU9iVWJncUIyM0Z6eEZF?=
+ =?utf-8?B?NlJNcDZFaXY2c2RuNWFNQm1KMXZXenZ0VW4zK2JucUxBTEgwY2xiV2tGcTF3?=
+ =?utf-8?B?NGpSK1dqaHdzanJHbVdYNGo2bFllVU1xc2lpTVZOc1U5akpXOWVCOEpwaVhB?=
+ =?utf-8?B?VFNQN1lZWlltdlE0K1ZzcE90dWd1TEVld3Jqa1E2UFhqdnZpOEF1RFFYTW1q?=
+ =?utf-8?Q?tXoSPS7BzSsWArnQ=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A233D2E4F8817D448C083ABD15719DD1@namprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260407045730.13359-1-emil@etsalapatis.com> <20260407045730.13359-8-emil@etsalapatis.com>
-In-Reply-To: <20260407045730.13359-8-emil@etsalapatis.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 7 Apr 2026 10:12:29 -0700
-X-Gm-Features: AQROBzC59AiExtJlToeIIn77F_ZXJcmBOwt6AEfB8yVUh9MDrrR9WOFiL8rgMZc
-Message-ID: <CAADnVQKNBdYrbXV-6BapQrwPxCpZDkD__VvkfzKBEtKC3iwP+A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 7/9] selftests/bpf: Add ASAN support for
- libarena selftests
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Exchange-RoutingPolicyChecked:
+	jSUXuVaJJR4l+xxAMQJtGtYn9vCn3hjBvbFFll3uh39rPDvnxPYfNw8V9bZAglnpDSfa0uxWKGTzftfGs1zxJ0eyPH2R1OcG3o2FvoUCxsuqbtxeSZVhPdqoHVbiz0ZfRVq4+B6Qeyj/K7+VGBhJ1xpHskFDu8iEWl+Kz1h+z8mcdlv7yufAfKEcyaBg2MAjyLQjFQ+hW1bxItO/3qUERCZmhlEvT341fyZUR7dOMKVQnGpS2UtvYLufuLInxxoSG3FSwpyq9OvgSgH0/cDskEVtGZVWAgFpOvyV7olL/kJoA3kNEj2lZJzBt5wJYejPsQNwi2giXfTbsAk9DDWr3g==
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: LV0PR02MB11133.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bca6a6a-5b50-4f69-5d59-08de94c8cb77
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2026 17:12:06.1075
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5i8rXfRojVifGFEIPlvJEeMcsPQnd2a6L3Wbu/FC1aE/J7oBr3aTZdHS8dbwXUr66f3rjLiNJMvZAmc8aHAv9WQKP5hG3v0SzX3LHrg1ezA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR02MB8656
+X-Proofpoint-ORIG-GUID: usUWWB5RmQlb1l3Jpw2kEI1eJxxwu4hQ
+X-Authority-Analysis: v=2.4 cv=MaRcfZ/f c=1 sm=1 tr=0 ts=69d53ae8 cx=c_pps
+ a=XGteBKPvimVCBgpwGHxg/w==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=A5OVakUREuEA:10 a=0kUYKlekyDsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VofLwUrZ8Iiv6rRUPXIb:22 a=Ap8k9tRZuQ82DLYWQqG7:22 a=1XWaLZrsAAAA:8
+ a=QyXUC8HyAAAA:8 a=Z4fkGGyZb4KzYHDMY-0A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA3MDE1NCBTYWx0ZWRfX50AsBnv7mEZa
+ IoP1Vd6cJygdt8CPlxDLFnL20u/Obwe8D4ImbaWg/TcDPE8hq38yGfQ+0pXBYT32m40pGzAx+Jl
+ 984dGgyteegVdKqHRRwcoBHp2TnRllFFdH+05H5UsuqY18S0wHEskJrNQfHUg5oKtT7zOkQdCLC
+ 7ij24ofpFRFSSFxDlCiBSa1fQ6fD3g0kVsyv6EpplIpd3Osn/9/mtzOpSh1D38P4Aa2ClPM0Q5d
+ yh44bpWUHrWP2pJs3/idp3WqM3Vr8ufP3BudC5gCtdgxd4qznlFf9XmwPuERJmBDA/s57+bX4SK
+ VBtKvE0wnqKJTWgkJ8ged03ZYJrOQPu5JSwPf+rhJyk/AzlemNOPdxdTVhKchqhKKXYOuqL2L38
+ Zp6UW8Q3N1Pse7Z/t67UkWfir7eNUuF3LaGoiiZ1Uy6xKTVLX/0j5+wDvsiz6U4aTk5ZBGoekEM
+ 7q1mCdmHJuCwWiHYajw==
+X-Proofpoint-GUID: usUWWB5RmQlb1l3Jpw2kEI1eJxxwu4hQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-07_03,2026-04-07_04,2025-10-01_01
+X-Proofpoint-Spam-Reason: safe
 
-On Mon, Apr 6, 2026 at 9:57=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.co=
-m> wrote:
->
-> Expand the arena library selftest infrastructure to support
-> address sanitization. Add the compiler flags necessary to
-> compile the library under ASAN when supported.
->
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->  tools/testing/selftests/bpf/.gitignore        |  1 +
->  tools/testing/selftests/bpf/Makefile          | 13 +++++-
->  tools/testing/selftests/bpf/libarena/Makefile | 31 ++++++++++++-
->  .../bpf/libarena/include/selftest_helpers.h   | 28 +++++++++++
->  .../selftests/bpf/libarena/include/userapi.h  |  1 +
->  .../bpf/libarena/selftests/selftest.c         | 27 ++++++++++-
->  .../bpf/libarena/selftests/st_asan_common.h   | 46 +++++++++++++++++++
->  7 files changed, 143 insertions(+), 4 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asa=
-n_common.h
->
-> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selft=
-ests/bpf/.gitignore
-> index 7f1960d6b59e..50fa79b2daac 100644
-> --- a/tools/testing/selftests/bpf/.gitignore
-> +++ b/tools/testing/selftests/bpf/.gitignore
-> @@ -50,3 +50,4 @@ verification_cert.h
->  usdt_1
->  usdt_2
->  libarena/test_libarena
-> +libarena/test_libarena_asan
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 0d332c991023..f10e865338f6 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -751,6 +751,13 @@ LIBARENA_MAKE_ARGS =3D \
->                 BPF_TARGET_ENDIAN=3D"$(BPF_TARGET_ENDIAN)" \
->                 Q=3D"$(Q)"
->
-> +# libarena_asan.skel.h currently requires LLVM 22. For now,
-> +# only integrate the non-ASAN version with test_progs.
-> +LIBARENA_SKEL :=3D libarena/libarena.skel.h
-> +
-> +$(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ)
-> +       +$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
-> +
->  # Define test_progs test runner.
->  TRUNNER_TESTS_DIR :=3D prog_tests
->  TRUNNER_BPF_PROGS_DIR :=3D progs
-> @@ -774,7 +781,8 @@ TRUNNER_EXTRA_SOURCES :=3D test_progs.c              =
- \
->                          flow_dissector_load.h  \
->                          ip_check_defrag_frags.h        \
->                          bpftool_helpers.c      \
-> -                        usdt_1.c usdt_2.c
-> +                        usdt_1.c usdt_2.c      \
-> +                        $(LIBARENA_SKEL)
->  TRUNNER_LIB_SOURCES :=3D find_bit.c
->  TRUNNER_EXTRA_FILES :=3D $(OUTPUT)/urandom_read                         =
- \
->                        $(OUTPUT)/liburandom_read.so                     \
-> @@ -946,3 +954,6 @@ endef
->
->  test_libarena: $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ)
->         +$(MAKE) -C libarena $@ $(LIBARENA_MAKE_ARGS)
-> +
-> +test_libarena_asan: $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ)
-> +       +$(MAKE) -C libarena $@ $(LIBARENA_MAKE_ARGS)
-> diff --git a/tools/testing/selftests/bpf/libarena/Makefile b/tools/testin=
-g/selftests/bpf/libarena/Makefile
-> index 151ab6d0509c..c988da56c863 100644
-> --- a/tools/testing/selftests/bpf/libarena/Makefile
-> +++ b/tools/testing/selftests/bpf/libarena/Makefile
-> @@ -8,6 +8,7 @@ LIBARENA=3D$(abspath .)
->
->  LIBARENA_SOURCES =3D $(wildcard $(LIBARENA)/src/*.bpf.c) $(wildcard $(LI=
-BARENA)/selftests/*.bpf.c)
->  LIBARENA_OBJECTS =3D $(notdir $(LIBARENA_SOURCES:.bpf.c=3D.bpf.o))
-> +LIBARENA_OBJECTS_ASAN =3D $(notdir $(LIBARENA_SOURCES:.bpf.c=3D_asan.bpf=
-.o))
->
->  INCLUDES =3D -I$(LIBARENA)/include -I$(LIBARENA)/..
->  ifneq ($(INCLUDE_DIR),)
-> @@ -17,6 +18,13 @@ ifneq ($(LIBBPF_INCLUDE),)
->  INCLUDES +=3D -I$(LIBBPF_INCLUDE)
->  endif
->
-> +ASAN_FLAGS =3D -fsanitize=3Dkernel-address -fno-stack-protector -fno-bui=
-ltin
-> +ASAN_FLAGS +=3D -mllvm -asan-instrument-address-spaces=3D1 -mllvm -asan-=
-shadow-addr-space=3D1
-> +ASAN_FLAGS +=3D -mllvm -asan-use-stack-safety=3D0 -mllvm -asan-stack=3D0
-> +ASAN_FLAGS +=3D -mllvm -asan-kernel=3D1
-> +ASAN_FLAGS +=3D -mllvm -asan-constructor-kind=3Dnone
-> +ASAN_FLAGS +=3D -mllvm -asan-destructor-kind=3Dnone
-> +
->  # ENABLE_ATOMICS_TESTS required because we use arena spinlocks
->  override BPF_CFLAGS +=3D -DENABLE_ATOMICS_TESTS
->  override BPF_CFLAGS +=3D -O2 -Wno-incompatible-pointer-types-discards-qu=
-alifiers
-> @@ -28,23 +36,42 @@ CFLAGS +=3D $(INCLUDES)
->  vpath %.bpf.c $(LIBARENA)/src $(LIBARENA)/selftests
->  vpath %.c $(LIBARENA)/src $(LIBARENA)/selftests
->
-> -all: test_libarena
-> +all: test_libarena test_libarena_asan
-> +
-> +test_libarena_asan: selftest.c $(BPFOBJ) libarena_asan.skel.h
-> +       $(call msg,BINARY,libarena,$@)
-> +       $(Q)$(CLANG) $(CFLAGS) -DBPF_ARENA_ASAN $< $(BPFOBJ) $(LDLIBS) -o=
- $@
->
->  test_libarena: selftest.c $(BPFOBJ) libarena.skel.h
->         $(call msg,BINARY,libarena,$@)
->         $(Q)$(CLANG) $(CFLAGS) $< $(BPFOBJ) $(LDLIBS) -o $@
->
-> +skeletons: libarena.skel.h libarena_asan.skel.h
-> +.PHONY: skeletons
-> +
-> +libarena_asan.skel.h: main_asan.bpf.o
-> +       $(call msg,GEN-SKEL,libarena,$@)
-> +       $(Q)$(BPFTOOL) gen skeleton $< name "libarena_asan" > $@
-> +
->  libarena.skel.h: main.bpf.o
->         $(call msg,GEN-SKEL,libarena,$@)
->         $(Q)$(BPFTOOL) gen skeleton $< name "libarena" > $@
->
-> +main_asan.bpf.o: $(LIBARENA_OBJECTS_ASAN)
-> +       $(call msg,GEN-OBJ,libarena,$@)
-> +       $(Q)$(BPFTOOL) gen object $@ $^
-> +
->  main.bpf.o: $(LIBARENA_OBJECTS)
->         $(call msg,GEN-OBJ,libarena,$@)
->         $(Q)$(BPFTOOL) gen object $@ $^
->
-> +%_asan.bpf.o: %.bpf.c
-> +       $(call msg,CLNG-BPF,libarena,$@)
-> +       $(Q)$(CLANG) $(BPF_CFLAGS) $(ASAN_FLAGS) -DBPF_ARENA_ASAN $(BPF_T=
-ARGET_ENDIAN) -c $< -o $@
-> +
->  %.bpf.o: %.bpf.c
->         $(call msg,CLNG-BPF,libarena,$@)
->         $(Q)$(CLANG) $(BPF_CFLAGS) $(BPF_TARGET_ENDIAN) -c $< -o $@
->
->  clean:
-> -       $(Q)rm -f *.skel.h *.bpf.o test_libarena
-> +       $(Q)rm -f *.skel.h *.bpf.o *.linked*.o test_libarena test_libaren=
-a_asan
-> diff --git a/tools/testing/selftests/bpf/libarena/include/selftest_helper=
-s.h b/tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
-> index ee445d8f5b26..0cb3fdddd535 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
-> @@ -79,3 +79,31 @@ static inline int libarena_get_globals_pages(int arena=
-_get_base_fd,
->         free(vec);
->         return 0;
->  }
-> +
-> +static inline int libarena_asan_init(int arena_get_base_fd,
-> +                                    int asan_init_fd,
-> +                                    size_t arena_all_pages)
-> +{
-> +       LIBBPF_OPTS(bpf_test_run_opts, opts);
-> +       struct asan_init_args args;
-> +       u64 globals_pages;
-> +       int ret;
-> +
-> +       ret =3D libarena_get_globals_pages(arena_get_base_fd,
-> +                                        arena_all_pages, &globals_pages)=
-;
-> +       if (ret)
-> +               return ret;
-> +
-> +       args =3D (struct asan_init_args){
-> +               .arena_all_pages =3D arena_all_pages,
-> +               .arena_globals_pages =3D globals_pages,
-> +       };
-> +
-> +       opts.ctx_in =3D &args;
-> +       opts.ctx_size_in =3D sizeof(args);
-> +
-> +       ret =3D bpf_prog_test_run_opts(asan_init_fd, &opts);
-> +       if (ret)
-> +               return ret;
-> +       return opts.retval;
-> +}
-> diff --git a/tools/testing/selftests/bpf/libarena/include/userapi.h b/too=
-ls/testing/selftests/bpf/libarena/include/userapi.h
-> index b4ac6bc9bd79..5d3a851fb65a 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/userapi.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/userapi.h
-> @@ -24,3 +24,4 @@ typedef int64_t s64;
->  #define arena_spinlock_t u64
->
->  #include "common.h"
-> +#include "asan.h"
-> diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b/=
-tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> index b69adc7baaab..2bd8363ea614 100644
-> --- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> +++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> @@ -18,6 +18,17 @@
->  #include <userapi.h>
->  #include <selftest_helpers.h>
->
-> +#include "selftest.h"
-> +
-> +#ifdef BPF_ARENA_ASAN
-> +#include "../libarena_asan.skel.h"
-> +typedef struct libarena_asan selftest;
-> +#define selftest__open libarena_asan__open
-> +#define selftest__open_and_load libarena_asan__open_and_load
-> +#define selftest__load libarena_asan__load
-> +#define selftest__attach libarena_asan__attach
-> +#define selftest__destroy libarena_asan__destroy
-
-ohh. I see. So you want to double compile the same bpf code
-with and without asan and reuse the tests?
-I guess #defines are fine then.
-
-> +#else
->  #include "../libarena.skel.h"
->  typedef struct libarena selftest;
->  #define selftest__open libarena__open
-> @@ -25,6 +36,7 @@ typedef struct libarena selftest;
->  #define selftest__load libarena__load
->  #define selftest__attach libarena__attach
->  #define selftest__destroy libarena__destroy
-> +#endif
->
->  static bool verbose =3D false;
->  static int testno =3D 1;
-> @@ -69,6 +81,7 @@ static int libbpf_print_fn(enum libbpf_print_level leve=
-l,
->
->  int run_test(selftest *skel, const struct bpf_program *prog)
->  {
-> +       size_t arena_pages =3D (1UL << 32) / sysconf(_SC_PAGESIZE);
->         int prog_fd;
->         int ret;
->
-> @@ -76,6 +89,15 @@ int run_test(selftest *skel, const struct bpf_program =
-*prog)
->         if (ret)
->                 return ret;
->
-> +#ifdef BPF_ARENA_ASAN
-> +       ret =3D libarena_asan_init(
-> +               bpf_program__fd(skel->progs.arena_get_base),
-> +               bpf_program__fd(skel->progs.asan_init),
-> +               arena_pages);
-> +       if (ret)
-> +               return ret;
-> +#endif
-> +
->         prog_fd =3D bpf_program__fd(prog);
->         if (prog_fd < 0)
->                 return prog_fd;
-> @@ -119,10 +141,13 @@ static void
->  banner(const char *progpath)
->  {
->         char *name =3D basename(progpath);
-> +       bool is_asan;
->
-> +       /* Check if our BPF programs are ASAN-capable using strstr on the=
- prog name. */
->         printf("%s\n", name);
-> +       is_asan =3D strstr(name, "_asan");
->
-> -       printf("=3D=3D=3D %s =3D=3D=3D\n", "libarena selftests");
-> +       printf("=3D=3D=3D %s %s=3D=3D=3D\n", "libarena selftests", is_asa=
-n ? "(asan) " : "");
->  }
->
->  int main(int argc, char *argv[])
-> diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_commo=
-n.h b/tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
-> new file mode 100644
-> index 000000000000..a907c9b45651
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
-> @@ -0,0 +1,46 @@
-> +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#pragma once
-> +
-> +#define ST_PAGES 64
-> +
-> +#define ASAN_MAP_STATE(addr)                                            =
-     \
-> +       do {                                                             =
-    \
-> +               arena_stdout("%s:%d ASAN %lx -> (val: %x gran: %x set: [%=
-s])", \
-> +                          __func__, __LINE__, addr,                     =
-    \
-> +                          asan_shadow_value((addr)), ASAN_GRANULE(addr),=
-    \
-> +                          asan_shadow_set((addr)) ? "yes" : "no");      =
-    \
-> +       } while (0)
-> +
-> +/*
-> + * Emit an error and force the current function to exit if the ASAN
-> + * violation state is unexpected. Reset the violation state after.
-> + */
-> +#define ASAN_VALIDATE_ADDR(cond, addr)                                  =
-     \
-> +       do {                                                             =
-    \
-> +               asm volatile("" ::: "memory");                           =
-    \
-> +               if ((asan_violated !=3D 0) !=3D (cond)) {                =
-        \
-> +                       arena_stdout("%s:%d ASAN asan_violated %lx", __fu=
-nc__, \
-> +                                  __LINE__, (u64)asan_violated);        =
-    \
-> +                       ASAN_MAP_STATE((addr));                          =
-    \
-> +                       return -EINVAL;                                  =
-    \
-> +               }                                                        =
-    \
-> +               asan_violated =3D 0;                                     =
-      \
-> +       } while (0)
-> +
-> +#define ASAN_VALIDATE()                                                 =
-\
-> +       do {                                                            \
-> +               if ((asan_violated)) {                                  \
-> +                       arena_stdout("%s:%d Found ASAN violation at %lx",=
- \
-> +                                  __func__, __LINE__, asan_violated);  \
-> +                       return -EINVAL;                                 \
-> +               }                                                       \
-> +       } while (0)
-
-ASAN_VALIDATE_ADDR has to be a macro, but the other two can
-be static inline functions.
+DQoNCj4gT24gQXByIDcsIDIwMjYsIGF0IDExOjQ24oCvQU0sIEppbSBNYXR0c29uIDxqbWF0dHNv
+bkBnb29nbGUuY29tPiB3cm90ZToNCj4gDQo+IE9uIFR1ZSwgQXByIDcsIDIwMjYgYXQgOTo0MOKA
+r0FNIFBhd2FuIEd1cHRhDQo+IDxwYXdhbi5rdW1hci5ndXB0YUBsaW51eC5pbnRlbC5jb20+IHdy
+b3RlOg0KPj4gDQo+PiBPbiBNb24sIEFwciAwNiwgMjAyNiBhdCAwNzoyMzoyNUFNIC0wNzAwLCBK
+aW0gTWF0dHNvbiB3cm90ZToNCj4+PiBZZXMsIGJ1dCB0aGUgZ3Vlc3QgbmVlZHMgYSB3YXkgdG8g
+ZGV0ZXJtaW5lIHdoZXRoZXIgdGhlIGh5cGVydmlzb3INCj4+PiB3aWxsIGRvIHdoYXQncyBuZWNl
+c3NhcnkgdG8gbWFrZSB0aGUgc2hvcnQgc2VxdWVuY2UgZWZmZWN0aXZlLiBBbmQsIGluDQo+Pj4g
+cGFydGljdWxhciwgbm8gS1ZNIGh5cGVydmlzb3IgdG9kYXkgaXMgcHJlcGFyZWQgdG8gZG8gdGhh
+dC4NCj4+PiANCj4+PiBXaGVuIHJ1bm5pbmcgdW5kZXIgYSBoeXBlcnZpc29yLCB3aXRob3V0IEJI
+SV9DVFJMIGFuZCB3aXRob3V0IGFueQ0KPj4+IGV2aWRlbmNlIHRvIHRoZSBjb250cmFyeSwgdGhl
+IGd1ZXN0IG11c3QgYXNzdW1lIHRoYXQgdGhlIGxvbmdlcg0KPj4+IHNlcXVlbmNlIGlzIG5lY2Vz
+c2FyeS4gQXQgdGhlIHZlcnkgbGVhc3QsIHdlIG5lZWQgYSBDUFVJRCBvciBNU1IgYml0DQo+Pj4g
+dGhhdCBzYXlzLCAidGhlIHNob3J0IEJIQiBjbGVhcmluZyBzZXF1ZW5jZSBpcyBhZGVxdWF0ZSBm
+b3IgdGhpcw0KPj4+IHZDUFUuIg0KPj4gDQo+PiBBZnRlciBkaXNjdXNzaW5nIHRoaXMgaW50ZXJu
+YWxseSwgdGhlIGNvbnNlbnN1cyBpcyB0aGF0IHRoZSBiZXN0IHBhdGgNCj4+IGZvcndhcmQgaXMg
+dG8gYWRkIHZpcnR1YWwgU1BFQ19DVFJMIHN1cHBvcnQgdG8gS1ZNLCB3aGljaCBhbHNvIGFsaWdu
+cyB3aXRoDQo+PiBJbnRlbCdzIGd1aWRhbmNlLiBJbiB0aGUgbG9uZyB0ZXJtLCB2aXJ0dWFsIFNQ
+RUNfQ1RSTCBjYW4gYmVuZWZpdCBmdXR1cmUNCj4+IG1pdGlnYXRpb25zIGFzIHdlbGwuIEFzIHdp
+dGggbWFueSBvdGhlciBtaXRpZ2F0aW9ucyAoZS5nLiBtaWNyb2NvZGUpLCB0aGUNCj4+IGd1ZXN0
+IHdvdWxkIHJlbHkgb24gdGhlIGhvc3QgdG8gZW5mb3JjZSB0aGUgYXBwcm9wcmlhdGUgcHJvdGVj
+dGlvbnMuDQoNCldvdWxkIHdlIGhhdmUgdG8gd2FpdCBmb3IgdmlydHVhbCBTUEVDX0NUUkwgdG8g
+Z2V0IHRoaXMgb3B0aW1pemF0aW9uPw0KDQpPciB3b3VsZCB0aGF0IGJlIGEgZnV0dXJlIGVuaGFu
+Y2VtZW50IHRvIG1ha2UgdGhpcyBtb3JlIHByZXNjcmlwdGl2ZT8NCj4gDQo+IEkgZG9uJ3QgdGhp
+bmsgaXQncyByZWFzb25hYmxlIGZvciB0aGUgZ3Vlc3QgdG8gcmVseSBvbiBhIGZ1dHVyZQ0KPiBp
+bXBsZW1lbnRhdGlvbiB0byBlbmZvcmNlIHRoZSBhcHByb3ByaWF0ZSBwcm90ZWN0aW9ucy4NCj4g
+DQo+IFRoaXMgaXMgYWxyZWFkeSBhIHByb2JsZW0gdG9kYXkuIElmIGEgZ3Vlc3Qgc2VlcyB0aGF0
+IEJISV9DVFJMIGlzDQo+IHVuYXZhaWxhYmxlLCBpdCB3aWxsIGRlcGxveSB0aGUgc2hvcnQgQkhC
+IGNsZWFyaW5nIHNlcXVlbmNlIGFuZA0KPiBkZWNsYXJlIHRoYXQgdGhlIHZ1bG5lcmFiaWxpdHkg
+aXMgbWl0aWdhdGVkLiBUaGF0IGlzbid0IHRydWUgaWYgdGhlDQo+IGd1ZXN0IGlzIHJ1bm5pbmcg
+b24gQWxkZXIgTGFrZSBvciBuZXdlci4NCg0K
