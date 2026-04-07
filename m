@@ -1,411 +1,191 @@
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3139E3A6F1D
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 09:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775555172; cv=pass; b=iFexFulnGbBTgNXlGJceWAR4rvFJKgRKRIMuUiAk1XMBWkNej8K2J90IEtwyHR1fhQGUlrgbfyA2oATTMakmuLYlBiIzugUV5Mdzm5+6Q0JQ9qNfsBJAISDi8j3532ynqsWOsTrKFBgA7sx7nvsJ7iTB5ErXCuRKFwDWcvLyvuI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775555172; c=relaxed/simple;
-	bh=h6lhxXkUnK9to4mvDTJLoQRynH+qEyeFNGNMe3B9/Sg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RCOt8hXr17nBB2hLCPqL9Tc0KhhZt67FIuOMlKq50lKc5JFkjGWMl2cY7GlNLcW8DfBaIN0QZdiHpHxdH4zT2JqBxs6sBXa1TVcoOaYk0u/OWx+rN1sqikUvQRtIGF9IrXFaxZCtDPua5xxNhRxigZODNjHx6+3hXxuD5SMP1P8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DDGqBCSI; arc=pass smtp.client-ip=74.125.224.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6DD217C211;
+	Tue,  7 Apr 2026 09:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775555462; cv=none; b=MnOoeSppX1CmzaiCXs7Y7PADUKYAPZT7JCHfkqrvhmZ+rdzZEophGqiG2AqWYHUKBWnVilvtEIcYCa/JqsFNT30iN56f8j9XwtU4Hvl6Dj5poqi4qyu54CN/7xkMsUeLaJyVo8tNPohS7F67vIha3vPog1rvPPvrXjQ5kjZ6bUA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775555462; c=relaxed/simple;
+	bh=n6aqPPp7D064x6KiO05o7DWyiQYk4CFYC5RxUthxGaU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=tOqc2Tr9iT1C/dy5uk0cjgo3qGn4Ydr7jKgUtW62YTzuHozb/QzLL+xe0JiD/CaRHJN+H3HwFQOKDZKuZN3ixpvkFiYpVISsDmn7LBHKglrKBnZjdaJvxMjY1PAOGj6ND0hsgXTMiQpkPjfEIJujQQMDctM62T7Wat67Eg8+QpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=pTvv3/u0; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DDGqBCSI"
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-6501c4857b2so2424538d50.3
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 02:46:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775555168; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RkqAGPwzVFr8DqPrXiARvZfoqvAdcgU/mruGus3eJkvMwATHf8CJRqQ4G+RCYALcI4
-         5pZCjIZ+kgX9VozqYemW67buw6SMF2UHEd6RcY/sqQI1CYWCS19nkBWfCYQsnvOXVTJd
-         uJgOhOkoO3+Hn2/63VtP+cM9Zn/Qp3dumUuV3PglpX5m6yy8H3Hs5G0fFl9cYwl9MSTa
-         QDdxbg/2XTv25w2YIYXVIJiKcTz2xyOliH6EQG0aId6GO8c4LLbiWXx9m6ZR6jE4kz6F
-         esmNxYSuw7KFWPjXoU5kcSZdhwL4RsCnMegDhn0VTJ8rWRv3n6loqaqbgmNxPTBVWSUT
-         +rEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9E60mk44Eky+PTLd9t+EfmiFZLuGKI0mwfBKJlhAG9Y=;
-        fh=MkOTrFNLwim+d/d8Vzo8U+ttRU2RkCdYGX0HM9Fii1k=;
-        b=TNLmKkSosPgvji1LpI47NjooqOmFlyILn5vYQS3hueeFoaRTuSM0NBx5SQa3g3eoZU
-         uZSJeXKWEYurQxxPZHNQzVwjiEditE7JrJqQKCPa49focuBp+qveytlgde0b7AWmd9cE
-         wy4VL+XYiapdA17Rok6ORFyt+Z5i4iKDleBn3CR8X1+5G2yov9ciLX/lP87lGNmvVo/2
-         zsRyo2nohmr1Qpd6ftbQUcwkWaG6bCjkTnfsAhKAJ9Wbsqql8vsgou0msQFCG2Tvr2qY
-         ylt6fPdFNsZ+XLSpfSySGi+8S6JMaZH6LXLYK4VWH7SUjxXrC5TA9t6JP3uLML2qVsMV
-         SNwg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775555168; x=1776159968; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9E60mk44Eky+PTLd9t+EfmiFZLuGKI0mwfBKJlhAG9Y=;
-        b=DDGqBCSInwehBp2B1z3jnzM2aWT0BQnQ9xDoQudeZZwVfqPJk0k4Sl/AdnXtEwZE1B
-         hm/PynS6qBFEpyGStOoDUtmIuAtgP94Sih3W6Xe+eHmeD44LzqyRh94G0eDL42wygjoV
-         w2/7QEKaRHAZ8lESkx3jlIRxM9SqsgIoQX5MsTpJzB1AceRn6/nEc0LozvtpDWkpOhWv
-         4ZJy61o1BPNnUCgJhGkI/pEs40CkPSTKmQ6RBdrarASBtkkCvXRyIur2fxvwRUT077I6
-         A+62S1j4uO75SzCakBmOXiT8fsGwr9BgPpxne6Zf5PKOrDUE8NPDF3KTKhmlytl8F5mY
-         /f+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775555168; x=1776159968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9E60mk44Eky+PTLd9t+EfmiFZLuGKI0mwfBKJlhAG9Y=;
-        b=dCWT3RjM46SdMPmgbvy164I2GJM4e4wh1vdwA/QzkdO1r0Pf3hRcqmLrbttptVIMOr
-         gBgZ8hDyNPVZHxCRFILNvkW4gafpuvQr2EWJvgW8d91fDCM80hxIvxHPnbV4WXgPJDkN
-         wktdTQMuZ2YmGtoC0KsxbtHlkBr/ZUq7TgOhPFQh2jhY2Z7FzIEbZlfU9+J2HOOHLKeV
-         dP4xQp0EddCGIyB0nV3GkWFPng/IsXiWtYQCt3LAz6HWxizCHM4aWTLC7j95/V+ghIyw
-         boQr8p8Zl0Skx5O8UfqVcbXd6tCMXk7ufkZzVvMInXDYoRiCRTNZbMMmlPMx2G+dE3pf
-         UpOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoQUaSP+rPvVEUJGyMIjzBVop3is3JX+5hT82IJ6KIYH87FMKmjoipIdkcnpmG9X5f7SM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRMCtiuiWQyeFl4UrcH+MBd0kxxmt8r86rT235hcj4JwiUXMwK
-	bUXmzazck6yXDrQ2sxi/0QI7R83b6GFreBIr0sQkugCl9K6e3EZY6+0fM2LsDnEfiqDwD1Hwcuz
-	gK9O7gT+/Xjglz1yxvq5kC9s8fl1qGEA=
-X-Gm-Gg: AeBDievfLEtqGbi8y5RsolGbTkatP2xG98CvPIohd2pMQGDoihhL7TOPMsAF0e8ict0
-	wowLKGNy5FxPyZCbOdX6zujNVStA2K4dCaX73BKyMUhTSleFxfArIkzbuPTcxGUBpMwXxj93y1w
-	oz/H2qCQlS8i8S75romDcf2Et80Gg6rzMqHHtHyn8o754s4rczXrAn/cTYRxNk8UXfUgpEAUMdy
-	03E06YsFhEN/Dl1otY9os7bEIrP3x76PWaotbZiL41UU8lDwkh3wEcYoVGBWBPdwQCk85p3LPUD
-	LYQhpk0FyDpHIgzEn9nXcOV2X6VxHKPR9RHQrtCaSU/UTVXaFQc=
-X-Received: by 2002:a05:690e:150d:b0:650:131b:6ee4 with SMTP id
- 956f58d0204a3-6504873abf4mr15220422d50.20.1775555167625; Tue, 07 Apr 2026
- 02:46:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="pTvv3/u0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Jvmhek9eBYywwT5eEvjckk1dp75+bwe5nYioDBqeGbQ=; b=pTvv3/u0sT3OmnqtitZI7HTr/9
+	X7GwEDGj/0jsjcKAxlFIkIuiaOWTuLA3w7RUjYeD3Mic+5tdJHWzSlXaEL9FAkyTW88saBFL/UE8O
+	BsZB+fJKC49S6/y4jflL0r4MQi4Cncsuh8PqpuRNqemITjZzvtlgM6YJimOZ6DIS/tLoXIbBnzajw
+	4iFfTiUlqoVnapzAsNGWmzqJIKTCTpQVFSASfZfyUnRtPiYaTLf78vUX7ldA/4QH6BdiSEpxl2CQw
+	RrZk/vBc4TuzUeSbj1JwcJDsR0M8mzPt40aGKFtBcq1LsDRf3TDO5h7qKbTO/6cAW8D1FwevH7CVB
+	kYbLoI/A==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wA34k-0009d2-1a;
+	Tue, 07 Apr 2026 11:50:26 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wA34C-000F6t-0g;
+	Tue, 07 Apr 2026 11:50:25 +0200
+Message-ID: <cada22a0-b3a8-4ff4-b163-fd8248fffaf3@iogearbox.net>
+Date: Tue, 7 Apr 2026 11:50:24 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-4-laoar.shao@gmail.com>
- <CAPhsuW51Hh7XfN6xXm_uMAoDXBBQoNQ5ynqom+wVNdqCt81f2A@mail.gmail.com>
- <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
- <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
- <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
- <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
- <adQhpBC2W9I6QW-g@redhat.com> <CAPhsuW66tuF+QZ0pVheWb5sC4NQ-9CXikq=zMrPBXTHcsVPjdg@mail.gmail.com>
- <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
-In-Reply-To: <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 7 Apr 2026 17:45:31 +0800
-X-Gm-Features: AQROBzD5aJ3floxrTMqD4Z-TWySrLI1f76mfxhJm1yktSWIu7d-2oRdLFdvycRA
-Message-ID: <CALOAHbCxPA0dtsx7L2kYn8wwBdM=krZyOpfRTBiDW9qfA_zmzQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
-To: Song Liu <song@kernel.org>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>, Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org, 
-	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, rostedt@goodmis.org, 
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, kpsingh@kernel.org, 
-	mattbobrowski@google.com, jolsa@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 00/14] netkit: Support for io_uring zero-copy
+ and AF_XDP
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
+ toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260402231031.447597-1-daniel@iogearbox.net>
+Content-Language: en-US
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260402231031.447597-1-daniel@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27964/Tue Apr  7 08:24:40 2026)
 
-On Tue, Apr 7, 2026 at 11:16=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
->
-> On Tue, Apr 7, 2026 at 10:54=E2=80=AFAM Song Liu <song@kernel.org> wrote:
-> >
-> > On Mon, Apr 6, 2026 at 2:12=E2=80=AFPM Joe Lawrence <joe.lawrence@redha=
-t.com> wrote:
-> > [...]
-> > > > > > - The regular livepatches are cumulative, have the replace flag=
-; and
-> > > > > >   are replaceable.
-> > > > > > - The occasional "off-band" livepatches do not have the replace=
- flag,
-> > > > > >   and are not replaceable.
-> > > > > >
-> > > > > > With this setup, for systems with off-band livepatches loaded, =
-we can
-> > > > > > still release a cumulative livepatch to replace the previous cu=
-mulative
-> > > > > > livepatch. Is this the expected use case?
-> > > > >
-> > > > > That matches our expected use case.
-> > > >
-> > > > If we really want to serve use cases like this, I think we can intr=
-oduce
-> > > > some replace tag concept: Each livepatch will have a tag, u32 numbe=
-r.
-> > > > Newly loaded livepatch will only replace existing livepatch with th=
-e
-> > > > same tag. We can even reuse the existing "bool replace" in klp_patc=
-h,
-> > > > and make it u32: replace=3D0 means no replace; replace > 0 are the
-> > > > replace tag.
-> > > >
-> > > > For current users of cumulative patches, all the livepatch will hav=
-e the
-> > > > same tag, say 1. For your use case, you can assign each user a
-> > > > unique tag. Then all these users can do atomic upgrades of their
-> > > > own livepatches.
-> > > >
-> > > > We may also need to check whether two livepatches of different tags
-> > > > touch the same kernel function. When that happens, the later
-> > > > livepatch should fail to load.
->
-> That sounds like a viable solution. I'll look into it and see how we
-> can implement it.
+Hi Jakub,
 
-Does the following change look good to you ?
+On 4/3/26 1:10 AM, Daniel Borkmann wrote:
+> Containers use virtual netdevs to route traffic from a physical netdev
+> in the host namespace. They do not have access to the physical netdev
+> in the host and thus can't use memory providers or AF_XDP that require
+> reconfiguring/restarting queues in the physical netdev.
+> 
+> This patchset adds the concept of queue leasing to virtual netdevs that
+> allow containers to use memory providers and AF_XDP at native speed.
+> Leased queues are bound to a real queue in a physical netdev and act
+> as a proxy.
+> 
+> Memory providers and AF_XDP operations take an ifindex and queue id,
+> so containers would pass in an ifindex for a virtual netdev and a queue
+> id of a leased queue, which then gets proxied to the underlying real
+> queue.
+> 
+> We have implemented support for this concept in netkit and tested the
+> latter against Nvidia ConnectX-6 (mlx5) as well as Broadcom BCM957504
+> (bnxt_en) 100G NICs. For more details see the individual patches.
+> 
+> v10->v11:
+>   - Fix missing mp_ops->uninstall upon unlease path (Gemini)
+>   - Fix dma device retrieval on tx queue when rx queue is leased (Gemini)
+>   - Rework ethtool channel checks to check rx/tx individually (Gemini)
+>   - The remainder of the Gemini findings were non-issues
+>   - Add more extensive net selftests around queue leasing corner cases
+>   - Rebase and retested everything with mlx5 + bnxt_en
+I've look into the latest v11 findings from Gemini in the meantime, and
+thought I'd share an update/comments related to them:
 
-Subject: [PATCH] livepatch: Support scoped atomic replace using replace tag=
-s
+   https://sashiko.dev/#/patchset/20260402231031.447597-1-daniel%40iogearbox.net
 
-Extend the replace attribute from a boolean to a u32 to act as a replace
-tag. This introduces the following semantics:
+ From all the claims related to the series, the one in the netkit device dump
+looks reasonable to improve, iow, to not dump IFLA_NETKIT_SCRUB if in single
+mode since we also reject the presence of the attribute during device creation,
+change would look like:
 
-  replace =3D 0: Atomic replace is disabled. However, this patch remains
-               eligible to be superseded by others.
-  replace > 0: Enables tagged replace (default is 1). A newly loaded
-               livepatch will only replace existing patches that share the
-               same tag.
+      -  if (nla_put_u32(skb, IFLA_NETKIT_SCRUB, nk->scrub))
+      -      return -EMSGSIZE;
+      +  if (nk->pair != NETKIT_DEVICE_SINGLE &&
+      +      nla_put_u32(skb, IFLA_NETKIT_SCRUB, nk->scrub))
+      +      return -EMSGSIZE;
 
-To maintain backward compatibility, a patch with replace =3D=3D 0 does not
-trigger an outgoing atomic replace, but remains eligible to be superseded
-by any incoming patch with a valid replace tag.
+Anyway, wrt the individual patch comments from Gemini:
 
-Suggested-by: Song Liu <song@kernel.org>
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- .../livepatch/cumulative-patches.rst          | 20 +++++++-----
- Documentation/livepatch/livepatch.rst         | 31 +++++++++++++------
- include/linux/livepatch.h                     |  8 +++--
- kernel/livepatch/core.c                       |  4 +++
- scripts/livepatch/init.c                      |  6 +---
- scripts/livepatch/klp-build                   | 11 +++++--
- 6 files changed, 53 insertions(+), 27 deletions(-)
+Patch 2:
+   - The capable(CAP_NET_ADMIN) is intentional
+Patch 6:
+   - Solved in your patch which is a good thing to do
+     https://patchwork.kernel.org/project/netdevbpf/patch/20260404001938.2425670-1-kuba@kernel.org/
+   -> Iiuc, its unreachable today due to other guards, but an explicit check
+      would definitely cement that
+   - The second double free or use-after-free on unregistered devices claim is
+     not true, there is an inconsistency in the io_uring vs devmem wrt clearing
+     mp_ops to NULL but the code handles both cases correctly
+Patch 7:
+   - Independent of the series; oob queue index in io_uring/zcrx claims that
+     there is no bounds-check against real_num_rx_queues before being passed
+     to netdev_queue_get_dma_dev and from there into ndo_queue_get_dma_dev
+     callback
+   -> mlx5e_queue_get_dma_dev as the only implementation does bounds check
+      internally, it might make sense to have a guard in the core code if
+      more drivers implement the ndo_queue_get_dma_dev
+   - Order-dependent DMA dev validation in netdev_nl_get_dma_dev claim cannot
+     override memory provider state, mixed cases get rejected
+Patch 9:
+   - Intentional, netkit proxies all xsk operations to the phys device
+Patch 10:
+   - Above diff to not dump IFLA_NETKIT_SCRUB makes sense to me
+   - The changelink operations claim further below is intentional and for now
+     rejected with -EOPNOTSUPP given nothing new can be configured here
+Patch 11:
+   - netkit notifier takes care of this and is part of this series
 
-diff --git a/Documentation/livepatch/cumulative-patches.rst
-b/Documentation/livepatch/cumulative-patches.rst
-index 1931f318976a..06e90dc5967c 100644
---- a/Documentation/livepatch/cumulative-patches.rst
-+++ b/Documentation/livepatch/cumulative-patches.rst
-@@ -12,23 +12,26 @@ modified the same function in different ways.
+Some cases in patch 6 and 7 that don't require a specific driver are worth additional
+tracking in the netkit leasing selftests to asset behavior though. Happy to fold that
++ the IFLA_NETKIT_SCRUB diff above into a v12 or as a follow-up, let me know.
 
- An elegant solution comes with the feature called "Atomic Replace". It all=
-ows
- creation of so called "Cumulative Patches". They include all wanted change=
-s
--from all older livepatches and completely replace them in one transition.
-+from older livepatches with a matching tag and replace them in one transit=
-ion.
-
- Usage
- -----
-
--The atomic replace can be enabled by setting "replace" flag in struct
-klp_patch,
--for example::
-+he atomic replace can be enabled by setting a non-zero value to the "repla=
-ce"
-+attribute in ``struct klp_patch``. This value acts as a **replace tag**,
-+defining the scope of the replacement.
-+
-+For example::
-
-        static struct klp_patch patch =3D {
-                .mod =3D THIS_MODULE,
-                .objs =3D objs,
--               .replace =3D true,
-+               .replace =3D 1,
-        };
-
- All processes are then migrated to use the code only from the new patch.
--Once the transition is finished, all older patches are automatically
--disabled.
-+Once the transition is finished, all older patches with the same replace t=
-ag
-+are automatically disabled. Patches with different tags remain active.
-
- Ftrace handlers are transparently removed from functions that are no
- longer modified by the new cumulative patch.
-@@ -62,9 +65,10 @@ Limitations:
- ------------
-
-   - Once the operation finishes, there is no straightforward way
--    to reverse it and restore the replaced patches atomically.
-+    to reverse it and restore the replaced patches (with the same tag)
-+    atomically.
-
--    A good practice is to set .replace flag in any released livepatch.
-+    A good practice is to set a consistent .replace tag in related livepat=
-ches.
-     Then re-adding an older livepatch is equivalent to downgrading
-     to that patch. This is safe as long as the livepatches do _not_ do
-     extra modifications in (un)patching callbacks or in the module_init()
-diff --git a/Documentation/livepatch/livepatch.rst
-b/Documentation/livepatch/livepatch.rst
-index acb90164929e..1fc1543a22c3 100644
---- a/Documentation/livepatch/livepatch.rst
-+++ b/Documentation/livepatch/livepatch.rst
-@@ -347,15 +347,28 @@ to '0'.
- 5.3. Replacing
- --------------
-
--All enabled patches might get replaced by a cumulative patch that
--has the .replace flag set.
--
--Once the new patch is enabled and the 'transition' finishes then
--all the functions (struct klp_func) associated with the replaced
--patches are removed from the corresponding struct klp_ops. Also
--the ftrace handler is unregistered and the struct klp_ops is
--freed when the related function is not modified by the new patch
--and func_stack list becomes empty.
-+All currently enabled patches may be superseded by a cumulative patch that
-+has the ``.replace`` attribute enabled. The behavior of the replacement
-+depends on the value assigned to the replace tag:
-+
-+replace =3D 0
-+    Atomic replace is disabled. However, this patch remains eligible to be
-+    superseded by others.
-+
-+replace > 0
-+    Enables tagged atomic replace. Once the new patch is enabled and the
-+    transition finishes, the livepatching core identifies all existing
-+    patches that share the same replace tag.
-+
-+Once the transition is complete, all functions (``struct klp_func``)
-+associated with the matching replaced patches are removed from the
-+corresponding ``struct klp_ops``. If a function is no longer modified by
-+the new patch and its ``func_stack`` list becomes empty, the ftrace
-+handler is unregistered and the ``struct klp_ops`` is freed.
-+
-+Patches with a different replace tag are not affected by this process
-+and remain active. This allows for the independent management and
-+stacking of multiple, non-conflicting livepatch sets.
-
- See Documentation/livepatch/cumulative-patches.rst for more details.
-
-diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-index ba9e3988c07c..417c67a17b99 100644
---- a/include/linux/livepatch.h
-+++ b/include/linux/livepatch.h
-@@ -123,7 +123,11 @@ struct klp_state {
-  * @mod:       reference to the live patch module
-  * @objs:      object entries for kernel objects to be patched
-  * @states:    system states that can get modified
-- * @replace:   replace all actively used patches
-+ * @replace:   replace tag:
-+ *             =3D 0: Atomic replace is disabled; however, this patch rema=
-ins
-+ *                  eligible to be superseded by others.
-+ *             > 0: Atomic replace is enabled. Only existing patches with =
-a
-+ *                  matching replace tag will be superseded.
-  * @list:      list node for global list of actively used patches
-  * @kobj:      kobject for sysfs resources
-  * @obj_list:  dynamic list of the object entries
-@@ -137,7 +141,7 @@ struct klp_patch {
-        struct module *mod;
-        struct klp_object *objs;
-        struct klp_state *states;
--       bool replace;
-+       unsigned int replace;
-
-        /* internal */
-        struct list_head list;
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 28d15ba58a26..e4e5c03b0724 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -793,6 +793,8 @@ void klp_free_replaced_patches_async(struct
-klp_patch *new_patch)
-        klp_for_each_patch_safe(old_patch, tmp_patch) {
-                if (old_patch =3D=3D new_patch)
-                        return;
-+               if (old_patch->replace && old_patch->replace !=3D
-new_patch->replace)
-+                       continue;
-                klp_free_patch_async(old_patch);
-        }
- }
-@@ -1194,6 +1196,8 @@ void klp_unpatch_replaced_patches(struct
-klp_patch *new_patch)
-        klp_for_each_patch(old_patch) {
-                if (old_patch =3D=3D new_patch)
-                        return;
-+               if (old_patch->replace && old_patch->replace !=3D
-new_patch->replace)
-+                       continue;
-
-                old_patch->enabled =3D false;
-                klp_unpatch_objects(old_patch);
-diff --git a/scripts/livepatch/init.c b/scripts/livepatch/init.c
-index f14d8c8fb35f..cd00e278a1d2 100644
---- a/scripts/livepatch/init.c
-+++ b/scripts/livepatch/init.c
-@@ -72,11 +72,7 @@ static int __init livepatch_mod_init(void)
-
-        /* TODO patch->states */
-
--#ifdef KLP_NO_REPLACE
--       patch->replace =3D false;
--#else
--       patch->replace =3D true;
--#endif
-+       patch->replace =3D KLP_REPLACE_TAG;
-
-        return klp_enable_patch(patch);
-
-diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index 7b82c7503c2b..9f6a7673304f 100755
---- a/scripts/livepatch/klp-build
-+++ b/scripts/livepatch/klp-build
-@@ -118,6 +118,7 @@ Options:
-    -j, --jobs=3D<jobs>           Build jobs to run simultaneously
-[default: $JOBS]
-    -o, --output=3D<file.ko>      Output file [default: livepatch-<patch-na=
-me>.ko]
-        --no-replace            Disable livepatch atomic replace
-+   -t, --replace-tag=3D<tag>     Set the atomic replace tag for this livep=
-atch
-    -v, --verbose               Pass V=3D1 to kernel/module builds
-
- Advanced Options:
-@@ -142,8 +143,8 @@ process_args() {
-        local long
-        local args
-
--       short=3D"hfj:o:vdS:T"
--       long=3D"help,show-first-changed,jobs:,output:,no-replace,verbose,de=
-bug,short-circuit:,keep-tmp"
-+       short=3D"hfj:o:t:vdS:T"
-+       long=3D"help,show-first-changed,jobs:,output:,no-replace,replace-ta=
-g:,verbose,debug,short-circuit:,keep-tmp"
-
-        args=3D$(getopt --options "$short" --longoptions "$long" -- "$@") |=
-| {
-                echo; usage; exit
-@@ -176,6 +177,10 @@ process_args() {
-                                REPLACE=3D0
-                                shift
-                                ;;
-+                       -t | --replace-tag)
-+                               REPLACE=3D"$2"
-+                               shift 2
-+                               ;;
-                        -v | --verbose)
-                                VERBOSE=3D"V=3D1"
-                                shift
-@@ -759,7 +764,7 @@ build_patch_module() {
-
-        cflags=3D("-ffunction-sections")
-        cflags+=3D("-fdata-sections")
--       [[ $REPLACE -eq 0 ]] && cflags+=3D("-DKLP_NO_REPLACE")
-+       cflags+=3D("-DKLP_REPLACE_TAG=3D$REPLACE")
-
-        cmd=3D("make")
-        cmd+=3D("$VERBOSE")
-
-
---
-Regards
-Yafang
+Thanks a lot,
+Daniel
