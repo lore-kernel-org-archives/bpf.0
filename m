@@ -1,191 +1,103 @@
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1368A34FF7A
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 02:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775528543; cv=pass; b=d4kdPDfTHt/R2TYGERyZYPVzjHI4Kor7e7UlDThvyzGriITXrPiluhuCAJsJ4wpgzm4AmZBihZhfFF5R5AfKUyDUcn2O0+8B3XgERhY/kVg4ImjhGTOz7xXCgqhG2OLwM+gtLbU3ZL6y6iIzYJM0frON0tP/8fXkk6qtkMBvZNw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775528543; c=relaxed/simple;
-	bh=NLGRqjeuKpGNc91JbpQik1MBmKlqX+MA4yQsWR41Rmc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p6+zOC1DGb0lXL59DrqyXoj0gH4uZr+p6ioJMqYY/ng8dAWVzdOvOGseldTV5SGRY/mPmMdB3Tj6vheeX/zmMf9JJhhKR8IbCHoms29PWDoj+4+6i3JE6CcB95KchLzGZGULw3Xns3OvDZoVeA3S+AQdgFtbDSFW6eeEs5NP0Hw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pbHA7w5D; arc=pass smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197C92E2EF9
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 02:27:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775528875; cv=none; b=qpykf/q/JFwSdxoEGj8pcNM1jPkBOXugpMKwNopnCV8xkJraAHVO0/mVy1erTf9RjI6sn2uuZnfM6WNLcfnkP7eAgftsHVU+vdqro6MC0ejRpr0bIQMDY86PN/LV+GpaeW0zMmNczLDEmpM3U69mCq4y77eF4H6/gsqGmr3cp/Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775528875; c=relaxed/simple;
+	bh=xr116ENgh6GConTk+CrKHjqqli2+OmQT78h7tAHpoFo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GVAJQAFinBGOi+w3EEr27xVrRVA/nNsTQPTS+CdSil9cG5HkVl3p1oGxXFztJjUoiWWAWGKBJbhDkqMfkdWGtVA6AaxN17d65OXOK+V4gUw5V0Du+wO//u5bdpXDfZPbVcO843kzh8c544v8j0LtMctNcgBhCugiaEQ4V0b0iLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pRlteTRF; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pbHA7w5D"
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-6501c4857b2so2158145d50.3
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 19:22:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775528541; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kE+mssYf2JK+qBuLsoSOU7LMYD5pOWySstu2CqsfPbC/C09o8iKSpIbOpMFVfNzYSh
-         cWmeDg1YpaVcpPPtR/ilaZlk76ot9gsQjHrq+BzXckeSQ/VuWRQXFicxUn0AGj69ZHgn
-         GZ7quSOnwWmenn446GcUYJr8WTo0uHH5kt/Ve+N8AcKGJyw38Hw1czjGXp/8IMzabExR
-         CKsr4C9jpJRuptQ6EJbXLvOpUCs5c6xuqVRWtg93unu/EfTPAAm89vqy7Hs/hmRd4vmi
-         DNekLK18kM4n97x+CcCLMtf2Wu8wBE9wu+S+9mJHvVpob15Lh47Y5TThHutJrPrGkUrl
-         0/BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hi0ALShgexmGG4t5YaOzHqoGmz/vsFovN1VLyQXTOrs=;
-        fh=NkPQZjWuHBcRMFufdL/EShDLpHEIOJU8FEz+i6/qvjA=;
-        b=cTKo/n9mcaVzOlpQxkJOtxTozap6f0CvpeLclhFY/FendhTYZs8aQjbxNLTbnIt+aY
-         HwlDEf/F/pifSRWHYJjUdsijxrvEO7ByAUxmyE5dExB1tzCx3Cpvs4qU0AUKxtgn2cm9
-         qkilueBClgfS39cIS/ruQfleyySXPpsayf+PAhB/oWuk1uoSxQYh/l5wd66xPbaekJJt
-         75i8tgZdXMA+ChOw8Afpj3b2nVGztRLx9iOzocb5oMBBKg8xhW+ggCBTRTAhXlpz/f0V
-         nN4o9NfWV7ssL2s4/85L4kyTRnCsF0foqbIdqPtXhYHwPxcV4zH5orGiLWwlsaQMEv95
-         517g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775528541; x=1776133341; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hi0ALShgexmGG4t5YaOzHqoGmz/vsFovN1VLyQXTOrs=;
-        b=pbHA7w5Dek9gqYazNwXy8Wev2rvy9OVweUsIbi+wRfrskH12GZbkNUvVLVp1G75SSl
-         xdihA+z0qyOP+JcYV940qHTv3HiyybT+50NATYRfV9jslA5bgmBDcaA9E/yXk7dfuoY3
-         4FZ5I2hI6lnVWHXTYg2m7KOFifM3pvBX+gsHuVPyR/mD8JwFavJ01hzUkUHZ27nvXVY5
-         Yj3Nr4q2ocH/LHlrpNX9ft7Z2RXUt/pqTP2To9ApkYOHXrr1lXMMQHezW+qbJK9aHH6i
-         q/stAYMHjDNjYreNhcNBEEgNLcilP/Ga9bIfOemsgrhH3rctNv+oIjDT0urzFOULbSSq
-         XwnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775528541; x=1776133341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hi0ALShgexmGG4t5YaOzHqoGmz/vsFovN1VLyQXTOrs=;
-        b=W/4FZ70L3BYlGFDSuOqnJKByT2jG5EOwkdCrNBAjq2bThCP9aw+/OWgLnan0p5gE5a
-         XxcGMSFzRYmNJLQk+yBlr3hFJ+clhSUwfkf2B5BHmVDY7OVFyxoXA0FTV1OZ2nZC1n8+
-         pTCADlg1b4XfF0gCYm0hlAdevVAchSz1fxqvO0TpZrHMP3eZff9ygRL6ZUnqWt9bblCe
-         IeHQxIa4QiFb7yk2xQvyeU8BorlMIAqzp4ydasqFvVq4XWsNfFFkVA/rcameNSHxKo7e
-         4ng9i8tWpEV1Y2vg3niitJOGrsPhXXQdjlfh2QEq+TRSRjfIz35tS+8p1RsCkSPgSK9N
-         vUgw==
-X-Forwarded-Encrypted: i=1; AJvYcCWAS0n88D7rLsnUfWE5Lbo6oJjXU5S+SyWkuBiCIumhWgnRLjW2BKXIJKS7k1U9AA2l8cY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8SAL9veY1CGcEQnhVNIkzx6EOFNjCEmLQWIbL2Rn8YLWz+osa
-	L+7BJzgyMgvvtaViNyXIC2EXUPFX/CRVHwmQm/5KOhMogPsnY6KWFGWx95q10eagauScTafGxiH
-	rBQj4mAECERWmnyhwwxpY7nnvS/9twjg=
-X-Gm-Gg: AeBDiesKhv72C0Ht6djXkvGzMaWoU+kLBK88IyL/a3XPlAdHQ/tsnC0Vv60n68fMBtL
-	rLODEm34H704cz3OMoVM0sZqWudr1Z8xkG6LT794yrg39Pw4Ybb2peapARrJfK4Pqh0ivRLRhLc
-	4Uylqh4MGiLSUbJqR6+oEFwUzXat7tJIsJq5mPkXDzrqVHyFkUusHFi9HWM8/P3r+O5OSaX9/so
-	ERIusL58T/x3gLwbmVlt4KjoUwnWl/+dOuJ2fomm/6LjyutKLI0W/H3fFJBx72p+suBnR+NUY2B
-	u7ziZ+ZzgDXIZ6PGiXAa2BHSxlRzXbmgXS8zRvjxRdN2DAou6rI=
-X-Received: by 2002:a05:690e:4841:b0:650:42ea:26da with SMTP id
- 956f58d0204a3-650486c18c3mr11636012d50.4.1775528541024; Mon, 06 Apr 2026
- 19:22:21 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pRlteTRF"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775528862;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/BTSRSfR0uEztwllvIBtGt3uj4LQXe+9g40tIFFHvFA=;
+	b=pRlteTRFCngwuqCfB/JPjTWBX+W/RnoxhfZoknK1Mz5RfmhefF+5ylpwY6KKZSsIYGwvV2
+	ZPFBxVFOoExV/l0+Kisefx27Vx26fjtBxsSp4Gjie32VCqGcq2m1+3DCPMXTggiMfKqBlA
+	E9WnvR1wIxK+1jb/NZvvrzMI4xL0XoU=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: werner@verivus.ai,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sun Jian <sun.jian.kdev@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v3 0/2] bpf: Fix SOCK_OPS_GET_SK same-register OOB read in sock_ops and add selftest
+Date: Tue,  7 Apr 2026 10:26:26 +0800
+Message-ID: <20260407022720.162151-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <CAPhsuW7Y5KksWM49TrGH_Hohaq02XO8qs7G99Y6D8=0usLFSrQ@mail.gmail.com>
- <CALOAHbDG8=eUV53kF+xn=izs2rpydCk=a9RznU-EEOzmkB8mQg@mail.gmail.com> <CAPhsuW73qFybHgOnZ=oFC1PvdWkYWDk7gsAoiBXe4xWYagPrmA@mail.gmail.com>
-In-Reply-To: <CAPhsuW73qFybHgOnZ=oFC1PvdWkYWDk7gsAoiBXe4xWYagPrmA@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 7 Apr 2026 10:21:45 +0800
-X-Gm-Features: AQROBzBkgo3KxI2MHJmBlrvcZpAG1jaYfSLmu1S4rqwNflNyNo9B1VXQaeJKRX0
-Message-ID: <CALOAHbC0hqk+yrUZay01EBRNOHgyj1MAavzNK-06XJKK9ARMqQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return overriding
- for livepatched functions
-To: Song Liu <song@kernel.org>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, 
-	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
-	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Apr 7, 2026 at 2:26=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> On Mon, Apr 6, 2026 at 3:55=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com>=
- wrote:
-> >
-> > On Sat, Apr 4, 2026 at 12:07=E2=80=AFAM Song Liu <song@kernel.org> wrot=
-e:
-> > >
-> > > Hi Yafang,
-> > >
-> > > On Thu, Apr 2, 2026 at 2:26=E2=80=AFAM Yafang Shao <laoar.shao@gmail.=
-com> wrote:
-> > > >
-> > > > Livepatching allows for rapid experimentation with new kernel featu=
-res
-> > > > without interrupting production workloads. However, static livepatc=
-hes lack
-> > > > the flexibility required to tune features based on task-specific at=
-tributes,
-> > > > such as cgroup membership, which is critical in multi-tenant k8s
-> > > > environments. Furthermore, hardcoding logic into a livepatch preven=
-ts
-> > > > dynamic adjustments based on the runtime environment.
-> > > >
-> > > > To address this, we propose a hybrid approach using BPF. Our produc=
-tion use
-> > > > case involves:
-> > > >
-> > > > 1. Deploying a Livepatch function to serve as a stable BPF hook.
-> > > >
-> > > > 2. Utilizing bpf_override_return() to dynamically modify the return=
- value
-> > > >    of that hook based on the current task's context.
-> > >
-> > > Could you please provide a specific use case that can benefit from th=
-is?
-> > > AFAICT, livepatch is more flexible but risky (may cause crash); while
-> > > BPF is safe, but less flexible. The combination you are proposing see=
-ms
-> > > to get the worse of the two sides. Maybe it can indeed get the benefi=
-t of
-> > > both sides in some cases, but I cannot think of such examples.
-> > >
-> >
-> > Here is an example we recently deployed on our production servers:
-> >
-> >   https://lore.kernel.org/bpf/CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh1gy5hy9=
-Yqgeo4C0iA@mail.gmail.com/
-> >
-> > In one of our specific clusters, we needed to send BGP traffic out
-> > through specific NICs based on the destination IP. To achieve this
-> > without interrupting service, we live-patched
-> > bond_xmit_3ad_xor_slave_get(), added a new hook called
-> > bond_get_slave_hook(), and then ran a BPF program attached to that
-> > hook to select the outgoing NIC from the SKB. This allowed us to
-> > rapidly deploy the feature with zero downtime.
->
-> I guess the idea here is: keep the risk part simple, and implement
-> it in module/livepatch, then use BPF for the flexible and programmable
-> part safe.
+When a BPF sock_ops program accesses ctx fields with dst_reg == src_reg,
+the SOCK_OPS_GET_SK() and SOCK_OPS_GET_FIELD() macros fail to zero the
+destination register in the !fullsock / !locked_tcp_sock path, leading to
+OOB read (GET_SK) and kernel pointer leak (GET_FIELD).
 
-Right
+Patch 1: Fix both macros by adding BPF_MOV64_IMM(si->dst_reg, 0) in the
+!fullsock landing pad.
+Patch 2: Add selftests covering same-register and different-register cases
+for both GET_SK and GET_FIELD.
 
->
-> Can we use struct_ops instead of bpf_override_return for this case?
-> This should make the solution more flexible.
+[1] https://lore.kernel.org/bpf/6fe1243e-149b-4d3b-99c7-fcc9e2f75787@std.uestc.edu.cn/T/#u
 
-Upstreaming struct_ops based BPF hooks is a challenging process, as
-seen in these examples:
+Changes since v2:
+https://lore.kernel.org/bpf/20260406031330.187630-1-jiayuan.chen@linux.dev/
+- Addressed selftest review from Martin KaFai Lau: removed unused skel
+  parameter, renamed to test_ns_ for automatic netns, ASSERT_GE -> ASSERT_OK_FD
+- Add reviewed-by tags.
 
-  https://lwn.net/Articles/1054030/
-  https://lwn.net/Articles/1043548/
+Changes since v1:
+https://lore.kernel.org/bpf/20260404141010.247536-1-jiayuan.chen@linux.dev/
+- Fixed the same bug in SOCK_OPS_GET_FIELD() (pointed out by AI review)
+- Added SOCK_OPS_GET_FIELD same-register and GET_SK different-register
+  subtests
 
-Even when successful, upstreaming can take a significant amount of
-time=E2=80=94often longer than our production requirements allow. To bridge
-this gap, we developed this livepatch+BPF solution. This allows us to
-rapidly deploy new features without maintaining custom hooks in our
-local kernel. Because these livepatch-based hooks are lightweight,
-they minimize maintenance overhead and simplify kernel upgrades (e.g.,
-from 6.1 to 6.18).
+Jiayuan Chen (2):
+  bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
+  selftests/bpf: Add tests for sock_ops ctx access with same src/dst
+    register
 
-That said, we would still prefer to have our hooks accepted upstream
-to eliminate the need for self-maintenance entirely.
+ net/core/filter.c                             |   6 +-
+ .../bpf/prog_tests/sock_ops_get_sk.c          |  76 ++++++++++++
+ .../selftests/bpf/progs/sock_ops_get_sk.c     | 117 ++++++++++++++++++
+ 3 files changed, 197 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+ create mode 100644 tools/testing/selftests/bpf/progs/sock_ops_get_sk.c
 
---=20
-Regards
-Yafang
+-- 
+2.43.0
+
