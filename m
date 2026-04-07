@@ -1,97 +1,113 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849033A7827
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 12:24:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC4B3B2FE1
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 12:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775564643; cv=none; b=XpDbmNKaSHUlGE9ir/i6LA4iGOD0h0/EtbfnuuICzMjcrQSPlObdRWZj5wUfTYAya6XGApWe8pGxhfgIB7Z5MgZwQUZFlCP8gMSm+S54fNn5Izmt/ZqaQxcm9vkjfOiw8ECp4/m1F0SAtygeD+fwG62ArnjHIvN75eSnZbECv0k=
+	t=1775566760; cv=none; b=evq4xlUSASP08urhAH6ve8eU7JbuDh1UQgg66b0wsYLtuUQ/2szsvGcLx0RWwYTXsoVJhFTVePaJqpxzfc9+JQ2cvd7g1Te7ZLWChg35M7dbE78tP9K5brjomMMdnlcFj5+RErx3Ms4DJGZO23Nh6z96Fi+1jBWLsvn0KYYRuCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775564643; c=relaxed/simple;
-	bh=a9hyKY5spvWij0IgoVFNrQXeW2pmP5a3PGtD7rIUxMQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cPo2WZ3hH8Mn/Nf5NOygFrv2znfdr0hzDUO7gT529pfFboMyQNQ2Ithz7vLJvIqnDbzTgSBIU3vYps+BlYAyQ6MU9rODJBDauP2ndmmnTDJId8kIb1+1+rzn9p4UoFxfxQYblL9F3riqX9OPQWJWuQNsVvMHwNRDFYRtW2I9+AA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XWz9Tcjs; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775566760; c=relaxed/simple;
+	bh=MRMavbZxCmCqu97ErQH2KvVIS98vfvYbGQ+qfUPr1Ko=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QrQxFJLJFjo3KxO6/SUi/PRUjg5lkTCaHxMVFVY8Pv66D3W3sGl0tRmHJ2VV1n817RCXUuWMDiszbsPGa0mVgZK1Fe6NnBWOZXnwxczhvtvRYgeX9v85dS1Q697plJo+EG3jXiqAOjP4mkMdZhz5hupkq+MgqPL+94MuRsjVHA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kBcv96/r; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XWz9Tcjs"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775564630;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZRzvcqnuvpSHx+xb15S2TwtDUeBRFUSsWiRQyo3ePeA=;
-	b=XWz9Tcjsbqf2Y6dkritCsUEZBwtoCUNwFqd+iH+dCoFfslxKWA3Ezs632VTGmo+kxTi+Xt
-	MeaNAuhuVEw8cSpASRkTX0vSYA6nIWgtl2LAAjRHF09SKFTabIaqePii664O2uQr9KPgEw
-	T++fNsZm2+NNiSMS1kfgt4/EX7vKqZ8=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Quan Sun <2022090917019@std.uestc.edu.cn>,
-	Yinhao Hu <dddddd@hust.edu.cn>,
-	Kaiyan Mei <M202472210@hust.edu.cn>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf: Drop task_to_inode and inet_conn_established from lsm sleepable hooks
-Date: Tue,  7 Apr 2026 20:23:33 +0800
-Message-ID: <20260407122334.344072-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kBcv96/r"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43cf7683a28so2988532f8f.2
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 05:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775566757; x=1776171557; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGNXMEdomMQOlLGOIDoXABUDmvC0Bd8MldldSKwLSgU=;
+        b=kBcv96/rrTo2xLduUbuybkQiPVfjyBN1g6CAF2tlfNk1anGH2d21Dw/yD/DEjeAxHh
+         +wS0kyy9FDvzHFJKr1HXGSC7S/kM5/F/1yYRY753AAV3ZweVTuyo7cg5FG3PJRe0QrvY
+         gWRvMJLTYhyp8lf11I6yvnbflQaawNdU138a31O+R61hgQa1ya/qSkVwt/NLSmcKEZfd
+         ZGBV/Ix84czcD+4NUsTd+Pb82TbyZf2DI+OK83tUIsts00hwN8LzHUzY0WAzEPuQvUM7
+         LYla06e55ACBK7sbFY6x7/87KnUaiCnx3QkimIiZV3LrRMMaelcPpVwTCQadbfWLoYM0
+         3A9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775566757; x=1776171557;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OGNXMEdomMQOlLGOIDoXABUDmvC0Bd8MldldSKwLSgU=;
+        b=X2xDBSdwjHz4lKVrhOK/hlAjbS55K2s6vWZbTXs2wDR8gJgRWMDP+6uYEJfXxg+noN
+         MG7+2N25KPiIRUbdPSmAF1dhSjIjqzNdmhmchYj3xezLMtF6LM94DNa+LFo3T4R3iE0a
+         gYD08vfDUx2aKeti3QwSNuUTjj3Jei/xIa2ACgb4vZ09xceHWNA/PTG555ywQLTsjzi1
+         2wk/rNyi7RIJohK1Afe1iqJzHNU4e15acy5XdxarW8MYpV6A/Bbs3m8YegkMVj1VvbnD
+         3iRk/rWI7zvfcpM4M8QSTcqC34Is73uFXntEBV5+ox84NDRHA6zg7wzZddQJqf1CEIa0
+         PbuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUko5YcEPoNrQolcCnPLyWCTaeHW7ifh3z0SdT2iDQY5WoH4qWIkunTt11CWwjuMHn2Iso=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfSx7cdLqx8My4JTB+HCxgh5+thT7l9g79FTbIPDrDXZPZ0ML7
+	kuMKgxdM8RJfBq5BGZFbXAdF9v0Rg88oab1w1NLcm3BWqrE4jxWIuLGD
+X-Gm-Gg: AeBDieutObdW8YRtZggfEuKqBFBjQtDkgrsOwc2L44DTrItxc0DzrSbTuySUcDPm28J
+	2gFUJq8dSJckrazSnXg2WLub65WwHGfSVeIC01KUlAx6ITq9bOCKdyDa5p9XE+bLcFtw8lRauJU
+	ZE66ztR7ALLemBITbv6jOdvGkH9IqK4vrY5tBLMT4PC8IFTipZKf2JN7Uj1xHZB8DfkdVqjH4LB
+	a4lkQ/kzXSXeD0xoIqoUbm7NIgIQnf1g+Lx4ZkvTqgYuM35UbTKdnnZSTqdsZcSeXMC0ISHyIKF
+	Ku+IvLlHwVHvrC3vxFi+hmjlKuzEmxMpm3cK5aK1LeamEHRJZqwSOigzOpwoWA5SMI/zvhjR2kH
+	qkOUgaq1R8jiJILMuW8AQOifN8CTVF/fXzwqlpCcLTXbdEg4kkCEHe3H5I3D3huRFDDscnkB8QM
+	NAjCzzo708kok=
+X-Received: by 2002:a05:6000:2903:b0:43b:3d4f:e18d with SMTP id ffacd0b85a97d-43d292e8001mr24841203f8f.39.1775566756876;
+        Tue, 07 Apr 2026 05:59:16 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2a6f73sm53750505f8f.8.2026.04.07.05.59.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 05:59:16 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 7 Apr 2026 14:59:14 +0200
+To: bot+bpf-ci@kernel.org
+Cc: andrey.grodzovsky@crowdstrike.com, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, rostedt@goodmis.org,
+	mhiramat@kernel.org, ihor.solodrai@linux.dev, emil@etsalapatis.com,
+	linux-open-source@crowdstrike.com, martin.lau@kernel.org,
+	eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com
+Subject: Re: [RFC PATCH bpf-next v5 1/2] tracing: Prefer vmlinux symbols over
+ module symbols for unqualified kprobes
+Message-ID: <adT_omtCk7ZGz1xS@krava>
+References: <20260406193158.754498-2-andrey.grodzovsky@crowdstrike.com>
+ <669779524c357c9790196e8e9ce8da8b21a71756c96e828252fead311fdc44c3@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <669779524c357c9790196e8e9ce8da8b21a71756c96e828252fead311fdc44c3@mail.kernel.org>
 
-bpf_lsm_task_to_inode() is called under rcu_read_lock() and
-bpf_lsm_inet_conn_established() is called from softirq context, so
-neither hook can be used by sleepable LSM programs.
+On Mon, Apr 06, 2026 at 08:15:10PM +0000, bot+bpf-ci@kernel.org wrote:
+> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> > Suggested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> 
+> This commit fixes a bug introduced when module symbol counting was
+> added to number_of_same_symbols(). Would it be worth adding a
+> Fixes: tag?
+> 
+> Suggested:
+> Fixes: 926fe783c8a6 ("tracing/kprobes: Fix symbol counting logic by looking at modules as well")
 
-Fixes: 423f16108c9d8 ("bpf: Augment the set of sleepable LSM hooks")
-Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
-Closes: https://lore.kernel.org/bpf/3ab69731-24d1-431a-a351-452aafaaf2a5@std.uestc.edu.cn/T/#u
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- kernel/bpf/bpf_lsm.c | 3 ---
- 1 file changed, 3 deletions(-)
+there's also:
+  9d8616034f16 tracing/kprobes: Add symbol counting check when module loads
 
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 0e74325d96a61..c5c925f002021 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -359,8 +359,6 @@ BTF_ID(func, bpf_lsm_sb_umount)
- BTF_ID(func, bpf_lsm_settime)
- 
- #ifdef CONFIG_SECURITY_NETWORK
--BTF_ID(func, bpf_lsm_inet_conn_established)
--
- BTF_ID(func, bpf_lsm_socket_accept)
- BTF_ID(func, bpf_lsm_socket_bind)
- BTF_ID(func, bpf_lsm_socket_connect)
-@@ -381,7 +379,6 @@ BTF_ID(func, bpf_lsm_syslog)
- BTF_ID(func, bpf_lsm_task_alloc)
- BTF_ID(func, bpf_lsm_task_prctl)
- BTF_ID(func, bpf_lsm_task_setscheduler)
--BTF_ID(func, bpf_lsm_task_to_inode)
- BTF_ID(func, bpf_lsm_userns_create)
- BTF_ID(func, bpf_lsm_bdev_alloc_security)
- BTF_ID(func, bpf_lsm_bdev_setintegrity)
--- 
-2.43.0
+jirka
+
+> 
+> That commit added module_kallsyms_on_each_symbol() to
+> number_of_same_symbols(), which caused unqualified kprobe targets
+> matching both vmlinux and a module to return count > 1 and fail
+> with -EADDRNOTAVAIL.
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24047967861
 
