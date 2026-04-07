@@ -1,69 +1,96 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2475737BE72;
-	Tue,  7 Apr 2026 20:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C288386C3C
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775592174; cv=none; b=ZJOP4MbGQYO+AmOLfO4tzO7CL/w7BGJFM/ukBtIRR+epS9hS623BMVwZe3ITxVhsLqmAPv7mSnboxhXkSzQDuTeAxLHZMAqyCOIwkiXp43ilOZ9vWdy3DoLBwOwzVnSbLGLPa9CqYaTlq/zxMg3qeyidmJ43CYfmrNWvQO3K8Rw=
+	t=1775592175; cv=none; b=YXb2i/l5YbT1sj1M0JIlwSDDowWGBeEYpKihDyVaIQCrxTz5HRcFn6AQYs861lu8SpIw5ka/BjFqayCI3fcMlueNf0VMg6MX2IUM0IVvyvGPeDupksvwUHkF/orWCMV/S9JyVgsVHUp3GS4FXWSs+HDuQSrdygJ5d4OoWdhv6vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775592174; c=relaxed/simple;
-	bh=nZ3PEPjXz02eJX/JIhSD3+m5eowdY0WI6laAM8b2o0M=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UIyCsCTjeFL8lOy++IwfFy7Zoqd1V4WY6HpMlPxY3xLS9bNmhsegXSqcDsoUB+9eNo/3pHSOTq7RilTMv2xNdrBvRPA4q8tbGeclPsOfggwGtdI/S2wSrGkTQ0gHXgXFALsul9+jPyiLCDuHAOD/RLnKbL46r3VZ/v3veFI9gWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Z2GIZNb+; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1775592175; c=relaxed/simple;
+	bh=vi5FjNFei0DMVU6UndsLw5X+Sug4/lpzBigVH5ACDgI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g0AdJPRj8qulzUGRNAZsBz5WOnNh4T/yvAYnMSAAnbE1mS+P24fbfOEMYOMBSRIEM1C0WNIml7QV32Tr+KLyPqQ9QK3/Yoo8LP+zR7wP8ULKMNYu7grm6kF7jKsQEk+b1ySJLy13SkRTZbv4Q5/6EHZrrSoAeBaasMKGDTuZyHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQD5IOG2; arc=none smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Z2GIZNb+"
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 70C1620B7128;
-	Tue,  7 Apr 2026 13:02:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 70C1620B7128
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1775592172;
-	bh=hmet5ykTD8e2tDq18DPjT6PHgc+wVdVqYFqMb8f4RmM=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Z2GIZNb+vIHPK96moiV4q3G88KHbNEkw2yI+onNgjbGBYEVlwoDoW3U/GeLf5SGwI
-	 CuDD12r6iZ5uP8jlpoY6S8VXWZM+9XrZJUiaWY8x14OU8z9civGmLYVcHHKSj26K81
-	 pp9/A59X+Nzs7vjxrVWKF+OEDSQftzst5yaksxXc=
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	leon@kernel.org,
-	longli@microsoft.com,
-	kotaranov@microsoft.com,
-	horms@kernel.org,
-	shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com,
-	linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org,
-	jacob.e.keller@intel.com,
-	leitao@debian.org,
-	kees@kernel.org,
-	john.fastabend@gmail.com,
-	hawk@kernel.org,
-	bpf@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQD5IOG2"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-650789b22e3so1728157d50.1
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775592173; x=1776196973; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=67+cKnsUxsC8cUauaFfSWyXKAlrlKdFCay5MrA604yk=;
+        b=FQD5IOG2tWX0D59HiO4K9pEDlYxhmVP4MpXfrNIQSwpTgJpi90+YdCCZixnUArZKcU
+         L3wnhMNmFMRXeP+eMdZIimpxKcqGN7Za6dzqbYagzhJLsxNkkzN8Sq0qzpXA093l6Rmz
+         5H5A6p1AgkNRnUMO0K1NhxEJl8LsFvmbILHHXH3LKTSJEl/jXjM+LS3cep+M+xtsDPzZ
+         gfJEMffOVL0QVhSHcChaNnTKEF3SiDtCMugA2zOz6LxGvRRFIaFSE+C0+HMFfWWbX2K0
+         e/B5aZeSOFOOREdPWldZSjSrSr5ICMbWE3KKG2qmR++ITiu/mZCA5hKiaYc2dzL3x32l
+         QAkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775592173; x=1776196973;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=67+cKnsUxsC8cUauaFfSWyXKAlrlKdFCay5MrA604yk=;
+        b=d35w6BR0l91N5HmLgsGzXJlWECDYLSvZBa9R7/08FFSBE50pP6RLrKIKb1p3vB2X9n
+         hr8Q6hQQMXDMtDr4DAvUdxxTJAqhuVHcsMkMZSXa2W8LdhU6Wd8sPIGhgtbr9+BGq3Mx
+         XVHlPnvBHJL8M7lXIImvWMN/yyz2RyTuKenng157TJF5hDE2TR7gdXYh2WOIWNGkE589
+         YFOaN/eMRg6WmUaIcjnvsR9aT7JO0c/wzkxDIeHhDncABeobr3QoGN/8f+2RjnjgO0/S
+         mvGstv4MrJ+zlY6QIjEdT/uZK/DkXuZBHjrKGAaH2lYCnUbHB2JyAdDqewNcDRM1xnUn
+         9s5g==
+X-Forwarded-Encrypted: i=1; AJvYcCX7kR0oi3sNmaG/oVEfLbcp6XghaF31Zv0l9tXizophTuoX30S+kt9ZBD97piKndoAF/J0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4FhIYB1F/K8L0gbx/8R8Vww/7ef4Sjn2D/GH9f+iYmLuPu2xx
+	JPx9W/xPkf2OHVTSIJmi5k6cHuu+lrkKwGTSqARgsse5wD5chHLak5RV
+X-Gm-Gg: AeBDietlu+vLAPGYsY9ZdHOycg+mGdChZhO3TzDd//1oCQmlGY0VYWruck9upbIdahi
+	v0lNqiUrLReO5lLN1lDlDrxnFehS2jhVqdQPm5qHF5daTjhtLN1QBjDXzpeMPYqHxplXXenuzcb
+	WUXI0Vtmv2b++gFCw2V74J11o0WQwCnW4u37JGxOCbKBwfPRghfJm8yo1j/0xv1yODbybtcCJmk
+	5f1E1y3JFlKXTUCQO/k5PXqyVnA5lCfb5j0eeGLW8Rb3wgEexWV553kcILX/XjAOzNk6+ZxJZgT
+	1FV/Uox+lrn4MEmDyuV+NTNRGkBhz0MVVeVJhdKhVqjyY7fSmtYaLrLn9Pa0XeuVuDhB5hYSNd+
+	apnL240fLFqvr7dXPW/F0482tFm6dZY7CxFB8+tJpYsdhTKDtcqACz3sWHZcveyJQRcWxSsZDYR
+	wAOFy2ePbvvH9uqKqcxmZ51q5/u/WthH2uN2mNWysdmiYayvfVuS6CBbdMvYb1RS/ZvqbL4pgP
+X-Received: by 2002:a05:690e:11ca:b0:650:891d:e1a6 with SMTP id 956f58d0204a3-650891de307mr938379d50.51.1775592172595;
+        Tue, 07 Apr 2026 13:02:52 -0700 (PDT)
+Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:92f8:8594:e84e:1d9a])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a828f3csm8354078d50.3.2026.04.07.13.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 13:02:52 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: ast@kernel.org,
 	daniel@iogearbox.net,
-	ast@kernel.org,
+	andrii@kernel.org,
+	kpsingh@kernel.org,
+	paul@paul-moore.com,
+	mic@digikod.net,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	kees@kernel.org
+Cc: gnoack@google.com,
+	jack@suse.cz,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	martin.lau@linux.dev,
+	m@maowtm.org,
+	eddyz87@gmail.com,
+	john.fastabend@gmail.com,
 	sdf@fomichev.me,
-	dipayanroy@microsoft.com
-Subject: [PATCH net-next v6 1/2] net: mana: refactor mana_get_strings() and mana_get_sset_count() to use switch
-Date: Tue,  7 Apr 2026 12:59:18 -0700
-Message-ID: <20260407200216.272659-2-dipayanroy@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
-References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
+	skhan@linuxfoundation.org,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [RFC PATCH 18/20] landlock: Document LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS
+Date: Tue,  7 Apr 2026 16:01:40 -0400
+Message-ID: <20260407200157.3874806-19-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260407200157.3874806-1-utilityemal77@gmail.com>
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,121 +99,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Refactor mana_get_strings() and mana_get_sset_count() from if/else to
-switch statements in preparation for adding ethtool private flags
-support which requires handling ETH_SS_PRIV_FLAGS.
+Document the new LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS flag, and explain
+how its designed primarily for BPF-side use cases for Landlock.
 
-No functional change.
-
-Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- .../ethernet/microsoft/mana/mana_ethtool.c    | 75 ++++++++++++-------
- 1 file changed, 46 insertions(+), 29 deletions(-)
+ Documentation/userspace-api/landlock.rst | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-index 6a4b42fe0944..a28ca461c135 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-@@ -138,53 +138,70 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
- 	struct mana_port_context *apc = netdev_priv(ndev);
- 	unsigned int num_queues = apc->num_queues;
+diff --git a/Documentation/userspace-api/landlock.rst b/Documentation/userspace-api/landlock.rst
+index fd8b78c31f2f..82c88d75ef21 100644
+--- a/Documentation/userspace-api/landlock.rst
++++ b/Documentation/userspace-api/landlock.rst
+@@ -204,7 +204,8 @@ similar backwards compatibility check is needed for the restrict flags
  
--	if (stringset != ETH_SS_STATS)
-+	switch (stringset) {
-+	case ETH_SS_STATS:
-+		return ARRAY_SIZE(mana_eth_stats) +
-+		       ARRAY_SIZE(mana_phy_stats) +
-+		       ARRAY_SIZE(mana_hc_stats)  +
-+		       num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
-+	default:
- 		return -EINVAL;
--
--	return ARRAY_SIZE(mana_eth_stats) + ARRAY_SIZE(mana_phy_stats) + ARRAY_SIZE(mana_hc_stats) +
--			num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
-+	}
- }
+     __u32 restrict_flags =
+         LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON |
+-        LANDLOCK_RESTRICT_SELF_TSYNC;
++        LANDLOCK_RESTRICT_SELF_TSYNC |
++        LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS;
+     switch (abi) {
+     case 1 ... 6:
+         /* Removes logging flags for ABI < 7 */
+@@ -223,10 +224,18 @@ similar backwards compatibility check is needed for the restrict flags
+          * children (and not for all threads, including parents and siblings).
+          */
+         restrict_flags &= ~LANDLOCK_RESTRICT_SELF_TSYNC;
++        __attribute__((fallthrough));
++    case 8:
++    case 9:
++        /* Removes no_new_privs convenience flag for ABI < 10 */
++        restrict_flags &= ~LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS;
+     }
  
--static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
-+static void mana_get_strings_stats(struct mana_port_context *apc, u8 **data)
- {
--	struct mana_port_context *apc = netdev_priv(ndev);
- 	unsigned int num_queues = apc->num_queues;
- 	int i, j;
+ The next step is to restrict the current thread from gaining more privileges
+-(e.g. through a SUID binary).  We now have a ruleset with the first rule
++(e.g. through a SUID binary).  When supported, this can be folded into
++``landlock_restrict_self()`` with ``LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS``;
++otherwise, user space must still call :manpage:`prctl(2)` explicitly.  We now
++have a ruleset with the first rule
+ allowing read and execute access to ``/usr`` while denying all other handled
+ accesses for the filesystem, and a second rule allowing HTTPS connections.
  
--	if (stringset != ETH_SS_STATS)
--		return;
- 	for (i = 0; i < ARRAY_SIZE(mana_eth_stats); i++)
--		ethtool_puts(&data, mana_eth_stats[i].name);
-+		ethtool_puts(data, mana_eth_stats[i].name);
+@@ -716,6 +725,15 @@ Starting with the Landlock ABI version 9, it is possible to restrict
+ connections to pathname UNIX domain sockets (:manpage:`unix(7)`) using
+ the new ``LANDLOCK_ACCESS_FS_RESOLVE_UNIX`` right.
  
- 	for (i = 0; i < ARRAY_SIZE(mana_hc_stats); i++)
--		ethtool_puts(&data, mana_hc_stats[i].name);
-+		ethtool_puts(data, mana_hc_stats[i].name);
- 
- 	for (i = 0; i < ARRAY_SIZE(mana_phy_stats); i++)
--		ethtool_puts(&data, mana_phy_stats[i].name);
-+		ethtool_puts(data, mana_phy_stats[i].name);
- 
- 	for (i = 0; i < num_queues; i++) {
--		ethtool_sprintf(&data, "rx_%d_packets", i);
--		ethtool_sprintf(&data, "rx_%d_bytes", i);
--		ethtool_sprintf(&data, "rx_%d_xdp_drop", i);
--		ethtool_sprintf(&data, "rx_%d_xdp_tx", i);
--		ethtool_sprintf(&data, "rx_%d_xdp_redirect", i);
--		ethtool_sprintf(&data, "rx_%d_pkt_len0_err", i);
-+		ethtool_sprintf(data, "rx_%d_packets", i);
-+		ethtool_sprintf(data, "rx_%d_bytes", i);
-+		ethtool_sprintf(data, "rx_%d_xdp_drop", i);
-+		ethtool_sprintf(data, "rx_%d_xdp_tx", i);
-+		ethtool_sprintf(data, "rx_%d_xdp_redirect", i);
-+		ethtool_sprintf(data, "rx_%d_pkt_len0_err", i);
- 		for (j = 0; j < MANA_RXCOMP_OOB_NUM_PPI - 1; j++)
--			ethtool_sprintf(&data, "rx_%d_coalesced_cqe_%d", i, j + 2);
-+			ethtool_sprintf(data,
-+					"rx_%d_coalesced_cqe_%d",
-+					i,
-+					j + 2);
- 	}
- 
- 	for (i = 0; i < num_queues; i++) {
--		ethtool_sprintf(&data, "tx_%d_packets", i);
--		ethtool_sprintf(&data, "tx_%d_bytes", i);
--		ethtool_sprintf(&data, "tx_%d_xdp_xmit", i);
--		ethtool_sprintf(&data, "tx_%d_tso_packets", i);
--		ethtool_sprintf(&data, "tx_%d_tso_bytes", i);
--		ethtool_sprintf(&data, "tx_%d_tso_inner_packets", i);
--		ethtool_sprintf(&data, "tx_%d_tso_inner_bytes", i);
--		ethtool_sprintf(&data, "tx_%d_long_pkt_fmt", i);
--		ethtool_sprintf(&data, "tx_%d_short_pkt_fmt", i);
--		ethtool_sprintf(&data, "tx_%d_csum_partial", i);
--		ethtool_sprintf(&data, "tx_%d_mana_map_err", i);
-+		ethtool_sprintf(data, "tx_%d_packets", i);
-+		ethtool_sprintf(data, "tx_%d_bytes", i);
-+		ethtool_sprintf(data, "tx_%d_xdp_xmit", i);
-+		ethtool_sprintf(data, "tx_%d_tso_packets", i);
-+		ethtool_sprintf(data, "tx_%d_tso_bytes", i);
-+		ethtool_sprintf(data, "tx_%d_tso_inner_packets", i);
-+		ethtool_sprintf(data, "tx_%d_tso_inner_bytes", i);
-+		ethtool_sprintf(data, "tx_%d_long_pkt_fmt", i);
-+		ethtool_sprintf(data, "tx_%d_short_pkt_fmt", i);
-+		ethtool_sprintf(data, "tx_%d_csum_partial", i);
-+		ethtool_sprintf(data, "tx_%d_mana_map_err", i);
-+	}
-+}
++No New Privs flag (ABI < 10)
++----------------------------------------
 +
-+static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
-+{
-+	struct mana_port_context *apc = netdev_priv(ndev);
++Starting with the Landlock ABI version 10, it is possible to request
++``no_new_privs`` as part of ``landlock_restrict_self()`` by passing the
++``LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS`` flag.  This lets user space request
++the prerequisite from the Landlock API itself, which is especially useful when
++the restriction is applied from an external context such as BPF.
 +
-+	switch (stringset) {
-+	case ETH_SS_STATS:
-+		mana_get_strings_stats(apc, &data);
-+		break;
-+	default:
-+		break;
- 	}
- }
+ .. _kernel_support:
  
+ Kernel support
 -- 
-2.43.0
+2.53.0
 
