@@ -1,73 +1,35 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A21F2472AF
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 06:02:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4DC3793C8;
+	Tue,  7 Apr 2026 06:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775541748; cv=none; b=pFaL85mjkbpBYPbwwVTjhtadRlbfbeC/4AswUAahwaVzifRnwomj/XiD/c1ExgRiq2EdeCS3wChe1+rlYjXI2MrH75+OrVvq6i1ZZHToKlGPZhotgMSixCL9C4AWEr5gl0RGQM8TcxrS4q0CD1YfNDgZJfecLeronpqSzGcLzUA=
+	t=1775543003; cv=none; b=JEw4N2dLxk2ReqgeHrFzKKdDdRiOrvJ4CNQ80v+SFb6AgPY1XOIGMeaEYbfjcbp/lOdykl6yzZv4jJajUEohGqbjZ8cHe4OkqbRlvS2IOa6ScAQe1lTNZyGohEPxO4/vPzuCR17v4xklaMyD/T472SFEUxG7wWdRN7HQModqNn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775541748; c=relaxed/simple;
-	bh=0H9VniHkzeScDYxm/6T7jaHVl7KRkm/Ov7jjRgrBk6Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A6SzA2WFLEQr632X9b0wcmZTNf+tKE4hTFmUaND7n1zSy0bLurr3q+f0IaffFJEBDXeBqq9j0NrCimxmlI4XoBrt+2xEzdyeh2QUy5hrsdvRVqr8NKwaCl8Bw7vtIpiHqAntDtjkPlYjT4qiLyarMa5soI1O0spVSi6zydBhCxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aSYr6cPA; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aSYr6cPA"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b258576d8cso29421165ad.0
-        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 23:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775541746; x=1776146546; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=W+UZVknFvzZ+CFZRKBwEomqUEvo570iJuDBzJawHtDk=;
-        b=aSYr6cPAGxt3Xk7EuXlKysqU+50BosfIlUki+v2Tc6Dy69Vt4fbcu5g5c6yVihUJ3t
-         DkTesnWuWRCGo6N88hNEHSWWB6mzLnrhwbfLkSxL5Fdzn/l1lDUObjz3br7yX8Dnwjyt
-         gOv8yrWj5sFA0mvKE2XFc6JqanDjZgV0ZGJqLBcd/H/GVOfYE0sSgcPup36Sdt1pWRaa
-         ASLsKJOep6FXQ60U9TGbZ58SlIFrlg98y1s9K9xSavQDRvCt2m4Fr4ycN1i5UW0kyqo8
-         DJrOjYjXksVBZbmBTv5Qz+Ts9X1qIqsjXK62dre58mSpUIA+s/HJZxBrtfKuKT0FiS1L
-         HpQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775541746; x=1776146546;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W+UZVknFvzZ+CFZRKBwEomqUEvo570iJuDBzJawHtDk=;
-        b=DmjMLsvO/DMX9MWj0tKQgz1U2Ni04amIoPFviXHmZNDStZKITTSfAPyot30qnI0LTy
-         4u+1fN6hvA5NAeUlr8mD38w4yoG3KfXk6lGhcmrosUN8nm4H9GfXzHGeYjY65RPIE/Bf
-         u0ffh1pTNETGVuKqamz/X1SYyeUboGRkVgHNKSqTnCLSobGW6fO9DeztBUteq4xJdMaf
-         KO/O8pwfJdcCgjTE4GEfMopQvfRxsK+U1Bm8xMOi5DUVAe11wDwDXHmyGTHqSb0jVwP5
-         U1ZkmrVGK3SPh49SufHSCP5zwfIBDemDbI5+TjAlh5MO1X16jbHber+eQ7JzhsRYoHsL
-         Nw3Q==
-X-Gm-Message-State: AOJu0YwXeZOmFju1J//LED4fvDIt10OG/1se4ohuGxU9KTRn3nMH66yI
-	uRtFUX4ZV5y7oAo67rH/iTQ/HGVAX28gqn6ZJzscyWT8fRgpetfLQnq0EY0QNHE686A=
-X-Gm-Gg: AeBDietEY2dW3gDn7YJiIOVzUUoYxKN5K6bK7oPjgmocy6MnjGQ0Zjrhl0lMHgKw2Mk
-	HF1XVMUOAQP3fF1Y2VzKmxo3IMlUQXny6rdEwGLaKZSqAiGZ9p4F7+biYuEiT2ou2YN/CABd6UA
-	P5cWnYDENEMzLqjZeiTM93UMSgoa2ZvuFemLlJ0eLlLlX33Fv2QARcPGMSu1lwJLDhfJdxRMbJT
-	AO8PFpqTrnfV3HYkRBWbbkFZjCGcJBikFqRdQDJdINh+vGOLwKOtEaKKRvSvaLvbz6lwRPWVBOE
-	MXPNyF+FbFbZzNLY/0/I5hyovUzr2IjYQRdVAaTjAf6MTL2McaTlky5r4BpTnQGhflMG/yNqGIt
-	VCsw9dCConwQlZhLg3BMzksTSwLigGMVctNuY36p2PUlbodXTcjrZDi3+7lezFWD+gQQXOCPfcU
-	K3+NhR8qNkaucLjeEbnalB7qx3DAwTqk3csnk=
-X-Received: by 2002:a17:903:22c6:b0:2b2:680c:2193 with SMTP id d9443c01a7336-2b2818b3ae8mr164243585ad.31.1775541745820;
-        Mon, 06 Apr 2026 23:02:25 -0700 (PDT)
-Received: from C6-AF-E1-B8-1C-91 ([106.216.138.173])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27478cb4fsm174986745ad.29.2026.04.06.23.02.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2026 23:02:25 -0700 (PDT)
-From: Adith-Joshua <adithalex29@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com
-Subject: [RFC bpf] Ingress RX queue provenance across cpumap redirect
-Date: Tue,  7 Apr 2026 11:32:03 +0530
-Message-ID: <20260407060203.3391-1-adithalex29@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1775543003; c=relaxed/simple;
+	bh=8UTl0XC2kOUL6OyLfakMpUNxbSJ7OAL9PKnPUb1bifg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fgljjtrqRT70/flvC9FXKDdIFXO6Qb7GbSmgFSKucj3HbbZTb7GOpGbK4TDjwmC7bmQsEpYklq0g1CsZvBvkcrgRxMQG1CqhFypdQ5OyfNZwcp53q+hU6B5qahOLtpNo4EJQ91qYWq+eBIPhFnrxQludgiNA+WKAdlCqnFdDPYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8Dx88DVotRpv6UiAA--.37462S3;
+	Tue, 07 Apr 2026 14:23:17 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCx_8LLotRpYh5nAA--.54S5;
+	Tue, 07 Apr 2026 14:23:15 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/5] LoongArch: BPF: Support 8 and 16 bit read-modify-write instructions
+Date: Tue,  7 Apr 2026 14:23:04 +0800
+Message-ID: <20260407062306.8915-4-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20260407062306.8915-1-yangtiezhu@loongson.cn>
+References: <20260407062306.8915-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,101 +37,154 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCx_8LLotRpYh5nAA--.54S5
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZFWxtFW5Cr4Utr13KF1Dtwc_yoW5KF1Dpr
+	srWrZ5KaykJF4agas3Jr97JFW3Kr4xJ3srWF13J395W3yaqF13GF1kKF1fZFy5Cr97Cr4f
+	W3s3ZFyq93W7AFgCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jOdb8UUUUU=
 
-Hi,
+The 8 and 16 bit read-modify-write instructions {amadd/amswap}.{b/h}
+were newly added in the latest LoongArch Reference Manual, use them
+to avoid the error of unknown opcode if possible.
 
-While working with XDP programs using cpumap redirection, I observed that
-ctx->rx_queue_index becomes 0 after xdp_buff -> xdp_frame conversion and
-execution on the remote CPU.
-
-This is expected since xdp_frame does not carry xdp_rxq_info and cpumap
-re-invokes XDP in a new execution context.
-
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
+ arch/loongarch/net/bpf_jit.c | 83 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 74 insertions(+), 9 deletions(-)
 
-## Motivation
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index fefda4050a20..c9a32f124f5e 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -363,10 +363,30 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 	switch (imm) {
+ 	/* lock *(size *)(dst + off) <op>= src */
+ 	case BPF_ADD:
+-		if (isdw)
+-			emit_insn(ctx, amaddd, t2, t1, src);
+-		else
++		switch (BPF_SIZE(insn->code)) {
++		case BPF_B:
++			if (cpu_has_lam_bh) {
++				emit_insn(ctx, amaddb, t2, t1, src);
++			} else {
++				pr_err_once("bpf-jit: amadd.b instruction is not supported\n");
++				return -EINVAL;
++			}
++			break;
++		case BPF_H:
++			if (cpu_has_lam_bh) {
++				emit_insn(ctx, amaddh, t2, t1, src);
++			} else {
++				pr_err_once("bpf-jit: amadd.h instruction is not supported\n");
++				return -EINVAL;
++			}
++			break;
++		case BPF_W:
+ 			emit_insn(ctx, amaddw, t2, t1, src);
++			break;
++		case BPF_DW:
++			emit_insn(ctx, amaddd, t2, t1, src);
++			break;
++		}
+ 		break;
+ 	case BPF_AND:
+ 		if (isdw)
+@@ -388,11 +408,32 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		break;
+ 	/* src = atomic_fetch_<op>(dst + off, src) */
+ 	case BPF_ADD | BPF_FETCH:
+-		if (isdw) {
+-			emit_insn(ctx, amaddd, src, t1, t3);
+-		} else {
++		switch (BPF_SIZE(insn->code)) {
++		case BPF_B:
++			if (cpu_has_lam_bh) {
++				emit_insn(ctx, amaddb, src, t1, t3);
++				emit_zext_32(ctx, src, true);
++			} else {
++				pr_err_once("bpf-jit: amadd.b instruction is not supported\n");
++				return -EINVAL;
++			}
++			break;
++		case BPF_H:
++			if (cpu_has_lam_bh) {
++				emit_insn(ctx, amaddh, src, t1, t3);
++				emit_zext_32(ctx, src, true);
++			} else {
++				pr_err_once("bpf-jit: amadd.h instruction is not supported\n");
++				return -EINVAL;
++			}
++			break;
++		case BPF_W:
+ 			emit_insn(ctx, amaddw, src, t1, t3);
+ 			emit_zext_32(ctx, src, true);
++			break;
++		case BPF_DW:
++			emit_insn(ctx, amaddd, src, t1, t3);
++			break;
+ 		}
+ 		break;
+ 	case BPF_AND | BPF_FETCH:
+@@ -421,11 +462,32 @@ static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 		break;
+ 	/* src = atomic_xchg(dst + off, src); */
+ 	case BPF_XCHG:
+-		if (isdw) {
+-			emit_insn(ctx, amswapd, src, t1, t3);
+-		} else {
++		switch (BPF_SIZE(insn->code)) {
++		case BPF_B:
++			if (cpu_has_lam_bh) {
++				emit_insn(ctx, amswapb, src, t1, t3);
++				emit_zext_32(ctx, src, true);
++			} else {
++				pr_err_once("bpf-jit: amswap.b instruction is not supported\n");
++				return -EINVAL;
++			}
++			break;
++		case BPF_H:
++			if (cpu_has_lam_bh) {
++				emit_insn(ctx, amswaph, src, t1, t3);
++				emit_zext_32(ctx, src, true);
++			} else {
++				pr_err_once("bpf-jit: amswap.h instruction is not supported\n");
++				return -EINVAL;
++			}
++			break;
++		case BPF_W:
+ 			emit_insn(ctx, amswapw, src, t1, t3);
+ 			emit_zext_32(ctx, src, true);
++			break;
++		case BPF_DW:
++			emit_insn(ctx, amswapd, src, t1, t3);
++			break;
+ 		}
+ 		break;
+ 	/* r0 = atomic_cmpxchg(dst + off, r0, src); */
+@@ -1259,6 +1321,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			return ret;
+ 		break;
+ 
++	/* Atomics */
++	case BPF_STX | BPF_ATOMIC | BPF_B:
++	case BPF_STX | BPF_ATOMIC | BPF_H:
+ 	case BPF_STX | BPF_ATOMIC | BPF_W:
+ 	case BPF_STX | BPF_ATOMIC | BPF_DW:
+ 		ret = emit_atomic_rmw(insn, ctx);
+-- 
+2.42.0
 
-Some XDP deployments use cpumap as part of a multi-stage packet processing
-pipeline, where XDP is effectively used as a distributed processing model
-across CPUs rather than a single RX invocation.
-
-In such setups, ingress RX queue identity (rx_queue_index) is sometimes
-used beyond the initial hook not only for debugging, but for maintaining
-consistent observability and pipeline semantics across stages. This includes:
-
-  - maintaining consistent per-RX-queue accounting across cpumap and later
-    XDP stages
-  - preserving RSS-based classification identity for traffic analysis and
-    validation of NIC steering behavior across a distributed pipeline
-  - enabling end-to-end telemetry correlation from hardware queue origin
-    through CPU-side processing
-  - supporting reproducibility of packet processing paths in asynchronous
-    cpumap-driven execution where scheduling and CPU assignment may vary
-
-In these cases, rx_queue_index acts as a stable ingress classification anchor.
-Losing this information at the cpumap boundary breaks the assumption that
-XDP programs operate on a logically continuous packet context across stages.
-
----
-
-## Design observation
-
-Current behavior appears intentional:
-
-  - xdp_frame does not carry xdp_rxq_info
-  - cpumap executes XDP in a new RX context
-  - RX metadata is not considered part of redirected packet state
-
-This suggests that RX provenance is currently scoped strictly to the NIC RX
-invocation context, and is not carried across execution boundaries such as
-cpumap or devmap.
-
----
-
-## Question
-
-Is RX queue provenance expected to be part of the XDP execution model across
-redirect boundaries, or is it explicitly considered out of scope once a packet
-is passed through cpumap/devmap?
-
----
-
-## Alternative direction (for clarification only)
-
-One possible model could be to treat ingress RX metadata as optional,
-non-authoritative context and expose it via a helper-based mechanism
-(e.g. ingress queue accessor), rather than embedding it in xdp_frame or
-xdp_rxq_info.
-
-However, I am not assuming this is aligned with existing design principles,
-and would appreciate clarification on whether such a model is desirable at all.
-
-To be explicit, I am not proposing that rx_queue_index itself be preserved
-in xdp_frame or across cpumap, nor any change to existing struct layouts.
-
-The question is whether ingress RX queue identity is intended to be
-representable beyond the initial NIC RX invocation, particularly in
-redirect-based XDP pipelines.
-
-This question is motivated by cases where cpumap is used as part of a
-multi-stage XDP processing pipeline, where loss of ingress queue identity
-removes a stable classification signal that can otherwise be useful for:
-
-  - correlating packets across distributed XDP execution stages
-  - validating RSS / hardware steering behavior in software datapaths
-  - maintaining consistent per-queue observability across cpumap boundaries
-  - reconstructing ingress-to-processing paths in asynchronous CPU offload
-
-The intent is to understand whether these requirements are intentionally
-out of scope in the current XDP execution model, or whether a helper-based
-or metadata-based abstraction is expected for such use cases.
-
----
-
-## Follow-up
-
-If this aligns with intended design, I would be happy to explore a concrete
-proposal or implementation.
-
-Thanks,
-Adith
