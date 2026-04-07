@@ -1,63 +1,63 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CD437BE97
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C3C37C91B
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775592145; cv=none; b=PgZeG/LUNtULpcBAfjqjVf3ogzvhGr4uCAfsWsKHEDtzgnrzyEA4jyxG1q7M1MROyYl6MFa88xdpNemA3WvNsjpGVlq2GLf9Cpk/i2h4j3XwESyVo0teVU5sd68qM5MAfkR2DEGlG8UgBNRtxO8XV023rAq0fPbXIxg6s6OU8dE=
+	t=1775592149; cv=none; b=UHJcV4ao5vcw1eNH+R2YIwy23ykMlo4TSDDtVuwVKauaDvwh0hn8SFvlVr8O0IYKmK1U1rjr39CpdHCGuZHCXQc+R8q7fZ8hgTRf3U7joTlCXpJ3ZHa+2EY2+l/j+YR12gvjQXkjmYAPyQiw/tZI2/jrl6yV+bBJt0EhQnhkOaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775592145; c=relaxed/simple;
-	bh=Vsih0b+o/jg8UkqUGlmWwwA82DsXh+PPInY0bCs+d9Y=;
+	s=arc-20240116; t=1775592149; c=relaxed/simple;
+	bh=2CMcW2gq2LmD6OBr8KShORwyqyftbdR5TuaGADyZZ7Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e/shMNke6G6i+LDNsBh0gbAbxnyKtQcMxT5vu1+gQMjYvLMXfqZfUbroA3T4wTN4dAMeiSIFl3PfzlBpo+SSwPgQGUZlHfRuXkdEy7uvyscfRVC0fPvXoqvqdI4+C2yb1TspSiREuGNLtqLI3mgEiW0ot+c+hc4IgPrs9x/xlws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ld7ijPzN; arc=none smtp.client-ip=74.125.224.54
+	 MIME-Version; b=oTGoY8mQe94ScvPwgs6sAs8gbczM40YtntUi389lZZCFQ/H+jEThBnKqIWmshMrqO1N9auXA5dbCS2L7p9socIyS00Yen/vBW81GkIrVOHDsUqP3/k7ORObtDRxRyacAb+YAPEkfU+BN6bwCP0Hmz/Y3HhmhwW5a80PYcop3nB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=enO869OX; arc=none smtp.client-ip=74.125.224.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ld7ijPzN"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-6501c4857b2so3224801d50.3
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:02:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="enO869OX"
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-6507a9303fbso1373979d50.1
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:02:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775592142; x=1776196942; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775592145; x=1776196945; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OdNRllWWd15mEvEF9vUAARg/W2nP/JkoUMdUtCOL1a0=;
-        b=ld7ijPzN6UwZa317Y+pOrcJPZLHllDYofuCiEtkh2WGlXHu7+66DI74qz/bVwYWrlD
-         8xwxYBr94m9hNQTO0VWx/6r2zlI51BAXuiM4eBlH9exuAR/BKXnZuCtF2U7mWjJiCQ+u
-         o9qBFlOyfJ5ZBHGQrxDlJhkXFlh8cZ6/J9psBZ9ODZAD1LAxy2Lm3gjFX3OWgTrJRufF
-         Ke5MQt9E+srEUL1McBkZINq8vOZe2gUM16dABU31bK6VJQWOnUnZ7RNfq00jpUAjEmEh
-         NrQr8M67os/5AKHOf22jEy1U0ImU6u2BBYm6t2D+qpejx4aPcvKxlzkbcBjMcOO/yBmm
-         +RCQ==
+        bh=V+Kz9KQLBOk2gZAk6F760LWdEiRy/BzHmk2mLo+ys2U=;
+        b=enO869OX6+lKrCmPv3YMb9cY5TbheaTdV1u7lyE15BBCMX6+/kAW7K9mixbvUXkDOk
+         Mosep08MeJflR2syvhe+4O/2FLii7ORtdQxHAafrfgnnGcly2EBeLZ+Za6bth08mGIBJ
+         u7hT40BbJ5hnnkMsz7pBBCRmcP5a+//tdvHNZtznHKMKPqWXzOPl6qWDZQ0MmH0y+AnD
+         Fp+xamww3eMWMeZ/mPXIkGkLoKupbX3ad3AwuUe2TBzWhQQ2GbraTTZjXkhwQrJB2FdO
+         I1WMDga0aCrUD5X6hM4FnP6EE6kpUC7GYL6Ex7Ab6uO8qWAMmYI9Cdn1cGz3DSEiiKJP
+         V7cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775592142; x=1776196942;
+        d=1e100.net; s=20251104; t=1775592145; x=1776196945;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=OdNRllWWd15mEvEF9vUAARg/W2nP/JkoUMdUtCOL1a0=;
-        b=GrOeXaueABVswC70suwHCkOwQ13U/u/+WR2rqA5wKvG4of9FkhlbrC4Fz8MyKwodID
-         gfh0APzrTfoJV02/NTh4u3u/pJD35tMlk9GQMXAz7qQsi7HaYZfau5/BpSls2bdT334w
-         ybgsgpLtAC9NK3x5p+D9cwYl3RH1JhuYRM3UV2qCUJIlMsxhb/31mCCMeigeOZ7P1x9N
-         nQb60jz0uR5jTBL3h/Lj8tPiifx7mBmkWxTnDIfcuK4tswyaspiB5jjeSqHdEbuzRiUE
-         +5o9OW5IQGQPHlxVcKwRQRCm4zSmd/flfV/q+l4kLhHHF9ReO+XxnSecoKmWTXyXMxvI
-         ShqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoIJQjUvLjGibizgxbQO0RQtlwaYSY70z3TXYrb/eoBB3ZdezpC3HBmje7xIsl9wZ55BQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu4l7dKLHGLkXRIrKDyLN85fmidfBh8zpWdkXkHmUFqrbTp4EG
-	VQgC0h4jMl/9lKefHU+Gi0Y2IIWQ9qSPvgHkkfjpUVqebpoOLrL15iss
-X-Gm-Gg: AeBDieuhPmknHJr3OhQZ53HY5JBjSfKcDo25XDkcJIPLuy/3lUwkOPmsVZRz4iu7nC4
-	3DrnsEzudfc5vSwcPx4fIz5bDEhVzllLBQo8xsZW3h9RYRLZtqeGxAtTHy4tcXWYsND2QdU/vvr
-	r4SNOtuboy9EgicW+ejTHznQAFvvle0nyR1f6sC7sBc29d2s9R0GJtTUVYhhpVrI3Ap+Tad6+33
-	tCpHDorN5ejJ0I79Cx9eOgT2AwczxAoVpfxqyulwmIjnPmTCQmHIMOqpmMuTUE8Sfc6SR19i0+j
-	5Li1emH3CJNFQj4huDEDuXmNnTjBsfgl5nKmTu9s+hWvXbTaOesIqHHACWKYAEAsP0kX5ZDQtes
-	zwywJ/wt+k9xw4gN2jgmbg4ISiTYKqHpsWqD+HEFBqDK/UsFRGDG0o7MMJgaveU3SXA7Q0yIk+V
-	UYXB4PsBgzvQipc8p5YPheSMluvJ3C9nxncTwJ1992puk8qxkGpTlxGeytc3ugPmJRibqMDoS+
-X-Received: by 2002:a05:690e:1557:20b0:650:3a28:4359 with SMTP id 956f58d0204a3-65048745b32mr13895318d50.22.1775592142319;
-        Tue, 07 Apr 2026 13:02:22 -0700 (PDT)
+        bh=V+Kz9KQLBOk2gZAk6F760LWdEiRy/BzHmk2mLo+ys2U=;
+        b=hUG9IDZ4DB0DghCBr7/Oyp59yc5/xeHn6W+mGl8W9fyMBLVdqA9iMk6KOOoIn1kNUu
+         TSAe9NvJciFyQTplKRDCzy+FPUiLv+qUUTCA3KAYwAgXpB/48dZAfu0NlZEeone2zF1J
+         tgJSu3m6APEuVKLlghGYE0+OjlAHmoUbW5cQmDZGDFEtkae/+e+cynkOdwCX8Aw6ALwV
+         cOCogboxCldH+UWf+pwdCL5qx66vJtyxYP3V1zGdp4FFRuXx0rXzhsDjGfHn2GmREmYS
+         PdrYnFHC44KmGNzcwXcolJhxEyqW8/gZ0APAhAe5Kt0veyHV4l0uNzJFs0fg0Moz6F9r
+         dCxw==
+X-Forwarded-Encrypted: i=1; AJvYcCWC2gCLMxMPLq8vd9B9xP2+9rxsgaZTlTntLQIUcWbt1q1YxKY28+hhLKvmHvFEFvRFYy8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKtRK7Zpd9LCHaOr+RPJP1j/DHue/ikpLa3TLcF3uv87zA+hmq
+	+QYDMiGs9z+O30EG1RDYQP7S3EPnNHzi+nOfIr0FWqyPD0Lg6lcixsWRvze2M5II
+X-Gm-Gg: AeBDietrgsZaV528ngoqDEMlygGhJOoaJ64MZex15RBxJoy4xnF44YuJSTzxZaecw47
+	K/8+WgP8+1/314iNHj88YNScB6cQxgtnuwLMNstgzBZjxPqR5g3PLJ3cPrwbxJNAeV7LocxyEKc
+	Ie1A/CyQmIaLqo+K0jZBy4MCcxoW4QI5g9HdLbLt/am5SmvOsRAK1s5597T806iT1naT2l/n0XP
+	GiO5bGQZGSVKim2GOxOKVYYDmnkSEFbAoJp2PYUY1JQndihWUgoR7t5N8+MWqUQjzHWc5kQ8ADK
+	ImfHgbSvHpMhtTSNtzFYWpkSTlLG60yeaG3tGckCQkfbB5PO9P1aWm2tzulPAlRkLEWzIXoKiE7
+	FNWrWa358LUsWvBvWK6Y9Emx9XX/1uWwOdA7zRjex0Lnx/Qs3SNl7XP+7YtiyhL1lqIGX0O9NXL
+	bY4hZtrnOK4Wwrkt8HtVXxbB25Lsf5PRrgao13bEVxf1oghI2E0Hfixpn4wc+Osf+TMZEGKOTv
+X-Received: by 2002:a05:690e:ee3:b0:649:b31e:8f48 with SMTP id 956f58d0204a3-6504871787bmr13350525d50.22.1775592145445;
+        Tue, 07 Apr 2026 13:02:25 -0700 (PDT)
 Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:92f8:8594:e84e:1d9a])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a828f3csm8354078d50.3.2026.04.07.13.02.21
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a828f3csm8354078d50.3.2026.04.07.13.02.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 13:02:22 -0700 (PDT)
+        Tue, 07 Apr 2026 13:02:25 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -85,9 +85,9 @@ Cc: gnoack@google.com,
 	linux-kernel@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [RFC PATCH 06/20] bpf: lsm: Add Landlock kfuncs
-Date: Tue,  7 Apr 2026 16:01:28 -0400
-Message-ID: <20260407200157.3874806-7-utilityemal77@gmail.com>
+Subject: [RFC PATCH 07/20] bpf: arraymap: Implement Landlock ruleset map
+Date: Tue,  7 Apr 2026 16:01:29 -0400
+Message-ID: <20260407200157.3874806-8-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260407200157.3874806-1-utilityemal77@gmail.com>
 References: <20260407200157.3874806-1-utilityemal77@gmail.com>
@@ -99,227 +99,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Create 2 kfuncs exposing control over Landlock functionality to BPF
-callers. Export an opaque struct bpf_landlock_ruleset preventing callers
-from accessing unstable internal Landlock fields.
+Implement a new BPF map BPF_MAP_LANDLOCK_RULESET. This specialized map type
+is designed to store ruleset file descriptors, and uses the exposed
+Landlock helper functions to ensure that the ruleset isn't freed
+unexpectedly. This map type may only be inserted into from userspace,
+and only with a file descriptor referring to a valid Landlock ruleset.
+Updating a Landlock ruleset directly through a map is not supported,
+as there are no fields that can be changed, but you may add rules from
+userspace as long as the file descriptor is open, or replace the fd with
+another. Elements in a Landlock ruleset map may be deleted from
+BPF or userspace. Looking up an element is supported only in BPF, this
+is enforced with the map_lookup_elem_sys_only field in the map ops.
 
-1) bpf_landlock_put_ruleset releases a reference on a bpf_landlock_ruleset.
-This is properly passed to the verifier with the KF_RELEASE annotation.
-
-2) bpf_landlock_restrict_binprm alters the pre-committed credentials in the
-linux_binprm struct, ensuring the program will start with the specified
-landlock ruleset. Normal domain inheritance, for existing and future
-domains apply as normal.
-
-To enable proper reference counting and destruction, a destructor is
-registered for the bpf_landlock_ruleset.
-
-Additionally, both kfuncs are restricted to LSM programs attached to
-bprm_creds_for_exec or bprm_creds_from_file, and only sleepable varients
-of these hooks. Landlock may block because a ruleset is protected by a
-lock, so both of the above kfuncs may sleep and are KF_SLEEPABLE.
-
-If RESTRICT_FLAGS_NO_NEW_PRIVS is set, and the task doesn't have
-CAP_SYS_ADMIN or is not already running with no_new_privs, we set the
-set_nnp_on_point_of_no_return to ensure that the next execution
-transition (but not the current one) will be subject to no_new_privs.
-
-Running task_set_no_new_privs directly is unsafe in this path, as a
-failed execution will result in a lingering side effect of no_new_privs
-being set on the original thread.
+Reuse the existing fd_array_map operations for inserting and deleting to
+avoid code duplication with existing FD maps.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- include/linux/bpf_lsm.h |  15 +++++
- kernel/bpf/bpf_lsm.c    | 145 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 160 insertions(+)
+ kernel/bpf/arraymap.c | 67 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-index 643809cc78c3..1fc019c0db44 100644
---- a/include/linux/bpf_lsm.h
-+++ b/include/linux/bpf_lsm.h
-@@ -31,6 +31,21 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
- bool bpf_lsm_is_sleepable_hook(u32 btf_id);
- bool bpf_lsm_is_trusted(const struct bpf_prog *prog);
- 
-+/*
-+ * Opaque type for BPF landlock ruleset.  This is used to prevent BPF programs
-+ * from directly accessing the landlock_ruleset structure, which is not designed
-+ * for external use and may change in the future.
-+ */
-+struct bpf_landlock_ruleset {};
-+BTF_ID_LIST_SINGLE(bpf_landlock_ruleset_btf_ids, struct, bpf_landlock_ruleset)
-+__bpf_kfunc void
-+bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset);
-+__bpf_kfunc int
-+bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
-+			     const struct bpf_landlock_ruleset *ruleset,
-+			     u32 flags);
-+__bpf_kfunc void bpf_landlock_put_ruleset_dtor(void *ruleset);
-+
- static inline struct bpf_storage_blob *bpf_inode(
- 	const struct inode *inode)
- {
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 0c4a0c8e6f70..5da9950aa555 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -16,6 +16,7 @@
- #include <linux/btf_ids.h>
- #include <linux/ima.h>
- #include <linux/bpf-cgroup.h>
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 33de68c95ad8..f0da17e0e23e 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -8,6 +8,7 @@
+ #include <linux/slab.h>
+ #include <linux/mm.h>
+ #include <linux/filter.h>
 +#include <linux/landlock.h>
- 
- /* For every LSM hook that allows attachment of BPF programs, declare a nop
-  * function where a BPF program can be attached. Notably, we qualify each with
-@@ -447,3 +448,147 @@ int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
- 	}
- 	return 0;
- }
+ #include <linux/perf_event.h>
+ #include <uapi/linux/btf.h>
+ #include <linux/rcupdate_trace.h>
+@@ -1458,3 +1459,69 @@ const struct bpf_map_ops array_of_maps_map_ops = {
+ 	.map_mem_usage = array_map_mem_usage,
+ 	.map_btf_id = &array_map_btf_ids[0],
+ };
 +
-+BTF_SET_START(bpf_landlock_kfunc_hooks)
-+BTF_ID(func, bpf_lsm_bprm_creds_for_exec)
-+BTF_ID(func, bpf_lsm_bprm_creds_from_file)
-+BTF_SET_END(bpf_landlock_kfunc_hooks)
-+
-+BTF_KFUNCS_START(bpf_landlock_kfunc_btf_ids)
-+BTF_ID_FLAGS(func, bpf_landlock_put_ruleset, KF_RELEASE | KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_landlock_restrict_binprm, KF_SLEEPABLE)
-+BTF_KFUNCS_END(bpf_landlock_kfunc_btf_ids)
-+
-+BTF_ID_LIST(bpf_landlock_dtor_ids)
-+BTF_ID(struct, bpf_landlock_ruleset)
-+BTF_ID(func, bpf_landlock_put_ruleset_dtor)
-+
-+static int bpf_landlock_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
++static int landlock_ruleset_map_alloc_check(union bpf_attr *attr)
 +{
-+	if (!btf_id_set8_contains(&bpf_landlock_kfunc_btf_ids, kfunc_id))
-+		return 0;
++	if (!IS_ENABLED(CONFIG_SECURITY_LANDLOCK))
++		return -EOPNOTSUPP;
 +
-+	/* BPF_LSM_CGROUP programs run under classic RCU and cannot sleep. */
-+	if (prog->expected_attach_type == BPF_LSM_CGROUP)
-+		return -EACCES;
-+
-+	if (!btf_id_set_contains(&bpf_landlock_kfunc_hooks,
-+				 prog->aux->attach_btf_id))
-+		return -EACCES;
-+
-+	return 0;
++	return fd_array_map_alloc_check(attr);
 +}
 +
-+static const struct btf_kfunc_id_set bpf_landlock_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set = &bpf_landlock_kfunc_btf_ids,
-+	.filter = bpf_landlock_kfunc_filter,
++static void landlock_ruleset_map_put_ptr(struct bpf_map *map, void *ptr,
++					 bool need_defer)
++{
++	if (!ptr)
++		return;
++
++	if (need_defer)
++		landlock_put_ruleset_deferred(ptr);
++	else
++		landlock_put_ruleset(ptr);
++}
++
++static void *landlock_ruleset_map_get_ptr(struct bpf_map *map,
++					  struct file *map_file, int fd)
++{
++	return landlock_get_ruleset_from_fd(fd, FMODE_CAN_READ);
++}
++
++static void *landlock_ruleset_map_lookup_elem(struct bpf_map *map, void *key)
++{
++	struct landlock_ruleset **elem, *ruleset;
++
++	rcu_read_lock();
++
++	elem = array_map_lookup_elem(map, key);
++	if (!elem) {
++		rcu_read_unlock();
++		return NULL;
++	}
++	ruleset = READ_ONCE(*elem);
++	if (!landlock_try_get_ruleset(ruleset))
++		ruleset = NULL;
++
++	rcu_read_unlock();
++
++	return ruleset;
++}
++
++static void landlock_ruleset_array_free(struct bpf_map *map)
++{
++	bpf_fd_array_map_clear(map, false);
++	fd_array_map_free(map);
++}
++
++const struct bpf_map_ops landlock_ruleset_map_ops = {
++	.map_alloc_check = landlock_ruleset_map_alloc_check,
++	.map_alloc = array_map_alloc,
++	.map_free = landlock_ruleset_array_free,
++	.map_get_next_key = bpf_array_get_next_key,
++	.map_lookup_elem_sys_only = fd_array_map_lookup_elem,
++	.map_lookup_elem = landlock_ruleset_map_lookup_elem,
++	.map_delete_elem = fd_array_map_delete_elem,
++	.map_fd_get_ptr = landlock_ruleset_map_get_ptr,
++	.map_fd_put_ptr = landlock_ruleset_map_put_ptr,
++	.map_mem_usage = array_map_mem_usage,
++	.map_btf_id = &array_map_btf_ids[0],
 +};
-+
-+static int __init bpf_landlock_kfunc_init(void)
-+{
-+	const struct btf_id_dtor_kfunc bpf_landlock_dtors[] = {
-+		{
-+			.btf_id = bpf_landlock_dtor_ids[0],
-+			.kfunc_btf_id = bpf_landlock_dtor_ids[1],
-+		},
-+	};
-+	int ret;
-+
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-+					&bpf_landlock_kfunc_set);
-+	if (ret)
-+		return ret;
-+
-+	return register_btf_id_dtor_kfuncs(bpf_landlock_dtors,
-+					   ARRAY_SIZE(bpf_landlock_dtors),
-+					   THIS_MODULE);
-+}
-+
-+late_initcall(bpf_landlock_kfunc_init);
-+
-+__bpf_kfunc_start_defs();
-+
-+#if IS_ENABLED(CONFIG_SECURITY_LANDLOCK)
-+
-+/**
-+ * bpf_landlock_put_ruleset - put a Landlock ruleset
-+ * @ruleset: Landlock ruleset to put
-+ */
-+__bpf_kfunc void
-+bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset)
-+{
-+	landlock_put_ruleset((struct landlock_ruleset *)ruleset);
-+}
-+
-+/**
-+ * bpf_landlock_restrict_binprm - enforce a Landlock ruleset on exec credentials
-+ * @bprm: execution context providing the prepared credentials to restrict
-+ * @ruleset: Landlock ruleset to enforce, may be NULL only with
-+ *	LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
-+ * @flags: landlock_restrict_self() flags
-+ *
-+ * When @flags contains LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS, the request is
-+ * staged through @bprm and committed only after exec reaches point-of-no-return.
-+ * This guarantees that the resulting task cannot gain more privileges through
-+ * later exec transitions, including when called from bprm_creds_from_file.
-+ * The current execution is unaffected, and may escalate as usual until the next
-+ * exec.
-+ */
-+__bpf_kfunc int
-+bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
-+			     const struct bpf_landlock_ruleset *ruleset,
-+			     u32 flags)
-+{
-+	int err = landlock_restrict_cred_precheck(flags, false);
-+
-+	if (err)
-+		return err;
-+
-+	err = landlock_restrict_cred(bprm->cred,
-+				     (struct landlock_ruleset *)ruleset,
-+				     flags);
-+
-+	if (err)
-+		return err;
-+	/*
-+	 * Stage no_new_privs through @bprm so exec can honor it without
-+	 * mutating the current task before point-of-no-return.
-+	 */
-+	if ((flags & LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS)
-+	    && !task_no_new_privs(current)
-+	    && !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN))
-+		bprm->set_nnp_on_point_of_no_return = 1;
-+
-+	return err;
-+}
-+
-+/* We define stubs for these to allow ebpf programs using landlock kfuncs to load
-+ * even when CONFIG_SECURITY_LANDLOCK is not enabled.
-+ */
-+#else /* IS_ENABLED(CONFIG_SECURITY_LANDLOCK) */
-+
-+__bpf_kfunc void
-+bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset)
-+{
-+}
-+
-+__bpf_kfunc int
-+bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
-+			     const struct bpf_landlock_ruleset *ruleset,
-+			     u32 flags)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+#endif /* IS_ENABLED(CONFIG_SECURITY_LANDLOCK) */
-+
-+/* Destructor does nothing when Landlock is not enabled */
-+__bpf_kfunc void bpf_landlock_put_ruleset_dtor(void *ruleset)
-+{
-+	bpf_landlock_put_ruleset(ruleset);
-+}
-+
-+CFI_NOSEAL(bpf_landlock_put_ruleset_dtor);
-+
-+__bpf_kfunc_end_defs();
 -- 
 2.53.0
 
