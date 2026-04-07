@@ -1,93 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEEB270830;
-	Tue,  7 Apr 2026 00:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA819212550
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 01:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775522606; cv=none; b=ue1fgAe3HkXp+Rmi79X8HzCn3b/OLSbl+5eKF9EQyZXYCsm04LJwLhJYjzXXm3KvUruvEBkqASoKQQGX5sJmjCLLdNxV4FueA7EDfMrvfvus5gHYqo92j/CJx1xbvs77aJL5wU2GOqjLc/DWCKr7cNCjHNzwTUSKADnQSftCLNE=
+	t=1775525191; cv=none; b=a0NND3+hKMVTpxUbPjF9WnQkhaayod6y1tsjyqoF4Yy5K9jXFD5dL81rDmtrPK11WodpCLH8LAku7X2bIr5ZN0trpF8PgwCZuDfHkwapBUEFfEFUk2nD8dqW0n3QHfhv/+pL7yykUVNez/0wjROz3EfTUehz0LnEk7Tt3exQhyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775522606; c=relaxed/simple;
-	bh=JY9IxlluVwlJCAKpBGKd5NaRfJ6onloYtkTR64nerzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AM+qBPaEhWBAb0000soc8tjEThc/UdVAU5ohw6pyD9rQLbrE6b/FMMSH+gEpPNh9baflFq3XxGXqB1/OlBpvhQwzO20gp3TfhypLp7W83icc/JDAVwphPQuAt8xgGg+ykpgI+7awD18+D+dsNYY37Sk+4kfsixQ9FkuBFTbo9wI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l1msI51X; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775525191; c=relaxed/simple;
+	bh=dVILt1iLbW9F7TOlyKfK5PT3r7yL8XE5R4xlV05lU2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NFwpahDehp9T/Rp96S+GRveVQRtCT07RYxkic5QIN/iZroDNFH1MmT0eELnOdcCqDb0BtMr8QZgM7QXOT4V+iAYkBfLhbWZHH6bsXJoJxp6lZKs43z0QE6dLZEEe9welxNUo1AxSCiOOfoiOhCDBIEwtcfieX//dIQD+E4zcU50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nJZSA9oC; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l1msI51X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAE3C4CEF7;
-	Tue,  7 Apr 2026 00:43:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775522605;
-	bh=JY9IxlluVwlJCAKpBGKd5NaRfJ6onloYtkTR64nerzg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=l1msI51X7ofjKkDGEwZ7TwCpO6NGnXPJnQA1lhuTqtcWJfoR/UN5nciutx8NZY7x1
-	 88KESoAUzgoAVxwpeh3cqmpaVWHfK1NdIkub5nMFky1HOhcMMt6VIt9oMAliFWypky
-	 Y5CbN/7UsM5Qwo2xvW+Fb0DR4qytEphv36XqoIHIgqi1EZjg/ZmORgNyNZpby3AdNp
-	 xThrScd8bMR1/Ya+pQJEubcerHYHo2slzgW/sgvVoGuZEnVRkW+0rCI/jWtDXUlaR8
-	 76Csx3avtjyGJtd5JzmiJ/TtZo3lhSxFg+JJQrZ/BIuhFaGPJp2XXxhtMak+/6dV4J
-	 HfYV6BSzNY21w==
-Date: Mon, 6 Apr 2026 17:43:23 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Nicolai Buchwitz <nb@tipi-net.de>
-Cc: Mark Bloch <mbloch@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
- Tariq Toukan <tariqt@nvidia.com>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Saeed Mahameed <saeedm@nvidia.com>, Leon
- Romanovsky <leon@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Cosmin Ratiu <cratiu@nvidia.com>, Simon Horman
- <horms@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>, Lama Kayal
- <lkayal@nvidia.com>, Michal Swiatkowski
- <michal.swiatkowski@linux.intel.com>, Carolina Jubran <cjubran@nvidia.com>,
- Nathan Chancellor <nathan@kernel.org>, Daniel Zahka
- <daniel.zahka@gmail.com>, Rahul Rameshbabu <rrameshbabu@nvidia.com>, Raed
- Salem <raeds@nvidia.com>, netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Gal Pressman <gal@nvidia.com>
-Subject: Re: [PATCH net-next V2 4/5] net/mlx5e: XDP, Use a single linear
- page per rq
-Message-ID: <20260406174323.4597db58@kernel.org>
-In-Reply-To: <d7c247276e39d88e1cd9d86e21c74779@tipi-net.de>
-References: <20260403090927.139042-1-tariqt@nvidia.com>
-	<20260403090927.139042-5-tariqt@nvidia.com>
-	<adH5yAsPJ8rNgT0k@x13>
-	<20260406084344.5d315f01@kernel.org>
-	<e0ac9755-fd49-4620-92ce-0f5e4203a95e@nvidia.com>
-	<d7c247276e39d88e1cd9d86e21c74779@tipi-net.de>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nJZSA9oC"
+Date: Mon, 6 Apr 2026 18:25:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775525177;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=euWRknGGJoLsZnDSjgyoR/3x+tUQI1fMgnlSdPtl2Ss=;
+	b=nJZSA9oCoqyBwc4kpihQiPaqanTRL6HaqfMrlXAGWgpkozZ43AB8upcT6Yt0IULldqZlgu
+	zySMdC4zpYVQV4VQuM9AMLIxjLSjUvAiGXSHc0TIjUvZgpqu5HTel2eOzghc7gWgT8AV6N
+	hMl+vQEtwoqSEnRrFslDBwUhQMJTlb8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Werner Kasselman <werner@verivus.ai>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Lawrence Brakmo <brakmo@fb.com>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] bpf: add is_locked_tcp_sock guard for sock_ops rtt_min
+ access
+Message-ID: <2026471147.8A6S.martin.lau@linux.dev>
+References: <20260406224953.2787289-1-werner@verivus.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260406224953.2787289-1-werner@verivus.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 06 Apr 2026 21:13:43 +0200 Nicolai Buchwitz wrote:
-> On 6.4.2026 18:31, Mark Bloch wrote:
-> > On 06/04/2026 18:43, Jakub Kicinski wrote: =20
-> >> Thanks a lot for reviewing the review! It takes a lot of maintainer=20
-> >> time =20
-> > =E2=80=9CBefore posting, authors could run a recommended baseline of re=
-view=20
-> > tools,
-> > where available, to catch obvious issues early. During review, tools=20
-> > such
-> > as review-prompts and Sashiko may be used to assist the reviewer.=E2=80=
-=9D
->=20
-> There is already https://netdev-ai.bots.linux.dev/ai-local.html which I=20
-> found really helpful.
-> If this is still the preferred approach, I could draft a patch to add it=
-=20
-> to Documentation/process/maintainer-netdev.rst
+On Mon, Apr 06, 2026 at 10:49:56PM +0000, Werner Kasselman wrote:
+> sock_ops_convert_ctx_access() generates BPF instructions to inline
+> context field accesses for BPF_PROG_TYPE_SOCK_OPS programs. For
+> tcp_sock-specific fields like snd_cwnd, srtt_us, etc., it uses the
+> SOCK_OPS_GET_TCP_SOCK_FIELD() macro which checks is_locked_tcp_sock
+> and returns 0 when the socket is not a locked full TCP socket.
+> 
+> However, the rtt_min field bypasses this guard entirely: it emits a raw
+> two-instruction load sequence (load sk pointer, then load from
+> tcp_sock->rtt_min offset) without checking is_locked_tcp_sock first.
+> 
+> This is a problem because bpf_skops_hdr_opt_len() and
+> bpf_skops_write_hdr_opt() in tcp_output.c set sock_ops.sk to a
+> tcp_request_sock (cast from request_sock) during SYN-ACK processing,
+> with is_fullsock=0 and is_locked_tcp_sock=0. If a SOCK_OPS program
+> with BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG reads ctx->rtt_min in this
+> callback, the generated code treats the tcp_request_sock pointer as a
+> tcp_sock and reads at offsetof(struct tcp_sock, rtt_min) -- which is
+> well past the end of the tcp_request_sock allocation, causing an
+> out-of-bounds slab read.
 
-Right, I'd like to have something similar and a bit of time to drive
-down the number of false positives from Sashiko. Compared to the
-NIPA's ai-reviews the Sashiko comments take a lot of time to validate
-and are often alarmist. The merge window starts next week so I'll have
-more spare cycles.
+This is not limited to hdr related CB flags.
 
-Please share if you had success running Sashiko (https://sashiko.dev/)
-"locally"!
+It also happens to earlier CB flags that have a request_sock, such as
+BPF_SOCK_OPS_RWND_INIT.
+
+> 
+> The rtt_min field was introduced in the same commit as the other
+> tcp_sock fields but was given hand-rolled access code because it reads
+> a sub-field (rtt_min.s[0].v, a minmax_sample) rather than a direct
+> struct member, making it incompatible with the SOCK_OPS_GET_FIELD()
+> macro. This hand-rolled code omitted the is_fullsock guard that the
+> macro provides. The guard was later renamed to is_locked_tcp_sock in
+> commit fd93eaffb3f9 ("bpf: Prevent unsafe access to the sock fields in the BPF timestamping callback").
+> 
+> Add the is_locked_tcp_sock guard to the rtt_min case, replicating the
+> exact instruction pattern used by SOCK_OPS_GET_FIELD() including
+> proper handling of the dst_reg==src_reg case with temp register
+> save/restore. Use offsetof(struct minmax_sample, v) for the sub-field
+> offset to match the style in bpf_tcp_sock_convert_ctx_access().
+> 
+> Found via AST-based call-graph analysis using sqry.
+> 
+> Fixes: 44f0e43037d3 ("bpf: Add support for reading sk_state and more")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Werner Kasselman <werner@verivus.com>
+> ---
+>  net/core/filter.c | 47 ++++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 44 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 78b548158fb0..58f0735b18d9 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -10830,13 +10830,54 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+>  		BUILD_BUG_ON(sizeof(struct minmax) <
+>  			     sizeof(struct minmax_sample));
+>  
+> +		/* Unlike other tcp_sock fields that use
+> +		 * SOCK_OPS_GET_TCP_SOCK_FIELD(), rtt_min requires a
+> +		 * custom access pattern because it reads a sub-field
+> +		 * (rtt_min.s[0].v) rather than a direct struct member.
+> +		 * We must still guard the access with is_locked_tcp_sock
+> +		 * to prevent an OOB read when sk points to a
+> +		 * tcp_request_sock (e.g., during SYN-ACK processing via
+> +		 * bpf_skops_hdr_opt_len/bpf_skops_write_hdr_opt).
+> +		 */
+> +		off = offsetof(struct tcp_sock, rtt_min) +
+> +		      offsetof(struct minmax_sample, v);
+> +	{
+> +		int fullsock_reg = si->dst_reg, reg = BPF_REG_9, jmp = 2;
+> +
+> +		if (si->dst_reg == reg || si->src_reg == reg)
+> +			reg--;
+> +		if (si->dst_reg == reg || si->src_reg == reg)
+> +			reg--;
+> +		if (si->dst_reg == si->src_reg) {
+> +			*insn++ = BPF_STX_MEM(BPF_DW, si->src_reg, reg,
+> +					  offsetof(struct bpf_sock_ops_kern,
+> +					  temp));
+> +			fullsock_reg = reg;
+> +			jmp += 2;
+> +		}
+> +		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+> +						struct bpf_sock_ops_kern,
+> +						is_locked_tcp_sock),
+> +				      fullsock_reg, si->src_reg,
+> +				      offsetof(struct bpf_sock_ops_kern,
+> +					       is_locked_tcp_sock));
+> +		*insn++ = BPF_JMP_IMM(BPF_JEQ, fullsock_reg, 0, jmp);
+> +		if (si->dst_reg == si->src_reg)
+> +			*insn++ = BPF_LDX_MEM(BPF_DW, reg, si->src_reg,
+> +				      offsetof(struct bpf_sock_ops_kern,
+> +				      temp));
+>  		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
+>  						struct bpf_sock_ops_kern, sk),
+>  				      si->dst_reg, si->src_reg,
+>  				      offsetof(struct bpf_sock_ops_kern, sk));
+> -		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,
+> -				      offsetof(struct tcp_sock, rtt_min) +
+> -				      sizeof_field(struct minmax_sample, t));
+> +		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg, off);
+> +		if (si->dst_reg == si->src_reg) {
+> +			*insn++ = BPF_JMP_A(1);
+> +			*insn++ = BPF_LDX_MEM(BPF_DW, reg, si->src_reg,
+> +				      offsetof(struct bpf_sock_ops_kern,
+> +				      temp));
+
+There is an existing bug in this copy-and-paste codes [1] and now is
+repeated here, so please find a way to refactor it to be reusable instead of
+duplicating it.
+
+This also needs a test. It should be a subtest of [1],
+so [1] need to land first.
+
+[1]: https://lore.kernel.org/bpf/20260406031330.187630-1-jiayuan.chen@linux.dev/
