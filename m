@@ -1,124 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA717283C9D;
-	Tue,  7 Apr 2026 02:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775527807; cv=none; b=akAed4MCUz8t3MbHOb2PmqZT/ZWx5j7aSD7kfQVlhGcRE5L6jZ7Nk22RK3VGbkShfxanVD7ltMt3jlQb3TTs7Jn2u8sUQKHdUxEcOIbKGKjZ5M8rCeZ4WfT/LcyW5N8PjaOCwRgXfB99cQmgCP8q+gxvUWRvAZEVY2SO0JMbgek=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775527807; c=relaxed/simple;
-	bh=/bV+bTTfPhODyuYodpZsbu0E+ohIbVKUHn1OOkkT/gM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dk/sW7J534viyjUqZuey3mfb7yRM/qIjxSO47z4PaV2+ai8SyZj5lTt+uTYf9jl03fvXORDq/DUs37m38wDZT57/5mPF4p9dOfEPdc5vNN26nUB3Bw0LEkeaodJOHU5hYbZiGh52WaaCL7Nrw2/mO/sRjAzCD+ICUfMcpOKE5I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0kvEK4W; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1368A34FF7A
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 02:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775528543; cv=pass; b=d4kdPDfTHt/R2TYGERyZYPVzjHI4Kor7e7UlDThvyzGriITXrPiluhuCAJsJ4wpgzm4AmZBihZhfFF5R5AfKUyDUcn2O0+8B3XgERhY/kVg4ImjhGTOz7xXCgqhG2OLwM+gtLbU3ZL6y6iIzYJM0frON0tP/8fXkk6qtkMBvZNw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775528543; c=relaxed/simple;
+	bh=NLGRqjeuKpGNc91JbpQik1MBmKlqX+MA4yQsWR41Rmc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p6+zOC1DGb0lXL59DrqyXoj0gH4uZr+p6ioJMqYY/ng8dAWVzdOvOGseldTV5SGRY/mPmMdB3Tj6vheeX/zmMf9JJhhKR8IbCHoms29PWDoj+4+6i3JE6CcB95KchLzGZGULw3Xns3OvDZoVeA3S+AQdgFtbDSFW6eeEs5NP0Hw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pbHA7w5D; arc=pass smtp.client-ip=74.125.224.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0kvEK4W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD7EC2BCAF;
-	Tue,  7 Apr 2026 02:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775527807;
-	bh=/bV+bTTfPhODyuYodpZsbu0E+ohIbVKUHn1OOkkT/gM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=H0kvEK4WdPguBs68FdUXumtOEYMcAARWdKr5U9iHRFFYdhHvbwdHcBhp+l/h6qAuC
-	 n/M06MPGTRWbTxt+BiTqZDCiPXOc7l7Gj2QkcFZACW4PuO/SzRqjpHzzjjXeTIS1or
-	 Rl8un6WwuDy8hcdeKI9J5bJ8R5vcgKBW7dLgW62MAasDUgxMn3Gamf0OKuHA+/deXe
-	 Nyn1dYZgYlrfYEhU3d0X7o/FQ4b9d41mEPJ8ABZKfFHVqOi7Hs7+GcFTLjxy0kBG+t
-	 088imVURnvi+0tCIo5SBq3diHslVrb7nqhmsFwmjGfbGQ0h9moqybpKh/HS8two8F8
-	 4af+y58m0ms7w==
-From: Jakub Kicinski <kuba@kernel.org>
-To: jitendra.vegiraju@broadcom.com
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	alexandre.torgue@foss.st.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	mcoquelin.stm32@gmail.com,
-	bcm-kernel-feedback-list@broadcom.com,
-	richardcochran@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	rmk+kernel@armlinux.org.uk,
-	rohan.g.thomas@altera.com,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	bpf@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	sdf@fomichev.me,
-	me@ziyao.cc,
-	siyanteng@cqsoftware.com.cn,
-	prabhakar.mahadev-lad.rj@bp.renesas.com,
-	weishangjuan@eswincomputing.com,
-	wens@kernel.org,
-	vladimir.oltean@nxp.com,
-	lizhi2@eswincomputing.com,
-	boon.khai.ng@altera.com,
-	maxime.chevallier@bootlin.com,
-	chenchuangyu@xiaomi.com,
-	yangtiezhu@loongson.cn,
-	ovidiu.panait.rb@renesas.com,
-	chenhuacai@kernel.org,
-	florian.fainelli@broadcom.com,
-	quic_abchauha@quicinc.com
-Subject: Re: [PATCH net-next v9 4/4] net: stmmac: Add BCM8958x driver to build system
-Date: Mon,  6 Apr 2026 19:10:04 -0700
-Message-ID: <20260407021004.3674655-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260402213629.1996133-5-jitendra.vegiraju@broadcom.com>
-References: <20260402213629.1996133-5-jitendra.vegiraju@broadcom.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pbHA7w5D"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-6501c4857b2so2158145d50.3
+        for <bpf@vger.kernel.org>; Mon, 06 Apr 2026 19:22:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775528541; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kE+mssYf2JK+qBuLsoSOU7LMYD5pOWySstu2CqsfPbC/C09o8iKSpIbOpMFVfNzYSh
+         cWmeDg1YpaVcpPPtR/ilaZlk76ot9gsQjHrq+BzXckeSQ/VuWRQXFicxUn0AGj69ZHgn
+         GZ7quSOnwWmenn446GcUYJr8WTo0uHH5kt/Ve+N8AcKGJyw38Hw1czjGXp/8IMzabExR
+         CKsr4C9jpJRuptQ6EJbXLvOpUCs5c6xuqVRWtg93unu/EfTPAAm89vqy7Hs/hmRd4vmi
+         DNekLK18kM4n97x+CcCLMtf2Wu8wBE9wu+S+9mJHvVpob15Lh47Y5TThHutJrPrGkUrl
+         0/BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hi0ALShgexmGG4t5YaOzHqoGmz/vsFovN1VLyQXTOrs=;
+        fh=NkPQZjWuHBcRMFufdL/EShDLpHEIOJU8FEz+i6/qvjA=;
+        b=cTKo/n9mcaVzOlpQxkJOtxTozap6f0CvpeLclhFY/FendhTYZs8aQjbxNLTbnIt+aY
+         HwlDEf/F/pifSRWHYJjUdsijxrvEO7ByAUxmyE5dExB1tzCx3Cpvs4qU0AUKxtgn2cm9
+         qkilueBClgfS39cIS/ruQfleyySXPpsayf+PAhB/oWuk1uoSxQYh/l5wd66xPbaekJJt
+         75i8tgZdXMA+ChOw8Afpj3b2nVGztRLx9iOzocb5oMBBKg8xhW+ggCBTRTAhXlpz/f0V
+         nN4o9NfWV7ssL2s4/85L4kyTRnCsF0foqbIdqPtXhYHwPxcV4zH5orGiLWwlsaQMEv95
+         517g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775528541; x=1776133341; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hi0ALShgexmGG4t5YaOzHqoGmz/vsFovN1VLyQXTOrs=;
+        b=pbHA7w5Dek9gqYazNwXy8Wev2rvy9OVweUsIbi+wRfrskH12GZbkNUvVLVp1G75SSl
+         xdihA+z0qyOP+JcYV940qHTv3HiyybT+50NATYRfV9jslA5bgmBDcaA9E/yXk7dfuoY3
+         4FZ5I2hI6lnVWHXTYg2m7KOFifM3pvBX+gsHuVPyR/mD8JwFavJ01hzUkUHZ27nvXVY5
+         Yj3Nr4q2ocH/LHlrpNX9ft7Z2RXUt/pqTP2To9ApkYOHXrr1lXMMQHezW+qbJK9aHH6i
+         q/stAYMHjDNjYreNhcNBEEgNLcilP/Ga9bIfOemsgrhH3rctNv+oIjDT0urzFOULbSSq
+         XwnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775528541; x=1776133341;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hi0ALShgexmGG4t5YaOzHqoGmz/vsFovN1VLyQXTOrs=;
+        b=W/4FZ70L3BYlGFDSuOqnJKByT2jG5EOwkdCrNBAjq2bThCP9aw+/OWgLnan0p5gE5a
+         XxcGMSFzRYmNJLQk+yBlr3hFJ+clhSUwfkf2B5BHmVDY7OVFyxoXA0FTV1OZ2nZC1n8+
+         pTCADlg1b4XfF0gCYm0hlAdevVAchSz1fxqvO0TpZrHMP3eZff9ygRL6ZUnqWt9bblCe
+         IeHQxIa4QiFb7yk2xQvyeU8BorlMIAqzp4ydasqFvVq4XWsNfFFkVA/rcameNSHxKo7e
+         4ng9i8tWpEV1Y2vg3niitJOGrsPhXXQdjlfh2QEq+TRSRjfIz35tS+8p1RsCkSPgSK9N
+         vUgw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAS0n88D7rLsnUfWE5Lbo6oJjXU5S+SyWkuBiCIumhWgnRLjW2BKXIJKS7k1U9AA2l8cY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8SAL9veY1CGcEQnhVNIkzx6EOFNjCEmLQWIbL2Rn8YLWz+osa
+	L+7BJzgyMgvvtaViNyXIC2EXUPFX/CRVHwmQm/5KOhMogPsnY6KWFGWx95q10eagauScTafGxiH
+	rBQj4mAECERWmnyhwwxpY7nnvS/9twjg=
+X-Gm-Gg: AeBDiesKhv72C0Ht6djXkvGzMaWoU+kLBK88IyL/a3XPlAdHQ/tsnC0Vv60n68fMBtL
+	rLODEm34H704cz3OMoVM0sZqWudr1Z8xkG6LT794yrg39Pw4Ybb2peapARrJfK4Pqh0ivRLRhLc
+	4Uylqh4MGiLSUbJqR6+oEFwUzXat7tJIsJq5mPkXDzrqVHyFkUusHFi9HWM8/P3r+O5OSaX9/so
+	ERIusL58T/x3gLwbmVlt4KjoUwnWl/+dOuJ2fomm/6LjyutKLI0W/H3fFJBx72p+suBnR+NUY2B
+	u7ziZ+ZzgDXIZ6PGiXAa2BHSxlRzXbmgXS8zRvjxRdN2DAou6rI=
+X-Received: by 2002:a05:690e:4841:b0:650:42ea:26da with SMTP id
+ 956f58d0204a3-650486c18c3mr11636012d50.4.1775528541024; Mon, 06 Apr 2026
+ 19:22:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260402092607.96430-1-laoar.shao@gmail.com> <CAPhsuW7Y5KksWM49TrGH_Hohaq02XO8qs7G99Y6D8=0usLFSrQ@mail.gmail.com>
+ <CALOAHbDG8=eUV53kF+xn=izs2rpydCk=a9RznU-EEOzmkB8mQg@mail.gmail.com> <CAPhsuW73qFybHgOnZ=oFC1PvdWkYWDk7gsAoiBXe4xWYagPrmA@mail.gmail.com>
+In-Reply-To: <CAPhsuW73qFybHgOnZ=oFC1PvdWkYWDk7gsAoiBXe4xWYagPrmA@mail.gmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Tue, 7 Apr 2026 10:21:45 +0800
+X-Gm-Features: AQROBzBkgo3KxI2MHJmBlrvcZpAG1jaYfSLmu1S4rqwNflNyNo9B1VXQaeJKRX0
+Message-ID: <CALOAHbC0hqk+yrUZay01EBRNOHgyj1MAavzNK-06XJKK9ARMqQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return overriding
+ for livepatched functions
+To: Song Liu <song@kernel.org>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
+	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-net: stmmac: Add BCM8958x driver to build system
+On Tue, Apr 7, 2026 at 2:26=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+>
+> On Mon, Apr 6, 2026 at 3:55=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com>=
+ wrote:
+> >
+> > On Sat, Apr 4, 2026 at 12:07=E2=80=AFAM Song Liu <song@kernel.org> wrot=
+e:
+> > >
+> > > Hi Yafang,
+> > >
+> > > On Thu, Apr 2, 2026 at 2:26=E2=80=AFAM Yafang Shao <laoar.shao@gmail.=
+com> wrote:
+> > > >
+> > > > Livepatching allows for rapid experimentation with new kernel featu=
+res
+> > > > without interrupting production workloads. However, static livepatc=
+hes lack
+> > > > the flexibility required to tune features based on task-specific at=
+tributes,
+> > > > such as cgroup membership, which is critical in multi-tenant k8s
+> > > > environments. Furthermore, hardcoding logic into a livepatch preven=
+ts
+> > > > dynamic adjustments based on the runtime environment.
+> > > >
+> > > > To address this, we propose a hybrid approach using BPF. Our produc=
+tion use
+> > > > case involves:
+> > > >
+> > > > 1. Deploying a Livepatch function to serve as a stable BPF hook.
+> > > >
+> > > > 2. Utilizing bpf_override_return() to dynamically modify the return=
+ value
+> > > >    of that hook based on the current task's context.
+> > >
+> > > Could you please provide a specific use case that can benefit from th=
+is?
+> > > AFAICT, livepatch is more flexible but risky (may cause crash); while
+> > > BPF is safe, but less flexible. The combination you are proposing see=
+ms
+> > > to get the worse of the two sides. Maybe it can indeed get the benefi=
+t of
+> > > both sides in some cases, but I cannot think of such examples.
+> > >
+> >
+> > Here is an example we recently deployed on our production servers:
+> >
+> >   https://lore.kernel.org/bpf/CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh1gy5hy9=
+Yqgeo4C0iA@mail.gmail.com/
+> >
+> > In one of our specific clusters, we needed to send BGP traffic out
+> > through specific NICs based on the destination IP. To achieve this
+> > without interrupting service, we live-patched
+> > bond_xmit_3ad_xor_slave_get(), added a new hook called
+> > bond_get_slave_hook(), and then ran a BPF program attached to that
+> > hook to select the outgoing NIC from the SKB. This allowed us to
+> > rapidly deploy the feature with zero downtime.
+>
+> I guess the idea here is: keep the risk part simple, and implement
+> it in module/livepatch, then use BPF for the flexible and programmable
+> part safe.
 
-This commit adds the PCI driver for the Broadcom BCM8958x to the Linux build
-system. It enables the configuration option and updates the MAINTAINERS file.
+Right
 
-While reviewing this patch, I noticed a potential regression introduced in the
-previous patch of the series (net: stmmac: Add PCI glue driver for BCM8958x)
-that is enabled here.
+>
+> Can we use struct_ops instead of bpf_override_return for this case?
+> This should make the solution more flexible.
 
-The driver defines a global static array of software nodes (brcm_swnodes)
-and registers it in brcm_drv_init() using software_node_register_node_group().
+Upstreaming struct_ops based BPF hooks is a challenging process, as
+seen in these examples:
 
-Since PCI drivers must support multiple device instances concurrently, what
-happens if there are multiple BCM8958x PCI devices present?
+  https://lwn.net/Articles/1054030/
+  https://lwn.net/Articles/1043548/
 
-If the second instance's probe attempts to register the exact same software
-node pointers, software_node_register() will return -EEXIST. The failure
-path in software_node_register_node_group() then unconditionally unregisters
-all nodes in the group.
+Even when successful, upstreaming can take a significant amount of
+time=E2=80=94often longer than our production requirements allow. To bridge
+this gap, we developed this livepatch+BPF solution. This allows us to
+rapidly deploy new features without maintaining custom hooks in our
+local kernel. Because these livepatch-based hooks are lightweight,
+they minimize maintenance overhead and simplify kernel upgrades (e.g.,
+from 6.1 to 6.18).
 
-Could this unregister the software nodes that the first probed device
-successfully registered and is actively using, leaving the first device with
-dangling fwnode pointers and leading to a use-after-free? Would it be safer
-to dynamically allocate the software nodes per device instance?
+That said, we would still prefer to have our hooks accepted upstream
+to eliminate the need for self-maintenance entirely.
 
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> index dc55aec915a27..a1e39f65cd42e 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
-> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> @@ -51,4 +51,5 @@ obj-$(CONFIG_STMMAC_PCI)	+= stmmac-pci.o
->  obj-$(CONFIG_DWMAC_INTEL)	+= dwmac-intel.o
->  obj-$(CONFIG_DWMAC_LOONGSON)	+= dwmac-loongson.o
->  obj-$(CONFIG_DWMAC_MOTORCOMM)	+= dwmac-motorcomm.o
-> +obj-$(CONFIG_DWMAC_BRCM)       += dwmac-brcm.o
-
-This isn't a bug, but it looks like spaces are used here for alignment instead
-of a tab. The surrounding entries all use a tab character before the
-assignment operator.
+--=20
+Regards
+Yafang
