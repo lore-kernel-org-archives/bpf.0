@@ -1,108 +1,128 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FFE38655D;
-	Tue,  7 Apr 2026 06:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B28175A83;
+	Tue,  7 Apr 2026 07:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775543017; cv=none; b=FRJDr9v4kLq2crrzE+IQc2MM8L4+bFjIqQToBLyb/ibjiBbyWRhOVY3o4eT5FdwUF5LsXF3f5+eiapCwCsOZlsxY4aRwxHKc5RXUuK5USu90MUa1yq57tyZLLUt0aAn/+Zn28QQuYvVRWVojUzskRSjUUOBpO7XVlnWHNYIcDXs=
+	t=1775546725; cv=none; b=gmlN3yzBwvz34GUhCeXEpQBP78CdRiRoQ/nz2e30lEMBsyeLCN7OqcWUnbTTOMTaK4I2gkOsF92vWyR1jYRuwpS03s6FdpgHAiusBo2Zb3EC2MhKHX0AGhvtxphT0J7AbZc1Mqsm9Qvcice/pPzOA/Z74M5vP6iOv+kFnRwQz3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775543017; c=relaxed/simple;
-	bh=mCp4it8EUfMTU9HORMd1P/tyjkUnKYdEXsV+q3LQIBk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bVK4ID7GN8jjPHU8fg8YxXuSK0sRLAmA0tMGTBYc72B3eqVeDw/SfoWoLIIZXI7BVeh3zJvdNZFSw0Ji7w0bmdeZA2yZZbd1bTVGj9epM/blBYq8Lgn81zx56ZufdwJc6xJtXbPTqDomUjspu+8Lk0jCLjHplUTbf4YI1p3FwV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8Ax_6nfotRpz6UiAA--.37671S3;
-	Tue, 07 Apr 2026 14:23:27 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJCx_8LLotRpYh5nAA--.54S7;
-	Tue, 07 Apr 2026 14:23:18 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] selftests/bpf: Make CAN_USE_LOAD_ACQ_STORE_REL usable for LoongArch
-Date: Tue,  7 Apr 2026 14:23:06 +0800
-Message-ID: <20260407062306.8915-6-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20260407062306.8915-1-yangtiezhu@loongson.cn>
-References: <20260407062306.8915-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1775546725; c=relaxed/simple;
+	bh=3opjvFYBgL1qeuyF5RExKJkNtN6TTTnSXpwSLVcsDV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VnX9ohghpQfOFMOAAcLScqb52IfTzHz1Ggqv+1oXdF8lZktf++bjPw7DUEcv8A8Daq28M77kAW6n3kt9WYLcliYsSeL9Upc6u6zqQBeqx1oc6nD/9w09wz+f8dEmi9KzbXlUx4CtIGIS0QPamK8BaJluFZJxsNooJ94F/XwLlcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=Vmn9Ozo5; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="Vmn9Ozo5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Xfd4Ai8X1jiYT9iJrd3H7okMbF4OcPxA5a49UaGG3Bw=; b=Vmn9Ozo5QiEKRbYD/7LSGVZBeD
+	SEgRx4FA/5P7govPIx4DVNioi2ragtO1PZ4zk2yS4RthLlcFsuOtAyDzr/nXA+7JQBZKyfyt9Mxuh
+	AeyGAyJVF9sKFpPiPTkqn8oNBU4itqHyK55vu/Utlm3JdnjcepTre+4P/DWZTOzSQC82s1jiZrTtt
+	xeItoEZYjRqlBCad0STVVtMkoIV3KOyoX74RVbuWf/uqPIgFpwv3/vqCUHWhe4u/XLRfffY5VsI8c
+	kVO1BAgZyWBfS4tPO/s3rd2gjuuRJWH0jltg+g3LP/zM5U2dt2xEf5sNob+TKDN/JOppHYtp3qOYO
+	sLLNgKNQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:51304)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1wA0o4-000000000YZ-2Nm1;
+	Tue, 07 Apr 2026 08:25:04 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1wA0nr-0000000024m-08Up;
+	Tue, 07 Apr 2026 08:24:51 +0100
+Date: Tue, 7 Apr 2026 08:24:50 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
+Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, mcoquelin.stm32@gmail.com,
+	bcm-kernel-feedback-list@broadcom.com, richardcochran@gmail.com,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, rohan.g.thomas@altera.com,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me,
+	me@ziyao.cc, siyanteng@cqsoftware.com.cn,
+	prabhakar.mahadev-lad.rj@bp.renesas.com,
+	weishangjuan@eswincomputing.com, wens@kernel.org,
+	vladimir.oltean@nxp.com, lizhi2@eswincomputing.com,
+	boon.khai.ng@altera.com, maxime.chevallier@bootlin.com,
+	chenchuangyu@xiaomi.com, yangtiezhu@loongson.cn,
+	ovidiu.panait.rb@renesas.com, chenhuacai@kernel.org,
+	florian.fainelli@broadcom.com, quic_abchauha@quicinc.com
+Subject: Re: [PATCH net-next v9 0/4] net: stmmac: Add PCI driver support for
+ BCM8958x
+Message-ID: <adSxQpAE0nY0ulfU@shell.armlinux.org.uk>
+References: <20260402213629.1996133-1-jitendra.vegiraju@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCx_8LLotRpYh5nAA--.54S7
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tF17GrW8JF1DArWxKFWkXwc_yoW8tFWrp3
-	WkuFyqyr18Kr4a9FnxAFWUuF4rGFykXrW8AFW0vr47G3WUJrWxJr1qkFZ0yFZ0ga9Yvrn5
-	Zwn2qw13Zr48ZwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07josjUUUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260402213629.1996133-1-jitendra.vegiraju@broadcom.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-In order to do the following load-acquire and store-release tests
-on LoongArch:
+On Thu, Apr 02, 2026 at 02:36:25PM -0700, Jitendra Vegiraju wrote:
+> From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
+> 
+> This patchset adds basic PCI ethernet device driver support for Broadcom
+> BCM8958x Automotive Ethernet switch SoC devices.
+> 
+> This SoC device has PCIe ethernet MAC attached to an integrated ethernet
+> switch using XGMII interface. The PCIe ethernet controller is presented to
+> the Linux host as PCI network device.
+> Management of integrated ethernet switch on this SoC is not handled via
+> the PCIe interface.
+> 
+> The following block diagram gives an overview of the application.
+>              +=================================+
+>              |       Host CPU/Linux            |
+>              +=================================+
+>                         || PCIe
+>                         ||
+>         +==========================================+
+>         |           +--------------+               |
+>         |           | PCIE Endpoint|               |
+>         |           | Ethernet     |               |
+>         |           | Controller   |               |
+>         |           |   DMA        |               |
+>         |           +--------------+               |
+>         |           |   MAC        |   BCM8958X    |
+>         |           +--------------+   SoC         |
+>         |               || XGMII                   |
+>         |               ||                         |
+>         |           +--------------+               |
+>         |           | Ethernet     |               |
+>         |           | switch       |               |
+>         |           +--------------+               |
+>         |             || || || ||                  |
+>         +==========================================+
+>                       || || || || More external interfaces
+> 
+> The MAC block on BCM8958x is based on Synopsis XGMAC 4.00a core. This
+> MAC IP introduces new DMA architecture called Hyper-DMA for virtualization
+> scalability.
+> 
+> Driver functionality specific to new MAC (DW25GMAC) is implemented in
+> new file dw25gmac.c.
 
-  sudo ./test_progs -t verifier_load_acquire
-  sudo ./test_progs -t verifier_store_release
-  sudo ./test_progs -t verifier_precision/bpf_load_acquire
-  sudo ./test_progs -t verifier_precision/bpf_store_release
-  sudo ./test_progs -t compute_live_registers/atomic_load_acq_store_rel
+Sorry for suggesting this rather late, but I recently came across
+another stmmac driver in the kernel - drivers/net/ethernet/synopsys.
+This is for XLGMAC, but I wonder whether it may be a better bet for
+this core. Have you looked at it?
 
-it needs to make CAN_USE_LOAD_ACQ_STORE_REL usable for LoongArch.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/testing/selftests/bpf/progs/bpf_misc.h           | 4 ++--
- tools/testing/selftests/bpf/progs/verifier_precision.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index c9bfbe1bafc1..19f0bf44a9e1 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -257,8 +257,8 @@
- 
- #if __clang_major__ >= 18 && defined(ENABLE_ATOMICS_TESTS) &&		\
- 	(defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||	\
--	 (defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) || \
--	  (defined(__TARGET_ARCH_powerpc))
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
-+	defined(__TARGET_ARCH_powerpc) || defined(__TARGET_ARCH_loongarch))
- #define CAN_USE_LOAD_ACQ_STORE_REL
- #endif
- 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
-index 4794903aec8e..6f325876efdd 100644
---- a/tools/testing/selftests/bpf/progs/verifier_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
-@@ -75,8 +75,8 @@ __naked int bpf_end_to_be(void)
- 
- #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
- 	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64) || \
--	defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390)) && \
--	__clang_major__ >= 18
-+	defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) || \
-+	defined(__TARGET_ARCH_loongarch)) && __clang_major__ >= 18
- 
- SEC("?raw_tp")
- __success __log_level(2)
 -- 
-2.42.0
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
