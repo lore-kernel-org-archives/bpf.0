@@ -1,167 +1,153 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55DC3A3E73
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 10:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2CC3AA4E0;
+	Tue,  7 Apr 2026 10:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775558347; cv=none; b=nl3OcoWwP12UsGg12FVTQVJ/imjC7IJ/cPyimX/C29cIX57uM/VoVr19KTG1yJq59KGq0DIpyQqcXW/lIdvshqmMc2Kv8ZQi78A9YP0XpJzXZe1V5BrB16DK0kW/A4XeLNW0Oa7EggDjYajRwZDMdBOjRRvjA7e7WnW+PYwXL1s=
+	t=1775558924; cv=none; b=dF6JVkpbDqZ9Q3dVU3OnTfaXmgQic/Fl5D5gzM5XXBgyYu2q1XPemA0qXYkj5EtQSHfmBkX+Nv4oIwkHrzCWa+uxFexlgK8Doq/J9jSEg913+Gqn7dv2zDRQcx6VgibYSjYLyMZSZvNwewUupn4OCQXal/dA8Y62klYrXhB1xbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775558347; c=relaxed/simple;
-	bh=V1hP5sQhNxvVYVxPSbTWY5q1NHHszPeMCmdBeBTAWIo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hWIaWvrU6kDc9R0I6r54dZ482zE7pZIZEWBlcqYI20+uBodryuF+jaMHASWn/KdlV7UzCT5lwtDc+k6DUtD3jgsXUgx1ATOMkv5MSjA3GuXm5PIAvT00XUpeMuOcKK6VCVn8V/aKd73jHPSjA+87dnPKWWqjqbEpnn9do6EhAZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qRt/ta0J; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775558924; c=relaxed/simple;
+	bh=00l58+E7d7W7EjKv0MTjo17DPYW/vSP39MhtKCxYo3k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NJIN2Y2RXlM5ZZ32lBmsxPWic98OVOMq8+Xw6PYZpd3W9zE4jDVpi8+rkIqEiVLC5pYAhvbhk3eaKDff9zTE/RbGqDrA7b2L6fnkgJXrw0v0UwCY/q/nTEt9QOGH+DxRKBtKemYtK5pJVE7BfYNyTNiwfyGqYQOgx3bnzBOoC6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ILQdYue/; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qRt/ta0J"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c70ea5e9e9dso1975117a12.1
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 03:39:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775558346; x=1776163146; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e2YGU/Qu7KSxje0XXhCuAHmY0WW9UbPdGFgaWpsgE88=;
-        b=qRt/ta0JX7QcV08H6oPCu970uRcej9B+zIIjCx+xTzNdIT5gqAu3uNqYn5i22mgueK
-         XmKCbXo2Rlufj3O4qSfEGtZ/MD55BEY0WYGDjaayDf7S+WGlOfcc2hVCrJJdrE/KEX02
-         VyIKWhD30Vyf8U/0/TN67tcy+DiPpgctkrfR4ztim/c+RO2nXcPjUBRXCU1djwqL64QU
-         K/m3AsStQJV9SdumTNHx+6o0HBInDD65G/z0Iieg5Ui4Q20HC+RH+8xsZObHpqWpTsrs
-         wrp2PL9Gm6fdtqghlviBW55S6mRIy3wNde3rXVefRO1cHys7KWhy2q7RtJYzJs/s3HbX
-         8G6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775558346; x=1776163146;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e2YGU/Qu7KSxje0XXhCuAHmY0WW9UbPdGFgaWpsgE88=;
-        b=QQPMAKmS1qKO79iORV9izdETF+gK/O1UrT55WeOC1fb106tbg08KyL/FjiWB7f3TWo
-         a/HUSvZnMa5lAJRXOYVpyKk0C2wGhnFKo5VT7bFRdE2SaMJF5Si2P5ARYoEBHlDxKh0L
-         T57DgpLX/JvDqdy9EWNQJCRjULQldL9zXQ3rYNtmpFTWqaa0wZ+GNgcoFBiWlRGU/pUA
-         akYGqC+pBX7gQYaEQnTIRQEw87EcKY2fdDZ3dzgYBEQ60ghxMBKkGrr2xIDU0hVOP7mv
-         +Vd9jG8rCySK/o05TzT0uAlrzH1POvY2nEd1zzosp/BpTm5MgXesxRY4cJjaDH14Fqvd
-         dtJw==
-X-Gm-Message-State: AOJu0YxwBnEEvjPTt+AMuNFhI+xc+K9c5fsaUOzqN7AFVg8CbKT3LGxj
-	Lq/46BTO1OsIFjwq/Wya9HWOJWreu3GyizjI51MEM/IXLtIN6V26+Utg0iT/BIId
-X-Gm-Gg: AeBDiev0zOMgYC/F9ejQurQ1AhNlfZi6EV0XvSc0ycwIkb3F7k0jM2iLHwHkPdJvJaw
-	xQ1q+k/yAOtrYSkNHU4AqT8Vl87KpYBLKCeWrW/Fbtxj+L/4nnv0gdLe+J2qLKrGOCKaHlGgwkz
-	2PVG1mYEk25MhVU42S34JvEIPhHpo+1FDcHzdDHDZAgW5HmdDwi8RQzaEi69yr85j1newA/za25
-	DFqV/jLnvH/W1cLgIQxgguuToFSh3e5yiDhswpiGB8BdjFsvNUNjD1nlIMtclRHN/FfGydfCCjY
-	dI5umJ8GlB00tk5mv5ojMQOO9L2FhNYaM+jPJC9MYBfxtRYVYqYD09s5m5q1rMcLTNIMjuBYJAN
-	/yxIZIT72T4ifnA7+K1xOxWwDozqX7D0C/xqO4XfKi+lQgrelpNFK+z2gKX+NgjiLVdMZsmCubI
-	eL6FiWx3ROOFENTDXMnKwW52HK555Et0aBeDaM9rPJq4aYSm98mPox2Ua5o1UTJQ==
-X-Received: by 2002:a05:6a00:3902:b0:82c:7876:a027 with SMTP id d2e1a72fcca58-82d0da8edd7mr14975927b3a.18.1775558345640;
-        Tue, 07 Apr 2026 03:39:05 -0700 (PDT)
-Received: from cps-manycore-1.. ([143.248.136.81])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9ca75dfsm16966468b3a.60.2026.04.07.03.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 03:39:05 -0700 (PDT)
-From: Sechang Lim <rhkrqnwk98@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	sun.jian.kdev@gmail.com,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	Sechang Lim <rhkrqnwk98@gmail.com>
-Subject: [PATCH bpf v4] bpf: Fix RCU stall in bpf_fd_array_map_clear()
-Date: Tue,  7 Apr 2026 10:38:23 +0000
-Message-ID: <20260407103823.3942156-1-rhkrqnwk98@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ILQdYue/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=fyJpmyBcC0c7wgp6GHS2X+37xYvhdQrxR7XrAUmv46U=; b=ILQdYue/GDcf//OaOT/C/eRjTe
+	yDRjyyPA7BaXJHg0FwBXfI7/BiD2QN9UO4fO2YQITTxw4vv9Px98i+jv4H/6UWC9KmaOjOpYgjf0c
+	UHAsTEk4MQYE0gHhU12M6DVdPkLl49WUl1LTMzghBzAwo6bNOnmekdqa0kuDXT5tQF1NUUGCKUsYL
+	vbpwywjJ3ipqkYw2+6/mgq2ryixz6K0zfDjNMyH6rrBeQDjmxdU0WRZdBOSNjWWevgOgGwiyddsYb
+	pMqyt66vdm7Jc75N8n4gurUZ8guk5198UCgzaSq9bZRRVY3zomk5FHz7PKDFBqmYcbaSovnmITQw2
+	wg8xPEVQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wA3z0-007aUU-2C;
+	Tue, 07 Apr 2026 10:48:33 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Tue, 07 Apr 2026 03:48:11 -0700
+Subject: [PATCH] bpf: Fix suspicious RCU usage in LPM trie for sleepable
+ programs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260407-bpf_rcu-v1-1-fbc9398d05c5@debian.org>
+X-B4-Tracking: v=1; b=H4sIAOvg1GkC/yXMQQqDMBBG4asM/9pA1JBCrlJE6jjTThdWEpWCe
+ HdpXb7F93YUySYFiXZk2azYZ0KiuiLw6zE9xdmIRGh8E33wNzfM2mdenUYOXjloyxEVYc6i9v2
+ f7t3VZR3ewsuP4zhO7/ACsWsAAAA=
+X-Change-ID: 20260407-bpf_rcu-f6c40fc4f3c6
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+ stable@vger.kernel.org, Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.16-dev-453a6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2619; i=leitao@debian.org;
+ h=from:subject:message-id; bh=00l58+E7d7W7EjKv0MTjo17DPYW/vSP39MhtKCxYo3k=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1OD8RJvEC4ekC1Vn+3mlpGO2OiNs/u7inMbh4
+ VouXm0v0meJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadTg/AAKCRA1o5Of/Hh3
+ bWdbD/9/rVgQPpYgtGVXoMqO49sw1jXzgBGINChDfuTQn1ZNoNMI+nJJJ7XafyFhPXL8IXYxjAd
+ NvuiOv603omdQORw2YVF5Mu7tRz1Uz43qG3cRZ28FXphRWgEERvicjbEKxUYuUQ86fBM4nn5IUW
+ MiF+zN/PBZ2U+uMtTexVpJvUkqxlP/clnnfVdpBY4zwlVWnVsNRy+s2tSRVEssf+cl5HUF1DD14
+ Yk49skDcEN1euG9qAaTOOhY3AJ91I7/Awg6IDfSfbGWOlMfQXNt8zFRzL+ecq/BDF6G7iAHgaLw
+ FR8Uw4kHS1UqkShBgrfnlpEiW03eA6q9ZNHX0WHX8jZ6WF+bBkKGl37tCWk0uFIxNVjTIfnKW9Q
+ JiDw38gqT3s3FKKygJ+J09LY2XrauYbRxePQGoy11WfhFWdWmj/8NKZqBAt1kJ8HmpyXQWDam2p
+ jLO3UAHjwUZQJhbtbzioU6J8DcQOC1hwTWFDheS3quNWG7clTwgCwJhZrn19W1aCQz0vX79UyP6
+ 4rUBubfmA0vsW1c6NP8YlAIo+WL8LHJ4EnrMHEZqyknmcibHKAMYRZpyPQOlCf+97iWzBirPGpN
+ CjhIk0+xEktb0sCT5dlVXFdySeglCKKvOU8kAxB0OMOSm+SJ42wG+INqe878x3s94nbP+Nl3jXf
+ G9mUEbXVqrMIAgg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-Add a missing cond_resched() in bpf_fd_array_map_clear() loop.
+trie_lookup_elem() uses rcu_dereference_check() with
+rcu_read_lock_bh_held() as the lockdep condition. This is insufficient
+when the lookup is called from a sleepable BPF program, which holds
+rcu_read_lock_trace() (via __bpf_prog_enter_sleepable) instead of
+rcu_read_lock_bh(). With CONFIG_PROVE_LOCKING enabled, this triggers the
+following warning:
 
-For PROG_ARRAY maps with many entries this loop calls
-prog_array_map_poke_run() per entry which can be expensive, and
-without yielding this can cause RCU stalls under load:
+  WARNING: suspicious RCU usage
+  kernel/bpf/lpm_trie.c:249 suspicious rcu_dereference_check() usage!
 
-  rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-  rcu: 	(detected by 0, t=6502 jiffies, g=729293, q=305 ncpus=1)
-  rcu: All QSes seen, last rcu_preempt kthread activity 6502 (4295096514-4295090012), jiffies_till_next_fqs=1, root ->qsmask 0x0
-  rcu: rcu_preempt kthread starved for 6502 jiffies! g729293 f0x2 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-  rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-  rcu: RCU grace-period kthread stack dump:
-  task:rcu_preempt     state:R  running task     stack:0     pid:15    tgid:15    ppid:2      task_flags:0x208040 flags:0x00004000
+  rcu_scheduler_active = 2, debug_locks = 1
+  1 lock held by .../...:
+   #0: ffffffff86ca5bd8 (rcu_tasks_trace_srcu_struct){....}-{0:0},
+       at: __bpf_prog_enter_sleepable+0x26/0x280
+
   Call Trace:
    <TASK>
-   context_switch kernel/sched/core.c:5382 [inline]
-   __schedule+0x697/0x1430 kernel/sched/core.c:6767
-   __schedule_loop kernel/sched/core.c:6845 [inline]
-   schedule+0x10a/0x3e0 kernel/sched/core.c:6860
-   schedule_timeout+0x145/0x2c0 kernel/time/sleep_timeout.c:99
-   rcu_gp_fqs_loop+0x255/0x1350 kernel/rcu/tree.c:2046
-   rcu_gp_kthread+0x347/0x680 kernel/rcu/tree.c:2248
-   kthread+0x465/0x880 kernel/kthread.c:464
-   ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
-   ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
-   </TASK>
-  rcu: Stack dump where RCU GP kthread last ran:
-  CPU: 0 UID: 0 PID: 30932 Comm: kworker/0:2 Not tainted 6.14.0-13195-g967e8def1100 #2 PREEMPT(undef)
-  Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-  Workqueue: events prog_array_map_clear_deferred
-  RIP: 0010:write_comp_data+0x38/0x90 kernel/kcov.c:246
-  Call Trace:
-   <TASK>
-   prog_array_map_poke_run+0x77/0x380 kernel/bpf/arraymap.c:1096
-   __fd_array_map_delete_elem+0x197/0x310 kernel/bpf/arraymap.c:925
-   bpf_fd_array_map_clear kernel/bpf/arraymap.c:1000 [inline]
-   prog_array_map_clear_deferred+0x119/0x1b0 kernel/bpf/arraymap.c:1141
-   process_one_work+0x898/0x19d0 kernel/workqueue.c:3238
-   process_scheduled_works kernel/workqueue.c:3319 [inline]
-   worker_thread+0x770/0x10b0 kernel/workqueue.c:3400
-   kthread+0x465/0x880 kernel/kthread.c:464
-   ret_from_fork+0x4d/0x80 arch/x86/kernel/process.c:153
-   ret_from_fork_asm+0x19/0x30 arch/x86/entry/entry_64.S:245
-   </TASK>
+   dump_stack_lvl+0x69/0xa0
+   lockdep_rcu_suspicious+0x13f/0x1d0
+   trie_lookup_elem+0x99e/0x9d0
+   bpf_prog_3980d36ecbef0e34_net_check_ip_pod+0x42a/0x510
+   bpf_prog_57df4ce643736a70_enforce_security_socket_connect+0x3e9/0x69e
+   bpf_trampoline_6442540179+0x60/0xf9
+   security_socket_connect+0x25/0x80
+   __sys_connect+0x15c/0x280
+   __x64_sys_connect+0x76/0x80
+   do_syscall_64+0xe6/0x930
 
-Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
-Fixes: da765a2f5993 ("bpf: Add poke dependency tracking for prog array maps")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
+Use bpf_rcu_lock_held() instead, which checks all three RCU flavors
+(regular, bh, and trace) and is the canonical helper for BPF map
+operations.
+
+Fixes: 694cea395fded ("bpf: Allow RCU-protected lookups to happen from bh context")
+Cc: stable@vger.kernel.org
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-v3 -> v4: Add changelog, no functional change
-v3: https://lore.kernel.org/bpf/20260331023056.484354-1-rhkrqnwk98@gmail.com
+I've hacked a reproducer for this issue, and it could be found at
+https://github.com/leitao/linux/commit/59c83f313face36107ef1e8392e27b1cf4887b70
+---
+ kernel/bpf/lpm_trie.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v2 -> v3: Add Reviewed-by tag, fix CC typo
-v2: https://lore.kernel.org/bpf/20260329020748.3649741-1-rhkrqnwk98@gmail.com
-
-v1 -> v2: Add Fixes tag
-v1: https://lore.kernel.org/bpf/20260328174428.3554328-1-rhkrqnwk98@gmail.com
-
- kernel/bpf/arraymap.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 33de68c95ad8..5e25e0353509 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -1015,8 +1015,10 @@ static void bpf_fd_array_map_clear(struct bpf_map *map, bool need_defer)
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
- 	int i;
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 0f57608b385d4..ac36063cb7e62 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -246,7 +246,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
  
--	for (i = 0; i < array->map.max_entries; i++)
-+	for (i = 0; i < array->map.max_entries; i++) {
- 		__fd_array_map_delete_elem(map, &i, need_defer);
-+		cond_resched();
-+	}
- }
+ 	/* Start walking the trie from the root node ... */
  
- static void prog_array_map_seq_show_elem(struct bpf_map *map, void *key,
--- 
-2.43.0
+-	for (node = rcu_dereference_check(trie->root, rcu_read_lock_bh_held());
++	for (node = rcu_dereference_check(trie->root, bpf_rcu_lock_held());
+ 	     node;) {
+ 		unsigned int next_bit;
+ 		size_t matchlen;
+@@ -280,7 +280,7 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+ 		 */
+ 		next_bit = extract_bit(key->data, node->prefixlen);
+ 		node = rcu_dereference_check(node->child[next_bit],
+-					     rcu_read_lock_bh_held());
++					     bpf_rcu_lock_held());
+ 	}
+ 
+ 	if (!found)
+
+---
+base-commit: 59c83f313face36107ef1e8392e27b1cf4887b70
+change-id: 20260407-bpf_rcu-f6c40fc4f3c6
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
