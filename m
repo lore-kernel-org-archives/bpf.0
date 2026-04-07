@@ -1,123 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B584023C4F3
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 05:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC28247280
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 05:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775540609; cv=none; b=hdcGY59paANELCRBLwBNImZ3V1S+EGjcNZnB/WIPaLbLtKD4eeQ3lkeHNghEJ8nrSQ36ZTGDwEcvKcpLIzgHW7s85w9Jv+84RDzUdo1RxLVMoRhoAPFygSni8e4JAdAH58H90eFzLFSStAA+SjqQHZvk2KYhfumSbBIkq9ZdUSc=
+	t=1775540611; cv=none; b=AQ8LDap/bOH0ysmi2Ku0rkHJhGTvcUQdFmE4YEcfxnfFP+EdK2zOxoGRtN+BLVRJbee/M2c3U7jCrsjvmB/iRaOSxTKPsdcerE919SXA0+OTcbsRTJ64z8ODGL4pU7+BSlKJS7gmz82TD/vM1ooJb/Ii5Kx4+sZ8QCxVr8JjUNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775540609; c=relaxed/simple;
-	bh=X3k9SdyuA+m9e5NzDahAOsMvPt3HDEPdfCm5GfWa54Q=;
+	s=arc-20240116; t=1775540611; c=relaxed/simple;
+	bh=05kuviT+lJFZYag8lRzhlb8aqh3nwSdHaEF8QGVq4lg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sUKdJDSxZsw8rEIUzFr7UG9O2tlNitfpaT21W0NmQdhNknTZCAiuWXPhJRlitSudBejUl6UFLCFLQiZEF0ah4bg525TxFHv4JjNZuvNHzJf/uOjZsPi4euAWEcIIJ1Dc6xeLPETrehhr05frNDeeepzi7lj5KfdvwN57g3phul4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GM1JBo4W; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=PZP1aJo54nJiCp/UgwTimhhjHoe4ugNIZtUEIBXJIYqcNUP/t2QeuhSWPSrR6fCxpsDVks/xSo5V56KzoivQXHk15wGKE7ulryactoh1OOJ5FKjAkc33Rxv6cEzvnDk8N8VHQ1B0rzkn9P/yqachmL+vqG1Bj0V8ojORfAiqD8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A1BH4tPV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GM1JBo4W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0357DC116C6;
-	Tue,  7 Apr 2026 05:43:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A1BH4tPV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F0AC19424;
+	Tue,  7 Apr 2026 05:43:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775540609;
-	bh=X3k9SdyuA+m9e5NzDahAOsMvPt3HDEPdfCm5GfWa54Q=;
+	s=k20201202; t=1775540610;
+	bh=05kuviT+lJFZYag8lRzhlb8aqh3nwSdHaEF8QGVq4lg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=GM1JBo4WI+1Dmc5Z9GBlpcSRUJrwYpD5i/rJ0mf0K9o2JmFjLts+BUtCTX1GNCsSX
-	 UnNzvTVWTNNOAX1wyQBAlL27MGAU8SSlQS5PktH4W1R17daZ3S5+4jc8SIWdwHkcto
-	 uzvjcDlMW9eKsRuULnoN9mxuGoq9Vj9YOIDYzk4i8+8xWFeO3zS1K5452qgOJhYreF
-	 TD/5WGKu350jrLybK+rOGeYLJHgnrHgRDaml2E5f8Tn6FsCdffn6eBxBvaMxv6p9p9
-	 +lXe41MZuSj2VQKTSD7PPUqU0ffxRUyt/tO2VhLikTF2TTYHd1Yslqg4n/MGntq1Vo
-	 ATPJ05U9TpYrw==
-Content-Type: multipart/mixed; boundary="===============7018480421653137301=="
+	b=A1BH4tPVu/L3gdQkvd4QgQ8IX79UZDcxiIc+ZACDCCpL63dke8KHV3E7rlmyC5O9r
+	 DCfI9Q8ARG71QNuoyf0BFYhFhwRJFQLbkLG/KrNppsW9jGe2wtPozv4EoIAp734JRD
+	 cf/ymuVy8xPjH5oX069x/srpJ1ZehPUXAcfAhWq6kN4jO5kt9o/2d6iIo03fslfzW0
+	 3Nm5x0Lmuuawd31bdhMBQdvm1pMbwJjW7nSEU1aGtK5fqNSQW5wHRs4TKjwfEc9upg
+	 NtUc0ZYoIrfq+Cif5xf+4gXszBR8Km6NO1S61pKPhxcVTCZOPoeSalqkRz8vhRq3nF
+	 8JSO6uTBlGqlQ==
+Content-Type: multipart/mixed; boundary="===============1318582547150768617=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cdf2be9110da344647f88bc76fc7bc9b7ee91cb8f27354a84ab57e6955ff783d@mail.kernel.org>
-In-Reply-To: <20260407045730.13359-9-emil@etsalapatis.com>
-References: <20260407045730.13359-9-emil@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v4 8/9] selftests/bpf: Add buddy allocator for libarena
+Message-Id: <6e46d2a1725f6f6788184b9305c9026006945d5e2f760c38b715e34e5c42204f@mail.kernel.org>
+In-Reply-To: <20260407045730.13359-2-emil@etsalapatis.com>
+References: <20260407045730.13359-2-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v4 1/9] bpf: Upgrade scalar to PTR_TO_ARENA on arena pointer addition
 From: bot+bpf-ci@kernel.org
 To: emil@etsalapatis.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,song@kernel.org,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  7 Apr 2026 05:43:28 +0000 (UTC)
+Date: Tue,  7 Apr 2026 05:43:30 +0000 (UTC)
 
---===============7018480421653137301==
+--===============1318582547150768617==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
-> new file mode 100644
-> index 000000000000..4343e39760ab
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1bebbdb3b693..6370290e72fd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -16619,11 +16619,34 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
 
 [ ... ]
 
-> +static u8 idx_get_order(buddy_chunk_t *chunk, u64 idx)
-> +{
-> +	u8 result;
+> +		if (dst_reg->type != PTR_TO_ARENA) {
+> +			/* Can't do arena arithmetic with non-scalars. */
+> +			if (dst_reg->type != SCALAR_VALUE) {
+> +				verbose(env, "R%d pointer %s arena prohibited\n",
+> +					insn->dst_reg,
+> +					bpf_alu_string[opcode >> 4]);
+> +				return -EACCES;
+> +			}
 > +
-> +	_Static_assert(BUDDY_CHUNK_NUM_ORDERS <= 16,
-> +		       "order must fit in 4 bits");
-> +
-> +	if (unlikely(idx >= BUDDY_CHUNK_ITEMS)) {
-> +		arena_stderr("setting order of invalid idx\n");
-> +		return BUDDY_CHUNK_NUM_ORDERS;
-> +	}
+> +			/* We have a SCALAR_PTR_TO_ARENA operation,
+> +			 * propagate the info to dst_reg. */
+> +			*dst_reg = *src_reg;
+> +		}
 
-This is a getter function, but the error message says "setting order".
-Looks like it was copied from idx_set_order().
+Should subreg_def be updated after the struct copy here?
 
-> +
-> +	result = chunk->orders[idx / 2];
-> +
-> +	return (idx & 0x1) ? (result & 0xf) : (result >> 4);
-> +}
-> +
-> +static void __arena *idx_to_addr(buddy_chunk_t *chunk, size_t idx)
-> +{
-> +	u64 address;
-> +
-> +	if (unlikely(idx >= BUDDY_CHUNK_ITEMS)) {
-> +		arena_stderr("setting order of invalid idx\n");
-> +		return NULL;
-> +	}
+Before adjust_reg_min_max_vals() is called, check_alu_op() calls
+check_reg_arg(env, insn->dst_reg, DST_OP_NO_MARK) which sets
+dst_reg->subreg_def for the current instruction. The struct copy
+overwrites this with src_reg's subreg_def, which points to the
+instruction that originally created the PTR_TO_ARENA (e.g. the
+addr_space_cast).
 
-Same issue here -- idx_to_addr() converts an index to an address, but
-the error message says "setting order of invalid idx".
+Elsewhere in check_alu_op(), every MOV path that uses
+copy_register_state() explicitly resets subreg_def afterwards:
 
-[ ... ]
+check_alu_op():
+    copy_register_state(dst_reg, src_reg);
+    dst_reg->subreg_def = env->insn_idx + 1;
 
-> +__weak int buddy_free_internal(struct buddy *buddy, u64 addr)
-> +{
-> +	int ret;
-> +
-> +	if (!buddy)
-> +		return -EINVAL;
-> +
-> +	if ((ret = buddy_lock(buddy)))
-> +		return ret;
-> +
-> +	buddy_free_unlocked(buddy, addr);
+For ALU64 operations this is benign, because mark_insn_zext() clears
+src_reg->subreg_def to DEF_NOT_SUBREG during the preceding SRC_OP
+check. But for ALU32 operations (where rw64 is false and
+mark_insn_zext is not called), the stale subreg_def propagates into
+the destination register.
 
-Should the return value of buddy_free_unlocked() be captured here?
-It returns -EINVAL on error (e.g., unaligned address), but
-buddy_free_internal() always returns 0 after a successful lock
-acquisition regardless of whether the free itself succeeded.
+On architectures where bpf_jit_needs_zext() returns true,
+opt_subreg_zext_lo32_rnd_hi32() relies on zext_dst (set via
+mark_insn_zext using subreg_def) to insert explicit zero-extension.
+With a stale subreg_def, the current ALU instruction would not get
+zext_dst set, potentially leaving upper 32 bits uninitialized.
 
-Something like:
+When dst_reg is already PTR_TO_ARENA (the pre-existing path), the
+subreg_def from check_reg_arg is preserved. Adding something like:
 
-    ret = buddy_free_unlocked(buddy, addr);
-    buddy_unlock(buddy);
-    return ret;
+    *dst_reg = *src_reg;
+    dst_reg->subreg_def = env->insn_idx + 1;
 
-> +
-> +	buddy_unlock(buddy);
-> +
-> +	return 0;
-> +}
+would keep the new path consistent with both the old path and the
+MOV handling convention.
 
 
 ---
@@ -125,4 +112,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24065579421
---===============7018480421653137301==--
+--===============1318582547150768617==--
