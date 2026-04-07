@@ -1,110 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F46394786;
-	Tue,  7 Apr 2026 11:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49983B389F;
+	Tue,  7 Apr 2026 11:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775562742; cv=none; b=SWyNEbEccBjNdtccB26RK7g5/XVureBeL6Wk7H4QoUvqCLjCwx4M304V7garSiq+93ek+N1y4jfMOQJgUCH8AFGfdv5Fl2TAtNfPcPwvEubLjgSWp16NIsJOJixMEqi9q3iB0j5mHVpR4gjx66VNAY5EtbQCQXPLKXBPIIbNZy4=
+	t=1775563019; cv=none; b=CX3ei+t/KiNr5FOiA20SJGroXUHt3TUXWQJv6Fe2BziKSkpeXZ86apqRgRuT1DjbX4PTKtQWIhYKgFVETUnkFvsvh6UJUz6jSJ2nk+AtqE0KDgXZBKVVP3fztA2wrDMKOqdTyfBCyDFjKCb0C8umZtUgErHT4EeGH5GeXSS0HvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775562742; c=relaxed/simple;
-	bh=uiNZibcrpanS2tAKwNcCtp5oMpTDwmPdO98fIwbT4rw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qGbOma6wDYiRLrM4S8AXf5PDuSH3l9hvJ3PSAB73YCpfpi57gY8x0gId/gS+u9hBbm4Dr3p1nHZkxtnBBg36UBgIknJiDfkI87vh2yVR1WLYRiWSreODV1ibYN5O2fa8IY+FkJDa8wAlRLS7tj3HFOyoEhuBz99eiENTqKyggyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EenWegPn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775563019; c=relaxed/simple;
+	bh=DjpTMGM5uO8hDs4UwV0YSkNNsFqc8N3+IFh3c+GCsA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qeW3cufQx+wVpdKhRugEF5Gxvscn5KAZiCpnMNcEQw7FrT1PfetR3UVBirP6o7YMKmFWrCXU0c082vsOFcsAw0uI6cpL9Y+izknvn0wr84IQoZPSciG2aawgreOzR1Bun1JyWer7BQA8ATdyRiJNzVqBGFQyfhFPdXcl2YMPPHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwMX75Ei; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EenWegPn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4111DC116C6;
-	Tue,  7 Apr 2026 11:52:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwMX75Ei"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F8DC116C6;
+	Tue,  7 Apr 2026 11:56:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775562742;
-	bh=uiNZibcrpanS2tAKwNcCtp5oMpTDwmPdO98fIwbT4rw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=EenWegPnPLymwI3Zd+2paaOXSnNisTgOga3YK1xwKYGERgzQ+h+xiOD3Omkbfs82g
-	 OP/cbIv/uPvynoW+jLvcwmMZXjQ/egLKOrMVX2s/gLLBtuOiy0bBBucxyxuiq/9hTo
-	 rr/rCQWl7ue5dqd8A8AoreQ/YIFAh7JojKM1N+ktM83LAAVllJ+cOgU3I7DTW8xzC6
-	 jq0pSrk2n1W0hnrgUEiixzTr/y/5OVd2Qe8F2Gc6f+R28r3a7ngedmPgPYL2XRAV+F
-	 UP0UE3j5c9blDYtzV/M6VmBHXaMNwqBKDtwN///wJFvSPzbu8+exctfSU7MZ28rOTY
-	 dWEA1ArJlwa/Q==
-Content-Type: multipart/mixed; boundary="===============5828004932034665690=="
+	s=k20201202; t=1775563019;
+	bh=DjpTMGM5uO8hDs4UwV0YSkNNsFqc8N3+IFh3c+GCsA8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VwMX75EiQ8VP5x37sBDKUNK96v7LxQx89pf2ccNmoz6iIXkFNgFoHPkn9ydVWnSXw
+	 LUxb71StkEF+Tts8qdTddBI08PsiSFP1VLHDRRES2/2kVdFTrt1Fmel7rga7aS75pR
+	 ZMaEFHKOcZiBRgM8pAH8mpDHtPYkLjokbEfDsAic2o9kxNYLtutq+7xyLYZQlaZXSl
+	 bAS2RjoKh3HNaZOZJRNAVjnykEcVGMD/LWy9o3mhJPfpaDwo533UbaSY1y9Euj4BX9
+	 3HEdzqjlveQI8txJ1Q144fGfHqwrMphjnyG4utHSnapuqnWu8fh0gwUT/AIF/ORnhq
+	 3KvVSVYZRs0WQ==
+Date: Tue, 7 Apr 2026 12:56:55 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>
+Cc: Abhishek Dubey <adubey@linux.ibm.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>
+Subject: linux-next: manual merge of the bpf-next tree with the powerpc tree
+Message-ID: <adTxB7PjvXi5N4EB@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4ab24b8c12f6594ff4bf5df1d05d1b8ada3c913e55000f86e15ec7e7ee980b54@mail.kernel.org>
-In-Reply-To: <20260407105005.1639815-6-nhudson@akamai.com>
-References: <20260407105005.1639815-6-nhudson@akamai.com>
-Subject: Re: [PATCH bpf-next v3 5/6] bpf: clear decap tunnel GSO state in skb_adjust_room
-From: bot+bpf-ci@kernel.org
-To: nhudson@akamai.com,bpf@vger.kernel.org,netdev@vger.kernel.org,willemb@google.com,martin.lau@linux.dev
-Cc: nhudson@akamai.com,mtottenh@akamai.com,aglasgal@akamai.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  7 Apr 2026 11:52:22 +0000 (UTC)
-
---===============5828004932034665690==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 7f8d43420afb..04059d07d368 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3667,6 +3667,46 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
->  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
->  			skb_increase_gso_size(shinfo, len_diff);
->
-> +		/* Selective GSO flag clearing based on decap type.
-> +		 * Only clear the flags for the tunnel layer being removed.
-> +		 */
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> +		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +					 SKB_GSO_UDP_TUNNEL_CSUM |
-> +					 SKB_GSO_TUNNEL_REMCSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-> +					      SKB_GSO_UDP_TUNNEL_CSUM |
-> +					      SKB_GSO_TUNNEL_REMCSUM);
-
-[ ... ]
-
-> +
-> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-> +		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-
-[ ... ]
-
-> +
-> +			if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) {
-> +				skb->encap_hdr_csum = !!(shinfo->gso_type & SKB_GSO_UDP_TUNNEL_CSUM);
-> +				skb->remcsum_offload = !!(shinfo->gso_type & SKB_GSO_TUNNEL_REMCSUM);
-
-The L4_UDP clearing block above unconditionally clears
-SKB_GSO_UDP_TUNNEL_CSUM and SKB_GSO_TUNNEL_REMCSUM from
-shinfo->gso_type. By the time these two assignments execute,
-both flags are always zero, so these expressions always
-evaluate to 0.
-
-The kernel's own __skb_udp_tunnel_segment() in udp_offload.c
-uses the same !!() pattern:
-
-    need_csum = !!(skb_shinfo(skb)->gso_type & SKB_GSO_UDP_TUNNEL_CSUM);
-    skb->encap_hdr_csum = need_csum;
-    remcsum = !!(skb_shinfo(skb)->gso_type & SKB_GSO_TUNNEL_REMCSUM);
-    skb->remcsum_offload = remcsum;
-
-but there the flags are still live. Here they have already been
-cleared, so the conditional form is misleading. Would it be
-clearer to just assign 0 directly?
-
-> +			}
-> +		}
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="SbOp3luEpbBMMsdp"
+Content-Disposition: inline
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+--SbOp3luEpbBMMsdp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24079111128
---===============5828004932034665690==--
+Hi all,
+
+Today's linux-next merge of the bpf-next tree got a conflict in:
+
+  tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+
+between commit:
+
+  66cad93ad325b ("selftest/bpf: Enable instruction array test for powerpc")
+
+=66rom the powerpc tree and commit:
+
+  99726ece0c8ad ("selftests/bpf: Enable test for instruction array on arm64=
+")
+
+=66rom the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+index 482d38b9c29e1,93166c2da8e7b..0000000000000
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+@@@ -3,7 -3,7 +3,7 @@@
+  #include <bpf/bpf.h>
+  #include <test_progs.h>
+ =20
+- #if defined(__x86_64__) || defined(__powerpc__)
+ -#if defined(__x86_64__) || defined(__aarch64__)
+++#if defined(__x86_64__) || defined(__powerpc__) || defined(__aarch64__)
+  static int map_create(__u32 map_type, __u32 max_entries)
+  {
+  	const char *map_name =3D "insn_array";
+
+--SbOp3luEpbBMMsdp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnU8QYACgkQJNaLcl1U
+h9AFcgf/U/ypvZWPUaE38iCgcOr9D2sft431E5zVpFC9wMXs668d9GJOmE/1VuwO
+XL253BucFVhgYDo82OVwDzdRqeRcuTF68dvwkZKT8VrAaqrZPv/yEAsY13rHOnnB
+grhCgSmPIauCen0an6CPj9CS5s6+JMAOhMCvozwK/6HyAvHUffRnhteWW5LWkrlz
+QdfxbvkiBOykKudK+mAPKkscBo3HIQJh94tYYdaU8B1BkmT1QwhZGzHUzBR4NM6F
+naYv3V0cCgIRNJGzecDtAk1EiBZ9OQb+/C2rIAoefZBpnPC22Ri27E3rODwELTx1
+sqG8OGsPFLCfMNteGrk49svTpH//OA==
+=ELIP
+-----END PGP SIGNATURE-----
+
+--SbOp3luEpbBMMsdp--
