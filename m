@@ -1,157 +1,127 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249B31FC0EA
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 22:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775600046; cv=pass; b=Zw6h/p57jerHYXvCBgzE7n6BzmltmH8S2kgLrXpyP5zrE1zCKhXlndUlqrKLclj5G3ATFXNmFP0jQ8nCAPLk3BTD9yEqCAP6v0fs5aO/quMBkKdUdzXMOjmkmXdVVrmH6Ow6vnZvWKkVjS0BPQCUnmi0xVuErcYU9z3bMZEnpWA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775600046; c=relaxed/simple;
-	bh=iaK6l0EdBauLQ3nTEzENIt+2mQg3t5tnQeAu7LUlX+E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uXbcPGqN6SKw/z/26Koa5TmTo+q3th287VwoKPcUzTaBDrdQ7PzH2nFPgxdkWUU8TF0b6rHW+RkFkUVreLb/nMmNfV7bo1iaNpt2tmjTiX3gegUCuqyCkY09hs/UWw+krEMg7Z7ia6zHAK+Y9XckkPW6U+TNjvGIgY6OGtvcwuE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JikpQ66A; arc=pass smtp.client-ip=209.85.128.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA5E1A682F;
+	Tue,  7 Apr 2026 22:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775600878; cv=none; b=n/S0PmwFij0JEFojwbFNbS5uN2/l1Yy2+rLly/xbmOGWJDo0gOTk1zhZtbQMG0Op8V3d7x8Oy4snorm5bcEDDDzbHxNOY8225mVUACOmbKeIC27QFKFgEN775ZgRwhtrzAUYUaIB6SGjv8i8zalP2DPjeAEW7i0lBZVt0d39dI4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775600878; c=relaxed/simple;
+	bh=uK2so+449fVDewAkzhkLGh5pYpxj0JI8+AxRt8nkkc4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DMRSVAUrulTQbeSGwJ81TY6dA+kIRJ7ap1KEmHjPzN7nqObcaIR+1+sxjYl8PSW/dKzLHc/L1xqpM1hGB6G+Kb/HtOepp/5EQWkKmjqDYp0bZzYMn6xW4m5ubjmLs78+iq8N/brlfREvttBzvns2TPS4/YifWUokiWRusKZlWMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FQWHy4OB; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JikpQ66A"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-48897fd88ebso41947205e9.2
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 15:14:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775600043; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HxqZW3AdpT7oFiFVk50IkbKjsW6LBUPnyL97XHWnXDKaXA12yfmd5iWlkJLGdIQFBr
-         a1Pyb6vDa5bhzvWQitrwraqiwCZdEKRpkJO8dpHqzdxU5qPhIFurLh5Phhec955hFAaJ
-         5Tn6DjYyi9G91f3enyQSbCFy4M+VSzChGhjMW2mpL188EkeW/hTvZQOwhgAQxlL6qeJo
-         KGfObnzUsFKMfsh+ny03eLhf9HE8gxn+HaaWns3QLfgDoAaxaFCgY+1OPaCQb04yqir4
-         Dtz+ZYtK+qX5X6L4VLZ1ZjR892gBv6kX30I7HP/uam9rn70InZyaWGqqazEoy4dQPWbK
-         3Sdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nkJg2QWrRgji7lKDqipaGVZEawOkuFxxlijrZlKXzmo=;
-        fh=h9i0AYhqScJNeWFSYB4NklZgWOr8s4aSjIrHWmm91p8=;
-        b=b8euRszYe7oD126gZIYE08CDKMtOvmlASoumZbnNYJG2mxZnDuwhuG9N4EIsM7dXOz
-         w84YkNyj+GuRwgTgNudSJ8GuaTs+h0G7CQaSv0TXxyCE04t/+CJDU5aKJ2qNKcS4R/EH
-         jBxwUE2zB51Ailc/ceqO60N3KIkoMiXT49bUYba7O941O3y3w5xKmoyi4J1mEM3226VU
-         SNDOOr/h1QGY6E07Uc2jy7DDnA6k3m2moB9AMgtBkQSrkCadPjkYmgjreRG6VB9fZA7g
-         7335YVQCOd64w+6z++0PlZs7inqSD4y58pAKr5iJZd0aw70nCml3PB1pmhDkBqc229Kv
-         j5wg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775600043; x=1776204843; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nkJg2QWrRgji7lKDqipaGVZEawOkuFxxlijrZlKXzmo=;
-        b=JikpQ66Aq4NVd74FkIWs5eKWDrNHxVxoj0oExzUmU1gi5TphB7H26U01mk1TC8AW1f
-         XTvSxWtKzcJVgrr9qiyon08aIUrfyem3XQHoFJZzdm2QBkidqlCaN8dk/or1DU1ir7vj
-         QxhzG4AniR+Z5UpsjH81iSarebW5EK3LvHwxy+/ejXyxhET3xB61WfK33N3mX0TWalZw
-         f9E+txv8A4NYtnsW6PEHAZlnGkJK1Oh3RQteDt1FTiUtGnk/yBYJYwxolThFn2vtmNCz
-         QKHRPU93mqeai3YqDQa/aOX9MYSPdrZEOYDMeXEt6bnBoqWI4UBOrI+fEncPPYc/NEe9
-         IlBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775600043; x=1776204843;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nkJg2QWrRgji7lKDqipaGVZEawOkuFxxlijrZlKXzmo=;
-        b=JYhQnDpUv3Wf5KP9R81u4vC4QY7iWitH1zwvutHkWHTcypi/r3w3a81Uc5goUuggjo
-         4wFBjGPQ1PWPICqkCV2AZhEz1ZD47i0xoRp+/pb58yd/rFN9GoCMjBJHNAff2EFzMXNJ
-         OCkHTkSCGoah5CLyHJUudOmwex+4cmvkksC6Di51dlDbagwIxiX+P8uU/lJ12itgFt5Q
-         m8P0YLqklp4cw5cSIOHZl9syNC1zy24Dwztu5+I9WFKqF2rm4HJENwOunHL1tKEd2c5Q
-         sKJtqy7J5IXla08ekkRlcXzUS0qGT07S39Gygwn6AxSldJtxd3jpKzovjZny9+5wsJIv
-         uGNw==
-X-Forwarded-Encrypted: i=1; AJvYcCVQp13NkIYJMGGdkpFHAl2USYRf0P0swhdoDMk4C3Z1TEeimSfTU5GQIV83VY/ocuwGnl0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBaVEoXT7mrWs1/5hQc6LxP1WlRcplRGp+1uMdxzNw0M981g4e
-	IMiEs9dppBjMkns97GQUscOFBNbaxFraBmzFEtXuKnNAU8VA8xr5iwChjIxeWNWOUU/lH1I34cZ
-	loUTFk8kTozQzTP49gTzzv3jwGC5dReI=
-X-Gm-Gg: AeBDievOnLP+wPXMMfkqbUwknEL6XwGyv5LGOyNqRj8WGhaBeXRDkHeCLPos9yIXlVA
-	SBILYKwQlB1n/7Ea04q9z/SKLcfgh3HE6CnBIcDjWh7xO1aXUOgSPNutG0c4m9Y1jp7nz1qljDs
-	xWFJSjTyxI+cUgsOtPZinbtpjXvdSVz+QhSACXPcDHIjJy6UdHDmawVWSQ0hEilolbcow9tmxuc
-	FPGvWnxGmMfvtup8C/GUOSVx49ge21W8s4jfX6XyJta+AIufT9h7bm0378Y2m2bINVxPuvbhTxz
-	YZ1bS4R0ATYf2yftFL8JqEYMSHq9ThPbeqNQhbQ20vraYNpH9gVs3PH5QGllvolTk+6e7Kas
-X-Received: by 2002:a5d:5f48:0:b0:43c:f40f:6c91 with SMTP id
- ffacd0b85a97d-43d29285606mr27805671f8f.10.1775600043381; Tue, 07 Apr 2026
- 15:14:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FQWHy4OB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775600876; x=1807136876;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=uK2so+449fVDewAkzhkLGh5pYpxj0JI8+AxRt8nkkc4=;
+  b=FQWHy4OB+ha1vvzz4XFTmswpUMB9MtiRjBNY+gVyRJfDajyd00LoWGeY
+   oYUvObvMdnEm/vCNUZU5Ps1rWG1LbQuBdBfPPqMZNYgueEa4QeLUnYKOy
+   AZ8/jH9o7Oh3quOGwFvUEP8J/efXXSP27grH+nevABvSVj/a7HdV1K/Tk
+   Es/AynSdW9RAJzHxSEUW8+WroIKQafOIHkHIddhzvHifMPLARwnt730Rr
+   QVOlAMMgl4Ol9/byWB3A/yQ7FBSi2/5EdaO7hMuG+ksokwCWVTfbRPpMm
+   XUDYLWwJjNPxGq6ePX8VhZjel6bDl2pSXQXJGhtiV6WMQampqXmopKKAz
+   Q==;
+X-CSE-ConnectionGUID: 52crIjU+SFCtuSue1K2n6w==
+X-CSE-MsgGUID: s4h5QCiwS+i8KGLUUcQrmw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11752"; a="99202728"
+X-IronPort-AV: E=Sophos;i="6.23,166,1770624000"; 
+   d="scan'208";a="99202728"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 15:27:55 -0700
+X-CSE-ConnectionGUID: wKZVC/j2R2W5foBwbNucVw==
+X-CSE-MsgGUID: GW5EjqQCTQO1e/H8lgmmAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,166,1770624000"; 
+   d="scan'208";a="258719236"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2026 15:27:54 -0700
+Date: Tue, 7 Apr 2026 15:27:38 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+	chao.gao@intel.com
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+Message-ID: <20260407222738.lrartp6evfp7yhti@desk>
+References: <20260404002149.wtayv6a64vzuppgp@desk>
+ <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
+ <20260404034954.t7iapenzvhdpagxp@desk>
+ <CALMp9eR70eE2U63gzNzTiic0PqJVGv3CBBuVUOVbi3nqbWKZkQ@mail.gmail.com>
+ <20260407163943.y6tkh26z2rfktn3y@desk>
+ <CALMp9eTA3cXxuOT4dq=6y1hx52gPH1ywwTEmPQ5-fA-vz6r3VQ@mail.gmail.com>
+ <20260407171151.2gf2idjbmph35ypb@desk>
+ <CALMp9eRNVGFpzk_-ajQTuXadMtoY9H-ndUaz78wTT1zDYbTrPQ@mail.gmail.com>
+ <20260407191128.b2hr2ttkdpyunhrr@desk>
+ <CALMp9eTK0o7Z7-oTB8ohvmoh-vy-Y2qjdUvbqD6HaEhOEPZmhw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260406150548.1354271-1-ameryhung@gmail.com> <20260406150548.1354271-2-ameryhung@gmail.com>
- <CAADnVQKgKkyRfoFNSsCi3ykquzsO+-bZnvRO=V2LqyOMiB0ydQ@mail.gmail.com> <CAMB2axM=ocGBkJ=UB0kcE+4MfYLUroR8G=ehr+00215aeG3EOQ@mail.gmail.com>
-In-Reply-To: <CAMB2axM=ocGBkJ=UB0kcE+4MfYLUroR8G=ehr+00215aeG3EOQ@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 8 Apr 2026 00:13:27 +0200
-X-Gm-Features: AQROBzB1Pt5IAX123HngRh08i70yLOH0_T7hgOYAizDM9QmczXy3kDZMuXO7hio
-Message-ID: <CAP01T753d27xGfvow6G_DQq1nQS969NpQLeGbqeE_zwCD0XH0Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Allow overwriting referenced dynptr
- when refcnt > 1
-To: Amery Hung <ameryhung@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALMp9eTK0o7Z7-oTB8ohvmoh-vy-Y2qjdUvbqD6HaEhOEPZmhw@mail.gmail.com>
 
-On Wed, 8 Apr 2026 at 00:05, Amery Hung <ameryhung@gmail.com> wrote:
->
-> On Tue, Apr 7, 2026 at 2:27=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+On Tue, Apr 07, 2026 at 01:53:24PM -0700, Jim Mattson wrote:
+> On Tue, Apr 7, 2026 at 12:11 PM Pawan Gupta
+> <pawan.kumar.gupta@linux.intel.com> wrote:
 > >
-> > On Mon, Apr 6, 2026 at 8:05=E2=80=AFAM Amery Hung <ameryhung@gmail.com>=
- wrote:
+> > On Tue, Apr 07, 2026 at 11:40:57AM -0700, Jim Mattson wrote:
+> > > My proposal is as follows:
 > > >
-> > > The verifier currently does not allow overwriting a referenced dynptr=
-'s
-> > > stack slot to prevent resource leak. This is because referenced dynpt=
-r
-> > > holds additional resources that requires calling specific helpers to
-> > > release. This limitation can be relaxed when there are multiple copie=
-s
-> > > of the same dynptr. Whether it is the orignial dynptr or one of its
-> > > clones, as long as there exists at least one other dynptr with the sa=
-me
-> > > ref_obj_id (to be used to release the reference), its stack slot shou=
-ld
-> > > be allowed to be overwritten.
-> > >
-> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > > ---
-> > >  kernel/bpf/verifier.c | 23 +++++++++++++++++++++--
-> > >  1 file changed, 21 insertions(+), 2 deletions(-)
+> > > 1. The (advanced) hypervisor can advertise to the guest (via CPUID bit
+> > > or MSR bit) that the short BHB clearing sequence is adequate. This may
+> > > mean either that the VM will only be hosted on pre-Alder Lake hardware
+> > > or that the hypervisor will set BHI_DIS_S behind the back of the
+> > > guest. Presumably, this bit would not be reported if BHI_CTRL is
+> > > advertised to the guest.
+> > > 2. If the guest sees this bit, then it can use the short sequence. If
+> > > it doesn't see this bit, it must use the long sequence.
 > >
-> > Why ?
-> > I understand that it's ok to allow, but the features
-> > adds more verifier complexity and more things to worry
-> > about in the future?
-> > What's wrong with disallowing?
->
-> The current limitation seems a bit arbitrary and adds more complexity
-> to the mental model of dynptr object relation (some dynptr slots can
-> be overwritten but some cannot).
->
-> Actually I think about it again, the check here may not be necessary
-> at all (like below). Even if a referenced dynptr and all its clones'
-> stack slots are overwritten, the verifier should still reject the
-> program and report reference leak.
->
+> > Thats a good middle ground. Let me check with folks internally what they
+> > think about defining a new software-only bit.
+> >
+> > Third case, for a guest that doesn't want BHI_DIS_S, userspace should be
+> > allowed to override setting BHI_DIS_S. Then this proposed bit can indicate
+> > that long sequence is required.
+> 
+> That case can be handled by the paravirtual mitigation MSRs, right?
 
-That's true, but when we last addressed this, the message was kept
-here early to make the error easier for the user to comprehend.
-Keeping it here was preferable to showing "Unreleased reference" at
-the end of the program, which is inevitable once all references are
-overwritten.
-
-
-> -        if (dynptr_type_refcounted(state->stack[spi].spilled_ptr.dynptr.=
-type))
-> {
-> -               verbose(env, "cannot overwrite referenced dynptr\n");
-> -               return -EINVAL;
-> -        }
+Yes. But, that was the part that received the most pushback.
