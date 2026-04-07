@@ -1,63 +1,63 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574CF37E30E
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8024A37CD53
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775592155; cv=none; b=UBMKMLBKSMFYNjg3JflqBbHOSeXduLCfjCyWQXp0apC56FvmQYEqWfiZAMt2wuI2DNF7Q47nbWsH2U50MmicE07XeQJFiqes/8Ap85jRhYwld0a+z2RkfScc6TvUL7IRgtsyEVN3esSYrwiZPG3Ikb71xLmSE4dr+BpjHH6m0ew=
+	t=1775592157; cv=none; b=uORaBE7eb4ptXYylOhuQU6qwiVE7YoWjTVvlDzY2M5t/cacpA6pWWwvbkPUA3viXBqPjkoKWfNW6nNVl4c2KpMuCEKjlCTeEWsy1mJOfefuNLZB0puOYFTTPzU6bSGjtBahyk7eMSyyNK+jYGCUiXlWPku+6+hkbULdMXWmkdEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775592155; c=relaxed/simple;
-	bh=oDGccJGbJlS5oEKY6wi1//U3cO/8pqhENd08XnBAFsE=;
+	s=arc-20240116; t=1775592157; c=relaxed/simple;
+	bh=969N04GJ63B6j3UvBpT8Xq+THHPJF5melGvVjbfv/jM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G/a9uD0ub5PdPZ3Y/Zx6PxNJsypp5BaDtIWqMZBpjWOxF+PJ8/P1gJOM3eXbeGGcNhGxdZE7yik8K/HJ31juD8kzxRJ5o2VNdPaZiNzqSPYfMYyX34fFbVgbmOGYtq4LyxGNeG7dGCAr0fmGY0Vnx7NA4yEm3xavFogUM04t20U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fNUmlfUt; arc=none smtp.client-ip=74.125.224.49
+	 MIME-Version; b=koQnrbJ3HPlfI4rizqaL8fT1xVsG9+gCc/cGAccCCKSnFoJssGa20+k+Uod0Ne49qArVJ7KJyIEJyEf5ITui1OiaSOb8wunNcpDdzs7OlqLcXQZBX6HnSAF48fdW1onAf6g5wrkD4MAejve6AFvERkuuD/pTh2mLqKrkdS1KOKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=spWqyiDj; arc=none smtp.client-ip=74.125.224.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fNUmlfUt"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-64937edbc9eso4949927d50.2
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:02:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="spWqyiDj"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-65006c99d38so5987188d50.3
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775592153; x=1776196953; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775592155; x=1776196955; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BVuog/6PNKtU3Y12cDCMa25hSzMRaoPl9mUO+ZR3Rs8=;
-        b=fNUmlfUtnxmN4gTTLADjufGaCm4+GOc31J77fV5J2ypNLL1vvBwGxn7NQVPuxqyn0w
-         QXGTeIZ5liEpgfBJ4x40sbzgEDAdS01bfjqK3L1CQgNJGVxe7jCwRQdEWmvLaZf1nyWN
-         DDz38eCNW+moQFkTs+bqCVAcDcLgOF2lRKcq7IPSl3I5rurEhtAOfOJMNQaFBX6PIdZG
-         4d4DRyvFD8Bfpht+QDWXglueWqXXqAFMADy2kUf1r0bZOhSMI+igy8vS5duF3PawNkFf
-         elc13+3+/8HFcau46tBbqp2j7Qg0ktw94r//Uwdc3POP1TExokx99OYfpwzboNP2N0qJ
-         kgMg==
+        bh=kh9HwIL+CvvpNMQ+fa0HjatniWcHatd9mVcMTjGbHyI=;
+        b=spWqyiDjKcQ76GvS9Qi99Hn61LwzbS++wKhAPzlridqIFzKfA1ld25/YXV89n4mg22
+         xmzPYZf9KjaoFVvry1OHp0MjGXcgHO8L+9LGXczqji417tU5ebWeluzX1ao2Vi0Cmjuq
+         4t5WCv/a5mBZyjLy5jNzVvc5MLqUbsFRwWwF03E4g17tGkZpZGtSmxp48dw4dlROoE7y
+         qtDwWJjaRnYVM6cKu5rgmCHRAlQfPtgPqpJ7Bku1ML4XOEqRh28YhG8qG2LF2b9UloOv
+         esMDjao0zUfe41Dm27hlrCUL/cJhuh0Mk3RXdAzZYEIZneuK8xxcNmrgubNDox51uhfB
+         RUUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775592153; x=1776196953;
+        d=1e100.net; s=20251104; t=1775592155; x=1776196955;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BVuog/6PNKtU3Y12cDCMa25hSzMRaoPl9mUO+ZR3Rs8=;
-        b=H/HF9XWMH0LeWPjlh0lLFDktRRu+b9T9n9Sj0A4ayJPEQN1DH1KzSznh0rp20OsegG
-         C+o+aT6Y+6ewML306GOEhV4HZnArF6PbFoKrrekZjCioysFyYEIdJK0+CjUMKc7AdI0V
-         hezP5jjBOzDE7g3trjV9zI/fOjnOT0/sZOw25gQz6U/Zu8Q7HXzSWYOcL0utUj4K/sR5
-         NS9dyf5e5al2YwRUZOh55ZrrnZrWmQSdCnsmVBsRq7FcsTdQiednXdZJy4ox0noRMgP8
-         94lLtZpQ2rqQYW7wD8EDxEkHsON5MTuLKm7WISMPRLZx5jPr4KBa7CHNnK/r3tYpJeR2
-         9wcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV5M/tHnXpn3iYCt4o3l+d/CqXhMY71aE+PQWwH9V+22AALKS9iJUNjl5AD1T/NBsGZMl0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMQG3GRy+XSAb6kDkdqlVWTJ/euAjNLpBjXSfw4hyWLxcO/r7Y
-	EhJtrjAAR6ADoGn6dQPIVkFnRDDoRVyL8vEjlmclEYt0jxDD383CgFpI
-X-Gm-Gg: AeBDiesbGAE/vtgseli0MnciW1AruKvR3kiiO27GHSoF5UDTzIMfBlV5lokuTKTnjn5
-	2f7pmsurI0JTnSc8fH4rnmMYsWkmFTAcCFkyqrh0lDsgGHxCknUqzc6wMNqQPIoGEZFayPjqcie
-	B+b8ckg9Y0/kn7c1hswNZJLegYKHERuoN1ckqNZc42eoSvBozEujQ7FfjXbuT1fS/vO8gGWORRe
-	kZbQXK+MxqVHTIbEASBh6SevLuq1W8hMZvBXT9o3VgrvlWcCgbFBch48w7JhR5WfXEvITCuCSoQ
-	ygBkUOtN/oSGMgRBilBRynC7qwORArjfP3EgVdmDw7fRyd5MpB2wyWhQrtPvn1BgEl0KjD/b82O
-	sPW8/PJEV8xvAS3tYs0CyK6Oom+DCfbLK9fLRjGWV25QoV+vCDLGrFwxRFtG50AYhqprra48C92
-	mMyU98MJov17J41Ah1LaC6UEr3wjoAdEqJtE2AUdyGVDB7faFHU70779IPRM4VQuwiAiB4G6yo
-X-Received: by 2002:a05:690e:140b:b0:650:1aa5:8568 with SMTP id 956f58d0204a3-6504887abe9mr16658180d50.55.1775592153359;
-        Tue, 07 Apr 2026 13:02:33 -0700 (PDT)
+        bh=kh9HwIL+CvvpNMQ+fa0HjatniWcHatd9mVcMTjGbHyI=;
+        b=WYuS+EBB53HPEEa5API0ZQ6jZYd54fmywGHFMdsFAcZvTnWSwU7IaOX7CAhbEN5mFS
+         C4B/h8GndTkT53XRMopoLrEjbqF4ELUpaOZkkPXKzaxDfZf2ucbB32xgzkmWbvL/9tkh
+         XkQ2palwUsXmRYUAFgYDeYIan76isR0WO/VXgvEVH9FUivJyGw7q4heK0B3HbD25wdNB
+         6Lf5GCyTZmO4yxP9D0u38rJxHHpD68fHj6bhO5hdZ5FN8D0vOvsxItuC5H+IxkuZPtNs
+         ALlJjBX8RxoHq35xnWR1D5lHS704ykJFSLoy6nK59TLI/pqp0f+go0gGhww4gkkUVqXb
+         85iA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKOtl5wfcwRzffvxmmSYCFSOJnRZmHNZE/s881kAVqJcpVsAeWA2QPs/H7tzz1rzctvek=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNMlls19nhQ6Jmm6AdQxrgMkr7pXM7jicHgtCPbe1v1Og4A54E
+	7oNB6MbEDNPoDCvu6HUNuMH0VPGxYRzgXv9pFG7ben62KpTvNOr9BUVa
+X-Gm-Gg: AeBDievSC44TQz1KIkLGAb3PpZAMCHqg7ekx4LWzjZKb7/4KVWXxMTHCmJ3p8vnPEJv
+	YF7Q189fnmTRUByAjQ1M42tB5uVow7B3ygZ5AkamKm7vyR7SvOco7cCFwJzMhYpmU04HNve8z1X
+	NHHtgyQGrpli+Zq8Uz4fjuPQCi56bWk/PqfGAM1biYiM3/iAJHmWQ1EphvBm4a/up/K+Rgo4Hl6
+	62OTT17g2VYggdxihf897eAINvZPty6ZUIvCqckpRGTupdJ3mwG7UINVgu3sT4s2b3fV6DEP2kz
+	E4QFGLrrGvEBHd4MBcM2ZPNET2uwdAp47gLDzdHNCdEfVP2ynqbIPPPPoxt9HYdRQatGUBkwgmn
+	XerqzMbonX6Un3SgNng0yWhnXVFRTWvjdONgy5d43eCAfnTLQPTC/nUiBYSiuAM4oM2vycQBVps
+	4PzZUBVSt+Z97vJQyIECS6TKoDG6wBE1ktQEc6GAPcPQQRbp9nL7PbVJmx4+iq/HrUsbtQgj7W
+X-Received: by 2002:a05:690e:4812:b0:64e:c641:d06b with SMTP id 956f58d0204a3-6504869ce58mr13854064d50.6.1775592155586;
+        Tue, 07 Apr 2026 13:02:35 -0700 (PDT)
 Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:92f8:8594:e84e:1d9a])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a828f3csm8354078d50.3.2026.04.07.13.02.32
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a828f3csm8354078d50.3.2026.04.07.13.02.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 13:02:33 -0700 (PDT)
+        Tue, 07 Apr 2026 13:02:35 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -85,9 +85,9 @@ Cc: gnoack@google.com,
 	linux-kernel@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [RFC PATCH 10/20] bpf: verifier: Add Landlock ruleset map support
-Date: Tue,  7 Apr 2026 16:01:32 -0400
-Message-ID: <20260407200157.3874806-11-utilityemal77@gmail.com>
+Subject: [RFC PATCH 11/20] selftests/bpf: Add Landlock kfunc declarations
+Date: Tue,  7 Apr 2026 16:01:33 -0400
+Message-ID: <20260407200157.3874806-12-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260407200157.3874806-1-utilityemal77@gmail.com>
 References: <20260407200157.3874806-1-utilityemal77@gmail.com>
@@ -99,63 +99,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for the BPF_MAP_TYPE_LANDLOCK_RULESET in the verifier. Mark
-the map as storing a trusted pointer to a BTF object.
-
-Specify the map as being usable from sleepable contexts.
+Expose the Landlock kfuncs to the BPF selftests.
 
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- kernel/bpf/verifier.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/bpf_kfuncs.h | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index f108c01ff6d0..52ba58536387 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -493,7 +493,8 @@ static bool is_acquire_function(enum bpf_func_id func_id,
+diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
+index 7dad01439391..00f2b337a232 100644
+--- a/tools/testing/selftests/bpf/bpf_kfuncs.h
++++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+@@ -79,6 +79,26 @@ extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+ 				      struct bpf_dynptr *sig_ptr,
+ 				      struct bpf_key *trusted_keyring) __ksym;
  
- 	if (func_id == BPF_FUNC_map_lookup_elem &&
- 	    (map_type == BPF_MAP_TYPE_SOCKMAP ||
--	     map_type == BPF_MAP_TYPE_SOCKHASH))
-+	     map_type == BPF_MAP_TYPE_SOCKHASH ||
-+	     map_type == BPF_MAP_TYPE_LANDLOCK_RULESET))
- 		return true;
- 
- 	return false;
-@@ -2269,6 +2270,10 @@ static void mark_ptr_not_null_reg(struct bpf_reg_state *reg)
- 		} else if (map->map_type == BPF_MAP_TYPE_SOCKMAP ||
- 			   map->map_type == BPF_MAP_TYPE_SOCKHASH) {
- 			reg->type = PTR_TO_SOCKET;
-+		} else if (map->map_type == BPF_MAP_TYPE_LANDLOCK_RULESET) {
-+			reg->type = PTR_TO_BTF_ID | PTR_TRUSTED;
-+			reg->btf = btf_vmlinux;
-+			reg->btf_id = *bpf_landlock_ruleset_btf_ids;
- 		} else {
- 			reg->type = PTR_TO_MAP_VALUE;
- 		}
-@@ -10238,6 +10243,13 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 		    !may_update_sockmap(env, func_id))
- 			goto error;
- 		break;
-+	case BPF_MAP_TYPE_LANDLOCK_RULESET:
-+		if (resolve_prog_type(env->prog) != BPF_PROG_TYPE_LSM)
-+			goto error;
-+		if (func_id != BPF_FUNC_map_lookup_elem &&
-+		    func_id != BPF_FUNC_map_delete_elem)
-+			goto error;
-+		break;
- 	case BPF_MAP_TYPE_REUSEPORT_SOCKARRAY:
- 		if (func_id != BPF_FUNC_sk_select_reuseport)
- 			goto error;
-@@ -21662,6 +21674,7 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 		case BPF_MAP_TYPE_ARENA:
- 		case BPF_MAP_TYPE_INSN_ARRAY:
- 		case BPF_MAP_TYPE_PROG_ARRAY:
-+		case BPF_MAP_TYPE_LANDLOCK_RULESET:
- 			break;
- 		default:
- 			verbose(env,
++struct bpf_landlock_ruleset;
++/*
++ * Description
++ *  Put a Landlock ruleset obtained from a Landlock ruleset map lookup.
++ */
++
++void bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset)
++	__ksym __weak;
++/*
++ * Description
++ *  Modifies the credential of the passed binary parameters to enforce the
++ *  provided landlock ruleset on the new credentials. The ruleset should
++ *  have been obtained from a Landlock ruleset map lookup.
++ * Returns
++ *  Error code same as those returned by landlock_restrict_self
++ */
++int bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
++		const struct bpf_landlock_ruleset *ruleset,
++		__u32 flags) __ksym __weak;
++
+ struct dentry;
+ /* Description
+  *  Returns xattr of a dentry
 -- 
 2.53.0
 
