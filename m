@@ -1,260 +1,171 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A021A337110;
-	Tue,  7 Apr 2026 18:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775587265; cv=none; b=IlSDsCUjZU6HJKGtKvAdYak+TW0utvKRDHQ9sexX13tRW312WSU9Dn1bK+r0tJq4c5J5Hf5xzChdnE8JGABBOUOzZ1lqWDsc+hg6K4hy40yujwNOniwEXgtYW2OqL1srpON0fyCiAZ87kxP3lcdkUx5IpiIbV2D+QdRK+s2BJCI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775587265; c=relaxed/simple;
-	bh=Vgoh9psjabACNffbt+5ZY22uG8xKmP766hYx26sSqj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l9N1fw1vCoa/TCPLh6TfMoohHy4lv1MxAmLUPnFQOAGl+IpdZNzedkWFBg2dnD6yuqvcwUnlN2WyIDeE9eLWb24duYHmKOC9wbhI5Y2bW35J/9DucgcPfJ1BFSbHAY5qVMpYdnoF0s7jI8rXTQDcOgeE4dmYBnQVwlRIfE6Ifwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h0+xKwvt; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A367337110
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 18:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775587273; cv=pass; b=bkNcLyNdh3xZCwKnsl+JYOLylvuYl6iIcRWIpxhZUqWQHPXgAGgZA2Q1YrXWBL9uBAExFaGiLSge30ddbcqkykUGm3h9iMhouDqNGVoX1r/0CbwIcgMQEmI3x/ipxQDeksSXG+oBRWnmFWiD9xy1I0xsKkVUE2HqkWiC3I66YO8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775587273; c=relaxed/simple;
+	bh=KZCDfzIeZ9MXyD9zphyFKr1/BkcZ0XXimcy7WGnXtA8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=noVNSTZrsn09VEYWd7poN9eamDXtqqB7LnwiQU+33EYEo+mEFlLFbbs0NEyTQN+Qu8tWM8v8VSb6H6xCtC+ZrYoehP5x7DcEvCFW+mdwbaE3JKUjxpFwarJrejZczngWmb3f2UrzQ3fmKH5Smf8j6cqB9etb1CkxNvs2iOVNg0E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DUAaRPdB; arc=pass smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h0+xKwvt"
-Message-ID: <82148eb1-f270-48f1-8900-e0becc6384e8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775587250;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/pbB/7yM9qnWDUuBrZvpjAMidUIj7HvUtBOVsbYidjw=;
-	b=h0+xKwvtmES4t2E/F0q+G9TXlDuoTaDFh/rZeodnMPmb8RXBsVHH8kYLzDhV1NPWTdjP29
-	WyuA/8QwIb8Xp+cGHq57odMx6LDxhDsStTjof8Hg0zpFTUlUNoBkTXLTNnnR97OoVyk3GT
-	LlCJKOYwAKdYmx3n2sW7LhOjM/FdhWE=
-Date: Tue, 7 Apr 2026 11:40:42 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DUAaRPdB"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-66ba6d3dab3so1988a12.0
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 11:41:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775587270; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EL15/SXvL0LCC3yxV4rcocrrDTz8Y2z2dYUeadoirr+/zwNbAhjSxA0JLlzzZN4GZ+
+         OpHDtqPtNFywLBseoLKZdRBvsjA1NroHyOGJmz5qPOdzWef1q0ktqISPPRcty8W+4V4O
+         Y+0u4aFLofTukyz0dbw0RJ3upM6EH3l1gCl4xIncJyX9eqYv38zZ/e+uDD606rkt7xkG
+         cIlUwyeOjXI/x1HPzrSpZdVj2B5FzA6RI7vgBAT7d/pqw0hoCdpaWucAlqdcA+fCkmHT
+         iyq4S+TgmkHt1oiexrwt+c10hZukSn0wko4hHl2PrLGsek+vZ7NZ7UCN1dUgchrvvsx9
+         4C2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KZCDfzIeZ9MXyD9zphyFKr1/BkcZ0XXimcy7WGnXtA8=;
+        fh=v6Rbt+UdQHb2Q4TeP88WMzN2Z3oBs2WPIP9PeimSEQM=;
+        b=fRrUR6Tm5h0XMLGK5U4lca7U1cGuCGeh1sA0KpGFGoOD9GBAGGldwLBV5Qttpd/m/5
+         w8qxsVNOQNIDrckeL2xlmerpP2mhn9XMW8X6mQGz4/5vXcXx4N+o4CNDDOwESloISqka
+         4xmiex5Y9gNlNDvad4Iis2iqNXKyrLrXrTulw61v0qCyQtA0mMvCF8JqxO5Lfhhlx4Sj
+         GICPjyeG7PhcqOdc1N/mq2jZCa77aODdMx9iR+gomfVZMkiptRgVUND+ii4/phm/Zees
+         xMqlc8jRtU2l0O9fR68G+8rAASGPj2KWbC8s1C/njm34ogQve6dLEVLESOL/QANTHOW9
+         GExQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775587270; x=1776192070; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KZCDfzIeZ9MXyD9zphyFKr1/BkcZ0XXimcy7WGnXtA8=;
+        b=DUAaRPdBnrNLOhCS9+edF+j0ec+XQt3UzjdvTP3IF2wUtvnWewBDIfOG8A4asaM+gh
+         Dp41Ia2yX8jvR1laMzMOzJE892sj0Si+EBIxA7qXW9mxytxolpmTAi7Yc7kuE9/kyQue
+         GkUynP1fUve4u+LXuM0vIRnANGjEXgQKUOKqlLv1q+ei2VNbmDYA+vj6dz/b3S2y9cVZ
+         5VCPpV4WzeVuK0R0iVsFKuDpV+LUgS8XU9jIjUQYdzIgAUneynnF8O2zqj0Ki0eDusAe
+         eQR/gHaAWMNOSwT5ZB1YwCqDvn/njJ1a67122OHZfb+kQnrgN9vdaQyvy8oVcvgiqqST
+         t9Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775587270; x=1776192070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KZCDfzIeZ9MXyD9zphyFKr1/BkcZ0XXimcy7WGnXtA8=;
+        b=CsGCCAAsgCA0/gl/kA1vSZmx7DRF4cE7gCRuOaZQ+K6jvfYI7bVRZDP/hGSm3yg/T5
+         5YXKQynBoFwIEuWrOtfjcLH2cgQNfJhkEzdlefHWKDUcBqyZnG4EvNCCwQsBsvijqFF0
+         r19F06ba9iXhKPD2tb+1YS4ZJVDqNxAZq7a7UOSzOuS4TYTviQbXOfay/nQRE1AOFO55
+         ZYydnNd7C9B/HyGlJsLEo8FUxtZ/J4CPU2vsPnPHO1bfCNWnWakfVhfKYNOkH4P9z/la
+         XMtscd8BLpK0eVIIKkEFElPEfnIaWciYQk5yNIxQkJfaJxgGPG7WM5igd3wfdYKUmils
+         VwtA==
+X-Forwarded-Encrypted: i=1; AJvYcCWW3ogvc5GqD6K+F0KE1d50j/P6tKLNsC9Ij9FpBYxeJR79udQGBlA3bGOgSo2u4jvjSto=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDdv7eL0Bie+T14/MYuPLY0n+Wh2a9QzfJJQLBH4fF6Au7wk4s
+	7/JiyYh7YYpWuzPvEQlaVYrcVQzt1TyR/ZvxFQQZeikE+QHE8Fum/vGjizmEh/G7o4LOWcFhxUx
+	nabZHf4Cn5VQxF0Fv3yRJ4Bo1YnFpklUCkf2s2eMx
+X-Gm-Gg: AeBDiesEg/qQDG0paGyJ/s2C00AlHy9LIktAdi7gM9K1s+1VggbBgeVvzUinonrjpWR
+	VT6W0y1VBCQLzi9bKQNKEj9cYvAtwRaFho/u8mXZ00XKBMBlQT6Qy/ODkIs8LBWZT/Y7RQP8nvv
+	WwirqlPTELIY+RL0IA8893TuHXHDU2NAswKTHg70NFWujgHbroNcVa+cXRegRZ2Kqojm74Fvq/w
+	+JX8qIhVtBoneVUSwe2NhcQp1WaiyXmDEURtrv1W4SSj/0C/aubdmj06bWYg+/SowwrX/lJQ0+O
+	6wCz32k=
+X-Received: by 2002:a05:6402:a0da:10b0:661:f987:357b with SMTP id
+ 4fb4d7f45d1cf-66e415a1e4bmr147625a12.14.1775587269433; Tue, 07 Apr 2026
+ 11:41:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
- table-driven approach in verifier
-To: Chengkaitao <pilgrimtao@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Chengkaitao <chengkaitao@kylinos.cn>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20260329140506.9595-1-pilgrimtao@gmail.com>
- <20260329140506.9595-2-pilgrimtao@gmail.com>
- <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
- <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
- <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev>
- <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260403231608.zopnhnypdclzqlx7@desk> <CALMp9eT2vJBdLPY2uBYrPgVrhS_aYmfGfdXe6MZXG_gyryLHVA@mail.gmail.com>
+ <20260403233329.fb2ppifgwm3um6ny@desk> <CALMp9eTpsenqsWjzmpXLEubn9uNjgZgzgrMwtZ72HDuV_2xgfg@mail.gmail.com>
+ <20260404002149.wtayv6a64vzuppgp@desk> <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
+ <20260404034954.t7iapenzvhdpagxp@desk> <CALMp9eR70eE2U63gzNzTiic0PqJVGv3CBBuVUOVbi3nqbWKZkQ@mail.gmail.com>
+ <20260407163943.y6tkh26z2rfktn3y@desk> <CALMp9eTA3cXxuOT4dq=6y1hx52gPH1ywwTEmPQ5-fA-vz6r3VQ@mail.gmail.com>
+ <20260407171151.2gf2idjbmph35ypb@desk>
+In-Reply-To: <20260407171151.2gf2idjbmph35ypb@desk>
+From: Jim Mattson <jmattson@google.com>
+Date: Tue, 7 Apr 2026 11:40:57 -0700
+X-Gm-Features: AQROBzCt9Ys4MdyKd8Tqk8kV948jbOd6itImLNrx4CMkmInZ0JBSW_3PRIdD-Y8
+Message-ID: <CALMp9eRNVGFpzk_-ajQTuXadMtoY9H-ndUaz78wTT1zDYbTrPQ@mail.gmail.com>
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, chao.gao@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/4/26 3:38 AM, Chengkaitao wrote:
-> On Sat, Apr 4, 2026 at 12:49 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->> On 4/3/26 10:41 AM, Chengkaitao wrote:
->>> On Tue, Mar 31, 2026 at 1:05 AM Alexei Starovoitov
->>> <alexei.starovoitov@gmail.com> wrote:
->>>>
->>>> On Sun, Mar 29, 2026 at 7:05 AM Chengkaitao <pilgrimtao@gmail.com> wrote:
->>>>>
->>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->>>>>
->>>>> [...]
->>>>> +
->>>>> +/* Kfunc family related to spin_lock. */
->>>>> +static const enum special_kfunc_type bpf_res_spin_lock_api_kfuncs[] = {
->>>>> +       KF_bpf_res_spin_lock,
->>>>> +       KF_bpf_res_spin_unlock,
->>>>> +       KF_bpf_res_spin_lock_irqsave,
->>>>> +       KF_bpf_res_spin_unlock_irqrestore,
->>>>> +};
->>>>
->>>> I think it's a step in the wrong direction.
->>>> I'd wait for Ihor's BTF_ID_NAMED cleanup.
->>>
->>> After reading Ihor's messages on the list, if I understand correctly,
->>> our two approaches seem to target different problems. What Ihor's
->>> work appears to achieve is the ability to remove the entire enum
->>> special_kfunc_type. My goal, on the other hand, is to replace many
->>> scattered func_id == special_kfunc_list[...] comparisons with a
->>> table-driven approach.
->>
->> Hi Kaitao,
->>
->> I appreciate your efforts, however after a quick pass over the changes
->> you propose (both here and in the new series) with respect to BTF_ID
->> macros and special_kfuncs_list, I don't understand what problem you're
->> trying to solve.
->>
->> The inherent complexity is in the fact that the verifier must know
->> when a particular BTF id identifies a specific kfunc, or whether it
->> belongs to some pre-defined set of ids. This is why
->> special_kfuncs_list and other BTF_ID_SET/LIST-s exist.
->>
->> And so there is no way around defining those ids and sets *somewhere*,
->> and so far BTF_ID_* macros did a fine job of that, all things
->> considered.
->>
->> AFAICT your changes simply move around the same definitions from
->> functions with if statements to constant arrays with a runtime search
->> on them (which is slower by the way). What is the benefit of that vs
->> the current implementation? We still have to maintain those arrays in
->> the same way we have to maintain the is_foo_kfunc helpers.
->>
->> Your newer proposal [1] takes the same idea to the next level, by
->> introducing an entire new BTF kind, new ELF sections and a bunch of
->> macros that are no less complicated than existing. And all of that
->> just moves the same arrays "upstream" to the .BTF_ids section. Again,
->> I fail to see any benefits to that complexity. Having differentiation
->> between LIST and SET, and having to mark START and END is not a
->> problem that needs solving IMO.
-> 
-> Your analysis of the code implementation for the new proposal is correct.
-> Let me elaborate on the purpose behind my approach.
-> 
-> ****** Purpose 1 ******
-> 
-> As described in this patch:
-> https://lore.kernel.org/bpf/20260303135219.33726-4-pilgrimtao@gmail.com/
-> 
-> If we want to add a new kfunc, bpf_list_add_impl, we would today have
-> to add "btf_id == special_kfunc_list[KF_bpf_list_back]" (or similar)
-> five times in verifier.c. ...
+On Tue, Apr 7, 2026 at 10:12=E2=80=AFAM Pawan Gupta
+<pawan.kumar.gupta@linux.intel.com> wrote:
+>
+> On Tue, Apr 07, 2026 at 09:46:07AM -0700, Jim Mattson wrote:
+> > On Tue, Apr 7, 2026 at 9:40=E2=80=AFAM Pawan Gupta
+> > <pawan.kumar.gupta@linux.intel.com> wrote:
+> > >
+> > > On Mon, Apr 06, 2026 at 07:23:25AM -0700, Jim Mattson wrote:
+> > > > Yes, but the guest needs a way to determine whether the hypervisor
+> > > > will do what's necessary to make the short sequence effective. And,=
+ in
+> > > > particular, no KVM hypervisor today is prepared to do that.
+> > > >
+> > > > When running under a hypervisor, without BHI_CTRL and without any
+> > > > evidence to the contrary, the guest must assume that the longer
+> > > > sequence is necessary. At the very least, we need a CPUID or MSR bi=
+t
+> > > > that says, "the short BHB clearing sequence is adequate for this
+> > > > vCPU."
+> > >
+> > > After discussing this internally, the consensus is that the best path
+> > > forward is to add virtual SPEC_CTRL support to KVM, which also aligns=
+ with
+> > > Intel's guidance. In the long term, virtual SPEC_CTRL can benefit fut=
+ure
+> > > mitigations as well. As with many other mitigations (e.g. microcode),=
+ the
+> > > guest would rely on the host to enforce the appropriate protections.
+> >
+> > I don't think it's reasonable for the guest to rely on a future
+> > implementation to enforce the appropriate protections.
+> >
+> > This is already a problem today. If a guest sees that BHI_CTRL is
+> > unavailable, it will deploy the short BHB clearing sequence and
+> > declare that the vulnerability is mitigated. That isn't true if the
+> > guest is running on Alder Lake or newer.
+>
+> In any case, there is a change required in the kernel either for the gues=
+t
+> or the host, they both are future implementations. Why not implement the
+> one that is more future proof.
 
-Kaitao,
+There will always be old hypervisors. True future-proofing requires
+that the guest be able to distinguish an old hypervisor from a new
+one.
 
-I think the maintainability pain in the current verifier-side kfunc
-handling is clear, I don't think anyone would argue that it's not a
-problem. Your bpf_list_* work is a good demonstration of that. I agree
-it can be improved.
+My proposal is as follows:
 
-That said, I don't think extending .BTF_ids and/or BTF is the right
-way to solve it.
-
-> ... Under the newer proposal, that is no longer
-> necessary: defining the kfunc and its verifier metadata in one place
-> is enough, for example:
-> 
-> __bpf_kfunc int bpf_list_add_impl(struct bpf_list_head *head,
->  struct bpf_list_node *new,
->  struct bpf_list_node *prev,
->  void *meta__ign, u64 off)
-> {
-> /* kfunc implementation */
-> .......
-> }
-> BPF_VERIF_KFUNC_DEF(bpf_list_add_impl, list_api, graph_node_api, ... )
-> 
-> If BPF_VERIF_KFUNC_DEF is extended further, BTF_ID(func, bpf_list_add_impl)
-> and BTF_ID_FLAGS(func, bpf_list_add_impl) might also become unnecessary,
-> so the snippet above could eventually be close to all the code required
-> to add a new kfunc.
-
-Defining a kfunc metadata in one place is a reasonable direction in
-principle, I agree.
-
-Where I disagree is the mechanism. The complexity does not disappear,
-it just moves into .BTF_ids, new macros and resolve_btfids. The
-primary consumer of this metadata is the verifier, and I think it is
-better to keep that metadata in verifier-local C definitions instead
-of encoding it into .BTF_ids. Adding more indirection to this will
-only hurt maintainability IMO.
-
-> 
-> ****** Purpose 2 ******
-> 
-> The kernel no longer needs enum special_kfunc_type to list every KF_bpf_*
-> entry. That information is folded into the .BTF_ids.##sfx section instead,
-> so kfunc authors do not have to touch or think about special_kfunc_type.
-
-This is not an argument for the .BTF_ids extension. Removing
-`special_kfunc_type` mirroring is useful, but that will be addressed
-directly by the targeted cleanup already under discussion.
-
-> 
-> ****** Purpose 3 ******
-> 
-> As described in this patch:
-> https://lore.kernel.org/bpf/20260303135219.33726-6-pilgrimtao@gmail.com/
-> 
-> In is_bpf_list_api_kfunc(u32 btf_id) there are on the order of eleven
-> "btf_id == special_kfunc_list[*]" comparisons. As more kfuncs are added,
-> every is_bpf_* helper will only grow longer and the verifier will get
-> more repetitive. With the new design, those is_bpf_* helpers can be
-> removed entirely, including the awkward scattered "btf_id == *" checks.
-
-The repetition is real. But removing is_bpf_*() helpers is not
-automatically a simplification if the same information is now encoded
-indirectly through section layout or local const arrays.
-
-The same metadata is being maintained somewhere else, with more
-indirection than before. The complexity just moved around, and was not
-reduced.
-
-The scattered "btf_id == *" will remain as long as it is necessary for
-the verifier to do certain checks or other work depending on the
-kfunc. Whether it's an array lookup, helper call or anything else in
-the condition, the condition must be there. Refactoring can't reduce
-this complexity, without changes in the verifier control flow.
-
-> 
-> ****** Purpose 4 ******
-> 
-> It pushes us to untangle messy verifier safety cases and make them modular,
-> so they can be expressed as parameters to BPF_VERIF_KFUNC_DEF
-
-Again, I agree with the premise that verifier safety checks could
-become more modular where possible. But I think we should first
-separate two questions:
-
-1. What kfunc properties should be declared centrally?
-2. Where that declaration should live?
-
-While I'd like to answer (1) with "all of them", I am not convinced
-the answer to (2) is .BTF_ids or BTF. A better C side declarative
-representation would give us most of the benefit here without making
-the BTF tooling more complex.
-
-Here is how I think we should move forward:
-
-  1. Your bpf_list_* work is orthogonal to BTF_ID refactoring, so it's
-  reasonable to first focus on landing it without changes to generic
-  kfunc handling.
-
-  2. I plan to send patches (soon) for resolve_btfids, and then for
-  BTF_ID macrology to eliminate the enum + array pattern. You are
-  welcome to join the discussion and review / test the patches.
-
-  3. After all of the above lands, we can come back to the general
-  BTF_ID / kfunc handling discussion. If you are interested in
-  developing this further, I suggest to re-think the approach and come
-  up with a "single kfunc metadata definition" that doesn't require
-  significant changes in .BTF_ids section layout.
-
-A slightly off-topic comment: the usage of `_impl` pattern for kfuncs
-should be considered deprecated. Any new kfuncs that work with
-verifier-supplied arguments should use KF_IMPLICIT_ARGS mechanism.  So
-the `bpf_list_add_impl` in your seires should only have one version:
-`bpf_list_add` marked with KF_IMPLICIT_ARGS flag.
-
-Thanks,
-Ihor
-
-
-> 
->> [...]
-> 
-
+1. The (advanced) hypervisor can advertise to the guest (via CPUID bit
+or MSR bit) that the short BHB clearing sequence is adequate. This may
+mean either that the VM will only be hosted on pre-Alder Lake hardware
+or that the hypervisor will set BHI_DIS_S behind the back of the
+guest. Presumably, this bit would not be reported if BHI_CTRL is
+advertised to the guest.
+2. If the guest sees this bit, then it can use the short sequence. If
+it doesn't see this bit, it must use the long sequence.
