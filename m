@@ -1,111 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49983B389F;
-	Tue,  7 Apr 2026 11:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849033A7827
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 12:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775563019; cv=none; b=CX3ei+t/KiNr5FOiA20SJGroXUHt3TUXWQJv6Fe2BziKSkpeXZ86apqRgRuT1DjbX4PTKtQWIhYKgFVETUnkFvsvh6UJUz6jSJ2nk+AtqE0KDgXZBKVVP3fztA2wrDMKOqdTyfBCyDFjKCb0C8umZtUgErHT4EeGH5GeXSS0HvM=
+	t=1775564643; cv=none; b=XpDbmNKaSHUlGE9ir/i6LA4iGOD0h0/EtbfnuuICzMjcrQSPlObdRWZj5wUfTYAya6XGApWe8pGxhfgIB7Z5MgZwQUZFlCP8gMSm+S54fNn5Izmt/ZqaQxcm9vkjfOiw8ECp4/m1F0SAtygeD+fwG62ArnjHIvN75eSnZbECv0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775563019; c=relaxed/simple;
-	bh=DjpTMGM5uO8hDs4UwV0YSkNNsFqc8N3+IFh3c+GCsA8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qeW3cufQx+wVpdKhRugEF5Gxvscn5KAZiCpnMNcEQw7FrT1PfetR3UVBirP6o7YMKmFWrCXU0c082vsOFcsAw0uI6cpL9Y+izknvn0wr84IQoZPSciG2aawgreOzR1Bun1JyWer7BQA8ATdyRiJNzVqBGFQyfhFPdXcl2YMPPHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VwMX75Ei; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775564643; c=relaxed/simple;
+	bh=a9hyKY5spvWij0IgoVFNrQXeW2pmP5a3PGtD7rIUxMQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cPo2WZ3hH8Mn/Nf5NOygFrv2znfdr0hzDUO7gT529pfFboMyQNQ2Ithz7vLJvIqnDbzTgSBIU3vYps+BlYAyQ6MU9rODJBDauP2ndmmnTDJId8kIb1+1+rzn9p4UoFxfxQYblL9F3riqX9OPQWJWuQNsVvMHwNRDFYRtW2I9+AA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XWz9Tcjs; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VwMX75Ei"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F8DC116C6;
-	Tue,  7 Apr 2026 11:56:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775563019;
-	bh=DjpTMGM5uO8hDs4UwV0YSkNNsFqc8N3+IFh3c+GCsA8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=VwMX75EiQ8VP5x37sBDKUNK96v7LxQx89pf2ccNmoz6iIXkFNgFoHPkn9ydVWnSXw
-	 LUxb71StkEF+Tts8qdTddBI08PsiSFP1VLHDRRES2/2kVdFTrt1Fmel7rga7aS75pR
-	 ZMaEFHKOcZiBRgM8pAH8mpDHtPYkLjokbEfDsAic2o9kxNYLtutq+7xyLYZQlaZXSl
-	 bAS2RjoKh3HNaZOZJRNAVjnykEcVGMD/LWy9o3mhJPfpaDwo533UbaSY1y9Euj4BX9
-	 3HEdzqjlveQI8txJ1Q144fGfHqwrMphjnyG4utHSnapuqnWu8fh0gwUT/AIF/ORnhq
-	 3KvVSVYZRs0WQ==
-Date: Tue, 7 Apr 2026 12:56:55 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XWz9Tcjs"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775564630;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZRzvcqnuvpSHx+xb15S2TwtDUeBRFUSsWiRQyo3ePeA=;
+	b=XWz9Tcjsbqf2Y6dkritCsUEZBwtoCUNwFqd+iH+dCoFfslxKWA3Ezs632VTGmo+kxTi+Xt
+	MeaNAuhuVEw8cSpASRkTX0vSYA6nIWgtl2LAAjRHF09SKFTabIaqePii664O2uQr9KPgEw
+	T++fNsZm2+NNiSMS1kfgt4/EX7vKqZ8=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Quan Sun <2022090917019@std.uestc.edu.cn>,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Abhishek Dubey <adubey@linux.ibm.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: linux-next: manual merge of the bpf-next tree with the powerpc tree
-Message-ID: <adTxB7PjvXi5N4EB@sirena.org.uk>
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] bpf: Drop task_to_inode and inet_conn_established from lsm sleepable hooks
+Date: Tue,  7 Apr 2026 20:23:33 +0800
+Message-ID: <20260407122334.344072-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SbOp3luEpbBMMsdp"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+bpf_lsm_task_to_inode() is called under rcu_read_lock() and
+bpf_lsm_inet_conn_established() is called from softirq context, so
+neither hook can be used by sleepable LSM programs.
 
---SbOp3luEpbBMMsdp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 423f16108c9d8 ("bpf: Augment the set of sleepable LSM hooks")
+Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+Closes: https://lore.kernel.org/bpf/3ab69731-24d1-431a-a351-452aafaaf2a5@std.uestc.edu.cn/T/#u
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ kernel/bpf/bpf_lsm.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Hi all,
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 0e74325d96a61..c5c925f002021 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -359,8 +359,6 @@ BTF_ID(func, bpf_lsm_sb_umount)
+ BTF_ID(func, bpf_lsm_settime)
+ 
+ #ifdef CONFIG_SECURITY_NETWORK
+-BTF_ID(func, bpf_lsm_inet_conn_established)
+-
+ BTF_ID(func, bpf_lsm_socket_accept)
+ BTF_ID(func, bpf_lsm_socket_bind)
+ BTF_ID(func, bpf_lsm_socket_connect)
+@@ -381,7 +379,6 @@ BTF_ID(func, bpf_lsm_syslog)
+ BTF_ID(func, bpf_lsm_task_alloc)
+ BTF_ID(func, bpf_lsm_task_prctl)
+ BTF_ID(func, bpf_lsm_task_setscheduler)
+-BTF_ID(func, bpf_lsm_task_to_inode)
+ BTF_ID(func, bpf_lsm_userns_create)
+ BTF_ID(func, bpf_lsm_bdev_alloc_security)
+ BTF_ID(func, bpf_lsm_bdev_setintegrity)
+-- 
+2.43.0
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
-
-  tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-
-between commit:
-
-  66cad93ad325b ("selftest/bpf: Enable instruction array test for powerpc")
-
-=66rom the powerpc tree and commit:
-
-  99726ece0c8ad ("selftests/bpf: Enable test for instruction array on arm64=
-")
-
-=66rom the bpf-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-index 482d38b9c29e1,93166c2da8e7b..0000000000000
---- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-@@@ -3,7 -3,7 +3,7 @@@
-  #include <bpf/bpf.h>
-  #include <test_progs.h>
- =20
-- #if defined(__x86_64__) || defined(__powerpc__)
- -#if defined(__x86_64__) || defined(__aarch64__)
-++#if defined(__x86_64__) || defined(__powerpc__) || defined(__aarch64__)
-  static int map_create(__u32 map_type, __u32 max_entries)
-  {
-  	const char *map_name =3D "insn_array";
-
---SbOp3luEpbBMMsdp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnU8QYACgkQJNaLcl1U
-h9AFcgf/U/ypvZWPUaE38iCgcOr9D2sft431E5zVpFC9wMXs668d9GJOmE/1VuwO
-XL253BucFVhgYDo82OVwDzdRqeRcuTF68dvwkZKT8VrAaqrZPv/yEAsY13rHOnnB
-grhCgSmPIauCen0an6CPj9CS5s6+JMAOhMCvozwK/6HyAvHUffRnhteWW5LWkrlz
-QdfxbvkiBOykKudK+mAPKkscBo3HIQJh94tYYdaU8B1BkmT1QwhZGzHUzBR4NM6F
-naYv3V0cCgIRNJGzecDtAk1EiBZ9OQb+/C2rIAoefZBpnPC22Ri27E3rODwELTx1
-sqG8OGsPFLCfMNteGrk49svTpH//OA==
-=ELIP
------END PGP SIGNATURE-----
-
---SbOp3luEpbBMMsdp--
