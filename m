@@ -1,69 +1,96 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970EF37AA6D;
-	Tue,  7 Apr 2026 20:02:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE6D38911C
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775592175; cv=none; b=IJhctyRLGsFQm6wspPlOvDIxwoSAsj3VgKy1kSY/fgnVNeEnsGOkvJJRxgslBim/Bg+uu7HbBSJgGMKfLqSCAq/LGCvgMUG1yKYbKZZuSVzA84pybitk6d43c504ROGQ8Y/fRyEJCtOmpvoCTsJ9Q+qjgorVQC5hSsgd0pZPl44=
+	t=1775592177; cv=none; b=IkgmPJpD+ibJaJwVnlHTYBb970w39ELOJSSLyL0CVX6kUBBOBLh7ZzjjOdb6Ip7U8bsa42Vju4bUgiLpmJjiOCVAZ5AU9ndbZvxfahIzQFoqgxeYi69v/in0y7l0tW4CRJiGq97xdrNMah+Sxxfj/S/DjZIAiQlqaYF5iSH+c80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775592175; c=relaxed/simple;
-	bh=5H8uv55CdIEjsgjwTREHfEmz2xCo418XDDD+GfJSn5U=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KLpQ+UJiA1J2eeKeNcV8PyVvbhqrYk/xvIJuqbGvtlC0gxVgzq8RSse9UOZ9BV+3c8epEojkpabdl7Jx5+vfqnCbeUxEBah9OX7wmbnlp3MREZga2hVXuVXzDYnUb953BSqexpWy9NBr8j7Cmp8ERnz/etUaV/w6I5KKcgTpZcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JAOPmnft; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1775592177; c=relaxed/simple;
+	bh=CmtKHOc332qKALJYWCWgXBnvrRYVAERnFXRVui+qI44=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VLPho7HlTvKGO4fQuqI00PWyRHMgYDZiG5eDcAD82pHer5oU3abxW8i1kEPbOcGVh11EFDNPFnmCVWMxS1xH4sCZFjYAhPvnRSjToqauz6ISvPgi+csBh2cPOgCnRRKkkGR1BaqR1PJ09/pdUpVnvr7CeKqDI5PciU+l+k2X+B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OvRx75UH; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JAOPmnft"
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id EBE7020B712B;
-	Tue,  7 Apr 2026 13:02:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EBE7020B712B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1775592173;
-	bh=u74eADCno/AFCuSqkMUCWBI9VPUeluydwikYKABjQ0o=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=JAOPmnftYB4cDoh6bKZiS28PLKXxzTRtRiWSRDXFvyGL+jqNznHJVBO7zMEvg5NOj
-	 /+n3Fl3VNP65Ab9oyxuhz0GbezfiD+MkUFA/9Lc+2p16aXqcn/SMpkLP0S1109+voE
-	 oJZ2BvPw94pIL7xHvPbTmNzrbyJseydowOSsraB8=
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	leon@kernel.org,
-	longli@microsoft.com,
-	kotaranov@microsoft.com,
-	horms@kernel.org,
-	shradhagupta@linux.microsoft.com,
-	ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com,
-	linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org,
-	jacob.e.keller@intel.com,
-	leitao@debian.org,
-	kees@kernel.org,
-	john.fastabend@gmail.com,
-	hawk@kernel.org,
-	bpf@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvRx75UH"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-64fc6b21789so4075047d50.3
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775592175; x=1776196975; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cMKVwFWhx9p/bEmXNWYwd3ePZhFhwvaKwwQ8qBoxvaM=;
+        b=OvRx75UHfpBZZXZyBICCoXtAnF6tUkJpi66vOk/+BVVg27EvOn7C6o/cFjxwtCV9jV
+         91mNr3r8xmZns5taDG/hxzbLqACblWgu/FSx0tpVSFdGUYGZONAB4NFexRUYMFFcs12C
+         TDsFZWvMD/+T+cU6wMrw9I5l7PZoeAI2zo/ReJwE4ZLBcH1pOpe7+C01CGmn104blOk7
+         e/sLsPhXtGIkFFnVi3JTnrtonZ3DDke6QwPMiqZ83asCCjpvkLtKCX5WbPXYhA6zNdCS
+         9A82DqkuQgRV5tgeB582j+AbwPJKRg13dDIHEM7IciVSm3oZYCcNFs2yG8+8Pfcczn0l
+         9keA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775592175; x=1776196975;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cMKVwFWhx9p/bEmXNWYwd3ePZhFhwvaKwwQ8qBoxvaM=;
+        b=Mp331iJcKNC/3q5OAed1zyNedu/4XSIUkEwNvtwpVXxpb6PuPYiIXzB1Im4e2TC1Cw
+         ntlnJRYCBykxu54PqbLhqJCGvam+ZgsWfdRxMHmFaCWxa1HJ+T+Aa7i55VmQYcrUGFNv
+         jjQVz8Ng6VRNKPzjjwdxjSxcEW7FT5gQFjc9PSrlIK8yNvVDFRW9UkKnU70d5/37d77O
+         lmQ3yS/H/FoZR6IyMkWnBEZmGkHcn9veep80Qz2WJksj+7wSJzPyhKp4enwZJMSlM897
+         lYNb4qUtCnXGmQj1JxL1khQF5P1kBP3SVM9NOtVSRzhtoiaqEpVXWXYqcvhRzzEcmEyi
+         6B8g==
+X-Forwarded-Encrypted: i=1; AJvYcCUGF5kYTQFkdFwrbG3xBgnJa4Zruas2KtCi7P4QiaJa1XtYUiubzoS+39H1UjXsAIJBKM0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7RBJofcPyRBqkC4rHnnemLrT3xKbWK/i56FnXJDdfEAKUTKj4
+	kjcpn2EQuVAqh8IoVSPAy7L7bt2In5XUbRv6tMuVBVistV+YbX5yCDgs
+X-Gm-Gg: AeBDievKo+n3tVrs3V3XFInl+Iw7ooFO/G4aChvLPN/S8r+hMgccHzy/jViOO2r/EjF
+	nYONU6SP5SaqJyLtrGMYp1RTv+FZrMxEZbnWiD8fZ9llDg+0eK6YM9K5DAh9f2aqRu18dmfmlF/
+	RwbVKlOFnkqRYbo1DjliNvhpSs2ND1igAjJB9L6sQ4Pi2qaY4NaBqbG8m7ZYpIS43o7XjwDjosB
+	ovBpjsTsLInbvf1Vbh6ZyJCJrh1UaZ85iHysI2DRkjXHlIDrYMwlAZ5lp/w+lO0sQDOlK8iLAMb
+	WULkiMLLfNvJTYeYl78PNDkuWS86Qu0aEA5YHXCffucK22ycD+q9bvyDNIBweiL9NK+JJH+X+1p
+	oFVvVN9Av1Z8yR3UCgr1GvRjwKfhrnxfOk8O0riqt5hDij0kSswj34DJ9JpCxgy3gCmsi3RoLzU
+	Is02nDHrBLpjq9fDvNnMU+0v4FboiFtfhzkSxYOAg6eVNAIkEIgrt9i7ePH3xSWTP83p1GghPv
+X-Received: by 2002:a53:c709:0:b0:650:4a4:e0fe with SMTP id 956f58d0204a3-650488904fbmr12715781d50.66.1775592174870;
+        Tue, 07 Apr 2026 13:02:54 -0700 (PDT)
+Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:92f8:8594:e84e:1d9a])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6503a828f3csm8354078d50.3.2026.04.07.13.02.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 13:02:54 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: ast@kernel.org,
 	daniel@iogearbox.net,
-	ast@kernel.org,
+	andrii@kernel.org,
+	kpsingh@kernel.org,
+	paul@paul-moore.com,
+	mic@digikod.net,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	kees@kernel.org
+Cc: gnoack@google.com,
+	jack@suse.cz,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	martin.lau@linux.dev,
+	m@maowtm.org,
+	eddyz87@gmail.com,
+	john.fastabend@gmail.com,
 	sdf@fomichev.me,
-	dipayanroy@microsoft.com
-Subject: [PATCH net-next v6 2/2] net: mana: force full-page RX buffers via ethtool private flag
-Date: Tue,  7 Apr 2026 12:59:19 -0700
-Message-ID: <20260407200216.272659-3-dipayanroy@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
-References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
+	skhan@linuxfoundation.org,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [RFC PATCH 19/20] bpf: Document BPF_MAP_TYPE_LANDLOCK_RULESET
+Date: Tue,  7 Apr 2026 16:01:41 -0400
+Message-ID: <20260407200157.3874806-20-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260407200157.3874806-1-utilityemal77@gmail.com>
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,231 +99,202 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On some ARM64 platforms with 4K PAGE_SIZE, page_pool fragment
-allocation in the RX refill path can cause 15-20% throughput
-regression under high connection counts (>16 TCP streams).
+Document the BPF_MAP_TYPE_LANDLOCK_RULESET map type and explain the
+kfuncs it is associated with.
 
-Add an ethtool private flag "full-page-rx" that allows the user to
-force one RX buffer per page, bypassing the page_pool fragment path.
-This restores line-rate (180+ Gbps) performance on affected platforms.
-
-Usage:
-  ethtool --set-priv-flags eth0 full-page-rx on
-
-There is no behavioral change by default. The flag must be explicitly
-enabled by the user or udev rule.
-
-The existing single-buffer-per-page logic for XDP and jumbo frames is
-consolidated into a new helper mana_use_single_rxbuf_per_page() which
-is now the single decision point for both the automatic and
-user-controlled paths.
-
-Signed-off-by: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- drivers/net/ethernet/microsoft/mana/mana_en.c | 22 ++++-
- .../ethernet/microsoft/mana/mana_ethtool.c    | 89 +++++++++++++++++++
- include/net/mana/mana.h                       |  8 ++
- 3 files changed, 117 insertions(+), 2 deletions(-)
+ Documentation/bpf/map_landlock_ruleset.rst | 181 +++++++++++++++++++++
+ 1 file changed, 181 insertions(+)
+ create mode 100644 Documentation/bpf/map_landlock_ruleset.rst
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index 49c65cc1697c..59a1626c2be1 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -744,6 +744,25 @@ static void *mana_get_rxbuf_pre(struct mana_rxq *rxq, dma_addr_t *da)
- 	return va;
- }
- 
-+static bool
-+mana_use_single_rxbuf_per_page(struct mana_port_context *apc, u32 mtu)
-+{
-+	/* On some platforms with 4K PAGE_SIZE, page_pool fragment allocation
-+	 * in the RX refill path (~2kB buffer) can cause significant throughput
-+	 * regression under high connection counts. Allow user to force one RX
-+	 * buffer per page via ethtool private flag to bypass the fragment
-+	 * path.
-+	 */
-+	if (apc->priv_flags & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF))
-+		return true;
+diff --git a/Documentation/bpf/map_landlock_ruleset.rst b/Documentation/bpf/map_landlock_ruleset.rst
+new file mode 100644
+index 000000000000..90f3141a829b
+--- /dev/null
++++ b/Documentation/bpf/map_landlock_ruleset.rst
+@@ -0,0 +1,181 @@
++.. SPDX-License-Identifier: GPL-2.0-only
 +
-+	/* For xdp and jumbo frames make sure only one packet fits per page. */
-+	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc))
-+		return true;
++==============================
++BPF_MAP_TYPE_LANDLOCK_RULESET
++==============================
 +
-+	return false;
-+}
++``BPF_MAP_TYPE_LANDLOCK_RULESET`` is a specialized, array-backed map for
++holding references to Landlock rulesets that were created from userspace.
++It is meant to bridge BPF LSM policy selection with Landlock policy
++enforcement: userspace creates a normal Landlock ruleset, inserts its file
++descriptor into the map, and a BPF LSM program later looks up that ruleset and
++applies it with a Landlock kfunc during ``execve()`` preparation.
 +
- /* Get RX buffer's data size, alloc size, XDP headroom based on MTU */
- static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
- 			       int mtu, u32 *datasize, u32 *alloc_size,
-@@ -754,8 +773,7 @@ static void mana_get_rxbuf_cfg(struct mana_port_context *apc,
- 	/* Calculate datasize first (consistent across all cases) */
- 	*datasize = mtu + ETH_HLEN;
- 
--	/* For xdp and jumbo frames make sure only one packet fits per page */
--	if (mtu + MANA_RXBUF_PAD > PAGE_SIZE / 2 || mana_xdp_get(apc)) {
-+	if (mana_use_single_rxbuf_per_page(apc, mtu)) {
- 		if (mana_xdp_get(apc)) {
- 			*headroom = XDP_PACKET_HEADROOM;
- 			*alloc_size = PAGE_SIZE;
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-index a28ca461c135..0547c903f613 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
-@@ -133,6 +133,10 @@ static const struct mana_stats_desc mana_phy_stats[] = {
- 	{ "hc_tc7_tx_pause_phy", offsetof(struct mana_ethtool_phy_stats, tx_pause_tc7_phy) },
- };
- 
-+static const char mana_priv_flags[MANA_PRIV_FLAG_MAX][ETH_GSTRING_LEN] = {
-+	[MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF] = "full-page-rx"
-+};
++BPF programs cannot create, inspect, or modify Landlock policy through this
++map.  The looked-up object is exposed only as an opaque
++``struct bpf_landlock_ruleset`` reference.
 +
- static int mana_get_sset_count(struct net_device *ndev, int stringset)
- {
- 	struct mana_port_context *apc = netdev_priv(ndev);
-@@ -144,6 +148,10 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
- 		       ARRAY_SIZE(mana_phy_stats) +
- 		       ARRAY_SIZE(mana_hc_stats)  +
- 		       num_queues * (MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
++The map uses ``__u32`` keys as array indexes and stores one ruleset reference
++per slot.  Like other array maps, its size is fixed at creation time and its
++elements are preallocated.
 +
-+	case ETH_SS_PRIV_FLAGS:
-+		return MANA_PRIV_FLAG_MAX;
++Usage
++=====
 +
- 	default:
- 		return -EINVAL;
- 	}
-@@ -192,6 +200,14 @@ static void mana_get_strings_stats(struct mana_port_context *apc, u8 **data)
- 	}
- }
- 
-+static void mana_get_strings_priv_flags(u8 **data)
-+{
-+	int i;
++Kernel BPF
++----------
 +
-+	for (i = 0; i < MANA_PRIV_FLAG_MAX; i++)
-+		ethtool_puts(data, mana_priv_flags[i]);
-+}
++.. note::
++   This map type is only supported for BPF LSM programs.  In practice, it is
++   useful for sleepable BPF LSM programs attached to
++   ``bprm_creds_for_exec`` or ``bprm_creds_from_file``, because those are the
++   hooks where the associated Landlock kfuncs are available.
 +
- static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
- {
- 	struct mana_port_context *apc = netdev_priv(ndev);
-@@ -200,6 +216,9 @@ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
- 	case ETH_SS_STATS:
- 		mana_get_strings_stats(apc, &data);
- 		break;
-+	case ETH_SS_PRIV_FLAGS:
-+		mana_get_strings_priv_flags(&data);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -590,6 +609,74 @@ static int mana_get_link_ksettings(struct net_device *ndev,
- 	return 0;
- }
- 
-+static u32 mana_get_priv_flags(struct net_device *ndev)
-+{
-+	struct mana_port_context *apc = netdev_priv(ndev);
++bpf_map_lookup_elem()
++~~~~~~~~~~~~~~~~~~~~~
 +
-+	return apc->priv_flags;
-+}
++.. code-block:: c
 +
-+static int mana_set_priv_flags(struct net_device *ndev, u32 priv_flags)
-+{
-+	struct mana_port_context *apc = netdev_priv(ndev);
-+	u32 changed = apc->priv_flags ^ priv_flags;
-+	u32 old_priv_flags = apc->priv_flags;
-+	bool schedule_port_reset = false;
-+	int err = 0;
++   void *bpf_map_lookup_elem(struct bpf_map *map, const void *key)
 +
-+	if (!changed)
-+		return 0;
++Lookup returns a trusted pointer to an opaque ``struct bpf_landlock_ruleset``.
++The verifier treats the result as a referenced BTF object, not as a pointer to
++the raw ``__u32`` map value declared in the map definition.
 +
-+	/* Reject unknown bits */
-+	if (priv_flags & ~GENMASK(MANA_PRIV_FLAG_MAX - 1, 0))
-+		return -EINVAL;
++Each successful lookup acquires a ruleset reference.  The BPF program must
++release that reference with ``bpf_landlock_put_ruleset()`` on all paths after
++the lookup succeeds.
 +
-+	if (changed & BIT(MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF)) {
-+		apc->priv_flags = priv_flags;
++The returned pointer is intended to be passed to
++``bpf_landlock_restrict_binprm()``.  It is opaque and cannot be dereferenced
++or inspected from BPF.
 +
-+		if (!apc->port_is_up) {
-+			/* Port is down, flag updated to apply on next up
-+			 * so just return.
-+			 */
-+			return 0;
-+		}
++bpf_map_delete_elem()
++~~~~~~~~~~~~~~~~~~~~~
 +
-+		/* Pre-allocate buffers to prevent failure in mana_attach
-+		 * later
-+		 */
-+		err = mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
-+		if (err) {
-+			netdev_err(ndev,
-+				   "Insufficient memory for new allocations\n");
-+			apc->priv_flags = old_priv_flags;
-+			return err;
-+		}
++.. code-block:: c
 +
-+		err = mana_detach(ndev, false);
-+		if (err) {
-+			netdev_err(ndev, "mana_detach failed: %d\n", err);
-+			apc->priv_flags = old_priv_flags;
-+			goto out;
-+		}
++   long bpf_map_delete_elem(struct bpf_map *map, const void *key)
 +
-+		err = mana_attach(ndev);
-+		if (err) {
-+			netdev_err(ndev, "mana_attach failed: %d\n", err);
-+			apc->priv_flags = old_priv_flags;
-+			schedule_port_reset = true;
-+		}
-+	}
++Delete removes the ruleset reference stored in the selected slot and drops the
++map's own reference to that ruleset.
 +
-+out:
-+	mana_pre_dealloc_rxbufs(apc);
++Landlock kfuncs
++---------------
 +
-+	if (err && schedule_port_reset)
-+		queue_work(apc->ac->per_port_queue_reset_wq,
-+			   &apc->queue_reset_work);
++The map contains objects designed to work with the following Landlock kfuncs:
 +
-+	return err;
-+}
++.. code-block:: c
 +
- const struct ethtool_ops mana_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_CQE_FRAMES,
- 	.get_ethtool_stats	= mana_get_ethtool_stats,
-@@ -608,4 +695,6 @@ const struct ethtool_ops mana_ethtool_ops = {
- 	.set_ringparam          = mana_set_ringparam,
- 	.get_link_ksettings	= mana_get_link_ksettings,
- 	.get_link		= ethtool_op_get_link,
-+	.get_priv_flags		= mana_get_priv_flags,
-+	.set_priv_flags		= mana_set_priv_flags,
- };
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index 3336688fed5e..fd87e3d6c1f4 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -30,6 +30,12 @@ enum TRI_STATE {
- 	TRI_STATE_TRUE = 1
- };
- 
-+/* MANA ethtool private flag bit positions */
-+enum mana_priv_flag_bits {
-+	MANA_PRIV_FLAG_USE_FULL_PAGE_RXBUF = 0,
-+	MANA_PRIV_FLAG_MAX,
-+};
++   void bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset)
 +
- /* Number of entries for hardware indirection table must be in power of 2 */
- #define MANA_INDIRECT_TABLE_MAX_SIZE 512
- #define MANA_INDIRECT_TABLE_DEF_SIZE 64
-@@ -531,6 +537,8 @@ struct mana_port_context {
- 	u32 rxbpre_headroom;
- 	u32 rxbpre_frag_count;
- 
-+	u32 priv_flags;
++.. code-block:: c
 +
- 	struct bpf_prog *bpf_prog;
- 
- 	/* Create num_queues EQs, SQs, SQ-CQs, RQs and RQ-CQs, respectively. */
++   int bpf_landlock_restrict_binprm(struct linux_binprm *bprm,
++                                    const struct bpf_landlock_ruleset *ruleset,
++                                    __u32 flags)
++
++``bpf_landlock_restrict_binprm()`` applies the looked-up ruleset to the new
++program credentials that are being prepared for ``execve()``.  The ``flags``
++argument uses the same Landlock restriction flags as
++``landlock_restrict_self()``, including ``LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS``.
++When this flag is used from BPF, ``no_new_privs`` is staged through the exec
++context and committed only after exec reaches point-of-no-return.  This avoids
++side effects on failed executions or ``AT_EXECVE_CHECK`` while ensuring that
++the resulting task cannot gain more privileges through later exec transitions.
++
++Userspace
++---------
++
++bpf_map_update_elem()
++~~~~~~~~~~~~~~~~~~~~~
++
++.. code-block:: c
++
++   int bpf_map_update_elem(int fd, const void *key, const void *value, __u64 flags)
++
++Userspace populates the map by writing a Landlock ruleset file descriptor into
++the selected slot.  The map uses FD-array update semantics:
++
++- ``key`` points to a ``__u32`` array index.
++- ``value`` points to a ``__u32`` containing the ruleset file descriptor.
++- ``flags`` must be ``BPF_ANY``.
++
++The supplied file descriptor must refer to a valid Landlock ruleset.
++
++Userspace lookup of map contents is not supported for this map type.
++
++Example
++=======
++
++Kernel BPF
++----------
++
++The following snippet shows a sleepable BPF LSM program that looks up a
++ruleset, applies it during exec credential preparation, and releases the
++lookup reference.
++
++.. code-block:: c
++
++   struct {
++           __uint(type, BPF_MAP_TYPE_LANDLOCK_RULESET);
++           __uint(max_entries, 1);
++           __type(key, __u32);
++           __type(value, __u32);
++   } ruleset_map SEC(".maps");
++
++   SEC("lsm.s/bprm_creds_for_exec")
++   int BPF_PROG(apply_ruleset, struct linux_binprm *bprm)
++   {
++           const struct bpf_landlock_ruleset *ruleset;
++           __u32 key = 0;
++
++           ruleset = bpf_map_lookup_elem(&ruleset_map, &key);
++           if (!ruleset)
++                   return 0;
++
++           bpf_landlock_restrict_binprm(
++                   bprm, ruleset, LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS);
++           bpf_landlock_put_ruleset(ruleset);
++           return 0;
++   }
++
++Userspace
++---------
++
++The following snippet shows how to insert a previously created Landlock
++ruleset into the map.
++
++.. code-block:: c
++
++   int populate_ruleset_map(int map_fd, int ruleset_fd)
++   {
++           __u32 key = 0;
++           __u32 value = ruleset_fd;
++
++           return bpf_map_update_elem(map_fd, &key, &value, BPF_ANY);
++   }
++
++Semantics
++=========
++
++- Map creation requires ``CONFIG_SECURITY_LANDLOCK``.  Otherwise,
++  ``BPF_MAP_CREATE`` for this type fails with ``-EOPNOTSUPP``.
++- Map definitions use ``sizeof(__u32)`` for both keys and values because
++  userspace writes ruleset file descriptors into the map.
++- From BPF, only ``bpf_map_lookup_elem()`` and ``bpf_map_delete_elem()`` are
++  supported for this map type.
++- From userspace, insertion is done with ``bpf_map_update_elem()`` using a
++  Landlock ruleset FD.
++- The looked-up value is an opaque, trusted BTF object reference, so BPF must
++  treat it as a handle and release it with ``bpf_landlock_put_ruleset()``.
++- ``LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS`` on the BPF path pins the resulting
++   task with ``no_new_privs`` after exec is committed.  When used from
++   ``bprm_creds_from_file``, this does not retroactively suppress privilege gain
++   for the current exec transition itself.
++- If Landlock support is disabled in the running kernel, programs using the
++  associated Landlock kfuncs may still load, but the kfunc call returns
++  ``-EOPNOTSUPP`` at runtime.
++
++See ``tools/testing/selftests/bpf/progs/landlock_kfuncs.c`` for a complete
++example.
 -- 
-2.43.0
+2.53.0
 
