@@ -1,110 +1,176 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340A430C37C
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 14:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A220733A9FF
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 14:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775573240; cv=pass; b=GFKySqViVsD/hw028ouxrzLdNZEFDpzc2EXoerhbgzJIuX2Y9ZVlIFZ82ShzxNIxjufehHq3Whu/8LCxAWtVCMWt9te+EfxsFYwBxZ96g6GEQy0J79naszPBaXsxTx6p9Lxv+eBp+8jAJPr1VyLLK3/tl1T6S8V9VEV1iw4iYVY=
+	t=1775573454; cv=pass; b=QC7tBIYPMABeCXTeOgaHMQiDGOq62mQ/Ojkd7ilSlV5dgOJpSgmy5DkT7aYrnmnOPu2d8Z2WEov4zqZvhOmXcH5xHLNqGQX2sca7gKG0zQIJxRczsIaBDThRoAx/BhgDOgYu/SyY9iEHCmgch2g8PLB1Q27ndWCbiVGGCvL7QrI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775573240; c=relaxed/simple;
-	bh=OeEj/HXgik+5b8Gkgy3jnJFzvK2dtmMqmb+r6b1XYqI=;
+	s=arc-20240116; t=1775573454; c=relaxed/simple;
+	bh=hG/FTwzy/ZE2SWNV7WriQV09KuIc7XMwXJVmR4rclLA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AMf7hS18WnyYYVczAdOPh9yphgjQJQTFbwp3kwTedBI2ntfDHRzi840h8YnevQhR8WoBmPo6LPmrJuE4RHvFeymjc1nK9c5bl8rtQRsIoH/uaJGVjmSQGDndSIhAVrFxTPheX+XzyRKlrdt2j7InWR57Rgms5XO9hhjoUI2YQ/8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n8sRoLdb; arc=pass smtp.client-ip=209.85.221.45
+	 To:Cc:Content-Type; b=a19e23MceWP31juF8Gdz2EwUGsD134zSP75MKmbqcjl7TpQ5Nbhw0MhMHx7IS/7xWq7Vjsmf4BlPsvb83QDVn76ng2eb7cx+suDNeARxuqCHTrAzJUdS8GBy4p0rEwzgbc3VhRNtTLUlCM0SO3P969GeKacOyw0J6oVgfTXzfG0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IE0XifjP; arc=pass smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n8sRoLdb"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43cfde3c3f3so4959172f8f.3
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 07:47:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775573235; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IE0XifjP"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488af96f6b2so30108155e9.0
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 07:50:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775573451; cv=none;
         d=google.com; s=arc-20240605;
-        b=ctd/L4d/JaJjAk67iA5jHlJjQ8QdDvFTyD2/I2cg5VzACux81Hp1xpIq88eVRsp8Hy
-         Wv/m+601zXIox+wkTPWVPGCvozZJvq7bhvbQb6udPz1INRu3m0el2txgIUo+XtA9OGKo
-         PNd54uTEamttJD3umUKeo7W3P0Mtk3mTazRdB8m2ZxxeA7aUdxQ4WTLlsoSzY2vfl796
-         0HXY875lkZHtAjqpr3ArHUDdwF/gl1EPTHhUOfq5OyjOgX2q2/0He1x+zLrcMfXbXdc1
-         0MYIBSaIasjECGTCwWCmefE3m+aZCgv/a0kzHaVJXq5VVQHvSNM6f4XJFx3kjuWfV9zg
-         +orQ==
+        b=VsRKD7Sq96FReAFJinA1PMhjLsOsZlSdwJliWBz3GVCNSoqAs2pgizZEvO5X9Rsqhk
+         3auaP6Y2wntE48vYPAeJIbh2+wJZOrPjlie6pTFPhFnS7b8cfTz8Accc2XfEegS/JTE1
+         vXMM3X1ZeZaI6tr2zP0H/wncDDXXZB9B8/t4+66/+hF9SbRMl8I96IhwQSgf+RbTNEeu
+         Ti9YbYl1z0rZ5iFWzQojATWKzFucU/KVrHhCT0HjcGusJV2tHu1g8eEFO0AIlLd5PaX4
+         NtINwuMiYsaQUlLAjrgYStIvlID9GDp3csRQgvck40AAXv50x8xK7D7wGUHUnKRqH2FK
+         5nCg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=OeEj/HXgik+5b8Gkgy3jnJFzvK2dtmMqmb+r6b1XYqI=;
-        fh=DvfpQAslPAnWxc1IDBOleEEWAijd6ktW9U7o29Pf7Cg=;
-        b=TGr/PN+ZYXy6ExN+I9mhO/oXN5aVxJGrWr1mP1kTUep+bx5Tj8EcSBbKK50vFqavHf
-         Lv35INqhgAytxi4HkdZTlmoHsIM527cHhjqBpsZNPsTswNSguynjCXveelTxqcbI/nzg
-         /4QZ7MvMZ5RH4ZntplJaWfhJM+9kqFtNb7Um7x6i2o2CCK8znsNvPXa10KMZr/ql+rm3
-         2Q2nL743av9n1jLasrIwjG0ce6hCH3Vxg9rceyHek2hYGdLuYMMGkUsAS5157HGenz4a
-         pyYZByQt0oQ0H2yNqKzJKrExSJ69I5s62Th/cQM6d1aBd1Eb5Bo1T1iWtuXh0eKywXI7
-         ZFHg==;
+        bh=F43DvoPLQ89GUslUWbajzpb04hbr9eseroihgGmJ9Cc=;
+        fh=jYyNGIOWrhOeLf3d5GyCPlNdGdNW629kGq65oTvPEHU=;
+        b=YosphyR31d/YzNVYk89ME/ka+w/O/RuFVoIXNiMOIbm+xlZjDaJ95WElyV+l5tTTYC
+         l9wQ1QKq+YCxqeNRpAZr//94O7fDe9o7HW7WsWl0+lq5JstgZxpGzNcOy0TCPjNR/Cou
+         Badpo50bUIrxcgmy+cgBgAebdRwrthrt+948qYHIfwrcpA3s7IFsuYCc2OflWrx3H/DD
+         MTdKO6pv6AOGGXydQaxr3UVIbh1k+qQOU55Fy7z1veQzgKUF/f636L3t++t+xIAlxnj8
+         NzW33SydWO1V2189bErbKB4NMT02Utiia681OfDqnAS/o2NgigFLjDJW9QMxTJRBZkCC
+         n7eA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775573235; x=1776178035; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775573451; x=1776178251; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OeEj/HXgik+5b8Gkgy3jnJFzvK2dtmMqmb+r6b1XYqI=;
-        b=n8sRoLdbGYa2E6FSeh4l88AhfVwsCr+GqAFcl17NRsyxrYGWHg7oGJGl4JonMKEYAM
-         Q1GCLsTeYCVZ/9tiRbp+OuJHEq52aDGGZivtBQCXFGm2+ZRslM4ods4mB0cwZZadrzCw
-         kSLg0QFY7e7gQGuwJ5FhXQIq7aUFy8nTlx/SDs7/sdznNmB+2hFknDfMq3FWEUrla71C
-         55FBPCryNoaQ47QH+LgW0cQFmC7D5e8KiZ6APEgHxg9S8+nNb4auHG0wKIRJ7MzWvTVI
-         K7XHMaVJv0JuDXXS/7RseT9Z3spfEU+16cx1m30DWtp3KjGNftSvrbygn9u1Oz+TL1kU
-         HfMA==
+        bh=F43DvoPLQ89GUslUWbajzpb04hbr9eseroihgGmJ9Cc=;
+        b=IE0XifjPI6pCdNxwwaV2KCkBy1PDjBAazo7B4h6NEDEwSLml8mO6kvC7CG5PYXQIif
+         YntET/Kbc4f1VQtzRsAOH1QVSdJgjDeRBvWCyP4yEL8AREIrlBTAtAC23FqS9PrBWT/h
+         6S4jSG6KzBOBGCsizeG0RBmlRe/jjyzRCeWmmr+bbHS2FtUBhdQt1qyjXAmrO3E8vd5q
+         +VE+eAvZBOdNnjaWtB97OxBjfHcvfoiQnY6v7R6m88Ec9piMPlb82+C4RlHxpvtmk3Oh
+         wiveOzkYuMladuysL+GjZFG0zExGXCTRl4XWltdnAqAUUWt8w40VHF/E3HADIJSgcCLr
+         FwFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775573235; x=1776178035;
+        d=1e100.net; s=20251104; t=1775573451; x=1776178251;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=OeEj/HXgik+5b8Gkgy3jnJFzvK2dtmMqmb+r6b1XYqI=;
-        b=puxXiATymTdzmc+7lzDcJmM2V8DzRJOa2qDS6PPSJRYvzRZHCKRl7eBKGDGOlS7t25
-         +fS3zsy5R3rYrDZyexjOEeQ3lfnIrLOJdqVjpk3Iwt/eVZVyLagNC7hcRTx1ERgjNklM
-         MWDToyf7vTaDYjyzZNJ+TjjzJ7bPyRrxgN8+TOXy39CTkCWvKknJ+WgLHk5F+89Ueo+o
-         5So1WtbPNffkBDmY4Z9465H8QJmXJo3s2P74mDUT0aEI1TIzpFdyYdpEIRNaX7Ps3ZQo
-         xKRsPtuwy3OLhOXrIsi+5TiUHR37Ze6SuQ6WpsSdf30+i0pO3mKQTccRXJNO6L7wLLlV
-         vvxQ==
-X-Gm-Message-State: AOJu0YwqJa+F5zkUCQStVwINCXX0wmmeZh742fxL5nW7XmIJj6QtkpzZ
-	h+nB+glklKHSq1iyOdD/zel+z/xYGMxxf78/mzFE6HLi8FJfkSxvuBv0r4UiEhSfjojRtc8JXH4
-	e40nlP5iEQ8c/8a/QfRtklLIlAfpWkxs=
-X-Gm-Gg: AeBDieuvutk81MeaH6iVWXFIA+wxbH0sLT7d3bENDz4nLCTi0vnZ5A4BkctdRfS6eUr
-	H+qxRx6Fb+Fj/n/zeQnvPte0vQQ06yFY+rphx9Tm1SMi19+cKzEToKM2W21/lt26447YlB0JFg0
-	ZL3W+8yv7W/kr3s6QiN8XGQl/9T54dsNj5ZtdbP4FbhKZF0OVfMwoIE7DyJ6ObpdK8ah+Bbrhke
-	MvmeBgS4I49J6HgHCPhnqp76NsnUN6s8SNrCZwPr71Fl2ZgORrmiRuL3kh2OE7mnv9QWD3Pg22J
-	oXfdHT1V8T+aMmKCj/WV24zvPP2ZR/5TCoqxDm3a+YHgpeIVksjA4gikqwO8JvKJX5VceJ2mPO4
-	o6/g+lwm4+dvV+XEjS9N3A9Ga5w==
-X-Received: by 2002:a05:6000:e52:b0:43d:303f:f358 with SMTP id
- ffacd0b85a97d-43d303ff3c9mr14598152f8f.2.1775573235071; Tue, 07 Apr 2026
- 07:47:15 -0700 (PDT)
+        bh=F43DvoPLQ89GUslUWbajzpb04hbr9eseroihgGmJ9Cc=;
+        b=kZL0drwLaZK0dxMQjbat+3/wU39+YTRcyxnN5VGWZNKxwZ9uKeDl4J5JLhJ7FcZW/k
+         a+1++1OzoOYkO3D4x0a7umG5zuSdD0xJetYFbVP1NugfdgXGaPHQF97RR300fbobMElb
+         DaI2um7dIHEMYmsxTdlMuIbFJves4iXrNaAU5q/WJEYRnfVonlYFppQLHGSk0qr50/kg
+         +anXJaqHah81xSX7i3jDdIhK7BzXHo3d0dTWvENXAFxRKSRAW0SXhAcSuw5BS7Vp2TaS
+         QLIJQAxHEC3law6Y684vXXWtbDGZi3TsvHlptEqn1xiUgOcRPP9+hQLPDQTaB/z0M+Mz
+         TtZg==
+X-Forwarded-Encrypted: i=1; AJvYcCX05QzBdOmCR0R1/Yl7Q5vOPtTLt6+r+P+tlRyxVs2Hf3w8I3qLe2JGXGTouSv4T6MVjpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpSvYv4GBn0615I7WRvwZZzqb/vfgo2h+R63oEuPU8w8PS9puu
+	mIONo6uuOU/7y6I3DszcmJKn4n99Gh8iH8F0j8zr+/rm5zkLwmTicfp8QqgCJku2NL+pSyQ2WjH
+	cwefeIpQUywIcMnBtCHu1zYjh/Llh9dY=
+X-Gm-Gg: AeBDieuyJpIemMZJJtZJEYzTP/HVq65Vyts0G6qy/r93bRGyyWt5GYprZy1zbW3t+8W
+	QSngcXRMYqmg82YmxTi5e6rjj0uYnC72kWCT+60t/UeVfSLWQvtv8HRo8sdcv8BTrJmvFoUZAjQ
+	u1Ys3pLGky6Ku+dOWCqr5f7dGuLrZgchPjyzCD6MjqInY1StNsstjG4J9xD08hShORLRxHuex1U
+	qdIoluMvGLdFn/cgqQ9UM+mw3i7hqvpzeC1hfesfXez+NxjFcjN+glJvgI79h9KMQRghVavvVo/
+	zpwmt5Bg3PZieL4oo8PWNPYFoT6QtzjrbHbuJJBo2jwnytS+cplbvQaFS7Mv/v4XTAlVqHxVdEV
+	PMDAA4ihLbmr82seZgDdf7dBf4LUtlbZ7MAfb
+X-Received: by 2002:a05:600c:3f08:b0:485:40db:d40c with SMTP id
+ 5b1f17b1804b1-488996d2323mr285113035e9.3.1775573450574; Tue, 07 Apr 2026
+ 07:50:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260407060203.3391-1-adithalex29@gmail.com>
-In-Reply-To: <20260407060203.3391-1-adithalex29@gmail.com>
+References: <20260407-bpf_rcu-v1-1-fbc9398d05c5@debian.org>
+In-Reply-To: <20260407-bpf_rcu-v1-1-fbc9398d05c5@debian.org>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 7 Apr 2026 07:47:03 -0700
-X-Gm-Features: AQROBzDfw806rbk62zqGXz60VYbL74dh0suuu09-A-cSlhpc4P2RimlV4vGLOSY
-Message-ID: <CAADnVQJ5g8VKSiSLaN8KBSi3jZc0U4C-UEZeXrPVxF+ZMz6jZQ@mail.gmail.com>
-Subject: Re: [RFC bpf] Ingress RX queue provenance across cpumap redirect
-To: Adith-Joshua <adithalex29@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>
+Date: Tue, 7 Apr 2026 07:50:38 -0700
+X-Gm-Features: AQROBzDp9hrsf35BhvzwwyjXQEk6_grrb8c07DLrm0nLORrAsgPCMCgQlbwgd2Q
+Message-ID: <CAADnVQ+NBOORC510MWz1OAyWw=Xbg-LRYVFG56xR7BzH31VgfQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Fix suspicious RCU usage in LPM trie for sleepable programs
+To: Breno Leitao <leitao@debian.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Kernel Team <kernel-team@meta.com>, stable <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 6, 2026 at 11:02=E2=80=AFPM Adith-Joshua <adithalex29@gmail.com=
-> wrote:
+On Tue, Apr 7, 2026 at 3:48=E2=80=AFAM Breno Leitao <leitao@debian.org> wro=
+te:
 >
+> trie_lookup_elem() uses rcu_dereference_check() with
+> rcu_read_lock_bh_held() as the lockdep condition. This is insufficient
+> when the lookup is called from a sleepable BPF program, which holds
+> rcu_read_lock_trace() (via __bpf_prog_enter_sleepable) instead of
+> rcu_read_lock_bh(). With CONFIG_PROVE_LOCKING enabled, this triggers the
+> following warning:
 >
-> ## Follow-up
+>   WARNING: suspicious RCU usage
+>   kernel/bpf/lpm_trie.c:249 suspicious rcu_dereference_check() usage!
 >
-> If this aligns with intended design, I would be happy to explore a concre=
-te
-> proposal or implementation.
+>   rcu_scheduler_active =3D 2, debug_locks =3D 1
+>   1 lock held by .../...:
+>    #0: ffffffff86ca5bd8 (rcu_tasks_trace_srcu_struct){....}-{0:0},
+>        at: __bpf_prog_enter_sleepable+0x26/0x280
+>
+>   Call Trace:
+>    <TASK>
+>    dump_stack_lvl+0x69/0xa0
+>    lockdep_rcu_suspicious+0x13f/0x1d0
+>    trie_lookup_elem+0x99e/0x9d0
+>    bpf_prog_3980d36ecbef0e34_net_check_ip_pod+0x42a/0x510
+>    bpf_prog_57df4ce643736a70_enforce_security_socket_connect+0x3e9/0x69e
+>    bpf_trampoline_6442540179+0x60/0xf9
+>    security_socket_connect+0x25/0x80
+>    __sys_connect+0x15c/0x280
+>    __x64_sys_connect+0x76/0x80
+>    do_syscall_64+0xe6/0x930
+>
+> Use bpf_rcu_lock_held() instead, which checks all three RCU flavors
+> (regular, bh, and trace) and is the canonical helper for BPF map
+> operations.
+>
+> Fixes: 694cea395fded ("bpf: Allow RCU-protected lookups to happen from bh=
+ context")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+> I've hacked a reproducer for this issue, and it could be found at
+> https://github.com/leitao/linux/commit/59c83f313face36107ef1e8392e27b1cf4=
+887b70
+> ---
+>  kernel/bpf/lpm_trie.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+> index 0f57608b385d4..ac36063cb7e62 100644
+> --- a/kernel/bpf/lpm_trie.c
+> +++ b/kernel/bpf/lpm_trie.c
+> @@ -246,7 +246,7 @@ static void *trie_lookup_elem(struct bpf_map *map, vo=
+id *_key)
+>
+>         /* Start walking the trie from the root node ... */
+>
+> -       for (node =3D rcu_dereference_check(trie->root, rcu_read_lock_bh_=
+held());
+> +       for (node =3D rcu_dereference_check(trie->root, bpf_rcu_lock_held=
+());
+>              node;) {
+>                 unsigned int next_bit;
+>                 size_t matchlen;
+> @@ -280,7 +280,7 @@ static void *trie_lookup_elem(struct bpf_map *map, vo=
+id *_key)
+>                  */
+>                 next_bit =3D extract_bit(key->data, node->prefixlen);
+>                 node =3D rcu_dereference_check(node->child[next_bit],
+> -                                            rcu_read_lock_bh_held());
+> +                                            bpf_rcu_lock_held());
 
-No "follow up" please.
-STOP sending AI slop to the mailing list.
+This is not a fix.
+The issue is deeper than it looks. We discussed it before.
