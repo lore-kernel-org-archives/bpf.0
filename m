@@ -1,79 +1,80 @@
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87021FF7C7
-	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 22:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249B31FC0EA
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 22:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775599516; cv=pass; b=e19KDKTdZiAd3U9+wmz//dWHYZUDhrIW5iCzlGRRQnpjhv8ZM1y1Tg2F2pO057RG+zUUGdvekNbKzxu7HkKyO0modRJnGlTchlcyIynnx1TFVDAPPhddH9ADD+2oWYAR/gmoVY15q0G7Idv3jK6U5bKt+0zcVpJbFxiTrHvTSKg=
+	t=1775600046; cv=pass; b=Zw6h/p57jerHYXvCBgzE7n6BzmltmH8S2kgLrXpyP5zrE1zCKhXlndUlqrKLclj5G3ATFXNmFP0jQ8nCAPLk3BTD9yEqCAP6v0fs5aO/quMBkKdUdzXMOjmkmXdVVrmH6Ow6vnZvWKkVjS0BPQCUnmi0xVuErcYU9z3bMZEnpWA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775599516; c=relaxed/simple;
-	bh=ftZcV7D8Ek057KXt0Oty0jKypxQgXC3ue2II96u+Ceo=;
+	s=arc-20240116; t=1775600046; c=relaxed/simple;
+	bh=iaK6l0EdBauLQ3nTEzENIt+2mQg3t5tnQeAu7LUlX+E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VUIobK6hjRAN7CNvwECe/z1mC1KFSoh3RUU5W3vx1NOjCKiIiCSD2qFlYbxmP9l+Up8zYAkeaqtYOBFg4fts2K0PVh1SvFerVAobbweeneHyKv/NHdS6qLIDXd+fRXUjwvfpMaQ+1EpRThsq+FFXXhjLbKOi6dgqLHCQr0vI6aQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sCP8lPq4; arc=pass smtp.client-ip=74.125.224.44
+	 To:Cc:Content-Type; b=uXbcPGqN6SKw/z/26Koa5TmTo+q3th287VwoKPcUzTaBDrdQ7PzH2nFPgxdkWUU8TF0b6rHW+RkFkUVreLb/nMmNfV7bo1iaNpt2tmjTiX3gegUCuqyCkY09hs/UWw+krEMg7Z7ia6zHAK+Y9XckkPW6U+TNjvGIgY6OGtvcwuE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JikpQ66A; arc=pass smtp.client-ip=209.85.128.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sCP8lPq4"
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-6507a7d2eccso1488571d50.0
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 15:05:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775599514; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JikpQ66A"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-48897fd88ebso41947205e9.2
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 15:14:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775600043; cv=none;
         d=google.com; s=arc-20240605;
-        b=GmMlg7KxwaDoONIrrCOUqZGHYwfZbC2JEzJ0j2O9aOTpRcO8y0w3a3Ebqdd0+YG8cg
-         /0dS2k7tofvHiGYOTqQ9+RRcuJnaFQ39j79lXwFnXsj+Vn5wjP4T5pSR80IXgrDnILVQ
-         ssPdRiN2XdMcrCjGK9F4os35RTpyJIaNpG2THC6ovzx7wneMV7nFV6BKsZcbseqg9F0A
-         Xjat40vPortKN02UySTMbBxf+UCtl2PH/3sQouHeXyPh/eH5gKctmLhXcEwkJpDDjlBy
-         UK/fyv4V1LKU7pLAbR26n9DlRte4Du5lBDUXClyeO5q7HZGnVxNWgadCztp8CkzAmCKr
-         QqXg==
+        b=HxqZW3AdpT7oFiFVk50IkbKjsW6LBUPnyL97XHWnXDKaXA12yfmd5iWlkJLGdIQFBr
+         a1Pyb6vDa5bhzvWQitrwraqiwCZdEKRpkJO8dpHqzdxU5qPhIFurLh5Phhec955hFAaJ
+         5Tn6DjYyi9G91f3enyQSbCFy4M+VSzChGhjMW2mpL188EkeW/hTvZQOwhgAQxlL6qeJo
+         KGfObnzUsFKMfsh+ny03eLhf9HE8gxn+HaaWns3QLfgDoAaxaFCgY+1OPaCQb04yqir4
+         Dtz+ZYtK+qX5X6L4VLZ1ZjR892gBv6kX30I7HP/uam9rn70InZyaWGqqazEoy4dQPWbK
+         3Sdg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Y8Ze6clvoOTtMLHA0Sdwn9CeMweK46HxENJfnBo0yGc=;
-        fh=7urYeYDoZGf91sk50ANv6VVORwCwzZWZ0tRKLdy/zLE=;
-        b=lzjd5MBeIHNNjOZNF///qAN81WyQOfpsOhyQGi2HUSXgq5GqMelpnTUTKVw1n6I09/
-         qnx341X8i2QYmC79jbiGvQ8J5jDw57yLnUKSUa/PSky3jU8DnIdDFoLAhC7qvw3wmYwJ
-         Nxqgu+nYfURNURYsfaLEaMvmRteo3cUrxvg6l1d0FR/pPAVrHyuLgDoRDkxxX9GkjXg/
-         x37Mp5qkR1cRyR84DSDhP/pyurRfz4tC5xhfsLT963qNm2sihr2VQaw+Ur9alwEL2clT
-         tY1qI0VTnax1ezoeKbNNluKFp9cMfT6eVYUl898o8Qh/3D66MgrBz2oFNZTpvn6blR/o
-         Cnfg==;
+        bh=nkJg2QWrRgji7lKDqipaGVZEawOkuFxxlijrZlKXzmo=;
+        fh=h9i0AYhqScJNeWFSYB4NklZgWOr8s4aSjIrHWmm91p8=;
+        b=b8euRszYe7oD126gZIYE08CDKMtOvmlASoumZbnNYJG2mxZnDuwhuG9N4EIsM7dXOz
+         w84YkNyj+GuRwgTgNudSJ8GuaTs+h0G7CQaSv0TXxyCE04t/+CJDU5aKJ2qNKcS4R/EH
+         jBxwUE2zB51Ailc/ceqO60N3KIkoMiXT49bUYba7O941O3y3w5xKmoyi4J1mEM3226VU
+         SNDOOr/h1QGY6E07Uc2jy7DDnA6k3m2moB9AMgtBkQSrkCadPjkYmgjreRG6VB9fZA7g
+         7335YVQCOd64w+6z++0PlZs7inqSD4y58pAKr5iJZd0aw70nCml3PB1pmhDkBqc229Kv
+         j5wg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775599514; x=1776204314; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775600043; x=1776204843; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y8Ze6clvoOTtMLHA0Sdwn9CeMweK46HxENJfnBo0yGc=;
-        b=sCP8lPq4dYZrG252OUG1Ua4HkaB5SqnEDbavB+WphqySjHUEJn/dD7TT/fKjx1hqOV
-         TaMV+mKfbzzQ/6MHVJzYIhPHgttk16p34HNEavoEIGPeXEPCgCTsIL0iInDHEuhGo37k
-         F1PykiS8QEbPb5b2wh9trMbZq/oBgpx8E9G6JpLf64riAv9vVhsKVTlD+gsC5G8C0kDR
-         wXENmLKiZLOxteLCM3JU1WQBTYfoDFSwCPatIzjjI8SeXm06EnhPRpgfkD4hPkCFEZwe
-         FqTd7gIzAcPTewYJdm2pGbaj6OisEYpRqpEhs5TNZVrMZPtEgiw7KtAgIEA+UVsTkVFI
-         lqIA==
+        bh=nkJg2QWrRgji7lKDqipaGVZEawOkuFxxlijrZlKXzmo=;
+        b=JikpQ66Aq4NVd74FkIWs5eKWDrNHxVxoj0oExzUmU1gi5TphB7H26U01mk1TC8AW1f
+         XTvSxWtKzcJVgrr9qiyon08aIUrfyem3XQHoFJZzdm2QBkidqlCaN8dk/or1DU1ir7vj
+         QxhzG4AniR+Z5UpsjH81iSarebW5EK3LvHwxy+/ejXyxhET3xB61WfK33N3mX0TWalZw
+         f9E+txv8A4NYtnsW6PEHAZlnGkJK1Oh3RQteDt1FTiUtGnk/yBYJYwxolThFn2vtmNCz
+         QKHRPU93mqeai3YqDQa/aOX9MYSPdrZEOYDMeXEt6bnBoqWI4UBOrI+fEncPPYc/NEe9
+         IlBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775599514; x=1776204314;
+        d=1e100.net; s=20251104; t=1775600043; x=1776204843;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Y8Ze6clvoOTtMLHA0Sdwn9CeMweK46HxENJfnBo0yGc=;
-        b=pytcYgHwFqQI2iuNjF1DOEC7r/aa5XPbQCVTS924XNV86MuznSOMXi1f2YI3BQS/ub
-         uxctzE0j8kABxzABwliDMGxjFHf2GHx7+G7EnZDVBPv7qYLl1N2x0d6iYmW2s52lfzar
-         NZ3nIZNShRuFc8b8i9x6l20vKCFMX6tGsjGcIp0UDGGIFB23GpYTcGr965qJ9c+Ip10c
-         PFGRnfS6qO9kzPloAPEssNC7BtZo5EGCW3K1oEUyyA/PAKajxzITHP3S7BJ3M9IZdR9b
-         DGCovcyVUhlp3ve+YW92qQUgjHQEmKieJ6HX0fvJm6VUFO4lud0R8B0UYfO16S5gmUxN
-         GvQQ==
-X-Gm-Message-State: AOJu0Yx9setvnc8ptvIr1SxZlMzg9RupIa/8h65Xg9htpTpPYZmuIx0K
-	nHpbYVz5Uzdmpk2znVoFKlMRQFcO1PZRftnux1sGApVOhlE771iuXYuOscxLiMJ2dNWJt+kauWv
-	YB/1RHF/BohsQK3CH2zBE3ZYa0IdoJZk=
-X-Gm-Gg: AeBDiev+7mAwMQIf11inn3p/eudJ7xlfQXua0Itg4XRZ1nG4odqsOs/Emm0ayXUN6qS
-	7ujG7OsJJIbBir6vOoK3Yn3QzNgMurPtJoaPVG29U36t6uYUmnQPCESTUqmIT5QVHEcID+h4Umi
-	reb2m51HDW4LgpijlARKpxhdQLjHoZ7T1I5nzbHe38r1WWXJ2oepRf+f5gD0T0RbTa6YvzNwLy0
-	6h0ZCsZqQ2Yy9wjHoqUj9Cud5dnhnkfgeb9p08Ok5B29LQae4Mr8cMcMw5Hq19q/fV1e8iZlqBH
-	jgOuzFU=
-X-Received: by 2002:a05:690c:7682:b0:79f:5904:767c with SMTP id
- 00721157ae682-7a4d5860742mr139917377b3.32.1775599513759; Tue, 07 Apr 2026
- 15:05:13 -0700 (PDT)
+        bh=nkJg2QWrRgji7lKDqipaGVZEawOkuFxxlijrZlKXzmo=;
+        b=JYhQnDpUv3Wf5KP9R81u4vC4QY7iWitH1zwvutHkWHTcypi/r3w3a81Uc5goUuggjo
+         4wFBjGPQ1PWPICqkCV2AZhEz1ZD47i0xoRp+/pb58yd/rFN9GoCMjBJHNAff2EFzMXNJ
+         OCkHTkSCGoah5CLyHJUudOmwex+4cmvkksC6Di51dlDbagwIxiX+P8uU/lJ12itgFt5Q
+         m8P0YLqklp4cw5cSIOHZl9syNC1zy24Dwztu5+I9WFKqF2rm4HJENwOunHL1tKEd2c5Q
+         sKJtqy7J5IXla08ekkRlcXzUS0qGT07S39Gygwn6AxSldJtxd3jpKzovjZny9+5wsJIv
+         uGNw==
+X-Forwarded-Encrypted: i=1; AJvYcCVQp13NkIYJMGGdkpFHAl2USYRf0P0swhdoDMk4C3Z1TEeimSfTU5GQIV83VY/ocuwGnl0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBaVEoXT7mrWs1/5hQc6LxP1WlRcplRGp+1uMdxzNw0M981g4e
+	IMiEs9dppBjMkns97GQUscOFBNbaxFraBmzFEtXuKnNAU8VA8xr5iwChjIxeWNWOUU/lH1I34cZ
+	loUTFk8kTozQzTP49gTzzv3jwGC5dReI=
+X-Gm-Gg: AeBDievOnLP+wPXMMfkqbUwknEL6XwGyv5LGOyNqRj8WGhaBeXRDkHeCLPos9yIXlVA
+	SBILYKwQlB1n/7Ea04q9z/SKLcfgh3HE6CnBIcDjWh7xO1aXUOgSPNutG0c4m9Y1jp7nz1qljDs
+	xWFJSjTyxI+cUgsOtPZinbtpjXvdSVz+QhSACXPcDHIjJy6UdHDmawVWSQ0hEilolbcow9tmxuc
+	FPGvWnxGmMfvtup8C/GUOSVx49ge21W8s4jfX6XyJta+AIufT9h7bm0378Y2m2bINVxPuvbhTxz
+	YZ1bS4R0ATYf2yftFL8JqEYMSHq9ThPbeqNQhbQ20vraYNpH9gVs3PH5QGllvolTk+6e7Kas
+X-Received: by 2002:a5d:5f48:0:b0:43c:f40f:6c91 with SMTP id
+ ffacd0b85a97d-43d29285606mr27805671f8f.10.1775600043381; Tue, 07 Apr 2026
+ 15:14:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,60 +82,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260406150548.1354271-1-ameryhung@gmail.com> <20260406150548.1354271-2-ameryhung@gmail.com>
- <CAADnVQKgKkyRfoFNSsCi3ykquzsO+-bZnvRO=V2LqyOMiB0ydQ@mail.gmail.com>
-In-Reply-To: <CAADnVQKgKkyRfoFNSsCi3ykquzsO+-bZnvRO=V2LqyOMiB0ydQ@mail.gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 7 Apr 2026 15:05:02 -0700
-X-Gm-Features: AQROBzDA4i8AiAgtekyR1hUboQAvhhWWiR9FkqkZdz9fdgQlWmcsn31pbP612wQ
-Message-ID: <CAMB2axM=ocGBkJ=UB0kcE+4MfYLUroR8G=ehr+00215aeG3EOQ@mail.gmail.com>
+ <CAADnVQKgKkyRfoFNSsCi3ykquzsO+-bZnvRO=V2LqyOMiB0ydQ@mail.gmail.com> <CAMB2axM=ocGBkJ=UB0kcE+4MfYLUroR8G=ehr+00215aeG3EOQ@mail.gmail.com>
+In-Reply-To: <CAMB2axM=ocGBkJ=UB0kcE+4MfYLUroR8G=ehr+00215aeG3EOQ@mail.gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 8 Apr 2026 00:13:27 +0200
+X-Gm-Features: AQROBzB1Pt5IAX123HngRh08i70yLOH0_T7hgOYAizDM9QmczXy3kDZMuXO7hio
+Message-ID: <CAP01T753d27xGfvow6G_DQq1nQS969NpQLeGbqeE_zwCD0XH0Q@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v1 1/2] bpf: Allow overwriting referenced dynptr
  when refcnt > 1
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eduard <eddyz87@gmail.com>, Kernel Team <kernel-team@meta.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
+	Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 7, 2026 at 2:27=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, 8 Apr 2026 at 00:05, Amery Hung <ameryhung@gmail.com> wrote:
 >
-> On Mon, Apr 6, 2026 at 8:05=E2=80=AFAM Amery Hung <ameryhung@gmail.com> w=
-rote:
+> On Tue, Apr 7, 2026 at 2:27=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > The verifier currently does not allow overwriting a referenced dynptr's
-> > stack slot to prevent resource leak. This is because referenced dynptr
-> > holds additional resources that requires calling specific helpers to
-> > release. This limitation can be relaxed when there are multiple copies
-> > of the same dynptr. Whether it is the orignial dynptr or one of its
-> > clones, as long as there exists at least one other dynptr with the same
-> > ref_obj_id (to be used to release the reference), its stack slot should
-> > be allowed to be overwritten.
+> > On Mon, Apr 6, 2026 at 8:05=E2=80=AFAM Amery Hung <ameryhung@gmail.com>=
+ wrote:
+> > >
+> > > The verifier currently does not allow overwriting a referenced dynptr=
+'s
+> > > stack slot to prevent resource leak. This is because referenced dynpt=
+r
+> > > holds additional resources that requires calling specific helpers to
+> > > release. This limitation can be relaxed when there are multiple copie=
+s
+> > > of the same dynptr. Whether it is the orignial dynptr or one of its
+> > > clones, as long as there exists at least one other dynptr with the sa=
+me
+> > > ref_obj_id (to be used to release the reference), its stack slot shou=
+ld
+> > > be allowed to be overwritten.
+> > >
+> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> > > ---
+> > >  kernel/bpf/verifier.c | 23 +++++++++++++++++++++--
+> > >  1 file changed, 21 insertions(+), 2 deletions(-)
 > >
-> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > ---
-> >  kernel/bpf/verifier.c | 23 +++++++++++++++++++++--
-> >  1 file changed, 21 insertions(+), 2 deletions(-)
+> > Why ?
+> > I understand that it's ok to allow, but the features
+> > adds more verifier complexity and more things to worry
+> > about in the future?
+> > What's wrong with disallowing?
 >
-> Why ?
-> I understand that it's ok to allow, but the features
-> adds more verifier complexity and more things to worry
-> about in the future?
-> What's wrong with disallowing?
+> The current limitation seems a bit arbitrary and adds more complexity
+> to the mental model of dynptr object relation (some dynptr slots can
+> be overwritten but some cannot).
+>
+> Actually I think about it again, the check here may not be necessary
+> at all (like below). Even if a referenced dynptr and all its clones'
+> stack slots are overwritten, the verifier should still reject the
+> program and report reference leak.
+>
 
-The current limitation seems a bit arbitrary and adds more complexity
-to the mental model of dynptr object relation (some dynptr slots can
-be overwritten but some cannot).
+That's true, but when we last addressed this, the message was kept
+here early to make the error easier for the user to comprehend.
+Keeping it here was preferable to showing "Unreleased reference" at
+the end of the program, which is inevitable once all references are
+overwritten.
 
-Actually I think about it again, the check here may not be necessary
-at all (like below). Even if a referenced dynptr and all its clones'
-stack slots are overwritten, the verifier should still reject the
-program and report reference leak.
 
--        if (dynptr_type_refcounted(state->stack[spi].spilled_ptr.dynptr.ty=
-pe))
-{
--               verbose(env, "cannot overwrite referenced dynptr\n");
--               return -EINVAL;
--        }
+> -        if (dynptr_type_refcounted(state->stack[spi].spilled_ptr.dynptr.=
+type))
+> {
+> -               verbose(env, "cannot overwrite referenced dynptr\n");
+> -               return -EINVAL;
+> -        }
