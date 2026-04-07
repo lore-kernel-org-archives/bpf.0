@@ -1,254 +1,139 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559B35733E;
-	Tue,  7 Apr 2026 20:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775594431; cv=none; b=OeW5YCTigpIGqbng9Y0xkZNzG6XMIt6AmIcIVULzBPKeDmtgjgzhnYRNr+99jFODN6jpZO/mnruiB2Nvd5DZwRprT35Xt831IM7CT5ezb8cfrIjHFUo/i3flVKOQCylBaS4WgV1uDrIhjZMHw3ZgmdFNbJB9AMl07kIt96oLHu8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775594431; c=relaxed/simple;
-	bh=vyMq0u2rGMtvlqhSUVN3PMQzZqLQi4uPFh6854qWLHw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NLu61ftsXS3awhODqk9tMbeEqyAGhC8oWRbUoPrYrRGfLJiX0ux4lbwQ7JVVPxcUkoGG+0hWko2A7A6wCQikB+uN5b+YBiyVf9rqOW5nbOO5aV1Rc+PhQVVKtdirFycFVMgopgT7P9ykeKDfFx+ph3bz+9loc9hxFSC7HNv3Sng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=qs0DZeRk; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB4033B6C6
+	for <bpf@vger.kernel.org>; Tue,  7 Apr 2026 20:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775595224; cv=pass; b=Mai597PLECBy3VZU5P5ZILShyu3vQy3QktSI38qsUk7+jAfBWJFu74MoMZ6F3Wkdfk6TsN9TExum95+D7S5Z7TRS6Zmy9TfgJVaYswyEXCKSmMR+17Dh9AKmjM83s5jRWbnPF4XgEeDOtuPYws7IptY9ZCK78HXqYx4ZaxdjLAE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775595224; c=relaxed/simple;
+	bh=hAYL3ZhdW2F5eHwp+Hfkeql6tYPYXzmgecrqyASwpsk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ld/4/INuA4R5Ip0g09n7WZVch4FNiDg3RCcvKi81Nyi6qImXpGnXBhi4HZJjOF7yrUxSqzSGjQrGdV/pblkWyLC5dLx4Yb+fjrQMFP44gmLSAEuq+bWei+ZHffHBtEr6WgcLJ772c+5dKQ8xx+41goigx5X59CCe7fY2gbnSgTY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k4y/I/8V; arc=pass smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="qs0DZeRk"
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 637KGDqS3555466;
-	Tue, 7 Apr 2026 20:39:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=sEU01usxppBkpPJ0cwFxst4UqH9nWpfzWUk0/pg3RPo=; b=qs0D
-	ZeRkffVg5VlUu5dwkXuGFth4DL6owKFAkkUo7Ry9LWdpr1UQzkytfeTcstQCWhKt
-	lhVo2qLyT6CsvcLGvozUyYslmAzOeyGu3WwQIb9tc6kHJjnyxf41NvFIJIDtJ5ZG
-	0BZ/ZXmDOZZTHr4jf/ggBlx9W4Oz4wPREdlz1b7cGFZhOjaR+rALktIr8IgSKQsH
-	VUIHpkNljL5uUUy5//8orrILIw42LSRu3WwJBvT+vXhHwmnRfjDEL+oxcoqW28Up
-	BA22FBmq3WoeUTXaIk/Tr/1ezU03UZuEMr4rruamS9iPARJ49NvyDVSlNIBGyAZo
-	X527yP265C0OZP+e7A==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4dcmqgwhv6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 07 Apr 2026 20:39:17 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Tue, 7 Apr 2026 20:39:15 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <jolsa@kernel.org>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <ihor.solodrai@linux.dev>, <emil@etsalapatis.com>,
-        <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v7 2/2] selftests/bpf: Add tests for kprobe attachment with duplicate symbols
-Date: Tue, 7 Apr 2026 16:39:12 -0400
-Message-ID: <20260407203912.1787502-3-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260407203912.1787502-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260407203912.1787502-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k4y/I/8V"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-66ba6d3dab3so3426a12.0
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 13:53:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775595222; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CMXUKp76g3JVaeOx6jswVnZvIncRuLsJz7DtVEExZ0FvK5iv77PHUh6umrvszL5+dv
+         p5ptdptQ6arFr2Fkis4wqBJzg74HPaTHLdfwLZ+1mJKvHpptc6o8lRbsSgJbvzGBLE18
+         +1v4tlv92tg/kQvgmffSw1pr8MlJGi50E+sNY9pkcs1hiLQ7iOTA8vRJSNfpMyi5QSfT
+         T6t8/vHS8hCnQEeGglsj4QwPsdIDsknXHxHdrX3tluQQVii6b91N7J5BLbXNSDAkLOFC
+         ueDEXZz1799ztGsJUTJHCAu8k5QnbkPKufJH4T3BnF+Yh7B+EXddkEjjiVY/EdHI8PWF
+         6gmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hAYL3ZhdW2F5eHwp+Hfkeql6tYPYXzmgecrqyASwpsk=;
+        fh=N38sqqQrSWahC/H1vmEsugMGiQ9iFvbN92vhkry+KKA=;
+        b=UIpgHeQNilrC7bpjinuMgh3+kH9vcRTrmjoudNoStVEotXX1XFeHTp3Eo/Ibq+7bTB
+         SladpkdEis47VmwM1f/TYZkmAccMoMGYQTKszDWzHx9EV8MA60TUbQAKEhba8thUpCQ0
+         EMT9teXeRlE5jDGoNuXYZ+wvLozYAsmzzsIKMOspczMXHWC2aduOOPedcCmyxTkTFRCU
+         nksxqxzFq2RrOaE/RNKeaSUJdQ/dxes/mIunOr6fBnxfuOF5V1Wq4BNbFzguLxzVaORT
+         QHhywH5oaDLmvXa5NKLs+WnG4AhX5CvvdMKqKqBwQ2nbg2dMWmBxKZIVYPoY5vAkqfL8
+         QCSA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1775595222; x=1776200022; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hAYL3ZhdW2F5eHwp+Hfkeql6tYPYXzmgecrqyASwpsk=;
+        b=k4y/I/8V5zgfQhXndP3mWx4YnmDYDu6ou/59VoGIYXXs2IBQ+h8CshdHAniJdJPXMN
+         1w8q3lbA9SqF5FPPJFiAapFx5N+8JVxH1DET1hrLHy/B4rkJZqADEOClFmhk+vb6MWGm
+         2+3k1enRL9AxIMsZsREEWQbUkeY4gzAVKz6p/aUlF0nUpZ0UNvnG+f56ak+9X8Ku5Z2i
+         xEs69JLh9QMHFbg3VIWRzNRZlhQMtABwv+bbj3aSQWvE7Zjaaa9adHy7VKqhiKNYlgBo
+         eE98y7Wr1O3tMHDhNHSk2XdvSdXrGfX/pDeUSo6u6gzWe60JN9fraaBwNYmUnrm1+Ilt
+         lx/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775595222; x=1776200022;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hAYL3ZhdW2F5eHwp+Hfkeql6tYPYXzmgecrqyASwpsk=;
+        b=sD+WxnBu1xZiVdBYzmJlDH7jHm6NicG2jDPQZDN2Erc/e5In2+Peo5iImKLxcpo3Ws
+         zW0yuyvQeDOpj3qqs/jMKpYpU0B69PQ6mANlJnZvvQvSjD0n1fs4wNIJJSluIJYmrhE2
+         r50zazS8qelM8r0iOOL1QZnkfREKTpykov71IRVCjVkxnrb1g5vOUFOZE8A+GuWa8dh7
+         lhoLtPK57262hJKHtiJ/fEMip5Fya+zj5lHe8JXOr5G6j6q0f8KY9BZ0rZxOysDTOXN9
+         LY6Lseu/6aVEk/YvvbDVZMLuv/LzSjQSr/XCM8oArOiPkwFnzY5ESHtykMpQgOb9+GM3
+         /5Mg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+V1ogg3zz1aUiZw3uNtxuJ3hzxnvrwf7tVLj4eLHI8cOp0e8Bbyu5sX45iFs/5PspPHI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDIfGgUatkWY8kowXc9lMSWFpDkR19h1or5C9lrjKk3ffZbFvT
+	PH9FRNgLj2u7TigG0QjHyFwM9rf42dVRud3jk2F+9bV1C7WcA4kXmw8mxyzJg35FSrUBRjU7jf5
+	sWHNHphlusIYgG9vzGmQrqmKk4F9B4sqW7Z6t6lM2
+X-Gm-Gg: AeBDieu8rWo3MYphmFy+l4yxgVuPhdFJOaApI5SrS0fvN3AYn51gdY0RHK5mQicMIax
+	vtFe+olPhRcEthLpeIy9w3eEa9mqEmPtlxgSos3FCx5QJv9bxb/apJifWQeM0NhEk3MfhvhY4uv
+	lkEsbEZ1lOh4opS1RzhwjvN/6WgF0WhG6O3OAckuXjlgtRQ2dgAk24FZRZ2PwTw50nBRJ2LIzP7
+	TLPNBRQEmqYLLKBhXxq8HpMHIaOK/qDBPzUwljVVCawaWdWLqYDfNrMbVPtACHqcYzdSUt5ZS9g
+	dMdD4sc=
+X-Received: by 2002:a05:6402:5192:b0:66b:b6d8:c0f7 with SMTP id
+ 4fb4d7f45d1cf-66f9e8a747amr784a12.0.1775595221201; Tue, 07 Apr 2026 13:53:41
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA3MDE4OCBTYWx0ZWRfX0G0VfhGliqVw
- 9EPFuqqbye0wE+3Oy9FhMIF4FygS/iAvm42mL43Pf0/FhV1ReuvAsKCf+VOBv1Ze36yqN2nNfZA
- KZwwA3H+luvGLkJY9lVZUpnN8S1r2lsR/w4Hw7ObUwH/2tRGKMIO5LksUCDYZ5rc3SFAFIW2ozl
- M4+3pmcyX6rDJo2QbR1WMsCS7wYS/bYHC1DMqtxRjLXkKy7l+xR56SmZ5GmXT2K1xhQQlQ3bFJ7
- 6UdyZEYV8cwO4GKwfYrV+kK6dQgfgT1yjtyU7ybCEiEmFrwGA9dwRxlayLThtFmLey5mSBr2/aU
- 4O8NLuxozyrvL2bpCOjwo+zu2KgJlEkUWLFaBKeARYOUOKIJm7grc/XnyfhJBwtXlAS1AZ83FRY
- yvHC/70RJxWy0LSNZRqPePoJdS+eXz7cpJpeiQmHib/aAAjZV1K6Fd3New8ahcSHwadrsGfF1Dk
- GtmRGJE0+71aDNvjYhQ==
-X-Proofpoint-ORIG-GUID: MRESKq4OJim_uIyveiYDzC5a1qbOvzbI
-X-Proofpoint-GUID: MRESKq4OJim_uIyveiYDzC5a1qbOvzbI
-X-Authority-Analysis: v=2.4 cv=C87ZDwP+ c=1 sm=1 tr=0 ts=69d56b75 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=pl6vuDidAAAA:8
- a=r6pRkrkL-UdkepozQqsA:9
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11752
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 malwarescore=0 spamscore=0 impostorscore=0
- suspectscore=0 bulkscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604070188
+References: <20260403233329.fb2ppifgwm3um6ny@desk> <CALMp9eTpsenqsWjzmpXLEubn9uNjgZgzgrMwtZ72HDuV_2xgfg@mail.gmail.com>
+ <20260404002149.wtayv6a64vzuppgp@desk> <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
+ <20260404034954.t7iapenzvhdpagxp@desk> <CALMp9eR70eE2U63gzNzTiic0PqJVGv3CBBuVUOVbi3nqbWKZkQ@mail.gmail.com>
+ <20260407163943.y6tkh26z2rfktn3y@desk> <CALMp9eTA3cXxuOT4dq=6y1hx52gPH1ywwTEmPQ5-fA-vz6r3VQ@mail.gmail.com>
+ <20260407171151.2gf2idjbmph35ypb@desk> <CALMp9eRNVGFpzk_-ajQTuXadMtoY9H-ndUaz78wTT1zDYbTrPQ@mail.gmail.com>
+ <20260407191128.b2hr2ttkdpyunhrr@desk>
+In-Reply-To: <20260407191128.b2hr2ttkdpyunhrr@desk>
+From: Jim Mattson <jmattson@google.com>
+Date: Tue, 7 Apr 2026 13:53:24 -0700
+X-Gm-Features: AQROBzDTwGQS7R5PAsEU3h53Sr6ks4a8QPBLHblMF9o5FM5amaSGtHZz6ABr9Kk
+Message-ID: <CALMp9eTK0o7Z7-oTB8ohvmoh-vy-Y2qjdUvbqD6HaEhOEPZmhw@mail.gmail.com>
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, chao.gao@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-bpf_fentry_shadow_test exists in both vmlinux (net/bpf/test_run.c) and
-bpf_testmod (bpf_testmod.c), creating a duplicate symbol condition when
-bpf_testmod is loaded. Add subtests that verify kprobe behavior with
-this duplicate symbol:
+On Tue, Apr 7, 2026 at 12:11=E2=80=AFPM Pawan Gupta
+<pawan.kumar.gupta@linux.intel.com> wrote:
+>
+> On Tue, Apr 07, 2026 at 11:40:57AM -0700, Jim Mattson wrote:
+> > My proposal is as follows:
+> >
+> > 1. The (advanced) hypervisor can advertise to the guest (via CPUID bit
+> > or MSR bit) that the short BHB clearing sequence is adequate. This may
+> > mean either that the VM will only be hosted on pre-Alder Lake hardware
+> > or that the hypervisor will set BHI_DIS_S behind the back of the
+> > guest. Presumably, this bit would not be reported if BHI_CTRL is
+> > advertised to the guest.
+> > 2. If the guest sees this bit, then it can use the short sequence. If
+> > it doesn't see this bit, it must use the long sequence.
+>
+> Thats a good middle ground. Let me check with folks internally what they
+> think about defining a new software-only bit.
+>
+> Third case, for a guest that doesn't want BHI_DIS_S, userspace should be
+> allowed to override setting BHI_DIS_S. Then this proposed bit can indicat=
+e
+> that long sequence is required.
 
-In attach_probe:
-- dup-sym-{default,legacy,perf,link}: unqualified attach succeeds
-  across all four modes, preferring vmlinux over module shadow.
-- MOD:SYM qualification attaches to the module version.
-
-In kprobe_multi_test:
-- dup_sym: kprobe_multi attach with kprobe and kretprobe succeeds.
-
-bpf_fentry_shadow_test is not invoked via test_run, so tests verify
-attach and detach succeed without triggering the probe.
-
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- .../selftests/bpf/prog_tests/attach_probe.c   | 69 +++++++++++++++++++
- .../bpf/prog_tests/kprobe_multi_test.c        | 40 +++++++++++
- 2 files changed, 109 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 12a841afda68..e8c1a619e330 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -197,6 +197,66 @@ static void test_attach_kprobe_legacy_by_addr_reject(void)
- 	test_attach_probe_manual__destroy(skel);
- }
- 
-+/*
-+ * bpf_fentry_shadow_test exists in both vmlinux (net/bpf/test_run.c) and
-+ * bpf_testmod (bpf_testmod.c). When bpf_testmod is loaded the symbol is
-+ * duplicated. Test that kprobe attachment handles this correctly:
-+ * - Unqualified name ("bpf_fentry_shadow_test") attaches to vmlinux.
-+ * - MOD:SYM name ("bpf_testmod:bpf_fentry_shadow_test") attaches to module.
-+ *
-+ * Note: bpf_fentry_shadow_test is not invoked via test_run, so we only
-+ * verify that attach and detach succeed without triggering the probe.
-+ */
-+static void test_attach_probe_dup_sym(enum probe_attach_mode attach_mode)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct bpf_link *kprobe_link, *kretprobe_link;
-+	struct test_attach_probe_manual *skel;
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_dup_sym_open_and_load"))
-+		return;
-+
-+	kprobe_opts.attach_mode = attach_mode;
-+
-+	/* Unqualified: should attach to vmlinux symbol */
-+	kprobe_opts.retprobe = false;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						      "bpf_fentry_shadow_test",
-+						      &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_vmlinux"))
-+		goto cleanup;
-+	bpf_link__destroy(kprobe_link);
-+
-+	kprobe_opts.retprobe = true;
-+	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+							 "bpf_fentry_shadow_test",
-+							 &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe_vmlinux"))
-+		goto cleanup;
-+	bpf_link__destroy(kretprobe_link);
-+
-+	/* MOD:SYM qualified: should attach to module symbol */
-+	kprobe_opts.retprobe = false;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						      "bpf_testmod:bpf_fentry_shadow_test",
-+						      &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_module"))
-+		goto cleanup;
-+	bpf_link__destroy(kprobe_link);
-+
-+	kprobe_opts.retprobe = true;
-+	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+							 "bpf_testmod:bpf_fentry_shadow_test",
-+							 &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe_module"))
-+		goto cleanup;
-+	bpf_link__destroy(kretprobe_link);
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
-+}
-+
- /* attach uprobe/uretprobe long event name testings */
- static void test_attach_uprobe_long_event_name(void)
- {
-@@ -559,6 +619,15 @@ void test_attach_probe(void)
- 	if (test__start_subtest("kprobe-legacy-by-addr-reject"))
- 		test_attach_kprobe_legacy_by_addr_reject();
- 
-+	if (test__start_subtest("dup-sym-default"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_DEFAULT);
-+	if (test__start_subtest("dup-sym-legacy"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_LEGACY);
-+	if (test__start_subtest("dup-sym-perf"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_PERF);
-+	if (test__start_subtest("dup-sym-link"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_LINK);
-+
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
- 	if (test__start_subtest("kprobe-sleepable"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 78c974d4ea33..20ddff6812e9 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -633,6 +633,44 @@ static void test_attach_write_ctx(void)
- }
- #endif
- 
-+/*
-+ * Test kprobe_multi handles shadow symbols (vmlinux + module duplicate).
-+ * bpf_fentry_shadow_test exists in both vmlinux and bpf_testmod.
-+ * kprobe_multi resolves via ftrace_lookup_symbols() which finds the
-+ * vmlinux symbol first and stops, so this should always succeed.
-+ */
-+static void test_attach_probe_dup_sym(void)
-+{
-+	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
-+	const char *syms[1] = { "bpf_fentry_shadow_test" };
-+	struct kprobe_multi *skel = NULL;
-+	struct bpf_link *link1 = NULL, *link2 = NULL;
-+
-+	skel = kprobe_multi__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "kprobe_multi__open_and_load"))
-+		goto cleanup;
-+
-+	skel->bss->pid = getpid();
-+	opts.syms = syms;
-+	opts.cnt = ARRAY_SIZE(syms);
-+
-+	link1 = bpf_program__attach_kprobe_multi_opts(skel->progs.test_kprobe_manual,
-+						      NULL, &opts);
-+	if (!ASSERT_OK_PTR(link1, "attach_kprobe_multi_dup_sym"))
-+		goto cleanup;
-+
-+	opts.retprobe = true;
-+	link2 = bpf_program__attach_kprobe_multi_opts(skel->progs.test_kretprobe_manual,
-+						      NULL, &opts);
-+	if (!ASSERT_OK_PTR(link2, "attach_kretprobe_multi_dup_sym"))
-+		goto cleanup;
-+
-+cleanup:
-+	bpf_link__destroy(link2);
-+	bpf_link__destroy(link1);
-+	kprobe_multi__destroy(skel);
-+}
-+
- void serial_test_kprobe_multi_bench_attach(void)
- {
- 	if (test__start_subtest("kernel"))
-@@ -676,5 +714,7 @@ void test_kprobe_multi_test(void)
- 		test_unique_match();
- 	if (test__start_subtest("attach_write_ctx"))
- 		test_attach_write_ctx();
-+	if (test__start_subtest("dup_sym"))
-+		test_attach_probe_dup_sym();
- 	RUN_TESTS(kprobe_multi_verifier);
- }
--- 
-2.34.1
-
+That case can be handled by the paravirtual mitigation MSRs, right?
