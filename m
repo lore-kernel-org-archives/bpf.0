@@ -1,476 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D15EED8;
-	Wed,  8 Apr 2026 22:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775686375; cv=none; b=cDZmVuNpYzpk9VNU0ILQxcNWv+VvDRsL/xavOMXk44lH/P5VEM5JT5PM29xL/Pl9d4N5YFaEJ4aEEbmt9ZeIeniaZDdYJGWNIIpYeYCY6++QsuxPyc4rci//w8ekTE0O3yV3C2MgbJYVyiw80oqLoGIbjoWlWwmgpBvc4JQaBnE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775686375; c=relaxed/simple;
-	bh=kpfDRdBg+JA4L4Y74DwFMPETPgg4c1leB+nWLe4qro8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kp5iTe2Q1/gIu+faZceHMQmW1rZcEz0Yj5Ayr2Yzt5emFNLwyE7SKvneKgmsscM2sf/CD0nM6uVKioa8k1pQezJx2zwtCcAfv8Kjt/TsGKyGv7zKWuo/zjTLDvJQqccOVzn68DIhkcejEWZYO9TjK2V8zH1qmnYL9FI577ueFwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gZgV/xed; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD51F35AC3B
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 23:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775689577; cv=pass; b=YJ8ne/TSQSV4D5UvNOJo4+9nEfEZzrQ9sRVie0fqZo8yumN/GCbNTP5DV7aOwL0Pdv3+ZzDm4H984bVeoKvD4l0Q9fFZZsea4v2bQL9T6vmuWIY68sTnh9hV40obswpB2VNZZh4VWtfa/1H03qDI3XzAypTVqfa4FX+1Xuz8Y18=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775689577; c=relaxed/simple;
+	bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dHjkp0srlHRw68WnwAV36TT8uehl579lgHJb5E1sL/tyV50ATeOX3iEMrGJF8XABqXrEMifb9eV7ckuiYtOab9HHEgJUJ57WkhSJ6oDWSlKpQAxe8/lqfE+irTV5foVLAvmPX0w8DFVk6VY/CBRXbntPd5l3b4ui/wZJWYucc8Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhOQaNX0; arc=pass smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gZgV/xed"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00752C19421;
-	Wed,  8 Apr 2026 22:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775686375;
-	bh=kpfDRdBg+JA4L4Y74DwFMPETPgg4c1leB+nWLe4qro8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=gZgV/xedtuRb2ExiLa3JSK45QmxBtDEzKiY9RgTYL3GurqSj2MrfBiXPRRLs85Ulj
-	 AgSja+0dDq2xrDD2frHovX6+jBKLmzondxxyQXX7nntxwd8JoNJhWOeKs8tRygy19q
-	 Jw7Bhg2TJmyY8EKnYI7yvtjzwRl6VMEczIQ7/g8y5OVygVL+8FvgQN/k6axOdXsZ6l
-	 yn/UhkIWeOk6a2rGz45ENgr2yHDijeXJ0S6I+Op1pfyVSkOEJcHvBanrUUEw4jdnfq
-	 elLssA1iHU2IDchLiA4QLvcLWeFqSo1g8sWSucn+K6+vkSAtTez8h41IqCUe93Tm32
-	 ZD0bRLfcilC2Q==
-Date: Wed, 8 Apr 2026 15:12:51 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com,
- sdf@fomichev.me, john.fastabend@gmail.com, martin.lau@kernel.org,
- jordan@jrife.io, maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
- dw@davidwei.uk, toke@redhat.com, yangzhenze@bytedance.com,
- wangdongdong.6@bytedance.com
-Subject: Re: [PATCH net-next v11 03/14] net: Add lease info to queue-get
- response
-Message-ID: <20260408151251.72bd2482@kernel.org>
-In-Reply-To: <b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
-References: <20260402231031.447597-1-daniel@iogearbox.net>
-	<20260402231031.447597-4-daniel@iogearbox.net>
-	<20260407204017.3fc79d1b@kernel.org>
-	<b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhOQaNX0"
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5a3d42263e4so279588e87.2
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 16:06:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775689573; cv=none;
+        d=google.com; s=arc-20240605;
+        b=iw5QRH5fNRmmfnLal619kLnDkBbhw8qvvamb+4825mD925e7sn1eB/MQl2ejtLLtZb
+         c7c86eqigX2lKYQm+i1XQiv3FyHQ3OU8ae2D6uNKF2ZFH8npVoUzol8EuAEXdL+gCviO
+         rZlOAFHl4Wk8LwozZn8OI02/jvb+dQvJ0bO5AK/X3kutKBC9INBe90diK+dtqrDtRxf0
+         fNGBBsrvuABLdfNIsukAJ4+GASQjvZPZLd6B2I5oXGdiIj/04XoGstmbsYUfjpauae0M
+         mnh0zGJ6bXTogoaJCTG26qHxcBmoudsD71p5zpODfS7LlPz8Z9fwoCCmNVKIf7NR7MDi
+         kYZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
+        fh=rZTRStmJ77ZLW+bVKVzBpJzUHWeIXpmPIMDYZTGCzMQ=;
+        b=bBlQvaGVCJ9g8dbq8MdM3UytSdBQ+rkWOjkuUO0pLDRfaoXpmpxkLsJenkxeCUN6nf
+         mV713ROSlvOt3uoEaOW91KDHoEm+UJhi4o49ozoeGsOR2hRbIxhb+WaE8we/KsyP8jWB
+         bCgqyM+tyigylLgYuDW+zf/EukOAuuO+eEswFXwltKHXJG40dxo+b2a3zXglKvZ4pson
+         Dv1k/u6y5Vhfi/MHlPSzYhtyMASHA50F5/UoLfjMLGvHVIwAVT1lG5lir5gyS9sKvJN4
+         nXtvFuY6l3zi1CkNhbWvBOIFh68+Cj0DPoud26F4ZRk86paHbWYuS8KbE9l4znp4+ADk
+         tQtw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775689573; x=1776294373; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
+        b=fhOQaNX02gPoFdrlvbU9SpzwcfwU8wAES3XWx8gv6zy91sICkyiWXAtZw4XQooBleW
+         EbLTdCUFHmoodtytBNKqjEzSf3+s7e/FzND3S5OhLfepH/HIaHZu+PKBUhkRY2xUy67z
+         /SK3g9IAdrDFhKJ9/eGKVfwOmeyz5BL38gmHlKpLO4j2+QYd87rHyUcf15ecTBXT70He
+         8S9XzxjY1v+BcFOwgs2gml+zXwYIkFRV79KpTZGJTjP9Q3EOIun3F9H/HumbMDImUtH2
+         s0w9BrrxPGn2fPoI9PAkGPNw5EEzav9M3igffoPzCn5SprUXMvGM7l77THCj8rRRnRh6
+         zP9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775689573; x=1776294373;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
+        b=cVeUE+cQjECdF0H2pex81W3LbuAPBpgLkFiMjYeDRVGWw1yGcAW3VR8YKKr4HoXPms
+         /Q1Gz3xPZ/Q1Ve5KkMj/M6gcLpUTKBL0UqvJjGE6PaO6RrRrdGrCVV+ghpYGPY/dzC3b
+         DErgIALJLBZnz2594hvBSqOQ4jMUf5Ps8yi59kmji65sOUnUE2fjLXlSIPiCnjGk5Kjs
+         fzI2SOR4VPC3ANudZuGK9TXnlj3eiKTsmpesgykDZ5GEn8sOSQV6LYFV5Qz2hv+4AJLZ
+         SqQ1K8D/1U++XM8I126v40ftxUvE70qtmOkP9VWPGZWGf/jb3Z3Z+QqssewzAL4vRayv
+         fPcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWLoaNLL0Wo0K7P8ZYNr66ak/xMNUjDqi6MQmhj5dncZDJdJccKhotl4i4z1aJZDtaw3Dk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxiu4yCBgkJG/ls1E/JBPMG6waWI475c2eJ/HJoPVLLHFdDqamA
+	3f26RqaRzS2cuTvXZPpcRWFxMxR3dNcXrDYg5dOSSXrUOqOUtcVHuByfV2XcdX5MG1Rfd5wjLOH
+	Zp9swPhzwogXRWdUE42F85z+H1o0QTDs=
+X-Gm-Gg: AeBDievkPmrkj2GINLyXe9MY+38OT7aZeYKKeOeZTVGkYMQ58/pYcSU6WNoQFSawalr
+	aCGBmJdj71XqgxLjdHEYAdWKvCh/Zeygc/0bHlb+0g+nKI2/4RoWKBeeCX/uv6lKXFRWUtWQdup
+	OVO6mjzVqfBCsNw0ucl/iwRWVTPhkNgDrxc2zzIDdAOKjKGZA7u3F/06cP4GidgLX8jYySRPAdT
+	kpzNBDC+Fn9t0yeDAVQUpaEbwU5YerG/7XhhdljGDW/WJW/fv9yu4mMfO+095LASFWOmglah48b
+	vlbeAGk=
+X-Received: by 2002:a05:6512:2255:b0:5a3:ea23:9af8 with SMTP id
+ 2adb3069b0e04-5a3ea239d28mr12499e87.24.1775689572219; Wed, 08 Apr 2026
+ 16:06:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260404150452.83904-1-kerneljasonxing@gmail.com>
+ <20260404150452.83904-4-kerneljasonxing@gmail.com> <willemdebruijn.kernel.2ff565d2f9e7f@gmail.com>
+ <CAL+tcoB94=ptFB-acU3nAK_MqW74DV0MQUVvvV3nbQ7Zc6zSZw@mail.gmail.com>
+ <willemdebruijn.kernel.27ec47b22b23c@gmail.com> <CAL+tcoAvVBN7juJEBt5-FYQ4eGTe7dYrFbR3CMOwguw=_X=btA@mail.gmail.com>
+ <CAL+tcoCctfs=d9zz5ei1S999S94HmUDSToriZ8NJiLT8MmpQTA@mail.gmail.com>
+ <willemdebruijn.kernel.1b49845d3acc7@gmail.com> <CAL+tcoBt1A5GYFvimkcRFUtmy298y13AiF-XFF8b8E8Y6fg8Xw@mail.gmail.com>
+ <willemdebruijn.kernel.257654f9a3f23@gmail.com>
+In-Reply-To: <willemdebruijn.kernel.257654f9a3f23@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 9 Apr 2026 07:05:34 +0800
+X-Gm-Features: AQROBzDQgEI9lw5wbSyPTgXA2FWuJ-qBMbd5NRMWRIDCToG7zeyMq_VD-ECIWvg
+Message-ID: <CAL+tcoCx0fB-jsF3j03vFfhPDvO0T-B=FGzEgi4GE06Y_rjeMw@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 3/4] bpf-timestamp: keep track of the skb when
+ wait_for_space occurs
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, willemb@google.com, 
+	martin.lau@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>, Yushan Zhou <katrinzhou@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 8 Apr 2026 11:09:34 +0200 Daniel Borkmann wrote:
-> >> +void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
-> >> +				     struct net_device *dev)
-> >> +{
-> >> +	if (orig_dev != dev)
-> >> +		netdev_unlock(dev);
-> >> +}  
-> > 
-> > Pretty sure I already complained about these ugly helpers.
-> > I'll try to find the time tomorrow to come up with something better.   
-> 
-> Ok, sounds good. Happy to adapt if you find something better and then I'll
-> work this into the series, and also integrate the things mentioned in my
-> cover letter reply (netkit nl dump + additional tests).
+On Wed, Apr 8, 2026 at 11:15=E2=80=AFPM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
+>
+> > > > > Since we're modifying the kernel, how about adding a new member t=
+o
+> > > > > record sendmsg time which bpf script is able to read. The whole
+> > > > > scenario looks like this:
+> > > > > 1) in tcp_sendmsg_locked(), record the sendmsg time for each skb
+> > > > > 2) in either tso_fragment() or tcp_gso_tstamp(), each new skb wil=
+l get
+> > > > > a copy of its original skb
+> > > > > 3) in each stage, bpf script reads the skb's sendmsg time and the
+> > > > > current time, and then effortlessly do the math.
+> > > > >
+> > > > > At this point, what I had in mind is we have two options:
+> > > > > 1) only handle the skb from the view of the send syscall layer, w=
+hich
+> > > > > is, for sure, very simple but not thorough.
+> > > > > 2) stick to a pure authentic packet basis, then adding a new memb=
+er
+> > > > > seems inevitable. so the question would be where to add? The spac=
+e of
+> > > > > the skb structure is very precious :(
+> > > >
+> > > > Finding a suitable place to put this timestamp is really hard. IIRC=
+,
+> > > > we can't expand the size of struct skb_shared_info so easily since
+> > > > it's a global effect.
+> > > >
+> > > > I'm wondering if we can turn the per-packet mode into a non-compati=
+ble
+> > > > feature by reusing 'u32 tskey' to store a microsecond timestamp of
+> > > > sendmsg.
+> > >
+> > > Agreed that an extra field is hard. We should avoid that.
+> >
+> > Avoiding adding a new one makes the whole work extremely hard. I'm
+> > wondering since we have hwtstamp in shared info, why not add a
+> > software one for timestamping use? Then, we would support more
+> > different protocols in more different stages in a finer grain, which
+> > is a big coarse picture in my mind.
+>
+> I don't understand the need to store more data in the skb for BPF.
 
-Hi! How would you feel about something like the following on top?
+I see your point.
 
---->8----------
+>
+> With BPF hooks, the bpf program can record the relevant data directly
+> in a BPF map.
 
-net: remove the netif_get_rx_queue_lease_locked() helpers
+It works for sure, but, as I said previously, it's not an effective
+approach that can be used in production to run a 7x24 monitor.
 
-The netif_get_rx_queue_lease_locked() API hides the locking
-and the descend onto the leased queue. Making the code
-harder to follow (at least to me). Remove the API and open
-code the descend a bit. Most of the code now looks like:
+Either adding a new field or repurposing the tskey makes the whole
+logic/arch very simple. Being simple is being efficient and easy to
+use. Without changes like that, the performance of flows can get
+hugely affected just because of the monitor.
 
- if (!leased)
-     return __helper(x);
+>
+> > Adding a software bit will completely reduce the whole complexity and
+> > be very easy to use. Would you expect to see a draft by adding such a
+> > bit first?
+> >
+> > Or just like I mentioned, repurposing tskey seems an alternative,
+> > which, however, makes the new feature incompatible.
+> >
+> > >
+> > > If the purpose is to group skbs by sendmsg call (e.g., to filter out
+> > > all but the last one), it is probably also unnecessary.
+> > >
+> > > From a process PoV, since the process knows the sendmsg len and each
+> > > skb has a tskey in byte offset, it can correlate the skb with a given
+> > > sendmsg buffer.
+> > >
+> > > The BPF program is under control of a third-party admin. So that does
+> > > not follow directly. But it can be passed additional metadata.
+> > >
+> > > I thought about passing the offset of the skb from the start of the
+> > > sendmsg buffer to identify all consecutive skbs for a sendmsg call,
+> > > as each new buffer will start with an skb with offset 0 ..
+> > >
+> > > .. but that won't work as there is no guarantee that a sendmsg call
+> > > will not append to an existing outstanding skb.
+> >
+> > Right. TCP is way too complex and we indeed see some tough issues when
+> > trying to deploy the feature. So my humble take is to make the design
+> > as simple as possible.
+> >
+> > >
+> > > Anyway, the general idea is to pass to the BPF program through
+> > > bpf_skops_tx_timestamping some relevant signal , without having to
+> > > expand either skb or sk itself.
+> > >
+> > > I hear you on that measuring every skb is too frequent. But is callin=
+g
+> > > the BPF program and letting it decide whether to measure too? BPF
+> > > program invocation itself should be cheap.
+> >
+> > Oh, I was clear enough. Sorry. I meant tracing per skb is definitely
+> > an awesome way to go. My ultimate goal is to do so. Instead of letting
+> > people implement various fine grained bpf progs, we can provide a very
+> > easy/understandable/efficient approach with more samples. It should be
+> > very beneficial.
+> >
+> > >
+> > > If per-push is preferable, with a filter ability like the above, it
+> > > seems more useful to me already.
+> >
+> > Push-level is a compromise plan. Packet-level is what I always pursue :=
+)
+>
+> Then why not directly implement per-packet.
+>
+> If the BPF call is cheap and the BPF program can choose to selectively
+> track packets.
+>
+> Reminder that you do not want to break (BPF) users by changing
+> behavior. Let alone more than once. If per-push is going to be
+> obsoleted, skip ip entirely.
 
- hw_rxq = ..
- netdev_lock(hw_rxq->dev);
- ret = __helper(x);
- netdev_unlock(hw_rxq->dev);
+Understood. My initial version was just to try to solve the missing
+tag issues with the minimum change. You're right about the
+compatibility across kernels. Let's work on the ultimate plan then.
 
- return ret;
-
-Of course if we have more code paths that need the wrapping
-we may need to revisit. For now, IMHO, having to know what
-netif_get_rx_queue_lease_locked() does is not worth the 20LoC
-it saves.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- include/net/netdev_rx_queue.h |  5 ---
- net/core/dev.h                |  1 +
- net/core/netdev-genl.c        | 59 +++++++++++++++++----------
- net/core/netdev_queues.c      | 14 ++++---
- net/core/netdev_rx_queue.c    | 48 +++++++---------------
- net/xdp/xsk.c                 | 77 ++++++++++++++++++++++-------------
- 6 files changed, 111 insertions(+), 93 deletions(-)
-
-diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-index 7e98c679ea84..9415a94d333d 100644
---- a/include/net/netdev_rx_queue.h
-+++ b/include/net/netdev_rx_queue.h
-@@ -76,11 +76,6 @@ struct netdev_rx_queue *
- __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
- 			   enum netif_lease_dir dir);
- 
--struct netdev_rx_queue *
--netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq);
--void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
--				     struct net_device *dev);
--
- int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
- void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
- 			   struct netdev_rx_queue *rxq_src);
-diff --git a/net/core/dev.h b/net/core/dev.h
-index 95edb2d4eff8..376bac4a82da 100644
---- a/net/core/dev.h
-+++ b/net/core/dev.h
-@@ -101,6 +101,7 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
- 
- bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
- bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
-+bool netif_is_queue_leasee(const struct net_device *dev);
- 
- void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
- 			      const struct pp_memory_provider_params *p);
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 056460d01940..b8f6076d8007 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -395,8 +395,7 @@ netdev_nl_queue_fill_lease(struct sk_buff *rsp, struct net_device *netdev,
- 	struct netdev_rx_queue *rxq;
- 	struct net *net, *peer_net;
- 
--	rxq = __netif_get_rx_queue_lease(&netdev, &q_idx,
--					 NETIF_PHYS_TO_VIRT);
-+	rxq = __netif_get_rx_queue_lease(&netdev, &q_idx, NETIF_PHYS_TO_VIRT);
- 	if (!rxq || orig_netdev == netdev)
- 		return 0;
- 
-@@ -436,13 +435,45 @@ netdev_nl_queue_fill_lease(struct sk_buff *rsp, struct net_device *netdev,
- 	return -ENOMEM;
- }
- 
-+static int
-+__netdev_nl_queue_fill_mp(struct sk_buff *rsp, struct netdev_rx_queue *rxq)
-+{
-+	struct pp_memory_provider_params *params = &rxq->mp_params;
-+
-+	if (params->mp_ops &&
-+	    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
-+		return -EMSGSIZE;
-+
-+#ifdef CONFIG_XDP_SOCKETS
-+	if (rxq->pool)
-+		if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
-+			return -EMSGSIZE;
-+#endif
-+	return 0;
-+}
-+
-+static int
-+netdev_nl_queue_fill_mp(struct sk_buff *rsp, struct net_device *netdev,
-+			struct netdev_rx_queue *rxq)
-+{
-+	struct netdev_rx_queue *hw_rxq;
-+	int ret;
-+
-+	hw_rxq = rxq->lease;
-+	if (!hw_rxq || !netif_is_queue_leasee(netdev))
-+		return __netdev_nl_queue_fill_mp(rsp, rxq);
-+
-+	netdev_lock(hw_rxq->dev);
-+	ret = __netdev_nl_queue_fill_mp(rsp, hw_rxq);
-+	netdev_unlock(hw_rxq->dev);
-+	return ret;
-+}
-+
- static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
--	struct pp_memory_provider_params *params;
--	struct net_device *orig_netdev = netdev;
--	struct netdev_rx_queue *rxq, *rxq_lease;
-+	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
- 
-@@ -462,20 +493,8 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			goto nla_put_failure;
- 		if (netdev_nl_queue_fill_lease(rsp, netdev, q_idx, q_type))
- 			goto nla_put_failure;
--
--		rxq_lease = netif_get_rx_queue_lease_locked(&netdev, &q_idx);
--		if (rxq_lease)
--			rxq = rxq_lease;
--		params = &rxq->mp_params;
--		if (params->mp_ops &&
--		    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
--			goto nla_put_failure_lease;
--#ifdef CONFIG_XDP_SOCKETS
--		if (rxq->pool)
--			if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
--				goto nla_put_failure_lease;
--#endif
--		netif_put_rx_queue_lease_locked(orig_netdev, netdev);
-+		if (netdev_nl_queue_fill_mp(rsp, netdev, rxq))
-+			goto nla_put_failure;
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-@@ -493,8 +512,6 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 
- 	return 0;
- 
--nla_put_failure_lease:
--	netif_put_rx_queue_lease_locked(orig_netdev, netdev);
- nla_put_failure:
- 	genlmsg_cancel(rsp, hdr);
- 	return -EMSGSIZE;
-diff --git a/net/core/netdev_queues.c b/net/core/netdev_queues.c
-index 265161e12a9c..5597af86591b 100644
---- a/net/core/netdev_queues.c
-+++ b/net/core/netdev_queues.c
-@@ -37,18 +37,22 @@ struct device *netdev_queue_get_dma_dev(struct net_device *dev,
- 					unsigned int idx,
- 					enum netdev_queue_type type)
- {
--	struct net_device *orig_dev = dev;
-+	struct netdev_rx_queue *hw_rxq;
- 	struct device *dma_dev;
- 
- 	/* Only RX side supports queue leasing today. */
- 	if (type != NETDEV_QUEUE_TYPE_RX || !netif_rxq_is_leased(dev, idx))
- 		return __netdev_queue_get_dma_dev(dev, idx);
--
--	if (!netif_get_rx_queue_lease_locked(&dev, &idx))
-+	if (!netif_is_queue_leasee(dev))
- 		return NULL;
- 
--	dma_dev = __netdev_queue_get_dma_dev(dev, idx);
--	netif_put_rx_queue_lease_locked(orig_dev, dev);
-+	hw_rxq = __netif_get_rx_queue(dev, idx)->lease;
-+
-+	netdev_lock(hw_rxq->dev);
-+	idx = get_netdev_rx_queue_index(hw_rxq);
-+	dma_dev = __netdev_queue_get_dma_dev(hw_rxq->dev, idx);
-+	netdev_unlock(hw_rxq->dev);
-+
- 	return dma_dev;
- }
- 
-diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index 1d6e7e47bf0a..53cea4460768 100644
---- a/net/core/netdev_rx_queue.c
-+++ b/net/core/netdev_rx_queue.c
-@@ -57,6 +57,11 @@ static bool netif_lease_dir_ok(const struct net_device *dev,
- 	return false;
- }
- 
-+bool netif_is_queue_leasee(const struct net_device *dev)
-+{
-+	return netif_lease_dir_ok(dev, NETIF_VIRT_TO_PHYS);
-+}
-+
- struct netdev_rx_queue *
- __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
- 			   enum netif_lease_dir dir)
-@@ -74,29 +79,6 @@ __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
- 	return rxq;
- }
- 
--struct netdev_rx_queue *
--netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq_idx)
--{
--	struct net_device *orig_dev = *dev;
--	struct netdev_rx_queue *rxq;
--
--	/* Locking order is always from the virtual to the physical device
--	 * see netdev_nl_queue_create_doit().
--	 */
--	netdev_ops_assert_locked(orig_dev);
--	rxq = __netif_get_rx_queue_lease(dev, rxq_idx, NETIF_VIRT_TO_PHYS);
--	if (rxq && orig_dev != *dev)
--		netdev_lock(*dev);
--	return rxq;
--}
--
--void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
--				     struct net_device *dev)
--{
--	if (orig_dev != dev)
--		netdev_unlock(dev);
--}
--
- /* See also page_pool_is_unreadable() */
- bool netif_rxq_has_unreadable_mp(struct net_device *dev, unsigned int rxq_idx)
- {
-@@ -261,7 +243,6 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 		      const struct pp_memory_provider_params *p,
- 		      struct netlink_ext_ack *extack)
- {
--	struct net_device *orig_dev = dev;
- 	int ret;
- 
- 	if (!netdev_need_ops_lock(dev))
-@@ -276,19 +257,18 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
- 	if (!netif_rxq_is_leased(dev, rxq_idx))
- 		return __netif_mp_open_rxq(dev, rxq_idx, p, extack);
- 
--	if (!netif_get_rx_queue_lease_locked(&dev, &rxq_idx)) {
-+	if (!__netif_get_rx_queue_lease(&dev, &rxq_idx, NETIF_VIRT_TO_PHYS)) {
- 		NL_SET_ERR_MSG(extack, "rx queue leased to a virtual netdev");
- 		return -EBUSY;
- 	}
- 	if (!dev->dev.parent) {
- 		NL_SET_ERR_MSG(extack, "rx queue belongs to a virtual netdev");
--		ret = -EOPNOTSUPP;
--		goto out;
-+		return -EOPNOTSUPP;
- 	}
- 
-+	netdev_lock(dev);
- 	ret = __netif_mp_open_rxq(dev, rxq_idx, p, extack);
--out:
--	netif_put_rx_queue_lease_locked(orig_dev, dev);
-+	netdev_unlock(dev);
- 	return ret;
- }
- 
-@@ -323,18 +303,18 @@ static void __netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
- void netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
- 			const struct pp_memory_provider_params *old_p)
- {
--	struct net_device *orig_dev = dev;
--
- 	if (WARN_ON_ONCE(ifq_idx >= dev->real_num_rx_queues))
- 		return;
- 	if (!netif_rxq_is_leased(dev, ifq_idx))
- 		return __netif_mp_close_rxq(dev, ifq_idx, old_p);
- 
--	if (WARN_ON_ONCE(!netif_get_rx_queue_lease_locked(&dev, &ifq_idx)))
-+	if (!__netif_get_rx_queue_lease(&dev, &ifq_idx, NETIF_VIRT_TO_PHYS)) {
-+		WARN_ON_ONCE(1);
- 		return;
--
-+	}
-+	netdev_lock(dev);
- 	__netif_mp_close_rxq(dev, ifq_idx, old_p);
--	netif_put_rx_queue_lease_locked(orig_dev, dev);
-+	netdev_unlock(dev);
- }
- 
- void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index fe1c7899455e..616cd7b42502 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -31,6 +31,8 @@
- #include <net/netdev_rx_queue.h>
- #include <net/xdp.h>
- 
-+#include "../core/dev.h"
-+
- #include "xsk_queue.h"
- #include "xdp_umem.h"
- #include "xsk.h"
-@@ -117,20 +119,42 @@ struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
- }
- EXPORT_SYMBOL(xsk_get_pool_from_qid);
- 
-+static void __xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
-+{
-+	if (queue_id < dev->num_rx_queues)
-+		dev->_rx[queue_id].pool = NULL;
-+	if (queue_id < dev->num_tx_queues)
-+		dev->_tx[queue_id].pool = NULL;
-+}
-+
- void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
- {
--	struct net_device *orig_dev = dev;
--	unsigned int id = queue_id;
-+	struct netdev_rx_queue *hw_rxq;
- 
--	if (id < dev->real_num_rx_queues)
--		WARN_ON_ONCE(!netif_get_rx_queue_lease_locked(&dev, &id));
-+	if (!netif_rxq_is_leased(dev, queue_id))
-+		return __xsk_clear_pool_at_qid(dev, queue_id);
-+	WARN_ON_ONCE(!netif_is_queue_leasee(dev));
- 
--	if (id < dev->num_rx_queues)
--		dev->_rx[id].pool = NULL;
--	if (id < dev->num_tx_queues)
--		dev->_tx[id].pool = NULL;
-+	hw_rxq = __netif_get_rx_queue(dev, queue_id)->lease;
- 
--	netif_put_rx_queue_lease_locked(orig_dev, dev);
-+	netdev_lock(hw_rxq->dev);
-+	queue_id = get_netdev_rx_queue_index(hw_rxq);
-+	__xsk_clear_pool_at_qid(hw_rxq->dev, queue_id);
-+	netdev_unlock(hw_rxq->dev);
-+}
-+
-+static int __xsk_reg_pool_at_qid(struct net_device *dev,
-+				 struct xsk_buff_pool *pool, u16 queue_id)
-+{
-+	if (xsk_get_pool_from_qid(dev, queue_id))
-+		return -EBUSY;
-+
-+	if (queue_id < dev->real_num_rx_queues)
-+		dev->_rx[queue_id].pool = pool;
-+	if (queue_id < dev->real_num_tx_queues)
-+		dev->_tx[queue_id].pool = pool;
-+
-+	return 0;
- }
- 
- /* The buffer pool is stored both in the _rx struct and the _tx struct as we do
-@@ -140,29 +164,26 @@ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
- int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
- 			u16 queue_id)
- {
--	struct net_device *orig_dev = dev;
--	unsigned int id = queue_id;
--	int ret = 0;
-+	struct netdev_rx_queue *hw_rxq;
-+	int ret;
- 
--	if (id >= max(dev->real_num_rx_queues,
--		      dev->real_num_tx_queues))
-+	if (queue_id >= max(dev->real_num_rx_queues,
-+			    dev->real_num_tx_queues))
- 		return -EINVAL;
- 
--	if (id < dev->real_num_rx_queues) {
--		if (!netif_get_rx_queue_lease_locked(&dev, &id))
--			return -EBUSY;
--		if (xsk_get_pool_from_qid(dev, id)) {
--			ret = -EBUSY;
--			goto out;
--		}
--	}
-+	if (queue_id >= dev->real_num_rx_queues ||
-+	    !netif_rxq_is_leased(dev, queue_id))
-+		return __xsk_reg_pool_at_qid(dev, pool, queue_id);
-+	if (!netif_is_queue_leasee(dev))
-+		return -EBUSY;
-+
-+	hw_rxq = __netif_get_rx_queue(dev, queue_id)->lease;
-+
-+	netdev_lock(hw_rxq->dev);
-+	queue_id = get_netdev_rx_queue_index(hw_rxq);
-+	ret = __xsk_reg_pool_at_qid(hw_rxq->dev, pool, queue_id);
-+	netdev_unlock(hw_rxq->dev);
- 
--	if (id < dev->real_num_rx_queues)
--		dev->_rx[id].pool = pool;
--	if (id < dev->real_num_tx_queues)
--		dev->_tx[id].pool = pool;
--out:
--	netif_put_rx_queue_lease_locked(orig_dev, dev);
- 	return ret;
- }
- 
--- 
-2.53.0
-
+Thanks,
+Jason
