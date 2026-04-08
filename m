@@ -1,40 +1,40 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FD137B41E;
-	Wed,  8 Apr 2026 10:31:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A32D37F018;
+	Wed,  8 Apr 2026 10:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775644266; cv=none; b=i6nzqUmj83vSvdE7V+6Rx2osY5JamrI9qiHzKYtGL4Z18QCbh3CPeWxyMxXJcJGGk3nEEuc/I0MAuwy+vu/AgccU6xN5NSAbGFI8Ey1HjnoYwX4J9Xw4VFSWbxRxCZXRBUC/dFPdHn6k5O/sfpi4G1JxS/Gyj2h6ayBy08LPSDo=
+	t=1775644271; cv=none; b=IkcbT+IIlHJc2GJInzSWbdDDqLNoDxJqcUBsq3CJuikhKWdilyi8Uz4COgmXwG7XtTLrcZ2kRFOE8blzeY9RbjpGiO2EPlEALFllUHYevXpCv4/yn7BiNoT5Dfj35BDCI9dNuqpMYbn1FnqV/BYRN11iIfyjWNgOgCw696tanGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775644266; c=relaxed/simple;
-	bh=pOesKuhudD+8zt+CMHqClMhFbjEUPseOmhGjEs6pHgA=;
+	s=arc-20240116; t=1775644271; c=relaxed/simple;
+	bh=ob+hbsa5gaZ2FLIvbFGSmZclTDNKFYEONGlciwWTcrs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PDSrYoRSqnIYqwJFJlT4RvruCxmN1l3G3z6iBUNVKiy+hgLpE+tc26QPveyEEC43wJGxukgoGMugQyD/tW3h2ypY8lbwMR4sY8s3ZLtX1eGn3o8/KUwUaPpH/MBRktIrx2OSoFUb/Yw/qgz++/+8ncYzaegy3KCKX3Hq5xQ+NHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=HBw0OcFy; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=LrpCL7XlZQ+fi1wKpKbz2AAJU3Y0EHsOQuIbfoOyxMTuyt74Bow+hvHueheyGEi70FpwNo11DTAIOpvkoAb6bWHQEVk0SmfpBDKgm23O7y8T5yzrNoY6X72c53VmdnGX6WS5PetU9/DLV4b1DsHFbwwmuwklGDk7m3+PhouvLMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=LyZ4perh; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="HBw0OcFy"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="LyZ4perh"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=j3sXh234yYQ0MK964QNxt3wLmUNhN01YHWe58GIc47Q=; b=HBw0OcFyK3w38tJfgCBbhV/RnJ
-	2krVQYopG2iUZxJasZBE/Oy1P2bc2pq1RVhC3NkI4Qjo41BIMU9bQyLGHhw1vmwKbsYhWpn/hjF6F
-	y6W6K6kW2p2JqlMsn2HwN8igzEVShqgBAdVNkgFxnTYh0Wjm9PdUXihvxUBQsyMdoKqyJm0Ey90vq
-	+oeaiqKCPE5aXopag4E/KyB50MJbkNl9VVxVhXKZcTL6F35E48eBJ/z1dl9z5j2NX8t0xWv9+dIhu
-	KhpZoP0lSAxB9kn63EnIg6m8hz5XOiUywWUa81znIVP7DhEjgnFluC8YZ33+nqhC4FZC2slciV+eg
-	3uTjf2Gw==;
+	bh=PNxblEMqB4KhPBmYKCSvHUph+B8wcGo1Xxvt6/jg+/Y=; b=LyZ4perhYBsBCH2dGqGUqhVW8e
+	92+aodKcuukx6WcViZboHFXjpjfi/pRXXVPq0uRgNvyX70zqhpzn3avmKKG1wYptu54XyLb4YedRF
+	chXr1R8FwbPWuqWWP7Pl5WMg/3zgl7+sUrj04/FgZX5vrj4i5EWHJXM7pAwSDInIuprSqoHpCyHxV
+	xT9TrXRhmpWO9aIs2z9P1PHeZzoNu5UBTuYIVyw2EG7QQ6IT7cmsVdLuyZns+9Sv9TO7cJS2gM47u
+	gCAaNqgU5mxzLuD5YP0cG1P7kUxpLtUuxgGPInQmdBgkRX2Sg0VA8sbg8TKxA4zwHTWWRJTz4ypBY
+	RhJLZgQA==;
 Received: from authenticated user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wAQBR-008ME4-08;
-	Wed, 08 Apr 2026 10:30:53 +0000
+	id 1wAQBa-008MEP-1M;
+	Wed, 08 Apr 2026 10:31:02 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Wed, 08 Apr 2026 03:30:30 -0700
-Subject: [PATCH net-next v3 2/4] net: call getsockopt_iter if available
+Date: Wed, 08 Apr 2026 03:30:32 -0700
+Subject: [PATCH net-next v3 4/4] can: raw: convert to getsockopt_iter
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,8 +42,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260408-getsockopt-v3-2-061bb9cb355d@debian.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260408-getsockopt-v3-4-061bb9cb355d@debian.org>
 References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
 In-Reply-To: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -57,154 +57,131 @@ Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel-team@meta.com, 
  Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4599; i=leitao@debian.org;
- h=from:subject:message-id; bh=pOesKuhudD+8zt+CMHqClMhFbjEUPseOmhGjEs6pHgA=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1i5N/XtgR1BS+9k8hmc7RUdjCimv1CtkLELse
- /WYkEfGTSSJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadYuTQAKCRA1o5Of/Hh3
- bWDHD/4vlrMvc/oNjL5ysHzc/csEMzRjhtG1l+EOFABmIl07keWEhShr9wJsy/WZRqc3wrj44Yk
- 38biaVCH5H9U2hPc90nvi++9DmGjn9GK+KTVNxbrQ9wUWgZSv6K53zU/hVETjAQxtReWpMZbNrQ
- AuiuQEr9i7GnRBSt677xIj62uU/sUP9Z396AIvL7n4oDklkhNbxnB0lv+J1AAuHiBjgrfoImkvy
- kIWAZyu7PGH6CU4fb0rzLKH+7Sryd1BHte07qE1fyLqxj0lszVb+ovfzUt6pJNUw6tfAoggp/Yg
- n9R/691XFOUrUW6boaEzEayUGckwGwRomVo9eE2qT0DyJMkJH32JTvxXemeQkPG8kL2jW6HIpEE
- +Dg9512nFz7ih0tmM2IJCxEo9hGGCOatvIuPMHZ7udT9sQknnjVO+UaBK8U4D9OAoaPKFynj81e
- Tuf4IH6P5tKtQRAoEEDjJpykaYiyiunKVwPhD3EpYN6aarpGf/Xsg7a/0v2jTVDoxS7Jv6aDV4K
- nFpT4wpN1Gnv4JvwfN5qGDsItejRc29p5Ox6WnpUWJkcHo0d8+IkJQk8RZ89mg7G9PichhHsx6n
- b4q/vlIiu+OhITeq9v4iqEI1WzNN/vKGaRbGUAZYIUGJ9vJX47HcIkEgKIFjQDk/3wW5V10+SCu
- 5N2jGCaWY3mV0lQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3570; i=leitao@debian.org;
+ h=from:subject:message-id; bh=ob+hbsa5gaZ2FLIvbFGSmZclTDNKFYEONGlciwWTcrs=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1i5NKMEdYHx3wGg7Qa4vX7iAivyNKvTyGmjC/
+ 1MCC9Vd3omJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadYuTQAKCRA1o5Of/Hh3
+ bY5ID/0QQwWLPW/sgiLSkESx/sudB1CI0N5EBltNaZhMUyskNxF0k2Gw835et7QDMWgo2GzycUi
+ +SQUpbBYztTxkQgLa56yuW16T41e5VaKKTB4bj8e9MtLyTWn2gETp5/nt4E2i3aZPe3CeMR84wZ
+ kDgolqoOwr9qGyN26yEY+92W4E0XaOCI29AP2sxKOAIRBADKGIlaAfihBteN3lkg9i8iHIFltjF
+ NY1Xs+p5uhIKYFD7R4Wuj6YzCvWiio6SE+Rkbm7Gdz3wmwbMmqGcNvsoBUXq7ICG/38hduHtfzn
+ ZgfzPWuXsfLhi1N9/NGC8TKyl0OWADXgEjQFx++3KrHHGcv9ecY4DPB5lxFTf2sf1wGP8Zx0+lF
+ eOBrHWnK2i+6QpMRARyFP0jQqw9AXrciDxie5dEps42klrnIx9zufvK9bhPR4lnd1sl2thGot6o
+ Z0eafJOmoYBzZ/IixnFRGmAEp/K83CwUJit0k1AWMkDgnYHuKgJvW4IE22CHLT3Rz3omNbha1MW
+ q18Gaitf3kf4SHx54NXTNK5TVjSdIVPlRpsdpm1b2LT0UH789u3hbXHA2cRhs2JF8SgS9gAv0gQ
+ eVMrybya7ngENB/cSe1qhMu67Y/T55QRGwSakdtuIuc6E0DrovsSq3x7J9kbLKdT1NeHPuk773R
+ 7yleGiMqVR8laYw==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Update do_sock_getsockopt() to use the new getsockopt_iter callback
-when available. Add do_sock_getsockopt_iter() helper that:
+Convert CAN raw socket's getsockopt implementation to use the new
+getsockopt_iter callback with sockopt_t.
 
-1. Reads optlen from user/kernel space
-2. Initializes a sockopt_t with the appropriate iov_iter (kvec for
-   kernel, ubuf for user buffers) and sets opt.optlen
-3. Calls the protocol's getsockopt_iter callback
-4. Writes opt.optlen back to user/kernel space
-
-The optlen is always written back, even on failure. Some protocols
-(e.g. CAN raw) return -ERANGE and set optlen to the required buffer
-size so userspace knows how much to allocate.
-
-The callback is responsible for setting opt.optlen to indicate the
-returned data size.
-
-Important to say that  iov_out does not need to be copied back in
-do_sock_getsockopt().
-
-When optval is not kernel (the userspace path), sockptr_to_sockopt()
-sets up opt->iter_out as a ITER_DEST ubuf iterator pointing directly at
-the userspace buffer (optval.user). So when getsockopt_iter
-implementations call copy_to_iter(..., &opt->iter_out), the data is
-written directly to userspace — no intermediate kernel buffer is
-involved.
-
-When optval.is_kernel is true (the in-kernel path, e.g. from io_uring),
-the kvec points at the already-provided kernel buffer (optval.kernel),
-so the data lands in the caller's buffer directly via the kvec-backed
-iterator.
-
-In both cases the iterator writes to the final destination in-place at
-protocol callback. There's nothing to copy back — only optlen needs to
-be written back.
+Key changes:
+- Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
+- Use opt->optlen for buffer length (input) and returned size (output)
+- Use copy_to_iter() instead of copy_to_user()
+- For CAN_RAW_FILTER and CAN_RAW_XL_VCID_OPTS: on -ERANGE, set
+  opt->optlen to the required buffer size. The wrapper writes this
+  back to userspace even on error, preserving the existing API that
+  lets userspace discover the needed allocation size.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- net/socket.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 51 insertions(+), 3 deletions(-)
+ net/can/raw.c | 28 +++++++++++++---------------
+ 1 file changed, 13 insertions(+), 15 deletions(-)
 
-diff --git a/net/socket.c b/net/socket.c
-index ade2ff5845a0c..a25e513cf0f47 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -77,6 +77,7 @@
- #include <linux/mount.h>
- #include <linux/pseudo_fs.h>
- #include <linux/security.h>
-+#include <linux/uio.h>
- #include <linux/syscalls.h>
- #include <linux/compat.h>
- #include <linux/kmod.h>
-@@ -2349,11 +2350,45 @@ SYSCALL_DEFINE5(setsockopt, int, fd, int, level, int, optname,
- INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
- 							 int optname));
+diff --git a/net/can/raw.c b/net/can/raw.c
+index eee244ffc31ec..6f9ef867a13f2 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -760,7 +760,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ }
  
-+/*
-+ * Initialize a sockopt_t from sockptr optval/optlen, setting up iov_iter
-+ * for both input and output directions.
-+ * It is important to remember that both iov points to the same data, but,
-+ * .iter_in is read-only and .iter_out is write-only by the protocol callbacks
-+ */
-+static int sockptr_to_sockopt(sockopt_t *opt, sockptr_t optval,
-+			      sockptr_t optlen, struct kvec *kvec)
-+{
-+	int koptlen;
-+
-+	if (copy_from_sockptr(&koptlen, optlen, sizeof(int)))
-+		return -EFAULT;
-+
-+	if (koptlen < 0)
-+		return -EINVAL;
-+
-+	if (optval.is_kernel) {
-+		kvec->iov_base = optval.kernel;
-+		kvec->iov_len = koptlen;
-+		iov_iter_kvec(&opt->iter_out, ITER_DEST, kvec, 1, koptlen);
-+		iov_iter_kvec(&opt->iter_in, ITER_SOURCE, kvec, 1, koptlen);
-+	} else {
-+		iov_iter_ubuf(&opt->iter_out, ITER_DEST, optval.user, koptlen);
-+		iov_iter_ubuf(&opt->iter_in, ITER_SOURCE, optval.user,
-+			      koptlen);
-+	}
-+	opt->optlen = koptlen;
-+
-+	return 0;
-+}
-+
- int do_sock_getsockopt(struct socket *sock, bool compat, int level,
- 		       int optname, sockptr_t optval, sockptr_t optlen)
+ static int raw_getsockopt(struct socket *sock, int level, int optname,
+-			  char __user *optval, int __user *optlen)
++			  sockopt_t *opt)
  {
- 	int max_optlen __maybe_unused = 0;
- 	const struct proto_ops *ops;
-+	struct kvec kvec;
-+	sockopt_t opt;
- 	int err;
+ 	struct sock *sk = sock->sk;
+ 	struct raw_sock *ro = raw_sk(sk);
+@@ -770,8 +770,7 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
  
- 	err = security_socket_getsockopt(sock, level, optname);
-@@ -2366,15 +2401,28 @@ int do_sock_getsockopt(struct socket *sock, bool compat, int level,
- 	ops = READ_ONCE(sock->ops);
- 	if (level == SOL_SOCKET) {
- 		err = sk_getsockopt(sock->sk, level, optname, optval, optlen);
--	} else if (unlikely(!ops->getsockopt)) {
--		err = -EOPNOTSUPP;
--	} else {
-+	} else if (ops->getsockopt_iter) {
-+		err = sockptr_to_sockopt(&opt, optval, optlen, &kvec);
-+		if (err)
-+			return err;
-+
-+		err = ops->getsockopt_iter(sock, level, optname, &opt);
-+
-+		/* Always write back optlen, even on failure. Some protocols
-+		 * (e.g. CAN raw) return -ERANGE and set optlen to the
-+		 * required buffer size so userspace can discover it.
-+		 */
-+		if (copy_to_sockptr(optlen, &opt.optlen, sizeof(int)))
-+			return -EFAULT;
-+	} else if (ops->getsockopt) {
- 		if (WARN_ONCE(optval.is_kernel || optlen.is_kernel,
- 			      "Invalid argument type"))
- 			return -EOPNOTSUPP;
+ 	if (level != SOL_CAN_RAW)
+ 		return -EINVAL;
+-	if (get_user(len, optlen))
+-		return -EFAULT;
++	len = opt->optlen;
+ 	if (len < 0)
+ 		return -EINVAL;
  
- 		err = ops->getsockopt(sock, level, optname, optval.user,
- 				      optlen.user);
-+	} else {
-+		err = -EOPNOTSUPP;
+@@ -787,12 +786,12 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
+ 			if (len < fsize) {
+ 				/* return -ERANGE and needed space in optlen */
+ 				err = -ERANGE;
+-				if (put_user(fsize, optlen))
+-					err = -EFAULT;
++				opt->optlen = fsize;
+ 			} else {
+ 				if (len > fsize)
+ 					len = fsize;
+-				if (copy_to_user(optval, ro->filter, len))
++				if (copy_to_iter(ro->filter, len,
++						 &opt->iter_out) != len)
+ 					err = -EFAULT;
+ 			}
+ 		} else {
+@@ -801,7 +800,7 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
+ 		release_sock(sk);
+ 
+ 		if (!err)
+-			err = put_user(len, optlen);
++			opt->optlen = len;
+ 		return err;
+ 	}
+ 	case CAN_RAW_ERR_FILTER:
+@@ -845,16 +844,16 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
+ 		if (len < sizeof(ro->raw_vcid_opts)) {
+ 			/* return -ERANGE and needed space in optlen */
+ 			err = -ERANGE;
+-			if (put_user(sizeof(ro->raw_vcid_opts), optlen))
+-				err = -EFAULT;
++			opt->optlen = sizeof(ro->raw_vcid_opts);
+ 		} else {
+ 			if (len > sizeof(ro->raw_vcid_opts))
+ 				len = sizeof(ro->raw_vcid_opts);
+-			if (copy_to_user(optval, &ro->raw_vcid_opts, len))
++			if (copy_to_iter(&ro->raw_vcid_opts, len,
++					 &opt->iter_out) != len)
+ 				err = -EFAULT;
+ 		}
+ 		if (!err)
+-			err = put_user(len, optlen);
++			opt->optlen = len;
+ 		return err;
+ 	}
+ 	case CAN_RAW_JOIN_FILTERS:
+@@ -868,9 +867,8 @@ static int raw_getsockopt(struct socket *sock, int level, int optname,
+ 		return -ENOPROTOOPT;
  	}
  
- 	if (!compat)
+-	if (put_user(len, optlen))
+-		return -EFAULT;
+-	if (copy_to_user(optval, val, len))
++	opt->optlen = len;
++	if (copy_to_iter(val, len, &opt->iter_out) != len)
+ 		return -EFAULT;
+ 	return 0;
+ }
+@@ -1077,7 +1075,7 @@ static const struct proto_ops raw_ops = {
+ 	.listen        = sock_no_listen,
+ 	.shutdown      = sock_no_shutdown,
+ 	.setsockopt    = raw_setsockopt,
+-	.getsockopt    = raw_getsockopt,
++	.getsockopt_iter = raw_getsockopt,
+ 	.sendmsg       = raw_sendmsg,
+ 	.recvmsg       = raw_recvmsg,
+ 	.mmap          = sock_no_mmap,
 
 -- 
 2.52.0
