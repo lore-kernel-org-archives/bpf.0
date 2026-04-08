@@ -1,41 +1,40 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA4037F8C1;
-	Wed,  8 Apr 2026 10:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FD137B41E;
+	Wed,  8 Apr 2026 10:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775644264; cv=none; b=BTC0SJn4lwEefuvJhDO00IrxzDvawL3mET+u1d52r+zuuUO6YmEeCtLYwr3mU2DGVZEuzp3/vOUd6pLA+lfeX7lnGMRFnLWtAXsNA6twsDNGdCaQfwkPLki0JIft7dyTkcRLhLc5ibjwkvKd+SWOgywe6aDaOjPCUvUfPvXHr5g=
+	t=1775644266; cv=none; b=i6nzqUmj83vSvdE7V+6Rx2osY5JamrI9qiHzKYtGL4Z18QCbh3CPeWxyMxXJcJGGk3nEEuc/I0MAuwy+vu/AgccU6xN5NSAbGFI8Ey1HjnoYwX4J9Xw4VFSWbxRxCZXRBUC/dFPdHn6k5O/sfpi4G1JxS/Gyj2h6ayBy08LPSDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775644264; c=relaxed/simple;
-	bh=M6Z/Tdn7c7BqgfjwYfWVJYYwcQOst/cUM26rwVzEQLY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KMWDKAWewNhiRdKnSXbkbvgjF46FfVAkPO1RldwPyssjHUr4nj/o+a81smfbxfzRx/y+LywwyrdaG3/Unc+2cSymligQrqQ3HkjPYIK4Xyb7k6H2sRF42N41UZc1TRtx2oUfdlMEUx0bid7u6rzIkRA/rhTBGfY2a1v2xOUZ1Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=al6WyMBb; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1775644266; c=relaxed/simple;
+	bh=pOesKuhudD+8zt+CMHqClMhFbjEUPseOmhGjEs6pHgA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=PDSrYoRSqnIYqwJFJlT4RvruCxmN1l3G3z6iBUNVKiy+hgLpE+tc26QPveyEEC43wJGxukgoGMugQyD/tW3h2ypY8lbwMR4sY8s3ZLtX1eGn3o8/KUwUaPpH/MBRktIrx2OSoFUb/Yw/qgz++/+8ncYzaegy3KCKX3Hq5xQ+NHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=HBw0OcFy; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="al6WyMBb"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="HBw0OcFy"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=2MF/al0VTf9Ca3kEu1gxRwO+cPEDevyh3csaP1pb6Q8=; b=al6WyMBbDmeCd4XwTRGacm29yD
-	mBVjM2DbKZREB6PnxRcTD6Cv7NupnzhFdAx8ZNF+4SuBtmGIeQHsku+7+FshzIFQ1gOoYQ4p0pSZ9
-	RBZwggtl+ooPM+IxBaw/sRxFfMm+GSV2EaBO2VQqkpPcprjF9TgsiqPpU8WaYT4YIZ9Mo8xIiyNNs
-	Ze0Q2um90kXD3IO2SAimeLM6WgK2HXPsai+bIl7pkkkiPjWs5gtpxb8tsmruuJCn4rloxEIiADeVs
-	1qboJQhSBoniHc5bQC+4LFEs2S/y1zNunvlUegAJJGbzFFYXWK7uYRwGIn0amLJM5HBIeYWHeSAYV
-	muAfxaUg==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=j3sXh234yYQ0MK964QNxt3wLmUNhN01YHWe58GIc47Q=; b=HBw0OcFyK3w38tJfgCBbhV/RnJ
+	2krVQYopG2iUZxJasZBE/Oy1P2bc2pq1RVhC3NkI4Qjo41BIMU9bQyLGHhw1vmwKbsYhWpn/hjF6F
+	y6W6K6kW2p2JqlMsn2HwN8igzEVShqgBAdVNkgFxnTYh0Wjm9PdUXihvxUBQsyMdoKqyJm0Ey90vq
+	+oeaiqKCPE5aXopag4E/KyB50MJbkNl9VVxVhXKZcTL6F35E48eBJ/z1dl9z5j2NX8t0xWv9+dIhu
+	KhpZoP0lSAxB9kn63EnIg6m8hz5XOiUywWUa81znIVP7DhEjgnFluC8YZ33+nqhC4FZC2slciV+eg
+	3uTjf2Gw==;
 Received: from authenticated user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wAQBH-008MD8-0b;
-	Wed, 08 Apr 2026 10:30:44 +0000
+	id 1wAQBR-008ME4-08;
+	Wed, 08 Apr 2026 10:30:53 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
- buffers
-Date: Wed, 08 Apr 2026 03:30:28 -0700
-Message-Id: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+Date: Wed, 08 Apr 2026 03:30:30 -0700
+Subject: [PATCH net-next v3 2/4] net: call getsockopt_iter if available
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,12 +42,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEQu1mkC/22NwQqDMBAFfyXs2ZQkakRP/Y/Sg8ZdTQuJJKlYx
- H8v2kMRen5vZlaIGCxGaNgKAWcbrXfQsDxjYMbWDchtDw0DJZQWMhd8wBS9efop8ZpyrVWJ2Js
- OMgZTQLLLIbuBw8QdLgnu3yW+ugeatLv272hj8uF9dGd5EP8Ss+SC17IsyBBpqstrj51t3cWH4
- TDP6scWQp5YxQXXUvakq0q2RCd227YP8znjUv0AAAA=
-X-Change-ID: 20260130-getsockopt-9f36625eedcb
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260408-getsockopt-v3-2-061bb9cb355d@debian.org>
+References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+In-Reply-To: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
 To: "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
@@ -60,86 +57,155 @@ Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel-team@meta.com, 
  Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2592; i=leitao@debian.org;
- h=from:subject:message-id; bh=M6Z/Tdn7c7BqgfjwYfWVJYYwcQOst/cUM26rwVzEQLY=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1i5NB4KxGFOCospvSlH1oOL4casp2Cq1n2ERt
- zqcV7+ImDCJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadYuTQAKCRA1o5Of/Hh3
- bfnREACMaTWL2KWmbRV8tUAqgEqg+U6UCZGINrli5yngBc0+ellIauUpYvegPq0cfPpPYVTBYp0
- bf4QDbSYXfuv9cJFWEAEMg9PR4QJ1ItTt8y+xbuVQdd9o7YpvCXd/MWMwnQC1ibaSHyfO50pbGM
- FpbZBJTEhVIm+I4bnRqR3HhHP7Rb1xecQqMkh9xVAI4RlRb9Km42nDeHeAjz1Pt1tANKH53CCat
- 7KlYs2FGo+ynwze2rfue4m1agtkKf+Nmbr37I/elMiNgYnFTDp9AKwTtXPFVJuF1xYPiqNsoVuY
- m66iKnSDQMZ458ZtmT5zcGStuwJx3Gz0uVt3K0+6V6pjk4lRmmA5r8DV1DUhFhCiIY8x+9N8ZYX
- dwq1P9vMFtAA402121JI115gOVrQAezWwX24YxoSbWo4k8SmFxBSBRY6KbsIFTFEUKIlQ4AW7mQ
- Oa4Fisz84Ydxe68db0NPSC6C2GsP5rsOQYtAL8298Zb6ovZZAKJLdzLNvI0q/vhV0muUHxIk7VM
- sfjQMf2PigYiwoUc9BhiFh7OqlUxoaKcuXxQkdlmctq3ZioYijnF4t/QW+vDwNOF/N2bGok9Aud
- tmHoYLWVbNHNcmakgl3A6AD9juho0AlpfEAlOrcrj0pSRlHDxGCXG8aEGSD/UmtX/siU6gn5wDh
- S50PTlS6+NbUKaA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4599; i=leitao@debian.org;
+ h=from:subject:message-id; bh=pOesKuhudD+8zt+CMHqClMhFbjEUPseOmhGjEs6pHgA=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1i5N/XtgR1BS+9k8hmc7RUdjCimv1CtkLELse
+ /WYkEfGTSSJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadYuTQAKCRA1o5Of/Hh3
+ bWDHD/4vlrMvc/oNjL5ysHzc/csEMzRjhtG1l+EOFABmIl07keWEhShr9wJsy/WZRqc3wrj44Yk
+ 38biaVCH5H9U2hPc90nvi++9DmGjn9GK+KTVNxbrQ9wUWgZSv6K53zU/hVETjAQxtReWpMZbNrQ
+ AuiuQEr9i7GnRBSt677xIj62uU/sUP9Z396AIvL7n4oDklkhNbxnB0lv+J1AAuHiBjgrfoImkvy
+ kIWAZyu7PGH6CU4fb0rzLKH+7Sryd1BHte07qE1fyLqxj0lszVb+ovfzUt6pJNUw6tfAoggp/Yg
+ n9R/691XFOUrUW6boaEzEayUGckwGwRomVo9eE2qT0DyJMkJH32JTvxXemeQkPG8kL2jW6HIpEE
+ +Dg9512nFz7ih0tmM2IJCxEo9hGGCOatvIuPMHZ7udT9sQknnjVO+UaBK8U4D9OAoaPKFynj81e
+ Tuf4IH6P5tKtQRAoEEDjJpykaYiyiunKVwPhD3EpYN6aarpGf/Xsg7a/0v2jTVDoxS7Jv6aDV4K
+ nFpT4wpN1Gnv4JvwfN5qGDsItejRc29p5Ox6WnpUWJkcHo0d8+IkJQk8RZ89mg7G9PichhHsx6n
+ b4q/vlIiu+OhITeq9v4iqEI1WzNN/vKGaRbGUAZYIUGJ9vJX47HcIkEgKIFjQDk/3wW5V10+SCu
+ 5N2jGCaWY3mV0lQ==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Currently, the .getsockopt callback requires __user pointers:
+Update do_sock_getsockopt() to use the new getsockopt_iter callback
+when available. Add do_sock_getsockopt_iter() helper that:
 
-  int (*getsockopt)(struct socket *sock, int level,
-                    int optname, char __user *optval, int __user *optlen);
+1. Reads optlen from user/kernel space
+2. Initializes a sockopt_t with the appropriate iov_iter (kvec for
+   kernel, ubuf for user buffers) and sets opt.optlen
+3. Calls the protocol's getsockopt_iter callback
+4. Writes opt.optlen back to user/kernel space
 
-This prevents kernel callers (io_uring, BPF) from using getsockopt on
-levels other than SOL_SOCKET, since they pass kernel pointers.
+The optlen is always written back, even on failure. Some protocols
+(e.g. CAN raw) return -ERANGE and set optlen to the required buffer
+size so userspace knows how much to allocate.
 
-Following Linus' suggestion [0], this series introduces sockopt_t, a
-type-safe wrapper around iov_iter, and a getsockopt_iter callback that
-works with both user and kernel buffers. AF_PACKET and CAN raw are
-converted as initial users, with selftests covering the trickiest
-conversion patterns.
+The callback is responsible for setting opt.optlen to indicate the
+returned data size.
 
-[0] https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/
+Important to say that  iov_out does not need to be copied back in
+do_sock_getsockopt().
 
-Updates from v2 to v3:
+When optval is not kernel (the userspace path), sockptr_to_sockopt()
+sets up opt->iter_out as a ITER_DEST ubuf iterator pointing directly at
+the userspace buffer (optval.user). So when getsockopt_iter
+implementations call copy_to_iter(..., &opt->iter_out), the data is
+written directly to userspace — no intermediate kernel buffer is
+involved.
 
-* Use two iov in sockopt_t instead of a single one:
-  a) .iter_in that is populated by the caller and will be read-only in
-  the protocols callback.
+When optval.is_kernel is true (the in-kernel path, e.g. from io_uring),
+the kvec points at the already-provided kernel buffer (optval.kernel),
+so the data lands in the caller's buffer directly via the kvec-backed
+iterator.
 
-  b) .iter_out will be populated by the protocol and it will be sent
-  back to the caller.
+In both cases the iterator writes to the final destination in-place at
+protocol callback. There's nothing to copy back — only optlen needs to
+be written back.
 
-  - This will avoid changing the protocol reset and changing the data
-    source at the callback, making the driver callback implementation
-    and converstion saner.
-
-* created sockptr_to_sockopt() to convert sockptr to sockopt, making the
-  call to getsockopt_iter straight-forward
-
-Link: https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/ [0]
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Changes in v3:
-- Create Two iov in sockopt_t instead of a single one (Stanislav Fomichev)
-- Implement the sockptr_to_sockopt() helper (Stanislav Fomichev)
-- Link to v2: https://patch.msgid.link/20260401-getsockopt-v2-0-611df6771aff@debian.org
+ net/socket.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 51 insertions(+), 3 deletions(-)
 
-Changes in v2:
-- Restore optlen even on error path (getsockopt_iter fails)
-- Move af_packet.c and can instead of netlink (given these are the most
-  complicate ones).
-- Link to v1: https://patch.msgid.link/20260130-getsockopt-v1-0-9154fcff6f95@debian.org
+diff --git a/net/socket.c b/net/socket.c
+index ade2ff5845a0c..a25e513cf0f47 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -77,6 +77,7 @@
+ #include <linux/mount.h>
+ #include <linux/pseudo_fs.h>
+ #include <linux/security.h>
++#include <linux/uio.h>
+ #include <linux/syscalls.h>
+ #include <linux/compat.h>
+ #include <linux/kmod.h>
+@@ -2349,11 +2350,45 @@ SYSCALL_DEFINE5(setsockopt, int, fd, int, level, int, optname,
+ INDIRECT_CALLABLE_DECLARE(bool tcp_bpf_bypass_getsockopt(int level,
+ 							 int optname));
+ 
++/*
++ * Initialize a sockopt_t from sockptr optval/optlen, setting up iov_iter
++ * for both input and output directions.
++ * It is important to remember that both iov points to the same data, but,
++ * .iter_in is read-only and .iter_out is write-only by the protocol callbacks
++ */
++static int sockptr_to_sockopt(sockopt_t *opt, sockptr_t optval,
++			      sockptr_t optlen, struct kvec *kvec)
++{
++	int koptlen;
++
++	if (copy_from_sockptr(&koptlen, optlen, sizeof(int)))
++		return -EFAULT;
++
++	if (koptlen < 0)
++		return -EINVAL;
++
++	if (optval.is_kernel) {
++		kvec->iov_base = optval.kernel;
++		kvec->iov_len = koptlen;
++		iov_iter_kvec(&opt->iter_out, ITER_DEST, kvec, 1, koptlen);
++		iov_iter_kvec(&opt->iter_in, ITER_SOURCE, kvec, 1, koptlen);
++	} else {
++		iov_iter_ubuf(&opt->iter_out, ITER_DEST, optval.user, koptlen);
++		iov_iter_ubuf(&opt->iter_in, ITER_SOURCE, optval.user,
++			      koptlen);
++	}
++	opt->optlen = koptlen;
++
++	return 0;
++}
++
+ int do_sock_getsockopt(struct socket *sock, bool compat, int level,
+ 		       int optname, sockptr_t optval, sockptr_t optlen)
+ {
+ 	int max_optlen __maybe_unused = 0;
+ 	const struct proto_ops *ops;
++	struct kvec kvec;
++	sockopt_t opt;
+ 	int err;
+ 
+ 	err = security_socket_getsockopt(sock, level, optname);
+@@ -2366,15 +2401,28 @@ int do_sock_getsockopt(struct socket *sock, bool compat, int level,
+ 	ops = READ_ONCE(sock->ops);
+ 	if (level == SOL_SOCKET) {
+ 		err = sk_getsockopt(sock->sk, level, optname, optval, optlen);
+-	} else if (unlikely(!ops->getsockopt)) {
+-		err = -EOPNOTSUPP;
+-	} else {
++	} else if (ops->getsockopt_iter) {
++		err = sockptr_to_sockopt(&opt, optval, optlen, &kvec);
++		if (err)
++			return err;
++
++		err = ops->getsockopt_iter(sock, level, optname, &opt);
++
++		/* Always write back optlen, even on failure. Some protocols
++		 * (e.g. CAN raw) return -ERANGE and set optlen to the
++		 * required buffer size so userspace can discover it.
++		 */
++		if (copy_to_sockptr(optlen, &opt.optlen, sizeof(int)))
++			return -EFAULT;
++	} else if (ops->getsockopt) {
+ 		if (WARN_ONCE(optval.is_kernel || optlen.is_kernel,
+ 			      "Invalid argument type"))
+ 			return -EOPNOTSUPP;
+ 
+ 		err = ops->getsockopt(sock, level, optname, optval.user,
+ 				      optlen.user);
++	} else {
++		err = -EOPNOTSUPP;
+ 	}
+ 
+ 	if (!compat)
 
----
-Breno Leitao (4):
-      net: add getsockopt_iter callback to proto_ops
-      net: call getsockopt_iter if available
-      af_packet: convert to getsockopt_iter
-      can: raw: convert to getsockopt_iter
-
- include/linux/net.h    | 23 +++++++++++++++++++++
- net/can/raw.c          | 28 ++++++++++++--------------
- net/packet/af_packet.c | 15 +++++++-------
- net/socket.c           | 54 +++++++++++++++++++++++++++++++++++++++++++++++---
- 4 files changed, 94 insertions(+), 26 deletions(-)
----
-base-commit: 9c14d60a50c4b726a3613a02e8b74778e9964891
-change-id: 20260130-getsockopt-9f36625eedcb
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.52.0
 
