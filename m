@@ -1,138 +1,176 @@
-Received: from mail-ot1-f66.google.com (mail-ot1-f66.google.com [209.85.210.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2D73537F1
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 17:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1933D301B
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 17:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775667763; cv=none; b=GfRdJYGWmpf2N94Xmvr5Lehk7mtwsgjqV40ijeDnioExMMYOknqkYJDv437Cx+O7XvuhOvkzOiHy0XVKgyXeTsZ/AdJVxH0tMwAHGcYrC3bSCFuki4s0mANQfWxW8xiGklLADLi2TLpgFrM0ZICWJL7jqSdXgONO21JsOiLvFww=
+	t=1775667893; cv=none; b=AD5zbhlEY9QE5r2yB1QQ7DoAaFtF3p9SBIojalU38K05rTxA3FlkxnR/mJ3Hpu6QScH+iX9w81Q3pdFsXRUp75WhRHX6JktzgSLjWk0HnsHGoKI4LXFO7XvKhWpxxV3PM7urtU/PXUUja3fgjyWUxw5CbjMUGYkSDW9FPkYgmHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775667763; c=relaxed/simple;
-	bh=xdLLVMMQT69JFQt1brGOUFUC5V03wHdBk5qEpoTRbKc=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PQz7MxQfpnHgkwCJh9pLvt5DDiPtSNwH3Q37E3jyB0xg4EO+FggzqSCXHTMoBYddRxFpirhCN+enyNV3JCIfXyiaRcnI1E5XywmC0Ycps8TPOdoVpdIpGa3gRPkN6F/tsy/CqcEYkyCV7Lqimm/XAxW1R21Klvy5xtZQzNh1+bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FTlH5UDy; arc=none smtp.client-ip=209.85.210.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775667893; c=relaxed/simple;
+	bh=6poPZzccZezyjDvLANxXXpy0o7EwMyecwXahZXEye88=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KiezSKC4jKdDNHmaSUlwrVjAbnit5fmy7KO7z1t3egGscPXhG4Hvjyi14AqI7ylpz5VGs2PrFp3zB5HPCnQ8Iwgh4gVMllqAWx3NBrNqek7eNo/XrXtQZ7U1TMrrqGVMtnqvvv1dbUafzYx4432nNKrt7cPxRzbSTN6qto/Np8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=PtAt2AQP; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FTlH5UDy"
-Received: by mail-ot1-f66.google.com with SMTP id 46e09a7af769-7dbff06e4a6so42084a34.1
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 10:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775667760; x=1776272560; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lMpI3o2mUCKoqrF6VB4ezds9Ya6pdU2HqjJAbgYriXQ=;
-        b=FTlH5UDyfbxYhlBp0sxVrDv0sG4vY5BIN6h9qqoMbtEi4tRFnnWTQrBZZa6YrddcAQ
-         N2auK8zv7t1LFG9mz9La7e+sWR5ZZq8gKlkXFRCs6ayikUL2uulDxGelJma7MaeM4Ymz
-         bHtxfv+PRJ2aEqrZKgSro5IJ5EAVFLZiMWRks+cf5Hc0rkCwm8cpgQKEGmVwPvlXwwTw
-         /NNJMcmftJpy06QCEeZ/2o+moBQfiJ+o4MxjvVkSQQmP2JBHR7C88wrGrU3VxHTrd7Lq
-         ieuA3XanTNPPRm9iiosJAoVZXRBVQuRziCZVgCCQs/I7BnpiqTc1Utj/ZY9Czt/JY+KA
-         PpXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775667760; x=1776272560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lMpI3o2mUCKoqrF6VB4ezds9Ya6pdU2HqjJAbgYriXQ=;
-        b=qTOgsAkhmogbu7jVFKpzcx6erosYhbKk5KySa+xQAPmMjEgLDD+QRSGg+oD/mvCiMj
-         Yb69x3qh0gwKIIzgHjw4rpqBwN0h5V1vOVm9VXL27jjzsWEGWz+oxQtx7nhmUcOBhuyc
-         yIPbzMdxrD1QGL1u2dROzVg+NQK3cT2LZwOMsPB8tz4XmQuU8bp6WaawTJTZZXZHzhVV
-         ArdAs8turNUdlGFR9GOS8Q+u6syXaiZTaP4TtndQcRzcwXvmKKrCckKtI8zRbCbV5BGa
-         z2n+M5NLWo7GuuMPImdM/iE9caAU1+NejGGVQtVmH9guiK1nRQznbGSXnVZjZDJxnEZu
-         mI5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXjen9JncdwPzglJg7ZzY76T01p0gXuu5M9eK102XDyC4iTaduB1Tw07D76uq6dYYRz4mc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQFObMDJKOmF0fciydIxUFdZ0QGW3BYELrGXpr+FrTZMJ7J2y2
-	M4EK9LpUkwEGUHaU5Z65rk/Q1oqewqbH1+aTHumyZW7Qksf/sm3uvuEu
-X-Gm-Gg: AeBDiesdWf/qwjrUnrQPbwPLna0juCXNBJr66M66OQDBKQfcY0ux83lMUbJjA1KxyPy
-	HZHk0Ojnfo5Llow5f2k7Pp6rPBelsETf2i9Q010Xovm2aPqAingmpkdHNpf8LSelIEmM9lHXMDv
-	upIH7HRV2bzYJjkEqAFU79uxo6AtQAnZlAoky8I9kCIbeznjoNgoCHO2GZ4w8gki3bgwiBP8CTI
-	WleZWDcc2aYYxPIddfsVofw3StRb0N6PK3bwQy+A6e4CgN8lQq0yD45rF9+BZYt0RVBZOGtQWmq
-	XJnImHHXIIv5pCzX8sjntMSz/LgqkiedSTW/ESlSfUfCJ1rcPzM2JuColmMh89IFbtDnka5Rk9V
-	iJ93h3VMA9+1czXAWWxpv/L2HKmXrzSAZlZyxcFkZHSlRarOnu9nBLJs6+CY4fGkQdRzbdhfM6y
-	U7lc/ugPklKBV0q2r1
-X-Received: by 2002:a05:6830:6103:b0:7d9:e9a7:cfaa with SMTP id 46e09a7af769-7dbb712a3a2mr14340529a34.15.1775667757936;
-        Wed, 08 Apr 2026 10:02:37 -0700 (PDT)
-Received: from localhost ([2a03:2880:12ff:3::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dba73d8126sm14465822a34.27.2026.04.08.10.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 10:02:37 -0700 (PDT)
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-X-Google-Original-From: Stanislav Fomichev <stfomichev@gmail.com>
-Date: Wed, 8 Apr 2026 10:02:36 -0700
-To: Breno Leitao <leitao@debian.org>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, metze@samba.org, 
-	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>, io-uring@vger.kernel.org, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
- buffers
-Message-ID: <adaJqy6Q4L7c-eTs@devvm17672.vll0.facebook.com>
-References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="PtAt2AQP"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=olGG5wSeYADTgoy2qAzgT2tEOfjzxC4Fg7asFiqoTD4=; b=PtAt2AQPxKkx4uo6hzcYlWKdB/
+	UC5Sug6qZxMYub1JpNDQl4RvdnXg+v8kEft0vj97eju9OkN0d/J4rCpGNAhipbqUJfH4A/9Nd+tVA
+	soxelgjU7O8fkq7Mh/q7av+DJNivr26F38JxdB3tUuJliOdr1BnK+ieLfKTVJmQu2sek7ZjFrXe1a
+	3DqaJWJ/kxlBCBfcnSvUb7Un3I7gmTjivHHp63dPJs74Tpw7Cvkv2XdvKIOQIPd4uzCQcpg6C8RH4
+	reUnAg8WCaYeeUE9UXMrR9jhTUae97C4caXUPbYo4pjDi/OpLz7Y+GvrsE7ouvTKPkk/JwkhbnQKi
+	HsD+2ZKw==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wAWKf-0008PV-04;
+	Wed, 08 Apr 2026 19:04:49 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wAWKd-000Grz-2W;
+	Wed, 08 Apr 2026 19:04:48 +0200
+Message-ID: <a4190f97-b171-4a7f-9722-9e7bc73a57ca@iogearbox.net>
+Date: Wed, 8 Apr 2026 19:04:48 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/4] bpf: Fix ld_{abs,ind} failure path analysis
+ in subprogs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Eduard <eddyz87@gmail.com>, STAR Labs SG <info@starlabs.sg>
+References: <20260408153712.523124-1-daniel@iogearbox.net>
+ <20260408153712.523124-2-daniel@iogearbox.net>
+ <CAADnVQ+tLKiH2a_1mOFZ7aZ3jN+9_vLxOxxPqqBc8QEYUwCgVg@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <CAADnVQ+tLKiH2a_1mOFZ7aZ3jN+9_vLxOxxPqqBc8QEYUwCgVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27965/Wed Apr  8 08:24:37 2026)
 
-On 04/08, Breno Leitao wrote:
-> Currently, the .getsockopt callback requires __user pointers:
+On 4/8/26 6:20 PM, Alexei Starovoitov wrote:
+> On Wed, Apr 8, 2026 at 8:37 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>
+>> Usage of ld_{abs,ind} instructions got extended into subprogs some time
+>> ago via commit 09b28d76eac4 ("bpf: Add abnormal return checks."). These
+>> are only allowed in subprograms when the latter are BTF annotated and
+>> have scalar return types.
+>>
+>> The code generator in bpf_gen_ld_abs() has an abnormal exit path (r0=0 +
+>> exit) from legacy cBPF times. While the enforcement is on scalar return
+>> types, the verifier must also simulate the path of abnormal exit if the
+>> packet data load via ld_{abs,ind} failed.
+>>
+>> This is currently not the case. Fix it by having the verifier simulate
+>> both success and failure paths, and extend it in similar ways as we do
+>> for tail calls. The success path (r0=unknown, continue to next insn) is
+>> pushed onto stack for later validation and the r0=0 and return to the
+>> caller is done on the fall-through side.
+>>
+>> Fixes: 09b28d76eac4 ("bpf: Add abnormal return checks.")
+>> Reported-by: STAR Labs SG <info@starlabs.sg>
+>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>> ---
+>>   kernel/bpf/verifier.c | 32 ++++++++++++++++++++++++++++++--
+>>   1 file changed, 30 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index db009d509ade..46f55ea6684e 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -18357,6 +18357,22 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>>          mark_reg_unknown(env, regs, BPF_REG_0);
+>>          /* ld_abs load up to 32-bit skb data. */
+>>          regs[BPF_REG_0].subreg_def = env->insn_idx + 1;
+>> +       /*
+>> +        * See bpf_gen_ld_abs() which emits a hidden BPF_EXIT with r0=0
+>> +        * which must be explored by the verifier when in a subprog.
+>> +        */
+>> +       if (env->cur_state->curframe) {
+>> +               struct bpf_verifier_state *branch;
+>> +
+>> +               branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
+>> +               if (IS_ERR(branch))
+>> +                       return PTR_ERR(branch);
+>> +               mark_reg_known_zero(env, regs, BPF_REG_0);
+>> +               err = prepare_func_exit(env, &env->insn_idx);
+>> +               if (err)
+>> +                       return err;
+>> +               env->insn_idx--;
 > 
->   int (*getsockopt)(struct socket *sock, int level,
->                     int optname, char __user *optval, int __user *optlen);
-> 
-> This prevents kernel callers (io_uring, BPF) from using getsockopt on
-> levels other than SOL_SOCKET, since they pass kernel pointers.
-> 
-> Following Linus' suggestion [0], this series introduces sockopt_t, a
-> type-safe wrapper around iov_iter, and a getsockopt_iter callback that
-> works with both user and kernel buffers. AF_PACKET and CAN raw are
-> converted as initial users, with selftests covering the trickiest
-> conversion patterns.
-> 
-> [0] https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/
-> 
-> Updates from v2 to v3:
-> 
-> * Use two iov in sockopt_t instead of a single one:
->   a) .iter_in that is populated by the caller and will be read-only in
->   the protocols callback.
-> 
->   b) .iter_out will be populated by the protocol and it will be sent
->   back to the caller.
-> 
->   - This will avoid changing the protocol reset and changing the data
->     source at the callback, making the driver callback implementation
->     and converstion saner.
-> 
-> * created sockptr_to_sockopt() to convert sockptr to sockopt, making the
->   call to getsockopt_iter straight-forward
-> 
-> Link: https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/ [0]
-> ---
-> Changes in v3:
-> - Create Two iov in sockopt_t instead of a single one (Stanislav Fomichev)
-> - Implement the sockptr_to_sockopt() helper (Stanislav Fomichev)
-> - Link to v2: https://patch.msgid.link/20260401-getsockopt-v2-0-611df6771aff@debian.org
-> 
-> Changes in v2:
-> - Restore optlen even on error path (getsockopt_iter fails)
-> - Move af_packet.c and can instead of netlink (given these are the most
->   complicate ones).
-> - Link to v1: https://patch.msgid.link/20260130-getsockopt-v1-0-9154fcff6f95@debian.org
+> similar code in check_helper_call() for tail_call
+> also does mark_reg_scratched() and clear_all_pkt_pointers()
+> which are missing here.
 
-LGTM! Not sure what's your plan for the selftest? You wanna keep it
-outside or maybe repost v4 with it?
+The clear_all_pkt_pointers() is only relevant for the cases where we
+modify/pull/push skb data, but in ld_{abs,ind} we either read skb
+packet data directly in linear section or via skb_copy_bits.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+I'll add the mark_reg_scratched(env, BPF_REG_0). Not sure how much
+this really suits to move into a common helper: the tail call case
+calls clear_all_pkt_pointers() and marks r0 unknown right after
+push_stack(), the ld_{abs,ind} case does not clear the packet
+pointers and marks r0 as known 0. imo its fine to leave it separate.
 
-I'm also not sure your unconditional 'copy-optlen-back' will work for every
-proto, but I think we can put something into sockopt_t to make it avoid
-the copy if needed in the future.
+> Pls refactor that part into a helper and call it here.
+> 
+> pw-bot: cr
+
