@@ -1,62 +1,62 @@
-Received: from mail-oi1-f193.google.com (mail-oi1-f193.google.com [209.85.167.193])
+Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1670C192D8A
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 02:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BD8363084
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 02:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775614452; cv=none; b=pqd574A7XyTUgoJjnkcilJ4Y90DANEXDxtOe0rBjYQuaFuZQB2aEyYzHSyTMi8nbPb5lJL0MZL2utKsp/rxEbh9bBxyizAoI7f2CvXQ98uIPWa1ovLV7GXOcFaAd3mZAHzBMvLy8ALr/cQAIEFCKUTrF52XW0r6phEGqSFWF4nQ=
+	t=1775614453; cv=none; b=IrjkF/AOvL0fdepq+F+P/LptmOXfGTky1zlXEt2278L7qwL+s6O0misjomGqXOrDeIBkPCDdoXjL7qlhv0QHU4dIQawUPoypJjuUMK4Q7SQJ1bvGwNs1aYfL7OSTycEF36Otuk6k3uaSymqpz3zVCcdQg//TnUtCNsyMGrpO6PE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775614452; c=relaxed/simple;
-	bh=XrkQcWqs7AP85csRWXc5TFKAZ+AkLwAi0B25wslTDII=;
+	s=arc-20240116; t=1775614453; c=relaxed/simple;
+	bh=KLEcKrNNxJLRmBOtQV0vrvqacmvRnYPtxeKTmG9NeAA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LrZxAx0UkpGrOJp0sj7OlwcvzlxGnQyV2wbU4oT5aml5WiX4rxcol599Ok8s1QsQriyEnF2Tunn+rSPm+PbjfsnfxgI/8prVVD13t7Xf5e52iOJ5KsQBWAYOfIKMPvdBXPQEYKNH8x+StOw1l6NvQuurUhWlbfZiQdT74OHqS88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IsEnMi84; arc=none smtp.client-ip=209.85.167.193
+	 MIME-Version; b=U6j5XRIFS1J1CdjhvsTopKx+S/eEcdtquGa5OvJh7Wd0KmJduORJy4mXpfnH1N1rwXN0CL7KGQWkQufwi+KGyX2cajUYLOzi242pXxA5WucMXSo9TQbIky2Kj2uy02YCTEbz8lGJGvZCy/8KraSF5GpkjJd7Bm6gsIxLCcP5U38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gv98tr3J; arc=none smtp.client-ip=209.85.210.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IsEnMi84"
-Received: by mail-oi1-f193.google.com with SMTP id 5614622812f47-47018d34159so3069957b6e.2
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 19:14:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gv98tr3J"
+Received: by mail-ot1-f65.google.com with SMTP id 46e09a7af769-7dbd801138eso276881a34.1
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 19:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775614449; x=1776219249; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775614451; x=1776219251; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y8CnhZIJ5K2VlXLB1GGRjRZedba+V9qPysWfN1PNd1Y=;
-        b=IsEnMi84VOXua72AiSdC97nccfQQ6vOG7pLI7n1VkAwvZ6srT7TQSlpTyIjrOtSj6z
-         8isHfF/zX3r7s+Te+HEzXA3Z78MXPxgzLpv+a3GsgFdkENlqNEgN+CT5lXwWJiUfLMIG
-         bgKbWXcXzbLMdiAAeTPPnAeAdL4ijqIp7EWfrYNZK9YCcx+ZWL4J059xRbE+hwApm+F1
-         Hst2IBHJKNsFsYVstkqi2z0BWGVQgsUqvQMGPnZeSgfxBwqGVm63D54QtGecHmv1ir9/
-         xz6FpasgnDgU/1h53xDVZT/MOrNwzWHiTQiSBDzV95I8KSfmIuRdlOVnQhiaYSrybX9c
-         H7rQ==
+        bh=5kGatzaq9+4I5rkmlmYvC3KMJ5b6j+lGzhs9tZbxtFI=;
+        b=gv98tr3J29RjibgCSLHAs3YQms48RIEyqy4R9Tt01jrw+/vV9rut8xIWeQsmcwt08c
+         A8DvN9vNrCd3Tig36MaLOvRXPhSZnNfif8UFEjnJsmUBqM9EIG4QXwR/W+QwUHpNTHsh
+         wQdZZPZGVA98Cm/H+bs7JJncW8ZtVxLkCEkJM+ioIPhOLgdz3eP3v8VEnb7WOcupyr1n
+         3Dr9mk7SeKwn1DIVozEYH00K4+iY+maUMJCVcg6NadNB6ic5/dn8AvfuupvGTmDsMB9Y
+         35WGidtX78xus+ECAPypOT1DkWdjO6nLMxwTh2b0ey9QTXza/XB8XuGvGQtSisleXyFq
+         kMBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775614449; x=1776219249;
+        d=1e100.net; s=20251104; t=1775614451; x=1776219251;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=y8CnhZIJ5K2VlXLB1GGRjRZedba+V9qPysWfN1PNd1Y=;
-        b=Q5IP0YaaWlUuJJfZmSF/VSazAxoBXeY87pV4lumlPxF6bognbwdDRKeDFLuxE6fCms
-         SdV4iNSwuS1obl1VC6RfzXgM/36LCm1ZdmIjZwnqdmEnQ8bhJdTYpsRKk4SrrZKTx00f
-         eOIZmr46EFvWzNivZJ10TTH7Px+Y8uAAbGnR3nGKEAGKpL01klbuXGlo+FyUh4+Xmfla
-         h1/J/ZJktxzvWjcR4pRskjACVv14BzEbEaGzfZijKiAkKluRpm80y74rWjLNTwTakavE
-         ADiFTwRgj0+GuDgPurIDAkcV1KF9vmRq7EQ7DaC3yON1SVANlp2aQBk/sGtQxDNtI5CF
-         bdtQ==
-X-Gm-Message-State: AOJu0YyVa2ZmqlvvnUDMMoCq5D6sIXB+o6PDVH4PYlGsjwr1GjZgt527
-	Zo6M5cjAoBnvQabaPdx0jLUTvH+6+NE/ayh55mX7Ge0UB4NMZiyW/cEh0yhjPt5q6OI=
-X-Gm-Gg: AeBDievg93knc2qomwu7oj0myjGRsJhyGe4gbncqNK1A8KLbxZt/KNztSSZKjjjUGcQ
-	U68o7w/0sKQS359Jfqjeml3iAlC+M/Zx8gEZqLqttKp55lzB4TzcD5veBuwEUAruL9E85z6TsRv
-	tV1OfjaFYyrTkyGENFokfbcmgfgSIufZBpgBBPwGu/x85FN13ElSFrsLVOGsINmuQPCbP8faPqA
-	61t/Ay1QDzBoks/8HJulIRni/RHbt/Nwi5MPsFyXW8KKgkkOcCIQdoN4x+AdHAlXpl1D75+jxdu
-	FayA1BgfHWGZZP1H3oKbpqpC4nN3Y1ttj8/ruW9Rz1BbX0/1iAvjH4DmYGqqRUZ31xfl9SbX+bX
-	KQl39H880a7ktTFO4ofjVfOfiyH4+bgwRjl4aPB1Q1+K+nQVubloUYWvcGv9qMGmbhvy/x3dUGh
-	tTkX6sqRcgDdFYHFp7OhyGXTkvgjbH/wfTt4EmMp/3fPaG
-X-Received: by 2002:a05:6808:66d6:b0:471:f036:7926 with SMTP id 5614622812f47-471f0367af3mr4003154b6e.28.1775614449641;
-        Tue, 07 Apr 2026 19:14:09 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4b::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-47551804168sm1500793b6e.5.2026.04.07.19.14.08
+        bh=5kGatzaq9+4I5rkmlmYvC3KMJ5b6j+lGzhs9tZbxtFI=;
+        b=Pxrx/unVvGIrV5vCBL+xg8tsQrkIGGTP3HHDQKX2msWDtrYMivvCmpl/piF+ox03ZG
+         emOKShWB6GOToQLuISgsY4dX6PkIlRUT2YUcNM7YEGySyoBoeOgKssDrinUzpGPc25nt
+         KyTevDq0UQvACEXxseuhPnXQQcnq8FQ1/4sxTe9NrQUkE3EGo3o9iYW+eOmzoHZnw2o4
+         /bF45CO8vS0P2c6iTqNi1sDbQWIfBIXSUfM/uUUwXbnic52OsQbFqS7qpZyZ27ZGo7UE
+         gDCTZlShkT++zyflWiomWncAuNtKRanIs8URjXQBWL58FnnRd/2oVsGCOpXklL2q4BA3
+         IjmQ==
+X-Gm-Message-State: AOJu0YyGWEwhWSi9spiNQR4fGcecvjpe6LXmUUGGuYzAZM2NlcAtWgov
+	t9QfoiLsdn9SLyGBgYL1d87huwGvSGSd3MoiNHSO7EERoY6ituHrJWLyBoMpJhHYxj8=
+X-Gm-Gg: AeBDievq0O+scmYmshI/dmwEf4yXT9EG+fm5kbwO7//2yeCx42Jq11VKlYxvR/vjc0E
+	kg5Yn1mIgFHC+v6Wo9cfRzlAeCy40WEOEMA5O+4gAJc0yMu6hpV7VcGqCZuR4x/Y+oTkr0V+GjZ
+	zdnrasjGCA0G/UGj8LhMLyptulIdCAa/SE/ElhNoefqlH/TEH6Gp74GyPa1uyEpNLJF7OOhoRee
+	lky6iZXQQKdmY70v+fGMlFd+PppePCsRUUhZm1sdfuC2f33Rdr4aaaLU3eo6BRwnJIcmdID1xD7
+	kKbhPBxQJ30hOZpOFZjd2yZQGBbGa/GIdEgDz5Ed+34AyI45C7fVXUVCJmh9bub9CM9UtpUtuDd
+	4HgyFQ/0QHQwdwK4gpUvuhuwSkNcTi08IQ9I4pK3JZmj0ZVGahQOzId9oAk6embx+XazDEDlmwJ
+	Jib00R+4cHruQpQBw0JbtAAVEbROCBy9CT8bZ8LiucyoKn
+X-Received: by 2002:a05:6820:998:b0:67f:31e3:81a with SMTP id 006d021491bc7-6821dd77ea0mr9368006eaf.2.1775614451086;
+        Tue, 07 Apr 2026 19:14:11 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:49::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42330d4a3c1sm9810323fac.1.2026.04.07.19.14.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 19:14:08 -0700 (PDT)
+        Tue, 07 Apr 2026 19:14:10 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +67,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 3/6] bpf: Make find_linfo widely available
-Date: Wed,  8 Apr 2026 04:13:54 +0200
-Message-ID: <20260408021359.3786905-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 4/6] bpf: Use KF_DEPRECATED to emit verifier warnings
+Date: Wed,  8 Apr 2026 04:13:55 +0200
+Message-ID: <20260408021359.3786905-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260408021359.3786905-1-memxor@gmail.com>
 References: <20260408021359.3786905-1-memxor@gmail.com>
@@ -79,140 +79,158 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4510; h=from:subject; bh=XrkQcWqs7AP85csRWXc5TFKAZ+AkLwAi0B25wslTDII=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPqzmObNIWWJpeKtCfM40r8bRjt8T7vjUz9onRBX+2Hce1+ 2652lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCKpNgz/lKNVZVmuOl14IrfJltv9oM Xd+axfNaRfNZrsS7ww4UPML4b/lRcnif3fdEDk7MQ3x1i+c2tvLpLjvbJxK+vrJNUFf7QtWQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7062; h=from:subject; bh=KLEcKrNNxJLRmBOtQV0vrvqacmvRnYPtxeKTmG9NeAA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPqzmMrJU77Ooe5zrqR2qApobg15twEjfis+2Z8s6PLY16+ 6l3dUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgInMWcLI0KG/LeYnz/G6RpdX+z38M2 XCXr35pr6U0ZDjcYLii08NTxj++2tM+T1lL1fg/OXZpseu6ZhWvlyy+43xqbRND3g1L0x+zQgA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Move find_linfo() as bpf_find_linfo() into core.c to allow for its use
-in the verifier in subsequent patches.
+As documented in kfuncs.rst, introduce a KF_DEPRECATED annotation for
+kfuncs and apply it to all existing impl-suffixed kfuncs that are
+preserved for backwards compatibility for a few kernel releases, after
+we introduced versions with KF_IMPLICIT_ARGS.
+
+Use the kfunc flag to decide whether to emit warnings to the verifier
+log or not. Be helpful and point out the file:line in addition to the
+instruction when the information is available while emitting the
+deprecation warning.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h |  1 +
- kernel/bpf/core.c   | 37 +++++++++++++++++++++++++++++++++++++
- kernel/bpf/log.c    | 43 +------------------------------------------
- 3 files changed, 39 insertions(+), 42 deletions(-)
+ include/linux/btf.h                           |  1 +
+ kernel/bpf/helpers.c                          | 16 ++++-----
+ kernel/bpf/verifier.c                         | 34 +++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  2 +-
+ 4 files changed, 44 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d8fb9d61f5ce..0136a108d083 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3945,6 +3945,7 @@ static inline bool bpf_is_subprog(const struct bpf_prog *prog)
- 	return prog->aux->func_idx != 0;
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 48108471c5b1..86006a2d8b2a 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -79,6 +79,7 @@
+ #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
+ #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
+ #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
++#define KF_DEPRECATED   (1 << 17) /* kfunc is deprecated and should warn when used */
+ 
+ /*
+  * Tag marking a kernel function as a kfunc. This is meant to minimize the
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index bb95e287b0dc..190c0b382f11 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4685,19 +4685,19 @@ BTF_KFUNCS_START(generic_btf_ids)
+ BTF_ID_FLAGS(func, crash_kexec, KF_DESTRUCTIVE)
+ #endif
+ BTF_ID_FLAGS(func, bpf_obj_new, KF_ACQUIRE | KF_RET_NULL | KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_obj_new_impl, KF_ACQUIRE | KF_RET_NULL | KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_percpu_obj_new, KF_ACQUIRE | KF_RET_NULL | KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_percpu_obj_new_impl, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_percpu_obj_new_impl, KF_ACQUIRE | KF_RET_NULL | KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_obj_drop, KF_RELEASE | KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_obj_drop_impl, KF_RELEASE)
++BTF_ID_FLAGS(func, bpf_obj_drop_impl, KF_RELEASE | KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_percpu_obj_drop, KF_RELEASE | KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_percpu_obj_drop_impl, KF_RELEASE)
++BTF_ID_FLAGS(func, bpf_percpu_obj_drop_impl, KF_RELEASE | KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_refcount_acquire, KF_ACQUIRE | KF_RET_NULL | KF_RCU | KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_refcount_acquire_impl, KF_ACQUIRE | KF_RET_NULL | KF_RCU)
++BTF_ID_FLAGS(func, bpf_refcount_acquire_impl, KF_ACQUIRE | KF_RET_NULL | KF_RCU | KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_list_push_front_impl)
++BTF_ID_FLAGS(func, bpf_list_push_front_impl, KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_list_push_back_impl)
++BTF_ID_FLAGS(func, bpf_list_push_back_impl, KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+@@ -4706,7 +4706,7 @@ BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_rbtree_add, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_rbtree_add_impl)
++BTF_ID_FLAGS(func, bpf_rbtree_add_impl, KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_rbtree_first, KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_rbtree_root, KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_rbtree_left, KF_RET_NULL)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 86d77d5f7f83..267ab3c36f6f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3229,6 +3229,7 @@ struct bpf_kfunc_desc {
+ 	u32 func_id;
+ 	s32 imm;
+ 	u16 offset;
++	bool warned_deprecated;
+ 	unsigned long addr;
+ };
+ 
+@@ -12426,6 +12427,11 @@ static bool is_kfunc_destructive(struct bpf_kfunc_call_arg_meta *meta)
+ 	return meta->kfunc_flags & KF_DESTRUCTIVE;
  }
  
-+const struct bpf_line_info *bpf_find_linfo(const struct bpf_prog *prog, u32 insn_off);
- void bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo,
- 			     const char **filep, const char **linep, int *nump);
- int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ada76f997177..066b86e7233c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3335,6 +3335,43 @@ void bpf_get_linfo_file_line(struct btf *btf, const struct bpf_line_info *linfo,
- 		*nump = BPF_LINE_INFO_LINE_NUM(linfo->line_col);
- }
- 
-+const struct bpf_line_info *bpf_find_linfo(const struct bpf_prog *prog, u32 insn_off)
++static bool is_kfunc_deprecated(struct bpf_kfunc_call_arg_meta *meta)
 +{
-+	const struct bpf_line_info *linfo;
-+	u32 nr_linfo;
-+	int l, r, m;
-+
-+	nr_linfo = prog->aux->nr_linfo;
-+	if (!nr_linfo || insn_off >= prog->len)
-+		return NULL;
-+
-+	linfo = prog->aux->linfo;
-+	/* Loop invariant: linfo[l].insn_off <= insns_off.
-+	 * linfo[0].insn_off == 0 which always satisfies above condition.
-+	 * Binary search is searching for rightmost linfo entry that satisfies
-+	 * the above invariant, giving us the desired record that covers given
-+	 * instruction offset.
-+	 */
-+	l = 0;
-+	r = nr_linfo - 1;
-+	while (l < r) {
-+		/* (r - l + 1) / 2 means we break a tie to the right, so if:
-+		 * l=1, r=2, linfo[l].insn_off <= insn_off, linfo[r].insn_off > insn_off,
-+		 * then m=2, we see that linfo[m].insn_off > insn_off, and so
-+		 * r becomes 1 and we exit the loop with correct l==1.
-+		 * If the tie was broken to the left, m=1 would end us up in
-+		 * an endless loop where l and m stay at 1 and r stays at 2.
-+		 */
-+		m = l + (r - l + 1) / 2;
-+		if (linfo[m].insn_off <= insn_off)
-+			l = m;
-+		else
-+			r = m - 1;
-+	}
-+
-+	return &linfo[l];
++	return meta->kfunc_flags & KF_DEPRECATED;
 +}
 +
- int bpf_prog_get_file_line(struct bpf_prog *prog, unsigned long ip, const char **filep,
- 			   const char **linep, int *nump)
+ static bool is_kfunc_rcu(struct bpf_kfunc_call_arg_meta *meta)
  {
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index c67fbbbd5768..48931d4e5a68 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -327,47 +327,6 @@ __printf(2, 3) void bpf_log(struct bpf_verifier_log *log,
- }
- EXPORT_SYMBOL_GPL(bpf_log);
+ 	return meta->kfunc_flags & KF_RCU;
+@@ -14583,6 +14589,32 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
  
--static const struct bpf_line_info *
--find_linfo(const struct bpf_verifier_env *env, u32 insn_off)
--{
--	const struct bpf_line_info *linfo;
--	const struct bpf_prog *prog;
--	u32 nr_linfo;
--	int l, r, m;
--
--	prog = env->prog;
--	nr_linfo = prog->aux->nr_linfo;
--
--	if (!nr_linfo || insn_off >= prog->len)
--		return NULL;
--
--	linfo = prog->aux->linfo;
--	/* Loop invariant: linfo[l].insn_off <= insns_off.
--	 * linfo[0].insn_off == 0 which always satisfies above condition.
--	 * Binary search is searching for rightmost linfo entry that satisfies
--	 * the above invariant, giving us the desired record that covers given
--	 * instruction offset.
--	 */
--	l = 0;
--	r = nr_linfo - 1;
--	while (l < r) {
--		/* (r - l + 1) / 2 means we break a tie to the right, so if:
--		 * l=1, r=2, linfo[l].insn_off <= insn_off, linfo[r].insn_off > insn_off,
--		 * then m=2, we see that linfo[m].insn_off > insn_off, and so
--		 * r becomes 1 and we exit the loop with correct l==1.
--		 * If the tie was broken to the left, m=1 would end us up in
--		 * an endless loop where l and m stay at 1 and r stays at 2.
--		 */
--		m = l + (r - l + 1) / 2;
--		if (linfo[m].insn_off <= insn_off)
--			l = m;
--		else
--			r = m - 1;
--	}
--
--	return &linfo[l];
--}
--
- static const char *ltrim(const char *s)
+ static int check_return_code(struct bpf_verifier_env *env, int regno, const char *reg_name);
+ 
++static void warn_for_deprecated_kfuncs(struct bpf_verifier_env *env,
++				       struct bpf_kfunc_call_arg_meta *meta,
++				       int insn_idx, s16 offset)
++{
++	const struct bpf_line_info *linfo;
++	struct bpf_kfunc_desc *desc;
++	const char *file;
++	int line_num;
++
++	desc = find_kfunc_desc(env->prog, meta->func_id, offset);
++	if (!desc || desc->warned_deprecated || !is_kfunc_deprecated(meta) || !env->prog->aux->btf)
++		return;
++
++	linfo = bpf_find_linfo(env->prog, insn_idx);
++	if (linfo) {
++		bpf_get_linfo_file_line(env->prog->aux->btf, linfo, &file, NULL, &line_num);
++		warn(env, "%s:%d (insn #%d) uses deprecated kfunc %s(), which will be removed.\n",
++		     file, line_num, insn_idx, meta->func_name);
++	} else {
++		warn(env, "(insn #%d) uses deprecated kfunc %s(), which will be removed.\n",
++		     insn_idx, meta->func_name);
++	}
++
++	desc->warned_deprecated = true;
++}
++
+ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			    int *insn_idx_p)
  {
- 	while (isspace(*s))
-@@ -388,7 +347,7 @@ __printf(3, 4) void verbose_linfo(struct bpf_verifier_env *env,
- 		return;
+@@ -14612,6 +14644,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
  
- 	prev_linfo = env->prev_linfo;
--	linfo = find_linfo(env, insn_off);
-+	linfo = bpf_find_linfo(env->prog, insn_off);
- 	if (!linfo || linfo == prev_linfo)
- 		return;
+ 	insn_aux->is_iter_next = is_iter_next_kfunc(&meta);
+ 
++	warn_for_deprecated_kfuncs(env, &meta, insn_idx, insn->off);
++
+ 	if (!insn->off &&
+ 	    (insn->imm == special_kfunc_list[KF_bpf_res_spin_lock] ||
+ 	     insn->imm == special_kfunc_list[KF_bpf_res_spin_lock_irqsave])) {
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index d876314a4d67..6ad7b2cdfd05 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1326,7 +1326,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1)
+ BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1_assoc, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl)
++BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl, KF_DEPRECATED)
+ BTF_ID_FLAGS(func, bpf_kfunc_trigger_ctx_check)
+ BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
  
 -- 
 2.52.0
