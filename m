@@ -1,148 +1,442 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9874933A717
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 13:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9A73D0916;
+	Wed,  8 Apr 2026 13:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775655808; cv=none; b=YiiVPh9+IT/4JX0wQb6/yAgWHR3EIEvqO8C/B0C31eazXo3x/O6xeO+vvE2cU6/H/8u2KdiN/5DGfhlgfsjquCmX0KfLnoqUtvXbiFD6v/DrvWooRo5h5n8pjGi1zIQsfsTXLl5i18z+mNYrgf5WNfZHZXRtKqn6p/9FlFsQnD8=
+	t=1775656161; cv=none; b=uusuhvEEj3k8+vOx63zVvcicip11x9E83S208ae0WwX7xiX2qSf/CiI/QOD52c8+Km2Oeee+D5y0bdtXP4nrA3WHQgZZz74frCHOcaLS5hEBqTv2LSA+sw77JKrj4wgmfSNczwFxNG/DTqOszGNiy30gVkVaGWZrQsHG9nMaNvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775655808; c=relaxed/simple;
-	bh=aGBBqF82BfQwkwgHxlkI1N/8GUQz8/+5w8flepFuzok=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ahr/0vKXgCpC/78fiDRyz9GAtzInCmlC+5gcoW+I0MlWjk5dQ1EHb2dqAiaBYI7qkCaP38KNgRnF6J8eWuuPkvERH+BnOYdVvEDnSX73w4zKfpCZWo8NguGVTZR29oSfMeIXAaKFj8Ko6mhcnMwXq2AoRTggFN8hhKty+GPNNnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PDGxzH+O; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1775656161; c=relaxed/simple;
+	bh=8gRJp9QAYSyyDY06/q5cdAtJuxc/ookvWoLfeNQv9D8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=jbjHfBBUh3Hu8goc/qbGz6xPN05zQuzwmjGRm19xmMO2wopoG+scDdbhz4wnKcY8MEAOJeG+YoyWTLNP7KafprB2XiY71RXf8afF1y+9qy90HISMjrOOd6PrLrIgeCaQVdx/J6QSJGoLXusE8s9EtEe9czpUp9MDdqkYdrz1aeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lC2tYDyW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PDGxzH+O"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso41790315e9.2
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 06:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775655805; x=1776260605; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7oNmpe4d3hv2RrDET86MTy+CkexOZOZ7u5ulEsKdlgw=;
-        b=PDGxzH+O+Rmd9SO+r3SuZTpt5hD7GCO6IVZQCDmw8NCkr61pFnu7hgQrGG4i/4zc5m
-         ZdYfRDHcoymcWNdVx0kfhUlzspdm1as5UA76jorvvwrR6TNEJ+luZAlSDsU7CA+DpX24
-         Zps0ouQ6vfjDYMf9GytYaUIwO6clNWYQa6lyEts63sCt53hwfx5j5sy20jdfEoKhnXw1
-         sV1+xx+2qDOiHBJ1v9MMjjAufu+tmDDWy9uhG4/iHjuL42imyzQsQC7YUeqsuiV4f+Wr
-         GFaaJbrDymY7WkXxc0SWeHIqFZgfJCZWw4PFwNbczyeSj8/opCfpUG/ETo8JbPRQOx5Q
-         EwFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775655805; x=1776260605;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7oNmpe4d3hv2RrDET86MTy+CkexOZOZ7u5ulEsKdlgw=;
-        b=T2gbF0SU3Vwa0eFZDJI4aiSo2Qle5dim41CUIcFnPH4lL8ifurbD9pdx6AKdZtTArN
-         Szs4j2Z4aViFA25DbWFLtDM/cxoePv2g2FdgkjSuCCkm+TMcBwVSfUC1ggNZwLdzWh5U
-         bo9DyCzDVWuoZJD0WwJrJ0CqfkdRSlqZ2+TjpY3TVJUA735MGhSxp6YWodmWdcPllqXn
-         xsRYX+VIRZw1EcRg72WYvCArgmujFFXDdoK8NGi0piCsjOK8M8IKF6EgKX7jXPggrs85
-         MiAOue2PKAKVxOtQbVUubhoh2VjzuAyuLmtbcxPQuik0YV/MLHbHchos799TLG0x2Ts2
-         tf+g==
-X-Forwarded-Encrypted: i=1; AJvYcCU96nCsE22TlKoaNMgH/8edAYaJw7mGuSS7YwYU7kZ9chANCPCenxDWB2XYKW51HdRvhUQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym8dOr7dqJhtfeOuvowJOj/9QPbZdVyMeCpvKeHfr3qAPlvOWQ
-	m0ZqbhMKVgeWVxC8RM6DpIJRGI7xta72CqaXmcMtrgy/qx4DjGzBKU9Cql+Zm6v2gYo=
-X-Gm-Gg: AeBDietfaN725YjMXNaPE2vVQ8USsAG0PKowAkuci3n4LfX5w6Rm6EWZTR0erMh+sjw
-	su/2l9qwOATfqnGFYBa08cr0uCokhIpoi1tNYNGVA3pYgx23/vFDkp2mrnbi+EiYCI5W3fzcrpl
-	uBp2Whm8bSHAtG7lGz5cRbFKGYJeR7v/bR3SNlLjR+nuMOKEjVA0SHQHtHoShNa4+5gHebAX6rW
-	aPAbdhthTez5bAvg2S36Yj5uyn23wVXFYsWeWBMLqKk35oBTtqz3gCKn4UAZbP9Rkv4VnA5TSjq
-	tZT9bmsBZmCD/gNYrL9COWtPjEp383Pj8OczSHrLy9ocINIDczXLkblAD7t2BAX+z/vlwc5Qwm8
-	pBTaafG0kPjYHI2gtgIWFyBHxjeMnAnMgLM2K0anOhGEQrPsez8/q9g9fnUa08muPfwqgxMg6Vb
-	sWl7ngOFPryQklH5svyNSYMkzGlLMIoUBGWyNvi8mxG/hTf45YhLboeLE=
-X-Received: by 2002:a05:600c:3b1a:b0:486:fc5f:1ab9 with SMTP id 5b1f17b1804b1-48899775d8emr271551155e9.14.1775655805038;
-        Wed, 08 Apr 2026 06:43:25 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e9630ddsm645561325e9.13.2026.04.08.06.43.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2026 06:43:24 -0700 (PDT)
-Message-ID: <81bee452-f3b9-4a65-a4ee-8a71e8bd265b@suse.com>
-Date: Wed, 8 Apr 2026 15:43:23 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lC2tYDyW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D40C19421;
+	Wed,  8 Apr 2026 13:49:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775656160;
+	bh=8gRJp9QAYSyyDY06/q5cdAtJuxc/ookvWoLfeNQv9D8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=lC2tYDyWBXEaQSWEUcdOIYULmre7wupFQwHAuzThRrcxBC4vXsrLEvtdX0BFZUfsf
+	 C61GmAGzZ8RHx03JI6N0REAQPJsfPeg++sucwlOzAjqFPGDLW4j1graN3QpwXryxAz
+	 4khYchbkUJ7swaoxNHOCgsCXm9HHLDZktsvCrurOANt+B8FWp+N7mFutWgHDSNT/l/
+	 r3h1yk07Oe+ALOOpakkOaF4iIxX2INVPnZDSBZGaW4Xw3/o8FFbWLHc4dSr+hDnfPo
+	 wAJ70PHQCKK3r6UkEkNr3IkIruL1iYJBJN8+imWUHrHwtgBkG1Xkp0OB+m/pwzKSu2
+	 I0Ah3Csoo/5Lw==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Song Liu <song@kernel.org>
+Cc: Shakeel Butt <shakeel.butt@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com, Puranjay Mohan
+ <puranjay12@gmail.com>
+Subject: Re: [PATCH bpf v1] bpf: Avoid faultable build ID reads under mm locks
+In-Reply-To: <20260407223003.720428-1-ihor.solodrai@linux.dev>
+References: <20260407223003.720428-1-ihor.solodrai@linux.dev>
+Date: Wed, 08 Apr 2026 14:49:08 +0100
+Message-ID: <m25x611s17.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kbuild/btf: Avoid relinking modules when only vmlinux
- changes
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260402141911.1577711-1-petr.pavlu@suse.com>
- <dc3db54f-f95d-46aa-ad84-6258abd13fab@suse.com>
-Content-Language: en-US
-In-Reply-To: <dc3db54f-f95d-46aa-ad84-6258abd13fab@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 4/7/26 1:30 PM, Petr Pavlu wrote:
-> On 4/2/26 4:17 PM, Petr Pavlu wrote:
->> Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
->> and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
->> to enable generation of split BTF for kernel modules. This change required
->> the %.ko Makefile rule to additionally depend on vmlinux, which is used as
->> a base for deduplication. The regular ld_ko_o command executed by the rule
->> was then modified to be skipped if only vmlinux changes. This was done by
->> introducing a new if_changed_except command and updating the original call
->> to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
->>
->> Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
->> in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
->> from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
->> previous logic to skip relinking modules if only vmlinux changes. The issue
->> is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
->> prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
->> retains the raw './vmlinux'. As a result, if_changed_except doesn't
->> correctly filter out vmlinux. Consequently, with
->> CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
->> changes.
->>
->> Additionally, commit 522397d05e7d ("resolve_btfids: Change in-place update
->> with raw binary output") in 2025 reworked the method for patching BTF data
->> into the resulting modules by using 'objcopy --add-section'. This command
->> fails if a section already exists.
->>
->> Fix the unnecessary relinking issue by also excluding the normalized form
->> 'vmlinux' when invoking ld_ko_o. Adjust embed_btf_data() to first use the
->> --remove-section option to remove the patched BTF section if it is already
->> present.
-> 
-> I noticed that sorting id+flags in BTF_SET8 by resolve_btfids doesn't
-> seem to be idempotent, so this requires additional work.
+Ihor Solodrai <ihor.solodrai@linux.dev> writes:
 
-It is possible to make sorting id+flags in BTF_SET8 by resolve_btfids
-idempotent. One approach would be to also update the offsets (st_value)
-of the __BTF_ID__* symbols so that they reflect the result after
-sorting.
+> Sleepable build ID parsing can block in __kernel_read() [1], so the
+> stackmap sleepable path must not call it while holding mmap_lock or a
+> per-VMA read lock.
+>
+> The issue and the fix are similar to a recent procfs patch [2].
+>
+> Resolve each covered VMA with a stable read-side reference, preferring
+> lock_vma_under_rcu() and falling back to mmap_read_lock() only long
+> enough to acquire the VMA read lock. Take a reference to the backing
+> file, drop the VMA lock, and then parse the build ID through
+> (sleepable) build_id_parse_file().
+>
+> [1]: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
+> [2]: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
+>
+> Fixes: 777a8560fd29 ("lib/buildid: use __kernel_read() for sleepable context")
+> Assisted-by: Codex:gpt-5.4
+> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>
+> ---
+>
+> Below is a sequence of events leading up to this patch.
+>
+> I noticed a following deadlock splat on bpf-next, when running a
+> subset of selftests/bpf:
+>
+>   #526     uprobe_multi_test:OK
+>   #28      bpf_obj_id:OK
+>   [   27.561465]
+>   [   27.561603] ======================================================
+>   [   27.561899] WARNING: possible circular locking dependency detected
+>   [   27.562193] 7.0.0-rc5-g0eeb0094ba03 #3 Tainted: G           OE
+>   [   27.562523] ------------------------------------------------------
+>   [   27.562820] uprobe_multi/561 is trying to acquire lock:
+>   [   27.563071] ff1100010768ba18 (&sb->s_type->i_mutex_key#8){++++}-{4:4}, at: netfs_start_io_read+0x24/0x110
+>   [   27.563556]
+>   [   27.563556] but task is already holding lock:
+>   [   27.563845] ff1100010b12a640 (&mm->mmap_lock){++++}-{4:4}, at: stack_map_get_build_id_offset+0xfa/0x650
+>   [   27.564296]
+>   [   27.564296] which lock already depends on the new lock.
+>   [   27.564296]
+>   [   27.564696]
+>   [   27.564696] the existing dependency chain (in reverse order) is:
+>   [   27.565044]
+>   [   27.565044] -> #1 (&mm->mmap_lock){++++}-{4:4}:
+>   [   27.565340]        __might_fault+0xa3/0x100
+>   [   27.565572]        _copy_to_iter+0xdf/0x1520
+>   [   27.565786]        copy_page_to_iter+0x1c6/0x2d0
+>   [   27.566011]        filemap_read+0x5f7/0xbf0
+>   [   27.566218]        netfs_file_read_iter+0x1ca/0x240
+>   [   27.566453]        vfs_read+0x482/0x9e0
+>   [   27.566658]        ksys_read+0x115/0x1f0
+>   [   27.566852]        do_syscall_64+0xde/0x390
+>   [   27.567057]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>   [   27.567322]
+>   [   27.567322] -> #0 (&sb->s_type->i_mutex_key#8){++++}-{4:4}:
+>   [   27.567701]        __lock_acquire+0x1529/0x2a10
+>   [   27.567923]        lock_acquire+0xd7/0x280
+>   [   27.568124]        down_read_interruptible+0x55/0x340
+>   [   27.568368]        netfs_start_io_read+0x24/0x110
+>   [   27.568622]        netfs_file_read_iter+0x191/0x240
+>   [   27.568858]        __kernel_read+0x401/0x850
+>   [   27.569068]        freader_fetch+0x19b/0x790
+>   [   27.569279]        __build_id_parse+0xde/0x580
+>   [   27.569528]        stack_map_get_build_id_offset+0x248/0x650
+>   [   27.569802]        __bpf_get_stack+0x653/0x890
+>   [   27.570019]        bpf_get_stack_sleepable+0x1d/0x30
+>   [   27.570257]        bpf_prog_51bb4c0f31ae471b_uprobe_sleepable+0x2d/0x42
+>   [   27.570594]        uprobe_prog_run+0x425/0x870
+>   [   27.570816]        uprobe_multi_link_handler+0x58/0xb0
+>   [   27.571062]        handler_chain+0x234/0x1270
+>   [   27.571275]        uprobe_notify_resume+0x4de/0xd60
+>   [   27.571542]        exit_to_user_mode_loop+0xe0/0x480
+>   [   27.571785]        exc_int3+0x1bd/0x260
+>   [   27.571973]        asm_exc_int3+0x39/0x40
+>   [   27.572169]
+>   [   27.572169] other info that might help us debug this:
+>   [   27.572169]
+>   [   27.572571]  Possible unsafe locking scenario:
+>   [   27.572571]
+>   [   27.572854]        CPU0                    CPU1
+>   [   27.573074]        ----                    ----
+>   [   27.573293]   rlock(&mm->mmap_lock);
+>   [   27.573502]                                lock(&sb->s_type->i_mutex_key#8);
+>   [   27.573846]                                lock(&mm->mmap_lock);
+>   [   27.574135]   rlock(&sb->s_type->i_mutex_key#8);
+>   [   27.574364]
+>   [   27.574364]  *** DEADLOCK ***
+>   [   27.574364]
+>   [   27.574671] 3 locks held by uprobe_multi/561:
+>   [   27.574884]  #0: ffffffff852e0038 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: uprobe_notify_resume+0x229/0xd60
+>   [   27.575371]  #1: ffffffff852e0038 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: uprobe_prog_run+0x239/0x870
+>   [   27.575874]  #2: ff1100010b12a640 (&mm->mmap_lock){++++}-{4:4}, at: stack_map_get_build_id_offset+0xfa/0x650
+>   [   27.576342]
+>   [   27.576342] stack backtrace:
+>   [   27.576578] CPU: 7 UID: 0 PID: 561 Comm: uprobe_multi Tainted: G           OE       7.0.0-rc5-g0eeb0094ba03 #3 PREEMPT(full)
+>   [   27.576586] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+>   [   27.576588] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-5.el9 11/05/2023
+>   [   27.576591] Call Trace:
+>   [   27.576595]  <TASK>
+>   [   27.576598]  dump_stack_lvl+0x54/0x70
+>   [   27.576606]  print_circular_bug+0x2e8/0x300
+>   [   27.576616]  check_noncircular+0x12e/0x150
+>   [   27.576628]  __lock_acquire+0x1529/0x2a10
+>   [   27.576642]  ? __pfx_walk_pgd_range+0x10/0x10
+>   [   27.576651]  ? srso_return_thunk+0x5/0x5f
+>   [   27.576656]  ? lock_acquire+0xd7/0x280
+>   [   27.576661]  ? avc_has_perm_noaudit+0x38/0x1f0
+>   [   27.576672]  lock_acquire+0xd7/0x280
+>   [   27.576677]  ? netfs_start_io_read+0x24/0x110
+>   [   27.576685]  ? srso_return_thunk+0x5/0x5f
+>   [   27.576693]  ? netfs_start_io_read+0x24/0x110
+>   [   27.576698]  down_read_interruptible+0x55/0x340
+>   [   27.576702]  ? netfs_start_io_read+0x24/0x110
+>   [   27.576707]  ? __pfx_cmp_ex_search+0x10/0x10
+>   [   27.576716]  netfs_start_io_read+0x24/0x110
+>   [   27.576723]  netfs_file_read_iter+0x191/0x240
+>   [   27.576731]  __kernel_read+0x401/0x850
+>   [   27.576741]  ? __pfx___kernel_read+0x10/0x10
+>   [   27.576752]  ? __pfx_fixup_exception+0x10/0x10
+>   [   27.576761]  ? srso_return_thunk+0x5/0x5f
+>   [   27.576766]  ? lock_is_held_type+0x76/0x100
+>   [   27.576773]  ? srso_return_thunk+0x5/0x5f
+>   [   27.576777]  ? mtree_range_walk+0x421/0x6c0
+>   [   27.576785]  freader_fetch+0x19b/0x790
+>   [   27.576793]  ? mt_find+0x14b/0x340
+>   [   27.576801]  ? __pfx_freader_fetch+0x10/0x10
+>   [   27.576805]  ? mt_find+0x29a/0x340
+>   [   27.576810]  ? mt_find+0x14b/0x340
+>   [   27.576820]  __build_id_parse+0xde/0x580
+>   [   27.576832]  ? __pfx___build_id_parse+0x10/0x10
+>   [   27.576850]  stack_map_get_build_id_offset+0x248/0x650
+>   [   27.576863]  __bpf_get_stack+0x653/0x890
+>   [   27.576867]  ? __pfx_stack_trace_consume_entry+0x10/0x10
+>   [   27.576880]  ? __pfx___bpf_get_stack+0x10/0x10
+>   [   27.576884]  ? lock_acquire+0xd7/0x280
+>   [   27.576889]  ? uprobe_prog_run+0x239/0x870
+>   [   27.576895]  ? srso_return_thunk+0x5/0x5f
+>   [   27.576899]  ? stack_trace_save+0xae/0x100
+>   [   27.576908]  bpf_get_stack_sleepable+0x1d/0x30
+>   [   27.576913]  bpf_prog_51bb4c0f31ae471b_uprobe_sleepable+0x2d/0x42
+>   [   27.576919]  uprobe_prog_run+0x425/0x870
+>   [   27.576927]  ? srso_return_thunk+0x5/0x5f
+>   [   27.576933]  ? __pfx_uprobe_prog_run+0x10/0x10
+>   [   27.576937]  ? uprobe_notify_resume+0x413/0xd60
+>   [   27.576952]  uprobe_multi_link_handler+0x58/0xb0
+>   [   27.576960]  handler_chain+0x234/0x1270
+>   [   27.576976]  ? __pfx_handler_chain+0x10/0x10
+>   [   27.576988]  ? srso_return_thunk+0x5/0x5f
+>   [   27.576992]  ? __kasan_kmalloc+0x72/0x90
+>   [   27.576998]  ? __pfx_ri_timer+0x10/0x10
+>   [   27.577003]  ? timer_init_key+0xf5/0x200
+>   [   27.577013]  uprobe_notify_resume+0x4de/0xd60
+>   [   27.577025]  ? uprobe_notify_resume+0x229/0xd60
+>   [   27.577030]  ? __pfx_uprobe_notify_resume+0x10/0x10
+>   [   27.577035]  ? srso_return_thunk+0x5/0x5f
+>   [   27.577039]  ? atomic_notifier_call_chain+0xfc/0x110
+>   [   27.577047]  ? srso_return_thunk+0x5/0x5f
+>   [   27.577051]  ? notify_die+0xe5/0x130
+>   [   27.577056]  ? __pfx_notify_die+0x10/0x10
+>   [   27.577063]  ? srso_return_thunk+0x5/0x5f
+>   [   27.577071]  exit_to_user_mode_loop+0xe0/0x480
+>   [   27.577076]  ? asm_exc_int3+0x39/0x40
+>   [   27.577083]  exc_int3+0x1bd/0x260
+>   [   27.577090]  asm_exc_int3+0x39/0x40
+>   [   27.577095] RIP: 0033:0x6c4180
+>   [   27.577100] Code: c6 05 0b 6f 32 00 01 5d c3 90 c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 f3 0f 1e fa eb 8a 66 2e 0f 1f 84 00 00 00 00 00 <cc> 48 89 e5 31 c0 5d c3 0f 1f 84 00 00 00 00 00 55 48 89 e5 31 c0
+>   [   27.577104] RSP: 002b:00007ffcbf71ada8 EFLAGS: 00000246
+>   [   27.577109] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fec9163db7b
+>   [   27.577112] RDX: 00007ffcbf71adbf RSI: 0000000000001000 RDI: 00000000007f0000
+>   [   27.577115] RBP: 00007ffcbf71add0 R08: 00007fec91731330 R09: 00007fec9178d060
+>   [   27.577118] R10: 00007fec9153ad98 R11: 0000000000000202 R12: 00007ffcbf71af08
+>   [   27.577120] R13: 0000000000787760 R14: 00000000009eade8 R15: 00007fec917bf000
+>   [   27.577135]  </TASK>
+>   #54/1    build_id/nofault-paged-out:OK
+>
+> It was reproducable, which allowed me to bisect to commit
+> 777a8560fd29 ("lib/buildid: use __kernel_read() for sleepable
+> context")
+>
+> Then I used Codex for analysis of the splat, patch and relevant lore
+> discussions, and then asked it to produce a patch draft.
+>
+> I then asked Puranjay to review the draft, and he advised to use
+> lock_vma_under_rcu() here, which seems appropriate. I also did a bit
+> of refactoring of the LLM-produced code.
+>
+> I verified the resulting patch fixes the deadlock splat.
+>
+> ---
+>  kernel/bpf/stackmap.c | 80 ++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 71 insertions(+), 9 deletions(-)
+>
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index da3d328f5c15..017ecbc22c96 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/btf_ids.h>
+>  #include <linux/buildid.h>
+> +#include <linux/mmap_lock.h>
+>  #include "percpu_freelist.h"
+>  #include "mmap_unlock_work.h"
+>  
+> @@ -152,6 +153,65 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+>  			 : build_id_parse_nofault(vma, build_id, NULL);
+>  }
+>  
+> +static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id_offs)
+> +{
+> +	id_offs->status = BPF_STACK_BUILD_ID_IP;
+> +	memset(id_offs->build_id, 0, BUILD_ID_SIZE_MAX);
+> +}
 
-However, I don't think this is worth doing. Since this logic would be
-relevant in specific cases when vmlinux changes and only the BTF data
-needs to be regenerated, it would have limited usage and testing.
-Importantly, always relinking the modules adds only about 6% to the
-rebuild time of the modules target on my system when vmlinux is touched.
-The work required for BTF and Makefile processing dominates this target.
-When developing the kernel locally, it's common to use a custom config
-with a limited amount of modules. In such a case, avoiding the relinking
-of modules saves very little.
+As you will be doing another version, can you put this refactoring in a
+preparatory patch.
 
-I plan to instead send a patch to replace the current condition that
-invokes ld_ko_o from if_changed_except to if_changed, and remove the
-if_changed_except logic.
+> +
+> +static struct vm_area_struct *stack_map_lock_vma(struct mm_struct *mm, unsigned long ip)
+> +{
+> +	struct vm_area_struct *vma;
+> +
+> +	vma = lock_vma_under_rcu(mm, ip);
+> +	if (vma)
+> +		return vma;
+> +
+> +	mmap_read_lock(mm);
 
--- Petr
+This will deadlock if the caller already holds mmap_lock, shouldn't this
+be:
+        if (!mmap_read_trylock(mm))
+                return NULL;
+
+similar to the non-sleepable path?
+
+> +	vma = find_vma(mm, ip);
+> +	if (range_in_vma(vma, ip, ip) && vma_start_read_locked(vma))
+
+I think this will not compile for !CONFIG_PER_VMA_LOCK as there is no
+stub for vma_start_read_locked().
+
+
+Also, lock_vma_under_rcu() returns NULL if address is not in vma's
+range, I think if replace find_vma() with vma_lookup(), you will not
+need any calls to range_in_vma(). (but please validate this as I am not
+sure)
+
+> +		goto out;
+> +
+> +	vma = NULL;
+> +out:
+> +	mmap_read_unlock(mm);
+> +
+> +	return vma;
+> +}
+> +
+> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
+> +						    u32 trace_nr)
+> +{
+> +	struct mm_struct *mm = current->mm;
+> +	struct vm_area_struct *vma;
+> +	struct file *file;
+> +	u64 ip;
+> +
+> +	for (u32 i = 0; i < trace_nr; i++) {
+> +		ip = READ_ONCE(id_offs[i].ip);
+> +		vma = stack_map_lock_vma(mm, ip);
+> +		if (!range_in_vma(vma, ip, ip) || !vma->vm_file) {
+
+stack_map_lock_vma() already guarantees that any non-NULL return
+contains the IP as lock_vma_under_rcu() checks address < vma->vm_start
+ || address >= vma->vm_end at mmap_lock.c:332 and fallback explicitly
+checks range_in_vma(vma, ip, ip) before returning 
+
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+> +			if (vma)
+> +				vma_end_read(vma);
+> +			continue;
+> +		}
+
+This is doing lock->unlock + finding vma for every ip, but the non
+sleepable path has an optimization which we should do here as well.
+As frames in the same library or executable will have the same file.
+
+something like:
+
+-- 8< --
+
+                /* Snapshot VMA fields before dropping the lock */
+                vm_start = vma->vm_start;
+                vm_pgoff = vma->vm_pgoff;
+                file = vma->vm_file;
+
+                if (file == prev_file) {
+                        /* Same backing file as previous frame, reuse build ID */
+                        memcpy(id_offs[i].build_id, prev_build_id, BUILD_ID_SIZE_MAX);
+                        vma_end_read(vma);
+                } else {
+                        get_file(file);
+                        vma_end_read(vma);
+
+                        /* build_id_parse_file() may block on filesystem reads */
+                        if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
+                                stack_map_build_id_set_ip(&id_offs[i]);
+                                fput(file);
+                                continue;
+                        }
+                        memcpy(prev_build_id, id_offs[i].build_id, BUILD_ID_SIZE_MAX);
+                        if (prev_file)
+                                fput(prev_file);
+                        prev_file = file;
+                }
+
+                id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
+                id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
+        }
+
+        if (prev_file)
+                fput(prev_file);
+
+-- >8 --
+
+P.S. - Above code is not even compile tested.
+
+> +		file = get_file(vma->vm_file);
+> +		vma_end_read(vma);
+
+AI is right, we need to snapshot vm_pgoff and vm_start before vma_end_read()
+
+> +		/* build_id_parse_file() may block on filesystem reads */
+> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+> +		} else {
+> +			id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ip - vma->vm_start;
+> +			id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
+> +		}
+> +
+> +		fput(file);
+> +	}
+> +}
+> +
+>  /*
+>   * Expects all id_offs[i].ip values to be set to correct initial IPs.
+>   * They will be subsequently:
+> @@ -165,23 +225,26 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+>  static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+>  					  u32 trace_nr, bool user, bool may_fault)
+>  {
+> -	int i;
+>  	struct mmap_unlock_irq_work *work = NULL;
+>  	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
+> +	bool has_user_ctx = user && current && current->mm;
+>  	struct vm_area_struct *vma, *prev_vma = NULL;
+>  	const char *prev_build_id;
+> +	int i;
+> +
+> +	if (may_fault && has_user_ctx) {
+> +		stack_map_get_build_id_offset_sleepable(id_offs, trace_nr);
+> +		return;
+> +	}
+>  
+>  	/* If the irq_work is in use, fall back to report ips. Same
+>  	 * fallback is used for kernel stack (!user) on a stackmap with
+>  	 * build_id.
+>  	 */
+> -	if (!user || !current || !current->mm || irq_work_busy ||
+> -	    !mmap_read_trylock(current->mm)) {
+> +	if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
+>  		/* cannot access current->mm, fall back to ips */
+> -		for (i = 0; i < trace_nr; i++) {
+> -			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+> -			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+> -		}
+> +		for (i = 0; i < trace_nr; i++)
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+>  		return;
+>  	}
+>  
+> @@ -196,8 +259,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+>  		vma = find_vma(current->mm, ip);
+>  		if (!vma || fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
+>  			/* per entry fall back to ips */
+> -			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+> -			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+>  			continue;
+>  		}
+>  build_id_valid:
+> -- 
+> 2.53.0
