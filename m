@@ -1,180 +1,460 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F1B3A8F7
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 17:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775670454; cv=pass; b=Wl31q02n6TbF7iX3Id/sBHosFG4Z2kvj2dwyAZfVp9yKqygOcMKwYyJS4nXFz04s5JOXcl5PcK/DSv1zF614y8hORl239aCh8AWmTlXNtJxxs5+si9SEG7tF8QBoG5g74ApAgcsZvACOv4sDsd0vAGgZjssHPeTDMI11Mazkr48=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775670454; c=relaxed/simple;
-	bh=6D7xZEwuAOpUUX33CCrlezKUHz8tZirmPI+OQ3coSio=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bkmxSAR7osxEb9fWpVH57S1l+PTYdtWcWKf7eWM6GSkqT85x64KpJkdPlORLkrqgTppsPBtNN5i7UK8kCergwH4EGkXT7e666oo9qoEctm1+vGbmBMxGS70ZQNhqxQ6wwQwg23KkYBvQZXdzsxt1ebrFicis6UY/bacAbo/ln0U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jhpr46Sr; arc=pass smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C437225A321
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 17:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775670756; cv=none; b=HS6wXSSaV2X4C6VXbRAbzmeqGleokBtiSxOstrvNRsYaOutAzx5359zxjfn14lhTkYfaASb/rp2V+KXf95gEYME6kKuEosju8MjSp/Wq/Wq4E3PUoP/5pirqOqcnCyb8nOLlUKQ90JFku38SKzntrGtuckpomUwJUt0YdgksrNo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775670756; c=relaxed/simple;
+	bh=Aa/EoxUYgL+tuYrxO4gB6ztvxANMtjex6eyL+RpfLVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mJsbd2GS4rjwhRZ85luva3liasuz34AnnyADTDw7NNEmz//AwmzF0hCipmqsdU/z2CM9zeDGU+Zu6pcY5NdtHv/xIGY+H3BfN+rIFY0fRoQlUgjCze+GCzd8FBdd7bZm0yJbWWVTfEKlSgN7XISc0B82B4JDTPKqVEjXuyXm8S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Om6pdpJ5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jhpr46Sr"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso882555e9.2
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 10:47:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775670451; cv=none;
-        d=google.com; s=arc-20240605;
-        b=EBSx5Gh4n1d0OI1GiRQvX7FaB7X7X6EldW89J6idJ4NRzqJk+Kp/YV6SD6vW7+PsMB
-         xvCoODFBF8GNi/sMsT568TydhCz/ldtZnHEgaUuqgLYjaKHsKw0AkJ4IgCp8xhtCpdQ1
-         3Zvbu0d+Dq6hOXLTNnA+wK6G0VvDziWs0njJCsAavPG3kAHHHky8tBRkyo+8KgDJiVZk
-         sR/95vRniRsK3AVq/wGl5JgyOA9e7ZtcosgtLXh/z7nNOZcgGMmHtsEdoa3IQtYqKuQC
-         k1obeb8NT5seh+fdamWYq/aBULlGy4Z5uLzQ5XruwUr5px+5LP/jEfBI6YfiJbT6Vej3
-         tccQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=WyObzYDLbSdUq16AytO8s0Wzd2RwSGq0XlA7UMsdCso=;
-        fh=CY4ub6tm4dU9Q9M/cvte17bmSVJcYAt67JYy2EieC4I=;
-        b=hqY9b/nnNtTkMkCXcS62f9wQsjGrcHynQDKbEhwn2XCvINemBsI64IusXlkWiuXLIx
-         LMvNeFA7SdRwL2W3aSYHv0ramPmXGs3YwRHSOEvQXfbKaRAMa40l+m52SSM15PV5gggG
-         oeEHeFlz65D+9zZoNnr0ckrFMkMP+6LsQu+1ERpDa2urtL1Z+bA5KdwHfsBnREktltt+
-         Z6SdsLOKSuwMkugvrF+9TQUt0FOpjmv6awe56uI+a8OVO7670gaBmOSx8HTBFyWtVQ4P
-         a3xTTgQWAYGHUB2UkkXLEAZao8eDy+WILrJjBPSReQvooQXtcWl46UknYmmspWBTgQIp
-         wTjQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775670451; x=1776275251; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WyObzYDLbSdUq16AytO8s0Wzd2RwSGq0XlA7UMsdCso=;
-        b=Jhpr46SrV39yvS8h+ohX8BJW105YC9YFx5BO/0MUv1ZDGaKNiHgwPimYZKEgGC/9KC
-         cnuApBUZO1yYX7KLpoIKtfX7jYjFHFohu1A5TDmuMjd+kFWDbH3A28dG+csaJpG+cF07
-         6IXhP3nByo++OECgTvpM455isMWQzyj9tuFSIq0x7dsXAOEFWvLfve9M0ydfUz1u8Wtu
-         NqBTPU8t373wQtCp5SvJvuPOlHAT21NK3Hxd/Hf2Sr8RnbtJHeQmiVWgR/BC8S2EU+Cr
-         7jQWk4ZbigTZHjNKBVEiFaet1I2DcSsvEQx3Q58LWQH08OP9SpAQ4l/mHR9wLAo22uAc
-         NZBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775670451; x=1776275251;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WyObzYDLbSdUq16AytO8s0Wzd2RwSGq0XlA7UMsdCso=;
-        b=P85rKtkDIoLc8j0Agpb39UOIwOMQMh8onKoMoPf938efxLmD2UMo/RLoBSc13fzb0a
-         RrWX9mPNUTsebUKJia7cPuJ8tOySRUpoZN8ScdMvJN3lZVaWRRJfg1R5se0HlBG8RMl4
-         z20yizVYb0xCb0Z1LxddhhuVnLfaKxkAEa7DIZOMvPjZpBfPaxQomHDd8GZLsIGVjRRS
-         BpvSe6M3OQfuOSxgDfEjJtMTkLLrRVO3PY0Ys+Hl3AiFBiyzsC5EGRdwg6JhQPRh4DPy
-         DlB2eeRPLNtzgY9wuosbRiqXXWMMjfFC1htdkFUTK3chSFwRIOE9Gci629aYkghpAbkV
-         lOhA==
-X-Gm-Message-State: AOJu0YxBtLuULmYrAL3zZu/il0UwwxVtKXpONYBKAo6v+2sxEoHtq+8p
-	9r0mFye2Oiwj7hy+vRyg35ofubfHXM9EKb4HUNs+cPDR83yqIDkC7WcHO5gJ4orGVH3VJ0mFTVz
-	ajpUTTuvOoNEYQo2qX+i5EolrBzdkgjo=
-X-Gm-Gg: AeBDievHFb1mqvNN+9BbwhCmsKuiVqmPNG8eQwgSmLSnDbJU0ji2P03msUSJCp5m1S+
-	Nrx9Q0a7oOGLgBF1J6G84aZCDKBTzcKNo5Bb/XNAb/8+YWeCHRGm+5HvvrmJWRj8lbNg/NjbA8s
-	K4zraK0DCwzksi5r8RFW9186s4RJ5Dr9KB5HhCtacl48dhzakdraq3OOqiArIVHrnR2zHSdy7km
-	4I6k8HaUcRRe9D8p8C68rFinrZeU3W/O3Yc8U1QECV6zgkvAZES5to1HmCNcZ+MViQcyWZXy6WY
-	A8DzkUutYwbebSUpNZzaMftmqLyy8s8gpqiHx7UHEb/J98JQ2ISbgB+mAYzdgmDmvTP6zYJmFUc
-	2hIqivzNdEaIAM6O8e+GVWGgPxLZxEjMwX3R/
-X-Received: by 2002:a05:600c:a47:b0:487:1108:48bc with SMTP id
- 5b1f17b1804b1-48899775d9amr328448365e9.17.1775670451184; Wed, 08 Apr 2026
- 10:47:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Om6pdpJ5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1CDC19421;
+	Wed,  8 Apr 2026 17:52:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775670756;
+	bh=Aa/EoxUYgL+tuYrxO4gB6ztvxANMtjex6eyL+RpfLVQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Om6pdpJ5n0TviR02zm7VASPMqlP3LbOxMI6QlizF3L52y8U6rnIAQ/ybVyVLbCjCO
+	 D9d312f9HKGGaR45Z7/ALHibThtqTI5upIb7nzv6CqtnTC6zAajQkCO9s5bxRTUQP1
+	 1ZLv4MVTFfZFzwSBch5IxeLOKDOFLtO+GJ4gz4Pl/QbC3rgJcj3p6ASL3NNB1P6cYn
+	 FrL/9NuU6IuSsu13Dx0hJ6Ar4RRarU0H7Sch3g59ia0a9zZz8hl5GDGPz5ZdLPD1yV
+	 HLLficdMvlNx43VtfqS0eGXBnKspUkCYZq48yb0LSOsRy3dpUplvr2uc/93JamhS6g
+	 HeAKd5+EF9WuQ==
+From: Song Liu <song@kernel.org>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	kernel-team@meta.com,
+	laoar.shao@gmail.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next] selftests/bpf: Add BPF struct_ops + livepatch integration test
+Date: Wed,  8 Apr 2026 10:52:17 -0700
+Message-ID: <20260408175217.1011024-1-song@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408153712.523124-1-daniel@iogearbox.net> <20260408153712.523124-2-daniel@iogearbox.net>
- <CAADnVQ+tLKiH2a_1mOFZ7aZ3jN+9_vLxOxxPqqBc8QEYUwCgVg@mail.gmail.com> <a4190f97-b171-4a7f-9722-9e7bc73a57ca@iogearbox.net>
-In-Reply-To: <a4190f97-b171-4a7f-9722-9e7bc73a57ca@iogearbox.net>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 8 Apr 2026 10:47:20 -0700
-X-Gm-Features: AQROBzDWsBCfWgQ4x8d1XDg4LcRe-HiVEe_KGJn-po5bqeJHqG_OSdR4_ht9MWw
-Message-ID: <CAADnVQKuAXW3T3spcYFSc7SVbbBHGfbiV=XR0QdNfuJtCbG5fA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] bpf: Fix ld_{abs,ind} failure path analysis
- in subprogs
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	STAR Labs SG <info@starlabs.sg>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 8, 2026 at 10:04=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.n=
-et> wrote:
->
-> On 4/8/26 6:20 PM, Alexei Starovoitov wrote:
-> > On Wed, Apr 8, 2026 at 8:37=E2=80=AFAM Daniel Borkmann <daniel@iogearbo=
-x.net> wrote:
-> >>
-> >> Usage of ld_{abs,ind} instructions got extended into subprogs some tim=
-e
-> >> ago via commit 09b28d76eac4 ("bpf: Add abnormal return checks."). Thes=
-e
-> >> are only allowed in subprograms when the latter are BTF annotated and
-> >> have scalar return types.
-> >>
-> >> The code generator in bpf_gen_ld_abs() has an abnormal exit path (r0=
-=3D0 +
-> >> exit) from legacy cBPF times. While the enforcement is on scalar retur=
-n
-> >> types, the verifier must also simulate the path of abnormal exit if th=
-e
-> >> packet data load via ld_{abs,ind} failed.
-> >>
-> >> This is currently not the case. Fix it by having the verifier simulate
-> >> both success and failure paths, and extend it in similar ways as we do
-> >> for tail calls. The success path (r0=3Dunknown, continue to next insn)=
- is
-> >> pushed onto stack for later validation and the r0=3D0 and return to th=
-e
-> >> caller is done on the fall-through side.
-> >>
-> >> Fixes: 09b28d76eac4 ("bpf: Add abnormal return checks.")
-> >> Reported-by: STAR Labs SG <info@starlabs.sg>
-> >> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> >> ---
-> >>   kernel/bpf/verifier.c | 32 ++++++++++++++++++++++++++++++--
-> >>   1 file changed, 30 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> >> index db009d509ade..46f55ea6684e 100644
-> >> --- a/kernel/bpf/verifier.c
-> >> +++ b/kernel/bpf/verifier.c
-> >> @@ -18357,6 +18357,22 @@ static int check_ld_abs(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn)
-> >>          mark_reg_unknown(env, regs, BPF_REG_0);
-> >>          /* ld_abs load up to 32-bit skb data. */
-> >>          regs[BPF_REG_0].subreg_def =3D env->insn_idx + 1;
-> >> +       /*
-> >> +        * See bpf_gen_ld_abs() which emits a hidden BPF_EXIT with r0=
-=3D0
-> >> +        * which must be explored by the verifier when in a subprog.
-> >> +        */
-> >> +       if (env->cur_state->curframe) {
-> >> +               struct bpf_verifier_state *branch;
-> >> +
-> >> +               branch =3D push_stack(env, env->insn_idx + 1, env->ins=
-n_idx, false);
-> >> +               if (IS_ERR(branch))
-> >> +                       return PTR_ERR(branch);
-> >> +               mark_reg_known_zero(env, regs, BPF_REG_0);
-> >> +               err =3D prepare_func_exit(env, &env->insn_idx);
-> >> +               if (err)
-> >> +                       return err;
-> >> +               env->insn_idx--;
-> >
-> > similar code in check_helper_call() for tail_call
-> > also does mark_reg_scratched() and clear_all_pkt_pointers()
-> > which are missing here.
->
-> The clear_all_pkt_pointers() is only relevant for the cases where we
-> modify/pull/push skb data, but in ld_{abs,ind} we either read skb
-> packet data directly in linear section or via skb_copy_bits.
->
-> I'll add the mark_reg_scratched(env, BPF_REG_0). Not sure how much
-> this really suits to move into a common helper: the tail call case
-> calls clear_all_pkt_pointers() and marks r0 unknown right after
-> push_stack(), the ld_{abs,ind} case does not clear the packet
-> pointers and marks r0 as known 0. imo its fine to leave it separate.
+Add a selftest that demonstrates BPF struct_ops controlling kernel
+behavior through livepatch. A kernel module (test_klp_bpf) livepatches
+cmdline_proc_show() and delegates output to a BPF struct_ops callback.
+The BPF program writes a custom string to /proc/cmdline via the
+bpf_klp_seq_write kfunc.
 
-Ahh. Known zero vs unknown. I missed that. Makes sense.
+Components:
+- test_kmods/test_klp_bpf.c: kernel module that registers a
+  klp_bpf_cmdline_ops struct_ops type, livepatches cmdline_proc_show,
+  and provides bpf_klp_seq_write kfunc for seq_file writes
+- progs/test_klp_bpf.c: BPF struct_ops program implementing
+  set_cmdline callback
+- prog_tests/test_klp_bpf.c: userspace test verifying /proc/cmdline
+  output with and without BPF struct_ops attached
 
-btw what is the point of env->insn_idx--; ?
-This and tail_call case are doing it, but why?
+Assisted-by: Claude:claude-opus-4-6
+Signed-off-by: Song Liu <song@kernel.org>
+
+---
+
+This shows an alternative solution to the idea proposed in [1]. This
+approach doesn't need any kernel change.
+
+[1] https://lore.kernel.org/bpf/20260402092607.96430-1-laoar.shao@gmail.com/
+---
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../selftests/bpf/prog_tests/test_klp_bpf.c   | 109 ++++++++++++
+ .../selftests/bpf/progs/test_klp_bpf.c        |  26 +++
+ .../testing/selftests/bpf/test_kmods/Makefile |   3 +-
+ .../selftests/bpf/test_kmods/test_klp_bpf.c   | 166 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/test_klp_bpf.h   |  12 ++
+ 6 files changed, 316 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_klp_bpf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_klp_bpf.c
+ create mode 100644 tools/testing/selftests/bpf/test_kmods/test_klp_bpf.c
+ create mode 100644 tools/testing/selftests/bpf/test_kmods/test_klp_bpf.h
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f75c4f52c028..22ef1f76196d 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -121,7 +121,7 @@ TEST_PROGS_EXTENDED := \
+ 	ima_setup.sh verify_sig_setup.sh
+ 
+ TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
+-	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
++	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko test_klp_bpf.ko
+ TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
+ 
+ # Compile but not part of 'make run_tests'
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_klp_bpf.c b/tools/testing/selftests/bpf/prog_tests/test_klp_bpf.c
+new file mode 100644
+index 000000000000..f70c4d1d0176
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/test_klp_bpf.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <test_progs.h>
++#include "testing_helpers.h"
++#include "test_klp_bpf.skel.h"
++
++#define KLP_MODULE_NAME "test_klp_bpf"
++#define KLP_ENABLED_PATH "/sys/kernel/livepatch/" KLP_MODULE_NAME "/enabled"
++
++static int load_klp_module(void)
++{
++	return load_module("test_klp_bpf.ko", env_verbosity > VERBOSE_NONE);
++}
++
++static void unload_klp_module(void)
++{
++	/* Disable the livepatch before unloading */
++	if (!access(KLP_ENABLED_PATH, F_OK))
++		system("echo 0 > " KLP_ENABLED_PATH);
++
++	unload_module(KLP_MODULE_NAME, env_verbosity > VERBOSE_NONE);
++}
++
++static int read_proc_cmdline(char *buf, size_t buf_sz)
++{
++	int fd, ret;
++
++	fd = open("/proc/cmdline", O_RDONLY);
++	if (fd < 0)
++		return -errno;
++
++	ret = read(fd, buf, buf_sz - 1);
++	close(fd);
++	if (ret < 0)
++		return -errno;
++
++	buf[ret] = '\0';
++	return 0;
++}
++
++void test_klp_bpf(void)
++{
++	struct test_klp_bpf *skel = NULL;
++	struct bpf_link *link = NULL;
++	char buf[4096] = {};
++	int err;
++
++	/* Skip if kernel was built without CONFIG_LIVEPATCH */
++	if (access("/sys/kernel/livepatch", F_OK)) {
++		test__skip();
++		return;
++	}
++
++	err = load_klp_module();
++	if (err) {
++		if (err == -ENOENT) {
++			test__skip();
++			return;
++		}
++		/* Module may already be loaded; unload and retry */
++		unload_klp_module();
++		err = load_klp_module();
++		if (!ASSERT_OK(err, "load_klp_module"))
++			return;
++	}
++
++	/* Verify livepatch is active with fallback message */
++	err = read_proc_cmdline(buf, sizeof(buf));
++	if (!ASSERT_OK(err, "read_cmdline_fallback"))
++		goto out;
++	if (!ASSERT_OK(strncmp(buf, "test_klp_bpf: no struct_ops attached",
++			       strlen("test_klp_bpf: no struct_ops attached")),
++		       "fallback_msg"))
++		goto out;
++
++	/* Load and attach BPF struct_ops */
++	skel = test_klp_bpf__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		goto out;
++
++	link = bpf_map__attach_struct_ops(skel->maps.cmdline_ops);
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		goto out;
++
++	/* Verify BPF-controlled cmdline */
++	memset(buf, 0, sizeof(buf));
++	err = read_proc_cmdline(buf, sizeof(buf));
++	if (!ASSERT_OK(err, "read_cmdline_bpf"))
++		goto out;
++	ASSERT_STREQ(buf, "klp_bpf: custom cmdline\n", "bpf_cmdline");
++
++	/* Detach and verify fallback resumes */
++	bpf_link__destroy(link);
++	link = NULL;
++
++	memset(buf, 0, sizeof(buf));
++	err = read_proc_cmdline(buf, sizeof(buf));
++	if (!ASSERT_OK(err, "read_cmdline_detached"))
++		goto out;
++	ASSERT_OK(strncmp(buf, "test_klp_bpf: no struct_ops attached",
++			  strlen("test_klp_bpf: no struct_ops attached")),
++		  "detached_fallback_msg");
++
++out:
++	bpf_link__destroy(link);
++	test_klp_bpf__destroy(skel);
++	unload_klp_module();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_klp_bpf.c b/tools/testing/selftests/bpf/progs/test_klp_bpf.c
+new file mode 100644
+index 000000000000..f3b68232231a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_klp_bpf.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "../test_kmods/test_klp_bpf.h"
++
++char _license[] SEC("license") = "GPL";
++
++extern void bpf_klp_seq_write(struct seq_file *m,
++			      const char *data, u32 data__sz) __ksym;
++
++SEC("struct_ops/set_cmdline")
++int BPF_PROG(set_cmdline, struct seq_file *m)
++{
++	char custom[] = "klp_bpf: custom cmdline\n";
++
++	bpf_klp_seq_write(m, custom, sizeof(custom) - 1);
++	return 0;
++}
++
++SEC(".struct_ops.link")
++struct klp_bpf_cmdline_ops cmdline_ops = {
++	.set_cmdline = (void *)set_cmdline,
++};
+diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
+index 63c4d3f6a12f..bb182d668277 100644
+--- a/tools/testing/selftests/bpf/test_kmods/Makefile
++++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+@@ -8,11 +8,12 @@ Q = @
+ endif
+ 
+ MODULES = bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
+-	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
++	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko test_klp_bpf.ko
+ 
+ $(foreach m,$(MODULES),$(eval obj-m += $(m:.ko=.o)))
+ 
+ CFLAGS_bpf_testmod.o = -I$(src)
++CFLAGS_test_klp_bpf.o = -I$(src)
+ 
+ all:
+ 	$(Q)$(MAKE) -C $(KDIR) M=$(TEST_KMOD_DIR) modules
+diff --git a/tools/testing/selftests/bpf/test_kmods/test_klp_bpf.c b/tools/testing/selftests/bpf/test_kmods/test_klp_bpf.c
+new file mode 100644
+index 000000000000..62943b6db4a3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_kmods/test_klp_bpf.c
+@@ -0,0 +1,166 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/bpf.h>
++#include <linux/btf.h>
++#include <linux/btf_ids.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/livepatch.h>
++#include <linux/seq_file.h>
++#include <linux/bpf_verifier.h>
++#include "test_klp_bpf.h"
++
++static struct klp_bpf_cmdline_ops *active_ops;
++
++/* --- kfunc: allow BPF struct_ops programs to write to seq_file --- */
++
++__bpf_kfunc_start_defs();
++
++__bpf_kfunc void bpf_klp_seq_write(struct seq_file *m,
++				    const char *data, u32 data__sz)
++{
++	seq_write(m, data, data__sz);
++}
++
++__bpf_kfunc_end_defs();
++
++BTF_KFUNCS_START(klp_bpf_kfunc_ids)
++BTF_ID_FLAGS(func, bpf_klp_seq_write)
++BTF_KFUNCS_END(klp_bpf_kfunc_ids)
++
++static const struct btf_kfunc_id_set klp_bpf_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set   = &klp_bpf_kfunc_ids,
++};
++
++/* --- Livepatch replacement for cmdline_proc_show --- */
++
++static int livepatch_cmdline_proc_show(struct seq_file *m, void *v)
++{
++	struct klp_bpf_cmdline_ops *ops = READ_ONCE(active_ops);
++
++	if (ops && ops->set_cmdline)
++		return ops->set_cmdline(m);
++
++	seq_printf(m, "%s: no struct_ops attached\n", THIS_MODULE->name);
++	return 0;
++}
++
++static struct klp_func funcs[] = {
++	{
++		.old_name = "cmdline_proc_show",
++		.new_func = livepatch_cmdline_proc_show,
++	}, { }
++};
++
++static struct klp_object objs[] = {
++	{
++		/* name being NULL means vmlinux */
++		.funcs = funcs,
++	}, { }
++};
++
++static struct klp_patch patch = {
++	.mod = THIS_MODULE,
++	.objs = objs,
++};
++
++/* --- struct_ops registration --- */
++
++static int klp_bpf_cmdline_reg(void *kdata, struct bpf_link *link)
++{
++	struct klp_bpf_cmdline_ops *ops = kdata;
++
++	if (cmpxchg(&active_ops, NULL, ops))
++		return -EBUSY;
++
++	return 0;
++}
++
++static void klp_bpf_cmdline_unreg(void *kdata, struct bpf_link *link)
++{
++	WRITE_ONCE(active_ops, NULL);
++}
++
++static int klp_bpf_cmdline_init(struct btf *btf)
++{
++	return 0;
++}
++
++static int klp_bpf_cmdline_init_member(const struct btf_type *t,
++				       const struct btf_member *member,
++				       void *kdata, const void *udata)
++{
++	return 0;
++}
++
++static bool klp_bpf_cmdline_is_valid_access(int off, int size,
++					    enum bpf_access_type type,
++					    const struct bpf_prog *prog,
++					    struct bpf_insn_access_aux *info)
++{
++	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
++}
++
++static int klp_bpf_cmdline_btf_struct_access(struct bpf_verifier_log *log,
++					     const struct bpf_reg_state *reg,
++					     int off, int size)
++{
++	return -EACCES;
++}
++
++static const struct bpf_verifier_ops klp_bpf_cmdline_verifier_ops = {
++	.is_valid_access = klp_bpf_cmdline_is_valid_access,
++	.btf_struct_access = klp_bpf_cmdline_btf_struct_access,
++};
++
++/* CFI stubs */
++static int klp_bpf_cmdline__set_cmdline(struct seq_file *m)
++{
++	return 0;
++}
++
++static struct klp_bpf_cmdline_ops __bpf_klp_bpf_cmdline_ops = {
++	.set_cmdline = klp_bpf_cmdline__set_cmdline,
++};
++
++static struct bpf_struct_ops bpf_klp_bpf_cmdline_ops = {
++	.verifier_ops = &klp_bpf_cmdline_verifier_ops,
++	.init = klp_bpf_cmdline_init,
++	.init_member = klp_bpf_cmdline_init_member,
++	.reg = klp_bpf_cmdline_reg,
++	.unreg = klp_bpf_cmdline_unreg,
++	.cfi_stubs = &__bpf_klp_bpf_cmdline_ops,
++	.name = "klp_bpf_cmdline_ops",
++	.owner = THIS_MODULE,
++};
++
++/* --- Module init/exit --- */
++
++static int __init test_klp_bpf_init(void)
++{
++	int ret;
++
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
++					&klp_bpf_kfunc_set);
++	ret = ret ?: register_bpf_struct_ops(&bpf_klp_bpf_cmdline_ops,
++					     klp_bpf_cmdline_ops);
++	if (ret)
++		return ret;
++
++	return klp_enable_patch(&patch);
++}
++
++static void __exit test_klp_bpf_exit(void)
++{
++}
++
++module_init(test_klp_bpf_init);
++module_exit(test_klp_bpf_exit);
++MODULE_LICENSE("GPL");
++MODULE_INFO(livepatch, "Y");
++MODULE_AUTHOR("Song Liu");
++MODULE_DESCRIPTION("Test: BPF struct_ops + livepatch integration");
+diff --git a/tools/testing/selftests/bpf/test_kmods/test_klp_bpf.h b/tools/testing/selftests/bpf/test_kmods/test_klp_bpf.h
+new file mode 100644
+index 000000000000..0ead3681fb89
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_kmods/test_klp_bpf.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#ifndef _TEST_KLP_BPF_H
++#define _TEST_KLP_BPF_H
++
++struct seq_file;
++
++struct klp_bpf_cmdline_ops {
++	int (*set_cmdline)(struct seq_file *m);
++};
++
++#endif /* _TEST_KLP_BPF_H */
+-- 
+2.52.0
+
