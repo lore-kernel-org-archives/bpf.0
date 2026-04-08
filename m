@@ -1,33 +1,33 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FA032720C
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 04:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AF016132A
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 04:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775623265; cv=none; b=ORsov/bCHI/NU1c1sRwYa74wuD9uUGMclQv88g9xs2bGgwzhkMxGRqXWO4yVHSeRMmm5kh4RtrMQ+I00XztnlGCjEB0xya54keoTwtZHhy8KUJepQF8h3+Nc0404b4PMGlY6NWty30R4QSW1jWYjhlzgP4nirx4a3cs47nHC5zM=
+	t=1775623350; cv=none; b=s9aP5SqIhgo5hbTv0lCAbOWFdtgo8dPq4jqLOL2iujFczOMRP7griRTDWduRFb0qpN9u0qTKniJMd8Ewp1UTVTHUkhr94h10KjbmnubfncDJZ5KDtezL9OfYGWMm9WIrS9DhuolFRGZ0MuQnJGPs0rp4u6d2WWRCx2Klcd7ED24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775623265; c=relaxed/simple;
-	bh=J3T8jTjfCOnNAy8g4BURRCc06xVl1WMtBEGP3pDqSGQ=;
+	s=arc-20240116; t=1775623350; c=relaxed/simple;
+	bh=zdUWZ8l88jlDSBXgWeObqrdBZNUvf6VUXi4X/cvE7MY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XR29Fi3F3JHYB1o6DCWewkUiGx6rJ603ViiapHHvFMDnpJ3+Uhp/KocYFM5NNyTBkr4o8TQvB2XjtPr1MHMBSPyPI/z9Fh2mLHFbsGJsniAnswYK+wnbOLldokYr104ZLaUmUUkPgWPMU1mFfUaeiXTh6Er9tArnwwya9PdTPb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WaIXSjNM; arc=none smtp.client-ip=91.218.175.177
+	 In-Reply-To:Content-Type; b=om+rnetuC65WT2u2HgccgT+TbBYMQsX17a0OLQd2afIttYk6UfVHuJXtut/kFVyIpyv0j2vgCYMF72w75pbv7Wg8bK1Ip9GT6C63Rrrbek8fgDyFNJVIaOXtkcPr0yjb6BepOeMESiO+NOe0nWoWc39dY0+JtbyLU3uXteYWNp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Kq3CHh4T; arc=none smtp.client-ip=95.215.58.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WaIXSjNM"
-Message-ID: <85de8d23-f919-4e68-929e-d4d571bdea4d@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kq3CHh4T"
+Message-ID: <4f582a12-1227-47f3-805b-7cc038b68457@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775623261;
+	t=1775623347;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aEwdExbYRCDa0tpgsv2D1cgUgYoqggXV1EGeuSoFIlk=;
-	b=WaIXSjNMmgeHWMAvZMynbCZ+6mKmWMU2gTb3TswWwJN4HvKe3Df4b7lmooupnstgorlSw/
-	UMAu8DnbEUxljYRT4hJ2TpPx/MB/p8ZRTwQJWubpKzD0cXO7DGnAcDbr30TpOMQYKyovts
-	98otqntRO4SSxsdtW/QzJjbm7217fHY=
-Date: Tue, 7 Apr 2026 21:40:55 -0700
+	bh=zRxJfHVlfNHeZ9evtiSVMFklaZtDUYu1VfXHfKLhgOs=;
+	b=Kq3CHh4T4vg3Hbqt1flYzD5olrhXfshDrYp3CAutlpMcuE1xgS9bMGYXOZ7Zsf9Fy1fW7S
+	NfTbub4ycbdMVgPezrplb/PTMC3nm0hveJEW2J498XKJS/HzVNpxXANPTgyBKxbDISCyD4
+	Mo2FQam9aWpZJRoOKoPlFOg2Tcm9ef0=
+Date: Tue, 7 Apr 2026 21:42:20 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,7 +47,7 @@ X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include 
 From: Yonghong Song <yonghong.song@linux.dev>
 In-Reply-To: <e093e4d67ae569dd8183db5affaa8ec67c3d20c7b9a46c0f78a223041efc0921@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
@@ -123,8 +123,8 @@ On 4/5/26 11:20 AM, bot+bpf-ci@kernel.org wrote:
 > subprog in jit_subprogs(), so can this combination actually be
 > reached?
 
-Yes, it could. So in next revision, we will disable private stack
-if outgoing stack arguments is not empty.
+You are right. Similar to my previous comments, private stack will
+be disabled if outgoing stack arguments are not empty.
 
 >
 >> @@ -2458,6 +2573,14 @@ st:			if (is_imm8(insn->off))
