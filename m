@@ -1,160 +1,138 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f66.google.com (mail-ot1-f66.google.com [209.85.210.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A1735B658
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 16:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2D73537F1
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 17:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775667509; cv=none; b=WC0p8B9dICI4yRqSG1Nml/s/soeNvQ6WHUaMgg7yfqgWvee1ufMXfSRcWgABl2iPTC8cWvqSZWZwMAqB/DyX55GubCe4KyT2JnI6HTuYxl1pPIKIBGfCzlO7dq3wfVtjpW2qrC1UaXhNI6DWny/35L13HFkuBp2vFuoQ2QgfN4g=
+	t=1775667763; cv=none; b=GfRdJYGWmpf2N94Xmvr5Lehk7mtwsgjqV40ijeDnioExMMYOknqkYJDv437Cx+O7XvuhOvkzOiHy0XVKgyXeTsZ/AdJVxH0tMwAHGcYrC3bSCFuki4s0mANQfWxW8xiGklLADLi2TLpgFrM0ZICWJL7jqSdXgONO21JsOiLvFww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775667509; c=relaxed/simple;
-	bh=cqZP+pK/cBUxyRbaEVUaTlZWYdJjhz2BRcUk1AD9RXc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IbSM5wZpyQdgTbpZFdLYE0i+OpOibRgcNZa2YuXMjjqnsRPBCqItoMU62vnqsw6wWAhCg5m6+QsQkVpzn+865IzGNDVcEWZrSZoSdPjYjVVOr1/B1wMuw7yCKiIB6wns54yBn4vGmzZRVzGQ0bCJs/AQUcCVCkis3+hnZnUmnIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Tf85EWui; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1775667763; c=relaxed/simple;
+	bh=xdLLVMMQT69JFQt1brGOUFUC5V03wHdBk5qEpoTRbKc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PQz7MxQfpnHgkwCJh9pLvt5DDiPtSNwH3Q37E3jyB0xg4EO+FggzqSCXHTMoBYddRxFpirhCN+enyNV3JCIfXyiaRcnI1E5XywmC0Ycps8TPOdoVpdIpGa3gRPkN6F/tsy/CqcEYkyCV7Lqimm/XAxW1R21Klvy5xtZQzNh1+bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FTlH5UDy; arc=none smtp.client-ip=209.85.210.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Tf85EWui"
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6387bScj2599011;
-	Wed, 8 Apr 2026 16:57:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=COIYH
-	/ZJibn+l2NJOgGyiyUKlEpOS/dCbAuL/x1kwuw=; b=Tf85EWuiirEfifMh60XKU
-	sAzdVadgUMTKlns7hRh2+QYE+vtC9XuKFLA++3JH7g549Zq0Tk2xSyej9nLfljG1
-	H9geG3/0QPTHi14qOLjsJhsJHQ6tS/0gSzLQHTY6NYRFmDPA22BLy2HUJDyNchl5
-	v8PZv94PD7baiShggRMh4fv2Fn+f5F/tH3kNW4GOWqo+GdItW8FPkgFIHUi9jQDX
-	BUVTrsvvCrZ/whwnkUoHKPpxEaEM11b3NWrmXxyoeSPi3kU0OL8mzlskQxcETrZ8
-	pveHmaJy4t1z4CY+SyRN6Mw8nFkxxvMot7IYuVMB9aq8vYw+WEGgm0PqvX4W+/8p
-	Q==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dcmqbkyb6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Apr 2026 16:57:40 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 638GkBU7027935;
-	Wed, 8 Apr 2026 16:57:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dcmebhqrb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Apr 2026 16:57:40 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 638GvboA025438;
-	Wed, 8 Apr 2026 16:57:39 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-48-176.vpn.oracle.com [10.154.48.176])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4dcmebhqmb-2;
-	Wed, 08 Apr 2026 16:57:39 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
-        yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 bpf-next 1/2] libbpf: Allow use of feature cache for non-token cases
-Date: Wed,  8 Apr 2026 17:57:34 +0100
-Message-ID: <20260408165735.843763-2-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260408165735.843763-1-alan.maguire@oracle.com>
-References: <20260408165735.843763-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FTlH5UDy"
+Received: by mail-ot1-f66.google.com with SMTP id 46e09a7af769-7dbff06e4a6so42084a34.1
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 10:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775667760; x=1776272560; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lMpI3o2mUCKoqrF6VB4ezds9Ya6pdU2HqjJAbgYriXQ=;
+        b=FTlH5UDyfbxYhlBp0sxVrDv0sG4vY5BIN6h9qqoMbtEi4tRFnnWTQrBZZa6YrddcAQ
+         N2auK8zv7t1LFG9mz9La7e+sWR5ZZq8gKlkXFRCs6ayikUL2uulDxGelJma7MaeM4Ymz
+         bHtxfv+PRJ2aEqrZKgSro5IJ5EAVFLZiMWRks+cf5Hc0rkCwm8cpgQKEGmVwPvlXwwTw
+         /NNJMcmftJpy06QCEeZ/2o+moBQfiJ+o4MxjvVkSQQmP2JBHR7C88wrGrU3VxHTrd7Lq
+         ieuA3XanTNPPRm9iiosJAoVZXRBVQuRziCZVgCCQs/I7BnpiqTc1Utj/ZY9Czt/JY+KA
+         PpXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775667760; x=1776272560;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lMpI3o2mUCKoqrF6VB4ezds9Ya6pdU2HqjJAbgYriXQ=;
+        b=qTOgsAkhmogbu7jVFKpzcx6erosYhbKk5KySa+xQAPmMjEgLDD+QRSGg+oD/mvCiMj
+         Yb69x3qh0gwKIIzgHjw4rpqBwN0h5V1vOVm9VXL27jjzsWEGWz+oxQtx7nhmUcOBhuyc
+         yIPbzMdxrD1QGL1u2dROzVg+NQK3cT2LZwOMsPB8tz4XmQuU8bp6WaawTJTZZXZHzhVV
+         ArdAs8turNUdlGFR9GOS8Q+u6syXaiZTaP4TtndQcRzcwXvmKKrCckKtI8zRbCbV5BGa
+         z2n+M5NLWo7GuuMPImdM/iE9caAU1+NejGGVQtVmH9guiK1nRQznbGSXnVZjZDJxnEZu
+         mI5g==
+X-Forwarded-Encrypted: i=1; AJvYcCXjen9JncdwPzglJg7ZzY76T01p0gXuu5M9eK102XDyC4iTaduB1Tw07D76uq6dYYRz4mc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQFObMDJKOmF0fciydIxUFdZ0QGW3BYELrGXpr+FrTZMJ7J2y2
+	M4EK9LpUkwEGUHaU5Z65rk/Q1oqewqbH1+aTHumyZW7Qksf/sm3uvuEu
+X-Gm-Gg: AeBDiesdWf/qwjrUnrQPbwPLna0juCXNBJr66M66OQDBKQfcY0ux83lMUbJjA1KxyPy
+	HZHk0Ojnfo5Llow5f2k7Pp6rPBelsETf2i9Q010Xovm2aPqAingmpkdHNpf8LSelIEmM9lHXMDv
+	upIH7HRV2bzYJjkEqAFU79uxo6AtQAnZlAoky8I9kCIbeznjoNgoCHO2GZ4w8gki3bgwiBP8CTI
+	WleZWDcc2aYYxPIddfsVofw3StRb0N6PK3bwQy+A6e4CgN8lQq0yD45rF9+BZYt0RVBZOGtQWmq
+	XJnImHHXIIv5pCzX8sjntMSz/LgqkiedSTW/ESlSfUfCJ1rcPzM2JuColmMh89IFbtDnka5Rk9V
+	iJ93h3VMA9+1czXAWWxpv/L2HKmXrzSAZlZyxcFkZHSlRarOnu9nBLJs6+CY4fGkQdRzbdhfM6y
+	U7lc/ugPklKBV0q2r1
+X-Received: by 2002:a05:6830:6103:b0:7d9:e9a7:cfaa with SMTP id 46e09a7af769-7dbb712a3a2mr14340529a34.15.1775667757936;
+        Wed, 08 Apr 2026 10:02:37 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:3::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dba73d8126sm14465822a34.27.2026.04.08.10.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 10:02:37 -0700 (PDT)
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+X-Google-Original-From: Stanislav Fomichev <stfomichev@gmail.com>
+Date: Wed, 8 Apr 2026 10:02:36 -0700
+To: Breno Leitao <leitao@debian.org>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, metze@samba.org, 
+	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>, io-uring@vger.kernel.org, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
+ buffers
+Message-ID: <adaJqy6Q4L7c-eTs@devvm17672.vll0.facebook.com>
+References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-08_05,2026-04-08_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 adultscore=0
- phishscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2604010000
- definitions=main-2604080157
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDE1NyBTYWx0ZWRfX3dVbKwfgrIo7
- oV+pgEwCf7s9fH50fkNg9yCApbPP+Rmf3gT+GIszBtCi5BgKxUYZ311p1QuwbrfQ48Jp1UwbBh5
- BleV5sLzOV5z85LWA/K/HswruVn+AuFMcqEfVnGvzranefh8jaQEj/sKwRina8LyPn9Cd4N0DJR
- A28dV+GvceyseiBdI4a6f/glptMXWnxr9qTaFiaNLcryaL58BdFXXObEWww7jHdQYYYJWATFjFa
- QMX28pWrZIJWCxEkEtcz8KsrGqaDm43Ex9+0ufE2TT0dPTOh0oF1Whm/C3I78Xm2Xnv5Fm8D4tp
- ldkncyEukjaI1h9oecZdjyjNX4+gqgZyo6pOLsA1a4XKb1sCf6CNxVdX7EtLoaq6iapyDG6srZ+
- /tj2rl4n+xPu9gr4XcTgQXwhR7GRFX1q3sKvBsZ+0jW4ntgeGeRE0f1HYEye91lG/J8mwrVeFi+
- VJAt2cjQmLLmX6dt8VcWr2kjhvwlLyi+5/RAnjHc=
-X-Proofpoint-ORIG-GUID: U4X9dyg7MQrv6PcUOq9oFN-ToCi02pBo
-X-Proofpoint-GUID: U4X9dyg7MQrv6PcUOq9oFN-ToCi02pBo
-X-Authority-Analysis: v=2.4 cv=KO1qylFo c=1 sm=1 tr=0 ts=69d68904 b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=BqU2WV_vvsyTyxaotp0D:22 a=yPCof4ZbAAAA:8 a=s5iUJX_GEmEhW97rA0IA:9 cc=ntf
- awl=host:12292
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
 
-Allow bpf object feat_cache assignment in BPF selftests
-to simulate missing features via inclusion of libbpf_internal.h
-and use of bpf_object_set_feat_cache() and bpf_object__sanitize_btf() to
-test BTF sanitization for cases where missing features are simulated.
+On 04/08, Breno Leitao wrote:
+> Currently, the .getsockopt callback requires __user pointers:
+> 
+>   int (*getsockopt)(struct socket *sock, int level,
+>                     int optname, char __user *optval, int __user *optlen);
+> 
+> This prevents kernel callers (io_uring, BPF) from using getsockopt on
+> levels other than SOL_SOCKET, since they pass kernel pointers.
+> 
+> Following Linus' suggestion [0], this series introduces sockopt_t, a
+> type-safe wrapper around iov_iter, and a getsockopt_iter callback that
+> works with both user and kernel buffers. AF_PACKET and CAN raw are
+> converted as initial users, with selftests covering the trickiest
+> conversion patterns.
+> 
+> [0] https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/
+> 
+> Updates from v2 to v3:
+> 
+> * Use two iov in sockopt_t instead of a single one:
+>   a) .iter_in that is populated by the caller and will be read-only in
+>   the protocols callback.
+> 
+>   b) .iter_out will be populated by the protocol and it will be sent
+>   back to the caller.
+> 
+>   - This will avoid changing the protocol reset and changing the data
+>     source at the callback, making the driver callback implementation
+>     and converstion saner.
+> 
+> * created sockptr_to_sockopt() to convert sockptr to sockopt, making the
+>   call to getsockopt_iter straight-forward
+> 
+> Link: https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/ [0]
+> ---
+> Changes in v3:
+> - Create Two iov in sockopt_t instead of a single one (Stanislav Fomichev)
+> - Implement the sockptr_to_sockopt() helper (Stanislav Fomichev)
+> - Link to v2: https://patch.msgid.link/20260401-getsockopt-v2-0-611df6771aff@debian.org
+> 
+> Changes in v2:
+> - Restore optlen even on error path (getsockopt_iter fails)
+> - Move af_packet.c and can instead of netlink (given these are the most
+>   complicate ones).
+> - Link to v1: https://patch.msgid.link/20260130-getsockopt-v1-0-9154fcff6f95@debian.org
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/lib/bpf/libbpf.c          | 12 ++++++++++--
- tools/lib/bpf/libbpf_internal.h |  3 ++-
- 2 files changed, 12 insertions(+), 3 deletions(-)
+LGTM! Not sure what's your plan for the selftest? You wanna keep it
+outside or maybe repost v4 with it?
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 42bdba4efd0c..8b0c3246097f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3145,7 +3145,7 @@ static bool btf_needs_sanitization(struct bpf_object *obj)
- 	       !has_layout;
- }
- 
--static struct btf *bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *orig_btf)
-+struct btf *bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *orig_btf)
- {
- 	bool has_func_global = kernel_supports(obj, FEAT_BTF_GLOBAL_FUNC);
- 	bool has_datasec = kernel_supports(obj, FEAT_BTF_DATASEC);
-@@ -5203,12 +5203,20 @@ bool kernel_supports(const struct bpf_object *obj, enum kern_feature_id feat_id)
- 		 */
- 		return true;
- 
--	if (obj->token_fd)
-+	if (obj->feat_cache)
- 		return feat_supported(obj->feat_cache, feat_id);
- 
- 	return feat_supported(NULL, feat_id);
- }
- 
-+/* Used in testing to simulate missing features. */
-+void bpf_object_set_feat_cache(struct bpf_object *obj, struct kern_feature_cache *cache)
-+{
-+	if (obj->feat_cache)
-+		free(obj->feat_cache);
-+	obj->feat_cache = cache;
-+}
-+
- static bool map_is_reuse_compat(const struct bpf_map *map, int map_fd)
- {
- 	struct bpf_map_info map_info;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index cabdaef79098..3781c45b46d3 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -414,6 +414,7 @@ struct kern_feature_cache {
- 
- bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id);
- bool kernel_supports(const struct bpf_object *obj, enum kern_feature_id feat_id);
-+void bpf_object_set_feat_cache(struct bpf_object *obj, struct kern_feature_cache *cache);
- 
- int probe_kern_syscall_wrapper(int token_fd);
- int probe_memcg_account(int token_fd);
-@@ -427,7 +428,7 @@ int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- int libbpf__load_raw_btf_hdr(const struct btf_header *hdr,
- 			     const char *raw_types, const char *str_sec,
- 			     const char *layout_sec, int token_fd);
--
-+struct btf *bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *orig_btf);
- int btf_load_into_kernel(struct btf *btf,
- 			 char *log_buf, size_t log_sz, __u32 log_level,
- 			 int token_fd);
--- 
-2.39.3
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 
+I'm also not sure your unconditional 'copy-optlen-back' will work for every
+proto, but I think we can put something into sockopt_t to make it avoid
+the copy if needed in the future.
