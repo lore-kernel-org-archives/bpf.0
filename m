@@ -1,185 +1,476 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E68BD26FA5B;
-	Wed,  8 Apr 2026 21:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3D15EED8;
+	Wed,  8 Apr 2026 22:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775684988; cv=none; b=aOw5zGtWIMwsqNJrf/3t6FHhBCZRi5MJyh+4FUTya6F5rO5pK5ampm7OypSZl2fmJkCc0qFGgX5//WjQ2NAm46bVBfBsQUf/N11pmmRo1ZX+d4DzidAQpiSoANbDS93JloMNfx1G6mlhy8MNCRjVCjktZurnes7DbNPuHibN3HQ=
+	t=1775686375; cv=none; b=cDZmVuNpYzpk9VNU0ILQxcNWv+VvDRsL/xavOMXk44lH/P5VEM5JT5PM29xL/Pl9d4N5YFaEJ4aEEbmt9ZeIeniaZDdYJGWNIIpYeYCY6++QsuxPyc4rci//w8ekTE0O3yV3C2MgbJYVyiw80oqLoGIbjoWlWwmgpBvc4JQaBnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775684988; c=relaxed/simple;
-	bh=jowT86efEHVCzGhKJ+OxlViOe7E9QtnCvlFGyor/DpU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gM/qOrU1jFf1KwOmhoRoNrgMf9vtp0yGWoK8QmbyNgDukyyjAmpJXozkAiIOH+g0UNSvWY1iEm7/b6hKS28vtaCa8meapUlKGyBd0tHAKQ5qlFZ46ui3o21ihhKCnJh0XvKTF0oLayO7Xo+/XRGsnasVLFMZ6q+L/BEBjnAsT8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=bFCYs5Y0; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1775686375; c=relaxed/simple;
+	bh=kpfDRdBg+JA4L4Y74DwFMPETPgg4c1leB+nWLe4qro8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kp5iTe2Q1/gIu+faZceHMQmW1rZcEz0Yj5Ayr2Yzt5emFNLwyE7SKvneKgmsscM2sf/CD0nM6uVKioa8k1pQezJx2zwtCcAfv8Kjt/TsGKyGv7zKWuo/zjTLDvJQqccOVzn68DIhkcejEWZYO9TjK2V8zH1qmnYL9FI577ueFwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gZgV/xed; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="bFCYs5Y0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=28EtfPCyXDYijsm4jFncDTATHlC5rea7CY6b9REQ7kQ=; b=bFCYs5Y0Xv1jOuIXCH8jdAUarK
-	5PjLo9PhwwuLG2OFhUE8ADv1MAywwW6HUTrEA7NT5cgLL5OMqL3rXDypvfSI+NyoKq0OQVTh4NllW
-	/QDwOmOIR7Sg1qMTC1kg/HOnhgEBk34A16njQZ8oWGf47F9h7z2Hz0mX9hOMNWWQPOVEq7woPAgK1
-	y/o1sJSWP+hLR4u4Iql6GNe5mBWSgdOKiR2RVGVGFisUk5yjZUE6XzxVmBjX4xDU5k7QdNsJSuUOP
-	FMuozpG+aICVmM8ZYep9dvMxMmyzfATRD11xpSc6LwuDDawVZt7Mi9EqBR9rKC54GXO+FV0FngpP9
-	53dM3Ugg==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wAamL-000MDx-0t;
-	Wed, 08 Apr 2026 23:49:41 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wAamJ-0008Bk-3C;
-	Wed, 08 Apr 2026 23:49:40 +0200
-Message-ID: <1eccd7fc-8a1c-4499-ae81-a63fc8d0ff26@iogearbox.net>
-Date: Wed, 8 Apr 2026 23:49:39 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gZgV/xed"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00752C19421;
+	Wed,  8 Apr 2026 22:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775686375;
+	bh=kpfDRdBg+JA4L4Y74DwFMPETPgg4c1leB+nWLe4qro8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gZgV/xedtuRb2ExiLa3JSK45QmxBtDEzKiY9RgTYL3GurqSj2MrfBiXPRRLs85Ulj
+	 AgSja+0dDq2xrDD2frHovX6+jBKLmzondxxyQXX7nntxwd8JoNJhWOeKs8tRygy19q
+	 Jw7Bhg2TJmyY8EKnYI7yvtjzwRl6VMEczIQ7/g8y5OVygVL+8FvgQN/k6axOdXsZ6l
+	 yn/UhkIWeOk6a2rGz45ENgr2yHDijeXJ0S6I+Op1pfyVSkOEJcHvBanrUUEw4jdnfq
+	 elLssA1iHU2IDchLiA4QLvcLWeFqSo1g8sWSucn+K6+vkSAtTez8h41IqCUe93Tm32
+	 ZD0bRLfcilC2Q==
+Date: Wed, 8 Apr 2026 15:12:51 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com,
+ sdf@fomichev.me, john.fastabend@gmail.com, martin.lau@kernel.org,
+ jordan@jrife.io, maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
+ dw@davidwei.uk, toke@redhat.com, yangzhenze@bytedance.com,
+ wangdongdong.6@bytedance.com
+Subject: Re: [PATCH net-next v11 03/14] net: Add lease info to queue-get
+ response
+Message-ID: <20260408151251.72bd2482@kernel.org>
+In-Reply-To: <b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
+References: <20260402231031.447597-1-daniel@iogearbox.net>
+	<20260402231031.447597-4-daniel@iogearbox.net>
+	<20260407204017.3fc79d1b@kernel.org>
+	<b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: Fix use-after-free in offloaded map/prog info
- fill
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Yinhao Hu <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>,
- Dongliang Mu <dzm91@hust.edu.cn>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <20260408104732.259683-1-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260408104732.259683-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27965/Wed Apr  8 08:24:37 2026)
 
-On 4/8/26 12:47 PM, Jiayuan Chen wrote:
-> When querying info for an offloaded BPF map or program,
-> bpf_map_offload_info_fill_ns() and bpf_prog_offload_info_fill_ns()
-> obtain the network namespace with get_net(dev_net(offmap->netdev)).
-> However, the associated netdev's netns may be racing with teardown
-> during netns destruction. If the netns refcount has already reached 0,
-> get_net() performs a refcount_t increment on 0, triggering:
+On Wed, 8 Apr 2026 11:09:34 +0200 Daniel Borkmann wrote:
+> >> +void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
+> >> +				     struct net_device *dev)
+> >> +{
+> >> +	if (orig_dev != dev)
+> >> +		netdev_unlock(dev);
+> >> +}  
+> > 
+> > Pretty sure I already complained about these ugly helpers.
+> > I'll try to find the time tomorrow to come up with something better.   
 > 
->    refcount_t: addition on 0; use-after-free.
-> 
-> Although rtnl_lock and bpf_devs_lock ensure the netdev pointer remains
-> valid, they cannot prevent the netns refcount from reaching zero.
-> 
-> Fix this by using maybe_get_net() instead of get_net(). maybe_get_net()
-> uses refcount_inc_not_zero() and returns NULL if the refcount is already
-> zero, which causes ns_get_path_cb() to fail and the caller to return
-> -ENODEV -- the correct behavior when the netns is being destroyed.
+> Ok, sounds good. Happy to adapt if you find something better and then I'll
+> work this into the series, and also integrate the things mentioned in my
+> cover letter reply (netkit nl dump + additional tests).
 
-nit: -ENOENT
+Hi! How would you feel about something like the following on top?
 
-> Fixes: 675fc275a3a2d ("bpf: offload: report device information for offloaded programs")
-> Fixes: 52775b33bb507 ("bpf: offload: report device information about offloaded maps")
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
-> Closes: https://lore.kernel.org/bpf/f0aa3678-79c9-47ae-9e8c-02a3d1df160a@hust.edu.cn/
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->   kernel/bpf/offload.c | 18 ++++++++++++------
->   1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-> index 0ad97d643bf49..d6dc684d0e872 100644
-> --- a/kernel/bpf/offload.c
-> +++ b/kernel/bpf/offload.c
-> @@ -435,9 +435,12 @@ static struct ns_common *bpf_prog_offload_info_fill_ns(void *private_data)
->   
->   	if (aux->offload) {
->   		args->info->ifindex = aux->offload->netdev->ifindex;
-> -		net = dev_net(aux->offload->netdev);
-> -		get_net(net);
-> -		ns = &net->ns;
-> +		net = maybe_get_net(dev_net(aux->offload->netdev));
-> +		if (net) {
-> +			ns = &net->ns;
-> +		} else {
-> +			ns = NULL;
-> +		}
+--->8----------
 
-nit: ns = net ? &net->ns : NULL;
+net: remove the netif_get_rx_queue_lease_locked() helpers
 
->   	} else {
->   		args->info->ifindex = 0;
->   		ns = NULL;
-> @@ -647,9 +650,12 @@ static struct ns_common *bpf_map_offload_info_fill_ns(void *private_data)
->   
->   	if (args->offmap->netdev) {
->   		args->info->ifindex = args->offmap->netdev->ifindex;
-> -		net = dev_net(args->offmap->netdev);
-> -		get_net(net);
-> -		ns = &net->ns;
-> +		net = maybe_get_net(dev_net(args->offmap->netdev));
-> +		if (net) {
-> +			ns = &net->ns;
-> +		} else {
-> +			ns = NULL;
-> +		}
+The netif_get_rx_queue_lease_locked() API hides the locking
+and the descend onto the leased queue. Making the code
+harder to follow (at least to me). Remove the API and open
+code the descend a bit. Most of the code now looks like:
 
-ditto, otherwise looks good to me
+ if (!leased)
+     return __helper(x);
 
->   	} else {
->   		args->info->ifindex = 0;
->   		ns = NULL;
+ hw_rxq = ..
+ netdev_lock(hw_rxq->dev);
+ ret = __helper(x);
+ netdev_unlock(hw_rxq->dev);
+
+ return ret;
+
+Of course if we have more code paths that need the wrapping
+we may need to revisit. For now, IMHO, having to know what
+netif_get_rx_queue_lease_locked() does is not worth the 20LoC
+it saves.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ include/net/netdev_rx_queue.h |  5 ---
+ net/core/dev.h                |  1 +
+ net/core/netdev-genl.c        | 59 +++++++++++++++++----------
+ net/core/netdev_queues.c      | 14 ++++---
+ net/core/netdev_rx_queue.c    | 48 +++++++---------------
+ net/xdp/xsk.c                 | 77 ++++++++++++++++++++++-------------
+ 6 files changed, 111 insertions(+), 93 deletions(-)
+
+diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+index 7e98c679ea84..9415a94d333d 100644
+--- a/include/net/netdev_rx_queue.h
++++ b/include/net/netdev_rx_queue.h
+@@ -76,11 +76,6 @@ struct netdev_rx_queue *
+ __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
+ 			   enum netif_lease_dir dir);
+ 
+-struct netdev_rx_queue *
+-netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq);
+-void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
+-				     struct net_device *dev);
+-
+ int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
+ void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
+ 			   struct netdev_rx_queue *rxq_src);
+diff --git a/net/core/dev.h b/net/core/dev.h
+index 95edb2d4eff8..376bac4a82da 100644
+--- a/net/core/dev.h
++++ b/net/core/dev.h
+@@ -101,6 +101,7 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
+ 
+ bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
+ bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
++bool netif_is_queue_leasee(const struct net_device *dev);
+ 
+ void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
+ 			      const struct pp_memory_provider_params *p);
+diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
+index 056460d01940..b8f6076d8007 100644
+--- a/net/core/netdev-genl.c
++++ b/net/core/netdev-genl.c
+@@ -395,8 +395,7 @@ netdev_nl_queue_fill_lease(struct sk_buff *rsp, struct net_device *netdev,
+ 	struct netdev_rx_queue *rxq;
+ 	struct net *net, *peer_net;
+ 
+-	rxq = __netif_get_rx_queue_lease(&netdev, &q_idx,
+-					 NETIF_PHYS_TO_VIRT);
++	rxq = __netif_get_rx_queue_lease(&netdev, &q_idx, NETIF_PHYS_TO_VIRT);
+ 	if (!rxq || orig_netdev == netdev)
+ 		return 0;
+ 
+@@ -436,13 +435,45 @@ netdev_nl_queue_fill_lease(struct sk_buff *rsp, struct net_device *netdev,
+ 	return -ENOMEM;
+ }
+ 
++static int
++__netdev_nl_queue_fill_mp(struct sk_buff *rsp, struct netdev_rx_queue *rxq)
++{
++	struct pp_memory_provider_params *params = &rxq->mp_params;
++
++	if (params->mp_ops &&
++	    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
++		return -EMSGSIZE;
++
++#ifdef CONFIG_XDP_SOCKETS
++	if (rxq->pool)
++		if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
++			return -EMSGSIZE;
++#endif
++	return 0;
++}
++
++static int
++netdev_nl_queue_fill_mp(struct sk_buff *rsp, struct net_device *netdev,
++			struct netdev_rx_queue *rxq)
++{
++	struct netdev_rx_queue *hw_rxq;
++	int ret;
++
++	hw_rxq = rxq->lease;
++	if (!hw_rxq || !netif_is_queue_leasee(netdev))
++		return __netdev_nl_queue_fill_mp(rsp, rxq);
++
++	netdev_lock(hw_rxq->dev);
++	ret = __netdev_nl_queue_fill_mp(rsp, hw_rxq);
++	netdev_unlock(hw_rxq->dev);
++	return ret;
++}
++
+ static int
+ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 			 u32 q_idx, u32 q_type, const struct genl_info *info)
+ {
+-	struct pp_memory_provider_params *params;
+-	struct net_device *orig_netdev = netdev;
+-	struct netdev_rx_queue *rxq, *rxq_lease;
++	struct netdev_rx_queue *rxq;
+ 	struct netdev_queue *txq;
+ 	void *hdr;
+ 
+@@ -462,20 +493,8 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 			goto nla_put_failure;
+ 		if (netdev_nl_queue_fill_lease(rsp, netdev, q_idx, q_type))
+ 			goto nla_put_failure;
+-
+-		rxq_lease = netif_get_rx_queue_lease_locked(&netdev, &q_idx);
+-		if (rxq_lease)
+-			rxq = rxq_lease;
+-		params = &rxq->mp_params;
+-		if (params->mp_ops &&
+-		    params->mp_ops->nl_fill(params->mp_priv, rsp, rxq))
+-			goto nla_put_failure_lease;
+-#ifdef CONFIG_XDP_SOCKETS
+-		if (rxq->pool)
+-			if (nla_put_empty_nest(rsp, NETDEV_A_QUEUE_XSK))
+-				goto nla_put_failure_lease;
+-#endif
+-		netif_put_rx_queue_lease_locked(orig_netdev, netdev);
++		if (netdev_nl_queue_fill_mp(rsp, netdev, rxq))
++			goto nla_put_failure;
+ 		break;
+ 	case NETDEV_QUEUE_TYPE_TX:
+ 		txq = netdev_get_tx_queue(netdev, q_idx);
+@@ -493,8 +512,6 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
+ 
+ 	return 0;
+ 
+-nla_put_failure_lease:
+-	netif_put_rx_queue_lease_locked(orig_netdev, netdev);
+ nla_put_failure:
+ 	genlmsg_cancel(rsp, hdr);
+ 	return -EMSGSIZE;
+diff --git a/net/core/netdev_queues.c b/net/core/netdev_queues.c
+index 265161e12a9c..5597af86591b 100644
+--- a/net/core/netdev_queues.c
++++ b/net/core/netdev_queues.c
+@@ -37,18 +37,22 @@ struct device *netdev_queue_get_dma_dev(struct net_device *dev,
+ 					unsigned int idx,
+ 					enum netdev_queue_type type)
+ {
+-	struct net_device *orig_dev = dev;
++	struct netdev_rx_queue *hw_rxq;
+ 	struct device *dma_dev;
+ 
+ 	/* Only RX side supports queue leasing today. */
+ 	if (type != NETDEV_QUEUE_TYPE_RX || !netif_rxq_is_leased(dev, idx))
+ 		return __netdev_queue_get_dma_dev(dev, idx);
+-
+-	if (!netif_get_rx_queue_lease_locked(&dev, &idx))
++	if (!netif_is_queue_leasee(dev))
+ 		return NULL;
+ 
+-	dma_dev = __netdev_queue_get_dma_dev(dev, idx);
+-	netif_put_rx_queue_lease_locked(orig_dev, dev);
++	hw_rxq = __netif_get_rx_queue(dev, idx)->lease;
++
++	netdev_lock(hw_rxq->dev);
++	idx = get_netdev_rx_queue_index(hw_rxq);
++	dma_dev = __netdev_queue_get_dma_dev(hw_rxq->dev, idx);
++	netdev_unlock(hw_rxq->dev);
++
+ 	return dma_dev;
+ }
+ 
+diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+index 1d6e7e47bf0a..53cea4460768 100644
+--- a/net/core/netdev_rx_queue.c
++++ b/net/core/netdev_rx_queue.c
+@@ -57,6 +57,11 @@ static bool netif_lease_dir_ok(const struct net_device *dev,
+ 	return false;
+ }
+ 
++bool netif_is_queue_leasee(const struct net_device *dev)
++{
++	return netif_lease_dir_ok(dev, NETIF_VIRT_TO_PHYS);
++}
++
+ struct netdev_rx_queue *
+ __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
+ 			   enum netif_lease_dir dir)
+@@ -74,29 +79,6 @@ __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
+ 	return rxq;
+ }
+ 
+-struct netdev_rx_queue *
+-netif_get_rx_queue_lease_locked(struct net_device **dev, unsigned int *rxq_idx)
+-{
+-	struct net_device *orig_dev = *dev;
+-	struct netdev_rx_queue *rxq;
+-
+-	/* Locking order is always from the virtual to the physical device
+-	 * see netdev_nl_queue_create_doit().
+-	 */
+-	netdev_ops_assert_locked(orig_dev);
+-	rxq = __netif_get_rx_queue_lease(dev, rxq_idx, NETIF_VIRT_TO_PHYS);
+-	if (rxq && orig_dev != *dev)
+-		netdev_lock(*dev);
+-	return rxq;
+-}
+-
+-void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
+-				     struct net_device *dev)
+-{
+-	if (orig_dev != dev)
+-		netdev_unlock(dev);
+-}
+-
+ /* See also page_pool_is_unreadable() */
+ bool netif_rxq_has_unreadable_mp(struct net_device *dev, unsigned int rxq_idx)
+ {
+@@ -261,7 +243,6 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+ 		      const struct pp_memory_provider_params *p,
+ 		      struct netlink_ext_ack *extack)
+ {
+-	struct net_device *orig_dev = dev;
+ 	int ret;
+ 
+ 	if (!netdev_need_ops_lock(dev))
+@@ -276,19 +257,18 @@ int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+ 	if (!netif_rxq_is_leased(dev, rxq_idx))
+ 		return __netif_mp_open_rxq(dev, rxq_idx, p, extack);
+ 
+-	if (!netif_get_rx_queue_lease_locked(&dev, &rxq_idx)) {
++	if (!__netif_get_rx_queue_lease(&dev, &rxq_idx, NETIF_VIRT_TO_PHYS)) {
+ 		NL_SET_ERR_MSG(extack, "rx queue leased to a virtual netdev");
+ 		return -EBUSY;
+ 	}
+ 	if (!dev->dev.parent) {
+ 		NL_SET_ERR_MSG(extack, "rx queue belongs to a virtual netdev");
+-		ret = -EOPNOTSUPP;
+-		goto out;
++		return -EOPNOTSUPP;
+ 	}
+ 
++	netdev_lock(dev);
+ 	ret = __netif_mp_open_rxq(dev, rxq_idx, p, extack);
+-out:
+-	netif_put_rx_queue_lease_locked(orig_dev, dev);
++	netdev_unlock(dev);
+ 	return ret;
+ }
+ 
+@@ -323,18 +303,18 @@ static void __netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
+ void netif_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
+ 			const struct pp_memory_provider_params *old_p)
+ {
+-	struct net_device *orig_dev = dev;
+-
+ 	if (WARN_ON_ONCE(ifq_idx >= dev->real_num_rx_queues))
+ 		return;
+ 	if (!netif_rxq_is_leased(dev, ifq_idx))
+ 		return __netif_mp_close_rxq(dev, ifq_idx, old_p);
+ 
+-	if (WARN_ON_ONCE(!netif_get_rx_queue_lease_locked(&dev, &ifq_idx)))
++	if (!__netif_get_rx_queue_lease(&dev, &ifq_idx, NETIF_VIRT_TO_PHYS)) {
++		WARN_ON_ONCE(1);
+ 		return;
+-
++	}
++	netdev_lock(dev);
+ 	__netif_mp_close_rxq(dev, ifq_idx, old_p);
+-	netif_put_rx_queue_lease_locked(orig_dev, dev);
++	netdev_unlock(dev);
+ }
+ 
+ void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index fe1c7899455e..616cd7b42502 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -31,6 +31,8 @@
+ #include <net/netdev_rx_queue.h>
+ #include <net/xdp.h>
+ 
++#include "../core/dev.h"
++
+ #include "xsk_queue.h"
+ #include "xdp_umem.h"
+ #include "xsk.h"
+@@ -117,20 +119,42 @@ struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
+ }
+ EXPORT_SYMBOL(xsk_get_pool_from_qid);
+ 
++static void __xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
++{
++	if (queue_id < dev->num_rx_queues)
++		dev->_rx[queue_id].pool = NULL;
++	if (queue_id < dev->num_tx_queues)
++		dev->_tx[queue_id].pool = NULL;
++}
++
+ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
+ {
+-	struct net_device *orig_dev = dev;
+-	unsigned int id = queue_id;
++	struct netdev_rx_queue *hw_rxq;
+ 
+-	if (id < dev->real_num_rx_queues)
+-		WARN_ON_ONCE(!netif_get_rx_queue_lease_locked(&dev, &id));
++	if (!netif_rxq_is_leased(dev, queue_id))
++		return __xsk_clear_pool_at_qid(dev, queue_id);
++	WARN_ON_ONCE(!netif_is_queue_leasee(dev));
+ 
+-	if (id < dev->num_rx_queues)
+-		dev->_rx[id].pool = NULL;
+-	if (id < dev->num_tx_queues)
+-		dev->_tx[id].pool = NULL;
++	hw_rxq = __netif_get_rx_queue(dev, queue_id)->lease;
+ 
+-	netif_put_rx_queue_lease_locked(orig_dev, dev);
++	netdev_lock(hw_rxq->dev);
++	queue_id = get_netdev_rx_queue_index(hw_rxq);
++	__xsk_clear_pool_at_qid(hw_rxq->dev, queue_id);
++	netdev_unlock(hw_rxq->dev);
++}
++
++static int __xsk_reg_pool_at_qid(struct net_device *dev,
++				 struct xsk_buff_pool *pool, u16 queue_id)
++{
++	if (xsk_get_pool_from_qid(dev, queue_id))
++		return -EBUSY;
++
++	if (queue_id < dev->real_num_rx_queues)
++		dev->_rx[queue_id].pool = pool;
++	if (queue_id < dev->real_num_tx_queues)
++		dev->_tx[queue_id].pool = pool;
++
++	return 0;
+ }
+ 
+ /* The buffer pool is stored both in the _rx struct and the _tx struct as we do
+@@ -140,29 +164,26 @@ void xsk_clear_pool_at_qid(struct net_device *dev, u16 queue_id)
+ int xsk_reg_pool_at_qid(struct net_device *dev, struct xsk_buff_pool *pool,
+ 			u16 queue_id)
+ {
+-	struct net_device *orig_dev = dev;
+-	unsigned int id = queue_id;
+-	int ret = 0;
++	struct netdev_rx_queue *hw_rxq;
++	int ret;
+ 
+-	if (id >= max(dev->real_num_rx_queues,
+-		      dev->real_num_tx_queues))
++	if (queue_id >= max(dev->real_num_rx_queues,
++			    dev->real_num_tx_queues))
+ 		return -EINVAL;
+ 
+-	if (id < dev->real_num_rx_queues) {
+-		if (!netif_get_rx_queue_lease_locked(&dev, &id))
+-			return -EBUSY;
+-		if (xsk_get_pool_from_qid(dev, id)) {
+-			ret = -EBUSY;
+-			goto out;
+-		}
+-	}
++	if (queue_id >= dev->real_num_rx_queues ||
++	    !netif_rxq_is_leased(dev, queue_id))
++		return __xsk_reg_pool_at_qid(dev, pool, queue_id);
++	if (!netif_is_queue_leasee(dev))
++		return -EBUSY;
++
++	hw_rxq = __netif_get_rx_queue(dev, queue_id)->lease;
++
++	netdev_lock(hw_rxq->dev);
++	queue_id = get_netdev_rx_queue_index(hw_rxq);
++	ret = __xsk_reg_pool_at_qid(hw_rxq->dev, pool, queue_id);
++	netdev_unlock(hw_rxq->dev);
+ 
+-	if (id < dev->real_num_rx_queues)
+-		dev->_rx[id].pool = pool;
+-	if (id < dev->real_num_tx_queues)
+-		dev->_tx[id].pool = pool;
+-out:
+-	netif_put_rx_queue_lease_locked(orig_dev, dev);
+ 	return ret;
+ }
+ 
+-- 
+2.53.0
 
