@@ -1,157 +1,208 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FB9326938
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 16:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775665257; cv=pass; b=uO+V1g+K171PV/DJJnFCVbnOmXayMp9RoqziPh20f2JCTMnvFnrh8qSblMWUhUtt2EqC9fmqZkbTL8L17ABfNNQCEAQDrVXAbP8L3F5TvrVaTbRbW79a2TMV20c3qLSl5269QpPZsB1d9imUvMtmizALKcb24ufCk6+7/2qWRbo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775665257; c=relaxed/simple;
-	bh=D+DJ5XwPgx47oZfXhJlPVNn63RztcRSxYBF21Le011U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oDUIEV3w9Dy3SbK6iBy46RbByoqyktxabfw+xCcaG2taiPtLh+cZd2Pti/ZanZEks/AMNTg0JE798E6Hr29UHWACYZbeV+XyuLX/dlAuf1xhAjyDh+b30vQm7BPuCqq5A3szv11F8sjGMbw5kz+0mgIVE6C/hF7Evp3Ms06JxkY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ebZz+MEq; arc=pass smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C4273AB262
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 16:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775667482; cv=none; b=TZ6uEYaJcbZYuf9AXn4XTPKe3I6w2OUoOpHO3a6VEmTZihpNhRZiBWw5q25V+plzJEX1FFAGoS6aEVS8zIvglrq+EezkxhoY2SnSmaJD/GQ+6t6j7pA41hKKf2C1ybratnwYuoyEjmy+YtpvcrsbtbNDM4mpCQRADKXU1aTbXaY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775667482; c=relaxed/simple;
+	bh=xEF5LvtyRUwN9VseYA2I4NUSQgAy87IRQ2StV51M4vg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZUiqlRo9cdlMftuz8atdKw9VUZt5doojQqknW4qyViAbgLPdq3FO4CCY8rTT46lz8IWliR9nyVrU74/hAKvdj80Gpws5HGcjsnysrrpQhLBzPaw5rTmxnCQqvzxL6Y43kZ8/lnVqc8ok3TPWyJwQ0AR5IqE3IGe2ZtffxFYhvyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=G3V7IBuX; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ebZz+MEq"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso53646135e9.3
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 09:20:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775665255; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AxY2ochhqbtEQdagKm+sEECZPwTuuXunGjeoqZC0H6MZUcTKAHaiL/fYDp3aYTUUPa
-         12rdJxtI4z9ORZa8urTUDxyZAFcLg3sOX3OgMnF5gRrE7IUrX0vM8OYUXFmEEx13dTjP
-         uthFzMGnecB/yP+HBpgACWtnQ1q8pOPEZ0vcEJUMKepTKqQtr92mM0tVRmNMV8O3StTa
-         TvYNFQcH/6gb6KwSavVFtcz43XliUPTMeX9Vh98nIpD+JWVwbc0ptI5uSfIJlKdvLE8x
-         nzoTcTMS0oxk45En4QBClKthT8cbOXz9hYOmO0I7mN2eRIQ/ujjIWH9AjQYPx3R0EpWH
-         /u4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZqJ20qZBqD3AF5g9BpxcrsDEk5Pj8myEQH5vjVcW+JE=;
-        fh=CY4ub6tm4dU9Q9M/cvte17bmSVJcYAt67JYy2EieC4I=;
-        b=U4BNK6KwQpLLrAbkQDCZIl+K+yjhe/4lzC6dhYY17Cs6G+QNoDqfwrQSBJnW8JQ+0J
-         eWjdbXuBQCop5Im7v+eqeAty+ANiL0l8o0gclOZd5fgi7wupiuAw4V/rImtYd0/oVpTm
-         GnPXFEGdv4AzjbQ1+f8g4bsJwo8QCPlPw0j1EDYvCeMArcFHsjFNt9vffRUJSY4tC06D
-         utHXOPkmwxbzO1dhMXmkPpgKvZAB4+9L53rYFJVoGLIANkqE+0cMjqB+0EXucJ+I44/s
-         LygWAtfBvMmEbEpT7pHG4kXAuhOjVqZjiMSaaNPzwKyTsPLYp+TI85ElZQEUH78sxWFb
-         DMcg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775665255; x=1776270055; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZqJ20qZBqD3AF5g9BpxcrsDEk5Pj8myEQH5vjVcW+JE=;
-        b=ebZz+MEqPW6pwUmPPPwNeFexf8MwEiynK4fMOjOK8gUXE/37YmcSgYYCR2DA+78FD4
-         b4RAGZnWIIbO0ddIl8BHzPNTLKbXwDK/HEdPz29z+QCqAYqhLe3n7MTfM2SUuT6nmudX
-         Ulj/o8cW16PKITZnAiQqr94wcBlR/2i1C5NwlwLBfC1tFoT5BT8BM+HoR4uHuCAFnCRY
-         pJ7W28tCgUNV/eYl4mGgY3Cvjeq+Au4ug8p0CSzlUnRsjzLvXfwv3dpjWeK6WJem5IS7
-         1EwLWCFr7DhiJrpsjOuZHZEyEQtrojtzvAVDeSD8onG4jwfCHdyDyyySHqBjd9cXTsGI
-         uwCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775665255; x=1776270055;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZqJ20qZBqD3AF5g9BpxcrsDEk5Pj8myEQH5vjVcW+JE=;
-        b=mRG4JpH1yMoYPQ9N81V3CFGLiBaS+QZE8yUABuOqBd4/X/kQALvTByzzJF4n2vThIj
-         EKcuWkiH5+uIOODYSXh7fV1aHZVGj962cM5JNGOYhCG9hqKRc8Mf7Swqs6mOYRuTkK76
-         yUXSVbj4jiYxi6A9QNSNvoDBEUIlYsT981rsjCJtwKe0dpGMD9om9oA2YyV6LwOIZ/d6
-         NAUJOy5CYNHhZ3u+WTzlnszM/4shO/SCsB6oz5TPhdqSAIqsg3OBeB7CG8rSyj8sMjy9
-         T1BBu3W46Met4dgHIv9wV2CUOoAO72TpSQ63CnAFpU+ebhYY9hYWZ/S2JM9AXRc2qNc7
-         TKtA==
-X-Gm-Message-State: AOJu0YyPOfEv9RkvdkZyYepFIL7jx/jm/Hg/Rm8A0XM6no4wKQedhVVs
-	H8mwk9V1v9sXZjjd80gMom+ZLRba+ldamFC27UCWzPaqexpkeQjrxSK+f2s4FJxC6WsKyqQI8f3
-	jkDNEIwaBHkXb7hKrLgpCNe1MPCztxdw=
-X-Gm-Gg: AeBDietXT/3CjtzL9m/IinYHYD6QJHuy0StW3y1O7iOXdlV5QtvweFukeNQenE3ZcBa
-	qLVScbiXMm2P/zY4HjjP7qo1e7tsPpx0r1P9icR0h889s8bp8rovgvhUtQXeps3jKxwWR4ME0wt
-	v5+QMEYtpGPoYrMmG+O8sds4GfpFln/OOHvNuF3Jto+f5GHIrcJUDPrErbQcYe0mdpIihdG5k/5
-	i7iHJpqsdyWsvw80NyB9a31m+6dDBxe/qXRO4BeNpU3PJLrwpO5XtRL+KZW+Ea2GV0sai6ANRdc
-	UObzIW1y5zL3ZITBeIzyxqllD2ZXYDEMG/AvXeSh/z2yHS1Wqvn7VQGHhqm8xI7jlw0F63U6YAK
-	xRI8RmqIt0UO8lwmynTJnkw9GRXq0vQtDKx5V
-X-Received: by 2002:a05:600c:c056:b0:485:40fd:8390 with SMTP id
- 5b1f17b1804b1-488998ef198mr208602935e9.26.1775665254326; Wed, 08 Apr 2026
- 09:20:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="G3V7IBuX"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 638DMPqf725743;
+	Wed, 8 Apr 2026 16:57:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=++XMv
+	TAVReZRsuTvXd1lo5K+BVjKWrpQiuYDmN8dKNE=; b=G3V7IBuX6Z0sdEtl/mDSp
+	kkKqX3dV6MPn3pQag3pXgKb04QHjLpt2YWwe9SKp6u40OEQLtRAPS/tqtr4frUrU
+	+KZENrgO3t8s2FUkQJ8/+Wj+LtngLPlHmE/xQt2B2e+SBy5K2844ioW6AM00FqmJ
+	R111DzaNmcFn/pUpc3uvsm9YKYhh3pC2MjzUS0hixZv+hMnPAj5cqA7+BjJCnd3a
+	/C/tFZYM6Zc4jVkercklhGda6SU1xSMMeGqr4mIbW1atJwWZqX/d7jh3noxUrlvF
+	FxDd1dkq98F3aFk0pHpS5PJh2qatL5VCE3qTPRIloNXlITKC2+og61hPxWyZL0pk
+	A==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dcmqebvkw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 08 Apr 2026 16:57:42 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 638F9wAi026134;
+	Wed, 8 Apr 2026 16:57:42 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dcmebhqtg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 08 Apr 2026 16:57:42 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 638GvboC025438;
+	Wed, 8 Apr 2026 16:57:41 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-48-176.vpn.oracle.com [10.154.48.176])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4dcmebhqmb-3;
+	Wed, 08 Apr 2026 16:57:41 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: andrii@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+        yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: Add BTF sanitize test covering BTF layout
+Date: Wed,  8 Apr 2026 17:57:35 +0100
+Message-ID: <20260408165735.843763-3-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260408165735.843763-1-alan.maguire@oracle.com>
+References: <20260408165735.843763-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408153712.523124-1-daniel@iogearbox.net> <20260408153712.523124-2-daniel@iogearbox.net>
-In-Reply-To: <20260408153712.523124-2-daniel@iogearbox.net>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 8 Apr 2026 09:20:43 -0700
-X-Gm-Features: AQROBzAfYBtFmprLqIrk6-mOTNR5ScgwXjvA1d0Esbk0J2mj4TUUtbyrupZb3to
-Message-ID: <CAADnVQ+tLKiH2a_1mOFZ7aZ3jN+9_vLxOxxPqqBc8QEYUwCgVg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] bpf: Fix ld_{abs,ind} failure path analysis
- in subprogs
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	STAR Labs SG <info@starlabs.sg>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-08_05,2026-04-08_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 adultscore=0
+ phishscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2604010000
+ definitions=main-2604080157
+X-Authority-Analysis: v=2.4 cv=MtJiLWae c=1 sm=1 tr=0 ts=69d68906 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=x4eqshVgHu-cdnggieHk:22 a=yPCof4ZbAAAA:8 a=uTUuzrmDwOiJP4hIRfUA:9 cc=ntf
+ awl=host:12292
+X-Proofpoint-GUID: eBvBUnspgW6AJu7FYOYp7gLOX52KqDur
+X-Proofpoint-ORIG-GUID: eBvBUnspgW6AJu7FYOYp7gLOX52KqDur
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDE1NyBTYWx0ZWRfX/qFR1UkPIrCO
+ owmloZLprsTOQaocWomxChzdoljtUC4gn0tPT17DkcdbQZcAW/Gpl9S8/8TQ2U1mmVJ6iDK36nY
+ Mz/BBdy612QDJ3dLs/nTBTCpoIrC9tKkaKMjr6gbg+5sCDdFMDDuGwyOskwsBama0GhFL8pf4hM
+ CuPhPYjkZc7kwVTANq+79wO1kr+KQlju1vwnBv+gUHFcyoGBMbWeZwXXwTNKVcDu/triqW63KK+
+ wBlQvKEfR/t2WK3CwCaZxUPosHUktsUwGMi3Hw3IRvqGU3tjhRBicpLxGivc33vUsJxDDse3iyw
+ ewLjcyisPT1RkUa1syJkngis6IbESuPnrVheCbae84bA8SX3UWWixgLYc7l+gwLkqZTYfku/Rrs
+ fsG5dEwMYLZnHQGpt7RsQph4VxoHfJY0oren4tyyTpOZ1tafzFU8A7Sx7QVMTnMCFGsPWnF13mE
+ 6qrjnN0j3Yv2wFsNgMmZ89P8S/5ONhDaGhwa/wQs=
 
-On Wed, Apr 8, 2026 at 8:37=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.ne=
-t> wrote:
->
-> Usage of ld_{abs,ind} instructions got extended into subprogs some time
-> ago via commit 09b28d76eac4 ("bpf: Add abnormal return checks."). These
-> are only allowed in subprograms when the latter are BTF annotated and
-> have scalar return types.
->
-> The code generator in bpf_gen_ld_abs() has an abnormal exit path (r0=3D0 =
+Add test that fakes up a feature cache of supported BPF
+features to simulate an older kernel that does not support
+BTF layout information.  Ensure that BTF is sanitized correctly
+to remove layout info between types and strings, and that all
+offsets and lengths are adjusted appropriately.
+
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ .../selftests/bpf/prog_tests/btf_sanitize.c   | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+new file mode 100644
+index 000000000000..652b51efafc2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+@@ -0,0 +1,97 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026, Oracle and/or its affiliates. */
++#include <test_progs.h>
++#include <linux/btf.h>
++#include "bpf/libbpf_internal.h"
++#include "../test_btf.h"
++#include "kfree_skb.skel.h"
 +
-> exit) from legacy cBPF times. While the enforcement is on scalar return
-> types, the verifier must also simulate the path of abnormal exit if the
-> packet data load via ld_{abs,ind} failed.
->
-> This is currently not the case. Fix it by having the verifier simulate
-> both success and failure paths, and extend it in similar ways as we do
-> for tail calls. The success path (r0=3Dunknown, continue to next insn) is
-> pushed onto stack for later validation and the r0=3D0 and return to the
-> caller is done on the fall-through side.
->
-> Fixes: 09b28d76eac4 ("bpf: Add abnormal return checks.")
-> Reported-by: STAR Labs SG <info@starlabs.sg>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> ---
->  kernel/bpf/verifier.c | 32 ++++++++++++++++++++++++++++++--
->  1 file changed, 30 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index db009d509ade..46f55ea6684e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -18357,6 +18357,22 @@ static int check_ld_abs(struct bpf_verifier_env =
-*env, struct bpf_insn *insn)
->         mark_reg_unknown(env, regs, BPF_REG_0);
->         /* ld_abs load up to 32-bit skb data. */
->         regs[BPF_REG_0].subreg_def =3D env->insn_idx + 1;
-> +       /*
-> +        * See bpf_gen_ld_abs() which emits a hidden BPF_EXIT with r0=3D0
-> +        * which must be explored by the verifier when in a subprog.
-> +        */
-> +       if (env->cur_state->curframe) {
-> +               struct bpf_verifier_state *branch;
-> +
-> +               branch =3D push_stack(env, env->insn_idx + 1, env->insn_i=
-dx, false);
-> +               if (IS_ERR(branch))
-> +                       return PTR_ERR(branch);
-> +               mark_reg_known_zero(env, regs, BPF_REG_0);
-> +               err =3D prepare_func_exit(env, &env->insn_idx);
-> +               if (err)
-> +                       return err;
-> +               env->insn_idx--;
++#define TYPE_LEN	(sizeof(struct btf_type) + sizeof(__u32))
++#define MAX_NR_LAYOUT	2
++#define LAYOUT_LEN	(sizeof(struct btf_layout) * MAX_NR_LAYOUT)
++#define STR_LEN		sizeof("\0int")
++
++struct layout_btf {
++	struct btf_header hdr;
++	__u32 types[TYPE_LEN/sizeof(__u32)];
++	struct btf_layout layout[MAX_NR_LAYOUT];
++	char strs[STR_LEN];
++};
++
++static const struct layout_btf layout_btf = {
++	.hdr = {
++		.magic		= BTF_MAGIC,
++		.version	= BTF_VERSION,
++		.hdr_len	= sizeof(struct btf_header),
++		.type_off	= 0,
++		.type_len	= TYPE_LEN,
++		.str_off	= TYPE_LEN + LAYOUT_LEN,
++		.str_len	= STR_LEN,
++		.layout_off	= TYPE_LEN,
++		.layout_len	= LAYOUT_LEN,
++	},
++	.types = {
++		BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
++	},
++	.layout = {
++		{ .info_sz = 0,          .elem_sz = 0, .flags = 0 },
++		{ .info_sz = sizeof(__u32), .elem_sz = 0, .flags = 0 },
++	},
++	.strs = "\0int",
++};
++
++void test_btf_sanitize_layout(void)
++{
++	struct btf *orig = NULL, *sanitized = NULL;
++	struct kern_feature_cache *cache = NULL;
++	struct kfree_skb *skel = NULL;
++	const struct btf_header *hdr;
++	const void *raw;
++	__u32 raw_sz;
++
++	skel = kfree_skb__open();
++	if (!ASSERT_OK_PTR(skel, "kfree_skb_skel"))
++		return;
++	orig = btf__new(&layout_btf, sizeof(layout_btf));
++	if (!ASSERT_OK_PTR(orig, "btf_new_layout"))
++		goto out;
++	raw = btf__raw_data(orig, &raw_sz);
++	if (!ASSERT_OK_PTR(raw, "btf__raw_data_orig"))
++		goto out;
++	hdr = (struct btf_header *)raw;
++	ASSERT_EQ(hdr->layout_off, TYPE_LEN, "layout_off_nonzero");
++	ASSERT_EQ(hdr->layout_len, LAYOUT_LEN, "layout_len_nonzero");
++
++	cache = calloc(1, sizeof(*cache));
++	if (!ASSERT_OK_PTR(cache, "alloc_feat_cache"))
++		goto out;
++	for (int i = 0; i < __FEAT_CNT; i++)
++		cache->res[i] = FEAT_SUPPORTED;
++	cache->res[FEAT_BTF_LAYOUT] = FEAT_MISSING;
++
++	bpf_object_set_feat_cache(skel->obj, cache);
++
++	if (!ASSERT_FALSE(kernel_supports(skel->obj, FEAT_BTF_LAYOUT), "layout_feature_missing"))
++		goto out;
++	if (!ASSERT_TRUE(kernel_supports(skel->obj, FEAT_BTF_FUNC), "other_feature_allowed"))
++		goto out;
++
++	sanitized = bpf_object__sanitize_btf(skel->obj, orig);
++	if (!ASSERT_OK_PTR(sanitized, "bpf_object__sanitize_btf"))
++		goto out;
++
++	raw = btf__raw_data(sanitized, &raw_sz);
++	if (!ASSERT_OK_PTR(raw, "btf__raw_data_sanitized"))
++		goto out;
++	hdr = (struct btf_header *)raw;
++	ASSERT_EQ(hdr->layout_off, 0, "layout_off_zero");
++	ASSERT_EQ(hdr->layout_len, 0, "layout_len_zero");
++	ASSERT_EQ(hdr->str_off, TYPE_LEN, "strs_after_types");
++	ASSERT_EQ(hdr->str_len, STR_LEN, "strs_len_unchanged");
++	ASSERT_EQ(raw_sz, hdr->hdr_len + hdr->type_len + hdr->str_len, "btf_raw_sz_reduced");
++out:
++	/* This will free the cache we allocated above */
++	kfree_skb__destroy(skel);
++	btf__free(sanitized);
++	btf__free(orig);
++}
+-- 
+2.39.3
 
-similar code in check_helper_call() for tail_call
-also does mark_reg_scratched() and clear_all_pkt_pointers()
-which are missing here.
-
-Pls refactor that part into a helper and call it here.
-
-pw-bot: cr
