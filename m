@@ -1,210 +1,137 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25F73BADAC
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 10:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E8D137D138
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 11:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775645637; cv=none; b=atYZczqc0lgRQAst1GkZOhMQpnJZOiXcGUwGfo8A2jn57sfhh1XPy9vbESfpBhIL7EuALd21SIqshgU07CNe3cT9vODo9DLq02vtw26OzwPuPdoTyTtFeogAQcA0A9ZPcYujrW99sMLmHx3cUroPFgNji8/Ci1/zDBXbsvtLNbM=
+	t=1775646659; cv=none; b=f1sKFmpWYnbnXOw4QHFjJiJyYAHs24RKSKxjNvbpHXOJ6moDRJhdcztRZHBuUmaajzXashbDjhbu7nOVsqxnL5sgrMNONtIvLbKirpRTf2+imVSFgj5sBxFvWW1mPKxp1CFDtumRiu5F0cijY3awIKQGcWg2iBXQfrHs+1BrU6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775645637; c=relaxed/simple;
-	bh=/35TEMNroy4ecVg8X9h79yEUc8P4usoWpQgfWXMKqmU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jLdwtG1X+B9wVN7BFuf4UI1rZqIuq8n2X2jK9URVcue5lInYZZT8e0NCEvsAcmNxFPabzts/rwBRJPFyWne6dtDxNBEq53aL0gDlNG7/QDvm6JjmCy46xITMfZbVl4EKSKNYbk8glKS7pvI7HJzw/IPgAsRN0ABxcLbqqI7Po+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=rvbKS7ys; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1775646659; c=relaxed/simple;
+	bh=jFZjtktr1182f8BWsVbMJEHb9H4MNzz+xm/vLv4K1D8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JkmVUilLTU6kbJoeuT8rtyqacqCYPQEFjJL61eiYXjr645dHB5ajNwR96xMzlmtMkyO96mj+bWJ+qsiuxi6VPxVhAdw1gxvXS3+SF86XBI+hEnA2ZAcBqhZe7KIZAHU/WSjsJcs8VU7B4gEUhOtYhVmcp6/jTQZkded0hv3vnoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Scmo/EJ+; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="rvbKS7ys"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 638891nE1227705;
-	Wed, 8 Apr 2026 10:53:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=iFDhZ
-	h5+finOoYu0T9cjz6YHOxOl4fvGz/AtaaGnGEA=; b=rvbKS7ys8y1Psh7q+51DC
-	4GSxN+ElhkcxcHVDHuyCUu3DCfBKBDZ94otGac0vfWq6+fsndN+8xKeSQrmuRGaB
-	R8k2v4y1Zk/ifQfMyZMTsJvQPylqvMmFwWdcZHlkFCC6QlpL+sA5jtAP1+WuMTsl
-	7ijfC3Qm4/t8Rb/rv6+HiqyVxwsYCTaJisKL8wwgZCmPlKk2KNsI7AzrL3AispGI
-	fSe+m7MhgyhdN+x7QRekHyPJV60scD6mtYmYPOW4b1pd5QjUunA9cdofsEvWuCQ8
-	t569olvVjnxslEWfhP2xNx20yJIXpd2TmXrGJJFvvHLLbiHZrGg9ReMWZwmta4On
-	A==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dcmq9uamm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Apr 2026 10:53:39 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 6388v1iv011613;
-	Wed, 8 Apr 2026 10:53:38 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4dcmnrcsq0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 08 Apr 2026 10:53:38 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 638ArW9w039263;
-	Wed, 8 Apr 2026 10:53:38 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-55-223.vpn.oracle.com [10.154.55.223])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4dcmnrcsgj-3;
-	Wed, 08 Apr 2026 10:53:37 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
-        yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: Add BTF sanitize test covering BTF layout
-Date: Wed,  8 Apr 2026 11:53:24 +0100
-Message-ID: <20260408105324.663280-3-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260408105324.663280-1-alan.maguire@oracle.com>
-References: <20260408105324.663280-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Scmo/EJ+"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d0deb7ad5so5356896f8f.2
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 04:10:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775646656; x=1776251456; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vfllRBgwiwa3h1YU32+J/3Xslzo7VJyKCR+sEXLOPdc=;
+        b=Scmo/EJ+ekij29gx2CQSx27ITvBa/vg71uKIqGTyxtvEoc4ODr3I/8+pVOEglOpK5I
+         SdoOTFP/ha9+eVfICmbo0AzaEr19G0QV/cuuk1hpEbANdcMkGMfbx+aWtl8hzDIW4BYr
+         jh3bse40AqusVWoyFJ6OXswjb3tJ+cistJiPXnDN4VH/eeSTUcUjDVAs0thGX3gj84nM
+         120ormNdhG6+CXwLNBhFFxSBrOPv6HEKau4TWb+kov0R4vstoPeApF6eKOom2WziCJXg
+         hIpV6UhWkn1RNLiIwElYZdwXLNDEqIapPndFCkO97e6UYivlHNWsGpcc6NfE1DxXokHM
+         bd6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775646656; x=1776251456;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vfllRBgwiwa3h1YU32+J/3Xslzo7VJyKCR+sEXLOPdc=;
+        b=GpF2ZQOid1AVQwyTYI6+iE6LIw6q9VWlkeHmwXFvF1N/SPxLwI5Q/qRZcNRg3lhXUY
+         3Xf9rEFeHLjN2eRHtwtaBEWy9Sbgq4Iv138boQnxN0Q8GE1WWjUwpKvu2K93bVaVY5b2
+         Ky3scQW/c596sEjm67xLxfkEAXQJAp3fn6Ke4LEaTUbdn1CEa5gJZndd1yEIkt+jemP6
+         oh03glHptgtkYg+shYhW4Y1XQdtt4sj74LVkk6UuC6r/6UWyRAfETo38O49SVKJY/+Yk
+         H4GojcHHMcUNr5vBivC+eiWLOylnnYJpr3REiYp/Ee0eCV1pHuitSMNQz3F+5xITSq9l
+         K2Cg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1tI268eBV7k2MzkryqKK2JaITxjbPamsS9k2/kmVEoMCPpoViK1pZ0Fd04bnzVvHlt18=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzb24rJpMMbhKWua2+Of1oJaGMnLamAPeLL42FqNOulQ/AC3Mva
+	8bee0IFc6OXokelD67i3n6fkFoXPug3vtpV1gv/b61ma7VfTov2cYJpopxiWWVqg8Rk=
+X-Gm-Gg: AeBDieu/74MEgTYcprFUPFLVx1a57DJ2rmjM53kOOj0OnE+evwoMICAZpkfWyMRkcUw
+	74tE6x2saTqTaILpLxQ3pJ3oJ8aef6E5Pz02cF0KSaPb3NzvC6tARHt2m3bd9dC5nRi4HGy63Vg
+	4ABzdhaeT2KiIk6+H+9BIk4DYSwQysZ7KfqdZrjqztkVYgtHdshoQdhEqX2uNslAIjGuJ9OTtGc
+	UhYpGPfRmtVArnMnGQJgmQ5mY63o5Wijd3NZY53N1WaBv2VBis2UYBEAF12g8AdrRSpbNLigsQe
+	lJOKj6CVxNPRnVmq3N+vEeuQYpMRI0PYCgXa6Bo1M+TAyl48voLGDZ9BDBS71pUb7BzRZrIgqe5
+	iuMmAeosQV1hMbXMZnbddy234usV7nKWZZB8PTTNahu5tEV7TKo78P00GIyxrVEvQKohvTalN7C
+	Uy3jQlrAg8bevQZq8rt29FixMdKg==
+X-Received: by 2002:a05:6000:2282:b0:43b:54c9:85f4 with SMTP id ffacd0b85a97d-43d292df407mr31359155f8f.39.1775646656473;
+        Wed, 08 Apr 2026 04:10:56 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2a6f73sm61649889f8f.8.2026.04.08.04.10.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 04:10:55 -0700 (PDT)
+Date: Wed, 8 Apr 2026 13:10:53 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Song Liu <song@kernel.org>
+Cc: Yafang Shao <laoar.shao@gmail.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org,
+	jikos@kernel.org, mbenes@suse.cz, rostedt@goodmis.org,
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+	kpsingh@kernel.org, mattbobrowski@google.com, jolsa@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	yonghong.song@linux.dev, live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to
+ klp_patch
+Message-ID: <adY3vej2kt5joAg4@pathway.suse.cz>
+References: <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
+ <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
+ <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+ <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
+ <adQhpBC2W9I6QW-g@redhat.com>
+ <CAPhsuW66tuF+QZ0pVheWb5sC4NQ-9CXikq=zMrPBXTHcsVPjdg@mail.gmail.com>
+ <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
+ <CALOAHbCxPA0dtsx7L2kYn8wwBdM=krZyOpfRTBiDW9qfA_zmzQ@mail.gmail.com>
+ <adUd0Mojbtrwmeod@pathway.suse.cz>
+ <CAPhsuW7JhtbniZHFWGMrzeqdS=-EjCySFPgiOBv0zKJNRwzONA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-08_03,2026-04-08_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 spamscore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2604010000
- definitions=main-2604080100
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDA5OSBTYWx0ZWRfX5S2m3dJUZHcX
- n4v1kyFess9BU1Xz1Bm3XTkemJk+K0s2to7pinQJbauHALTjFD/uIhD+TzdqaIW9nG/YMOjTBY0
- bWowiYtD4nkaav0+L384YprkA6tOSbw5DK0Cq0ZzaaZE5aR5ZiAYwKS8cVJ5J+Anz7y90QOD2lt
- sPUDnY0Z0jSg0NOM7Ze/KJxc3+CeAaDvS2xkwIW3GJG31p4ls7yvX/kwIctfMQkUlvzY1nxW0W2
- XhonIawsdpA0RDPRahb/9Ama2dDEkWsWJhhUcVvVoQ1GJt7Jd2GZGJo7wpO+DFxwDrxDIiZgpAL
- Zs6P2OF54U9Mi+hiw3g1GRyJt/WH0TihypnnbFL/UQUY0Ve+92c0SEFNizRSRUPx+f9h52cr9mR
- CIUh0bNiRNWOelHzEjN4t91JW/SVfSyNmSkVM9ghAqZ6staPOb7uWX0t/F/O4S+MTNXgwiN5lEc
- YZw8m83WuLQko+OoDHw==
-X-Proofpoint-ORIG-GUID: cOA5KYslsswebkKldY_0aj3IbiXoK6in
-X-Authority-Analysis: v=2.4 cv=MaJcfZ/f c=1 sm=1 tr=0 ts=69d633b3 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=o5oIOnhZENCTenyL_yNV:22 a=yPCof4ZbAAAA:8 a=uTUuzrmDwOiJP4hIRfUA:9
-X-Proofpoint-GUID: cOA5KYslsswebkKldY_0aj3IbiXoK6in
+In-Reply-To: <CAPhsuW7JhtbniZHFWGMrzeqdS=-EjCySFPgiOBv0zKJNRwzONA@mail.gmail.com>
 
-Add test that fakes up a feature cache of supported BPF
-features to simulate an older kernel that does not support
-BTF layout information.  Ensure that BTF is sanitized correctly
-to remove layout info between types and strings, and that all
-offsets and lengths are adjusted appropriately.
+On Tue 2026-04-07 16:09:39, Song Liu wrote:
+> On Tue, Apr 7, 2026 at 8:08 AM Petr Mladek <pmladek@suse.com> wrote:
+> [...]
+> > > + * @replace:   replace tag:
+> > > + *             = 0: Atomic replace is disabled; however, this patch remains
+> > > + *                  eligible to be superseded by others.
+> >
+> > This is weird semantic. Which livepatch tag would be allowed to
+> > supersede it, please?
+> >
+> > Do we still need this category?
+> >
+> > > + *             > 0: Atomic replace is enabled. Only existing patches with a
+> > > + *                  matching replace tag will be superseded.
+> > >   * @list:      list node for global list of actively used patches
+> > >   * @kobj:      kobject for sysfs resources
+> > >   * @obj_list:  dynamic list of the object entries
+> > > @@ -137,7 +141,7 @@ struct klp_patch {
+> > >         struct module *mod;
+> > >         struct klp_object *objs;
+> > >         struct klp_state *states;
+> > > -       bool replace;
+> > > +       unsigned int replace;
+> >
+> > This already breaks the backward compatibility by changing the type
+> > and semantic of this field.
+> 
+> I was thinking if replace=0 means no replace, it is still backward
+> compatible. Did I miss something?
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- .../selftests/bpf/prog_tests/btf_sanitize.c   | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+IMHO, the semantic of the no-replace mode would be strange if
+we introduce the hybrid mode. Especially, it would be strange when
+it can be replaced by any livepatch with random replace tag/set.
+Also it would just complicate the definition and detection of conflicts.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
-new file mode 100644
-index 000000000000..470b29298cbc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026, Oracle and/or its affiliates. */
-+#include <test_progs.h>
-+#include <linux/btf.h>
-+#include "bpf/libbpf_internal.h"
-+#include "../test_btf.h"
-+#include "kfree_skb.skel.h"
-+
-+#define TYPE_LEN	(sizeof(struct btf_type) + sizeof(__u32))
-+#define MAX_NR_LAYOUT	2
-+#define LAYOUT_LEN	(sizeof(struct btf_layout) * MAX_NR_LAYOUT)
-+#define STR_LEN		sizeof("\0int")
-+
-+struct layout_btf {
-+	struct btf_header hdr;
-+	__u32 types[TYPE_LEN/sizeof(__u32)];
-+	struct btf_layout layout[MAX_NR_LAYOUT];
-+	char strs[STR_LEN];
-+};
-+
-+static const struct layout_btf layout_btf = {
-+	.hdr = {
-+		.magic		= BTF_MAGIC,
-+		.version	= BTF_VERSION,
-+		.hdr_len	= sizeof(struct btf_header),
-+		.type_off	= 0,
-+		.type_len	= TYPE_LEN,
-+		.str_off	= TYPE_LEN + LAYOUT_LEN,
-+		.str_len	= STR_LEN,
-+		.layout_off	= TYPE_LEN,
-+		.layout_len	= LAYOUT_LEN,
-+	},
-+	.types = {
-+		BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
-+	},
-+	.layout = {
-+		{ .info_sz = 0,          .elem_sz = 0, .flags = 0 },
-+		{ .info_sz = sizeof(__u32), .elem_sz = 0, .flags = 0 },
-+	},
-+	.strs = "\0int",
-+};
-+
-+void test_btf_sanitize_layout(void)
-+{
-+	struct btf *orig = NULL, *sanitized = NULL;
-+	struct kern_feature_cache *cache = NULL;
-+	struct kfree_skb *skel = NULL;
-+	const struct btf_header *hdr;
-+	const void *raw;
-+	__u32 raw_sz;
-+
-+	skel = kfree_skb__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "kfree_skb_skel"))
-+		return;
-+	orig = btf__new(&layout_btf, sizeof(layout_btf));
-+	if (!ASSERT_OK_PTR(orig, "btf_new_layout"))
-+		return;
-+
-+	raw = btf__raw_data(orig, &raw_sz);
-+	if (!ASSERT_OK_PTR(raw, "btf__raw_data_orig"))
-+		goto out;
-+	hdr = (struct btf_header *)raw;
-+	ASSERT_EQ(hdr->layout_off, TYPE_LEN, "layout_off_nonzero");
-+	ASSERT_EQ(hdr->layout_len, LAYOUT_LEN, "layout_len_nonzero");
-+
-+	cache = calloc(1, sizeof(*cache));
-+	if (!ASSERT_OK_PTR(cache, "alloc_feat_cache"))
-+		goto out;
-+	for (int i = 0; i < __FEAT_CNT; i++)
-+		cache->res[i] = FEAT_SUPPORTED;
-+	cache->res[FEAT_BTF_LAYOUT] = FEAT_MISSING;
-+
-+	bpf_object_set_feat_cache(skel->obj, cache);
-+
-+	if (!ASSERT_FALSE(kernel_supports(skel->obj, FEAT_BTF_LAYOUT), "layout_feature_missing"))
-+		goto out;
-+
-+	if (!ASSERT_TRUE(kernel_supports(skel->obj, FEAT_BTF_FUNC), "other_feature_allowed"))
-+		goto out;
-+
-+	sanitized = bpf_object__sanitize_btf(skel->obj, orig);
-+	if (!ASSERT_OK_PTR(sanitized, "bpf_object__sanitize_btf"))
-+		goto out;
-+
-+	raw = btf__raw_data(sanitized, &raw_sz);
-+	if (!ASSERT_OK_PTR(raw, "btf__raw_data_sanitized"))
-+		goto out;
-+	hdr = (struct btf_header *)raw;
-+
-+	ASSERT_EQ(hdr->layout_off, 0, "layout_off_zero");
-+	ASSERT_EQ(hdr->layout_len, 0, "layout_len_zero");
-+	ASSERT_EQ(hdr->str_off, TYPE_LEN, "strs_after_types");
-+	ASSERT_EQ(hdr->str_len, STR_LEN, "strs_len_unchanged");
-+	ASSERT_EQ(raw_sz, hdr->hdr_len + hdr->type_len + hdr->str_len, "btf_raw_sz_reduced");
-+out:
-+	/* This will free the cache we allocated above */
-+	kfree_skb__destroy(skel);
-+	btf__free(sanitized);
-+	btf__free(orig);
-+}
--- 
-2.39.3
+I am going to provide more details in the reply to Yafang.
 
+Best Regards,
+Petr
