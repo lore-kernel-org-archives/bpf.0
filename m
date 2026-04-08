@@ -1,231 +1,232 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD51F35AC3B
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 23:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775689577; cv=pass; b=YJ8ne/TSQSV4D5UvNOJo4+9nEfEZzrQ9sRVie0fqZo8yumN/GCbNTP5DV7aOwL0Pdv3+ZzDm4H984bVeoKvD4l0Q9fFZZsea4v2bQL9T6vmuWIY68sTnh9hV40obswpB2VNZZh4VWtfa/1H03qDI3XzAypTVqfa4FX+1Xuz8Y18=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775689577; c=relaxed/simple;
-	bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dHjkp0srlHRw68WnwAV36TT8uehl579lgHJb5E1sL/tyV50ATeOX3iEMrGJF8XABqXrEMifb9eV7ckuiYtOab9HHEgJUJ57WkhSJ6oDWSlKpQAxe8/lqfE+irTV5foVLAvmPX0w8DFVk6VY/CBRXbntPd5l3b4ui/wZJWYucc8Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhOQaNX0; arc=pass smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261B538946A
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 23:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775689586; cv=none; b=Lmu03ngbyOSjhmlZuR7rZJOc6LA3j3YlOIeh5sCZYvs4R8qEyju4FmYUAx3QurJ1J1PczwnUuZ3eW4zsXtPHWwItWs/ZWp5HLPPJtiyC69MLduhwji+uej1Ch7CxO0AZoqUggGsY98QBk7xyx28AF9ul94YzPQPqRVcCRy5GE94=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775689586; c=relaxed/simple;
+	bh=imhnP3c90RnqduwmC0Bs7sD+WwiHek5Y56xEli2D4zw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VXynjAGLNiY2hvGsABLYil/mUIVoCKdX9EQ3ZMpu/rn/5MsrLJA57+vnO2ZYM8TaoyfthJ7gm8fe7WVp0CNbHp6ilubKvJlFaJIDHbE+DfHRgzRxuaqGAvAPnH7BYrMMpYe6+PDder8juT85AkPIL4gIbjoMsSUSZMWc5eKCcKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=PCd+W6uJ; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhOQaNX0"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5a3d42263e4so279588e87.2
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 16:06:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775689573; cv=none;
-        d=google.com; s=arc-20240605;
-        b=iw5QRH5fNRmmfnLal619kLnDkBbhw8qvvamb+4825mD925e7sn1eB/MQl2ejtLLtZb
-         c7c86eqigX2lKYQm+i1XQiv3FyHQ3OU8ae2D6uNKF2ZFH8npVoUzol8EuAEXdL+gCviO
-         rZlOAFHl4Wk8LwozZn8OI02/jvb+dQvJ0bO5AK/X3kutKBC9INBe90diK+dtqrDtRxf0
-         fNGBBsrvuABLdfNIsukAJ4+GASQjvZPZLd6B2I5oXGdiIj/04XoGstmbsYUfjpauae0M
-         mnh0zGJ6bXTogoaJCTG26qHxcBmoudsD71p5zpODfS7LlPz8Z9fwoCCmNVKIf7NR7MDi
-         kYZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
-        fh=rZTRStmJ77ZLW+bVKVzBpJzUHWeIXpmPIMDYZTGCzMQ=;
-        b=bBlQvaGVCJ9g8dbq8MdM3UytSdBQ+rkWOjkuUO0pLDRfaoXpmpxkLsJenkxeCUN6nf
-         mV713ROSlvOt3uoEaOW91KDHoEm+UJhi4o49ozoeGsOR2hRbIxhb+WaE8we/KsyP8jWB
-         bCgqyM+tyigylLgYuDW+zf/EukOAuuO+eEswFXwltKHXJG40dxo+b2a3zXglKvZ4pson
-         Dv1k/u6y5Vhfi/MHlPSzYhtyMASHA50F5/UoLfjMLGvHVIwAVT1lG5lir5gyS9sKvJN4
-         nXtvFuY6l3zi1CkNhbWvBOIFh68+Cj0DPoud26F4ZRk86paHbWYuS8KbE9l4znp4+ADk
-         tQtw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="PCd+W6uJ"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2b2503753efso2612485ad.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 16:06:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775689573; x=1776294373; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1775689584; x=1776294384; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
-        b=fhOQaNX02gPoFdrlvbU9SpzwcfwU8wAES3XWx8gv6zy91sICkyiWXAtZw4XQooBleW
-         EbLTdCUFHmoodtytBNKqjEzSf3+s7e/FzND3S5OhLfepH/HIaHZu+PKBUhkRY2xUy67z
-         /SK3g9IAdrDFhKJ9/eGKVfwOmeyz5BL38gmHlKpLO4j2+QYd87rHyUcf15ecTBXT70He
-         8S9XzxjY1v+BcFOwgs2gml+zXwYIkFRV79KpTZGJTjP9Q3EOIun3F9H/HumbMDImUtH2
-         s0w9BrrxPGn2fPoI9PAkGPNw5EEzav9M3igffoPzCn5SprUXMvGM7l77THCj8rRRnRh6
-         zP9Q==
+        bh=gILlFOgGbo5p4rommdyZj12/KVIzsVhqUzxLDwWsXoM=;
+        b=PCd+W6uJyv2pSwLleizYtKZImlVCVQPf/pogGHl2I7eZ2DxxDTOxNVSvGxCY9SS6ZQ
+         r+8YaKQF1EPKNkgasH/o2IWcrNPOt71q8hGdUZg2h7/3waFbPEkVcUNFDuVrzLLo0aaA
+         waQDL+GhBEIcc1BK8xDqW1vEKviepj2fL0N0xkDCHsGcy00suldpTPr3BVDU5RwIzkhU
+         O7adZvmjYZrSu2IdW2ZyMaKGcQGVia2VK68WlnCHGIKv9PNd4gH7NcuzNTxVCDf5425X
+         Jelil90Arem91upK4tJBr3TVJWfd5LcyffdDsssWJoLVw52WdH02quewebC58FhLgk6k
+         Ddbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775689573; x=1776294373;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1775689584; x=1776294384;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=z6c7hISk3aid/HRlRk44fwvEql24rvRb047d0E9+O+E=;
-        b=cVeUE+cQjECdF0H2pex81W3LbuAPBpgLkFiMjYeDRVGWw1yGcAW3VR8YKKr4HoXPms
-         /Q1Gz3xPZ/Q1Ve5KkMj/M6gcLpUTKBL0UqvJjGE6PaO6RrRrdGrCVV+ghpYGPY/dzC3b
-         DErgIALJLBZnz2594hvBSqOQ4jMUf5Ps8yi59kmji65sOUnUE2fjLXlSIPiCnjGk5Kjs
-         fzI2SOR4VPC3ANudZuGK9TXnlj3eiKTsmpesgykDZ5GEn8sOSQV6LYFV5Qz2hv+4AJLZ
-         SqQ1K8D/1U++XM8I126v40ftxUvE70qtmOkP9VWPGZWGf/jb3Z3Z+QqssewzAL4vRayv
-         fPcg==
-X-Forwarded-Encrypted: i=1; AJvYcCWLoaNLL0Wo0K7P8ZYNr66ak/xMNUjDqi6MQmhj5dncZDJdJccKhotl4i4z1aJZDtaw3Dk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxiu4yCBgkJG/ls1E/JBPMG6waWI475c2eJ/HJoPVLLHFdDqamA
-	3f26RqaRzS2cuTvXZPpcRWFxMxR3dNcXrDYg5dOSSXrUOqOUtcVHuByfV2XcdX5MG1Rfd5wjLOH
-	Zp9swPhzwogXRWdUE42F85z+H1o0QTDs=
-X-Gm-Gg: AeBDievkPmrkj2GINLyXe9MY+38OT7aZeYKKeOeZTVGkYMQ58/pYcSU6WNoQFSawalr
-	aCGBmJdj71XqgxLjdHEYAdWKvCh/Zeygc/0bHlb+0g+nKI2/4RoWKBeeCX/uv6lKXFRWUtWQdup
-	OVO6mjzVqfBCsNw0ucl/iwRWVTPhkNgDrxc2zzIDdAOKjKGZA7u3F/06cP4GidgLX8jYySRPAdT
-	kpzNBDC+Fn9t0yeDAVQUpaEbwU5YerG/7XhhdljGDW/WJW/fv9yu4mMfO+095LASFWOmglah48b
-	vlbeAGk=
-X-Received: by 2002:a05:6512:2255:b0:5a3:ea23:9af8 with SMTP id
- 2adb3069b0e04-5a3ea239d28mr12499e87.24.1775689572219; Wed, 08 Apr 2026
- 16:06:12 -0700 (PDT)
+        bh=gILlFOgGbo5p4rommdyZj12/KVIzsVhqUzxLDwWsXoM=;
+        b=N+3HGKnEPfaZWYXqbfSPr7E/RokFE5xACVh2Rpt0Hyzg9p/LdzjXFbwoBrsaqT2gig
+         E8xGEHF6UBE5QOhKQoNuV2AXb/Y34dnV7smERLyKWq7BlDIZo0ZGSDr9F6V/1KPnFl4g
+         +Qp+hNp+kREmvAyxp/P5EuCNcD8Yk5obNu1NIL0eoY1GXj4dlQTHPjOBuOcaDdI3G+nV
+         FcuQPb4xChrjSjvy+y2TWsPGs6jYvn1bZOTFPEYf/fc/d5SyMvQnWncAcFK8lA+OsAil
+         P8820vDlhhavpOVTbopsAKBtacxk7lj0GVcV+z2V5bZJZNRUkQxE6YQ8AE6a1GUWK+IN
+         w5Kg==
+X-Forwarded-Encrypted: i=1; AJvYcCWfIaZP0gBRyERDD8oaC1R8E+JlSMykoSlyuVJtiNAGLdHnRhQpQjkSujiuea1nWN7l3TA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2HrHAn3GsPHAzHMZWe4waglCZW+iT0g1xp7dG7jtUAGklxd4C
+	4GJsP1Kt8a0efDrSnU9bvSWLIL1SykaOkk2OkwtE+9UwImolMOczcgPv/CPt2P1jkXU=
+X-Gm-Gg: AeBDietoB5YuwA+ElFGOlMMxafCVP/i/H78bjtvtwZ3ArLduMyzqXEKkFlinZCzPUa2
+	ntq0nNJ0vf9OCk+LGfAHbokC/VPK2Z76ZfY1aWKArVmJYJqZOidF8xXFP5SxyHFyeHbYeHsjJlu
+	WXIf+PnTqQ1QYBGXMpe1fOpOC3a8JVE0kEiPPsrjKeOAa0zSzmPORN9VrJQWQtoL2ORVyun27fy
+	nTnaAZE+3nRowPq1gSmHaC8C0GGru6Ec+QoLM/nwtZjJFb3Xn04t7i/1jGW8ObH1WcHKFQyYCOt
+	+SEURu9uIdmJr/ws3+Y7tXAiITjcBqs9fO6UoXdaIBeDr6NRCgQ686y8uWvCXSHo871Gm9eRVNx
+	XgmAoN2IPqtdigOhDdrGbZJh+bg7QnzoNpa8RP64X9hTQGUPbjhlG9JNZoFiPFWKrFlUDVVBrYH
+	EV55Dr
+X-Received: by 2002:a17:903:287:b0:2b0:c2d9:270a with SMTP id d9443c01a7336-2b28198d6e9mr235351495ad.42.1775689584518;
+        Wed, 08 Apr 2026 16:06:24 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:5e::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b27475ff56sm213190295ad.22.2026.04.08.16.06.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 16:06:24 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: horms@kernel.org,
+	linux-kernel@vger.kernel.org,
+	leon@kernel.org,
+	Joe Damato <joe@dama.to>,
+	bpf@vger.kernel.org
+Subject: [net-next v10 06/10] net: bnxt: Add boilerplate GSO code
+Date: Wed,  8 Apr 2026 16:05:55 -0700
+Message-ID: <20260408230607.2019402-7-joe@dama.to>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260408230607.2019402-1-joe@dama.to>
+References: <20260408230607.2019402-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260404150452.83904-1-kerneljasonxing@gmail.com>
- <20260404150452.83904-4-kerneljasonxing@gmail.com> <willemdebruijn.kernel.2ff565d2f9e7f@gmail.com>
- <CAL+tcoB94=ptFB-acU3nAK_MqW74DV0MQUVvvV3nbQ7Zc6zSZw@mail.gmail.com>
- <willemdebruijn.kernel.27ec47b22b23c@gmail.com> <CAL+tcoAvVBN7juJEBt5-FYQ4eGTe7dYrFbR3CMOwguw=_X=btA@mail.gmail.com>
- <CAL+tcoCctfs=d9zz5ei1S999S94HmUDSToriZ8NJiLT8MmpQTA@mail.gmail.com>
- <willemdebruijn.kernel.1b49845d3acc7@gmail.com> <CAL+tcoBt1A5GYFvimkcRFUtmy298y13AiF-XFF8b8E8Y6fg8Xw@mail.gmail.com>
- <willemdebruijn.kernel.257654f9a3f23@gmail.com>
-In-Reply-To: <willemdebruijn.kernel.257654f9a3f23@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Thu, 9 Apr 2026 07:05:34 +0800
-X-Gm-Features: AQROBzDQgEI9lw5wbSyPTgXA2FWuJ-qBMbd5NRMWRIDCToG7zeyMq_VD-ECIWvg
-Message-ID: <CAL+tcoCx0fB-jsF3j03vFfhPDvO0T-B=FGzEgi4GE06Y_rjeMw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/4] bpf-timestamp: keep track of the skb when
- wait_for_space occurs
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, 
-	martin.lau@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>, Yushan Zhou <katrinzhou@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 8, 2026 at 11:15=E2=80=AFPM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> > > > > Since we're modifying the kernel, how about adding a new member t=
-o
-> > > > > record sendmsg time which bpf script is able to read. The whole
-> > > > > scenario looks like this:
-> > > > > 1) in tcp_sendmsg_locked(), record the sendmsg time for each skb
-> > > > > 2) in either tso_fragment() or tcp_gso_tstamp(), each new skb wil=
-l get
-> > > > > a copy of its original skb
-> > > > > 3) in each stage, bpf script reads the skb's sendmsg time and the
-> > > > > current time, and then effortlessly do the math.
-> > > > >
-> > > > > At this point, what I had in mind is we have two options:
-> > > > > 1) only handle the skb from the view of the send syscall layer, w=
-hich
-> > > > > is, for sure, very simple but not thorough.
-> > > > > 2) stick to a pure authentic packet basis, then adding a new memb=
-er
-> > > > > seems inevitable. so the question would be where to add? The spac=
-e of
-> > > > > the skb structure is very precious :(
-> > > >
-> > > > Finding a suitable place to put this timestamp is really hard. IIRC=
-,
-> > > > we can't expand the size of struct skb_shared_info so easily since
-> > > > it's a global effect.
-> > > >
-> > > > I'm wondering if we can turn the per-packet mode into a non-compati=
-ble
-> > > > feature by reusing 'u32 tskey' to store a microsecond timestamp of
-> > > > sendmsg.
-> > >
-> > > Agreed that an extra field is hard. We should avoid that.
-> >
-> > Avoiding adding a new one makes the whole work extremely hard. I'm
-> > wondering since we have hwtstamp in shared info, why not add a
-> > software one for timestamping use? Then, we would support more
-> > different protocols in more different stages in a finer grain, which
-> > is a big coarse picture in my mind.
->
-> I don't understand the need to store more data in the skb for BPF.
+Add bnxt_gso.c and bnxt_gso.h with a stub bnxt_sw_udp_gso_xmit()
+function, SW USO constants (BNXT_SW_USO_MAX_SEGS,
+BNXT_SW_USO_MAX_DESCS), and the is_sw_gso field in bnxt_sw_tx_bd
+with BNXT_SW_GSO_MID/LAST markers.
 
-I see your point.
+The full SW USO implementation will be added in a future commit.
 
->
-> With BPF hooks, the bpf program can record the relevant data directly
-> in a BPF map.
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ v7:
+   - Changed the placement of is_sw_gso in struct bnxt_sw_tx_bd to be near
+     other is_* fields.
+   - No functional changes.
 
-It works for sure, but, as I said previously, it's not an effective
-approach that can be used in production to run a 7x24 monitor.
+ v5:
+   - Added Pavan's Reviewed-by. No functional changes.
 
-Either adding a new field or repurposing the tskey makes the whole
-logic/arch very simple. Being simple is being efficient and easy to
-use. Without changes like that, the performance of flows can get
-hugely affected just because of the monitor.
+ drivers/net/ethernet/broadcom/bnxt/Makefile   |  2 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  4 +++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c | 30 ++++++++++++++++++
+ drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h | 31 +++++++++++++++++++
+ 4 files changed, 66 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
+ create mode 100644 drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
 
->
-> > Adding a software bit will completely reduce the whole complexity and
-> > be very easy to use. Would you expect to see a draft by adding such a
-> > bit first?
-> >
-> > Or just like I mentioned, repurposing tskey seems an alternative,
-> > which, however, makes the new feature incompatible.
-> >
-> > >
-> > > If the purpose is to group skbs by sendmsg call (e.g., to filter out
-> > > all but the last one), it is probably also unnecessary.
-> > >
-> > > From a process PoV, since the process knows the sendmsg len and each
-> > > skb has a tskey in byte offset, it can correlate the skb with a given
-> > > sendmsg buffer.
-> > >
-> > > The BPF program is under control of a third-party admin. So that does
-> > > not follow directly. But it can be passed additional metadata.
-> > >
-> > > I thought about passing the offset of the skb from the start of the
-> > > sendmsg buffer to identify all consecutive skbs for a sendmsg call,
-> > > as each new buffer will start with an skb with offset 0 ..
-> > >
-> > > .. but that won't work as there is no guarantee that a sendmsg call
-> > > will not append to an existing outstanding skb.
-> >
-> > Right. TCP is way too complex and we indeed see some tough issues when
-> > trying to deploy the feature. So my humble take is to make the design
-> > as simple as possible.
-> >
-> > >
-> > > Anyway, the general idea is to pass to the BPF program through
-> > > bpf_skops_tx_timestamping some relevant signal , without having to
-> > > expand either skb or sk itself.
-> > >
-> > > I hear you on that measuring every skb is too frequent. But is callin=
-g
-> > > the BPF program and letting it decide whether to measure too? BPF
-> > > program invocation itself should be cheap.
-> >
-> > Oh, I was clear enough. Sorry. I meant tracing per skb is definitely
-> > an awesome way to go. My ultimate goal is to do so. Instead of letting
-> > people implement various fine grained bpf progs, we can provide a very
-> > easy/understandable/efficient approach with more samples. It should be
-> > very beneficial.
-> >
-> > >
-> > > If per-push is preferable, with a filter ability like the above, it
-> > > seems more useful to me already.
-> >
-> > Push-level is a compromise plan. Packet-level is what I always pursue :=
-)
->
-> Then why not directly implement per-packet.
->
-> If the BPF call is cheap and the BPF program can choose to selectively
-> track packets.
->
-> Reminder that you do not want to break (BPF) users by changing
-> behavior. Let alone more than once. If per-push is going to be
-> obsoleted, skip ip entirely.
+diff --git a/drivers/net/ethernet/broadcom/bnxt/Makefile b/drivers/net/ethernet/broadcom/bnxt/Makefile
+index ba6c239d52fa..debef78c8b6d 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/Makefile
++++ b/drivers/net/ethernet/broadcom/bnxt/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_BNXT) += bnxt_en.o
+ 
+-bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o
++bnxt_en-y := bnxt.o bnxt_hwrm.o bnxt_sriov.o bnxt_ethtool.o bnxt_dcb.o bnxt_ulp.o bnxt_xdp.o bnxt_ptp.o bnxt_vfr.o bnxt_devlink.o bnxt_dim.o bnxt_coredump.o bnxt_gso.o
+ bnxt_en-$(CONFIG_BNXT_FLOWER_OFFLOAD) += bnxt_tc.o
+ bnxt_en-$(CONFIG_DEBUG_FS) += bnxt_debugfs.o
+ bnxt_en-$(CONFIG_BNXT_HWMON) += bnxt_hwmon.o
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+index d98a58aa30f6..6b38b84924e0 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+@@ -892,6 +892,7 @@ struct bnxt_sw_tx_bd {
+ 	struct page		*page;
+ 	u8			is_ts_pkt;
+ 	u8			is_push;
++	u8			is_sw_gso;
+ 	u8			action;
+ 	unsigned short		nr_frags;
+ 	union {
+@@ -900,6 +901,9 @@ struct bnxt_sw_tx_bd {
+ 	};
+ };
+ 
++#define BNXT_SW_GSO_MID		1
++#define BNXT_SW_GSO_LAST	2
++
+ struct bnxt_sw_rx_bd {
+ 	void			*data;
+ 	u8			*data_ptr;
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
+new file mode 100644
+index 000000000000..b296769ee4fe
+--- /dev/null
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/* Broadcom NetXtreme-C/E network driver.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation.
++ */
++
++#include <linux/pci.h>
++#include <linux/netdevice.h>
++#include <linux/skbuff.h>
++#include <net/netdev_queues.h>
++#include <net/ip.h>
++#include <net/ipv6.h>
++#include <net/udp.h>
++#include <net/tso.h>
++#include <linux/bnxt/hsi.h>
++
++#include "bnxt.h"
++#include "bnxt_gso.h"
++
++netdev_tx_t bnxt_sw_udp_gso_xmit(struct bnxt *bp,
++				 struct bnxt_tx_ring_info *txr,
++				 struct netdev_queue *txq,
++				 struct sk_buff *skb)
++{
++	dev_kfree_skb_any(skb);
++	dev_core_stats_tx_dropped_inc(bp->dev);
++	return NETDEV_TX_OK;
++}
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
+new file mode 100644
+index 000000000000..f01e8102dcd7
+--- /dev/null
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_gso.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Broadcom NetXtreme-C/E network driver.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation.
++ */
++
++#ifndef BNXT_GSO_H
++#define BNXT_GSO_H
++
++/* Maximum segments the stack may send in a single SW USO skb.
++ * This caps gso_max_segs for NICs without HW USO support.
++ */
++#define BNXT_SW_USO_MAX_SEGS	64
++
++/* Worst-case TX descriptors consumed by one SW USO packet:
++ * Each segment: 1 long BD + 1 ext BD + payload BDs.
++ * Total payload BDs across all segs <= num_segs + nr_frags (each frag
++ * boundary crossing adds at most 1 extra BD).
++ * So: 3 * max_segs + MAX_SKB_FRAGS + 1 = 3 * 64 + 17 + 1 = 210.
++ */
++#define BNXT_SW_USO_MAX_DESCS	(3 * BNXT_SW_USO_MAX_SEGS + MAX_SKB_FRAGS + 1)
++
++netdev_tx_t bnxt_sw_udp_gso_xmit(struct bnxt *bp,
++				 struct bnxt_tx_ring_info *txr,
++				 struct netdev_queue *txq,
++				 struct sk_buff *skb);
++
++#endif
+-- 
+2.52.0
 
-Understood. My initial version was just to try to solve the missing
-tag issues with the minimum change. You're right about the
-compatibility across kernels. Let's work on the ultimate plan then.
-
-Thanks,
-Jason
