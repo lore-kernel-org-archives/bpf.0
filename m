@@ -1,312 +1,137 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858ED293B5F
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 00:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357512E4274
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 00:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775608580; cv=pass; b=G0lHjp0YobCJUmCYP143+xJiOvGBm2pOeDqeu1ponOV+GUKq69l6fwTwDlb2ycRY5th/gb64jFxJC/NDtbrbB+8eYBbLGXWndGD7i+x9BnR0e/X8PyEO4UkrXtkCOib4Ww5/+8BGdxwgpnxdQkHvaknCSIDYHuhEFol36qgbdqs=
+	t=1775609238; cv=pass; b=p8F0WLWVFoPkQ6QGEqrF7JZT8DtD+uuz+Z3+06GUXbgDDQMRJhxEXX9UXRnvdWvH8m9/Qf1YLeBoHNuylJac8yQCKctmNX5oHgIFf4c2uoUit4pa/xaWGrdB0rT73PIzCSbjemncgiWCzPHKqT9JEKarekMcQPCGGOkwtJbiXTI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775608580; c=relaxed/simple;
-	bh=yc04CXDJZIssiibVZiuD663knKh8kMXknZH9b823FCg=;
+	s=arc-20240116; t=1775609238; c=relaxed/simple;
+	bh=DEsI0BgmtgLBAsle4MGY7bLXYBY4CxWUL4evHL89W7w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n22znO0+c9BczfVNF7hV9YhQ0wqKdZSkfRxrBoKzSK4T3EZdps2/oJndjeW3C3fKgqjhDkaKLW6+Bluj53RY7PwbJcD77L4WT88WHy8QMUuGmKhDBMyI+lvdQjJ89Of8OsKWLPk7k0UWO+8tga1f6VTG7tqZ9ZGqBZpsJ53IIdo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+JUawZu; arc=pass smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=TMjsrrRhLJny+RFoknlN7RrzMMwzCpPqOO2YlWr6pYaiSdZL9nwUPoUtZPrg62Sqj/tfKI5ZZwdwGqu6Z3cgYBszs3zcbVg4PHjGiOqwtbCgfxczahNv/MyjKeky7zPca68braAKHL1VMjLnwUG6PZ6gYaJiWuzIf6t9nbziKB0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KKvqJdv1; arc=pass smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+JUawZu"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5a2c500750dso6989402e87.1
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 17:36:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775608577; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KKvqJdv1"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-66b0dc690bcso2985a12.1
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 17:47:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775609235; cv=none;
         d=google.com; s=arc-20240605;
-        b=li0A94ZSdfB5oqJkgPrd+APWduu5JMjtMFhHAx42OCKszY/NecQLZI8MzeSPqufewn
-         yxI330IKgF9UQVQLqnu6CplIeLmGwgrf4ulGzQ6wsQ+5LSMNTLoclaJocfXfZDJ8cP+q
-         k7/Ohl0Lk6Z2AZ8GyM4AC8qpYfiaiRNqand/ac8lIghI9K71nxtz3eNeLJONMZNbs0oO
-         JT0Xu7d++moocWXeVPW82HTGUn2fXPQ6NFRzam/+eGOvjjIOAgeUl7TaNNbpkiPKTdqi
-         hOvmOpza5032w+hknOyeUBwfgRu2mA7BvBsLGWgIYzRmNmyxFvSF7MGASgKxOHVONTVf
-         PkeQ==
+        b=SVeU8sA8B+d2+JcoAXRERFCCz+51K/YISkC+NUEvcONSBJ5DPfxBNQrzM47/DwzrEe
+         2e+/QvBfIOdE9tDkZxXoCS50e5ZNZ8G0Vx4cWvUVmTbYjRuaPfHp9QkLFHOTb87JcluZ
+         ZyWFhjUfsqADZIzDb0LjeDzJS9zhclj0acPler072tsNnQCy+rCuNho9av7pmH60e27n
+         uAWw9HWA7QT+GaV5X7jXhBnauJYXDN5+IVRM5ss2xr+9CHYgkRi0JCqv4Y/Ofh5JGjwf
+         eVmgtIEcRbZa14HMJRTTV4ZpBgnVocanedOhTh3wzWCcIg7qhE36V8bEh7kbc1R3hfXw
+         pSug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=6n/7HQyrtMfTJW06twOyVYb1ZogrEoRjRGf+zORS6bw=;
-        fh=fMSQXTV5ORucyEhNVZhm2TpZuk87HwL7pbtDry/tZk0=;
-        b=OdRaM/lnqp++CvDkw1nvf2lwX1OQS403p3XEV+fBB2XMqxmJcQfZVKqC/U4bUS+8/n
-         lgD8RWoRWv0/rKX7+T8PY3jHbGmSjD3ykCYCfSt+vv3J30/QjjaCKt9DrluLPuYIquUq
-         GHDFxxW/3GhImS2Jv8WifZRXlZX/wqE7x/vsRDPAUP3DyX9GERdeaQaY/5oQbIbNwyNe
-         md/6Hn5SVZYUJwGj542aix4+KE1eX8Ww9eWt9nJF/ipnHXvr8R6Aet18Sd+dpM9X8mzX
-         NV8hCK1v7beCDMg2RXXcQuzmqYiHhV3lwGPFXFOJT/GA0cKzy2qAuWPPl6vVrUtZYPU4
-         ylcA==;
+        bh=VhUSt7ISpVg4Y3MHFKzYjd0CV4ZCvpoOMj+LKGHtSi4=;
+        fh=USQnBnZeUuTcvi6QaU2WfHTNRGHaq89BiECmPaTz1f0=;
+        b=j2WotbyC4KR968p6O03aiXaKl5UNw2F1D4ieOXJ7jVhqK9U9SNVXXlOwK7r6uNNrTe
+         Wwy4iipyQXj+fItJ4B3RzHul9DFJABGpaMGzxXd0CJe1z4O3E3JM20Mu6s01aYsZg96X
+         sOzekNXFQztss9rbbva9uvxX0dG06CigOdWdZ5VxtzbSUyaLxRuVwnJ50KKV7AkfpOzT
+         wUQPqNiAE/DeBdBo9V6LEWx8bZodu3Sn+AyOI+eH3yrkyYts4YxHlesOm9WAdn8lWckI
+         v21TFI1OC8eHnPDd8EFc3VUH3YDn+rhIChels+AYINjarS0ZfFR7vGm8PcFDmDr43JaH
+         K/TQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775608577; x=1776213377; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1775609235; x=1776214035; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6n/7HQyrtMfTJW06twOyVYb1ZogrEoRjRGf+zORS6bw=;
-        b=C+JUawZuGpJ+S/JC3+NwIKuvjzqT0kP5t1tTzp6xss1ly7PtsnDa5T6+TFVz3Ulka0
-         HkEfXFZPKxDaaEvfdSjmSUeSCQ7p/9qc604rPQJse8iot6ypAto4/2P0BfFS9haL/Rpf
-         HVbCCPXBq5jVHdXozjhK8ZC+/Kr2cf+pTOYZW8s2iFdr5TU15g1UyHz3i9mUgNYK7HTG
-         kiL803MtiEScAeIYh47lLganqZgJQfC6Z8JdDA3G5ShuwMMFy4x6L9dA5I4peoRhmX/9
-         gNexUL+qN2gHuRdLNiItEeou7XiL3cQ9entBn3HEbXXCn2QakJAzFEypLkaLmCCu38zD
-         mTtg==
+        bh=VhUSt7ISpVg4Y3MHFKzYjd0CV4ZCvpoOMj+LKGHtSi4=;
+        b=KKvqJdv1deFk/NCBYGoYx7KsXn37UKrHhWvdfgpGnZNPnPwsPABEoTOuQY10pLF32C
+         cmAbsc4sLMEmxWTsLiuvkfwLv4H8ivPdHgM7rOjGyYSSocIogd274WfUUY8MoV7VE/F6
+         nLA0DQCUxSrmzkjm3cticRqKQZ1KPnaULPsp2NbMzjnI3cdNb2ts5JPINkdMeqkzTZZ6
+         Uus0SyNXXPeT24XTqT2M1mB3K1xyvx0MRVSIA0HxIbZFxn983ieNym8TZKZdc57F5sWU
+         vaV6b5wKO2AaeLKNQu1LxURCR0aY+7o4KhcJDzetJru1eL5fbFgyj+W8aGR9EnVctYAT
+         GgeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775608577; x=1776213377;
+        d=1e100.net; s=20251104; t=1775609235; x=1776214035;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6n/7HQyrtMfTJW06twOyVYb1ZogrEoRjRGf+zORS6bw=;
-        b=R+Qeo0WU9dfa4yne90HZiJuMLgv6JTRP9gBDVPtZyD1WZQqkJn6jvri/rLAmiL48IM
-         VIpjdHhTFTKsY3avCkKkexgGzRvLXpGQzHKLWa8EztC2KRGlEnebgVc08fr2nLDUcPQX
-         qTtgy+4/5bQ73VsOhQiaaXm13WEahkxzMl0y1eUZaySPC1GnQzQ1cRyVWLKO76LXhUif
-         c/MPIdiEGOOJ3L3ttq5anlo6uuN/jJPjYgvcar2J9Mj9gCPFoqmfpKEV2oNBLRbF9Gcc
-         9CT1h96LLC/qSvBVA2rpte9jxxu5ZlJ5Lr/dNiZY2IyrsDstauNI0iWTOW4oq8N9NmHH
-         LYpA==
-X-Forwarded-Encrypted: i=1; AJvYcCXUbF0O/KT8TRG+JZXNBNPL6/RBhaBWu4L0e6waPnCjsmp6MMSHdVqdecyhrciJVTLKDOY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHwvPBTntvitY9qfUFFCXT9drtVJ7kUp7nrYTN3y/Ppni0N8dl
-	A4PcZwUEm7mk0ieV4ZYbc5YUzccC/4T2ob54apomCc3hVUwI05wOuL8tBF77zLRewc/ug892wsw
-	j8r8AwTVUwVVI5Nkz1c157bUfeCB+yaQ=
-X-Gm-Gg: AeBDiesfAOadACgoiMs1mrlN0KFGaatCfgQcHdvtZuXx2KTLGAp7HBOwFCWJHkJA5cQ
-	dw6Hh2lRqXffhIARSiyCXXwXdThe8oMaEOIPvdzKvnKXEV12OqtO2xKJgK4dHBAPH6Y1zLWt6gI
-	kNPFMT+IlUcQilDA0mzzfvSWy6gLXkkbPIzBTfZp8g6t2L60ICOQStr8JbdtQZiKlYepfZUNMRP
-	iGtAUT6jAFeB/6RW1bBb9QBo+5s+qoGdbYYph1af/gePoQYd36/N0vpj5jg8qVW2DAXKv/qcz3V
-	aL8duaI=
-X-Received: by 2002:a05:6512:3b12:b0:5a1:1daf:f7b2 with SMTP id
- 2adb3069b0e04-5a337514f67mr5768921e87.0.1775608576338; Tue, 07 Apr 2026
- 17:36:16 -0700 (PDT)
+        bh=VhUSt7ISpVg4Y3MHFKzYjd0CV4ZCvpoOMj+LKGHtSi4=;
+        b=BFe/jYg8guPJeeWen0xLQetGxCtR2eL1Zi7QyOBfcY0bWBlBDmNsyqHbYd1ufTPm7u
+         EtWehxw9xVNnnEz1UFU+W01PPWPZ0KvKEKaAc2aVCF8Lsuq1VC+gnTaW0r1RKXMnw3GF
+         2u7WghlSQeUyEL5pAujICI4SYDDmbC8mf5HWTm7+DEFRNkgz0aZ/PrGk7JTi7/Z0w+2Y
+         CEWp1xu17hzAwDdT57xOGN8BWKotvdUHs3kBpC4RjHPVg1VdCH0X2fYREV/7xVHfIanA
+         jXIGaKMR9aKwNtWL4rzca4e9NdSAs8LZ68sLee4LnJ0QjPV3FfL2IwXRw16yeYyLET86
+         0Ssg==
+X-Forwarded-Encrypted: i=1; AJvYcCUi3FYM1Iig/7VCdY6erB9uLu96NGFrfsX6OPi15mLPw5sygbpkDVptW57+6B0pHnfDvZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBuC3IkY1NBut+16bz8y2kOkInGXNdKoK2fmst+OapSFaD9hjI
+	l2i/riQ7B4r9ZJazbG7eaU/m5OMNXngPQSaZaFNkDlQSpVoHb3FfyRQSXSzlieKt0Ae67iqwrm6
+	qXbItr7V2F6KCI4/sTQ7EP8joFjCEIoEB/jUkgQ9+
+X-Gm-Gg: AeBDietx8Gm3jtSb0cGYlsiXipcc4TvqZfr3JjWAoGalF4KsYNCQWe/v+8IzAnhSqkZ
+	VEA4IzabkkKcGO7NI8ogl/S3lvrZsQMyp82034UpW7C73TrMm810Nm5ZWYv9GbR3iWU1OS2cnq5
+	1XCbW+GdII5oZywcH7/gLyTK5ziH0ZYtE43ivHQk/3MAg07f9IFDqUTgGHb6rFxpggftEvQkJfb
+	lcru5gNv4i1L//4uMzMLXYT1bagPVHPYXGrwEShiAT8VusfUnggbht0v8BMh0JmJUJkxfAOw+fi
+	CQB8z+Y=
+X-Received: by 2002:a05:6402:400e:b0:66e:e3f9:ebb6 with SMTP id
+ 4fb4d7f45d1cf-66f9eb0e641mr16529a12.4.1775609235225; Tue, 07 Apr 2026
+ 17:47:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260404150452.83904-1-kerneljasonxing@gmail.com>
- <20260404150452.83904-4-kerneljasonxing@gmail.com> <willemdebruijn.kernel.2ff565d2f9e7f@gmail.com>
- <CAL+tcoB94=ptFB-acU3nAK_MqW74DV0MQUVvvV3nbQ7Zc6zSZw@mail.gmail.com>
- <willemdebruijn.kernel.27ec47b22b23c@gmail.com> <CAL+tcoAvVBN7juJEBt5-FYQ4eGTe7dYrFbR3CMOwguw=_X=btA@mail.gmail.com>
- <CAL+tcoCctfs=d9zz5ei1S999S94HmUDSToriZ8NJiLT8MmpQTA@mail.gmail.com> <willemdebruijn.kernel.1b49845d3acc7@gmail.com>
-In-Reply-To: <willemdebruijn.kernel.1b49845d3acc7@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 8 Apr 2026 08:35:37 +0800
-X-Gm-Features: AQROBzCRTd0x9BrsJHcoQc-2sCYrx--jI_bQa6YUl2OGCkGbIENnd0UvF44LYi8
-Message-ID: <CAL+tcoBt1A5GYFvimkcRFUtmy298y13AiF-XFF8b8E8Y6fg8Xw@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/4] bpf-timestamp: keep track of the skb when
- wait_for_space occurs
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, 
-	martin.lau@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>, Yushan Zhou <katrinzhou@tencent.com>
+References: <20260404002149.wtayv6a64vzuppgp@desk> <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
+ <20260404034954.t7iapenzvhdpagxp@desk> <CALMp9eR70eE2U63gzNzTiic0PqJVGv3CBBuVUOVbi3nqbWKZkQ@mail.gmail.com>
+ <20260407163943.y6tkh26z2rfktn3y@desk> <CALMp9eTA3cXxuOT4dq=6y1hx52gPH1ywwTEmPQ5-fA-vz6r3VQ@mail.gmail.com>
+ <20260407171151.2gf2idjbmph35ypb@desk> <CALMp9eRNVGFpzk_-ajQTuXadMtoY9H-ndUaz78wTT1zDYbTrPQ@mail.gmail.com>
+ <20260407191128.b2hr2ttkdpyunhrr@desk> <CALMp9eTK0o7Z7-oTB8ohvmoh-vy-Y2qjdUvbqD6HaEhOEPZmhw@mail.gmail.com>
+ <20260407222738.lrartp6evfp7yhti@desk> <CALMp9eQjSqwnvJz4JVzYpMkkTiucSJtW48zC4Hj9GBiUhOH-Eg@mail.gmail.com>
+ <a605fb45-f8e3-45ad-8924-1da43b9a9e05@intel.com>
+In-Reply-To: <a605fb45-f8e3-45ad-8924-1da43b9a9e05@intel.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Tue, 7 Apr 2026 17:47:03 -0700
+X-Gm-Features: AQROBzDwO89X4_V9WtLHsu6z2_UbVoDRV4IxmA1X-n2IZi_rt3P0Mq9B7UxbbGE
+Message-ID: <CALMp9eRfNsghM_RnDXOs=SJYObfPa5A1aOVDZno_zJ=XotfmRw@mail.gmail.com>
+Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
+ newer CPUs
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org, 
+	Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Sean Christopherson <seanjc@google.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, David Laight <david.laight.linux@gmail.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	David Ahern <dsahern@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org, chao.gao@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 8, 2026 at 5:17=E2=80=AFAM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
+On Tue, Apr 7, 2026 at 4:41=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
+wrote:
 >
-> Jason Xing wrote:
-> > On Tue, Apr 7, 2026 at 11:33=E2=80=AFAM Jason Xing <kerneljasonxing@gma=
-il.com> wrote:
-> > >
-> > > On Mon, Apr 6, 2026 at 10:37=E2=80=AFPM Willem de Bruijn
-> > > <willemdebruijn.kernel@gmail.com> wrote:
-> > > >
-> > > > Jason Xing wrote:
-> > > > > On Mon, Apr 6, 2026 at 10:28=E2=80=AFAM Willem de Bruijn
-> > > > > <willemdebruijn.kernel@gmail.com> wrote:
-> > > > > >
-> > > > > > Jason Xing wrote:
-> > > > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > > > >
-> > > > > > > The patch is the 1/2 part of push-level granularity feature.
-> > > > > > >
-> > > > > > > Tag the skb in tcp_sendmsg_locked() when wait_for_space occur=
-s even
-> > > > > > > though it might not carry the last byte of the sendmsg.
-> > > > > > >
-> > > > > > > Prior to the patch, BPF timestamping cannot cover this case:
-> > > > > > > The following steps reproduce this:
-> > > > > > > 1) skb A is the current last skb before entering wait_for_spa=
-ce process
-> > > > > > > 2) tcp_push() pushes A without any tag
-> > > > > > > 3) A is transmitted from TCP to driver without putting any sk=
-b carrying
-> > > > > > >    timestamps in the error queue, like SCHED, DRV/HARDWARE.
-> > > > > > > 4) sk_stream_wait_memory() sleeps for a while and then return=
-s with an
-> > > > > > >    error code. Note that the socket lock is released.
-> > > > > > > 5) skb A finally gets acked and removed from the rtx queue.
-> > > > > > > 6) continue with the rest of tcp_sendmsg_locked(): it will ju=
-mp to(goto)
-> > > > > > >    'do_error' label and then 'out' label.
-> > > > > > > 7) at this moment, skb A turns out to be the last one in this=
- send
-> > > > > > >    syscall, and miss the following tcp_bpf_tx_timestamp() opp=
-ortunity
-> > > > > > >    before the final tcp_push()
-> > > > > > > 8) BPF script fails to see any timestamps this time
-> > > > > > >
-> > > > > > > Signed-off-by: Yushan Zhou <katrinzhou@tencent.com>
-> > > > > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > > > > > > ---
-> > > > > > >  net/ipv4/tcp.c | 4 +++-
-> > > > > > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> > > > > > > index c603b90057f6..7d030a11d004 100644
-> > > > > > > --- a/net/ipv4/tcp.c
-> > > > > > > +++ b/net/ipv4/tcp.c
-> > > > > > > @@ -1400,9 +1400,11 @@ int tcp_sendmsg_locked(struct sock *sk=
-, struct msghdr *msg, size_t size)
-> > > > > > >  wait_for_space:
-> > > > > > >               set_bit(SOCK_NOSPACE, &sk->sk_socket->flags);
-> > > > > > >               tcp_remove_empty_skb(sk);
-> > > > > > > -             if (copied)
-> > > > > > > +             if (copied) {
-> > > > > > > +                     tcp_bpf_tx_timestamp(sk);
-> > > > > > >                       tcp_push(sk, flags & ~MSG_MORE, mss_now=
-,
-> > > > > > >                                TCP_NAGLE_PUSH, size_goal);
-> > > > > >
-> > > > > > Now the number of skbs that will be tracked will be unpredictab=
-le,
-> > > > > > varying based on memory pressure.
-> > > > >
-> > > > > Right, I put some effort into writing a selftests to check how ma=
-ny
-> > > > > push functions get called at one time and failed to do so.
-> > > > >
-> > > > > >
-> > > > > > That sounds hard to use to me. Especially if these extra pushes
-> > > > > > cannot be identified as such.
-> > > > > >
-> > > > > > Perhaps if all skbs from the same sendmsg call can be identifie=
-d,
-> > > > > > that would help explain pattern in data resulting from these
-> > > > > > uncommon extra data points.
-> > > > >
-> > > > > You meant move tcp_bpf_tx_timestamp before tcp_skb_entail()? That=
- is
-> > > > > close to packet basis without considering fragmentation of skb :)
-> > > >
-> > > > No, I meant somehow in the notification having a way to identify al=
-l
-> > > > the skbs belonging to the same sendmsg call, to allow filtering on
-> > > > that. But I also don't immediately see how to do that (without addi=
-ng
-> > > > yet another counter say).
-> > >
-> > > If we don't build the relationship between skb and sendmsg (just like
-> > > the SENDMSG sock option), we will have no clue on how to calculate. I=
-f
-> > > we only take care of the skb from the view of the syscall layer, it's
-> > > fine by moving tcp_bpf_tx_timestamp() before tcp_skb_entail(). But in
-> > > terms of per skb even generated beneath TCP due to gso/tso, there is
-> > > only one way to correlate: adding an additional member in the skb
-> > > structure to store its sendmsg time. This discussion is only suitable
-> > > for use cases like net_timestamping.
-> > >
-> > > Well, my key point is that, I have to admit, the above (including
-> > > existing bpf script net_timestamping) is a less effective way which
-> > > definitely harms the performance because of the extremely frequent
-> > > look-up process. It's not suitable for 7x24 observability in
-> > > production. What we've done internally is make the kernel layer as
-> > > lightweight/easy as possible and let the timestamping feature throw
-> > > each record into a ring buffer that the application can read, sort an=
-d
-> > > calculate. This arch survives the performance. But that's simply what
-> > > the design of the kernel module is, given the fast deployment in
-> > > production. I suppose in the future we could build a userspace tool
-> > > like blktrace to monitor efficiently instead of the selftest sample.
-> > > Honestly I don't like look-up action.
-> > >
-> > > Since we're modifying the kernel, how about adding a new member to
-> > > record sendmsg time which bpf script is able to read. The whole
-> > > scenario looks like this:
-> > > 1) in tcp_sendmsg_locked(), record the sendmsg time for each skb
-> > > 2) in either tso_fragment() or tcp_gso_tstamp(), each new skb will ge=
-t
-> > > a copy of its original skb
-> > > 3) in each stage, bpf script reads the skb's sendmsg time and the
-> > > current time, and then effortlessly do the math.
-> > >
-> > > At this point, what I had in mind is we have two options:
-> > > 1) only handle the skb from the view of the send syscall layer, which
-> > > is, for sure, very simple but not thorough.
-> > > 2) stick to a pure authentic packet basis, then adding a new member
-> > > seems inevitable. so the question would be where to add? The space of
-> > > the skb structure is very precious :(
-> >
-> > Finding a suitable place to put this timestamp is really hard. IIRC,
-> > we can't expand the size of struct skb_shared_info so easily since
-> > it's a global effect.
-> >
-> > I'm wondering if we can turn the per-packet mode into a non-compatible
-> > feature by reusing 'u32 tskey' to store a microsecond timestamp of
-> > sendmsg.
+> On 4/7/26 16:27, Jim Mattson wrote:
+> > What is your proposed BHI_DIS_S override mechanism, then?
 >
-> Agreed that an extra field is hard. We should avoid that.
-
-Avoiding adding a new one makes the whole work extremely hard. I'm
-wondering since we have hwtstamp in shared info, why not add a
-software one for timestamping use? Then, we would support more
-different protocols in more different stages in a finer grain, which
-is a big coarse picture in my mind.
-
-Adding a software bit will completely reduce the whole complexity and
-be very easy to use. Would you expect to see a draft by adding such a
-bit first?
-
-Or just like I mentioned, repurposing tskey seems an alternative,
-which, however, makes the new feature incompatible.
-
+> Let me make sure I get this right. The desire is to:
 >
-> If the purpose is to group skbs by sendmsg call (e.g., to filter out
-> all but the last one), it is probably also unnecessary.
->
-> From a process PoV, since the process knows the sendmsg len and each
-> skb has a tskey in byte offset, it can correlate the skb with a given
-> sendmsg buffer.
->
-> The BPF program is under control of a third-party admin. So that does
-> not follow directly. But it can be passed additional metadata.
->
-> I thought about passing the offset of the skb from the start of the
-> sendmsg buffer to identify all consecutive skbs for a sendmsg call,
-> as each new buffer will start with an skb with offset 0 ..
->
-> .. but that won't work as there is no guarantee that a sendmsg call
-> will not append to an existing outstanding skb.
+> 1. Have hypervisors lie to guests about the CPU they are running on (for
+>    the benefit of large/diverse migration pools)
+> 2. Have guests be allowed to boot with BHI_DIS_S for performance
+> 3. Have apps in those guests that care about security to opt back in to
+>    BHI_DIS_S for themselves?
 
-Right. TCP is way too complex and we indeed see some tough issues when
-trying to deploy the feature. So my humble take is to make the design
-as simple as possible.
+I just want guests on heterogeneous migration pools to properly
+protect themselves from native BHI when running on host kernels at
+least as far back as Linux v6.6.
 
->
-> Anyway, the general idea is to pass to the BPF program through
-> bpf_skops_tx_timestamping some relevant signal , without having to
-> expand either skb or sk itself.
->
-> I hear you on that measuring every skb is too frequent. But is calling
-> the BPF program and letting it decide whether to measure too? BPF
-> program invocation itself should be cheap.
-
-Oh, I was clear enough. Sorry. I meant tracing per skb is definitely
-an awesome way to go. My ultimate goal is to do so. Instead of letting
-people implement various fine grained bpf progs, we can provide a very
-easy/understandable/efficient approach with more samples. It should be
-very beneficial.
-
->
-> If per-push is preferable, with a filter ability like the above, it
-> seems more useful to me already.
-
-Push-level is a compromise plan. Packet-level is what I always pursue :)
-
-The current series has this ability: the bpf prog noticed it's a
-SENDMSG sock option and will selectively call
-bpf_sock_ops_enable_tx_tstamp() to do so. Only by calling
-bpf_sock_ops_enable_tx_tstamp() could the skb be tracked.
-
-Thanks,
-Jason
+To that end, I would be satisfied with using the longer BHB clearing
+sequence when HYPERVISOR is true and BHI_CTRL is false.
