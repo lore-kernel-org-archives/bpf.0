@@ -1,116 +1,151 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BBD37C929
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 10:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D2137F75C;
+	Wed,  8 Apr 2026 10:30:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775642736; cv=none; b=RR2VlXk4qQhmEAwdFUmOnfFlK9IIzDt9yCrJyamzr2bg0VEWOFnYum/Yh3+UC7MtOFslKSEpAd/z+VOgKozZtNvKJQ/L/QjoondWPvO42nTLLgOowIZcCTxDyIoxba2/qJW2xFkuWm2/QpDvgLym/a9J0K4fvcyY35ARm5W1erg=
+	t=1775644261; cv=none; b=QsqtFQc+QGwfwBbFbfiBmq7N2pMm2L8c0QqHJwKaeG9JWDu85Vi3eIdBE/RnywEtcVYS7T58lQyjzMMiCuEwPLejF1eLe63jfubXyhQ6N0PhMkg6RlzW8XNr7keGakkdKFw/lV8tYaa3KbtfgJWMtygVtNXHFcU1GQTL5feXBAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775642736; c=relaxed/simple;
-	bh=MCLTIXrD+yaBU+Pjpd7fHq1c/W893Gxi+KdyQQAbV8A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gj0MlpASQBnMJKLnNS3q5HeMHiUMHQl00fh7nMJ8EqbRY6JCY0ezo+2inKhHOzy0fDUseKpTe0JCJ/meG5s7Jfw4C8f/uLnH0mP3aBjSuwIrmePbBUWhP1eNeWixjXnkMXGey4/SNDPWSh1nROn73+cC0+yXML2U7Fskuz4EKxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B+PQQpxs; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775644261; c=relaxed/simple;
+	bh=Z3kqAGj1zvBralU1HC67R+RaKPOjxmuRHQ9FYFkUl2Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Kz02XTRZd1iZCweVyjuTBTerKaGcldfEzYJ1ZbWPhc59GAZ3Elro0v8o4P0tF1q7AngaCsZlEeRlznEHC8xOo+hYy6pGMeBCMNiVtSCMgNOH6LCteI6xmDhAECETYAs6sFadsE66wAMQJGqJ4oBscYLhkBBGO62jfvhYofI56GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=JVitOMZw; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B+PQQpxs"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775642715;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RSEevyQ9Ax4TiLoB+p7V2brYfKZuqG1ikZ4lpQQb0js=;
-	b=B+PQQpxsUD1KaEk0NQS+kxrCC07Ue1/I+Q2I+CWgYve88Swh2LhxoPNgcJPbYcLGPEldIC
-	s5VX4B9qYrrO4OxumMgF7PPW7oh7+kyATQMuoVzM5OEuOLeYfsWxxoIfsS9oPmtz8jUDUU
-	GrvqTue8lw4M+66xDDaLiNRfWA69OXU=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Kaiyan Mei <M202472210@hust.edu.cn>,
-	Yinhao Hu <dddddd@hust.edu.cn>,
-	Dongliang Mu <dzm91@hust.edu.cn>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	David Verbeiren <david.verbeiren@tessares.net>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf: Fix out-of-bounds read in bpf_obj_memcpy
-Date: Wed,  8 Apr 2026 18:04:54 +0800
-Message-ID: <20260408100455.190561-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="JVitOMZw"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=HtRRkzAXU0fkc0Tx+iUTyUu5YP+MGY2ZcOBwtJyH1lk=; b=JVitOMZw8q6rQWdCtOPrdGutrk
+	YSH0+ciKG0cdOw7QJXC+kYJCbcXHaO8kP8Q0BIUCPkY5b6RlIetdT5fJmo9z5ztsDy3i6OWdEWVjA
+	+x78Qu4JIqgKuAvWtlXSXnlNzFsT3Gvx1Tg7j4rZTY+4rl7VSva3Ntaq4EoKPe7hi90JNpzpKo/AT
+	v+6i0HqxXcSPczfpL8Ee09yn2ILsgJKWfYDKobWTXWKSPLXvQedhvPOoGQvPRj7XUxXw8ZQfDnV5g
+	ueRy2683pSrIs1XQWYOXEst4z+puYmwCVeFAByRVHOHvxRo6noKtz+Zl1U9K1YniUFBxzG5gBr9RB
+	8Hw59Cag==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wAQBM-008MDm-1b;
+	Wed, 08 Apr 2026 10:30:48 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Wed, 08 Apr 2026 03:30:29 -0700
+Subject: [PATCH net-next v3 1/4] net: add getsockopt_iter callback to
+ proto_ops
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260408-getsockopt-v3-1-061bb9cb355d@debian.org>
+References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+In-Reply-To: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ Willem de Bruijn <willemb@google.com>, metze@samba.org, axboe@kernel.dk, 
+ Stanislav Fomichev <sdf@fomichev.me>
+Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ linux-kernel@vger.kernel.org, kernel-team@meta.com, 
+ Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.16-dev-453a6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2673; i=leitao@debian.org;
+ h=from:subject:message-id; bh=Z3kqAGj1zvBralU1HC67R+RaKPOjxmuRHQ9FYFkUl2Q=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1i5NHj9Xl1AjkU+gDhoHhigNX4piORFmHvHzF
+ ggEMJO/kDGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadYuTQAKCRA1o5Of/Hh3
+ bZSAD/9mexa9BnbBzpMw7Rr4ZVS3NFpB7NDeynnsM7sUiVPrOWAkPo7rlbcancrXJlCfNSSFMz/
+ wegWUoI5sfK1KiK624x/DnenCu1IrLLre6ZIO+sv3DStjCM1JHwMyXLlptxNHUytis6/FI+JwBl
+ 63GrFn9+9C+kIKu/5cTVJla7X4p5BZsqWV+0G94G6Efj6cX0UxdSqX+PPv7fwOPleg7ATdzY2YW
+ GNo4x11F668/k1OMm6XXkUYJhhN18yblY26UUwSZLvXDGgJ0m2lPeDwHUS3jOb8CJVjmS6YM/hf
+ g5qYCUyasNkav3spTD2jbtIKBXk/8HZ3TpZaZoE07yIQ2W81WLKYQ9IyzgNGJDrD/hlr6jbZfRJ
+ BBEfIJ349WxsyWKylxO/KuV93u6i/d8qrnT+L04Lck/XL8EpMO6aZ7PSPnRAydlmLkC/qcEpCU8
+ KQi2uWvvQM1aILFEB+xwjQ2DJtyLV2YRvg2EZd4nzddAh9NQSKw7UdKsDiFwO7BIjeqpKLhP4rB
+ YdKGKUfI8UGUm3LEuu9t1LEWl66XudjUpMd/DbpDOA36tSR8R4h2ZB6X5X+r7/gTzN8LVT7/z6C
+ 0Y0W0GHoNKs/NPS5OePYv3YTiq5z6p1kMiefLqcsEcYEMc+nOYXGu5/ncz8qR+XQ07y3WY3Xk9P
+ +RmIb6YyDfzILLg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-When copying map value between two maps in BPF program, an out-of-bounds
-read can occur in bpf_obj_memcpy(). Consider the following scenario:
-    // map1: BPF_MAP_TYPE_CGROUP_STORAGE, value_size = 4
-    // map2: BPF_MAP_TYPE_LRU_PERCPU_HASH, value_size = 4
-    void *src = bpf_get_local_storage(&map1, 0);  // 4-byte buffer
-    bpf_map_update_elem(&map2, &key, src, 0);     // copy src to map2
+Add a new getsockopt_iter callback to struct proto_ops that uses
+sockopt_t, a type-safe wrapper around iov_iter. This provides a clean
+interface for socket option operations that works with both user and
+kernel buffers.
 
-The verifier validates that source buffer size >= destination map's
-value_size through check_helper_mem_access(). Since both maps have
-value_size=4, verification passes.
+The sockopt_t type encapsulates an iov_iter and an optlen field.
 
-However, at runtime bpf_obj_memcpy() rounds up the copy size to 8 bytes
-for long-aligned atomic copy:
-    bpf_long_memcpy(dst, src, round_up(size, 8));  // reads 8 bytes
+The optlen field, although not suggested by Linus, serves as both input
+(buffer size) and output (returned data size), allowing callbacks to
+return random values independent of the bytes written via
+copy_to_iter(), so, keep it separated from iov_iter.count.
 
-This causes a 4-byte over-read from the source buffer. Fix this by using
-round_down() to only copy complete 8-byte chunks with bpf_long_memcpy(),
-then copy any remaining bytes with regular memcpy().
+This is preparatory work for removing the SOL_SOCKET level restriction
+from io_uring getsockopt operations.
 
-This ensures we never read beyond the validated buffer size while still
-maintaining atomic operations where possible.
+Keep in mind that both iter_out and iter_in always point to the same
+data at all times, and we just have two of them to make the callback
+implementation sane.
 
-Fixes: d3bec0138bfbe ("bpf: Zero-fill re-used per-cpu map element")
-Closes: https://lore.kernel.org/bpf/14e6c70c.6c121.19c0399d948.Coremail.kaiyanm@hust.edu.cn/
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- include/linux/bpf.h | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ include/linux/net.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 05b34a6355b03..1b789f9f8a095 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -535,10 +535,15 @@ static inline void bpf_obj_memcpy(struct btf_record *rec,
- 	int i;
+diff --git a/include/linux/net.h b/include/linux/net.h
+index a8e818de95b33..fdd48d5c94441 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -23,9 +23,30 @@
+ #include <linux/fs.h>
+ #include <linux/mm.h>
+ #include <linux/sockptr.h>
++#include <linux/uio.h>
  
- 	if (IS_ERR_OR_NULL(rec)) {
--		if (long_memcpy)
--			bpf_long_memcpy(dst, src, round_up(size, 8));
--		else
-+		u32 aligned = round_down(size, 8);
+ #include <uapi/linux/net.h>
+ 
++/**
++ * struct sockopt - socket option value container
++ * @iter_in: iov_iter for reading optval with the content from the caller.
++ *	     Use copy_from_iter() given this iov direction is ITER_SOURCE
++ * @iter_out: iov_iter for protocols to update optval data to userspace
++ *	      Use _copy_to_iter() given iov direction is ITER_DEST
++ * @optlen: serves as both input (buffer size) and output (returned data size).
++ *
++ * Type-safe wrapper for socket option data that works with both
++ * user and kernel buffers.
++ *
++ * The optlen field allows callbacks to return a specific length value
++ * independent of the bytes written via copy_to_iter().
++ */
++typedef struct sockopt {
++	struct iov_iter iter_in;
++	struct iov_iter iter_out;
++	int optlen;
++} sockopt_t;
 +
-+		if (long_memcpy && aligned) {
-+			bpf_long_memcpy(dst, src, aligned);
-+			if (size > aligned)
-+				memcpy(dst + aligned, src + aligned, size - aligned);
-+		} else {
- 			memcpy(dst, src, size);
-+		}
- 		return;
- 	}
- 
+ struct poll_table_struct;
+ struct pipe_inode_info;
+ struct inode;
+@@ -192,6 +213,8 @@ struct proto_ops {
+ 				      unsigned int optlen);
+ 	int		(*getsockopt)(struct socket *sock, int level,
+ 				      int optname, char __user *optval, int __user *optlen);
++	int		(*getsockopt_iter)(struct socket *sock, int level,
++					   int optname, sockopt_t *opt);
+ 	void		(*show_fdinfo)(struct seq_file *m, struct socket *sock);
+ 	int		(*sendmsg)   (struct socket *sock, struct msghdr *m,
+ 				      size_t total_len);
+
 -- 
-2.43.0
+2.52.0
 
