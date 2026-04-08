@@ -1,148 +1,199 @@
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010037.outbound.protection.outlook.com [52.101.69.37])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AACC2BAF7;
-	Wed,  8 Apr 2026 04:44:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775623446; cv=fail; b=rR5ZKKhDZ12FgOxli+qStYuvDCVyr6f4Z+9tPhWe7D3gx9dHSmRjZnIS2smqmEN9+/VzqkmylnpvDNJ9GnehpEjJwdeYzk0EIDhF94+VPleTFrEO+KNzFDUq4uRvNqaIs/bmal+oGVlzM3LF/g8LDXhDn+q/1pMh9kI5lPBq2Lc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775623446; c=relaxed/simple;
-	bh=4mjreigLTtMVfACvZO5eIB7KrUErUy5ZurJYNKmYgbI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=nDrYntMhk+a+5aokQSK3xDUnv0DeS2nHph2t1d9D2R+3HfAqzuGjhfukN8Il7ZAymXjiLOiRoZOWfdzcQnhMRM84MouSmAmb/oibr/QefLDc/sP3q9Pup5kZ9Qu4iGXDAAmLhfMpa6zeviz8ta+bgWphXbmpUDkx6fD8a0fkN6s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=BZ1mHj9N; arc=fail smtp.client-ip=52.101.69.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930C534DCE0;
+	Wed,  8 Apr 2026 04:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775623934; cv=none; b=ulbMz+NjIIsTstd/y3+D65mmDNqmvGl1loAVkFbabSETtbffqmvPVraKgXzrrjI6PiXYdyCPa80YwvBZYnuSEWjAFYEycYAup4Hr4ZkaA58YT3VL5hWHFaDb7WlahutQkDmSqEfurPGaTfH3FXOBSx7gGA6dvnxFD5M7EkheNYs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775623934; c=relaxed/simple;
+	bh=X5h/xLTb1845Lra6ReWS/ZxjpdKl+DXhqHElu54zeWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NZ9zn5evJ9dq9SVancaPEJ31cB6O/fw0oOFLiMQNOz/RJixQKGIovv4523WkeL5Cn/wYd2INh7TWfNEVBUOOOZBuVAvYaATnMpqgUrw9T1n+wq3+PGSNuYLjqcv7rMqr7ub7jm52WdiBX8Kn9whC8fcoaOTv8HciLj0+PKU8q4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GZobKJls; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="BZ1mHj9N"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xU/20cnkOsFDDZxZdioMgPclDUAvPqhQpPvGq67Dai7Pm+PaDcKBbS07LxiEzsm6jHSTD6tRuoJeu2gzcvDX+tArrwR6B+LP3QXRkZZGgpzdI3xXB5QFppMB8vmXzEJxaCtNqHa7pD5E9Hb7i9ll4fpbHiyBoRAtjQ7y3kJTYY9l7BxfWgzxd+ViCdu5t878jT/vxR8mGa5YokAcUZIDKUSvg+lN4YOe/5x5gADBG7uTgT6XUzgaZdTjnGTlADmkkmygNpgASUzUTtoixFFbeTz2zHsuR+2BL0QyK7uhjaJyDSKxLgGKiaEwH5rGTHeZ4fFDwkugW6ME9wF6H/9VJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HjNd1YLT7Kes2ggLqiTLPAvMel4rt6qXOohS2//Rm34=;
- b=xNWc2qlCiWKZioiNvsVEm5fh7JivIqclVVr8rxN0CAmfFyWmgHyub9gNKKZHZlsbrHImvRoI5SPFvBKxfkrzPh9OlZ+Ib9PEd/Hyu4fsPuuYePHOvx3wE5O1B0/9t60GbGTryr8lWCYOKDqZhw07gshXP6pCbKFMIJQeUlvrJhXXe1/DQzgfDXBINXjhx7m4FTMb3dJtqBDCD7Suh5JRj59RbJoWQiFbKsMWgvGZwML6cOBAyUxMTWR4BtLWyEDlopTffoTTg6UC3bQBKBriN5lZ1GHL468PmZOQIE9JcU+8D+FezBz3B3c6U9MxKHsGR42jZHmlJRYsR0xXsMXK9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HjNd1YLT7Kes2ggLqiTLPAvMel4rt6qXOohS2//Rm34=;
- b=BZ1mHj9NlF4/Lh9ilpXWxpeVb4jDmNO8riCHEQk1I5dc3A16rM/HqG/Utz126ppKfO6lqIvPHyXEQJQeeD1xYJWxGjOCpjSs1cpD8JWN+wUWE/mxgQskVBc+SQxO701tK527RF2A5kTaJFBVJBKbJHBt6DH1CNDAbS8NQF49HLZ0ohBhXXXVSdVv4iisygj4EL9O5dQEQSpsLdEt16Jbace1jFE76v5hjMajFp8DjibexLXqJv0FF1JuDt2dzWhBCKKIkFuK3mHgm8+oWdHLo6zTI0iQNqylEjlHJ0ox01jhYsMXXW1NgSfsojG45dTZ6nGIgoEf6yHX1XRNvovRSg==
-Received: from AM8PR04MB7284.eurprd04.prod.outlook.com (2603:10a6:20b:1dc::8)
- by DU2PR04MB9212.eurprd04.prod.outlook.com (2603:10a6:10:2fb::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Wed, 8 Apr
- 2026 04:44:01 +0000
-Received: from AM8PR04MB7284.eurprd04.prod.outlook.com
- ([fe80::9cd6:51bd:82b:98dc]) by AM8PR04MB7284.eurprd04.prod.outlook.com
- ([fe80::9cd6:51bd:82b:98dc%5]) with mapi id 15.20.9769.014; Wed, 8 Apr 2026
- 04:44:01 +0000
-From: Wei Fang <wei.fang@nxp.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-CC: Zefir Kurtisi <zefir.kurtisi@westermo.com>, Claudiu Manoil
-	<claudiu.manoil@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Ioana Ciornei <ioana.ciornei@nxp.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "imx@lists.linux.dev"
-	<imx@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>
-Subject: RE: [PATCH v2 net 2/6] net: enetc: linearize PTP event packets with
- one-step TX timestamping
-Thread-Topic: [PATCH v2 net 2/6] net: enetc: linearize PTP event packets with
- one-step TX timestamping
-Thread-Index: AQHcxgXDfkmmu1nzLEaLzgxbmswkm7XUhM6g
-Date: Wed, 8 Apr 2026 04:44:01 +0000
-Message-ID:
- <AM8PR04MB7284A378E8FD79C53E77B0C1885BA@AM8PR04MB7284.eurprd04.prod.outlook.com>
-References: <20260406204122.167237-1-vladimir.oltean@nxp.com>
- <20260406204122.167237-3-vladimir.oltean@nxp.com>
-In-Reply-To: <20260406204122.167237-3-vladimir.oltean@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM8PR04MB7284:EE_|DU2PR04MB9212:EE_
-x-ms-office365-filtering-correlation-id: 625d27ad-1625-4a15-d1ac-08de952974c4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|366016|19092799006|1800799024|38070700021|56012099003|22082099003|18002099003;
-x-microsoft-antispam-message-info:
- kbdWSnaF6U1X8Ne0kxmfIv0tzu/T++OT7JPb2TGR6S2zGYs50NjpSfHsbNl83lRyLtvsXDcok4YcKHUyM93x1q5v/SwVaDL75jiyQYNd0Ydl0R6giZCO9W/pG/SiZdb76Cz44uH4i0tooADjLnnVLIANtP9tvBbr/WDeVw7+vAhBcPt1F/NJ+wBwkrTItBwbupvjGR+WR97rblcyN75bQdRUQ/atxLjZpjJfgJMzT+l0NC5Te9nsCIOt/5M7scdDAvFueMstEKTR/c1pxMsHKznNFm4qRGD8Ecufy7Gpkj9mZaXaZU7snai2E3BU15zFPftbkI2pgSnqw6pVdJeYw5cTSj2FGJc2Opd44vP8HOawjcniqgO8TqDEGJGMnoyotlb9J90HF3zcW3dG6daoE0l6qP1e+/wc8xENtX/WbEygVjf8H9+MfEZT09lnIqoWCa/MvJliKCYZHCWWYEPvULC8jJTl0q8WjU75VtGs9Dq5wla7peEVfJIbYCJURynYs0H3X1kQh/AJDtgLudR2fFN9lwfGBc284F5/lh+CP9NAw9AywNzwJa0Yx4DNRBFHGTxzMdONF0HqL2fJlFRYwBV4BLsLzpW5jAycv0be1k2Pa/OraDRgkqqyvm7UttHVlJLG3KoFWm6M5f3C/LYRk89pDBiti4Y0namT+E8rRUjVZpSqhNNMJRsIHH9hGr1YL85Px1r2EBy+2rcSU6T+w+MJvGOTXR4OP7x+6NVwGDBPS8vjpnUoxN+HevEVuVAA9UaWT3Tq/C8gEG7GFNQHuPt74pU7el0Y+tEIfQv4BDk=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7284.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(19092799006)(1800799024)(38070700021)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?O0ytI7AZyrciu6CMm0DlP4aJJVDk/erFrBPNxsIhCMciyK22qwMh2+NODV4+?=
- =?us-ascii?Q?VDPFM0QHAp9a5DYYm5yZ6otCQtHN2hqowwsOMDXdfuCtipM7zK0rlR6+VkxX?=
- =?us-ascii?Q?q6NIUkqrKs4ZZ1TEBXZ8/rTu+tgD//k6qSOEly2x6lrEEShpuHEfjDSQP7qQ?=
- =?us-ascii?Q?XzrTZyRM8wZTuOKQ4sr/KXe8SzRCKqDJF7iqojlO0j4oHnYGyc6lHoFcXVGM?=
- =?us-ascii?Q?d3gLQVzl+BEEZLhCw+34sarP/h3FJBRchMnAt2o86eHEWNYZ0RU/3bn5iE5S?=
- =?us-ascii?Q?6/RfrmEl7Dqyn3GUJwR2AnG43Ae26CzHubFSPz4uN0Dbo4yy/sH6clwLAncC?=
- =?us-ascii?Q?Dt5K2wTQSM82cPy/WitpMSzk0o8XMLGl6HDjfd5RuzNMepo8izqihnOM3/bT?=
- =?us-ascii?Q?Srj/A9RdqvNAE1CD+RFQ+FnankH0HmZ+JdJxnMOi23r5c0zHs53LF2dXizX5?=
- =?us-ascii?Q?IUoqH04TNLWUaIvrBxZWFetbbUp4kpm3LtRT3P5Ylq274mTIS3mP+O9AFFht?=
- =?us-ascii?Q?HLvjPqnT8TP0CX8HgtyBHX6HVTCcQY4oZqDNW+t2mutDic3dZzaVaJmE+Lrb?=
- =?us-ascii?Q?BBAPGVOI2Q/7c0J8+0CUr5tOyHgPETsgWRY/44KY+SqcQayDHNX9Vt8ctGEk?=
- =?us-ascii?Q?j93st4blaNV+eeN0d4lTRtSS6VdmOqu9cB9ulyGSobtgc1ZbvzmIBkpLyxIS?=
- =?us-ascii?Q?5x7qvzk4vD9rNj2iURfWHLWz7/zMCRoFAHqGNF2G5Lj2gcwglkkpGftqS8RZ?=
- =?us-ascii?Q?wM6+OuwwRN+RKTyoMvHu8HEM1C9P48Qrr2SSAXiO8QPVAyOGZ5YCaoZAMseZ?=
- =?us-ascii?Q?bMgkNuYDiviFeK0T/qIhvpjXJINvT6R9HjXBTm5m7FcvrKAIy1ZU5xMTQPcf?=
- =?us-ascii?Q?Cig7F5OkrHhrOXbjLKJWLUOvPrmK1AMQfXBZckLcs4kSA7SoQKYwZZr5cwX+?=
- =?us-ascii?Q?1MZQKXz++GgPpyTi7oxmwHce8LzOhN2vOGpNCRWS4QFrbNlxJJSs3A1lUbA2?=
- =?us-ascii?Q?Y07xZ8gNZBihwmGR5IC2HrxykdPmh7CHtEHJqVeMopKGynEVzCS6/kv5ec+1?=
- =?us-ascii?Q?5R7IILcZ+IlonU6rAaIdP5UaErBxAalPHIk0JTkuX+DPu57exyTNOEEXlX5M?=
- =?us-ascii?Q?ikk5Kx6AbtMHX1pOAevUkVFoNtYVFS04cYBqUCIV8G/SsoiNFoMxJHWSygji?=
- =?us-ascii?Q?SYMRZt6F+soyf2JfB08++SJte2brauREpfo4MVtRuK91TUHq2FYOIT5cJgpU?=
- =?us-ascii?Q?u5Gf2s7++G5A9NHecziBQhDJvLT5z6c8GLZ37QaSHIOBCrby1bsKIrBx5PRW?=
- =?us-ascii?Q?IFnZ0U4SFdlEqxcqGuOgTL6nHy7+iGEj61pBCVKr/iPHdp/mx4Y/nVqIE99k?=
- =?us-ascii?Q?obrtDJOIKmfu0pbcP/ku7aUD0swtPKkwaUsF3WiCe9tAsNy48XKl32ewzgS/?=
- =?us-ascii?Q?bqAPDiLFxXauECwZPXJjsvqsrRzSOiN9VrzWjp7a8MABnAROZjfi72CPZSfZ?=
- =?us-ascii?Q?raoRBAOg4Q03KiFlqoVAlaHnvWjfqfVwG2PfpcH6WtjSHLkfgcEqTyCNAsOg?=
- =?us-ascii?Q?ZtgVXL9CJVzm9SxJMN4+FEgC26Bbv/NnWqoNGikXbI+H2oAMRva89PWPrXb4?=
- =?us-ascii?Q?2qfZb7S7tAIVWW4eyq3Gcnrfj+nHkBbXQbQz9RUdAit3nIYw5gxn9wvx5aGg?=
- =?us-ascii?Q?SGCT9sbDT+Ugqk7qPSs0iKEpRtnEkbAThTubgOtaz5JDDMr5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GZobKJls"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 637Df0i72326654;
+	Wed, 8 Apr 2026 04:51:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=4uX9lT
+	4+5ouAhDI/5zmvB0saieArA06hYmrzCLeSKeo=; b=GZobKJlsiocF2+vHcY+yJR
+	dl6l0GDq5aQO0CmNGYo3h3/LBA2EgzXxTrwi1rayk1PEGVt9lXopVGScc2JEo9CU
+	ppzPjPXVxvkCGNHD5QiBsNbZdxd9Il/07LcvJDIl6e3Caz1URYw5xJ1bcptA8Ny+
+	Ay2oJmiF0lNSBrasl4yqBExIzIbDs+VlwqXgqHIvizYZ24q/FU6w4sA+w6e+BD7k
+	HbtPjjv/K40Ym8tvATlOMNPpBP6RRbiMZpa8EFlbomhEXbQKhw03yCWDv5jeBMFQ
+	Pe3I0hJxXVco1lTHbRPjks/Kqk3F09Dy1s2NC9Pqs7QBy3G1N2xMUbRmcF3e31iQ
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dcn2kdt1u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 Apr 2026 04:51:58 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6380149H007881;
+	Wed, 8 Apr 2026 04:51:57 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dcmg2e1k9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 Apr 2026 04:51:57 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6384prwn45875524
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 8 Apr 2026 04:51:53 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9617E2004B;
+	Wed,  8 Apr 2026 04:51:53 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 205B520040;
+	Wed,  8 Apr 2026 04:51:50 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.39.22.74])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed,  8 Apr 2026 04:51:49 +0000 (GMT)
+Date: Wed, 8 Apr 2026 10:21:46 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Venkat Rao Bagalkote <venkat88@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Abhishek Dubey <adubey@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ritesh Harjani <riteshh@linux.ibm.com>
+Subject: Re: bpf/selftests: test_access_variable_array breaks due to
+ sched_domain::span removal
+Message-ID: <adXe4gNBihTOyIjQ@linux.ibm.com>
+References: <3e129be5-d61e-4bc4-b691-8d69e2f58de6@linux.ibm.com>
+ <CAADnVQ+wZgucXKf5ZFNeSMcgARQVsQ7knVctf5R2GOGDRSEagA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7284.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 625d27ad-1625-4a15-d1ac-08de952974c4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2026 04:44:01.7966
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +ajNQQSR+WPzqU/jbE6c9tNGSaSGqkgyTRlMgg+2ULq4a6z7wetqPdU9pA6SMcukns8jejYHO3QBi2zPQ6FEWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9212
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+wZgucXKf5ZFNeSMcgARQVsQ7knVctf5R2GOGDRSEagA@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDA0MSBTYWx0ZWRfX8nvCheWy2YLc
+ UXGr87rQYVMANOb7cjZJcDUCmjBYwaaLrNAXFNDRHZGL08H0W171EQrdMyb90+cTur2SL81NzEk
+ gvzqPYVo2JOBSnnoXa2wPQ/ssuf6LJxaPRyOaNOJj0W180nQHB+/RF7+Gfcsn31pJIko0d0PVbj
+ PAjD1k8DNr8BmadCw5pr3RTHcgWiG0dS7+IFSWkCvglDTJvLkV4N+tSiOEbvWjus9Gc4rm+PREi
+ dgnDXoIC1pdOnse633afZo+5eqYS9jp9dL8AfVz2cEVt9b3gZ/AIxWDOV9+YtT1eYz2Wh4V5HGb
+ /rB4rF5N1lFUHEBF2cGylKCACIBoHi5W6BQYPQikxc4l93xFEwORMdL7ox3A7uVL4s3uUwdcPVB
+ fmMXq0DxMHGk+bfXlSxk+07tEMIyMY3AfOvn+zBy+vUZ3t1aXTT4DsrWVOKkNqz2YGqGDNtI97W
+ owjTLHrQw7MQRW/3Vmw==
+X-Proofpoint-ORIG-GUID: kwpThi0ex2Ku9hE4BSiOFo0OF6kkWI7t
+X-Authority-Analysis: v=2.4 cv=e9k2j6p/ c=1 sm=1 tr=0 ts=69d5deee cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
+ a=dx792_0i3jrKHWLwZscA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: rFkOjVeNGYSJxCENsn5lrUP1G6XJywzG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-08_02,2026-04-07_05,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 impostorscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604080041
 
-> Sashiko reports that enetc_ptp_parse() uses ptp_parse_header(), which
-> does not handle fragmented headers, and expects the entire area between
-> skb_mac_header() and the end of the PTP header to be linear.
+On Tue, Apr 07, 2026 at 10:33:51AM -0700, Alexei Starovoitov wrote:
+> On Tue, Apr 7, 2026 at 9:12 AM Venkat Rao Bagalkote
+> <venkat88@linux.ibm.com> wrote:
+> >
+> > Hi,
+> >
+> >
+> > While running BPF selftests on current linux-next, I noticed that
+> > test_access_variable_array fails to build due to reliance on
+> > struct sched_domain::span, which is no longer appers to be BTF-visible
+> > after recent
+> > scheduler refactoring.
+> >
+> > The Build error I am seeing is:
+> >
+> > progs/test_access_variable_array.c:14:13: error: no member named 'span'
+> > in 'struct sched_domain'  CLNG-BPF [test_progs] test_check_mtu.bpf.o
+> >
+> >     14 |         span = sd->span[0];
+> >        |                ~~  ^
+> >
+> > Below is a proposed update to the test that switches from
+> > sched_domain::span to sched_group::cpumask. This preserves the original
+> > intent of validating variable-length array access via BTF while avoiding
+> > reliance on removed scheduler internals.
+> >
+> >
+> > diff --git
+> > a/tools/testing/selftests/bpf/progs/test_access_variable_array.c
+> > b/tools/testing/selftests/bpf/progs/test_access_variable_array.c
+> > index 326b7d1f496a..c9f345ccde3c 100644
+> > --- a/tools/testing/selftests/bpf/progs/test_access_variable_array.c
+> > +++ b/tools/testing/selftests/bpf/progs/test_access_variable_array.c
+> > @@ -4,14 +4,18 @@
+> >   #include "vmlinux.h"
+> >   #include <bpf/bpf_helpers.h>
+> >   #include <bpf/bpf_tracing.h>
+> > +#include <bpf/bpf_core_read.h>
+> >
+> > -unsigned long span = 0;
+> > +unsigned long cpumask0 = 0;
+> >
+> > -SEC("fentry/sched_balance_rq")
+> > -int BPF_PROG(fentry_fentry, int this_cpu, struct rq *this_rq,
+> > -               struct sched_domain *sd)
+> > +SEC("fentry/sched_balance_find_dst_group_cpu")
+> > +int BPF_PROG(fentry_fentry, struct sched_group *sg, struct task_struct *p,
+> > +               int this_cpu)
+> >   {
+> > -       span = sd->span[0];
+> > +       unsigned long *mask;
+> > +       /* Read pointer to variable-length CPU mask */
+> > +       mask = BPF_CORE_READ(sg, cpumask);
+> > +       cpumask0 = mask[0];
+> 
+> No. That defeats the point of the test.
+> It tests [] array in the kernel struct.
+> Just make one in testmod.ko and access that.
+Hi Alexei,
 
-I think we should correct the check in ptp_parse_header().
+We do have cpumask as [] array in sched_group:
 
-@@ -130,7 +130,7 @@ struct ptp_header *ptp_parse_header(struct sk_buff *skb=
-, unsigned int type)
-        ptr +=3D ETH_HLEN;
+struct sched_group {
+	struct sched_group	*next;			/* Must be a circular list */
+	atomic_t		ref;
 
-        /* Ensure that the entire header is present in this packet. */
--       if (ptr + sizeof(struct ptp_header) > skb->data + skb->len)
-+       if (ptr + sizeof(struct ptp_header) > skb->data + skb_headlen(skb))
-                return NULL;
+	unsigned int		group_weight;
+	unsigned int		cores;
+	struct sched_group_capacity *sgc;
+	int			asym_prefer_cpu;	/* CPU of highest priority in group */
+	int			flags;
+
+	/*
+	 * The CPUs this group covers.
+	 *
+	 * NOTE: this field is variable length. (Allocated dynamically
+	 * by attaching extra space to the end of the structure,
+	 * depending on how many CPUs the kernel has booted up with)
+	 */
+	unsigned long		cpumask[];
+};
+
+Wouldn't be good if it is used as:
+
+cpumask0 = sg->cpumask[0];
+
+Also, there is already a selftest that makes [] in testmod.ko
+and access that.
+
+Thanks,
+Saket
