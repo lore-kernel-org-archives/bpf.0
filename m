@@ -1,63 +1,62 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96913D890F
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 19:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0493AE712
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 19:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775674940; cv=none; b=nA4cINV6ZgkUa8s+5ZHgptqwxjI9EH1M5QM1x1wCErJROuamz6x3cZZ1wnuPJ1HfaUmmYwiM8cGintULotX9Sp8aI9vmR4+BuVdMPH1+yjmoxvda3F4AokB+Ot/CdzrrWO56iB/aq9FxesQBfRUo3RaaP8ukXp+yjUxg5jJQIec=
+	t=1775674947; cv=none; b=Aeev2ei5kRWsJ1aqeVKYJ378eNQFFjzsTqmY7QnAB0wFR6lJ0hs4nVqwnfvJdwz4APHA5KDzdpS8cp6r2YJT+1Hkrt0NznVzP6yxszExRatEeBKPa4hYEe+9wyOhdRwdc9SswHp2wB00j4c0h7MVYY/pifQkCAK3uk8Gur/u3tY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775674940; c=relaxed/simple;
-	bh=VdFKMNT5L/KA3XzmFwN0Fhycm4d6g0VlevgEnt/1Rz4=;
+	s=arc-20240116; t=1775674947; c=relaxed/simple;
+	bh=/O5oeGgC5b3j64e2ru8U45y4Y9aDC/mlyIl6E36Mp3U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o9pLBRz5ceNtfYbBh4CaPK5jaA9iOyHkakACl3e+u4Y2Jyo5iSD2JP70b7xjN4TqzF7z6mRajk/SQzwO4X7OYBoLxZ3I0etul39XgkmokBVelnkgMnGNUgfy8n2kwrqIiSnaMOWhXxW0256Q3j0SCnkFLeNk+GxEqpTsykzdkiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJCUpkEU; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=SrwePgwDaaEhrcPk5rFUDq3I3e8ldgq/qxCA3n5Sc1K6RPbgW62Jxz9TlPuLrnuqRMOeC/1jjOhJVL/HutyP90OJk73QkEDsbiBjLoIQ3BDuoOmf/GXFLvSJwXMjTvJWO8XQS/5Xo+k8uVNW0R+Pb4ZJbN9Rp/X7pP++rHwTdyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=asZ0BkcD; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJCUpkEU"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-35d971fbcddso81285a91.1
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 12:02:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="asZ0BkcD"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35d96be7c13so82186a91.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 12:02:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775674939; x=1776279739; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775674945; x=1776279745; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=auGuTYgvSyaul+AIxfXecK4Li8tZkkMpaNVTbE1iobg=;
-        b=KJCUpkEUXLavTfEXdGu8UcW9AjH2FuYU9D0O70J0g39i9QOMQaLCfF5+JnZHbajGYC
-         hipwoHo2JXgLUOhPSjwfBr71a82vzbDUu1ftqFdjATr0quPNvh7LQyAsU75cmG12xGan
-         CneJhmTGbUPnjAHHzsfN0a/hFDogOXADcSlP7d3xuaReh2qr2CS/Zvx+2Miev8qJPUrk
-         VNgStMU/hhBQyP1uEo3OUtBXkuOaoH9Pv07ucYPKX0dEnhZApgW8M/bfZSaXg6gl910a
-         l8OESx6MXsGUIxA3oRYPpD9dPlZa0pfkPE/D94PLhxXKqRcVZWMVmjJVOPWoqt5y/dna
-         ukIQ==
+        bh=MlX1897QIvgYNBePjjdYhhpwHwSAdVuUlE8RPQRxA5g=;
+        b=asZ0BkcDFzVkpCgd99FGNqyAxJlSVXlKlu2UH9Km993efpiSbHjeZz4swjpLbEqke9
+         aGMNgjzocou7iimsQvisy3XDN/3jQLCAIrClOCFRb+TJRNqL+BvYelOLxR+iyxWe6yhN
+         Cm6LdvKsPhEVVr2xdRUkOcQ8aCcuBehRy1Cyt0edt9h7zwt+i30L9KTcKDGK/6Fcv6X+
+         O3tR/yhNGQxmc4NgbdyZ66OrUTijseQq+OZPetNrVSak9kaGvXnKOvXsSB5qdGqqVH/E
+         dz4uh6IHdyJSnl5m6/i5BykhhQSU7SbI862ipZf+qwexeDT/Qh4lnP/rZKEQVvUQBmNO
+         vBUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775674939; x=1776279739;
+        d=1e100.net; s=20251104; t=1775674945; x=1776279745;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=auGuTYgvSyaul+AIxfXecK4Li8tZkkMpaNVTbE1iobg=;
-        b=bE8so6dHNhlgRaq3eb3fn0HD40rL43QzA2ETcKrOFGUPqFEMr/OuJ7VIKxklW7Qim3
-         rQ+1Uw1be+UbURARYBKhJE2PbowcnhGTVS+0n9gH5WIs+bXuIdC6MVmEv2iXQX0UooWa
-         eJkBneGGrK/mKlzB1WFP3iYJPIIGI4cjj3WcAhOcpGrUnXvHpNLOR3vzbp7IcE8ry5ag
-         VQEylv/pmZGhsr02LmykQ/6bsDrdnShUHwUxzppZbBzbKF9Asx46xBv1j+bzepq4oSEZ
-         BShm+/UAm/8/Rm/krPKtCPCJBhtJMoLF7Hj/SGbbyopvXXYuXu0xN4gtQVn6QKkUEPUH
-         Iqbg==
-X-Gm-Message-State: AOJu0YzukYJFFln0ApjMwqn2AYBbl3keQe8M71KlMz3xHHSvIz1mUyI+
-	fOC/qTHNO4i+maen1r+j5gG3TjtPXkuxBNUc9hB6/RPgJD2IabRnuhvHC5HR1q27RHo=
-X-Gm-Gg: AeBDies0khg9V0zUCaxGvPqxea7OqU9JJ+6iBM+Ho0KDFbpq5I6Ga/W5RWcC8krGYLO
-	++ktH8F+PVLCr126mdrbgINx/wYOMP7WxGksGFgl3F1ogXbOo23dBXrYmvpXmoW18zFdqQE+Ab4
-	ZvoeglbVquTYfhJN80nxFsUYXlSnbQoYQCko9nToiUwjuDbf1ZL5TTwpE8o3lqWHWteZVVuJlIW
-	0rgcCxEW1ILXCETDnKypCpqDbHGHm5J7A54Ah0lJYjG9tWXPfsPGNbWLUJ9W/wiKsT4mGTZX11T
-	Z5EmkYMW+8Vx/oc9S+MyMORhRFnzEfeBO95fTJHp4SVg56oIfXJ4c8YT1RU75ZMe8eXy3hhbeR5
-	UwNIdvcsImsntJA9ChCpSlf93AEuk8S6yhJeftEv1CFU8MfQexg5PtBESNn/yDLC5A7M5IZZZ8t
-	0ozGbpw3nMO+ZXIJMWPRN0ug/oBzOqdxqjaf25U9ineLxLz289F6OVlR642EcuRJjWBLTopylQa
-	c5TRKA=
-X-Received: by 2002:a17:90b:3e81:b0:359:8df1:8553 with SMTP id 98e67ed59e1d1-35e3542917bmr500387a91.9.1775674938847;
-        Wed, 08 Apr 2026 12:02:18 -0700 (PDT)
+        bh=MlX1897QIvgYNBePjjdYhhpwHwSAdVuUlE8RPQRxA5g=;
+        b=S3lgCCo466SLKcyxRAOhKxwmsv3Ruw7kGZjgQtthLiiJ4sLvYUS6qC476j/cW4QQvC
+         q/Go3cIIGGmLYqVZGGPdDqoWOAqjza2oHLc7NkG6k0qs4GUI6BTAhmqR15lM6V7bMB3x
+         /CBlfWAJf3gFfnMzMGny6iN00e+BvS0ByBOBaMpstFzZklXX7h8dqElAp1/aPSqDVcdl
+         wSNlRjBsNMH+dYZzz9zFfJj2feUfotkHxLyo6Le/Ko+425eNmemxW5UnOXK7chw1aXPF
+         pn4ejhieXLue2k+lxrk0arVSWnQzjlaG+voulEoowcjf5Rj2wYFX4XCIFOCNc0CDnKNH
+         ZOaw==
+X-Gm-Message-State: AOJu0Yzus99oZ5w0u4mN6uNuuDEOJex8kdGX7Ihkf8T8a6sWJfBA4x0j
+	RIehYcU6DWuceqby7jTXSXbYnEBHhuneLxlm0MCg2VqmFfo2Z+5txhS4GadCX057/4A=
+X-Gm-Gg: AeBDievXqbz98HknDcet1Ei9ZIcGEi5Bv1WNNn+KXrDGdFZloqFJw9x+kmhGHeN/GDe
+	vXgjR1UfzOHds0KzyBb7Nnp2T8oZ/MW/tM7pRhCZioTEKzdU53LNe56NIm9QJyqPStge3yBhvyt
+	DHkWjm5rXmAOS0xaAjgpNFwXUyl/FQp4aF9FaHxnU1jMj5PBap8E1RfbxYogxtUJBYuKyFuo8Ew
+	A3t8uXqhGdIhKJGWSW28zXfCn7d+aGb+MG8Yy2CfSqGyaV2ef2xnMCNSufBODEe4yAsl4nM3Ui6
+	QrEDLGI1R4za5fkQguQEjBLc3rEjgeXQDdwWuzDSTU/FvTZ1VP84B8ZAPwsm/vT2Me5Cudl4v+Q
+	FkSSX88tDtrjoxtOVwk6p75L/yJ1RKa+EvFMKeYuahkUsNUOQyJaqaJ6lwGHI6OFJHrEIXYHjLX
+	b+dg7bxgcUSm5DAH96NHvLPrcAXU4VUkEw5SL8dVQ6+syDOFT0OC3PvEtKVMZCJQKPPAew
+X-Received: by 2002:a17:90b:48c1:b0:35d:9276:eba7 with SMTP id 98e67ed59e1d1-35e353e8bc6mr422904a91.7.1775674945211;
+        Wed, 08 Apr 2026 12:02:25 -0700 (PDT)
 Received: from computer.goose-salary.ts.net ([2a09:bac5:40b2:1a96::2a6:4e])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e34d0d9efsm143630a91.8.2026.04.08.12.02.13
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e34d0d9efsm143630a91.8.2026.04.08.12.02.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 12:02:18 -0700 (PDT)
+        Wed, 08 Apr 2026 12:02:24 -0700 (PDT)
 From: Varun R Mallya <varunrmallya@gmail.com>
 To: bpf@vger.kernel.org,
 	leon.hwang@linux.dev,
@@ -70,9 +69,9 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	varunrmallya@gmail.com
-Subject: [PATCH bpf-next v5 1/2] bpf: Reject sleepable kprobe_multi programs at attach time
-Date: Thu,  9 Apr 2026 00:31:36 +0530
-Message-ID: <20260408190137.101418-2-varunrmallya@gmail.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Add test to ensure kprobe_multi is not sleepable
+Date: Thu,  9 Apr 2026 00:31:37 +0530
+Message-ID: <20260408190137.101418-3-varunrmallya@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260408190137.101418-1-varunrmallya@gmail.com>
 References: <20260408190137.101418-1-varunrmallya@gmail.com>
@@ -84,47 +83,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-kprobe.multi programs run in atomic/RCU context and cannot sleep.
-However, bpf_kprobe_multi_link_attach() did not validate whether the
-program being attached had the sleepable flag set, allowing sleepable
-helpers such as bpf_copy_from_user() to be invoked from a non-sleepable
-context.
+Add a selftest to ensure that kprobe_multi programs cannot be attached
+using the BPF_F_SLEEPABLE flag. This test succeeds when the kernel
+rejects attachment of kprobe_multi when the BPF_F_SLEEPABLE flag is set.
 
-This causes a "sleeping function called from invalid context" splat:
-
-  BUG: sleeping function called from invalid context at ./include/linux/uaccess.h:169
-  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1787, name: sudo
-  preempt_count: 1, expected: 0
-  RCU nest depth: 2, expected: 0
-
-Fix this by rejecting sleepable programs early in
-bpf_kprobe_multi_link_attach(), before any further processing.
-
-Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
+Suggested-by: Leon Hwang <leon.hwang@linux.dev>
 Signed-off-by: Varun R Mallya <varunrmallya@gmail.com>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-
 ---
- kernel/trace/bpf_trace.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../bpf/prog_tests/kprobe_multi_test.c        | 35 ++++++++++++++++++-
+ .../bpf/progs/kprobe_multi_sleepable.c        | 25 +++++++++++++
+ 2 files changed, 59 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 0b040a417442..af7079aa0f36 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2752,6 +2752,10 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	if (!is_kprobe_multi(prog))
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index 78c974d4ea33..a07cd853ed2a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -10,6 +10,7 @@
+ #include "kprobe_multi_session_cookie.skel.h"
+ #include "kprobe_multi_verifier.skel.h"
+ #include "kprobe_write_ctx.skel.h"
++#include "kprobe_multi_sleepable.skel.h"
+ #include "bpf/libbpf_internal.h"
+ #include "bpf/hashmap.h"
  
-+	/* kprobe_multi is not allowed to be sleepable. */
-+	if (prog->sleepable)
-+		return -EINVAL;
+@@ -220,7 +221,9 @@ static void test_attach_api_syms(void)
+ static void test_attach_api_fails(void)
+ {
+ 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
+ 	struct kprobe_multi *skel = NULL;
++	struct kprobe_multi_sleepable *sl_skel = NULL;
+ 	struct bpf_link *link = NULL;
+ 	unsigned long long addrs[2];
+ 	const char *syms[2] = {
+@@ -228,7 +231,7 @@ static void test_attach_api_fails(void)
+ 		"bpf_fentry_test2",
+ 	};
+ 	__u64 cookies[2];
+-	int saved_error;
++	int saved_error, err;
+ 
+ 	addrs[0] = ksym_get_addr("bpf_fentry_test1");
+ 	addrs[1] = ksym_get_addr("bpf_fentry_test2");
+@@ -351,9 +354,39 @@ static void test_attach_api_fails(void)
+ 	if (!ASSERT_EQ(saved_error, -ENOENT, "fail_8_error"))
+ 		goto cleanup;
+ 
++	/* fail_9 - sleepable kprobe multi should not attach */
++	sl_skel = kprobe_multi_sleepable__open();
++	if (!ASSERT_OK_PTR(sl_skel, "sleep_skel_open"))
++		goto cleanup;
 +
- 	/* Writing to context is not allowed for kprobes. */
- 	if (prog->aux->kprobe_write_ctx)
- 		return -EINVAL;
++	sl_skel->bss->user_ptr = sl_skel;
++
++	err = bpf_program__set_flags(sl_skel->progs.handle_kprobe_multi_sleepable,
++				     BPF_F_SLEEPABLE);
++	if (!ASSERT_OK(err, "sleep_skel_set_flags"))
++		goto cleanup;
++
++	err = kprobe_multi_sleepable__load(sl_skel);
++	if (!ASSERT_OK(err, "sleep_skel_load"))
++		goto cleanup;
++
++	link = bpf_program__attach_kprobe_multi_opts(sl_skel->progs.handle_kprobe_multi_sleepable,
++						     "bpf_fentry_test1", NULL);
++	saved_error = -errno;
++
++	if (!ASSERT_ERR_PTR(link, "fail_9"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(saved_error, -EINVAL, "fail_9_error"))
++		goto cleanup;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(sl_skel->progs.fentry), &topts);
++	ASSERT_OK(err, "bpf_prog_test_run_opts");
++
+ cleanup:
+ 	bpf_link__destroy(link);
+ 	kprobe_multi__destroy(skel);
++	kprobe_multi_sleepable__destroy(sl_skel);
+ }
+ 
+ static void test_session_skel_api(void)
+diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c b/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
+new file mode 100644
+index 000000000000..932e1d9c72e2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kprobe_multi_sleepable.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++void *user_ptr = 0;
++
++SEC("kprobe.multi")
++int handle_kprobe_multi_sleepable(struct pt_regs *ctx)
++{
++	int a, err;
++
++	err = bpf_copy_from_user(&a, sizeof(a), user_ptr);
++	barrier_var(a);
++	return err;
++}
++
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(fentry)
++{
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
