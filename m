@@ -1,242 +1,143 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43293B19B9
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 15:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8F32D77E5
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 15:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775662647; cv=none; b=TCk+Jd5nYoz7/SbPVUMX3+d4YXUBLf7lymw7IP+trJ9MhE1UoyDWONG10nG3GUGml1oulfsGV1tvJlW27VbC1pbhqKItJizNNW1LNumkTMFWnRIFqaavCadhu+guwzYoeIdN6pGDEM4VdlJzDyIkA7wG2GJjnppQtFWr3rof2Es=
+	t=1775663145; cv=none; b=MSMmoiE3HCovB2shhDP+uYqxc6cIrZavfGWupmERR1CQVQ+AGK2QJEnv1IkWCmiYwcUDzpuWvqZO+3LMMJbFHzuCNkwnS/snspXPLoAfJEYZx01rB0vvLa0YQpF+cnHAcw/Uw4zU36KoMP2e3v5GMcP3w4lMPQOkM5worNadxgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775662647; c=relaxed/simple;
-	bh=5uFWb6tgQGjlq5k5MzsifMsMZE5ITzCM41F0b+76Zak=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oaWm17QKNiw9n8ak168w+yVPe4upDTSR57OatdKakvt2FJBHuwkkTDXh0y32mZk7mdvJM1PjpX6yFttMDfChx0onK9KObNrhnqyTY5d4jPcp0SYc4DqseTOHLACDBk7BhwbGZSe03r/pcMzwcdkzJqtukmC+NwTaGx1cUoohjno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Ypj1rYtj; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1775663145; c=relaxed/simple;
+	bh=ThmizSExdxAeMM00v9BZsGU8mn4Bg6GpFrF82z+c3ZM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UrGLC5cnpyORtnykWkefhOwqstxPIXr4QXY5fr029aLCXwU1skJVdoG0nf2leaI+wjJDP7/kLgUvGJPUjnf7622jEee9BHOKhGTf1pPHaDvV+GNi1VySLXBSS8uXFKF16EGhSdsMFyoi2hHJihniesMouUTq3LDJF5PaVgJm4Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZKyo97m; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Ypj1rYtj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Mf1labaxqEz40r4F6+XifaPA5svoG1rC9lPSNHgpMSQ=; b=Ypj1rYtjQ+MvXveVfE+H8NruNi
-	/BPqL9VblreBck84EZTYPORbfFbQuj1QyHPf+9xlHOTt8AbCSSuRPLo1DCfv0atn1KGXuEFOZh/5T
-	nhnqEm358WAQWMZubI/YT2U0Ia2mD/YweoDgHbkivFxVT5awfR0kzgYgL9m0tbD/q29vqirSPG/SM
-	AYE/bqTGkJBdmZjdv4g7RmP4s5zDkIrd9oMyhPKv5FlDKVJxlzZbvuYIoX8tA8NY8P0TROvyeposM
-	4RSmPBdv7ili+PBYjRu+yRA3L9Hi7wapMJY6dFHI1++lvTXf06bpjYXZ0bPqaTe7RWi3RHt3j6XLO
-	qxUC4tzQ==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wAUxv-000LV9-1r;
-	Wed, 08 Apr 2026 17:37:15 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZKyo97m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3036BC19421;
+	Wed,  8 Apr 2026 15:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775663145;
+	bh=ThmizSExdxAeMM00v9BZsGU8mn4Bg6GpFrF82z+c3ZM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=aZKyo97m8fjWUP7snyjOfIbaYrRQxU1OTicHErFa1EG8gZi1GyrkEZYcbGzrmDoNm
+	 /v2bEXbAVHf6NQseJ39cx1otyZSm53+EMsn41IHniAnXHMYFKzYvO8zBnch1W2fje7
+	 rsihscSXPwh+CF/dUGsHDPRkPJYdemkFXsfBDCSsf/g6CAB5SD7zq0BhZs+OE/WmAD
+	 08bDDpkF+kU/qLEqUS/8/lxKDNVMjCOv7O+tjVw1HvAMlcFrrzlbphf3O7cotUNeWl
+	 VTTTR7KltNSLfj39bdMd2H7hu9CDsBpLFhQsjIAu/wDWnX8YR3JDvwG6Y7axbQNDaE
+	 AC7d1RDCFvfFA==
+From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	eddyz87@gmail.com,
-	info@starlabs.sg
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Add tests for ld_{abs,ind} failure path in subprogs
-Date: Wed,  8 Apr 2026 17:37:12 +0200
-Message-ID: <20260408153712.523124-4-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260408153712.523124-1-daniel@iogearbox.net>
-References: <20260408153712.523124-1-daniel@iogearbox.net>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	kernel-team@meta.com
+Subject: [PATCH bpf v6 0/3] bpf: fix and improve open-coded task_vma iterator
+Date: Wed,  8 Apr 2026 08:45:34 -0700
+Message-ID: <20260408154539.3832150-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27965/Wed Apr  8 08:24:37 2026)
 
-Extend the verifier_ld_ind BPF selftests with subprogs containing
-ld_{abs,ind} and craft the test in a way where the invalid register
-read is rejected in the fixed case. Also add a success case each,
-and add additional coverage related to the BTF return type enforcement.
+Changelog:
+v5: https://lore.kernel.org/all/20260326151111.4002475-1-puranjay@kernel.org/
+Changes in v6:
+- Replace local_irq_disable() + get_task_mm() with spin_trylock() on
+  alloc_lock to avoid a softirq deadlock: if the target task holds its
+  alloc_lock and gets interrupted, a softirq BPF program iterating
+  that task would deadlock on task_lock() (Gemini)
+- Gate on CONFIG_MMU in patch 1 so that the mmput() fallback in
+  bpf_iter_mmput_async() cannot sleep in non-sleepable BPF context
+  on NOMMU; patch 2 tightens this to CONFIG_PER_VMA_LOCK (Gemini)
+- Merge the split if (irq_work_busy) / if (!mmap_read_trylock())
+  back into a single if statement in patch 1 (Andrii)
+- Flip comparison direction in bpf_iter_task_vma_find_next() so both
+  the locked and unlocked VMA failure cases read consistently:
+  end <= next_addr → PAGE_SIZE, else - use end (Andrii)
+- Add Acked-by from Andrii on patch 3
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_ld_ind
-  [...]
-  #611/1   verifier_ld_ind/ld_ind: check calling conv, r1:OK
-  #611/2   verifier_ld_ind/ld_ind: check calling conv, r1 @unpriv:OK
-  #611/3   verifier_ld_ind/ld_ind: check calling conv, r2:OK
-  #611/4   verifier_ld_ind/ld_ind: check calling conv, r2 @unpriv:OK
-  #611/5   verifier_ld_ind/ld_ind: check calling conv, r3:OK
-  #611/6   verifier_ld_ind/ld_ind: check calling conv, r3 @unpriv:OK
-  #611/7   verifier_ld_ind/ld_ind: check calling conv, r4:OK
-  #611/8   verifier_ld_ind/ld_ind: check calling conv, r4 @unpriv:OK
-  #611/9   verifier_ld_ind/ld_ind: check calling conv, r5:OK
-  #611/10  verifier_ld_ind/ld_ind: check calling conv, r5 @unpriv:OK
-  #611/11  verifier_ld_ind/ld_ind: check calling conv, r7:OK
-  #611/12  verifier_ld_ind/ld_ind: check calling conv, r7 @unpriv:OK
-  #611/13  verifier_ld_ind/ld_abs: subprog early exit on ld_abs failure:OK
-  #611/14  verifier_ld_ind/ld_ind: subprog early exit on ld_ind failure:OK
-  #611/15  verifier_ld_ind/ld_abs: subprog with both paths safe:OK
-  #611/16  verifier_ld_ind/ld_ind: subprog with both paths safe:OK
-  #611/17  verifier_ld_ind/ld_abs: reject void return subprog:OK
-  #611/18  verifier_ld_ind/ld_ind: reject void return subprog:OK
-  #611     verifier_ld_ind:OK
-  Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
+v4: https://lore.kernel.org/all/20260316185736.649940-1-puranjay@kernel.org/
+Changes in v5:
+- Use get_task_mm() instead of a lockless task->mm read followed by
+  mmget_not_zero() to fix a use-after-free: mm_struct is not
+  SLAB_TYPESAFE_BY_RCU, so the lockless pointer can go stale (AI)
+- Add a local bpf_iter_mmput_async() wrapper with #ifdef CONFIG_MMU
+  to avoid modifying fork.c and sched/mm.h outside the BPF tree
+- Drop the fork.c and sched/mm.h changes that widened the
+  mmput_async() #if guard
+- Disable IRQs around get_task_mm() to prevent raw tracepoint
+  re-entrancy from deadlocking on task_lock()
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- .../selftests/bpf/progs/verifier_ld_ind.c     | 142 ++++++++++++++++++
- 1 file changed, 142 insertions(+)
+v3: https://lore.kernel.org/all/20260311225726.808332-1-puranjay@kernel.org/
+Changes in v4:
+- Disable task_vma iterator in irq_disabled() contexts to mitigate deadlocks (Alexei)
+- Use a helper function to reset the snapshot (Andrii)
+- Remove the redundant snap->vm_mm = kit->data->mm; (Andrii)
+- Remove all irq_work deferral as the iterator will not work in
+  irq_disabled() sections anymore and _new() will return -EBUSY early.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-index c925ba9a2e74..09e81b99eecb 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-@@ -107,4 +107,146 @@ __naked void ind_check_calling_conv_r7(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * ld_{abs,ind} subprog that always sets r0=1 on the success path.
-+ * bpf_gen_ld_abs() emits a hidden exit with r0=0 when the load helper
-+ * fails. The verifier must model this failure return so that callers
-+ * account for r0=0 as a possible return value.
-+ */
-+__naked __noinline __used
-+static int ldabs_subprog(void)
-+{
-+	asm volatile (
-+	"r6 = r1;"
-+	".8byte %[ld_abs];"
-+	"r0 = 1;"
-+	"exit;"
-+	:
-+	: __imm_insn(ld_abs, BPF_LD_ABS(BPF_W, 0))
-+	: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static int ldind_subprog(void)
-+{
-+	asm volatile (
-+	"r6 = r1;"
-+	"r7 = 0;"
-+	".8byte %[ld_ind];"
-+	"r0 = 1;"
-+	"exit;"
-+	:
-+	: __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_abs: subprog early exit on ld_abs failure")
-+__failure __msg("R9 !read_ok")
-+__naked void ld_abs_subprog_early_exit(void)
-+{
-+	asm volatile (
-+	"call ldabs_subprog;"
-+	"if r0 != 0 goto l_exit_%=;"
-+	"r0 = r9;"
-+	"l_exit_%=:"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_ind: subprog early exit on ld_ind failure")
-+__failure __msg("R9 !read_ok")
-+__naked void ld_ind_subprog_early_exit(void)
-+{
-+	asm volatile (
-+	"call ldind_subprog;"
-+	"if r0 != 0 goto l_exit_%=;"
-+	"r0 = r9;"
-+	"l_exit_%=:"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_abs: subprog with both paths safe")
-+__success
-+__naked void ld_abs_subprog_both_paths_safe(void)
-+{
-+	asm volatile (
-+	"call ldabs_subprog;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_ind: subprog with both paths safe")
-+__success
-+__naked void ld_ind_subprog_both_paths_safe(void)
-+{
-+	asm volatile (
-+	"call ldind_subprog;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/*
-+ * ld_{abs,ind} in subprogs require scalar (int) return type in BTF.
-+ * A test with void return must be rejected.
-+ */
-+__naked __noinline __used
-+static void ldabs_void_subprog(void)
-+{
-+	asm volatile (
-+	"r6 = r1;"
-+	".8byte %[ld_abs];"
-+	"r0 = 1;"
-+	"exit;"
-+	:
-+	: __imm_insn(ld_abs, BPF_LD_ABS(BPF_W, 0))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_abs: reject void return subprog")
-+__failure __msg("LD_ABS is only allowed in functions that return 'int'")
-+__naked void ld_abs_void_subprog_reject(void)
-+{
-+	asm volatile (
-+	"call ldabs_void_subprog;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static void ldind_void_subprog(void)
-+{
-+	asm volatile (
-+	"r6 = r1;"
-+	"r7 = 0;"
-+	".8byte %[ld_ind];"
-+	"r0 = 1;"
-+	"exit;"
-+	:
-+	: __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_ind: reject void return subprog")
-+__failure __msg("LD_ABS is only allowed in functions that return 'int'")
-+__naked void ld_ind_void_subprog_reject(void)
-+{
-+	asm volatile (
-+	"call ldind_void_subprog;"
-+	"r0 = 0;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+v2: https://lore.kernel.org/all/20260309155506.23490-1-puranjay@kernel.org/
+Changes in v3:
+- Remove the rename patch 1 (Andrii)
+- Put the irq_work in the iter data, per-cpu slot is not needed (Andrii)
+- Remove the unnecessary !in_hardirq() in the deferral path (Alexei)
+- Use PAGE_SIZE advancement in case vma shrinks back to maintain the
+  forward progress guarantee (AI)
+
+v1: https://lore.kernel.org/all/20260304142026.1443666-1-puranjay@kernel.org/
+Changes in v2:
+- Add a preparatory patch to rename mmap_unlock_irq_work to
+  bpf_iter_mm_irq_work (Mykyta)
+- Fix bpf_iter_mmput() to also defer for IRQ disabled regions (Alexei)
+- Fix a build issue where mmpu_async() is not available without
+  CONFIG_MMU (kernel test robot)
+- Reuse mmap_unlock_irq_work (after rename) for mmput (Mykyta)
+- Move vma lookup (retry block) to a separate function (Mykyta)
+
+This series fixes the mm lifecycle handling in the open-coded task_vma
+BPF iterator and switches it from mmap_lock to per-VMA locking to reduce
+contention. It then fixes a deadlock that is caused by holding locks
+accross the body of the iterator where faulting is allowed.
+
+Patch 1 fixes a use-after-free where task->mm was read locklessly and
+could be freed before the iterator used it. It uses a trylock on
+alloc_lock to safely read task->mm and acquire an mm reference, and
+disables the iterator in irq_disabled() contexts by returning -EBUSY
+from _new().
+
+Patch 2 switches from holding mmap_lock for the entire iteration to
+per-VMA locking via lock_vma_under_rcu(). This still doesn't fix the
+deadlock problem because holding the per-vma lock for the whole
+iteration can still cause lock ordering issues when a faultable helper
+is called in the body of the iterator.
+
+Patch 3 resolves the lock ordering problems caused by holding the
+per-VMA lock or the mmap_lock (not applicable after patch 2) across BPF
+program execution. It snapshots VMA fields under the lock, then drops
+the lock before returning to the BPF program. File references are
+managed via get_file()/fput() across iterations.
+
+Puranjay Mohan (3):
+  bpf: fix mm lifecycle in open-coded task_vma iterator
+  bpf: switch task_vma iterator from mmap_lock to per-VMA locks
+  bpf: return VMA snapshot from task_vma iterator
+
+ kernel/bpf/task_iter.c | 151 +++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 136 insertions(+), 15 deletions(-)
+
+
+base-commit: d8a9a4b11a137909e306e50346148fc5c3b63f9d
 -- 
-2.43.0
+2.52.0
 
