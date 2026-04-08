@@ -1,234 +1,211 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A20A3BB9E7
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 12:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775652816; cv=pass; b=B6lsEWVScKHRylxf/ZKmPT9wDMypg17DuO+ti0Dvge8ZeAVJxkaVEZTJKXjnywSc28oUXYh1hKBGX/PrYHIfzIQ1wlMwouidz74HU3cC3iSdbT+zvhEVZ+Zo71UFEI4YOgFPwVsbPeIH3zPU4ZHDx60NbmsGIjEGM2NeshzI2Vw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775652816; c=relaxed/simple;
-	bh=yeS7jHV4JVc+nUtYyIJXT90laJTfzGdlhhyxLeqxdoc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VVWqYMbjk6H0goqizrCFpNJXMQxcNR36wQSm17M55m1tMSLeBh6Er81QWHLUvi+GZdg29i29Jud4HQftaOyiclvqN1MymR9uEfMbsPylkw6uqIJyH77mgCx6vBk3LdKhnnwxa+E3qr7ExqZ+Ugr6fztiORI0yj9vhErHk2B4AR8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nP3aEjih; arc=pass smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18893329E6F
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 13:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775654487; cv=none; b=Y4UzSr0qa9UMeCKxfY3OhofEpXZM0W6CJ8DwvPtCGyH7uSoNOiNbLwA5K0WgIYzldXnxgMN17VDgdQ1qZWLB27vsFTAEBAl5EkmMWrC6Q3RIc4b2+dl/wH4zW/ss+DX+laVwi6BfNZ0YIdFyVp+mbkc7ctHwIDzHQoJsPR+gJro=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775654487; c=relaxed/simple;
+	bh=VP3NcXff/+TYc44f6hOSBUWnA6Frgpc2AoF4mlLCtOc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lzkeKozBGpzs3cBJIQKDtUS2MM+SckPrjiA7rTd25/GpoVtg+E2P05911LvD9kDOrvPgPQY/fJZDGaBYqdHsKw6NAIZB9fiDwKWQodbYG3M0LUYY8Qd2JlFNJM7OtO7ScXvaS9FKyg33o8Y2vMo+6ocegJJqCKT/AzrUKAAOHf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INaW3MxH; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nP3aEjih"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c76ffd06593so1288867a12.0
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 05:53:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775652815; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fWiJtsyoE+WmzaEAPmG7D2LTBfOIsZxBA/mCg9vOb7FLEhDHXtBSe5gqUTtJUBA+Ni
-         Jz89pRRG7dv1wOxEqSJ26QocpgmLWHcVsyRZpIlFrwUa9ufVO5t4Cz+YRyTG437khTpC
-         GS/rQpnLwcUnSnOBl/nIH2YOsB5uZELWpV2z9swt90iou8YPuG1O+eVBcJDdRlWG3cU+
-         CzaOyh1yfZkfBiEECUkwAwG9uh2dAFTQThhjNlVprEmGILZf7ZY+CzsaZV0s501+Xkyk
-         MRHngHkVbg8zEYPtWdSzOQ1NjUyup1h9jE96L9JCDAr5wqy5Q3QnF+mU6VyMH+7kImmU
-         bFzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tXup5YBzVAlg6/HdojpZUjRgQHZwZkCPN2ErnlaSkJ4=;
-        fh=ApIlLOUIbxK9wlX4VpiWbSQQRjN1ATdWU8tV5cZgvug=;
-        b=QLaGzhiE5gNYyxv21BdEb+HakTHpFg9neMZRvt0EfcuoJCDYk0I2Dvj6EDionKCjM+
-         +HS/fPXMWdf8cGDND0hV2fCatYUg6kJvfUTa4KEo/lPcM7PwmgjCJ0cFBC/sXAm86Wk6
-         GpyfI8fd39jzwnahf05iOwO9h1BC88oCgl7/Xehr+hCcl4axWdTHKxSXUDgd++xJ52Hx
-         CMv4Qw44Olcnvo3/5VYD9NpSXrq6i6x2jatGi7ijHrjFOY80TFXtVZKyYSs9P+EuNUzd
-         BJtEzRm1WUs8tO5BuuRyHY/wsvVcqOhOyxHE/UyNs9QcLChommhZqEa9/DXfak9yVSbF
-         /zOA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INaW3MxH"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so28244505e9.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 06:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775652815; x=1776257615; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tXup5YBzVAlg6/HdojpZUjRgQHZwZkCPN2ErnlaSkJ4=;
-        b=nP3aEjihKYmY1dmF+pClXnXIj9HQnDroDU639crqyrfqK4okrk0nyRx/H/Y91ZiGeB
-         N11IJyxY9gbQ2DKswJA4S8UHCoTFW9DzmDo2cZlqDJ0dFSc9XiEKEG4OVZLSgDZ7Wyad
-         6YddLwlQ3BNwOoWefxwl6W5z55HaGpa71gk69m7qkA3BkUGCb4rGaJ2q/BZit8s+3i8y
-         bplAn4AJZdjVkfnXxjdoh40EzFBoFgCRNe+i0u5YrwHKXZDGcJOiHkQFP0UYJ4E9VX3Q
-         mJhd7rPZ8zXoOuvVz91zf2eLbvdvBy8zbAZDZG5FyfOU9bM47FYKdFnW10XmHFwvsXVr
-         U8fA==
+        d=gmail.com; s=20251104; t=1775654482; x=1776259282; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6gNsg/Hs4yDzHq+ohAAgGwtWqgWEZ88+2YXJM2hzyc=;
+        b=INaW3MxHtubbhLwuVv726EV/4BXfOXM0kjPc7n1JgDGHj5b0Vses3mMSg3C+QTIBOF
+         RJGkHC4d6osqrbuZkEGvLEaMyqLn7e27/EF2N4UxuMm2D/CqQ041NJgP+1ErrBLCRnrq
+         9pjGpFKl9TboIf5DMZLaL/AJZHHzH0HwGGGwvRcE9rV6T2L2ZttyJx2TdN8z4es+fDI3
+         rK6L7AeSSzuTQnn7ez81gAeK/GhDZn1Y2eOf95Lt8hwBrcG4fjA5BFyN+eZMcWulbKFA
+         PX2GsOO5blnlr5QY5FgHKRYuge7wy0zpsbjGpM4c578nqSfE0SfmfQccN0CFATuYeHx8
+         ++nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775652815; x=1776257615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tXup5YBzVAlg6/HdojpZUjRgQHZwZkCPN2ErnlaSkJ4=;
-        b=pMmYvis9G9PBaIRkz98shPm03RbrPaX4xQRjCPXSby2/dUrfhv2A3H4iz/1kf2KmCu
-         yqngOEzt8zEB00NJBGUQUjZN+PvZBX1cnpERwf/aT5oDB5bcsKUt0+DhG3vZYJUZ0PB5
-         d/1HERzP20FHxj2cfuawyHY2SH6vYvaxZsV+8wvH2ZPlm7Solrj6YcoGb5Neez7nWJyC
-         +LZXLxp22cPamXDHPkWptnRD/yROKdVuEIxSMThc8wPAyNSPYkOxYNYPR7LboUAm0x6N
-         vi1avA6nhsB3MwTffb+OIlxuZwTnHllqzc7eX8bYIsVXTnYIg3mWqAevrOL18yuLkVOP
-         TsOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUecJoJPgV0DoDJiftjHbKsShQ0eyzOZSUWsBs2ocZg4kbj8vBKrVl3D1jmHvDMidOseis=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7CENei5SMV6/wPXaWgFaehm5B8SO4cjmhI2IgfTyicUXUcPuk
-	4SRhnQSM9owENEo054FQx3G/zdCgsc581Rlb6txAV9ZKsJ9Aak28luzU8Ll6t4VblBSP+VTbh8s
-	0SkQV0niG9WU7xeIYP55DiVQEDdQeVbA=
-X-Gm-Gg: AeBDievGZqNh+yJl+d52s5Ks9nYhc/NfDZgKnwChHmUNPKiDevKMphHvNDMioB3rVfd
-	hnJN5kLcOpvN74VEz/eh6ChIZZiH55sJn3v05+XBzSCCQaezZra4+UgFb9tU6EU1AlJ6H1J73rJ
-	DuQItQ3Esd3C4XFp+9XB6ZRO8aembXhxLHgiKikwd4PhEhF8NolMuMYzHTjE3K7bd5Uz/7/P+9L
-	H3P0YnyLLbH2O1QbC5adv8hG851mlcoHz2i3EJBWeguTzelMaG7W1QViOjJVE7mjbD1mOowx5Nt
-	hhggJA==
-X-Received: by 2002:a05:6a20:9145:b0:39b:c0b5:b0ee with SMTP id
- adf61e73a8af0-39f2ed784cemr24509160637.12.1775652814680; Wed, 08 Apr 2026
- 05:53:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775654482; x=1776259282;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S6gNsg/Hs4yDzHq+ohAAgGwtWqgWEZ88+2YXJM2hzyc=;
+        b=W1PvL5CSauOmTkLt+yleYyQsbTWEz3nMAtArhVV4uiFE9m0EwZ5l8taO1CPOk6hr+B
+         vEmzr1UGlPKi5zSRuncrZyenzQccd6YPgbOin5gjF8ODKK7rafA1GHn9/MmsvnHJTzc4
+         MXyQ9Y97RTGaLE18LMrnQCaBV1o5hKdTf1sbcaI+t2eGtXHue6B//lRd1dqPwU6oJxLo
+         qiIfFKUkb16W5Xo99GfbqHmB8wpCfDq5VVPXrpBDlZ9JCfXNGIP/W11kF3L/zZTsnVTg
+         4bIfMINCbZPPqpAZggjhUcq8dZ/fjEF77fhUJx03FK9l/VUVylzjNTIb8x5W1cqy0mhk
+         LU8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWHQrug6bcJqQ7rgMXqfPm+ATuySDRjjNfcYPLyJUZ4LhxGwgUgKFJ/UxBy//VxYjSly8w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMEDxVmslykPlI8JCuMutA+RZwU1kyViwvFlIDwVqQjfNWFqqC
+	tltp19xnWcCCWI/j1SrlrlCynjK5S9n4dHBGMNeUGEwnuSvoQ24ZBGTZ
+X-Gm-Gg: AeBDiev9hbLDqUFeZgqzE9rD1PVrDLI0KO5b7mWh18AtHl0eggX+Hf8xkdezQcRca3N
+	0ovqZzPAN6SrVtYqei9PZeFniJpU7psfKrkDEBaNmcngUroDf4qRF9024kzXsXPmqNxKB0biCTk
+	oCeZdpVunndLtKoDRbpI45tHRJht1PbyFXdaHmf2optWV4mDuf2NPeQPnZ/fjV0AwF+wHcCc+Tm
+	/paBvviIqM9abfFX1dUx+RWcQuNTmUoxlBG+VivTnR37i9/a6ke00zAduK0B7NOa95qalUhl5QP
+	EPpRxwK1HTu1vlGEXbzUfuDKr/TBGnyWL6EWlxZuVUPgUrieY2O3LDZvoUbVSKDRZF0Al57nRLf
+	jdh6LzN29ubY4P85g+siCCr+HcYG9ZBUbr1iHBhZF+thwoxKknL/HZN4zzztV6wBcrUVMP79SJm
+	GEJuupzNPYDA1Xvwc=
+X-Received: by 2002:a05:600c:3b23:b0:488:869c:edaf with SMTP id 5b1f17b1804b1-488996df052mr261117285e9.8.1775654481947;
+        Wed, 08 Apr 2026 06:21:21 -0700 (PDT)
+Received: from krava ([2a00:102a:5031:5a39:87ca:af14:10da:98b6])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488b6ff70bcsm363448385e9.14.2026.04.08.06.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 06:21:21 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 8 Apr 2026 15:21:14 +0200
+To: Menglong Dong <menglong8.dong@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+	shuah@kernel.org, emil@etsalapatis.com, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: add missing fsession to the
+ verifier log
+Message-ID: <adZWStMinOeunjSH@krava>
+References: <20260408062109.386083-1-dongml2@chinatelecom.cn>
+ <20260408062109.386083-2-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408105324.663280-1-alan.maguire@oracle.com> <20260408105324.663280-3-alan.maguire@oracle.com>
-In-Reply-To: <20260408105324.663280-3-alan.maguire@oracle.com>
-From: Chengkaitao <pilgrimtao@gmail.com>
-Date: Wed, 8 Apr 2026 20:53:22 +0800
-X-Gm-Features: AQROBzDgGWgps8HuLBoLmbZqPM_t8XuWUsCzmMBcEAODWsNqdrBYhPPA65DVkXw
-Message-ID: <CAAWJmAbQFCTyLoO_xoBtaf1ekhj853tx4hK8dEC4L8TW2-jEVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: Add BTF sanitize test
- covering BTF layout
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260408062109.386083-2-dongml2@chinatelecom.cn>
 
-On Wed, Apr 8, 2026 at 6:56=E2=80=AFPM Alan Maguire <alan.maguire@oracle.co=
-m> wrote:
->
-> Add test that fakes up a feature cache of supported BPF
-> features to simulate an older kernel that does not support
-> BTF layout information.  Ensure that BTF is sanitized correctly
-> to remove layout info between types and strings, and that all
-> offsets and lengths are adjusted appropriately.
->
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+On Wed, Apr 08, 2026 at 02:21:07PM +0800, Menglong Dong wrote:
+> The fsession attach type is missed in the verifier log in
+> check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
+> Update them to make the verifier log proper. Meanwhile, update the
+> corresponding selftests.
+> 
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> Acked-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  .../selftests/bpf/prog_tests/btf_sanitize.c   | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c b/tool=
-s/testing/selftests/bpf/prog_tests/btf_sanitize.c
-> new file mode 100644
-> index 000000000000..470b29298cbc
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
-> @@ -0,0 +1,100 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026, Oracle and/or its affiliates. */
-> +#include <test_progs.h>
-> +#include <linux/btf.h>
-> +#include "bpf/libbpf_internal.h"
-> +#include "../test_btf.h"
-> +#include "kfree_skb.skel.h"
-> +
-> +#define TYPE_LEN       (sizeof(struct btf_type) + sizeof(__u32))
-> +#define MAX_NR_LAYOUT  2
-> +#define LAYOUT_LEN     (sizeof(struct btf_layout) * MAX_NR_LAYOUT)
-> +#define STR_LEN                sizeof("\0int")
-> +
-> +struct layout_btf {
-> +       struct btf_header hdr;
-> +       __u32 types[TYPE_LEN/sizeof(__u32)];
-> +       struct btf_layout layout[MAX_NR_LAYOUT];
-> +       char strs[STR_LEN];
-> +};
-> +
-> +static const struct layout_btf layout_btf =3D {
-> +       .hdr =3D {
-> +               .magic          =3D BTF_MAGIC,
-> +               .version        =3D BTF_VERSION,
-> +               .hdr_len        =3D sizeof(struct btf_header),
-> +               .type_off       =3D 0,
-> +               .type_len       =3D TYPE_LEN,
-> +               .str_off        =3D TYPE_LEN + LAYOUT_LEN,
-> +               .str_len        =3D STR_LEN,
-> +               .layout_off     =3D TYPE_LEN,
-> +               .layout_len     =3D LAYOUT_LEN,
-> +       },
-> +       .types =3D {
-> +               BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
-> +       },
-> +       .layout =3D {
-> +               { .info_sz =3D 0,          .elem_sz =3D 0, .flags =3D 0 }=
-,
-> +               { .info_sz =3D sizeof(__u32), .elem_sz =3D 0, .flags =3D =
-0 },
-> +       },
-> +       .strs =3D "\0int",
-> +};
-> +
-> +void test_btf_sanitize_layout(void)
-> +{
-> +       struct btf *orig =3D NULL, *sanitized =3D NULL;
-> +       struct kern_feature_cache *cache =3D NULL;
-> +       struct kfree_skb *skel =3D NULL;
-> +       const struct btf_header *hdr;
-> +       const void *raw;
-> +       __u32 raw_sz;
-> +
-> +       skel =3D kfree_skb__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "kfree_skb_skel"))
-> +               return;
-> +       orig =3D btf__new(&layout_btf, sizeof(layout_btf));
-> +       if (!ASSERT_OK_PTR(orig, "btf_new_layout"))
-> +               return;
+> v2:
+> - add a missing FSESSION in bpf_check_attach_target()
+> ---
+>  kernel/bpf/verifier.c                               | 10 +++++-----
+>  tools/testing/selftests/bpf/prog_tests/exceptions.c |  8 ++++----
+>  tools/testing/selftests/bpf/verifier/sleepable.c    |  2 +-
+>  3 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 594260c1f382..beb660b4c3ec 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
+>  
+>  	if (type == BPF_PROG_TYPE_TRACING) {
+>  		if (!bpf_prog_has_trampoline(env->prog)) {
+> -			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
+> +			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
+>  				func_id_name(func_id), func_id);
+>  			return -ENOTSUPP;
+>  		}
+> @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
+>  	if (!btf) {
+>  		bpf_log(log,
+> -			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
+> +			"FENTRY/FEXIT/FSESSION program can only be attached to another program annotated with BTF\n");
 
-Missing kfree_skb__destroy(skel) here; consider using goto out instead.
+I wonder this should say 'Tracing program...' instead,
+we have other tracing types not covered in this error
 
-> +       raw =3D btf__raw_data(orig, &raw_sz);
-> +       if (!ASSERT_OK_PTR(raw, "btf__raw_data_orig"))
-> +               goto out;
-> +       hdr =3D (struct btf_header *)raw;
-> +       ASSERT_EQ(hdr->layout_off, TYPE_LEN, "layout_off_nonzero");
-> +       ASSERT_EQ(hdr->layout_len, LAYOUT_LEN, "layout_len_nonzero");
-> +
-> +       cache =3D calloc(1, sizeof(*cache));
-> +       if (!ASSERT_OK_PTR(cache, "alloc_feat_cache"))
-> +               goto out;
-> +       for (int i =3D 0; i < __FEAT_CNT; i++)
-> +               cache->res[i] =3D FEAT_SUPPORTED;
-> +       cache->res[FEAT_BTF_LAYOUT] =3D FEAT_MISSING;
-> +
-> +       bpf_object_set_feat_cache(skel->obj, cache);
-> +
-> +       if (!ASSERT_FALSE(kernel_supports(skel->obj, FEAT_BTF_LAYOUT), "l=
-ayout_feature_missing"))
-> +               goto out;
-> +
-> +       if (!ASSERT_TRUE(kernel_supports(skel->obj, FEAT_BTF_FUNC), "othe=
-r_feature_allowed"))
-> +               goto out;
-> +
-> +       sanitized =3D bpf_object__sanitize_btf(skel->obj, orig);
-> +       if (!ASSERT_OK_PTR(sanitized, "bpf_object__sanitize_btf"))
-> +               goto out;
-> +
-> +       raw =3D btf__raw_data(sanitized, &raw_sz);
-> +       if (!ASSERT_OK_PTR(raw, "btf__raw_data_sanitized"))
-> +               goto out;
-> +       hdr =3D (struct btf_header *)raw;
-> +
-> +       ASSERT_EQ(hdr->layout_off, 0, "layout_off_zero");
-> +       ASSERT_EQ(hdr->layout_len, 0, "layout_len_zero");
-> +       ASSERT_EQ(hdr->str_off, TYPE_LEN, "strs_after_types");
-> +       ASSERT_EQ(hdr->str_len, STR_LEN, "strs_len_unchanged");
-> +       ASSERT_EQ(raw_sz, hdr->hdr_len + hdr->type_len + hdr->str_len, "b=
-tf_raw_sz_reduced");
-> +out:
-> +       /* This will free the cache we allocated above */
-> +       kfree_skb__destroy(skel);
-> +       btf__free(sanitized);
-> +       btf__free(orig);
-> +}
-> --
-> 2.39.3
->
+jirka
 
---=20
-Yours,
-Chengkaitao
+>  		return -EINVAL;
+>  	}
+>  	t = btf_type_by_id(btf, btf_id);
+> @@ -25597,7 +25597,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  		if (aux->func && aux->func[subprog]->aux->exception_cb) {
+>  			bpf_log(log,
+>  				"%s programs cannot attach to exception callback\n",
+> -				prog_extension ? "Extension" : "FENTRY/FEXIT");
+> +				prog_extension ? "Extension" : "FENTRY/FEXIT/FSESSION");
+>  			return -EINVAL;
+>  		}
+>  		conservative = aux->func_info_aux[subprog].unreliable;
+> @@ -25686,7 +25686,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+>  	case BPF_TRACE_RAW_TP:
+>  		if (tgt_prog) {
+>  			bpf_log(log,
+> -				"Only FENTRY/FEXIT progs are attachable to another BPF prog\n");
+> +				"Only FENTRY/FEXIT/FSESSION progs are attachable to another BPF prog\n");
+>  			return -EINVAL;
+>  		}
+>  		if (!btf_type_is_typedef(t)) {
+> @@ -25952,7 +25952,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+>  	}
+>  
+>  	if (prog->sleepable && !can_be_sleepable(prog)) {
+> -		verbose(env, "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable\n");
+> +		verbose(env, "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable\n");
+>  		return -EINVAL;
+>  	}
+>  
+> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> index 84ab73e08b0e..94a62fcd4543 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> @@ -128,7 +128,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("throwing fentry -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> @@ -138,7 +138,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("non-throwing fexit -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> @@ -148,7 +148,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("throwing fexit -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> @@ -158,7 +158,7 @@ static void test_exceptions_success(void)
+>  				       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+>  				       "exception_cb_mod"), "set_attach_target"))
+>  				goto done;
+> -		}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> +		}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+>  
+>  	if (test__start_subtest("throwing extension (with custom cb) -> exception_cb"))
+>  		RUN_EXT(-EINVAL, true, ({
+> diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
+> index 1f0d2bdc673f..c2b7f5ebf168 100644
+> --- a/tools/testing/selftests/bpf/verifier/sleepable.c
+> +++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+> @@ -85,7 +85,7 @@
+>  	.expected_attach_type = BPF_TRACE_RAW_TP,
+>  	.kfunc = "sched_switch",
+>  	.result = REJECT,
+> -	.errstr = "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
+> +	.errstr = "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
+>  	.flags = BPF_F_SLEEPABLE,
+>  	.runs = -1,
+>  },
+> -- 
+> 2.53.0
+> 
