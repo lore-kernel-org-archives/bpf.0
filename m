@@ -1,144 +1,114 @@
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0446E36212D
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 06:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6D722370A;
+	Wed,  8 Apr 2026 06:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775629317; cv=none; b=Gr7biNk7XO9B2065Dn4PrgntkiR+Yz47ka/c+9VUa1DYBnJwP3wSdbtQsN0/SqoGYFfC7elQ8xqtFiaGkxYXA9GBk8yvBuXONPSI4XQC896x+MxfQR1CAtbgeD1t7MLZFPiOpiXaWQc72EpIzuYf/DaOgx4PsFcSRUAbyTuiENw=
+	t=1775630945; cv=none; b=sdf2Q8tYg1UKnWfW5yqELU4uBUJ6osrn3jLQOq1JaL6JZJtszuX5yF9RsGUvFM/urkAHpty7gKoLKbdesshIE7lGpA7BIoupx83GgvXyi8E06PSmjZI0tYgyFWgz1Xoxkw+YEbUj9kRa45UigYeCNAAKYkTQ43cPh7Q0sNwTtd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775629317; c=relaxed/simple;
-	bh=ws7lGY5DDx7cDa1bHI5ZlxYFjbZK7oocW2/1NSr3xtI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RnlAuukuur5Vj4TzO2hHz499YViV8KO2jy88iIPCJVTo/b2iaX8slPRJI9Awz2qvugH0TN7mFDintPZ+uQ+wQm4MgKTC+LVJG62vAXTr3pS5OBvbrp00+6O7wrSfMHfFj5He9I3MwS9z272mIFLSQlZgBb31+u4fj6STNbgNiXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MenQSDjX; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775630945; c=relaxed/simple;
+	bh=Jf27xk2PEb+D+m73rLzzPti70YoNYsdCvSbCyz5KRkY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=td+Xf/8pXJLn/1ed8nDgh5OhbiybwDxAXiazdXlNIZsbEZaJDHs69TznzAuJaamnXHyEvGsYxLrdAkcZf/tHVi3JlQdG2jifdTxnZ6Q966g8PJSAV3dqTA5G6uHvbIBkpyH3quQ5qu31W4vbxTIt4Ba2uvipch00X3K2gYtWkyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4NFTZAU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MenQSDjX"
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-82c68339cf0so293687b3a.0
-        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 23:21:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775629314; x=1776234114; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ptcHUH52MTJBYjzovgiwUsh2fxU5c/oxZodZTSTMLQs=;
-        b=MenQSDjXUtM8ap+U73uxY02HlWfvIn1NSbjEXyExe4myMnNsiKsVumwkAoXogT2buY
-         vKjLeIyIXiEaDRxUyGhI6qlA6jeyP/whN2UesGEF+tD1r2gbyRirhQD7q5SqJkdwH2LR
-         DG7nvv5l2Jnqb5MhsZEVnpqhkewWayOjoPIt6oXVWRxFTs7UGe13FzlbFgZCSndThM4n
-         5l0JRoGGxR6enrwaU8FLYh6CSf5Vdx/ZnLRorozfGakJ48D3IgKcqebZuooFAWA/hFL0
-         63bDiQy88zVK09WqiVkypsESJOTIKOjqkpToI10NZg/hPRVkID6Ja1kDZUxENTzjNW/O
-         OVpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775629314; x=1776234114;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ptcHUH52MTJBYjzovgiwUsh2fxU5c/oxZodZTSTMLQs=;
-        b=KIl1KnwwdHsixLWUu6SyTqBuUoJlS8JOvqiGwj2yyXpCojDxpSE5sV4kqqf/Adm0H1
-         ThN6+QqhdKtzA3fZQRc0ENjThoCwxj9cuSvs7CN2Uok8JWJoKcl8u1ax6UOD8ZABKiWN
-         z1Cla75L2nzgTrxYHj98kQY09rwQLDdquvCWmq9oKFQs8VWGNEtTx71ovRGyiFzIlEFL
-         tM/2aBcItBOV91/rgfJYlQEa+gmBNCNyjxXV//Cyh7R4Csv3JvVlq2YYtwbMNkhnvbXc
-         sld5LKomYsoHeAycTPit3XLLxWEzccCaO1X6J5UtcMVMLA2IktJUtDaIIrFIQZnxy883
-         BWqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVE9DnJReprVjfsJDCViK8rYNc1gzHQUvOu7jvJXFLqbZjnodeKjBEeoDqj7FeT1W3hOYM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPEEiS3bveVaMgMAxveZpqs3t7J6FmkhoIa0IN9Q5PXdvn53Kf
-	3YhngU3sDWUn7bTbEj6nvFTyfeK+JqoPp3x9pGJBO2+4O1UvHWKVPVhZ
-X-Gm-Gg: AeBDieucxm1YYb8I9FZcQ2wRqfPnNxtIBcZedsFIEZ9KkHuDhhnQ5REna8hClUn611S
-	c4ZDBcQ+W1pz3QerUE4P5HPTomYRhlezf5cSQnjx7M4DqB1SYXmq/2A9sObvhHCHtqs2eXIfpaY
-	4qL7GMFstGf6d//byHsWtcSL/lmdT3qeQADJ4v+Vd0u1oI3NgFN6HR4D1apqx/rgBIt1Q30uCXk
-	k3W/o2HJUj9AryTYt6yc3IpwJt/w5Aens0t/Po1wS+qyv+HhknXNFmpIvEse1SHJKYi6ysjOfjN
-	WUVF6BS+29GBs/stBQKCB8VOF4P5ykJ6ywkduqWX98YSSreMbT2xZiCFzeJkqYupCuHC6zIqb/U
-	EXdVowHG6BdwuqBeDr026fpC8/YdACc1O4PK37bAfcwSTDhFRnkZVNtrbRLrBxb/EPfjHGHwDGS
-	nSJrQYeWMAcqi8aYFvn624
-X-Received: by 2002:a05:6a00:1ca2:b0:7a9:d8a8:992a with SMTP id d2e1a72fcca58-82d0023fdbcmr18985149b3a.13.1775629314258;
-        Tue, 07 Apr 2026 23:21:54 -0700 (PDT)
-Received: from 7940hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82cf9b60199sm17827638b3a.25.2026.04.07.23.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2026 23:21:53 -0700 (PDT)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: ast@kernel.org
-Cc: daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	emil@etsalapatis.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] bpftool: add missing fsession to the usage and docs of bpftool
-Date: Wed,  8 Apr 2026 14:21:09 +0800
-Message-ID: <20260408062109.386083-4-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260408062109.386083-1-dongml2@chinatelecom.cn>
-References: <20260408062109.386083-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4NFTZAU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DA8C19425;
+	Wed,  8 Apr 2026 06:48:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775630945;
+	bh=Jf27xk2PEb+D+m73rLzzPti70YoNYsdCvSbCyz5KRkY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O4NFTZAUGXJlYJi1cB1XvfzxzdGTopyBo3L3YcY86XA142N96ZrAP2E8Z7cICnhLE
+	 6AeES82rZ1GsQxLKVt6MkUHPfg+P7aIRFJgyQpgbmVrbSsa7jW85ipzT5C6LDcS0XP
+	 gRoSDzQgopOYGZbbOnFfFufWbjcN0mV7jrsb6rLPGUY7f4w4xUxlKOoWXKNQODNu2E
+	 mZd3Qix7Buh60T4+rmK4cx3a5t4M4Pm5adIEofTwJpiX1TKY3djbBbAAYSinFuRLaI
+	 RP+58r0yTBQ6QMvYP/COqOMpaf/w8MiS5qx3fyLn/tFDdAP7Z2ZdXxVtxUdC6c2c//
+	 HJbDftmUH6B0w==
+Date: Wed, 8 Apr 2026 07:48:57 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Gregory Price <gourry@gourry.net>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, lsf-pc@lists.linux-foundation.org, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Michal Hocko <mhocko@kernel.org>, Qi Zheng <zhengqi.arch@bytedance.com>, 
+	Chen Ridong <chenridong@huaweicloud.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Kairui Song <ryncsn@gmail.com>, 
+	Matthew Wilcox <willy@infradead.org>, Nhat Pham <nphamcs@gmail.com>, Barry Song <21cnbao@gmail.com>, 
+	David Stevens <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>, 
+	David Rientjes <rientjes@google.com>, Kalesh Singh <kaleshsingh@google.com>, 
+	wangzicheng <wangzicheng@honor.com>, "T . J . Mercier" <tjmercier@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
+ (reclaim_ext)
+Message-ID: <adX5txC9tGPR-iyX@lucifer>
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+ <42e26dbb-0180-4408-b8a8-be0cafb75ad9@lucifer.local>
+ <acVPrEyfcE4Naz5b@gourry-fedora-PF4VCD3F>
+ <248a126c-43e7-4320-b4bb-282e0b6da9c4@lucifer.local>
+ <acbgIKuwDsPvPjdF@cmpxchg.org>
+ <adTonuzmUc2AzUhp@lucifer>
+ <adU3P9fk8h-AmEp4@gourry-fedora-PF4VCD3F>
+ <adU8VnzlLw9JUHB3@lucifer>
+ <adVPAS4PP7wK0Pxq@gourry-fedora-PF4VCD3F>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adVPAS4PP7wK0Pxq@gourry-fedora-PF4VCD3F>
 
-Add the fsession attach type to the usage of bpftool in do_help().
-Meanwhile, add it to the bash-completion and bpftool-prog.rst too.
+On Tue, Apr 07, 2026 at 02:37:53PM -0400, Gregory Price wrote:
+> On Tue, Apr 07, 2026 at 06:30:55PM +0100, Lorenzo Stoakes wrote:
+> >
+> > > somewhat trivial work these days via <pick your favorite LLM> with
+> > > reasonably well designed interfaces.
+> >
+> > Though to be honest, I did ask Claude to do this with some code before and was
+> > really impressed with how quickly it came up with something.
+> >
+> > Buuut I've generally found the code LLMs produce... terrible? Really terrible?
+> > So I think you'd want there to be some level of human improvement there.
+> >
+> > And in any case, maybe doing things this way will struggle to really represent
+> > real world cases (lock contention etc.) but OTOH, being able to simulate a high
+> > memory pressure environment with certain parameters even without [the rest of
+> > the kernel] interacting might still be super super useful for diagnosing issues.x
+> >
+>
+> There is a concern people start looking at these tests as signal for
+> performance regressions - which is neither meaningful nor useful
+> (unless you fundamentally break list iteration or something).
+>
+> But for trivial cases, you'd at least like to know under strongly
+> controlled aging and reclaim scenarios that anon/file memory is
+> reclaimed in a balanced manner - just as an example.
+>
+> If something breaks THAT assumption, you know there's a logic issue.
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
----
- tools/bpf/bpftool/Documentation/bpftool-prog.rst | 2 +-
- tools/bpf/bpftool/bash-completion/bpftool        | 2 +-
- tools/bpf/bpftool/prog.c                         | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Yeah and you could assert a lot of things like this, for me the real value would
+be in extreme circumstances which might otherwise be hard to simulate.
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index 35aeeaf5f711..90fa2a48cc26 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -54,7 +54,7 @@ PROG COMMANDS
- |     **cgroup/sendmsg4** | **cgroup/sendmsg6** | **cgroup/sendmsg_unix** |
- |     **cgroup/recvmsg4** | **cgroup/recvmsg6** | **cgroup/recvmsg_unix** | **cgroup/sysctl** |
- |     **cgroup/getsockopt** | **cgroup/setsockopt** | **cgroup/sock_release** |
--|     **struct_ops** | **fentry** | **fexit** | **freplace** | **sk_lookup**
-+|     **struct_ops** | **fentry** | **fexit** | **fsession** | **freplace** | **sk_lookup**
- | }
- | *ATTACH_TYPE* := {
- |     **sk_msg_verdict** | **sk_skb_verdict** | **sk_skb_stream_verdict** |
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index babb0d4e9753..75cbcb512eba 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -501,7 +501,7 @@ _bpftool()
-                                 cgroup/post_bind4 cgroup/post_bind6 \
-                                 cgroup/sysctl cgroup/getsockopt \
-                                 cgroup/setsockopt cgroup/sock_release struct_ops \
--                                fentry fexit freplace sk_lookup'
-+                                fentry fexit fsession freplace sk_lookup'
-                             COMPREPLY=( $( compgen -W "$BPFTOOL_PROG_LOAD_TYPES" -- "$cur" ) )
-                             return 0
-                             ;;
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 6daf19809ca4..a9f730d407a9 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -2583,7 +2583,7 @@ static int do_help(int argc, char **argv)
- 		"                 cgroup/getsockname_unix | cgroup/sendmsg4 | cgroup/sendmsg6 |\n"
- 		"                 cgroup/sendmsg_unix | cgroup/recvmsg4 | cgroup/recvmsg6 | cgroup/recvmsg_unix |\n"
- 		"                 cgroup/getsockopt | cgroup/setsockopt | cgroup/sock_release |\n"
--		"                 struct_ops | fentry | fexit | freplace | sk_lookup }\n"
-+		"                 struct_ops | fentry | fexit | fsession | freplace | sk_lookup }\n"
- 		"       ATTACH_TYPE := { sk_msg_verdict | sk_skb_verdict | sk_skb_stream_verdict |\n"
- 		"                        sk_skb_stream_parser | flow_dissector }\n"
- 		"       METRIC := { cycles | instructions | l1d_loads | llc_misses | itlb_misses | dtlb_misses }\n"
--- 
-2.53.0
+But it'd be testing very specific things rather than 'how does an actual kernel
+behave in this situation?'
 
+>
+> Likewise with comparisons between LRU and MGLRU.  It might be easier to
+> identify the behavioral divergences that way.
+>
+> But i fear the whole page-table walk thing makes all of this a
+> non-starter.  That's turns into stubbing out like rmap and such.
+
+It could grow exponentially yes :) it was hard enough isolating the VMA logic...
+
+>
+> ~Gregory
+
+Cheers, Lorenzo
