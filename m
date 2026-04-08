@@ -1,150 +1,148 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010037.outbound.protection.outlook.com [52.101.69.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69AF016132A
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 04:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775623350; cv=none; b=s9aP5SqIhgo5hbTv0lCAbOWFdtgo8dPq4jqLOL2iujFczOMRP7griRTDWduRFb0qpN9u0qTKniJMd8Ewp1UTVTHUkhr94h10KjbmnubfncDJZ5KDtezL9OfYGWMm9WIrS9DhuolFRGZ0MuQnJGPs0rp4u6d2WWRCx2Klcd7ED24=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775623350; c=relaxed/simple;
-	bh=zdUWZ8l88jlDSBXgWeObqrdBZNUvf6VUXi4X/cvE7MY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=om+rnetuC65WT2u2HgccgT+TbBYMQsX17a0OLQd2afIttYk6UfVHuJXtut/kFVyIpyv0j2vgCYMF72w75pbv7Wg8bK1Ip9GT6C63Rrrbek8fgDyFNJVIaOXtkcPr0yjb6BepOeMESiO+NOe0nWoWc39dY0+JtbyLU3uXteYWNp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Kq3CHh4T; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AACC2BAF7;
+	Wed,  8 Apr 2026 04:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775623446; cv=fail; b=rR5ZKKhDZ12FgOxli+qStYuvDCVyr6f4Z+9tPhWe7D3gx9dHSmRjZnIS2smqmEN9+/VzqkmylnpvDNJ9GnehpEjJwdeYzk0EIDhF94+VPleTFrEO+KNzFDUq4uRvNqaIs/bmal+oGVlzM3LF/g8LDXhDn+q/1pMh9kI5lPBq2Lc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775623446; c=relaxed/simple;
+	bh=4mjreigLTtMVfACvZO5eIB7KrUErUy5ZurJYNKmYgbI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=nDrYntMhk+a+5aokQSK3xDUnv0DeS2nHph2t1d9D2R+3HfAqzuGjhfukN8Il7ZAymXjiLOiRoZOWfdzcQnhMRM84MouSmAmb/oibr/QefLDc/sP3q9Pup5kZ9Qu4iGXDAAmLhfMpa6zeviz8ta+bgWphXbmpUDkx6fD8a0fkN6s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=BZ1mHj9N; arc=fail smtp.client-ip=52.101.69.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kq3CHh4T"
-Message-ID: <4f582a12-1227-47f3-805b-7cc038b68457@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775623347;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zRxJfHVlfNHeZ9evtiSVMFklaZtDUYu1VfXHfKLhgOs=;
-	b=Kq3CHh4T4vg3Hbqt1flYzD5olrhXfshDrYp3CAutlpMcuE1xgS9bMGYXOZ7Zsf9Fy1fW7S
-	NfTbub4ycbdMVgPezrplb/PTMC3nm0hveJEW2J498XKJS/HzVNpxXANPTgyBKxbDISCyD4
-	Mo2FQam9aWpZJRoOKoPlFOg2Tcm9ef0=
-Date: Tue, 7 Apr 2026 21:42:20 -0700
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="BZ1mHj9N"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xU/20cnkOsFDDZxZdioMgPclDUAvPqhQpPvGq67Dai7Pm+PaDcKBbS07LxiEzsm6jHSTD6tRuoJeu2gzcvDX+tArrwR6B+LP3QXRkZZGgpzdI3xXB5QFppMB8vmXzEJxaCtNqHa7pD5E9Hb7i9ll4fpbHiyBoRAtjQ7y3kJTYY9l7BxfWgzxd+ViCdu5t878jT/vxR8mGa5YokAcUZIDKUSvg+lN4YOe/5x5gADBG7uTgT6XUzgaZdTjnGTlADmkkmygNpgASUzUTtoixFFbeTz2zHsuR+2BL0QyK7uhjaJyDSKxLgGKiaEwH5rGTHeZ4fFDwkugW6ME9wF6H/9VJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HjNd1YLT7Kes2ggLqiTLPAvMel4rt6qXOohS2//Rm34=;
+ b=xNWc2qlCiWKZioiNvsVEm5fh7JivIqclVVr8rxN0CAmfFyWmgHyub9gNKKZHZlsbrHImvRoI5SPFvBKxfkrzPh9OlZ+Ib9PEd/Hyu4fsPuuYePHOvx3wE5O1B0/9t60GbGTryr8lWCYOKDqZhw07gshXP6pCbKFMIJQeUlvrJhXXe1/DQzgfDXBINXjhx7m4FTMb3dJtqBDCD7Suh5JRj59RbJoWQiFbKsMWgvGZwML6cOBAyUxMTWR4BtLWyEDlopTffoTTg6UC3bQBKBriN5lZ1GHL468PmZOQIE9JcU+8D+FezBz3B3c6U9MxKHsGR42jZHmlJRYsR0xXsMXK9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HjNd1YLT7Kes2ggLqiTLPAvMel4rt6qXOohS2//Rm34=;
+ b=BZ1mHj9NlF4/Lh9ilpXWxpeVb4jDmNO8riCHEQk1I5dc3A16rM/HqG/Utz126ppKfO6lqIvPHyXEQJQeeD1xYJWxGjOCpjSs1cpD8JWN+wUWE/mxgQskVBc+SQxO701tK527RF2A5kTaJFBVJBKbJHBt6DH1CNDAbS8NQF49HLZ0ohBhXXXVSdVv4iisygj4EL9O5dQEQSpsLdEt16Jbace1jFE76v5hjMajFp8DjibexLXqJv0FF1JuDt2dzWhBCKKIkFuK3mHgm8+oWdHLo6zTI0iQNqylEjlHJ0ox01jhYsMXXW1NgSfsojG45dTZ6nGIgoEf6yHX1XRNvovRSg==
+Received: from AM8PR04MB7284.eurprd04.prod.outlook.com (2603:10a6:20b:1dc::8)
+ by DU2PR04MB9212.eurprd04.prod.outlook.com (2603:10a6:10:2fb::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Wed, 8 Apr
+ 2026 04:44:01 +0000
+Received: from AM8PR04MB7284.eurprd04.prod.outlook.com
+ ([fe80::9cd6:51bd:82b:98dc]) by AM8PR04MB7284.eurprd04.prod.outlook.com
+ ([fe80::9cd6:51bd:82b:98dc%5]) with mapi id 15.20.9769.014; Wed, 8 Apr 2026
+ 04:44:01 +0000
+From: Wei Fang <wei.fang@nxp.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+CC: Zefir Kurtisi <zefir.kurtisi@westermo.com>, Claudiu Manoil
+	<claudiu.manoil@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Ioana Ciornei <ioana.ciornei@nxp.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "imx@lists.linux.dev"
+	<imx@lists.linux.dev>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+Subject: RE: [PATCH v2 net 2/6] net: enetc: linearize PTP event packets with
+ one-step TX timestamping
+Thread-Topic: [PATCH v2 net 2/6] net: enetc: linearize PTP event packets with
+ one-step TX timestamping
+Thread-Index: AQHcxgXDfkmmu1nzLEaLzgxbmswkm7XUhM6g
+Date: Wed, 8 Apr 2026 04:44:01 +0000
+Message-ID:
+ <AM8PR04MB7284A378E8FD79C53E77B0C1885BA@AM8PR04MB7284.eurprd04.prod.outlook.com>
+References: <20260406204122.167237-1-vladimir.oltean@nxp.com>
+ <20260406204122.167237-3-vladimir.oltean@nxp.com>
+In-Reply-To: <20260406204122.167237-3-vladimir.oltean@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM8PR04MB7284:EE_|DU2PR04MB9212:EE_
+x-ms-office365-filtering-correlation-id: 625d27ad-1625-4a15-d1ac-08de952974c4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|366016|19092799006|1800799024|38070700021|56012099003|22082099003|18002099003;
+x-microsoft-antispam-message-info:
+ kbdWSnaF6U1X8Ne0kxmfIv0tzu/T++OT7JPb2TGR6S2zGYs50NjpSfHsbNl83lRyLtvsXDcok4YcKHUyM93x1q5v/SwVaDL75jiyQYNd0Ydl0R6giZCO9W/pG/SiZdb76Cz44uH4i0tooADjLnnVLIANtP9tvBbr/WDeVw7+vAhBcPt1F/NJ+wBwkrTItBwbupvjGR+WR97rblcyN75bQdRUQ/atxLjZpjJfgJMzT+l0NC5Te9nsCIOt/5M7scdDAvFueMstEKTR/c1pxMsHKznNFm4qRGD8Ecufy7Gpkj9mZaXaZU7snai2E3BU15zFPftbkI2pgSnqw6pVdJeYw5cTSj2FGJc2Opd44vP8HOawjcniqgO8TqDEGJGMnoyotlb9J90HF3zcW3dG6daoE0l6qP1e+/wc8xENtX/WbEygVjf8H9+MfEZT09lnIqoWCa/MvJliKCYZHCWWYEPvULC8jJTl0q8WjU75VtGs9Dq5wla7peEVfJIbYCJURynYs0H3X1kQh/AJDtgLudR2fFN9lwfGBc284F5/lh+CP9NAw9AywNzwJa0Yx4DNRBFHGTxzMdONF0HqL2fJlFRYwBV4BLsLzpW5jAycv0be1k2Pa/OraDRgkqqyvm7UttHVlJLG3KoFWm6M5f3C/LYRk89pDBiti4Y0namT+E8rRUjVZpSqhNNMJRsIHH9hGr1YL85Px1r2EBy+2rcSU6T+w+MJvGOTXR4OP7x+6NVwGDBPS8vjpnUoxN+HevEVuVAA9UaWT3Tq/C8gEG7GFNQHuPt74pU7el0Y+tEIfQv4BDk=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7284.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(19092799006)(1800799024)(38070700021)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?O0ytI7AZyrciu6CMm0DlP4aJJVDk/erFrBPNxsIhCMciyK22qwMh2+NODV4+?=
+ =?us-ascii?Q?VDPFM0QHAp9a5DYYm5yZ6otCQtHN2hqowwsOMDXdfuCtipM7zK0rlR6+VkxX?=
+ =?us-ascii?Q?q6NIUkqrKs4ZZ1TEBXZ8/rTu+tgD//k6qSOEly2x6lrEEShpuHEfjDSQP7qQ?=
+ =?us-ascii?Q?XzrTZyRM8wZTuOKQ4sr/KXe8SzRCKqDJF7iqojlO0j4oHnYGyc6lHoFcXVGM?=
+ =?us-ascii?Q?d3gLQVzl+BEEZLhCw+34sarP/h3FJBRchMnAt2o86eHEWNYZ0RU/3bn5iE5S?=
+ =?us-ascii?Q?6/RfrmEl7Dqyn3GUJwR2AnG43Ae26CzHubFSPz4uN0Dbo4yy/sH6clwLAncC?=
+ =?us-ascii?Q?Dt5K2wTQSM82cPy/WitpMSzk0o8XMLGl6HDjfd5RuzNMepo8izqihnOM3/bT?=
+ =?us-ascii?Q?Srj/A9RdqvNAE1CD+RFQ+FnankH0HmZ+JdJxnMOi23r5c0zHs53LF2dXizX5?=
+ =?us-ascii?Q?IUoqH04TNLWUaIvrBxZWFetbbUp4kpm3LtRT3P5Ylq274mTIS3mP+O9AFFht?=
+ =?us-ascii?Q?HLvjPqnT8TP0CX8HgtyBHX6HVTCcQY4oZqDNW+t2mutDic3dZzaVaJmE+Lrb?=
+ =?us-ascii?Q?BBAPGVOI2Q/7c0J8+0CUr5tOyHgPETsgWRY/44KY+SqcQayDHNX9Vt8ctGEk?=
+ =?us-ascii?Q?j93st4blaNV+eeN0d4lTRtSS6VdmOqu9cB9ulyGSobtgc1ZbvzmIBkpLyxIS?=
+ =?us-ascii?Q?5x7qvzk4vD9rNj2iURfWHLWz7/zMCRoFAHqGNF2G5Lj2gcwglkkpGftqS8RZ?=
+ =?us-ascii?Q?wM6+OuwwRN+RKTyoMvHu8HEM1C9P48Qrr2SSAXiO8QPVAyOGZ5YCaoZAMseZ?=
+ =?us-ascii?Q?bMgkNuYDiviFeK0T/qIhvpjXJINvT6R9HjXBTm5m7FcvrKAIy1ZU5xMTQPcf?=
+ =?us-ascii?Q?Cig7F5OkrHhrOXbjLKJWLUOvPrmK1AMQfXBZckLcs4kSA7SoQKYwZZr5cwX+?=
+ =?us-ascii?Q?1MZQKXz++GgPpyTi7oxmwHce8LzOhN2vOGpNCRWS4QFrbNlxJJSs3A1lUbA2?=
+ =?us-ascii?Q?Y07xZ8gNZBihwmGR5IC2HrxykdPmh7CHtEHJqVeMopKGynEVzCS6/kv5ec+1?=
+ =?us-ascii?Q?5R7IILcZ+IlonU6rAaIdP5UaErBxAalPHIk0JTkuX+DPu57exyTNOEEXlX5M?=
+ =?us-ascii?Q?ikk5Kx6AbtMHX1pOAevUkVFoNtYVFS04cYBqUCIV8G/SsoiNFoMxJHWSygji?=
+ =?us-ascii?Q?SYMRZt6F+soyf2JfB08++SJte2brauREpfo4MVtRuK91TUHq2FYOIT5cJgpU?=
+ =?us-ascii?Q?u5Gf2s7++G5A9NHecziBQhDJvLT5z6c8GLZ37QaSHIOBCrby1bsKIrBx5PRW?=
+ =?us-ascii?Q?IFnZ0U4SFdlEqxcqGuOgTL6nHy7+iGEj61pBCVKr/iPHdp/mx4Y/nVqIE99k?=
+ =?us-ascii?Q?obrtDJOIKmfu0pbcP/ku7aUD0swtPKkwaUsF3WiCe9tAsNy48XKl32ewzgS/?=
+ =?us-ascii?Q?bqAPDiLFxXauECwZPXJjsvqsrRzSOiN9VrzWjp7a8MABnAROZjfi72CPZSfZ?=
+ =?us-ascii?Q?raoRBAOg4Q03KiFlqoVAlaHnvWjfqfVwG2PfpcH6WtjSHLkfgcEqTyCNAsOg?=
+ =?us-ascii?Q?ZtgVXL9CJVzm9SxJMN4+FEgC26Bbv/NnWqoNGikXbI+H2oAMRva89PWPrXb4?=
+ =?us-ascii?Q?2qfZb7S7tAIVWW4eyq3Gcnrfj+nHkBbXQbQz9RUdAit3nIYw5gxn9wvx5aGg?=
+ =?us-ascii?Q?SGCT9sbDT+Ugqk7qPSs0iKEpRtnEkbAThTubgOtaz5JDDMr5?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 08/11] bpf,x86: Implement JIT support for
- stack arguments
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
- eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260405172626.1337674-1-yonghong.song@linux.dev>
- <e093e4d67ae569dd8183db5affaa8ec67c3d20c7b9a46c0f78a223041efc0921@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <e093e4d67ae569dd8183db5affaa8ec67c3d20c7b9a46c0f78a223041efc0921@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7284.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 625d27ad-1625-4a15-d1ac-08de952974c4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2026 04:44:01.7966
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +ajNQQSR+WPzqU/jbE6c9tNGSaSGqkgyTRlMgg+2ULq4a6z7wetqPdU9pA6SMcukns8jejYHO3QBi2zPQ6FEWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9212
 
+> Sashiko reports that enetc_ptp_parse() uses ptp_parse_header(), which
+> does not handle fragmented headers, and expects the entire area between
+> skb_mac_header() and the end of the PTP header to be linear.
 
+I think we should correct the check in ptp_parse_header().
 
-On 4/5/26 11:20 AM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 32864dbc2c4e..206f342a0ca0 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
-> [ ... ]
->
->> @@ -2449,6 +2529,41 @@ st:			if (is_imm8(insn->off))
->>   			}
->>   			if (!imm32)
->>   				return -EINVAL;
->> +
->> +			if (src_reg == BPF_PSEUDO_CALL && outgoing_stack_arg_depth > 0) {
->> +				s32 outgoing_base = -(prog_stack_depth + outgoing_stack_arg_depth);
->> +				int n_args = outgoing_stack_arg_depth / 8;
->> +
->> +				ip += push_stack_args(&prog, outgoing_base, n_args, 1);
->> +			}
->> +
->> +			if (src_reg != BPF_PSEUDO_CALL && insn->off > 0) {
->> +				/* Kfunc calls: arg 6 -> R9, args 7+ -> push. */
->> +				s32 outgoing_base = -(prog_stack_depth + outgoing_stack_arg_depth);
->> +				int kfunc_stack_args = insn->off;
->> +
->> +				stack_args = kfunc_stack_args > 1 ? kfunc_stack_args - 1 : 0;
->> +
->> +				/* Push args 7+ in reverse order */
->> +				if (stack_args > 0)
->> +					ip += push_stack_args(&prog, outgoing_base, kfunc_stack_args, 2);
->> +
->> +				/* mov r9, [rbp + outgoing_base] (arg 6) */
->> +				if (is_imm8(outgoing_base)) {
->> +					EMIT4(0x4C, 0x8B, 0x4D, outgoing_base);
->> +					ip += 4;
->> +				} else {
->> +					EMIT3_off32(0x4C, 0x8B, 0x8D, outgoing_base);
->> +					ip += 7;
->> +				}
->> +			}
->>   			if (priv_frame_ptr) {
->>   				push_r9(&prog);
->>   				ip += 2;
-> When priv_frame_ptr is active (private stack in use), R9 holds the
-> private frame pointer throughout the program. The existing push_r9 /
-> pop_r9 around calls preserves R9 across the function call.
->
-> With this new code, two issues arise when stack args and
-> priv_frame_ptr are both active.
->
-> For kfunc calls with stack args: the MOV R9, [rbp + outgoing_base]
-> overwrites the priv_frame_ptr in R9 with arg6 before push_r9 saves
-> it. After the call, pop_r9 restores arg6 into R9 instead of the
-> priv_frame_ptr, so subsequent BPF_REG_FP accesses (which map to R9
-> when priv_frame_ptr is set) would reference the wrong memory.
->
-> For both kfunc and BPF-to-BPF calls: push_r9 inserts an extra 8
-> bytes onto the stack between the pushed args and the CALL
-> instruction. The callee then sees the wrong values for its stack
-> arguments. For example, with a BPF-to-BPF call the callee's
-> incoming arg formula expects [rbp + 16] to be the first stack arg,
-> but instead it finds the caller's saved R9 value:
->
->      push_stack_args:  [RSP] = arg1, [RSP+8] = arg2
->      push_r9:          [RSP] = R9,   [RSP+8] = arg1, [RSP+16] = arg2
->      CALL:             [RSP] = ret,  [RSP+8] = R9 ...
->      callee prologue:  [rbp+16] = R9  (expected arg1)
->
-> Both priv_stack_mode and stack_arg_depth are set independently per
-> subprog in jit_subprogs(), so can this combination actually be
-> reached?
+@@ -130,7 +130,7 @@ struct ptp_header *ptp_parse_header(struct sk_buff *skb=
+, unsigned int type)
+        ptr +=3D ETH_HLEN;
 
-You are right. Similar to my previous comments, private stack will
-be disabled if outgoing stack arguments are not empty.
-
->
->> @@ -2458,6 +2573,14 @@ st:			if (is_imm8(insn->off))
->>   				return -EINVAL;
->>   			if (priv_frame_ptr)
->>   				pop_r9(&prog);
->> +			if (stack_args > 0) {
->> +				/* add rsp, stack_args * 8 */
->> +				EMIT4(0x48, 0x83, 0xC4, stack_args * 8);
->> +			}
->> +			if (src_reg == BPF_PSEUDO_CALL && outgoing_stack_arg_depth > 0) {
->> +				/* add rsp, outgoing_stack_arg_depth */
->> +				EMIT4(0x48, 0x83, 0xC4, outgoing_stack_arg_depth);
->> +			}
->>   			break;
->>   		}
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24006922024
-
+        /* Ensure that the entire header is present in this packet. */
+-       if (ptr + sizeof(struct ptp_header) > skb->data + skb->len)
++       if (ptr + sizeof(struct ptp_header) > skb->data + skb_headlen(skb))
+                return NULL;
