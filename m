@@ -1,66 +1,73 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f66.google.com (mail-oo1-f66.google.com [209.85.161.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E205E26158B;
-	Wed,  8 Apr 2026 01:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513CE192D8A
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 02:14:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775613195; cv=none; b=Jy6l74oNsakRpM3H425d6yXjCntwWN1AgGQd/EVCcDJcQtwNV9AifpZbIPKx9anG9n7cMXrnc642EeCuOBQ13lNvWleZIgBP7MS8MfLnzg64RimYw90nurthNjBHMQ1S8a4m+Wx+UJfy4oO/RY3gMJxbR7WJo72BvEjHWPiUQio=
+	t=1775614445; cv=none; b=bjvTx/ewRhc2uedDSWJLczCzQH4P7v6JQfAN+4CgVLA3ahY3QMa1+LSGnx36vCFgmysgr10sT8r/txyp4yAHzg1zHPOhlRryBwjmwvwwTpkXPhFiqBBllXVnBfxzVcR/crI2SxL34T6ly2h0u542uKs64jFv3aFVcwEusKsWuLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775613195; c=relaxed/simple;
-	bh=oot1CW3zYRijoApmfAfQNt+TN7eXzXttwWjkQW8Dj+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Iu9kHWH0V3wXt5KFoCJMlQ0gCnO3X3VZLs32XfLPffnbjYXkhcBiGz88cs1x00++63FMwcnW/6KtxWirP9SMLA70DZ3kiCr9PuJGJ7K+4knFrRKcJmaQjWcTXTf5q/iMHvpSvVklMEsPMXE8qzwO3Sfv/JaPyPNhjb8phk3+NRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DBcuVhjV; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1775614445; c=relaxed/simple;
+	bh=4fIZyyTzT8mZ0PmHVsfsEzOhp6rN2divLnBYb5IlV3c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LBQaIiV4wjuVKqFoTY/m4A+9Wv73I0SE6ETHIOqxIW/qZSlogaSjAum8dlu792CxEvmuoYuvEvgVGQsEkBeU/ctm71pxQ2oB1Ws6xUCQCFYq3VusXacIPSsn4bjJ/vwJk48wQ9ro2lThoX+Ins9+a8aOudm0mnrs1YhJoYfm8GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bvVqULJP; arc=none smtp.client-ip=209.85.161.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DBcuVhjV"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 637E2T4H2318761;
-	Wed, 8 Apr 2026 01:52:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=g6rj0ALg0UDdA6CH9K1KA8uNXSHO7JVCsZ60bnU6T
-	Ls=; b=DBcuVhjVQiucartfFEhvrV/7K6GhneHZMIpm/sFwhx+sLlFIu39ZyWCoa
-	JnC4G8gIdUv2L7GhI2vXRfnwJu0Wr21vC5P8c6ZoHI9kvyndWeIyrrfn+igLZoyp
-	5BBJW5GTXVdLyxWYFFNUjxZNgkoL6JHpHFzAMaBIvj9EaW0KAaNwQIl1Uf3uCR9a
-	DBgGDDZuv+N5wMH9ll94Yu6pTwU/jQSkA7Cgvw+aYoVrolMQDh+4IOkySKKmbE9p
-	O4VwrXRKDoucAjlUKUk5Hqm49tJuetDBb7aIk5+Qmue4b6cq2JmuujXdMd6mlYNd
-	vTg26xjJSk+9sD9FkGkPTXmshRYxQ==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dcn2fwv1n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Apr 2026 01:52:52 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63804vvj013827;
-	Wed, 8 Apr 2026 01:52:51 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dcmf45mw1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Apr 2026 01:52:51 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6381qlbC50594170
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 8 Apr 2026 01:52:47 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7FC1F20043;
-	Wed,  8 Apr 2026 01:52:47 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7395D20040;
-	Wed,  8 Apr 2026 01:52:45 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  8 Apr 2026 01:52:45 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, bpf@vger.kernel.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        Abhishek Dubey <adubey@linux.ibm.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] powerpc32/bpf: fix loading fsession func metadata using PPC_LI32
-Date: Wed,  8 Apr 2026 01:53:01 -0400
-Message-ID: <20260408055301.232745-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bvVqULJP"
+Received: by mail-oo1-f66.google.com with SMTP id 006d021491bc7-68481c9e067so1172408eaf.0
+        for <bpf@vger.kernel.org>; Tue, 07 Apr 2026 19:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775614443; x=1776219243; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+MX4Wgha+fJVUcuVPsjB/rcXKLTKIvJ3+Ck67aQgVbk=;
+        b=bvVqULJPrryfQ9oqUN4R2c8qC9LKPjdDBynlF2uO1TEeXSAUKvJztdGQvwU1GbTJzj
+         pJKcYlLp11ukJHnC6zwrfVN5CVV0SJnOsOc6JsN/bt0JDX1pb0qigYKbHR/wQ9X5RVqf
+         M+P4KVLTyQdGzod/kQP7v5TK6Gr+f1irGbZ7n0PbSu4esRarBBbi4kcMXTvWBVISpMJ1
+         CFIgS1ONN50zUC3mLJEnu4lOoahPzfUHt777bC0AOlAUeYwKU8toHQi4FGs7kFHk+qnN
+         YjSfZgiZuIFX2A9J+kBg30jGY0Gdc0Qhi2tmBj0CiHmGgLPq55Nn9pH8JYzhvOUY8wT4
+         3dow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775614443; x=1776219243;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+MX4Wgha+fJVUcuVPsjB/rcXKLTKIvJ3+Ck67aQgVbk=;
+        b=hntL277pFfdqgsltVgHprgflBNwGXHgzd6XGo6zD0QT+bEyZF+i0YRz/GpfxJD61kK
+         /nczZgOr8ZFsHB+aJ7JjH3qZ2jhPgizlk/cB3Bi87/cK+588QovFjjUFBeqz2s9F0EQZ
+         T8J48/Zwv9USJ0+r3oQb3AjB/8zMy/86G/wY90JHSFJxKMpFADNB5D8FtBUkpFilndhb
+         LynkGBvQ3KjG1G+iCXfGpqxHoxen8kWkZPYMobAauphFiuR8xDLYzYrZzYYmeiNyhlh9
+         qF9F3MOLPIrW3wCYjUx4SfZwENoPnGtTK96ejZoJEjWqQOD4WRcUONXSX7X7oTXeTn2Q
+         eRKw==
+X-Gm-Message-State: AOJu0YycdhSzr9oNKEETLYN4pRRulUAiT2t2mwaQ+svoLSnofLk/oMM/
+	Glvfe8u1lEBfNn0XaSY1rtXabqPXBtalwWk+5EN/6qQdwcUQA5TPe4u+m1Umgu9rbpA=
+X-Gm-Gg: AeBDieuJRzxHeI2JvlfFBmxOMSbJzYQYp/SjctvmZEwvujfCjtFOXNVxN3FnEUno0Ww
+	LUoZNNlDrNaycnrxLpWM4FBEg7JHQEOFri1SBIJrevJYJMwYf0w21yTzxPSvbWqBbE1zQQLsIAI
+	iTY6+Fkt+t7khTHf3EER4nejddIDI33Xtjc43tpbX03Q6EYVSoWSe3emMz7ZT8+oh/Ar+3Z8dNL
+	8zvHDVNuZk9T8F1xietZOWWE3IVGkKX5l/ce18No8KvAIzBfz69iZbMy15/xcEMvufNkBkArtuy
+	JEdbyX2AbM3NLKHiN2aLNvVYhFxuy3Je3K3AGvVGEicqdKGxABS74ICwsfYr5Z1S3sZrf7YTqTF
+	IIDeRLL9hX8Vaeq8N1bqSVu/znP4xkffqq8wm2+3dhC4dOScmSJkk2ZV3KQcvaC6ZwFFenxBOj/
+	b35UqUuqXy2H1AkMLlRTvYW3hSm1Lbh/qIYWP/1edTSDqV
+X-Received: by 2002:a05:6820:4b12:b0:67e:aa1:87fe with SMTP id 006d021491bc7-6821f382404mr9547450eaf.26.1775614442745;
+        Tue, 07 Apr 2026 19:14:02 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:49::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-680a882d978sm11142902eaf.10.2026.04.07.19.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Apr 2026 19:14:01 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/6] Add support to emit verifier warnings
+Date: Wed,  8 Apr 2026 04:13:51 +0200
+Message-ID: <20260408021359.3786905-1-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -68,66 +75,87 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3755; h=from:subject; bh=4fIZyyTzT8mZ0PmHVsfsEzOhp6rN2divLnBYb5IlV3c=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPqzmMu3lEX5BKiW7ds7At8rfepYLv9Y0WP53x5PaWHOBUu 2rJ1lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCK+1xn+1/+aJuZdoMpsyK01QaR5Sv 7PpXsZa9/l22s2qXwVPXxzOsP/yAuLW9RFd6qr3brQoM7/ic0kvdm3Y7Xo3OjsS/vnTSpmBwA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=FKArAeos c=1 sm=1 tr=0 ts=69d5b4f4 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8 a=VnNF1IyMAAAA:8
- a=6s7t5AJM6jSuhkjG0HUA:9
-X-Proofpoint-ORIG-GUID: OiNXJKwsFEvqySt0UQE1_8rzYoeh0oOf
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA4MDAxNCBTYWx0ZWRfX3fbnrFmako0t
- UyNKPX+solfhugp8ZoDS2xUWb8ZxkZRDb2YMrVg4Wz96sKT+YIfG58Pv7w6RbzvCpD5HJ2ZQbzN
- bNTlxoLu9qF24BLJSDujtM+/SftRr3y3gufK0Rx8q5OMCvmmUqVCcE/jCjN3ofP4bmnEB9nDx+d
- KI65UhEljcYpFjBZ7OrRcFysrDbH/DtQIHWOaSPV3+uFtSvx/vWRf1s6rJZasLr87RsUGMOZYrE
- IMK3s7QzA7zMt1t2SI0GOIQl8vX9fBofKRnpxZFEkrU7+4Y9Ja2PQRdHgtQxjiC8RdgcdvnIFFs
- nkJiXnWn4kCdVEv/Ggsu9/TWITJ2/R1MG+q5XwjstA9rwTRzICmulpUDrz5Bc5dksiTHYqoXUs/
- zV6UcHDA7+Okg06smAbNTrfpPI1ly/B3XVsE0eUiNPXKz2Hk2Cg6GC/TQaukG49g6+Cf9sxQPbj
- EHkETcZGCDHXkgi2Eng==
-X-Proofpoint-GUID: OiNXJKwsFEvqySt0UQE1_8rzYoeh0oOf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-08_01,2026-04-07_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 bulkscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604080014
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+Currently, there are only two ways of communicating information to the user
+when a program is verified, success or failure with a verbose verifier log.
+Some information is meant to be more discretionary, e.g. warning about use of
+kfuncs that are deprecated, and may be removed in future kernel releases.
 
-PPC_RAW_LI32 is not a valid macro in the PowerPC BPF JIT. Use PPC_LI32,
-which correctly handles immediate loads for large values.
-Fixes the build error introduced when adding fsession support on ppc32.
+An example is shown below.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202604040212.jIxEd2DW-lkp@intel.com/
-Fixes: 92258b5bf1ec ("powerpc32/bpf: Add fsession support")
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
-Need to apply on tp of powerpc -next, as this fixes a build error reported on that branch
+$ ./test_progs -t kfunc_implicit_args/test_kfunc_implicit_arg_legacy_impl -v
+...
+2: (b7) r3 = 0                        ; R3=0
+3: (85) call bpf_kfunc_implicit_arg_legacy_impl#114683
+kfunc_implicit_args.c:40 (insn #3) uses deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
+Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
+For older kernels, choose the correct kfunc using bpf_ksym_exists().
+4: R0=scalar()
+4: (95) exit
+...
 
- arch/powerpc/net/bpf_jit_comp32.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+With verbose logging, the deprecation warnings are printed inline in the
+verifier log. When no log level is chosen, the warning is printed in a
+block, as follows:
 
-diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
-index f3ae89e1d1d0..bfdc50740da8 100644
---- a/arch/powerpc/net/bpf_jit_comp32.c
-+++ b/arch/powerpc/net/bpf_jit_comp32.c
-@@ -150,11 +150,11 @@ void store_func_meta(u32 *image, struct codegen_context *ctx,
- 	 * func_meta := argument count in first byte + cookie value
- 	 */
- 	/* Store lower word */
--	EMIT(PPC_RAW_LI32(bpf_to_ppc(TMP_REG), (u32)func_meta));
-+	PPC_LI32(bpf_to_ppc(TMP_REG), (u32)func_meta);
- 	EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, func_meta_off));
- 
- 	/* Store upper word */
--	EMIT(PPC_RAW_LI32(bpf_to_ppc(TMP_REG), (u32)(func_meta >> 32)));
-+	PPC_LI32(bpf_to_ppc(TMP_REG), (u32)(func_meta >> 32));
- 	EMIT(PPC_RAW_STW(bpf_to_ppc(TMP_REG), _R1, func_meta_off + 4));
- }
- 
+libbpf: prog 'test_kfunc_implicit_arg_legacy_impl': -- BEGIN PROG LOAD WARNINGS --
+kfunc_implicit_args.c:40 (insn #3) uses deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
+Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
+For older kernels, choose the correct kfunc using bpf_ksym_exists().
+-- END PROG LOAD WARNINGS --
+
+The set was tested with and without kernel changes applied, so that we
+could conclude that libbpf feature detection works correctly and
+backwards compatibility is not violated on older kernels. Still, it
+would be helpful if other reviewers could recheck all assumptions and
+make sure I didn't miss any corner case.
+
+One case I need more opinions on: log_buf.c passes log_buf with
+log_level=0 and expects it to be empty, with newer libbpf that won't be
+true on older kernels anymore. I don't think this is something that
+needs to be addressed, but explicitly noting it here since I saw that
+test fail when testing new libbpf on older kernels. The kernel will now
+populate such log_buf will "processed N insns ..." log since on failure
+libbpf will retry with log_level=1, so unless applications are relying
+on log_buf to be empty for correctness it should be ok.
+
+Changelog:
+----------
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260329212534.3270005-1-memxor@gmail.com
+
+ * Use BTF tags and kfunc flags for deprecation warnings.
+ * Reuse verifier log to deliver log messages. (Alexei)
+ * Make the mechanism declarative without kfunc lists in verifier.c.
+
+Kumar Kartikeya Dwivedi (6):
+  bpf: Add support for verifier warning messages
+  bpf: Extract bpf_get_linfo_file_line
+  bpf: Make find_linfo widely available
+  bpf: Use KF_DEPRECATED to emit verifier warnings
+  bpf: Add __bpf_kfunc_replacement() annotation
+  libbpf: Flush verifier warning messages by default
+
+ include/linux/bpf.h                           |  3 +
+ include/linux/bpf_verifier.h                  |  1 +
+ include/linux/btf.h                           |  6 ++
+ include/linux/compiler_types.h                | 14 +++-
+ kernel/bpf/core.c                             | 66 ++++++++++++++++---
+ kernel/bpf/helpers.c                          | 24 ++++---
+ kernel/bpf/log.c                              | 49 +-------------
+ kernel/bpf/verifier.c                         | 60 ++++++++++++++++-
+ tools/lib/bpf/bpf.c                           |  5 +-
+ tools/lib/bpf/features.c                      | 56 ++++++++++++++++
+ tools/lib/bpf/libbpf.c                        | 20 ++++--
+ tools/lib/bpf/libbpf_internal.h               |  2 +
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  3 +-
+ 13 files changed, 233 insertions(+), 76 deletions(-)
+
+
+base-commit: 5c662b1c1789f51f79ee9c648681abc8410dfa81
 -- 
 2.52.0
 
