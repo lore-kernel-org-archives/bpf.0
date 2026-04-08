@@ -1,66 +1,66 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93733D47DE
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 15:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C473D525B
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 15:10:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775661044; cv=none; b=nP9YDyZOUXtonWcBgLl0uhynI3Vn0c6y+EK8IydmktvX+A8O6yGPYDa800/NDl8gAUxj9a5OTZORvA6z9sQuIfUdzQWVan391yOH4q3IopF8sXbueQtl51dfRIEKSUO8UTPF/odXZS2kmgiGj9kPkfAFVKgte14FIVTVCsn8SDw=
+	t=1775661046; cv=none; b=jaEEuzGU+iyL5J4uZj1AfCw6kTWtUi6uJFMKdvtpet/+91SwqpGnV+ajiAWMNZsmWVjHBD3kjcWnTHE76/ePcR1OI2OfIAncXBt5PCe7dNCUE+nPB1w1azxFc0qRBQokajwq0BHhF3y+BInumIQgZ10ECjyqlHjVembpY7fwfP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775661044; c=relaxed/simple;
-	bh=ZfjIVk3gAy/RUhCx6KVF5Tu7i2txth3CT4UEtNA5gyA=;
+	s=arc-20240116; t=1775661046; c=relaxed/simple;
+	bh=yjLaQEMTieHR7wobpATENYKpdO4CKpbIaMgWTNPOLkw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eO2a5GI6AirxjNs2mb/DkonFhJbkvEPcsQbz+UPAPKnYgKFwQx8AY/53fNktMrc4qKZXpJwBBtmE7sdVVkxo19g8CLLWhgkr0egoWraVQnR9ksZUsQRaLY80MoeTY+oiNPrE9NEeC8SronHidNvDX3Wd5ZTEmH4NQe3GXwpoDC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V0NAHjOo; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:To:Cc; b=n1XTn9yquNTDjg6rKIKMcU9fAGLHFPWRLIepdtH/ECJUlI5Wenv5ilvwczVm12Wcf4qDWSz4M3pU8N9XPSq6njSPwxW6sy1cbBMFwa1RMpMsYg3LqRWlWB3WNVzAxdP4FpbJNfqC6t6FiNKbaZPyZa0aq+b2H4aiRjBd61Dc8Tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L44Zkt4p; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V0NAHjOo"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488a29e6110so45801585e9.3
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 08:10:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L44Zkt4p"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43cf5ad500fso5455696f8f.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 08:10:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775661041; x=1776265841; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775661043; x=1776265843; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Lk33fD0ri0RiVAA2BTvKZbt9Cw8mFJBHq3pDdcyppGM=;
-        b=V0NAHjOo6BXom5IGcnl7jbYdw7EebtlsHPcLdLmQDK5HaJdxwg+NHnbAeDnffVq9lm
-         ZHnUoQyk7xltZUw97iWtlQ6maiPIOpH1/TPuuAQK+N5/Bgu0ATbNWN+LP7HdZuQePdZu
-         +wZypxpZmKJLWOp2RZPViQ39cleMGUCTomPeICGK0uv4SvumIyrKb7YidJnOcBvTkeYx
-         QOMLoZ8LiWczffp4ASjKBlIwxqjFPgexV+hHwBhh+qJZCnq40HzlcEruTaa847bsYDTt
-         Sx2D5VHw77+ee2xq3S3X9Vc0N2Kpo3ohLgXK9oiIcGj3fPbL9DvfgTtnQsGU6zTca7WZ
-         gP8w==
+        bh=a6bi0znCzlSlJ1i3IghZ0eFkdO54f8beoh46qg2lkMk=;
+        b=L44Zkt4pGuGxlN9BmbSmNEwkch5iqh6a/8ARNfB90/2EzFRkD3iT4QS21mEmpGuU0u
+         Af7FE/3oiXelqBXMIEs2GHluf0DTlVI2zmWUZ99htlVVr80QyF4OTc8mqNGld6TqmZUU
+         yzYrULf7uCxFayuN/xjq67lznzQsNKvFwaU9uE4ZBhqGPzAIqB5O82lDrLtsQyb9aWSG
+         hYP0CWVqAV25W9awo88Kiqa/ZuLCEltTASa6hyEfi90KqDMNW3+VEKt3Wj2Gl9dpcv5y
+         LV05tUNJLu86cbxsU7mbbKTtA0zFIP5BUUHnTtYH5ZPFGkcNqVj3kd9JCzCBZHfS8Ntm
+         6Hyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775661041; x=1776265841;
+        d=1e100.net; s=20251104; t=1775661043; x=1776265843;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Lk33fD0ri0RiVAA2BTvKZbt9Cw8mFJBHq3pDdcyppGM=;
-        b=G8Abntb9rYj9kjVXO/vEgF56M68Xzh5l1Mc/+vzWqWtPmUya0BGP8GoHriNJnQlc1/
-         uRJhJ9c09u7XGzM3RLrq9VlzBebpTlpPurkrkSmGHcfbvRH1Zsfnmi0NMQnADRE8BHDU
-         nUJ6hoSuOrLcnhVr82mMDTFjNo9vjFtpS1UokCr5tyKMgGyoaZvmL9XvDT6iGIkULLBt
-         y1hxO/5NOzHJvk3nXxVprWvKqw9+uy2Ct52+LpwDAQBZqgqPPyEKyfIPcM3z2ExN0/NN
-         zVuk0UFzAW/8IYM7IyK3LVALCApkLA3em1tN98bGLxZ5FjM1qyDzsAXzAwB27DC/MZEh
-         /oAA==
-X-Gm-Message-State: AOJu0Yw8mwZKFRF8J0QfvOvECF/5Z3jPlF8Yng1FAi++hfx7+yiTZcoo
-	go4A3M2o2zu6VzcgLoGlBzrgd6BLSZt46p0LLEsqASVcKeMxtEIPWrzN
-X-Gm-Gg: AeBDietRNpbW3vwdlmjGZlPWypUZF8oKJoectkpFJT5s2aDmxcPEmUPjZNAK+LIefdI
-	/OZrjwM6QJTI7Ui472MG1b5x2+lEuWBv9A21CaFdyM7qSsaT9tWZtsQsUn4yMIkxleA5LMogHFb
-	kM3rpmVNY7F6xMCkzNPMJUZsfK/jl4r2gW5rVq353leDRQZOX7NII+JrSfBBjG5Pw0hiCtk6iKy
-	ogUnszxNIrwYo0NZOLyAVWWtpdz3iLz8A/V0sYeCHGQXhQGwFBhhoECoNss9hQ78AF+ju2AbRvv
-	PcR7DVWU92IPbIDWB0G8itdBk+KmJcrYAwsu+3aGKtCBm+LFE3mOCalBxBtkRizwr6ctE2BTmri
-	n/UC5zwoKnH+sW2aAEwgmPlUnyhB1cZn4oJCCuud3Q+vdTB3sdQRQ4tgG4wZyCueDFjD/RrGiln
-	7o63vQEKilfMUhqw==
-X-Received: by 2002:a05:600c:8b75:b0:486:f634:ef1 with SMTP id 5b1f17b1804b1-4889978c516mr315675425e9.17.1775661041045;
-        Wed, 08 Apr 2026 08:10:41 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:75::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e9630ddsm650753445e9.13.2026.04.08.08.10.40
+        bh=a6bi0znCzlSlJ1i3IghZ0eFkdO54f8beoh46qg2lkMk=;
+        b=iMmSXRBGYzkFz3lL96RFOZhq7smyt59WKMpLrO88moGyfEEhM26zp/xRtHN70PM5tb
+         IkpLF8AsZNSO42LnR3oukJT5G1ITZdV0bLH1VXbEokHSZid1GdVc8N3qH7dtUmvSYiU+
+         j0To2AogfRXpRIpk8B7wIXbVpKrV2DMy2VGT3DdGlO3fcwdRVqnMl4NnuCCsD8yowCkR
+         Ix/cDe3hvJjAnsSw3nlrS3f6kDKePrahCvcm/8q+2q7B//SaY60Qm7JgAK4pwIjbcOKk
+         WNwxCSmFe/6QiDsYTosHyxEMn9BdTdVRBC2Zso2vn6ThG5BO2tula2MNqwlII86XwLPT
+         jlFA==
+X-Gm-Message-State: AOJu0YxnHrJOjJOcF0L8pUxzBJyRulpce7X1NZrWUcwUCiKc9LiKnwI/
+	8wttNckIi5r5iil8FN5Sw2rGP501F2DRlUVx1IvomA5SA4cFcxhPRCEd
+X-Gm-Gg: AeBDietT2ALCrM88eKftDXVka8nnJBU+7fH6je3KdL4d5/gfw3BwVxTLUgjZ1cTeRF7
+	mKKw/m7jxc/sgzZqBZ9p9GAT/OdXS7ghX2rNKwfHlkxsKEn6KJ/iMthtVEc/92tiiQ+dER7K4fC
+	hxA8aGLtbMHhaqYmhoffzgK8cu+tz9dM76+1zfjICldlqZXjqHzvJU8rWycpD806Vs9kHhwGuHs
+	/4EEtSmKcL37lR93L0Fc1zakLpcoGtM/72H+1SDlPH0m8fu8Zxi0juJ1v6H3VQKIiQocCjSWagj
+	bOEtKujobq4V9Ermot8TAJeZbanAl/pmANibhhzUqzmP/t44J8UZrIQrhitINUt5KYU2J+GV17V
+	xp9BSi0iatzTKCI4NotfhiKIrJQZCWoLh2c6RGNcTBxegZLFTzB188ar6Z0ksrV3qsGufRZOQm0
+	h0l4TBVf2CptozS242DtUqH5I=
+X-Received: by 2002:a05:6000:4387:b0:439:b3c5:ea1f with SMTP id ffacd0b85a97d-43d29298863mr31413062f8f.16.1775661042842;
+        Wed, 08 Apr 2026 08:10:42 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:6::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4e5890sm58112072f8f.31.2026.04.08.08.10.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 08:10:40 -0700 (PDT)
+        Wed, 08 Apr 2026 08:10:42 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 08 Apr 2026 08:10:10 -0700
-Subject: [PATCH RFC bpf-next v2 05/18] bpf: Implement get_next_key and
- free_internal_structs for resizable hashtab
+Date: Wed, 08 Apr 2026 08:10:11 -0700
+Subject: [PATCH RFC bpf-next v2 06/18] bpf: Implement bpf_each_rhash_elem()
+ using walk API
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260408-rhash-v2-5-3b3675da1f6e@meta.com>
+Message-Id: <20260408-rhash-v2-6-3b3675da1f6e@meta.com>
 References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
 In-Reply-To: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,120 +77,72 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  eddyz87@gmail.com, memxor@gmail.com, herbert@gondor.apana.org.au
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775661028; l=3086;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775661029; l=1776;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=swrrrgeeLBeoy5fNvkqUm0RNIBdMBZXGCZ/2PWSn44g=;
- b=blrxm6toiUVCUABFOLDu3edhmiFr7wHwXeII7nwZgMwnW8Qu1kFxwLEiXHoSV66Jn3HWXkQBK
- cHQwJBVk0L9Ag74bgrGcAAWZgXhBWRcgeK1zELBccDkR/VjaE59jJc5
+ bh=tO5/kLNmstrThUCW4HLHPHqYqd80qV17G5PZRXvEDhk=;
+ b=3wIRBIak/DtJDNeV3Ptw3HKPe5cPmV+c8e89191Q2cEbPRI/omp0gWVrQMmYvpdFZFOHyB2Rt
+ H+QpS8SDN0PAh/geYb4/YYeCKC6QWStkuyTaCLW2wt/GvcFVY7zL+64
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Implement rhtab_map_get_next_key() and rhtab_map_free_internal_structs()
-of the BPF resizable hashtable. Both are only called from syscall, so
-it's safe to use rhashtable walk API that uses spinlocks internally.
+rhashtable walk API takes spin_lock(&ht->lock) in start/stop,
+making it unsafe in NMI and hard IRQ contexts. Guard with
+!in_task() rather than open-coding raw RCU
+iteration that would need to handle resize races manually.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- kernel/bpf/hashtab.c | 78 +++++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 77 insertions(+), 1 deletion(-)
+ kernel/bpf/hashtab.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index ea7314cc3703..7eee450a321e 100644
+index 7eee450a321e..e79c194e2779 100644
 --- a/kernel/bpf/hashtab.c
 +++ b/kernel/bpf/hashtab.c
-@@ -2921,13 +2921,89 @@ static int rhtab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
- 	return insn - insn_buf;
- }
- 
-+/* Helper to get next element, handling -EAGAIN during resize */
-+static struct rhtab_elem *rhtab_iter_next(struct rhashtable_iter *iter)
-+{
-+	struct rhtab_elem *elem;
-+
-+	while ((elem = rhashtable_walk_next(iter))) {
-+		if (IS_ERR(elem)) {
-+			if (PTR_ERR(elem) == -EAGAIN)
-+				continue;
-+			return NULL;
-+		}
-+		return elem;
-+	}
-+
-+	return NULL;
-+}
-+
- static void rhtab_map_free_internal_structs(struct bpf_map *map)
- {
-+	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
-+	struct rhashtable_iter iter;
-+	struct rhtab_elem *elem;
-+
-+	if (!bpf_map_has_internal_structs(map))
-+		return;
-+
-+	/*
-+	 * An element can be processed twice if rhashtable resized concurrently.
-+	 * Special structs freeing handles duplicate cancel_and_free.
-+	 */
-+	rhashtable_walk_enter(&rhtab->ht, &iter);
-+	rhashtable_walk_start(&iter);
-+
-+	for (elem = rhtab_iter_next(&iter); elem; elem = rhtab_iter_next(&iter))
-+		bpf_map_free_internal_structs(map, rhtab_elem_value(elem, map->key_size));
-+
-+	rhashtable_walk_stop(&iter);
-+	rhashtable_walk_exit(&iter);
- }
- 
- static int rhtab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+@@ -3013,7 +3013,40 @@ static void rhtab_map_seq_show_elem(struct bpf_map *map, void *key, struct seq_f
+ static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t callback_fn,
+ 				void *callback_ctx, u64 flags)
  {
 -	return -EOPNOTSUPP;
 +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
 +	struct rhashtable_iter iter;
 +	struct rhtab_elem *elem;
-+	bool key_found;
-+	int ret = -ENOENT;
++	int num_elems = 0;
++	u64 ret = 0;
++
++	if (flags != 0)
++		return -EINVAL;
 +
 +	/*
-+	 * Hold RCU across enter_from + walk_start to prevent the
-+	 * element cached by enter_from from being freed before
-+	 * walk_start re-acquires RCU.
++	 * The rhashtable walk API uses spin_lock(&ht->lock) in rhashtable_walk_start/stop,
++	 * which is not safe in NMI or soft/hard IRQ context.
 +	 */
-+	guard(rcu)();
-+	rhashtable_walk_enter_from(&rhtab->ht, &iter, key, rhtab->params);
-+	key_found = key && iter.p;
-+	rhashtable_walk_start(&iter);
++	if (!in_task())
++		return -EOPNOTSUPP;
 +
-+	elem = rhtab_iter_next(&iter);
-+	if (elem) {
-+		memcpy(next_key, elem->data, map->key_size);
-+		ret = 0;
-+	}
-+
-+	rhashtable_walk_stop(&iter);
-+	rhashtable_walk_exit(&iter);
-+
-+	if (ret == 0 || key_found)
-+		return ret;
-+
-+	/* Key was not found restart from the beginning */
 +	rhashtable_walk_enter(&rhtab->ht, &iter);
 +	rhashtable_walk_start(&iter);
 +
-+	elem = rhtab_iter_next(&iter);
-+	if (elem) {
-+		memcpy(next_key, elem->data, map->key_size);
-+		ret = 0;
++	for (elem = rhtab_iter_next(&iter); elem;
++	     elem = rhtab_iter_next(&iter)) {
++		num_elems++;
++		ret = callback_fn((u64)(long)map,
++				  (u64)(long)elem->data,
++				  (u64)(long)rhtab_elem_value(elem, map->key_size),
++				  (u64)(long)callback_ctx, 0);
++		if (ret)
++			break;
 +	}
 +
 +	rhashtable_walk_stop(&iter);
 +	rhashtable_walk_exit(&iter);
-+	return ret;
++
++	return num_elems;
  }
  
- static void rhtab_map_seq_show_elem(struct bpf_map *map, void *key, struct seq_file *m)
+ static u64 rhtab_map_mem_usage(const struct bpf_map *map)
 
 -- 
 2.52.0
