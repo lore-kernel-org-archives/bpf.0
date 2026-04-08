@@ -1,40 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF03C3803DB;
-	Wed,  8 Apr 2026 10:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA4037F8C1;
+	Wed,  8 Apr 2026 10:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775644264; cv=none; b=ru+mvb0Pnk05qHtIBQ7xYn3aw5hoikZctMZhfRMYYFvHeVXjOdJe9a31y5yygKFF1bLkAMicHC6E0NvkdWdnKCsoVWR7m1u0ECpFfFtdIWgjSnOhD2ceg+W+u9bb+WPf/h/ovMG36eHaOkuIkU1umdErAb7kaGG+kPhGGm//sJ0=
+	t=1775644264; cv=none; b=BTC0SJn4lwEefuvJhDO00IrxzDvawL3mET+u1d52r+zuuUO6YmEeCtLYwr3mU2DGVZEuzp3/vOUd6pLA+lfeX7lnGMRFnLWtAXsNA6twsDNGdCaQfwkPLki0JIft7dyTkcRLhLc5ibjwkvKd+SWOgywe6aDaOjPCUvUfPvXHr5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775644264; c=relaxed/simple;
-	bh=bAnwf474ats9C/F39HbYDhQ2a4jRPfMKlAC7YLXpf48=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=H3ZD6B79R/e4vcNzhp91JGWDhfwtSMID9NT5ISa+B18HAqOfqAlMy2xKAKGJMU65aphs7AfDOjonmIGMQmG4KOkIaUsZ5Hr5JSEzAr5vcT8/dMbMnxmGVSwGIGE03Z8q4Mh+XI4b/kTXTaRw4w0pF7jm2nJDVwuDJre3DpZvens=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=C+cMLpeH; arc=none smtp.client-ip=82.195.75.108
+	bh=M6Z/Tdn7c7BqgfjwYfWVJYYwcQOst/cUM26rwVzEQLY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KMWDKAWewNhiRdKnSXbkbvgjF46FfVAkPO1RldwPyssjHUr4nj/o+a81smfbxfzRx/y+LywwyrdaG3/Unc+2cSymligQrqQ3HkjPYIK4Xyb7k6H2sRF42N41UZc1TRtx2oUfdlMEUx0bid7u6rzIkRA/rhTBGfY2a1v2xOUZ1Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=al6WyMBb; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="C+cMLpeH"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="al6WyMBb"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=sDEaI6Lvz2cvHsuIvdFPvtDt+pIQQFQmB6yzCWILEKA=; b=C+cMLpeHCPy4SaXJVMG8YGOQUu
-	P0DhuDnUMwQfDZ3sJnurAbPsn6+q/y4yGm880dL2jvaEyPHnzHFZ4lBWUAyX7ztrhsnlsjNyOPWC9
-	anGH1Zl7YuilENzpCTuWPG5T7CGrWx8bbbKBYye6AnvT/hnT/ENkXwG7/6H/+pkOQeucYc4K3FKlw
-	TDDtoljEpJb3vflEoMpLstHUxvVPLjM/kWrNRGNt8/eEAxQe2lesXapNay8c5RMR1lIk55nB561Hb
-	vT/EmvSrD8giJPPSEBTggKP3QjrPxcIMj67z+xWXl3Av/g2nJlHy8uJyJsibVlyv498JJnAnetZsu
-	9bqWK0aQ==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=2MF/al0VTf9Ca3kEu1gxRwO+cPEDevyh3csaP1pb6Q8=; b=al6WyMBbDmeCd4XwTRGacm29yD
+	mBVjM2DbKZREB6PnxRcTD6Cv7NupnzhFdAx8ZNF+4SuBtmGIeQHsku+7+FshzIFQ1gOoYQ4p0pSZ9
+	RBZwggtl+ooPM+IxBaw/sRxFfMm+GSV2EaBO2VQqkpPcprjF9TgsiqPpU8WaYT4YIZ9Mo8xIiyNNs
+	Ze0Q2um90kXD3IO2SAimeLM6WgK2HXPsai+bIl7pkkkiPjWs5gtpxb8tsmruuJCn4rloxEIiADeVs
+	1qboJQhSBoniHc5bQC+4LFEs2S/y1zNunvlUegAJJGbzFFYXWK7uYRwGIn0amLJM5HBIeYWHeSAYV
+	muAfxaUg==;
 Received: from authenticated user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wAQBV-008MEF-1y;
-	Wed, 08 Apr 2026 10:30:57 +0000
+	id 1wAQBH-008MD8-0b;
+	Wed, 08 Apr 2026 10:30:44 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Wed, 08 Apr 2026 03:30:31 -0700
-Subject: [PATCH net-next v3 3/4] af_packet: convert to getsockopt_iter
+Subject: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
+ buffers
+Date: Wed, 08 Apr 2026 03:30:28 -0700
+Message-Id: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,9 +44,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260408-getsockopt-v3-3-061bb9cb355d@debian.org>
-References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
-In-Reply-To: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+X-B4-Tracking: v=1; b=H4sIAEQu1mkC/22NwQqDMBAFfyXs2ZQkakRP/Y/Sg8ZdTQuJJKlYx
+ H8v2kMRen5vZlaIGCxGaNgKAWcbrXfQsDxjYMbWDchtDw0DJZQWMhd8wBS9efop8ZpyrVWJ2Js
+ OMgZTQLLLIbuBw8QdLgnu3yW+ugeatLv272hj8uF9dGd5EP8Ss+SC17IsyBBpqstrj51t3cWH4
+ TDP6scWQp5YxQXXUvakq0q2RCd227YP8znjUv0AAAA=
+X-Change-ID: 20260130-getsockopt-9f36625eedcb
 To: "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
@@ -57,102 +60,86 @@ Cc: io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, kernel-team@meta.com, 
  Breno Leitao <leitao@debian.org>
 X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2610; i=leitao@debian.org;
- h=from:subject:message-id; bh=bAnwf474ats9C/F39HbYDhQ2a4jRPfMKlAC7YLXpf48=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1i5N/OYD+4vKRcZXdFyIXfM++jE47P6zmYLkU
- CnNZ8f1jeiJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadYuTQAKCRA1o5Of/Hh3
- bccuD/wLiCk4QokKOoiqYW6cXyWar1nKhJh/kX3OVg8uz3cYNKNJDPXBmXcw+D+LQdWce2BQ2uf
- lYZ0PKEoyLK0c2M7Y/93z7lFPo2dDcZP8rGVkF2Ungwt6jRDIGgfS2b6Tw83+i8WOwOawkzKM8A
- buA9DWAskLI1M59IaXZp7LB1DSVHLD5vJ2BasoWpgyv7JghpF2HDkHxJYCiSI0ntoBN+YAIZaoU
- bq/u6LMbrb9rMPRgsPrf/yHlD5F2AVDs8UZz9r1cPH1IL4GvuY0yTqqjgQAQtyE1NYayxg3KC6F
- IUC8iaZqGkMqW0VJpdAg7VWNaQKj1vIgArrCqGFk1VAMIGA7UhQo3Y3lni2Ou94/YzmfuBgZVW4
- 85tj+SRc2TAB88WAeq+T+UF31YGHVLMvMzi/wE3+Sbo0LuNlWX1nOrhW13eRB0hSUJW9y++bZDk
- 3zgdIeJ27x+01lFTFzJ3Hlu4mRt/NKjAQqBcn+kfzxT1SCFrq8MCSyTGDQAsNh5EnDpR88x7cx4
- wfk59AY4hFtsNAaJ0eHpm4xnZK0zJ1/nzFwEn+d1aj9RScWEvgbPWUosEYPKZssF4/7t9w+x+Qz
- 0RKgVA+fIdXGClcRKtcCV+fTF9VvO8QQ9f8brfTwq6JAAZntQYHTg+n/e9XOx0CQ4Qe8ea6FSK/
- ehL1wzYBWpFqD2Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2592; i=leitao@debian.org;
+ h=from:subject:message-id; bh=M6Z/Tdn7c7BqgfjwYfWVJYYwcQOst/cUM26rwVzEQLY=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp1i5NB4KxGFOCospvSlH1oOL4casp2Cq1n2ERt
+ zqcV7+ImDCJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCadYuTQAKCRA1o5Of/Hh3
+ bfnREACMaTWL2KWmbRV8tUAqgEqg+U6UCZGINrli5yngBc0+ellIauUpYvegPq0cfPpPYVTBYp0
+ bf4QDbSYXfuv9cJFWEAEMg9PR4QJ1ItTt8y+xbuVQdd9o7YpvCXd/MWMwnQC1ibaSHyfO50pbGM
+ FpbZBJTEhVIm+I4bnRqR3HhHP7Rb1xecQqMkh9xVAI4RlRb9Km42nDeHeAjz1Pt1tANKH53CCat
+ 7KlYs2FGo+ynwze2rfue4m1agtkKf+Nmbr37I/elMiNgYnFTDp9AKwTtXPFVJuF1xYPiqNsoVuY
+ m66iKnSDQMZ458ZtmT5zcGStuwJx3Gz0uVt3K0+6V6pjk4lRmmA5r8DV1DUhFhCiIY8x+9N8ZYX
+ dwq1P9vMFtAA402121JI115gOVrQAezWwX24YxoSbWo4k8SmFxBSBRY6KbsIFTFEUKIlQ4AW7mQ
+ Oa4Fisz84Ydxe68db0NPSC6C2GsP5rsOQYtAL8298Zb6ovZZAKJLdzLNvI0q/vhV0muUHxIk7VM
+ sfjQMf2PigYiwoUc9BhiFh7OqlUxoaKcuXxQkdlmctq3ZioYijnF4t/QW+vDwNOF/N2bGok9Aud
+ tmHoYLWVbNHNcmakgl3A6AD9juho0AlpfEAlOrcrj0pSRlHDxGCXG8aEGSD/UmtX/siU6gn5wDh
+ S50PTlS6+NbUKaA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Convert AF_PACKET's getsockopt implementation to use the new
-getsockopt_iter callback with sockopt_t.
+Currently, the .getsockopt callback requires __user pointers:
 
-Key changes:
-- Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
-- Use opt->optlen for buffer length (input) and returned size (output)
-- Use copy_to_iter() instead of put_user()/copy_to_user()
-- For PACKET_HDRLEN which reads from optval: use opt->iter_in with
-  copy_from_iter() for the input read, then the common opt->iter_out
-  copy_to_iter() epilogue handles the output
+  int (*getsockopt)(struct socket *sock, int level,
+                    int optname, char __user *optval, int __user *optlen);
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
+This prevents kernel callers (io_uring, BPF) from using getsockopt on
+levels other than SOL_SOCKET, since they pass kernel pointers.
+
+Following Linus' suggestion [0], this series introduces sockopt_t, a
+type-safe wrapper around iov_iter, and a getsockopt_iter callback that
+works with both user and kernel buffers. AF_PACKET and CAN raw are
+converted as initial users, with selftests covering the trickiest
+conversion patterns.
+
+[0] https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/
+
+Updates from v2 to v3:
+
+* Use two iov in sockopt_t instead of a single one:
+  a) .iter_in that is populated by the caller and will be read-only in
+  the protocols callback.
+
+  b) .iter_out will be populated by the protocol and it will be sent
+  back to the caller.
+
+  - This will avoid changing the protocol reset and changing the data
+    source at the callback, making the driver callback implementation
+    and converstion saner.
+
+* created sockptr_to_sockopt() to convert sockptr to sockopt, making the
+  call to getsockopt_iter straight-forward
+
+Link: https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/ [0]
 ---
- net/packet/af_packet.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+Changes in v3:
+- Create Two iov in sockopt_t instead of a single one (Stanislav Fomichev)
+- Implement the sockptr_to_sockopt() helper (Stanislav Fomichev)
+- Link to v2: https://patch.msgid.link/20260401-getsockopt-v2-0-611df6771aff@debian.org
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index bb2d88205e5a6..1da78b6ad3d5f 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -49,6 +49,7 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <linux/ethtool.h>
-+#include <linux/uio.h>
- #include <linux/filter.h>
- #include <linux/types.h>
- #include <linux/mm.h>
-@@ -4051,7 +4052,7 @@ packet_setsockopt(struct socket *sock, int level, int optname, sockptr_t optval,
- }
- 
- static int packet_getsockopt(struct socket *sock, int level, int optname,
--			     char __user *optval, int __user *optlen)
-+			     sockopt_t *opt)
- {
- 	int len;
- 	int val, lv = sizeof(val);
-@@ -4065,8 +4066,7 @@ static int packet_getsockopt(struct socket *sock, int level, int optname,
- 	if (level != SOL_PACKET)
- 		return -ENOPROTOOPT;
- 
--	if (get_user(len, optlen))
--		return -EFAULT;
-+	len = opt->optlen;
- 
- 	if (len < 0)
- 		return -EINVAL;
-@@ -4115,7 +4115,7 @@ static int packet_getsockopt(struct socket *sock, int level, int optname,
- 			len = sizeof(int);
- 		if (len < sizeof(int))
- 			return -EINVAL;
--		if (copy_from_user(&val, optval, len))
-+		if (copy_from_iter(&val, len, &opt->iter_in) != len)
- 			return -EFAULT;
- 		switch (val) {
- 		case TPACKET_V1:
-@@ -4171,9 +4171,8 @@ static int packet_getsockopt(struct socket *sock, int level, int optname,
- 
- 	if (len > lv)
- 		len = lv;
--	if (put_user(len, optlen))
--		return -EFAULT;
--	if (copy_to_user(optval, data, len))
-+	opt->optlen = len;
-+	if (copy_to_iter(data, len, &opt->iter_out) != len)
- 		return -EFAULT;
- 	return 0;
- }
-@@ -4672,7 +4671,7 @@ static const struct proto_ops packet_ops = {
- 	.listen =	sock_no_listen,
- 	.shutdown =	sock_no_shutdown,
- 	.setsockopt =	packet_setsockopt,
--	.getsockopt =	packet_getsockopt,
-+	.getsockopt_iter =	packet_getsockopt,
- 	.sendmsg =	packet_sendmsg,
- 	.recvmsg =	packet_recvmsg,
- 	.mmap =		packet_mmap,
+Changes in v2:
+- Restore optlen even on error path (getsockopt_iter fails)
+- Move af_packet.c and can instead of netlink (given these are the most
+  complicate ones).
+- Link to v1: https://patch.msgid.link/20260130-getsockopt-v1-0-9154fcff6f95@debian.org
 
--- 
-2.52.0
+---
+Breno Leitao (4):
+      net: add getsockopt_iter callback to proto_ops
+      net: call getsockopt_iter if available
+      af_packet: convert to getsockopt_iter
+      can: raw: convert to getsockopt_iter
+
+ include/linux/net.h    | 23 +++++++++++++++++++++
+ net/can/raw.c          | 28 ++++++++++++--------------
+ net/packet/af_packet.c | 15 +++++++-------
+ net/socket.c           | 54 +++++++++++++++++++++++++++++++++++++++++++++++---
+ 4 files changed, 94 insertions(+), 26 deletions(-)
+---
+base-commit: 9c14d60a50c4b726a3613a02e8b74778e9964891
+change-id: 20260130-getsockopt-9f36625eedcb
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
