@@ -1,83 +1,129 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45071E5724
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 18:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664A03D9DA3
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 18:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775672018; cv=none; b=mO66/aKIbx21X53lm4nltwZj8/jfYgc9MaSXfdDDbiTHPs+gaJZ852TI3YLJDtEEEiktEifkB0GGPxNdYmEuK1PKbpyPO4bTZMIe0sVWeOdsXKYdybEMZ45CPZUcc+ZxoxJfYDpzXtykUQF0eBHf/msvvPrXysroJBvUArODmD8=
+	t=1775672403; cv=none; b=Y8xFGgV/Sos96C/KipdK2kchSP7qKxWl6Bsn+Oj5qcD+9YTInejfyBz027WliTUBivtGqHtNi6JmqFYcG9MfyzSCSVV/Z7tQ2ZZ6ZyZ8qOTUhv1m89ob1GO5FHa6BFVOzKRSA1YbVoV8VAavX9w7xO0ME/p/ZF2K9ZtO5mxJqXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775672018; c=relaxed/simple;
-	bh=eERDK8MrgRVFpt8EPs6mScv+NPAcz47BRTMWRwRaxO8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TETtTALvFAWUTwRa+o9P7XUrEIpFh0G0HHTP7xlktm7OjbFZm3hEcj/e5vD6Q890sYM8AS4j4xXufVN9Px0MZ96xmR5tVbGnNDMZEVrynO4SIGN39jpQ+5227oVjRdFIPRRF6LbPw/lWueRnAFj+tCBrsUqWUviL/dg1fPZoUZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fpqPtzxi; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775672403; c=relaxed/simple;
+	bh=QWyyjb8yrf7T4LkpQ/fS0bsphkrKWYfnmeHKmwhlNjM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aQqLCe38IZREmUpCxVHKW3wrtOvqaczWW9zDni6I7IskUMR7ntJc4b2QaQIiieg3U7h/7+ptS5PSVzjgPomSBiBJHOOGzoEBhTPm5Th5ARrK89stAiuevVORo2Ay9X5KUohdArqStGxStb9A+wPv5X08CEqYV8sYHEC0LBComlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZDp/B/s; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fpqPtzxi"
-Date: Wed, 8 Apr 2026 11:12:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775672003;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yvj5h4HHK3avmY1kaN9kSeAcx7M966IB/bsppq/wjeY=;
-	b=fpqPtzxiBAcO1LzeEqfVrmmPD1WZRWqf1D0cXahjB9nqdlirSLXRI2Ys4YaAnqzXLbr1Th
-	0h+Lzl0ZfAXzRyZDCXh4brASljnAAp1N0LGKGI61+84B+R3Q1hg+onnZ2O91Tz+baLn1UD
-	XqGfeuybvA2UDxCObG5jwffCDo3sm8c=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Jason Xing <kerneljasonxing@gmail.com>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	willemb@google.com, martin.lau@kernel.org, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, Jason Xing <kernelxing@tencent.com>, 
-	Yushan Zhou <katrinzhou@tencent.com>
-Subject: Re: [PATCH net-next v2 3/4] bpf-timestamp: keep track of the skb
- when wait_for_space occurs
-Message-ID: <20264818422.Ya8u.martin.lau@linux.dev>
-References: <20260404150452.83904-1-kerneljasonxing@gmail.com>
- <20260404150452.83904-4-kerneljasonxing@gmail.com>
- <willemdebruijn.kernel.2ff565d2f9e7f@gmail.com>
- <CAL+tcoB94=ptFB-acU3nAK_MqW74DV0MQUVvvV3nbQ7Zc6zSZw@mail.gmail.com>
- <willemdebruijn.kernel.27ec47b22b23c@gmail.com>
- <CAL+tcoAvVBN7juJEBt5-FYQ4eGTe7dYrFbR3CMOwguw=_X=btA@mail.gmail.com>
- <CAL+tcoCctfs=d9zz5ei1S999S94HmUDSToriZ8NJiLT8MmpQTA@mail.gmail.com>
- <willemdebruijn.kernel.1b49845d3acc7@gmail.com>
- <CAL+tcoBt1A5GYFvimkcRFUtmy298y13AiF-XFF8b8E8Y6fg8Xw@mail.gmail.com>
- <willemdebruijn.kernel.257654f9a3f23@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZDp/B/s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15481C4AF09
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 18:20:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775672403;
+	bh=QWyyjb8yrf7T4LkpQ/fS0bsphkrKWYfnmeHKmwhlNjM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PZDp/B/sp0vMV5vF2b1qu39xrSKO0SkoFzfiZGVngTU5HPADqjrucR6GiY/HhGsMT
+	 Ak7NEIvzB8HZ3Vo66tfHKKV84vVnQo9ZV93e5kuoAk5oiZr8pmTvnsjGR9pb0t3C2S
+	 JzzefvHFPoH77XqjXVMO2XWz+kMfXwkKOlc8fL9ZjqkcTOaH/1uE0cIILPgJaoZe+n
+	 2a60pvwx/DqN0PB3aOrNBsb+rBdH/zirkWhod5SdNXZzwKhVHMnSGgXQUAeyC0au4Q
+	 ysbljTp5wzjI6PKwUTpZrdfHcFApzeVDIhyschnFVQUxOWA3xzktWHjMAEe0b5Qx1b
+	 EpZ0Q+ujwBjtQ==
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-89cc68655f8so753206d6.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 11:20:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWTQuPDP1dPU5L8f4cBz7lYnO1bKpDNsBCkNX0R0bUBKoRkXz5k+9PESnrtRYnJDJmGnIs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu0Ie80dpMc3gOUkh2nZ7drLusk2jE9n1Jp/DsLWMpAaPwhsQf
+	nVDRjSRwrdKP7ZQ3EP3amZXRn3/gsCo3KCPJSCHg743O8umIpBMTFXCuTaUQ1OJgM7u6hRTy2Jk
+	p6xIpeK4HteM7RI6uO9JvJ+lL4Vjip1M=
+X-Received: by 2002:a05:6214:4699:b0:8a7:164c:d5c8 with SMTP id
+ 6a1803df08f44-8ac746bec7fmr8189476d6.24.1775672402156; Wed, 08 Apr 2026
+ 11:20:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <willemdebruijn.kernel.257654f9a3f23@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
+ <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
+ <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+ <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
+ <adQhpBC2W9I6QW-g@redhat.com> <CAPhsuW66tuF+QZ0pVheWb5sC4NQ-9CXikq=zMrPBXTHcsVPjdg@mail.gmail.com>
+ <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
+ <CALOAHbCxPA0dtsx7L2kYn8wwBdM=krZyOpfRTBiDW9qfA_zmzQ@mail.gmail.com>
+ <adUd0Mojbtrwmeod@pathway.suse.cz> <CALOAHbDG9mq1iJv5suct=cqJ+2r8VvJ-dXN=nuvMw0XYqnUjxA@mail.gmail.com>
+ <adY_WgA54CDtWBq6@pathway.suse.cz>
+In-Reply-To: <adY_WgA54CDtWBq6@pathway.suse.cz>
+From: Song Liu <song@kernel.org>
+Date: Wed, 8 Apr 2026 11:19:50 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW42WqGuZ1Z-RG0yzifZ7rh=XKUa5hKb6JxLeTWdc4s4-A@mail.gmail.com>
+X-Gm-Features: AQROBzDWe_vpf5f0DrH1BpfkbDrq31L-0Z60zRTstiTlWDjm9dqpqQwJLlcic4k
+Message-ID: <CAPhsuW42WqGuZ1Z-RG0yzifZ7rh=XKUa5hKb6JxLeTWdc4s4-A@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
+To: Petr Mladek <pmladek@suse.com>
+Cc: Yafang Shao <laoar.shao@gmail.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org, jikos@kernel.org, 
+	mbenes@suse.cz, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
+	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 08, 2026 at 11:15:09AM -0400, Willem de Bruijn wrote:
-> > Avoiding adding a new one makes the whole work extremely hard. I'm
-> > wondering since we have hwtstamp in shared info, why not add a
-> > software one for timestamping use? Then, we would support more
-> > different protocols in more different stages in a finer grain, which
-> > is a big coarse picture in my mind.
-> 
-> I don't understand the need to store more data in the skb for BPF.
+On Wed, Apr 8, 2026 at 4:43=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrote=
+:
+[...]
+> > >
+> > > This is weird semantic. Which livepatch tag would be allowed to
+> > > supersede it, please?
+> > >
+> > > Do we still need this category?
+> >
+> > It can be superseded by any livepatch that has a non-zero tag set.
+>
+> And this exactly the weird thing.
+>
+> A patch with the .replace flag set is supposed to obsolete all already
+> installed livepatches. It means that it should provide all existing
+> fixes and features.
+>
+> Now, we want to introduce a replace flag/set which would allow to
+> replace/obsolete only the livepatch with the same tag/set number.
+> And we want to prevent conflicts by making sure that livepatches with
+> different tag/set number will never livepatch the same function.
+>
+> Obviously, livepatches with different tag/set number could not
+> obsolete the same no-replace livepatch. They would need to livepatch
+> the same functions touched by the no-replace livepatch and would
+> conflict.
+>
+> So, I suggest to remove the no-replace mode completely. It should
+> not be needed. A livepatch which should be installed in parallel
+> will simply use another unique tag/set number.
 
-Adding a field specific to bpf timestamping is not scalable.
-There will always be other bpf use cases that need to store
-something in a skb.
+I think I see your point now. Existing code works as:
+- replace=3Dfalse doesn't replace anything
+- replace=3Dtrue replaces everything
 
-There have been discussions about storing metadata for a skb which should
-solve the general bpf use cases.
+If we assume false=3D0 and true=3D1, it is technically possible to define:
+- replace_set=3D0 doesn't replace anything
+- replace_set=3D1 replaces everything
+- replace_set=3D2+ only replace the same replace_set
 
-https://msgid.link/20260226-skb-local-storage-v1-0-4ca44f0dd9d1@cloudflare.com/
-https://msgid.link/20260110-skb-meta-fixup-skb_metadata_set-calls-v1-0-1047878ed1b0@cloudflare.com/
+This is probably a little too complicated.
 
-> 
-> With BPF hooks, the bpf program can record the relevant data directly
-> in a BPF map.
+> > This ensures backward compatibility: while a non-atomic-replace
+> > livepatch can be superseded by an atomic-replace one, the reverse is
+> > not permitted=E2=80=94an atomic-replace livepatch cannot be superseded =
+by a
+> > non-atomic one.
+>
+> IMHO, the backward compatibility would just create complexity and mess
+> in this case.
+
+Given that livepatch is for expert users, I think we can make this work
+without backward compatibility. But breaking compatibility is always not
+preferred.
+
+Thanks,
+Song
