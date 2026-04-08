@@ -1,254 +1,242 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFF53B27FF
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 09:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775641981; cv=pass; b=FpO41W3wVA3zP6fTsmMzZJ2yu1w8zoIYkZY8vbIqsFgQuo/oCwLnNYrWMNfpENrbM0DltZXkWhuT0VuPgvP9wzrRHpRv5+FOiypuYBgJ4lLuEMtypMzOExfJAGfylOsGocJb3sUFnHCk1zssIr2GyviVNk/QLPUMQ9Sh2LuWnJ0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775641981; c=relaxed/simple;
-	bh=DiOBvzXn2k6n9a145LIoiJCW3EofsmMXmzFBBf+tvgw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fCizQzMnZR/2Opo4Jy7IY3r06pTioCPy8C5aO3F1FdnSvuCuPonORYIaZ4TMmlPLz2fdkKf+Sj+meUCHLJ3ZskttxrxNBRNnqb3n2/lTZkwnlHiQB6AJu/6sqttpN/ce0fEOpZaZvzRw9k2C91I9mUWBhZAs9xRsug8KqFmGSvc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jzqYpXWZ; arc=pass smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F5B63B47C6
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 09:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775642260; cv=none; b=uaPQH9eAYbTmE6EFoUl6BoeD6JJDhlZ9grNSpyEiaGefP4vAV/Kw4TRiyop6XBzHbvFfVgz9JVvoyytgUcLz9IZDDTgAK8R+KsTSx8h/l4enD59B6l3tomO3xDIXZTCaelE8ntgqPF05pAGJsOAJcqr2OgOmqAntclUt86hYOEU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775642260; c=relaxed/simple;
+	bh=C9FG3DtWS19fzdQFs6EET2d8cyZQ21hc9YyvZv11zaE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=RAGf7l1p7y/as4DhxyPnDcwRCdjGI7kCO2I9yOZpa9wDR6vQ7SgHKqEYIBe9jyQfyANfQiO8gu0NSo6CvrwG4vMREq4QzyU54Kj8ZkFLbZUaFEWpfZlRS0vrV0kGXIsAbZHIjLpg/gjsGZNxeLEI+AezsIvw320XnKJPVbayS6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mayamatuszczyk.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VwqFZG2b; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mayamatuszczyk.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jzqYpXWZ"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82c20b9fb15so2633176b3a.3
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 02:52:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775641971; cv=none;
-        d=google.com; s=arc-20240605;
-        b=AtceJ9ZB5GQlpeVgsDZiVVLUBj6TJgBm+6Qx2E7n2uG0AO9DSjUoOFi7M2yOMUtf6w
-         +dRqC7SGcE8cbXVZmDQpHWeyLFGKymZlNu0PB0N3YEvK0UjyiLquALXiZ+Fsc4aDmwHs
-         f7DDVb0JzeRMff2ZtXdVWkKmBZVw22G3PX9rXQcW5iOKqKKKWg4ZMVItdVt2N3sK1EmW
-         cCNlw7J2oqSZs4h842pLNuxDhlgdba9kdKGtpAGcwfhBBsThoEKBIqgPsPRhXiGi1UuP
-         vIWzxli4aPxJcft1UlEKK6xwARTAlahKbCDeYgQVA+d9UAJAF0JMaj8KLVbRyoCoeRXq
-         h2IQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3fIcu+EE0T1FiQ924DbTOnU3rPRa0Ol5aKhZEtawreQ=;
-        fh=BujbVS9ld2oRrthowo7plPM7wg0A8Gm55SFUF4SsqBI=;
-        b=MytyGaInEt6oGyDeTtZ9i09GosFdAE3soYRBAOgPHNbDpwWmtmCPiEUT3ALy+AlN3L
-         y6MPOpfcI//2H60Oa3agnzuwID8CMsQtMu5jn60Lscka4FP9b3YHeDLsKP1QvEaa3EOb
-         KZOKyfqE86ooypsCfAYtOoPoyK3werVXobKgVL8AUUNMfgA22ZeXoFm88u1bmY7pvf5p
-         CvPYt1o+Tuj3NOTblg7tkxb4V7qWc7p+3I7XrIbPoglWOlqWVSl2tet/cldO4BO1PJ1z
-         T1beMQc/roSTTpX2GlC2YZNnhn9VDe4z7VjM4h+MZyddPmy+bGUQGLkG+yV9Bb4Kdj1m
-         NhNQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VwqFZG2b"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-66c73f6be2cso6506857a12.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 02:57:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775641971; x=1776246771; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3fIcu+EE0T1FiQ924DbTOnU3rPRa0Ol5aKhZEtawreQ=;
-        b=jzqYpXWZxD6ZIgregSuQpLcuyyA4irvM684KINoELf03kc1UQKp2uxzdo366bGyM0c
-         R28yiZjD6ErBf/6RqVkLHqe9d6YpOAopKPXMvWU64NmIBS1piWMx1AHCOLCtSfcDHNSb
-         ieLI/QLOwpyz4grdauhCkJyJ675El7g3SlysM4IuHuIcPEm3RXRKRxczX+VFy+qHQWKB
-         +Jq+4rIQLFXoka1zAfIpsPpKA8OrS/v9BNMGOmQGWqOvZch/REXiWdTzby4vM8UDvKnW
-         WBeb4pMasuOf96q3vQxuBtdeZRLmXFZkRj+Ep5auYWJtEf5zyu6lTJM8A2KwYAP+Z/LE
-         csmg==
+        d=google.com; s=20251104; t=1775642248; x=1776247048; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CzIbkkxlc3hTYE+O4JvgRtwb3OFAdaRiTNhNwoqT7Ec=;
+        b=VwqFZG2b2sBU+nuYlHRj4fdK0KPttZuRlzGIggApahQ2IZyQtWlNKNxnSgHleAWVt2
+         +d7POiPYp3ipyzJSMLafNOxbha+H1uLxc+HMlDdMvOSObOT9D0X1Ruwa3TFHfWq1f8Cp
+         nzpmMovfsEXDNLvqb4Ls0keJMzAB1xOGv4U0tecl+U+EEzky+hclDg7A4spuZB8XOnJB
+         25wyJcL1b+G7QdtglgF2myR0nIkKafLW8Pg869AFqJrD2RWWTh7vRTw7izBFg0wA7iM2
+         RExwyALpIuPz4UglLgYMF30VLFuj6kSFpmuc6VGvxf9QVBKwMS3FePcjfQZRUF7MIzls
+         psSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775641971; x=1776246771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3fIcu+EE0T1FiQ924DbTOnU3rPRa0Ol5aKhZEtawreQ=;
-        b=IpPgw7ZOn0ML+z38pMYcHVo1picp9U2P2BVb+rYPxWBVysJMl+sGxGguSlHvD0Vr9M
-         U9AaDcj/17fCjJtyTqdElHIwAoCCRYhfewulkIQfVVI+LBOmqcdOpzhikPpNsLkDQMmy
-         4GIvKO6xRHhXWnMh7L6LSfR59gsMZ08ludrwv/bQ8PlgxwTnqtqBBGOT43gtUD67PPI7
-         Z0yWWeUkljIVe95tFyWZf9TuMBSzfJ9mZQy0kbPWnLyYAj3ZT4y3m3VmCCbeo9ccNcgt
-         OuCgktY6Gd2mUQqjnEXFaoEEmJ1/PzHW9q5idKdreDWDrr7IXLtkAiR88XCJRTezWn2M
-         0znw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbVJhf9wZv8keMiX3EFnaHNOcQq+ZMdjPyAtypxivUrJ0Of58Kr4Q5VRlJVlG+ghq5bK4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDABQK7FPVfPcZB50ZC/sNeFQfmFbPfF7Vg5YkAoTHhgXxfbFh
-	DuMZ8aufq9wlQxTz5gBiwxFBkblrhos6EG3AswmwGEL7JwgI9OSK6Gdcddzd8CcxG2ZvRhZRvdr
-	cjgFPPR3c7NcQAvvO0PIuXvOrPHqyEto=
-X-Gm-Gg: AeBDieta5YOGqb728btBlEhCwHR3AQL54CsjwuFnFlTY8V9D0R2yas06ykPihmiYhfU
-	8jc85Z07r28YM4fsWPvmHiYSUpuqiWbgh6FPIbPxCsZjsbMBJdOVDul/KPc3nkEHyTj8JT095pH
-	s6xharFzt1umqvGAQiQEYGBHYMIF9Q2YDU7mOmQlRLTkJPBWTBsWR7wXYLCWhvDnWCdW2N32GE3
-	TUQSVFSjYA230GyFums5dxF9qWxHzunqfkI6fYfjb2VtPvPsGGFmz4DfFZ2caruhJxtRnqnXr7Y
-	uB6Qa5kbIWLw+uBz
-X-Received: by 2002:a05:6a00:22c4:b0:82c:9897:70ef with SMTP id
- d2e1a72fcca58-82d0db50dd2mr22552204b3a.27.1775641971270; Wed, 08 Apr 2026
- 02:52:51 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775642248; x=1776247048;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CzIbkkxlc3hTYE+O4JvgRtwb3OFAdaRiTNhNwoqT7Ec=;
+        b=IRsB9unt3VqUMDF7zAljDux0/Ke0QJJnApECiGvGGarv65H//v1IQuPePbl018mPWD
+         PDpRvJEM2A3QjYL32C5SlJTMxkQSXQHmH5C1xgMFPGckVRZOdIztT4a6LyT2b0ujqxy/
+         dgVorp5xJq3lwF6tPITiUO3bKq+XTTUp7chfCOOhk9VyH6p8g24qHC3I8q0/CXeej0O7
+         GBFlbKh30zMd3Q9I5ffaG4Yx8ZT8zNeeAxvOXEw/Fxv7goZLnaVwMEt/H8VJNiHv8jJ4
+         ebRPQKzGKv5P6Yo11d6WALafCDl0QF6dj7xh/kjN2Kr/SLDu5bjlTKBWRNqnWTIQe+Qq
+         k2iw==
+X-Forwarded-Encrypted: i=1; AJvYcCVqFu+i3Fx8ORHQKPrQKeuCvR4xvsRvaft9mdMbUMxzrCqdVvCu+D2K/HoFkrdE62PlKfo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwfR3WzXmhvsdY+4NZksYf0xARzmNu3u7xHOotJUVgJ6zy9IV8
+	SHUHf0GcBB56m0Cz3j/tT8SDko67rAW167xCJgmkcxn8LkxdD2xZtRWZ3koFO6QSNjDY7GIGICE
+	H6eYQCjirc6MUolRyOulsKd50RLZp2otSxPtURg==
+X-Received: from edql23.prod.google.com ([2002:aa7:c317:0:b0:66b:f774:b985])
+ (user=mayamatuszczyk job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:a2d4:10b0:66e:4372:8cfa with SMTP id 4fb4d7f45d1cf-66e43728e1fmr6413850a12.28.1775642248103;
+ Wed, 08 Apr 2026 02:57:28 -0700 (PDT)
+Date: Wed,  8 Apr 2026 09:57:10 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260408031416.266229-1-dongml2@chinatelecom.cn> <20260408031416.266229-2-dongml2@chinatelecom.cn>
-In-Reply-To: <20260408031416.266229-2-dongml2@chinatelecom.cn>
-From: Chengkaitao <pilgrimtao@gmail.com>
-Date: Wed, 8 Apr 2026 17:52:39 +0800
-X-Gm-Features: AQROBzBWrwE0tidToGSaPJyd1qaAblMjT1eQpeAJuW6o7uECXoh1pYXrsJLBqT4
-Message-ID: <CAAWJmAbhbD68JmFFwL5HLPMVaJyGi1w7hK6t84+DL-snQ+ASmQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] bpf: add missing fsession to the verifier log
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org, 
-	emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.1213.gd9a14994de-goog
+Message-ID: <20260408095710.4090495-1-mayamatuszczyk@google.com>
+Subject: [PATCH bpf] selftests/bpf: Run test_perf_branches more than 1 time
+From: Maya Matuszczyk <mayamatuszczyk@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Matt Bobrowski <mattbobrowski@google.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Maya Matuszczyk <mayamatuszczyk@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 8, 2026 at 11:16=E2=80=AFAM Menglong Dong <menglong8.dong@gmail=
-.com> wrote:
->
-> The fsession attach type is missed in the verifier log in
-> check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
-> Update them to make the verifier log proper. Meanwhile, update the
-> corresponding selftests.
->
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> ---
->  kernel/bpf/verifier.c                               | 8 ++++----
->  tools/testing/selftests/bpf/prog_tests/exceptions.c | 8 ++++----
->  tools/testing/selftests/bpf/verifier/sleepable.c    | 2 +-
->  3 files changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 594260c1f382..707eaf262307 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+test_perf_branches bpf program was only being ran once, and
+perf_branches test would fail if the only sample that was passed to
+test_perf_branches didn't have branch data.
+Fix those failures by running it a few more times and waiting until a valid
+sample shows up, and leave the perf event only enabled for the duration of
+test spins.
 
-Some comments in bpf_check_attach_target still need to be added or updated.
+Signed-off-by: Maya Matuszczyk <mayamatuszczyk@google.com>
+---
+ .../selftests/bpf/prog_tests/perf_branches.c  | 57 +++++++++++++------
+ .../selftests/bpf/progs/test_perf_branches.c  | 11 ++--
+ 2 files changed, 43 insertions(+), 25 deletions(-)
 
-Reviewed-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_branches.c b/tools/testing/selftests/bpf/prog_tests/perf_branches.c
+index 0a7ef770c487..1dcb7c70f545 100644
+--- a/tools/testing/selftests/bpf/prog_tests/perf_branches.c
++++ b/tools/testing/selftests/bpf/prog_tests/perf_branches.c
+@@ -15,10 +15,6 @@ static void check_good_sample(struct test_perf_branches *skel)
+ 	int pbe_size = sizeof(struct perf_branch_entry);
+ 	int duration = 0;
+ 
+-	if (CHECK(!skel->bss->run_cnt, "invalid run_cnt",
+-		  "checked sample validity before prog run"))
+-		return;
+-
+ 	if (CHECK(!skel->bss->valid, "output not valid",
+ 		 "no valid sample from prog"))
+ 		return;
+@@ -49,10 +45,6 @@ static void check_bad_sample(struct test_perf_branches *skel)
+ 	int written_stack = skel->bss->written_stack_out;
+ 	int duration = 0;
+ 
+-	if (CHECK(!skel->bss->run_cnt, "invalid run_cnt",
+-		  "checked sample validity before prog run"))
+-		return;
+-
+ 	if (CHECK(!skel->bss->valid, "output not valid",
+ 		 "no valid sample from prog"))
+ 		return;
+@@ -73,7 +65,6 @@ static void test_perf_branches_common(int perf_fd,
+ 	bool detached = false;
+ 	struct bpf_link *link;
+ 	volatile int j = 0;
+-	cpu_set_t cpu_set;
+ 
+ 	skel = test_perf_branches__open_and_load();
+ 	if (CHECK(!skel, "test_perf_branches_load",
+@@ -85,19 +76,35 @@ static void test_perf_branches_common(int perf_fd,
+ 	if (!ASSERT_OK_PTR(link, "attach_perf_event"))
+ 		goto out_destroy_skel;
+ 
+-	/* generate some branches on cpu 0 */
+-	CPU_ZERO(&cpu_set);
+-	CPU_SET(0, &cpu_set);
+-	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
+-	if (CHECK(err, "set_affinity", "cpu #0, err %d\n", err))
++	err = ioctl(perf_fd, PERF_EVENT_IOC_RESET, 0);
++	if (CHECK(err == -1, "perf event reset", "ioctl err %d", errno))
+ 		goto out_destroy;
+ 
+-	/* Spin the loop for a while by using a high iteration count, and by
+-	 * checking whether the specific run count marker has been explicitly
+-	 * incremented at least once by the backing perf_event BPF program.
++	err = ioctl(perf_fd, PERF_EVENT_IOC_REFRESH, 10);
++	if (CHECK(err == -1, "perf event refresh", "ioctl err %d", errno))
++		goto out_destroy;
++
++	/* Make up a bunch of branch events until we time out or bpf prog sets a flag
++	 * that it caught a valid event. To be completely sure that required_size_out,
++	 * written_stack_out or written_global_out writes and reads won't get
++	 * reordered by anyone in a way that would fail this test, use atomic
++	 * operations
+ 	 */
+-	for (i = 0; i < 100000000 && !*(volatile int *)&skel->bss->run_cnt; ++i)
++	for (i = 0; i < 100000000; ++i) {
++		/* This technically should be an atomic load with acquire
++		 * ordering, but we don't want to clog up memory bus while
++		 * spinning
++		 */
++		if (READ_ONCE(skel->bss->valid) > 0)
++			break;
+ 		++j;
++	}
++
++	__atomic_thread_fence(__ATOMIC_ACQUIRE);
++
++	err = ioctl(perf_fd, PERF_EVENT_IOC_DISABLE, 0);
++	if (CHECK(err == -1, "perf event disable", "ioctl err %d", errno))
++		goto out_destroy;
+ 
+ 	test_perf_branches__detach(skel);
+ 	detached = true;
+@@ -121,6 +128,7 @@ static void test_perf_branches_hw(void)
+ 	attr.size = sizeof(attr);
+ 	attr.type = PERF_TYPE_HARDWARE;
+ 	attr.config = PERF_COUNT_HW_CPU_CYCLES;
++	attr.disabled = 1;
+ 	attr.freq = 1;
+ 	attr.sample_freq = 1000;
+ 	attr.sample_type = PERF_SAMPLE_BRANCH_STACK;
+@@ -162,6 +170,7 @@ static void test_perf_branches_no_hw(void)
+ 	attr.size = sizeof(attr);
+ 	attr.type = PERF_TYPE_SOFTWARE;
+ 	attr.config = PERF_COUNT_SW_CPU_CLOCK;
++	attr.disabled = 1;
+ 	attr.freq = 1;
+ 	attr.sample_freq = 1000;
+ 	pfd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FLAG_FD_CLOEXEC);
+@@ -175,6 +184,18 @@ static void test_perf_branches_no_hw(void)
+ 
+ void test_perf_branches(void)
+ {
++	int err, duration = 0;
++	cpu_set_t cpu_set;
++
++	/* Pin ourselves to cpu0 so that all branches we generate would be
++	 * also on cpu0
++	 */
++	CPU_ZERO(&cpu_set);
++	CPU_SET(0, &cpu_set);
++	err = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &cpu_set);
++	if (CHECK(err, "set_affinity", "cpu #0, err %d\n", err))
++		return;
++
+ 	if (test__start_subtest("perf_branches_hw"))
+ 		test_perf_branches_hw();
+ 	if (test__start_subtest("perf_branches_no_hw"))
+diff --git a/tools/testing/selftests/bpf/progs/test_perf_branches.c b/tools/testing/selftests/bpf/progs/test_perf_branches.c
+index 05ac9410cd68..9806414cebc4 100644
+--- a/tools/testing/selftests/bpf/progs/test_perf_branches.c
++++ b/tools/testing/selftests/bpf/progs/test_perf_branches.c
+@@ -8,7 +8,6 @@
+ #include <bpf/bpf_tracing.h>
+ 
+ int valid = 0;
+-int run_cnt = 0;
+ int required_size_out = 0;
+ int written_stack_out = 0;
+ int written_global_out = 0;
+@@ -25,13 +24,11 @@ int perf_branches(void *ctx)
+ 	__u64 entries[4 * 3] = {0};
+ 	int required_size, written_stack, written_global;
+ 
+-	++run_cnt;
+-
+ 	/* write to stack */
+ 	written_stack = bpf_read_branch_records(ctx, entries, sizeof(entries), 0);
+ 	/* ignore spurious events */
+ 	if (!written_stack)
+-		return 1;
++		return 0;
+ 
+ 	/* get required size */
+ 	required_size = bpf_read_branch_records(ctx, NULL, 0,
+@@ -40,14 +37,14 @@ int perf_branches(void *ctx)
+ 	written_global = bpf_read_branch_records(ctx, fpbe, sizeof(fpbe), 0);
+ 	/* ignore spurious events */
+ 	if (!written_global)
+-		return 1;
++		return 0;
+ 
+ 	required_size_out = required_size;
+ 	written_stack_out = written_stack;
+ 	written_global_out = written_global;
+-	valid = 1;
++	__atomic_add_fetch(&valid, 1, __ATOMIC_RELEASE);
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ char _license[] SEC("license") = "GPL";
+-- 
+2.53.0.1213.gd9a14994de-goog
 
-> @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifier_=
-env *env)
->
->         if (type =3D=3D BPF_PROG_TYPE_TRACING) {
->                 if (!bpf_prog_has_trampoline(env->prog)) {
-> -                       verbose(env, "func %s#%d supported only for fentr=
-y/fexit/fmod_ret programs\n",
-> +                       verbose(env, "func %s#%d supported only for fentr=
-y/fexit/fsession/fmod_ret programs\n",
->                                 func_id_name(func_id), func_id);
->                         return -ENOTSUPP;
->                 }
-> @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier_l=
-og *log,
->         btf =3D tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
->         if (!btf) {
->                 bpf_log(log,
-> -                       "FENTRY/FEXIT program can only be attached to ano=
-ther program annotated with BTF\n");
-> +                       "FENTRY/FEXIT/FSESSION program can only be attach=
-ed to another program annotated with BTF\n");
->                 return -EINVAL;
->         }
->         t =3D btf_type_by_id(btf, btf_id);
-> @@ -25686,7 +25686,7 @@ int bpf_check_attach_target(struct bpf_verifier_l=
-og *log,
->         case BPF_TRACE_RAW_TP:
->                 if (tgt_prog) {
->                         bpf_log(log,
-> -                               "Only FENTRY/FEXIT progs are attachable t=
-o another BPF prog\n");
-> +                               "Only FENTRY/FEXIT/FSESSION progs are att=
-achable to another BPF prog\n");
->                         return -EINVAL;
->                 }
->                 if (!btf_type_is_typedef(t)) {
-> @@ -25952,7 +25952,7 @@ static int check_attach_btf_id(struct bpf_verifie=
-r_env *env)
->         }
->
->         if (prog->sleepable && !can_be_sleepable(prog)) {
-> -               verbose(env, "Only fentry/fexit/fmod_ret, lsm, iter, upro=
-be, and struct_ops programs can be sleepable\n");
-> +               verbose(env, "Only fentry/fexit/fsession/fmod_ret, lsm, i=
-ter, uprobe, and struct_ops programs can be sleepable\n");
->                 return -EINVAL;
->         }
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/=
-testing/selftests/bpf/prog_tests/exceptions.c
-> index 84ab73e08b0e..94a62fcd4543 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-> @@ -128,7 +128,7 @@ static void test_exceptions_success(void)
->                                        bpf_program__fd(skel->progs.except=
-ion_ext_mod_cb_runtime),
->                                        "exception_cb_mod"), "set_attach_t=
-arget"))
->                                 goto done;
-> -               }), "FENTRY/FEXIT programs cannot attach to exception cal=
-lback", 0);
-> +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to exce=
-ption callback", 0);
->
->         if (test__start_subtest("throwing fentry -> exception_cb"))
->                 RUN_EXT(-EINVAL, true, ({
-> @@ -138,7 +138,7 @@ static void test_exceptions_success(void)
->                                        bpf_program__fd(skel->progs.except=
-ion_ext_mod_cb_runtime),
->                                        "exception_cb_mod"), "set_attach_t=
-arget"))
->                                 goto done;
-> -               }), "FENTRY/FEXIT programs cannot attach to exception cal=
-lback", 0);
-> +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to exce=
-ption callback", 0);
->
->         if (test__start_subtest("non-throwing fexit -> exception_cb"))
->                 RUN_EXT(-EINVAL, true, ({
-> @@ -148,7 +148,7 @@ static void test_exceptions_success(void)
->                                        bpf_program__fd(skel->progs.except=
-ion_ext_mod_cb_runtime),
->                                        "exception_cb_mod"), "set_attach_t=
-arget"))
->                                 goto done;
-> -               }), "FENTRY/FEXIT programs cannot attach to exception cal=
-lback", 0);
-> +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to exce=
-ption callback", 0);
->
->         if (test__start_subtest("throwing fexit -> exception_cb"))
->                 RUN_EXT(-EINVAL, true, ({
-> @@ -158,7 +158,7 @@ static void test_exceptions_success(void)
->                                        bpf_program__fd(skel->progs.except=
-ion_ext_mod_cb_runtime),
->                                        "exception_cb_mod"), "set_attach_t=
-arget"))
->                                 goto done;
-> -               }), "FENTRY/FEXIT programs cannot attach to exception cal=
-lback", 0);
-> +               }), "FENTRY/FEXIT/FSESSION programs cannot attach to exce=
-ption callback", 0);
->
->         if (test__start_subtest("throwing extension (with custom cb) -> e=
-xception_cb"))
->                 RUN_EXT(-EINVAL, true, ({
-> diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/tes=
-ting/selftests/bpf/verifier/sleepable.c
-> index 1f0d2bdc673f..c2b7f5ebf168 100644
-> --- a/tools/testing/selftests/bpf/verifier/sleepable.c
-> +++ b/tools/testing/selftests/bpf/verifier/sleepable.c
-> @@ -85,7 +85,7 @@
->         .expected_attach_type =3D BPF_TRACE_RAW_TP,
->         .kfunc =3D "sched_switch",
->         .result =3D REJECT,
-> -       .errstr =3D "Only fentry/fexit/fmod_ret, lsm, iter, uprobe, and s=
-truct_ops programs can be sleepable",
-> +       .errstr =3D "Only fentry/fexit/fsession/fmod_ret, lsm, iter, upro=
-be, and struct_ops programs can be sleepable",
->         .flags =3D BPF_F_SLEEPABLE,
->         .runs =3D -1,
->  },
-> --
-> 2.53.0
->
->
-
-
---=20
-Yours,
-Chengkaitao
