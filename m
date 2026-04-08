@@ -1,66 +1,66 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4BE3D5256
-	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 15:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4975B3D5666
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 15:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775661047; cv=none; b=TlbqczJwcaYM5jmfIr4rHfrYIW3xij5Xa+TsxEv87NjkM/lDSfKzwuREP94vI5eOo/ngAfGz+/VLkUPPCsRDLh/3hHgD/JtyiA4YCjEV05U5052a2QSfS2pmGvie+pg10Ft5v8ViZRaTgdfVXVQYWAMOJiwGQyOGHyZd0BHe1Sk=
+	t=1775661049; cv=none; b=aJBl9Ms94vE0QmAIcsYkbBLdL2CltvvBznjU689kCFgB9pRkHlZM6stOLtPTkBpfcuzt1E/zMLtVic65wuyQPZaLB3R0YXQekjp8grIsa+wS6TgBCxOmzWafnl7b+PoU5WkNNlk0Hrbs9qf9bStYCKlWn2hikfHwPGJFcCjt/3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775661047; c=relaxed/simple;
-	bh=gaP5ySj7h+SnFOzS6pB9gOxtSDtqw+ztxk7Tc6gq3KU=;
+	s=arc-20240116; t=1775661049; c=relaxed/simple;
+	bh=SPIrdCaJryCy0xmLCDDtOlDU/xkvzcpdEYm9GOS6jnI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=phZwW1+dATQ7MoItBjpf5pUwK0A50qL8dQGjb6Qa+CgRXBuQpBjb9etSd83D2f3Z2flt88QcwQ//NEe9Hz5epOc3Z/BelxkUu4hlxCcQUVq1kuS/mDihMM91Gu1e6tBXhbeie8cvQbqyG9qTg2AKC3zLR7HzorHodF5HTgrQsR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OFKCVhd1; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:To:Cc; b=LLiaDn10vkvoVW9rZxSUFRPxAbomeWcftoJjVQ7n7Iu5NeSpLk6oSENsRNGQfUhp86v8Zgj8CLk2+VEfiaF9g0N00+YRZPjI+z7NIXR0AIuEP8+yEJB0vCJitUSMp6Go5PIvC5O7T9hS+3VCM3B4HVr/yh2+VjEw8EgJNor/p8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cEJtbjwU; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OFKCVhd1"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488971db0fdso52273565e9.0
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 08:10:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cEJtbjwU"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488a8ca4aadso44222315e9.3
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 08:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775661039; x=1776265839; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775661047; x=1776265847; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IcX/ko03a6d4SEGIjPswlxh+wscJTppsFfY0lIcJDLw=;
-        b=OFKCVhd1KWgs7fjNzbzLbq4URPrjk+QR9xg1g9f33OyCf0KwDvo+WlH9agqOJm9gOl
-         9gVFEYGURldEAmPCxGBAFZPYxsxvrLgx4ILpDPCjLfc/EGlpjKZdXBhCaVU2SSMs+TJz
-         XM5XMLWinvtydVjb6WUA4YkFSjIBGozTWyDMmWiE97TPGXHi3+rivMKksQRykWFbX/h+
-         LQgBK8HWSPaBeSq+SMTsAEQ6qs+igmns/O91GOJAJoYoehzRBO61wQasqP2Xw9JOr80r
-         +sqYkcCZz+ia1czGdVAV2SdkpDCjQk5culX4JmRrrgCZWSBJ8IwIx6BUXtgmZXKfyCYC
-         TLpw==
+        bh=oR46rAhAnj8wIytN3gbgm1MQ5zT/yD4AJQgbblfOUEY=;
+        b=cEJtbjwU4vdsZv6XDdbXZI7dOeoahzK0ihk/CGvdRZDwo/j+M1LYjRr07UDxFN53TS
+         M5L1yMbHLLgI5f6M36hA8mQs87dZWJoxFak/ZntxUSFAiGEHQw9sLu86/9zTvwz6H1HX
+         jbDgSpZI/0u+9h8v+hLdN2P6xLTltiXGzLTWz9DdDz7A+KiB0xxx1iw4OSRPPcTJ3Yk3
+         Mtlkz3wbzxGmxOF+/v8xv8fZiKAxp0+pqi4c94dJHLwFIJ3YtcrWd4lVhFlIEJBUTigq
+         vOyZzVkzNoAMzc2L8mBJhCHjiW1n6GQmSGfIj0zRQJm7mhwdXHNzlevFsmicMd83pZ72
+         Di6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775661039; x=1776265839;
+        d=1e100.net; s=20251104; t=1775661047; x=1776265847;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=IcX/ko03a6d4SEGIjPswlxh+wscJTppsFfY0lIcJDLw=;
-        b=YL9I+SkBtA8sAB1JlOUtx38ckqx0UPi1is1Ilvt/TTupMrMJJSuv/2ckcrFqJu0YEq
-         zRvD7IZrXk/OxHmr7967EIFEYyIJjtKAPc8WO+XW/09UlILq+/8YB0IASNNxIe6qvsbN
-         aokMzF+f9mvA7IR2t8dpfrBsmZhZjTl2HbrZFFXgJ7fLWZ0/maNLyqfw4wrL1AuBOaaQ
-         pqt2y0KezLNksS333eQ8OYEQDlnoIUuUeDwDk/ImTfiAh5OljhfMCm1dpX6ssCvfyEOn
-         L2r4pBjhz18QaEmbg2g1KF2RYa3d2ooenjUV5yRn7mArV6eHB8/sLW6Ulzmn4GQUCL3d
-         0ARg==
-X-Gm-Message-State: AOJu0Yw1UQquWgBkaRSBILwJJpx9pQOlVkCjGoijseTUBqd9R/epWxVj
-	axipf7Div9R9AmeoZszUnWzrNKgjzVzb8p50wKJ2Qxn9DBprUBmdzQHz
-X-Gm-Gg: AeBDievm0FWMI8AJ/gU9UaeewQdpeBWcOmfysoBRms0HaGFkpRVZQZTZ6vBNGTLkxkc
-	KSbvXyGFDGwqzsAZX38RA++WJG6edA9Y4a0GjT0j6VtGpwjpJ/hTIuFvZKt6QylTvbQzOQzeGZ0
-	AdKDrShysEBW6p+0qH21/JAYT+EzAsr+rVqVbqWHSLqb9nEKX/N6zdX6aEpGYvuJrPJjZzIp/KU
-	iV5rjTMAPLPDZvMPu00BkuBVLAgNNTTzdUZAagEgQeKO292PnYTEhRS1IUKZOpVDhSVLNJ1MDP3
-	9uPmGmc0TXx4A7tjq570iDRLOUWLwd1uQ1NR4KhuxDcKmVTWVuJpO7c+/znnzdh6qdCLTBok0MF
-	P82B62a8DkuEGvkmgyhIypxV2oiKwSgeH39100hj2wv/sPgqUeL79C4le4JtQY9nL+X9c402BaJ
-	zFVnmURwKc2+y4Cg==
-X-Received: by 2002:a05:600c:548d:b0:485:3423:727d with SMTP id 5b1f17b1804b1-488cd068ce8mr749965e9.26.1775661039271;
-        Wed, 08 Apr 2026 08:10:39 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488c5dd63d6sm20962215e9.34.2026.04.08.08.10.38
+        bh=oR46rAhAnj8wIytN3gbgm1MQ5zT/yD4AJQgbblfOUEY=;
+        b=HYxUrLIgsoMgqnXnp2fNncNMnNLxqg0PMbu+gD/n/diZRmwOebFKPsJ+UcpPb5W8gf
+         j9A7yCAK3FOS2iKILP1MD7GV4mVBK083kYq7CLUr7kytAsJj/tKvgN+ROqRuqWVH9qZO
+         cAnb7939fkn/JrUEfudp4gTVC0HDz00AoKSz2v7rAAE9mdS6fDMGtgbI/rh4/eaYJJF/
+         QLQy+ZojeY8s97DMQT5PS77PlOsVCvocZod6o2jlcKKl30t2RAHMx/Wy78pBRbtzk/KY
+         roDCVT72dc1VzKLGV9UKb++ppaumiVeYYZS/6fe/FDDoad5gPMHsXXpB6g4ece6bxzrS
+         m99g==
+X-Gm-Message-State: AOJu0YyQsiUqF2FgAHGgIrh7ZvR+L2a2gWmsX99KFu/Xv7UPhuA9uo4J
+	/+oPhwYZgjUAMYD7Pt9TvwCYga4cfehD4x5UVgEtBSAS0MQSa0ZxBZFR
+X-Gm-Gg: AeBDieuzKKPFhxe1Ji+UGJJ3KetC835atsFB04fffxMl9QbVtt4tFOUSKJMIfDSJ0tr
+	mJkO8XdAQx4rv3ja6cNgfzpNE0QAQCjUrUpSMq/EWd7ACAvobJl4g56HBWC3d+y3JPVM9udmVNz
+	YAGvFU00A4ao7zIgf4hvJqCFmSi6NInrQlXR+5+4jBOdA/oO1PkQXsBe4Lt+FxQ/padWFLSsLaq
+	PwoYlVSdMz2kHVmOxOeWfAKpa0ifJF8+7zEOrw1F3o7Dzw0R7ZyXHBB7aLfhUH9Fl4OMCDzwQLP
+	v1h7l26TmxZsiYq6sUHp5mKdhQtathu3KyJyGKLeFtCVIfhlNmHqzfvtt/sXwwLor90JD/m5kln
+	qZ02v415v+6BFHwIjjImODZm7ehrfc5CtPwFtQu4vh2/my1UMyWwhHCQrffFjPk+pni4XC9F0WS
+	At1NWsF2FNUQ0gIw==
+X-Received: by 2002:a05:600c:a306:b0:488:c014:34da with SMTP id 5b1f17b1804b1-488c01436b4mr66329005e9.26.1775661046561;
+        Wed, 08 Apr 2026 08:10:46 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:47::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4887e80a616sm1202704565e9.2.2026.04.08.08.10.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 08:10:38 -0700 (PDT)
+        Wed, 08 Apr 2026 08:10:45 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 08 Apr 2026 08:10:09 -0700
-Subject: [PATCH RFC bpf-next v2 04/18] rhashtable: Add
- rhashtable_walk_enter_from()
+Date: Wed, 08 Apr 2026 08:10:13 -0700
+Subject: [PATCH RFC bpf-next v2 08/18] bpf: Implement iterator APIs for
+ resizable hashtab
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260408-rhash-v2-4-3b3675da1f6e@meta.com>
+Message-Id: <20260408-rhash-v2-8-3b3675da1f6e@meta.com>
 References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
 In-Reply-To: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,313 +77,173 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  eddyz87@gmail.com, memxor@gmail.com, herbert@gondor.apana.org.au
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1775661028; l=8669;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1775661029; l=4428;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=nBrQiGS5XbekLGn5nIJd56+swnNm845Cw/aL7050vrc=;
- b=1sRxfCwIIy1jsWmUv5L+CzIDEfbq9TXyMb6nh1LD+u1nwEJq4FeW6MsLIsf6Do5Uz6BKqie+a
- H4DzCUGo7FoA7OGtTa5Y8m/3i0vOngurhoLMw/sNU4n/OP4ixoxFNF/
+ bh=s+V2B1bE7q5i1g1HZnov6A1xHlyzuXjBgnNBI1AvTV8=;
+ b=MJ0mXEEpu2Pk6pkA+vX18yZsasYvqcgzn5TXzFQSCBM8zYwQm69k5cYlFJmnIYSk8wFAXEgRU
+ wcL1BXPeXVOB5+F/CtNlpFnI1LQNH8o3uNthQ27hi+pMf9eWbZ80fpc
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-BPF resizable hashmap needs efficient iteration resume for
-get_next_key and seq_file iterators. rhashtable_walk_enter()
-always starts from bucket 0, forcing linear skip of already-seen
-elements.
+Wire up seq_file BPF iterator for BPF_MAP_TYPE_RHASH so that
+bpf_iter and bpftool map dump work with resizable hash maps.
 
-Add rhashtable_walk_enter_from() that looks up the key's bucket
-and positions the walker there, so walk_next returns the successor
-directly. If a resize moved the key to the future table, the
-walker is migrated to that table.
+Use rhashtable_walk_enter_from() with a saved last_key to resume
+iteration across read() calls without linear skip from the
+beginning on each seq_start.
 
-Refactor __rhashtable_lookup into __rhashtable_lookup_one to reuse
-the single-table lookup in both the two-table search and the new
-enter_from positioning.
+Also implement rhtab_map_seq_show_elem() for bpftool map dump
+in non-iterator mode.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- include/linux/rhashtable.h |  31 ++++++++++--
- lib/rhashtable.c           |  53 ++++++++++++++++++++
- lib/test_rhashtable.c      | 120 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 199 insertions(+), 5 deletions(-)
+ kernel/bpf/hashtab.c | 98 +++++++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 94 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-index 133ccb39137a..2c7a343ac592 100644
---- a/include/linux/rhashtable.h
-+++ b/include/linux/rhashtable.h
-@@ -253,6 +253,11 @@ static inline void rhashtable_walk_start(struct rhashtable_iter *iter)
- 	(void)rhashtable_walk_start_check(iter);
- }
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index a79d434dc626..492c6a9154b6 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -3008,6 +3008,19 @@ static int rhtab_map_get_next_key(struct bpf_map *map, void *key, void *next_key
  
-+void rhashtable_walk_enter_from(struct rhashtable *ht,
-+				struct rhashtable_iter *iter,
-+				const void *key,
-+				const struct rhashtable_params params);
+ static void rhtab_map_seq_show_elem(struct bpf_map *map, void *key, struct seq_file *m)
+ {
++	void *value;
 +
- void *rhashtable_walk_next(struct rhashtable_iter *iter);
- void *rhashtable_walk_peek(struct rhashtable_iter *iter);
- void rhashtable_walk_stop(struct rhashtable_iter *iter) __releases_shared(RCU);
-@@ -613,8 +618,8 @@ static inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
- }
- 
- /* Internal function, do not use. */
--static __always_inline struct rhash_head *__rhashtable_lookup(
--	struct rhashtable *ht, const void *key,
-+static __always_inline struct rhash_head *__rhashtable_lookup_one(
-+	struct rhashtable *ht, struct bucket_table *tbl, const void *key,
- 	const struct rhashtable_params params,
- 	const enum rht_lookup_freq freq)
- 	__must_hold_shared(RCU)
-@@ -624,13 +629,10 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
- 		.key = key,
- 	};
- 	struct rhash_lock_head __rcu *const *bkt;
--	struct bucket_table *tbl;
- 	struct rhash_head *he;
- 	unsigned int hash;
- 
- 	BUILD_BUG_ON(!__builtin_constant_p(freq));
--	tbl = rht_dereference_rcu(ht->tbl, ht);
--restart:
- 	hash = rht_key_hashfn(ht, tbl, key, params);
- 	bkt = rht_bucket(tbl, hash);
- 	do {
-@@ -646,6 +648,25 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
- 		 */
- 	} while (he != RHT_NULLS_MARKER(bkt));
- 
-+	return NULL;
-+}
++	/* Guarantee that hashtab value is not freed */
++	guard(rcu)();
 +
-+/* Internal function, do not use. */
-+static __always_inline struct rhash_head *__rhashtable_lookup(
-+	struct rhashtable *ht, const void *key,
-+	const struct rhashtable_params params,
-+	const enum rht_lookup_freq freq)
-+	__must_hold_shared(RCU)
-+{
-+	struct bucket_table *tbl;
-+	struct rhash_head *he;
-+
-+	tbl = rht_dereference_rcu(ht->tbl, ht);
-+restart:
-+	he = __rhashtable_lookup_one(ht, tbl, key, params, freq);
-+	if (he)
-+		return he;
-+
- 	/* Ensure we see any new tables. */
- 	smp_rmb();
- 
-diff --git a/lib/rhashtable.c b/lib/rhashtable.c
-index 6074ed5f66f3..2fc277207dcc 100644
---- a/lib/rhashtable.c
-+++ b/lib/rhashtable.c
-@@ -692,6 +692,59 @@ void rhashtable_walk_enter(struct rhashtable *ht, struct rhashtable_iter *iter)
- }
- EXPORT_SYMBOL_GPL(rhashtable_walk_enter);
- 
-+/**
-+ * rhashtable_walk_enter_from - Initialise a walk starting at a key's bucket
-+ * @ht:		Table to walk over
-+ * @iter:	Hash table iterator
-+ * @key:	Key whose bucket to start from
-+ * @params:	Hash table parameters
-+ *
-+ * Like rhashtable_walk_enter(), but positions the iterator at the bucket
-+ * containing @key. If a resize is in progress and @key has been migrated
-+ * to the future table, the walker is moved to that table.
-+ *
-+ * Same constraints as rhashtable_walk_enter() apply.
-+ */
-+void rhashtable_walk_enter_from(struct rhashtable *ht,
-+				struct rhashtable_iter *iter,
-+				const void *key,
-+				const struct rhashtable_params params)
-+				__must_hold(RCU)
-+{
-+	struct bucket_table *tbl;
-+	struct rhash_head *he;
-+
-+	rhashtable_walk_enter(ht, iter);
-+
-+	if (!key)
++	value = rhtab_map_lookup_elem(map, key);
++	if (!value)
 +		return;
 +
-+	tbl = rht_dereference_rcu(ht->tbl, ht);
-+	he = __rhashtable_lookup_one(ht, tbl, key, params,
-+				     RHT_LOOKUP_NORMAL);
-+	if (!he) {
-+		smp_rmb();
-+		tbl = rht_dereference_rcu(tbl->future_tbl, ht);
-+		if (!tbl)
-+			return;
-+
-+		he = __rhashtable_lookup_one(ht, tbl, key, params,
-+					     RHT_LOOKUP_NORMAL);
-+		if (!he)
-+			return;
-+
-+		spin_lock(&ht->lock);
-+		list_del(&iter->walker.list);
-+		iter->walker.tbl = tbl;
-+		list_add(&iter->walker.list, &tbl->walkers);
-+		spin_unlock(&ht->lock);
-+	}
-+
-+	iter->slot = rht_key_hashfn(ht, tbl, key, params);
-+	iter->p = he;
-+}
-+EXPORT_SYMBOL_GPL(rhashtable_walk_enter_from);
-+
- /**
-  * rhashtable_walk_exit - Free an iterator
-  * @iter:	Hash table Iterator
-diff --git a/lib/test_rhashtable.c b/lib/test_rhashtable.c
-index 0b33559a910b..0084157a96b4 100644
---- a/lib/test_rhashtable.c
-+++ b/lib/test_rhashtable.c
-@@ -23,6 +23,7 @@
- #include <linux/random.h>
- #include <linux/vmalloc.h>
- #include <linux/wait.h>
-+#include <linux/cleanup.h>
- 
- #define MAX_ENTRIES	1000000
- #define TEST_INSERT_FAIL INT_MAX
-@@ -679,6 +680,122 @@ static int threadfunc(void *data)
- 	return err;
++	btf_type_seq_show(map->btf, map->btf_key_type_id, key, m);
++	seq_puts(m, ": ");
++	btf_type_seq_show(map->btf, map->btf_value_type_id, value, m);
++	seq_putc(m, '\n');
  }
  
-+static int __init test_walk_enter_from(void)
-+{
-+	struct rhashtable ht;
-+	struct test_obj objs[4];
-+	struct rhashtable_iter iter;
-+	struct test_obj *obj;
-+	int err, i;
+ static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t callback_fn,
+@@ -3201,36 +3214,113 @@ struct bpf_iter_seq_rhash_map_info {
+ 	struct bpf_map *map;
+ 	struct bpf_rhtab *rhtab;
+ 	struct rhashtable_iter iter;
+-	u32 skip_elems;
++	void *last_key;
+ 	bool iter_active;
+ };
+ 
+ static void *bpf_rhash_map_seq_start(struct seq_file *seq, loff_t *pos)
+ {
+-	return NULL;
++	struct bpf_iter_seq_rhash_map_info *info = seq->private;
++	struct rhtab_elem *elem;
++	void *key = *pos > 0 ? info->last_key : NULL;
 +
-+	err = rhashtable_init(&ht, &test_rht_params);
-+	if (err)
-+		return err;
-+
-+	/* Insert 4 elements with keys 0, 2, 4, 6 */
-+	for (i = 0; i < 4; i++) {
-+		objs[i].value.id = i * 2;
-+		objs[i].value.tid = 0;
-+		err = rhashtable_insert_fast(&ht, &objs[i].node,
-+					     test_rht_params);
-+		if (err) {
-+			pr_warn("walk_enter_from: insert %d failed: %d\n",
-+				i, err);
-+			goto out;
-+		}
++	scoped_guard(rcu) {
++		rhashtable_walk_enter_from(&info->rhtab->ht, &info->iter,
++					   key, info->rhtab->params);
++		rhashtable_walk_start(&info->iter);
 +	}
++	info->iter_active = true;
 +
++	elem = rhtab_iter_next(&info->iter);
++	if (!elem)
++		return NULL;
 +	/*
-+	 * Test 1: walk_enter_from positions at key, walk_next returns
-+	 * the successor (not the key itself).
++	 * if *pos is not 0, previously iteration failed on this elem,
++	 * so we are restarting it. That's why no need to increment *pos.
 +	 */
-+	for (i = 0; i < 4; i++) {
-+		struct test_obj_val key = { .id = i * 2 };
++	if (*pos == 0)
++		++*pos;
++	return elem;
+ }
+ 
+ static void *bpf_rhash_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+ {
+-	return NULL;
++	struct bpf_iter_seq_rhash_map_info *info = seq->private;
++	struct rhtab_elem *elem = v;
 +
-+		scoped_guard(rcu) {
-+			rhashtable_walk_enter_from(&ht, &iter, &key,
-+						   test_rht_params);
-+			rhashtable_walk_start(&iter);
-+		}
++	/* Save current key for O(1) resume in next seq_start */
++	memcpy(info->last_key, elem->data, info->map->key_size);
 +
-+		obj = rhashtable_walk_next(&iter);
-+		while (IS_ERR(obj) && PTR_ERR(obj) == -EAGAIN)
-+			obj = rhashtable_walk_next(&iter);
++	++*pos;
 +
-+		/* Successor must not be the key itself */
-+		if (obj && obj->value.id == i * 2) {
-+			pr_warn("walk_enter_from: returned key %d instead of successor\n",
-+				i * 2);
-+			err = -EINVAL;
-+			rhashtable_walk_stop(&iter);
-+			rhashtable_walk_exit(&iter);
-+			goto out;
-+		}
-+
-+		rhashtable_walk_stop(&iter);
-+		rhashtable_walk_exit(&iter);
-+	}
-+
-+	/* Test 2: walk_enter_from with non-existent key starts from bucket */
-+	{
-+		struct test_obj_val key = { .id = 99 };
-+
-+		scoped_guard(rcu) {
-+			rhashtable_walk_enter_from(&ht, &iter, &key,
-+						   test_rht_params);
-+			rhashtable_walk_start(&iter);
-+		}
-+
-+		obj = rhashtable_walk_next(&iter);
-+		while (IS_ERR(obj) && PTR_ERR(obj) == -EAGAIN)
-+			obj = rhashtable_walk_next(&iter);
-+
-+		/* Should still return some element (iteration from bucket start) */
-+		rhashtable_walk_stop(&iter);
-+		rhashtable_walk_exit(&iter);
-+	}
-+
-+	/* Test 3: verify walk_enter_from + walk_next can iterate remaining elements */
-+	{
-+		struct test_obj_val key = { .id = 0 };
-+		int count = 0;
-+
-+		scoped_guard(rcu) {
-+			rhashtable_walk_enter_from(&ht, &iter, &key,
-+						   test_rht_params);
-+			rhashtable_walk_start(&iter);
-+		}
-+
-+		while ((obj = rhashtable_walk_next(&iter))) {
-+			if (IS_ERR(obj)) {
-+				if (PTR_ERR(obj) == -EAGAIN)
-+					continue;
-+				break;
-+			}
-+			count++;
-+		}
-+
-+		rhashtable_walk_stop(&iter);
-+		rhashtable_walk_exit(&iter);
-+
-+		/*
-+		 * Should see at least some elements after key 0.
-+		 * Exact count depends on hash distribution.
-+		 */
-+		if (count == 0) {
-+			pr_warn("walk_enter_from: no elements found after key 0\n");
-+			err = -EINVAL;
-+			goto out;
-+		}
-+	}
-+
-+	pr_info("walk_enter_from: all tests passed\n");
-+	err = 0;
-+out:
-+	rhashtable_destroy(&ht);
-+	return err;
++	return rhtab_iter_next(&info->iter);
 +}
 +
- static int __init test_rht_init(void)
- {
- 	unsigned int entries;
-@@ -738,6 +855,9 @@ static int __init test_rht_init(void)
- 
- 	test_insert_duplicates_run();
- 
-+	pr_info("Testing walk_enter_from: %s\n",
-+		test_walk_enter_from() == 0 ? "pass" : "FAIL");
++static int __bpf_rhash_map_seq_show(struct seq_file *seq,
++				    struct rhtab_elem *elem)
++{
++	struct bpf_iter_seq_rhash_map_info *info = seq->private;
++	struct bpf_iter__bpf_map_elem ctx = {};
++	struct bpf_iter_meta meta;
++	struct bpf_prog *prog;
++	int ret = 0;
 +
- 	if (!tcount)
- 		return 0;
++	meta.seq = seq;
++	prog = bpf_iter_get_info(&meta, elem == NULL);
++	if (prog) {
++		ctx.meta = &meta;
++		ctx.map = info->map;
++		if (elem) {
++			ctx.key = elem->data;
++			ctx.value = rhtab_elem_value(elem, info->map->key_size);
++		}
++		ret = bpf_iter_run_prog(prog, &ctx);
++	}
++
++	return ret;
+ }
  
+ static int bpf_rhash_map_seq_show(struct seq_file *seq, void *v)
+ {
+-	return 0;
++	return __bpf_rhash_map_seq_show(seq, v);
+ }
+ 
+ static void bpf_rhash_map_seq_stop(struct seq_file *seq, void *v)
+ {
++	struct bpf_iter_seq_rhash_map_info *info = seq->private;
++
++	if (!v)
++		(void)__bpf_rhash_map_seq_show(seq, NULL);
++
++	if (info->iter_active) {
++		rhashtable_walk_stop(&info->iter);
++		rhashtable_walk_exit(&info->iter);
++		info->iter_active = false;
++	}
+ }
+ 
+ static int bpf_iter_init_rhash_map(void *priv_data, struct bpf_iter_aux_info *aux)
+ {
++	struct bpf_iter_seq_rhash_map_info *info = priv_data;
++	struct bpf_map *map = aux->map;
++
++	info->last_key = kmalloc(map->key_size, GFP_USER);
++	if (!info->last_key)
++		return -ENOMEM;
++
++	bpf_map_inc_with_uref(map);
++	info->map = map;
++	info->rhtab = container_of(map, struct bpf_rhtab, map);
++	info->iter_active = false;
+ 	return 0;
+ }
+ 
+ static void bpf_iter_fini_rhash_map(void *priv_data)
+ {
++	struct bpf_iter_seq_rhash_map_info *info = priv_data;
++
++	kfree(info->last_key);
++	bpf_map_put_with_uref(info->map);
+ }
+ 
+ static const struct seq_operations bpf_rhash_map_seq_ops = {
 
 -- 
 2.52.0
