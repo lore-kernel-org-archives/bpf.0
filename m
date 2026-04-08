@@ -1,86 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551233BB4A;
-	Wed,  8 Apr 2026 05:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAE5361DCD
+	for <bpf@vger.kernel.org>; Wed,  8 Apr 2026 05:53:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775627590; cv=none; b=HsR2ieYZ8ge5VXD9aeICLahjkYyXoYG0a7CvzXIJjeXS6RtC7+9oCEkhra+9X3w6Y1QXuOrctSHr1v3y0GuoNLiZowHgcaI9rT5SSYTNpiOKO6KPWWi69a4L2TYyT0+z/VoJzOwxUcgMUmR8HmrSv/yNjT9dnvICyPO7a99DkNU=
+	t=1775627599; cv=none; b=SWPlqW13N3gEP9TvH6tOvT6gf3mkAhmj5JWpGv2HiFcfJ2TRqh9NNaYWjSmPuoKe17LArVO2bhuUjvddU5E8mSJ3Il+t3EbQXf7uETbHmiE9XJaAMAgDTRbGlV+eY3twr4SISznfw5E8a2v9b9kBCx3wsnGInKPs+DXG7DlZSjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775627590; c=relaxed/simple;
-	bh=tbrYApG/NtLbSePwUubAvAtB9DPup9vrDkjrSeN/GEY=;
+	s=arc-20240116; t=1775627599; c=relaxed/simple;
+	bh=2O0JlSSvV2vpCSIH+pMQRc8zt5p8brJgyBBIvVPB+PM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uTINPZeuoaBRpLp5rSw/+3Ryj5Lc9dfp75kQ6siut8zGFHzbq7OcYipBniZlj4rg5kCtLmxE7sncuFbOubeqj42oJczubcPhR8liNcKQxzVfrdG7+D/1xQjb4hyWYiLP///KLHdMAVlp7cTHe8OWzEElhQJGZLi/lCfGB6sZx54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CutBCc5O; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=RNZA1fjgX5Kn2q2kB0/ZE7QoZd24SM+ynIy7aVW4ee2C5GA+U05KNNxRzdjJxr37vO/6Ni3LdnF/rvtBw9kIe20tTsi+/dV8WLsEn1i3mx88Wr8e4wZMsmig4atm4dHNHEB4V5OBP9ZZvGSMZZuKiuwiYDba8M+UtKr23vo5KGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LwC4+tDY; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CutBCc5O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D600C19425;
-	Wed,  8 Apr 2026 05:53:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775627589;
-	bh=tbrYApG/NtLbSePwUubAvAtB9DPup9vrDkjrSeN/GEY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CutBCc5OhDKXVbm+/CvvP73kQWgzw66VQ8RpmS+QAT4v6dx2n83Dx4a5afecLoHv3
-	 5b4DApQZh4gYAkun9nqN0Zbgdh+mQlF+Z/6lFxgOFRnxhkAh4aU0nMUrdgMMOsfOCv
-	 ndFJlK3jBqlYGufhVX7QV+hk1OkrvefyTZli6bQcaARfexV40g66qjpY9sGQ8LyBBc
-	 T3Wezv08jdtwsr8Fh5L4RgGg6LcKVjiK4UVYNxNN7OImtsB0l3URUS9CRJaPDbL8xw
-	 LGIrk51gs1wZyf5bH6nOC8Q1/GsnmBzA69I12eUqMWoGVfyCS+y3nueJQSSAPLVb2D
-	 etytLW7O1Ir5w==
-From: Namhyung Kim <namhyung@kernel.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	James Clark <james.clark@linaro.org>
-Cc: Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-perf-users@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH 2/2] perf build: Add -Wno-missing-declarations for GEN_VMLINUX_H=1
-Date: Tue,  7 Apr 2026 22:52:59 -0700
-Message-ID: <20260408055259.374744-2-namhyung@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260408055259.374744-1-namhyung@kernel.org>
-References: <20260408055259.374744-1-namhyung@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LwC4+tDY"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775627586;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1GwFq4CXsNlts6RLLjMvnSY7coWZ8/t9Vuaq+ZX8NTA=;
+	b=LwC4+tDYXm1I+uL86v2xFpDRXDpPhNI4cVb25E8N3gaMbdFVw0Km6d9xSj9crVRDvOb3dq
+	LIgODrHKdDKyV5pmiHrE9J0XVyWExyHmuhOEuIAOdzpfieT5tODab2scvC6rhjuE7HqMQz
+	Ukju/OJcT55caOlZFIWNfTXqUQv4gr4=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: menglong8.dong@gmail.com, bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com,
+ yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Subject:
+ Re: [PATCH bpf-next 1/3] bpf: add missing fsession to the verifier log
+Date: Wed, 08 Apr 2026 13:52:49 +0800
+Message-ID: <5980838.DvuYhMxLoT@7940hx>
+In-Reply-To:
+ <772063b0c36262d2bee020fb590eca02ef6bfbfbecebf3a88be540b373c6ed4d@mail.kernel.org>
+References:
+ <20260408031416.266229-2-dongml2@chinatelecom.cn>
+ <772063b0c36262d2bee020fb590eca02ef6bfbfbecebf3a88be540b373c6ed4d@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On my system, `make GEN_VMLINUX_H=1` fails with a lot of error messages
-like below:
+On 2026/4/8 12:55 bot+bpf-ci@kernel.org write:
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> > index 84ab73e08b0e6..94a62fcd4543d 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> > @@ -128,7 +128,7 @@ static void test_exceptions_success(void)
+> >  			       bpf_program__fd(skel->progs.exception_ext_mod_cb_runtime),
+> >  			       "exception_cb_mod"), "set_attach_target"))
+> >  			goto done;
+> > -	}), "FENTRY/FEXIT programs cannot attach to exception callback", 0);
+> > +	}), "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback", 0);
+> 
+> These four selftest locations now expect the string
+> "FENTRY/FEXIT/FSESSION programs cannot attach to exception callback",
+> but the verifier message they match against was not updated. In
+> bpf_check_attach_target() the format string still reads:
+> 
+>     prog_extension ? "Extension" : "FENTRY/FEXIT");
 
-  ./util/bpf_skel/vmlinux.h:134488:4: error: declaration does not declare anything [-Werror,-Wmissing-declarations]
-   134488 |                         struct freelist_counters;
-          |                         ^~~~~~~~~~~~~~~~~~~~~~~~
-  make[2]: *** [Makefile.perf:1249: linux/tools/perf/util/bpf_skel/.tmp/lock_contention.bpf.o] Error 1
+You are right, I missed this part. I'll update it in the V2.
 
-It seems clang doesn't like forward declarations in the current setting.
-Let's suppress the warning by adding the no warning flags.
+Thanks!
+Menglong Dong
 
-Cc: bpf@vger.kernel.org
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/Makefile.perf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> so the kernel produces "FENTRY/FEXIT programs cannot attach to
+> exception callback". The RUN_EXT macro uses strstr() to match the
+> expected string against the kernel log buffer, and since
+> "FENTRY/FEXIT/FSESSION" is not a substring of "FENTRY/FEXIT programs",
+> strstr() returns NULL and the ASSERT_OK_PTR fails.
+> 
+> Should the verifier message also be updated to include FSESSION, to
+> match the selftest expectation? As it stands these four subtests will
+> fail.
+> 
+> > [ ... ]
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24117471086
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index cee19c923c0607d2..a41e0dd34d8df660 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -1249,7 +1249,7 @@ $(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OUT)/vmlinux.h
- 	$(QUIET_CLANG)$(CLANG) -g -O2 -fno-stack-protector --target=bpf \
- 	  $(CLANG_OPTIONS) $(EXTRA_BPF_FLAGS) $(BPF_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
- 	  -include $(OUTPUT)PERF-VERSION-FILE -include util/bpf_skel/perf_version.h \
--	  -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
-+	  -Wno-missing-declarations -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
- 
- $(SKEL_OUT)/%.skel.h: $(SKEL_TMP_OUT)/%.bpf.o | $(BPFTOOL)
- 	$(QUIET_GENSKEL)$(BPFTOOL) gen skeleton $< > $@
--- 
-2.53.0
+
+
 
