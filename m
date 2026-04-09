@@ -1,89 +1,85 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0D029B78D;
-	Thu,  9 Apr 2026 14:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABBC3D16FC
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 14:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775745473; cv=none; b=l7f4dHVaulePgQrOEu98Z5baLTIteoH+S4SSHNQsrc1hnuxCo+p0NSCB9pJ/Lbqg9kYehu+1YEXQBIorwqEMgSu8qmaxugqf47SdFOlgtOZ5ITb4wIYGPlRJ3IkkdkzACt7vAGJjJ/WTogh02FXJ3PyO2OuOJv+tFky+GqcqPn0=
+	t=1775745656; cv=none; b=TFDWWAlzSRBl66omS5pmp2JEhsm+MnayzX+uzzlwjI2cm3juQareHUJxDVnK/Ki1XSoGutKJa7y6P/MZV2rf3lqbfyNYode43fS2brhtbECDOBh2SyoTMHF6ipj2NEy1j8r5pxn2zn/SHRXTVJxpMo+YNIDklTYnq752jBzWGHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775745473; c=relaxed/simple;
-	bh=6DWMFvsSMDfBi+51f0s0BGiwf4kZBzVSyVt4VWnrKrs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TTU4GapAwBdxabBdtjBPNQPUqzmijCxVqsOccvC7x53zQbhbBeQ30dJS5SSZAfQazYTM4Tv6+NejvdU2q1TSHJUD13UzCSU3rYWmAha2kWt3Nur2w0V21QCSwAB1XoHjnhIANf3gDheXmr1V3xk6AjdHB4bj+9gvV06QeLdrxdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=vs9L2UCA; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1775745656; c=relaxed/simple;
+	bh=AouGHkgXdYe9anG9SbX/UJnI/L1Ht06pXTIqPlV3qiU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ACKnvNCMRBwXTYJlg3oZKCBY5dHyG9gFJiDmnP5LNxNEGhS6LddwatVQKkSvnKUNh39/2wCjml3i8DrWdxKZ9zD3nHSDkxIo1T1FJu+aguKL0aqaIgeJ1btZVSqGzzqsO3tZPgcKEBc0bSOXnd/5COEn6O/1sKb7Z41iyXXvj1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G4kudXV8; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="vs9L2UCA"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1775745468; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=E1p69RJjKiJrkHqzfUHfp5KTa/fZVVB2ULuTIqlExdQ=;
-	b=vs9L2UCABEOqda9/HNISxuk2Z7lNcQ1UDhyMnhYHjEYrI8bpiLXD0X95XaMYp58i+MqvRy9554RvqFH2MB/L3hSOCCNr3FEmQSPSr0mw0V7hLlYWlFE8rAXfxDwwRE44/tCYOr1PRKT35P+T7zTtbrudEP5eKuaraLj3isrbn/0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0X0iXRcm_1775745467;
-Received: from 30.41.54.139(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0X0iXRcm_1775745467 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 09 Apr 2026 22:37:47 +0800
-Message-ID: <d889ed2b-ca34-4e95-ae5b-1d66636b515d@linux.alibaba.com>
-Date: Thu, 9 Apr 2026 22:37:46 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G4kudXV8"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2b256a4c6b5so6135575ad.0
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 07:40:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775745655; x=1776350455; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AouGHkgXdYe9anG9SbX/UJnI/L1Ht06pXTIqPlV3qiU=;
+        b=G4kudXV85Zy5Beb768hB6ozQ9L9xN7RQM5iGTnxKNylcS/2d32ZEKi9vSZKsAhfvAE
+         HOKRgBaunI70XmF6EVyKUAgqJPR0Bx5HBAdFFHcvFnPzwIm36VjwFJDJLxVmNWRwqkyV
+         9MLpAqm/rouEtIPcctQ7Vzu0M0cSQMPG6qXcvtO/pu5OoUUryYLSBSm3IDxvNsZtsJFu
+         UYwC6rVi7xxLXm/t5v4ZP4EpWjKnVMCbNLyl93gXqc40x4P92GEls/iP+6FSM6dqJGJY
+         3C6KIjAqU5lhdUZATD3d9/aAVCJI3YREQGLUmOFZC26FjK1x+zY/01glnrmUoIQPs9Yh
+         EvGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775745655; x=1776350455;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AouGHkgXdYe9anG9SbX/UJnI/L1Ht06pXTIqPlV3qiU=;
+        b=eMQeGlaSz+YziJad2OUVwHfqYgjx60cf+6iXQFuMe3iJAtZBBMN3WNSRMpaXcvYQ1v
+         a1BAvwtFtEhgZJK7EyrrHG+YQc1BT+DclHltnGgxXCf4SbdRN9e24cNPzu6ZodwQBwtH
+         +UfBJKARDaD5TV/CWd0QviGMn1TDzln43Ukxo1PXAI531NE8uzKJSX3Bd66mQU7PVYL/
+         Ys0kI0b6TFKdKjvbChUXS7nzsug4fdaY/ipDhHOu53pDmuX4qzfDT0JJMAFScHyOJF6b
+         /KPI/EhNylvyT7QOg5EDTJPKI0cjx6VE6Y5ejORvyCXeyqTYvHTzs/9u0SnKkkk2wa5g
+         lAfA==
+X-Gm-Message-State: AOJu0YwjYwKh1WvHtGdmBUfULqDadXrShB8Kl2rgN1BjBpWXuxaaf5rM
+	7JBWHKB/Xkl6TCB9qrhUHk4nd/uyvl5e2f56zM7sSWfdSTBcCGuM4HtncafBO38w2Q8=
+X-Gm-Gg: AeBDiesMifaLw/r9qjBm67aJqFiEBJdqTtv+v+X+5OcLdylgzxihWMXQKTc4IBR4EEK
+	j4xAtUwjhmZDAVBjcckH3szgAjC4YDMLgu+tvdqvubM/5mK+/m+KOFFIHVIe6llTDv5BgClRHNu
+	oSjCcMh3CD3CWHd+8/7KRLtiIiSDvpsi52hQer4YvmKFOtJboJE/c1cLp7i4XO9hLqE9+U47WzI
+	pOGzgtB1JIxsDOayzQAcdl+BaKW5jslMMQx15bgZfZyzBwQgS7uWCNawpiNF7AswOcWRXdVa3Nb
+	iOMvNQ5pvctzfW3BUuqTbJ+rAYDrstaP5r89BFy7zFKxYTDAt8PRR14izX5d1b6v/MaoyFzPtDm
+	kDTDUwceGg2LIGecygzW8WvUJcpkwW5nuz5vATU63vNL6JnB4pOKfvZEz8cRClcoyWjlQas6aZC
+	pdOG3Seyhxnstm2IssYyE+
+X-Received: by 2002:a17:903:1c2:b0:2ae:aa16:acf7 with SMTP id d9443c01a7336-2b2817bcbabmr255292475ad.40.1775745654694;
+        Thu, 09 Apr 2026 07:40:54 -0700 (PDT)
+Received: from laptop ([223.131.147.119])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b274779b48sm335511965ad.25.2026.04.09.07.40.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2026 07:40:54 -0700 (PDT)
+From: Woojin Ji <random6.xyz@gmail.com>
+To: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	shuah@kernel.org
+Subject: Re: [PATCH] selftests/bpf: fix const qualifier in fexit_bpf2bpf test
+Date: Thu,  9 Apr 2026 23:40:50 +0900
+Message-ID: <20260409144050.374405-1-random6.xyz@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <7967c952-3922-4b49-953b-530b80850aa8@linux.dev>
+References: <7967c952-3922-4b49-953b-530b80850aa8@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
-To: Christoph Hellwig <hch@infradead.org>,
- Christian Brauner <brauner@kernel.org>
-Cc: "Darrick J. Wong" <djwong@kernel.org>, Amir Goldstein
- <amir73il@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>, Daniel Borkmann <daniel@iogearbox.net>,
- Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
- <acYVjuDOD7NynO9m@infradead.org> <20260327060518.GP6202@frogsfrogsfrogs>
- <20260407-unmengen-wahltag-474557ec0c58@brauner>
- <adUalnAyY9mm1LUr@infradead.org>
- <20260409-vorsichtig-umstand-d417555377e4@brauner>
- <ade2nskzkdcsvF55@infradead.org>
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <ade2nskzkdcsvF55@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Thanks for the pointer.
 
-
-On 2026/4/9 22:24, Christoph Hellwig wrote:
-> On Thu, Apr 09, 2026 at 03:19:27PM +0200, Christian Brauner wrote:
->>> ways to do full file system verity [1] much more efficiently inside the
->>> file systems, and it would be good to not lock in a specific solution
->>
->> Note about that: we generally don't rely on any verity implementation
->> that makes the verity information itself part of the on-disk filesystem
->> format. The nice property of dm-verity is that the integrity is
->> completely separate from the filesystem format and it's basically simple
->> math that is trivially to prove correct.
-> 
-> Any file system integrated version storing the hashed in the extended
-> LBA data (which Linux also confusingly calls intgrity data) would be
-> even simpler and easier to verify.  But yes, we need to clearly
-> document what we want.
-
-Yes, you could keep hash / checksum in the extended OOB area, but
-I guess you still don't know if the hash / checksum of the
-particular data can be trusted (or is changed by attackers).
-
-I think the key point of merkle tree approach is not only for
-data integrity but also to distribute the trust between all
-hashes by calculating the hash (of the hashes) of the hashes
-so that you could get the only one root hash value regardless
-of how to organize the container filesystem (meta)data so
-that it's totally seperated from individual filesystem layouts
-and can be proven seperately and even implemented easily by
-hardware/firmware rather than inside the specific filesystem
-implementation.
-
-Thanks,
-Gao Xiang
+I missed that commit ca0f39a369c5 was already applied to bpf-next.
+Sorry for sending a duplicate patch.
