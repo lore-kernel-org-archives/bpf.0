@@ -1,46 +1,49 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287463D9DB2
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 15:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D131722F77B
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 15:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775749828; cv=none; b=IFl/Y91pHr6qiNg3u4FzYfoBHQQL4dKXjDD7ylLtaveDoTyYIoBdwxVA8BtmROq4VfuAIMLxHhhWfo1HrcziG8r3WO4h4CdgKIJoGywCfkHoYJszBuwepO37vh3QnZA32j2yBxMvP9B62VFIHmmMugpfvKCEbFcCVYFggt/gEdA=
+	t=1775749829; cv=none; b=sqesLd9Pmy0HmlJBPk8nhvC/Tevv3O7U8ei8REVMs0CKxH6BiGqB+wsk+U8Kk0PdhvdqKLAqMddJv3gtdfYAOVRWFZYNMVAUFDQxuYzg1I3Y4hOIp9hM1dzrPTtYCxgajPuOvxJJnNsnGX99WEGhvNFICdTVICR/r8Yxo619W2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775749828; c=relaxed/simple;
-	bh=ZbHLOFhVKcEGmybl7KKLPwOljzibDQwOshKeJ55BZMc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BuO/CuJPrewjT3lU1t3mvuKEPHvB08NuRECg1xcrwfKn3unwDUkz2/19VI7sTZ/YMVyIYyfIbT9z2cbvRPKZGdkKjs/YPsXF1fRNjgnzLPq8eMBwNrugpLkCiKc6Lo8rNjjjAFRbZX3whjczPrhHvpRpuL0ddQrd591KUcEqHNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hvJqC+gl; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1775749829; c=relaxed/simple;
+	bh=dVpzTE2olahybK/q/R89EYqbNkpBcd3LEXGXNfkRh94=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tBN6eI64FAjzgsc8x0ag2f8AWCBix6TgRLA+khfpybtTjLum/PFmW4V8egBTOa9kzmDPWUeCQjY5mD9ZSS5WXejSCxPAzASyHbP7QE5tIBNGNnDD/DBa5PwxSaOQ0khiPrhWC03bfut6nKkfWA7Ux/bmqaENxKTbVY8hOph6ls4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=NjhbqAMl; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hvJqC+gl"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="NjhbqAMl"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=JG7Cu4N3ve24hwdqXawknf9IVCKH6E77lTOS3SlHTTk=; b=hvJqC+gl8UJTUb2FNKVhVWEaAO
-	MfVXPLKbJeVdgmksc7br29XhLmI8A3lAn1L61TxKWFv97GsdOfVj1dV4/fXWVQCqy/wSEVp7jBpSG
-	cZtl2HYDwoC2FczTeD99JHJeEDpDorT05oV8kmTpU1mZFGQvajLalxVr3r/WTqGfBh/KgczDUtnnK
-	PUBdsW6OE/aqeH3JkfzRYGgdbIdBiRu2segsvXL6dchxvnIpfHvdrv1KcbL/gcQDRj4M34EMTK76Z
-	9p5BkizBwYHk2XfU5j2RCtZjevjwSO5X6GbXE0b1Ej0mKcxESjObaKnD51D7Zv9+4bYMm6gWHTZjz
-	ybNdfLdQ==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=N7goyYAtkb25GuEm/3ofKFVkxUC/fu4aF5BO8IpRLgQ=; b=NjhbqAMl41Q0IeBRqPeD/4l2JQ
+	aL8lCgik+Q6K4s1FuoBnp0hLAXxBzF+K1iQqRfVTEhY0VvyfZxndYBemgoIbQ5iKcNQcSa82kjArv
+	C++3XcFxR8R2lCyeS/zoHs4ZZ30DvBF1c5Sqi6pySWqs7LfzHWTrE3U+YHCI2O5E2Ou50j7vz1ogZ
+	639xRv+TalTKWG/FhAQA16fC3T7ULeq/5xqrpOYOZfT73NKJeYdksDgoictySJgXzPpHF4vHWUOcz
+	Jw1sGyDJLgOULgRklhdyIqxt5LkrF1R9INLkzYCntILYTwToDdlB25LcM9Z22KFHrZYlTetHLHXpf
+	QM6q9X/Q==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wAre5-000ESJ-1b;
-	Thu, 09 Apr 2026 17:50:17 +0200
+	id 1wAre6-000ESO-0c;
+	Thu, 09 Apr 2026 17:50:18 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	info@starlabs.sg
-Subject: [PATCH bpf-next 1/2] bpf: Drop pkt_end markers on arithmetic to prevent is_pkt_ptr_branch_taken
-Date: Thu,  9 Apr 2026 17:50:15 +0200
-Message-ID: <20260409155016.536608-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add test for stale pkt range after scalar arithmetic
+Date: Thu,  9 Apr 2026 17:50:16 +0200
+Message-ID: <20260409155016.536608-2-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260409155016.536608-1-daniel@iogearbox.net>
+References: <20260409155016.536608-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,72 +53,98 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27966/Thu Apr  9 08:24:43 2026)
 
-When a pkt pointer acquires AT_PKT_END or BEYOND_PKT_END range from
-a comparison, and then, known-constant arithmetic is performed,
-adjust_ptr_min_max_vals() copies the stale range via dst_reg->raw =
-ptr_reg->raw without clearing the negative reg->range sentinel values.
+Extend the verifier_direct_packet_access BPF selftests to exercise the
+verifier code paths which ensure that the pkt range is cleared after
+add/sub alu with a known scalar. The tests reject the invalid access.
 
-This lets is_pkt_ptr_branch_taken() choose one branch direction and
-skip going through the other. Fix this by clearing negative pkt range
-values (that is, AT_PKT_END and BEYOND_PKT_END) after arithmetic on
-pkt pointers. This ensures is_pkt_ptr_branch_taken() returns unknown
-and both branches are properly verified.
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_direct
+  [...]
+  #592/35  verifier_direct_packet_access/direct packet access: pkt_range cleared after sub with known scalar:OK
+  #592/36  verifier_direct_packet_access/direct packet access: pkt_range cleared after add with known scalar:OK
+  #592/37  verifier_direct_packet_access/direct packet access: test3:OK
+  #592/38  verifier_direct_packet_access/direct packet access: test3 @unpriv:OK
+  #592/39  verifier_direct_packet_access/direct packet access: test34 (non-linear, cgroup_skb/ingress, too short eth):OK
+  #592/40  verifier_direct_packet_access/direct packet access: test35 (non-linear, cgroup_skb/ingress, too short 1):OK
+  #592/41  verifier_direct_packet_access/direct packet access: test36 (non-linear, cgroup_skb/ingress, long enough):OK
+  #592     verifier_direct_packet_access:OK
+  [...]
+  Summary: 2/47 PASSED, 0 SKIPPED, 0 FAILED
 
-Fixes: 6d94e741a8ff ("bpf: Support for pointers beyond pkt_end.")
-Reported-by: STAR Labs SG <info@starlabs.sg>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- kernel/bpf/verifier.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ .../bpf/progs/verifier_direct_packet_access.c | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1227b168bb07..9c1135d373e2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15448,10 +15448,17 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		}
- 		dst_reg->var_off = tnum_add(ptr_reg->var_off, off_reg->var_off);
- 		dst_reg->raw = ptr_reg->raw;
--		if (!known && reg_is_pkt_pointer(ptr_reg)) {
--			dst_reg->id = ++env->id_gen;
--			/* something was added to pkt_ptr, set range to zero */
--			memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
-+		if (reg_is_pkt_pointer(ptr_reg)) {
-+			if (!known)
-+				dst_reg->id = ++env->id_gen;
-+			/*
-+			 * Clear range for unknown addends since we can't know
-+			 * where the pkt pointer ended up. Also clear AT_PKT_END /
-+			 * BEYOND_PKT_END from prior comparison as any pointer
-+			 * arithmetic invalidates them.
-+			 */
-+			if (!known || dst_reg->range < 0)
-+				memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
- 		}
- 		break;
- 	case BPF_SUB:
-@@ -15490,10 +15497,17 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		}
- 		dst_reg->var_off = tnum_sub(ptr_reg->var_off, off_reg->var_off);
- 		dst_reg->raw = ptr_reg->raw;
--		if (!known && reg_is_pkt_pointer(ptr_reg)) {
--			dst_reg->id = ++env->id_gen;
--			/* something was added to pkt_ptr, set range to zero */
--			if (smin_val < 0)
-+		if (reg_is_pkt_pointer(ptr_reg)) {
-+			if (!known)
-+				dst_reg->id = ++env->id_gen;
-+			/*
-+			 * Clear range if the subtrahend may be negative since
-+			 * pkt pointer could move past its bounds. A positive
-+			 * subtrahend moves it backwards keeping positive range
-+			 * intact. Also clear AT_PKT_END / BEYOND_PKT_END from
-+			 * prior comparison as arithmetic invalidates them.
-+			 */
-+			if ((!known && smin_val < 0) || dst_reg->range < 0)
- 				memset(&dst_reg->raw, 0, sizeof(dst_reg->raw));
- 		}
- 		break;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
+index 4ee3b7a708f7..915a9707298b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
+@@ -859,4 +859,65 @@ l0_%=:	r0 = 1;					\
+ 	: __clobber_all);
+ }
+ 
++SEC("tc")
++__description("direct packet access: pkt_range cleared after sub with known scalar")
++__failure __msg("invalid access to packet")
++__naked void pkt_range_clear_after_sub(void)
++{
++	asm volatile ("					\
++	r9 = *(u32*)(r1 + %[__sk_buff_data]);		\
++	r8 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
++	r9 += 256;					\
++	if r9 >= r8 goto l0_%=;				\
++	r0 = 0;						\
++	exit;						\
++l0_%=:	/* r9 has AT_PKT_END (pkt + 256 >= pkt_end) */	\
++	r9 -= 256;					\
++	/*						\
++	 * AT_PKT_END must not survive the arithmetic.	\
++	 * is_pkt_ptr_branch_taken must validate both	\
++	 * branches when visiting the next condition.	\
++	 */						\
++	if r9 < r8 goto l1_%=;				\
++	r0 = 0;						\
++	exit;						\
++l1_%=:	r0 = *(u8*)(r9 + 0);				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
++	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end))
++	: __clobber_all);
++}
++
++SEC("tc")
++__description("direct packet access: pkt_range cleared after add with known scalar")
++__failure __msg("invalid access to packet")
++__naked void pkt_range_clear_after_add(void)
++{
++	asm volatile ("					\
++	r9 = *(u32*)(r1 + %[__sk_buff_data]);		\
++	r8 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
++	r9 += 256;					\
++	if r9 >= r8 goto l0_%=;				\
++	r0 = 0;						\
++	exit;						\
++l0_%=:	/* r9 has AT_PKT_END (pkt + 256 >= pkt_end) */	\
++	r9 += -256;					\
++	/*						\
++	 * Same as sub, but goes through BPF_ADD path.	\
++	 * AT_PKT_END must not survive the arithmetic.	\
++	 */						\
++	if r9 < r8 goto l1_%=;				\
++	r0 = 0;						\
++	exit;						\
++l1_%=:	r0 = *(u8*)(r9 + 0);				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
++	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end))
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
