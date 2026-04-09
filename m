@@ -1,114 +1,116 @@
-Received: from mail-pj1-f97.google.com (mail-pj1-f97.google.com [209.85.216.97])
+Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED445387351
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 22:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D636E387371
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 22:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.228
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775772533; cv=pass; b=X2HYPsZqWxUC5kFImRmM22eDJ/fqu/ULIlxKUEYiE3ESf/3TaoTxVCtibtskx92vb6FF0Ux7BaeUDR7GY5rn5oVUa8VzABiDjTdHF0u8Mr+kN0JQ1uasZvZdaJ2wPNjNIrQuTrtLJegTiZDsACuDyZZ7zH8AmFxV+X2sAtrew4k=
+	t=1775772896; cv=pass; b=eXnFMxa2QbKCOQmWun1rJEiH0wQK0ScW3lz/Vqyf3QepodB34WmwY9yWNyRF9yjjRnezdIevieUDKkGSUC5YvhDiV3EkU1IHJGK46BW0RLkTqFCpKwoOLOp1uxxAS3KZ6O86UvibBDEOCI54HgC4EmLptioNL5mx3Ixbb/FK23Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775772533; c=relaxed/simple;
-	bh=3MYTqkP/OsLWAjjIhBHEHK2WqSnZcZeinyJnYjTW9u4=;
+	s=arc-20240116; t=1775772896; c=relaxed/simple;
+	bh=kfM/wF3Rht4EmNM4bz/i4FaPy40shnaPhi0+QdEZWZ4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zzv0kYn2eRDWBOlbZ7tk/+1AjOeEG2eArLITXZ34jd+B+sCkg02yESGJcMiil4Zy2JfESS7KwOvZeFVVgllC+t+hN5xNSOPlD7NeZkHT6C+ZnRTLsZa2xeRw24NtYzTVRO2DTGdXnpA36zDAZ6dOhD8775wpZa6EeDudjId+Xj0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=CPUCi1GH; arc=pass smtp.client-ip=209.85.216.97
+	 To:Cc:Content-Type; b=j6ZjBOlEQJDSc39/nHzTFUvvHoFe+m7+9Y2WysQ5Knl53vA6p55TAjS2UdaCdjKFUyCC6ntKhXc38HZckGqrwTKdlq9Ctq7RZh/4mtsEYs9uzqTwuOQMbBbx/QHvKWTwttvncJFCIzI++SQvjsUwo3lFqEdltT61cSvCmR3WCmE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=NBHdeHjY; arc=pass smtp.client-ip=209.85.214.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="CPUCi1GH"
-Received: by mail-pj1-f97.google.com with SMTP id 98e67ed59e1d1-35d971fb6f1so1302128a91.0
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 15:08:51 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="NBHdeHjY"
+Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-2ad9516a653so6873965ad.0
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 15:14:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775772531; x=1776377331;
+        d=1e100.net; s=20251104; t=1775772894; x=1776377694;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3MYTqkP/OsLWAjjIhBHEHK2WqSnZcZeinyJnYjTW9u4=;
-        b=rLzcKkHrhLnLNetX6zTKqAnIRdo2bKfotxWJR22nbC4v3jXeVTCe017X6GT0jNXAbG
-         YVj2sbgh/mhEuYitOxrHOUVJ65Ov+3CExo6Nt/Y3mUsDxaz6jGO8gZxBUgy2nIRD8kw4
-         u77ZiqeE2KSBDJDXwaM+UKE5YvKw3uOrGeHZ+CA1fa2pYeO0HB4oloy1jZzKQODCx2G2
-         BmjuicyqBlj/UTbImPeClKHZlDava5Zt6g2F6zvkhfS40cQU/D2Qyti2H45F/TSrL3hY
-         BeHPz1gQMWKGlHsZg02prvhn8ju5FFJYkORQQe3KiofSD3JrdaEFou5St2lySyHLep/I
-         uTXA==
-X-Forwarded-Encrypted: i=2; AJvYcCUUB4w2rCFczzKMUU5SRL757ahDtBsmg/Ol9zn0b38Ly/y0K+Q5cryrWxXgKLntu3HSm6k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMs+nhbE5jZdpXBjJH7JXWGzHsW7pOjLS+eJ9+MK519yDw01jV
-	WMvf3K3n8KfI9nJRP1GybbDhcjJr7LZleshJvi4sg5eMdoMtyN1LUl7lWPQVLSGOdYwiWVlpO/r
-	3aR2OaSIuks/fqYylbsMtKFNkHwxG2KMeYgG/DHG+Ynfck0CKWGQnQMt2kWX6K5s5H5+GRN74G1
-	6BCcvCAt78DXFsoo5rqbe4K0oWDecBh9Zx48rXvcp9txOIiGWAiim8l3FBFFIFG2mwngQK4B2Tr
-	PL2G3WfJqsSGA==
-X-Gm-Gg: AeBDietLf4NoZKgcM8IJg/n0bIQUjLlEVynxJPXzEVnp/P5ikLCJnaxikKwQZqi0AWN
-	i9x9Tx0m5+AGChldNQpsw0PCgtfPeE31O/bSF8Z941Pe4O5uRafOiObrtCzWbf89xW+gj1QuL3N
-	2rlcR7Ic/VC1xEzJm1hJFVypDIeuvVst2cBfKjXAjVQ145vlqlvxeHA4tYlxUxoQpUBC9DGclXa
-	r14WKY0lJchl1BooRf8mMZz4fOIROql8yQZAnPwwxfCiXdndhoExjTKSzHzgJhiBtcuJ9qJ2iId
-	Yh/XLg5FDhXSeDunx02N/2JttPvrdX3pXXMHnxd36EkXgoDr5kqjWRazPavIOebUP0oMdcMr36U
-	+iPdeUd19ggM3x+jeyJuB7ys9ZXZSktID552QXSG4pE0emlMmoFnPPzED9u9lyn34XBLTMopsDD
-	UZS6E2UHiv5WpxUO9UV14kkG+cPxSxSm4oaybpElnsqc1CnuuK21PdrOMhgxT2f2g=
-X-Received: by 2002:a17:902:6bc3:b0:2b0:6e60:9586 with SMTP id d9443c01a7336-2b2d599adedmr4613345ad.17.1775772531097;
-        Thu, 09 Apr 2026 15:08:51 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-24.dlp.protect.broadcom.com. [144.49.247.24])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2b2d4e54f0fsm572705ad.23.2026.04.09.15.08.50
+        bh=JSsHTKNfmisjk8Wrx6LoskiSSVrIoSHn0g9UnyxtkDs=;
+        b=dRJlJUDcaR8G0+9dPhOeTJADuPOzp2Z5tNQ+0ObUuCZAbhQ6v1ppyQk8wQI/DXZoDQ
+         x3HSsGa10PskseqdhWgj4Y10VoSWhhZHfGjUfrTbqbIesgWK5h79BRtt1h86g28dP2Ui
+         7vo6ztMYDGblnPw0UPQC9PWI9oSJqK9K+AO1ZH3UX45iL3tb6luS8kk/A50GVBA3si1C
+         YrJeD5PTT2UdhQOoNi3HuW7gs4KQHzEqyMlF9f7tVgVs7DHXpAgJIh8Dd4gt+77nqHIJ
+         yBMHBbDblY8O/OufP4/dJmMEoX0ojs09MgXYuaF7o2oZmVjnipMd7bkl7u3Jvh0Bd6+4
+         FomQ==
+X-Forwarded-Encrypted: i=2; AJvYcCW82r49umYbmGlt/YJbFPuWtlH20KxozhaVg5sCbYwZhL2nt918dbnwVCUnb3l2or7zyZg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLowNd4+J3a2diopfsjkE4n3h+a64mfdKQ7tiqZSXNkTpW6aQK
+	Inc0fSveDvJ7A9i9z1eMfMGp9hXamr581/H7/WPu6x/2zLr7JCMwq4nP49IM/gkY01+HnFRTCbP
+	lnohgZcjiRNoGh7Lkk1Zo4RZZFNOYdWdRCUer5V/hSxnRtzbsCzTiCQBQiKcjnSEzY+giruFm3I
+	A2RyDJEvK7TntIFPhLy10unbQGpU3oGdWHrr2t6dzxwPs3AlsrfgFHYJO2I/ME2Q3h/QfQ+k2e0
+	w9XMCsPT4hpKQ==
+X-Gm-Gg: AeBDieu3pDx2ijx3BwCh+TvI6ixoI3TwvJAvQxaT772gMQTPT08N5cKWSJE1AxxXZTT
+	Pqn2feuZYxVZuwm50/DXIhwCaH2xuM4MUMdmFhrnXVlVlroMI9bBsm6qZfknOIyxc77o99uIB6x
+	VYdAXAAtXhJ5xt5sq0yXb3Sj2PWbM+z3AOYho0vuh2hM71ptprLj+rGeHv3gHvJHxpm6jjmhgUm
+	xjDo7XI5HrapbaJ5IqgdNx5wKG0FCyqUHmkZ9P1HLuvNzuHRSKBR+lDsft7gs1AcVu8lO/GC6RH
+	arI57zRYFIP/B/itOTMDXJgP+ghd4R0vIaS1eKZeoXSpG9l6oqMjNTdI0A+R9TvAg7JHPEpW6Hs
+	SCmCjiSz39hiAqDsC2VH/kLy/vl+iAtBYx4M3voZ76me+wDjdwYOUGK0GreEWonOOffk9zYkBbZ
+	5rXNVmTLJ8zhzQ+pDNMjcxWnKfTGsQwxIKGxMQ6YJf9Nb4xDrqwPNTehoCHYGtBWo=
+X-Received: by 2002:a17:902:d58c:b0:2b0:67fa:dbf8 with SMTP id d9443c01a7336-2b2d5a5f5a5mr6179465ad.41.1775772894028;
+        Thu, 09 Apr 2026 15:14:54 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-29.dlp.protect.broadcom.com. [144.49.247.29])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2b2d4f354ccsm547965ad.38.2026.04.09.15.14.53
         for <bpf@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Apr 2026 15:08:51 -0700 (PDT)
+        Thu, 09 Apr 2026 15:14:54 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-43d63280c97so143703f8f.2
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 15:08:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775772529; cv=none;
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-43d03db814eso1458531f8f.2
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 15:14:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775772892; cv=none;
         d=google.com; s=arc-20240605;
-        b=OrwiFOH5Rny9vxU5fwqri1MOCCnHVAcG1ZltZMiURv3vUjUtmToOd6L2fL18UpGnob
-         NuUpmm/r3F6g3HXzhHQDxgcN141sf8DBErHUDho4rLhup5Z4R4cG+3+xZ2weB1plwuLc
-         Y9trlCR0db6n8Ksvy0S35jnaRn48hGZiN4rgNX9XNb6D5knIhwSIkmpjoFGy8/d41Ll3
-         w/HXBuwEcP9o34gXlHFlJlOnU4jCxfJ+luVmetrbRtU1yTnhsaSQH1NWUKz8igjpv0EN
-         wEiRtrICXiIImpqfTOfNRe8MonMH/w7xMBrBwAGoUzTbv3jD44eXsPZwdPA3QQQbWrn0
-         S1/w==
+        b=hDowWiASyNb14PCTdeKBwqsYEFEKDdvlnfR1dBbuBcDzz5TkDIYHlsrY6jibikXwHx
+         amH4Ji7i/MqhP1b+QCIWuR0RKMTbAy/d24iNeiZ/mYZob4ujeIgL++ne9WRuYojSqGjv
+         5mftHYzswj7TCExTNm6OfbQwJyrQrka7OVDnG1PqJhUTZDYwhAsaYV+tt+gUIOoL2+L5
+         fHcr6lMUAsyrYmIm1ef/7mrULrJJPId/Vd0aED5EIso55ABapqLGCfBAlY+GSl7dcmwG
+         jmL3WX8mTpGERON+AtW9oC8eflTO8Jy9d6i62rlt7UMAABf32uJ96WjkU/qpvfStTyNU
+         3bKA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=3MYTqkP/OsLWAjjIhBHEHK2WqSnZcZeinyJnYjTW9u4=;
-        fh=kjm/1IPWwaovej2ICGW5Wr/8EJl21Ct6nIRipL68vjs=;
-        b=VnUFFwoxFAxT3xah2Y054ssphjkKwgGvKNSF+S+6JSE5+KwLtFfhxmZdwq5dD7QzY3
-         HWY+Di/1hKRCiSP8dNXvqGa9HYlw+pGycDEva/TQpkPEd65AOzMbIB53R/nHMAulZJQP
-         K0T8cZ8gw1n9Ug5+pVFtze3sYgW2aW3J9FKeoiPoLU25WNK9m5mw2dqZ8TrpIbn93nDw
-         pFT644xVqbJy0jhw389QHQWA8edykBXAXhYGvjy2alz+5EjVfC21W/Jf7VMNvXV6Hjta
-         OVQQlzbLF3A2fixelyh8GuVw/xK1zrNER9C1GJYbDF5WTl6omPUC9hLBcTS1lY4s799f
-         GS6Q==;
+        bh=JSsHTKNfmisjk8Wrx6LoskiSSVrIoSHn0g9UnyxtkDs=;
+        fh=v5FPlCU4yLe2wTJuMk/oDGI7iRulLX7HuGq3Tr+eT0M=;
+        b=SDwS7lorJ7xreBIRu/6QeLKGaUi9DW/Mv3xgXqRPggxT4s+MD9m4CwkwgbcO6Wtg+C
+         OUFeGPfu+SrSYHre89KzfScE/8hsMREVjEtCFKeYkpV7orW6IsYnz8PH/Td4BXoUUFaW
+         T5Ln+L5tGfttx6QThEuQQmnCDEJ3sk0UI8XBbIn2SCzACUOL6M2nS1HYGUkaUCzTWUNg
+         73iIwA3quawmX8XKuZIpNlAgVcQ4absc19Vnr16ROn8Nn1sV0/F4MXlqR6nwINwxNoJU
+         LxFAaqygr+1XVqbj6MPBNNKDU+Q2c7A1DZpe2HZXpoKbwxDE9SmbLNaPIYKJbQrDGeda
+         Nomg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1775772529; x=1776377329; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1775772892; x=1776377692; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3MYTqkP/OsLWAjjIhBHEHK2WqSnZcZeinyJnYjTW9u4=;
-        b=CPUCi1GHhEUEIDAKVhdUiOplx+HQSlWJiigHsrdjEcSTW2kUXFcHxMdihowv3Ayauo
-         +N2zLuC5Sn6Z2sVoxQLnjZNkKwsCg6z/pPpWigIWnJ3DU49nIxlbJVFyaCAtRFf1HgW0
-         0v/udxo/lnLRIdG+KXD5k80dWkbIk0HPYEGEw=
-X-Forwarded-Encrypted: i=1; AJvYcCV6Cyl10Qae9Yqs7OkiFInxjqDUeKrPGo/vs/rwO8ihHGcaSaWQnOhIr0oH47vjGRGtqPc=@vger.kernel.org
-X-Received: by 2002:a5d:5f87:0:b0:43b:4703:9de5 with SMTP id ffacd0b85a97d-43d642dccc3mr1022144f8f.44.1775772529153;
-        Thu, 09 Apr 2026 15:08:49 -0700 (PDT)
-X-Received: by 2002:a5d:5f87:0:b0:43b:4703:9de5 with SMTP id
- ffacd0b85a97d-43d642dccc3mr1022125f8f.44.1775772528655; Thu, 09 Apr 2026
- 15:08:48 -0700 (PDT)
+        bh=JSsHTKNfmisjk8Wrx6LoskiSSVrIoSHn0g9UnyxtkDs=;
+        b=NBHdeHjY93i8CEnZGdEQoIY8Ho7Vy81bRDnylsL5ueUKa5Y38rE6H8wLt0Q5bNlH+i
+         VDzEQZGpvqv0wPJjyJH4R9Af8ozP4C744DTwSmFwRCyf7qSn4Yvga6qwijbZdkzDlkHP
+         XceDjjphmQCdK9ThwagUCxJtUV2CejSGLcWKM=
+X-Forwarded-Encrypted: i=1; AJvYcCXgfU4kFFPgv7/XKEYPe+dXIPN56avppsqSL0/JrW9bP7sIDUV2A86gBiyRwhJD0JxxOFU=@vger.kernel.org
+X-Received: by 2002:a05:6000:2010:b0:43c:f7e5:817a with SMTP id ffacd0b85a97d-43d64292b01mr916407f8f.19.1775772891650;
+        Thu, 09 Apr 2026 15:14:51 -0700 (PDT)
+X-Received: by 2002:a05:6000:2010:b0:43c:f7e5:817a with SMTP id
+ ffacd0b85a97d-43d64292b01mr916355f8f.19.1775772891127; Thu, 09 Apr 2026
+ 15:14:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402213629.1996133-1-jitendra.vegiraju@broadcom.com> <adSxQpAE0nY0ulfU@shell.armlinux.org.uk>
-In-Reply-To: <adSxQpAE0nY0ulfU@shell.armlinux.org.uk>
+References: <20260402213629.1996133-2-jitendra.vegiraju@broadcom.com> <20260407020954.3674529-1-kuba@kernel.org>
+In-Reply-To: <20260407020954.3674529-1-kuba@kernel.org>
 From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
-Date: Thu, 9 Apr 2026 15:08:35 -0700
-X-Gm-Features: AQROBzArt3I8bemRMGDxmah0OqjGLcvGglqY0L8HZtuxxXqb_QYUkXgoucoT5Fg
-Message-ID: <CAMdnO-J0Ss=+sp+aJA2TOiNPvzAv37MN05gwVZTGJmh3L4n7sQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 0/4] net: stmmac: Add PCI driver support for BCM8958x
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Date: Thu, 9 Apr 2026 15:14:37 -0700
+X-Gm-Features: AQROBzDIrVBrq9a8N-kCZj3is_dHAtUZh7lT-03nRSlBMuTVHnIsC_ZMyZ5jrJ4
+Message-ID: <CAMdnO-KHq273kkC2wBou7oEK1BAHbYYW4u9iRV9nfe0dNk_61A@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 1/4] net: stmmac: Add DW25GMAC support in
+ stmmac core driver
+To: Jakub Kicinski <kuba@kernel.org>
 Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	mcoquelin.stm32@gmail.com, bcm-kernel-feedback-list@broadcom.com, 
-	richardcochran@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
-	hawk@kernel.org, john.fastabend@gmail.com, rohan.g.thomas@altera.com, 
-	linux-kernel@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	edumazet@google.com, pabeni@redhat.com, mcoquelin.stm32@gmail.com, 
+	bcm-kernel-feedback-list@broadcom.com, richardcochran@gmail.com, 
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, rmk+kernel@armlinux.org.uk, 
+	rohan.g.thomas@altera.com, linux-kernel@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
 	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
 	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me, 
 	siyanteng@cqsoftware.com.cn, prabhakar.mahadev-lad.rj@bp.renesas.com, 
@@ -119,44 +121,106 @@ Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, davem@davemloft.net,
 	florian.fainelli@broadcom.com, quic_abchauha@quicinc.com
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000d3be7e064f0e426f"
+	boundary="00000000000072415d064f0e5824"
 
---000000000000d3be7e064f0e426f
+--00000000000072415d064f0e5824
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Russell,
-
-On Tue, Apr 7, 2026 at 12:25=E2=80=AFAM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+On Mon, Apr 6, 2026 at 7:09=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
 >
-> On Thu, Apr 02, 2026 at 02:36:25PM -0700, Jitendra Vegiraju wrote:
-> > From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
-> >
-> > This patchset adds basic PCI ethernet device driver support for Broadco=
-m
-> > BCM8958x Automotive Ethernet switch SoC devices.
-> >
-> > The MAC block on BCM8958x is based on Synopsis XGMAC 4.00a core. This
-> > MAC IP introduces new DMA architecture called Hyper-DMA for virtualizat=
-ion
-> > scalability.
-> >
-> > Driver functionality specific to new MAC (DW25GMAC) is implemented in
-> > new file dw25gmac.c.
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> ---
+> Subject: net: stmmac: Add DW25GMAC support in stmmac core driver
 >
-> Sorry for suggesting this rather late, but I recently came across
-> another stmmac driver in the kernel - drivers/net/ethernet/synopsys.
-> This is for XLGMAC, but I wonder whether it may be a better bet for
-> this core. Have you looked at it?
+> This commit introduces support for the DW25GMAC hardware in the stmmac
+> core driver, which uses a new Hyper-DMA (HDMA) architecture. It adds a
+> new DMA ops instance mapping virtual DMA channels to physical DMA
+> channels and sets up the basic device configurations.
 >
-I wasn't aware of this driver earlier. We are looking into this driver now.
-Thanks
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dw25gmac.c b/drivers/n=
+et/ethernet/stmicro/stmmac/dw25gmac.c
+> > new file mode 100644
+> > index 0000000000000..82eb22bff73e0
+> > --- /dev/null
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/dw25gmac.c
+>
+> [ ... ]
+>
+> > +static int rd_dma_ch_ind(void __iomem *ioaddr, u8 mode, u32 channel)
+> > +{
+> > +     u32 reg_val =3D 0;
+> > +
+> > +     reg_val |=3D FIELD_PREP(XXVGMAC_MODE_SELECT, mode);
+> > +     reg_val |=3D FIELD_PREP(XXVGMAC_ADDR_OFFSET, channel);
+> > +     reg_val |=3D XXVGMAC_CMD_TYPE | XXVGMAC_OB;
+> > +     writel(reg_val, ioaddr + XXVGMAC_DMA_CH_IND_CONTROL);
+> > +     return readl(ioaddr + XXVGMAC_DMA_CH_IND_DATA);
+> > +}
+>
+> Does this readl() need to wait for the hardware to clear the XXVGMAC_OB
+> (Operation Busy) bit? Returning immediately might read uninitialized or
+> stale data if the hardware hasn't finished the fetch.
+>
+This is an issue. We will fix it.
+> > +
+> > +static void wr_dma_ch_ind(void __iomem *ioaddr, u8 mode, u32 channel, =
+u32 val)
+> > +{
+> > +     u32 reg_val =3D 0;
+> > +
+> > +     writel(val, ioaddr + XXVGMAC_DMA_CH_IND_DATA);
+> > +     reg_val |=3D FIELD_PREP(XXVGMAC_MODE_SELECT, mode);
+> > +     reg_val |=3D FIELD_PREP(XXVGMAC_ADDR_OFFSET, channel);
+> > +     reg_val |=3D XGMAC_OB;
+>
+> This isn't a bug, but should this use the XXVGMAC_OB macro instead of
+> XGMAC_OB here for consistency?
+>
+> > +     writel(reg_val, ioaddr + XXVGMAC_DMA_CH_IND_CONTROL);
+> > +}
+>
+> Similarly, does this function need to poll for the busy bit to clear afte=
+r
+> the writel()? If back-to-back operations occur, the next indirect write
+> might overwrite the control and data registers while the hardware is stil=
+l
+> processing this request.
+>
+Agreed. This is bug, we will fix it.
+> [ ... ]
+>
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c b/driv=
+ers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c
+> > index f02b434bbd505..64c38de294da2 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c
+>
+> [ ... ]
+>
+> > -int dwxgmac2_setup(struct stmmac_priv *priv)
+> > +static void dwxgmac2_common_setup(struct stmmac_priv *priv, char *mac_=
+name)
+> >  {
+>
+> This isn't a bug, but should mac_name be declared as const char * since i=
+t
+> is passed string literals like "XGMAC2" and "DW25GMAC"? This avoids
+> discarded-qualifiers compiler warnings.
+>
+> >       struct mac_device_info *mac =3D priv->hw;
+> >
+> > -     dev_info(priv->device, "\tXGMAC2\n");
+> > +     dev_info(priv->device, "\t%s\n", mac_name);
+>
+Ack
+> [ ... ]
 > --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> pw-bot: cr
 
---000000000000d3be7e064f0e426f
+--00000000000072415d064f0e5824
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -249,13 +313,13 @@ Y/1/C9Jv/mWm/2lK8nvusOFxhKmbG83Hx8toQdZ5F1kYk6zAWjfB7lwXr/En9mCmLieJ18hen9EK
 qbYyUkmCmuoLi5GXFMJy+iQv6DgMVQ7CACagybU6FUrmL9lVa+A6caBEEh4xggJXMIICUwIBATBi
 MFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9i
 YWxTaWduIEdDQyBSNiBTTUlNRSBDQSAyMDIzAgwYdforFgrdZbZjKmswDQYJYIZIAWUDBAIBBQCg
-gccwLwYJKoZIhvcNAQkEMSIEILuLmSSO4fRKTPTuCUL9ZTZdoL2rS4KMUF6rJInr/XkbMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDQwOTIyMDg0OVowXAYJKoZI
+gccwLwYJKoZIhvcNAQkEMSIEIGwoVXYTb7jIt4pZrqv7oj7W19W19KkcepsmKqv6JpsJMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDQwOTIyMTQ1MlowXAYJKoZI
 hvcNAQkPMU8wTTALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
-9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAJjVU0MvI29h
-uY7bvx9vWk/zixT5OP5qh07gQ9ZF9enzeLyx+PJ+FN8nDKF6+sRt2oK57Z/N+zupzhJ8rkQLg/ga
-Vae5b8gm1TEdtKWoKjlVg15ODGKq0Yl9xpoE8z1FXc7jtzlszLRjxfDG9kpPtIV+fESaJ948mWM+
-Dj+3E9D7GwmUERU4IRcd16s26H3vlHeIzlccQqYyitsy+gq8lArA1S1Xoub06MRPb1oGEnuzt2iV
-DfacCXZyQpO1r7f6dLyk0DQdGseZS1qZBL+mvF8voTPWMvQCJcUgxDeBMBgRaIYCqiKAaf2M7jY7
-PdVbSt7f6/FRFOnIQM6hwwFig08=
---000000000000d3be7e064f0e426f--
+9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAAZLX4DO4Cov
+kQIFrRc07yuLHnUiFw6Zy57h25q9VBipyCFcX1t+qvtoZWuRRC34DLZB5+TL5jSkWkcypzrGbJL1
+a9ywfeNdACY6ZTGC1dzVICDIM4gdYlCBwXyly5bwm+/+rf+yKQS2wRFhZ0sWOrVpsTcglCi3F/UT
+plCuAp8w71I5vtcxJiWUmU5+BXXMQFdLdoSPO4hFp7aOW8hO87mQ0LIzTwtt3sn5Vu9mFCmbWw3b
+swspQ85xb5Ra9j5Do1TcVaB4HHXojqjB1a4dxXEhLjIxfb+NJHxYAE9e3RZHwwrJFmVXW/JduMra
+502KfFM/YwnlfaghhO75Mp8TqQ8=
+--00000000000072415d064f0e5824--
