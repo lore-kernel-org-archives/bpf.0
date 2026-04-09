@@ -1,90 +1,62 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB5E30ACF2
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 07:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C13F37187B;
+	Thu,  9 Apr 2026 08:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775720200; cv=none; b=NZQksqaolAMaPOgoAy4Aa3hD/oOG05HXGjGFMxsytIqEpJuRRz7ygilvQXn7PoGpLnpM8pQH3GUrOUP8wEoQDVy0+HHjH1POmWvgFVvCmcg3MexaNYK9toUknTMVErJ570u+LLOrW9Qz8pdetvFlUt48QI3E45a2ZpsnE9fi+Jw=
+	t=1775722963; cv=none; b=LcP7hp94LhmdTXdRAYZs7bskdxcPnA3ZOsK8JvbD4zf/R8K0rlIFpeyGBqg/h42vQyhSC++/k6g22jlQ6kLbpMa8Q2ojMPPaGTgJwblLvzcy1Tv2L0nA/D7Mnh9ZuvzrnXsTQZ/KvtYRBhlkDGCA7bEIbeaHb5Qj6phwDMU4Hic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775720200; c=relaxed/simple;
-	bh=bWM+n0PuIclSzxSg8yrCMqDB9BwasgmhRhRSh6nIcUg=;
+	s=arc-20240116; t=1775722963; c=relaxed/simple;
+	bh=tEQLa/8haXS+/Iqw/lhgd64KpO8nYmKlsOtiLdY6YwM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fX75LLDvtex4ZBoN2CWtqgjj87nZIyzc83cmuyOL/FXetN6yu/zAmMqIBF1fZNFptir31bIxRvYxaHVx0yDMqNCi+sQ7YwJ7AXAD+gD4C2FFXfqivbjMLSfWJUqJM4SZlORh53q2Y9WYCxMlfzjK1gEQp84wYrnTLYRIYGYXhhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cBCYfFvr; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=t/qLUgSAPK/LAXU1vzG6pUqGzlV3yggVNH5LjC7ePbQMZX3UED3NH7oGOPLZAuhsJ7jQhA4Vxz5XLsPZpLGHMRGgePbf3SiEVxMBjdIgF2rcq1bdLpxxTiZYyV32Dlp2ewqKPavseQ1UcGvFfNH589WlNRUC5w2Qxn2zi0jcx0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1AdIWKg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cBCYfFvr"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso8138845e9.3
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 00:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775720195; x=1776324995; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SFIAOrBx/Kk6hQbOqlmoeLP19Ql72j2A2UxB1/jbKYA=;
-        b=cBCYfFvrs1geXGepneF48LzQAgmUYgVNSWs7NXsWvzAB3JeKpKS0eBD5D5iChjgId+
-         XNhLodDX3OaRT+lCWCtHl9GTXt/zd38gGDyImjK8v9vMtNhrHkXOOMzmj6Fdg2Furs96
-         CXJTnqHnFDvRGXQxeCu2v0MTKtkmYolX5VYeXL2UMLxG1wGALEF8xs4oouz47G6tMxnT
-         bPdop31V4ZUG1STY5xZiVloB76UIThDBi4FQmNNDVxG/14vJ5zFWqYi6lZgzj2+Q9Oyl
-         e5fFK3GsAcb7JbJ94z0YXEon477481XH7PfwuKCFveYFAPEEucllZwaOSVVhuP7X7a4J
-         betQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775720195; x=1776324995;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SFIAOrBx/Kk6hQbOqlmoeLP19Ql72j2A2UxB1/jbKYA=;
-        b=Qhom+tee78PR2tWZaPeS5Cz+o13J0QO+dAFZXA90BVCTY5BMEG+Mso+8UhY7WVly0h
-         Fig+LjoYPi2qK67NDG1tIA4N3MLyzFYIEmaruCbTrlA+7jMqz37+caPtzkiflKcvHd8O
-         /ueuzWbnX1TLwNzRiGOMl30+ysmcMKZNv4jKHK+fuHxp7EOtjypMPXCMnLFFUPvtSZDY
-         n9/v1qUX8n29HlgUCm+9WdkV001scXAN45UA28gR/O9fjeKzFDL4p8p2kGBjfOdcQI44
-         AMw41ejevBnKujtBoau7EBBy+azsNsFYHQou0t913kDG0+dAVAx+aIOeMZ95/9jDsj8r
-         ZMHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUeFUaTNZxk9Y4wx1MmtfSHrLSltYVzF/xd53tanz+6Pq8MBMWO5Es1UUS+fiatPc+Ouho=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnAp9uciYHiOZkDMTxkha9/I2hskk35orHZCZKVecgLtsvYqZQ
-	SwnjUlB7t2Ta8xXPgDsu8zB1KbUJEhZu5T/rv768beWZzj7UFsA4fIZe/gFsNc0NVww=
-X-Gm-Gg: AeBDiessW+vyljFQC7hw4xqVBw5r9TaOMHtV1ngSnL2Y20n7XYchYF2AWfCfP8FNsVu
-	gblmdYIMlq38Xwsp7Srg9/a8P7o9+AQdDvfIzJnr9CTeyzzxsMNAIKlF4eV9d45XtWLveqrcQVg
-	ssE5cxeIzwwffLrOLp/gg/Oh+oxlBRFg8kFyOr/KTBZjjzGXa3/scXmXLAvkNLKBVQtgllHq7UX
-	h7qSPJKUTW1TrTXQ/TToaS55v3FXsVNT/NBVxEDFKR3OgP0TF3d+S+WH/uaVsaVqmsgmEdDspia
-	uSQ0w6ueuAd1P1V6dlcmY6X73WAr/YoIsdb6kwL69tzOQky235RkEVphUolAv2zkB05DZ/MAjj2
-	nTHpkKAAiBvpnd0KUDv9ccl4lKeBm0uXm+/yNslYeUKe/33e1Y7TLwaBt8ZVZoXXh/o2HaVxPJs
-	YsSRzrisKFgpA22pFpllfjBcyh/A==
-X-Received: by 2002:a05:600c:4753:b0:486:fcc7:d6a with SMTP id 5b1f17b1804b1-4889976eb60mr333821525e9.13.1775720194684;
-        Thu, 09 Apr 2026 00:36:34 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488cd19ea83sm81192215e9.1.2026.04.09.00.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2026 00:36:34 -0700 (PDT)
-Date: Thu, 9 Apr 2026 09:36:31 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Song Liu <song@kernel.org>
-Cc: Yafang Shao <laoar.shao@gmail.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org,
-	jikos@kernel.org, mbenes@suse.cz, rostedt@goodmis.org,
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-	kpsingh@kernel.org, mattbobrowski@google.com, jolsa@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	yonghong.song@linux.dev, live-patching@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to
- klp_patch
-Message-ID: <addW_-whBavyHY-Z@pathway.suse.cz>
-References: <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
- <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
- <adQhpBC2W9I6QW-g@redhat.com>
- <CAPhsuW66tuF+QZ0pVheWb5sC4NQ-9CXikq=zMrPBXTHcsVPjdg@mail.gmail.com>
- <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
- <CALOAHbCxPA0dtsx7L2kYn8wwBdM=krZyOpfRTBiDW9qfA_zmzQ@mail.gmail.com>
- <adUd0Mojbtrwmeod@pathway.suse.cz>
- <CALOAHbDG9mq1iJv5suct=cqJ+2r8VvJ-dXN=nuvMw0XYqnUjxA@mail.gmail.com>
- <adY_WgA54CDtWBq6@pathway.suse.cz>
- <CAPhsuW42WqGuZ1Z-RG0yzifZ7rh=XKUa5hKb6JxLeTWdc4s4-A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1AdIWKg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40484C4CEF7;
+	Thu,  9 Apr 2026 08:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775722963;
+	bh=tEQLa/8haXS+/Iqw/lhgd64KpO8nYmKlsOtiLdY6YwM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V1AdIWKgfOuDJnPp0z+X5VbbR6VGXVevTY5CMaVxbW7CBwU+xh+KqYAgOjAwy7ayy
+	 xzHnhxAd/NDD9PPh7UKVMBhQ9fr/XYFFQ+/GYlRiGfC+DdNPbr/HkzLVA5ThAO75nM
+	 pn2hP70NYF2GNI8LRJhk/BLYgkmfk/TVZY807NSO77hk5Qt8r02RB+q8ZXCAslahwb
+	 G6y0N27JcSLXE4vix5q//WRmXo0IyrN5OjHcBiDQJGfTZ+bY9izWYBaW5K/GMWypOU
+	 kgK+kiHTUk7BM/QtTyJ1TXXRAJHMAdStC6LeKNMoTV6yXB4AlVpke4SVoacUGT/wLS
+	 iexf5GxvRAAhQ==
+Date: Thu, 9 Apr 2026 09:22:33 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Tal Zussman <tz2294@columbia.edu>, 
+	Matthew Wilcox <willy@infradead.org>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Gregory Price <gourry@gourry.net>, Michal Hocko <mhocko@suse.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	lsf-pc@lists.linux-foundation.org, Johannes Weiner <hannes@cmpxchg.org>, 
+	David Hildenbrand <david@kernel.org>, Qi Zheng <zhengqi.arch@bytedance.com>, 
+	Chen Ridong <chenridong@huaweicloud.com>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Kairui Song <ryncsn@gmail.com>, Nhat Pham <nphamcs@gmail.com>, Barry Song <21cnbao@gmail.com>, 
+	David Stevens <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>, 
+	David Rientjes <rientjes@google.com>, Kalesh Singh <kaleshsingh@google.com>, 
+	wangzicheng <wangzicheng@honor.com>, "T . J . Mercier" <tjmercier@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
+ (reclaim_ext)
+Message-ID: <adddpxFfWIO9a2Ih@lucifer>
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+ <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
+ <acTaRgusrxfCoKqe@tiehlicka>
+ <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
+ <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
+ <acWXdvHx9mYqvT2w@gourry-fedora-PF4VCD3F>
+ <CAJHvVciAmX9OFLBSahwvXL=E+3xnDsL2aE4WKfDBFqaT1Gu+Qg@mail.gmail.com>
+ <acX8_XMQYA0-NGUW@casper.infradead.org>
+ <6f40c513-af3e-45b6-9000-c61494a23bd3@columbia.edu>
+ <70fd648a-efa1-465a-8e6a-51411dfd50b8@nvidia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -94,80 +66,79 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW42WqGuZ1Z-RG0yzifZ7rh=XKUa5hKb6JxLeTWdc4s4-A@mail.gmail.com>
+In-Reply-To: <70fd648a-efa1-465a-8e6a-51411dfd50b8@nvidia.com>
 
-On Wed 2026-04-08 11:19:50, Song Liu wrote:
-> On Wed, Apr 8, 2026 at 4:43 AM Petr Mladek <pmladek@suse.com> wrote:
-> [...]
-> > > >
-> > > > This is weird semantic. Which livepatch tag would be allowed to
-> > > > supersede it, please?
-> > > >
-> > > > Do we still need this category?
-> > >
-> > > It can be superseded by any livepatch that has a non-zero tag set.
+On Wed, Apr 08, 2026 at 05:21:17PM -0700, John Hubbard wrote:
+> On 3/27/26 12:12 PM, Tal Zussman wrote:
+> > On 3/26/26 11:43 PM, Matthew Wilcox wrote:
+> >> On Thu, Mar 26, 2026 at 01:47:43PM -0700, Axel Rasmussen wrote:
+> >>> On Thu, Mar 26, 2026 at 1:30 PM Gregory Price <gourry@gourry.net> wrote:
+> ...
+> > Yeah, unfortunately it's not so straightforward. As a simple illustrative
+> > example, consider a file-search workload, where you search through a large
+> > number of files over and over again (e.g., a poor kernel developer trying to
+> > understand how the page cache works). This follows an MRU, rather than LRU,
+> > pattern, and readahead doesn't help much, leading the active/inactive and
+> > MGLRU policies to have similar performance (~40s runtime in a specific
+> > benchmark we ran). In comparison, using cache_ext (our eBPF-based caching
+> > framework), we can run an MRU policy and it goes down to 20s.
+>
+> That's dramatic!
+>
+> ...
+> > It's been well-known in the academic realm for a while that there isn't
+> > really a "one-size-fits-all" policy that works *best* for all workloads.
+>
+> I think that that point has been less clear, outside of academia. In fact,
+> MGRLU (to the extent that we believed we would eventually get rid of LRU,
+> in favor of MGLRU) doubled down on the idea of one size fits all. So this
+> is interesting.
+>
+> > Yes, you can make a general policy that works *well*, but if you really care
+> > about a workload's performance and want to squeeze out the last 10-20% (or
+> > more) of performance, you need to be able to (1) experiment and (2) take
+> > advantage of application-level insights. Being able to extend reclaim (in
+> > our case with eBPF) enables that.
 > >
-> > And this exactly the weird thing.
+> > We wrote a paper about this that was published a few months ago [1]. Happy
+> > to answer any questions and continue the discussion!
 > >
-> > A patch with the .replace flag set is supposed to obsolete all already
-> > installed livepatches. It means that it should provide all existing
-> > fixes and features.
+> > [1] https://dl.acm.org/doi/pdf/10.1145/3731569.3764820
 > >
-> > Now, we want to introduce a replace flag/set which would allow to
-> > replace/obsolete only the livepatch with the same tag/set number.
-> > And we want to prevent conflicts by making sure that livepatches with
-> > different tag/set number will never livepatch the same function.
-> >
-> > Obviously, livepatches with different tag/set number could not
-> > obsolete the same no-replace livepatch. They would need to livepatch
-> > the same functions touched by the no-replace livepatch and would
-> > conflict.
-> >
-> > So, I suggest to remove the no-replace mode completely. It should
-> > not be needed. A livepatch which should be installed in parallel
-> > will simply use another unique tag/set number.
-> 
-> I think I see your point now. Existing code works as:
-> - replace=false doesn't replace anything
-> - replace=true replaces everything
-> 
-> If we assume false=0 and true=1, it is technically possible to define:
-> - replace_set=0 doesn't replace anything
-> - replace_set=1 replaces everything
-> - replace_set=2+ only replace the same replace_set
+>
+> Excellent work, I was delighted to find a well-balanced description of
+> both older and more recent history of the Linux page cache there.
+>
+> It's helpful to read this, even if we go with a non-eBPF approach.
 
-Yes. This well describes my point.
+Yes, thanks for that, it's interesting!
 
-> This is probably a little too complicated.
-> 
-> > > This ensures backward compatibility: while a non-atomic-replace
-> > > livepatch can be superseded by an atomic-replace one, the reverse is
-> > > not permitted—an atomic-replace livepatch cannot be superseded by a
-> > > non-atomic one.
-> >
-> > IMHO, the backward compatibility would just create complexity and mess
-> > in this case.
-> 
-> Given that livepatch is for expert users, I think we can make this work
-> without backward compatibility. But breaking compatibility is always not
-> preferred.
+But I would say for now we need to defer any consideration of bpf being a
+thing until we actually get things into shape in terms of improving and
+modularising the existing reclaim mechanisms.
 
-I believe that it is acceptable because:
+mm has been far too keen to take features without paying down technical
+debt first and it's been very costly, so before anything else, we must
+ensure that reclaim is both long-term maintainable and maintained.
 
-  1. It was always hard to combine no-replace and replace livepatches.
-     I wonder if anyone combines them at all.
+In terms of reclaim bpf as a concept in general - reclaim is so very
+sensitive to even minor changes, and I fear that people might find
+something that appears to dramatically improve matters in one scenario, but
+end up with an unusable system in another.
 
-  2. I believe that nobody tries to load the same livepatch module on
-     different kernel versions. Instead, everyone prepares a custom
-     livepatch module for each livepatched kernel version/release.
+A bad sched_ext implementation might result in poor responsiveness, but a
+bad reclaim_ext implementation might result in a soft-locked system, and I
+fear that it might be quite easy to do that.
 
-     And the tooling for creating livepatches will need to be updated
-     to use "number" instead of "true/false" anyway.
+In any case, we can look at all that once we are in a better place with
+reclaim, which Shakeel's proposal focuses on and I'm very much in favour
+of! :)
 
-That said, it is easier to always use "0" for non-replace patches
-instead of assigning an unique "number" to avoid replacing. But
-I do not think that this would justify the complexity of having
-different semantic for 0, 1, and 2+ replace_set numbers.
+>
+>
+> thanks,
+> --
+> John Hubbard
+>
 
-Best Regards,
-Petr
+Cheers, Lorenzo
