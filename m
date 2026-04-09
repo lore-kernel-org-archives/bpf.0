@@ -1,143 +1,137 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAE82309AA
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1AA368293
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775701701; cv=pass; b=JDis9EJNBBtw8LdrIGzQiHG0Q5IW+cJ0rdsqdyYdGXpWfdFUvrIKzHnurDKtIcUfo20+eCpbu9lH+3Jl+YVMlrW//TQ+qcy++7lN+AOVFW7gIVjL6P5h+OYaKG4Hotug9zTjACXfCf3vMHF5qiHGhCca5akmAtk+woRagHjTJTM=
+	t=1775702045; cv=pass; b=ngi+31WVOFbwwas3spDkS5c/hconDdLkAabeOpl8eOkEe+srM2vABV27ZoDo2VFn5dV6lNqjMYeBHgVzPDT/3xqlUfc5fw2UVZhN/zgPyqZEZIeNXONcrVtoa8VgkwJCuQt8YCcGhtTdiNSnO8ppIwdxra7zMzulxG4cxI8Xo90=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775701701; c=relaxed/simple;
-	bh=Wsjd4wf9kaem2S35Hl93re5ukqCSWQjB5gwANngiNC4=;
+	s=arc-20240116; t=1775702045; c=relaxed/simple;
+	bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qSkjH9ZjSoc267ec97mI390AvtE5KKvuLeaqqXKtyD6oWpLbR8SNjwWGuMLWnj3PVmuFprKDSTf0O8C0VbexWQIXI5hL9X5vdzQITJ4mUk3XSxLBbhisu1SXVPfAoXqQR8/jeReZVko6pn7FIM7E7XITmAm/x5dsLb7NtBn8Wcg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NY9wvrbN; arc=pass smtp.client-ip=209.85.221.49
+	 To:Cc:Content-Type; b=uLT5TZvPp+C0e+9WM/mYc0GQHyDKEbIaa5X2WsHZ2CrsAtAevIv+2CJGb1H1QO5OYjJd9LsWn3M/Un9seJfDujugy7h0tE2ZVLjgwLVxDUmmfdUYchFQpiN+ItnTs4Wy3fh075FssJA0fvzH4vFu+8Bm5jXDCnA38jxGIo4OC78=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWjORgsF; arc=pass smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NY9wvrbN"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43cf5d14d6eso191504f8f.0
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 19:28:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775701698; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWjORgsF"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488b0046078so3374405e9.1
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 19:34:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775702041; cv=none;
         d=google.com; s=arc-20240605;
-        b=h5NS/Yu0wJaN2tyM7T7C5qqXW8OnHvYAs59HcZ3/+8zk+Wi+LvcEBG6UzD6Q6GqLhI
-         fMsnD/Fo8ytCKaXn5QcXz7ltUYO6JzDz8Lw8thoNsqztFrkUI5zcSXAoiIZ2CgKAvTLU
-         jlXC/gy05lwxsqUdDjOoG+v2N5jt5Kx8I8GXlS8NAWB8PRS050kTg06SqZmeSLR28j3L
-         oXyDETtYNLzj8BAIl6gW8QqeBlM963JPlxpaovla56J4sZDaL7RK8J3bfH0yvHy6PeWl
-         GNcuAXmjy2H3EEqOR71bcGGdFPqbCPZI4ve+Rgz+kyR345WR1f5Zv8Mo3AB6BhRKdnX/
-         og+g==
+        b=jC+bWwCNTkt3+uQT2UPVbzOcs4FcrcSR0A9l7Z7FlEpTJEZjgsQUk3d27rUFA+Q5s0
+         MqpwnwGLZrc2nGOOBJwgE4uM+7ZfEOdwOfhfncF/2+D9dtVXZldcKPAnbXiQJTVhf6b1
+         12N8KJlujqeQo4Huvk1je1p3QW3h9MnL7/fIyPeGGFAVx74Njglvx8rGb1oGMrAkwxqb
+         VlUhP7C0gR2W94/lO8J9I8uI1jXzY6rUb78swMg+vySfv7023Q7UEoMGWBihrfJlxt+g
+         gtdYv+2yoHerzJpwLMi77ZY1jvfqNlmZUwY13jsRSdDPt+WQ/yAdVC7sX/4DYUieQ7/D
+         7omg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=z3bd+PHd9+tjI7Jp5TgPURkM2f0KAKSiJC2HCfcIIPg=;
-        fh=hfRje2veXRgnK/5UbF368BTRuTdPC/oA5JvW+CkXkIA=;
-        b=YjfKKGzVzR0smrmXVik3DuesqcafySZ+WsNA6yCuzI4vfPTnBbfV3+GuzlxG4qBNrf
-         XNjNLLZBT5R4KKqfmNmQv9A9fIAeQW8YwyOEfIId2cmBmgN2T/rYWAdDt1n23q3+bc3l
-         wtk+BTD2hXXHcg98/LCwAyE7P53CcVaceeQ3dINgP+wVdrRWsRkEvRSyYG3Gw2hu4B0v
-         G/mrIJ25DKSiqlca6uL1o2Wci+zDFHj1JcS2n19bwJBseImyr5uTYXsS6Cb6i8ztLmDR
-         YZzW5dxiaWd5xJEWatpyDSAqYSg6xiUAYOVyrgdPkLdV/+ApUO75JiCjiwjk3FAKQrTu
-         BwGQ==;
+        bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
+        fh=yJD8G2PFrJEJ5ou/PGuX+gCp7xaXtso+pr8M1o1C8rM=;
+        b=D6qkJW1sctS56TMVIq/VsiuHvBLTr4KD1WJsUkb03EVuh2kN6UCd8sDiJYUwc+tSZm
+         pTMJwOSrFHPEkVzvNawfbE4nWkIr97nL+CegJJ9y12jCSJgHXH7v7ITlkDkWxxUWlnbI
+         9XrkSZ/vg/ZkgapUWIeRjvA+tAvJoZBWIZuh0N1oUs6XHFMvgDxiU0bEFraJ4SqjjKlV
+         U3sg0Jnc9+C6XBckCqzLoFj0ISU1nHMN6/a1u89wZyqKUseKntZ8NLSQT/n90DheSDjA
+         5qIg/ZwdyirgPJNdfhGZDgq98l7tDXpQP5w4RWk76cD7X0SbID3TC3jBxt9vQmhMKRDq
+         NZjQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775701698; x=1776306498; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775702041; x=1776306841; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z3bd+PHd9+tjI7Jp5TgPURkM2f0KAKSiJC2HCfcIIPg=;
-        b=NY9wvrbNFcfcFntxGJnT+b6+mHAPJcyuQFOU6mJ5/lHzVsTjalTozX+cFdBfEXS7ta
-         HoGK/XB4KaeBpkxfNxG1z7W/MWMe8UHok52klZUJmeIl9v784awlbVqsA4ZJjrsR+aRv
-         9T3RC9/AhjtF7La2B4f/dPUKuaFGPyPStFXYbTnnPGWCDjzdd8krg1q7XEJjkmGvbI51
-         crCNrCNl5i1khiXrg03HyOP9mIdORMsfhN7i/yHzAkAvtBkTLqkDalp+w/qw4x2kPm2R
-         vgNyfOhEvzaoQtD7r6A//p7fbpYhf/2DT/di1gsaW67jEcikmXnkrsNUsPVjgOhtIQww
-         AgQg==
+        bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
+        b=JWjORgsFjjSYeZztVkh+aEO5pr+ZpV6o5CxQh1KjDMqwLUpX6q32kEtCD7ZCVf2RTV
+         A3y2Uo4TQqhUMOBLHiZodDsMMUDh797scKlT2OKQIh7BvicPCp4vEIa19oAqiiYKt/vs
+         apiR7S8WPoplgIg1J6JIhTu2T0eNCTa5lhq1pa11soiPQJKtxTcbF4MH50r9tgBLhxqg
+         vQBjrutXF2mdgP0lX/9GnECvVEy9Fl75DnxVbhTc2TzyqNLDXjd4jYuJA9UAokUGs5n6
+         c7Y9c4gabsAD7AwPmeH1w3rODL/kj9AJHhi0CSqtVdc3WKw9xV4poH6+iS/qWXJg4mmr
+         vZNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775701698; x=1776306498;
+        d=1e100.net; s=20251104; t=1775702041; x=1776306841;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=z3bd+PHd9+tjI7Jp5TgPURkM2f0KAKSiJC2HCfcIIPg=;
-        b=Mxtoy18jlp2WvxCWq4cFJGMG8BVfl1nFp5uBtIb5GKHKg+LYPnAJE7tojkkxYPgpvC
-         8olk3ThQObiYYlNLKXYYC9gecojm6FjUpni6tnZKbWGTb7rEYtp4PhnqeZ00monFm/Ao
-         JLkqmbeuqghQlPAx7V4rSrZ3q4dWnQ5XvSbz3xKOWPMc+hpiODJr+8OdO5gO+jjfyLGb
-         xLPjce/dRZRMWAuKn+Fp4RRmHXS/9oNaaL72mCSTnlk4b1KFDNa7gL3Fj0CsbN2jrFu8
-         wu/u0Q5xtNhszx5yjPwpBm931Y9I1akKW8xcebPmGaM35uf8RMu1yUaZiQy0U2qCMZUw
-         6LQg==
-X-Gm-Message-State: AOJu0Ywaj/TasFBwQvReyVtLdTetnMMhuJJmry812/SrCP0NYxgHAZXp
-	vnRtjnB36DPmngOc7gme1UxG/W+sjRq26IA8y5y21N248lamOKz2YdENDwCPjI14JrnAcfpzBem
-	dzvwGIusOtzZzAlafYW9T+sq1/vISWP8=
-X-Gm-Gg: AeBDieuprSZsIOb8kW8tE93K4OF0BlQ4W2o2YXUb7pDtL2XLKmlhCdgezoKF5DiyvWK
-	vJwfFnNvD/e37s7a4+Acz2jyahlgtj9NZi7x+NKhkr9iGUt4tt0vP5oSDwGhx43nhk8Blx/NATn
-	SYjAbXK4i9VOXfZ929mavoHF2ciuZoCTFHQc3qXy1oHXextD9bRTaOdY3Zzs/qK6PdAYU0XZkjj
-	h7YHMatxkt0r4DRbNyGonKdAk2lDcOq0PvJ4gNZedEZAgEqwSYbnAaeSZf3SUmD4ilhXP7Vx+CT
-	chzzf+PO2lTz/HvMJXeQl3flNWq/55kV18pfY5Df/KBJlAZX6u2rdv02DFkb9XkmGQjBaGtFWHy
-	SEcJAvyeebEBWrtZYYqvbEhY6zw==
-X-Received: by 2002:a5d:5d08:0:b0:43d:500a:1e5c with SMTP id
- ffacd0b85a97d-43d500a1f0bmr8281093f8f.26.1775701697902; Wed, 08 Apr 2026
- 19:28:17 -0700 (PDT)
+        bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
+        b=UmpkGptOyVud0PMHz98sUqYlJHgQ44xjRElFSQZV3+HhjOc0HWF7BuMk1XxaXZOxCn
+         ZtgiyDXTVGWPJtpirmrNAllSG9r1oBaQIIrEX54S933wpI0LIwmwm2rByGLTiNb/T6i1
+         ylt7GY3n+Ns0Atx1HxPPP9bchqiTyfO8mhpoSMXnfkxD47ZJmd52EtIcoUMRQ/mszqPK
+         xnaodeBLQbjzYiwc0GxsvSO9sXn7CBVNo2/OCQ+G/USEcBAZBmboX8EGg1LYhiQTCQIe
+         2LjDZoqQK9/0uMBu+TQ0R726PfXc1q+Ix87ruSzeT0Vzv1tBTw0BsRKQ/hcQyL2Qgie9
+         BzEA==
+X-Gm-Message-State: AOJu0YygJrONdLwF8xA+vvpSnGuJalGtHGjvG+8HcxjWa2m8mxx1y5yO
+	rnC68ali5OPF9DWlrtzm3xfftbRwhXeTAYxRWy/Z/T3VfFROn0mC+x6E+OMcij588+4/5pSuZtE
+	Ba9Ixsh9IP6p2m69ckNF467Je0vxBvuc=
+X-Gm-Gg: AeBDieviICatpp1kOv5ZVwe2EMLjAxBj9ureVlm61bvmBbgFo/nNIaIrdNKEqAHZSgR
+	khrM0ECnHfWnHqEuAByQLWci4Pq632il3Fr874fIGwPmivJk6hSqogc+kQbHnA1kEUGwBmOxKrg
+	H83et4bQxAZQcscRIR30p534VeEXucqfUiXLuedl9GSer/BlZCwDliD2o6xW4bCiPsEEPXp8tVo
+	nIbA4AA71Pj5uslkOfl6ajHljw8TcqRxTIsbkFjyxKl2nk4pvwYE0oG66p7WlkLxJXfZ+YupxUq
+	1GTVdPlKsEy+ybPuu6Kc4mMTqRtYdSMYNqCh51PdvKPunUVrU1Awg/QN/4dXMxTZXiTaUuydsFQ
+	4xMM2nWjsBhtmecerYlyMIZemyg==
+X-Received: by 2002:a05:600c:358b:b0:485:4135:5c92 with SMTP id
+ 5b1f17b1804b1-488995cb858mr386413205e9.0.1775702041098; Wed, 08 Apr 2026
+ 19:34:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260407045730.13359-1-emil@etsalapatis.com> <20260407045730.13359-7-emil@etsalapatis.com>
- <CAADnVQLHFZE3AFzP3gtZKvcaX+3hbp3pCw3JLqEtpdoQ+OUf7g@mail.gmail.com> <DHO7DJ574EL1.8O0NIINEBJMR@etsalapatis.com>
-In-Reply-To: <DHO7DJ574EL1.8O0NIINEBJMR@etsalapatis.com>
+References: <20260407045730.13359-1-emil@etsalapatis.com> <20260407045730.13359-9-emil@etsalapatis.com>
+ <CAADnVQKnHXg0YnuLvzfXjszMaqugpMNWD5=ipffWS4GVNg6rFQ@mail.gmail.com> <DHO7PDYZAY17.1I9BCM8TQWIJP@etsalapatis.com>
+In-Reply-To: <DHO7PDYZAY17.1I9BCM8TQWIJP@etsalapatis.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 8 Apr 2026 19:28:06 -0700
-X-Gm-Features: AQROBzBnZYOJRdGG9R8wjuhCkYD0S2Lwqftlv7mGHSIdg9NhWpK2CVPMbC6tuYM
-Message-ID: <CAADnVQ+mv56x_0HftRzwWkpiBK-3ZmW7wCXUVa47UVDqmFeCCw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 6/9] selftests/bpf: Add arena ASAN runtime to libarena
-To: Emil Tsalapatis <emil@etsalapatis.com>
+Date: Wed, 8 Apr 2026 19:33:50 -0700
+X-Gm-Features: AQROBzCoUquyCH9biDKGaMaTmdbsMh7297OH1fch0XoZ_tsBf_1KVQnNaBM-BLs
+Message-ID: <CAADnVQLdhjd_owgNxxyP_ozk2R6NX_UR-ZgnpF=2PFnUJYNp9g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 8/9] selftests/bpf: Add buddy allocator for libarena
+To: Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 8, 2026 at 5:38=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.co=
+On Wed, Apr 8, 2026 at 5:53=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.co=
 m> wrote:
 >
-> >> +int asan_dummy_call(void) {
-> >> +       /* Use the shadow map base to prevent it from being optimized =
-out. */
-> >> +       if (__asan_shadow_memory_dynamic_address)
-> >> +               ASAN_DUMMY_CALLS_ALL(NULL);
-> >> +
-> >> +       return 0;
-> >> +}
+> > BUDDY_CHUNK_ITEMS is used like NULL ?
+> > The header is u32 + u32. Is it really worth saving 8 bytes?
+> > Use two proper pointers?
+> > How many headers are there?
 > >
-> > so every bpf prog with arena will have this asan_dummy_call() function
-> > just for BTF info?
-> > It doesn't smell right.
-> > I think it's a bug on LLVM side. It should be preserving BTF
-> > when it emits calls to __asan*.
 >
-> This only gets emitted for programs compiled with ASAN, so it's not
-> there by default. That being said, the issue is ultimately that LLVM
-> doesn't inject debug info for the __asan functions. I've been able to
-> remove the dummy calls by adding a postprocessing step in LLVM's
-> AddressSanitizer (github.com/etsal/llvm-project/tree/asan-emit-dinfo).
-> I've also gotten the dummy definitions removed by replacing them with
-> a function pointer array, like so:
+> This is to make memory corruption harder and keep ASAN effective.
+> The headers are actually embedded only in free blocks, so they're
+> not taking any extra space. However, turning them into pointers means
+> that for 16 byte blocks they occupy the very beginning of the block.
 >
-> /* Only required when compiled with ASAN flags */
-> static void (* __asan_btf[])(void *) {
->         ASAN_LOAD_STORE_SIZE(1),
->         ASAN_LOAD_STORE_SIZE(2),
->         ASAN_LOAD_STORE_SIZE(4),
->         ASAN_LOAD_STORE_SIZE(8),
-> };
+> When the previous block has an off-by-one it immediately corrupts the
+> allocator freelist. Worse, if the header is at the beginning of the
+> block then we can't catch the corruption with ASAN: The header must
+> stay unpoisoned since we have to read/write it while the block is free.
+>
+> Since these are arena pointers maybe we can store them by turning them
+> back into address 0 scalars to both be able to do regular pointers and
+> pack them into 8 bytes?
 
-yeah. Just this array of pointers is certainly much better.
+that probably will be even less readable.
+Ok. let's keep them idx for now.
 
-> Wdyt about either keeping the dummy calls or using the function pointer
-> array for now, then removing it if/once an LLVM-side solution gets accept=
-ed?
+btw, please trim your replies.
+gmail sucks in viewing/replying to long emails.
 
-Ok for now. Pls cc us on llvm diff. It looks landable to me.
-Explain why it needs to be in BTF better in the commit log.
-Since it's not about debugging and not really about pleasing
-the verifier. BTF is used to link. So it's part of accurate linking.
-Since we don't match by name only. BTF is our way to avoid mangling.
+>
+> By the way, we're calling bpf_arena_alloc_pages without the lock because
+> allocations of the order of ~1MiB fail when we take the lock (which is
+> fine imo, it makes sense that the nonsleeping path isn't able to satisfy
+> large allocations).
+
+That's weird.
+
+Puranjay,
+that shouldn't be happening. What's causing this 1m issue?
