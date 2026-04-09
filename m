@@ -1,161 +1,108 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAF63A0E9A
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 10:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775730365; cv=pass; b=D7+LITGgrCBEka9ypcI8D45pUuR19tPpo/6csIi/SAYbjFc9SDFrR7/Bklmyg0AQlHdkinL0A/cZR9fqG2QYF6dWOCDvIVxhvEn7wewxK5JSUYfdYRfl0ySLmkvIBVWuDFludBahMAN/CeMqm/QSR5HIJcWYIi/ZWiThKXO/UQk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775730365; c=relaxed/simple;
-	bh=apqxXJEJdLgz0MPrd/4+PeW3rREgQ/peBQ1tEbjfD90=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r6GE3R+wVtuuByVMk6H+eXdr2M40SFQpW5GtrBJ610ipDcKAEDWZLK9vnr6H+2iUllMzkDAIQtsHimEwQSHhq1Aa6TdEv3aMXOLFB4Yt1D5V1UGEMVvupHTWNKUsW4ARFTafQCIWct4iq9KXAXsxvoQzmw3sjLstZzhxyIRRonw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KG6Jn1/C; arc=pass smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83333A5447;
+	Thu,  9 Apr 2026 10:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775730371; cv=none; b=cmvENhWuUtYXivAZ5iVVeY0/Wmk0ThzhmDigP8yVzZc1QQqBucLLFDMHGuzcHBTB8VdZ2GK6JgyscQ2Z5g7eieNHP02gbfRR6wPNDk6BB1GahMmvuKgGMp4ywUnIYo3l5zKvAnwJ3MvagwdUW+Hp6FpSX1TOnZA2y7t3Pf7KdB0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775730371; c=relaxed/simple;
+	bh=7py9+jmGAJ42gklg146TwBoQ25+pE+fdXjulq709fJc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=U0kHVDJTTQ77w6lZdUnW03fUvhdJYI0QwApqWMHDZSG6/wN/a+sdEm1IVPC1Hm8x88gMo2LfwAfLleMiFddGsFR7m6fhsaOgEStsp2SeD5cUyfJwnMmK66tD8a9bCn7Np2j+6RYUqNDr4M3WCIWtJcfQFzg84XqqBN5vyCk2/xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PNN0hgq2; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KG6Jn1/C"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-66f727d6849so957962a12.1
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 03:26:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775730363; cv=none;
-        d=google.com; s=arc-20240605;
-        b=M3yM+S5+F5r6KQESorBAVhlN9tAQkH72U+5PssP6Mc0LdBkHV38ZQlRooUs5cxHMTS
-         m5sG/L2V7TP4twKgF4u07WwHlsVlQmWesQP05NaKimNj4cBviPnhfKsqVSlHxfy9Ndxi
-         e3u3zECz3pFMsM2JUASRT5FYdO2wN1WohNJ9MjKClvIEb2AkW+eFEAlerXswCXMyLzi9
-         3NxJqoTwMjTwtbWsGvJvp/PBLAGOONvhIFDDLVmLoAi5o57voTop9H83inLH8vXCGR/G
-         DSh4f3Q6b4B8p68eqobCVecmEUiHLdJHgYRh2jEfI/FUKKl1aJhodWZA4qVP+PvBY48C
-         bF5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=apqxXJEJdLgz0MPrd/4+PeW3rREgQ/peBQ1tEbjfD90=;
-        fh=zS0NdvB+xqfzlkr/79D2w/kHn4REB9TYbxDCgj5RNV4=;
-        b=JWlfZ9FR/4fbWSfnmHpsd7ZMj7nyxXVXNwmQEFgqIOkbE4jH+SjC8K2xf0Ed3GF6lC
-         gWPW4qetIW49Mt3FDu/ScQ9+Hbo/RtC3PP2FbsxclPSi8lItiWpjRZxGA+yN+V3yZRR7
-         cTB03IUZrBj/hljNnhaGaxz/wUX2vwRqlEMuBOh6HDMeD14j2Vv1IGaGR6kuUnfUAxBG
-         fklpPTbb+lzzk2EpRqrmXnRYl0jPYoZg5qJbk0BliDv/DYX3lRli4Ve+KwsMbQMOSor1
-         uIQONTc4PfOlyn5n/nxa6pR2aUHNt/jPSkCB2DDQx8TEQzjM09tdTfWKP/LbZqdgUufZ
-         2M9Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775730363; x=1776335163; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=apqxXJEJdLgz0MPrd/4+PeW3rREgQ/peBQ1tEbjfD90=;
-        b=KG6Jn1/Ck2PGSS2KXF94NmEqwwm9Y1KRRNlIJSPhZkgtVYlcpO1vOvEOXQNiPsO7++
-         Tbk5CNE81Jif/PCPYMZzwtunCEaASWbQtq/382fROU+/V8xRM/YwFNLIEFvEfqlcbl0t
-         UVQpa0BTElXp86MQQPb4VyY9Py6ylkZcwQ1n5hdS/Re4uwaSSzYMBWa1vo96shoXto0D
-         vbdWnCHTOoRA8BQgICATgp/vZt/bbzdfTm1jCnayydt/U5imkDo1TmaIynqa7aWaFZJf
-         yd4DJEpsFR8+5EpDXh5qLFF2uwaqwJTFrtP0kkO28gM3/UzW8B/NGuux+Zu7k8F6J8Vw
-         nc9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775730363; x=1776335163;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=apqxXJEJdLgz0MPrd/4+PeW3rREgQ/peBQ1tEbjfD90=;
-        b=fogkSORkgWihmMWm9JUPscygqFBiwjjPfWZvJk9L38s1Jqs3dFFrtHWmErmLY2mZEb
-         Un5P1mZSX0hVUXoxrVI/oJssfKpZAcxKR6CR7WxrCtqs6WaJfXlgsE+LIzN5Pf4Lb2If
-         MyBbQdYSpE2Dlyw9E0EV2AnGm0KsuWOeWe9U8oeFEMbqgXodvySXssWXfx/K/+ouMf3h
-         FHwo0x9Y0hv7rxujrro929ak/2VNCD2liIueN1RR98g5kgnfJ4Ben0usIounQBT+MstU
-         1OCXoUlTzRQgVTcH/BDINhwHlsEAOMRP/eZrPvkv1MdSH+ZBGCyfTKcuzja48I1Nth7J
-         LC6w==
-X-Forwarded-Encrypted: i=1; AJvYcCVbjImQkYm8pdZ7hkoJp6rrPFIccR2oBgt3fkl3hTmywwZEqqh5C1687hdpilw8d4twKjY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOUogl/jKbE5xMv363ZOWByded+TcuXOaMYM2jUWL1gExIupRA
-	AexpsgoWzbUyBbnloE1nHnL8m8oXSkr++ICNJmS6gIOabzEdJ1GrmSkxn3KR1mEAg2G7MHOiu5u
-	7zIcH9ErqP25o/kBib8c+PUmE/C4N2ef/qIGuckk=
-X-Gm-Gg: AeBDieseLLOE3mui0C385dW4QRz7uNoxvLu+8VJVsbp4D+Igs2TxMD//lLM+4jzxMK2
-	ctmXS64lPRCkNJfyS0Py0EzaTwwXQMPjgAFMI8lDSDXMZazqOHktJFAeZIszh1wdldMfpW0qaon
-	r9AY9favGXXxX68E0ihcGLi8CfjRomWK2wLhNoWjE/EAe2kdoZs3XKHGTYT8Ldg0UTptaT2DDWl
-	DIKOZZGRljdWxu6GPEahhpgvta+VkYtGsgYoEYkktN1D2W7CiTTsI4gAKYPsKCdYOPyjCGrcslA
-	BWQQOqp8cnzjrNCxwsczl+g=
-X-Received: by 2002:a05:6402:21d3:b0:66e:45dc:52bb with SMTP id
- 4fb4d7f45d1cf-67004d93df3mr1248945a12.23.1775730362544; Thu, 09 Apr 2026
- 03:26:02 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PNN0hgq2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=oX
+	ak1Wf+tJCIBtTfH/i2OKO0EooehvNI969H+oz08rc=; b=PNN0hgq2zZ/JWVvQHB
+	wakqazxGzzbOiJZmpJ+BGhwF3nSh3uvjD8Fp0nJbpcpYu7H/+owzBXh90+WZc+Dd
+	63CSCfO7//XCKhgbr/gK7d5R6yX7bwwBeNMEA8Ro/Xwc8yM7nmcL4sjIn85f2vtg
+	9KowFUKUg13GOOTaGsf+SjU/Y=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wD3H_WOftdpMHcLEA--.37469S2;
+	Thu, 09 Apr 2026 18:25:19 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: jiayuan.chen@linux.dev
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	mattbobrowski@google.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yangfeng59949@163.com,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
+Date: Thu,  9 Apr 2026 18:25:18 +0800
+Message-Id: <20260409102518.258752-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <409f3694-a054-4288-acd9-7900cc8f8620@linux.dev>
+References: <409f3694-a054-4288-acd9-7900cc8f8620@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260407045730.13359-1-emil@etsalapatis.com> <20260407045730.13359-9-emil@etsalapatis.com>
- <CAADnVQKnHXg0YnuLvzfXjszMaqugpMNWD5=ipffWS4GVNg6rFQ@mail.gmail.com>
- <DHO7PDYZAY17.1I9BCM8TQWIJP@etsalapatis.com> <CAADnVQLdhjd_owgNxxyP_ozk2R6NX_UR-ZgnpF=2PFnUJYNp9g@mail.gmail.com>
-In-Reply-To: <CAADnVQLdhjd_owgNxxyP_ozk2R6NX_UR-ZgnpF=2PFnUJYNp9g@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Thu, 9 Apr 2026 11:25:50 +0100
-X-Gm-Features: AQROBzDZhy71M8j3R7BWLAKPDT0ukWJoKiHCLyjacv7RFZk1qquGiDJbQcR-E_8
-Message-ID: <CANk7y0gqT0CdTp5-_+YgbYjmoS4pwKcXutpGD-_XJMX2ZLCpeA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 8/9] selftests/bpf: Add buddy allocator for libarena
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3H_WOftdpMHcLEA--.37469S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ZF18CFWxGF4kGr45Cr17Wrg_yoW8XF1rpF
+	4fKF9rJF1vyFW29ryIyF47uayFqa4Dtay3WFZYk347AFsYqrn5JF4UGFyj9rW3CrWDAr18
+	ta12vanIya1DZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JjjKZXUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0A8Ti2nXfo-7uQAA3K
 
-On Thu, Apr 9, 2026 at 3:34=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Apr 8, 2026 at 5:53=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.=
-com> wrote:
-> >
-> > > BUDDY_CHUNK_ITEMS is used like NULL ?
-> > > The header is u32 + u32. Is it really worth saving 8 bytes?
-> > > Use two proper pointers?
-> > > How many headers are there?
-> > >
-> >
-> > This is to make memory corruption harder and keep ASAN effective.
-> > The headers are actually embedded only in free blocks, so they're
-> > not taking any extra space. However, turning them into pointers means
-> > that for 16 byte blocks they occupy the very beginning of the block.
-> >
-> > When the previous block has an off-by-one it immediately corrupts the
-> > allocator freelist. Worse, if the header is at the beginning of the
-> > block then we can't catch the corruption with ASAN: The header must
-> > stay unpoisoned since we have to read/write it while the block is free.
-> >
-> > Since these are arena pointers maybe we can store them by turning them
-> > back into address 0 scalars to both be able to do regular pointers and
-> > pack them into 8 bytes?
->
-> that probably will be even less readable.
-> Ok. let's keep them idx for now.
->
-> btw, please trim your replies.
-> gmail sucks in viewing/replying to long emails.
->
-> >
-> > By the way, we're calling bpf_arena_alloc_pages without the lock becaus=
-e
-> > allocations of the order of ~1MiB fail when we take the lock (which is
-> > fine imo, it makes sense that the nonsleeping path isn't able to satisf=
-y
-> > large allocations).
->
-> That's weird.
->
-> Puranjay,
-> that shouldn't be happening. What's causing this 1m issue?
+On Wed, 8 Apr 2026 20:16:45 +0800 Jiayuan Chen wrote:
 
-Emil,
+[...]
 
-On the system where it fails to allocate 1MB in a non-sleepable
-context, how much total RAM does that system have?
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 594260c1f382..3bfc67983e12 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -18413,8 +18413,10 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
+> >   			*range = retval_range(0, 0);
+> >   			break;
+> >   		case BPF_TRACE_RAW_TP:
+> > -		case BPF_MODIFY_RETURN:
+> >   			return false;
+> > +		case BPF_MODIFY_RETURN:
+> > +			bpf_security_get_retval_range(env->prog, range);
+> > +			break;
+> 
+> This is a breaking change. The verifier rejection log should be more 
+> descriptive
+> so users can understand why their program is being rejected.
 
-We have had problems like this when system memory is low, there is
-high Zone Lock Contention, see:
-https://lore.kernel.org/all/CANk7y0jsWjt4VMbCza7TOLLXSVtGA=3DMDNVj3roTrwG=
-=3DZMhcG3w@mail.gmail.com/
+It should be easy to see from the existing error log that the return value does not meet the requirements:
 
-If you have more than 4G of memory and it is still failing then I will
-spend more time debugging the exact reason and see what we can do
-about it.
+At program exit the register R0 has smin=1 smax=1 should have been in [-4095, 0]
+processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
 
-Thanks,
-Puranjay
+> 
+> >   		case BPF_TRACE_ITER:
+> >   		default:
+> >   			break;
+> 
+> Also, I think a whitelist approach would be better here.
+> The known danger is specifically those security hooks whose return 
+> values get fed into ERR_PTR() by callers, such as:
+> - security_task_alloc
+> - security_inode_readlink
+> - security_task_movememory
+> - security_inode_follow_link
+> - security_fs_context_submount
+> - security_dentry_create_files_as
+> - security_perf_event_alloc
+> - security_inode_get_acl
+
