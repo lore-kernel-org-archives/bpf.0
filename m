@@ -1,170 +1,313 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SY5PR01CU010.outbound.protection.outlook.com (mail-australiaeastazon11022086.outbound.protection.outlook.com [40.107.40.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89B827E04C
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 05:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775711933; cv=none; b=KLi0+NiEXIungjl7XwtIaAM+2Qu1GKwf6MerOsUF07XKhedOJRhLR6NkjL20HQCUbzNpuwmbTd/iNw2rZc9vOoOZuXvSvyg6h6gTQgG6gClcg4xoEPbvMWc8UG460VqiIYNPuMjKoOMG+UdZmEnaD+eiIT+pt25eDW4ToZaC7pg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775711933; c=relaxed/simple;
-	bh=IiIjfaAakQDPNkQgQkfMdzZDuNR7hFEeDHo2PAQjn+4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xathei/buRwnPvd5ovK7wbhcpk7tfDLhGQAEhuKNVKvDbNiuWqYvb7Yy2oNHCpd66ZV1c6kjw8RkaeUERqtFU3dXRVk4Zq26wyVMhHLEQ0H+8Br+lL7XsgVZ+Chy4AaqCKEtZr/UuqhNqcH3M/ll7ZBo9Q4+G4rAboBnK2SXhkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyJevyQo; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECDB4A3E;
+	Thu,  9 Apr 2026 06:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.40.86
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775715041; cv=fail; b=gHL2dvwEmDBtHijxu5HvJbTOF4gtStStGGQennrPfaxTw+Bsjr+yW+bK4swz6YMscvbvcH73RuISaAJWeMnhjLqMK/n6JHmaQhpf1aOMFbZdA8iXuJbeDfR5LtwdXD2CjEYUdYPX03HAA0RkAWmyZuOeQDNoEFnFT9sfUIi8bgM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775715041; c=relaxed/simple;
+	bh=fCKOAEO3P0w1vLmb/lHhQNnyPexeb9/R9CqRLF8SeNc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=llJYJ9/gGxo+H2x9Zz3Js5gDFy9Tt+fdHwa689c51/Qs73CdSfcSklSttZcVz7cqv1zNHIrITUCmh/V9O4D0AKhpiyrI25BrDJJ4E6qGBtLs5qehQf++qDIwNOPqb1JA/ro/etnbCSRZZBEkui+xJKJUVLw+bTBuJlRepnzgJ78=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=verivus.ai; spf=pass smtp.mailfrom=verivus.ai; dkim=fail (2048-bit key) header.d=verivus.ai header.i=@verivus.ai header.b=DVzgxEJa reason="signature verification failed"; arc=fail smtp.client-ip=40.107.40.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=verivus.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verivus.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyJevyQo"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8d76492e51bso44851785a.0
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 22:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775711931; x=1776316731; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2ML8LqxZrjyjFmoSU8L6gN5gKbH63aXwV93VjwmnQ70=;
-        b=fyJevyQoaF4R7nupUHBAB4PS/rs+dfU0PaYmTC4mZrMynI4zV+y/NwknQAtHHXnhQ1
-         lxOFEbL/79EE5rAZzio2Fa5dMSt97oF2lQ6vzlnlfbZ4RoG1qkJLCAo41sJe/aUkQm78
-         eXhr5GRIu4psZYVbEOoZNDTJ1MkU0wuUrVt9bWBnXBM2/IUo1bZNeXMMl3FwypazsmET
-         oSgvuHQRD1R0GI05Bk1TV1ikkzpZPwbWf7NcB7FkZpI96EZ/hYqOv3375tM/8hKhidBd
-         qp5MPDHHNddbR+afTIZGJ+5BLIc2D89TfRCW8S6FBfowOr2OCBl0uZSUqbPaSpDZpEqo
-         9JVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775711931; x=1776316731;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2ML8LqxZrjyjFmoSU8L6gN5gKbH63aXwV93VjwmnQ70=;
-        b=qzxW/ytsOdFGJvL15SqoFioabUPGUdtdvjo+kPxdz6EM6BgYJ611dVhsPFJwjelsdV
-         ITaG7/wdOMl5XbFFvLJ+pvkpEcq4CXreHA1f0xgdBR9zgdk8505KeU3dmBZMMCWh3IEy
-         +wxV+sWE9D0JQk4mlaZ96AL4OvYx9vrZkhiRQgF2lJNSHNzCYrsDtldEUkKwH+hk2rgm
-         5Bo6BTS16Tq/zewgDHHMItAyhYaXC/kdIqUGbmDbfjWWlrahf3GTdQXbzPyP4GlqaWbB
-         9acDb3/6rPJbkGuAEBT27YIzAQoIjOXR8raQHPNlQ9hJC032+j1RA+1yY2tqAd3rhuNt
-         dsaw==
-X-Forwarded-Encrypted: i=1; AJvYcCW6tRSxH/jpZwGYIxls2gbPVNX4zzIypeDZg80yp+u9Kg9BfehFTJ1QJjirA/J3GAAUvII=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBleDfPZeIEefNS1B35WJZOvOFQziP/biT7aIbd3ta4wsmrRfC
-	lApWLoyfcHgx+J3NDAWRgHOnzNWp8BRyOeiENYkvs1Evfsd3MF/zkLO2
-X-Gm-Gg: AeBDievay2PQAjNN3ikd+aLC+rN1UbKUn67gzVHC6wNtDq1PFIf8/prRVgV/FhkjPtY
-	s2oQwiNK6aOGHMPwUUvFJh4cltAItWxk/XKpHuwtG0snPWpNCeqDVJAGgdZTYBR82EidHbLtRxA
-	KCu2vS5UXRCqa8EV8nMakWNBoTdG1+oydRIv5MKd/X+TaTRg07NxGby+zOZ9Ll8oSn6JnSmy2Xe
-	oV91Vqhds5LmvaMbAl8i712+Yb0PML2Ai2oBAbJwqdiT5RgNUSK5V/g5fbeV5XbFXhuQ03VfHNw
-	cCtPlF7UKVc8+jsSaqQxNmaCTdTwFrWEiT8ax50qkyccfrSZj5BUlobifPsxU6sPc7DTqvRFpNx
-	e88wth7luYkRY4D9lT24pfYFx3cwVKMZFChHnPBo34bRWrSXQgjKNdzYQewrH+5k+YBDNtJ/PDY
-	2+C2mX5ZCm4HhR0qHoFTxJ62oNfhd/X6SU8u2CmbAm9KBAj083AgPlGA2yjdpxYt6yr37dOPgVd
-	g6GcJC8MBDVAGzXrtVcoIM7DHIkln0=
-X-Received: by 2002:a05:6214:5081:b0:89c:c8eb:e807 with SMTP id 6a1803df08f44-8a704e9f9dcmr373036276d6.54.1775711930702;
-        Wed, 08 Apr 2026 22:18:50 -0700 (PDT)
-Received: from lima-default (pool-108-50-252-180.nwrknj.fios.verizon.net. [108.50.252.180])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8a59691580bsm189419036d6.26.2026.04.08.22.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 22:18:50 -0700 (PDT)
-From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-To: paul.chaignon@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	harishankar.vishwanathan@gmail.com,
-	memxor@gmail.com
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix reg_bounds to match new tnum-based refinement
-Date: Thu,  9 Apr 2026 01:18:49 -0400
-Message-ID: <20260409051849.228066-1-harishankar.vishwanathan@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <ada_F2WbRcnOYXWb@mail.gmail.com>
-References: <ada_F2WbRcnOYXWb@mail.gmail.com>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=verivus.ai header.i=@verivus.ai header.b="DVzgxEJa"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TawbKXMLZ2zl285gKMdKt8gdEVA9Sk0oxGy5UYPJUyxphIrtTmm9ES+JZsD5EJtn7oP99DpuLl9orTMDoPrWWOUVJA2njjvFT4Y2Cl3s77Ba/uXJRKxFrkhCchIAFVKXuS+Rqm+sRhsqiT43vd6u7cx/WJfcN8erpkXVry7z2bCQJtbCQEEVBS/9bfyaZlantN3bTZZ5q4bTL3FyfrFIlCyYDDkx/ZIqDnE+ceLslvZibE8WU+2wGZlEIBURd6CdLCx+eU1O+9+LQ54hL9lk/1l15hMcKbS7xfv9bThSsTyGut2+yow0mR6rGJ3ju9cNkhaahW/hyl8qNtLqwy2zuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WIJgzL/u4JC7+8sRK0EMCl8ssas/wjNMtwycnQH1bfk=;
+ b=jchN+YGlYMYpoR5VwbHz2AJbSnytEeBZnTTwTgOUfp5JY83VowNJzjdCqniAMp48kkTu1+yMK9DUGDqd2sG6mZPtMNsXHFshWPkp+d/pyiOCTb20beq1g+S2BztR2Cn9yxhbdEUIuVVyWXiHpPw7bfvp6FVDkYFqjiEh6/pmfviKa7dxGwFdrjE12ozkoQSNRlrFN8i2dAyzufP8zAmICdrn15oUjd0xy2e4TVk99g1J+7+v/4JE44KOaC8RxQDXedaDtS+nwSaDql88g2/VcUsfor7pPkHSrlaLXzne/RV3sGo/WkJGJPswY/rdPqWwXPa0rYX7gIUWrrxqFO6EzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=verivus.ai; dmarc=pass action=none header.from=verivus.ai;
+ dkim=pass header.d=verivus.ai; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verivus.ai;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WIJgzL/u4JC7+8sRK0EMCl8ssas/wjNMtwycnQH1bfk=;
+ b=DVzgxEJaHZ1LPJ1/kyNBMqbORFNGNI8xZcQnpP7nAqg4HjOOcfq3odeaJT/B4bIn7DOxAs0l34ZvFaDUA73TNeXByrp03HnTmvTifXkPAlQWxxBg8YE6lt3QoGutQjXT/8ri3BMPZDh3nrSV82B6Jiq3BJtqfIeP70vZ9Tn0WJB3jXk/lFOXls/KWY3SWVEJdvxzYzPhl1kVnCqAdD6zaCFcG18BpGpNf6HgYnL71weUpwR0/NCaJhVg/5+R31/00+zd2ncba8xLKFBFAPj/kS/wY+xqPhSofOLyyOjNsimUrXZmYv1IDBOZD0MC3w/4kSPA5S1d1MvU3uK50DsK1w==
+Received: from ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22a::5)
+ by SY7P300MB0218.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:235::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.21; Thu, 9 Apr
+ 2026 06:10:31 +0000
+Received: from ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::1e3f:9cb9:4a95:b5a2]) by ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::1e3f:9cb9:4a95:b5a2%5]) with mapi id 15.20.9791.012; Thu, 9 Apr 2026
+ 06:10:29 +0000
+From: Werner Kasselman <werner@verivus.ai>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, Werner Kasselman
+	<werner@verivus.ai>
+Subject: [PATCH v2] bpf: guard sock_ops rtt_min access with is_locked_tcp_sock
+Thread-Topic: [PATCH v2] bpf: guard sock_ops rtt_min access with
+ is_locked_tcp_sock
+Thread-Index: AQHcx+eQDTDmE7ol90u8LpJWPxuBdg==
+Date: Thu, 9 Apr 2026 06:10:28 +0000
+Message-ID: <20260409061026.3926858-1-werner@verivus.com>
+References: <20260406224953.2787289-1-werner@verivus.com>
+In-Reply-To: <20260406224953.2787289-1-werner@verivus.com>
+Accept-Language: en-AU, en-AT, en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: git-send-email 2.43.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=verivus.ai;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ME0P300MB0853:EE_|SY7P300MB0218:EE_
+x-ms-office365-filtering-correlation-id: 73179e39-45d1-42c3-6dd3-08de95feb2e9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700021|18002099003|56012099003|22082099003;
+x-microsoft-antispam-message-info:
+ 2AtUOYXEiQQv7YVBmMaeBmM9foIcDsFaxMT8h05/u1nfp67XJTzr9AXfW8k4tAcbyBg5U913vmcwmbVMqn2F69xel1J2+SX8hEsiZ5oW9u4BODu9/usgnIR39DuAtuKoU7jFWEsptsZsQgmczpEjr1r25iAMNxOSJO6a5td71LF3ZxttbR6py3ZOlP3/tTQ1Bc+2dnGbJfaeRNKFGagImGpVOCFYaU10S0axPwGadiAn/9kD0VRreS7Y7HymQdHkmZc/GdPW51p9dq+6r8x+f5E84FSsWQhOe+JNQBMJdgX6rGwuDHr3TaNYcfqAIDiDo0PNyAyLWoB4ew55G/Ihb+A932uluCumqXSlOSvVsWIzwwLfvZT1IMmsmLyxQ1lh03FUegQFj6fiMZOBAIi3SN9fup6o6fWwkw1kndted3Bcn6JXMLQnpjrui9zPaHeq5sW3yg+AFzbGo3PHR4dVxfYW/tKsgVel36BRZgweGaQOSyhxO+pF+YRoo2XN2EooDwsX/BB6MucOnFXTVJr1NnZ/vZ9uD8cFVzmdAU1CQ3gfkkRP0Imj7JOYGqemCy68Eym2i5B2lc+SUCZ47tSvhfDRO3k/gSH5oIKmlCNVdW2Xz7eWanD5gW4gtvxdrUVyiTRq94jmelh7yk7pfLibGkb2rUUjsiPsYFxM/XA/jNxSMrAbFPrD607m1oEvqmfp2jbNe2tlkNgoIJf651huD6VvhEButTAvRW5tj8x0uA5yXHKXmOLBnqdmamigLYTOv04WyepdArDFGL075jOcpnB6Ak7TOLWwgHnXvYw9tzw=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700021)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?OOxFlQBJuLtsM0w1seOyrayn2Wf9aUY+3CvA0AvX5SVtL5h80/vmMZYnik?=
+ =?iso-8859-1?Q?u77u9lASgQRF2b4gMqBu7ieTFu0jYXJ6A2lAoFHzb/73aRgSJ8IMAjQqv/?=
+ =?iso-8859-1?Q?V6TlJKc7McL2NGj/wQhZHu5Qek3Zb8OqZIpMYB7ZySggYSreaSnkLoorON?=
+ =?iso-8859-1?Q?LPLUJOOhp0+GxoP8TEzxJwThwUND1OY/uKrtztyL3N/4dyDz5MP5heXP56?=
+ =?iso-8859-1?Q?3988kq1Y15/n7IHCzWmbb1eYjpJU13jN/9ym94/Y/JCL9dtLEZDRUmtEQx?=
+ =?iso-8859-1?Q?Np0XAvNrEJSDW7mkcm7zoXLGWM7Bom8l+AF91CRJ4Y+7EpoJisQwOOHYCF?=
+ =?iso-8859-1?Q?4yHMZVPy3robFtuvNqXc+GH2EYT3xtuNwzT6FuOoAal+TD+abpWcakCZhO?=
+ =?iso-8859-1?Q?9SrBNka1kKZTFCJr8+bi7pyClvlcL+1QogKh6zU3hZCXYpZFm7utDzLD0I?=
+ =?iso-8859-1?Q?TzuiK3yJT7vceYD9eVDhOVqqV/bNOte2h41pWFJc7tcJSES61r6ZRAZeP7?=
+ =?iso-8859-1?Q?pw6wm1o3nOqcJlTNYwbsIeF9fbgU6ZhD6xfyh+8BktgXfoLVqwafLAVU67?=
+ =?iso-8859-1?Q?2zc3dGco1wbqvqpixa3IRUXM6r0XbgVaVxmlMtmC1rTW/zp08UDHFnCfyQ?=
+ =?iso-8859-1?Q?Yw+cN8pRTHq6Zmd1Q6cq9Ug9yKqW72eAs6l1waExZhb+0bIxXBALsNYq/U?=
+ =?iso-8859-1?Q?A4URgNMgu0UvAEMJsjV/ZIxQi2TueVoNAnVLm+HMSOrEt+9OAYneKmsUUz?=
+ =?iso-8859-1?Q?WWZd1x9rD9i4kER4zIzzE3bmY/0Hlwp5e4bglPN09w310agcHZwmmpY3eZ?=
+ =?iso-8859-1?Q?fwUpFCedDzTrtpaE2c8YLa72POUPT7tIhaYYpdE0KnR1uRHcx7s2zrilX3?=
+ =?iso-8859-1?Q?2GmIoUrgB+ZPcxmNQPZSBubUHitj+2BbAWpx0BacRaESD37J7qPunevNeJ?=
+ =?iso-8859-1?Q?GHq1oJ4n4X7msL4DHw8JXxHeODRO9/vMhvG+i8FtHBQJIU7UxXC/UJ2hDn?=
+ =?iso-8859-1?Q?Dizq5nE5Xy3/m/q5hoSQNvn1+dCkzKA5j/IhXEFXHGC40ox8nCPnWyP4bY?=
+ =?iso-8859-1?Q?rkk6Eiu90jP3U/ZXef2L61+Zj41CsN4rppSghMOeCEVFixFdZ7rITqnUpK?=
+ =?iso-8859-1?Q?52rddhUJx7BMk5nzoAy9xluHFe6jBvS63Ntvu+cOLxuoIvqyUme1s6UX50?=
+ =?iso-8859-1?Q?wgr2nZmH9aH4iPeRS1f1+T6VaG66mVQdWNKiqx17Z5GUpYDkr0ZFEPoEJF?=
+ =?iso-8859-1?Q?toLtIAzIWxf+xCud77fxlddUwaLBQNJTZIEXIC4YSriaOz5AtVt3B6uP49?=
+ =?iso-8859-1?Q?9TyzmtovUQFbNG1bh7s2NH+3wujdv/wh8YRZnnjHyxSBcCEpSRoXxSIszQ?=
+ =?iso-8859-1?Q?vxf3mGpSSrchKgvijaOn5LJIunFR7rOKCNm6dzPyXG8hLU6mzn/EFDH8vC?=
+ =?iso-8859-1?Q?ew8rvNwGB6czbl5z1Gxt21uFdodA/TF97v+FtVwu75F9daFP7GJM4GGkoI?=
+ =?iso-8859-1?Q?wr2OYS9acaiwsVscCKvjgw/2V1BLdbLexz4iMxdvyOaLOiazgecNpomlSx?=
+ =?iso-8859-1?Q?IxEDEH/P9uHUMEqOiX+JX6CRxLm+NVCX31Rr9q2Zn7lkrxTBvuZ62PouSs?=
+ =?iso-8859-1?Q?6JP+OAJc8PLRkJxtjOGCOH8JqVuiO/XBuntNII6/i4TaMvZoDvi1U7hx1I?=
+ =?iso-8859-1?Q?ExVnhe3iCeVWXIeW2E+c6sD+iUqN6AdJ7tSe/YyG/GzEa//3PZUyb9Nzt2?=
+ =?iso-8859-1?Q?L+6OB0kJWvcrv7aiaOOlXowoXNvQKodPUN2aCvWPu4yVjfw5W3M2plXyLy?=
+ =?iso-8859-1?Q?nyu3kp0aNg=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: verivus.ai
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73179e39-45d1-42c3-6dd3-08de95feb2e9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2026 06:10:28.8883
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ccdcedb0-4edc-4cc8-9791-c44ee6610030
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: O1yBI4VIWIbpQsjUe7RQfFarJgvIVe7R/L6vTg5yWGqiNqKuO0IhMdhDqV5VgbbmRoKFzoOHxxuEL3Knf7Aelw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY7P300MB0218
 
-On Wed, Apr 8, 2026 at 4:48 PM Paul Chaignon <paul.chaignon@gmail.com> wrote:
-> On Wed, Apr 08, 2026 at 10:40:50PM +0200, Paul Chaignon wrote:
-[...]
-> This one hits an invariant violation on an impossible branch and the
-> bounds are set to an incorrect value that doesn't match what the test
-> expects.
-> 
->   19: w0 = w6                ; R0=scalar(smin=0,smax=umax=0xffffffff,
->                                          var_off=(0x0; 0xffffffff))
->                                R6=scalar(smin=0xfffffffe00000002,smax=0xffffffff00000000,
->                                          umin=0xfffffffe00000002,umax=0xffffffff00000000,
->                                          var_off=(0xfffffffe00000000; 0x1ffffffff))
->   20: w0 = w7                ; R0=1 R7=0x8000000000000001
->   21: if w6 == w7 goto pc+3  ; [...]
->   [...]
-> 
->   from 21 to 25: R0=1 R1=0x8000000000000001 R2=0x8000000000000001 R6=0xffffffff00000001 R7=0x8000000000000001 R10=fp0
->   [...]
-> 
->   ACTUAL   TRUE1:  scalar(u64=0xffffffff00000001,u32=1,s64=0xffffffff00000001,s32=0x1)
->   EXPECTED TRUE1:  scalar(u64=[0xfffffffe00000002; 0xffffffff00000000],u32=1,s64=[0xfffffffe00000002; 0xffffffff00000000],s32=0x1)
-> 
-> W7 is equal to 1 and, given R6's ranges, cannot be equal to W6. The
-> condition is always false. On the true branch, the verifier thus
-> incorrectly refines R6's value to 0xffffffff00000001.
-> 
-> This is a new type of invariant violation (i.e., involving the tnum)
-> that is not detected by range_bounds_violation(). I'm expecting it will
-> be handled by Hari's followup patchset. I've shared the program with
-> Hari so it can maybe be used as a selftest. I'm guessing we're fine
-> waiting for that fix as it's not failing in CI; if not, we could do a
-> quick fix in the verifier.
-
-At 21, after simulate_both_branches(), R6's tnum is var_off=(0xfffffffe00000001;
-0x100000000) and u64 is [0xfffffffe00000002; 0xffffffff00000000]. 
-
-The tnum and u64 ranges do not intersect, but in a specific way: the u64 range
-is lodged within the tnum, i.e. tmin < umin <= umax < tmax
-
-u64:        [      ]
-tnum:  x                   x
-
-When the tnum and u64 don't intersect along a branch, that branch is dead, and
-we should prune it. Because simulate_both_branches() currently only checks for
-"range bounds" violations, (e.g. umin > umax) it doesn't detect this kind of
-"intersection" violation (tnum and u64 ranges don't intersect), and doesn't
-prune the branch where the violation occurs.
-
-As Paul mentioned, the follow-up patchset, which implements intersection
-detection for all domain pairs, should fix this. This particular case will be
-detected using a tnum-u64-intersection check that employs tnum_step, as
-mentioned before [1, 2]. 
-
-[1]: https://lore.kernel.org/bpf/CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com/
-[2]: https://lore.kernel.org/bpf/20251107192328.2190680-1-harishankar.vishwanathan@gmail.com/
-
-I have tested the idea and it works (able to prune the branch where the
-violation occurred). We'll follow up with the intersection patchset, and can
-definitely use this as a selftest.
-
-> ---
-> 
-> reg_bounds_gen_consts_s64_u32/(s64)[0xffffffff00000002; 0] (u32)<op> S64_MIN+1
-> 
-> This one fails because reg_bounds' branch detection logic doesn't match
-> the kernel's.
-> 
->   ACTUAL   FALSE1: scalar(u64=[0; U64_MAX],u32=[0; 4294967295],s64=[0xffffffff00000002; 0],s32=[S32_MIN; S32_MAX])
->   EXPECTED FALSE1: scalar(u64=[0; U64_MAX],u32=[0; 4294967295],s64=[0xffffffff00000002; 0],s32=[S32_MIN; S32_MAX])
->   ACTUAL   FALSE2: scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
->   EXPECTED FALSE2: scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
->   ACTUAL   TRUE1:  <not found>
->   EXPECTED TRUE1:  scalar(u64=[0xffffffff00000002; 0x7fffffffffffffff],u32=[2147483648; 1],s64=[0xffffffff00000002; 0xffffffff00000001],s32=0x1)
->   ACTUAL   TRUE2:  <not found>
->   EXPECTED TRUE2:  scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
-> 
-> It's failing with that error since b254c6d816e5 ("bpf: Simulate branches
-> to prune based on range violations"), but was already failing before
-> with a different error (unexpected range). The root cause seems to be
-> that the test runs into an invariant violation, here as well.
-> 
-> We'll probably need to update reg_bounds's branch prediction logic to
-> match what the kernel is now doing. I can look into this next.
-> 
-> [...]
+sock_ops_convert_ctx_access() emits guarded reads for tcp_sock-backed=0A=
+bpf_sock_ops fields such as snd_cwnd, srtt_us, snd_ssthresh, rcv_nxt,=0A=
+snd_nxt, snd_una, mss_cache, ecn_flags, rate_delivered, and=0A=
+rate_interval_us. Those accesses go through SOCK_OPS_GET_TCP_SOCK_FIELD(),=
+=0A=
+which checks is_locked_tcp_sock before dereferencing sock_ops.sk.=0A=
+=0A=
+The rtt_min case is different. Because it reads a subfield of=0A=
+struct minmax, it uses a custom open-coded load sequence instead of the=0A=
+usual helper macro, and that sequence currently dereferences sock_ops.sk=0A=
+without checking is_locked_tcp_sock first.=0A=
+=0A=
+This is unsafe when sock_ops.sk points to a request_sock-backed object=0A=
+instead of a locked full tcp_sock. That is reachable not only from the=0A=
+SYNACK header option callbacks, but also from other request_sock-backed=0A=
+sock_ops callbacks such as BPF_SOCK_OPS_TIMEOUT_INIT,=0A=
+BPF_SOCK_OPS_RWND_INIT, and BPF_SOCK_OPS_NEEDS_ECN. In those cases,=0A=
+reading ctx->rtt_min makes the generated code treat a request_sock as a=0A=
+tcp_sock and read beyond the end of the request_sock allocation.=0A=
+=0A=
+Fix the rtt_min conversion by adding the same is_locked_tcp_sock guard=0A=
+used for the other tcp_sock field reads. Also make the accessed subfield=0A=
+explicit by using offsetof(struct minmax_sample, v).=0A=
+=0A=
+Add a selftest that verifies request_sock-backed sock_ops callbacks see=0A=
+ctx->rtt_min as zero after the fix.=0A=
+=0A=
+Found via AST-based call-graph analysis using sqry.=0A=
+=0A=
+Fixes: 44f0e43037d3 ("bpf: Add support for reading sk_state and more")=0A=
+Cc: stable@vger.kernel.org=0A=
+Signed-off-by: Werner Kasselman <werner@verivus.com>=0A=
+---=0A=
+ net/core/filter.c                             | 53 +++++++++++++++----=0A=
+ .../selftests/bpf/prog_tests/tcpbpf_user.c    |  9 ++++=0A=
+ .../selftests/bpf/progs/test_tcpbpf_kern.c    | 21 ++++++++=0A=
+ tools/testing/selftests/bpf/test_tcpbpf.h     |  6 +++=0A=
+ 4 files changed, 79 insertions(+), 10 deletions(-)=0A=
+=0A=
+diff --git a/net/core/filter.c b/net/core/filter.c=0A=
+index 78b548158..5040bf7e4 100644=0A=
+--- a/net/core/filter.c=0A=
++++ b/net/core/filter.c=0A=
+@@ -10827,16 +10827,49 @@ static u32 sock_ops_convert_ctx_access(enum bpf_a=
+ccess_type type,=0A=
+ 	case offsetof(struct bpf_sock_ops, rtt_min):=0A=
+ 		BUILD_BUG_ON(sizeof_field(struct tcp_sock, rtt_min) !=3D=0A=
+ 			     sizeof(struct minmax));=0A=
+-		BUILD_BUG_ON(sizeof(struct minmax) <=0A=
+-			     sizeof(struct minmax_sample));=0A=
+-=0A=
+-		*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(=0A=
+-						struct bpf_sock_ops_kern, sk),=0A=
+-				      si->dst_reg, si->src_reg,=0A=
+-				      offsetof(struct bpf_sock_ops_kern, sk));=0A=
+-		*insn++ =3D BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,=0A=
+-				      offsetof(struct tcp_sock, rtt_min) +=0A=
+-				      sizeof_field(struct minmax_sample, t));=0A=
++		BUILD_BUG_ON(sizeof_field(struct bpf_sock_ops, rtt_min) !=3D=0A=
++			     sizeof_field(struct minmax_sample, v));=0A=
++		off =3D offsetof(struct tcp_sock, rtt_min) +=0A=
++		      offsetof(struct minmax_sample, v);=0A=
++=0A=
++		{=0A=
++			int fullsock_reg =3D si->dst_reg, reg =3D BPF_REG_9, jmp =3D 2;=0A=
++=0A=
++			if (si->dst_reg =3D=3D reg || si->src_reg =3D=3D reg)=0A=
++				reg--;=0A=
++			if (si->dst_reg =3D=3D reg || si->src_reg =3D=3D reg)=0A=
++				reg--;=0A=
++			if (si->dst_reg =3D=3D si->src_reg) {=0A=
++				*insn++ =3D BPF_STX_MEM(BPF_DW, si->src_reg, reg,=0A=
++						      offsetof(struct bpf_sock_ops_kern,=0A=
++							       temp));=0A=
++				fullsock_reg =3D reg;=0A=
++				jmp +=3D 2;=0A=
++			}=0A=
++			*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(=0A=
++							struct bpf_sock_ops_kern,=0A=
++							is_locked_tcp_sock),=0A=
++					      fullsock_reg, si->src_reg,=0A=
++					      offsetof(struct bpf_sock_ops_kern,=0A=
++						       is_locked_tcp_sock));=0A=
++			*insn++ =3D BPF_JMP_IMM(BPF_JEQ, fullsock_reg, 0, jmp);=0A=
++			if (si->dst_reg =3D=3D si->src_reg)=0A=
++				*insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,=0A=
++						      offsetof(struct bpf_sock_ops_kern,=0A=
++							       temp));=0A=
++			*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(=0A=
++							struct bpf_sock_ops_kern, sk),=0A=
++					      si->dst_reg, si->src_reg,=0A=
++					      offsetof(struct bpf_sock_ops_kern, sk));=0A=
++			*insn++ =3D BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,=0A=
++					      off);=0A=
++			if (si->dst_reg =3D=3D si->src_reg) {=0A=
++				*insn++ =3D BPF_JMP_A(1);=0A=
++				*insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,=0A=
++						      offsetof(struct bpf_sock_ops_kern,=0A=
++							       temp));=0A=
++			}=0A=
++		}=0A=
+ 		break;=0A=
+ =0A=
+ 	case offsetof(struct bpf_sock_ops, bpf_sock_ops_cb_flags):=0A=
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools/t=
+esting/selftests/bpf/prog_tests/tcpbpf_user.c=0A=
+index 7e8fe1bad..d243d6713 100644=0A=
+--- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c=0A=
++++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c=0A=
+@@ -42,6 +42,15 @@ static void verify_result(struct tcpbpf_globals *result)=
+=0A=
+ 	/* check getsockopt for window_clamp */=0A=
+ 	ASSERT_EQ(result->window_clamp_client, 9216, "window_clamp_client");=0A=
+ 	ASSERT_EQ(result->window_clamp_server, 9216, "window_clamp_server");=0A=
++=0A=
++	ASSERT_EQ(result->timeout_init_req_seen, 1, "timeout_init_req_seen");=0A=
++	ASSERT_EQ(result->timeout_init_req_rtt_min, 0, "timeout_init_req_rtt_min"=
+);=0A=
++=0A=
++	ASSERT_EQ(result->rwnd_init_req_seen, 1, "rwnd_init_req_seen");=0A=
++	ASSERT_EQ(result->rwnd_init_req_rtt_min, 0, "rwnd_init_req_rtt_min");=0A=
++=0A=
++	ASSERT_EQ(result->needs_ecn_req_seen, 1, "needs_ecn_req_seen");=0A=
++	ASSERT_EQ(result->needs_ecn_req_rtt_min, 0, "needs_ecn_req_rtt_min");=0A=
+ }=0A=
+ =0A=
+ static void run_test(struct tcpbpf_globals *result)=0A=
+diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools/t=
+esting/selftests/bpf/progs/test_tcpbpf_kern.c=0A=
+index 6935f32ee..79757a19b 100644=0A=
+--- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c=0A=
++++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c=0A=
+@@ -85,6 +85,27 @@ int bpf_testcb(struct bpf_sock_ops *skops)=0A=
+ 	global.event_map |=3D (1 << op);=0A=
+ =0A=
+ 	switch (op) {=0A=
++	case BPF_SOCK_OPS_TIMEOUT_INIT:=0A=
++		if (!skops->is_fullsock) {=0A=
++			global.timeout_init_req_seen =3D 1;=0A=
++			global.timeout_init_req_rtt_min =3D skops->rtt_min;=0A=
++		}=0A=
++		rv =3D -1;=0A=
++		break;=0A=
++	case BPF_SOCK_OPS_RWND_INIT:=0A=
++		if (!skops->is_fullsock) {=0A=
++			global.rwnd_init_req_seen =3D 1;=0A=
++			global.rwnd_init_req_rtt_min =3D skops->rtt_min;=0A=
++		}=0A=
++		rv =3D 0;=0A=
++		break;=0A=
++	case BPF_SOCK_OPS_NEEDS_ECN:=0A=
++		if (!skops->is_fullsock) {=0A=
++			global.needs_ecn_req_seen =3D 1;=0A=
++			global.needs_ecn_req_rtt_min =3D skops->rtt_min;=0A=
++		}=0A=
++		rv =3D 0;=0A=
++		break;=0A=
+ 	case BPF_SOCK_OPS_TCP_CONNECT_CB:=0A=
+ 		rv =3D bpf_setsockopt(skops, SOL_TCP, TCP_WINDOW_CLAMP,=0A=
+ 				    &window_clamp, sizeof(window_clamp));=0A=
+diff --git a/tools/testing/selftests/bpf/test_tcpbpf.h b/tools/testing/self=
+tests/bpf/test_tcpbpf.h=0A=
+index 9dd9b5590..46500c1d6 100644=0A=
+--- a/tools/testing/selftests/bpf/test_tcpbpf.h=0A=
++++ b/tools/testing/selftests/bpf/test_tcpbpf.h=0A=
+@@ -18,5 +18,11 @@ struct tcpbpf_globals {=0A=
+ 	__u32 tcp_saved_syn;=0A=
+ 	__u32 window_clamp_client;=0A=
+ 	__u32 window_clamp_server;=0A=
++	__u32 timeout_init_req_seen;=0A=
++	__u32 timeout_init_req_rtt_min;=0A=
++	__u32 rwnd_init_req_seen;=0A=
++	__u32 rwnd_init_req_rtt_min;=0A=
++	__u32 needs_ecn_req_seen;=0A=
++	__u32 needs_ecn_req_rtt_min;=0A=
+ };=0A=
+ #endif=0A=
+-- =0A=
+2.43.0=0A=
+=0A=
