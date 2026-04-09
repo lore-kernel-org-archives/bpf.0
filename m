@@ -1,137 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971BB2309AA
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:26:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A32F2309AA
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775701580; cv=none; b=pFA2RYBho/ojwvslI8l4JJcQ+++rnpQCGQfbbCHbVIpn7ffVjJ6WCZspI3MVwpuOYN3QgL6scvgBZkwyT4/BRnbOnvGciZkdBJp8s6yzqJddIHaxQQ0qxxjaCSi6he9YDkrXCb0XXFaQAikW52/fk74upoXdnwdiEyuapKX0Gz4=
+	t=1775701582; cv=none; b=PXEd7WKIYH6FzLd7D7ZhrfrYzP1xCR6FoA5lnUqd/h/E/P5RRPF8ULrUInVo2wUS6TLDWt0u7f6/GlL9vt0JDWLckfiRlbBrHdCH/FlHzzXsn8sNrE+wb6/ToWh2rclMp/00ooXxi5h6wB4/yt+OIjzWRR3JDM7PxmEI1Y1NT70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775701580; c=relaxed/simple;
-	bh=esP9HxOkgA5GKA4ssBAkb2EPAZ4ZguuYjEK+uqlhqSA=;
+	s=arc-20240116; t=1775701582; c=relaxed/simple;
+	bh=0FAesaBKBIM3IW2VAjdEcUGVDZnIllMAx3czWTBdoCg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JS081JgTvOnT3Vao4AbMDfKdWOyuZLxukioymDHuLGg/cqZjd8c/UJvwQuK0fKAESvPMz4UnVLYidai/+vehplp/jABTW4ymelHJBf7YLKA1x03szDK0FskbCm+/9nIkC4THfUQI29T9667c4R20efM1LAHPYkkeMS23icnN+g4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5HgnIRY; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=eK1Q5X0dJlZzy12kHnqNyijXQnu9PPIdGNlL5Z1kkaQi9/j4EhEjmLodWm+oCvkUf2d/s6mrXxAIMmBizUcXtbcc2azt+BW4Dg83FmcapDZLXYjI68Ic4d4ti75NGEqJwVpGOzbZ9Fe55uULo9oB1r86AHsjLlwVZLqBakwrzvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cov4Ivgf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5HgnIRY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8B6C19421;
-	Thu,  9 Apr 2026 02:26:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cov4Ivgf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5511C19421;
+	Thu,  9 Apr 2026 02:26:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775701580;
-	bh=esP9HxOkgA5GKA4ssBAkb2EPAZ4ZguuYjEK+uqlhqSA=;
+	s=k20201202; t=1775701581;
+	bh=0FAesaBKBIM3IW2VAjdEcUGVDZnIllMAx3czWTBdoCg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=N5HgnIRYw+gIxop1DOEU/LQ1OFa+if31fCybzFgSYI1Em+7J+FBaNmTIsi4XwiymX
-	 s/VzBUVfzoRzel5SBPKrsWJcvbFADLmsU5/4BBYEbLQLokYPipqzt7d7QRfYYckdWn
-	 Vw9TQbd1NUk+yAzJiHYjz5+E7UNi7+1y3zA0VrAaL3/fwOGIrtTPI+msnTz5nRMq1m
-	 N2Dgp+ecqB1wq3p7vphPgVZ4xJD16cA49RD2PmSuw+jjGLrzI2HyM/FZ2sHAFOJnDd
-	 kCwaTj0Jm/eYZhvWvUQTsIuscAr6NKVJ1Xgp6VVA8wm/N+UvHci2nfoJQ06s26qS3t
-	 hjb5ftwKa7g7g==
-Content-Type: multipart/mixed; boundary="===============5264469444886364970=="
+	b=Cov4IvgfGqZFOXML/WrCpBtv14tEcF8dYOKkccG4ux2JqI4G+a+0RplmYOzTkW/1M
+	 JYjGQNpunSowNged640pFYyzUtB/DZjed75d82cSNQlVcMLXMD6oYvZ3vMckn5yaJG
+	 e6+E+DSRs+FWeBX8T/oEG4H1BoOaaQkQRn9BCo6f0Y3NXwOJtq155ZWSFYrbx0vNHw
+	 4vMdYvn+zWuf8Ny3iCODZ/PLCAYuiVW1U9xW7GNhqjWsHq1126Q0bePdZX/Zm1QYHD
+	 0+Fh5RrRacacurXikKOhtKjkblt5Qa4iIc4/+Qzo4FWxn9nUhs7MPwO62g9chu12Od
+	 SalhToSCYqcjw==
+Content-Type: multipart/mixed; boundary="===============0640741652904002027=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <438e59feaf2325987f2b85c36251a402ac473c9bb87c12b5cc13e404259e7813@mail.kernel.org>
-In-Reply-To: <20260408-patch-set-v1-8-1a666e860d42@gmail.com>
-References: <20260408-patch-set-v1-8-1a666e860d42@gmail.com>
-Subject: Re: [PATCH bpf-next 08/14] bpf: record arg tracking results in bpf_liveness masks
+Message-Id: <ea799805de3dc55c195861b2b18aab9ea57cb42e17549f4ac68c2111a9885158@mail.kernel.org>
+In-Reply-To: <20260408-patch-set-v1-9-1a666e860d42@gmail.com>
+References: <20260408-patch-set-v1-9-1a666e860d42@gmail.com>
+Subject: Re: [PATCH bpf-next 09/14] bpf: simplify liveness to use (callsite, depth) keyed func_instances
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
 Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  9 Apr 2026 02:26:19 +0000 (UTC)
+Date: Thu,  9 Apr 2026 02:26:21 +0000 (UTC)
 
---===============5264469444886364970==
+--===============0640741652904002027==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 4f7748720250..4457cd80d072 100644
+> index 4457cd80d072..c3098369bee8 100644
 > --- a/kernel/bpf/liveness.c
 > +++ b/kernel/bpf/liveness.c
 
 [ ... ]
 
-> +static void record_stack_access_off(struct bpf_verifier_env *env,
-> +				    struct func_instance *instance, s64 fp_off,
-> +				    s64 access_bytes, u32 frame, u32 insn_idx)
-> +{
+> -static int commit_stack_write_marks(struct bpf_verifier_env *env,
+> -				    struct func_instance *instance,
+> -				    u32 insn_idx)
+> -{
+> -	struct bpf_liveness *liveness = env->liveness;
+> -	u32 idx, frame, curframe;
+>  	struct per_frame_masks *masks;
+> -	spis_t mask, old_must_write, dropped;
+>
+> -	if (!instance)
+> -		return 0;
+> -
+> -	curframe = instance->callchain.curframe;
+> -	idx = relative_idx(instance, insn_idx);
+> -	for (frame = 0; frame <= curframe; frame++) {
+> -		mask = liveness->write_masks_acc[frame];
+> -		/* avoid allocating frames for zero masks */
+> -		if (spis_is_zero(mask) && !instance->must_write_set[idx])
+> -			continue;
+> -		masks = alloc_frame_masks(instance, frame, insn_idx);
+> -		if (IS_ERR(masks))
+> -			return PTR_ERR(masks);
 
 [ ... ]
 
-> +	if (access_bytes == S64_MIN) {
-> +		/* helper/kfunc read unknown amount of bytes from fp_off until fp+0 */
-> +		slot_hi = (-fp_off - 1) / STACK_SLOT_SZ;
-> +		mask = SPIS_ZERO;
-> +		spis_or_range(&mask, 0, slot_hi);
-> +		mark_stack_read(instance, frame, insn_idx, mask);
-
-mark_stack_read() returns int and can fail with -ENOMEM via
-alloc_frame_masks(), but this and the other call sites in
-record_stack_access_off() silently discard the return value.
-
-The same pattern repeats in record_stack_access():
-
-> +static void record_stack_access(struct bpf_verifier_env *env,
-
-[ ... ]
-
-> +	if (arg->off_cnt == 0) {
-> +		if (access_bytes > 0)
-> +			mark_stack_read(instance, frame, insn_idx, SPIS_ALL);
-
-and record_imprecise():
-
-> +static void record_imprecise(struct func_instance *instance, u32 mask, u32 insn_idx)
+> +static int mark_stack_write(struct func_instance *instance, u32 frame, u32 insn_idx, spis_t mask)
 > +{
-> +	int depth = instance->callchain.curframe;
-> +	int f;
+> +	struct per_frame_masks *masks;
 > +
-> +	for (f = 0; mask; f++, mask >>= 1) {
-> +		if (!(mask & 1))
-> +			continue;
-> +		if (f <= depth)
-> +			mark_stack_read(instance, f, insn_idx, SPIS_ALL);
+> +	masks = alloc_frame_masks(instance, frame, insn_idx);
+> +	if (IS_ERR(masks))
+> +		return PTR_ERR(masks);
+> +	if (instance->must_write_initialized)
+> +		masks->must_write = spis_and(masks->must_write, mask);
+> +	else
+> +		masks->must_write = mask;
+> +	return 0;
+> +}
 
-and record_call_access():
+mark_stack_write() now returns int and can fail with -ENOMEM via
+alloc_frame_masks(), but its sole caller record_stack_access_off()
+is a void function that ignores the return value:
 
-> +static void record_call_access(struct bpf_verifier_env *env,
+kernel/bpf/liveness.c:record_stack_access_off() {
+    ...
+    mark_stack_write(instance, frame, insn_idx, mask);
+    ...
+}
+
+The old code path through commit_stack_write_marks() did propagate
+alloc_frame_masks() errors back through compute_subprog_args().
+Should the return value be checked here, or is the silent failure
+(conservative liveness, more slots appear live) intentional?
 
 [ ... ]
 
-> +		} else {
-> +			for (int f = 0; f <= depth; f++)
-> +				mark_stack_read(instance, f, insn_idx, SPIS_ALL);
+> -/* Fixed-point computation of @live_before and @must_write_acc marks */
+> -static int update_instance(struct bpf_verifier_env *env, struct func_instance *instance)
+> +/* Fixed-point computation of @live_before marks */
+> +static void update_instance(struct bpf_verifier_env *env, struct func_instance *instance)
+>  {
 
-However, later in analyze_subprog() the same commit does check the
-return value:
+[ ... ]
 
-> +				for (int f = 0; f <= depth; f++) {
-> +					err = mark_stack_read(instance, f, idx, SPIS_ALL);
-> +					if (err)
-> +						return err;
-> +				}
+> -	instance->updated = false;
+> -	instance->must_write_dropped = false;
+> -	return 0;
+> +	return 0;
+>  }
 
-Is the inconsistency intentional?  If alloc_frame_masks() fails in
-the recording functions, the may_read mask for that frame/instruction
-is never updated, so the slot could silently appear dead to the main
-verifier pass.  The existing callers of mark_stack_read()
-(bpf_mark_stack_read(), propagate_to_outer_instance()) also propagate
-its errors.
-
-Similarly, in the recording loop of compute_subprog_args():
-
-> +		commit_stack_write_marks(env, instance, idx);
-
-commit_stack_write_marks() also returns int (can fail via
-alloc_frame_masks()), and the return value is not checked here.
-
-Should these recording functions propagate errors from
-mark_stack_read() and commit_stack_write_marks() back to
-compute_subprog_args(), which already has error-handling via
-goto err_free?
+update_instance() was changed from returning int to void, but
+"return 0;" was left behind. This is resolved by the later commit
+cc55f39c101d ("bpf: change logging scheme for live stack analysis")
+which removes it.
 
 
 ---
@@ -139,4 +135,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24168298083
---===============5264469444886364970==--
+--===============0640741652904002027==--
