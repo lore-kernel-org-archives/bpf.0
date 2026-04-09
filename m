@@ -1,112 +1,119 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88330175A93;
-	Thu,  9 Apr 2026 11:24:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E43B3BED4A
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 11:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775733898; cv=none; b=GeHlTzlabMV9XE32mAhk+EYJ45CQ08ne4fn49cBf5Xo5ZYOe7MDM7ybNukV9CGl/DSf5litBj5wB2/1nrxFinqHn3BS5cQzgRy0UZCbWndhr8jl6L3W1kem/RMAv2XmAir6jf7TFSUU8sGMk+zmPKP0x4rRA3JEixXw8h8VDt20=
+	t=1775734158; cv=none; b=nz27G4QA5xvrBiSUyCS45MZ98MWU/QS4iMzUJt+/+b32H6RvVBYNY/wpKt1E12SmimFneZRZrl5GlgLNaVBSGMw1aE8jQhzXfzj8RBrL+KPZDdf42VEuB6Zfd29YEcOnY3fFVp0kc/PdCoi2srQo9zKz3p3iDYFBZXCBBCY2p+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775733898; c=relaxed/simple;
-	bh=HW235KFpjxbKvTk+WbTpyUdPgeAVRwPuLJY5veTJkmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DinfLShIIwoVIwmMIS7SsJTTAJboL3lQ6q20/eZUaDUyspPrCEhCLcr4roHES4ElLnPZnMt49GdXUOS7sWFSbUtCjE5TTtexVfNG6fd7VFwiDLvA7HkENbKkDd6hT0Kcjl/de5cxFfZrAowlX6mhjONp4yKCarB9guroU8H84Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MgaSFhU9; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1775734158; c=relaxed/simple;
+	bh=+mAuVhclk7/79jHnw5cx20QkLJGt0qzs190F78JpAYo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=F07XI4k2ki8vj/p/hvbzYLqMItusVOliIW/zajJd1onosTqiuTRXGEh/ye7ylxDwXKtsfwfy1sjHMfd+9KMB7mbVpxIJh4YEifoAj3DOhv9uvcQe8ciUAfFyHM9bQyMZD3vEuyYFcmn+XhhITSU5og98up+ROc/yXf5exqNextk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YKYSvdNP; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="MgaSFhU9"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1818E2E98;
-	Thu,  9 Apr 2026 04:24:50 -0700 (PDT)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 66E053F632;
-	Thu,  9 Apr 2026 04:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1775733895; bh=HW235KFpjxbKvTk+WbTpyUdPgeAVRwPuLJY5veTJkmY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MgaSFhU9wXsL9zjTQF337jQVFlBf0oLy4vD54DYAxMiZy9QaQXdCtRRSM6lNzjm7F
-	 3pcPS5GyUE9NXWHm2gnn0rw+TJ1T4Bmq9xK0TG3OI6zcbldMwhU5bNi3Gx0Fr7VC4r
-	 2CSnXBKqomALzglM9nDb23FJC0vpiVkBJLUyM7G0=
-Date: Thu, 9 Apr 2026 12:24:53 +0100
-From: Leo Yan <leo.yan@arm.com>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Rob Herring <robh@kernel.org>, Breno Leitao <leitao@debian.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org, kernel-team@meta.com,
-	James Clark <James.Clark@arm.com>
-Subject: Re: [PATCH v2 1/4] perf/arm_pmuv3: Fix NULL pointer dereference in
- armv8pmu_sched_task()
-Message-ID: <20260409112453.GR356832@e132581.arm.com>
-References: <20260318171706.2840512-1-puranjay@kernel.org>
- <20260318171706.2840512-2-puranjay@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YKYSvdNP"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775734153;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bX9UNH9nppVP6n/cB7hjsiwZXPi5JOvS+eugnkyUXao=;
+	b=YKYSvdNPwqF0I/tcBgCvVlJyENCg8xn8864YiPcXKQxp5KPJAAv/dto4GxeHfeK+nWzr61
+	aRs1EYDyPewSS5gGxgNjmiwjQf/jJf4vt5M6r7Z/sxmmGxeNzXEpxdzX5DAC2k4FBO0ckN
+	+yPn1uoLO0WWyMVVoB3+2yKk12Mf3Kk=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Menglong Dong <menglong8.dong@gmail.com>, Jiri Olsa <olsajiri@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, shuah@kernel.org,
+ emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next v2 1/3] bpf: add missing fsession to the verifier log
+Date: Thu, 09 Apr 2026 19:28:55 +0800
+Message-ID: <5090408.31r3eYUQgx@7940hx>
+In-Reply-To: <adZWStMinOeunjSH@krava>
+References:
+ <20260408062109.386083-1-dongml2@chinatelecom.cn>
+ <20260408062109.386083-2-dongml2@chinatelecom.cn> <adZWStMinOeunjSH@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260318171706.2840512-2-puranjay@kernel.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-Hi Puranjay,
-
-On Wed, Mar 18, 2026 at 10:16:55AM -0700, Puranjay Mohan wrote:
-> This is easily triggered with:
+On 2026/4/8 21:21 Jiri Olsa <olsajiri@gmail.com> write:
+> On Wed, Apr 08, 2026 at 02:21:07PM +0800, Menglong Dong wrote:
+> > The fsession attach type is missed in the verifier log in
+> > check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
+> > Update them to make the verifier log proper. Meanwhile, update the
+> > corresponding selftests.
+> > 
+> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > Acked-by: Leon Hwang <leon.hwang@linux.dev>
+> > ---
+> > v2:
+> > - add a missing FSESSION in bpf_check_attach_target()
+> > ---
+> >  kernel/bpf/verifier.c                               | 10 +++++-----
+> >  tools/testing/selftests/bpf/prog_tests/exceptions.c |  8 ++++----
+> >  tools/testing/selftests/bpf/verifier/sleepable.c    |  2 +-
+> >  3 files changed, 10 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 594260c1f382..beb660b4c3ec 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
+> >  
+> >  	if (type == BPF_PROG_TYPE_TRACING) {
+> >  		if (!bpf_prog_has_trampoline(env->prog)) {
+> > -			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
+> > +			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
+> >  				func_id_name(func_id), func_id);
+> >  			return -ENOTSUPP;
+> >  		}
+> > @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >  	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
+> >  	if (!btf) {
+> >  		bpf_log(log,
+> > -			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
+> > +			"FENTRY/FEXIT/FSESSION program can only be attached to another program annotated with BTF\n");
 > 
->   perf record -b -e cycles -a -- ls
+> I wonder this should say 'Tracing program...' instead,
+> we have other tracing types not covered in this error
 > 
-> which crashes on the first context switch with:
+> jirka
 > 
->   Unable to handle kernel NULL pointer dereference at virtual address 00[.]
->   PC is at armv8pmu_sched_task+0x14/0x50
->   LR is at perf_pmu_sched_task+0xac/0x108
->   Call trace:
->     armv8pmu_sched_task+0x14/0x50 (P)
->     perf_pmu_sched_task+0xac/0x108
->     __perf_event_task_sched_out+0x6c/0xe0
->     prepare_task_switch+0x120/0x268
->     __schedule+0x1e8/0x828
->     ...
+> >  		return -EINVAL;
+> >  	}
+> >  	t = btf_type_by_id(btf, btf_id);
+> > @@ -25597,7 +25597,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> >  		if (aux->func && aux->func[subprog]->aux->exception_cb) {
+> >  			bpf_log(log,
+> >  				"%s programs cannot attach to exception callback\n",
+> > -				prog_extension ? "Extension" : "FENTRY/FEXIT");
+> > +				prog_extension ? "Extension" : "FENTRY/FEXIT/FSESSION");
+
+I guess that we'd better use "Tracing" instead of "FENTRY/FEXIT/FSESSION"
+here too?
+
+> >  			return -EINVAL;
+> >  		}
+[...]
 > 
-> perf_pmu_sched_task() invokes the PMU sched callback with cpc->task_epc,
-> which is NULL when no per-task events exist for this PMU. With CPU-wide
-> branch-stack events, armv8pmu_sched_task() is still registered and
-> dereferences pmu_ctx->pmu unconditionally, causing the crash.
-
-Would not this is a bug in perf core layer that it should properly
-pass &cpc->epc for CPU wide trace?
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 89b40e439717..a8cd0a26effa 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -3906,7 +3906,8 @@ static void __perf_pmu_sched_task(struct perf_cpu_pmu_context *cpc,
-        perf_ctx_lock(cpuctx, cpuctx->task_ctx);
-        perf_pmu_disable(pmu);
-
--       pmu->sched_task(cpc->task_epc, task, sched_in);
-+       pmu->sched_task(cpc->task_epc ? cpc->task_epc : &cpc->epc,
-+                       task, sched_in);
-
-        perf_pmu_enable(pmu);
-        perf_ctx_unlock(cpuctx, cpuctx->task_ctx);
+> 
 
 
-I checked other archs, most of them don't use the parameter *pmu_ctx
-so the issue never hits.
 
-My understanding is that for CPU-wide (or system-wide) tracing, we still
-need to invalidate the branch record on a task switch so that a branch
-stack is recorded within the same context.
 
-Thanks,
-Leo
