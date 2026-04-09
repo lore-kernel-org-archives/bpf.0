@@ -1,33 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8593C33BBA2;
-	Thu,  9 Apr 2026 13:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB9633BBA2;
+	Thu,  9 Apr 2026 13:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775741982; cv=none; b=T2b1aoJJ6p5nFqHum3vEEwzcLARiyCh5pXEFYgLxzN72hptkr6T+aoB/ZUyu5bdcTxOrGNYI598ItkwSUJP9soF0ahkLO4vOG1+E0cZOnhcRJq90p7nMGo8z0RbLqUu2CTatDUhPPR3V7BNjX/dJEu63L/fpprc+l4JZTKM/0oA=
+	t=1775742226; cv=none; b=sSOFge/VNirAcvUJoP6Et8JxP9jqRR4XhAMU2hXAm6IWJUj2hsNVEygEJH4dJchHAovXL+AZDFXHLi0XvqP1qkon1EDEJqtwGs/lj2oBVqViYgJzECgY9teS1Tdwrxi4LUbDE8PN6lt6qGBcaDJSG7pqv+FMdx9DtEjKkaGK9FE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775741982; c=relaxed/simple;
-	bh=DYLjldAdnScOnFQ3m1c1iYIMhoWkA1ikgUOXjvCtsAY=;
+	s=arc-20240116; t=1775742226; c=relaxed/simple;
+	bh=n3CpLk97LtDsZ0cI3+n3Ybw5XoyVOqFsSCOxiXAQZuA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uc0zGzpRMxRR6s0hbm15owxTM1P3s4DXtW1dn9jc+7cuLFjo3CUNVKhMjqWr/5giAmyZOh4kbID/b36OynHS/7n/z/bJArttoZ4IIW5s7R9nDyB9pa2SwWzcBnzkOf8705NK0z9Xz3FqERHE8+XQmpFVlhvPL5zrPUdUWuviKMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3AeqFhz; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=eQheprpEanRl066ohn1b7La9mcS195hAYXRbwzR2YGJNICpOKH/VIm27E8uTENaBfEqfGpX0pRUULRIhKfaBD6FzMl9T67+pwWUgJOupnfm5S3sMUPSMJBb2g8K7ezmYkYRvtFZC+ijD3xQ+Z3v8rAmkepVCifxX2wZdYEW5br0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LoERg2F6; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3AeqFhz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964CBC4CEF7;
-	Thu,  9 Apr 2026 13:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775741982;
-	bh=DYLjldAdnScOnFQ3m1c1iYIMhoWkA1ikgUOXjvCtsAY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=S3AeqFhz39K5zU4799CepbX1Bw5lVKHZmsNzu83ePyMhGPQSy9FaiWVuhad2AAo0S
-	 We4cZVI8db31HcaGvoiw6gVUW1azPU+WpDWJld2kJW38HoN3oDWS5Ujgr9LZbG7cSt
-	 PpyU3pSL5X0+7YKZvkK28I/He2ej4pcLS8k+w5OtStkwrQNff2IjtNJ8rpbJdcIteA
-	 85I7ZexERvhNlKtIS/3+8EqmOEPo3s44qnPt/YCKFsylq2pjfQIwKsT37X8mWMqt6E
-	 p7HJbowjxX1vWXUOfBiINLuTIYhwDVsNI/+mB6vXo3P24ArL1I3CLFPAYVAZvzsfsa
-	 01M2lllB3YEZQ==
-Message-ID: <389aba68-10b9-4881-a5a8-551dc66f729d@kernel.org>
-Date: Thu, 9 Apr 2026 14:39:38 +0100
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LoERg2F6"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=mKUYgIaFNz8pbnf2XU9B3/tKrqrjJUecCZ/5IGn7BCg=; b=LoERg2F6vUZf7NGI+H67TxTMSP
+	JZ9UZ4p9vSXdVgAy0DZO946sSsg9au2fyT10dJRJEe0xlBcyGEv0Zg+IvKEnWezcM/osta7rQMGd/
+	YBU+KscerpFzmQcoUJP0BqfxI2IRTQiGEjWGxOMNc70A7JkSUG/+NDJCsYd3qEr+AwUhAw4TSkuG+
+	zQbFqF7xgGCmJh09rnmtkos6TF8J5bz8ciV7eHmGEsytOX6RE4Ys7n43jf1KFE1+HjItq56jVXBBr
+	5btXxATR7Nd3k6ovCXFf4lptobmlmpwRRw7GnzJmUayooA1qp/8pCmvHexwAZgih3EcwKC4l+mcy5
+	C9SzkGRA==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wApf9-000JxQ-1K;
+	Thu, 09 Apr 2026 15:43:15 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wApf8-0002p0-0y;
+	Thu, 09 Apr 2026 15:43:14 +0200
+Message-ID: <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
+Date: Thu, 9 Apr 2026 15:43:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,30 +48,182 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 3/3] bpftool: add missing fsession to the
- usage and docs of bpftool
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
-Cc: daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260408062109.386083-1-dongml2@chinatelecom.cn>
- <20260408062109.386083-4-dongml2@chinatelecom.cn>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260408062109.386083-4-dongml2@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH net-next v11 03/14] net: Add lease info to queue-get
+ response
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
+ toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260402231031.447597-1-daniel@iogearbox.net>
+ <20260402231031.447597-4-daniel@iogearbox.net>
+ <20260407204017.3fc79d1b@kernel.org>
+ <b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
+ <20260408151251.72bd2482@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260408151251.72bd2482@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27966/Thu Apr  9 08:24:43 2026)
 
-On 08/04/2026 07:21, Menglong Dong wrote:
-> Add the fsession attach type to the usage of bpftool in do_help().
-> Meanwhile, add it to the bash-completion and bpftool-prog.rst too.
+On 4/9/26 12:12 AM, Jakub Kicinski wrote:
+> On Wed, 8 Apr 2026 11:09:34 +0200 Daniel Borkmann wrote:
+>>>> +void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
+>>>> +				     struct net_device *dev)
+>>>> +{
+>>>> +	if (orig_dev != dev)
+>>>> +		netdev_unlock(dev);
+>>>> +}
+>>>
+>>> Pretty sure I already complained about these ugly helpers.
+>>> I'll try to find the time tomorrow to come up with something better.
+>>
+>> Ok, sounds good. Happy to adapt if you find something better and then I'll
+>> work this into the series, and also integrate the things mentioned in my
+>> cover letter reply (netkit nl dump + additional tests).
 > 
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> Acked-by: Leon Hwang <leon.hwang@linux.dev>
+> Hi! How would you feel about something like the following on top?
+> 
+> --->8----------
+> 
+> net: remove the netif_get_rx_queue_lease_locked() helpers
+> 
+> The netif_get_rx_queue_lease_locked() API hides the locking
+> and the descend onto the leased queue. Making the code
+> harder to follow (at least to me). Remove the API and open
+> code the descend a bit. Most of the code now looks like:
+> 
+>   if (!leased)
+>       return __helper(x);
+> 
+>   hw_rxq = ..
+>   netdev_lock(hw_rxq->dev);
+>   ret = __helper(x);
+>   netdev_unlock(hw_rxq->dev);
+> 
+>   return ret;
+> 
+> Of course if we have more code paths that need the wrapping
+> we may need to revisit. For now, IMHO, having to know what
+> netif_get_rx_queue_lease_locked() does is not worth the 20LoC
+> it saves.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Thanks for looking into it! That looks good to me. I've also retested that
+it still works.
+
+Maybe small nits could be below to move the netif_is_queue_leasee into the
+netdev_rx_queue.h header since its used outside of core and it might be
+worth to also have the lock assertion in netdev_queue_get_dma_dev.
+
+Do you want me to add your patch on top for a v12 of the series?
+
+Thanks,
+Daniel
+
+  include/net/netdev_rx_queue.h | 2 ++
+  net/core/dev.h                | 1 -
+  net/core/netdev_queues.c      | 2 ++
+  net/xdp/xsk.c                 | 2 --
+  4 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+index 9415a94d333d..e9f7f098609b 100644
+--- a/include/net/netdev_rx_queue.h
++++ b/include/net/netdev_rx_queue.h
+@@ -76,6 +76,8 @@ struct netdev_rx_queue *
+  __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
+  			   enum netif_lease_dir dir);
+  
++bool netif_is_queue_leasee(const struct net_device *dev);
++
+  int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
+  void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
+  			   struct netdev_rx_queue *rxq_src);
+diff --git a/net/core/dev.h b/net/core/dev.h
+index 376bac4a82da..95edb2d4eff8 100644
+--- a/net/core/dev.h
++++ b/net/core/dev.h
+@@ -101,7 +101,6 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
+  
+  bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
+  bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
+-bool netif_is_queue_leasee(const struct net_device *dev);
+  
+  void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
+  			      const struct pp_memory_provider_params *p);
+diff --git a/net/core/netdev_queues.c b/net/core/netdev_queues.c
+index 5597af86591b..73fb28087a93 100644
+--- a/net/core/netdev_queues.c
++++ b/net/core/netdev_queues.c
+@@ -40,6 +40,8 @@ struct device *netdev_queue_get_dma_dev(struct net_device *dev,
+  	struct netdev_rx_queue *hw_rxq;
+  	struct device *dma_dev;
+  
++	netdev_ops_assert_locked(dev);
++
+  	/* Only RX side supports queue leasing today. */
+  	if (type != NETDEV_QUEUE_TYPE_RX || !netif_rxq_is_leased(dev, idx))
+  		return __netdev_queue_get_dma_dev(dev, idx);
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 616cd7b42502..7da620aa11d6 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -31,8 +31,6 @@
+  #include <net/netdev_rx_queue.h>
+  #include <net/xdp.h>
+  
+-#include "../core/dev.h"
+-
+  #include "xsk_queue.h"
+  #include "xdp_umem.h"
+  #include "xsk.h"
+-- 
+2.43.0
 
 
-Thanks for this.
-
-Acked-by: Quentin Monnet <qmo@kernel.org>
