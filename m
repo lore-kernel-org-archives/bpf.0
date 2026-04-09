@@ -1,97 +1,135 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9B136680E
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775701268; cv=none; b=jgzwYSAzBYfAl1a6UEWBhydajzV/A1Eft5K1/Y8tPHsvD9ZUP3t+beCZCkdFw0Zh5+ujLpmp8gfKgnqriAcoq7rRT+Oz0dQ6BYQV9c7EtxFLqDU+Hgksbl/HhNxVaNaXCZZ5rkSCqozZGG1CrNSEnhKCpDDBQVJTR0baFS6jvjw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775701268; c=relaxed/simple;
-	bh=RuB5+pd2Nu5pchRK3PaPGzH/A7+qlSYVQ+ZHYCAMe28=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qysE1FBVuHwjIZAYqHjrnccTpo43ipxbe0M5+WxYi3Hgg2y6HziMy5TCuMMdPhU8CLC82XvCajSiTDpPgiwyaqtRqXHWg5yxUuTjjg2jBUf1FxB7xxFHX8D1WsiIxMNUlJoVUlDOL95lLDfv9fgiIKWGlTh5DIn48iimLBqQecQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CjSfQEvm; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFE4364E9E
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775701298; cv=pass; b=bJtezvYGdWJK0oYQ+qNOdY7Sp2QnUI+5N7z8bJfGVR2jtrGRk14xL90HRJmLJwRqhoelVHWxn9gy0hr3PQRPFUpdiIWj7nNJiZ7tNdMnqUkck3K+8yp9AG8k94ann+RiALrWaNVsvwqOk+dTSBw2JV/99u386xd9l6fnvdFngFM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775701298; c=relaxed/simple;
+	bh=beL9NqS5Q6p/GRMlCv5HKOQu/6sGbyOzNgAKzyBuSYQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LL5Kfm0nxcr4z/3tiXtEb7md1MAUbX8OohuR284RxzSi7NYEQAtVB/9f6Z0dfVEjFzzDV1svurFf22PG6EptP0DvIOc/WlDdENxoBjK6Qts/dSbPuTbR34jbDUSbXMaffxgD7I1DFbghLEK2VIhz1TaZl4tE01h9N+9NWeevpi8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IVt3tVYj; arc=pass smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CjSfQEvm"
-Message-ID: <2034cfa0-839a-4ce8-bc67-89daf4089bce@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775701264;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FRaSmDYd/xGobYcS16a8Z5SJsKmMXmBfzHmKSeJwECw=;
-	b=CjSfQEvmCsxlMP5z4pG7Y9DGtV7/XPIxj71rOHJCzaN+XrLxwcvDOTF0jxM3iUXus3chzs
-	WzZkk52Xu/hHJvBX2hH8t0fL3Vp/5RDqZ6KHPyJTiQ+LtSVg5K6lAR2s2WLsgzC0quz8cG
-	sxdZgBC2nQCq1JbWzOn7PDpORE4GW2o=
-Date: Thu, 9 Apr 2026 10:20:30 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IVt3tVYj"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43cf5d14d6eso189800f8f.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 19:21:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775701295; cv=none;
+        d=google.com; s=arc-20240605;
+        b=INbu+KfGrNF0s43okiIqNU0DiAPM+2swY8tx/KfoiP89+cEWm+e3M8NnjDGUOiSofX
+         uuR6oY3KaFs4SS/k9GGay/GyjPJOnxTx33r/W61SzHmqio8oGpaGeBl+R0OyffHWQTQY
+         PTD+KRnbM0Lhs+vTDCdtB2XUBZDLGguynK8XH6j1dT56xOQ2TIA0Y8fUSBqX4L0zp5L1
+         YhIrgfPmS+3JpHfja6KM1GpGh1GgFMRlD2jAz6ZIs9Vha3p15KIOJhJiHjssPq+wiRmr
+         C0Jab6aGnxJQQQbmxZk2Tab5bNLELfXXqtYuDpNaMqx+EcKBT/wQKekDK5xk+g3plYtj
+         CRuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=l6JJiyFjJbnOGZ8rZXZJp5A2imKxEasjra2KlZFCRuY=;
+        fh=hfRje2veXRgnK/5UbF368BTRuTdPC/oA5JvW+CkXkIA=;
+        b=hK/yYp0PbKDVXU06v+mKG6Y5OygVnBBAGSDDybsgQ10HDeXBS69hnQVDsEUY/5dLUe
+         qwfnIIQxdr1amUP3KehKakRgpwYr1DwjpEOshm9mPQH0PQXzY2/Ehhm7glUWCS6Pk+1f
+         cQT0SxWyu3bfGJzdzhcnjUhTz32TCjeGQs05x8NXQB2LRJqF06EuJw725TpoLGuHBMqC
+         dF8JuERLLz/FfP0cXgfgrWuWbveqOeKQliufMWstM3n+CIRyxw5sElh0DzXYrKtrUKrj
+         X7pCykp7rdPShnx2R5Z017MAgJ+sT7FhE/WaIPfcwoIJiRVH0yj80JcBz7QjJBVUMRvS
+         gPPg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775701295; x=1776306095; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l6JJiyFjJbnOGZ8rZXZJp5A2imKxEasjra2KlZFCRuY=;
+        b=IVt3tVYjPXasalzs4UR1TG5OnQiDpkiOuPfr/CJgN5xbxmF5HcsxKIAXnqShXmnR5J
+         Q5N3VqQrMFhfah4vJJKlaXMxshxE1VQYg463mUyr/ZBX2GXuAGix+Q7luKYILzXfa8n5
+         f6xZTs4AAtzK0v1cSy4MhEYJye12aLJtJtZhxX8OfBlDhy874Nap2lcGKkvxhTX3E/qG
+         T2JkU2x6C93kyzQUobxywKu7UMWQksCH1pnW7N04CrprmuIx/7bgjOi8Bqapi5ejFAL4
+         40u9ow8pZqLBgoWgNuuTYwTYMP2LZopVOTU3xts8WoTb9LUkL0Csw+7/ZL6O1cm3MfKc
+         gqHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775701295; x=1776306095;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=l6JJiyFjJbnOGZ8rZXZJp5A2imKxEasjra2KlZFCRuY=;
+        b=nSyoiaYLw/RAuIF7OYU4IxGajVfXsQb4rRA7BZdWO84wAFr/kTH8C3TC00YK9FM1Be
+         ZHf4G9uXG0LRY9whxr1jcDTR047UAnPh5dsxX+33eiRn7UYlDtLDSEi77zf4NZJNbqnN
+         7+8PylXut6opQog/m0LXcSNcRYpZD4/dCUKgi11AYAjWLeXzVoWqlF/8RSym0qz1vHnf
+         qwRkRL2/hqqmEWciGKvfFfzqGFlJmC4C55YiV9jvlryz7/KOlmReQKSKxF/xK/4TgipC
+         ex9gcFBOyVLNzkD2QBl4VzqZOV5nsvCuSzYqXwU2OGCUnV+0kt2IZUFa7hyEumsSwP0b
+         fN/Q==
+X-Gm-Message-State: AOJu0YwhjbdSFoxBblrcw0/ug4uwLFeCXeV74jBu8ZG6SKGmwNlFg54N
+	pvNIYzLpMGaGUZLtE3LALP4EXqiEVsECtCFHaI/J8hrRQL+IkFeB7CBtxa5efHExCZBEHbheSsC
+	MIjKRBcsPgFaIC8I32l18LzONZGpS7E8=
+X-Gm-Gg: AeBDieuT1HHL5OPs5tpz/N9Cm4FtzISeMxNExXwEEh4hrzg+YV9MLbmY9W69CrOT12X
+	WJQp+b/CQfIY4oPaolgkLppQl+00z6giBqRJeQ5aZbcUROY9OOjPYlFx/sEcTnnZ9ogXNut5rlw
+	Yjgs4cSy2jfndhSkCv9tMgFvnVhfGEhePwHExEhWxrd/w1lBxBu8im16kJEGF6MWlhmr88W8O+P
+	GEjB81QcVWwfYTq//gwYbjt3MpLCG+tkRWUobZdIn6xpVUKUrHjrFv8m4yxuQ5/5ZKX2nAsg3xh
+	RU8L20JAOrCC9DjzvW33mnoNt2C45XpxZGNk4tBTHrD0bbbgx76ggY6QDx/0eRZD0x+Fg4KQaui
+	1uL6pJvLbyw1Vu2pmhtZqTv0ikw==
+X-Received: by 2002:adf:fd89:0:b0:43d:30ea:bade with SMTP id
+ ffacd0b85a97d-43d30eabb1cmr20326493f8f.3.1775701295384; Wed, 08 Apr 2026
+ 19:21:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf: Fix use-after-free in offloaded map/prog info
- fill
-To: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
-Cc: Yinhao Hu <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>,
- Dongliang Mu <dzm91@hust.edu.cn>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <20260408104732.259683-1-jiayuan.chen@linux.dev>
- <1eccd7fc-8a1c-4499-ae81-a63fc8d0ff26@iogearbox.net>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <1eccd7fc-8a1c-4499-ae81-a63fc8d0ff26@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260407045730.13359-1-emil@etsalapatis.com> <20260407045730.13359-6-emil@etsalapatis.com>
+ <CAADnVQLCyP+NzO9-332JO+dBe=EDEOr+ax+-ZrvAqJ9yTNYyEA@mail.gmail.com> <DHO6YBPIPV5A.ZIBDPIXBG1NT@etsalapatis.com>
+In-Reply-To: <DHO6YBPIPV5A.ZIBDPIXBG1NT@etsalapatis.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 8 Apr 2026 19:21:22 -0700
+X-Gm-Features: AQROBzAXvQX3dSz53Bn-25C-DPij6gqYwmyaUHTg_1nvXGdP45SQ43jLVwuLCCQ
+Message-ID: <CAADnVQL6fQWdMibEfKk8DJ9cD=oSsUNKbpHJ_MFjx+VTYSSAAA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 5/9] selftests/bpf: Add basic libarena scaffolding
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Apr 8, 2026 at 5:18=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.co=
+m> wrote:
+>
+> >> +++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.h
+> >> @@ -0,0 +1,12 @@
+> >> +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
+> >> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> >> +#pragma once
+> >> +
+> >> +#define ALLOC_SELFTEST(func, ...)              \
+> >> +       do {                            \
+> >> +               int ret =3D func(__VA_ARGS__);    \
+> >> +               if (ret) {              \
+> >> +                       arena_stderr("SELFTEST %s FAIL: %d", #func, re=
+t);       \
+> >> +                       return ret;     \
+> >> +               }                       \
+> >> +       } while (0)
+> >
+> > I'm not excited about yet another special macro that hides control flow=
+.
+> > Pls stick to ASSERT*() family.
+>
+> Reusing test_progs.h would require us to other include the header in
+> libarena or complicate exporting it. Since as it is right now it's not
+> immediately exportable, I can everything to ASSERT and we can either
+> factor them out of test_progs.h later if necessary.
 
-On 4/9/26 5:49 AM, Daniel Borkmann wrote:
-> On 4/8/26 12:47 PM, Jiayuan Chen wrote:
->> When querying info for an offloaded BPF map or program,
->>
-[...]
->> zero, which causes ns_get_path_cb() to fail and the caller to return
->> -ENODEV -- the correct behavior when the netns is being destroyed.
->
-> nit: -ENOENT
->
->> Fixes: 675fc275a3a2d ("bpf: offload: report device information for 
->> offloaded programs")
->> Fixes: 52775b33bb507 ("bpf: offload: report device information about 
->> offloaded maps")
->> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
->> [...]
->> +        net = maybe_get_net(dev_net(aux->offload->netdev));
->> +        if (net) {
->> +            ns = &net->ns;
->> +        } else {
->> +            ns = NULL;
->> +        }
->
-> nit: ns = net ? &net->ns : NULL;
->
->>
-[...]
->> +        }
->
-> ditto, otherwise looks good to me
->
->>       } else {
->>           args->info->ifindex = 0;
->>           ns = NULL;
->
-
-  Thanks for the review!
-
-  Both nits are valid -- will fix the commit message to say -ENOENT and
-  simplify to ternary in the next version.
-
+I think testing of libarena doesn't need to be standalone.
+For testing it can include test_progs.h and everything else as-is
+assuming their exact location and relationship between dirs.
+But libarena itself, its main core code with allocator, spinlock
+needs to be designed with automatic sync to github in mind.
+Just like the source of truth for libbpf is in the kernel tree,
+but it's released and used from github.
+So libarena will be tested routinely by bpf CI,
+then synced to github and submodule-d into scx and other projects.
