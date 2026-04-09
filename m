@@ -1,80 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7B1376BE4;
-	Thu,  9 Apr 2026 02:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5C2363C72
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 03:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775703091; cv=none; b=h6cqcmzI45i0SNmfRix/YKD/luVRPGOmscawvxlcI0gdRlLGpE8KaRefYzdm5b7hptBbaEJAcLdikpsw0eyiUjlwmNefDA7wE19Aq+0wpOnJbD2t2w6Hknpz8HhQj2tJuRZo5UHzWVxYm3814Go5NtuukUfMnCFoSzMP/XYFR5s=
+	t=1775704369; cv=none; b=oVwOeGSzCgS7ABajBTvtfsGwTjmOTyYnBl8zXCfy35ayYgAVGCL3oJdDOZzTg8QKJH4z56rtDz2yRdQgvBF3CU9Ll9tvnS0DPTFWDhbsO4/WwtUmswixnzIl5YDmu75AsQt5T7lCuKwN7G9W854gwWiszHD6nT6tQ3nZCp5FUnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775703091; c=relaxed/simple;
-	bh=PbBzdI3qVvg8NGCmO5KQ9RJ+udLRsXOc/boi6AFdsgQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VvyAR6mD4nPzhQHYGltgCgV1CQFkUpg26MdYfQwnviuuf98xbd4Ts5dIUXbV1DhgknZV0OIykz6Zg2ubdtUg19nmkNj+n0IIA8Yh8XuZalfMdqcdXIyGtMJGsxzOXGGaIOdYvMBG59tWCWFG3CBMo5SdaTlcM8478XGONN4ppgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sc7KXseE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775704369; c=relaxed/simple;
+	bh=NmXwYXgS5NhY+HfYGWSMuq4HwcAqN/5Ic0etOAfT088=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=myHU8XHpDzoEpj58LOfvguvDKMp32TManfBAoXwY1ITKzB0mbBeqa97VwpZ4e3rF459OC1kUnHImX2rmx2CtviomY81uWZpvgq1J8HD5Jswkxb4L2s9rSDiwS//Y+vnmP25pCaR3wDsJW2aKEXxibH1QQaNufxNJmSYu5nUmvAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UG+1V7fz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sc7KXseE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5023DC19421;
-	Thu,  9 Apr 2026 02:51:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UG+1V7fz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 823F1C19421;
+	Thu,  9 Apr 2026 03:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775703091;
-	bh=PbBzdI3qVvg8NGCmO5KQ9RJ+udLRsXOc/boi6AFdsgQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Sc7KXseEdMPIjzjq+JbCSai8GUhdWZcEoY9D5tYoC2gpqwEcICLpKP/iX+43+lATC
-	 nXaUh7czRKwVb8racnt0PnI7UOPUdpo6JuyoAe6GuTH/tLsTbVJFt5h/x7O51kCoAN
-	 exNWYDlCY2+4lHDExN6Q9a3qk9895/kki7AOH1BPobUl4P7SFBmlqNK15Katn3se0r
-	 DZOmr2ImOwotZzBhgDIaymxJ+pHgAbmpoP8PpwQLSfdFkVYCgLdG2n3wBKjZZEyRSS
-	 Uyo/MR5tq9bI0/X/dHbH0DxFsuzmkhKVghZfXLAj+TRGzyA/sEem1HLMhNXH4Zjy5L
-	 Pd7Vrc3ZPLkPw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA0BA3930793;
-	Thu,  9 Apr 2026 02:51:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1775704368;
+	bh=NmXwYXgS5NhY+HfYGWSMuq4HwcAqN/5Ic0etOAfT088=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=UG+1V7fzaqF0HebenCq8TagkT1fSHZt+9bZoEgbK8IfuYDXLzgrxfbgCcK8LRWzu+
+	 yR2NhhjEHwTSplVGMZnUFUuson8u/PuyWirPJO/lpRjwGd2LR/9681prQR15+grjSb
+	 m/FrLilMv0FeUqUfIuqTlE5b/dngHxrvtfjFBxdn2h3PfBS5D8FM03Gbj8YuP94lQ7
+	 E7QDL/DrFaY8y3V9zSOGDMsObt3VUcmncQsGcWIQ8Fsrw0iDjwu7XR86ti+eUMHib3
+	 8PqJq9L9f4+xSXqbFDCOLUa1tNfWCTOepJ1M6Te4kg1p5HYwaBcC5yofzIfroB0FWH
+	 j2pt4lTMbTXOg==
+Content-Type: multipart/mixed; boundary="===============6946961242110826903=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] selftests/drivers/net: Add an xdp test to
- xdp.py
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177570306754.968772.17543482845016752024.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Apr 2026 02:51:07 +0000
-References: <20260406072655.368173-1-leon.huangfu@shopee.com>
-In-Reply-To: <20260406072655.368173-1-leon.huangfu@shopee.com>
-To: Leon Hwang <leon.huangfu@shopee.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, leon.hwang@linux.dev
+Message-Id: <bebd6ee70784d72f6b6d36e1cf6cec12bada144fb5b15f0acf5a234be1fc0616@mail.kernel.org>
+In-Reply-To: <20260408-patch-set-v1-3-1a666e860d42@gmail.com>
+References: <20260408-patch-set-v1-3-1a666e860d42@gmail.com>
+Subject: Re: [PATCH bpf-next 03/14] bpf: Add spis_*() helpers for 4-byte stack slot bitmasks
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  9 Apr 2026 03:12:48 +0000 (UTC)
 
-Hello:
+--===============6946961242110826903==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 410939d7b325..64361cb49073 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
-On Mon,  6 Apr 2026 15:26:54 +0800 you wrote:
-> In "bpf: Disallow freplace on XDP with mismatched xdp_has_frags values" [1],
-> this XDP test is suggested to add to xdp.py.
-> 
-> 1. Verify the failure of updating frag-capable prog with non-frag-capable
->    prog, when the frag-capable prog attaches to mtu=9k driver.
-> 
-> The test has been verified against Mellanox CX6 and Intel 82599ES NICs.
-> 
-> [...]
+[ ... ]
 
-Here is the summary with links:
-  - [net-next,v2] selftests/drivers/net: Add an xdp test to xdp.py
-    https://git.kernel.org/netdev/net-next/c/5ae4ba98d725
+> +static inline spis_t spis_xor(spis_t a, spis_t b)
+> +{
+> +	return (spis_t){{ a.v[0] ^ b.v[0], a.v[1] ^ b.v[1] }};
+> +}
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+spis_xor() does not appear to have any callers in this series.
+The same applies to spis_set_bit(), spis_single_slot(),
+spis_msb_half_slot(), and spis_lsb_half_slot() -- none of them
+are used by any commit in the series up through "bpf: poison
+dead stack slots".  Could these be dropped, or are they intended
+for use beyond this series?
+
+[ ... ]
+
+> +/*
+> + * Return a mask with only the MSB (higher-addressed) 4-byte half
+> + * of an 8-byte SPI set. This is sub-slot spi*2+1.
+> + */
+> +static inline spis_t spis_msb_half_slot(u32 spi)
+
+> +/*
+> + * Return a mask with only the LSB (lower-addressed) 4-byte half
+> + * of an 8-byte SPI set. This is sub-slot spi*2.
+> + */
+> +static inline spis_t spis_lsb_half_slot(u32 spi)
+
+If these helpers are kept, the comments appear to have the
+address direction inverted.  Later in the series,
+clean_verifier_state() documents the sub-slot mapping as:
+
+    half_spi 2*i   -> slot_type[0..3] (closer to FP)
+    half_spi 2*i+1 -> slot_type[4..7] (farther from FP)
+
+Since the BPF stack grows downward, closer to FP means higher
+addresses.  So spi*2 is the higher-addressed half and spi*2+1
+is the lower-addressed half, which is the opposite of what
+these comments say.
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24168298083
+--===============6946961242110826903==--
