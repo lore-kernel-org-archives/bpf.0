@@ -1,46 +1,67 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610843D75C5;
-	Thu,  9 Apr 2026 13:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C2E363C4E
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 14:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775742788; cv=none; b=GRlxvOy5rrrMXpgRQuwEVW4BLYqJ+Sylmgf/EkC5SPmRsiOv7eDkZzdTGThBzakr3iDPFrNbkxL477EfUcthFEBm4dVbVKioQFqAJcWCSWZglXYdYb7lckKlWgcsJUn+nZ0dg7+gsSevz/1vZpiD2Xn6PqKZQzqEISA7Oc8JL2o=
+	t=1775743284; cv=none; b=rSUX1W0QeHTcqURH9hd9tzCS0qr9K2kTXgXlU9UYZieTO647mJcdtE0HieiRsq+Hs0746oVhaGb28i+3j/QlLetukbVwMfediOLU7mi4BmcawgYpRlba+CyxuSCA6mq47DMK1vqlhOnA9+CedOo8jDQ/mn9Cl3TN1yXjGymDeKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775742788; c=relaxed/simple;
-	bh=eF/aCpZX42xIoCMhfzcSBeQ1PrvuTJUQEin5OH45dok=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=CFUBw1JS9L9Pgv8H54ZI4YcpYDY2Jomk1i6o/KYmnESAKrb8beTY0RkRgLTeMyuuBmVsjnnfl5cOG5LeEbKmT+znrVHclcz/L8cOvBPgUF+EhZVo1pDpFyCzo9x8x5w31koIPHy9rQXKbSPr0msyFUiHaD16MXgXSVwIHQtkIwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=DXUx3hGv; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1775743284; c=relaxed/simple;
+	bh=Rkw1Ysxec0IR3+Zc8bMDz4J3G2dSh6FOnBK2CbbO13g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aMsEzeubmf2Ba3gSk8yYQApGaRJ+P2tf6cWQDXWewzRdWuooyyLeueu/d3nTv2NybT35Z+hZTa2Bk3pA6CoBHj5RGGjZgni9wz6Nqe78GYB8RfBeXsY+aqxCazvofbdLdb3Jl8i0bAcrt7hZPaaL1EcSUw4SAEldHrwx67cpcQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LieyiAsL; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="DXUx3hGv"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=VnwzXGZ18M3mh4RXdSCjxFaPYPqhX3XHNq/8FIKdlos=; b=DXUx3hGvRZlvv31fuIhIKfAIL0
-	q+YyqLoFhgH7/6qhUIIu76of9WP8TRNGMGO29tBIlSPs4RRhp4riczysuF56q+ebL5odLGrr75ELo
-	sIsPaAMF76ZMmifZlGmT7extFCoIrqHZSvSfgin6ueCrf2is1RAOTExAQS0YhxgiT9sFPB2hVim1u
-	UI4OhZ/PxKi0eoVPBkQnmSrH+2E33vCnvoP5Uubv4CCuVw63nQel8C4fnCzN1WIOR0/mTnKZRuN+o
-	aNxs6msCuNBVTM5WMnRTe/6fcT+149izSKMpK6QalZFfNLn6DyxEdoN8UxjZDzN4FPWH8TjdmPWp2
-	66AwIrmw==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wApoK-000LKG-1y;
-	Thu, 09 Apr 2026 15:52:44 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wApoJ-0009rJ-0k;
-	Thu, 09 Apr 2026 15:52:43 +0200
-Message-ID: <5a5feea9-7675-4ccf-aa8e-3a2e476ce8f5@iogearbox.net>
-Date: Thu, 9 Apr 2026 15:52:42 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LieyiAsL"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43b983bb07eso574729f8f.0
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 07:01:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775743269; x=1776348069; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ohIZ93yOp8/92W90PMyxfve36tc22fjDET33D09RBUM=;
+        b=LieyiAsLmby8syaBRE4E6t44bMEWJzahktXIHsz1IM9R6zvMo4/LattCyTkYs3P/S9
+         m4mKIxPBhvgbwlu7WwInAPAR3x9hisuBIrjC3BO/aa81Gl7dnPNOQ3FCnFV/BitHl3bG
+         jNXS9XK/QIf/IhZa3bC9Wce2ItyriPp6DK+loGfVYMONcwnEHTaI4KlsYinjx0awxDS/
+         6mRMHe6ileXIm22NeKupHA0oi1JiR43sxIIAVgRyJOdJnrhsO62yUiW288h4c52hPMLY
+         aGNjSZbJBffDBviR/7ZlMeBe8FsDSr+BK6gAP+MtQojbGD7cTLjKdLBIG+UIZwUC3jjV
+         8rHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775743269; x=1776348069;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ohIZ93yOp8/92W90PMyxfve36tc22fjDET33D09RBUM=;
+        b=bkZPzOcp7m5Kp4OtSP7PBNE9SMRkwKswDwDN8jmH/mU4iQtjEISo6qgdzLiqRWySKl
+         kVHCtoFisG3m6RRFS7JkNMNmpc9PSv49ogVIwVO8LqJGe/RrVtr20I+MUzGs2UYK5dU8
+         qgqrYzjzseRD5jxgRXDVYdbKqtAuYrge9JvU9hxHMmnZNfKkBMrPRZ0Bbi0RUjZrwzAI
+         /caX/rzUjJOm7b6RuOYtY+uKFsEQSR6J5ye+PXWrw8kl/jeV0sd7g3V210qijKENvG8Z
+         xus8ybYlS1sMEgYN7pAJ7uzJIIWHZMSHTPxzZxaCznX67Q6tzhKprDWCsAKZknIv9fV/
+         Ca3g==
+X-Forwarded-Encrypted: i=1; AJvYcCUOWUwh4ATmwNf3kF1QvhjokgkJyImwl7O7jd6GTACNGAuQKSctN9VtLIkMrOz2EWPKwaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8KoWIOrB/R8DWRvRrN+qmyXpFnRmSSDqLzb0bgbwlGGRUe6ed
+	+yXxvLuX6B9R6XKLBMM9LMuqqbK1xkr1WWYHzbmeXMRtJVdlKr9a2HFD
+X-Gm-Gg: AeBDiev9o6XkN9LnJ0DvXbgDuZ4j2dODY9zl4SFqw9UN4M9GqwK2GeaJ412qMBQlp0o
+	KtgkhVqB8Igwj6Aos5U6iRq1r1ZpbMs4ROsKCUDdZJbFqRjWVX1Rh881hwEsdZCGB/5vi6r5Qbl
+	9QQX+EXKotASfpAN/yn7BtN9dl33WAx16GYbPELfYmOidElMoasVEAJHFei+PsIS9K3jW1lHOy9
+	D7rMt+A24VOYiyQ/Nk/NF3aFtnNkppyH2Lcdv+CHsT8Kh70zOX/CKiCdMwYyfGZmTEXmjBvkaeu
+	pOsJDZIBQmeMX7/hOfy2nEj6WvOk3nkxOv0pY5y2/YG95TB9lO6B0CKFp9hFqDxZDhgLfImZElK
+	ux4NADjIDSI+sGdbKZWXUn1IbCAjYjjFmWjEDDKujxy8xbh+l8rWPk0Obk3sR0ykP9gBz/f58+L
+	J6tBUtsVm70bWs6Rl0fkG5HT2oVMXiPZAJPeFVoLQJApc0pBAyPTzPhcEGaP43gOwE8Tk9AgQCw
+	UjrDkzvRTA=
+X-Received: by 2002:a5d:5f92:0:b0:43d:184:8aa2 with SMTP id ffacd0b85a97d-43d2928f9a2mr36664959f8f.16.1775743265211;
+        Thu, 09 Apr 2026 07:01:05 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:a778:a387:b2af:188b? ([2a02:8109:a307:d900:a778:a387:b2af:188b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2a720dsm68509311f8f.4.2026.04.09.07.01.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Apr 2026 07:01:04 -0700 (PDT)
+Message-ID: <139753e9-99ab-4b54-a527-71dc034f1ac9@gmail.com>
+Date: Thu, 9 Apr 2026 15:01:03 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,157 +69,90 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 03/14] net: Add lease info to queue-get
- response
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
- john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
- maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
- toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20260402231031.447597-1-daniel@iogearbox.net>
- <20260402231031.447597-4-daniel@iogearbox.net>
- <20260407204017.3fc79d1b@kernel.org>
- <b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
- <20260408151251.72bd2482@kernel.org>
- <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
+Subject: Re: [PATCH bpf v2 1/2] bpf: Factor out stack_map_build_id_set_ip() in
+ stackmap.c
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260409010604.1439087-1-ihor.solodrai@linux.dev>
+ <20260409010604.1439087-2-ihor.solodrai@linux.dev>
 Content-Language: en-US
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260409010604.1439087-2-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27966/Thu Apr  9 08:24:43 2026)
+Content-Transfer-Encoding: 7bit
 
-On 4/9/26 3:43 PM, Daniel Borkmann wrote:
-> On 4/9/26 12:12 AM, Jakub Kicinski wrote:
->> On Wed, 8 Apr 2026 11:09:34 +0200 Daniel Borkmann wrote:
->>>>> +void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
->>>>> +                     struct net_device *dev)
->>>>> +{
->>>>> +    if (orig_dev != dev)
->>>>> +        netdev_unlock(dev);
->>>>> +}
->>>>
->>>> Pretty sure I already complained about these ugly helpers.
->>>> I'll try to find the time tomorrow to come up with something better.
->>>
->>> Ok, sounds good. Happy to adapt if you find something better and then I'll
->>> work this into the series, and also integrate the things mentioned in my
->>> cover letter reply (netkit nl dump + additional tests).
->>
->> Hi! How would you feel about something like the following on top?
->>
->> --->8----------
->>
->> net: remove the netif_get_rx_queue_lease_locked() helpers
->>
->> The netif_get_rx_queue_lease_locked() API hides the locking
->> and the descend onto the leased queue. Making the code
->> harder to follow (at least to me). Remove the API and open
->> code the descend a bit. Most of the code now looks like:
->>
->>   if (!leased)
->>       return __helper(x);
->>
->>   hw_rxq = ..
->>   netdev_lock(hw_rxq->dev);
->>   ret = __helper(x);
->>   netdev_unlock(hw_rxq->dev);
->>
->>   return ret;
->>
->> Of course if we have more code paths that need the wrapping
->> we may need to revisit. For now, IMHO, having to know what
->> netif_get_rx_queue_lease_locked() does is not worth the 20LoC
->> it saves.
->>
->> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> Thanks for looking into it! That looks good to me. I've also retested that
-> it still works.
+
+On 4/9/26 2:06 AM, Ihor Solodrai wrote:
+> Factor out a small helper from stack_map_get_build_id_offset() in
+> preparation for adding a sleepable build ID resolution path.
 > 
-> Maybe small nits could be below to move the netif_is_queue_leasee into the
-> netdev_rx_queue.h header since its used outside of core and it might be
-> worth to also have the lock assertion in netdev_queue_get_dma_dev.
+> No functional changes.
 > 
-> Do you want me to add your patch on top for a v12 of the series?
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
+The refactoring looks correct.
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+>   kernel/bpf/stackmap.c | 21 ++++++++++++---------
+>   1 file changed, 12 insertions(+), 9 deletions(-)
 > 
-> Thanks,
-> Daniel
-> 
->   include/net/netdev_rx_queue.h | 2 ++
->   net/core/dev.h                | 1 -
->   net/core/netdev_queues.c      | 2 ++
->   net/xdp/xsk.c                 | 2 --
->   4 files changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-> index 9415a94d333d..e9f7f098609b 100644
-> --- a/include/net/netdev_rx_queue.h
-> +++ b/include/net/netdev_rx_queue.h
-> @@ -76,6 +76,8 @@ struct netdev_rx_queue *
->   __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
->                  enum netif_lease_dir dir);
-> 
-> +bool netif_is_queue_leasee(const struct net_device *dev);
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index da3d328f5c15..4ef0fd06cea5 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -152,6 +152,12 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+>   			 : build_id_parse_nofault(vma, build_id, NULL);
+>   }
+>   
+> +static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
+> +{
+> +	id->status = BPF_STACK_BUILD_ID_IP;
+> +	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
+> +}
 > +
->   int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
->   void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
->                  struct netdev_rx_queue *rxq_src);
-> diff --git a/net/core/dev.h b/net/core/dev.h
-> index 376bac4a82da..95edb2d4eff8 100644
-> --- a/net/core/dev.h
-> +++ b/net/core/dev.h
-> @@ -101,7 +101,6 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
-> 
->   bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
->   bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
-> -bool netif_is_queue_leasee(const struct net_device *dev);
+>   /*
+>    * Expects all id_offs[i].ip values to be set to correct initial IPs.
+>    * They will be subsequently:
+> @@ -165,23 +171,21 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+>   static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+>   					  u32 trace_nr, bool user, bool may_fault)
+>   {
+> -	int i;
+>   	struct mmap_unlock_irq_work *work = NULL;
+>   	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
+> +	bool has_user_ctx = user && current && current->mm;
+>   	struct vm_area_struct *vma, *prev_vma = NULL;
+>   	const char *prev_build_id;
+> +	int i;
+>   
+>   	/* If the irq_work is in use, fall back to report ips. Same
+>   	 * fallback is used for kernel stack (!user) on a stackmap with
+>   	 * build_id.
+>   	 */
+> -	if (!user || !current || !current->mm || irq_work_busy ||
+> -	    !mmap_read_trylock(current->mm)) {
+> +	if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
+>   		/* cannot access current->mm, fall back to ips */
+> -		for (i = 0; i < trace_nr; i++) {
+> -			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+> -			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+> -		}
+> +		for (i = 0; i < trace_nr; i++)
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+>   		return;
+>   	}
+>   
+> @@ -196,8 +200,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+>   		vma = find_vma(current->mm, ip);
+>   		if (!vma || fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
+>   			/* per entry fall back to ips */
+> -			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+> -			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+> +			stack_map_build_id_set_ip(&id_offs[i]);
+>   			continue;
+>   		}
+>   build_id_valid:
 
-(Ok, if so then netif_rxq_is_leased would have to move too..
-  maybe its fine as-is then.)
-
-Thanks,
-Daniel
