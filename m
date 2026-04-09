@@ -1,170 +1,293 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010053.outbound.protection.outlook.com [52.101.85.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78293BB4A;
-	Thu,  9 Apr 2026 20:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775766988; cv=none; b=cIIYNEW8iTyCyHoyn4rwIhZOh7eIUvizta++VM96SF9mJpXmmYOu+hqwOaOwTzrYZG6hDws1JsDJxKEDw4K53LMqf0yeq/Ccaws5VxBlZUHtYFGXL6bQ5zGZnbjyqNmokNHTodgYZO5RHjmG/Fb4awkX5EhHzMD08Zy3bWoiC8A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775766988; c=relaxed/simple;
-	bh=gQuowERDs2CwnIxKTi48OK2lUNoHKjazh0NAg6vOHig=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jU6ZLwZH7+Fhl3uz5u9VINc42wC155fIvZHXgDu/W2lrkipcPZVZoMWHsiX4F0p34Mra0Y9o/lNRbeu5rQm6wXtMpiH8H1CWGAjiuaugcO1iBz839/99Q5YkVoLLTQjxgfqygS2g13iS9XpjsCazYCGhGU3jF8Fgyfn1KaEaKmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T3ZVRQeK; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A07E3382F4;
+	Thu,  9 Apr 2026 20:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775767626; cv=fail; b=rOyyZzVWGNBBZHUoUxQY5gbQRhG9Bm7j9i6t+qOiCPede5t+73WNTjQkmhQtOodXFfR2o0Im108wC3HAmrW2jpFx1XcZsVAxYJlAFUpZG9x8dTwT6lUHS42a7WiSYR+lcXZgClpQz3Z/AjN4SK1oL0qz5FiyuvU0/SNidhBbx0o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775767626; c=relaxed/simple;
+	bh=zf2+b0OYOvcdFWXZThYhG50BORU0kUIV+Fydf09WKHE=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=rHgCO8sv2snDo4qv1q0v0pdgm2gOotcvY4WE/0cLGM2MKcehOaEK50WPWWBRS60zivp01dQg3iI+zNtmd78f0STMPIP4UxPzAsaySr/qRS5yjpwojzRKtkX54cUxyzvburQrtf3YrXNeXjK/uwJdUBfgPglDczzKo7h6JkwcnWg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nD2JaIXC; arc=fail smtp.client-ip=52.101.85.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T3ZVRQeK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775766987; x=1807302987;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gQuowERDs2CwnIxKTi48OK2lUNoHKjazh0NAg6vOHig=;
-  b=T3ZVRQeKbB33BVErx85W8FBNfDz3BdWRyzTz2YpND0yiDOHCfYqGtJp9
-   s/R0xya9G1CDcO0CC4QUeRHiSoF+oPNNckckEKjLdD5opu3QNupu2HGJD
-   /CkxeYWBc5muAaF6Onntu9/MYndp4XyACc2aSn8DydLUmE54nToYHcDgL
-   Onxt8ysfOEx+eTL0eiZ/DiU8RE92NxQGD0IUjNjML1q7vjzKteC0aKDVk
-   nS2gGs+yc9VYA7/b3Gl7yXvwQBgYGJV43NoPRWV9BeXi2dW2h6gNkhHTD
-   EorSqQ807mLl9QJdRFhzRoEoIPCBurvk2kjFhuwa/bWR7a8aCf7d+IHNi
-   g==;
-X-CSE-ConnectionGUID: 0uxO33JbQVGV2XkMMEukGw==
-X-CSE-MsgGUID: F/tssg+lQY2FyNsJ21XGhA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11754"; a="80643225"
-X-IronPort-AV: E=Sophos;i="6.23,170,1770624000"; 
-   d="scan'208";a="80643225"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2026 13:36:26 -0700
-X-CSE-ConnectionGUID: gdIWAIm2Rj6zJdgyDMCvlQ==
-X-CSE-MsgGUID: p6gG8xayQ9u+FfGy3T8zPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,170,1770624000"; 
-   d="scan'208";a="230608472"
-Received: from ray2.jf.intel.com (HELO [10.24.81.183]) ([10.24.81.183])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2026 13:36:24 -0700
-Message-ID: <410df9f6-69ec-483f-9009-0a9b8c9162a9@intel.com>
-Date: Thu, 9 Apr 2026 13:36:02 -0700
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nD2JaIXC"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=kBnI4h8vAeavrWbqhR8dZPr/fsFLEl4G7lbOPnshiDJ+47Cmbz9TnLjgwdHA1EJYfUVqhLK5+F9MNPoQ4OzeyTWpwrx0TMuduusN6e0e9Y8kpsb3gs9uTsL7FDmQDkvHsYWa1Dd2Nd1Rr/T+au5oe9IJDTcbt4YFwWcMXuABFGyIwpeOVhAnjsHiExM6eEbOi0C3W0kVwatfFTyWTcYcT5hxVyAzOoyw5cZSdEyOEgFa9KLFkSslGvq+23ekQV3Qx8i+A091703Sfkkx+8Cfnhj0PffQwzaRx37ahirZKcm0+1JYLSXoHeJB0gRiyr1BvfetyIdMN4ellMGSX9bzYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SI1uxUd+ugGR94MJQBUonRgOJMf/65/S1zE2Pws4t/A=;
+ b=V9Yk4VjJ2fkws8kAYhQ4xw4+wpn9z659QpGq/p5EDRdxNlrtrIJs3ALGQkWgr5UmLq16AX+A+GUVAFeU8fwCgAC/o6494X/C+khupelwFuqpBiDNeui2kogd++YO5gDAWRoyPgOj9kt1wE6WWNKXI2x8SiqesFWvZ4tx5Q/Ruu7RXNCcyCIj7QKA/plBidF3MCCxB7XUsewTDT3GtHdv1Mw2lRbIcB34OPFSc0n/HFuDyO4NM987a+tneWY0QJbEEC54QL1AWoQMCFy9nSSX69S3I1+GLrJbniDrG7xbY0jwk6xFfV1oWPR9yMdqhBaFtK3c2+CoY/7MoZYqwYpmZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SI1uxUd+ugGR94MJQBUonRgOJMf/65/S1zE2Pws4t/A=;
+ b=nD2JaIXC/4YNlBIeG7LguBemXQ/m+hl3UsoSc/3Mi5teHdlbgZnfZpsf+xzl15kFWicH7CGBUZltmY1uCBfmLad09ob9eWfcnnChqUcREVX5XlVkOph1VjCRcX6JENymYYsCgfHiDqRq4+537mTU5LA+OSfoFIlrhgZT+6VHe8IUaJT1x3ms0OiyGs9PzjxX69TaAMyASh34HiFjtEuahTcXFtOCueqH3oHrCiUIlG9fsVqTA40AVKJScDV1uKVPgj1gDP901l3Av5Yy9G4dK5MHeJj/SZlxgc+i42H6jsFmTM+Qu1J8JJw0XBnbcGNpIJq8BwshPgpBLzokXuZi+A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS0PR12MB6583.namprd12.prod.outlook.com (2603:10b6:8:d1::12) by
+ IA0PR12MB8278.namprd12.prod.outlook.com (2603:10b6:208:3dc::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9791.32; Thu, 9 Apr
+ 2026 20:47:01 +0000
+Received: from DS0PR12MB6583.namprd12.prod.outlook.com
+ ([fe80::16e2:19ba:8915:90be]) by DS0PR12MB6583.namprd12.prod.outlook.com
+ ([fe80::16e2:19ba:8915:90be%4]) with mapi id 15.20.9769.018; Thu, 9 Apr 2026
+ 20:47:01 +0000
+Message-ID: <85479042-d982-48df-87aa-591d73346a59@nvidia.com>
+Date: Thu, 9 Apr 2026 23:46:54 +0300
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] net/mlx5: Use dma_wmb() for completion queue
+ doorbell updates
+To: lirongqing <lirongqing@baidu.com>, Saeed Mahameed <saeedm@nvidia.com>,
+ Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+ Mark Bloch <mbloch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Boris Pismenny <borisp@nvidia.com>,
+ Richard Cochran <richardcochran@gmail.com>, Cosmin Ratiu
+ <cratiu@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
+ Carolina Jubran <cjubran@nvidia.com>, Kees Cook <kees@kernel.org>,
+ Akiva Goldberger <agoldberger@nvidia.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260402055206.2311-1-lirongqing@baidu.com>
+Content-Language: en-US
+From: Tariq Toukan <tariqt@nvidia.com>
+In-Reply-To: <20260402055206.2311-1-lirongqing@baidu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TL2P290CA0022.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:3::6)
+ To DS0PR12MB6583.namprd12.prod.outlook.com (2603:10b6:8:d1::12)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 02/10] x86/bhi: Make clear_bhb_loop() effective on
- newer CPUs
-To: Jim Mattson <jmattson@google.com>
-Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
- Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- David Kaplan <david.kaplan@amd.com>, Sean Christopherson
- <seanjc@google.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
- "David S. Miller" <davem@davemloft.net>,
- David Laight <david.laight.linux@gmail.com>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- chao.gao@intel.com
-References: <20260404002149.wtayv6a64vzuppgp@desk>
- <CALMp9eSqgL5q-MY1xpjqR5oRn5_cb=mfEhNFWusNneS=Mx8UMg@mail.gmail.com>
- <20260404034954.t7iapenzvhdpagxp@desk>
- <CALMp9eR70eE2U63gzNzTiic0PqJVGv3CBBuVUOVbi3nqbWKZkQ@mail.gmail.com>
- <20260407163943.y6tkh26z2rfktn3y@desk>
- <CALMp9eTA3cXxuOT4dq=6y1hx52gPH1ywwTEmPQ5-fA-vz6r3VQ@mail.gmail.com>
- <20260407171151.2gf2idjbmph35ypb@desk>
- <CALMp9eRNVGFpzk_-ajQTuXadMtoY9H-ndUaz78wTT1zDYbTrPQ@mail.gmail.com>
- <20260407191128.b2hr2ttkdpyunhrr@desk>
- <CALMp9eTK0o7Z7-oTB8ohvmoh-vy-Y2qjdUvbqD6HaEhOEPZmhw@mail.gmail.com>
- <20260407222738.lrartp6evfp7yhti@desk>
- <CALMp9eQjSqwnvJz4JVzYpMkkTiucSJtW48zC4Hj9GBiUhOH-Eg@mail.gmail.com>
- <a605fb45-f8e3-45ad-8924-1da43b9a9e05@intel.com>
- <CALMp9eRfNsghM_RnDXOs=SJYObfPa5A1aOVDZno_zJ=XotfmRw@mail.gmail.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <CALMp9eRfNsghM_RnDXOs=SJYObfPa5A1aOVDZno_zJ=XotfmRw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6583:EE_|IA0PR12MB8278:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7ba9f1a-4b3e-44b4-3c68-08de96792643
+X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|921020|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	nrpTGJO9ppmm09fERAM7w5M+keejrLjnB1zsqT8pbSwOkehcibAEI8RTzxBHz9oHLpFLsWjZUpNTxxT0iFedQlThW9EABLBuhww5cbWzZuUqLh8jwFc54CBqO8LNBwtcFgj5UlbI12dncGrBENcFAKBdYDrhkPymWdJtDqKS8UlLUNNJ7tQKUUMcfLUyfDc68U0ktlJJGOdIrbEZXEmSSxR9Ueu0DbrfAAuK71ZWVSMGrBqvuguxanNQ1J9O9xIKUsvXR4SOFnnCDxOZrm+pUW6N+u45Fts2ZKbnNEveD7nNgb6KSJF53USLf5ceE8zCfYNuF4UR/iAGgHO33Iv9TZSwnZhqa63wydSeccQfNhxyR7UocXCEa9bqDPwDg4CE8xyV/j7WClAS5ir6L1Cds2CVroZizEDFaYmD41NEWU8qjZRsKsYaMofwCHENz9FKvD5+KYW1NjWRHSs3rqM0BbadotqI/vT9Fe54YO9w+HjMFIPkfvBnPS6xSci0s9euzdApPM7p522p064AS45R4tqzpN0V/MEfc2tJ0S3mgTNJ5qtBDkQngtVBrRsOwEq/ROhRqTsv8WZZx5F31DEOjzlu4kg7RYz9p40v4ZPokGP1SmmCPF3RQs7OvlP0WF/kez4z9bSYdNf5SnWz/YYk92VJCIGo0LunUQFt0y7twxvdzOeSy8VJvZWAUHP6S47o4xNGWc2mqckxpjckhoy2notItq3OUb6yKsbI1xtKAToEWG5CtSNzJcq1Sj6OTnNmeag5uBOODFi1IcueoMFAuN8RkpqjjSgN94lWmtkBfCY=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6583.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(921020)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bWJndnF0aFJyMldiQ0U0RGVtMG1odnNKanBPTmU0R1U4T3A4a3VzdWNCWjZJ?=
+ =?utf-8?B?Q2RBR3dZTUJSTGE5UElkQXJZNmlCd0xvTDZTN2NkbWhXeDNmeHR3VlMxczdS?=
+ =?utf-8?B?RjQ0MjNKQ1pzc1B1T1BJeHhtcVQxbU5IZ1MxWi93RWdTRmV0M3JWZGhaSkpJ?=
+ =?utf-8?B?MjF0SkdaZDhtckJOTW9UUlE5ZDBwb0pWOW45Vk9tSnd1bGJnTWpVTEtRUXV5?=
+ =?utf-8?B?ekY3OXlkaGlVcVl5Zy94QVA3aEloVDZWUTNOOXRyemt4S3RtTHpoUnZ6QU5i?=
+ =?utf-8?B?THZiZXQrWVlxRTg1R1d6OVNTTkVxT3RVNm1mVEhUeXhPRU5sSkpYQUV2WEZK?=
+ =?utf-8?B?bWdHd2FnMUlXRXVvTkoyNTdKUlhHd24vUzVQWk41SVNqd3dyd0tWeStYMDdq?=
+ =?utf-8?B?OW9DZlhpbEVuSmZGai9HOGRlbFpoK3BHWlJrcEl1d3oxOFBYZFM1QzVQaFFu?=
+ =?utf-8?B?UTNRUk9DaU5IVklrNmp2WVJtd3JJTlZuQlpTQ0wvamhZS0o1eTlIQU5RdGhE?=
+ =?utf-8?B?ZkF0YnlUL2RYMHQrZEFIUGZQbCtqOFJDTE1KWjhNdVM3NkNBVnlkb0J1TDky?=
+ =?utf-8?B?RlVnZzJtVWxoRE9oTy9kcGd6N1pRMURieTU1ajhLY0VNcTZnd2tVZHVkVDVa?=
+ =?utf-8?B?NDk0R2tNNEJqbWkrU3FRN2lLYjRiV082Q0x1aUIwYTRxQVVXZWJTSmxNZ2JY?=
+ =?utf-8?B?dmtwNWoyWlRZdENxR2s2clA4b3FMVXFzaTBSc0xDck96Y3gzVzV1VE5iazdY?=
+ =?utf-8?B?UnF3MUVLOGhNdXRPL1VmaElaZ0RjQm1YbDU3YXRCWGZTdzA0eGpDU09IVGRC?=
+ =?utf-8?B?N3J1dG1NODlkZ2JqdXNzYzUxU3kwZ2Z5Z0Q5WXZVbmlUc3FZOGRUam45ODZ5?=
+ =?utf-8?B?RlhxR1daT1RkYTBMV2hLSEVVcXRWbktWeHRkR2hoTWZKTXI2UCtHcnJQU3c0?=
+ =?utf-8?B?SDVwTmNjUEpPWkRLMHBPamZzS2VkVzJGSlBrQ090aFl0aDN3dmNZUU8yQjRp?=
+ =?utf-8?B?WFRMcGdKVDdOSXk1VVBucHN2dktPcGQ0UjQrVUNEOFRQQnVNSnczbjd2dVo4?=
+ =?utf-8?B?VDFvaGVZQm1PWTVPa09EbzR0M1lYMk5xNkVhbjE3Zm1paG1UcFpNQ00zVHVi?=
+ =?utf-8?B?MWJBVTRkMElMMUNDbzRoRXFpQjZBR3RNTGlJT3VQc2RTaGNXeWkyNW1sZytR?=
+ =?utf-8?B?MHlySTMrcWVGK0tJU1dEVmNqUnZ4MzI3YmRMNS95bGl3UW9LTXI5QUNUYjNz?=
+ =?utf-8?B?TkVYbUVZd3U0bldsVVVqS1BCSEVKYmdFdFc3MlM3QnZHUm1KWkM3dkVjT2Ri?=
+ =?utf-8?B?dDVBTG90cnZpL0RwQzBDQzNLckpXdWUxbDREVjZTd0MrMXNTQ3poVXZ4N1RT?=
+ =?utf-8?B?OU14Vm5pMHErSktwY0ZrWnc2MTRESkNNVnZjcVJvVjE0VVRHL0tuWHltclVY?=
+ =?utf-8?B?WHJsWHpLWDV2dkZ0SHRuZnVCQ1B0L1FEemp4RzFUWElsbHdXQ1k2R1B2M1BE?=
+ =?utf-8?B?VVhVQzdXYnEyS2hoMlBUc3VibnlTaDZCaExIeWJCSFhBaytET05zSThrcW5O?=
+ =?utf-8?B?ZHMxSlhYejY3bEhhVG9Vb0hqSTRvK2Fuc1MrT0JOeGxCQ2VDL0ZzUW9hMFY0?=
+ =?utf-8?B?MzNtalFQTTJzWklGTVI3UlMxTlR3WjlqNmhnMi9NY3RLMDMvYlA1aDVuMGdY?=
+ =?utf-8?B?RDROb3BKdWZxNnZlSjdidEVINk1QTTJ2dFQzeHgwak5XTVBjMTBsOHhHYS8z?=
+ =?utf-8?B?Y2lEUC9CYU8zV25QSXdrMzhYL3NlejkrV0NERnlLNHBmY3JzbzF3ditzNVEr?=
+ =?utf-8?B?ZkVkalY3OTcxUTBHL0g0NmR6STQ3QWUvbnZTVEdVT2pDQWZEZ2c0UTlXeE9Y?=
+ =?utf-8?B?QTJmbC9lSDFEVzlYQjJhY3gyZVVCMm9KUUR0KzdGd29HeFNVd2I4RXJHMGdI?=
+ =?utf-8?B?TGh0S0RMQWduZCsvc3hWVnhnYTRMcFVRVzhZYzlTd2FxYVFRNVR6TkMwWERN?=
+ =?utf-8?B?RFVVOU1sU2N5U3QvZWF1K1JYbkQxNzdOaE0rY0tXRUtTRlVUOGlFNVkvSVVJ?=
+ =?utf-8?B?WnVZUXlUeTVPaC9GNWh5TzFDOFk5K1BPY25rNGZiaFdYUk1udzl1dFlleG5C?=
+ =?utf-8?B?T3N3Y2dFQ3BJSXoxeFpURW83YUp6VDRER1BreXNLOFpVTmlPdDREaXRtUDYz?=
+ =?utf-8?B?UkpnQVlaYnZFMnN3WG5SRnpvMWo3eENWTGYzcCt6eTQyajh2QUl4UHNKZXlF?=
+ =?utf-8?B?YTNLODU2ZXlwN1RhTElpUGdCN29XdndCNDJ5TlFadmxHYklFbEZmU3JVSW1p?=
+ =?utf-8?B?VlcyUDYybWJYQzhZQUx3aUlFZllGZ0ZLTW4vSUc5MGU4aFd0aXJydz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7ba9f1a-4b3e-44b4-3c68-08de96792643
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6583.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2026 20:47:01.4099
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qaIpjHqGqTvF0gpHX+WOnL5k/Jq9nkfSaqmwagSLjm633Ygo4fxRW0hFs7nKOt4o7RCb69GjEy1W+iQqCfWZOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8278
 
-On 4/7/26 17:47, Jim Mattson wrote:
-> On Tue, Apr 7, 2026 at 4:41 PM Dave Hansen <dave.hansen@intel.com> wrote:
->> On 4/7/26 16:27, Jim Mattson wrote:
->>> What is your proposed BHI_DIS_S override mechanism, then?
->> Let me make sure I get this right. The desire is to:
->>
->> 1. Have hypervisors lie to guests about the CPU they are running on (for
->>    the benefit of large/diverse migration pools)
->> 2. Have guests be allowed to boot with BHI_DIS_S for performance
->> 3. Have apps in those guests that care about security to opt back in to
->>    BHI_DIS_S for themselves?
-> I just want guests on heterogeneous migration pools to properly
-> protect themselves from native BHI when running on host kernels at
-> least as far back as Linux v6.6.
+
+
+On 02/04/2026 8:52, lirongqing wrote:
+> From: Li RongQing <lirongqing@baidu.com>
 > 
-> To that end, I would be satisfied with using the longer BHB clearing
-> sequence when HYPERVISOR is true and BHI_CTRL is false.
+> dma_wmb() barriers are specifically for ordering writes to DMA
+> coherent memory that is accessible to both the CPU and DMA capable
+> devices.
+> 
+> The dma_wmb() barrier is lighter than wmb() on some architectures
+> because it only ensures ordering for DMA writes, not for all writes
+> including MMIO accesses.
+> 
+> In the MLX5 driver, completion queue (CQ) doorbell records are
+> allocated as DMA coherent memory via mlx5_dma_zalloc_coherent_node().
+> The CQ update pattern is:
+>    1. Update CQ space (device reads via DMA)
+>    2. Update doorbell record (device reads via DMA)
+>    3. Memory barrier
+>    4. Enable more CQEs
+> 
+> Since only DMA coherent memory accesses are involved (no MMIO accesses
+> follow), can safely use dma_wmb() instead of wmb().
+> 
+> This change improves performance slightly on architectures where
+> dma_wmb() is lighter than wmb().
+> 
+> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+> ---
 
-If the guests can't get mitigation information from model/family because
-the hypervisor is lying (or may lie), then it's on the hypervisor to
-figure it out.
+Hi,
 
-I'm not sure we want to just assume that all hypervisors are going to
-lie all the time about this.
+Sorry for the delay.
+Thanks for your patch.
 
-I kinda think we should just let Pawan's series move forward and then we
-can debate the lying hypervisor problem once the series is settled.
+The idea looks valid.
+This is the kind of patches that better go through intensive testing 
+before acceptance, I'm picking it for internal testing and will update.
+
+PS: I know you have one more patch [1] pending testing. It looks good so 
+far, I'll verify and send an update soon.
+
+Regards,
+Tariq
+
+[1] 
+https://patchwork.kernel.org/project/netdevbpf/patch/20260317003544.2583-1-lirongqing@baidu.com/
+
+>   drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c    | 2 +-
+>   drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c    | 2 +-
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rx.c     | 2 +-
+>   drivers/net/ethernet/mellanox/mlx5/core/en_tx.c     | 2 +-
+>   drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c | 2 +-
+>   drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c   | 2 +-
+>   drivers/net/ethernet/mellanox/mlx5/core/wc.c        | 2 +-
+>   7 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+> index 1b76647..7bd6dfc 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+> @@ -259,7 +259,7 @@ static bool mlx5e_ptp_poll_ts_cq(struct mlx5e_cq *cq, int napi_budget)
+>   	mlx5_cqwq_update_db_record(cqwq);
+>   
+>   	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+>   
+>   	while (metadata_buff_sz > 0)
+>   		mlx5e_ptp_metadata_fifo_push(&ptpsq->metadata_freelist,
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> index 80f9fc1..dde8856 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> @@ -805,7 +805,7 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
+>   	mlx5_cqwq_update_db_record(&cq->wq);
+>   
+>   	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+>   
+>   	sq->cc = sqcc;
+>   	return (i == MLX5E_TX_CQ_POLL_BUDGET);
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> index 268e208..f17e7f1 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> @@ -2447,7 +2447,7 @@ int mlx5e_poll_rx_cq(struct mlx5e_cq *cq, int budget)
+>   	mlx5_cqwq_update_db_record(cqwq);
+>   
+>   	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+>   
+>   	return work_done;
+>   }
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+> index 9f02726..7ba319f 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+> @@ -849,7 +849,7 @@ bool mlx5e_poll_tx_cq(struct mlx5e_cq *cq, int napi_budget)
+>   	mlx5_cqwq_update_db_record(&cq->wq);
+>   
+>   	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+>   
+>   	sq->dma_fifo_cc = dma_fifo_cc;
+>   	sq->cc = sqcc;
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+> index 1f6bde5..1341874 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+> @@ -384,7 +384,7 @@ static inline void mlx5_fpga_conn_cqes(struct mlx5_fpga_conn *conn,
+>   
+>   	mlx5_fpga_dbg(conn->fdev, "Re-arming CQ with cc# %u\n", conn->cq.wq.cc);
+>   	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+>   	mlx5_fpga_conn_arm_cq(conn);
+>   }
+>   
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+> index 614cd57..8f7a89a 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+> @@ -421,7 +421,7 @@ int mlx5_aso_poll_cq(struct mlx5_aso *aso, bool with_data)
+>   	mlx5_cqwq_update_db_record(&cq->wq);
+>   
+>   	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+>   
+>   	if (with_data)
+>   		aso->cc += MLX5_ASO_WQEBBS_DATA;
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/wc.c b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> index 7d3d4d7..1afbdd19 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/wc.c
+> @@ -314,7 +314,7 @@ static void mlx5_wc_post_nop(struct mlx5_wc_sq *sq, unsigned int *offset,
+>   	/* ensure doorbell record is visible to device before ringing the
+>   	 * doorbell
+>   	 */
+> -	wmb();
+> +	dma_wmb();
+>   
+>   	mlx5_iowrite64_copy(sq, mmio_wqe, sizeof(mmio_wqe), *offset);
+>   
+
