@@ -1,30 +1,32 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3AF1C7012
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 01:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD1472623
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 01:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775696786; cv=none; b=MgR2rj+eXh9/0tjo0AGyEJR0mZhZGvgDGq66OiWfABCGzJo/nCv1Lp8I6fqfUmpaCsu6mWRP19rG9myIGL1AFYsglbgsVR/RnpYwUg6ChZdXG/VZFdJVMowTzahZCLL3f+9HKy3kZ+jGOj9dQbWrAJ6rW1B/il9xKFdvuX21IR8=
+	t=1775696787; cv=none; b=svfgVsNqVypd3J2iPMVgWlZ0Jb2SzHIlTxSp1lg/QByL/akw+4J4xDBce+pxg2MvPPfZCkaX1kPf76KgiRMj2/ZromX5cupEjck/v5R/Wm1xtDl2M3dSQAvdbfwierrCWSv6tQ/O4H/3Jq/3aIRehm4e36LIz0tpEqCML1WJWBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775696786; c=relaxed/simple;
-	bh=y7jVw1PVUTW7VxJBopV9P0AqCSr+v5JFr26hkxr41PM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IrJefNc2pFris92S9i2I8sPouS0d6nTXfE7jlkosVhV5CcLdZgfWukeQWuUJqpw9SCNBXJ3Pa45dnBkeDbrLht3xueRf6XlBSiskwq5Y5cFKhkYiM/jaXVp3oec70zn8H+c+PliMDzHrXcyT+PtK6xnXhl4/Ieism5ch/oShD4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qdDh4c2G; arc=none smtp.client-ip=95.215.58.178
+	s=arc-20240116; t=1775696787; c=relaxed/simple;
+	bh=iczHXna4L7grqbUgBt6rxCfU6rJknMojicr/70GykkU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Zen9tImEDhFYn6N2J6f/3holAs27gkpN9IGLlqgsuElMptP3TgRoJlww+A7PjTdCy43tGJ60JNmBTMpreerh7bddS3GTNf4SFH6934iiJdeirH1/VbkBwLf8kQZk3smSEsKcGWkwazB6LJ2f8p62x+C5S99yN5t8H1qqvrzslSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nzy+Vs1u; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qdDh4c2G"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nzy+Vs1u"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775696781;
+	t=1775696784;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=m1rgf8jUjVNk6F5nwtz0oXC82qsf1MpqKYVv7gk/X/E=;
-	b=qdDh4c2GqbfHdQ0rsWayikStYgbpRN6DPgaZsQPfGUA30THY/DvW8qmPeecv16SoYMR8Vz
-	jpYaOE8NR3qXk3b8p2g7DCYZOb+PmR0v+42XbME3LbfxAy92yaiLwf8TbgNKS7X8nFG0j3
-	UsaN3mOLJFXrswkHdNqWZQQ+xn+Lp30=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T/Jsa74Va1s1Nkqgt9Gzuyp9emVzAprYCwqK0vMSfQo=;
+	b=Nzy+Vs1uJn7v6TQR2nqBXukjlVTDTvOg6392fHX5wlNKvBpvUbS2zWBe4n/QnFi7ttXVrF
+	7ibcY537CnlUM5LiZ/aaoLnR8OzFuyDXU+lOxiX1gBtKDbwlRv9+FzVdm/R4jKfay/CRA8
+	fKLEkHSADDVPw+USG2N+hjj0kBT6e30=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -35,9 +37,11 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v2 0/2] bpf: Implement stack_map_get_build_id_offset_sleepable()
-Date: Wed,  8 Apr 2026 18:06:02 -0700
-Message-ID: <20260409010604.1439087-1-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v2 1/2] bpf: Factor out stack_map_build_id_set_ip() in stackmap.c
+Date: Wed,  8 Apr 2026 18:06:03 -0700
+Message-ID: <20260409010604.1439087-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20260409010604.1439087-1-ihor.solodrai@linux.dev>
+References: <20260409010604.1439087-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,192 +51,72 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-I noticed a following deadlock splat on bpf-next, when running a
-subset of selftests/bpf:
+Factor out a small helper from stack_map_get_build_id_offset() in
+preparation for adding a sleepable build ID resolution path.
 
-  #526     uprobe_multi_test:OK
-  #28      bpf_obj_id:OK
-  [   27.561465]
-  [   27.561603] ======================================================
-  [   27.561899] WARNING: possible circular locking dependency detected
-  [   27.562193] 7.0.0-rc5-g0eeb0094ba03 #3 Tainted: G           OE
-  [   27.562523] ------------------------------------------------------
-  [   27.562820] uprobe_multi/561 is trying to acquire lock:
-  [   27.563071] ff1100010768ba18 (&sb->s_type->i_mutex_key#8){++++}-{4:4}, at: netfs_start_io_read+0x24/0x110
-  [   27.563556]
-  [   27.563556] but task is already holding lock:
-  [   27.563845] ff1100010b12a640 (&mm->mmap_lock){++++}-{4:4}, at: stack_map_get_build_id_offset+0xfa/0x650
-  [   27.564296]
-  [   27.564296] which lock already depends on the new lock.
-  [   27.564296]
-  [   27.564696]
-  [   27.564696] the existing dependency chain (in reverse order) is:
-  [   27.565044]
-  [   27.565044] -> #1 (&mm->mmap_lock){++++}-{4:4}:
-  [   27.565340]        __might_fault+0xa3/0x100
-  [   27.565572]        _copy_to_iter+0xdf/0x1520
-  [   27.565786]        copy_page_to_iter+0x1c6/0x2d0
-  [   27.566011]        filemap_read+0x5f7/0xbf0
-  [   27.566218]        netfs_file_read_iter+0x1ca/0x240
-  [   27.566453]        vfs_read+0x482/0x9e0
-  [   27.566658]        ksys_read+0x115/0x1f0
-  [   27.566852]        do_syscall_64+0xde/0x390
-  [   27.567057]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
-  [   27.567322]
-  [   27.567322] -> #0 (&sb->s_type->i_mutex_key#8){++++}-{4:4}:
-  [   27.567701]        __lock_acquire+0x1529/0x2a10
-  [   27.567923]        lock_acquire+0xd7/0x280
-  [   27.568124]        down_read_interruptible+0x55/0x340
-  [   27.568368]        netfs_start_io_read+0x24/0x110
-  [   27.568622]        netfs_file_read_iter+0x191/0x240
-  [   27.568858]        __kernel_read+0x401/0x850
-  [   27.569068]        freader_fetch+0x19b/0x790
-  [   27.569279]        __build_id_parse+0xde/0x580
-  [   27.569528]        stack_map_get_build_id_offset+0x248/0x650
-  [   27.569802]        __bpf_get_stack+0x653/0x890
-  [   27.570019]        bpf_get_stack_sleepable+0x1d/0x30
-  [   27.570257]        bpf_prog_51bb4c0f31ae471b_uprobe_sleepable+0x2d/0x42
-  [   27.570594]        uprobe_prog_run+0x425/0x870
-  [   27.570816]        uprobe_multi_link_handler+0x58/0xb0
-  [   27.571062]        handler_chain+0x234/0x1270
-  [   27.571275]        uprobe_notify_resume+0x4de/0xd60
-  [   27.571542]        exit_to_user_mode_loop+0xe0/0x480
-  [   27.571785]        exc_int3+0x1bd/0x260
-  [   27.571973]        asm_exc_int3+0x39/0x40
-  [   27.572169]
-  [   27.572169] other info that might help us debug this:
-  [   27.572169]
-  [   27.572571]  Possible unsafe locking scenario:
-  [   27.572571]
-  [   27.572854]        CPU0                    CPU1
-  [   27.573074]        ----                    ----
-  [   27.573293]   rlock(&mm->mmap_lock);
-  [   27.573502]                                lock(&sb->s_type->i_mutex_key#8);
-  [   27.573846]                                lock(&mm->mmap_lock);
-  [   27.574135]   rlock(&sb->s_type->i_mutex_key#8);
-  [   27.574364]
-  [   27.574364]  *** DEADLOCK ***
-  [   27.574364]
-  [   27.574671] 3 locks held by uprobe_multi/561:
-  [   27.574884]  #0: ffffffff852e0038 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: uprobe_notify_resume+0x229/0xd60
-  [   27.575371]  #1: ffffffff852e0038 (rcu_tasks_trace_srcu_struct){....}-{0:0}, at: uprobe_prog_run+0x239/0x870
-  [   27.575874]  #2: ff1100010b12a640 (&mm->mmap_lock){++++}-{4:4}, at: stack_map_get_build_id_offset+0xfa/0x650
-  [   27.576342]
-  [   27.576342] stack backtrace:
-  [   27.576578] CPU: 7 UID: 0 PID: 561 Comm: uprobe_multi Tainted: G           OE       7.0.0-rc5-g0eeb0094ba03 #3 PREEMPT(full)
-  [   27.576586] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
-  [   27.576588] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-5.el9 11/05/2023
-  [   27.576591] Call Trace:
-  [   27.576595]  <TASK>
-  [   27.576598]  dump_stack_lvl+0x54/0x70
-  [   27.576606]  print_circular_bug+0x2e8/0x300
-  [   27.576616]  check_noncircular+0x12e/0x150
-  [   27.576628]  __lock_acquire+0x1529/0x2a10
-  [   27.576642]  ? __pfx_walk_pgd_range+0x10/0x10
-  [   27.576651]  ? srso_return_thunk+0x5/0x5f
-  [   27.576656]  ? lock_acquire+0xd7/0x280
-  [   27.576661]  ? avc_has_perm_noaudit+0x38/0x1f0
-  [   27.576672]  lock_acquire+0xd7/0x280
-  [   27.576677]  ? netfs_start_io_read+0x24/0x110
-  [   27.576685]  ? srso_return_thunk+0x5/0x5f
-  [   27.576693]  ? netfs_start_io_read+0x24/0x110
-  [   27.576698]  down_read_interruptible+0x55/0x340
-  [   27.576702]  ? netfs_start_io_read+0x24/0x110
-  [   27.576707]  ? __pfx_cmp_ex_search+0x10/0x10
-  [   27.576716]  netfs_start_io_read+0x24/0x110
-  [   27.576723]  netfs_file_read_iter+0x191/0x240
-  [   27.576731]  __kernel_read+0x401/0x850
-  [   27.576741]  ? __pfx___kernel_read+0x10/0x10
-  [   27.576752]  ? __pfx_fixup_exception+0x10/0x10
-  [   27.576761]  ? srso_return_thunk+0x5/0x5f
-  [   27.576766]  ? lock_is_held_type+0x76/0x100
-  [   27.576773]  ? srso_return_thunk+0x5/0x5f
-  [   27.576777]  ? mtree_range_walk+0x421/0x6c0
-  [   27.576785]  freader_fetch+0x19b/0x790
-  [   27.576793]  ? mt_find+0x14b/0x340
-  [   27.576801]  ? __pfx_freader_fetch+0x10/0x10
-  [   27.576805]  ? mt_find+0x29a/0x340
-  [   27.576810]  ? mt_find+0x14b/0x340
-  [   27.576820]  __build_id_parse+0xde/0x580
-  [   27.576832]  ? __pfx___build_id_parse+0x10/0x10
-  [   27.576850]  stack_map_get_build_id_offset+0x248/0x650
-  [   27.576863]  __bpf_get_stack+0x653/0x890
-  [   27.576867]  ? __pfx_stack_trace_consume_entry+0x10/0x10
-  [   27.576880]  ? __pfx___bpf_get_stack+0x10/0x10
-  [   27.576884]  ? lock_acquire+0xd7/0x280
-  [   27.576889]  ? uprobe_prog_run+0x239/0x870
-  [   27.576895]  ? srso_return_thunk+0x5/0x5f
-  [   27.576899]  ? stack_trace_save+0xae/0x100
-  [   27.576908]  bpf_get_stack_sleepable+0x1d/0x30
-  [   27.576913]  bpf_prog_51bb4c0f31ae471b_uprobe_sleepable+0x2d/0x42
-  [   27.576919]  uprobe_prog_run+0x425/0x870
-  [   27.576927]  ? srso_return_thunk+0x5/0x5f
-  [   27.576933]  ? __pfx_uprobe_prog_run+0x10/0x10
-  [   27.576937]  ? uprobe_notify_resume+0x413/0xd60
-  [   27.576952]  uprobe_multi_link_handler+0x58/0xb0
-  [   27.576960]  handler_chain+0x234/0x1270
-  [   27.576976]  ? __pfx_handler_chain+0x10/0x10
-  [   27.576988]  ? srso_return_thunk+0x5/0x5f
-  [   27.576992]  ? __kasan_kmalloc+0x72/0x90
-  [   27.576998]  ? __pfx_ri_timer+0x10/0x10
-  [   27.577003]  ? timer_init_key+0xf5/0x200
-  [   27.577013]  uprobe_notify_resume+0x4de/0xd60
-  [   27.577025]  ? uprobe_notify_resume+0x229/0xd60
-  [   27.577030]  ? __pfx_uprobe_notify_resume+0x10/0x10
-  [   27.577035]  ? srso_return_thunk+0x5/0x5f
-  [   27.577039]  ? atomic_notifier_call_chain+0xfc/0x110
-  [   27.577047]  ? srso_return_thunk+0x5/0x5f
-  [   27.577051]  ? notify_die+0xe5/0x130
-  [   27.577056]  ? __pfx_notify_die+0x10/0x10
-  [   27.577063]  ? srso_return_thunk+0x5/0x5f
-  [   27.577071]  exit_to_user_mode_loop+0xe0/0x480
-  [   27.577076]  ? asm_exc_int3+0x39/0x40
-  [   27.577083]  exc_int3+0x1bd/0x260
-  [   27.577090]  asm_exc_int3+0x39/0x40
-  [   27.577095] RIP: 0033:0x6c4180
-  [   27.577100] Code: c6 05 0b 6f 32 00 01 5d c3 90 c3 66 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 f3 0f 1e fa eb 8a 66 2e 0f 1f 84 00 00 00 00 00 <cc> 48 89 e5 31 c0 5d c3 0f 1f 84 00 00 00 00 00 55 48 89 e5 31 c0
-  [   27.577104] RSP: 002b:00007ffcbf71ada8 EFLAGS: 00000246
-  [   27.577109] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007fec9163db7b
-  [   27.577112] RDX: 00007ffcbf71adbf RSI: 0000000000001000 RDI: 00000000007f0000
-  [   27.577115] RBP: 00007ffcbf71add0 R08: 00007fec91731330 R09: 00007fec9178d060
-  [   27.577118] R10: 00007fec9153ad98 R11: 0000000000000202 R12: 00007ffcbf71af08
-  [   27.577120] R13: 0000000000787760 R14: 00000000009eade8 R15: 00007fec917bf000
-  [   27.577135]  </TASK>
-  #54/1    build_id/nofault-paged-out:OK
+No functional changes.
 
-It was reproducable, which allowed me to bisect to commit 777a8560fd29
-("lib/buildid: use __kernel_read() for sleepable context")
-
-Then I used Codex for analysis of the splat, patch and relevant lore
-discussions, and then asked it to produce a patch draft, which was a
-starting point for this series.
-
-I verified that the patch series fixes the deadlock splat.
-
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
+ kernel/bpf/stackmap.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-v1->v2:
-  * Addressed feedback from Puranjay:
-    * split out a small refactoring patch
-    * use mmap_read_trylock()
-    * take into account CONFIG_PER_VMA_LOCK
-    * replace find_vma() with vma_lookup()
-    * cache prev_build_id to avoid re-parsing the same file
-  * Snapshot vm_pgoff and vm_start before unlocking (AI)
-  * To avoid repetitive unlocking statements, introduce struct
-    stack_map_vma_lock to hold relevant lock state info and add an
-    unlock helper
-v1: https://lore.kernel.org/bpf/20260407223003.720428-1-ihor.solodrai@linux.dev/
-
----
-
-Ihor Solodrai (2):
-  bpf: Factor out stack_map_build_id_set_ip() in stackmap.c
-  bpf: Avoid faultable build ID reads under mm locks
-
- kernel/bpf/stackmap.c | 160 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 151 insertions(+), 9 deletions(-)
-
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index da3d328f5c15..4ef0fd06cea5 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -152,6 +152,12 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+ 			 : build_id_parse_nofault(vma, build_id, NULL);
+ }
+ 
++static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
++{
++	id->status = BPF_STACK_BUILD_ID_IP;
++	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
++}
++
+ /*
+  * Expects all id_offs[i].ip values to be set to correct initial IPs.
+  * They will be subsequently:
+@@ -165,23 +171,21 @@ static int fetch_build_id(struct vm_area_struct *vma, unsigned char *build_id, b
+ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 					  u32 trace_nr, bool user, bool may_fault)
+ {
+-	int i;
+ 	struct mmap_unlock_irq_work *work = NULL;
+ 	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
++	bool has_user_ctx = user && current && current->mm;
+ 	struct vm_area_struct *vma, *prev_vma = NULL;
+ 	const char *prev_build_id;
++	int i;
+ 
+ 	/* If the irq_work is in use, fall back to report ips. Same
+ 	 * fallback is used for kernel stack (!user) on a stackmap with
+ 	 * build_id.
+ 	 */
+-	if (!user || !current || !current->mm || irq_work_busy ||
+-	    !mmap_read_trylock(current->mm)) {
++	if (!has_user_ctx || irq_work_busy || !mmap_read_trylock(current->mm)) {
+ 		/* cannot access current->mm, fall back to ips */
+-		for (i = 0; i < trace_nr; i++) {
+-			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+-			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+-		}
++		for (i = 0; i < trace_nr; i++)
++			stack_map_build_id_set_ip(&id_offs[i]);
+ 		return;
+ 	}
+ 
+@@ -196,8 +200,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 		vma = find_vma(current->mm, ip);
+ 		if (!vma || fetch_build_id(vma, id_offs[i].build_id, may_fault)) {
+ 			/* per entry fall back to ips */
+-			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+-			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
++			stack_map_build_id_set_ip(&id_offs[i]);
+ 			continue;
+ 		}
+ build_id_valid:
 -- 
 2.53.0
 
