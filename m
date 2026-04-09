@@ -1,137 +1,118 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1AA368293
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775702045; cv=pass; b=ngi+31WVOFbwwas3spDkS5c/hconDdLkAabeOpl8eOkEe+srM2vABV27ZoDo2VFn5dV6lNqjMYeBHgVzPDT/3xqlUfc5fw2UVZhN/zgPyqZEZIeNXONcrVtoa8VgkwJCuQt8YCcGhtTdiNSnO8ppIwdxra7zMzulxG4cxI8Xo90=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775702045; c=relaxed/simple;
-	bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uLT5TZvPp+C0e+9WM/mYc0GQHyDKEbIaa5X2WsHZ2CrsAtAevIv+2CJGb1H1QO5OYjJd9LsWn3M/Un9seJfDujugy7h0tE2ZVLjgwLVxDUmmfdUYchFQpiN+ItnTs4Wy3fh075FssJA0fvzH4vFu+8Bm5jXDCnA38jxGIo4OC78=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWjORgsF; arc=pass smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4C62E6CC0
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775702286; cv=none; b=uqAh80T36gUqljFhO0mBFSb9NXY+Iv3NP/oASugGlKdrBtdEAkWk1NygNptmpeOvVjshpd0gSPUGQiNW0OZyN1hIl6aSLfvir3YCEjLeVuIWfYAF5rphMFZz+LzZoIcs+zk8zA59XCZC0b6B8a6IRtTTXWSaXZqtvlPLkGrJJIA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775702286; c=relaxed/simple;
+	bh=iboPAysu5FVZY9DSbZkB2uSur0iwM/BDdPF314YWQMI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WHBkTBGADcCkxZADich2IiDZOyVTJMoZ296PFoL21gGbseXj3UHXR9R753gi0PGXPADYoNUpid+i5DKR9BwnVkxUr9ffnOUQNsLwnISRX4xVX3Ddccr3zT8lVG3tDAbjmx4XF3/KFWILF0E/ZUKN7xPkvUdZjL7g8AlucXhElCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VEZ4wgjr; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWjORgsF"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488b0046078so3374405e9.1
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 19:34:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775702041; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jC+bWwCNTkt3+uQT2UPVbzOcs4FcrcSR0A9l7Z7FlEpTJEZjgsQUk3d27rUFA+Q5s0
-         MqpwnwGLZrc2nGOOBJwgE4uM+7ZfEOdwOfhfncF/2+D9dtVXZldcKPAnbXiQJTVhf6b1
-         12N8KJlujqeQo4Huvk1je1p3QW3h9MnL7/fIyPeGGFAVx74Njglvx8rGb1oGMrAkwxqb
-         VlUhP7C0gR2W94/lO8J9I8uI1jXzY6rUb78swMg+vySfv7023Q7UEoMGWBihrfJlxt+g
-         gtdYv+2yoHerzJpwLMi77ZY1jvfqNlmZUwY13jsRSdDPt+WQ/yAdVC7sX/4DYUieQ7/D
-         7omg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
-        fh=yJD8G2PFrJEJ5ou/PGuX+gCp7xaXtso+pr8M1o1C8rM=;
-        b=D6qkJW1sctS56TMVIq/VsiuHvBLTr4KD1WJsUkb03EVuh2kN6UCd8sDiJYUwc+tSZm
-         pTMJwOSrFHPEkVzvNawfbE4nWkIr97nL+CegJJ9y12jCSJgHXH7v7ITlkDkWxxUWlnbI
-         9XrkSZ/vg/ZkgapUWIeRjvA+tAvJoZBWIZuh0N1oUs6XHFMvgDxiU0bEFraJ4SqjjKlV
-         U3sg0Jnc9+C6XBckCqzLoFj0ISU1nHMN6/a1u89wZyqKUseKntZ8NLSQT/n90DheSDjA
-         5qIg/ZwdyirgPJNdfhGZDgq98l7tDXpQP5w4RWk76cD7X0SbID3TC3jBxt9vQmhMKRDq
-         NZjQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775702041; x=1776306841; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
-        b=JWjORgsFjjSYeZztVkh+aEO5pr+ZpV6o5CxQh1KjDMqwLUpX6q32kEtCD7ZCVf2RTV
-         A3y2Uo4TQqhUMOBLHiZodDsMMUDh797scKlT2OKQIh7BvicPCp4vEIa19oAqiiYKt/vs
-         apiR7S8WPoplgIg1J6JIhTu2T0eNCTa5lhq1pa11soiPQJKtxTcbF4MH50r9tgBLhxqg
-         vQBjrutXF2mdgP0lX/9GnECvVEy9Fl75DnxVbhTc2TzyqNLDXjd4jYuJA9UAokUGs5n6
-         c7Y9c4gabsAD7AwPmeH1w3rODL/kj9AJHhi0CSqtVdc3WKw9xV4poH6+iS/qWXJg4mmr
-         vZNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775702041; x=1776306841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3iXYLL7ZTeLjfMXFk7O1ltQciT2rgkYob/DR9p00BOI=;
-        b=UmpkGptOyVud0PMHz98sUqYlJHgQ44xjRElFSQZV3+HhjOc0HWF7BuMk1XxaXZOxCn
-         ZtgiyDXTVGWPJtpirmrNAllSG9r1oBaQIIrEX54S933wpI0LIwmwm2rByGLTiNb/T6i1
-         ylt7GY3n+Ns0Atx1HxPPP9bchqiTyfO8mhpoSMXnfkxD47ZJmd52EtIcoUMRQ/mszqPK
-         xnaodeBLQbjzYiwc0GxsvSO9sXn7CBVNo2/OCQ+G/USEcBAZBmboX8EGg1LYhiQTCQIe
-         2LjDZoqQK9/0uMBu+TQ0R726PfXc1q+Ix87ruSzeT0Vzv1tBTw0BsRKQ/hcQyL2Qgie9
-         BzEA==
-X-Gm-Message-State: AOJu0YygJrONdLwF8xA+vvpSnGuJalGtHGjvG+8HcxjWa2m8mxx1y5yO
-	rnC68ali5OPF9DWlrtzm3xfftbRwhXeTAYxRWy/Z/T3VfFROn0mC+x6E+OMcij588+4/5pSuZtE
-	Ba9Ixsh9IP6p2m69ckNF467Je0vxBvuc=
-X-Gm-Gg: AeBDieviICatpp1kOv5ZVwe2EMLjAxBj9ureVlm61bvmBbgFo/nNIaIrdNKEqAHZSgR
-	khrM0ECnHfWnHqEuAByQLWci4Pq632il3Fr874fIGwPmivJk6hSqogc+kQbHnA1kEUGwBmOxKrg
-	H83et4bQxAZQcscRIR30p534VeEXucqfUiXLuedl9GSer/BlZCwDliD2o6xW4bCiPsEEPXp8tVo
-	nIbA4AA71Pj5uslkOfl6ajHljw8TcqRxTIsbkFjyxKl2nk4pvwYE0oG66p7WlkLxJXfZ+YupxUq
-	1GTVdPlKsEy+ybPuu6Kc4mMTqRtYdSMYNqCh51PdvKPunUVrU1Awg/QN/4dXMxTZXiTaUuydsFQ
-	4xMM2nWjsBhtmecerYlyMIZemyg==
-X-Received: by 2002:a05:600c:358b:b0:485:4135:5c92 with SMTP id
- 5b1f17b1804b1-488995cb858mr386413205e9.0.1775702041098; Wed, 08 Apr 2026
- 19:34:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VEZ4wgjr"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775702282;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=j0ntqr0eCaKHhnWx3mL0czlYIr6pfx9bXG9ovvs2on4=;
+	b=VEZ4wgjrupbdKEyUbn/8BSesAScfXul+T6CNlG86nUBf7I/5S9cWtAXYSW9kKzgSTYQHe3
+	TuPFtnYs0xEd/iyvn+/MQAQ1pEH2voFDm2tUZwEcjSmmesSab+RxDMlrtnA1bw8vnytO0G
+	+qoNVie0rTO8q71fr6HqKu4kT3TpyxQ=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: Fix use-after-free in offloaded map/prog info fill
+Date: Thu,  9 Apr 2026 10:37:32 +0800
+Message-ID: <20260409023733.168050-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260407045730.13359-1-emil@etsalapatis.com> <20260407045730.13359-9-emil@etsalapatis.com>
- <CAADnVQKnHXg0YnuLvzfXjszMaqugpMNWD5=ipffWS4GVNg6rFQ@mail.gmail.com> <DHO7PDYZAY17.1I9BCM8TQWIJP@etsalapatis.com>
-In-Reply-To: <DHO7PDYZAY17.1I9BCM8TQWIJP@etsalapatis.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 8 Apr 2026 19:33:50 -0700
-X-Gm-Features: AQROBzCoUquyCH9biDKGaMaTmdbsMh7297OH1fch0XoZ_tsBf_1KVQnNaBM-BLs
-Message-ID: <CAADnVQLdhjd_owgNxxyP_ozk2R6NX_UR-ZgnpF=2PFnUJYNp9g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 8/9] selftests/bpf: Add buddy allocator for libarena
-To: Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Apr 8, 2026 at 5:53=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.co=
-m> wrote:
->
-> > BUDDY_CHUNK_ITEMS is used like NULL ?
-> > The header is u32 + u32. Is it really worth saving 8 bytes?
-> > Use two proper pointers?
-> > How many headers are there?
-> >
->
-> This is to make memory corruption harder and keep ASAN effective.
-> The headers are actually embedded only in free blocks, so they're
-> not taking any extra space. However, turning them into pointers means
-> that for 16 byte blocks they occupy the very beginning of the block.
->
-> When the previous block has an off-by-one it immediately corrupts the
-> allocator freelist. Worse, if the header is at the beginning of the
-> block then we can't catch the corruption with ASAN: The header must
-> stay unpoisoned since we have to read/write it while the block is free.
->
-> Since these are arena pointers maybe we can store them by turning them
-> back into address 0 scalars to both be able to do regular pointers and
-> pack them into 8 bytes?
+When querying info for an offloaded BPF map or program,
+bpf_map_offload_info_fill_ns() and bpf_prog_offload_info_fill_ns()
+obtain the network namespace with get_net(dev_net(offmap->netdev)).
+However, the associated netdev's netns may be racing with teardown
+during netns destruction. If the netns refcount has already reached 0,
+get_net() performs a refcount_t increment on 0, triggering:
 
-that probably will be even less readable.
-Ok. let's keep them idx for now.
+  refcount_t: addition on 0; use-after-free.
 
-btw, please trim your replies.
-gmail sucks in viewing/replying to long emails.
+Although rtnl_lock and bpf_devs_lock ensure the netdev pointer remains
+valid, they cannot prevent the netns refcount from reaching zero.
 
->
-> By the way, we're calling bpf_arena_alloc_pages without the lock because
-> allocations of the order of ~1MiB fail when we take the lock (which is
-> fine imo, it makes sense that the nonsleeping path isn't able to satisfy
-> large allocations).
+Fix this by using maybe_get_net() instead of get_net(). maybe_get_net()
+uses refcount_inc_not_zero() and returns NULL if the refcount is already
+zero, which causes ns_get_path_cb() to fail and the caller to return
+-ENOENT -- the correct behavior when the netns is being destroyed.
 
-That's weird.
+Fixes: 675fc275a3a2d ("bpf: offload: report device information for offloaded programs")
+Fixes: 52775b33bb507 ("bpf: offload: report device information about offloaded maps")
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+Closes: https://lore.kernel.org/bpf/f0aa3678-79c9-47ae-9e8c-02a3d1df160a@hust.edu.cn/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+v1 -> v2: fix the commit message and simplify to ternary.
+v1: https://lore.kernel.org/bpf/20260408104732.259683-1-jiayuan.chen@linux.dev/
+---
+ kernel/bpf/offload.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-Puranjay,
-that shouldn't be happening. What's causing this 1m issue?
+diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
+index 0ad97d643bf49..0d6f5569588c3 100644
+--- a/kernel/bpf/offload.c
++++ b/kernel/bpf/offload.c
+@@ -435,9 +435,8 @@ static struct ns_common *bpf_prog_offload_info_fill_ns(void *private_data)
+ 
+ 	if (aux->offload) {
+ 		args->info->ifindex = aux->offload->netdev->ifindex;
+-		net = dev_net(aux->offload->netdev);
+-		get_net(net);
+-		ns = &net->ns;
++		net = maybe_get_net(dev_net(aux->offload->netdev));
++		ns = net ? &net->ns : NULL;
+ 	} else {
+ 		args->info->ifindex = 0;
+ 		ns = NULL;
+@@ -647,9 +646,8 @@ static struct ns_common *bpf_map_offload_info_fill_ns(void *private_data)
+ 
+ 	if (args->offmap->netdev) {
+ 		args->info->ifindex = args->offmap->netdev->ifindex;
+-		net = dev_net(args->offmap->netdev);
+-		get_net(net);
+-		ns = &net->ns;
++		net = maybe_get_net(dev_net(args->offmap->netdev));
++		ns = net ? &net->ns : NULL;
+ 	} else {
+ 		args->info->ifindex = 0;
+ 		ns = NULL;
+-- 
+2.43.0
+
