@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78D5271A9A
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 20:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3FF2F39C2;
+	Thu,  9 Apr 2026 20:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775766034; cv=none; b=fjolP3HsScB8371TLZP07GSvYRR6/ayGLxMPH9aSXzEsXm3xidh6reU/SUgGGvuPG0YkxUB5nqCgUYTfOemaZNTHHRc3yLLHaH1V69vI1vlC4lWwJqX7Jmr531g973rF9vfNkEEhyNlg1QRFLWp26W8cJQBHIHbPVBlatxtWyoQ=
+	t=1775766630; cv=none; b=K2HYYlkhYT/Fo7PHys+l3i1JnmsykqQKh7PVLq5pSBQ+UFniBqhRStShGqRNffktnozdhMluLRxHa8j4aIiB5DhM/SSXgqOSU/OPZ701iMCuwMCSjxXrDe1CycXzQ6aqDdXF/HgBMVI+di0dq8W9UzV+tX84LssWAe1Kxt5qCXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775766034; c=relaxed/simple;
-	bh=t0pbKYzaRe9zA3bv2d62a55HGpuBg6UPCvPr9VMM00I=;
+	s=arc-20240116; t=1775766630; c=relaxed/simple;
+	bh=YuFF0row2xbw1GIj/sy7Sd+bYuSOqtTAR9QJHHBt27M=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=NIq6T6+3+P21zBVMEM79yXe3QX7v/V/R192JSXW9XrH9JDnWBCs/ZielIsiszfLfO7jjtd8ZuRjLvjBKpH3QlpIKYQMVoChDT25FUFF69USJsu+hWOqRPgxMMX7wdWkFwNOxyEPhvbYwlx/c47vK/JhUy5WZ9CsJTO6dhdq9C3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h+7w2A1g; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Kqfc2nJoUHaoZHjidD4vqTXuQn34X6h8CN9SEpu2SWBVD+8KfiZGomaPyzlKf09pegnYGDXid1RimDoJOhkfBHssvj8cCUsYpydK6kUMODyoMYMZImrFTjv1m/a7mqJ9IJ3NCOQiUW/0GHUtzX8bDmltNeMQ2KCWWlJ2DGYuFWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NF0u/wPa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h+7w2A1g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B55AC4CEF7;
-	Thu,  9 Apr 2026 20:20:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NF0u/wPa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE03C4CEF7;
+	Thu,  9 Apr 2026 20:30:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775766034;
-	bh=t0pbKYzaRe9zA3bv2d62a55HGpuBg6UPCvPr9VMM00I=;
+	s=k20201202; t=1775766629;
+	bh=YuFF0row2xbw1GIj/sy7Sd+bYuSOqtTAR9QJHHBt27M=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=h+7w2A1gCTmRsG0duqki7fUVD+O1D9fHc6VyM7RDSdAHqQ+EPga8UcUhXJljlc7l9
-	 vgc+rcV8sCODrr9lXJIpjPomu89ARtcBw6yKpKe/vDYLDHIMxORK6oVhzD6HNWS8dH
-	 X77X/Niut6bMLZ6/sfX4++Ls4nH2B9jkToXOO05oCBhy8nwG2Kijcar54CgIELRsep
-	 0wtRNpxESF5+w8euM6O9wl3M881GyMPvlv/HDMX5Neoz5Uq/ODQOlKXdhR5lTXbPHq
-	 1s2dgSANURrFMvNP7K5Tw6iuH1JZB8Z/ciM8xnNNg8ndYCERAduUv7W6Mj/XsGF8IE
-	 +73j8fyA6aPkw==
+	b=NF0u/wPaniW9nexwAkqokvWZONOeSSwxxaiQqTGC4esQTUjGD4LtamgYtNsgNfmUM
+	 0Tv2AebBi7737dasyi0P2j1tZyCOncehlcoURu6kuWQ0xD/772wbJufAwtNo/zGlBJ
+	 O9wdwaSOr/cL6vk44e+me+I8ZfDBIbMRzNc2ESRZmJG8OAMKcvHrfnEQMhDFwhump2
+	 HA2MoZ9lUF9cs5c7Sjkz+jt64KfooqGsuFMxQZG9sEyfmNAbfG4WHuGVgr+vJX2MXh
+	 2l/McuDAmaukfFHkf2QAteIiEY9Fl5pAeTvvJ76L/2dvP/vHHooVkK0lfogG5MvazE
+	 r5IWal5d1/1xQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1D6BE39308B7;
-	Thu,  9 Apr 2026 20:20:11 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CDD739308B7;
+	Thu,  9 Apr 2026 20:30:06 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,41 +37,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 1/2] bpf: Drop pkt_end markers on arithmetic to
- prevent is_pkt_ptr_branch_taken
+Subject: Re: [PATCH bpf v2] bpf: Fix use-after-free in offloaded map/prog info
+ fill
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177576601004.1723637.10865726418244127226.git-patchwork-notify@kernel.org>
-Date: Thu, 09 Apr 2026 20:20:10 +0000
-References: <20260409155016.536608-1-daniel@iogearbox.net>
-In-Reply-To: <20260409155016.536608-1-daniel@iogearbox.net>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org, ast@kernel.org, eddyz87@gmail.com, info@starlabs.sg
+ <177576660531.1728013.12983748791423250538.git-patchwork-notify@kernel.org>
+Date: Thu, 09 Apr 2026 20:30:05 +0000
+References: <20260409023733.168050-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260409023733.168050-1-jiayuan.chen@linux.dev>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, dddddd@hust.edu.cn, M202472210@hust.edu.cn,
+ dzm91@hust.edu.cn, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, kuba@kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Thu,  9 Apr 2026 17:50:15 +0200 you wrote:
-> When a pkt pointer acquires AT_PKT_END or BEYOND_PKT_END range from
-> a comparison, and then, known-constant arithmetic is performed,
-> adjust_ptr_min_max_vals() copies the stale range via dst_reg->raw =
-> ptr_reg->raw without clearing the negative reg->range sentinel values.
-> 
-> This lets is_pkt_ptr_branch_taken() choose one branch direction and
-> skip going through the other. Fix this by clearing negative pkt range
-> values (that is, AT_PKT_END and BEYOND_PKT_END) after arithmetic on
-> pkt pointers. This ensures is_pkt_ptr_branch_taken() returns unknown
-> and both branches are properly verified.
+On Thu,  9 Apr 2026 10:37:32 +0800 you wrote:
+> When querying info for an offloaded BPF map or program,
+> bpf_map_offload_info_fill_ns() and bpf_prog_offload_info_fill_ns()
+> obtain the network namespace with get_net(dev_net(offmap->netdev)).
+> However, the associated netdev's netns may be racing with teardown
+> during netns destruction. If the netns refcount has already reached 0,
+> get_net() performs a refcount_t increment on 0, triggering:
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,1/2] bpf: Drop pkt_end markers on arithmetic to prevent is_pkt_ptr_branch_taken
-    https://git.kernel.org/bpf/bpf-next/c/9f118095dd34
-  - [bpf-next,2/2] selftests/bpf: Add test for stale pkt range after scalar arithmetic
-    https://git.kernel.org/bpf/bpf-next/c/8697bdd67be8
+  - [bpf,v2] bpf: Fix use-after-free in offloaded map/prog info fill
+    https://git.kernel.org/bpf/bpf-next/c/a0c584fc1805
 
 You are awesome, thank you!
 -- 
