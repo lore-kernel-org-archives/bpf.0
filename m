@@ -1,106 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C192309AA
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971BB2309AA
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 02:26:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775701579; cv=none; b=rzVk8GurWI2z4VzWkWu/Q0CKcdnFWTHqnhUW9rY5VXp5s5D1hXOp44OnK7XcWuu7flRLdVB+RjhUobGba4B9Vc83fX6IAizC7tD+O8ul8orJeRczC1SrXjxWkj56LBdNxtnqjWPFzuy8efrpGL95T7UHuJe5zeRNF/S1aJnzxHs=
+	t=1775701580; cv=none; b=pFA2RYBho/ojwvslI8l4JJcQ+++rnpQCGQfbbCHbVIpn7ffVjJ6WCZspI3MVwpuOYN3QgL6scvgBZkwyT4/BRnbOnvGciZkdBJp8s6yzqJddIHaxQQ0qxxjaCSi6he9YDkrXCb0XXFaQAikW52/fk74upoXdnwdiEyuapKX0Gz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775701579; c=relaxed/simple;
-	bh=IQsclcGALKCbMKdjzMzKpJbzOxXUv4E6GsmBANRb2s8=;
+	s=arc-20240116; t=1775701580; c=relaxed/simple;
+	bh=esP9HxOkgA5GKA4ssBAkb2EPAZ4ZguuYjEK+uqlhqSA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Is3/hyX5smGBZpaZD6u7ARzZmX1SK4gX4V8sB2X8gr92QSe4eA3KXtvIX+wxtbt3V4kYHNNdOxeAwhYk+3zFQypKwnOMgHrJKdouKkDFwdTtH0DLCgcZS1UItBEqWVaHBiX5BSVAbFxN3Tbb1aWVBeYNdQMgDsg39PFesi7PL0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7BBFv8v; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=JS081JgTvOnT3Vao4AbMDfKdWOyuZLxukioymDHuLGg/cqZjd8c/UJvwQuK0fKAESvPMz4UnVLYidai/+vehplp/jABTW4ymelHJBf7YLKA1x03szDK0FskbCm+/9nIkC4THfUQI29T9667c4R20efM1LAHPYkkeMS23icnN+g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5HgnIRY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7BBFv8v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64861C19421;
-	Thu,  9 Apr 2026 02:26:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5HgnIRY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8B6C19421;
+	Thu,  9 Apr 2026 02:26:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775701578;
-	bh=IQsclcGALKCbMKdjzMzKpJbzOxXUv4E6GsmBANRb2s8=;
+	s=k20201202; t=1775701580;
+	bh=esP9HxOkgA5GKA4ssBAkb2EPAZ4ZguuYjEK+uqlhqSA=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=R7BBFv8vGzCMSl6lc5Er50a9FCXAjnZQUoANzC7vKJGMvHNAvFOLI3SzREbNMQpUe
-	 ma04SvMokTq7OZdgd9t9J+xO0sskM4Stp0WpexT/5ZcYuf4yaEXqMt3jmOjXRcIFzX
-	 GjCQeZfF5Yrh0d3ItT1QR42gmm8aPMGejVnTztiiFqdukX0vz83ZOoBxg3o5tpmy+D
-	 t+HwRA1R4sJiAKZUVFY2ZHcTXEUxlgGU8AZQW+zvDgvJSrhjHyFe79FoySASM09l9D
-	 7WSvwMYbMv6cDSERVP0B4cOkJetd4pqPtGhoNJmn+lJjWPlMk3tvnmrMlzZaqSFr7l
-	 qwOEwp97u1iow==
-Content-Type: multipart/mixed; boundary="===============5269330392652719733=="
+	b=N5HgnIRYw+gIxop1DOEU/LQ1OFa+if31fCybzFgSYI1Em+7J+FBaNmTIsi4XwiymX
+	 s/VzBUVfzoRzel5SBPKrsWJcvbFADLmsU5/4BBYEbLQLokYPipqzt7d7QRfYYckdWn
+	 Vw9TQbd1NUk+yAzJiHYjz5+E7UNi7+1y3zA0VrAaL3/fwOGIrtTPI+msnTz5nRMq1m
+	 N2Dgp+ecqB1wq3p7vphPgVZ4xJD16cA49RD2PmSuw+jjGLrzI2HyM/FZ2sHAFOJnDd
+	 kCwaTj0Jm/eYZhvWvUQTsIuscAr6NKVJ1Xgp6VVA8wm/N+UvHci2nfoJQ06s26qS3t
+	 hjb5ftwKa7g7g==
+Content-Type: multipart/mixed; boundary="===============5264469444886364970=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ebe2561af12fef3888da2ac17b7da0735be644338ab28369a4f162a117db3b80@mail.kernel.org>
-In-Reply-To: <20260408-patch-set-v1-4-1a666e860d42@gmail.com>
-References: <20260408-patch-set-v1-4-1a666e860d42@gmail.com>
-Subject: Re: [PATCH bpf-next 04/14] bpf: make liveness.c track stack with 4-byte granularity
+Message-Id: <438e59feaf2325987f2b85c36251a402ac473c9bb87c12b5cc13e404259e7813@mail.kernel.org>
+In-Reply-To: <20260408-patch-set-v1-8-1a666e860d42@gmail.com>
+References: <20260408-patch-set-v1-8-1a666e860d42@gmail.com>
+Subject: Re: [PATCH bpf-next 08/14] bpf: record arg tracking results in bpf_liveness masks
 From: bot+bpf-ci@kernel.org
 To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  9 Apr 2026 02:26:18 +0000 (UTC)
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  9 Apr 2026 02:26:19 +0000 (UTC)
 
---===============5269330392652719733==
+--===============5264469444886364970==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 998986853c61..9e36ea5f2eec 100644
+> index 4f7748720250..4457cd80d072 100644
 > --- a/kernel/bpf/liveness.c
 > +++ b/kernel/bpf/liveness.c
 
 [ ... ]
 
-> +/*
-> + * When both halves of an 8-byte SPI are set, print as "-8","-16",...
-> + * When only one half is set, print as "-4h","-8h",...
-> + */
-> +static void bpf_fmt_spis_mask(char *buf, ssize_t buf_sz, spis_t spis)
+> +static void record_stack_access_off(struct bpf_verifier_env *env,
+> +				    struct func_instance *instance, s64 fp_off,
+> +				    s64 access_bytes, u32 frame, u32 insn_idx)
 > +{
-> +	bool first = true;
-> +	int spi, n;
+
+[ ... ]
+
+> +	if (access_bytes == S64_MIN) {
+> +		/* helper/kfunc read unknown amount of bytes from fp_off until fp+0 */
+> +		slot_hi = (-fp_off - 1) / STACK_SLOT_SZ;
+> +		mask = SPIS_ZERO;
+> +		spis_or_range(&mask, 0, slot_hi);
+> +		mark_stack_read(instance, frame, insn_idx, mask);
+
+mark_stack_read() returns int and can fail with -ENOMEM via
+alloc_frame_masks(), but this and the other call sites in
+record_stack_access_off() silently discard the return value.
+
+The same pattern repeats in record_stack_access():
+
+> +static void record_stack_access(struct bpf_verifier_env *env,
+
+[ ... ]
+
+> +	if (arg->off_cnt == 0) {
+> +		if (access_bytes > 0)
+> +			mark_stack_read(instance, frame, insn_idx, SPIS_ALL);
+
+and record_imprecise():
+
+> +static void record_imprecise(struct func_instance *instance, u32 mask, u32 insn_idx)
+> +{
+> +	int depth = instance->callchain.curframe;
+> +	int f;
 > +
-> +	buf[0] = '\0';
-> +
-> +	for (spi = 0; spi < STACK_SLOTS / 2 && buf_sz > 0; spi++) {
-> +		bool lo = spis_test_bit(spis, spi * 2);
-> +		bool hi = spis_test_bit(spis, spi * 2 + 1);
-> +
-> +		if (!lo && !hi)
+> +	for (f = 0; mask; f++, mask >>= 1) {
+> +		if (!(mask & 1))
 > +			continue;
-> +		n = snprintf(buf, buf_sz, "%s%d%s",
-> +			     first ? "" : ",",
-> +			     -(spi + 1) * BPF_REG_SIZE + (lo && !hi ? BPF_HALF_REG_SIZE : 0),
-> +			     lo && hi ? "" : "h");
+> +		if (f <= depth)
+> +			mark_stack_read(instance, f, insn_idx, SPIS_ALL);
 
-Is the ternary condition here inverted? The lo bit (spi*2) represents
-the LSB / lower-addressed half of the 8-byte slot, which starts at
-offset -(spi + 1) * 8 (e.g. fp-8 for spi 0). The hi bit (spi*2+1)
-represents the MSB / higher-addressed half, which starts 4 bytes
-higher (e.g. fp-4 for spi 0).
+and record_call_access():
 
-With the current expression, when only lo is set (lower half at fp-8),
-the +4 adjustment fires and produces "-4h". When only hi is set
-(upper half at fp-4), no adjustment fires and it produces "-8h".
-This swaps the two half-slot offsets in the verbose log output.
+> +static void record_call_access(struct bpf_verifier_env *env,
 
-For example, a 4-byte write at fp-8 marks the lo bit via
-spis_lsb_half_slot() in check_stack_write_fixed_off(), but
-bpf_fmt_spis_mask() would then print it as "-4h" instead of "-8h".
+[ ... ]
 
-Should the condition be (hi && !lo) rather than (lo && !hi)?
+> +		} else {
+> +			for (int f = 0; f <= depth; f++)
+> +				mark_stack_read(instance, f, insn_idx, SPIS_ALL);
 
-Note: this function is removed in cc55f39c101d ("bpf: change logging
-scheme for live stack analysis") later in this series.
+However, later in analyze_subprog() the same commit does check the
+return value:
 
-> +		first = false;
-> +		buf += n;
-> +		buf_sz -= n;
-> +	}
-> +}
+> +				for (int f = 0; f <= depth; f++) {
+> +					err = mark_stack_read(instance, f, idx, SPIS_ALL);
+> +					if (err)
+> +						return err;
+> +				}
+
+Is the inconsistency intentional?  If alloc_frame_masks() fails in
+the recording functions, the may_read mask for that frame/instruction
+is never updated, so the slot could silently appear dead to the main
+verifier pass.  The existing callers of mark_stack_read()
+(bpf_mark_stack_read(), propagate_to_outer_instance()) also propagate
+its errors.
+
+Similarly, in the recording loop of compute_subprog_args():
+
+> +		commit_stack_write_marks(env, instance, idx);
+
+commit_stack_write_marks() also returns int (can fail via
+alloc_frame_masks()), and the return value is not checked here.
+
+Should these recording functions propagate errors from
+mark_stack_read() and commit_stack_write_marks() back to
+compute_subprog_args(), which already has error-handling via
+goto err_free?
 
 
 ---
@@ -108,4 +139,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24168298083
---===============5269330392652719733==--
+--===============5264469444886364970==--
