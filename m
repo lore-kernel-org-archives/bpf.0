@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB9633BBA2;
-	Thu,  9 Apr 2026 13:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610843D75C5;
+	Thu,  9 Apr 2026 13:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775742226; cv=none; b=sSOFge/VNirAcvUJoP6Et8JxP9jqRR4XhAMU2hXAm6IWJUj2hsNVEygEJH4dJchHAovXL+AZDFXHLi0XvqP1qkon1EDEJqtwGs/lj2oBVqViYgJzECgY9teS1Tdwrxi4LUbDE8PN6lt6qGBcaDJSG7pqv+FMdx9DtEjKkaGK9FE=
+	t=1775742788; cv=none; b=GRlxvOy5rrrMXpgRQuwEVW4BLYqJ+Sylmgf/EkC5SPmRsiOv7eDkZzdTGThBzakr3iDPFrNbkxL477EfUcthFEBm4dVbVKioQFqAJcWCSWZglXYdYb7lckKlWgcsJUn+nZ0dg7+gsSevz/1vZpiD2Xn6PqKZQzqEISA7Oc8JL2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775742226; c=relaxed/simple;
-	bh=n3CpLk97LtDsZ0cI3+n3Ybw5XoyVOqFsSCOxiXAQZuA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eQheprpEanRl066ohn1b7La9mcS195hAYXRbwzR2YGJNICpOKH/VIm27E8uTENaBfEqfGpX0pRUULRIhKfaBD6FzMl9T67+pwWUgJOupnfm5S3sMUPSMJBb2g8K7ezmYkYRvtFZC+ijD3xQ+Z3v8rAmkepVCifxX2wZdYEW5br0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LoERg2F6; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1775742788; c=relaxed/simple;
+	bh=eF/aCpZX42xIoCMhfzcSBeQ1PrvuTJUQEin5OH45dok=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=CFUBw1JS9L9Pgv8H54ZI4YcpYDY2Jomk1i6o/KYmnESAKrb8beTY0RkRgLTeMyuuBmVsjnnfl5cOG5LeEbKmT+znrVHclcz/L8cOvBPgUF+EhZVo1pDpFyCzo9x8x5w31koIPHy9rQXKbSPr0msyFUiHaD16MXgXSVwIHQtkIwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=DXUx3hGv; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LoERg2F6"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="DXUx3hGv"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=mKUYgIaFNz8pbnf2XU9B3/tKrqrjJUecCZ/5IGn7BCg=; b=LoERg2F6vUZf7NGI+H67TxTMSP
-	JZ9UZ4p9vSXdVgAy0DZO946sSsg9au2fyT10dJRJEe0xlBcyGEv0Zg+IvKEnWezcM/osta7rQMGd/
-	YBU+KscerpFzmQcoUJP0BqfxI2IRTQiGEjWGxOMNc70A7JkSUG/+NDJCsYd3qEr+AwUhAw4TSkuG+
-	zQbFqF7xgGCmJh09rnmtkos6TF8J5bz8ciV7eHmGEsytOX6RE4Ys7n43jf1KFE1+HjItq56jVXBBr
-	5btXxATR7Nd3k6ovCXFf4lptobmlmpwRRw7GnzJmUayooA1qp/8pCmvHexwAZgih3EcwKC4l+mcy5
-	C9SzkGRA==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
+	bh=VnwzXGZ18M3mh4RXdSCjxFaPYPqhX3XHNq/8FIKdlos=; b=DXUx3hGvRZlvv31fuIhIKfAIL0
+	q+YyqLoFhgH7/6qhUIIu76of9WP8TRNGMGO29tBIlSPs4RRhp4riczysuF56q+ebL5odLGrr75ELo
+	sIsPaAMF76ZMmifZlGmT7extFCoIrqHZSvSfgin6ueCrf2is1RAOTExAQS0YhxgiT9sFPB2hVim1u
+	UI4OhZ/PxKi0eoVPBkQnmSrH+2E33vCnvoP5Uubv4CCuVw63nQel8C4fnCzN1WIOR0/mTnKZRuN+o
+	aNxs6msCuNBVTM5WMnRTe/6fcT+149izSKMpK6QalZFfNLn6DyxEdoN8UxjZDzN4FPWH8TjdmPWp2
+	66AwIrmw==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wApf9-000JxQ-1K;
-	Thu, 09 Apr 2026 15:43:15 +0200
+	id 1wApoK-000LKG-1y;
+	Thu, 09 Apr 2026 15:52:44 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wApf8-0002p0-0y;
-	Thu, 09 Apr 2026 15:43:14 +0200
-Message-ID: <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
-Date: Thu, 9 Apr 2026 15:43:13 +0200
+	id 1wApoJ-0009rJ-0k;
+	Thu, 09 Apr 2026 15:52:43 +0200
+Message-ID: <5a5feea9-7675-4ccf-aa8e-3a2e476ce8f5@iogearbox.net>
+Date: Thu, 9 Apr 2026 15:52:42 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,6 +50,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next v11 03/14] net: Add lease info to queue-get
  response
+From: Daniel Borkmann <daniel@iogearbox.net>
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
  razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
@@ -61,8 +62,8 @@ References: <20260402231031.447597-1-daniel@iogearbox.net>
  <20260407204017.3fc79d1b@kernel.org>
  <b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
  <20260408151251.72bd2482@kernel.org>
+ <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
 Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
  xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
  2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
@@ -106,124 +107,98 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260408151251.72bd2482@kernel.org>
+In-Reply-To: <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27966/Thu Apr  9 08:24:43 2026)
 
-On 4/9/26 12:12 AM, Jakub Kicinski wrote:
-> On Wed, 8 Apr 2026 11:09:34 +0200 Daniel Borkmann wrote:
->>>> +void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
->>>> +				     struct net_device *dev)
->>>> +{
->>>> +	if (orig_dev != dev)
->>>> +		netdev_unlock(dev);
->>>> +}
+On 4/9/26 3:43 PM, Daniel Borkmann wrote:
+> On 4/9/26 12:12 AM, Jakub Kicinski wrote:
+>> On Wed, 8 Apr 2026 11:09:34 +0200 Daniel Borkmann wrote:
+>>>>> +void netif_put_rx_queue_lease_locked(struct net_device *orig_dev,
+>>>>> +                     struct net_device *dev)
+>>>>> +{
+>>>>> +    if (orig_dev != dev)
+>>>>> +        netdev_unlock(dev);
+>>>>> +}
+>>>>
+>>>> Pretty sure I already complained about these ugly helpers.
+>>>> I'll try to find the time tomorrow to come up with something better.
 >>>
->>> Pretty sure I already complained about these ugly helpers.
->>> I'll try to find the time tomorrow to come up with something better.
+>>> Ok, sounds good. Happy to adapt if you find something better and then I'll
+>>> work this into the series, and also integrate the things mentioned in my
+>>> cover letter reply (netkit nl dump + additional tests).
 >>
->> Ok, sounds good. Happy to adapt if you find something better and then I'll
->> work this into the series, and also integrate the things mentioned in my
->> cover letter reply (netkit nl dump + additional tests).
+>> Hi! How would you feel about something like the following on top?
+>>
+>> --->8----------
+>>
+>> net: remove the netif_get_rx_queue_lease_locked() helpers
+>>
+>> The netif_get_rx_queue_lease_locked() API hides the locking
+>> and the descend onto the leased queue. Making the code
+>> harder to follow (at least to me). Remove the API and open
+>> code the descend a bit. Most of the code now looks like:
+>>
+>>   if (!leased)
+>>       return __helper(x);
+>>
+>>   hw_rxq = ..
+>>   netdev_lock(hw_rxq->dev);
+>>   ret = __helper(x);
+>>   netdev_unlock(hw_rxq->dev);
+>>
+>>   return ret;
+>>
+>> Of course if we have more code paths that need the wrapping
+>> we may need to revisit. For now, IMHO, having to know what
+>> netif_get_rx_queue_lease_locked() does is not worth the 20LoC
+>> it saves.
+>>
+>> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Thanks for looking into it! That looks good to me. I've also retested that
+> it still works.
 > 
-> Hi! How would you feel about something like the following on top?
+> Maybe small nits could be below to move the netif_is_queue_leasee into the
+> netdev_rx_queue.h header since its used outside of core and it might be
+> worth to also have the lock assertion in netdev_queue_get_dma_dev.
 > 
-> --->8----------
+> Do you want me to add your patch on top for a v12 of the series?
 > 
-> net: remove the netif_get_rx_queue_lease_locked() helpers
+> Thanks,
+> Daniel
 > 
-> The netif_get_rx_queue_lease_locked() API hides the locking
-> and the descend onto the leased queue. Making the code
-> harder to follow (at least to me). Remove the API and open
-> code the descend a bit. Most of the code now looks like:
+>   include/net/netdev_rx_queue.h | 2 ++
+>   net/core/dev.h                | 1 -
+>   net/core/netdev_queues.c      | 2 ++
+>   net/xdp/xsk.c                 | 2 --
+>   4 files changed, 4 insertions(+), 3 deletions(-)
 > 
->   if (!leased)
->       return __helper(x);
+> diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+> index 9415a94d333d..e9f7f098609b 100644
+> --- a/include/net/netdev_rx_queue.h
+> +++ b/include/net/netdev_rx_queue.h
+> @@ -76,6 +76,8 @@ struct netdev_rx_queue *
+>   __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
+>                  enum netif_lease_dir dir);
 > 
->   hw_rxq = ..
->   netdev_lock(hw_rxq->dev);
->   ret = __helper(x);
->   netdev_unlock(hw_rxq->dev);
+> +bool netif_is_queue_leasee(const struct net_device *dev);
+> +
+>   int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
+>   void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
+>                  struct netdev_rx_queue *rxq_src);
+> diff --git a/net/core/dev.h b/net/core/dev.h
+> index 376bac4a82da..95edb2d4eff8 100644
+> --- a/net/core/dev.h
+> +++ b/net/core/dev.h
+> @@ -101,7 +101,6 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
 > 
->   return ret;
-> 
-> Of course if we have more code paths that need the wrapping
-> we may need to revisit. For now, IMHO, having to know what
-> netif_get_rx_queue_lease_locked() does is not worth the 20LoC
-> it saves.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Thanks for looking into it! That looks good to me. I've also retested that
-it still works.
+>   bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
+>   bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
+> -bool netif_is_queue_leasee(const struct net_device *dev);
 
-Maybe small nits could be below to move the netif_is_queue_leasee into the
-netdev_rx_queue.h header since its used outside of core and it might be
-worth to also have the lock assertion in netdev_queue_get_dma_dev.
-
-Do you want me to add your patch on top for a v12 of the series?
+(Ok, if so then netif_rxq_is_leased would have to move too..
+  maybe its fine as-is then.)
 
 Thanks,
 Daniel
-
-  include/net/netdev_rx_queue.h | 2 ++
-  net/core/dev.h                | 1 -
-  net/core/netdev_queues.c      | 2 ++
-  net/xdp/xsk.c                 | 2 --
-  4 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-index 9415a94d333d..e9f7f098609b 100644
---- a/include/net/netdev_rx_queue.h
-+++ b/include/net/netdev_rx_queue.h
-@@ -76,6 +76,8 @@ struct netdev_rx_queue *
-  __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq,
-  			   enum netif_lease_dir dir);
-  
-+bool netif_is_queue_leasee(const struct net_device *dev);
-+
-  int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
-  void netdev_rx_queue_lease(struct netdev_rx_queue *rxq_dst,
-  			   struct netdev_rx_queue *rxq_src);
-diff --git a/net/core/dev.h b/net/core/dev.h
-index 376bac4a82da..95edb2d4eff8 100644
---- a/net/core/dev.h
-+++ b/net/core/dev.h
-@@ -101,7 +101,6 @@ int netdev_queue_config_validate(struct net_device *dev, int rxq_idx,
-  
-  bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx);
-  bool netif_rxq_is_leased(struct net_device *dev, unsigned int rxq_idx);
--bool netif_is_queue_leasee(const struct net_device *dev);
-  
-  void __netif_mp_uninstall_rxq(struct netdev_rx_queue *rxq,
-  			      const struct pp_memory_provider_params *p);
-diff --git a/net/core/netdev_queues.c b/net/core/netdev_queues.c
-index 5597af86591b..73fb28087a93 100644
---- a/net/core/netdev_queues.c
-+++ b/net/core/netdev_queues.c
-@@ -40,6 +40,8 @@ struct device *netdev_queue_get_dma_dev(struct net_device *dev,
-  	struct netdev_rx_queue *hw_rxq;
-  	struct device *dma_dev;
-  
-+	netdev_ops_assert_locked(dev);
-+
-  	/* Only RX side supports queue leasing today. */
-  	if (type != NETDEV_QUEUE_TYPE_RX || !netif_rxq_is_leased(dev, idx))
-  		return __netdev_queue_get_dma_dev(dev, idx);
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 616cd7b42502..7da620aa11d6 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -31,8 +31,6 @@
-  #include <net/netdev_rx_queue.h>
-  #include <net/xdp.h>
-  
--#include "../core/dev.h"
--
-  #include "xsk_queue.h"
-  #include "xdp_umem.h"
-  #include "xsk.h"
--- 
-2.43.0
-
-
