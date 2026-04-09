@@ -1,325 +1,155 @@
-Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
+Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D636E387371
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 22:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.228
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775772896; cv=pass; b=eXnFMxa2QbKCOQmWun1rJEiH0wQK0ScW3lz/Vqyf3QepodB34WmwY9yWNyRF9yjjRnezdIevieUDKkGSUC5YvhDiV3EkU1IHJGK46BW0RLkTqFCpKwoOLOp1uxxAS3KZ6O86UvibBDEOCI54HgC4EmLptioNL5mx3Ixbb/FK23Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775772896; c=relaxed/simple;
-	bh=kfM/wF3Rht4EmNM4bz/i4FaPy40shnaPhi0+QdEZWZ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j6ZjBOlEQJDSc39/nHzTFUvvHoFe+m7+9Y2WysQ5Knl53vA6p55TAjS2UdaCdjKFUyCC6ntKhXc38HZckGqrwTKdlq9Ctq7RZh/4mtsEYs9uzqTwuOQMbBbx/QHvKWTwttvncJFCIzI++SQvjsUwo3lFqEdltT61cSvCmR3WCmE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=NBHdeHjY; arc=pass smtp.client-ip=209.85.214.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFF12472A6
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 23:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775776881; cv=none; b=QhOhQmS/SHrXBHmdeLJojaElb8adoWQAXa3bnVID8S5m/Wn774uQ/hrTppXh3N7PYrq/EUyh5x9dpcTiCH1JctIBruNaT1GaAr9jgKL2ur/sua1ctNKg6zQknwgQer6AGT+tnKRSm03aQVkDz698KOFSvd3FXuIBYp7BeCoQ6VA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775776881; c=relaxed/simple;
+	bh=QkW1pXcLnyWp7fQDqZ+NOCfYeHxXgvIZOJ6Bvgjxa9E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XxH7tE4uXnNmXjLvG7kGnSVBMcBCR70hVfvScmeQnVumaaQAvNqpudWZCvzHSU8iR0hZ+q8xWFDVv81aNUUV3/djiJ0tODMyTv5qZzjsuhnaaBaMdpi7wLYjT9l6IrGVOZ7ZeUPR+VuA8EIbvC7/xdPc4KhO/OO6WJ7eD4lj914=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nHh9EwKV; arc=none smtp.client-ip=74.125.82.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="NBHdeHjY"
-Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-2ad9516a653so6873965ad.0
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 15:14:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775772894; x=1776377694;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JSsHTKNfmisjk8Wrx6LoskiSSVrIoSHn0g9UnyxtkDs=;
-        b=dRJlJUDcaR8G0+9dPhOeTJADuPOzp2Z5tNQ+0ObUuCZAbhQ6v1ppyQk8wQI/DXZoDQ
-         x3HSsGa10PskseqdhWgj4Y10VoSWhhZHfGjUfrTbqbIesgWK5h79BRtt1h86g28dP2Ui
-         7vo6ztMYDGblnPw0UPQC9PWI9oSJqK9K+AO1ZH3UX45iL3tb6luS8kk/A50GVBA3si1C
-         YrJeD5PTT2UdhQOoNi3HuW7gs4KQHzEqyMlF9f7tVgVs7DHXpAgJIh8Dd4gt+77nqHIJ
-         yBMHBbDblY8O/OufP4/dJmMEoX0ojs09MgXYuaF7o2oZmVjnipMd7bkl7u3Jvh0Bd6+4
-         FomQ==
-X-Forwarded-Encrypted: i=2; AJvYcCW82r49umYbmGlt/YJbFPuWtlH20KxozhaVg5sCbYwZhL2nt918dbnwVCUnb3l2or7zyZg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLowNd4+J3a2diopfsjkE4n3h+a64mfdKQ7tiqZSXNkTpW6aQK
-	Inc0fSveDvJ7A9i9z1eMfMGp9hXamr581/H7/WPu6x/2zLr7JCMwq4nP49IM/gkY01+HnFRTCbP
-	lnohgZcjiRNoGh7Lkk1Zo4RZZFNOYdWdRCUer5V/hSxnRtzbsCzTiCQBQiKcjnSEzY+giruFm3I
-	A2RyDJEvK7TntIFPhLy10unbQGpU3oGdWHrr2t6dzxwPs3AlsrfgFHYJO2I/ME2Q3h/QfQ+k2e0
-	w9XMCsPT4hpKQ==
-X-Gm-Gg: AeBDieu3pDx2ijx3BwCh+TvI6ixoI3TwvJAvQxaT772gMQTPT08N5cKWSJE1AxxXZTT
-	Pqn2feuZYxVZuwm50/DXIhwCaH2xuM4MUMdmFhrnXVlVlroMI9bBsm6qZfknOIyxc77o99uIB6x
-	VYdAXAAtXhJ5xt5sq0yXb3Sj2PWbM+z3AOYho0vuh2hM71ptprLj+rGeHv3gHvJHxpm6jjmhgUm
-	xjDo7XI5HrapbaJ5IqgdNx5wKG0FCyqUHmkZ9P1HLuvNzuHRSKBR+lDsft7gs1AcVu8lO/GC6RH
-	arI57zRYFIP/B/itOTMDXJgP+ghd4R0vIaS1eKZeoXSpG9l6oqMjNTdI0A+R9TvAg7JHPEpW6Hs
-	SCmCjiSz39hiAqDsC2VH/kLy/vl+iAtBYx4M3voZ76me+wDjdwYOUGK0GreEWonOOffk9zYkBbZ
-	5rXNVmTLJ8zhzQ+pDNMjcxWnKfTGsQwxIKGxMQ6YJf9Nb4xDrqwPNTehoCHYGtBWo=
-X-Received: by 2002:a17:902:d58c:b0:2b0:67fa:dbf8 with SMTP id d9443c01a7336-2b2d5a5f5a5mr6179465ad.41.1775772894028;
-        Thu, 09 Apr 2026 15:14:54 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-29.dlp.protect.broadcom.com. [144.49.247.29])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2b2d4f354ccsm547965ad.38.2026.04.09.15.14.53
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Apr 2026 15:14:54 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-43d03db814eso1458531f8f.2
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 15:14:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775772892; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hDowWiASyNb14PCTdeKBwqsYEFEKDdvlnfR1dBbuBcDzz5TkDIYHlsrY6jibikXwHx
-         amH4Ji7i/MqhP1b+QCIWuR0RKMTbAy/d24iNeiZ/mYZob4ujeIgL++ne9WRuYojSqGjv
-         5mftHYzswj7TCExTNm6OfbQwJyrQrka7OVDnG1PqJhUTZDYwhAsaYV+tt+gUIOoL2+L5
-         fHcr6lMUAsyrYmIm1ef/7mrULrJJPId/Vd0aED5EIso55ABapqLGCfBAlY+GSl7dcmwG
-         jmL3WX8mTpGERON+AtW9oC8eflTO8Jy9d6i62rlt7UMAABf32uJ96WjkU/qpvfStTyNU
-         3bKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=JSsHTKNfmisjk8Wrx6LoskiSSVrIoSHn0g9UnyxtkDs=;
-        fh=v5FPlCU4yLe2wTJuMk/oDGI7iRulLX7HuGq3Tr+eT0M=;
-        b=SDwS7lorJ7xreBIRu/6QeLKGaUi9DW/Mv3xgXqRPggxT4s+MD9m4CwkwgbcO6Wtg+C
-         OUFeGPfu+SrSYHre89KzfScE/8hsMREVjEtCFKeYkpV7orW6IsYnz8PH/Td4BXoUUFaW
-         T5Ln+L5tGfttx6QThEuQQmnCDEJ3sk0UI8XBbIn2SCzACUOL6M2nS1HYGUkaUCzTWUNg
-         73iIwA3quawmX8XKuZIpNlAgVcQ4absc19Vnr16ROn8Nn1sV0/F4MXlqR6nwINwxNoJU
-         LxFAaqygr+1XVqbj6MPBNNKDU+Q2c7A1DZpe2HZXpoKbwxDE9SmbLNaPIYKJbQrDGeda
-         Nomg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nHh9EwKV"
+Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-12c287eb77fso835313c88.1
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 16:21:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1775772892; x=1776377692; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JSsHTKNfmisjk8Wrx6LoskiSSVrIoSHn0g9UnyxtkDs=;
-        b=NBHdeHjY93i8CEnZGdEQoIY8Ho7Vy81bRDnylsL5ueUKa5Y38rE6H8wLt0Q5bNlH+i
-         VDzEQZGpvqv0wPJjyJH4R9Af8ozP4C744DTwSmFwRCyf7qSn4Yvga6qwijbZdkzDlkHP
-         XceDjjphmQCdK9ThwagUCxJtUV2CejSGLcWKM=
-X-Forwarded-Encrypted: i=1; AJvYcCXgfU4kFFPgv7/XKEYPe+dXIPN56avppsqSL0/JrW9bP7sIDUV2A86gBiyRwhJD0JxxOFU=@vger.kernel.org
-X-Received: by 2002:a05:6000:2010:b0:43c:f7e5:817a with SMTP id ffacd0b85a97d-43d64292b01mr916407f8f.19.1775772891650;
-        Thu, 09 Apr 2026 15:14:51 -0700 (PDT)
-X-Received: by 2002:a05:6000:2010:b0:43c:f7e5:817a with SMTP id
- ffacd0b85a97d-43d64292b01mr916355f8f.19.1775772891127; Thu, 09 Apr 2026
- 15:14:51 -0700 (PDT)
+        d=gmail.com; s=20251104; t=1775776880; x=1776381680; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zEIUiTG0IWgjDuD6AFSTGRqa2JggO2YmAKWBMwTzMAU=;
+        b=nHh9EwKVHJEP1elDqvuD/P0UhSwO5+5bKwg+L4jOliXkf78tKjuxl59km8fdkjb4ln
+         qJgNeJRdoL238j1YFGZoF+1SgPGduM5jmkYM14xyGtm6C5ORUHy9A3cP3iV//Ju1rgvZ
+         hBwkOh6tFAkF0ElyORFbT0mo5Kh9Nxq7PY1SOBdcaYSf2p0UgeCgBWtrQle3fpqorsby
+         RwaOpdNZdKpSleRKa3e6kRtGVTQfIg2rYMC55SQgfaqWkJNBB7qxpRe8K1KEs1njI6Yp
+         WturWjpXoQHny04HRvuA1onvJ7nJlElUyuNw/oRZ2SNJlJvbtpeRxl7B0PBdMND9W+u3
+         0pQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775776880; x=1776381680;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEIUiTG0IWgjDuD6AFSTGRqa2JggO2YmAKWBMwTzMAU=;
+        b=QlEX1QKTkCvRLJX+tXlgfySa7IIIg+1HTgEejctKYzoy4Ixt+vnbWkhlWmM6h0wIFL
+         3yPquuKg2ZUdKIjWd4va5/NC5Rq+zK2IdVNp/IbTz93Gf8IWNoVNsUcPLq4Kkwg+srdG
+         ShMTn1Bpjo9XaffR3TktGxkOS5azahh+/af5y5sdIZty7LoXnwoCBnbqbBDUuHbaRLMG
+         tAzGD8UeTAr+vj9WVqQ2f9TW1wbWY7A4SLPTw5183l2Lrlg6hGms0EAQwP+F9vXCc8AB
+         O/mNpds3JcRLxeWSDzU0qIXP3PjqNBa6TI3RzrxCYK60MCNIvV/ogyJGEKFEfYaxk1bl
+         kPXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXcZT6FPmG6Tew3Tupc3ywIJAvb/N6zmQvzVMcX4cMU5HEK4VrghSW86Vw9+HGd3bAdSc4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzduwV4A7aOynKu+qgxUKFO9NZj+/jZ83xl3Holy2uuizKnk10P
+	XFJt+R55R8FCcsXQaX87sFquPhxCZHvSzmSbrPpEaoPvZjlfO/p8UiaX
+X-Gm-Gg: AeBDies+uhIPUHOrMMEEf8giV7X8yJB2FrAxOx1VhAZpgTMSMesVOEdZswbyUCgwDey
+	GkxPiH4TCKPeNDf+rg3KdrRNltVnO0rwQrZm6QNjlskODS3FQKYvY4KCzDSq+bp/fINWjphSgrS
+	ROT3Xr37qbDTjqLac2OI6nAalPHyMrw9x8eRA5bhQgeZnRM/amRZN5GSsL261N50W+7LEf9PLK0
+	bZ1G3oinHaeHKXx2DdXRpRXr5so0+FgFPsUY2TJ1mqlx/JSMU5at+WOViAF4KGSNsrhWwEgEQ+u
+	RkD5LEyy35jmpfH1pcywC+6BST+EIBjiEUB8Cn8soqbmchuIcK/n1T3AyGou/0Rj5jQBRF5ncL/
+	nNjoOBRwV0csyKk2FruZF2USTu+pCPLV8LHvVNJEINxyV1yyR7ZC8vV9Q9e4WVH5P3TESRWKw9+
+	nRZAjrMRF1xZXxSgtiQktL4Y4lpB08qP+5PcPCii+ZGpDmq5eGtaKUNxpqBON6z24tegR7QmPRh
+	JtCxCKM+3wy3qhsvg==
+X-Received: by 2002:a05:693c:3114:b0:2b8:c1b4:9cb7 with SMTP id 5a478bee46e88-2d5888a057dmr672085eec.22.1775776879356;
+        Thu, 09 Apr 2026 16:21:19 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:7da6:9d9:d70c:7407? ([2620:10d:c090:500::2:f3a8])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d5632a2a06sm1730614eec.30.2026.04.09.16.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2026 16:21:18 -0700 (PDT)
+Message-ID: <57e38e3296bcfb8ef909f4180ff8e17c9120ab1a.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 04/14] bpf: make liveness.c track stack with
+ 4-byte granularity
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ andrii@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, martin.lau@kernel.org, clm@meta.com, 
+	ihor.solodrai@linux.dev
+Date: Thu, 09 Apr 2026 16:21:17 -0700
+In-Reply-To: <ebe2561af12fef3888da2ac17b7da0735be644338ab28369a4f162a117db3b80@mail.kernel.org>
+References: <20260408-patch-set-v1-4-1a666e860d42@gmail.com>
+	 <ebe2561af12fef3888da2ac17b7da0735be644338ab28369a4f162a117db3b80@mail.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402213629.1996133-2-jitendra.vegiraju@broadcom.com> <20260407020954.3674529-1-kuba@kernel.org>
-In-Reply-To: <20260407020954.3674529-1-kuba@kernel.org>
-From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
-Date: Thu, 9 Apr 2026 15:14:37 -0700
-X-Gm-Features: AQROBzDIrVBrq9a8N-kCZj3is_dHAtUZh7lT-03nRSlBMuTVHnIsC_ZMyZ5jrJ4
-Message-ID: <CAMdnO-KHq273kkC2wBou7oEK1BAHbYYW4u9iRV9nfe0dNk_61A@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 1/4] net: stmmac: Add DW25GMAC support in
- stmmac core driver
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, davem@davemloft.net, 
-	edumazet@google.com, pabeni@redhat.com, mcoquelin.stm32@gmail.com, 
-	bcm-kernel-feedback-list@broadcom.com, richardcochran@gmail.com, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, rmk+kernel@armlinux.org.uk, 
-	rohan.g.thomas@altera.com, linux-kernel@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	andrew+netdev@lunn.ch, horms@kernel.org, sdf@fomichev.me, 
-	siyanteng@cqsoftware.com.cn, prabhakar.mahadev-lad.rj@bp.renesas.com, 
-	weishangjuan@eswincomputing.com, wens@kernel.org, vladimir.oltean@nxp.com, 
-	lizhi2@eswincomputing.com, boon.khai.ng@altera.com, 
-	maxime.chevallier@bootlin.com, chenchuangyu@xiaomi.com, 
-	yangtiezhu@loongson.cn, ovidiu.panait.rb@renesas.com, chenhuacai@kernel.org, 
-	florian.fainelli@broadcom.com, quic_abchauha@quicinc.com
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000072415d064f0e5824"
 
---00000000000072415d064f0e5824
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2026-04-09 at 02:26 +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> > index 998986853c61..9e36ea5f2eec 100644
+> > --- a/kernel/bpf/liveness.c
+> > +++ b/kernel/bpf/liveness.c
+>=20
+> [ ... ]
+>=20
+> > +/*
+> > + * When both halves of an 8-byte SPI are set, print as "-8","-16",...
+> > + * When only one half is set, print as "-4h","-8h",...
+> > + */
+> > +static void bpf_fmt_spis_mask(char *buf, ssize_t buf_sz, spis_t spis)
+> > +{
+> > +	bool first =3D true;
+> > +	int spi, n;
+> > +
+> > +	buf[0] =3D '\0';
+> > +
+> > +	for (spi =3D 0; spi < STACK_SLOTS / 2 && buf_sz > 0; spi++) {
+> > +		bool lo =3D spis_test_bit(spis, spi * 2);
+> > +		bool hi =3D spis_test_bit(spis, spi * 2 + 1);
+> > +
+> > +		if (!lo && !hi)
+> > +			continue;
+> > +		n =3D snprintf(buf, buf_sz, "%s%d%s",
+> > +			     first ? "" : ",",
+> > +			     -(spi + 1) * BPF_REG_SIZE + (lo && !hi ? BPF_HALF_REG_SIZE : 0=
+),
+> > +			     lo && hi ? "" : "h");
+>=20
+> Is the ternary condition here inverted? The lo bit (spi*2) represents
+> the LSB / lower-addressed half of the 8-byte slot, which starts at
+> offset -(spi + 1) * 8 (e.g. fp-8 for spi 0). The hi bit (spi*2+1)
+> represents the MSB / higher-addressed half, which starts 4 bytes
+> higher (e.g. fp-4 for spi 0).
+>=20
+> With the current expression, when only lo is set (lower half at fp-8),
+> the +4 adjustment fires and produces "-4h". When only hi is set
+> (upper half at fp-4), no adjustment fires and it produces "-8h".
+> This swaps the two half-slot offsets in the verbose log output.
+>=20
+> For example, a 4-byte write at fp-8 marks the lo bit via
+> spis_lsb_half_slot() in check_stack_write_fixed_off(), but
+> bpf_fmt_spis_mask() would then print it as "-4h" instead of "-8h".
+>=20
+> Should the condition be (hi && !lo) rather than (lo && !hi)?
+>=20
+> Note: this function is removed in cc55f39c101d ("bpf: change logging
+> scheme for live stack analysis") later in this series.
 
-On Mon, Apr 6, 2026 at 7:09=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
-te:
->
-> This is an AI-generated review of your patch. The human sending this
-> email has considered the AI review valid, or at least plausible.
+Valid point, I got this inverted.
+Funnily enough, it was inverted one more time with patch
+"bpf: simplify liveness to use (callsite, depth) keyed func_instances",
+the logging is fine after full patch-set is applied.
+
+> > +		first =3D false;
+> > +		buf +=3D n;
+> > +		buf_sz -=3D n;
+> > +	}
+> > +}
+>=20
+>=20
 > ---
-> Subject: net: stmmac: Add DW25GMAC support in stmmac core driver
->
-> This commit introduces support for the DW25GMAC hardware in the stmmac
-> core driver, which uses a new Hyper-DMA (HDMA) architecture. It adds a
-> new DMA ops instance mapping virtual DMA channels to physical DMA
-> channels and sets up the basic device configurations.
->
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dw25gmac.c b/drivers/n=
-et/ethernet/stmicro/stmmac/dw25gmac.c
-> > new file mode 100644
-> > index 0000000000000..82eb22bff73e0
-> > --- /dev/null
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dw25gmac.c
->
-> [ ... ]
->
-> > +static int rd_dma_ch_ind(void __iomem *ioaddr, u8 mode, u32 channel)
-> > +{
-> > +     u32 reg_val =3D 0;
-> > +
-> > +     reg_val |=3D FIELD_PREP(XXVGMAC_MODE_SELECT, mode);
-> > +     reg_val |=3D FIELD_PREP(XXVGMAC_ADDR_OFFSET, channel);
-> > +     reg_val |=3D XXVGMAC_CMD_TYPE | XXVGMAC_OB;
-> > +     writel(reg_val, ioaddr + XXVGMAC_DMA_CH_IND_CONTROL);
-> > +     return readl(ioaddr + XXVGMAC_DMA_CH_IND_DATA);
-> > +}
->
-> Does this readl() need to wait for the hardware to clear the XXVGMAC_OB
-> (Operation Busy) bit? Returning immediately might read uninitialized or
-> stale data if the hardware hasn't finished the fetch.
->
-This is an issue. We will fix it.
-> > +
-> > +static void wr_dma_ch_ind(void __iomem *ioaddr, u8 mode, u32 channel, =
-u32 val)
-> > +{
-> > +     u32 reg_val =3D 0;
-> > +
-> > +     writel(val, ioaddr + XXVGMAC_DMA_CH_IND_DATA);
-> > +     reg_val |=3D FIELD_PREP(XXVGMAC_MODE_SELECT, mode);
-> > +     reg_val |=3D FIELD_PREP(XXVGMAC_ADDR_OFFSET, channel);
-> > +     reg_val |=3D XGMAC_OB;
->
-> This isn't a bug, but should this use the XXVGMAC_OB macro instead of
-> XGMAC_OB here for consistency?
->
-> > +     writel(reg_val, ioaddr + XXVGMAC_DMA_CH_IND_CONTROL);
-> > +}
->
-> Similarly, does this function need to poll for the busy bit to clear afte=
-r
-> the writel()? If back-to-back operations occur, the next indirect write
-> might overwrite the control and data registers while the hardware is stil=
-l
-> processing this request.
->
-Agreed. This is bug, we will fix it.
-> [ ... ]
->
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c b/driv=
-ers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c
-> > index f02b434bbd505..64c38de294da2 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_core.c
->
-> [ ... ]
->
-> > -int dwxgmac2_setup(struct stmmac_priv *priv)
-> > +static void dwxgmac2_common_setup(struct stmmac_priv *priv, char *mac_=
-name)
-> >  {
->
-> This isn't a bug, but should mac_name be declared as const char * since i=
-t
-> is passed string literals like "XGMAC2" and "DW25GMAC"? This avoids
-> discarded-qualifiers compiler warnings.
->
-> >       struct mac_device_info *mac =3D priv->hw;
-> >
-> > -     dev_info(priv->device, "\tXGMAC2\n");
-> > +     dev_info(priv->device, "\t%s\n", mac_name);
->
-Ack
-> [ ... ]
-> --
-> pw-bot: cr
-
---00000000000072415d064f0e5824
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-tJVewHuOmXgWQxNWV7Oiszu1d9xAcqyj65s1PrEIIaHnxEM3eTK+teecLEy8QymZjjDTrCHg4x36
-2AczdlQAIiq5TSAucGja5VP8g1zTnfL/RAxEZvLS471GABptArolXY2hMVHdVEYcTduZlu8aHARc
-phXveOB5/l3bPqpMVf2aFalv4ab733Aw6cPuQkbtwpMFifp9Y3s/0HGBfADomK4OeDTDJfuvCp8g
-a907E48SjOJBGkh6c6B3ace2XH+CyB7+WBsoK6hsrV5twAXSe7frgP4lN/4Cm2isQl3D7vXM3PBQ
-ddI2aZzmewTfbgZptt4KCUhZh+t7FGB6ZKppQ++Rx0zsGN1s71MtjJnhXvJyPs9UyL1n7KQPTEX/
-07kwIwdMjxC/hpbZmVq0mVccpMy7FYlTuiwFD+TEnhmxGDTVTJ267fcfrySVBHioA7vugeXaX3yL
-SqGQdCWnsz5LyCxWvcfI7zjiXJLwefechLp0LWEBIH5+0fJPB1lfiy1DUutGDJTh9WZHeXfVVFsf
-rSQ3y0VaTqBESMjYsJnFFYQJ9tZJScBluOYacW6gqPGC6EU+bNYC1wpngwVayaQQMIIGbTCCBFWg
-AwIBAgIMGHX6KxYK3WW2YyprMA0GCSqGSIb3DQEBCwUAMFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
-ExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9iYWxTaWduIEdDQyBSNiBTTUlNRSBDQSAy
-MDIzMB4XDTI0MDkyNTEzNTAzMVoXDTI2MDkyNjEzNTAzMVowgbMxCzAJBgNVBAYTAlVTMRMwEQYD
-VQQIEwpDYWxpZm9ybmlhMREwDwYDVQQHEwhTYW4gSm9zZTEZMBcGA1UEYRMQTlRSVVMrREUtNjYx
-MDExNzEWMBQGA1UEChMNQlJPQURDT00gSU5DLjEaMBgGA1UEAxMRSml0ZW5kcmEgVmVnaXJhanUx
-LTArBgkqhkiG9w0BCQEWHmppdGVuZHJhLnZlZ2lyYWp1QGJyb2FkY29tLmNvbTCCASIwDQYJKoZI
-hvcNAQEBBQADggEPADCCAQoCggEBAKWV+9PYvG4njqRsbQas79f8Q46VL7b1ZxvWT6ik6VMbdRZx
-tfpfZalVXksqcb02/N1H7UA9V04cV2q97FkSr/KxeFLMetPb3cVJZICg23IRO2NTPdmgPFzwkPTo
-35h9h/OYLgh3/9a1nTsC2xqJa8GtohD5+42rsskGcI57U4n1r1L4R5IL9ypSqDxX/xVEAdGI5FTj
-VgvoZC6iuEbnez+yO8TT3wun9b/PQowOB5P0CwIFv7ERW0S1s6B8yrbsoaTrz0vQaEA786k1pZkg
-ykC1+zXq/iTyZuPP4B4RkzFd43Pw+GAH0Tt2nx5V4rNisJHeAVNU92Gj01cEg0I+FnsCAwEAAaOC
-Ad8wggHbMA4GA1UdDwEB/wQEAwIFoDCBkwYIKwYBBQUHAQEEgYYwgYMwRgYIKwYBBQUHMAKGOmh0
-dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjZzbWltZWNhMjAyMy5jcnQw
-OQYIKwYBBQUHMAGGLWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAy
-MzBlBgNVHSAEXjBcMAkGB2eBDAEFAwEwCwYJKwYBBAGgMgEoMEIGCisGAQQBoDIKAwIwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIw
-ADBBBgNVHR8EOjA4MDagNKAyhjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWlt
-ZWNhMjAyMy5jcmwwKQYDVR0RBCIwIIEeaml0ZW5kcmEudmVnaXJhanVAYnJvYWRjb20uY29tMBMG
-A1UdJQQMMAoGCCsGAQUFBwMEMB8GA1UdIwQYMBaAFAApNp5ceroPry1QLdugI4UYsKCSMB0GA1Ud
-DgQWBBRq5Jlxz3MqC+zEgUxK566xEc2g3DANBgkqhkiG9w0BAQsFAAOCAgEARXrmeeWA31pp9Tr0
-M6mOlMv+Pr2raES4GzPSyftvxf6tBQCBNaqi6LSbyusDYOj3mG9bp6VeVn+68OxNY9iNAk+ujtId
-f3+30BlZOQ1v8z9u2peUOUtWI60y2MxhdH0X0n2H+BCGvUOFqs5z440jqqy1HsscZTXHB7FEZmVP
-fyD+0Z6cxyh7WNC6+BgLiFwf8iqmAbu7Yb1sGTUGyS5gfYEjJbF2PJfwNUcJDd7eS4w5Ju5mK5y7
-spgjH2/JmDgbkpSk9JyuWfjGZIg4ah/q2nb6UMd1XJb6gLQZuzPOI3SgXPvd8MHGjKZrX2BHOBSC
-bJJ8rp4w4a9QMS6dde2MFObusxkZAft4tUnwo+ProchHs7iA85sL7sWEZhAmjmKKCpECpEfZm0+/
-hpvKQV3AZp5vBstb4IVL8QmLj8beDVHYnNhEicsSiG1wW7zSYyBnmGbFRrFQIJnJDWPjTZOlVEyp
-T1ShrXRCtqJpOt6rgg+rFEY3D8j6/bAkJXnmKnE2LZ0YyrrKk7eC6UfNNimx38w3NWchtcGY8zJn
-Y/1/C9Jv/mWm/2lK8nvusOFxhKmbG83Hx8toQdZ5F1kYk6zAWjfB7lwXr/En9mCmLieJ18hen9EK
-qbYyUkmCmuoLi5GXFMJy+iQv6DgMVQ7CACagybU6FUrmL9lVa+A6caBEEh4xggJXMIICUwIBATBi
-MFIxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSgwJgYDVQQDEx9HbG9i
-YWxTaWduIEdDQyBSNiBTTUlNRSBDQSAyMDIzAgwYdforFgrdZbZjKmswDQYJYIZIAWUDBAIBBQCg
-gccwLwYJKoZIhvcNAQkEMSIEIGwoVXYTb7jIt4pZrqv7oj7W19W19KkcepsmKqv6JpsJMBgGCSqG
-SIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDQwOTIyMTQ1MlowXAYJKoZI
-hvcNAQkPMU8wTTALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG
-9w0DBzALBgkqhkiG9w0BAQcwCwYJYIZIAWUDBAIBMA0GCSqGSIb3DQEBAQUABIIBAAZLX4DO4Cov
-kQIFrRc07yuLHnUiFw6Zy57h25q9VBipyCFcX1t+qvtoZWuRRC34DLZB5+TL5jSkWkcypzrGbJL1
-a9ywfeNdACY6ZTGC1dzVICDIM4gdYlCBwXyly5bwm+/+rf+yKQS2wRFhZ0sWOrVpsTcglCi3F/UT
-plCuAp8w71I5vtcxJiWUmU5+BXXMQFdLdoSPO4hFp7aOW8hO87mQ0LIzTwtt3sn5Vu9mFCmbWw3b
-swspQ85xb5Ra9j5Do1TcVaB4HHXojqjB1a4dxXEhLjIxfb+NJHxYAE9e3RZHwwrJFmVXW/JduMra
-502KfFM/YwnlfaghhO75Mp8TqQ8=
---00000000000072415d064f0e5824--
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>=20
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/241682=
+98083
