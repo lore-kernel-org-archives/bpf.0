@@ -1,67 +1,67 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7222E8B83
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 14:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1BC3DFC84
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 15:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775746282; cv=none; b=Y+v+vGqSRgJxhs5nFhKD4pQe20HGQdgzilwo1dmGg0UM2s+TP0aZbzf+uDS6GcTC3ksrLiUsoXz1PjbSd6FUNB6tlg96uvPdGINRXPcleub1SxRKnFm6azlgM3J1hWeF5doE6lmbDoGgrQHMM6qvy6YyxKWdGjaYq+yRnQFskdY=
+	t=1775748394; cv=none; b=RDIqa4uRqWGDmfG65dbwdMqKRYS4spCnly9WN6wKiFuxhd2AMV6BzbvWrY3aaGWTpPAsGUEF7Ys0EfjRb2Izmwkf/vfTMP6L+YsXdnI0hlBvn+v5/i9ee8GaldFbZryaNQuuJYrsPpZsTn7LwZScHeb2XxIAMhITw2Ixrnb91g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775746282; c=relaxed/simple;
-	bh=egI9q0znF73vG3hvf7kbEtPWcbPku7o6x+9QloxXuns=;
+	s=arc-20240116; t=1775748394; c=relaxed/simple;
+	bh=Vo5BdvgMKNwCv/sgsRcNCPktf/KjsVUtBqlPMGZ3I/g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AJ12auDce8kfqP6Kr8/W78VjLssBvs94qAaaQdKPitEolpQQ/aZ2sX0HqjJcXgBd5C5B7htW/QbK/+7fvPuDXRSBhbqEv/Bgz424IS6Rox5l4h5zwMrKn7iGAYrx1Oz8KOEEXNPPEP+XHxL4WNWFmcMF7L/cZwPG2Yk2caNbAwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HXHKEdv1; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=n4Zp3Az/iyBjiHc6f9cOgiEUZXlDmEiU8PhSqPHkOy8gNHGZWJB81gCRIs2HT9b/zQtVC3vKHEVxVcQC8VuiqifrEzGYpUoMoV/ZprCN8HK+jmw9TxKuMHHZSgiBf/zhNsy3RpWk7/LxOReuT2hdsRJMedTsqdvV1Y5ZVBuzF7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=MOkDm60q; arc=none smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HXHKEdv1"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43ccda008cdso545292f8f.0
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 07:51:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="MOkDm60q"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12c0433a4b9so3388478c88.1
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 08:26:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775746278; x=1776351078; darn=vger.kernel.org;
+        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1775748393; x=1776353193; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XCFONB0BZGVLwfaMI+ElBjgfDz4mBl9N0XIpJxn0i1E=;
-        b=HXHKEdv1+uTx1xyiTI/LTvZFSdmop5o5vLNaRK9e796R8CAt0+xsSIWkL/ohNUMKS5
-         5QZm3Z7BVUA5JQcAuDlRwpUUeDdR4rVhc09pGf0EaUB5kOE193wl+pTmpUl8Tlc1XyGt
-         rbauLCRZtpiRRf9aaZ6bPBCpsnaGMPURjRuZC0MfALhXXy7VWYjmyz65frSpZLaXtymw
-         von3ZESHCoLMRdmRne1zLZqjCf8AEWWAAts+dBuPUTDwXJH/vbKdozeDvYvBpm7a66pk
-         XXsQA9h5qjOVEs6/2LuwDYd4DHg8Ah/Nms1BxY2XbJxdRrk05f8PCF4DwzQOAdFN9/VL
-         QRAg==
+        bh=BHRoQZNPAYM8bnXSy4YbYk14YDP/fBgqD6/mrZ9ntqM=;
+        b=MOkDm60q97mgNfdUgLpbHtDm6YcHujdQCMnEAjPmrtcrcwF/0ChMcHE4Uokqe51nqd
+         VR9EYIaEEwTbk3pv1Lrr6+aoGtkx4Jl/vyUffmbWHKSjwFrE6ZIC0+qy3KgwKhiU8c8v
+         o01SU95PUoijrTYG5s58nwzHj0IiLebrNJ5uxGxYfiF1Qw9Q0ECAbsRtkbU4f7YiXHqF
+         KtW3bD1y3NTocIqYkSNTcNJlBp1kSU6m+GhIe0+76acMP/Uimr2uRvIWj3wISqphgins
+         THtUkqUs5v23i0pGBeGb3mQK6NJ9AtUD0SRQO6SRRbJWa6e8b2eJswAXqe4ZVqcY8KKq
+         eFHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775746278; x=1776351078;
+        d=1e100.net; s=20251104; t=1775748393; x=1776353193;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XCFONB0BZGVLwfaMI+ElBjgfDz4mBl9N0XIpJxn0i1E=;
-        b=P7Y712Xwj0CqyBCL4zTc3ZCEZFnSYkBUO2vEk2zU4JNhUoG0fc0fZsR8K7BcbC8uYk
-         TFTeI6ykuOxM9HBiJhtZiR/GaX3MK7tVCYC3BFGlZi2oR4tz3x68jlIkKtacUaLLQKSN
-         To3vRzSVnh7chfVzBjl8mvbVukWXKi6R/pn9ZaYasDWP4XwwTXOKhCKAVabSe3PDSvsW
-         yPt4J5E7cgbpxoFqkbPV7PVqLd1OWjtTQnLcsQRjW9bIZvOr9z99Wo8JUkbFJMkzmH7a
-         kgszhfvHi5O8sBHJebJ3hu6BcjbZA+66O4WMa5A+3DzVZMf/ZlRrZ8F6BriMlLVxQ36u
-         yFFw==
-X-Forwarded-Encrypted: i=1; AJvYcCWy7SyOL96URF/RM69+PHbtxjqO3CqGkxg/JtynBl27cFw5AuwhApR5rKAVycrl4ae9/MU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwpHt3JMWqQ5L3PnZqsvXNoPtXJkIityLD4/2AVYYycWVy5QXu
-	38P3UHOaYDOuyHbQmrebPVBf8nTvnGyNGAksrhKIXVUuO4VlJ71R4HZk
-X-Gm-Gg: AeBDiev/ivDl6Q6an2rmFxzPOiPYY1Re3FApkPw38omq3enu5OSk844elg0+RZJA5by
-	O3XX2sbGvbsZGk82NgHXAg14SUIv+kkIy1+mUN9q+k+EUsgbzME0HHuA+dmUUCi/YPoRc5yuKDQ
-	cXnlygQXMlvLEgV1jYET1OeqBRurIQlkuDdmy/Tq0CgZAAUheupMeM+DrCyVFnitSLoi7fbGoZ+
-	aRbPsTUga9thf45tdzXVICLfYCY09K8DbFtRgc69526s/EeqauzStEx5JhRltTC02Uk+/5+IQLM
-	Hz+NWrgr7dfjLjaAZyvq9HryDA3ZVHAclLq7D7BL2dLGG5FPKp4V/49tlyQZD7ZE6UJIEe/unbd
-	6gfty6ecoYUc4qn9X2Uw79uSC9urpqMJUeWko7gxFCcVKnCOl0Ki8Bm9obKxo0Dvv3ar1mPxtXO
-	bo6JG83kFgSyYeoD5iOCPOZv2QFqzDKo2X7gmrOoN4rngVJXS4lMd655bM4eV85GJPTetiXKU/k
-	Kx5WRHpRWU=
-X-Received: by 2002:a05:6000:4014:b0:43c:a352:c366 with SMTP id ffacd0b85a97d-43d595c4f98mr6133887f8f.25.1775746277373;
-        Thu, 09 Apr 2026 07:51:17 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:a778:a387:b2af:188b? ([2a02:8109:a307:d900:a778:a387:b2af:188b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d473b8c1esm28181423f8f.12.2026.04.09.07.51.16
+        bh=BHRoQZNPAYM8bnXSy4YbYk14YDP/fBgqD6/mrZ9ntqM=;
+        b=ilK6SQh/GtXM/yeLRNaiNyfaSC6sVRQOotk6ltKNnd5GTfTRlx/O5ES24X6PYc9ZTX
+         1HEiU2LqNiTRMHgJ6UFWwmdtRX/VBP5/xl1TGfWUHhnLiNRu2itCI+1slTlwaCIby6xj
+         UQc/cJ4+JXs9J3iIANltDgC0bGyJEHzFn910I6AgxyB+Nm/9EAdq6+G2VXKF1/jXVKRV
+         0t64giI5m/pr4kkMd8apQ8vjkaeua2GG9WwiulsyqsZxB4AesQhmbzERcBImx9ZjwDpC
+         dw6f0EPnzatDogJkjmx/VbaWBFLSW+zmVnHoSx7FOZGAjsDd6bZl46A7VGfcCtPY4FLC
+         +26Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWIaszGLeDW3WBxADImcds8fD/ClD0X3z5IsSg6vLBbmuW72NA3Tegnn0FFw0x5NdoWL+M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEJ1cCNqHJpAgG+Kh+sjlSeLYsIEJLkUOFJJc9OvU81mYtPshE
+	5nEwYiGS7VFcJwmX92K503GNGIRT644nFmZgT6+p/XJ7Q1RGebXoxiBV+qo0LfZf3OY=
+X-Gm-Gg: AeBDietPetTFfM6U/SQ0JeGiBljKN7n36BF39EeoFXigNsE1EUSpI4ex/f/bKQ7AB7p
+	XwUuR1d0375ij8aGeldTYzfCTsFRezDkUbJKQL/vgnCi63FsmXpEpcJG39PiAOH544oO7aZ7ufc
+	F1ttS7St/AHloYRvsR5yFSaGo0O1fVdyGbZqr0f/3V1Hc4RPx1luasvkk9PIL/2nPn0ZYG1XiLU
+	NNMTN3Rf/sU2GO+3Kj5yJeZOb5KY6MO49I7caNZJ3IoEM6CE5bEZT+xwKWpj5ocpwFZ+2eJjvbj
+	0qlgzihtrzN5446xohFYhyCE1gEh5Xjz0iE/5lfv34fs297XlT/qDXBJxujv4cJXxIGLnBn+2Y9
+	uBSQrdE+KlGS8zlvDOY4Wv41C7pHAZGlNjR3dSd7/ipLRI651pXMOfWdPSG/R81hDV4ZbiiDehG
+	tESMfNNnan3ZiBvD13u9UOYwoOBMqGOU2+5ieSsZQ5u1UJMBzfQVQKcz1wqxqvoloQtUIjO6PD+
+	y4n1/2TaWIwbViIsoXkUy0A
+X-Received: by 2002:a05:7022:7a4:b0:127:33e0:ea40 with SMTP id a92af1059eb24-12c28bf1e52mr2275147c88.15.1775748392572;
+        Thu, 09 Apr 2026 08:26:32 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::3:da93])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c14a371b1sm12471884c88.13.2026.04.09.08.26.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Apr 2026 07:51:16 -0700 (PDT)
-Message-ID: <ed1470d0-8894-4440-9234-a94e478a39e2@gmail.com>
-Date: Thu, 9 Apr 2026 15:51:15 +0100
+        Thu, 09 Apr 2026 08:26:32 -0700 (PDT)
+Message-ID: <244b745a-3c95-48c3-b6c5-11ed3eacdf46@davidwei.uk>
+Date: Thu, 9 Apr 2026 08:26:30 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,246 +69,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 2/2] bpf: Avoid faultable build ID reads under mm
- locks
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
- Puranjay Mohan <puranjay@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- Song Liu <song@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260409010604.1439087-1-ihor.solodrai@linux.dev>
- <20260409010604.1439087-3-ihor.solodrai@linux.dev>
- <bf91eb90-1b6a-4bad-a0e5-072f9dce7daa@linux.dev>
+Subject: Re: [PATCH net-next v11 14/14] selftests/net: Add queue leasing tests
+ with netkit
+To: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, toke@redhat.com,
+ yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260402231031.447597-1-daniel@iogearbox.net>
+ <20260402231031.447597-15-daniel@iogearbox.net>
+ <20260408162238.16709090@kernel.org>
 Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <bf91eb90-1b6a-4bad-a0e5-072f9dce7daa@linux.dev>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20260408162238.16709090@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/9/26 5:20 AM, Ihor Solodrai wrote:
+On 2026-04-08 16:22, Jakub Kicinski wrote:
+> On Fri,  3 Apr 2026 01:10:31 +0200 Daniel Borkmann wrote:
+>> +    ksft_run(
+>> +        [
+>> +            test_remove_phys,
+>> +            test_double_lease,
+>> +            test_virtual_lessor,
+>> +            test_phys_lessee,
+>> +            test_different_lessors,
+>> +            test_queue_out_of_range,
+>> +            test_resize_leased,
 > 
+>> +        # test_destroy must be last because it destroys the netkit devices
+>> +        ksft_run(
+>> +            [test_iou_zcrx, test_attrs, test_attach_xdp_with_mp, test_destroy],
+>> +            args=(cfg,),
+>> +        )
+>> +    ksft_exit()
 > 
-> On 4/8/26 6:06 PM, Ihor Solodrai wrote:
->> Sleepable build ID parsing can block in __kernel_read() [1], so the
->> stackmap sleepable path must not call it while holding mmap_lock or a
->> per-VMA read lock.
->>
->> The issue and the fix are conceptually similar to a recent procfs
->> patch [2].
->>
->> Resolve each covered VMA with a stable read-side reference, preferring
->> lock_vma_under_rcu() and falling back to mmap_read_lock() only long
->> enough to acquire the VMA read lock. Take a reference to the backing
->> file, drop the VMA lock, and then parse the build ID through
->> (sleepable) build_id_parse_file().
->>
->> [1]: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
->> [2]: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
->>
->> Fixes: 777a8560fd29 ("lib/buildid: use __kernel_read() for sleepable context")
->> Assisted-by: Codex:gpt-5.4
->> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> ---
->>   kernel/bpf/stackmap.c | 139 ++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 139 insertions(+)
->>
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index 4ef0fd06cea5..de3d89e20a1e 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
->> @@ -9,6 +9,7 @@
->>   #include <linux/perf_event.h>
->>   #include <linux/btf_ids.h>
->>   #include <linux/buildid.h>
->> +#include <linux/mmap_lock.h>
->>   #include "percpu_freelist.h"
->>   #include "mmap_unlock_work.h"
->>   
->> @@ -158,6 +159,139 @@ static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
->>   	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
->>   }
->>   
->> +enum stack_map_vma_lock_state {
->> +	STACK_MAP_LOCKED_NONE = 0,
->> +	STACK_MAP_LOCKED_VMA,
->> +	STACK_MAP_LOCKED_MMAP,
->> +};
->> +
->> +struct stack_map_vma_lock {
->> +	enum stack_map_vma_lock_state state;
->> +	struct vm_area_struct *vma;
->> +	struct mm_struct *mm;
->> +};
->> +
->> +static struct vm_area_struct *stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
->> +{
->> +	struct mm_struct *mm = lock->mm;
->> +	struct vm_area_struct *vma;
->> +
->> +	if (WARN_ON_ONCE(!mm))
->> +		return NULL;
->> +
->> +	vma = lock_vma_under_rcu(mm, ip);
->> +	if (vma)
->> +		goto vma_locked;
->> +
->> +	if (!mmap_read_trylock(mm))
->> +		return NULL;
->> +
->> +	vma = vma_lookup(mm, ip);
->> +	if (!vma) {
->> +		mmap_read_unlock(mm);
->> +		return NULL;
->> +	}
->> +
->> +#ifdef CONFIG_PER_VMA_LOCK
+> ksft_run() can't be called multiple times.
 > 
-> Puranjay and others,
-> 
-> I tried to test this patch with CONFIG_PER_VMA_LOCK=n, and it turns
-> out it's not easy to turn off.
-> 
->      config PER_VMA_LOCK
->      	def_bool y
->      	depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
-> 
-> AFAIU this definition means that PER_VMA_LOCK is automatically true if
-> it's dependencies are satisfied. The only practical way to do it
-> appears to be disabling SMP, which is probably very unusual.
-> 
-> So I am thinking, maybe instead of having to manage both mmap and vma
-> lock in stackmap.c, we can assume CONFIG_PER_VMA_LOCK=y, and have
-> 
->      #ifndef CONFIG_PER_VMA_LOCK
->      return -ENOTSUPP
->      #endif
-> 
-> somewhere in the stack_map_get_build_id_offset() callstack?
-> Say in __bpf_get_stackid()?
-> 
-> Thoughts?
->
+> The first run looks like it's purely testing netdevsim. So that should
+> move to selftests/net. The rest which tests HW should stay here.
+> Please also move all the setup inside the test cases.
 
-I looks like you are right, it should be safe to drop 
-CONFIG_PER_VMA_LOCK=n case, I understand all platforms that care about 
-BPF going to have it enabled.
-
->> +	if (!vma_start_read_locked(vma)) {
->> +		mmap_read_unlock(mm);
->> +		return NULL;
->> +	}
->> +	mmap_read_unlock(mm);
->> +#else
->> +	lock->state = STACK_MAP_LOCKED_MMAP;
->> +	lock->vma = vma;
->> +	return vma;
->> +#endif
->> +
->> +vma_locked:
->> +	lock->state = STACK_MAP_LOCKED_VMA;
->> +	lock->vma = vma;
->> +	return vma;
->> +}
->> +
->> +static void stack_map_unlock_vma(struct stack_map_vma_lock *lock)
->> +{
->> +	struct vm_area_struct *vma = lock->vma;
->> +	struct mm_struct *mm = lock->mm;
->> +
->> +	switch (lock->state) {
->> +	case STACK_MAP_LOCKED_VMA:
->> +		if (WARN_ON_ONCE(!vma))
->> +			break;
->> +		vma_end_read(vma);
->> +		break;
->> +	case STACK_MAP_LOCKED_MMAP:
->> +		if (WARN_ON_ONCE(!mm))
->> +			break;
->> +		mmap_read_unlock(mm);
->> +		break;
->> +	default:
->> +		break;
->> +	}
->> +
->> +	lock->state = STACK_MAP_LOCKED_NONE;
->> +	lock->vma = NULL;
->> +}
->> +
->> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
->> +						    u32 trace_nr)
->> +{
->> +	struct mm_struct *mm = current->mm;
->> +	struct stack_map_vma_lock lock = {
->> +		.state = STACK_MAP_LOCKED_NONE,
->> +		.vma = NULL,
->> +		.mm = mm,
->> +	};
->> +	struct file *file, *prev_file = NULL;
->> +	unsigned long vm_pgoff, vm_start;
->> +	struct vm_area_struct *vma;
->> +	const char *prev_build_id;
->> +	u64 ip;
->> +
->> +	for (u32 i = 0; i < trace_nr; i++) {
->> +		ip = READ_ONCE(id_offs[i].ip);
->> +		vma = stack_map_lock_vma(&lock, ip);
->> +		if (!vma || !vma->vm_file) {
->> +			stack_map_build_id_set_ip(&id_offs[i]);
->> +			stack_map_unlock_vma(&lock);
->> +			continue;
->> +		}
->> +
->> +		file = vma->vm_file;
->> +		vm_pgoff = vma->vm_pgoff;
->> +		vm_start = vma->vm_start;
->> +
->> +		if (file == prev_file) {
->> +			memcpy(id_offs[i].build_id, prev_build_id, BUILD_ID_SIZE_MAX);
->> +			stack_map_unlock_vma(&lock);
->> +			goto build_id_valid;
->> +		}
->> +
->> +		file = get_file(file);
->> +		stack_map_unlock_vma(&lock);
->> +
->> +		/* build_id_parse_file() may block on filesystem reads */
->> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
->> +			stack_map_build_id_set_ip(&id_offs[i]);
->> +			fput(file);
->> +			continue;
->> +		}
->> +
->> +		if (prev_file)
->> +			fput(prev_file);
->> +		prev_file = file;
->> +		prev_build_id = id_offs[i].build_id;
->> +
->> +build_id_valid:
->> +		id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
->> +		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
->> +	}
->> +
->> +	if (prev_file)
->> +		fput(prev_file);
->> +}
->> +
->>   /*
->>    * Expects all id_offs[i].ip values to be set to correct initial IPs.
->>    * They will be subsequently:
->> @@ -178,6 +312,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->>   	const char *prev_build_id;
->>   	int i;
->>   
->> +	if (may_fault && has_user_ctx) {
->> +		stack_map_get_build_id_offset_sleepable(id_offs, trace_nr);
->> +		return;
->> +	}
->> +
->>   	/* If the irq_work is in use, fall back to report ips. Same
->>   	 * fallback is used for kernel stack (!user) on a stackmap with
->>   	 * build_id.
-> 
-> 
-
+Sorry, didn't know about multiple ksft_run(). I'll prep the follow up
+separately so we can land it soon after 7.1.
