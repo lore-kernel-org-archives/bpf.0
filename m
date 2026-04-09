@@ -1,82 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E77EED8;
-	Thu,  9 Apr 2026 01:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984AD2594B9;
+	Thu,  9 Apr 2026 01:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775697404; cv=none; b=HvNO9kUATD85HIp1/QLXTPXyvqxJvS+6m5L141GoR00oDNH5+xK0uU9TTp9s+7Vl5BBxGtt1HsDVkHmU4tdEkPUzfCeEJZ/MDZMduTyUvpK0xmzRYRsLnZ1x2dEnVRYjzEB2tkkIwGE+ae9u/o3fTO49eoqmgXVq4aALu55KG9k=
+	t=1775697632; cv=none; b=Kq3VIpaXhE4tpxZ79QgSGGUjtgRq6BKRs0YxHGgr6Ivqv62r2tUQ0vRNHZTCU+yt5wWTVaJ7S1ryalMHvfnQN5/j7CQNEq328mdwnYZSre80BCW1qRWY3QB2SZs39/3+XMRMM1HgLUXR3k5VMDAOS9dZ2uUsCvlaI019DGregIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775697404; c=relaxed/simple;
-	bh=iALZeEnXSNK+RE8EKrDOIs8TZ8OS7+bqUjhuduKCHNg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=arR+E0lFZpw+XF2lhJx00DgZIAKglOucl/pn/BTiLUwpcegpxzRwdK22WgO6So97y26kRv4B32QaJEh4gQgzTmYBR6P9zHyvDcqhMCc1LBRV2+ci4masUC+Dfp0em6SizVcgceJTd1oAkEeHqmssY+SOciuZipAvCSjCrxGm9l0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKpGw427; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775697632; c=relaxed/simple;
+	bh=jffhaj7XtvWEHrEQlXWo93RdtoyPK03UBjowjBvGjP8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=CEjqgjEkZAGBVIcnXM1furTiupgOezZDef65lIf5MbNsMxpOElFiTcKXG2BPa9kkbA4ym6e2PjaJCyJ/mFWF5R7z0x6GAG+nENBHgTKX75uzJIdRLQWl2koEyM0jBAwghSHX2qr7NpL76IwHN/Klw6IGnRosdemqa9EUVChwGU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gryz7yrq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKpGw427"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA14C19421;
-	Thu,  9 Apr 2026 01:16:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gryz7yrq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E8DC19421;
+	Thu,  9 Apr 2026 01:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775697403;
-	bh=iALZeEnXSNK+RE8EKrDOIs8TZ8OS7+bqUjhuduKCHNg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=dKpGw427s0HqSARsFytx6lNxiW7wiIxWjATl3sh7zSd9vtvkDnEFKDV+qWMLV57dr
-	 l8YUgkJuRobtlV0GBMoY+KUbPCdonQaQUxiNnv5bEzLK9TqSJlFUgDqdU3fhPTIrnH
-	 oPvWycL9T/iOrFW9XnROJa+N0Fu/U87wMn63AKMjv50+ftGYRD86Et6uUzsjMe09cw
-	 HFkkqbK5m37XFi2KAOXhCiCkQcO1o6txtyZv+98D3sohtDd2PwxnAwojlleRzVZqF8
-	 11SbE0BEFlmZng1s5BX5KvdMTHKm8rtewVgL7TOAYEwcFOPwsXjf02X8bEw68iUv8D
-	 3JwJHM3Hs8mBw==
-Content-Type: multipart/mixed; boundary="===============6524245521076539298=="
+	s=k20201202; t=1775697632;
+	bh=jffhaj7XtvWEHrEQlXWo93RdtoyPK03UBjowjBvGjP8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Gryz7yrqaPJrjCZGSIT8NbDvEiJeYzjfBfvVleJy8s/QH2qqqbaZiIRy0C7g80mUN
+	 LBF7D8AjuGm9gunEzOgrl1cP/fUcf8uKyyhRHJN2DZBdh+pOxGndtS/MQ5APle5FtL
+	 RpvjV+plg0FySjOcpMJoLDV/RsxeKHsKvRW1E32l+FTEobFZpfMC4vDzTFpZ/+N4Po
+	 WRaOES0dehfEtbTX6E6CkuVZ8LLm6hf8a9sxNpqGJMDxXTTZAVMp+L+ZtvprugdK+j
+	 XSqBvIhfUsS816pjZm7Mj9rHd5uz8ArOmWWDPNDb+iNQAlRD2z7U3T3sfIQHkptgbC
+	 rWBD1R9muTmeg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA0233930793;
+	Thu,  9 Apr 2026 01:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0db331580ccc3fd65bab9b80566ea78bab6fde78960f0ec1590486b2452408db@mail.kernel.org>
-In-Reply-To: <20260408104732.259683-1-jiayuan.chen@linux.dev>
-References: <20260408104732.259683-1-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf] bpf: Fix use-after-free in offloaded map/prog info fill
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,dddddd@hust.edu.cn,M202472210@hust.edu.cn,dzm91@hust.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kuba@kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  9 Apr 2026 01:16:43 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v5 0/2] Reject sleepable kprobe_multi programs at
+ attach time
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177569760855.941108.1194858936384188273.git-patchwork-notify@kernel.org>
+Date: Thu, 09 Apr 2026 01:20:08 +0000
+References: <20260408190137.101418-1-varunrmallya@gmail.com>
+In-Reply-To: <20260408190137.101418-1-varunrmallya@gmail.com>
+To: Varun R Mallya <varunrmallya@gmail.com>
+Cc: bpf@vger.kernel.org, leon.hwang@linux.dev, memxor@gmail.com,
+ jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ yonghong.song@linux.dev, rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
 
---===============6524245521076539298==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> Fix this by using maybe_get_net() instead of get_net(). maybe_get_net()
-> uses refcount_inc_not_zero() and returns NULL if the refcount is already
-> zero, which causes ns_get_path_cb() to fail and the caller to return
-> -ENODEV -- the correct behavior when the netns is being destroyed.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Should this say -ENOENT rather than -ENODEV?  When maybe_get_net()
-returns NULL, ns_get_path_cb() returns -ENOENT:
+On Thu,  9 Apr 2026 00:31:35 +0530 you wrote:
+> These patches fix an issue where sleepable kprobe_multi programs
+> were allowed to attach, leading to "sleeping function called from invalid
+> context" splats.
+> 
+> Because kprobe.multi programs run in atomic/RCU context, they cannot
+> sleep. However, `bpf_kprobe_multi_link_attach()` previously lacked
+> validation for the `prog->sleepable` flag. This allowed sleepable
+> helpers, such as `bpf_copy_from_user()`, to be invoked from an invalid
+> non-sleepable context.
+> 
+> [...]
 
-fs/nsfs.c:ns_get_path_cb() {
-    ns = ns_get_cb(private_data);
-    if (!ns)
-        return -ENOENT;
-}
+Here is the summary with links:
+  - [bpf-next,v5,1/2] bpf: Reject sleepable kprobe_multi programs at attach time
+    (no matching commit)
+  - [bpf-next,v5,2/2] selftests/bpf: Add test to ensure kprobe_multi is not sleepable
+    https://git.kernel.org/bpf/bpf-next/c/c7cab53f9d52
 
-Since the callback sets info->ifindex before maybe_get_net() fails,
-bpf_prog_offload_info_fill() takes this path:
-
-    if (res) {
-        if (!info->ifindex)  /* false, ifindex was set */
-            return -ENODEV;
-        return res;          /* returns -ENOENT */
-    }
-
-Daniel Borkmann also noted this in his review of v1:
-https://lore.kernel.org/bpf/1eccd7fc-8a1c-4499-ae81-a63fc8d0ff26@iogearbox.net/
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24166717291
---===============6524245521076539298==--
