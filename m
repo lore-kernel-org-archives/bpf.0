@@ -1,63 +1,63 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8874B2E7635
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 01:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833E5261B8D
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 01:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775698415; cv=none; b=DTPfYdw7q7pUq9I75JSl28xr4H9qJTd1P//uxJF8Wz2N0zPytQd9EXn8OydM4hizioItrPTyR5pKQBieWWK9AS8KBoEZnQ/IuEZ7KObYjxDUTc6CnnUWADTIIgKNOHZB1HuLFNHUj8dYrrFF6Tcr7lW3eOWITpqkMCg2aQ1l7mg=
+	t=1775698417; cv=none; b=MsNWCfTIZ7sEFl7D2KUKK6EGSsmOJaI94ODshaQBtU9hRWih7URqSLDCtYcEu4BKMHZ2mSrHwcukSYw6u3tFlVviPp8zCoILYiYb538m0b0ohw0TLHTnK/CvuspVdMPdEhOS1C3J4Cgs4hcHCy1xZ70JrKZ5LfEGg61DzLFsj9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775698415; c=relaxed/simple;
-	bh=eDlXRi2c5PfeEIS1bP/vf8rI3hi5sQfUhINB+PWin0o=;
+	s=arc-20240116; t=1775698417; c=relaxed/simple;
+	bh=t9hBgMjeTjp1KXTDaxFroLco9foaWHWB5VvRbLr9rqw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cVMSyasrs6M6Tn6szxmWA4d0WKLMCjfUAUgIP4dKIRXGQ3OoBYR8+BrmRpo5eX13kNgWMLP5DScoFOLRUG2AB9LqQwolwYDeepOi8bGFZgApekbTJAvO+mUichc6c9EbmP31bD8zunjBHpzL1EPoyrbEuCNZsp2ie86vp1hhrxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=arixOK3Z; arc=none smtp.client-ip=74.125.82.42
+	 MIME-Version:Content-Type; b=cov/s7YHc9wdCgGzSi8IKu5a1xulcptuVcHdWF3dsL5T68GOgKmAYoxSZpzayiOdRJOSXkcTVDMx4Sbqw1/cxSEhEyVqyYE095yxFrhzrR8tt5sP9K9NnNaIKwH/U1fK6xWKCWUj/aqS98h9rld6TXmoqVktspnzYlzGM55iy/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ob2F4cGZ; arc=none smtp.client-ip=74.125.82.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="arixOK3Z"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1279eced0b9so276950c88.0
-        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 18:33:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ob2F4cGZ"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-1271195d2a7so505141c88.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 18:33:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775698410; x=1776303210; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775698412; x=1776303212; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g6+ZksMm94dK0/Qff8YOUOuJra6Twe7R8hGNBZH1YTU=;
-        b=arixOK3Z4vx/g7HNGi1Tn4kSEjmX5mvusKwqb7SuGmRy+Cf/kfT52d/zf6guQLBBhQ
-         nYuxY4/SaaLDxya3n/s1CDrm0I3bUSKdHtnu58lDP8jpCLzolg/cFWF6Yz2U61NvuIUj
-         C7EndfEoAAmvmdtsZsgJ95+WkoVlodL2ilpN7eG7FoCCJn/DdiaR+geGKJk5In579RZw
-         9DOp4Aw8k/KpHJqX0i0Vzn8uJcjx+N4eh4Lt80dmZOViR3pGiJ6xEmcQrJGfOSrLI+Fb
-         /CtSSbKgdMN3Tf3byv8nsgQMxbK4RP89O4lqH3F1ZoakEMs+h+qSCYdxMjfmqhcaacop
-         jqpQ==
+        bh=jbAKcVf3ewfS7gcDVxF0UxFCd7HDDNCIrtelgTNhqRM=;
+        b=ob2F4cGZZCZdOWge7yGISeJ+OYC55Hj4hnJBKbc7yv+vI0gen4WGS3ONnz4KcpBw3f
+         rOp+VVPnblAD56Y/lTA9Ln2MewsSy1PD/1VJeKbgraQAYupsSUTHl1ubqDLsOaXMwzDp
+         UUkKpw0klGoOZallFoFsAbKh7n9NUpoU/Q9rUssEzf0jD14H5eE9m4uIGI0I92413glE
+         bupfatWzJMM+9m7t7ziZ61lLnv9OVYKND00TZljFZ9SMaA4JtVVV0bv6RILJv6rWr4BV
+         roxUZ+jvmYHAxSbI4nHknlVmjAR+TCLfKDMZecZQxOlmCYIE6UAcn9uzWn92LW2rhJOc
+         Os1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775698410; x=1776303210;
+        d=1e100.net; s=20251104; t=1775698412; x=1776303212;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=g6+ZksMm94dK0/Qff8YOUOuJra6Twe7R8hGNBZH1YTU=;
-        b=lBMmv2UcLv8WxPfZxXmQc/6NPIOYMgqPX1Am+KvQFHXtOjcnWijXQAjT4RBS/ETGIj
-         9AINxvXSILQusQ2oieMo2ysQAN4tifFiwotNcNJDwgFr9JuKi0Y3Xzh+5MLd4nS8KoBI
-         llk2sHMcuBpCsgYdmH+xdbN+RNe90zD1c2bI1fmdBCYz7lKjMDJwt0uWtcxPT3bDD5LM
-         k75+07FMnHmdUMpj+MaHYXeDjFjreBoYcqBWSLztIOd0y2sxEtLAFMYDGnHH3RmvZnUT
-         7UEdarc5ynu1LFMTjWyfLqq/euPNZO8AX6xb7lPN9OtaGcPBaRdATSB9eJQrCgffJHUg
-         UpXg==
-X-Gm-Message-State: AOJu0YwPkBGaKHSjHdgtlBT/htxtiOefYqgZn2EDAk+JhpRq+gVjcY+F
-	V5ix5sXLviBLigOcUMuIBqsiu0SsJtfP6JHVvCnuPFD3NM6j6vUXkFLm1tFWWFR0
-X-Gm-Gg: AeBDievDoj2LoAQVZbN3oSsud5psF2QCGVbmfL7Z/Xs5nnIM14aJ+d5zTb/4yqBQD9p
-	9cDm+alJto5ogwvaskmAfX8QKlrpz/WL5AMU4uPQjhwHVQ/1S766OW4NgrxO3NSw/EN6b/rSYE2
-	GyyxH3IdI/4rXZcZJCh6J6eSYdH5v+Bv3ic7psAJkLGPrLjuZbtklwaRVJthVxczlf3o05Cure9
-	pSQQEzC59jDDVRkALNEPUD6956nSgsPG0deirdjh3VecE/Nz+zk4gRdEv6z9FqrKD73hW6am3aL
-	6Arqyar+CyrZ35V9/VhmWiZ2+w56SX7nB/1B3j02TMQIIAk8hNCsJ6HHVNN9ZodbO8Grf9REVQG
-	7ChOb1ae4CSeVCOWcFqu6CwesoFp7b4Jpz2cirTJ64uHstmx8nxO/Oc5KClEeyJXlHUttWKgNUN
-	WjHOXCF+cz7U4YZQPC3sPYwQsxSivx9D9d9JpooBEg9M0Q1kIeznchG+YtBJd3fUyv94coXhVEe
-	cq9nSnVAPmaRg==
-X-Received: by 2002:a05:7022:6990:b0:128:d715:b717 with SMTP id a92af1059eb24-12c28bc138cmr974758c88.13.1775698410376;
-        Wed, 08 Apr 2026 18:33:30 -0700 (PDT)
+        bh=jbAKcVf3ewfS7gcDVxF0UxFCd7HDDNCIrtelgTNhqRM=;
+        b=qiT94o31NvkXvV4PMdkruJ+Y8qy6FbCUDuvkwjNFpoRAV+GfvwXYzbLNcn9z+KUxgY
+         DVpJiyOctwYaWPkB+BLKAySvto/fSXfU0oAjmWZi1+S6btIBRBnv+RHt2tY2mU0bJw5W
+         fQ4WsnB+SDR8l56nH8D6fkYEQOKG8PDvWNOllU5VmxIMa4MSME4j2jJjurifGtfyaovA
+         9JEEVsnNYHKqjYsbxR4BcLaTVm0NFkvo8MGXAAEM8wK9Uvu3RtX43UBU5WE9IOr5to6C
+         cIeYN6JiQvVmUSV7rCidzSKGeTHSVo+0fuk+rbXI1YARJXOmCvNdqussip2MtPCMLfnB
+         hy8Q==
+X-Gm-Message-State: AOJu0Yz8yyLr2bCXNRjSGKhENxAzDo0IRAuppaHGY14S6MklYPYYsrSQ
+	PegdH0CGnMwYj1mOdlrM5g52f728aBWb6c8H33DcJtvM22RgVJ6DmUQzVi40U9YV
+X-Gm-Gg: AeBDieuwJKw0uPJDxvxNKxnALK+psuOz3fC3LwgYri3SUh2KOoh64gMyrc8f8F1fO0r
+	WWZu9B82bNWdIHZ5iYc5i3oItnrjoo+2+lRUWSmyJFaPwAzy3swvANI5kG5XNiIwaDgma3MdOck
+	H0iSe7EPYrppewGCoJtsJ6SmC7uL5TZmXhMDjfgt3hQC2jGJfqH8aBN8GHQdpWkdWSdyAxn3WKi
+	OFww9QKo/ObfFeGz/UcTduEmDkibrcEccpTYcPecPFgDQnadURBNtw7NGawvMXmd4v6bGUSwY3o
+	Fdnyx1lHnAoQS8++bIN2NKPmy4m41tIHRL/tm5kcETi0GCQQQqBU+5uF+J1vD3ewHjsWo+Upt/q
+	Nt4jK823KV3+vZVIjkLhoBwd2mB3aJ8Is1qqqSxH4kwWDnjxC0I8aaADDpXiC9BKDTo74ejCcXs
+	tanTdQ9zEaPrpz7rDz8cUErVU7jZsfO6iNQxkY+C14MPDNwwyr1oi+CUgk4yB3a8UKR2YbI+K6Z
+	ZI=
+X-Received: by 2002:a05:7022:e2a:b0:128:d34a:320f with SMTP id a92af1059eb24-12c28bafe84mr1161919c88.12.1775698411877;
+        Wed, 08 Apr 2026 18:33:31 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::c05])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c0ce7dfe8sm15943230c88.3.2026.04.08.18.33.29
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c0ce7dfe8sm15943230c88.3.2026.04.08.18.33.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2026 18:33:30 -0700 (PDT)
+        Wed, 08 Apr 2026 18:33:31 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -66,11 +66,10 @@ Cc: daniel@iogearbox.net,
 	martin.lau@linux.dev,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH bpf-next 05/14] bpf: 4-byte precise clean_verifier_state
-Date: Wed,  8 Apr 2026 18:33:07 -0700
-Message-ID: <20260408-patch-set-v1-5-1a666e860d42@gmail.com>
+	eddyz87@gmail.com
+Subject: [PATCH bpf-next 06/14] bpf: prepare bpf_liveness api for use by static analysis pass
+Date: Wed,  8 Apr 2026 18:33:08 -0700
+Message-ID: <20260408-patch-set-v1-6-1a666e860d42@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260408-patch-set-v1-0-1a666e860d42@gmail.com>
 References: <20260408-patch-set-v1-0-1a666e860d42@gmail.com>
@@ -83,186 +82,174 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Migrate clean_verifier_state() and its liveness queries from 8-byte
-SPI granularity to 4-byte half-slot granularity.
+bpf: prepare liveness internal API for static analysis pass
 
-In __clean_func_state(), each SPI is cleaned in two independent
-halves:
-  - half_spi 2*i   (lo): slot_type[0..3]
-  - half_spi 2*i+1 (hi): slot_type[4..7]
+Move the `updated` check and reset from bpf_update_live_stack() into
+update_instance() itself, so callers outside the main loop can reuse
+it. Similarly, move write_insn_idx assignment out of
+reset_stack_write_marks() into its public caller, and thread insn_idx
+as a parameter to commit_stack_write_marks() instead of reading it
+from liveness->write_insn_idx. Drop the unused `env` parameter from
+alloc_frame_masks() and mark_stack_read().
 
-Slot types STACK_DYNPTR, STACK_ITER and STACK_IRQ_FLAG are never
-cleaned, as their slot type markers are required by
-destroy_if_dynptr_stack_slot(), is_iter_reg_valid_uninit() and
-is_irq_flag_reg_valid_uninit() for correctness.
-
-When only the hi half is dead, spilled_ptr metadata is destroyed and
-the lo half's STACK_SPILL bytes are downgraded to STACK_MISC or
-STACK_ZERO. When only the lo half is dead, spilled_ptr is preserved
-because the hi half may still need it for state comparison.
-
-Signed-off-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/liveness.c | 14 +++++-----
- kernel/bpf/verifier.c | 77 +++++++++++++++++++++++++++++++++++++++++++--------
- 2 files changed, 72 insertions(+), 19 deletions(-)
+ kernel/bpf/liveness.c | 48 +++++++++++++++++++++++-------------------------
+ 1 file changed, 23 insertions(+), 25 deletions(-)
 
 diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 9e36ea5f2eec88587749b316bebdfc92dfa33e8d..e2697cd9ae27f95970a7a495a362c371d27922ed 100644
+index e2697cd9ae27f95970a7a495a362c371d27922ed..a3af5972520f3c19d4d5fc003d2ca8088d6b4489 100644
 --- a/kernel/bpf/liveness.c
 +++ b/kernel/bpf/liveness.c
-@@ -732,13 +732,12 @@ int bpf_update_live_stack(struct bpf_verifier_env *env)
- 	return 0;
+@@ -259,8 +259,7 @@ static struct per_frame_masks *get_frame_masks(struct func_instance *instance,
+ 	return &instance->frames[frame][relative_idx(instance, insn_idx)];
  }
  
--static bool is_live_before(struct func_instance *instance, u32 insn_idx, u32 frameno, u32 spi)
-+static bool is_live_before(struct func_instance *instance, u32 insn_idx, u32 frameno, u32 half_spi)
+-static struct per_frame_masks *alloc_frame_masks(struct bpf_verifier_env *env,
+-						 struct func_instance *instance,
++static struct per_frame_masks *alloc_frame_masks(struct func_instance *instance,
+ 						 u32 frame, u32 insn_idx)
+ {
+ 	struct per_frame_masks *arr;
+@@ -298,13 +297,12 @@ static int ensure_cur_instance(struct bpf_verifier_env *env)
+ }
+ 
+ /* Accumulate may_read masks for @frame at @insn_idx */
+-static int mark_stack_read(struct bpf_verifier_env *env,
+-			   struct func_instance *instance, u32 frame, u32 insn_idx, spis_t mask)
++static int mark_stack_read(struct func_instance *instance, u32 frame, u32 insn_idx, spis_t mask)
  {
  	struct per_frame_masks *masks;
+ 	spis_t new_may_read;
  
- 	masks = get_frame_masks(instance, frameno, insn_idx);
--	return masks && (spis_test_bit(masks->live_before, spi * 2) ||
--			 spis_test_bit(masks->live_before, spi * 2 + 1));
-+	return masks && spis_test_bit(masks->live_before, half_spi);
+-	masks = alloc_frame_masks(env, instance, frame, insn_idx);
++	masks = alloc_frame_masks(instance, frame, insn_idx);
+ 	if (IS_ERR(masks))
+ 		return PTR_ERR(masks);
+ 	new_may_read = spis_or(masks->may_read, mask);
+@@ -321,17 +319,15 @@ int bpf_mark_stack_read(struct bpf_verifier_env *env, u32 frame, u32 insn_idx, s
+ 	int err;
+ 
+ 	err = ensure_cur_instance(env);
+-	err = err ?: mark_stack_read(env, env->liveness->cur_instance, frame, insn_idx, mask);
++	err = err ?: mark_stack_read(env->liveness->cur_instance, frame, insn_idx, mask);
+ 	return err;
  }
  
- int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
-@@ -759,7 +758,7 @@ int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_
+-static void reset_stack_write_marks(struct bpf_verifier_env *env,
+-				    struct func_instance *instance, u32 insn_idx)
++static void reset_stack_write_marks(struct bpf_verifier_env *env, struct func_instance *instance)
+ {
+ 	struct bpf_liveness *liveness = env->liveness;
+ 	int i;
+ 
+-	liveness->write_insn_idx = insn_idx;
+ 	for (i = 0; i <= instance->callchain.curframe; i++)
+ 		liveness->write_masks_acc[i] = SPIS_ZERO;
+ }
+@@ -345,7 +341,8 @@ int bpf_reset_stack_write_marks(struct bpf_verifier_env *env, u32 insn_idx)
+ 	if (err)
+ 		return err;
+ 
+-	reset_stack_write_marks(env, liveness->cur_instance, insn_idx);
++	liveness->write_insn_idx = insn_idx;
++	reset_stack_write_marks(env, liveness->cur_instance);
  	return 0;
  }
  
--bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi)
-+bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 half_spi)
+@@ -355,7 +352,8 @@ void bpf_mark_stack_write(struct bpf_verifier_env *env, u32 frame, spis_t mask)
+ }
+ 
+ static int commit_stack_write_marks(struct bpf_verifier_env *env,
+-				    struct func_instance *instance)
++				    struct func_instance *instance,
++				    u32 insn_idx)
  {
+ 	struct bpf_liveness *liveness = env->liveness;
+ 	u32 idx, frame, curframe;
+@@ -366,13 +364,13 @@ static int commit_stack_write_marks(struct bpf_verifier_env *env,
+ 		return 0;
+ 
+ 	curframe = instance->callchain.curframe;
+-	idx = relative_idx(instance, liveness->write_insn_idx);
++	idx = relative_idx(instance, insn_idx);
+ 	for (frame = 0; frame <= curframe; frame++) {
+ 		mask = liveness->write_masks_acc[frame];
+ 		/* avoid allocating frames for zero masks */
+ 		if (spis_is_zero(mask) && !instance->must_write_set[idx])
+ 			continue;
+-		masks = alloc_frame_masks(env, instance, frame, liveness->write_insn_idx);
++		masks = alloc_frame_masks(instance, frame, insn_idx);
+ 		if (IS_ERR(masks))
+ 			return PTR_ERR(masks);
+ 		old_must_write = masks->must_write;
+@@ -402,7 +400,7 @@ static int commit_stack_write_marks(struct bpf_verifier_env *env,
+  */
+ int bpf_commit_stack_write_marks(struct bpf_verifier_env *env)
+ {
+-	return commit_stack_write_marks(env, env->liveness->cur_instance);
++	return commit_stack_write_marks(env, env->liveness->cur_instance, env->liveness->write_insn_idx);
+ }
+ 
+ static char *fmt_callchain(struct bpf_verifier_env *env, struct callchain *callchain)
+@@ -576,18 +574,17 @@ static int propagate_to_outer_instance(struct bpf_verifier_env *env,
+ 	if (IS_ERR(outer_instance))
+ 		return PTR_ERR(outer_instance);
+ 	callsite = callchain->callsites[callchain->curframe - 1];
+-
+-	reset_stack_write_marks(env, outer_instance, callsite);
++	reset_stack_write_marks(env, outer_instance);
+ 	for (frame = 0; frame < callchain->curframe; frame++) {
+ 		insn = get_frame_masks(instance, frame, this_subprog_start);
+ 		if (!insn)
+ 			continue;
+ 		bpf_mark_stack_write(env, frame, insn->must_write_acc);
+-		err = mark_stack_read(env, outer_instance, frame, callsite, insn->live_before);
++		err = mark_stack_read(outer_instance, frame, callsite, insn->live_before);
+ 		if (err)
+ 			return err;
+ 	}
+-	commit_stack_write_marks(env, outer_instance);
++	commit_stack_write_marks(env, outer_instance, callsite);
+ 	return 0;
+ }
+ 
+@@ -654,6 +651,9 @@ static int update_instance(struct bpf_verifier_env *env, struct func_instance *i
+ 	bool changed;
+ 	int err;
+ 
++	if (!instance->updated)
++		return 0;
++
+ 	this_subprog_start = callchain_subprog_start(callchain);
  	/*
- 	 * Slot is alive if it is read before q->st->insn_idx in current func instance,
-@@ -773,15 +772,16 @@ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi)
- 	bool alive;
- 
- 	curframe_instance = q->instances[q->curframe];
--	if (is_live_before(curframe_instance, q->insn_idx, frameno, spi))
-+	alive = is_live_before(curframe_instance, q->insn_idx, frameno, half_spi);
-+	if (alive)
- 		return true;
- 
- 	for (i = frameno; i < q->curframe; i++) {
- 		callsite = curframe_instance->callchain.callsites[i];
- 		instance = q->instances[i];
- 		alive = bpf_calls_callback(env, callsite)
--			? is_live_before(instance, callsite, frameno, spi)
--			: is_live_before(instance, callsite + 1, frameno, spi);
-+			? is_live_before(instance, callsite, frameno, half_spi)
-+			: is_live_before(instance, callsite + 1, frameno, half_spi);
- 		if (alive)
- 			return true;
+ 	 * If must_write marks were updated must_write_acc needs to be reset
+@@ -699,6 +699,8 @@ static int update_instance(struct bpf_verifier_env *env, struct func_instance *i
+ 			return err;
  	}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6e852d461289197276cb50b54fc6cf307de04962..f971c89c77fc000a1e7b2d38fd8ed784cfb562ec 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20068,11 +20068,10 @@ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 	return check_ids(old_id, cur_id, idmap);
+ 
++	instance->updated = false;
++	instance->must_write_dropped = false;
+ 	return 0;
  }
  
--static void clean_func_state(struct bpf_verifier_env *env,
--			     struct bpf_func_state *st,
--			     u32 ip)
-+static void __clean_func_state(struct bpf_verifier_env *env,
-+			       struct bpf_func_state *st,
-+			       u16 live_regs, int frame)
- {
--	u16 live_regs = env->insn_aux_data[ip].live_regs_before;
- 	int i, j;
+@@ -721,13 +723,9 @@ int bpf_update_live_stack(struct bpf_verifier_env *env)
+ 		if (IS_ERR(instance))
+ 			return PTR_ERR(instance);
  
- 	for (i = 0; i < BPF_REG_FP; i++) {
-@@ -20084,10 +20083,61 @@ static void clean_func_state(struct bpf_verifier_env *env,
- 			__mark_reg_not_init(env, &st->regs[i]);
+-		if (instance->updated) {
+-			err = update_instance(env, instance);
+-			if (err)
+-				return err;
+-			instance->updated = false;
+-			instance->must_write_dropped = false;
+-		}
++		err = update_instance(env, instance);
++		if (err)
++			return err;
  	}
- 
-+	/*
-+	 * Clean dead 4-byte halves within each SPI independently.
-+	 * half_spi 2*i   → lower half: slot_type[0..3] (closer to FP)
-+	 * half_spi 2*i+1 → upper half: slot_type[4..7] (farther from FP)
-+	 */
- 	for (i = 0; i < st->allocated_stack / BPF_REG_SIZE; i++) {
--		if (!bpf_stack_slot_alive(env, st->frameno, i)) {
--			__mark_reg_not_init(env, &st->stack[i].spilled_ptr);
--			for (j = 0; j < BPF_REG_SIZE; j++)
-+		bool lo_live = bpf_stack_slot_alive(env, frame, i * 2);
-+		bool hi_live = bpf_stack_slot_alive(env, frame, i * 2 + 1);
-+
-+		if (!hi_live || !lo_live) {
-+			int start = !lo_live ? 0 : BPF_REG_SIZE / 2;
-+			int end = !hi_live ? BPF_REG_SIZE : BPF_REG_SIZE / 2;
-+			u8 stype = st->stack[i].slot_type[7];
-+
-+			/*
-+			 * Don't clearn special slots.
-+			 * destroy_if_dynptr_stack_slot() needs STACK_DYNPTR to
-+			 * detect overwrites and invalidate associated data slices.
-+			 * is_iter_reg_valid_uninit() and is_irq_flag_reg_valid_uninit()
-+			 * check for their respective slot types to detect double-create.
-+			 */
-+			if (stype == STACK_DYNPTR || stype == STACK_ITER ||
-+			    stype == STACK_IRQ_FLAG)
-+				continue;
-+
-+			/*
-+			 * Only destroy spilled_ptr when hi half is dead.
-+			 * If hi half is still live with STACK_SPILL, the
-+			 * spilled_ptr metadata is needed for correct state
-+			 * comparison in stacksafe().
-+			 * is_spilled_reg() is using slot_type[7], but
-+			 * is_spilled_scalar_after() check either slot_type[0] or [4]
-+			 */
-+			if (!hi_live) {
-+				struct bpf_reg_state *spill = &st->stack[i].spilled_ptr;
-+
-+				if (lo_live && stype == STACK_SPILL) {
-+					u8 val = STACK_MISC;
-+
-+					/*
-+					 * 8 byte spill of scalar 0 where half slot is dead
-+					 * should become STACK_ZERO in lo 4 bytes.
-+					 */
-+					if (register_is_null(spill))
-+						val = STACK_ZERO;
-+					for (j = 0; j < 4; j++) {
-+						u8 *t = &st->stack[i].slot_type[j];
-+
-+						if (*t == STACK_SPILL)
-+							*t = val;
-+					}
-+				}
-+				__mark_reg_not_init(env, spill);
-+			}
-+			for (j = start; j < end; j++)
- 				st->stack[i].slot_type[j] = STACK_INVALID;
- 		}
- 	}
-@@ -20096,13 +20146,16 @@ static void clean_func_state(struct bpf_verifier_env *env,
- static void clean_verifier_state(struct bpf_verifier_env *env,
- 				 struct bpf_verifier_state *st)
- {
--	int i, ip;
-+	int i;
- 
--	bpf_live_stack_query_init(env, st);
--	st->cleaned = true;
-+	if (env->cur_state != st)
-+		st->cleaned = true;
-+	bpf_live_stack_query_init(env, st); // TODO: return err
- 	for (i = 0; i <= st->curframe; i++) {
--		ip = frame_insn_idx(st, i);
--		clean_func_state(env, st->frame[i], ip);
-+		u32 ip = frame_insn_idx(st, i);
-+		u16 live_regs = env->insn_aux_data[ip].live_regs_before;
-+
-+		__clean_func_state(env, st->frame[i], live_regs, i);
- 	}
+ 	return 0;
  }
- 
 
 -- 
 2.53.0
