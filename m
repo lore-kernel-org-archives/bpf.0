@@ -1,271 +1,170 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0003924DD15
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 04:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89B827E04C
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 05:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775708446; cv=none; b=aX447AxnRDyBqy92fEGGx6UejX5SfjouSbIZiOhaDwt57MCHEphsQwnfvzCXqXiBvoIrGUqI/6ub+SqwJj6bLZ+httUFgZQXtAlqOtrbmQsxU561gIzw6uyw0BDsqRsBpN4aqf3Ss0bHeT1TuYsneKcmZTa2jal8NIuGgdc6U9g=
+	t=1775711933; cv=none; b=KLi0+NiEXIungjl7XwtIaAM+2Qu1GKwf6MerOsUF07XKhedOJRhLR6NkjL20HQCUbzNpuwmbTd/iNw2rZc9vOoOZuXvSvyg6h6gTQgG6gClcg4xoEPbvMWc8UG460VqiIYNPuMjKoOMG+UdZmEnaD+eiIT+pt25eDW4ToZaC7pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775708446; c=relaxed/simple;
-	bh=65I4WorEjOQJB/0YHWmuGVaHDAzhSJopSU6BK3WMu4o=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Bbpxuc4OVs68sjt50xzV+sgI4oBZIbXb0Jzzw+KPdIcTXnn0Auaz8p/ELrmfOOwpmjXku9gWSnKo1DCQ97d4G980YuOwUU8vO9qNMYrqPaojhb20p2LULnBKI/cXfKoDPRNVLwft7nYW5guEglhJu+gU04Y+2JABDpHrmR1KDzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZOwQeVXS; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775711933; c=relaxed/simple;
+	bh=IiIjfaAakQDPNkQgQkfMdzZDuNR7hFEeDHo2PAQjn+4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xathei/buRwnPvd5ovK7wbhcpk7tfDLhGQAEhuKNVKvDbNiuWqYvb7Yy2oNHCpd66ZV1c6kjw8RkaeUERqtFU3dXRVk4Zq26wyVMhHLEQ0H+8Br+lL7XsgVZ+Chy4AaqCKEtZr/UuqhNqcH3M/ll7ZBo9Q4+G4rAboBnK2SXhkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyJevyQo; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZOwQeVXS"
-Message-ID: <bf91eb90-1b6a-4bad-a0e5-072f9dce7daa@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775708433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SXivS5dvxTdcrkjcpWeHkhv1qBc5P8vwKzl4jmwUB10=;
-	b=ZOwQeVXSAKHFNh3w4RZq4vjP/2CTcr48/1DZN87TgqMyBuvsUfFlVPbxZC4rsFFx/jfeJw
-	p8L553/J8Eya4bVLJ/Vt2j7vjAZ/UfjQbgwCo0aAzKduIGgjjIET9HvYkVL3RTrG8IAKnr
-	2fUvRlZoPNkIWmzuK4wzA8Nt9ZK89sg=
-Date: Wed, 8 Apr 2026 21:20:25 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyJevyQo"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8d76492e51bso44851785a.0
+        for <bpf@vger.kernel.org>; Wed, 08 Apr 2026 22:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775711931; x=1776316731; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ML8LqxZrjyjFmoSU8L6gN5gKbH63aXwV93VjwmnQ70=;
+        b=fyJevyQoaF4R7nupUHBAB4PS/rs+dfU0PaYmTC4mZrMynI4zV+y/NwknQAtHHXnhQ1
+         lxOFEbL/79EE5rAZzio2Fa5dMSt97oF2lQ6vzlnlfbZ4RoG1qkJLCAo41sJe/aUkQm78
+         eXhr5GRIu4psZYVbEOoZNDTJ1MkU0wuUrVt9bWBnXBM2/IUo1bZNeXMMl3FwypazsmET
+         oSgvuHQRD1R0GI05Bk1TV1ikkzpZPwbWf7NcB7FkZpI96EZ/hYqOv3375tM/8hKhidBd
+         qp5MPDHHNddbR+afTIZGJ+5BLIc2D89TfRCW8S6FBfowOr2OCBl0uZSUqbPaSpDZpEqo
+         9JVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775711931; x=1776316731;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2ML8LqxZrjyjFmoSU8L6gN5gKbH63aXwV93VjwmnQ70=;
+        b=qzxW/ytsOdFGJvL15SqoFioabUPGUdtdvjo+kPxdz6EM6BgYJ611dVhsPFJwjelsdV
+         ITaG7/wdOMl5XbFFvLJ+pvkpEcq4CXreHA1f0xgdBR9zgdk8505KeU3dmBZMMCWh3IEy
+         +wxV+sWE9D0JQk4mlaZ96AL4OvYx9vrZkhiRQgF2lJNSHNzCYrsDtldEUkKwH+hk2rgm
+         5Bo6BTS16Tq/zewgDHHMItAyhYaXC/kdIqUGbmDbfjWWlrahf3GTdQXbzPyP4GlqaWbB
+         9acDb3/6rPJbkGuAEBT27YIzAQoIjOXR8raQHPNlQ9hJC032+j1RA+1yY2tqAd3rhuNt
+         dsaw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6tRSxH/jpZwGYIxls2gbPVNX4zzIypeDZg80yp+u9Kg9BfehFTJ1QJjirA/J3GAAUvII=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBleDfPZeIEefNS1B35WJZOvOFQziP/biT7aIbd3ta4wsmrRfC
+	lApWLoyfcHgx+J3NDAWRgHOnzNWp8BRyOeiENYkvs1Evfsd3MF/zkLO2
+X-Gm-Gg: AeBDievay2PQAjNN3ikd+aLC+rN1UbKUn67gzVHC6wNtDq1PFIf8/prRVgV/FhkjPtY
+	s2oQwiNK6aOGHMPwUUvFJh4cltAItWxk/XKpHuwtG0snPWpNCeqDVJAGgdZTYBR82EidHbLtRxA
+	KCu2vS5UXRCqa8EV8nMakWNBoTdG1+oydRIv5MKd/X+TaTRg07NxGby+zOZ9Ll8oSn6JnSmy2Xe
+	oV91Vqhds5LmvaMbAl8i712+Yb0PML2Ai2oBAbJwqdiT5RgNUSK5V/g5fbeV5XbFXhuQ03VfHNw
+	cCtPlF7UKVc8+jsSaqQxNmaCTdTwFrWEiT8ax50qkyccfrSZj5BUlobifPsxU6sPc7DTqvRFpNx
+	e88wth7luYkRY4D9lT24pfYFx3cwVKMZFChHnPBo34bRWrSXQgjKNdzYQewrH+5k+YBDNtJ/PDY
+	2+C2mX5ZCm4HhR0qHoFTxJ62oNfhd/X6SU8u2CmbAm9KBAj083AgPlGA2yjdpxYt6yr37dOPgVd
+	g6GcJC8MBDVAGzXrtVcoIM7DHIkln0=
+X-Received: by 2002:a05:6214:5081:b0:89c:c8eb:e807 with SMTP id 6a1803df08f44-8a704e9f9dcmr373036276d6.54.1775711930702;
+        Wed, 08 Apr 2026 22:18:50 -0700 (PDT)
+Received: from lima-default (pool-108-50-252-180.nwrknj.fios.verizon.net. [108.50.252.180])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8a59691580bsm189419036d6.26.2026.04.08.22.18.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Apr 2026 22:18:50 -0700 (PDT)
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+To: paul.chaignon@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	harishankar.vishwanathan@gmail.com,
+	memxor@gmail.com
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix reg_bounds to match new tnum-based refinement
+Date: Thu,  9 Apr 2026 01:18:49 -0400
+Message-ID: <20260409051849.228066-1-harishankar.vishwanathan@gmail.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <ada_F2WbRcnOYXWb@mail.gmail.com>
+References: <ada_F2WbRcnOYXWb@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 2/2] bpf: Avoid faultable build ID reads under mm
- locks
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- Song Liu <song@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260409010604.1439087-1-ihor.solodrai@linux.dev>
- <20260409010604.1439087-3-ihor.solodrai@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260409010604.1439087-3-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+On Wed, Apr 8, 2026 at 4:48 PM Paul Chaignon <paul.chaignon@gmail.com> wrote:
+> On Wed, Apr 08, 2026 at 10:40:50PM +0200, Paul Chaignon wrote:
+[...]
+> This one hits an invariant violation on an impossible branch and the
+> bounds are set to an incorrect value that doesn't match what the test
+> expects.
+> 
+>   19: w0 = w6                ; R0=scalar(smin=0,smax=umax=0xffffffff,
+>                                          var_off=(0x0; 0xffffffff))
+>                                R6=scalar(smin=0xfffffffe00000002,smax=0xffffffff00000000,
+>                                          umin=0xfffffffe00000002,umax=0xffffffff00000000,
+>                                          var_off=(0xfffffffe00000000; 0x1ffffffff))
+>   20: w0 = w7                ; R0=1 R7=0x8000000000000001
+>   21: if w6 == w7 goto pc+3  ; [...]
+>   [...]
+> 
+>   from 21 to 25: R0=1 R1=0x8000000000000001 R2=0x8000000000000001 R6=0xffffffff00000001 R7=0x8000000000000001 R10=fp0
+>   [...]
+> 
+>   ACTUAL   TRUE1:  scalar(u64=0xffffffff00000001,u32=1,s64=0xffffffff00000001,s32=0x1)
+>   EXPECTED TRUE1:  scalar(u64=[0xfffffffe00000002; 0xffffffff00000000],u32=1,s64=[0xfffffffe00000002; 0xffffffff00000000],s32=0x1)
+> 
+> W7 is equal to 1 and, given R6's ranges, cannot be equal to W6. The
+> condition is always false. On the true branch, the verifier thus
+> incorrectly refines R6's value to 0xffffffff00000001.
+> 
+> This is a new type of invariant violation (i.e., involving the tnum)
+> that is not detected by range_bounds_violation(). I'm expecting it will
+> be handled by Hari's followup patchset. I've shared the program with
+> Hari so it can maybe be used as a selftest. I'm guessing we're fine
+> waiting for that fix as it's not failing in CI; if not, we could do a
+> quick fix in the verifier.
 
+At 21, after simulate_both_branches(), R6's tnum is var_off=(0xfffffffe00000001;
+0x100000000) and u64 is [0xfffffffe00000002; 0xffffffff00000000]. 
 
-On 4/8/26 6:06 PM, Ihor Solodrai wrote:
-> Sleepable build ID parsing can block in __kernel_read() [1], so the
-> stackmap sleepable path must not call it while holding mmap_lock or a
-> per-VMA read lock.
-> 
-> The issue and the fix are conceptually similar to a recent procfs
-> patch [2].
-> 
-> Resolve each covered VMA with a stable read-side reference, preferring
-> lock_vma_under_rcu() and falling back to mmap_read_lock() only long
-> enough to acquire the VMA read lock. Take a reference to the backing
-> file, drop the VMA lock, and then parse the build ID through
-> (sleepable) build_id_parse_file().
-> 
-> [1]: https://lore.kernel.org/all/20251218005818.614819-1-shakeel.butt@linux.dev/
-> [2]: https://lore.kernel.org/all/20260128183232.2854138-1-andrii@kernel.org/
-> 
-> Fixes: 777a8560fd29 ("lib/buildid: use __kernel_read() for sleepable context")
-> Assisted-by: Codex:gpt-5.4
-> Suggested-by: Puranjay Mohan <puranjay@kernel.org>
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+The tnum and u64 ranges do not intersect, but in a specific way: the u64 range
+is lodged within the tnum, i.e. tmin < umin <= umax < tmax
+
+u64:        [      ]
+tnum:  x                   x
+
+When the tnum and u64 don't intersect along a branch, that branch is dead, and
+we should prune it. Because simulate_both_branches() currently only checks for
+"range bounds" violations, (e.g. umin > umax) it doesn't detect this kind of
+"intersection" violation (tnum and u64 ranges don't intersect), and doesn't
+prune the branch where the violation occurs.
+
+As Paul mentioned, the follow-up patchset, which implements intersection
+detection for all domain pairs, should fix this. This particular case will be
+detected using a tnum-u64-intersection check that employs tnum_step, as
+mentioned before [1, 2]. 
+
+[1]: https://lore.kernel.org/bpf/CAM=Ch05-XWF-x_VzUZAWhRO9eum-bjdutuwvPXEcOvnx_0omAA@mail.gmail.com/
+[2]: https://lore.kernel.org/bpf/20251107192328.2190680-1-harishankar.vishwanathan@gmail.com/
+
+I have tested the idea and it works (able to prune the branch where the
+violation occurred). We'll follow up with the intersection patchset, and can
+definitely use this as a selftest.
+
 > ---
->  kernel/bpf/stackmap.c | 139 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 139 insertions(+)
 > 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 4ef0fd06cea5..de3d89e20a1e 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -9,6 +9,7 @@
->  #include <linux/perf_event.h>
->  #include <linux/btf_ids.h>
->  #include <linux/buildid.h>
-> +#include <linux/mmap_lock.h>
->  #include "percpu_freelist.h"
->  #include "mmap_unlock_work.h"
->  
-> @@ -158,6 +159,139 @@ static inline void stack_map_build_id_set_ip(struct bpf_stack_build_id *id)
->  	memset(id->build_id, 0, BUILD_ID_SIZE_MAX);
->  }
->  
-> +enum stack_map_vma_lock_state {
-> +	STACK_MAP_LOCKED_NONE = 0,
-> +	STACK_MAP_LOCKED_VMA,
-> +	STACK_MAP_LOCKED_MMAP,
-> +};
-> +
-> +struct stack_map_vma_lock {
-> +	enum stack_map_vma_lock_state state;
-> +	struct vm_area_struct *vma;
-> +	struct mm_struct *mm;
-> +};
-> +
-> +static struct vm_area_struct *stack_map_lock_vma(struct stack_map_vma_lock *lock, unsigned long ip)
-> +{
-> +	struct mm_struct *mm = lock->mm;
-> +	struct vm_area_struct *vma;
-> +
-> +	if (WARN_ON_ONCE(!mm))
-> +		return NULL;
-> +
-> +	vma = lock_vma_under_rcu(mm, ip);
-> +	if (vma)
-> +		goto vma_locked;
-> +
-> +	if (!mmap_read_trylock(mm))
-> +		return NULL;
-> +
-> +	vma = vma_lookup(mm, ip);
-> +	if (!vma) {
-> +		mmap_read_unlock(mm);
-> +		return NULL;
-> +	}
-> +
-> +#ifdef CONFIG_PER_VMA_LOCK
-
-Puranjay and others,
-
-I tried to test this patch with CONFIG_PER_VMA_LOCK=n, and it turns
-out it's not easy to turn off.
-
-    config PER_VMA_LOCK
-    	def_bool y
-    	depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
-
-AFAIU this definition means that PER_VMA_LOCK is automatically true if
-it's dependencies are satisfied. The only practical way to do it
-appears to be disabling SMP, which is probably very unusual.
-
-So I am thinking, maybe instead of having to manage both mmap and vma
-lock in stackmap.c, we can assume CONFIG_PER_VMA_LOCK=y, and have
-
-    #ifndef CONFIG_PER_VMA_LOCK
-    return -ENOTSUPP
-    #endif
-
-somewhere in the stack_map_get_build_id_offset() callstack?
-Say in __bpf_get_stackid()?
-
-Thoughts?
-
-> +	if (!vma_start_read_locked(vma)) {
-> +		mmap_read_unlock(mm);
-> +		return NULL;
-> +	}
-> +	mmap_read_unlock(mm);
-> +#else
-> +	lock->state = STACK_MAP_LOCKED_MMAP;
-> +	lock->vma = vma;
-> +	return vma;
-> +#endif
-> +
-> +vma_locked:
-> +	lock->state = STACK_MAP_LOCKED_VMA;
-> +	lock->vma = vma;
-> +	return vma;
-> +}
-> +
-> +static void stack_map_unlock_vma(struct stack_map_vma_lock *lock)
-> +{
-> +	struct vm_area_struct *vma = lock->vma;
-> +	struct mm_struct *mm = lock->mm;
-> +
-> +	switch (lock->state) {
-> +	case STACK_MAP_LOCKED_VMA:
-> +		if (WARN_ON_ONCE(!vma))
-> +			break;
-> +		vma_end_read(vma);
-> +		break;
-> +	case STACK_MAP_LOCKED_MMAP:
-> +		if (WARN_ON_ONCE(!mm))
-> +			break;
-> +		mmap_read_unlock(mm);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	lock->state = STACK_MAP_LOCKED_NONE;
-> +	lock->vma = NULL;
-> +}
-> +
-> +static void stack_map_get_build_id_offset_sleepable(struct bpf_stack_build_id *id_offs,
-> +						    u32 trace_nr)
-> +{
-> +	struct mm_struct *mm = current->mm;
-> +	struct stack_map_vma_lock lock = {
-> +		.state = STACK_MAP_LOCKED_NONE,
-> +		.vma = NULL,
-> +		.mm = mm,
-> +	};
-> +	struct file *file, *prev_file = NULL;
-> +	unsigned long vm_pgoff, vm_start;
-> +	struct vm_area_struct *vma;
-> +	const char *prev_build_id;
-> +	u64 ip;
-> +
-> +	for (u32 i = 0; i < trace_nr; i++) {
-> +		ip = READ_ONCE(id_offs[i].ip);
-> +		vma = stack_map_lock_vma(&lock, ip);
-> +		if (!vma || !vma->vm_file) {
-> +			stack_map_build_id_set_ip(&id_offs[i]);
-> +			stack_map_unlock_vma(&lock);
-> +			continue;
-> +		}
-> +
-> +		file = vma->vm_file;
-> +		vm_pgoff = vma->vm_pgoff;
-> +		vm_start = vma->vm_start;
-> +
-> +		if (file == prev_file) {
-> +			memcpy(id_offs[i].build_id, prev_build_id, BUILD_ID_SIZE_MAX);
-> +			stack_map_unlock_vma(&lock);
-> +			goto build_id_valid;
-> +		}
-> +
-> +		file = get_file(file);
-> +		stack_map_unlock_vma(&lock);
-> +
-> +		/* build_id_parse_file() may block on filesystem reads */
-> +		if (build_id_parse_file(file, id_offs[i].build_id, NULL)) {
-> +			stack_map_build_id_set_ip(&id_offs[i]);
-> +			fput(file);
-> +			continue;
-> +		}
-> +
-> +		if (prev_file)
-> +			fput(prev_file);
-> +		prev_file = file;
-> +		prev_build_id = id_offs[i].build_id;
-> +
-> +build_id_valid:
-> +		id_offs[i].offset = (vm_pgoff << PAGE_SHIFT) + ip - vm_start;
-> +		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
-> +	}
-> +
-> +	if (prev_file)
-> +		fput(prev_file);
-> +}
-> +
->  /*
->   * Expects all id_offs[i].ip values to be set to correct initial IPs.
->   * They will be subsequently:
-> @@ -178,6 +312,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->  	const char *prev_build_id;
->  	int i;
->  
-> +	if (may_fault && has_user_ctx) {
-> +		stack_map_get_build_id_offset_sleepable(id_offs, trace_nr);
-> +		return;
-> +	}
-> +
->  	/* If the irq_work is in use, fall back to report ips. Same
->  	 * fallback is used for kernel stack (!user) on a stackmap with
->  	 * build_id.
-
+> reg_bounds_gen_consts_s64_u32/(s64)[0xffffffff00000002; 0] (u32)<op> S64_MIN+1
+> 
+> This one fails because reg_bounds' branch detection logic doesn't match
+> the kernel's.
+> 
+>   ACTUAL   FALSE1: scalar(u64=[0; U64_MAX],u32=[0; 4294967295],s64=[0xffffffff00000002; 0],s32=[S32_MIN; S32_MAX])
+>   EXPECTED FALSE1: scalar(u64=[0; U64_MAX],u32=[0; 4294967295],s64=[0xffffffff00000002; 0],s32=[S32_MIN; S32_MAX])
+>   ACTUAL   FALSE2: scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
+>   EXPECTED FALSE2: scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
+>   ACTUAL   TRUE1:  <not found>
+>   EXPECTED TRUE1:  scalar(u64=[0xffffffff00000002; 0x7fffffffffffffff],u32=[2147483648; 1],s64=[0xffffffff00000002; 0xffffffff00000001],s32=0x1)
+>   ACTUAL   TRUE2:  <not found>
+>   EXPECTED TRUE2:  scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
+> 
+> It's failing with that error since b254c6d816e5 ("bpf: Simulate branches
+> to prune based on range violations"), but was already failing before
+> with a different error (unexpected range). The root cause seems to be
+> that the test runs into an invariant violation, here as well.
+> 
+> We'll probably need to update reg_bounds's branch prediction logic to
+> match what the kernel is now doing. I can look into this next.
+> 
+> [...]
