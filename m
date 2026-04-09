@@ -1,122 +1,83 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA8D2749C1
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 10:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA9FFF513
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 10:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775729316; cv=none; b=TAgyyIWe5dBR/vZHAgBBoQEBvnitEJ6JfOOtqpLgjKY9uU1gUzDM5c6AlZ0Cmqu1BnZB4sX/1K5Qbx3sl/ZOWVoxRf8bPJIOUohSKb9C6cUa6vo8p2jhG+oOQqQdKI9Xpb17NOd59apBhQ1uOoo/Dhen0oWl1UAR6hEiEL8MSPQ=
+	t=1775730031; cv=none; b=ZxGMiWIOdDzHW7tt7qBEjVcReVbgMrLLnjpAtomALgsxDcj71UPbzF8k/Vzy1AQJobFGpGYn8X+nnNzTDlnH8E08AoEhc2OY0by71ASjM7i/Ndl7M672iWovawDvsMN3tMVllYLp2lylnG7UzTsbLxsbaYQxkDgFn0otxRLhNZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775729316; c=relaxed/simple;
-	bh=QK1HlenAL6ONmxS8R6XHJojcLwfa9/hk+hay9qkClu4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=I+BoflgpkThhmEQpa9CX/banieN3NrjxEXLMh/8VVVgPTBnGs9TdJyTHe0PkVkL2/+GLBn+qp2EuHNHMjiTRoqHVVEtrDc2Qiv7b4GIzEMnyZp2UWtIa3s0e3Fm+3ziiJK1dkv7S/JDs/0xGu/VSKTXXlAaK/RIUDghSqQuAfec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LhBo2qrX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QJIDTV/X; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LhBo2qrX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=QJIDTV/X; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1775730031; c=relaxed/simple;
+	bh=0c0PQsJdNcOmI2FhdBKzTMX/zQ7RVd5vdDiZaKVwo9o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s/UZcjPeo1Q2kErR2zhj8LG9QPtJAvql6Za2X00KIIvkLBPaBJVP50I3dqG/s3S/7vobqQnGufN/ZrqsYZISYRFuB6xgrbZUAQ1IdzH7P7/4hefq/ddKR46UMXn4DQzf0fi4tW1T43TjtiJYeupuQLNKGvMUjgAD4pgXk2aCVt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IswKzoCI; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LhBo2qrX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QJIDTV/X";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LhBo2qrX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="QJIDTV/X"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id BABFC4EE9C;
-	Thu,  9 Apr 2026 10:08:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1775729313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IswKzoCI"
+Message-ID: <7967c952-3922-4b49-953b-530b80850aa8@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775730027;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/4YHUZBuBWUA7o0h5dWVSLlyfPkU18QmDDLBi+t5/uU=;
-	b=LhBo2qrXJqcmczNFHHWVdGcsLQsVIL1yREAVlsVVK0OjK80a1uZffAT+f5r+nLAGij6iNQ
-	bZNLoskMZTXkpKlsBVWFo09oiK0oBHgGgLynsmW8/c2r8RxYV7aE+0ogdhlRmHLT6OP67x
-	BKSkw9RHeeIM7qmC3attuKB0ztgRhHE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1775729313;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/4YHUZBuBWUA7o0h5dWVSLlyfPkU18QmDDLBi+t5/uU=;
-	b=QJIDTV/XnUqaZWaQIHo/n4/fcGYqQPkaFAEdqeFfHYj85pC3LyfGdeQKmWuLPjbcNHB2uN
-	x4oRvJbBw7LeIWCA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1775729313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/4YHUZBuBWUA7o0h5dWVSLlyfPkU18QmDDLBi+t5/uU=;
-	b=LhBo2qrXJqcmczNFHHWVdGcsLQsVIL1yREAVlsVVK0OjK80a1uZffAT+f5r+nLAGij6iNQ
-	bZNLoskMZTXkpKlsBVWFo09oiK0oBHgGgLynsmW8/c2r8RxYV7aE+0ogdhlRmHLT6OP67x
-	BKSkw9RHeeIM7qmC3attuKB0ztgRhHE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1775729313;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/4YHUZBuBWUA7o0h5dWVSLlyfPkU18QmDDLBi+t5/uU=;
-	b=QJIDTV/XnUqaZWaQIHo/n4/fcGYqQPkaFAEdqeFfHYj85pC3LyfGdeQKmWuLPjbcNHB2uN
-	x4oRvJbBw7LeIWCA==
-Date: Thu, 9 Apr 2026 12:08:33 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Yafang Shao <laoar.shao@gmail.com>
-cc: Song Liu <song@kernel.org>, jpoimboe@kernel.org, jikos@kernel.org, 
-    pmladek@suse.com, joe.lawrence@redhat.com, rostedt@goodmis.org, 
-    mhiramat@kernel.org, mathieu.desnoyers@efficios.com, kpsingh@kernel.org, 
-    mattbobrowski@google.com, jolsa@kernel.org, ast@kernel.org, 
-    daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-    eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
-    live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return overriding
- for livepatched functions
-In-Reply-To: <CALOAHbAmTAfamStF9sZtO6efWYJ1sbXJp3PbsVapZf7dba91ig@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2604091205250.31526@pobox.suse.cz>
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <CAPhsuW7Y5KksWM49TrGH_Hohaq02XO8qs7G99Y6D8=0usLFSrQ@mail.gmail.com> <CALOAHbDG8=eUV53kF+xn=izs2rpydCk=a9RznU-EEOzmkB8mQg@mail.gmail.com> <CAPhsuW73qFybHgOnZ=oFC1PvdWkYWDk7gsAoiBXe4xWYagPrmA@mail.gmail.com>
- <CALOAHbC0hqk+yrUZay01EBRNOHgyj1MAavzNK-06XJKK9ARMqQ@mail.gmail.com> <CAPhsuW5MN6ikKmxgqby5RJ3_gvjJ4B77X74OvfbTQoFO8iUgzA@mail.gmail.com> <CALOAHbAmTAfamStF9sZtO6efWYJ1sbXJp3PbsVapZf7dba91ig@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	bh=9+i0GpBq9saj+JeIlFazz0t2Q1VA7JT5SrQeKRubDaM=;
+	b=IswKzoCILV1fwr+qS2zv8IVQrbnIK2KcNaEY/b/dLDG7B2VVU57vgg0jXStZ0ZbrvLks6q
+	1uyR5Z9jd8A6SzlAwIKpC5QXEB48xECR4U39FrcVxhQZsLRDBv00JUf/R9z8dw3tzykYDn
+	4CUmg5hg/fUYfrJpVTpcPecq6RRvJws=
+Date: Thu, 9 Apr 2026 18:20:11 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -2.80
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_ZERO(0.00)[0];
-	TAGGED_RCPT(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[23];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,suse.com,redhat.com,goodmis.org,efficios.com,google.com,iogearbox.net,linux.dev,gmail.com,vger.kernel.org];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
+Subject: Re: [PATCH] selftests/bpf: fix const qualifier in fexit_bpf2bpf test
+To: Woojin Ji <random6.xyz@gmail.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, shuah@kernel.org
+References: <20260409091101.364091-1-random6.xyz@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260409091101.364091-1-random6.xyz@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> Can we add something like ALLOW_LIVEPATCH_ERROR_INJECTION() to allow
-> error injection on functions defined inside a livepatch?
 
-No.
+On 4/9/26 5:11 PM, Woojin Ji wrote:
+> prog_name is an array of const char * strings, so strstr() returns a
+> pointer into const data.
+>
+> Store the result in a const char * to avoid discarding the const
+> qualifier.
+>
+> With GCC 15 this triggers -Werror=discarded-qualifiers and breaks
+> the build of tools/testing/selftests/bpf.
+>
+> Signed-off-by: Woojin Ji <random6.xyz@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+> index f29fc789c14b..d8225da4c1af 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+> @@ -111,7 +111,7 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
+>   		struct bpf_link_info link_info;
+>   		struct bpf_program *pos;
+>   		const char *pos_sec_name;
+> -		char *tgt_name;
+> +		const char *tgt_name;
+>   		__s32 btf_id;
+>   
+>   		tgt_name = strstr(prog_name[i], "/");
 
-I am sorry but you always seem to find band aids to your set up and how 
-you deal with live patches internally. While I can see that something like 
-a hybrid mode might be useful to people if done right (and we are not 
-there yet), the combination of it with bpf overrides or anything like that 
-is not something I would like to see in upstream.
+Already exist.
 
-Miroslav
+https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c?id=ca0f39a369c5f927c3d004e63a5a778b08a9df94
+
