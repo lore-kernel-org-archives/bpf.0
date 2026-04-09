@@ -1,208 +1,147 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AEB8287510
-	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 13:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B963D4121
+	for <bpf@vger.kernel.org>; Thu,  9 Apr 2026 13:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775740518; cv=none; b=QzIDxw+glMorVf0DI7Yh2BR4c7Lqhk8rp38vaBy4nZ5VilRHDzB0yMejcbZMqQ/Yo/t7dvFt5Luunx+aAGYDuThuH2JKNSTv+hUPhOgNJGOP3fXtl2BXdGmcqgZ2yRo3hAoMzjY4tHc0TSlpYc/tijw2gIzoHJhPx4+LLYIVBzM=
+	t=1775740618; cv=none; b=VX/j6/nZ3x7fgfiv4UAmFLf5MJVbseKJM94nnY4g/thLIRY/NoolhhcYlcqaHcF5qvvmHpgFiN7WjDD97R3xyCdS0+cs+QMA/RTm94FMTzSpK2fuYZjbF0GD8BNsGflbf2EHWzLm6f2sAMCGZr1FHNO+d7QZlmt9N6B9wx98aIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775740518; c=relaxed/simple;
-	bh=F4fu+I+hRLJ6URGwbdPUisqeGvdU+OF0nt23JxKHX2k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oTCUW37iTVG1p108CAzzTvgvtsjd680HVr3M/Db/f1BHYx/P36ze9A/lEw9TUvZpt9gqI3KkBNjRmd3T3qBOy5ODB0fvBdktAukQDf7ACtTletEc8kBI83kFU/QScrC/M56zWE/nfqA4+jabs8nBeN7HNJAqUAtC9sSRO/qVa/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V0vYm6KQ; arc=none smtp.client-ip=209.85.128.54
+	s=arc-20240116; t=1775740618; c=relaxed/simple;
+	bh=FJ/D4q23EFv6mDXNXcni7J38bIM5TIPQlv22/kkJCWc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RMAKwV6ZbI7UtYlIlRgQEcUw8K1i/fOaFCP6S1zQU/eugGkrdoCfCwrVcyvm3vbLRKCOGLDB6jsEg7/qVCtcY0DH6h4buYlYAgo5hjAtRv6kUrBQOPovd2Dvu2qxhJK05lWCMFdQk5I0XUQ/kdH4v+Z3P9l6XNYWngKI67JCIP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHHUYkLw; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V0vYm6KQ"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488d2079582so5194985e9.2
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 06:15:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHHUYkLw"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43d17bb1c1dso711580f8f.2
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 06:16:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775740513; x=1776345313; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EoCkZtW9G4UfWdiopt7U3VG4v4IwPUlRb2/onfAwCJg=;
-        b=V0vYm6KQC4mY/oq+BQ2YbETsEoww/8IeU74YPPemKVQzb+CPRofBC+F0sosGwY82FR
-         HHH5CM8HSUJlhEIXeviNK8lXmsR9CO8BSUbTCDS9tYFe/xz9oGLKnMhk0oquHhCl52Kn
-         yyZBzJKaMFqLxQPfVjikQhXmV2QdDZrg9W7SJ240SEHNQoryHWmEdFeoHAHeggaQNvKY
-         LGOzJXfA7eTjGcm7ZoY8gZwwavRuC1k0FUBAmTv1DE1+Mv2ds1D55Mp35R7TK2om+9O3
-         DKFQSKCoMT6YFSvPMWQ74HyWNEzi2IPhNIA4E4Hh8hyaQYAGL5h9r4C9iWn/70Vx9HmR
-         MAiQ==
+        d=gmail.com; s=20251104; t=1775740613; x=1776345413; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sEfIeWMKEQinR24XF9uKTH7B8WIhwrpXr7IybuBO0ac=;
+        b=aHHUYkLwVOd69YrQ76wrp6NCP/4uRzYaRgPUhfEZtpdDB8pkt8Y3P2yzG/iSy3h09z
+         l+celceRc4YhZM4QriRzvQyaTcl0RcolPX7lApz6YvZKu1K2kx+oev8PGQvA3UYFHR6r
+         v8Hxo5hq228XQgQ/57ujjgKL0HAU8Rnefz/8vnW2p8Cs2pijlrFq73hZh+L0nR/IKVBJ
+         JEFRZcspYD6cWWaYD2cSYj2pHnk83kbXrfaIQUPz5wK/BzH0FGwGOKdXqyO5mBK3jnAs
+         7zz+oo7BX3pj6b7fC0fFbnEKOCKwQ8xgN+vBPrrSvcFD8PRKv8jmwkzHZZg7C2c/L+pH
+         RRaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775740513; x=1776345313;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EoCkZtW9G4UfWdiopt7U3VG4v4IwPUlRb2/onfAwCJg=;
-        b=VoJyQkHK515Tps2LM0hrqAqv3Kmhi5lAbrJypJMSGxe60TAy7RKJHxEyZQU+uj+3Sf
-         2Dd5645Loqsl2aLHGxD9JA5EnaErpkjyPcScWc80Dfl9h2+fZU9gT223UPWbAew9IMdX
-         Ooy8hI9IcXwPzcOaCcOKnxrSwk3+fwBJXctUdMmn+A14iHwb1yh+LSutER3ySwzj73KT
-         kEJs/4fCtPG/k0uANRhUdAzm74trFxSD5Mg4rvvaVsXE101yH30Ul3mHHZq9z9QAXdb0
-         9IZUxXV/bMDp+B8/I9qOPxz0N7upnV4cF5CrZGChPzjNGoS8B8OW6T8fzh1T3z8GQ0Q5
-         iA3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUpENgxfEX0LSWP+XmOe4Xq2K0f4hpIC/pR1KLAGkosQn0oPpqnkxXmTcxtB/4Uy8kYhow=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7woroMJW5gyL4ZYfw5Mw1Nsg7HSB1Zx7WcVaxq8+1YuTWp7No
-	qI+dm7dYAS+yUDVTBcd1ODcN6KlFBlK/N01gmKGGqeoOgUQcpcMAHYAj
-X-Gm-Gg: AeBDieu0nGHweFVHfxpJiz1Hz8v6GPp4MlNOpwEXyfy15ScCZXNV6CtOyMv/Q5rrKKV
-	9ivmCfIWZfFF3WvCZ/yO2hEof8F/hIos/ygMRLmb1qb7EdSdoC0/B8teickvI+BY53r0lx1l9ZZ
-	Vw5jf/xFHYGh4EXruNx0m6K0oB4HKOt9YyzpeVOK2bTx0ZSaJHUX2kd3JpAZcqeRkMGLYCEd7G/
-	nIROlN8InDVhAXBvd7Zul/GcCISMLAv1Ean2joTsVLz2nvrKcCm1AXJqKp1CoHiu7BytKsfeb1g
-	YlcOsgPAr721NLx7J4FCuN2l2NhkU5nQjYPlrpiVw05OilhV3wEPjogKf9D3IFwjI6MW7RCrrrx
-	9Ppj64BRzzbE37tSFm2wTcoll1MzSB9m80Eg4vnbdE1+sIso0C36flkiNamr5RLSwlDq2sNiogg
-	BDiZDkbB3TfmA5vBUGTFep6q6mePMy7ZPQSD78+esAEDOtxtUaMj1uQQ9neCGLTGA4x+9YHa4vv
-	9K91U8K5gU=
-X-Received: by 2002:a05:600c:2d91:b0:488:a2ac:a334 with SMTP id 5b1f17b1804b1-488a2aca406mr165144005e9.3.1775740513149;
-        Thu, 09 Apr 2026 06:15:13 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:a778:a387:b2af:188b? ([2a02:8109:a307:d900:a778:a387:b2af:188b])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488cd10af88sm24178525e9.12.2026.04.09.06.15.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Apr 2026 06:15:12 -0700 (PDT)
-Message-ID: <debb9f27-443a-4277-b252-de8efc09697a@gmail.com>
-Date: Thu, 9 Apr 2026 14:15:10 +0100
+        d=1e100.net; s=20251104; t=1775740613; x=1776345413;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sEfIeWMKEQinR24XF9uKTH7B8WIhwrpXr7IybuBO0ac=;
+        b=XpnSY1Yp8Mwn/IB/ydVTJRkAieIe/kcfljPHVbQVTx7wogTrEd74LQmm2r7TLsr3T3
+         Zpzv0DJGrT5n7n1af0wYVcJN5ap6i4J3WaTY0QxoO8trQwUG9jDoUQYDvO8g56bb2WRk
+         vKq6rts0dVLap5B2PY2wFTV1EazRfJoSJysbi/LvDQK6wxYaxiLZNdSCqRjWAdvWKrpC
+         BGG3bGeCVIsplTFkEVTn1bJfkhfDF95C7wgeQENc3l2pf1MoSJWZ4Hx5P/Kkwa0uRgQ3
+         nkQMyJBSk1DzDgD0ymgd2QQJxLGI+FbKeVejRNRkBaFwqqgmopUhgHb3maRSnj4Jy6wA
+         zobg==
+X-Forwarded-Encrypted: i=1; AJvYcCWgkbbpisjY6I4DX0YCKgIW3t1UAsZ4BkNWSaYpKU7SAdyT+/w5XnGJP/hNElt2VfU56So=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgI+Mmh9OFnVBUlttSXkwa+UfERh44joZyGlKDEubf42BjRnJ2
+	WMXL795aOrISrRM2U9xbc/ZusPemvAIhAIry9kgmEQuxR3MRQaHtTlug
+X-Gm-Gg: AeBDietl9YVCOKEzvfhmwE6FFLpqT35nFw8x7kOKjEJu1GeqC7AM6wZEoH8AbgIB81A
+	P1ulWSjEmd0eczPTe6Zf5QwrMcR0JsB5seM1BORUglPGn2p0GOptALhdkl3XcoMmIfUdutpPy6U
+	TRxPtv1T7JU84qtL0ZTe2z2X0cSxcyZexg7yTXfga3rBJbRjz1yVQhqdhheu1Xd/firz5fvvXDt
+	6S4CfcILQFjk03DizkVFArQ9OyA9qJs1jhV5cXgVjU1RbzldYK/1vC3Hv8+vWfIghxKKtq0bgvK
+	u+vueC3uOhXgBcO3rUd92GmGuntQUNP84yQ84xosyhxECo2DE27wNF40Ad86ewFftEl/IBrNcd0
+	7c9JY2VqIvliqDPMScC9ayPcQIW9oSiuH3mDcF85HZ1k4dJ0hGA8vkSOCiua5QoL14+KV3N5VNa
+	OdCFvOiiTnHrEa/A0=
+X-Received: by 2002:a05:6000:1acf:b0:43d:20e9:b0e1 with SMTP id ffacd0b85a97d-43d29280e6dmr35116020f8f.7.1775740612569;
+        Thu, 09 Apr 2026 06:16:52 -0700 (PDT)
+Received: from krava ([2a00:102a:403a:e361:61e0:606e:5b16:ccaf])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4d282esm67310305f8f.18.2026.04.09.06.16.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Apr 2026 06:16:52 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 9 Apr 2026 15:16:46 +0200
+To: Menglong Dong <menglong.dong@linux.dev>
+Cc: Menglong Dong <menglong8.dong@gmail.com>,
+	Jiri Olsa <olsajiri@gmail.com>, ast@kernel.org,
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, shuah@kernel.org,
+	emil@etsalapatis.com, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: add missing fsession to the
+ verifier log
+Message-ID: <ademvg2HQT3AZRh1@krava>
+References: <20260408062109.386083-1-dongml2@chinatelecom.cn>
+ <20260408062109.386083-2-dongml2@chinatelecom.cn>
+ <adZWStMinOeunjSH@krava>
+ <5090408.31r3eYUQgx@7940hx>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v6 3/3] bpf: return VMA snapshot from task_vma
- iterator
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, kernel-team@meta.com
-References: <20260408154539.3832150-1-puranjay@kernel.org>
- <20260408154539.3832150-4-puranjay@kernel.org>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260408154539.3832150-4-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5090408.31r3eYUQgx@7940hx>
 
-On 4/8/26 4:45 PM, Puranjay Mohan wrote:
-> Holding the per-VMA lock across the BPF program body creates a lock
-> ordering problem when helpers acquire locks that depend on mmap_lock:
+On Thu, Apr 09, 2026 at 07:28:55PM +0800, Menglong Dong wrote:
+> On 2026/4/8 21:21 Jiri Olsa <olsajiri@gmail.com> write:
+> > On Wed, Apr 08, 2026 at 02:21:07PM +0800, Menglong Dong wrote:
+> > > The fsession attach type is missed in the verifier log in
+> > > check_get_func_ip(), bpf_check_attach_target() and check_attach_btf_id().
+> > > Update them to make the verifier log proper. Meanwhile, update the
+> > > corresponding selftests.
+> > > 
+> > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > > Acked-by: Leon Hwang <leon.hwang@linux.dev>
+> > > ---
+> > > v2:
+> > > - add a missing FSESSION in bpf_check_attach_target()
+> > > ---
+> > >  kernel/bpf/verifier.c                               | 10 +++++-----
+> > >  tools/testing/selftests/bpf/prog_tests/exceptions.c |  8 ++++----
+> > >  tools/testing/selftests/bpf/verifier/sleepable.c    |  2 +-
+> > >  3 files changed, 10 insertions(+), 10 deletions(-)
+> > > 
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 594260c1f382..beb660b4c3ec 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -11757,7 +11757,7 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
+> > >  
+> > >  	if (type == BPF_PROG_TYPE_TRACING) {
+> > >  		if (!bpf_prog_has_trampoline(env->prog)) {
+> > > -			verbose(env, "func %s#%d supported only for fentry/fexit/fmod_ret programs\n",
+> > > +			verbose(env, "func %s#%d supported only for fentry/fexit/fsession/fmod_ret programs\n",
+> > >  				func_id_name(func_id), func_id);
+> > >  			return -ENOTSUPP;
+> > >  		}
+> > > @@ -25561,7 +25561,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> > >  	btf = tgt_prog ? tgt_prog->aux->btf : prog->aux->attach_btf;
+> > >  	if (!btf) {
+> > >  		bpf_log(log,
+> > > -			"FENTRY/FEXIT program can only be attached to another program annotated with BTF\n");
+> > > +			"FENTRY/FEXIT/FSESSION program can only be attached to another program annotated with BTF\n");
+> > 
+> > I wonder this should say 'Tracing program...' instead,
+> > we have other tracing types not covered in this error
+> > 
+> > jirka
+> > 
+> > >  		return -EINVAL;
+> > >  	}
+> > >  	t = btf_type_by_id(btf, btf_id);
+> > > @@ -25597,7 +25597,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+> > >  		if (aux->func && aux->func[subprog]->aux->exception_cb) {
+> > >  			bpf_log(log,
+> > >  				"%s programs cannot attach to exception callback\n",
+> > > -				prog_extension ? "Extension" : "FENTRY/FEXIT");
+> > > +				prog_extension ? "Extension" : "FENTRY/FEXIT/FSESSION");
 > 
->    vm_lock -> i_rwsem -> mmap_lock -> vm_lock
-> 
-> Snapshot the VMA under the per-VMA lock in _next() via memcpy(), then
-> drop the lock before returning. The BPF program accesses only the
-> snapshot.
-> 
-> The verifier only trusts vm_mm and vm_file pointers (see
-> BTF_TYPE_SAFE_TRUSTED_OR_NULL in verifier.c). vm_file is reference-
-> counted with get_file() under the lock and released via fput() on the
-> next iteration or in _destroy(). vm_mm is already correct because
-> lock_vma_under_rcu() verifies vma->vm_mm == mm. All other pointers
-> are left as-is by memcpy() since the verifier treats them as untrusted.
-> 
-> Fixes: 4ac454682158 ("bpf: Introduce task_vma open-coded iterator kfuncs")
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
->   kernel/bpf/task_iter.c | 42 ++++++++++++++++++++++++++++++------------
->   1 file changed, 30 insertions(+), 12 deletions(-)
-> 
-> diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-> index 87e87f18913d..e791ae065c39 100644
-> --- a/kernel/bpf/task_iter.c
-> +++ b/kernel/bpf/task_iter.c
-> @@ -808,7 +808,7 @@ static inline void bpf_iter_mmput_async(struct mm_struct *mm)
->   struct bpf_iter_task_vma_kern_data {
->   	struct task_struct *task;
->   	struct mm_struct *mm;
-> -	struct vm_area_struct *locked_vma;
-> +	struct vm_area_struct snapshot;
->   	u64 next_addr;
->   };
->   
-> @@ -842,7 +842,7 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
->   
->   	/*
->   	 * Reject irqs-disabled contexts including NMI. Operations used
-> -	 * by _next() and _destroy() (vma_end_read, bpf_iter_mmput_async)
-> +	 * by _next() and _destroy() (vma_end_read, fput, bpf_iter_mmput_async)
->   	 * can take spinlocks with IRQs disabled (pi_lock, pool->lock).
->   	 * Running from NMI or from a tracepoint that fires with those
->   	 * locks held could deadlock.
-> @@ -885,7 +885,7 @@ __bpf_kfunc int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
->   		goto err_cleanup_iter;
->   	}
->   
-> -	kit->data->locked_vma = NULL;
-> +	kit->data->snapshot.vm_file = NULL;
->   	kit->data->next_addr = addr;
->   	return 0;
->   
-> @@ -947,26 +947,45 @@ bpf_iter_task_vma_find_next(struct bpf_iter_task_vma_kern_data *data)
->   	return vma;
->   }
->   
-> +static void bpf_iter_task_vma_snapshot_reset(struct vm_area_struct *snap)
-> +{
-> +	if (snap->vm_file) {
-> +		fput(snap->vm_file);
-> +		snap->vm_file = NULL;
-> +	}
-> +}
-> +
->   __bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_vma *it)
->   {
->   	struct bpf_iter_task_vma_kern *kit = (void *)it;
-> -	struct vm_area_struct *vma;
-> +	struct vm_area_struct *snap, *vma;
->   
->   	if (!kit->data) /* bpf_iter_task_vma_new failed */
->   		return NULL;
->   
-> -	if (kit->data->locked_vma) {
-> -		vma_end_read(kit->data->locked_vma);
-> -		kit->data->locked_vma = NULL;
-> -	}
-> +	snap = &kit->data->snapshot;
-> +
-> +	bpf_iter_task_vma_snapshot_reset(snap);
->   
->   	vma = bpf_iter_task_vma_find_next(kit->data);
->   	if (!vma)
->   		return NULL;
->   
-> -	kit->data->locked_vma = vma;
-> +	memcpy(snap, vma, sizeof(*snap));
-> +
-> +	/*
-> +	 * The verifier only trusts vm_mm and vm_file (see
-> +	 * BTF_TYPE_SAFE_TRUSTED_OR_NULL in verifier.c). Take a reference
-> +	 * on vm_file; vm_mm is already correct because lock_vma_under_rcu()
-> +	 * verifies vma->vm_mm == mm. All other pointers are untrusted by
-> +	 * the verifier and left as-is.
-> +	 */
-> +	if (snap->vm_file)
-> +		get_file(snap->vm_file);
-> +
->   	kit->data->next_addr = vma->vm_end;
-> -	return vma;
-> +	vma_end_read(vma);
-> +	return snap;
->   }
->   
->   __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
-> @@ -974,8 +993,7 @@ __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
->   	struct bpf_iter_task_vma_kern *kit = (void *)it;
->   
->   	if (kit->data) {
-> -		if (kit->data->locked_vma)
-> -			vma_end_read(kit->data->locked_vma);
-> +		bpf_iter_task_vma_snapshot_reset(&kit->data->snapshot);
->   		put_task_struct(kit->data->task);
->   		bpf_iter_mmput_async(kit->data->mm);
->   		bpf_mem_free(&bpf_global_ma, kit->data);
+> I guess that we'd better use "Tracing" instead of "FENTRY/FEXIT/FSESSION"
+> here too?
 
+ah right lgtm
+
+jirka
