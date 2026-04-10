@@ -1,167 +1,131 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34CFA396B82;
-	Fri, 10 Apr 2026 10:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47DF3B7747;
+	Fri, 10 Apr 2026 11:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775818473; cv=none; b=FFi+pMg6RAJNfXlRUHxTKsuLyBWlw68q+3UCISlvvahct5u/OQUr/oIKdwlJwCDZ8jubtF1UvYl0IHMa9z5ssPhXA3cpkFd+tpLT7ttMZxp55sBXAWo77B9QgYbnF7Kdt54Fv66Gc+LoF/1rExU6dWXX1WAj0dzatt+AppTroCY=
+	t=1775819483; cv=none; b=RJnlAPmWGive2+7EnMQrSWDTmsNHoXvgDsCBW8cFpjqnl5A8+a+AM/UvWxuiTEHFK7nQIniAWUO/MaQAYk+ymADRdH/8VYO+zu7hFuRPeiMD+0cvevhKL7MkdU0Uuk+bY0YA61aKgpOcqgEPJuWYszG7/EclZRlJB6Wh3vADBxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775818473; c=relaxed/simple;
-	bh=2EdHCsAD4jtFpVhokSRSmDHiF05jvD3EmVglWBqRjQ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a4vf0cwrtsoGsiHa00QLFEOULX0RvqSjzYHMcGrayJNS6otHkXHgSOQKdOeBC87VfNUdUqb7O5scCgXaPUy6DcndRuzLYsKAbDOJKrhP6iOyQlao2ZYPDSxK3d99lq+M3yVaULw6CT/CKnW3zFvrL9OrNdZtBkhAXZbpG8eGuek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jWz6cGAO; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1775819483; c=relaxed/simple;
+	bh=gsG4phlKbpI6tXmlFoxwhc3dioq5qwclgZRSUQsUjtI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fBVMUrPe0Z/ldSeA8p0/CEcjz0WJDwfIoz8s8ivn1HTq5sNU0Ofo9W5CKZZX6zZyaF2xJSEzzoYxoXRZGWk29YVmeTjTIcYMMUR6Kqx/SyYpXCqrw2Sg0+0M4oxE6kij1OZPUrbt2pjr6TIhw76MxKTic93t6nGJ2pveIpzBO/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Bi1faN1f; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jWz6cGAO"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63A10AcX2592757;
-	Fri, 10 Apr 2026 10:54:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=KFHFjsFq5MrU8B5Bmbcnu5De8RhaBKL5ohjIz4RcE
-	FE=; b=jWz6cGAOeFdWnP0aoRYrrlCmUvA3eEoPuK4fkFH6TNNIpXui5xvJxlC3i
-	gzXHtHwFDi03a4xpzfFUBBAIz0yYjmVnQir9bhaIiI6BoSgTa4YpHcfquKTkysHM
-	h26oGmWnWBZXUjFS/367oebap/RuZxjc3jtCRIbXwTbKT501N5EPVF/9a3K4oUvp
-	erpRUqzCMGGkBb7cwoODStC8+jlJKF4fQuPeeuhJZi0HQZKiryPu7HyYcAPM1HoL
-	3B38ciuidc7X9ig6CmXzJnnPUXRTX2kbExE69HTJSZMCn6yHUtJhWn4VWpPcWxvp
-	Uwy4bMR/9/KpXeHQKt2GsBmb27odA==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dcn2ehjg3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Apr 2026 10:54:21 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63A85k3U014361;
-	Fri, 10 Apr 2026 10:54:20 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dcmg4yn2d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Apr 2026 10:54:20 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63AAsG0Q43319710
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 10 Apr 2026 10:54:16 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7B20320043;
-	Fri, 10 Apr 2026 10:54:16 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B2AEE20040;
-	Fri, 10 Apr 2026 10:54:10 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.61.241.130])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 10 Apr 2026 10:54:10 +0000 (GMT)
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-To: bpf@vger.kernel.org
-Cc: skb99@linux.ibm.com, hbathini@linux.ibm.com, adubey@linux.ibm.com,
-        ast@kernel.org, alexei.starovoitov@gmail.com, peterz@infradead.org,
-        andrii@kernel.org, maddy@linux.ibm.com, linux-kernel@vger.kernel.org,
-        riteshh@linux.ibm.com, alan.maguire@oracle.com,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [PATCH] bpf/selftests: remove test_access_variable_array
-Date: Fri, 10 Apr 2026 16:24:04 +0530
-Message-ID: <20260410105404.91126-1-venkat88@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Bi1faN1f"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=wu06R/S7zmzK/DYdHkzd8P5CQqq6wprF75SyYhA68Cc=; b=Bi1faN1f1vu8kimWfIWiOp6Zxk
+	vApZbEx41b19IjHMAUa7hsSgE7WiQiFvBqr3yRHsLPaX17rgz0YhboD+HbMzFr5HTstaXTY15AroR
+	hFbG8hwPCaL2d1/m1xfEr1UsN9NwnK1K4yJnESau/kWSSaKHfS4RjU5tjym5ONYTlDHg1rum7yYLC
+	ZAZI7Hp95eEfA3ZcEKOyZ//Oh/UQ2EWph5oJ54Ya90GOrZUKsbpaVuvslppZce9AdZOo/X7/H+PFk
+	/+sWdStBZq/RVSkXDnoWOLYNA0L4va151J70793VsMXfsm0eZr8BW438upcwHsabGO/uYoShgDgKm
+	Xm4tRfZA==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wB9lF-0000UE-3B;
+	Fri, 10 Apr 2026 13:10:54 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wB9kh-000O8p-2A;
+	Fri, 10 Apr 2026 13:10:52 +0200
+Message-ID: <7388ed41-6d87-4c58-8cf5-e149d97c93c9@iogearbox.net>
+Date: Fri, 10 Apr 2026 13:10:52 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: T4oXYMgLFhRq7UyLFey0V-HlOymnvtms
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEwMDEwMCBTYWx0ZWRfX6NDdCvwL8kUH
- pE582vdeXo1fl2lVfvJPdUyOicettonyi6gyCd4DvBN3ZHiKc5cBv8c3kMZJoquvBucbIAocpWs
- B4jeGk+Sy0W89T04ZxqnFbzSxqS82k+t60jSdU0xPHz/E4d4GCQp3H+SFga4iZtG5ctZeZKr66H
- cxgjNo159SfotBm5jR50zIqcAXWho4LStunpweP4qzf41Q6xRLOoOqE2dCxZjfLz4eGIRIgi9vz
- E+zqKEaeib2zgBq/077GU2jj+++xBCDUECsaAKlovG7jA9RB2AcbMJ+n29MvbFA2XtJVe0KhVbv
- f8ac+5ATiDWOmVs8TcGps467/mEc4/+N7R6PqkaSlyN3pSsIQ/Ls7tY+MxvAFgVKKcrZsfnUzL7
- Px6HGyEx+YY5t085uJ8dykHpDdt+SVZVeuHyjobWKZcBeAjt1hYK6pZYQT6HQFy6srKRmu6pi5t
- 8MSBXmyqZzW4aXqhipg==
-X-Authority-Analysis: v=2.4 cv=Cfw4Irrl c=1 sm=1 tr=0 ts=69d8d6dd cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=fr7GdGX52fyC5VJlwL4A:9
-X-Proofpoint-GUID: 3EcIb9v_m4-CPn4L3AZ0vLDlbgPgVFVc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-10_03,2026-04-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 clxscore=1011 adultscore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604100100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v11 03/14] net: Add lease info to queue-get
+ response
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
+ toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260402231031.447597-1-daniel@iogearbox.net>
+ <20260402231031.447597-4-daniel@iogearbox.net>
+ <20260407204017.3fc79d1b@kernel.org>
+ <b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
+ <20260408151251.72bd2482@kernel.org>
+ <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
+ <5a5feea9-7675-4ccf-aa8e-3a2e476ce8f5@iogearbox.net>
+ <20260409074651.2e58b3dd@kernel.org>
+ <aa222301-e716-41cf-ab10-5365c0e15b6a@iogearbox.net>
+ <20260409185105.721a6465@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260409185105.721a6465@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27967/Fri Apr 10 08:24:45 2026)
 
-test_access_variable_array relied on accessing struct sched_domain::span
-to validate variable-length array handling via BTF. Recent scheduler
-refactoring removed or hid this field, causing the test
-to fail to build.
+On 4/10/26 3:51 AM, Jakub Kicinski wrote:
+> On Thu, 9 Apr 2026 17:32:31 +0200 Daniel Borkmann wrote:
+>>> I think the test has to be reworked but of the available options seems
+>>> like merging it as is and following up quickly is the best. I've only
+>>> set up the container testing in our CI yesterday anyway so there may
+>>> be more things that need changing in the test as we gain experience :S
+>>
+>> No objections obviously if you want to land as-is with your refactor on
+>> top.
+> 
+> Done, please double check my work, there were some conflicts with net.
 
-Given that this test depends on internal scheduler structures that are
-subject to refactoring, and equivalent variable-length array coverage
-already exists via bpf_testmod-based tests, remove
-test_access_variable_array entirely.
-
-Link: https://lore.kernel.org/all/177434340048.1647592.8586759362906719839.tip-bot2@tip-bot2/
-
-Signed-off-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
----
- .../bpf/prog_tests/access_variable_array.c    | 16 ----------------
- .../bpf/progs/test_access_variable_array.c    | 19 -------------------
- 2 files changed, 35 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/access_variable_array.c
- delete mode 100644 tools/testing/selftests/bpf/progs/test_access_variable_array.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/access_variable_array.c b/tools/testing/selftests/bpf/prog_tests/access_variable_array.c
-deleted file mode 100644
-index 08131782437c..000000000000
---- a/tools/testing/selftests/bpf/prog_tests/access_variable_array.c
-+++ /dev/null
-@@ -1,16 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright (c) 2022 Bytedance */
--
--#include <test_progs.h>
--#include "test_access_variable_array.skel.h"
--
--void test_access_variable_array(void)
--{
--	struct test_access_variable_array *skel;
--
--	skel = test_access_variable_array__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "test_access_variable_array__open_and_load"))
--		return;
--
--	test_access_variable_array__destroy(skel);
--}
-diff --git a/tools/testing/selftests/bpf/progs/test_access_variable_array.c b/tools/testing/selftests/bpf/progs/test_access_variable_array.c
-deleted file mode 100644
-index 326b7d1f496a..000000000000
---- a/tools/testing/selftests/bpf/progs/test_access_variable_array.c
-+++ /dev/null
-@@ -1,19 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright (c) 2023 Bytedance */
--
--#include "vmlinux.h"
--#include <bpf/bpf_helpers.h>
--#include <bpf/bpf_tracing.h>
--
--unsigned long span = 0;
--
--SEC("fentry/sched_balance_rq")
--int BPF_PROG(fentry_fentry, int this_cpu, struct rq *this_rq,
--		struct sched_domain *sd)
--{
--	span = sd->span[0];
--
--	return 0;
--}
--
--char _license[] SEC("license") = "GPL";
--- 
-2.45.2
-
+Looks good to me, thanks a lot for everything!
