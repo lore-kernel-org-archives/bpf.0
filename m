@@ -1,220 +1,160 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B84E39D6E9
-	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 11:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD4B3C13FD;
+	Fri, 10 Apr 2026 12:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775821094; cv=none; b=GRuEbdOj0TgfJqL0tBFtqOXnsEe/lynNomNmcCfOtNBTI6RHyBeep6H6zLzzHcBqqgQ9Ec/z/jfa3/LQV/ErBUbBB6JSDwv9Uqzx5JGmUhnRNkn9ikP6+7VNvpCRASjw9Y70HZFovFYK29qnJD0cwFXFJHmXFjUU5nk8qhQ5mUA=
+	t=1775824201; cv=none; b=UsA6S/u+/scqriHSXgSXm05Cn5wnJ3Ba4hD5NHHo7IXoVPHnHOZtWJ+gba9AlnA4BaKzVUmpLgPX6CZI0mD2yTsG30ji14u53cj5AqKeSQtnBKJ6TPAWEeHSKjOSqSLkoCbyot1r6BsuydpCFbOEXOsK/yRX0H1fUHPzQmh5nkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775821094; c=relaxed/simple;
-	bh=AWCGHMr8nQo9XENHPYNO3gNdIfX/Y9wTKaLGJfZGXgs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GhogKwrEEFxS/3uZ+hFl14DNALXKvhS+HXQP7+PtigHB6ZZWcXaadsGUz9n3EatwdaA+7EHfuGL1xhmtwlIN/yB0m2+XmoC06C7kHvNd0qxGz/udXIqciMXHpz7M3A35cZFMQfhbpFHVljpE20kzbjkWCsikKCxJO9INrh3FeMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h3upXIVR; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775824201; c=relaxed/simple;
+	bh=WPubJfES7p4gvWPDzr4zZPy0LuQA5OuWC1+cg1hyJtc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ik0BH+HyxXp4T5zUwl8eDZzXIG0m9xqCZHlau5f3s64l0c4TxJhyHwZEQb4bDIWV2iUdsSkNMV9HVYXNrG2+7PeO/fAmBhBEjJWVw1M8AWjf8EeYqrv6h6E5TZIyeztJ1C7lVP9FGanAwLqdjSxOZeJFlD8Y1IuavzIcJ9F3R0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=c+ByTDIu; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h3upXIVR"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775821091;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=n/513DDDdwX8CA3k/+2+q38x0A9p30a5TG1TXyuVxZA=;
-	b=h3upXIVR0yXYtg37kOcCTUjp7VlaQxt2bPnQAREYQ/L2pxjxqMZ0apYAb+5ebN16FL79WG
-	Myd6CBIGgyX5BnPqQE0AdFuqMlIdlwPnfsrlNLbvHf9n2Y/sTSMqvjs03H9DIk7YchjSj2
-	gR2kUmgAMDT7gp0/Qoo/Vnd37vZDusc=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jussi Maki <joamaki@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v6 2/2] selftests/bpf: add test for xdp_master_redirect with bond not up
-Date: Fri, 10 Apr 2026 19:37:23 +0800
-Message-ID: <20260410113726.368111-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260410113726.368111-1-jiayuan.chen@linux.dev>
-References: <20260410113726.368111-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="c+ByTDIu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-ID:Content-Description;
+	bh=wmoBkrzxhzQLQSgXC9e4/Z5v1th8/1neJXocPsENlU8=; b=c+ByTDIukWwFz+5S4k5nnLaLVY
+	Vw2NDoLq+dLe6QfQqzYg/QdVJVHjYQBB0svul21f4GLpRjqDcbpIHDCZDZFU3j4YWniJQbR1xA2Z+
+	0sfibxpTrB0H3t76q/qItnKluGTGS9lLw1dqNhHGNjxmQFeVRuHTDrqlds3n2xhLOaDmQjyr48bwt
+	0UrS1wc9qhRN+Vbyq6CILEnC1fbcUexI6yZvTg4d8okZIiayjjlSBkYDriXKwqNWFF4nt+iR12QuW
+	5yNJYr/PZ/UnqQ24TovrO5tlOk5SvWtDeV9Tfbu+I6Z7CkSVdwuER/INmPOlBCxZfjEZQXAeOBjKs
+	LLpLUdaQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wBAzX-009yhN-03;
+	Fri, 10 Apr 2026 12:29:43 +0000
+Date: Fri, 10 Apr 2026 05:29:37 -0700
+From: Breno Leitao <leitao@debian.org>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, metze@samba.org, 
+	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>, io-uring@vger.kernel.org, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
+ buffers
+Message-ID: <adjkn7p4U13WBs2o@gmail.com>
+References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+ <20260408122653.295953dd@pumpkin>
+ <adZcnNgxhsUjAgZW@gmail.com>
+ <20260408195640.324ee932@pumpkin>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20260408195640.324ee932@pumpkin>
+X-Debian-User: leitao
 
-Add a selftest that reproduces the null-ptr-deref in
-bond_rr_gen_slave_id() when XDP redirect targets a bond device in
-round-robin mode that was never brought up. The test verifies the fix
-by ensuring no crash occurs.
+On Wed, Apr 08, 2026 at 07:56:40PM +0100, David Laight wrote:
+> On Wed, 8 Apr 2026 06:52:54 -0700
+> Breno Leitao <leitao@debian.org> wrote:
+>
+> > Hello David,
+> >
+> > On Wed, Apr 08, 2026 at 12:26:53PM +0100, David Laight wrote:
+> > > On Wed, 08 Apr 2026 03:30:28 -0700
+> > > Breno Leitao <leitao@debian.org> wrote:
+> > >
+> > > > Currently, the .getsockopt callback requires __user pointers:
+> > > >
+> > > >   int (*getsockopt)(struct socket *sock, int level,
+> > > >                     int optname, char __user *optval, int __user *optlen);
+> > > >
+> > > > This prevents kernel callers (io_uring, BPF) from using getsockopt on
+> > > > levels other than SOL_SOCKET, since they pass kernel pointers.
+> > > >
+> > > > Following Linus' suggestion [0], this series introduces sockopt_t, a
+> > > > type-safe wrapper around iov_iter, and a getsockopt_iter callback that
+> > > > works with both user and kernel buffers. AF_PACKET and CAN raw are
+> > > > converted as initial users, with selftests covering the trickiest
+> > > > conversion patterns.
+> > >
+> > > What are you doing about the cases where 'optlen' is a complete lie?
+> >
+> > Is this incorrect optlen originating from userspace, and getting into
+> > the .getsockopt callbacks?
+>
+> Look at tcp_ao_copy_mptks_to_user() in net/ipv4/tcp_ao.c
+> This isn't 'old code' it was added in 2023.
+>
+> Basically what is being transferred is an array and 'optlen' is the
+> size of one element.
+> The number of elements is in the first one.
 
-Test setup:
-- bond0: active-backup mode, UP, with native XDP (enables
-  bpf_master_redirect_enabled_key globally)
-- bond1: round-robin mode, never UP
-- veth1: slave of bond1, with generic XDP (XDP_TX)
-- BPF_PROG_TEST_RUN with live frames triggers the redirect path
+Thank you for pointing this out. I now understand the issue you're raising.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/xdp_bonding.c    | 101 +++++++++++++++++-
- 1 file changed, 99 insertions(+), 2 deletions(-)
+The problem is that optlen doesn't represent the full buffer length. Instead:
+	optlen = per-element struct size (stride)
+	actual buffer length = optlen * nkeys (where nkeys comes from optval[0])
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-index e8ea26464349..0d4ec1e5b401 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
-@@ -191,13 +191,18 @@ static int bonding_setup(struct skeletons *skeletons, int mode, int xmit_policy,
- 	return -1;
- }
- 
--static void bonding_cleanup(struct skeletons *skeletons)
-+static void link_cleanup(struct skeletons *skeletons)
- {
--	restore_root_netns();
- 	while (skeletons->nlinks) {
- 		skeletons->nlinks--;
- 		bpf_link__destroy(skeletons->links[skeletons->nlinks]);
- 	}
-+}
-+
-+static void bonding_cleanup(struct skeletons *skeletons)
-+{
-+	restore_root_netns();
-+	link_cleanup(skeletons);
- 	ASSERT_OK(system("ip link delete bond1"), "delete bond1");
- 	ASSERT_OK(system("ip link delete veth1_1"), "delete veth1_1");
- 	ASSERT_OK(system("ip link delete veth1_2"), "delete veth1_2");
-@@ -493,6 +498,95 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
- 	system("ip link del bond_nest2");
- }
- 
-+/*
-+ * Test that XDP redirect via xdp_master_redirect() does not crash when
-+ * the bond master device is not up. When bond is in round-robin mode but
-+ * never opened, rr_tx_counter is NULL.
-+ */
-+static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
-+{
-+	struct nstoken *nstoken = NULL;
-+	int xdp_pass_fd, xdp_tx_fd;
-+	int veth1_ifindex;
-+	int err;
-+	char pkt[ETH_HLEN + 1];
-+	struct xdp_md ctx_in = {};
-+
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &pkt,
-+			    .data_size_in = sizeof(pkt),
-+			    .ctx_in = &ctx_in,
-+			    .ctx_size_in = sizeof(ctx_in),
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+			    .batch_size = 1,
-+		);
-+
-+	/* We can't use bonding_setup() because bond will be active */
-+	SYS(out, "ip netns add ns_rr_no_up");
-+	nstoken = open_netns("ns_rr_no_up");
-+	if (!ASSERT_OK_PTR(nstoken, "open ns_rr_no_up"))
-+		goto out;
-+
-+	/* bond0: active-backup, UP with slave veth0.
-+	 * Attaching native XDP to bond0 enables bpf_master_redirect_enabled_key
-+	 * globally.
-+	 */
-+	SYS(out, "ip link add bond0 type bond mode active-backup");
-+	SYS(out, "ip link add veth0 type veth peer name veth0p");
-+	SYS(out, "ip link set veth0 master bond0");
-+	SYS(out, "ip link set bond0 up");
-+	SYS(out, "ip link set veth0p up");
-+
-+	/* bond1: round-robin, never UP -> rr_tx_counter stays NULL */
-+	SYS(out, "ip link add bond1 type bond mode balance-rr");
-+	SYS(out, "ip link add veth1 type veth peer name veth1p");
-+	SYS(out, "ip link set veth1 master bond1");
-+
-+	veth1_ifindex = if_nametoindex("veth1");
-+	if (!ASSERT_GT(veth1_ifindex, 0, "veth1_ifindex"))
-+		goto out;
-+
-+	/* Attach native XDP to bond0 -> enables global redirect key */
-+	if (xdp_attach(skeletons, skeletons->xdp_tx->progs.xdp_tx, "bond0"))
-+		goto out;
-+
-+	/* Attach generic XDP (XDP_TX) to veth1.
-+	 * When packets arrive at veth1 via netif_receive_skb, do_xdp_generic()
-+	 * runs this program. XDP_TX + bond slave triggers xdp_master_redirect().
-+	 */
-+	xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
-+	if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
-+		goto out;
-+
-+	err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
-+			     XDP_FLAGS_SKB_MODE, NULL);
-+	if (!ASSERT_OK(err, "attach generic XDP to veth1"))
-+		goto out;
-+
-+	/* Run BPF_PROG_TEST_RUN with XDP_PASS live frames on veth1.
-+	 * XDP_PASS frames become SKBs with skb->dev = veth1, entering
-+	 * netif_receive_skb -> do_xdp_generic -> xdp_master_redirect.
-+	 * Without the fix, bond_rr_gen_slave_id() dereferences NULL
-+	 * rr_tx_counter and crashes.
-+	 */
-+	xdp_pass_fd = bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
-+	if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
-+		goto out;
-+
-+	memset(pkt, 0, sizeof(pkt));
-+	ctx_in.data_end = sizeof(pkt);
-+	ctx_in.ingress_ifindex = veth1_ifindex;
-+
-+	err = bpf_prog_test_run_opts(xdp_pass_fd, &opts);
-+	ASSERT_OK(err, "xdp_pass test_run should not crash");
-+
-+out:
-+	link_cleanup(skeletons);
-+	close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del ns_rr_no_up");
-+}
-+
- static void test_xdp_bonding_features(struct skeletons *skeletons)
- {
- 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
-@@ -738,6 +832,9 @@ void serial_test_xdp_bonding(void)
- 	if (test__start_subtest("xdp_bonding_redirect_multi"))
- 		test_xdp_bonding_redirect_multi(&skeletons);
- 
-+	if (test__start_subtest("xdp_bonding_redirect_no_up"))
-+		test_xdp_bonding_redirect_no_up(&skeletons);
-+
- out:
- 	xdp_dummy__destroy(skeletons.xdp_dummy);
- 	xdp_tx__destroy(skeletons.xdp_tx);
--- 
-2.43.0
+For handling these cases, I can think of several approaches:
 
+1) Dynamically resize the iter once the actual buffer size is discovered:
+
+  int sockopt_set_buflen(sockopt_t *opt, size_t new_len)
+  {
+      if (!opt->legacy)   /* Following Stefan's suggestion */
+	return -EINVAL;
+
+      /* Re-initialize iter with the actual buffer size.
+       * For ubuf: same base pointer, updated count.
+       * For kvec: same iov_base, updated iov_len + re-init.
+       */
+  }
+
+This allows legacy protocols to adjust the iov_iter later, mirroring
+current behavior. Note that this doesn't worsen the existing
+situation—currently, the current code is like having iov_iter length is
+set to INT_MAX, given the callback can read/write to any location based
+on that __user pointer.
+
+2) Use a special legacy callback path, as proposed by Stefan.
+
+3) Store base pointers in sockopt_t and defer iter initialization for
+   legacy callbacks:
+
+  static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
+                                    struct tcp_ao_info *ao_info,
+                                    sockopt_t *opt)
+  {
+        struct tcp_ao_getsockopt opt_in;
+        int user_len = opt->optlen;
+        struct kvec kvec;
+
+        /* First, initialize a small iter to read the first element */
+        sockopt_init_iter(opt, user_len, &kvec);
+
+        if (copy_from_iter(&opt_in, user_len, &opt->iter_in) != user_len)
+                return -EFAULT;
+
+        /* Now we know the actual buffer size */
+        sockopt_init_iter(opt, user_len * opt_in.nkeys, &kvec);
+
+        /* ... write the full array via copy_to_iter() ... */
+  }
+
+4) Maintain two separate callbacks: ->getsockopt_iter (to be renamed to ->getsockopt
+   after the transition) and ->getsockopt_unsafe for legacy cases.
+
+
+Regardless of which approach we take for these legacy implementations, I don't
+believe any of them invalidate the current patchset from a design standpoint.
+
+Since these legacy protocols represent less than 1% of the cases, I'd prefer to
+optimize for the common path and handle the exceptional cases as exceptions.
