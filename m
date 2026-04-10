@@ -1,160 +1,210 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD4B3C13FD;
-	Fri, 10 Apr 2026 12:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D593181334;
+	Fri, 10 Apr 2026 12:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775824201; cv=none; b=UsA6S/u+/scqriHSXgSXm05Cn5wnJ3Ba4hD5NHHo7IXoVPHnHOZtWJ+gba9AlnA4BaKzVUmpLgPX6CZI0mD2yTsG30ji14u53cj5AqKeSQtnBKJ6TPAWEeHSKjOSqSLkoCbyot1r6BsuydpCFbOEXOsK/yRX0H1fUHPzQmh5nkU=
+	t=1775824857; cv=none; b=m4hZ3bp9SgEzy3QqJgWRBVl6n7DXI257UQeXp5sFCCyKa5vZFxxlbE5RLmGgB3Rp91sC+ZkVPxw9VX/jQmVjOCF/Sn6rK8pkhNmi0G0e8l+zJSJ0n2s7tiyBUpUtycldiQFHK8zAM5dOD0zcQG0EFfAk8QAQzVALG7S0uWEIbjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775824201; c=relaxed/simple;
-	bh=WPubJfES7p4gvWPDzr4zZPy0LuQA5OuWC1+cg1hyJtc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ik0BH+HyxXp4T5zUwl8eDZzXIG0m9xqCZHlau5f3s64l0c4TxJhyHwZEQb4bDIWV2iUdsSkNMV9HVYXNrG2+7PeO/fAmBhBEjJWVw1M8AWjf8EeYqrv6h6E5TZIyeztJ1C7lVP9FGanAwLqdjSxOZeJFlD8Y1IuavzIcJ9F3R0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=c+ByTDIu; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	s=arc-20240116; t=1775824857; c=relaxed/simple;
+	bh=f58Vx0UvA7DLYtnthJ1QgLCkjQluN/A7fbzZMZVhqNs=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=S71k/BSpRtRYlm6bD0Z91iE7Rs9pXib34qSvQUtk4WopfTUIFXA9p9NanKAyXWZU1mlwpXA0nwItdy2dR5sB+dlYzEyyjZrLQ+vNSCr7dEWKjCCqxF1HSk/WAYaA5PsSzioV95ElAKSzKN6OPv/PvxId4Nbw9C6lX9Yq005CdkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ggFI/0Vf; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="c+ByTDIu"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=wmoBkrzxhzQLQSgXC9e4/Z5v1th8/1neJXocPsENlU8=; b=c+ByTDIukWwFz+5S4k5nnLaLVY
-	Vw2NDoLq+dLe6QfQqzYg/QdVJVHjYQBB0svul21f4GLpRjqDcbpIHDCZDZFU3j4YWniJQbR1xA2Z+
-	0sfibxpTrB0H3t76q/qItnKluGTGS9lLw1dqNhHGNjxmQFeVRuHTDrqlds3n2xhLOaDmQjyr48bwt
-	0UrS1wc9qhRN+Vbyq6CILEnC1fbcUexI6yZvTg4d8okZIiayjjlSBkYDriXKwqNWFF4nt+iR12QuW
-	5yNJYr/PZ/UnqQ24TovrO5tlOk5SvWtDeV9Tfbu+I6Z7CkSVdwuER/INmPOlBCxZfjEZQXAeOBjKs
-	LLpLUdaQ==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wBAzX-009yhN-03;
-	Fri, 10 Apr 2026 12:29:43 +0000
-Date: Fri, 10 Apr 2026 05:29:37 -0700
-From: Breno Leitao <leitao@debian.org>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, metze@samba.org, 
-	axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>, io-uring@vger.kernel.org, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
- buffers
-Message-ID: <adjkn7p4U13WBs2o@gmail.com>
-References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
- <20260408122653.295953dd@pumpkin>
- <adZcnNgxhsUjAgZW@gmail.com>
- <20260408195640.324ee932@pumpkin>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ggFI/0Vf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=GMOnElWjFvV7n3suXFvXe554PCnHWxci5bhcwLgnIF8=; b=ggFI/0VfSG4oIKeFuLShmEAOmc
+	6Vl0ztbg2DMsBaw7gjp9DxBPLiWFLlzBiRe9B1CNBnWc9BRrqa1qezsQmxDzBcLHGJ4Cbc6SrYSF/
+	iF9EcjXW1aJKM0pIcWyk1MinHJ7tNn2ENaLnJvzw0XGRiSthyhgd0/wk93/3//WkVw+ZC2m3fXzgf
+	QUCGM4i4FcUwPqVqimJWRomxcPmy3qoPGl6DSy5H84bXv+plns0CVPM/0T+pFt097isuGAYvxagTT
+	2E/6tVmAFyqsWxD800mMLnxeuZ+4Jy1PIzFM+DwLXBMdXEEDl+5eHYKUnYSTh5qJvcnHZWplQfEfy
+	zRfpax3Q==;
+Received: from [179.244.2.202] (helo=toolbx)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wBBAG-00EMz1-0g; Fri, 10 Apr 2026 14:40:48 +0200
+From: Helen Koike <koike@igalia.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	shung-hsi.yu@suse.com,
+	yonghong.song@linux.dev,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	koike@igalia.com,
+	kernel-dev@igalia.com
+Subject: [PATCH 1/2] bpf: deduce_bounds_64_from_32 tightening with circular range logic
+Date: Fri, 10 Apr 2026 09:40:27 -0300
+Message-ID: <20260410124035.297632-1-koike@igalia.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260408195640.324ee932@pumpkin>
-X-Debian-User: leitao
 
-On Wed, Apr 08, 2026 at 07:56:40PM +0100, David Laight wrote:
-> On Wed, 8 Apr 2026 06:52:54 -0700
-> Breno Leitao <leitao@debian.org> wrote:
->
-> > Hello David,
-> >
-> > On Wed, Apr 08, 2026 at 12:26:53PM +0100, David Laight wrote:
-> > > On Wed, 08 Apr 2026 03:30:28 -0700
-> > > Breno Leitao <leitao@debian.org> wrote:
-> > >
-> > > > Currently, the .getsockopt callback requires __user pointers:
-> > > >
-> > > >   int (*getsockopt)(struct socket *sock, int level,
-> > > >                     int optname, char __user *optval, int __user *optlen);
-> > > >
-> > > > This prevents kernel callers (io_uring, BPF) from using getsockopt on
-> > > > levels other than SOL_SOCKET, since they pass kernel pointers.
-> > > >
-> > > > Following Linus' suggestion [0], this series introduces sockopt_t, a
-> > > > type-safe wrapper around iov_iter, and a getsockopt_iter callback that
-> > > > works with both user and kernel buffers. AF_PACKET and CAN raw are
-> > > > converted as initial users, with selftests covering the trickiest
-> > > > conversion patterns.
-> > >
-> > > What are you doing about the cases where 'optlen' is a complete lie?
-> >
-> > Is this incorrect optlen originating from userspace, and getting into
-> > the .getsockopt callbacks?
->
-> Look at tcp_ao_copy_mptks_to_user() in net/ipv4/tcp_ao.c
-> This isn't 'old code' it was added in 2023.
->
-> Basically what is being transferred is an array and 'optlen' is the
-> size of one element.
-> The number of elements is in the first one.
+Unify handling of signed and unsigned using circular range logic.
 
-Thank you for pointing this out. I now understand the issue you're raising.
+Signed and unsigned numbers follows the same order in bit
+representation. We can think of it as a clock, were 12h is
+0x0000_0000 and 11h is 0xFFFF_FFFF, regardless of its sign.
 
-The problem is that optlen doesn't represent the full buffer length. Instead:
-	optlen = per-element struct size (stride)
-	actual buffer length = optlen * nkeys (where nkeys comes from optval[0])
+Then, instead of dealing with max and min, we deal with a base and len,
+where len = max - min.
 
-For handling these cases, I can think of several approaches:
+Example:
+    range [-1, 3] is represented by base=0xFFFF_FFFF len=4
+    since (u32)3 - (u32)-1 is 4.
 
-1) Dynamically resize the iter once the actual buffer size is discovered:
+And we can verify if a value v is in range if:
+    (u32)(v - base) <= len
+which is true if v is signed -1 or v is unsigned 0xFFFF_FFFF.
 
-  int sockopt_set_buflen(sockopt_t *opt, size_t new_len)
-  {
-      if (!opt->legacy)   /* Following Stefan's suggestion */
-	return -EINVAL;
+This automatically handles the wrapping case, discarding the need to
+check if it crosses the signed range or not and handle each case.
 
-      /* Re-initialize iter with the actual buffer size.
-       * For ubuf: same base pointer, updated count.
-       * For kvec: same iov_base, updated iov_len + re-init.
-       */
-  }
+It also fixes the following current issues:
+* [(u32)umin, (u32)umax] falling outside of [u32_min_value, u32_max_value]
+* [(u32)umin, (u32)umax] falling in the gap [(u32)s32_max_value, (u32)s32_min_value]
 
-This allows legacy protocols to adjust the iov_iter later, mirroring
-current behavior. Note that this doesn't worsen the existing
-situation—currently, the current code is like having iov_iter length is
-set to INT_MAX, given the callback can read/write to any location based
-on that __user pointer.
+Fixes: c51d5ad6543c ("bpf: improve deduction of 64-bit bounds from 32-bit bounds")
+[Circular representation]
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Helen Koike <koike@igalia.com>
 
-2) Use a special legacy callback path, as proposed by Stefan.
+---
 
-3) Store base pointers in sockopt_t and defer iter initialization for
-   legacy callbacks:
+This is a follow-up from discussion:
+  https://lore.kernel.org/all/7fb97184-baaa-4639-a0b9-ac289bf2e54d@igalia.com/
 
-  static int tcp_ao_copy_mkts_to_user(const struct sock *sk,
-                                    struct tcp_ao_info *ao_info,
-                                    sockopt_t *opt)
-  {
-        struct tcp_ao_getsockopt opt_in;
-        int user_len = opt->optlen;
-        struct kvec kvec;
+I didn't tag this as v2 since it is a completely different
+implementation.
 
-        /* First, initialize a small iter to read the first element */
-        sockopt_init_iter(opt, user_len, &kvec);
+I did do an implementation[1] without circular range logic, by using
+if/elses blocks, but it feels I'm always missing a corner case and using
+circular range logic feels safer.
 
-        if (copy_from_iter(&opt_in, user_len, &opt->iter_in) != user_len)
-                return -EFAULT;
+Eduard, I didn't use the exact code you pointed, since it seems it is
+covered by your RFC, so I used the logic just for this case while your
+RFC doesn't move forward.
 
-        /* Now we know the actual buffer size */
-        sockopt_init_iter(opt, user_len * opt_in.nkeys, &kvec);
+Please let me know what you think.
 
-        /* ... write the full array via copy_to_iter() ... */
-  }
+[1]
+https://github.com/helen-fornazier/linux/commits/bpf-min-max-if-else-solution/
+(3 last commits)
 
-4) Maintain two separate callbacks: ->getsockopt_iter (to be renamed to ->getsockopt
-   after the transition) and ->getsockopt_unsafe for legacy cases.
+Thanks,
+Helen
+---
+ kernel/bpf/verifier.c | 77 +++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 64 insertions(+), 13 deletions(-)
 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8c1cf2eb6cbb..2944c17d2b7b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2700,6 +2700,48 @@ static void deduce_bounds_64_from_64(struct bpf_reg_state *reg)
+ 	}
+ }
+ 
++/*
++ * Find the smallest v >= lo such that (u32)v is in the circular u32 range
++ * [b_min, b_max] (b_len = b_max - b_min wraps naturally for wrapping ranges).
++ */
++static u64 u64_tighten_umin(u64 lo, u64 hi, u32 b_min, u32 b_max)
++{
++	u32 b_len = b_max - b_min;
++	u64 a_len = hi - lo;
++	u64 cand;
++
++	/* lo32(lo) already in [b_min, b_max]? */
++	if ((u32)((u32)lo - b_min) <= b_len)
++		return lo;
++	/* Set lo32 to b_min and check if it's in the range [lo, hi] */
++	cand = (lo & ~(u64)U32_MAX) | b_min;
++	if (cand - lo <= a_len)
++		return cand;
++	/* Advance to the next 2^32 block */
++	return cand + BIT_ULL(32);
++}
++
++/*
++ * Find the largest v <= hi such that (u32)v is in the circular u32 range
++ * [b_min, b_max].
++ */
++static u64 u64_tighten_umax(u64 lo, u64 hi, u32 b_min, u32 b_max)
++{
++	u32 b_len = b_max - b_min;
++	u64 a_len = hi - lo;
++	u64 cand;
++
++	/* lo32(hi) already in [b_min, b_max]? */
++	if ((u32)((u32)hi - b_min) <= b_len)
++		return hi;
++	/* Set lo32 to b_max and check if it's in the range [lo, hi] */
++	cand = (hi & ~(u64)U32_MAX) | b_max;
++	if (hi - cand <= a_len)
++		return cand;
++	/* Retreat to the previous 2^32 block */
++	return cand - BIT_ULL(32);
++}
++
+ static void deduce_bounds_64_from_32(struct bpf_reg_state *reg)
+ {
+ 	/* Try to tighten 64-bit bounds from 32-bit knowledge, using 32-bit
+@@ -2714,19 +2756,28 @@ static void deduce_bounds_64_from_32(struct bpf_reg_state *reg)
+ 	 * with are well-formed ranges in respective s64 or u64 domain, just
+ 	 * like we do with similar kinds of 32-to-64 or 64-to-32 adjustments.
+ 	 */
+-	__u64 new_umin, new_umax;
+-	__s64 new_smin, new_smax;
+-
+-	/* u32 -> u64 tightening, it's always well-formed */
+-	new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
+-	new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
+-	reg->umin_value = max_t(u64, reg->umin_value, new_umin);
+-	reg->umax_value = min_t(u64, reg->umax_value, new_umax);
+-	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range validity */
+-	new_smin = (reg->smin_value & ~0xffffffffULL) | reg->u32_min_value;
+-	new_smax = (reg->smax_value & ~0xffffffffULL) | reg->u32_max_value;
+-	reg->smin_value = max_t(s64, reg->smin_value, new_smin);
+-	reg->smax_value = min_t(s64, reg->smax_value, new_smax);
++	u32 b_min, b_max;
++
++	/*
++	 * If [u32_min_value, u32_max_value] is conservative, i.e. [0, U32_MAX],
++	 * use [s32_min_value, s32_max_value] for tightening.
++	 */
++	if (reg->u32_min_value == 0 && reg->u32_max_value == U32_MAX) {
++		b_min = (u32)reg->s32_min_value;
++		b_max = (u32)reg->s32_max_value;
++	} else {
++		b_min = reg->u32_min_value;
++		b_max = reg->u32_max_value;
++	}
++
++	reg->umin_value = u64_tighten_umin(reg->umin_value, reg->umax_value, b_min, b_max);
++	reg->umax_value = u64_tighten_umax(reg->umin_value, reg->umax_value, b_min, b_max);
++
++	/* u32 -> s64 tightening uses the same circular algorithm. */
++	reg->smin_value = (s64)u64_tighten_umin((u64)reg->smin_value, (u64)reg->smax_value,
++						reg->u32_min_value, reg->u32_max_value);
++	reg->smax_value = (s64)u64_tighten_umax((u64)reg->smin_value, (u64)reg->smax_value,
++						reg->u32_min_value, reg->u32_max_value);
+ 
+ 	/* Here we would like to handle a special case after sign extending load,
+ 	 * when upper bits for a 64-bit range are all 1s or all 0s.
+-- 
+2.53.0
 
-Regardless of which approach we take for these legacy implementations, I don't
-believe any of them invalidate the current patchset from a design standpoint.
-
-Since these legacy protocols represent less than 1% of the cases, I'd prefer to
-optimize for the common path and handle the exceptional cases as exceptions.
