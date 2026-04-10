@@ -1,143 +1,111 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED52A2E282B;
-	Fri, 10 Apr 2026 08:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FAA3AB286
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 08:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775809550; cv=none; b=gSEF4vvekkgppvfeawiu5+gHQF8mlxfeQ3NyvK15V7pJj3U93nqOa9MzOb7V4HTRjO8qRNYvF2MwE/FXeKlhDXHJGEUkbE/r4qGfbjJVEB/TTrXgc0JnaNrHTsCk5cy3f2g36/WaqSc/OtfLsI2xfnGhhqlJ6Q5FZHBOIUNIvKk=
+	t=1775809716; cv=none; b=NUHNEHOaWw54To/l2c18gXSTHA0YU98GKNz5WsqMIZpfvZ7SH40YEk+3IrNP4uKNbj1K9mnwvptddiFGztKK1/OZsIcmJ6eQaBRcj8g8r3eiqUV7CbSu7QHq3Gw3qoUmTKiq8kYV9G+9jHpNfKd3G+nJ7YQxbOYmph7goIqUSx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775809550; c=relaxed/simple;
-	bh=CW8N8p0JKHV9D9/nrKZqEPaGSLfd/n/BDZsHmKuDqmE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tk9f0u1zh5D2cx6oPhoPatcu61zReLJVA6SAjPSlL786GN6WSRkxcEMMzqF6JcmpRDef+NoT7QGrSXqCGiSCQL3Ur3q4zOqpMlBROfaZ6IYHRl440djES/mdn6sf7PvmDvweuyqzlhu2MgVOKNsleSD1lGkQ3kGOrTakFUzZ0/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IUHaWmvF; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775809716; c=relaxed/simple;
+	bh=gE4lFkwrEKvSeJ6XQ+Z6uIsAJEH9uGA9CYINV6kvaSM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZapQqZXU1T57JY9uxfcQZcn8daLmkHsMHS5ZNCh1hcUHKVH8TPfvRRfxIE1YPMQHe90DS8htDWyUAVDzusPK6Nl6MUoxjyk3ziGqdb2Xvz8rj5PruJK0T7tCA9l2pAIyHcWBnD2uoTYEzfHbWRxZjAGU6z9WbJCWkqlXsJfL30M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dfsXVOLa; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IUHaWmvF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=nK
-	hts2FvWXRxxGntylpOhvJ0txu8iZSqcSWRzUoElMw=; b=IUHaWmvFKwTWwmKcPd
-	Wxc5qPxAOraCKTvnaDkBXTQsBF76H/zvsk0WQqpJQncX9zvpEl+uiJKxo+VSOMxn
-	nGAw5WHcxp4XQLKo//DmffiWQ84fPKDePyaKb4rzMwOdeCFcqwzOqcT63CAzmw7e
-	oqoPkRqT23B/EDoQRdQxzux64=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wA36MnQs9hpLu5dEQ--.57056S2;
-	Fri, 10 Apr 2026 16:24:49 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: bot+bpf-ci@kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	clm@meta.com,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	jiayuan.chen@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@kernel.org,
-	martin.lau@linux.dev,
-	mattbobrowski@google.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yangfeng59949@163.com,
-	yonghong.song@linux.dev
-Subject: [PATCH v2 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
-Date: Fri, 10 Apr 2026 16:24:47 +0800
-Message-Id: <20260410082447.205139-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <60e1c3bebe4eefa53d73bdfa1f016af7abedb294634614119aab1380b9d46eaa@mail.kernel.org>
-References: <60e1c3bebe4eefa53d73bdfa1f016af7abedb294634614119aab1380b9d46eaa@mail.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dfsXVOLa"
+Message-ID: <28ead0fc-7bd1-462e-a31a-6464d15618cc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775809702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pZxl2XX58g/sb6s0KAApLQ4EPBEmfJaBHw9XfaoDL0c=;
+	b=dfsXVOLagKg6a1W2bBco/2RG7fZodGrVYKXZw2DYC/zE1WiD43QMQq/C0Ls3Ckvba6Pb5V
+	8U91HH+bzEgryAgB17sjZ+0bMvqw+1JmJs78s/5ZN2PIO5ypKrowuVnhyW+WVkHr8PcUyA
+	4RQ9qE685u4bXgS0XyqaeJRRQQccH9I=
+Date: Fri, 10 Apr 2026 16:27:35 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wA36MnQs9hpLu5dEQ--.57056S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCFyDCF4DGw1fAry8Kw4DJwb_yoW5Wr4kpr
-	W5tFWjkr1rAFyUGryIyF48uF4Sk3yFgrW3CFs8AryxZFn5Jr18Wr15tryj9343Wr1UXr92
-	q340vrZIvwn8Z37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi0JP_UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8hGxKmnYs9E1oQAA3-
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in
+ kernel_clone() via BPF fmod_ret on security_task_alloc
+Content-Language: en-US
+To: Feng Yang <yangfeng59949@163.com>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, jiayuan.chen@linux.dev,
+ john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@linux.dev, mattbobrowski@google.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev
+References: <20260410061037.149532-2-yangfeng59949@163.com>
+ <20260410080335.196379-1-yangfeng59949@163.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260410080335.196379-1-yangfeng59949@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 10 Apr 2026 07:00:25, bot+bpf-ci@kernel.org wrote:
+On 10/4/26 16:03, Feng Yang wrote:
+> [...]
+>> +static int modify_return_get_retval_range(const struct bpf_prog *prog,
+>> +					  struct bpf_retval_range *retval_range)
 
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 9c1135d373e2..37975e9a291c 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> 
-> [ ... ]
-> 
-> > +/* hooks return 0 or 1 */
-> > +BTF_SET_START(bool_security_hooks)
-> > +BTF_ID(func, security_xfrm_state_pol_flow_match)
-> > +BTF_ID(func, security_audit_rule_known)
-> > +BTF_ID(func, security_inode_xattr_skipcap)
-> > +BTF_SET_END(bool_security_hooks)
-> 
-> There are two issues with this BTF set.
-> 
-> First, security_inode_xattr_skipcap does not exist as a kernel function.
-> The LSM hook inode_xattr_skipcap is only invoked via call_int_hook()
-> inside security_inode_setxattr() and security_inode_removexattr().
-> There is no standalone security_inode_xattr_skipcap() wrapper. The
-> equivalent entry in bool_lsm_hooks in kernel/bpf/bpf_lsm.c correctly
-> references bpf_lsm_inode_xattr_skipcap instead.
-> 
+How about 'range' instead of 'retval_range' like its caller?
 
-Yes, and in fact, the return values of `security_inode_removexattr` and `security_inode_setxattr` 
-can be those of `inode_removexattr` and `inode_setxattr` respectively, so the 0-1 restriction is not necessary here.
+>> +{
+>> +	unsigned long addr = (unsigned long)prog->aux->dst_trampoline->func.addr;
+>> +
+>> +	if (within_error_injection_list(addr)) {
+>> +		switch (get_injectable_error_type(addr)) {
+>> +		case EI_ETYPE_NULL:
+>> +			retval_range->minval = 0;
+>> +			retval_range->maxval = 0;
+>> +			break;
+>> +		case EI_ETYPE_ERRNO:
+>> +			retval_range->minval = -MAX_ERRNO;
+>> +			retval_range->maxval = -1;
+>> +			break;
+> 
+> This refers to the documentation in fault-injection.rst:
+> 
+> Each error injectable functions will have the error type specified by the
+> ALLOW_ERROR_INJECTION() macro. You have to choose it carefully if you add
+> a new error injectable function. If the wrong error type is chosen, the
+> kernel may crash because it may not be able to handle the error.
+> There are 4 types of errors defined in include/asm-generic/error-injection.h
+> 
+> EI_ETYPE_NULL
+>   This function will return `NULL` if it fails. e.g. return an allocated
+>   object address.
+> 
+> EI_ETYPE_ERRNO
+>   This function will return an `-errno` error code if it fails. e.g. return
+>   -EINVAL if the input is wrong. This will include the functions which will
+>   return an address which encodes `-errno` by ERR_PTR() macro.
+> 
+> EI_ETYPE_ERRNO_NULL
+>   This function will return an `-errno` or `NULL` if it fails. If the caller
+>   of this function checks the return value with IS_ERR_OR_NULL() macro, this
+>   type will be appropriate.
+> 
+> EI_ETYPE_TRUE
+>   This function will return `true` (non-zero positive value) if it fails.
+> 
+> Restrict EI_ETYPE_ERRNO to only return error codes.
+> However, it was noticed that the self-test bpf_testmod_test_read uses 
+> ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO); and returns 0, which causes a failure.
+> So should returning 0 be considered valid for the EI_ETYPE_ERRNO type, or should the self-test be modified instead?
+> 
+I think it would be better to add such explanation in code comment.
 
-> Second, the v1 of this patch had #ifdef guards matching those in
-> bool_lsm_hooks:
-> 
->     #ifdef CONFIG_SECURITY_NETWORK_XFRM
->     BTF_ID(func, security_xfrm_state_pol_flow_match)
->     #endif
->     #ifdef CONFIG_AUDIT
->     BTF_ID(func, security_audit_rule_known)
->     #endif
-> 
-> These guards were dropped in v2. security_xfrm_state_pol_flow_match
-> is defined under CONFIG_SECURITY_NETWORK_XFRM in security/security.c,
-> and security_audit_rule_known is defined under CONFIG_AUDIT. Without
-> the guards, BTF_IDs will be unresolvable when those configs are
-> disabled.
-
-I saw there was a default return prototype even without the corresponding config,
-and assumed that hooking would still work without it, so I removed the config guards.
-However, I didn't notice that these are inline functions and cannot be hooked.
-I will revert this change in the next version.
-
-> > +
-> > +/* Similar to bpf_lsm_get_retval_range,
-> > + * ensure that the return values of fmod_ret are valid.
-> > + */
-> 
-> This isn't a bug, but the BPF subsystem uses the kernel multi-line
-> comment style where the opening /* goes on its own line:
-> 
->     /*
->      * Similar to bpf_lsm_get_retval_range,
->      * ensure that the return values of fmod_ret are valid.
->      */
-> 
-> [ ... ]
-> 
-> This commit appears to be a major bug fix addressing a kernel NULL
-> pointer dereference but is missing a Fixes: tag. The bug was
-> introduced when fmod_ret was first allowed on security_* functions
-> without return value validation:
-> 
->     Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
-> 
-Thanks.
+Thanks,
+Leon
 
