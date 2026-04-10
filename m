@@ -1,115 +1,142 @@
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E4F2FE042;
-	Fri, 10 Apr 2026 07:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE91635A93B
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 07:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775806188; cv=none; b=dvj/1AaBfrvu99NQMATMUMBGaEMvGxItDZy4BuqoQBuhjhofnRse+RtiKVWeQaqydfD5oGqbVD4SK2fsBeTiMoO5A08ddbEQy845JwCjQMM1ITM+BekhZJU9zhBkEHjeHyjLFQKLHYjnomEVOhcHlO+TKpKwxxOun+zRCP7QdSM=
+	t=1775806437; cv=none; b=gWijEFdu0Xl+BWp0OuCs05gmiKVIvftiwBjXqh5v8vOFAQkEv+tD5nb8CAT8l4cHSPx9BqEbe96BNO9wBuQa2APS8U7g6NrVUYa+HRgdfuBzpxEJT/fEwWU96qicE9BjGToI9dPTIBUYoHRIOJ2O3oWQWPrxvMF1hnIcxB0k8x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775806188; c=relaxed/simple;
-	bh=90quZfFp/zNbAfQjmjjkE6kJ1aAxPV/sS/yGrJcPP/I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=glOr46KkARCli6m7ZrMSPYF8b/eEp8z8+K0Bmcq8T54droD18zdLXl1PRh9Jfn+c5SHO4BnVSlvhn9ruWUhckzZ2bop3Yrq8X2rRlNjogwPMmLh8Fu7mGMCTAsyy0llgY1s1MC1tfqfoILbUEBCDF9AsGrChZlFNbDbgFnY/J+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=F66okIR6; arc=none smtp.client-ip=115.124.30.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1775806437; c=relaxed/simple;
+	bh=28Vg1GMV4r+i+vIBKXJxixIg3Vo2QeNnzHXDUGj0Jxw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oWJAtkhiLQgLg9ylvZR+jrjer08ZRRKG3vQ6FnsxKU6p0FesK9fFQiLZYGCyqLo+6G3IZqSKRiaFw7J3H3LenUpZYnmkE4k9l5i7QCrxADm9w2mD2K2NYKQKn0aYoZewiAjsTKJxoMwbkwYRc67dEpp1kYVUeG55P4kjbqvbQvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2hJoxTm; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="F66okIR6"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1775806181; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=ZiYDJH6G5nEZPKa3wnpYh0WEnqoDw7vS63MMN4mBIRQ=;
-	b=F66okIR6zit3L6hacXggTwY1zdderGkDs8Sd3IF12yXb8QycUGcEzMjK0RbsloPI3gc9qFX/7OfV+c92iIkIiaXS/ZYmVb8UBVZSjdXSEqljaIDvkWIUPvLMdTqUM2AHRpv0xYzeTyAAj985edT8hnY3TRc4kDqgr88ghbnHHtA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0X0kURBV_1775806179;
-Received: from 30.221.132.105(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0X0kURBV_1775806179 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 10 Apr 2026 15:29:40 +0800
-Message-ID: <6bfe805e-be0d-4bd5-ac45-1b58fc55839f@linux.alibaba.com>
-Date: Fri, 10 Apr 2026 15:29:39 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2hJoxTm"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82418b0178cso912020b3a.1
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 00:33:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775806436; x=1776411236; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qRS9Nnu+V9tZL7QDrIq6tWswijIHQUZ2fyNkuG3AePY=;
+        b=g2hJoxTm7d5pBhbOXQS7vatn0f0ODokjIMvFDcP8jW2+zBI3hJfFgMW2Dz+es76FPT
+         fraXJH7hXZaaV8ikQrw3q0PSyOPHNL/+9lGSf67o/zkDY4Pg/ijupxwqi20UQ6bSSI1J
+         LT5FUfkIh2KqXeY05xslSQWmzPpzImp09FJZ2TSNwScIs7v2Vm96J9lme+Qw3IGJ4J9b
+         P0Suzi9XiND8bmXCdvlp5Hh9Tw2jOLTqK5EvoYo39fPxr93eytWCFydXpu73OIBu2OHx
+         Z1L8VSvgE0t9YcUZ571x7pk+CdksaN89X5wdjS4iJ6IplCbLH6nP4xn/jSBMVNgmxzu7
+         pzpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775806436; x=1776411236;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qRS9Nnu+V9tZL7QDrIq6tWswijIHQUZ2fyNkuG3AePY=;
+        b=lc0mX6HqZqId9mFHWNEfuQHg42L5s8jlkjV5O9aLf3DEGfAJ/pImbO3JARnA5oZ/8x
+         tiL3BYIhsuGjLOIjxD1ciDpHMQayx0AxShLLl7W7nH0NJNabPtALge31SH+9LaeYhp59
+         4mdhZAb/ynZScp24qWYRNHOvjm9kYulGpet31+VnD6qi7r4nweAG1d/bay4zoy81b0VT
+         7MXVnswa6VXA4Zn+4yOVXHxocw6X2OBps6Rphjz5V1kQ7CY/LZNxNR/ngK5OCgBj32qw
+         e7PrPsFbNp18uuxtK6UU241+Jwl20VziWY1bZskeVCPi9m3hAgeSNfss3lhb9lxjnOWf
+         u3nw==
+X-Gm-Message-State: AOJu0Yw8w1tpGMRPHlXs893cFJHtqTvfmIao+zXnjNw5i3vG4acJc5MR
+	SOMVYOK2JEEPu0cWAd7f+gs1UWgY92LtKBVqubhgSr5md1Ieax/vJSTw
+X-Gm-Gg: AeBDievqAA7AR6dhpqPfZ5NZczY9FXO5QrQrns322kuYr3OsLYjhRYVYRl+ceDM9dkX
+	9f6pR4RLMIaDC2Z/hpMk+HKEZgD7xLsifcFuS18DYTARhWAaRP1ZT4BGpLpV2tm+WHauTWFQzGN
+	FFI0liPGBt/zc6sdpcl983UjszVqvPgHfif3zzZYcbDC0icEhOJfSXPAZpc2KfU+1K81vaZ5+tX
+	bkxR7Z0o1OO0BzFmM8DUnlG4WzMLeajvpj31sDGpYqgqMnuL7cE9NLh4qAU87PzHOl1KFAUVe9R
+	I33zKLW+d0swX0CcNqW/Y1OmlKH0zR/tzbXu0baXLyt1GmSiyywZe6T3gfxBZQNjNhtvJ2x4srS
+	XhQ3aMiYZhlwjm3xA0hZzaDuXZ86WuEQ7rimQAOdS1xeN7Jo1Wa1AL61jWJD9m7oJJKHM9LQWDn
+	z6eVnadCqNXWlJr/AfAtpMnQcae7SsjskbFbyjG9xh7A==
+X-Received: by 2002:a05:6a00:429b:b0:829:7553:afc5 with SMTP id d2e1a72fcca58-82f0c13210cmr2263369b3a.4.1775806435999;
+        Fri, 10 Apr 2026 00:33:55 -0700 (PDT)
+Received: from computer ([2a09:bac5:40b2:277d::3ef:37])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c30ee32sm1908846b3a.7.2026.04.10.00.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2026 00:33:55 -0700 (PDT)
+Date: Fri, 10 Apr 2026 13:03:43 +0530
+From: Varun R Mallya <varunrmallya@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, jolsa@kernel.org, leon.hwang@linux.dev,
+	andrii@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
+	eddyz87@gmail.com, martin.lau@linux.dev, daniel@iogearbox.net,
+	linux-kernel@vger.kernel.org, memxor@gmail.com, song@kernel.org,
+	menglong8.dong@gmail.com, martin.lau@kernel.org,
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [RFC PATCH bpf-next v3 2/3] libbpf: Add FEAT_KPROBE_MULTI_LINK
+ feature probe.
+Message-ID: <adin1waaRhIJZWbi@computer>
+References: <20260403124412.37449-3-varunrmallya@gmail.com>
+ <3b7a777be44a7aaea75f1dc3084b3adfb32357c4bedde08d0666f6f9f3d65ba4@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>,
- "Darrick J. Wong" <djwong@kernel.org>, Amir Goldstein <amir73il@gmail.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260327060518.GP6202@frogsfrogsfrogs>
- <20260407-unmengen-wahltag-474557ec0c58@brauner>
- <adUalnAyY9mm1LUr@infradead.org>
- <20260409-vorsichtig-umstand-d417555377e4@brauner>
- <ade2nskzkdcsvF55@infradead.org>
- <d889ed2b-ca34-4e95-ae5b-1d66636b515d@linux.alibaba.com>
- <adfPlQrImtuyhMIO@infradead.org>
- <7a605318-9f09-436f-806e-d4a3bd31b97d@linux.alibaba.com>
- <adiVdIhcgfiIoXja@infradead.org>
- <b3dfc06b-9f9b-4337-be96-a277061517d0@linux.alibaba.com>
- <adihXuFuuS5uoJ31@infradead.org>
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <adihXuFuuS5uoJ31@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b7a777be44a7aaea75f1dc3084b3adfb32357c4bedde08d0666f6f9f3d65ba4@mail.kernel.org>
 
-
-
-On 2026/4/10 15:06, Christoph Hellwig wrote:
-> On Fri, Apr 10, 2026 at 02:46:00PM +0800, Gao Xiang wrote:
->>> It needs to be applied in-memory for every changed, and persisted to
->>> disk on every fsync or equivalent operation.
->>
->> Yes, yet it doesn't change my evaluation: and you need
->> to consider background writebacks too (since writeback
->> will update data and then impact the whole hash tree).
->>
->> Currently data writeback can be applied for each block
->> independently, but if you consider maintaining a hash
->> tree (rather than simple checksums), I guess you have
->> to keep strict atomicity between data writeback,
->> metadata and hash-tree writeback, otherwise the hashes
->> and partial writeback data will be mismatched.
+On Fri, Apr 03, 2026 at 01:22:37PM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> > index 4f19a0d79b0c..01ded8a1e3c4 100644
+> > --- a/tools/lib/bpf/features.c
+> > +++ b/tools/lib/bpf/features.c
+> > @@ -424,6 +424,41 @@ static int probe_uprobe_multi_link(int token_fd)
+> >  	return link_fd < 0 && err == -EINVAL;
+> >  }
+> >
+> > +static int probe_kprobe_multi_link(int token_fd)
+> > +{
 > 
-> You write the leaf checksum with each block.  The rest of the chain
-> leading up to the root is kept in metadata tied to the inode and needs
-> to be written atomically with the transaction commit that updates the
-> on-disk metadata to point to the newly written block.
+> [ ... ]
 > 
->> Yes, the OOB approach for leaf hashes will help to
->> reduce write amplification, but my current observation
->> is that it won't have any help to read amplification,
->> especially for small random read; overall it depends
->> on the target workload.
+> > +	/* attaching to a valid symbol should succeed */
 > 
-> For HDD is roughly halves the number of seeks for random reads, and
-> at least significantly reduces it significantly but quite a bit
-> less.  For SSD it reduces the IOPS in a similar way, but for that
+> The operation is designed to fail with E2BIG (the count is intentionally
+> set above MAX_KPROBE_MULTI_CNT). Should this comment say something like
+> "use a stable, always-present symbol" instead? As written, it reads like
+> the attach is expected to succeed, which contradicts the comment two
+> lines below about making it fail.
 
-Yes, seeks can be reduced and if all related leaf block
-hashes can be loaded in a single request (even some main
-data blocks may not needed) it will help more; in
-practice, a POC forming out to measure the numbers between
-hashing in individual blocks or extended area may help to
-get more detailed ideas.
+Yeah, I should be clarifying that. This is a nit though.
 
-If it's useful, I think dm-verity can work out in this way
-too as a bogus as long as the device supports it (and
-converting between these two metadata formats should be
-trivial.)
+> > +	link_opts.kprobe_multi.syms = &sym;
+> > +	/* MAX_KPROBE_MULTI_CNT is defined as (1U << 20) in kernel/trace/bpf_trace.c,
+> > +	 * so we create one more than the allowed limit to make it fail with E2BIG.
+> > +	 */
+> > +	link_opts.kprobe_multi.cnt = (1U << 20) + 1;
+> > +	link_fd = bpf_link_create(prog_fd, -1, BPF_TRACE_KPROBE_MULTI, &link_opts);
+> > +	err = -errno;
+> > +	if (link_fd >= 0)
+> > +		close(link_fd);
+> > +	close(prog_fd);
+> > +	/* Fails with E2BIG on kernels where kprobe_multi is supported */
+> > +	return link_fd <= 0 && err == -E2BIG;
+>                     ^^^^
+> 
+> Should this be "link_fd < 0" rather than "link_fd <= 0"?  The
+> reference function probe_uprobe_multi_link() just above uses
+> "link_fd < 0 && err == -EINVAL" for the same pattern.  fd 0 is
+> a valid file descriptor, so "<= 0" treats a successful fd 0 as
+> a failure.  In practice bpf_link_create() goes through
+> ensure_good_fd() which dup's fds below 3, so fd 0 cannot be
+> returned, but the check is still inconsistent with the
+> existing code pattern.
 
-> you need to max out the IOPS, which for most workloads you won't
-> on anything currently (and probably in the future) using erofs.
+Good catch. I'll fix this in the next version after I get more reviews on this.
 
-The problem is not always maximum IOPS (I also suspect
-there is such real long-term max-IOPS workload too), but
-small random burst I/Os with low latencies is what we
-usually care much for typical use cases.
-
-Thanks,
-Gao Xiang
+> > +}
+> 
+> [ ... ]
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/23947048141
 
