@@ -1,48 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564DA29BDBB;
-	Fri, 10 Apr 2026 01:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3ED28003A;
+	Fri, 10 Apr 2026 01:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775783992; cv=none; b=VlNB6Xve4q2PfMnJip3pEoAu8+1F2qwnmQpvR3a8PW4MuFtG2+piK6kNWtUouGcgp3RQ3nCfpJog3ushApYBrwDApKwASyPeKRhXIXsU8jCrOXPbNjWYA9kStptWy1kGElDoLNPoc8A3/ZgwG8fqhqn8K3XdeI987WHXrBXkFx8=
+	t=1775784912; cv=none; b=MEEklbIOTCL7gs2ubc8BpRzLKNoUfZ0dz4IWdaSyOUHt98WNr906MAlS2EfNUCkWcXahyv1feGVuIF3dE/nEwbX6tFAOC9rT1skfgoMwgoTikffm03R9rzsk52V+nL338izCVrDBhbd2UmrlH1Y+x4/b8S1MOQoURGhGFez+smI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775783992; c=relaxed/simple;
-	bh=gGsYUBEVZo5hL9O/fOakoYwSsS5d8ujkz8bA913vz/o=;
+	s=arc-20240116; t=1775784912; c=relaxed/simple;
+	bh=XJOTva4mMOagP8Rzl2OcqxIKEtJKfglxHGAZ1JQFuas=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JlXRyFgd/bwTidXqNsfe4FKO3RinrkiS4u+bL9dpezeLkduNcbL3L7QG3OzDyFoZPKgPrgHMbefRbS8tIWer7nd1kmSFXlDQnl9OcioHewS5LsUHMbMpP0IWg2uxp0ZLcvTnTbTV3jC1XmeDs2yFg+zwdTbycebdNZpenR1K+H0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EdK01tbF; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=nY3sIhNBSJ8z7KWe9Za67EC0lTxP9ASvrDvRCHQYo0QRDCJ7liZxA/kX2ApCrIHt6BED3swIAw54g2wdkOrBMfY0vzVUcn4qDMhDkphVLUxtRHpVaYM79sKBP3m6R9b5wQXQE9l5fqM4Sn0+ea3TMJ25TW+zq2sBB6q3GaS1+2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OZ2ksg1b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EdK01tbF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28374C4CEF7;
-	Fri, 10 Apr 2026 01:19:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OZ2ksg1b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 998E1C4CEF7;
+	Fri, 10 Apr 2026 01:35:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775783991;
-	bh=gGsYUBEVZo5hL9O/fOakoYwSsS5d8ujkz8bA913vz/o=;
+	s=k20201202; t=1775784912;
+	bh=XJOTva4mMOagP8Rzl2OcqxIKEtJKfglxHGAZ1JQFuas=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EdK01tbFfPp86XRPo/eMsK/uDK4xhM8XN5Fro5qYwi3RjHBxMyP6UwwfsZiT+LaEZ
-	 JRSvRY0cAeyha/rwP5Ecci8hMrtI5EP3wglEys7029PioWgWZTrnp0JIBH6PmsXvsd
-	 ehxuxumwnFyP9lGJgOiBfU8LnOfY4xF2ZfAbjQBUJfnKcv0lxfqnPNu+nZF0QsCCkd
-	 4F5meCw3vK/o9fqz66vXvjcrF03SYuLBBaZUAicxKFjaKR+9vHGulpxGeP4Bp215aO
-	 nZcFuaSrNgpDBUAvuAGOrTs2w7k9STTW5KDCDXJna5L4y7zTVo889+im+3y3gUDNL4
-	 0vU1l8xcU5SHA==
-Date: Thu, 9 Apr 2026 18:19:50 -0700
+	b=OZ2ksg1b2Zyer7P05w8qvm0ZGKDRQ14IlXYAxvwA8lPtfQVCYVbTRlNY8Kab9gql1
+	 hyzNNhFl1lYWj7E428NWb1sfQTzKrMQwRJo5LyKWBMfBm/wIaRi5GD6pWYoSVYYlt9
+	 9QhGQ1okWNju/6hgGg6KOWOnsefSPoz3BRPQPxxJ6ezvYPaYXHfCGkhEfMeP0owLO0
+	 BmLsJ4+T8O8C5sZc7GF7Sc0+RITaHVjDQTWACsjupZtjA8DKCEw/BybijwMmmxwon0
+	 esIL3orMYB8sorl2PgmtaUBXjXonsm0bP2eYncC1RLnS9fUxnDEvb3aoMpqksVUtrP
+	 Q7sz9zWKzVqbQ==
+Date: Thu, 9 Apr 2026 18:35:09 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: David Wei <dw@davidwei.uk>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, davem@davemloft.net, razor@blackwall.org,
- pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
- john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
- maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, toke@redhat.com,
- yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-Subject: Re: [PATCH net-next v11 14/14] selftests/net: Add queue leasing
- tests with netkit
-Message-ID: <20260409181950.7e099b6c@kernel.org>
-In-Reply-To: <244b745a-3c95-48c3-b6c5-11ed3eacdf46@davidwei.uk>
-References: <20260402231031.447597-1-daniel@iogearbox.net>
-	<20260402231031.447597-15-daniel@iogearbox.net>
-	<20260408162238.16709090@kernel.org>
-	<244b745a-3c95-48c3-b6c5-11ed3eacdf46@davidwei.uk>
+To: Dipayaan Roy <dipayanroy@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+ decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
+ longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
+ shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
+ ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
+ linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ stephen@networkplumber.org, jacob.e.keller@intel.com, leitao@debian.org,
+ kees@kernel.org, john.fastabend@gmail.com, hawk@kernel.org,
+ bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org, sdf@fomichev.me,
+ dipayanroy@microsoft.com
+Subject: Re: [PATCH net-next v6 0/2] net: mana: add ethtool private flag for
+ full-page RX buffers
+Message-ID: <20260409183509.0b24dea6@kernel.org>
+In-Reply-To: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
+References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,15 +55,16 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 9 Apr 2026 08:26:30 -0700 David Wei wrote:
-> > ksft_run() can't be called multiple times.
-> > 
-> > The first run looks like it's purely testing netdevsim. So that should
-> > move to selftests/net. The rest which tests HW should stay here.
-> > Please also move all the setup inside the test cases.  
-> 
-> Sorry, didn't know about multiple ksft_run(). I'll prep the follow up
-> separately so we can land it soon after 7.1.
+On Tue,  7 Apr 2026 12:59:17 -0700 Dipayaan Roy wrote:
+> This behavior is observed on a single platform; other platforms
+> perform better with page_pool fragments, indicating this is not a
+> page_pool issue but platform-specific.
 
-I have a patch queued to make multiple ksft_run()s hard-fail.
-So let's not wait until after the merge window if that's what you mean.
+Well, someone has to run some experiments and confirm other ARM
+platforms are not impacted, with data. I was hoping to do it myself
+but doesn't look like that will happen in time for the merge window :(
+
+> Changes in v6:
+>  - Added missed maintainers.
+
+STOP REPOSTING PATCHES FOR NO REASON.
