@@ -1,154 +1,125 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7783D29E0FD;
-	Fri, 10 Apr 2026 15:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2129635DD1C
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 16:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775835740; cv=none; b=Kz/JbSf3Uvm+bWGB6FRdq9xT8DCtrv/xDucOPCiWd8UqtM+80o/aHeQxLcSLo3mXVOeZgyWzMvzW/8sTVZU8fHTMvjPpjNa9SFUbifnMGANEEqGWbFxhs+pshrnVxx3Ziae3gbuREITVWl5StQDizJqTDD/2Xul5JfchO9kyglU=
+	t=1775837135; cv=none; b=d85TsLdI5WqPg6jfQGgN4DCb8RfmvUJ+MEmBNwx1mk96wMcWL2rNBIU/IWAt3IDA9CJwrHCvzAEsaw+6S1+WHswj1QcJWO+OtNTsi/TxzKx3Z3PrkJwbAPkXfdvBTGi72J83m5sWfuzS4VleV4tsWDFvi1pvuXn2s9Z5JXAxLZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775835740; c=relaxed/simple;
-	bh=VuY9d8ya7ZrkRA3+pPycZwzLoPi050/HBpC+KjlPqTg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q98TqSlQvKhiiC6gasRWQXnHmk+WLeT1kEsAOLCgaqgzzMbhsy7NgkT8DegXdFywAP9+P2fdbsFVL1y9QSF4qZ8IiAwHCFccWu0G/V/i+JkOmndLANZ8fcmeI80zXFlqec7a7dOkLMJuCUdNGDSLsYxpRZ0i2KkQl/3NPMVKjHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LI1mzWP+; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1775837135; c=relaxed/simple;
+	bh=i6bEd552PhBO/1Xeb3RQMWVne64NiEeYfAApdFhY0jY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ajfRnKW8KHUFi+rOKd5on9T2starJmwOvUDUrGjRQ6JQtxrBpJKdXvqgUj77GwnPo1PoeRjcqma7IQwODhLKhyXzWP+Bw/IHBPC5SM28sQpzuROBnuRR4yP+gT1tYfbIg95/B6xxKDZXuUb6AWOXb4TLBq8p0YzqdkysNph2uNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HT8rgPha; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LI1mzWP+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=stCxWmUrNp14+9hxFJqDr/4fYw51ho1P6q+Qw6AaXnE=; b=LI1mzWP+o8s7lU/ie+it1x4JBI
-	b2IhfwevYYFMRrmZCxdNcvuFfJX4xJLrbz9lYw8H/KBFCbK7ZOGul/ocX6Ks+i8bdLvTpwAqNA/pM
-	Kps+wq/OiO5xrC23HXcYQFti3DGPA96HyESSHzw+StOELt0IOl+d4UV8Vx1VgBtjR2ABBTcAHf15r
-	Q97b7rreNKIGXwr/3YJA1qFTDSYscBsQDYFWtgc5NZVH6XUPr9t07wo/gvGe4HN/D7ivKgm6TdkVR
-	RPEtEI3AtmkCu5Wyq56c8vkVo1RGrJyFSEBl/h/j71VdioxWilHpGveSS/6OpEIDv47ukEbvo32RH
-	CXKNuEMA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wBDzp-000BpZ-0c;
-	Fri, 10 Apr 2026 17:42:13 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wBDzo-000Eua-0e;
-	Fri, 10 Apr 2026 17:42:11 +0200
-Message-ID: <917b37eb-af81-41fc-bc60-ce37642f4bd9@iogearbox.net>
-Date: Fri, 10 Apr 2026 17:42:10 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HT8rgPha"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43cfb723793so1540512f8f.2
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 09:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775837130; x=1776441930; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=krK2n62Fq+Z6Io+RFNDqG7AgBW6fbH9EutpWEaO54oU=;
+        b=HT8rgPhafBlNNDaqdb78lnZpSZOI6nVs6Vj7c92dQa0Cb/z3XbWalGq8DGWX0l1GKL
+         9nvjX/0QcrYroy3jKbFLFMesZzNFPNbqPTOh0vCxT9YbmX9KBWsKfRXmFLnGi+EKOEE7
+         90TtIbck0jdfSulDRHW+iBD+QUhe4fA9zHEPVrgcPHJGtksaIw0d4gxpbyt5tQad3wZk
+         z2BS5Z6oWUEhgLfeyrGryPU+mm9rsjnpelcuw3pJNSg0fcaEdK5SLtv8fNCqLjQ7U83W
+         1/qZlWf9EytAZYCBzI3BBfAEvheT2adA7om/Qks2fRzDyh2lknGhu1VSsDU3dplezjQi
+         ZSUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775837130; x=1776441930;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=krK2n62Fq+Z6Io+RFNDqG7AgBW6fbH9EutpWEaO54oU=;
+        b=aJ07U6ZTxzzUwnTM3mmGy1kig/dYs7gdeWAMfZHMGKiTb7atVjtSuLWWBpifK/JIE5
+         HwMsdxyhs7p2ADOSCG0SXlTlSoBx8KoFqddA9YHeEpZgngwkuK3F3b9rzsc8J+dzJnjM
+         +VP/6sM+PlIbGSJMCqVSvn9URQWHNIuPP3R2739ISAvT23mYra7hZKOxSvGgsuARZPP4
+         zT5R6PnsptKxfEXkkNCnV2lpFZRKfb6KX4eFJsyfoaCAtsQtT3uS6QgDkhzph7BUgry3
+         KPYb+b3IHkoei6sH2J4z7cWxf0OYEkgJMXdk3UDECzKXSaTGWkkY9yHJYGnhXb1BAM6B
+         t04w==
+X-Forwarded-Encrypted: i=1; AJvYcCW3R5yc100GIpBkumgkyXsswt3Kg02hrT4Q+n2L7+IqI4NjeT/SzyM1VNLlqLZD65yFczo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgPjq7zZR/aTcbwPMs8GZ9hrkzxhIAgg8qrI+RiMA42qpOA4Ow
+	ihqtjQ+7NddnvHcJYejLui6EQXS/duGlFqFM50I8BEOBxlsNPbMNb9Rq
+X-Gm-Gg: AeBDievSmMzE7yHzepiZ3K1lwoqa1Y0m7xTYQiHQD9vu7VR7FhxKzkZmcLVTqQe+rt7
+	JSsIdRAITzI8ZDnkmlyVSxRdPAC3o1pecnLwwEsj/gRFEBy5MOkiSBinK0TT5olO/qe5dsvPhS7
+	o3Helxav4UvgG23TPC7USvfY8RXfclACHOIy1pcqiK4YLjDxnIQ/wspr2d8+3AlEaxPIpcsoy6I
+	cIls6/ABk0cjADBrpcotyP4Ef6BucxW/yiUNBsCAjOOtqtGX92KD4MeNgT6KYWToBxewLKNqJfd
+	uBAYSHZsrm9PvqEHrQs8oSr1a1xUYCPZrVeNAxU+EDYGv5trYzK1xWdmhgMgvxCKQVAPMqOartX
+	Dj4DyVWR0lIzgxilN0qOc8+5xjVu5xiwVZszLkHfOpfYOMZ/ekGbtzjaYWZezqrUshVemXhm7W5
+	qTQxz1GF7k1lIfbQQ=
+X-Received: by 2002:a05:6000:2886:b0:43b:4982:fc73 with SMTP id ffacd0b85a97d-43d642c77cemr5750110f8f.25.1775837130107;
+        Fri, 10 Apr 2026 09:05:30 -0700 (PDT)
+Received: from krava ([2a00:102a:403b:7d88:2732:ff4a:659f:a4ca])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d63e468c5sm8877076f8f.20.2026.04.10.09.05.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2026 09:05:29 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 10 Apr 2026 18:05:27 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org
+Subject: Re: [PATCH v3 bpf-next 0/2] selftests/bpf: Test BTF sanitization
+Message-ID: <adkfx0imgJ2mjtHM@krava>
+References: <20260408165735.843763-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v6 1/2] net, bpf: fix null-ptr-deref in
- xdp_master_redirect() for down master
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org
-Cc: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Jussi Maki <joamaki@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Nikolay Aleksandrov <razor@blackwall.org>
-References: <20260410113726.368111-1-jiayuan.chen@linux.dev>
- <20260410113726.368111-2-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260410113726.368111-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27967/Fri Apr 10 08:24:45 2026)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260408165735.843763-1-alan.maguire@oracle.com>
 
-On 4/10/26 1:37 PM, Jiayuan Chen wrote:
-> syzkaller reported a kernel panic in bond_rr_gen_slave_id() reached via
-> xdp_master_redirect(). Full decoded trace:
+On Wed, Apr 08, 2026 at 05:57:33PM +0100, Alan Maguire wrote:
+> Allow simulation of missing BPF features through provision of
+> a synthetic feature cache set, and use this to simulate case
+> where FEAT_BTF_LAYOUT is missing.  Ensure sanitization leaves us
+> with expected BTF (layout info removed, layout header fields
+> zeroed, strings data adjusted).
 > 
->    https://syzkaller.appspot.com/bug?extid=80e046b8da2820b6ba73
+> Specifying a feature cache with selected missing features will
+> allow testing of other missing feature codepaths, but for now
+> add BTF layout sanitization test only.
 > 
-> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter, a per-CPU
-> counter that bonding only allocates in bond_open() when the mode is
-> round-robin. If the bond device was never brought up, rr_tx_counter
-> stays NULL.
+> Changes since v2 [1]:
 > 
-> The XDP redirect path can still reach that code on a bond that was
-> never opened: bpf_master_redirect_enabled_key is a global static key,
-> so as soon as any bond device has native XDP attached, the
-> XDP_TX -> xdp_master_redirect() interception is enabled for every
-> slave system-wide. The path xdp_master_redirect() ->
-> bond_xdp_get_xmit_slave() -> bond_xdp_xmit_roundrobin_slave_get() ->
-> bond_rr_gen_slave_id() then runs against a bond that has no
-> rr_tx_counter and crashes.
+> - change zfree() to free() since we immediately assign the
+>   feat_cache (Jiri, patch 1)
+> - "goto out" to avoid skeleton leak (Chengkaitao, patch 2)
+> - just use kfree_skb__open() since we do not need to load
+>   skeleton
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+jirka
+
 > 
-> Fix this in the generic xdp_master_redirect() by refusing to call into
-> the master's ->ndo_xdp_get_xmit_slave() when the master device is not
-> up. IFF_UP is only set after ->ndo_open() has successfully returned,
-> so this reliably excludes masters whose XDP state has not been fully
-> initialized. Drop the frame with XDP_ABORTED so the exception is
-> visible via trace_xdp_exception() rather than silently falling through.
-> This is not specific to bonding: any current or future master that
-> defers XDP state allocation to ->ndo_open() is protected.
+> Changes since v1 [2]:
 > 
-> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
-> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
-> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+> - renamed to bpf_object_set_feat_cache() (Andrii, patch 1)
+> - remove __packed, relocate skeleton open/load, fix formatting
+>   issues (Andrii, patch 2)
+> 
+> [1] https://lore.kernel.org/bpf/20260408105324.663280-1-alan.maguire@oracle.com/
+> [2] https://lore.kernel.org/bpf/20260401164302.3844142-1-alan.maguire@oracle.com/
+> 
+> Alan Maguire (2):
+>   libbpf: Allow use of feature cache for non-token cases
+>   selftests/bpf: Add BTF sanitize test covering BTF layout
+> 
+>  tools/lib/bpf/libbpf.c                        | 12 ++-
+>  tools/lib/bpf/libbpf_internal.h               |  3 +-
+>  .../selftests/bpf/prog_tests/btf_sanitize.c   | 97 +++++++++++++++++++
+>  3 files changed, 109 insertions(+), 3 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+> 
+> -- 
+> 2.39.3
+> 
