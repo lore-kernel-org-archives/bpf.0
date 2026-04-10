@@ -1,32 +1,32 @@
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AABC1DC1AB;
-	Fri, 10 Apr 2026 08:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054F932FA18;
+	Fri, 10 Apr 2026 08:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775808266; cv=none; b=GVLn/OD8953872SOoCa3MZ1GJRcz1LuAYlhcFzfBTeXnUkGej75qyocedZxmPFSP0rqSekc4fehEKzChOLDRHno2Rp3mXWQJZ/rCwbeo3aGkv5HpfS32joGF0phyjTHWjnSlEEBGrGh9NwZ2bJSgtqe6OqL34lI9jKwKUGLFGZw=
+	t=1775808511; cv=none; b=GTplemEKphBLFR8mPrk6aKiZ6p+9jQtp5mH3cKQP1pjD/Hq35XUMFfgv2Ku7iG2HEpNf8LJiRtM3B3CgJLvauU+HHiYaiMWwXN4C/WrEgkPeM6UdozqUdPQKg34/r+oimQUr7XAgOIJ7NjEpqw6o8rtKxxDZLHHi4r/jauXPpuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775808266; c=relaxed/simple;
-	bh=jrVu8XWsjxZwQuTVH3EWBOXQhHNrB9oge9KGU/njLPU=;
+	s=arc-20240116; t=1775808511; c=relaxed/simple;
+	bh=h1oXMcs1CK5zwUzytZu0xcqg8SHVijzx15iLz4dANmY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jMdcH4XyzUEOmpq8W5bD6KkoqqLEv3PaL46X+hcKcdyRZo9xCuZ4gN3CoYJhEK0V5huPLXQXM5BQ15KDAOSSmR9w2hHmLTg56XpF6vGq01V1Q68zg+bVUEZLNZR8BLkWe+aJl63tnlt3a9UYtk99xOFS+xXQ5M1GUlSmwyH51fE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=FR0/h576; arc=none smtp.client-ip=220.197.31.4
+	 MIME-Version; b=egMQG7q6513dK55X1fHWnOkoHvHJSUyfc7F1TcQO2KhEEgFXsWQOgT3pGgfn4sptM959tju4keXtmTviUgLYP+XBydSXNUv9Vs8VhAEc+cCgoYkSqMw6dYKL+mz6R3rWYtBdQRNwoYnItjhUU7qw2gyVfkXRSbyjvrz7rdvwQzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TvrZEaD9; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="FR0/h576"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TvrZEaD9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=IE
-	5nBF8P1ysGKQ0zp3fGcSHFrKNPjEwK1R/h//vIGfc=; b=FR0/h576yDNTgBaS8E
-	XursAMBC1vhcMj0tqJXk9OCfI1fjIg+rmgkzYeEhvm7lLiHFjwGTOAds+UdOaHCn
-	AFw5LEslZPb8Aok6v10/K/AveT6ksPZ1PCkkrtOF910mgKRRfgHTVVG9VAj+EF+R
-	kRNbIh11G7Io7/XxLgjk6robY=
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=G2
+	l3ukdpVpShjOhp1L8RvNWAeO8PsphRq0XYpI3vJhs=; b=TvrZEaD9eezB0pZFzU
+	DcVBaVJR9I0/dOOdX2T3+67Zr8V8R+4Q4pWtxbqAMspnkabZG5CYHkeMCBoGm94o
+	XnC43an6r/vHrIRGH5Q+CqzjA/fF/JmcUryPzifdVCer4aaDtJvcm97IhdQwx37T
+	a9B02trkEoIpMOj7rQFNCHwVA=
 Received: from localhost.localdomain (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgD3P8PXrthpRdjWAQ--.103S2;
-	Fri, 10 Apr 2026 16:03:40 +0800 (CST)
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDHLrLbr9hprDa2EA--.59603S2;
+	Fri, 10 Apr 2026 16:07:56 +0800 (CST)
 From: Feng Yang <yangfeng59949@163.com>
-To: yangfeng59949@163.com
+To: leon.hwang@linux.dev
 Cc: andrii@kernel.org,
 	ast@kernel.org,
 	bpf@vger.kernel.org,
@@ -42,13 +42,13 @@ Cc: andrii@kernel.org,
 	mattbobrowski@google.com,
 	memxor@gmail.com,
 	song@kernel.org,
-	yonghong.song@linux.dev
+	yangfeng59949@163.com
 Subject: [PATCH v2 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
-Date: Fri, 10 Apr 2026 16:03:35 +0800
-Message-Id: <20260410080335.196379-1-yangfeng59949@163.com>
+Date: Fri, 10 Apr 2026 16:07:55 +0800
+Message-Id: <20260410080755.197991-1-yangfeng59949@163.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260410061037.149532-2-yangfeng59949@163.com>
-References: <20260410061037.149532-2-yangfeng59949@163.com>
+In-Reply-To: <8fd076d2-af88-4e35-8009-797132511063@linux.dev>
+References: <8fd076d2-af88-4e35-8009-797132511063@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,76 +56,57 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgD3P8PXrthpRdjWAQ--.103S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJrW5tF45JFy3Xr4rAFWDArb_yoW8tF1UpF
-	W7GwnFyr4qvrW29F47XF48XF1Fy39rKrWSgF95W3sFvw4Yv3srJrsrK34UtrWfCrWDJw15
-	Zay2gFn0kFWUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEEdgtUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8hxz62nYrty2FAAA3X
+X-CM-TRANSID:_____wDHLrLbr9hprDa2EA--.59603S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFWftFy3Zry8Xr1UtFWxCrg_yoW8GrW8pr
+	W0g3WqyF48JFy7tr9aq3Z5Gr9ayr18JF12qw15GF9rAFnIvrW3GryrGr1j9a4xWryxCa1I
+	vFW8XFZxAr45AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pi1SodUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RyzLGnYr9zRvQAA3c
 
-[...]
-> +static int modify_return_get_retval_range(const struct bpf_prog *prog,
-> +					  struct bpf_retval_range *retval_range)
-> +{
-> +	unsigned long addr = (unsigned long)prog->aux->dst_trampoline->func.addr;
-> +
-> +	if (within_error_injection_list(addr)) {
-> +		switch (get_injectable_error_type(addr)) {
-> +		case EI_ETYPE_NULL:
-> +			retval_range->minval = 0;
-> +			retval_range->maxval = 0;
-> +			break;
-> +		case EI_ETYPE_ERRNO:
-> +			retval_range->minval = -MAX_ERRNO;
-> +			retval_range->maxval = -1;
-> +			break;
+On Fri, 10 Apr 2026 15:49:15 +0800, Leon Hwang wrote:
+> On 10/4/26 15:40, Feng Yang wrote:
+> > On Fri, 10 Apr 2026 15:21:26 +0800 Leon Hwang wrote:
+> >> On 10/4/26 14:10, Feng Yang wrote:
+> >>> From: Feng Yang <yangfeng@kylinos.cn>
+> >>>
+> >>
+> >> [...]
+> >>
+> >>> +
+> >>> +static int check_attach_sleepable(u32 btf_id, unsigned long addr, const char *func_name)
+> >>> +{
+> >>> +	/* fentry/fexit/fmod_ret progs can be sleepable if they are
+> >>> +	 * attached to ALLOW_ERROR_INJECTION and are not in denylist.
+> >>> +	 */
+> >>> +	if (!check_non_sleepable_error_inject(btf_id) &&
+> >>> +	    within_error_injection_list(addr))
+> >>> +		return 0;
+> >>> +
+> >>> +	return -EINVAL;
+> >>> +}
+> >>> +
+> >>> +static int check_attach_modify_return(unsigned long addr, const char *func_name)
+> >>> +{
+> >>> +	if (within_error_injection_list(addr) ||
+> >>> +	    !strncmp(SECURITY_PREFIX, func_name, sizeof(SECURITY_PREFIX) - 1))
+> >>> +		return 0;
+> >>> +
+> >>> +	return -EINVAL;
+> >>> +}
+> >>
+> >> Why did you move them here? Seems that you didn't use them.
+> > 
+> > Because CONFIG_FUNCTION_ERROR_INJECTION is directly reused here,
+> > and the function has_arch_syscall_prefix is intended to be used.
+> > 
+> 
+> You can declare the function instead. No?
+> 
+> But, the function has_arch_syscall_prefix was not used in your new code?
 
-This refers to the documentation in fault-injection.rst:
+Indeed, I will fix it in the next version. Thank you.
 
-Each error injectable functions will have the error type specified by the
-ALLOW_ERROR_INJECTION() macro. You have to choose it carefully if you add
-a new error injectable function. If the wrong error type is chosen, the
-kernel may crash because it may not be able to handle the error.
-There are 4 types of errors defined in include/asm-generic/error-injection.h
+> Thanks,
+> Leon
 
-EI_ETYPE_NULL
-  This function will return `NULL` if it fails. e.g. return an allocated
-  object address.
-
-EI_ETYPE_ERRNO
-  This function will return an `-errno` error code if it fails. e.g. return
-  -EINVAL if the input is wrong. This will include the functions which will
-  return an address which encodes `-errno` by ERR_PTR() macro.
-
-EI_ETYPE_ERRNO_NULL
-  This function will return an `-errno` or `NULL` if it fails. If the caller
-  of this function checks the return value with IS_ERR_OR_NULL() macro, this
-  type will be appropriate.
-
-EI_ETYPE_TRUE
-  This function will return `true` (non-zero positive value) if it fails.
-
-Restrict EI_ETYPE_ERRNO to only return error codes.
-However, it was noticed that the self-test bpf_testmod_test_read uses 
-ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO); and returns 0, which causes a failure.
-So should returning 0 be considered valid for the EI_ETYPE_ERRNO type, or should the self-test be modified instead?
-
-Thanks.
-
-> +		case EI_ETYPE_ERRNO_NULL:
-> +			retval_range->minval = -MAX_ERRNO;
-> +			retval_range->maxval = 0;
-> +			break;
-> +		case EI_ETYPE_TRUE:
-> +			retval_range->minval = 1;
-> +			retval_range->maxval = 1;
-> +			break;
-> +		}
-> +		retval_range->return_32bit = true;
-> +
-> +		return 0;
-> +	}
-> +
-> +	return -EINVAL;
-> +}
 
