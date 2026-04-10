@@ -1,33 +1,35 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5580039EF12
-	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 11:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B84E39D6E9
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 11:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775821083; cv=none; b=f4GVPwKCGs2+0HMb+rCN/rmoxwTKl4Q/jrkJQIffIteU/batunkvCIqvQpQH3NzqnpfCwwNbzfJn0+XelGDCSRiZ81Xl+a3DWzpMP1itnlC6XpY6uoCP4I/GKHGfOsS0Q1ephGwIwUE2vPLrjBUiu0pZnvrV+3Bw+X9D09glacc=
+	t=1775821094; cv=none; b=GRuEbdOj0TgfJqL0tBFtqOXnsEe/lynNomNmcCfOtNBTI6RHyBeep6H6zLzzHcBqqgQ9Ec/z/jfa3/LQV/ErBUbBB6JSDwv9Uqzx5JGmUhnRNkn9ikP6+7VNvpCRASjw9Y70HZFovFYK29qnJD0cwFXFJHmXFjUU5nk8qhQ5mUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775821083; c=relaxed/simple;
-	bh=1dX4uXwGzRHChAqZIKUJnts7+cVmhDPfr4wixNUYVkk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CN/W/++o8WKFWFMa1u4CRIR9PaqycF2CWmeUuoCfIdeWN6o4Z0XZSIjBP4pCR+xoTWRKUWFZEarigcEjNuhb5FIZK1homha3dDmelBd23AGoiPM9/jcH5FDllehjvwqFX380BIvHThQFilpNWiI80ZhaBCg1veXMlcUz0zB4674=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U+wMO9WA; arc=none smtp.client-ip=95.215.58.176
+	s=arc-20240116; t=1775821094; c=relaxed/simple;
+	bh=AWCGHMr8nQo9XENHPYNO3gNdIfX/Y9wTKaLGJfZGXgs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GhogKwrEEFxS/3uZ+hFl14DNALXKvhS+HXQP7+PtigHB6ZZWcXaadsGUz9n3EatwdaA+7EHfuGL1xhmtwlIN/yB0m2+XmoC06C7kHvNd0qxGz/udXIqciMXHpz7M3A35cZFMQfhbpFHVljpE20kzbjkWCsikKCxJO9INrh3FeMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h3upXIVR; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U+wMO9WA"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h3upXIVR"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775821070;
+	t=1775821091;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KeqZvV+Oy9FQiiKRUD3VowmUdxbmTHkCnn/4hwZRALo=;
-	b=U+wMO9WATDP9BfWiPwhR7iA5Nd5PfmBagdYVXBnjUUg5GTlNgvvs9+8klD9yhrYRFER/Qv
-	mjvMWlD3UrS3t4CNun37TbB3HwUNtfJ+dV6dnknl7ayAxNv/87zDo/BjN8XJipQLYeFC3a
-	TzXfV6JdAz6fbfqxBWEZvyY1sPe8K+Y=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n/513DDDdwX8CA3k/+2+q38x0A9p30a5TG1TXyuVxZA=;
+	b=h3upXIVR0yXYtg37kOcCTUjp7VlaQxt2bPnQAREYQ/L2pxjxqMZ0apYAb+5ebN16FL79WG
+	Myd6CBIGgyX5BnPqQE0AdFuqMlIdlwPnfsrlNLbvHf9n2Y/sTSMqvjs03H9DIk7YchjSj2
+	gR2kUmgAMDT7gp0/Qoo/Vnd37vZDusc=
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	John Fastabend <john.fastabend@gmail.com>,
@@ -51,9 +53,11 @@ Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v6 0/2] net,bpf: fix null-ptr-deref in xdp_master_redirect() for bonding and add selftest
-Date: Fri, 10 Apr 2026 19:37:21 +0800
-Message-ID: <20260410113726.368111-1-jiayuan.chen@linux.dev>
+Subject: [PATCH net v6 2/2] selftests/bpf: add test for xdp_master_redirect with bond not up
+Date: Fri, 10 Apr 2026 19:37:23 +0800
+Message-ID: <20260410113726.368111-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20260410113726.368111-1-jiayuan.chen@linux.dev>
+References: <20260410113726.368111-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,87 +67,154 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-From: Jiayuan Chen <jiayuan.chen@shopee.com>
+Add a selftest that reproduces the null-ptr-deref in
+bond_rr_gen_slave_id() when XDP redirect targets a bond device in
+round-robin mode that was never brought up. The test verifies the fix
+by ensuring no crash occurs.
 
-This series has gone through several rounds of discussion and the
-maintainers hold different views on where the fix should live (in the
-generic xdp_master_redirect() path vs. inside bonding). I respect all
-of the suggestions, but I would like to get the crash fixed first, so
-this version takes the approach of checking whether the master device
-is up in xdp_master_redirect(), as suggested by Daniel Borkmann. If a
-different shape is preferred later it can be done as a follow-up, but
-the null-ptr-deref should not linger.
+Test setup:
+- bond0: active-backup mode, UP, with native XDP (enables
+  bpf_master_redirect_enabled_key globally)
+- bond1: round-robin mode, never UP
+- veth1: slave of bond1, with generic XDP (XDP_TX)
+- BPF_PROG_TEST_RUN with live frames triggers the redirect path
 
-syzkaller reported a kernel panic, full decoded trace here:
-https://syzkaller.appspot.com/bug?extid=80e046b8da2820b6ba73
-
-Problem Description
-
-bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a NULL
-check. rr_tx_counter is a per-CPU counter that bonding only allocates
-in bond_open() when the mode is round-robin. If the bond device was
-never brought up, rr_tx_counter stays NULL.
-
-The XDP redirect path can still reach that code on a bond that was
-never opened: bpf_master_redirect_enabled_key is a global static key,
-so as soon as any bond device has native XDP attached, the
-XDP_TX -> xdp_master_redirect() interception is enabled for every
-slave system-wide. The path xdp_master_redirect() ->
-bond_xdp_get_xmit_slave() -> bond_xdp_xmit_roundrobin_slave_get() ->
-bond_rr_gen_slave_id() then runs against a bond that has no
-rr_tx_counter and crashes.
-
-Solution
-
-Patch 1: Fix this in the generic xdp_master_redirect() by skipping
-master interception when the master device is not running. Returning
-XDP_TX keeps the original XDP_TX behaviour on the receiving slave, and
-avoids calling into any master ->ndo_xdp_get_xmit_slave() on a device
-that has not fully initialized its XDP state. This is not specific to
-bonding: any current or future master that defers XDP state allocation
-to ->ndo_open() is protected.
-Patch 2: Add a selftest that reproduces the above scenario.
-
-Changes since v5:
-https://lore.kernel.org/netdev/20260309030659.xxxxx-1-jiayuan.chen@linux.dev/
-- Moved the fix back into xdp_master_redirect() and use netif_running()
-  on the master device to decide whether to intercept
-  (Suggested by Daniel Borkmann, seconded by Paolo Abeni and Eric Dumazet)
-
-Changes since v4:
-https://lore.kernel.org/netdev/20260304074301.35482-1-jiayuan.chen@linux.dev/
-- Reverted unconditional alloc in bond_init(); instead add a NULL check
-  with unlikely()/READ_ONCE() in bond_rr_gen_slave_id() and WRITE_ONCE()
-  in bond_open(), avoiding memory waste for non-RR modes
-  (Suggested by Nikolay Aleksandrov, patch by Jay Vosburgh)
-
-Changes since v3:
-https://lore.kernel.org/netdev/20260228021918.141002-1-jiayuan.chen@linux.dev/T/#t
-- Added code comment and commit log explaining why rr_tx_counter is
-  allocated unconditionally for all modes (Suggested by Jay Vosburgh)
-
-Changes since v2:
-https://lore.kernel.org/netdev/20260227092254.272603-1-jiayuan.chen@linux.dev/T/#t
-- Moved allocation from bond_create_init() helper into bond_init()
-  (ndo_init), which is the natural single point covering both creation
-  paths and also handles post-creation mode changes to round-robin
-
-Changes since v1:
-https://lore.kernel.org/netdev/20260224112545.37888-1-jiayuan.chen@linux.dev/T/#t
-- Moved the guard for NULL rr_tx_counter from xdp_master_redirect()
-  into the bonding subsystem itself
-  (Suggested by Sebastian Andrzej Siewior <bigeasy@linutronix.de>)
-
-[1] https://syzkaller.appspot.com/bug?extid=80e046b8da2820b6ba73
-
-Jiayuan Chen (2):
-  net, bpf: fix null-ptr-deref in xdp_master_redirect() for down master
-  selftests/bpf: add test for xdp_master_redirect with bond not up
-
- net/core/filter.c                             |   2 +
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
  .../selftests/bpf/prog_tests/xdp_bonding.c    | 101 +++++++++++++++++-
- 2 files changed, 101 insertions(+), 2 deletions(-)
+ 1 file changed, 99 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+index e8ea26464349..0d4ec1e5b401 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+@@ -191,13 +191,18 @@ static int bonding_setup(struct skeletons *skeletons, int mode, int xmit_policy,
+ 	return -1;
+ }
+ 
+-static void bonding_cleanup(struct skeletons *skeletons)
++static void link_cleanup(struct skeletons *skeletons)
+ {
+-	restore_root_netns();
+ 	while (skeletons->nlinks) {
+ 		skeletons->nlinks--;
+ 		bpf_link__destroy(skeletons->links[skeletons->nlinks]);
+ 	}
++}
++
++static void bonding_cleanup(struct skeletons *skeletons)
++{
++	restore_root_netns();
++	link_cleanup(skeletons);
+ 	ASSERT_OK(system("ip link delete bond1"), "delete bond1");
+ 	ASSERT_OK(system("ip link delete veth1_1"), "delete veth1_1");
+ 	ASSERT_OK(system("ip link delete veth1_2"), "delete veth1_2");
+@@ -493,6 +498,95 @@ static void test_xdp_bonding_nested(struct skeletons *skeletons)
+ 	system("ip link del bond_nest2");
+ }
+ 
++/*
++ * Test that XDP redirect via xdp_master_redirect() does not crash when
++ * the bond master device is not up. When bond is in round-robin mode but
++ * never opened, rr_tx_counter is NULL.
++ */
++static void test_xdp_bonding_redirect_no_up(struct skeletons *skeletons)
++{
++	struct nstoken *nstoken = NULL;
++	int xdp_pass_fd, xdp_tx_fd;
++	int veth1_ifindex;
++	int err;
++	char pkt[ETH_HLEN + 1];
++	struct xdp_md ctx_in = {};
++
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++			    .data_in = &pkt,
++			    .data_size_in = sizeof(pkt),
++			    .ctx_in = &ctx_in,
++			    .ctx_size_in = sizeof(ctx_in),
++			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
++			    .repeat = 1,
++			    .batch_size = 1,
++		);
++
++	/* We can't use bonding_setup() because bond will be active */
++	SYS(out, "ip netns add ns_rr_no_up");
++	nstoken = open_netns("ns_rr_no_up");
++	if (!ASSERT_OK_PTR(nstoken, "open ns_rr_no_up"))
++		goto out;
++
++	/* bond0: active-backup, UP with slave veth0.
++	 * Attaching native XDP to bond0 enables bpf_master_redirect_enabled_key
++	 * globally.
++	 */
++	SYS(out, "ip link add bond0 type bond mode active-backup");
++	SYS(out, "ip link add veth0 type veth peer name veth0p");
++	SYS(out, "ip link set veth0 master bond0");
++	SYS(out, "ip link set bond0 up");
++	SYS(out, "ip link set veth0p up");
++
++	/* bond1: round-robin, never UP -> rr_tx_counter stays NULL */
++	SYS(out, "ip link add bond1 type bond mode balance-rr");
++	SYS(out, "ip link add veth1 type veth peer name veth1p");
++	SYS(out, "ip link set veth1 master bond1");
++
++	veth1_ifindex = if_nametoindex("veth1");
++	if (!ASSERT_GT(veth1_ifindex, 0, "veth1_ifindex"))
++		goto out;
++
++	/* Attach native XDP to bond0 -> enables global redirect key */
++	if (xdp_attach(skeletons, skeletons->xdp_tx->progs.xdp_tx, "bond0"))
++		goto out;
++
++	/* Attach generic XDP (XDP_TX) to veth1.
++	 * When packets arrive at veth1 via netif_receive_skb, do_xdp_generic()
++	 * runs this program. XDP_TX + bond slave triggers xdp_master_redirect().
++	 */
++	xdp_tx_fd = bpf_program__fd(skeletons->xdp_tx->progs.xdp_tx);
++	if (!ASSERT_GE(xdp_tx_fd, 0, "xdp_tx prog_fd"))
++		goto out;
++
++	err = bpf_xdp_attach(veth1_ifindex, xdp_tx_fd,
++			     XDP_FLAGS_SKB_MODE, NULL);
++	if (!ASSERT_OK(err, "attach generic XDP to veth1"))
++		goto out;
++
++	/* Run BPF_PROG_TEST_RUN with XDP_PASS live frames on veth1.
++	 * XDP_PASS frames become SKBs with skb->dev = veth1, entering
++	 * netif_receive_skb -> do_xdp_generic -> xdp_master_redirect.
++	 * Without the fix, bond_rr_gen_slave_id() dereferences NULL
++	 * rr_tx_counter and crashes.
++	 */
++	xdp_pass_fd = bpf_program__fd(skeletons->xdp_dummy->progs.xdp_dummy_prog);
++	if (!ASSERT_GE(xdp_pass_fd, 0, "xdp_pass prog_fd"))
++		goto out;
++
++	memset(pkt, 0, sizeof(pkt));
++	ctx_in.data_end = sizeof(pkt);
++	ctx_in.ingress_ifindex = veth1_ifindex;
++
++	err = bpf_prog_test_run_opts(xdp_pass_fd, &opts);
++	ASSERT_OK(err, "xdp_pass test_run should not crash");
++
++out:
++	link_cleanup(skeletons);
++	close_netns(nstoken);
++	SYS_NOFAIL("ip netns del ns_rr_no_up");
++}
++
+ static void test_xdp_bonding_features(struct skeletons *skeletons)
+ {
+ 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
+@@ -738,6 +832,9 @@ void serial_test_xdp_bonding(void)
+ 	if (test__start_subtest("xdp_bonding_redirect_multi"))
+ 		test_xdp_bonding_redirect_multi(&skeletons);
+ 
++	if (test__start_subtest("xdp_bonding_redirect_no_up"))
++		test_xdp_bonding_redirect_no_up(&skeletons);
++
+ out:
+ 	xdp_dummy__destroy(skeletons.xdp_dummy);
+ 	xdp_tx__destroy(skeletons.xdp_tx);
 -- 
 2.43.0
 
