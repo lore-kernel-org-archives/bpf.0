@@ -1,95 +1,85 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35DE2C08C8;
-	Fri, 10 Apr 2026 06:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9EC387591
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 06:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775801732; cv=none; b=XUoX7p6mIAJQFsnGWRLmfaZhjulOtqpDienP59vdtWQtn4ZAt06FPf2kbUMft2eANYxd1PVVjPsvE5elHeevxHULVLpepnHghdSjViycvoc296+3T3QN2tVRCUDZ3CkIoTqY7UUw0hPUhA4R+3BXPVUmtyaoHV/RPRrjO2Q33A4=
+	t=1775803464; cv=none; b=AulbbcMMgB/7AOP3aLxLH1/1vvEjhlLSNAbpaI3i1TgNuSvb6nsAmDS9Mx3QiW8PxvwGt7K7uINsHZ2TJFO3oLyZTOq+GdMvoCzjtku1LCMy0TeFeiPQKOMAGe+pi7OMlCZIjvu3/3huAJCJJOikoQOSz8zTJacece9uNeAYPws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775801732; c=relaxed/simple;
-	bh=KgvnKGcXGXU88l0czntTzYFax2G5Iid/3FAP9jKyAMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qo5XnSk8sjw7QT28RtDfonu6RfBajvk9oPexPqH5KNjqKu61T3M240o2TIbRD4XY9xb5mAEfQ3FS59QL4VRrbSJtZCHoeHLrFQP+rsjvTtO9BbWvhCuA2H4jGFiCWVr3C4gYb0Wn3rhbjlfb2syQp/NkC7JRpd2UjHDaHeNmfJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=zsTIFQla; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zsTIFQla"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=1Kk3EU/XwfJL9hGGHRQptOeSG6TwGLTBxlWVgkU2o2I=; b=zsTIFQlac0OVQ6jQXXHfQCatYd
-	9PiNnMeIZYp3BXrusZ2eqU8Z6tigF6T/XTp2D9y7SD+Nv7iAtTr7glCU+dCJKzZ902X6xj8UxHht9
-	G4OGKGJQ8qEcpG3ujjrcFn676rIC8WuLQl1KtjwYZORsfbZjNtqvyO4TGhSfGBcBzVP2+cXUtLdsR
-	SgORoyZ+xlyyfiHI/6eLaNaBnYn/v2slv4CwJjX7+4lsFozLlMkDGEEi6cNa82Vu/5UknDXGjoH7R
-	hnuEtqX+S3gU0SUdlcsRfOhwKXCoSWWKdoNle3V3wTP3Ck1sGpkNQ/pZ8Wc8+xQBhhoNFgm/i7c7R
-	XcEmSp9A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wB59A-0000000BfVD-43nY;
-	Fri, 10 Apr 2026 06:15:16 +0000
-Date: Thu, 9 Apr 2026 23:15:16 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Christian Brauner <brauner@kernel.org>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
-Message-ID: <adiVdIhcgfiIoXja@infradead.org>
-References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
- <acYVjuDOD7NynO9m@infradead.org>
- <20260327060518.GP6202@frogsfrogsfrogs>
- <20260407-unmengen-wahltag-474557ec0c58@brauner>
- <adUalnAyY9mm1LUr@infradead.org>
- <20260409-vorsichtig-umstand-d417555377e4@brauner>
- <ade2nskzkdcsvF55@infradead.org>
- <d889ed2b-ca34-4e95-ae5b-1d66636b515d@linux.alibaba.com>
- <adfPlQrImtuyhMIO@infradead.org>
- <7a605318-9f09-436f-806e-d4a3bd31b97d@linux.alibaba.com>
+	s=arc-20240116; t=1775803464; c=relaxed/simple;
+	bh=J5DARsOU+MfOWHWOUhZeOQ4qAgS47iijriI8BG0h8KA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NE1rxUlTnLBxfCeinDRnhthamI5pCUICaf7ds/lU0n/AWuf3YzxfUsu5RVBiqm1g2MPLMhXLRyu2TMdOtBdiIXJHAsepwxl0+gQhv4s8YI6Dg0S0aex00CicrVLrr/jTEivEngZE993ASF30Ru1nDGdHnCkDPfTL4XQ4mgxa4WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7d7efc5a904so3546263a34.3
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 23:44:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775803462; x=1776408262;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cFBER3hIUtHWl0Dw3abQ8wvDzEYzUasOugvwdjjP/fQ=;
+        b=eDfDf1JsMq275zD18+0FP5ZmzeFNSFcv0ea0IPYMl/s8l/wtTD5hQ4A1W/gD3Os8Lb
+         7Ef1gQWbY4o55dOlOKp1fjZeA7xP4OMuFbyOfOZDWwx0HMeVVt3Wm8N1pTiN3+eVWfPy
+         0RGVDsZ9VdezA4BDJWxU9sIsl5fP0aEzDpCAQxt7tJZ7+4T3+cjoYsBA6+j7U5Tm2uQa
+         BOfycW812fy6deCGw8Ews2bVZdk9zofzWrOspsTspst6N6PuE6YWH7C11wHN1Hl0s9NL
+         cDHtqRuCR+YlncOxY6tnG3cyFD/N4XI4m66W8nWO2jtZiutFc5wcf2ydlrJWP6LbsaNS
+         MwMw==
+X-Forwarded-Encrypted: i=1; AJvYcCUovFrl8tlayX9kjMWL0wokG2Ox2EyQjeflml9F4O92zWpvJqWmdpIGyjlYZHd0+AF6pa0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfWDBtRcIFxEDzpgh1QziQJGq8qAkyyQoIuLJouCqHVAEnTIXW
+	DG/awjRo7hzeMYrIwE8CDfaGXulE4EY4yOW+XaszvXPTRMDIHDpOWqUHjW5tVkI0u5oVObA2Rg1
+	YUf135yC3uU97MtMNwWcWg6nRlp86qpcJlG/UiBx5NkkRyyzaJ2QEv2MpN78=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7a605318-9f09-436f-806e-d4a3bd31b97d@linux.alibaba.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Received: by 2002:a05:6820:2187:b0:67e:3a2b:922 with SMTP id
+ 006d021491bc7-68be83dc692mr986359eaf.48.1775803462059; Thu, 09 Apr 2026
+ 23:44:22 -0700 (PDT)
+Date: Thu, 09 Apr 2026 23:44:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69d89c46.050a0220.3030df.0025.GAE@google.com>
+Subject: [syzbot] Monthly bpf report (Apr 2026)
+From: syzbot <syzbot+list370a3633a9304f1efcd8@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Apr 10, 2026 at 12:42:41AM +0800, Gao Xiang wrote:
-> >   - a lot less I/O amplification
-> 
-> But not quite sure recently how extended OOB data is
-> kept within the physical media (I remembered in the
-> early years each page of raw nand flashes has
-> several-byte OOB together with the user data): if
-> it's along with the corresponding LBA main area, I
-> guess it has to read extended data among multiple
-> LBAs (but the LBA main data may not relate to this
-> partcular I/O) in order to verify the hash of the
-> hashes.
+Hello bpf maintainers/developers,
 
-For HDD it it is stored next to the media, and doesn't introduce
-extra seeks.  For NAND-based SSDs it typically is stored close to
-the data as well.  NAND pages are significantly larger than the
-exposed block size for any modern SSD.
+This is a 31-day syzbot report for the bpf subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/bpf
 
-> 
-> >   - a sane way to actually have verification (including authenticated
-> >     encryption) in a writable file system
-> 
-> Yet if considering modification, it need to move up
-> the tree and recalculate/update all hashes until the
-> root hash, it's not a low-overhead task TBH, and need
-> to apply to every single on-disk change.
+During the period, 1 new issues were detected and 1 were fixed.
+In total, 23 issues are still open and 324 have already been fixed.
 
-It needs to be applied in-memory for every changed, and persisted to
-disk on every fsync or equivalent operation.
+Some of the still happening issues:
 
+Ref Crashes Repro Title
+<1> 310     Yes   KMSAN: uninit-value in handle_bug
+                  https://syzkaller.appspot.com/bug?extid=ba80855313e6fa65717a
+<2> 259     Yes   inconsistent lock state in bpf_lru_push_free
+                  https://syzkaller.appspot.com/bug?extid=c69a0a2c816716f1e0d5
+<3> 95      Yes   KASAN: slab-use-after-free Read in bpf_trace_run2 (3)
+                  https://syzkaller.appspot.com/bug?extid=59701a78e84b0bccfe1b
+<4> 8       Yes   KASAN: slab-use-after-free Read in bpf_trace_run3 (2)
+                  https://syzkaller.appspot.com/bug?extid=9ea7c90be2b24e189592
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
