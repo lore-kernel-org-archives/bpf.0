@@ -1,85 +1,120 @@
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9EC387591
-	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 06:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D2E35CBC3;
+	Fri, 10 Apr 2026 06:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775803464; cv=none; b=AulbbcMMgB/7AOP3aLxLH1/1vvEjhlLSNAbpaI3i1TgNuSvb6nsAmDS9Mx3QiW8PxvwGt7K7uINsHZ2TJFO3oLyZTOq+GdMvoCzjtku1LCMy0TeFeiPQKOMAGe+pi7OMlCZIjvu3/3huAJCJJOikoQOSz8zTJacece9uNeAYPws=
+	t=1775803567; cv=none; b=aFIr1U/ox/wXCscAhgcZ1iLf49Xfd53o20mt3rytBfk3cuDr89IYCFd4tPnl276oU1f6fFdRL6bO+EsUU+CydxPRSq4RB4+Z3GwBKlQvUk1N9TgZWB0H+flxB1/C3ghOFN4Xx2nZ/MpHipU451Kmw7YYDomOGDPxnATwOzHKhXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775803464; c=relaxed/simple;
-	bh=J5DARsOU+MfOWHWOUhZeOQ4qAgS47iijriI8BG0h8KA=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NE1rxUlTnLBxfCeinDRnhthamI5pCUICaf7ds/lU0n/AWuf3YzxfUsu5RVBiqm1g2MPLMhXLRyu2TMdOtBdiIXJHAsepwxl0+gQhv4s8YI6Dg0S0aex00CicrVLrr/jTEivEngZE993ASF30Ru1nDGdHnCkDPfTL4XQ4mgxa4WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-7d7efc5a904so3546263a34.3
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 23:44:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775803462; x=1776408262;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cFBER3hIUtHWl0Dw3abQ8wvDzEYzUasOugvwdjjP/fQ=;
-        b=eDfDf1JsMq275zD18+0FP5ZmzeFNSFcv0ea0IPYMl/s8l/wtTD5hQ4A1W/gD3Os8Lb
-         7Ef1gQWbY4o55dOlOKp1fjZeA7xP4OMuFbyOfOZDWwx0HMeVVt3Wm8N1pTiN3+eVWfPy
-         0RGVDsZ9VdezA4BDJWxU9sIsl5fP0aEzDpCAQxt7tJZ7+4T3+cjoYsBA6+j7U5Tm2uQa
-         BOfycW812fy6deCGw8Ews2bVZdk9zofzWrOspsTspst6N6PuE6YWH7C11wHN1Hl0s9NL
-         cDHtqRuCR+YlncOxY6tnG3cyFD/N4XI4m66W8nWO2jtZiutFc5wcf2ydlrJWP6LbsaNS
-         MwMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUovFrl8tlayX9kjMWL0wokG2Ox2EyQjeflml9F4O92zWpvJqWmdpIGyjlYZHd0+AF6pa0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfWDBtRcIFxEDzpgh1QziQJGq8qAkyyQoIuLJouCqHVAEnTIXW
-	DG/awjRo7hzeMYrIwE8CDfaGXulE4EY4yOW+XaszvXPTRMDIHDpOWqUHjW5tVkI0u5oVObA2Rg1
-	YUf135yC3uU97MtMNwWcWg6nRlp86qpcJlG/UiBx5NkkRyyzaJ2QEv2MpN78=
+	s=arc-20240116; t=1775803567; c=relaxed/simple;
+	bh=iQzlLilWtocvd6uLsezDvskuGvJwo2dkB/xIWOyud2M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=srbls7alPkvv86En6vmsVSHKiLWKWVq8usRr5Bqyy7pNobalP5Z2MyGI2MduNFwT+MR1j8XD+oKHcuLoGxoNSC7q+v8ptEh3k4jss1QiR/Na1iglPKiri+asH1VzNS4DVypE0igSFLN15oAqnl98ntS1Pl9vmZx9AYWy1Ij2gwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=UFYkrM6T; arc=none smtp.client-ip=115.124.30.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="UFYkrM6T"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1775803562; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=Et5kuzAgXyxKomaZmeSluAIe6eBbOj9IAO1Yolsuvzg=;
+	b=UFYkrM6TpY7Z50PromvhFw4v3mYb/eNs5KOXKxIL/jP/oRnVo6Bjj9agbZyq2/In4hWI1RuPCKUUGg6PG9MMDsmOY3jhB5T44WGdo2kr2qc0ZYuEycg35u8qYNaQ6JioB+efBufE3AGWR1GDzoSFQ5lJ7lKwyaKLTgvIos4YvN0=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0X0kUbGL_1775803560;
+Received: from 30.221.132.105(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0X0kUbGL_1775803560 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Fri, 10 Apr 2026 14:46:01 +0800
+Message-ID: <b3dfc06b-9f9b-4337-be96-a277061517d0@linux.alibaba.com>
+Date: Fri, 10 Apr 2026 14:46:00 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2187:b0:67e:3a2b:922 with SMTP id
- 006d021491bc7-68be83dc692mr986359eaf.48.1775803462059; Thu, 09 Apr 2026
- 23:44:22 -0700 (PDT)
-Date: Thu, 09 Apr 2026 23:44:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69d89c46.050a0220.3030df.0025.GAE@google.com>
-Subject: [syzbot] Monthly bpf report (Apr 2026)
-From: syzbot <syzbot+list370a3633a9304f1efcd8@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+ "Darrick J. Wong" <djwong@kernel.org>, Amir Goldstein <amir73il@gmail.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
+ <acYVjuDOD7NynO9m@infradead.org> <20260327060518.GP6202@frogsfrogsfrogs>
+ <20260407-unmengen-wahltag-474557ec0c58@brauner>
+ <adUalnAyY9mm1LUr@infradead.org>
+ <20260409-vorsichtig-umstand-d417555377e4@brauner>
+ <ade2nskzkdcsvF55@infradead.org>
+ <d889ed2b-ca34-4e95-ae5b-1d66636b515d@linux.alibaba.com>
+ <adfPlQrImtuyhMIO@infradead.org>
+ <7a605318-9f09-436f-806e-d4a3bd31b97d@linux.alibaba.com>
+ <adiVdIhcgfiIoXja@infradead.org>
+From: Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <adiVdIhcgfiIoXja@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello bpf maintainers/developers,
 
-This is a 31-day syzbot report for the bpf subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/bpf
 
-During the period, 1 new issues were detected and 1 were fixed.
-In total, 23 issues are still open and 324 have already been fixed.
+On 2026/4/10 14:15, Christoph Hellwig wrote:
+> On Fri, Apr 10, 2026 at 12:42:41AM +0800, Gao Xiang wrote:
+>>>    - a lot less I/O amplification
+>>
+>> But not quite sure recently how extended OOB data is
+>> kept within the physical media (I remembered in the
+>> early years each page of raw nand flashes has
+>> several-byte OOB together with the user data): if
+>> it's along with the corresponding LBA main area, I
+>> guess it has to read extended data among multiple
+>> LBAs (but the LBA main data may not relate to this
+>> partcular I/O) in order to verify the hash of the
+>> hashes.
+> 
+> For HDD it it is stored next to the media, and doesn't introduce
+> extra seeks.  For NAND-based SSDs it typically is stored close to
+> the data as well.  NAND pages are significantly larger than the
+> exposed block size for any modern SSD.
 
-Some of the still happening issues:
+Ok, thanks.
 
-Ref Crashes Repro Title
-<1> 310     Yes   KMSAN: uninit-value in handle_bug
-                  https://syzkaller.appspot.com/bug?extid=ba80855313e6fa65717a
-<2> 259     Yes   inconsistent lock state in bpf_lru_push_free
-                  https://syzkaller.appspot.com/bug?extid=c69a0a2c816716f1e0d5
-<3> 95      Yes   KASAN: slab-use-after-free Read in bpf_trace_run2 (3)
-                  https://syzkaller.appspot.com/bug?extid=59701a78e84b0bccfe1b
-<4> 8       Yes   KASAN: slab-use-after-free Read in bpf_trace_run3 (2)
-                  https://syzkaller.appspot.com/bug?extid=9ea7c90be2b24e189592
+> 
+>>
+>>>    - a sane way to actually have verification (including authenticated
+>>>      encryption) in a writable file system
+>>
+>> Yet if considering modification, it need to move up
+>> the tree and recalculate/update all hashes until the
+>> root hash, it's not a low-overhead task TBH, and need
+>> to apply to every single on-disk change.
+> 
+> It needs to be applied in-memory for every changed, and persisted to
+> disk on every fsync or equivalent operation.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Yes, yet it doesn't change my evaluation: and you need
+to consider background writebacks too (since writeback
+will update data and then impact the whole hash tree).
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+Currently data writeback can be applied for each block
+independently, but if you consider maintaining a hash
+tree (rather than simple checksums), I guess you have
+to keep strict atomicity between data writeback,
+metadata and hash-tree writeback, otherwise the hashes
+and partial writeback data will be mismatched.
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+I won't say it's impossible, in short I have to say
+it's just not a straight-forward task compared to the
+previous data checksums, e.g. for XFS, maybe journalled
+COW approach has to be used since it's hard to keep
+such atomicity for XFS without COW.
 
-You may send multiple commands in a single email message.
+Yes, the OOB approach for leaf hashes will help to
+reduce write amplification, but my current observation
+is that it won't have any help to read amplification,
+especially for small random read; overall it depends
+on the target workload.
+
+Thanks,
+Gao Xiang
+
