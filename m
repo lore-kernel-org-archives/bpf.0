@@ -1,164 +1,103 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EBD0314B66
-	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 21:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D673C3DD504
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 21:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775857156; cv=none; b=LP8AcevHnqMR1sQZ24d/cfC++IDe+3+hussd6egeoC53o4qBLK1hJNYEUtqqgcb7WMRwi4J7imF1X+b93B2/noRDdWChQvnRG4MWKdtbwILJygiZpN/CkSvPlZ3gMp5lJjHmHeMzIExVj8pmQc9nv6I9NldmkKDNNB2IEfGDqkg=
+	t=1775857380; cv=none; b=sljqFpZLuA9qaqdNHNvAsgZfNFvgjk6M6uHcpjPknnnU0DfY5JX2QzbAaCa68FiKMfRSxmO44yAiUZye0Df6r+J9Rv25vDNk0DepDkaa8KuB7nCoZEd6CpQ0IdUlA4EDJaYBzXDt9/vGENl8gX0tSq+raGtSrz/TMaBBpCWaouY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775857156; c=relaxed/simple;
-	bh=X40SVEH2EWLhnCWRnzxRODXQMz51jpsCoC6upNBmCdo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GEd4oRFAVWMxQKQQfxOoC7EsXxab8Ksp9Iy38+P5YgTbAZ1mhbZfMZHBHgYdZwYwUlZNVdh8d0lTIpMC358wY6XsLD8OUaVUhCATfndFj7bf8+GnoX2Wjp1YwY73zGUnyW80/e0YIb95jtQjSM7VqAqfjXHyF5ER3ZbyTFsrhhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IqfhOZES; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1775857380; c=relaxed/simple;
+	bh=HeyaM3mTAFyS+c0s/5ObZzTxh2LHrZ/Wz6Lek0n6tD4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AelEh8KOAYO6kXErREnMjL72mcbFQ4V7uUPrhuQqMuKqkL7s4gum4NRq6stLorF3LRXYrI1ie7J+ExilJ1clnGCthA+ea+TMiB9F6e9sxptA44ECOyQekjPMOo7R+xb4M7bLxLibTKIL2BN+Hx8GPe+hK3y1y3cUn3zYi73p3Zs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZIsmp9eK; arc=none smtp.client-ip=209.85.210.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IqfhOZES"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4852a9c6309so23942915e9.0
-        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 14:39:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZIsmp9eK"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82f0fc82c76so452025b3a.0
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 14:42:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775857153; x=1776461953; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eDaPIZ/IfHPIrwdv48VKeRjdYY9bTC02cJ29tbREoyM=;
-        b=IqfhOZESj/29g4eHZp9NUkR5QtO5p6xXkzH0PB8WZd5eDLca2DqXBiZrxysEnE27HK
-         6UkLx/7nbPHC77kxV+BfULj6Vv3UcVsBXITP5ydyxv86LUQA0iGLJrmXj8+hnfMWd6nT
-         COBhUSVDV49Vvxd2QEYLpMqlWpVvim0yILF5vZRiFY8TV/GuE2Owv32lUy9yl+mEkDbX
-         daDzhjRYlXvQn7J/nSlWe1qfTOd0Jsx4Xqixma6MynhoO5QldIje7qtOUEw3PmjlwvOF
-         kn2IG5QfLZQxDaJanskME73GqNR7B2ZTDgyMD+fuV8I5BXHczXFsplkVu8A7F6PuUol/
-         6bSg==
+        d=gmail.com; s=20251104; t=1775857377; x=1776462177; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HeyaM3mTAFyS+c0s/5ObZzTxh2LHrZ/Wz6Lek0n6tD4=;
+        b=ZIsmp9eKevpino0eYjhRM3dW8HMV3xV81+IE3r/suojFSz+3HMW78OuhGymTDNNiEM
+         TniozEm38CyeZId1DcqNK7mAy9QW7Jm7PjV3mOuj3kt7rlQF9MBQEOzl6gOHfV6XOa8j
+         k02umLFK5pYGSh88PWK3Em1BaL1f2M/PrDOpfnEVunqUL73jP2h77o8khbw5S7Oh07kB
+         li7RBqBpHCZo33thJi/fPaNaO7oWLctonHYbFXfPI1WUMhRbft9Y0ZcYH7XCAKb8sk7B
+         sFSyJzBgoFiURzKhfsJ5Rml+Pzvnn7mpUi7sRftgZFFC17Z3EZ4omwsPVdO8AcMqMCwX
+         Qzbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775857153; x=1776461953;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eDaPIZ/IfHPIrwdv48VKeRjdYY9bTC02cJ29tbREoyM=;
-        b=T3vlYujj1Ol0rzWR6HJBSyTSGTGm5+MTXg3M1Y5WX+AjwMH7Z5if50V2JPPRLkd8c4
-         gSY6cf3xVstt0obrk7wpYr1sFCqWoxblBF8/mLhh6eNKfhz7Nbmew0p9TpR+F7aXdjB9
-         w18SWXYDIVBQOjT6RkCG2CxOZxjuHjgagcNS2fSsbJpTTTkNlfAl3TRkVr7djgc16g2n
-         dP0zvvAIzwiWRyj1JOwcNQFNE0C6atil6u0oyVhdqpOWv867YclxbPxvtXs+Tv6S2BKG
-         a768f0aRvbdt24dUJGL8Aere5Ra2cMbutolcXlBNtgWD3xYnb4RXKnHK+4yZFF/dGuWp
-         7FpA==
-X-Gm-Message-State: AOJu0YzxUumWsVlPz/Yp1QTxRbEJRW2rf7Z58Gtlm97nU1hBolYRXmhO
-	xv+5NoPtbtNZIpnwCHjdgPvUmrhpyrUEsuho9PMzqp7aIA/40hX2BIPgjr17Su2c
-X-Gm-Gg: AeBDietyaNNHqafD5v3xVA9WVJXHKPTaTxxPo2ekFzfiFITiEzPY1W8VirXpxkjpFDy
-	JDpSgHAqq/vGr1dyx+xtrVITOtdDwZ454hGTv+lbIwN4pOe8PoFaA4FAINUafZk8DZglKIZly5j
-	8gtGI1cTkb+pSpXLTpvZ0Ny2k/m2s1/2E1a7P8GiNLl2zUd3/MQcUHGt+eGLMjLIulOnqZO3DAV
-	2sBicNuCCgq4pFJUFcr4PL7AjlLQ+7NmIxhLu0IBq1yZMsDEN5QSO2dwTs9Ie3C3wn3ockmaSb1
-	xrq+xYtiUYsTz8rlluq8DGwjAKUG4K+e3/F7Mmhn12dQmQoRJa7GHN7b2YTp5QW8w6vlbfkQM8d
-	LE3YNmklbiOjCABzWPaLYOlRX21Dwwm+0ONPwQkRxUaVNrdEKMeyRy7VsL39ITqs7RoEuJ19+co
-	mzgI3xq5svBj8DUI3iZvh/MsrnyB8hGC/qeBIl+OSY6fIaP00YZv0sIUlv8u0iFrPCdD8U7VRwB
-	cSrkX/F0rPXPY9ysMySXFpIc4+ES1uGPwBMCQEnFBvpBx9L7z6G8PvRTP6xwrddyQlwqsNoXu+f
-	lsbpHeE4XENpb0J7ZXwb7Yqkra5rbg==
-X-Received: by 2002:a05:600c:3b29:b0:486:fbf6:abd4 with SMTP id 5b1f17b1804b1-488d67d24cbmr60170805e9.9.1775857153172;
-        Fri, 10 Apr 2026 14:39:13 -0700 (PDT)
-Received: from Tunnel (2a01cb01206cfcf44e874a0c0620d58e.ipv6.abo.wanadoo.fr. [2a01:cb01:206c:fcf4:4e87:4a0c:620:d58e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d63e51600sm10128900f8f.32.2026.04.10.14.39.12
+        d=1e100.net; s=20251104; t=1775857377; x=1776462177;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HeyaM3mTAFyS+c0s/5ObZzTxh2LHrZ/Wz6Lek0n6tD4=;
+        b=O3RnD880u4FSls0pYWYLO06LXMKdcMeo3rR36lMj+xXW8rLtssxJhDOeQnV0QkNPcS
+         8nC3CpiM9DdxIGhqU8sPlVieXuhpuJX/xJU4SBEKNr9qAXekh+ElIJUDAvuYduIHglLl
+         E1wpRE3iKQWvGX+ZriVXWwsuVf0DAaM1wmBGZ2XHAxwFJTda0qjHSQD2/pHIrnnFRRU9
+         IbJkQvDOnrI+vIIAfZ7+Qy3cQKLxK4TXLpH2V/OrgG6heugvlA3TEf3Zo3mwPnxNWGDM
+         Ewz4odw1IirFuOqMYQFPc2do+ovvBx2xJ2jDa0+XLCk8BzUkRTEXoUei60WlgAUHRqaR
+         UVow==
+X-Gm-Message-State: AOJu0YxnScHAPuxmHDZ57/o18DcBUm7ruc6uT/I+Ry0emdgeN7VOhfDp
+	2Q6VUb6mJg6oql7OoHpxvcgNFwW6xpP+dOBeVEeQ7IWOLv7ZeKpf4NLH
+X-Gm-Gg: AeBDievL8q1Cr8kFWMVEfcg8d/bO4bXEJCJtmk/VgNdFVsqzGlNYCY7UGfcHsbJxNLt
+	TrfDkUIdOWmOy0DJXFoqt1ADwC10B5Ocvx7eNRiqRaO+CQKLpGeEjPtlUrUKdLiXP1iYPJpqN7t
+	3aiO5kylkY+raCOa9MX6Fi+KdhvgEb8j4O+Vo40+QI7vb6JyijYEX4ZGc+UWa0VGR+1QH/DHKw3
+	GTeziEFcNXdVZSViAN6ec2NHLzAAQ9xmDAtcnY0s2V+aD+exmHZQSDVmiO0Jf5haI1KL+wXNium
+	wzw6f8MYdgBDezfwslpRzg99pP92XGNb3vuiOljNkYxiu3JVcy2sWqhv0qpohvJEuscXrbVuF9X
+	WLivpxcUuAYjfBPkIA4JqGISCq2ayUdF6VF9allgm323YRdeo5QhjUT2wsyFEo2AvndMgACBwNR
+	L+ZlQJbttsX2PLIag9Rx10uwgU4hZT0wAwhF7jSnWN73HyDIwrvgV0yIav4BzPVq0=
+X-Received: by 2002:a05:6a00:4fcf:b0:827:441a:c970 with SMTP id d2e1a72fcca58-82f0c12f194mr5109882b3a.6.1775857377061;
+        Fri, 10 Apr 2026 14:42:57 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c4dd37asm3889878b3a.42.2026.04.10.14.42.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2026 14:39:12 -0700 (PDT)
-Date: Fri, 10 Apr 2026 23:39:10 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+        Fri, 10 Apr 2026 14:42:56 -0700 (PDT)
+Message-ID: <fb4290b261d2265e9cf64cd6f67df9d0e1a1ac74.camel@gmail.com>
 Subject: Re: [PATCH bpf-next v4 09/14] bpf: simplify liveness to use
  (callsite, depth) keyed func_instances
-Message-ID: <adlt_kFLi-rA_zTR@Tunnel>
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, 	martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 10 Apr 2026 14:42:53 -0700
+In-Reply-To: <adlt_kFLi-rA_zTR@Tunnel>
 References: <20260410-patch-set-v4-0-5d4eecb343db@gmail.com>
- <20260410-patch-set-v4-9-5d4eecb343db@gmail.com>
+	 <20260410-patch-set-v4-9-5d4eecb343db@gmail.com> <adlt_kFLi-rA_zTR@Tunnel>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260410-patch-set-v4-9-5d4eecb343db@gmail.com>
 
-On Fri, Apr 10, 2026 at 01:56:00PM -0700, Eduard Zingerman wrote:
-> Rework func_instance identification and remove the dynamic liveness
-> API, completing the transition to fully static stack liveness analysis.
-> 
-> Replace callchain-based func_instance keys with (callsite, depth)
-> pairs. The full callchain (all ancestor callsites) is no longer part
-> of the hash key; only the immediate callsite and the call depth
-> matter. This does not lose precision in practice and simplifies the
-> data structure significantly: struct callchain is removed entirely,
-> func_instance stores just callsite, depth.
-> 
-> Drop must_write_acc propagation. Previously, must_write marks were
-> accumulated across successors and propagated to the caller via
-> propagate_to_outer_instance(). Instead, callee entry liveness
-> (live_before at subprog start) is pulled directly back to the
-> caller's callsite in analyze_subprog() after each callee returns.
-> 
-> Since (callsite, depth) instances are shared across different call
-> chains that invoke the same subprog at the same depth, must_write
-> marks from one call may be stale for another. To handle this,
-> analyze_subprog() records into a fresh_instance() when the instance
-> was already visited (must_write_initialized), then merge_instances()
-> combines the results: may_read is unioned, must_write is intersected.
-> This ensures only slots written on ALL paths through all call sites
-> are marked as guaranteed writes.
-> This replaces commit_stack_write_marks() logic.
-> 
-> Skip recursive descent into callees that receive no FP-derived
-> arguments (has_fp_args() check). This is needed because global
-> subprogram calls can push depth beyond MAX_CALL_FRAMES (max depth
-> is 64 for global calls but only 8 frames are accommodated for FP
-> passing). It also handles the case where a callback subprog cannot be
-> determined by argument tracking: such callbacks will be processed by
-> analyze_subprog() at depth 0 independently.
-> 
-> Update lookup_instance() (used by is_live_before queries) to search
-> for the func_instance with maximal depth at the corresponding
-> callsite, walking depth downward from frameno to 0. This accounts for
-> the fact that instance depth no longer corresponds 1:1 to
-> bpf_verifier_state->curframe, since skipped non-FP calls create gaps.
-> 
-> Remove the dynamic public liveness API from verifier.c:
->   - bpf_mark_stack_{read,write}(), bpf_reset/commit_stack_write_marks()
->   - bpf_update_live_stack(), bpf_reset_live_stack_callchain()
->   - All call sites in check_stack_{read,write}_fixed_off(),
->     check_stack_range_initialized(), mark_stack_slot_obj_read(),
->     mark/unmark_stack_slots_{dynptr,iter,irq_flag}()
->   - The per-instruction write mark accumulation in do_check()
->   - The bpf_update_live_stack() call in prepare_func_exit()
-> 
-> mark_stack_read() and mark_stack_write() become static functions in
-> liveness.c, called only from the static analysis pass. The
-> func_instance->updated and must_write_dropped flags are removed.
-> Remove spis_single_slot(), spis_one_bit() helpers from bpf_verifier.h
-> as they are no longer used.
-> 
-> Signed-off-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-
-I tested this series with Cilium's complexity test suite [1]. We have a
-lot of different configuration and some producing larger programs than
-covered in the cover letter.
-
-Overall, the impact is quite good. It reduces the number of processed
-instructions by more than 60k instructions for some of our largest
-programs. It also increases the number of processed instructions by up
-to 20k in fewer other cases, but I think it's manageable because they
-are not the largest programs so we have some room. The mean diff over
-all programs is a reduction of a few thousands processed instructions.
-
-For good measure, I also ran this patchset through a subset of Cilium's
-CI. All looks good.
-
-For the whole series, but probably only needs to be applied for this
-patch:
-
-Tested-by: Paul Chaignon <paul.chaignon@gmail.com>
-
-1: https://pchaigno.github.io/test-verifier-complexity.html
+On Fri, 2026-04-10 at 23:39 +0200, Paul Chaignon wrote:
 
 [...]
 
+> I tested this series with Cilium's complexity test suite [1]. We have a
+> lot of different configuration and some producing larger programs than
+> covered in the cover letter.
+>=20
+> Overall, the impact is quite good. It reduces the number of processed
+> instructions by more than 60k instructions for some of our largest
+> programs. It also increases the number of processed instructions by up
+> to 20k in fewer other cases, but I think it's manageable because they
+> are not the largest programs so we have some room. The mean diff over
+> all programs is a reduction of a few thousands processed instructions.
+
+Hi Paul,
+
+Thank you for testing this series!
+Are the regressing program open-source?
+If so, could you please point to a few?
+
+[...]
