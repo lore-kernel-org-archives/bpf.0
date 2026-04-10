@@ -1,131 +1,123 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47DF3B7747;
-	Fri, 10 Apr 2026 11:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C467137C11E
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 11:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775819483; cv=none; b=RJnlAPmWGive2+7EnMQrSWDTmsNHoXvgDsCBW8cFpjqnl5A8+a+AM/UvWxuiTEHFK7nQIniAWUO/MaQAYk+ymADRdH/8VYO+zu7hFuRPeiMD+0cvevhKL7MkdU0Uuk+bY0YA61aKgpOcqgEPJuWYszG7/EclZRlJB6Wh3vADBxU=
+	t=1775821083; cv=none; b=C+vYgnbv/oiJEG+EBbshwzeYAMmH2K7B6vBlCI8Fi0dK0bHdfWyimIcrAY2yvhBnjks5/zBsj+wbfrSCt6ltCGrFuCqBEkRcNpIyxsd5/wWqSb/j3f3A4TCuHKfGmZuK7XnqTwM/zcWFvT0txkHnbTKk+PeU2r/GnCe2N5wMNZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775819483; c=relaxed/simple;
-	bh=gsG4phlKbpI6tXmlFoxwhc3dioq5qwclgZRSUQsUjtI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fBVMUrPe0Z/ldSeA8p0/CEcjz0WJDwfIoz8s8ivn1HTq5sNU0Ofo9W5CKZZX6zZyaF2xJSEzzoYxoXRZGWk29YVmeTjTIcYMMUR6Kqx/SyYpXCqrw2Sg0+0M4oxE6kij1OZPUrbt2pjr6TIhw76MxKTic93t6nGJ2pveIpzBO/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Bi1faN1f; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1775821083; c=relaxed/simple;
+	bh=l+czVuwQHstFoGQ0erf5GW3LK50yl71BT8sY04MrUdA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=U7qeZ68kYRWGxp01vmdaZHhYU58PqGEyKY0hvZYCYkN1TVEd4Yz9OXP9y9UxUXiRGPIlR8qsEPfoBZezQ7TJvwZ1Yhu0q6q2TOK/pzJ8dZoRvARgqz7CF8soOIoa0khMynKK7LBFNd4Z8x3nv75V17UY49FESWGRQJ0xsEZ6jmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g4eTDi9+; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Bi1faN1f"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=wu06R/S7zmzK/DYdHkzd8P5CQqq6wprF75SyYhA68Cc=; b=Bi1faN1f1vu8kimWfIWiOp6Zxk
-	vApZbEx41b19IjHMAUa7hsSgE7WiQiFvBqr3yRHsLPaX17rgz0YhboD+HbMzFr5HTstaXTY15AroR
-	hFbG8hwPCaL2d1/m1xfEr1UsN9NwnK1K4yJnESau/kWSSaKHfS4RjU5tjym5ONYTlDHg1rum7yYLC
-	ZAZI7Hp95eEfA3ZcEKOyZ//Oh/UQ2EWph5oJ54Ya90GOrZUKsbpaVuvslppZce9AdZOo/X7/H+PFk
-	/+sWdStBZq/RVSkXDnoWOLYNA0L4va151J70793VsMXfsm0eZr8BW438upcwHsabGO/uYoShgDgKm
-	Xm4tRfZA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wB9lF-0000UE-3B;
-	Fri, 10 Apr 2026 13:10:54 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wB9kh-000O8p-2A;
-	Fri, 10 Apr 2026 13:10:52 +0200
-Message-ID: <7388ed41-6d87-4c58-8cf5-e149d97c93c9@iogearbox.net>
-Date: Fri, 10 Apr 2026 13:10:52 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g4eTDi9+"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775821079;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QJG3fzhNJShwRUz5BQprDbEjltSfJbR/gTk145ASZm4=;
+	b=g4eTDi9+wF3dkG8vsT27iFYubAPBziMy46Rb1NIRolDvVXCuwYpN2broohFHG5pVK54cbT
+	zzzI86oYgLV3dCebLrNhlV+9UKRiVpcmD/RGPBfWTrX3vocNsxFW+npkb5zixGSYkh4M3o
+	XfL6rpJdaSGosFqqoJ5GM9kivL32m0I=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jussi Maki <joamaki@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v6 1/2] net, bpf: fix null-ptr-deref in xdp_master_redirect() for down master
+Date: Fri, 10 Apr 2026 19:37:22 +0800
+Message-ID: <20260410113726.368111-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260410113726.368111-1-jiayuan.chen@linux.dev>
+References: <20260410113726.368111-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v11 03/14] net: Add lease info to queue-get
- response
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
- john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
- maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, dw@davidwei.uk,
- toke@redhat.com, yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
-References: <20260402231031.447597-1-daniel@iogearbox.net>
- <20260402231031.447597-4-daniel@iogearbox.net>
- <20260407204017.3fc79d1b@kernel.org>
- <b9a046f8-cb02-4d54-9a7e-e8213339d720@iogearbox.net>
- <20260408151251.72bd2482@kernel.org>
- <731d2749-abf6-403c-a1f4-ffe9c8d1e8ad@iogearbox.net>
- <5a5feea9-7675-4ccf-aa8e-3a2e476ce8f5@iogearbox.net>
- <20260409074651.2e58b3dd@kernel.org>
- <aa222301-e716-41cf-ab10-5365c0e15b6a@iogearbox.net>
- <20260409185105.721a6465@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260409185105.721a6465@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27967/Fri Apr 10 08:24:45 2026)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 4/10/26 3:51 AM, Jakub Kicinski wrote:
-> On Thu, 9 Apr 2026 17:32:31 +0200 Daniel Borkmann wrote:
->>> I think the test has to be reworked but of the available options seems
->>> like merging it as is and following up quickly is the best. I've only
->>> set up the container testing in our CI yesterday anyway so there may
->>> be more things that need changing in the test as we gain experience :S
->>
->> No objections obviously if you want to land as-is with your refactor on
->> top.
-> 
-> Done, please double check my work, there were some conflicts with net.
+syzkaller reported a kernel panic in bond_rr_gen_slave_id() reached via
+xdp_master_redirect(). Full decoded trace:
 
-Looks good to me, thanks a lot for everything!
+  https://syzkaller.appspot.com/bug?extid=80e046b8da2820b6ba73
+
+bond_rr_gen_slave_id() dereferences bond->rr_tx_counter, a per-CPU
+counter that bonding only allocates in bond_open() when the mode is
+round-robin. If the bond device was never brought up, rr_tx_counter
+stays NULL.
+
+The XDP redirect path can still reach that code on a bond that was
+never opened: bpf_master_redirect_enabled_key is a global static key,
+so as soon as any bond device has native XDP attached, the
+XDP_TX -> xdp_master_redirect() interception is enabled for every
+slave system-wide. The path xdp_master_redirect() ->
+bond_xdp_get_xmit_slave() -> bond_xdp_xmit_roundrobin_slave_get() ->
+bond_rr_gen_slave_id() then runs against a bond that has no
+rr_tx_counter and crashes.
+
+Fix this in the generic xdp_master_redirect() by refusing to call into
+the master's ->ndo_xdp_get_xmit_slave() when the master device is not
+up. IFF_UP is only set after ->ndo_open() has successfully returned,
+so this reliably excludes masters whose XDP state has not been fully
+initialized. Drop the frame with XDP_ABORTED so the exception is
+visible via trace_xdp_exception() rather than silently falling through.
+This is not specific to bonding: any current or future master that
+defers XDP state allocation to ->ndo_open() is protected.
+
+Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ net/core/filter.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index cf2113af4bc9..9ec70c4b7723 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4398,6 +4398,8 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+ 	struct net_device *master, *slave;
+ 
+ 	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
++	if (unlikely(!(master->flags & IFF_UP)))
++		return XDP_ABORTED;
+ 	slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
+ 	if (slave && slave != xdp->rxq->dev) {
+ 		/* The target device is different from the receiving device, so
+-- 
+2.43.0
+
