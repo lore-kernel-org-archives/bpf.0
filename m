@@ -1,63 +1,63 @@
-Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B4B31E838
-	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 01:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E5931691C
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 01:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775783521; cv=none; b=IpwnYS37Sb4Yk+AZTqZ+4/yVhIQWHieE7Lv8YyaPxHwyn7kWOXL4L6CQ5c7jkEMlCX81ujd0PfFtJboINzb6Hu1Un7FgP5MjDU15G6h9G8QEc9kWZNA9GrmwCbU+6ZXYCw+L4r24NcPiloj5p4z6Kh036OFvkYt9PDl4CZKAYEA=
+	t=1775783523; cv=none; b=KiS4AwuAZ0b89JzCnywc9te8WD1dUaZH1u5uP3p3NuoCwLQuALqcwpq6W1wW8tNlJja5Cx+c1+TwsKBzNjDvpdhEDAxdkg5ufM1a0yMKRWeOEaQ758lgdYhXi7p4xfQgCDC1cvrO1xImtfMYQ1+UbqANN1aAs1F2+ntF5IbRN04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775783521; c=relaxed/simple;
-	bh=ofehPBg6p5ypgMtflxb4hjg7hI60RrOpaD26S9Ytwzg=;
+	s=arc-20240116; t=1775783523; c=relaxed/simple;
+	bh=kuYYTyXA49p0iFYO+Zreji9e988cU7UfrXqPGakNbgk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uyOVK3S6XqaAXohNPtZx9W7kCTugfUBYJntxgFfLvkiVyIG4vQS++l8J8mhHnzLP4HUjOm19p6POH4fAhnRQ35aPJHv0lKrc68WqPRbw77LxT8gplDmynJEZozVPoAgQVkgDJA3uIirLEL5P/efh91A20hrBWuTiBOZxj96jTX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YvubIfdf; arc=none smtp.client-ip=74.125.82.171
+	 MIME-Version:Content-Type; b=aM4x2wXsqFZHmcHOxTQcQoUYOFGKd+ra8X+vo5Q7kbAbYwp2dBckMTJeCAPKFp+MEVI0s1BOdOg4jFxNE9fukBogvVrh8LsQgfZzqpn3PHjMn/tZh0WmYUOfrcJkJfoKW3jv+Hs/paQklYfwxEmzKAHoaSFIUh53cuMgqCtA4no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rS6DLQAK; arc=none smtp.client-ip=74.125.82.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YvubIfdf"
-Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2bdcf5970cdso810467eec.0
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 18:11:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rS6DLQAK"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2ce102afb0aso1923083eec.1
+        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 18:12:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775783518; x=1776388318; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775783520; x=1776388320; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ocVmzbZwX5WQlXWp4Rea9luCKOiqE96uEd6CEE74usg=;
-        b=YvubIfdfh2f9Xdx7gSgt5m4dEma5sq2el/HXIX7KQKD6VOnJIr5Dcyz7W4k4+GFM1N
-         xUQNnwaDNcC0WVmJthE6fZInR0iBeZHOBG4at2lLKjOjzZnXAvKYaYL02E4N6ZEoXQHS
-         5Vj+WBAbkiGeFA2PPEkIOMnw+Lbr/ma8y3sLexGcBjubO2OlkgxgOL0uXI/WGhGN3EX/
-         Jb1+YDgEevYU+MFaDSmNqkRdOKdSDdTWiaBTF2agOnKhEyS26edimsa/CeqG4i4nAyV9
-         cjsV6831Wyh/WayWAu0vdA9qzI5HiTCiZzGM4/0Dlb/0dGaLfYmaJpnJjmqCtnpk2NIM
-         GsLg==
+        bh=gEcebxuDMTLGKLOzv2TZQ65SiduoQgOJGaG1cSk21Uc=;
+        b=rS6DLQAKacXK2qylrvrmN/TdCcwSzf9MVfCuB3XsABka/8PZxJ3dsItcKyYstktjhm
+         Shd6dGz6yMI7HQ9ibGVv+2J92w90OdI5dy1hZRe+8GxLZsYYNFFEMTv5XzNLthiUOBOo
+         2N9NiXCNlk7BVQiuoac8rSQn5X5Uht+g+avfFIN1WqodQ6+XvQjWrmvGoY/VfmN+1O5y
+         RgnNepcsfC9L4IlcYFxIYkWy79JDf4PseRWDRm4sZOkM8+K6H+0JSjVnyr0pm7kKbUav
+         FFNCm9V5gdfrslAOMPWkKkh8sl47E5KstmULd+EmM/jTGcT6jqZGHBvQYcp80RWzpuqI
+         Gy3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775783518; x=1776388318;
+        d=1e100.net; s=20251104; t=1775783520; x=1776388320;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ocVmzbZwX5WQlXWp4Rea9luCKOiqE96uEd6CEE74usg=;
-        b=je/i17aGitDQ03ZTX8UDRTiAJrjyUrtJ8tJz4xpJR/clQjVj6vNQmzZfYPTKKXduEt
-         wryYOYYZ1PbgcrxR/n0SBi0AKKY/F4iebxQXcD6PP9sSPgN9nMwMewM0JvPMLaPru3k1
-         tBnGWMR/y1BWcrLqKzel+lrJ/UPymwP3+QeJhj6GayN/LPK2fZsH3u2nDI9fDVLRHRVt
-         Q6Ohe6OXyXYO+F4FxyJSxDLl3u6csFMrV8ZwgJ8KKdc+jyOJC2v6ilc8/G45o+PqzDpp
-         9bvE/lyXbZttI0pz/i405mGoE/2NWXWPIouF2hOmBc2chVx+KSTnzK1S9vCikKiZ6BTo
-         oUqA==
-X-Gm-Message-State: AOJu0Yw9T2WMhW+HUskOrRj4epAFY/LCeRBjfMGDnO13OJYSrOCTI8HJ
-	CyPQsOybk/3t2GswCI59n4AYUeDdijZMTwSo2J4TwQRJFvbsrsp8Th9FaleKAWmG
-X-Gm-Gg: AeBDievYUSIMrNulgh9YFyBTkmD7QJL/VndsqVOnssTHEbmYZUGQqCFMQR5h/jTT0Za
-	R22B7ECOfyY2Yot1EyuQXHpZibaCd3jLptfNUgLGKgVEEJ7kH5AGOb1rCXO9P9sg3+ed2WJzuJo
-	bvIHQg5tYXbWz285MqZ282hxeGZiIeNSJHTZvsBIyO6k+INQ5/OJZmdyYaQ5QaJ7MSc/7FZkoXm
-	i6Ln0z9wkzt3rzuauYT/6nex3h4Hxakvg/oPnOcLPYx3GEvsujD9USUnJMUCUHwYOU4ZgmAMcOH
-	hDOWzYGZoHxQ6m+QAGk06eSjCKLcpszR/kXo0LMAqUXDMaujYqUqcgduLY9oXJbv8GuCyxUaHl8
-	qlBO76N5Y3LyhgZOkoRsClwL7EWY5sMTI+ga27ao19qVLPbgthIef7fDEN5gpNrzFHpC7vm51gU
-	cO2eq4yB2bHh+FCM1Rv4rF+FTEwPQmlaB55MAsymcOpc4AqszCuyzavfI2p0Ae/Ttg/dfGiU2df
-	HduRhU=
-X-Received: by 2002:a05:7301:408b:b0:2d0:239a:23b5 with SMTP id 5a478bee46e88-2d59c3a8b6emr535140eec.15.1775783517338;
-        Thu, 09 Apr 2026 18:11:57 -0700 (PDT)
+        bh=gEcebxuDMTLGKLOzv2TZQ65SiduoQgOJGaG1cSk21Uc=;
+        b=moQ57gO2ldeUFhZx94YGrulm1vkLwGT09hga5gkNPmXVDUt0ClpgaJ+CAlyegAory1
+         PJyuyFZtkcT047xH3w5H30zCyKajdKe2/uIsf6pI9kVrWBVOJZIL/gf+f2X9xvmg6BYR
+         nlp17J4LUQdAyhMQCh5rvOWg8TkGiirv4S4DbRf3kEjM4J0JCK552KpUq5rzAGl/DJRE
+         /Z28/yQHXc5n4QqK5shewH2HiKxS5kkRwVYZmWRyTMqqyHjT/lzRe047gV+6+4uagDgW
+         vkHUOg8UO9rnxbYv58CvCpcDl5l4lg2oBThgNrkdWyX6ze3kZI3z+kiG3v7s18bZ93XR
+         TOQQ==
+X-Gm-Message-State: AOJu0YwfnMSAmIGX8bsjNJ+vMTFoZg39NlhK2karRI8pdx/YYzGxp/8M
+	HZsjaVJQvVswNXVmEdOiLAHKLaR8/+sBR08riJFPy+6tJgOCiFgLCx/Bsa4JW4Il
+X-Gm-Gg: AeBDievbzwx7bSnWA1joFmSfZ4eA1h0KbIXGBCwQsQVacKo5rh3jpMAuldKnB3W4Nzm
+	sodsORlV38jyvgx6ylliJJaYx6Mfr+qRGmJk3JAw3S2+L3nWAn3VWAtAP9J/l5J5DPb5tmtYOs4
+	aSHqMGDCKMl9mBdIidB7N3/tEOGAuDf2Y1HfVSm/d6eWzPPTrTfjkW8xMrfXMe+U5lZqG+HR7HT
+	AW3ZUanJx0FVZ6WgKBcbtM+I5x3V3eP+x3gI0I2/y+6PeDI3ki+2gCxp1dtH9BGbdKIR+k+WvHB
+	pL7Bm4VSjD36towHuOv0Ua8fqr9Cu0W63CIAeRYTFDuEkiFy70UFxe7+N4fFWES4HeAQ59wPwRD
+	CJEJj9l1+ssmVFXg2s/YI9d6cfy22KSa2U3VO5j+qq2Mz26gwH4qw3+SVJfumyfQllDfoVp9zcf
+	sGtEOGla4toHrnQzlNYlsOFfNGZSKWnM++QXkiOVP3Ei+ieD05GqEiDFK/Qd1yKnOXvF3HumY0W
+	QDbHFDkDjAnZUmCNA==
+X-Received: by 2002:a05:7300:4347:b0:2c8:717:7ec7 with SMTP id 5a478bee46e88-2d58945dd66mr738787eec.20.1775783519477;
+        Thu, 09 Apr 2026 18:11:59 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::2:f3a8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d5627c44fcsm2174922eec.23.2026.04.09.18.11.55
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d5627c44fcsm2174922eec.23.2026.04.09.18.11.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2026 18:11:56 -0700 (PDT)
+        Thu, 09 Apr 2026 18:11:58 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -66,10 +66,11 @@ Cc: daniel@iogearbox.net,
 	martin.lau@linux.dev,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
-	eddyz87@gmail.com
-Subject: [PATCH bpf-next v2 07/13] bpf: introduce forward arg-tracking dataflow analysis
-Date: Thu,  9 Apr 2026 18:11:26 -0700
-Message-ID: <20260409-patch-set-v2-7-651804512349@gmail.com>
+	eddyz87@gmail.com,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 08/13] bpf: simplify liveness to use (callsite, depth) keyed func_instances
+Date: Thu,  9 Apr 2026 18:11:27 -0700
+Message-ID: <20260409-patch-set-v2-8-651804512349@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260409-patch-set-v2-0-651804512349@gmail.com>
 References: <20260409-patch-set-v2-0-651804512349@gmail.com>
@@ -79,1450 +80,1190 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The analysis is a basis for static liveness tracking mechanism
-introduced by the next two commits.
+Rework func_instance identification and remove the dynamic liveness
+API, completing the transition to fully static stack liveness analysis.
 
-A forward fixed-point analysis that tracks which frame's FP each
-register value is derived from, and at what byte offset. This is
-needed because a callee can receive a pointer to its caller's stack
-frame (e.g. r1 = fp-16 at the call site), then do *(u64 *)(r1 + 0)
-inside the callee — a cross-frame stack access that the callee's local
-liveness must attribute to the caller's stack.
+Replace callchain-based func_instance keys with (callsite, depth)
+pairs. The full callchain (all ancestor callsites) is no longer part
+of the hash key; only the immediate callsite and the call depth
+matter. This does not lose precision in practice and simplifies the
+data structure significantly: struct callchain is removed entirely,
+func_instance stores just callsite, depth, and a callsites[] array
+for outer frame lookups.
 
-Each register holds an arg_track value from a three-level lattice:
-- Precise {frame=N, off=[o1,o2,...]} — known frame index and
-  up to 4 concrete byte offsets
-- Offset-imprecise {frame=N, off_cnt=0} — known frame, unknown offset
-- Fully-imprecise {frame=ARG_IMPRECISE, mask=bitmask} — unknown frame,
-   mask says which frames might be involved
+Drop must_write_acc propagation. Previously, must_write marks were
+accumulated across successors and propagated to the caller via
+propagate_to_outer_instance(). Instead, callee entry liveness
+(live_before at subprog start) is pulled directly back to the
+caller's callsite in analyze_subprog() after each callee returns.
 
-At CFG merge points the lattice moves toward imprecision (same
-frame+offset stays precise, same frame different offsets merges offset
-sets or becomes offset-imprecise, different frames become
-fully-imprecise with OR'd bitmask).
+Skip recursive descent into callees that receive no FP-derived
+arguments (has_fp_args() check). This is needed because global
+subprogram calls can push depth beyond MAX_CALL_FRAMES (max depth
+is 64 for global calls but only 8 frames are accommodated for FP
+passing). It also handles the case where a callback subprog cannot be
+determined by argument tracking: such callbacks will be processed by
+analyze_subprog() at depth 0 independently.
 
-The analysis also tracks spills/fills to the callee's own stack
-(at_stack_in/out), so FP derived values spilled and reloaded.
+Update lookup_instance() (used by is_live_before queries) to search
+for the func_instance with maximal depth at the corresponding
+callsite, walking depth downward from frameno to 0. This accounts for
+the fact that instance depth no longer corresponds 1:1 to
+bpf_verifier_state->curframe, since skipped non-FP calls create gaps.
 
-This pass is run recursively per call site: when subprog A calls B
-with specific FP-derived arguments, B is re-analyzed with those entry
-args. The recursion follows analyze_subprog -> compute_subprog_args ->
-(for each call insn) -> analyze_subprog. Subprogs that receive no
-FP-derived args are skipped during recursion and analyzed
-independently at depth 0.
+Remove the dynamic public liveness API from verifier.c:
+  - bpf_mark_stack_{read,write}(), bpf_reset/commit_stack_write_marks()
+  - bpf_update_live_stack(), bpf_reset_live_stack_callchain()
+  - All call sites in check_stack_{read,write}_fixed_off(),
+    check_stack_range_initialized(), mark_stack_slot_obj_read(),
+    mark/unmark_stack_slots_{dynptr,iter,irq_flag}()
+  - The per-instruction write mark accumulation in do_check()
+  - The bpf_update_live_stack() call in prepare_func_exit()
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+mark_stack_read() and mark_stack_write() become static functions in
+liveness.c, called only from the static analysis pass. The
+func_instance->updated and must_write_dropped flags are removed.
+Remove spis_single_slot(), spis_msb_half_slot(), spis_lsb_half_slot()
+helpers from bpf_verifier.h as they are no longer used.
+
+Signed-off-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h |    4 +
- kernel/bpf/liveness.c        | 1293 ++++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        |   16 +-
- 3 files changed, 1311 insertions(+), 2 deletions(-)
+ include/linux/bpf_verifier.h |  19 --
+ kernel/bpf/liveness.c        | 558 ++++++++++++-------------------------------
+ kernel/bpf/verifier.c        |  79 +-----
+ 3 files changed, 159 insertions(+), 497 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index fac9bf403c5d..b93cb9619d79 100644
+index b93cb9619d79..1ee94e36806d 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -226,6 +226,7 @@ enum bpf_stack_slot_type {
+@@ -279,19 +279,6 @@ static inline void spis_or_range(spis_t *mask, u32 lo, u32 hi)
+ 		mask->v[w / 64] |= BIT_ULL(w % 64);
+ }
  
- /* 4-byte stack slot granularity for liveness analysis */
- #define BPF_HALF_REG_SIZE	4
-+#define STACK_SLOT_SZ		4
- #define STACK_SLOTS		(MAX_BPF_STACK / BPF_HALF_REG_SIZE)	/* 128 */
- 
- typedef struct {
-@@ -887,6 +888,8 @@ struct bpf_verifier_env {
- 	} cfg;
- 	struct backtrack_state bt;
- 	struct bpf_jmp_history_entry *cur_hist_ent;
-+	/* Per-callsite copy of parent's converged at_stack_in for cross-frame fills. */
-+	struct arg_track **callsite_at_stack;
- 	u32 pass_cnt; /* number of times do_check() was called */
- 	u32 subprog_cnt;
- 	/* number of instructions analyzed by the verifier */
-@@ -1214,6 +1217,7 @@ s64 bpf_helper_stack_access_bytes(struct bpf_verifier_env *env,
- s64 bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env,
- 				 struct bpf_insn *insn, int arg,
- 				 int insn_idx);
-+int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
+-static inline spis_t spis_one_bit(u32 slot)
+-{
+-	if (slot < 64)
+-		return (spis_t){{ BIT(slot), 0 }};
+-	else
+-		return (spis_t){{ 0, BIT(slot - 64) }};
+-}
+-
+-static inline spis_t spis_single_slot(u32 spi)
+-{
+-	return spis_or(spis_one_bit(spi * 2), spis_one_bit(spi * 2 + 1));
+-}
+-
+ #define BPF_REGMASK_ARGS ((1 << BPF_REG_1) | (1 << BPF_REG_2) | \
+ 			  (1 << BPF_REG_3) | (1 << BPF_REG_4) | \
+ 			  (1 << BPF_REG_5))
+@@ -1221,13 +1208,7 @@ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env);
  
  int bpf_stack_liveness_init(struct bpf_verifier_env *env);
  void bpf_stack_liveness_free(struct bpf_verifier_env *env);
+-int bpf_update_live_stack(struct bpf_verifier_env *env);
+-int bpf_mark_stack_read(struct bpf_verifier_env *env, u32 frameno, u32 insn_idx, spis_t mask);
+-void bpf_mark_stack_write(struct bpf_verifier_env *env, u32 frameno, spis_t mask);
+-int bpf_reset_stack_write_marks(struct bpf_verifier_env *env, u32 insn_idx);
+-int bpf_commit_stack_write_marks(struct bpf_verifier_env *env);
+ int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_state *st);
+ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 spi);
+-void bpf_reset_live_stack_callchain(struct bpf_verifier_env *env);
+ 
+ #endif /* _LINUX_BPF_VERIFIER_H */
 diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index a3af5972520f..1b2abc96d5a3 100644
+index 1b2abc96d5a3..c13f57ddf582 100644
 --- a/kernel/bpf/liveness.c
 +++ b/kernel/bpf/liveness.c
-@@ -2,10 +2,13 @@
- /* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+@@ -49,22 +49,8 @@
+  *
+  *   The above equations are computed for each call chain and instruction
+  *   index until state stops changing.
+- * - Additionally, in order to transfer "must_write" information from a
+- *   subprogram to call instructions invoking this subprogram,
+- *   the "must_write_acc" set is tracked for each (cc, i) tuple.
+- *   A set of stack slots that are guaranteed to be written by this
+- *   instruction or any of its successors (within the subprogram).
+- *   The equation for "must_write_acc" propagation looks as follows:
+- *
+- *     state[cc, i].must_write_acc =
+- *       ∩ [state[cc, s].must_write_acc for s in bpf_insn_successors(i)]
+- *       U state[cc, i].must_write
+- *
+- *   (An intersection of all "must_write_acc" for instruction successors
+- *    plus all "must_write" slots for the instruction itself).
+  * - After the propagation phase completes for a subprogram, information from
+  *   (cc, 0) tuple (subprogram entry) is transferred to the caller's call chain:
+- *   - "must_write_acc" set is intersected with the call site's "must_write" set;
+  *   - "may_read" set is added to the call site's "may_read" set.
+  * - Any live stack queries must be taken after the propagation phase.
+  * - Accumulation and propagation phases can be entered multiple times,
+@@ -85,157 +71,110 @@
+  * - A hash table mapping call chains to function instances.
+  */
  
- #include <linux/bpf_verifier.h>
-+#include <linux/btf.h>
- #include <linux/hashtable.h>
- #include <linux/jhash.h>
- #include <linux/slab.h>
+-struct callchain {
+-	u32 callsites[MAX_CALL_FRAMES];	/* instruction pointer for each frame */
+-	/* cached subprog_info[*].start for functions owning the frames:
+-	 * - sp_starts[curframe] used to get insn relative index within current function;
+-	 * - sp_starts[0..current-1] used for fast callchain_frame_up().
+-	 */
+-	u32 sp_starts[MAX_CALL_FRAMES];
+-	u32 curframe;			/* depth of callsites and sp_starts arrays */
+-};
+-
+ struct per_frame_masks {
+ 	spis_t may_read;	/* stack slots that may be read by this instruction */
+ 	spis_t must_write;	/* stack slots written by this instruction */
+-	spis_t must_write_acc;	/* stack slots written by this instruction and its successors */
+ 	spis_t live_before;	/* stack slots that may be read by this insn and its successors */
+ };
  
-+#define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
-+
  /*
-  * This file implements live stack slots analysis. After accumulating
-  * stack usage data, the analysis answers queries about whether a
-@@ -107,6 +110,7 @@ struct per_frame_masks {
+- * A function instance created for a specific callchain.
++ * A function instance keyed by (callsite, depth).
+  * Encapsulates read and write marks for each instruction in the function.
+- * Marks are tracked for each frame in the callchain.
++ * Marks are tracked for each frame up to @depth.
+  */
  struct func_instance {
  	struct hlist_node hl_node;
- 	struct callchain callchain;
-+	u32 subprog;		/* subprog index */
+-	struct callchain callchain;
++	u32 callsite;		/* call insn that invoked this subprog (subprog_start for depth 0) */
++	u32 depth;		/* call depth (0 = entry subprog) */
+ 	u32 subprog;		/* subprog index */
++	u32 subprog_start;	/* cached env->subprog_info[subprog].start */
  	u32 insn_cnt;		/* cached number of insns in the function */
- 	bool updated;
- 	bool must_write_dropped;
-@@ -200,11 +204,30 @@ static struct func_instance *__lookup_instance(struct bpf_verifier_env *env,
- 		return ERR_PTR(-ENOMEM);
- 	}
- 	memcpy(&result->callchain, callchain, sizeof(*callchain));
-+	result->subprog = subprog - env->subprog_info;
- 	result->insn_cnt = subprog_sz;
- 	hash_add(liveness->func_instances, &result->hl_node, key);
- 	return result;
+-	bool updated;
+-	bool must_write_dropped;
+ 	/* Per frame, per instruction masks, frames allocated lazily. */
+ 	struct per_frame_masks *frames[MAX_CALL_FRAMES];
+-	/* For each instruction a flag telling if "must_write" had been initialized for it. */
+-	bool *must_write_set;
++	bool must_write_initialized;
+ };
+ 
+ struct live_stack_query {
+ 	struct func_instance *instances[MAX_CALL_FRAMES]; /* valid in range [0..curframe] */
++	u32 callsites[MAX_CALL_FRAMES]; /* callsite[i] = insn calling frame i+1 */
+ 	u32 curframe;
+ 	u32 insn_idx;
+ };
+ 
+ struct bpf_liveness {
+-	DECLARE_HASHTABLE(func_instances, 8);		/* maps callchain to func_instance */
++	DECLARE_HASHTABLE(func_instances, 8);		/* maps (depth, callsite) to func_instance */
+ 	struct live_stack_query live_stack_query;	/* cache to avoid repetitive ht lookups */
+-	/* Cached instance corresponding to env->cur_state, avoids per-instruction ht lookup */
+-	struct func_instance *cur_instance;
+-	/*
+-	 * Below fields are used to accumulate stack write marks for instruction at
+-	 * @write_insn_idx before submitting the marks to @cur_instance.
+-	 */
+-	spis_t write_masks_acc[MAX_CALL_FRAMES];
+-	u32 write_insn_idx;
+ };
+ 
+-/* Compute callchain corresponding to state @st at depth @frameno */
+-static void compute_callchain(struct bpf_verifier_env *env, struct bpf_verifier_state *st,
+-			      struct callchain *callchain, u32 frameno)
+-{
+-	struct bpf_subprog_info *subprog_info = env->subprog_info;
+-	u32 i;
+-
+-	memset(callchain, 0, sizeof(*callchain));
+-	for (i = 0; i <= frameno; i++) {
+-		callchain->sp_starts[i] = subprog_info[st->frame[i]->subprogno].start;
+-		if (i < st->curframe)
+-			callchain->callsites[i] = st->frame[i + 1]->callsite;
+-	}
+-	callchain->curframe = frameno;
+-	callchain->callsites[callchain->curframe] = callchain->sp_starts[callchain->curframe];
+-}
+-
+-static u32 hash_callchain(struct callchain *callchain)
+-{
+-	return jhash2(callchain->callsites, callchain->curframe, 0);
+-}
+-
+-static bool same_callsites(struct callchain *a, struct callchain *b)
++/*
++ * Hash/compare key for func_instance: (depth, callsite).
++ * For depth == 0 (entry subprog), @callsite is the subprog start insn.
++ * For depth > 0, @callsite is the call instruction index that invoked the subprog.
++ */
++static u32 instance_hash(u32 callsite, u32 depth)
+ {
+-	int i;
++	u32 key[2] = { depth, callsite };
+ 
+-	if (a->curframe != b->curframe)
+-		return false;
+-	for (i = a->curframe; i >= 0; i--)
+-		if (a->callsites[i] != b->callsites[i])
+-			return false;
+-	return true;
++	return jhash2(key, 2, 0);
  }
  
-+static struct func_instance *call_instance(struct bpf_verifier_env *env,
-+					   struct func_instance *caller,
-+					   u32 callsite, int subprog)
-+{
-+	struct callchain cc;
+-/*
+- * Find existing or allocate new function instance corresponding to @callchain.
+- * Instances are accumulated in env->liveness->func_instances and persist
+- * until the end of the verification process.
+- */
+-static struct func_instance *__lookup_instance(struct bpf_verifier_env *env,
+-					       struct callchain *callchain)
++static struct func_instance *find_instance(struct bpf_verifier_env *env,
++					   u32 callsite, u32 depth)
+ {
+ 	struct bpf_liveness *liveness = env->liveness;
+-	struct bpf_subprog_info *subprog;
+-	struct func_instance *result;
+-	u32 subprog_sz, size, key;
+-
+-	key = hash_callchain(callchain);
+-	hash_for_each_possible(liveness->func_instances, result, hl_node, key)
+-		if (same_callsites(&result->callchain, callchain))
+-			return result;
+-
+-	subprog = bpf_find_containing_subprog(env, callchain->sp_starts[callchain->curframe]);
+-	subprog_sz = (subprog + 1)->start - subprog->start;
+-	size = sizeof(struct func_instance);
+-	result = kvzalloc(size, GFP_KERNEL_ACCOUNT);
+-	if (!result)
+-		return ERR_PTR(-ENOMEM);
+-	result->must_write_set = kvzalloc_objs(*result->must_write_set,
+-					       subprog_sz, GFP_KERNEL_ACCOUNT);
+-	if (!result->must_write_set) {
+-		kvfree(result);
+-		return ERR_PTR(-ENOMEM);
+-	}
+-	memcpy(&result->callchain, callchain, sizeof(*callchain));
+-	result->subprog = subprog - env->subprog_info;
+-	result->insn_cnt = subprog_sz;
+-	hash_add(liveness->func_instances, &result->hl_node, key);
+-	return result;
++	struct func_instance *f;
++	u32 key = instance_hash(callsite, depth);
 +
-+	if (caller) {
-+		cc = caller->callchain;
-+		cc.callsites[cc.curframe] = callsite;
-+		cc.curframe++;
-+	} else {
-+		memset(&cc, 0, sizeof(cc));
-+	}
-+	cc.sp_starts[cc.curframe] = env->subprog_info[subprog].start;
-+	cc.callsites[cc.curframe] = cc.sp_starts[cc.curframe];
-+	return __lookup_instance(env, &cc);
-+}
++	hash_for_each_possible(liveness->func_instances, f, hl_node, key)
++		if (f->depth == depth && f->callsite == callsite)
++			return f;
++	return NULL;
+ }
+ 
+ static struct func_instance *call_instance(struct bpf_verifier_env *env,
+ 					   struct func_instance *caller,
+ 					   u32 callsite, int subprog)
+ {
+-	struct callchain cc;
+-
+-	if (caller) {
+-		cc = caller->callchain;
+-		cc.callsites[cc.curframe] = callsite;
+-		cc.curframe++;
+-	} else {
+-		memset(&cc, 0, sizeof(cc));
+-	}
+-	cc.sp_starts[cc.curframe] = env->subprog_info[subprog].start;
+-	cc.callsites[cc.curframe] = cc.sp_starts[cc.curframe];
+-	return __lookup_instance(env, &cc);
++	u32 depth = caller ? caller->depth + 1 : 0;
++	u32 subprog_start = env->subprog_info[subprog].start;
++	u32 lookup_key = depth > 0 ? callsite : subprog_start;
++	struct func_instance *f;
++	u32 hash;
 +
++	f = find_instance(env, lookup_key, depth);
++	if (f)
++		return f;
++
++	f = kvzalloc(sizeof(*f), GFP_KERNEL_ACCOUNT);
++	if (!f)
++		return ERR_PTR(-ENOMEM);
++	f->callsite = lookup_key;
++	f->depth = depth;
++	f->subprog = subprog;
++	f->subprog_start = subprog_start;
++	f->insn_cnt = (env->subprog_info + subprog + 1)->start - subprog_start;
++	hash = instance_hash(lookup_key, depth);
++	hash_add(env->liveness->func_instances, &f->hl_node, hash);
++	return f;
+ }
+ 
  static struct func_instance *lookup_instance(struct bpf_verifier_env *env,
  					     struct bpf_verifier_state *st,
  					     u32 frameno)
-@@ -786,3 +809,1273 @@ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 half_sp
- 
- 	return false;
+ {
+-	struct callchain callchain;
+-
+-	compute_callchain(env, st, &callchain, frameno);
+-	return __lookup_instance(env, &callchain);
++	u32 callsite, subprog_start;
++	struct func_instance *f;
++	u32 key, depth;
++
++	subprog_start = env->subprog_info[st->frame[frameno]->subprogno].start;
++	callsite = frameno > 0 ? st->frame[frameno]->callsite : subprog_start;
++
++	for (depth = frameno; ; depth--) {
++		key = depth > 0 ? callsite : subprog_start;
++		f = find_instance(env, key, depth);
++		if (f || depth == 0)
++			return f;
++	}
  }
-+
-+/*
-+ * Per-register tracking state for compute_subprog_args().
-+ * Tracks which frame's FP a value is derived from
-+ * and the byte offset from that frame's FP.
-+ *
-+ * The .frame field forms a lattice with three levels of precision:
-+ *
-+ *   precise {frame=N, off=V}      -- known absolute frame index and byte offset
-+ *        |
-+ *   offset-imprecise {frame=N, off=OFF_IMPRECISE}
-+ *        |                        -- known frame identity, unknown offset
-+ *   fully-imprecise {frame=ARG_IMPRECISE, mask=bitmask}
-+ *                                 -- unknown frame identity; .mask is a
-+ *                                    bitmask of which frame indices might be
-+ *                                    involved
-+ *
-+ * At CFG merge points, arg_track_join() moves down the lattice:
-+ *   - same frame + same offset  -> precise
-+ *   - same frame + different offset -> offset-imprecise
-+ *   - different frames          -> fully-imprecise (bitmask OR)
-+ *
-+ * At memory access sites (LDX/STX/ST), offset-imprecise marks only
-+ * the known frame's access mask as U64_MAX, while fully-imprecise
-+ * iterates bits in the bitmask and routes each frame to its target.
-+ */
-+#define MAX_ARG_OFFSETS 4
-+
-+struct arg_track {
-+	union {
-+		s16 off[MAX_ARG_OFFSETS]; /* byte offsets; off_cnt says how many */
-+		u16 mask;	/* arg bitmask when arg == ARG_IMPRECISE */
-+	};
-+	s8 frame;	/* absolute frame index, or enum arg_track_state */
-+	s8 off_cnt;	/* 0 = offset-imprecise, 1-4 = # of precise offsets */
-+};
-+
-+enum arg_track_state {
-+	ARG_NONE	= -1,	/* not derived from any argument */
-+	ARG_UNVISITED	= -2,	/* not yet reached by dataflow */
-+	ARG_IMPRECISE	= -3,	/* lost identity; .mask is arg bitmask */
-+};
-+
-+#define OFF_IMPRECISE	S16_MIN	/* arg identity known but offset unknown */
-+
-+/* Track callee stack slots fp-8 through fp-512 (64 slots of 8 bytes each) */
-+#define MAX_ARG_SPILL_SLOTS 64
-+
-+static bool arg_is_visited(const struct arg_track *at)
-+{
-+	return at->frame != ARG_UNVISITED;
-+}
-+
-+static bool arg_is_fp(const struct arg_track *at)
-+{
-+	return at->frame >= 0 || at->frame == ARG_IMPRECISE;
-+}
-+
-+/*
-+ * Clear all tracked callee stack slots overlapping the byte range
-+ * [off, off+sz-1] where off is a negative FP-relative offset.
-+ */
-+static void clear_overlapping_stack_slots(struct arg_track *at_stack, s16 off, u32 sz)
-+{
-+	struct arg_track none = { .frame = ARG_NONE };
-+
-+	if (off == OFF_IMPRECISE) {
-+		for (int i = 0; i < MAX_ARG_SPILL_SLOTS; i++)
-+			at_stack[i] = none;
-+		return;
-+	}
-+	for (int i = 0; i < MAX_ARG_SPILL_SLOTS; i++) {
-+		int slot_start = -((i + 1) * 8);
-+		int slot_end = slot_start + 8;
-+
-+		if (slot_start < off + sz && slot_end > off)
-+			at_stack[i] = none;
-+	}
-+}
-+
-+static void verbose_arg_track(struct bpf_verifier_env *env, struct arg_track *at)
-+{
-+	int i;
-+
-+	switch (at->frame) {
-+	case ARG_NONE:      verbose(env, "_");                          break;
-+	case ARG_UNVISITED: verbose(env, "?");                          break;
-+	case ARG_IMPRECISE: verbose(env, "IMP%x", at->mask);            break;
-+	default:
-+		/* frame >= 0: absolute frame index */
-+		if (at->off_cnt == 0) {
-+			verbose(env, "fp%d ?", at->frame);
-+		} else {
-+			for (i = 0; i < at->off_cnt; i++) {
-+				if (i)
-+					verbose(env, "|");
-+				verbose(env, "fp%d%+d", at->frame, at->off[i]);
-+			}
-+		}
-+		break;
-+	}
-+}
-+
-+static bool arg_track_eq(const struct arg_track *a, const struct arg_track *b)
-+{
-+	int i;
-+
-+	if (a->frame != b->frame)
-+		return false;
-+	if (a->frame == ARG_IMPRECISE)
-+		return a->mask == b->mask;
-+	if (a->frame < 0)
-+		return true;
-+	if (a->off_cnt != b->off_cnt)
-+		return false;
-+	for (i = 0; i < a->off_cnt; i++)
-+		if (a->off[i] != b->off[i])
-+			return false;
-+	return true;
-+}
-+
-+static struct arg_track arg_single(s8 arg, s16 off)
-+{
-+	struct arg_track at = {};
-+
-+	at.frame = arg;
-+	at.off[0] = off;
-+	at.off_cnt = 1;
-+	return at;
-+}
-+
-+/*
-+ * Merge two sorted offset arrays, deduplicate.
-+ * Returns off_cnt=0 if the result exceeds MAX_ARG_OFFSETS.
-+ * Both args must have the same frame and off_cnt > 0.
-+ */
-+static struct arg_track arg_merge_offsets(struct arg_track a, struct arg_track b)
-+{
-+	struct arg_track result = { .frame = a.frame };
-+	struct arg_track imp = { .frame = a.frame };
-+	int i = 0, j = 0, k = 0;
-+
-+	while (i < a.off_cnt && j < b.off_cnt) {
-+		s16 v;
-+
-+		if (a.off[i] <= b.off[j]) {
-+			v = a.off[i++];
-+			if (v == b.off[j])
-+				j++;
-+		} else {
-+			v = b.off[j++];
-+		}
-+		if (k > 0 && result.off[k - 1] == v)
-+			continue;
-+		if (k >= MAX_ARG_OFFSETS)
-+			return imp;
-+		result.off[k++] = v;
-+	}
-+	while (i < a.off_cnt) {
-+		if (k >= MAX_ARG_OFFSETS)
-+			return imp;
-+		result.off[k++] = a.off[i++];
-+	}
-+	while (j < b.off_cnt) {
-+		if (k >= MAX_ARG_OFFSETS)
-+			return imp;
-+		result.off[k++] = b.off[j++];
-+	}
-+	result.off_cnt = k;
-+	return result;
-+}
-+/*
-+ * Collapse to ARG_IMPRECISE with a bitmask of which arg
-+ * identities are involved.  This lets memory access sites
-+ * mark only the relevant args' access masks and only set
-+ * stack_use when AT_CURRENT (bit 0) is in the bitmask.
-+ */
-+static struct arg_track arg_join_imprecise(struct arg_track a, struct arg_track b)
-+{
-+	u32 m = 0;
-+
-+	if (a.frame >= 0)
-+		m |= BIT(a.frame);
-+	else if (a.frame == ARG_IMPRECISE)
-+		m |= a.mask;
-+
-+	if (b.frame >= 0)
-+		m |= BIT(b.frame);
-+	else if (b.frame == ARG_IMPRECISE)
-+		m |= b.mask;
-+
-+	return (struct arg_track){ .mask = m, .frame = ARG_IMPRECISE };
-+}
-+
-+/* Join two arg_track values at merge points */
-+static struct arg_track __arg_track_join(struct arg_track a, struct arg_track b)
-+{
-+	if (!arg_is_visited(&b))
-+		return a;
-+	if (!arg_is_visited(&a))
-+		return b;
-+	if (a.frame == b.frame && a.frame >= 0) {
-+		/* Both offset-imprecise: stay imprecise */
-+		if (a.off_cnt == 0 || b.off_cnt == 0)
-+			return (struct arg_track){ .frame = a.frame };
-+		/* Merge offset sets; falls back to off_cnt=0 if >4 */
-+		return arg_merge_offsets(a, b);
-+	}
-+
-+	/*
-+	 * args are different, but one of them is known
-+	 * arg + none -> arg
-+	 * none + arg -> arg
-+	 *
-+	 * none + none -> none
-+	 */
-+	if (a.frame == ARG_NONE && b.frame == ARG_NONE)
-+		return a;
-+	if (a.frame >= 0 && b.frame == ARG_NONE) {
-+		/*
-+		 * When joining single fp-N add fake fp+0 to
-+		 * keep stack_use and prevent stack_def
-+		 */
-+		if (a.off_cnt == 1)
-+			return arg_merge_offsets(a, arg_single(a.frame, 0));
-+		return a;
-+	}
-+	if (b.frame >= 0 && a.frame == ARG_NONE) {
-+		if (b.off_cnt == 1)
-+			return arg_merge_offsets(b, arg_single(b.frame, 0));
-+		return b;
-+	}
-+
-+	return arg_join_imprecise(a, b);
-+}
-+
-+static bool arg_track_join(struct bpf_verifier_env *env, int idx, int target, int r,
-+			   struct arg_track *in, struct arg_track out)
-+{
-+	struct arg_track old = *in;
-+	struct arg_track new_val = __arg_track_join(old, out);
-+
-+	if (arg_track_eq(&new_val, &old))
-+		return false;
-+
-+	*in = new_val;
-+	if (!(env->log.level & BPF_LOG_LEVEL2) || !arg_is_visited(&old))
-+		return true;
-+
-+	verbose(env, "arg JOIN insn %d -> %d ", idx, target);
-+	if (r >= 0)
-+		verbose(env, "r%d: ", r);
+ 
+ int bpf_stack_liveness_init(struct bpf_verifier_env *env)
+@@ -256,9 +195,8 @@ void bpf_stack_liveness_free(struct bpf_verifier_env *env)
+ 	if (!env->liveness)
+ 		return;
+ 	hash_for_each_safe(env->liveness->func_instances, bkt, tmp, instance, hl_node) {
+-		for (i = 0; i <= instance->callchain.curframe; i++)
++		for (i = 0; i <= instance->depth; i++)
+ 			kvfree(instance->frames[i]);
+-		kvfree(instance->must_write_set);
+ 		kvfree(instance);
+ 	}
+ 	kvfree(env->liveness);
+@@ -270,7 +208,7 @@ void bpf_stack_liveness_free(struct bpf_verifier_env *env)
+  */
+ static int relative_idx(struct func_instance *instance, u32 insn_idx)
+ {
+-	return insn_idx - instance->callchain.sp_starts[instance->callchain.curframe];
++	return insn_idx - instance->subprog_start;
+ }
+ 
+ static struct per_frame_masks *get_frame_masks(struct func_instance *instance,
+@@ -297,145 +235,36 @@ static struct per_frame_masks *alloc_frame_masks(struct func_instance *instance,
+ 	return get_frame_masks(instance, frame, insn_idx);
+ }
+ 
+-void bpf_reset_live_stack_callchain(struct bpf_verifier_env *env)
+-{
+-	env->liveness->cur_instance = NULL;
+-}
+-
+-/* If @env->liveness->cur_instance is null, set it to instance corresponding to @env->cur_state. */
+-static int ensure_cur_instance(struct bpf_verifier_env *env)
+-{
+-	struct bpf_liveness *liveness = env->liveness;
+-	struct func_instance *instance;
+-
+-	if (liveness->cur_instance)
+-		return 0;
+-
+-	instance = lookup_instance(env, env->cur_state, env->cur_state->curframe);
+-	if (IS_ERR(instance))
+-		return PTR_ERR(instance);
+-
+-	liveness->cur_instance = instance;
+-	return 0;
+-}
+-
+ /* Accumulate may_read masks for @frame at @insn_idx */
+ static int mark_stack_read(struct func_instance *instance, u32 frame, u32 insn_idx, spis_t mask)
+ {
+ 	struct per_frame_masks *masks;
+-	spis_t new_may_read;
+ 
+ 	masks = alloc_frame_masks(instance, frame, insn_idx);
+ 	if (IS_ERR(masks))
+ 		return PTR_ERR(masks);
+-	new_may_read = spis_or(masks->may_read, mask);
+-	if (!spis_equal(new_may_read, masks->may_read) &&
+-	    !spis_equal(spis_or(new_may_read, masks->live_before),
+-				masks->live_before))
+-		instance->updated = true;
+ 	masks->may_read = spis_or(masks->may_read, mask);
+ 	return 0;
+ }
+ 
+-int bpf_mark_stack_read(struct bpf_verifier_env *env, u32 frame, u32 insn_idx, spis_t mask)
+-{
+-	int err;
+-
+-	err = ensure_cur_instance(env);
+-	err = err ?: mark_stack_read(env->liveness->cur_instance, frame, insn_idx, mask);
+-	return err;
+-}
+-
+-static void reset_stack_write_marks(struct bpf_verifier_env *env, struct func_instance *instance)
++static int mark_stack_write(struct func_instance *instance, u32 frame, u32 insn_idx, spis_t mask)
+ {
+-	struct bpf_liveness *liveness = env->liveness;
+-	int i;
+-
+-	for (i = 0; i <= instance->callchain.curframe; i++)
+-		liveness->write_masks_acc[i] = SPIS_ZERO;
+-}
+-
+-int bpf_reset_stack_write_marks(struct bpf_verifier_env *env, u32 insn_idx)
+-{
+-	struct bpf_liveness *liveness = env->liveness;
+-	int err;
+-
+-	err = ensure_cur_instance(env);
+-	if (err)
+-		return err;
+-
+-	liveness->write_insn_idx = insn_idx;
+-	reset_stack_write_marks(env, liveness->cur_instance);
+-	return 0;
+-}
+-
+-void bpf_mark_stack_write(struct bpf_verifier_env *env, u32 frame, spis_t mask)
+-{
+-	env->liveness->write_masks_acc[frame] = spis_or(env->liveness->write_masks_acc[frame], mask);
+-}
+-
+-static int commit_stack_write_marks(struct bpf_verifier_env *env,
+-				    struct func_instance *instance,
+-				    u32 insn_idx)
+-{
+-	struct bpf_liveness *liveness = env->liveness;
+-	u32 idx, frame, curframe;
+ 	struct per_frame_masks *masks;
+-	spis_t mask, old_must_write, dropped;
+ 
+-	if (!instance)
+-		return 0;
+-
+-	curframe = instance->callchain.curframe;
+-	idx = relative_idx(instance, insn_idx);
+-	for (frame = 0; frame <= curframe; frame++) {
+-		mask = liveness->write_masks_acc[frame];
+-		/* avoid allocating frames for zero masks */
+-		if (spis_is_zero(mask) && !instance->must_write_set[idx])
+-			continue;
+-		masks = alloc_frame_masks(instance, frame, insn_idx);
+-		if (IS_ERR(masks))
+-			return PTR_ERR(masks);
+-		old_must_write = masks->must_write;
+-		/*
+-		 * If instruction at this callchain is seen for a first time, set must_write equal
+-		 * to @mask. Otherwise take intersection with the previous value.
+-		 */
+-		if (instance->must_write_set[idx])
+-			mask = spis_and(mask, old_must_write);
+-		if (!spis_equal(old_must_write, mask)) {
+-			masks->must_write = mask;
+-			instance->updated = true;
+-		}
+-		/* dropped = old_must_write & ~mask */
+-		dropped = spis_and(old_must_write, spis_not(mask));
+-		if (!spis_is_zero(dropped))
+-			instance->must_write_dropped = true;
+-	}
+-	instance->must_write_set[idx] = true;
+-	liveness->write_insn_idx = 0;
++	masks = alloc_frame_masks(instance, frame, insn_idx);
++	if (IS_ERR(masks))
++		return PTR_ERR(masks);
++	if (instance->must_write_initialized)
++		masks->must_write = spis_and(masks->must_write, mask);
 +	else
-+		verbose(env, "fp%+d: ", r * 8);
-+	verbose_arg_track(env, &old);
-+	verbose(env, " + ");
-+	verbose_arg_track(env, &out);
-+	verbose(env, " => ");
-+	verbose_arg_track(env, &new_val);
-+	verbose(env, "\n");
-+	return true;
-+}
-+
-+/*
-+ * Compute the result when an ALU op destroys offset precision.
-+ * If a single arg is identifiable, preserve it with OFF_IMPRECISE.
-+ * If two different args are involved or one is already ARG_IMPRECISE,
-+ * the result is fully ARG_IMPRECISE.
-+ */
-+static void arg_track_alu64(struct arg_track *dst, const struct arg_track *src)
-+{
-+	WARN_ON_ONCE(!arg_is_visited(dst));
-+	WARN_ON_ONCE(!arg_is_visited(src));
-+
-+	if (dst->frame >= 0 && (src->frame == ARG_NONE || src->frame == dst->frame)) {
-+		/*
-+		 * rX += rY where rY is not arg derived
-+		 * rX += rX
-+		 */
-+		dst->off_cnt = 0;
-+		return;
-+	}
-+	if (src->frame >= 0 && dst->frame == ARG_NONE) {
-+		/*
-+		 * rX += rY where rX is not arg derived
-+		 * rY identity leaks into rX
-+		 */
-+		dst->off_cnt = 0;
-+		dst->frame = src->frame;
-+		return;
-+	}
-+
-+	if (dst->frame == ARG_NONE && src->frame == ARG_NONE)
-+		return;
-+
-+	*dst = arg_join_imprecise(*dst, *src);
-+}
-+
-+static s16 arg_add(s16 off, s64 delta)
-+{
-+	s64 res;
-+
-+	if (off == OFF_IMPRECISE)
-+		return OFF_IMPRECISE;
-+	res = (s64)off + delta;
-+	if (res < S16_MIN + 1 || res > S16_MAX)
-+		return OFF_IMPRECISE;
-+	return res;
-+}
-+
-+static void arg_padd(struct arg_track *at, s64 delta)
-+{
-+	int i;
-+
-+	if (at->off_cnt == 0)
-+		return;
-+	for (i = 0; i < at->off_cnt; i++) {
-+		s16 new_off = arg_add(at->off[i], delta);
-+
-+		if (new_off == OFF_IMPRECISE) {
-+			at->off_cnt = 0;
-+			return;
-+		}
-+		at->off[i] = new_off;
-+	}
-+}
-+
-+/*
-+ * Convert a byte offset from FP to a callee stack slot index (0-7).
-+ * Returns -1 if out of range or not 8-byte aligned.
-+ * Slot 0 = fp-8, slot 1 = fp-16, ..., slot 7 = fp-64.
-+ */
-+static int fp_off_to_slot(s16 off)
-+{
-+	if (off == OFF_IMPRECISE)
-+		return -1;
-+	if (off >= 0 || off < -(int)(MAX_ARG_SPILL_SLOTS * 8))
-+		return -1;
-+	if (off % 8)
-+		return -1;
-+	return (-off) / 8 - 1;
-+}
-+
-+/*
-+ * Join stack slot states across all possible FP offsets tracked in @reg.
-+ * When a register holds multiple possible FP-derived offsets (off_cnt > 1),
-+ * this merges the arg_track from each corresponding stack slot rather than
-+ * falling back to imprecise.
-+ */
-+static struct arg_track fill_from_stack(struct bpf_insn *insn,
-+					struct arg_track *at_out, int reg,
-+					struct arg_track *at_stack_out,
-+					int depth)
-+{
-+	int frame = at_out[reg].frame;
-+	struct arg_track imp = {
-+		.mask = frame >= 0 ? BIT(frame) : (1u << (depth + 1)) - 1,
-+		.frame = ARG_IMPRECISE
-+	};
-+	struct arg_track result = { .frame = ARG_NONE };
-+	int cnt, i;
-+
-+	if (reg == BPF_REG_FP) {
-+		int slot = fp_off_to_slot(insn->off);
-+
-+		return slot >= 0 ? at_stack_out[slot] : imp;
-+	}
-+	cnt = at_out[reg].off_cnt;
-+	if (cnt == 0)
-+		return imp;
-+
-+	for (i = 0; i < cnt; i++) {
-+		s16 fp_off = arg_add(at_out[reg].off[i], insn->off);
-+		int slot = fp_off_to_slot(fp_off);
-+
-+		if (slot < 0)
-+			return imp;
-+		result = __arg_track_join(result, at_stack_out[slot]);
-+	}
-+	return result;
-+}
-+
-+/*
-+ * Spill @val to all possible stack slots indicated by the FP offsets in @reg.
-+ * For an 8-byte store, each candidate slot gets @val; for sub-8-byte stores
-+ * the slot is cleared to ARG_NONE.
-+ */
-+static void spill_to_stack(struct bpf_insn *insn, struct arg_track *at_out,
-+			   int reg, struct arg_track *at_stack_out,
-+			   struct arg_track *val, u32 sz)
-+{
-+	struct arg_track none = { .frame = ARG_NONE };
-+	int cnt, i;
-+
-+	if (reg == BPF_REG_FP) {
-+		int slot = fp_off_to_slot(insn->off);
-+
-+		if (slot >= 0)
-+			at_stack_out[slot] = sz == 8 ? *val : none;
++		masks->must_write = mask;
+ 	return 0;
+ }
+ 
+-/*
+- * Merge stack writes marks in @env->liveness->write_masks_acc
+- * with information already in @env->liveness->cur_instance.
+- */
+-int bpf_commit_stack_write_marks(struct bpf_verifier_env *env)
+-{
+-	return commit_stack_write_marks(env, env->liveness->cur_instance, env->liveness->write_insn_idx);
+-}
+-
+-static char *fmt_callchain(struct bpf_verifier_env *env, struct callchain *callchain)
++static char *fmt_instance(struct bpf_verifier_env *env, struct func_instance *instance)
+ {
+-	char *buf_end = env->tmp_str_buf + sizeof(env->tmp_str_buf);
+-	char *buf = env->tmp_str_buf;
+-	int i;
+-
+-	buf += snprintf(buf, buf_end - buf, "(");
+-	for (i = 0; i <= callchain->curframe; i++)
+-		buf += snprintf(buf, buf_end - buf, "%s%d", i ? "," : "", callchain->callsites[i]);
+-	snprintf(buf, buf_end - buf, ")");
++	snprintf(env->tmp_str_buf, sizeof(env->tmp_str_buf),
++		 "(d%d,cs%d)", instance->depth, instance->callsite);
+ 	return env->tmp_str_buf;
+ }
+ 
+@@ -466,7 +295,7 @@ static void bpf_fmt_spis_mask(char *buf, ssize_t buf_sz, spis_t spis)
+ 	}
+ }
+ 
+-static void log_mask_change(struct bpf_verifier_env *env, struct callchain *callchain,
++static void log_mask_change(struct bpf_verifier_env *env, struct func_instance *instance,
+ 			    char *pfx, u32 frame, u32 insn_idx,
+ 			    spis_t old, spis_t new)
+ {
+@@ -478,7 +307,7 @@ static void log_mask_change(struct bpf_verifier_env *env, struct callchain *call
+ 
+ 	if (spis_is_zero(changed_bits))
+ 		return;
+-	bpf_log(&env->log, "%s frame %d insn %d ", fmt_callchain(env, callchain), frame, insn_idx);
++	bpf_log(&env->log, "%s frame %d insn %d ", fmt_instance(env, instance), frame, insn_idx);
+ 	if (!spis_is_zero(new_ones)) {
+ 		bpf_fmt_spis_mask(env->tmp_str_buf, sizeof(env->tmp_str_buf), new_ones);
+ 		bpf_log(&env->log, "+%s %s ", pfx, env->tmp_str_buf);
+@@ -561,61 +390,12 @@ bpf_insn_successors(struct bpf_verifier_env *env, u32 idx)
+ 
+ __diag_pop();
+ 
+-static struct func_instance *get_outer_instance(struct bpf_verifier_env *env,
+-						struct func_instance *instance)
+-{
+-	struct callchain callchain = instance->callchain;
+-
+-	/* Adjust @callchain to represent callchain one frame up */
+-	callchain.callsites[callchain.curframe] = 0;
+-	callchain.sp_starts[callchain.curframe] = 0;
+-	callchain.curframe--;
+-	callchain.callsites[callchain.curframe] = callchain.sp_starts[callchain.curframe];
+-	return __lookup_instance(env, &callchain);
+-}
+-
+-static u32 callchain_subprog_start(struct callchain *callchain)
+-{
+-	return callchain->sp_starts[callchain->curframe];
+-}
+-
+-/*
+- * Transfer @may_read and @must_write_acc marks from the first instruction of @instance,
+- * to the call instruction in function instance calling @instance.
+- */
+-static int propagate_to_outer_instance(struct bpf_verifier_env *env,
+-				       struct func_instance *instance)
+-{
+-	struct callchain *callchain = &instance->callchain;
+-	u32 this_subprog_start, callsite, frame;
+-	struct func_instance *outer_instance;
+-	struct per_frame_masks *insn;
+-	int err;
+-
+-	this_subprog_start = callchain_subprog_start(callchain);
+-	outer_instance = get_outer_instance(env, instance);
+-	if (IS_ERR(outer_instance))
+-		return PTR_ERR(outer_instance);
+-	callsite = callchain->callsites[callchain->curframe - 1];
+-	reset_stack_write_marks(env, outer_instance);
+-	for (frame = 0; frame < callchain->curframe; frame++) {
+-		insn = get_frame_masks(instance, frame, this_subprog_start);
+-		if (!insn)
+-			continue;
+-		bpf_mark_stack_write(env, frame, insn->must_write_acc);
+-		err = mark_stack_read(outer_instance, frame, callsite, insn->live_before);
+-		if (err)
+-			return err;
+-	}
+-	commit_stack_write_marks(env, outer_instance, callsite);
+-	return 0;
+-}
+ 
+ static inline bool update_insn(struct bpf_verifier_env *env,
+ 			       struct func_instance *instance, u32 frame, u32 insn_idx)
+ {
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+-	spis_t new_before, new_after, must_write_acc;
++	spis_t new_before, new_after;
+ 	struct per_frame_masks *insn, *succ_insn;
+ 	struct bpf_iarray *succ;
+ 	u32 s;
+@@ -629,17 +409,10 @@ static inline bool update_insn(struct bpf_verifier_env *env,
+ 	insn = get_frame_masks(instance, frame, insn_idx);
+ 	new_before = SPIS_ZERO;
+ 	new_after = SPIS_ZERO;
+-	/*
+-	 * New "must_write_acc" is an intersection of all "must_write_acc"
+-	 * of successors plus all "must_write" slots of instruction itself.
+-	 */
+-	must_write_acc = SPIS_ALL;
+ 	for (s = 0; s < succ->cnt; ++s) {
+ 		succ_insn = get_frame_masks(instance, frame, succ->items[s]);
+ 		new_after = spis_or(new_after, succ_insn->live_before);
+-		must_write_acc = spis_and(must_write_acc, succ_insn->must_write_acc);
+ 	}
+-	must_write_acc = spis_or(must_write_acc, insn->must_write);
+ 	/*
+ 	 * New "live_before" is a union of all "live_before" of successors
+ 	 * minus slots written by instruction plus slots read by instruction.
+@@ -648,53 +421,27 @@ static inline bool update_insn(struct bpf_verifier_env *env,
+ 	new_before = spis_or(spis_and(new_after, spis_not(insn->must_write)),
+ 			     insn->may_read);
+ 	changed |= !spis_equal(new_before, insn->live_before);
+-	changed |= !spis_equal(must_write_acc, insn->must_write_acc);
+ 	if (unlikely(env->log.level & BPF_LOG_LEVEL2) &&
+ 	    (!spis_is_zero(insn->may_read) || !spis_is_zero(insn->must_write) ||
+-	     insn_idx == callchain_subprog_start(&instance->callchain) ||
++	     insn_idx == instance->subprog_start ||
+ 	     aux[insn_idx].prune_point)) {
+-		log_mask_change(env, &instance->callchain, "live",
++		log_mask_change(env, instance, "live",
+ 				frame, insn_idx, insn->live_before, new_before);
+-		log_mask_change(env, &instance->callchain, "written",
+-				frame, insn_idx, insn->must_write_acc, must_write_acc);
+ 	}
+ 	insn->live_before = new_before;
+-	insn->must_write_acc = must_write_acc;
+ 	return changed;
+ }
+ 
+-/* Fixed-point computation of @live_before and @must_write_acc marks */
+-static int update_instance(struct bpf_verifier_env *env, struct func_instance *instance)
++/* Fixed-point computation of @live_before marks */
++static void update_instance(struct bpf_verifier_env *env, struct func_instance *instance)
+ {
+-	u32 i, frame, po_start, po_end, cnt, this_subprog_start;
+-	struct callchain *callchain = &instance->callchain;
++	u32 i, frame, po_start, po_end, cnt;
+ 	int *insn_postorder = env->cfg.insn_postorder;
+ 	struct bpf_subprog_info *subprog;
+-	struct per_frame_masks *insn;
+ 	bool changed;
+-	int err;
+-
+-	if (!instance->updated)
+-		return 0;
+-
+-	this_subprog_start = callchain_subprog_start(callchain);
+-	/*
+-	 * If must_write marks were updated must_write_acc needs to be reset
+-	 * (to account for the case when new must_write sets became smaller).
+-	 */
+-	if (instance->must_write_dropped) {
+-		for (frame = 0; frame <= callchain->curframe; frame++) {
+-			if (!instance->frames[frame])
+-				continue;
+-
+-			for (i = 0; i < instance->insn_cnt; i++) {
+-				insn = get_frame_masks(instance, frame, this_subprog_start + i);
+-				insn->must_write_acc = SPIS_ZERO;
+-			}
+-		}
+-	}
+ 
+-	subprog = bpf_find_containing_subprog(env, this_subprog_start);
++	instance->must_write_initialized = true;
++	subprog = &env->subprog_info[instance->subprog];
+ 	po_start = subprog->postorder_start;
+ 	po_end = (subprog + 1)->postorder_start;
+ 	cnt = 0;
+@@ -702,7 +449,7 @@ static int update_instance(struct bpf_verifier_env *env, struct func_instance *i
+ 	do {
+ 		cnt++;
+ 		changed = false;
+-		for (frame = 0; frame <= instance->callchain.curframe; frame++) {
++		for (frame = 0; frame <= instance->depth; frame++) {
+ 			if (!instance->frames[frame])
+ 				continue;
+ 
+@@ -713,44 +460,7 @@ static int update_instance(struct bpf_verifier_env *env, struct func_instance *i
+ 
+ 	if (env->log.level & BPF_LOG_LEVEL2)
+ 		bpf_log(&env->log, "%s live stack update done in %d iterations\n",
+-			fmt_callchain(env, callchain), cnt);
+-
+-	/* transfer marks accumulated for outer frames to outer func instance (caller) */
+-	if (callchain->curframe > 0) {
+-		err = propagate_to_outer_instance(env, instance);
+-		if (err)
+-			return err;
+-	}
+-
+-	instance->updated = false;
+-	instance->must_write_dropped = false;
+-	return 0;
+-}
+-
+-/*
+- * Prepare all callchains within @env->cur_state for querying.
+- * This function should be called after each verifier.c:pop_stack()
+- * and whenever verifier.c:do_check_insn() processes subprogram exit.
+- * This would guarantee that visited verifier states with zero branches
+- * have their bpf_mark_stack_{read,write}() effects propagated in
+- * @env->liveness.
+- */
+-int bpf_update_live_stack(struct bpf_verifier_env *env)
+-{
+-	struct func_instance *instance;
+-	int err, frame;
+-
+-	bpf_reset_live_stack_callchain(env);
+-	for (frame = env->cur_state->curframe; frame >= 0; --frame) {
+-		instance = lookup_instance(env, env->cur_state, frame);
+-		if (IS_ERR(instance))
+-			return PTR_ERR(instance);
+-
+-		err = update_instance(env, instance);
+-		if (err)
+-			return err;
+-	}
+-	return 0;
++			fmt_instance(env, instance), cnt);
+ }
+ 
+ static bool is_live_before(struct func_instance *instance, u32 insn_idx, u32 frameno, u32 half_spi)
+@@ -770,9 +480,12 @@ int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_
+ 	memset(q, 0, sizeof(*q));
+ 	for (frame = 0; frame <= st->curframe; frame++) {
+ 		instance = lookup_instance(env, st, frame);
+-		if (IS_ERR(instance))
+-			return PTR_ERR(instance);
+-		q->instances[frame] = instance;
++		if (IS_ERR_OR_NULL(instance))
++			q->instances[frame] = NULL;
 +		else
-+			clear_overlapping_stack_slots(at_stack_out, insn->off, sz);
-+		return;
-+	}
-+	cnt = at_out[reg].off_cnt;
-+	if (cnt == 0) {
-+		clear_overlapping_stack_slots(at_stack_out, OFF_IMPRECISE, sz);
-+		return;
-+	}
-+	for (i = 0; i < cnt; i++) {
-+		s16 fp_off = arg_add(at_out[reg].off[i], insn->off);
-+		int slot = fp_off_to_slot(fp_off);
++			q->instances[frame] = instance;
++		if (frame < st->curframe)
++			q->callsites[frame] = st->frame[frame + 1]->callsite;
+ 	}
+ 	q->curframe = st->curframe;
+ 	q->insn_idx = st->insn_idx;
+@@ -782,27 +495,44 @@ int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_
+ bool bpf_stack_slot_alive(struct bpf_verifier_env *env, u32 frameno, u32 half_spi)
+ {
+ 	/*
+-	 * Slot is alive if it is read before q->st->insn_idx in current func instance,
++	 * Slot is alive if it is read before q->insn_idx in current func instance,
+ 	 * or if for some outer func instance:
+ 	 * - alive before callsite if callsite calls callback, otherwise
+ 	 * - alive after callsite
+ 	 */
+ 	struct live_stack_query *q = &env->liveness->live_stack_query;
+ 	struct func_instance *instance, *curframe_instance;
+-	u32 i, callsite;
+-	bool alive;
++	u32 i, callsite, rel;
++	int cur_delta, delta;
++	bool alive = false;
+ 
+ 	curframe_instance = q->instances[q->curframe];
+-	alive = is_live_before(curframe_instance, q->insn_idx, frameno, half_spi);
++	if (!curframe_instance)
++		return true;
++	cur_delta = (int)curframe_instance->depth - (int)q->curframe;
++	rel = frameno + cur_delta;
++	if (rel <= curframe_instance->depth)
++		alive = is_live_before(curframe_instance, q->insn_idx, rel, half_spi);
 +
-+		if (slot >= 0)
-+			at_stack_out[slot] = sz == 8 ? *val : none;
-+		else
-+			clear_overlapping_stack_slots(at_stack_out, fp_off, sz);
-+	}
+ 	if (alive)
+ 		return true;
+ 
+ 	for (i = frameno; i < q->curframe; i++) {
+-		callsite = curframe_instance->callchain.callsites[i];
+ 		instance = q->instances[i];
++		if (!instance)
++			return true;
++		/* Map actual frameno to frame index within this instance */
++		delta = (int)instance->depth - (int)i;
++		rel = frameno + delta;
++		if (rel > instance->depth)
++			return true;
++
++		/* Get callsite from verifier state, not from instance callchain */
++		callsite = q->callsites[i];
++
+ 		alive = bpf_calls_callback(env, callsite)
+-			? is_live_before(instance, callsite, frameno, half_spi)
+-			: is_live_before(instance, callsite + 1, frameno, half_spi);
++			? is_live_before(instance, callsite, rel, half_spi)
++			: is_live_before(instance, callsite + 1, rel, half_spi);
+ 		if (alive)
+ 			return true;
+ 	}
+@@ -1301,7 +1031,7 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			   struct func_instance *instance,
+ 			   u32 *callsites)
+ {
+-	int depth = instance->callchain.curframe;
++	int depth = instance->depth;
+ 	u8 class = BPF_CLASS(insn->code);
+ 	u8 code = BPF_OP(insn->code);
+ 	struct arg_track *dst = &at_out[insn->dst_reg];
+@@ -1431,8 +1161,7 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+  *   access_bytes == 0:      no access
+  *
+  */
+-static int record_stack_access_off(struct bpf_verifier_env *env,
+-				   struct func_instance *instance, s64 fp_off,
++static int record_stack_access_off(struct func_instance *instance, s64 fp_off,
+ 				   s64 access_bytes, u32 frame, u32 insn_idx)
+ {
+ 	s32 slot_hi, slot_lo;
+@@ -1467,7 +1196,7 @@ static int record_stack_access_off(struct bpf_verifier_env *env,
+ 		if (slot_lo <= slot_hi) {
+ 			mask = SPIS_ZERO;
+ 			spis_or_range(&mask, slot_lo, slot_hi);
+-			bpf_mark_stack_write(env, frame, mask);
++			return mark_stack_write(instance, frame, insn_idx, mask);
+ 		}
+ 	}
+ 	return 0;
+@@ -1477,8 +1206,7 @@ static int record_stack_access_off(struct bpf_verifier_env *env,
+  * 'arg' is FP-derived argument to helper/kfunc or load/store that
+  * reads (positive) or writes (negative) 'access_bytes' into 'use' or 'def'.
+  */
+-static int record_stack_access(struct bpf_verifier_env *env,
+-			       struct func_instance *instance,
++static int record_stack_access(struct func_instance *instance,
+ 			       const struct arg_track *arg,
+ 			       s64 access_bytes, u32 frame, u32 insn_idx)
+ {
+@@ -1496,7 +1224,7 @@ static int record_stack_access(struct bpf_verifier_env *env,
+ 		return 0;
+ 
+ 	for (i = 0; i < arg->off_cnt; i++) {
+-		err = record_stack_access_off(env, instance, arg->off[i], access_bytes, frame, insn_idx);
++		err = record_stack_access_off(instance, arg->off[i], access_bytes, frame, insn_idx);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -1509,7 +1237,7 @@ static int record_stack_access(struct bpf_verifier_env *env,
+  */
+ static int record_imprecise(struct func_instance *instance, u32 mask, u32 insn_idx)
+ {
+-	int depth = instance->callchain.curframe;
++	int depth = instance->depth;
+ 	int f, err;
+ 
+ 	for (f = 0; mask; f++, mask >>= 1) {
+@@ -1530,7 +1258,7 @@ static int record_load_store_access(struct bpf_verifier_env *env,
+ 				    struct arg_track *at, int insn_idx)
+ {
+ 	struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
+-	int depth = instance->callchain.curframe;
++	int depth = instance->depth;
+ 	s32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
+ 	u8 class = BPF_CLASS(insn->code);
+ 	struct arg_track resolved, *ptr;
+@@ -1576,7 +1304,7 @@ static int record_load_store_access(struct bpf_verifier_env *env,
+ 	}
+ 
+ 	if (ptr->frame >= 0 && ptr->frame <= depth)
+-		return record_stack_access(env, instance, ptr, sz, ptr->frame, insn_idx);
++		return record_stack_access(instance, ptr, sz, ptr->frame, insn_idx);
+ 	if (ptr->frame == ARG_IMPRECISE)
+ 		return record_imprecise(instance, ptr->mask, insn_idx);
+ 	/* ARG_NONE: not derived from any frame pointer, skip */
+@@ -1590,7 +1318,7 @@ static int record_call_access(struct bpf_verifier_env *env,
+ 			      int insn_idx)
+ {
+ 	struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
+-	int depth = instance->callchain.curframe;
++	int depth = instance->depth;
+ 	struct bpf_call_summary cs;
+ 	int r, err = 0, num_params = 5;
+ 
+@@ -1623,7 +1351,7 @@ static int record_call_access(struct bpf_verifier_env *env,
+ 			continue;
+ 
+ 		if (frame >= 0 && frame <= depth)
+-			err = record_stack_access(env, instance, &at[r], bytes, frame, insn_idx);
++			err = record_stack_access(instance, &at[r], bytes, frame, insn_idx);
+ 		else if (frame == ARG_IMPRECISE)
+ 			err = record_imprecise(instance, at[r].mask, insn_idx);
+ 		if (err)
+@@ -1782,7 +1510,7 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+ {
+ 	int subprog = instance->subprog;
+ 	struct bpf_insn *insns = env->prog->insnsi;
+-	int depth = instance->callchain.curframe;
++	int depth = instance->depth;
+ 	int start = env->subprog_info[subprog].start;
+ 	int po_start = env->subprog_info[subprog].postorder_start;
+ 	int end = env->subprog_info[subprog + 1].start;
+@@ -1882,7 +1610,6 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+ 		int i = idx - start;
+ 		struct bpf_insn *insn = &insns[idx];
+ 
+-		reset_stack_write_marks(env, instance);
+ 		err = record_load_store_access(env, instance, at_in[i], idx);
+ 		if (err)
+ 			goto err_free;
+@@ -1903,9 +1630,6 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+ 			memcpy(env->callsite_at_stack[idx],
+ 			       at_stack_in[i], sizeof(struct arg_track) * MAX_ARG_SPILL_SLOTS);
+ 		}
+-		err = commit_stack_write_marks(env, instance, idx);
+-		if (err)
+-			goto err_free;
+ 	}
+ 
+ 	info->at_in = at_in;
+@@ -1921,6 +1645,15 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+ 	return err;
+ }
+ 
++/* Return true if any of R1-R5 is derived from a frame pointer. */
++static bool has_fp_args(struct arg_track *args)
++{
++	for (int r = BPF_REG_1; r <= BPF_REG_5; r++)
++		if (args[r].frame != ARG_NONE)
++			return true;
++	return false;
 +}
 +
-+/*
-+ * Clear stack slots overlapping all possible FP offsets in @reg.
-+ */
-+static void clear_stack_for_all_offs(struct bpf_insn *insn,
-+				     struct arg_track *at_out, int reg,
-+				     struct arg_track *at_stack_out, u32 sz)
-+{
-+	int cnt, i;
-+
-+	if (reg == BPF_REG_FP) {
-+		clear_overlapping_stack_slots(at_stack_out, insn->off, sz);
-+		return;
-+	}
-+	cnt = at_out[reg].off_cnt;
-+	if (cnt == 0) {
-+		clear_overlapping_stack_slots(at_stack_out, OFF_IMPRECISE, sz);
-+		return;
-+	}
-+	for (i = 0; i < cnt; i++) {
-+		s16 fp_off = arg_add(at_out[reg].off[i], insn->off);
-+
-+		clear_overlapping_stack_slots(at_stack_out, fp_off, sz);
-+	}
-+}
-+
-+static void arg_track_log(struct bpf_verifier_env *env, struct bpf_insn *insn, int idx,
-+			  struct arg_track *at_in, struct arg_track *at_stack_in,
-+			  struct arg_track *at_out, struct arg_track *at_stack_out)
-+{
-+	bool printed = false;
-+	int i;
-+
-+	if (!(env->log.level & BPF_LOG_LEVEL2))
-+		return;
-+	for (i = 0; i < MAX_BPF_REG; i++) {
-+		if (arg_track_eq(&at_out[i], &at_in[i]))
-+			continue;
-+		if (!printed) {
-+			verbose(env, "%3d: ", idx);
-+			bpf_verbose_insn(env, insn);
-+			bpf_vlog_reset(&env->log, env->log.end_pos - 1);
-+			printed = true;
-+		}
-+		verbose(env, "\tr%d: ", i); verbose_arg_track(env, &at_in[i]);
-+		verbose(env, " -> "); verbose_arg_track(env, &at_out[i]);
-+	}
-+	for (i = 0; i < MAX_ARG_SPILL_SLOTS; i++) {
-+		if (arg_track_eq(&at_stack_out[i], &at_stack_in[i]))
-+			continue;
-+		if (!printed) {
-+			verbose(env, "%3d: ", idx);
-+			bpf_verbose_insn(env, insn);
-+			bpf_vlog_reset(&env->log, env->log.end_pos - 1);
-+			printed = true;
-+		}
-+		verbose(env, "\tfp%+d: ", -(i + 1) * 8); verbose_arg_track(env, &at_stack_in[i]);
-+		verbose(env, " -> "); verbose_arg_track(env, &at_stack_out[i]);
-+	}
-+	if (printed)
-+		verbose(env, "\n");
-+}
-+
-+/*
-+ * Pure dataflow transfer function for arg_track state.
-+ * Updates at_out[] based on how the instruction modifies registers.
-+ * Tracks spill/fill, but not other memory accesses.
-+ */
-+static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
-+			   int insn_idx,
-+			   struct arg_track *at_out, struct arg_track *at_stack_out,
-+			   struct func_instance *instance,
-+			   u32 *callsites)
-+{
-+	int depth = instance->callchain.curframe;
-+	u8 class = BPF_CLASS(insn->code);
-+	u8 code = BPF_OP(insn->code);
-+	struct arg_track *dst = &at_out[insn->dst_reg];
-+	struct arg_track *src = &at_out[insn->src_reg];
-+	struct arg_track none = { .frame = ARG_NONE };
-+	int r;
-+
-+	if (class == BPF_ALU64 && BPF_SRC(insn->code) == BPF_K) {
-+		if (code == BPF_MOV) {
-+			*dst = none;
-+		} else if (dst->frame >= 0) {
-+			if (code == BPF_ADD)
-+				arg_padd(dst, insn->imm);
-+			else if (code == BPF_SUB)
-+				arg_padd(dst, -(s64)insn->imm);
-+			else
-+				/* Any other 64-bit alu on the pointer makes it imprecise */
-+				dst->off_cnt = 0;
-+		} /* else if dst->frame is imprecise it stays so */
-+	} else if (class == BPF_ALU64 && BPF_SRC(insn->code) == BPF_X) {
-+		if (code == BPF_MOV) {
-+			if (insn->off == 0) {
-+				*dst = *src;
-+			} else {
-+				/* addr_space_cast destroys a pointer */
-+				*dst = none;
-+			}
-+		} else {
-+			arg_track_alu64(dst, src);
-+		}
-+	} else if (class == BPF_ALU) {
-+		/*
-+		 * 32-bit alu destroys the pointer.
-+		 * If src was a pointer it cannot leak into dst
-+		 */
-+		*dst = none;
-+	} else if (class == BPF_JMP && code == BPF_CALL) {
-+		/*
-+		 * at_stack_out[slot] is not cleared by the helper and subprog calls.
-+		 * The fill_from_stack() may return the stale spill — which is an FP-derived arg_track
-+		 * (the value that was originally spilled there). The loaded register then carries
-+		 * a phantom FP-derived identity that doesn't correspond to what's actually in the slot.
-+		 * This phantom FP pointer propagates forward, and wherever it's subsequently used
-+		 * (as a helper argument, another store, etc.), it sets stack liveness bits.
-+		 * Those bits correspond to stack accesses that don't actually happen.
-+		 * So the effect is over-reporting stack liveness — marking slots as live that aren't
-+		 * actually accessed. The verifier preserves more state than necessary across calls,
-+		 * which is conservative.
-+		 *
-+		 * helpers can scratch stack slots, but they won't make a valid pointer out of it.
-+		 * subprogs are allowed to write into parent slots, but they cannot write
-+		 * _any_ FP-derived pointer into it (either their own or parent's FP).
-+		 */
-+		for (r = BPF_REG_0; r <= BPF_REG_5; r++)
-+			at_out[r] = none;
-+	} else if (class == BPF_LDX) {
-+		u32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
-+		bool src_is_local_fp = insn->src_reg == BPF_REG_FP || src->frame == depth ||
-+				       (src->frame == ARG_IMPRECISE && (src->mask & BIT(depth)));
-+
-+		/*
-+		 * Reload from callee stack: if src is current-frame FP-derived
-+		 * and the load is an 8-byte BPF_MEM, try to restore the spill
-+		 * identity.  For imprecise sources fill_from_stack() returns
-+		 * ARG_IMPRECISE (off_cnt == 0).
-+		 */
-+		if (src_is_local_fp && BPF_MODE(insn->code) == BPF_MEM && sz == 8) {
-+			*dst = fill_from_stack(insn, at_out, insn->src_reg, at_stack_out, depth);
-+		} else if (src->frame >= 0 && src->frame < depth &&
-+			   BPF_MODE(insn->code) == BPF_MEM && sz == 8) {
-+			struct arg_track *parent_stack =
-+				env->callsite_at_stack[callsites[src->frame]];
-+
-+			*dst = fill_from_stack(insn, at_out, insn->src_reg,
-+					       parent_stack, src->frame);
-+		} else if (src->frame == ARG_IMPRECISE &&
-+			   !(src->mask & BIT(depth)) && src->mask &&
-+			   BPF_MODE(insn->code) == BPF_MEM && sz == 8) {
-+			/*
-+			 * Imprecise src with only parent-frame bits:
-+			 * conservative fallback.
-+			 */
-+			*dst = *src;
-+		} else {
-+			*dst = none;
-+		}
-+	} else if (class == BPF_LD && BPF_MODE(insn->code) == BPF_IMM) {
-+		*dst = none;
-+	} else if (class == BPF_STX) {
-+		u32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
-+		bool dst_is_local_fp;
-+
-+		/* Track spills to current-frame FP-derived callee stack */
-+		dst_is_local_fp = insn->dst_reg == BPF_REG_FP || dst->frame == depth;
-+		if (dst_is_local_fp && BPF_MODE(insn->code) == BPF_MEM)
-+			spill_to_stack(insn, at_out, insn->dst_reg,
-+				       at_stack_out, src, sz);
-+
-+		if (BPF_MODE(insn->code) == BPF_ATOMIC) {
-+			if (dst_is_local_fp && insn->imm != BPF_LOAD_ACQ)
-+				clear_stack_for_all_offs(insn, at_out, insn->dst_reg,
-+							 at_stack_out, sz);
-+
-+			if (insn->imm == BPF_CMPXCHG)
-+				at_out[BPF_REG_0] = none;
-+			else if (insn->imm == BPF_LOAD_ACQ)
-+				*dst = none;
-+			else if (insn->imm & BPF_FETCH)
-+				*src = none;
-+		}
-+	} else if (class == BPF_ST && BPF_MODE(insn->code) == BPF_MEM) {
-+		u32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
-+		bool dst_is_local_fp = insn->dst_reg == BPF_REG_FP || dst->frame == depth;
-+
-+		/* BPF_ST to FP-derived dst: clear overlapping stack slots */
-+		if (dst_is_local_fp)
-+			clear_stack_for_all_offs(insn, at_out, insn->dst_reg,
-+						 at_stack_out, sz);
-+	}
-+}
-+
-+/*
-+ * Record access_bytes from helper/kfunc or load/store insn.
-+ *   access_bytes > 0:      stack read
-+ *   access_bytes < 0:      stack write
-+ *   access_bytes == S64_MIN: unknown   — conservative, mark [0..slot] as read
-+ *   access_bytes == 0:      no access
-+ *
-+ */
-+static int record_stack_access_off(struct bpf_verifier_env *env,
-+				   struct func_instance *instance, s64 fp_off,
-+				   s64 access_bytes, u32 frame, u32 insn_idx)
-+{
-+	s32 slot_hi, slot_lo;
-+	spis_t mask;
-+
-+	if (fp_off >= 0)
-+		/*
-+		 * out of bounds stack access doesn't contribute
-+		 * into actual stack liveness. It will be rejected
-+		 * by the main verifier pass later.
-+		 */
-+		return 0;
-+	if (access_bytes == S64_MIN) {
-+		/* helper/kfunc read unknown amount of bytes from fp_off until fp+0 */
-+		slot_hi = (-fp_off - 1) / STACK_SLOT_SZ;
-+		mask = SPIS_ZERO;
-+		spis_or_range(&mask, 0, slot_hi);
-+		return mark_stack_read(instance, frame, insn_idx, mask);
-+	}
-+	if (access_bytes > 0) {
-+		/* Mark any touched slot as use */
-+		slot_hi = (-fp_off - 1) / STACK_SLOT_SZ;
-+		slot_lo = max_t(s32, (-fp_off - access_bytes) / STACK_SLOT_SZ, 0);
-+		mask = SPIS_ZERO;
-+		spis_or_range(&mask, slot_lo, slot_hi);
-+		return mark_stack_read(instance, frame, insn_idx, mask);
-+	} else if (access_bytes < 0) {
-+		/* Mark only fully covered slots as def */
-+		access_bytes = -access_bytes;
-+		slot_hi = (-fp_off) / STACK_SLOT_SZ - 1;
-+		slot_lo = max_t(s32, (-fp_off - access_bytes + STACK_SLOT_SZ - 1) / STACK_SLOT_SZ, 0);
-+		if (slot_lo <= slot_hi) {
-+			mask = SPIS_ZERO;
-+			spis_or_range(&mask, slot_lo, slot_hi);
-+			bpf_mark_stack_write(env, frame, mask);
-+		}
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * 'arg' is FP-derived argument to helper/kfunc or load/store that
-+ * reads (positive) or writes (negative) 'access_bytes' into 'use' or 'def'.
-+ */
-+static int record_stack_access(struct bpf_verifier_env *env,
-+			       struct func_instance *instance,
-+			       const struct arg_track *arg,
-+			       s64 access_bytes, u32 frame, u32 insn_idx)
-+{
-+	int i, err;
-+
-+	if (access_bytes == 0)
-+		return 0;
-+	if (arg->off_cnt == 0) {
-+		if (access_bytes > 0)
-+			return mark_stack_read(instance, frame, insn_idx, SPIS_ALL);
-+		return 0;
-+	}
-+	if (access_bytes != S64_MIN && access_bytes < 0 && arg->off_cnt != 1)
-+		/* multi-offset write cannot set stack_def */
-+		return 0;
-+
-+	for (i = 0; i < arg->off_cnt; i++) {
-+		err = record_stack_access_off(env, instance, arg->off[i], access_bytes, frame, insn_idx);
-+		if (err)
-+			return err;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * When a pointer is ARG_IMPRECISE, conservatively mark every frame in
-+ * the bitmask as fully used.
-+ */
-+static int record_imprecise(struct func_instance *instance, u32 mask, u32 insn_idx)
-+{
-+	int depth = instance->callchain.curframe;
-+	int f, err;
-+
-+	for (f = 0; mask; f++, mask >>= 1) {
-+		if (!(mask & 1))
-+			continue;
-+		if (f <= depth) {
-+			err = mark_stack_read(instance, f, insn_idx, SPIS_ALL);
-+			if (err)
-+				return err;
-+		}
-+	}
-+	return 0;
-+}
-+
-+/* Record load/store access for a given 'at' state of 'insn'. */
-+static int record_load_store_access(struct bpf_verifier_env *env,
-+				    struct func_instance *instance,
-+				    struct arg_track *at, int insn_idx)
-+{
-+	struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
-+	int depth = instance->callchain.curframe;
-+	s32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
-+	u8 class = BPF_CLASS(insn->code);
-+	struct arg_track resolved, *ptr;
-+	int oi;
-+
-+	switch (class) {
-+	case BPF_LDX:
-+		ptr = &at[insn->src_reg];
-+		break;
-+	case BPF_STX:
-+		if (BPF_MODE(insn->code) == BPF_ATOMIC) {
-+			if (insn->imm == BPF_STORE_REL)
-+				sz = -sz;
-+			if (insn->imm == BPF_LOAD_ACQ)
-+				ptr = &at[insn->src_reg];
-+			else
-+				ptr = &at[insn->dst_reg];
-+		} else {
-+			ptr = &at[insn->dst_reg];
-+			sz = -sz;
-+		}
-+		break;
-+	case BPF_ST:
-+		ptr = &at[insn->dst_reg];
-+		sz = -sz;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	/* Resolve offsets: fold insn->off into arg_track */
-+	if (ptr->off_cnt > 0) {
-+		resolved.off_cnt = ptr->off_cnt;
-+		resolved.frame = ptr->frame;
-+		for (oi = 0; oi < ptr->off_cnt; oi++) {
-+			resolved.off[oi] = arg_add(ptr->off[oi], insn->off);
-+			if (resolved.off[oi] == OFF_IMPRECISE) {
-+				resolved.off_cnt = 0;
-+				break;
-+			}
-+		}
-+		ptr = &resolved;
-+	}
-+
-+	if (ptr->frame >= 0 && ptr->frame <= depth)
-+		return record_stack_access(env, instance, ptr, sz, ptr->frame, insn_idx);
-+	if (ptr->frame == ARG_IMPRECISE)
-+		return record_imprecise(instance, ptr->mask, insn_idx);
-+	/* ARG_NONE: not derived from any frame pointer, skip */
-+	return 0;
-+}
-+
-+/* Record stack access for a given 'at' state of helper/kfunc 'insn' */
-+static int record_call_access(struct bpf_verifier_env *env,
-+			      struct func_instance *instance,
-+			      struct arg_track *at,
-+			      int insn_idx)
-+{
-+	struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
-+	int depth = instance->callchain.curframe;
-+	struct bpf_call_summary cs;
-+	int r, err = 0, num_params = 5;
-+
-+	if (bpf_pseudo_call(insn))
-+		return 0;
-+
-+	if (bpf_get_call_summary(env, insn, &cs))
-+		num_params = cs.num_params;
-+
-+	for (r = BPF_REG_1; r < BPF_REG_1 + num_params; r++) {
-+		int frame = at[r].frame;
-+		s64 bytes;
-+
-+		if (!arg_is_fp(&at[r]))
+ /*
+  * Recursively analyze a subprog with specific 'entry_args'.
+  * Each callee is analyzed with the exact args from its call site.
+@@ -1937,7 +1670,7 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 			   u32 *callsites)
+ {
+ 	int subprog = instance->subprog;
+-	int depth = instance->callchain.curframe;
++	int depth = instance->depth;
+ 	struct bpf_insn *insns = env->prog->insnsi;
+ 	int start = env->subprog_info[subprog].start;
+ 	int po_start = env->subprog_info[subprog].postorder_start;
+@@ -1999,6 +1732,9 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 			continue;
+ 		}
+ 
++		if (!has_fp_args(callee_args))
 +			continue;
 +
-+		if (bpf_helper_call(insn)) {
-+			bytes = bpf_helper_stack_access_bytes(env, insn, r - 1, insn_idx);
-+		} else if (bpf_pseudo_kfunc_call(insn)) {
-+			bytes = bpf_kfunc_stack_access_bytes(env, insn, r - 1, insn_idx);
-+		} else {
-+			for (int f = 0; f <= depth; f++) {
-+				err = mark_stack_read(instance, f, insn_idx, SPIS_ALL);
+ 		if (depth == MAX_CALL_FRAMES - 1)
+ 			return -EINVAL;
+ 
+@@ -2009,9 +1745,25 @@ static int analyze_subprog(struct bpf_verifier_env *env,
+ 		err = analyze_subprog(env, callee_args, info, callee_instance, callsites);
+ 		if (err)
+ 			return err;
++
++		/* Pull callee's entry liveness back to caller's callsite */
++		{
++			u32 callee_start = callee_instance->subprog_start;
++			struct per_frame_masks *entry;
++
++			for (int f = 0; f < callee_instance->depth; f++) {
++				entry = get_frame_masks(callee_instance, f, callee_start);
++				if (!entry)
++					continue;
++				err = mark_stack_read(instance, f, idx, entry->live_before);
 +				if (err)
 +					return err;
 +			}
-+			return 0;
 +		}
-+		if (bytes == 0)
-+			continue;
-+
-+		if (frame >= 0 && frame <= depth)
-+			err = record_stack_access(env, instance, &at[r], bytes, frame, insn_idx);
-+		else if (frame == ARG_IMPRECISE)
-+			err = record_imprecise(instance, at[r].mask, insn_idx);
-+		if (err)
-+			return err;
-+	}
+ 	}
+ 
+-	return update_instance(env, instance);
++	update_instance(env, instance);
 +	return 0;
-+}
-+
-+/*
-+ * For a calls_callback helper, find the callback subprog and determine
-+ * which caller register maps to which callback register for FP passthrough.
-+ */
-+static int find_callback_subprog(struct bpf_verifier_env *env,
-+				 struct bpf_insn *insn, int insn_idx,
-+				 int *caller_reg, int *callee_reg)
-+{
-+	struct bpf_insn_aux_data *aux = &env->insn_aux_data[insn_idx];
-+	int cb_reg = -1;
-+
-+	*caller_reg = -1;
-+	*callee_reg = -1;
-+
-+	if (!bpf_helper_call(insn))
-+		return -1;
-+	switch (insn->imm) {
-+	case BPF_FUNC_loop:
-+		/* bpf_loop(nr, cb, ctx, flags): cb=R2, R3->cb R2 */
-+		cb_reg = BPF_REG_2;
-+		*caller_reg = BPF_REG_3;
-+		*callee_reg = BPF_REG_2;
-+		break;
-+	case BPF_FUNC_for_each_map_elem:
-+		/* for_each_map_elem(map, cb, ctx, flags): cb=R2, R3->cb R4 */
-+		cb_reg = BPF_REG_2;
-+		*caller_reg = BPF_REG_3;
-+		*callee_reg = BPF_REG_4;
-+		break;
-+	case BPF_FUNC_find_vma:
-+		/* find_vma(task, addr, cb, ctx, flags): cb=R3, R4->cb R3 */
-+		cb_reg = BPF_REG_3;
-+		*caller_reg = BPF_REG_4;
-+		*callee_reg = BPF_REG_3;
-+		break;
-+	case BPF_FUNC_user_ringbuf_drain:
-+		/* user_ringbuf_drain(map, cb, ctx, flags): cb=R2, R3->cb R2 */
-+		cb_reg = BPF_REG_2;
-+		*caller_reg = BPF_REG_3;
-+		*callee_reg = BPF_REG_2;
-+		break;
-+	default:
-+		return -1;
-+	}
-+
-+	if (!(aux->const_reg_subprog_mask & BIT(cb_reg)))
-+		return -2;
-+
-+	return aux->const_reg_vals[cb_reg];
-+}
-+
-+/* Per-subprog intermediate state kept alive across analysis phases */
-+struct subprog_at_info {
-+	struct arg_track (*at_in)[MAX_BPF_REG];
-+	int len;
-+};
-+
-+static void print_subprog_arg_access(struct bpf_verifier_env *env,
-+				     int subprog,
-+				     struct subprog_at_info *info,
-+				     struct arg_track (*at_stack_in)[MAX_ARG_SPILL_SLOTS])
-+{
-+	struct bpf_insn *insns = env->prog->insnsi;
-+	int start = env->subprog_info[subprog].start;
-+	int len = info->len;
-+	int i, r;
-+
-+	if (!(env->log.level & BPF_LOG_LEVEL2))
-+		return;
-+
-+	verbose(env, "subprog#%d %s:\n", subprog,
-+		env->prog->aux->func_info
-+		? btf_name_by_offset(env->prog->aux->btf,
-+				     btf_type_by_id(env->prog->aux->btf,
-+						    env->prog->aux->func_info[subprog].type_id)->name_off)
-+		: "");
-+	for (i = 0; i < len; i++) {
-+		int idx = start + i;
-+		bool has_extra = false;
-+		u8 cls = BPF_CLASS(insns[idx].code);
-+		bool is_ldx_stx_call = cls == BPF_LDX || cls == BPF_STX ||
-+				       insns[idx].code == (BPF_JMP | BPF_CALL);
-+
-+		verbose(env, "%3d: ", idx);
-+		bpf_verbose_insn(env, &insns[idx]);
-+
-+		/* Collect what needs printing */
-+		if (is_ldx_stx_call &&
-+		    arg_is_visited(&info->at_in[i][0])) {
-+			for (r = 0; r < MAX_BPF_REG - 1; r++)
-+				if (arg_is_fp(&info->at_in[i][r]))
-+					has_extra = true;
-+		}
-+		if (is_ldx_stx_call) {
-+			for (r = 0; r < MAX_ARG_SPILL_SLOTS; r++)
-+				if (arg_is_fp(&at_stack_in[i][r]))
-+					has_extra = true;
-+		}
-+
-+		if (!has_extra) {
-+			if (bpf_is_ldimm64(&insns[idx]))
-+				i++;
-+			continue;
-+		}
-+
-+		bpf_vlog_reset(&env->log, env->log.end_pos - 1);
-+		verbose(env, " //");
-+
-+		if (is_ldx_stx_call && info->at_in &&
-+		    arg_is_visited(&info->at_in[i][0])) {
-+			for (r = 0; r < MAX_BPF_REG - 1; r++) {
-+				if (!arg_is_fp(&info->at_in[i][r]))
-+					continue;
-+				verbose(env, " r%d=", r);
-+				verbose_arg_track(env, &info->at_in[i][r]);
-+			}
-+		}
-+
-+		if (is_ldx_stx_call) {
-+			for (r = 0; r < MAX_ARG_SPILL_SLOTS; r++) {
-+				if (!arg_is_fp(&at_stack_in[i][r]))
-+					continue;
-+				verbose(env, " fp%+d=", -(r + 1) * 8);
-+				verbose_arg_track(env, &at_stack_in[i][r]);
-+			}
-+		}
-+
-+		verbose(env, "\n");
-+		if (bpf_is_ldimm64(&insns[idx]))
-+			i++;
-+	}
-+}
-+
-+/*
-+ * Compute arg tracking dataflow for a single subprog.
-+ * Runs forward fixed-point with arg_track_xfer(), then records
-+ * memory accesses in a single linear pass over converged state.
-+ *
-+ * @callee_entry: pre-populated entry state for R1-R5
-+ *                NULL for main (subprog 0).
-+ * @info:         stores at_in, len for debug printing.
-+ */
-+static int compute_subprog_args(struct bpf_verifier_env *env,
-+				struct subprog_at_info *info,
-+				struct arg_track *callee_entry,
-+				struct func_instance *instance,
-+				u32 *callsites)
-+{
-+	int subprog = instance->subprog;
-+	struct bpf_insn *insns = env->prog->insnsi;
-+	int depth = instance->callchain.curframe;
-+	int start = env->subprog_info[subprog].start;
-+	int po_start = env->subprog_info[subprog].postorder_start;
-+	int end = env->subprog_info[subprog + 1].start;
-+	int po_end = env->subprog_info[subprog + 1].postorder_start;
-+	int len = end - start;
-+	struct arg_track (*at_in)[MAX_BPF_REG] = NULL;
-+	struct arg_track at_out[MAX_BPF_REG];
-+	struct arg_track (*at_stack_in)[MAX_ARG_SPILL_SLOTS] = NULL;
-+	struct arg_track *at_stack_out = NULL;
-+	struct arg_track unvisited = { .frame = ARG_UNVISITED };
-+	struct arg_track none = { .frame = ARG_NONE };
-+	bool changed;
-+	int i, p, r, err = -ENOMEM;
-+
-+	at_in = kvmalloc_objs(*at_in, len, GFP_KERNEL_ACCOUNT);
-+	if (!at_in)
-+		goto err_free;
-+
-+	at_stack_in = kvmalloc_objs(*at_stack_in, len, GFP_KERNEL_ACCOUNT);
-+	if (!at_stack_in)
-+		goto err_free;
-+
-+	at_stack_out = kvmalloc_objs(*at_stack_out, MAX_ARG_SPILL_SLOTS, GFP_KERNEL_ACCOUNT);
-+	if (!at_stack_out)
-+		goto err_free;
-+
-+	for (i = 0; i < len; i++) {
-+		for (r = 0; r < MAX_BPF_REG; r++)
-+			at_in[i][r] = unvisited;
-+		for (r = 0; r < MAX_ARG_SPILL_SLOTS; r++)
-+			at_stack_in[i][r] = unvisited;
-+	}
-+
-+	for (r = 0; r < MAX_BPF_REG; r++)
-+		at_in[0][r] = none;
-+
-+	/* Entry: R10 is always precisely the current frame's FP */
-+	at_in[0][BPF_REG_FP] = arg_single(depth, 0);
-+
-+	/* R1-R5: from caller or ARG_NONE for main */
-+	if (callee_entry) {
-+		for (r = BPF_REG_1; r <= BPF_REG_5; r++)
-+			at_in[0][r] = callee_entry[r];
-+	}
-+
-+	/* Entry: all stack slots are ARG_NONE */
-+	for (r = 0; r < MAX_ARG_SPILL_SLOTS; r++)
-+		at_stack_in[0][r] = none;
-+
-+	if (env->log.level & BPF_LOG_LEVEL2)
-+		verbose(env, "subprog#%d: analyzing (depth %d)...\n", subprog, depth);
-+
-+	/* Forward fixed-point iteration in reverse post order */
-+redo:
-+	changed = false;
-+	for (p = po_end - 1; p >= po_start; p--) {
-+		int idx = env->cfg.insn_postorder[p];
-+		int i = idx - start;
-+		struct bpf_insn *insn = &insns[idx];
-+		struct bpf_iarray *succ;
-+
-+		if (!arg_is_visited(&at_in[i][0]) && !arg_is_visited(&at_in[i][1]))
-+			continue;
-+
-+		memcpy(at_out, at_in[i], sizeof(at_out));
-+		memcpy(at_stack_out, at_stack_in[i], MAX_ARG_SPILL_SLOTS * sizeof(*at_stack_out));
-+
-+		arg_track_xfer(env, insn, idx, at_out, at_stack_out, instance, callsites);
-+		arg_track_log(env, insn, idx, at_in[i], at_stack_in[i], at_out, at_stack_out);
-+
-+		/* Propagate to successors within this subprogram */
-+		succ = bpf_insn_successors(env, idx);
-+		for (int s = 0; s < succ->cnt; s++) {
-+			int target = succ->items[s];
-+			int ti;
-+
-+			/* Filter: stay within the subprogram's range */
-+			if (target < start || target >= end)
-+				continue;
-+			ti = target - start;
-+
-+			for (r = 0; r < MAX_BPF_REG; r++)
-+				changed |= arg_track_join(env, idx, target, r,
-+							  &at_in[ti][r], at_out[r]);
-+
-+			for (r = 0; r < MAX_ARG_SPILL_SLOTS; r++)
-+				changed |= arg_track_join(env, idx, target, -r - 1,
-+							  &at_stack_in[ti][r], at_stack_out[r]);
-+		}
-+	}
-+	if (changed)
-+		goto redo;
-+
-+	/* Record memory accesses using converged at_in (RPO skips dead code) */
-+	for (p = po_end - 1; p >= po_start; p--) {
-+		int idx = env->cfg.insn_postorder[p];
-+		int i = idx - start;
-+		struct bpf_insn *insn = &insns[idx];
-+
-+		reset_stack_write_marks(env, instance);
-+		err = record_load_store_access(env, instance, at_in[i], idx);
-+		if (err)
-+			goto err_free;
-+
-+		if (insn->code == (BPF_JMP | BPF_CALL)) {
-+			err = record_call_access(env, instance, at_in[i], idx);
-+			if (err)
-+				goto err_free;
-+		}
-+
-+		if (bpf_pseudo_call(insn) || bpf_calls_callback(env, idx)) {
-+			kvfree(env->callsite_at_stack[idx]);
-+			env->callsite_at_stack[idx] =
-+				kvmalloc_objs(*env->callsite_at_stack[idx],
-+					      MAX_ARG_SPILL_SLOTS, GFP_KERNEL_ACCOUNT);
-+			if (!env->callsite_at_stack[idx])
-+				goto err_free;
-+			memcpy(env->callsite_at_stack[idx],
-+			       at_stack_in[i], sizeof(struct arg_track) * MAX_ARG_SPILL_SLOTS);
-+		}
-+		err = commit_stack_write_marks(env, instance, idx);
-+		if (err)
-+			goto err_free;
-+	}
-+
-+	info->at_in = at_in;
-+	at_in = NULL;
-+	info->len = len;
-+	print_subprog_arg_access(env, subprog, info, at_stack_in);
-+	err = 0;
-+
-+err_free:
-+	kvfree(at_stack_out);
-+	kvfree(at_stack_in);
-+	kvfree(at_in);
-+	return err;
-+}
-+
-+/*
-+ * Recursively analyze a subprog with specific 'entry_args'.
-+ * Each callee is analyzed with the exact args from its call site.
-+ *
-+ * Args are recomputed for each call because the dataflow result at_in[]
-+ * depends on the entry args and frame depth. Consider: A->C->D and B->C->D
-+ * Callsites in A and B pass different args into C, so C is recomputed.
-+ * Then within C the same callsite passes different args into D.
-+ */
-+static int analyze_subprog(struct bpf_verifier_env *env,
-+			   struct arg_track *entry_args,
-+			   struct subprog_at_info *info,
-+			   struct func_instance *instance,
-+			   u32 *callsites)
-+{
-+	int subprog = instance->subprog;
-+	int depth = instance->callchain.curframe;
-+	struct bpf_insn *insns = env->prog->insnsi;
-+	int start = env->subprog_info[subprog].start;
-+	int po_start = env->subprog_info[subprog].postorder_start;
-+	int po_end = env->subprog_info[subprog + 1].postorder_start;
-+	int j, err;
-+
-+	/* Free prior analysis if this subprog was already visited */
-+	kvfree(info[subprog].at_in);
-+	info[subprog].at_in = NULL;
-+
-+	err = compute_subprog_args(env, &info[subprog], entry_args, instance, callsites);
-+	if (err)
-+		return err;
-+
-+	/* For each reachable call site in the subprog, recurse into callees */
-+	for (int p = po_start; p < po_end; p++) {
-+		int idx = env->cfg.insn_postorder[p];
-+		struct arg_track callee_args[BPF_REG_5 + 1];
-+		struct arg_track none = { .frame = ARG_NONE };
-+		struct bpf_insn *insn = &insns[idx];
-+		struct func_instance *callee_instance;
-+		int callee, target;
-+		int caller_reg, cb_callee_reg;
-+
-+		j = idx - start; /* relative index within this subprog */
-+
-+		if (bpf_pseudo_call(insn)) {
-+			target = idx + insn->imm + 1;
-+			callee = bpf_find_subprog(env, target);
-+			if (callee < 0)
-+				continue;
-+
-+			/* Build entry args: R1-R5 from at_in at call site */
-+			for (int r = BPF_REG_1; r <= BPF_REG_5; r++)
-+				callee_args[r] = info[subprog].at_in[j][r];
-+		} else if (bpf_calls_callback(env, idx)) {
-+			callee = find_callback_subprog(env, insn, idx, &caller_reg, &cb_callee_reg);
-+			if (callee == -2) {
-+				/*
-+				 * same bpf_loop() calls two different callbacks and passes
-+				 * stack pointer to them
-+				 */
-+				if (info[subprog].at_in[j][caller_reg].frame == ARG_NONE)
-+					continue;
-+				for (int f = 0; f <= depth; f++) {
-+					err = mark_stack_read(instance, f, idx, SPIS_ALL);
-+					if (err)
-+						return err;
-+				}
-+				continue;
-+			}
-+			if (callee < 0)
-+				continue;
-+
-+			for (int r = BPF_REG_1; r <= BPF_REG_5; r++)
-+				callee_args[r] = none;
-+			callee_args[cb_callee_reg] = info[subprog].at_in[j][caller_reg];
-+		} else {
-+			continue;
-+		}
-+
-+		if (depth == MAX_CALL_FRAMES - 1)
-+			return -EINVAL;
-+
-+		callee_instance = call_instance(env, instance, idx, callee);
-+		if (IS_ERR(callee_instance))
-+			return PTR_ERR(callee_instance);
-+		callsites[depth] = idx;
-+		err = analyze_subprog(env, callee_args, info, callee_instance, callsites);
-+		if (err)
-+			return err;
-+	}
-+
-+	return update_instance(env, instance);
-+}
-+
-+int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
-+{
-+	u32 callsites[MAX_CALL_FRAMES] = {};
-+	int insn_cnt = env->prog->len;
-+	struct func_instance *instance;
-+	struct subprog_at_info *info;
-+	int k, err = 0;
-+
-+	info = kvzalloc_objs(*info, env->subprog_cnt, GFP_KERNEL_ACCOUNT);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	env->callsite_at_stack = kvzalloc_objs(*env->callsite_at_stack, insn_cnt,
-+					       GFP_KERNEL_ACCOUNT);
-+	if (!env->callsite_at_stack) {
-+		kvfree(info);
-+		return -ENOMEM;
-+	}
-+
-+	instance = call_instance(env, NULL, 0, 0);
-+	if (IS_ERR(instance)) {
-+		err = PTR_ERR(instance);
-+		goto out;
-+	}
-+	err = analyze_subprog(env, NULL, info, instance, callsites);
-+	if (err)
-+		goto out;
-+
-+	/*
-+	 * Subprogs and callbacks that don't receive FP-derived arguments
-+	 * cannot access ancestor stack frames, so they were skipped during
-+	 * the recursive walk above.  Async callbacks (timer, workqueue) are
-+	 * also not reachable from the main program's call graph.  Analyze
-+	 * all unvisited subprogs as independent roots at depth 0.
-+	 *
-+	 * Use reverse topological order (callers before callees) so that
-+	 * each subprog is analyzed before its callees, allowing the
-+	 * recursive walk inside analyze_subprog() to naturally
-+	 * reach nested callees that also lack FP-derived args.
-+	 */
-+	for (k = env->subprog_cnt - 1; k >= 0; k--) {
-+		int sub = env->subprog_topo_order[k];
-+
-+		if (info[sub].at_in && !bpf_subprog_is_global(env, sub))
-+			continue;
-+		instance = call_instance(env, NULL, 0, sub);
-+		if (IS_ERR(instance)) {
-+			err = PTR_ERR(instance);
-+			goto out;
-+		}
-+		err = analyze_subprog(env, NULL, info, instance, callsites);
-+		if (err)
-+			goto out;
-+	}
-+
-+out:
-+	for (k = 0; k < insn_cnt; k++)
-+		kvfree(env->callsite_at_stack[k]);
-+	kvfree(env->callsite_at_stack);
-+	env->callsite_at_stack = NULL;
-+	for (k = 0; k < env->subprog_cnt; k++)
-+		kvfree(info[k].at_in);
-+	kvfree(info);
-+	return err;
-+}
+ }
+ 
+ int bpf_compute_subprog_arg_access(struct bpf_verifier_env *env)
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0731e99aa541..4e8a6813af4f 100644
+index 4e8a6813af4f..b279c4c93b09 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -20256,6 +20256,15 @@ static int clean_live_states(struct bpf_verifier_env *env, int insn,
- 	struct list_head *pos, *head;
+@@ -828,9 +828,6 @@ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_
+ 		state->stack[spi - 1].spilled_ptr.ref_obj_id = id;
+ 	}
+ 
+-	bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi));
+-	bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi - 1));
+-
+ 	return 0;
+ }
+ 
+@@ -845,9 +842,6 @@ static void invalidate_dynptr(struct bpf_verifier_env *env, struct bpf_func_stat
+ 
+ 	__mark_reg_not_init(env, &state->stack[spi].spilled_ptr);
+ 	__mark_reg_not_init(env, &state->stack[spi - 1].spilled_ptr);
+-
+-	bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi));
+-	bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi - 1));
+ }
+ 
+ static int unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+@@ -965,9 +959,6 @@ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+ 	__mark_reg_not_init(env, &state->stack[spi].spilled_ptr);
+ 	__mark_reg_not_init(env, &state->stack[spi - 1].spilled_ptr);
+ 
+-	bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi));
+-	bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi - 1));
+-
+ 	return 0;
+ }
+ 
+@@ -1093,7 +1084,6 @@ static int mark_stack_slots_iter(struct bpf_verifier_env *env,
+ 		for (j = 0; j < BPF_REG_SIZE; j++)
+ 			slot->slot_type[j] = STACK_ITER;
+ 
+-		bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi - i));
+ 		mark_stack_slot_scratched(env, spi - i);
+ 	}
+ 
+@@ -1122,7 +1112,6 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 		for (j = 0; j < BPF_REG_SIZE; j++)
+ 			slot->slot_type[j] = STACK_INVALID;
+ 
+-		bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi - i));
+ 		mark_stack_slot_scratched(env, spi - i);
+ 	}
+ 
+@@ -1212,7 +1201,6 @@ static int mark_stack_slot_irq_flag(struct bpf_verifier_env *env,
+ 	slot = &state->stack[spi];
+ 	st = &slot->spilled_ptr;
+ 
+-	bpf_mark_stack_write(env, reg->frameno, spis_single_slot(spi));
+ 	__mark_reg_known_zero(st);
+ 	st->type = PTR_TO_STACK; /* we don't have dedicated reg type */
+ 	st->ref_obj_id = id;
+@@ -1268,8 +1256,6 @@ static int unmark_stack_slot_irq_flag(struct bpf_verifier_env *env, struct bpf_r
+ 
+ 	__mark_reg_not_init(env, st);
+ 
+-	bpf_mark_stack_write(env, reg->frameno, spis_single_slot(spi));
+-
+ 	for (i = 0; i < BPF_REG_SIZE; i++)
+ 		slot->slot_type[i] = STACK_INVALID;
+ 
+@@ -3846,15 +3832,10 @@ static int sort_subprogs_topo(struct bpf_verifier_env *env)
+ static int mark_stack_slot_obj_read(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 				    int spi, int nr_slots)
+ {
+-	int err, i;
++	int i;
+ 
+-	for (i = 0; i < nr_slots; i++) {
+-		err = bpf_mark_stack_read(env, reg->frameno, env->insn_idx,
+-					  spis_single_slot(spi - i));
+-		if (err)
+-			return err;
++	for (i = 0; i < nr_slots; i++)
+ 		mark_stack_slot_scratched(env, spi - i);
+-	}
+ 	return 0;
+ }
+ 
+@@ -5402,16 +5383,6 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	if (err)
+ 		return err;
+ 
+-	if (!(off % BPF_REG_SIZE) && size == BPF_REG_SIZE)
+-		/* 8-byte aligned, 8-byte write */
+-		bpf_mark_stack_write(env, state->frameno, spis_single_slot(spi));
+-	else if (!(off % BPF_REG_SIZE) && size == BPF_HALF_REG_SIZE)
+-		/* 8-byte aligned, 4-byte write */
+-		bpf_mark_stack_write(env, state->frameno, spis_one_bit(spi * 2 + 1));
+-	else if (!(off % BPF_HALF_REG_SIZE) && size == BPF_HALF_REG_SIZE)
+-		/* 4-byte aligned, 4-byte write */
+-		bpf_mark_stack_write(env, state->frameno, spis_one_bit(spi * 2));
+-
+ 	check_fastcall_stack_contract(env, state, insn_idx, off);
+ 	mark_stack_slot_scratched(env, spi);
+ 	if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE && env->bpf_capable) {
+@@ -5668,26 +5639,12 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+ 	struct bpf_reg_state *reg;
+ 	u8 *stype, type;
+ 	int insn_flags = insn_stack_access_flags(reg_state->frameno, spi);
+-	spis_t mask;
+-	int err;
+ 
+ 	stype = reg_state->stack[spi].slot_type;
+ 	reg = &reg_state->stack[spi].spilled_ptr;
+ 
+ 	mark_stack_slot_scratched(env, spi);
+ 	check_fastcall_stack_contract(env, state, env->insn_idx, off);
+-	if (!(off % BPF_REG_SIZE) && size == BPF_HALF_REG_SIZE)
+-		/* 8-byte aligned, 4-byte read */
+-		mask = spis_one_bit(spi * 2 + 1);
+-	else if (!(off % BPF_HALF_REG_SIZE) && size == BPF_HALF_REG_SIZE)
+-		/* 4-byte aligned, 4-byte read */
+-		mask = spis_one_bit(spi * 2);
+-	else
+-		mask = spis_single_slot(spi);
+-
+-	err = bpf_mark_stack_read(env, reg_state->frameno, env->insn_idx, mask);
+-	if (err)
+-		return err;
+ 
+ 	if (is_spilled_reg(&reg_state->stack[spi])) {
+ 		u8 spill_size = 1;
+@@ -8479,18 +8436,7 @@ static int check_stack_range_initialized(
+ 		}
+ 		return -EACCES;
+ mark:
+-		/* reading any byte out of 8-byte 'spill_slot' will cause
+-		 * the whole slot to be marked as 'read'
+-		 */
+-		err = bpf_mark_stack_read(env, reg->frameno, env->insn_idx,
+-					  spis_single_slot(spi));
+-		if (err)
+-			return err;
+-		/* We do not call bpf_mark_stack_write(), as we can not
+-		 * be sure that whether stack slot is written to or not. Hence,
+-		 * we must still conservatively propagate reads upwards even if
+-		 * helper may write to the entire memory range.
+-		 */
++		;
+ 	}
+ 	return 0;
+ }
+@@ -11105,8 +11051,6 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	/* and go analyze first insn of the callee */
+ 	*insn_idx = env->subprog_info[subprog].start - 1;
+ 
+-	bpf_reset_live_stack_callchain(env);
+-
+ 	if (env->log.level & BPF_LOG_LEVEL) {
+ 		verbose(env, "caller:\n");
+ 		print_verifier_state(env, state, caller->frameno, true);
+@@ -11391,10 +11335,6 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 	bool in_callback_fn;
  	int err;
  
-+	/* keep cleaning the current state as registers/stack become dead */
-+	err = clean_verifier_state(env, cur);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * can simply return here, since cached states will also be clean,
-+	 * but keep old logic for the sake of dynamic liveness.
-+	 */
- 	head = explored_state(env, insn);
- 	list_for_each(pos, head) {
- 		sl = container_of(pos, struct bpf_verifier_state_list, node);
-@@ -20267,8 +20276,6 @@ static int clean_live_states(struct bpf_verifier_env *env, int insn,
- 		if (sl->state.cleaned)
- 			/* all regs in this state in all frames were already marked */
- 			continue;
--		if (incomplete_read_marks(env, &sl->state))
--			continue;
- 		err = clean_verifier_state(env, &sl->state);
- 		if (err)
- 			return err;
-@@ -26301,6 +26308,11 @@ static int compute_live_registers(struct bpf_verifier_env *env)
- 	for (i = 0; i < insn_cnt; ++i)
- 		compute_insn_live_regs(env, &insns[i], &state[i]);
+-	err = bpf_update_live_stack(env);
+-	if (err)
+-		return err;
+-
+ 	callee = state->frame[state->curframe];
+ 	r0 = &callee->regs[BPF_REG_0];
+ 	if (r0->type == PTR_TO_STACK) {
+@@ -21753,7 +21693,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 	for (;;) {
+ 		struct bpf_insn *insn;
+ 		struct bpf_insn_aux_data *insn_aux;
+-		int err, marks_err;
++		int err;
  
-+	/* Forward pass: resolve stack access through FP-derived pointers */
-+	err = bpf_compute_subprog_arg_access(env);
-+	if (err)
-+		goto out;
-+
- 	changed = true;
- 	while (changed) {
- 		changed = false;
+ 		/* reset current history entry on each new instruction */
+ 		env->cur_hist_ent = NULL;
+@@ -21867,15 +21807,7 @@ static int do_check(struct bpf_verifier_env *env)
+ 		if (state->speculative && insn_aux->nospec)
+ 			goto process_bpf_exit;
+ 
+-		err = bpf_reset_stack_write_marks(env, env->insn_idx);
+-		if (err)
+-			return err;
+ 		err = do_check_insn(env, &do_print_state);
+-		if (err >= 0 || error_recoverable_with_nospec(err)) {
+-			marks_err = bpf_commit_stack_write_marks(env);
+-			if (marks_err)
+-				return marks_err;
+-		}
+ 		if (error_recoverable_with_nospec(err) && state->speculative) {
+ 			/* Prevent this speculative path from ever reaching the
+ 			 * insn that would have been unsafe to execute.
+@@ -21916,9 +21848,6 @@ static int do_check(struct bpf_verifier_env *env)
+ process_bpf_exit:
+ 			mark_verifier_state_scratched(env);
+ 			err = update_branch_counts(env, env->cur_state);
+-			if (err)
+-				return err;
+-			err = bpf_update_live_stack(env);
+ 			if (err)
+ 				return err;
+ 			err = pop_stack(env, &prev_insn_idx, &env->insn_idx,
 
 -- 
 2.53.0
