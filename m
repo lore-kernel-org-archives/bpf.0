@@ -1,285 +1,373 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7111E9B35;
-	Fri, 10 Apr 2026 12:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B421DD877
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 12:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775824864; cv=none; b=LDu8Oph8A9EfG29RaafC56cqjF1tylUuIzdWLRw0QGeeMlrH2EHkF0yz8en8xhFzjwglatjmaC8jMh+/R3aLUWvw2awxlW9hbiQU7prhaArO1DMmhi3hCD5UICuu/31IvuQyHb1vbrWl+Qire01UKoJM//k/Xbf4bCeROsM8lv8=
+	t=1775825002; cv=none; b=plidrooYfbHGG6mZbvUJd5NVpk9q/8WFWxTzGcn1k7tkZdkds1QoDu6r1I/go08GTN+DHqTQD7hpb3Dzg89BniCV0FxlMcpOjdGVSlxS9Z0rOg9utUWSG47j2Lvn3IfXf6bndngrFPybYgTShoAD0LcphKEVYBtodwvKQAyq54M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775824864; c=relaxed/simple;
-	bh=WBacjSH+A9F+E3slIREWcDoBvyj0TxR4tQM+XW/yzlA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WPM6gZSzygbHtl2732Q3hSV6x0LFkDVj5AJThfncNdiOgAxCLqKlha9YE8aPyVvqUew0/cgUs10hzxCWtvvbaouthkf0nurOVKYnPWNG9usL+SCfRlPRq0DTUidKx5nGSFcVBhmtwg7X8qi6vkGDWL3SmsZLNXxr7Uim563nMI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ANUF75UW; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1775825002; c=relaxed/simple;
+	bh=Sc7/+ledvDd6/XfbwzrxfD6WLiQg32gmFdGOcx0PMx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NtnHc/L7uJ0LGX7dJLWBwa8Fcp8V4iQG6rmw/kFDphNoC3T/Aw+PtZktcOoYOMURFpY9sB5VRkL1fwpWQmgCpfxs1PDVn26xKBewXp6MrwhKJ3dYVc+LH+RE2aQjT5ICImFVvrRWMoel2rUn/5iT5nghfupWat3CvPJsWWpI/p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OfyAlhqI; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ANUF75UW"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=HxM0dEKEy7st/6YHEFqxDJptD4HoEs+gEovPMJRD5c0=; b=ANUF75UWcNiDPZ2zaAB1IEaYaO
-	Qxygtl4iFodKeyoHcpUpFiOXLXVHqD77FFOTJOjQ3wsWC9nYUBkaCLmNKVZGNZRxLfId7Pc+J5kNm
-	wWwv35aYeMXWt/ekdqnswe4UkzF3EgGyYRqr/DNfOIxODUbsPfx60JGifaO8K3J8Aczj5BbIdha6U
-	BOlDPrD9am8qbB30UethCf7PRjRmXaxd4WxkIMLuSXeR6htQIgZlDzIbwiNahLxOuRmEfPYfEoqJb
-	vO4ITKu9nIvII67KGdCmNgfwcMQb3VAjLXqt0PAdqA0Zm6mTJ+T4l0paa72m+Ft8L2v6ih8Lb5fYS
-	R7ouaUkQ==;
-Received: from [179.244.2.202] (helo=toolbx)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wBBAJ-00EMz1-2q; Fri, 10 Apr 2026 14:40:51 +0200
-From: Helen Koike <koike@igalia.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	shung-hsi.yu@suse.com,
-	yonghong.song@linux.dev,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	koike@igalia.com,
-	kernel-dev@igalia.com
-Subject: [PATCH 2/2] selftests/bpf: new cases handled by 32->64 range refinements
-Date: Fri, 10 Apr 2026 09:40:28 -0300
-Message-ID: <20260410124035.297632-2-koike@igalia.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260410124035.297632-1-koike@igalia.com>
-References: <20260410124035.297632-1-koike@igalia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OfyAlhqI"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-79853c0f5b9so23778477b3.0
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 05:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775824999; x=1776429799; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3wPTYprFWv5OAAQY713DVZBl5oogf+yV0PVKx1wdxoc=;
+        b=OfyAlhqIfGIIvXcSWlNUkcQ2ak83d3+Ct0PhDTbKJFretZhIvPJ6PpJ30WDVN5BRRe
+         ZAvmGau+bZ6ywAYYSWrRrrrQRYSyqMEGeuVv5U52yylovJXvLxXmQ0nAD37+jHF8+y2D
+         OANoP9deVe1y2x0dGj/vUS5c5RSktWrVbXseHq9fS2DNtknICHmZ1NJSd/vQq6K9SgP4
+         sut8UjxLr9i3gVKc2zTYItAnwy7gt4hY9Z/vm9dgnbSd9+Jy+Wu7E39KJRiFWAfueHcI
+         Oy6nUvJa39k54pT07bLT65HB0VI3Hoy+AWITpPahGeKqID/sJCovklFF3Xaq6RuvjsKh
+         LTHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775824999; x=1776429799;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3wPTYprFWv5OAAQY713DVZBl5oogf+yV0PVKx1wdxoc=;
+        b=JlnXTX4qwAFwHoU/mqze0YysNuQFdNS7JlREcDceTu89RrudP2jlfOi6iFeVGDZFYF
+         t9lqHxFVnStNPynGjcqzvT9YhMZ2GCeE5uxg/N6YkPM9FxooEzA4HGTyyqiTguIhopgS
+         KzDHAWMfN5WYYuHDPT2bn+kCF675fY4ng7dI/1yEt84aLEO7KWcBYOpxf8Ob4nspV/vl
+         GmPv7BEiCQp1kY2mO1Er5zFfrIrdkczrKGP0vVlyoplZ+ktxCKVgIUAQouDC3mg8rVGc
+         JVIAhFdRzksYsu+ZRp2/hMNkYTzl/7DeFqjHz0yoTuQMClY9Xa5va2aY3bfckfqIPCs/
+         EhtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZ9zY5lvUOaSfn3y/xYQpusuytRBJ+5x8JDmtsYlP9ge9d5+bJJLAy5FvyLMpCHw6Kyrs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTKurIa0xBSRGjjGXfxSIHUuMx3wiUBOH4G2oXAi8CpMF8owZx
+	1ML9owHm83vDr5/JkJMDJrw+qkfJRCeJOITMbrBZzG6Rq2l6Q+u9F1zy
+X-Gm-Gg: AeBDieueMGJpKUeTy8x+zX/5qO+Wuf53f2trdrhup00KkbIDjUeAcfB1mBGohI1myAC
+	1ZkLXqFnlhoxKddsdLqHzFbgpf4d+q1sAvf13ZtR2JxcQDhqSSCEgCpalzWuzH8A83PYXXwxUIG
+	Pa44OQ7I9mHGDcsZ8ww5FOjuecZhkHHB/Q85J5iX3HHsjGbbaZVbXIEjG8jEpLwChgyPsPesZNM
+	lKpN9fJL7F3NnMt4JyQkdcyvz/bCQ8wIJKw4tW0oLfI8Qn/DbR58v6b06djuYYb8vpxtgMoAhN8
+	RlbE6xKMXlZ46vqJDYKihFsE63NX4AdabTzRt0Sx+rwcADKx2ZlNO9SFWcjRRIsL4I5cOtNEY8t
+	APZOyZpOnVS0x4znqj9kNPyG+80w54tzDH/sST7zqohSmaBX3NCGTtt1nWVn81TTiRACbs5LRIn
+	GzKmDtMt4LqMNrdRSNcnjOwIBkVNTd/Dh73NlQ/BJzYYA+I3jJyV9wIkm749FicTSRGEWHZVT4p
+	h4=
+X-Received: by 2002:a05:690c:110:b0:7a2:9a26:d3da with SMTP id 00721157ae682-7af72923e2cmr31495347b3.53.1775824998737;
+        Fri, 10 Apr 2026 05:43:18 -0700 (PDT)
+Received: from suesslenovo ([2600:1700:18fb:6011:19ff:af81:e78c:e10d])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7af400ec8dcsm12766097b3.46.2026.04.10.05.43.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2026 05:43:18 -0700 (PDT)
+Date: Fri, 10 Apr 2026 08:43:16 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+	brauner@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+	fred@cloudflare.com, gnoack@google.com, jack@suse.cz,
+	jmorris@namei.org, john.fastabend@gmail.com, kees@kernel.org,
+	kpsingh@kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+	m@maowtm.org, martin.lau@linux.dev, paul@paul-moore.com
+Subject: Re: [RFC PATCH 00/20] BPF interface for applying Landlock rulesets
+Message-ID: <adjwZAevNaDguilw@suesslenovo>
+References: <20260408.ong9Eshe0omu@digikod.net>
+ <20260408171030.4083129-1-utilityemal77@gmail.com>
+ <20260408.ainu5Chohnge@digikod.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260408.ainu5Chohnge@digikod.net>
 
-From: Eduard Zingerman <eddyz87@gmail.com>
+On Wed, Apr 08, 2026 at 09:21:11PM +0200, Mickaël Salaün wrote:
+> On Wed, Apr 08, 2026 at 01:10:28PM -0400, Justin Suess wrote:
+> > 
+> > Add a flag LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS, which executes
+> > task_set_no_new_privs on the current credentials, but only if
+> > the process lacks the CAP_SYS_ADMIN capability.
+> > 
+> > While this operation is redundant for code running from userspace
+> > (indeed callers may achieve the same logic by calling
+> > prctl w/ PR_SET_NO_NEW_PRIVS), this flag enables callers without access
+> > to the syscall abi (defined in subsequent patches) to restrict processes
+> > from gaining additional capabilities. This is important to ensure that
+> > consumers can meet the task_no_new_privs || CAP_SYS_ADMIN invariant
+> > enforced by Landlock without having syscall access.
+> > 
+> > This is done by hooking bprm_committing_creds along with a
+> > landlock_cred_security flag to indicate that the next execution should
+> > task_set_no_new_privs if the process doesn't possess CAP_SYS_ADMIN. This
+> > is done to ensure that task_set_no_new_privs is being done past the
+> > point of no return.
+> > 
+> > Cc: Mickaël Salaün <mic@digikod.net>
+> > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> > ---
+> > 
+> > On Wed, Apr 08, 2026 at 02:00:00 -0000, Mickaël Salaün wrote:
+> > > > Points of Feedback
+> > > > ===
+> > > > 
+> > > > First, the new set_nnp_on_point_of_no_return field in struct linux_binprm.
+> > > > This field was needed to request that task_set_no_new_privs be set during an
+> > > > execution, but only after the execution has proceeded beyond the point of no
+> > > > return. I couldn't find a way to express this semantic without adding a new
+> > > > bitfield to struct linux_binprm and a conditional in fs/exec.c. Please see
+> > > > patch 2.
+> > 
+> > > What about using security_bprm_committing_creds()?
+> > 
+> > Good idea. Definitely cleaner.
+> > 
+> > Something like this? Then dropping the "execve: Add set_nnp_on_point_of_no_return"
+> > commit.
+> > 
+> > This adds a bitfield to the landlock_cred_security struct to indicate that the flag
+> > should be set on the next exec(s).
+> > 
+> >  include/uapi/linux/landlock.h | 14 ++++++++++++++
+> >  security/landlock/cred.c      | 13 +++++++++++++
+> >  security/landlock/cred.h      |  7 +++++++
+> >  security/landlock/limits.h    |  2 +-
+> >  security/landlock/ruleset.c   | 15 ++++++++++++---
+> >  security/landlock/syscalls.c  |  5 +++++
+> >  6 files changed, 52 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/include/uapi/linux/landlock.h b/include/uapi/linux/landlock.h
+> > index f88fa1f68b77..edd9d9a7f60e 100644
+> > --- a/include/uapi/linux/landlock.h
+> > +++ b/include/uapi/linux/landlock.h
+> > @@ -129,12 +129,26 @@ struct landlock_ruleset_attr {
+> >   *
+> >   *     If the calling thread is running with no_new_privs, this operation
+> >   *     enables no_new_privs on the sibling threads as well.
+> > + *
+> > + * %LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS
+> > + *    Sets no_new_privs on the calling thread before applying the Landlock domain.
+> > + *    This flag is useful for convenience as well as for applying a ruleset from
+> > + *    an outside context (e.g BPF). This flag only has an effect on when both
+> > + *    no_new_privs isn't already set and the caller doesn't possess CAP_SYS_ADMIN.
+> > + *
+> > + *    This flag has slightly different behavior when used from BPF. Instead of
+> > + *    setting no_new_privs on the current task, it sets a flag on the bprm so that
+> > + *    no_new_privs is set on the task at exec point-of-no-return. This guarantees
+> > + *    that the current execution is unaffected, and may escalate as usual until the
+> > + *    next exec, but the resulting task cannot gain more privileges through later
+> > + *    exec transitions.
+> >   */
+> >  /* clang-format off */
+> >  #define LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF		(1U << 0)
+> >  #define LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON			(1U << 1)
+> >  #define LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF		(1U << 2)
+> >  #define LANDLOCK_RESTRICT_SELF_TSYNC				(1U << 3)
+> > +#define LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS			(1U << 4)
+> >  /* clang-format on */
+> >  
+> >  /**
+> > diff --git a/security/landlock/cred.c b/security/landlock/cred.c
+> > index 0cb3edde4d18..bcc9b716916f 100644
+> > --- a/security/landlock/cred.c
+> > +++ b/security/landlock/cred.c
+> > @@ -43,6 +43,18 @@ static void hook_cred_free(struct cred *const cred)
+> >  		landlock_put_ruleset_deferred(dom);
+> >  }
+> >  
+> > +static void hook_bprm_committing_creds(const struct linux_binprm *bprm)
+> > +{
+> > +	struct landlock_cred_security *const llcred = landlock_cred(bprm->cred);
+> > +
+> > +	if (llcred->set_nnp_on_committing_creds &&
+> > +	    !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN)) {
+> 
+> If asked by the caller, NNP must be set, whatever the capabilities of
+> the task.
+>
+Gotcha. I suppose checking the capability is possible from BPF anyway
+(at least from bprm_creds_from_file) so that makes sense.
+> > +		task_set_no_new_privs(current);
+> > +		/* Don't need to set it again for subsequent execution. */
+> > +		llcred->set_nnp_on_committing_creds = false;
+> > +	}
+> 
+> Thinking more about it, it would make more sense to add another flag to
+> enforce restriction on the next exec.  This new cred bit would then be
+> generic and enforce both NNP (if set) and the domain once we know the
+Problem is enforcing NNP after the escalation (and past the point of no
+return) is NOT safe from userspace side, (at least not without CAP_SYS_ADMIN
+already)
 
-1. u64 range where the lo32 of each endpoint falls outside the u32
-   range within its 2^32 block, requiring umin/umax to advance to an
-   adjacent block. Three variants:
-   - range entirely below S64_MAX;
-   - s64 range spanning negative and positive values to exercise
-     smin/smax advance;
-   - u64 range crossing the sign boundary: smin/smax stay conservative
-     at S64_MIN/S64_MAX.
+Imagine this (contrived) scenario where Landlock enforces NNP after the
+point of no return:
 
-2. 32-bit range crosses the U32_MAX/0 boundary, represented as s32
-   range crossing sign boundary.
+1. Sudo is configured like this: (some system file is critical to
+enforcing policy)
+   /etc/sudoers.d/policy.blah.conf
+   /etc/sudoers.d/policy.keep_bob_out.conf
+   
+2. Bob creates a program that enforces a landlock ruleset forbidding
+access to /etc/sudoers.d/policy.keep_bob_out.conf but allowing access to
+other configs. Then it launches sudo /bin/sh
 
-3. s32-bit range wraps, but u32 has a tighter lower bound from an
-   unsigned comparison.
+3. Bob can now escalate because the policy file keeping him out could
+not be read. NNP is only enforced after exec, so NNP only takes
+place after sudo escalates already.
 
-Co-developed-by: Helen Koike <koike@igalia.com>
-Signed-off-by: Helen Koike <koike@igalia.com>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+This is just an example, but there are other cases I'm probably not
+thinking of where it's dangerous to bypass the NNP check and enforce it
+on the next exec.
 
----
+To be safe, NNP must be enforced BEFORE the escalation in the
+unprivileged side, but problem is the escalation happens just
+before the point of no return, so exec may still fail!
 
-This patch was cherry-picked from:
-    https://lore.kernel.org/bpf/20260318-cnum-sync-bounds-v1-4-1f2e455ea711@gmail.com/
+So the conditions
 
-I added three other test cases and renamed a test to follow a pattern with
-the others (and updated commit message).
+1. NNP must happen after exec cannot fail, to not leave 
+side effects.
+2. NNP must happen before escalation, to avoid confused deputy attacks.
 
-Some of these extra tests were added due to cases I found while
-implementing the version without the circular range logic[1], so I kept
-them here (I guess some extra tests won't hurt).
+Are currently unsatisfiable.
+> execution is ok.  That should also bring the required plumbing to
+> create the domain at syscall (or kfunc) time and handle memory
+> allocation issue there, but only enforce it at exec time with
+> security_bprm_committing_creds() (without any possible error).
+> 
+I like that flow.
 
-[1] https://github.com/helen-fornazier/linux/commits/bpf-min-max-if-else-solution/
----
- .../selftests/bpf/progs/verifier_bounds.c     | 177 ++++++++++++++++++
- 1 file changed, 177 insertions(+)
+I guess this poses the question about what happens if a ruleset is asked
+for "on next exec" from userspace and then
+bpf_landlock_restrict_binprm() is called during the same execution?
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index bb20f0f06f05..a0178207c186 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -2165,4 +2165,181 @@ l0_%=:	r0 = 0;						\
- 	: __clobber_all);
- }
- 
-+/*
-+ * 64-bit range is outside the 32-bit range in each 2^32 block.
-+ *
-+ * This test triggers updates on umin/umax and smin/smax.
-+ *
-+ * N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
-+ * ||----|=====|--|----------||----|=====|-------------||--|-|=====|-------------||
-+ *       |< b >|  |                |< b >|                 | |< b >|
-+ *                |                |     |                 |
-+ *                |<---------------+- a -+---------------->|
-+ *                                 |     |
-+ *                                 |< t >| refined r0 range
-+ *
-+ * a = u64 [0x1'00000008, 0x3'00000001]
-+ * b = u32 [2, 5]
-+ * t = u64 [0x2'00000002, 0x2'00000005]
-+ */
-+SEC("socket")
-+__success
-+__flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void deduce64_from_32_block_change(void *ctx)
-+{
-+	asm volatile ("							\
-+	call %[bpf_get_prandom_u32];					\
-+	r1 = 0x100000008 ll;						\
-+	if r0 < r1 goto 2f;						\
-+	r1 = 0x300000001 ll;						\
-+	if r0 > r1 goto 2f;	/* u64: [0x1'00000008, 0x3'00000001] */	\
-+	if w0 < 2 goto 2f;						\
-+	if w0 > 5 goto 2f;	/* u32: [2, 5] */			\
-+	r2 = 0x200000002 ll;						\
-+	r3 = 0x200000005 ll;						\
-+	if r0 >= r2 goto 1f;	/* should be always true */		\
-+	r10 = 0;		/* dead code */				\
-+1:	if r0 <= r3 goto 2f;	/* should be always true */		\
-+	r10 = 0;		/* dead code */				\
-+2:	exit;								\
-+	"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Similar to the deduce64_from_32_block_change test for smin/smax boundaries.
-+ *
-+ * a = s64 [0x8000000100000008, 0x0000000300000001]  (crosses sign boundary)
-+ * b = u32 [2, 5]
-+ * t = s64 [0x8000000200000002, 0x0000000200000005]
-+ */
-+SEC("socket")
-+__success
-+__flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void deduce64_from_32_block_change_signed(void *ctx)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r1 = 0x8000000100000008 ll;				\
-+	if r0 s< r1 goto 2f;					\
-+	r1 = 0x300000001 ll;					\
-+	if r0 s> r1 goto 2f;	/* s64: [0x8000000100000008, 0x3'00000001] */ \
-+	if w0 < 2 goto 2f;					\
-+	if w0 > 5 goto 2f;	/* u32: [2, 5] */		\
-+	r2 = 0x8000000200000002 ll;				\
-+	r3 = 0x200000005 ll;					\
-+	if r0 s>= r2 goto 1f;	/* should be always true */	\
-+	r10 = 0;		/* dead code */			\
-+1:	if r0 s<= r3 goto 2f;	/* should be always true */	\
-+	r10 = 0;		/* dead code */			\
-+2:	exit;							\
-+	"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Similar to the deduce64_from_32_block_change test, with conservative signed boundaries.
-+ *
-+ * a = u64 [0x1'00000008, 0x80000003'00000001]
-+ *   = s64 [S64_MIN, S64_MAX] (since (s64)umin > (s64)umax)
-+ * b = u32 [2, 5]
-+ * t = u64 [0x2'00000002, 0x80000002'00000005]
-+ */
-+SEC("socket")
-+__success
-+__flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void deduce64_from_32_block_change_conservative_signed(void *ctx)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r1 = 0x100000008 ll;					\
-+	if r0 < r1 goto 2f;					\
-+	r1 = 0x8000000300000001 ll;				\
-+	if r0 > r1 goto 2f;	/* u64: [0x100000008, 0x8000000300000001] */ \
-+	if w0 < 2 goto 2f;					\
-+	if w0 > 5 goto 2f;	/* u32: [2, 5] */		\
-+	r2 = 0x200000002 ll;					\
-+	r3 = 0x8000000200000005 ll;				\
-+	if r0 >= r2 goto 1f;	/* should be always true */	\
-+	r10 = 0;		/* dead code */			\
-+1:	if r0 <= r3 goto 2f;	/* should be always true */	\
-+	r10 = 0;		/* dead code */			\
-+2:	exit;							\
-+	"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * 32-bit range crossing U32_MAX / 0 boundary.
-+ *
-+ * N*2^32                   (N+1)*2^32                (N+2)*2^32                (N+3)*2^32
-+ * ||===|---------|------|===||===|----------------|===||===|---------|------|===||
-+ *  |b >|         |      |< b||b >|                |< b||b >|         |      |< b|
-+ *                |      |                                  |         |
-+ *                |<-----+----------------- a --------------+-------->|
-+ *                       |                                  |
-+ *                       |<---------------- t ------------->| refined r0 range
-+ *
-+ * a = u64 [0x1'00000006, 0x2'FFFFFFEF]
-+ * b = s32 [-16, 5] (u32 wrapping [0xFFFFFFF0, 0x00000005])
-+ * t = u64 [0x1'FFFFFFF0, 0x2'00000005]
-+ */
-+SEC("socket")
-+__success
-+__flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void deduce64_from_32_wrapping_32bit(void *ctx)
-+{
-+	asm volatile ("							\
-+	call %[bpf_get_prandom_u32];					\
-+	r1 = 0x100000006 ll;						\
-+	if r0 < r1 goto 2f;						\
-+	r1 = 0x2ffffffef ll;						\
-+	if r0 > r1 goto 2f;	/* u64: [0x1'00000006, 0x2'FFFFFFEF] */	\
-+	if w0 s< -16 goto 2f;						\
-+	if w0 s> 5 goto 2f;	/* s32: [-16, 5] */			\
-+	r1 = 0x1fffffff0 ll;						\
-+	r2 = 0x200000005 ll;						\
-+	if r0 >= r1 goto 1f;	/* should be always true */		\
-+	r10 = 0;		/* dead code */				\
-+1:	if r0 <= r2 goto 2f;	/* should be always true */		\
-+	r10 = 0;		/* dead code */				\
-+2:	exit;								\
-+	"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * s32 range wraps, but u32 has a tighter lower bound from an unsigned
-+ * comparison.
-+ *
-+ * a = u64 [0x7FFFFFFF'00000001, 0x80000002'00000010]
-+ * b = s32 [-5, 5] + w0 u>= 2  =>  u32: [2, U32_MAX]
-+ * t = u64 [0x7FFFFFFF'00000002, ...]
-+ */
-+SEC("socket")
-+__success __flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void deduce64_from_32_u32_tighter_than_s32(void *ctx)
-+{
-+	asm volatile ("							\
-+	call %[bpf_get_prandom_u32];					\
-+	r1 = 0x7fffffff00000001 ll;					\
-+	if r0 < r1 goto 2f;						\
-+	r1 = 0x8000000200000010 ll;					\
-+	if r0 > r1 goto 2f;	/* u64: [0x7FFFFFFF'00000001, 0x80000002'00000010] */	\
-+	if w0 s< -5 goto 2f;						\
-+	if w0 s> 5 goto 2f;	/* s32: [-5, 5] */			\
-+	if w0 < 2 goto 2f;	/* u32_min=2; s32 still wraps */	\
-+	r2 = 0x7fffffff00000002 ll;					\
-+	if r0 >= r2 goto 2f;	/* should be always true */		\
-+	r10 = 0;		/* dead code */				\
-+2:	exit;								\
-+	"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.53.0
+Which would get priority? Would they
+be merged? (etc). What happens if one requests NNP and the other
+doesn't?
 
+This needs some thought.
+
+> > +}
+> > +
+> >  #ifdef CONFIG_AUDIT
+> >  
+> >  static int hook_bprm_creds_for_exec(struct linux_binprm *const bprm)
+> > @@ -55,6 +67,7 @@ static int hook_bprm_creds_for_exec(struct linux_binprm *const bprm)
+> >  #endif /* CONFIG_AUDIT */
+> >  
+> >  static struct security_hook_list landlock_hooks[] __ro_after_init = {
+> > +	LSM_HOOK_INIT(bprm_committing_creds, hook_bprm_committing_creds),
+> >  	LSM_HOOK_INIT(cred_prepare, hook_cred_prepare),
+> >  	LSM_HOOK_INIT(cred_transfer, hook_cred_transfer),
+> >  	LSM_HOOK_INIT(cred_free, hook_cred_free),
+> > diff --git a/security/landlock/cred.h b/security/landlock/cred.h
+> > index c10a06727eb1..7ec6dd12ebc3 100644
+> > --- a/security/landlock/cred.h
+> > +++ b/security/landlock/cred.h
+> > @@ -49,6 +49,13 @@ struct landlock_cred_security {
+> >  	 * not require a current domain.
+> >  	 */
+> >  	u8 log_subdomains_off : 1;
+> > +	/**
+> > +	 * @set_nnp_on_committing_creds: Set if the domain should set NO_NEW_PRIVS on the
+> > +	 * execution past the point of no return in security_bprm_committing_creds().
+> > +	 * This is not a hierarchy configuration because the nnp state is inherited by
+> > +	 * exec and doesn't need further configuration.
+> > +	 */
+> > +	u8 set_nnp_on_committing_creds : 1;
+> >  #endif /* CONFIG_AUDIT */
+> >  } __packed;
+> >  
+> > diff --git a/security/landlock/limits.h b/security/landlock/limits.h
+> > index eb584f47288d..d298086a4180 100644
+> > --- a/security/landlock/limits.h
+> > +++ b/security/landlock/limits.h
+> > @@ -31,7 +31,7 @@
+> >  #define LANDLOCK_MASK_SCOPE		((LANDLOCK_LAST_SCOPE << 1) - 1)
+> >  #define LANDLOCK_NUM_SCOPE		__const_hweight64(LANDLOCK_MASK_SCOPE)
+> >  
+> > -#define LANDLOCK_LAST_RESTRICT_SELF	LANDLOCK_RESTRICT_SELF_TSYNC
+> > +#define LANDLOCK_LAST_RESTRICT_SELF	LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS
+> >  #define LANDLOCK_MASK_RESTRICT_SELF	((LANDLOCK_LAST_RESTRICT_SELF << 1) - 1)
+> >  
+> >  /* clang-format on */
+> > diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
+> > index 1d6fa74f2a52..ad0bd5994ec5 100644
+> > --- a/security/landlock/ruleset.c
+> > +++ b/security/landlock/ruleset.c
+> > @@ -121,11 +121,13 @@ int landlock_restrict_cred_precheck(const __u32 flags,
+> >  
+> >  	/*
+> >  	 * Similar checks as for seccomp(2), except that an -EPERM may be
+> > -	 * returned.
+> > +	 * returned, or no_new_privs may be set by the caller via
+> > +	 * LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS.
+> >  	 */
+> >  	if (!task_no_new_privs(current) &&
+> >  	    !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN)) {
+> > -		return -EPERM;
+> > +		if (!(flags & LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS))
+> > +			return -EPERM;
+> >  	}
+> >  
+> >  	if (flags & ~LANDLOCK_MASK_RESTRICT_SELF)
+> > @@ -140,7 +142,7 @@ int landlock_restrict_cred(struct cred *const cred,
+> >  {
+> >  	struct landlock_cred_security *new_llcred;
+> >  	bool __maybe_unused log_same_exec, log_new_exec, log_subdomains,
+> > -		prev_log_subdomains;
+> > +		prev_log_subdomains, set_nnp_on_committing_creds;
+> >  
+> >  	/*
+> >  	 * It is allowed to set LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF without
+> > @@ -157,6 +159,12 @@ int landlock_restrict_cred(struct cred *const cred,
+> >  	log_new_exec = !!(flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON);
+> >  	/* Translates "off" flag to boolean. */
+> >  	log_subdomains = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF);
+> > +	/*
+> > +	 * Translates "on" flag to boolean. This flag is not inherited by exec,
+> > +	 * but the resulting nnp state is.
+> > +	 */
+> > +	set_nnp_on_committing_creds =
+> > +		!!(flags & LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS);
+> >  
+> >  	new_llcred = landlock_cred(cred);
+> >  
+> > @@ -165,6 +173,7 @@ int landlock_restrict_cred(struct cred *const cred,
+> >  	new_llcred->log_subdomains_off = !prev_log_subdomains ||
+> >  					 !log_subdomains;
+> >  #endif /* CONFIG_AUDIT */
+> > +	new_llcred->set_nnp_on_committing_creds = set_nnp_on_committing_creds;
+> >  
+> >  	/*
+> >  	 * The only case when a ruleset may not be set is if
+> > diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
+> > index c6c7be7698a2..f3520c764360 100644
+> > --- a/security/landlock/syscalls.c
+> > +++ b/security/landlock/syscalls.c
+> > @@ -397,6 +397,7 @@ SYSCALL_DEFINE4(landlock_add_rule, const int, ruleset_fd,
+> >   *         - %LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON
+> >   *         - %LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF
+> >   *         - %LANDLOCK_RESTRICT_SELF_TSYNC
+> > + *         - %LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS
+> >   *
+> >   * This system call enforces a Landlock ruleset on the current thread.
+> >   * Enforcing a ruleset requires that the task has %CAP_SYS_ADMIN in its
+> > @@ -450,6 +451,10 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
+> >  	if (!new_cred)
+> >  		return -ENOMEM;
+> >  
+> > +	if (flags & LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS &&
+> > +	    !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN))
+> > +		task_set_no_new_privs(current);
+> > +
+> >  	err = landlock_restrict_cred(new_cred, ruleset, flags);
+> >  	if (err) {
+> >  		abort_creds(new_cred);
+> > -- 
+> > 2.53.0
+> > 
+> > 
