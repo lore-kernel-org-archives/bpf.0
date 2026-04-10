@@ -1,174 +1,95 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA0B29AAEA;
-	Fri, 10 Apr 2026 06:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35DE2C08C8;
+	Fri, 10 Apr 2026 06:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775801526; cv=none; b=adV/rm9IkCzvD/A6mMIXVDQDSlns0OoejkaXTGeVd+o/o+KwVxYreIYByma3Vtc6f294lkN2vnOSTqvNupPs+ysPvpjr3kRFyS6uI4r0QB2D874I8JSXkwQRLE8ap2CJefPkPXX7FV1leJf86Fv7g63blTcrOWaFzMfAe5rmZFI=
+	t=1775801732; cv=none; b=XUoX7p6mIAJQFsnGWRLmfaZhjulOtqpDienP59vdtWQtn4ZAt06FPf2kbUMft2eANYxd1PVVjPsvE5elHeevxHULVLpepnHghdSjViycvoc296+3T3QN2tVRCUDZ3CkIoTqY7UUw0hPUhA4R+3BXPVUmtyaoHV/RPRrjO2Q33A4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775801526; c=relaxed/simple;
-	bh=rivNMzxXrs9lHPPIuhozjHmdmlyJEjRXgGypuqw7qR8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lxDDXOUe7KvJ6D3eKSg7w5wsbHBeo4WTbxaAE6MsWUG0juB4vRh5zFmuhdJan5GTXWy45MoR61nMYBmG2DVeuncZf600zjDRrPw8//d5ZPmNfSGliZ9Q8lT9SJwSYJwzM2/hsyzKAQWkuJvCMQpctxL7aodr5+N7cwrxoscAXdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KzbwIPjw; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775801732; c=relaxed/simple;
+	bh=KgvnKGcXGXU88l0czntTzYFax2G5Iid/3FAP9jKyAMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qo5XnSk8sjw7QT28RtDfonu6RfBajvk9oPexPqH5KNjqKu61T3M240o2TIbRD4XY9xb5mAEfQ3FS59QL4VRrbSJtZCHoeHLrFQP+rsjvTtO9BbWvhCuA2H4jGFiCWVr3C4gYb0Wn3rhbjlfb2syQp/NkC7JRpd2UjHDaHeNmfJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=zsTIFQla; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KzbwIPjw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=If
-	FPalp3WHxpMdpiLbcJeroljTSghFPD7+9njMmArlo=; b=KzbwIPjwzVCrm+m2f6
-	6ncm8Ks52+w8avLBzTq3uyAusVp9Prr4OGmIb68nnebu5198ZFcnmzXc5ZlrV0tK
-	1nL0z2CzxPgywRgcLovV0/lF36nzF/PyP+6dh4spTXVbIjEggU6NsMwSIz259HNl
-	XSvIAF47oeZg+kWs7DDtDUUDg=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgDn739elNhpd0HuZg--.6807S4;
-	Fri, 10 Apr 2026 14:10:41 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	mattbobrowski@google.com,
-	jiayuan.chen@linux.dev
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: Add selftests for verifying return values of fmod_ret.
-Date: Fri, 10 Apr 2026 14:10:37 +0800
-Message-Id: <20260410061037.149532-3-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260410061037.149532-1-yangfeng59949@163.com>
-References: <20260410061037.149532-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zsTIFQla"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=1Kk3EU/XwfJL9hGGHRQptOeSG6TwGLTBxlWVgkU2o2I=; b=zsTIFQlac0OVQ6jQXXHfQCatYd
+	9PiNnMeIZYp3BXrusZ2eqU8Z6tigF6T/XTp2D9y7SD+Nv7iAtTr7glCU+dCJKzZ902X6xj8UxHht9
+	G4OGKGJQ8qEcpG3ujjrcFn676rIC8WuLQl1KtjwYZORsfbZjNtqvyO4TGhSfGBcBzVP2+cXUtLdsR
+	SgORoyZ+xlyyfiHI/6eLaNaBnYn/v2slv4CwJjX7+4lsFozLlMkDGEEi6cNa82Vu/5UknDXGjoH7R
+	hnuEtqX+S3gU0SUdlcsRfOhwKXCoSWWKdoNle3V3wTP3Ck1sGpkNQ/pZ8Wc8+xQBhhoNFgm/i7c7R
+	XcEmSp9A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1wB59A-0000000BfVD-43nY;
+	Fri, 10 Apr 2026 06:15:16 +0000
+Date: Thu, 9 Apr 2026 23:15:16 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Christian Brauner <brauner@kernel.org>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>, linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
+Message-ID: <adiVdIhcgfiIoXja@infradead.org>
+References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
+ <acYVjuDOD7NynO9m@infradead.org>
+ <20260327060518.GP6202@frogsfrogsfrogs>
+ <20260407-unmengen-wahltag-474557ec0c58@brauner>
+ <adUalnAyY9mm1LUr@infradead.org>
+ <20260409-vorsichtig-umstand-d417555377e4@brauner>
+ <ade2nskzkdcsvF55@infradead.org>
+ <d889ed2b-ca34-4e95-ae5b-1d66636b515d@linux.alibaba.com>
+ <adfPlQrImtuyhMIO@infradead.org>
+ <7a605318-9f09-436f-806e-d4a3bd31b97d@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgDn739elNhpd0HuZg--.6807S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF13AFy8uFy5tw4kZryfCrg_yoWrWF47pF
-	4kur9ruF1vywnxGFn7uF43AFyfX3Z7Zw45ZFWIvwnrZF18Jr1DJr4kGa45Xw1rGFZ8Cw4Y
-	yrsxtws3C3WUCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jopB-UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8gHNRmnYlGF3rgAA3l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a605318-9f09-436f-806e-d4a3bd31b97d@linux.alibaba.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On Fri, Apr 10, 2026 at 12:42:41AM +0800, Gao Xiang wrote:
+> >   - a lot less I/O amplification
+> 
+> But not quite sure recently how extended OOB data is
+> kept within the physical media (I remembered in the
+> early years each page of raw nand flashes has
+> several-byte OOB together with the user data): if
+> it's along with the corresponding LBA main area, I
+> guess it has to read extended data among multiple
+> LBAs (but the LBA main data may not relate to this
+> partcular I/O) in order to verify the hash of the
+> hashes.
 
-Add selftests for verifying return values of fmod_ret.
-test_progs -t verifier_fmod_ret_return
-569/1   verifier_fmod_ret_return/fmod_task_alloc_1:OK
-569/2   verifier_fmod_ret_return/fmod_task_alloc_2:OK
-569/3   verifier_fmod_ret_return/fmod_ret_sys_open_1:OK
-569/4   verifier_fmod_ret_return/fmod_ret_sys_open_2:OK
-569/5   verifier_fmod_ret_return/fmod_ret_sys_open_3:OK
-569/6   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_1:OK
-569/7   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_2:OK
-569     verifier_fmod_ret_return:OK
-Summary: 1/7 PASSED, 0 SKIPPED, 0 FAILED
+For HDD it it is stored next to the media, and doesn't introduce
+extra seeks.  For NAND-based SSDs it typically is stored close to
+the data as well.  NAND pages are significantly larger than the
+exposed block size for any modern SSD.
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_fmod_ret_return.c      | 60 +++++++++++++++++++
- 2 files changed, 62 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
+> 
+> >   - a sane way to actually have verification (including authenticated
+> >     encryption) in a writable file system
+> 
+> Yet if considering modification, it need to move up
+> the tree and recalculate/update all hashes until the
+> root hash, it's not a low-overhead task TBH, and need
+> to apply to every single on-disk change.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 169cf7fbf40f..6e67f69d88fa 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -37,6 +37,7 @@
- #include "verifier_div0.skel.h"
- #include "verifier_div_mod_bounds.skel.h"
- #include "verifier_div_overflow.skel.h"
-+#include "verifier_fmod_ret_return.skel.h"
- #include "verifier_global_subprogs.skel.h"
- #include "verifier_global_ptr_args.skel.h"
- #include "verifier_gotol.skel.h"
-@@ -184,6 +185,7 @@ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_direct_st
- void test_verifier_div0(void)                 { RUN(verifier_div0); }
- void test_verifier_div_mod_bounds(void)       { RUN(verifier_div_mod_bounds); }
- void test_verifier_div_overflow(void)         { RUN(verifier_div_overflow); }
-+void test_verifier_fmod_ret_return(void)      { RUN(verifier_fmod_ret_return); }
- void test_verifier_global_subprogs(void)      { RUN(verifier_global_subprogs); }
- void test_verifier_global_ptr_args(void)      { RUN(verifier_global_ptr_args); }
- void test_verifier_gotol(void)                { RUN(verifier_gotol); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-new file mode 100644
-index 000000000000..11d303b01c80
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-@@ -0,0 +1,60 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+SEC("fmod_ret/security_task_alloc")
-+__success
-+int BPF_PROG(fmod_task_alloc_1)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/security_task_alloc")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, 0]")
-+int BPF_PROG(fmod_task_alloc_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=0 smax=0 should have been in [-4095, -1]")
-+int BPF_PROG(fmod_ret_sys_open_1)
-+{
-+	return 0;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, -1]")
-+int BPF_PROG(fmod_ret_sys_open_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__success
-+int BPF_PROG(fmod_ret_sys_open_3)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [0, 0]")
-+int BPF_PROG(fmod_page_pool_alloc_netmems_1)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__success
-+int BPF_PROG(fmod_page_pool_alloc_netmems_2)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+It needs to be applied in-memory for every changed, and persisted to
+disk on every fsync or equivalent operation.
 
