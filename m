@@ -1,106 +1,140 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF4029DB86
-	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 04:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB7B284B3B;
+	Fri, 10 Apr 2026 04:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775793990; cv=none; b=H/vXMMtAWHPz5cmw5v4YQ2MwiyNZ9qhpn7ZxUOSw8SbUlwuF+qxJ8IZ+BpicRnq96tfUairEatAN8jeNTsZvBJfnkXDteOAT1s3Rzywz/zrPyV2hEl7KtH0fVtnwVZ+2g6tccBMM+Krkb9MFb1wzGAZbdt7heC8KrTcdJwxKO3U=
+	t=1775795929; cv=none; b=pmh0cW8ZPeD6J8HYRBQKVOtweuzYDoC4/HRFkiHw/vYzMN39SnqzjIE8E5RyjX/PZhnCISMLm8AxQGQOKrmVTwtuPL7721tDVldHTHLnnW5cVTOR4N59qw+zxQTi6xFiFEaVvoym0vz85OXzrtgS4/iZmTaw7cOt2AbqOee3Dfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775793990; c=relaxed/simple;
-	bh=12TIH/ruxgKdIOU8pjWtlJBdXrxl9KsvEs+uhot3q/g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S+lBOzW/XpGetwuQ4H5SXyLZXS8rKKq+Ai5nZBfidCKXA5CDQUEiEORHeir1o4ZlGKV08DtpY25ZuqGD3heMWfJPdJayGVQS+LDLIuPwtRbEnC0hGKCFy3LMLxsksZQScqcljypxijqSxWXI79yCFdjd2XZf+5y4dTp8KMdArx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HFMcz95p; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775795929; c=relaxed/simple;
+	bh=FmXdg4PVg6nOMJQniMxzVUWTu8cQuElt+wDMuGSqKDU=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=KPur9Y2KqOKg5GnQ8G7T3ynKJodjLdLrn5APo/2XujnxagOAb+G3nZhhi1E1tev5a/6mLvIawqucq5zln0nbmmGf0PDaF5PrNM5kcExg4xIfW5zqln2aecM0mCHECAttlRxVNmipcYXdijVKqtTCzWnZGqjP+xY4ePpIwZkIMuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mTUAysVx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HFMcz95p"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82cebbdbdccso884416b3a.1
-        for <bpf@vger.kernel.org>; Thu, 09 Apr 2026 21:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775793989; x=1776398789; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6zByR4I42nJU+U7WNsfen5fUnNABHZ3cyk6mFVO9Ap0=;
-        b=HFMcz95pBIWLDzurUHcdYWH8W7cxdN0Wy3wZP2UaotsXYvV+vbqlB90VFygkQVUNZw
-         R+ehwprmqootVH4G/OeNyszuX1KKMTR1gpn1ZJ0zTiQY72P3W1Q9Js8jP9e9ELNHNooq
-         X4ZojuyuF7c/GL/s90rVnGzazJ8gAxuIvnvTou5r48lD48ZUrHjTmnKrqf9URlKu2Bok
-         pG1qV63/OSpHUsddATRDFcxuLzD7+M+dMs1BKH5uf2kFzWeRpc7PQj2DWjTvy1QbRlLS
-         /nwYDvJ+8vofUejvpBWZf+ptcviiztxomEFGkWd2qJvKOkwL8h/Zud7oiEbvpVKgP31I
-         TeGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775793989; x=1776398789;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6zByR4I42nJU+U7WNsfen5fUnNABHZ3cyk6mFVO9Ap0=;
-        b=XMkimBYaKbZZ7DFsk9v82Z58XdawDWV5TOLR2Wf73iSaKHJDDL1TwH36PmBfVDXYHx
-         Cz3JPdQMJTsn2SD2RYsHiCMWEu36FNkUGSG7ygDBT7C9yZxVn0QXTEVWAqNb8jGwsq3Q
-         Ubnak6ioCyBhf+ZaKOx/Ps6UDhP22ox/jmZbonpaa/wai5hvU5HOy6Ca2YqzdU0e/b4M
-         IzBmFByFjSyHUMhf/TequgakMypm7DsFltQg/hIIP9+Y5a67LZPyUJlLaTAuoIX6lXDQ
-         F40m2Je5h+RWMqkuEr9v/9wFN+3X34VzMMB5c+9vWLEe+Ev1nJPHslWBt/vky/MuM0EL
-         wWsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXtqL2CM11C0mQ1O/ZJKiR64LaAXZWjqEvOwzO1BzWJNn875b6zyhy1UYetudLAydQZtyg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMbCJXolBSOu0kjQSVNtDUI1WEpwQZd4nT71hBHxfUZtZqkjxi
-	3ojFPxlgzTRd4ThOVg+tbCscGvDSjUOavBRdLtHrQqEg7vfCBEvuewlG
-X-Gm-Gg: AeBDievxvsssdZvPYJeU/gYRpbfMp9UKlEbmj43uRqSPbMqHkesqpqqYEbEqw6Zk0jA
-	GfbjE4D3xi95Ey1FgdrZFReWn89u1aaYrvMkKZ4zS3BWl0jOyT4eCte7ujGzNk9u7pnwIt+sU3J
-	2w/BOBMOLz3IpC1rq1AC/9/vB/J9SCdi+HeYA0BXlZLzs//nAKW6cpqcQMg7ScBmWDgWbeC5tTN
-	EQc2qxEwunjHNqhqa4e5LgtAltT8u6+L8isD2HR8gGfa8sbhTYuBZlwHWv1SVVNSCDW5U8dKEKe
-	pB/DqLXSZs35b6P4Qt1Wzan4VCj50glgQgbaRTbSpXS2lsbUd9Vg4FyJNBhvcUCBAHIgMQfHtMj
-	JdQZLpKGWmFlOPbsotDggkGJfxCFKm034M/lroe+NP/dM+cy5oLmsyb/IZaJ/Ck1I7pZmN4V+zt
-	ccKDShd0RaBpQ4qusGxWaDcdfbnRyMKvj9UYXfvZfXo+DiYEop5u6I
-X-Received: by 2002:a05:6a00:847:b0:829:7b30:92f4 with SMTP id d2e1a72fcca58-82f0d1ec618mr1470423b3a.16.1775793989026;
-        Thu, 09 Apr 2026 21:06:29 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c4b2455sm1082944b3a.35.2026.04.09.21.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2026 21:06:28 -0700 (PDT)
-Message-ID: <cc3f05c2e39396764347d73a49d9305de853f48a.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 09/13] bpf: change logging scheme for live
- stack analysis
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
-Date: Thu, 09 Apr 2026 21:06:26 -0700
-In-Reply-To: <ae3905f1e84c416687ced8fb9db48af481b77a68915805e80e4be42147699821@mail.kernel.org>
-References: <20260409-patch-set-v2-9-651804512349@gmail.com>
-	 <ae3905f1e84c416687ced8fb9db48af481b77a68915805e80e4be42147699821@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mTUAysVx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F04C19421;
+	Fri, 10 Apr 2026 04:38:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775795929;
+	bh=FmXdg4PVg6nOMJQniMxzVUWTu8cQuElt+wDMuGSqKDU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mTUAysVxViK0zKzSxW3w8s8hTeWAJZwRuh1I/HuaFJFE69YL1/L629kHZzuzje3O0
+	 OYsta+wMcZtVV/xTU2dF1ZLZRwG7tHXCainc244ppQT4L4ZeSdAsFZzobEa1F43jc+
+	 5D3DYAcYSdoPjGeCrzcvgQJkOy4cGEnKlvYXrBG05m3PJ87ZYHmxL6mGMiBPn0Cwg4
+	 KBg+T2t4sjpQpqIxBxQH5yDRf8eJJjvbBAbQMLn/83/mtXn1hJhcT034/8TDLojYQ2
+	 109X2G701SWSKWkHwvO1yrOelNSCLVT+hznf3pcQ4s1tObhC6CvoZnDpaZIHaswT1w
+	 zzelgB4x9EfWg==
+Date: Fri, 10 Apr 2026 13:38:44 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+ joe.lawrence@redhat.com, rostedt@goodmis.org,
+ mathieu.desnoyers@efficios.com, kpsingh@kernel.org,
+ mattbobrowski@google.com, song@kernel.org, jolsa@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ yonghong.song@linux.dev, live-patching@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return
+ overriding for livepatched functions
+Message-Id: <20260410133844.56ab7964da7628d1c3482acb@kernel.org>
+In-Reply-To: <20260402092607.96430-1-laoar.shao@gmail.com>
+References: <20260402092607.96430-1-laoar.shao@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2026-04-10 at 02:02 +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> > index c13f57ddf582..f296c3304752 100644
-> > --- a/kernel/bpf/liveness.c
-> > +++ b/kernel/bpf/liveness.c
->=20
-> [ ... ]
->=20
-> > +static void print_instance(struct bpf_verifier_env *env, struct func_i=
-nstance *instance)
-> > +{
-> > +	int start =3D env->subprog_info[instance->subprog].start;
-> > +	struct bpf_insn *insns =3D env->prog->insnsi;
-> > +	struct per_frame_masks *masks;
-> > +	int insn_idx, frame, pos, insn_pos, i;
->=20
-> Should pos and insn_pos be u64 here?  They store env->log.end_pos
-> which is u64, and are later passed to bpf_vlog_reset() which takes a
-> u64 new_pos parameter:
+Hi Yafang,
 
-Yeap, u64 is needed.
+On Thu,  2 Apr 2026 17:26:03 +0800
+Yafang Shao <laoar.shao@gmail.com> wrote:
 
-[...]
+> Livepatching allows for rapid experimentation with new kernel features
+> without interrupting production workloads. However, static livepatches lack
+> the flexibility required to tune features based on task-specific attributes,
+> such as cgroup membership, which is critical in multi-tenant k8s
+> environments. Furthermore, hardcoding logic into a livepatch prevents
+> dynamic adjustments based on the runtime environment.
+> 
+> To address this, we propose a hybrid approach using BPF. Our production use
+> case involves:
+> 
+> 1. Deploying a Livepatch function to serve as a stable BPF hook.
+> 
+> 2. Utilizing bpf_override_return() to dynamically modify the return value
+>    of that hook based on the current task's context.
+
+First of all, I don't like this approach to test a new feature in the
+kernel, because it sounds like allowing multiple different generations
+of implementations to coexist simultaneously. The standard kernel code
+is not designed to withstand such implementations.
+
+For example, if you implement a well-designed framework in a specific
+subsystem, like Schedext, which allows multiple implementations extended
+with BPF to coexist, there's no problem (at least it's debatable).
+
+But if it is for any function, it is dangerous feature. Bugs that occur
+in kernels that use this functionality cannot be addressed here. They
+need to be treated the same way as out-of-tree drivers or forked kernels.
+I mean, add a tainted flag for this feature. And we don't care of it.
+
+> 
+> A significant challenge arises when atomic-replace is enabled. In this
+> mode, deploying a new livepatch changes the target function's address,
+> forcing a re-attachment of the BPF program. This re-attachment latency is
+> unacceptable in critical paths, such as those handling networking policies.
+> 
+> To solve this, we introduce a hybrid livepatch mode that allows specific
+> patches to remain non-replaceable, ensuring the function address remains
+> stable and the BPF program stays attached.
+
+Can you share your actual problem to be solved? 
+If the specific problem and the specific subsystem are clear,
+I think there is room to discuss it with the subsystem maintainer.
+
+> 
+> Furthermore, this mechanism provides a lower-maintenance alternative to
+> out-of-tree BPF hooks. Given the complexities of upstreaming custom BPF
+> hooks (e.g., [0], [1]), this hybrid mode allows for the maintenance of
+> stable, minimal hook points via livepatching with significantly reduced
+> maintenance burden.
+
+Maintenance cost is the same. We need to add out-of-tree BPF hooks on
+source code. Maybe deploying cost will be reduced.
+
+Thank you,
+
+> 
+> Link: https://lwn.net/Articles/1054030/ [0]
+> Link: https://lwn.net/Articles/1043548/ [1]
+> 
+> Yafang Shao (4):
+>   trace: Simplify kprobe overridable function check
+>   trace: Allow kprobes to override livepatched functions
+>   livepatch: Add "replaceable" attribute to klp_patch
+>   livepatch: Implement livepatch hybrid mode
+> 
+>  include/linux/livepatch.h   |  2 ++
+>  kernel/livepatch/core.c     | 50 +++++++++++++++++++++++++++++++
+>  kernel/trace/Kconfig        | 14 +++++++++
+>  kernel/trace/bpf_trace.c    | 14 ++++++---
+>  kernel/trace/trace_kprobe.c | 49 ++++++++++++------------------
+>  kernel/trace/trace_probe.h  | 59 +++++++++++++++++++++++++++----------
+>  6 files changed, 139 insertions(+), 49 deletions(-)
+> 
+> -- 
+> 2.47.3
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
