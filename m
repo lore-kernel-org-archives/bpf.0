@@ -1,165 +1,112 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB2E3A75B9
-	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 14:07:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C15BE3CE4A2
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 14:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775830065; cv=none; b=LCrMKCTbph7Eu54opvOG4x390YqxIbD0MQa0Q1E+bOoI4D+ALGRTNmr6MR/bRqAwivdHg4byKTn3pzWZEz6rudTXUGgik9CBCHqXJZzJaRfJweYCf7ExUKCPhmJmZPCyrCgsHH4Lbks0foAP2KwV951+cgBIXWGCj3+sce6bbms=
+	t=1775830531; cv=none; b=gSSzybi7X1YFvaUXk5fQzQ76J9Wp9S9K8/lUyRYau5WFz+OZZiDqbHlGBLomR3p7GT6iFbMvv/tguRYLu3QKPCtvxKgo176dIMvMF6MidEH3La1S3BCrJ7B4J+6XkI6VGH5nr4G0Bx0nb+Fn6d8RcgfnuAWQn++BOkknVTAcQ8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775830065; c=relaxed/simple;
-	bh=hOxm7SjlpbqBrEEDguYsG+OkjxtRvM2/8AInbZBt79Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JBApC3NxxPYYyO/qO6mCHASjA0aVCN727D2g/2ABfYOs1TbQCxbZUMQ0ojsAi6i0E+QDXIc+l/riiCzM8zvS/48y0F1R1IB9ls3LrvmMYu5IfIIlwzMsZ8HMC4iQdDMHe5317O2mwWOncW345ju8RLWrJgOjEnIfrXG5y40cXpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ov0qzb/o; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1775830531; c=relaxed/simple;
+	bh=ZMMwOHR8+o5eywy7A4dv25R5kTA4VWF1ikDRQjsig3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZcpcOhaa4WtXv0n1biA0xVMI9tirBZVyHfPZEKCnNAKxONU9ka0R3cT4A6hbbh/LFfXPIbtzQFkbKUgn3AxoBytzWSnP/IBeQgPmMkbLXmhakxnF88SrMjCzeK4rRLcmbDzspEjwYTGVfv3FurITPLBfOQdXUr9Ye2nmW/ZP6m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WrPaYkMn; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ov0qzb/o"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43b8ebe6bd1so112978f8f.2
-        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 07:07:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WrPaYkMn"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488ba6366a7so25869155e9.0
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 07:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775830062; x=1776434862; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qyzPpXAXSz138DHYR7mZI4kKk1VA1xvVpWE+tBCFF8M=;
-        b=Ov0qzb/oKp48mDdjoRGkZv6L+RMdac2BAjVx/5FngAJcY0/R22AbqTL/HywJc0i0BN
-         HYSNJXPVxbgPrvBldNh/aZARN7dUHdxpqpt1WFXJjAgTSdivgSnkcIDRceAY385kyUjj
-         kDn9tYRllsvZTkyFwvSuBqYcDYuLXHswCLPsjvw/OAs3XH/aVzPpgChVl/WipGn62WcL
-         xJIIFgbZlgFY50cXn/D9jYcuaZqwaGvIOjW8hhtxZYt7LiB+iEqjeXmcnm8hMxgYyXLG
-         3iN7PaV5H9RiknGe8ENW3U7VRBZYWCiDeX7MbWbss7VlA+LkVripRCuSqcamGaRU7BBw
-         EpcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775830062; x=1776434862;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775830528; x=1776435328; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qyzPpXAXSz138DHYR7mZI4kKk1VA1xvVpWE+tBCFF8M=;
-        b=XwsqPD1DNV2IXHBwGAuqbV2CvUjMqXbFdhic4mcN1vSJrpECS1hbaxVheehqvZsKT6
-         S9mZNRmH67W6/2TX6+ABW81mHw2QfBJ59yC8Cs24ggRpMo/LT4Bq7iqv7MVEuZm9Fh0b
-         94QQvk5lFen4enleUxGM+6NYZfdK5Ot7G8IMh+7GexNlL5gfgDy7yof0LRjsNKPszYP5
-         sBgL3+yOpdmLuQP/THMwOb/20Usb8osDcGq6uCrxJNDyKrL7mD3onbAYCLxwOeBqJxz2
-         R1EN/J9hwX9JNHJIe35IfIVbw4SVNjNS7CWsf2x/VEbFYLJmb4CWRza75DaFHQeKiHrA
-         Cw4A==
-X-Gm-Message-State: AOJu0YzYOJgtEnsdY1MHqjbNHtWQkJXJpYy7FTRThqELZXoyZFXNuFtl
-	zgaow5Y/wLH2Hf2uY7AzauiFIX3gSG+i7YdNCThNOrrk6fhhQgrgPerBpEXGdHN4
-X-Gm-Gg: AeBDiesRFZsTSR5VZHVFqZDVbqfIeQvRq8dY/xz6oGLxIcbQjuWqRBltlnJTruW8TqW
-	H8hCM54YDBTkKQoHK/9ZCDTjwbp+5fsSmf3rXmVFy47HewxPWbJlbY7+ST75bTK0+/vGaLvEtxO
-	8SdEzNQAu7ad9ClkszoxzU63+4ss4gPRoIZvFKnRyLnTVqLvJRQDJ7c0/sBOVSDoTSKKVWFdXtX
-	omWEgtlT/vD3bhfYCq58yCYZtLPkNe+nLMQro0v3KYUjr1uaU1fJapokQTaazgZhbsqb73JFOcc
-	/R0g5iNgbZLFvO90r6Z75NAvnlWUDDEqKu5KH2DOwbk2b+XJYh0hfFkjFmy/wcj2cAcEMkVo1LJ
-	sAhp+LiHN6g6UiPSBopmTB3f7UR9/pB4njb9gK8Jr6N+7B35wSc7Uci8ZvKIF4xc+bEi14wLamA
-	91vWutZru4qUOum82Ij2K+80V1vH57evqze2bvl8RV+S1hQ8LWzr/N/s5XHvSQpWDFaEi01pDEW
-	c7KIn4=
-X-Received: by 2002:a05:600c:1f83:b0:488:a9e4:35be with SMTP id 5b1f17b1804b1-488d687c0f9mr24225825e9.5.1775830062231;
-        Fri, 10 Apr 2026 07:07:42 -0700 (PDT)
-Received: from ast-epyc5.inf.ethz.ch (ast-epyc4.inf.ethz.ch. [129.132.161.179])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d67b4a46sm47409655e9.4.2026.04.10.07.07.40
+        bh=ibVIM3YRkDFxVQFXMQG/D+NUY7JRDZKRc/EMBS4wLuY=;
+        b=WrPaYkMnAp26p+pfLHavvii60oj5quWpAzHQOoJpk3pNcwB8rRbhAcKP26y3rCOfjE
+         2bUhrt7cYb6Ytu4f0pOA7b4UONhlHUH8Sd9zfz3SYosJTJGUD7Hg+ckcXSQKTAis6fZw
+         9/ku5BNFLGUqtIy4L5xgrDN1iOl0uNey2cJwZ43btsTFwSwE7HTK49/FdpdwoNxPjkQ4
+         pXO8Nw+TAjBMMzhpIg2JFep7mTQqTxtply2zVnqUkP/nz7ZNxLOcaQAz662QuPPQX5jf
+         WbmgdSTexyz0b2WpbyKoHyVqOE96QTZGb2TuFeOf3FQiBQ/nRAOW4R3uXWSuJiUuQF3Z
+         00gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775830528; x=1776435328;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ibVIM3YRkDFxVQFXMQG/D+NUY7JRDZKRc/EMBS4wLuY=;
+        b=F308IuQREzR6JDzou3/4CzjIxBbLkR3LDJ9imfAMVI7BTomp0v5fiUmCoGm+Yc4+9l
+         Zhd//98j4FcbGKsxeStBV6+DLCVFfg6ssK0vCQt4O7KE6hT7G6LLKvLXilxwRO54CbnD
+         S59zfrbgUqJPX9CPq+KYfHeJ3Ujy+bN3DFjvG3Kdgv9E6NAN3diOj9pxUoBU1SH6kGHK
+         srqCYykAMfwIUjqSQcDAIY7yyX25slsiGv27jCZdwbPK1yTD67K4zM3Co7OJKtN5LnYY
+         fXm10T7z9GVvK8nfIOLawWG/ibpiEl39oJNYMDh7m2csimFtfFfW+TADne5hWpO+HmBo
+         H3IA==
+X-Forwarded-Encrypted: i=1; AJvYcCUOzq1sccp1pJOgj/bDy/vBwRFtg+AaLAQMBYbJ8S8mDAeKG3+9cd6v1t5gxMXtxgxMONc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaTubihV2lleoB0172mehKWd06ChwMVytJjfRJ1v27PXHQJHTn
+	WF51KFii+1luYpQX/i7BEKtX10X5q2/3/rkHCi2Cb0lD1/Xcxab1Hqac
+X-Gm-Gg: AeBDievvuYl7pVrIeyL4Kyq/4CCHoJ6f6DXjrhQdmw/k9Ga/jf/HAxEIGJzTHjlNa+6
+	WMNPNF1bACN35vuIJkRzGf/ViGO+SlCpqgamwLvHo+nZDnzSM3NrjDTUBe6oPMrxrb1IfaZAddU
+	l4fCfRcxc3eJ3z54SVpeJExovOakkr5tC/N0k6t+PXAOgWqRSyVRWsioKSIies/bQy4v0Ulr38f
+	OvOmGA11O0sgU9vcrFUJ7oUbEHEE2wh7JPCFqsBHs0jWyRD+tJBqIlC/CLvrsXQm/TvcSYdiHVW
+	nhQZ1wPy5KOGQw1631siGtGIT9edHe2p++LD6vIs6EVhVk0Yw8wvFjnl2PO9Pr62VEse10xvcxw
+	yK1iNqM4E31TZU0oqoMF/15OkgA0kbUhF7j10Fjai3osVp1I4451ogGGoIG/A3L8byxZg71Aw7V
+	s6O3WYGSZwobrtCOyRkXq2nmo6wcFsUGPBEUNK35MDcknmrd4HmAnWMbe8EdFrKmb6X+eeIA+qQ
+	9A=
+X-Received: by 2002:a05:600c:c08e:b0:488:9619:9bf4 with SMTP id 5b1f17b1804b1-488d686093bmr29672415e9.20.1775830527797;
+        Fri, 10 Apr 2026 07:15:27 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d5d68585sm36286005e9.1.2026.04.10.07.15.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2026 07:07:41 -0700 (PDT)
-From: Zijing Yin <yzjaurora@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	Zijing Yin <yzjaurora@gmail.com>
-Subject: [PATCH bpf-next] bpf: reuseport: add cond_resched_rcu() in reuseport_array_free()
-Date: Fri, 10 Apr 2026 07:07:25 -0700
-Message-ID: <20260410140725.961623-1-yzjaurora@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Fri, 10 Apr 2026 07:15:27 -0700 (PDT)
+Date: Fri, 10 Apr 2026 15:15:20 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>,
+ metze@samba.org, axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>,
+ io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next v3 0/4] net: move .getsockopt away from __user
+ buffers
+Message-ID: <20260410151520.3e91c2ce@pumpkin>
+In-Reply-To: <adjkn7p4U13WBs2o@gmail.com>
+References: <20260408-getsockopt-v3-0-061bb9cb355d@debian.org>
+	<20260408122653.295953dd@pumpkin>
+	<adZcnNgxhsUjAgZW@gmail.com>
+	<20260408195640.324ee932@pumpkin>
+	<adjkn7p4U13WBs2o@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-reuseport_array_free() iterates over all map entries inside
-rcu_read_lock() to detach sockets from the array. When max_entries is
-very large (e.g., hundreds of millions), this loop runs for an extended
-period without yielding the CPU, triggering RCU stall warnings in the
-kworker thread that executes bpf_map_free_deferred().
+On Fri, 10 Apr 2026 05:29:37 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-The observed stall occurs because the loop has no scheduling point:
+...
+> Since these legacy protocols represent less than 1% of the cases, I'd prefer to
+> optimize for the common path and handle the exceptional cases as exceptions.
 
-  rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-  Workqueue: events_unbound bpf_map_free_deferred
-  Call Trace:
-   reuseport_array_free+0x1ec/0x470 kernel/bpf/reuseport_array.c:127
-   bpf_map_free_deferred+0x34a/0x7e0 kernel/bpf/syscall.c:893
-   process_one_work+0x952/0x1a80
-   worker_thread+0x87b/0x11f0
+Optimising for the common path would pass a fixed size on-stack buffer
+(say 64 bytes - or perhaps enough for an IPv6 address) through to the protocol
+code, update it, and do the copy_to_user() in the system call stub.
+Write to small constant offsets onto the buffer could then just be direct
+assignments through some pointer.
 
-Add cond_resched_rcu() in the loop body to allow the scheduler to run
-and RCU grace periods to complete. This is safe because each iteration
-processes a single entry independently, sk->sk_callback_lock is not held
-across the yield point, and the map is fully detached from userspace so
-no concurrent insertions can occur.
+The 'buffer descriptor' would need to contain any associated user address for
+the unusual cases (also look at the sctp socket options).
 
-This follows an established pattern for long-running kernel loops that
-must run under rcu_read_lock().  The closest precedent is in another BPF
-map free function:
+But I still think you need functions that read/write at offsets into
+the buffer rather than using iov_iter - which is only really designed
+for sequential access. It isn't as though you need scatter-gather.
 
-  kernel/bpf/hashtab.c:1600
-    htab_free_malloced_internal_structs()
-      rcu_read_lock();
-      for (i = 0; i < htab->n_buckets; i++) {
-          ... walk bucket ...
-          cond_resched_rcu();
-      }
-      rcu_read_unlock();
-
-Fixes: 5dc4c4b7d4e8 ("bpf: Introduce BPF_MAP_TYPE_REUSEPORT_SOCKARRAY")
-Signed-off-by: Zijing Yin <yzjaurora@gmail.com>
----
-Base: bpf-next.git master branch
-      (tip a0c584fc18056709c8e047a82a6045d6c209f4ce
-       "bpf: Fix use-after-free in offloaded map/prog info fill"
-       as of 2026-04-09).
-
-Tested with CONFIG_PREEMPT_RCU=y, CONFIG_KASAN=y (inline),
-CONFIG_SMP=n (single vCPU QEMU VM), gcc 13.3.0.
-
-To reproduce: create a BPF_MAP_TYPE_REUSEPORT_SOCKARRAY with
-max_entries >= 100M, set rcu_cpu_stall_timeout low, pin the CPU with a
-SCHED_FIFO thread so the kworker stays in rcu_read_lock() long enough
-to trip the stall timeout, then close the fd. Without the fix the
-reuseport_array_free() kworker stalls RCU reliably; with the fix,
-cond_resched_rcu() yields periodically and no stall is observed.
-Reproducer (C source): repro_reuseport.c (https://pastebin.com/YjdwqdX1)
-
- kernel/bpf/reuseport_array.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index 49b8e5a0c6b4f..e3c789b80e2b8 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -5,6 +5,7 @@
- #include <linux/bpf.h>
- #include <linux/err.h>
- #include <linux/sock_diag.h>
-+#include <linux/rcupdate_wait.h>
- #include <net/sock_reuseport.h>
- #include <linux/btf_ids.h>
-
-@@ -136,6 +137,7 @@ static void reuseport_array_free(struct bpf_map *map)
- 			write_unlock_bh(&sk->sk_callback_lock);
- 			RCU_INIT_POINTER(array->ptrs[i], NULL);
- 		}
-+		cond_resched_rcu();
- 	}
- 	rcu_read_unlock();
-
--- 
-2.43.0
+	David
