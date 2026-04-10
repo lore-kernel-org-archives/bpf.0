@@ -1,120 +1,117 @@
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D2E35CBC3;
-	Fri, 10 Apr 2026 06:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624D235C183;
+	Fri, 10 Apr 2026 07:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775803567; cv=none; b=aFIr1U/ox/wXCscAhgcZ1iLf49Xfd53o20mt3rytBfk3cuDr89IYCFd4tPnl276oU1f6fFdRL6bO+EsUU+CydxPRSq4RB4+Z3GwBKlQvUk1N9TgZWB0H+flxB1/C3ghOFN4Xx2nZ/MpHipU451Kmw7YYDomOGDPxnATwOzHKhXA=
+	t=1775804426; cv=none; b=cg6NStrqrZyLe5/n/syvzmUoHThOKUHCGC2hIL4r6U7HZzEzHUAbF5x1+2DGkzjyGPrKFCLDoRuz8FOTJqYLwpGdcBsaNCdud6XQiX8WOmExhIT9jS8bqXkeCjFcsR9UVFIWnaCirA6qlA9Zj5ExnuaDfIdVn7X1PfehcMPOy4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775803567; c=relaxed/simple;
-	bh=iQzlLilWtocvd6uLsezDvskuGvJwo2dkB/xIWOyud2M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=srbls7alPkvv86En6vmsVSHKiLWKWVq8usRr5Bqyy7pNobalP5Z2MyGI2MduNFwT+MR1j8XD+oKHcuLoGxoNSC7q+v8ptEh3k4jss1QiR/Na1iglPKiri+asH1VzNS4DVypE0igSFLN15oAqnl98ntS1Pl9vmZx9AYWy1Ij2gwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=UFYkrM6T; arc=none smtp.client-ip=115.124.30.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1775804426; c=relaxed/simple;
+	bh=FYOED05A4FXTMvwtmbTUN4lSeCMdZLyjXVtRNchrCS4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MWfH8BA64KX8/glDeO/EoBNKOAOlkTpjI96JEKYSntFKsBaaunFOqxzgKuXNNfMKeDdyovcGmmKmn6qfxngta0oY4nxORVY557mj57h8Ej19UkZCEr559njEdksk0PUEf48Y2ZhVx/pJaWq5lsWxPnSRc/f5YmiVatuXDb6ID3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VyzCwBUH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="UFYkrM6T"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1775803562; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Et5kuzAgXyxKomaZmeSluAIe6eBbOj9IAO1Yolsuvzg=;
-	b=UFYkrM6TpY7Z50PromvhFw4v3mYb/eNs5KOXKxIL/jP/oRnVo6Bjj9agbZyq2/In4hWI1RuPCKUUGg6PG9MMDsmOY3jhB5T44WGdo2kr2qc0ZYuEycg35u8qYNaQ6JioB+efBufE3AGWR1GDzoSFQ5lJ7lKwyaKLTgvIos4YvN0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0X0kUbGL_1775803560;
-Received: from 30.221.132.105(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0X0kUbGL_1775803560 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Fri, 10 Apr 2026 14:46:01 +0800
-Message-ID: <b3dfc06b-9f9b-4337-be96-a277061517d0@linux.alibaba.com>
-Date: Fri, 10 Apr 2026 14:46:00 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VyzCwBUH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E39C19421;
+	Fri, 10 Apr 2026 07:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775804426;
+	bh=FYOED05A4FXTMvwtmbTUN4lSeCMdZLyjXVtRNchrCS4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=VyzCwBUHZcB2xXJzaUT7G23ULE8qfTLNikzouzE6oe5IQYiy61MvTo/LhNVPreMCW
+	 prbVCljZZM7sVQe+Gz6pbpowQsCzsXXA/6fnBm0KzQQ4KNiaCznmmPEoHHQc27w3/n
+	 zpo99n8p07dk5BMYENEihJYqs0qBHAsgOn13jwxho2ahd7FnQZGYnEA7EoAf2eGB7n
+	 WCaHJocImbjKlEJWnvGS98XUsazui3+kbyVtSyAl3giKTvhoPJ0a5wM3RTp+7ZRWv8
+	 50glDeGwjxdjvLkz85o2wrdutW/zPrSdr/PPbZf3HMBG2kqdeSsYYRimr03Yg1AmIk
+	 iEydLmWYpkqLw==
+Content-Type: multipart/mixed; boundary="===============2539386933282708395=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: add bpf_real_inode() kfunc
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>,
- "Darrick J. Wong" <djwong@kernel.org>, Amir Goldstein <amir73il@gmail.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
- linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260326-work-bpf-verity-v1-1-efe9edc46ddc@kernel.org>
- <acYVjuDOD7NynO9m@infradead.org> <20260327060518.GP6202@frogsfrogsfrogs>
- <20260407-unmengen-wahltag-474557ec0c58@brauner>
- <adUalnAyY9mm1LUr@infradead.org>
- <20260409-vorsichtig-umstand-d417555377e4@brauner>
- <ade2nskzkdcsvF55@infradead.org>
- <d889ed2b-ca34-4e95-ae5b-1d66636b515d@linux.alibaba.com>
- <adfPlQrImtuyhMIO@infradead.org>
- <7a605318-9f09-436f-806e-d4a3bd31b97d@linux.alibaba.com>
- <adiVdIhcgfiIoXja@infradead.org>
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <adiVdIhcgfiIoXja@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <60e1c3bebe4eefa53d73bdfa1f016af7abedb294634614119aab1380b9d46eaa@mail.kernel.org>
+In-Reply-To: <20260410061037.149532-2-yangfeng59949@163.com>
+References: <20260410061037.149532-2-yangfeng59949@163.com>
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,mattbobrowski@google.com,jiayuan.chen@linux.dev
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 10 Apr 2026 07:00:25 +0000 (UTC)
+
+--===============2539386933282708395==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 9c1135d373e2..37975e9a291c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> +/* hooks return 0 or 1 */
+> +BTF_SET_START(bool_security_hooks)
+> +BTF_ID(func, security_xfrm_state_pol_flow_match)
+> +BTF_ID(func, security_audit_rule_known)
+> +BTF_ID(func, security_inode_xattr_skipcap)
+> +BTF_SET_END(bool_security_hooks)
+
+There are two issues with this BTF set.
+
+First, security_inode_xattr_skipcap does not exist as a kernel function.
+The LSM hook inode_xattr_skipcap is only invoked via call_int_hook()
+inside security_inode_setxattr() and security_inode_removexattr().
+There is no standalone security_inode_xattr_skipcap() wrapper. The
+equivalent entry in bool_lsm_hooks in kernel/bpf/bpf_lsm.c correctly
+references bpf_lsm_inode_xattr_skipcap instead.
+
+Second, the v1 of this patch had #ifdef guards matching those in
+bool_lsm_hooks:
+
+    #ifdef CONFIG_SECURITY_NETWORK_XFRM
+    BTF_ID(func, security_xfrm_state_pol_flow_match)
+    #endif
+    #ifdef CONFIG_AUDIT
+    BTF_ID(func, security_audit_rule_known)
+    #endif
+
+These guards were dropped in v2. security_xfrm_state_pol_flow_match
+is defined under CONFIG_SECURITY_NETWORK_XFRM in security/security.c,
+and security_audit_rule_known is defined under CONFIG_AUDIT. Without
+the guards, BTF_IDs will be unresolvable when those configs are
+disabled.
+
+> +
+> +/* Similar to bpf_lsm_get_retval_range,
+> + * ensure that the return values of fmod_ret are valid.
+> + */
+
+This isn't a bug, but the BPF subsystem uses the kernel multi-line
+comment style where the opening /* goes on its own line:
+
+    /*
+     * Similar to bpf_lsm_get_retval_range,
+     * ensure that the return values of fmod_ret are valid.
+     */
+
+[ ... ]
+
+This commit appears to be a major bug fix addressing a kernel NULL
+pointer dereference but is missing a Fixes: tag. The bug was
+introduced when fmod_ret was first allowed on security_* functions
+without return value validation:
+
+    Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
 
 
-On 2026/4/10 14:15, Christoph Hellwig wrote:
-> On Fri, Apr 10, 2026 at 12:42:41AM +0800, Gao Xiang wrote:
->>>    - a lot less I/O amplification
->>
->> But not quite sure recently how extended OOB data is
->> kept within the physical media (I remembered in the
->> early years each page of raw nand flashes has
->> several-byte OOB together with the user data): if
->> it's along with the corresponding LBA main area, I
->> guess it has to read extended data among multiple
->> LBAs (but the LBA main data may not relate to this
->> partcular I/O) in order to verify the hash of the
->> hashes.
-> 
-> For HDD it it is stored next to the media, and doesn't introduce
-> extra seeks.  For NAND-based SSDs it typically is stored close to
-> the data as well.  NAND pages are significantly larger than the
-> exposed block size for any modern SSD.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Ok, thanks.
-
-> 
->>
->>>    - a sane way to actually have verification (including authenticated
->>>      encryption) in a writable file system
->>
->> Yet if considering modification, it need to move up
->> the tree and recalculate/update all hashes until the
->> root hash, it's not a low-overhead task TBH, and need
->> to apply to every single on-disk change.
-> 
-> It needs to be applied in-memory for every changed, and persisted to
-> disk on every fsync or equivalent operation.
-
-Yes, yet it doesn't change my evaluation: and you need
-to consider background writebacks too (since writeback
-will update data and then impact the whole hash tree).
-
-Currently data writeback can be applied for each block
-independently, but if you consider maintaining a hash
-tree (rather than simple checksums), I guess you have
-to keep strict atomicity between data writeback,
-metadata and hash-tree writeback, otherwise the hashes
-and partial writeback data will be mismatched.
-
-I won't say it's impossible, in short I have to say
-it's just not a straight-forward task compared to the
-previous data checksums, e.g. for XFS, maybe journalled
-COW approach has to be used since it's hard to keep
-such atomicity for XFS without COW.
-
-Yes, the OOB approach for leaf hashes will help to
-reduce write amplification, but my current observation
-is that it won't have any help to read amplification,
-especially for small random read; overall it depends
-on the target workload.
-
-Thanks,
-Gao Xiang
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24229694699
+--===============2539386933282708395==--
