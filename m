@@ -1,95 +1,101 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB0C225417;
-	Fri, 10 Apr 2026 01:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0902213E9C
+	for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 01:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775785463; cv=none; b=LwAUUWQJShPLVOWF+ToMsG/razDqrCFctO53qriOLK7qL/qoBufjEZkpp/O8QFBRgdfFgc4VnojrF8zBRRgrObwToDcL4AghZhdinzfwBnsIjfX7XDtlDiaA/gc6RoGXKZn+JGK7uU5L2ZBshm/FAKZeZyLxMiu4TCZlZ2M34PY=
+	t=1775785804; cv=none; b=ErDDB8AaUeSN0GJxakVaFwAnTqEy3pLUybF0PQTGjOnFhRlllIUa27ZzHviocR2qUPThn20YLkPmU+nbd+FIpzEm/eB68L3Dc2ThpacJSVte43kAjyM/P6ed/S7sjUzlkyO/Je5PQjgDquimeNyZO7XkifbpcLf66XIyCn+YT2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775785463; c=relaxed/simple;
-	bh=aLPPxdkHWSTxMGERxDQ6Hz8oUK9gClGFiW+/4k/qV2Q=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YEmPH8CtSwx9r2WGhY/7dJJ/iZXSm/BcgE5adkBhjsQ3hBaxA4D6feCDyKrbZhJQeWtlx7kj0TijUn8/peKxFiYOv/WiA3nwBJygjR+578eyFCBn8ojaMmdY9oLQEWRlzqxP7v8kVPnae/nN+/ttF1w9GFboypOyLB5qJnuAbuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=E3HpjW3u; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1775785804; c=relaxed/simple;
+	bh=44q4fiGd17ezwKcivgTVaFF0Wf8IQOJFG36Ugke6+FY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=YCxUNmiJY/WfdvQnzN0OjQk6YyRMUyh5MOg8ukV+pdTWPPwYb8ausrsIwX1/r+tL4BYuPPqr7iv+Mkthu2VwK/m9XuRlACiE5HXVeJkooYuBLqDLBLgcIOAulBWbWPrO8NYgFQ+2GMoPq3wi2ePNT2zBEs/3c51YVJ127gIGjw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnsDH75X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="E3HpjW3u"
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 639NgHEE275074;
-	Fri, 10 Apr 2026 01:43:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=aLPPxdkHWSTxMGERxDQ6Hz8oUK9gClGFiW+/4k/qV2Q=; b=E3Hp
-	jW3unf4xgktY7G5Tbsov+dmP6NBPujAKwuOg/mvQvNdGObnCEjMxAV/POa02Cl4F
-	s9jvrht1zX+MJ7EEpsgFelAvoq6a4VTzOOj+1a3MunIpczhCen/xs7S1VFfJaCeW
-	tuOlTVPADnRBhw+tWSR4Z14r0T9qUnDAJ+uiqSr7BiZyerO7NJYdcrpFgodOyahh
-	u6UJj1LDOPfOgBJHWM3uEH6SVAFll/GrBcytwSJQSrONTdZUC5G2NhkxUvi7K+l8
-	ZsjYTiTQPyF17OpaHjd+gsSOtd6uj4Athngle2Jkxdhg0XI0KWH/lX5Kd3Blt2fe
-	N6/oK3JMyjvkxvet9Q==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4dehv0sf94-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Apr 2026 01:43:50 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Fri, 10 Apr 2026 01:43:46 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <ameryhung@gmail.com>
-CC: <alexei.starovoitov@gmail.com>, <andrii@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <kernel-team@meta.com>, <kpsingh@kernel.org>,
-        <martin.lau@kernel.org>, <memxor@gmail.com>, <netdev@vger.kernel.org>,
-        <song@kernel.org>, <yonghong.song@linux.dev>,
-        <linux-open-source@crowdstrike.com>
-Subject: Re: [PATCH v2 bpf-next 4/4] bpf: Replace bpf memory allocator with kmalloc_nolock() in local storage
-Date: Fri, 10 Apr 2026 11:43:41 +1000
-Message-ID: <20260410014341.47043-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251114201329.3275875-5-ameryhung@gmail.com>
-References: <20251114201329.3275875-5-ameryhung@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnsDH75X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA8DC4CEF7;
+	Fri, 10 Apr 2026 01:50:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775785804;
+	bh=44q4fiGd17ezwKcivgTVaFF0Wf8IQOJFG36Ugke6+FY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=VnsDH75XCXDC4Y8kxPzfcbfwlDer/kiKTHC70w945+AVUbBfMxUQvEFGgD7hGdJ05
+	 77BDDGZw+PmLh6tT8poJcB7FXNjRbwaefskf5swEuOa6kAxaXsCgRtKKkIGwNFR5IA
+	 dsxJkD9oKO+9Gw8jf3E0nc2vjxGLaYJSMFL97EmSb63cVOPtOH+XT+5Yr55t8/pylp
+	 xU+d21QHKm8eSRbpcFF/2xqc51fJM490AA/5ohdfRYF5FCnGyxbOBN43V/yWGoph6B
+	 jP0uSxD2qrtQVHxZLgTx2A2Lj/yrDKGfl5x9/2sqrqfkPoE4RgyKGxY8uBZZJKLqnB
+	 Kg57NX/Y5L/8g==
+Content-Type: multipart/mixed; boundary="===============3175991978239558108=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: RcXIRzfMWFawyeH2AQxMufBQSFniYC7_
-X-Proofpoint-GUID: RcXIRzfMWFawyeH2AQxMufBQSFniYC7_
-X-Authority-Analysis: v=2.4 cv=VPHtWdPX c=1 sm=1 tr=0 ts=69d855d6 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=VpCBGzChIgXs0OzVo5AA:9
- a=ZXulRonScM0A:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEwMDAxNCBTYWx0ZWRfX7ltmy9VraLnZ
- fbPzYGT+ZnAtykRYxzCrEzoN+vMh2GUMVe4atfbWIZ1Af0nNiOQEMwNZDNJTGfY6YNT6syaFgK9
- sV7uhcJPpuo0agk632fwMLWfJ5Ob4ScSCvMRMcSHXqUroKFit4eA3PAYD98w5Rx2dZca1Z7TD+y
- OhfJZqjR0NjtHZRUCxo3Ija5otxf59NdhCQsU+SSZV6gqgW5uJBJrAYYBnFs3yONDzT9g6O197R
- Oql2k6qxBNlxg9MtOQnUQYg4JkWj7j3trR7d+BIivh67V5kXDmr3C1UDkbWq5rFeq8Jsyq30pqq
- 3oZz1zDOs9g8j3zjZzFl/xC5umbRlFMHUb13HxNHL5CJ7vEldlYAuvkRtdX6HdpSOU4Achj7amg
- u0VJlaysYxw8PDmO3vvauAIjLWnlhr/ekc1ytBW8z7MCzrVIEdMvWYmAmhgRMSONRlns6DntlJZ
- vkMjr+2Dua/0oxKZ10g==
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11754
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 phishscore=0 priorityscore=1501 impostorscore=0 clxscore=1011
- malwarescore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604100014
+Message-Id: <7d7f8f5857c7ba5ca8b5cbf34e001d1ff7afda61513f35e14edb441c5eee1d9f@mail.kernel.org>
+In-Reply-To: <20260409-patch-set-v2-3-651804512349@gmail.com>
+References: <20260409-patch-set-v2-3-651804512349@gmail.com>
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: Add spis_*() helpers for 4-byte stack slot bitmasks
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 10 Apr 2026 01:50:04 +0000 (UTC)
 
-I found that this patch restricts task storage value allocation to
-KMALLOC_MAX_CACHE_SIZE on any system regardless of CONFIG_PREEMPT_RT,
-which is 8KB on many systems, as use_kmalloc_nolock is set to true
-always for task storage by task_storage_map_alloc. Before this patch
-there was no such restriction and task storage supported at least 64KB
-allocation for value, restricted only by
-BPF_LOCAL_STORAGE_MAX_VALUE_SIZE. Was this KMALLOC_MAX_CACHE_SIZE
-restriction added deliberately by this patch?
+--===============3175991978239558108==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 410939d7b325..124828c9a916 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+
+[ ... ]
+
+> +static inline bool spis_test_bit(spis_t s, u32 slot)
+> +{
+> +	return s.v[slot / 64] & BIT_ULL(slot % 64);
+> +}
+> +
+> +static inline void spis_or_range(spis_t *mask, u32 lo, u32 hi)
+> +{
+> +	u32 w;
+> +
+> +	for (w = lo; w <= hi && w < STACK_SLOTS; w++)
+> +		mask->v[w / 64] |= BIT_ULL(w % 64);
+> +}
+> +
+> +static inline spis_t spis_one_bit(u32 slot)
+> +{
+> +	if (slot < 64)
+> +		return (spis_t){{ BIT(slot), 0 }};
+> +	else
+> +		return (spis_t){{ 0, BIT(slot - 64) }};
+> +}
+
+Should BIT() here be BIT_ULL() to match spis_test_bit() and
+spis_or_range() above?
+
+The bitmask is stored in u64 v[2], and BIT() expands to
+(1UL << (nr)) which is 32-bit wide on 32-bit architectures.
+For slot values >= 32, this would be undefined behavior.
+
+spis_single_slot() passes values up to 127 through here via
+spis_one_bit(spi * 2 + 1), so on a 32-bit build both branches
+would hit shifts >= 32.
+
+Note: this function is removed later in the series by commit
+6314c1b64c52 ("bpf: simplify liveness to use (callsite, depth)
+keyed func_instances"), but it is used in the intermediate commit
+3199040a2cb9 ("bpf: make liveness.c track stack with 4-byte
+granularity") via spis_single_slot().
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24221779050
+--===============3175991978239558108==--
