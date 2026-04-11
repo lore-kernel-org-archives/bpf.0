@@ -1,72 +1,35 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1146B175A6B
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 14:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BD72347DD
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 14:20:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775916892; cv=none; b=MHwstJcFu+0JAEqSw/eGbAYllLStyuxTd+Lx5pVundO1thR9DP52+rr3AIs5TvvDIPqkr0Y/d2koDF7mSA0rL4cmBXWAfbrKPR3PinSaZL5zKMGDu8V78u0tlxhm0yoT+kmfUpoiNLZnlAZTb1YGpRvHMnjz12VTTZsUVkyLwz4=
+	t=1775917238; cv=none; b=rGwXd95D+oTL8jOsNSvGZMzI/J130Kxc/PwrX/YgghynRoqHLcpLAqlSH2zp/T4BNhex+oS5/UYvs8yaMgnvwBw2VRAbdsCFlMKMj4EBn89xS8en0Bst65ckLxSQdlLjEZq+C3uAe5xpmhvvJ/7HPaWUlJ20GdGFy5kfDvdseM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775916892; c=relaxed/simple;
-	bh=qAytnbamaUzBLN7iApLxQf9vSA5/uGw2fHQ4GLMZfFY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l6ZsSDDUnKlKC1NwdKhO7JsWvWTiWalbxmzrx00fkxi2b3z7e5emtux6PBE0n71zCZCtLXDg5+Zc9YY3faNOC8yYBxl/Qnv1qVwuaL+hP7E0dMMTd+bCEYo3AleEvciid9SopYTX31NgaHlh34CKN1MdwwtwQ29wTaATa83lBoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKsTQb4U; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775917238; c=relaxed/simple;
+	bh=XLNRP/BEKTE8S7fkEH+xic1n4U12JgHr5AHwHJyOH5Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=qjM3Yr3yb4Hz3IhQwTbZPRavHWRL9lTwRfkJxgguxC1H7B5OoN3HEJp/AXOrATm7wuzsvcEgfebh+2xs7Svci2kQtPySDDmsxZNBkpmZ/LrazTLznPjtfcIPCkaRSStJqsMKnByxKQQ/Tyv3sj5Xjz5KvUE65k8ksCLitnP21mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L09ySvWC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKsTQb4U"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-82f1f6103afso266070b3a.1
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 07:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775916890; x=1776521690; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=l8DEYcBTWnAaRsZsHThl3Wv/DSP0vtu+sXpjHjBvSBs=;
-        b=EKsTQb4Ucd6zIAwQ8Ra07Tm5lGm9pdo7adVaHY6Z/4/r0uDonOZ1lFCr+RQ99507cu
-         D9/6C5iWue9M/kJuTbRbzSrsbJgNtqbGuZAoxkQn4VXeqxQuzlj7zZKugLblnTaSv83Q
-         VdTyTJY88Q2qWEbV41QE8dAKhcNdj9EDv9MXdwCrF48hDqzsbdgGKcptziO8OszWQ6em
-         qZmM1rEQNoOISfytZuiWJNQrNn6N/o/YM+DctX9tss+lRmNrsSaJ3SjUHqsYwgpd7bDK
-         3VloB26Dccow+64PMlVvyihYvflUQK1m+m7GdfkhavhbpOmMIo10lv86eT7meJRrQ/5+
-         v/gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775916890; x=1776521690;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l8DEYcBTWnAaRsZsHThl3Wv/DSP0vtu+sXpjHjBvSBs=;
-        b=aWZTOdm1UYkmLz4ZH9p8W3B1LXZIRLXt8gDaSlrPJfwskrAx7y5ZVt1A8779a10R73
-         aUF6MNVRgM9TwgfcZ1gs+F2BrTbwtM6BdkgaKN4jiZHcwU+EZRyBLKqMC+lOh2ZofQth
-         AFK941BX1sh0WdYV8ZcS9zYmsqxgjkmuoAr4ivrgWmGxcjAGpUYWgkYBg+2xcbb4GrnM
-         xiAHGS9s0mJbHrs8VI16B+EtIuwwzn1VwdIaezTstz/u9UduAfYJASYxoAqsUTUvExlF
-         1bxQx/08gXxGisWGP4FC2zDKD1LricuLTvQ8s75nI4EUgUFeCwqiwAYF/yv6n0RWh/5f
-         7EGA==
-X-Gm-Message-State: AOJu0YxDE8YSL712l/mjg3KX1XD1PGIxHt1Pt6kQOpxWJ3UFCvOdqg9P
-	fpyR20AE8TpBH0GAicDNzYjhi5ky0A8m/t//tSUuay/TBWc06meGEpdyxEYSGg==
-X-Gm-Gg: AeBDietfZMViD+MOpyURgc5GClQ968G0ek0QQS9wejUPi6DKbAmKOC+blXep4kFHsfA
-	oJQOFCSo9otEErh172cZJ0XG5plItryU1FS/GfzrQw5CiedHj2HoxyGXDqhZnE7pmEtVK7WVqfv
-	KQ2YuiGSkYafPiQU3WiTE5qqkcNW7ZfmYHdG9sjQDZodYyrscE7yZ8WZUDlsMvSLYnJP8teaitM
-	fbkCx6DhW3gbBI1VK4gcm0B7LYYCM/IzIpKXaPgEJyGgjk4PtvltRXRXh1y53mUaPy+zleKmXXR
-	FLrz9/14NvMsuQI3H8FO9BXE7MnnXhD6eDW9R6bLI3q/bvwyVKFCXtWA0Kw3tr7ovPF8GIDQ+b+
-	ZkpfovhZBiU4oDlr48eO0taHZkLTiPvdnlZsWb+tC6IjVkg65Fh8ubC9DHGx2DfDyZGVsWhaMr5
-	tAoNwicN5NDI7vJPAJV3816RYvuTB6mdMweEe5JUNlZVDLgM7PuxR5ajvF/J8a70GeG/ZSszj17
-	ZFH3P247Sw9l5UWzkac42Nxh1x6oYJVDzcVLfDQRILCrIOX37Czo/1R1STt3Q==
-X-Received: by 2002:a05:6a00:6c89:b0:82d:24f:2511 with SMTP id d2e1a72fcca58-82f0c28b69cmr8149104b3a.12.1775916889688;
-        Sat, 11 Apr 2026 07:14:49 -0700 (PDT)
-Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c4b3dc2sm6135838b3a.34.2026.04.11.07.14.48
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 11 Apr 2026 07:14:49 -0700 (PDT)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	eddyz87@gmail.com
-Subject: [PATCH bpf-next] bpf: Delete unused variable
-Date: Sat, 11 Apr 2026 07:14:47 -0700
-Message-ID: <20260411141447.45932-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L09ySvWC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7CBAC4CEF7;
+	Sat, 11 Apr 2026 14:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775917237;
+	bh=XLNRP/BEKTE8S7fkEH+xic1n4U12JgHr5AHwHJyOH5Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=L09ySvWCPf/cnMe4lbNCZ6hGzJTYwiQLPXsXlHXAC0XG9+OHhzGAqZFIAs0CH5N16
+	 uju0yPrNBBLfEXm9w7hL1vZvWQlQRldljCVjpAzmQQH2msmNc10CXOrZ7ZqEAO48Ju
+	 0XNvc94Igv1iGy/esOsZkEKjN8NjWOwlF/th4KHqk5Ok85hZnQWSSqVST29F2O9jMW
+	 6mxc4spFN6i90DeR8ZdAZKFByXAKPQ/mPi8IBtAdl7b2F/h7BGDVXqbpiVhdedi1wA
+	 hBCCrAG8cL+Q5NHoJkbnSfTqAoqSuBiUR8PWnqwwdGPhtXcYpkaFd1PrA5enJwglLg
+	 b8xLPjW3i0Kng==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CCF83809A8B;
+	Sat, 11 Apr 2026 14:20:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,43 +37,53 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/4] selftests/bpf: impose global ordering for
+ test decl_tags
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177591721129.2987296.14759491353155138068.git-patchwork-notify@kernel.org>
+Date: Sat, 11 Apr 2026 14:20:11 +0000
+References: 
+ <20260410-selftests-global-tags-ordering-v2-0-c566ec9781bf@gmail.com>
+In-Reply-To: 
+ <20260410-selftests-global-tags-ordering-v2-0-c566ec9781bf@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, cupertino.miranda@oracle.com
 
-From: Alexei Starovoitov <ast@kernel.org>
+Hello:
 
-'cnt' is set, but not used. Delete it.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202604111401.eqzyF2kx-lkp@intel.com/
-Fixes: 2c167d91775b ("bpf: change logging scheme for live stack analysis")
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- kernel/bpf/liveness.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+On Sat, 11 Apr 2026 00:33:43 -0700 you wrote:
+> Impose global ordering for all decl tags used by test_loader.c based
+> tests: __success, __failure, __msg, etc. The tags are now sorted by
+> testing framework to be processed in the same order they appear in the
+> C source code of the test.
+> 
+> The ordering is necessary for gcc-bpf. Neither GCC nor the C standard
+> defines the order in which function attributes are consumed.
+> While Clang tends to preserve tags definition order in the output BTF,
+> GCC does not. This inconsistency causes BPF tests with multiple __msg
+> entries to fail when compiled with GCC.
+> 
+> [...]
 
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 9bb6574d73fe..59d990237cbd 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -306,7 +306,7 @@ static inline bool update_insn(struct bpf_verifier_env *env,
- /* Fixed-point computation of @live_before marks */
- static void update_instance(struct bpf_verifier_env *env, struct func_instance *instance)
- {
--	u32 i, frame, po_start, po_end, cnt;
-+	u32 i, frame, po_start, po_end;
- 	int *insn_postorder = env->cfg.insn_postorder;
- 	struct bpf_subprog_info *subprog;
- 	bool changed;
-@@ -315,10 +315,8 @@ static void update_instance(struct bpf_verifier_env *env, struct func_instance *
- 	subprog = &env->subprog_info[instance->subprog];
- 	po_start = subprog->postorder_start;
- 	po_end = (subprog + 1)->postorder_start;
--	cnt = 0;
- 	/* repeat until fixed point is reached */
- 	do {
--		cnt++;
- 		changed = false;
- 		for (frame = 0; frame <= instance->depth; frame++) {
- 			if (!instance->frames[frame])
+Here is the summary with links:
+  - [bpf-next,v2,1/4] selftests/bpf: fix __jited_unpriv tag name
+    https://git.kernel.org/bpf/bpf-next/c/cdd54fe98c00
+  - [bpf-next,v2,2/4] selftests/bpf: make str_has_pfx return pointer past the prefix
+    https://git.kernel.org/bpf/bpf-next/c/5160e584c361
+  - [bpf-next,v2,3/4] selftests/bpf: impose global ordering for test decl_tags
+    https://git.kernel.org/bpf/bpf-next/c/713db9fd0336
+  - [bpf-next,v2,4/4] selftests/bpf: inline TEST_TAG constants in test_loader.c
+    https://git.kernel.org/bpf/bpf-next/c/335a6ca04158
+
+You are awesome, thank you!
 -- 
-2.52.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
