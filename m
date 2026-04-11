@@ -1,142 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75E34386544;
-	Sat, 11 Apr 2026 14:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535B13B6348;
+	Sat, 11 Apr 2026 16:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775918639; cv=none; b=HvXe9htTYfVAVDau6v0xb1EccoD5QJYfQe65YTJnE4sdFGEKGcwF9HrMrLbrdkRyoKEirMYOrtOS6i+4un5uhYrvyeRMpnuNM2Nn5t4z1zqgaYLMmnjNle1HSFuhAuWjamdFP2FxTkznZXwijNemldcaVTmbtg34hX9l5rEjrIQ=
+	t=1775925434; cv=none; b=J+/BCGhjZ0XmEM7Hwz9GMKwyl5uJ0wae9NAleogE/OCP+9dBFioonrNEv50MgWG0vU6adbKBkA9TmQV9jXLxkl53seSA0ZWYpSJP0nyjRMTZysn0FB8eHBs7Cw5JyHf5f3fMoCHAc1JtK6OSicDdNfl38yJN/Ff5I6HgOt3aAOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775918639; c=relaxed/simple;
-	bh=57CK0l47W/yUIcext4eyuju0/nugILwSpCFYoiLQZ1w=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qo1W5OHdzo4ouoUrOdtiN5AzD9S5Wc6WjuGVThxuEjtIIXruWA4NjfXVpZ5xGkXvvhCP8vdC19G2s1AqGim5b2+6EhOuZsAYIq4AuYuL5s0Zzgl/pqHJ7GgP8o0XTKak7e7jveB4b7mDRrW1SpWqGkzyp1HECRng4ECAmvSFr6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVNETH1d; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775925434; c=relaxed/simple;
+	bh=iEYTN/i0ensRxHCR3PWp+UZvvmrgLHYp6XBloHadzyM=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=FXyLSLoCBNR7SqHg6E6K1bWJ9vo6/m9/FK3yeJ/mayNmqLlXWeL8TVXRDrowtAhHoe84RXhGE/x1moVqYM4mpm8x5reLSuPvDpgvIE1GD+XMI7JmKZMDKWxUJBWh9dRIJUrEiBRLj477BP3CG3MJJtgqGSExTJAg6xSFF23bSbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=i95X4gy1; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVNETH1d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF43C4CEF7;
-	Sat, 11 Apr 2026 14:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775918639;
-	bh=57CK0l47W/yUIcext4eyuju0/nugILwSpCFYoiLQZ1w=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=YVNETH1dUEX7yY7UewBlhZDFbFt/WffNDaRp7atNEDrAsN+cU2zTUdxljF1UAjRLJ
-	 hwLGarf7aRIF6f0Ipxm58l/e4zZdrVrdv+Yl9s15V+qrjlHR8DSXHb87HBugMnDOOH
-	 xSpKZo0ocgd+yWwmzjB31dvWG+IvO3IcbEmFeYXq8PCfGbM8dFggH8CKVnTYnISXLE
-	 bsqA5sgzbWwQDveasfkEb3NTjILzQZ5z4hx0QZ08YhcrgW56tpf4AyCzXB6FRICbG+
-	 39hHNRWBBmNMGTOkEh5mvjcUEViK9T7Pw+ieLQktr+Xfz357kHHSuHjaivQk10ZjwE
-	 fC9z7IvBe5Udg==
-Content-Type: multipart/mixed; boundary="===============3603684705991622016=="
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="i95X4gy1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id; bh=avNQzUN3cbjiD4n
+	aA3fIjqUVtalOyi0zej3JABA4QTE=; b=i95X4gy1hl7F9820go7RdYE/qbcg23/
+	uNVSJcO6nHrV/k9DitCE/ESb3iAs1ihza1g1Sa/TQiPy3eX8Mn8iEkZtcli1BSGK
+	ErwXwCKzHiJioriEj6FTDOPKkmsINqfUYDcY6UMagaBBXmKm8lhnKlw7c4zhiDg0
+	HKj8PUObvfok=
+Received: from yang-Virtual-Machine.mshome.net (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAn3n9ueNppX_iUEg--.31671S2;
+	Sun, 12 Apr 2026 00:35:59 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	mattbobrowski@google.com,
+	jiayuan.chen@linux.dev,
+	leon.hwang@linux.dev,
+	menglong.dong@linux.dev
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Feng Yang <yangfeng@kylinos.cn>
+Subject: [PATCH v3 bpf-next 0/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
+Date: Sun, 12 Apr 2026 00:35:54 +0800
+Message-Id: <20260411163556.8567-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wAn3n9ueNppX_iUEg--.31671S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKrWDZry5KFWftw4fKr4fAFb_yoWkZrc_ur
+	4Fq34rtrZ7tFn8CayakF47GrZ0yayfGr4fAasxta43XrnrXr1UKF4vqr95JFy8W3WfGrWa
+	yF98Cas5trnF9jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8v_M3UUUUU==
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8g9KwmnaeG-w3QAA38
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <ebe116b9417e77b2f1a7d0d9f07cd1fc5d162c23992fe35e84190c1ddbb3ed3c@mail.kernel.org>
-In-Reply-To: <20260411133847.1042658-2-xukuohai@huaweicloud.com>
-References: <20260411133847.1042658-2-xukuohai@huaweicloud.com>
-Subject: Re: [PATCH bpf-next v13 1/5] bpf: Move constants blinding out of arch-specific JITs
-From: bot+bpf-ci@kernel.org
-To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,a.s.protopopov@gmail.com,alexis.lothore@bootlin.com,list+bpf@vahedi.org,linux@armlinux.org.uk,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,johan.almbladh@anyfinetworks.com,paulburton@kernel.org,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,iii@linux.ibm.com,hca@linux.ibm.com,gor@linux.ibm.com,davem@davemloft.net,udknight@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 11 Apr 2026 14:43:58 +0000 (UTC)
 
---===============3603684705991622016==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Feng Yang <yangfeng@kylinos.cn>
 
-> leaving the global env->prog->insni and env->insn_aux_data untouched.
+This patch set adds return value validation for fmod_ret
+to prevent system crashes caused by incorrect return values.
 
-The struct field is insnsi, not insni. The same paragraph also says:
+Changes in v3:
+- Do not move the code, and make some formatting changes. Thanks, Leon
+  Hwang.
+- Error injection always ensures that 0 is a valid return value. Thanks,
+  Menglong Dong.
+- Link to v2: https://lore.kernel.org/all/20260410061037.149532-1-yangfeng59949@163.com/
+Changes in v2:
+- Add validation for fault injection and include selftests. Thanks, Jiri
+  Olsa, Jiayuan Chen.
+- Link to v1: https://lore.kernel.org/all/20260408094816.228322-1-yangfeng59949@163.com/
 
-> this approach result in incorrect index for the insni array
+Feng Yang (2):
+  bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret
+    on security_task_alloc
+  selftests/bpf: Add selftests for verifying return values of fmod_ret.
 
-Should this be "results in" and "insnsi"?
+ kernel/bpf/verifier.c                         | 114 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_fmod_ret_return.c      |  59 +++++++++
+ 3 files changed, 173 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
 
-The commit message also refers to clean_insn_aux_data():
+-- 
+2.43.0
 
-> it is freed by clean_insn_aux_data() at the end of bpf_check().
-> Before freeing, clean_insn_aux_data() loops over env->insn_aux_data
-
-The function is actually clear_insn_aux_data(), not
-clean_insn_aux_data(). Searching the tree for clean_insn_aux_data
-returns no results.
-
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 066b86e7233c..3fa3c74869d0 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1508,7 +1508,10 @@ static void adjust_insn_arrays(struct bpf_prog *prog, u32 off, u32 len)
->  #endif
->  }
->
-> -struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *prog)
-> +/* Now this function is used only to blind the main prog and must be invoked only when
-> + * bpf_prog_need_blind() returns true.
-> + */
-> +struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bpf_prog *prog)
-
-The BPF subsystem convention is for multi-line comments to have the
-opening /* on its own line. Should this be:
-
-/*
- * Now this function is used only to blind the main prog and must be
- * invoked only when bpf_prog_need_blind() returns true.
- */
-
-[ ... ]
-
-> @@ -1550,21 +1557,34 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_prog *prog)
-
-[ ... ]
-
-> +		if (env)
-> +			env->prog = clone;
-> +		else
-> +			/* Instructions arrays must be updated using absolute xlated offsets.
-> +			 * The arrays have already been adjusted by bpf_patch_insn_data() when
-> +			 * env is not NULL.
-> +			 */
-> +			adjust_insn_arrays(clone, i, rewritten);
-
-Same comment style question here.
-
-[ ... ]
-
-> @@ -2533,6 +2553,34 @@ static bool bpf_prog_select_interpreter(struct bpf_prog *fp)
-
-[ ... ]
-
-> +	prog = bpf_jit_blind_constants(NULL, prog);
-> +	/* If blinding was requested and we failed during blinding, we must fall
-> +	 * back to the interpreter.
-> +	 */
-> +	if (IS_ERR(prog))
-
-And here as well.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 56fcc96dc780..0cca590915ff 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> +	} else {
-> +		if (err != -EFAULT) {
-> +			/* We will fall back to interpreter mode when err is not -EFAULT, before
-> +			 * that, insn->off and insn->imm should be restored to their original
-> +			 * values since they were modified by __jit_subprogs.
-> +			 */
-
-Same comment style question.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24284268460
---===============3603684705991622016==--
