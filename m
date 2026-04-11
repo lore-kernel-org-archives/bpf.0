@@ -1,283 +1,126 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E415211A28
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 17:33:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775928827; cv=none; b=fSAPIHZ/yLjEYVplnRAYDNfvNzxqIhfHRnAJJLPkwpL8bLFc4mzWz9rRcIs5t339zYMtA8PL8MF7Z0BpG7HyaqNxyS76lfG9o8iWd+zg/FLWHlDNS+xPomzBWYzV6djx9tFZ31g7U6RXBuc/4a+vDxJvCqKsTOSB2BDGD1yGJ6U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775928827; c=relaxed/simple;
-	bh=IU/0pOkeFDc+FRkr7E9j+UCNzuCjih1QJGsPSy7fwU8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=ipOKdelfBezQjiz5Eu5X1ujVokNq3XttCH6NEFNMeL5NuE5Yq9HQV9BcbTSmPkFv6XO6FRmSYXmv10mGHRIrYx+FtKDFH25ydPARdqPnCnO1N113zAgmsVjQEq1E1GFmrmPhjaFVWTbK94mm5THWgSYFrTKDHJt/GPg024lHHfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=o5U7q8Px; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72E6285CA4
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 17:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775929233; cv=pass; b=u7Mu+YTZBkZUdKoyTUQ0OkIL4F8UtdwhlPV+/4VObgghr7Ce+BeOVYJVz4Ww1OjNniJI5L/c8jOjDn1sw2vCxy9cHQxWNMHL+ys+K8fYJwjwOt5sc+oEZ4goOJvRe1azkoMCf33hbrChGezzfusrb+m8owoxbQJ6pGBjiPhTkEA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775929233; c=relaxed/simple;
+	bh=Tw/u5oUZtot/hTNDcsveB9ekvgdwkxo8ZCcekiGgSYM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bjwpk4PAK24jQxptqwHfnGfzvq5MIBVVmK95vhJDb9XmOc7hCVH/kNlR2/+JHc2kjXfO72pWz3VOQKbr0e6I/Eg6zpULZXPddTIG/k17lPn2TLdjfWJ6rsb7YvLvK3PLqbiCHPdr7t6/BOhlccTPKeANF+rSSsZkXvShjSbKpdA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y0Dvz0Pa; arc=pass smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="o5U7q8Px"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35c2fe0d90fso2133678a91.1
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 10:33:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y0Dvz0Pa"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso46665415e9.3
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 10:40:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775929230; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IbJ6JpCVUpNj0mW8JvhPe/ffN0hNessasQv9Xis/V5a6p4SF0vmgBf6TR0jVUsMXFq
+         uOwD33k+kqa8vq/WkBO7GG1DMMBNLNisE6SFiTkY4JoDdZsbKSdH5ibCKDrS5rofkbre
+         pWJLJQ+idQHzYonCdQsVzPh5FtQCHF/C+/7EdE9AdfWMptCBEzQbVK67mfWmoGpmq16t
+         w3lCMdUWc+4Z/D+pQDM6dz6yFf8aRzpLIfBJ9es2hfAYsVWmeiCQwTfd/PUj0MTPPmr7
+         I6Ha8EOg6byNTaXYd3DFKPG7Gu3wYwEhKZMQiwmI3xUIuXPpkGW72zUjim4bkwZ9m3HM
+         0qUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Lqmr4eWyWQ13XcEc+A05muMZUDdgHIlyuz1WByeFfPg=;
+        fh=s1Ti3SkLciWk7EfKrMC5VJiTJj3bx161sWV7jb1u8Dg=;
+        b=UiiKXtR8Uz7CTUzN842C+vHT0U5Nqidz+dT5SDjlh73fhqJOp9wNJLbUi9k8371ap+
+         6fQODjrweNRp+NGW+lRWyp/yqwkMn8CtP+S4wZTFsWH72u+Q+MX+oeJxWhh9ZzbiqE7a
+         2Uw5V93XTR0txjDwgNzGLfgX+USx9FCDaTnFpQFfbNDUnhjoJjskFR8RDm/zp8JbQeRg
+         RYSLtRZLQhkM/FrIhlKzTiRTyqltDR9lNYaknNwoiXfEYlPqHzT1PSdR4vmwbbTwLw6Y
+         vOWYZ8xQ6TJ+nn7LUjlis0tpHkUQWIWebgby3EyJUw3PExmrNR2klderr19Fp76c20Cg
+         fzaQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775928824; x=1776533624; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775929230; x=1776534030; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7+fjhkgboTj6XpIyi85+VsmEIROTdfUbY9vPiAakbcs=;
-        b=o5U7q8PxzKL7Cu4PulsTQ47TXAb10nPLJOI1ZebEABJ5QRsWqybXMrYp4corWRW1OC
-         O9lJwdgPItCPxiOnRlTC8ITAWxKnmxLYY3u2uAoRxkqWmWAfX0iTRYgh6Bfw9nez2wSF
-         f5zAH5GurWjyaQ2oYYtTbcgzdLSdOxG/qEiXCrW/kJJijgaMzh/pszvbJAsRSIf09pYj
-         kZN/YpQK1lYBLMEbIgqRvXo8fwqYTs37cVcqRsjfy4k3zntWu049r/4bC3oLJbp8toIF
-         +url3+OWb8I34pP9T203Aa/o4z23RVMZSFY7VpympO7hVFIGvWzHDyED0BPlpydLmKgT
-         CrvA==
+        bh=Lqmr4eWyWQ13XcEc+A05muMZUDdgHIlyuz1WByeFfPg=;
+        b=Y0Dvz0PaJ1inV7NKLvO8eQ1Yx/fRj2YubhcCai7u/lpHcRzBtBM/X+hbDuCO8FGKBW
+         WBE11+w3z0/dd4KrLnT8x3UNq2ah/Grb7Ha+NfKLaiCwFEB7kOH7/6W3NfbpG/d7IMbv
+         Nee4w9z/OktoSZ7TK/+S5n24Hm+LGZ3ZhgvDH+JSeKUScs8lHnjCrScQHCgrmYYWJn4f
+         349lq1xwlq+VmfIbMeD8C6dcX2oZsrBHEz9RXMA0hUzugnbXfn8AFiU7eU+kbjLCjpyc
+         zguri3ayHDM2m/47lb2v0Ur7/7t2ZTGDSFO82t7Rz76wI8adl9CT9kUxwWcYF6mH5KUe
+         qPqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775928824; x=1776533624;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7+fjhkgboTj6XpIyi85+VsmEIROTdfUbY9vPiAakbcs=;
-        b=cZvIgSLiqGCDPsJK28T3PzT80q0vpFVXf72NaPUzr4PJmDFwAna/siy0pE1TUAtUBD
-         A9B7YyL/JVbkeYJgcP8IG3oead2KaqJLe13C/1yOR2TC9LyZeWXyCbpluhmpbaGhLqLK
-         L47p7/DFppCcA+4Z9btqEjzCkS/0PvVl/pnaxuBS+RDLzuv1HFjX7e8QTSatUrCmfSgm
-         3JLwVZ1lhMTAuPldfTksmFqsiG+5+o1pIQMtzWnhChqnpKIf9rvU7Ajx4+9IfHJtjhGp
-         /wd0yjlBr+OWFxr/64uedFgH/+pqLLi6I+t+tmWnURgfgpSf3Nd8QesOEk2vZdv0aLJ7
-         GNRw==
-X-Forwarded-Encrypted: i=1; AFNElJ+UpXDe4N7P5CHt65ZRV1Svq3OSGFHgMVwGec0zDVySb+ubzcvMivpzHpWHt51JkjWFuXs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbO8KImbiUWF/UiL+3SMtzVLRXAPGCBdwzW04bpMUn6G88mxmZ
-	eZVjBd7lb2UPb49fi4Sz/IuBHljO0a86LYUI4Qd82DTBv7JpT+DUgQMWFC/CAuyIGp3is949CRg
-	EyT4Np2rspSuG
-X-Gm-Gg: AeBDies9TSjWBb7y93jRDtkUcQvG1H5qZ90PIV/bSvIy4Y3zo+pwfI/Zj5vaD8h/K1Q
-	EplWMstmi5OdT+JS12M+RQXdU2N9N9NbAPcSX52DAXBJ74Son5D+GqAlt7c1IsTdScqSarLWOZv
-	aGlgIjpnA5FEYIt78P9INT/iCmkdPeYvoC17Ip/soIZCgk/HF6YEhFilBR2vYOhHzm7bosGnOQw
-	VSiybpELYQGXmCG5lm1S/nLvHjfBdtfx6/T5hWT0Df20CdPqPCZlbH4c/dw3clEn7ZMQ/vznwPL
-	1/dGCyv1+pKM5fvMcQi3bcxhCvubst0tNSOzoRAC2ZyyoSeWSiBfzOtE2Q2bV48WVtEcDRnjU7u
-	+GlXthhYsW0fZmmpmaI5fEeG1uRU47DI2bqnmwLd8Gp6GK6KOclIJN2c+NA+lqBWpEjlXDM6/ao
-	C4fgx4l3U=
-X-Received: by 2002:a17:90b:3950:b0:35b:e4f8:7cc5 with SMTP id 98e67ed59e1d1-35e4284c7e0mr7604236a91.25.1775928824314;
-        Sat, 11 Apr 2026 10:33:44 -0700 (PDT)
-Received: from localhost ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2d4f09e85sm70570795ad.47.2026.04.11.10.33.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Apr 2026 10:33:43 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1775929230; x=1776534030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Lqmr4eWyWQ13XcEc+A05muMZUDdgHIlyuz1WByeFfPg=;
+        b=ZTSPYh77j7KwUKQLkKp47hwFOW1QIgvBYTFcxlq9CFcOELgQfq9jalF3LUGuWEtLEc
+         9TWNPKq3axvyy7loF3e9Y8pQ5ibayMGlEUw8y5a2+/HsozGtukNwo8mjZu+z3dLPgvjn
+         JGQLLBg8KitEmxYmFxqwYxd0u9DyApv/k2puY2d5D8GOrCaZ3yhW++Vkje5nOy29ppab
+         xDKjiLorLLy7dqqQfRwS1jsSW9obvFKa4oPTScTzu0nVRHiqTb9QoW06srgQmKiVxNGI
+         ZXLS5x1nQbCsIyEVPJIdj3HAu5LBSgKzsHxlfcMXShypasShH2N4vA4ibUjMRcHAKiQk
+         PSnA==
+X-Forwarded-Encrypted: i=1; AJvYcCULT3aUKaKMGanuLqNH31NtrfX5zjGXo7RwRNfPQh5nkmyuj94uq62w2aQpVKdYJFPhp9Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxv3KfcnyBoSG9iPSmw2sbCRlH204II5vwM51TaAImOakpSYkzI
+	jDfizev7Yy4y4NSHX/RCTLlq8/Ttg2WA3XSlc4u03y1r6gMeriv7e9/+9rmA8qL79zvB3dXHmPP
+	ete2xzpudQKIaGgQ9z5/WrmELshYn4yc=
+X-Gm-Gg: AeBDiesr02pUJm23yTuEaYL8kRExFhp239+yXpBpAnIEYGHN+z0nwIJkR6Pvf0IvdNt
+	80Tj95X5EJ4BmbIpn6lD4+VdwiEZJc0o6JcC7PxJdGrDhxq13AoLQm3Y7aMveXyVLGwpfjr6GLJ
+	zrMK7z5zBniOdzCUV8m1McwDdjEVcTBZlaRTb0GJnnLtI9869vH1p5FjMwojcp+53koXiG0kIiD
+	znxnReDbLsChVf62viUE8Br5JrVNsJKv4NS2vysBoPiLL1kE3CvOF4AkddCb4LUpNlf1v7ZKlkq
+	I+9PlmDyjVhaBasRR5qbenxUiUMibeLgcHveq1MGGpg8+ePd4qC6+/8JI8o/NQoXR4Ox86iMOTd
+	kcqWOLpmHgNmMwfdaPYYD3AcaDA==
+X-Received: by 2002:a05:6000:2dc1:b0:43c:f8a7:3b09 with SMTP id
+ ffacd0b85a97d-43d642da703mr11188838f8f.23.1775929230153; Sat, 11 Apr 2026
+ 10:40:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <CAADnVQKXio6nh+3OLkJb3C5FyGS404ZAQEPpwxVD6Bsr444ahQ@mail.gmail.com>
+ <20260406203950.2669356-1-jmeng@fb.com>
+In-Reply-To: <20260406203950.2669356-1-jmeng@fb.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 11 Apr 2026 10:40:18 -0700
+X-Gm-Features: AQROBzCN9U9z9SJ-cvZBbCW8wwhj55-MxFdr7ypSG25E1nnwyX4EtfAXs6Kv330
+Message-ID: <CAADnVQLH09DxPWF5f8+sx4XTN=7NqehRUGieDPoAkDz5HXdkGg@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf/tests: Exhaustive test coverage for signed
+ division and modulo
+To: Jie Meng <jmeng@fb.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 11 Apr 2026 13:33:43 -0400
-Message-Id: <DHQI86CY1QDQ.16RMS5QSX99EC@etsalapatis.com>
-To: "Weiming Shi" <bestswngs@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>, "KP
- Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
- Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Barret Rhoden"
- <brho@google.com>, <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- "Xiang Mei" <xmei5@asu.edu>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add test for arena VMA
- use-after-free on fork
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260411112944.1455470-1-bestswngs@gmail.com>
- <20260411112944.1455470-3-bestswngs@gmail.com>
-In-Reply-To: <20260411112944.1455470-3-bestswngs@gmail.com>
 
-On Sat Apr 11, 2026 at 7:29 AM EDT, Weiming Shi wrote:
-> Add a selftest that reproduces the arena VMA use-after-free fixed in
-> the previous commit. The test creates an arena, mmaps it, allocates
-> pages via BPF, forks, has the parent munmap the arena, then has the
-> child call bpf_arena_free_pages. Without the fix this triggers a
-> KASAN slab-use-after-free in zap_page_range_single.
+On Mon, Apr 6, 2026 at 1:40=E2=80=AFPM Jie Meng <jmeng@fb.com> wrote:
 >
-> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> ---
->  .../selftests/bpf/prog_tests/arena_fork.c     | 86 +++++++++++++++++++
->  .../testing/selftests/bpf/progs/arena_fork.c  | 41 +++++++++
->  2 files changed, 127 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
->  create mode 100644 tools/testing/selftests/bpf/progs/arena_fork.c
 >
+>  /* ALU result computation used in tests */
+> -static bool __bpf_alu_result(u64 *res, u64 v1, u64 v2, u8 op)
+> +enum { F_ALU32 =3D 1, F_SIGNED =3D 2 };
+> +
+> +static bool __bpf_alu_result(u64 *res, u64 v1, u64 v2, u8 op, bool is_si=
+gned)
 
-The test doesn't work for me as advertised. Does it fail for you under
-vmtest without patch 1/2?
+why? Use u32 flags here too and avoid..
 
-The test doesn't fail on base vmtest for me, even without the previous patc=
-h,
-because KASAN isn't turned on for the CI. With KASAN the test triggers
-the splat just fine.=20
+>
+> -       __bpf_alu_result(&res, dst, imm, op);
+> +       if ((flags & F_ALU32) && (flags & F_SIGNED))
+> +               __bpf_alu_result(&res, (u64)(s32)dst, (u64)(s32)imm, op, =
+true);
+> +       else if (flags & F_ALU32)
+> +               __bpf_alu_result(&res, (u32)dst, (u32)imm, op, false);
+> +       else
+> +               __bpf_alu_result(&res, dst, imm, op, flags & F_SIGNED);
 
-Should we maybe turn on KASAN and panic_on_warn by default on vmtest?
+this convolution.
+It will be just single line
+__bpf_alu_result(&res, dst, imm, op, flags);
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork.c b/tools/=
-testing/selftests/bpf/prog_tests/arena_fork.c
-> new file mode 100644
-> index 000000000000..445574827891
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
-> @@ -0,0 +1,86 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 */
-> +
-
-No actual copyright holder.
-
-> +/*
-> + * Test that forking a process with an arena mmap does not cause a
-> + * use-after-free when the parent unmaps and the child frees arena pages=
-.
-> + *
-> + * The bug: arena_vm_open() only incremented a refcount but never regist=
-ered
-> + * the child's VMA. After parent munmap, vml->vma pointed to a freed
-> + * vm_area_struct. bpf_arena_free_pages -> zap_pages would then UAF.
-
-Remove this, there is no point keeping information about past bugs in
-the tests. The first sentence is enough.
-
-> + */
-> +#include <test_progs.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +#include <sys/user.h>
-> +#ifndef PAGE_SIZE
-> +#define PAGE_SIZE getpagesize()
-> +#endif
-
-Use sysconf to get the page size.
-
-> +
-> +#include "arena_fork.skel.h"
-> +
-> +void test_arena_fork(void)
-> +{
-> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
-> +	struct bpf_map_info info =3D {};
-> +	__u32 info_len =3D sizeof(info);
-> +	struct arena_fork *skel;
-> +	size_t arena_sz;
-> +	void *arena_addr;
-> +	int arena_fd, ret, status;
-> +	pid_t pid;
-> +
-> +	skel =3D arena_fork__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
-> +
-> +	arena_fd =3D bpf_map__fd(skel->maps.arena);
-> +
-> +	/* libbpf mmaps the arena via initial_value */
-> +	arena_addr =3D bpf_map__initial_value(skel->maps.arena, &arena_sz);
-> +	if (!ASSERT_OK_PTR(arena_addr, "arena_mmap"))
-> +		goto out;
-> +
-> +	/* Get real arena byte size for munmap */
-> +	bpf_map_get_info_by_fd(arena_fd, &info, &info_len);
-> +	arena_sz =3D (size_t)info.max_entries * PAGE_SIZE;
-> +
-> +	/* Allocate 4 pages in the arena via BPF */
-> +	ret =3D bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arena_alloc)=
-,
-> +				     &opts);
-> +	if (!ASSERT_OK(ret, "alloc_run") ||
-> +	    !ASSERT_OK(opts.retval, "alloc_ret"))
-> +		goto out;
-> +
-> +	/* Fault in a page so zap_pages has work to do */
-> +	((char *)arena_addr)[0] =3D 'A';
-> +
-> +	/* Fork: child inherits the arena VMA */
-> +	pid =3D fork();
-> +	if (!ASSERT_GE(pid, 0, "fork"))
-> +		goto out;
-> +
-> +	if (pid =3D=3D 0) {
-> +		/* Child: parent will unmap first, then we free pages.
-> +		 * Without the fix, this triggers UAF in zap_pages.
-
-Again, "the fix" isn't clear. Remove the second sentence.
-
-> +		 */
-> +		LIBBPF_OPTS(bpf_test_run_opts, child_opts);
-> +		int free_fd =3D bpf_program__fd(skel->progs.arena_free);
-> +
-> +		usleep(200000); /* let parent munmap first */
-
-This is dependable on vmtest, and we do use usleep in other tests
-so I'd say it's a valid use.
-
-> +
-> +		ret =3D bpf_prog_test_run_opts(free_fd, &child_opts);
-> +		_exit(ret || child_opts.retval);
-> +	}
-> +
-> +	/* Parent: unmap the arena, making vml->vma stale */
-> +	munmap(arena_addr, arena_sz);
-> +
-> +	/* Wait for child -- if kernel UAFs, child will crash/hang */
-
-That's not the case. The test exits with a success for me.
-
-> +	waitpid(pid, &status, 0);
-> +	ASSERT_TRUE(WIFEXITED(status), "child_exited");
-> +	ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
-> +out:
-> +	arena_fork__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/arena_fork.c b/tools/testi=
-ng/selftests/bpf/progs/arena_fork.c
-> new file mode 100644
-> index 000000000000..b1f8435f1834
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_fork.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 */
-
-There's no copyright holder here, add one or remove the line it.
-
-> +#include <linux/bpf.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_arena_common.h"
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARENA);
-> +	__uint(map_flags, BPF_F_MMAPABLE);
-> +	__uint(max_entries, 16); /* number of pages */
-> +#ifdef __TARGET_ARCH_arm64
-> +	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
-> +#else
-> +	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
-> +#endif
-> +} arena SEC(".maps");
-> +
-> +void __arena *alloc_addr;
-> +
-> +SEC("syscall")
-> +int arena_alloc(void *ctx)
-> +{
-> +	void __arena *p;
-> +
-> +	p =3D bpf_arena_alloc_pages(&arena, NULL, 4, NUMA_NO_NODE, 0);
-> +	if (!p)
-> +		return 1;
-> +	alloc_addr =3D p;
-> +	return 0;
-> +}
-> +
-> +SEC("syscall")
-> +int arena_free(void *ctx)
-> +{
-> +	if (!alloc_addr)
-> +		return 1;
-> +	bpf_arena_free_pages(&arena, alloc_addr, 4);
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
-
+pw-bot: cr
