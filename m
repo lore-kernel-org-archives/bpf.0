@@ -1,130 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2081D5151;
-	Sat, 11 Apr 2026 10:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BB032E743
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 11:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775904386; cv=none; b=bHI8X+OGOjUY4tgzj28zg/1IYcn6xNZR9jxkHRk4h5+SihdUMV8p3JybJ9EGSdLZGOX3Po2BG9DaGQhVZYc/oR0DF+KI6rjm2i1JwR/1Lef7oXb/YsNlYcsYHqWjPUt0sMtpcbE1lX5Mn8wTVayhTyzI5jWtG2Ln82xHsK2Tdow=
+	t=1775906484; cv=none; b=AfMoICODLhFedNoGb68wBw+lZYr1gdFFwbQvz3mxM0IpQl13gAFLtChsMEqK4HNlro0THAGYmkwFVwR2FjjWwWLwHwESvd3DihS7yBGOA6LWVauwSg12itt3RH5h1o89MOYlYrn9rWzVcs7+7//7wOfTG2TWAcLnRHjvUUpWNOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775904386; c=relaxed/simple;
-	bh=yfup+R+Hy7kL/EVQORGNoDyl5Kw0LcEhlJSNpUE5f5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ozdjAdFb583GcnY0FqrNdUIPBqf/XtBaJAJNzqwZuWoGwuGxdwhWvxQPzv5Z2e5ox9M2ZTs7r5CbgvB8z+skNe7BWUhVpHMsiJ/KffHv491hxiiVRFyD48TaZ6tG02tw76U4glE3gJPETZsb2sw55gpcj/yQZ4cC/eXqdwb92HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WR/5Rn4v; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1775906484; c=relaxed/simple;
+	bh=QQ1L22Wvfp4TF/Wc10ZxkSgTMXrBIFR8TmwA+TpbEBg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=npjxAcKqoHXynWqzRB38YyKmxYS9mgOhPyinUSa5TVmGf2e0cU8nNT4jEAhhHaY3N1xwE7Vo8ZOCyow5otEDR+ceMXOkSc+CDY07D36t6cVzT6mAUdHhwFxREbRcuc9oZyxDfGqJwJnx310aoWzZnKU9Sv1k4cLb/hlaFw4j9Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PXz/Hf2p; arc=none smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WR/5Rn4v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1775904385; x=1807440385;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yfup+R+Hy7kL/EVQORGNoDyl5Kw0LcEhlJSNpUE5f5M=;
-  b=WR/5Rn4vNkRd5Vk8IGXkJ5Kg1I2ZQWFByKX4BX2NlmUQgQ6MkV1bX6x8
-   7gTjXXUVLKWqLrez1csoToJ2J9Ksm6GblipAIVk7vQJHPywFf6JCntgPv
-   S56sSqs3nJ9WDpkoVnZDruwBfmUSQ3D3AnJW9jIFORdiuWcdAvCtE+Eml
-   WseXFFRvvIS7fx17Rcxd7XYlA0/PltEuTKetgUWEVvaDmWJ2bfyd9sRNb
-   Jev3wu2j7t8Xgh4xS0hlfe2+T6L62MHgcJGXPggSoiz52msNgEP1rHvrF
-   r4jnLaOs3GBYyN/TbxnutinGcq8WMrGrmGz+up6dKlRIv/whfx3VD2HlV
-   Q==;
-X-CSE-ConnectionGUID: Q9L5+wyoRGukWcWT0Caf4A==
-X-CSE-MsgGUID: XSL1lhGSTF+LeZ4/u3EPJQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11755"; a="88297090"
-X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
-   d="scan'208";a="88297090"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2026 03:46:24 -0700
-X-CSE-ConnectionGUID: cSlGkiyNTvmFeLPPAlNDLg==
-X-CSE-MsgGUID: MRnAW5IERXaHc+Puwf/vIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,173,1770624000"; 
-   d="scan'208";a="226163658"
-Received: from lkp-server01.sh.intel.com (HELO 3eaaf1a74b89) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Apr 2026 03:46:21 -0700
-Received: from kbuild by 3eaaf1a74b89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wBVr0-0000000015B-3f1P;
-	Sat, 11 Apr 2026 10:46:18 +0000
-Date: Sat, 11 Apr 2026 18:45:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf v1] bpf: Avoid faultable build ID reads under mm locks
-Message-ID: <202604111812.ms5JQMgD-lkp@intel.com>
-References: <20260407223003.720428-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PXz/Hf2p"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2ce102afb0aso3784327eec.1
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 04:21:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775906482; x=1776511282; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N106WXZEbWbm+mkMjfNRlJHCBH/oaKGWtZxKOVnjw0g=;
+        b=PXz/Hf2pd//EXCKl74wF9AkwoWRm2GtwjtCrJl00jRsJ3M78Zzczng/Y9xnCv1QJz4
+         cPhRDDOaJ3cTqna/ZW59Tcpb+pEfS2TpFeqqpazoPM4JR6BRJpTmwk+0tkTbgLMWdWGK
+         Xt6CinptBGucNSjJaqOeQfRc5zJ0HCPeK2R/aBqcktrxILyXolV4o05sHvHPcS650mZI
+         lfOE8kpWKKnKoB1PoOtdFcj0ZFfaV3ZADgtW5xnFNbA7USldSZ4AK6I6FwNI2vrbQ9pR
+         MvqJcg5fOs1yxpq3o6KCwc0JGesFppHYdtEmpnzoUkMyRNJcUHEK7MEjoHQMyADtbCFh
+         BehA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775906482; x=1776511282;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N106WXZEbWbm+mkMjfNRlJHCBH/oaKGWtZxKOVnjw0g=;
+        b=MPJLXhFX7bIKN4jZVDWYCl+ze3AyJiS3uAL5wWjNH7GO42cK1qZw9dsnqn0O2sRUmW
+         v4Uf/UhFwmrJzwHQFQPxUBglyvSwnEVjPwymquvQkNamJ1uIEkBWFxTgaOXHtvleuAG4
+         x4fgAsPNHxbuyNzQEhg2i6f7a9ZNMAe34+uzygL+mzB61Qrzp2rqE+6Yhdh4VKrmHQnJ
+         zcE40MBwdnqFF4vCpO9hqn40KOmuRaPhcUB85ouVY7b+rUkUIa5+Jr2tm9ZJOUTFEaRZ
+         gwvD0WVdJ8aSrnYyZq18taxeslUJp0gdJYpqxt+PdkMvBzLcSvouPBiJW46flX41SSKH
+         t8dg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGz5AIh8kZzev4YGuVkDVX1uHDwqpjSbDkL0KbwzCLC737B7q881T5wSGDVz6YeWeoCIk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJCJdoNC1eBa9w2OEXpxROITs4SvNuB6ixX6eXM8uo/WT821Li
+	0kAejV2FUaRkJ80aF6xFLewkiDHn6EnIlb04Zs7ikrWNRmYJNSOttLrS
+X-Gm-Gg: AeBDietWPfif6MOWh+Nhj3B8YhVkbovrKfnKlNEx+xnNc+twczLQMhGmQvUwQLxASJf
+	3Nc8+rfdhGciK7NSnjucmAxxNl/hrjPOpII0YAcBMYJOIC8uWj3lQQ4wfX3oxeIBOKC0xfjTMBE
+	IAOoxRY47mK2CdORn0Q3JkARU75Hol1V7OS6apNf0spPiyzTrQvBrvRE4uHgIEZaFk8BWOKJ88W
+	KXAppHRxJle8MrGbNjs/UtEahvJQuszcscieUGonbY2Nvy/YXMaNMrjA7FqwUg53paRdmWEhwCC
+	XT1wm3sP69f6le+voKky+0iIjOacxXi8h6svXmRPZLMlY0msgzFfhggnXvZW63zHr64gACc4cZ+
+	la69mgSS0kVy/vr7hu6mwsShBPwKtrYk7kZqgClV5HETLmML7mJm0Om8c6JLGUT55FNSu7A+VFZ
+	EYkeZBCwZTidU5wo5h9oOLGEADWwWHhg6okLDIqzNg6CAGh52Rgw4FHHKpf2XL+hr7edrztQgpY
+	cKf12lKVw==
+X-Received: by 2002:a05:7300:4347:b0:2c8:717:7ec7 with SMTP id 5a478bee46e88-2d58945dd66mr3786627eec.20.1775906481985;
+        Sat, 11 Apr 2026 04:21:21 -0700 (PDT)
+Received: from efaec68ba852.tailc0aff1.ts.net ([206.206.192.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d562db64c4sm8224984eec.27.2026.04.11.04.21.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Apr 2026 04:21:21 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Barret Rhoden <brho@google.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>
+Subject: [PATCH bpf 0/2] bpf: Fix arena VMA use-after-free on fork
+Date: Sat, 11 Apr 2026 04:20:49 -0700
+Message-ID: <20260411112050.1454548-2-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260407223003.720428-1-ihor.solodrai@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-Hi Ihor,
+arena_vm_open() only increments a refcount on the shared vma_list entry
+but never registers the new VMA. After fork + parent munmap, vml->vma
+becomes a dangling pointer. bpf_arena_free_pages -> zap_pages then
+dereferences it, causing a slab-use-after-free in zap_page_range_single.
 
-kernel test robot noticed the following build errors:
+Patch 1 fixes the bug by giving each VMA its own vma_list entry,
+following the HugeTLB vma_lock pattern (hugetlb_vm_op_open).
+Patch 2 adds a selftest that reproduces the issue.
 
-[auto build test ERROR on bpf/master]
+Weiming Shi (2):
+  bpf: Fix use-after-free of arena VMA on fork
+  selftests/bpf: Add test for arena VMA use-after-free on fork
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ihor-Solodrai/bpf-Avoid-faultable-build-ID-reads-under-mm-locks/20260411-130435
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20260407223003.720428-1-ihor.solodrai%40linux.dev
-patch subject: [PATCH bpf v1] bpf: Avoid faultable build ID reads under mm locks
-config: i386-buildonly-randconfig-002-20260411 (https://download.01.org/0day-ci/archive/20260411/202604111812.ms5JQMgD-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260411/202604111812.ms5JQMgD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604111812.ms5JQMgD-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/bpf/stackmap.c:172:35: error: call to undeclared function 'vma_start_read_locked'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     172 |         if (range_in_vma(vma, ip, ip) && vma_start_read_locked(vma))
-         |                                          ^
-   kernel/bpf/stackmap.c:172:35: note: did you mean 'vma_assert_write_locked'?
-   include/linux/mmap_lock.h:507:20: note: 'vma_assert_write_locked' declared here
-     507 | static inline void vma_assert_write_locked(struct vm_area_struct *vma)
-         |                    ^
-   1 error generated.
-
-
-vim +/vma_start_read_locked +172 kernel/bpf/stackmap.c
-
-   161	
-   162	static struct vm_area_struct *stack_map_lock_vma(struct mm_struct *mm, unsigned long ip)
-   163	{
-   164		struct vm_area_struct *vma;
-   165	
-   166		vma = lock_vma_under_rcu(mm, ip);
-   167		if (vma)
-   168			return vma;
-   169	
-   170		mmap_read_lock(mm);
-   171		vma = find_vma(mm, ip);
- > 172		if (range_in_vma(vma, ip, ip) && vma_start_read_locked(vma))
-   173			goto out;
-   174	
-   175		vma = NULL;
-   176	out:
-   177		mmap_read_unlock(mm);
-   178	
-   179		return vma;
-   180	}
-   181	
+ kernel/bpf/arena.c                            | 26 ++++--
+ .../selftests/bpf/prog_tests/arena_fork.c     | 86 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_fork.c  | 41 +++++++++
+ 3 files changed, 148 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_fork.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
