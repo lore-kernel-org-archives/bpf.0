@@ -1,106 +1,144 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E0723EAA3
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 01:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775869528; cv=none; b=O56iHP2OWpj5yegtO1WUF9EksDuu2e1GIFZ3jAmcBmveccF+9gvLb9RTwve5zSgGfabOoy5f8ykgcImv6k8goj+iCP+tfe0ju3lgVODHl0oVOgCQSKyMxNr6bNEZGDkq3VSksGhSyx0XC07PiQ4qHpBfyIwvIAMjk3YCOCnN+/c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775869528; c=relaxed/simple;
-	bh=Mj2JSPiQ7qUlq+UnF/pTR82EVW9XrkmLw85SNWcSttw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LJ+GVb8zhOEnTlkGCtGwLvzFqzxQEZXVJov7h2RiCno8g2znUKQaEn8jWml0DC2vz/wg49lbo0Pu17SQTT+kwbDHFp6s7U6boY++zhuw6hTsKmSijpAHPP13NaSM+TCzth/UY6Ow9BoYbY/7PQpdAhr8ScOf+v8AlyZnuq7Navo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b9w/h6op; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E309475
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 01:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775870382; cv=pass; b=XD/swIhf3nnRhnnbXWaPr8HK5fCKq04yrqJifGpT4vnqSWKWsf9R52hg6m+TpdRC/gP+eF9Pv3fbwkc3qWoq8G1GQJ3BOIPrMhxcBcRNOPPgWh79WjhQhiT4xc5l0Kch49T5ubNIMG1bRPA3ytPgjfgFnFhJxbXkke3exauQj5c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775870382; c=relaxed/simple;
+	bh=CglKaT8q8HTeggZFLMd5JWhtMWstH39/dJLglKYh+lE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kCUh5VHNQCM84IaMcznInDiyW7WUw37wOxw+pKuTpIYZLNhgVLU8JUrqEcMQCmQP97O/lUJz6XPqkGPuOMX0CgPOObsGvPL7TREVaGQ1ONMvqQr+X0t8PpRpzmTqoQylo/TJ/c2d4DD4CF0a3sfgwnbftvt7iN7+zvAI2Su0VzA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O0ylRXtT; arc=pass smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b9w/h6op"
-Message-ID: <ce0aeb2f-55a5-4445-8a5a-e2a0fef75f4a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775869523;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JzowawuhjssmOibz4u6Ng0JIXaca22FBMTkYloQqV0Q=;
-	b=b9w/h6opH4wE5Izkc8DtGE6YAcekG3DmckRpJ+NMiyNbReKg+26PUTCFw34pJAb9OOE4KL
-	XOqNjpx33W6m6/2GKQtsyzEFvFDzG4Vzwl08967kSthRU1sT48WGYyApnidLRNE8lNfy1L
-	c0H0Mn90FmXAyYgQWT/s2JBjA1ucfD4=
-Date: Sat, 11 Apr 2026 09:05:16 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O0ylRXtT"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43cf3ee0fc1so1615871f8f.1
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 18:19:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775870379; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ht6AqQJvpFNAL2txddVjtHtwp2xrVdt/AGQ1cYvFxLvDvS+493n5BX6glg9tbo55vo
+         wqOdD+nvZdiYdptiIEgRvCAPjrSIp5VwWiRl2wj/3DZC2h+n+Fhwj/LmSjFZ448sISZL
+         KTYO2mrbWayTFCwpV0UbOaG6OHZSP7H17/TqDWTnEca295zuVXdBSO7VgAxx1jUGzoU5
+         YWS7ae4LxLDctAtDBVZDSGPDYkii3yA9QlVwX17mvi17DIkkvkm+E86N23bIhwqLnbF4
+         db9ec7qzINZnkHpYHSfHfcbMPXdu1t4/FgcfC3Znu8iJYvWNuJhqX93pDpgZyIWxrKzT
+         N4bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8OZKa9SGoXcu6sayigWJ7uTxhjTe7+OEh9pgBdh/JaM=;
+        fh=HvpcOF6oy8R+w8FBEvlf/uslKo4ESeCb37i0kfL3o9k=;
+        b=XoQymsqmQShW/qHLEYuIC/oNrOT+B/d4bAY1iIyi0LqXhWjTZNY7hgCCfTStYaM9K6
+         R1HFMm9VWohHHzavKg0lHGleN63lV0oe9J/pQkMn0OVCWwNkIQV6Y8+1n7qRdfSI6pGE
+         4zdlrKjvzmYhzAMpoFz4MhqfyQHnacjAE3wXKCVMls7aYTeMRqpyDhX/VPDYhaANBTTp
+         HaG4RkutwPNtIJ/y0G9V9t+Ow1NhVk89EdKOEa6Xtwz4OVM0H8Zs4wD2ryHetuTP2N+3
+         8damREQzoylH5CQp67SljI8F+zDkI66RVrHa8y44ttGJFIp/Ba04DhQ6QxVj0j0V+8ji
+         NtRQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775870379; x=1776475179; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8OZKa9SGoXcu6sayigWJ7uTxhjTe7+OEh9pgBdh/JaM=;
+        b=O0ylRXtTwC1Wt6WFz8nInMhiAN5Mzzto+uwlWOGWlJIJzfacaMfFneaac0uUjfSkBP
+         B1Tv0F5EEFZNX/Lcc8fpkysdsG4ptQTCxsZ+Pb8TYZ2cyD+Uv48SB26Gi0xKse3fOfw8
+         mGMpxdJm0PsjrAkGeawcH8UEYr8UH7pOuI5wIgxtVEEn+pYJMBWhEEFREfz2Ijmtn792
+         D212LRgXh0niheC3HvuVMjTvg4fxQseZ1k6Vme6Pio9LTJiOruguLK1xZk0NLxaU/xs3
+         2Nf+Apih/BsUCB3u1/khqw3QkFBkvf/4NyvvrrJEHKViK5ElcO3d4lk3356c8//LRKo/
+         658Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775870379; x=1776475179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8OZKa9SGoXcu6sayigWJ7uTxhjTe7+OEh9pgBdh/JaM=;
+        b=W5f+z+BLCnUhN8UNRjmdxcVIdrAb6bbFvfvcN9qc4cPZE0EfIG6JZUK62HSTtl9O1t
+         9IkXGFZygYE8R4NXvlpTaB362uZO6hJkZAya3MynbnzK5TKawqbXQF67XOaau++gHOE3
+         fFoNOm8v12L6sK+JjRtiZ5XcULfxvhEpAQX0oq0DhqWhVHnIRTsqgvc9tzZ33PzuV+r+
+         JlqOQAgKYRc0SexxmoiO32msQabl8jDVXjGtQu1FfoMaH1xZQF+ffCAqSQuUj455V7ey
+         smNHu7pOhYYTeeaiImAuNPFm6l8/dJZPfPVpyf0EG5vgdm6QnyWkOnivUk/RGtAk8CYT
+         jvoA==
+X-Forwarded-Encrypted: i=1; AJvYcCV0vz12r7IM/kQJrW/T3mNopipmCZ1e31REjsBSIhRS+M1dMKJqa5SmnYjw+/7I4cgTopE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDvul8GFb/IoNJDllsdmfj2YGKPHcNljY9aFU1lvt9Qayro7td
+	byRTka0ApD5w8uEwXanZXTYuAPwDC6Qp4IA7zvusirX5EssEhH2F2UC0dYeH//MrmHapSvc8Y57
+	55ODUiunkAvESVljxOYjQZ8kITD6YL3w=
+X-Gm-Gg: AeBDietWlzNftIPj7+0lpKXWvVUwEUE1iUhADs7vVqtLC/ucYGAzQ5jpv5tWuNa2PI0
+	aAjWxn2VcOfwb0JDBup2GlxYOkfuL/yJOSIhtT2D2L/X5ZbPZQULroSApXMa6Z6NDH1G+gnNAZF
+	GNWqP2IgkSs3QAAnTOolJuponrPzvJLH+Swn5DvtB4+pb7gwzyMjCQycj122OHwFplfwOVsXcom
+	8F81TYZmJ5ORPaQ++9LPuEJ8HAYEfGHBHm0MkuMrz/RtXj99E/cgImJcAkECYpvki5x+E8SotlW
+	RohX/0ElfmrWySQl5XsdszLsj+JzQRBIDdG64pKsc7hpXBsEUgN6HhsvR+1HNTjW9RPpcp2z0Ds
+	sKWUxG5az6lSr3lLiPDq2FWvI7g==
+X-Received: by 2002:a05:6000:480c:b0:439:c153:ae3d with SMTP id
+ ffacd0b85a97d-43d5955c07fmr12999815f8f.6.1775870379228; Fri, 10 Apr 2026
+ 18:19:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v1] net: add missing syncookie statistics for BPF
- custom syncookies
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Neal Cardwell <ncardwell@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- David Ahern <dsahern@kernel.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260409124129.361777-1-jiayuan.chen@linux.dev>
- <CAAVpQUCK-d6YwYW+ZAH5OvmYZmAFnmunnoctdZfFFMhqY26aTQ@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <CAAVpQUCK-d6YwYW+ZAH5OvmYZmAFnmunnoctdZfFFMhqY26aTQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260411001711.3418264-4-ameryhung@gmail.com> <9f7e217d9a5184bfcf0bd1112a9075c0f3633266e8eb1026cd1c651a0754edb2@mail.kernel.org>
+In-Reply-To: <9f7e217d9a5184bfcf0bd1112a9075c0f3633266e8eb1026cd1c651a0754edb2@mail.kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 10 Apr 2026 18:19:28 -0700
+X-Gm-Features: AQROBzAd9LCLDqHMq6-LCreyoFS5ypIKBHGiGpbUgkvApPh0SIvT-diMd9Ngt8I
+Message-ID: <CAADnVQJ5gSL1XDYYwgKgq6pxLG0m9m6mC1DntHxLCrMmQ8Gp=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/3] bpf: Remove gfp_flags plumbing from bpf_local_storage_update()
+To: bot+bpf-ci@kernel.org
+Cc: Amery Hung <ameryhung@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Kernel Team <kernel-team@meta.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, Chris Mason <clm@meta.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Apr 10, 2026 at 5:51=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_loca=
+l_storage.h
+> > index dced54e9265f..9e4f5c45c974 100644
+> > --- a/include/linux/bpf_local_storage.h
+> > +++ b/include/linux/bpf_local_storage.h
+> > @@ -188,7 +188,7 @@ int bpf_selem_link_map(struct bpf_local_storage_map=
+ *smap,
+> >
+> >  struct bpf_local_storage_elem *
+> >  bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, void =
+*value,
+> > -             bool swap_uptrs, gfp_t gfp_flags);
+> > +             bool swap_uptrs);
+>
+> [ ... ]
+>
+> > @@ -196,12 +196,11 @@ void bpf_selem_free(struct bpf_local_storage_elem=
+ *selem,
+> >  int
+> >  bpf_local_storage_alloc(void *owner,
+> >                       struct bpf_local_storage_map *smap,
+> > -                     struct bpf_local_storage_elem *first_selem,
+> > -                     gfp_t gfp_flags);
+> > +                     struct bpf_local_storage_elem *first_selem);
+>
+> bpf_selem_alloc() now takes 4 arguments and bpf_local_storage_alloc()
+> takes 3, but bpf_sk_storage_clone_elem() and bpf_sk_storage_clone()
+> in net/core/bpf_sk_storage.c were not updated:
+>
+> net/core/bpf_sk_storage.c:bpf_sk_storage_clone_elem() {
+>     copy_selem =3D bpf_selem_alloc(smap, newsk, NULL, false, GFP_ATOMIC);
+> }
+>
+> net/core/bpf_sk_storage.c:bpf_sk_storage_clone() {
+>     ret =3D bpf_local_storage_alloc(newsk, smap, copy_selem, GFP_ATOMIC);
+> }
+>
+> Won't this break the build?
 
-On 4/11/26 6:31 AM, Kuniyuki Iwashima wrote:
->> 1. Replace IS_ENABLED(CONFIG_BPF) with CONFIG_BPF_SYSCALL for
->>     cookie_bpf_ok() and cookie_bpf_check(). CONFIG_BPF is selected by
->>     CONFIG_NET unconditionally, so IS_ENABLED(CONFIG_BPF) is always
->>     true and provides no real guard. CONFIG_BPF_SYSCALL is the correct
->>     config for BPF program functionality.
->>
->> 2. Remove the CONFIG_BPF_SYSCALL guard around struct bpf_tcp_req_attrs.
->>     This struct is referenced by bpf_sk_assign_tcp_reqsk() in
->>     net/core/filter.c which is compiled unconditionally, so wrapping
->>     the definition in a config guard could cause build failures when
->>     CONFIG_BPF_SYSCALL=n.
->>
->> 3. Fix mismatched declaration of cookie_bpf_check() between the
->>     CONFIG_BPF_SYSCALL and stub paths: the real definition takes
->>     'struct net *net' but the declaration in the header did not.
->>     Add the net parameter to the declaration and all call sites.
->>
->> 4. Add missing LINUX_MIB_SYNCOOKIESRECV and LINUX_MIB_SYNCOOKIESFAILED
->>     statistics in cookie_bpf_check(), so that BPF custom syncookie
->>     validation is accounted for in SNMP counters just like the
->>     non-BPF path.
->>
->> Compile-tested with CONFIG_BPF_SYSCALL=y and CONFIG_BPF_SYSCALL
->> not set.
-> Can you add SNMP test in tcp_custom_syncookie.c by checking
-> the delta before connect_to_fd() and after accept() ?
-
-
-Thanks for the suggestion. I've added the following to the existing test 
-case and it works correctly:
-
-+   recv_before = read_tcpext("SyncookiesRecv");
-+   failed_before = read_tcpext("SyncookiesFailed");
-
-    client = connect_to_fd(server, 0);
-    if (!ASSERT_NEQ(client, -1, "connect_to_fd"))
-          goto close_server;
-
-    child = accept(server, NULL, 0);
-    if (!ASSERT_NEQ(child, -1, "accept"))
-          goto close_client;
-
-+   recv_after = read_tcpext("SyncookiesRecv");
-+   failed_after = read_tcpext("SyncookiesFailed");
-
-+   ASSERT_EQ(recv_after - recv_before, 1, "SyncookiesRecv delta");
-+   ASSERT_EQ(failed_after - failed_before, 0, "SyncookiesFailed delta");
-
-Will include it in v2.
-
+Nice cleanup! Pls fix the build and respin right away.
