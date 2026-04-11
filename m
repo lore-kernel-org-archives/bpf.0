@@ -1,66 +1,66 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7879A31195B;
-	Sat, 11 Apr 2026 18:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C0814F9FB;
+	Sat, 11 Apr 2026 18:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775931267; cv=none; b=HcY57gM0iVDwIEcFASD7Sydl/n34QPDdq/JQF+r71RdrHe0M+RJi3If+AKGEWbp04MbKq53nOnmsy97tkJ9B9gPjk9Wlc27ZoCzrEZaaH7SJ7mjx66DC8sO3FRcSm3NF7kN9dQnTb/zTJXSq7c+WbxJTJTXuwL4EgP8zACqifOE=
+	t=1775931274; cv=none; b=NmaJuX87q/tio384pfZ8bzRSmmVVRsLa/LpRRnV8tMubOnenL1WBDPTt/mFismZebluTf2qXz2lebmfTvW4H7UrgdZoJrTbRt5r48dx/9CnliiE5ACOxzDq1/MKSfcbVggC+m5bmcnt0SQg9d2yc2O7fyOUVk7Mwa1nHsJABb9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775931267; c=relaxed/simple;
-	bh=Pw0ncMHthOzZ+ZsSf0Vs3294PRWKAVHuyBA82HsX92w=;
+	s=arc-20240116; t=1775931274; c=relaxed/simple;
+	bh=KcJiFW+VW/jUCoquQPxDhDl/5hwaUFcOA2BV65Rc6L8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q6InLMaRCozCw0eQTazBOxXiWb3wDDsDZVe6m20jsl/x74u5cF0HwViuH8pDmuHYsLYGU00eYoslAFstV2UzVGJHqiXR3yBXYXqm9JfU+K/mp7MW3ao3fh+5TAPvkf0qDpl7fdJo6C5x9IXHJVqYc6am6hdrIsrGqiAfC59GkmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=i35IdX+4; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=VoqcYFVkI0boiZtB4IgsJIsw5PfVyrmguYBkp4WNWymBKiIR6v2H2gq4T0gRtFsU3efhC/KWgkUVF7WlJXDDjddN6dW3/jkl/ax8oViCzzebQyPeUakhQQSXSC/5h2VBjqD5WZg6Np4eL/pDWgRK6wa414lUMTdal1gcDw7iJpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KirhiVMH; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="i35IdX+4"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KirhiVMH"
 Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63B7uL8v3062980;
-	Sat, 11 Apr 2026 18:14:09 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63BBrkkb3508724;
+	Sat, 11 Apr 2026 18:14:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=5hX2IA1gVoidJXqVD
-	B9SGb2K3fToT1fugzo1EB9Q+KA=; b=i35IdX+4DGswsMKbLxXnVUJzdsRNWOjJh
-	4OVNxdfaMmJCO8WawLMbhyydIL6+hLWdboMx/d2TJkULx3M53siqs9Itbuom5MWO
-	eaX3Q3Ld6lFeUBoxE7+/f+PANNzPPrCQSkJ8lVQpnVbNghkk58lue0ZurL4mVLjC
-	6KUObBcvCsL5YvKcob6rfArbn/IYzeFunEx+MUsaNQwNtkHSwk2AwcVk001U6yDi
-	V7x8UrXdqK4d2rvUNetY/S9bsrzGEdWecD1VWU4Zl8ZKHLvuF09HzJnSQOVu/kpg
-	bKNOappvh6iao5yB2g8qW46F+WH35bPD3Ozbxzy0qLL2GtG+h6r6g==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dfdxwsrmk-1
+	:mime-version:references:subject:to; s=pp1; bh=/+Fg77UFVERdhIcfn
+	JPmiGBFbyGneKpzzqbjfmQa53w=; b=KirhiVMH9M1Q8U950cwgGyhcZCoQN+WHd
+	VM0QL6VfIWiTNLmK9uTnrA6VxPv3txzdWVPwjRdcVarEeKfScBs2u2L7U4RzELJL
+	q6XJwYj2U2td5oErB1ecVsccwS6iUKvflLhYL8ArzeqH4b8IXSyaIvnoIe7758vn
+	TxbTxVOifRonstQkTzJYI6pQjM5SQuwYGPLVXXvnwv9V2R4kJn8vQQlbopjnp5GT
+	Ra2cKdVezTJUsKGYfuNzOshiuRti4FL0Hf8ICQ2YkMo7uByZ36MyX39JuQOrnPB4
+	nfIQkSiDNJvvEXbzElRTpnjik75WhXp/GyZttZPsl28SGaz1gEgFA==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dfdxwsrmv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 11 Apr 2026 18:14:09 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63BD5RTC014356;
-	Sat, 11 Apr 2026 18:14:08 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dcmg5578b-1
+	Sat, 11 Apr 2026 18:14:17 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63BDV7QE013827;
+	Sat, 11 Apr 2026 18:14:17 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dcmf4n6f7-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 11 Apr 2026 18:14:08 +0000
+	Sat, 11 Apr 2026 18:14:17 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63BIE4U653215522
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63BIEDcs43450634
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 11 Apr 2026 18:14:04 GMT
+	Sat, 11 Apr 2026 18:14:13 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A82E420043;
-	Sat, 11 Apr 2026 18:14:04 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 1479C20043;
+	Sat, 11 Apr 2026 18:14:13 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A1CF620040;
-	Sat, 11 Apr 2026 18:14:02 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 0E62B20040;
+	Sat, 11 Apr 2026 18:14:11 +0000 (GMT)
 Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Sat, 11 Apr 2026 18:14:02 +0000 (GMT)
+	Sat, 11 Apr 2026 18:14:10 +0000 (GMT)
 From: adubey@linux.ibm.com
 To: bpf@vger.kernel.org
 Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
         ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
         shuah@kernel.org, linux-kselftest@vger.kernel.org,
         stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH v3 2/5] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
-Date: Sat, 11 Apr 2026 18:14:10 -0400
-Message-ID: <20260411221413.44304-3-adubey@linux.ibm.com>
+Subject: [PATCH v3 4/5] selftest/bpf: Enable verifier selftest for powerpc64
+Date: Sat, 11 Apr 2026 18:14:12 -0400
+Message-ID: <20260411221413.44304-5-adubey@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260411221413.44304-1-adubey@linux.ibm.com>
 References: <20260411221413.44304-1-adubey@linux.ibm.com>
@@ -72,20 +72,20 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDExMDE1NyBTYWx0ZWRfXzN8uFByKrmN0
- 4evKjqxAdqx/IKp0JsmgMbk8F0MQ/uBn0gy/lMstIVUA9iK89FGCAJZhgPH0EArRJQelmmf+GHw
- BMUd0dfosh6GbEC0uACBaMoSQPbNsJhJhtMqVCwOyninu8cLh4SzjJ0tmsK5JoZgjtKhzlbloTh
- RdmEi4XaQOPGwTRid5TeWFUZ1MOOKGRcW2Nmame3tr8wwiDZjW6f2gVP5lTePW1wvq9CVb8ZwXG
- 34Br8Is7RdTd0qwqVc5KJZn0g56w7m/vpOuMGhpQSK8DkJNIYRTQcyyQ8OUCuWZ9eT2/CM2fMnj
- Cv/mySN7GW95yIR1ULSmM8VCBDl0ETctH5oQ4aXQGGv8OJKtO5ng5lhPRBprLRbeuV+SWMdGcOR
- E+NQSsOCfqIcbzEbXXd3McjNEF3s4QKIyBlAuV5lIb423MeKHYTM6iBwNUVfv6vz4umCc7C1l1s
- tvTH9prgpLvBqwHvwUg==
-X-Proofpoint-ORIG-GUID: LHHDgYUUlXZ1kUqaksyCTxxybqeQsxp0
-X-Authority-Analysis: v=2.4 cv=TId1jVla c=1 sm=1 tr=0 ts=69da8f71 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDExMDE1NyBTYWx0ZWRfX1wtaZCvzVWZm
+ /ZezTU3ReOhWwrJnF3ZrV5wzNf8O7GgLWq0W+sFQGRzXhNEkYtk0EmoPOfZmMsR7UTQdvjan8p5
+ c64QVSXw+PzDC3aDLRa/TFqcg9nLUHXK/lgsBXdbbK3gr8afQ9qGLoAPwKz9yiAa2Y9P79jhKe+
+ fbTMqEcD6fNg90khPeiH2XgJGOeFo0yxNNeuSKhkh0iweYo/1avWRdFgHy0nar575Oa9d9RbjAx
+ Ee0L88ebrCuWuU97+aUlCkklNdmlO0ZRRT2s3QA8V1roYDEzwcvkncwXAKmnf7i/mIMdHTGgow/
+ LYLAUREs9eeTdB1YzBNl+NAfwiBK3VFwZTGd5K7hw8vxLdSiwiXRk/VTxxqAnV9bKBquW3LEuM4
+ uu3GzXtzR34o7weB0ypp/uwrznpJxanZO8wdUEGGCqRqrFKUgBJ77RMbrvbAK4YDWa27D082Ro4
+ oNvK7ZBK/624Mg4AnlQ==
+X-Proofpoint-ORIG-GUID: g5YeKLljJDA7zbo5nzEMtBpGBnCFE71G
+X-Authority-Analysis: v=2.4 cv=TId1jVla c=1 sm=1 tr=0 ts=69da8f79 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=wRVbdlKoTiVShp7l6ZUA:9
-X-Proofpoint-GUID: LHHDgYUUlXZ1kUqaksyCTxxybqeQsxp0
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=DRl-xmwt84w-93Xc4WMA:9
+X-Proofpoint-GUID: g5YeKLljJDA7zbo5nzEMtBpGBnCFE71G
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-11_05,2026-04-09_02,2025-10-01_01
@@ -98,153 +98,58 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
 
 From: Abhishek Dubey <adubey@linux.ibm.com>
 
-Move the long branch address space to the bottom of the long
-branch stub. This allows uninterrupted disassembly until the
-last 8 bytes. Exclude these last bytes from the overall
-program length to prevent failure in assembly generation.
-Also, align dummy_tramp_addr field with 8-byte boundary.
-
-Following is disassembler output for test program with moved down
-dummy_tramp_addr field:
-.....
-.....
-pc:68    left:44     a6 03 08 7c  :  mtlr 0
-pc:72    left:40     bc ff ff 4b  :  b .-68
-pc:76    left:36     a6 02 68 7d  :  mflr 11
-pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
-pc:84    left:28     a6 02 88 7d  :  mflr 12
-pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
-pc:92    left:20     a6 03 89 7d  :  mtctr 12
-pc:96    left:16     a6 03 68 7d  :  mtlr 11
-pc:100   left:12     20 04 80 4e  :  bctr
-pc:104   left:8      c0 34 1d 00  :
-
-Failure log:
-Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
-Disassembly logic can truncate at 104, ignoring last 8 bytes.
-
-Update the dummy_tramp_addr field offset calculation from the end
-of the program to reflect its new location, for bpf_arch_text_poke()
-to update the actual trampoline's address in this field.
-
-All BPF trampoline selftests continue to pass with this patch applied.
+This patch enables arch specifier "__powerpc64" in verifier
+selftest for ppc64. Power 32-bit would require separate
+handling. Changes tested for 64-bit only.
 
 Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit_comp.c | 42 +++++++++++++++++++--------------
- 1 file changed, 24 insertions(+), 18 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_misc.h | 1 +
+ tools/testing/selftests/bpf/test_loader.c    | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index c255b30a37b0..c2ac4e355464 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -58,20 +58,22 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
- 	 * in the fimage. The alignment NOP must appear before OOL stub,
- 	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
- 	 *
-+	 * The dummy_tramp_addr field is placed at bottom of Long branch stub.
-+	 *
- 	 * Need alignment NOP in following conditions:
- 	 *
- 	 * OOL stub aligned	CONFIG_PPC_FTRACE_OUT_OF_LINE	Alignment NOP
--	 *      Y                               Y                     N
--	 *      Y                               N                     Y
--	 *      N                               Y                     Y
--	 *      N                               N                     N
-+	 *      Y                               Y                     Y
-+	 *      Y                               N                     N
-+	 *      N                               Y                     N
-+	 *      N                               N                     Y
- 	 */
- #ifdef CONFIG_PPC64
- 	if (fimage && image) {
- 		unsigned long pc = (unsigned long)fimage + CTX_NIA(ctx);
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index dcd78a3a9052..8e8a732b4481 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -157,6 +157,7 @@
+ #define __arch_arm64		__arch("ARM64")
+ #define __arch_riscv64		__arch("RISCV64")
+ #define __arch_s390x		__arch("s390x")
++#define __arch_powerpc64	__arch("POWERPC64")
+ #define __caps_unpriv(caps)	__test_tag("test_caps_unpriv=" EXPAND_QUOTE(caps))
+ #define __load_if_JITed()	__test_tag("load_mode=jited")
+ #define __load_if_no_JITed()	__test_tag("load_mode=no_jited")
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index c4c34cae6102..9b0736831484 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -376,6 +376,7 @@ enum arch {
+ 	ARCH_ARM64	= 0x4,
+ 	ARCH_RISCV64	= 0x8,
+ 	ARCH_S390X	= 0x10,
++	ARCH_POWERPC64	= 0x20,
+ };
  
--		if (IS_ALIGNED(pc, 8) ^
--			IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE))
-+		if (~(IS_ALIGNED(pc, 8) ^
-+			IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE)))
- 			EMIT(PPC_RAW_NOP());
- 	}
+ static int get_current_arch(void)
+@@ -388,6 +389,8 @@ static int get_current_arch(void)
+ 	return ARCH_RISCV64;
+ #elif defined(__s390x__)
+ 	return ARCH_S390X;
++#elif defined(__powerpc64__)
++	return ARCH_POWERPC64;
  #endif
-@@ -93,28 +95,29 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
- 
- 	/*
- 	 * Long branch stub:
--	 *	.long	<dummy_tramp_addr>  // 8-byte aligned
- 	 *	mflr	r11
- 	 *	bcl	20,31,$+4
--	 *	mflr	r12
--	 *	ld	r12, -8-SZL(r12)
-+	 *	mflr	r12	// lr/r12 stores pc of current(this) inst.
-+	 *	ld	r12, 20(r12) // offset(dummy_tramp_addr) from prev inst. is 20
- 	 *	mtctr	r12
--	 *	mtlr	r11 // needed to retain ftrace ABI
-+	 *	mtlr	r11	// needed to retain ftrace ABI
- 	 *	bctr
-+	 *	.long	<dummy_tramp_addr>  // 8-byte aligned
- 	 */
--	if (image)
--		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
--
--	ctx->idx += SZL / 4;
- 	long_branch_stub_idx = ctx->idx;
- 	EMIT(PPC_RAW_MFLR(_R11));
- 	EMIT(PPC_RAW_BCL4());
- 	EMIT(PPC_RAW_MFLR(_R12));
--	EMIT(PPC_RAW_LL(_R12, _R12, -8-SZL));
-+	EMIT(PPC_RAW_LL(_R12, _R12, 20));
- 	EMIT(PPC_RAW_MTCTR(_R12));
- 	EMIT(PPC_RAW_MTLR(_R11));
- 	EMIT(PPC_RAW_BCTR());
- 
-+	if (image)
-+		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
-+
-+	ctx->idx += SZL / 4;
-+
- 	if (!bpf_jit_ool_stub) {
- 		bpf_jit_ool_stub = (ctx->idx - ool_stub_idx) * 4;
- 		bpf_jit_long_branch_stub = (ctx->idx - long_branch_stub_idx) * 4;
-@@ -1155,6 +1158,7 @@ static void do_isync(void *info __maybe_unused)
-  * bpf_func:
-  *	[nop|b]	ool_stub
-  * 2. Out-of-line stub:
-+ *	nop	// optional nop for alignment
-  * ool_stub:
-  *	mflr	r0
-  *	[b|bl]	<bpf_prog>/<long_branch_stub>
-@@ -1162,14 +1166,14 @@ static void do_isync(void *info __maybe_unused)
-  *	b	bpf_func + 4
-  * 3. Long branch stub:
-  * long_branch_stub:
-- *	.long	<branch_addr>/<dummy_tramp>
-  *	mflr	r11
-  *	bcl	20,31,$+4
-  *	mflr	r12
-- *	ld	r12, -16(r12)
-+ *	ld	r12, 20(r12)
-  *	mtctr	r12
-  *	mtlr	r11 // needed to retain ftrace ABI
-  *	bctr
-+ *	.long	<branch_addr>/<dummy_tramp>
-  *
-  * dummy_tramp is used to reduce synchronization requirements.
-  *
-@@ -1271,10 +1275,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 	 * 1. Update the address in the long branch stub:
- 	 * If new_addr is out of range, we will have to use the long branch stub, so patch new_addr
- 	 * here. Otherwise, revert to dummy_tramp, but only if we had patched old_addr here.
-+	 *
-+	 * dummy_tramp_addr moved to bottom of long branch stub.
- 	 */
- 	if ((new_addr && !is_offset_in_branch_range(new_addr - ip)) ||
- 	    (old_addr && !is_offset_in_branch_range(old_addr - ip)))
--		ret = patch_ulong((void *)(bpf_func_end - bpf_jit_long_branch_stub - SZL),
-+		ret = patch_ulong((void *)(bpf_func_end - SZL), /* SZL: dummy_tramp_addr offset */
- 				  (new_addr && !is_offset_in_branch_range(new_addr - ip)) ?
- 				  (unsigned long)new_addr : (unsigned long)dummy_tramp);
- 	if (ret)
+ 	return ARCH_UNKNOWN;
+ }
+@@ -579,6 +582,8 @@ static int parse_test_spec(struct test_loader *tester,
+ 				arch = ARCH_RISCV64;
+ 			} else if (strcmp(val, "s390x") == 0) {
+ 				arch = ARCH_S390X;
++			} else if (strcmp(val, "POWERPC64") == 0) {
++				arch = ARCH_POWERPC64;
+ 			} else {
+ 				PRINT_FAIL("bad arch spec: '%s'\n", val);
+ 				err = -EINVAL;
 -- 
 2.52.0
 
