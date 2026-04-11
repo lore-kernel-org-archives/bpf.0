@@ -1,60 +1,62 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C55C17E792
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 07:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C041D23EABC
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 07:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775892842; cv=none; b=c7ioLqoDzf3y94645hspK19d5zO2D1yQFnZ9aQxg+TAwotoeXGAHcgDKzqBZrfGYce2xLojLZyWFc5PmR1qr2TYqDH1V+6mDaSKSaBMUtLLqW6OTGKGZfCqsK280EERxvotr4z9iMphL1kfzVrm9vYSxXqwTzWgyaEP/GMA4e0A=
+	t=1775892843; cv=none; b=KD+6MlF4KkofuNefqf9uBN7n7bOx7qqYvmwTGn3Sps9N/PPdHkZ6Jg45HHUCbPkF4VUqqY49VYcTbiiRGg8BnCKZ5ZanQkFjrI7Thqye82smCbtd2Zb+J+cyGAJLxttIz/inpbFjOAwVl07Gom6ienXRtQoHLv7NM3jS491YPzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775892842; c=relaxed/simple;
-	bh=wGbBkQp2ILnkHmOqDv2/s21hTmjqpH8CYp7xOU/q7kM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fqc8G+l1xtwq6PqY3NSlLthvQVVFXcEBKqUOMpKSsHQIqGVgbZMv171W6UQHhAtu5y8Cq/rYWl5KozQehXeBTeTzyMhTUsEAKkqweFP/MTnhO7k/5BgyjT0RLcuocZevJ2iBnfpKLcXNVIKlYJdbhJE1Jwi+0ohkDonGgabrDBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RBQaT/aA; arc=none smtp.client-ip=209.85.210.177
+	s=arc-20240116; t=1775892843; c=relaxed/simple;
+	bh=1dZFqrqfBJMh9hjaqYdFWxaIIuSOz9LBW8Js1PqjMmk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f2HC58+Lud/u5JZ+g5ivPOEPQsTOohkrX0fd54Z/ZsB3yXr5YAdW+N4NtcC4iplr0PiDxmq7rgCUw9ZoW7JUF12lMngjLhMK9Cl51dbaeA+Hb3q4Rzu9ilGcWUunenN/j5/RyU63Qf2aFrgMlF75iwSsGDw56cLvKeq9I6Z71sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FKuJBh3Q; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RBQaT/aA"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-82f138a6d5aso544517b3a.0
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 00:34:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FKuJBh3Q"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-c742723c863so1780977a12.0
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 00:34:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775892841; x=1776497641; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ryCUWN5JZmxF4CLOrLm5FaSrOwnjFTUuC3tbNsIM7Lw=;
-        b=RBQaT/aAg9gPbwWZPBTVQrCIXwngMnxbKyb3O9Gp6SqWgNeGPJm7YGDpb1joEAaCxR
-         HgtBSFmUepNRq4FqLFt0HXH/+5EXJky7ujF2m+3J4S9TfpBMlhJucuHkW6wprL05fB+5
-         /sy/JolutrFe0IVzMSmDYLHUyuCtqc1RPdlaNyBPMVu6GUa7uRYBo0bg7CBMCQEy1/Gn
-         /dqbbvT5IbkergB0fm8/Rqw1697SO3Up+gk5ACUuZA4+tTcFz+hGd7w71eKugHai9CuH
-         nu8YYx/4Mpfm4piw7+XM0W1JGHYVexK/CJjeAD313OfgKJ42VKkI4jqyVGGtrAPuA9rh
-         3I9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775892841; x=1776497641;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775892842; x=1776497642; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ryCUWN5JZmxF4CLOrLm5FaSrOwnjFTUuC3tbNsIM7Lw=;
-        b=fXasWYE+AOOqWmjXwXY2XsjoqbQHdjGfLWJ7PBXULhb0wOnepMSNJOHwStYOgNkjtn
-         5/eKFxLKJy5VYBqDNFfzAyn9B+fWClGA/CYcdYCxQHe8BeMD0BdYQa1taugTXuzG8ZIj
-         nEyhzPmd8zzjSuC5ao0eb/bfisfGTxUSvydAJOJbA7jgB+sx7e+/IrQpSG5FPqz7+ADJ
-         rYGz2SC4KJrodfCl3j4MY1n5729GungxJQHAjCoddGwS0IXiTZhdrwYKEgrxdRmEQXLl
-         2AtngFlQipXvkivfSgCo/vhTe1Qc9dQEEw9mXRgwQuR3jHhP/Oz50XxhBTbI/3DKPqIz
-         JJDw==
-X-Gm-Message-State: AOJu0YyUyYtuFGTKjTuuW4DglHJfXt8AIRKINDpjW078KN/+w280cM8J
-	gTZA6GYcI74rqkN2R8IinHBUB9o5CkzHLIt/GFxozrYJZoNvy+mprB7j8LK1sA==
-X-Gm-Gg: AeBDiesQPEgwiz78nk9xMYJayjU3iprUsbQXv9YVSmK3s4pRF2kPiecMONfcl8YpmXA
-	30iw5p9z7TerBZHDeEVA4zb+kAspwNRThh8KlsrNR+p+8zw7nkrVPUU9WBI4k6xIdVJy53S83va
-	uWWKpMdMxZIRXMemNc90eMPzPwNubG5zd6n4QdtKZ4fbVCxK449p2TxbX88GvVlsdFjsOWnhB7q
-	SMoeo8gZ8GxOj4uKUObVCN7OgdEhOLuGs/d2cA2bnMJZK8/ToUrqaXEYDQ1A0/oVR0M82Ri/qgw
-	s2qk53jlNlVw9RIJ9+LOWvYjP5kc0890ikcS8k7jMRsitU6o1OgZqV4IrfrBRKnU0rw1R70/lxD
-	hpV+SCkjlbInXuiJBXMFT9QsnCSfpQC6BHRZBpV5oeNUahi6yEMfAoL9wfDd1WhFhyc9Wr6quAL
-	4a6VorlfRYwTIvrjAPZEW3oTqRJGsuo5VGL1bReqEByGfgeWEnZWd58xlb8GGHG8A23XA=
-X-Received: by 2002:a05:6a00:3e27:b0:82c:2205:507d with SMTP id d2e1a72fcca58-82f0c385de5mr6117271b3a.36.1775892840822;
-        Sat, 11 Apr 2026 00:34:00 -0700 (PDT)
+        bh=jp0lQVz0Dq69waZFLDCSSR9NgYI7BZSMZLD8Yj+4BvA=;
+        b=FKuJBh3Q88Qb4q6iFBnIGcU1G4AyqITiCgNeA/a1YUyskkZ2mTrPow4IQUHh+ivcBp
+         yxE8+PE6/EPNG3HEvUjM3/Vby6RNUzYl/bPipmvtaZnhKrEzs/93aLQEtLtPuznIBUb3
+         dK28IGBA1exp8h5ZuggBpVcZ5Nq0oRSfd8HFqytddJPZGZkHdraLwqOrkXaapLECTle7
+         /XQoSz7klfMZsv2GP0qQygsvBK5S85JfZcRmf5MkpOrjYQ8y5jkxz9CqJOx457NjRDL2
+         VcaINOLf485i8Ob0hHdQubvZI06iwz+SVFSMuh+29qAsbOlcSRs3bk7aARwasDCzzsgx
+         ndkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775892842; x=1776497642;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jp0lQVz0Dq69waZFLDCSSR9NgYI7BZSMZLD8Yj+4BvA=;
+        b=WU806RIDfzfPZtijuahb/FFJ+QQuciVc5ZY2xH1rjxO5IXsCSFfSB66rD69/IlQngZ
+         cGSYinAjGG3MnIJhNRwnPElF5vOvqBGZ1+FqpY+v6h1q9By76zgxXJVc5udS5kzv0ODn
+         j3CVIiWUkHOQgP2BEa+zR9O+14CIc30Mt2APowRR8Yo+EBdWhK+ZZFBLTrDasiO8Lmp3
+         s7+r+Q9KCvHR4xsHetfKQx8ab0yU7kW/zSNFCEY6t0Kj7vllCjlYjjgwltlqSOdgXw2C
+         DdZhn+slnpwZtsV6uLIJRnGjz7ax57Nm4JLmVKIR0yjFSbUKm12Aoj7djP1KqccmtNVs
+         tQ+Q==
+X-Gm-Message-State: AOJu0Yx96+f6lvQqYLSckGd0hvO9Lr5hCD5pY2h9z63J0SQYjZfl30tE
+	sLoCgTNniNmg9SWxhURNleW4Q/GdUx5FXLu5OWplCXKMKzzkGf9GF68QMde13w==
+X-Gm-Gg: AeBDieuheznhV19so2WpiJyoHFyUWfboMR98MrcpUt6Ffhn34r/H5knGxs3I5HJkR0a
+	mFyj0XikJ54YRyj9T6Y+0ZW2YhQGdRoUHiQvdT/s/XwNnKKzmlmqugpb8tVYTr1L4fG17B6q4HP
+	b27EFPDvB3GvkkOzdl15ebyFldKdFKnUXzFnh1+r6efrmSAn6CbKoxXjy+py2oOMjRb9UcZwfrF
+	wdyvlwYIfOVRKELBuc5Xxd5YegKw2J0ArWd2pXPxeCOjlqEa4vh5rEh+9J0voj/u356fEBRvbeD
+	ByfRN2ywrL+pxlePSFwk5xIiSeaoVD9wDEjd4sY3deqpFMZhIsw+BHcx9zi5KD5Mc4yd9KwdNe3
+	5f1/nQZQnAp7FaWjh45sLc614GmGKtH19XV5dBRhYBSzgySzT5+ZQQHdr8KLdSOG7S69b75wnAP
+	zXv6aHGCgmBqXu5YJu5S2CPokxOPEjUcMzqdH6bPDJniAwbc15/7ffnQwZWc3Ly6iF2so=
+X-Received: by 2002:a05:6a20:7486:b0:39f:d611:9ea0 with SMTP id adf61e73a8af0-39fe3f5983bmr7376795637.31.1775892841814;
+        Sat, 11 Apr 2026 00:34:01 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c30f5c3sm4965388b3a.3.2026.04.11.00.33.59
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c30f5c3sm4965388b3a.3.2026.04.11.00.34.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2026 00:34:00 -0700 (PDT)
+        Sat, 11 Apr 2026 00:34:01 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -64,11 +66,15 @@ Cc: daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
-	cupertino.miranda@oracle.com
-Subject: [PATCH bpf-next v2 0/4] selftests/bpf: impose global ordering for test decl_tags
-Date: Sat, 11 Apr 2026 00:33:43 -0700
-Message-ID: <20260410-selftests-global-tags-ordering-v2-0-c566ec9781bf@gmail.com>
+	cupertino.miranda@oracle.com,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 1/4] selftests/bpf: fix __jited_unpriv tag name
+Date: Sat, 11 Apr 2026 00:33:44 -0700
+Message-ID: <20260410-selftests-global-tags-ordering-v2-1-c566ec9781bf@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260410-selftests-global-tags-ordering-v2-0-c566ec9781bf@gmail.com>
+References: <20260410-selftests-global-tags-ordering-v2-0-c566ec9781bf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,50 +82,32 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20260326-selftests-global-tags-ordering-8f324323d9c8
 Content-Transfer-Encoding: 8bit
 
-Impose global ordering for all decl tags used by test_loader.c based
-tests: __success, __failure, __msg, etc. The tags are now sorted by
-testing framework to be processed in the same order they appear in the
-C source code of the test.
+__jited_unpriv was using "test_jited=" as its tag name, same as the
+priv variant __jited. Fix by using "test_jited_unpriv=".
 
-The ordering is necessary for gcc-bpf. Neither GCC nor the C standard
-defines the order in which function attributes are consumed.
-While Clang tends to preserve tags definition order in the output BTF,
-GCC does not. This inconsistency causes BPF tests with multiple __msg
-entries to fail when compiled with GCC.
-
-This is based on a patch [1] from Cupertino Miranda (see patch #3) and
-includes some additional cleanups for test_loader.c decl tags
-declaration and processing (see patches #1, #2, #4).
-
-[1] https://lore.kernel.org/bpf/20260305130035.192080-1-cupertino.miranda@oracle.com/
-
-Changelog:
-v2: https://lore.kernel.org/bpf/20260330-selftests-global-tags-ordering-v2-0-c0ac61e81098@gmail.com/
-v2 -> v3:
-- fixed free(tmp) call in collect_decl_tags() (Puranjay, bot)
-- naming nit in compile_regex() (Mykyta)
-
-v1 -> v2:
-- refactoring str_has_pfx() usages missing from v1 (Puranjay)
-- removed realloc_or_free() (Andrii)
-- fixed qsort(NULL, ...) usage (Puranjay)
-- skip_decl_tag_pfx() returns NULL if tag does not start from
-  "comment:" (Puranjay)
-
-v1: https://lore.kernel.org/bpf/20260326-selftests-global-tags-ordering-v1-0-5dd2ced5d9ad@gmail.com/
+Fixes: 7d743e4c759c ("selftests/bpf: __jited test tag to check disassembly after jit")
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
-Eduard Zingerman (4):
-      selftests/bpf: fix __jited_unpriv tag name
-      selftests/bpf: make str_has_pfx return pointer past the prefix
-      selftests/bpf: impose global ordering for test decl_tags
-      selftests/bpf: inline TEST_TAG constants in test_loader.c
+ tools/testing/selftests/bpf/progs/bpf_misc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- tools/testing/selftests/bpf/progs/bpf_misc.h |  60 ++++----
- tools/testing/selftests/bpf/test_loader.c    | 202 +++++++++++++--------------
- 2 files changed, 125 insertions(+), 137 deletions(-)
----
-base-commit: 749b925802c2351ae7204e6960ca086e4c4e4fa7
-change-id: 20260326-selftests-global-tags-ordering-8f324323d9c8
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index 4b313374c5f1..7e99fe8555e0 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -140,7 +140,7 @@
+ #define __msg_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_msg_unpriv=" XSTR(__COUNTER__) "=" msg)))
+ #define __not_msg_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_not_msg_unpriv=" XSTR(__COUNTER__) "=" msg)))
+ #define __xlated_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_xlated_unpriv=" XSTR(__COUNTER__) "=" msg)))
+-#define __jited_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_jited=" XSTR(__COUNTER__) "=" msg)))
++#define __jited_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_jited_unpriv=" XSTR(__COUNTER__) "=" msg)))
+ #define __failure_unpriv	__attribute__((btf_decl_tag("comment:test_expect_failure_unpriv")))
+ #define __success_unpriv	__attribute__((btf_decl_tag("comment:test_expect_success_unpriv")))
+ #define __log_level(lvl)	__attribute__((btf_decl_tag("comment:test_log_level="#lvl)))
+
+-- 
+2.53.0
