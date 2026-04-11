@@ -1,60 +1,62 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07CD256C8D
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 00:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A5426F2A0
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 00:17:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775866635; cv=none; b=n1oXdlhL8jVAXQNWFfDx8f36aThHrwGn5qvFmNKbhhSLFlapK79sLbyS1WSJHAvzc4cpS/uMisPlKJlY5k54nMnRbwbaw3x/qFx8IsPyTw/6uImHT8XNzoF5h+bAMBLJ/KFcha0mrXLikA6ZefRzri6JUKMhntnH+nTmIXh4D4Q=
+	t=1775866636; cv=none; b=ADmd/OMZyvQOPN3cyLsyVV1B/xjguTvK2q1tF3+uH7BiaVLgz39Mro9aXiG0h3k28sLsOvCFFJ0VBMcJqPgJQvVddSIjkQQ09QZoBNaWujUetxDNs9ix7OfUC9E9tmHL0chZiu9yk04ZstA1+7LsEDJnbnIXxedP+0irzROvovU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775866635; c=relaxed/simple;
-	bh=lwr/BZdnzpyNNg2NwLakVIP3TG1oh36S0z/Hctq4hHk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=l/o8lSbVGSrjnHOBODV6aWYqKWsUsdZJdNMHct0goS568Fdk3Eamjf3ww1CLT+GnNFDj6+GCSJ59YvIXaBcLFrJvL4dbJ8ggxwOzwP4vbcd5zILF694wlV8m9zp2L5y/5cKpN+LDe0egaj3/TGJcQbLB0VS10yrHPMyecY8QDyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gA93PnsL; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1775866636; c=relaxed/simple;
+	bh=SudG+jDJunOsI/OEMque3c7RwjkfU8QMeUquLEG2qAY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pmEvw8zmqhZ3eXtt6MxRPrN+8OPUBh488Go1vEQ4OTPKBjhGQGxtsSc+o3O3aQ0E3gpqfJxkOx7uBKUVx/1M58hTBCUTpPStz8jnryj3x+V9iiIFLinS0BOurRcvFH34FkGYy5/7Apr8JTxfEBDGs199GkTG2qOaoL6kVprmesQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mhzDiyYK; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gA93PnsL"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82ce49785a0so1225901b3a.2
-        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 17:17:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mhzDiyYK"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35d96be7c13so1967328a91.0
+        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 17:17:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775866634; x=1776471434; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oGroRrPUmeJuw2t/fNDoydAUsIKWbQ4ohVi9Js90EoI=;
-        b=gA93PnsL7T7q0KlPK2wAnNDdFebFyn1RNvffNGstJKOvHc6N5FavdX1aMbCQOdUt/I
-         WhgtbPeWyIno/U4uLxoMedN7a5Keu7uQJ7ZG87xbvQQGXvzaA/EU+hq0u3aaK9xm8MqL
-         krvS90GXzooMdLukcV+PUhTJb+aoeNqit+tyGZROBHMq9SJ0vuqSrNzTeUYZ+B5sIx0i
-         u8/h+Omwq9z+9oPCS6/sPEwy/O/8DBxGUMbD/PHPqTwAxRwJcf/ctNskhgtsgwFKvF8V
-         NLKgRBlJv89QBynotVABIZKdHYXjr+ewwotQU81XhxdN2HwmHbdyg9rL0vKcxgr+XSsG
-         /thA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775866634; x=1776471434;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775866635; x=1776471435; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oGroRrPUmeJuw2t/fNDoydAUsIKWbQ4ohVi9Js90EoI=;
-        b=jl+YRG3Zcw7gLjWpTExlIbj7Zwxcy62S2YOtjRDhX4WQ6Q60Jw7tLiakBtOfwxcAl6
-         30No2ugLVD2wZUSZCDK/H6DkdS+r7aflTD3whk4Q5KkX6renkOQH+VoY9zwtb5f3o4mR
-         1+H+ALNUBWCByKLYcTcGmkCZPjiN5JGZbsO3J3PfNihaX00XJMhIxxh3SC92648rZtwk
-         D8XiI3ew6+PTa0iSLLnRhnyXCYPlcvDcStttXpFTMkgGRDC5ykS5+ZkVU4Oag+c3VTJv
-         cQa96g4Dn0Ixk2CjNobTO/5p5KoZZvTTtFXR8OFojA4E5vwNgxyHVb5lxXmoxGBepRXU
-         b5oA==
-X-Gm-Message-State: AOJu0YwkocSsW6KClRk37MwgaZQWw8gFC2Z1ISTBWGxE24K5OkfeCdOK
-	V2FnHVSHsIVRiFzH4ys1qiAEDRveFdX0Eyc6wsbars5jq787X6bxdWk89uv5FA==
-X-Gm-Gg: AeBDieuFeZn7Z7QQgFT+1v1XtXnqbGFF5qoUGkPfxAXKYJFv5UDREu3tlwSILip2gfr
-	MKp8hOppVdMCBuYsQ8hPsKqUsc2B89DAxshOycxC806ohH/IQo/mrwU2r4YS/MMosiaIKHldVoQ
-	v3eto2tdo8Zp8vS063YQBJ8xZCzyBL/34UQzpyDDFE65gAS5USKOR9vOayKNoV6SPkAdSaUzqPq
-	hO5TYxUXq9/yAJ/VoOR6bAYG386+zJ26+1oJnZB7PqWiKz9QBqZLh6kr2vC4iWzkSa33EHLplG8
-	Cj3FSIJRo03u4J2fwhDxb+AxK7zZdX9eD4dfAx+m/M/XLFHWJZ//cBBaLWt57nkAE80rqvVAt1W
-	99gjmIrmw+ONg7RH94P3zRYNx7hxK36XeUv665sFMejvXQN71uHlVkeLXlcX3wNXo61BBzOHtU9
-	ClLXH7GbLMga1X
-X-Received: by 2002:a05:6a21:338c:b0:39e:badd:c1d8 with SMTP id adf61e73a8af0-39fe3f3d7c9mr5409820637.31.1775866633992;
-        Fri, 10 Apr 2026 17:17:13 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:8::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c4b3b29sm4016549b3a.36.2026.04.10.17.17.13
+        bh=G6+ORxmBxUJDC+8lFcSXAEheocoFoy9EPciA5CoKp8Y=;
+        b=mhzDiyYKgo+/1S3/vLy2la7BlnTm7YkwmJxlcXmUBOfFd7C3CejOZTdkDDO7XQE+Ol
+         vX35vwx+MUj2pwcIF2xJYC9tpLUHPQcq9/dLSV0Sc1xU0eFVEbP7RAXWbia+57tyr/xl
+         RWAG2hfVmom88ci9lKx8FtEvqmCE70IjmRa744qXSW1j4o7YYSkq44KoqW0+PDVBoCnA
+         WmzlS9YCHLZeN3ZApRqCs93C8eQMouIjFZYg+Bj37TWFmWf5O7d2g6clFVjxvVQT69gP
+         f7LOSgYNUpziCNVO/VY19LgyqH9U6bo7K5iejtCdHS70CdXsHHVmmYuK0ZRyKnJNnwC3
+         07dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775866635; x=1776471435;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=G6+ORxmBxUJDC+8lFcSXAEheocoFoy9EPciA5CoKp8Y=;
+        b=QFGhvsaAVlA2ZVFyTb4UhzYMPMFzdKcH0U320n3Dx7RHBuC2YPEpbth3lwGvEFUqVc
+         LN8S84wrvpcAkodARhXkzCKDv8X5bcpMuVtAwrEYI3wMi/6ge0VDUs+u2oGxCDPKARiE
+         1VI+WJRVyOTZXx3BiZ6+42WZN6Yhy8SQD5LkmzbFdNQYLlQFfBFRVKCTrhP2FxlA/ejB
+         mJbUxM2Qgi7Vxe6HDD2w7PtLQbIgs01RblISIWNHfDDv4BlD+fNmjsk3bDSc97VTub/h
+         4e4L3yV2mxOTJlHYravZVeU+G3ZjQ1m+lNr7z0Z61Pm7w5bQPZuIaa60JUPPLLUybwIC
+         lwaA==
+X-Gm-Message-State: AOJu0YzcQR8tIiu+l+x0Dp2OdoqKH7Gwt/iyWFkjOw6JqZ2BKFtv53kh
+	BlZwbHMtTR2EHN4/C29xQd9PDrWvgRMps9EA6cvkbVCWXv5odpEVF9WmpNd8OQ==
+X-Gm-Gg: AeBDieu9OmsC0g0Ga419qDj37BYYuu/m3Q8ZSIn1Ed0hvJDrb7DrNBH8f912X9s1sAI
+	ghave3eDdTtI+hWFs2cBoWFnLn27IOvXETH51UivWjlJNMMcZrxtDmHPJAF1ORtD7rQCBgv6MfL
+	2lPF168235WQT4vgOSxxzU0qyz3n9+I5n3HrD+1uoo/hSkl7e4z0WhCRdF5NgaOsxoI34tVAgFN
+	EVS+05GJLzk6vm/32UdEmCQUdCTN+UDK4i5+3lhDaR8nnqeqZfsTYmVvs2UjU87CqGTPEv7PyWf
+	r59rAi7gLpbYUPKlqH7SBGvi0oRmzq8O23H0OvSdp4zbyJUqMKVYOprWiqSkpbIKbZq18edXuqI
+	KD+6uuvRQSbsfLa4w1J8SmdxdPEZ06jQAdLCPFsEhwxbC88CyX/UdEXlGWFwk1ZDJU9+1ZhuE78
+	xy4pYuHrIvszwu
+X-Received: by 2002:a17:90a:fc4e:b0:35d:9fe9:f830 with SMTP id 98e67ed59e1d1-35e430e512cmr3658710a91.12.1775866634931;
+        Fri, 10 Apr 2026 17:17:14 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:2::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e35156445sm7729654a91.14.2026.04.10.17.17.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Apr 2026 17:17:13 -0700 (PDT)
+        Fri, 10 Apr 2026 17:17:14 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -65,42 +67,133 @@ Cc: netdev@vger.kernel.org,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/3] Use kmalloc_nolock() universally in BPF local storage 
-Date: Fri, 10 Apr 2026 17:17:08 -0700
-Message-ID: <20260411001711.3418264-1-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 1/3] selftests/bpf: Remove kmalloc tracing from local storage create bench
+Date: Fri, 10 Apr 2026 17:17:09 -0700
+Message-ID: <20260411001711.3418264-2-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260411001711.3418264-1-ameryhung@gmail.com>
+References: <20260411001711.3418264-1-ameryhung@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Socket local storage did not convert to use kmalloc_nolock() since there
-were observable performance degredation due to kfree_nolock() hitting the
-slow path and the lack of kfree_rcu()-like batching freeing. Now that
-these concern were addressed in slub, convert all remaining local storage
-flavors to use kmalloc_nolock().
+Remove the raw_tp/kmalloc BPF program and its associated reporting from
+the local storage create benchmark. The kmalloc count per create is not
+a useful metric as different code paths use different allocators (e.g.
+kmalloc_nolock vs kzalloc), introducing noise that makes the number
+hard to interpret.
 
+Keep total_creates in the summary output as it is useful for normalizing
+perf statistics collected alongside the benchmark.
 
-Amery Hung (3):
-  selftests/bpf: Remove kmalloc tracing from local storage create bench
-  bpf: Use kmalloc_nolock() universally in local storage
-  bpf: Remove gfp_flags plumbing from bpf_local_storage_update()
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ .../bpf/benchs/bench_local_storage_create.c   | 21 ++++++-------------
+ .../bpf/progs/bench_local_storage_create.c    | 11 ----------
+ 2 files changed, 6 insertions(+), 26 deletions(-)
 
- include/linux/bpf_local_storage.h             |  15 +-
- kernel/bpf/bpf_cgrp_storage.c                 |  11 +-
- kernel/bpf/bpf_inode_storage.c                |  11 +-
- kernel/bpf/bpf_local_storage.c                | 146 +++---------------
- kernel/bpf/bpf_task_storage.c                 |  11 +-
- kernel/bpf/verifier.c                         |  26 ----
- net/core/bpf_sk_storage.c                     |  19 +--
- .../bpf/benchs/bench_local_storage_create.c   |  21 +--
- .../bpf/progs/bench_local_storage_create.c    |  11 --
- 9 files changed, 55 insertions(+), 216 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c b/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c
+index e2ff8ea1cb79..71e38000ee06 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c
++++ b/tools/testing/selftests/bpf/benchs/bench_local_storage_create.c
+@@ -101,11 +101,6 @@ static void setup(void)
+ 		}
+ 	}
+ 
+-	if (!bpf_program__attach(skel->progs.kmalloc)) {
+-		fprintf(stderr, "Error attaching bpf program\n");
+-		exit(1);
+-	}
+-
+ 	threads = calloc(env.producer_cnt, sizeof(*threads));
+ 
+ 	if (!threads) {
+@@ -140,7 +135,6 @@ static void setup(void)
+ static void measure(struct bench_res *res)
+ {
+ 	res->hits = atomic_swap(&skel->bss->create_cnts, 0);
+-	res->drops = atomic_swap(&skel->bss->kmalloc_cnts, 0);
+ }
+ 
+ static void *sk_producer(void *input)
+@@ -203,28 +197,25 @@ static void *producer(void *input)
+ 
+ static void report_progress(int iter, struct bench_res *res, long delta_ns)
+ {
+-	double creates_per_sec, kmallocs_per_create;
++	double creates_per_sec;
+ 
+ 	creates_per_sec = res->hits / 1000.0 / (delta_ns / 1000000000.0);
+-	kmallocs_per_create = (double)res->drops / res->hits;
+ 
+ 	printf("Iter %3d (%7.3lfus): ",
+ 	       iter, (delta_ns - 1000000000) / 1000.0);
+-	printf("creates %8.3lfk/s (%7.3lfk/prod), ",
++	printf("creates %8.3lfk/s (%7.3lfk/prod)\n",
+ 	       creates_per_sec, creates_per_sec / env.producer_cnt);
+-	printf("%3.2lf kmallocs/create\n", kmallocs_per_create);
+ }
+ 
+ static void report_final(struct bench_res res[], int res_cnt)
+ {
+ 	double creates_mean = 0.0, creates_stddev = 0.0;
+-	long total_creates = 0, total_kmallocs = 0;
++	long total_creates = 0;
+ 	int i;
+ 
+ 	for (i = 0; i < res_cnt; i++) {
+ 		creates_mean += res[i].hits / 1000.0 / (0.0 + res_cnt);
+ 		total_creates += res[i].hits;
+-		total_kmallocs += res[i].drops;
+ 	}
+ 
+ 	if (res_cnt > 1)  {
+@@ -234,9 +225,9 @@ static void report_final(struct bench_res res[], int res_cnt)
+ 				       (res_cnt - 1.0);
+ 		creates_stddev = sqrt(creates_stddev);
+ 	}
+-	printf("Summary: creates %8.3lf \u00B1 %5.3lfk/s (%7.3lfk/prod), ",
+-	       creates_mean, creates_stddev, creates_mean / env.producer_cnt);
+-	printf("%4.2lf kmallocs/create\n", (double)total_kmallocs / total_creates);
++	printf("Summary: creates %8.3lf \u00B1 %5.3lfk/s (%7.3lfk/prod), %ld total\n",
++	       creates_mean, creates_stddev, creates_mean / env.producer_cnt,
++	       total_creates);
+ 	if (create_owner_errs || skel->bss->create_errs)
+ 		printf("%s() errors %ld create_errs %ld\n",
+ 		       storage_type == BPF_MAP_TYPE_SK_STORAGE ?
+diff --git a/tools/testing/selftests/bpf/progs/bench_local_storage_create.c b/tools/testing/selftests/bpf/progs/bench_local_storage_create.c
+index c8ec0d0368e4..25ca6045fea3 100644
+--- a/tools/testing/selftests/bpf/progs/bench_local_storage_create.c
++++ b/tools/testing/selftests/bpf/progs/bench_local_storage_create.c
+@@ -8,7 +8,6 @@
+ 
+ long create_errs = 0;
+ long create_cnts = 0;
+-long kmalloc_cnts = 0;
+ __u32 bench_pid = 0;
+ 
+ struct storage {
+@@ -29,16 +28,6 @@ struct {
+ 	__type(value, struct storage);
+ } task_storage_map SEC(".maps");
+ 
+-SEC("raw_tp/kmalloc")
+-int BPF_PROG(kmalloc, unsigned long call_site, const void *ptr,
+-	     size_t bytes_req, size_t bytes_alloc, gfp_t gfp_flags,
+-	     int node)
+-{
+-	__sync_fetch_and_add(&kmalloc_cnts, 1);
+-
+-	return 0;
+-}
+-
+ SEC("tp_btf/sched_process_fork")
+ int BPF_PROG(sched_process_fork, struct task_struct *parent, struct task_struct *child)
+ {
 -- 
 2.52.0
 
