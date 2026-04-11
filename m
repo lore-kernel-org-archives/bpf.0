@@ -1,173 +1,77 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8699A2D2488;
-	Sat, 11 Apr 2026 16:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923E51A275
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 17:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775925445; cv=none; b=dG7JaedbUKg9DDqQbu2JL58DIqdmjuKeaC5dPMgxi91naMGZK85RkNl42c2JPrxUMwvDm/nzMK9bmeoWdExJfoIdVRlUkgZlglqRcZa7S6llldaGXRIPF8ROt1ph71iBeGPAk3OSYHEKGJt4CuZB9gHzmByjBuOONIub1aQda1M=
+	t=1775927432; cv=none; b=YYZypG+b1kBXBnJrRl4hiF8pSCIvg14vkgZjIGfvBn6+WJxLeIZhu0YZ581kAvozUNMpYy66cn/rcGhPyHWkcWhSPRZJazz0Lk6EDRYTSRSQsVeRvLXq3wsiSvXK6xZzgILLsTuSXFMVS5+9d4Hor6YawU887TK8fDp/UwVlLzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775925445; c=relaxed/simple;
-	bh=X6KfuU1xGAMoYDth3ML5cPjtN20UZbGau8wgaqzEGH4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=TZtJ2xdwo8rX68ugEeBJ30zX5arxNZKuVfDf98sxauSGP7BEK6A83hPwdTavwGLQNWga94Aot5cZoXcSj6c3urqAw5EW6ftiSQ5eISnqArfj5lW9DRMWHHVD2dQ4VKNyUIeYiqMBoDrXwtbKgmK3fLfjSuhgKhPcmsjKYfIeLd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=gzz5Cm8J; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775927432; c=relaxed/simple;
+	bh=YvM2vGDtcLBvOErD2bi2cljJ7w+E6nMClzLqyexwn2k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=CMaMOuzKUFHTuLUuwstLmWoRyqFjhU13AqnnQ8xPaZC8s3oh6LjY6ILehLonxBbaXvVXlgZnHG0Fw12C1XU7+L0CpEyroBR622SQvZ6h1X+HBRJ2/gxUusngRIW1ZH/BioLPZf9BAfisf5LYIGFPDTadIa6JaoYB2NFwkAdOjLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o0KaCYho; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="gzz5Cm8J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id; bh=imhm8Gy5iuzPJ6w
-	NyZl4KRJwqw5GT9O+YMrp7L7s8ig=; b=gzz5Cm8JqyFFf7Lgfkn83C2pErHkNCn
-	0uHkOgVL4sQ8EqCuuPhzV09f8YcBge9FqEhY9jCywkTOmnBpzJu0kKLLTkWR1rYT
-	Y3jxgkBKfoSmKFaN6dtdVKtg5lHXRte7QkiLb0tpBRINM+ka/zwFPnBgz9pEXsNX
-	XeN0RviRMyjo=
-Received: from yang-Virtual-Machine.mshome.net (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAn3n9ueNppX_iUEg--.31671S4;
-	Sun, 12 Apr 2026 00:36:02 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	mattbobrowski@google.com,
-	jiayuan.chen@linux.dev,
-	leon.hwang@linux.dev,
-	menglong.dong@linux.dev
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Feng Yang <yangfeng@kylinos.cn>
-Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: Add selftests for verifying return values of fmod_ret.
-Date: Sun, 12 Apr 2026 00:35:56 +0800
-Message-Id: <20260411163556.8567-3-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20260411163556.8567-1-yangfeng59949@163.com>
-References: <20260411163556.8567-1-yangfeng59949@163.com>
-X-CM-TRANSID:_____wAn3n9ueNppX_iUEg--.31671S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXF13AFy8uFy5tw4kZryfCrg_yoWrXFy5pF
-	4v9r9ruF4vyw13GFn7uF43AFyfXanrZa1UZFWIvwn3ZF18Jw1DJr4kGa45Xw1rGFZ8Cw4Y
-	yrsxXws3C3WUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jhManUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RJLw2naeHLu1wAA3r
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0KaCYho"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BEC1C4CEF7;
+	Sat, 11 Apr 2026 17:10:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775927432;
+	bh=YvM2vGDtcLBvOErD2bi2cljJ7w+E6nMClzLqyexwn2k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=o0KaCYho8buWrHxoiUWGWdstYzCs6mG459IMZ8IQlTCGyaSsM+ELu4hFTdjH7KueS
+	 Gy3Tshj1V8gz3yHZiqhY/tDKaG1dxU5pfAUctiEAhN/0nwlAyU+47MG6Z+M6xDXjic
+	 dq/maj48EJspqNEepxbB7wiYGkn5Ms+E8tgex3MDiQzsYPluwaZg6gx4a+AXBuNFfH
+	 0TqTO69yZN3X/b3Q5fY9DlaxHIv0gQGbAnr29oDxtjWkxU4/oQjgUgVnEvODcJhCax
+	 YyACv9bIZsQdf9JweAg+HI9WVdf3ahZR2cwJiAfyOpfKnqoAEGKUcXQK44BvP5+qlm
+	 le+Ak+bL7/Ipg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02B8E3809A8B;
+	Sat, 11 Apr 2026 17:10:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: Delete unused variable
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177592740580.3026957.412768943399871463.git-patchwork-notify@kernel.org>
+Date: Sat, 11 Apr 2026 17:10:05 +0000
+References: <20260411141447.45932-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260411141447.45932-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@kernel.org, memxor@gmail.com, eddyz87@gmail.com
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Hello:
 
-Add selftests for verifying return values of fmod_ret.
-test_progs -t verifier_fmod_ret_return
-569/1   verifier_fmod_ret_return/fmod_task_alloc_1:OK
-569/2   verifier_fmod_ret_return/fmod_task_alloc_2:OK
-569/3   verifier_fmod_ret_return/fmod_ret_sys_open_1:OK
-569/4   verifier_fmod_ret_return/fmod_ret_sys_open_2:OK
-569/5   verifier_fmod_ret_return/fmod_ret_sys_open_3:OK
-569/6   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_1:OK
-569/7   verifier_fmod_ret_return/fmod_page_pool_alloc_netmems_2:OK
-569     verifier_fmod_ret_return:OK
-Summary: 1/7 PASSED, 0 SKIPPED, 0 FAILED
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_fmod_ret_return.c      | 59 +++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
+On Sat, 11 Apr 2026 07:14:47 -0700 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> 'cnt' is set, but not used. Delete it.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202604111401.eqzyF2kx-lkp@intel.com/
+> Fixes: 2c167d91775b ("bpf: change logging scheme for live stack analysis")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> 
+> [...]
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index a96b25ebff23..5a8d14e3980e 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -37,6 +37,7 @@
- #include "verifier_div0.skel.h"
- #include "verifier_div_mod_bounds.skel.h"
- #include "verifier_div_overflow.skel.h"
-+#include "verifier_fmod_ret_return.skel.h"
- #include "verifier_global_subprogs.skel.h"
- #include "verifier_global_ptr_args.skel.h"
- #include "verifier_gotol.skel.h"
-@@ -185,6 +186,7 @@ void test_verifier_direct_stack_access_wraparound(void) { RUN(verifier_direct_st
- void test_verifier_div0(void)                 { RUN(verifier_div0); }
- void test_verifier_div_mod_bounds(void)       { RUN(verifier_div_mod_bounds); }
- void test_verifier_div_overflow(void)         { RUN(verifier_div_overflow); }
-+void test_verifier_fmod_ret_return(void)      { RUN(verifier_fmod_ret_return); }
- void test_verifier_global_subprogs(void)      { RUN(verifier_global_subprogs); }
- void test_verifier_global_ptr_args(void)      { RUN(verifier_global_ptr_args); }
- void test_verifier_gotol(void)                { RUN(verifier_gotol); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-new file mode 100644
-index 000000000000..2c7daeaf0b69
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_fmod_ret_return.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+SEC("fmod_ret/security_task_alloc")
-+__success
-+int BPF_PROG(fmod_task_alloc_1)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/security_task_alloc")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, 0]")
-+int BPF_PROG(fmod_task_alloc_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__success
-+int BPF_PROG(fmod_ret_sys_open_1)
-+{
-+	return 0;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [-4095, 0]")
-+int BPF_PROG(fmod_ret_sys_open_2)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/" SYS_PREFIX "sys_open")
-+__success
-+int BPF_PROG(fmod_ret_sys_open_3)
-+{
-+	return -1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__failure __log_level(2)
-+__msg("At program exit the register R0 has smin=1 smax=1 should have been in [0, 0]")
-+int BPF_PROG(fmod_page_pool_alloc_netmems_1)
-+{
-+	return 1;
-+}
-+
-+SEC("fmod_ret/page_pool_alloc_netmems")
-+__success
-+int BPF_PROG(fmod_page_pool_alloc_netmems_2)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Here is the summary with links:
+  - [bpf-next] bpf: Delete unused variable
+    https://git.kernel.org/bpf/bpf-next/c/57205e2dd962
+
+You are awesome, thank you!
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
