@@ -1,152 +1,193 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A971C861A
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 01:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775870896; cv=pass; b=tQMgSFTdSqYOp2bpT81dmLsqpd/5dwz4DlbSTzC2Rw6zew/ZOWUSnu47HGHy/e+RK/YWGT3AcuEPTpp/phbhmS1tUsJRmJn0/LgVPwrDrJBvSHjrf1D7tS1gAlD454RQC57mBIMz5HNNdkb2pz1236ywFQluYN97q15Ef3ujTBU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775870896; c=relaxed/simple;
-	bh=sARHTMqKvBCZQlh4hioib58ltF7mRpUhN3lu0IlCoM0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KN+RwmSdawY3wb0KTM+dHG8iiQ7H1iZpzv4z6ASPWcsMJlAMtPpadcOLzDBBYP33L757tViS3v9L9HPvxAA17bKmNTECgZCTsB+6o570qDTff2PLx7RtVaJaWvMwKf9h8vbAshGI6/CmhtGiGWuBT4WJjK9qsZzpNnfxGjzGee0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jOHFOsXb; arc=pass smtp.client-ip=74.125.224.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917E61C84C0
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 01:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775871172; cv=none; b=DiFpZOLZOZdDgLzjsX+ZAUrmnYUGiq4PBjRzz+IHDuMScz6j2oNBM4v399JOspkZL1zxOUpHSh+9aVaJ5RFgPzzOIM1RbqcWs43aQRqJhmawjbU7bbrN4mVYc61SRpCzgZu/iXZkNnZ1wVcyosnozsvDWtGjcoC2P++kVtmMlts=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775871172; c=relaxed/simple;
+	bh=wJBoOnYjhw+pUBicokDxqfaJkrZTKbpeqNHlpSLQoA0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Nj3D9mycrKPoceJgxjcrzmuicsK6aGMf9udhSy65Zz9AYOq3POK9MA58QLABbmLLDe+SCWBFTnsZoptq92DosfliXURxPNBhiHF+7+uYlwWBobPB0iQbl+twOzPumvC+0CTkrXZszRop6mly+PXZfksLHe+R3UaotAn0VTvQeqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XzHgE1xl; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jOHFOsXb"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-6501c9903edso3093124d50.1
-        for <bpf@vger.kernel.org>; Fri, 10 Apr 2026 18:28:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775870894; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BagxvOoCFNGz6geAAiD51lLTEUpgSEmbzRu3ic9XKJM0uxioZHaCuDisn8UwgXwtfl
-         ponj7s4gLuiQo7AL3+zuFALZh8hSapeftU5OJe83ETaOWNgw6/aMwrFpGKVaY7/LIrEs
-         fWuEqzGeKcVC6Cl1dOPIeDC6lXYnZvXfDcvaLsH/srOPR4cZ9uhwqPb05jiPKQSvCh+f
-         sO49xf97jM6AEoZv5y9kHJ2ij9MLB6p/Ho+fhgWJ5ckvUi6p8jnuFSOEUCb4Q+WxRSqI
-         XMumnp4ncoEGeW/jSlko4j04FMSRPCYeKDZFnAZI+qv4X67/oIXimTb9mjqwJWTKMDxs
-         LrOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0bew957SGHSKvBzAS0ore+LVnHZLQj3z4pL95ua2ACY=;
-        fh=dqB3qfq0a/Hq3br+utT7Mkr0GTqlulvcvZTAIkmmimM=;
-        b=WSvTqlMTJjMgoDvz78dopvrFdUBo4LaLyDO4UdUwSMpMFma9uO58Znh0ZTtx7EdBbq
-         76AEyRcFWnIieo+HhQifuVgAQjrUjiWfEIKwqELjiCAEAWiOyb0CGLw/BoltkX8pkW15
-         xdipil487Ybn+QG6t8Exko6AQPEtge5Qukia5PKa9P8kZUYxnypTbjvBeMiQHUe5bMfZ
-         FsqNAvNc7flII3r7gqE9KZXqaUuyP7YcRqMl9gldys07kWz+wseOUv1VrqTg7RQAfXeY
-         DtPtbYo3a1DABFknuDeNQizYnojeNvQVVlAhLeYuAEgA4YtRlF2H+E7Qw5sa97NQyZH2
-         XAyQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775870894; x=1776475694; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0bew957SGHSKvBzAS0ore+LVnHZLQj3z4pL95ua2ACY=;
-        b=jOHFOsXbtu+xkTIVOziqHO2CKjQ268jRahPto8NgjFW5TLp0OfAxjUqyZ3IOTOCis0
-         +jrc05dOHwTlCUN3T8VXX5RqOauCEXs1A1iNuQhNOMEHhtM+RsD4kp7nq75IhVFjtASM
-         CEwd4yE4dmi8uYpc06KyKf7BijdvWJqVysw5Fakp6fW+eQsV8Ebbm21Ctj/1yI5sV1JT
-         rn+yQ6v06pEa44U1OWBl+R8LSTSNZgC4kLpfdkzm7/IBhhidJu3IpTeG1PNk4ZMMExTv
-         vbcq+B9BqbdzZN6vMh7PDpfTUhfUT/4g1/0+mybUG+rYdknWAGnAilM7OKapt1zSH2DQ
-         4Ddg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775870894; x=1776475694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0bew957SGHSKvBzAS0ore+LVnHZLQj3z4pL95ua2ACY=;
-        b=P/fFwAhpIi8kZp0sqoetk7HCLnePIaTlm8OlvrP6dnWbbbVw06ZFC9cTVFRBJoA/8E
-         XvHW8KU1G3B6Wjjkj9PfwfjXOuTfYgDVfnfbYiBtim8jXzxSho/72rDjo7MjY+AJbXEb
-         DIT0j1PJKqUQwBP92a1K8d5sDu+YNyijLPFlYoBI35AavaGARavrjSf8U3Mqzhdl6yDH
-         Nqkb0V14UgWxFKi+TMs3Hfuu2G/KiZ5DbeQ1PuRaOEh1CjKoVZ39y6vmjVZaeHodBlrs
-         pymQo1hzE2dEZBZliAjBFTlPxTsMqSDOQt0kFWvV3u4ITFo2AlrAQ64HMa9ycRIUlav/
-         nvYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUok+DhWze6SZhbyn0MwJ6QIt3pQgXB5y7HcBnsp0O+lTxH2d6i4BDZ4/yttaBBpU2267k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh3BQXo8MFKy/xiQrPe99V6+0A4VRhD9wAYwMZkmUICSxVxMqo
-	JN09MwtICfZs5NwTC/yxhWW65tH+B66edP6yPNdiAYTNxBfA35J+mG4AqmZVm78nxVSN6MC0uJy
-	RBP5FskeogMBSA9WmsfdFEWQjbg9pYEqYpZep
-X-Gm-Gg: AeBDievPXJ1lF22zzdMm2zbl3pnB2+GXJOvzJ/ghKNlr2W7TdkBul4C0GP4FUwGFJoq
-	doFV1JnfWvCORncQVxtGiV3TDP9krwWhyRrkG/yHgwGfnjhdVj3H9bfmFpT6PI558aVl5UDhP7T
-	bAwTuXAt/DPuMBWN07R9hv1ZAvK/pMDqeqkUXrvJDoNu8Nx7WtAruo+ZSQxqi8OT3hR5Dq3O/yd
-	xzdP61fVKTtDe937o84UoZgyAMbmn2yAnMBYY2OciBmNuNL0eZEWgIsvXH9qUMGBwUClyh7zCem
-	NN687gw=
-X-Received: by 2002:a05:690c:c147:b0:798:1219:c780 with SMTP id
- 00721157ae682-7af71478e3dmr55601077b3.26.1775870894222; Fri, 10 Apr 2026
- 18:28:14 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XzHgE1xl"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1775871158;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=E79Q5CkAVpFseZarzsSAQtNJelU2PgVkwbeuT/mWF94=;
+	b=XzHgE1xl12TudtuCmASy/U7V6lglBs/QQk2o74v1gvkitxUrlSbtnqnPlOXR5QDrwcsH1+
+	U0OuPzkBk1aXr4e1YD8Vy9+AXvYMzvcBkspJrkDMY7FmtrVdfUQ9EFtX91uyhoXDNRhLsg
+	+kgk9/cRslRssLpldtLrgW3dWNlIBWA=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v2 1/2] net: add missing syncookie statistics for BPF custom syncookies
+Date: Sat, 11 Apr 2026 09:32:04 +0800
+Message-ID: <20260411013211.225834-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260411001711.3418264-4-ameryhung@gmail.com> <9f7e217d9a5184bfcf0bd1112a9075c0f3633266e8eb1026cd1c651a0754edb2@mail.kernel.org>
- <CAADnVQJ5gSL1XDYYwgKgq6pxLG0m9m6mC1DntHxLCrMmQ8Gp=g@mail.gmail.com>
-In-Reply-To: <CAADnVQJ5gSL1XDYYwgKgq6pxLG0m9m6mC1DntHxLCrMmQ8Gp=g@mail.gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 10 Apr 2026 18:28:03 -0700
-X-Gm-Features: AQROBzB3Y0gFVbZ0QmWcDCTtHxj-St6CKseFfy6xjF80Iq5WC9m-ibzU1-h_apA
-Message-ID: <CAMB2axPw_YQZaj3LoYVbR3Wo+RzWma32KfXzdedz9Of_nakVWw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/3] bpf: Remove gfp_flags plumbing from bpf_local_storage_update()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Kernel Team <kernel-team@meta.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Apr 10, 2026 at 6:19=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Apr 10, 2026 at 5:51=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
-> >
-> > > diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_lo=
-cal_storage.h
-> > > index dced54e9265f..9e4f5c45c974 100644
-> > > --- a/include/linux/bpf_local_storage.h
-> > > +++ b/include/linux/bpf_local_storage.h
-> > > @@ -188,7 +188,7 @@ int bpf_selem_link_map(struct bpf_local_storage_m=
-ap *smap,
-> > >
-> > >  struct bpf_local_storage_elem *
-> > >  bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, voi=
-d *value,
-> > > -             bool swap_uptrs, gfp_t gfp_flags);
-> > > +             bool swap_uptrs);
-> >
-> > [ ... ]
-> >
-> > > @@ -196,12 +196,11 @@ void bpf_selem_free(struct bpf_local_storage_el=
-em *selem,
-> > >  int
-> > >  bpf_local_storage_alloc(void *owner,
-> > >                       struct bpf_local_storage_map *smap,
-> > > -                     struct bpf_local_storage_elem *first_selem,
-> > > -                     gfp_t gfp_flags);
-> > > +                     struct bpf_local_storage_elem *first_selem);
-> >
-> > bpf_selem_alloc() now takes 4 arguments and bpf_local_storage_alloc()
-> > takes 3, but bpf_sk_storage_clone_elem() and bpf_sk_storage_clone()
-> > in net/core/bpf_sk_storage.c were not updated:
-> >
-> > net/core/bpf_sk_storage.c:bpf_sk_storage_clone_elem() {
-> >     copy_selem =3D bpf_selem_alloc(smap, newsk, NULL, false, GFP_ATOMIC=
-);
-> > }
-> >
-> > net/core/bpf_sk_storage.c:bpf_sk_storage_clone() {
-> >     ret =3D bpf_local_storage_alloc(newsk, smap, copy_selem, GFP_ATOMIC=
-);
-> > }
-> >
-> > Won't this break the build?
->
-> Nice cleanup! Pls fix the build and respin right away.
+1. Replace IS_ENABLED(CONFIG_BPF) with CONFIG_BPF_SYSCALL for
+   cookie_bpf_ok() and cookie_bpf_check(). CONFIG_BPF is selected by
+   CONFIG_NET unconditionally, so IS_ENABLED(CONFIG_BPF) is always
+   true and provides no real guard. CONFIG_BPF_SYSCALL is the correct
+   config for BPF program functionality.
 
-Oh well. That's embarrassing... I made some changes to the last patch
-at the last minute but didn't test it. Will respin right away.
+2. Remove the CONFIG_BPF_SYSCALL guard around struct bpf_tcp_req_attrs.
+   This struct is referenced by bpf_sk_assign_tcp_reqsk() in
+   net/core/filter.c which is compiled unconditionally, so wrapping
+   the definition in a config guard could cause build failures when
+   CONFIG_BPF_SYSCALL=n.
+
+3. Fix mismatched declaration of cookie_bpf_check() between the
+   CONFIG_BPF_SYSCALL and stub paths: the real definition takes
+   'struct net *net' but the declaration in the header did not.
+   Add the net parameter to the declaration and all call sites.
+
+4. Add missing LINUX_MIB_SYNCOOKIESRECV and LINUX_MIB_SYNCOOKIESFAILED
+   statistics in cookie_bpf_check(), so that BPF custom syncookie
+   validation is accounted for in SNMP counters just like the
+   non-BPF path.
+
+Compile-tested with CONFIG_BPF_SYSCALL=y and CONFIG_BPF_SYSCALL
+not set.
+
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+No functional bug here — CONFIG_BPF is always enabled under
+CONFIG_NET, so the existing code compiles and works correctly.
+This is a cleanup and improvement, no backport needed.
+
+Added a selftest, suggested by Kuniyuki Iwashima.
+---
+ include/net/tcp.h     |  7 +++----
+ net/ipv4/syncookies.c | 10 +++++++---
+ net/ipv6/syncookies.c |  2 +-
+ 3 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 6156d1d068e1..570a8836c2ba 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -598,7 +598,6 @@ struct request_sock *cookie_tcp_reqsk_alloc(const struct request_sock_ops *ops,
+ 					    struct tcp_options_received *tcp_opt,
+ 					    int mss, u32 tsoff);
+ 
+-#if IS_ENABLED(CONFIG_BPF)
+ struct bpf_tcp_req_attrs {
+ 	u32 rcv_tsval;
+ 	u32 rcv_tsecr;
+@@ -612,7 +611,6 @@ struct bpf_tcp_req_attrs {
+ 	u8 usec_ts_ok;
+ 	u8 reserved[3];
+ };
+-#endif
+ 
+ #ifdef CONFIG_SYN_COOKIES
+ 
+@@ -715,13 +713,14 @@ static inline bool cookie_ecn_ok(const struct net *net, const struct dst_entry *
+ 		dst_feature(dst, RTAX_FEATURE_ECN);
+ }
+ 
+-#if IS_ENABLED(CONFIG_BPF)
++#ifdef CONFIG_BPF_SYSCALL
+ static inline bool cookie_bpf_ok(struct sk_buff *skb)
+ {
+ 	return skb->sk;
+ }
+ 
+-struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb);
++struct request_sock *cookie_bpf_check(struct net *net, struct sock *sk,
++				      struct sk_buff *skb);
+ #else
+ static inline bool cookie_bpf_ok(struct sk_buff *skb)
+ {
+diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
+index f1474598d2c8..d685631438cb 100644
+--- a/net/ipv4/syncookies.c
++++ b/net/ipv4/syncookies.c
+@@ -295,8 +295,9 @@ static int cookie_tcp_reqsk_init(struct sock *sk, struct sk_buff *skb,
+ 	return 0;
+ }
+ 
+-#if IS_ENABLED(CONFIG_BPF)
+-struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb)
++#ifdef CONFIG_BPF_SYSCALL
++struct request_sock *cookie_bpf_check(struct net *net, struct sock *sk,
++				      struct sk_buff *skb)
+ {
+ 	struct request_sock *req = inet_reqsk(skb->sk);
+ 
+@@ -306,6 +307,9 @@ struct request_sock *cookie_bpf_check(struct sock *sk, struct sk_buff *skb)
+ 	if (cookie_tcp_reqsk_init(sk, skb, req)) {
+ 		reqsk_free(req);
+ 		req = NULL;
++		__NET_INC_STATS(net, LINUX_MIB_SYNCOOKIESFAILED);
++	} else {
++		__NET_INC_STATS(net, LINUX_MIB_SYNCOOKIESRECV);
+ 	}
+ 
+ 	return req;
+@@ -419,7 +423,7 @@ struct sock *cookie_v4_check(struct sock *sk, struct sk_buff *skb)
+ 		goto out;
+ 
+ 	if (cookie_bpf_ok(skb)) {
+-		req = cookie_bpf_check(sk, skb);
++		req = cookie_bpf_check(net, sk, skb);
+ 	} else {
+ 		req = cookie_tcp_check(net, sk, skb);
+ 		if (IS_ERR(req))
+diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
+index 4f6f0d751d6c..111d7a41d957 100644
+--- a/net/ipv6/syncookies.c
++++ b/net/ipv6/syncookies.c
+@@ -190,7 +190,7 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
+ 		goto out;
+ 
+ 	if (cookie_bpf_ok(skb)) {
+-		req = cookie_bpf_check(sk, skb);
++		req = cookie_bpf_check(net, sk, skb);
+ 	} else {
+ 		req = cookie_tcp_check(net, sk, skb);
+ 		if (IS_ERR(req))
+-- 
+2.43.0
+
