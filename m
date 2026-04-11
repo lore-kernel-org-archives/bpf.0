@@ -1,199 +1,246 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA8E2ED17B
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 18:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775931011; cv=pass; b=HutCpKwfO4ozjZj1zjo29hXkYKj2pJYO+Hd2QSHC5T9XrHW62tHkllyXKbvdvmxN7l7qX1mYQ/JDi63kMhOGICwkPaByqyTUhLAVj8O2zWmoHKBY3Rw2ymgsXI+oJDMCWuyFeCdU2CCWnfyly6ruAyCyj66KYeE6J+NT1It48Zc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775931011; c=relaxed/simple;
-	bh=yvcW02x1KNbc8+q/RDgH4lZx+kL+dYQn2iR7/553JiM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O6qkoZ4/YCwdXLLQiinnXk0tDkZaFcL/YYIfPGK6efkBKpc8ruu//Fvwdsbvjtdcd3AsmP7DAOCg6TupYucGyvUMbjCR3DuJ6orYMj+P46tTCg0Uqo6oTSkzZ5SicrWsCD05Z30ZszOG3mnShgm8z2WUwfHAGeDUGgx9HgNRnao=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kz4XlJxn; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A6A14F9FB;
+	Sat, 11 Apr 2026 18:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775931263; cv=none; b=qZZS2qTmuqxtYsm3FkP3dj9Goa49KMx5t/5A/QyMymQoMAHwcihQGH94/pX77fMYEkMH8p/rrDZRZyNaGi/bsuExdDQcHJc40M5Y7x3o6mjRVDwlh6OpFXJJsbyhz9i7niXzx9eU1jdjh0bP1Oi8sgOo3Edtk5Lhn8HSfBOE57I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775931263; c=relaxed/simple;
+	bh=dDvAtt+VeYbJ8peI/sGKxhCmGdpPy5Z2A7aSBmraeeA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hYR6XXt3qETymU/m7SaOgNCubU9f4wRIHDsnrKSNV4Y9GaVlmWL5JCvkwzZb+kEeP5piBy97at4J/vPX8flZt09QPe1ynRp2Fb2Z51PndPQmDcIuSayRnW9Adry0SLoiIZ2r+ldo21nyow2AO0DCVUbEkK+93F9dhl/T2lzGlGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eLvft3lV; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kz4XlJxn"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43d70c30767so59429f8f.0
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 11:10:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775931008; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HiLs3zGRDaZ0Q6ejKb/O0vzyuvd9gJgUxeKy5VHwp6WK3uEh5NZGmIH4xFErFs367v
-         zLV15VyBfuNn+vyKrMs2is6ajj6bY8nCjg4oHiIFkPF6/HHvELWtxKCoquO4WdrdWEj4
-         /EHu2wWcuVXE0ionRk1P2OQpQAeZAlzFvLUTXstZiA/47gHKad6SGGBZTrCjJyBXjuHM
-         iF129KOZioXSj1uInOQTZGlJlnIP+7xRnJp3iglEDOCKxaFWaT0z0yTt024bVJTJiDbS
-         qo45j93VMZNXLwyoqBCN4Ge0zbJWWgvMkDdzRHEhWAVrjxXuKAtUV02VUboBIDLMwUpx
-         h16A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=R/7dYnA2K4xT6LPd1w0Mqp4/PRNYQI3twve+b/J/BZA=;
-        fh=bDDEM18lcmV1PrlC3b9UedbqYoS6CR0ZrRtZmmprsOM=;
-        b=b6EGguwD7Y3aL+LBUuLzkoYpFBYKWLUaSvZW9ce7qDashN4on1mOZr+1A3sxF9xCsA
-         HZjSBIQjuAfU+4B6JAQTzRXF/LquaB2hrhq9egvMqr9r67Kf1FrcjFqIFbbJrfcD1sbT
-         hiBTTYbF43Yu1wpeTYE4J8WMzaR4w+GHbjA+sb4UZ4aVHpsGXtx0YS6bsJDodKcNsA8G
-         mVLZ+e5YkS9Bej+Y8B0NF3iwuMPr/VN1m6IzSriwHJvwq0YUFMwRjqIjK13MkzNHwOMD
-         4qC+TaHZIaygOfrkWpVybhHRzH0id1AOi0zki+ClWKYvlXGIwq+Khbi436n3cFHD+qtG
-         rd4Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775931008; x=1776535808; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R/7dYnA2K4xT6LPd1w0Mqp4/PRNYQI3twve+b/J/BZA=;
-        b=Kz4XlJxnybR9zYLKc9uHx2nKfgOZ7H4Ow6eYj9Zj8YG2okH1pibUCaPgvRp/CiGJOp
-         S9Cx/dX9pHvA3+yp0xQfmHpKeSNlxwozlMD7cyDh5fuc08OfTrvSKBFt5i3vKNdELc+X
-         QxzsmedcugLCfARokQAhRxOqxiaUw9nTfunzN2X4K2JOl79wtpYJjzP4C0OUWZSYgzp6
-         6NcWTG8DYWOku4bRoGMx7M+OE72FyMhelWPlM09vTKz76dtAOehdVltq+0sM6W5yc3gM
-         LhnoVn9k/3ygd6hgKoLs6bnmbMelL7rkTgQnViCWka8iGuzJMh0dZ81YQ9C34Cd6OSFD
-         SaDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775931008; x=1776535808;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=R/7dYnA2K4xT6LPd1w0Mqp4/PRNYQI3twve+b/J/BZA=;
-        b=nDqoundqzQapCmspFwkYpIKEEbpY+UFimjZCyofqRkLvp7RxzxKnswqOsv/J99p/+X
-         pN8ZyVsbpRubv1nYTb900B0hwGbF40WiuvhU7sX2/z2q1d9ONwzb5+Zr3HiRxeLoO21L
-         ykeJ7KUecJv8Fu6gMygwfOyosPLlTZ5gSYc9JFmdqNLH0rkYzmDQrI4+IwD4Mzirm6gX
-         7uI7dqmWoqCsNKOEIOcQ6FgK6GOKU8grRh5Gib+PR2lAVYZl3MuDKMNhpbSxMXe8q3oy
-         ubk60285axMLk1P9y9uK0CqyttQmJcENljKbz9CC5ByzezXFofmFJ0rHzIyNzQjI4TZk
-         gFaQ==
-X-Gm-Message-State: AOJu0YwD0knEiEKGU4qci1rOhhIfH2Aw+nhSdrwDaGowRhC+BPEbXzbr
-	i3MzlDPOTiPk6eh1lQHR1To5a4DRKSvL5av4q3OOuM4Rj3R/NlQmoNWZXsHI3SoYhD1l42slioL
-	y0RfIk4bpfvhJDJCLTlUeTbNUgOKu5nE=
-X-Gm-Gg: AeBDiesDpuKGcWBe9a3ARFt+I4cksIRjCOB39Wg0s7odfx+U63hquDIdUG4z+D3CL0H
-	OPwmRt93rueYjifRHNcpMWbh7ffs2GrL9m3iMDkc3kynfDJYequsLjqUWTB/xBRiemv4Te4Q9ir
-	zsUFADow8oS2bS8fOQsNpsamQfxODhqPYabVzIFBVdbM/hP9L23FKJOGwlc8vzgnxJIIgpc4jc3
-	GU+O+8Ka8y5/KicICT5f6tW8H7YDLQIeQzQrVaFYzhE3j64wykqrvm1Q56530c5VCL4dQtyyQO9
-	iO0WuBckSpmHTYVAH269u+hfMpArDA1aveZxLraMEYVAdO1jVNioyyGS9VjiSpv3QMm3p6OyiJr
-	NDnbMtswyEKXzBrKEVORFyFcW/g==
-X-Received: by 2002:a05:6000:4b0a:b0:43b:a16b:ee69 with SMTP id
- ffacd0b85a97d-43d595cf8c2mr16086425f8f.24.1775931007845; Sat, 11 Apr 2026
- 11:10:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eLvft3lV"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63BFPita3909595;
+	Sat, 11 Apr 2026 18:14:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=sf5L2LHSp2gdD6RQtrFoA0HeuUB9dxabi9juCEOAJ
+	yI=; b=eLvft3lVNoNaAo3DGaEpU+GXpGx/25PyGlReFF586Q6EEu0XuN47RnVaL
+	7iLDqDT3/CRsTvT6o87Vq+jdfofrogMpiO7JMNep7/ego7YlsH4zLC25+vBVbyJs
+	qCQZG9bF+JQiUhbhnpmqT24dmI56/aQGW8hr1MdUtXm4kIUZg3eO741WsAVlHnfo
+	pO9zlujnV9Aq6cmFc4oSqVTEioGdjyASqpA4VRuq6N67dETvg9p0PWiRJqN3Uqfu
+	pimF5/f2p69nRNlTz7EV/zfmij4S/mtRLg7rFUVCwnR1BOGOyVeVDE+iCcePuEEv
+	j683BpAGDuvARsKnI78ayUmTqPYUQ==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dfdxwsrmd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 11 Apr 2026 18:14:02 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63BD2Prd030062;
+	Sat, 11 Apr 2026 18:14:01 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dcme7w6yf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 11 Apr 2026 18:14:01 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63BIDvqq47382960
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 11 Apr 2026 18:13:57 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E662620043;
+	Sat, 11 Apr 2026 18:13:56 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DDA1920040;
+	Sat, 11 Apr 2026 18:13:54 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Sat, 11 Apr 2026 18:13:54 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
+        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v3 0/5] powerpc/bpf: Add support for verifier selftest
+Date: Sat, 11 Apr 2026 18:14:08 -0400
+Message-ID: <20260411221413.44304-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260411175134.771552-1-azpijr@gmail.com>
-In-Reply-To: <20260411175134.771552-1-azpijr@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 11 Apr 2026 11:09:56 -0700
-X-Gm-Features: AQROBzDujJvl5xUrRjTM_VNS1HlF3KROSrKOJXIZiSQeN29h2QIoJ69GUdo-T7o
-Message-ID: <CAADnVQJOKc0zP4=-STEX0szgzUeS7RaxQTtre=P92R0UStug8A@mail.gmail.com>
-Subject: Re: [RFC PATCH] bpf: cpumap: report queue_index to xdp_rxq_info
-To: "Jose A. Perez de Azpillaga" <azpijr@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Madalin Bucur <madalin.bucur@nxp.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDExMDE1NyBTYWx0ZWRfX8oVqAZ2IBF6k
+ BADqp/Rn8mg+oBOjqgU9MBtHh9t5PwPKwkC9NHbLlU/m9z3p0KXOFBIQGkjil9BAy77tpODQYDE
+ 8SYazMp6fIjKiY4AEnbYKysI1ygIMSw0tffp1lwdRnuzoabFOgPI3QdkezE/xhLW+SEpe8IQZtW
+ i1hqEUOxdZeyW7+3SLkbrrR34xopEN/mTZVgmz5t4jqAG2sywoiHMOxMUmpeI8X5biSZAiaBc2y
+ hGfQ03e1wXRJku9W1Saz3I0pLlsm4/WaEcGuE1nadAfKsRyXutprQlb+N+63a/iqflorxcbPI2w
+ 2rVI9CL3e5RaY0OUyQMo1zM7YQSEReXV1pcFT/WpW9uiv1CmqaG5Ron8RaCqi9Ls9dM4pTExvuy
+ 4WamcJXfT1wvfTTwz9RvpPigVQupxDfylgzY4gGRm1tczU+waKlm70HWXyUGayFdO/KKNwcmlO9
+ YLgLHxi9IQLGHwGwQ3Q==
+X-Proofpoint-ORIG-GUID: 4ORPvybNgQe8p3vbsIEhY1igoLFOtzbh
+X-Authority-Analysis: v=2.4 cv=TId1jVla c=1 sm=1 tr=0 ts=69da8f6a cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=UrLCjDVe54a93DmA31EA:9
+X-Proofpoint-GUID: 4ORPvybNgQe8p3vbsIEhY1igoLFOtzbh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-11_05,2026-04-09_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 malwarescore=0 spamscore=0 adultscore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604010000
+ definitions=main-2604110157
 
-On Sat, Apr 11, 2026 at 10:51=E2=80=AFAM Jose A. Perez de Azpillaga
-<azpijr@gmail.com> wrote:
->
-> When a packet is redirected to a CPU map entry,
-> cpu_map_bpf_prog_run_xdp() reconstructs a minimal xdp_rxq_info from
-> xdp_frame fields (dev_rx and mem_type) before re-running the BPF program
-> on the target CPU. However, queue_index was never preserved across the
-> CPU boundary, so BPF programs running in cpumap context always observe
-> ctx->rx_queue_index =3D=3D 0, regardless of which hardware queue original=
-ly
-> received the packet.
->
-> Fix this by storing the originating queue_index in struct xdp_frame,
-> following the same pattern already established for dev_rx and mem_type.
-> The field is populated from rxq->queue_index in
-> xdp_convert_buff_to_frame() during NAPI context, when the rxq_info is
-> still valid, and restored into the reconstructed rxq_info in
-> cpu_map_bpf_prog_run_xdp().
->
-> Also use xdpf->queue_index in __xdp_build_skb_from_frame() to call
-> skb_record_rx_queue(), which was previously listed as missing
-> information in that function's comment.
->
-> Also propagate queue_index in dpaa_a050385_wa_xdpf(), which manually
-> constructs a new xdp_frame from an uninitialized page. Without this,
-> queue_index would contain stale data from the page allocator.
->
-> Signed-off-by: Jose A. Perez de Azpillaga <azpijr@gmail.com>
-> ---
-> Note: this patch was only compiled, not tested.
->
->  drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 1 +
->  include/net/xdp.h                              | 4 +++-
->  kernel/bpf/cpumap.c                            | 2 +-
->  net/core/xdp.c                                 | 2 +-
->  4 files changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net=
-/ethernet/freescale/dpaa/dpaa_eth.c
-> index 3edc8d142dd5..00e36b0ac74d 100644
-> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> @@ -2281,6 +2281,7 @@ static int dpaa_a050385_wa_xdpf(struct dpaa_priv *p=
-riv,
->         new_xdpf->headroom =3D priv->tx_headroom;
->         new_xdpf->frame_sz =3D DPAA_BP_RAW_SIZE;
->         new_xdpf->mem_type =3D MEM_TYPE_PAGE_ORDER0;
-> +       new_xdpf->queue_index =3D xdpf->queue_index;
->
->         /* Release the initial buffer */
->         xdp_return_frame_rx_napi(xdpf);
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index aa742f413c35..6db10e6a8864 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -297,10 +297,11 @@ struct xdp_frame {
->         u32 headroom;
->         u32 metasize; /* uses lower 8-bits */
->         /* Lifetime of xdp_rxq_info is limited to NAPI/enqueue time,
-> -        * while mem_type is valid on remote CPU.
-> +        * while mem_type and queue_index are valid on remote CPU.
->          */
->         enum xdp_mem_type mem_type:32;
->         struct net_device *dev_rx; /* used by cpumap */
-> +       u32 queue_index; /* used by cpumap */
->         u32 frame_sz;
->         u32 flags; /* supported values defined in xdp_buff_flags */
->  };
-> @@ -441,6 +442,7 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xd=
-p_buff *xdp)
->
->         /* rxq only valid until napi_schedule ends, convert to xdp_mem_ty=
-pe */
->         xdp_frame->mem_type =3D xdp->rxq->mem.type;
-> +       xdp_frame->queue_index =3D xdp->rxq->queue_index;
->
->         return xdp_frame;
->  }
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> index 5e59ab896f05..448da572de9a 100644
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-> @@ -197,7 +197,7 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_ma=
-p_entry *rcpu,
->
->                 rxq.dev =3D xdpf->dev_rx;
->                 rxq.mem.type =3D xdpf->mem_type;
-> -               /* TODO: report queue_index to xdp_rxq_info */
-> +               rxq.queue_index =3D xdpf->queue_index;
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-This is like 5th time people attempt to address this TODO.
+The verifier selftest validates JITed instructions by matching expected
+disassembly output. The first two patches fix issues in powerpc instruction
+disassembly that were causing test flow failures. The fix is common for 
+64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
+architecture tag in the third patch, enabling proper test filtering in
+verifier test files. Introduce verifier testcases for tailcalls on powerpc64
+in the final patch.
 
-Just remove that comment. Don't send broken patches.
+The first patch in series is fix patch, correcting memory alignment with
+8-byte boundary for long branch trampoline address. The subsequent
+patches enables verifier selftests on powerpc.
 
-pw-bot: cr
+Issue Details:
+--------------
+
+    The Long branch stub in the trampoline implementation[1] provides
+    flexibility to handles short as well as long branch distance to
+    actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
+    sitting before long branch stub leads to failure when enabling
+    verifier based seltest for ppc64.
+    
+    The verifier selftests require disassembing the final jited image
+    to get native instructions. Later the disassembled instruction
+    sequence is matched against sequence of instructions provided in
+    test-file under __jited() wrapper. The final jited image contains
+    Out-of-line stub and Long branch stub as part of epilogue jitting
+    for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
+    between both above mentioned stubs. These 8 bytes contain memory
+    address of dummy trampoline during trampoline invocation which don't
+    correspond to any powerpc instructions. So, disassembly fails
+    resulting in failure of verifier selftests.
+    
+    The following code snippet shows the problem with current arrangement
+    made for dummy_tramp_addr.
+    
+    /* Out-of-line stub */
+    mflr    r0  
+    [b|bl]  tramp
+    mtlr    r0 //only with OOL 
+    b       bpf_func + 4 
+    /* Long branch stub */
+    .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
+    mflr    r11 
+    bcl     20,31,$+4
+    mflr    r12 
+    ld      r12, -8-SZL(r12)
+    mtctr   r12 
+    mtlr    r11 //retain ftrace ABI 
+    bctr
+
+    Consider test program binary of size 112 bytes:
+    0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
+    28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
+    56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
+    84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
+
+    Disassembly output of above binary for ppc64le:
+    pc:0     left:112    00 00 00 60  :  nop
+    pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
+    pc:8     left:104    00 00 20 39  :  li 9, 0
+    pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
+    pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
+    pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
+    pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
+    pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
+    pc:32    left:80     2a 00 60 38  :  li 3, 42
+    pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
+    pc:40    left:72     00 00 00 39  :  li 8, 0
+    pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
+    pc:48    left:64     80 00 21 38  :  addi 1, 1, 128
+    pc:52    left:60     78 43 03 7d  :  mr    3, 8
+    pc:56    left:56     20 00 80 4e  :  blr
+    pc:60    left:52     a6 02 08 7c  :  mflr 0
+    pc:64    left:48     00 00 00 60  :  nop
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     c0 34 1d 00  :
+    ...
+
+    Failure log:
+    Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
+    --------------------------------------
+
+    Observation:
+    Can't disasm instruction at offset 76 as this address has
+    ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
+    But valid instructions follow at offset 84 onwards.
+
+    Move the long branch address space to the bottom of the long
+    branch stub. This allows uninterrupted disassembly until the
+    last 8 bytes. Exclude these last bytes from the overall
+    program length to prevent failure in assembly generation.
+
+    Following is disassembler output for same test program with moved down
+    dummy_tramp_addr field:
+    .....
+    .....
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     a6 02 68 7d  :  mflr 11
+    pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+    pc:84    left:28     a6 02 88 7d  :  mflr 12
+    pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+    pc:92    left:20     a6 03 89 7d  :  mtctr 12
+    pc:96    left:16     a6 03 68 7d  :  mtlr 11
+    pc:100   left:12     20 04 80 4e  :  bctr
+    pc:104   left:8      c0 34 1d 00  :
+
+    Failure log:
+    Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+    ---------------------------------------
+    Disassembly logic can truncate at 104, ignoring last 8 bytes.
+
+    Update the dummy_tramp_addr field offset calculation from the end
+    of the program to reflect its new location, for bpf_arch_text_poke()
+    to update the actual trampoline's address in this field.
+
+    [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com
+
+v2->v3:
+  Removed fixed NOP from bottom of long branch stub
+  Rebased on top of bpf-next
+
+v1->v2:
+  Added fix-patch to correct memory alignment in-place
+  Moved the optional alignmnet NOP before OOL stub
+
+[v1]: https://lore.kernel.org/bpf/20260225013627.22098-1-adubey@linux.ibm.com
+[v2]: https://lore.kernel.org/bpf/20260403004011.44417-1-adubey@linux.ibm.com
+
+Abhishek Dubey (5):
+  powerpc/bpf: fix alignment of long branch trampoline  address
+  powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+  selftest/bpf: Fixing powerpc JIT disassembly failure
+  selftest/bpf: Enable verifier selftest for powerpc64
+  selftest/bpf: Add tailcall verifier selftest for powerpc64
+
+ arch/powerpc/net/bpf_jit.h                    |  4 +-
+ arch/powerpc/net/bpf_jit_comp.c               | 60 ++++++++++++----
+ arch/powerpc/net/bpf_jit_comp64.c             |  4 +-
+ .../selftests/bpf/jit_disasm_helpers.c        | 13 +++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
+ .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  5 ++
+ 7 files changed, 136 insertions(+), 20 deletions(-)
+
+-- 
+2.52.0
