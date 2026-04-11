@@ -1,64 +1,64 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584343446AB
-	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 11:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9261B4F1F
+	for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 11:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775906488; cv=none; b=anTXsCB4PKZmidDF2f8SbhyRBfrbCNl7ktgXvJuN3D3B+4oprreaUenM3lM65FjSgrmNtKUnqGQ75cwjfRCGIYXoJao9bDYFiagXensBUBMa3BLAhr3QzJ8O5YWzOAuTR/uQSwqRGV9IwpxxUqj0Tq8xRr5WE2xfA1s8iEAWcvU=
+	t=1775906490; cv=none; b=HUaAG1fwSdLv+7dee7qP7+/5A553RNsVhpGHxHURJYfQn72gc2/raFVbq/XMqpeTyid6j+4QaNCyFphEsYq69O13obIGnw5xZocuBxkRehI3I4XUurL8MSDPpTm+x+1oFeGJtH3HalEKBKGgj73e6/G+YCgf8Rrzbo0vjRx/9L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775906488; c=relaxed/simple;
-	bh=9QlHGdkTLeV9V00JRc0JOW6i7+Q0aVko8DuLbBYPo4A=;
+	s=arc-20240116; t=1775906490; c=relaxed/simple;
+	bh=VDleVhlM+AWXVtS+vsFZ+Rmbunt7uexH//AXGlq39F8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jFw/pP9j8y6hBsJIxJtXbxCTayCknZJswtrKQ0qMZAZ3CJtiW4Ehqq6fXIsK2mwcsVohCtwSwjfqjwFt5l+Sag79T29++wSJFVIuNnavs7EsWe28P7tdA4k+ZoxlJ/Cxf3U6cYlDgtkKjJHUy3jCuYlPtxmrR2sJokA7yvmgZs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hX8HYexk; arc=none smtp.client-ip=74.125.82.170
+	 MIME-Version; b=oFfDfMykGI5PQ1a4jwEVTbI94OrHu22nvWyfgaggEW0ZszkfbYnv/Tgym0BYpY47MFBTCz/mFOVG4uzCNyjJtPLZe45Nw10cvKLdxrc3JUNWYp8OAfr7k2HuX/e5jDDorjUi9PDMJCtiIw2eQQLRSp2dAbMpi2SEj6FESHyHB6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EuVpCa5z; arc=none smtp.client-ip=74.125.82.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hX8HYexk"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2c54c68db4dso5180540eec.0
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 04:21:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EuVpCa5z"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b6b0500e06so4968971eec.1
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 04:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775906485; x=1776511285; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775906487; x=1776511287; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I3ZPcIa5OvWR2yiUKd/+yp0eIrmzRtU8HCVYMTSVr1M=;
-        b=hX8HYexkyUvLcWyGgcBsgEGdbuFKzy/o/9PuIHS0L7wPfBPifaGs/UIvfv0Dfnj7GC
-         zaRxX7wmX+Nr2gKxQoNsKOd5YH8lw2Gf9YMF+AnxuXEAIkuuOEdRL7BKEDLokRF6qsFJ
-         mtUXAg+Y96apufmdmOfyLeH8mYBG1eIMBZbJb8Z52i+2fAjzsnCXlZWsc0qsvMmo9A1a
-         tuUEgypwpwksvTzAYxJouDFmt4lAyFCJJZnKHGVZdwSjrhbak5tnGkZBTb6XGnwEGod6
-         TH+AOnjjvhPAmb+mfT8KIt7gwQCKd0cXgbqSLdKm7iawjBxb1nZ9VMT9X0YtUux1+Tke
-         hdlw==
+        bh=SR6PIjf9ygKKS8EPk3SHWBc5/ngwD0asCwUuSLZOTMk=;
+        b=EuVpCa5zlGCAEpwh7shWm8PhGj615I2xvqsQ2f5KZrpQbbVEsEd+haSqIpXMV8omot
+         f9vpWmIyXQAPcG1h7Dsz/u7ecZAsWhiffuMJZ7M1bWz63FBLTWhViLVc7py9hWoQO8VG
+         Ts+peqF7FV3lZUOZ7gIvHF745EoYEjMiiJm1J3OY8DCCz4UR7layotlOFtRjV5H6QCXw
+         HrQCqx8TCRb37xZnfjCRG2ZZgSbBB9inhuvLMYnJIjJb6Kp5fvd/VdE/84XdC5MgHFZ9
+         qkUOav+ACgmXth4KdK10jU2TvMjTHsmR7zdH4e8IUAmkcXBnMZjd1x0SjclIz7D8p8Hs
+         wjLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775906485; x=1776511285;
+        d=1e100.net; s=20251104; t=1775906487; x=1776511287;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=I3ZPcIa5OvWR2yiUKd/+yp0eIrmzRtU8HCVYMTSVr1M=;
-        b=JZRKgajiOX4p38QEx5yKxkj2E5ivds79kpzRh4rm3W2sVX4fZPTkA49y95jq3OvYn9
-         BGaCx9NqiS0GuGXlFy+B4W6lj6dL1LYx2wObnQLatYRf9swyEEaTL3EoHgUvPIQxhggl
-         gmOL2wnRvi7CTqjSO/3mzJJa9V8P/ew1Std7kDcLGSuxWWVC8J6Yuim8zWuutNHEyUHE
-         lF8XTqtzW1fKUREWLOVNQlXYghFJmhSSO0zs3FXfvxZPCvF7xN7Tc36SPI3gqpaeUlj6
-         mvHN2LzFDT1N1uqrKfhK7x54hQQ0kH8FfYytiI7naGAKaR2cMOKuS2GnwPtjtgmo96+Z
-         ThQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWM16HVe/AcBM0zbhRqKB0aq1S8iQfizTwX2zUlpUhZ3YIcgY0Q8UAXrlatkP74EheMC8o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXiM8831mQYnFeKy48esKECiGOqRLL3YmP0p8bJeO7QBzNxJqm
-	3wUQZIUW1eLQphM2+VLbErQR5AjWCmssnf9oWHsSYwrurR4iyU6O5hpN
-X-Gm-Gg: AeBDieuY8dlpQcFJqjC3wXt2PkebMfq2MH6h4HZx0ycha0+rvtTBSUF+lqXRxedebn7
-	hWV7P2Hxmh7GYXLJLZGvR4cwPxHucV1sXgCv3mFSyOv+MqrgD+xhLnJph9ftIUrCEuKG0xLNo23
-	jtUHOXfT+/JLxCZDvqTAMYMnF2kDq5ZimbRqQm58aIKWyngvSz/KK2KyHFDcB1PemI7+w2I1JF3
-	4a+deo3eF3Ab615iGJznLkE33kTr56/5AHFOILrqynBn+8fol2MgB6HQLji//eoSX76PXXTOy54
-	xbL2xA7ZDOGMBLuXki6jkVE/JTi1kHRxaiqbbwjKCg8Wj/EatcSRuvZAATjkLSmdXpe/LAshJE0
-	S/lBXVgGmzJVm6pFHnuPvAQedH0w9wHcblun26mpvNedHGyXk5Gl3QVkQNkMb1jHk6E+ywJz5c1
-	uZ052gKW7S1KgxCEZhdy9tXBDnG2t8luWUETaKp1O+B8+6xsHggpZDkMEzKnn4WF6lpi66rJHGn
-	csUbGIDgg==
-X-Received: by 2002:a05:7300:8c14:b0:2c4:ec89:bd3 with SMTP id 5a478bee46e88-2d5898aa893mr3717101eec.24.1775906485373;
-        Sat, 11 Apr 2026 04:21:25 -0700 (PDT)
+        bh=SR6PIjf9ygKKS8EPk3SHWBc5/ngwD0asCwUuSLZOTMk=;
+        b=b5x9dAFgEPZy2K1MezcdXzKo8PwZjsrrClO/OGjWL/Z+YhNZtoy695avwrNOsWQ1Ec
+         F+Fk1QP+9fe6KvEy9UYu+RTRdEo4KHt00StRNTMITYsr8EJid+UgfrjS539O3x4aWWRr
+         v14MTFsabCrTDYbo/kbYF/6M5NA3GRLELDXRdAymbe7lhaHSFgHBvJO4l8V22DyA9gcb
+         c49xG3gTqucMdMH3mJOMglaZD9TAKMksE/bYL8qrRL5uLLzC6/3P+FMYs2N8w6bCeWOh
+         5viKojJgiZyXAsKrNxviHyTxVu5tBLzfZVhDhY+BjVNTxRjanHk6xQnMFZdUq5VM/Rgt
+         XEpg==
+X-Forwarded-Encrypted: i=1; AJvYcCWmqnDLXzKO1tCuKsX2DmClPCu354ek6IB8Kupk738hVohGmF2+nOq44kr++D82B07ENlo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpwQaY8B+OxHExThUlmedJeCJVSsnsiRf2leGE773uD7iX4soW
+	+tKodwIK+45C6k0twp5gncTeUV4pcYW385cV9wXeBQthy6s2emzNgIOo
+X-Gm-Gg: AeBDieuVC52anF1npbOw+j+Ko/4EdvwJSY0etsp8jfuXOU35bwHbCOWK5fqQAcn9YM0
+	lCKznQbH3lyeoEVmFgQz9LQFGAL60htgzJV+1gl/ncIhx9NMHKyNUHEhf/6wOXpo27j9oRWrme1
+	iV9eArs3UJiIfiJ7SV6C/S1TSv+yly70CK9STvtznoDwz3/JzS/X5HxtdFAgfhPQZTQn0bqb2mG
+	qqb+/us2k+MygseHZGe8K06+1W6IgP8Noy9W0cKTTHTBYBYPFiGNm3zMI8ASDY88dLNeUfytqrz
+	eg/8qUoTZdzjwfjsPh26KIur1BQSekqRtWACPWSdNC00gYroTKl4A4q1HWEFxfHcNuqcN3D27Ml
+	ZteUAbugGw3+a0uO9NyT+yAKm8T9PetUllGj4psCD18JrYOpvGm6R+AZe7TElLTJKFpoxggjsg8
+	zCQwgJi3v5O/6wUY08UxDPLMkx9+tHbobWuN4EhtfbdNdVOal3fJHW58XQ9X3Z5ZDSARY8AhFMi
+	c00HyVchQ==
+X-Received: by 2002:a05:7301:1f10:b0:2b0:48f7:837d with SMTP id 5a478bee46e88-2d587a8be8bmr3797189eec.11.1775906486577;
+        Sat, 11 Apr 2026 04:21:26 -0700 (PDT)
 Received: from efaec68ba852.tailc0aff1.ts.net ([206.206.192.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d562db64c4sm8224984eec.27.2026.04.11.04.21.24
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2d562db64c4sm8224984eec.27.2026.04.11.04.21.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2026 04:21:24 -0700 (PDT)
+        Sat, 11 Apr 2026 04:21:25 -0700 (PDT)
 From: Weiming Shi <bestswngs@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -76,11 +76,10 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Xiang Mei <xmei5@asu.edu>,
-	Weiming Shi <bestswngs@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf 1/2] bpf: Fix use-after-free of arena VMA on fork
-Date: Sat, 11 Apr 2026 04:20:50 -0700
-Message-ID: <20260411112050.1454548-3-bestswngs@gmail.com>
+	Weiming Shi <bestswngs@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Add test for arena VMA use-after-free on fork
+Date: Sat, 11 Apr 2026 04:20:51 -0700
+Message-ID: <20260411112050.1454548-4-bestswngs@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260411112050.1454548-2-bestswngs@gmail.com>
 References: <20260411112050.1454548-2-bestswngs@gmail.com>
@@ -92,108 +91,159 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-arena_vm_open() only increments a refcount on the shared vma_list entry
-but never registers the new VMA or updates the stored vma pointer. When
-the original VMA is unmapped while a forked/split copy still exists,
-arena_vm_close() drops the refcount without freeing the vma_list entry.
-The entry's vma pointer now refers to a freed vm_area_struct. A
-subsequent bpf_arena_free_pages() call iterates vma_list and passes
-the dangling pointer to zap_page_range_single(), causing a
-use-after-free.
+Add a selftest that reproduces the arena VMA use-after-free fixed in
+the previous commit. The test creates an arena, mmaps it, allocates
+pages via BPF, forks, has the parent munmap the arena, then has the
+child call bpf_arena_free_pages. Without the fix this triggers a
+KASAN slab-use-after-free in zap_page_range_single.
 
-The bug is reachable by any process with CAP_BPF and CAP_PERFMON that
-can create a BPF_MAP_TYPE_ARENA, mmap it, and fork. It triggers
-deterministically -- no race condition is involved.
-
- BUG: KASAN: slab-use-after-free in zap_page_range_single (mm/memory.c:2234)
- Call Trace:
-  <TASK>
-  zap_page_range_single+0x101/0x110   mm/memory.c:2234
-  zap_pages+0x80/0xf0                 kernel/bpf/arena.c:658
-  arena_free_pages+0x67a/0x860        kernel/bpf/arena.c:712
-  bpf_prog_test_run_syscall+0x3da     net/bpf/test_run.c:1640
-  __sys_bpf+0x1662/0x50b0             kernel/bpf/syscall.c:6267
-  __x64_sys_bpf+0x73/0xb0             kernel/bpf/syscall.c:6360
-  do_syscall_64+0xf1/0x530            arch/x86/entry/syscall_64.c:63
-  entry_SYSCALL_64_after_hwframe+0x77  arch/x86/entry/entry_64.S:130
-  </TASK>
-
-Fix this by giving each VMA its own vma_list entry, following the
-HugeTLB vma_lock pattern (hugetlb_vm_op_open). arena_vm_open() now
-detects an inherited vm_private_data pointer via the vma_lock->vma !=
-vma check, clears it, and allocates a fresh entry for the new VMA.
-arena_vm_close() unconditionally removes and frees the entry. The
-shared refcount is no longer needed and is removed.
-
-Fixes: b90d77e5fd78 ("bpf: Fix remap of arena.")
-Cc: stable@vger.kernel.org
 Signed-off-by: Weiming Shi <bestswngs@gmail.com>
 ---
- kernel/bpf/arena.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/arena_fork.c     | 86 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_fork.c  | 41 +++++++++
+ 2 files changed, 127 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_fork.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_fork.c
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index f355cf1c1a16..3a156ec473a8 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -317,7 +317,6 @@ static u64 arena_map_mem_usage(const struct bpf_map *map)
- struct vma_list {
- 	struct vm_area_struct *vma;
- 	struct list_head head;
--	refcount_t mmap_count;
- };
- 
- static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
-@@ -327,7 +326,6 @@ static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
- 	vml = kmalloc_obj(*vml);
- 	if (!vml)
- 		return -ENOMEM;
--	refcount_set(&vml->mmap_count, 1);
- 	vma->vm_private_data = vml;
- 	vml->vma = vma;
- 	list_add(&vml->head, &arena->vma_list);
-@@ -336,9 +334,28 @@ static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
- 
- static void arena_vm_open(struct vm_area_struct *vma)
- {
-+	struct bpf_map *map = vma->vm_file->private_data;
-+	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
- 	struct vma_list *vml = vma->vm_private_data;
- 
--	refcount_inc(&vml->mmap_count);
-+	/*
-+	 * If vm_private_data points to a vma_list for a different VMA, it was
-+	 * inherited via vm_area_dup (fork or split). Clear it and allocate a
-+	 * fresh entry for this VMA, following the HugeTLB vma_lock pattern.
-+	 */
-+	if (vml && vml->vma != vma)
-+		vma->vm_private_data = NULL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_fork.c b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+new file mode 100644
+index 000000000000..445574827891
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_fork.c
+@@ -0,0 +1,86 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 */
 +
-+	if (vma->vm_private_data)
++/*
++ * Test that forking a process with an arena mmap does not cause a
++ * use-after-free when the parent unmaps and the child frees arena pages.
++ *
++ * The bug: arena_vm_open() only incremented a refcount but never registered
++ * the child's VMA. After parent munmap, vml->vma pointed to a freed
++ * vm_area_struct. bpf_arena_free_pages -> zap_pages would then UAF.
++ */
++#include <test_progs.h>
++#include <sys/mman.h>
++#include <sys/wait.h>
++#include <unistd.h>
++#include <sys/user.h>
++#ifndef PAGE_SIZE
++#define PAGE_SIZE getpagesize()
++#endif
++
++#include "arena_fork.skel.h"
++
++void test_arena_fork(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct bpf_map_info info = {};
++	__u32 info_len = sizeof(info);
++	struct arena_fork *skel;
++	size_t arena_sz;
++	void *arena_addr;
++	int arena_fd, ret, status;
++	pid_t pid;
++
++	skel = arena_fork__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
 +		return;
 +
-+	vml = kmalloc_obj(*vml);
-+	if (!vml)
-+		return;
-+	vml->vma = vma;
-+	vma->vm_private_data = vml;
-+	guard(mutex)(&arena->lock);
-+	list_add(&vml->head, &arena->vma_list);
- }
- 
- static void arena_vm_close(struct vm_area_struct *vma)
-@@ -347,10 +364,9 @@ static void arena_vm_close(struct vm_area_struct *vma)
- 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
- 	struct vma_list *vml = vma->vm_private_data;
- 
--	if (!refcount_dec_and_test(&vml->mmap_count))
-+	if (!vml)
- 		return;
- 	guard(mutex)(&arena->lock);
--	/* update link list under lock */
- 	list_del(&vml->head);
- 	vma->vm_private_data = NULL;
- 	kfree(vml);
++	arena_fd = bpf_map__fd(skel->maps.arena);
++
++	/* libbpf mmaps the arena via initial_value */
++	arena_addr = bpf_map__initial_value(skel->maps.arena, &arena_sz);
++	if (!ASSERT_OK_PTR(arena_addr, "arena_mmap"))
++		goto out;
++
++	/* Get real arena byte size for munmap */
++	bpf_map_get_info_by_fd(arena_fd, &info, &info_len);
++	arena_sz = (size_t)info.max_entries * PAGE_SIZE;
++
++	/* Allocate 4 pages in the arena via BPF */
++	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arena_alloc),
++				     &opts);
++	if (!ASSERT_OK(ret, "alloc_run") ||
++	    !ASSERT_OK(opts.retval, "alloc_ret"))
++		goto out;
++
++	/* Fault in a page so zap_pages has work to do */
++	((char *)arena_addr)[0] = 'A';
++
++	/* Fork: child inherits the arena VMA */
++	pid = fork();
++	if (!ASSERT_GE(pid, 0, "fork"))
++		goto out;
++
++	if (pid == 0) {
++		/* Child: parent will unmap first, then we free pages.
++		 * Without the fix, this triggers UAF in zap_pages.
++		 */
++		LIBBPF_OPTS(bpf_test_run_opts, child_opts);
++		int free_fd = bpf_program__fd(skel->progs.arena_free);
++
++		usleep(200000); /* let parent munmap first */
++
++		ret = bpf_prog_test_run_opts(free_fd, &child_opts);
++		_exit(ret || child_opts.retval);
++	}
++
++	/* Parent: unmap the arena, making vml->vma stale */
++	munmap(arena_addr, arena_sz);
++
++	/* Wait for child -- if kernel UAFs, child will crash/hang */
++	waitpid(pid, &status, 0);
++	ASSERT_TRUE(WIFEXITED(status), "child_exited");
++	ASSERT_EQ(WEXITSTATUS(status), 0, "child_exit_code");
++out:
++	arena_fork__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_fork.c b/tools/testing/selftests/bpf/progs/arena_fork.c
+new file mode 100644
+index 000000000000..b1f8435f1834
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_fork.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_arena_common.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 16); /* number of pages */
++#ifdef __TARGET_ARCH_arm64
++	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
++#else
++	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
++#endif
++} arena SEC(".maps");
++
++void __arena *alloc_addr;
++
++SEC("syscall")
++int arena_alloc(void *ctx)
++{
++	void __arena *p;
++
++	p = bpf_arena_alloc_pages(&arena, NULL, 4, NUMA_NO_NODE, 0);
++	if (!p)
++		return 1;
++	alloc_addr = p;
++	return 0;
++}
++
++SEC("syscall")
++int arena_free(void *ctx)
++{
++	if (!alloc_addr)
++		return 1;
++	bpf_arena_free_pages(&arena, alloc_addr, 4);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
