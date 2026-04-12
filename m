@@ -1,185 +1,117 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655221D5CE0
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 03:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF499299A82
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 03:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775965998; cv=none; b=Kr2JHSzYXtTSZgpLs9je2as6Ia+287Ar2WgRtDXubVhWQhGYG0F6k2VK6tiISAFy997iyqaImJu+5ktoeT+h3EsNe0bKe5OV/E20QXzbfSQGh3yQ6Jv//jBccmPykcBGb6eiAK+QbPIpydeeETIqV03Bina6aTLfxwAssJogBuE=
+	t=1775966390; cv=none; b=lhVAEEk45tqXTqVyuJowbE2I0w98mHIinfWmDOmdnrqRfh1D6uwhvh8gC6tScNXvjGOSwWJQCULaEntE6l6wKD0te3lO20Kl4RptlkPlt/tMeM+qtpJvcwy3A+askUs8P/rVs9UVLBV50bkaJkg1k1XqGKhdbcxu3aGR7NUI4ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775965998; c=relaxed/simple;
-	bh=Lu/oDFkatQ9quS801rXI3qRhnOm4VKKPcBwuO3QoAts=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y/cWuzR3DjxOTcQZBUaIEtaJeUShc15gvI/FYd5J5DFYxq/iriHngguyM3vz4mTE0AkJ2uAoE3SxIcRwQbiLTqe6r10fzwM9Xgt1vmLe34KNABlyzclMwXU2KGo0NqIMa+/AWOzrM/+fyeyPLdzvs7SxVAXCoX4YT6DZH+izUaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [209.85.210.51])
-	by gateway (Coremail) with SMTP id _____8BxD6oiF9tpLmkkAA--.41543S3;
-	Sun, 12 Apr 2026 11:53:07 +0800 (CST)
-Received: from mail-ot1-f51.google.com (unknown [209.85.210.51])
-	by front1 (Coremail) with SMTP id qMiowJCxecEfF9tpWVZrAA--.44359S2;
-	Sun, 12 Apr 2026 11:53:05 +0800 (CST)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7dbff3ea81fso1608137a34.1
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 20:53:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWwS9GWr0WDuJ87MEwZMS3mR7pYECLiM5PVwLNExq1B5ee7bZOy1O0gyt9blA/qkDvYl3E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlaOsxTgrJLHpxxK3rtExqcZymuWszhSU2ZcaDImNlh78UjvRu
-	91UujdX7iWsDAMOGceHs6sdziTG49Upc7LMqU4ZOwJZ2DLiHGvdQ0WmCik4ggJ3gb07L9XSDh/0
-	ee1qG3hVv1qpnXFipQFWGxdOHt8A6iN7wBlMY758Qrw==
-X-Received: by 2002:a53:d018:0:b0:651:b73b:251a with SMTP id
- 956f58d0204a3-651b73b3411mr2397588d50.0.1775965599212; Sat, 11 Apr 2026
- 20:46:39 -0700 (PDT)
+	s=arc-20240116; t=1775966390; c=relaxed/simple;
+	bh=B++w+s1H28Wgavll3+Zb8PITrs55QwuPPHeRjrBqS1w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ai6KSR5mGnn/YkQvSX/gSmiU2msccy81kqfUgp+qgny4BZ/F2FPD1mVR/zmu+gUlhp0sXPUwPcr9auzi5D0mVnxgfsbymm8CWFXKXrpEv4mYwWDkVZ+ovrfEsJAa0SbQPld+whqECcf2HrbIdoGZElb+bRBYPDZj6XQq01qcJRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cgOAVOMc; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cgOAVOMc"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-82d0b68837aso1833671b3a.2
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 20:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775966388; x=1776571188; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dVACO35wLDF+QszVEzok6Azy+lVqx/Q+37daFkjjXM4=;
+        b=cgOAVOMcpxrkF2aiDxcUJ17q7gknHV6JmB+eYO/WD1xmfms9uzSegTOqk0poDZqxO9
+         iqwu/k9g8PZ8EBBWscNy8ltIgQM4TjEiaLNgGVAcjy2mTAGoC2liJ/dPlO3y9yg0kPJu
+         KsBxrbB4zAtLsbaYOoJr0WmaexMVi20L+D+D+Al9Cl3f+RH3dJliwoZDotm0vJAQLkor
+         xfrvZ3J8WecKlRe8Xnvnh/E+LcOYlsP9CTNL0e67B75fdc7ra3PppxM5lGt8Onk85HZG
+         9Gd4bmfDCZdghAYeHOfNaRx6n9+aDnGtUpneHOhRSyN4c20S6VOuo7bKsIAbu1pFg7aq
+         hkvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775966388; x=1776571188;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dVACO35wLDF+QszVEzok6Azy+lVqx/Q+37daFkjjXM4=;
+        b=mMmJHl+lARz8uOnvR+95odxDpPNHarqy/0r9ItaaoRzGOSKNEJSx2sROsV6JdLIxGC
+         S957YHHUcURxnqGiDvmZLU9iwy3WlAb47aGNb5fHK4+b19dEEDWb5SYNmxITTb5z1sRo
+         2/jerST4H3Iefx24UZeT98fiypNTilbFhNwTBEGVL18h5vH0bAPCsHh1Q7HQ87g8ne6A
+         QREOq09+47eSIzPzWa26R6Eaj5g7YaXdr3jo9ipOCZ/YiFxHdokYPsEYmYoW6ARD38yf
+         R5b72AHsf9nywLo9tYzMIM0A4LEdVIoRHU6wImjrIF1OvpSCeE8Va/uSnEQmKOnFw3Ew
+         hvhg==
+X-Gm-Message-State: AOJu0YydOvoozyPQwsrezePrF8WCr7NjBYEZs9AvJVUAWVM+jzm0yYp8
+	bTIZkw66lwWeKW/wNw9eW56BBdPOzXBq1qqV0r5U7qI4Y/jdBUVFSIZwheY0aw==
+X-Gm-Gg: AeBDieu6opkzdV5IB/qAofoWUOaQmX4WfzxPP6SYLweuU/mn5/aCO0HRUedtdHSSYHP
+	seFHVI/lYdxFbqLdGNJDSj7wUmuRbE5K7+CznCeEZogcLmw9EYnFVnWJLRlrNmsz6vfr4IL0/yw
+	txEVWEP7UwphVq2xF9XUu4Ezh/X8qMWDKRBCBqeuSdLlaJxKSldekBgzlas8vDGRNgQ+u8tQyWq
+	QFAJHIolwxryxtbn9LLUQi4rIiBwMjL0fXmS4ze9w/2EpbbRmbYreuhpH8NX6pgTcErzkOzGfZo
+	N5+Q+d79v5M+qN7r6R9t3vVIN8czvcHg86hpIy50ZPdL3fquodnROmvUem0C7xmbdXW9Ui2n/L2
+	F70Nlaez3U/ktcFzc4Qo+f0jgj7tHNbrZAhe/ZyEBSdL/m7hM5no8fwMpFxOFiBPpEUaUIj6V+R
+	mXUUDW9PieN6EBRWa+w7HO57FX83RfgjCM7Lwm5MW4sdb6baJWzj50Mw9JTJqjjXI0WwxJTyJ3d
+	VrEiVTsARhyRQ2qstznruV0dfd69IqdNDnpDSBRNTY=
+X-Received: by 2002:a05:6a20:6a27:b0:398:b95c:51ed with SMTP id adf61e73a8af0-39fe3f55568mr9937723637.35.1775966387777;
+        Sat, 11 Apr 2026 20:59:47 -0700 (PDT)
+Received: from ast-mac ([2603:3023:126:8500:1c82:6ab4:808c:1834])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79216fedfdsm6837928a12.4.2026.04.11.20.59.46
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 11 Apr 2026 20:59:47 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH v2 bpf-next 0/6] bpf: Split verifier.c
+Date: Sat, 11 Apr 2026 20:59:38 -0700
+Message-ID: <20260412035945.46916-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260407062306.8915-1-yangtiezhu@loongson.cn> <20260407062306.8915-5-yangtiezhu@loongson.cn>
-In-Reply-To: <20260407062306.8915-5-yangtiezhu@loongson.cn>
-From: WANG Rui <wangrui@loongson.cn>
-Date: Sun, 12 Apr 2026 11:46:27 +0800
-X-Gmail-Original-Message-ID: <CAHirt9jnveJCgCt2TsuyQrJV0tCB+FJStgP6OaCiH8eJWLfpvw@mail.gmail.com>
-X-Gm-Features: AQROBzD5i-4b6QMIxNy530j08dclbLPpFeIac85R-xUvjzsf53IoZemseVKWL6k
-Message-ID: <CAHirt9jnveJCgCt2TsuyQrJV0tCB+FJStgP6OaCiH8eJWLfpvw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] LoongArch: BPF: Support load-acquire and
- store-release instructions
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>, Hengqi Chen <hengqi.chen@gmail.com>, 
-	loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-CM-TRANSID:qMiowJCxecEfF9tpWVZrAA--.44359S2
-X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAryUWFW7Zw4DZr48XF1kZwc_yoW5tFW8pw
-	srCFs5CrW8AasxWF9xJF4UWr4FkFsagr13WF12yrZ3GrsxX34UCr18KFnIvFZ5G3ykXFs3
-	XFn0vw1293WUGrbCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Jr0_Gr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
-	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v2
-	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrw
-	CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-	14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-	IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
-	x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI
-	0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 7, 2026 at 2:23=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn>=
- wrote:
->
-> Use the LoongArch common memory access instructions with the barrier dbar
-> to support the BPF load-acquire and store-release instructions.
->
-> With this patch, the following testcases passed on LoongArch if the macro
-> CAN_USE_LOAD_ACQ_STORE_REL is usable in bpf selftests:
->
->   sudo ./test_progs -t verifier_load_acquire
->   sudo ./test_progs -t verifier_store_release
->   sudo ./test_progs -t verifier_precision/bpf_load_acquire
->   sudo ./test_progs -t verifier_precision/bpf_store_release
->   sudo ./test_progs -t compute_live_registers/atomic_load_acq_store_rel
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/loongarch/net/bpf_jit.c | 101 ++++++++++++++++++++++++++++++++++-
->  arch/loongarch/net/bpf_jit.h |  12 +++++
->  2 files changed, 112 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index c9a32f124f5e..f18a2858123f 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -344,6 +344,102 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, =
-int insn)
->  #undef jmp_offset
->  }
->
-> +static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx=
- *ctx)
-> +{
-> +       const u8 t1 =3D LOONGARCH_GPR_T1;
-> +       const u8 src =3D regmap[insn->src_reg];
-> +       const u8 dst =3D regmap[insn->dst_reg];
-> +       const s16 off =3D insn->off;
-> +       const s32 imm =3D insn->imm;
-> +
-> +       switch (imm) {
-> +       /* dst_reg =3D load_acquire(src_reg + off16) */
-> +       case BPF_LOAD_ACQ:
-> +               switch (BPF_SIZE(insn->code)) {
-> +               case BPF_B:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldb, dst, src, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxb, dst, src, t1);
-> +                       }
-> +                       emit_zext_8(ctx, dst);
+From: Alexei Starovoitov <ast@kernel.org>
 
-Could we use ld[x].{bu,hu,wu} here to simplify this?
+v1->v2: Restore comments lost in patch 3
 
-> +                       break;
-> +               case BPF_H:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldh, dst, src, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxh, dst, src, t1);
-> +                       }
-> +                       emit_zext_16(ctx, dst);
-> +                       break;
-> +               case BPF_W:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldw, dst, src, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxw, dst, src, t1);
-> +                       }
-> +                       emit_zext_32(ctx, dst, true);
-> +                       break;
-> +               case BPF_DW:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldd, dst, src, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxd, dst, src, t1);
-> +                       }
-> +                       break;
-> +               }
-> +               emit_insn(ctx, dbar, 0b10100);
-> +               break;
-> [ ... ]
-> diff --git a/arch/loongarch/net/bpf_jit.h b/arch/loongarch/net/bpf_jit.h
-> index a8e29be35fa8..9150de94ac60 100644
-> --- a/arch/loongarch/net/bpf_jit.h
-> +++ b/arch/loongarch/net/bpf_jit.h
-> @@ -72,6 +72,18 @@ static inline int epilogue_offset(const struct jit_ctx=
- *ctx)
->         return (to - from);
->  }
->
-> +/* Zero-extend 8 bits into 64 bits */
-> +static inline void emit_zext_8(struct jit_ctx *ctx, enum loongarch_gpr r=
-eg)
-> +{
-> +       emit_insn(ctx, bstrinsd, reg, LOONGARCH_GPR_ZERO, 63, 8);
-> +}
-> +
-> +/* Zero-extend 16 bits into 64 bits */
-> +static inline void emit_zext_16(struct jit_ctx *ctx, enum loongarch_gpr =
-reg)
-> +{
-> +       emit_insn(ctx, bstrinsd, reg, LOONGARCH_GPR_ZERO, 63, 16);
-> +}
-> +
->  /* Zero-extend 32 bits into 64 bits */
->  static inline void emit_zext_32(struct jit_ctx *ctx, enum loongarch_gpr =
-reg, bool is32)
->  {
-> --
-> 2.42.0
->
->
+verifier.c is huge. Split it into logically independent pieces.
+No functional changes.
+The diff is impossible to review over email.
+'git show' shows minimal actual changes. Only plenty of moved lines.
+Such split may cause backport headaches.
+We should have split it long ago.
+Even after split verifier.c is still 20k lines,
+but further split is harder.
+
+Alexei Starovoitov (6):
+  bpf: Split fixup/post-processing logic from verifier.c into fixups.c
+  bpf: Move compute_insn_live_regs() into liveness.c
+  bpf: Move check_cfg() into cfg.c
+  bpf: Move state equivalence logic to states.c
+  bpf: Move backtracking logic to backtrack.c
+  bpf: Move BTF checking logic into check_btf.c
+
+ include/linux/bpf_verifier.h |   284 +-
+ kernel/bpf/Makefile          |     1 +
+ kernel/bpf/backtrack.c       |   933 +++
+ kernel/bpf/cfg.c             |   872 +++
+ kernel/bpf/check_btf.c       |   463 ++
+ kernel/bpf/fixups.c          |  2457 +++++++
+ kernel/bpf/liveness.c        |   247 +
+ kernel/bpf/states.c          |  1552 +++++
+ kernel/bpf/verifier.c        | 12382 ++++++++-------------------------
+ 9 files changed, 9641 insertions(+), 9550 deletions(-)
+ create mode 100644 kernel/bpf/backtrack.c
+ create mode 100644 kernel/bpf/cfg.c
+ create mode 100644 kernel/bpf/check_btf.c
+ create mode 100644 kernel/bpf/fixups.c
+ create mode 100644 kernel/bpf/states.c
+
+-- 
+2.52.0
 
