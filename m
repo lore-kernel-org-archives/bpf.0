@@ -1,55 +1,35 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A031362136;
-	Sun, 12 Apr 2026 19:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37693A1DB
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 19:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776022890; cv=none; b=f3gGdAxbbzmQyYcZ8UIcAbXfRSAd498nXFsw1qJgGs/C9yJTedQGRL1DVjjoBm16xMI0O6OMFCc0UMXGk1ogtgBFIbDD3+WfhoPRujQfdkrFU18KJ2ZtYC7S6BdAs6bNjrqI0rObAOPwSUNdh7inNVByjC3aW/h1l5+TK8Bwf04=
+	t=1776023446; cv=none; b=f4tnFnAABm4eQmKhYZUoWlDcczN+HPiA2ozXMV97LHb3Z6Gcr4t7TuZwj2L6kCuwf6K4dHyTviGOYevIeLxzmYcJlZ4csmkHQuCk49kxYomaSgu8A6FVkpUqg7c+sU/QG0iA2iwO97gwZgklT80XwQxQ+EZp7kiWm8E52nfplfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776022890; c=relaxed/simple;
-	bh=B/A0eVdyffeEAwDBX96uPJ/O7S7dvrZYaibvZVA32Ww=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IFFmZmgxM1/pdTeVzpSxSqmkQwH74oxksfo9wRXkvPcNSQ/NiHJqjyYB0SvU7kGoRtjeOq/50Fl6kJpsGv6i4z76z1DwToU0uDan/bbdOj2XCeZ2osnGKEZBRD9aQI9tOhN79KrNDocp5MggC1tbUTYcJbGjZWHRdMmnRClxdmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=U2k8ZXxP; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1776023446; c=relaxed/simple;
+	bh=K1Hfx1E7YWb3naPjHQ2dgiu30i+TFrU8i55NnOPPdtI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=npTmc4l3SFGv3VWlDo8xZSbFWGCMitMPGy7XuOWt3Z9NI5vLPjMM9kdKr3TVEGgd3MOnlb0Qh6rpefNfmSlD9qAO4A5BBKYP4nZBhULzrnQmJh40lyAzZzYO2CKiLRnkV5nwM3yKZymJsZ3qdWl9QammO0osoG4e6ppSkYYk4wA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpgFf8Ys; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="U2k8ZXxP"
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63CD2CPC2384609;
-	Sun, 12 Apr 2026 19:40:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=rYAHOUHF4tVSuhRxEulmlA7bJfQZG35LINctsMDZ3PQ=; b=U2k8
-	ZXxPN4dlflTAPn8Dn3OYYxsWayO6LLvX8jtBr05jlWO65dQoMqqfjsRdNZtJlmCY
-	qmDxK54adRD8UT6ns4NwsdFyXz1zGuFiSMGekbjQQI/O1zG3pcM/ctEhbIQhe7Ez
-	pHaHmbO7jI94dBrFwDVl/XeCt5iITxYUiRSgepb40e3QamPbvIjrYy5TgitEp18B
-	q5mWwOosfYPYQEp2wp6M+5RcPptfbbwbUp62HmwahUZUaxLCXCwrPCLChBe0lhKk
-	tiFoTnKdjyHkqZX53r8B6QQ84yeqtRDcSPe75brWHyXkgNiU5/lA1gBk96yabKJ5
-	tTnuIfILinePpM0D7Q==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4dg2sbjb3s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 12 Apr 2026 19:40:53 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Sun, 12 Apr 2026 19:40:49 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <alexei.starovoitov@gmail.com>
-CC: <ameryhung@gmail.com>, <andrii@kernel.org>, <ast@kernel.org>,
-        <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <clm@meta.com>,
-        <daniel@iogearbox.net>, <eddyz87@gmail.com>, <ihor.solodrai@linux.dev>,
-        <kernel-team@meta.com>, <martin.lau@kernel.org>, <memxor@gmail.com>,
-        <netdev@vger.kernel.org>, <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Use kmalloc_nolock() universally in local storage
-Date: Mon, 13 Apr 2026 05:40:44 +1000
-Message-ID: <20260412194044.13195-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <CAADnVQKeFF--bgnZZSU12UY0muuwYA=7EdzLyOi837oZs+bXTA@mail.gmail.com>
-References: <CAADnVQKeFF--bgnZZSU12UY0muuwYA=7EdzLyOi837oZs+bXTA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpgFf8Ys"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7550CC19424;
+	Sun, 12 Apr 2026 19:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776023446;
+	bh=K1Hfx1E7YWb3naPjHQ2dgiu30i+TFrU8i55NnOPPdtI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=MpgFf8Ys5iCJrxHtoW1V7tKRT9Qy9V+4GkpAWW0ckWNbsdDU2B1J5ZcHK84FiSdux
+	 NRnEHZIofSWFbcFupqLtRh0bl30Tz5eK2J4FvA5Uip6JA+VsmGdcVo6GiK6AUZ8m9q
+	 epeZcKtafiWbV51PkkWp7y5RRny0SHrGCdG/xp6dQXWYpSbVym1Ygu+CNYjpq9Z4Dm
+	 acol+XxXwaZLZKvJA8aealk8Z3y9GlE/YheEcXWF6t9u+OQDhVnqJd7ZWacq45hsXJ
+	 6rtPMxbAZGhB2nwCR3d+X08k0qelYH2b2M9PpVNd3etvi6N009GP8CRsgNYnsJaC8b
+	 g1+ywH7sr3v1Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02DE13809A8C;
+	Sun, 12 Apr 2026 19:50:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,86 +37,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-GUID: tu7Wg6oZs5niZ0kEPh5Ncgq1dSR_3y2j
-X-Proofpoint-ORIG-GUID: tu7Wg6oZs5niZ0kEPh5Ncgq1dSR_3y2j
-X-Authority-Analysis: v=2.4 cv=OIwXGyaB c=1 sm=1 tr=0 ts=69dbf545 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=sIHlx-zSKvd85TjScasA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEyMDE5MyBTYWx0ZWRfX9G/ksOHSezo7
- P86kwGwjV8F+FU8XV8+1/UD9GOyuKVJgR9301I2PBbqKbg6hr0tyLNosn3oVnZCD/CIFbg2VIBa
- hDP4wOJfHSMRGSJJlcOOwsW6Kc5jaARLZXALCLkV3oHUxuXscdY0RSypOLTe8OM7MMaV5r40C/4
- cusyS/kuVBjFI9ffsAYdyMT+CCzPiN0YNeG8W4AMjmHepgvTNA/VRBqB3XnpDtAtcYn5ET1O3U+
- rSfv/5We0++t9i5tgcS45Cr31UPFw6zfsabnovWVacvSFDrVV3dO6XEqqbq3OwZDqPAdofqA7MV
- avIYMNJC9Y0f5STwTp7M88s1z9HwgvmzXEnruNH1/x+ygS3LWjfG8CjHs7bbyf79lXNzzjVKvP+
- aj0IvNCXqjcEbkD9x4LAqPCd1K7ie1WRu5YwhsBTObhE6O4X0k0ajj3f1Vcxdm1QGwe2y4W+FBK
- b7HBE6lx/3IUapPHr2A==
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11757
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- adultscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604120193
+Subject: Re: [PATCH v4 bpf-next 0/6] bpf: Split verifier.c
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177602341880.3390867.3076801947752305915.git-patchwork-notify@kernel.org>
+Date: Sun, 12 Apr 2026 19:50:18 +0000
+References: <20260412152936.54262-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260412152936.54262-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@kernel.org, memxor@gmail.com, eddyz87@gmail.com
 
-On Fri, 10 Apr 2026 21:39:00 -0700 Alexei Starovoitov wrote:
-> >
-> >
-> > This allows value sizes up to ~65KB. Before this patch, socket and
-> > inode storage used bpf_map_kzalloc() (backed by regular kmalloc)
-> > which could handle those large sizes. After this patch, any
-> > elem_size above KMALLOC_MAX_CACHE_SIZE will silently fail: the map
-> > creation succeeds via bpf_local_storage_map_alloc_check() but every
-> > element allocation returns NULL.
-> >
-> > Should BPF_LOCAL_STORAGE_MAX_VALUE_SIZE be updated to use
-> > KMALLOC_MAX_CACHE_SIZE instead of KMALLOC_MAX_SIZE now that all
-> > storage types go through kmalloc_nolock()?
-> >
-> > Slava Imameev raised the same concern for task storage in
-> > https://lore.kernel.org/bpf/20260410014341.47043-1-slava.imameev@crowdstrike.com/
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Sun, 12 Apr 2026 08:29:29 -0700 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
 > 
-> Right. Let's update it, but I don't think it's a regression.
-> On a loaded system kmalloc_large() rarely succeeds for order 2+.
-> That's why kmalloc_nolock() doesn't attempt to bridge that gap.
-> One or two contiguous physical pages is the best one can expect.
-> In early bpf days we picked KMALLOC_MAX_SIZE assuming that
-> it's a realistic max for kmalloc().
-> It turned out to be wishful thinking.
-> kmalloc_large concept should really be removed.
-> It deceives users into thinking that it's usable.
+> v3->v4: Restore few minor comments and undo few function moves
+> v2->v3: Actually restore comments lost in patch 3
+> (instead of adding them to patch 4)
+> v1->v2: Restore comments lost in patch 3
+> 
+> [...]
 
-Do you think it would be viable to extend task storage to
-support larger allocations, to restore support for 64KB or maybe
-less value like 32 KB, using vmalloc or bpf_mem_cache_alloc,
-with the obvious restrictions that vmalloc imposes? Perhaps we
-could use bpf_mem_cache_alloc as the primary mechanism with
-vmalloc as a fallback when the caller context permits?
+Here is the summary with links:
+  - [v4,bpf-next,1/6] bpf: Split fixup/post-processing logic from verifier.c into fixups.c
+    https://git.kernel.org/bpf/bpf-next/c/449f08fa59dd
+  - [v4,bpf-next,2/6] bpf: Move compute_insn_live_regs() into liveness.c
+    https://git.kernel.org/bpf/bpf-next/c/fc150cddeea7
+  - [v4,bpf-next,3/6] bpf: Move check_cfg() into cfg.c
+    https://git.kernel.org/bpf/bpf-next/c/f8a8faceab99
+  - [v4,bpf-next,4/6] bpf: Move state equivalence logic to states.c
+    https://git.kernel.org/bpf/bpf-next/c/c82834a5a11f
+  - [v4,bpf-next,5/6] bpf: Move backtracking logic to backtrack.c
+    https://git.kernel.org/bpf/bpf-next/c/ed0b9710bd2e
+  - [v4,bpf-next,6/6] bpf: Move BTF checking logic into check_btf.c
+    https://git.kernel.org/bpf/bpf-next/c/99a832a2b5b8
 
-We've found task storage allocations larger than 8KB quite
-valuable for scenarios involving processing multiple file paths.
-Currently, without large task storage support, we're forced to
-preallocate maps with 12KB+ values and significantly
-over-provision the number of entries to reduce the probability
-of free entry depletion. This approach places unnecessary burden
-on the memory subsystem since much of this pre-allocated memory
-remains unused.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Even if task storage allocation fails due to lack of contiguous
-physical memory and vmalloc is not possible, there's an option to
-maintain an emergency preallocated map of much smaller size
-compared to when this map serves as the primary mechanism.
-
-With larger task storage allocations, we've implemented a simple
-memory allocator that operates over task storage. For example, a
-16KB task storage can accommodate multiple allocations, one big
-and couple of small, which has substantially reduced our memory
-footprint compared to the current map-based approach. We've also
-experimented successfully with 32KB arenas for workloads
-requiring even larger working sets.
 
