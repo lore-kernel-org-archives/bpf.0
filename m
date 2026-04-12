@@ -1,86 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7783E3242B1;
-	Sun, 12 Apr 2026 22:50:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776034241; cv=none; b=YbntT3+eZ5SIy7MtC6cs5n8E/IVNamjSggo35poB3cwqEI4BPxfQ5b+83JHCkNBf3Ga1g5B4FiopScLz1lFsxeMWP4/8wYMHqk4Moy0T0zSoVM7/klhGgYWsNP/D2L9I+y8C2UsDLekDwJuJ6zrVDfFdoRJbG8EsYNv8/SlhY7Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776034241; c=relaxed/simple;
-	bh=AE0Trs61tSgDh/Pcbu51eZL5ciMR9aruQTmqkMMl/ow=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=pHzzScz500slOa04U7c2LfB3mnwpaTUjvOBR9wOvJgky80oe40XkMxMTe/fsVswiZHI3bCLZwMo7OyT7n/f2Ys9Te05WFTd+KtrF93R220/nh5UmJqY3wBoBCmmkd2M0auROVntQsyHMC1G8fvVxjVig7Qe+K3AUUZBK+ODJgsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hEHhfQpI; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B207082D
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 23:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776035429; cv=pass; b=gHsj318o2VG4uWDRNNk7FdsbPnm+eyduNgdQJ4IVOzgaRak/flUQu73uhDY3AUystBzD7/JL1942dAY+yzOxSCtPVQD2bULPtNHKSjBCdcVTV1nmXcDBaIgrho+59a4fSlr2ljN19rQDKMLNYF5aSn1PT/5cm0/nzrIlPXrnmSo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776035429; c=relaxed/simple;
+	bh=8rz6Tx1iGyWQsFeXWN9Y5oPml9Qlubxcs7Vs5P0IQZM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n5Wzj/0XQU78oQ+ZPXEp/uGq3LtJID875rWQY1LtADsiDOU6mT+bXyn4PJPha4INce+hrkukh867r0E0eIC4D8GPJml8F43ARTQihuE9blchX60TWZd3cLKspnXV5X8fyE4BJ9c/D6ddB5AxYOFeTRZS3ots98hBSkr8ZnO7A/0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hcjjpfnD; arc=pass smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hEHhfQpI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 061B6C19424;
-	Sun, 12 Apr 2026 22:50:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776034241;
-	bh=AE0Trs61tSgDh/Pcbu51eZL5ciMR9aruQTmqkMMl/ow=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hEHhfQpIiSimgI0j1P026Zhb4fbwCrZue/ATOd2O++mwNJ3er4H6VA/YTaWeEPWZA
-	 H/JrvZgbScF6Ar4rGoqmkbfH619UGqje6hx7LmMh/F6UodISTh2EAmYMo6e3TwHgOh
-	 wYdY4mY0122EqSO8P/gGb631vZLQV1WI8aQ1QvR5yDW6Gc5BJDye3WrK4WylalsPii
-	 XfMDdmx1O77onsvgv+96gHRbi++YQ5Of52js6Lfb0xBE2bsa8yVtEM/8NPwVQNJubn
-	 GoWNEaD1KmaAEHJSiy2nSHZ9HX9Hs1hBUAFFcuS8LDky68BuZvIIHxMPpLOgTZKjeh
-	 HagBA3dx2fNWg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CD6A3809A8C;
-	Sun, 12 Apr 2026 22:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hcjjpfnD"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso34402325e9.3
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 16:10:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776035426; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ep4fMyqrtZSlQQfS8X0U2PJAKKaGJSevoME/NE+cjTULQAOKQqAXki3VIEYGwcf9dd
+         P0jpoPwWt1dIE/YZCd8i+QPdHD6vNzL+gUMXB8c3EmXRwe/J0elpLhd9ImyCaOwu06PA
+         x5OU4sDPE/LuOEPWelYlgkvUBxhGm/DzedMCN6bDgkjpkuHTV53rC1ewaOWlhZHMyHTg
+         SsRSBX9yr4+I6DZgGeMGFEu2SAFChsns/k/w/qz2rmOx7k9epmkIFFADepPBrv9qyThY
+         bnctinMK0vwcI8iN8keWLYvI7XQiByNIsuv13W7RP5LB0ZRlnICzSggiavATQogqI7uR
+         leNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WXntvhb6lS83YIFgsd4ADNGkjiZFylG+adHR5IPtKDs=;
+        fh=AoyNRaktsZ7bW/hTwiP8Dm5frmwh/+vEg7lx+EPGuMM=;
+        b=aRHAXxvszKpXR6Dqw5i32kh7AZgOOWyPS+iQAwLr1VKVfnN0R9e2+Gh4DFeimOLHNd
+         pa2MTUBVB54GPzzKgOGMt4lh8vLjzEyCrNWACbR9oXJ319Q90/4arBzYOnxEyEpfkDSH
+         bbblmzHtEaRwjgA7aUMu53+TMfOGqD1aDvo9na+xoEiOieDMN3VjFrqsQ7XhqVCv/KON
+         gxck1syd8BK5RptlzcCn+PdKLyh87bxP1/roGMwI5n+7c77ZEKZEEp6i9aUXkQCEuDlS
+         96cxwBMPZqM1VZCBFing1Qy7a6ETtcoT9W/Y4kVIBZlNXFCQ7G8NIYEK+ABuGXfpXWfk
+         FY2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776035426; x=1776640226; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WXntvhb6lS83YIFgsd4ADNGkjiZFylG+adHR5IPtKDs=;
+        b=hcjjpfnDOLxgNj+cTrCZKTLfyuEgNEIqFpHs6U2XcD74S4OjTgcETU1GCP7tCoNSKa
+         rw0IM2o/InpqYLUBa6lqHIgjmbWhRmfevOHA8O4Dzsf7fs4MnUPp7EUA9WeDpLMeo4JA
+         e5eZSpbjml3vwKYIYUsDEAbvBsTF2PsMpz/hLQi+YLLi5T1QM7S8o44KShnzqB2VW9i9
+         GJjMT23Kcwi/AhEr/OlGwAbAM4YSUH2/zG9IViKV1JIt20y5oHrP23i3SAS6AX9VKNcT
+         XrDh+ieBQo6MdtG5tVMaTTKP5wWdWqyJ32kOeI9SxlbL6qDrs2rxioaq6sA0n5GTASxX
+         8g/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776035426; x=1776640226;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WXntvhb6lS83YIFgsd4ADNGkjiZFylG+adHR5IPtKDs=;
+        b=tBlNQ6f7Vv0z/dnF8fRjozrJn65OjgxSpECAyuAU+7UfwGv3pRnerODgF1iCYmAKNI
+         WE2nZie6NHcJuWhlytkm2072oquCNK7fL8kykziC0kNgLkL+ckQT+AFctTjLrtVms6eU
+         x5Gfv8ymEFMmY+4MoWf4FVLKN65Dy6Et01fKHH43JG8qaA38Wv+eHb+LxETMCsDS6obn
+         NRjqtDrDMq0burNgj/nzkvpzNq+GiKvxdTGgelnHkQeLv69hZXshnhSEz0B0qY3bYOJL
+         tkkx8XxEW1Fu4fbKbUwZ8RWjYD0gH6hSubSV+ryF0XejloNxsdY4X/GwVByi1NSk7K/5
+         dOvA==
+X-Gm-Message-State: AOJu0Yzb6A4LBYeQb5T93FWF1/i6uAfVxJYCBmQQQsqJ9bCBMYHE97Jj
+	RXQ7DIbzVT8qM6B8hpzI5Q5h5QxG2aV0nHATciwOCd0G3K7EF0tXGqPuoNP9Us1fvFIagjvpE1R
+	RYEArhMvNAbKPXJNcuu0UPA/hWlznnEo=
+X-Gm-Gg: AeBDieuMNqTIBwanADUWnziU7nQ5u8VujERLpxSgs74flHbcZbaBbZhLkGCF2fBiilo
+	/hkfCH4K1/37b7DE7krm+NN7ImUIr+gP79X3Dp4UrygA3BaYG3g1CR3wOXByE9g4GO3LzUoHKS7
+	DFgsisPloPL50RNcx8BdLixchU4ZFz6PJX2dK0F3WIYnLRGlAjQ+yZD+XRvl4szJkCshP3SDuWJ
+	mZht2feASg6d4Ul/Mm39PxkPGMBz4W1FdnD9mH3/JLIsk0IzHSnJgnLNsTeBIKC2frn6NnOaWG0
+	qR7NF8rX/JuUb8RwpvL7i3U5kGt/2gYvJ6WkYRPcJOzDJTO83jZcBSDjT2qCPZwJejteONNgq32
+	0QyT63bjMoBnhcM/zpZrzKLrOHQ==
+X-Received: by 2002:a05:600c:a109:b0:488:a977:8de with SMTP id
+ 5b1f17b1804b1-488d6839866mr104866155e9.16.1776035426257; Sun, 12 Apr 2026
+ 16:10:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v4 0/2] bpf: fix short IPv4/IPv6 handling in
- test_run_skb
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177603421329.3846122.3103968416452888308.git-patchwork-notify@kernel.org>
-Date: Sun, 12 Apr 2026 22:50:13 +0000
-References: <20260408034623.180320-1-sun.jian.kdev@gmail.com>
-In-Reply-To: <20260408034623.180320-1-sun.jian.kdev@gmail.com>
-To: sun jian <sun.jian.kdev@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- shuah@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, horms@kernel.org,
- syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com> <20260408-rhash-v2-3-3b3675da1f6e@meta.com>
+In-Reply-To: <20260408-rhash-v2-3-3b3675da1f6e@meta.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 12 Apr 2026 16:10:14 -0700
+X-Gm-Features: AQROBzALTf-JhWwwsVGuPsEGqVLAXqGpz2n2MhsawKYjyZJySBWLbB8qtURkrbk
+Message-ID: <CAADnVQJ-rW+MkrrtaAoVvExNYX9rEc+=zSw+phzCgv9QtaAX8w@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v2 03/18] bpf: Implement lookup, delete,
+ update for resizable hashtab
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
+	Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Wed, Apr 8, 2026 at 8:10=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+>
+> +static void *rhtab_lookup_elem(struct bpf_map *map, void *key)
+> +{
+> +       struct bpf_rhtab *rhtab =3D container_of(map, struct bpf_rhtab, m=
+ap);
+> +       /* Using constant zeroed params to force rhashtable use inlined h=
+ashfunc */
+> +       static const struct rhashtable_params params =3D { 0 };
+> +
+> +       return rhashtable_lookup_likely(&rhtab->ht, key, params);
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+How does the asm look like?
+Please share 'perf report' or 'perf annotate' for lookup.
+Maybe worth it to include in commit log.
 
-On Wed,  8 Apr 2026 11:46:21 +0800 you wrote:
-> bpf_prog_test_run_skb() may access IPv4/IPv6 network headers based on
-> skb->protocol even when the provided test input only contains an
-> Ethernet header.
-> 
-> Fix it by rejecting such short IPv4/IPv6 inputs before accessing the
-> L3 headers, and add a selftest that exercises the reported
-> bpf_skb_adjust_room() path on ETH_HLEN-sized IPv4/IPv6 EtherType
-> inputs.
-> 
-> [...]
+> +}
+> +
+>  static void *rhtab_map_lookup_elem(struct bpf_map *map, void *key) __mus=
+t_hold(RCU)
+>  {
+> -       return NULL;
 
-Here is the summary with links:
-  - [bpf,v4,1/2] bpf: reject short IPv4/IPv6 inputs in bpf_prog_test_run_skb
-    https://git.kernel.org/bpf/bpf-next/c/12bec2bd4b76
-  - [bpf,v4,2/2] selftests/bpf: cover short IPv4/IPv6 inputs with adjust_room
-    https://git.kernel.org/bpf/bpf-next/c/f1cc94665df9
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+imo there is no point in such a step by step introduction.
+Patches 1,2,3 can be squashed.
