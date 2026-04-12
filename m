@@ -1,120 +1,129 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457821FE451
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871421FE451
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775972600; cv=none; b=JLtGBDM0b1fgHKcMSLOex7JDIhzVEicEkj8wjf0HdZpUJZPxJCno2ILlwuCEPADlX9h9SRE3lZubc6PeGYs6XmegSFeJbeeJGI/k+a+D/KAET2dAAqOL/0dtMlvhRNrq2lOWttOaYw+on8334MxMh0kLy7JSiCPx8ExwT9qYYIQ=
+	t=1775972601; cv=none; b=WBMoxN52LrEcxSksoYkHv5D3jgb8i+dPls5qUbRWVbuXV8gJ/Ge+BjAa3nTooLSeAZFXwUaonoqy5i5Z09cSU/vXC6MGF6AeJR+w6Y+2Z86rvkCqvUhm8LlRzfEhcUHwVi2w4fbw0UEMoWvNsO6SAAp6sLaB9CwTGoIk3S78eQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775972600; c=relaxed/simple;
-	bh=y/+R/DTE0X9iBgzYl6Yi/IPet8C1R66+a/Zby9ztto8=;
+	s=arc-20240116; t=1775972601; c=relaxed/simple;
+	bh=TYZk653/IJbUc00ugD0dJjRAtK+g4KRJ5VZajvwwOtQ=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=DV/w7m0V9Rvu6QvfjIsyCtJJTYnIgYu0yQ4M6n3R0BN4qUQLqKB6xkALsL3Bs56Znzo4OgmGGKeY2i1rbdL1mV2IqmqdIDjcicVBSeKnTyysIw+vzlneqF9JUcpJZYIqE0cKBLw28uWr14bCWS/jY1qG7O33cMZ64UZFIoJB09M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYo1hxkN; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=WYr5r6umLWeXE4kB1wMAV4k09LnSgcCnxknOXZpFdPfmkN2pXCI6fmj5SZL+zFxhSfI2/RA9rR/7Nepn4v44ImgoXRjLqa3Au5zPsbytqK23M9vu4bMciJzeA9iLc4v2FumFrIsv4EZtEf4HmKOfrEzy0/ZNY9EbpZnsYpEs2Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=poNcy+ut; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYo1hxkN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE2BCC19424;
-	Sun, 12 Apr 2026 05:43:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="poNcy+ut"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C03C19424;
+	Sun, 12 Apr 2026 05:43:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775972599;
-	bh=y/+R/DTE0X9iBgzYl6Yi/IPet8C1R66+a/Zby9ztto8=;
+	s=k20201202; t=1775972601;
+	bh=TYZk653/IJbUc00ugD0dJjRAtK+g4KRJ5VZajvwwOtQ=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=XYo1hxkNkkBIKiMEW39Tg5KxYGQNudYLmipzjxby9SvSvXqODmpPFBUeFsfWbvYLS
-	 /DcymGlGMMIsDIqEH96GjgKxS3jniJN1OqX7tx0udweg7pm9b9pDUNKTBktzNHh9T2
-	 siQypD7fNUTgrkJxH8sKEJ4Ay7+RRf8XkjYCcPeEyFCBuCktGV6iUIDqTE2uS9AxU9
-	 T0zXZISTftkJwQ+SeEMm+58ovbB0yYjaMH+zrDXznUIh36SmlGn+bZKXS2y8N2HqVi
-	 cKlxR0DFu1voBE7YMPQAYxlxvVQB5sA+dyQ4jBqS8ijjdfX8qX4gBn0cHRGnQ8xciQ
-	 6Oqo6fjUVQbMw==
-Content-Type: multipart/mixed; boundary="===============2933192911232600193=="
+	b=poNcy+uta8y81WQBIrilRPW06uQEBPzFr1rdPzseAqgZi05IeTi8dMJw1XbsjIe+X
+	 1d+ML1Pa5Woe+t31XMgD1BSiJxqOBNrCoQxpQaIgeEpULJ6RHY9ir9wOg8W8sBz5CH
+	 N7/Wzgh3tjGyamBsXBfkkLah8ITqTfVEG1rwBxk7dYa86XdnIRY3U8/eVSjsV/MbuK
+	 Wvw4JeKNG4dNYKSVA/DQY5zlH6zgAjPb7js0v63wc9CvFFuixeTQHBsT+0PqDBT+nb
+	 p/qDw4zhktKyXRElUeDjPIOlA9+LinxFMPQGfR7foP6yxz4x5Y0QBHyHoYrpDhFwiU
+	 8ImYCnN/qMySA==
+Content-Type: multipart/mixed; boundary="===============0069160052411199773=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2783e4c4632337ff1a09e3ece084c8bce5f1672a0ec5bacf093e497ee66107a8@mail.kernel.org>
-In-Reply-To: <20260412045857.256260-1-yonghong.song@linux.dev>
-References: <20260412045857.256260-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 06/18] bpf: Use argument index instead of register index in kfunc verifier logs
+Message-Id: <257c9ac68d5ab6ec929cd3d53c54793a848a6cfa07a65e9473ee66a4d44f2cc3@mail.kernel.org>
+In-Reply-To: <20260412050033.267815-1-yonghong.song@linux.dev>
+References: <20260412050033.267815-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 15/18] bpf,x86: Implement JIT support for stack arguments
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 12 Apr 2026 05:43:19 +0000 (UTC)
+Date: Sun, 12 Apr 2026 05:43:21 +0000 (UTC)
 
---===============2933192911232600193==
+--===============0069160052411199773==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 54296d818d35..01df990f841a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 32864dbc2c4e..ec57b9a6b417 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
 
 [ ... ]
 
-> @@ -8592,12 +8609,12 @@ static int check_helper_mem_access(...)
->   */
->  static int check_mem_size_reg(struct bpf_verifier_env *env,
->  			      struct bpf_reg_state *mem_reg,
-> -			      struct bpf_reg_state *size_reg, int mem_regno,
-> +			      struct bpf_reg_state *size_reg, int reg_or_arg,
->  			      enum bpf_access_type access_type,
->  			      bool zero_size_allowed,
->  			      struct bpf_call_arg_meta *meta)
->  {
-> -	int size_regno = mem_regno + 1;
-> +	int size_reg_or_arg = (reg_or_arg >= 0) ? reg_or_arg + 1 : reg_or_arg - 1;
+> @@ -1664,16 +1699,48 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image
 
 [ ... ]
 
-> -	err = check_helper_mem_access(env, mem_reg, mem_regno, size_reg->umax_value,
-> +	err = check_helper_mem_access(env, mem_reg, reg_or_arg, size_reg->umax_value,
->  				      access_type, zero_size_allowed, meta);
-> -	if (!err)
-> -		err = mark_chain_precision(env, size_regno);
-> +	if (!err && size_reg_or_arg > 0)
-> +		err = mark_chain_precision(env, size_reg_or_arg);
->  	return err;
->  }
-
-When called from the kfunc path via check_kfunc_mem_size_reg(),
-reg_or_arg is always negative (-(mem_argno + 1)), which makes
-size_reg_or_arg also negative (reg_or_arg - 1). The condition
-"size_reg_or_arg > 0" is then always false, so mark_chain_precision()
-is never called for kfunc mem+size argument pairs.
-
-The old code unconditionally called mark_chain_precision(env,
-size_regno) with the actual register number. With the new encoding,
-precision tracking is skipped entirely on the kfunc path.
-
-For reference, check_kfunc_mem_size_reg() constructs the negative
-encoding:
-
-> @@ -8674,14 +8691,15 @@ static int check_mem_reg(...)
->  static int check_kfunc_mem_size_reg(struct bpf_verifier_env *env,
->                                     struct bpf_reg_state *mem_reg,
-> 				    struct bpf_reg_state *size_reg,
-> -				    u32 mem_regno)
-> +				    u32 mem_argno)
->  {
-> +	int reg_or_arg = -(int)(mem_argno + 1);
+> +	/*
+> +	 * The verifier guarantees that neither tail_call_reachable nor
+> +	 * priv_stack is set when outgoing stack args exist, so R9 is
+> +	 * always available.
 
 [ ... ]
 
-> -	err = check_mem_size_reg(env, mem_reg, size_reg, mem_regno, BPF_READ, true, &meta);
-> -	err = err ?: check_mem_size_reg(env, mem_reg, size_reg, mem_regno, BPF_WRITE, true, &meta);
-> +	err = check_mem_size_reg(env, mem_reg, size_reg, reg_or_arg, BPF_READ, true, &meta);
-> +	err = err ?: check_mem_size_reg(env, mem_reg, size_reg, reg_or_arg, BPF_WRITE, true, &meta);
+> @@ -2243,6 +2377,18 @@ st:			if (is_imm8(insn->off))
+>  		case BPF_LDX | BPF_PROBE_MEMSX | BPF_H:
+>  		case BPF_LDX | BPF_PROBE_MEMSX | BPF_W:
+>  			insn_off = insn->off;
+> +			if (adjust_stack_arg_off) {
+> +				if (insn_off == 8) {
+> +					/* Incoming arg 6: read from r9 */
+> +					EMIT_mov(dst_reg, X86_REG_R9);
+> +					break;
+> +				}
 
-Should check_mem_size_reg() still call mark_chain_precision() with
-the actual register number for the kfunc path? It looks like the
-precision marking was unintentionally dropped rather than being
-intentionally skipped. The later commit 2d66a554f1b5 ("bpf: Support
-stack arguments for kfunc calls") adds "if (regno > 0)" guards for
-mark_chain_precision in check_kfunc_args() but does not address
-this case in check_mem_size_reg().
+[ ... ]
+
+> @@ -3757,7 +3907,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>  		prog->aux->jit_data = jit_data;
+>  	}
+>  	priv_stack_ptr = prog->aux->priv_stack_ptr;
+> -	if (!priv_stack_ptr && prog->aux->jits_use_priv_stack) {
+> +	/*
+> +	 * x86-64 uses R9 for both private stack frame pointer and
+> +	 * outgoing arg 6, so disable private stack when outgoing
+> +	 * stack args are present.
+> +	 */
+> +	if (!priv_stack_ptr && prog->aux->jits_use_priv_stack &&
+> +	    prog->aux->stack_arg_depth == prog->aux->incoming_stack_arg_depth) {
+
+This condition disables priv_stack when outgoing stack args are present,
+but R9 is also used for incoming arg 6. Could a subprog with incoming
+stack args (incoming_stack_arg_depth > 0) and no outgoing stack args
+still get priv_stack allocated here?
+
+The condition stack_arg_depth == incoming_stack_arg_depth is true when
+outgoing is zero, regardless of the incoming depth. When priv_stack is
+allocated, emit_priv_frame_ptr() in the prologue overwrites R9:
+
+  emit_mov_imm64(&prog, X86_REG_R9, ...priv_frame_ptr...);
+
+Later, the LDX handler for incoming arg 6 reads R9 expecting the
+caller's 6th argument:
+
+  if (insn_off == 8) {
+      EMIT_mov(dst_reg, X86_REG_R9);
+      break;
+  }
+
+For a subprog with 6+ args and >= 64 bytes of stack (triggering
+PRIV_STACK_ADAPTIVE in check_max_stack_depth_subprog()), R9 would
+contain the private stack frame pointer instead of the incoming arg 6
+value.
+
+The comment also says "outgoing arg 6" but should this also mention
+incoming arg 6, since both use R9?
+
+Would changing the condition to check that stack_arg_depth is zero
+(no stack args at all) be the right fix here?
+
+>  		/* Allocate actual private stack size with verifier-calculated
+>  		 * stack size plus two memory guards to protect overflow and
+>  		 * underflow.
 
 
 ---
@@ -122,4 +131,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24299298635
---===============2933192911232600193==--
+--===============0069160052411199773==--
