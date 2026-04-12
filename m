@@ -1,101 +1,149 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074282D97B7
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 03:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B1736404F
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 03:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775965220; cv=none; b=hV/er/8+FgOiF7nQuw5uZTXgL3RhioYfmzjKFRFnlgI3lQJ5ZDeO9bEIfbYaleIF7gxOjVCEQstXAT5XCDWGKjy6lVMDtnWPmgEzZZ07wcBkoDp1TnRTx+miByeUtSsKMgewggd6JvEMNMU6yL7Fp1w46zrcPrxNh/MB5arFhzo=
+	t=1775965414; cv=none; b=Nu7FwZwhCXVmreI7RkKxMnDCcgc1UR+RWnGreh/KL5C6GM3sc6R1RuxBgAGIgmeGuSD9UfAGxenVh1fzIChE8KRrEypdt+i5mpQvOp+g3LBvskPie8rYl566XFROvYoI2Fd6yeGllyhrTrIa0n15/wDY0oTqZxuW3ShKqEM6sT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775965220; c=relaxed/simple;
-	bh=QTpRIWJBZbo5W+sP8qwmW5sjTJWB3isGCeUcOk8dHTM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fngu5k/pkrSvOwXoit6RNgGh0VYyNW6MQu3zPVSpXUpLPn5JW0URTbzpFUEzEP4jZpylOsydL+7JIJguWabffcij2FfqywX1LHTxka0n4WtdLwPgOcTatZuaSS5Oo6F78/QrDNiTUi2P8fOnUS6pzKU/2y5hIkg0WCY2bRKL+D0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U1SDXgw6; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1775965414; c=relaxed/simple;
+	bh=6Z4nzhvmBWHI+rGl996YGtyFS5RDh7vkobljT3IDHw0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=iWlSDZpG0NGt6lkPwzKz0mcoYYuri8zrOAXv1BIb2bgNEZAqtYUb5z+n4Sq8qsJLZrLEgnhDGFYoqbZXK9HGD3AfQQEeUfyPnqlxD+nxSxqYym51UebCjdTOG6w/7ArHfLSmVK5OahXbB5vukB5F5s/ahuXSdLI1OQeRIwii45o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7ddE1cs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U1SDXgw6"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1775965206;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iAG0ABuE1sEGRvpt1epm3J9hCMO3p++8dKsbmS4IJFM=;
-	b=U1SDXgw6DbvODJVvvWWjlWOCVvjN4LyH/538gr2L9aiGDihVp+tZvXfNg5C8gI2IK6L+HM
-	qxtc491nDfKr7h7d/P2vOaCIt73JXT8yFm+rk25A5KEh1T5mVL/xAOD0CKYmOrFLqriLgJ
-	K8s31QgpH+bhX7cG8PAY3Rqzb/203o8=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Feng Yang <yangfeng59949@163.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
- kpsingh@kernel.org, mattbobrowski@google.com, jiayuan.chen@linux.dev,
- leon.hwang@linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Feng Yang <yangfeng@kylinos.cn>
-Subject:
- Re: [PATCH v3 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in
- kernel_clone() via BPF fmod_ret on security_task_alloc
-Date: Sun, 12 Apr 2026 11:39:53 +0800
-Message-ID: <4726660.LvFx2qVVIh@7950hx>
-In-Reply-To: <20260411163556.8567-2-yangfeng59949@163.com>
-References:
- <20260411163556.8567-1-yangfeng59949@163.com>
- <20260411163556.8567-2-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7ddE1cs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D510EC19424;
+	Sun, 12 Apr 2026 03:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775965414;
+	bh=6Z4nzhvmBWHI+rGl996YGtyFS5RDh7vkobljT3IDHw0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=e7ddE1csVC5FyvkHsNw0KyZQ6mzophHqfzwwpMPZv9r/YbmkYZGyDofZ64/NKFHjy
+	 Vuwpk+MwDz+jWZOWut5a+PSr19QYxK1HQFIIsGqAUHdMB+b8StKb0jQVkfimGzlAmZ
+	 sCp4XBL1eFIe7MjUvAzQaoUXYMSdqK6QCAaaml6d3AdQGUxi/Sav74irydW6SxAL1e
+	 d3apbE45OMLwu2tdvwL7l2gWzQqOVguPnx0w6/QtsePwyXOMuzv/EuzlUalwTNC+3/
+	 eH2DcPeQQB+nUSAYL047AbzkHRqpfLvnbZtFsY1nxElKA3wW5Vf1zaVXJVDY/kzXlO
+	 f/yR0nVgX/tcA==
+Content-Type: multipart/mixed; boundary="===============8969052368686364737=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <4b9c4dea6cad92d46d23e299c8e46fc27d73751e3f3229143515ff1897cf10f3@mail.kernel.org>
+In-Reply-To: <20260412031139.41248-4-alexei.starovoitov@gmail.com>
+References: <20260412031139.41248-4-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 3/6] bpf: Move check_cfg() into cfg.c
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 12 Apr 2026 03:43:33 +0000 (UTC)
 
-On 2026/4/12 00:35, Feng Yang wrote:
-> From: Feng Yang <yangfeng@kylinos.cn>
-> 
-[...]
->  
->  static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
->  {
-> @@ -18416,8 +18522,13 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
->  			*range = retval_range(0, 0);
->  			break;
->  		case BPF_TRACE_RAW_TP:
-> -		case BPF_MODIFY_RETURN:
->  			return false;
-> +		case BPF_MODIFY_RETURN:
-> +			if (!bpf_security_get_retval_range(env->prog, range))
-> +				break;
-> +			if (modify_return_get_retval_range(env->prog, range))
-> +				return false;
-> +			break;
+--===============8969052368686364737==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-return false by default, as what we did in the previous logic?
+> verifier.c is huge. Move check_cfg(), compute_postorder(),
+> compute_scc() into cfg.c
+>
+> Mechanical move. No functional changes.
 
-+		case BPF_MODIFY_RETURN:
-+			if (!bpf_security_get_retval_range(env->prog, range))
-+				break;
-+			if (!modify_return_get_retval_range(env->prog, range))
-+				break;
-+			return false;
+The commit message says "Mechanical move" but bpf_compute_scc() in
+cfg.c has had roughly 89 lines of comments stripped compared to
+the original compute_scc() in verifier.c.  The code logic itself
+is unchanged, but the following documentation was removed during
+the move:
 
->  		case BPF_TRACE_ITER:
->  		default:
->  			break;
-> @@ -25460,7 +25571,6 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
->  	return bpf_prog_ctx_arg_info_init(prog, st_ops_desc->arg_info[member_idx].info,
->  					  st_ops_desc->arg_info[member_idx].cnt);
->  }
-> -#define SECURITY_PREFIX "security_"
->  
->  #ifdef CONFIG_FUNCTION_ERROR_INJECTION
->  
-> 
+- Variable documentation explaining what stack, pre, low, and dfs
+  represent
+- Academic references to Tarjan [1] and Pearce [2]
+- The algorithm invariant explanation and full recursive pseudocode
+  (~73 lines)
+- Inline annotations on the assign_scc logic:
+  /* two or more elements? */, /* self reference? */,
+  /* implicit loop? */
+- The "Preserve the invariant" and "Pop component elements from
+  stack" comments
+
+For reference, the original had comments like:
+
+    /*
+     * References:
+     * [1] R. Tarjan "Depth-First Search and Linear Graph Algorithms"
+     * [2] D. J. Pearce "A Space-Efficient Algorithm for ..."
+     *
+     * The algorithm maintains the following invariant:
+     * ...
+     * Below implementation replaces explicit recursion with
+     * array 'dfs'.
+     */
+
+The moved version in cfg.c retains only the function header comment
+and a single "Visit 'w' successors" line.
+
+Was this comment removal intentional, or were the comments
+accidentally lost during the move?  This is a non-recursive
+adaptation of Tarjan's algorithm using goto-based DFS emulation,
+and the inline documentation was the primary explanation of the
+algorithm's invariants and design decisions.
+
+> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/kernel/bpf/cfg.c
+
+[ ... ]
+
+> +int bpf_compute_scc(struct bpf_verifier_env *env)
+> +{
+> +	const u32 NOT_ON_STACK = U32_MAX;
+
+[ ... ]
+
+> +	next_preorder_num = 1;
+> +	next_scc_id = 1;
+> +	stack = kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
+
+The variable documentation comment (what stack, pre, low, dfs each
+represent) that was present in compute_scc() is missing here.
+
+> +	for (i = 0; i < insn_cnt; i++) {
+
+The ~73-line algorithm reference and invariant comment that appeared
+before this loop in compute_scc() is missing here.
+
+> +		if (low[w] < pre[w]) {
+> +			dfs_sz--;
+> +			goto dfs_continue;
+> +		}
+
+The "Preserve the invariant" comment is missing.
+
+> +		assign_scc = stack[stack_sz - 1] != w;
+> +		for (j = 0; j < succ->cnt; ++j) {
+
+The "Assign SCC number only if component has two or more elements,
+or if component has a self reference, or if instruction is a
+callback calling function (implicit loop)" comment is missing,
+along with the inline annotations /* two or more elements? */ and
+/* self reference? */ that previously appeared on these lines.
+
+> +		if (bpf_calls_callback(env, w))
+> +			assign_scc = true;
+> +		do {
+> +			t = stack[--stack_sz];
+
+The /* implicit loop? */ and /* Pop component elements from stack */
+comments are missing.
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24297693732
+--===============8969052368686364737==--
