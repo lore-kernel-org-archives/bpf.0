@@ -1,117 +1,152 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178453002A0
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 18:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776019707; cv=pass; b=O854dupHnXG9nvV6v/B08UUKT8tA/KzsqolXm1XcbGcNGv0nmVUpRRT2t+t52B+s1XUch/yF3vOou7jE/55IOT7yvRzBbA+kCv3u/KJM2VtFHyecOMluUl6V9IRTElFFWTCZ4c+tpiBB/eZJ0xNMrdqlLi39OcaWhOO7cUb7gjU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776019707; c=relaxed/simple;
-	bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z0L2ZD1hR8kpOp79onAT3RmcQoAKI1Hf7fFQMtTapO5Pi3HE0NZCt082zmtHU3CFnZaKDM1CULX9iQ02Aj5Lypcct50kzchyyuoJuuM/ILNTOGWEAkjdBk+zqsyuPxGck85eLnKIEt2Ha2MNQthBGBDeJ4/TAG3oi28uw1ktKHU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q+jky8L1; arc=pass smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B963D994;
+	Sun, 12 Apr 2026 19:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776021781; cv=none; b=JlPoxmqVtrQcvQx+jl+ezhrvaQUEPFTTM7G9Gf3qLMcGY/qj2NeGM8n9dgez8eiDon/NLK6uZf4lB8jT+NK5FYwLYNDiPRpFiQILMupGXHYVka1haRpfufeKcjqadZbEEeyVLa8c08sWwXLIqa0H7gsrWsrb+lYxN04wJ8fS//U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776021781; c=relaxed/simple;
+	bh=zu0lIJQUIewV/SiTFI+WoMVAaMwpj9KsyR9cAaBeAAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y5fiavCQoAt9y3G6HCU3D5GHZFse1IdtddTncjClD2vqMO920QLRbmF8+JgmbU2IZan42jCyRcfIerfxwc1DNdxXQpow8m28dBNyTPWElmhwT7kqyMdRszUM72Y77wGQlQV6sEA/dvRTNHN8mXAKUGhHnDKTWWXiDiuKSeNhp3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WAJi5m2U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q+jky8L1"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43cfac48bc7so2441704f8f.0
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 11:48:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776019704; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fH7TpmJmA5+1fEbLnUmb81vs5y1x2sZL1omPErXqGt7QpRFuuLSwHS/CsZ2lGM1gGe
-         5VG+UPIFNp+Y4Bh9PS+sS1xdpksnQkzQg1EWsjkcX+QeRuhbfAWAujSOGT2CXO+y3zsI
-         GXxNUXldwGQlTvFr2a6biYhoasftzZ9otdiHD4CH6quyUNZmZSarGlxI5OS/VsKeidjN
-         18Ng2i2neuqsUIdpS8lqVKakkYF1bu0xVqbITZC9NCsE5S64loy7yqAImcUnQJeMaNWc
-         uAHNbZes9ixWMgJZpsrLJM+C6+X7Rx4z05RJQgQCbXbq3w0t68Ijy9Cmuo5oOv/MApKh
-         KiRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
-        fh=9Eucqq5vQ5myrTLYAMkb1pusjK6Ea69iu5P+Jvr7ylE=;
-        b=lInq3VT1Wv8axFOXoNROdA7DJGR2gV5T7Z1RkZoIiy0JsZCx6BexhCO06BY87Hy8LB
-         ChjmKs4u17urCsZCp5kcNW0v8z2KSyQ+RHWIjVdLqQVrnMS5yYmqpag7fPi1KWCal1Mt
-         FrJ+oLo4wCA680jSW3R3exgvYmanAGG/AwpbjV9Ln1Tp3UY6nsLRu7h/iYlw8uTu+lJH
-         86LayZYczqeRpPTgOW9zW5LheeGQXFV5z7hGdSyhPyFJhuKIFNwtYxIirPhmf/e5ldgp
-         jp6ylMFbsMmyVTxT6nJaD/C2nVwpaI2EYRnRSb43r7j1tog1vzWx2pXGIrAuvXBYZGya
-         kgJg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776019704; x=1776624504; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
-        b=Q+jky8L1hvkPhiwIm/rQ83WgwdkSs1yAl2vnhKF0RU9fDmudVMqbSohtA1BpSW73tP
-         0oFEEUW6INo+bSsaaRK8P+N+uusnyafCwtyrxpELxmxmtkeiqMPLH/I4LeckFHYmKGju
-         5m2Z3Z/vw0UNMrZ6Rhag+P/LbTVRHwvPOlRILmq2MZp1fQwHxQyqj0JeJiNUJxqsW/LP
-         xw7fNddswhLY7PiLpLyuQVlZK24PbGEfEX34zbnabx0RyJuHwNXYxkri/cZQESQRpYKy
-         nCYluvgmtSG+jcjB065IG5HoDKVYL+kg61POL4fvQW9eHF2L8uRl30iuIw0vdWhFvkls
-         6i0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776019704; x=1776624504;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
-        b=QTpVVZRqXMBPlYwfDJgN1EDHVQtEPkqAmAH/KgobdT/RZKszolBzq0cudwSJUkKMty
-         jGTzRPtYE+1kwD5sdGbQGmXFXdAYYvxtYIFjHukk6GKOlsKky1NTOkN4RdS3PZ3iAhIJ
-         q7YkD9g1u+aazXy001eKC0q9ovK7mh4Mo48UU4DSIT58rZoTo5BrAFD+WT49+L2jX1L4
-         R/UiU3/ZTXRclS+w7lzgfsw5q/m+j7FUYI4BbzkJNd7aX/4Hlr8FtUJy2+KlkNphoHke
-         5EVvuvEvGFVDIuRHaiV0ZDAuogghkOzesqU2tC+udnyLDXa+tapuJRixcqtSz1CJt0Hd
-         sblQ==
-X-Gm-Message-State: AOJu0YwmUr4WXNyG/PiIsYVcDzb6Ut/YU4H2d5jeMgKKUK9P7L285oRI
-	rHBWLEuuFIndQuAhIa7XGkTeDa0byjBbXBiAlSVqBAM4m9a4JAHdBhK9VSR9hIYwSUb+acgTq9Y
-	rMgPInv1SKzQWQcW3MIRWUuOLPvx88HM=
-X-Gm-Gg: AeBDiesBHZbiKT0ouRa1VI5XzkWzt4zqYVWugREYpzmOfI8iHB/8YJUPuamOrX+V+XK
-	LJ8NvPD0K6F8oZb6gxP+TUK/h2vNYsqIYvuOcdOQyqcuOxo/T8G/gl3CraL2GbYF60GBSoum0lj
-	gNTbOIb5cVB4Z4sVywVD9TnW4eFDfQdl5ddUqw3VzLStztWDwgexCcythVpXac2Y5q2sZs4lfYe
-	eUZabjSmReb9PKnGBQL3DYLKIbNIzbPDepzpSlrjX8nYgCir4TVxZ3EuI59VMhDJGJyXOEJjFdZ
-	h/9ijoxaPKfR7w31FUfuDgZ0u3odLD5IhwrvHWGYeqb/KXeBU0UclpfrqpmUkNlc+Y1v
-X-Received: by 2002:a05:6000:144b:b0:43d:76d8:5797 with SMTP id
- ffacd0b85a97d-43d76d858b5mr3214293f8f.51.1776019704123; Sun, 12 Apr 2026
- 11:48:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WAJi5m2U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E44EC19424;
+	Sun, 12 Apr 2026 19:22:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776021781;
+	bh=zu0lIJQUIewV/SiTFI+WoMVAaMwpj9KsyR9cAaBeAAo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WAJi5m2UchIYvwnd/3sOCW2Pbs1kSbs+ASTpJ4/aQjSD8yW0GZc532LonkUAQxChA
+	 JvQTmIXvJTTUGPkvu5pmJ8MLM1d9j4XhPbDD7sP4HlA21PgPS3SPY2V2BjgacWANpR
+	 NZ/tkq6vpw0EumfNQ+beba+1/mFT5fps4N2dD/kuLfI8o77PpiBvWuiIxAwRfAbNQN
+	 pPbRK7zlczcK7J8PNjE5Ottn98LQ11JpCqmKpKINQ1cbYsXH1tBYWcy11rkFFEs+pF
+	 XTWgDwmHWMMSj31IXq0+tLYeGKk+Rz63IxvaGKq9uXNOz8J+7/asVsjdi+CI47M37A
+	 LeuLZevET20kA==
+Date: Sun, 12 Apr 2026 12:22:58 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Nicolai Buchwitz <nb@tipi-net.de>
+Cc: netdev@vger.kernel.org, Justin Chen <justin.chen@broadcom.com>, Simon
+ Horman <horms@kernel.org>, Mohsin Bashir <mohsin.bashr@gmail.com>, Doug
+ Berger <opendmb@gmail.com>, Florian Fainelli
+ <florian.fainelli@broadcom.com>, Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v6 3/7] net: bcmgenet: add basic XDP support
+ (PASS/DROP)
+Message-ID: <20260412122258.3a7ffd87@kernel.org>
+In-Reply-To: <20260406083536.839517-4-nb@tipi-net.de>
+References: <20260406083536.839517-1-nb@tipi-net.de>
+	<20260406083536.839517-4-nb@tipi-net.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260412152936.54262-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260412152936.54262-1-alexei.starovoitov@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Sun, 12 Apr 2026 20:47:46 +0200
-X-Gm-Features: AQROBzBlSTC-ooyH6HEhnxIXDYSWQqGpmaNOqVMwaw3pFhU2jd7Y97-piCZh7y8
-Message-ID: <CAP01T77QAKjiGDDjX_f16Ftz217Oir8q08R-u5FP30VoY4irPQ@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 0/6] bpf: Split verifier.c
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@kernel.org, eddyz87@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun, 12 Apr 2026 at 17:29, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> v3->v4: Restore few minor comments and undo few function moves
-> v2->v3: Actually restore comments lost in patch 3
-> (instead of adding them to patch 4)
-> v1->v2: Restore comments lost in patch 3
->
-> verifier.c is huge. Split it into logically independent pieces.
-> No functional changes.
-> The diff is impossible to review over email.
-> 'git show' shows minimal actual changes. Only plenty of moved lines.
-> Such split may cause backport headaches.
-> We should have split it long ago.
-> Even after split verifier.c is still 20k lines,
-> but further split is harder.
->
+On Mon,  6 Apr 2026 10:35:27 +0200 Nicolai Buchwitz wrote:
+> Add XDP program attachment via ndo_bpf and execute XDP programs in the
+> RX path. XDP_PASS builds an SKB from the xdp_buff (handling
+> xdp_adjust_head/tail), XDP_DROP returns the page to page_pool without
+> SKB allocation.
+> 
+> XDP_TX and XDP_REDIRECT are not yet supported and return XDP_ABORTED.
+> 
+> Advertise NETDEV_XDP_ACT_BASIC in xdp_features.
 
-Great clean up, for the set:
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-> [...]
+> -		skb_mark_for_recycle(skb);
+> -
+> -		/* Reserve the RSB + pad, then set the data length */
+> -		skb_reserve(skb, GENET_RSB_PAD);
+> -		__skb_put(skb, len - GENET_RSB_PAD);
+> +		{
+
+floating code blocks are considered poor coding style in the kernel
+Why not push the variables up into the outer scope or make this 
+a helper?
+
+> +			struct xdp_buff xdp;
+> +			unsigned int xdp_act;
+> +			int pkt_len;
+> +
+> +			pkt_len = len - GENET_RSB_PAD;
+> +			if (priv->crc_fwd_en)
+> +				pkt_len -= ETH_FCS_LEN;
+> +
+> +			/* Save rx_csum before XDP runs - an XDP program
+> +			 * could overwrite the RSB via bpf_xdp_adjust_head.
+> +			 */
+> +			if (dev->features & NETIF_F_RXCSUM)
+> +				rx_csum = (__force __be16)(status->rx_csum
+> +							   & 0xffff);
+
+FWIW this could be before the block
+
+> +			xdp_init_buff(&xdp, PAGE_SIZE, &ring->xdp_rxq);
+> +			xdp_prepare_buff(&xdp, page_address(rx_page),
+> +					 GENET_RX_HEADROOM, pkt_len, true);
+> +
+> +			if (xdp_prog) {
+> +				xdp_act = bcmgenet_run_xdp(ring, xdp_prog,
+> +							   &xdp, rx_page);
+
+Since you pass the xdp_prog in you can save yourself the indentation by
+making bcmgenet_run_xdp() return PASS when no program is set.
+bcmgenet_run_xdp() has one caller, it's going to get inlined.
+
+> +				if (xdp_act != XDP_PASS)
+> +					goto next;
+> +			}
+>  
+> -		if (priv->crc_fwd_en) {
+> -			skb_trim(skb, skb->len - ETH_FCS_LEN);
+> +			skb = bcmgenet_xdp_build_skb(ring, &xdp);
+> +			if (unlikely(!skb)) {
+> +				BCMGENET_STATS64_INC(stats, dropped);
+> +				page_pool_put_full_page(ring->page_pool,
+> +							rx_page, true);
+> +				goto next;
+> +			}
+>  		}
+>  
+>  		/* Set up checksum offload */
+>  		if (dev->features & NETIF_F_RXCSUM) {
+> -			rx_csum = (__force __be16)(status->rx_csum & 0xffff);
+>  			if (rx_csum) {
+>  				skb->csum = (__force __wsum)ntohs(rx_csum);
+>  				skb->ip_summed = CHECKSUM_COMPLETE;
+> @@ -3744,6 +3810,37 @@ static int bcmgenet_change_carrier(struct net_device *dev, bool new_carrier)
+>  	return 0;
+>  }
+>  
+> +static int bcmgenet_xdp_setup(struct net_device *dev,
+> +			      struct netdev_bpf *xdp)
+> +{
+> +	struct bcmgenet_priv *priv = netdev_priv(dev);
+> +	struct bpf_prog *old_prog;
+> +	struct bpf_prog *prog = xdp->prog;
+> +
+> +	if (prog && dev->mtu > PAGE_SIZE - GENET_RX_HEADROOM -
+> +	    SKB_DATA_ALIGN(sizeof(struct skb_shared_info))) {
+
+I'm confused by this check, it appears that the max page size this
+driver can Rx in the first place is 2kB (RX_BUF_LENGTH). And max_mtu 
+is 1.5kB.
+
+If GENET_RX_HEADROOM + SKB_DATA_ALIGN(sizeof(struct skb_shared_info))
+is larger than 2kB the Rx path will break completely whether XDP was
+attached or not.
+
+This check seems to be cargo culting what other drivers do?
