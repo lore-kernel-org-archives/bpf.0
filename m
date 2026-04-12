@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438DA3644CC
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 04:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E5F364053
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 04:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775969951; cv=none; b=pCzDJNWRFwL5gjEsUfcVhJjj8sQ2j1TEv236wnuzPcMjiNpPQTvRAeA1i9E7jXVGOMw5D8KZLp7jZ+IFtSNycE/sisHmA450CzJDJB6H8RxOdj6VWMV6uYqmFjGkpHCfRIdMEeMv71GB5HyBbngWhnXsCGbDEGabbCkStfZejl8=
+	t=1775969960; cv=none; b=E4PVTlSTiiyygIto1IN9OqV+pRZwiaIEpC2TMYklY0cFco/hWyuHeifluN0XEx/LzLt1+BsD7HcekOPG3LWlHXFYCShpNbhVZm02r6MoITUyOqH/+fD1HWItHaZZkugwy+N+ZrkHtNjg/cv4QnRWd05IHBSY0VH7mcRlbbr6W6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775969951; c=relaxed/simple;
-	bh=mpzT6+UIodYLsQl4vudprqgEVRfSOPYznGh6Tw8IDqc=;
+	s=arc-20240116; t=1775969960; c=relaxed/simple;
+	bh=XiAMW+pRNa+aD1lU5+Q5Gpx66P7cvRfGyB9zZp/9KIU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J8nwyjOEHv2yvOzeCgNKcnD2JUiBwfpI5cXFt2cVQEVK2QAggEPbXDpMIaoAkifSuLOXvXVbHd/WQAuLsNBcDEupmmaF1u5f/Yz5yBLcdPGPniSEh0NKS+GVKXdgTpY6fnZeVecP/yNoWWpHZ1r2j+R878dMfdHuCRSGVKsLiSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=GTEI1BY/uzlhzeHlll+jD5tXC/trmAHQfHNlRm/UfcP33PdybcJW70VeNc+WqP3bPX+A97VeK9N9eueyF3nmW48t3g2tSGSXUCryzZwRiWWdWPAP7M4a7nc/C3TPeev8MAo/nVNyPrR312/5b+vuKfXogKhoG6NGgLauagsPv9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 75C543B021A27; Sat, 11 Apr 2026 21:59:02 -0700 (PDT)
+	id 904273B021A57; Sat, 11 Apr 2026 21:59:07 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 07/18] bpf: Introduce bpf register BPF_REG_STACK_ARG_BASE
-Date: Sat, 11 Apr 2026 21:59:02 -0700
-Message-ID: <20260412045902.256704-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 08/18] bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
+Date: Sat, 11 Apr 2026 21:59:07 -0700
+Message-ID: <20260412045907.257368-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260412045826.254200-1-yonghong.song@linux.dev>
 References: <20260412045826.254200-1-yonghong.song@linux.dev>
@@ -38,48 +38,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The newly-added register BPF_REG_STACK_ARG_BASE corresponds to bpf
-register R12 added by [1]. R12 is used as the base for stack arguments
-so it won't mess out R10 based stacks.
+Currently, MAX_BPF_FUNC_ARGS is used for tracepoint related progs where
+the number of parameters cannot exceed MAX_BPF_FUNC_ARGS.
 
-  [1] https://github.com/llvm/llvm-project/pull/189060
+Here, MAX_BPF_FUNC_ARGS is reused to set a limit of the number of argumen=
+ts
+for bpf functions and kfunc's. The current value for MAX_BPF_FUNC_ARGS
+is 12 which should be sufficient for majority of bpf functions and
+kfunc's.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/filter.h | 3 ++-
- kernel/bpf/core.c      | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ include/linux/bpf.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index e40d4071a345..68f018dd4b9c 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -59,7 +59,8 @@ struct ctl_table_header;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0136a108d083..b0f956be73d2 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1151,6 +1151,10 @@ struct bpf_prog_offload {
 =20
- /* Kernel hidden auxiliary/helper register. */
- #define BPF_REG_AX		MAX_BPF_REG
--#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 1)
-+#define BPF_REG_STACK_ARG_BASE	(MAX_BPF_REG + 1)
-+#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
- #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
+ /* The longest tracepoint has 12 args.
+  * See include/trace/bpf_probe.h
++ *
++ * Also reuse this macro for maximum number of arguments a BPF function
++ * or a kfunc can have. Args 1-5 are passed in registers, args 6-12 via
++ * stack arg slots.
+  */
+ #define MAX_BPF_FUNC_ARGS 12
 =20
- /* unused opcode to mark special call to bpf_tail_call() helper */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 066b86e7233c..76a4e208f34e 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1299,8 +1299,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn=
- *from,
- 	u32 imm_rnd =3D get_random_u32();
- 	s16 off;
-=20
--	BUILD_BUG_ON(BPF_REG_AX  + 1 !=3D MAX_BPF_JIT_REG);
--	BUILD_BUG_ON(MAX_BPF_REG + 1 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_AX + 2 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_STACK_ARG_BASE + 1 !=3D MAX_BPF_JIT_REG);
-=20
- 	/* Constraints on AX register:
- 	 *
 --=20
 2.52.0
 
