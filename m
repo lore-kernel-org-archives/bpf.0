@@ -1,94 +1,94 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F042F851
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 23:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4365A19AD5C
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 23:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776035821; cv=pass; b=kih5GuuSbqVDE4ApLXnwOH7w4NLUjHY7yoNxHA4sgJQMo9PuIKKJIBeeMKSC934i9V1nzyj0Q+DRp6L+mxmzY+dT1J6RbQdKCdA8acPx+Pg39OR2OkDAhulZokW9ugnG0xG4f+WTd7wWAjyTp11ATSydXPCP+FkwFXArB3J9AlA=
+	t=1776035889; cv=pass; b=DliJEwqpA/z+VA7tHiBzLVF+EdRi6UQKDUZODIfQhOISKWGvVq1lP/5icibB9wphr9ovuejffGcoP62aVUyOeU3DIE79tf/+eLAHv1yMFIXydSepmxgMGtMw/zK7cmXb0iFgZXJssMQRkBf6ldMrxE4MwgiWIJf8XLvTJfGrOPE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776035821; c=relaxed/simple;
-	bh=bZSzwtjkGedP+pp4l8agHmh78WZOpJ34XOIrTmWhOQ8=;
+	s=arc-20240116; t=1776035889; c=relaxed/simple;
+	bh=T1Emvgx7G33FlFzqYTI2/IwckMwtMJHCggHS4dHUwNk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oAVTo5KBL4LYvUnZgYZBr6FhIwuemUjbWyMuqHu7I9rjPJyTwRF2Utzlx7nUaTThdOuFsjAVU+AYC0xMTQOk4sflbx4GKMjIi/gMtkfKJ51D5BAwjN3j7zK4S2yhjP7wYBfzFY6XBzAII8zk8kDwWAlvPs9PPq0itef8jaO4e9k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EcFOx/yT; arc=pass smtp.client-ip=209.85.221.45
+	 To:Cc:Content-Type; b=qmpy6syiN7+SJaZzpFptmjakM1tJoatHmlmBoAQinukxyXsIj+NBzAH82nGmts2detLum7jbgUo1UsI2hPbiefktvoNAAQWXfiyzVR5TCAnWtiVktT59Aq1874dQTtLP6/s7lR9J5qxTB7x6uFGI0xBnQ/ZRRbFKcKCybY0H0hs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dJwQfvj6; arc=pass smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EcFOx/yT"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43d74086e5bso533468f8f.0
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 16:16:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776035818; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dJwQfvj6"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-43d734223e4so422372f8f.0
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 16:18:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776035887; cv=none;
         d=google.com; s=arc-20240605;
-        b=lTK+CbaiFLg+CU3q46uxoVJ6jBUswBG1dteXvP6yfjhaGLh/sF6kbwHRDLTtgQWGmr
-         X4ibAMpESDGLUHNi0S2QTAQwY4MkJdKLg0YSm9RM13WvwexURENvyevuwjc1wAZMkXw4
-         XP6P6Ho7dqMCn6XcE/yYWFIc4JlAEL/ndOAuBPg5MxxRvtxvz3CEozGkiRwcN1JoCjrh
-         UwrDunOYug+afwpTaPSlYeLJg4c9hKtex6idn3nAn5G9c2mOTUnSEIEvD6wxPoG9wfMJ
-         kOhgAhJWEIFyhikVRrxpPsmasiqDGaEs/A+WlIyqfSf0R3yd7AiNw7R4ffpnucIVXNKS
-         a/Ag==
+        b=gro3zKB5FnF6C3nNBN6v32n9yfh3V7XNBHTb25ib9xnMaMxDJQq3RYrD0Eby6CEcLP
+         ybOS4o7wMbzncnPnVVJL15W2UQvZR2DQLYjM+jDUboM7CjadwmMxwOVru2YoOc8RJ8Dd
+         3GK3nIMYI5y0l/PlJtQXLnTd6qM/Zpa9ASaKJw19+CSCRCnXurNw7JWc0qbQBg4vt54i
+         yadGA0t6WJA0xOAZx8/R4sLDa9B200YBPALgjpL6UaDz1hwgyE24sk5cb+nEO9IaJ/OD
+         90MRQkYYgG4BHrTQtC7d40IZjkq9wih1DzEHjQD6F4ke0RLdjVSNM1+ekMlc+npb4IhG
+         qVaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=6qdSBxH0eTYbSEHmjzdVFHo4E3qWo4kk0GIxyh4ZtTE=;
+        bh=CBpIGdpi7y5J6d2ZGjs7KLbq185URk8J9tRJtfPwI0c=;
         fh=AoyNRaktsZ7bW/hTwiP8Dm5frmwh/+vEg7lx+EPGuMM=;
-        b=KZDunzyeEiDquJ6u9R/tuFJwnWEAOOWGxVMv8FDhLqk9KsdXEG9esdXC4v16Rec0PC
-         3i+3tD4Iuk+H/+vx1djU3h8f921euPGPePNVpKW1ffqvZ1YHCUXfDk4pbYV5VHAjeHvW
-         +b1ngmD2PFcPAvmQd62qp47NajH0xmK9UwOCIvy9lcZNU8TjDqFIUlOvXFwMQUeknCiv
-         us3m4V5w+7bgYjYbCtRJIu6ULDe4J7vS9rQmRHP7QjE1mZAlP6xlSIfQMgMtukQ0z0YD
-         5I22p49/3MlSzobQXLnsFKIv07ksq8qcS7g50w2QzsW9zIenoWui2W8Ob3zJDkd+y3YE
-         VH8A==;
+        b=OJ27hnb9tjkOJZ8j7iJVIgPNMQ6EwxnAPJmhX3qpQr5dogqXxv5ou4gmRTvuUoBvgJ
+         eMEk05/Cl/PBc+SMtGEggpAvQA1/eFGuO5q4U/A3BuHc72vD5I/edc7rdqbjCTkMPsQG
+         g8H7i+tTVMCQN0FughCOH3wwBi69NTWgstR4uoPoM7EpiY4MNWEYzRsF1aGgtBnCvV9y
+         jQt9q9RJYaSGbF2j3hFX5ftTSlrV7kY5x6DSsrsK1ku3oGV4kyrj37/Qy/ZLME2l7Uus
+         f5A7ccMp1Edwn3nNOh8sNLh3gB9HtX2InmpWeiM0KiSWtARCRPsqGIfq2eGhkPmV6ZtJ
+         8cBQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776035818; x=1776640618; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776035887; x=1776640687; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6qdSBxH0eTYbSEHmjzdVFHo4E3qWo4kk0GIxyh4ZtTE=;
-        b=EcFOx/yTW1kSr+NOr4my9yvDEihcuXzXW5nx7ctVKepCaOyW+DKrIjxJLUF2If5+OQ
-         Un0tPotTvgNq97Dwxwt6vDUvWw+bia1LgKD5CwMFQNzGBR0PDCIcNZiHA2x4FZmgdVW4
-         r/4LI1I1y3N6HD64W6nYImHlIIZuh8Koc340toeqiZ2Q0OVRNop9QEzfGKlg6rDwyaru
-         wBmrRiuh0sYMWVk1lBTfhiHdv+LVnmEfWJeym0Ip8g91JNXFjFJp1Sckj+uGYxIDZly8
-         KJlvOT0CE0HPvDBpcfqmca1NaXhRDe3u3wQ9lC+bJfaAolsXqOScpP7IU39w7xnnS3pd
-         VQFg==
+        bh=CBpIGdpi7y5J6d2ZGjs7KLbq185URk8J9tRJtfPwI0c=;
+        b=dJwQfvj6AyWx/q6Sf91KnoWhiCbqCpeVlGveYriEQ7Kj/aRmt9sGZZTuazzR0oEN1/
+         5/mmpeL7Zlikvu2bjNMmUp3P7//xT06KYyjM2cr8Nk1f3nC9o0NMDl9sW6yYatLdvTeP
+         zhU+SG4A2YO+41ysh/pfpAnF2RLey5y5ExchY6sCLNwZ0QUS1N03zjDASRQe2nMyitWC
+         6XJQsk0t4LOP85/BsK4FFUpLOSgpulQrGNXFBpCoLfAJ54K2pLrbH6EOmqqhB7epnVMR
+         +DfQO6wnDWu6LvT83enUtL9Oah8l2/6izrdn/ZdP5vlwgo94v2t4Ct3jO6HDD+jMcMb+
+         bhXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776035818; x=1776640618;
+        d=1e100.net; s=20251104; t=1776035887; x=1776640687;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6qdSBxH0eTYbSEHmjzdVFHo4E3qWo4kk0GIxyh4ZtTE=;
-        b=omrcMLbxDPaFU9jDQ66IlZmt6eT4Gw2yqmI5HkiHoMl9mXmQwlPHLHF8iPGdxAAAY6
-         L4p94r9w3sMqMnENy1E+r6p10UTNR/wt1kmuRmMTFU0QihkcU77qZeJflT/5WB9KbfNS
-         M4e2YqnZ4y46IUiWo+3ZVQuMOBkMARP6dGEmRL4o6QUNkTGxsXRTHzueCX1FeB1tXJAZ
-         4NGy2j0u5kc66t69NmY78v24iEwDImszeoKdJUD5GmC3WXj9RDnRVg9Y4FFgGlNwVS2M
-         /fTcqtxWh3lgLLK+LhlJ2PkC/jyrKmeHeYtMLO0KEHHDoJ0b8Y/peGVFSMmCUhDIY3JR
-         y8VQ==
-X-Gm-Message-State: AOJu0YwnHn9KmE9gblvR+EDgP9cDzDaCXbzfv/yPSH5mWSL6Oz75zSuf
-	4ss5Z28kSKXYOzLqBetSR0YGrl8GeImv0GDIkYzyWySOOi8sXOwWF/ciOTa4TlJOb2vJETXxMnc
-	8YsVUoAPZpzoV7zC273M743nfzy6ebO0=
-X-Gm-Gg: AeBDieuSyblVXXur3l05ThZ9YIWN5P0CVs7sHM8v0b8LRD6MAM+YgNR0AA5qmMmhfUy
-	G7m2WHk/RPvgRNv0MyTfcQ9g6YGZV1EoiWaYeFWAap00CLdoqFzvPuifxJ15/orVXOatBPJ2hCQ
-	B4KPU6f6DRtwS/E4CjthC7YvUy1/6rAKkjwLTvIEtE3tiDU3plfsDR69QAuQaf8qcI1DNZsFc4i
-	nTyFUC1/E9s4wCUA+fv6zZuPtz6758CF7Ih33UreNPgsN/y0kf2n61SPZPN8RTbOR5W+zenGE8i
-	2jdQGeID1qDsBT2uc4Jt1E7Maqks/+a8X6UIuF9IBOTsVPJIngXqZe8fd94w15z8AfOfgTcX9iH
-	T0tJGeo7EoL+/NLM8KJS8BfAKeQ==
-X-Received: by 2002:a5d:5d0b:0:b0:43d:70e5:bfa9 with SMTP id
- ffacd0b85a97d-43d70e5c016mr5609330f8f.48.1776035818347; Sun, 12 Apr 2026
- 16:16:58 -0700 (PDT)
+        bh=CBpIGdpi7y5J6d2ZGjs7KLbq185URk8J9tRJtfPwI0c=;
+        b=pd5XzammkF/kO0UK8Q3kBJv0LJ6PyGXyKckejhhiZHHh18/YvgL5RNfr2rRLq+2BPB
+         LDuwDmSULfMEmol63fI2f+mxqq7iMo8nX6SwTsM5hu8ujUvRe1UQ5bHh6eOZc58F6zX4
+         Fv+Rfhec5EnAocIIdnJmz1mAw5C04Gs7n2DjnajNFMAm/Ga9s3wpzWhxnsk7ZTt5hq/2
+         jjXl/5XzM+i+itx7wzU/9NaxZ43okYgaunIjpfaBplg8TCwG5FLVrEO6SMOQ0E5eIh94
+         YwHEVJtPIWPBc1+040BBnzwKxoKlF0M41FKGIC0y9PSAHU+33a8Or+F2SdSteOLo1M/K
+         zuIQ==
+X-Gm-Message-State: AOJu0YyG9J2s3FuYiUz3204mFNTjkRWfXm1mi1GLuc/eo2Pzctu49Iek
+	MySxD+cmNth4s09dh1RjgSIS2JFupFB1JXWf6SkFk4/jHWfBqLxLwzqf6npnoPK1jgnYNt4Kp36
+	vJgE7D920ac9WEpAAVYja7kuuDsm8Jz+5Mw==
+X-Gm-Gg: AeBDietiHp/2Urb4IqKDXO3jEKf92Ew48FfZQQHnppw9CpwORCxtlx7UUhA7QsKwWKB
+	XvcHXmVfu8JZ21coG6PU67oPJUXZ+F+25ik5gLCPgftKq5qOpcuPFKu13v1Vw9E7e55RJYmjwtv
+	y0XJckZyvziaeOiwocebaPPZ5QQvqcIW/SKTqTKpuiv2z3jQgaJ8bqoLIgotwX+Zzbgrr/IvIzQ
+	32qj8ZG7UdGu88itk3z0RE9J+YjsgmWyXwv4iU6zhHBiRwtIiCsEHmqNcW3jqAzMVVREb/xzSoo
+	wkUAqaB2Mqmq6zwjxc0HcfYcTVzSIt4ZSwpV/J78kMQzVJgR/S1rBFpQWGzSXXkrznJgWOc/W+A
+	MbjP4bA1lIyBo3YMbEX51Q6szxg==
+X-Received: by 2002:a05:6000:2609:b0:43d:c06:bcd7 with SMTP id
+ ffacd0b85a97d-43d595d8724mr21052019f8f.26.1776035886629; Sun, 12 Apr 2026
+ 16:18:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com> <20260408-rhash-v2-12-3b3675da1f6e@meta.com>
-In-Reply-To: <20260408-rhash-v2-12-3b3675da1f6e@meta.com>
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com> <20260408-rhash-v2-13-3b3675da1f6e@meta.com>
+In-Reply-To: <20260408-rhash-v2-13-3b3675da1f6e@meta.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 12 Apr 2026 16:16:47 -0700
-X-Gm-Features: AQROBzDWpENZhx-b0RSj4gRM_i21wM1wad3ZjUEBBKeKacp2_vQDSYq_3BEJ3Rc
-Message-ID: <CAADnVQKgaA7rT50XCpsNAqmPNRNzZQ673-NWJhQZQvQ6JHkWvA@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 12/18] selftests/bpf: Add basic tests for
- resizable hash map
+Date: Sun, 12 Apr 2026 16:17:55 -0700
+X-Gm-Features: AQROBzABRSAzMwX23jGkBm2mPxInyP4rI6V24-iX9AFWaR9YCR-OTuLtBoWMcw4
+Message-ID: <CAADnVQJumCinzc8pdUGkxHjqn-=ewRvLaCgfC9-JG1jNZ23=yw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v2 13/18] selftests/bpf: Support resizable
+ hashtab in test_maps
 To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
@@ -103,25 +103,16 @@ On Wed, Apr 8, 2026 at 8:10=E2=80=AFAM Mykyta Yatsenko
 >
 > From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> Test basic map operations (lookup, update, delete) for
-> BPF_MAP_TYPE_RHASH including boundary conditions like duplicate
-> key insertion and deletion of nonexistent keys.
+> Parameterize existing htab tests (test_hashmap, test_hashmap_sizes,
+> test_hashmap_walk, htab_map_batch_ops) by map type so they run
+> against BPF_MAP_TYPE_RHASH as well. Relax ordering and exact-count
+> assertions where rhashtable resize makes them non-deterministic.
 >
 > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 > ---
->  tools/testing/selftests/bpf/prog_tests/rhash.c |  64 +++++++
->  tools/testing/selftests/bpf/progs/rhash.c      | 242 +++++++++++++++++++=
-++++++
->  2 files changed, 306 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testi=
-ng/selftests/bpf/prog_tests/rhash.c
-> new file mode 100644
-> index 000000000000..40f30ce69190
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
-> @@ -0,0 +1,64 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+>  .../selftests/bpf/map_tests/htab_map_batch_ops.c   |  22 +++-
+>  tools/testing/selftests/bpf/test_maps.c            | 127 +++++++++++++++=
++-----
+>  2 files changed, 114 insertions(+), 35 deletions(-)
 
-year what?
+drop test_maps changes. It's quite obsolete. We probably should delete it.
