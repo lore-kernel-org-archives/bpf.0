@@ -1,134 +1,132 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97078271464
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 13:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDD7366553
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 13:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775999324; cv=pass; b=lYIipmCuOJz8AxgnderEZna1JCo8IJwk8A7jiHBNbdHQkFeG/AlSAA78ZMX0px1TLyvmIhFZFTbrBmCcAB4VawFvdwWuGm+WpZKK62fPJ1obR418JWsH88X+4e3f+sRE0QVwcypKgNkcWDCkAjkBsKYz3IBqVKsAx4+7rqA4i78=
+	t=1776000664; cv=pass; b=btxaomcMRNJ0zXB/ZVG7w3HDXKQIkTGGJBw5nk8qGdF4jze7uFDrppkTLfrraZE/3ykzWbhEISeGO65sBcOoVj8cYjKoRGTIISSlb70o5T5nrfOIAMrIWItApE+0bKRkpPYJ5L1EFbnGd5QdocgNQ2v4aWED22/tcrCKg1rbhRo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775999324; c=relaxed/simple;
-	bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
+	s=arc-20240116; t=1776000664; c=relaxed/simple;
+	bh=C6RY+r5Ylx4J7Ow2wiGd1LhoQuZdYHn356nitvzkRbY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GNpk/6iuc03vXpdXaC0bV6s5ELGN+FijecyzWUfsXjnk5EiqxZa35VP+Y93ghrhxMklNrIcWs3C4/aMDBz735Rq6C/XNb0LBLzjNo7BGIfxpvlYZPlCSz+NfLcqXJdOHIATG0n2LTEutWhU14892i4g36eT1KTBgRioG9qbMYR8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuLJlfN2; arc=pass smtp.client-ip=209.85.128.172
+	 To:Cc:Content-Type; b=ORtuxfaDDI5cHoA1ZAh+RP+eQhlIVjLkoCPu6EJesRHAUc/css+UboKFzTAhBlEXZ12AVFQlM84QiTG41BPmNOtsNJ4Br0x2Jq7Rp20V+G1RQUJN+hep8911UZLwej3O3xluEt9mrUU6R7if2PuGCIHJdfDxBO5i3lVQkwhX+GM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cczCth2K; arc=pass smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuLJlfN2"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7a17bc5745eso33165497b3.1
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 06:08:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775999323; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cczCth2K"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-797ab169454so40715147b3.3
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 06:31:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776000661; cv=none;
         d=google.com; s=arc-20240605;
-        b=eUQbtC7caygfrKA6J5xHW5N/XJrfbVPwMTb4RlzFTMVC9LWnCARLmC0ULSbs9Ttulb
-         CutXqZeV2Ch54PLZApSevpwKtDwFeOWAjQ/nuhRl0jW2sJBQlpjCIjW03sOTFvqUkK1r
-         722V8f+LIoz+h1RRLAos3PpiSyzBjranm3fJ6wE9BrDH7ex8T8WS2SZE1MyomCkiCX3o
-         GFaXzprtrW8dgZV8NOXlOEmX3/iOIbOwbXyCFanTBSaH9mA+oDNm8FqFjbTds4qTvfk0
-         w+5U0Xq2H5MF0SZ3g9kw/jv3rygusl3VjpyEwsNyLyKqW1jlXoZuzK+aOubK8AamTdGC
-         VcHQ==
+        b=liao/NEIxzMZ2Chv+na+Wy8TS9djzfWU3hJcYaBa8ggF8K0uy5lFAJvKKRUVLcGmfc
+         hBOZjXVeohMWrRyJFeOvkNYJVAAL6SCpHtZ97CXfYWkobo8ZGPkHAXUeKlBiq7jvYc6u
+         r8yPY/3oDi3TZqGm4LmRGxdZwgwWCXq5ItkyjJETNcDspAE4IACu4uPrV4w4LF8rOmCh
+         71sf4UTqiSDI7V0bFzFm7fJJrs179ISy0VJcvBK22XgWI88qGkHKtfa/l4VmwSmGM1wc
+         e2PU/9GJsfw7/FNA/9v5TQp4VWb9A2JDWtsbtGARxEqhEMqgVAak0JriOkmODVFZH32z
+         S6zQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
-        fh=zkpf4b2ndjNtM09+fSDmeTkdWHaF+E+LAkYWkk1TmjA=;
-        b=k4oaEjWWooskFAGbe1FwuCa8cjb0XZbnNmf2ZE2R2/o/yCYxm1OF2YBFw+cReFMYea
-         HIiMalH4m1KgGhlRNtW6KYklcL973QVjVXRl8YZBGuUUrVtIV+fBiALlotw/zCpop9as
-         k6/KhwhycAhhufzOXrgOipvV2552jJX0N5g3nWSSS5kexd1gN/C3WW4X1E+9v4OLmOQo
-         qnSlBlYW0R61Dlx3wq9OdxqoFTlU3WXssiuXGi70IBmjf1K16T5XO8yOpwsVkkH+OlRJ
-         aoA5mQgm5Y8fk7rLhqJvzI50p8Di0IL32NuiqJtlGdly5rhi1h0M4ZHXdFeoXEiMMXuX
-         L7+g==;
+        bh=DXgBrho6CsK2+t2aCD8rZwM6Rey4DYcpPa87+rv2X+o=;
+        fh=8KKBYFPatPJbteyq5iqM6ccJvM8qSJOeFeSoKUKQIuU=;
+        b=j4QPjGTxDdkhSffwuCEoyFwoErH1RWDdG6Cbu3Uy3iN9mZbamPB6Fc0XMiXOVc3pMB
+         DvMbUi2BqcsRgrIXnxvmN3tG8WvlyWwFsGvq0bmCcldVDKUCTzMG2X8gKpvHUX0xsjbD
+         ZTjizZs7gXaYHyAWQ/OssZUp0TnucxeHfYoKowJdz4XCEPMHtBH0bvP/8AjQw4E8Dx49
+         8ppeJWBLudyWmgtYc0NiOqEivCdumIiU/QM8Wo+MhPgcNAWo8QJJ9VINjbHGo49/xgdF
+         AnA0BxgYgaagUeNHY81fjHsy2CMvmuD7fpL3rvTUr82LSZYA71MFTfVNtsyrUG+0tET1
+         H8xA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775999323; x=1776604123; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776000661; x=1776605461; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
-        b=kuLJlfN2DofUdwT+syoUrQnMLqlZ2KfG0EBZ1q/hifobtYSVUf8KPZ+5/xpeS65+2C
-         qyw3K6M4M9KjNrd5JZuGUGe3phaSxvCaCJzvrr7jmZbajOrDNQH310++fEFEenwmy6lB
-         Vh9FDFQ/c85PE/z5N72aABXIV1fup6Qaqybice0OBLoS5r2LtVbLd3fkDHyX6a8LMhnj
-         +E1+2MLUzdYmAh9HtLus2vxfQUL2HsxFmxvykoosuzJ2IM39eZU44BzhIQk6SSMpi76B
-         TTNjs444BUPjEe9kbqlQ6JzCBO87y3LZ0lg9CPvAyTrfY/q4ZCccUdaHwMOX/JPzZIQO
-         Yl1g==
+        bh=DXgBrho6CsK2+t2aCD8rZwM6Rey4DYcpPa87+rv2X+o=;
+        b=cczCth2K2sLrPD/N/YtRFYIWH/K5oQpNo2MbO63jR7NHToIIVLtbjhFkN+DrOXvExl
+         Tg4QrGPYfiJ/PPNLeI1zmXFG9nQS404LC+bh0X56h+tIGRtYylTrzausH9VjXutVzP09
+         Bvu5y+iKG8/S+T8XjWZu5PPy0i4bmG9PVW2ZlD8JS5cLn6w8RSKjxefOsS1TXw+qmT63
+         g2HFvm7ff7qGhNG7hVfE7Li9jaYFumJHU2EJ0gq2g8uhg9XRusNlHP0QiPY/YKy7s23t
+         8zJwJNPlShAA8cEQFLSVgraqOcsypIf/qt4TwZWv3Q6J8BIGZ483BshRrN4EsaG0QLFj
+         PiKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775999323; x=1776604123;
+        d=1e100.net; s=20251104; t=1776000661; x=1776605461;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
-        b=n/uiRK+1mtxBRD83WsCT4CwGnNdjKJ4ZoIf1LUCzJIE7jFYsyA0ZLMt4G3HQZz0JMx
-         GiGbert7591yhlDFq6qMM09PdQI/ofE4RCS0/+Zbb7mIjEG2a+FwT5L7XBNOTwmhwSxP
-         H0izhrD7TPZIq9lqhHcJzWf2fcA6E4CkJNbDMnF/ayJ+FUEKku5j878SgREHGlUcF9+m
-         lNEY3L/GAzg7VFJ08Ggw58vRY05SNLKfN2Mn3T5E7E7Jrs+h6L2PDs3SZQJ4CiQgat3q
-         iIdUITXVz5QZDwTJvlVrjswa0OLANbw9Vv8w4EfKS5nxBmu60lN6cR/pTi4axSifkwYs
-         xErg==
-X-Forwarded-Encrypted: i=1; AFNElJ/0yaPoAnoSbfFK72Z+WUkunCQT6BtO2UjiBjktirsiZk27e97vXHuZOZA8fiVEpHuasUA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpKRS2G3x6E6xfDXWhgV/pnh1suzIpBi+UjftE55Ruw+9NeHn9
-	r+MQPJRZoBomqQJl35Lx6ecCNTwlaf8Pd5Zs8Aifbvs5g5KcWj7M2GMJsHZp47iGr3vXEWMCgn7
-	tnprtXNoxyRWPG2OU4pnwPs2B8DS5z/s=
-X-Gm-Gg: AeBDietcnQbgcwplrzWE8b4NVe0MnFwtzOxaXRfTfRcVXlGYVKnjx7m8mHiM9oc/icZ
-	p2+QwhCSr/nA0hzcY36PyMB01RsWTWQm5CHZQjiA28szL8MC7JrkX6/zxrjgDUMXn9xbxfv6LxZ
-	IIsnSIhO+0z72QJ1CgbBmXfmjdXx/98qmldBwWZGgSUMVEYHeNHdl4SH8LUskhkNJ+hyByC8xI2
-	K8RkVNPaEWAeaLcPnvd5+U9V1sIrLbcMLmkx6z6YKuW9x+U9fU3Ov9a88d8OT8xTSgPQIA8CCNC
-	bbJysI1/QTaXMiH5L0JRwacUr3/HQ+SQbS30JrvQ
-X-Received: by 2002:a05:690c:e645:20b0:7a6:1df5:c99e with SMTP id
- 00721157ae682-7af71578411mr84093067b3.30.1775999322635; Sun, 12 Apr 2026
- 06:08:42 -0700 (PDT)
+        bh=DXgBrho6CsK2+t2aCD8rZwM6Rey4DYcpPa87+rv2X+o=;
+        b=M/Pv7oUoXnDrvAuYOuSTCGnh65uz5NfHCTBwuWkq/j/eYiw9+9Ql5xCC/2vUHo7C3C
+         nm9lVP1fyTOVIVoiyPj1z3fcrg/uCozIAUC9xaTCJoq/iCC+bExQ6vwdMqk6nrsZV1Uf
+         repp1D+t6JrYRGCVPkOslzfKUKhg1PPFxZ4hrPSkwd54cKrX9CIGsCEoWzKz6PEnISBg
+         B/9QiD5oUTn2/BxWVEHZ98dj74hmSOGAPP8RIe7373MvdH+P7JOTI3Vu+DbBXJ4WGh/w
+         7RVxHd15zUfYcuBJponBcazUbvYJ8ZmXzJ02J/+mQL2cR8xzge7LolYCxqjgp9d7IDSp
+         p9hQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8RYYIKPNxXP3RETtNqumhOgw4QbGvW4Xp+UNpmFSI+QZ96CdB4+UtI0FphfoD12otossw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxgbb70MSXumEKHi3XNLTAUoFncOPZ/OllxlFNBCdK5cjb+VqrO
+	eS2amVlpUftFbDE/HeMrXDJWTH+mJjY/oXw/ikAkwmz4ciW+U92uSfbB9SpjZhsXyq2FPPWV0MC
+	sp++qbYdmWzoa6izhHIPoTNWsKuUqpMA=
+X-Gm-Gg: AeBDieuwDIwTab4H+30+uvhhC4ETY15hkIph5XQibU8WKZFU2l4SNlWNYvEgvUTmSVf
+	FOaiG2NM4lVjlUcDTPTchLL0V9esWxr8a+Eqvazf59Ff1YIJ7D0E9AviempZZ72riOr4efKBKFC
+	jzlU8oXLhluyfelNzCE1EUmmsidyjb7L3ACujumLivFcLeoCmjulGRG/W4JeRFZU8bI8xj5YQPf
+	lfkI+rA+TaQYvIjmIms0Csh0cS3gxvV/pAk6qMle0X7bGWRBLUDXlOjkuH6Baduw0VbtXFJNyby
+	6XiFPeVpNyi5GTm3ds7LfyXX7IyoD8gYlPd8Mu2r
+X-Received: by 2002:a05:690c:8e1a:b0:7ae:dc4a:ff6e with SMTP id
+ 00721157ae682-7af702dbb9dmr92247417b3.24.1776000660995; Sun, 12 Apr 2026
+ 06:31:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-3-laoar.shao@gmail.com>
- <alpine.LSU.2.21.2604091145340.31526@pobox.suse.cz>
-In-Reply-To: <alpine.LSU.2.21.2604091145340.31526@pobox.suse.cz>
+References: <20260402092607.96430-1-laoar.shao@gmail.com> <CAPhsuW7Y5KksWM49TrGH_Hohaq02XO8qs7G99Y6D8=0usLFSrQ@mail.gmail.com>
+ <CALOAHbDG8=eUV53kF+xn=izs2rpydCk=a9RznU-EEOzmkB8mQg@mail.gmail.com>
+ <CAPhsuW73qFybHgOnZ=oFC1PvdWkYWDk7gsAoiBXe4xWYagPrmA@mail.gmail.com>
+ <CALOAHbC0hqk+yrUZay01EBRNOHgyj1MAavzNK-06XJKK9ARMqQ@mail.gmail.com>
+ <CAPhsuW5MN6ikKmxgqby5RJ3_gvjJ4B77X74OvfbTQoFO8iUgzA@mail.gmail.com>
+ <CALOAHbAmTAfamStF9sZtO6efWYJ1sbXJp3PbsVapZf7dba91ig@mail.gmail.com> <alpine.LSU.2.21.2604091205250.31526@pobox.suse.cz>
+In-Reply-To: <alpine.LSU.2.21.2604091205250.31526@pobox.suse.cz>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 12 Apr 2026 21:08:05 +0800
-X-Gm-Features: AQROBzAclerg8yyA2S4z9obC58pWuFg4E2KRrI1OP_QkCniXP5TtVECzkOzNGHw
-Message-ID: <CALOAHbB5yyj4wJBOZnspVUPfoyumrxHcq2e27hzY881G+Jc_tw@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/4] trace: Allow kprobes to override livepatched functions
+Date: Sun, 12 Apr 2026 21:30:25 +0800
+X-Gm-Features: AQROBzAhZ7uy9uCOnehpJbZd9tdZu27AddmcCPfaAwa94iQun-8NAS1qnJVKEUo
+Message-ID: <CALOAHbC3-_zW2CbHccy8kCzuBj0x4LeraeEt5DdUV=CdrxCnNw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return overriding
+ for livepatched functions
 To: Miroslav Benes <mbenes@suse.cz>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
-	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, 
-	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
-	song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
+Cc: Song Liu <song@kernel.org>, jpoimboe@kernel.org, jikos@kernel.org, 
+	pmladek@suse.com, joe.lawrence@redhat.com, rostedt@goodmis.org, 
+	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, kpsingh@kernel.org, 
+	mattbobrowski@google.com, jolsa@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 9, 2026 at 5:47=E2=80=AFPM Miroslav Benes <mbenes@suse.cz> wrot=
+On Thu, Apr 9, 2026 at 6:08=E2=80=AFPM Miroslav Benes <mbenes@suse.cz> wrot=
 e:
 >
-> Hi,
+> > Can we add something like ALLOW_LIVEPATCH_ERROR_INJECTION() to allow
+> > error injection on functions defined inside a livepatch?
 >
-> On Thu, 2 Apr 2026, Yafang Shao wrote:
+> No.
 >
-> > Introduce the ability for kprobes to override the return values of
-> > functions that have been livepatched. This functionality is guarded by =
-the
-> > CONFIG_KPROBE_OVERRIDE_KLP_FUNC configuration option.
->
-> this is imprecise if I read the code correctly. You want to override live
-> patch functions, not the original ones which are live patched.
+> I am sorry but you always seem to find band aids to your set up and how
+> you deal with live patches internally. While I can see that something lik=
+e
+> a hybrid mode might be useful to people if done right (and we are not
+> there yet), the combination of it with bpf overrides or anything like tha=
+t
+> is not something I would like to see in upstream.
 
-Correct. The BPF program will override the livepatched functions
-rather than the original ones.
+The upstream kernel already allows for combining BPF and livepatch to
+override functions. Song=E2=80=99s patch offers a great reference for
+implementing this without changing the kernel:
 
->
-> I also think that if nothing else, it needs to be more specific then just
-> checking mod->klp. It should check if a function itself in klp module is
-> overridable to keep it as limited as possible.
-
-That is exactly what I am currently implementing in
-trace_kprobe_klp_func_overridable().
-
-> Even with that, the
-> concerns expressed by the others still apply.
+  https://lore.kernel.org/bpf/20260408175217.1011024-1-song@kernel.org/
 
 --=20
 Regards
