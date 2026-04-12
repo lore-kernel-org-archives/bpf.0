@@ -1,49 +1,74 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4783F4F1
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 17:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417742F12CF
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 17:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776013479; cv=none; b=Tm4hXQEaBbqGh5ftuOE8Nv+07AWPgSPWoGLn/vnScddDigoUyKU/uMQ6PpJzfsINE8bfLT0C7caGbMSbfkHLIhdhADayuFGCJaE/7gAPAs/VOVxoiauggH6R5n8fecJHLMrbqGG122bxs4Yt17hVSd25JuPlF/yPgJ6qq1IYknI=
+	t=1776015952; cv=none; b=Qjiw4gYMq4xKsauti43aQpzEdWLzJjRzb/X65Y2uuPgGfbWz17yQeHh9FobHg9JHADJ5WBc0yqggPkGSRfY+5OWpMjaJI73i84dPDX1wJU5F0uQ7xztSwYMDv5CWQibc8Lqu2C0j3BjRxIRhsN9xW7vKZFiBJGx3su2GjfYXVsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776013479; c=relaxed/simple;
-	bh=3ETik9cQoXu8OTt1zSelFM5luwr5rBDwRJZDL0WL9+g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ERLwJ8ICsJnNwjZ/mE3PoJjC3c4zsRd3IJliPB7YJcirBQ3TZS7ev2JsynS1nJ4WHhUTGP0bUE2LkehGQv5rtzsqmcCB9/8HWUG9TqKc6z8r1boLpgG6xch4GgiMF6416r0OviCgsXtoufSuzw48kEjN6ai3lTh4p12kt/kaVKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wDnVjx_0NtpHCZPAA--.6734S3;
-	Mon, 13 Apr 2026 01:03:59 +0800 (CST)
-Received: from lutetium.tail477849.ts.net (unknown [10.162.163.215])
-	by mail-app3 (Coremail) with SMTP id zS_KCgCnUHN_0Ntp2K9xAA--.22918S2;
-	Mon, 13 Apr 2026 01:03:59 +0800 (CST)
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	puranjay@kernel.org,
-	xukuohai@huaweicloud.com
-Cc: daniel@iogearbox.net,
-	john.fastabend@gmail.com,
+	s=arc-20240116; t=1776015952; c=relaxed/simple;
+	bh=wlzhMq9OF4v5U63IwJEIZSagMrISbIW2h8zQwRQHLK0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ng6K/AOTKFgYOtBt7mB914sAxlGvGNNn84/l62oLIOzVe3+x00Qad1FPbs21gtkfhWl5sEdgMAmfNmWTF3BPshFlsY+uJrzKmP/apv8liNIcyp5y9UXidQdq8cEVoxT2X0IY3ouiwXqYZVEiC2WlE/oGAmsju0HlKryulwAgPOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=qzECqxtz; arc=none smtp.client-ip=209.85.210.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="qzECqxtz"
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-82cd70febc7so2447647b3a.2
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 10:45:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776015950; x=1776620750; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dWC2mOXza/SkSwnCDLs+5ksMxy/vKU9jO8QO1/AHI/8=;
+        b=qzECqxtzonDPct04usXbQulY5aayPhMvE6BHwKeYqlp5gGCaWAbdZarhfS1TIjyMd+
+         r5/Q7vwss4vvObAFaVz1F7aMNT2CI8UEJUkW3LnJMpwzz9UEctpeYf/uIs+efwEWosY+
+         O9gb276VssUzQ+6BTiSU2xzC+KwiXkOnttP3fHSxHZY2RCCmT0vpglFzjBNgV0atLdoj
+         vCiH32VaE8Q85OCLyCVMT/Rw4oiGEpz1kOcuC1gJ0WcQEYaRs+q54flia/YfHXsxRjWK
+         JVtqtKtON0xxR191dKqXQV1PRKEG7UR+LoGAZfPYBnVAiu5ChtrMFZAiPL4uaRsryCs9
+         nrVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776015950; x=1776620750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dWC2mOXza/SkSwnCDLs+5ksMxy/vKU9jO8QO1/AHI/8=;
+        b=Z5l5uPI5PrhRp6vavYqc+/RJKMN8V1ifTTP9s2DmE34NzW+7w+bI3bOJdMFkFgBjrQ
+         ADhUpyucnK71RzPPHZasGILrJiqMakj5EqAeMDqesUx9hA0vf3QU5E1U78Hy+yW1S6Hw
+         GPkMf6sgM22Hkn3at4k1tJeb6Rfns0rebRkyZe1AaY2bw/ycRxZYSr+q5Oj9tn6KCnCI
+         A1IMJmHPZze5brclC/RlqY2aDZXDxlMwi4Ir4HYeQWHMjWnBBMhtgDxRS8qsXD8s2NKG
+         Kqc3WXnkH6SE/NCfu0Rw2/nfduczX/qMDkDsTkxU7fnqhqYK0Hqwli+LrIRrtvGwc5tu
+         PYcw==
+X-Gm-Message-State: AOJu0YyBPu1N+GCDArIXLnwUwn0xlAyIXp6ZCQdP+1somiBMWTA4VKDa
+	ri4tudO/Lk8TNZMbeeB9SMmRalLJuJWXMk/4eC50q4qh1nuZmUTsJq7Q0teEYQ5fXJ4NQHKb7Sn
+	oErHhTtdVLg==
+X-Gm-Gg: AeBDieuQCg4QvZuhUKZS8T2o+cqiGLYZ4zOQ8++MaFPFX9Vvb2CIY8VJ6RS5gBj5AS8
+	nIDWLuCzZUXAwU4qAN0gQ/tfz/Wmfg64S3jM2hmaCKFEk0pnB5mqC7s78Mr+6NxsK5zv2WwXWdM
+	0Z+Q152dk07RZss1HS2ng2qmdNwru0ObCsaRTbZ9ntoFJq3TVbW/GFMLnTPY/VbA8Km3ve5CzpG
+	xl1jE/uEu1MRu7o7UL7i0JrPHkCRAs8SBlNjHBNixGtRE271sUumq6tE9LfcaLN1FKsYPoReptw
+	8y4ASA9z0GTN/Urm1aekR+JA35pJv+ftIZIs33AqoifLBjAvlgtdehoo6jWEdW8BWz0ArvBp0Nw
+	mN+SktJThee94uufkJt9Qh5ra0bHibD7CoxPaz7Rdsrdl2HQbUE8qHP5HgjjJzSBRObSjoZbEnh
+	JyDw==
+X-Received: by 2002:a05:6a00:7611:b0:82f:1b42:11d6 with SMTP id d2e1a72fcca58-82f1b4213b5mr6039028b3a.19.1776015950416;
+        Sun, 12 Apr 2026 10:45:50 -0700 (PDT)
+Received: from krios ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0df08c09sm8524099b3a.9.2026.04.12.10.45.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Apr 2026 10:45:49 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
 	andrii@kernel.org,
-	martin.lau@linux.dev,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
 	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn
-Subject: [PATCH bpf v6 1/2] bpf: Fix s16 truncation for large bpf-to-bpf call offsets
-Date: Mon, 13 Apr 2026 01:03:33 +0800
-Message-ID: <20260412170334.716778-2-tangyazhou@zju.edu.cn>
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v7 0/9]  Introduce arena library and runtime
+Date: Sun, 12 Apr 2026 13:45:37 -0400
+Message-ID: <20260412174546.18684-1-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260412170334.716778-1-tangyazhou@zju.edu.cn>
-References: <20260412170334.716778-1-tangyazhou@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,244 +76,163 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zS_KCgCnUHN_0Ntp2K9xAA--.22918S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhITCmnapA0X-AAAs8
-X-CM-DELIVERINFO: =?B?ooj2YgXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9HVazVfOnUbgJX+OovLH6fzc/PcGT4Tl2SHtFP5dBEryAGCEslAsh+8MzSnlX5vn9uhu
-	SGEavzjqklytVTmJnGgY0iJWctH955S+ru3BrHnhnt0h5Jiu+q+uzi5VaXe6sg==
-X-Coremail-Antispam: 1Uk129KBj93XoW3JrWxtw1DKF4rGFW5KFy7twc_yoWfGrWxpF
-	Z5KFy7Kr4kJF4Yk39rCr4UCw43Gr4kA347Cas5A3yS9r45tF9xWF48KF1SvF9xCr929w1F
-	yrsF9a47uw1DCrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
-	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
-	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1Hq2tUUUUU==
 
-From: Yazhou Tang <tangyazhou518@outlook.com>
+Add a new subdirectory to tools/testing/selftests/bpf called libarena,
+along with programs useful for writing arena-based BPF code. This
+patchset adds the following:
 
-Currently, the BPF instruction set allows bpf-to-bpf calls (or internal calls,
-pseudo calls) to use a 32-bit imm field to represent the relative jump offset.
+1) libarena, a subdirectory where arena BPF code that is generally useful
+to BPF arena programs can be easily added and tested.
 
-However, when JIT is disabled or falls back to the interpreter, the verifier
-invokes bpf_patch_call_args() to rewrite the call instruction. In this
-function, the 32-bit imm is downcast to s16 and stored in the off field.
+2) An ASAN runtime for BPF arena programs. BPF arenas allow for accessing
+memory after it has been freed or if it is out of bounds, making it more
+difficult to triage bugs combined to regular BPF. Use LLVM's recently added
+support for address-space based sanitization to selectively sanitize just
+the arena accesses.
 
-    void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-    {
-        stack_depth = max_t(u32, stack_depth, 1);
-        insn->off = (s16) insn->imm;
-        insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
-            __bpf_call_base_args;
-        insn->code = BPF_JMP | BPF_CALL_ARGS;
-    }
+3) A buddy memory allocator that can be reused by BPF programs to handle
+memory allocation/deletion. The allocator uses the ASAN runtime to add
+address sanitization if requested.
 
-If the original imm exceeds the s16 range (i.e., jump offset > 32KB),
-this downcast silently truncates the offset, resulting in an incorrect
-call target.
+The patch includes testing for the new allocators and ASAN features that
+can be built from the top directory using "make libarena_test" and
+"make libarena_test_asan". The generated binaries reside in libarena/.
+The patch also adds test-progs-based selftests to the codebase for the
+libarena code, so the new tests are run by ./test_progs.
 
-Fix this by:
-1. In bpf_patch_call_args(), keeping the imm field unchanged and using the off
-   field to store the index of the interpreter function.
-2. In ___bpf_prog_run() for the JMP_CALL_ARGS case, retrieving the interpreter
-   function pointer from the interpreters_args array using the off field as
-   the index, and passing the original imm to calculate the last argument of
-   the interpreter function.
+The patchset has the following stucture:
 
-After these changes, the truncation issue is resolved, and __bpf_call_base_args
-is also no longer needed and can be removed, which makes the code cleaner.
+1-2: Addresses a verification failure triggered by SCALAR += PTR_TO_ARENA
+instructions.
 
-Performance: In ___bpf_prog_run() for the JMP_CALL_ARGS case, changing the
-retrieval of the interpreter function pointer from pointer addition to direct
-array indexing improves performance. The possible reason is that the latter
-has better instruction-level parallelism. See the v5 discussion [1] for more
-details.
+3-4: Minor changes to selftest headers to prepare for the introduction
+of libarena.
 
-[1] https://lore.kernel.org/bpf/f120c3c4-6999-414a-b514-518bb64b4758@zju.edu.cn/
+5-7: Add the libarena directory and testing scaffolding, and introduce
+the ASAN runtime.
 
-The related dumper code is also updated to adapt to the verifier changes.
-Specifically, the usages of insn->imm and insn->off are swapped:
-1. When JIT is enabled, use insn->imm as the call offset, and insn->off
-   as the subprog id.
-2. When JIT is disabled, print insn->imm as the call offset.
+8-9: Add the new buddy memory allocator along with self-contained and
+prog-tests-based selftests.
 
-Consequently, the workaround introduced in tools/testing/selftests/bpf/disasm_helpers.c
-by commit 203e6aba7692 ("selftests/bpf: print correct offset for pseudo calls in disasm_insn()")
-is no longer needed. Since the verifier now correctly exposes the offset
-in the imm field, we can safely remove the custom print_call_cb() and
-allow the selftests to rely on the native BPF disassembler.
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
-Fixes: 7105e828c087 ("bpf: allow for correlation of maps and helpers in dump")
-Suggested-by: Xu Kuohai <xukuohai@huaweicloud.com>
-Suggested-by: Puranjay Mohan <puranjay@kernel.org>
-Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
----
-To Emil and Puranjay: The v6 of the patch is quite different from v1-v5,
-so I removed your "Reviewed-by" tags. Please take another look at v6. Thanks!
- include/linux/filter.h                       |  3 ---
- kernel/bpf/core.c                            | 10 +++++-----
- kernel/bpf/verifier.c                        |  6 +++---
- tools/bpf/bpftool/xlated_dumper.c            | 10 +++++-----
- tools/testing/selftests/bpf/disasm_helpers.c | 18 ------------------
- 5 files changed, 13 insertions(+), 34 deletions(-)
+HISTORY
+=======
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 44d7ae95ddbc..559ddbc4fdfc 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1149,9 +1149,6 @@ bool sk_filter_charge(struct sock *sk, struct sk_filter *fp);
- void sk_filter_uncharge(struct sock *sk, struct sk_filter *fp);
- 
- u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
--#define __bpf_call_base_args \
--	((u64 (*)(u64, u64, u64, u64, u64, const struct bpf_insn *)) \
--	 (void *)__bpf_call_base)
- 
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
- void bpf_jit_compile(struct bpf_prog *prog);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 9de5e69607c6..a35413c668c9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1763,6 +1763,8 @@ static u32 abs_s32(s32 x)
- 	return x >= 0 ? (u32)x : -(u32)x;
- }
- 
-+static u64 (*interpreters_args[])(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5,
-+				  const struct bpf_insn *insn);
- /**
-  *	___bpf_prog_run - run eBPF program on a given context
-  *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-@@ -2069,10 +2071,10 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 		CONT;
- 
- 	JMP_CALL_ARGS:
--		BPF_R0 = (__bpf_call_base_args + insn->imm)(BPF_R1, BPF_R2,
-+		BPF_R0 = (interpreters_args[insn->off])(BPF_R1, BPF_R2,
- 							    BPF_R3, BPF_R4,
- 							    BPF_R5,
--							    insn + insn->off + 1);
-+							    insn + insn->imm + 1);
- 		CONT;
- 
- 	JMP_TAIL_CALL: {
-@@ -2405,9 +2407,7 @@ EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
- void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
- {
- 	stack_depth = max_t(u32, stack_depth, 1);
--	insn->off = (s16) insn->imm;
--	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
--		__bpf_call_base_args;
-+	insn->off = (round_up(stack_depth, 32) / 32) - 1;
- 	insn->code = BPF_JMP | BPF_CALL_ARGS;
- }
- #endif
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e3814152b52f..1015b08d130e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23054,9 +23054,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		}
- 		if (!bpf_pseudo_call(insn))
- 			continue;
--		insn->off = env->insn_aux_data[i].call_imm;
--		subprog = find_subprog(env, i + insn->off + 1);
--		insn->imm = subprog;
-+		insn->imm = env->insn_aux_data[i].call_imm;
-+		subprog = find_subprog(env, i + insn->imm + 1);
-+		insn->off = subprog;
- 	}
- 
- 	prog->jited = 1;
-diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
-index 5e7cb8b36fef..6ccda6787245 100644
---- a/tools/bpf/bpftool/xlated_dumper.c
-+++ b/tools/bpf/bpftool/xlated_dumper.c
-@@ -150,13 +150,13 @@ static const char *print_call_pcrel(struct dump_data *dd,
- 	if (!dd->nr_jited_ksyms)
- 		/* Do not show address for interpreted programs */
- 		snprintf(dd->scratch_buff, sizeof(dd->scratch_buff),
--			"%+d", insn->off);
-+			"%+d", insn->imm);
- 	else if (sym)
- 		snprintf(dd->scratch_buff, sizeof(dd->scratch_buff),
--			 "%+d#%s", insn->off, sym->name);
-+			 "%+d#%s", insn->imm, sym->name);
- 	else
- 		snprintf(dd->scratch_buff, sizeof(dd->scratch_buff),
--			 "%+d#0x%lx", insn->off, address);
-+			 "%+d#0x%lx", insn->imm, address);
- 	return dd->scratch_buff;
- }
- 
-@@ -181,8 +181,8 @@ static const char *print_call(void *private_data,
- 	struct kernel_sym *sym;
- 
- 	if (insn->src_reg == BPF_PSEUDO_CALL &&
--	    (__u32) insn->imm < dd->nr_jited_ksyms && dd->jited_ksyms)
--		address = dd->jited_ksyms[insn->imm];
-+	    (__u32) insn->off < dd->nr_jited_ksyms && dd->jited_ksyms)
-+		address = dd->jited_ksyms[insn->off];
- 
- 	sym = kernel_syms_search(dd, address);
- 	if (insn->src_reg == BPF_PSEUDO_CALL)
-diff --git a/tools/testing/selftests/bpf/disasm_helpers.c b/tools/testing/selftests/bpf/disasm_helpers.c
-index f529f1c8c171..96b1f2ffe438 100644
---- a/tools/testing/selftests/bpf/disasm_helpers.c
-+++ b/tools/testing/selftests/bpf/disasm_helpers.c
-@@ -4,7 +4,6 @@
- #include "disasm.h"
- 
- struct print_insn_context {
--	char scratch[16];
- 	char *buf;
- 	size_t sz;
- };
-@@ -19,22 +18,6 @@ static void print_insn_cb(void *private_data, const char *fmt, ...)
- 	va_end(args);
- }
- 
--static const char *print_call_cb(void *private_data, const struct bpf_insn *insn)
--{
--	struct print_insn_context *ctx = private_data;
--
--	/* For pseudo calls verifier.c:jit_subprogs() hides original
--	 * imm to insn->off and changes insn->imm to be an index of
--	 * the subprog instead.
--	 */
--	if (insn->src_reg == BPF_PSEUDO_CALL) {
--		snprintf(ctx->scratch, sizeof(ctx->scratch), "%+d", insn->off);
--		return ctx->scratch;
--	}
--
--	return NULL;
--}
--
- struct bpf_insn *disasm_insn(struct bpf_insn *insn, char *buf, size_t buf_sz)
- {
- 	struct print_insn_context ctx = {
-@@ -43,7 +26,6 @@ struct bpf_insn *disasm_insn(struct bpf_insn *insn, char *buf, size_t buf_sz)
- 	};
- 	struct bpf_insn_cbs cbs = {
- 		.cb_print	= print_insn_cb,
--		.cb_call	= print_call_cb,
- 		.private_data	= &ctx,
- 	};
- 	char *tmp, *pfx_end, *sfx_start;
+v6->v7 (https://lore.kernel.org/bpf/20260412011857.3387-1-emil@etsalapatis.com)
+- Modify patch 1 to allow operations between PTR_TO_ARENA src_reg
+and dst_reg of any type. Adjust selftests accordingly (Alexei)
+- Remove unnecessary include in patch 5 (Song)
+- Removed unused definitions/assignments in patches 8/9, update patch
+  descriptions
+
+v5->v6 (https://lore.kernel.org/bpf/20260410163041.8063-1-emil@etsalapatis.com)
+- Fix subreg_def management for SCALAR += PTR_TO_ARENA operations (AI)
+- Add more selftests for the SCALAR += PTR_TO_ARENA patch (Sashiko)
+- Adjust fls() operation to be in line with the kernel version (Sashiko)
+- Address Sashiko selftests and debugging nits
+- Add ASAN loadN and storeN _noabort variants and associated BTF anchor
+- Remove unnecessary bit freeing of buddies during block splitting
+
+v4->v5 (https://lore.kernel.org/bpf/20260407045730.13359-1-emil@etsalapatis.com)
+Omitting various nits and fixups.
+- Properly adjust subreg_def for scalar += ptr_to_arena calls (Sashiko)
+- Remove extraneous definition from prog_tests/arena_spin_lock.c (Song)
+- Trim extraneous comments from ASAN and buddy (Alexei)
+- Remove asan_dummy call and replace with function pointer array (Alexei)
+- Remove usersapi.h header and merge it into common.h (Alexei)
+- Replace ASAN macros with function calls (Alexei)
+- Embed buddy lock into the struct and move the buddy allocator to __arena_global
+  (Alexei)
+- Add commenting for buddy allocator constants (Alexei)
+- Add default buddy allocator directly in common.bpf.c, so that the user does
+  not need to define it.
+- Expand test harnesses to dynamically find individual selftests. Now the
+  selftests also reports each test individually (e.g., 5 entries for the
+  buddy allocator instead of 1). This brings them to par with the rest of
+  the test_progs.
+
+v3->v4 (https://lore.kernel.org/bpf/20260403042720.18862-1-emil@etsalapatis.com)
+- Add Acks by Song to patches 1-4.
+- Expand the verifier's handling of scalar/arena operations to
+  include all 3-operand operations in Patch 1 (Alexei)
+- Add additional tests for arena/arena (allowed) and arena/pointer (not allowed)
+operations in Patch 2
+- Remove ASAN version of the library from default compilation since it requires
+LLVM 22 and up (CI)
+- Rework buddy allocator locking for clarity and add comments
+- Fix From: email to be consistent with SOB
+- Address (most) Sashiko comments
+
+v2->v3 (https://lore.kernel.org/bpf/20260127181610.86376-1-emil@etsalapatis.com)
+Nonexhaustive due to significant patch rework.
+- Do not duplicate WRITE_ONCE macro (Mykyta, Kumar)
+- Add SPDX headers (Alexei)
+- Remove bump/stack allocators (Alexei)
+- Integrate testing with test_progs (Kumar)
+- Add short description of ASAN algorithm at the top of the file (Alexei)
+
+v1->v2 (https://lore.kernel.org/bpf/20260122160131.2238331-1-etsal@meta.com/)
+
+- Added missing format string argument (AI)
+- Fix outdated selftests prog name check (AI)
+- Fixed stack allocation check for segment creation (AI)
+- Fix errors in non-ASAN bump allocator selftests (AI)
+- Propagate error value from individual selftests in selftest.c
+- Removed embedded metadata from bump allocator as it was needlessly
+  complicating its behavior
+
+
+Emil Tsalapatis (9):
+  bpf: Allow instructions with arena source and non-arena dest registers
+  selftests/bpf: Add tests for non-arena/arena operations
+  selftests/bpf: Move bpf_arena_spin_lock.h to the top level
+  selftests/bpf: Move READ_ONCE/WRITE_ONCE macros to bpf_experimental.h
+  selftests/bpf: Add basic libarena scaffolding
+  selftests/bpf: Add arena ASAN runtime to libarena
+  selftests/bpf: Add ASAN support for libarena selftests
+  selftests/bpf: Add buddy allocator for libarena
+  selftests/bpf: Add selftests for libarena buddy allocator
+
+ kernel/bpf/verifier.c                         |  14 +-
+ tools/testing/selftests/bpf/.gitignore        |   2 +
+ tools/testing/selftests/bpf/Makefile          |  28 +-
+ .../testing/selftests/bpf/bpf_arena_common.h  |   4 -
+ .../bpf/{progs => }/bpf_arena_spin_lock.h     |   4 +-
+ tools/testing/selftests/bpf/bpf_atomic.h      |   4 -
+ .../testing/selftests/bpf/bpf_experimental.h  |   3 +
+ tools/testing/selftests/bpf/libarena/Makefile |  77 ++
+ .../selftests/bpf/libarena/include/asan.h     | 118 +++
+ .../selftests/bpf/libarena/include/buddy.h    |  92 ++
+ .../selftests/bpf/libarena/include/common.h   |  67 ++
+ .../bpf/libarena/include/selftest_helpers.h   | 121 +++
+ .../bpf/libarena/selftests/selftest.c         | 188 ++++
+ .../libarena/selftests/st_asan_buddy.bpf.c    | 241 +++++
+ .../bpf/libarena/selftests/st_asan_common.h   |  47 +
+ .../bpf/libarena/selftests/st_buddy.bpf.c     | 208 ++++
+ .../selftests/bpf/libarena/src/asan.bpf.c     | 559 +++++++++++
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 903 ++++++++++++++++++
+ .../selftests/bpf/libarena/src/common.bpf.c   |  74 ++
+ .../bpf/prog_tests/arena_spin_lock.c          |   7 -
+ .../selftests/bpf/prog_tests/libarena.c       |  62 ++
+ .../selftests/bpf/progs/arena_spin_lock.c     |   2 +-
+ .../selftests/bpf/progs/verifier_arena.c      | 130 +++
+ 23 files changed, 2934 insertions(+), 21 deletions(-)
+ rename tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h (99%)
+ create mode 100644 tools/testing/selftests/bpf/libarena/Makefile
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/asan.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/buddy.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/selftest.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/common.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena.c
+
 -- 
 2.53.0
 
