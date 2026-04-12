@@ -1,208 +1,135 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A82937BE9B
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 12:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97078271464
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 13:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775996339; cv=pass; b=lbJ3sV39I0+51eWPzjkizne2ZvScgymwhv3OwzeF5KKRtmyhDvm2ayQBIpbLjfm/Ez72D7GE3km3UbkEcugkDC0TKvR60wO8PBPaII3dn3CiRtnopl6Grb0QnnqXfRamw+bciFQFHfHpR3DGbQfylAyNwde+19dZwq6O89/Qlyk=
+	t=1775999324; cv=pass; b=lYIipmCuOJz8AxgnderEZna1JCo8IJwk8A7jiHBNbdHQkFeG/AlSAA78ZMX0px1TLyvmIhFZFTbrBmCcAB4VawFvdwWuGm+WpZKK62fPJ1obR418JWsH88X+4e3f+sRE0QVwcypKgNkcWDCkAjkBsKYz3IBqVKsAx4+7rqA4i78=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775996339; c=relaxed/simple;
-	bh=uafX2bQpJrLfg9yfw+DCfmB3m9g7ysXsoTFfZ75pRt0=;
+	s=arc-20240116; t=1775999324; c=relaxed/simple;
+	bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jqQGCRGoRGgCSxhz6pwGRi8ACV/OwT/1tqc0uVh1/QlFS5EC9lsHgm77YAz2NLORopy0scPjMKHxdEscYxmKglcLuMmUBZaexs5aaXtSnISxTTQ4Y6qMeb76pQslxrhDPDhIBtEluj88+QFyW+sBxmRQ34DGD2OGI6uykHG5QjU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L1w7iWpP; arc=pass smtp.client-ip=209.85.128.170
+	 To:Cc:Content-Type; b=GNpk/6iuc03vXpdXaC0bV6s5ELGN+FijecyzWUfsXjnk5EiqxZa35VP+Y93ghrhxMklNrIcWs3C4/aMDBz735Rq6C/XNb0LBLzjNo7BGIfxpvlYZPlCSz+NfLcqXJdOHIATG0n2LTEutWhU14892i4g36eT1KTBgRioG9qbMYR8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kuLJlfN2; arc=pass smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L1w7iWpP"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7b248750279so2343437b3.0
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:18:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775996337; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kuLJlfN2"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-7a17bc5745eso33165497b3.1
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 06:08:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775999323; cv=none;
         d=google.com; s=arc-20240605;
-        b=YWt6NHrlxQAHdSGN+o6gHVOO3hfMRLjMg1JAWqCgv5by83YL51sWjRyT6aercLR4wk
-         DuqZOBvnDEgdNHjoGhSVDO+k/HHTFVKOAvu9pN83I2a2MxJ8e7Jc6+WHAGmbhXBaBSBc
-         gae/Me+22G4edGV21BBjAbaLIHCWxtM7eY55hj2t69VGujkKO86B1v33Wi8S+AcdDE47
-         JLdKDbPIh4TRXurP1ACBH8jWTfMa76Uvhl4KWpb3UfKPa5Khc3mD+1EZM44yG2Hf9rba
-         /h+3PtQMxgwvJPqAwIHnQkqeLK3tjKNx+bE3t6O3c6UngkZc3q4z4m1mCUmpfxSDbhT8
-         wr1w==
+        b=eUQbtC7caygfrKA6J5xHW5N/XJrfbVPwMTb4RlzFTMVC9LWnCARLmC0ULSbs9Ttulb
+         CutXqZeV2Ch54PLZApSevpwKtDwFeOWAjQ/nuhRl0jW2sJBQlpjCIjW03sOTFvqUkK1r
+         722V8f+LIoz+h1RRLAos3PpiSyzBjranm3fJ6wE9BrDH7ex8T8WS2SZE1MyomCkiCX3o
+         GFaXzprtrW8dgZV8NOXlOEmX3/iOIbOwbXyCFanTBSaH9mA+oDNm8FqFjbTds4qTvfk0
+         w+5U0Xq2H5MF0SZ3g9kw/jv3rygusl3VjpyEwsNyLyKqW1jlXoZuzK+aOubK8AamTdGC
+         VcHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=pDCtYpSt5MQDUqGRaPZuhMEbLqOBYANHADybtg+qQXY=;
-        fh=ITi6V+df/BLXKtPIOzuiePDH0Gx42eXDKfus5vZtqfM=;
-        b=SEniWsKGrt+eCr0lJupcfjE+GZjPZ5r7cNmAFd5WaBFWvsKY/hF0jS3KjZwbk6kFYd
-         FQ7xMcefXRLKUfVXICcoziSn/Z6XE0UGl/ewt/O4pfMitt8NfLsOX4YyOgmN7fbXKviV
-         blvn7Dl/unMJ8+jfLGB2ltjgLcpElFfMoWq7y1UpZUdnA12OJzCnc0lWzRCP5y9aqINV
-         S0B3Fsk3/DS+a1bRDPXvWcH3rs5rbB4xTt9Pz7YOcxgtDLDCXZpMDizR8zioD7Tybw3o
-         2ZQqaH6YW68pHGvS7jPVBg+Bvjg3pfWjoOya51AQyZeSSwp6WxidqXKcxUoGsAusl8/i
-         Rl5w==;
+        bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
+        fh=zkpf4b2ndjNtM09+fSDmeTkdWHaF+E+LAkYWkk1TmjA=;
+        b=k4oaEjWWooskFAGbe1FwuCa8cjb0XZbnNmf2ZE2R2/o/yCYxm1OF2YBFw+cReFMYea
+         HIiMalH4m1KgGhlRNtW6KYklcL973QVjVXRl8YZBGuUUrVtIV+fBiALlotw/zCpop9as
+         k6/KhwhycAhhufzOXrgOipvV2552jJX0N5g3nWSSS5kexd1gN/C3WW4X1E+9v4OLmOQo
+         qnSlBlYW0R61Dlx3wq9OdxqoFTlU3WXssiuXGi70IBmjf1K16T5XO8yOpwsVkkH+OlRJ
+         aoA5mQgm5Y8fk7rLhqJvzI50p8Di0IL32NuiqJtlGdly5rhi1h0M4ZHXdFeoXEiMMXuX
+         L7+g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775996337; x=1776601137; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775999323; x=1776604123; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pDCtYpSt5MQDUqGRaPZuhMEbLqOBYANHADybtg+qQXY=;
-        b=L1w7iWpPjeegHoc9cP6BaGEAqFGK/8eCGY7df9Mu6T7TiPe6jg8yrlfT5j7X6WhBZS
-         JCZf2TZlC/ol2ltgkb2jLz+ZBfnaddtYmm7F2xg9ysRtaKPYEIIj6Kc3fMIWXVRQhfS/
-         Rv0lcdIXCgI16EFL0Z8jQJqxDECvrtcyPN0s9S5J4Q9Ac2X/MxNBac78S1FhVR1+aDbn
-         mKfrDac9sl7Lf8IZ8AxVCoHAyODdkNQMhgvyOhwOlgaUNvf871kGs/tzQ9Y5Q99GPL7T
-         roUWoyD+oGDJmTDhegrO0nRZOlBkMQKlLi8EulyjkxfBm0psBw1b1Xa7X+laho44JjdZ
-         +Kqg==
+        bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
+        b=kuLJlfN2DofUdwT+syoUrQnMLqlZ2KfG0EBZ1q/hifobtYSVUf8KPZ+5/xpeS65+2C
+         qyw3K6M4M9KjNrd5JZuGUGe3phaSxvCaCJzvrr7jmZbajOrDNQH310++fEFEenwmy6lB
+         Vh9FDFQ/c85PE/z5N72aABXIV1fup6Qaqybice0OBLoS5r2LtVbLd3fkDHyX6a8LMhnj
+         +E1+2MLUzdYmAh9HtLus2vxfQUL2HsxFmxvykoosuzJ2IM39eZU44BzhIQk6SSMpi76B
+         TTNjs444BUPjEe9kbqlQ6JzCBO87y3LZ0lg9CPvAyTrfY/q4ZCccUdaHwMOX/JPzZIQO
+         Yl1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775996337; x=1776601137;
+        d=1e100.net; s=20251104; t=1775999323; x=1776604123;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=pDCtYpSt5MQDUqGRaPZuhMEbLqOBYANHADybtg+qQXY=;
-        b=qVZu/TyjCjkZ57k260VP79Hpt3RfXKGbNH4O5YV02aZm6XmwWiaffBA8CSDyvtZmn6
-         INmhiMBQVAau0szmJVFzO6DuyCWTO3+ryyBow8OLSbS4J5mKIpvCT5V+5Q3FPaLwWoJE
-         BU5gke851VMA2LKAdZXzQTgbyyBYV0ISAUrP1qRTP5N1zTzlG4+zng0u7BjHMZjZqevJ
-         QXkmQPn/bZatI8V5Gh2Hg/tI8aszxm6Wyj/SzVOR6oJpgRqWxW65pAcSUjgJmAyfsZv6
-         hwg3xG/5Qsp3xzgM3Lz6u9TEJ0F+e++ak216auK6i7c3zqAM3Hffur6AkcyaSTMlBcyf
-         CVfw==
-X-Forwarded-Encrypted: i=1; AFNElJ+JUX58yySfEJjZSYB8D9Lg8WcB42WZXwv5THway9oXUkMduPzkopoh7P6UGwl6hK3t7Hk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx64hsSH+m45e70TfGZSPJPu9xKEir9c6BQvX9crSInLK1Kx/+6
-	rijcJDUsmghvWNQfg8vlqwKcH1OcXgA1ilPea1Sy8DPb2PxJeWqhhjH3l+cds4Rxmi9WGH3bJa2
-	ZmzYvSWk2kV45uob8Znp3H7KqSnlEaNU=
-X-Gm-Gg: AeBDieuZqUO7ME6SkvX7EVXvOurReEIy8BV2ULulyONxxb99qvz1K6/9oNCsZzIHxZB
-	++bWKOl8kNAvYoNaQCqGmpEFG+4u/w/V9XNEqSrdZXSBrEfNYs04BTPhVhaMOZKy5q2SUQeHZ5d
-	f1BXclApoIbKcaZcrUUnapSwrtRODFsUlwTPvK3Ji5hqWp0PY/neHC6Mmmhp85ZBcvLKpGEJgWZ
-	U7XHTrA9hF8fBubtG4Tgp1jr7fSfSgt2IxhK5SomlMqjpdy4ouF2jA7pgF2RaCHEPKJNPmc628P
-	n48nqNFKifbBfF0jKeLudubvbGBZeOCi5sN1f8Mg
-X-Received: by 2002:a05:690e:e8b:b0:650:70da:bc25 with SMTP id
- 956f58d0204a3-65198c71a1amr8599414d50.58.1775996337015; Sun, 12 Apr 2026
- 05:18:57 -0700 (PDT)
+        bh=MhNSVDq+Mp4atqhKE+k2G9tvL4hBYd8ILox5fx+oqq8=;
+        b=n/uiRK+1mtxBRD83WsCT4CwGnNdjKJ4ZoIf1LUCzJIE7jFYsyA0ZLMt4G3HQZz0JMx
+         GiGbert7591yhlDFq6qMM09PdQI/ofE4RCS0/+Zbb7mIjEG2a+FwT5L7XBNOTwmhwSxP
+         H0izhrD7TPZIq9lqhHcJzWf2fcA6E4CkJNbDMnF/ayJ+FUEKku5j878SgREHGlUcF9+m
+         lNEY3L/GAzg7VFJ08Ggw58vRY05SNLKfN2Mn3T5E7E7Jrs+h6L2PDs3SZQJ4CiQgat3q
+         iIdUITXVz5QZDwTJvlVrjswa0OLANbw9Vv8w4EfKS5nxBmu60lN6cR/pTi4axSifkwYs
+         xErg==
+X-Forwarded-Encrypted: i=1; AFNElJ/0yaPoAnoSbfFK72Z+WUkunCQT6BtO2UjiBjktirsiZk27e97vXHuZOZA8fiVEpHuasUA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpKRS2G3x6E6xfDXWhgV/pnh1suzIpBi+UjftE55Ruw+9NeHn9
+	r+MQPJRZoBomqQJl35Lx6ecCNTwlaf8Pd5Zs8Aifbvs5g5KcWj7M2GMJsHZp47iGr3vXEWMCgn7
+	tnprtXNoxyRWPG2OU4pnwPs2B8DS5z/s=
+X-Gm-Gg: AeBDietcnQbgcwplrzWE8b4NVe0MnFwtzOxaXRfTfRcVXlGYVKnjx7m8mHiM9oc/icZ
+	p2+QwhCSr/nA0hzcY36PyMB01RsWTWQm5CHZQjiA28szL8MC7JrkX6/zxrjgDUMXn9xbxfv6LxZ
+	IIsnSIhO+0z72QJ1CgbBmXfmjdXx/98qmldBwWZGgSUMVEYHeNHdl4SH8LUskhkNJ+hyByC8xI2
+	K8RkVNPaEWAeaLcPnvd5+U9V1sIrLbcMLmkx6z6YKuW9x+U9fU3Ov9a88d8OT8xTSgPQIA8CCNC
+	bbJysI1/QTaXMiH5L0JRwacUr3/HQ+SQbS30JrvQ
+X-Received: by 2002:a05:690c:e645:20b0:7a6:1df5:c99e with SMTP id
+ 00721157ae682-7af71578411mr84093067b3.30.1775999322635; Sun, 12 Apr 2026
+ 06:08:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
- <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
- <adQhpBC2W9I6QW-g@redhat.com> <CAPhsuW66tuF+QZ0pVheWb5sC4NQ-9CXikq=zMrPBXTHcsVPjdg@mail.gmail.com>
- <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
- <CALOAHbCxPA0dtsx7L2kYn8wwBdM=krZyOpfRTBiDW9qfA_zmzQ@mail.gmail.com>
- <adUd0Mojbtrwmeod@pathway.suse.cz> <CALOAHbDG9mq1iJv5suct=cqJ+2r8VvJ-dXN=nuvMw0XYqnUjxA@mail.gmail.com>
- <adY_WgA54CDtWBq6@pathway.suse.cz> <CAPhsuW42WqGuZ1Z-RG0yzifZ7rh=XKUa5hKb6JxLeTWdc4s4-A@mail.gmail.com>
- <addW_-whBavyHY-Z@pathway.suse.cz>
-In-Reply-To: <addW_-whBavyHY-Z@pathway.suse.cz>
+References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260402092607.96430-3-laoar.shao@gmail.com>
+ <alpine.LSU.2.21.2604091145340.31526@pobox.suse.cz>
+In-Reply-To: <alpine.LSU.2.21.2604091145340.31526@pobox.suse.cz>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 12 Apr 2026 20:18:21 +0800
-X-Gm-Features: AQROBzAAbQj2joTRPhJ-lyVJz17Ih4lLYbyXLH4mJVa2clLa9rohXScgqMMq5Wg
-Message-ID: <CALOAHbB-b6YUx4zQjp-AgV0gYp26pKjwrjABd8+XJHNsW=0EtQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
-To: Petr Mladek <pmladek@suse.com>
-Cc: Song Liu <song@kernel.org>, Joe Lawrence <joe.lawrence@redhat.com>, 
-	Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org, jikos@kernel.org, 
-	mbenes@suse.cz, rostedt@goodmis.org, mhiramat@kernel.org, 
+Date: Sun, 12 Apr 2026 21:08:05 +0800
+X-Gm-Features: AQROBzAclerg8yyA2S4z9obC58pWuFg4E2KRrI1OP_QkCniXP5TtVECzkOzNGHw
+Message-ID: <CALOAHbB5yyj4wJBOZnspVUPfoyumrxHcq2e27hzY881G+Jc_tw@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/4] trace: Allow kprobes to override livepatched functions
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
+	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, 
 	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
-	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
 	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 9, 2026 at 3:36=E2=80=AFPM Petr Mladek <pmladek@suse.com> wrote=
-:
+On Thu, Apr 9, 2026 at 5:47=E2=80=AFPM Miroslav Benes <mbenes@suse.cz> wrot=
+e:
 >
-> On Wed 2026-04-08 11:19:50, Song Liu wrote:
-> > On Wed, Apr 8, 2026 at 4:43=E2=80=AFAM Petr Mladek <pmladek@suse.com> w=
-rote:
-> > [...]
-> > > > >
-> > > > > This is weird semantic. Which livepatch tag would be allowed to
-> > > > > supersede it, please?
-> > > > >
-> > > > > Do we still need this category?
-> > > >
-> > > > It can be superseded by any livepatch that has a non-zero tag set.
-> > >
-> > > And this exactly the weird thing.
-> > >
-> > > A patch with the .replace flag set is supposed to obsolete all alread=
-y
-> > > installed livepatches. It means that it should provide all existing
-> > > fixes and features.
-> > >
-> > > Now, we want to introduce a replace flag/set which would allow to
-> > > replace/obsolete only the livepatch with the same tag/set number.
-> > > And we want to prevent conflicts by making sure that livepatches with
-> > > different tag/set number will never livepatch the same function.
-> > >
-> > > Obviously, livepatches with different tag/set number could not
-> > > obsolete the same no-replace livepatch. They would need to livepatch
-> > > the same functions touched by the no-replace livepatch and would
-> > > conflict.
-> > >
-> > > So, I suggest to remove the no-replace mode completely. It should
-> > > not be needed. A livepatch which should be installed in parallel
-> > > will simply use another unique tag/set number.
-> >
-> > I think I see your point now. Existing code works as:
-> > - replace=3Dfalse doesn't replace anything
-> > - replace=3Dtrue replaces everything
-> >
-> > If we assume false=3D0 and true=3D1, it is technically possible to defi=
-ne:
-> > - replace_set=3D0 doesn't replace anything
-> > - replace_set=3D1 replaces everything
-> > - replace_set=3D2+ only replace the same replace_set
+> Hi,
 >
-> Yes. This well describes my point.
+> On Thu, 2 Apr 2026, Yafang Shao wrote:
 >
-> > This is probably a little too complicated.
-> >
-> > > > This ensures backward compatibility: while a non-atomic-replace
-> > > > livepatch can be superseded by an atomic-replace one, the reverse i=
-s
-> > > > not permitted=E2=80=94an atomic-replace livepatch cannot be superse=
-ded by a
-> > > > non-atomic one.
-> > >
-> > > IMHO, the backward compatibility would just create complexity and mes=
-s
-> > > in this case.
-> >
-> > Given that livepatch is for expert users, I think we can make this work
-> > without backward compatibility. But breaking compatibility is always no=
-t
-> > preferred.
+> > Introduce the ability for kprobes to override the return values of
+> > functions that have been livepatched. This functionality is guarded by =
+the
+> > CONFIG_KPROBE_OVERRIDE_KLP_FUNC configuration option.
 >
-> I believe that it is acceptable because:
->
->   1. It was always hard to combine no-replace and replace livepatches.
->      I wonder if anyone combines them at all.
+> this is imprecise if I read the code correctly. You want to override live
+> patch functions, not the original ones which are live patched.
 
-Because 'replace' patches can supersede 'no-replace' ones, users have
-to maintain a strict loading order. I doubt anyone actually combines
-them in production.
+Correct. The BPF program will override the livepatched functions
+rather than the original ones.
 
 >
->   2. I believe that nobody tries to load the same livepatch module on
->      different kernel versions. Instead, everyone prepares a custom
->      livepatch module for each livepatched kernel version/release.
+> I also think that if nothing else, it needs to be more specific then just
+> checking mod->klp. It should check if a function itself in klp module is
+> overridable to keep it as limited as possible.
 
-Correct. We always build and apply distinct livepatches for each
-specific kernel version.
+That is exactly what I am currently implementing in
+trace_kprobe_klp_func_overridable().
 
->
->      And the tooling for creating livepatches will need to be updated
->      to use "number" instead of "true/false" anyway.
->
-> That said, it is easier to always use "0" for non-replace patches
-> instead of assigning an unique "number" to avoid replacing. But
-> I do not think that this would justify the complexity of having
-> different semantic for 0, 1, and 2+ replace_set numbers.
+> Even with that, the
+> concerns expressed by the others still apply.
 
-Fair enough. Let's drop backward compatibility to keep the
-implementation simple.
-
---
+--=20
 Regards
 Yafang
