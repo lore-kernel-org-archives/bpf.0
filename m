@@ -1,93 +1,94 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C8B9186284
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 23:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB1E156677
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 23:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776035638; cv=pass; b=otdASnnv/cmMhJq1RH8+huPjxqrJjIQdPza99wijhSBo/ISSe2motdqjIUrCfEJRs002oM6dXMFms3gK92WDuxlHqy9AzN1sZFs7W4e2NpDlfTPYl6oq885pSUNmQHda9qp4LraBUqEb3j+ME5xzl3IBIcrWbcbe+M05sw2szK4=
+	t=1776035741; cv=pass; b=eVMd6wNFe95mMc7/0tRTlV/s9PFkRiTYxGoXN6FUnO7nrDFgiCJg1uDDvGCSvubfbeeJIEblTNoLLLvWGAqAyoy7E1TNQInQiXzWQw4l2x0J5S7M71tHvD55QWk9myFJbmJsR+R1DLoJPkDJsmOZ0krhsiaMNyiAHhxL5/V/pyU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776035638; c=relaxed/simple;
-	bh=OvyiZMLoxX3BPJUUEyg9JbjgHozYzZqa9sE6BCOrHVk=;
+	s=arc-20240116; t=1776035741; c=relaxed/simple;
+	bh=u6J4fQ+rdazm3+dVF7FE+8SPRm/6wsJtUkbtpxlq0J4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TWsNU0v15PjP41cpi00xTkcwmzSBj2x56MUfp1ZPFQZg+w5PPF/Tj0C0+FGK9Jep9UVynXfWbAZ+cylEU82MWQUD+UTW7GAfMNs6HHFmPCq034yBlyiZ6qYqqmFhoElKz+zrHCJVzAvE6sk+DgKOchZ+6YMDx56feihGk/+GB+4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKnD43o0; arc=pass smtp.client-ip=209.85.221.47
+	 To:Cc:Content-Type; b=EADBYyrwNFVawLnHyCOxRc6HSU4oufo3TLCSGjUNMm+8dgtCBfhn/z6FbifrSjjdYcT8UThbLCLI/YGCWCRoKs/ewB4ufY0DXUhf92GvZWq6/tyLr6oRc1TAlaHktT8wRnQkJC6ZSERRqRjwX4x30te3t0ewO3xGtUozSEI80QE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NXHtK/Tz; arc=pass smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKnD43o0"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43cf906b007so2321662f8f.0
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 16:13:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776035635; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NXHtK/Tz"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488aa77a06eso65003345e9.0
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 16:15:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776035739; cv=none;
         d=google.com; s=arc-20240605;
-        b=VsJcslHzo1YvKGYhn1v1WCqwNY7OJudxHJC4CdQxDhG5sKUAQ1xhvvGCp0KZXJE6lI
-         8TbXGq9KsO6idRR2EhssluEJ1gA7B9aB9F7JjY07BwZWKHvT/+HthT3kmud718V462ZI
-         KwtNvsmY9/EYf7LPOG2DqTwBZ795fI0tcoFlRfM9io1iEwzLrgP56+HgNV0iNAJt73dA
-         CBvHSndDXcCm2MO30BMZjeQ7gFqJxLg1yjCPrLJrTNGr623zRLN3V2NccGvu+Jbx4cLO
-         nI89cf8ozaOpqipwsmBMPIi9fdHGdQb7cLLwFEqbqrksK8KqWspZ1sVJfQrd9AWYfITE
-         CVlw==
+        b=ZdRa3Z3cRetyqnieJXeuYIEbxmU+rNquBOJdsr6C3LpgxAy3cgH9talt4NxwEHMoPH
+         DcHzSL3MT84Gk1Xn2GcbRGCBg36H7W6mPg3JaaLPjVmSDMpuWY6ZWv9e1nRVDTGNutHB
+         ksBYUHvsff8dhovEs9IIeZBjEwz1tx5U5q46qTgkIXR0LCAMZGYGAHeKzbPKx4CuEhQ8
+         gzm4mAKjMjYlx8erZvqYv1PYwAk8pvaXtOpLMXEXDzJEXfubdXCr3agCLrEYXqVPK2pd
+         xt/R43STeD0QdG43TsJqAevS7BZ0itCu1WvrH+SNL5gZMiT8Rjpyjr6f76N+ohx+/Kep
+         o/lQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=DSjHYoAQF0MsRrTTTuwzpwQvdpllUnjwd/m6mYv3TIk=;
+        bh=jbSTLfpjceQei5hrkbF7ESE97kfXLmFRMS6NVAuGGt4=;
         fh=AoyNRaktsZ7bW/hTwiP8Dm5frmwh/+vEg7lx+EPGuMM=;
-        b=Wb9GT/DaBOV9PWmRg6c5eshvja+ZT65hc7BG59Hy2B6YJr0/2O3OKloSWVPtUUj+Hl
-         oOWzCstO5Ixd4NWRKpS1fP2RD8uVOrCS1tcliR3/HUlh7kw+L8BMU0WlAMcyaJ9OZXzA
-         dcpHaUvHp9gsUAeEYXdkedvtI5m7MPzoQp+X8U6vFxdVFl5hApuu/g/gYoUPS2J7X84P
-         hQdxvQNLI4x37P2xsRDHx5ybss61/e3X0kG5zw1yqoArg3Tun/GkIxZw1IuXAi6MLoch
-         3j0q4Bblo7VoQQsw4GRvuUwoU3spaRDC6dKZsRJhGQmyUoYAFg7zKQdMsjfQ2hHeqzta
-         NOCQ==;
+        b=F0n4ATrbtIW14n3g0/62OrOLQKX6CaRGM4SAJPSDBCKWdo64arvhmqUJbMohS00qYV
+         48LkYRvDfXGt6pnh3UpZApNYaM2HBOxeFtoLQNkRXIckUFhu+iv7ztyr6aV5jikZh+8D
+         VdmoErEDtvBI68U/lrSVdezuTzrWW8qj/1RclRE54y5eYiPhW1/jCrOWTq3OFzMeqbFG
+         dQ/kcrUdXMQb7NMWyE5BMlFCXIGrt7zLRq37SKq9i4fl4s/CCfCx3yMyE7Ed1dgwVgwP
+         DZFKYcHNo18m4YZLMFRhv659I6Gy19sRmBKjHpyY8GRkeQwnC1sY8N4uN7KZAN9NRfzZ
+         k7OA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776035635; x=1776640435; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776035739; x=1776640539; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DSjHYoAQF0MsRrTTTuwzpwQvdpllUnjwd/m6mYv3TIk=;
-        b=EKnD43o0YLfh7bJwX0erDQDIQqIkH2nqfQwug2uf3wj5BUe+rH+F3HuqqF9SU6cPh4
-         5JTkWszm/ZLNP/y0f2bl2TJuvIKZiRzAHf/eVw9xBkcjiiwCeKHYLBuOv10szvMN9BDo
-         mFyB+kiip8JwP+ka1AbebuzqlonRgWKP9M55VIjNUXxklgyzEiQEBM7Aj2gtqeJvXWT5
-         FD/du1POvsyXUgtC3//wsdh4QXDKObNq3cV4qbiJlhrPyxKzfSB+UG2cc5QK/Ywwj2HN
-         U/B7XYd0mpBebpRroO5cafkgg2r6k8LfbmeMhMvK80vNH/9zbhQ6BMgYyLJS37bL9vuU
-         WEtw==
+        bh=jbSTLfpjceQei5hrkbF7ESE97kfXLmFRMS6NVAuGGt4=;
+        b=NXHtK/TzuyQzeAeWQvbwxDTP1W5lmo8NWrWY868uqKYRMGlLSTP0owXrKlfNOi/Erd
+         5Z8//5FP3yxeWaWXVldyWnBUPCDGtmuu3LBDofRGuiKBde/3NwSBoWkgjxzfhG54ZEfF
+         Bw/FMIjxYW9u8D/MJQEx4egNjTRUCocUSX9bALs8cMjJ9GGMVX/9oCGTnXHCnKhxS8ER
+         Ft7MusEsU/T7opKpmDWc3CZmsVxTzJIraKi5jgH2wmKbBa4zc1mowqg9pisf9q9QjVd5
+         zaCOMxeRqexd19QB0PLLVHq+acLPXSyslvnEcKaRHoiBJ+yYjWFETn3PasV4rPotgR/G
+         fA0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776035635; x=1776640435;
+        d=1e100.net; s=20251104; t=1776035739; x=1776640539;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=DSjHYoAQF0MsRrTTTuwzpwQvdpllUnjwd/m6mYv3TIk=;
-        b=KFB/8in+pk717VDzhb9pft47yFk75nLhVRUiMTw2p9S0L9Wt6vpDqqiyJijCP977hM
-         1gdhLedmmR+ZPUY8QKqgztIYcNXtnhctrp/K+RHqHADcUBvRgCTu88NfAg0/EUVvkfOe
-         X0vr+s0VL0dVq0IA/ja4Z0P2tQfBa+wqlzu4cKiiyyCq3ro4QPkNcp43zxihuMw9JStM
-         UnQonc8s+sIAcUoQ5EU66GYCC4Hl+HDmPaP22Z2apcM4tAta7sN2FmFurfJicyYpGFkE
-         Fq/n3O0qktDkMQfBVkNeC2yo++jkX+wuMx8vF8egGgIwhwFm3OyCaWpyzIv5afDqr4Nn
-         LA9A==
-X-Gm-Message-State: AOJu0YzG/s9srr1nCxF0R2ii9aQWkJ3381PdzvqNN+iZZ318D8BeEIwV
-	Zq32DnyNKqREdxlEDyUhDgdZN6TQpcJjH0LWl1qQeBuuB4QoIzzMcsiCNwYasDefECERqCvmRxt
-	ax1LFRGxCsWVgaM8wpdNMZFqMqoaz85o=
-X-Gm-Gg: AeBDieuo3u+lwtp6gAFf0rHLENE3wvxd0V/KAC5NzcjTo1IRTHZon1BpVoKDW+qsvPi
-	dz36aB8VJIhiwp0GRYG2mUFr+H7KgrRFlPnPCjcKT3l8YfrphP7cJXl4o6Z2r8caMANnJupRkLD
-	LXb1CgmNwwuAEv/7Ipc8Qh69I+4iL8mFs4CLgElkHJEY8KMwEvDpSS5sIJzDRm6GGxCovMX4ZSj
-	Wt8NkX/HEBQyRtTjD/xhhz4fuILbNWlnRvb+tAi1gk9qK3wVXI/ZKPuEoBXegXsGDJ4v2ekm3vQ
-	U+EnovsQixKKPhOfe/DLE6zwDt6xTDgFZRGqEh/ksiv68l/SodmxufOYNk5cE5n0nB87yRC+i7Z
-	GApt6off1a6V4dZuC7shoAIhUJw==
-X-Received: by 2002:a05:6000:24c2:b0:43d:73de:abd1 with SMTP id
- ffacd0b85a97d-43d73dead06mr4443308f8f.51.1776035635514; Sun, 12 Apr 2026
- 16:13:55 -0700 (PDT)
+        bh=jbSTLfpjceQei5hrkbF7ESE97kfXLmFRMS6NVAuGGt4=;
+        b=U8hWtd70/aKReYKIzYXcfPwxL5XFHfSWT+9u3rrWGUtwf+iWides0YybHLFmz8ApcR
+         RdlyZHmtcQ11ABL7o4zrUw5ifoksm9FR3wRwNj8kepTB95Mp0JfU0nAWtuzXdsOdpfVj
+         uj/ue2R16I/hojP52vbGb2keoNJmqAG9/dVvTOTFRBuZTZqXNBCsiDRVbcaUVzgLL1uT
+         9LheucfL9On7eB0Bkwx0KKyQ9iwRZfOsvrwZEdlQwH8rKe5uTeUJfCzxHtM83IkqGYP2
+         av8KhTB2JxjASHxnWmvThXerzNFCOzBfr1K/HWRbxv0enY9/VOgdnnmyZyhXiNu3Intd
+         KBoA==
+X-Gm-Message-State: AOJu0YwhnT9FKql3wor2ZoPP+5Y1RSJ3Q8VUHPeZpZw3rJBqInnXYf2h
+	j4GqH5idSwXPStKP/TnHgUZDXNm+SRaClDXBryLzbHLaGbiQag/9WleWrvg0aK0bsKgucu+ivpZ
+	xr1ZyzVDY7aTMiHhe2KotTD8crFqaW0w=
+X-Gm-Gg: AeBDieurIHztktiJfbTDqvFJ1xL+9ZwqCFccjjkpchDUalx5q4FKKQWHKjad7cWfvvT
+	IBEG+vld10CMSAIGuT3DK83rUbzhYbMdtX17nviD8KzTffq/K5KBZvOCsp6RpOOgUCbQOyLUWTd
+	H+7VAeaP47hW21o4m64XB1ZCKBQLTzrpCzrEBI8jRGtdOiH52RKC462UMsXJ/ODiAz91luuXOL5
+	1hDtQlbGSgtzu7S3WSB77SNLnkFerBkrVb/xO8JQo4pwb715ki1VP9RQVFAPxFNIFWvZcXktfIg
+	QmClJJgafF0wMtROzlxfSw2VIbdyPQDxHxaFdNUSo3waVhT+Jst5qH2EeEx6wqGjSdUkZWIqhUx
+	7IX89WaFLbYANyPZIIHYMmWkUVA==
+X-Received: by 2002:a05:600c:3b29:b0:488:d07a:b178 with SMTP id
+ 5b1f17b1804b1-488d67c7029mr152420095e9.6.1776035738593; Sun, 12 Apr 2026
+ 16:15:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com> <20260408-rhash-v2-4-3b3675da1f6e@meta.com>
-In-Reply-To: <20260408-rhash-v2-4-3b3675da1f6e@meta.com>
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com> <20260408-rhash-v2-9-3b3675da1f6e@meta.com>
+In-Reply-To: <20260408-rhash-v2-9-3b3675da1f6e@meta.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 12 Apr 2026 16:13:44 -0700
-X-Gm-Features: AQROBzC1ik6rp9TViTaBBFbQXSnVaO4bar6kg13iU6amrtwquEn0qIWz5v96usY
-Message-ID: <CAADnVQJuqv+ZkgaajB42r-PNj_zFWzvCakOs-jQvzODz5M=6gg@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 04/18] rhashtable: Add rhashtable_walk_enter_from()
+Date: Sun, 12 Apr 2026 16:15:26 -0700
+X-Gm-Features: AQROBzBnZuxIn0fswPSjj9-mjuLbdpRhta8bZ_GJYuYio7sFIOqhym8Wk5lm-sA
+Message-ID: <CAADnVQLpgugNV+FAuxrRwZBh5-XXLQqwVdbOO6WgmmtJrN0t2w@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v2 09/18] bpf: Implement alloc and free for
+ resizable hashtab
 To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
@@ -100,34 +101,29 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Apr 8, 2026 at 8:10=E2=80=AFAM Mykyta Yatsenko
 <mykyta.yatsenko5@gmail.com> wrote:
 >
-> +
-> +       /* Test 2: walk_enter_from with non-existent key starts from buck=
-et */
-> +       {
-> +               struct test_obj_val key =3D { .id =3D 99 };
-> +
-> +               scoped_guard(rcu) {
-> +                       rhashtable_walk_enter_from(&ht, &iter, &key,
-> +                                                  test_rht_params);
-> +                       rhashtable_walk_start(&iter);
-> +               }
-> +
-> +               obj =3D rhashtable_walk_next(&iter);
-> +               while (IS_ERR(obj) && PTR_ERR(obj) =3D=3D -EAGAIN)
-> +                       obj =3D rhashtable_walk_next(&iter);
-> +
-> +               /* Should still return some element (iteration from bucke=
-t start) */
-> +               rhashtable_walk_stop(&iter);
-> +               rhashtable_walk_exit(&iter);
-> +       }
-> +
-> +       /* Test 3: verify walk_enter_from + walk_next can iterate remaini=
-ng elements */
-> +       {
-> +               struct test_obj_val key =3D { .id =3D 0 };
-> +               int count =3D 0;
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+>
+> Initialize rhashtable with bpf_mem_alloc element cache. Require
+> BPF_F_NO_PREALLOC. Limit max_entries to 2^31. Free elements via
+> rhashtable_free_and_destroy() callback to handle internal structs.
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  kernel/bpf/hashtab.c | 62 ++++++++++++++++++++++++++++++++++++++++++++++=
+++++--
+>  1 file changed, 60 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 492c6a9154b6..a62093d8d1ae 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -2762,16 +2762,74 @@ static inline void *rhtab_elem_value(struct rhtab=
+_elem *l, u32 key_size)
+>
+>  static struct bpf_map *rhtab_map_alloc(union bpf_attr *attr)
+>  {
+> -       return ERR_PTR(-EOPNOTSUPP);
+> +       struct bpf_rhtab *rhtab;
 
-Please de-claude this.
-I couldn't force claude to avoid using these pointless indents.
-Either figure out how to do it or remove it manually.
+patches 6,7,8 are ok as step-by-step,
+but this one should be squashed with 1-3
