@@ -1,94 +1,94 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0090B31328E
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 23:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086D731328E
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 23:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776036005; cv=pass; b=LUgksZmiA8NDpE+icfRdPQDxNKNpmcTvymWK+RZnpyIE5P9o61qiiObNI1R+j9Myzsb/gVC9oqPVjSyUZVbKs/KAPa54BHLi2Ea1Ij+KJMrNM/boVZwM6catNLsjTmtA0G7LVFf29YforX/kZWfpKKweUMhP+gqzL59tEiylauE=
+	t=1776036061; cv=pass; b=hZDUyuBGRQKb0yjFfNJ1gjAYPjTveodwlXCe57nahQ4NU5Pe/dJiNqgJVqhdSvRqkFgAxmnvYF2R4ZNlBcTOIEwMyT6cndzQi/A//wNKop5sBCJVufGnygR0w4FIXwUgy7seONPZbqsjJVclvPiJgLsBr0obn/010y0Ko7fXJYA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776036005; c=relaxed/simple;
-	bh=TnvMcE8uRlbYvFGN0ys+09YmYV1a31fs1mN93JXacAw=;
+	s=arc-20240116; t=1776036061; c=relaxed/simple;
+	bh=OIZUuu8XaxhAYULax+7XLO82nX2cw3V+YS1pGknyAgE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=STDb59tTzo/lwAIxicLnKd4ArqP/6s+1r5L7eh3PfOombghWwAspuYzslgkt1tIjWqkcwcNAv9dR+Ii2AVfOYFZFyBez/+ZvyI46EKH3hzZb4WIS8mlJ/Z5v3rtZCl0XPL6bHBV2Op2VVCOkqtXmklnu08Sn44Aklz1OL+kkQUA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FthaxW89; arc=pass smtp.client-ip=209.85.221.43
+	 To:Cc:Content-Type; b=W7HCgIQj6Q/UEIuhunIb51gEDM1zpP6nz+F70MlmOhMfs96NUCHz9Kwxdhtn7EkHwcUydG0PJBD0SB8EOUU0cwHblFYXOZO5vhW2P8dNH9Vn2GtEWXqGCLPZUMmaMbDfJjdKBWhy/Lc07H16d/CaosysnDBBrWOww1R2vPibTOk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gax9U5Qe; arc=pass smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FthaxW89"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43cfac48bc7so2527655f8f.0
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 16:20:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776036002; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gax9U5Qe"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so51018785e9.2
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 16:20:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776036058; cv=none;
         d=google.com; s=arc-20240605;
-        b=W55/mXNtaX7O8Q0qgsQ4Jv6U58/OLUTh60KY0reDhs1+mSn8EQwJaFXVIS0EUWZSPn
-         TaBrVSQbvLcRTmGYAY6NC8gqNQ/guJ443Gf17uPhKCiWS2dYkK6o+hbbiRAmNvL3uh1t
-         ysW3uEPfyRkqtaZ49uPR9yoUbwes4opXW0nBYMGrZ5gwY95Hld3ZhUsz7sd5LRn9qWKw
-         dUdeHFC2WHd/EBjGi1wBHjFJcde2Gy3XcvC3usD03brFjv0B5WR8LAowq6ee0ZM6v3D6
-         V0D38vIwI/6wO2UYjvBNYqrjKqOTLBiHrF9E7IO7UcicrBEgr2l2v+Qv2Vfkvc2GdV64
-         2V/g==
+        b=GHwgFoUKg9ibbh634VaeagXCqPO7iSoM9mj8qG2M2UgUBm/n35HLSvgx0KTL/NbzlW
+         tFwCaWl2XwfjgEMO5FT2dHw3iUxtR+JkMu3ASTqWnvK92P4efWhmN8TbiiTHPjAPXi1n
+         Ci6ggDeKcCEs5eI9dn7VFwqzxQ2tzGEY5921KOJAodu7pAW16BVbTAGzXq+5mFi+Dlne
+         gJY2Zaz+aBHy9TvxXA0w6Yh9duaqwSr7yfBYyu/dxqmvYMVjs5RqWX4Jz0QXVEhOomjF
+         1YsoPE/YXRqGFXOmXNgL1EVWTaP48mmNYHP14oMMBh6XD1kQrSY1tg4E2OjGouNd+6hX
+         tJIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=gSQoyTUn27kTSkgVKhBBcaDZwPUxzkAvNPts0Nk8xDo=;
+        bh=x+YZxNbuofKbM9IzF7CAEt/EcQAmm0YMMKLfcfL9RLk=;
         fh=AoyNRaktsZ7bW/hTwiP8Dm5frmwh/+vEg7lx+EPGuMM=;
-        b=W6azB0O9UuHvakWORe/9JbQSzeHyQnmtt+x9MuW6qYYqjhgV/QON9CA8w6/Omk1EIN
-         kfV9g/yO+W7HTobouTHU8RK5mbvAJB0yUNqKV4l5oFFYYf1mn3mexY6ktis5sA/hjX2v
-         AB7/5knfMb27ooMHKcNYdBFMvVXrTA89Wn+3UDLmBDsSc2i/iWEehNvxiXdLFAarfjk4
-         z7anw2NSFjsd52+9Cfe68J3cZLX1JEi1dscfnY6atRPZBgnVQVu3R24lwIrtQJ251lfW
-         BptIHN9KJYFZ9d3ykxby5huY7NL+XNANUheTA55xHxrJjsaPargY+HCXdqaDYoTOL+Mr
-         Baqw==;
+        b=gLrUF2wuvzC8KeFKF/QIbcYipAeJrAziDAhsRgQb3gxstKIklJ7nPU8vActhtJub99
+         qFUnqaWT4xBKl7/cqDDRR9yFORxQLnpX4XiwId91GT4U6bMsxDvZXgcxdn6D1IILJIcS
+         4IGl6vdK4YOiA90L4qyDPojSSiNHniGTVQngRhLJI7BSMOsNN+bF2LW9Pqccypv+hQzp
+         yedSe0+Dd354JgK+v1D2QUTYv9kEYPmxked3m1qt4a1xlCDO03PbTff3SMPlaUJm9rJm
+         5OeIV1EMN6yzhMbNkTSHXyJa4mVKdG9Fl+0Jo9JrtKK7aDwsPL1MUsl0lqpFGHsjJ4iX
+         vmAQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776036002; x=1776640802; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776036058; x=1776640858; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gSQoyTUn27kTSkgVKhBBcaDZwPUxzkAvNPts0Nk8xDo=;
-        b=FthaxW89Ds0UmJl3G7anvTIaqAhKqbV5gGe07cizfoYlkknwFEdPkkM6gC0p44x/t3
-         mSRjHgoXR7woxbK8gJV1lQpSOK3UqaxmQPJLQjq41OhkugDqzySjxsFt1tEU31Ln1t1t
-         t+2MmD0tA+L0lfSXaAPLFTCZHozaLROaSjODn+DlVkzpBy6/q7iCtvYM91JwHMwf0jTc
-         IiBnnZKE5vvr/no2evb9MRzs1Zh5erGPBmiwDBOxZUr4pJnKRS4ooYatHzZlzlV3wqdZ
-         hR8Lna6SozkyIOiFK6xbTkFU4ozD/8f3jeJK7zhm5YAeqWBePNnfcMJn4ZuF+0V2ZZiy
-         iuxw==
+        bh=x+YZxNbuofKbM9IzF7CAEt/EcQAmm0YMMKLfcfL9RLk=;
+        b=gax9U5QeIHQMzwrT1368APbNOzVDb3yXwHS965mCbTikJ61s3MCFR8w0iUAhR0VGIf
+         qsB3ggQzg1UsGMCxlEAMEZrXOyPizmqBy9VEvwe1weOTiqVM1BE6RYStlIoqFZNSHYMm
+         x5QYJHcbl/NYz4fFERZyipGjNOQqIQuINK8N4uERUjmYqD23basUwaslxNBf3STBi/Op
+         fYyaoPjH5KafE4hRi6dgF2WoX8nuZ4L8nK1/b5rgBeLHMhf9IF/hmtlyPTAgz3zbeiAf
+         X6W9GI4wrjGCSc4LXsWwUKxfao0JbcrN+1fQ81a3PQO4O+p35yZpebhR/6lOSk7O4wCG
+         JuvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776036002; x=1776640802;
+        d=1e100.net; s=20251104; t=1776036058; x=1776640858;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=gSQoyTUn27kTSkgVKhBBcaDZwPUxzkAvNPts0Nk8xDo=;
-        b=g6spLNnWiL7DBw4UJo5VpgrZxscl7BCK8GijCRI03AfU3F0yarnTflZzNIgfGtsRO5
-         rVZe5IiOt0f88SnC84Jqfg7ow9Ou+HWFjiojQOBqwA5w3dlAt/ZY/axxS0DxII8ZH59C
-         oRSZ9ugTK1p6SSFcr1Iya4ka74Dxgce6TFlkzRqSDn3NgrMurf/U75NGF0G2UCkq9Z7x
-         rxFJY0/kqTnl/gEvQX1ualbXcVA0GT50RDhJNECXnxzo1aYqCDHXrqRthdBqzoqsoVsP
-         AU7dOd0bGOElQsVrvmJ584m3tb+/K/2XtpHTSwtECGDJvSPvyCeL10gGl2CDI9zUW+tk
-         eJQA==
-X-Gm-Message-State: AOJu0YzzlPxEDfGhLxIq/iwYGmj9F8udyhxiTqXE1gbpuBWDMbdAKjAb
-	7lIOcrzq/ajmdobAsbqVfUuHIVLAomrM+ZaK7q3Z6OXZHIp/x8AtGKn3WSkyNv0B58/STi7PzYu
-	aQhLGMiogFaY2uoT/0BYJ4PR3MYy8500=
-X-Gm-Gg: AeBDiesU0bq/92hl9ppJ7sh+qfCLQuBxHJ3YaeFHuCZn4qz9mTvFAUu3kTREHwk/hB2
-	5bJlBEOYlXM7m/lzwlWOMgvGb3FCUHiuFyhdtAvsQFig2JPmyOHTB1Zk+eJmqwoFXLqHfLtfCMu
-	VPAV3E2OAo573lzcWzh50w6XB41gyh1sWGilrnWQ5JMGiKo0nVYD5sut+V81N9n5ZbohQ3uzDLq
-	GmGJPBhDxbS2Fo30nEygb8/ltpe9Z1tT3Ekiixz4NtPI2XwJ+UvBPy+s+WtuJaBnMWC3IkVrhgi
-	1AeaNgQh/YCc0EP9F3ihS4V32K3duKfZ8z8oQl+yA912iWPjPNLbmuLdIE3pVNjyM7f8Mc6x64g
-	BJ7sTi0mF9v5GN+tBgbqW0eVJlw==
-X-Received: by 2002:a05:6000:2407:b0:43d:70de:1c68 with SMTP id
- ffacd0b85a97d-43d70de1ff2mr5572348f8f.30.1776036002238; Sun, 12 Apr 2026
- 16:20:02 -0700 (PDT)
+        bh=x+YZxNbuofKbM9IzF7CAEt/EcQAmm0YMMKLfcfL9RLk=;
+        b=jAJgmVdE60/Cv5glBhnjGMR6wsVJU21x5BAlXKB6MNvkvFCg1MMkA+dMFCXZryMFYQ
+         0UkxJymRx6rUZ3Q2OPblrYAoeqDWw4m3rHjHNOwaq24yLxANc8Qrs6cmzec+Wiyk1DI9
+         m69BPfSViXWqeyidKA60CeYI6YXzVQMSI8sy7U0VYhEhpCUGq3JTWr+BsuNzGPEm7Pa3
+         jt8svPwkzTTMU8N9QXEfJsd9h9QlPlyVnCCmlT4Fuk+id6nmqXXTgg3zJrx4H325VZlt
+         mFJ8z/7RDCjoDcc5fD26BM0K6srZWlsenBVoVhgtwMMXCHFYZyuOl1ZpnbJIIgq8OazW
+         2icA==
+X-Gm-Message-State: AOJu0YzFAOypdKB46hYLzhdBVOsUqwwFs98l3Z9j3mt7ksa++C7YAgXE
+	ez+OFwEtdvL+bJsEe0oFsoSyNxEQ/C4aK1PWYGEQUNtWE3GHW+6AvRArMoqJgYeQ45uk35J9CsJ
+	u2I2gEorLZy1x7WrnoZslC6IN8w62ECY=
+X-Gm-Gg: AeBDieu4+hnPld46GQhJ/OC3WvTqL+LulC8wiKDc1dHc1177fnrrnN4VREnDpuH0a1/
+	b6T7N6U77PeZWVpIrT5BO3HmIQpk+fQ+sTRGVlPvYXCTsc21DmSUFtxliTAAmMAu6UayuPc2qKQ
+	wkcI6w4xrGSK4cK6oqWrNvSqsDK1TzwCNdUtRxr8Slx3Tyf6gt71etCYJfEFm5Rabtm0c+2KQii
+	e/AIV+8KUtKEQLwJCnIaFAkzX42tNxwJuR+SrHucO49zz2Pd/FoI2tPIOY7sKZjG6+mWWnH1gX0
+	qwgeLB1GoN3TUFQGXbGouM6AO4lWOWqEDZ0LDZWB0vBOeEI0ObgI/vKRE/PJlWXzOkFc+TuaOLd
+	+VXjMa+MYA2A927nYADE4DDEKBg==
+X-Received: by 2002:a05:600c:4a18:b0:488:e6cf:671a with SMTP id
+ 5b1f17b1804b1-488e6cf67d6mr11887195e9.25.1776036058401; Sun, 12 Apr 2026
+ 16:20:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com> <20260408-rhash-v2-15-3b3675da1f6e@meta.com>
-In-Reply-To: <20260408-rhash-v2-15-3b3675da1f6e@meta.com>
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com> <20260408-rhash-v2-16-3b3675da1f6e@meta.com>
+In-Reply-To: <20260408-rhash-v2-16-3b3675da1f6e@meta.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 12 Apr 2026 16:19:50 -0700
-X-Gm-Features: AQROBzBIRmm0TVhDFdIX-UAiInJSHURLH6653fOXYX4L8BYb7LmXvR3ThRlqrS8
-Message-ID: <CAADnVQJ-gAtijXVdu=zQ5kX5RLAW9mesgO3A=Xr1Bo7Z_N60Zw@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 15/18] selftests/bpf: Add stress tests for
- resizable hash get_next_key
+Date: Sun, 12 Apr 2026 16:20:47 -0700
+X-Gm-Features: AQROBzC6w8tBH8qDleWa7DjTRe_zcdiF-vJOY6As9LaLtcTtyFVXFIc1V_aVJc8
+Message-ID: <CAADnVQK307F_T5md5pLOjMNRmNOJOj2qdWbJBNjMR1R4b-VmCA@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v2 16/18] selftests/bpf: Add BPF iterator
+ tests for resizable hash map
 To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
@@ -103,16 +103,16 @@ On Wed, Apr 8, 2026 at 8:11=E2=80=AFAM Mykyta Yatsenko
 >
 > From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> Test get_next_key behavior under concurrent modification:
->  * Resize test: verify all elements visited after resize trigger
->  * Stress test: concurrent iterators and modifiers to detect races
+> Test BPF iterator functionality for BPF_MAP_TYPE_RHASH:
+>  * Basic iteration verifying all elements are visited
+>  * Overflow test triggering seq_file restart, validating correct
+> resume behavior via skip_elems tracking
 >
 > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 > ---
->  tools/testing/selftests/bpf/prog_tests/rhash.c | 181 +++++++++++++++++++=
-++++++
->  tools/testing/selftests/bpf/progs/rhash.c      |   8 ++
->  2 files changed, 189 insertions(+)
+>  tools/testing/selftests/bpf/prog_tests/rhash.c     | 160 +++++++++++++++=
++++++-
+>  .../selftests/bpf/progs/bpf_iter_bpf_rhash_map.c   |  75 ++++++++++
+>  2 files changed, 234 insertions(+), 1 deletion(-)
 
-I don't like this either. It's a test of rhashtable internals.
-If you really feel like testing it, it shouldn't be in selftests/bpf
+too much code for little test coverage.
