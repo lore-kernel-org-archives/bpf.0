@@ -1,142 +1,119 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD6C1DFFD
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 14:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776002638; cv=pass; b=C9nGtY16tEKRfXERQZC8kZmoQmbXqi1u9BVYADARcuYRz1K5h+CI9p6NKyceALPJTcr/tuY/CzJPzDhieVbWBWf6772YRlt7DrCX3bMwcPXFHmO0AK3GQPUP/4CaXsSqKEAX1CMpj2bWjbW9y7WIQCtfe5qB2CQo23175MyRxEI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776002638; c=relaxed/simple;
-	bh=AnR8L4v/sXZ2V5ByFDs9rqpOPJNXmPmJceLHkDjYMjk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GQOB7y+cZwBWipiYeE5/3wXQEx9sMUt2zLr4Rt2TEC+rUmaxTh29EPBbPoeBgxymW4pM5h4KHu5PQnw7U5X1TLFyH/IILdO6XUQFEjvaPpQqk4J1vs8X7r6R3nwANgnipQ6KMsb+EZBRq6FywjV5GCTo5AByVeD1Cps6RCUb9GQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l2+fkoqw; arc=pass smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB482F5468
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 14:07:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776002839; cv=none; b=reP6tXTOzZumd1K0YGeRZw1L8mYWzGmm1+qKCb+3T29Fb6+2p9RnlbnMyJhwyuBoTWh1WwgdiWOisgDEF0MWxsOV6LL2MpZ/YJiOAOzezL0mZmrcViA4trRB3DcgXj/6zVXH8lZKMtJw9zI+f9NUK1kd2vH6DkAmY0xWqAFIJCE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776002839; c=relaxed/simple;
+	bh=biK4/46PkQ5RvKLhaFzZ3Xo5Fug/l/bBy44rAxgQDeU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Vj2/WTpX1oLx2h2Gu/DZgLKCgOnQxHEdvF0RXDGyl6rvEL3hgk/hqnziI6Y5JxP6mg7BvgrU3fmVqUZAhlucSW5JsJEgQc27o8zgwxIpWBWX12nLhVel0YgN6qgfVDRWqMdb/DHeUOgoXz+7Qa+q/kfOmmBW3h8UmXnUJfPD80g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o+xr+4x+; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2+fkoqw"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so2100069f8f.2
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 07:03:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776002635; cv=none;
-        d=google.com; s=arc-20240605;
-        b=az30qo5M68cOJEeXuo6Yar4Fe2kr8Io0yYRqUJ35ZPkKBHqGwV1vDRqxBBOUwjgVU/
-         L3vUsWdo5q6763LR2FLSnwuOOHlUfmufFuvpSzad3lp1jArzKLriJnYCyJa3q0kTzJ4B
-         2OHtI/lz4pm+wygcnlt04j6WMJhAFj6TbmSNYSpUNQb0GOF1KUzDEHZaiq8CGfHiimuz
-         pLEscJpt41CZd+pbJrUi61kuZPF3ZZu99fOSxI7Msqjuh/5/zlVWb+MMefBwQbS+K6Vg
-         DUaw1Yb9xp3UU7BRSALel3rUxvsljq+ndurFSGtaFxsDrZ4JA+GCmJ8JFS10OtMTCPup
-         IlOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Cq1Z75/e0D+5hRu+2USCP4K8G8uQUiZVQU8i07jGzks=;
-        fh=+N1dkzuK3ETw8TZOK5BpA0225SwbBmIcySC5++hI5qs=;
-        b=be1uKRa30ytksQkpiPHts5Jedu56NrIgRgXVCLiCurq3Da02CT0rp0MumIWJiL3Ina
-         E63VVEJ5QjkvB02uWaVdcb15vA4me4mE/zDWEhQVv2plWfvtAMUlYLSh1aLep9Q992yZ
-         K9zvkWFx8nD9ZRPo7FZ8TSZiWbPlCypQYTUkZmnDkF/NDfWGDf41vxWcLqpLnkhDr2TR
-         lzBP326T+FS8oizsWTOCcyWdE0GbLlAsPBTdscY82NBPb7nng+kRGJkGAbwfMx0LyL7+
-         3g6hm9KHdPaId3ToBRqRkzxNmZtEwvzq9/TTKFmT4VwsLzG7UghDqZRyqGPjRbH/YpFe
-         abCg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o+xr+4x+"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82f0fc82c76so779126b3a.0
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 07:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776002635; x=1776607435; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cq1Z75/e0D+5hRu+2USCP4K8G8uQUiZVQU8i07jGzks=;
-        b=l2+fkoqwgleggBsNf2OJLSpIN+IjFEjazZN6WaMbT7jTxoHz8s0r5i1jrQSdqFcwkH
-         xRIADSL3XzySPfaAeDL8JlXlGHJxHG7vRuSRE/5pmrUVsSRSC9PXBXAYwpn5gh78/JGY
-         ZLttkHx6Uhf+Dh1Ji1PlVEopeaf7yvnYFMV76OuXDPGgCoGms8ta7xycjFWSAJFfVI+w
-         AFSH41ladnpPim0oNAYi00i7c74Og2U7+U3UDunQrIuH1NZBvnciWjkbJ0IcBk6Nk/uO
-         n4FrUV58Lm2kV2TgzBuv7BXt8g8y6Kc3Z3WG4SfCDKxysH8MiLjLgwKJu4ClAWLEbihv
-         oPXQ==
+        d=gmail.com; s=20251104; t=1776002837; x=1776607637; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xXrXNC1aozfRtChEJXwvaRmaFJMgiOHIq/Eg3RJfA8E=;
+        b=o+xr+4x+Z7KWeZQNJoX0WUneFVVFnf9pAsXCR7DKPA5fOEIui5u30SlDSg/JtwpgE1
+         Wp7F98Th3X5X8P222PAFOz1tlttVLQt1wg99I7MN/kup8+rypOJxgFojyj30xRJs0jOE
+         Nd59T6yFjRrHFAx4P0OnaOjqEx/14sxZWmHupzrn8S1DpyZXwO2Hpfaw1trOgNIGU2CB
+         xNOC+Eprn+TJuw11RYSsiPqvJeu/TkcVzy70JQxSVlwmpU7bZo/wit7ZmhbkVaV6Fm8r
+         NlhcmW+yuMjkoOv710Hq+va7bTFAPH1gNMH38ZOyGDJP2S1IWjqpWVn04Q+iRwZpC0Dm
+         kIIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776002635; x=1776607435;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Cq1Z75/e0D+5hRu+2USCP4K8G8uQUiZVQU8i07jGzks=;
-        b=a+UEB37MKIYGZ7VomWqi13fnxmV3FnPSgqqamFsdTqHcP0kNXoUAQ60+LHz8H/NJ3q
-         MK4eQObB6d/31e1ZiB1l2Dlop1KzPFkSsfyrCKH1VckGru412sCJRddjBmns00tiWpOB
-         sE2+zR2qBZrn/MUI7krPMji6APLYlGJgjo6ayAwbZQH+gk4rZ4K5U3SqRat2VodHmD+a
-         znzdCKphu/IlmIMMFLT2f8iDvgYV0uWKWw0W3Lg1nITeZhXlkGq3idOZBLQ6cbdnBUjR
-         hVFjB7ZSTxfANcVgbVaB1nxmwWTrTe3ePNL/PTe8inoof1bkAD3xFfZUFc13yAO/BFgD
-         grxQ==
-X-Gm-Message-State: AOJu0Yzpry0eiq7KzB+HgeutFI6rrMRZPXd7umVkg/EFobTbxY3OlnBG
-	3ZDRCY2/q9AbAXB8AFBqdwTCkwRBhbIrXOyQeR2BEuAB9fBjZT57FFLkdsWpHKrDZSCI4H/i68C
-	XsjXtdB/Y4z7Z2ICmmrfWcBPJPDsGOMk=
-X-Gm-Gg: AeBDieuSfpx7EGvYFJ3siIj2FgpymTyHciWxVcEVDd+hrjLpEqERYVKyXb+klOSrC7z
-	Y/Hvs7qTaITjAWdtNckFfpF3M20kydBfCjSQBvz9qHflp6zVb3nhGcJh7dI5Fg55Crat5UleWt4
-	K1dHgFbfDFrMFWqLtWAeKY/InWB3F2S9r7L2TJ02QfXLRytM/RYLyp947gtgr6neIheOCWKuV/L
-	M6rSeNBlY1rbDpn9YafBaauijHHOlneUCTNCLOOvn6ssftwI0pMrx0DlqCuaqdCDvn64r4/4WX6
-	6DlIJr4Oh1CuK0gE0PuSqwjVBLwC0g8oQmyZOXz8pp6WQpH4QuSiMDKkDyyEef+vT7ntLpudjEj
-	fNJh+hcJBYe5uIigw4Q5VwEqKXyH3e+SD/BVQ
-X-Received: by 2002:a05:6000:2908:b0:43b:8fa4:1937 with SMTP id
- ffacd0b85a97d-43d64255170mr14522520f8f.5.1776002634891; Sun, 12 Apr 2026
- 07:03:54 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776002837; x=1776607637;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xXrXNC1aozfRtChEJXwvaRmaFJMgiOHIq/Eg3RJfA8E=;
+        b=qLYhdImv7J/dpVzbCzWRFC27d/mcvAke/0rqB7YC0vxeodI3BtPdyu2JUwD5MxJFyQ
+         bq+STuPV14cKgqEZTklaO70zSSn6EMN9EM+kkfpKmJjpghHgYeHPfdmqowa6kMiCWJeL
+         4jVMgfORmGcVkU8K0gcfoIkMNg6caMUQ+BTfLNqz13qoYpy/HZ8c5OVRNNfzdeDtg3XM
+         l5aQsucAFLsWxPlmDowgE/WjG99coR7r3Gsm9qyZUeL7TTkAmgF+gyZAQamCkyQD/Lds
+         96bQzBmfq54ye7wiGVMmS/jY0elckf9QTmV/muchPvRzon5kqWJ9aYSJAwoq2i93+/25
+         zR6g==
+X-Gm-Message-State: AOJu0YwjYHtTaSSnlG3dquKzTTavHRgnBMsT/OAlf4mi3K3JhXkblIRT
+	a0nSTbrUsorbGUOFzG3miK7xoJozMTS2q8nz0tASoMpSlI5PIt0WFiy/3SvJ+w==
+X-Gm-Gg: AeBDietG9hvMyxG/Uy6n6/RlXltms2sL2sgszIYvz0zppML5T0Tt5CpxMZVUmUZYM67
+	GS4f/8Y6j1Vg+Xut8xWmn/hhf5vdF8PxRHb34x9jOSDuxNACJFErIVoz7NELNymNLfvV7HnLTyP
+	TrflNYfZIU9XOj7GC0jD5lO26PTcMlLPFyBueFhyXGZSTTXmucK6/7/WCNpQHrY2CU68obu0Q6B
+	pKV3ZbeWlNNCjRxJ5bBJU65vIcfZTXkpLMlP37kw7Naup1BqAHT8alJCqch+d+UWOxv20w2udAi
+	x6jCJF845/oI96mUT3XQEUUoPe7WcbX3dqV3mw4qYdDuE92nT1cgiRlXMldqKupBbb2h0Z+pzdK
+	S9A7Af0g2BqqNuvVC3TN3AbFOeKi9qK/Zorc5IUt6H+6HiQymbKvF8mVve2fSD+fjcGJSWI7N67
+	QU3rMNHD+hZJSSGjAEY9mn8K5RBdORrWmGX8/xGWx4vXeStzA6zZdbnJ4qBoXMzIbTAQzpiHzMK
+	8H0N47QfcI0LJuVFDSNzNxgdNVEpKoHBtTGDhMNTU1n0PgLBeOBYM2WBkd6sw==
+X-Received: by 2002:a05:6a00:2183:b0:82c:7f08:8826 with SMTP id d2e1a72fcca58-82f0c1600dbmr10770634b3a.17.1776002837147;
+        Sun, 12 Apr 2026 07:07:17 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c50a8f7sm7946812b3a.56.2026.04.12.07.07.16
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 12 Apr 2026 07:07:16 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH v3 bpf-next 0/6] bpf: Split verifier.c
+Date: Sun, 12 Apr 2026 07:07:08 -0700
+Message-ID: <20260412140715.30423-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260412035945.46916-4-alexei.starovoitov@gmail.com> <2ff758e4ce8ee3924f231e2ca37a08b833b3b95160344e01c623e71c35a3e0db@mail.kernel.org>
-In-Reply-To: <2ff758e4ce8ee3924f231e2ca37a08b833b3b95160344e01c623e71c35a3e0db@mail.kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 12 Apr 2026 07:03:43 -0700
-X-Gm-Features: AQROBzCG1GItiSA-Dfn3oHiu2qi2U54XSbBUqCLFvMgSMqQZ_Q05WAWh6skgZRE
-Message-ID: <CAADnVQJ40wUS0Ak8WbSw5k6fgCPGY4Ekrb7di4sOt9S9PkKtww@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 3/6] bpf: Move check_cfg() into cfg.c
-To: bot+bpf-ci@kernel.org
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Apr 11, 2026 at 9:47=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> > --- /dev/null
-> > +++ b/kernel/bpf/cfg.c
->
-> [ ... ]
->
-> > +/*
-> > + * Compute strongly connected components (SCCs) on the CFG.
-> > + * Assign an SCC number to each instruction, recorded in env->insn_aux=
-[*].scc.
-> > + * If instruction is a sole member of its SCC and there are no self ed=
-ges,
-> > + * assign it SCC number of zero.
-> > + * Uses a non-recursive adaptation of Tarjan's algorithm for SCC compu=
-tation.
-> > + */
-> > +int bpf_compute_scc(struct bpf_verifier_env *env)
-> > +{
-> > +     const u32 NOT_ON_STACK =3D U32_MAX;
-> > +
-> > +     struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
-> > +     const u32 insn_cnt =3D env->prog->len;
-> > +     int stack_sz, dfs_sz, err =3D 0;
-> > +     u32 *stack, *pre, *low, *dfs;
->
-> [ ... ]
->
-> > +     next_preorder_num =3D 1;
-> > +     next_scc_id =3D 1;
-> > +     stack =3D kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
-> > +     pre =3D kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
-> > +     low =3D kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
-> > +     dfs =3D kvcalloc(insn_cnt, sizeof(*dfs), GFP_KERNEL_ACCOUNT);
->
-> The commit message says "Mechanical move. No functional changes." but
-> the original compute_scc() in verifier.c had extensive algorithmic
-> documentation between these allocations and the main loop that was
-> not carried over. The removed comments included:
+From: Alexei Starovoitov <ast@kernel.org>
 
-Yeah. In v2 I accidentally squashed them into patch 4 instead of 3.
-Fixing...
+v2->v3: Actually restore comments lost in patch 3
+(instead of adding them to patch 4)
+v1->v2: Restore comments lost in patch 3
+
+verifier.c is huge. Split it into logically independent pieces.
+No functional changes.
+The diff is impossible to review over email.
+'git show' shows minimal actual changes. Only plenty of moved lines.
+Such split may cause backport headaches.
+We should have split it long ago.
+Even after split verifier.c is still 20k lines,
+but further split is harder.
+
+Alexei Starovoitov (6):
+  bpf: Split fixup/post-processing logic from verifier.c into fixups.c
+  bpf: Move compute_insn_live_regs() into liveness.c
+  bpf: Move check_cfg() into cfg.c
+  bpf: Move state equivalence logic to states.c
+  bpf: Move backtracking logic to backtrack.c
+  bpf: Move BTF checking logic into check_btf.c
+
+ include/linux/bpf_verifier.h |   284 +-
+ kernel/bpf/Makefile          |     1 +
+ kernel/bpf/backtrack.c       |   933 +++
+ kernel/bpf/cfg.c             |   872 +++
+ kernel/bpf/check_btf.c       |   463 ++
+ kernel/bpf/fixups.c          |  2457 +++++++
+ kernel/bpf/liveness.c        |   247 +
+ kernel/bpf/states.c          |  1552 +++++
+ kernel/bpf/verifier.c        | 12382 ++++++++-------------------------
+ 9 files changed, 9641 insertions(+), 9550 deletions(-)
+ create mode 100644 kernel/bpf/backtrack.c
+ create mode 100644 kernel/bpf/cfg.c
+ create mode 100644 kernel/bpf/check_btf.c
+ create mode 100644 kernel/bpf/fixups.c
+ create mode 100644 kernel/bpf/states.c
+
+-- 
+2.52.0
+
