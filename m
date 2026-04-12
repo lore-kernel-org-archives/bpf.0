@@ -1,145 +1,117 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478353624CC
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 18:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776018858; cv=none; b=If3nG2OWOfrdP8syDtanVJzH31D+c486TTiBIr281aCk86XD40PDJ9MS9mf0SthWREVIJwqJ8+8C/cSjOTXJMBzWhexM9O3mA3BirSy9YcaWMcZlzU49AgrxTNz+/bFbq1UrEhrsr1MpP3qJa2hNCBE31Sutc+HuGNSHo4uXR3k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776018858; c=relaxed/simple;
-	bh=1AAjN6Ot92FN+SDDO4FqRWSDZeDAexmiU/+PppVwah4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=IBgtTcQHd7ZT4FSMYElY01kq8B+8t5fLiyC0CsIB9YciiHvO2itLpNa6uKUbJvGLWfII5eCgW6gLVcZJjwuai20hy6vtKGOqud4zYRHOlgrx/LYyj6KOnTysc/HsbZ0Xt5jGi6nHzeLMwSzyOO1SEcq72qOcq+9/zX3K6CoRsiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=QV71ENoN; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178453002A0
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 18:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776019707; cv=pass; b=O854dupHnXG9nvV6v/B08UUKT8tA/KzsqolXm1XcbGcNGv0nmVUpRRT2t+t52B+s1XUch/yF3vOou7jE/55IOT7yvRzBbA+kCv3u/KJM2VtFHyecOMluUl6V9IRTElFFWTCZ4c+tpiBB/eZJ0xNMrdqlLi39OcaWhOO7cUb7gjU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776019707; c=relaxed/simple;
+	bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z0L2ZD1hR8kpOp79onAT3RmcQoAKI1Hf7fFQMtTapO5Pi3HE0NZCt082zmtHU3CFnZaKDM1CULX9iQ02Aj5Lypcct50kzchyyuoJuuM/ILNTOGWEAkjdBk+zqsyuPxGck85eLnKIEt2Ha2MNQthBGBDeJ4/TAG3oi28uw1ktKHU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q+jky8L1; arc=pass smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="QV71ENoN"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2ab46931cf1so20657515ad.0
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 11:34:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q+jky8L1"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43cfac48bc7so2441704f8f.0
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 11:48:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776019704; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fH7TpmJmA5+1fEbLnUmb81vs5y1x2sZL1omPErXqGt7QpRFuuLSwHS/CsZ2lGM1gGe
+         5VG+UPIFNp+Y4Bh9PS+sS1xdpksnQkzQg1EWsjkcX+QeRuhbfAWAujSOGT2CXO+y3zsI
+         GXxNUXldwGQlTvFr2a6biYhoasftzZ9otdiHD4CH6quyUNZmZSarGlxI5OS/VsKeidjN
+         18Ng2i2neuqsUIdpS8lqVKakkYF1bu0xVqbITZC9NCsE5S64loy7yqAImcUnQJeMaNWc
+         uAHNbZes9ixWMgJZpsrLJM+C6+X7Rx4z05RJQgQCbXbq3w0t68Ijy9Cmuo5oOv/MApKh
+         KiRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
+        fh=9Eucqq5vQ5myrTLYAMkb1pusjK6Ea69iu5P+Jvr7ylE=;
+        b=lInq3VT1Wv8axFOXoNROdA7DJGR2gV5T7Z1RkZoIiy0JsZCx6BexhCO06BY87Hy8LB
+         ChjmKs4u17urCsZCp5kcNW0v8z2KSyQ+RHWIjVdLqQVrnMS5yYmqpag7fPi1KWCal1Mt
+         FrJ+oLo4wCA680jSW3R3exgvYmanAGG/AwpbjV9Ln1Tp3UY6nsLRu7h/iYlw8uTu+lJH
+         86LayZYczqeRpPTgOW9zW5LheeGQXFV5z7hGdSyhPyFJhuKIFNwtYxIirPhmf/e5ldgp
+         jp6ylMFbsMmyVTxT6nJaD/C2nVwpaI2EYRnRSb43r7j1tog1vzWx2pXGIrAuvXBYZGya
+         kgJg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776018857; x=1776623657; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LlpsixpOF2bwjh+BWmuKc2S5Q7JC2uJWyortHExZM/o=;
-        b=QV71ENoNvqpRZrsUF8SNxhRHb1s1ur+Y916ZqFpcgtbF+dGj8Gvx3zPNtF/cn/1nv+
-         b9Jx2q7w3QDChYmz5EBpAu+lrLR6nxtj++/2oanFw+BPmgGuQ2QwtTApS5WNtXPHNpFa
-         ASv8x0cQXko+iAS22R5CeK7Hz9lhOXD7bh6KHRcqEw3yuR3j/ubGk8pR1KCQKRMEEPY6
-         q+IZYMB8imI54fkUu9wFdWDItTtyGgXqGqwrqix2VLCm6HTj7vwjq+TZDO2Tw1k9ieF3
-         TkfL2r7uObpMliQ8restCI9nAPZk7Oc9xtaoV3ubMefWv5mY00237Ryw3/d874D3tb3Z
-         RWiw==
+        d=gmail.com; s=20251104; t=1776019704; x=1776624504; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
+        b=Q+jky8L1hvkPhiwIm/rQ83WgwdkSs1yAl2vnhKF0RU9fDmudVMqbSohtA1BpSW73tP
+         0oFEEUW6INo+bSsaaRK8P+N+uusnyafCwtyrxpELxmxmtkeiqMPLH/I4LeckFHYmKGju
+         5m2Z3Z/vw0UNMrZ6Rhag+P/LbTVRHwvPOlRILmq2MZp1fQwHxQyqj0JeJiNUJxqsW/LP
+         xw7fNddswhLY7PiLpLyuQVlZK24PbGEfEX34zbnabx0RyJuHwNXYxkri/cZQESQRpYKy
+         nCYluvgmtSG+jcjB065IG5HoDKVYL+kg61POL4fvQW9eHF2L8uRl30iuIw0vdWhFvkls
+         6i0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776018857; x=1776623657;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LlpsixpOF2bwjh+BWmuKc2S5Q7JC2uJWyortHExZM/o=;
-        b=hJqMERbl9jLbV4M1PclRxFjyMpkJ++nWPFlPTol2tshFwbuszrkw16OUpS3ytgukLL
-         k59iPaq6M7Bw9jyoN0AXEbNEw241u4o5wTseG1DShQ2C+d7BFpG4vwVQTL+LqGtGbAW0
-         rFYJ5DNlrJeUsJ41o6g9QX71gfJ5ziWZR7h8tMM2jua78rF5C8fQaN8wkopxtI7fxiEy
-         WfF8nvWU+1tyvMd43Ybqq+t6BNEWf63/aVnOt7sTKLQD6/J49tniuE0wrY4+6KOzn6Uo
-         4AT+yDHGqRc2asQ3lGHbG038DRN7mqlOveorm14lzhqI+ECY2G8eVuW1/4DY3OyVwlBT
-         OAFw==
-X-Forwarded-Encrypted: i=1; AFNElJ8ZwbFSUyWu26VdTzq+o83zy+ys6oIjVuf8QSYk32pj93lTwJOVJ+X2MUOvy5z+HHWJirw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7/J/n8ZJZMQsUkLUhB+pRnpsJHvk0Rqc6UGUs/53bEl0yI2bU
-	xWoHaV87rFdFcNzzGWez/4JFPjnfP14U0766umzP2grSVgsvS1OQ8i8mRz/DlUkWoVgguriV+vO
-	CcOSq+zr8tQ==
-X-Gm-Gg: AeBDiev+MCTRPmkAup1+4RwDnTyRxUveUbtKE+GEJAsDsWtZjT7fd00uPqMFHxbjbeX
-	esNSWr3lO8O0U1pXaIXhFPD6BtAlVHPDyJuUAeDCsNmbbryfDt/+MMFokWJyea5fX4tVC6H+Z1z
-	Wz8lpHcRcoikJI2/11fepR8iVN2P2bYf4eysFAIzOUKYKkbAtYOxxDFV+gD8sQOiCxMv1fJg8ml
-	pK3nvoJ7dGS9ar1I6tKriWpEkSAdshMpkNYKaN/OAmpRv3GWei/7bb3+LRRrnLneBnjZn/MHLoZ
-	IvZEuD//9tJVERO7YasOdqDmEddkSQNibEm9cwQvpCVH4pqaSxJduqM6hn61llYPHLZAYm0mBx8
-	AlHYdUQhvfK+QZCUln4g+BDps50mkLb+rdZL/al10bKOnfrd71l5RR2JthhSi2/cRFFot6513fM
-	0j3o8anBA=
-X-Received: by 2002:a17:902:f64c:b0:2b2:5168:2f82 with SMTP id d9443c01a7336-2b2c7384dddmr126319685ad.24.1776018856526;
-        Sun, 12 Apr 2026 11:34:16 -0700 (PDT)
-Received: from localhost ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2d4f48cfdsm93930355ad.82.2026.04.12.11.34.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Apr 2026 11:34:16 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776019704; x=1776624504;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XY6VaETd+hAeDG5crprj7Be8rufMkxg+B5f9SxxaoKQ=;
+        b=QTpVVZRqXMBPlYwfDJgN1EDHVQtEPkqAmAH/KgobdT/RZKszolBzq0cudwSJUkKMty
+         jGTzRPtYE+1kwD5sdGbQGmXFXdAYYvxtYIFjHukk6GKOlsKky1NTOkN4RdS3PZ3iAhIJ
+         q7YkD9g1u+aazXy001eKC0q9ovK7mh4Mo48UU4DSIT58rZoTo5BrAFD+WT49+L2jX1L4
+         R/UiU3/ZTXRclS+w7lzgfsw5q/m+j7FUYI4BbzkJNd7aX/4Hlr8FtUJy2+KlkNphoHke
+         5EVvuvEvGFVDIuRHaiV0ZDAuogghkOzesqU2tC+udnyLDXa+tapuJRixcqtSz1CJt0Hd
+         sblQ==
+X-Gm-Message-State: AOJu0YwmUr4WXNyG/PiIsYVcDzb6Ut/YU4H2d5jeMgKKUK9P7L285oRI
+	rHBWLEuuFIndQuAhIa7XGkTeDa0byjBbXBiAlSVqBAM4m9a4JAHdBhK9VSR9hIYwSUb+acgTq9Y
+	rMgPInv1SKzQWQcW3MIRWUuOLPvx88HM=
+X-Gm-Gg: AeBDiesBHZbiKT0ouRa1VI5XzkWzt4zqYVWugREYpzmOfI8iHB/8YJUPuamOrX+V+XK
+	LJ8NvPD0K6F8oZb6gxP+TUK/h2vNYsqIYvuOcdOQyqcuOxo/T8G/gl3CraL2GbYF60GBSoum0lj
+	gNTbOIb5cVB4Z4sVywVD9TnW4eFDfQdl5ddUqw3VzLStztWDwgexCcythVpXac2Y5q2sZs4lfYe
+	eUZabjSmReb9PKnGBQL3DYLKIbNIzbPDepzpSlrjX8nYgCir4TVxZ3EuI59VMhDJGJyXOEJjFdZ
+	h/9ijoxaPKfR7w31FUfuDgZ0u3odLD5IhwrvHWGYeqb/KXeBU0UclpfrqpmUkNlc+Y1v
+X-Received: by 2002:a05:6000:144b:b0:43d:76d8:5797 with SMTP id
+ ffacd0b85a97d-43d76d858b5mr3214293f8f.51.1776019704123; Sun, 12 Apr 2026
+ 11:48:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 12 Apr 2026 14:34:15 -0400
-Message-Id: <DHRE52J8R79R.3IK2L5DG23AUG@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <bot+bpf-ci@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <song@kernel.org>,
- <martin.lau@kernel.org>, <yonghong.song@linux.dev>, <clm@meta.com>,
- <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v7 6/9] selftests/bpf: Add arena ASAN runtime
- to libarena
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260412174546.18684-7-emil@etsalapatis.com>
- <c06f36b021360e0d00ab3b8c9ba1916001937e8fcdfe1d721c11c5574bcf7830@mail.kernel.org>
-In-Reply-To: <c06f36b021360e0d00ab3b8c9ba1916001937e8fcdfe1d721c11c5574bcf7830@mail.kernel.org>
+MIME-Version: 1.0
+References: <20260412152936.54262-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260412152936.54262-1-alexei.starovoitov@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Sun, 12 Apr 2026 20:47:46 +0200
+X-Gm-Features: AQROBzBlSTC-ooyH6HEhnxIXDYSWQqGpmaNOqVMwaw3pFhU2jd7Y97-piCZh7y8
+Message-ID: <CAP01T77QAKjiGDDjX_f16Ftz217Oir8q08R-u5FP30VoY4irPQ@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 0/6] bpf: Split verifier.c
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@kernel.org, eddyz87@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun Apr 12, 2026 at 2:28 PM EDT, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools=
-/testing/selftests/bpf/libarena/src/asan.bpf.c
->> new file mode 100644
->> index 000000000000..fff12ff50f26
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+On Sun, 12 Apr 2026 at 17:29, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> [ ... ]
+> From: Alexei Starovoitov <ast@kernel.org>
 >
->> +SEC("syscall")
->> +__weak __noasan int asan_init(struct asan_init_args *args)
->> +{
->> +	u64 globals_pages =3D args->arena_globals_pages;
->> +	u64 all_pages =3D args->arena_all_pages;
->> +	u64 shadow_map, shadow_pgoff;
->> +	u64 shadow_pages;
->> +
->> +	if (asan_inited)
->> +		return 0;
->> +
->> +	/*
->> +	 * Round up the shadow map size to the nearest page.
->> +	 */
->> +	shadow_pages =3D all_pages >> ASAN_SHADOW_SHIFT;
->> +	if ((all_pages & ((1 << ASAN_SHADOW_SHIFT) - 1)))
->> +		shadow_pages +=3D 1;
->> +
->> +	/*
->> +	 * Make sure the numbers provided by userspace are sane.
->> +	 */
+> v3->v4: Restore few minor comments and undo few function moves
+> v2->v3: Actually restore comments lost in patch 3
+> (instead of adding them to patch 4)
+> v1->v2: Restore comments lost in patch 3
 >
-> Alexei Starovoitov flagged this comment as unhelpful in v4 review.
-> The validation checks below with their error messages are
-> self-documenting. Was the intent to remove this comment or
-> replace it with something more descriptive?
+> verifier.c is huge. Split it into logically independent pieces.
+> No functional changes.
+> The diff is impossible to review over email.
+> 'git show' shows minimal actual changes. Only plenty of moved lines.
+> Such split may cause backport headaches.
+> We should have split it long ago.
+> Even after split verifier.c is still 20k lines,
+> but further split is harder.
 >
-> https://lore.kernel.org/bpf/CAADnVQLHFZE3AFzP3gtZKvcaX+3hbp3pCw3JLqEtpdoQ=
-+OUf7g@mail.gmail.com/
 
-Missed this during the comment removal pass, holding off on updating
-for now as this is relatively minor.
+Great clean up, for the set:
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
->
->> +	if (all_pages > (1ULL << 32) / __PAGE_SIZE) {
->> +		arena_stderr("error: arena size %lx too large", all_pages);
->> +		return -EINVAL;
->> +	}
->
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/243130=
-21445
-
+> [...]
