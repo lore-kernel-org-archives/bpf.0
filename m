@@ -1,63 +1,63 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429BD264A86
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 17:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812BE2F12CF
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 17:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776015953; cv=none; b=aUJW580UuzAf0BM/94NKa+hCzgTeH3qTwi5DY9Y0rW9L0ONO12H3M7h0MBRbZmuvKk0n+af/Yne2/k7pkDhSmovwPgKPZ9Lie+b7JWq32HKAAcMGEKaSw+CWcQQy+xB8H5oi+m20QvWOclY6LoXUrIzUBZtLVhnvqC6fwQgl8D4=
+	t=1776015954; cv=none; b=CKzMy40kfr5lOBm00orIik2keVs5S35uOOpibxRvucVfse9ZVCMMDjk5flwd/thhpNKjKGC9CR76aEO7n1IDsV7UmJ9ONm9SA3HZVxh8sx+IL9EDIupgbJRyxXqzVR0Qffs9W0yGfqjjdT899wWhN/prpiZYZOCVOWsay5fT/1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776015953; c=relaxed/simple;
-	bh=63/mRS5Y2Siyke3ieoYHbnyF1qKh/L0M5AdE3q7XJvk=;
+	s=arc-20240116; t=1776015954; c=relaxed/simple;
+	bh=EfkBROJfJKaZ0we4zotmtZKjEv9FZo5LgHiSTtQC6bU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kyDvhEdgwnaVV0ZNEn1sv/8xcO/TYg/fqMP1Dw/SI5XmUdqXnJbqhYtZY2h+Uz5X/LMZb0JnuJ9jhY9XRHtpgNRGQOP6EqYQOf9evc8v7D1UW/L4B4dTdOwCBz2KoA/B+OxnLLEkuNHK/XDt2GdlJMIZlpNu6kgqqpfJWzNMY50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hnVecBK5; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=g/x6W+yYz+a8ChTnbe0TXImTQ6xqajKQn3JZTaan/uyiNJ21+12f8yCB+Mz6xiUIJRD1OxrDHCLuLLHsEzuAW48YKaWuoKDoh1n2AUul4/G8TX5MzeDY2fLTmw17FMqAPAqgK/mKus9fDyqz/z8mVC5oMEoqJnHdpSYpVpQpVH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=uvY8fayM; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hnVecBK5"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8296d553142so1792243b3a.3
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 10:45:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="uvY8fayM"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8296d553142so1792246b3a.3
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 10:45:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776015952; x=1776620752; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776015953; x=1776620753; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kG0bJkyyVqEeHnF16KGLZ/pTgnUNgi7fxwRcIKja2zg=;
-        b=hnVecBK5Yf6Wp0BYBxJiVxB+k0gq7WMWwnW3NIcsFzsbOyl/IS6nqTIb+0sNQQ7imc
-         Nl7ZzlNCBkC5vlUlDYhMLOtsZf7j7wkL93CFQA/dyBn59yB4zc4jOUb+6oyXe0HqRh1r
-         CtCEoWbYN+LbK3GHUrVC6602tlM+N6EVN+2uQm8C5/qVPYGa5t5ffZnpZNBESFAd6QLi
-         ZW8Ke0gbww3zHahjljKHlohKNOoTO9ZeQkK1/OivOVmpvDOGJ5Z3XiSrChh2AjbdQUFH
-         dd9VuodgbEEXv7W2nS5jsNydItFo+c5iIQnqcPuVPUpV4aR+LAU47hWHKGqVHKJ9glYn
-         QiUw==
+        bh=Z1AXgGpWDyHQEMSIyNXM3Xi1vkMCzQJirTKzNTvoB1g=;
+        b=uvY8fayMGJjNwVrafVI+N8IRoa7P9uZdUkcxFslRAjC5mPoOUmU9Ud9PPlr84+TTgR
+         14oIqjW8cqvbx4xjdKj6Hw9rBW8FLa23kX1ZqUQXc0WakkRc5YjYoLzo6UUsBeQFOeGf
+         JHCRNdajRxt1ekDDPPh2VZI6S5uRnPuNic8FUMlDKeujYg3uQURATaAKGQtpdSvpNf+o
+         ItaFUk08mdpGfuI8zyFNVWMmNSK2eDYMb4TOAi/SqIfIJ3Th64oX3SskVYzuFH0YgY+D
+         LSy3eXFz0HnejzGzE57iemypvz8jwZI/GfilHH2G2U+uNGZW6FAWMEx/T282KCXK6C4H
+         J1+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776015952; x=1776620752;
+        d=1e100.net; s=20251104; t=1776015953; x=1776620753;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=kG0bJkyyVqEeHnF16KGLZ/pTgnUNgi7fxwRcIKja2zg=;
-        b=JDct4+3FuceqLKwSupvDak+h4pOEGbLT45GiyWcObOYb+2OFKGij9mNT6wKGBTELJ2
-         PBTQPj7ahuQWlDezA9FlxGTXjyA+oTvCUwC+sPPyTnNwZ7JzgkzIUMFmFgcLr2ww4Yj6
-         Uw5UUALXPtUgUOdDdhhHwHtGzAWsOaTTAq1VDm6mIphX6xVnGUU/XmWo5XiTqde7jYXE
-         QriMaW0oEGZBXYGUUkvNqzrafFub+cbvKct8kk1Cvnnx+c9C0QyQg0TAucCzJ1zVZ3JT
-         QxCBPVL75pqm8SZFb+Q2tXtYd97s0zagYM5BSKPPe2SqplKwCPGDBvSEf2wl2TYqE94b
-         0wbg==
-X-Gm-Message-State: AOJu0Yx5fSnN5Av5xqtFSPeGnlmXOnLS3aJm+j+IgGTlMDccnxPbmx4M
-	iqCifYkWGPvMGLY9CyxMWOj2iw0iwbuJU4AHjKXZYGafPWvffGry2psRiw/Q7IN2knWF5SC/2/b
-	Kt6EdbdA=
-X-Gm-Gg: AeBDievEy1eSlqPM8Hqoqcw5MvcAZqkjfVAbtw0bGx7tNzx0AyTDOugWvUDh+R+d4le
-	N+9AgIkgUkGNRLBU0qOKPzVi6ScqF8AhpyHZYAEH+d9OrLyQtL4IwfZdxPSEgw1x6PCej5urFAV
-	phixSn7COzYeQhnUiSRvU9LXRR4y7GfAJTczbXFMc++0aL//LYAtm5fuNgPZ1mCBdAiydFcXu28
-	eX9Wz2KgMI8IIFeLChNW7Z+IB1YE8wYLPcs7OAlS7eMIP6p5xHuNHAtcavXnDp4tPoWSAMezhYP
-	ROKZmF+EYtcaOGkkEUHQB0XyFWZ796LigJsTD5ql+pe7WDHsibG+3Ly1wYREVO1etd4HQg0qEWh
-	VAmbkL315iBMWRWBJkqhRF2R9o8E7UHQLgAiU9WoBuIVLM7dHkAPKTdceW5CwprR7Fqj9poG+db
-	wC1A==
-X-Received: by 2002:a05:6a00:aa85:b0:82a:7046:86a2 with SMTP id d2e1a72fcca58-82f0c1cc417mr9346048b3a.10.1776015951568;
-        Sun, 12 Apr 2026 10:45:51 -0700 (PDT)
+        bh=Z1AXgGpWDyHQEMSIyNXM3Xi1vkMCzQJirTKzNTvoB1g=;
+        b=TWt9r/9ZNE3b6Vqr9ZF1wIizSA4at+zw9miVM8bQSyRiZrt5/I30Ab7ZejQYlOi7Yp
+         LmAu6Q4mK5V8NORGrN83F/FEstsQ3RtjYOlLkthxwn+vee2SdsVff0VyFBl6sHLbcZa7
+         z9cBmwmydcw/iQGtQ7E4AVp+prBhCQTb2PQ30JqpMosNqLsrTLg3vwExpQyz+kTEeUEB
+         yPQGDwuBLiKCJI7Wvef4z4aoyIUx8S++uR+i2xI02VNz0KAJ8yemkZuCzwkifFs1ehXh
+         w4VgOC45dwAUI/61WddHH+V+22Xsw413uqBl/UTbExIT8UvJ33nqKvyBvX67MjJh/6fW
+         sfsg==
+X-Gm-Message-State: AOJu0YwjnlHGVxhH2ouGyYNvvs7CyvpJNqRdiTqfCUro07xr3W5RBmYA
+	VstqI6+b8QVKtEYexAQMr5nkpjIMEZ58hJLDf8IU1JXZBpw0X4LTg2Mwuml6L7X06K2oyiqIgF7
+	WlQc5iS4=
+X-Gm-Gg: AeBDiesVk/58NtWxFCRxyZMfvpRjfjGtlkEaOxhCe57OznAtwalR+gYVT3d4xGQD6QB
+	DDKWf0H+cDvKFqWdF18WOE1e8DQ4fZWsg83Hgojy9I9HSYiR0MDCS5a/PS/zB+UljH8bQVoix7b
+	Dr/UQhhOnfqVlkb4xe8UtuTXkDKKovkoDVnhGi7/q2l1PBUP80SsR76rXaCdvqI6bZp27Fy5A2M
+	SxtHq8FbGiI2FuZKn8iT3Iu3KWm57s9J8lvL2tducC3/Oavgyq2tZhym3bwmZBSziOvLeMOuJtP
+	H43Nx5Po3yOtspb9QTDvBz19xLH3NHabK+UgoN9iTkrNtlfZS7PLKleM13Rta98YLacZ7bKJNU5
+	6/beTaD8VEQd+hQfi5XDK3jwcSt4M/hB7vvZMtCguCPok5yaY/vTez8b3tpkntz/EsTbaq5qV90
+	Z6iw==
+X-Received: by 2002:a05:6a00:8e01:b0:82f:3c63:4a0c with SMTP id d2e1a72fcca58-82f3c639d9cmr1254294b3a.51.1776015952712;
+        Sun, 12 Apr 2026 10:45:52 -0700 (PDT)
 Received: from krios ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0df08c09sm8524099b3a.9.2026.04.12.10.45.50
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0df08c09sm8524099b3a.9.2026.04.12.10.45.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Apr 2026 10:45:51 -0700 (PDT)
+        Sun, 12 Apr 2026 10:45:52 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	song@kernel.org,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v7 1/9] bpf: Allow instructions with arena source and non-arena dest registers
-Date: Sun, 12 Apr 2026 13:45:38 -0400
-Message-ID: <20260412174546.18684-2-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v7 2/9] selftests/bpf: Add tests for non-arena/arena operations
+Date: Sun, 12 Apr 2026 13:45:39 -0400
+Message-ID: <20260412174546.18684-3-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260412174546.18684-1-emil@etsalapatis.com>
 References: <20260412174546.18684-1-emil@etsalapatis.com>
@@ -81,47 +81,154 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The compiler sometimes stores the result of a PTR_TO_ARENA and SCALAR
-operation into the scalar register rather than the pointer register.
-Relax the verifier to allow operations between a source arena register
-and a destination non-arena register, marking the destination's value
-as a PTR_TO_ARENA.
+Add a selftest that ensures instructions with arena source and
+non-arena destination registers are accepted by the verifier.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 Acked-by: Song Liu <song@kernel.org>
-Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
 ---
- kernel/bpf/verifier.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_arena.c      | 130 ++++++++++++++++++
+ 1 file changed, 130 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9c1135d373e2..9280b3aaae46 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16655,11 +16655,21 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 	int err;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+index c4b8daac4388..62e282f4448a 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_arena.c
++++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+@@ -477,4 +477,134 @@ int arena_kfuncs_under_bpf_lock(void *ctx)
  
- 	dst_reg = &regs[insn->dst_reg];
--	src_reg = NULL;
-+	if (BPF_SRC(insn->code) == BPF_X)
-+		src_reg = &regs[insn->src_reg];
-+	else
-+		src_reg = NULL;
- 
--	if (dst_reg->type == PTR_TO_ARENA) {
-+	/* Case where at least one operand is an arena. */
-+	if (dst_reg->type == PTR_TO_ARENA || (src_reg && src_reg->type == PTR_TO_ARENA)) {
- 		struct bpf_insn_aux_data *aux = cur_aux(env);
- 
-+		/* If dst_reg wasn't PTR_TO_ARENA, it is now. */
-+		if (dst_reg->type != PTR_TO_ARENA)
-+			*dst_reg = *src_reg;
+ 	return 0;
+ }
 +
-+		dst_reg->subreg_def = env->insn_idx + 1;
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
 +
- 		if (BPF_CLASS(insn->code) == BPF_ALU64)
- 			/*
- 			 * 32-bit operations zero upper bits automatically.
++/*
++ * Test that scalar += PTR_TO_ARENA correctly upgrades the
++ * destination register to a PTR_TO_ARENA.
++ */
++SEC("syscall")
++__success __retval(0)
++int scalar_add_arena_ptr(void *ctx)
++{
++	int __arena *scalar, *arena_ptr;
++
++	volatile char __arena *base = arena_base(&arena);
++
++	asm volatile (
++		"%[arena_ptr] = 8192;"
++		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
++		"%[scalar] = 12;"
++		"%[scalar] += %[arena_ptr];"
++		: [scalar] "=r"(scalar),
++		  [arena_ptr] "=&r"(arena_ptr)
++		: "r"(base)
++		:
++	);
++	return 0;
++}
++
++/*
++ * Tests that PTR_TO_ARENA + PTR_TO_ARENA is allowed.
++ */
++SEC("syscall")
++__success __retval(0)
++int arena_ptr_add_arena_ptr(void *ctx)
++{
++	int __arena *arena_ptr2, *arena_ptr1;
++
++	/* Needed for the verifier to link the arena to the subprog. */
++	volatile char __arena *base = arena_base(&arena);
++
++	asm volatile (
++		"%[arena_ptr1] = 8192;"
++		"%[arena_ptr1] = addr_space_cast(%[arena_ptr1], 0x0, 0x1);"
++		"%[arena_ptr2] = 4096;"
++		"%[arena_ptr2] = addr_space_cast(%[arena_ptr2], 0x0, 0x1);"
++		"%[arena_ptr2] += %[arena_ptr1];"
++		: [arena_ptr2] "=r"(arena_ptr2),
++		  [arena_ptr1] "=&r"(arena_ptr1)
++		: "r"(base)
++		:
++	);
++	return 0;
++}
++
++SEC("syscall")
++__success __retval(0)
++int scalar_xor_arena_ptr(void *ctx)
++{
++	int __arena *scalar, *arena_ptr;
++
++	volatile char __arena *base = arena_base(&arena);
++
++	asm volatile (
++		"%[arena_ptr] = 8192;"
++		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
++		"%[scalar] = 12;"
++		"%[scalar] ^= %[arena_ptr];"
++		: [scalar] "=r"(scalar),
++		  [arena_ptr] "=&r"(arena_ptr)
++		: "r"(base)
++		:
++	);
++	return 0;
++}
++
++/*
++ * Tests that PTR_TO_ARENA and non-arena pointers can be added.
++ */
++SEC("syscall")
++__success __retval(0)
++int arena_ptr_add_to_non_arena_ptr(void *ctx)
++{
++	register int __arena *arena_ptr asm("r3");
++	register void *dst asm("r4");
++
++	volatile char __arena *base = arena_base(&arena);
++
++	asm volatile (
++		"%[arena_ptr] = 8192;"
++		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
++		"%[dst] = %[ctx];"
++		"%[dst] += %[arena_ptr];"
++		: [arena_ptr] "=&r"(arena_ptr),
++		  [dst] "=&r"(dst)
++		: [ctx] "r"(ctx), "r"(base)
++		:
++	);
++
++	(void)ctx;
++
++	return 0;
++}
++
++SEC("syscall")
++__success __retval(0)
++int non_arena_ptr_add_to_arena_ptr(void *ctx)
++{
++	register int __arena *arena_ptr asm("r3");
++	register void *src asm("r4");
++
++	volatile char __arena *base = arena_base(&arena);
++
++	asm volatile (
++		"%[arena_ptr] = 8192;"
++		"%[arena_ptr] = addr_space_cast(%[arena_ptr], 0x0, 0x1);"
++		"%[src] = %[ctx];"
++		"%[arena_ptr] += %[src];"
++		: [arena_ptr] "=&r"(arena_ptr),
++		  [src] "=&r"(src)
++		: [ctx] "r"(ctx), "r"(base)
++		:
++	);
++
++	(void)ctx;
++
++	return 0;
++}
++
++#endif
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
