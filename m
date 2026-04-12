@@ -1,61 +1,63 @@
-Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE24178372
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 01:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2EB1D416C
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 01:19:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775956743; cv=none; b=b/KwEE8/NDfU2b1ar38OyVFhqoTceL7pU8FvGgA5dOrXQhT+qYou9yw9j5c9F5N1qTpiG+4za36r1WwUHhwYvGAAPCAoBT8l09fMyRZ+X2AQVkXHmeq+AAYABe1iQHuU17pUIVufhNcuSMp2lDVxyHSPE0C3u1QN2iNDcWTo8rs=
+	t=1775956744; cv=none; b=scb8XjBITJi+Kmlnd6QkhYIvAylBHI2wy154TfNp8dC1qkIGbv5P9Q81wpWrHcbXiWMFnyXH+59CX4b/dAag4WH+T6FD2YvD8OPeThjHsX73qCMtcK7Thh1XS3eEK/Q4iOiS1DuCCL6EfUyWc/sP0lUPKL6gk/sTiuGZb/DtqwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775956743; c=relaxed/simple;
-	bh=8ntoPmHZY3X2Gj54qGTLdBdrZ/XF5QqzOkEfELtfGg4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L5IUKuisrCbP36RPslNSSb9ZWMtCHRK1UXkRETPJYUBQChxxK1nwRQWTK9NhdAQjiEH3X6J5LzoL5kzMFfJlsR3/OjRknqGoehk+V/KkmM2AXS8TFHY6AZ/tZhQy/ZtK1KEjHSIOxOzTDnD0wIZKFq/HVqUBCkCuSkmijZDN7+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=IRHUZtf4; arc=none smtp.client-ip=209.85.216.68
+	s=arc-20240116; t=1775956744; c=relaxed/simple;
+	bh=VL1RV0quOoe7m6nvllTNiq715eBJ2KkgBdIY7h+Ycxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fRnSz0vIWoXKBrP7TEcNahmiEBXRCaOxHRrurtjPtGYovr/neghknnO9a0/tW4KKRGFTfoR23rsTuY0m5u51dAP/MoP9x7/Mo0d24PonZfOlK1Z5fGfY+I2VBMnwCXb6FDFktR0n3C7XIgmaZLI43Ptm4Ph1+wDHvFr3g8FFKIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=g5S/+P39; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="IRHUZtf4"
-Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-3591cc98871so1611111a91.3
-        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 18:19:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="g5S/+P39"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2adbfab4501so13388055ad.2
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 18:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775956741; x=1776561541; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zyQ+iEufDlo0a9rm7YXPETUX/QfJoarrVwp4Y8d0YfQ=;
-        b=IRHUZtf4zeWwjl9E+wYXCcz/mZGZwk5dz9l/OjOiAQZbN7oD3UGz7Ypmguw7FrOvNa
-         YjC56Tl3ZUaDhdpRiJpwy0tkya/eHpFeOc0M2m1fAsjixryaXF9rlbPAlaae4AHGZ1jl
-         RP+om2Yoc3bEyy3IP4Kj5B7nX/jktERghtWQMI6ls9epjg2tdWi4Lr0qreS0at0MzxDE
-         kwDuxJwOsD2zxjnHd9JZFkPGSWiQ+a5C63MSTUfjwRHoWUvnPnzd0MHaZSCrp3UQ4Cni
-         Qk9qHUSYWAwS2/skaW6pTtL3eQV/FFNPC10Gqxyl20X46kpkSa7nVc1cIBr82JvM0Wmd
-         hhaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775956741; x=1776561541;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775956742; x=1776561542; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zyQ+iEufDlo0a9rm7YXPETUX/QfJoarrVwp4Y8d0YfQ=;
-        b=dKxnihLlEgNNatzwpEOk33TXmYz66EpE/PLVxKgWVuqod7NwZKM48vdBqoqfvDRc9L
-         zM76XuEFyoe3iyVRnLUjTewpJnYVxf6W4I5cDSsjOdw7IZcuH9LiIPqYZBo/JR5MJnEt
-         xnjqZXsdwGtW9kgKKu8Z8/6bFyaarjQy9gPbtpfEJr6ts+CP4tDJSQm0W7qJMRNcCAMF
-         lV9BQP4dob1HvQk6liNNy+BG1PRX88TStxM6kDVFrFlh8oFE8UOYdmKP8YU26pCvw8Oc
-         Mt9ELnKQonhZj2S+laVo6fRPpxbGDKO+7bOO8wawcX6znDxZBjtij+IfV65NateKyOF3
-         Vkng==
-X-Gm-Message-State: AOJu0YxRC6RJ0mNHlAezFar1FaMTrdsGU9Cg6I9wN0NzxZpTCBLs7dA9
-	fyhY/BM2rTj/OJ5v8A0DLjwzWUXQ4DXH8d27Fu0Rhn6yAb2+6et1XvpoTuZ9qxVZPFTHV8VbmHJ
-	rmGH8FMmuIQ==
-X-Gm-Gg: AeBDieteb/4gCvWFD90TuXxocONMAL0bn7kqmOLMMVXA8D0MLW9qaftpie8rml2yo0w
-	gb7qhbC55CmNlpXQogh4in8gzp+0l+JLKs5WIwDijyDcZrFO1mLIN62/aDl4K4uww2b/0mzqHXZ
-	EbEblxFv6YpEl3bcppBznlOiMNCzXYAbwzi5B/kejeHXgR3Bp2DCuNi9Qg70CUF/+BraPD0qUH0
-	msd7wtMxMsgn6+NW5r2ukgoA8FJboMEeGr27j9DaE24+MtHbc7v3+rQaTb9HobQ7q4nrrmJXV2Y
-	piV2MdLW4umRQ/OS4uTepM9+dXeEViGLLzn5IoDUPWXnvgpbYZw4ZIidipL4niP1LAjiEx7//D0
-	CqP7JOaU46XtiFXCIl45yoZtdHZBaU55gGGBrrYTTrhEIWhEvlh/hrkHs0Q7MUuH0JudfzMJ5X5
-	XBzw==
-X-Received: by 2002:a05:6a20:12d3:b0:39f:a91:783 with SMTP id adf61e73a8af0-39fe3c92b4amr9561982637.4.1775956740889;
-        Sat, 11 Apr 2026 18:19:00 -0700 (PDT)
+        bh=CVJoo32h8IrUWktHypz7f+bZYtIHQ6+CipEeBMln2fs=;
+        b=g5S/+P397TWCFYD8Tp3JON7zY4C3nCKGcoR9yehKJLVJC4qK4jS9D3NuQv5iQNWdwb
+         f0PhwAXjxwAghv3P83UuidQjR2NeGp6oxlITjHP9OPYf1SN7iFfL7qMQYI9DvJJSw4zL
+         YjT1VY5RIRlEJ8Hud8dTp9sq4RWqM0WqZxBbpqJ/HkpM4OW/CuL5+QF7KClA4qteXAnV
+         4FG7m0Q30dGazY3Y0KknbMBAIJU4v/VOtjk+UwUETULJ3xU1gD2gKbUUlmvI1jTyo7ft
+         ODKhxj+PGmfR9grDQ+wRPtk1kHI8I161YNRu1YclF9g1wPFB1TI0ViMx9FFpkGq6ig1A
+         dhUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775956742; x=1776561542;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=CVJoo32h8IrUWktHypz7f+bZYtIHQ6+CipEeBMln2fs=;
+        b=ryz3sC6l05LhLk2d0DOgyHEoE9C2WewCBctqfWzrPK4CdrRNQvGHEAHL5ij0u3SNv8
+         xh18Devx9JHoD553JY0eS2npqOpqy3R98cUwnr8HJIMY5vt87gvgnthcUa1OyciR+Za2
+         95tl2q9zdj0pOY13cRHzMpaX5HH0QcLJlL8/RbfpP+66Y+9BoMlSvPDuG7e/op8IGLOH
+         zgSQmjHsPXkrpmc3xXYecYU6qRe0EXO0yHS3F2Stswzs/bH158t8hhyapEmhGSZur7pT
+         tkdK7Cde1SqX9y730tQzKXSXVAw5BFNBJ/7uY6Jm7gQxJxt57qR9wTM7QLKG7bsg9cym
+         xQaw==
+X-Gm-Message-State: AOJu0YwQ5LLbFnP0CsEBHoDMHr6E7A1ktc8phDSwrmCvdnfuuJE6MRog
+	bMf3+Qj+ZG+ms5AbRgz2MHS6cU6oh4SWufQuE3DBRPzPyuNQNagPHJDg+8RsFgJEsyDA4YcIu2v
+	1JmbcI/Q=
+X-Gm-Gg: AeBDievX5ME73xF26I/G4JFX0P6jLZxBsfPGvoFgAwNfBunY5pg20aoNoe+/NpAaTWa
+	u2D6GjHfKyNrtjh/V3TqQPDBOCpzE30czpa8UJS50fBNA6w3B3Muhefgyr1HYhv+U/XgY9X8Ada
+	QFMXzQE42VrUaLm6/X8XEl+R3MxE1YKeq7hdtHFMdTasX4d1qD3CVqnt1V3s0Tzm4G8QO+b3Qse
+	RS2qpWwPtvohVxXeDzGEwHkIHP71DNTr1sBC/SlR6A++B3know46L5GualGpF60fXq9Zia+Y6ba
+	N0yN2wyzip+9Z2bR+TJttBM9LzHBhD1zqsJ/CbP1Z2dFzKGJn3sSdsueHvhG6ftlef2QMLkNtXs
+	wCtAbWu9uGNjWptb/OFZPQvntTuwFQQtTrpMSCIuOaP32+H+eQIp32H/3bJHEHF20X+2pLxVhgl
+	6jImdfDgXT+Kts
+X-Received: by 2002:a05:6a20:4312:b0:398:9923:749f with SMTP id adf61e73a8af0-39fe3d1f64cmr8665322637.20.1775956741854;
+        Sat, 11 Apr 2026 18:19:01 -0700 (PDT)
 Received: from krios ([2604:3d08:487d:cd00::5517])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79216ffa72sm6569310a12.6.2026.04.11.18.18.59
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79216ffa72sm6569310a12.6.2026.04.11.18.19.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2026 18:19:00 -0700 (PDT)
+        Sat, 11 Apr 2026 18:19:01 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -65,10 +67,12 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	song@kernel.org,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v6 0/9] Introduce arena library and runtime
-Date: Sat, 11 Apr 2026 21:18:48 -0400
-Message-ID: <20260412011857.3387-1-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v6 1/9] bpf: Upgrade scalar to PTR_TO_ARENA on arena pointer addition
+Date: Sat, 11 Apr 2026 21:18:49 -0400
+Message-ID: <20260412011857.3387-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260412011857.3387-1-emil@etsalapatis.com>
+References: <20260412011857.3387-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,155 +81,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a new subdirectory to tools/testing/selftests/bpf called libarena,
-along with programs useful for writing arena-based BPF code. This
-patchset adds the following:
-
-1) libarena, a subdirectory where arena BPF code that is generally useful
-to BPF arena programs can be easily added and tested.
-
-2) An ASAN runtime for BPF arena programs. BPF arenas allow for accessing
-memory after it has been freed or if it is out of bounds, making it more
-difficult to triage bugs combined to regular BPF. Use LLVM's recently added
-support for address-space based sanitization to selectively sanitize just
-the arena accesses.
-
-3) A buddy memory allocator that can be reused by BPF programs to handle
-memory allocation/deletion. The allocator uses the ASAN runtime to add
-address sanitization if requested.
-
-The patch includes testing for the new allocators and ASAN features that
-can be built from the top directory using "make libarena_test" and
-"make libarena_test_asan". The generated binaries reside in libarena/.
-The patch also adds test-progs-based selftests to the codebase for the
-libarena code, so the new tests are run by ./test_progs.
-
-The patchset has the following stucture:
-
-1-2: Addresses a verification failure triggered by SCALAR += PTR_TO_ARENA
-instructions.
-
-3-4: Minor changes to selftest headers to prepare for the introduction
-of libarena.
-
-5-7: Add the libarena directory and testing scaffolding, and introduce
-the ASAN runtime.
-
-8-9: Add the new buddy memory allocator along with self-contained and
-prog-tests-based selftests.
+The compiler sometimes stores the result of a PTR_TO_ARENA and  SCALAR
+operation into the scalar register rather than the pointer register.
+Handle this case by upgrading the destination scalar register to
+PTR_TO_ARENA, matching the existing handling when the destination is
+already PTR_TO_ARENA.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+Acked-by: Song Liu <song@kernel.org>
+Fixes: 6082b6c328b5 ("bpf: Recognize addr_space_cast instruction in the verifier.")
+---
+ kernel/bpf/verifier.c | 73 ++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 59 insertions(+), 14 deletions(-)
 
-HISTORY
-=======
-
-v5->v6 (https://lore.kernel.org/bpf/20260410163041.8063-1-emil@etsalapatis.com)
-- Fix subreg_def management for SCALAR += PTR_TO_ARENA operations (AI)
-- Add more selftests for the SCALAR += PTR_TO_ARENA patch (Sashiko)
-- Adjust fls() operation to be in line with the kernel version (Sashiko)
-- Address Sashiko selftests and debugging nits
-- Add ASAN loadN and storeN _noabort variants and associated BTF anchor
-- Remove unnecessary bit freeing of buddies during block splitting
-
-v4->v5 (https://lore.kernel.org/bpf/20260407045730.13359-1-emil@etsalapatis.com)
-Omitting various nits and fixups.
-- Properly adjust subreg_def for scalar += ptr_to_arena calls (Sashiko)
-- Remove extraneous definition from prog_tests/arena_spin_lock.c (Song)
-- Trim extraneous comments from ASAN and buddy (Alexei)
-- Remove asan_dummy call and replace with function pointer array (Alexei)
-- Remove usersapi.h header and merge it into common.h (Alexei)
-- Replace ASAN macros with function calls (Alexei)
-- Embed buddy lock into the struct and move the buddy allocator to __arena_global
-  (Alexei)
-- Add commenting for buddy allocator constants (Alexei)
-- Add default buddy allocator directly in common.bpf.c, so that the user does
-  not need to define it.
-- Expand test harnesses to dynamically find individual selftests. Now the
-  selftests also reports each test individually (e.g., 5 entries for the
-  buddy allocator instead of 1). This brings them to par with the rest of
-  the test_progs.
-
-v3->v4 (https://lore.kernel.org/bpf/20260403042720.18862-1-emil@etsalapatis.com)
-- Add Acks by Song to patches 1-4.
-- Expand the verifier's handling of scalar/arena operations to
-  include all 3-operand operations in Patch 1 (Alexei)
-- Add additional tests for arena/arena (allowed) and arena/pointer (not allowed)
-operations in Patch 2
-- Remove ASAN version of the library from default compilation since it requires
-LLVM 22 and up (CI)
-- Rework buddy allocator locking for clarity and add comments
-- Fix From: email to be consistent with SOB
-- Address (most) Sashiko comments
-
-v2->v3 (https://lore.kernel.org/bpf/20260127181610.86376-1-emil@etsalapatis.com)
-Nonexhaustive due to significant patch rework.
-- Do not duplicate WRITE_ONCE macro (Mykyta, Kumar)
-- Add SPDX headers (Alexei)
-- Remove bump/stack allocators (Alexei)
-- Integrate testing with test_progs (Kumar)
-- Add short description of ASAN algorithm at the top of the file (Alexei)
-
-v1->v2 (https://lore.kernel.org/bpf/20260122160131.2238331-1-etsal@meta.com/)
-
-- Added missing format string argument (AI)
-- Fix outdated selftests prog name check (AI)
-- Fixed stack allocation check for segment creation (AI)
-- Fix errors in non-ASAN bump allocator selftests (AI)
-- Propagate error value from individual selftests in selftest.c
-- Removed embedded metadata from bump allocator as it was needlessly
-  complicating its behavior
-
-
-Emil Tsalapatis (9):
-  bpf: Upgrade scalar to PTR_TO_ARENA on arena pointer addition
-  selftests/bpf: Add test for scalar/arena pointer addition
-  selftests/bpf: Move bpf_arena_spin_lock.h to the top level
-  selftests/bpf: Deduplicate WRITE_ONCE macro between headers
-  selftests/bpf: Add basic libarena scaffolding
-  selftests/bpf: Add arena ASAN runtime to libarena
-  selftests/bpf: Add ASAN support for libarena selftests
-  selftests/bpf: Add buddy allocator for libarena
-  selftests/bpf: Add selftests for libarena buddy allocator
-
- kernel/bpf/verifier.c                         |  73 +-
- tools/testing/selftests/bpf/.gitignore        |   2 +
- tools/testing/selftests/bpf/Makefile          |  28 +-
- .../testing/selftests/bpf/bpf_arena_common.h  |   4 -
- .../bpf/{progs => }/bpf_arena_spin_lock.h     |   4 +-
- tools/testing/selftests/bpf/bpf_atomic.h      |   4 -
- .../testing/selftests/bpf/bpf_experimental.h  |   3 +
- tools/testing/selftests/bpf/libarena/Makefile |  77 ++
- .../selftests/bpf/libarena/include/asan.h     | 118 +++
- .../selftests/bpf/libarena/include/buddy.h    |  92 ++
- .../selftests/bpf/libarena/include/common.h   |  68 ++
- .../bpf/libarena/include/selftest_helpers.h   | 121 +++
- .../bpf/libarena/selftests/selftest.c         | 188 ++++
- .../libarena/selftests/st_asan_buddy.bpf.c    | 243 +++++
- .../bpf/libarena/selftests/st_asan_common.h   |  47 +
- .../bpf/libarena/selftests/st_buddy.bpf.c     | 211 ++++
- .../selftests/bpf/libarena/src/asan.bpf.c     | 559 +++++++++++
- .../selftests/bpf/libarena/src/buddy.bpf.c    | 903 ++++++++++++++++++
- .../selftests/bpf/libarena/src/common.bpf.c   |  74 ++
- .../bpf/prog_tests/arena_spin_lock.c          |   7 -
- .../selftests/bpf/prog_tests/libarena.c       |  62 ++
- .../selftests/bpf/progs/arena_spin_lock.c     |   2 +-
- .../selftests/bpf/progs/verifier_arena.c      | 127 +++
- 23 files changed, 2984 insertions(+), 33 deletions(-)
- rename tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h (99%)
- create mode 100644 tools/testing/selftests/bpf/libarena/Makefile
- create mode 100644 tools/testing/selftests/bpf/libarena/include/asan.h
- create mode 100644 tools/testing/selftests/bpf/libarena/include/buddy.h
- create mode 100644 tools/testing/selftests/bpf/libarena/include/common.h
- create mode 100644 tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/selftest.c
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/src/common.bpf.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9c1135d373e2..1aa60199fa2e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16640,6 +16640,59 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
++/* At least one source instruction register is a PTR_TO_ARENA. */
++static int adjust_ptr_to_arena_vals(struct bpf_verifier_env *env,
++		struct bpf_insn *insn, struct bpf_reg_state *dst_reg,
++		struct bpf_reg_state *src_reg)
++{
++	struct bpf_insn_aux_data *aux = cur_aux(env);
++	u8 opcode = BPF_OP(insn->code);
++
++	/*
++	 * If it's an instruction with an imm operand, we know it's valid
++	 * because we checked in the caller if the destination is
++	 * an arena.
++	 */
++	if (!src_reg)
++		goto valid;
++
++	/* Ensure both operands is either PTR_TO_ARENA or SCALAR_VALUE. */
++
++	if (dst_reg->type != PTR_TO_ARENA && dst_reg->type != SCALAR_VALUE)
++		goto error;
++
++	if (src_reg->type != PTR_TO_ARENA && src_reg->type != SCALAR_VALUE)
++		goto error;
++
++	/* If dst_reg wasn't a PTR_TO_ARENA, it is now. */
++	if (dst_reg->type != PTR_TO_ARENA)
++		*dst_reg = *src_reg;
++
++valid:
++	dst_reg->subreg_def = env->insn_idx + 1;
++
++	if (BPF_CLASS(insn->code) == BPF_ALU64)
++		/*
++		 * 32-bit operations zero upper bits automatically.
++		 * 64-bit operations need to be converted to 32.
++		 */
++		aux->needs_zext = true;
++
++	/* Any arithmetic operations are allowed on arena pointers */
++	return 0;
++
++error:
++	verbose(env, "R%d %s R%d: Invalid operation between "
++			"bpf_reg_state types %s and %s\n",
++		insn->dst_reg,
++		bpf_alu_string[opcode >> 4],
++		insn->src_reg,
++		reg_type_str(env, dst_reg->type),
++		reg_type_str(env, src_reg->type));
++
++	return -EACCES;
++}
++
+ /* Handles ALU ops other than BPF_END, BPF_NEG and BPF_MOV: computes new min/max
+  * and var_off.
+  */
+@@ -16655,21 +16708,13 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 	int err;
+ 
+ 	dst_reg = &regs[insn->dst_reg];
+-	src_reg = NULL;
+-
+-	if (dst_reg->type == PTR_TO_ARENA) {
+-		struct bpf_insn_aux_data *aux = cur_aux(env);
+-
+-		if (BPF_CLASS(insn->code) == BPF_ALU64)
+-			/*
+-			 * 32-bit operations zero upper bits automatically.
+-			 * 64-bit operations need to be converted to 32.
+-			 */
+-			aux->needs_zext = true;
++	if (BPF_SRC(insn->code) == BPF_X)
++		src_reg = &regs[insn->src_reg];
++	else
++		src_reg = NULL;
+ 
+-		/* Any arithmetic operations are allowed on arena pointers */
+-		return 0;
+-	}
++	if (dst_reg->type == PTR_TO_ARENA || (src_reg && src_reg->type == PTR_TO_ARENA))
++		return adjust_ptr_to_arena_vals(env, insn, dst_reg, src_reg);
+ 
+ 	if (dst_reg->type != SCALAR_VALUE)
+ 		ptr_reg = dst_reg;
 -- 
 2.53.0
 
