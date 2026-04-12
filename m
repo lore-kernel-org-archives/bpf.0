@@ -1,183 +1,115 @@
-Received: from SY8PR01CU002.outbound.protection.outlook.com (mail-australiaeastazon11020139.outbound.protection.outlook.com [52.101.150.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C022F0C74;
-	Sun, 12 Apr 2026 03:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.150.139
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775963000; cv=fail; b=qX0Yo6O0HRY/YsvF7RFKOOCMfUiFHm++elbno8V9tjbRwzw6qrz3uemH/E+o4aUVD0+WnAx7id5plKjPfbTNhwsGJHiEG2mX6SLjJrHaG00d9qRqPsYTARRqIW3rB4XWtBrwGpaQ3IbjyAaaEb0gpMTlzpLzcZ394paM2lg1pXM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775963000; c=relaxed/simple;
-	bh=Q+FWb6UC5/GobjEddZLnCx3OFoqJVraWXxOUiBcAQmI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=FPtqHB9lfWGm5BeyWZoRLTBc/5tq9QKaF6sfGrMNLHWN/y7ATSj23F23ZGFc15RptcXXW2DD3JkTDtQZDMNMXZfBxhVlDihlx0K3mepBHJPCvKZGWj2ZOFdnJ9TvEyPMBligRI0jM0r1Tfj1oDvUuhDP+ZmPTLq2+uvkv4ilQF8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=verivus.ai; spf=pass smtp.mailfrom=verivus.ai; dkim=fail (2048-bit key) header.d=verivus.ai header.i=@verivus.ai header.b=nn5IIyDn reason="signature verification failed"; arc=fail smtp.client-ip=52.101.150.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=verivus.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verivus.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5799434CFC7
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 03:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775963505; cv=none; b=aGgpNe34j4mwMo7O/yPxuhCCZwSNJHq6aIvhHKu+VZQwV6sxjMQGUtfUGknCgOpj02SPmjsTGZKF8wnuc3pxa3fzzasnjtgc4ghQoIyRdPCwt9fx4EbgEd+Hc6ydeVKgzWhz/c+3meiygSL2q8hFGDxIqGBVUyk2PGfF1J1t3yk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775963505; c=relaxed/simple;
+	bh=eW22JNhxKeqFHRlgUglqnu1dF2bhDSrVaEnt0pVcDQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QbrGxHYnPzd7XJlixJwZdN7aQsG9HSFgthFviRNlG8vI0beUVgoaeMwZM6Mxhefu2EfHsdywrCf8AFsSwdmfle3T4LuNDMZMfbmo6PrjCgmwkkFdldxOXnJCYFIjz++ojQOdsY638aVxKISXWfc5MOWGVyUmzLyrEKeMKD1Dw+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cxqiqy8e; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=verivus.ai header.i=@verivus.ai header.b="nn5IIyDn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GMCYLjkTHzz3ke3+X08eaGomhca+oT5l7ZNnrra9erhnnj5JDuuY1LAwtDfjL1MW3HCgZ2jBeUEss8lKSzEg5lJq6X0G5EPqUG2eskwksNuxNa2U+giMh385DegKlLuBYRQsquY8/Yd28MotePaKEHVQ3tntv7XH2ml9W1ibx4wF+uiNt2ydLVQyZsVnAygq2puzqaypuwZS9jiXvc8TnMyCc1VEpkiLlJ5exdmwSXCxGUzhGkoZ+nAHRqA2EKmjq4u77xEmYYPz/MOxH0YSkqO0MaTdYyvQl8E4i1n2E4k6oSZkNXxenOkz95iDVsNmvNiTSoU1et7HcHAfCYKECA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ClP1KiamlEhqHK9kogOYxtZqY49ve67IBE2FN6I1cX8=;
- b=FgHaIZdYXQrUiyyVv8UK7RSbKpkdS0/Z6I1WpLhhY9Xv/pTpyAjT8jbU8ltP/gw5y0EiXx2iwerjoiQ12sv+mEb9qFxhJd9T28xr/BKjXiJYn+bCMRtcdl/skQkXCEyYYUZC4dM8TEuvzAjYdC1pGUsv7VgzjL0aMW+pbi+uKQBrZc8RDWAt/UCjgGfy2oKZQwbIxAm620CP5tFKX0mO553eawVVVyk0uEyeEbEZn9PfXcxTo2ypq55zVccc4RccjcvMx2brOESmpXWY9/7iRoh8alAo3abryzr4F99AVn6T+LK0Jo01VKmbKgpKtZ6L6dJXYjoncugQEuHDrsdTPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=verivus.ai; dmarc=pass action=none header.from=verivus.ai;
- dkim=pass header.d=verivus.ai; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verivus.ai;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ClP1KiamlEhqHK9kogOYxtZqY49ve67IBE2FN6I1cX8=;
- b=nn5IIyDnT5l27VjRiURGGLYtGWav3rKoCSsIhmnKS9sPFcRKcF4s5KgVWYKSUjWDAhwkJefHb/QsIVAtJH+smAllnE1eoTsgU+7ZzI+1NeBOCn1Xg1vzm3PZch8t6cUpxHj0SH6dmf/uz9aEYtnyk1Hx4yon7X11JpmOeMHJjeI0Lkl/DXFpwmBI6zf5yk0WWkbPeBPzCodKcEU2HhPuBdJKtz6sN5G/0CwIMWXT5VZWDHsl+f1IQKLCZ4VQw1zDjeqei2tLNzXTXPnL0M5H8HzgZ11fmmlqaZQdbKC5FpAiJoRvrqRwAKwW1MlyHU9WU+U+sQYAjJpxRzydSQyX2g==
-Received: from ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22a::5)
- by ME0P300MB0668.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9818.17; Sun, 12 Apr
- 2026 03:03:14 +0000
-Received: from ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
- ([fe80::1e3f:9cb9:4a95:b5a2]) by ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
- ([fe80::1e3f:9cb9:4a95:b5a2%5]) with mapi id 15.20.9818.017; Sun, 12 Apr 2026
- 03:03:14 +0000
-From: Werner Kasselman <werner@verivus.ai>
-To: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	<andrii@kernel.org>
-CC: John Fastabend <john.fastabend@gmail.com>, Lawrence Brakmo
-	<brakmo@fb.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
-	<kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
-	<horms@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Werner
- Kasselman <werner@verivus.ai>
-Subject: [PATCH v2 3/3] bpf: guard sock_ops rtt_min against non-locked
- tcp_sock
-Thread-Topic: [PATCH v2 3/3] bpf: guard sock_ops rtt_min against non-locked
- tcp_sock
-Thread-Index: AQHcyijn8WB+tCGVOUqZuGYSLPl7Ww==
-Date: Sun, 12 Apr 2026 03:03:14 +0000
-Message-ID: <20260412030306.3469543-4-werner@verivus.com>
-References: <20260412030306.3469543-1-werner@verivus.com>
-In-Reply-To: <20260412030306.3469543-1-werner@verivus.com>
-Accept-Language: en-AU, en-AT, en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: git-send-email 2.43.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=verivus.ai;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ME0P300MB0853:EE_|ME0P300MB0668:EE_
-x-ms-office365-filtering-correlation-id: d1022f83-80cd-4570-c552-08de98400a03
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700021|22082099003|18002099003|56012099003;
-x-microsoft-antispam-message-info:
- V8KEuDbuWHINWGV9KAvdNdv4ncVua848ikou4/Xwp63qTbR3strp2t0H308jNBcxu3tk7I9SpW5UGNU9ghDmXIuplMFwZ0E/34g1ffzRoqnp56gv2jr3bw7/DSKpzVew+gYqITzmDOS8oZip/U8ygq5fbjAq+rbqS2CErcUftxvPwrB2QPF7uPEabCjXGCu5YLtIU/uslSzFHfHLPH5w2JQOLRbF0DKOO1Z6QxEbCbxTeCh6aoKi8wqEaSr5oQcrBS9uzQF4NYG2GB/RHp3k8hoMNH5/Og7Py+u9bNKNvkBi3ZlAuctu0oAmgRl0cukESlBu8xvPoQzXhcyoDZ+KOACSHJDa3jYDFLWto5HVOwhSqUI4yzsYqtwH/jCluOst6njxWh3KPRtUigS0n/rxY/buTvddgXqDEXtix3/Ym8/hnepiPB3RGoFcWp1vTdsKoy4oeRq8rzNx83EwSHMzgvQm9EWyDQlhHxMlI0y6noby00SA1649YZgTV60ew/VxW7r5lunsi4gRTZYWBhajH99xfZyCEssW5fUEy8xRJw+Tzvc4aLuv1DidaePOWgQOXhNoMKNKPhfcDZZo0s9qkaEDrzj0oe2dr5fvvXnSaJNfjuIkW3swVcQjXM0OlVFQpmuJ+SGs8mDcPqed/39ISEcyWbG6JEyHYIsDAWG+OOwHJa7IlJV23gsGPZDHjn1W93gEBZBQlqW8wiJ/cZqW6VZKgKbawpYMenH7TFxoUtb30SaUbfoMYmWh5pxfxajeih9+NT2TucyRAIxJZAGxR+UTWm1THMNj3pTUFebPUTs=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700021)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?BZHWBI9khLTURBlg9DTTWxM8Rc4YlPr+ig2r5fMdcUcjHpwEOHjX72l1r7?=
- =?iso-8859-1?Q?IFdIQWUgIze1fgYhKf0EjHc9UiD7vkpr//k59j2E/xHpLWmq93VvJ2Zeo9?=
- =?iso-8859-1?Q?aHPOjLSepso7ZyIOhHQJsDy30GzFvBrxyp+nLTS/HFA+OQ+a/3YblT5aMA?=
- =?iso-8859-1?Q?CIev3dzwKIcqq5eWFt1yAm8yCRB1H1mBYgcD+l54G9QdRbkVZ4kyFx/+SU?=
- =?iso-8859-1?Q?hYMIlSd7ZTy37gMnD33iXPyYPFiG/2XLcZZe+REMQQgTfVLcSf1kvYXBh3?=
- =?iso-8859-1?Q?KrFqn7Y7evk/PKpThliIuj6EgTl6faKyElox26z861JbAvjaLGJqpVqNeG?=
- =?iso-8859-1?Q?Vi9/Rodl50txqpcoFnsfC+qppHdbD9P+E9jY+q4DlequWjoU17Gcjx/qKT?=
- =?iso-8859-1?Q?sq4lHAvzA+HmAiB/A/Ju8qLq38r++0eg1ncelHRhyUmi6JBs0OPL548vkJ?=
- =?iso-8859-1?Q?ZVflb1VkHvchnDsjp7WX9a+fHzUGuZK8B7NLMjZfwiW2z9y8asa4A80uWC?=
- =?iso-8859-1?Q?vJLbTikPfcc+XgsWle94yCrLTyVUsurZ+uYYfl+pv8NSyhxc7T+Es8AgOm?=
- =?iso-8859-1?Q?JvjIy3cdYbqybA2gZbQv48oRAHY1hBnpbPNuzLbpPK0mwtStDePC665rAb?=
- =?iso-8859-1?Q?lgA8WTjT2lPjnQVf37jHiVFgI2EFo5PSgEPXoKd1Foj6SNiDnQCNwuwyuH?=
- =?iso-8859-1?Q?bApycwkR8UKadVr7qWTY8lHpf34N9Y5CYv3q029tHCGsDBbKXGYjQSvH/c?=
- =?iso-8859-1?Q?2arZ4NHbIGyhFQmpyfuF3k3+bMMDD4tDq3MQEqPoyBCmGhrcXS+Q0IFX0+?=
- =?iso-8859-1?Q?1RZ9Xr+lTnLAslQI95vcfXG1unwb8il2eRLM5DX4l+q4xXIq5GI8+Cy+WW?=
- =?iso-8859-1?Q?bwNkZvueA40bVJhdGhh6aERAU6kgquBQ4dLvf42jTK71Yr7yPYBh0/F1l6?=
- =?iso-8859-1?Q?OeXdolNsfTnjFEyKWBuIVyA2D/ACA7bIb+HwQFr03OuR3Zg8wrSimbWwkc?=
- =?iso-8859-1?Q?8Rpemsre1ocs8IoO5Np65nhcUFTK6TiHcQk8tfKVqRdjgxn+Bc+w7IgL2r?=
- =?iso-8859-1?Q?aj/OXnX/p4Rh8p8qA5xjrXHIH4qXqJ4t8eh2YtTX6NXSYyWhrA7dxsqMbB?=
- =?iso-8859-1?Q?B63UmyoZ11hm69gApyqvrTk2VoHv1YJI/juj8+mQSL+MqeVDj28GVZoca4?=
- =?iso-8859-1?Q?LS3Kf4iPm13WCzzTy3w8uGJOIR6loh9yaPikiWxNMZ5jjaKwSz2oG4pbSp?=
- =?iso-8859-1?Q?yoreE55rgpsx/uJbZ9GKavje4IAuEFhmqCnfVVZB+TJhuE7U0BJzlRvjvd?=
- =?iso-8859-1?Q?JL/jjNutLw48dxW5+8lhZX1H6KkksH6XWqOII4zH9kSUAQethFls2hqhC3?=
- =?iso-8859-1?Q?riwO8VwlGAZ6e14Nav9FMKnqbE6dURwWMw8Uvsp4QnsicTNcgFr73w1ZG2?=
- =?iso-8859-1?Q?juRTMJSzXyHPYUg5ePe7m73ZHCtWJt/VOndPM90vFVzLJm3zrDspkEyPV4?=
- =?iso-8859-1?Q?i7ZGj+OC0MRV9liM+p2st7ziQrmwaqPcFaI8DMC3pEdb4FSf/CBhzvSkXg?=
- =?iso-8859-1?Q?ya9/B++V+lvbG0RqKCDxO8B0uNIwhHsY9pueGwIdVIfslKk9Qvgjrd7rNO?=
- =?iso-8859-1?Q?4Z7R9dl+4C6u0nlLUvmOSajxgPyiI9oDt1a7TUFRnsvEycUdT+PK48UeLR?=
- =?iso-8859-1?Q?Dk4L3Wi23X0/XAM462KOG5ApzqhQ/jkWzSRI1jIFe5mgfASE5YglmUULrN?=
- =?iso-8859-1?Q?qEvR822F0uXsxAM4RGiRtKdUPzRboRrYSh8TunY5Mi3V3CLWK64fSsv8lr?=
- =?iso-8859-1?Q?EPSo0qGTWg=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cxqiqy8e"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c76e702e01aso1104061a12.3
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 20:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775963502; x=1776568302; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=09MYCeHfL58jZVmSawMyzrmoQXnRCN4jiMGZx1VCy5w=;
+        b=Cxqiqy8ez4ODZpAbmg+eb8XsnsZCaL/AXNFF9wIS2EdUeeUdRLYT1uiE861cjOCqKt
+         ysKL21sWsyzKsFe7KTUbvx+DMzmFAdhqtJlcfwBP2I3i04w6+ZDLu0r0GSfFlgn3wlpy
+         pyCTPHJRzwRmtYirHV2ExOvwteR+8sW5RPLhb6xKtVK9IBpVtTnqO+7zimEG1VqkijYD
+         RvJsVaydE04yf6GYxfqSP5NBiP7CgrKeDzpcQ1LNX+W/uiPhGtTIMsUWlOjY68ajDvfN
+         quYtrP+ruQkZzrtyI5j9t/KSLwqO4H8JFakYBRHh7WQQzX9Y3HqeUXqRuQ6R8WAfojIL
+         ZxDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775963502; x=1776568302;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=09MYCeHfL58jZVmSawMyzrmoQXnRCN4jiMGZx1VCy5w=;
+        b=Wiunnoo7qDx3fPQ+WIDkgmwg94V1Hko9qd7lRJZbU3h8p06w1DlUS/M1SNUGMHseky
+         r1e61hU2YSmHeA8EYXPUMJVLjy9xH2Be9Ra+Iz3mBW8mtvRVKDJ0cNchBBxIPl2B2tRl
+         TSwTUQWoSI7Nqi1w+um596LgMCPXq28Dx/qGPAejRsq20vj60eDwSnpz08dZImFZAmeR
+         h/F1FUD7vLf+mIoqDc5yx7ux6VXB+reiPzfIkn9TnHaGOV3GcNRog7uYkpokH3ITpJxn
+         72vf5ZBTCa3v47ZeG0nj00ktA/QUXXqpOF85tgd9BWtsyRupQvm41OcLxyAc6ic6MWkC
+         BWhQ==
+X-Gm-Message-State: AOJu0YxpxmS6q7A/iJRYNJmGUoJl5XBX8XNYbAs2BKrISzo4H7O2mDpn
+	JIEA161IiJqteo0s0BxtToIwrjvoYWgTQsA0R2ZKSldUOqMPkwALs2TilT68TA==
+X-Gm-Gg: AeBDievZA5xS0P/aeJREOrSQASUkvlX5ynrKAQtogho/rNoXNPERrmRFTKQaZ9+JQqj
+	uhWZAbEQAEawBEVog4N/hHWuO3SGEuQobdV1gzoTNOcqV+9bSBpxAcRTfjMmbuC5ou16gIyKXa2
+	6j2WcEU2lPAiIG3iRushQOLqyyFXnScM3A0ZO8n7OSW/RCCZIHYrdEaFqXBe6II8azBy06xiM7D
+	mQYPktEiABrBvdm9CerSImdGO5E6R5kkCvuhtMU25NRSRPeSP37FTpidYwCLRzao0ea7shJD5TC
+	n0hcog1/te3WiwIn2Crd6fMxqadohb0dFSz/NItKTwLHnlxUA8f8sn6x5V+n+GA/XZ2goaj/TDC
+	ZuULK3RZQuQbrsYkZTlOSXfZpoEzQLnUiFYfa9MCS1G19Fz+YAGAW9OQU2AzQHW6/O4SoCiX4ry
+	uf8ysNFqLZtp2PC4hP0UrWg8GfhnoBLYyc+EHfk+RZdsDKmZS2qrna4xeZUEZU2lTGXRyXWvRYm
+	s9icSKnZ5+BU75OG1sLAXw0O7RAiCEHhIPzqBfIRSc=
+X-Received: by 2002:a17:90b:4d83:b0:359:8a78:569c with SMTP id 98e67ed59e1d1-35e42827fd2mr8995923a91.25.1775963501934;
+        Sat, 11 Apr 2026 20:11:41 -0700 (PDT)
+Received: from ast-mac ([2603:3023:126:8500:1c82:6ab4:808c:1834])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e3517f2a0sm14777766a91.17.2026.04.11.20.11.40
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 11 Apr 2026 20:11:41 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next 0/6] bpf: Split verifier.c
+Date: Sat, 11 Apr 2026 20:11:31 -0700
+Message-ID: <20260412031139.41248-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: verivus.ai
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1022f83-80cd-4570-c552-08de98400a03
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2026 03:03:14.5931
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ccdcedb0-4edc-4cc8-9791-c44ee6610030
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gOoXBkhwV7ZPHdY6wzzPHUeHefLya7vYFcY5l0DNgwJCUvZ09PZ8jwkTjKMDVSHMIiCkTdOAQJfJac7RPD7WZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME0P300MB0668
+Content-Transfer-Encoding: 8bit
 
-sock_ops_convert_ctx_access() reads rtt_min without the=0A=
-is_locked_tcp_sock guard used for every other tcp_sock field. On=0A=
-request_sock-backed sock_ops callbacks, sk points at a=0A=
-tcp_request_sock and the converted load reads past the end of the=0A=
-allocation.=0A=
-=0A=
-Use SOCK_OPS_LOAD_TCP_SOCK_FIELD() so the load is guarded, and=0A=
-compute the offset via offsetof(struct minmax_sample, v).=0A=
-=0A=
-Found via AST-based call-graph analysis using sqry.=0A=
-=0A=
-Fixes: 44f0e43037d3 ("bpf: Add support for reading sk_state and more")=0A=
-Cc: stable@vger.kernel.org=0A=
-Signed-off-by: Werner Kasselman <werner@verivus.com>=0A=
----=0A=
- net/core/filter.c | 12 +++++-------=0A=
- 1 file changed, 5 insertions(+), 7 deletions(-)=0A=
-=0A=
-diff --git a/net/core/filter.c b/net/core/filter.c=0A=
-index 385fc3e9eb4a..88fa290caeaa 100644=0A=
---- a/net/core/filter.c=0A=
-+++ b/net/core/filter.c=0A=
-@@ -10836,14 +10836,12 @@ static u32 sock_ops_convert_ctx_access(enum bpf_a=
-ccess_type type,=0A=
- 			     sizeof(struct minmax));=0A=
- 		BUILD_BUG_ON(sizeof(struct minmax) <=0A=
- 			     sizeof(struct minmax_sample));=0A=
-+		BUILD_BUG_ON(offsetof(struct tcp_sock, rtt_min) +=0A=
-+			     offsetof(struct minmax_sample, v) > S16_MAX);=0A=
- =0A=
--		*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(=0A=
--						struct bpf_sock_ops_kern, sk),=0A=
--				      si->dst_reg, si->src_reg,=0A=
--				      offsetof(struct bpf_sock_ops_kern, sk));=0A=
--		*insn++ =3D BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,=0A=
--				      offsetof(struct tcp_sock, rtt_min) +=0A=
--				      sizeof_field(struct minmax_sample, t));=0A=
-+		off =3D offsetof(struct tcp_sock, rtt_min) +=0A=
-+		      offsetof(struct minmax_sample, v);=0A=
-+		SOCK_OPS_LOAD_TCP_SOCK_FIELD(BPF_W, off);=0A=
- 		break;=0A=
- =0A=
- 	case offsetof(struct bpf_sock_ops, bpf_sock_ops_cb_flags):=0A=
--- =0A=
-2.43.0=0A=
-=0A=
+From: Alexei Starovoitov <ast@kernel.org>
+
+verifier.c is huge. Split it into logically independent pieces.
+No functional changes.
+The diff is impossible to review over email.
+'git show' shows minimal actual changes. Only plenty of moved lines.
+Such split may cause backport headaches.
+We should have split it long ago.
+Even after split verifier.c is still 20k lines,
+but further split is harder.
+
+Alexei Starovoitov (6):
+  bpf: Split fixup/post-processing logic from verifier.c into fixups.c
+  bpf: Move compute_insn_live_regs() into liveness.c
+  bpf: Move check_cfg() into cfg.c
+  bpf: Move state equivalence logic to states.c
+  bpf: Move backtracking logic to backtrack.c
+  bpf: Move BTF checking logic into check_btf.c
+
+ include/linux/bpf_verifier.h |   284 +-
+ kernel/bpf/Makefile          |     1 +
+ kernel/bpf/backtrack.c       |   933 +++
+ kernel/bpf/cfg.c             |   783 +++
+ kernel/bpf/check_btf.c       |   463 ++
+ kernel/bpf/fixups.c          |  2457 +++++++
+ kernel/bpf/liveness.c        |   247 +
+ kernel/bpf/states.c          |  1552 +++++
+ kernel/bpf/verifier.c        | 12382 ++++++++-------------------------
+ 9 files changed, 9552 insertions(+), 9550 deletions(-)
+ create mode 100644 kernel/bpf/backtrack.c
+ create mode 100644 kernel/bpf/cfg.c
+ create mode 100644 kernel/bpf/check_btf.c
+ create mode 100644 kernel/bpf/fixups.c
+ create mode 100644 kernel/bpf/states.c
+
+-- 
+2.52.0
+
