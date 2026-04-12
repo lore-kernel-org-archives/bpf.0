@@ -1,157 +1,194 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888B930BBAE;
-	Sun, 12 Apr 2026 09:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775984412; cv=none; b=Bwww+7JDoWNpHAFC2//YA9B6Y7ANoSaM64hyFedrV1C3Cvxwz6vD7zEi3rCoixkuJSfJaxvPOX+7sL8fDCRHWhIb1n+mYP459uwiJj2IdZXLO4mNaeZml5jyzE9EwU/6d8nckv6MFw6rRpE1Q6vmPZxlBOvqEIzBipOYxXz7R3Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775984412; c=relaxed/simple;
-	bh=XLSXOqKfHWfTPS6C6Vq2UT2HUb3l8dn3SksR7uKAF1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ICGLxQm+6CxD1uTOrCow4rBaGpOMxagPDEN3Gh/R8F6Vhi4+4MJAlOfTc9FeOQ+2+Qb2nAmUoH4nEYntIee/n+7kB9o5IYoatygZ6s0504nxsuVyVml7Wyr9gkmO+kc33kj1baTarB8f5xG65cpIcpsxfliNTPlwbxAs64OVTDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jp8RS9Py; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46C31B4F2C
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 12:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775995797; cv=pass; b=Gn1TSDSrnkXaezqSdUFYYP2ZXPdSrFu3B7ZrzUoT0x7I68Fm6L8bEiuDQ0FkLVpDYuOCYIcpW08ZyTnyLWwdNhtHFquGGLu1R+txW5F+wRp+RZkwOmdJ8v0YbLxwn+6NslkKO4iIhuuOhE59rh3/KzmhT/5G0br4/ow0vaSyqSU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775995797; c=relaxed/simple;
+	bh=SVTNVJLn1VqDWx0HDz8tbsYxcEIfkMoVv4id3LOHg7s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fDi0cijOb2o4jHTwWn3pYLLtbxxS3gVMtj3oZYo7jWcspdeEg01Wz3gAAQU1IdbTIjTOsxYMMWSHXZTzaXSdMulVwgW+poYMPQEVhcfQcfH+atKASeh1Tmzt1sm9BfLG+gHuu4JQ7698A5TnPTifJzQMJgV1HgRzN4BPRGCOOSI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jrduKbKu; arc=pass smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jp8RS9Py"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B8EAC19424;
-	Sun, 12 Apr 2026 09:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775984412;
-	bh=XLSXOqKfHWfTPS6C6Vq2UT2HUb3l8dn3SksR7uKAF1I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jp8RS9PyXTYJFvkzzLsKbqdk9YThojx4/3xYFhM36XYBeKqzD1VS87sgR3Ep4G+wj
-	 nIDIotasekxgRR2+0LR1ZnRFKfv6A7hEbes2g4J5SoihEugtVrNR7XvlNzaLHEZS2r
-	 cHZihj147Ov2kMt/c0JJRi/9bPg/TdDk4SdHu+WdXL0qjA0ahVxxKxP7Kc3PwKLHmk
-	 b2Opz8lmLzC4ig2Rs95Ar//4WLPrxMnbu3drosCYDokJ6cVPTWVa/Z4SoW7kMZaHjC
-	 UkqezaVoZsCnLgyhyOrwMVesW6JK6+EAfZsldb0dCG8a1n/N7VSqtXivIBgWjVJo2f
-	 1WwiEbGVseE+Q==
-Date: Sun, 12 Apr 2026 12:00:06 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260412090006.GA21470@unreal>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jrduKbKu"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7986e0553bdso33470367b3.2
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:09:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775995795; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OkUgssFAdqSolKoAU5lSgcugk3+ObJhJmqUZURFvTsZkllpryftcd2m0kfa9h7Joqx
+         uqSPtrXvIuvdaU5la2WCRGuNHGktHSKeHGU8/EKe0hxnJNipPgQHo2ijqngdUKVyyELC
+         UK1CBsEHnJa/UPgmfr1ZEekzQmZYFnw94+8eRs8mWjfwh8Ay2c/nchtT3wWlILaEWd1n
+         hnJaBSd8OGr5FlsgdmW+PqBWTKFV7oYkA8DV+mYiplR0g7PlWmq3iH1LN3FaNj0EJ0ge
+         L7caXUHHNpLOVtVH6fMzv/3xJF5lLhF+pIb+GeT7uaJ9yU4g9VhHz493lNOLWA+d7uEl
+         QM3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3yi7Jufl9MZ6r9E9T+DntWdpQRPYoo/vSgS2eY9Rp+c=;
+        fh=uLdhUBuUp2ynjUEdz1qnPo3ArlJq4lM/hwa7YkBaByE=;
+        b=go2I4jJ+49pns5r68yR88c97LBhfrevh8zHkA283HmOYAOi2vXYV0k75EtLw9eQyYI
+         CAixlJEReU/ZDl6bIlvYOjKZqXYPRqlQs89jguvQJYoKrpADFpRzd96swltp85ImZGvd
+         6oLvjtGE3OxWcQxd+uvltMqhvt5KaMKVkz69y8vb1Bgur1CVZGsk9l1eglyRocBYJWwq
+         b6mjmP95ELNUGWokfB5dHqXFC+xbd1sDuEm85YRn3RijYKFngpH5eWSL9sXHSP1zjT2M
+         r0DI4xXk4W+J5QihSdi1ZuF+/YJnJR36RZLVnpLUujzctVPJNJvdh3JO8321v1l/YfJd
+         i4TA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1775995795; x=1776600595; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3yi7Jufl9MZ6r9E9T+DntWdpQRPYoo/vSgS2eY9Rp+c=;
+        b=jrduKbKucOJ0CrdEhOzQjksun3glLXXyDIsHC29QDod3cu+as1tdU/z//zLc3j771F
+         Ww0mpRkjrNeekX5PJhDel6R4DMkc6Ea5uPdNN8QAEvd2w2v9BWeqEgh81fUyMRKCYoaz
+         PKjzJ1ADdJLkpXk9OsWoHjE4qpRTULett3nyv/g16kMfC/HsuxD/CBtq7KDTa/Q50WfX
+         IGmN9R4IaIlJhNnocOiKpGnjeqM6Ob+Ym6X/+JxHmIEuW+GzceECvAJan3e9NKQ5tB8t
+         4SnhUenVs+FFcdLic6qX9rVRaofoOzUPQ6B4l5TAYm2AmbSyukIT2c/v4XbvLqPuvyd4
+         SlhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775995795; x=1776600595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3yi7Jufl9MZ6r9E9T+DntWdpQRPYoo/vSgS2eY9Rp+c=;
+        b=rOr74ilVhuMLL+x9yDDDcmRrD+l5w1Y4YOE+OLRBPlTin07N+R0nvokcgK3et4cWwV
+         LG8IuxMppLgHonXK0AAmzpe7rHKv8h3lpxTiDhxEEkhLla9xsqMdQJEvtPPK0fKP8b/Q
+         V3DCpSBOhn6K9dI72S1apH1ROrzNRfy+R4HYrzJLEZohvTFZbTfPWMv+Awk7cfNhURhX
+         NF0GUigDq18S0p+xGvEYx4dkYfGEHGS0N8sCqcJGvuE3FT6StlS5RK6dqhuvtVL9xwPi
+         3rjZDkigqWT2JOr9TEQ71+smPbMY8CxD2PUGy5uH2nozFJy9AiyxSlQYPOnt/ijbGq0c
+         OPbA==
+X-Forwarded-Encrypted: i=1; AFNElJ+xjxZgLXDQ4+VbSbq2Q25HcC4sPQX9mkTJBZE+FhFSMcuINK+u6c7aKOndWU2OJbCVw6I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5GI5GJUBwO/Aozt4BlM7SpkYC+xSu8JakB7+RkAmqLJzmBpBI
+	kIODFmb0tgn9nNDnJOwog9uT9LTOQoxHkL+4iSaNKEP8MG1F5JrrlKTM8C0abLulXtySQqyuYrd
+	bTakFGh20WBTQc1EM+hEflneWxd8BFKY=
+X-Gm-Gg: AeBDiet9Pbt5uZ/ULPeB9XEXvC0DaeRW6h9s1Jlp+TIMdAMHze6RQlZMKzv9gfypB9z
+	FPd3wfakhneiX11xkPND/8OaJS/RfUJAEsBLUZS+LENoBgzWfvq+eyO/vD+SDgcuJaM74MzO/JT
+	rcqN/c5Cb3Ny8C9VY+uOYp085KpFXMsky0aYaEp4NUXihRS8TgsJFlf8PcCYTw9Xrj74jkHucMz
+	YtM7i7ckLzINGT06rKzjB9D/tRQbytSZMst2lBnUj3wDvEHEnTU0TiIloWCjDJd0FNovRESnRGN
+	I6f6wLa0rYxpG0fzdEC+U7wexf3BkjFWvm0X8h8E
+X-Received: by 2002:a05:690c:dc3:b0:79a:cc64:886e with SMTP id
+ 00721157ae682-7af7282b96bmr107487127b3.52.1775995794798; Sun, 12 Apr 2026
+ 05:09:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+References: <CADBMgpy3e25EH5xbKMN5GeOK47jE6uzviknbt35V49_Y7zFj8A@mail.gmail.com>
+ <CAPhsuW6p3YOv3_M_c0ThMcrNqNjT=7i46ekJBrWO_oGzQkxrxA@mail.gmail.com>
+ <CALOAHbCbcw2jpjk9JD9yyf+SMpQ-s9FAonSaz7Gs4XUeP+w+2g@mail.gmail.com>
+ <CAPhsuW4B00-grg9XJa+AO3xgGwM_u8FC+GH3JrkYZOJx4PuV8Q@mail.gmail.com>
+ <adQhpBC2W9I6QW-g@redhat.com> <CAPhsuW66tuF+QZ0pVheWb5sC4NQ-9CXikq=zMrPBXTHcsVPjdg@mail.gmail.com>
+ <CALOAHbDN_t-ZRO0g9_sQFCv0J6SPDFfwJCcwSzd4ww5XRkU0QA@mail.gmail.com>
+ <CALOAHbCxPA0dtsx7L2kYn8wwBdM=krZyOpfRTBiDW9qfA_zmzQ@mail.gmail.com>
+ <adUd0Mojbtrwmeod@pathway.suse.cz> <CALOAHbDG9mq1iJv5suct=cqJ+2r8VvJ-dXN=nuvMw0XYqnUjxA@mail.gmail.com>
+ <adY_WgA54CDtWBq6@pathway.suse.cz>
+In-Reply-To: <adY_WgA54CDtWBq6@pathway.suse.cz>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Sun, 12 Apr 2026 20:09:18 +0800
+X-Gm-Features: AQROBzCu-w_ClAxqsNaksL5y_dXr6lYJTZQFfWsBZznnXM9_LWPtoFPm4-st89c
+Message-ID: <CALOAHbB8Kt-RTVUcy66Bx__Bqu_YWKjgJoRBRNTGXk=CNmXGPQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] livepatch: Add "replaceable" attribute to klp_patch
+To: Petr Mladek <pmladek@suse.com>
+Cc: Song Liu <song@kernel.org>, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Dylan Hatch <dylanbhatch@google.com>, jpoimboe@kernel.org, jikos@kernel.org, 
+	mbenes@suse.cz, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
+	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 09, 2026 at 05:04:24PM -0400, Paul Moore wrote:
-> On Thu, Apr 9, 2026 at 8:45 AM Leon Romanovsky <leon@kernel.org> wrote:
-> > On Thu, Apr 09, 2026 at 02:27:43PM +0200, Roberto Sassu wrote:
-> > > On Thu, 2026-04-09 at 15:12 +0300, Leon Romanovsky wrote:
-> > > > On Tue, Mar 31, 2026 at 08:56:32AM +0300, Leon Romanovsky wrote:
-> > > > > From Chiara:
+On Wed, Apr 8, 2026 at 7:43=E2=80=AFPM Petr Mladek <pmladek@suse.com> wrote=
+:
+>
+> On Wed 2026-04-08 10:40:10, Yafang Shao wrote:
+> > On Tue, Apr 7, 2026 at 11:08=E2=80=AFPM Petr Mladek <pmladek@suse.com> =
+wrote:
+> > >
+> > > On Tue 2026-04-07 17:45:31, Yafang Shao wrote:
+> > > > On Tue, Apr 7, 2026 at 11:16=E2=80=AFAM Yafang Shao <laoar.shao@gma=
+il.com> wrote:
 > > > > >
-> > > > > This patch set introduces a new BPF LSM hook to validate firmware commands
-> > > > > triggered by userspace before they are submitted to the device. The hook
-> > > > > runs after the command buffer is constructed, right before it is sent
-> > > > > to firmware.
-> > > >
-> > > > <...>
-> > > >
-> > > > > ---
-> > > > > Chiara Meiohas (4):
-> > > > >       bpf: add firmware command validation hook
-> > > > >       selftests/bpf: add test cases for fw_validate_cmd hook
-> > > > >       RDMA/mlx5: Externally validate FW commands supplied in DEVX interface
-> > > > >       fwctl/mlx5: Externally validate FW commands supplied in fwctl
-> > > >
-> > > > Hi,
-> > > >
-> > > > Can we get Ack from BPF/LSM side?
+> > > > > On Tue, Apr 7, 2026 at 10:54=E2=80=AFAM Song Liu <song@kernel.org=
+> wrote:
+> > > > > >
+> > > > > > On Mon, Apr 6, 2026 at 2:12=E2=80=AFPM Joe Lawrence <joe.lawren=
+ce@redhat.com> wrote:
+> > > > > > [...]
+> > > > > > > > > > - The regular livepatches are cumulative, have the repl=
+ace flag; and
+> > > > > > > > > >   are replaceable.
+> > > > > > > > > > - The occasional "off-band" livepatches do not have the=
+ replace flag,
+> > > > > > > > > >   and are not replaceable.
+> > > > > > > > > >
+> > > > > > > > > > With this setup, for systems with off-band livepatches =
+loaded, we can
+> > > > > > > > > > still release a cumulative livepatch to replace the pre=
+vious cumulative
+> > > > > > > > > > livepatch. Is this the expected use case?
+> > > > > > > > >
+> > > > > > > > > That matches our expected use case.
+> > > > > > > >
+> > > > > > > > If we really want to serve use cases like this, I think we =
+can introduce
+> > > > > > > > some replace tag concept: Each livepatch will have a tag, u=
+32 number.
+> > > > > > > > Newly loaded livepatch will only replace existing livepatch=
+ with the
+> > > > > > > > same tag. We can even reuse the existing "bool replace" in =
+klp_patch,
+> > > > > > > > and make it u32: replace=3D0 means no replace; replace > 0 =
+are the
+> > > > > > > > replace tag.
+> > > > > > > >
+> > > > > > > > For current users of cumulative patches, all the livepatch =
+will have the
+> > > > > > > > same tag, say 1. For your use case, you can assign each use=
+r a
+> > > > > > > > unique tag. Then all these users can do atomic upgrades of =
+their
+> > > > > > > > own livepatches.
+> > > > > > > >
+> > > > > > > > We may also need to check whether two livepatches of differ=
+ent tags
+> > > > > > > > touch the same kernel function. When that happens, the late=
+r
+> > > > > > > > livepatch should fail to load.
 > > >
-> > > + Paul, linux-security-module ML
+> > > I still think how to make the hybrid mode more secure:
 > > >
-> > > Hi
-> > >
-> > > probably you also want to get an Ack from the LSM maintainer (added in
-> > > CC with the list). Most likely, he will also ask you to create the
-> > > security_*() functions counterparts of the BPF hooks.
+> > >     + The isolated sets of livepatched functions look like a good rul=
+e.
+> > >     + What about isolating the shadow variables/states as well?
 > >
-> > We implemented this approach in v1:
-> > https://patch.msgid.link/20260309-fw-lsm-hook-v1-0-4a6422e63725@nvidia.com
-> > and were advised to pursue a different direction.
-> 
-> I'm assuming you are referring to my comments? If so, that isn't exactly what I said,
-> I mentioned at least one other option besides
-> going directly to BPF.  Ultimately, it is your choice to decide how
-> you want to proceed, but to claim I advised you to avoid a LSM based
-> solution isn't strictly correct.
+> > We might consider extending the klp_shadow_* API to support the new
+> > livepatch tag.
+>
+> It would be nice to associate shadow variables with states so that
+> we could check which shadow variables are used by each livepatch.
+>
+> It is partially implemented in my earlier RFC, see
+> https://lore.kernel.org/all/20250115082431.5550-3-pmladek@suse.com/
 
-Yes, this matches how we understood your comments:  
-https://lore.kernel.org/all/20260311081955.GS12611@unreal/
+This patch is still pending acceptance, but it offers a nice
+improvement. With your modifications, the remaining task would be to
+integrate a new replace_set into klp_state and update the API
+accordingly
 
-In the end, the goal is to build something practical and avoid adding
-unnecessary complexity that brings no real benefit to users.
+[...]
 
-> 
-> Regardless, looking at your v2 patchset, it looks like you've taken an
-> unusual approach of using some of the LSM mechanisms, e.g. LSM_HOOK(),
-> but not actually exposing a LSM hook with proper callbacks.
-> Unfortunately, that's not something we want to support.  If you want
-> to pursue an LSM based solution, complete with a security_XXX() hook,
-> use of LSM_HOOK() macros, etc. then that's fine, I'm happy to work
-> with you on that.
-
-The issue is that the sentence below was the reason we did not merge v1 with v2:
-https://github.com/LinuxSecurityModule/kernel/blob/main/README.md#new-lsm-hooks
-"pass through implementations, such as the BPF LSM, are not eligible for
-LSM hook reference implementations."
-
-
-> However, if you've decided that your preferred
-> option is to create a BPF hook you should avoid using things like
-> LSM_HOOK() and locating your hook/code in bpf_lsm.c.
-
-We are not limited to LSM solution, the goal is to intercept commands
-which are submitted to the FW and "security" bucket sounded right to us.
-
-> 
-> The good news is that there are plenty of other examples of BPF
-> plugable code that you could use as an example, one such thing is the
-> update_socket_protocol() BPF hook that was originally proposed as a
-> LSM hook, but moved to a dedicated BPF hook as we generally want to
-> avoid changing non-LSM kernel objects within the scope of the LSMs.
-> While your proposed case is slightly different, I think the basic idea
-> and mechanism should still be useful.
-> 
-> https://lore.kernel.org/all/cover.1692147782.git.geliang.tang@suse.com
-
-Thanks
-
-> 
-> -- 
-> paul-moore.com
-> 
+--=20
+Regards
+Yafang
