@@ -1,132 +1,186 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDD7366553
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 13:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A191A3166
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 13:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776000664; cv=pass; b=btxaomcMRNJ0zXB/ZVG7w3HDXKQIkTGGJBw5nk8qGdF4jze7uFDrppkTLfrraZE/3ykzWbhEISeGO65sBcOoVj8cYjKoRGTIISSlb70o5T5nrfOIAMrIWItApE+0bKRkpPYJ5L1EFbnGd5QdocgNQ2v4aWED22/tcrCKg1rbhRo=
+	t=1776001870; cv=pass; b=GSzWYdu31ufmtlqO6ERqc3m96trLMjjUCitzRcBPi/4qTrG2BQT1Bs14D9jJLlOl9tcrNukUy/4xsvm5wG76ST0ArJSHpjXXV+gxk5lcsPOzwavK2PcK/YgC7WHeipZ0+alKtrQNksYi3cWT2ggz17u7+cJWWG9f5TqSEqBRu9E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776000664; c=relaxed/simple;
-	bh=C6RY+r5Ylx4J7Ow2wiGd1LhoQuZdYHn356nitvzkRbY=;
+	s=arc-20240116; t=1776001870; c=relaxed/simple;
+	bh=Vm+QvtQZE23sVbgK/tEkRjhUlOBlrvQ/gGRliE28Mbw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ORtuxfaDDI5cHoA1ZAh+RP+eQhlIVjLkoCPu6EJesRHAUc/css+UboKFzTAhBlEXZ12AVFQlM84QiTG41BPmNOtsNJ4Br0x2Jq7Rp20V+G1RQUJN+hep8911UZLwej3O3xluEt9mrUU6R7if2PuGCIHJdfDxBO5i3lVQkwhX+GM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cczCth2K; arc=pass smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=aUD25kZBCByQDsDkiQRZ1HloTDE8m23RkQMbSDTT/rwrx+v97+gw3ldGGmI8YuW0Ua3fj+Ao1mWncIDHMHz2zbGWD+baZbqAWUBIuTeFYAd95t/R3vijZx0Ny9pa+lAlKQmPGt5dawQEeB6vC4WmXz/9HQGcfcBB5ZogWn3Id48=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9EpLx+G; arc=pass smtp.client-ip=74.125.224.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cczCth2K"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-797ab169454so40715147b3.3
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 06:31:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776000661; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9EpLx+G"
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-6501c4857b2so2966180d50.3
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 06:51:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776001868; cv=none;
         d=google.com; s=arc-20240605;
-        b=liao/NEIxzMZ2Chv+na+Wy8TS9djzfWU3hJcYaBa8ggF8K0uy5lFAJvKKRUVLcGmfc
-         hBOZjXVeohMWrRyJFeOvkNYJVAAL6SCpHtZ97CXfYWkobo8ZGPkHAXUeKlBiq7jvYc6u
-         r8yPY/3oDi3TZqGm4LmRGxdZwgwWCXq5ItkyjJETNcDspAE4IACu4uPrV4w4LF8rOmCh
-         71sf4UTqiSDI7V0bFzFm7fJJrs179ISy0VJcvBK22XgWI88qGkHKtfa/l4VmwSmGM1wc
-         e2PU/9GJsfw7/FNA/9v5TQp4VWb9A2JDWtsbtGARxEqhEMqgVAak0JriOkmODVFZH32z
-         S6zQ==
+        b=Kw13p6jrme6BkH+waUsg8Cy9mlyl8DsLPFLoGqq8vrmMv6eE508KbqOBP5SpZ2VuF8
+         P7BXkebuxyJB5WeOfC5/lgrEfAZ/EJnzGfR55H3v1fq9ySx3cG4840TvHUa+juttCtQM
+         IxPKHA/KuiuAP6DLNI/ouT8h8Zv+EfGPMugQvoa6YynylL4A8CW5q8lEaXHOhbzcj+UQ
+         2l9NRG52ZCaSMlEzf6qX8wPPFgbN08eJLZ/6QGeezL7L1EkuD7Pwu/WtTVzZf5zvWeCK
+         jTlyoyDS1JZ1LkMrMY3ZnUACRJZAkmmUKqTZWbH7kZjYc7lhmyydaRAl1BN//Xh7Stpy
+         n8Vg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=DXgBrho6CsK2+t2aCD8rZwM6Rey4DYcpPa87+rv2X+o=;
-        fh=8KKBYFPatPJbteyq5iqM6ccJvM8qSJOeFeSoKUKQIuU=;
-        b=j4QPjGTxDdkhSffwuCEoyFwoErH1RWDdG6Cbu3Uy3iN9mZbamPB6Fc0XMiXOVc3pMB
-         DvMbUi2BqcsRgrIXnxvmN3tG8WvlyWwFsGvq0bmCcldVDKUCTzMG2X8gKpvHUX0xsjbD
-         ZTjizZs7gXaYHyAWQ/OssZUp0TnucxeHfYoKowJdz4XCEPMHtBH0bvP/8AjQw4E8Dx49
-         8ppeJWBLudyWmgtYc0NiOqEivCdumIiU/QM8Wo+MhPgcNAWo8QJJ9VINjbHGo49/xgdF
-         AnA0BxgYgaagUeNHY81fjHsy2CMvmuD7fpL3rvTUr82LSZYA71MFTfVNtsyrUG+0tET1
-         H8xA==;
+        bh=mdsrFw8g8Bu97byW04CT8KXQ2lpv8OYnpWUOna6h/+A=;
+        fh=F9+GiexV+OeJMSYY6YtbhVpRT8FtmqyqVu+uQWGa81w=;
+        b=GA8FvAYbAg+5+qQ5/MUdJp+a0bEd2wXbptj5zg9zWNGtMs5g5sQw/gr/fMwPmhOljU
+         HaxVYoNkko15xbZMMv9pB1m9IF+IQFBs+kV4YvZpDW+D7tM+wSwgguwOHcsBklH8XprH
+         b3C9wCbLCx3RMzbjz8uwo/jagW2XUyHAYKEs55ff7TDLfbdlF9VPCA9Ex9erFz6011r2
+         bRBtg0rEa+RW47z2EiaqWjoWN9UBHElLnNdhVUNSrFeUEI68z4yp30DIMkuSmwAfrEFE
+         tr+R9uthpEGAHWq7Z+6h/sQhKTVChXGk+YBrMwp0vkqABDXNbjiT8OYvT9dYbFukoaKV
+         JOkA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776000661; x=1776605461; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776001868; x=1776606668; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DXgBrho6CsK2+t2aCD8rZwM6Rey4DYcpPa87+rv2X+o=;
-        b=cczCth2K2sLrPD/N/YtRFYIWH/K5oQpNo2MbO63jR7NHToIIVLtbjhFkN+DrOXvExl
-         Tg4QrGPYfiJ/PPNLeI1zmXFG9nQS404LC+bh0X56h+tIGRtYylTrzausH9VjXutVzP09
-         Bvu5y+iKG8/S+T8XjWZu5PPy0i4bmG9PVW2ZlD8JS5cLn6w8RSKjxefOsS1TXw+qmT63
-         g2HFvm7ff7qGhNG7hVfE7Li9jaYFumJHU2EJ0gq2g8uhg9XRusNlHP0QiPY/YKy7s23t
-         8zJwJNPlShAA8cEQFLSVgraqOcsypIf/qt4TwZWv3Q6J8BIGZ483BshRrN4EsaG0QLFj
-         PiKQ==
+        bh=mdsrFw8g8Bu97byW04CT8KXQ2lpv8OYnpWUOna6h/+A=;
+        b=C9EpLx+G3IANRDKis1pKPomgySzvwrG/DTrjgtOykO1b4WyF3+cMHefL7ElWXKi1FU
+         CeYm5P+RLOwAP1N249Neu8WTFkgGtw5FjimXN1muGdRIrzADFh+Uq3Go1DbLWIXT7RjX
+         V07TzjpDIxbj7Oc/EFLBW0w7CQ4HHrvyUJ7wHNLEwrDPgS1Yw9gOm8oDkmsOnVwJYd3u
+         To0SeMQSipn0oCThDiy4jRix087DHW9zam1PJ/H8bxZ77aBwnIj0uKulpEq4DjCtYRbg
+         u6OhiOFwAcxkzhM2L+cbQcodjM+mQfGnKAzlqKb42c8jnt1MikHeiFpTgFWx37F2Doem
+         QqGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776000661; x=1776605461;
+        d=1e100.net; s=20251104; t=1776001868; x=1776606668;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=DXgBrho6CsK2+t2aCD8rZwM6Rey4DYcpPa87+rv2X+o=;
-        b=M/Pv7oUoXnDrvAuYOuSTCGnh65uz5NfHCTBwuWkq/j/eYiw9+9Ql5xCC/2vUHo7C3C
-         nm9lVP1fyTOVIVoiyPj1z3fcrg/uCozIAUC9xaTCJoq/iCC+bExQ6vwdMqk6nrsZV1Uf
-         repp1D+t6JrYRGCVPkOslzfKUKhg1PPFxZ4hrPSkwd54cKrX9CIGsCEoWzKz6PEnISBg
-         B/9QiD5oUTn2/BxWVEHZ98dj74hmSOGAPP8RIe7373MvdH+P7JOTI3Vu+DbBXJ4WGh/w
-         7RVxHd15zUfYcuBJponBcazUbvYJ8ZmXzJ02J/+mQL2cR8xzge7LolYCxqjgp9d7IDSp
-         p9hQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8RYYIKPNxXP3RETtNqumhOgw4QbGvW4Xp+UNpmFSI+QZ96CdB4+UtI0FphfoD12otossw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxgbb70MSXumEKHi3XNLTAUoFncOPZ/OllxlFNBCdK5cjb+VqrO
-	eS2amVlpUftFbDE/HeMrXDJWTH+mJjY/oXw/ikAkwmz4ciW+U92uSfbB9SpjZhsXyq2FPPWV0MC
-	sp++qbYdmWzoa6izhHIPoTNWsKuUqpMA=
-X-Gm-Gg: AeBDieuwDIwTab4H+30+uvhhC4ETY15hkIph5XQibU8WKZFU2l4SNlWNYvEgvUTmSVf
-	FOaiG2NM4lVjlUcDTPTchLL0V9esWxr8a+Eqvazf59Ff1YIJ7D0E9AviempZZ72riOr4efKBKFC
-	jzlU8oXLhluyfelNzCE1EUmmsidyjb7L3ACujumLivFcLeoCmjulGRG/W4JeRFZU8bI8xj5YQPf
-	lfkI+rA+TaQYvIjmIms0Csh0cS3gxvV/pAk6qMle0X7bGWRBLUDXlOjkuH6Baduw0VbtXFJNyby
-	6XiFPeVpNyi5GTm3ds7LfyXX7IyoD8gYlPd8Mu2r
-X-Received: by 2002:a05:690c:8e1a:b0:7ae:dc4a:ff6e with SMTP id
- 00721157ae682-7af702dbb9dmr92247417b3.24.1776000660995; Sun, 12 Apr 2026
- 06:31:00 -0700 (PDT)
+        bh=mdsrFw8g8Bu97byW04CT8KXQ2lpv8OYnpWUOna6h/+A=;
+        b=ZfHUP7kyvJPerwrogLezLZYMF1Zax4gS02Gcp4DroXms2DWr3K6FM+0HPrZg5Grm1O
+         q5K8EJ/mKuq8pYax6cvTr4y1dmAqRxikAdfSiAeWXXeYBzfTw/xJlo5SIXegaBeg5c6s
+         UzltOQnpcsbXFRZOdlLopOE5Ap2d6qXrF9rcrlNzy2AlrG+Drk+EkDNBRDC6+qO0nRHN
+         bpTsNDkdEqH5B1PXjV3XXuXSNBQCcPQAzw1ROiEw6L4U0JezMWrgK/tsE0hAYmyyJNys
+         z8IERTQgf63ZAOqv1Jk/qPfcFsTrjob1fop91REm3h3xvQ4E2CnidCInIkJjPgVH7Ny4
+         glhQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9JcLLsyb99Gg/Ex93h75iJjxOXzWyTJY8B6wp3oHGEz7nJnJ5AviIK+IYlbpcRwnyHSXM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwemRxtNxdjhczvZFuzjneDcgujVK2su3aT486FGFvlLkkg/o99
+	mMrJnVVwYedCGK29pCxtwNlqutlHjL4sekUgSpFXg54HP9Waq/S3s9OsSYDkxM/Z/KX8b/kCL44
+	MxOmtXpIjhirGXaxg+6qHnJTFR/ef6Y8=
+X-Gm-Gg: AeBDievZ9b/xlAj9VZ4T8nTHFqBvpTEwxn+rtyRRvXMgwEqz3iH7mCRhNnASqaVcBXA
+	SAwqvc/7NH/vPymZVOjQjjFF/7yLibzPfriVHuuLpL454Ugh12IPPMBFatJOkszrcjyMNfPy/rR
+	EqAVQK3jd9d/otJmQaL2rxzQTYPx5c3YTAeYhDqfIdlTrkvg3kaa3FIOfmxUQwyjL6mDkZ26Hwq
+	vXediu1RyluUNAANiQq9K9xxyp+gqwMiyoj8obwyYZEp0twzrbsWw7VfBgbuFst9CkxxrmjSw/q
+	WN6SWhPLo5jHMjSwBlOpvfgUcguzJKjoVnn4CcVX
+X-Received: by 2002:a53:d246:0:b0:650:77f5:1410 with SMTP id
+ 956f58d0204a3-65198b47128mr6848061d50.33.1776001868315; Sun, 12 Apr 2026
+ 06:51:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <CAPhsuW7Y5KksWM49TrGH_Hohaq02XO8qs7G99Y6D8=0usLFSrQ@mail.gmail.com>
- <CALOAHbDG8=eUV53kF+xn=izs2rpydCk=a9RznU-EEOzmkB8mQg@mail.gmail.com>
- <CAPhsuW73qFybHgOnZ=oFC1PvdWkYWDk7gsAoiBXe4xWYagPrmA@mail.gmail.com>
- <CALOAHbC0hqk+yrUZay01EBRNOHgyj1MAavzNK-06XJKK9ARMqQ@mail.gmail.com>
- <CAPhsuW5MN6ikKmxgqby5RJ3_gvjJ4B77X74OvfbTQoFO8iUgzA@mail.gmail.com>
- <CALOAHbAmTAfamStF9sZtO6efWYJ1sbXJp3PbsVapZf7dba91ig@mail.gmail.com> <alpine.LSU.2.21.2604091205250.31526@pobox.suse.cz>
-In-Reply-To: <alpine.LSU.2.21.2604091205250.31526@pobox.suse.cz>
+References: <20260402092607.96430-1-laoar.shao@gmail.com> <20260410133844.56ab7964da7628d1c3482acb@kernel.org>
+In-Reply-To: <20260410133844.56ab7964da7628d1c3482acb@kernel.org>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 12 Apr 2026 21:30:25 +0800
-X-Gm-Features: AQROBzAhZ7uy9uCOnehpJbZd9tdZu27AddmcCPfaAwa94iQun-8NAS1qnJVKEUo
-Message-ID: <CALOAHbC3-_zW2CbHccy8kCzuBj0x4LeraeEt5DdUV=CdrxCnNw@mail.gmail.com>
+Date: Sun, 12 Apr 2026 21:50:31 +0800
+X-Gm-Features: AQROBzBaWJkKG21AiORGSzFrR-pHHuRCQzMa1l_wXUruYUno8uNhz0WAA12-V04
+Message-ID: <CALOAHbAOx=C4b+4xQwRf59xvY0vbMPfOjO5LMDghC4Ryksv++Q@mail.gmail.com>
 Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return overriding
  for livepatched functions
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Song Liu <song@kernel.org>, jpoimboe@kernel.org, jikos@kernel.org, 
-	pmladek@suse.com, joe.lawrence@redhat.com, rostedt@goodmis.org, 
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, kpsingh@kernel.org, 
-	mattbobrowski@google.com, jolsa@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, yonghong.song@linux.dev, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, rostedt@goodmis.org, mathieu.desnoyers@efficios.com, 
+	kpsingh@kernel.org, mattbobrowski@google.com, song@kernel.org, 
+	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 9, 2026 at 6:08=E2=80=AFPM Miroslav Benes <mbenes@suse.cz> wrot=
-e:
+On Fri, Apr 10, 2026 at 12:38=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.=
+org> wrote:
 >
-> > Can we add something like ALLOW_LIVEPATCH_ERROR_INJECTION() to allow
-> > error injection on functions defined inside a livepatch?
+> Hi Yafang,
 >
-> No.
+> On Thu,  2 Apr 2026 17:26:03 +0800
+> Yafang Shao <laoar.shao@gmail.com> wrote:
 >
-> I am sorry but you always seem to find band aids to your set up and how
-> you deal with live patches internally. While I can see that something lik=
-e
-> a hybrid mode might be useful to people if done right (and we are not
-> there yet), the combination of it with bpf overrides or anything like tha=
-t
-> is not something I would like to see in upstream.
+> > Livepatching allows for rapid experimentation with new kernel features
+> > without interrupting production workloads. However, static livepatches =
+lack
+> > the flexibility required to tune features based on task-specific attrib=
+utes,
+> > such as cgroup membership, which is critical in multi-tenant k8s
+> > environments. Furthermore, hardcoding logic into a livepatch prevents
+> > dynamic adjustments based on the runtime environment.
+> >
+> > To address this, we propose a hybrid approach using BPF. Our production=
+ use
+> > case involves:
+> >
+> > 1. Deploying a Livepatch function to serve as a stable BPF hook.
+> >
+> > 2. Utilizing bpf_override_return() to dynamically modify the return val=
+ue
+> >    of that hook based on the current task's context.
+>
+> First of all, I don't like this approach to test a new feature in the
+> kernel, because it sounds like allowing multiple different generations
+> of implementations to coexist simultaneously. The standard kernel code
+> is not designed to withstand such implementations.
 
-The upstream kernel already allows for combining BPF and livepatch to
-override functions. Song=E2=80=99s patch offers a great reference for
-implementing this without changing the kernel:
+However, this approach is invaluable for rapidly deploying new kernel
+features to production servers without downtime. Upgrading kernels
+across a large fleet remains a significant challenge.
 
-  https://lore.kernel.org/bpf/20260408175217.1011024-1-song@kernel.org/
+>
+> For example, if you implement a well-designed framework in a specific
+> subsystem, like Schedext, which allows multiple implementations extended
+> with BPF to coexist, there's no problem (at least it's debatable).
+>
+> But if it is for any function, it is dangerous feature. Bugs that occur
+> in kernels that use this functionality cannot be addressed here. They
+> need to be treated the same way as out-of-tree drivers or forked kernels.
+> I mean, add a tainted flag for this feature. And we don't care of it.
+
+Agreed. This should be handled as an OOT module rather than part of
+the core kernel.
+
+>
+> >
+> > A significant challenge arises when atomic-replace is enabled. In this
+> > mode, deploying a new livepatch changes the target function's address,
+> > forcing a re-attachment of the BPF program. This re-attachment latency =
+is
+> > unacceptable in critical paths, such as those handling networking polic=
+ies.
+> >
+> > To solve this, we introduce a hybrid livepatch mode that allows specifi=
+c
+> > patches to remain non-replaceable, ensuring the function address remain=
+s
+> > stable and the BPF program stays attached.
+>
+> Can you share your actual problem to be solved?
+
+Here is an example we recently deployed on our production servers:
+
+  https://lore.kernel.org/bpf/CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh1gy5hy9Yqge=
+o4C0iA@mail.gmail.com/
+
+In one of our specific clusters, we needed to send BGP traffic out
+through specific NICs based on the destination IP. To achieve this
+without interrupting service, we live-patched
+bond_xmit_3ad_xor_slave_get(), added a new hook called
+bond_get_slave_hook(), and then ran a BPF program attached to that
+hook to select the outgoing NIC from the SKB. This allowed us to
+rapidly deploy the feature with zero downtime.
+
+[...]
 
 --=20
 Regards
