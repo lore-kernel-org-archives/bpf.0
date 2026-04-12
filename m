@@ -1,21 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C43A364927
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA0F364040
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775970036; cv=none; b=dVBJixBTBOhM7kuKs9nSPWa1/Qbo4xMwiTYJ33wsHS26N1NEVz0m1T4HMLUarOwRblSHOcwU3zBfvCnEreZ4oNj2oUztgnS86WhvIgo3bhaA3Gplb4eR+0rDTNA4cWoT0fiZ/pUs+0XIHAPKkawtV6VFTfC+HWVXPEaUraIn2nA=
+	t=1775970041; cv=none; b=Au3J0yNIWJW3apnJHBlWhnwXixy5Z0IvcMwjMUQl/c6Hxs3cKFEF8XzreQweFIt0zUqc6Y3o1hipXJKjWOmUgRGv+KnWzPF30bJWfjQsqmKyQYOB6/W2lxVszHRXF1cci6xcfSPN31HXqCbqE77mQ8fV2A/ogAG9giQDu6TXrO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775970036; c=relaxed/simple;
-	bh=VIJ+9iyobLDhEzYqb0dqp/TgOFKkiZKbBe5F2Gul0F0=;
+	s=arc-20240116; t=1775970041; c=relaxed/simple;
+	bh=IprgqHNEPOP9ezloSeEYTPGsjH1erWhevzXAFU42r/c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mOAjcSXbUKLm9QvWCj6o897ZgOatOYMxJf5aaFSZCfO8hwSO7LTS8DPSoFH5twFoWlOPRYB+NkC7IUNwUL2ir2LyDKZM+uZWFiAmMzasoc0IGQsweo8F/+zy+Jba5Up7jeOVIpxkqQBtQjflEz366Y2+ymJdC7KK9Whr7RzFjJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	 MIME-Version; b=BAnS37cNXaHBH0+x6RmQ6uWMdi3m6g+c6++lnEGG0F46opKkteAUrdTuFdmzaRvs1VG8pRjno4y9NzPiCwkAl3VWZguPq8QSyOfZrhQJEvU8ISjfX9IEpGqdkHwsas4LiUWdsbW9vI+Mg4iNk+/XwqoSH176JHMYlLmaqmeRUNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id A63083B021C95; Sat, 11 Apr 2026 22:00:33 -0700 (PDT)
+	id C026C3B021CB2; Sat, 11 Apr 2026 22:00:38 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 15/18] bpf,x86: Implement JIT support for stack arguments
-Date: Sat, 11 Apr 2026 22:00:26 -0700
-Message-ID: <20260412050033.267815-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 16/18] selftests/bpf: Add tests for BPF function stack arguments
+Date: Sat, 11 Apr 2026 22:00:38 -0700
+Message-ID: <20260412050038.270899-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260412045826.254200-1-yonghong.song@linux.dev>
 References: <20260412045826.254200-1-yonghong.song@linux.dev>
@@ -36,386 +36,705 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Add x86_64 JIT support for BPF functions and kfuncs with more than
-5 arguments. The extra arguments are passed through a stack area
-addressed by register r12 (BPF_REG_STACK_ARG_BASE) in BPF bytecode,
-which the JIT translates to native code.
-
-The JIT follows the x86-64 calling convention for both BPF-to-BPF
-and kfunc calls:
-  - Arg 6 is passed in the R9 register
-  - Args 7+ are passed on the stack
-
-Incoming arg 6 (BPF r12+8) is translated to a MOV from R9 rather
-than a memory load. Incoming args 7+ (BPF r12+16, r12+24, ...) map
-directly to [rbp + 16], [rbp + 24], ..., matching the x86-64 stack
-layout after CALL + PUSH RBP, so no offset adjustment is needed.
-
-The verifier guarantees that neither tail_call_reachable nor
-priv_stack is set when outgoing stack args exist, so R9 is always
-available. When BPF bytecode writes to the arg-6 stack slot
-(the most negative outgoing offset), the JIT emits a MOV into R9
-instead of a memory store. Outgoing args 7+ are placed at [rsp]
-in a pre-allocated area below callee-saved registers, using:
-  native_off =3D outgoing_arg_base + bpf_off
-
-The native x86_64 stack layout:
-
-  high address
-  +-------------------------+
-  | incoming stack arg N    |  [rbp + 16 + (N-2)*8]  (from caller)
-  | ...                     |
-  | incoming stack arg 7    |  [rbp + 16]
-  +-------------------------+
-  | return address          |  [rbp + 8]
-  | saved rbp               |  [rbp]
-  +-------------------------+
-  | BPF program stack       |  (round_up(stack_depth, 8) bytes)
-  +-------------------------+
-  | callee-saved regs       |  (r12, rbx, r13, r14, r15 as needed)
-  +-------------------------+
-  | outgoing arg M          |  [rsp + (M-7)*8]
-  | ...                     |
-  | outgoing arg 7          |  [rsp]
-  +-------------------------+  rsp
-  low address
-
-  (Arg 6 is in R9, not on the stack)
-
-  [1] https://github.com/llvm/llvm-project/pull/189060
+Add selftests covering stack argument passing for both BPF-to-BPF
+subprog calls and kfunc calls with more than 5 arguments. All tests
+are guarded by __BPF_FEATURE_STACK_ARGUMENT and __TARGET_ARCH_x86.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c | 172 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 164 insertions(+), 8 deletions(-)
+ .../selftests/bpf/prog_tests/stack_arg.c      | 132 +++++++++++
+ tools/testing/selftests/bpf/progs/stack_arg.c | 212 ++++++++++++++++++
+ .../selftests/bpf/progs/stack_arg_kfunc.c     | 164 ++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  66 ++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  20 +-
+ 5 files changed, 593 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 32864dbc2c4e..ec57b9a6b417 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -390,6 +390,34 @@ static void pop_callee_regs(u8 **pprog, bool *callee=
-_regs_used)
- 	*pprog =3D prog;
+diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg.c b/tools/t=
+esting/selftests/bpf/prog_tests/stack_arg.c
+new file mode 100644
+index 000000000000..1af5e5c91e0d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <test_progs.h>
++#include <network_helpers.h>
++#include "stack_arg.skel.h"
++#include "stack_arg_kfunc.skel.h"
++
++static void run_subtest(struct bpf_program *prog, int expected)
++{
++	int err, prog_fd;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in =3D &pkt_v4,
++		.data_size_in =3D sizeof(pkt_v4),
++		.repeat =3D 1,
++	);
++
++	prog_fd =3D bpf_program__fd(prog);
++	err =3D bpf_prog_test_run_opts(prog_fd, &topts);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(topts.retval, expected, "retval");
++}
++
++static void test_global_many(void)
++{
++	struct stack_arg *skel;
++
++	skel =3D stack_arg__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++
++	if (!skel->rodata->has_stack_arg) {
++		test__skip();
++		goto out;
++	}
++
++	if (!ASSERT_OK(stack_arg__load(skel), "load"))
++		goto out;
++
++	run_subtest(skel->progs.test_global_many_args, 36);
++
++out:
++	stack_arg__destroy(skel);
++}
++
++static void test_async_cb_many(void)
++{
++	struct stack_arg *skel;
++
++	skel =3D stack_arg__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++
++	if (!skel->rodata->has_stack_arg) {
++		test__skip();
++		goto out;
++	}
++
++	if (!ASSERT_OK(stack_arg__load(skel), "load"))
++		goto out;
++
++	run_subtest(skel->progs.test_async_cb_many_args, 0);
++
++out:
++	stack_arg__destroy(skel);
++}
++
++static void test_bpf2bpf(void)
++{
++	struct stack_arg *skel;
++
++	skel =3D stack_arg__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++
++	if (!skel->rodata->has_stack_arg) {
++		test__skip();
++		goto out;
++	}
++
++	if (!ASSERT_OK(stack_arg__load(skel), "load"))
++		goto out;
++
++	run_subtest(skel->progs.test_bpf2bpf_ptr_stack_arg, 45);
++	run_subtest(skel->progs.test_bpf2bpf_mix_stack_args, 51);
++	run_subtest(skel->progs.test_bpf2bpf_nesting_stack_arg, 50);
++	run_subtest(skel->progs.test_bpf2bpf_dynptr_stack_arg, 69);
++
++out:
++	stack_arg__destroy(skel);
++}
++
++static void test_kfunc(void)
++{
++	struct stack_arg_kfunc *skel;
++
++	skel =3D stack_arg_kfunc__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++
++	if (!skel->rodata->has_stack_arg) {
++		test__skip();
++		goto out;
++	}
++
++	if (!ASSERT_OK(stack_arg_kfunc__load(skel), "load"))
++		goto out;
++
++	run_subtest(skel->progs.test_stack_arg_scalar, 36);
++	run_subtest(skel->progs.test_stack_arg_ptr, 45);
++	run_subtest(skel->progs.test_stack_arg_mix, 51);
++	run_subtest(skel->progs.test_stack_arg_dynptr, 69);
++	run_subtest(skel->progs.test_stack_arg_mem, 151);
++	run_subtest(skel->progs.test_stack_arg_iter, 115);
++	run_subtest(skel->progs.test_stack_arg_const_str, 15);
++	run_subtest(skel->progs.test_stack_arg_timer, 15);
++
++out:
++	stack_arg_kfunc__destroy(skel);
++}
++
++void test_stack_arg(void)
++{
++	if (test__start_subtest("global_many_args"))
++		test_global_many();
++	if (test__start_subtest("async_cb_many_args"))
++		test_async_cb_many();
++	if (test__start_subtest("bpf2bpf"))
++		test_bpf2bpf();
++	if (test__start_subtest("kfunc"))
++		test_kfunc();
++}
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testin=
+g/selftests/bpf/progs/stack_arg.c
+new file mode 100644
+index 000000000000..c6bf89c3a0db
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/stack_arg.c
+@@ -0,0 +1,212 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <stdbool.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_kfuncs.h"
++
++#define CLOCK_MONOTONIC 1
++
++long a, b, c, d, e, f, g, i;
++
++struct timer_elem {
++	struct bpf_timer timer;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct timer_elem);
++} timer_map SEC(".maps");
++
++int timer_result;
++
++#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++const volatile bool has_stack_arg =3D true;
++
++__noinline static int static_func_many_args(int a, int b, int c, int d,
++					    int e, int f, int g, int h)
++{
++	return a + b + c + d + e + f + g + h;
++}
++
++__noinline int global_calls_many_args(int a, int b, int c)
++{
++	return static_func_many_args(a, b, c, 4, 5, 6, 7, 8);
++}
++
++SEC("tc")
++int test_global_many_args(void)
++{
++	return global_calls_many_args(1, 2, 3);
++}
++
++struct test_data {
++	long x;
++	long y;
++};
++
++/* 1 + 2 + 3 + 4 + 5 + 10 + 20 =3D 45 */
++__noinline static long func_with_ptr_stack_arg(long a, long b, long c, l=
+ong d,
++					       long e, struct test_data *p)
++{
++	return a + b + c + d + e + p->x + p->y;
++}
++
++__noinline long global_ptr_stack_arg(long a, long b, long c, long d, lon=
+g e)
++{
++	struct test_data data =3D { .x =3D 10, .y =3D 20 };
++
++	return func_with_ptr_stack_arg(a, b, c, d, e, &data);
++}
++
++SEC("tc")
++int test_bpf2bpf_ptr_stack_arg(void)
++{
++	return global_ptr_stack_arg(1, 2, 3, 4, 5);
++}
++
++/* 1 + 2 + 3 + 4 + 5 + 10 + 6 + 20 =3D 51 */
++__noinline static long func_with_mix_stack_args(long a, long b, long c, =
+long d,
++						long e, struct test_data *p,
++						long f, struct test_data *q)
++{
++	return a + b + c + d + e + p->x + f + q->y;
++}
++
++__noinline long global_mix_stack_args(long a, long b, long c, long d, lo=
+ng e)
++{
++	struct test_data p =3D { .x =3D 10 };
++	struct test_data q =3D { .y =3D 20 };
++
++	return func_with_mix_stack_args(a, b, c, d, e, &p, e + 1, &q);
++}
++
++SEC("tc")
++int test_bpf2bpf_mix_stack_args(void)
++{
++	return global_mix_stack_args(1, 2, 3, 4, 5);
++}
++
++/*
++ * Nesting test: func_outer calls func_inner, both with struct pointer
++ * as stack arg.
++ *
++ * func_inner: (a+1) + (b+1) + (c+1) + (d+1) + (e+1) + p->x + p->y
++ *           =3D 2 + 3 + 4 + 5 + 6 + 10 + 20 =3D 50
++ */
++__noinline static long func_inner_ptr(long a, long b, long c, long d,
++				      long e, struct test_data *p)
++{
++	return a + b + c + d + e + p->x + p->y;
++}
++
++__noinline static long func_outer_ptr(long a, long b, long c, long d,
++				      long e, struct test_data *p)
++{
++	return func_inner_ptr(a + 1, b + 1, c + 1, d + 1, e + 1, p);
++}
++
++__noinline long global_nesting_ptr(long a, long b, long c, long d, long =
+e)
++{
++	struct test_data data =3D { .x =3D 10, .y =3D 20 };
++
++	return func_outer_ptr(a, b, c, d, e, &data);
++}
++
++SEC("tc")
++int test_bpf2bpf_nesting_stack_arg(void)
++{
++	return global_nesting_ptr(1, 2, 3, 4, 5);
++}
++
++/* 1 + 2 + 3 + 4 + 5 + sizeof(pkt_v4) =3D 15 + 54 =3D 69 */
++__noinline static long func_with_dynptr(long a, long b, long c, long d,
++					long e, struct bpf_dynptr *ptr)
++{
++	return a + b + c + d + e + bpf_dynptr_size(ptr);
++}
++
++__noinline long global_dynptr_stack_arg(void *ctx __arg_ctx, long a, lon=
+g b,
++					long c, long d)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_skb(ctx, 0, &ptr);
++	return func_with_dynptr(a, b, c, d, d + 1, &ptr);
++}
++
++SEC("tc")
++int test_bpf2bpf_dynptr_stack_arg(struct __sk_buff *skb)
++{
++	return global_dynptr_stack_arg(skb, 1, 2, 3, 4);
++}
++
++static int timer_cb_many_args(void *map, int *key, struct bpf_timer *tim=
+er)
++{
++	timer_result =3D static_func_many_args(10, 20, 30, 40, 50, 60, 70, 80);
++	return 0;
++}
++
++SEC("tc")
++int test_async_cb_many_args(void)
++{
++	struct timer_elem *elem;
++	int key =3D 0;
++
++	elem =3D bpf_map_lookup_elem(&timer_map, &key);
++	if (!elem)
++		return -1;
++
++	bpf_timer_init(&elem->timer, &timer_map, CLOCK_MONOTONIC);
++	bpf_timer_set_callback(&elem->timer, timer_cb_many_args);
++	bpf_timer_start(&elem->timer, 1, 0);
++	return 0;
++}
++
++#else
++
++const volatile bool has_stack_arg =3D false;
++
++SEC("tc")
++int test_global_many_args(void)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_bpf2bpf_ptr_stack_arg(void)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_bpf2bpf_mix_stack_args(void)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_bpf2bpf_nesting_stack_arg(void)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_bpf2bpf_dynptr_stack_arg(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_async_cb_many_args(void)
++{
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/=
+testing/selftests/bpf/progs/stack_arg_kfunc.c
+new file mode 100644
+index 000000000000..6cc404d57863
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+@@ -0,0 +1,164 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_kfuncs.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++const volatile bool has_stack_arg =3D true;
++
++struct bpf_iter_testmod_seq {
++	u64 :64;
++	u64 :64;
++};
++
++extern int bpf_iter_testmod_seq_new(struct bpf_iter_testmod_seq *it, s64=
+ value, int cnt) __ksym;
++extern int *bpf_iter_testmod_seq_next(struct bpf_iter_testmod_seq *it) _=
+_ksym;
++extern void bpf_iter_testmod_seq_destroy(struct bpf_iter_testmod_seq *it=
+) __ksym;
++
++struct timer_map_value {
++	struct bpf_timer timer;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct timer_map_value);
++} kfunc_timer_map SEC(".maps");
++
++SEC("tc")
++int test_stack_arg_scalar(struct __sk_buff *skb)
++{
++	return bpf_kfunc_call_stack_arg(1, 2, 3, 4, 5, 6, 7, 8);
++}
++
++SEC("tc")
++int test_stack_arg_ptr(struct __sk_buff *skb)
++{
++	struct prog_test_pass1 p =3D { .x0 =3D 10, .x1 =3D 20 };
++
++	return bpf_kfunc_call_stack_arg_ptr(1, 2, 3, 4, 5, &p);
++}
++
++SEC("tc")
++int test_stack_arg_mix(struct __sk_buff *skb)
++{
++	struct prog_test_pass1 p =3D { .x0 =3D 10 };
++	struct prog_test_pass1 q =3D { .x1 =3D 20 };
++
++	return bpf_kfunc_call_stack_arg_mix(1, 2, 3, 4, 5, &p, 6, &q);
++}
++
++/* 1 + 2 + 3 + 4 + 5 + sizeof(pkt_v4) =3D 15 + 54 =3D 69 */
++SEC("tc")
++int test_stack_arg_dynptr(struct __sk_buff *skb)
++{
++	struct bpf_dynptr ptr;
++
++	bpf_dynptr_from_skb(skb, 0, &ptr);
++	return bpf_kfunc_call_stack_arg_dynptr(1, 2, 3, 4, 5, &ptr);
++}
++
++/* 1 + 2 + 3 + 4 + 5 + (1 + 2 + ... + 16) =3D 15 + 136 =3D 151 */
++SEC("tc")
++int test_stack_arg_mem(struct __sk_buff *skb)
++{
++	char buf[16] =3D {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16=
+};
++
++	return bpf_kfunc_call_stack_arg_mem(1, 2, 3, 4, 5, buf, sizeof(buf));
++}
++
++/* 1 + 2 + 3 + 4 + 5 + 100 =3D 115 */
++SEC("tc")
++int test_stack_arg_iter(struct __sk_buff *skb)
++{
++	struct bpf_iter_testmod_seq it;
++	u64 ret;
++
++	bpf_iter_testmod_seq_new(&it, 100, 10);
++	ret =3D bpf_kfunc_call_stack_arg_iter(1, 2, 3, 4, 5, &it);
++	bpf_iter_testmod_seq_destroy(&it);
++	return ret;
++}
++
++const char cstr[] =3D "hello";
++
++/* 1 + 2 + 3 + 4 + 5 =3D 15 */
++SEC("tc")
++int test_stack_arg_const_str(struct __sk_buff *skb)
++{
++	return bpf_kfunc_call_stack_arg_const_str(1, 2, 3, 4, 5, cstr);
++}
++
++/* 1 + 2 + 3 + 4 + 5 =3D 15 */
++SEC("tc")
++int test_stack_arg_timer(struct __sk_buff *skb)
++{
++	struct timer_map_value *val;
++	int key =3D 0;
++
++	val =3D bpf_map_lookup_elem(&kfunc_timer_map, &key);
++	if (!val)
++		return 0;
++	return bpf_kfunc_call_stack_arg_timer(1, 2, 3, 4, 5, &val->timer);
++}
++
++#else
++
++const volatile bool has_stack_arg =3D false;
++
++SEC("tc")
++int test_stack_arg_scalar(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_stack_arg_ptr(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_stack_arg_mix(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_stack_arg_dynptr(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_stack_arg_mem(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_stack_arg_iter(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_stack_arg_const_str(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++SEC("tc")
++int test_stack_arg_timer(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index d876314a4d67..ea82a6d32d9f 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -825,6 +825,63 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u3=
+2 c)
+ 	return 0;
  }
 =20
-+/* add rsp, depth */
-+static void emit_add_rsp(u8 **pprog, u16 depth)
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg(u64 a, u64 b, u64 c, u64 d,
++					 u64 e, u64 f, u64 g, u64 h)
 +{
-+	u8 *prog =3D *pprog;
-+
-+	if (!depth)
-+		return;
-+	if (is_imm8(depth))
-+		EMIT4(0x48, 0x83, 0xC4, depth); /* add rsp, imm8 */
-+	else
-+		EMIT3_off32(0x48, 0x81, 0xC4, depth); /* add rsp, imm32 */
-+	*pprog =3D prog;
++	return a + b + c + d + e + f + g + h;
 +}
 +
-+/* sub rsp, depth */
-+static void emit_sub_rsp(u8 **pprog, u16 depth)
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg_ptr(u64 a, u64 b, u64 c, u64 d,=
+ u64 e,
++					     struct prog_test_pass1 *p)
 +{
-+	u8 *prog =3D *pprog;
-+
-+	if (!depth)
-+		return;
-+	if (is_imm8(depth))
-+		EMIT4(0x48, 0x83, 0xEC, depth); /* sub rsp, imm8 */
-+	else
-+		EMIT3_off32(0x48, 0x81, 0xEC, depth); /* sub rsp, imm32 */
-+	*pprog =3D prog;
++	return a + b + c + d + e + p->x0 + p->x1;
 +}
 +
- static void emit_nops(u8 **pprog, int len)
- {
- 	u8 *prog =3D *pprog;
-@@ -725,8 +753,8 @@ static void emit_return(u8 **pprog, u8 *ip)
-  */
- static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
- 					u8 **pprog, bool *callee_regs_used,
--					u32 stack_depth, u8 *ip,
--					struct jit_context *ctx)
-+					u32 stack_depth, u16 outgoing_depth,
-+					u8 *ip, struct jit_context *ctx)
- {
- 	int tcc_ptr_off =3D BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack_depth);
- 	u8 *prog =3D *pprog, *start =3D *pprog;
-@@ -775,6 +803,9 @@ static void emit_bpf_tail_call_indirect(struct bpf_pr=
-og *bpf_prog,
- 	/* Inc tail_call_cnt if the slot is populated. */
- 	EMIT4(0x48, 0x83, 0x00, 0x01);            /* add qword ptr [rax], 1 */
-=20
-+	/* Deallocate outgoing stack arg area. */
-+	emit_add_rsp(&prog, outgoing_depth);
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg_mix(u64 a, u64 b, u64 c, u64 d,=
+ u64 e,
++					     struct prog_test_pass1 *p, u64 f,
++					     struct prog_test_pass1 *q)
++{
++	return a + b + c + d + e + p->x0 + f + q->x1;
++}
 +
- 	if (bpf_prog->aux->exception_boundary) {
- 		pop_callee_regs(&prog, all_callee_regs_used);
- 		pop_r12(&prog);
-@@ -815,6 +846,7 @@ static void emit_bpf_tail_call_direct(struct bpf_prog=
- *bpf_prog,
- 				      struct bpf_jit_poke_descriptor *poke,
- 				      u8 **pprog, u8 *ip,
- 				      bool *callee_regs_used, u32 stack_depth,
-+				      u16 outgoing_depth,
- 				      struct jit_context *ctx)
- {
- 	int tcc_ptr_off =3D BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack_depth);
-@@ -842,6 +874,9 @@ static void emit_bpf_tail_call_direct(struct bpf_prog=
- *bpf_prog,
- 	/* Inc tail_call_cnt if the slot is populated. */
- 	EMIT4(0x48, 0x83, 0x00, 0x01);                /* add qword ptr [rax], 1=
- */
-=20
-+	/* Deallocate outgoing stack arg area. */
-+	emit_add_rsp(&prog, outgoing_depth);
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg_dynptr(u64 a, u64 b, u64 c, u64=
+ d, u64 e,
++					       struct bpf_dynptr *ptr)
++{
++	const struct bpf_dynptr_kern *kern_ptr =3D (void *)ptr;
 +
- 	if (bpf_prog->aux->exception_boundary) {
- 		pop_callee_regs(&prog, all_callee_regs_used);
- 		pop_r12(&prog);
-@@ -1664,16 +1699,48 @@ static int do_jit(struct bpf_prog *bpf_prog, int =
-*addrs, u8 *image, u8 *rw_image
- 	int i, excnt =3D 0;
- 	int ilen, proglen =3D 0;
- 	u8 *prog =3D temp;
-+	u16 stack_arg_depth, incoming_stack_arg_depth, outgoing_stack_arg_depth=
-;
-+	u16 outgoing_rsp;
- 	u32 stack_depth;
-+	int callee_saved_size;
-+	s32 outgoing_arg_base;
-+	bool has_stack_args;
- 	int err;
-=20
- 	stack_depth =3D bpf_prog->aux->stack_depth;
-+	stack_arg_depth =3D bpf_prog->aux->stack_arg_depth;
-+	incoming_stack_arg_depth =3D bpf_prog->aux->incoming_stack_arg_depth;
-+	outgoing_stack_arg_depth =3D stack_arg_depth - incoming_stack_arg_depth=
-;
- 	priv_stack_ptr =3D bpf_prog->aux->priv_stack_ptr;
- 	if (priv_stack_ptr) {
- 		priv_frame_ptr =3D priv_stack_ptr + PRIV_STACK_GUARD_SZ + round_up(sta=
-ck_depth, 8);
- 		stack_depth =3D 0;
- 	}
-=20
-+	/*
-+	 * Follow x86-64 calling convention for both BPF-to-BPF and
-+	 * kfunc calls:
-+	 *   - Arg 6 is passed in R9 register
-+	 *   - Args 7+ are passed on the stack at [rsp]
-+	 *
-+	 * Incoming arg 6 is read from R9 (BPF r12+8 =E2=86=92 MOV from R9).
-+	 * Incoming args 7+ are read from [rbp + 16], [rbp + 24], ...
-+	 * (BPF r12+16, r12+24, ... map directly with no offset change).
-+	 *
-+	 * The verifier guarantees that neither tail_call_reachable nor
-+	 * priv_stack is set when outgoing stack args exist, so R9 is
-+	 * always available.
-+	 *
-+	 * Stack layout (high to low):
-+	 *   [rbp + 16 + ...]    incoming stack args 7+ (from caller)
-+	 *   [rbp + 8]           return address
-+	 *   [rbp]               saved rbp
-+	 *   [rbp - prog_stack]  program stack
-+	 *   [below]             callee-saved regs
-+	 *   [below]             outgoing args 7+ (=3D rsp)
-+	 */
-+	has_stack_args =3D stack_arg_depth > 0;
++	return a + b + c + d + e + (kern_ptr->size & 0xFFFFFF);
++}
 +
- 	arena_vm_start =3D bpf_arena_get_kern_vm_start(bpf_prog->aux->arena);
- 	user_vm_start =3D bpf_arena_get_user_vm_start(bpf_prog->aux->arena);
-=20
-@@ -1700,6 +1767,41 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
-addrs, u8 *image, u8 *rw_image
- 			push_r12(&prog);
- 		push_callee_regs(&prog, callee_regs_used);
- 	}
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg_mem(u64 a, u64 b, u64 c, u64 d,=
+ u64 e,
++					     void *mem, int mem__sz)
++{
++	const unsigned char *p =3D mem;
++	u64 sum =3D a + b + c + d + e;
++	int i;
 +
-+	/* Compute callee-saved register area size. */
-+	callee_saved_size =3D 0;
-+	if (bpf_prog->aux->exception_boundary || arena_vm_start)
-+		callee_saved_size +=3D 8; /* r12 */
-+	if (bpf_prog->aux->exception_boundary) {
-+		callee_saved_size +=3D 4 * 8; /* rbx, r13, r14, r15 */
-+	} else {
-+		int j;
++	for (i =3D 0; i < mem__sz; i++)
++		sum +=3D p[i];
++	return sum;
++}
 +
-+		for (j =3D 0; j < 4; j++)
-+			if (callee_regs_used[j])
-+				callee_saved_size +=3D 8;
-+	}
-+	/*
-+	 * Base offset from rbp for translating BPF outgoing args 7+
-+	 * to native offsets:
-+	 *   native_off =3D outgoing_arg_base + bpf_off
-+	 *
-+	 * BPF outgoing offsets are negative (r12 - N*8 for arg6,
-+	 * ..., r12 - 8 for last arg). Arg 6 goes to R9 directly,
-+	 * so only args 7+ occupy the outgoing stack area.
-+	 *
-+	 * Note that tail_call_reachable is guaranteed to be false when
-+	 * stack args exist, so tcc pushes need not be accounted for.
-+	 */
-+	outgoing_arg_base =3D -(round_up(stack_depth, 8) + callee_saved_size);
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg_iter(u64 a, u64 b, u64 c, u64 d=
+, u64 e,
++					      struct bpf_iter_testmod_seq *it__iter)
++{
++	return a + b + c + d + e + it__iter->value;
++}
 +
-+	/*
-+	 * Allocate outgoing stack arg area for args 7+ only.
-+	 * Arg 6 goes into r9 register, not on stack.
-+	 */
-+	outgoing_rsp =3D outgoing_stack_arg_depth > 8 ?  outgoing_stack_arg_dep=
-th - 8 : 0;
-+	emit_sub_rsp(&prog, outgoing_rsp);
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg_const_str(u64 a, u64 b, u64 c, =
+u64 d, u64 e,
++						   const char *str__str)
++{
++	return a + b + c + d + e;
++}
 +
- 	if (arena_vm_start)
- 		emit_mov_imm64(&prog, X86_REG_R12,
- 			       arena_vm_start >> 32, (u32) arena_vm_start);
-@@ -1715,13 +1817,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int =
-*addrs, u8 *image, u8 *rw_image
- 	prog =3D temp;
-=20
- 	for (i =3D 1; i <=3D insn_cnt; i++, insn++) {
-+		bool adjust_stack_arg_off =3D false;
- 		const s32 imm32 =3D insn->imm;
- 		u32 dst_reg =3D insn->dst_reg;
- 		u32 src_reg =3D insn->src_reg;
- 		u8 b2 =3D 0, b3 =3D 0;
- 		u8 *start_of_ldx;
- 		s64 jmp_offset;
--		s16 insn_off;
-+		s32 insn_off;
- 		u8 jmp_cond;
- 		u8 *func;
- 		int nops;
-@@ -1734,6 +1837,21 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
-addrs, u8 *image, u8 *rw_image
- 				dst_reg =3D X86_REG_R9;
- 		}
-=20
-+		if (has_stack_args) {
-+			u8 class =3D BPF_CLASS(insn->code);
++__bpf_kfunc u64 bpf_kfunc_call_stack_arg_timer(u64 a, u64 b, u64 c, u64 =
+d, u64 e,
++					       struct bpf_timer *timer)
++{
++	return a + b + c + d + e;
++}
 +
-+			if (class =3D=3D BPF_LDX &&
-+			    src_reg =3D=3D BPF_REG_STACK_ARG_BASE) {
-+				src_reg =3D BPF_REG_FP;
-+				adjust_stack_arg_off =3D true;
-+			}
-+			if ((class =3D=3D BPF_STX || class =3D=3D BPF_ST) &&
-+			    dst_reg =3D=3D BPF_REG_STACK_ARG_BASE) {
-+				dst_reg =3D BPF_REG_FP;
-+				adjust_stack_arg_off =3D true;
-+			}
-+		}
+ static struct prog_test_ref_kfunc prog_test_struct =3D {
+ 	.a =3D 42,
+ 	.b =3D 108,
+@@ -1288,6 +1345,15 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_ptr)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_mix)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_dynptr)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_mem)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_iter)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_const_str)
++BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_timer)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_pass1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_mem_len_fail2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_acquire, KF_ACQUIRE | KF_RET_NULL=
+)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
+/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index aa0b8d41e71b..2c1cb118f886 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -26,6 +26,8 @@ struct prog_test_ref_kfunc {
+ };
+ #endif
+=20
++struct bpf_iter_testmod_seq;
 +
- 		switch (insn->code) {
- 			/* ALU */
- 		case BPF_ALU | BPF_ADD | BPF_X:
-@@ -2129,12 +2247,20 @@ static int do_jit(struct bpf_prog *bpf_prog, int =
-*addrs, u8 *image, u8 *rw_image
- 				EMIT1(0xC7);
- 			goto st;
- 		case BPF_ST | BPF_MEM | BPF_DW:
-+			if (adjust_stack_arg_off && insn->off =3D=3D -outgoing_stack_arg_dept=
-h) {
-+				/* Arg 6: store immediate in r9 register */
-+				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31, (u32)imm32);
-+				break;
-+			}
- 			EMIT2(add_1mod(0x48, dst_reg), 0xC7);
-=20
--st:			if (is_imm8(insn->off))
--				EMIT2(add_1reg(0x40, dst_reg), insn->off);
-+st:			insn_off =3D insn->off;
-+			if (adjust_stack_arg_off)
-+				insn_off =3D outgoing_arg_base + insn_off;
-+			if (is_imm8(insn_off))
-+				EMIT2(add_1reg(0x40, dst_reg), insn_off);
- 			else
--				EMIT1_off32(add_1reg(0x80, dst_reg), insn->off);
-+				EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
-=20
- 			EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
- 			break;
-@@ -2144,7 +2270,15 @@ st:			if (is_imm8(insn->off))
- 		case BPF_STX | BPF_MEM | BPF_H:
- 		case BPF_STX | BPF_MEM | BPF_W:
- 		case BPF_STX | BPF_MEM | BPF_DW:
--			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
-+			if (adjust_stack_arg_off && insn->off =3D=3D -outgoing_stack_arg_dept=
-h) {
-+				/* Arg 6: store register value in r9 */
-+				EMIT_mov(X86_REG_R9, src_reg);
-+				break;
-+			}
-+			insn_off =3D insn->off;
-+			if (adjust_stack_arg_off)
-+				insn_off =3D outgoing_arg_base + insn_off;
-+			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
- 			break;
-=20
- 		case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
-@@ -2243,6 +2377,18 @@ st:			if (is_imm8(insn->off))
- 		case BPF_LDX | BPF_PROBE_MEMSX | BPF_H:
- 		case BPF_LDX | BPF_PROBE_MEMSX | BPF_W:
- 			insn_off =3D insn->off;
-+			if (adjust_stack_arg_off) {
-+				if (insn_off =3D=3D 8) {
-+					/* Incoming arg 6: read from r9 */
-+					EMIT_mov(dst_reg, X86_REG_R9);
-+					break;
-+				}
-+				/*
-+				 * Incoming args 7+: native_off =3D=3D bpf_off
-+				 * (r12+16 =E2=86=92 [rbp+16], r12+24 =E2=86=92 [rbp+24], ...)
-+				 * No offset adjustment needed.
-+				 */
-+			}
-=20
- 			if (BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM ||
- 			    BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEMSX) {
-@@ -2468,12 +2614,14 @@ st:			if (is_imm8(insn->off))
- 							  &prog, image + addrs[i - 1],
- 							  callee_regs_used,
- 							  stack_depth,
-+							  outgoing_rsp,
- 							  ctx);
- 			else
- 				emit_bpf_tail_call_indirect(bpf_prog,
- 							    &prog,
- 							    callee_regs_used,
- 							    stack_depth,
-+							    outgoing_rsp,
- 							    image + addrs[i - 1],
- 							    ctx);
- 			break;
-@@ -2734,6 +2882,8 @@ st:			if (is_imm8(insn->off))
- 				if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
- 					return -EINVAL;
- 			}
-+			/* Deallocate outgoing args 7+ area. */
-+			emit_add_rsp(&prog, outgoing_rsp);
- 			if (bpf_prog->aux->exception_boundary) {
- 				pop_callee_regs(&prog, all_callee_regs_used);
- 				pop_r12(&prog);
-@@ -3757,7 +3907,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pr=
-og *prog)
- 		prog->aux->jit_data =3D jit_data;
- 	}
- 	priv_stack_ptr =3D prog->aux->priv_stack_ptr;
--	if (!priv_stack_ptr && prog->aux->jits_use_priv_stack) {
-+	/*
-+	 * x86-64 uses R9 for both private stack frame pointer and
-+	 * outgoing arg 6, so disable private stack when outgoing
-+	 * stack args are present.
-+	 */
-+	if (!priv_stack_ptr && prog->aux->jits_use_priv_stack &&
-+	    prog->aux->stack_arg_depth =3D=3D prog->aux->incoming_stack_arg_dep=
-th) {
- 		/* Allocate actual private stack size with verifier-calculated
- 		 * stack size plus two memory guards to protect overflow and
- 		 * underflow.
+ struct prog_test_pass1 {
+ 	int x0;
+ 	struct {
+@@ -111,7 +113,23 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, _=
+_u32 b) __ksym;
+ struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
+ long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
+ int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
+-
++__u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
++			       __u64 e, __u64 f, __u64 g, __u64 h) __ksym;
++__u64 bpf_kfunc_call_stack_arg_ptr(__u64 a, __u64 b, __u64 c, __u64 d, _=
+_u64 e,
++				   struct prog_test_pass1 *p) __ksym;
++__u64 bpf_kfunc_call_stack_arg_mix(__u64 a, __u64 b, __u64 c, __u64 d, _=
+_u64 e,
++				   struct prog_test_pass1 *p, __u64 f,
++				   struct prog_test_pass1 *q) __ksym;
++__u64 bpf_kfunc_call_stack_arg_dynptr(__u64 a, __u64 b, __u64 c, __u64 d=
+, __u64 e,
++				      struct bpf_dynptr *ptr) __ksym;
++__u64 bpf_kfunc_call_stack_arg_mem(__u64 a, __u64 b, __u64 c, __u64 d, _=
+_u64 e,
++				   void *mem, int mem__sz) __ksym;
++__u64 bpf_kfunc_call_stack_arg_iter(__u64 a, __u64 b, __u64 c, __u64 d, =
+__u64 e,
++				    struct bpf_iter_testmod_seq *it__iter) __ksym;
++__u64 bpf_kfunc_call_stack_arg_const_str(__u64 a, __u64 b, __u64 c, __u6=
+4 d, __u64 e,
++					 const char *str__str) __ksym;
++__u64 bpf_kfunc_call_stack_arg_timer(__u64 a, __u64 b, __u64 c, __u64 d,=
+ __u64 e,
++				     struct bpf_timer *timer) __ksym;
+ void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
+ void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
+ void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
 --=20
 2.52.0
 
