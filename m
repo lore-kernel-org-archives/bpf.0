@@ -1,21 +1,21 @@
 Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5755928D8DB
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:00:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A889475
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775970013; cv=none; b=Vmxl5YDyZCPbi6RewxqrbSj9xkPN5ThgStI3ulBfksF7MNy8D+nrBqqEmMxTtpEi4EglY/cVRjdo3+q5Yz6lLZK8m3pyjbvpuQLLEye7b3SWf2LW+UoSdmybV4lL+/48yuAcd/P9LYG4gccPsjJVyvqYi1gw5dpbaSKoJbSB4QU=
+	t=1775970023; cv=none; b=IqBvaJS5BTshqTbmGl5f9lyZyHBnHAS7PJVwJz4nMnBXq8i1IrEEBPFBr35bXF2O+daF+wrFRkaAs08zN5vvWauh760mLOYeS4F36OUZEr7FFnt68tUyPB8dv9+YlczwZAUPyWOE4Hpia52dOTyq6j9pVU0hdf9Oo4ePzt9FJh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775970013; c=relaxed/simple;
-	bh=NjH3i6VRWsHzXrq8rkEX7F+xcP5a1I9aKopT7yQrWXw=;
+	s=arc-20240116; t=1775970023; c=relaxed/simple;
+	bh=/VANlIrMcOdGBRhisNYMQo2n8w2kkMcYYCy39542QSA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NlitO3niiz6mPNF99YImrAZ1aeKxc9wBdY1yD45UBAik2Czcdj/ZLhiaOtQS9I/qthbVLZEMfC1TwaKn0l64XiGDZbZQCK8lLu3HLgSotcWkU/QoTo/aW+0+JSVgjGMwCrtQDMytmTajPHIY+BShzRf/3bZGLDIlVa0/fbeVfUs=
+	 MIME-Version; b=UINNCQxgELDx18HxaslTWHLvbPzLF1gdX8aieDK05ApvAY7Y0HWzHukXNPhVNbhJMdk5Bnoxss4YazCw3VfCXR1Gm1WgVape1+/vsbERbUw5chqs7IolBlE9Ty77+yn7Q9igyLs0Z/HrVbbFqj6sHRGMnunFdqMz5myrz3ij09s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 8591C3B021BA6; Sat, 11 Apr 2026 22:00:00 -0700 (PDT)
+	id B9DF53B021C03; Sat, 11 Apr 2026 22:00:10 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 10/18] bpf: Fix interaction between stack argument PTR_TO_STACK and dead slot poisoning
-Date: Sat, 11 Apr 2026 22:00:00 -0700
-Message-ID: <20260412050000.262030-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 12/18] bpf: Reject stack arguments if tail call reachable
+Date: Sat, 11 Apr 2026 22:00:10 -0700
+Message-ID: <20260412050010.266625-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260412045826.254200-1-yonghong.song@linux.dev>
 References: <20260412045826.254200-1-yonghong.song@linux.dev>
@@ -38,74 +38,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The "poison dead stack slots" mechanism (commit 2cb27158adb3) uses
-static liveness analysis to identify dead stack slots and poisons them
-as a safety check. However, the static liveness pass cannot track
-indirect stack references through pointers passed via stack arguments.
-
-For register-passed PTR_TO_STACK (e.g., R1 =3D fp-8 passed to a static
-subprog), the liveness abstract tracker carries frame/offset info
-through registers. When the callee dereferences R1, the tracker
-attributes the read to the parent frame's stack slot, correctly marking
-it alive. So no poisoning issue arises.
-
-For stack-argument-passed PTR_TO_STACK (e.g., fp-8 stored via
-*(r12-8) =3D r1), the value goes through BPF_REG_STACK_ARG_BASE (r12)
-which the liveness pass does not track. When the callee loads the
-pointer from its incoming stack arg and dereferences it, the liveness
-pass cannot attribute the read back to the parent frame. The parent's
-stack slot is determined dead and poisoned before the callee even
-starts. The callee's subsequent dereference then fails with "slot
-poisoned by dead code elimination".
-
-Fix this by allowing STACK_POISON reads in check_stack_read_fixed_off()
-when the read targets a parent frame's stack (reg_state !=3D state).
-Same-frame STACK_POISON reads remain rejected to preserve the safety
-check for real liveness bugs. Cross-frame reads are safe to allow
-because:
-  - The pointer to the parent's stack was already validated by the
-    verifier.
-  - The slot contained valid data before being (incorrectly) poisoned.
-  - The read returns an unknown scalar, which is conservative.
+Tailcalls are been deprecated. So reject stack arguments
+if tail call is in the way.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ kernel/bpf/verifier.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e664d924e8d4..bfeecd73e66e 100644
+index 20fb53ead728..45987041bb2a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -5764,6 +5764,13 @@ static int check_stack_read_fixed_off(struct bpf_v=
-erifier_env *env,
- 					}
- 					if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
- 						continue;
-+					/*
-+					 * Cross-frame reads may hit slots poisoned by dead code eliminatio=
-n.
-+					 * Static liveness can't track indirect references through pointers=
-,
-+					 * so allow the read conservatively.
-+					 */
-+					if (type =3D=3D STACK_POISON && reg_state !=3D state)
-+						continue;
- 					if (type =3D=3D STACK_POISON) {
- 						verbose(env, "reading from stack off %d+%d size %d, slot poisoned =
-by dead code elimination\n",
- 							off, i, size);
-@@ -5819,6 +5826,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
-rifier_env *env,
- 				continue;
- 			if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
- 				continue;
-+			if (type =3D=3D STACK_POISON && reg_state !=3D state)
-+				continue;
- 			if (type =3D=3D STACK_POISON) {
- 				verbose(env, "reading from stack off %d+%d size %d, slot poisoned by=
- dead code elimination\n",
- 					off, i, size);
+@@ -7175,6 +7175,11 @@ static int check_max_stack_depth_subprog(struct bp=
+f_verifier_env *env, int idx,
+ 				verbose(env, "cannot tail call within exception cb\n");
+ 				return -EINVAL;
+ 			}
++			if (subprog[tmp].incoming_stack_arg_depth ||
++			    subprog[tmp].outgoing_stack_arg_depth) {
++				verbose(env, "tail_calls are not allowed in programs with stack args=
+\n");
++				return -EINVAL;
++			}
+ 			subprog[tmp].tail_call_reachable =3D true;
+ 		}
+ 	if (subprog[0].tail_call_reachable)
 --=20
 2.52.0
 
