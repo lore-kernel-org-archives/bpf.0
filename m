@@ -1,21 +1,20 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654A5364053
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F3636405E
 	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 04:58:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775969920; cv=none; b=PpuLDL6k2v0ViZxu0jCMFRrvWrEAnDrzRu/QlYjBvoa4+dmz9yYx9Ptyg88dGc1EaDaxsXy9yyqFS6fchLvKHdyo37K4N+dFCrJDEa7h8WN6fBKkQAukvUupU81vqvVH5Q+N7iZAjM73wwX1cTrM/nSKswZH3rrXokIbY8ln8eY=
+	t=1775969920; cv=none; b=Se1n/ttpAwR7F2NcHh0mBe1Lx5lhcwLebJSQ/pctpWjXlUqF2QOYhvhNOnJKSihxZV7gU+IaPT+TYH/aQvQnyrv7RAK89/eK/3NKS79lRFVrAiCWg3Fm8XVlFOzBQjC95U/OopP91dQtsbuOWTS/74rttv0fNUVXyP4AlSp4lIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1775969920; c=relaxed/simple;
-	bh=ZXjfUoxteI8Ta/c5MZ/5ypKl1VrVIUDOcYQ+dSZqpPo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EmbRQb/yVXuIaUeVlzr1wXmzDgG/SiL5np0AOdlj6nyePPn0Z2GU4576kaKqXIFFX8H4Ql3AA1TzYXmBq2RjwDurageP3OttqSBzXUVh4J5tkSOxgUlcQpCN/bkSWcnYxIJL/N5B+N6FNjc6OjKRX9dkjlrl+cUzWmrzXIX2IcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	bh=FJwV/3YIiXsDMc6FCg2kHYyfX3nDGLXkrNn8uTHxDls=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0swGTL0AgXkqJqxLEMO/DC0KZN7svcEQtzq6r03YbEGxR68HK9r8EpFpWpS+6K6R8rKTeomNtlcI6SLmq6a94GSK+z2bKAHlMIgsNNhCAHt/lH4uyvyC6d1NjWfzercvjoJJ9lXiJb6XBVllwz1Wlpq8EU5nA6C2ytnjgCidbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id E3DF33B02197C; Sat, 11 Apr 2026 21:58:36 -0700 (PDT)
+	id AE7723B02193A; Sat, 11 Apr 2026 21:58:26 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,12 +23,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 02/18] bpf: Change from "arg #%d" to "arg#%d" in verifier log
-Date: Sat, 11 Apr 2026 21:58:36 -0700
-Message-ID: <20260412045836.254807-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 00/18] bpf: Support stack arguments for BPF functions and kfuncs
+Date: Sat, 11 Apr 2026 21:58:26 -0700
+Message-ID: <20260412045826.254200-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260412045826.254200-1-yonghong.song@linux.dev>
-References: <20260412045826.254200-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,316 +35,180 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-In verifier, there are 31 verifier logs with "arg#%d" and 5 with "arg #%d=
-".
-Consolidate all of these to be "arg#%d" as in later patch, a helper funct=
-ion
-will emit "arg#%d" as the defined format. Some related selftests are
-adjusted as well.
+Currently, bpf function calls and kfunc's are limited by 5 reg-level
+parameters. For function calls with more than 5 parameters,
+developers can use always inlining or pass a struct pointer
+after packing more parameters in that struct. But there is
+no workaround for kfunc if more than 5 parameters is needed.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- kernel/bpf/verifier.c                         | 10 +++++-----
- .../testing/selftests/bpf/progs/dynptr_fail.c | 20 +++++++++----------
- .../selftests/bpf/progs/file_reader_fail.c    |  4 ++--
- .../selftests/bpf/progs/iters_state_safety.c  | 14 ++++++-------
- .../selftests/bpf/progs/iters_testmod_seq.c   |  4 ++--
- .../selftests/bpf/progs/verifier_bits_iter.c  |  4 ++--
- 6 files changed, 28 insertions(+), 28 deletions(-)
+This patch set lifts the 5-argument limit by introducing stack-based
+argument passing for BPF functions and kfunc's, coordinated with
+compiler support in LLVM [1]. The compiler emits loads/stores through
+a new bpf register r12 (BPF_REG_STACK_ARG_BASE) to pass arguments beyond
+the 5th, keeping the stack arg area separate from the r10-based program
+stack. The maximum number of arguments is capped at MAX_BPF_FUNC_ARGS
+(12), which is sufficient for the vast majority of use cases.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3ba837e4b591..6469e71cd1fa 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9074,7 +9074,7 @@ static int process_dynptr_func(struct bpf_verifier_=
-env *env, int regno, int insn
+The x86_64 JIT translates r12-relative accesses to RBP-relative
+native instructions. Each function's stack allocation is extended
+by 'max_outgoing' bytes to hold the outgoing arg area below the
+callee-saved registers. This makes implementation easier as the r10 can b=
+e
+reused for stack argument access. At both BPF-to-BPF and kfunc calls,
+outgoing args are pushed onto the expected calling convention locations
+directly. The incoming parameters can directly get the value from
+caller.
+
+To support kfunc stack arguments, before doing any stack arguments,
+existing codes are refactored/modified to use bpf_reg_state as much
+as possible instead of using regno, and to pass regno/argno in a
+single variable where non-negative means regno and negative means argno.
+
+Global subprogs with >5 args are not yet supported. Only x86_64
+is supported for now.
+
+For the rest of patches, patches 1-6 make changes to make it
+easy for future stack arguments for kfuncs. Patches 7-10
+supports bpf-to-bpf stack arguments. Patch 11 rejects interpreter
+for stack arguments. Patch 12 rejects subprogs if tailcall reachable.
+Patch 13 adds stack argument support for kfuncs. Patch 14 enables
+stack arguments for x86_64 and Patch 15 implements the x86_64 JIT.
+Patches 16-18 are some test cases.
+
+  [1] https://github.com/llvm/llvm-project/pull/189060
+
+Note:
+  - The patch set is on top of the following commit:
+    2ec74a053611  bpf: Simplify do_check_insn()
+  - This patch set requires latest llvm23 compiler. It is possible that a=
+ build
+    failure may appear:
+      /home/yhs/work/bpf-next/scripts/mod/modpost.c:59:13: error: variabl=
+e 'extra_warn' set but not used [-Werror,-Wunused-but-set-global]
+             59 | static bool extra_warn;
+                |             ^
+          1 error generated.
+    In this case, the following hack can workaround the build issue:
+      --- a/Makefile
+      +++ b/Makefile
+      @@ -467,7 +467,7 @@ KERNELDOC       =3D $(srctree)/tools/docs/kerne=
+l-doc
+       export KERNELDOC
 =20
- 		if (!is_dynptr_reg_valid_init(env, reg)) {
- 			verbose(env,
--				"Expected an initialized dynptr as arg #%d\n",
-+				"Expected an initialized dynptr as arg#%d\n",
- 				regno - 1);
- 			return -EINVAL;
- 		}
-@@ -9082,7 +9082,7 @@ static int process_dynptr_func(struct bpf_verifier_=
-env *env, int regno, int insn
- 		/* Fold modifiers (in this case, MEM_RDONLY) when checking expected ty=
-pe */
- 		if (!is_dynptr_type_expected(env, reg, arg_type & ~MEM_RDONLY)) {
- 			verbose(env,
--				"Expected a dynptr of type %s as arg #%d\n",
-+				"Expected a dynptr of type %s as arg#%d\n",
- 				dynptr_type_str(arg_to_dynptr_type(arg_type)), regno - 1);
- 			return -EINVAL;
- 		}
-@@ -9152,7 +9152,7 @@ static int process_iter_arg(struct bpf_verifier_env=
- *env, int regno, int insn_id
- 	 */
- 	btf_id =3D btf_check_iter_arg(meta->btf, meta->func_proto, regno - 1);
- 	if (btf_id < 0) {
--		verbose(env, "expected valid iter pointer as arg #%d\n", regno - 1);
-+		verbose(env, "expected valid iter pointer as arg#%d\n", regno - 1);
- 		return -EINVAL;
- 	}
- 	t =3D btf_type_by_id(meta->btf, btf_id);
-@@ -9161,7 +9161,7 @@ static int process_iter_arg(struct bpf_verifier_env=
- *env, int regno, int insn_id
- 	if (is_iter_new_kfunc(meta)) {
- 		/* bpf_iter_<type>_new() expects pointer to uninit iter state */
- 		if (!is_iter_reg_valid_uninit(env, reg, nr_slots)) {
--			verbose(env, "expected uninitialized iter_%s as arg #%d\n",
-+			verbose(env, "expected uninitialized iter_%s as arg#%d\n",
- 				iter_type_str(meta->btf, btf_id), regno - 1);
- 			return -EINVAL;
- 		}
-@@ -9185,7 +9185,7 @@ static int process_iter_arg(struct bpf_verifier_env=
- *env, int regno, int insn_id
- 		case 0:
- 			break;
- 		case -EINVAL:
--			verbose(env, "expected an initialized iter_%s as arg #%d\n",
-+			verbose(env, "expected an initialized iter_%s as arg#%d\n",
- 				iter_type_str(meta->btf, btf_id), regno - 1);
- 			return err;
- 		case -EPROTO:
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
-ing/selftests/bpf/progs/dynptr_fail.c
-index b62773ce5219..d552117b001e 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -149,7 +149,7 @@ int ringbuf_release_uninit_dynptr(void *ctx)
-=20
- /* A dynptr can't be used after it has been invalidated */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #2")
-+__failure __msg("Expected an initialized dynptr as arg#2")
- int use_after_invalid(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-@@ -448,7 +448,7 @@ int invalid_helper2(void *ctx)
-=20
- /* A bpf_dynptr is invalidated if it's been written into */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #0")
-+__failure __msg("Expected an initialized dynptr as arg#0")
- int invalid_write1(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-@@ -1642,7 +1642,7 @@ int invalid_slice_rdwr_rdonly(struct __sk_buff *skb=
-)
-=20
- /* bpf_dynptr_adjust can only be called on initialized dynptrs */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #0")
-+__failure __msg("Expected an initialized dynptr as arg#0")
- int dynptr_adjust_invalid(void *ctx)
- {
- 	struct bpf_dynptr ptr =3D {};
-@@ -1655,7 +1655,7 @@ int dynptr_adjust_invalid(void *ctx)
-=20
- /* bpf_dynptr_is_null can only be called on initialized dynptrs */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #0")
-+__failure __msg("Expected an initialized dynptr as arg#0")
- int dynptr_is_null_invalid(void *ctx)
- {
- 	struct bpf_dynptr ptr =3D {};
-@@ -1668,7 +1668,7 @@ int dynptr_is_null_invalid(void *ctx)
-=20
- /* bpf_dynptr_is_rdonly can only be called on initialized dynptrs */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #0")
-+__failure __msg("Expected an initialized dynptr as arg#0")
- int dynptr_is_rdonly_invalid(void *ctx)
- {
- 	struct bpf_dynptr ptr =3D {};
-@@ -1681,7 +1681,7 @@ int dynptr_is_rdonly_invalid(void *ctx)
-=20
- /* bpf_dynptr_size can only be called on initialized dynptrs */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #0")
-+__failure __msg("Expected an initialized dynptr as arg#0")
- int dynptr_size_invalid(void *ctx)
- {
- 	struct bpf_dynptr ptr =3D {};
-@@ -1694,7 +1694,7 @@ int dynptr_size_invalid(void *ctx)
-=20
- /* Only initialized dynptrs can be cloned */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #0")
-+__failure __msg("Expected an initialized dynptr as arg#0")
- int clone_invalid1(void *ctx)
- {
- 	struct bpf_dynptr ptr1 =3D {};
-@@ -1728,7 +1728,7 @@ int clone_invalid2(struct xdp_md *xdp)
-=20
- /* Invalidating a dynptr should invalidate its clones */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #2")
-+__failure __msg("Expected an initialized dynptr as arg#2")
- int clone_invalidate1(void *ctx)
- {
- 	struct bpf_dynptr clone;
-@@ -1749,7 +1749,7 @@ int clone_invalidate1(void *ctx)
-=20
- /* Invalidating a dynptr should invalidate its parent */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #2")
-+__failure __msg("Expected an initialized dynptr as arg#2")
- int clone_invalidate2(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-@@ -1770,7 +1770,7 @@ int clone_invalidate2(void *ctx)
-=20
- /* Invalidating a dynptr should invalidate its siblings */
- SEC("?raw_tp")
--__failure __msg("Expected an initialized dynptr as arg #2")
-+__failure __msg("Expected an initialized dynptr as arg#2")
- int clone_invalidate3(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-diff --git a/tools/testing/selftests/bpf/progs/file_reader_fail.c b/tools=
-/testing/selftests/bpf/progs/file_reader_fail.c
-index 32fe28ed2439..429831ca9154 100644
---- a/tools/testing/selftests/bpf/progs/file_reader_fail.c
-+++ b/tools/testing/selftests/bpf/progs/file_reader_fail.c
-@@ -30,7 +30,7 @@ int on_nanosleep_unreleased_ref(void *ctx)
-=20
- SEC("xdp")
- __failure
--__msg("Expected a dynptr of type file as arg #0")
-+__msg("Expected a dynptr of type file as arg#0")
- int xdp_wrong_dynptr_type(struct xdp_md *xdp)
- {
- 	struct bpf_dynptr dynptr;
-@@ -42,7 +42,7 @@ int xdp_wrong_dynptr_type(struct xdp_md *xdp)
-=20
- SEC("xdp")
- __failure
--__msg("Expected an initialized dynptr as arg #0")
-+__msg("Expected an initialized dynptr as arg#0")
- int xdp_no_dynptr_type(struct xdp_md *xdp)
- {
- 	struct bpf_dynptr dynptr;
-diff --git a/tools/testing/selftests/bpf/progs/iters_state_safety.c b/too=
-ls/testing/selftests/bpf/progs/iters_state_safety.c
-index d273b46dfc7c..88cdd8d46373 100644
---- a/tools/testing/selftests/bpf/progs/iters_state_safety.c
-+++ b/tools/testing/selftests/bpf/progs/iters_state_safety.c
-@@ -73,7 +73,7 @@ int create_and_forget_to_destroy_fail(void *ctx)
- }
-=20
- SEC("?raw_tp")
--__failure __msg("expected an initialized iter_num as arg #0")
-+__failure __msg("expected an initialized iter_num as arg#0")
- int destroy_without_creating_fail(void *ctx)
- {
- 	/* init with zeros to stop verifier complaining about uninit stack */
-@@ -91,7 +91,7 @@ int destroy_without_creating_fail(void *ctx)
- }
-=20
- SEC("?raw_tp")
--__failure __msg("expected an initialized iter_num as arg #0")
-+__failure __msg("expected an initialized iter_num as arg#0")
- int compromise_iter_w_direct_write_fail(void *ctx)
- {
- 	struct bpf_iter_num iter;
-@@ -143,7 +143,7 @@ int compromise_iter_w_direct_write_and_skip_destroy_f=
-ail(void *ctx)
- }
-=20
- SEC("?raw_tp")
--__failure __msg("expected an initialized iter_num as arg #0")
-+__failure __msg("expected an initialized iter_num as arg#0")
- int compromise_iter_w_helper_write_fail(void *ctx)
- {
- 	struct bpf_iter_num iter;
-@@ -230,7 +230,7 @@ int valid_stack_reuse(void *ctx)
- }
-=20
- SEC("?raw_tp")
--__failure __msg("expected uninitialized iter_num as arg #0")
-+__failure __msg("expected uninitialized iter_num as arg#0")
- int double_create_fail(void *ctx)
- {
- 	struct bpf_iter_num iter;
-@@ -258,7 +258,7 @@ int double_create_fail(void *ctx)
- }
-=20
- SEC("?raw_tp")
--__failure __msg("expected an initialized iter_num as arg #0")
-+__failure __msg("expected an initialized iter_num as arg#0")
- int double_destroy_fail(void *ctx)
- {
- 	struct bpf_iter_num iter;
-@@ -284,7 +284,7 @@ int double_destroy_fail(void *ctx)
- }
-=20
- SEC("?raw_tp")
--__failure __msg("expected an initialized iter_num as arg #0")
-+__failure __msg("expected an initialized iter_num as arg#0")
- int next_without_new_fail(void *ctx)
- {
- 	struct bpf_iter_num iter;
-@@ -305,7 +305,7 @@ int next_without_new_fail(void *ctx)
- }
-=20
- SEC("?raw_tp")
--__failure __msg("expected an initialized iter_num as arg #0")
-+__failure __msg("expected an initialized iter_num as arg#0")
- int next_after_destroy_fail(void *ctx)
- {
- 	struct bpf_iter_num iter;
-diff --git a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c b/tool=
-s/testing/selftests/bpf/progs/iters_testmod_seq.c
-index 83791348bed5..fd160c14289f 100644
---- a/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-+++ b/tools/testing/selftests/bpf/progs/iters_testmod_seq.c
-@@ -79,7 +79,7 @@ int testmod_seq_truncated(const void *ctx)
-=20
- SEC("?raw_tp")
- __failure
--__msg("expected an initialized iter_testmod_seq as arg #1")
-+__msg("expected an initialized iter_testmod_seq as arg#1")
- int testmod_seq_getter_before_bad(const void *ctx)
- {
- 	struct bpf_iter_testmod_seq it;
-@@ -89,7 +89,7 @@ int testmod_seq_getter_before_bad(const void *ctx)
-=20
- SEC("?raw_tp")
- __failure
--__msg("expected an initialized iter_testmod_seq as arg #1")
-+__msg("expected an initialized iter_testmod_seq as arg#1")
- int testmod_seq_getter_after_bad(const void *ctx)
- {
- 	struct bpf_iter_testmod_seq it;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bits_iter.c b/too=
-ls/testing/selftests/bpf/progs/verifier_bits_iter.c
-index 8bcddadfc4da..86f1e5a8e87f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bits_iter.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bits_iter.c
-@@ -32,7 +32,7 @@ int BPF_PROG(no_destroy, struct bpf_iter_meta *meta, st=
-ruct cgroup *cgrp)
-=20
- SEC("iter/cgroup")
- __description("uninitialized iter in ->next()")
--__failure __msg("expected an initialized iter_bits as arg #0")
-+__failure __msg("expected an initialized iter_bits as arg#0")
- int BPF_PROG(next_uninit, struct bpf_iter_meta *meta, struct cgroup *cgr=
-p)
- {
- 	struct bpf_iter_bits it =3D {};
-@@ -43,7 +43,7 @@ int BPF_PROG(next_uninit, struct bpf_iter_meta *meta, s=
-truct cgroup *cgrp)
-=20
- SEC("iter/cgroup")
- __description("uninitialized iter in ->destroy()")
--__failure __msg("expected an initialized iter_bits as arg #0")
-+__failure __msg("expected an initialized iter_bits as arg#0")
- int BPF_PROG(destroy_uninit, struct bpf_iter_meta *meta, struct cgroup *=
-cgrp)
- {
- 	struct bpf_iter_bits it =3D {};
+       KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-pro=
+totypes \
+      -                        -O2 -fomit-frame-pointer -std=3Dgnu11
+      +                        -O2 -fomit-frame-pointer -std=3Dgnu11 -Wno=
+-unused-but-set-global
+       KBUILD_USERCFLAGS  :=3D $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
+       KBUILD_USERLDFLAGS :=3D $(USERLDFLAGS)
+
+Changelogs:
+  v3 -> v4:
+    - v3: https://lore.kernel.org/bpf/20260405172505.1329392-1-yonghong.s=
+ong@linux.dev/
+    - Refactor/Modify codes to make it easier for later kfunc stack argum=
+ent support
+    - Invalidate outgoing slots immediately after the call to prevent reu=
+se
+    - Fix interaction between stack argument PTR_TO_STACK and dead slot p=
+oisoning
+    - Reject stack arguments if tail call reachable
+    - Disable private stack if stack argument is used
+    - Allocate outgoing stack argument region after callee saved register=
+s, and this
+      simplifies the JITed code a lot.
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20260405165300.826241-1-yonghong.so=
+ng@linux.dev/
+    - Fix selftest stack_arg_gap_at_minus8().
+    - Fix a few 'UTF-8' issues.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260402012727.3916819-1-yonghong.s=
+ong@linux.dev/
+    - Add stack_arg_safe() to do pruning for stack arguments.
+    - Fix an issue with KF_ARG_PTR_TO_MEM_SIZE. Since a faked register is
+      used, added verification log to indicate the start and end of such
+      faked register usage.
+    - For x86_64 JIT, copying incoming parameter values directly from cal=
+ler's stack.
+    - Add test cases with stack arguments e.g. mem, mem+size, dynptr, ite=
+r, etc.
+
+Yonghong Song (18):
+  bpf: Remove unused parameter from check_map_kptr_access()
+  bpf: Change from "arg #%d" to "arg#%d" in verifier log
+  bpf: Refactor to avoid redundant calculation of bpf_reg_state
+  bpf: Refactor to handle memory and size together
+  bpf: Change some regno type from u32 to int type
+  bpf: Use argument index instead of register index in kfunc verifier
+    logs
+  bpf: Introduce bpf register BPF_REG_STACK_ARG_BASE
+  bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
+  bpf: Support stack arguments for bpf functions
+  bpf: Fix interaction between stack argument PTR_TO_STACK and dead slot
+    poisoning
+  bpf: Reject stack arguments in non-JITed programs
+  bpf: Reject stack arguments if tail call reachable
+  bpf: Support stack arguments for kfunc calls
+  bpf: Enable stack argument support for x86_64
+  bpf,x86: Implement JIT support for stack arguments
+  selftests/bpf: Add tests for BPF function stack arguments
+  selftests/bpf: Add negative test for greater-than-8-byte kfunc stack
+    argument
+  selftests/bpf: Add verifier tests for stack argument validation
+
+ arch/x86/net/bpf_jit_comp.c                   |  177 ++-
+ include/linux/bpf.h                           |    6 +
+ include/linux/bpf_verifier.h                  |   32 +-
+ include/linux/filter.h                        |    4 +-
+ kernel/bpf/btf.c                              |   21 +-
+ kernel/bpf/core.c                             |   12 +-
+ kernel/bpf/verifier.c                         | 1038 ++++++++++++-----
+ .../selftests/bpf/prog_tests/cb_refs.c        |    2 +-
+ .../selftests/bpf/prog_tests/linked_list.c    |    4 +-
+ .../selftests/bpf/prog_tests/stack_arg.c      |  132 +++
+ .../selftests/bpf/prog_tests/stack_arg_fail.c |   24 +
+ .../selftests/bpf/prog_tests/verifier.c       |    2 +
+ .../selftests/bpf/progs/cpumask_failure.c     |    4 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |   26 +-
+ .../selftests/bpf/progs/file_reader_fail.c    |    4 +-
+ .../selftests/bpf/progs/iters_state_safety.c  |   14 +-
+ .../selftests/bpf/progs/iters_testmod.c       |    6 +-
+ .../selftests/bpf/progs/iters_testmod_seq.c   |    4 +-
+ .../bpf/progs/local_kptr_stash_fail.c         |    2 +-
+ .../selftests/bpf/progs/map_kptr_fail.c       |    4 +-
+ .../bpf/progs/mem_rdonly_untrusted.c          |    2 +-
+ .../bpf/progs/nested_trust_failure.c          |    2 +-
+ .../selftests/bpf/progs/res_spin_lock_fail.c  |    2 +-
+ tools/testing/selftests/bpf/progs/stack_arg.c |  212 ++++
+ .../selftests/bpf/progs/stack_arg_fail.c      |   32 +
+ .../selftests/bpf/progs/stack_arg_kfunc.c     |  164 +++
+ .../testing/selftests/bpf/progs/stream_fail.c |    2 +-
+ .../selftests/bpf/progs/task_kfunc_failure.c  |    4 +-
+ .../selftests/bpf/progs/verifier_bits_iter.c  |    4 +-
+ .../bpf/progs/verifier_cgroup_storage.c       |    4 +-
+ .../selftests/bpf/progs/verifier_ctx.c        |    2 +-
+ .../bpf/progs/verifier_ref_tracking.c         |    2 +-
+ .../selftests/bpf/progs/verifier_sock.c       |    6 +-
+ .../selftests/bpf/progs/verifier_stack_arg.c  |  316 +++++
+ .../selftests/bpf/progs/verifier_unpriv.c     |    4 +-
+ .../selftests/bpf/progs/verifier_vfs_reject.c |    8 +-
+ .../testing/selftests/bpf/progs/wq_failures.c |    4 +-
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   73 ++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   26 +
+ tools/testing/selftests/bpf/verifier/calls.c  |    6 +-
+ .../testing/selftests/bpf/verifier/map_kptr.c |   10 +-
+ 41 files changed, 1996 insertions(+), 407 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg_fail=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
+c
+
 --=20
 2.52.0
 
