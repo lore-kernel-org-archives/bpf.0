@@ -1,21 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCC428D8DB
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5755928D8DB
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 05:00:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775970011; cv=none; b=tjIiMnCWbnsbHy4Si50iBi9OuGH1Q78c1dtEA6ba7kMPxq9yPcC62uWU0kwIeFGDSVgqLLfo3y8fweBeB3dwNp12bWX14aR5fkO3XgVHJyLNNhti9mdFvBFFYnEqKju12hSjgxDURcbA7bGXmif1ryfd3ovqw3OJG28l2GqFS2k=
+	t=1775970013; cv=none; b=Vmxl5YDyZCPbi6RewxqrbSj9xkPN5ThgStI3ulBfksF7MNy8D+nrBqqEmMxTtpEi4EglY/cVRjdo3+q5Yz6lLZK8m3pyjbvpuQLLEye7b3SWf2LW+UoSdmybV4lL+/48yuAcd/P9LYG4gccPsjJVyvqYi1gw5dpbaSKoJbSB4QU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775970011; c=relaxed/simple;
-	bh=bgdBNz4U6+yJF9we8S7QuIfJVZA9Yn6oJHi2bnykx2o=;
+	s=arc-20240116; t=1775970013; c=relaxed/simple;
+	bh=NjH3i6VRWsHzXrq8rkEX7F+xcP5a1I9aKopT7yQrWXw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nQb8nM8/7X2+D5m0k3BqXZEI6WLPU6jZ4AnLPvRgoOZnN7wT2V+fmrBXeLtDBIZmrNV3+sTA0RrBrRUMtY3ioou5hzODBMAfqbbb2WMDZIxNKIfvi5iluqKp5KV/tlXHLZ9Y4oAT4a8eaMm6nKZq9vtsnUjBWb5nFpHyJl7AHs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	 MIME-Version; b=NlitO3niiz6mPNF99YImrAZ1aeKxc9wBdY1yD45UBAik2Czcdj/ZLhiaOtQS9I/qthbVLZEMfC1TwaKn0l64XiGDZbZQCK8lLu3HLgSotcWkU/QoTo/aW+0+JSVgjGMwCrtQDMytmTajPHIY+BShzRf/3bZGLDIlVa0/fbeVfUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id A03A43B021BC7; Sat, 11 Apr 2026 22:00:05 -0700 (PDT)
+	id 8591C3B021BA6; Sat, 11 Apr 2026 22:00:00 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 11/18] bpf: Reject stack arguments in non-JITed programs
-Date: Sat, 11 Apr 2026 22:00:05 -0700
-Message-ID: <20260412050005.264809-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 10/18] bpf: Fix interaction between stack argument PTR_TO_STACK and dead slot poisoning
+Date: Sat, 11 Apr 2026 22:00:00 -0700
+Message-ID: <20260412050000.262030-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260412045826.254200-1-yonghong.song@linux.dev>
 References: <20260412045826.254200-1-yonghong.song@linux.dev>
@@ -38,51 +38,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The interpreter does not understand the bpf register r12
-(BPF_REG_STACK_ARG_BASE) used for stack argument addressing. So
-reject interpreter usage if stack arguments are used either
-in the main program or any subprogram.
+The "poison dead stack slots" mechanism (commit 2cb27158adb3) uses
+static liveness analysis to identify dead stack slots and poisons them
+as a safety check. However, the static liveness pass cannot track
+indirect stack references through pointers passed via stack arguments.
+
+For register-passed PTR_TO_STACK (e.g., R1 =3D fp-8 passed to a static
+subprog), the liveness abstract tracker carries frame/offset info
+through registers. When the callee dereferences R1, the tracker
+attributes the read to the parent frame's stack slot, correctly marking
+it alive. So no poisoning issue arises.
+
+For stack-argument-passed PTR_TO_STACK (e.g., fp-8 stored via
+*(r12-8) =3D r1), the value goes through BPF_REG_STACK_ARG_BASE (r12)
+which the liveness pass does not track. When the callee loads the
+pointer from its incoming stack arg and dereferences it, the liveness
+pass cannot attribute the read back to the parent frame. The parent's
+stack slot is determined dead and poisoned before the callee even
+starts. The callee's subsequent dereference then fails with "slot
+poisoned by dead code elimination".
+
+Fix this by allowing STACK_POISON reads in check_stack_read_fixed_off()
+when the read targets a parent frame's stack (reg_state !=3D state).
+Same-frame STACK_POISON reads remain rejected to preserve the safety
+check for real liveness bugs. Cross-frame reads are safe to allow
+because:
+  - The pointer to the parent's stack was already validated by the
+    verifier.
+  - The slot contained valid data before being (incorrectly) poisoned.
+  - The read returns an unknown scalar, which is conservative.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/core.c     | 3 ++-
- kernel/bpf/verifier.c | 6 ++++++
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 76a4e208f34e..1bd8a19d7b61 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2555,7 +2555,8 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf=
-_prog *fp, int *err)
- 		goto finalize;
-=20
- 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--	    bpf_prog_has_kfunc_call(fp))
-+	    bpf_prog_has_kfunc_call(fp) ||
-+	    fp->aux->stack_arg_depth)
- 		jit_needed =3D true;
-=20
- 	if (!bpf_prog_select_interpreter(fp))
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bfeecd73e66e..20fb53ead728 100644
+index e664d924e8d4..bfeecd73e66e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -24030,6 +24030,12 @@ static int fixup_call_args(struct bpf_verifier_e=
-nv *env)
- 		verbose(env, "calling kernel functions are not allowed in non-JITed pr=
-ograms\n");
- 		return -EINVAL;
- 	}
-+	for (i =3D 0; i < env->subprog_cnt; i++) {
-+		if (env->subprog_info[i].incoming_stack_arg_depth) {
-+			verbose(env, "stack args are not supported in non-JITed programs\n");
-+			return -EINVAL;
-+		}
-+	}
- 	if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
- 		/* When JIT fails the progs with bpf2bpf calls and tail_calls
- 		 * have to be rejected, since interpreter doesn't support them yet.
+@@ -5764,6 +5764,13 @@ static int check_stack_read_fixed_off(struct bpf_v=
+erifier_env *env,
+ 					}
+ 					if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
+ 						continue;
++					/*
++					 * Cross-frame reads may hit slots poisoned by dead code eliminatio=
+n.
++					 * Static liveness can't track indirect references through pointers=
+,
++					 * so allow the read conservatively.
++					 */
++					if (type =3D=3D STACK_POISON && reg_state !=3D state)
++						continue;
+ 					if (type =3D=3D STACK_POISON) {
+ 						verbose(env, "reading from stack off %d+%d size %d, slot poisoned =
+by dead code elimination\n",
+ 							off, i, size);
+@@ -5819,6 +5826,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+ 				continue;
+ 			if (type =3D=3D STACK_INVALID && env->allow_uninit_stack)
+ 				continue;
++			if (type =3D=3D STACK_POISON && reg_state !=3D state)
++				continue;
+ 			if (type =3D=3D STACK_POISON) {
+ 				verbose(env, "reading from stack off %d+%d size %d, slot poisoned by=
+ dead code elimination\n",
+ 					off, i, size);
 --=20
 2.52.0
 
