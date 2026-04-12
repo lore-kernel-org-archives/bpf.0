@@ -1,173 +1,189 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D8D2253FC
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 22:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2D530B508
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 22:49:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776033574; cv=pass; b=TNOJ7/Y9zlzsGgnMRPcDJqmoWmm6FFSTShwkLkKzXH+murQzts0sqviAsbRXLGAs/QDFZrHNoM/D7xlZz0mFJimwzWAOCToVeXbaCPTdEx6gFN2/7AnT0536nKit4QR5V9KzibSBDYpAODHK5j752hO/gZAQzZqydyd2oRIIhkY=
+	t=1776034152; cv=pass; b=ogE3iT/EMHVz98WDxfTs6ox70FNg7+G1bkDrBqC2nM9omM8BWnCJUMjJCXPNpIjidDO8n8bi1kPC2t2inyhrpQvI5faOLHZPljWIKrA96JTV2sxpqwnCM4TskEMF97vA0P7cbg5e6B9T2S60gwLKYFpiM7H4uorQ/IDiKfPp45s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776033574; c=relaxed/simple;
-	bh=cjb7H3ckcwuFEtXtGWZ/guWnwvZYB3tLC9zM1p1agn8=;
+	s=arc-20240116; t=1776034152; c=relaxed/simple;
+	bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hNPDIm5cPU5C1SpO/1/96Q73VEHE9bRCsQCvyLN45DrEBCv5blBhpG0orw0msbAUCCyZ2d0ZfIdf11+04jPjbgom4I1sluREvPK9OyXW1BOTgCpyY4k9fXEIFVCNHelM2gNQgiOzOfa/z54VhAA7bydEGdPJe2OuCifbd8PlHb8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZEPkbNzW; arc=pass smtp.client-ip=209.85.221.44
+	 To:Cc:Content-Type; b=DsWbO0eu0eA6goe6Ul8aO/7TnGnG29qK4wy00lpRWLviZJWcugqIsuRTaLEobotNjV9bAisynyxqPMxYxIXtD7s2sj4h61YEP2/YKBiDmNhjEr/Vi4PTSRpRU5Z91TmUuAlLrEKWEpTxz10ExfB6DM8omUUl0ExnB8Ag2eb2VyI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JzGPmV6G; arc=pass smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZEPkbNzW"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43d70b3e159so272482f8f.0
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 15:39:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776033571; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JzGPmV6G"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so61415815e9.2
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 15:49:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776034149; cv=none;
         d=google.com; s=arc-20240605;
-        b=PhFQGuwu4tEyYwGfd+FFJNVtfEqY81f4Fv9FqYQTboh59CAR02BpU8DLyW/EthmrYu
-         cgBROnSalyJdOiqGujxmuZVELo0hgGuF9YO/bxDQSyM4f95FIcZhaqZrSW2lFnUiJ28U
-         GXdTCHq4oksJ1+zhk/FstSpVnWY6s1QYTrNo9QAIJ7Sct1bM1IhJvC97CS5UjHGNDyU2
-         s1dUERJXqtVxr0D/XSBoqpiBFhXuEuz0ceg7OsvUSrsLGYHNukrvQZ6HQC6KX8H3tt0E
-         Rclp4Ht2ybTzkowloRbuX7QpfO4I2oD9y8mOi2svimEe2J7A/KoyDx9ygsPyFYhC/Y/6
-         0/8g==
+        b=T58rbfLDUg8nU2vOpWW9x/h1JwaWLMWr1r4a8DY4tMhPiysaQz0ps6XrB6wx/Py5Sd
+         AKby8SBugN1WG2hb/aBc+GjX+6utE63tA0kklTZK2MJrkB8LkFcT0L+EANv9jrQainca
+         wY1qNRDp7pqgC2FhH8aGtB4do2MF5K/Ctjr2GrvuAxi3WtWAfOiUI0ntS2YKnjgVP3Q9
+         4eS2izicoeTtrhU3nkBHU88egR8Cwmm3VcUmC7g50bdm4Q54jHnJyF4MFbkbUWkj6ehS
+         OJmwxUaZ2acoMZG/SEkLaMgpHp9uPRDuicX8CeHj98ZZauEtW9J9migFbsIeovsj0+sX
+         Xwsg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=jDBAEEoQBuKDltRw41SmsNmQUUOb1HI8tJvTVBEOIqs=;
-        fh=eaxf7JtI/RroZtVj1uGO8/wMYU0awWyEBcCk+fXpeO4=;
-        b=VNU2O5lPXxag6X7//7Obju01WGBHaSJLyOERxQOK9LBR+mief0OkEohkPWrbzhIVON
-         KgjpZ9xjT5hxB4G8Kd0hXEO5bTch0eeLKoT4XHjz3E/t1g3aq0YDHq9EPKuFmxQpSjL0
-         Kk5q4YonB8QAbSOA4hf+LFXHzbv6vpdTKyZP1kfAAhU+O+ER4fvsR/R4zfgT4mZHcGd+
-         YtWjQzl5UGJT0mRx0MSRSBcalMFdQRo7j4AWUNloKnTjCNnX7eCW5kez6EGmfWx5plQ4
-         jMMmX6yyqJ7AwYgswFEihhXNBcA+0nkGxLTHYryeWjmDh1HD5ahl2eWy1jQt9WeBsMfd
-         sVMA==;
+        bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
+        fh=GlY4OVTdokhQS+qu53YI8pESuza2mOlqhVGXg0PoTLc=;
+        b=IVj8Fdz96CIapScJyTeXzgQR5Imdx3XNRIXzDcWYXYMg7nH/Pdete0EqQtBS8lsiFn
+         lKxpnt3U3XYMHdGiuIJ8BhxFuVDJhznUeKegTlLFvahoGNqu36V/rchU5jtZAHNjLwgs
+         bLDi8Z0YYWbOaRE1B1yN2vbyH8n+ueZnc1CyE2+FrZ3qytTjTc0ZGCRY6uu/j9EtntUd
+         ZMUiXe1d8NAsaSgNOVm47D15qPKmY6EOa1ZSH75MDFBLrAoi0DLEJDiiL9nq/OJaReBN
+         jVpooYdH4yPGdkiA6Xjv7AvKsIF7FvgENfbhi7Yn6Q1OmNcjOu3TGW4Q7gZXuqDLXEQw
+         IQxw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776033571; x=1776638371; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776034149; x=1776638949; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jDBAEEoQBuKDltRw41SmsNmQUUOb1HI8tJvTVBEOIqs=;
-        b=ZEPkbNzWNCLEUDpgCjM+6BbDbnaHLjUwnQY1OoS8LUPpOqXZRcgGUbkj4/uA7qsaHO
-         X9/p39yWQ86RNTu6zXAmToyHAhxvvA02yl5bfDVXYg0idzwdcuWkEiujw0UKU+Qn2a7e
-         2doWUjAQt2UUk8Kg2LeXO3uSSXByb4YUaQJ/zZSbir6n0lg69HZTBO2RhgbO67I96tLH
-         lUvJszAGYX6L9+WjN9Tr/pRvDsfgUqlZ5r3W4y+KOn3ULX+GXaRk6KO/tP6h+19qFkEQ
-         iHiym8TvbOKZdQjjrTmRl4uqJBpDgdipIp9LNaWBmgSb7jsNk8wKjt1SOIl0xeYWjr3J
-         gbEQ==
+        bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
+        b=JzGPmV6G7blQOWDYd28cCLXXkn5AbGxMqcXp+JvqQ0zefugE7AKxmcExlbXyk1sH8H
+         vJfCJJSC/vEayTpdcQUTtCWo56S+myiARavQHrZWO8NgvWaJI5HMcQ9t0hT8pxl8EHSk
+         UAjidL2TxSPvgbRm7esxfiEhLwZjiamnf6B+kMV/PBj8vlsCEO/xoFCGYyk8Y32t1TY3
+         r1zbLfXqDWCnYHEOqMAk1nLXR3WGkKWuUzGwPaGAPl72Sh8ERDGFzUHF9zqo7bs9SfX4
+         qtfkftcoRxHbNX1kik2Emwn04lmgaslaB5dNOZkWDe0JEwlOSETphhvbaEH4QCYBk+Zr
+         +rBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776033571; x=1776638371;
+        d=1e100.net; s=20251104; t=1776034149; x=1776638949;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jDBAEEoQBuKDltRw41SmsNmQUUOb1HI8tJvTVBEOIqs=;
-        b=kXfAuvbOrDqGeRiPBWmwT3pZVi369B1IaI5nfvZctEIWfM1z3xioNLm6EWjpeX3JCB
-         N6hyv3Hn9On7wQ4BPjxMyKUWgD8qQBTTrQxNyoPLJ7ELAUkr9abthK2BrBVx6we4H7E8
-         CW6lMFlOTK62VYpIPYs3PYdlU0PPn86kSuPYe7tdQ1Ok74p5rWsUdiduQsOMJq9wuMP2
-         qs7dU/HgsZd3XKlkQHG5SiQHbDUGkKaoy43BtQSat+AUSkZh4eVuqDMW2ecZ5q+WobzR
-         RdEOGdeS5nvBEQbELe4veLkemGFeDNUk95/XYdHTyQ7nk3PF2PRb2s0p6FiUWXGgvYsg
-         G+kQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9VMD/0zfIq/5M+3stnhMAQWyCgURYwGtsHQCTXVmdK80Te4XH77dmMWTm1w1bBU3WfWpM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws7d6YLe465SRDiGdfHBmZS+1fwpT51Z61uDbQW0UzA5tZW6Xo
-	nXYMgdMeBEU8UFL6/Qz/NVlQlRRzmmzwpnyPiWFaYQTiTW8Vt7vZCeEvudt4Wz6AY+WjpN49mCj
-	1lij8sDp/uN7Mk8GlVL94hiXCtv7gSrM=
-X-Gm-Gg: AeBDietkV1PB14dMfeecaINoUUcKY4qriL1ZSAr+uODNEFgSY2f81//ma0G5eIRJ6Jb
-	u6V91zC6iEKkuko9oa8CP5jYlLNk0Y/UNqV1NFHAFurjyakxLlWjID7JZwg1Ty6SoQ7OAZmVPom
-	GPJKoJ2kOWnMGF1B7ubxKfMOtXLXKzGat0kXN6dATLU+EBKkhQqmAzHR06MWOBxwwXvax8WE01c
-	3ZK9P0TIdd4C3ffkzKn9KwNbYqJdU7QJdY0pEnc7uex4pMFakvQjHbKcCJoy85flRm0pkYLdAI1
-	tmBy4tTh8ltc9KuqdCgOR+pvdP6Z9Yx+hjMo3WpdXr4OqvxM3XkfzX1ty8RLz9G7NoPLv0bec7E
-	3MZtRMMOfHUViirQCxjrCZnDFiA==
-X-Received: by 2002:a05:6000:2407:b0:43d:70de:1c5e with SMTP id
- ffacd0b85a97d-43d70de1f62mr5483007f8f.46.1776033570619; Sun, 12 Apr 2026
- 15:39:30 -0700 (PDT)
+        bh=O5OVsiCKYjUkVc/4Ce0JG9hbx01UZGanAjUUxH4B9a0=;
+        b=gVsDPY1bQEOGpFR4q2SisaqfHNoHvhrzBzEzMYFJPo68/0tPsP3Y00FoKywGFMcNeM
+         hP2Cmwh7Dzuj3UZpZqvj+BdPPaBkuJhC4DKujA/aQk/FM9sWAA+rPA1cFEx9S2Y5N+Ip
+         FvbHmAxGF8CJQDLUBN9fPjELXEx5w9HImWNko9rFLhgOATRwnvqlq9SPQZwitn2+LDHJ
+         bsNsyn03n0Kvm+mZNI1rsx1kdz/BlwgJaQy5MK52fkmR0G10DA126QCTBaCPrKunAQs4
+         UpWiwnW4eRmMskk8su7ONYMUZCP6hrWpKb9b6SHmSsnFpF5RH59S+nYd/yeQ4WD2n6nR
+         kFVg==
+X-Forwarded-Encrypted: i=1; AJvYcCWnMUFdOysgcD0JfDJHiaH8G16qfcZDN6dKUoAmkEFUrGOVmDUoLpan/EhP7fo+yAdwoGE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycM61DD+aGFbgmXzecgm8iFQnoDqvWsIQU99Ho5AZtL3yZb9sc
+	dJmi9d7wDUFmr+9ynhCubHnIewTQb9gjPv2QkUa2eAblOoPhNPuutH4qQjtTpDHltkKGESPYHrr
+	Ew446HTtrxtjkRqvAw3q0GlehHFvt3TY=
+X-Gm-Gg: AeBDieudaVUlEORu+XaHm3W8EMWO6+8o8gxr1FsJ0k7m8x+muKysJAOeiRsddir6rJF
+	u2BlbjAQw3tR/1ECU1In0eykQu8GaQWnNymJJ7KITBy7jyRK8R3eMzeDDdfRnikMVfUp1vCzqdS
+	52ZN7jyt3LKtr7UCh8jN1OW7+j8Gd25+8v/mbRITndZPz4B9sXbw0oQR6nmuN7luhH7zDpG2/qm
+	5nXQRPlCmv2EfSxfV0Gs9QeaUoeeEtGTbUTCScZdI4p8R1H5zO8rZ0c6I43kGXSxiYCbNtodHcp
+	EveJROVx/4bB2PLxzxeOSyfeYhPUVqxWfkLxJcOcVgdFUplxpGet+0S2Z6X24lTd25/Ydn8AX4U
+	tKK+ezZsnhCGAiQ3DqwBlsQU1MQ==
+X-Received: by 2002:a05:600c:6990:b0:488:a2ac:a34c with SMTP id
+ 5b1f17b1804b1-488d67f5bf5mr154924175e9.12.1776034149238; Sun, 12 Apr 2026
+ 15:49:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408095710.4090495-1-mayamatuszczyk@google.com>
-In-Reply-To: <20260408095710.4090495-1-mayamatuszczyk@google.com>
+References: <20260331153413.2469218-1-wusamuel@google.com> <2026040136-ocelot-simply-8981@gregkh>
+ <CAG2KctokEVVuhrs6tYuMjFF4ALR=tX80iZHrt4bhVvEKyoHzRQ@mail.gmail.com>
+ <2026040236-kiln-carat-bb6d@gregkh> <CAG2Kctpr7vBm_=Xz4H5FHYAfFxg=bDt35j6B4EprfUGio=Ftew@mail.gmail.com>
+ <2026040357-undefined-gave-c98e@gregkh> <CAG2KctqOLeYm_NFUjGdXQcBo1KhSZpXFQxQdM-DQBV4Mn0ahTw@mail.gmail.com>
+In-Reply-To: <CAG2KctqOLeYm_NFUjGdXQcBo1KhSZpXFQxQdM-DQBV4Mn0ahTw@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 12 Apr 2026 15:39:19 -0700
-X-Gm-Features: AQROBzD7qbDazBS7Fum_ZxU92K_-Pcjnp3Jjue6ttx4Xd1eLMU5IWfBdxDhbOQ4
-Message-ID: <CAADnVQLmJ5cPOL39dOubQvix2BhQ0GHs5gMVCeNhdc7r_f-zsw@mail.gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Run test_perf_branches more than 1 time
-To: Maya Matuszczyk <mayamatuszczyk@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+Date: Sun, 12 Apr 2026 15:48:58 -0700
+X-Gm-Features: AQROBzBmpL408c1tkfYuNTafpAd5aZMliRFfez61VTABAQ1oaYAiYAqJdTmdInY
+Message-ID: <CAADnVQLELWyv0kuv8wK3FJVFdJPbp-tD8d3p2pgCiVrcw_cVNA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Support BPF traversal of wakeup sources
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Matt Bobrowski <mattbobrowski@google.com>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Android Kernel Team <kernel-team@android.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Linux Power Management <linux-pm@vger.kernel.org>, driver-core@lists.linux.dev, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 8, 2026 at 2:57=E2=80=AFAM Maya Matuszczyk
-<mayamatuszczyk@google.com> wrote:
+On Fri, Apr 3, 2026 at 9:28=E2=80=AFAM Samuel Wu <wusamuel@google.com> wrot=
+e:
 >
-> test_perf_branches bpf program was only being ran once, and
-> perf_branches test would fail if the only sample that was passed to
-> test_perf_branches didn't have branch data.
-> Fix those failures by running it a few more times and waiting until a val=
-id
-> sample shows up, and leave the perf event only enabled for the duration o=
-f
-> test spins.
+> On Fri, Apr 3, 2026 at 3:04=E2=80=AFAM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Apr 02, 2026 at 12:37:12PM -0700, Samuel Wu wrote:
+> > > On Wed, Apr 1, 2026 at 9:06=E2=80=AFPM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Wed, Apr 01, 2026 at 12:07:12PM -0700, Samuel Wu wrote:
+> > > > > On Wed, Apr 1, 2026 at 2:15=E2=80=AFAM Greg Kroah-Hartman
+> > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Tue, Mar 31, 2026 at 08:34:09AM -0700, Samuel Wu wrote:
 >
-> Signed-off-by: Maya Matuszczyk <mayamatuszczyk@google.com>
-> ---
->  .../selftests/bpf/prog_tests/perf_branches.c  | 57 +++++++++++++------
->  .../selftests/bpf/progs/test_perf_branches.c  | 11 ++--
->  2 files changed, 43 insertions(+), 25 deletions(-)
+> [ ... ]
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_branches.c b/too=
-ls/testing/selftests/bpf/prog_tests/perf_branches.c
-> index 0a7ef770c487..1dcb7c70f545 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/perf_branches.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/perf_branches.c
-> @@ -15,10 +15,6 @@ static void check_good_sample(struct test_perf_branche=
-s *skel)
->         int pbe_size =3D sizeof(struct perf_branch_entry);
->         int duration =3D 0;
+> > > The data is fundamental for debugging and improving power at scale.
+> > > The original discussion and patch [1] provide more context of the
+> > > intent. To summarize the history, debugfs was unstable and insecure,
+> > > leading to the current sysfs implementation. However, sysfs has the
+> > > constraint of one attribute per node, requiring 10 sysfs accesses per
+> > > wakeup source.
+> >
+> > Ok, as the sysfs api doesn't work your use case anymore, why do we need
+> > to keep it around at all?
+> >
+> > > That said, I completely agree that reading 1500+ sysfs files at once
+> > > is unreasonable. Perhaps the sysfs approach was manageable at the tim=
+e
+> > > of [1], but moving forward we need a more scalable solution. This is
+> > > the main motivator and makes BPF the sane approach, as it improves
+> > > traversal in nearly every aspect (e.g. cycles, memory, simplicity,
+> > > scalability).
+> >
+> > I'm all for making this more scalable and work for your systems now, bu=
+t
+> > consider if you could drop the sysfs api entirely, would you want this
+> > to be a different type of api entirely instead of having to plug throug=
+h
+> > these using ebpf?
 >
-> -       if (CHECK(!skel->bss->run_cnt, "invalid run_cnt",
-> -                 "checked sample validity before prog run"))
-> -               return;
-> -
->         if (CHECK(!skel->bss->valid, "output not valid",
->                  "no valid sample from prog"))
->                 return;
-> @@ -49,10 +45,6 @@ static void check_bad_sample(struct test_perf_branches=
- *skel)
->         int written_stack =3D skel->bss->written_stack_out;
->         int duration =3D 0;
+> Almost all use cases want all this data at once, so AFAICT BPF offers
+> the best performance for that. But of course, open to discussion if
+> there is an alternative API that matches BPF's performance for this
+> use case.
 >
-> -       if (CHECK(!skel->bss->run_cnt, "invalid run_cnt",
-> -                 "checked sample validity before prog run"))
-> -               return;
-> -
->         if (CHECK(!skel->bss->valid, "output not valid",
->                  "no valid sample from prog"))
->                 return;
-> @@ -73,7 +65,6 @@ static void test_perf_branches_common(int perf_fd,
->         bool detached =3D false;
->         struct bpf_link *link;
->         volatile int j =3D 0;
-> -       cpu_set_t cpu_set;
+> I'm not opposed to dropping the sysfs approach, and I attempted to do
+> so in the v1 patch [1]. I'm not sure who else currently uses those
+> sysfs nodes, but a config flag should remove friction and could be a
+> stepping stone toward deprecation/removal.
 >
->         skel =3D test_perf_branches__open_and_load();
->         if (CHECK(!skel, "test_perf_branches_load",
-> @@ -85,19 +76,35 @@ static void test_perf_branches_common(int perf_fd,
->         if (!ASSERT_OK_PTR(link, "attach_perf_event"))
->                 goto out_destroy_skel;
->
-> -       /* generate some branches on cpu 0 */
-> -       CPU_ZERO(&cpu_set);
-> -       CPU_SET(0, &cpu_set);
-> -       err =3D pthread_setaffinity_np(pthread_self(), sizeof(cpu_set), &=
-cpu_set);
-> -       if (CHECK(err, "set_affinity", "cpu #0, err %d\n", err))
-> +       err =3D ioctl(perf_fd, PERF_EVENT_IOC_RESET, 0);
-> +       if (CHECK(err =3D=3D -1, "perf event reset", "ioctl err %d", errn=
-o))
->                 goto out_destroy;
+> [1]: https://lore.kernel.org/all/20260320160055.4114055-3-wusamuel@google=
+.com/
 
-Since you're touching this part, please use ASSERT*() macros,
-since CHECK() is deprecated.
+The patches make sense to me.
 
-sashiko thinks the same.
+Patch 2 adds a bpf selftest and corresponding:
++CONFIG_DIBS_LO=3Dy
++CONFIG_PM_WAKELOCKS=3Dy
+
+and almost green in BPF CI.
+
+Except s390 that fails with:
+
+Error: #682/1 wakeup_source/iterate_and_verify_times
+Error: #682/1 wakeup_source/iterate_and_verify_times
+libbpf: extern (func ksym) 'bpf_wakeup_sources_get_head': not found in
+kernel or module BTFs
+libbpf: failed to load BPF skeleton 'test_wakeup_source': -EINVAL
+test_wakeup_source:FAIL:skel_open_and_load unexpected error: -22
+
+We can still land it into bpf-next for this merge window.
+
+Greg,
+any objection ?
+
+If not, Samuel, could you resend and address s390 issue?
+I'm guessing wakeup sources just don't exist there.
