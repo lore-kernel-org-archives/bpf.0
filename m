@@ -1,138 +1,119 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A2D25393B
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 21:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776027757; cv=pass; b=cEreMiBfn+yxO7FJ0JyWTkIFh2cLTVNl1YHolNUIc8KmJRn5SXJuZOTmdMQQfKg3JCP2NqvTEnjz2vV+GsbwwpyF70xglGKcgfPKZ5j9SJZ/NCmGRLSPZp9jlJMzaQ66p51F8wWRWFniNlrYKNOX9acAXPivE8iJYuRXvkmcz6c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776027757; c=relaxed/simple;
-	bh=UpGn+dLSSPdFQoqgFCwZC4/yOQBu7p+tyVcKAO/vaAw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pSMDLVaP6QkL2GIAA8FYOOZZ3aSYvbeartl8TxARcKgvnD1XJFXcJPm/uVUMZF+ZKXFi0j+Yfm3zdWxSUNV6T4EqGNj3Ojr921kd8CwFBKbaZyqcKwryc5UP4qmVWYzqbM6h4y0TBb3KQnOlzmPZu8RiewcV/NNkqku+zOO+/tY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sm//m3dr; arc=pass smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1446B1FF1B5
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 21:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776028001; cv=none; b=YKkMDzdZNMkGgkKjJ1Lbdg/prwW4/geSC41/tV6ew6YUtgRhkv5GEJxttKiHj8d1sUIopC5Ex0M+pVyZXOBtaBSfIKXqeJuedrjKLgR05BuU2oeVyUak0OyAoP8gpZ31G7PubXMscObsaBLHNtdEFlXVKd7yDoS9gqKF6V2rbio=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776028001; c=relaxed/simple;
+	bh=5prrjAsOQCrUaTyxgM5/zKJOVqL/fFRv43hdqj6D9Ew=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e57rMX7WdpJbENbQNj4H9ywpflpoTrAGmWlsntWNJDQvt5K8IkLz3NPCzKFQ8j33EtDbuk9ZKGBd4BBwDqfcLBFcdF9rXQlvcy4rrjUfl617ml9kBYntTURvNRnlR6idGdhd0FZmvq49sNwu9x1cq1iu1p6nYGiKq23chKC1QLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ihJTbICk; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sm//m3dr"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488ba840146so35685385e9.1
-        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 14:02:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776027754; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lMFhArIWkd14kC51dstYmsYYU8BoFE1Uv4tEwrDUJzSi/GxMT1jjKiiZCAmt7PCmUW
-         d5ey5bGhiXkoKMCUcQuPSHh3PKhdhq9L5hfqB75S1WlqmO9Y4T5dFn9yCC160fU0vatp
-         4A60EJw648bObjcZLBh0i/nVjvkhsNpGGzutDEmkhp+nZrgavjx+563nAOIZW9JS/yT1
-         vA+d70nkARanbVpXU6o19UA+fljB3nvN6OpkzksEsW2g1HnpKnEH/VsU/Z1snpbcBZCV
-         yth3oSyB0aGoxEBNyqx6U3mMIpullaI5YHEJAM44P9E8Ns/Mvt2K1UtknHsezcjKeAxf
-         6r6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Aq7oOwp7wgRv/b9bzOLiDEXrH64adU/KQAqTS/4rqsI=;
-        fh=PRgOisS+4dL3hoju24GvIS4toL+2fehoUxNF2kPx1hs=;
-        b=cKH374JfwolG+R1TmdykCil28CjCMv6tcgJpzfCq9jnusqVra4juX7UYuKbaBQbtiy
-         BUZyUGi4tBq+znp9wrtakHbI9/xwISJ755EnL0UxkqGNvZJbi4b1nt7Eps0i0ip/HIjh
-         UskuA/G6OB8O1TohRedbyTULyQZA5cxO3QIfe12JaDY625vbWYNDwdh6OgVePJBoHlfA
-         pM4B42n6A92VMCoC0vOUeFAYEMQbjBDqthX3O6yWxywGc2AZsjTfvjG6ExTVzEsP8AyZ
-         fbLqsyCuJwp75+rt2pOmsqkFWg4x7BmkBr3n0+zkpbIfG0O98vFIEGk0Ir3VbA6J7zki
-         nGxg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ihJTbICk"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-35d965648a2so3115861a91.0
+        for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 14:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776027754; x=1776632554; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Aq7oOwp7wgRv/b9bzOLiDEXrH64adU/KQAqTS/4rqsI=;
-        b=sm//m3drAHtZ5AYDKjvyHmrldCtRSoNHnSr11xTNMAFS+i1D0wPP79SVajL3SXLx+y
-         SKItPj2KyVfXyr4Gwz9QI1ZJJ8cedQBP8JeZpj9tdMPpzMTHYwh6vee9SmefIxPAc0n5
-         KDv8zRnzgcidxwq2HedGtqEl4alNn9+BKeqYyt5qAAH+DXb6D8icOOzg0caY8UJsekez
-         rDRHEfoxxWjPgKtvqOA3lnPBZzKOMiMQ3B1bUJnIvyYKiI9HqZpaD04o0+zlxH6wO8KW
-         UcRYOoR/g2yH9vIXigz8AHXSqT2QsnMuNGn1iH3Y+1KSkjOBmTZrBSdJfDeR9skYf07F
-         yHcw==
+        d=gmail.com; s=20251104; t=1776027999; x=1776632799; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JznjFapbdb9VgsxIU6h6Rnj+fkyJs2JPdnyTNJj0hN8=;
+        b=ihJTbICkpVe2qOoAn3sR0lsunXe992rBD+iHgjkVjyzE8q+EwnJEHj6v73R4MJHZI5
+         YcpnaxurylN1goCB+lZwjucCMgjhdQrEULQnSIjUWDG0HxZ6clSi1/Vywlka4HEFHRJe
+         4Rzj9q5iZjPeWTfCa2ms+BSThwAq17Xnq4FsrMjQBO80e8yKyeZYnrgxZVWX7isnNfvP
+         lDR2ZXLM5Sy8zjoKbknz+2VQ+gkSvqT5AkditilAd5ys1qW/BkbCZpqvFmV7/xUCGBbv
+         5Dgu7LHhqgXKQKPZFCuUFnHHsr8K3dBFRkBhsJlc9/LnkoCH7nfi6QvjFKePAKuCn2Wf
+         KA+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776027754; x=1776632554;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Aq7oOwp7wgRv/b9bzOLiDEXrH64adU/KQAqTS/4rqsI=;
-        b=WkNorEFg3avzydNPubyI4cS2u9quN2+op1A9sa5uRMEh13kRQnKBNyPVb6slMCjjnQ
-         3jntHvJeaajK+m5ucWc6xFCSYtX+A5c7k6TW3gKhEyK/QmycgUUruLJZnc83oJMFwV/I
-         pg8kXhk2ScvFjQe7nlU7Ot+zgRuasnNEkKVfgvulPS65D2RnetA4mmqLomrYFjAlLjzO
-         cV8zBIDJzlR/GXLj+62eeI9YJZLiak5MnQBHo+omeZ4tJmQ4GOH5+96qXYoHqIQOUQr7
-         mtSSPA4UJNDU/th4LeLkFcVjSinzRU4vBEKqMVFhG35rm4dHWrDqsCmvEtcrlkT8NKGA
-         eakg==
-X-Gm-Message-State: AOJu0YzMHE8HGDC0lwSmwpp4o5w5mkqase6NJ4/KkbnK6N0R1+S0pA7O
-	2iXztm26w/wClV6G/U/a15H5E6dLduT/QdQ7AV0aeZam/tdnyPbD07iH86HWRAo51j2QdtLPOUc
-	rrL6lOT4WRpedP6YFxY5YPpUJHEbgBjI=
-X-Gm-Gg: AeBDies3dghc6C882zsqN01/9FGVtxcVLvfvnXqEDHkem7ytKhPq5ppLQemqoOQuQR/
-	tOah+BSDBus2jBLSfQBtuslfDp39BEblnGciOzFKCJRhhkS2VS4TyLfTb8C3dZ2yXZWk7cHhJiy
-	XZbIl/SG4mEOYjyYec5PDlT5IhXsK70lXVU8eOTgiOgjo4PythY9/WI5og9kj0DydSP2E87EqdS
-	bSuDunPByyppyDZujuuvbdUhNMWDGEz+wX4PLa2lLPoaFlBLBPNzBoNiJmCpsPYrc6u5u9FIiHJ
-	fAHyQARy9/Kr8gAI0wChYn4MB+0eLbYlejUHjR2etVftuEUFfrLETCA5XdupE6tbyEmale3thSt
-	IG1OU7wbNSIa32f09xzKhreDIdw==
-X-Received: by 2002:a05:600c:8710:b0:485:3abe:ab86 with SMTP id
- 5b1f17b1804b1-488d67bbd1dmr160134105e9.4.1776027754164; Sun, 12 Apr 2026
- 14:02:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776027999; x=1776632799;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JznjFapbdb9VgsxIU6h6Rnj+fkyJs2JPdnyTNJj0hN8=;
+        b=XiV0OF4T1lPSbKGJFYgtVAvL9UOgwm2DaF8OsXMKRq8yJuOCwiTviLngZNi2NY1Dug
+         QddHEzv62pGgpk0IDLicBYYpxgf9epBvbje07dGETwcQvU3p6LMnu9UVPNn61Os8VhYN
+         Zkcl8asdrSwFXYWYg7Vn1fSdlCRVUcJxdQOmpDWVJwVr3/5t1MMYPVh9U15q6BS96QmI
+         flkXDXC0YYwU5ARpwXEwf3GSdHgNJbazB9PpfscshDTzaaFHqK3QUWQR5OR/g6kXv+Z6
+         MFiMq/P94+PLkgcTcw7bk1oOLdGLKSLr/RIv9VHdQabNER/adEeNBO3S4UCwTtcebvBB
+         O1kA==
+X-Gm-Message-State: AOJu0Yzf+I4lzcaPBkgATefoYm0nET0AVNq/7wSnJxJivkqGSIMbxb2G
+	Uh8KGAjW4oaKGSnPjd6R/cxw7Sgkg2NqphKvG6kYUhFikRHfUCshN/2X3n8MQQ==
+X-Gm-Gg: AeBDieuFYMViuKlmV2RFYSH4lKq7qST+WNuA0hqNJD3fEwaTQC0BrCiCUyieHZNL7E/
+	1kA/2g4pemEfdAVi8vQNlopclXKDgMk6qoe3dRRns9fsjB9emmT6nHEomXN1Mia2DI9MrQ59y0q
+	nR6Fs2gXN0hBcZixreAIqJxUPE05UZ+fvMX3QQVR4oUh/wfScUGPkFnqtdTWgdbSod0oXwTrMT2
+	ob1QJlOMqtzjTRKl0vya+tuz3gXrL9HVyKhY6zifHPf/beGJk0+Tw773XwMKfL6ooILn1nfMOxb
+	YkC51d5gKX65ic907YquZwcP8m7nod0m9TKM23j91fEf0wNujZiOjMRcYv+SdNtHIwn+EKJsrmb
+	HRH4ciP0xU1IJpvT9oLeOVYZbgyio0ChkGPiKE3ZPAHTumgnmVZrwj93gAt+Wc6Amlq+fIbYl/Z
+	vx0IMSWWZfXDGQ39+NqAYZmtUuzMh+tBg86OrnjNIv1JXYb0Vm62d2SIvtTFxae/6DLfphPW8Xw
+	TtNU9I7ndEi2hcmEOqHPk6mXo34YW1rBXScG7SWzvz3t3ovuMI1Jqxmty8AUA==
+X-Received: by 2002:a17:90b:28cc:b0:35d:aeb2:25b2 with SMTP id 98e67ed59e1d1-35e428cda1bmr11477378a91.27.1776027998881;
+        Sun, 12 Apr 2026 14:06:38 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e3517f2a0sm17082205a91.17.2026.04.12.14.06.38
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 12 Apr 2026 14:06:38 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	eddyz87@gmail.com
+Subject: [PATCH bpf-next] selftests/bpf: Use memfd_create instead of shm_open in cgroup_iter_memcg
+Date: Sun, 12 Apr 2026 14:06:36 -0700
+Message-ID: <20260412210636.47516-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408175217.1011024-1-song@kernel.org>
-In-Reply-To: <20260408175217.1011024-1-song@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 12 Apr 2026 14:02:23 -0700
-X-Gm-Features: AQROBzBq3S8-HfXSLmejYXIQb96lGp7xSb_yp_4gi6lNj4FXfoMkza2Ce3qtFN4
-Message-ID: <CAADnVQKMyGyw6vYVPVgT_G-CfbabARTiisd0dKV4U+8SY3qcEQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add BPF struct_ops + livepatch
- integration test
-To: Song Liu <song@kernel.org>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Kernel Team <kernel-team@meta.com>, Yafang Shao <laoar.shao@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 8, 2026 at 10:52=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> Add a selftest that demonstrates BPF struct_ops controlling kernel
-> behavior through livepatch. A kernel module (test_klp_bpf) livepatches
-> cmdline_proc_show() and delegates output to a BPF struct_ops callback.
-> The BPF program writes a custom string to /proc/cmdline via the
-> bpf_klp_seq_write kfunc.
->
-> Components:
-> - test_kmods/test_klp_bpf.c: kernel module that registers a
->   klp_bpf_cmdline_ops struct_ops type, livepatches cmdline_proc_show,
->   and provides bpf_klp_seq_write kfunc for seq_file writes
-> - progs/test_klp_bpf.c: BPF struct_ops program implementing
->   set_cmdline callback
-> - prog_tests/test_klp_bpf.c: userspace test verifying /proc/cmdline
->   output with and without BPF struct_ops attached
->
-> Assisted-by: Claude:claude-opus-4-6
-> Signed-off-by: Song Liu <song@kernel.org>
->
-> ---
->
-> This shows an alternative solution to the idea proposed in [1]. This
-> approach doesn't need any kernel change.
->
-> [1] https://lore.kernel.org/bpf/20260402092607.96430-1-laoar.shao@gmail.c=
-om/
-> ---
->  tools/testing/selftests/bpf/Makefile          |   2 +-
->  .../selftests/bpf/prog_tests/test_klp_bpf.c   | 109 ++++++++++++
->  .../selftests/bpf/progs/test_klp_bpf.c        |  26 +++
->  .../testing/selftests/bpf/test_kmods/Makefile |   3 +-
->  .../selftests/bpf/test_kmods/test_klp_bpf.c   | 166 ++++++++++++++++++
->  .../selftests/bpf/test_kmods/test_klp_bpf.h   |  12 ++
->  6 files changed, 316 insertions(+), 2 deletions(-)
+From: Alexei Starovoitov <ast@kernel.org>
 
-It looks good, but takes 1.6 seconds on a non-debug kernel.
-This example can stay out of the tree.
+Replace shm_open/shm_unlink with memfd_create in the shmem subtest.
+shm_open requires /dev/shm to be mounted, which is not always available
+in test environments, causing the test to fail with ENOENT.
+memfd_create creates an anonymous shmem-backed fd without any filesystem
+dependency while exercising the same shmem accounting path.
+
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+index 88fc3e83d2b7..b7c18d590b99 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+@@ -107,10 +107,10 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 
+ 	/*
+ 	 * Increase memcg shmem usage by creating and writing
+-	 * to a shmem object.
++	 * to a memfd backed by shmem/tmpfs.
+ 	 */
+-	fd = shm_open("/tmp_shmem", O_CREAT | O_RDWR, 0644);
+-	if (!ASSERT_OK_FD(fd, "shm_open"))
++	fd = memfd_create("tmp_shmem", 0);
++	if (!ASSERT_OK_FD(fd, "memfd_create"))
+ 		return;
+ 
+ 	if (!ASSERT_OK(fallocate(fd, 0, 0, len), "fallocate"))
+@@ -123,7 +123,6 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 
+ cleanup:
+ 	close(fd);
+-	shm_unlink("/tmp_shmem");
+ }
+ 
+ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+-- 
+2.52.0
+
