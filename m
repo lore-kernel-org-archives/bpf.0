@@ -1,35 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55F714A8B
-	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 00:50:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE24178372
+	for <bpf@vger.kernel.org>; Sun, 12 Apr 2026 01:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775955033; cv=none; b=Xe/uDxUysVVNnlp8MzziFc+SwSpErRKK/BP0TJrwKVC/CInBvNKcriz8PT8Gqq6iWrcqdJRrnGDrubLnPmvYOuRmi3b6HgiNEFNnfZPIwVYpTgGDpADEaYlR4VNCV4DA4R26jTHKHNxXmmn6exJBfxM+Uo7+Ur6KZz34yJwhYMk=
+	t=1775956743; cv=none; b=b/KwEE8/NDfU2b1ar38OyVFhqoTceL7pU8FvGgA5dOrXQhT+qYou9yw9j5c9F5N1qTpiG+4za36r1WwUHhwYvGAAPCAoBT8l09fMyRZ+X2AQVkXHmeq+AAYABe1iQHuU17pUIVufhNcuSMp2lDVxyHSPE0C3u1QN2iNDcWTo8rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775955033; c=relaxed/simple;
-	bh=fK1FXWNs8ISsph7h4NrWzJV2n/ky7rAWlRge3PB7VuE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ViDM1oQo/5N0aYBPKEf6UGzQszo3JzxuDpNn9nf75Mn0lRsr1whh7BH9l4DxEwvC4m8JLQIt2panhn0E4z0zSbHBgMDJYIaJPUGOO39L5hhJVy2axsrGeYZ0XUVSgN4e0cHf8+CON/rqp3D4H0I2KOK8BXNYlPuTPVFdhBrC9dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3KfZiTb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1775956743; c=relaxed/simple;
+	bh=8ntoPmHZY3X2Gj54qGTLdBdrZ/XF5QqzOkEfELtfGg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L5IUKuisrCbP36RPslNSSb9ZWMtCHRK1UXkRETPJYUBQChxxK1nwRQWTK9NhdAQjiEH3X6J5LzoL5kzMFfJlsR3/OjRknqGoehk+V/KkmM2AXS8TFHY6AZ/tZhQy/ZtK1KEjHSIOxOzTDnD0wIZKFq/HVqUBCkCuSkmijZDN7+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=IRHUZtf4; arc=none smtp.client-ip=209.85.216.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3KfZiTb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880D2C116C6;
-	Sun, 12 Apr 2026 00:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775955032;
-	bh=fK1FXWNs8ISsph7h4NrWzJV2n/ky7rAWlRge3PB7VuE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=O3KfZiTbPLs1uL8Ei0Z7mc1GjQs7+iaIPgoLki/KTQFZo3mexhHymcIznA/TB7YXn
-	 oQnc4xRxZTM2Sg+QIq5Ch4A8K4aK79C3CcBrkOWpHqsK9B4ZG5+9EuM4WK5akBYm0z
-	 btJ20vVGjyGtpWlpp54VdQ43eyVgMQ/IHNJV3lKx3wqelbGB35GInnaNAqJN1TMMSz
-	 V+yTrgfKKKTRijbN+YZu3tDjK9Fnc9L1BR04CmEUC8JI8ZEh3FH+2Bi8c7WkcurjIO
-	 o/6V+/igKkJROo5tZSTDQMDad8M95hNPSkW8UMistBioEi3Aqxxo0KB2R1w53iEFvv
-	 Ad7N2XBuGvtUA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D4A3809A8B;
-	Sun, 12 Apr 2026 00:50:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="IRHUZtf4"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-3591cc98871so1611111a91.3
+        for <bpf@vger.kernel.org>; Sat, 11 Apr 2026 18:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1775956741; x=1776561541; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zyQ+iEufDlo0a9rm7YXPETUX/QfJoarrVwp4Y8d0YfQ=;
+        b=IRHUZtf4zeWwjl9E+wYXCcz/mZGZwk5dz9l/OjOiAQZbN7oD3UGz7Ypmguw7FrOvNa
+         YjC56Tl3ZUaDhdpRiJpwy0tkya/eHpFeOc0M2m1fAsjixryaXF9rlbPAlaae4AHGZ1jl
+         RP+om2Yoc3bEyy3IP4Kj5B7nX/jktERghtWQMI6ls9epjg2tdWi4Lr0qreS0at0MzxDE
+         kwDuxJwOsD2zxjnHd9JZFkPGSWiQ+a5C63MSTUfjwRHoWUvnPnzd0MHaZSCrp3UQ4Cni
+         Qk9qHUSYWAwS2/skaW6pTtL3eQV/FFNPC10Gqxyl20X46kpkSa7nVc1cIBr82JvM0Wmd
+         hhaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775956741; x=1776561541;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zyQ+iEufDlo0a9rm7YXPETUX/QfJoarrVwp4Y8d0YfQ=;
+        b=dKxnihLlEgNNatzwpEOk33TXmYz66EpE/PLVxKgWVuqod7NwZKM48vdBqoqfvDRc9L
+         zM76XuEFyoe3iyVRnLUjTewpJnYVxf6W4I5cDSsjOdw7IZcuH9LiIPqYZBo/JR5MJnEt
+         xnjqZXsdwGtW9kgKKu8Z8/6bFyaarjQy9gPbtpfEJr6ts+CP4tDJSQm0W7qJMRNcCAMF
+         lV9BQP4dob1HvQk6liNNy+BG1PRX88TStxM6kDVFrFlh8oFE8UOYdmKP8YU26pCvw8Oc
+         Mt9ELnKQonhZj2S+laVo6fRPpxbGDKO+7bOO8wawcX6znDxZBjtij+IfV65NateKyOF3
+         Vkng==
+X-Gm-Message-State: AOJu0YxRC6RJ0mNHlAezFar1FaMTrdsGU9Cg6I9wN0NzxZpTCBLs7dA9
+	fyhY/BM2rTj/OJ5v8A0DLjwzWUXQ4DXH8d27Fu0Rhn6yAb2+6et1XvpoTuZ9qxVZPFTHV8VbmHJ
+	rmGH8FMmuIQ==
+X-Gm-Gg: AeBDieteb/4gCvWFD90TuXxocONMAL0bn7kqmOLMMVXA8D0MLW9qaftpie8rml2yo0w
+	gb7qhbC55CmNlpXQogh4in8gzp+0l+JLKs5WIwDijyDcZrFO1mLIN62/aDl4K4uww2b/0mzqHXZ
+	EbEblxFv6YpEl3bcppBznlOiMNCzXYAbwzi5B/kejeHXgR3Bp2DCuNi9Qg70CUF/+BraPD0qUH0
+	msd7wtMxMsgn6+NW5r2ukgoA8FJboMEeGr27j9DaE24+MtHbc7v3+rQaTb9HobQ7q4nrrmJXV2Y
+	piV2MdLW4umRQ/OS4uTepM9+dXeEViGLLzn5IoDUPWXnvgpbYZw4ZIidipL4niP1LAjiEx7//D0
+	CqP7JOaU46XtiFXCIl45yoZtdHZBaU55gGGBrrYTTrhEIWhEvlh/hrkHs0Q7MUuH0JudfzMJ5X5
+	XBzw==
+X-Received: by 2002:a05:6a20:12d3:b0:39f:a91:783 with SMTP id adf61e73a8af0-39fe3c92b4amr9561982637.4.1775956740889;
+        Sat, 11 Apr 2026 18:19:00 -0700 (PDT)
+Received: from krios ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79216ffa72sm6569310a12.6.2026.04.11.18.18.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Apr 2026 18:19:00 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v6 0/9] Introduce arena library and runtime
+Date: Sat, 11 Apr 2026 21:18:48 -0400
+Message-ID: <20260412011857.3387-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,39 +76,156 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Simplify do_check_insn()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177595500580.3127504.6650770601785541715.git-patchwork-notify@kernel.org>
-Date: Sun, 12 Apr 2026 00:50:05 +0000
-References: <20260411230001.71664-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260411230001.71664-1-alexei.starovoitov@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@kernel.org, memxor@gmail.com, mykyta.yatsenko5@gmail.com
 
-Hello:
+Add a new subdirectory to tools/testing/selftests/bpf called libarena,
+along with programs useful for writing arena-based BPF code. This
+patchset adds the following:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+1) libarena, a subdirectory where arena BPF code that is generally useful
+to BPF arena programs can be easily added and tested.
 
-On Sat, 11 Apr 2026 16:00:01 -0700 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> Move env->insn_idx++ to the caller, so that most of
-> check_*() calls in do_check_insn() tail call into the next helper.
-> 
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> 
-> [...]
+2) An ASAN runtime for BPF arena programs. BPF arenas allow for accessing
+memory after it has been freed or if it is out of bounds, making it more
+difficult to triage bugs combined to regular BPF. Use LLVM's recently added
+support for address-space based sanitization to selectively sanitize just
+the arena accesses.
 
-Here is the summary with links:
-  - [bpf-next] bpf: Simplify do_check_insn()
-    https://git.kernel.org/bpf/bpf-next/c/2ec74a053611
+3) A buddy memory allocator that can be reused by BPF programs to handle
+memory allocation/deletion. The allocator uses the ASAN runtime to add
+address sanitization if requested.
 
-You are awesome, thank you!
+The patch includes testing for the new allocators and ASAN features that
+can be built from the top directory using "make libarena_test" and
+"make libarena_test_asan". The generated binaries reside in libarena/.
+The patch also adds test-progs-based selftests to the codebase for the
+libarena code, so the new tests are run by ./test_progs.
+
+The patchset has the following stucture:
+
+1-2: Addresses a verification failure triggered by SCALAR += PTR_TO_ARENA
+instructions.
+
+3-4: Minor changes to selftest headers to prepare for the introduction
+of libarena.
+
+5-7: Add the libarena directory and testing scaffolding, and introduce
+the ASAN runtime.
+
+8-9: Add the new buddy memory allocator along with self-contained and
+prog-tests-based selftests.
+
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+HISTORY
+=======
+
+v5->v6 (https://lore.kernel.org/bpf/20260410163041.8063-1-emil@etsalapatis.com)
+- Fix subreg_def management for SCALAR += PTR_TO_ARENA operations (AI)
+- Add more selftests for the SCALAR += PTR_TO_ARENA patch (Sashiko)
+- Adjust fls() operation to be in line with the kernel version (Sashiko)
+- Address Sashiko selftests and debugging nits
+- Add ASAN loadN and storeN _noabort variants and associated BTF anchor
+- Remove unnecessary bit freeing of buddies during block splitting
+
+v4->v5 (https://lore.kernel.org/bpf/20260407045730.13359-1-emil@etsalapatis.com)
+Omitting various nits and fixups.
+- Properly adjust subreg_def for scalar += ptr_to_arena calls (Sashiko)
+- Remove extraneous definition from prog_tests/arena_spin_lock.c (Song)
+- Trim extraneous comments from ASAN and buddy (Alexei)
+- Remove asan_dummy call and replace with function pointer array (Alexei)
+- Remove usersapi.h header and merge it into common.h (Alexei)
+- Replace ASAN macros with function calls (Alexei)
+- Embed buddy lock into the struct and move the buddy allocator to __arena_global
+  (Alexei)
+- Add commenting for buddy allocator constants (Alexei)
+- Add default buddy allocator directly in common.bpf.c, so that the user does
+  not need to define it.
+- Expand test harnesses to dynamically find individual selftests. Now the
+  selftests also reports each test individually (e.g., 5 entries for the
+  buddy allocator instead of 1). This brings them to par with the rest of
+  the test_progs.
+
+v3->v4 (https://lore.kernel.org/bpf/20260403042720.18862-1-emil@etsalapatis.com)
+- Add Acks by Song to patches 1-4.
+- Expand the verifier's handling of scalar/arena operations to
+  include all 3-operand operations in Patch 1 (Alexei)
+- Add additional tests for arena/arena (allowed) and arena/pointer (not allowed)
+operations in Patch 2
+- Remove ASAN version of the library from default compilation since it requires
+LLVM 22 and up (CI)
+- Rework buddy allocator locking for clarity and add comments
+- Fix From: email to be consistent with SOB
+- Address (most) Sashiko comments
+
+v2->v3 (https://lore.kernel.org/bpf/20260127181610.86376-1-emil@etsalapatis.com)
+Nonexhaustive due to significant patch rework.
+- Do not duplicate WRITE_ONCE macro (Mykyta, Kumar)
+- Add SPDX headers (Alexei)
+- Remove bump/stack allocators (Alexei)
+- Integrate testing with test_progs (Kumar)
+- Add short description of ASAN algorithm at the top of the file (Alexei)
+
+v1->v2 (https://lore.kernel.org/bpf/20260122160131.2238331-1-etsal@meta.com/)
+
+- Added missing format string argument (AI)
+- Fix outdated selftests prog name check (AI)
+- Fixed stack allocation check for segment creation (AI)
+- Fix errors in non-ASAN bump allocator selftests (AI)
+- Propagate error value from individual selftests in selftest.c
+- Removed embedded metadata from bump allocator as it was needlessly
+  complicating its behavior
+
+
+Emil Tsalapatis (9):
+  bpf: Upgrade scalar to PTR_TO_ARENA on arena pointer addition
+  selftests/bpf: Add test for scalar/arena pointer addition
+  selftests/bpf: Move bpf_arena_spin_lock.h to the top level
+  selftests/bpf: Deduplicate WRITE_ONCE macro between headers
+  selftests/bpf: Add basic libarena scaffolding
+  selftests/bpf: Add arena ASAN runtime to libarena
+  selftests/bpf: Add ASAN support for libarena selftests
+  selftests/bpf: Add buddy allocator for libarena
+  selftests/bpf: Add selftests for libarena buddy allocator
+
+ kernel/bpf/verifier.c                         |  73 +-
+ tools/testing/selftests/bpf/.gitignore        |   2 +
+ tools/testing/selftests/bpf/Makefile          |  28 +-
+ .../testing/selftests/bpf/bpf_arena_common.h  |   4 -
+ .../bpf/{progs => }/bpf_arena_spin_lock.h     |   4 +-
+ tools/testing/selftests/bpf/bpf_atomic.h      |   4 -
+ .../testing/selftests/bpf/bpf_experimental.h  |   3 +
+ tools/testing/selftests/bpf/libarena/Makefile |  77 ++
+ .../selftests/bpf/libarena/include/asan.h     | 118 +++
+ .../selftests/bpf/libarena/include/buddy.h    |  92 ++
+ .../selftests/bpf/libarena/include/common.h   |  68 ++
+ .../bpf/libarena/include/selftest_helpers.h   | 121 +++
+ .../bpf/libarena/selftests/selftest.c         | 188 ++++
+ .../libarena/selftests/st_asan_buddy.bpf.c    | 243 +++++
+ .../bpf/libarena/selftests/st_asan_common.h   |  47 +
+ .../bpf/libarena/selftests/st_buddy.bpf.c     | 211 ++++
+ .../selftests/bpf/libarena/src/asan.bpf.c     | 559 +++++++++++
+ .../selftests/bpf/libarena/src/buddy.bpf.c    | 903 ++++++++++++++++++
+ .../selftests/bpf/libarena/src/common.bpf.c   |  74 ++
+ .../bpf/prog_tests/arena_spin_lock.c          |   7 -
+ .../selftests/bpf/prog_tests/libarena.c       |  62 ++
+ .../selftests/bpf/progs/arena_spin_lock.c     |   2 +-
+ .../selftests/bpf/progs/verifier_arena.c      | 127 +++
+ 23 files changed, 2984 insertions(+), 33 deletions(-)
+ rename tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h (99%)
+ create mode 100644 tools/testing/selftests/bpf/libarena/Makefile
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/asan.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/buddy.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/selftest.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/buddy.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/common.bpf.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
