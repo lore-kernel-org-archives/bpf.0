@@ -1,536 +1,305 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DDD366573;
-	Mon, 13 Apr 2026 18:29:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776104974; cv=none; b=bxqFRXxP+KYJTl8QSzXEHCdVK3uJycFbpthitc3Jz5g/SOpU9O0Z68uPh0YmOwwyGPh2C9W0d4Hw2FOnvPs15g+m/E73FeeJiN6T3o/9o9nP6RhrmcXAHyjGeQMCrxw5MZBY8ztQuvu9J1wn7XR59bO7S13upUkDQaAna3+VaSM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776104974; c=relaxed/simple;
-	bh=2ArdSjKR2RlI+jqmygWwNX6zIeyTDO5eF6SkrpbWQO8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WLwwD40Yg5qcGxwLhg8kMrAybNcEj9dd77kCxFCNZxCj5d58X9yxhpqf/ofZy17LU+8zckngynHusyCQzAcz8DDYCPIyQEaVxjC0tTGVLoWkd4QeWLaiLQFGBPwJcNj7eZPLqq0YaHxl8xmGvUz4OLoBlcz1zjzS+y76sneQEcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l+QWbYiW; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4105534DCD9
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 18:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776106430; cv=pass; b=DIhZV5eVGw+PRYtWoGlUxa9JmRZ140tDZNlW23xbkDwRQIt+ZE8ARSdq7CTuTV516+FX/e6T0COJsNCnp5JtZvYfDtNv7FpECFNGl5XEild7hRdUcIVxC5Jn52afCfZSmMM6eshk16pW9aporjFSL61iKARZzi13IBx+2lWBarY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776106430; c=relaxed/simple;
+	bh=iRaMeK4JhgvHiM/J3hdyo6IQijxuTpMUhCVy42mVQqk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=es7x//Wn0JnC+rsxmxF90C5FKxRQZCOoeKNeEOrWbJX7FIG035kF6cNlCJ+nyE7tgfdHdfoM1onHxGMJ2+uj+nLUp2HybwOWFArLcc8z12LQZNNL06I4TmYNS/RYknewJ4Ond4Ii0zZRCAmimagM8I/tUmOuIYgW59IBRbMwuBI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YKJacyM1; arc=pass smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l+QWbYiW"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id DEF001A322D;
-	Mon, 13 Apr 2026 18:29:31 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B31185FFB9;
-	Mon, 13 Apr 2026 18:29:31 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EB7DD104504B7;
-	Mon, 13 Apr 2026 20:29:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776104969; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=15vke5PQWZFrVkgnnIyubbncfs+/GAw/Iqj1wymNY98=;
-	b=l+QWbYiWMGIz4qwFLYvxVvMGDaqNYLxl8K1kxh6kptb7szLGWRQXA8zBqpP99PBjYfp8qF
-	hoA1ZbpPykPq9PL8Qqxin+5v7f2di/xPCQjqjFU6MHvnHnb7DzKKp7Kxr2TzD0HFALS1qP
-	5ngtttZu6iq7pgtx9fYP2GUHSigLJA/zant3mcWAwXJWO57o7EYixDOPIMLE+oxnKesxjF
-	k+Q6hecUSaC5jbC0cNStpOirpqlYFEaQFckGdH4/SvkvwlJl/Ra4Hd/e9I1L+OYr5wYV4c
-	pl4AOaTC3FiTflrqPJAOjxm2TiiwfD3O7esj3A9Z/06x97gRP2S9RRjFwaQYsA==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Mon, 13 Apr 2026 20:28:48 +0200
-Subject: [PATCH RFC bpf-next 8/8] selftests/bpf: add tests to validate
- KASAN on JIT programs
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YKJacyM1"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488af96f6b2so63754995e9.0
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 11:53:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776106427; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eWakmuzkWTp7fRKuQEBo6g6P4w7l8h4DPr7LFpVa2KrKv2YQcAT7T5oKVgDAEFfgOQ
+         tzbavCDf3bWyDFLuIESnIVS6/W1Sf7ZfHinxRJmE62pdrCmv4qWGZLIzagWTN68nnzyk
+         CDlpIcluEvycpo6BYgz/siqNzyMSNtvis1gan6pk+YnWZ+ueHqATPAuwwfKhKLTgRvof
+         uRCMAhQhifyjXijDdrfUmChxHA+J/trf/s66GIp5k0ylMeL/asHVFg5hjDAiLNz8TyER
+         2qARQK/iYEchOWlKk3wDvEen7DJ7kLumy4Om7UVzwQqPl4p7fvZ00Lk/mJUaiF0Kf0Pg
+         WOMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+yw8Sc7Sdmmz9WVAmIiXHRX4MTWcNUZn7bCmbySdGTo=;
+        fh=YNWt4Y0wqzitVpgmbcQBCiXmYTJYDAY+xbXi8GMD3D4=;
+        b=KBIAZYlK2kQQC37ex9x0UHbUZUHGA2MIUROKn0epFO3eC0YUdLuCPDlcovX0l4wyLp
+         WAo4wMWnjmV/AUk5D1PopIaGnmDfqhdcA4Yv5tacP2DkQpkc7kRe5lLyqY0F/1M84Qag
+         wMCiuawfGFua9nuljCHEsqidshjI3IOP/hdY5hTILzcGANvy7ik72Cf8NgNdcSMqeliS
+         p1uQ2INwkP2ovDWBmc/XqaPSzFpL28KuPnradECr5hMCPpvztqr5MHUZUfNkV3pQSQZS
+         7nh3o32UISk37H5CMZIO9jMH7r3znVZUCW4ePpIILsGVb1OoknUzEFSi/RL/9THrnF9N
+         bE0w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776106427; x=1776711227; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+yw8Sc7Sdmmz9WVAmIiXHRX4MTWcNUZn7bCmbySdGTo=;
+        b=YKJacyM1PNRAXoDmBBfLGZdURx+AeE8PSNUwY89WkFNS4qe+puoXFnitFoRuF77+JW
+         Iil7vfcl5ryQ37MbDQtveOd/Oz5Wd6rTArI0b6y9ug3uAbUGDeIOhSY7XdlnpB2A84vY
+         oOrS5buVJpY54IgjzyxQgie5JsQcEf8FUgT2WOK7EUrlqeq9FPIqmLRwMWGXoIHRB2F2
+         H3Rhu7oLQwXinknpLC8Zsd1fuxrcECs74u+q0s4HZnBwnH91gDPpeHC/60UECheeOYNM
+         k8rnkwZSRi61UOMtHQsCJD4VZ3f4/+KfGxkA8rH1Aa3tVTjuj5dQ9PucPWxmPRc5b0SQ
+         opaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776106427; x=1776711227;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+yw8Sc7Sdmmz9WVAmIiXHRX4MTWcNUZn7bCmbySdGTo=;
+        b=eliuIZ7cj5+xdpCzQVqwbdjfKqTZ519AjSQDHvalfEcbYNtamyILkeHa3pIzVIg1iZ
+         HBl4+UATJc2oAhsVpb7C04Hz05TTIgn9dVqikT4uQfBEo7IsV/VhSvZvmuAR1ZgoFSKJ
+         OLivCPhC7MXdzF7xiiDHNkIUH0p4XrBLJ45cpfCZagni1/okw71uns5jAF6iU/gnA+H0
+         6+rTOB4p398G87Cp9r9ZI+bzce5Oe0aZ10z4UeJLLfBBYbGUJvXzy6g1CxJdLdZTX7+g
+         X9f5sJ06Xd+y4TSWYv/q2VykDGc1dVbPaiQfqIy7MkEi5ay/RGoFdo2DihLH8Rz6KP+1
+         +uxg==
+X-Forwarded-Encrypted: i=1; AFNElJ8nyBBk9Fx/na2nkUO4/yH+PaieP0fT2ll5d/+/a7uh9LjN5qKrVEkGqrWz0FI64p14lJQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwUETEHfATV/ZGHicdqZJFSg45GI6Rq3fdy17VYRfmETprKTbR
+	j3dHmjCz0oOFjd2mvM0RRsLM0MIS/QE0H5j5sgN5TwneCT2NxD6lojONOY1V1o5diVVmIURKP3J
+	9LPIs3vFJMJpBq5osTEQJuTc0dG8HSxY=
+X-Gm-Gg: AeBDiescU2EIGGY/QAtPzKtqGyHyx3lCwxHvQhydq8xecOuMXWv9gwBDnYoIcbjqHY3
+	QuFJj52T+Mp7lV8g4E2Yod2a6cLN2twooLPS8usgLWMCqpCGYfnJahJBwWY6NzfiqMEuyEN30vF
+	75YFUgicUNGNAlxjtF7oYk+2N27LSi2W1ZbdmnK8KSh9Rv7GGTDjScQmhYG8HzOyMwW0YTnxq24
+	O1ldfFhXcBsKTUXgO5aIEpuOSnd8uksU97czABca2VqSx4W/2h9FRLzZ0X1t+Nk18SkJQ7BfcZi
+	ACoN02yeT4wa5ZuIfP7BEPq6ra6TBtaibsQlXM2KLVE0e27kKrwF/MAMNyk8j+jLgCY8kYil6eK
+	krXwYRzE64v+BKKAxYHrHeIr5Cw==
+X-Received: by 2002:a05:600c:a010:b0:487:300:d9ca with SMTP id
+ 5b1f17b1804b1-488d68af201mr215291025e9.31.1776106427352; Mon, 13 Apr 2026
+ 11:53:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260413-kasan-v1-8-1a5831230821@bootlin.com>
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
-In-Reply-To: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
- Alexander Potapenko <glider@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com, 
- linux-mm@kvack.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.1
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260412022714.1955495-2-bestswngs@gmail.com> <20260412022714.1955495-3-bestswngs@gmail.com>
+ <DHRD7K4Q4R0E.2HT85NT44DKZI@etsalapatis.com> <CAADnVQLhnnt8uGoZk=38zH1jh_9Uy8ah=NdcoBE71qGkuH2O5g@mail.gmail.com>
+ <adzBmOuXCZ0vHnbg@SLSGDTSWING002>
+In-Reply-To: <adzBmOuXCZ0vHnbg@SLSGDTSWING002>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 13 Apr 2026 11:53:34 -0700
+X-Gm-Features: AQROBzAu4hxvmTGtVwVF6u1a3jFDsvQD0ZbaSyf7ca2eybMqvd_9Sa8KTcEqCYc
+Message-ID: <CAADnVQLxJ4+uAEOLw4+w-aAsObaJFBLE4uppqAd5b06uAD=3Fw@mail.gmail.com>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Fix use-after-free of arena VMA on fork
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Barret Rhoden <brho@google.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Xiang Mei <xmei5@asu.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a basic KASAN test runner that loads and test-run programs that can
-trigger memory management bugs. The test captures kernel logs and ensure
-that the expected KASAN splat is emitted by searching for the
-corresponding first lines in the report.
+On Mon, Apr 13, 2026 at 3:12=E2=80=AFAM Weiming Shi <bestswngs@gmail.com> w=
+rote:
+>
+> On 26-04-12 14:30, Alexei Starovoitov wrote:
+> > On Sun, Apr 12, 2026 at 10:50=E2=80=AFAM Emil Tsalapatis <emil@etsalapa=
+tis.com> wrote:
+> > >
+> > > On Sat Apr 11, 2026 at 10:27 PM EDT, Weiming Shi wrote:
+> > > > arena_vm_open() only increments a refcount on the shared vma_list e=
+ntry
+> > > > but never registers the new VMA or updates the stored vma pointer. =
+When
+> > > > the original VMA is unmapped while a forked copy still exists,
+> > > > arena_vm_close() drops the refcount without freeing the vma_list en=
+try.
+> > > > The entry's vma pointer now refers to a freed vm_area_struct. A
+> > > > subsequent bpf_arena_free_pages() call iterates vma_list and passes
+> > > > the dangling pointer to zap_page_range_single(), causing a
+> > > > use-after-free.
+> > > >
+> > > > The bug is reachable by any process with CAP_BPF and CAP_PERFMON th=
+at
+> > > > can create a BPF_MAP_TYPE_ARENA, mmap it, and fork. It triggers
+> > > > deterministically -- no race condition is involved.
+> > > >
+> > > >  BUG: KASAN: slab-use-after-free in zap_page_range_single (mm/memor=
+y.c:2234)
+> > > >  Call Trace:
+> > > >   <TASK>
+> > > >   zap_page_range_single+0x101/0x110   mm/memory.c:2234
+> > > >   zap_pages+0x80/0xf0                 kernel/bpf/arena.c:658
+> > > >   arena_free_pages+0x67a/0x860        kernel/bpf/arena.c:712
+> > > >   bpf_prog_test_run_syscall+0x3da     net/bpf/test_run.c:1640
+> > > >   __sys_bpf+0x1662/0x50b0             kernel/bpf/syscall.c:6267
+> > > >   __x64_sys_bpf+0x73/0xb0             kernel/bpf/syscall.c:6360
+> > > >   do_syscall_64+0xf1/0x530            arch/x86/entry/syscall_64.c:6=
+3
+> > > >   entry_SYSCALL_64_after_hwframe+0x77  arch/x86/entry/entry_64.S:13=
+0
+> > > >   </TASK>
+> > > >
+> > > > Fix this by tracking each child VMA separately. arena_vm_open() now
+> > > > clears the inherited vm_private_data and calls remember_vma() to
+> > > > register a fresh vma_list entry for the new VMA. If remember_vma()
+> > > > fails due to OOM, vm_private_data stays NULL and arena_vm_close()
+> > > > skips the cleanup for that VMA. The shared refcount is no longer
+> > > > needed and is removed.
+> > > >
+> > > > Also add arena_vm_may_split() returning -EINVAL to prevent VMA
+> > > > splitting, so that arena_vm_open() only needs to handle fork and th=
+e
+> > > > vma_list tracking stays simple.
+> > > >
+> > > > Fixes: b90d77e5fd78 ("bpf: Fix remap of arena.")
+> > > > Reported-by: Xiang Mei <xmei5@asu.edu>
+> > > > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> > > > ---
+> > > >  kernel/bpf/arena.c | 23 +++++++++++++++++------
+> > > >  1 file changed, 17 insertions(+), 6 deletions(-)
+> > > >
+> > > > diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> > > > index f355cf1c1a16..3462c4463617 100644
+> > > > --- a/kernel/bpf/arena.c
+> > > > +++ b/kernel/bpf/arena.c
+> > > > @@ -317,7 +317,6 @@ static u64 arena_map_mem_usage(const struct bpf=
+_map *map)
+> > > >  struct vma_list {
+> > > >       struct vm_area_struct *vma;
+> > > >       struct list_head head;
+> > > > -     refcount_t mmap_count;
+> > > >  };
+> > > >
+> > > >  static int remember_vma(struct bpf_arena *arena, struct vm_area_st=
+ruct *vma)
+> > > > @@ -327,7 +326,6 @@ static int remember_vma(struct bpf_arena *arena=
+, struct vm_area_struct *vma)
+> > > >       vml =3D kmalloc_obj(*vml);
+> > > >       if (!vml)
+> > > >               return -ENOMEM;
+> > > > -     refcount_set(&vml->mmap_count, 1);
+> > > >       vma->vm_private_data =3D vml;
+> > > >       vml->vma =3D vma;
+> > > >       list_add(&vml->head, &arena->vma_list);
+> > > > @@ -336,9 +334,17 @@ static int remember_vma(struct bpf_arena *aren=
+a, struct vm_area_struct *vma)
+> > > >
+> > > >  static void arena_vm_open(struct vm_area_struct *vma)
+> > > >  {
+> > > > -     struct vma_list *vml =3D vma->vm_private_data;
+> > > > +     struct bpf_map *map =3D vma->vm_file->private_data;
+> > > > +     struct bpf_arena *arena =3D container_of(map, struct bpf_aren=
+a, map);
+> > > >
+> > > > -     refcount_inc(&vml->mmap_count);
+> > > > +     /*
+> > > > +      * vm_private_data points to the parent's vma_list entry afte=
+r fork.
+> > > > +      * Clear it and register this VMA separately.
+> > > > +      */
+> > > > +     vma->vm_private_data =3D NULL;
+> > > > +     guard(mutex)(&arena->lock);
+> > > > +     /* OOM is silently ignored; arena_vm_close() handles NULL. */
+> > >
+> > > I don't see any way this approach gonna work, and frankly makes no se=
+nse
+> > > to me. This patch doesn't take into account how the vma_list is actua=
+lly
+> > > used. It frankly makes no sense, Please think through this: If we cou=
+ld
+> > > silently just not allocate the vml, why do we need it in the first pl=
+ace?
+> >
+> > +1
+> >
+> > Weiming,
+> >
+> > you should stop trusting AI so blindly.
+> > First, analyze the root cause (the first paragraph of the commit log).
+> > Is this really the case?
+> >
+> > Second, I copy pasted it to claude and got the same "fix" back,
+> > but implemented without your bug:
+> > +       vml =3D kmalloc_obj(*vml);
+> > +       if (!vml) {
+> > +               vma->vm_private_data =3D NULL;
+> > +               return;
+> > +       }
+> > +       vml->vma =3D vma;
+> > +       vma->vm_private_data =3D vml;
+> > +       guard(mutex)(&arena->lock);
+> > +       list_add(&vml->head, &arena->vma_list);
+> >
+> > at least this part is kinda makes sense...
+> >
+> > and, of course, this part too:
+> >
+> > -       if (!refcount_dec_and_test(&vml->mmap_count))
+> > +       if (!vml)
+> >                 return;
+> >
+> > when you look at it you MUST ask AI back:
+> > "Is this buggy?"
+> >
+> > and it will reply:
+> > "
+> > Right =E2=80=94 silently dropping the VMA from the list means zap_pages=
+()
+> > won't unmap pages from it, which is a correctness problem, not just
+> > degraded behavior. Since vm_open can't fail, the allocation should use
+> > __GFP_NOFAIL. The struct is tiny so that's fine.
+> > "
+> >
+> > and it proceeded adding __GFP_NOFAIL.
+> >
+> > which is wrong too.
+> >
+> > So please don't just throw broken patches at maintainers.
+> > Do your homework. Fixing one maybe-bug and introducing
+> > more real bugs is not a step forward.
+> >
+> > pw-bot: cr
+>
+> Thanks for the detailed review, really appreciate it.
+>
+> I traced through it with GDB + KASAN in QEMU. Here's what happens:
+>
+>   1. mmap =E2=86=92 remember_vma()
+>      vml->vma =3D 0xffff88800abfe700, mmap_count  =3D 1
+>      now Parent VMA =3D 0xffff88800abfe700
+>   2. fork =E2=86=92 arena_vm_open(child_vma)
+>      vml->vma =3D 0xffff88800abfe700 (unchanged), mmap_count  =3D 2
+>
+>   3. parent munmap =E2=86=92 arena_vm_close(parent_vma)
+>      mmap_count  =3D 1
+>      vml->vma is now dangling
+>
+>   4. child bpf_arena_free_pages =E2=86=92 zap_pages()
+>      reads vml->vma =3D 0xffff88800abfe700 =E2=86=92 UAF
+>
+> The core issue is that arena_vm_open() never registers the child
+> VMA -- it only bumps the mmap_count . So vml->vma always points at
+> the parent, and dangles once the parent unmaps.
+>
+> What approach would you suggest for fixing this?
 
-This version implements two faulty programs triggering either a
-user-after-free, or an out-of-bounds memory usage. The bugs are
-triggered thanks to some dedicated kfuncs in bpf_testmod.c, but two
-different techniques are used, as some cases can be quite hard to
-trigger in a pure "black box" approach:
-- for reads, we can make the used kfuncs return some faulty pointers
-  that ebpf programs will manipulate, they will generate legitimate
-  kasan reports as a consequence
-- applying the same trick for faulty writes is harder, as ebpf programs
-  can't write kernel data freely. So ebpf programs can call another
-  specific testing kfunc that will alter the shadow memory matching the
-  passed memory (eg: a map). When the program will try to write to the
-  corresponding memory, it will trigger a report as well.
+I'm thinking to just do this:
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
-The way of bringing kasan_poison into bpf_testmod is definitely not
-ideal.  But I would like to validate the testing approach (triggering
-real faulty accesses, which is hard on some cases, VS manually poisoning
-BPF-manipulated memory) before eventually making clean bridges between
-KASAN APIs and bpf_testmod.c, if the latter approach is the valid one.
----
- tools/testing/selftests/bpf/prog_tests/kasan.c     | 165 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/kasan.c          | 146 ++++++++++++++++++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  79 ++++++++++
- 3 files changed, 390 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testing/selftests/bpf/prog_tests/kasan.c
-new file mode 100644
-index 000000000000..fd628aaa8005
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+#include <bpf/bpf.h>
-+#include <fcntl.h>
-+#include <linux/if_ether.h>
-+#include <sys/klog.h>
-+#include <test_progs.h>
-+#include <unpriv_helpers.h>
-+#include "kasan.skel.h"
-+
-+#define SUBTEST_NAME_MAX_LEN	64
-+#define SYSLOG_ACTION_READ_ALL	3
-+#define SYSLOG_ACTION_CLEAR	5
-+
-+#define MAX_LOG_SIZE		(8*1024)
-+#define READ_CHUNK_SIZE		128
-+
-+#define KASAN_PATTERN_SLAB_UAF "BUG: KASAN: slab-use-after-free in bpf_prog_"
-+#define KASAN_PATTERN_GLOBAL_OOB "BUG: KASAN: global-out-of-bounds in bpf_prog_"
-+
-+static char klog_buffer[MAX_LOG_SIZE];
-+
-+static int read_kernel_logs(char *buf, size_t max_len)
-+{
-+	return klogctl(SYSLOG_ACTION_READ_ALL, buf, max_len);
-+}
-+
-+static int clear_kernel_logs(void)
-+{
-+	return klogctl(SYSLOG_ACTION_CLEAR, NULL, 0);
-+}
-+
-+static int kernel_logs_have_matching_kasan_report(char *buf, char *pattern,
-+						  bool is_write, int size)
-+{
-+	char *access_desc_start, *access_desc_end, *tmp;
-+	char access_log[READ_CHUNK_SIZE];
-+	char *kasan_report_start;
-+	int hsize, nsize;
-+	/* Searched kasan report is valid if
-+	 * - it contains the expected kasan pattern
-+	 * - the next line is the description of the faulty access
-+	 * - faulty access properties match the tested type and size
-+	 */
-+	kasan_report_start = strstr(buf, pattern);
-+
-+	if (!kasan_report_start)
-+		return 1;
-+
-+	/* Find next line */
-+	access_desc_start = strchr(kasan_report_start, '\n');
-+	if (!access_desc_start)
-+		return 1;
-+	access_desc_start++;
-+
-+	access_desc_end = strchr(access_desc_start, '\n');
-+	if (!access_desc_end)
-+		return 1;
-+
-+	nsize = snprintf(access_log, READ_CHUNK_SIZE, "%s of size %d at addr",
-+		 is_write ? "Write" : "Read", size);
-+
-+	hsize = access_desc_end - access_desc_start;
-+	tmp = memmem(access_desc_start, hsize, access_log, nsize);
-+
-+	if (!tmp)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+struct test_spec {
-+	char *prog_name;
-+	char *expected_report_pattern;
-+};
-+
-+static struct test_spec tests[] = {
-+	{
-+		.prog_name = "bpf_kasan_uaf",
-+		.expected_report_pattern = KASAN_PATTERN_SLAB_UAF
-+	},
-+	{
-+		.prog_name = "bpf_kasan_oob",
-+		.expected_report_pattern = KASAN_PATTERN_GLOBAL_OOB
-+	}
-+};
-+
-+static void run_test_with_type_and_size(struct kasan *skel,
-+					struct test_spec *test, bool is_write,
-+					int access_size)
-+{
-+	char subtest_name[SUBTEST_NAME_MAX_LEN];
-+	struct bpf_program *prog;
-+	uint8_t buf[ETH_HLEN];
-+	int ret;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj, test->prog_name);
-+	if (!ASSERT_OK_PTR(prog, "find test prog"))
-+		return;
-+
-+	snprintf(subtest_name, SUBTEST_NAME_MAX_LEN, "%s_%s_%d",
-+		 test->prog_name, is_write ? "write" : "read", access_size);
-+
-+	if (!test__start_subtest(subtest_name))
-+		return;
-+
-+	ret = clear_kernel_logs();
-+	if (!ASSERT_OK(ret, "reset log buffer"))
-+		return;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	topts.sz = sizeof(struct bpf_test_run_opts);
-+	topts.data_size_in = ETH_HLEN;
-+	topts.data_in = buf;
-+	skel->bss->is_write = is_write;
-+	skel->bss->access_size = access_size;
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
-+	if (!ASSERT_OK(ret, "run prog"))
-+		return;
-+
-+	ret = read_kernel_logs(klog_buffer, MAX_LOG_SIZE);
-+	if (ASSERT_GE(ret, 0, "read kernel logs"))
-+		ASSERT_OK(kernel_logs_have_matching_kasan_report(
-+				  klog_buffer, test->expected_report_pattern,
-+				  is_write, access_size),
-+			  test->prog_name);
-+}
-+
-+static void run_test_with_type(struct kasan *skel, struct test_spec *test,
-+			       bool is_write)
-+{
-+	run_test_with_type_and_size(skel, test, is_write, 1);
-+	run_test_with_type_and_size(skel, test, is_write, 2);
-+	run_test_with_type_and_size(skel, test, is_write, 4);
-+	run_test_with_type_and_size(skel, test, is_write, 8);
-+}
-+
-+static void run_test(struct kasan *skel, struct test_spec *test)
-+{
-+	run_test_with_type(skel, test, false);
-+	run_test_with_type(skel, test, true);
-+}
-+
-+void test_kasan(void)
-+{
-+	struct test_spec *test;
-+	struct kasan *skel;
-+	int i;
-+
-+	if (!is_jit_enabled() || !get_kasan_jit_enabled()) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = kasan__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load prog"))
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		test = &tests[i];
-+
-+		run_test(skel, test);
-+	}
-+
-+	kasan__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kasan.c b/tools/testing/selftests/bpf/progs/kasan.c
-new file mode 100644
-index 000000000000..f713c9b7c9ce
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kasan.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define KASAN_SLAB_FREE 0xFB
-+#define KASAN_GLOBAL_REDZONE 0xF9
-+
-+extern __u8 *bpf_kfunc_kasan_uaf_1(void) __ksym;
-+extern __u16 *bpf_kfunc_kasan_uaf_2(void) __ksym;
-+extern __u32 *bpf_kfunc_kasan_uaf_4(void) __ksym;
-+extern __u64 *bpf_kfunc_kasan_uaf_8(void) __ksym;
-+extern __u8 *bpf_kfunc_kasan_oob_1(void) __ksym;
-+extern __u16 *bpf_kfunc_kasan_oob_2(void) __ksym;
-+extern __u32 *bpf_kfunc_kasan_oob_4(void) __ksym;
-+extern __u64 *bpf_kfunc_kasan_oob_8(void) __ksym;
-+extern void bpf_kfunc_kasan_poison(void *mem, __u32 mem__sz, __u8 byte) __ksym;
-+
-+int access_size;
-+int is_write;
-+
-+struct kasan_write_val {
-+	__u8 data_1;
-+	__u16 data_2;
-+	__u32 data_4;
-+	__u64 data_8;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct kasan_write_val);
-+} test_map SEC(".maps");
-+
-+static void bpf_kasan_faulty_write(int size, __u8 poison_byte)
-+{
-+	struct kasan_write_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val),
-+			       poison_byte);
-+	switch (size) {
-+	case 1:
-+		val->data_1 = 0xAA;
-+		break;
-+	case 2:
-+		val->data_2 = 0xAA;
-+		break;
-+	case 4:
-+		val->data_4 = 0xAA;
-+		break;
-+	case 8:
-+		val->data_8 = 0xAA;
-+		break;
-+	}
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_write_val), 0x00);
-+}
-+
-+
-+static int bpf_kasan_uaf_read(int size)
-+{
-+	__u8 *result_1;
-+	__u16 *result_2;
-+	__u32 *result_4;
-+	__u64 *result_8;
-+	int ret = 0;
-+
-+	switch (size) {
-+	case 1:
-+		result_1 = bpf_kfunc_kasan_uaf_1();
-+		ret = result_1[0] ? 1 : 0;
-+		break;
-+	case 2:
-+		result_2 = bpf_kfunc_kasan_uaf_2();
-+		ret = result_2[0] ? 1 : 0;
-+		break;
-+	case 4:
-+		result_4 = bpf_kfunc_kasan_uaf_4();
-+		ret = result_4[0] ? 1 : 0;
-+		break;
-+	case 8:
-+		result_8 = bpf_kfunc_kasan_uaf_8();
-+		ret = result_8[0] ? 1 : 0;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+SEC("tcx/ingress")
-+int bpf_kasan_uaf(struct __sk_buff *skb)
-+{
-+	if (is_write) {
-+		bpf_kasan_faulty_write(access_size, KASAN_SLAB_FREE);
-+		return 0;
-+	}
-+
-+	return bpf_kasan_uaf_read(access_size);
-+}
-+
-+static int bpf_kasan_oob_read(int size)
-+{
-+	__u8 *result_1;
-+	__u16 *result_2;
-+	__u32 *result_4;
-+	__u64 *result_8;
-+	int ret = 0;
-+
-+	switch (size) {
-+	case 1:
-+		result_1 = bpf_kfunc_kasan_oob_1();
-+		ret = result_1[0] ? 1 : 0;
-+		break;
-+	case 2:
-+		result_2 = bpf_kfunc_kasan_oob_2();
-+		ret = result_2[0] ? 1 : 0;
-+		break;
-+	case 4:
-+		result_4 = bpf_kfunc_kasan_oob_4();
-+		ret = result_4[0] ? 1 : 0;
-+		break;
-+	case 8:
-+		result_8 = bpf_kfunc_kasan_oob_8();
-+		ret = result_8[0] ? 1 : 0;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+SEC("tcx/ingress")
-+int bpf_kasan_oob(struct __sk_buff *skb)
-+{
-+	if (is_write) {
-+		bpf_kasan_faulty_write(access_size, KASAN_GLOBAL_REDZONE);
-+		return 0;
-+	}
-+
-+	return bpf_kasan_oob_read(access_size);
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index d876314a4d67..01554bcbbbb0 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -271,6 +271,76 @@ __bpf_kfunc void bpf_kfunc_put_default_trusted_ptr_test(struct prog_test_member
- 	 */
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index f355cf1c1a16..a4f1df1bf0f4 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -489,7 +489,7 @@ static int arena_map_mmap(struct bpf_map *map,
+struct vm_area_struct *vma)
+         * clears VM_MAYEXEC. Set VM_DONTEXPAND as well to avoid
+         * potential change of user_vm_start.
+         */
+-       vm_flags_set(vma, VM_DONTEXPAND);
++       vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY);
+        vma->vm_ops =3D &arena_vm_ops;
+        return 0;
  }
- 
-+static void *kasan_uaf(void)
-+{
-+	void *p = kmalloc(64, GFP_ATOMIC);
-+
-+	if (!p)
-+		return NULL;
-+	memset(p, 0xAA, 64);
-+	kfree(p);
-+
-+	return p;
-+}
-+
-+#ifdef CONFIG_KASAN_GENERIC
-+extern void kasan_poison(const void *addr, size_t size, u8 value, bool init);
-+
-+__bpf_kfunc void bpf_kfunc_kasan_poison(void *mem, u32 mem__sz, u8 byte)
-+{
-+	kasan_poison(mem, mem__sz, byte, false);
-+}
-+#else
-+__bpf_kfunc void bpf_kfunc_kasan_poison(void *mem, u32 mem__sz, u8 byte) { }
-+#endif
-+
-+__bpf_kfunc u8 *bpf_kfunc_kasan_uaf_1(void)
-+{
-+	return kasan_uaf();
-+}
-+
-+__bpf_kfunc u16 *bpf_kfunc_kasan_uaf_2(void)
-+{
-+	return kasan_uaf();
-+}
-+
-+__bpf_kfunc u32 *bpf_kfunc_kasan_uaf_4(void)
-+{
-+	return kasan_uaf();
-+}
-+
-+__bpf_kfunc u64 *bpf_kfunc_kasan_uaf_8(void)
-+{
-+	return kasan_uaf();
-+}
-+
-+static u8 test_oob_buffer[64];
-+
-+static void *bpf_kfunc_kasan_oob(void)
-+{
-+	return test_oob_buffer+64;
-+}
-+
-+__bpf_kfunc u8 *bpf_kfunc_kasan_oob_1(void)
-+{
-+	return bpf_kfunc_kasan_oob();
-+}
-+
-+__bpf_kfunc u16 *bpf_kfunc_kasan_oob_2(void)
-+{
-+	return bpf_kfunc_kasan_oob();
-+}
-+
-+__bpf_kfunc u32 *bpf_kfunc_kasan_oob_4(void)
-+{
-+	return bpf_kfunc_kasan_oob();
-+}
-+
-+__bpf_kfunc u64 *bpf_kfunc_kasan_oob_8(void)
-+{
-+	return bpf_kfunc_kasan_oob();
-+}
-+
- __bpf_kfunc struct bpf_testmod_ctx *
- bpf_testmod_ctx_create(int *err)
- {
-@@ -740,6 +810,15 @@ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_1)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_2)
- BTF_ID_FLAGS(func, bpf_kfunc_get_default_trusted_ptr_test);
- BTF_ID_FLAGS(func, bpf_kfunc_put_default_trusted_ptr_test);
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_poison)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_1)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_2)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_4)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_uaf_8)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_oob_1)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_oob_2)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_oob_4)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_oob_8)
- BTF_KFUNCS_END(bpf_testmod_common_kfunc_ids)
- 
- BTF_ID_LIST(bpf_testmod_dtor_ids)
-
--- 
-2.53.0
-
