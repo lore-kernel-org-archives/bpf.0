@@ -1,99 +1,84 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C0331354F
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 21:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704C5395D9D
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 21:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776116610; cv=none; b=n95rInV7C2nDwcUAJqNdbG943OwHYLT3Fn96FvrdRTpfYzpwFg9nLOuQbgq3nOzibeQYph5SKXs4A/4CDWfXWvgpaRG+YKSmXBDcUVsTg6LgkH/jxaxpILrXEJCk2sLz97BaPsswx78X+Fwa5tS5Ng5EHlAaOmS1fiRWMdslwzA=
+	t=1776116611; cv=none; b=izbrWx0NB8XrhtyxEQG0lOWrtq0QmzYRtELPKR+cGKS/5oFC011c+9UkOUln3aHLWdfXse3UAJHgpXt7VahsUaV8piP/UJvzGcto7d2IB3LOFdVCUQKZmxP4ZyKfT1ChdupBAnUuo2gx2nswehtH/I4o2F4K5AsPp/PWOKvPbhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776116610; c=relaxed/simple;
-	bh=EkuZsIwIZ4Stmk4f/1zPkGvys8i5ZgOj583Pkaelhkc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BPps1RFqulZrqWw88Lhrcc2IU4odbUbzqpedNzeym6HchPAHkqfvSO2yHw+UJiPU5KZXccbltuj1vI/ft+TTidq0I/QOs8OjnJC6oBJDQ50wNM/vHsrixntEshxeb2646xkOdguCDYWfU9xDZ3K6KtQxpV+tGcWW8IFDWfXgbX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FVFAOV7X; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776116611; c=relaxed/simple;
+	bh=PPuI7UMHBNPYvWyE1slim5/MwsnFqz3RSJoYkg3rq3k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cutXQu9URBi1hfti5UC/V+8im219ylkpZpzTdV+XNeFXz+ciMvFTgHPMtlAsVI3N2JIL9LfG62NN6xp32xxF7vQg1Y1p2oxmC06UZjNsy+xZHH2flY5nBBmd43/xIWKTWreghycXZJrVQZvUb8KdyAfOYTgprtg7oRoKYGZq+kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bnhu6jX5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVFAOV7X"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c70c112cb61so3159096a12.0
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 14:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776116609; x=1776721409; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EkuZsIwIZ4Stmk4f/1zPkGvys8i5ZgOj583Pkaelhkc=;
-        b=FVFAOV7XsUXZ3TcpStjWt9T99AbclyyMh0H4l5jzw6Zg0KDD64r5rFlh2tgnLWuuv5
-         vA2G0iuoJk0oIOa4fEdTDWXlJQqZy7NbjlKB3d8kxojrOU+RAmClqyPV12tkFmWxms33
-         aPpIUOkNSfc0REJX8FbkVaTvZUU1kX4+G54ROqSzPQUUE/DLCuffnbA+uCPoQ04ckvWz
-         wV3nujKi9lvHLta731OQ50woikikz3R5qLhA9UV884mngDXZb0lCMGoVuUhIlIlFM/R4
-         mxMLMSru6Q3riZQEt6dlQBA+s+3HGV65Mb/tpA2GmegaIphEs+9YtLYviLnqUZ9yDg4F
-         MaYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776116609; x=1776721409;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EkuZsIwIZ4Stmk4f/1zPkGvys8i5ZgOj583Pkaelhkc=;
-        b=ZspswjJQ/zGnO4F1n3Pbkr6adx66kNj4i7R3WUhvABG5DsHiqL87jvAe2NplstUAxS
-         +NPmtiUaGIZBpC1ey3ODqC+0SAxm9ubv5HRUoDu419mmGn7ayzS9TSo0jiVgKXxZo/wY
-         y6g8ZojnnScTnZGXIXkuOYHqF0x5vSsOu123c5jZ05/Tk13fxujDrlrT6hlC8YTymh2F
-         tmCDqCICxNxy/8+Fz9tZfV5zO94pHZ41TnME86rDPS4nH3qgKgRY3wfX0mElsRTBBlXa
-         dO1msLT76oeXC2GJmL3GU0NJacCacohapTcqrn+xC1sfUYXa1bYvO1I05xyx8oqE/1Ko
-         Y2pw==
-X-Forwarded-Encrypted: i=1; AFNElJ/RsCqX2XTEuFQohMkpaIdzRU0TgAp/7mmmgS4oh78WDPhTV/GVAIbL/pQIkJ5Dlv1BZu4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBA19ztRGQPVA+dyEUd+0C9J1QIV1+EikMiSSO0oPklcHUUcXU
-	czfSTvWPbUhiWNOUQngBR5nnPQ26ZUT9PT9HSUnZy4vsTyFotpRTvrtLgzZH5g==
-X-Gm-Gg: AeBDietPIzJIe1bgR1g6KLmtLa7MJmc6KYF1E7GNsT5XdrdL8Wbd+XV7EZhc2doiS8A
-	8CL2fjg6gvbDDWwR0LRZa1GsbEr5/5lLdhjEW/5lxtn+KMXuFFAdRLm/hsVg/iKhttw/uuqjTxd
-	coh7LfPqGJzfN3Gz0xU2kTp6gdVbVs0IeI++XXFodctHIZopIlTr4WGuo30HJ5nlaGyMuDfBKBS
-	RyBPUvuRlb7d+jerSG2ZOVn2CSijPkqi/WLGVbjfWKlw7xvmOAsEQsx9b+29yV/jDSENId4ALcU
-	iKFnz1yEFXRkb/kVZ/Y4sxIGIHI9I57eORppjmK/9itcVXGeIMBqysgMOMAZQgxqutm1KDYiiR5
-	4yiMOFygweRPyrwezACeYFFw+pZP2tDnm0HxGzcWE+Di1MTt72HCPuieCHVjszSCvmyeqllrYJs
-	LUmUngAULcUI3+Ers3/Syfsa8w4AEDaynPNU/qkO7xVWEORUWFn1jA
-X-Received: by 2002:a05:6a20:4324:b0:39c:4af6:4303 with SMTP id adf61e73a8af0-39fe3d6557dmr16500588637.20.1776116609045;
-        Mon, 13 Apr 2026 14:43:29 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c20aed6sm12252069b3a.0.2026.04.13.14.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 14:43:28 -0700 (PDT)
-Message-ID: <5258cc4b95c2c835b699598f0ce24b3a318b5bc3.camel@gmail.com>
-Subject: Re: [PATCH] bpf: btf: reject division by zero in btf_struct_walk
- for zero-size flex array elements
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Dudu Lu <phx0fer@gmail.com>, bpf@vger.kernel.org
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org
-Date: Mon, 13 Apr 2026 14:43:25 -0700
-In-Reply-To: <20260413085033.71952-1-phx0fer@gmail.com>
-References: <20260413085033.71952-1-phx0fer@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bnhu6jX5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 267A8C4AF0C
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 21:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776116611;
+	bh=PPuI7UMHBNPYvWyE1slim5/MwsnFqz3RSJoYkg3rq3k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Bnhu6jX5NNRVIJi4Y1gSDiT9iyWrTVuKkEPGP0GF3qISUWEFInWr8xAbniAD+QZMz
+	 3Wk9HJXNLiDf1Rb6dU0nLW5HbxiRidcc3EqYqMe+XGqS9FzsH3xVUT3VPF1wyqF/vi
+	 BmXUHDwx8jJSbxPzuyocmr+zWG4aCoKdXMRpPkYOwaiIR4EsFXZXst7oMA4qhzx9pW
+	 g22MNGe0W2Pk0DQa8+yq8e/P45kT4Out+UxGm71fJtcxsPHCKShXLK8ZcImOc7BMzS
+	 WpX23EbIHflxxsNcx/f2HjWr3MMdqPj9q5rsD5Q54d3ARGzPNjwvv9Cr8jTgzT67o0
+	 u1ai2ExxgrB7w==
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8a3342d301aso50232296d6.2
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 14:43:31 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyDaLtmOKW8KjNDIPaFNKnnVboFOTbG2mIIaCJNYfP2kZ+9QDLr
+	038acUDy1+wv2+VmA+teg20g5smF8k7qwvi2Ej3Qzh/jTIQd6usawmA9A1vmfVg0aj9NoGhersS
+	FIJF1yLE/AYEFa+TxjiwufYepLyfBsyo=
+X-Received: by 2002:ad4:5bc1:0:b0:89a:98:ff1d with SMTP id 6a1803df08f44-8ac861b63cemr244813136d6.20.1776116610349;
+ Mon, 13 Apr 2026 14:43:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260408175217.1011024-1-song@kernel.org> <CAADnVQKMyGyw6vYVPVgT_G-CfbabARTiisd0dKV4U+8SY3qcEQ@mail.gmail.com>
+In-Reply-To: <CAADnVQKMyGyw6vYVPVgT_G-CfbabARTiisd0dKV4U+8SY3qcEQ@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 13 Apr 2026 14:43:18 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4uCU0SitRErVGr9B3RA9_MCxtGopHcpyZzw-Nm46fGEA@mail.gmail.com>
+X-Gm-Features: AQROBzA4yZkuwuYblYp-J9lcbpfBtxVAnlVox6W9wBBXHBCVKAPugLoLUb5sBsk
+Message-ID: <CAPhsuW4uCU0SitRErVGr9B3RA9_MCxtGopHcpyZzw-Nm46fGEA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add BPF struct_ops + livepatch
+ integration test
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Kernel Team <kernel-team@meta.com>, Yafang Shao <laoar.shao@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2026-04-13 at 16:50 +0800, Dudu Lu wrote:
-> btf_struct_walk() computes `off =3D (off - moff) % t->size` when handling
-> access to a flexible array member. If the element type is a zero-size
-> struct (e.g., `struct B {}`), t->size is 0 and this causes a division-
-> by-zero exception. On x86 this triggers a #DE fault resulting in a
-> kernel panic.
->=20
-> The BTF validator does not reject zero-size structs: btf_struct_check_met=
-a()
-> passes trivially for vlen=3D0 structs, and btf_array_resolve() skips the
-> overflow check for flex arrays (nelems=3D0). This allows a user to load
-> crafted BTF containing `struct B {}; struct A { int x; struct B flex[]; }=
-`
-> and then trigger the crash when the verifier calls btf_struct_walk()
-> during program load.
-
-Could you please add a selftest as well?
-
+On Sun, Apr 12, 2026 at 2:02=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 [...]
+> >
+> > This shows an alternative solution to the idea proposed in [1]. This
+> > approach doesn't need any kernel change.
+> >
+> > [1] https://lore.kernel.org/bpf/20260402092607.96430-1-laoar.shao@gmail=
+.com/
+> > ---
+> >  tools/testing/selftests/bpf/Makefile          |   2 +-
+> >  .../selftests/bpf/prog_tests/test_klp_bpf.c   | 109 ++++++++++++
+> >  .../selftests/bpf/progs/test_klp_bpf.c        |  26 +++
+> >  .../testing/selftests/bpf/test_kmods/Makefile |   3 +-
+> >  .../selftests/bpf/test_kmods/test_klp_bpf.c   | 166 ++++++++++++++++++
+> >  .../selftests/bpf/test_kmods/test_klp_bpf.h   |  12 ++
+> >  6 files changed, 316 insertions(+), 2 deletions(-)
+>
+> It looks good, but takes 1.6 seconds on a non-debug kernel.
+> This example can stay out of the tree.
+
+Sure. This is not a typical self test to begin with.
+
+Thanks,
+Song
