@@ -1,214 +1,125 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE6A389110
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5B7390C8E
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:09:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776106985; cv=none; b=aGfeqDFi41T/rY/gDzE8dZIhJHbvveYvlOF6ECp2MsOXi52EAFl04yJXhG1oXIMALtyoiYFEhoT6xPPH8jq4UmSZjPSRXWHyniqC0vRw9DJdV8r7UOfvXFmXPuv6KHMSmyCRMtA+1Y5OFjW+hFJeQRwKAO9VRnmRDhKoZIEmK7E=
+	t=1776107353; cv=none; b=CISOo0Q5dYGWYh7u+yQP4vdWMoj+WFxH0rq2O7tGbPISd0dQaw+FkRzarUl3V9woe0N46cHzhdU2twiIaNH99wygR97Elfs1Q5h5hCD4Trb0UOB07L3b3aOvUhK2m3YtRuWXtjq9IbH34bAMCVUwYHzT4PwDSg++zdEvZI6BRs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776106985; c=relaxed/simple;
-	bh=pMpwvXE7yOaZrVTGmBsC5B/Lv9HpgVAuB4OWHRd1f38=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=djc779tCkavhZQb/U3q0q1Xqa7DxqtFk7p4AwEUFqQfCztJNSuPHyWPiDygKPulhR/3klubJZhfu5rrWIIo3i+79bD7Qlwl3VwIOsdLxrdC390FH/JUiLraqDGi8bY7lFqg5jDIn5Yagu6XFflMXW9fKjLK/JVB/wr05FouzyJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a+o53yZM; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776107353; c=relaxed/simple;
+	bh=4lCjZBrL20Y1MEon1+tdGW8CkaiyHj2NmsrGq6qstrQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JjogJyCEKbU8+dmEWr71ymrH53ZL+GnDe4b0UyHC23JUe68c6sv9dV40iVcF7IhKeWxoy0dZcDDM+6iYo7pg8SeqBUH9d53KEZuYQ83l8sl7qBobkfahGbrcipdPk5P56PYCnhbBdYTVZQL1d4+GPCsl2amH9g/MyGkvwIk6B84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=pHdjIZqN; arc=none smtp.client-ip=66.163.187.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a+o53yZM"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-c76b0cda2aeso1966756a12.2
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776106984; x=1776711784; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8UZ7jkkKZAtYbyD2FZ41mfTnzdOMPoraKwEtxgxHrUE=;
-        b=a+o53yZMY+3kBl2Tjf47rOnTC+s0qsBFKswHbUQYUDoHdohUz0BTHeu/Enmz+w3/Rg
-         fZoIHSQarw8knQ26AxMWXoDuRWA+2Cu7DmODfz9SsTjyIVyiuGQJ5Vv9F2yaKyXptiQD
-         puISDhGDpkH8O5yPROtCG43pLEDDOxaFS57YpplR/EXLTwv+XCO85oz07vjCv/XYGCPI
-         6++ciEybRafbfJKPRyh87CxLGCzVVFYnPKa/LNtDlQZwbWag8FmAXQp/5bFkiQvBENsO
-         U9ts8xzaFH4n5MOfV0FbfaeNJflGmmcn1V3ZbGqTAS8guhpXXBqE+q2eRnC/2Pohb0bO
-         BRNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776106984; x=1776711784;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8UZ7jkkKZAtYbyD2FZ41mfTnzdOMPoraKwEtxgxHrUE=;
-        b=NqyQWqe/JSZ531cJi5/Z5VYvG7DWnoC/2HGhDUVUlBKDpdApAJcPylxtiBErUgGwkf
-         G5W6sONo+kpkvZM8J8O6VpjnH/Ld/rRDMZQUR7sDW39vU8agKhsx1XwHT4F5mdu0hS79
-         T/vPTYO5XKc/PMQp54XRIa65Y9cP0TjoCivZGpQKpsT5D2y94tk3Hhr0GEppJnPlxxAi
-         5XFlOHmKF4f2zeWlfjS5QEgH+NARzbAFqpCxhD9jAD4+jwck+iWJQvaBp+QoobLOiVNb
-         6SUPBxJx7gWLkKqJYxY42aCi6zQZMdxByCqD0M7e+Z7HJCjf5CgXFeEcSTGkV7MuVCMJ
-         9MBw==
-X-Gm-Message-State: AOJu0YwrWp/MU4XmLHiSNBV/DD55OHWLaNWg5mM6LHzZFKnt1I6qLmcA
-	AjxnglBBpRV9yaHIEMVReLZGKyzc7bM/QaacbeI85wya+Pr6qURd2kccy4BpSw==
-X-Gm-Gg: AeBDieusKOlsTXlrsEkSi0QXMlHxrB+Tah67/mBxOsslaHjrkYcjCncV3mqPpxFvfpP
-	Y55gT5mnPktl/IAYnuK3vfxLQTl01g95I3KdMxa6DPPoqEFJn5OBI0f6CkWdveliJTPpD2N+SOE
-	5vwAMKTm2YXTmHVh8L9wrJ/whkHfVO3hMqNqTpeKc560IG0S9XxM7+GQb/zUXkvunMOVi6npCrW
-	Nl14DAXQPTUNjcrFAmgn0jkt6vsBW5Gd1n/wgjVHLRxNLvIteHw52qHjTL9p//zbnWTbtACihcK
-	mQUxD3Mqy00ESMmfPu63CAfpZtolMapiG4f1U49+SZ5zBSIneTbiN5MpTiaAOGIyz7zA3jAWvif
-	oBYTS42bZhsGq4pQyfIRY9HR6I9uZtRnMQsIeTCyHKQ0pmzbH+ReHzRgIuquqI8BYIL6BGvhneX
-	ZKGJ2E5sE5jSqczw==
-X-Received: by 2002:a17:902:ebd0:b0:2b0:60b2:4f8 with SMTP id d9443c01a7336-2b2d59c812bmr102768895ad.15.1776106983554;
-        Mon, 13 Apr 2026 12:03:03 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:72::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b2d4ddcda9sm126867825ad.28.2026.04.13.12.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 12:03:03 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	yatsenko@meta.com,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 3/3] selftests/bpf: Test small task local data allocation
-Date: Mon, 13 Apr 2026 12:02:59 -0700
-Message-ID: <20260413190259.358442-4-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260413190259.358442-1-ameryhung@gmail.com>
-References: <20260413190259.358442-1-ameryhung@gmail.com>
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="pHdjIZqN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776107350; bh=4lCjZBrL20Y1MEon1+tdGW8CkaiyHj2NmsrGq6qstrQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=pHdjIZqNnW+dbZRvMjbm9zdetYmS1602MegnsXCul9FLDxAHEwD4XaqlX5PCEe1FaE1ts97gQ6A+G/RLY6HOZ4Cgs5wZHYXCJTrEmtcpA1n6s4HAX+JTKMRLlSbxCrH8Q69e1N3A+AGZ3osGw0Iihn4am7QkNBfAKpXvP/fDMV4K33hDB36tXLjHeAROAuLfqeYSWVBd3EEYHTeG4Th8PU59EDAoPE8O5pgPPhUOb2Kt/k0YAFTJsFWhaWBeivvUMowSBTcAhBzi+GUXlcIVJRI99PwOwhYxBM8p/EMqjxmwhX0tTHznTLjLLnVVgFW/q7qb2qW0oVG0jtDRPKfKug==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776107350; bh=E15Dqj+ts7GhtVutkKE3G/CPgTeb/uCXfpQaID6ENp6=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=p6Yiym3hwvN/SEDLXNnRddJqUjRWMd3rjo748ag5qutHzqJF56y6gRROrGXHhShv9M1s27EaUQWxS/sMePrL/aAnxx5jiC4CrSyi+l/GkAzMkFVMKNzWKG34IsuIkJHMizOZmX4uiOHMCF/pCKS1yDf43WTRJDAIBgyzDklqoisqyjaPOJ7VrZkFq5Qek4agupQCMqFWJcAuf0HgBiKGaCD9d7F+DJ4pVhCCzFe5UNPLyxYppzf0oZZhQfiOpRarHqedNIhlwN+Gfih2p/vwEu+GZDAGZSgXDgteT7bdpebAMn6aayTE3i6yLk0z9zuK36MYfB8oNACZMeh2yV8vpA==
+X-YMail-OSG: S.53nWMVM1n5YHcAVgmX51Tz.J7cK4w9XPc2eYfDt2DURaDD6t9wsnArxUjuU4_
+ LWb38xC2bJ6eswZi03x3Dm4YVaZE6iWLESzVcFigTThTEzs1ALY2wy7uzmwKkCD.LU3SsM6DSkqv
+ LGS38bio0Wc2z4jiVLEGo_X1U92JBlsOAz9FUVm6tohsBe_FL3GlohL77kKVBPEwQ1dI2B9Q0z6l
+ s2kYaVC.jLxjQ_.8QvZq.wOPLUmzB0e.BN4OhZxR6u_EJysRb4B9TNhR_rQZnxFq9SWaRuazzL6Z
+ fR2IBhfAIB9qdnquQ9acNg4x3ktrMFof8lsJRkL7hJKjaL0QNtvmdDKNpJ2i2dHF_ePBfIO89iXJ
+ qjhB6dYw4VDrBBZeSnr77opZzI068pyvAPBseOkA49KskHY2CX7ihE31SWD4aHRer03VlzTzQ_Cz
+ mQegpNzmMIawBGG8A_dniUaikUBPH5svvWtjWEoTfOn5b0jnyCW9Q1qDYsi_7ejuXeaTg4iJhoRQ
+ FFxUoOLRsKMpGF1sgXtMnnx9a7lpxWpKpf4s9PPDXrzY0X4e3Rv0_NC.l0MXBK2SLVsYTaTvqppP
+ yUPkBZ5XEWcFSQDiTawQkriQVrx6iNh_8IAckzISMxnIrbLgW.H.bAgr6PAcbvXq0rD5wt8XYf2j
+ 4mrqbdRfhlBeR8AjIKMeKddFPvSrCPUivEgFht6sRzNL.4_MYaXlFp3y70aElBtH.vv4CJRG_MlJ
+ 0j5quoVIBaWENVEPjRROw1omd4pK8DB7UprFSsxKa7WSe.Yz9ILvl16H.GE6NKhSl1T10JVpxAP4
+ uQzMCiZtTNHhBwBS.bO1E5HMKvV08qTe6KHhWQR9QNEY6WmipHp3I0Zhn4vlY8IOjz6s4CLEDfj1
+ hbSss.gTZWXl5g2GwmR5OEYzYw1dkjVz7g3hIQ9xxS0yYWsLTFwB4cGH77fHXKi.TuOc48muQVLk
+ Pl.UQ0CFLXlT5P7wbQIIldamdsp5wv1gfpYa4h9GsAUg37IpO6.1t1_awti3UigKfvGcLs.Gm65f
+ s9JnGS08GRH_0azPL4YkHMrBdKVQQ1w70T_Ay5dC28fu9Y38YwMGoGRCrDYNY9GnmJ2vZN2C0rer
+ fRSmYZrrosRMGvJ_d0RpUj0n8KVoNRjHn6u_Yy051YJtG_9FW9sy_xbjTV3BBV4j39hSJLXi7R1N
+ 5il75zqILZLFxO6Tx102wKnBdaT1k7H3Bs31jDxv3BFw10yBX0lEgyBVsJ1KOKlap9_2AsqFNdOw
+ esyjPh7Uhs5a5uljW6hj78wdQ53QV967JrExR3xEIjdXocSkCMhAUnryebvECIX5j60WOowZVh8J
+ tXXHyfcyI5XHZUtqezq7aeTa52LUx6zmgWT3jfIetaOcnDI9BMXRPIAb.Q8T39NvcVI4AvFEEMfo
+ D7x8841_S1WgOfv88E73zDab0ZLh.gvPI44ECNKrLQRO5MSpuU1_FyYLSZ9_ODrynNvgJT7YvOF1
+ ghP9mu3iaOocaKvwtkpxHrOIAb2zERr97F87t6t1IHoh4p4zfcSsLmxv8iAXoRwsnhCdsoWGCQxm
+ XQQBgZf5eGqcoambDihRYGKcSgzMW6oeWLFP7kgFI8jYYKoKeMHZM3GxqJTBN.5i_UD_XKALNc_L
+ 55aMnUgTAlhRAv2lgHkw16DzYB3vYzfp7.rGjjpXwMwWOXHArGZNU3MnoiRhNqNDUMTLyNL5WFX7
+ VVjIyi99WXAawV16wDhpfXV_EmQlDikiEtGNu2MLz_OCjn9piBOaMz6mxTHEPVo6Fj3TpVYCg_hQ
+ au909sTaUzjSWJoEF3z758ksIa.SM8ZDWqpTDuRrm3.w8iESXpW9fLk6fcjJp1IyPWKWBrbvJbZ8
+ bNO67LqjOCcRxBbEPeLvxSFOX05bdJ4xn9exrlA_44LYJK9Y9lYxK8MOhWZ6H9Y.V6sy.1.vRHlo
+ 6wcpwZHLH_q5WUpFW7s233cMNfVFAZ7qfUcVqY3OVbNTik3hVATdi93ZSUIAOhPcJ1cFdNWs0KVv
+ 5U5ErA4NfUROcYZPx5F.rKr4cYA4vfS9qYepFeRdpZw650Isg8naBbsqrwAEb6E6_E7V1vJM5Neq
+ CUw7L4Q3oJ5Uk8y3CgkBIiWgAs1xualGovyQShI7yoY_BE_2wUQET7bWR87ZwHVrT7ljX25iM0lu
+ fPR0oPie0Fd.nPkAzKJ7vPb2ox6q.U86MgKaq7PWwJYbNiP7FceTSEaJ_sQbDwEgtO7.xpQw2zWf
+ zLkiTTd_mzFCg8kuPjVXdKrCHt03RGw51eV1hcOLaKlHsvnosqNrKuYzxjNSV1KSSsTw-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: ff501cc8-7b35-4a47-996a-fa0874e3405d
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Mon, 13 Apr 2026 19:09:10 +0000
+Received: by hermes--production-gq1-6dfcf9f8b-x2pwf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c2976e02367141b17038844605468df3;
+          Mon, 13 Apr 2026 19:09:05 +0000 (UTC)
+Message-ID: <7700699d-f6c4-4d60-89da-e0977d086a5b@schaufler-ca.com>
+Date: Mon, 13 Apr 2026 12:09:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+To: Jason Gunthorpe <jgg@ziepe.ca>, Paul Moore <paul@paul-moore.com>
+Cc: Leon Romanovsky <leon@kernel.org>,
+ Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
+ <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+ Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal>
+ <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal>
+ <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal>
+ <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca>
+ <bd7d139f-b5d6-42e1-be2c-4f71feed63cf@schaufler-ca.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <bd7d139f-b5d6-42e1-be2c-4f71feed63cf@schaufler-ca.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-Make sure task local data is working correctly for different allocation
-sizes. Existing task local data selftests allocate the maximum amount of
-data possible but miss the garbage data issue when only small amount of
-data is allocated. Therefore, test small data allocations as well.
+On 4/13/2026 10:36 AM, Casey Schaufler wrote:
+> On 4/13/2026 9:42 AM, Jason Gunthorpe wrote:
+>> On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
+>>>> We are not limited to LSM solution, the goal is to intercept commands
+>>>> which are submitted to the FW and "security" bucket sounded right to us.
+>>> Yes, it does sound "security relevant", but without a well defined
+>>> interface/format it is going to be difficult to write a generic LSM to
+>>> have any level of granularity beyond a basic "load firmware"
+>>> permission.
+>> I think to step back a bit, what this is trying to achieve is very
+>> similar to the iptables fwmark/secmark scheme.
+>>
+>> secmark allows the user to specify programmable rules via iptables
+>> which results in each packet being tagged with a SELinux context and
+>> then the userspace policy can consume that and make security decision
+>> based on that.
+> If you want to pursue something like this DO NOT USE A u32 TO REPRESENT
+> THE SECURITY CONTEXT! Use a struct lsm_context pointer. The limitations
+> imposed by a "secid" don't show up in SELinux, which introduced them, but
+> they sure do in Smack, and they really gum up the works for general LSM
+> stacking.
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- .../bpf/prog_tests/test_task_local_data.c     | 78 ++++++++++++++++++-
- 1 file changed, 74 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-index 8b99b4880d24..6a5806b36113 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-@@ -30,12 +30,12 @@ TLD_DEFINE_KEY(value0_key, "value0", sizeof(int));
-  * sequentially. Users of task local data library should not touch
-  * library internal.
-  */
--static void reset_tld(void)
-+static void reset_tld(__u16 dyn_data_size)
- {
- 	if (tld_meta_p) {
- 		/* Remove TLDs created by tld_create_key() */
- 		tld_meta_p->cnt = 1;
--		tld_meta_p->size = TLD_DYN_DATA_SIZE;
-+		tld_meta_p->size = dyn_data_size + 8;
- 		memset(&tld_meta_p->metadata[1], 0,
- 		       (TLD_MAX_DATA_CNT - 1) * sizeof(struct tld_metadata));
- 	}
-@@ -133,7 +133,7 @@ static void test_task_local_data_basic(void)
- 	tld_key_t key;
- 	int i, err;
- 
--	reset_tld();
-+	reset_tld(TLD_DYN_DATA_SIZE_MAX);
- 
- 	ASSERT_OK(pthread_mutex_init(&global_mutex, NULL), "pthread_mutex_init");
- 
-@@ -247,7 +247,7 @@ static void test_task_local_data_race(void)
- 	tld_keys[0] = value0_key;
- 
- 	for (j = 0; j < 100; j++) {
--		reset_tld();
-+		reset_tld(TLD_DYN_DATA_SIZE_MAX);
- 
- 		for (i = 0; i < TEST_RACE_THREAD_NUM; i++) {
- 			/*
-@@ -296,10 +296,80 @@ static void test_task_local_data_race(void)
- 	test_task_local_data__destroy(skel);
- }
- 
-+static void test_task_local_data_dyn_size(__u16 dyn_data_size)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct test_task_local_data *skel;
-+	int max_keys, i, err, fd, *data;
-+	char name[TLD_NAME_LEN];
-+	tld_key_t key;
-+
-+	reset_tld(dyn_data_size);
-+
-+	skel = test_task_local_data__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	tld_keys = calloc(TLD_MAX_DATA_CNT, sizeof(tld_key_t));
-+	if (!ASSERT_OK_PTR(tld_keys, "calloc tld_keys"))
-+		goto out;
-+
-+	fd = bpf_map__fd(skel->maps.tld_data_map);
-+
-+	/* Create as many int-sized TLDs as the dynamic data size allows */
-+	max_keys = dyn_data_size / TLD_ROUND_UP(sizeof(int), 8);
-+	for (i = 0; i < max_keys; i++) {
-+		snprintf(name, TLD_NAME_LEN, "value_%d", i);
-+		tld_keys[i] = tld_create_key(name, sizeof(int));
-+		if (!ASSERT_FALSE(tld_key_is_err(tld_keys[i]), "tld_create_key"))
-+			goto out;
-+
-+		data = tld_get_data(fd, tld_keys[i]);
-+		if (!ASSERT_OK_PTR(data, "tld_get_data"))
-+			goto out;
-+		*data = i;
-+	}
-+
-+	/* The next key should fail with E2BIG */
-+	key = tld_create_key("overflow", sizeof(int));
-+	ASSERT_EQ(tld_key_err_or_zero(key), -E2BIG, "tld_create_key overflow");
-+
-+	/* Verify data for value_i do not overlap */
-+	for (i = 0; i < max_keys; i++) {
-+		data = tld_get_data(fd, tld_keys[i]);
-+		if (!ASSERT_OK_PTR(data, "tld_get_data"))
-+			goto out;
-+
-+		ASSERT_EQ(*data, i, "tld_get_data value_i");
-+	}
-+
-+	/* Verify BPF side can still read the static key */
-+	data = tld_get_data(fd, value0_key);
-+	if (!ASSERT_OK_PTR(data, "tld_get_data value0"))
-+		goto out;
-+	*data = 0xdeadbeef;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.task_main), &opts);
-+	ASSERT_OK(err, "run task_main");
-+	ASSERT_EQ(skel->bss->test_value0, 0xdeadbeef, "tld_get_data value0");
-+
-+out:
-+	if (tld_keys) {
-+		free(tld_keys);
-+		tld_keys = NULL;
-+	}
-+	tld_free();
-+	test_task_local_data__destroy(skel);
-+}
-+
- void test_task_local_data(void)
- {
- 	if (test__start_subtest("task_local_data_basic"))
- 		test_task_local_data_basic();
- 	if (test__start_subtest("task_local_data_race"))
- 		test_task_local_data_race();
-+	if (test__start_subtest("task_local_data_dyn_size_small"))
-+		test_task_local_data_dyn_size(64);
-+	if (test__start_subtest("task_local_data_dyn_size_zero"))
-+		test_task_local_data_dyn_size(0);
- }
--- 
-2.52.0
+Whoops. I meant a struct lsm_prop pointer. It must be Monday morning.
 
