@@ -1,63 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f67.google.com (mail-oa1-f67.google.com [209.85.160.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E1E125A9;
-	Mon, 13 Apr 2026 15:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644B7346E6D
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 15:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776095616; cv=none; b=dix1E8+no/Yv00CqE+12xxhLy1Tc1LMm5q1dPd7v84eHhircEjMyUxdwhW+EzRiSFPx1hrGjNqQiKAkim3+TbF2Iw6aQDKMt5m7i5jsXJQ/bOcP5HGYe6i0J3Xqf7Eo3/FjbkE+3sZUF3Fr3Pv8sVNbKKeoxpYqRspcssPR6ZFQ=
+	t=1776095749; cv=none; b=HXseboiqyPC/stoqL0S7231BqhM6Qsj0J3Il6Ohv4WI57u4P4RZ/h1arS1wVafvi+UYX1lnu9LkmODcZt4iMdRKnszp2yzaUj/3GJCR21XOQ5ivcAQq02/Inas3HjNIGjP5s7lRkUePZeVYVNQqZOf19Ie/XikIxwQSWiC0udUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776095616; c=relaxed/simple;
-	bh=9M6tnLgIr+sMqBYY17RTZRwcr2YkcNi64g6q6UG2hdk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B4QeJ3Fse7ZUlZRvHFYiAwiWiR1QZ4Ao3tyZC+Hd81uZ54QiiLIFxjpn4XgFR3UfkgBq4E+tbBA4IAC6+eRIoi5AxlwJ7mFfmthYaFDSne6AqLUvFpPxy4c3zhYNbCgR8d7EDbyjJf1UDFBfoYaG9Skx/IqugIE4rGlM2885FAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ia0sDvZ4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776095749; c=relaxed/simple;
+	bh=7sspJKDltG4HFJK2tD6VaW9zwgF0tLc1ZFdNtEqqBzM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rmkxge7tLZNcWmT3Yk3d46trXE6GjI80xKGhk3IeliDMeuerdnlrPCBtt+3Dd7bKpjOlHnNXKB7rkbLtoeGoWaEEm8hxWVEn5e7NYHwMEfEiFBk/e1bmbU7VclX81GuncNf/Tb7zW9NbIOpjdcs39qepxTF7e1paNz7QNd+3rSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F5ogafts; arc=none smtp.client-ip=209.85.160.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ia0sDvZ4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00D0C2BCAF;
-	Mon, 13 Apr 2026 15:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776095616;
-	bh=9M6tnLgIr+sMqBYY17RTZRwcr2YkcNi64g6q6UG2hdk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ia0sDvZ4lmIa/fXnarKKku6xXJW3V+56XzaeZOpO6F3X8Ow8pD6wXa3N/3VWNOAaj
-	 ybUrRO4+LWB/5UiKpAQ4KCdCijHpeH92xtAcIsSXadz4Mjdwsy6+q6BRwZwIRZuukC
-	 rOlAtExAFewHXIQ9FAu0e5DUTneN75JJM7i5S3d00aZi3kXvvwQSnxf9KvBEmlcmTd
-	 JIWQwF74SQOLwTJArhFb2WflOc5KaoUtx84BBU2DXw4Z8AmFmuiOPXOMlpp13767Th
-	 4qOLCEHoEV9tnM0NFO2zR/uV3LdtOOzTFqT322eQxO1KOeIgxzYadv6TGqsVCZvUwF
-	 OMb79RWzbXHAQ==
-Date: Mon, 13 Apr 2026 18:53:32 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260413155332.GL21470@unreal>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F5ogafts"
+Received: by mail-oa1-f67.google.com with SMTP id 586e51a60fabf-40423dbe98bso1763821fac.2
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 08:55:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776095746; x=1776700546; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GjKfqBprjxv4QTZk/hU0uWCqgeC5qXnesIkVQZLu/xU=;
+        b=F5ogaftsMsDdYQULm4WUFIbtzuw/Xx2ZEvijpz7Fpb38mHnz4aIGbfcTy1jyjNvpCK
+         LyRcB3TiHc4LcURAWte+dxdTmma3Ro6XQbgu58dvnMNTfNRPWRlQvbw/AUasJvQf/G+Q
+         MqDcRzQXRRgL9Ukp91EkkS8ZqvWgxknXk5vxkQrrTVcy/53maOSiea7KCyp8koRaQX/T
+         +ELeUnSL2haQLy97Dvs4SH7LPZeOGnaCQivDTBMIW6+p96d1eFVKNCX4qx39Gc6mBAgi
+         mVC6uyX4eFvHvV5hTavn+MBti2itwTWaUbPWtVqpPDnqVNr9qhENXPPtlE+T64YlbUZM
+         Orbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776095746; x=1776700546;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GjKfqBprjxv4QTZk/hU0uWCqgeC5qXnesIkVQZLu/xU=;
+        b=sYkuor2pXv8TUpjUxPznkPRRcO4elN/Q28xD6nVF0f2cx7Rn1kPKkHEq508kFedcWa
+         ToIDYUiZLy9ICUY6B1sz2MiVXBDgomPz3xP8PNksQKiyPL8X4k2o0xB0uwltcSAntnVE
+         A5G8Q/NfsTpTaztbhLUTQ08tcnvnsHT+VPdKujHzh3uwCI4icH2fi//FZUrpKyeeEdZ4
+         mLoEsGZcHwQMQKpOClKgdGU4FW8dLiDoWenkOuhSSC2tWLiP/yWChFTcOBbCUFZjSrXv
+         Dt5a7E6578PtgGO0/NRrlZuE1MrIWxDqGRAW5dPTvqM4zSbLwIHA7TlPSgwODEXie3Y6
+         A9KQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/ycDjMap3GLFCKASW9z9QWnxFNfl1GPKX+8rWIH+UvhxN2BLobjrkMZms/Y8J3N8Ix1Zk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+Obl6VLTh+QFK0TXiTiAclcUmIpG9i/HTufI7UBuNPtJGJdPV
+	mMhUCKz8n00OMq+tJWGOgA4qARct2XNC/yGvi2WcXmkYt05Aq4HY7vA+
+X-Gm-Gg: AeBDietFHrxImpSgw6gG1YVRGfSirGX+1U/c/UqFT+OezljyiZ5RjCK17k5ELPoIMcX
+	2eZaKk1jaQdptcvCvYXJ+DWBKyEevPeRFCktuRz4UiOX/oUviDKbvdIWOYP2wcW1mzuURATwq7z
+	ohNh2p7Z8Exw0w2oDFiInQ2bf9UAOXe1eHL4RH8l6qC8r0wc+MDkIyp9Q8tyaEdWXSSydXaLJk7
+	mBm3O5mlTBTGFS0slKDcfPBVJETxdaF2CPz2U1al5//teucmLmaGqH3x9P+6y+tYjF+9jRcMoNX
+	YIWVmg0+PdwSlgX+Za68JdVFNllRgvFhUl6CzJYW2eXHcveqzuA1XpBK2/PlNB/PpAcMZgc1OOw
+	bIisNlPhOAR2M2dLc5jpzbsexIRYGgPXImwLfG2XIEvG5ksEAahyAoH91SyCHtUgkotDCheoqwQ
+	B/Wt4vlM2XYJ/AKm1L
+X-Received: by 2002:a05:6870:5b81:b0:416:3b62:2227 with SMTP id 586e51a60fabf-423e10a179fmr7211598fac.31.1776095746073;
+        Mon, 13 Apr 2026 08:55:46 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:4::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-423ddb80ccesm8719752fac.13.2026.04.13.08.55.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 08:55:45 -0700 (PDT)
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+X-Google-Original-From: Stanislav Fomichev <stfomichev@gmail.com>
+Date: Mon, 13 Apr 2026 08:55:44 -0700
+To: Quan Sun <2022090917019@std.uestc.edu.cn>
+Cc: daniel@iogearbox.net, bpf@vger.kernel.org, dddddd@hust.edu.cn, 
+	M202472210@hust.edu.cn, dzm91@hust.edu.cn, hust-os-kernel-patches@googlegroups.com, 
+	ast@kernel.org, andrii@kernel.org, jiayuan.chen@linux.dev
+Subject: Re: Infinite Recursion / Kernel Stack Overflow in
+ bpf_skops_hdr_opt_len() via TCP_NODELAY setsockopt
+Message-ID: <ad0Row2av871JSJL@devvm17672.vll0.facebook.com>
+References: <d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,109 +76,107 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+In-Reply-To: <d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn>
 
-On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
-> On Sun, Apr 12, 2026 at 5:00 AM Leon Romanovsky <leon@kernel.org> wrote:
-> > On Thu, Apr 09, 2026 at 05:04:24PM -0400, Paul Moore wrote:
-> > > On Thu, Apr 9, 2026 at 8:45 AM Leon Romanovsky <leon@kernel.org> wrote:
-> > > > On Thu, Apr 09, 2026 at 02:27:43PM +0200, Roberto Sassu wrote:
-> > > > > On Thu, 2026-04-09 at 15:12 +0300, Leon Romanovsky wrote:
-> > > > > > On Tue, Mar 31, 2026 at 08:56:32AM +0300, Leon Romanovsky wrote:
+On 04/13, Quan Sun wrote:
+> Our fuzzing found a Stack Guard Page hit / Infinite Recursion vulnerability
+> in the Linux TCP BPF Subsystem. The issue is triggered when a
+> `BPF_PROG_TYPE_SOCK_OPS` program is attached and uses the `bpf_setsockopt()`
+> helper inside the `BPF_SOCK_OPS_HDR_OPT_LEN_CB` callback to set
+> `TCP_NODELAY` on the associated socket. This creates a logical loop that
+> unconditionally pushes pending frames and re-invokes the same option-length
+> BPF callback until the kernel stack overflows.
 > 
-> ...
+> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 > 
-> > > > We implemented this approach in v1:
-> > > > https://patch.msgid.link/20260309-fw-lsm-hook-v1-0-4a6422e63725@nvidia.com
-> > > > and were advised to pursue a different direction.
-> > >
-> > > I'm assuming you are referring to my comments? If so, that isn't exactly what I said,
-> > > I mentioned at least one other option besides
-> > > going directly to BPF.  Ultimately, it is your choice to decide how
-> > > you want to proceed, but to claim I advised you to avoid a LSM based
-> > > solution isn't strictly correct.
-> >
-> > Yes, this matches how we understood your comments:
-> > https://lore.kernel.org/all/20260311081955.GS12611@unreal/
-> >
-> > In the end, the goal is to build something practical and avoid adding
-> > unnecessary complexity that brings no real benefit to users.
-> >
-> > > Regardless, looking at your v2 patchset, it looks like you've taken an
-> > > unusual approach of using some of the LSM mechanisms, e.g. LSM_HOOK(),
-> > > but not actually exposing a LSM hook with proper callbacks.
-> > > Unfortunately, that's not something we want to support.  If you want
-> > > to pursue an LSM based solution, complete with a security_XXX() hook,
-> > > use of LSM_HOOK() macros, etc. then that's fine, I'm happy to work
-> > > with you on that.
-> >
-> > The issue is that the sentence below was the reason we did not merge v1 with v2:
-> > https://github.com/LinuxSecurityModule/kernel/blob/main/README.md#new-lsm-hooks
-> > "pass through implementations, such as the BPF LSM, are not eligible for
-> > LSM hook reference implementations."
+> ## Root Cause
 > 
-> I can expand on that in a minute, but I'd like to return to your use
-> of the LSM_HOOK() macro and locating the hook within the BPF LSM as
-> that is the most concerning issue from my perspective.  One should
-> only use the LSM_HOOK() macro and locate code within bpf_lsm.c if that
-> code is part of the BPF LSM, utilizing an LSM hook.  Since this
-> patchset doesn't use an LSM hook or any part of the LSM framework, the
-> implementation choices seem odd and are not something we want to
-> support.  As mentioned in my prior reply, you could do something very
-> similar though the use of a normal BPF hook similar to what was done
-> with the update_socket_protocol() BPF hook.
+> This vulnerability is caused by a semantic loop created by mixing BPF TCP
+> hooks tightly bounded to transmission paths with auxiliary socket state
+> mutations like TCP Nagle transitions.
 > 
-> There are multiple reasons why out-of-tree and pass through LSMs are
-> not considered eligible for reference implementations of LSM hooks.  I
-> think is most relevant to this patchset is that an out-of-tree hook
-> implementation doesn't necessarily require a stable interface, and
-> without a stable interface it is impossible to make a generic API at
-> the LSM framework layer.  As you mentioned previously, each vendor and
-> each firmware version brings the possibility of a new
-> format/interface, and while that may not be a problem for out-of-tree
-> code which is left to the user/admin to manage, it makes upstream
-> development difficult.  I did mention at least one approach that might
-> be a possibility to enable upstream, in-tree support of this, but you
-> seem to prefer a BPF approach that doesn't require a well defined
-> format.
+> 1. A user loads a `BPF_PROG_TYPE_SOCK_OPS` program and attaches it to a
+> cgroup via `BPF_CGROUP_SOCK_OPS`.
+> 2. The program intercepts `BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB` or
+> `BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB` events and sets the
+> `BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG` on the socket to enable custom TCP
+> header options injection.
+> 3. During the standard TCP frame transmission process (e.g., when sending
+> data), the kernel needs to calculate the header's precise length. To
+> retrieve the size of the injected option, `tcp_established_options()`
+> invokes `bpf_skops_hdr_opt_len()`, which correctly triggers the
+> `BPF_SOCK_OPS_HDR_OPT_LEN_CB` callback inside the BPF program.
+> 4. Inside this callback, the malicious BPF program uses the
+> `bpf_setsockopt()` helper function to force `TCP_NODELAY`.
+> 5. Down in the kernel, setting `TCP_NODELAY` alters the connection context.
+> Doing so invokes `__tcp_sock_set_nodelay()`, which unconditionally calls
+> `tcp_push_pending_frames()` to immediately dispatch any packets that were
+> previously waiting under the Nagle algorithm logic.
+> 6. The recursive sub-call to `tcp_push_pending_frames()` initiates packet
+> building again, causing a cascading invocation of
+> `tcp_established_options()` -> `bpf_skops_hdr_opt_len()` ->
+> `BPF_SOCK_OPS_HDR_OPT_LEN_CB` -> `bpf_setsockopt()` ->
+> `tcp_push_pending_frames()`...
+> 7. Without a depth limit or re-entrancy blocking condition on these socket
+> callbacks, the repetitive nesting rapidly exhausts the kernel stack
+> boundaries, pushing past the limits (hitting the `stack guard page`). The
+> result is an immediate kernel panic leading to Denial of Service.
 > 
-> > > However, if you've decided that your preferred
-> > > option is to create a BPF hook you should avoid using things like
-> > > LSM_HOOK() and locating your hook/code in bpf_lsm.c.
-> >
-> > We are not limited to LSM solution, the goal is to intercept commands
-> > which are submitted to the FW and "security" bucket sounded right to us.
+> #### Execution Flow Visualization
 > 
-> Yes, it does sound "security relevant", but without a well defined
-> interface/format it is going to be difficult to write a generic LSM to
-> have any level of granularity beyond a basic "load firmware"
-> permission.
+> ```text
+> Vulnerability Execution Flow
+> |
+> |--- 1. `BPF_SOCK_OPS_HDR_OPT_LEN_CB` BPF Handler Executed
+> |    |\
+> |    | `-- `bpf_setsockopt(..., SOL_TCP, TCP_NODELAY, ...)`
+> |    |
+> |--- 2. `do_tcp_setsockopt()` called by BPF Helper
+> |    |\
+> |    | `-- `__tcp_sock_set_nodelay()`
+> |    |     |
+> |    |     `-- `tcp_push_pending_frames()` (Immediate TCP transmission)
+> |    |
+> |--- 3. Context switches to Frame Packaging
+> |    |\
+> |    | `-- `tcp_current_mss()`
+> |    |     |
+> |    |     `-- `tcp_established_options()`
+> |    |
+> |--- 4. TCP Header calls BPF back again for size computation
+> |    |\
+> |    | `-- `bpf_skops_hdr_opt_len()`
+> |    |     |
+> |    |     `-- Invokes BPF Callback: `BPF_SOCK_OPS_HDR_OPT_LEN_CB`
+> |    |         |
+> |    |         `-- (Reverts to Step 1 directly) Infinite recursion depth.
+> <==== KERNEL PANIC
+> ```
 > 
-> > > The good news is that there are plenty of other examples of BPF
-> > > plugable code that you could use as an example, one such thing is the
-> > > update_socket_protocol() BPF hook that was originally proposed as a
-> > > LSM hook, but moved to a dedicated BPF hook as we generally want to
-> > > avoid changing non-LSM kernel objects within the scope of the LSMs.
-> > > While your proposed case is slightly different, I think the basic idea
-> > > and mechanism should still be useful.
-> > >
-> > > https://lore.kernel.org/all/cover.1692147782.git.geliang.tang@suse.com
-> >
-> > Thanks
+> ## Reproduction Steps
 > 
-> Good luck on whatever you choose, and while I'm guessing it is
-> unlikely, if you do decide to pursue a LSM based solution please let
-> us know and we can work with you to try and find ways to make it work.
+> 1. Load a `BPF_PROG_TYPE_SOCK_OPS` BPF program that:
+>    - Checks the `op` field in the `bpf_sock_ops` context.
+>    - If the `op` is `BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB` or
+> `BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB`, calls the
+> `bpf_sock_ops_cb_flags_set()` helper to enable the
+> `BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG`.
+>    - If the `op` is `BPF_SOCK_OPS_HDR_OPT_LEN_CB`, calls the
+> `bpf_setsockopt()` helper to forcefully enable `TCP_NODELAY`.
+> 2. Attach the loaded program to a chosen cgroup directory using
+> `BPF_CGROUP_SOCK_OPS`.
+> 3. Trigger a standard TCP connection (e.g., using `connect()`) within the
+> targeted cgroup to establish the socket and trigger the initial established
+> callbacks.
+> 4. Force a packet transmission (e.g., using `send()`). This forces the
+> kernel to compute the MSS and invoke the option length callback.
+> 5. The forced `TCP_NODELAY` inside the callback will trap the kernel in an
+> infinite recursive call sequence traversing `tcp_push_pending_frames()` and
+> `bpf_skops_hdr_opt_len()` until the stack overflows, leading to a stack
+> guard page crash.
 
-Thanks a lot. We should know which direction we'll take in a week or two,
-once Chiara wraps up her internal commitments and returns to this series.
-
-I appreciate your help.
-
-Thanks
-
-> 
-> -- 
-> paul-moore.com
-> 
+The easiest fix is to probably return early from tcp_push_pending_frames
+when has_current_bpf_ctx()?
