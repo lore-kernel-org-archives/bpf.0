@@ -1,82 +1,149 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3B630DD3C
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 16:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C88280CFB
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 16:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776098286; cv=none; b=h6nREHxv/0Ond+K+9aTcFdbHYDqT9ox2Ux9KoWQ8fcoWr3IH2r+Pi3dGMXwpN+uZWeJpnpbr4b4Tvg29Kvphe+xCn2ytPukPkoKKgk/3c1HS6V+IwOYtYX80xw7N5LJCKZXi87dpXsLVsj0SWcQVzbzSR9Fk/x5G9IVJjplmr3M=
+	t=1776098543; cv=none; b=RFp/gA1x1QvLO/5fSP0EC7ReGFEbnAuZ9OpMkBFqIWLSukrwfMG2fw+oqZDfal9AKFJR1EIZ9TBgQ2cf3hCT99aatBcRlC/BH11tcFFup70iraWUILlIMhADU+WvVdCfSdARZtm3ODlxrosCFEZ7aZ334lYHn5GHvVGceX9Qsq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776098286; c=relaxed/simple;
-	bh=LsirsLNtt39wTKZPA+YTGKYfOI/MUdjDa3ENx9IOl/M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JHCOcjiNDEJ8LshfJBDY0HzhEogCSajtXo71/wA81kQdRLr6LPS9gJMkwnJVUSF4dYIVRJt//N8zlke0KwwjP0s9kM6qE3dUfaWjtbCgyYXKuTU7Cm54RY9QAVnCgBujjzkdl24E++Jr62RT0YUoVoBlY75T6zTgS6DKUr3+9c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DA0Gv6nh; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776098543; c=relaxed/simple;
+	bh=G+WYrb1BBVDoPFmFwGScCNyDrJlyYOjXSYKOQwe+8ko=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MK2ADZrahT2Jf5IuyU/MN55wMKd1FXnM5Dn5gpXcSiJvsysqYEtw4jujOs+dQsNyzU/mWzJbch0QwlmZMcT5y/Jur2hleV5T2G2pJ7u+IxdIMXsTn2h/RKTL34KfZyLpNFncvYO7DNofOjYZ+McUrqTjK7nA8dbUxNQfbJoM5gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=E2wavPRL; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DA0Gv6nh"
-Message-ID: <ba80e1ba-a290-47d6-8f61-9bcb63a996ba@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776098283;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WWD2CmAX77KCX9SDFhxRCe+HNXaaKB/BBPC6P69rvJo=;
-	b=DA0Gv6nhocj7o+h/3+4qNSYLo6g/GMxw4+hOV5jrKXg6j60eMD5k0VlZ+E0YrMH65y/pET
-	glrP5bmLhdHJco3yJGxSWZw3IymN8j5QvFXWyTSfdNX/SggflP5spQ3+px8hSIDPoTWu8Z
-	xarnkU5vq6GIbq1Jc4C4DeDfuLvlP8U=
-Date: Mon, 13 Apr 2026 09:37:42 -0700
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="E2wavPRL"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-50d8e11b948so46029081cf.3
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 09:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1776098541; x=1776703341; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jUiNyilK1I2myoXjgAEGP+spYezLcxgAYqqWit3D6Xk=;
+        b=E2wavPRL5AmyZgB0g/U0hP95w+LHR0CODATHBR29H0d0H1ZgOljvH8X8HvEY3mXt5a
+         YlnadNIjO+fQDkEchqiV9cHty+PdpSlVJ0f4C9c9V84ivaVyIHJVhYYiHOq6kNaLYdCy
+         RS6GxQgi6h43fT46Qsn7sAG84AXG/H7JJnfCpu1q5aml+RfpX8WXFWxo1JtI9p6txnZa
+         PdoMOOEpmP/FwRH5QMlO4oHklEDiJJ+80RerI/KkkD87VkTNCjDn28FG8unDsu3pExSz
+         eHYOVnR1ITXBzK/9kIafEqDD5d9qV0i6BSWJek3gMW5q99EoszY3lceECT/YF1kRVaZz
+         9cvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776098541; x=1776703341;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jUiNyilK1I2myoXjgAEGP+spYezLcxgAYqqWit3D6Xk=;
+        b=KWdJvF6MWStXyvtulvQRFaa+GJEmFnnzpCxG+fBp4Xo3cIZ1/Txev9WEs9l68/IhNi
+         1QmIdJnHh2KaXwg04VC+f+S6dIbE2hhycmFgCJdTpUKqWuqWXkmGe7P8VfiMrOZUnELd
+         Ml2eO0fQEBgaSs1HRc1i8RQ8ZBItiulVkRbhPW8DE/mkzxKDMSWXxEdSsZGRAskxfd0T
+         yiWQRdeNkzTNv2+b/lexh67vZHwdS3JSJlBPriqtd9CAj/UDAI/Yyg+LAkuVgbazjTd+
+         bBaL7ht9o0AA/GRLdJDfHzspLAjU/iNdvfUKxdhH9Kz0ndR4NYhasAGmIsSaHaBuarnX
+         KFVA==
+X-Forwarded-Encrypted: i=1; AFNElJ8mPobiNWaE2bretcNLiNV75RcQ+GLsePcWNcrmGOShe7j2Y2zppEUhSV1zrM3T/4Nd1w8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP5UXO/82X2jVtVl7l5/8QbmrNk8v2D5KbwC4NQYMg5SSpSkuz
+	Iqb2PlI5t8/lakeRWY6P2Ul5P4s13JoAq7EUxSjByAFeacinXk3jSzCrDppZUiloA/U=
+X-Gm-Gg: AeBDieuA3sn/1bz8sVOjB8Wl4NdO286vdUs9r90dKdApnbKU+ZDpqw6ZsKc4UQwrFGI
+	s594k/SUdSoH0ZpNehTNwZpSCk1yKb2WPYPx1ZLQS1JExKEPFAqZHcalTkjQ5Xdv4e/gwv2Pzgm
+	uszxh3fbC6dzPGNFThSC/U6rAxeXrvK3DAS/IkoviWj5WO5fH9vFKpfzkBbIpvd3IajBkvYgNbG
+	3l4qHhJZ4RAoUDdx6k/GFei8yY65IeI4ov6/8Ml/W4zkXQ4HV75+zlirgkakgdoUOEfTGg8yyWW
+	VnQoRkI3gppQTy5qkEZ3L0bgLTwL5qjjJAItfX9LitXjXHdpCDKsfVBo3zZ86JNtUgaWGh//Pzq
+	CLgp21HQH5R+JimjiemsmJZOeO40npOZWHJDAxNwFt28/tOzSoAbSc4eMWPbjQmWP9GPRo+RAId
+	AmSq2BfizTPqgWBSa187C9SenKQvYyNce9MGjDPFUDdu1EoQOs5U3hCcyQTFOCylJV37rf9ycHZ
+	KG6hw==
+X-Received: by 2002:ac8:5ac8:0:b0:509:120d:4311 with SMTP id d75a77b69052e-50dd5c02761mr211953761cf.60.1776098541243;
+        Mon, 13 Apr 2026 09:42:21 -0700 (PDT)
+Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50de6bc04e0sm60997991cf.19.2026.04.13.09.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 09:42:20 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wCKMe-00000005Zr4-10vb;
+	Mon, 13 Apr 2026 13:42:20 -0300
+Date: Mon, 13 Apr 2026 13:42:20 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Leon Romanovsky <leon@kernel.org>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260413164220.GP3694781@ziepe.ca>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal>
+ <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal>
+ <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal>
+ <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 12/18] bpf: Reject stack arguments if tail
- call reachable
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
- eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260412050010.266625-1-yonghong.song@linux.dev>
- <f163dcbf46e9511eba14b22ed10467984bda3bf07a3d1bd6cd27ae14eadc2056@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <f163dcbf46e9511eba14b22ed10467984bda3bf07a3d1bd6cd27ae14eadc2056@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
 
+On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
+> > We are not limited to LSM solution, the goal is to intercept commands
+> > which are submitted to the FW and "security" bucket sounded right to us.
+> 
+> Yes, it does sound "security relevant", but without a well defined
+> interface/format it is going to be difficult to write a generic LSM to
+> have any level of granularity beyond a basic "load firmware"
+> permission.
 
+I think to step back a bit, what this is trying to achieve is very
+similar to the iptables fwmark/secmark scheme.
 
-On 4/11/26 10:43 PM, bot+bpf-ci@kernel.org wrote:
->> Tailcalls are been deprecated. So reject stack arguments
->> if tail call is in the way.
-> The commit message has a grammar issue ("are been" should probably
-> be "have been" or "are being"), but more importantly, is the claim
-> that tail calls are deprecated accurate?
->
-> Looking at the mailing list discussion on the v1 series, Alexei's
-> guidance was "let's disallow mixing 6+ args and tailcalls" due to
-> stack frame layout incompatibility, not because tail calls are being
-> deprecated.
->
-> Could the commit message more precisely describe the actual
-> reason for the restriction?  Something along the lines of "tail
-> calls and stack arguments require incompatible stack frame
-> handling" would better explain to future readers why the
-> combination is rejected.
+secmark allows the user to specify programmable rules via iptables
+which results in each packet being tagged with a SELinux context and
+then the userspace policy can consume that and make security decision
+based on that.
 
-Okay. Will update the commit message.
+Google is showing me examples of this to permit only certain processes
+to use certain network addresses.
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24299298635
+So this is exactly the same high level idea. The transport of the
+packet is different (firwmare cmd vs network) but otherwise it is all
+the same basic problem. We need a user programmable classifier like
+iptables. Once classified we want this to work with more than SELinux
+only, we have a particular interest in the eBPF LSM. In any case the
+userspace should be able to specify the security policy that applies
+to the kernel classified data.
 
+Following the fwmark example, if there was some programmable in-kernel
+function to convert the cmd into a SELinux label would we be able to
+enable SELinux following the SECMARK design?
+
+Would there be an objection if that in-kernel function was using a
+system-wide eBPF uploaded with some fwctl uAPI?
+
+Finally, would there be an objection to enabling the same function in
+eBPF by feeding it the entire command and have it classify and make a
+security decision in a single eBPF program? Is there some other way to
+enable eBPF? I see eBPF doesn't interwork with SECMARK today so there
+isn't a ready example?
+
+Jason
