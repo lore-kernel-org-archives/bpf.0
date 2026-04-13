@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1ACA37EFFA;
-	Mon, 13 Apr 2026 19:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE11B3B9D96;
+	Mon, 13 Apr 2026 19:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776107480; cv=none; b=Yn/EFSgLOe89LRQUNDJwAPlC+7wvI2kGido9DP7thNJw0/qJTODXqf7tGjeAWC7yi+Ehk42a1Wrcceo8YLtTdwO2SvtcqaZwpSd4Qg22fugPOtUwdcI4W0op54nd8PxvvKLyGWOr+ht71rUq14xugbSBpyzG7GpwAqCmqDFdxtg=
+	t=1776107483; cv=none; b=Cqh9C90zTRTQPGm8Nin2h77CJFyRf150O9xxIlBCDRgwv6SA8OlkLaOfF/THNW53mjaAEBPJJycgmVZzSZAp1mju6MTBfXg+NXd0rqsV4qyXXQPqWKaapGmv5VeEvUyJ/WecPDi1YVhtNLZGBZW4W+hCH1kdKV0F//QpzbL0JkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776107480; c=relaxed/simple;
-	bh=wQgADd80D/pun3cifGRSz/mIPDYovCZECVayXUjBKrg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hNQJbg3n27X1OaYzZaxgxz7kuX8QjbuRjKz+iZK3TmD0LbnnAoY2IHc81zzZfGpzvgWTxhmGgRuwATG6Q4DGhdc8ZFzTMUffxRdUYL6Kxv2eBbdbuG72vZGzQmrcdFp3rXYXAdxkmn4YvxSWoQgDSWJ9dB8+J0IC+8MAqURQqPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eM4ZFz8y; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776107483; c=relaxed/simple;
+	bh=RaXnAWNff4duq1RNyPN0ZReQj1L/HbYwn3Mst5z7mDs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=P3Ic8o3+eaIsDQDD3oiEkCnekHXlKL4+2eUFq+vxGQ+WvySJE100d2jfmRNTR++HDENegeDBkfdKv63IS1mU6Vra2LwkBs9+nVBeQVetLwvHKpQWrMuL/3pMROuhUASIfKs/jud4mG0lI6MMwBp+Vn32mkaPxXfNZaf6tbJvt0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LlCnP6Rm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eM4ZFz8y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC95C2BCAF;
-	Mon, 13 Apr 2026 19:11:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LlCnP6Rm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 294B8C2BCAF;
+	Mon, 13 Apr 2026 19:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776107479;
-	bh=wQgADd80D/pun3cifGRSz/mIPDYovCZECVayXUjBKrg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eM4ZFz8yZ1k2of+wPmWowz80jBd70rhdHOFyAgCv0sMUcqq0hNqASbK+atDSo5/v7
-	 OXff0sMmMm4Uro+jw8NeKEYarPVkLeL8qMq3lqsyEW3QAEvgN03yTT6LiY+l5TwXJp
-	 +AOSvHlpjhGl1TGT/cRGpwRA5mk0402pGmvuMok0k9QbhxsrWBnGAZFb4NUo8ATRiS
-	 w4gChZ2YV7eK5ePij0+2wggMJnaMHBhNL62obsd5Xtd7ztUYsQpP2rjuqUOSIWmk1w
-	 LmDg122CUY1O4kD3Nv4u37ry0E8k8KT+6HL9MZnw6vEt6s2wWVRzsReULl215xuJBx
-	 x/H3dsIak8hVQ==
+	s=k20201202; t=1776107483;
+	bh=RaXnAWNff4duq1RNyPN0ZReQj1L/HbYwn3Mst5z7mDs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LlCnP6RmxuAKB0gAI1nC7kPGEqeRRo2NXdlC9bNO65KDApEEdDpNeU4z90SabRxIB
+	 EoHZGegIveSk6125qX30acurctIP7EWFM79fmbCGfHNpIDYKUUpCm/tqhIB2zsdRoV
+	 wxBd9ehytg5O5ohrJvj3npz3Ld5au/mK1GznFKr1Gl97266oouDFBUbeWexk5VaZgn
+	 y8k7DF2cJI4Pev+eCA3uKLdAlfeWA+Fz9KfLJeIm3Yijmo9pa+lbRtOkY2VX2YhMwp
+	 e7+xMgK560SlBDGM9nmdlrK4Gbil0+C9vFPww1PnHuuvcWzvfqH6V0Ijw/3720apij
+	 zkwL7tSaBL+cg==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -51,10 +52,12 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/2] bpf, arm64/riscv: Remove redundant icache flush after pack allocator finalize
-Date: Mon, 13 Apr 2026 12:11:07 -0700
-Message-ID: <20260413191111.3426023-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 1/2] bpf, arm64: Remove redundant bpf_flush_icache() after pack allocator finalize
+Date: Mon, 13 Apr 2026 12:11:08 -0700
+Message-ID: <20260413191111.3426023-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260413191111.3426023-1-puranjay@kernel.org>
+References: <20260413191111.3426023-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,36 +66,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changelog:
-v1: https://lore.kernel.org/all/20260413123256.3296452-1-puranjay@kernel.org/
-Changes in v2:
-- Remove "#include <asm/cacheflush.h>" as it is not needed now.
-- Add Acked-by: Song Liu <song@kernel.org>
+bpf_flush_icache() calls flush_icache_range() to clean the data cache
+and invalidate the instruction cache for the JITed code region. However,
+since commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+management"), this flush is redundant.
 
-When the BPF prog pack allocator was added for arm64 and riscv, the
-existing bpf_flush_icache() calls were retained after
-bpf_jit_binary_pack_finalize(). However, the finalize path copies the
-JITed code via architecture text patching routines (__text_poke on arm64,
-patch_text_nosync on riscv) that already perform a full
-flush_icache_range() internally. The subsequent bpf_flush_icache()
-repeats the same cache maintenance on the same range.
+bpf_jit_binary_pack_finalize() copies the JITed instructions to the ROX
+region via bpf_arch_text_copy() -> aarch64_insn_copy() -> __text_poke(),
+and __text_poke() already calls flush_icache_range() on the written
+range. The subsequent bpf_flush_icache() repeats the same cache
+maintenance on an overlapping range, including an unnecessary second
+synchronous IPI to all CPUs via kick_all_cpus_sync().
 
-Remove the redundant flush and the now-unused bpf_flush_icache()
-definitions on both architectures.
+Remove the redundant bpf_flush_icache() call and its now-unused
+definition.
 
-Puranjay Mohan (2):
-  bpf, arm64: Remove redundant bpf_flush_icache() after pack allocator
-    finalize
-  bpf, riscv: Remove redundant bpf_flush_icache() after pack allocator
-    finalize
-
+Fixes: 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management")
+Acked-by: Song Liu <song@kernel.org>
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
  arch/arm64/net/bpf_jit_comp.c | 12 ------------
- arch/riscv/net/bpf_jit.h      |  6 ------
- arch/riscv/net/bpf_jit_core.c |  7 -------
- 3 files changed, 25 deletions(-)
+ 1 file changed, 12 deletions(-)
 
-
-base-commit: 71b500afd2f7336f5b6c6026f2af546fc079be26
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index adf84962d579..7417d24a5b6f 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -18,7 +18,6 @@
+ 
+ #include <asm/asm-extable.h>
+ #include <asm/byteorder.h>
+-#include <asm/cacheflush.h>
+ #include <asm/cpufeature.h>
+ #include <asm/debug-monitors.h>
+ #include <asm/insn.h>
+@@ -1961,11 +1960,6 @@ static int validate_ctx(struct jit_ctx *ctx)
+ 	return 0;
+ }
+ 
+-static inline void bpf_flush_icache(void *start, void *end)
+-{
+-	flush_icache_range((unsigned long)start, (unsigned long)end);
+-}
+-
+ static void priv_stack_init_guard(void __percpu *priv_stack_ptr, int alloc_size)
+ {
+ 	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
+@@ -2204,12 +2198,6 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 			prog = orig_prog;
+ 			goto out_off;
+ 		}
+-		/*
+-		 * The instructions have now been copied to the ROX region from
+-		 * where they will execute. Now the data cache has to be cleaned to
+-		 * the PoU and the I-cache has to be invalidated for the VAs.
+-		 */
+-		bpf_flush_icache(ro_header, ctx.ro_image + ctx.idx);
+ 	} else {
+ 		jit_data->ctx = ctx;
+ 		jit_data->ro_image = ro_image_ptr;
 -- 
 2.52.0
 
