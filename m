@@ -1,98 +1,104 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF41223323;
-	Mon, 13 Apr 2026 01:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E4E740DFD5
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 02:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776045588; cv=none; b=juPtkjBL+Vv0e6GmpdadHln0fEgxdcZQdrFFUOi/00rZFhUzXQvZj1MjQeyU/2s7qQAF+9jUAMBms7B7r8ZY8CAtCQzUZKEydtpEFeAnlAoH1Qt0KHyrjBB0T5jGkHQjzJqqqeTDZGQxLCTa4kVBYsjuDByRODN60+n6F56I++A=
+	t=1776047971; cv=none; b=LAd2DqhXX12H7R2FQZdT27sJNor2xszjVZZjUg0GuFWByPgRLSRwDWcqQc2v1Nf5+iYdnuwrSRGtWkTg1/GTjOut1/v9enVKeyXd6UlMuNrBvQUX3Ba9fCcav1Iauf13+AmI5TXRJpRuTQnBU4H0b2S0JDdYRvigpp+zAsZK8FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776045588; c=relaxed/simple;
-	bh=SW3kdgAMMk1CrOG6hIuDvqqTZdWtCKfcPxSWXpnIkiw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=M0/Lj9MBroeSuFCQ32Uu6u0YibLUR4FP3265L7RolqfvTX+SivhMu/qBuj0AG1TpQ5jAMB1B0L5TpQY6O8CXD8tHSvQ48Pvv/wbFoZcaAqsbzlUgt+UTeSSd0w+LqIMZQVy8NFVLOeLu7LcS51YjntOL9oasL2g5we4nbOyU0jM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QbPagGFn; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QbPagGFn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=bF
-	B9ezxilDEXzMXCA8jasVHzR2QUbxqA/UbWKTsBRLo=; b=QbPagGFnJUW0jzpq80
-	Te2ytxESEsXdE9cFUIXeKjGkOipsRZ7xPkrEsv2OKyCMLLv9WLR5k7uikxRkNINj
-	oV3MI2zUKId6tJ158IXS8abBAFXZpeX5qqEP/hPoGMZq23+2VMUhXRjkeWUd2qie
-	eE7+4rHNBhjJtR380mMpgglcs=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wAHCXPMTdxpN6CoEw--.40560S2;
-	Mon, 13 Apr 2026 09:58:37 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: menglong.dong@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	jiayuan.chen@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	mattbobrowski@google.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yangfeng59949@163.com,
-	yangfeng@kylinos.cn,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH v3 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
-Date: Mon, 13 Apr 2026 09:58:36 +0800
-Message-Id: <20260413015836.73506-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4726660.LvFx2qVVIh@7950hx>
-References: <4726660.LvFx2qVVIh@7950hx>
+	s=arc-20240116; t=1776047971; c=relaxed/simple;
+	bh=5aMG8Y9lQBC4/Htgs6nHIi6KjiFrjSyf+BvWlgPjtiY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dHr2sOhPihs51bIGvseYhVI19XCic4zJ9rlDaPzTrNxySU2/rDoyZposogH3FDd5tAWPUoqWYh0h3K31NeV4vDnca024iQc15R8ypmblUWpQ32e9AszvvlRVWcpdtbXfmG9UHZ6e12abZZCsdLZBtySAZpgqmETxG4iMPm+yzKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.163.215])
+	by mtasvr (Coremail) with SMTP id _____wB3BS08V9xpm9JRAA--.5020S3;
+	Mon, 13 Apr 2026 10:38:53 +0800 (CST)
+Received: from [10.162.163.215] (unknown [10.162.163.215])
+	by mail-app4 (Coremail) with SMTP id zi_KCgB3WzQ4V9xpQGdcAA--.53741S3;
+	Mon, 13 Apr 2026 10:38:48 +0800 (CST)
+Message-ID: <c93818d4-a556-48bf-b7d5-b5ece41c16bf@zju.edu.cn>
+Date: Mon, 13 Apr 2026 10:38:47 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAHCXPMTdxpN6CoEw--.40560S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1rCw1DAF1DGryxKry8Xwb_yoWfCFX_CF
-	W0kr17Jw1j9wn5WFn8CrnrCrZrtwn8Ww4rZrWvqa129asxKayUAr18Xrs5Xry7Xw1xXFs7
-	Crn0gayxCw1fZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUUmLvPUUUUU==
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8g0YkGncTc0cMwAA3t
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v6 1/2] bpf: Fix s16 truncation for large bpf-to-bpf
+ call offsets
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Eduard <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Yazhou Tang <tangyazhou518@outlook.com>,
+ Shenghao Yuan <shenghaoyuan0928@163.com>, Tianci Cao <ziye@zju.edu.cn>
+References: <20260412170334.716778-1-tangyazhou@zju.edu.cn>
+ <20260412170334.716778-2-tangyazhou@zju.edu.cn>
+ <CAADnVQ+m2pFaPbRi=A+tsROKP2CPPkny_LXUKR3vUgH2+u1jRg@mail.gmail.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <CAADnVQ+m2pFaPbRi=A+tsROKP2CPPkny_LXUKR3vUgH2+u1jRg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:zi_KCgB3WzQ4V9xpQGdcAA--.53741S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBhIACmnb9Y0J-AAAsh
+X-CM-DELIVERINFO: =?B?hu/3YAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9LeWw/0zHTXLOK0vjQv36EbZtQvpwFWb/HW7AxFIyEVNuysBxI0evUGiFE5eaHszkKG9
+	CgYkawT8MEqOzsJAP3ZM2fFnjTyJszEy35AMTVFTpy9YwEy1woGOLMoHT6tzSQ==
+X-Coremail-Antispam: 1Uk129KBj9xXoWrur43Gr4xGw15KrWDKr17Jwc_yoWDAFcEk3
+	95Kr1UJrWj9FnrZan3Cw1F9FWvkF1kCr13CrW8Xr13KF1UZan7WF40kas2v34Fy348Gry8
+	Wr1vqFZFkF1I9osvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbI8YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2
+	ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGO
+	UUUUU
 
-On Sun, 12 Apr 2026 11:39:53 +0800, Menglong Dong wrote:
-> >  static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
-> >  {
-> > @@ -18416,8 +18522,13 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
-> >  			*range = retval_range(0, 0);
-> >  			break;
-> >  		case BPF_TRACE_RAW_TP:
-> > -		case BPF_MODIFY_RETURN:
-> >  			return false;
-> > +		case BPF_MODIFY_RETURN:
-> > +			if (!bpf_security_get_retval_range(env->prog, range))
-> > +				break;
-> > +			if (modify_return_get_retval_range(env->prog, range))
-> > +				return false;
-> > +			break;
-> 
-> return false by default, as what we did in the previous logic?
-> 
-> +		case BPF_MODIFY_RETURN:
-> +			if (!bpf_security_get_retval_range(env->prog, range))
-> +				break;
-> +			if (!modify_return_get_retval_range(env->prog, range))
-> +				break;
-> +			return false;
-> 
+Hi Alexei,
 
-Okay, thank you very much.
+Thanks for your review.
 
-> >  		case BPF_TRACE_ITER:
+On 4/13/26 4:13 AM, Alexei Starovoitov wrote:
+> The patch doesn't apply anymore. This function was moved.
+> 
+> Also see sashiko review. It flagged a real issue.
+> 
+> pw-bot: cr
+
+Regarding the apply failure: My patch was originally targeted at the bpf
+tree as a bugfix, where it applies cleanly. I see that commit f1606dd0ac49
+renamed find_subprog() to bpf_find_subprog() in the bpf-next tree.
+
+Given this conflict, would you prefer I rebase and target bpf-next for the
+v7 submission, or should I keep targeting the bpf tree?
+
+Regarding the Sashiko review: The issue of stack_depth exceeding MAX_BPF_STACK
+during JIT fallback is indeed a pre-existing bug (it originally caused a
+load-time OOB read). However, my patch inadvertently turned it into a more
+critical run-time OOB read.
+
+I will fix this properly in v7. I plan to change the return type of
+bpf_patch_call_args() to int and add a strict boundary check of stack_depth
+to safely reject the fallback.
+
+Thanks,
+Yazhou
 
