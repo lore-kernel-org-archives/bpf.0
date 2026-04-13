@@ -1,63 +1,62 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 960D9390223
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5EC3E4C6E
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776110219; cv=none; b=fpSi1ikDgryRqXk4Sa2llRa7ijscqriIT70VNsKDALwXvB+HPUqDNXKd60+ezVXQ/hROXQwJDTUBDxzWi/f4yajXn9G9GU5B5cK+Hk3sww9B9P5age8bY5lrd7k810MQWprbtVfNB+PWY+HN73hEZQCIA/Svp/jHZ/VVASrvktU=
+	t=1776110220; cv=none; b=cs0sdGA9+3Bhh8BXwPJh38mFPxxuptfY74DyN03hlB16msJm1VIvDo9GSZnsd5ULY3d5goJbioUv/GOSLmKkb3Y8jq/Cq2OF+YZLEY4VpNlD8UU20TMZORgvB+kIH/rjGuGK/Gt9p3P+USG47LFpfeFDNlut00L8wBr2LZWf7zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776110219; c=relaxed/simple;
-	bh=qnOZ3pZVmGhoXHk1WKN3SGMEkSGXjcz9fN46WOajHak=;
+	s=arc-20240116; t=1776110220; c=relaxed/simple;
+	bh=5OOW5Hv1uAF+wSubAKsIG33WXOGafvJcPR6+4k3Ci7s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f7vh37htk+nTAW16NlTxVfW0XeoGme+cDyO8GByno/ySwMMhp0AdPk/BcMWsMQVlIWjlBBjJXQDDYfLXI6v91mAIPIUwZjHrOiaTwm+qfftaO1Tt/plAkEqx+O+ClEAaHD0U7eW3RVwtuEcMX53QGV5UBoPamJIyWNt1V6a3S7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wt77NHdh; arc=none smtp.client-ip=209.85.216.52
+	 MIME-Version:Content-Type; b=exfX+jgHtLYmglFRNKMSj+uZrLQv1CDxgEUdKz1teCZUuU9oIaAQy1+InaLHqkbxAc0YCf7eCPOJhEgi+tKywY21Yf8ZrVJTr0WqaIKX2zp1UTc+4ocHIj84qGV/zlohNdA3nKGKOm9bxNG0z8sE/tJPsNIWHaSS1A5E2qLJ4TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kz+1yfMb; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wt77NHdh"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-35fb7f51171so1214871a91.1
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:56:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kz+1yfMb"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35fc258aaa4so400483a91.2
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776110218; x=1776715018; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776110219; x=1776715019; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3N+ggbalB+aiT8TNp4qyNwpeEcxjZBAepL60FMU6ub8=;
-        b=Wt77NHdhh24xpMJ8kbV/jyLcnwfIiDsle8AVKX01nFndhIM0ijwb8WnXWNTMeQ3OBN
-         IJdmYqPdQ5jCJPKbf5VORd/Qx0saifhc1lkY29ADV0NzIawPbzR0GDCCejmTbLls3PUb
-         T65ZD/H4TjRKRiraaqF7bNloOAT5fm5e+79DIwmT953f69a62lYVQhZWdnYUExfnPIy7
-         KP0uB1LeJjnX0oZB6A8maNX1WDiYhffVhWOrrnATL+gc5yucDZd21mC0A0R1QLc0SyxG
-         71S1Fpp2wIRXHPEf9Au4q+epe3GzbfEcUjcv7QF03f9XmasFMhtg5w4Ax8rnT81mOmYr
-         F4og==
+        bh=/jB9OPnIhPg9GBCR5K6QkLNPcOIraFHkVwqWp9POQDE=;
+        b=kz+1yfMbGW5iZdZg9ArqN6kPLDDhVwPkuN+tIVjSGUPp7TC/FA+6Oct1VxqhPaorY8
+         bpLNMlCCNPZy2gdoZMEn390rOjFcrGEPJz5MEYSbbCacP2iaXzCwWyLQCGMppNkNwvBU
+         Ju0VN4+PR1fkVb9g+ubtaC8Zv05+sms74682YvOqr4QMtUJrinwVopmYznCqB+7MEZ/j
+         lc7NRZoxasuG9JAiV/5tShYa9z1zmLmRdf38scwsGe3safpz3knK1Y/uos/O+gQ3HrNT
+         vio1hDuP6I+yZSJuX6JzqTvklki0Kzlcjpo64FdjpYgnvkHqfDDlQIs7d1GobmvmA1P0
+         0mhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776110218; x=1776715018;
+        d=1e100.net; s=20251104; t=1776110219; x=1776715019;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=3N+ggbalB+aiT8TNp4qyNwpeEcxjZBAepL60FMU6ub8=;
-        b=cHIZNKec6D6rNoBIMMepFBIsUHflyOhuMah0zr6vcOxzFSg73jQvU3b278FJFlbkEX
-         Z8eF8o7u4pjF4MWnKwSzkd1LzLWMEBWRDWLvHNjk3G6467gtnYwU3rgMxFhEqNB8Cson
-         PtajUU9WPeUHqUmwL5W5wBh0uCLkNh8LP/ulHjxPa1vL6OE6QRwzgL1EHFO47aC90udj
-         24clWr57l9lvOjn5g0Fr68DZnwGLWl5T96XA5st9aWdmWyFBkLzvTpn3VPAnTP6kD2I7
-         yeQooWihymmv1gMlFZuyapDqfTN6s/MoURE9CNFF1AAZdxYu+RPKc2+vmEolTft83NIf
-         sjIQ==
-X-Gm-Message-State: AOJu0YwtpmCiWRYYzrJfZJreVzGktbjal26YnEszrz/rr6RcGx/OPint
-	ohnORDx6aHKySlaLLV7siMtUBKa0W+kyjRTRg42njQ3beYtckknwLq+40mv9IQ==
-X-Gm-Gg: AeBDietN/A4PBFaAH4k1ciph2FbLHQl+TtH7vm9DCsm73JveuUN1VmJvIz/FSt3cFUm
-	7Ctyfa1Ol2seFLE5cn1/nfkBsEaZSYLMjKOzG3Q0RnV22yHaugwEz3PNTp073rP4MyH0LpUMkTG
-	AwgecbxAe4EHBkvYMCOZoB9b9RIE0jreoRchaFDV/Vz+x6xAFgMv28CH4Ks7c8MUR4GCcSMXtF/
-	TX643cUl+TO+KpGgiiCRSeVoGQ0uXbTqaW+7QCtAxmXLWSKGDhZr197pMDfRKnlz6WXxFxwUmiY
-	Lm9fJGBBeXIPdEDu5DBelpROtMI2uADO8C3KoQavQCZMOU62lz9GIPpEKNjwTrHqSNiwzjQjeg2
-	4q/VYNuRiDe7xGxPi+32gKnp+b9yJU9gNnEVscegyJ9S+VLMN+D8thgbmt9pAbPFZBHWBlM3wtQ
-	bT4STtdr6opI1aRkmuCKPpThN8mP7SDUc5kpJzBPbHZlVkYN8xmtCEZJy7zxc6VFZNemgfIIaUA
-	PinjQ==
-X-Received: by 2002:a17:90b:3a4d:b0:34c:2db6:578f with SMTP id 98e67ed59e1d1-35e428412a8mr13408962a91.19.1776110217747;
-        Mon, 13 Apr 2026 12:56:57 -0700 (PDT)
+        bh=/jB9OPnIhPg9GBCR5K6QkLNPcOIraFHkVwqWp9POQDE=;
+        b=GWT5SW55U3s0cHEIxT3+7e0y4PNZ9L8CTmyq+/rXD/Cbgc3vycZx2rnSlhlwVkjH5d
+         SD0vt4TWffH/+gd2QBdDAfnuQlYZOP5VVmGWZWZKeCBdkjGPhHOKH1rfVzSvCAQIzWte
+         pPSYI7K+qXR5xAGevJcYFlseI0J5fjYQ0byYMD19rA0timuB2GJM0tL1jFcKuyjsWP5n
+         v8LsqPTTTzDsCcO9JXYPujoDKZNyUJZtJ3sCOAN7+PhO7Hn33HaF8cWUoP660FnFRems
+         9VAkbATHjzONS2j+LN0SamIHVM3Q6mm0and7Nr9FjIUNI7aH4P8ASABHPrpt3oNPJ9hk
+         TRoQ==
+X-Gm-Message-State: AOJu0Yzq8GAVGlUw9oFpMmbGjI2YfCRL/+6gpVDzRe3aQWTY/lxqbeIi
+	LqIzVIjDDQHi6617O6CTjNWO2ja5iglHhm1yb2a+8FJW5akQwHCmupKnR0p2ig==
+X-Gm-Gg: AeBDiesc+1+LiAqSLWKVhqpipDoXHH385cc2ayB2e28Hm6u/xOvKqlrnPHZbC/hPsZP
+	yQJBeHgkvi+NeW1nEbbloTqNkx4/hkEz0RsmbfvleCr0B7R9GKlsZDyjWAFyOnRFkwYDPej5A7q
+	lrfugcrKKvFnnaTg/9f37bVXOg1riLD8fPUiHpfCsI45DKy/L1aE50I27HEcS3eFUwnbTdb4TXy
+	o+aRZg76VXeVmpdoeMeQgCkiJL7xhHnmqtAyvOxhw7r74coEI1quQJhiBryLP54TeVc0X92zdFU
+	BGrkvveEm4sOn/pRS8WkCQPmssMnYi62eEMEATtLNhXgmNLauIXmZLGsDQ2D5VBAjivAgurGDp5
+	XXdcKl43BgFEFHIQzu0uagtRFJ/Rzg6kxeJBl31d5nm5hOpFx0cnqZ3I7tg/9/4o7r6Kng8tIwN
+	uTTc4ey+AaC1zmOkJzK+HDExXdY3hZ2TPaE2BYdtx38CZbnCqv+8aQWdiCNI7Klu0r+jE=
+X-Received: by 2002:a17:90b:4d10:b0:35d:8fdb:4f36 with SMTP id 98e67ed59e1d1-35e42846585mr14379811a91.18.1776110218552;
+        Mon, 13 Apr 2026 12:56:58 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e3512f41bsm16452599a91.9.2026.04.13.12.56.56
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35e3512f41bsm16452599a91.9.2026.04.13.12.56.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 12:56:57 -0700 (PDT)
+        Mon, 13 Apr 2026 12:56:58 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -67,9 +66,9 @@ Cc: daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com
-Subject: [PATCH bpf-next 1/3] bpf: fix arg tracking for BPF_STX through imprecise ptrs
-Date: Mon, 13 Apr 2026 12:56:39 -0700
-Message-ID: <20260413-stacklive-fixes-v1-1-9f48a9999d6e@gmail.com>
+Subject: [PATCH bpf-next 2/3] bpf: fix arg tracking for BPF_ST through imprecise/multi-offset ptrs
+Date: Mon, 13 Apr 2026 12:56:40 -0700
+Message-ID: <20260413-stacklive-fixes-v1-2-9f48a9999d6e@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260413-stacklive-fixes-v1-0-9f48a9999d6e@gmail.com>
 References: <20260413-stacklive-fixes-v1-0-9f48a9999d6e@gmail.com>
@@ -82,58 +81,122 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-BPF_STX through ARG_IMPRECISE dst should be recognized as a local
-spill and join at_stack with the written value. For example,
-consider the following situation:
+BPF_ST through multi-offset or imprecise dst should join at_stack with
+none instead of overwriting the slots. For example, consider the
+following situation:
 
    // r1 = ARG_IMPRECISE{mask=BIT(0)|BIT(1)}
-   *(u64 *)(r1 + 0) = r8
+   *(u64 *)(r1 + 0) = 0
 
 Here the analysis should produce an equivalent of
 
-  at_stack[*] = join(old, r8)
+  at_stack[*r1] = join(old, none).
+
+Move the definition clear_overlapping_stack_slots() in order to have
+__arg_track_join() visible.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/liveness.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ kernel/bpf/liveness.c | 56 +++++++++++++++++++++++++++------------------------
+ 1 file changed, 30 insertions(+), 26 deletions(-)
 
 diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 1fb4c511db5a..8069ea955023 100644
+index 8069ea955023..d5e0bd18ee06 100644
 --- a/kernel/bpf/liveness.c
 +++ b/kernel/bpf/liveness.c
-@@ -1042,6 +1042,12 @@ static void arg_track_log(struct bpf_verifier_env *env, struct bpf_insn *insn, i
- 		verbose(env, "\n");
+@@ -622,28 +622,6 @@ static bool arg_is_fp(const struct arg_track *at)
+ 	return at->frame >= 0 || at->frame == ARG_IMPRECISE;
  }
  
-+static bool can_be_local_fp(int depth, int regno, struct arg_track *at)
+-/*
+- * Clear all tracked callee stack slots overlapping the byte range
+- * [off, off+sz-1] where off is a negative FP-relative offset.
+- */
+-static void clear_overlapping_stack_slots(struct arg_track *at_stack, s16 off, u32 sz)
+-{
+-	struct arg_track none = { .frame = ARG_NONE };
+-
+-	if (off == OFF_IMPRECISE) {
+-		for (int i = 0; i < MAX_ARG_SPILL_SLOTS; i++)
+-			at_stack[i] = none;
+-		return;
+-	}
+-	for (int i = 0; i < MAX_ARG_SPILL_SLOTS; i++) {
+-		int slot_start = -((i + 1) * 8);
+-		int slot_end = slot_start + 8;
+-
+-		if (slot_start < off + (int)sz && slot_end > off)
+-			at_stack[i] = none;
+-	}
+-}
+-
+ static void verbose_arg_track(struct bpf_verifier_env *env, struct arg_track *at)
+ {
+ 	int i;
+@@ -980,6 +958,32 @@ static void spill_to_stack(struct bpf_insn *insn, struct arg_track *at_out,
+ 	}
+ }
+ 
++/*
++ * Clear all tracked callee stack slots overlapping the byte range
++ * [off, off+sz-1] where off is a negative FP-relative offset.
++ */
++static void clear_overlapping_stack_slots(struct arg_track *at_stack, s16 off, u32 sz, int cnt)
 +{
-+	return regno == BPF_REG_FP || at->frame == depth ||
-+	       (at->frame == ARG_IMPRECISE && (at->mask & BIT(depth)));
++	struct arg_track none = { .frame = ARG_NONE };
++
++	if (off == OFF_IMPRECISE) {
++		for (int i = 0; i < MAX_ARG_SPILL_SLOTS; i++)
++			at_stack[i] = __arg_track_join(at_stack[i], none);
++		return;
++	}
++	for (int i = 0; i < MAX_ARG_SPILL_SLOTS; i++) {
++		int slot_start = -((i + 1) * 8);
++		int slot_end = slot_start + 8;
++
++		if (slot_start < off + (int)sz && slot_end > off) {
++			if (cnt == 1)
++				at_stack[i] = none;
++			else
++				at_stack[i] = __arg_track_join(at_stack[i], none);
++		}
++	}
 +}
 +
  /*
-  * Pure dataflow transfer function for arg_track state.
-  * Updates at_out[] based on how the instruction modifies registers.
-@@ -1111,8 +1117,7 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			at_out[r] = none;
- 	} else if (class == BPF_LDX) {
+  * Clear stack slots overlapping all possible FP offsets in @reg.
+  */
+@@ -990,18 +994,18 @@ static void clear_stack_for_all_offs(struct bpf_insn *insn,
+ 	int cnt, i;
+ 
+ 	if (reg == BPF_REG_FP) {
+-		clear_overlapping_stack_slots(at_stack_out, insn->off, sz);
++		clear_overlapping_stack_slots(at_stack_out, insn->off, sz, 1);
+ 		return;
+ 	}
+ 	cnt = at_out[reg].off_cnt;
+ 	if (cnt == 0) {
+-		clear_overlapping_stack_slots(at_stack_out, OFF_IMPRECISE, sz);
++		clear_overlapping_stack_slots(at_stack_out, OFF_IMPRECISE, sz, cnt);
+ 		return;
+ 	}
+ 	for (i = 0; i < cnt; i++) {
+ 		s16 fp_off = arg_add(at_out[reg].off[i], insn->off);
+ 
+-		clear_overlapping_stack_slots(at_stack_out, fp_off, sz);
++		clear_overlapping_stack_slots(at_stack_out, fp_off, sz, cnt);
+ 	}
+ }
+ 
+@@ -1171,7 +1175,7 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		}
+ 	} else if (class == BPF_ST && BPF_MODE(insn->code) == BPF_MEM) {
  		u32 sz = bpf_size_to_bytes(BPF_SIZE(insn->code));
--		bool src_is_local_fp = insn->src_reg == BPF_REG_FP || src->frame == depth ||
--				       (src->frame == ARG_IMPRECISE && (src->mask & BIT(depth)));
-+		bool src_is_local_fp = can_be_local_fp(depth, insn->src_reg, src);
+-		bool dst_is_local_fp = insn->dst_reg == BPF_REG_FP || dst->frame == depth;
++		bool dst_is_local_fp = can_be_local_fp(depth, insn->dst_reg, dst);
  
- 		/*
- 		 * Reload from callee stack: if src is current-frame FP-derived
-@@ -1147,7 +1152,7 @@ static void arg_track_xfer(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		bool dst_is_local_fp;
- 
- 		/* Track spills to current-frame FP-derived callee stack */
--		dst_is_local_fp = insn->dst_reg == BPF_REG_FP || dst->frame == depth;
-+		dst_is_local_fp = can_be_local_fp(depth, insn->dst_reg, dst);
- 		if (dst_is_local_fp && BPF_MODE(insn->code) == BPF_MEM)
- 			spill_to_stack(insn, at_out, insn->dst_reg,
- 				       at_stack_out, src, sz);
+ 		/* BPF_ST to FP-derived dst: clear overlapping stack slots */
+ 		if (dst_is_local_fp)
 
 -- 
 2.53.0
