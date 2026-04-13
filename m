@@ -1,170 +1,87 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75ABA2E54D1
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 16:33:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E001D5AD4
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 16:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776098038; cv=none; b=Icsw7BJQEzelCOgHw8ROase3lPefMh3X1jRkSqHAwehU4EXFQWzrtaNCF6l3AIpl+WYCN2HF++/EohCQVQwDuW9B0qRrmuPfJRCwjr0q2Plh6YqwO3bLXI8h4SZd3tzFCps2oSTdtCNBOeYHh6b1u5r/xuxELy302Ykm/JBUt2U=
+	t=1776098172; cv=none; b=lg5hQIjp2qKKDU2/ZFQ59xDQpXAv4+z504cM8g5fpyWAiAUPmCuAmixSyI1sBI+CX41p1biQ/z1wGDnVBj+ifw6Ymoanf2occgH/jb72oXprEb8tw9mHKhvvbYcJDWc5dONmjEzzgdK4boBJ/rF1LkcJravQSg/pk4dvBw+240c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776098038; c=relaxed/simple;
-	bh=iGhLlks1VUBy4AOo1gJuHeSEAz5yFJug4+xtmx+taRY=;
+	s=arc-20240116; t=1776098172; c=relaxed/simple;
+	bh=ZVSs1Q1Ca6aqWmwCaLZCX6QTUsOHWBEsX/rkDdXDHjU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C3b0iYeqf5UfmWD7x7rGriNysrZDXgDskuX1tktVs+LU8cauFzsDi+sqCqz7WJv266du9ysRYtPgTTs7/D8KDGCBFiFPaaVkeyhEvrGJNj0rHeENt3B7R4W63F3VbnKuP969V2Kd4IlqwGoJG9V8SupC7Iqg5rn/bTG4kyjAL0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M1P0jvPn; arc=none smtp.client-ip=91.218.175.182
+	 In-Reply-To:Content-Type; b=f8uE+JRdI75jjsrHz6YhodXs0CkxSLTnKWERTEFf5x5dbWotGieJqFyZDXL0vxntuyeR8+QtFBcysbQW/55JeLIO3Icz8S63Kc/KuRqzXjyiioIgmf1/pktpeRYGOTaj87HlDu16nC2tVbL9VqNcIJUDMb3HwkOENTKeNBPvSeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RNZ3EGHV; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M1P0jvPn"
-Message-ID: <1f47b526-d995-4771-9123-fc2a4a9a7ea3@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RNZ3EGHV"
+Message-ID: <26b3bb62-ca7b-4a1b-aec6-b5e779e2fc84@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776098033;
+	t=1776098168;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=F5FAyaJAYsu86kb0Ky634PFmNEjkY7mJUQSIM9SdrVs=;
-	b=M1P0jvPnSFWD8ScrNggSywMMWJAgYnpF9M88UJEGpDWwUScLjZARcJ6qijeN/xBVrR9VP7
-	8PXi6ZGI+NFMKKAOl+pKGjG/4InvZbPa+VTjwd/cR1hBzjD6Zw1WOoSURVKeX2daVMSnhd
-	jH4rSyDoLXaMicsWJRyJdHI1w0VWrWo=
-Date: Mon, 13 Apr 2026 09:33:44 -0700
+	bh=ZjvLwXEvfP1zSzKUp2Fqd77zPSu/0mjcpiEaIPUoU0w=;
+	b=RNZ3EGHVErZcYQjES60y1Exqb6C0QQfEJP14MNBI5sFgnToDWGZv8SUCnVB/Omr7sdUi/c
+	Ek7u8NOe/e2vmfBzaOO7ZhQtdPIgJrnepntm9MRasdhOoOUu3acqMk7Fu0U7+F1FsausTC
+	+j4BvUicwFkk0Pdq3fX8wK7GNm2PI68=
+Date: Mon, 13 Apr 2026 09:36:03 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 09/18] bpf: Support stack arguments for bpf
- functions
+Subject: Re: [PATCH bpf-next v4 10/18] bpf: Fix interaction between stack
+ argument PTR_TO_STACK and dead slot poisoning
 Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>,
- Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
-References: <20260412045826.254200-1-yonghong.song@linux.dev>
- <20260412045955.257613-1-yonghong.song@linux.dev>
- <CAADnVQLPruMzAt+jFMhwS_OHyMcqoviHDAPSKAYK8VW1k1FBKg@mail.gmail.com>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
+ eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260412050000.262030-1-yonghong.song@linux.dev>
+ <928fac5880ee0f617245a8cb45a88a00eb03fa2137e18fc8943a4505a3df50be@mail.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAADnVQLPruMzAt+jFMhwS_OHyMcqoviHDAPSKAYK8VW1k1FBKg@mail.gmail.com>
+In-Reply-To: <928fac5880ee0f617245a8cb45a88a00eb03fa2137e18fc8943a4505a3df50be@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 4/12/26 3:23 PM, Alexei Starovoitov wrote:
-> On Sat, Apr 11, 2026 at 10:00 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->> Currently BPF functions (subprogs) are limited to 5 register arguments.
->> With [1], the compiler can emit code that passes additional arguments
->> via a dedicated stack area through bpf register
->> BPF_REG_STACK_ARG_BASE (r12), introduced in the previous patch.
->>
->> The compiler uses positive r12 offsets for incoming (callee-side) args
->> and negative r12 offsets for outgoing (caller-side) args, following the
->> x86_64/arm64 calling convention direction. There is an 8-byte gap at
->> offset 0 separating the two regions:
->>
->>    Incoming (callee reads):   r12+8 (arg6), r12+16 (arg7), ...
->>    Outgoing (caller writes):  r12-N*8 (arg6), ..., r12-8 (last arg)
->>
->> The following is an example to show how stack arguments are saved
->> and transferred between caller and callee:
->>
->>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
->>      ...
->>      bar(a1, a2, a3, a4, a5, a6, a7, a8);
->>      ...
->>    }
->>
->>     Caller (foo)                           Callee (bar)
->>     ============                           ============
->>     Incoming (positive offsets):           Incoming (positive offsets):
->>
->>     r12+8:  [incoming arg 6]               r12+8:  [incoming arg 6] <-+
->>     r12+16: [incoming arg 7]               r12+16: [incoming arg 7] <-|+
->>                                            r12+24: [incoming arg 8] <-||+
->>     Outgoing (negative offsets):                                      |||
->>     r12-24: [outgoing arg 6 to bar] -------->-------------------------+||
->>     r12-16: [outgoing arg 7 to bar] -------->--------------------------+|
->>     r12-8:  [outgoing arg 8 to bar] -------->---------------------------+
->>
->> Note the reversed order: the caller's most negative outgoing offset
->> (arg6) maps to the callee's first positive incoming offset (arg6).
->> The caller stores arg6 at r12-24 (= -3*8 for 3 stack args), and
->> the callee reads it at r12+8.
->>
->> If the bpf function has more than one call:
->>
->>    int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
->>      ...
->>      bar1(a1, a2, a3, a4, a5, a6, a7, a8);
->>      ...
->>      bar2(a1, a2, a3, a4, a5, a6, a7, a8, a9);
->>      ...
->>    }
->>
->>     Caller (foo)                             Callee (bar2)
->>     ============                             ==============
->>     Incoming (positive offsets):             Incoming (positive offsets):
->>
->>     r12+8:  [incoming arg 6]                 r12+8:  [incoming arg 6] <+
->>     r12+16: [incoming arg 7]                 r12+16: [incoming arg 7] <|+
->>                                              r12+24: [incoming arg 8] <||+
->>     Outgoing for bar2 (negative offsets):    r12+32: [incoming arg 9] <|||+
->>     r12-32: [outgoing arg 6] ---->----------->-------------------------+|||
->>     r12-24: [outgoing arg 7] ---->----------->--------------------------+||
->>     r12-16: [outgoing arg 8] ---->----------->---------------------------+|
->>     r12-8:  [outgoing arg 9] ---->----------->----------------------------+
-> The diagram looks good.
-> When I suggested to use r12 I thought the whole support will take
-> much longer and by that time we will land Eduard's r11 work.
-> Now it looks like 6+ args will land first,
-> so let's swap them. Please use r11 as a base and Eduard's spill/fill
-> will use r12 if/when it happens.
+On 4/11/26 10:43 PM, bot+bpf-ci@kernel.org wrote:
+> commit 7570556100592966981ed4784bb775307405e5f0
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf: Fix interaction between stack argument PTR_TO_STACK and dead slot poisoning
+>
+> This commit fixes a false rejection where the verifier rejects valid
+> cross-frame stack reads because the static liveness pass cannot track
+> indirect references through stack-argument-passed pointers, causing
+> parent frame slots to be incorrectly poisoned.
+>
+> This patch fixes a bug introduced by an earlier commit in the same
+> series but does not include a Fixes: tag. The issue is introduced
+> when stack argument support is added, because BPF_REG_STACK_ARG_BASE
+> (r12) is not tracked by the liveness pass. Without attribution, it
+> is harder to identify the scope of the fix during bisection or
+> stable backporting.
+>
+> Would it make sense to add:
+>
+>      Fixes: 442d7da1edaf ("bpf: Support stack arguments for bpf functions")
 
-Okay.
+I will swap this patch vs. the previous patch to avoid bisection issue.
+There is no need to have Fixes tag then.
 
 >
->>    [1] https://github.com/llvm/llvm-project/pull/189060
-> Same for llvm. pls update it to use r11.
-
-Will do.
-
-> I feel it can land soon-ish.
 >
->> +struct bpf_stack_arg_state {
->> +       struct bpf_reg_state spilled_ptr; /* for spilled scalar/pointer semantics */
->> +       u8 slot_type[BPF_REG_SIZE];
->> +};
-> This is pointless. Not sure whether claude came up with this idea
-> or you, but please think harder. Why slot_type[] is there?
-
-I consulted claude for this patch and for the above data strcture,
-I didn't do enough auditing for it. My fault.
-
-> What does it give?
-> Whether we pass u8 or u64 the slot is still 8 byte and this is
-> still the same spilled_ptr..
-> which is also wrong name here. Call it 'arg' ?
-
-I guess we can simplify it as
-
-struct bpf_func_state {
-	struct bpf_reg_state regs[MAX_BPF_REG];
-	...
-	struct bpf_reg_state *stack_args;
-}
-
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 >
-> Also think through how i128 and structs of 8,16,24,32 bytes will be
-> passed.
-
-The llvm supports i128 type since it is not an aggregate. But the kernel
-didn't handle i128 properly even if i128 is in the first 5 registers.
-I will look into this after this patch set.
-
-for stack arguments, reg states of structs (<= 64 bytes) will passed
-from caller to callee.
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24299298635
 
