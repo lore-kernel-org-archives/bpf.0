@@ -1,191 +1,203 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95031214A9B
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 08:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383423A5457
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 08:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776067838; cv=none; b=GHd6Khepj9rCb2ZMZ0Lsl0DebUB0+4ruodnJuM9Y5ddxB7JyE74LGDRri2nsm9M4wZjGmUjNRF0fxB1cGeURNywj9Cye5ETxyZ75SBulOuNAA2f94YU92q1wdarTGUR+ATdll0qdYyW6IFFpkiPLNbHChMI5QSw/elFsvnLWG8w=
+	t=1776068041; cv=none; b=FjCoJ1LRebU6Y7SDS59entbOA9Di7L/WUBgJ5AHqAPfQ63UG+IEKeadfXU/8eaTwFJkV4I0ryKL34YRhhbgtTIYdbgeS2e6EkuFAunoRKqN1iL9IYCkGjjz3hkY3UQGoGNgPsWIJ6+MwQ5mBrn4pnkgf9uibmwpO+uldf1OGbGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776067838; c=relaxed/simple;
-	bh=blN4bEAPNe1K0Ioz3u5M44VuB6ehn+I0XkVx1Bjc2ls=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VXIiNQHXFfrJ4t6NNCQ7eutDn5s4W8Gjk/nFyHBiqBdM0QVCnbeAf5q13MvFgQKA6PeZ0W6vvYnxxAqBXBRlMRvUlcTpsdLZ7KnYeOBg6Qw3bjInA+lLz66Fz1I9EIxKkcK9/ORcpzcGH2gm2T0FvnIQVErDK1ZazbQUT7Dvkbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VGZlPqZA; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VGZlPqZA"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so65785075e9.2
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 01:10:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776067835; x=1776672635; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bU8P2JETl6nf7rFzjnnYyncnk6MgTuYU7HjNQEaAMc4=;
-        b=VGZlPqZAIsJ4lqUmDhkShvlmLNL+mItsgo8s2Rsff4CNqW0TV1vKurYweQ3riNcGyu
-         bq9qDdEFDqbILn+IDRXHIpKJxIKOGUVbRqk1bcsqqlxG8mE3rRYhLn5rw0JAkxzTOs0Y
-         6HC1v10CsP6OJKNzhhrgcM23LZNTaxaTauPf+MMDBtv85rwYFBMYz8f5AMnrIiXv2h2B
-         bRs9l3huGgZE0uxaWihpo+aWsqg3I/dMVHr+qGSJ8Bj0Itl5zVX1F+YOvNb/1xqbacRr
-         2kRAvL3hPHAApTQ1w9y6fU834EjvydpF9klisX9l9KTKbAMBKXo9A4FqtR4bwXiwIG8f
-         LDpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776067835; x=1776672635;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bU8P2JETl6nf7rFzjnnYyncnk6MgTuYU7HjNQEaAMc4=;
-        b=L1Vhelce8RDu+Wb5uNYsslmFs0RqdkYL/4IJZcu3ykCykPSZdCoT/dmlkUAzwY79G6
-         7Z+1jVLPO64dpcJuH+rv0XW8Plx0vKxAqt8udWmw5pWeZ5I2e6Gtsrjd4ycD4XcF4iep
-         niItwSuuNVaBbjHF2fZbQAVEqnwWWryPjEW/wz8jetSkzLrgV3ygH9H3AQyc5GmMoQAD
-         VFSIt823c/W4Z0SArcxNNudFcXugCU1HBki7iRdoX+tEBhM1Yf8NW3lQMI+vxnZJkZnF
-         UCKdhZUf1aEmKeMTMN87hpW9wM1DQyvwTI98Vki6F5JzAoeXj0In1tUuBU4WH59EYq9R
-         YG4Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/QYWNMMWlz0YBGVjw+4IE4ofWAY2kYRCASeMX7QxDj4RSeICWD75XRc4IeNl3Z0TKVtu0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6HOGpx8vGdfcbZmXu4bFm9Xr2b+hmKV9b0G9YI7oMZDISUcYU
-	wjlIw+HG5v/31U2Ne819K4ZH31VsREtyceYzysvvGpfpK2zOjmOhYJO3v286KHAP
-X-Gm-Gg: AeBDievASc7JYf8XPark6ul7srcCXZp2Ly9RsNWiC01o54gkVNFdZ57hJhxyX8Zezht
-	5oZHT5r8+9D2aOrd1gX5ULP3g6o+Y14wEyY0HoHzaQT2o0/TE9dt/Mazrampk+Q+s9r7tBffaXL
-	WH0/efD5tmAmidtJ0HemiiYhUm0GkmI2qYifjBkYbfqGv7QPmAiyOlxWcqbpYvkUgpfFDl3YzKB
-	PLC9pIF3+PdQGMxs1SOrH5emNWMAiMTkUd2ahC1jx2YWqi6WfKgz/8ZSM1u61ppvbAgWIk/uFyf
-	O7ZwYOIw9KcZXTD+j+WZjKAjKMsiiPzNQ3x9gaJ7TZ8IEVSbqi7P3G+BoMHt/m1jUnYcxFVmpq/
-	j8nNF3usayuPlrVVv8QCsP4dQS6OcRuO/YHuz4GEBstDrlcrfL9Z+2152NfZ522gIKE0U6sJX6W
-	CtQOkU2yue3ZZ9UI1Br34POl5X9QZLzfnp41Ma2sGYZrGOrz9ILUsQP2336zn1E5dzPyMa4AWaB
-	1cEh/WxlyZLrO8tZV+jOA==
-X-Received: by 2002:a05:600c:3149:b0:488:acbc:b2e with SMTP id 5b1f17b1804b1-488d68431f6mr170271085e9.17.1776067834827;
-        Mon, 13 Apr 2026 01:10:34 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:1086:f5f1:32fc:93b3? ([2a02:8109:a307:d900:1086:f5f1:32fc:93b3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d53808b2sm339849805e9.11.2026.04.13.01.10.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Apr 2026 01:10:34 -0700 (PDT)
-Message-ID: <0f4b66fd-4e50-43af-a952-4a0f615e6377@gmail.com>
-Date: Mon, 13 Apr 2026 09:10:32 +0100
+	s=arc-20240116; t=1776068041; c=relaxed/simple;
+	bh=ntJPW3F9wCH+bnd+CBHM4WQZ6U/QVcZiqScx2Aax40s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rS9jtbtCJF5dvhiwlUbX2TF+3K4bz2IG/Mk6Ly5JEyuZsaQyRC10bzqjxal49gz4fP2oeo3KfP3hhXP+Qtqx6T/qm3dxr7Wk7jVkp/lN796kHAyhTgDLfxxI9nDl7sLcoEsa+DUK62/xhgzIFRHJglVGhs7IQqo3B1NvxJwA2hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [209.85.222.174])
+	by gateway (Coremail) with SMTP id _____8DxLurEpdxpqBQAAA--.90S3;
+	Mon, 13 Apr 2026 16:13:57 +0800 (CST)
+Received: from mail-qk1-f174.google.com (unknown [209.85.222.174])
+	by front1 (Coremail) with SMTP id qMiowJBxrsLCpdxpGPtrAA--.49244S2;
+	Mon, 13 Apr 2026 16:13:56 +0800 (CST)
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8d4f78fc9f6so490033385a.3
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 01:13:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ87QL8IY1E9N4wnX8jzEsDQ3+V8G8gwtjjtq9rsPDEnneZfYtlFfCLsr3OpApx/8SWu9gg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnG1t2QAiNJFjUVEA2FEoSMFvMBh8HnzHlrv4PSGMFgJU5s0WD
+	XUXX5s1nT9m2X8vcEssOTmn2Ty/1rMzHqanWnwHHbihSVyBuQhf8fDxAt4o9X64bLo7AHOUuO4K
+	A0GLe8qWUDocEXkXPhmWGLLmfrU3ZCgNlrim6SU4YcA==
+X-Received: by 2002:a53:d007:0:b0:651:c047:f094 with SMTP id
+ 956f58d0204a3-651c047f43amr3893314d50.31.1776067568854; Mon, 13 Apr 2026
+ 01:06:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next v2 01/18] bpf: Register rhash map
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
- kernel-team@meta.com, eddyz87@gmail.com, memxor@gmail.com,
- herbert@gondor.apana.org.au
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
- <20260408-rhash-v2-1-3b3675da1f6e@meta.com>
- <DHPTXQZL4ERG.3QCBWTRWKFNN@etsalapatis.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <DHPTXQZL4ERG.3QCBWTRWKFNN@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260413040506.26640-4-yangtiezhu@loongson.cn> <8822e0eb47985fc0bcb8bc6c9b0fcdfb55566144517d90a8e77f2690c44ee8df@mail.kernel.org>
+In-Reply-To: <8822e0eb47985fc0bcb8bc6c9b0fcdfb55566144517d90a8e77f2690c44ee8df@mail.kernel.org>
+From: WANG Rui <wangrui@loongson.cn>
+Date: Mon, 13 Apr 2026 16:05:57 +0800
+X-Gmail-Original-Message-ID: <CAHirt9gy=HETVpi6bOrUOw65N0wuVVSMG-0usMSAQKm7G4OQww@mail.gmail.com>
+X-Gm-Features: AQROBzDo6XriASiqA6WQWtAVhetXPEwhLVNnHT93SmV1NrOhpV5lBoAQTMbGKwU
+Message-ID: <CAHirt9gy=HETVpi6bOrUOw65N0wuVVSMG-0usMSAQKm7G4OQww@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] LoongArch: BPF: Support 8 and 16 bit
+ read-modify-write instructions
+To: bot+bpf-ci@kernel.org
+Cc: yangtiezhu@loongson.cn, chenhuacai@kernel.org, hengqi.chen@gmail.com, 
+	loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	clm@meta.com, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:qMiowJBxrsLCpdxpGPtrAA--.49244S2
+X-CM-SenderInfo: pzdqw2txl6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxWr18Zw18GrWUXr1fGFykJFc_yoWrXF4kpr
+	y8Wrs5Cr4kJFyqv3s7Ja17JrWUKr4ay3W7Wr1UXrWYyayYvF98JF10kF17XFW5urZYyFWa
+	vF4q9w12va1UtagCm3ZEXasCq-sJn29KB7ZKAUJUUUUk529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	JVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAF
+	wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jwtxhUUUUU=
 
-On 4/10/26 11:31 PM, Emil Tsalapatis wrote:
-> On Wed Apr 8, 2026 at 11:10 AM EDT, Mykyta Yatsenko wrote:
->> From: Mykyta Yatsenko <yatsenko@meta.com>
->>
->> Add resizable hash map into enums where it is needed.
->>
-> 
-> These changes in isolation are difficult to reason about,
-> can we roll this into subsequent patches? Right now this
-> adds a the BPF_MAP_TYPE_RHASH without there being a way
-> to create one.
-> 
+On Mon, Apr 13, 2026 at 12:49=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.=
+c
+> > index fefda4050a20..c9a32f124f5e 100644
+> > --- a/arch/loongarch/net/bpf_jit.c
+> > +++ b/arch/loongarch/net/bpf_jit.c
+>
+> [ ... ]
+>
+> > @@ -388,11 +408,32 @@ static int emit_atomic_rmw(const struct bpf_insn =
+*insn, struct jit_ctx *ctx)
+> >       /* src =3D atomic_fetch_<op>(dst + off, src) */
+> >       case BPF_ADD | BPF_FETCH:
+> > +             switch (BPF_SIZE(insn->code)) {
+> > +             case BPF_B:
+> > +                     if (cpu_has_lam_bh) {
+> > +                             emit_insn(ctx, amaddb, src, t1, t3);
+> > +                             emit_zext_32(ctx, src, true);
+>
+> Is emit_zext_32() sufficient for zero-extending an 8-bit value here?
+>
+> emit_zext_32() uses lu32id to clear bits [63:32], but for a byte-width
+> atomic fetch the returned value needs bits [63:8] zeroed. If amadd.b
+> follows the LoongArch convention of sign-extending sub-word results
+> (as amadd.w does for 32-bit values), then a byte value like 0x80 would
+> produce 0x00000000ffffff80 after emit_zext_32() instead of the expected
+> 0x0000000000000080.
+>
+> Elsewhere in this file, 16-bit zero-extension already uses bstrpickd:
+>
+>     emit_insn(ctx, bstrpickd, dst, dst, 15, 0);
+>
+> Should the BPF_B and BPF_H cases here use bstrpickd with the
+> appropriate bit range (7,0 for bytes and 15,0 for halfwords) instead
+> of emit_zext_32()?
 
-Thanks for taking a look, makes sense, I can squash it into the latter 
-commits.
+I don't think truncating byte and sub-word results to only the low 8
+or 16 bits is the right model here. The current behavior intentionally
+keeps the low 32 bits of the computed value in the register, because
+all uses explicitly extend from 32 bits to 64 bits when feeding
+instructions that require 64-bit operands. The same reasoning should
+apply to byte and sub-word types as well.
 
->> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->> ---
->>   include/uapi/linux/bpf.h       | 1 +
->>   kernel/bpf/map_iter.c          | 3 ++-
->>   kernel/bpf/syscall.c           | 3 +++
->>   kernel/bpf/verifier.c          | 1 +
->>   tools/include/uapi/linux/bpf.h | 1 +
->>   5 files changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index 552bc5d9afbd..822582c04f22 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -1046,6 +1046,7 @@ enum bpf_map_type {
->>   	BPF_MAP_TYPE_CGRP_STORAGE,
->>   	BPF_MAP_TYPE_ARENA,
->>   	BPF_MAP_TYPE_INSN_ARRAY,
->> +	BPF_MAP_TYPE_RHASH,
->>   	__MAX_BPF_MAP_TYPE
->>   };
->>   
->> diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
->> index 261a03ea73d3..4a2aafbe28b4 100644
->> --- a/kernel/bpf/map_iter.c
->> +++ b/kernel/bpf/map_iter.c
->> @@ -119,7 +119,8 @@ static int bpf_iter_attach_map(struct bpf_prog *prog,
->>   		is_percpu = true;
->>   	else if (map->map_type != BPF_MAP_TYPE_HASH &&
->>   		 map->map_type != BPF_MAP_TYPE_LRU_HASH &&
->> -		 map->map_type != BPF_MAP_TYPE_ARRAY)
->> +		 map->map_type != BPF_MAP_TYPE_ARRAY &&
->> +		 map->map_type != BPF_MAP_TYPE_RHASH)
->>   		goto put_map;
->>   
->>   	key_acc_size = prog->aux->max_rdonly_access;
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index 51ade3cde8bb..0a5ec417638d 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -1287,6 +1287,7 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
->>   			case BPF_SPIN_LOCK:
->>   			case BPF_RES_SPIN_LOCK:
->>   				if (map->map_type != BPF_MAP_TYPE_HASH &&
->> +				    map->map_type != BPF_MAP_TYPE_RHASH &&
->>   				    map->map_type != BPF_MAP_TYPE_ARRAY &&
->>   				    map->map_type != BPF_MAP_TYPE_CGROUP_STORAGE &&
->>   				    map->map_type != BPF_MAP_TYPE_SK_STORAGE &&
->> @@ -1464,6 +1465,7 @@ static int map_create(union bpf_attr *attr, bpfptr_t uattr)
->>   	case BPF_MAP_TYPE_CGROUP_ARRAY:
->>   	case BPF_MAP_TYPE_ARRAY_OF_MAPS:
->>   	case BPF_MAP_TYPE_HASH:
->> +	case BPF_MAP_TYPE_RHASH:
->>   	case BPF_MAP_TYPE_PERCPU_HASH:
->>   	case BPF_MAP_TYPE_HASH_OF_MAPS:
->>   	case BPF_MAP_TYPE_RINGBUF:
->> @@ -2199,6 +2201,7 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
->>   		   map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
->>   		   map->map_type == BPF_MAP_TYPE_LRU_HASH ||
->>   		   map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
->> +		   map->map_type == BPF_MAP_TYPE_RHASH ||
->>   		   map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
->>   		if (!bpf_map_is_offloaded(map)) {
->>   			bpf_disable_instrumentation();
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 8c1cf2eb6cbb..53523ab953c2 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -21816,6 +21816,7 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
->>   	if (prog->sleepable)
->>   		switch (map->map_type) {
->>   		case BPF_MAP_TYPE_HASH:
->> +		case BPF_MAP_TYPE_RHASH:
->>   		case BPF_MAP_TYPE_LRU_HASH:
->>   		case BPF_MAP_TYPE_ARRAY:
->>   		case BPF_MAP_TYPE_PERCPU_HASH:
->> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
->> index 677be9a47347..9d7df174770a 100644
->> --- a/tools/include/uapi/linux/bpf.h
->> +++ b/tools/include/uapi/linux/bpf.h
->> @@ -1046,6 +1046,7 @@ enum bpf_map_type {
->>   	BPF_MAP_TYPE_CGRP_STORAGE,
->>   	BPF_MAP_TYPE_ARENA,
->>   	BPF_MAP_TYPE_INSN_ARRAY,
->> +	BPF_MAP_TYPE_RHASH,
->>   	__MAX_BPF_MAP_TYPE
->>   };
->>   
-> 
+For example:
+
+Def:
+int8 a =3D amadd.b
+int8 b =3D amadd.b
+
+Use:
+t1 =3D sext32 a
+t2 =3D sext32 b
+blt t1, t2   // a < b
+
+Take a =3D -1 and b =3D 0. In the 64-bit registers:
+
+If we keep the low 32 bits:
+a: 0x0000_0000_ffff_ffff
+b: 0x0000_0000_0000_0000
+
+then:
+t1: 0xffff_ffff_ffff_ffff
+t2: 0x0000_0000_0000_0000
+
+So a < b evaluates to true, as expected.
+
+But if we only keep the low 8 bits:
+a: 0x0000_0000_0000_00ff
+b: 0x0000_0000_0000_0000
+
+then:
+t1: 0x0000_0000_0000_00ff
+t2: 0x0000_0000_0000_0000
+
+Now a < b becomes false, which is clearly not the intended result.
+
+In other words, narrowing the result to 8 or 16 bits here would break
+the existing 32-bit canonicalization rule for sub-word values.
+
+More generally, the "always explicitly extend" pattern doesn't map
+particularly well to the LoongArch ISA. In the long run, it would be
+preferable if we could eliminate these explicit extensions altogether
+rather than relying on them as part of the semantic model.
+
+Thanks,
+Rui
+
+
+>
+> > +             case BPF_H:
+> > +                     if (cpu_has_lam_bh) {
+> > +                             emit_insn(ctx, amaddh, src, t1, t3);
+> > +                             emit_zext_32(ctx, src, true);
+>
+> Same concern for the halfword case -- emit_zext_32() would leave
+> bits [31:16] with sign-extended values if amadd.h sign-extends.
+>
+> [ ... ]
+>
+> > @@ -421,11 +462,32 @@ static int emit_atomic_rmw(const struct bpf_insn =
+*insn, struct jit_ctx *ctx)
+> >       /* src =3D atomic_xchg(dst + off, src); */
+> >       case BPF_XCHG:
+> > +             switch (BPF_SIZE(insn->code)) {
+> > +             case BPF_B:
+> > +                     if (cpu_has_lam_bh) {
+> > +                             emit_insn(ctx, amswapb, src, t1, t3);
+> > +                             emit_zext_32(ctx, src, true);
+>
+> Same question applies to the exchange path -- amswap.b and amswap.h
+> return the old value and would need proper sub-word zero-extension
+> rather than the 32-bit emit_zext_32().
+>
+> > +             case BPF_H:
+> > +                     if (cpu_has_lam_bh) {
+> > +                             emit_insn(ctx, amswaph, src, t1, t3);
+> > +                             emit_zext_32(ctx, src, true);
+>
+> Same here for amswap.h.
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/243253=
+84786
 
