@@ -1,159 +1,178 @@
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149D336EA8B
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A5331354F
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776109764; cv=none; b=DJ1C2Sxv9mbJMMbE/Ryc0RMUuuGo9s6XPMcCBTiN3x8fh8hoDUQAXshyH3qT3HjMjIRQb1AgYgPH7bAEjqorm01LKGyAvZTentDMPXN9YnLWpXMEoYqxuUz5NO1bi3BEM/66c3dc86G+rOMQqnsUcDSMuG/PurJMFQnmIpKMH/o=
+	t=1776110121; cv=none; b=kE8z9k5/4kNWXP1nyjjSE9YB44orKulMBaBZRGgH2VE6fFS5Ajb0ASxYxL+wxPwhC/iqbCbholVM17lwURSbSMXWAuLUfWUxcnfk3SaVto6KZnxfdNgzKgiOnDmM4UgRY4IdvJsz5XvhB2MZLn2M5U6iRf532VfFysuGa0KFBgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776109764; c=relaxed/simple;
-	bh=moVbajI93ylbX6Hc5sdUyOa//mRwUHngn4c2aF7DVXc=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=HTBFEvIITUx/a7Yr1ozdAVS06z+E8IGedp6tTnwAT71ip2nMtcC5xlcTd2gR6iBhQLsvTKW2TciN77tqA6QzDbkF0p2HTr0//wYVU354W08eMC04P8GvfBQsEgs2POCOxQ05rldSVmpj8jIqkZ75sYIX7wwpMdZTM6mmD6u7cH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-68d7d187379so4924070eaf.1
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:49:22 -0700 (PDT)
+	s=arc-20240116; t=1776110121; c=relaxed/simple;
+	bh=fFA0oPhJ1y6oKS/dQCscTzizZvxXcw4DwiIflgYKFNc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=hUR6uSJUkyNnL8Trpk60bluVBv971vqdLvaA7HmhmF8N/9ztNDQsGVZuPWGaMn5YwMV/WM8sjf0nBvB2GVLV6kRk+vtL68MSl34z14KfRc4HRjOfhIolcO7YFpc6l9sd87XbUix/Pl+Kl0nBo7EoyZ7pcKV1qxx459YkFUVGg7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=diKR7cIa; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="diKR7cIa"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c79467f128cso254699a12.3
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776110119; x=1776714919; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sVBfhPpb6T5B2cxV2U8qzqGuSimQj2eMSClLgFg4X7I=;
+        b=diKR7cIaztKT6TFbult8CbKdHn8MA9tFDy01p4ZDcTR3pojEa6vdSTA8Vfz77L+72B
+         Z9sMJBQB8+RKgTyAiMHlHXy9KUWhuakyiVUfl2QSGC9pN34uQYwjO3Wjd5masGnE0PqO
+         Si8O+4R3qtJZ83n8Cgp8yenHD5iW9Si4rF1wHVXCPABgEUI1lFp8jbjHwmDUXiZC/47l
+         QyhKj/Gv+fkcIt0ipwXHDTdXtotWONrjkBssQBxsOXzlsYbfw9dNzCVVo0NXTtzHYnML
+         raE5xDMqzGtQ4wZDLg+gIdoL4jJbEK+SihGrwzjOAPS/tWMhdRPF2ZiChTz3fmQ/BJRx
+         zWFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776109762; x=1776714562;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wwIjK5znXEGb3Qzj4YtcJUWny7RW6O0EuDhuQVd9AfU=;
-        b=fpUz1YAigBUAzG3BvBKuYiC69Z43W0ycmySmP2B1XX0BClo4GUyEWedGBpaLxM+Kjw
-         TN0WHLIvjIRw15HaIJ/bW4zMX1oqu2eGD8mETH7eB+5TnaVNOUyJK5N6MF7OTdGQZTsZ
-         0xKICac2z8unFa3KM2V8nI0gxpo2hzcjruVvu5dtIKFukpcViIkcgIz/Y+cz3PKK+Kmu
-         UFYkBQve9U0sAp181+Fhy6IiLdok3VjEhs7XESiNE4bVtycItLKL5l9ERT4qzBbtb5e2
-         CKyeK+ooQ4zEFXVDpeTs5p5J4UYkcmyKhJmdCWAdQp91pVkIO4VzBIHaA8sbup3TRqba
-         c6Dg==
-X-Forwarded-Encrypted: i=1; AFNElJ/64UbikG9Bfy7Zn75Dok4oyqVaXKppitJma1+nflJaNrAOvV6k1Mm72wjZ+H5Zta+N/Xw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydxsJruCFXV/zravuBNHtu1ywF/KILjYaOzvLAscnJDFyaU6xz
-	Ivtzzf79iHolxr3/0K9ikf9yXrGzmEwsZWqZwpNAFNBt2iTmC0ex687j6D2dJlUzB4aEPsgOxKi
-	3mN90iQjHucvmcs8f9McAKZGzK0hxHwr5wyOQHnX/Pa3V9Ut6vyqFPqYMUcs=
+        d=1e100.net; s=20251104; t=1776110119; x=1776714919;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sVBfhPpb6T5B2cxV2U8qzqGuSimQj2eMSClLgFg4X7I=;
+        b=FVd0jSdR6gAYNO8UR+FodKl6gL9Ty+BioaGDPLbT7KncCnK+l2O5gfEBoPKAh8BEgW
+         VVjyEb7Ep9kGCpqYDAfI6tvCDTWF76VAqO69Unw2KkO4XmFmsn9pLf4+UFdZTtZFPwN3
+         gOo7eEVdxLux577Xca0j1IiMYlMEbn03CrdnwmYB5v3tEkMDkLTmiXpd5lKOa7RcGoX7
+         TUo1/s6kffEaex1wSfr9o1czuBevx5mNHABrOfpmJbVDb8xkyjLPWJ+uqhDxejtHwtcC
+         XoDVYFZoTYii3yW2k7ALx378bNxVFL4v2zLv3JXhYiSR7xbH8TmlBaB8n0pLp2sRlEO0
+         it5A==
+X-Forwarded-Encrypted: i=1; AFNElJ+wfWSi1PvXmLIiA6wosA1/CPzVQVP7FlaHIe27TkwFXKfjPp43L+m8K59hFdx8qAUB07k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBGXKcf4cABkL+cK2aMBCzw8Q0T1Obn6E2RoW9JoLhFWenZyYM
+	8/ebHWX2u3uxp9xzTyDVG5/YcpLH2cUMXP9xhWVcIN9osXRYAYBTq4z3DJBImGv0sRg=
+X-Gm-Gg: AeBDietiRJyMbzJH6IDVrJbzPGUrwiZc6Z7sm97vVuMJtDQBEC1OgCqdbFN5ySR/z2b
+	HbbbwCxupWSmgmdNwEwdta4Yu10CzpCXbidSiHihVhvGbXVhcbqW7l5uUAr5iKUA0Igm3DCeVtT
+	gnbOpAeXLMxcsF9xLLpzf6tb540jZtvqyNxFyAwKJ073L+D/tCScNJtZlBFQoxiMN05ovhbLzSd
+	7u8A5Vo+o6Q5+Bul1KXsMk7b1BU6tSLvNkJTP3vWwltiUUraAQjdVNgV0uaojEWGF7d0vG9gkpj
+	wrK41qDdmVhFyMtg/aELf32YncrS3QK5cbMy1Fj/Yu1jhXK2kt5ngDc/6d8yCFGLH3BI8pbaope
+	tgMmsPcs0M9f0xwxbOmfgC2wuQ8gNVIGKUy/SelmRRUw4gsPnld6pG0/B7vbGrbfQYSHh9Y3Q5+
+	ppmOMtNIPfW5dglftnQw==
+X-Received: by 2002:a17:903:27c5:b0:2ae:8253:1452 with SMTP id d9443c01a7336-2b2d593e9a0mr93547265ad.11.1776110118875;
+        Mon, 13 Apr 2026 12:55:18 -0700 (PDT)
+Received: from localhost ([2604:3d08:487d:cd00::5517])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b45e949464sm54659175ad.24.2026.04.13.12.55.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Apr 2026 12:55:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6820:2908:b0:67e:1887:34b4 with SMTP id
- 006d021491bc7-68be8dd14dfmr7132661eaf.58.1776109762119; Mon, 13 Apr 2026
- 12:49:22 -0700 (PDT)
-Date: Mon, 13 Apr 2026 12:49:22 -0700
-In-Reply-To: <20260413094442.1376022-1-hawk@kernel.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69dd48c2.a00a0220.468cb.004e.GAE@google.com>
-Subject: [syzbot ci] Re: veth: add Byte Queue Limits (BQL) support
-From: syzbot ci <syzbot+cib904ea9ebb647254@syzkaller.appspotmail.com>
-To: andrew@lunn.ch, ast@kernel.org, bpf@vger.kernel.org, corbet@lwn.net, 
-	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
-	frederic@kernel.org, hawk@kernel.org, horms@kernel.org, 
-	j.koeppeler@tu-berlin.de, jhs@mojatatu.com, jiri@resnulli.us, 
-	john.fastabend@gmail.com, kernel-team@cloudflare.com, krikku@gmail.com, 
-	kuba@kernel.org, kuniyu@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, sdf@fomichev.me, shuah@kernel.org, 
-	skhan@linuxfoundation.org, yajun.deng@linux.dev
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 13 Apr 2026 15:55:17 -0400
+Message-Id: <DHSAHO1WKLJ6.1G8DTJIDOKK32@etsalapatis.com>
+Subject: Re: [PATCH bpf-next] bpf: Fix use-after-free in arena_vm_close on
+ fork
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ <bpf@vger.kernel.org>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@kernel.org>,
+ <memxor@gmail.com>, <eddyz87@gmail.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413194245.21449-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260413194245.21449-1-alexei.starovoitov@gmail.com>
 
-syzbot ci has tested the following series
+On Mon Apr 13, 2026 at 3:42 PM EDT, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> arena_vm_open() only bumps vml->mmap_count but never registers the
+> child VMA in arena->vma_list. The vml->vma always points at the
+> parent VMA, so after parent munmap the pointer dangles. If the child
+> then calls bpf_arena_free_pages(), zap_pages() reads the stale
+> vml->vma triggering use-after-free.
+>
+> Fix this by preventing the arena VMA from being inherited across
+> fork with VM_DONTCOPY, and preventing VMA splits via the may_split
+> callback.
+>
+> Also reject mremap with a .mremap callback returning -EINVAL. A
+> same-size mremap(MREMAP_FIXED) on the full arena VMA reaches
+> copy_vma() through the following path:
+>
+>   check_prep_vma()       - returns 0 early: new_len =3D=3D old_len
+>                            skips VM_DONTEXPAND check
+>   prep_move_vma()        - vm_start =3D=3D old_addr and
+>                            vm_end =3D=3D old_addr + old_len
+>                            so may_split is never called
+>   move_vma()
+>     copy_vma_and_data()
+>       copy_vma()
+>         vm_area_dup()    - copies vm_private_data (vml pointer)
+>         vm_ops->open()   - bumps vml->mmap_count
+>       vm_ops->mremap()   - returns -EINVAL, rollback unmaps new VMA
+>
+> The refcount ensures the rollback's arena_vm_close does not free
+> the vml shared with the original VMA.
+>
+> Reported-by: Weiming Shi <bestswngs@gmail.com>
+> Reported-by: Xiang Mei <xmei5@asu.edu>
+> Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-[v2] veth: add Byte Queue Limits (BQL) support
-https://lore.kernel.org/all/20260413094442.1376022-1-hawk@kernel.org
-* [PATCH net-next v2 1/5] net: add dev->bql flag to allow BQL sysfs for IFF_NO_QUEUE devices
-* [PATCH net-next v2 2/5] veth: implement Byte Queue Limits (BQL) for latency reduction
-* [PATCH net-next v2 3/5] veth: add tx_timeout watchdog as BQL safety net
-* [PATCH net-next v2 4/5] net: sched: add timeout count to NETDEV WATCHDOG message
-* [PATCH net-next v2 5/5] selftests: net: add veth BQL stress test
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-and found the following issue:
-WARNING in veth_napi_del_range
+With this fix we now properly use the refcnt to keep a single vml for
+all users of an arena, since having a reference to the arena implies a
+successful mmap() call.
 
-Full report is available here:
-https://ci.syzbot.org/series/ee732006-8545-4abd-a105-b4b1592a7baf
+> ---
+>  kernel/bpf/arena.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index f355cf1c1a16..9c68c9b0b24a 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -341,6 +341,16 @@ static void arena_vm_open(struct vm_area_struct *vma=
+)
+>  	refcount_inc(&vml->mmap_count);
+>  }
+> =20
+> +static int arena_vm_may_split(struct vm_area_struct *vma, unsigned long =
+addr)
+> +{
+> +	return -EINVAL;
+> +}
+> +
+> +static int arena_vm_mremap(struct vm_area_struct *vma)
+> +{
+> +	return -EINVAL;
+> +}
+> +
+>  static void arena_vm_close(struct vm_area_struct *vma)
+>  {
+>  	struct bpf_map *map =3D vma->vm_file->private_data;
+> @@ -417,6 +427,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf=
+)
+> =20
+>  static const struct vm_operations_struct arena_vm_ops =3D {
+>  	.open		=3D arena_vm_open,
+> +	.may_split	=3D arena_vm_may_split,
+> +	.mremap		=3D arena_vm_mremap,
+>  	.close		=3D arena_vm_close,
+>  	.fault          =3D arena_vm_fault,
+>  };
+> @@ -486,10 +498,11 @@ static int arena_map_mmap(struct bpf_map *map, stru=
+ct vm_area_struct *vma)
+>  	arena->user_vm_end =3D vma->vm_end;
+>  	/*
+>  	 * bpf_map_mmap() checks that it's being mmaped as VM_SHARED and
+> -	 * clears VM_MAYEXEC. Set VM_DONTEXPAND as well to avoid
+> -	 * potential change of user_vm_start.
+> +	 * clears VM_MAYEXEC. Set VM_DONTEXPAND to avoid potential change
+> +	 * of user_vm_start. Set VM_DONTCOPY to prevent arena VMA from
+> +	 * being copied into the child process on fork.
+>  	 */
+> -	vm_flags_set(vma, VM_DONTEXPAND);
+> +	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY);
+>  	vma->vm_ops =3D &arena_vm_ops;
+>  	return 0;
+>  }
 
-***
-
-WARNING in veth_napi_del_range
-
-tree:      net-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/netdev/net-next.git
-base:      8806d502e0a7e7d895b74afbd24e8550a65a2b17
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/90743a26-f003-44cf-abcc-5991c47588b2/config
-syz repro: https://ci.syzbot.org/findings/d068bfb2-9f8b-466a-95b4-cd7e7b00006c/syz_repro
-
-------------[ cut here ]------------
-index >= dev->num_tx_queues
-WARNING: ./include/linux/netdevice.h:2672 at netdev_get_tx_queue include/linux/netdevice.h:2672 [inline], CPU#0: syz.1.27/6002
-WARNING: ./include/linux/netdevice.h:2672 at veth_napi_del_range+0x3b7/0x4e0 drivers/net/veth.c:1142, CPU#0: syz.1.27/6002
-Modules linked in:
-CPU: 0 UID: 0 PID: 6002 Comm: syz.1.27 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:netdev_get_tx_queue include/linux/netdevice.h:2672 [inline]
-RIP: 0010:veth_napi_del_range+0x3b7/0x4e0 drivers/net/veth.c:1142
-Code: 00 e8 ad 96 69 fe 44 39 6c 24 10 74 5e e8 41 61 44 fb 41 ff c5 49 bc 00 00 00 00 00 fc ff df e9 6d ff ff ff e8 2a 61 44 fb 90 <0f> 0b 90 42 80 3c 23 00 75 8e eb 94 48 8b 0c 24 80 e1 07 80 c1 03
-RSP: 0018:ffffc90003adf918 EFLAGS: 00010293
-RAX: ffffffff86814ec6 RBX: 1ffff110227a6c03 RCX: ffff888103a857c0
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000002
-RBP: 1ffff110227a6c9a R08: ffff888113f01ab7 R09: 0000000000000000
-R10: ffff888113f01a98 R11: ffffed10227e0357 R12: dffffc0000000000
-R13: 0000000000000002 R14: 0000000000000002 R15: ffff888113d36018
-FS:  000055555ea16500(0000) GS:ffff88818de4a000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007efc287456b8 CR3: 000000010cdd0000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- veth_napi_del drivers/net/veth.c:1153 [inline]
- veth_disable_xdp+0x1b0/0x310 drivers/net/veth.c:1255
- veth_xdp_set drivers/net/veth.c:1693 [inline]
- veth_xdp+0x48e/0x730 drivers/net/veth.c:1717
- dev_xdp_propagate+0x125/0x260 net/core/dev_api.c:348
- bond_xdp_set drivers/net/bonding/bond_main.c:5715 [inline]
- bond_xdp+0x3ca/0x830 drivers/net/bonding/bond_main.c:5761
- dev_xdp_install+0x42c/0x600 net/core/dev.c:10387
- dev_xdp_detach_link net/core/dev.c:10579 [inline]
- bpf_xdp_link_release+0x362/0x540 net/core/dev.c:10595
- bpf_link_free+0x103/0x480 kernel/bpf/syscall.c:3292
- bpf_link_put_direct kernel/bpf/syscall.c:3344 [inline]
- bpf_link_release+0x6b/0x80 kernel/bpf/syscall.c:3351
- __fput+0x44f/0xa70 fs/file_table.c:469
- task_work_run+0x1d9/0x270 kernel/task_work.c:233
- resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
- __exit_to_user_mode_loop kernel/entry/common.c:67 [inline]
- exit_to_user_mode_loop+0xed/0x480 kernel/entry/common.c:98
- __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
- syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:325 [inline]
- do_syscall_64+0x32d/0xf80 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f5bda39c819
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdca2969e8 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
-RAX: 0000000000000000 RBX: 00007f5bda617da0 RCX: 00007f5bda39c819
-RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
-RBP: 00007f5bda617da0 R08: 00007f5bda616128 R09: 0000000000000000
-R10: 000000000003fd78 R11: 0000000000000246 R12: 0000000000010fb8
-R13: 00007f5bda61609c R14: 0000000000010cdd R15: 00007ffdca296af0
- </TASK>
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
-
-To test a patch for this bug, please reply with `#syz test`
-(should be on a separate line).
-
-The patch should be attached to the email.
-Note: arguments like custom git repos and branches are not supported.
