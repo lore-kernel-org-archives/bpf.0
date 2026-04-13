@@ -1,72 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE4A39150D;
-	Mon, 13 Apr 2026 18:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5226D1BBBE5
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776106723; cv=none; b=aVrfs9JA08hj4cBMTmo0fV6Hn8tpnvgzBMi0oT9BjgvfU2WfZSPFXugXhG4MrUBCkusCu/0OHd/wJ3rc3cOocr7SZmfkcG4FxRovr5c22KB4m6LgHO71yFiIUQKalmy77h/xEajmvDAz2TcISLc9v4JAjBzzBdQVhak+m0L+8OY=
+	t=1776106982; cv=none; b=biQad/IbrTwO7ZuG9eqJyIm1/ngU1aoBQ7L8UGRSL5lWpRfbPNCWpSQor8ISFOYcVAs8d6c0q6eizynEEBd4x/WRkv48FjvdGYtchNtBQgs6c+RSSroDcCg9tyZjP3cCB3fgK7602J/xKqQB9XFfjCiec3jyCZtu4omZgylmOK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776106723; c=relaxed/simple;
-	bh=x0FufSkSBt0JmK3zAYZJMpJPG4N7AJq2hUvuGYHPtHo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kKAOtD0x4N8wqPVivNbBT9rdxvb1fRBgJEWrJHpSqt4Wty4Zg5DTnEgERJZiP6lxFcxcMDIMHWy/okq21jw5qrUy+DYZtU5SDg425tHiUm0cv5exymBXD5mmm9VUkokxVMm0wtA/rpLuI1wItrDr/ntz0m1mJutWdbMDLCHGkcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOrNAGGi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776106982; c=relaxed/simple;
+	bh=3YNnHNzoRQBEKeQfH7qO4P9qrWEQ8S86M2M1cS9RSUc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Yoz9KEuzGcIf99jlLfTj73Py6ZOIu8uWzgS347/r55ANDwVafCSGIw7MCfkdBrXoYmPux3C0SMwThseTFnfq3i8+Gi9ZXQ5jZ6oJh5rgXnFpoXpI66gPP8t4V21Ns27BTooZ2HDrlTEYVvuyGr33HgjrxhebVojIR7RDT15otdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RrXsccnt; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOrNAGGi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7DEC2BCAF;
-	Mon, 13 Apr 2026 18:58:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776106723;
-	bh=x0FufSkSBt0JmK3zAYZJMpJPG4N7AJq2hUvuGYHPtHo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EOrNAGGi3PB4uFo4u00SGeTHTJjiJ+KbmpiDpXapCjf8Hw2J36+vBxqQLreLRvxKI
-	 rUiq4vyy3kxR7DD+c0uis7k7+A2RsFpUg5uLtT9yl8N5wGwnwhz4y1jv+joA+62hWU
-	 2EI17S/kgnyprLCJXsJCT4aiVnWuadAlRfay9aU/AWcf9w6+iDPanf14ZNYI4lqOWi
-	 KUDtYMks4Nd6OWmefO8IHkO4kb3ahvGKTDX3lT/atWa5FGH5hQ+1WM4y6cLzl4Z3Vp
-	 hqgh6nZ5tYJV1s+QpsJeSk4vki3nqGY2pJ3VZSWyAIH7CoxlOF+zpLWRaqZVNJ5Nx0
-	 2qZx2hKoMTJPA==
-From: Puranjay Mohan <puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RrXsccnt"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-35fc2b18363so539272a91.0
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776106980; x=1776711780; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xQIBhE9cQY6rnR7Ha5FrwWAKM7NUKPJp0JpQ1iItgcQ=;
+        b=RrXsccntvss8ceSGxVPqtHdXjw/UR92fvNFM7sTzogHrCCGFeOZ+6x87uJsfseKYr5
+         rSGKWxoqVWxsweKh49YArjmnPC6dqPqgn77AWxWMwuMC7AFgUOFjhL4VxHWYxpI337Lg
+         fWJ9dwMsMnvgbg74Cb4nzlKEV9gjjfOl6O8UXhVgYUxxFgYoHFfWHV9sXmETKjVcDL8T
+         4R/XzSMFbyj5q4rEP0epyPU9f1CZgn79D45eVJPEMQHTNbSA81kDRjtaQNU04C+B5P/H
+         BBeV1QVIobNa8LkBESH0uqIyMcWzhZqXddyjSSUAzQ8JjhRlnC/wCLr/nC4L5IQsvCzQ
+         35cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776106980; x=1776711780;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xQIBhE9cQY6rnR7Ha5FrwWAKM7NUKPJp0JpQ1iItgcQ=;
+        b=rSCjvsnyBTIDYDZRURPnSuSCEYSgeGN2Z7KL6vxCMyoxo5obzEvbP4ZkocYYNHj8bb
+         OjtdulE91fbAhrSZbDRRfghvUvv166eX5N2p5fsmCz6OJ3f01B9TZGIZZ33GAqFxcU2/
+         msJwvhnpW++txsrXQpbQHHIFokIWh9JeyeFHRoTyXrVVpdKAnbHk6dbNkMtt01EUsSpm
+         +mnJ4JhcieHXrIrwBPWYtAIeiJxuuGvkJFtk6VmB9DbTQpHvyqAKDcpXHxJ7EaIPJffH
+         RZWXoL7JtohTaJcn/m3NrBwwZb2dsEJ5Xi+NBY3okFlkA9clR6p6A681SPrcgBCJf7n6
+         D8mQ==
+X-Gm-Message-State: AOJu0Yw9UK/X2HmJrREjmmyuCThj/RVipkclE8pEWB+w5ywocaiOiX4N
+	yovol6J68BvR8ktzOVLROL1XOPgkOBjGd5jrzv7yusoM4/kk0vGqArcvL/gcOw==
+X-Gm-Gg: AeBDiestyRXonRii2zL+CvG8/TqeG+ARXOF4Dy5BPKIxP/kIA3n78E2Z1th7CKqtgHf
+	CdnYSOSpkxAWYWywAkDeBd3goXBpgmSdeRTTpL8O+CxdCFFrqnZku6wUkPbJcns/GLutiK3MDGT
+	E0Tvg9BT0OAukFw5eoD8a1W9g6VLM2UVVsUpzrSnmcnU4j0hbJAck9mmdtPDkfyQOZtb1UBLuBl
+	hiCNcv2Xir2uHvOVewELIJl6iBzouWhsX18E26kXq46Vasy13FR/Zr7L109l3jhI/F4WzJkn5aA
+	ozDlhb8SaM2QO6SkihWQ0C35mDrwJXOPXJchgkG0O2v3kHSmJ3H0dvKFkNiU+rrvMzd1TJxjhke
+	D75At/bpFwWP1noJW0giTvROS1EfRlMMiaD7m4IMf3Xs2QlnLfwnYy248kckbS1Q5w3IEKKrcRf
+	1dvwh2d18sH0NV
+X-Received: by 2002:a17:903:986:b0:2b4:5d87:a207 with SMTP id d9443c01a7336-2b45d87c372mr49538155ad.30.1776106980532;
+        Mon, 13 Apr 2026 12:03:00 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:a::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b462320562sm32667515ad.37.2026.04.13.12.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 12:03:00 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Leo Yan <leo.yan@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Breno Leitao <leitao@debian.org>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Stephane Eranian <eranian@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Usama Arif <usama.arif@linux.dev>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	yatsenko@meta.com,
+	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH v3 4/4] selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
-Date: Mon, 13 Apr 2026 11:57:23 -0700
-Message-ID: <20260413185740.3286146-5-puranjay@kernel.org>
+Subject: [PATCH bpf-next v1 0/3] Fix garbage data in task local data
+Date: Mon, 13 Apr 2026 12:02:56 -0700
+Message-ID: <20260413190259.358442-1-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260413185740.3286146-1-puranjay@kernel.org>
-References: <20260413185740.3286146-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,66 +77,22 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The get_branch_snapshot test checks that bpf_get_branch_snapshot()
-doesn't waste too many branch entries on infrastructure overhead. The
-threshold of < 10 was calibrated for x86 where about 7 entries are
-wasted.
+Hi,
 
-On ARM64, the BPF trampoline generates more branches than x86,
-resulting in about 13 wasted entries. The overhead comes from the BPF
-trampoline calling __bpf_prog_enter_recur which on ARM64 makes
-out-of-line calls to __rcu_read_lock and generates more conditional
-branches than x86:
+The patchset fixes two scenarios where BPF side task local data API may
+see garbage data and adds corresponding selftests.
 
- [#12] bpf_testmod_loop_test+0x40    -> bpf_trampoline_...+0x48
- [#11] bpf_trampoline_...+0x68       -> __bpf_prog_enter_recur+0x0
- [#10] __bpf_prog_enter_recur+0x20   -> __bpf_prog_enter_recur+0x118
- [#09] __bpf_prog_enter_recur+0x154  -> __bpf_prog_enter_recur+0x160
- [#08] __bpf_prog_enter_recur+0x164  -> __bpf_prog_enter_recur+0x2c
- [#07] __bpf_prog_enter_recur+0x2c   -> __rcu_read_lock+0x0
- [#06] __rcu_read_lock+0x18          -> __bpf_prog_enter_recur+0x30
- [#05] __bpf_prog_enter_recur+0x9c   -> __bpf_prog_enter_recur+0xf0
- [#04] __bpf_prog_enter_recur+0xf4   -> __bpf_prog_enter_recur+0xa8
- [#03] __bpf_prog_enter_recur+0xb8   -> __bpf_prog_enter_recur+0x100
- [#02] __bpf_prog_enter_recur+0x114  -> bpf_trampoline_...+0x6c
- [#01] bpf_trampoline_...+0x78       -> bpf_prog_...test1+0x0
- [#00] bpf_prog_...test1+0x58        -> arm_brbe_snapshot_branch_stack+0x0
 
-Use an architecture-specific threshold of < 14 for ARM64 to accommodate
-this overhead while still detecting regressions.
+Amery Hung (3):
+  selftests/bpf: Prevent allocating data larger than a page
+  selftests/bpf: Fix tld_get_data() returning garbage data
+  selftests/bpf: Test small task local data allocation
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../selftests/bpf/prog_tests/get_branch_snapshot.c  | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ .../bpf/prog_tests/task_local_data.h          | 13 ++-
+ .../bpf/prog_tests/test_task_local_data.c     | 96 +++++++++++++++++--
+ .../selftests/bpf/progs/task_local_data.bpf.h |  5 +-
+ 3 files changed, 100 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-index 0394a1156d99..8d1a3480767f 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
-@@ -116,13 +116,18 @@ void serial_test_get_branch_snapshot(void)
- 
- 	ASSERT_GT(skel->bss->test1_hits, 6, "find_looptest_in_lbr");
- 
--	/* Given we stop LBR in software, we will waste a few entries.
-+	/* Given we stop LBR/BRBE in software, we will waste a few entries.
- 	 * But we should try to waste as few as possible entries. We are at
--	 * about 7 on x86_64 systems.
--	 * Add a check for < 10 so that we get heads-up when something
--	 * changes and wastes too many entries.
-+	 * about 7 on x86_64 and about 13 on arm64 systems (the arm64 BPF
-+	 * trampoline generates more branches than x86_64).
-+	 * Add a check so that we get heads-up when something changes and
-+	 * wastes too many entries.
- 	 */
-+#if defined(__aarch64__)
-+	ASSERT_LT(skel->bss->wasted_entries, 14, "check_wasted_entries");
-+#else
- 	ASSERT_LT(skel->bss->wasted_entries, 10, "check_wasted_entries");
-+#endif
- 
- cleanup:
- 	get_branch_snapshot__destroy(skel);
 -- 
 2.52.0
 
