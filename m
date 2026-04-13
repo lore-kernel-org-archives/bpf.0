@@ -1,121 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7087A3C3428;
-	Mon, 13 Apr 2026 13:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A9231F9AF
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 14:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776088038; cv=none; b=NTpniNKpf3i/GGZg9v1PuiAxdTMAFgn1+Cg5PZn159tkw+nxoQabsdU5zwaVNJGGBDj+KjxJ88yJdWHkdM+b717rmjosJ2ihfbJXVehycXlnzzA0/7PXLuqLQmVkXTigx6WnxNGTbTqvPqrySwPw2yUvsB12y1/AEy5HDwth+tU=
+	t=1776090351; cv=none; b=U0TsH1O+BLIIDKc/zloor/rPiAyZuahrcj+FknwDHQ/VvTpgifJROZir9HzemqMjFRllceen8xwhqKfiFLf0AisIINsFCkrsKdIqfoWTlv3VHCdiKWAQNierr81yHVM0zxARH5ScRqaPIdK4iGeM6AaPpPuFZlZcSgMySYoDfu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776088038; c=relaxed/simple;
-	bh=rMXI7MynRACmo7J3TU7p5YzDSfDDr/BAcnGwaBTJV94=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=aEFgLJTPOJGdjCnB/208wBGWa+tW/VDR0AikDzXpiSvDSBgIDN6VQdawqiqZDYPQvIEnHdws5xXNlplauMKun+EwamdEf7eUBNf/fK9ZCA/iKTJjio12YpSBR5QPVQTPR/RhSSmsu17/lvjDbnG1SUQPPPJeN+FtoMWUoCcnnm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IuPKkqBF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776090351; c=relaxed/simple;
+	bh=BmTcxKQ1Dh00PvlGta9EXFSanXaeKqx0+FQL8Bz4jfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AB0Swu4eMvkXb/xdQP9xGVIlceuRJcr5r4S8bNw9QwA9IBAV5azSmckzTThTyKsFdQD4cL0GNHNkvsQU+tZh4cZVaiV9lt3LA83yab49FMR/uheTZ21mVKKgVB03y1rSJGnQ/X7pwiJV6lmeM39PvrX6JrLaGiouMFIh/whhUGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=S3lYEs/x; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IuPKkqBF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9C8C2BCB1;
-	Mon, 13 Apr 2026 13:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776088038;
-	bh=rMXI7MynRACmo7J3TU7p5YzDSfDDr/BAcnGwaBTJV94=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=IuPKkqBFLus3ZZihucCPXZBt0/wyjJXVs9cLIPDnUMaU+SFwTxw+o32qNML+J7nvB
-	 +T0ctEKppjqTZOIM6Rh3j17lGUYIeAzFiWyBqRwf76+oabI4Mp8eXQv5ninX1ukEvr
-	 LnH8NYY5a631BQ60QJwGDVOVITtEloDxi398HYkfXCKB41n08uH4BssEdBkDJqnx0n
-	 QA7qYUc5xYwPpefkCXn0fvXa6DXoHuOaoFBvwYltyVxogbHvcfPje+NZHdmnKlmxV5
-	 F0XlRCtoF/jpz8glOacO4i4jrAjxxjQc8VMGEp2086vfWXRZXeAHBUBqvSG3B/UETz
-	 cg2zi5atDi8Nw==
-Content-Type: multipart/mixed; boundary="===============0318703698084331295=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="S3lYEs/x"
+Message-ID: <4469c49f-34e3-4d23-9aa2-953b390c416a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776090347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x6LQEWzZKJkl1BmRalKD0CS13HMWsUH3JZpA8k6wYdw=;
+	b=S3lYEs/xSTfM4HOgaKNaRalAT/VW+7bqYViNnbjLy+VakoaFvY6Dy3WUg6787Mj/Ee2N+X
+	ai+iWbr2BBYj9qvsuNH4kMLB+6l3RmhU2sSAymUCRXiHqImy7wgHoa2Hm9GTs1fl6ZFQDK
+	0ySDhTMB9XIuNL9KKyBgh1xZuvj85cM=
+Date: Mon, 13 Apr 2026 07:25:40 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fa46a9034904c7622f935d3e3a60264a37afda290705f40c816c9846c9d3f3f8@mail.kernel.org>
-In-Reply-To: <7d88904b4028cbe124bbaba5739c525663bedc64.1776062885.git.xukuohai@hotmail.com>
-References: <7d88904b4028cbe124bbaba5739c525663bedc64.1776062885.git.xukuohai@hotmail.com>
-Subject: Re: [PATCH bpf-next v14 1/5] bpf: Move constants blinding out of arch-specific JITs
-From: bot+bpf-ci@kernel.org
-To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,a.s.protopopov@gmail.com,alexis.lothore@bootlin.com,list+bpf@vahedi.org,linux@armlinux.org.uk,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,johan.almbladh@anyfinetworks.com,paulburton@kernel.org,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,iii@linux.ibm.com,hca@linux.ibm.com,gor@linux.ibm.com,davem@davemloft.net,udknight@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 13 Apr 2026 13:47:17 +0000 (UTC)
-
---===============0318703698084331295==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v4 03/18] bpf: Refactor to avoid redundant
+ calculation of bpf_reg_state
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
+ eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260412045842.255098-1-yonghong.song@linux.dev>
+ <fb261f110faa13eb0dddaf0197a670f8bb9716c8ba8c0537766bdf2cb4c17600@mail.kernel.org>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <fb261f110faa13eb0dddaf0197a670f8bb9716c8ba8c0537766bdf2cb4c17600@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 066b86e7233c..fc9fb3c07866 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-
-[ ... ]
-
->  /**
->   *	bpf_prog_select_runtime - select exec runtime for BPF program
->   *	@fp: bpf_prog populated with BPF program
-
-[ ... ]
-
-> -	/* eBPF JITs can rewrite the program in case constant
-> -	 * blinding is active. However, in case of error during
-> -	 * blinding, bpf_int_jit_compile() must always return a
-> -	 * valid program, which in this case would simply not
-> -	 * be JITed, but falls back to the interpreter.
-> -	 */
-> +	/* eBPF JITs can rewrite the program in case constant
-> +	 * blinding is active. However, in case of error during
-> +	 * blinding, bpf_int_jit_compile() must always return a
-> +	 * valid program, which in this case would simply not
-> +	 * be JITed, but falls back to the interpreter.
-> +	 */
-
-This isn't a bug, but this comment still references bpf_int_jit_compile()
-even though the code now calls bpf_prog_jit_compile(). Should this be
-updated to match?
-
-> -		fp = bpf_int_jit_compile(fp);
-> +		fp = bpf_prog_jit_compile(fp);
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 67c9b28767e1..ec8afd6a9369 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-
-[ ... ]
-
-> +out_jit_err:
-> +	if (blinded) {
-> +		bpf_jit_prog_release_other(orig_prog, prog);
-> +		/* roll back to the clean original prog */
-> +		prog = env->prog = orig_prog;
-> +		goto out_restore;
-> +	} else {
-> +		if (err != -EFAULT) {
-> +			/*
-> +			 * We will fall back to interpreter mode when err is not -EFAULT, before
-> +			 * that, insn->off and insn->imm should be restored to their original
-> +			 * values since they were modified by __jit_subprogs.
-> +			 */
-
-The comment references __jit_subprogs, but the function is named
-jit_subprogs (no double underscore prefix). Should this be updated?
-
-> +			for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
-> +				if (!bpf_pseudo_call(insn))
-> +					continue;
-> +				insn->off = 0;
-> +				insn->imm = env->insn_aux_data[i].call_imm;
-> +			}
-> +		}
+X-Migadu-Flow: FLOW_OUT
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24345549165
---===============0318703698084331295==--
+On 4/11/26 10:31 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 6469e71cd1fa..4c67a15c73e1 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>
+>> @@ -8374,11 +8355,10 @@ static int check_atomic(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>>    * read offsets are marked as read.
+>>    */
+>>   static int check_stack_range_initialized(
+>> -		struct bpf_verifier_env *env, int regno, int off,
+>> +		struct bpf_verifier_env *env, struct bpf_reg_state *reg,int regno, int off,
+>                                                                       ^
+>
+> There's a missing space after the comma between *reg and int.  The
+> forward declaration earlier in the file has proper spacing, but the
+> definition here does not.
+
+Ack. Will fix.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24299298635
+
