@@ -1,228 +1,339 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853D13CA4BF;
-	Mon, 13 Apr 2026 13:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776085598; cv=none; b=kVFDJALnGUU1CF0LC2o0aBi82rraaC7RyWMmE06S2R5oS8SkOqPnQarCFQAqdesbexeie1QED6Zv1AwLLtBXRv2uSQg44VhdTVO0y6uVR5Wp7ZnD75BTFQ1BHLYh2FemGmjIVty0Mwj7C+phxixiL+YKmTK5qfCnNvFQL4XJow0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776085598; c=relaxed/simple;
-	bh=T6uYRdIiuLgP9oPnstEcNACJEeZzPvUZW07HC1rP5d8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EpMRHS9oXNElwewz4JxqGtzzbEKGryjUOp7qgSduHdvVcpmEQeKknzHow9mPNvZP6sJ96iTct0V+0F/P1WxOVGUxv6ZRK8S4TlXg4qf7AsbjvaRTqVvMU8dQ5iIOhf4lXdZDe5iXK8l6hyDjUy1HIS4fe0GlRvRddzASx9vzw1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fvSN150lxzKHMS9;
-	Mon, 13 Apr 2026 21:06:25 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 4087C4058C;
-	Mon, 13 Apr 2026 21:06:32 +0800 (CST)
-Received: from localhost.huawei.com (unknown [10.67.174.243])
-	by APP4 (Coremail) with SMTP id gCh0CgA3Ib9U6txpI8MQAQ--.65519S5;
-	Mon, 13 Apr 2026 21:06:31 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
-	Shahab Vahedi <list+bpf@vahedi.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Hengqi Chen <hengqi.chen@gmail.com>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-	Paul Burton <paulburton@kernel.org>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	Luke Nelson <luke.r.nels@gmail.com>,
-	Xi Wang <xi.wang@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Wang YanQing <udknight@gmail.com>
-Subject: [PATCH bpf-next v14 3/5] bpf: Add helper to detect indirect jump targets
-Date: Mon, 13 Apr 2026 12:45:00 +0000
-Message-ID: <02230fcf318eff0d60857a2887f1138e99893de6.1776062885.git.xukuohai@hotmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1776062885.git.xukuohai@hotmail.com>
-References: <cover.1776062885.git.xukuohai@hotmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B45E11CAF
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 13:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776086153; cv=pass; b=EQaDyke1aySREC2NWBebzRIJIwnK2jj3SObOmoi7+xg7t68NkzA9iKwZL7q2qpnXyluLxqIYiiMqis25Fg43LdtG2rkfHVNwPNEC5h0Lv8ZlhZtZY4YS1gsWDhsQ5Vw3kExHfmkSMjeYZnJWqP3KbU2dKF95ktgu2x6KJUANSmQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776086153; c=relaxed/simple;
+	bh=rbtQWmZpZtpEyQaDLGpE4qXR8j+SUOJWytm4qdxIGUg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dN3sjXx5BfyHEPkQcb9x5WrqQYoLLeVodAx1aT948448vIEqjRH53M2j9CjjCZrbYg5Y7x+/d7uha9w2U60+r/PcrMC6h44B+bW1nV1nobYX5SwMeUItFKLjj4RpBMqKPjRQzgV+tx91JS/DKiu/l17JsIhGRhB7aHORRd2VeO0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hn1HtZxD; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hn1HtZxD"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b9d9971d059so328749966b.2
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 06:15:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776086150; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MnU/I9K2yX2NZu8wH79OQBlzBMEw+budTKooyP1h4XUcjQj5q7mjZYgecGahHbEZgL
+         Nc4KNiEG/sbDaPDl8IYI8YIbPPXv1BGkSDkhP/I6L7Iz7OcO6TAU6bPAU2dpoNLx9pAw
+         AYnJofB4k71vDR4yCWAyEIbQXSqpbeGkLRhLfiUVVXNG4l1TL1sw8T5HIE4qacRjYbfZ
+         F0oc6K9j0GK2KCM6+Ppkh1OHpPR7lBY9wVfVFn8OMZuhYi4Qql0y3K2Ui3Nkb7RrI1Eb
+         PrZpn/+KMmwIooOdUnvIkr+Eqa8Qu17UnhgRt1I81kt6VWQcAAZsivPRSVmLl7AgnpLH
+         IlVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TWFfKp/TWghMUUA6IzgBnGVqi4hfkBllldqvNPSkdJ0=;
+        fh=oc5FsWylxuHoi/Wmi3r7RRIs23WhQEf10x0QHEVJrRM=;
+        b=LVcYav6Qti2stZipbG3kNbm6Im0Yb59pn1MFYy97TU3ByAQyPrUQdTiojtnUU8PODK
+         H1/BwhgCdSogOcAaDaRQrybZ/eerfrKlT6Yq2HfNcftgm04aRfE3WMXmzeDG4epsKw+F
+         Pw/lLC6BzRiZ6uUii4W/ynUtYaLrs0p17jh5asHiDXcfzw2gEWkVMNSiRPjxjC8RTI/k
+         U86257qDWXp6St1LKu42mOQjqO63Xc8p5X6zk13fYpFSpaI8NB7TDAnbYWPzE+BWc3cj
+         mWY1OYSfrYORL3g9zwab/ttk4H4nE3MLzF0ob4dqVhEPF6DHm6tbjaD542ho0qbBCwHS
+         3+og==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776086150; x=1776690950; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TWFfKp/TWghMUUA6IzgBnGVqi4hfkBllldqvNPSkdJ0=;
+        b=Hn1HtZxD+r5eaGMFBOEWLOrq4Lqnxuj/JTC1pm0ATJsrv//E+/ISmNl+/2H2DF97Bk
+         bb7yiHHEV9MK3L07Nmt0M8axyc1aE0wKfjq5E/DGqXW9cLD97TsczqB+9v6C1n0SMOAo
+         CFnaL4YHvcyXrlPmvsF/hUub8pCOQttQCceXMkLfaTCKWbUxC2P1NI5h8lj5bo6l7qFi
+         TXNYwqjCaW/YSkZOneXwBfsgHVxf4yHfE4RBTBJXIdrLIIhcjq78vi0zxszf/PbWgRbv
+         bKQINsQolbYVA+/Hgyiny80dtEkKyfJUKvCHitIbXhaUsBxgCed5KscGgW1qsf8XqVuA
+         B8QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776086150; x=1776690950;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TWFfKp/TWghMUUA6IzgBnGVqi4hfkBllldqvNPSkdJ0=;
+        b=rN0z00i4pfajgMm43FPaNs+JC1L1UnxFSwagck6VK6xdIJNkGJ0r9oA9OgnFp6n4tF
+         83TW78VqlWtr2HDC3hOyZXw+3NampPUZfhrGw+SeYEj/UuxvwXhb7YEyZNEYaO63ebRM
+         B12+JC5UXcD2e8y0a1rcj5ZzGW5PYJEdbtfm6lzAvD/7wCW81qTrE6pYBqOQQmlujsA0
+         mqavDMvOH/yA5Zp7lTOX+1Qs39JFBLgx17bbUfE4q1vQLpp+x56yv2s/yCo5IA2ISfhD
+         A1P0ox/HRpiuHWts2a9f4cMytVqdajHqc+6cmnR7o6XhBdBVhdgAkQsBDAiscZoITroX
+         eWdA==
+X-Gm-Message-State: AOJu0YxaV3qIRdCcKf6OregztKDqc29BJFKzZXFrnyj5vgkrSZ6ows6M
+	RfFig5VMWe0+FlMCrIgo6G2b2ghHoTUtEt0za90e/EIyVM0PS7Gu1gr5Km00VAEAGxYJca7aV4Y
+	fKsljDopn23PMTvxPtqSMf3iEOf9Lkgk=
+X-Gm-Gg: AeBDievnTKn0YXUaKTV3YzpZ4+9oZ2O4zUR6P3lZBw6VqNUWpBBXfx3R7vDgWjZQ5qY
+	wO19nGowkHvFqrD3tJZz3xoPIf/OOquSvI4kmcyuKi2oe5lyUDwGuR//+ZyhrL5m88yKyMw0Piu
+	qJF3EpK3pplnW8hHnOrgtuJ3LWFp0ycRTCBMZbycaqdihy8W5l9pOT+M4xEumtYx4QpwOx4sKVS
+	YEq/pYOJLpKKXgjdnGPRcdYdlxJVD43SevLKdYZmGBYc2Balfc0KUgWSoXdX9eoLIAGAtZq0OAT
+	DmrnSdxo4W8+tcYulvrtIe0=
+X-Received: by 2002:a17:907:3d51:b0:b9b:4519:7914 with SMTP id
+ a640c23a62f3a-b9d729665efmr793693166b.33.1776086149384; Mon, 13 Apr 2026
+ 06:15:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgA3Ib9U6txpI8MQAQ--.65519S5
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF1rWFy5Ary3Ar1xCFyDJrb_yoW7XFW5pF
-	4DWF93AF4vvFZrur9rAa10yry3Ja1rW3y3CFWxC348ta1Yqr1vqFWFgr1avFn5trZ8C3Wx
-	ZFs0vr4jg34UZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU
-	IF4iUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+References: <20260318171706.2840512-1-puranjay@kernel.org> <20260318171706.2840512-4-puranjay@kernel.org>
+ <20260410192300.GA1050337-robh@kernel.org>
+In-Reply-To: <20260410192300.GA1050337-robh@kernel.org>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Mon, 13 Apr 2026 14:15:36 +0100
+X-Gm-Features: AQROBzCue1TP9mde88YkHmv2yOUt3MzeMPylxtPFcG41TotdWLOxWFNqGRjveP0
+Message-ID: <CANk7y0h1m1ECB7ud2Sw0_PTRq3bPstSm_CGg=nwU8d4yruxdfw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+To: Rob Herring <robh@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Leo Yan <leo.yan@arm.com>, 
+	Breno Leitao <leitao@debian.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-perf-users@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Fri, Apr 10, 2026 at 8:23=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Wed, Mar 18, 2026 at 10:16:57AM -0700, Puranjay Mohan wrote:
+> > Enable the bpf_get_branch_snapshot() BPF helper on ARM64 by implementin=
+g
+> > the perf_snapshot_branch_stack static call for ARM's Branch Record Buff=
+er
+> > Extension (BRBE).
+> >
+> > The BPF helper bpf_get_branch_snapshot() allows BPF programs to capture
+> > hardware branch records on-demand. This was previously only available o=
+n
+> > x86 (Intel LBR) but not on ARM64 despite BRBE being available since
+> > ARMv9.
+> >
+> > BRBE is paused before disabling interrupts because local_irq_save() can
+> > trigger trace_hardirqs_off() which performs stack walking and pollutes
+> > the branch buffer. The sysreg read/write and ISB used to pause BRBE are
+> > branchless, so pausing first avoids this pollution.
+> >
+> > All exceptions are masked after pausing BRBE using local_daif_save() to
+> > prevent pseudo-NMI from PMU counter overflow from interfering with the
+> > snapshot read. A PMU overflow arriving between the pause and
+> > local_daif_save() can re-enable BRBE via the interrupt handler; the
+> > snapshot detects this by re-checking BRBFCR_EL1.PAUSED and bailing out.
+> >
+> > Branch records are read using the existing perf_entry_from_brbe_regset(=
+)
+> > helper with a NULL event pointer, which bypasses event-specific filteri=
+ng
+> > and captures all recorded branches. The BPF program is responsible for
+> > filtering entries based on its own criteria. The BRBE buffer is
+> > invalidated after reading to maintain contiguity for other consumers.
+> >
+> > On heterogeneous big.LITTLE systems, only some CPUs may implement
+> > FEAT_BRBE. The perf_snapshot_branch_stack static call is system-wide, s=
+o
+> > a per-CPU brbe_active flag is used to prevent BRBE sysreg access on CPU=
+s
+> > that do not implement FEAT_BRBE, where such access would be UNDEFINED.
+>
+> Is this something you've seen? IIRC, the existing assumption is all CPUs
+> have FEAT_BRBE or that perf has been limited to those CPUs. It is
+> allowed that the number of records can vary.
 
-Introduce helper bpf_insn_is_indirect_target to check whether a BPF
-instruction is an indirect jump target.
+I just added it as a safeguard, but if you say that it is not
+possible, I will remove this in the next version.
 
-Since the verifier knows which instructions are indirect jump targets,
-add a new flag indirect_target to struct bpf_insn_aux_data to mark
-them. The verifier sets this flag when verifying an indirect jump target
-instruction, and the helper checks the flag to determine whether an
-instruction is an indirect jump target.
+>
+> >
+> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> > ---
+> >  drivers/perf/arm_brbe.c  | 79 +++++++++++++++++++++++++++++++++++++++-
+> >  drivers/perf/arm_brbe.h  |  9 +++++
+> >  drivers/perf/arm_pmuv3.c |  5 ++-
+> >  3 files changed, 90 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+> > index ba554e0c846c..527c2d5ebba6 100644
+> > --- a/drivers/perf/arm_brbe.c
+> > +++ b/drivers/perf/arm_brbe.c
+> > @@ -8,9 +8,13 @@
+> >   */
+> >  #include <linux/types.h>
+> >  #include <linux/bitmap.h>
+> > +#include <linux/percpu.h>
+> >  #include <linux/perf/arm_pmu.h>
+> > +#include <asm/daifflags.h>
+> >  #include "arm_brbe.h"
+> >
+> > +static DEFINE_PER_CPU(bool, brbe_active);
+> > +
+> >  #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
+> >                                  BRBFCR_EL1_INDIRECT | \
+> >                                  BRBFCR_EL1_RTN      | \
+> > @@ -533,6 +537,8 @@ void brbe_enable(const struct arm_pmu *arm_pmu)
+> >       /* Finally write SYS_BRBFCR_EL to unpause BRBE */
+> >       write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+> >       /* Synchronization in PMCR write ensures ordering WRT PMU enablin=
+g */
+> > +
+> > +     this_cpu_write(brbe_active, true);
+> >  }
+> >
+> >  void brbe_disable(void)
+> > @@ -544,6 +550,7 @@ void brbe_disable(void)
+> >        */
+> >       write_sysreg_s(BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> >       write_sysreg_s(0, SYS_BRBCR_EL1);
+> > +     this_cpu_write(brbe_active, false);
+> >  }
+> >
+> >  static const int brbe_type_to_perf_type_map[BRBINFx_EL1_TYPE_DEBUG_EXI=
+T + 1][2] =3D {
+> > @@ -618,10 +625,10 @@ static bool perf_entry_from_brbe_regset(int index=
+, struct perf_branch_entry *ent
+> >
+> >       brbe_set_perf_entry_type(entry, brbinf);
+> >
+> > -     if (!branch_sample_no_cycles(event))
+> > +     if (!event || !branch_sample_no_cycles(event))
+> >               entry->cycles =3D brbinf_get_cycles(brbinf);
+> >
+> > -     if (!branch_sample_no_flags(event)) {
+> > +     if (!event || !branch_sample_no_flags(event)) {
+> >               /* Mispredict info is available for source only and compl=
+ete branch records. */
+> >               if (!brbe_record_is_target_only(brbinf)) {
+> >                       entry->mispred =3D brbinf_get_mispredict(brbinf);
+> > @@ -803,3 +810,71 @@ void brbe_read_filtered_entries(struct perf_branch=
+_stack *branch_stack,
+> >  done:
+> >       branch_stack->nr =3D nr_filtered;
+> >  }
+> > +
+> > +/*
+> > + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
+> > + * self-recording and return 0 if the snapshot state appears disturbed=
+.
+> > + */
+> > +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, =
+unsigned int cnt)
+> > +{
+> > +     unsigned long flags;
+> > +     int nr_hw, nr_banks, nr_copied =3D 0;
+> > +     u64 brbidr, brbfcr, brbcr;
+> > +
+> > +     if (!cnt || !__this_cpu_read(brbe_active))
+> > +             return 0;
+> > +
+> > +     /* Pause BRBE first to avoid recording our own branches. */
+> > +     brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
+> > +     brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
+> > +     write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> > +     isb();
+>
+> Is there something that guarantees BRBE is enabled when you enter this
+> function and that it is not disabled in this window? A context switch
+> could disable it unless it's a global event for example.
 
-Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com> #v8
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com> #v12
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- include/linux/bpf.h          |  2 ++
- include/linux/bpf_verifier.h |  9 +++++----
- kernel/bpf/core.c            |  9 +++++++++
- kernel/bpf/fixups.c          | 12 ++++++++++++
- kernel/bpf/verifier.c        |  7 +++++++
- 5 files changed, 35 insertions(+), 4 deletions(-)
+The user space program handling this BPF program should create a
+system wide event in the expected use case. But you are right that it
+is not guaranteed to be enabled, I will check and return early in that
+case.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0136a108d083..b4b703c90ca9 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1541,6 +1541,8 @@ bool bpf_has_frame_pointer(unsigned long ip);
- int bpf_jit_charge_modmem(u32 size);
- void bpf_jit_uncharge_modmem(u32 size);
- bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
-+bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
-+				 int insn_idx);
- #else
- static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
- 					   struct bpf_trampoline *tr,
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 53e8664cb566..b148f816f25b 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -630,16 +630,17 @@ struct bpf_insn_aux_data {
- 
- 	/* below fields are initialized once */
- 	unsigned int orig_idx; /* original instruction index */
--	bool jmp_point;
--	bool prune_point;
-+	u32 jmp_point:1;
-+	u32 prune_point:1;
- 	/* ensure we check state equivalence and save state checkpoint and
- 	 * this instruction, regardless of any heuristics
- 	 */
--	bool force_checkpoint;
-+	u32 force_checkpoint:1;
- 	/* true if instruction is a call to a helper function that
- 	 * accepts callback function as a parameter.
- 	 */
--	bool calls_callback;
-+	u32 calls_callback:1;
-+	u32 indirect_target:1; /* if it is an indirect jump target */
- 	/*
- 	 * CFG strongly connected component this instruction belongs to,
- 	 * zero if it is a singleton SCC.
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 79361aa11757..8b018ff48875 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1573,6 +1573,15 @@ struct bpf_prog *bpf_jit_blind_constants(struct bpf_verifier_env *env, struct bp
- 	clone->blinded = 1;
- 	return clone;
- }
-+
-+bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, const struct bpf_prog *prog,
-+				 int insn_idx)
-+{
-+	if (!env)
-+		return false;
-+	insn_idx += prog->aux->subprog_start;
-+	return env->insn_aux_data[insn_idx].indirect_target;
-+}
- #endif /* CONFIG_BPF_JIT */
- 
- /* Base function for offset calculation. Needs to go into .text section,
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 6ef213429a2a..67f14e24d7d7 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -183,6 +183,18 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
- 		data[i].seen = old_seen;
- 		data[i].zext_dst = insn_has_def32(insn + i);
- 	}
-+
-+	/*
-+	 * The indirect_target flag of the original instruction was moved to the last of the
-+	 * new instructions by the above memmove and memset, but the indirect jump target is
-+	 * actually the first instruction, so move it back. This also matches with the behavior
-+	 * of bpf_insn_array_adjust(), which preserves xlated_off to point to the first new
-+	 * instruction.
-+	 */
-+	if (data[off + cnt - 1].indirect_target) {
-+		data[off].indirect_target = 1;
-+		data[off + cnt - 1].indirect_target = 0;
-+	}
- }
- 
- static void adjust_subprog_starts(struct bpf_verifier_env *env, u32 off, u32 len)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e804e0da3500..1e36b9e91277 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3497,6 +3497,11 @@ static int insn_stack_access_flags(int frameno, int spi)
- 	return INSN_F_STACK_ACCESS | (spi << INSN_F_SPI_SHIFT) | frameno;
- }
- 
-+static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
-+{
-+	env->insn_aux_data[idx].indirect_target = true;
-+}
-+
- #define LR_FRAMENO_BITS	3
- #define LR_SPI_BITS	6
- #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
-@@ -17545,12 +17550,14 @@ static int check_indirect_jump(struct bpf_verifier_env *env, struct bpf_insn *in
- 	}
- 
- 	for (i = 0; i < n - 1; i++) {
-+		mark_indirect_target(env, env->gotox_tmp_buf->items[i]);
- 		other_branch = push_stack(env, env->gotox_tmp_buf->items[i],
- 					  env->insn_idx, env->cur_state->speculative);
- 		if (IS_ERR(other_branch))
- 			return PTR_ERR(other_branch);
- 	}
- 	env->insn_idx = env->gotox_tmp_buf->items[n-1];
-+	mark_indirect_target(env, env->insn_idx);
- 	return INSN_IDX_UPDATED;
- }
- 
--- 
-2.47.3
+>
+> > +
+> > +     /* Block local exception delivery while reading the buffer. */
+> > +     flags =3D local_daif_save();
+> > +
+> > +     /*
+> > +      * A PMU overflow before local_daif_save() could have re-enabled
+> > +      * BRBE, clearing the PAUSED bit. The overflow handler already
+> > +      * restored BRBE to its correct state, so just bail out.
+> > +      */
+> > +     if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED)) {
+> > +             local_daif_restore(flags);
+> > +             return 0;
+> > +     }
+> > +
+> > +     brbidr =3D read_sysreg_s(SYS_BRBIDR0_EL1);
+> > +     if (!valid_brbidr(brbidr))
+>
+> This is not possibly true if brbe_active is true. If BRBIDR is not
+> valid, then we would have rejected any event requesting branch stack.
 
+Will remove it in the next version.
+
+>
+> > +             goto out;
+> > +
+> > +     nr_hw =3D FIELD_GET(BRBIDR0_EL1_NUMREC_MASK, brbidr);
+> > +     nr_banks =3D DIV_ROUND_UP(nr_hw, BRBE_BANK_MAX_ENTRIES);
+> > +
+> > +     for (int bank =3D 0; bank < nr_banks; bank++) {
+> > +             int nr_remaining =3D nr_hw - (bank * BRBE_BANK_MAX_ENTRIE=
+S);
+> > +             int nr_this_bank =3D min(nr_remaining, BRBE_BANK_MAX_ENTR=
+IES);
+> > +
+> > +             select_brbe_bank(bank);
+> > +
+> > +             for (int i =3D 0; i < nr_this_bank; i++) {
+>
+> I don't love all this being duplicated. Perhaps an iterator would help
+> here (and the other copy):
+>
+> static void next_slot(int *bank, int *bank_idx, int nr_hw)
+> {
+>         *bank_idx++;
+>         if (*bank_idx + (*bank * BRBE_BANK_MAX_ENTRIES) =3D=3D nr_hw)
+>                 bank =3D BRBE_MAX_BANKS;
+>         else if ((*bank_idx % BRBE_BANK_MAX_ENTRIES) =3D=3D 0) {
+>                 *bank_idx =3D 0;
+>                 select_brbe_bank(++(*bank));
+>         }
+>
+> }
+>
+> #define for_each_bank_slot(i, nr_hw) \
+> for (int bank =3D 0, int i =3D 0; bank < BRBE_MAX_BANKS; next_slot(&bank,
+> &i))
+>
+> Then here you just have:
+>
+> for_each_bank_slot(i, FIELD_GET(BRBIDR0_EL1_NUMREC_MASK, brbidr)) {
+>         ...
+> }
+>
+> Feel free to come up with better naming. :)
+
+Will add this to the next version, thanks
+
+>
+> > +                     if (nr_copied >=3D cnt)
+> > +                             goto done;
+> > +
+> > +                     if (!perf_entry_from_brbe_regset(i, &entries[nr_c=
+opied], NULL))
+> > +                             goto done;
+> > +
+> > +                     nr_copied++;
+> > +             }
+> > +     }
+> > +
+> > +done:
+> > +     brbe_invalidate();
+> > +out:
+> > +     /* Restore BRBCR before unpausing via BRBFCR, matching brbe_enabl=
+e(). */
+> > +     write_sysreg_s(brbcr, SYS_BRBCR_EL1);
+> > +     isb();
+> > +     write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+> > +     local_daif_restore(flags);
+> > +
+> > +     return nr_copied;
+> > +}
