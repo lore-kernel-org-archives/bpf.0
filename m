@@ -1,62 +1,62 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F53F35BDDC
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:03:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68ED6390981
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 19:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776106983; cv=none; b=X0rn2nt4YDipCsMbPSEx6j/oVGKf/7yjY2nAM4n17CBoA29QYo5MfVw8dNE43GAS2BYc1HQ18vWxp7xWxH3049nvkbf9PdePpVa7ki3TKTdgiRIdFffnPuuqP1dk7xOIp9/bQwms7VxNMSDm7hD03Xr/dytU4b/UxV430POWbl4=
+	t=1776106984; cv=none; b=D3d7j2GqSPAXtX8efz8DBKnA44h7Jk34YTI1XBi+yt2YKUtKTkrawS5RU0CEgG3LsuQPBJgTJGpw7Bu4pnlZ1becXcvVSn3cWVz1xIe7AaZauijCSROmJ+O2Y2uYtrjgaUqfFjYpybg34zGtVU60EdZx/ulwdqFuVuDiVpC42f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776106983; c=relaxed/simple;
-	bh=3H8vD11IX7KZqyfN6H09ZHFT+Xe8BH17Ev9HoyvdB5Y=;
+	s=arc-20240116; t=1776106984; c=relaxed/simple;
+	bh=wcogO+yi9UymmqXKF1p/G3r9lV+G0rzLcrvkUW6ZthE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uU7EMHrc2/Vtu876iZndfGou+ezT0eJizLwIZkXSPfHnsgED9FWTbwj8V7kS3WQ5Y1yAi6u0hvPklA+lCtXud5xMMakm+ZEpiRg4BogWoXQZE6koPvvvTFevpJDIbUTD3ZuWhDpCdqxVNMUnOa01ItZXN0KuE+5TCQJOvHyZzvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GsGy9z8c; arc=none smtp.client-ip=209.85.210.169
+	 MIME-Version; b=Cn5LBI/LN3mGqxnmFl+7PZ2iGbsbB7UAft86pX0v4V3J2yxADRI3MZ3CVIDUwm8xeuWW9JD86eDh3W8TBaLTW5W+wKO2Zm3CFyeOZ2l5pfBXcotw+QeB+eH1H/VEtrpndqNUcgXxY1QJo3mw2vnegU0fLEY+tfrIMl+Y3LiWVTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YXaysll4; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GsGy9z8c"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-82f206f2b54so858114b3a.0
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:03:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YXaysll4"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-82cd70febc7so3210024b3a.2
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776106981; x=1776711781; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776106983; x=1776711783; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=atDvfZ5kF80vti1eITSyPMZO8y4WUdaD3lKF20+5h6g=;
-        b=GsGy9z8c1KQjqv0Ir47cEambhLlRubdk9Ttf6ATKwd5WxI7BWQGCLAaEldF7VxIG65
-         EoZO+sf0tQFTpGhZog/Fkc89NnEGxiv/UvXvhUh51ZaqYpdvowQ13wNLVOJYExzAnWi2
-         W3B8jKW3n9nr88iKLix+2/M9ww/PhMi3Ykwv2fI+6j/VjTE3ReQeT/P853lhKQ2uKqWl
-         L/WfTy5XmyUXrHJCmZkVGV1Uxn5wzmjtzL2ooYhGtNmYHeNCEG+UzGGZhQbhy3HGBINT
-         brrZZdnnddKyTeLvkZYCEentuyCaAUQBmwwJZdSRiw01hXcKyFg+u2J5R5OxFjNsJ1T2
-         KdLg==
+        bh=1LPzNhJ9SoJ92wROfmZC7oCsB29Lo57fmL6CTPDCcEk=;
+        b=YXaysll4OCszhuD66aoCBDkfn3gTj5soTwhMGBIfvKXcxEdyweXMLv8UAE7MwD0xX3
+         NILx5B2nYatTgmBhMjINTWuW8KFU2aSdNoiXFUOLY1t4GQUa/u82HMoUpVcVPVRPDhY1
+         DOF8PDS19JWDaHLxQd2LPPTO3tuF1NNH/A0mgVqxlpARfU3P+KjUi03E7IJa1sbE6xzz
+         OqWZJFoKj3Cx1LAgXzTbSkXUEBGQZXt7JxT7YVch1Ictr1IxJvHBmo+CH3KlrdeL/u6g
+         ANAQtuZX9OgSsHc7L19eWERHbGwHLqFlGKDtZB3lK1tsjblkH6ID9FXCM8k6rWcfZ9t4
+         iQLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776106981; x=1776711781;
+        d=1e100.net; s=20251104; t=1776106983; x=1776711783;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=atDvfZ5kF80vti1eITSyPMZO8y4WUdaD3lKF20+5h6g=;
-        b=owFqHYp74t8A6h8A3b255XasgKEURx6qMOGOmW+NxFZ5ihmpsaJ66orkz9Fjd16yja
-         Kfxm6qM8bQsi4nUAR/whqHkHdCZ4EBPsCAiA2SUXk1RmCwRRRswzZuC+WjePCbGaw0w7
-         63FK2e+gyZez/cbWgffVOrx0Qw1yV6zRpfUdqjUZl8MswYEXEsRLGuiB48YiT5Oc5GrO
-         Fe0MxBbxfuep56lXfdK0C4tR3WULDQI/Uc1gzPS7kLbsAbv1NBRdHSH1UpUnrck/AhI0
-         mitSKG+EqkCiZZff1nYZ3AD87b2t1TjoINeArf+X3Dqdi3pLAXkSAQqjxjyoY8v1dDLa
-         gTzg==
-X-Gm-Message-State: AOJu0YwOvSNxt9Z9F/iu0/UxNpO5c9zQ+z6q72gHXEI4etKMC8ajzqzu
-	AyzzcUBfYvRnLBxqRrTU3+ZjZILfWhi4sb6KBt1fk0r8bqkXk/l5f++wxsNidQ==
-X-Gm-Gg: AeBDiesB59Feu/6GeFw70s3SWjJAeTKg/W5br4C9PyKnrBtrSnPaqAZLmmbJ7CIV8xS
-	MCc7U1NVKpQ8MRI8mcTHYHdj/MpSAd2K2sXX7D4xPu5kyoioMlE8AiWfnJBArJ/Qj7Kx07rhpKa
-	kfxI21o1hB+7ptfQLovKhzOtowDZ3rKjuMZ7zYitAOBz/WkebN6xJhWLbdpkSgSTBJgg9e1z6VR
-	ybDsqJnSz3zNNrmgD27KgFLsnG/IAaWRj+VlyUJgN5VwJ3BaoQar5cDDiEWz1O0rBclL3U+OQVl
-	MP1IY/qCpQ8L5vQWbOi8tmd7R3nOeqvfq+aYI8MuWpvlxsGlOW4WhPhvppDaZAfZdq82i8Av+ob
-	z3+dOLTKQNOd/EGWI7zM54Enwm+/A74TUfeC3XNs/+IGUR1j8OiGKuhT7B6GXMMR/uVRMPCJUji
-	X/O6c6Qn0w0LJK
-X-Received: by 2002:a05:6a00:4293:b0:82c:7eb1:4d61 with SMTP id d2e1a72fcca58-82f0c298d87mr14557102b3a.32.1776106981495;
-        Mon, 13 Apr 2026 12:03:01 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:2::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f45e9c5c4sm3785603b3a.60.2026.04.13.12.03.01
+        bh=1LPzNhJ9SoJ92wROfmZC7oCsB29Lo57fmL6CTPDCcEk=;
+        b=PCSl7jcu9jOh5G2H7DIgFOXKTp6yFD/G4iPI2lUK+DhZNuVfOrfj2/dLNYTnREc6yk
+         vd5/Tg4MvTMHyym9Lk2cw6mriyJ5+Lf5KUOJtmz3wd6d8U4yh+uRvLyKgwftHzmPR1oD
+         Er7axJKLsaIqSDkcc3jg0U2DLiZPoJztm1rmPtLXDwGS1ig15W3jO827GwlQZxUlWdbW
+         JvZ9nbPJDyfZcLxpuWyC7CWK3cjjgjF8DLfXgpiklTOuVZ77z6OGmzsmytNlIyhqDz1L
+         Xisg8hfJVZH//dEQn0amLjN8W2b2mAHUjvq4Ljf7k8xvehie0EuKFlUN4t8vzJ8a0x6s
+         JPbw==
+X-Gm-Message-State: AOJu0YwD1GpvPyv33kQ+TaUTQvLn14LM2JFrqtYkEH3AOYz3K7jkXW04
+	CL5zD267Kg39ujtQ50DouPFfEqMLth6RzUfz31Y43SAELow602mmh4bhtOKrrg==
+X-Gm-Gg: AeBDies6lqevHuzgN84LllpCqQfgCiVoEmfzyx9MIyttfeQXbZ3NWCddWnNpiv7RCxA
+	HebsoK9pAHs0nN9ft6hYkC+FBIo5s0R/qsu3wA/kMjejDfz3wOyxRGYyXeXRzXSJbQpszrB00XN
+	ywA6Xc81PGwFh8d/FwzfyhH1VojhanyRAJ4s1tFVhfHs4eNkQVPzdNJHMHBcY7eNraCvyrOid9G
+	jb+XXHhF+xY+UkihaS0NM3DcAvm5TrDbK47caBBHfZJMMOc0lPjub7xPJ3QMbBibwKCMStYG5zc
+	VRtzmghyYnAAFYWTY52muVoaiypEkP0MKVDWCKSYma1WCEK14H9IGvVNSoLsQcp57Sqn4/XCVN0
+	/iNE78FoQ/Kl0RHgiohnHQ1NWXZJwdF9Ycl0SHDjT8E+SZP3HvmpzEW3Ny+c6WEmNKQ5EzCO0UD
+	07C3V7gYc2ON8KeA==
+X-Received: by 2002:a05:6a00:a217:b0:82c:d7c9:5479 with SMTP id d2e1a72fcca58-82f0c29fe3bmr15748682b3a.32.1776106982651;
+        Mon, 13 Apr 2026 12:03:02 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:49::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c35194asm15176042b3a.20.2026.04.13.12.03.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2026 12:03:01 -0700 (PDT)
+        Mon, 13 Apr 2026 12:03:02 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -67,9 +67,9 @@ Cc: alexei.starovoitov@gmail.com,
 	yatsenko@meta.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 1/3] selftests/bpf: Prevent allocating data larger than a page
-Date: Mon, 13 Apr 2026 12:02:57 -0700
-Message-ID: <20260413190259.358442-2-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 2/3] selftests/bpf: Fix tld_get_data() returning garbage data
+Date: Mon, 13 Apr 2026 12:02:58 -0700
+Message-ID: <20260413190259.358442-3-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260413190259.358442-1-ameryhung@gmail.com>
 References: <20260413190259.358442-1-ameryhung@gmail.com>
@@ -81,69 +81,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix a bug in the task local data library that may allocate more than a
-a page for tld_data_u. This may happen when users set a too large
-TLD_DYN_DATA_SIZE, so check it when creating dynamic TLD fields and fix
-the corresponding selftest.
+BPF side tld_get_data() currently may return garbage when tld_data_u is
+not aligned to page_size. This can happen when small amount of memory
+is allocated for tld_data_u. The misalignment is supposed to be allowed
+and the BPF side will use tld_data_u->start to reference the tld_data_u
+in a page. However, since "start" is within tld_data_u, there is no way
+to know the correct "start" in the first place. As a result, BPF
+programs will see garbage data. The selftest did not catch this since
+it tries to allocate the maximum amount of data possible (i.e., a page)
+such that tld_data_u->start is always correct.
+
+Fix it by moving tld_data_u->start to tld_data_map->start. The original
+field is now renamed as unused instead of removing it because BPF side
+tld_get_data() views off = 0 returned from tld_fetch_key() as
+uninitialized.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- .../selftests/bpf/prog_tests/task_local_data.h |  3 ++-
- .../bpf/prog_tests/test_task_local_data.c      | 18 +++++++++++++-----
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ .../testing/selftests/bpf/prog_tests/task_local_data.h | 10 ++++++++--
+ .../testing/selftests/bpf/progs/task_local_data.bpf.h  |  5 +++--
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-index 1e5c67c78ffb..489f07045c9f 100644
+index 489f07045c9f..8ae4fb2027f7 100644
 --- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
 +++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-@@ -241,7 +241,8 @@ static tld_key_t __tld_create_key(const char *name, size_t size, bool dyn_data)
- 		 * TLD_DYN_DATA_SIZE is allocated for tld_create_key()
- 		 */
- 		if (dyn_data) {
--			if (off + TLD_ROUND_UP(size, 8) > tld_meta_p->size)
-+			if (off + TLD_ROUND_UP(size, 8) > tld_meta_p->size ||
-+			    tld_meta_p->size > TLD_PAGE_SIZE - sizeof(struct tld_data_u))
- 				return (tld_key_t){-E2BIG};
- 		} else {
- 			if (off + TLD_ROUND_UP(size, 8) > TLD_PAGE_SIZE - sizeof(struct tld_data_u))
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-index e219ff506b56..8b99b4880d24 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-@@ -3,8 +3,14 @@
- #include <bpf/btf.h>
- #include <test_progs.h>
+@@ -99,14 +99,20 @@ struct tld_meta_u {
+ 	struct tld_metadata metadata[];
+ };
  
 +/*
-+ * Only a page is pinned to kernel, so the maximum amount of dynamic data
-+ * allowed is page_size - sizeof(struct tld_data_u) - static TLD fields.
++ * The unused field ensures map_val.start > 0. On the BPF side, __tld_fetch_key()
++ * calculates off by summing map_val.start and tld_key_t.off and treats off == 0
++ * as key not cached.
 + */
-+#define TLD_DYN_DATA_SIZE_MAX (getpagesize() - sizeof(struct tld_data_u) - 8)
-+
- #define TLD_FREE_DATA_ON_THREAD_EXIT
--#define TLD_DYN_DATA_SIZE (getpagesize() - 8)
-+#define TLD_DYN_DATA_SIZE TLD_DYN_DATA_SIZE_MAX
- #include "task_local_data.h"
+ struct tld_data_u {
+-	__u64 start; /* offset of tld_data_u->data in a page */
++	__u64 unused;
+ 	char data[] __attribute__((aligned(8)));
+ };
  
- struct test_tld_struct {
-@@ -147,11 +153,13 @@ static void test_task_local_data_basic(void)
+ struct tld_map_value {
+ 	void *data;
+ 	struct tld_meta_u *meta;
++	__u16 start; /* offset of tld_data_u->data in a page */
+ };
  
- 	/*
- 	 * Shouldn't be able to store data exceed a page. Create a TLD just big
--	 * enough to exceed a page. TLDs already created are int value0, int
--	 * value1, and struct test_tld_struct value2.
-+	 * enough to exceed a page. Data already contains struct tld_data_u,
-+	 * value0 and value1 of int type, and value 2 of struct test_tld_struct.
+ struct tld_meta_u * _Atomic tld_meta_p __attribute__((weak));
+@@ -182,7 +188,7 @@ static int __tld_init_data_p(int map_fd)
+ 	 * is a page in BTF.
  	 */
--	key = tld_create_key("value_not_exist",
--			     TLD_PAGE_SIZE - 2 * sizeof(int) - sizeof(struct test_tld_struct) + 1);
-+	key = tld_create_key("value_not_exist", TLD_PAGE_SIZE + 1 -
-+						sizeof(struct tld_data_u) -
-+						TLD_ROUND_UP(sizeof(int), 8) * 2 -
-+						TLD_ROUND_UP(sizeof(struct test_tld_struct), 8));
- 	ASSERT_EQ(tld_key_err_or_zero(key), -E2BIG, "tld_create_key");
+ 	map_val.data = (void *)(TLD_PAGE_MASK & (intptr_t)data);
+-	data->start = (~TLD_PAGE_MASK & (intptr_t)data) + sizeof(struct tld_data_u);
++	map_val.start = (~TLD_PAGE_MASK & (intptr_t)data) + sizeof(struct tld_data_u);
+ 	map_val.meta = tld_meta_p;
  
- 	key = tld_create_key("value2", sizeof(struct test_tld_struct));
+ 	err = bpf_map_update_elem(map_fd, &tid_fd, &map_val, 0);
+diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+index 1f396711f487..0df8a12fd61e 100644
+--- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
++++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+@@ -86,13 +86,14 @@ struct tld_meta_u {
+ };
+ 
+ struct tld_data_u {
+-	__u64 start; /* offset of tld_data_u->data in a page */
++	__u64 unused;
+ 	char data[__PAGE_SIZE - sizeof(__u64)] __attribute__((aligned(8)));
+ };
+ 
+ struct tld_map_value {
+ 	struct tld_data_u __uptr *data;
+ 	struct tld_meta_u __uptr *meta;
++	__u16 start; /* offset of tld_data_u->data in a page */
+ };
+ 
+ typedef struct tld_uptr_dummy {
+@@ -176,7 +177,7 @@ static int __tld_fetch_key(struct tld_object *tld_obj, const char *name, int i_s
+ 	if (!tld_obj->data_map || !tld_obj->data_map->data || !tld_obj->data_map->meta)
+ 		return 0;
+ 
+-	start = tld_obj->data_map->data->start;
++	start = tld_obj->data_map->start;
+ 	cnt = tld_obj->data_map->meta->cnt;
+ 	metadata = tld_obj->data_map->meta->metadata;
+ 
 -- 
 2.52.0
 
