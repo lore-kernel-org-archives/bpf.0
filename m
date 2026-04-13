@@ -1,171 +1,189 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B463C2770
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 12:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855D33CAE99;
+	Mon, 13 Apr 2026 13:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776084942; cv=none; b=dXW1BRZxgDcAChd9099/N7Z+BzVBnWpj+31i3B5goF9A74/DKnSZAgXyuxqq9A+g2Z59CfHnzOg9DBq35HxUADN4v4XZHeQruHyuaDHicyJoBKPeqvpD82fg7UcjzDolMu91F/CUUIEmi5TXsPnc0FTBeHkbJ6QOAFOHLUtoZ+o=
+	t=1776085596; cv=none; b=rsADMGOh0hxtonxRDRb+tYCBQfL1Qme1sbf+HC1zwNTjl0H+LTaA2v6kAhdroVZmWnTcLGcZ5NF4xONFLYSxHYryGkSoBpcRr9xTIsvyDJXRhznrRP/MFuNHNdVsL04ll29d6yWKGPzxLYqWnSVSMsSBSyfLyqqQrji2vpLUFtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776084942; c=relaxed/simple;
-	bh=Y3hlRLHyBcfwyl+W3Am1VL3ZEtEna5WlQZGSYTY2Kak=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sz+vP2pdzTYAujkmPLGiWO01L+EHfDdMjLrFEtLym1vnJdfoS6cicUsKZwRzlsDTgnPF7NPNgqAY/lt9ujLA2XayFJ47AsdUM1kWaWKWQGh3R5oEXH6FXYq7MS5MeSiXIBYmND0PirhnN58gKof1l9kO2iiGIhsKd7jylXVX2xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hh7uGp4L; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hh7uGp4L"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6709d172dd3so2997649a12.0
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 05:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776084939; x=1776689739; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bOciD5j2zkhvaZlo8kvya+zVe7Ak1F76IZ5ZmFc7+r8=;
-        b=hh7uGp4LSaJQijm3yoqpPw0SRhGkaucDnfZo4N7yYNILSlZcdhSmljfvX9tw0VVOO/
-         +BZlixpzWzMOcD8Jyu3V2Wn+34vNm4HJN4YBAMc0xV+euKyRWcJOcSU78GBvYG+Aw5Bz
-         wcgJnEabfVycTpn/IWSM61K2BYHjj243wuNr54uH/hFr6ggEER+EfQVoLHicEgxQ4JH9
-         44HeaieeTrTf//bTiv41c25hzGgZz7MpeI3IsOwIDxJOpTCt+s6fXYOopmGiK4uzqXTQ
-         cM1FeAM9C/CGDBf64+ytmNSZD4TXyQzjd7YWt3yKzmggESNObzGqgXQPGPpcCDHOoZfQ
-         qLEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776084939; x=1776689739;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bOciD5j2zkhvaZlo8kvya+zVe7Ak1F76IZ5ZmFc7+r8=;
-        b=BwpExUXDN5ecUUMCgws6qY+iVNtuIhy1HLzWjILj2XjPpv2kTh9BgX7SbIPt9LHG83
-         +xaLpINDlXcxPERqpE8Bgdxysyhqwqf4WsTByVpO89b24nVzhk4PQv3X8cqSJ7tmrFkU
-         YDdP7RlND5NCyIprr+Xk1Js/UWi2PgKDh749jcYhwAvBU6v4D+0tTQQHbMy+M1O0nxBe
-         H3NBAF7wjHOOWsi0BE6wOW8QTankMUib/f35h7hty15/i9nPW0PGXa/YolvOqnZJt613
-         6h+MrvnusoE+LZF7Wf9Lzq53UWoFL7tTAVlIMWlPBIzioJ4aZHfo4oYO5UNrpnq0Q2nO
-         HVRg==
-X-Gm-Message-State: AOJu0Yx8jmrNSUu6TuGReXj8qEXzuXJTl5yoo8L3yuwmiTXuv2RwmEt4
-	9ZS4bkJhlAV16nkkKcmRo6C0WSXwpwq/REMD4RRu/8i5rSPbXyWL/nCX
-X-Gm-Gg: AeBDievw+hTgmYXBLWrv2WP0xc8P3AzPRldeRhzhC63YRn3o749OT7MA5y16u9YyVji
-	O85J/SNji1crMpmqORVZ/BDgtlnTzG+MJgsGcOx3Mb5ytS7HQP8uCnALlAvkNXV2zjtNTwDLdWr
-	JkYOJiVoDKLyKrwgi4lItNDbOr7rss9B1ADyjnmf8RZY/1CvbLySXfmeyHbxohjUObmBPPjc6J5
-	VdVWvzTUw8bt6FQ3FFoi0+9i2FCuItf7qMK9iuKPjNftG7P7jV2NknGtmnIJRZgTNoKLXLuKSxv
-	dkE/PnRItWI6XDoTpfgu+2OYO1/AsLpNxSkBZfMgi375SxTBk1XNJ4DEMk+exwPjRt7N2Ch6oc3
-	Kwmzbg4MQC/HlL5JFsyf28U7ip8J2XWqqHRqNnG4P723dObGHWuHbWnvLv6iKwxzypz7wSywKKj
-	Po7qR9+scQbc8RtTY7NQWErz5uGWxvf81A5rR00WDGxcaTe69QmzaYbtMJ6qF6M187IKbSKS9Xp
-	pcG1VAzguU=
-X-Received: by 2002:a05:6402:5644:b0:671:8e48:920a with SMTP id 4fb4d7f45d1cf-6718e489360mr1023652a12.5.1776084938855;
-        Mon, 13 Apr 2026 05:55:38 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:1086:f5f1:32fc:93b3? ([2a02:8109:a307:d900:1086:f5f1:32fc:93b3])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-670702eec2bsm2412087a12.5.2026.04.13.05.55.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Apr 2026 05:55:38 -0700 (PDT)
-Message-ID: <76e88c11-fc18-42e1-920e-e0965b984689@gmail.com>
-Date: Mon, 13 Apr 2026 13:55:36 +0100
+	s=arc-20240116; t=1776085596; c=relaxed/simple;
+	bh=2Y0CgW2yCM4lhW3Lg3rW3xYF1k85ckSDXj8dp0p9XJQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RxXCy85e/gE+pHNEctDDCrgYMnfxYerD8Sol30lu3BX1509Lb3exf5jbL8d7oMvKXnyrov8/6i9JDS89OO8F7t3FXQkkCxWCy3esVPC93DZy0u555H27Zk/pr/IVaqdvmZWHc5E2eQg+xh3owMndAvy4QYn7vpmW0HCgOVAW96s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fvSN207p6zKHMj9;
+	Mon, 13 Apr 2026 21:06:26 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 8D8CE4056B;
+	Mon, 13 Apr 2026 21:06:32 +0800 (CST)
+Received: from localhost.huawei.com (unknown [10.67.174.243])
+	by APP4 (Coremail) with SMTP id gCh0CgA3Ib9U6txpI8MQAQ--.65519S7;
+	Mon, 13 Apr 2026 21:06:32 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+	Shahab Vahedi <list+bpf@vahedi.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+	Paul Burton <paulburton@kernel.org>,
+	Hari Bathini <hbathini@linux.ibm.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Naveen N Rao <naveen@kernel.org>,
+	Luke Nelson <luke.r.nels@gmail.com>,
+	Xi Wang <xi.wang@gmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Pu Lehui <pulehui@huawei.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Wang YanQing <udknight@gmail.com>
+Subject: [PATCH bpf-next v14 5/5] bpf, arm64: Emit BTI for indirect jump target
+Date: Mon, 13 Apr 2026 12:45:02 +0000
+Message-ID: <63b112e8dad43246e590b2be3ac9de592986963a.1776062885.git.xukuohai@hotmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1776062885.git.xukuohai@hotmail.com>
+References: <cover.1776062885.git.xukuohai@hotmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v9 2/6] bpf: Add bpf_prog_run_array_sleepable()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin Lau <kafai@meta.com>, Kernel Team <kernel-team@meta.com>,
- Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>,
- Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260410-sleepable_tracepoints-v9-0-e719e664e84c@meta.com>
- <20260410-sleepable_tracepoints-v9-2-e719e664e84c@meta.com>
- <CAADnVQ+6s0U6dVV0r_RK4ATwmuJd+BiGvp_yTYwL58ac9GEhwg@mail.gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAADnVQ+6s0U6dVV0r_RK4ATwmuJd+BiGvp_yTYwL58ac9GEhwg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgA3Ib9U6txpI8MQAQ--.65519S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8trW5XF45Cw1rWw4Uurg_yoW5tFW7pF
+	4DC3s0krW8Gr4UWa1DXayDAFyakr4kGay3GFyFk3yIkrZIqFy5WF15KF12kFn3A3yrur1f
+	AayYkr18W34xJrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	vjxUI-eODUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
+From: Xu Kuohai <xukuohai@huawei.com>
 
+On CPUs that support BTI, the indirect jump selftest triggers a kernel
+panic because there is no BTI instructions at the indirect jump targets.
 
-On 4/10/26 11:55 PM, Alexei Starovoitov wrote:
-> On Fri, Apr 10, 2026 at 10:09 AM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
->>
->> From: Mykyta Yatsenko <yatsenko@meta.com>
->>
->> Add bpf_prog_run_array_sleepable() for running BPF program arrays
->> on faultable tracepoints. Unlike bpf_prog_run_array_uprobe(), it
->> includes per-program recursion checking for private stack safety
->> and hardcodes is_uprobe to false.
->>
->> Keep bpf_prog_run_array_uprobe() unchanged for uprobe callers.
->>
->> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->> ---
->>   include/linux/bpf.h | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 50 insertions(+)
->>
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index 0136a108d083..4e166accab35 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -3077,6 +3077,56 @@ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
->>   void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
->>   void bpf_prog_report_arena_violation(bool write, unsigned long addr, unsigned long fault_ip);
->>
->> +static __always_inline u32
->> +bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
->> +                            const void *ctx, bpf_prog_run_fn run_prog)
->> +{
->> +       const struct bpf_prog_array_item *item;
->> +       struct bpf_prog *prog;
->> +       struct bpf_run_ctx *old_run_ctx;
->> +       struct bpf_trace_run_ctx run_ctx;
->> +       u32 ret = 1;
->> +
->> +       might_fault();
->> +       RCU_LOCKDEP_WARN(!rcu_read_lock_trace_held(), "no rcu lock held");
->> +
->> +       if (unlikely(!array))
->> +               return ret;
->> +
->> +       migrate_disable();
->> +
->> +       run_ctx.is_uprobe = false;
->> +
->> +       old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
->> +       item = &array->items[0];
->> +       while ((prog = READ_ONCE(item->prog))) {
->> +               if (!prog->sleepable)
->> +                       rcu_read_lock();
->> +
->> +               /* Per-prog recursion check to enable private stack. */
->> +               if (unlikely(!bpf_prog_get_recursion_context(prog))) {
-> 
-> from sashiko
-> 
->> + old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
->> + item = &array->items[0];
->> + while ((prog = READ_ONCE(item->prog))) {
->> + if (!prog->sleepable)
->> + rcu_read_lock();
->> +
->> + /* Per-prog recursion check to enable private stack. */
->> + if (unlikely(!bpf_prog_get_recursion_context(prog))) {
-> 
-> Can this cause a panic by dereferencing dummy_bpf_prog.prog.active?
-> When a program is detached from a BPF array and memory allocation for the new
-> array fails, bpf_prog_array_delete_safe() replaces the detached program with
-> &dummy_bpf_prog.prog as a fallback.
-> Because dummy_bpf_prog is a statically allocated placeholder, its prog.active
-> field is uninitialized (NULL).
-> If prog is dummy_bpf_prog.prog, bpf_prog_get_recursion_context() will
-> dereference prog->active as a per-CPU pointer, accessing offset 0 in the
-> per-CPU area and causing memory corruption or a panic.
-> Should there be an explicit check to skip dummy_bpf_prog.prog here?
+Fix it by emitting a BTI instruction for each indirect jump target.
 
-Looks like a real issue, thanks. I think the best solution is to add 
-valid `prog->active` field for the dummy_bpf_prog.prog so we don't need 
-to maintain special branches and can rely on the being a valid bpf_prog.
+For reference, below is a sample panic log.
+
+Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
+...
+Call trace:
+ bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x54/0xf8 (P)
+ bpf_prog_run_pin_on_cpu+0x140/0x468
+ bpf_prog_test_run_syscall+0x280/0x3b8
+ bpf_prog_test_run+0x22c/0x2c0
+
+Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com> # v8
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com> # v12
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 7212ec89dfe3..aa5cd240cdda 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1198,8 +1198,8 @@ static int add_exception_handler(const struct bpf_insn *insn,
+  * >0 - successfully JITed a 16-byte eBPF instruction.
+  * <0 - failed to JIT.
+  */
+-static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+-		      bool extra_pass)
++static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn *insn,
++		      struct jit_ctx *ctx, bool extra_pass)
+ {
+ 	const u8 code = insn->code;
+ 	u8 dst = bpf2a64[insn->dst_reg];
+@@ -1224,6 +1224,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	int ret;
+ 	bool sign_extend;
+ 
++	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
++		emit_bti(A64_BTI_J, ctx);
++
+ 	switch (code) {
+ 	/* dst = src */
+ 	case BPF_ALU | BPF_MOV | BPF_X:
+@@ -1899,7 +1902,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 	return 0;
+ }
+ 
+-static int build_body(struct jit_ctx *ctx, bool extra_pass)
++static int build_body(struct bpf_verifier_env *env, struct jit_ctx *ctx, bool extra_pass)
+ {
+ 	const struct bpf_prog *prog = ctx->prog;
+ 	int i;
+@@ -1918,7 +1921,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
+ 		int ret;
+ 
+ 		ctx->offset[i] = ctx->idx;
+-		ret = build_insn(insn, ctx, extra_pass);
++		ret = build_insn(env, insn, ctx, extra_pass);
+ 		if (ret > 0) {
+ 			i++;
+ 			ctx->offset[i] = ctx->idx;
+@@ -2079,7 +2082,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	if (build_prologue(&ctx, was_classic))
+ 		goto out_off;
+ 
+-	if (build_body(&ctx, extra_pass))
++	if (build_body(env, &ctx, extra_pass))
+ 		goto out_off;
+ 
+ 	ctx.epilogue_offset = ctx.idx;
+@@ -2127,7 +2130,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	/* Dont write body instructions to memory for now */
+ 	ctx.write = false;
+ 
+-	if (build_body(&ctx, extra_pass))
++	if (build_body(env, &ctx, extra_pass))
+ 		goto out_free_hdr;
+ 
+ 	ctx.epilogue_offset = ctx.idx;
+@@ -2136,7 +2139,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	ctx.write = true;
+ 
+ 	/* Pass 3: Adjust jump offset and write final image */
+-	if (build_body(&ctx, extra_pass) ||
++	if (build_body(env, &ctx, extra_pass) ||
+ 		WARN_ON_ONCE(ctx.idx != ctx.epilogue_offset))
+ 		goto out_free_hdr;
+ 
+-- 
+2.47.3
 
