@@ -1,307 +1,253 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A15337FF5D;
-	Mon, 13 Apr 2026 09:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB783B7760
+	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 10:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776073525; cv=none; b=mrsuDpitpnLYAtEuhT7aMCz371KS59OV5/h1I412FpQxKOAORhWiS16XvCijicxj1+Ro3A/TnrRmNV6dLBL/FAWlj9qWyW9pbFc4G/G302wKT37YXXM3qAnVsvDnHScuoJsxCGUJdah+j3EtpreeTVaI3ju4x8XeFqjalFsBOl4=
+	t=1776075169; cv=none; b=awed1/1uZpVJeGNEd0yC9yHaYQR7F+hTsjwLt/cH5JnSIOQls5yd9aHcndsxZ55pMLvoNgCX4Ey6czdy603suXLtthj//mEBqUstGKcijp1JZxA1axQHgVh8A3UqPNVD+hdRfuLvvHWSSg9vqNaHHAyBVT5JhbIKaMWBRWPfpcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776073525; c=relaxed/simple;
-	bh=JQg4OeiBK9CwI/t5dhGGWawIcTvBRJ/kebzn6qWSS/A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aXzPMu1oBI0EQ1Z6BC9wAVCPb6kCJs7AWOPYPFgHI5TpSmGGYWn7opFNlWx2c85KcD9KNdeOH/UPlGuzBzOqxVHfUJL7brOicZG0DrcB3QeW2t7MltmN4x3AtcWMym/+HPezUlzHuB/yiwwIHYwuuQncVF7eAMs1Vhobgeb1l/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VbiML1Bq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776075169; c=relaxed/simple;
+	bh=v2shKDtstmBcJL5GwbEIXrSThH2cazTsgaEc+auQxWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SwSkt/fjcKP3UjSE/qxPRfqywvV+hiKtO5jfHndMcRP0k77xPfbkkmAAg1B7MB9kExLWwRnDd3quvgQXizBGeMud81Iq84exyRUIQtDW27SQuj3aYet7yU/gjFpZnOcYFuNTMWhWP5XUDK87xr/vHAw3NfofpsAZnd7/EGv3qOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uy8kaOPC; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VbiML1Bq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3B2C116C6;
-	Mon, 13 Apr 2026 09:45:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776073525;
-	bh=JQg4OeiBK9CwI/t5dhGGWawIcTvBRJ/kebzn6qWSS/A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VbiML1BqEWG/TPWETIkWBBEumI1p032Q59SDQoKmHxtONj3uV+jIdbPm6evW+34X+
-	 rB59FmDg4r765WFSqirDj47hVg91GTtTcYhF0KI0iDcAB6XlLbe2fYPCu79gDR8HM7
-	 1vMhE9mqWhpA0edKZEq1CvBwLXrqPngqUzOmtRr9ARh6UyLiig/ojuHUWlYjnsPEGR
-	 +esXTa/zOZDPZ1BqXV+PVqtQvEm/+RJtToZzlNbGz4US7TAdr57rfkiW8fDS960DvB
-	 TwY1praATNjaYqa6JYPl8hR9/Xi327GZ5p7UTb2RVIzgMtGzGz+0rXP0c0ChCufUBd
-	 w0UA2WPE3tWvw==
-From: hawk@kernel.org
-To: netdev@vger.kernel.org
-Cc: kernel-team@cloudflare.com,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uy8kaOPC"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82f0fc82c76so1046959b3a.0
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 03:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776075168; x=1776679968; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nWXvz8rZo3Khkxx1y+wE0yFMhUTBnpnArPai1qfvgmc=;
+        b=Uy8kaOPCRbhjLW1jpOmIgem63dy02J36erqarI5gAgPWpE56jGAKcGNYHp9a6nLJC2
+         yN0GUvsx5Ldc8g8IjvHT8+WAK5eAcyd0m9VxIZNdRiS4KnkIywFTWoV/dgQ1R4Pr9c5J
+         TAIESbOFfinH2XrwdKAUIIyRvCiHTbTBmrFwubuu0c9s1tQOfdE/BRkErPjpAT+fDMKI
+         G4fYLESbsCIwa7ttOG5rxd22VMh0X7PbS9RNxl+Bq3WDErL4NAd9B5YOVG4hqAMxxaCH
+         S6zUVFwUdWYaDYlv8OFdjaFwMIowUOh624lWeAptAsUxqiauvUiXOpWZl5+vczU7mlh8
+         9m/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776075168; x=1776679968;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nWXvz8rZo3Khkxx1y+wE0yFMhUTBnpnArPai1qfvgmc=;
+        b=QEgJKGz+UcbfpLVxialV2dOWY8bAmPGnAuqGReCzth7SCK1efkPim3ma/ylg64tg82
+         bAmMTXP76hFtqa+OiegJ9jKcKo/RAcF8c4rGL+qbdt4HEQxVZ7xkmpgwGelQ5/P7Z9z7
+         5YjabuEE0LFbttpcyJ3fXKvCOfZ5QnRjuYDVeIPvDrZW98eXCFam/zy1vVJ6ldkHPMH8
+         XBttRpYYCJAp77Cl8RC+dHgJkoz2pjthrHfRbSG1dNEhvjGO5WnLP4/7ddarf5pS39by
+         +JIC9dOWB6NHooER3moZDv+7lqDcjPELV+nZ3ywPEptF9nfclDH/sxcCX4HUu2HYk2tH
+         2nFw==
+X-Forwarded-Encrypted: i=1; AFNElJ8ayzY9eR/YAiVbmaNPGm1515d1U0btDU59RlqDLrQoCrn4CyDy5Dfo42vN7Y0J38XS9FA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3OY6zIAU4dxTogFmXPqizRB5QwU71cEfx4dF1ksVcBysM/quy
+	65RZYK66Ny7kk/nqCpQfcCIYA/NeGeT/8pu/HKh4N0l/w+tAufdHl8+b
+X-Gm-Gg: AeBDiet75q2h1eHRCubj5ktcfjaiqGmhx7Sg006HK51dgksH14Zcv20PNBwJD+21SHA
+	5qSfQ4Z8Ry9tz6mpm+A9nX+dkXTM9dcknlMxRcOEv5QI6UVInHZ1usCg8ogCeYoGEVfzUB2IjzJ
+	H3BQxEiox0UszKXNPdfXzycZEuxKMm3SBEaYewT6V+cXWmG6CwnH8OzzDcfMzncALKWZXdoDqEp
+	Asc9IU735VTbVTfVf0BUjR7CpbNo+RasRXe45ZPk5CGi9OQxIUxX8LCw8fcjlde48bxBcdybCvh
+	JaVsyGd1ZNbSVPyhcyzjb1mfUZ/sanByYuuiUtn7T+qGZYIhz7eoeJVROKyNWSfOCBmrHFCgssg
+	lCIcPY8hQWatm4EraAKhRdE5FeIaKJRgf3iciYfTnWW0iQtJ8VLQcKqQuCPPm9wBibIL/14/BVJ
+	a5ZoWNW6q9tbObYKq1YCZZuQTqwzyovADsVNxxOhZggkaZVCHBQ5G/UZUI7/eLK1SW+EcH41Y=
+X-Received: by 2002:a05:6a00:4b0b:b0:82c:9c90:58c9 with SMTP id d2e1a72fcca58-82f0c12f435mr12263295b3a.4.1776075167826;
+        Mon, 13 Apr 2026 03:12:47 -0700 (PDT)
+Received: from SLSGDTSWING002 ([129.126.109.177])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f0c30e3f8sm11098391b3a.8.2026.04.13.03.12.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 03:12:47 -0700 (PDT)
+Date: Mon, 13 Apr 2026 18:12:40 +0800
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v2 2/5] veth: implement Byte Queue Limits (BQL) for latency reduction
-Date: Mon, 13 Apr 2026 11:44:35 +0200
-Message-ID: <20260413094442.1376022-3-hawk@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260413094442.1376022-1-hawk@kernel.org>
-References: <20260413094442.1376022-1-hawk@kernel.org>
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Barret Rhoden <brho@google.com>, bpf <bpf@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>, Xiang Mei <xmei5@asu.edu>
+Subject: Re: [PATCH bpf v4 1/2] bpf: Fix use-after-free of arena VMA on fork
+Message-ID: <adzBmOuXCZ0vHnbg@SLSGDTSWING002>
+References: <20260412022714.1955495-2-bestswngs@gmail.com>
+ <20260412022714.1955495-3-bestswngs@gmail.com>
+ <DHRD7K4Q4R0E.2HT85NT44DKZI@etsalapatis.com>
+ <CAADnVQLhnnt8uGoZk=38zH1jh_9Uy8ah=NdcoBE71qGkuH2O5g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLhnnt8uGoZk=38zH1jh_9Uy8ah=NdcoBE71qGkuH2O5g@mail.gmail.com>
 
-From: Jesper Dangaard Brouer <hawk@kernel.org>
+On 26-04-12 14:30, Alexei Starovoitov wrote:
+> On Sun, Apr 12, 2026 at 10:50 AM Emil Tsalapatis <emil@etsalapatis.com> wrote:
+> >
+> > On Sat Apr 11, 2026 at 10:27 PM EDT, Weiming Shi wrote:
+> > > arena_vm_open() only increments a refcount on the shared vma_list entry
+> > > but never registers the new VMA or updates the stored vma pointer. When
+> > > the original VMA is unmapped while a forked copy still exists,
+> > > arena_vm_close() drops the refcount without freeing the vma_list entry.
+> > > The entry's vma pointer now refers to a freed vm_area_struct. A
+> > > subsequent bpf_arena_free_pages() call iterates vma_list and passes
+> > > the dangling pointer to zap_page_range_single(), causing a
+> > > use-after-free.
+> > >
+> > > The bug is reachable by any process with CAP_BPF and CAP_PERFMON that
+> > > can create a BPF_MAP_TYPE_ARENA, mmap it, and fork. It triggers
+> > > deterministically -- no race condition is involved.
+> > >
+> > >  BUG: KASAN: slab-use-after-free in zap_page_range_single (mm/memory.c:2234)
+> > >  Call Trace:
+> > >   <TASK>
+> > >   zap_page_range_single+0x101/0x110   mm/memory.c:2234
+> > >   zap_pages+0x80/0xf0                 kernel/bpf/arena.c:658
+> > >   arena_free_pages+0x67a/0x860        kernel/bpf/arena.c:712
+> > >   bpf_prog_test_run_syscall+0x3da     net/bpf/test_run.c:1640
+> > >   __sys_bpf+0x1662/0x50b0             kernel/bpf/syscall.c:6267
+> > >   __x64_sys_bpf+0x73/0xb0             kernel/bpf/syscall.c:6360
+> > >   do_syscall_64+0xf1/0x530            arch/x86/entry/syscall_64.c:63
+> > >   entry_SYSCALL_64_after_hwframe+0x77  arch/x86/entry/entry_64.S:130
+> > >   </TASK>
+> > >
+> > > Fix this by tracking each child VMA separately. arena_vm_open() now
+> > > clears the inherited vm_private_data and calls remember_vma() to
+> > > register a fresh vma_list entry for the new VMA. If remember_vma()
+> > > fails due to OOM, vm_private_data stays NULL and arena_vm_close()
+> > > skips the cleanup for that VMA. The shared refcount is no longer
+> > > needed and is removed.
+> > >
+> > > Also add arena_vm_may_split() returning -EINVAL to prevent VMA
+> > > splitting, so that arena_vm_open() only needs to handle fork and the
+> > > vma_list tracking stays simple.
+> > >
+> > > Fixes: b90d77e5fd78 ("bpf: Fix remap of arena.")
+> > > Reported-by: Xiang Mei <xmei5@asu.edu>
+> > > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> > > ---
+> > >  kernel/bpf/arena.c | 23 +++++++++++++++++------
+> > >  1 file changed, 17 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> > > index f355cf1c1a16..3462c4463617 100644
+> > > --- a/kernel/bpf/arena.c
+> > > +++ b/kernel/bpf/arena.c
+> > > @@ -317,7 +317,6 @@ static u64 arena_map_mem_usage(const struct bpf_map *map)
+> > >  struct vma_list {
+> > >       struct vm_area_struct *vma;
+> > >       struct list_head head;
+> > > -     refcount_t mmap_count;
+> > >  };
+> > >
+> > >  static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
+> > > @@ -327,7 +326,6 @@ static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
+> > >       vml = kmalloc_obj(*vml);
+> > >       if (!vml)
+> > >               return -ENOMEM;
+> > > -     refcount_set(&vml->mmap_count, 1);
+> > >       vma->vm_private_data = vml;
+> > >       vml->vma = vma;
+> > >       list_add(&vml->head, &arena->vma_list);
+> > > @@ -336,9 +334,17 @@ static int remember_vma(struct bpf_arena *arena, struct vm_area_struct *vma)
+> > >
+> > >  static void arena_vm_open(struct vm_area_struct *vma)
+> > >  {
+> > > -     struct vma_list *vml = vma->vm_private_data;
+> > > +     struct bpf_map *map = vma->vm_file->private_data;
+> > > +     struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
+> > >
+> > > -     refcount_inc(&vml->mmap_count);
+> > > +     /*
+> > > +      * vm_private_data points to the parent's vma_list entry after fork.
+> > > +      * Clear it and register this VMA separately.
+> > > +      */
+> > > +     vma->vm_private_data = NULL;
+> > > +     guard(mutex)(&arena->lock);
+> > > +     /* OOM is silently ignored; arena_vm_close() handles NULL. */
+> >
+> > I don't see any way this approach gonna work, and frankly makes no sense
+> > to me. This patch doesn't take into account how the vma_list is actually
+> > used. It frankly makes no sense, Please think through this: If we could
+> > silently just not allocate the vml, why do we need it in the first place?
+> 
+> +1
+> 
+> Weiming,
+> 
+> you should stop trusting AI so blindly.
+> First, analyze the root cause (the first paragraph of the commit log).
+> Is this really the case?
+> 
+> Second, I copy pasted it to claude and got the same "fix" back,
+> but implemented without your bug:
+> +       vml = kmalloc_obj(*vml);
+> +       if (!vml) {
+> +               vma->vm_private_data = NULL;
+> +               return;
+> +       }
+> +       vml->vma = vma;
+> +       vma->vm_private_data = vml;
+> +       guard(mutex)(&arena->lock);
+> +       list_add(&vml->head, &arena->vma_list);
+> 
+> at least this part is kinda makes sense...
+> 
+> and, of course, this part too:
+> 
+> -       if (!refcount_dec_and_test(&vml->mmap_count))
+> +       if (!vml)
+>                 return;
+> 
+> when you look at it you MUST ask AI back:
+> "Is this buggy?"
+> 
+> and it will reply:
+> "
+> Right — silently dropping the VMA from the list means zap_pages()
+> won't unmap pages from it, which is a correctness problem, not just
+> degraded behavior. Since vm_open can't fail, the allocation should use
+> __GFP_NOFAIL. The struct is tiny so that's fine.
+> "
+> 
+> and it proceeded adding __GFP_NOFAIL.
+> 
+> which is wrong too.
+> 
+> So please don't just throw broken patches at maintainers.
+> Do your homework. Fixing one maybe-bug and introducing
+> more real bugs is not a step forward.
+> 
+> pw-bot: cr
 
-Commit dc82a33297fc ("veth: apply qdisc backpressure on full ptr_ring to
-reduce TX drops") gave qdiscs control over veth by returning
-NETDEV_TX_BUSY when the ptr_ring is full (DRV_XOFF).  That commit noted
-a known limitation: the 256-entry ptr_ring sits in front of the qdisc as
-a dark buffer, adding base latency because the qdisc has no visibility
-into how many bytes are already queued there.
+Thanks for the detailed review, really appreciate it.
 
-Add BQL support so the qdisc gets feedback and can begin shaping traffic
-before the ring fills.  In testing with fq_codel, BQL reduces ping RTT
-under UDP load from ~6.61ms to ~0.36ms (18x).
+I traced through it with GDB + KASAN in QEMU. Here's what happens:
 
-Charge a fixed VETH_BQL_UNIT (1) per packet rather than skb->len, so
-the DQL limit tracks packets-in-flight.  Unlike a physical NIC, veth
-has no link speed -- the ptr_ring drains at CPU speed and is
-packet-indexed, not byte-indexed, so bytes are not the natural unit.
-With byte-based charging, small packets sneak many more entries into
-the ring before STACK_XOFF fires, deepening the dark buffer under
-mixed-size workloads.  Testing with a concurrent min-size packet flood
-shows 3.7x ping RTT degradation with skb->len charging versus no
-change with fixed-unit charging.
+  1. mmap → remember_vma()
+     vml->vma = 0xffff88800abfe700, mmap_count  = 1
+     now Parent VMA = 0xffff88800abfe700
+  2. fork → arena_vm_open(child_vma)
+     vml->vma = 0xffff88800abfe700 (unchanged), mmap_count  = 2
 
-Charge BQL inside veth_xdp_rx() under the ptr_ring producer_lock, after
-confirming the ring is not full.  The charge must precede the produce
-because the NAPI consumer can run on another CPU and complete the SKB
-the instant it becomes visible in the ring.  Doing both under the same
-lock avoids a pre-charge/undo pattern -- BQL is only charged when
-produce is guaranteed to succeed.
+  3. parent munmap → arena_vm_close(parent_vma)
+     mmap_count  = 1
+     vml->vma is now dangling
 
-BQL is enabled only when a real qdisc is attached (guarded by
-!qdisc_txq_has_no_queue), as HARD_TX_LOCK provides serialization
-for TXQ modification like dql_queued(). For lltx devices, like veth,
-this HARD_TX_LOCK serialization isn't provided.  The ptr_ring
-producer_lock provides additional serialization that would allow
-BQL to work correctly even with noqueue, though that combination
-is not currently enabled, as the netstack will drop and warn.
+  4. child bpf_arena_free_pages → zap_pages()
+     reads vml->vma = 0xffff88800abfe700 → UAF
 
-Track per-SKB BQL state via a VETH_BQL_FLAG pointer tag in the ptr_ring
-entry.  This is necessary because the qdisc can be replaced live while
-SKBs are in-flight -- each SKB must carry the charge decision made at
-enqueue time rather than re-checking the peer's qdisc at completion.
+The core issue is that arena_vm_open() never registers the child
+VMA -- it only bumps the mmap_count . So vml->vma always points at
+the parent, and dangles once the parent unmaps.
 
-Complete per-SKB in veth_xdp_rcv() rather than in bulk, so STACK_XOFF
-clears promptly when producer and consumer run on different CPUs.
-
-BQL introduces a second independent queue-stop mechanism (STACK_XOFF)
-alongside the existing DRV_XOFF (ring full).  Both must be clear for
-the queue to transmit.  Reset BQL state in veth_napi_del_range() after
-synchronize_net() to avoid racing with in-flight veth_poll() calls.
-
-Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
----
- drivers/net/veth.c | 74 +++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 63 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index e35df717e65e..6431dc40f9b4 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -34,9 +34,13 @@
- #define DRV_VERSION	"1.0"
- 
- #define VETH_XDP_FLAG		BIT(0)
-+#define VETH_BQL_FLAG		BIT(1)
- #define VETH_RING_SIZE		256
- #define VETH_XDP_HEADROOM	(XDP_PACKET_HEADROOM + NET_IP_ALIGN)
- 
-+/* Fixed BQL charge: DQL limit tracks packets-in-flight, not bytes */
-+#define VETH_BQL_UNIT		1
-+
- #define VETH_XDP_TX_BULK_SIZE	16
- #define VETH_XDP_BATCH		16
- 
-@@ -280,6 +284,21 @@ static bool veth_is_xdp_frame(void *ptr)
- 	return (unsigned long)ptr & VETH_XDP_FLAG;
- }
- 
-+static bool veth_ptr_is_bql(void *ptr)
-+{
-+	return (unsigned long)ptr & VETH_BQL_FLAG;
-+}
-+
-+static struct sk_buff *veth_ptr_to_skb(void *ptr)
-+{
-+	return (void *)((unsigned long)ptr & ~VETH_BQL_FLAG);
-+}
-+
-+static void *veth_skb_to_ptr(struct sk_buff *skb, bool bql)
-+{
-+	return bql ? (void *)((unsigned long)skb | VETH_BQL_FLAG) : skb;
-+}
-+
- static struct xdp_frame *veth_ptr_to_xdp(void *ptr)
- {
- 	return (void *)((unsigned long)ptr & ~VETH_XDP_FLAG);
-@@ -295,7 +314,7 @@ static void veth_ptr_free(void *ptr)
- 	if (veth_is_xdp_frame(ptr))
- 		xdp_return_frame(veth_ptr_to_xdp(ptr));
- 	else
--		kfree_skb(ptr);
-+		kfree_skb(veth_ptr_to_skb(ptr));
- }
- 
- static void __veth_xdp_flush(struct veth_rq *rq)
-@@ -309,19 +328,33 @@ static void __veth_xdp_flush(struct veth_rq *rq)
- 	}
- }
- 
--static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb)
-+static int veth_xdp_rx(struct veth_rq *rq, struct sk_buff *skb, bool do_bql,
-+		       struct netdev_queue *txq)
- {
--	if (unlikely(ptr_ring_produce(&rq->xdp_ring, skb)))
-+	struct ptr_ring *ring = &rq->xdp_ring;
-+
-+	spin_lock(&ring->producer_lock);
-+	if (unlikely(!ring->size) || __ptr_ring_full(ring)) {
-+		spin_unlock(&ring->producer_lock);
- 		return NETDEV_TX_BUSY; /* signal qdisc layer */
-+	}
-+
-+	/* BQL charge before produce; consumer cannot see entry yet */
-+	if (do_bql)
-+		netdev_tx_sent_queue(txq, VETH_BQL_UNIT);
-+
-+	__ptr_ring_produce(ring, veth_skb_to_ptr(skb, do_bql));
-+	spin_unlock(&ring->producer_lock);
- 
- 	return NET_RX_SUCCESS; /* same as NETDEV_TX_OK */
- }
- 
- static int veth_forward_skb(struct net_device *dev, struct sk_buff *skb,
--			    struct veth_rq *rq, bool xdp)
-+			    struct veth_rq *rq, bool xdp, bool do_bql,
-+			    struct netdev_queue *txq)
- {
- 	return __dev_forward_skb(dev, skb) ?: xdp ?
--		veth_xdp_rx(rq, skb) :
-+		veth_xdp_rx(rq, skb, do_bql, txq) :
- 		__netif_rx(skb);
- }
- 
-@@ -352,6 +385,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 	struct net_device *rcv;
- 	int length = skb->len;
- 	bool use_napi = false;
-+	bool do_bql = false;
- 	int ret, rxq;
- 
- 	rcu_read_lock();
-@@ -375,8 +409,11 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 	}
- 
- 	skb_tx_timestamp(skb);
-+	txq = netdev_get_tx_queue(dev, rxq);
- 
--	ret = veth_forward_skb(rcv, skb, rq, use_napi);
-+	/* BQL charge happens inside veth_xdp_rx() under producer_lock */
-+	do_bql = use_napi && !qdisc_txq_has_no_queue(txq);
-+	ret = veth_forward_skb(rcv, skb, rq, use_napi, do_bql, txq);
- 	switch (ret) {
- 	case NET_RX_SUCCESS: /* same as NETDEV_TX_OK */
- 		if (!use_napi)
-@@ -388,8 +425,6 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 		/* If a qdisc is attached to our virtual device, returning
- 		 * NETDEV_TX_BUSY is allowed.
- 		 */
--		txq = netdev_get_tx_queue(dev, rxq);
--
- 		if (qdisc_txq_has_no_queue(txq)) {
- 			dev_kfree_skb_any(skb);
- 			goto drop;
-@@ -412,6 +447,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
- 		net_crit_ratelimited("%s(%s): Invalid return code(%d)",
- 				     __func__, dev->name, ret);
- 	}
-+
- 	rcu_read_unlock();
- 
- 	return ret;
-@@ -900,7 +936,8 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
- 
- static int veth_xdp_rcv(struct veth_rq *rq, int budget,
- 			struct veth_xdp_tx_bq *bq,
--			struct veth_stats *stats)
-+			struct veth_stats *stats,
-+			struct netdev_queue *peer_txq)
- {
- 	int i, done = 0, n_xdpf = 0;
- 	void *xdpf[VETH_XDP_BATCH];
-@@ -928,9 +965,13 @@ static int veth_xdp_rcv(struct veth_rq *rq, int budget,
- 			}
- 		} else {
- 			/* ndo_start_xmit */
--			struct sk_buff *skb = ptr;
-+			bool bql_charged = veth_ptr_is_bql(ptr);
-+			struct sk_buff *skb = veth_ptr_to_skb(ptr);
- 
- 			stats->xdp_bytes += skb->len;
-+			if (peer_txq && bql_charged)
-+				netdev_tx_completed_queue(peer_txq, 1, VETH_BQL_UNIT);
-+
- 			skb = veth_xdp_rcv_skb(rq, skb, bq, stats);
- 			if (skb) {
- 				if (skb_shared(skb) || skb_unclone(skb, GFP_ATOMIC))
-@@ -975,7 +1016,7 @@ static int veth_poll(struct napi_struct *napi, int budget)
- 	peer_txq = peer_dev ? netdev_get_tx_queue(peer_dev, queue_idx) : NULL;
- 
- 	xdp_set_return_frame_no_direct();
--	done = veth_xdp_rcv(rq, budget, &bq, &stats);
-+	done = veth_xdp_rcv(rq, budget, &bq, &stats, peer_txq);
- 
- 	if (stats.xdp_redirect > 0)
- 		xdp_do_flush();
-@@ -1073,6 +1114,7 @@ static int __veth_napi_enable(struct net_device *dev)
- static void veth_napi_del_range(struct net_device *dev, int start, int end)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
-+	struct net_device *peer;
- 	int i;
- 
- 	for (i = start; i < end; i++) {
-@@ -1091,6 +1133,15 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
- 		ptr_ring_cleanup(&rq->xdp_ring, veth_ptr_free);
- 	}
- 
-+	/* Reset BQL on peer's txqs: remaining ring items were freed above
-+	 * without BQL completion, so DQL state must be reset.
-+	 */
-+	peer = rtnl_dereference(priv->peer);
-+	if (peer) {
-+		for (i = start; i < end; i++)
-+			netdev_tx_reset_queue(netdev_get_tx_queue(peer, i));
-+	}
-+
- 	for (i = start; i < end; i++) {
- 		page_pool_destroy(priv->rq[i].page_pool);
- 		priv->rq[i].page_pool = NULL;
-@@ -1740,6 +1791,7 @@ static void veth_setup(struct net_device *dev)
- 	dev->priv_flags |= IFF_PHONY_HEADROOM;
- 	dev->priv_flags |= IFF_DISABLE_NETPOLL;
- 	dev->lltx = true;
-+	dev->bql = true;
- 
- 	dev->netdev_ops = &veth_netdev_ops;
- 	dev->xdp_metadata_ops = &veth_xdp_metadata_ops;
--- 
-2.43.0
-
+What approach would you suggest for fixing this?
