@@ -1,121 +1,102 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CE31624C0;
-	Mon, 13 Apr 2026 03:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A0919DF55;
+	Mon, 13 Apr 2026 04:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776052147; cv=none; b=E9HSWL62NVk+6H5hPZkGg2Me+hYfUvXRD0r7usE8iBypE8QC+XY/TmWsn6UJWhC92o0uKapLsIDF7cPy0/3V9NXyiETbI3RWLnhgJVT2ml3OlTzR8oR027pm9UASdb6BZf6Fk1C4GhFhaR4lZiADHWzGKQePr3sSq9/WO80AKvM=
+	t=1776052950; cv=none; b=JSJ06WgbDjhUtTcLhlWg28PZmlzX3lJiC++pYb0RtgmMuU1iT29/3kkP2aluIr8jiPDGV82/5+tYESQZYQuehCgDx1pbd799oi80cnaTSEQ6YBRHGCv3oHrzvGRBgAwDG6j8eJMoo6lRSLIA7iqXxB5b4XwiEh3Sn0sVxwRvRYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776052147; c=relaxed/simple;
-	bh=7XT8jQFKhQPi6m0BiSj2fNHbaAA4HfCB1b0sOPbEhec=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UZk7gv+LnojvgtIIxHmhtEbMDW3xXfLmRzb75UIcluM71/Br/9Kmmf73xCH4g5pQogqq/MsDZM+mjUTUuVA9oIG1hyO87J/v5a5KJMwWHa0DMlHHdWudfX75/eiYCudhLUVOfSbip5r57xKtQVHlWTrbj/3Bw2vjjIIkW2Y5gFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=FTLplFtx; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="FTLplFtx"
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63CM2Dr61857891;
-	Mon, 13 Apr 2026 03:48:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=1etFCmvme2baTl/EdL6GLOxJBBQ3MX5tKscevVXvyRk=; b=FTLp
-	lFtxE3JkDHzCFfpYarozVq+UTgG5PrlbX4NpRE5bi+yQqXNyOIQ7TooclJupAdOI
-	d5BDCYQaG6LtMqgOGLLmo2e0neniwCSrIMaQO5MPKcue47kPN7VXAb8IKD8CZpj0
-	CsgSPpHxqyaITnA9wXor4lxxPrNpSWTIRumI557jmEKUS/+whXyNdS4zdvvAJA+1
-	PkFtQAF8flnO1I/cC3mpjL6vNa0FT3cNsWMUWHgaHImI+UN+6c/5cgMpvP3LgtRI
-	3nWgpxze6403YqHQYF+WUU9FVoavzdKYEeMS3gC4tLu1jOivid500sMM1ffwCTQH
-	ooT1u+qZQtATUQkCbA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4dg1hxuqeb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Apr 2026 03:48:37 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 13 Apr 2026 03:48:32 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <alexei.starovoitov@gmail.com>
-CC: <ameryhung@gmail.com>, <andrii@kernel.org>, <ast@kernel.org>,
-        <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <clm@meta.com>,
-        <daniel@iogearbox.net>, <eddyz87@gmail.com>, <ihor.solodrai@linux.dev>,
-        <kernel-team@meta.com>, <martin.lau@kernel.org>, <memxor@gmail.com>,
-        <netdev@vger.kernel.org>, <yonghong.song@linux.dev>,
-        <linux-open-source@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Use kmalloc_nolock() universally in local storage
-Date: Mon, 13 Apr 2026 13:48:29 +1000
-Message-ID: <20260413034829.39307-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <CAADnVQKeFF--bgnZZSU12UY0muuwYA=7EdzLyOi837oZs+bXTA@mail.gmail.com>
-References: <CAADnVQKeFF--bgnZZSU12UY0muuwYA=7EdzLyOi837oZs+bXTA@mail.gmail.com>
+	s=arc-20240116; t=1776052950; c=relaxed/simple;
+	bh=QxWRHSMp1/Al5AZhtUT19IBqkpz5G5CLCcuYpkGa9CE=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Il9NAazvbRHgpuzbX6wzcwcrFJ9DOVOOLoOVzXTMLyW/Q1IO4u3Abv2ysQlE8zYfAEOO2OwvIzxByl+8do5YDtcWJoc+6yI6dO6z2bHdDAd4qElGqVMhnT2OV0wAucozFuKnLdrfgBb9N4aK+ASuAxoYQnnVcNFgQKlLJ9nfWBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8CxIuvTatxpXgIAAA--.61S3;
+	Mon, 13 Apr 2026 12:02:27 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJCx2+DQatxpstxrAA--.8752S3;
+	Mon, 13 Apr 2026 12:02:26 +0800 (CST)
+Subject: Re: [PATCH v2 4/5] LoongArch: BPF: Support load-acquire and
+ store-release instructions
+To: WANG Rui <wangrui@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, Hengqi Chen <hengqi.chen@gmail.com>,
+ loongarch@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260407062306.8915-1-yangtiezhu@loongson.cn>
+ <20260407062306.8915-5-yangtiezhu@loongson.cn>
+ <CAHirt9jnveJCgCt2TsuyQrJV0tCB+FJStgP6OaCiH8eJWLfpvw@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <fa0a3521-7373-70d8-e08a-d2059fc62265@loongson.cn>
+Date: Mon, 13 Apr 2026 12:02:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CAHirt9jnveJCgCt2TsuyQrJV0tCB+FJStgP6OaCiH8eJWLfpvw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH012.crowdstrike.sys (10.100.11.82) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: eD2s3wDOa7Cz--sW2bSM6QJARp09QVqG
-X-Proofpoint-GUID: eD2s3wDOa7Cz--sW2bSM6QJARp09QVqG
-X-Authority-Analysis: v=2.4 cv=Z67c2nRA c=1 sm=1 tr=0 ts=69dc6795 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=h-wXxoor8ZUhGJ0R1u8A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDEzMDAzMSBTYWx0ZWRfXxSFkYLXQs2xs
- v/+x1vE02VN6PVXLi2sMenV29uxFoV37GXfwycaUI4XLaVuolLUDo3xz6JIeT9IKmqfgbXDpHle
- OoPYtRO+PzaeLLc2+wucUq3Sk/tB57VtNdlhnEtfJj76P1/PEL1H9WJi8Qodp+JFGvfTJlygsZh
- 227eqy5L/mnWInVAy9S5SXhtxufjPuAaJaOS9HlyhFPKc3yfvwGe3xDGErmmLeZNQNklBEK24Kg
- JrY7Z1IyCmezhiAZlwwBMQT0RbO63Oe/HVzY2l8h2lxmmlO4XW2CF8au2t76/e73V1UHhoWn2yX
- 8yNVyLHpUn+WK2oCQF8/at7XkjvbR3Yr7o0POUHX8mpN6D28VVANKbEexhl6QJ/njzTlnBNyfO2
- fS712Vlx1wFk0qokxAMlyDI7gCR1uKfP7vfOahedyED8KRYK0yIyHKtOT+7P7ideHwo2BXYnHIA
- BY8ztE/H+isd7rlL0kw==
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11757
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 suspectscore=0 impostorscore=0 bulkscore=0
- adultscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604010000 definitions=main-2604130031
+X-CM-TRANSID:qMiowJCx2+DQatxpstxrAA--.8752S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWrKry5Aw1UZFWrZw15JFy7Arc_yoW8Jr1UpF
+	4DJw4rKF4rArykur98Gr42qw1fKF4fKF45Gw15J34fJFyqvrnxKFn8KF1YkFW3Cr18JFn7
+	ZF1qv3srZ3W5CrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+	1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-
+	e5UUUUU==
 
-On Fri, 10 Apr 2026 21:39:00 -0700 Alexei Starovoitov wrote:
-> >
-> >
-> > This allows value sizes up to ~65KB. Before this patch, socket and
-> > inode storage used bpf_map_kzalloc() (backed by regular kmalloc)
-> > which could handle those large sizes. After this patch, any
-> > elem_size above KMALLOC_MAX_CACHE_SIZE will silently fail: the map
-> > creation succeeds via bpf_local_storage_map_alloc_check() but every
-> > element allocation returns NULL.
-> >
-> > Should BPF_LOCAL_STORAGE_MAX_VALUE_SIZE be updated to use
-> > KMALLOC_MAX_CACHE_SIZE instead of KMALLOC_MAX_SIZE now that all
-> > storage types go through kmalloc_nolock()?
-> >
-> > Slava Imameev raised the same concern for task storage in
-> > https://lore.kernel.org/bpf/20260410014341.47043-1-slava.imameev@crowdstrike.com/
+On 2026/4/12 上午11:46, WANG Rui wrote:
+> On Tue, Apr 7, 2026 at 2:23 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>>
+>> Use the LoongArch common memory access instructions with the barrier dbar
+>> to support the BPF load-acquire and store-release instructions.
+
+...
+>> +static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx *ctx)
+>> +{
+>> +       const u8 t1 = LOONGARCH_GPR_T1;
+>> +       const u8 src = regmap[insn->src_reg];
+>> +       const u8 dst = regmap[insn->dst_reg];
+>> +       const s16 off = insn->off;
+>> +       const s32 imm = insn->imm;
+>> +
+>> +       switch (imm) {
+>> +       /* dst_reg = load_acquire(src_reg + off16) */
+>> +       case BPF_LOAD_ACQ:
+>> +               switch (BPF_SIZE(insn->code)) {
+>> +               case BPF_B:
+>> +                       if (is_signed_imm12(off)) {
+>> +                               emit_insn(ctx, ldb, dst, src, off);
+>> +                       } else {
+>> +                               move_imm(ctx, t1, off, false);
+>> +                               emit_insn(ctx, ldxb, dst, src, t1);
+>> +                       }
+>> +                       emit_zext_8(ctx, dst);
 > 
-> Right. Let's update it, but I don't think it's a regression.
-> On a loaded system kmalloc_large() rarely succeeds for order 2+.
-> That's why kmalloc_nolock() doesn't attempt to bridge that gap.
-> One or two contiguous physical pages is the best one can expect.
-> In early bpf days we picked KMALLOC_MAX_SIZE assuming that
-> it's a realistic max for kmalloc().
-> It turned out to be wishful thinking.
-> kmalloc_large concept should really be removed.
-> It deceives users into thinking that it's usable.
+> Could we use ld[x].{bu,hu,wu} here to simplify this?
 
-In defense of supporting 8KB-64KB allocations for local
-storage, we can consider BPF_MAP_TYPE_HASH with BPF_F_NO_PREALLOC
-as providing similar functionality to replace the missing 8KB-64KB
-local storage allocation support. However, these map entry
-allocations can also fail with similar probability since they
-depend on the same underlying allocator.
+Yes, this is better, the instructions are zero extended, so no need
+to use the bstrinsd instruction to clear the higher bits explicitly,
+thanks for your suggestion.
+
+I tested the changes, it works well, v3 is coming soon.
+
+Thanks,
+Tiezhu
 
