@@ -1,305 +1,243 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4105534DCD9
-	for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 18:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776106430; cv=pass; b=DIhZV5eVGw+PRYtWoGlUxa9JmRZ140tDZNlW23xbkDwRQIt+ZE8ARSdq7CTuTV516+FX/e6T0COJsNCnp5JtZvYfDtNv7FpECFNGl5XEild7hRdUcIVxC5Jn52afCfZSmMM6eshk16pW9aporjFSL61iKARZzi13IBx+2lWBarY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776106430; c=relaxed/simple;
-	bh=iRaMeK4JhgvHiM/J3hdyo6IQijxuTpMUhCVy42mVQqk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=es7x//Wn0JnC+rsxmxF90C5FKxRQZCOoeKNeEOrWbJX7FIG035kF6cNlCJ+nyE7tgfdHdfoM1onHxGMJ2+uj+nLUp2HybwOWFArLcc8z12LQZNNL06I4TmYNS/RYknewJ4Ond4Ii0zZRCAmimagM8I/tUmOuIYgW59IBRbMwuBI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YKJacyM1; arc=pass smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D26036073E;
+	Mon, 13 Apr 2026 18:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776106697; cv=none; b=VBu2Awwrgd0JBHJI6hhEWLg0Jv4tB1IyfEN0HAiYWO0oMcWaKuyVvMQZ2EkaemCyAYfQVwQfrkfSpBhmNBWYwDNFOT3O7xNWVddTPaeYnOx6pRrVER3S/wBCNjxLt9qaW+XtltCjOW8BF7ddQTN+HePQlPF4I8S9D1YoeRv4vUU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776106697; c=relaxed/simple;
+	bh=ZIwtCZUtFAcxaWvpSxsXK2zFamF+0vNdar2fG1YYuk8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EVUom4M501Lp/jTYJ4S5oZa69nRPLaqnCqEVv+dUUGaEwnn9eXmwPVMks+oWQpBvHavSAmgpnTXK7KWU+UCxfmi6ALH8VQoez6h/cv8ImQDCc9TgF77G07n4mM6TBVNPMg0gYpb/utSCpSMVxiN4em6Hv3O9eYMtvM3svy9z4Ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q25BzOsK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YKJacyM1"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488af96f6b2so63754995e9.0
-        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 11:53:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776106427; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eWakmuzkWTp7fRKuQEBo6g6P4w7l8h4DPr7LFpVa2KrKv2YQcAT7T5oKVgDAEFfgOQ
-         tzbavCDf3bWyDFLuIESnIVS6/W1Sf7ZfHinxRJmE62pdrCmv4qWGZLIzagWTN68nnzyk
-         CDlpIcluEvycpo6BYgz/siqNzyMSNtvis1gan6pk+YnWZ+ueHqATPAuwwfKhKLTgRvof
-         uRCMAhQhifyjXijDdrfUmChxHA+J/trf/s66GIp5k0ylMeL/asHVFg5hjDAiLNz8TyER
-         2qARQK/iYEchOWlKk3wDvEen7DJ7kLumy4Om7UVzwQqPl4p7fvZ00Lk/mJUaiF0Kf0Pg
-         WOMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+yw8Sc7Sdmmz9WVAmIiXHRX4MTWcNUZn7bCmbySdGTo=;
-        fh=YNWt4Y0wqzitVpgmbcQBCiXmYTJYDAY+xbXi8GMD3D4=;
-        b=KBIAZYlK2kQQC37ex9x0UHbUZUHGA2MIUROKn0epFO3eC0YUdLuCPDlcovX0l4wyLp
-         WAo4wMWnjmV/AUk5D1PopIaGnmDfqhdcA4Yv5tacP2DkQpkc7kRe5lLyqY0F/1M84Qag
-         wMCiuawfGFua9nuljCHEsqidshjI3IOP/hdY5hTILzcGANvy7ik72Cf8NgNdcSMqeliS
-         p1uQ2INwkP2ovDWBmc/XqaPSzFpL28KuPnradECr5hMCPpvztqr5MHUZUfNkV3pQSQZS
-         7nh3o32UISk37H5CMZIO9jMH7r3znVZUCW4ePpIILsGVb1OoknUzEFSi/RL/9THrnF9N
-         bE0w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776106427; x=1776711227; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+yw8Sc7Sdmmz9WVAmIiXHRX4MTWcNUZn7bCmbySdGTo=;
-        b=YKJacyM1PNRAXoDmBBfLGZdURx+AeE8PSNUwY89WkFNS4qe+puoXFnitFoRuF77+JW
-         Iil7vfcl5ryQ37MbDQtveOd/Oz5Wd6rTArI0b6y9ug3uAbUGDeIOhSY7XdlnpB2A84vY
-         oOrS5buVJpY54IgjzyxQgie5JsQcEf8FUgT2WOK7EUrlqeq9FPIqmLRwMWGXoIHRB2F2
-         H3Rhu7oLQwXinknpLC8Zsd1fuxrcECs74u+q0s4HZnBwnH91gDPpeHC/60UECheeOYNM
-         k8rnkwZSRi61UOMtHQsCJD4VZ3f4/+KfGxkA8rH1Aa3tVTjuj5dQ9PucPWxmPRc5b0SQ
-         opaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776106427; x=1776711227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+yw8Sc7Sdmmz9WVAmIiXHRX4MTWcNUZn7bCmbySdGTo=;
-        b=eliuIZ7cj5+xdpCzQVqwbdjfKqTZ519AjSQDHvalfEcbYNtamyILkeHa3pIzVIg1iZ
-         HBl4+UATJc2oAhsVpb7C04Hz05TTIgn9dVqikT4uQfBEo7IsV/VhSvZvmuAR1ZgoFSKJ
-         OLivCPhC7MXdzF7xiiDHNkIUH0p4XrBLJ45cpfCZagni1/okw71uns5jAF6iU/gnA+H0
-         6+rTOB4p398G87Cp9r9ZI+bzce5Oe0aZ10z4UeJLLfBBYbGUJvXzy6g1CxJdLdZTX7+g
-         X9f5sJ06Xd+y4TSWYv/q2VykDGc1dVbPaiQfqIy7MkEi5ay/RGoFdo2DihLH8Rz6KP+1
-         +uxg==
-X-Forwarded-Encrypted: i=1; AFNElJ8nyBBk9Fx/na2nkUO4/yH+PaieP0fT2ll5d/+/a7uh9LjN5qKrVEkGqrWz0FI64p14lJQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwUETEHfATV/ZGHicdqZJFSg45GI6Rq3fdy17VYRfmETprKTbR
-	j3dHmjCz0oOFjd2mvM0RRsLM0MIS/QE0H5j5sgN5TwneCT2NxD6lojONOY1V1o5diVVmIURKP3J
-	9LPIs3vFJMJpBq5osTEQJuTc0dG8HSxY=
-X-Gm-Gg: AeBDiescU2EIGGY/QAtPzKtqGyHyx3lCwxHvQhydq8xecOuMXWv9gwBDnYoIcbjqHY3
-	QuFJj52T+Mp7lV8g4E2Yod2a6cLN2twooLPS8usgLWMCqpCGYfnJahJBwWY6NzfiqMEuyEN30vF
-	75YFUgicUNGNAlxjtF7oYk+2N27LSi2W1ZbdmnK8KSh9Rv7GGTDjScQmhYG8HzOyMwW0YTnxq24
-	O1ldfFhXcBsKTUXgO5aIEpuOSnd8uksU97czABca2VqSx4W/2h9FRLzZ0X1t+Nk18SkJQ7BfcZi
-	ACoN02yeT4wa5ZuIfP7BEPq6ra6TBtaibsQlXM2KLVE0e27kKrwF/MAMNyk8j+jLgCY8kYil6eK
-	krXwYRzE64v+BKKAxYHrHeIr5Cw==
-X-Received: by 2002:a05:600c:a010:b0:487:300:d9ca with SMTP id
- 5b1f17b1804b1-488d68af201mr215291025e9.31.1776106427352; Mon, 13 Apr 2026
- 11:53:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q25BzOsK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F33BDC2BCAF;
+	Mon, 13 Apr 2026 18:58:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776106697;
+	bh=ZIwtCZUtFAcxaWvpSxsXK2zFamF+0vNdar2fG1YYuk8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q25BzOsKiK2Ph9Z9XF8bDoVKeWECh8ph2lSUriFzjTKVrv3lbZWzMCoL3JICKaMtP
+	 CcwAl+9tpVb7T880Q61O27tIn4wfeB36a625PJTuKGzopCSrWgCe6wpbUDih/eaNv2
+	 /uCmW5RqZy0eCaXnaARzCoVRWvpCHd9+7S8pGqU7oQelrvTs+w/2mhXFT3nFqPB34p
+	 ao214sKnpvR/ao64D9QaOGw9mq4JDpvxtGhPzdXJZ+eIL5C60YCIkCBkKdxDpQaTmD
+	 i5GrNrsexwSxRqmjninqISK0nsLeySTQ4rsDG+cd3W032WWDDy47WF+ZOQA2acObnC
+	 0DB8VDFwRzzSw==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Leo Yan <leo.yan@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	James Clark <james.clark@linaro.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Stephane Eranian <eranian@google.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Usama Arif <usama.arif@linux.dev>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH v3 0/4] arm64: Add BRBE support for bpf_get_branch_snapshot()
+Date: Mon, 13 Apr 2026 11:57:19 -0700
+Message-ID: <20260413185740.3286146-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260412022714.1955495-2-bestswngs@gmail.com> <20260412022714.1955495-3-bestswngs@gmail.com>
- <DHRD7K4Q4R0E.2HT85NT44DKZI@etsalapatis.com> <CAADnVQLhnnt8uGoZk=38zH1jh_9Uy8ah=NdcoBE71qGkuH2O5g@mail.gmail.com>
- <adzBmOuXCZ0vHnbg@SLSGDTSWING002>
-In-Reply-To: <adzBmOuXCZ0vHnbg@SLSGDTSWING002>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 13 Apr 2026 11:53:34 -0700
-X-Gm-Features: AQROBzAu4hxvmTGtVwVF6u1a3jFDsvQD0ZbaSyf7ca2eybMqvd_9Sa8KTcEqCYc
-Message-ID: <CAADnVQLxJ4+uAEOLw4+w-aAsObaJFBLE4uppqAd5b06uAD=3Fw@mail.gmail.com>
-Subject: Re: [PATCH bpf v4 1/2] bpf: Fix use-after-free of arena VMA on fork
-To: Weiming Shi <bestswngs@gmail.com>
-Cc: Emil Tsalapatis <emil@etsalapatis.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Barret Rhoden <brho@google.com>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Xiang Mei <xmei5@asu.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 13, 2026 at 3:12=E2=80=AFAM Weiming Shi <bestswngs@gmail.com> w=
-rote:
->
-> On 26-04-12 14:30, Alexei Starovoitov wrote:
-> > On Sun, Apr 12, 2026 at 10:50=E2=80=AFAM Emil Tsalapatis <emil@etsalapa=
-tis.com> wrote:
-> > >
-> > > On Sat Apr 11, 2026 at 10:27 PM EDT, Weiming Shi wrote:
-> > > > arena_vm_open() only increments a refcount on the shared vma_list e=
-ntry
-> > > > but never registers the new VMA or updates the stored vma pointer. =
-When
-> > > > the original VMA is unmapped while a forked copy still exists,
-> > > > arena_vm_close() drops the refcount without freeing the vma_list en=
-try.
-> > > > The entry's vma pointer now refers to a freed vm_area_struct. A
-> > > > subsequent bpf_arena_free_pages() call iterates vma_list and passes
-> > > > the dangling pointer to zap_page_range_single(), causing a
-> > > > use-after-free.
-> > > >
-> > > > The bug is reachable by any process with CAP_BPF and CAP_PERFMON th=
-at
-> > > > can create a BPF_MAP_TYPE_ARENA, mmap it, and fork. It triggers
-> > > > deterministically -- no race condition is involved.
-> > > >
-> > > >  BUG: KASAN: slab-use-after-free in zap_page_range_single (mm/memor=
-y.c:2234)
-> > > >  Call Trace:
-> > > >   <TASK>
-> > > >   zap_page_range_single+0x101/0x110   mm/memory.c:2234
-> > > >   zap_pages+0x80/0xf0                 kernel/bpf/arena.c:658
-> > > >   arena_free_pages+0x67a/0x860        kernel/bpf/arena.c:712
-> > > >   bpf_prog_test_run_syscall+0x3da     net/bpf/test_run.c:1640
-> > > >   __sys_bpf+0x1662/0x50b0             kernel/bpf/syscall.c:6267
-> > > >   __x64_sys_bpf+0x73/0xb0             kernel/bpf/syscall.c:6360
-> > > >   do_syscall_64+0xf1/0x530            arch/x86/entry/syscall_64.c:6=
-3
-> > > >   entry_SYSCALL_64_after_hwframe+0x77  arch/x86/entry/entry_64.S:13=
-0
-> > > >   </TASK>
-> > > >
-> > > > Fix this by tracking each child VMA separately. arena_vm_open() now
-> > > > clears the inherited vm_private_data and calls remember_vma() to
-> > > > register a fresh vma_list entry for the new VMA. If remember_vma()
-> > > > fails due to OOM, vm_private_data stays NULL and arena_vm_close()
-> > > > skips the cleanup for that VMA. The shared refcount is no longer
-> > > > needed and is removed.
-> > > >
-> > > > Also add arena_vm_may_split() returning -EINVAL to prevent VMA
-> > > > splitting, so that arena_vm_open() only needs to handle fork and th=
-e
-> > > > vma_list tracking stays simple.
-> > > >
-> > > > Fixes: b90d77e5fd78 ("bpf: Fix remap of arena.")
-> > > > Reported-by: Xiang Mei <xmei5@asu.edu>
-> > > > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> > > > ---
-> > > >  kernel/bpf/arena.c | 23 +++++++++++++++++------
-> > > >  1 file changed, 17 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> > > > index f355cf1c1a16..3462c4463617 100644
-> > > > --- a/kernel/bpf/arena.c
-> > > > +++ b/kernel/bpf/arena.c
-> > > > @@ -317,7 +317,6 @@ static u64 arena_map_mem_usage(const struct bpf=
-_map *map)
-> > > >  struct vma_list {
-> > > >       struct vm_area_struct *vma;
-> > > >       struct list_head head;
-> > > > -     refcount_t mmap_count;
-> > > >  };
-> > > >
-> > > >  static int remember_vma(struct bpf_arena *arena, struct vm_area_st=
-ruct *vma)
-> > > > @@ -327,7 +326,6 @@ static int remember_vma(struct bpf_arena *arena=
-, struct vm_area_struct *vma)
-> > > >       vml =3D kmalloc_obj(*vml);
-> > > >       if (!vml)
-> > > >               return -ENOMEM;
-> > > > -     refcount_set(&vml->mmap_count, 1);
-> > > >       vma->vm_private_data =3D vml;
-> > > >       vml->vma =3D vma;
-> > > >       list_add(&vml->head, &arena->vma_list);
-> > > > @@ -336,9 +334,17 @@ static int remember_vma(struct bpf_arena *aren=
-a, struct vm_area_struct *vma)
-> > > >
-> > > >  static void arena_vm_open(struct vm_area_struct *vma)
-> > > >  {
-> > > > -     struct vma_list *vml =3D vma->vm_private_data;
-> > > > +     struct bpf_map *map =3D vma->vm_file->private_data;
-> > > > +     struct bpf_arena *arena =3D container_of(map, struct bpf_aren=
-a, map);
-> > > >
-> > > > -     refcount_inc(&vml->mmap_count);
-> > > > +     /*
-> > > > +      * vm_private_data points to the parent's vma_list entry afte=
-r fork.
-> > > > +      * Clear it and register this VMA separately.
-> > > > +      */
-> > > > +     vma->vm_private_data =3D NULL;
-> > > > +     guard(mutex)(&arena->lock);
-> > > > +     /* OOM is silently ignored; arena_vm_close() handles NULL. */
-> > >
-> > > I don't see any way this approach gonna work, and frankly makes no se=
-nse
-> > > to me. This patch doesn't take into account how the vma_list is actua=
-lly
-> > > used. It frankly makes no sense, Please think through this: If we cou=
-ld
-> > > silently just not allocate the vml, why do we need it in the first pl=
-ace?
-> >
-> > +1
-> >
-> > Weiming,
-> >
-> > you should stop trusting AI so blindly.
-> > First, analyze the root cause (the first paragraph of the commit log).
-> > Is this really the case?
-> >
-> > Second, I copy pasted it to claude and got the same "fix" back,
-> > but implemented without your bug:
-> > +       vml =3D kmalloc_obj(*vml);
-> > +       if (!vml) {
-> > +               vma->vm_private_data =3D NULL;
-> > +               return;
-> > +       }
-> > +       vml->vma =3D vma;
-> > +       vma->vm_private_data =3D vml;
-> > +       guard(mutex)(&arena->lock);
-> > +       list_add(&vml->head, &arena->vma_list);
-> >
-> > at least this part is kinda makes sense...
-> >
-> > and, of course, this part too:
-> >
-> > -       if (!refcount_dec_and_test(&vml->mmap_count))
-> > +       if (!vml)
-> >                 return;
-> >
-> > when you look at it you MUST ask AI back:
-> > "Is this buggy?"
-> >
-> > and it will reply:
-> > "
-> > Right =E2=80=94 silently dropping the VMA from the list means zap_pages=
-()
-> > won't unmap pages from it, which is a correctness problem, not just
-> > degraded behavior. Since vm_open can't fail, the allocation should use
-> > __GFP_NOFAIL. The struct is tiny so that's fine.
-> > "
-> >
-> > and it proceeded adding __GFP_NOFAIL.
-> >
-> > which is wrong too.
-> >
-> > So please don't just throw broken patches at maintainers.
-> > Do your homework. Fixing one maybe-bug and introducing
-> > more real bugs is not a step forward.
-> >
-> > pw-bot: cr
->
-> Thanks for the detailed review, really appreciate it.
->
-> I traced through it with GDB + KASAN in QEMU. Here's what happens:
->
->   1. mmap =E2=86=92 remember_vma()
->      vml->vma =3D 0xffff88800abfe700, mmap_count  =3D 1
->      now Parent VMA =3D 0xffff88800abfe700
->   2. fork =E2=86=92 arena_vm_open(child_vma)
->      vml->vma =3D 0xffff88800abfe700 (unchanged), mmap_count  =3D 2
->
->   3. parent munmap =E2=86=92 arena_vm_close(parent_vma)
->      mmap_count  =3D 1
->      vml->vma is now dangling
->
->   4. child bpf_arena_free_pages =E2=86=92 zap_pages()
->      reads vml->vma =3D 0xffff88800abfe700 =E2=86=92 UAF
->
-> The core issue is that arena_vm_open() never registers the child
-> VMA -- it only bumps the mmap_count . So vml->vma always points at
-> the parent, and dangles once the parent unmaps.
->
-> What approach would you suggest for fixing this?
+v2: https://lore.kernel.org/all/20260318171706.2840512-1-puranjay@kernel.org/
+Changes in v3:
+- Move NULL pmu_ctx fix from arm_pmuv3.c to perf core (Leo Yan)
+- Use union to clear branch entry bitfields instead of per-field
+  zeroing (Leo Yan)
+- Remove per-CPU brbe_active flag; check BRBCR_EL1 == 0 instead (Rob
+  Herring)
+- Remove redundant valid_brbidr() check in snapshot path (Rob Herring)
+- Introduce for_each_brbe_entry() iterator to deduplicate bank
+  iteration (Rob Herring)
+- Include perf core maintainers (Leo Yan, Rob Herring)
 
-I'm thinking to just do this:
+v1: https://lore.kernel.org/all/20260313180352.3800358-1-puranjay@kernel.org/
+Changes in v2:
+- Rebased on arm64/for-next/core
+- Add per-CPU brbe_active flag to guard against UNDEFINED sysreg access
+  on non-BRBE CPUs in heterogeneous big.LITTLE systems.
+- Fix pre-existing bug in perf_clear_branch_entry_bitfields() that missed
+  zeroing new_type and priv bitfields, added as a separate patch with
+  Fixes tags (new patch 2).
+- Use architecture-specific selftest threshold (#if defined(__aarch64__))
+  instead of raising the global threshold, to preserve x86 regression
+  detection.
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index f355cf1c1a16..a4f1df1bf0f4 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -489,7 +489,7 @@ static int arena_map_mmap(struct bpf_map *map,
-struct vm_area_struct *vma)
-         * clears VM_MAYEXEC. Set VM_DONTEXPAND as well to avoid
-         * potential change of user_vm_start.
-         */
--       vm_flags_set(vma, VM_DONTEXPAND);
-+       vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY);
-        vma->vm_ops =3D &arena_vm_ops;
-        return 0;
- }
+RFC: https://lore.kernel.org/all/20260102214043.1410242-1-puranjay@kernel.org/
+Changes from RFC:
+ - Fix pre-existing NULL pointer dereference in armv8pmu_sched_task()
+   found by Leo Yan during testing (patch 1)
+ - Pause BRBE before local_daif_save() to avoid branch pollution from
+   trace_hardirqs_off()
+ - Use local_daif_save() to prevent pNMI race from counter overflow
+   (Mark Rutland)
+ - Reuse perf_entry_from_brbe_regset() instead of duplicating register
+   read logic, by making it accept NULL event (Mark Rutland)
+ - Invalidate BRBE after reading to maintain record contiguity for
+   other consumers (Mark Rutland)
+ - Adjust selftest wasted_entries threshold for ARM64 (patch 3)
+ - Tested on ARM FVP with BRBE enabled
+
+This series enables the bpf_get_branch_snapshot() BPF helper on ARM64
+by implementing the perf_snapshot_branch_stack static call for ARM's
+Branch Record Buffer Extension (BRBE).
+
+bpf_get_branch_snapshot() [1] allows BPF programs to capture hardware
+branch records on-demand from any BPF tracing context. This was
+previously only available on x86 (Intel LBR) since v5.16. With BRBE
+available on ARMv9, this series closes the gap for ARM64.
+
+Usage model
+-----------
+
+The helper works in conjunction with perf events. The userspace
+component of the BPF application opens a perf event with
+PERF_SAMPLE_BRANCH_STACK on each CPU, which configures the hardware
+to continuously record branches into BRBE (on ARM64) or LBR (on x86).
+A BPF program attached to a tracepoint, kprobe, or fentry hook can
+then call bpf_get_branch_snapshot() to snapshot the branch buffer at
+any point. Without an active perf event, BRBE is not recording and
+the buffer is empty.
+
+On-demand branch snapshots from BPF are useful for diagnosing which
+specific code path was taken inside a function. Stack traces only show
+function boundaries, but branch records reveal the exact sequence of
+jumps, calls, and returns within a function -- making it possible to
+identify which specific error check triggered a failure, or which
+callback implementation was invoked through a function pointer.
+
+For example, retsnoop [2] is a BPF-based tool for non-intrusive
+mass-tracing of kernel internals. Its LBR mode (--lbr) creates per-CPU
+perf events with PERF_SAMPLE_BRANCH_STACK and then uses
+bpf_get_branch_snapshot() in its fentry/fexit BPF programs to capture
+branch records whenever a traced function returns an error.
+
+Consider debugging a bpf() syscall that returns -EINVAL when creating
+a BPF map with invalid parameters. Running retsnoop on an ARM64 FVP
+with BRBE to trace the bpf() syscall and array_map_alloc_check():
+
+  $ retsnoop -e '*sys_bpf' -a 'array_map_alloc_check' --lbr=any \
+             -F -k vmlinux --debug full-lbr
+  $ simfail bpf-bad-map-max-entries-array  # in another terminal
+
+Output of retsnoop:
+
+  --- fentry BPF program (entries #63-#17) ---
+
+  [#63-#59] __htab_map_lookup_elem: hash table walk with memcmp        (hashtab.c)
+  [#58] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xc850           (hashtab.c:750)
+  [#57-#55] ... dump_bpf_prog internal branches ...
+  [#54] dump_bpf_prog+0xcab8        -> bpf_get_current_pid_tgid+0x0    (helpers.c:225)
+  [#53] bpf_get_current_pid_tgid+0x1c -> dump_bpf_prog+0xcabc          (helpers.c:225)
+  [#52-#51] ... dump_bpf_prog -> __htab_map_lookup_elem ...
+  [#50-#47] __htab_map_lookup_elem: htab_map_hash (jhash2), select_bucket
+  [#46-#42] lookup_nulls_elem_raw: hash chain walk with memcmp         (hashtab.c:717)
+  [#41] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xcaf8           (hashtab.c:750)
+  [#40-#37] ... dump_bpf_prog -> bpf_ktime_get_ns ...
+  [#36] bpf_ktime_get_ns+0x10       -> ktime_get_mono_fast_ns+0x0      (helpers.c:178)
+  [#35-#32] ktime_get_mono_fast_ns: tk_clock_read -> arch_counter_get_cntpct
+  [#31] ktime_get_mono_fast_ns+0x9c -> bpf_ktime_get_ns+0x14           (timekeeping.c:493)
+  [#30] bpf_ktime_get_ns+0x18       -> dump_bpf_prog+0xcd50            (helpers.c:178)
+  [#29-#25] ... dump_bpf_prog internal branches ...
+  [#24] dump_bpf_prog+0x11b28       -> __bpf_prog_exit_recur+0x0       (trampoline.c:1190)
+  [#23-#17] __bpf_prog_exit_recur: rcu_read_unlock, migrate_enable     (trampoline.c:1195)
+
+  --- array_map_alloc_check (entries #16-#12) ---
+
+  [#16] dump_bpf_prog+0x11b38       -> array_map_alloc_check+0x8       (arraymap.c:55)
+  [#15] array_map_alloc_check+0x18  -> array_map_alloc_check+0xb8      (arraymap.c:56)
+        . bpf_map_attr_numa_node       . bpf_map_attr_numa_node
+  [#14] array_map_alloc_check+0xbc  -> array_map_alloc_check+0x20      (arraymap.c:59)
+        . bpf_map_attr_numa_node
+  [#13] array_map_alloc_check+0x24  -> array_map_alloc_check+0x94      (arraymap.c:64)
+  [#12] array_map_alloc_check+0x98  -> dump_bpf_prog+0x11b3c           (arraymap.c:82)
+
+  --- fexit trampoline overhead (entries #11-#00) ---
+
+  [#11] dump_bpf_prog+0x11b5c       -> __bpf_prog_enter_recur+0x0      (trampoline.c:1145)
+  [#10-#03] __bpf_prog_enter_recur: rcu_read_lock, migrate_disable     (trampoline.c:1146)
+  [#02] __bpf_prog_enter_recur+0x114 -> dump_bpf_prog+0x11b60          (trampoline.c:1157)
+  [#01] dump_bpf_prog+0x11b6c       -> dump_bpf_prog+0xd230
+  [#00] dump_bpf_prog+0xd340        -> arm_brbe_snapshot_branch_stack+0x0 (arm_brbe.c:814)
+
+                   el0t_64_sync+0x168
+                   el0t_64_sync_handler+0x98
+                   el0_svc+0x28
+                   do_el0_svc+0x4c
+                   invoke_syscall.constprop.0+0x54
+    373us [-EINVAL] __arm64_sys_bpf+0x8
+                    __sys_bpf+0x87c
+                    map_create+0x120
+     95us [-EINVAL] array_map_alloc_check+0x8
+
+The FVP's BRBE buffer has 64 entries (BRBE supports 8, 16, 32, or
+64). Of these, entries #63-#17 (47) are consumed by the fentry BPF
+trampoline that ran before the function, and entries #11-#00 (12)
+are consumed by the fexit trampoline that runs after. Entry #00
+shows the very last branch recorded before BRBE is paused: the call
+into arm_brbe_snapshot_branch_stack().
+
+The 5 useful entries (#16-#12) show the exact path taken inside
+array_map_alloc_check(). Record #14 shows a jump from line 56
+(bpf_map_attr_numa_node) to line 59 (the if-condition), and #13
+shows an immediate jump from line 59 (attr->max_entries == 0) to
+line 64 (return -EINVAL), skipping lines 60-63. This pinpoints
+max_entries==0 as the cause -- a diagnosis impossible with stack
+traces alone.
+
+[1] 856c02dbce4f ("bpf: Introduce helper bpf_get_branch_snapshot")
+[2] https://github.com/anakryiko/retsnoop
+
+Puranjay Mohan (4):
+  perf/core: Fix NULL pmu_ctx passed to PMU sched_task callback
+  perf: Use a union to clear branch entry bitfields
+  perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
+  selftests/bpf: Adjust wasted entries threshold for ARM64 BRBE
+
+ drivers/perf/arm_brbe.c                       | 107 +++++++++++++++---
+ drivers/perf/arm_brbe.h                       |   9 ++
+ drivers/perf/arm_pmuv3.c                      |   5 +-
+ include/linux/perf_event.h                    |   9 +-
+ include/uapi/linux/perf_event.h               |  25 ++--
+ kernel/events/core.c                          |   3 +-
+ .../bpf/prog_tests/get_branch_snapshot.c      |  13 ++-
+ 7 files changed, 130 insertions(+), 41 deletions(-)
+
+
+base-commit: 480a9e57cceaf42db6ff874dbfe91de201935035
+-- 
+2.52.0
+
