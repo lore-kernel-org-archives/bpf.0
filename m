@@ -1,49 +1,47 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A2935E956;
-	Tue, 14 Apr 2026 07:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E7D36EA99;
+	Tue, 14 Apr 2026 07:07:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776150442; cv=none; b=hlXJjwc2DCXthQfSnngB9QZyRpwMCeGP+bq8lZ5PvQLVGpTRht0h/y5+Ng7c9OcLIoCCpSVC3FmuumqosGFJk/gpkCMhgNndl7sZrgJNziJAnz1inEx6cXhQLXE8KLsuvtK6A8EoOoNs4g6wdjCY12lwHgrCjl8FxcmWlID4Xac=
+	t=1776150444; cv=none; b=Z15i+ZofzIiR6mHDKEdD2P11S+/ZCq4475chBpYH3CBDhlKw56C4SiONCSuU7JONVHZGGXbekAdThn4D+g7CpGCA2s6RpbTogmQ4WeWkolOMyODxDdcVzMgh+Rs+lcE17yrKkHth+bQBWjQoHOSgEyesT4/673FQbhtzcYN1DJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776150442; c=relaxed/simple;
-	bh=YsdvlQqeVior0g/k+WAElPcnRGxse6gI8p2joQTg8Fc=;
+	s=arc-20240116; t=1776150444; c=relaxed/simple;
+	bh=KVbMpsTcEmKCfBAEuiRTEOHPL8aBkXpCY8W5TJV1kNk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rJC0DzCBip2KX0dk3hJje0tFhnRoN1+lcKeMN3i9tbcN7zhJ/PxD2o7FCDDF0MeVbRrNrKf5pfXLTegzO1YlU3fmcbc9N1WcorjnIyCnsKKWSOxCM3Ub7EOCRTORpcLwMpMIw1g7cYTpRP5dH5bPR2lI8SibR8yB9ln1o21NcTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PovEGdae; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hzn9ddyWY6DEIn6CCF3T8aHbjqbCwTcbMGSzAjLU0By9suu/kxIP4zUswaHs0Ys0Wd1rpjS9aLvX1TBz77e9d5izSNzuUC0j+RifOW83hPN2yAv1JX9Cked7obqwcy8/7oCEo6gyuBLQLr/NhFZvdLvQUoppA3fXK1uhJ5iYNBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gi68y5DP; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PovEGdae"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gi68y5DP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776150440; x=1807686440;
+  t=1776150444; x=1807686444;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YsdvlQqeVior0g/k+WAElPcnRGxse6gI8p2joQTg8Fc=;
-  b=PovEGdae8yNB/AX6euDry4JoYMxrWZxXzWQoydG3w9Fo3DkpObX9cW11
-   LhogVTP9YqI5XKURzMV02suRkYUbou9mx8ijnZDxWuPAAikWmj1q/ZBdM
-   XOllFPlhSCogrn/MVT6MzKcbdHy+y8lXhJIuhvPWJve2OwyI7p8CMemuO
-   9SK1DEOMHe8ubqjXs/550mf+1MuE+mc4LD/ObxDC2oA95IsI6dQVcIo81
-   6XJpVQg6MCkB5YYU1QcF4Q8f/V+NUQppeef4E6j8lUunybJcaYE1nPQX8
-   +3S98Jh/pUZXctD5T5iV4bsaKNTs6kN/XTN8yoW6pEakgv255dpFetnBD
-   Q==;
-X-CSE-ConnectionGUID: rFHTN/mrSRa0XFt8ZVzD0A==
-X-CSE-MsgGUID: eFYd2JKhRuaLPIihMKletg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="99742708"
+  bh=KVbMpsTcEmKCfBAEuiRTEOHPL8aBkXpCY8W5TJV1kNk=;
+  b=gi68y5DPmeniRVv8gURQTUxCM0zzkR2l9kEUdkQ3iTRaaS3zpEQGhSTR
+   e0You5vgx9046ODwVNrDQa22HSNRvXxkKSJSmtszn+h1XDtwN+VrCt6pm
+   SeBbyhBJSBISLYHap3ho2AIaY3SWjC737iHmSTIjd5ptYAio6bLtEkpUj
+   8XGYUy2cLVxf07abGVZE/8GDaVartrkQvmoqDZxuBQ4CY0kB4fWYfjnIb
+   TGFQzwIH+B1mmN6wPV5BoLone93Y1E0yunbIPSOJTPek1sS9wUUuI+7tb
+   tCX4akd5JX8sF8DmtDnnwYgaqeBaWrVeLhrfeh7ViNKxCm7dOod0AO4GR
+   A==;
+X-CSE-ConnectionGUID: fQck+jcwSgWOsBcTGA2B0w==
+X-CSE-MsgGUID: YB1s5fWNQqWPAdRX8EVRyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="77279752"
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="99742708"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:06:49 -0700
-X-CSE-ConnectionGUID: Qqv0CU4hSmi1Ya0DhafpcQ==
-X-CSE-MsgGUID: ld6HPmOxQI28P4mVvbJYIw==
+   d="scan'208";a="77279752"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:07:23 -0700
+X-CSE-ConnectionGUID: KWGZfSwARvKo4geOUIPkKA==
+X-CSE-MsgGUID: j3Be09BiRdyShxoi7H87AA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="231744909"
 Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:06:49 -0700
-Date: Tue, 14 Apr 2026 00:06:48 -0700
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:07:21 -0700
+Date: Tue, 14 Apr 2026 00:07:21 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
 	Nikolay Borisov <nik.borisov@suse.com>,
@@ -74,9 +72,8 @@ Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
 	Asit Mallick <asit.k.mallick@intel.com>,
 	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
 	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v10 06/12] x86/vmscape: Use write_ibpb() instead of
- indirect_branch_prediction_barrier()
-Message-ID: <20260414-vmscape-bhb-v10-6-efa924abae5f@linux.intel.com>
+Subject: [PATCH v10 08/12] kvm: Define EXPORT_STATIC_CALL_FOR_KVM()
+Message-ID: <20260414-vmscape-bhb-v10-8-efa924abae5f@linux.intel.com>
 X-Mailer: b4 0.16-dev
 References: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
 Precedence: bulk
@@ -89,35 +86,71 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
 
-indirect_branch_prediction_barrier() is a wrapper to write_ibpb(), which
-also checks if the CPU supports IBPB. For VMSCAPE, call to
-indirect_branch_prediction_barrier() is only possible when CPU supports
-IBPB.
+EXPORT_SYMBOL_FOR_KVM() exists to export symbols to KVM modules. Static
+calls need the same treatment when the core kernel defines a static_call
+that KVM needs access to (e.g. from a VM-exit path).
 
-Simply call write_ibpb() directly to avoid unnecessary alternative
-patching.
+Define EXPORT_STATIC_CALL_FOR_KVM() as the static_call analogue of
+EXPORT_SYMBOL_FOR_KVM(). The same three-way logic applies:
 
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Jon Kohler <jon@nutanix.com>
-Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+  - KVM_SUB_MODULES defined: export to "kvm," plus all sub-modules
+  - KVM=m, no sub-modules: export to "kvm" only
+  - KVM built-in: no export needed (noop)
+
+As with EXPORT_SYMBOL_FOR_KVM(), allow architectures to override the
+definition (e.g. to suppress the export when kvm.ko itself will not be
+built despite CONFIG_KVM=m). Add the x86 no-op override in
+arch/x86/include/asm/kvm_types.h for that case.
+
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- arch/x86/include/asm/entry-common.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/kvm_types.h |  1 +
+ include/linux/kvm_types.h        | 13 ++++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/entry-common.h
-index c45858db16c9..78b143673ca7 100644
---- a/arch/x86/include/asm/entry-common.h
-+++ b/arch/x86/include/asm/entry-common.h
-@@ -97,7 +97,7 @@ static inline void arch_exit_to_user_mode_prepare(struct pt_regs *regs,
- 	/* Avoid unnecessary reads of 'x86_predictor_flush_exit_to_user' */
- 	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
- 	    this_cpu_read(x86_predictor_flush_exit_to_user)) {
--		indirect_branch_prediction_barrier();
-+		write_ibpb();
- 		this_cpu_write(x86_predictor_flush_exit_to_user, false);
- 	}
- }
+diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
+index d7c704ed1be9..bceeaed2940e 100644
+--- a/arch/x86/include/asm/kvm_types.h
++++ b/arch/x86/include/asm/kvm_types.h
+@@ -15,6 +15,7 @@
+  * at least one vendor module is enabled.
+  */
+ #define EXPORT_SYMBOL_FOR_KVM(symbol)
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
+ #endif
+ 
+ #define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
+diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+index a568d8e6f4e8..c81f4fdba625 100644
+--- a/include/linux/kvm_types.h
++++ b/include/linux/kvm_types.h
+@@ -13,6 +13,8 @@
+ 	EXPORT_SYMBOL_FOR_MODULES(symbol, __stringify(KVM_SUB_MODULES))
+ #define EXPORT_SYMBOL_FOR_KVM(symbol) \
+ 	EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol) \
++	EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
+ #else
+ #define EXPORT_SYMBOL_FOR_KVM_INTERNAL(symbol)
+ /*
+@@ -27,7 +29,16 @@
+ #define EXPORT_SYMBOL_FOR_KVM(symbol)
+ #endif /* IS_MODULE(CONFIG_KVM) */
+ #endif /* EXPORT_SYMBOL_FOR_KVM */
+-#endif
++
++#ifndef EXPORT_STATIC_CALL_FOR_KVM
++#if IS_MODULE(CONFIG_KVM)
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol) EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm")
++#else
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
++#endif /* IS_MODULE(CONFIG_KVM) */
++#endif /* EXPORT_STATIC_CALL_FOR_KVM */
++
++#endif /* KVM_SUB_MODULES */
+ 
+ #ifndef __ASSEMBLER__
+ 
 
 -- 
 2.34.1
