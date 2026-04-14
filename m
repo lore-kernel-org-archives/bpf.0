@@ -1,273 +1,321 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1104437105A;
-	Tue, 14 Apr 2026 07:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC026306B1B
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 07:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776150510; cv=none; b=mGKcUM6TvthVk6i9z1QmLLevGUvPxJpx+FcjL8jm9YT8wXrWOTAn6myYBj8PaXpJQv6+P3CkDZEflprlhlT6//R33GARTYaVm8JMHeQ4ZMjGLMNQyF15Rq8MuPRkAe45VeJKgf5sHDClK6pZNos57acTKPikFt45DzQz1TfqpEE=
+	t=1776150922; cv=none; b=t8bHdMq9HqEk5h4BG9w7aYqoorTO6J2jB+7ePsy36W4htaQTYD91JaFQvnDbIsvqMrbq40/q5Nm1Ds82W4cs9bIuD1Ouxo9tfCwwgz4EsVtTkjiMVtuslx8r2jhM4vj1YavBycLvU72UweNK1rhpfTWFUc4XZ8SeK8uWULQNh30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776150510; c=relaxed/simple;
-	bh=/5skwiH0gY1oo5ieSmlZoXl/fkBIevmFUlNqtPJTLYQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bfpE0TnT399DmHjXerXlZOAheCge9J0yckQ2vIfPbRz2iTgFP5Ykw0rEaQmyZYvqj5KgUZUbsYjIMJO9H03e9VBMVYNd1YIhR3HtT5PB2DrMPTaqwMeX9G2aUoj8LfBVoFINQJxgfF+lYNNRR8JCJYgSVmDtlx65r6WNxQzrtl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X9Zqw883; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X9Zqw883"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776150509; x=1807686509;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/5skwiH0gY1oo5ieSmlZoXl/fkBIevmFUlNqtPJTLYQ=;
-  b=X9Zqw883afLHSZh5WW8T+TCUHQ2tJN4DN2/nhPLeebwlrqYNsdIN7n1z
-   Tn6xzsilMBYx+7s5xF7rhXLJvRlhvrtWeY5rUrdJSb6dpeSeqORc6Zt4n
-   GAJaHYWNI0xafUmZKUIMxiFGovKUdneN4x1MDIYYm9JWxZA0BjrBCcRSS
-   42+h+qNkKRIYSam1P8RGZj2ZBqsGQH+uPYlJpwOckw4TE5Ugj4CEUOzq4
-   sFL8Ebj4jf5R5adOhg/HG3qK4zq8FYftuc6rjX8ARRFV+74xf2iycAPYy
-   /GoGXLjz/u2o2VZ92X4ntIRGlyw9AfjNNYLaN28blALF6BKhevWkpQmYu
-   Q==;
-X-CSE-ConnectionGUID: 1DqyMwXeT1mvwN60ivhVOg==
-X-CSE-MsgGUID: GbewHZsgR2GH1YKuT8pk5g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="76980649"
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="76980649"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:07:54 -0700
-X-CSE-ConnectionGUID: wf/gjug8TzOgiJchL76yQQ==
-X-CSE-MsgGUID: oraOJ9/jS3OmjTimA9Yr/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="228974882"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:07:52 -0700
-Date: Tue, 14 Apr 2026 00:07:52 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v10 10/12] x86/vmscape: Deploy BHB clearing mitigation
-Message-ID: <20260414-vmscape-bhb-v10-10-efa924abae5f@linux.intel.com>
-X-Mailer: b4 0.16-dev
-References: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
+	s=arc-20240116; t=1776150922; c=relaxed/simple;
+	bh=8Je2oB5UH0EVIL0m9/8djGDmfe6JcWnihWmXad8EcRk=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EqKsI5x+/x1+v7XJAvemTHCEdS/1NBJVMzu/iD0RVeUZ9IPAV6/1+5LXpWt/S2S8ISzgc/YKXUvdPnOvrAGb2aJXZ54HBH+4f8xDxD9wia3EypHfKY5hqIyu+MelWmq7cQmrTIZ8FScD3KCKDTGep28wQu7a628zq73NEgxOuPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8CxQ_CC6d1pf2kAAA--.2007S3;
+	Tue, 14 Apr 2026 15:15:14 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJDxzsJ86d1pWLtsAA--.10358S4;
+	Tue, 14 Apr 2026 15:15:13 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: bpf@vger.kernel.org
+Subject: [PATCH RFC bpf-next 2/4] selftests/bpf: Add 8-bit and 16-bit fetch-based testcases for atomics
+Date: Tue, 14 Apr 2026 15:15:05 +0800
+Message-ID: <20260414071507.29804-3-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20260414071507.29804-1-yangtiezhu@loongson.cn>
+References: <20260414071507.29804-1-yangtiezhu@loongson.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJDxzsJ86d1pWLtsAA--.10358S4
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW3ZFW3KFy3XF48ArW8CFyUurX_yoWDKr4rp3
+	yrXrnrAFy5Za10vrZagw15KFs5urs7Ar93GrZrKr9FvrnrCa4kJrnrJFyvvF1rZry0yw4r
+	Cryjq3909wsrWabCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+	67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1j6r15MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
+	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j1WlkUUUUU=
 
-IBPB mitigation for VMSCAPE is an overkill on CPUs that are only affected
-by the BHI variant of VMSCAPE. On such CPUs, eIBRS already provides
-indirect branch isolation between guest and host userspace. However, branch
-history from guest may also influence the indirect branches in host
-userspace.
+The BPF instruction set has been extended to support 8-bit and 16-bit
+atomic operations. Update the atomics test to ensure these new sizes
+are correctly handled by the verifier and JIT backends, each of test
+verifies that both the value in memory and the value returned (fetch)
+are correct.
 
-To mitigate the BHI aspect, use the BHB clearing sequence. Since now, IBPB
-is not the only mitigation for VMSCAPE, update the documentation to reflect
-that =auto could select either IBPB or BHB clear mitigation based on the
-CPU.
-
-Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
-Tested-by: Jon Kohler <jon@nutanix.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
- Documentation/admin-guide/hw-vuln/vmscape.rst   | 11 ++++++++-
- Documentation/admin-guide/kernel-parameters.txt |  4 +++-
- arch/x86/include/asm/entry-common.h             |  4 ++++
- arch/x86/include/asm/nospec-branch.h            |  2 ++
- arch/x86/kernel/cpu/bugs.c                      | 30 +++++++++++++++++++------
- 5 files changed, 42 insertions(+), 9 deletions(-)
+ .../selftests/bpf/prog_tests/atomics.c        | 44 ++++++++++++++++
+ tools/testing/selftests/bpf/progs/atomics.c   | 50 +++++++++++++++++++
+ 2 files changed, 94 insertions(+)
 
-diff --git a/Documentation/admin-guide/hw-vuln/vmscape.rst b/Documentation/admin-guide/hw-vuln/vmscape.rst
-index d9b9a2b6c114..7c40cf70ad7a 100644
---- a/Documentation/admin-guide/hw-vuln/vmscape.rst
-+++ b/Documentation/admin-guide/hw-vuln/vmscape.rst
-@@ -86,6 +86,10 @@ The possible values in this file are:
-    run a potentially malicious guest and issues an IBPB before the first
-    exit to userspace after VM-exit.
+diff --git a/tools/testing/selftests/bpf/prog_tests/atomics.c b/tools/testing/selftests/bpf/prog_tests/atomics.c
+index 92b5f378bfb8..6409fb581b66 100644
+--- a/tools/testing/selftests/bpf/prog_tests/atomics.c
++++ b/tools/testing/selftests/bpf/prog_tests/atomics.c
+@@ -23,6 +23,12 @@ static void test_add(struct atomics_lskel *skel)
+ 	ASSERT_EQ(skel->data->add32_value, 3, "add32_value");
+ 	ASSERT_EQ(skel->bss->add32_result, 1, "add32_result");
  
-+ * 'Mitigation: Clear BHB before exit to userspace':
++	ASSERT_EQ(skel->data->add16_value, 3, "add16_value");
++	ASSERT_EQ(skel->bss->add16_result, 1, "add16_result");
 +
-+   As above, conditional BHB clearing mitigation is enabled.
++	ASSERT_EQ(skel->data->add8_value, 3, "add8_value");
++	ASSERT_EQ(skel->bss->add8_result, 1, "add8_result");
 +
-  * 'Mitigation: IBPB on VMEXIT':
+ 	ASSERT_EQ(skel->bss->add_stack_value_copy, 3, "add_stack_value");
+ 	ASSERT_EQ(skel->bss->add_stack_result, 1, "add_stack_result");
  
-    IBPB is issued on every VM-exit. This occurs when other mitigations like
-@@ -102,9 +106,14 @@ The mitigation can be controlled via the ``vmscape=`` command line parameter:
+@@ -48,6 +54,12 @@ static void test_sub(struct atomics_lskel *skel)
+ 	ASSERT_EQ(skel->data->sub32_value, -1, "sub32_value");
+ 	ASSERT_EQ(skel->bss->sub32_result, 1, "sub32_result");
  
-  * ``vmscape=ibpb``:
- 
--   Enable conditional IBPB mitigation (default when CONFIG_MITIGATION_VMSCAPE=y).
-+   Enable conditional IBPB mitigation.
- 
-  * ``vmscape=force``:
- 
-    Force vulnerability detection and mitigation even on processors that are
-    not known to be affected.
++	ASSERT_EQ(skel->data->sub16_value, -1, "sub16_value");
++	ASSERT_EQ(skel->bss->sub16_result, 1, "sub16_result");
 +
-+ * ``vmscape=auto``:
++	ASSERT_EQ(skel->data->sub8_value, -1, "sub8_value");
++	ASSERT_EQ(skel->bss->sub8_result, 1, "sub8_result");
 +
-+   Choose the mitigation based on the VMSCAPE variant the CPU is affected by.
-+   (default when CONFIG_MITIGATION_VMSCAPE=y)
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 03a550630644..3853c7109419 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -8378,9 +8378,11 @@ Kernel parameters
+ 	ASSERT_EQ(skel->bss->sub_stack_value_copy, -1, "sub_stack_value");
+ 	ASSERT_EQ(skel->bss->sub_stack_result, 1, "sub_stack_result");
  
- 			off		- disable the mitigation
- 			ibpb		- use Indirect Branch Prediction Barrier
--					  (IBPB) mitigation (default)
-+					  (IBPB) mitigation
- 			force		- force vulnerability detection even on
- 					  unaffected processors
-+			auto		- (default) use IBPB or BHB clear
-+					  mitigation based on CPU
+@@ -73,6 +85,12 @@ static void test_and(struct atomics_lskel *skel)
+ 	ASSERT_EQ(skel->data->and32_value, 0x010, "and32_value");
+ 	ASSERT_EQ(skel->bss->and32_result, 0x110, "and32_result");
  
- 	vsyscall=	[X86-64,EARLY]
- 			Controls the behavior of vsyscalls (i.e. calls to
-diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/entry-common.h
-index 783e7cb50cae..13db31472f3a 100644
---- a/arch/x86/include/asm/entry-common.h
-+++ b/arch/x86/include/asm/entry-common.h
-@@ -96,6 +96,10 @@ static inline void arch_exit_to_user_mode_prepare(struct pt_regs *regs,
- 	choose_random_kstack_offset(rdtsc());
- 
- 	if (unlikely(this_cpu_read(x86_predictor_flush_exit_to_user))) {
-+		/*
-+		 * Since the mitigation is for userspace, an explicit
-+		 * speculation barrier is not required after flush.
-+		 */
- 		static_call_cond(vmscape_predictor_flush)();
- 		this_cpu_write(x86_predictor_flush_exit_to_user, false);
- 	}
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index 066fd8095200..38478383139b 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -390,6 +390,8 @@ extern void write_ibpb(void);
- 
- #ifdef CONFIG_X86_64
- extern void clear_bhb_loop_nofence(void);
-+#else
-+static inline void clear_bhb_loop_nofence(void) {}
- #endif
- 
- extern void (*x86_return_thunk)(void);
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index bfc0e41697f6..1082ed1fb2e6 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -61,9 +61,8 @@ DEFINE_PER_CPU(u64, x86_spec_ctrl_current);
- EXPORT_PER_CPU_SYMBOL_GPL(x86_spec_ctrl_current);
- 
- /*
-- * Set when the CPU has run a potentially malicious guest. An IBPB will
-- * be needed to before running userspace. That IBPB will flush the branch
-- * predictor content.
-+ * Set when the CPU has run a potentially malicious guest. Indicates that a
-+ * branch predictor flush is needed before running userspace.
-  */
- DEFINE_PER_CPU(bool, x86_predictor_flush_exit_to_user);
- EXPORT_PER_CPU_SYMBOL_GPL(x86_predictor_flush_exit_to_user);
-@@ -3061,13 +3060,15 @@ enum vmscape_mitigations {
- 	VMSCAPE_MITIGATION_AUTO,
- 	VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER,
- 	VMSCAPE_MITIGATION_IBPB_ON_VMEXIT,
-+	VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER,
- };
- 
- static const char * const vmscape_strings[] = {
--	[VMSCAPE_MITIGATION_NONE]		= "Vulnerable",
-+	[VMSCAPE_MITIGATION_NONE]			= "Vulnerable",
- 	/* [VMSCAPE_MITIGATION_AUTO] */
--	[VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER]	= "Mitigation: IBPB before exit to userspace",
--	[VMSCAPE_MITIGATION_IBPB_ON_VMEXIT]	= "Mitigation: IBPB on VMEXIT",
-+	[VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER]		= "Mitigation: IBPB before exit to userspace",
-+	[VMSCAPE_MITIGATION_IBPB_ON_VMEXIT]		= "Mitigation: IBPB on VMEXIT",
-+	[VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER]	= "Mitigation: Clear BHB before exit to userspace",
- };
- 
- static enum vmscape_mitigations vmscape_mitigation __ro_after_init =
-@@ -3085,6 +3086,8 @@ static int __init vmscape_parse_cmdline(char *str)
- 	} else if (!strcmp(str, "force")) {
- 		setup_force_cpu_bug(X86_BUG_VMSCAPE);
- 		vmscape_mitigation = VMSCAPE_MITIGATION_AUTO;
-+	} else if (!strcmp(str, "auto")) {
-+		vmscape_mitigation = VMSCAPE_MITIGATION_AUTO;
- 	} else {
- 		pr_err("Ignoring unknown vmscape=%s option.\n", str);
- 	}
-@@ -3114,7 +3117,17 @@ static void __init vmscape_select_mitigation(void)
- 		break;
- 
- 	case VMSCAPE_MITIGATION_AUTO:
--		if (boot_cpu_has(X86_FEATURE_IBPB))
-+		/*
-+		 * CPUs with BHI_CTRL(ADL and newer) can avoid the IBPB and use
-+		 * BHB clear sequence. These CPUs are only vulnerable to the BHI
-+		 * variant of the VMSCAPE attack, and thus they do not require a
-+		 * full predictor flush.
-+		 *
-+		 * Note, in 32-bit mode BHB clear sequence is not supported.
-+		 */
-+		if (boot_cpu_has(X86_FEATURE_BHI_CTRL) && IS_ENABLED(CONFIG_X86_64))
-+			vmscape_mitigation = VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER;
-+		else if (boot_cpu_has(X86_FEATURE_IBPB))
- 			vmscape_mitigation = VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER;
- 		else
- 			vmscape_mitigation = VMSCAPE_MITIGATION_NONE;
-@@ -3141,6 +3154,8 @@ static void __init vmscape_apply_mitigation(void)
- {
- 	if (vmscape_mitigation == VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER)
- 		static_call_update(vmscape_predictor_flush, write_ibpb);
-+	else if (vmscape_mitigation == VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER)
-+		static_call_update(vmscape_predictor_flush, clear_bhb_loop_nofence);
++	ASSERT_EQ(skel->data->and16_value, 0x010, "and16_value");
++	ASSERT_EQ(skel->bss->and16_result, 0x110, "and16_result");
++
++	ASSERT_EQ(skel->data->and8_value, 0x01, "and8_value");
++	ASSERT_EQ(skel->bss->and8_result, 0x11, "and8_result");
++
+ 	ASSERT_EQ(skel->data->and_noreturn_value, 0x010ull << 32, "and_noreturn_value");
  }
  
- #undef pr_fmt
-@@ -3232,6 +3247,7 @@ void cpu_bugs_smt_update(void)
- 		break;
- 	case VMSCAPE_MITIGATION_IBPB_ON_VMEXIT:
- 	case VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER:
-+	case VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER:
- 		/*
- 		 * Hypervisors can be attacked across-threads, warn for SMT when
- 		 * STIBP is not already enabled system-wide.
-
+@@ -95,6 +113,12 @@ static void test_or(struct atomics_lskel *skel)
+ 	ASSERT_EQ(skel->data->or32_value, 0x111, "or32_value");
+ 	ASSERT_EQ(skel->bss->or32_result, 0x110, "or32_result");
+ 
++	ASSERT_EQ(skel->data->or16_value, 0x111, "or16_value");
++	ASSERT_EQ(skel->bss->or16_result, 0x110, "or16_result");
++
++	ASSERT_EQ(skel->data->or8_value, 0x13, "or8_value");
++	ASSERT_EQ(skel->bss->or8_result, 0x11, "or8_result");
++
+ 	ASSERT_EQ(skel->data->or_noreturn_value, 0x111ull << 32, "or_noreturn_value");
+ }
+ 
+@@ -117,6 +141,12 @@ static void test_xor(struct atomics_lskel *skel)
+ 	ASSERT_EQ(skel->data->xor32_value, 0x101, "xor32_value");
+ 	ASSERT_EQ(skel->bss->xor32_result, 0x110, "xor32_result");
+ 
++	ASSERT_EQ(skel->data->xor16_value, 0x101, "xor16_value");
++	ASSERT_EQ(skel->bss->xor16_result, 0x110, "xor16_result");
++
++	ASSERT_EQ(skel->data->xor8_value, 0x10, "xor8_value");
++	ASSERT_EQ(skel->bss->xor8_result, 0x11, "xor8_result");
++
+ 	ASSERT_EQ(skel->data->xor_noreturn_value, 0x101ull << 32, "xor_nxoreturn_value");
+ }
+ 
+@@ -140,6 +170,14 @@ static void test_cmpxchg(struct atomics_lskel *skel)
+ 	ASSERT_EQ(skel->data->cmpxchg32_value, 2, "lcmpxchg32_value");
+ 	ASSERT_EQ(skel->bss->cmpxchg32_result_fail, 1, "cmpxchg_result_fail");
+ 	ASSERT_EQ(skel->bss->cmpxchg32_result_succeed, 1, "cmpxchg_result_succeed");
++
++	ASSERT_EQ(skel->data->cmpxchg16_value, 2, "cmpxchg16_value");
++	ASSERT_EQ(skel->bss->cmpxchg16_result_fail, 1, "cmpxchg16_result_fail");
++	ASSERT_EQ(skel->bss->cmpxchg16_result_succeed, 1, "cmpxchg16_result_succeed");
++
++	ASSERT_EQ(skel->data->cmpxchg8_value, 2, "cmpxchg8_value");
++	ASSERT_EQ(skel->bss->cmpxchg8_result_fail, 1, "cmpxchg8_result_fail");
++	ASSERT_EQ(skel->bss->cmpxchg8_result_succeed, 1, "cmpxchg8_result_succeed");
+ }
+ 
+ static void test_xchg(struct atomics_lskel *skel)
+@@ -160,6 +198,12 @@ static void test_xchg(struct atomics_lskel *skel)
+ 
+ 	ASSERT_EQ(skel->data->xchg32_value, 2, "xchg32_value");
+ 	ASSERT_EQ(skel->bss->xchg32_result, 1, "xchg32_result");
++
++	ASSERT_EQ(skel->data->xchg16_value, 2, "xchg16_value");
++	ASSERT_EQ(skel->bss->xchg16_result, 1, "xchg16_result");
++
++	ASSERT_EQ(skel->data->xchg8_value, 2, "xchg8_value");
++	ASSERT_EQ(skel->bss->xchg8_result, 1, "xchg8_result");
+ }
+ 
+ void test_atomics(void)
+diff --git a/tools/testing/selftests/bpf/progs/atomics.c b/tools/testing/selftests/bpf/progs/atomics.c
+index f89c7f0cc53b..748c4da148d1 100644
+--- a/tools/testing/selftests/bpf/progs/atomics.c
++++ b/tools/testing/selftests/bpf/progs/atomics.c
+@@ -16,6 +16,10 @@ __u64 add64_value = 1;
+ __u64 add64_result = 0;
+ __u32 add32_value = 1;
+ __u32 add32_result = 0;
++__u16 add16_value = 1;
++__u16 add16_result = 0;
++__u8  add8_value = 1;
++__u8  add8_result = 0;
+ __u64 add_stack_value_copy = 0;
+ __u64 add_stack_result = 0;
+ __u64 add_noreturn_value = 1;
+@@ -30,6 +34,8 @@ int add(const void *ctx)
+ 
+ 	add64_result = __sync_fetch_and_add(&add64_value, 2);
+ 	add32_result = __sync_fetch_and_add(&add32_value, 2);
++	add16_result = __sync_fetch_and_add(&add16_value, 2);
++	add8_result  = __sync_fetch_and_add(&add8_value, 2);
+ 	add_stack_result = __sync_fetch_and_add(&add_stack_value, 2);
+ 	add_stack_value_copy = add_stack_value;
+ 	__sync_fetch_and_add(&add_noreturn_value, 2);
+@@ -42,6 +48,10 @@ __s64 sub64_value = 1;
+ __s64 sub64_result = 0;
+ __s32 sub32_value = 1;
+ __s32 sub32_result = 0;
++__s16 sub16_value = 1;
++__s16 sub16_result = 0;
++__s8  sub8_value = 1;
++__s8  sub8_result = 0;
+ __s64 sub_stack_value_copy = 0;
+ __s64 sub_stack_result = 0;
+ __s64 sub_noreturn_value = 1;
+@@ -56,6 +66,8 @@ int sub(const void *ctx)
+ 
+ 	sub64_result = __sync_fetch_and_sub(&sub64_value, 2);
+ 	sub32_result = __sync_fetch_and_sub(&sub32_value, 2);
++	sub16_result = __sync_fetch_and_sub(&sub16_value, 2);
++	sub8_result  = __sync_fetch_and_sub(&sub8_value, 2);
+ 	sub_stack_result = __sync_fetch_and_sub(&sub_stack_value, 2);
+ 	sub_stack_value_copy = sub_stack_value;
+ 	__sync_fetch_and_sub(&sub_noreturn_value, 2);
+@@ -68,6 +80,10 @@ __u64 and64_value = (0x110ull << 32);
+ __u64 and64_result = 0;
+ __u32 and32_value = 0x110;
+ __u32 and32_result = 0;
++__u16 and16_value = 0x110;
++__u16 and16_result = 0;
++__u8  and8_value = 0x11;
++__u8  and8_result = 0;
+ __u64 and_noreturn_value = (0x110ull << 32);
+ 
+ SEC("raw_tp/sys_enter")
+@@ -79,6 +95,8 @@ int and(const void *ctx)
+ 
+ 	and64_result = __sync_fetch_and_and(&and64_value, 0x011ull << 32);
+ 	and32_result = __sync_fetch_and_and(&and32_value, 0x011);
++	and16_result = __sync_fetch_and_and(&and16_value, 0x011);
++	and8_result = __sync_fetch_and_and(&and8_value, 0x01);
+ 	__sync_fetch_and_and(&and_noreturn_value, 0x011ull << 32);
+ #endif
+ 
+@@ -89,6 +107,10 @@ __u64 or64_value = (0x110ull << 32);
+ __u64 or64_result = 0;
+ __u32 or32_value = 0x110;
+ __u32 or32_result = 0;
++__u16 or16_value = 0x110;
++__u16 or16_result = 0;
++__u8  or8_value = 0x11;
++__u8  or8_result = 0;
+ __u64 or_noreturn_value = (0x110ull << 32);
+ 
+ SEC("raw_tp/sys_enter")
+@@ -99,6 +121,8 @@ int or(const void *ctx)
+ #ifdef ENABLE_ATOMICS_TESTS
+ 	or64_result = __sync_fetch_and_or(&or64_value, 0x011ull << 32);
+ 	or32_result = __sync_fetch_and_or(&or32_value, 0x011);
++	or16_result = __sync_fetch_and_or(&or16_value, 0x011);
++	or8_result = __sync_fetch_and_or(&or8_value, 0x02);
+ 	__sync_fetch_and_or(&or_noreturn_value, 0x011ull << 32);
+ #endif
+ 
+@@ -109,6 +133,10 @@ __u64 xor64_value = (0x110ull << 32);
+ __u64 xor64_result = 0;
+ __u32 xor32_value = 0x110;
+ __u32 xor32_result = 0;
++__u16 xor16_value = 0x110;
++__u16 xor16_result = 0;
++__u8  xor8_value = 0x11;
++__u8  xor8_result = 0;
+ __u64 xor_noreturn_value = (0x110ull << 32);
+ 
+ SEC("raw_tp/sys_enter")
+@@ -119,6 +147,8 @@ int xor(const void *ctx)
+ #ifdef ENABLE_ATOMICS_TESTS
+ 	xor64_result = __sync_fetch_and_xor(&xor64_value, 0x011ull << 32);
+ 	xor32_result = __sync_fetch_and_xor(&xor32_value, 0x011);
++	xor16_result = __sync_fetch_and_xor(&xor16_value, 0x011);
++	xor8_result = __sync_fetch_and_xor(&xor8_value, 0x01);
+ 	__sync_fetch_and_xor(&xor_noreturn_value, 0x011ull << 32);
+ #endif
+ 
+@@ -131,6 +161,12 @@ __u64 cmpxchg64_result_succeed = 0;
+ __u32 cmpxchg32_value = 1;
+ __u32 cmpxchg32_result_fail = 0;
+ __u32 cmpxchg32_result_succeed = 0;
++__u16 cmpxchg16_value = 1;
++__u16 cmpxchg16_result_fail = 0;
++__u16 cmpxchg16_result_succeed = 0;
++__u8  cmpxchg8_value = 1;
++__u8  cmpxchg8_result_fail = 0;
++__u8  cmpxchg8_result_succeed = 0;
+ 
+ SEC("raw_tp/sys_enter")
+ int cmpxchg(const void *ctx)
+@@ -143,6 +179,12 @@ int cmpxchg(const void *ctx)
+ 
+ 	cmpxchg32_result_fail = __sync_val_compare_and_swap(&cmpxchg32_value, 0, 3);
+ 	cmpxchg32_result_succeed = __sync_val_compare_and_swap(&cmpxchg32_value, 1, 2);
++
++	cmpxchg16_result_fail = __sync_val_compare_and_swap(&cmpxchg16_value, 0, 3);
++	cmpxchg16_result_succeed = __sync_val_compare_and_swap(&cmpxchg16_value, 1, 2);
++
++	cmpxchg8_result_fail = __sync_val_compare_and_swap(&cmpxchg8_value, 0, 3);
++	cmpxchg8_result_succeed = __sync_val_compare_and_swap(&cmpxchg8_value, 1, 2);
+ #endif
+ 
+ 	return 0;
+@@ -152,6 +194,10 @@ __u64 xchg64_value = 1;
+ __u64 xchg64_result = 0;
+ __u32 xchg32_value = 1;
+ __u32 xchg32_result = 0;
++__u16 xchg16_value = 1;
++__u16 xchg16_result = 0;
++__u8  xchg8_value = 1;
++__u8  xchg8_result = 0;
+ 
+ SEC("raw_tp/sys_enter")
+ int xchg(const void *ctx)
+@@ -161,9 +207,13 @@ int xchg(const void *ctx)
+ #ifdef ENABLE_ATOMICS_TESTS
+ 	__u64 val64 = 2;
+ 	__u32 val32 = 2;
++	__u16 val16 = 2;
++	__u8  val8  = 2;
+ 
+ 	xchg64_result = __sync_lock_test_and_set(&xchg64_value, val64);
+ 	xchg32_result = __sync_lock_test_and_set(&xchg32_value, val32);
++	xchg16_result = __sync_lock_test_and_set(&xchg16_value, val16);
++	xchg8_result  = __sync_lock_test_and_set(&xchg8_value, val8);
+ #endif
+ 
+ 	return 0;
 -- 
-2.34.1
-
+2.42.0
 
