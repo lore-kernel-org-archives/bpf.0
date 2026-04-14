@@ -1,118 +1,162 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EFD1B4224
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 14:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776178099; cv=none; b=RZDpDT9WOtGJEJLllPCgbpxOKl8DL1PBemiMlciArCO/b+8NJLX+roNSNCCpKz2J50vbCasMpdhwBkh1i9c48h2dZpA2KZm4fml9yH3JiELEA0RIANnIbIUyNpDmexL+nulIj5pJTLnGxHpFdg5ZgZMtDq/4bN0ToEjkDA7gYJQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776178099; c=relaxed/simple;
-	bh=+HuZaVweJXgTyzQ6erpXIoY9txv2iB96rPKNVFlaNJ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EAHrKMQW9LI46ZrgvOQ1wGbjynHqIi5xYi8d9RlHauup1UNcp6HwwDUGHgcrkwNQaWLDlaaAuZIOFaFailsVROgbUk8RjZfgJF7K+y3XkRJtulHmnHypiCEuvi9CoQio3hydJR0kEYkkeM07CNSFYjsJoiec7O8kEu3JL+BhTxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=id8E5AfT; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A833E6398
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 15:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776179424; cv=pass; b=ncTZG7XOXPo4+liI1MLLAFY8IlH9VjDWZdJVbGvMB7H0H8f6xm6OoRcH/pTd/BX8DmtHOWsTbXTyHmLXNdfo7V+jScxHBFsHxi0Ps1qqRYy8iXtjaMYyAHfACxq6d3SqNwVZTZMyZQsDoOQ9HwgztUBRqWlChTR01S0Mj2l6ais=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776179424; c=relaxed/simple;
+	bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AVuDQ7CD1lUaLOClnp4ERb2rHTgVcM/EpNvBuJJrFnOkzGgfue7p/lsR4rxW2n2ikxHJjmbbUZlCfB9pZ8kpQeJsGfNVPAtovtcqjYmiBTBEbBlRr2+v3mkRkiiX8WonncpqFWPEeZhZvns0dcqRzoMIsYCrTc10wiSiMy/rMq4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eUKFA+2A; arc=pass smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="id8E5AfT"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4887ca8e529so37665775e9.0
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 07:48:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eUKFA+2A"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d734223e4so1665840f8f.0
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 08:10:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776179421; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MkYKHoOozrOicXAYAzlIxCWoPezNabA2bGNL5mOMcXJ4dD3oputqz7RQ/K0A1kCJ6o
+         RTENZgAqyzrpk5pKFTuLUJ4Kg4BuVwMpzHMNqDiFscADxVkyoA55SP7EIPXealVbnG6v
+         bxuGmdT87N8BZoG4mMnkHVumGhrAIkzsDcd128KM6goWv0EmxAgd5+VbuO9xS+1ufZMc
+         v63aYs4YylGDz9IHktHY4MuLgQS0TzIrzI4FQUa5VOeAD4jLG87UrWjgxz970rnLmG+I
+         MiqEtZ/drKyAwapO3+SC8Bqy5RZg4nM6hUOLJOAbF5sDqEao9Ok+pZH0oxoAxVz7oFp1
+         z/jQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+        fh=xLFmWPTUt3pgg6mrFDsK52YQyOm24x7GryxnGNPcBAg=;
+        b=LUidYlF+AI53EM2jerapODh/GjzCorgau9woviFPkoZGwld/XwyDga77DhUjIQoYJd
+         +Pd7VzxRoLRcF5qdY+eGfMHkxJHrYdsr9iKohy9yThNr6x3xseuDiumI6P48RZzbFEcF
+         ycyPsFlj/BkcFOZRRmfKdey2Ps8hGcvPl/EwCU8aTy1KypRG/CVkeF4ccQSJiSO2wk5c
+         VcmTSSA3/o6QFeVXdXU3tgXcHnvXF4CRI6ia9kHYqp4m5t1m27/kNHNMFrUXUa47iWz1
+         z6myVKO9rgrVIb3chppL9ldSKRzJCmVGGHQD1ckbk+RUKpEiB/kklx+1nQCraAzEk18N
+         fTfg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776178096; x=1776782896; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qs3FTaDVrhGRqFvZSZtkN7YawmSROR8+0cRgAi/+3fA=;
-        b=id8E5AfTFD7k4N+ZFNSxnzr6knH8KRm1miE5Yx9HkvzNETF5lns+6fUfNYjiom8N70
-         2JTSdG3qoh1EhNH8QvcQkFeQygpKyq3uGn/+rUiZ8qxM4yi2Yf0eJza4+EUCczPQSRqO
-         t6Iw4gW63kw3Xbj9Hr4xrx28rUbICqxqpaJ/m3Y/aV0U+nlzuHvJO43PfNwRhK2bNWf6
-         U7o18Z0X3Db054JBiAJJsH/PeJpOv2Y2WvcglvS1YTNiYZFj7DsL/LwSgtt3OItsXTvo
-         PuYfoBXFdPHOd4EzQ7GbTfNCm1Q5wBfeKn2y+xeTxx8JuvtBPK9rEz64GclwKnx3LszY
-         f/+A==
+        d=gmail.com; s=20251104; t=1776179421; x=1776784221; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+        b=eUKFA+2AoQREtn0iyQraI6Pd872uELauer8EVJrgJNhwKAL5DDkqWPhcB/7eDyozrx
+         qbp9AJD0LHtNW1OtDScOl8AJVcbQOTNhU6w3VpD4FhCfMk0lNNP/jQ+LJwQ0drfIq1wI
+         0oNyhdBZv/fo7rrKJ1W5X9KGjMvlW7rSLEGpsjo/XfKYyglsnire53d/4PbfQJEqNXDL
+         3lOmas2U6pCwaTfM++sGZBaeyn5QXX/V/ErK0tawok/bWwzgOHtquIHAdxnsqGJhX+u4
+         ocUpxh0rqMDOtK4blQIOE61GbogTPRhfyYmworZTWngPik83hC1PFpMdJF4kTzTTk8wX
+         ZgGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776178096; x=1776782896;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qs3FTaDVrhGRqFvZSZtkN7YawmSROR8+0cRgAi/+3fA=;
-        b=X5eydDccXk1mPkYhhCqxInwgrEX3xXU4X0Jg3dJrXIM6Amw9KtBEXLEeR7UQxKg6kn
-         TSQBNOsB7AOgtOxvFf7ceGvDmrYU4ptFJJa6wytq8czMxgYRPI3B4Kd02vL7lkQduoDP
-         fxYJNZsGxMEQCeAdDYd+sAAs+eYnB5cFNj4xRFwDVTQEix5z/jYm6Kr1ka0uiGtUBrNw
-         0PDmtGS2jNXG2fIcsO4fS8hW5MNVNfFuQ5yu9FFKN8d/vbrRh1ihJQdWu7385iimB8uV
-         jhvnrMEnSkW1XKKbzeMbug2+CVwg7sjPqZt7miayh/NgYcAIp4502h2C5vpmLEyh8WBv
-         YBDQ==
-X-Gm-Message-State: AOJu0Yx1VjxNMdy4v4/z+qUPgk77KbR7cE6kruoN5h4F9BOhT4t7/iEu
-	zbymTc2EVuy6uDITkm+xRpCnW4we3sgwkMN5nv0BSxtoM+FAqHqI7kT6
-X-Gm-Gg: AeBDiesbKy/MYdBkYBgv/bHibgu1oEp0L/F4t/BNFSu+dlu9sbKc7pimHu7BnBmWcNy
-	6OPxy2GCYn0jPTGM56PqkLkRwbKNTKbHGgyyy5e8doEYBNX8lTTjkBwqlriIa6xsNzhLlykGkxT
-	GONqb5FX1Bl/MEVdEi3UIfiwCwRrrHpAvEGCwiOrtVek7UCwcBE3MXKPU47CcjJeYZ1O+kGc0Iz
-	4MnjhvXCdD7OlhC3/rdzCiszmTTGEe5ZV9nYsCYzi9ycEhXHPoBcq62R4F2A9A2rqQuNgsAhW/h
-	xJRcnA6FCtaO1MNrGikh7Y3R8jPx9PYI+dCq/LK605lg4aixLtggHXQpJSO5En3i7JV4S6kv2Z5
-	AetbIPXHcrIz9hLfHZ3NHCBluftB1MIgOxNQmbNlXF3qh1MkG0Y34PF6COD48Lv/H3tp7IHSVj+
-	VPftPFBWq9u70xOdyJFjj9VBOSnAKaXtQ0zynpWR8MrnAUWwPtt+wNCmOuYXbEODHwtlQpze5zK
-	CpPlrzJHfWD16opLFJZWBWJvW6o+gHfGxfS5jGWsO+s6ub2SzLo2U3v6qlQeRMV020daD4I+fcg
-	jop+kGVdryztPAtznzRb0cpj1JFjRUqa2IEIl0jE2FYemMzsV5p/iQ==
-X-Received: by 2002:a05:600c:19cd:b0:488:c239:d498 with SMTP id 5b1f17b1804b1-488d68712d5mr246717425e9.8.1776178096002;
-        Tue, 14 Apr 2026 07:48:16 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e002e3feaf8ac5b1b0d.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:2e3f:eaf8:ac5b:1b0d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488d5d768afsm183992125e9.2.2026.04.14.07.48.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2026 07:48:13 -0700 (PDT)
-Date: Tue, 14 Apr 2026 16:48:12 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>,
-	Xi Wang <xi.wang@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Pu Lehui <pulehui@huawei.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] bpf, riscv: Remove redundant
- bpf_flush_icache() after pack allocator finalize
-Message-ID: <ad5TrE-wIiw4rHvg@mail.gmail.com>
-References: <20260413191111.3426023-1-puranjay@kernel.org>
- <20260413191111.3426023-3-puranjay@kernel.org>
+        d=1e100.net; s=20251104; t=1776179421; x=1776784221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=A7c7tKPqaKq3NgFiv2DNK8q/BvKoh1wbxDHgCCrA1+c=;
+        b=UabjrDZx8zqUlyziKMn2LcAyOPi4ggI1dqa4me1bVC5WPdfKPISVMiwHle5ErWyq6r
+         biHrv+ru/+yxpJOTLNAjNI7B1CI3vrkClvTnuKPbrZowAQGyQuEszreA1CQUtV+PzZ40
+         OlI9H4rWdraaXcv3qmyrW5zIt69XDoGocug0EZNIIP6ev/EnD2ZGoHykECeTKavX9sjm
+         my0xIEsJinzneQtL9yHvc9+hG+tq2Ro7cPWYHNhBmlM42eufe9aYru1eF8m/59QCLpC/
+         +tRp9Ec8LFXFwVc4wJvIDRlL/ftEl8R/S6dPKVQR710rutM1zGhdPuwSwLgM0JuWrGbo
+         ZxzQ==
+X-Forwarded-Encrypted: i=1; AFNElJ910ZQGMb9OyH9aDzDlcfRndzPjY0waSMh57S/Jtu2g5UjsB7YTrifkWmjK76Q1czrsvPs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwBI2DLW0jNJoLhgCZ1we7mXWf6ajESiWXsCmZ82e7dh+N5vjb
+	FPM/Nft78uXmGooSNSMNVjSdTK+0OnKz9iwuteP+yQuyr1xnqQ1VvmbBQ51wwaAdV46EPQRBQnF
+	pXR4pJrYoX2S31xUstvtJgQn9z0ErSNE=
+X-Gm-Gg: AeBDievqxWO/fbf4l4dSRkAH5E04K+OpjSt4m0GjHVGfWjhnIYvOHXeTlxGcPW/jvKH
+	+81vvdF9h3khg2HVl+GB9fvYrmO2VZQAbrQE53ViszK9H7bLnhZnAUe0HOFAUw9LeiG+kV5sRxi
+	63wvdHVwJ0CTqU+NazuLkwU95XcJ4jLVVHqPvk+3XNLxV+uDXqX6OSfAhvk05yTKsfouFAwoAzr
+	GaJU6o/KT7QnXs552eB7HjRZU8lLbud53q6hT2BXRLU1dfiGosiYZFGbh8ff88LxlxGG7x2lI7t
+	gBh+6PSbGVQs4VWJ528eci/0ro6VIP0gZk0vkV6r
+X-Received: by 2002:a05:6000:4110:b0:43e:a8cc:89b7 with SMTP id
+ ffacd0b85a97d-43ea8cc8c24mr1517128f8f.3.1776179420992; Tue, 14 Apr 2026
+ 08:10:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260413191111.3426023-3-puranjay@kernel.org>
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com> <20260413-kasan-v1-1-1a5831230821@bootlin.com>
+ <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
+ <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com> <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
+In-Reply-To: <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Tue, 14 Apr 2026 17:10:08 +0200
+X-Gm-Features: AQROBzAtXSFwPeCMpZ2dGca-DBLsSXREgEyBZSQFf7Waht1WxQ2QIbb8WTtAIYs
+Message-ID: <CA+fCnZd31GzdpEqR8VhfK4JtUKyyRMgbBoAbeGACJgm7WvB6Vw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, ebpf@linuxfoundation.org, 
+	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Xu Kuohai <xukuohai@huawei.com>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	kasan-dev <kasan-dev@googlegroups.com>, linux-mm <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 13, 2026 at 12:11:09PM -0700, Puranjay Mohan wrote:
-> bpf_flush_icache() calls flush_icache_range() to clean the data cache
-> and invalidate the instruction cache for the JITed code region. However,
-> since commit 48a8f78c50bd ("bpf, riscv: use prog pack allocator in the
-> BPF JIT"), this flush is redundant.
-> 
-> bpf_jit_binary_pack_finalize() copies the JITed instructions to the ROX
-> region via bpf_arch_text_copy() -> patch_text_nosync(), and
-> patch_text_nosync() already calls flush_icache_range() on the written
-> range. The subsequent bpf_flush_icache() repeats the same cache
-> maintenance on an overlapping range.
-> 
-> Remove the redundant bpf_flush_icache() call and its now-unused
-> definition.
-> 
-> Fixes: 48a8f78c50bd ("bpf, riscv: use prog pack allocator in the BPF JIT")
-> Acked-by: Song Liu <song@kernel.org>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+On Tue, Apr 14, 2026 at 4:36=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> > ACK, I'll try to use those kasan_check_read and kasan_check_write rathe=
+r
+> > than __asan_{load,store}X.
+>
+> No. The performance penalty will be too high.
 
-Tested-by: Paul Chaignon <paul.chaignon@gmail.com>
+With using __asan_load/storeX(), it will be one function call to get
+to check_region_inline(): __asan_load/storeX->check_region_inline.
 
-[...]
+With kasan_check_read/write(), right now, it would be two function
+calls: __kasan_check_read->kasan_check_range->check_region_inline.
 
+I doubt an extra function call would make a difference in terms of
+performance: the shadow checking itself is also expensive.
+
+But if the second call is a concern, we can move kasan_check_range()
+and lower-level functions into mm/kasan/generic.h and include it into
+shadow.c, and then it will be just one function call.
+
+To improve performance further, the JIT compiler could emit inlined
+shadow checking instructions, same as the C compiler does with
+KASAN_INLINE=3Dy.
+
+> hw_tags won't work without corresponding JIT work.
+
+You probably meant SW_TAGS here.
+
+HW_TAGS will likely just work without any JIT changes (even the
+kasan_check_byte() thing I mentioned should not be required), assuming
+JIT'ed BPF code just accesses kernel-returned pointers as is.
+
+> I see no point sacrificing performance for aesthetics.
+
+With the change I suggested above, there would be no performance
+difference. And the code stays cleaner.
+
+> __asan_load/storeX is what compilers emit.
+
+For Generic mode. For SW_TAGS, the function names are different.
+Keeping this detail within the KASAN code is cleaner.
+
+
+> In that sense JIT is a compiler it should emit exactly the same.
