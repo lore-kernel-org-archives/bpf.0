@@ -1,179 +1,88 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69612EDD78
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 08:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943BB363C7A;
+	Tue, 14 Apr 2026 09:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776156838; cv=none; b=X4LOTgDPObLFAC5V1yHnkM3DA3wFJ/UJlV7UlZPTzuWLAwWT7jx4sEAmy79ffInxUTSpT64yZO6eLC1g2iVuZK8BYngiCYKMneBhZhQZmIadh+bBeyZvyYiQ9Rb8l0oDqb8K6EOFep+5LzbyLjdNBnjrLiqxLjJJkSwNtQQkoR4=
+	t=1776157237; cv=none; b=I1HgjW8fU++H8D4xXnfuyrEKDl28I49ncvfaT/JIMYQHtDBCdK91IjWWJpRK0xIk85fRwqyuYcCp9r6T2938lDalYhNBPFjjGqi++fWhp2X0aD617aTDO5RV34Ulr8pmuW/7nT0pDzZNzwEn0e/mnd6aPhj6Ln3jokdcl6WWKdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776156838; c=relaxed/simple;
-	bh=OVu9KdSJZseM7Nt2ItB4OpCFv/h6niQO/sezNN27FOY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QMqQfvkFoqycBXzgFP0wqQH6fsdfx0mPEkGrmQF6dxGiqh6B+yPzHlnI+joUcykntmkIfJrzpEQjs04kNF5K8Xu3PCNZy1nfLn/dudDdu5HIgHCIlxwpc262KxQPlQB+C50I6Mt+utk5y4PRthU6ElkdYraOmhmtL+9zddjY/18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CKKyqhqO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=D8045Z7D; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776157237; c=relaxed/simple;
+	bh=zdlo3W96ELYI1Fn/YDiVM4lAg7Ak4ObAMwHGqi668ag=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=B/Hh2/D83HZO1mY4iu+vNaf8j6MbsAkMLlfAcozYpELtoZLDtjYtqe9hgn2uPwd0IMgI99TLT5AhrJesGC0v9dIB7rfmAcFBtiu3Yrve808c4xx7haZVNYQOqwMqqIaj55dmgwCcOub6+PzrCUmKPyRiG7J23ZBqhuFerXi5LvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZWZf9eq5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CKKyqhqO";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="D8045Z7D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776156835;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oxmBacf55etftW8UnPkV/EpOImxHgh4CswOaaLPDOw4=;
-	b=CKKyqhqO2So0XpOB4Uh/L9Kq3rF8sqLrwta2N8pLYMrogylHIgUicCxeMU9HRexeSicwts
-	ryvVpSAg5otUrSF0cqmkD9nQCFSiYE3zghYUchT/hVf9rw6DZrTGxATC6+6sYtVBi0gObC
-	PLlgM6rO4wcefbgrdtsUTaDEAgeerAw=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-Pwns3EimN4C3w0m2xlE7nw-1; Tue, 14 Apr 2026 04:53:54 -0400
-X-MC-Unique: Pwns3EimN4C3w0m2xlE7nw-1
-X-Mimecast-MFC-AGG-ID: Pwns3EimN4C3w0m2xlE7nw_1776156833
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-488c74405ecso32623625e9.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 01:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1776156833; x=1776761633; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oxmBacf55etftW8UnPkV/EpOImxHgh4CswOaaLPDOw4=;
-        b=D8045Z7DM4W6TRMmcU3o9sEfc1br3fLGCCWbiZy6gZ036NAzT2SNL1ZO0JRVW9NAv7
-         +/L+RVVPNigrXF2DTqzeIkotIPNfokQwJlrQj5oUABBwTuD4dKek5A2WdNiDzYj3S+uZ
-         L+V/TSILikmX0dFpylurwkW4cfw8vTYf0J50Xl3K60H7BGw56Kxx5bCe3AtsBCQJqyE4
-         ZP6Z+02zx609KNdcioUQv61v9vxZ085+TxmI0XxZ8uYCRh5+ukpYnv4RnljYl7uJXE7o
-         2QmZ2mQTdTw91jnJEA4CyPcHyrNgZyJ2USNACTRucftITeH+uT4Xp798U2m5zXwONzmQ
-         d8hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776156833; x=1776761633;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oxmBacf55etftW8UnPkV/EpOImxHgh4CswOaaLPDOw4=;
-        b=I+g1sPJbXXOS0QcnV1+KEiXNxu7+rhj6bNwuYgvE72mFQB11Hld7F9VzK9yN4TU+kt
-         1HyBIhhEB2wECjC0CMdAntyjbkHGoDnwnZfFn1vcTaf3IYtuHmoob7zflw7ydRoLwfAw
-         ViXFfH+DYKTf1Samj6oBqpFgCB5RUWgFYZ7mhqMS9u5yZDjzNIPWYoUrMi3Jfdsk5RV5
-         WFIYeroSOS2OcR+OQ/Nqz6z6Z13uxZEPsRsVN7+hI4jb8+G7fX2T60n7eq7S4DIp43dD
-         oHC817Kz/cYQbq+tv+nuVrAc/wF/5RbGfCR9WUXlZTWTCUb+IkypWjqLRiraap6K45ao
-         5+Tg==
-X-Forwarded-Encrypted: i=1; AFNElJ+DmeGxXcvnZC6ReeBCMqfN2ErU+/4nH2GIhClOmy0EsSs6FRxxSWN56foGdmLoGDHVaxo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrJE3xhJVPaL4mK4H/bQhdPOgkUs5SU6cjnGftPznObFa1OWGL
-	R0BDog+PKF+EJEvPB+s6T8xuH2J6mG9COxEc9GZYgd8niazxNC9iD2H2jMSCoqse5ovTFB8tDXx
-	K1Z3OokTRuE5PYCKYmDhGUnY1Yy9C6tj0dLdvoPNnrZcXFm9JlWvoVA==
-X-Gm-Gg: AeBDiesTYE5/QHv1ArAtKMmSqit0qeUYEmjEoT1gnAmjEP3EZ5eWy2KOFIzuBYDxiDW
-	vfBm7pI3qr039dcl2GC1BGeztMTjAh0MxEQx3ujYs1pJWuCgKXZY9OHpDkmgaG8sgRvth8CdCwj
-	Zjjz9NGfkEp8YeKiPZQzxkUoMKnX7IQ0PZO/ygeM1GF8fEGkI41Ea44YP6AVzcvHXqg4b+Da2XC
-	TL2ztLKYX1SFwqdUUlLL4g9ryOyx66B72NcPxmB/xpwZL6Ic751nzeEy8lEPGdy3o5lGjSwO9kt
-	Lv83wLpmBAF9FdkF/LPQWkTTkEN08NO44c4+AsvujnnvEoFpsg/frhxhs2mSN/DgSPWNC5oLi1u
-	cbxXAhuoYr770IdNyS775H63tTcF0vtUI1JdWsYKrlJBSTttYEmZ2oNkZ
-X-Received: by 2002:a05:600c:3150:b0:486:fcc7:d6a with SMTP id 5b1f17b1804b1-488d67f4c4dmr251372745e9.13.1776156833169;
-        Tue, 14 Apr 2026 01:53:53 -0700 (PDT)
-X-Received: by 2002:a05:600c:3150:b0:486:fcc7:d6a with SMTP id 5b1f17b1804b1-488d67f4c4dmr251372295e9.13.1776156832656;
-        Tue, 14 Apr 2026 01:53:52 -0700 (PDT)
-Received: from [192.168.88.32] ([216.128.11.125])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d6f4bf2b4sm23579778f8f.20.2026.04.14.01.53.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2026 01:53:52 -0700 (PDT)
-Message-ID: <c79bdb62-eab2-4bf3-af8b-3875730adc53@redhat.com>
-Date: Tue, 14 Apr 2026 10:53:49 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZWZf9eq5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32749C2BCB8;
+	Tue, 14 Apr 2026 09:00:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776157237;
+	bh=zdlo3W96ELYI1Fn/YDiVM4lAg7Ak4ObAMwHGqi668ag=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ZWZf9eq5oxhWlXD4nF9KwNW8yueehxVajGxgb4AFdgySiJdNBfnFle4VuOpMfnPYH
+	 Vk7r858G5iRg7BEFRHmzIIzGgC+vOf5muZojJ1NOA1HMzHKoeJ3lq2krEQtvzbvV3y
+	 TlesjKkg03i5dR6MTrsf3RwnLEB3h5gUfbGZ4V1RLGfXqFJSzwHbtSmspvUdC4Dzqo
+	 2ZDiqD2fCiqRrF0SN0tDao2hIoCY5bdL3czlA1tKMCrF8aQP5GsW03baHXSEr2rd5P
+	 WMo6pV6QDsN/SjiFn0FtYNj+hRMuSwUUx0jZyJJEKkZfzq0ypxWFULHN/zw7q8Hc1w
+	 a2xS6El1ogjIg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE553809A0B;
+	Tue, 14 Apr 2026 09:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v7 1/2] net, bpf: fix null-ptr-deref in
- xdp_master_redirect() for down master
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
- Martin KaFai Lau <martin.lau@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Jussi Maki <joamaki@gmail.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v7 0/2] net,bpf: fix null-ptr-deref in
+ xdp_master_redirect() for bonding and add selftest
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177615720804.778664.16896373121000918147.git-patchwork-notify@kernel.org>
+Date: Tue, 14 Apr 2026 09:00:08 +0000
 References: <20260411005524.201200-1-jiayuan.chen@linux.dev>
- <20260411005524.201200-2-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260411005524.201200-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20260411005524.201200-1-jiayuan.chen@linux.dev>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, jiayuan.chen@shopee.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ hawk@kernel.org, shuah@kernel.org, joamaki@gmail.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-On 4/11/26 2:55 AM, Jiayuan Chen wrote:
-> syzkaller reported a kernel panic in bond_rr_gen_slave_id() reached via
-> xdp_master_redirect(). Full decoded trace:
-> 
->   https://syzkaller.appspot.com/bug?extid=80e046b8da2820b6ba73
-> 
-> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter, a per-CPU
-> counter that bonding only allocates in bond_open() when the mode is
-> round-robin. If the bond device was never brought up, rr_tx_counter
-> stays NULL.
-> 
-> The XDP redirect path can still reach that code on a bond that was
-> never opened: bpf_master_redirect_enabled_key is a global static key,
-> so as soon as any bond device has native XDP attached, the
-> XDP_TX -> xdp_master_redirect() interception is enabled for every
-> slave system-wide. The path xdp_master_redirect() ->
-> bond_xdp_get_xmit_slave() -> bond_xdp_xmit_roundrobin_slave_get() ->
-> bond_rr_gen_slave_id() then runs against a bond that has no
-> rr_tx_counter and crashes.
-> 
-> Fix this in the generic xdp_master_redirect() by refusing to call into
-> the master's ->ndo_xdp_get_xmit_slave() when the master device is not
-> up. IFF_UP is only set after ->ndo_open() has successfully returned,
-> so this reliably excludes masters whose XDP state has not been fully
-> initialized. Drop the frame with XDP_ABORTED so the exception is
-> visible via trace_xdp_exception() rather than silently falling through.
-> This is not specific to bonding: any current or future master that
-> defers XDP state allocation to ->ndo_open() is protected.
-> 
-> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
-> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
-> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  net/core/filter.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index cf2113af4bc9..9ec70c4b7723 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4398,6 +4398,8 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
->  	struct net_device *master, *slave;
->  
->  	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
-> +	if (unlikely(!(master->flags & IFF_UP)))
-> +		return XDP_ABORTED;
->  	slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
+Hello:
 
-The AI review noted that the master could be (theoretically) NULL here.
-Since that event is not a regression (unconditional `master` dereference
-already present) and syzkaller failed to trigger it (despite being the
-sort of thing syzkaller is very good to find) make me thing it's better
-to eventually follow-up instead requesting another revision here, but
-please have a look.
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Thanks,
+On Sat, 11 Apr 2026 08:55:18 +0800 you wrote:
+> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> 
+> This series has gone through several rounds of discussion and the
+> maintainers hold different views on where the fix should live (in the
+> generic xdp_master_redirect() path vs. inside bonding). I respect all
+> of the suggestions, but I would like to get the crash fixed first, so
+> this version takes the approach of checking whether the master device
+> is up in xdp_master_redirect(), as suggested by Daniel Borkmann. If a
+> different shape is preferred later it can be done as a follow-up, but
+> the null-ptr-deref should not linger.
+> 
+> [...]
 
-Paolo
+Here is the summary with links:
+  - [net,v7,1/2] net, bpf: fix null-ptr-deref in xdp_master_redirect() for down master
+    https://git.kernel.org/netdev/net/c/1921f91298d1
+  - [net,v7,2/2] selftests/bpf: add test for xdp_master_redirect with bond not up
+    https://git.kernel.org/netdev/net/c/8dd1bdde38af
 
->  	if (slave && slave != xdp->rxq->dev) {
->  		/* The target device is different from the receiving device, so
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
