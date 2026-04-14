@@ -1,259 +1,207 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40F013D891;
-	Tue, 14 Apr 2026 14:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FBA27380A
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 14:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776176893; cv=none; b=jUoA94/cZRmz1uYBLYLBBpCuncxruInG7qNUKhSGTugrWKuu2QgiMTscH7R4wXpPiJbIiKC2uYU1dlgLDkcMobV6PPL9PRyesVI20pMm1uHip8nFETuNiETP2Jrap+nDLfDpDZan8bHVAbXP+q+7Vu8/6MjOuijM6PN4wZHfVkQ=
+	t=1776176990; cv=none; b=I+K1yFWAV557DHmKN1cRjwwqGR43RgMrYBApT/E1Iv4BOSl1t1tJMtTXPID6zizUDB/w4Q5x3Sfx1yzr8xMBlQbISmzs+5gjrevt/YpWhq4z6Zk5LWUg+oWrz/3vAdvZmPjR3W7wam7VQYIoCznPdjgE8X4OS2n5QArywYG6KyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776176893; c=relaxed/simple;
-	bh=p8Zy4nEBkR+9ygIdN12Yw4cEGuBqrwNG0zv+nsgBx1Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TVe5WMhvnnu2uasAPZNLy2TPp6K1opV2uKgiQvwNNL9q4mCEvHQCO+vDInYGNlb5t+5bj9q7Qny/MBOVGcAewREKgwSxrj4Y8HvgZgSGdM7gfuUwn++cv6xPTdaxe6rK5TtZTr829kkUPw1Y6oC/+hiFGiA8zhf41zPrSVWCx9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=I6KproVw; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1776176990; c=relaxed/simple;
+	bh=6z5ZXTYPoAXpbPM6XzJpPVsG2nyNI96mXM+LnGFnXZo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ju3RKaGhLxPF2Uw/yihKLw2kEZrUNUApSHt0g3p+TVd9d5dEB3ftMr4c5GC8f3+WR/8HOWaoJeEGLuc6ZkiEMg6H/Y0+AM69B/T5AxLHHLLNCWTw2fU+kAv4zDd12qvwZcQspObUcuCKGM3tsOUQeJBj6haa8NV0SIyZFcR/FXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SxtIUDNV; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="I6KproVw"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCeWJ-00FB59-OP; Tue, 14 Apr 2026 16:13:39 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=X2qj25w98WiHnwStskIYNOIACWJIKBz1Po4lV2H/JLA=; b=I6KproVwiOhp3VkHnpZ4puOYjM
-	jKpsGVpJbMxuZqvrxuHCMXyXTQfaKrPISdyNIQRYV9QMuHwyJ6Ghdg6G8a1akSCYg1+ufMdLCZp2Z
-	UIilcls5V1RJJ4R+B79hmzYUk9uZxU/Xb1uvuuWqSDmOjWPmZEfDUYgrf8aKzn3pXLevKjmnXvc3B
-	dLIYQU1/ExoUVMtumBvM/yeMVU5SmJoosBwO5ZYXjqZYncQwBfHuBDVxTQLggP8pkOk0mSC7JQtlN
-	CPLJPm5Nusx1R+o0y4n3z5IFzbyvGi/KFHkTYRlyg6P2c1037Nx4I+e8KXQVUo86ZLVCiDNeVnDdn
-	9bg+S5jQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCeWI-0001rb-Ku; Tue, 14 Apr 2026 16:13:38 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1wCeWE-00DhbX-8g; Tue, 14 Apr 2026 16:13:34 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Tue, 14 Apr 2026 16:13:18 +0200
-Subject: [PATCH bpf v4 4/5] bpf, sockmap: Fix af_unix null-ptr-deref in
- proto update
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SxtIUDNV"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63EDdDLw1843301;
+	Tue, 14 Apr 2026 14:29:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=YjAnSX5zyRx35H14kLZgKz9J3KMf
+	UuvZPe4gzyVoh88=; b=SxtIUDNVYCdsePtpf4FbbQlG1JNkI1P1RLQlHerJ3E+M
+	syxRsgXwi5nDjHtpNK7TvZfUpTMq6hT6hA3b1py6pnYxIVhIfb1q9oGeJFTn/Hjx
+	7wa2ZiE/l3n+WMA9d+p29kbUyEaVKl3DR7p6YsjuGOZEcX8unyMsWfrDSlCL0l0M
+	mqjpiKCt2rG0RubH0NAHnlj2ZnveNvEWcHBzk4igmbvx8RCjN6EYHSPRmr/jAK8C
+	kHmjBYRKIzlr17lL2ehnFr+HjEKnfwIaMn838WVbz51nISFtonu/bXb9HA+upK6x
+	8cw9AjZEcmsXGTHDe7ZI6ygAPkPWQt0/pKDEQiUqZg==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89mk5qx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Apr 2026 14:29:35 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63ED82v0031191;
+	Tue, 14 Apr 2026 14:29:34 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg10y9xqt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 14 Apr 2026 14:29:34 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63EETX1e30540388
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 14 Apr 2026 14:29:33 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9B3F958051;
+	Tue, 14 Apr 2026 14:29:33 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ABA345805C;
+	Tue, 14 Apr 2026 14:29:31 +0000 (GMT)
+Received: from thinkpad-p1.aag-de.ibm.com (unknown [9.52.219.66])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 14 Apr 2026 14:29:31 +0000 (GMT)
+From: Maxim Khmelevskii <max@linux.ibm.com>
+To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: [PATCH bpf-next] s390/bpf: inline smp_processor_id and current_task
+Date: Tue, 14 Apr 2026 16:29:26 +0200
+Message-ID: <20260414142930.528751-1-max@linux.ibm.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260414-unix-proto-update-null-ptr-deref-v4-4-2af6fe97918e@rbox.co>
-References: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-In-Reply-To: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Cong Wang <cong.wang@bytedance.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Michal Luczaj <mhal@rbox.co>, 
- =?utf-8?q?=E9=92=B1=E4=B8=80=E9=93=AD?= <yimingqian591@gmail.com>
-X-Mailer: b4 0.15.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDEzNCBTYWx0ZWRfX0IN6RLOTCZ8y
+ 2sBaWW50O+mbko41o95tba84mR1bcDQCHmGXm8M4tLNshiswRdKLw7s31lzQ5V5qjzrpkfOQWuR
+ QhwZyJnAs2S5GpdyNec3LmXEJ/whWy8WYuYD/wyTfSrTmScqP9sCpUVXjZXNF6l1s4KC7pPabFA
+ N9FDC5yZLyRy+l6+PPiLdj3rBPmSbcIZfTpkekPBUev49kF1FJStjMxBMb6RCSVHASs8Pyinyjz
+ mQI6qa9/fu9FY/OnDt0SPun/VsJxhgcp4PZYxmlAL5JYBpNh/+opzWae4/IKZQnfD8oWdLHUM46
+ NBCg0bc12FaOAlEqIq78WDjpKIgCZhwZ1zNnOwNzRPfRybid/ONL+lVfuV5O5OexKgmEk4MYOzX
+ w08InAvhvKBRrMaS0JIcQRL39Nx2JOKd8wwT35qe4CDcL4QCWuNmgDxGkRj7m1dIMOMqE21nDdl
+ WvRXqeUwh0dbh+8FOIQ==
+X-Authority-Analysis: v=2.4 cv=eJ4jSnp1 c=1 sm=1 tr=0 ts=69de4f50 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=NEAV23lmAAAA:8
+ a=VnNF1IyMAAAA:8 a=xk9cym82weemkfCegS0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: Mnc2js8KdH3KEWTsikY5JMl_lK_7U-mV
+X-Proofpoint-ORIG-GUID: Mnc2js8KdH3KEWTsikY5JMl_lK_7U-mV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-14_03,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ clxscore=1011 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604070000
+ definitions=main-2604140134
 
-unix_stream_connect() sets sk_state (`WRITE_ONCE(sk->sk_state,
-TCP_ESTABLISHED)`) _before_ it assigns a peer (`unix_peer(sk) = newsk`).
-sk_state == TCP_ESTABLISHED makes sock_map_sk_state_allowed() believe that
-socket is properly set up, which would include having a defined peer. IOW,
-there's a window when unix_stream_bpf_update_proto() can be called on
-socket which still has unix_peer(sk) == NULL.
+Inline these calls in bpf jit:
+ - bpf_get_smp_processor_id()
+ - bpf_get_current_task()
+ - bpf_get_current_task_btf()
 
-         CPU0 bpf                            CPU1 connect
-         --------                            ------------
+s390 has a 8 KiB per-CPU prefix area in the CPU's
+virtual address space, called the lowcore. It is a
+struct that contains the cpu number and a pointer
+to the current task. These are exactly the values
+returned by the BPF helpers.
 
-                                WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
-sock_map_sk_state_allowed(sk)
-...
-sk_pair = unix_peer(sk)
-sock_hold(sk_pair)
-                                sock_hold(newsk)
-                                smp_mb__after_atomic()
-                                unix_peer(sk) = newsk
+Emit a load from the lowcore instead of a helper
+function call.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000080
-RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
-Call Trace:
-  sock_map_link+0x564/0x8b0
-  sock_map_update_common+0x6e/0x340
-  sock_map_update_elem_sys+0x17d/0x240
-  __sys_bpf+0x26db/0x3250
-  __x64_sys_bpf+0x21/0x30
-  do_syscall_64+0x6b/0x3a0
-  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+JIT output for `bpf_get_smp_processor_id`:
 
-Initial idea was to move peer assignment _before_ the sk_state update[1],
-but that involved an additional memory barrier, and changing the hot path
-was rejected.
-Then a NULL check during proto update in unix_stream_bpf_update_proto() was
-considered[2], but the follow-up discussion[3] focused on the root cause,
-i.e. sockmap update taking a wrong lock. Or, more specifically, missing
-unix_state_lock()[4].
-In the end it was concluded that teaching sockmap about the af_unix locking
-would be unnecessarily complex[5].
-Complexity aside, since BPF_PROG_TYPE_SCHED_CLS and BPF_PROG_TYPE_SCHED_ACT
-are allowed to update sockmaps, sock_map_update_elem() taking the unix
-lock, as it is currently implemented in unix_state_lock():
-spin_lock(&unix_sk(s)->lock), would be problematic. unix_state_lock() taken
-in a process context, followed by a softirq-context TC BPF program
-attempting to take the same spinlock -- deadlock[6].
-This way we circled back to the peer check idea[2].
+ Before:                       After:
+---------------               ----------------
+brasl   %r14,0x3ffe0385460    ly      %r14,928
+lgr     %r14,%r2
 
-[1]: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
-[2]: https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/
-[3]: https://lore.kernel.org/netdev/7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev/
-[4]: https://lore.kernel.org/netdev/CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com/
-[5]: https://lore.kernel.org/bpf/CAAVpQUAHijOMext28Gi10dSLuMzGYh+jK61Ujn+fZ-wvcODR2A@mail.gmail.com/
-[6]: https://lore.kernel.org/bpf/dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev/
+JIT output for `bpf_get_current_task`:
 
-Summary of scenarios where af_unix/stream connect() may race a sockmap
-update:
+ Before:                        After:
+---------------                ----------------
+brasl   %r14,0x3ffe0362a90     lg      %r14,832
+lgr     %r14,%r2
 
-1. connect() vs. bpf(BPF_MAP_UPDATE_ELEM), i.e. sock_map_update_elem_sys()
+Benchmark using [1] on KVM(virtme-ng).
 
-   Implemented NULL check is sufficient. Once assigned, socket peer won't
-   be released until socket fd is released. And that's not an issue because
-   sock_map_update_elem_sys() bumps fd refcnf.
+./benchs/run_bench_trigger.sh glob-arr-inc arr-inc hash-inc
 
-2. connect() vs BPF program doing update
++---------------+--------------------+--------------------+--------------+
+|     Name      |       Before       |       After        |   % change   |
+|---------------+--------------------+--------------------+--------------|
+| glob-arr-inc  | 244.954 ± 0.654M/s | 278.501 ± 0.834M/s |   + 13.70%   |
+| arr-inc       | 311.597 ± 1.016M/s | 313.610 ± 0.331M/s |   + 0.65%    |
+| hash-inc      | 47.421 ± 0.017M/s  | 47.600 ± 0.004M/s  |   + 0.38%    |
++---------------+--------------------+--------------------+--------------+
 
-   Update restricted per verifier.c:may_update_sockmap() to
+[1] https://github.com/anakryiko/linux/commit/8dec900975ef
 
-      BPF_PROG_TYPE_TRACING/BPF_TRACE_ITER
-      BPF_PROG_TYPE_SOCK_OPS (bpf_sock_map_update() only)
-      BPF_PROG_TYPE_SOCKET_FILTER
-      BPF_PROG_TYPE_SCHED_CLS
-      BPF_PROG_TYPE_SCHED_ACT
-      BPF_PROG_TYPE_XDP
-      BPF_PROG_TYPE_SK_REUSEPORT
-      BPF_PROG_TYPE_FLOW_DISSECTOR
-      BPF_PROG_TYPE_SK_LOOKUP
-
-   Plus one more race to consider:
-
-            CPU0 bpf                            CPU1 connect
-            --------                            ------------
-
-                                   WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
-   sock_map_sk_state_allowed(sk)
-                                   sock_hold(newsk)
-                                   smp_mb__after_atomic()
-                                   unix_peer(sk) = newsk
-   sk_pair = unix_peer(sk)
-   if (unlikely(!sk_pair))
-      return -EINVAL;
-
-                                                 CPU1 close
-                                                 ----------
-
-                                   skpair = unix_peer(sk);
-                                   unix_peer(sk) = NULL;
-                                   sock_put(skpair)
-   // use after free?
-   sock_hold(sk_pair)
-
-   2.1 BPF program invoking helper function bpf_sock_map_update() ->
-       BPF_CALL_4(bpf_sock_map_update(), ...)
-
-       Helper limited to BPF_PROG_TYPE_SOCK_OPS. Nevertheless, a unix sock
-       might be accessible via bpf_map_lookup_elem(). Which implies sk
-       already having psock, which in turn implies sk already having
-       sk_pair. Since sk_psock_destroy() is queued as RCU work, sk_pair
-       won't go away while BPF executes the update.
-
-   2.2 BPF program invoking helper function bpf_map_update_elem() ->
-       sock_map_update_elem()
-
-       2.2.1 Unix sock accessible to BPF prog only via sockmap lookup in
-             BPF_PROG_TYPE_SOCKET_FILTER, BPF_PROG_TYPE_SCHED_CLS,
-             BPF_PROG_TYPE_SCHED_ACT, BPF_PROG_TYPE_XDP,
-             BPF_PROG_TYPE_SK_REUSEPORT, BPF_PROG_TYPE_FLOW_DISSECTOR,
-             BPF_PROG_TYPE_SK_LOOKUP.
-
-             Pretty much the same as case 2.1.
-
-       2.2.2 Unix sock accessible to BPF program directly:
-             BPF_PROG_TYPE_TRACING, narrowed down to BPF_TRACE_ITER.
-
-             Sockmap iterator (sock_map_seq_ops) is safe: unix sock
-             residing in a sockmap means that the sock already went through
-             the proto update step.
-
-             Unix sock iterator (bpf_iter_unix_seq_ops), on the other hand,
-             gives access to socks that may still be unconnected. Which
-             means iterator prog can race sockmap/proto update against
-             connect().
-
-             BUG: KASAN: null-ptr-deref in unix_stream_bpf_update_proto+0x253/0x4d0
-             Write of size 4 at addr 0000000000000080 by task test_progs/3140
-             Call Trace:
-              dump_stack_lvl+0x5d/0x80
-              kasan_report+0xe4/0x1c0
-              kasan_check_range+0x125/0x200
-              unix_stream_bpf_update_proto+0x253/0x4d0
-              sock_map_link+0x71c/0xec0
-              sock_map_update_common+0xbc/0x600
-              sock_map_update_elem+0x19a/0x1f0
-              bpf_prog_bbbf56096cdd4f01_selective_dump_unix+0x20c/0x217
-              bpf_iter_run_prog+0x21e/0xae0
-              bpf_iter_unix_seq_show+0x1e0/0x2a0
-              bpf_seq_read+0x42c/0x10d0
-              vfs_read+0x171/0xb20
-              ksys_read+0xff/0x200
-              do_syscall_64+0xf7/0x5e0
-              entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
-             While the introduced NULL check prevents null-ptr-deref in the
-             BPF program path as well, it is insufficient to guard against
-             a poorly timed close() leading to a use-after-free. This will
-             be addressed in a subsequent patch.
-
-Reported-by: Michal Luczaj <mhal@rbox.co>
-Closes: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
-Reported-by: 钱一铭 <yimingqian591@gmail.com>
-Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
+Signed-off-by: Maxim Khmelevskii <max@linux.ibm.com>
+Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- net/unix/unix_bpf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/s390/net/bpf_jit_comp.c | 37 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
-index e0d30d6d22ac..57f3124c9d8d 100644
---- a/net/unix/unix_bpf.c
-+++ b/net/unix/unix_bpf.c
-@@ -185,6 +185,9 @@ int unix_stream_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool r
- 	 */
- 	if (!psock->sk_pair) {
- 		sk_pair = unix_peer(sk);
-+		if (unlikely(!sk_pair))
-+			return -EINVAL;
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index d08d159b6319..93ab2fb16b99 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -27,6 +27,7 @@
+ #include <asm/extable.h>
+ #include <asm/dis.h>
+ #include <asm/facility.h>
++#include <asm/lowcore.h>
+ #include <asm/nospec-branch.h>
+ #include <asm/set_memory.h>
+ #include <asm/text-patching.h>
+@@ -1777,6 +1778,30 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 		int j, ret;
+ 		u64 func;
+ 
++		/* Implement helper call to bpf_get_smp_processor_id() inline */
++		if (insn->src_reg == 0 &&
++		    insn->imm == BPF_FUNC_get_smp_processor_id) {
++			const u32 *cpu_nr = &get_lowcore()->cpu_nr;
 +
- 		sock_hold(sk_pair);
- 		psock->sk_pair = sk_pair;
- 	}
-
++			/* ly %b0, cpu_nr */
++			EMIT6_DISP_LH(0xe3000000, 0x0058, BPF_REG_0, REG_0, REG_0,
++				      (unsigned long)cpu_nr);
++			break;
++		}
++
++		/* Implement helper call to bpf_get_current_task/_btf() inline */
++		if (insn->src_reg == 0 &&
++		    (insn->imm == BPF_FUNC_get_current_task ||
++		     insn->imm == BPF_FUNC_get_current_task_btf)) {
++			const u64 *current_task =
++				&get_lowcore()->current_task;
++
++			/* lg %b0, current_task */
++			EMIT6_DISP_LH(0xe3000000, 0x0004, BPF_REG_0, REG_0, REG_0,
++				      (unsigned long)current_task);
++			break;
++		}
++
+ 		ret = bpf_jit_get_func_addr(fp, insn, extra_pass,
+ 					    &func, &func_addr_fixed);
+ 		if (ret < 0)
+@@ -3076,3 +3101,15 @@ bool bpf_jit_supports_timed_may_goto(void)
+ {
+ 	return true;
+ }
++
++bool bpf_jit_inlines_helper_call(s32 imm)
++{
++	switch (imm) {
++	case BPF_FUNC_get_smp_processor_id:
++	case BPF_FUNC_get_current_task:
++	case BPF_FUNC_get_current_task_btf:
++		return true;
++	default:
++		return false;
++	}
++}
 -- 
 2.53.0
 
