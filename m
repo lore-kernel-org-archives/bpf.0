@@ -1,168 +1,162 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0BA40DFB5;
-	Tue, 14 Apr 2026 03:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FDE4340A7D
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 03:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776136824; cv=none; b=RDF/8VfEESsrsoURR31UbuoP67aM1QiiK23dlBrA0dvCBAx1SrJbM5vyudgP+dVG+R6BkaJx8g3AHQzBTGA1mGYCC91mSKUNe51UFdujPN8LDNzSPfvjbSYPblFfZAPkSiMo2eO/+q8je0bufUa+2TLK0RkRjg4SOBnNvOgbChA=
+	t=1776139198; cv=none; b=iYVDyUN/FzqFkMQcsRLVe2OC93YMdcGvSuFNyV5TvcmcpS3JFNnSrj3v8MLxPL4GAwJuA50jIDXKq4H9dyKd1CgSgt1uTbRA4QXAjsThqshHR58m2VKe6r0Zw6/I+/JCH/wVu9msQscF/6/Yn15ASFcS2kv/zHSXmIL0WyiaaSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776136824; c=relaxed/simple;
-	bh=KnKZ4O80fmaPG17sZuZULYLcj3fiGYJgtgJiFcltv5I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XQhlUA/vi9DqhuOMASTYiCjwFP1VfF2HVRw7u/t6HXA6PGO5HOfbG9HnXQWaekTn3XuPow6M3RXfPdPIQVmMfW7EZtJ4cuuPzQbPG6RJOHnEsty5msZIOD+WFZkThzBO9JRi8cQs+MuoOe+D1b+y0eR91IYpiox6eY1eetpZh7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fvqJQ3PFyzYQtsY;
-	Tue, 14 Apr 2026 11:19:34 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 2459A4056F;
-	Tue, 14 Apr 2026 11:20:18 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP3 (Coremail) with SMTP id _Ch0CgA3Mrxwst1pANJVAQ--.64448S2;
-	Tue, 14 Apr 2026 11:20:17 +0800 (CST)
-Message-ID: <349fd6fd-97c8-4d80-8f2f-af5a9c7d3be9@huaweicloud.com>
-Date: Tue, 14 Apr 2026 11:20:16 +0800
+	s=arc-20240116; t=1776139198; c=relaxed/simple;
+	bh=UynYnHhtqrNA4eF5yZjesCpgsIKgtpf+dvKOxyDLvoo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=txaXcMQxnzAKHLZtVtj+3yWYYkVizea9Vn0MlgjD3zYrTcDybVtKGAd9g0GMtdUPVF0f/ACTMkX2IqOfrjoIvOgBbZwwugMvEnze7o0BZh9w/b2ujg5xWG1OsMOsGIYcOaJFjsw173cjLNwW3OqF9406YNHJ6x5+EBtlDsEl9hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bQptTkIk; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bQptTkIk"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488af96f6b2so67664765e9.0
+        for <bpf@vger.kernel.org>; Mon, 13 Apr 2026 20:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776139181; x=1776743981; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E9IBRabjOdZ1ovlAsFCvtBMhJQ8fnNOQwDdqpwrXeCY=;
+        b=bQptTkIkwTgJ3Gg9ugJcdfUVIYFHTJQC6fnxSakfJpRyjxv9b2yVXYkrY3NBUp039t
+         jNx2pqJJvlIyOt0dvu6lt5zUI9KCGimmpgWNkBCwuSSg9UzqIihzoCn+14t7QeaBfuEI
+         HXGSkmrIqqdk0nUWqfW+Ik1XB3GwUEPI12K6Cls4s+HuR+F1m0+LJjnPI8xlC6lq9ioC
+         r2Fjmk0hpv7MKR82vWNrwDri72jxLmxL0mXTyb1qEF6Ba87MjGAqRIiVoQYlckLRcNcN
+         /Dy6jV6Ab9CNHcBEjtwDOWard4e6jYZTA0Nj+zEx8+Mqj21kzLooDaY4R6096SThgdmN
+         KIQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776139181; x=1776743981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E9IBRabjOdZ1ovlAsFCvtBMhJQ8fnNOQwDdqpwrXeCY=;
+        b=YnsawBrNYwE8m52M/HHn/AlR+PU0woW2ir6CfNk0MLdefTmnjGgc1rmHmNrT3krY1F
+         g0fs//+w5cgk90VXwqqK+WQQ69FULbYKXUkXCtT+WkXZf/fyr2sL71pEj4578vGg6b0s
+         RswtEtvuNyVrlUemuTYbZ0mdoHa4ojn5FN+B/0URS9iIlNQd8Xa6aXiyXBvAVQFF8tzK
+         yleY5DE1PthRWx/FoStMIoLl06vawa8aUAKk2y/lz8QlTPqHP9tDlyBP1cu0cIqzGyux
+         vg6rMEXav1902/OM9I6WqgIlIla6Cju8aVnOeZ5LyZ1D4vKVJ6k+poxOh/jgeUTN9ioL
+         l0Lw==
+X-Gm-Message-State: AOJu0YxsHnZOA5nt3mPRVcRzmwz5DQlqkUotGecPDmuCslimPfP5DMrX
+	nGz7aSTjepmBpjqsrV35usm4VhihQeIo87yCUSPs84lsrrzVeQTJsipPuu2zgDIEF+Q=
+X-Gm-Gg: AeBDiesXUDaRRtw4+RnMO0blaYw84I/hiF8OZA3vvgRt6si1WsahhGg1fsfTl2OArAq
+	mwDtU3NMgjousillDXp1xu+97KNy6+PM4EDWTqDbPjs5lK07Hho0Fy7rXvfQ8SR3j2mVtcVGI1+
+	yP8lQOUEgYoxc/NmOF45QmZVskQCCGudCocIGMQR08+OZdMwtf527IUZ3Lu0xa2uffY10VBpq5h
+	9h6yYQ943/+s8NhLEmNU4IPsTG+NlwE+I9PAUfnEypBwNc37Kbb1fDn4X0NSWo350a/bhyNYLcc
+	sUH1vVEWw1o03CQ+sSpBnIdjFrgvda27IBu9DqAFaVxoYpfot95xy4VWZKZ1S/T2ZVE2LBGQvrQ
+	v5KDxAtxtSDjsU6CELJldoWWFnCMjIRdHHAax74lNXjFawyw2jtjdLPDP8YW7CnuqKemiXT3uHG
+	0t8zjUh0wh1k+hppEkc9ZNjgKeOUG2K9AgSGEAp7C/nsg=
+X-Received: by 2002:a05:600c:a404:b0:488:bfc3:ef3 with SMTP id 5b1f17b1804b1-488d6671271mr197493275e9.0.1776139181045;
+        Mon, 13 Apr 2026 20:59:41 -0700 (PDT)
+Received: from u94a (27-53-106-10.adsl.fetnet.net. [27.53.106.10])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c3459faa7sm19615691c88.2.2026.04.13.20.59.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2026 20:59:39 -0700 (PDT)
+Date: Tue, 14 Apr 2026 11:59:29 +0800
+From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, paul.chaignon@gmail.com, harishankar.vishwanathan@gmail.com, 
+	Helen Koike <koike@igalia.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] bpf: implement __reg_deduce_bounds()
+ using wrapped intervals
+Message-ID: <gvmhprcx6an4iumk7cno35azyseqpcbu634c6dvl4twshjtcse@4jdndkvxalsc>
+References: <20260318-cnum-sync-bounds-v1-0-1f2e455ea711@gmail.com>
+ <qfwof7nyxz2amrzbjxolhc7m2nvzzqpnwglafk4tuetdyuiixu@tlbntm5jgswg>
+ <69e94f86bf1d620b92b4128c0205ec0e29327d8e.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v14 1/5] bpf: Move constants blinding out of
- arch-specific JITs
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- yonghong.song@linux.dev, puranjay@kernel.org, a.s.protopopov@gmail.com,
- alexis.lothore@bootlin.com, list+bpf@vahedi.org, linux@armlinux.org.uk,
- yangtiezhu@loongson.cn, hengqi.chen@gmail.com,
- johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
- hbathini@linux.ibm.com, chleroy@kernel.org, naveen@kernel.org,
- luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
- pulehui@huawei.com, iii@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
- davem@davemloft.net, udknight@gmail.com, martin.lau@kernel.org,
- clm@meta.com, ihor.solodrai@linux.dev
-References: <7d88904b4028cbe124bbaba5739c525663bedc64.1776062885.git.xukuohai@hotmail.com>
- <fa46a9034904c7622f935d3e3a60264a37afda290705f40c816c9846c9d3f3f8@mail.kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <fa46a9034904c7622f935d3e3a60264a37afda290705f40c816c9846c9d3f3f8@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgA3Mrxwst1pANJVAQ--.64448S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZry7Kr45urykXrWUCr4UJwb_yoW5ZrW5pF
-	y8tFy7CF4qqFs7tw47XF48W3yYqw4rXFW3CF98Wryxtrn8XrykWr4fKrWa9FW3Ar90yrWF
-	vFs0grySka4DuFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
-	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	EksDUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69e94f86bf1d620b92b4128c0205ec0e29327d8e.camel@gmail.com>
 
-On 4/13/2026 9:47 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index 066b86e7233c..fc9fb3c07866 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
-> 
-> [ ... ]
-> 
->>   /**
->>    *	bpf_prog_select_runtime - select exec runtime for BPF program
->>    *	@fp: bpf_prog populated with BPF program
-> 
-> [ ... ]
-> 
->> -	/* eBPF JITs can rewrite the program in case constant
->> -	 * blinding is active. However, in case of error during
->> -	 * blinding, bpf_int_jit_compile() must always return a
->> -	 * valid program, which in this case would simply not
->> -	 * be JITed, but falls back to the interpreter.
->> -	 */
->> +	/* eBPF JITs can rewrite the program in case constant
->> +	 * blinding is active. However, in case of error during
->> +	 * blinding, bpf_int_jit_compile() must always return a
->> +	 * valid program, which in this case would simply not
->> +	 * be JITed, but falls back to the interpreter.
->> +	 */
-> 
-> This isn't a bug, but this comment still references bpf_int_jit_compile()
-> even though the code now calls bpf_prog_jit_compile(). Should this be
-> updated to match?
->
+On Thu, Mar 26, 2026 at 10:50:31AM -0700, Eduard Zingerman wrote:
+> On Thu, 2026-03-26 at 12:25 +0800, Shung-Hsi Yu wrote:
+> > On Wed, Mar 18, 2026 at 09:28:57AM -0700, Eduard Zingerman wrote:
+> > > Use wrapped intervals representation [1] to express range-based
+> > > deductions. Such representation allows to express these deductions in
+> > > a more mathematically rigorous way:
+> > > - {32,64}-bit signed -> unsigned, unsigned -> signed deduction infers
+> > >   improved bounds from an intersection of signed and unsigned arcs.
+> > > - 32-bit -> 64-bit and 32-bit -> 64 bit deduction infer improved
+> > >   bounds from projections of 32-bit arcs onto 64-bit space and
+> > >   vice-versa.
+> > > 
+> > > Reformulating 32-bit -> 64-bit deduction in such terms allowed to find
+> > > two cases currently not handled by deduce_bounds_64_from_32().
+> > > See patch #3 for details.
+> > > 
+> > > This RFC argues that wrapped interval based implementation for
+> > > __reg_deduce_bounds() is easier to understand and maintain.
+> > > An alternative to this RFC would be to update
+> > > deduce_bounds_64_from_32() in a same way patch #3 modifies
+> > > reg_bounds.c selftest, in order to handle newly identified cases.
+> > 
+> > I think introducing wrapper interval for purpose of improving &
+> > simplification of __reg_deduce_bounds() alone might not be enough. That
+> > said, I still want to push wrapper interval integration forward, but
+> > that will be addressed in a separate follow-up email.
+> > 
+...
+> > That said, we do pay some price as cnum is more mind bending and not as
+> > straightforward to grasp. Cognitive complexity cannot factor in the
+> > background knowledge required.
+> > 
+> > I do think there are more reason to push cnum/wrapped interval forward
+> > beyond using it __reg_deduce_bounds though. Will try to write a
+> > follow-up to this email.
 
-This comment is not touched by the patch, it was already there before
-the patch, so I'd leave it as is.
+Trying to pursue this line of thought further.
 
->> -		fp = bpf_int_jit_compile(fp);
->> +		fp = bpf_prog_jit_compile(fp);
-> 
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 67c9b28767e1..ec8afd6a9369 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
-> 
-> [ ... ]
-> 
->> +out_jit_err:
->> +	if (blinded) {
->> +		bpf_jit_prog_release_other(orig_prog, prog);
->> +		/* roll back to the clean original prog */
->> +		prog = env->prog = orig_prog;
->> +		goto out_restore;
->> +	} else {
->> +		if (err != -EFAULT) {
->> +			/*
->> +			 * We will fall back to interpreter mode when err is not -EFAULT, before
->> +			 * that, insn->off and insn->imm should be restored to their original
->> +			 * values since they were modified by __jit_subprogs.
->> +			 */
-> 
-> The comment references __jit_subprogs, but the function is named
-> jit_subprogs (no double underscore prefix). Should this be updated?
->
+Ideally we just have cnum in 'struct bpf_reg_state', and get rid of
+signed & unsigned tracking, and __reg_deduce_bounds would be the perfect
+place to start. Though as you have pointed out in [1], it will be less
+precise for cases where signed & unsigned's overlap in two ranges.
 
-Yes, it should be jit_subprogs.
+That said, the paper also states that cnum and reduced product of signed
+and unsigned domains are incomparable, which I take as cnum is not
+strictly less precise. And given the reg_bounds.c test you ran into is
+added specifically for ldsx[2], perhaps some special case would be
+enough.
 
-In addition, sashiko reported an issue that subprog_start of the fake
-exit subprog is not restored on the rollback path. It said that
-bpf_fixup_call_args() relies on this sentinel to detect the end of the
-last subprog. I checked the bpf_fixup_call_args() function and its child
-functions, but could not find any usage of the sentinel.
+But I suppose we'll just have to get to the full implementation and see
+whether Cilium, scx, and Meta's BPF programs pass to now for sure.
 
-IIUC, the sentinel is only used to compute the length of the last subprog
-and is not used after jit_subprogs fails, so not restoring it does not
-to be a real issue.
+If that fails we still have the much less elegant way of dealing with
+cases of split range with 
+ a. forking verifier state (like "Recognize special arithmetic shift in
+    the verifier")
+ b. use two cnum instead of one
 
-However, leaving the sentinel unrestored seems error-prone, and for code
-consistency, I'll restore it in the next version.
+Last of all we could keep sign and unsigned ranges, but convert them
+into cnum for all operations, then converting them back as this patchset
+does, spread to all operations beyond __reg_deduce_bounds; we should
+still get some simplification, just not sure if I am trying too hard at
+this point.
 
->> +			for (i = 0, insn = prog->insnsi; i < prog->len; i++, insn++) {
->> +				if (!bpf_pseudo_call(insn))
->> +					continue;
->> +				insn->off = 0;
->> +				insn->imm = env->insn_aux_data[i].call_imm;
->> +			}
->> +		}
+> Hi Shung-Hsi,
 > 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24345549165
+> Thank you for taking a look.  I have a work-in-progress branch [1]
+> which implements union and multiplication operators for wrapped intervals domain.
+> I'll plug it into the verifier and share the results in this thread.
 
+Thanks! Looking forward to the result.
+
+Shung-Hsi
+
+1: https://lore.kernel.org/bpf/bff0a144925370ba4c34be610f910a8ca0f91efb.camel@gmail.com/
+2: https://lore.kernel.org/all/20240723162940.2732171-1-yonghong.song@linux.dev/
+
+> Thanks,
+> Eduard
+> 
+> [1] https://github.com/eddyz87/cnum-verif/tree/arithm-ops
