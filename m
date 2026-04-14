@@ -1,134 +1,196 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D42345CAA;
-	Tue, 14 Apr 2026 20:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776199474; cv=none; b=ayDAx+TeySqL4xuq7THVVppCSRTLWIxZ+P1SRrTDUjDc2JrCJfk6uF2r2jGfxA4OJ7sxA+SAqo44LJPrsNy3TZ/O94htwCZEXVr3JuSw3sAABVFUL6UZXE3j4NwcEqtr+4dPyQ/eH68E9X+3+smEX8PsU+2m5EsXme5hWaQR7qE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776199474; c=relaxed/simple;
-	bh=L8bWJr7FXUdlTXBxL69DdsJ20JowQnELYHkBWQ0j71o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=ZmWG5uszWwbTG1lnUg84uX4Yyr6i3SRSfCm0DY7HTbbb+xRkzOXfHhK2lR32+a4IYrui09SFtr/Z53ZGkYJeRX3qn2kLM/ZB+SVPOkCaoiqbf/a26b8XML4fev8wzAAbAeL7C0UbtMdP74D8cLQTdDHIkAiL/Ubk25KgeAUU+eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tp0oFwTf; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B18F34CFD6
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776199479; cv=pass; b=egZ/L3FZW7s1DUzr2FAVzAVMGzilxgHB+4R/zIB/5Gc/AYHuEdjaJir+QCgyWT75fZlXMr+3pGLRUU2xlAN0N5ngZNZwHInt0eIDwBcoFtMBgWZwZdj4JatJ9U2JHYYxQBnwEJmzdpec18J/iUA/u+Xz4FIrMQrNwlUJZMLvelg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776199479; c=relaxed/simple;
+	bh=aQ0aNEU1NKIVhrIy+q01cYGQ+H3qfAr9fLe4K4e+a7A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TSD2V1u7WkCGD3TGVb368F0S+78ihPIjQsktqL60M3INUK9gZY+V/ZPw8OsVgImF+LhzREQBLAcuiwL7B8SKRTtdtbJd2aiMoAuqCHCt84hRAnqT7VQrmN1tg0YfUiaSBPhPgYJtVjF7H3gONEyx247r7lacL+1mRnCN1TWqJlk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Mq38fDxg; arc=pass smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tp0oFwTf"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 36C6FC5AAB7;
-	Tue, 14 Apr 2026 20:45:05 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CCCED60410;
-	Tue, 14 Apr 2026 20:44:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4D13710450F98;
-	Tue, 14 Apr 2026 22:44:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776199466; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=L8bWJr7FXUdlTXBxL69DdsJ20JowQnELYHkBWQ0j71o=;
-	b=tp0oFwTf5VHzsnEQcoI6YFXubpXr48s6UWlXK4aDR8EDMSSF+/OjNf6hUwJE2BAbHAdgPz
-	v2f4A8tTxVtK7dqJZfFAdjP+hWDl0Fam9eGGy91tNDrdqr1jGCVU5mlUKQsx7dKkw5Fj/o
-	8xB9Inm9XOYYzG+OqKhmNW03MF+ALRZMBSynxDWIF5QBxopuN97KxRbIxhOyfKSB9o6wkS
-	91454gD3J6J7wN/TaEOT0JgO64Dp+ztksnjtLIOwoMGIkVJ9RQPJZYo6iGmJA9iAtEHlyl
-	YSu689PmkWekOvBlF+bpB2iuXK1nNSBHe1tFVeClAIGo4vy+Vjuo6lCfP898kw==
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Mq38fDxg"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35dac556bb2so3510938a91.1
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:44:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776199476; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fbsrpL8sFUuC2Yr3VPIZAAfS85f5je+Qe+8VRUaJOII+9Wr4GnFAgqj+jnK5muAgO1
+         4r678BkIv7re7k4GnOcF8nlGaSauJmHvIdkHm9xAcwJTFUEVuS7W5wJouarcpdV/0M2w
+         W5liZy3s2HzOd9LySCnZuZmf7fvVQhVAbdyNAFPVyflAqneiCysqxlIWaE36yK291gol
+         9Pd93DPf8HPY3kvTnaSkCU6Ryb5kQSssLkNb1c8zyVGergnJ7J3nIoL/6bU09M+cv+dV
+         dRHuwixuyjzI29RbTFjJ6nuM9cDbr01G0WwvFl8R8HIZrwsyxzoUyJcWCuSOxSvx7upt
+         dyqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NK52TA8NFT/IbeGeLW1RBad6qmXIJT5VQoTcm/weixc=;
+        fh=XmKHd0bOZCIAfY4/AUy1z13vuqazj/PMbV7onPUEwC8=;
+        b=C1KgJG8MiiXHeaHAW8ZXOi4zGQRAZFZ+QkNQx+BD7K6FNYONi3xi5fDv6WPSLMzUF5
+         ySyJOt4P8Eov/VDY7Fi3Ih/0RnvsEvywBqkk7TwjaDbf47Sqfpk80oPYdMZAqg+hNB1j
+         c5J/KV70bZYsJtx80C5szetdLK9fZpsvPw2MRFoSTVYsmalRZSyz1sxpbWQJuVZSbUTn
+         rs7Kxwz/mfAGVcOHaC0flkjLFA3/achomiiZttFWvU3AYK+ZeVAX/TA8iPhKtzG5pING
+         GmHHVpuhWvObzI6gXPD/wLXDTmX9QdjaIQRYEwRcjS8pX1wHjbNuiIcy9biDWCPya5E8
+         XwQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1776199476; x=1776804276; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NK52TA8NFT/IbeGeLW1RBad6qmXIJT5VQoTcm/weixc=;
+        b=Mq38fDxgkRfbZriNhJABnogX4gz7zpqK0Au2qqDIFMX2ogbyvFEPsYjnLGTXlpO2Si
+         lW1aaS5H/r2peKduY50ri7h0VcaUV0dGMn2HR0TTNrcnMkksZEb+CN4/ZJprW6ZTc4sV
+         vDqSqP5yGnHQEepEQe2byxcoIpBgAabX4QoRoIe2qY4uAaWo9Fv/fdL+xrYqespMfRhr
+         CepcKaXSgv+DM7QAAW1CNNtc4sdRDzW+5zSK4iYBZ6Nm4drYrkQ5E7YWpiw2IGT81Y8U
+         FRklGCDNW+FbZIMM4Va/IH57P7gti6geKYN7jVTnAu2yrwx6o52NsPoEPbRpdXGQpQzN
+         XR/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776199476; x=1776804276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NK52TA8NFT/IbeGeLW1RBad6qmXIJT5VQoTcm/weixc=;
+        b=OOncNDsfZiAbpYQhybH0lYsRf/xr8p6t5hCndwQFeBT0z4oOq6v5qRw6ge5FeHt6Xy
+         4kig206o/YNqdpoACDC/UVWFW/RpJc+jdvljDFdc1XFuNZigTkEE2+f92PIX81mT8Vl2
+         hQxYuUnYlmrLHtQppM0Sou4wc/8J3JYNF4zn3p3MbtS29vTeMsoHxJ0d9gtrGZvVnDia
+         NSCmzCHbhTnFfjgS2BRmsq2tzplIlP80B0kWPKSXdBZEjD9pp5ZK8GnND8KPPSEV/YNE
+         R/Bi9t+iuqjIahMf+ZbxEN/w2CD4Uwdp6HAvIg7K9XEQFf0ltE489eJ1FB3XV4wg7mK6
+         hm4Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+uthulHLIHHojj7PXIT+eWqcZ1IeGbLdwfuGG85usGv9SSDyz6CfnhmjweaZ3zB9C9qGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyznmKhn2EfJMzS3fXVFhyfR//Dtk3OkmODNLotG9bKAZKRDoDR
+	TTtSQRm2/2eZyy1fN8Y6tPG0yAW9zoKaNSJLvnR+9C9yDpMXGaBHYphc3pdlsejQUYbebaB3QYJ
+	wn1yrX5aBgSJ3jp0Dm0U84oACKjHFofnZUGOovRWq
+X-Gm-Gg: AeBDievkpIDldeShFo0rbzHCDQcuxw1s4nf5MzslSHlo2U9dVYotJLs5W84SiCmjgFR
+	qyOz64UaNntWi/EolJPPSdZzD5AAj3OyZI5CH8cedp1yK2Ch4LLkvlaVMHaFtRF4fPqOR1qcgex
+	vHHKkdVsbDkVLtizulBeLvtAeU6QtwYoS5w103iK4cAV4LYL8+4Au2DevtOu76i4X25Yo+c8YFv
+	jx5u6n3cWEGGpEWs+83dL5eHBNms9LVof7gtNP2fN6FLtfOpq77xIJ53AKFOONaIoxgKlRZN6el
+	OJNElc8=
+X-Received: by 2002:a17:90b:4d0e:b0:35c:b02:b5c1 with SMTP id
+ 98e67ed59e1d1-35e4254fa24mr18173516a91.2.1776199475615; Tue, 14 Apr 2026
+ 13:44:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal> <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal> <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca> <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca> <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
+ <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com> <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
+In-Reply-To: <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 14 Apr 2026 16:44:23 -0400
+X-Gm-Features: AQROBzCEfz_j_XIQqt_9SrRpougQ4lYANU563js1WLhMuxDlob1XiduX3tGAPf0
+Message-ID: <CAHC9VhRoaECt03Rs-ZyoGhW2_qZkA_1weTYYjiXc41Yf5U8A_g@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Itay Avraham <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
+	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 14 Apr 2026 22:44:13 +0200
-Message-Id: <DHT65O6DS001.14GNQMXFJZHTN@bootlin.com>
-Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
- Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
- <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
- <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
- <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
- Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
- <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-1-1a5831230821@bootlin.com>
- <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
- <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
- <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
- <DHT3JV7GTOBL.29205LGGNEDSH@bootlin.com>
- <CAADnVQ+c9h_wuNwj8pjx885oNErGY7bxxCwKi+DiJ0XKSpyYfg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+c9h_wuNwj8pjx885oNErGY7bxxCwKi+DiJ0XKSpyYfg@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue Apr 14, 2026 at 9:16 PM CEST, Alexei Starovoitov wrote:
-> On Tue, Apr 14, 2026 at 11:41=E2=80=AFAM Alexis Lothor=C3=A9
-> <alexis.lothore@bootlin.com> wrote:
->>
->> On Tue Apr 14, 2026 at 4:36 PM CEST, Alexei Starovoitov wrote:
->> > On Tue, Apr 14, 2026 at 6:13=E2=80=AFAM Alexis Lothor=C3=A9
->> > <alexis.lothore@bootlin.com> wrote:
->> >>
->> >> Hi Andrey, thanks for the prompt review !
+On Tue, Apr 14, 2026 at 4:10=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
+> On 4/14/2026 12:09 PM, Paul Moore wrote:
+> > On Tue, Apr 14, 2026 at 1:05=E2=80=AFPM Casey Schaufler <casey@schaufle=
+r-ca.com> wrote:
 
-[...]
+...
 
->> > No. The performance penalty will be too high.
->>
->> Since we are mentioning it, I did not consider yet any performance
->> comparision/benchmarking (and I am not really familiar with usual bpf
->> performance validation practices for new bpf features). Is there any
->> existing test I should take a look at for this ? Maybe some specific
->> benches in tools/testing/selftests/bpf/bench ?
+> > For those of you who are interested in a more detailed explanation,
+> > here ya go ...
+> >
+> > NetLabel passes security attributes between itself and various LSMs
+> > through the netlbl_lsm_secattr struct.  The netlbl_lsm_secattr struct
+> > is an abstraction not only for the underlying labeling protocols, e.g.
+> > CIPSO and CALIPSO, but also for the LSMs.  Multiple LSMs call into
+> > NetLabel for the same inbound packet using netlbl_skbuff_getattr() and
+> > then translate the attributes into their own label representation.
+> >
+> > Outbound traffic is a bit more complicated as it involves changing the
+> > state of either a sock, via netlbl_sock_setattr(), or a packet, via
+> > netlbl_skbuff_setattr(), but in both cases we are once again dealing
+> > with netlbl_lsm_secattr struct, not a LSM specific label.  Since the
+> > underlying labeling protocol is configured within the NetLabel
+> > subsystem and outside the individual LSMs, there is no worry about
+> > different LSMs requesting different protocol configurations (that is a
+> > separate system/network management issue). The only concern is that
+> > the on-the-wire representation is the same for each LSM that is using
+> > NetLabel based labeling.  While some additional work would be
+> > required, it shouldn't be that hard to add NetLabel/protocol code to
+> > ensure the protocol specific labels are the same, and reject/drop the
+> > packet if not.
 >
-> So far everything in bpf/bench/ measures bpf infra like
-> maps, kprobes, tracepoints, etc.
-> We don't have benchmarks for bpf programs.
-> So we don't know how well JITs are generating code
-> and how much inlining done by the verifier, JITs actually helps.
+> Indeed, we've discussed this, and I had at one point implemented it.
+> The problem is that for any meaningful access control policies you will
+> never get the two LSMs to agree on a unified network representation.
+
+That is also not correct.  In the early days when SELinux was first
+being used to displace the old CMW/MLS UNIXes NetLabel/CIPSO was used
+to interoperate between the systems and it did so quite well despite
+the SELinux TE/MLS policy being quite different than the CMW MLS
+policies.  Yes, there were aspects of the SELinux policy that made
+this easier - it had a MLS component after all - but they were still
+*very* different policies.
+
+> SELinux transmits the MLS component of the security context. Smack passes
+> the text of its context.
+
+Arguably the NetLabel/CIPSO interoperability challenge between SELinux
+and Smack is due more to differences in how Smack encodes its security
+labels into MLS attributes than from any inherent interop limitation.
+In fact, I thought the "cipso2" Smack interface was intended to
+resolve this by allowing admins to control how a Smack/CIPSO
+translation so that Smack could interop with MLS systems, is that not
+the case?
+
+> Unless the Smack label is completely in step with
+> the MLS component of the SELinux context there is no hope of a common
+> network representation. If a *very talented* sysadmin could create such a
+> policy, you would have to wonder why, because Smack would be duplicating
+> the SELinux MLS policy.
+
+Interoperability wouldn't be a problem if everyone the "right" systems :D
+
+> > Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
+> > require some additional work to convert over to a lsm_prop instead of
+> > a u32/secid, but if you look at the caching code that should be
+> > trivial.  It might be as simple as adding a lsm_prop to the
+> > netlbl_lsm_secattr::attr struct since the cache stores a full secattr
+> > and not just a u32/secid.
 >
-> Puranjay is working on creating a SPECint like set of benchmarks.
->
-> For this kasan work we should make the best decisions from
-> performance point of view, like not wasting unnecessary call
-> and not saving unnecessary registers. btw in the other patch
-> I think you can skip saving of r10 and r11.
+> Indeed. But with no viable users it seems like a lower priority task.
 
-Noted, I'll do some checks and tests without those two.
+You need to be very careful about those "viable users" claims ...
 
-> But we cannot quantify yet that avoiding extra call gives us N%.
->
-> You can micro-benchmark, of course, but gotta be careful
-> interpreting the results. It might be too easy to get into
-> thinking that JIT must inline __asan_load() for the sake of performance.
+> And to be clear, I have no problem with netlabel as written. Multiple tag
+> support isn't simple (we did it for Trusted IRIX) and the limited space
+> available for IP options make it tricky.
 
-Ok, interesting, thanks for those details
-
-Alexis
+That's an entirely different problem from the LSM and protocol
+abstractions, but yeah.
 
 --=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+paul-moore.com
