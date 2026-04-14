@@ -1,352 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60861DF74F
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 22:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F4F313E07
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 22:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776205039; cv=none; b=ifuqib5M1BLtPyUAdm/YmzQbqn+s6B7e/N8Ya6V0V3x6gwB3ckyKMPT8jnso821BkUByPvY4jwwCwSDX7ZJva2Np4p6R7N0vZAxpxz/lV3QkPYXBzEbCFDSR8j5bf81ZuzLnAhTQuKOVH0zoLw/SXwJFgN0s7sAaTZx7HVNHoNI=
+	t=1776205585; cv=none; b=ZNWXjEvkh89WYyLXl7OVND0dZHqQ05eXK6eMqDNELVzx53f7GsAsm6osqYYZM/S+U+FSKy64fpuMQFaGWIHl1l+rmB+6WJzTio/fC6nKOPd4u7iuHc9TcZppTbrGT4kLVaJMYKk5p30YN4pg5hBanYIKa0139YWuVnMZOH3y4hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776205039; c=relaxed/simple;
-	bh=Rj4ezHe//JWNS6BIR5BgUJsfjMXsCJD+qu7CijGxE0s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HVunncijSYqiaJROtzAYp7DNUXw7UguY5jhJtcXBt9NKgPqLXtFvmOW1aCeUw8GbDuqZjY2RYtMlqHKoL32iCdo6pHrnVcQzyGH+q8xZpILvEPEjILNlqANlmtRWF9VqFRIMSi6wQkq7OHsDbMdgJRI9DabDvUigi4ZttldksU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhHapKz3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776205585; c=relaxed/simple;
+	bh=WetevDgfi1kihQ5MfiOnbrBk50X6LXHGQvXVo46bZdQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=I65xidYh0b1y8zHkZ5EquO/JAnsDGgeTtWE3eE2chvk6NGoCNN3aUCNK9+NFEVX1QzIWs1CGLQkQ74Jxcefs1paPwXX591X6f1qP3A6ANl0DznyTuAs3qXBFdqvs6f1Y67TXfC1kuTwn3H7iUIjPlMl8aNadysvcFBOryMmM0NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPfe/g83; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhHapKz3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F8BC4AF09
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 22:17:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPfe/g83"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A722AC19425;
+	Tue, 14 Apr 2026 22:26:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776205039;
-	bh=Rj4ezHe//JWNS6BIR5BgUJsfjMXsCJD+qu7CijGxE0s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UhHapKz31LAhL5mokbh4uQH0XqlpZ5FZnhqGdCFxlh/dkOnPjLGWEy0mgPLZo9Zfp
-	 BTAj/hD0F/NV1MXe2DGL4vqt6u295dWcN65fyDkLZ27FtsZc99LDr4e4Bsmi2Cw+BX
-	 BVi2t0G2cWN8q8MxD6H6yPR8Pp1ph+LygECkmH5UeZw6pqH06L/XgaflrH63nj7rrT
-	 XfS/HO7F13ac6FWXEIc57lY1E0X2MVCGq6XMfRMz8f2V+c40WXIcwySBycR9gDO3wm
-	 lEzkeYZh6Ic+qFAYtKRT1zVLvdIoxXmz4p/ZuzLhG8UIYQh6ywxGfeOTCjw1fbzJFZ
-	 5v9S6Vt5jdrCA==
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-899a9f445cbso68886066d6.0
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 15:17:19 -0700 (PDT)
-X-Gm-Message-State: AOJu0YyUBbJUTH/eizbbwpbpmKONTEwt99VNhU+fKSHYY3wxCBpLM+Ss
-	OQEYL1g4LfMOtr48BirIURiNDPcdPg2/vCo8gUw+3Zq5Zh7tnR7rjGgMLdZ73h2PsqwQvIli0SB
-	WzLVcI3lSzr+J3RJTA3P0UF/6KNEZyI0=
-X-Received: by 2002:a05:6214:20ee:b0:8ac:b542:1063 with SMTP id
- 6a1803df08f44-8acb542133emr128022866d6.15.1776205038309; Tue, 14 Apr 2026
- 15:17:18 -0700 (PDT)
+	s=k20201202; t=1776205584;
+	bh=WetevDgfi1kihQ5MfiOnbrBk50X6LXHGQvXVo46bZdQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=CPfe/g83jshMTdvd86JjI0Nm+AHNL+mRqkLJSJxJ1WnlgDZw9QToFjPwZadRktGqN
+	 W8ZL/nLkcNSy6+sdI0d3qo69yIGJHY1G2iyWpVsBKxcaw3onBllts1EcjGcp9X0fef
+	 9gUfW9YaXHLiPzDkK4pECSQVaJo2B02kO4LJstUY15xhMw8tnyCBrbD/lg0+Zt/WbS
+	 NhL6HwzBuwRz9tQ35l0LsPoY1gUgM/CMuLG8d2vWif3eMBOCfwAnqXuOurxU5yV7Ic
+	 LN31/3Luyyhn8wyWwjbQugKjgGp4HyEig+jqV6QfsZ1JAS/oaHsWWaWG2cM0J3fwpC
+	 LipfxTD6g2LVQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 5/6] selftests/bpf: Test BTF sanitization
+ rejection for invalid vlen
+Reply-To: sashiko@lists.linux.dev
+To: "Alan Maguire" <alan.maguire@oracle.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260414195019.684531-6-alan.maguire@oracle.com>
+References: <20260414195019.684531-6-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 14 Apr 2026 22:26:24 +0000
+Message-Id: <20260414222624.A722AC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260408175217.1011024-1-song@kernel.org> <CALOAHbBpK7YBz2Y8YWL0=0dLz5DLUa003y4b8SMgB+BVjePeOw@mail.gmail.com>
- <CAPhsuW6-YEkJYKiC7M_jBsJWRT38B0AN0Y8x+yWKn9cHoVu=Uw@mail.gmail.com> <CALOAHbC1K=3y-U327GtrJO93f1ra2jxg3mh865DSuEG+VFbMSA@mail.gmail.com>
-In-Reply-To: <CALOAHbC1K=3y-U327GtrJO93f1ra2jxg3mh865DSuEG+VFbMSA@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Tue, 14 Apr 2026 15:17:06 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW53pymgmFsHSkSwDvEAJ=+Rp2T102JYe4i9kgdePpR=6Q@mail.gmail.com>
-X-Gm-Features: AQROBzCQXWNYrFzrhnzlLzuFNYaAUsnF5eBYiYS4CfP5VA2flkCtYQHRXM400uE
-Message-ID: <CAPhsuW53pymgmFsHSkSwDvEAJ=+Rp2T102JYe4i9kgdePpR=6Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add BPF struct_ops + livepatch
- integration test
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
-	yonghong.song@linux.dev, jolsa@kernel.org, kernel-team@meta.com
-Content-Type: multipart/mixed; boundary="0000000000005bf7f2064f72f6ff"
 
---0000000000005bf7f2064f72f6ff
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Sashiko AI review found 3 potential issue(s):
+- [Low] Leaking the BTF object on unexpected success of sanitization.
+- [Low] Lack of error checks for BTF construction calls.
+- [Low] Using `BTF_MAX_VLEN` as the `byte_sz` argument in `btf__add_datasec=
+()`.
+--
 
-On Mon, Apr 13, 2026 at 11:56=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com>=
- wrote:
->
-> On Tue, Apr 14, 2026 at 5:42=E2=80=AFAM Song Liu <song@kernel.org> wrote:
-> >
-> > On Sun, Apr 12, 2026 at 1:44=E2=80=AFAM Yafang Shao <laoar.shao@gmail.c=
-om> wrote:
-> > [...]
-> > > > +
-> > > > +/* --- Module init/exit --- */
-> > > > +
-> > > > +static int __init test_klp_bpf_init(void)
-> > > > +{
-> > > > +       int ret;
-> > > > +
-> > > > +       ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
-> > > > +                                       &klp_bpf_kfunc_set);
-> > > > +       ret =3D ret ?: register_bpf_struct_ops(&bpf_klp_bpf_cmdline=
-_ops,
-> > > > +                                            klp_bpf_cmdline_ops);
-> > >
-> > > Is it possible to integrate this BTF registration directly into
-> > > klp-build? It appears we might need to extend scripts/livepatch/init.=
-c
-> > > to provide the necessary support.
-> >
-> > Can you try the attached patch and see whether it works?
->
-> While your klp-build.patch generates the necessary BTF for the
-> livepatch, it doesn't actually handle the registration of specific
-> struct_ops like klp_bpf_cmdline_ops, does it?
->
-> Consequently, this struct_ops approach seems to require a hand-written
-> kernel module rather than a patch-generated one, as we can't trigger
-> register_bpf_struct_ops() from a .patch file without modifying
-> scripts/livepatch/init.c.
->
-> The primary motivation for staying with the .patch workflow is the
-> scope: a standard kernel module is restricted to exported symbols,
-> whereas a patch-generated module grants us access to non-exported
-> functions. Am I missing any alternative workarounds?
+commit 9c5af444155b34aa840793bf185bc0c0aaa04f3f
+Author: Alan Maguire <alan.maguire@oracle.com>
 
-There are other ways to access non-exported symbols. :) But I agree
-that binary diff based solutions (klp-build, kpatch-build) have their
-advantages.
+selftests/bpf: Test BTF sanitization rejection for invalid vlen
+   =20
+This patch adds a selftest to verify that BTF objects with extended vlen
+are properly rejected by kernels that do not support the extended feature.
+It simulates the lack of support using the feature cache and checks if
+sanitization fails when the vlen limit is surpassed.
 
-0001-objtool-klp-Build-proper-BTF-for-the-livepatch-modul.patch
-(attached) seems to work for this. It is not very clean though.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c b/tool=
+s/testing/selftests/bpf/prog_tests/btf_sanitize.c
+> index 652b51efafc27..f41cea5a769a2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+[ ... ]
+> @@ -95,3 +95,65 @@ void test_btf_sanitize_layout(void)
+> +static void test_btf_sanitize_extended(void)
+> +{
+[ ... ]
+> +	btf =3D btf__new_empty();
+> +	if (!ASSERT_OK_PTR(btf, "empty_btf"))
+> +		goto out;
+> +	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
+> +	btf__add_var(btf, "var1", 0, 1);
 
-I tested it with 0001-test-klp-build-btf.patch (also attached) as:
+Are we missing error checks on these btf__add_*() calls?
 
-./scripts/livepatch/klp-build -e scripts/livepatch/test_klp_bpf_ops.c
-0001-test-klp-build-btf.patch
+If any of these allocations silently fail, the test might proceed with an
+incomplete BTF object that hasn't actually surpassed the vlen limit. This
+would cause the subsequent bpf_object__sanitize_btf() call to unexpectedly
+succeed, failing the test for the wrong reason.
 
-Does this work for your use cases?
+> +	btf__add_datasec(btf, "datasec1", BTF_MAX_VLEN);
 
-Thanks,
-Song
+Is it intentional to use BTF_MAX_VLEN for the byte_sz argument here?
 
---0000000000005bf7f2064f72f6ff
-Content-Type: application/octet-stream; 
-	name="0001-objtool-klp-Build-proper-BTF-for-the-livepatch-modul.patch"
-Content-Disposition: attachment; 
-	filename="0001-objtool-klp-Build-proper-BTF-for-the-livepatch-modul.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mnz6huig1>
-X-Attachment-Id: f_mnz6huig1
+BTF_MAX_VLEN is a bitmask representing the maximum number of items, not a b=
+yte
+size. Using a proper calculated byte size like 0x10000 * 4 might be clearer.
 
-RnJvbSBiYWQyZGU4OTEwMTRkZTQxY2MxMTY0NjUwMTUxOWQwMWZmZjIwMDc0IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTb25nIExpdSA8c29uZ0BrZXJuZWwub3JnPgpEYXRlOiBNb24s
-IDEzIEFwciAyMDI2IDE0OjUzOjU2IC0wNzAwClN1YmplY3Q6IFtQQVRDSF0gb2JqdG9vbC9rbHA6
-IEJ1aWxkIHByb3BlciBCVEYgZm9yIHRoZSBsaXZlcGF0Y2ggbW9kdWxlCgpTaWduZWQtb2ZmLWJ5
-OiBTb25nIExpdSA8c29uZ0BrZXJuZWwub3JnPgotLS0KIHNjcmlwdHMvbGl2ZXBhdGNoL2luaXQu
-YyAgICB8IDE2ICsrKysrKysKIHNjcmlwdHMvbGl2ZXBhdGNoL2tscC1idWlsZCB8IDg3ICsrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgOTUgaW5z
-ZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zY3JpcHRzL2xpdmVwYXRj
-aC9pbml0LmMgYi9zY3JpcHRzL2xpdmVwYXRjaC9pbml0LmMKaW5kZXggZjE0ZDhjOGZiMzVmLi4y
-ZmIwN2ZjODZkZDQgMTAwNjQ0Ci0tLSBhL3NjcmlwdHMvbGl2ZXBhdGNoL2luaXQuYworKysgYi9z
-Y3JpcHRzL2xpdmVwYXRjaC9pbml0LmMKQEAgLTYsOSArNiwxOCBAQAogI2RlZmluZSBwcl9mbXQo
-Zm10KSBLQlVJTERfTU9ETkFNRSAiOiAiIGZtdAogCiAjaW5jbHVkZSA8bGludXgva2VybmVsLmg+
-CisjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+CiAjaW5jbHVkZSA8bGludXgvc2xhYi5oPgogI2lu
-Y2x1ZGUgPGxpbnV4L2xpdmVwYXRjaC5oPgogCisvKgorICogT3B0aW9uYWwgbW9kdWxlIGluaXQg
-aG9vayBmb3IgZXh0cmEgc291cmNlIGZpbGVzICgtLWV4dHJhLW1vZCkuCisgKiBPdmVycmlkZSB0
-aGlzIHRvIHJlZ2lzdGVyIGtmdW5jcywgc3RydWN0X29wcywgZXRjLiAgVGhlICdtb2QnIGFyZ3Vt
-ZW50CisgKiBpcyB0aGUgbGl2ZXBhdGNoIG1vZHVsZSAoVEhJU19NT0RVTEUgZnJvbSBpbml0LmMp
-LgorICovCitleHRlcm4gaW50IF9fa2xwX21vZF9pbml0KHN0cnVjdCBtb2R1bGUgKm1vZCk7Citp
-bnQgX193ZWFrIF9fa2xwX21vZF9pbml0KHN0cnVjdCBtb2R1bGUgKm1vZCkgeyByZXR1cm4gMDsg
-fQorCiBzdGF0aWMgc3RydWN0IGtscF9wYXRjaCAqcGF0Y2g7CiAKIHN0YXRpYyBpbnQgX19pbml0
-IGxpdmVwYXRjaF9tb2RfaW5pdCh2b2lkKQpAQCAtNzgsOCArODcsMTUgQEAgc3RhdGljIGludCBf
-X2luaXQgbGl2ZXBhdGNoX21vZF9pbml0KHZvaWQpCiAJcGF0Y2gtPnJlcGxhY2UgPSB0cnVlOwog
-I2VuZGlmCiAKKwlyZXQgPSBfX2tscF9tb2RfaW5pdChUSElTX01PRFVMRSk7CisJaWYgKHJldCkK
-KwkJZ290byBlcnJfZnJlZV9mdW5jczsKKwogCXJldHVybiBrbHBfZW5hYmxlX3BhdGNoKHBhdGNo
-KTsKIAorZXJyX2ZyZWVfZnVuY3M6CisJa2xwX2Zvcl9lYWNoX29iamVjdF9zdGF0aWMocGF0Y2gs
-IG9ianMpCisJCWtmcmVlKG9ianMtPmZ1bmNzKTsKIGVycl9mcmVlX29ianM6CiAJa2ZyZWUob2Jq
-cyk7CiBlcnJfZnJlZV9wYXRjaDoKZGlmZiAtLWdpdCBhL3NjcmlwdHMvbGl2ZXBhdGNoL2tscC1i
-dWlsZCBiL3NjcmlwdHMvbGl2ZXBhdGNoL2tscC1idWlsZAppbmRleCA3YjgyYzc1MDNjMmIuLmFh
-NjQ2NGI0NDQ3NSAxMDA3NTUKLS0tIGEvc2NyaXB0cy9saXZlcGF0Y2gva2xwLWJ1aWxkCisrKyBi
-L3NjcmlwdHMvbGl2ZXBhdGNoL2tscC1idWlsZApAQCAtMjIsNiArMjIsNyBAQCBzaG9wdCAtcyBs
-YXN0cGlwZQogCiB1bnNldCBERUJVR19DTE9ORSBESUZGX0NIRUNLU1VNIFNLSVBfQ0xFQU5VUCBY
-VFJBQ0UKIAorZGVjbGFyZSAtYSBFWFRSQV9NT0RfU1JDUwogUkVQTEFDRT0xCiBTSE9SVF9DSVJD
-VUlUPTAKIEpPQlM9IiQoZ2V0Y29uZiBfTlBST0NFU1NPUlNfT05MTikiCkBAIC0xMTksNiArMTIw
-LDcgQEAgT3B0aW9uczoKICAgIC1vLCAtLW91dHB1dD08ZmlsZS5rbz4JT3V0cHV0IGZpbGUgW2Rl
-ZmF1bHQ6IGxpdmVwYXRjaC08cGF0Y2gtbmFtZT4ua29dCiAgICAgICAgLS1uby1yZXBsYWNlCQlE
-aXNhYmxlIGxpdmVwYXRjaCBhdG9taWMgcmVwbGFjZQogICAgLXYsIC0tdmVyYm9zZQkJUGFzcyBW
-PTEgdG8ga2VybmVsL21vZHVsZSBidWlsZHMKKyAgIC1lLCAtLWV4dHJhLW1vZD08ZmlsZS5jPglF
-eHRyYSBzb3VyY2UgZmlsZSBjb21waWxlZCBpbnRvIHRoZSBtb2R1bGUKIAogQWR2YW5jZWQgT3B0
-aW9uczoKICAgIC1kLCAtLWRlYnVnCQkJU2hvdyBzeW1ib2wvcmVsb2MgY2xvbmluZyBkZWNpc2lv
-bnMKQEAgLTE0Miw4ICsxNDQsOCBAQCBwcm9jZXNzX2FyZ3MoKSB7CiAJbG9jYWwgbG9uZwogCWxv
-Y2FsIGFyZ3MKIAotCXNob3J0PSJoZmo6bzp2ZFM6VCIKLQlsb25nPSJoZWxwLHNob3ctZmlyc3Qt
-Y2hhbmdlZCxqb2JzOixvdXRwdXQ6LG5vLXJlcGxhY2UsdmVyYm9zZSxkZWJ1ZyxzaG9ydC1jaXJj
-dWl0OixrZWVwLXRtcCIKKwlzaG9ydD0iaGZqOm86dmU6ZFM6VCIKKwlsb25nPSJoZWxwLHNob3ct
-Zmlyc3QtY2hhbmdlZCxqb2JzOixvdXRwdXQ6LG5vLXJlcGxhY2UsdmVyYm9zZSxleHRyYS1tb2Q6
-LGRlYnVnLHNob3J0LWNpcmN1aXQ6LGtlZXAtdG1wIgogCiAJYXJncz0kKGdldG9wdCAtLW9wdGlv
-bnMgIiRzaG9ydCIgLS1sb25nb3B0aW9ucyAiJGxvbmciIC0tICIkQCIpIHx8IHsKIAkJZWNobzsg
-dXNhZ2U7IGV4aXQKQEAgLTE4MCw2ICsxODIsMTAgQEAgcHJvY2Vzc19hcmdzKCkgewogCQkJCVZF
-UkJPU0U9IlY9MSIKIAkJCQlzaGlmdAogCQkJCTs7CisJCQktZSB8IC0tZXh0cmEtbW9kKQorCQkJ
-CUVYVFJBX01PRF9TUkNTKz0oIiRTUkMvJDIiKQorCQkJCXNoaWZ0IDIKKwkJCQk7OwogCQkJLWQg
-fCAtLWRlYnVnKQogCQkJCURFQlVHX0NMT05FPTEKIAkJCQlrZWVwX3RtcD0xCkBAIC0zMDEsNiAr
-MzA3LDcgQEAgZ2V0X3BhdGNoX2ZpbGVzKCkgewogCWdyZXAwIC1FICdeKC0tLSB8XCtcK1wrICkn
-ICIkcGF0Y2giCQkJXAogCQl8IGdhd2sgJ3twcmludCAkMn0nCQkJCVwKIAkJfCBzZWQgJ3N8Xlte
-L10qL3x8JwkJCQlcCisJCXwgZ3JlcCAtdiAnXmRldi9udWxsJCcJCQkJXAogCQl8IHNvcnQgLXUK
-IH0KIApAQCAtMzE1LDcgKzMyMiw4IEBAIGdpdF9yZWZyZXNoKCkgewogCiAJKAogCQljZCAiJFNS
-QyIKLQkJZ2l0IHVwZGF0ZS1pbmRleCAtcSAtLXJlZnJlc2ggLS0gIiR7ZmlsZXNbQF19IgorCQkj
-IEZpbHRlciBvdXQgZmlsZXMgdGhhdCBkb24ndCBleGlzdCAoZS5nLiBuZXcgZmlsZXMgcmVtb3Zl
-ZCBieSByZXZlcnNlKQorCQlnaXQgdXBkYXRlLWluZGV4IC1xIC0tcmVmcmVzaCAtLSAiJHtmaWxl
-c1tAXX0iIDI+L2Rldi9udWxsIHx8IHRydWUKIAkpCiB9CiAKQEAgLTQzNCwxMiArNDQyLDIwIEBA
-IHJlZnJlc2hfcGF0Y2goKSB7CiAJIyBHZXQgYWxsIHNvdXJjZSBmaWxlcyBhZmZlY3RlZCBieSB0
-aGUgcGF0Y2gKIAlnZXRfcGF0Y2hfZmlsZXMgIiRwYXRjaCIgfCBtYXBmaWxlIC10IGZpbGVzCiAK
-LQkjIENvcHkgb3JpZyBzb3VyY2UgZmlsZXMgdG8gJ2EnCi0JKCBjZCAiJFNSQyIgJiYgZWNobyAi
-JHtmaWxlc1tAXX0iIHwgeGFyZ3MgY3AgLS1wYXJlbnRzIC0tdGFyZ2V0LWRpcmVjdG9yeT0iJHRt
-cGRpci9hIiApCisJIyBDb3B5IG9yaWcgc291cmNlIGZpbGVzIHRvICdhJyAoc2tpcCBmaWxlcyB0
-aGF0IGRvbid0IGV4aXN0IHlldCkKKwlmb3IgZmlsZSBpbiAiJHtmaWxlc1tAXX0iOyBkbworCQlb
-WyAtZiAiJFNSQy8kZmlsZSIgXV0gfHwgY29udGludWUKKwkJbWtkaXIgLXAgIiR0bXBkaXIvYS8k
-KGRpcm5hbWUgIiRmaWxlIikiCisJCWNwIC1mICIkU1JDLyRmaWxlIiAiJHRtcGRpci9hLyRmaWxl
-IgorCWRvbmUKIAogCSMgQ29weSBwYXRjaGVkIHNvdXJjZSBmaWxlcyB0byAnYicKIAlhcHBseV9w
-YXRjaCAiJHBhdGNoIiAtLXJlY291bnQKLQkoIGNkICIkU1JDIiAmJiBlY2hvICIke2ZpbGVzW0Bd
-fSIgfCB4YXJncyBjcCAtLXBhcmVudHMgLS10YXJnZXQtZGlyZWN0b3J5PSIkdG1wZGlyL2IiICkK
-Kwlmb3IgZmlsZSBpbiAiJHtmaWxlc1tAXX0iOyBkbworCQlbWyAtZiAiJFNSQy8kZmlsZSIgXV0g
-fHwgY29udGludWUKKwkJbWtkaXIgLXAgIiR0bXBkaXIvYi8kKGRpcm5hbWUgIiRmaWxlIikiCisJ
-CWNwIC1mICIkU1JDLyRmaWxlIiAiJHRtcGRpci9iLyRmaWxlIgorCWRvbmUKIAlyZXZlcnRfcGF0
-Y2ggIiRwYXRjaCIgLS1yZWNvdW50CiAKIAkjIERpZmYgJ2EnIGFuZCAnYicgdG8gbWFrZSBhIGNs
-ZWFuIHBhdGNoCkBAIC01NjYsNiArNTgyLDExIEBAIGNvcHlfb3JpZ19vYmplY3RzKCkgewogCWRv
-bmUKIAl4dHJhY2VfcmVzdG9yZQogCisJIyBTYXZlIHZtbGludXggZm9yIEJURiBiYXNlIHJlZmVy
-ZW5jZSB3aGVuIGdlbmVyYXRpbmcgbW9kdWxlIEJURgorCWlmIFtbIC12IENPTkZJR19ERUJVR19J
-TkZPX0JURl9NT0RVTEVTIF1dICYmIFtbIC1mICIkT0JKL3ZtbGludXgiIF1dOyB0aGVuCisJCWNw
-IC1mICIkT0JKL3ZtbGludXgiICIkT1JJR19ESVIvdm1saW51eCIKKwlmaQorCiAJbXYgLWYgIiRU
-TVBfRElSL2J1aWxkLmxvZyIgIiRPUklHX0RJUiIKIAl0b3VjaCAiJFRJTUVTVEFNUCIKIH0KQEAg
-LTcxNSw2ICs3MzYsMzYgQEAgZGlmZl9jaGVja3N1bXMoKSB7CiAJZG9uZQogfQogCisjIFJlZ2Vu
-ZXJhdGUgQlRGIGZvciB0aGUgbGl2ZXBhdGNoIG1vZHVsZQorZ2VuX21vZHVsZV9idGYoKSB7CisJ
-bG9jYWwga21vZF9maWxlPSIkMSIKKworCSMgVXNlIHRoZSBvcmlnaW5hbCAocHJlLXBhdGNoKSB2
-bWxpbnV4IGFzIEJURiBiYXNlLCBzaW5jZSB0aGUgbW9kdWxlCisJIyB3aWxsIGJlIGxvYWRlZCBv
-biBhIGtlcm5lbCBydW5uaW5nIHRoYXQgdm1saW51eC4gIFRoZSBwYXRjaGVkIHZtbGludXgKKwkj
-IChjdXJyZW50bHkgYXQgJE9CSi92bWxpbnV4KSBoYXMgZGlmZmVyZW50IEJURiBzdHJpbmcgb2Zm
-c2V0cy4KKwlsb2NhbCBidGZfYmFzZT0iJE9SSUdfRElSL3ZtbGludXgiCisKKwlbWyAhIC1mICIk
-YnRmX2Jhc2UiIF1dICYmIHsgd2FybiAib3JpZ2luYWwgdm1saW51eCBub3QgZm91bmQsIHNraXBw
-aW5nIEJURiI7IHJldHVybjsgfQorCisJIyBnZW4tYnRmLnNoIGlzIGEgc3VicHJvY2VzcyBhbmQg
-bmVlZHMgdGhlc2UgdmFyaWFibGVzIGV4cG9ydGVkLgorCSMgUXVlcnkgdG9vbCBwYXRocyBhbmQg
-ZmxhZ3MgZnJvbSBrYnVpbGQgcmF0aGVyIHRoYW4gaGFyZGNvZGluZworCSMgdGhlbSwgc2luY2Ug
-dGhleSB2YXJ5IHdpdGggTExWTT0gYW5kIENST1NTX0NPTVBJTEU9LgorCWxvY2FsIHBhaG9sZSBv
-Ympjb3B5IHBhaG9sZV9mbGFncworCXBhaG9sZT0iJChjZCAiJFNSQyIgJiYgbWFrZSAtcyAtLW5v
-LXByaW50LWRpcmVjdG9yeSBcCisJCS0tZXZhbD0ncHJpbnQtdmFyOiA7IEBlY2hvICQoUEFIT0xF
-KScgcHJpbnQtdmFyIDI+L2Rldi9udWxsKSIKKwlvYmpjb3B5PSIkKGNkICIkU1JDIiAmJiBtYWtl
-IC1zIC0tbm8tcHJpbnQtZGlyZWN0b3J5IFwKKwkJLS1ldmFsPSdwcmludC12YXI6IDsgQGVjaG8g
-JChPQkpDT1BZKScgcHJpbnQtdmFyIDI+L2Rldi9udWxsKSIKKwlwYWhvbGVfZmxhZ3M9IiQoY2Qg
-IiRTUkMiICYmIG1ha2UgLXMgLS1uby1wcmludC1kaXJlY3RvcnkgXAorCQktLWV2YWw9J3ByaW50
-LXZhcjogOyBAZWNobyAkKFBBSE9MRV9GTEFHUyknIHByaW50LXZhciAyPi9kZXYvbnVsbCkiCisK
-KwlQQUhPTEU9IiRwYWhvbGUiIFBBSE9MRV9GTEFHUz0iJHBhaG9sZV9mbGFncyIgT0JKQ09QWT0i
-JG9iamNvcHkiCVwKKwlSRVNPTFZFX0JURklEUz0iJE9CSi90b29scy9icGYvcmVzb2x2ZV9idGZp
-ZHMvcmVzb2x2ZV9idGZpZHMiCQlcCisJUkVTT0xWRV9CVEZJRFNfRkxBR1M9Ii0tZGlzdGlsbF9i
-YXNlIgkJCQkJXAorCW9ianRyZWU9IiRPQkoiIEtCVUlMRF9WRVJCT1NFPSIiCQkJCQlcCisJCSIk
-U1JDL3NjcmlwdHMvZ2VuLWJ0Zi5zaCIgLS1idGZfYmFzZSAiJGJ0Zl9iYXNlIiAiJGttb2RfZmls
-ZSIJXAorCQl8fCBkaWUgIkJURiBnZW5lcmF0aW9uIGZhaWxlZCIKK30KKwogIyBCdWlsZCBhbmQg
-cG9zdC1wcm9jZXNzIGxpdmVwYXRjaCBtb2R1bGUgaW4gJEtNT0RfRElSCiBidWlsZF9wYXRjaF9t
-b2R1bGUoKSB7CiAJbG9jYWwgbWFrZWZpbGU9IiRLTU9EX0RJUi9LYnVpbGQiCkBAIC03NTUsNiAr
-ODA2LDEzIEBAIGJ1aWxkX3BhdGNoX21vZHVsZSgpIHsKIAkJZWNobyAtbiAiICRyZWxfZmlsZSIg
-Pj4gIiRtYWtlZmlsZSIKIAlkb25lCiAKKwkjIENvcHkgZXh0cmEgLmMgZmlsZXMgaW50byB0aGUg
-a21vZCBkaXJlY3RvcnkKKwlmb3Igc3JjIGluICIke0VYVFJBX01PRF9TUkNTW0BdfSI7IGRvCisJ
-CWxvY2FsIGJhc2U9IiQoYmFzZW5hbWUgIiRzcmMiKSIKKwkJY3AgLWYgIiRUTVBfRElSLyRiYXNl
-IiAiJEtNT0RfRElSLyRiYXNlIgorCQllY2hvIC1uICIgJHtiYXNlJS5jfS5vIiA+PiAiJG1ha2Vm
-aWxlIgorCWRvbmUKKwogCWVjaG8gPj4gIiRtYWtlZmlsZSIKIAogCWNmbGFncz0oIi1mZnVuY3Rp
-b24tc2VjdGlvbnMiKQpAQCAtNzgxLDEyICs4MzksMjEgQEAgYnVpbGRfcGF0Y2hfbW9kdWxlKCkg
-ewogCSMgU2F2ZSBvZmYgdGhlIGludGVybWVkaWF0ZSBiaW5hcnkgZm9yIGRlYnVnZ2luZwogCWNw
-IC1mICIka21vZF9maWxlIiAiJGttb2RfZmlsZS5vcmlnIgogCi0JIyBXb3JrIGFyb3VuZCBpc3N1
-ZSB3aGVyZSBzbGlnaHQgLmNvbmZpZyBjaGFuZ2UgbWFrZXMgY29ycnVwdCBCVEYKLQlvYmpjb3B5
-IC0tcmVtb3ZlLXNlY3Rpb249LkJURiAiJGttb2RfZmlsZSIKKwkjIFJlbW92ZSBCVEYgc2VjdGlv
-bnMgZnJvbSB0aGUga2J1aWxkIE09IGJ1aWxkLiAgVGhleSB3ZXJlIGdlbmVyYXRlZAorCSMgYWdh
-aW5zdCB0aGUgcGF0Y2hlZCB2bWxpbnV4IGFuZCB3aWxsIGJlIHJlZ2VuZXJhdGVkIGJlbG93IGFn
-YWluc3QKKwkjIHRoZSBvcmlnaW5hbCB2bWxpbnV4LiAgS2VlcCAuQlRGX2lkcyBhcyBpdCBjb250
-YWlucyBydW50aW1lIGRhdGEuCisJb2JqY29weSAtLXJlbW92ZS1zZWN0aW9uPS5CVEYJCVwKKwkJ
-LS1yZW1vdmUtc2VjdGlvbj0uQlRGLmJhc2UJXAorCQkiJGttb2RfZmlsZSIKIAogCSMgRml4IChh
-bmQgd29yayBhcm91bmQpIGxpbmtlciB3cmVja2FnZSBmb3Iga2xwIHN5bXMgLyByZWxvY3MKIAki
-JFNSQy90b29scy9vYmp0b29sL29ianRvb2wiIGtscCBwb3N0LWxpbmsgIiRrbW9kX2ZpbGUiIHx8
-IGRpZSAib2JqdG9vbCBrbHAgcG9zdC1saW5rIGZhaWxlZCIKIAorCSMgUmVnZW5lcmF0ZSBCVEYg
-YWZ0ZXIgcG9zdC1saW5rCisJaWYgW1sgLXYgQ09ORklHX0RFQlVHX0lORk9fQlRGX01PRFVMRVMg
-XV07IHRoZW4KKwkJZ2VuX21vZHVsZV9idGYgIiRrbW9kX2ZpbGUiCisJZmkKKwogCWNwIC1mICIk
-a21vZF9maWxlIiAiJE9VVEZJTEUiCiB9CiAKQEAgLTgxMCw2ICs4NzcsMTAgQEAgaWYgKCggU0hP
-UlRfQ0lSQ1VJVCA8PSAyICkpOyB0aGVuCiAJc3RhdHVzICJGaXhpbmcgcGF0Y2goZXMpIgogCWZp
-eF9wYXRjaGVzCiAJYXBwbHlfcGF0Y2hlcworCSMgU2F2ZSBleHRyYS1tb2QgZmlsZXMgYmVmb3Jl
-IHJldmVydF9wYXRjaGVzIGRlbGV0ZXMgdGhlbQorCWZvciBzcmMgaW4gIiR7RVhUUkFfTU9EX1NS
-Q1NbQF19IjsgZG8KKwkJW1sgLWYgIiRzcmMiIF1dICYmIGNwIC1mICIkc3JjIiAiJFRNUF9ESVIv
-JChiYXNlbmFtZSAiJHNyYyIpIgorCWRvbmUKIAlzdGF0dXMgIkJ1aWxkaW5nIHBhdGNoZWQga2Vy
-bmVsIgogCWJ1aWxkX2tlcm5lbAogCXJldmVydF9wYXRjaGVzCi0tIAoyLjUyLjAKCg==
---0000000000005bf7f2064f72f6ff
-Content-Type: application/octet-stream; name="0001-test-klp-build-btf.patch"
-Content-Disposition: attachment; filename="0001-test-klp-build-btf.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mnz6hui80>
-X-Attachment-Id: f_mnz6hui80
+> +	for (i =3D 0; i <=3D 0xffff; i++)
+> +		btf__add_datasec_var_info(btf, 2, i * 4, 4);
+> +
+> +	/* Sanitization should fail here as vlen surpasses unextended limit. */
+> +	sanitized =3D bpf_object__sanitize_btf(skel->obj, btf);
+> +	if (!ASSERT_ERR_PTR(sanitized, "bpf_object__sanitize_btf_should_fail"))=
+ {
+> +		sanitized =3D NULL;
 
-RnJvbSAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTb25nIExpdSA8c29uZ0BrZXJuZWwub3JnPgpEYXRlOiBNb24s
-IDE0IEFwciAyMDI2IDAwOjAwOjAwIC0wNzAwClN1YmplY3Q6IFtQQVRDSF0gdGVzdC1rbHAtYnBm
-CgpMaXZlcGF0Y2ggY21kbGluZV9wcm9jX3Nob3cgdG8gZGVsZWdhdGUgdG8gQlBGIHN0cnVjdF9v
-cHMuClVzZSB3aXRoOiBrbHAtYnVpbGQgLWUgc2NyaXB0cy9saXZlcGF0Y2gvdGVzdF9rbHBfYnBm
-X29wcy5jCi0tLQpkaWZmIC0tZ2l0IGEvZnMvcHJvYy9jbWRsaW5lLmMgYi9mcy9wcm9jL2NtZGxp
-bmUuYwppbmRleCBhNmY3NjEyMTk1NWYuLmM2NzJlYWQwMGZmNCAxMDA2NDQKLS0tIGEvZnMvcHJv
-Yy9jbWRsaW5lLmMKKysrIGIvZnMvcHJvYy9jbWRsaW5lLmMKQEAgLTUsMTAgKzUsMjAgQEAKICNp
-bmNsdWRlIDxsaW51eC9zZXFfZmlsZS5oPgogI2luY2x1ZGUgImludGVybmFsLmgiCiAKK3N0cnVj
-dCBrbHBfYnBmX2NtZGxpbmVfb3BzIHsKKwlpbnQgKCpzZXRfY21kbGluZSkoc3RydWN0IHNlcV9m
-aWxlICptKTsKK307CisKK3N0cnVjdCBrbHBfYnBmX2NtZGxpbmVfb3BzICphY3RpdmVfb3BzOwor
-CiBzdGF0aWMgaW50IGNtZGxpbmVfcHJvY19zaG93KHN0cnVjdCBzZXFfZmlsZSAqbSwgdm9pZCAq
-dikKIHsKLQlzZXFfcHV0cyhtLCBzYXZlZF9jb21tYW5kX2xpbmUpOwotCXNlcV9wdXRjKG0sICdc
-bicpOworCXN0cnVjdCBrbHBfYnBmX2NtZGxpbmVfb3BzICpvcHMgPSBSRUFEX09OQ0UoYWN0aXZl
-X29wcyk7CisKKwlpZiAob3BzICYmIG9wcy0+c2V0X2NtZGxpbmUpCisJCXJldHVybiBvcHMtPnNl
-dF9jbWRsaW5lKG0pOworCisJc2VxX3B1dHMobSwgImtscF9icGY6IG5vIHN0cnVjdF9vcHMgYXR0
-YWNoZWRcbiIpOwogCXJldHVybiAwOwogfQogCmRpZmYgLS1naXQgYi9zY3JpcHRzL2xpdmVwYXRj
-aC90ZXN0X2tscF9icGZfb3BzLmMgYi9zY3JpcHRzL2xpdmVwYXRjaC90ZXN0X2tscF9icGZfb3Bz
-LmMKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAwLi5iOGFlNGJhZDUxODEK
-LS0tIC9kZXYvbnVsbAorKysgYi9zY3JpcHRzL2xpdmVwYXRjaC90ZXN0X2tscF9icGZfb3BzLmMK
-QEAgLTAsMCArMSwxMjkgQEAKKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCisv
-KiBDb3B5cmlnaHQgKGMpIDIwMjYgTWV0YSBQbGF0Zm9ybXMsIEluYy4gYW5kIGFmZmlsaWF0ZXMu
-CisgKgorICogQlBGIHN0cnVjdF9vcHMgKyBrZnVuYyBpbmZyYXN0cnVjdHVyZSBmb3Iga2xwLWJ1
-aWxkIGxpdmVwYXRjaCB0ZXN0LgorICogQ29tcGlsZWQgaW50byB0aGUgbGl2ZXBhdGNoIG1vZHVs
-ZSB2aWEgLS1leHRyYS1tb2Qgc28gdGhhdDoKKyAqICAgMS4gcGFob2xlIGdlbmVyYXRlcyBCVEYg
-ZnJvbSBEV0FSRiBmb3Iga2Z1bmMgYW5kIHN0cnVjdF9vcHMgdHlwZXMKKyAqICAgMi4gX19rbHBf
-bW9kX2luaXQgcmVjZWl2ZXMgVEhJU19NT0RVTEUgZnJvbSBpbml0LmMKKyAqLworCisjaW5jbHVk
-ZSA8bGludXgvYnBmLmg+CisjaW5jbHVkZSA8bGludXgvYnRmLmg+CisjaW5jbHVkZSA8bGludXgv
-YnRmX2lkcy5oPgorI2luY2x1ZGUgPGxpbnV4L2JwZl92ZXJpZmllci5oPgorI2luY2x1ZGUgPGxp
-bnV4L21vZHVsZS5oPgorI2luY2x1ZGUgPGxpbnV4L3NlcV9maWxlLmg+CisKKy8qIC0tLSBzdHJ1
-Y3Rfb3BzIHR5cGUgZGVmaW5pdGlvbiAtLS0gKi8KKworc3RydWN0IGtscF9icGZfY21kbGluZV9v
-cHMgeworCWludCAoKnNldF9jbWRsaW5lKShzdHJ1Y3Qgc2VxX2ZpbGUgKm0pOworfTsKKworLyog
-RGVmaW5lZCBpbiB0aGUgZGlmZiBvYmplY3QgKHBhdGNoZWQgY21kbGluZS5jKSAqLworZXh0ZXJu
-IHN0cnVjdCBrbHBfYnBmX2NtZGxpbmVfb3BzICphY3RpdmVfb3BzOworCisvKiAtLS0ga2Z1bmMg
-LS0tICovCisKK19fYnBmX2tmdW5jX3N0YXJ0X2RlZnMoKTsKKworX19icGZfa2Z1bmMgdm9pZCBi
-cGZfa2xwX3NlcV93cml0ZShzdHJ1Y3Qgc2VxX2ZpbGUgKm0sCisJCQkJICAgIGNvbnN0IGNoYXIg
-KmRhdGEsIHUzMiBkYXRhX19zeikKK3sKKwlzZXFfd3JpdGUobSwgZGF0YSwgZGF0YV9fc3opOwor
-fQorCitfX2JwZl9rZnVuY19lbmRfZGVmcygpOworCitCVEZfS0ZVTkNTX1NUQVJUKGtscF9icGZf
-a2Z1bmNfaWRzKQorQlRGX0lEX0ZMQUdTKGZ1bmMsIGJwZl9rbHBfc2VxX3dyaXRlKQorQlRGX0tG
-VU5DU19FTkQoa2xwX2JwZl9rZnVuY19pZHMpCisKK3N0YXRpYyBzdHJ1Y3QgYnRmX2tmdW5jX2lk
-X3NldCBrbHBfYnBmX2tmdW5jX3NldCA9IHsKKwkuc2V0ID0gJmtscF9icGZfa2Z1bmNfaWRzLAor
-fTsKKworLyogLS0tIHN0cnVjdF9vcHMgLS0tICovCisKK3N0YXRpYyBpbnQga2xwX2JwZl9jbWRs
-aW5lX3JlZyh2b2lkICprZGF0YSwgc3RydWN0IGJwZl9saW5rICpsaW5rKQoreworCXN0cnVjdCBr
-bHBfYnBmX2NtZGxpbmVfb3BzICpvcHMgPSBrZGF0YTsKKworCWlmIChjbXB4Y2hnKCZhY3RpdmVf
-b3BzLCBOVUxMLCBvcHMpKQorCQlyZXR1cm4gLUVCVVNZOworCisJcmV0dXJuIDA7Cit9CisKK3N0
-YXRpYyB2b2lkIGtscF9icGZfY21kbGluZV91bnJlZyh2b2lkICprZGF0YSwgc3RydWN0IGJwZl9s
-aW5rICpsaW5rKQoreworCVdSSVRFX09OQ0UoYWN0aXZlX29wcywgTlVMTCk7Cit9CisKK3N0YXRp
-YyBpbnQga2xwX2JwZl9jbWRsaW5lX2luaXQoc3RydWN0IGJ0ZiAqYnRmKQoreworCXJldHVybiAw
-OworfQorCitzdGF0aWMgaW50IGtscF9icGZfY21kbGluZV9pbml0X21lbWJlcihjb25zdCBzdHJ1
-Y3QgYnRmX3R5cGUgKnQsCisJCQkJICAgICAgIGNvbnN0IHN0cnVjdCBidGZfbWVtYmVyICptZW1i
-ZXIsCisJCQkJICAgICAgIHZvaWQgKmtkYXRhLCBjb25zdCB2b2lkICp1ZGF0YSkKK3sKKwlyZXR1
-cm4gMDsKK30KKworc3RhdGljIGJvb2wga2xwX2JwZl9jbWRsaW5lX2lzX3ZhbGlkX2FjY2Vzcyhp
-bnQgb2ZmLCBpbnQgc2l6ZSwKKwkJCQkJICAgIGVudW0gYnBmX2FjY2Vzc190eXBlIHR5cGUsCisJ
-CQkJCSAgICBjb25zdCBzdHJ1Y3QgYnBmX3Byb2cgKnByb2csCisJCQkJCSAgICBzdHJ1Y3QgYnBm
-X2luc25fYWNjZXNzX2F1eCAqaW5mbykKK3sKKwlyZXR1cm4gYnBmX3RyYWNpbmdfYnRmX2N0eF9h
-Y2Nlc3Mob2ZmLCBzaXplLCB0eXBlLCBwcm9nLCBpbmZvKTsKK30KKworc3RhdGljIGludCBrbHBf
-YnBmX2NtZGxpbmVfYnRmX3N0cnVjdF9hY2Nlc3Moc3RydWN0IGJwZl92ZXJpZmllcl9sb2cgKmxv
-ZywKKwkJCQkJICAgICBjb25zdCBzdHJ1Y3QgYnBmX3JlZ19zdGF0ZSAqcmVnLAorCQkJCQkgICAg
-IGludCBvZmYsIGludCBzaXplKQoreworCXJldHVybiAtRUFDQ0VTOworfQorCitzdGF0aWMgY29u
-c3Qgc3RydWN0IGJwZl92ZXJpZmllcl9vcHMga2xwX2JwZl9jbWRsaW5lX3ZlcmlmaWVyX29wcyA9
-IHsKKwkuaXNfdmFsaWRfYWNjZXNzID0ga2xwX2JwZl9jbWRsaW5lX2lzX3ZhbGlkX2FjY2VzcywK
-KwkuYnRmX3N0cnVjdF9hY2Nlc3MgPSBrbHBfYnBmX2NtZGxpbmVfYnRmX3N0cnVjdF9hY2Nlc3Ms
-Cit9OworCitzdGF0aWMgaW50IGtscF9icGZfY21kbGluZV9fc2V0X2NtZGxpbmUoc3RydWN0IHNl
-cV9maWxlICptKQoreworCXJldHVybiAwOworfQorCitzdGF0aWMgc3RydWN0IGtscF9icGZfY21k
-bGluZV9vcHMgX19icGZfa2xwX2JwZl9jbWRsaW5lX29wcyA9IHsKKwkuc2V0X2NtZGxpbmUgPSBr
-bHBfYnBmX2NtZGxpbmVfX3NldF9jbWRsaW5lLAorfTsKKworc3RhdGljIHN0cnVjdCBicGZfc3Ry
-dWN0X29wcyBicGZfa2xwX2JwZl9jbWRsaW5lX29wcyA9IHsKKwkudmVyaWZpZXJfb3BzID0gJmts
-cF9icGZfY21kbGluZV92ZXJpZmllcl9vcHMsCisJLmluaXQgPSBrbHBfYnBmX2NtZGxpbmVfaW5p
-dCwKKwkuaW5pdF9tZW1iZXIgPSBrbHBfYnBmX2NtZGxpbmVfaW5pdF9tZW1iZXIsCisJLnJlZyA9
-IGtscF9icGZfY21kbGluZV9yZWcsCisJLnVucmVnID0ga2xwX2JwZl9jbWRsaW5lX3VucmVnLAor
-CS5jZmlfc3R1YnMgPSAmX19icGZfa2xwX2JwZl9jbWRsaW5lX29wcywKKwkubmFtZSA9ICJrbHBf
-YnBmX2NtZGxpbmVfb3BzIiwKK307CisKKy8qIC0tLSBNb2R1bGUgaW5pdCBob29rIChjYWxsZWQg
-ZnJvbSBpbml0LmMgd2l0aCBUSElTX01PRFVMRSkgLS0tICovCisKK2V4dGVybiBpbnQgX19rbHBf
-bW9kX2luaXQoc3RydWN0IG1vZHVsZSAqbW9kKTsKK2ludCBfX2tscF9tb2RfaW5pdChzdHJ1Y3Qg
-bW9kdWxlICptb2QpCit7CisJaW50IHJldDsKKworCWtscF9icGZfa2Z1bmNfc2V0Lm93bmVyID0g
-bW9kOworCWJwZl9rbHBfYnBmX2NtZGxpbmVfb3BzLm93bmVyID0gbW9kOworCisJcmV0ID0gcmVn
-aXN0ZXJfYnRmX2tmdW5jX2lkX3NldChCUEZfUFJPR19UWVBFX1NUUlVDVF9PUFMsCisJCQkJCSZr
-bHBfYnBmX2tmdW5jX3NldCk7CisJcmV0ID0gcmV0ID86IHJlZ2lzdGVyX2JwZl9zdHJ1Y3Rfb3Bz
-KCZicGZfa2xwX2JwZl9jbWRsaW5lX29wcywKKwkJCQkJICAgICBrbHBfYnBmX2NtZGxpbmVfb3Bz
-KTsKKwlyZXR1cm4gcmV0OworfQotLSAKMi41Mi4wCg==
---0000000000005bf7f2064f72f6ff--
+If the first bpf_object__sanitize_btf() call unexpectedly succeeds, sanitiz=
+ed
+will hold a valid pointer.
+
+Doesn't setting it to NULL before the goto out path leak the memory, since
+btf__free(sanitized) will be called with a NULL pointer at the end of the
+function?
+
+> +		goto out;
+> +	}
+> +	/* Now switch extended feature on and ensure success. */
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260414195019.6845=
+31-1-alan.maguire@oracle.com?part=3D5
