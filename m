@@ -1,47 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E7D36EA99;
-	Tue, 14 Apr 2026 07:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DFB35FF57;
+	Tue, 14 Apr 2026 07:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776150444; cv=none; b=Z15i+ZofzIiR6mHDKEdD2P11S+/ZCq4475chBpYH3CBDhlKw56C4SiONCSuU7JONVHZGGXbekAdThn4D+g7CpGCA2s6RpbTogmQ4WeWkolOMyODxDdcVzMgh+Rs+lcE17yrKkHth+bQBWjQoHOSgEyesT4/673FQbhtzcYN1DJI=
+	t=1776150490; cv=none; b=lH+g2Qf30cs84fww0Z/KxZqhM7hnQhDJQtfOIb1n7DeFwB+KYyefavKeahnmWxiufjIYyoIc5x0sMwyifctPB6TFkb+dyERVApz8juW61GUnVAhkXAlEZ4dpT0KvmCMx9D5LxopAGJM/0IQgnItPr6sMeHkV4filSqVqeMkCJkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776150444; c=relaxed/simple;
-	bh=KVbMpsTcEmKCfBAEuiRTEOHPL8aBkXpCY8W5TJV1kNk=;
+	s=arc-20240116; t=1776150490; c=relaxed/simple;
+	bh=6gK4EmiJjoxMBErZvB2QlG52OKl4TSLVAd68WmRFl3s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hzn9ddyWY6DEIn6CCF3T8aHbjqbCwTcbMGSzAjLU0By9suu/kxIP4zUswaHs0Ys0Wd1rpjS9aLvX1TBz77e9d5izSNzuUC0j+RifOW83hPN2yAv1JX9Cked7obqwcy8/7oCEo6gyuBLQLr/NhFZvdLvQUoppA3fXK1uhJ5iYNBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gi68y5DP; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=t9nQnXQJ65cY2YqMk619cwdvaaEAKWW3o88lyZaqMsKr5/SMjv83RsrnA6ldSW+NipZ0bxMW19reXH7hM2VJsBLirhYfxIKhSNllC13UEatnYX17sur38ztDgdbicOKDgwNMVvPz0/xhlsPxQQdqQRhykD1Noa5IltXPLcFlQgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AQLSFzLd; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gi68y5DP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AQLSFzLd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776150444; x=1807686444;
+  t=1776150488; x=1807686488;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=KVbMpsTcEmKCfBAEuiRTEOHPL8aBkXpCY8W5TJV1kNk=;
-  b=gi68y5DPmeniRVv8gURQTUxCM0zzkR2l9kEUdkQ3iTRaaS3zpEQGhSTR
-   e0You5vgx9046ODwVNrDQa22HSNRvXxkKSJSmtszn+h1XDtwN+VrCt6pm
-   SeBbyhBJSBISLYHap3ho2AIaY3SWjC737iHmSTIjd5ptYAio6bLtEkpUj
-   8XGYUy2cLVxf07abGVZE/8GDaVartrkQvmoqDZxuBQ4CY0kB4fWYfjnIb
-   TGFQzwIH+B1mmN6wPV5BoLone93Y1E0yunbIPSOJTPek1sS9wUUuI+7tb
-   tCX4akd5JX8sF8DmtDnnwYgaqeBaWrVeLhrfeh7ViNKxCm7dOod0AO4GR
+  bh=6gK4EmiJjoxMBErZvB2QlG52OKl4TSLVAd68WmRFl3s=;
+  b=AQLSFzLdmdWaWw2tR8tjzBrpo2tN82CeK9/QF+Ox59NsXwK1Lmg67bOt
+   VjL4UbYGo5qvMZvYK13YSE142L4XBUIzKw1shKHncPIXKu3AbhW7qiWhQ
+   /2ps/s9KrRRPWe8rTP8UdHPdMDpXzd5+tvRzq4st5cjvu84HAB28v7wxD
+   JNcRS0UMKOO1UayixB1SoMTvHEvuSnKF6b3EagpEa7StpYeC0KZlRgFMN
+   IM9XNdZq9FOI+4V5rWaVOjxM2NymdmU5MFZ7pUzCDrTL9xHfUHsjX58kE
+   GisvJxaAjmd02pQ+R9foF+RLAAMcfhFDxx3vjtmyyiQk8zdO34VINbgt4
    A==;
-X-CSE-ConnectionGUID: fQck+jcwSgWOsBcTGA2B0w==
-X-CSE-MsgGUID: YB1s5fWNQqWPAdRX8EVRyw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="77279752"
+X-CSE-ConnectionGUID: EI4OJlwzQGyKqmCpx6jsYw==
+X-CSE-MsgGUID: Nnj2sNKdT0u9vFgfj72utw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="80983572"
 X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="77279752"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:07:23 -0700
-X-CSE-ConnectionGUID: KWGZfSwARvKo4geOUIPkKA==
-X-CSE-MsgGUID: j3Be09BiRdyShxoi7H87AA==
+   d="scan'208";a="80983572"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:08:08 -0700
+X-CSE-ConnectionGUID: qe1Tj7DpR1GMXevU9CZkkQ==
+X-CSE-MsgGUID: y4GmX7THR3O6YrFvtFcK5Q==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
+   d="scan'208";a="260430933"
 Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:07:21 -0700
-Date: Tue, 14 Apr 2026 00:07:21 -0700
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:08:08 -0700
+Date: Tue, 14 Apr 2026 00:08:07 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
 	Nikolay Borisov <nik.borisov@suse.com>,
@@ -72,8 +74,9 @@ Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
 	Asit Mallick <asit.k.mallick@intel.com>,
 	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
 	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v10 08/12] kvm: Define EXPORT_STATIC_CALL_FOR_KVM()
-Message-ID: <20260414-vmscape-bhb-v10-8-efa924abae5f@linux.intel.com>
+Subject: [PATCH v10 11/12] x86/vmscape: Resolve conflict between
+ attack-vectors and vmscape=force
+Message-ID: <20260414-vmscape-bhb-v10-11-efa924abae5f@linux.intel.com>
 X-Mailer: b4 0.16-dev
 References: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
 Precedence: bulk
@@ -86,71 +89,66 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
 
-EXPORT_SYMBOL_FOR_KVM() exists to export symbols to KVM modules. Static
-calls need the same treatment when the core kernel defines a static_call
-that KVM needs access to (e.g. from a VM-exit path).
+vmscape=force option currently defaults to AUTO mitigation. This lets
+attack-vector controls to override the vmscape mitigation. Preventing the
+user from being able to force VMSCAPE mitigation.
 
-Define EXPORT_STATIC_CALL_FOR_KVM() as the static_call analogue of
-EXPORT_SYMBOL_FOR_KVM(). The same three-way logic applies:
+When vmscape mitigation is forced, allow it be deployed irrespective of
+attack vectors. Introduce VMSCAPE_MITIGATION_ON that wins over
+attack-vector controls.
 
-  - KVM_SUB_MODULES defined: export to "kvm," plus all sub-modules
-  - KVM=m, no sub-modules: export to "kvm" only
-  - KVM built-in: no export needed (noop)
-
-As with EXPORT_SYMBOL_FOR_KVM(), allow architectures to override the
-definition (e.g. to suppress the export when kvm.ko itself will not be
-built despite CONFIG_KVM=m). Add the x86 no-op override in
-arch/x86/include/asm/kvm_types.h for that case.
-
+Tested-by: Jon Kohler <jon@nutanix.com>
+Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- arch/x86/include/asm/kvm_types.h |  1 +
- include/linux/kvm_types.h        | 13 ++++++++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/bugs.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
-index d7c704ed1be9..bceeaed2940e 100644
---- a/arch/x86/include/asm/kvm_types.h
-+++ b/arch/x86/include/asm/kvm_types.h
-@@ -15,6 +15,7 @@
-  * at least one vendor module is enabled.
-  */
- #define EXPORT_SYMBOL_FOR_KVM(symbol)
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
- #endif
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 1082ed1fb2e6..fbdb137720c4 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -3058,6 +3058,7 @@ static void __init srso_apply_mitigation(void)
+ enum vmscape_mitigations {
+ 	VMSCAPE_MITIGATION_NONE,
+ 	VMSCAPE_MITIGATION_AUTO,
++	VMSCAPE_MITIGATION_ON,
+ 	VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER,
+ 	VMSCAPE_MITIGATION_IBPB_ON_VMEXIT,
+ 	VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER,
+@@ -3066,6 +3067,7 @@ enum vmscape_mitigations {
+ static const char * const vmscape_strings[] = {
+ 	[VMSCAPE_MITIGATION_NONE]			= "Vulnerable",
+ 	/* [VMSCAPE_MITIGATION_AUTO] */
++	/* [VMSCAPE_MITIGATION_ON] */
+ 	[VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER]		= "Mitigation: IBPB before exit to userspace",
+ 	[VMSCAPE_MITIGATION_IBPB_ON_VMEXIT]		= "Mitigation: IBPB on VMEXIT",
+ 	[VMSCAPE_MITIGATION_BHB_CLEAR_EXIT_TO_USER]	= "Mitigation: Clear BHB before exit to userspace",
+@@ -3085,7 +3087,7 @@ static int __init vmscape_parse_cmdline(char *str)
+ 		vmscape_mitigation = VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER;
+ 	} else if (!strcmp(str, "force")) {
+ 		setup_force_cpu_bug(X86_BUG_VMSCAPE);
+-		vmscape_mitigation = VMSCAPE_MITIGATION_AUTO;
++		vmscape_mitigation = VMSCAPE_MITIGATION_ON;
+ 	} else if (!strcmp(str, "auto")) {
+ 		vmscape_mitigation = VMSCAPE_MITIGATION_AUTO;
+ 	} else {
+@@ -3117,6 +3119,7 @@ static void __init vmscape_select_mitigation(void)
+ 		break;
  
- #define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
-diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
-index a568d8e6f4e8..c81f4fdba625 100644
---- a/include/linux/kvm_types.h
-+++ b/include/linux/kvm_types.h
-@@ -13,6 +13,8 @@
- 	EXPORT_SYMBOL_FOR_MODULES(symbol, __stringify(KVM_SUB_MODULES))
- #define EXPORT_SYMBOL_FOR_KVM(symbol) \
- 	EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol) \
-+	EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
- #else
- #define EXPORT_SYMBOL_FOR_KVM_INTERNAL(symbol)
- /*
-@@ -27,7 +29,16 @@
- #define EXPORT_SYMBOL_FOR_KVM(symbol)
- #endif /* IS_MODULE(CONFIG_KVM) */
- #endif /* EXPORT_SYMBOL_FOR_KVM */
--#endif
-+
-+#ifndef EXPORT_STATIC_CALL_FOR_KVM
-+#if IS_MODULE(CONFIG_KVM)
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol) EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm")
-+#else
-+#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
-+#endif /* IS_MODULE(CONFIG_KVM) */
-+#endif /* EXPORT_STATIC_CALL_FOR_KVM */
-+
-+#endif /* KVM_SUB_MODULES */
- 
- #ifndef __ASSEMBLER__
- 
+ 	case VMSCAPE_MITIGATION_AUTO:
++	case VMSCAPE_MITIGATION_ON:
+ 		/*
+ 		 * CPUs with BHI_CTRL(ADL and newer) can avoid the IBPB and use
+ 		 * BHB clear sequence. These CPUs are only vulnerable to the BHI
+@@ -3244,6 +3247,7 @@ void cpu_bugs_smt_update(void)
+ 	switch (vmscape_mitigation) {
+ 	case VMSCAPE_MITIGATION_NONE:
+ 	case VMSCAPE_MITIGATION_AUTO:
++	case VMSCAPE_MITIGATION_ON:
+ 		break;
+ 	case VMSCAPE_MITIGATION_IBPB_ON_VMEXIT:
+ 	case VMSCAPE_MITIGATION_IBPB_EXIT_TO_USER:
 
 -- 
 2.34.1
