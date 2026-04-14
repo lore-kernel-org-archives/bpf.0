@@ -1,137 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F004248166;
-	Tue, 14 Apr 2026 18:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A824E146A66
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 18:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776189935; cv=none; b=mlEyw3vWEKXgwrz9PGgYVVl6+cBI96bQllImt16GB2jG31Z5QapS/hzvaQ8LA7PCQEHoFWiE+VlBOuGbfheEDTh2Q6zkSqQARBoqua3fb8kpj4fLV4V2L+LBbgUzcfzYiZyGTsVrxe/8gPa+8PhOSWOoGnUc+An0cunb5lmqN2g=
+	t=1776191546; cv=none; b=r2RA+rdODRP4zl2J96eLFe22ibqdZ7770gjvvngHKl7J/VaH+lPJysOqzce/edc/lzdjphIHbEyh3B25MMLm79nsEAgZAB+E4nC2Vz/No0QuEKBe6LsuxIiBsLp24NbOWpd6CjyBEA0BvVGrfEa8Pv1XDD7ZLsyf5BuOC7K7dMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776189935; c=relaxed/simple;
-	bh=q2DrsFnuxK1fHmNxOuRECS2OWVI0HZxW9voN9duT66w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nC7RQ4BIU5k5FsSynqhC/jW1S4IlvJK9cKy0uXFp6Gjn9TY7Idy+8KIrq0gXw7wGv/ipj0Z6ZWbNopBKBwldZMMZTmsWoTh61SXifIaTyYXLEsY6nkFJp9r4E3i+XULbqZ9MNYXl+vNwJ4sOGHEKJK6koAuhvGZ/Vc4HOrTOzj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EAGTSUYk; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1776191546; c=relaxed/simple;
+	bh=pqSJ63Uro0ixE/GwGtXJZgkMG1Um7tkSp2VgdgcIe5E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Pm/8dfJZeu3M1rohHhuNXz2xLEFS/xE9IYVApp47umWJ4tVYdubT+iSCG6/7tA20CsGv+yPangIYhvMf8pzoaq3TbaTKa2V3jDixtTUqlEOu0I/BXkLR4T23rn4lrBlIW/m98xE3gFHBD2msQluxnNsfpJc0Fa1KJPp1mAXhZTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c4hIWdNZ; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EAGTSUYk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776189935; x=1807725935;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q2DrsFnuxK1fHmNxOuRECS2OWVI0HZxW9voN9duT66w=;
-  b=EAGTSUYkUJ758mdy2h8UrDVyHnUMN9shwpNX6JEty7mEMS3i1XGqrNpA
-   k6LDouC1f8LLJ1KoKZyAGt63oZs7X9kYiA//Wx6WSJk1gHn62+QGBwk3J
-   qv8b+7qTI5zObK7B2foun4U9NOjfoKe12pS+IAt+FHi9MZ3VZ2QbAuzrM
-   0LhJRu7yODrcJiCngHf89UWEFJzbwiCWFkVymFVaHtt7NXGAvhu9Vcpq9
-   niT5A7Fzqki6TmCI1rcifEiVtleWObiXP5f7B4Uq0y42uCxrDsGDiJvhM
-   8go0720F84xmSgU2ezn5RXEHwVEXb5bp5ICMbN6LoeV5SQdPLvDuer2XV
-   Q==;
-X-CSE-ConnectionGUID: deWxrDmaRoe1bH65EFtpLg==
-X-CSE-MsgGUID: 5a6cH/lmSgaZsTqq6ybFDA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11759"; a="80751352"
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="80751352"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 11:05:34 -0700
-X-CSE-ConnectionGUID: E6+mn6gRRpCxIi3eA8k+Gg==
-X-CSE-MsgGUID: 8cAOYDHdTKawlZGUMUgCbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
-   d="scan'208";a="235119082"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 11:05:33 -0700
-Date: Tue, 14 Apr 2026 11:05:00 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v10 01/12] x86/bhi: x86/vmscape: Move LFENCE out of
- clear_bhb_loop()
-Message-ID: <20260414180442.gcio7h6zjwjcayrs@desk>
-References: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
- <20260414-vmscape-bhb-v10-1-efa924abae5f@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c4hIWdNZ"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-12c287eb77fso8743776c88.1
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 11:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776191545; x=1776796345; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ly3nPoYLyh6amf7MJAsQye0KMsL7fp9Ld2f0OrnDJXg=;
+        b=c4hIWdNZQXvPkaA+aOm9MrcQfTNTLYiI96rknMvoIxwVCjU1C5H7uneotnyHkP8Q0+
+         b4yPR3KwyGNlX0ovrD1dv/zCHUzDfOp/dqbUCcnCXAlgB1GTQSUHNksxQIJHejxnAnTO
+         N0dSqLoeNvzrPKxgNYdC+n6toCBvuzv1/bKrU3uOcnZqeDtB6947lkKsBWCdaANyrB4v
+         X5lXX+bmJoiizHm1rgJg2UF/vT5octX34BVZFvxxMYewIAyZD6/qZ58ctFF1lt7yiKoK
+         ys36Rqj+Gu2zn82EfT9eOLL/KcY6Vq2tmzHAnv8yGcRr50zp7VQsX2GCjBnAMnVhI8rj
+         orBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776191545; x=1776796345;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ly3nPoYLyh6amf7MJAsQye0KMsL7fp9Ld2f0OrnDJXg=;
+        b=SEfDqL1/EQxAzwUsgyYAnSrvpmtyDB81YB+lo2fPf/TCw1H0HCVw14/+9IfjtsDbKH
+         GTJ991jW8Dvq1skWDNU3w9fz4iLTYLjqX7jGSNIGm1NtrSoZfLlWNhADrycp4DlTZX6R
+         SjzwlIVYTQTRvvsMvqwSVVipwwVXi+PtlOpGy+dI7yxjamgMD/9oAq0WRKStEQUGVCVb
+         0f9d0uq12A5O4XPxWoImjC3a01QGuUhvYThKl8Sjg/Cb4XMTYxRVVeXVs51i/utFQzd2
+         1azOJS+j2bkN76EfU92fwHsx5dHLSXYYQfE8sbWxmmWGDHWO54UZvjgTx8ZZaBwixxQj
+         40CA==
+X-Forwarded-Encrypted: i=1; AFNElJ+ZGE/n0RYFXlY08EAZcIgJpO93kvrr8GM0D8WRfcJ0zFSpYTGEBRI3J4LpuJt40tz0CPQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHSfBdu8zaMja7Mf+v1OKs/NXF9OrKUB0d0n6yMMcLH98QZjsO
+	WKaby15zG35d5t7gjOmh+7BtcO14CNXG/jgMFp4eT4bQ1eZU1SzO+egv
+X-Gm-Gg: AeBDiesNHGEgthzn1cMbuoQlnEOAlShsYB7sG25a+kdOukhgoHpz/Y96QaSxzlBQco4
+	qzI25uBHX9pLKpt4D2GbHViXcAwOYVwzOOA6OQAIjHB+FuCLADal0buNRqNTiZB/zY3wzICoUz4
+	JcV33nFxcq5aQDMVupcgnWId8nw84UCxRJq98BMOp0XlnnLJwn6TcRs3Dwz1l/C5dN0a9EOoHdB
+	Ul5PU335AcjPY8JZHBrrJYN6yHSTlR6QKojXT0ghlljn6vO+QNrL7TYBvAvzEy24WXWUsoCB3j6
+	nvvddNNLefb2F/VFd+aQPCvkDzxNwTuCS6PCb6NtGy/UIsuVjU9lXCtFWBjbhJWyc1bqJu9UnWy
+	5VfgE/tBokudrpLiT9y39pHuuQuGGLOodBKMxP/2vprOpSX6hQw2tQ7X0+wlbLjAaWTzecMR4BK
+	xS1B2RvIB+dqccgyxOYYBfwovE0RGjxYs/uTqCNJFXCbaheG5OPoP8GKtAFxPj5FwDwuw+1pmvk
+	7iWQg==
+X-Received: by 2002:a05:7022:6099:b0:12c:22be:385b with SMTP id a92af1059eb24-12c34e92ee6mr10867313c88.4.1776191544439;
+        Tue, 14 Apr 2026 11:32:24 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:b98e:bd6b:f141:e7ab? ([2620:10d:c090:500::d8d4])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c4b323428sm12395806c88.4.2026.04.14.11.32.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2026 11:32:23 -0700 (PDT)
+Message-ID: <2aaf049fdd735f642f470ca6b0822bddf07a5eff.camel@gmail.com>
+Subject: Re: [PATCH 1/2] bpf: deduce_bounds_64_from_32 tightening with
+ circular range logic
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Helen Koike <koike@igalia.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: andrii@kernel.org, yonghong.song@linux.dev, ast@kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+Date: Tue, 14 Apr 2026 11:32:20 -0700
+In-Reply-To: <aa97dc1f-02d2-4da6-aa17-9619e2b6f999@igalia.com>
+References: <20260410124035.297632-1-koike@igalia.com>
+	 <zeqb2e3d67as3an4u6h6dgvqymchgiyvx2p7mu5u7ns5rx66xf@j5flwnwsud6b>
+	 <aa97dc1f-02d2-4da6-aa17-9619e2b6f999@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260414-vmscape-bhb-v10-1-efa924abae5f@linux.intel.com>
 
-On Tue, Apr 14, 2026 at 12:05:28AM -0700, Pawan Gupta wrote:
-> Currently, the BHB clearing sequence is followed by an LFENCE to prevent
-> transient execution of subsequent indirect branches prematurely. However,
-> the LFENCE barrier could be unnecessary in certain cases. For example, when
-> the kernel is using the BHI_DIS_S mitigation, and BHB clearing is only
-> needed for userspace. In such cases, the LFENCE is redundant because ring
-> transitions would provide the necessary serialization.
-> 
-> Below is a quick recap of BHI mitigation options:
-> 
-> On Alder Lake and newer
-> 
->     BHI_DIS_S: Hardware control to mitigate BHI in ring0. This has low
->     performance overhead.
-> 
->     Long loop: Alternatively, a longer version of the BHB clearing sequence
->     can be used to mitigate BHI. It can also be used to mitigate the BHI
->     variant of VMSCAPE. This is not yet implemented in Linux.
-> 
-> On older CPUs
-> 
->     Short loop: Clears BHB at kernel entry and VMexit. The "Long loop" is
->     effective on older CPUs as well, but should be avoided because of
->     unnecessary overhead.
-> 
-> On Alder Lake and newer CPUs, eIBRS isolates the indirect targets between
-> guest and host. But when affected by the BHI variant of VMSCAPE, a guest's
-> branch history may still influence indirect branches in userspace. This
-> also means the big hammer IBPB could be replaced with a cheaper option that
-> clears the BHB at exit-to-userspace after a VMexit.
-> 
-> In preparation for adding the support for the BHB sequence (without LFENCE)
-> on newer CPUs, move the LFENCE to the caller side after clear_bhb_loop() is
-> executed. Allow callers to decide whether they need the LFENCE or not. This
-> adds a few extra bytes to the call sites, but it obviates the need for
-> multiple variants of clear_bhb_loop().
-> 
-> Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-> Tested-by: Jon Kohler <jon@nutanix.com>
-> Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> ---
+On Tue, 2026-04-14 at 13:25 -0300, Helen Koike wrote:
+> Hi Shung-Hsi Yu,
+>=20
+>=20
+> Thanks for your reply,
+>=20
+> On 4/14/26 5:26 AM, Shung-Hsi Yu wrote:
+> > Hi Helen,
+> >=20
+> > On Fri, Apr 10, 2026 at 09:40:27AM -0300, Helen Koike wrote:
+> > ...
+> > > This is a follow-up from discussion:
+> > >    https://lore.kernel.org/all/7fb97184-baaa-4639-a0b9-ac289bf2e54d@i=
+galia.com/
+> >=20
+> > Base on the original thread, I see that motivation of the patchset came
+> > from a Syzkaller reported issue[1]. Can you try to run the reproducer
+> > again and see if you can still get it to reproduce on the bpf-next tree=
+?
+>=20
+> I just tested on bpf-next/master ("71b500afd2f7") and I couldn't=20
+> reproduce the issue from Syzbot anymore. It seems that the branch=20
+> causing the issue is pruned now, fixing the error in that case.
+>=20
+> But I still get the failures of the kselftests from patch 2/2:
+>=20
+>      * verifier_bounds/deduce64_from_32_block_change:FAIL
+>      * verifier_bounds/deduce64_from_32_block_change_signed:FAIL
+>      *=20
+> verifier_bounds/deduce64_from_32_block_change_conservative_signed:FAIL
+>      * verifier_bounds/deduce64_from_32_wrapping_32bit:FAIL
+>=20
+>=20
+> How do you suggest we should proceed?
+>=20
 
-Sorry this is missing Boris's Ack, I will fix.
-
-> Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
+I still want this for the sake of improved value tracking.
+Please give me a bit more time for review.
