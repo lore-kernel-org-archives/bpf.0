@@ -1,79 +1,155 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E452D1F64
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BE222332E;
+	Tue, 14 Apr 2026 20:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776198560; cv=none; b=UsWNXymuE2rNOqHjG8eGlEmpp4h4T/xgzW81fccEuSDV3Q+cwPiWHdJ+bN/cHtTVC54gtFu2T5zCEShKeSvQtsNjKiB2Y7prVXhdCow+UmPM36pBr9E8b8Yg8vZbTVb0ER/jrVAGoQ9GWMzGM8/T9G9sUTwTtPVYrQsvdohfKcg=
+	t=1776198866; cv=none; b=bPGu7s2EgvLQOqQMPcPhPI2P8Kl4OENmfnslyaC33HHhX+LeHKozCpOm4wVVkfxScTA/incZfZHrhLf1Y1s6IOhfK1vzYMKPET5eTTrVTOz7k1jUSUwcth1w36m+agZZEaUXsaz7bEO+nxG9+kh3he11Ge8iXLE2kKGOg3izYLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776198560; c=relaxed/simple;
-	bh=pSRhEW774+mPJ248ZVALoIEFunbnEZ5Qy3OePaLkxv8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=OZbNyl75rR0ObBX0+jaGSsqf0CJe5HUrDoXS3/X0fMfUjBBScEIy2hqDg3qQbphVPjlg31DgNKHKPnqESOYO+7DyZJ5BT2TwqvqX3Frh79TyOaiHLmhtLymvtChg+hGaazOeH319D3BY+NBgCxn+jmBkK6Cy4prn+mFMYvDcLQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VhJSj2Zl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776198866; c=relaxed/simple;
+	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cue/pNAKowuF4W16OQOYwmIpHARygNiWuD/1qkHZD7NmeIt8yidRThnTBAvd4zeDFLrMzAnmZDeJhYM1faAYjSFoKQ79lK78Vh+NYa8Yvk9JkcEjHm4N1DCdi6v+3pJggP9vHm6G+c35d/m62sFF3KI5bycaOfkHKcyNwWoW9vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=as5O93zt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VhJSj2Zl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F037C19425;
-	Tue, 14 Apr 2026 20:29:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="as5O93zt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781CBC19425;
+	Tue, 14 Apr 2026 20:34:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776198559;
-	bh=pSRhEW774+mPJ248ZVALoIEFunbnEZ5Qy3OePaLkxv8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=VhJSj2Zl1/DVXWDOwYW5Zue0SfTZBs85NK2IESo/Svv6GQRKTwwH3ANRPhwO0syn6
-	 1HuVn3R3nDrjWsVPm/KscrloHVLAZrlq69vqHDayv+/HQaMDsKa8f7foTMmaflLjYw
-	 ulvpTNl4UmVTYjcZho2pLZCJBQz2sLrsTEg5EYyrpjB/2P9FKnOs1jH5ZoiLfBAMje
-	 STr1rmRdv/hnHrSKRWKiIiJtOa/WquH1BgXo6tehBW/dMJgwYhmZueXTCH8O+UYzAg
-	 RU/yjWLppZIFxnQ1eDZSk7rAvPcgx8vZroNW0QMg8Qzvs6nt2kIoJcPxsIJR/jXh/s
-	 +/p/hQC6qTtyA==
-Content-Type: multipart/mixed; boundary="===============1988659359355805784=="
+	s=k20201202; t=1776198866;
+	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=as5O93ztneTN0G6XdHqJvjzPW88jPn4thvhZqK2fpeqnxRIbjEtqiL5BTUJzXVEvQ
+	 OXHsmNV6+s61r1x6ViUiMdaJ1yXwPOKJHabD6VxNnvW5kt3jI8cga9KBIXnaEZxzfm
+	 8EVdyH5fbZuUm4fy7gjeclQ4JzndkIspECCZVMAkCzsqUx2fdSMgqDcjAFyxd8Nj5X
+	 SnyWNdgL56bz45xrfLk5J9RUbB4BEy3912lGi6MaRC08ssl/EZSvhvGNFXwLeQh0LF
+	 6NQ58fVtuIzclzZkYlaGGO1WSjYbL5E5YGhg4Ul6bVIDVNkfbarSrV93nP0qUuDc9b
+	 KAhIncF4Lrfog==
+Date: Tue, 14 Apr 2026 13:34:18 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Nicolas Schier <nsc@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kbuild/btf: Remove broken module relinking exclusion
+Message-ID: <20260414203418.GA1022044@ax162>
+References: <20260410131343.2519532-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d975ff536f220ff614371435325e44251713ed131a8c64f2e5be5d04ae06f01d@mail.kernel.org>
-In-Reply-To: <20260414195019.684531-4-alan.maguire@oracle.com>
-References: <20260414195019.684531-4-alan.maguire@oracle.com>
-Subject: Re: [PATCH bpf-next 3/6] libbpf: Add feature for kernel extended vlen/kind support
-From: bot+bpf-ci@kernel.org
-To: alan.maguire@oracle.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,qmo@kernel.org,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 14 Apr 2026 20:29:19 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260410131343.2519532-1-petr.pavlu@suse.com>
 
---===============1988659359355805784==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Apr 10, 2026 at 03:13:29PM +0200, Petr Pavlu wrote:
+> Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
+> and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
+> to enable generation of split BTF for kernel modules. This change required
+> the %.ko Makefile rule to additionally depend on vmlinux, which is used as
+> a base for deduplication. The regular ld_ko_o command executed by the rule
+> was then modified to be skipped if only vmlinux changes. This was done by
+> introducing a new if_changed_except command and updating the original call
+> to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
+> 
+> Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
+> in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
+> from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
+> previous logic to skip relinking modules if only vmlinux changes. The issue
+> is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
+> prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
+> retains the raw './vmlinux'. As a result, if_changed_except doesn't
+> correctly filter out vmlinux. Consequently, with
+> CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
+> changes.
+> 
+> It is possible to fix this Makefile issue. However, having the %.ko rule
+> update the resulting file in place without starting from the original
+> inputs is rather fragile. The logic is harder to debug if something breaks
+> during a subsequent .ko update because the old input is lost due to the
+> overwrite. Additionally, it requires that the BTF processing is idempotent.
+> For example, sorting id+flags BTF_SET8 pairs in .BTF_ids by resolve_btfids
+> currently doesn't have this property.
+> 
+> One option is to split the %.ko target into two rules: the first for
+> partial linking and the second one for generating the BTF data. However,
+> this approach runs into an issue with requiring additional intermediate
+> files, which increases the size of the build directory. On my system, when
+> using a large distribution config with ~5500 modules, the size of the build
+> directory with debuginfo enabled is already ~25 GB, with .ko files
+> occupying ~8 GB. Duplicating these .ko files doesn't seem practical.
+> 
+> Measuring the speed of the %.ko processing shows that the link step is
+> actually relatively fast. It takes about 20% of the overall rule time,
+> while the BTF processing accounts for 80%. Moreover, skipping the link part
+> becomes relevant only during local development. In such cases, developers
+> typically use configs that enable a limited number of modules, so having
+> the %.ko rule slightly slower doesn't significantly impact the total
+> rebuild time. This is supported by the fact that no one has complained
+> about this optimization being broken for the past two years.
+> 
+> Therefore, remove the logic that prevents module relinking when only
+> vmlinux changes and simplify Makefile.modfinal.
+> 
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-> index 3781c45b46d3..8ef1fc96b73a 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -398,6 +398,8 @@ enum kern_feature_id {
->  	FEAT_UPROBE_SYSCALL,
->  	/* Kernel supports BTF layout information */
->  	FEAT_BTF_LAYOUT,
-> +	/* Kernel supports BTF vlen > 65535 */
-> +	FEAT_BTF_VLEN_KIND_EXTENDED,
->  	__FEAT_CNT,
->  };
+If the BPF folks want to take this since it deals with BTF:
 
-This isn't a bug, but the comment says "BTF vlen > 65535" while the
-feature also covers extended BTF kinds (> 31).  The enum name itself
-says VLEN_KIND_EXTENDED, the feature descriptor in features.c says
-"kernel supports extended BTF vlen/kind", and the sanitization check
-in bpf_object__sanitize_btf() tests both btf_vlen(t) > 0xffff and
-btf_kind(t) > 0x1f.
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-Should the comment be something like
-"Kernel supports extended BTF vlen/kind" to match?
+Otherwise, either Nicolas can take this for 7.1 or I will pick it up for
+7.2 when 7.1-rc1 is out.
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24420385267
---===============1988659359355805784==--
+> ---
+> My previous attempt to fix this logic can be found at
+> https://lore.kernel.org/linux-modules/20260402141911.1577711-1-petr.pavlu@suse.com/
+> ---
+>  scripts/Makefile.modfinal | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index adcbcde16a07..01a37ec872b9 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -46,17 +46,9 @@ quiet_cmd_btf_ko = BTF [M] $@
+>  		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
+>  	fi;
+>  
+> -# Same as newer-prereqs, but allows to exclude specified extra dependencies
+> -newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
+> -
+> -# Same as if_changed, but allows to exclude specified extra dependencies
+> -if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+> -	$(cmd);                                                              \
+> -	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+> -
+>  # Re-generate module BTFs if either module's .ko or vmlinux changed
+>  %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+> -	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
+> +	+$(call if_changed,ld_ko_o)
+>  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+>  endif
+> 
+> base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+> -- 
+> 2.53.0
+> 
