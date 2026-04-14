@@ -1,102 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3693E8C50
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 14:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AEA3E866B;
+	Tue, 14 Apr 2026 14:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776175809; cv=none; b=LJBl9Ts0ixlMvBanwMUiTBMiRjQSi14DZPtCNkEZz7RLj1uk+5+dPQCPrehaWDNezDAiFZWg6DIWbVHbLO7T8LxMIFFYPDLfSoy/QXqDbarBvA0DaS5jLXLeGH6dVxOcoDs7AGx/mYGs771gCfUipFz/7zIaAQ03ucVVZscQ9SU=
+	t=1776176043; cv=none; b=QuQQO+QCXi8enMebxBcIUGPNtCShoLJHhvJTh9fZM80H7PhjJ9vgAWghI5bJv/Qv2EMlAYyJ/Ml4Am7BFhRUTGu9ndyIlLeWwMwFy7sv6E9mlyIdBkeg5lFevIJEq6dsUIHcF1Hc1e56pxorkCeJcX7WdibG7zczHkb1/HcWo8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776175809; c=relaxed/simple;
-	bh=myv2J1hmNetmeZvk0I6Hm50m017jG6Nu5o27ARXxvy4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gAXwosRbAy8hdZAweJVFxcYfYo7oCIeU3kq/wPa5ZJ3FAY+MU+kY/mtgrgE9gQRdJKY5baHme1Pe5Ekn3XKuS+hAFwdGngZCE8kefGT/liYQej4Ujj4VFfkZfj0mahtJJZQTLJznIPfOAapFy1m1gFf+eQf46M3OjAsKFTE4how=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G67lTauS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776176043; c=relaxed/simple;
+	bh=tp2zXVzdAJ5XOEiTCsRkb3jbGLsEwShzGi5kuermpAc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gVSWJfyvUKwnNKECSLnrqhn8BNluv7Mtj9vNFcPzT6cwTzsQ1Z/6xhydk+MOD7MsabbDj3D2+7TI1JnvudxuRtWziZC6voUvLAjuv/zvDuZcrRHr+146MuVwV1KhNdOOh4VgQuZjk2Etw6Z7e/e2k3GADIGtjDGopr16swY3+zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=evp0a+zh; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G67lTauS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50CAC2BCB5;
-	Tue, 14 Apr 2026 14:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776175808;
-	bh=myv2J1hmNetmeZvk0I6Hm50m017jG6Nu5o27ARXxvy4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=G67lTauSmPdoJBBgazxrxSvhyaOOdVd62StcHkI9zeTGqx8CJ0/dK6YxgiWjfgIaR
-	 8EsDg0t7/p+Csomk0C0qbqFkU2hVzE8FoElyIUHHgNOn3LrBjW4+kHW1bQsTlYZAEU
-	 2QIKiO90xtpOrL6m182kZlVNpt4khbcQWcGNPTrDukIduEvl8B8dLrpeTGj8Y5VwUq
-	 Z/qAJEuiNFbM+YxknOdQYfYjKBr83NUkRMWpeRwzTuSFj3256Fge4AvrIKCwE4OGLG
-	 /zxjQfqwT8KKB+BFJK0ve99nWVETIddlFaIHnWEsHng4uiitYlMGNhEYiclaLIExfH
-	 0BRgUneDIgfuA==
-Content-Type: multipart/mixed; boundary="===============9095934616257402327=="
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="evp0a+zh"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWL-00FdqH-Nc; Tue, 14 Apr 2026 16:13:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=mJIuV1hFcG0AqFmXjuVmJdTq5oqD37Hr+RkhyPIT/fw=; b=evp0a+zhKZ19/tsYUtmJ1rGgiq
+	i0W3zfkwG/OaN3LhGGjEC4UXYU4KDsxr9TrXWuP6GuLHX36a4GwBGeb4xusowreSSKEvqZWt9KofG
+	D5I+ZPzmEzU3n6XWZo1ZLaW4TcC8IwLcCzCkxOYsbUB9TwM9Jg8Nuw5Jz1QiavTCuYELdwwG98sCs
+	QJ1mQCVpJEmZWT+Dg4X7VnOobXBI6YYJPcDIQ0bmbgoiwBAnPAuw5kc83nXfQW4YYLWRfj87AYNNg
+	A6JboP87w8dYhJHKqf0DsyQS5BD0Abs/P6MllJ7qFjzVwLrJhPJWHdjLe2rdy2cjx4RxKxIHmIe4T
+	Sd4d7rrg==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWL-0000Ul-FU; Tue, 14 Apr 2026 16:13:41 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1wCeWB-00DhbX-F5; Tue, 14 Apr 2026 16:13:31 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Tue, 14 Apr 2026 16:13:16 +0200
+Subject: [PATCH bpf v4 2/5] bpf, sockmap: Fix af_unix iter deadlock
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <72dbcacc4cf2e76dc9de3c045e2fe1f3454d8880197b0db92c7d994ca82dcab0@mail.kernel.org>
-In-Reply-To: <20260414132421.63409-3-leon.hwang@linux.dev>
-References: <20260414132421.63409-3-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v4 2/8] bpf: Introduce global percpu data
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,yonghong.song@linux.dev,song@kernel.org,eddyz87@gmail.com,qmo@kernel.org,dxu@dxuuu.xyz,leon.hwang@linux.dev,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 14 Apr 2026 14:10:08 +0000 (UTC)
-
---===============9095934616257402327==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260414-unix-proto-update-null-ptr-deref-v4-2-2af6fe97918e@rbox.co>
+References: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
+In-Reply-To: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <jiayuan.chen@linux.dev>
+X-Mailer: b4 0.15.2
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1757c5720503..8ec24d63a2c4 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6362,7 +6362,8 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, u32 regn
->  			if (tnum_is_const(reg->var_off) &&
->  			    bpf_map_is_rdonly(map) &&
->  			    map->ops->map_direct_value_addr &&
-> -			    map->map_type != BPF_MAP_TYPE_INSN_ARRAY) {
-> +			    map->map_type != BPF_MAP_TYPE_INSN_ARRAY &&
-> +			    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY) {
+bpf_iter_unix_seq_show() may deadlock when lock_sock_fast() takes the fast
+path and the iter prog attempts to update a sockmap. Which ends up spinning
+at sock_map_update_elem()'s bh_lock_sock():
 
-This correctly prevents constant folding of percpu array values in
-check_mem_access().  However, should the same exclusion also be
-added to const_reg_xfer() in kernel/bpf/const_fold.c?
+WARNING: possible recursive locking detected
+test_progs/1393 is trying to acquire lock:
+ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: sock_map_update_elem+0xdb/0x1f0
 
-That function has a parallel constant folding path via
-bpf_map_direct_read() that only excludes BPF_MAP_TYPE_INSN_ARRAY:
+but task is already holding lock:
+ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
 
-kernel/bpf/const_fold.c:const_reg_xfer() {
-    ...
-    case BPF_LDX:
-        ...
-        if (!bpf_map_is_rdonly(map) ||
-            !map->ops->map_direct_value_addr ||
-            map->map_type == BPF_MAP_TYPE_INSN_ARRAY ||
-            off < 0 || off + size > map->value_size ||
-            bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
-                *dst = unknown;
-                break;
-        }
-    ...
-}
+other info that might help us debug this:
+ Possible unsafe locking scenario:
 
-Since percpu_array_map_ops now has map_direct_value_addr set,
-bpf_map_direct_read() would dereference the raw percpu base pointer
-directly, rather than the actual per-cpu address.  For a frozen
-read-only percpu array, the constant-folded value could differ from
-what the program reads at runtime after the BPF_MOV64_PERCPU_REG
-fixup converts the address to the correct per-cpu copy.
+       CPU0
+       ----
+  lock(slock-AF_UNIX);
+  lock(slock-AF_UNIX);
 
-In the v3 series, bpf_map_direct_read() itself had a guard
-(map->map_type != BPF_MAP_TYPE_ARRAY), which protected all callers.
-The v4 moved this to caller-side checks but appears to have missed
-const_reg_xfer().
+ *** DEADLOCK ***
 
+ May be due to missing lock nesting notation
 
+4 locks held by test_progs/1393:
+ #0: ffff88814b59c790 (&p->lock){+.+.}-{4:4}, at: bpf_seq_read+0x59/0x10d0
+ #1: ffff88811ec25fd8 (sk_lock-AF_UNIX){+.+.}-{0:0}, at: bpf_seq_read+0x42c/0x10d0
+ #2: ffff88811ec25f58 (slock-AF_UNIX){+...}-{3:3}, at: __lock_sock_fast+0x37/0xe0
+ #3: ffffffff85a6a7c0 (rcu_read_lock){....}-{1:3}, at: bpf_iter_run_prog+0x51d/0xb00
+
+Call Trace:
+ dump_stack_lvl+0x5d/0x80
+ print_deadlock_bug.cold+0xc0/0xce
+ __lock_acquire+0x130f/0x2590
+ lock_acquire+0x14e/0x2b0
+ _raw_spin_lock+0x30/0x40
+ sock_map_update_elem+0xdb/0x1f0
+ bpf_prog_2d0075e5d9b721cd_dump_unix+0x55/0x4f4
+ bpf_iter_run_prog+0x5b9/0xb00
+ bpf_iter_unix_seq_show+0x1f7/0x2e0
+ bpf_seq_read+0x42c/0x10d0
+ vfs_read+0x171/0xb20
+ ksys_read+0xff/0x200
+ do_syscall_64+0x6b/0x3a0
+ entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domain socket.")
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ net/unix/af_unix.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24401974087
---===============9095934616257402327==--
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index b23c33df8b46..590a30d3b2f7 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -3731,15 +3731,14 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
+ 	struct bpf_prog *prog;
+ 	struct sock *sk = v;
+ 	uid_t uid;
+-	bool slow;
+ 	int ret;
+ 
+ 	if (v == SEQ_START_TOKEN)
+ 		return 0;
+ 
+-	slow = lock_sock_fast(sk);
++	lock_sock(sk);
+ 
+-	if (unlikely(sk_unhashed(sk))) {
++	if (unlikely(sock_flag(sk, SOCK_DEAD))) {
+ 		ret = SEQ_SKIP;
+ 		goto unlock;
+ 	}
+@@ -3749,7 +3748,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
+ 	prog = bpf_iter_get_info(&meta, false);
+ 	ret = unix_prog_seq_show(prog, &meta, v, uid);
+ unlock:
+-	unlock_sock_fast(sk, slow);
++	release_sock(sk);
+ 	return ret;
+ }
+ 
+
+-- 
+2.53.0
+
