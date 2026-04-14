@@ -1,97 +1,169 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic314-27.consmr.mail.ne1.yahoo.com (sonic314-27.consmr.mail.ne1.yahoo.com [66.163.189.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D579D2E54D3;
-	Tue, 14 Apr 2026 20:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22C92D9792
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.189.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776196946; cv=none; b=mlCWt1jYUSFSJY6NCHl7Gci9bHZM0BQy8wTIBZkLcIweOpaSHzgDdkQZFAGkrX+LidKBJYiRBQ+oTdSAs8q0EE8UMPXRa8gP6IDC4pZe0oYs8TG/eRqX97pn8rOX0gMFwJPhj6aQQKgeZFXRFefJkiy5+tE9+etdJAOrFhG8alA=
+	t=1776198013; cv=none; b=i0R4gTE2yGMALibDshh2N03xGFzlBgOqCbbqMm0+oYtNXENPxMW3X0wgq37AC2dqm9Q/gevAQyvdsyFI4Y9Jr9lpfkdLQIJY2NQ4aKZ1BLMVvCYCcMyYL+d6vdQALrMCad+mMswfZr7MgSzRNTSdIwy3PTGfZKiJaCSVzJeimXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776196946; c=relaxed/simple;
-	bh=EN+PtLnaKD8HEY73xxSJCPjkEkd7hKDTdNognbNaPVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oNLFOEQhSyvwQQmDak9J6aSlKVf28GJHPRLNgKARveov4M8l1wekyeN4ZjC1CSNMPEiUYOD+OkTTgjqQTVsUxuSNuOokAfkQxuaOft4dtPCQSIh+EhHkbTgfufy1iYxLMgY9Ztf+qVObcksnq2lgN0ZEgr7eY4DtAkUYAOnbnU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HCmdSF+u; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776198013; c=relaxed/simple;
+	bh=6RA72LREKomIWQz20rOHPiKnlvWsEq+7Qsyttzg4eCo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DPAimtrxl6xvg8d+Hdzjnk0ZG9PWGUx2Er2gu6mdbQfrlWwa7KahcfEfTT2Abl/grHmr94wTXkqJWKKziSx7QJqkRA192KsHBgtF+MwX6+55hIOD7rDbJMAeRjI2LgwLahitM9/OYNp3DeQIt34joCDucE4et9L7dcSmhU2kHfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=RVMPbCpx; arc=none smtp.client-ip=66.163.189.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HCmdSF+u"
-Date: Tue, 14 Apr 2026 13:02:13 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776196941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hVulSorLZqSOev8jY1Kt7v0qUZeYnyrZOKpTRmYQuLA=;
-	b=HCmdSF+uzymU8UJ9oUOJhxska8uNEoFMpwiTwEnIABuUQIHer6f7hd5Dr01gHj8GhfnnFc
-	ZHL4CWaqA57+fyBcjM4ymYvWYHE0vbw1RgZfc96XAtqks5WiwKM7VjTjAY57AatIUs5T4d
-	SSD28ptrpR1A1AxwsvJYyMleuuAN0n8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, 
-	Jiayuan Chen <jiayuan.chen@linux.dev>, Eric Dumazet <edumazet@google.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org, Neal Cardwell <ncardwell@google.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] selftests/bpf: verify syncookie
- statistics in tcp_custom_syncookie
-Message-ID: <2026414195145.Ur8-.martin.lau@linux.dev>
-References: <20260411013211.225834-1-jiayuan.chen@linux.dev>
- <20260411013211.225834-2-jiayuan.chen@linux.dev>
- <CAAVpQUCCZVogDUUTfr3k-JxV52kpVvdYzqFC68-J3n6_ugd4Uw@mail.gmail.com>
- <6b22a595-cd65-42ec-b332-c835273bc174@redhat.com>
- <04cafd50-7af5-4835-b0df-67393d9f5a51@redhat.com>
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="RVMPbCpx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776198011; bh=Gi1Te5MKu3lSkf9CJ6/ejqyTfTqko6UyGFbJ/Gs5eMI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=RVMPbCpxrs3myrA/44pKvquEbYP5i8DwJqhBXhf9Y0wf4A20y10tktbI+aUUqjJhYS2vNsYa7wExTR3pqarOE59V21YwPe+1uMoVandAxfrlFL0WW9Jf5l12JDUFyX+H4Vva4hR61RAE8DrxrWc3Aht4ADUfgoTikmX5kAl4ifp/1XdTcd1Lk41GAGHz5Vz0XKRPIxC7gVBhS0w/LDnTo0pYwtuFptYw/qRdnUrDDIui1tnlxODt1x9E16hyY5yUnkhcKMCMe3wfosiQSphcB1aNbN5jb9FqY3DfV+XQWnBAXtXYoTdC3eyEJu/9QU/yln87SkHiR4dYS5wJKAgBPQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776198011; bh=Mvxp3hHufjttL3AEROrDIM7FJvIqTdqFjhZb/cpTYgL=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=go3S+HBEFa3Cl6LmO0EfwYJEJmMUbTiY7PYYGFC8HZ0Du+PiW5WHPzfdRWG5hqR610s2lvmNmFrMjZG6CeZY3bbA5ysQLK61uR0ZXve744pfkoEl6jiFLnesA9NPnflCj8O0N6ZYSy5vql8/B1T78pCWEIELPy+oFMbeRQQZaB055QMycw/EgaKXshlMPS1GdjtrUA8d1rYMpNZa4AHa62GsQYsgVbx9m6L/1sFnlKZcJvpWLSOWLD2oYMV7yl1txLpF5ULvCb0/XEzAk7SbiJ6xDT4NPAGBUKhbto/pGQN9805pTVqKKOF8/EFYZM9Dmu+YllhgA3bWSgOPj8iChQ==
+X-YMail-OSG: iay6JtoVM1k0h6r_zLyTJrXRIr3aSR906hOswAKIVf64Slcl8gPMUSKv3byLnYf
+ s_EsKWeto798l7yb.Gn.PSrflgfdUwonQAURtzPVhvA7Fl0o3QQNLiZfItH6GEaWrn8xbPB48UxE
+ JvLUl1qmj.VDD27okP15BemWdGIXJUx_0kotjlCkgd9QUlSa1.dBHkRGNkWuie2.otqvAmh3gcN3
+ iw5i9OGoiI1H3l5jU3az.AncPfZd6qXvVRKkwxqGq65_420NzVqHL1atK5krVJbeWFuUTYq5wLMY
+ fOdT.lUEhAYQY.tngCRGae4YpvaObv8j1_n7cH5oqZYs2P_.XmKMYZCCiCNC1dflQBrtt87RIXBF
+ WEBja3aHB1W6cvjUlpkkFQYSm1Zn1JGRQd3rqFyJgNRtsVL6VXcQtpxe41n2GeDUWDZV22JMEL2O
+ g7ycpx_ROUKuh0sAYHpoW.q_A2n.zLTVNNVKr3JI3MdMDHz8bcAAl6CA.JW1kPxAf50vEIDPHdoe
+ Gl9iIzmwYR.otZORerLkLGQOsPp1E_Ite6bRgucNB2Tu3Uu2dA1zINBkuzHBWbSMhFaNjFywciyq
+ TWmY6BwwakA6_kiavl8EM4am6J.Sz8XMmoOTm1Ffzr.u.AFEq5xuHDf80mPxcISQJyJY9Cyswj8Z
+ .REdQHoRybUfb4CjtWMJJXNL2Lodizrsf.c7VJMeJj6k9V4ahOPOB6Sw2MDWjqdZdldRmPa.gP0q
+ vdSE1wYIxWYT1Sgv3WhibVlDnUALAmf5DTa39F1CCvrnFTs0DoOQPLmP2wBphWlmMdmih49wJpJB
+ 95fNiQyCNymtA4Cp.g2.guwEgsO9nH5nTH013tHljLl8t_JuS2wpXWv8dHYS5xRBjX7yKuvvKrAb
+ EVmewx6N7Hxei87gZNDUNqC1qz9SfAEYktEJsfMQHL6yXww348XaDF3RtsqivJ4TdEI_Fq9CpHZW
+ H9.Xx1Am9mjOsEdCq9LUPYMHx3uauPogOL5sUASOQcfPWRvwAlBmlqblgAQBpfukJ2dRW85xeHId
+ 5.blW3UTxPYnNfS_9bxK3yPgKDc_jDV3AVyZhZoRamgrMaz._Kj3dBNFF6RsBmwL2IPkv5vmv0D2
+ E3fYhZ8vdOLFfaMiAgtu7exqzWBXyxo6xDF2xiSf_h1lBgRzH0_6ZDNpeHkT7L2P.z_zx4E3EASJ
+ zwJ9rMY2qgXmno3vN.tkLsfu08qWSYiG91ak4L7ZctKGdXaHpnZNcDyq70BTAQNT7TtMMO63.TGx
+ e5Srk8d61YzOKBL3F0Nz5uGpgtLlYu3GRT0rQlYskiY52OgbNimCOHC8tkXsABqrq5tItOjzbTyJ
+ rxMD6px5aQsFmBrWFuMtE5i_GweFmv3UArqAq522E.D98Q_cy7hgSu779ep2Gp6t8VD9VXL3HaUF
+ ruuxnr7voim323k8z4b1ql0uQFcfnIAPd3dsAA4rnd1mJQ7_bw1crsE5Gsa7UNkqzwT8R_39R0HB
+ XBssnbTb_GKkNJPS_jVrmx00zB2Y6YkeVrpdUYTp29ZVF3JTEeFhRkhJ..YQM1BCWWQg.VLz2QKM
+ gqO1nmg3Z3WQlSam8wNtgBPIUaGpz4YFNc4LQezYv._XuCDvB2jIdjSIA5AXpQO7aUjCKBWSoYj_
+ 5eSvyxmm66rqUmy4hXF1VleTovFhE9yHypTTefgV4GMJ3ytpXrDWh9NGitPfyMBwXNIDR6seAam_
+ f0SLK5ZmLZp.ldOMdL1DVQ2DaSbB7e6dk0Etvuo8JQ_vGSwNVL65Wq0lXZy8U3eGFErxgtxU4vUS
+ YDamSSndVvg7xKTjrPK7eeCh_3uT1JC0wAfketpYsbZF49gM1T59nw3nikmnW2f_Pv8AUEwTGo29
+ civCtQR4V8imc_Rr1_noR_XC9ZgOvV4qW8lUfdnJEB7YKp69_xAASmFvKnM2OCaKUe2MJHQQ7nNx
+ svqUqyjFepnK6ntadO53LtRnueVc29X4ALS86lTMnlnV7tpXO17pT2.nFivHGOeiuGSUuGqI3pwR
+ fXEezigAXlkIYRm1iK.PtKQWhmChZxjxdkCiIJ2KTmPCJ88EMp2hCBL6no6J583Pje1.YEElN5_W
+ uCqt0a3sLoAGYNxRrfdoMrXwyFeDFotFHpp4EEq4xYX6S6x9kz2HXB6U0tiZwm5Rgnn7p6l5DxCx
+ _r6XjnoGDBBlP7XqYN8Jh08chKthKFHpt_lNMxbW8L3dlycRPacEG6ps14eTur.Vk1TMVZ_NOz8r
+ h9qdlP9dBZtbck_ZwzKVSVLCDs.Mh9hnKnBltA23fPbL6hJVwE1AwbQ--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 5645cfa9-c473-4367-838c-8ef631aabbef
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Tue, 14 Apr 2026 20:20:11 +0000
+Received: by hermes--production-gq1-6dfcf9f8b-7ggwq (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ed718aee344bcab0b89868fa26b773d6;
+          Tue, 14 Apr 2026 20:10:01 +0000 (UTC)
+Message-ID: <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
+Date: Tue, 14 Apr 2026 13:09:58 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+To: Paul Moore <paul@paul-moore.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
+ <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+ Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal>
+ <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal>
+ <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal>
+ <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca>
+ <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+ <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
+ <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <04cafd50-7af5-4835-b0df-67393d9f5a51@redhat.com>
-X-Migadu-Flow: FLOW_OUT
+X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Tue, Apr 14, 2026 at 11:17:39AM +0200, Paolo Abeni wrote:
-> On 4/14/26 11:08 AM, Paolo Abeni wrote:
-> > On 4/14/26 7:50 AM, Kuniyuki Iwashima wrote:
-> >> On Fri, Apr 10, 2026 at 6:32 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
-> >>>
-> >>> Add read_tcpext_snmp() helper to network_helpers which reads a
-> >>> TcpExt SNMP counter via nstat, and use it in the tcp_custom_syncookie
-> >>> test to verify that LINUX_MIB_SYNCOOKIESRECV is incremented and
-> >>> LINUX_MIB_SYNCOOKIESFAILED stays unchanged across a successful
-> >>> BPF custom syncookie validation.
-> >>>
-> >>> The delta is captured between start_server() and accept(), which
-> >>> covers the full SYN/ACK/cookie-check path for one connection.
-> >>>
-> >>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> >>> ---
-> >>>  tools/testing/selftests/bpf/network_helpers.c | 22 +++++++++++++++++++
-> >>>  tools/testing/selftests/bpf/network_helpers.h |  1 +
-> >>>  .../bpf/prog_tests/tcp_custom_syncookie.c     | 20 +++++++++++++++++
-> >>
-> >> As you touch bpf selftest helper files, please rebase on bpf-next
-> >> to avoid possible conflicts and tag bpf-next in the Subject.
-> > 
-> > To hopefully  minimize the conflicts handling I'm going to apply patch
-> > 1/2 to net-next. Please resubmit patch 2/2 to bpf-next after the
-> > relevant net core reach there.
-> 
-> Uhmm... the original feature went through the bpf tree, so I guess both
-> patches could/should via bpf-next. Hopefully conflict into the tcp code
-> should be minimal.
+On 4/14/2026 12:09 PM, Paul Moore wrote:
+> On Tue, Apr 14, 2026 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> Netlabel has a similar issue to secmarks with its use of secids, and
+>> currently supports only a single CIPSO tag in the IP header, making
+>> multiple concurrent LSM support impossible.
+> That's not correct.
 
-I think it is best to land both patches together. It seems the 7.1 pull-request
-is out. We can take it to bpf-next/net after the merge window and then follow
-by a pull-request for the net-next tree as usual.
+OK, you're right. However ...
+
+>
+> We've talked about this multiple times Casey.  The short version is
+> that while NetLabel doesn't support multiple simultaneous LSMs at the
+> moment (mostly due to an issue with outbound traffic), this is not due
+> to some inherent limitation, it is due to the fact that it wasn't
+> needed when NetLabel was created, and no one has done the (relatively
+> minor) work to add support since then.
+>
+> For those of you who are interested in a more detailed explanation,
+> here ya go ...
+>
+> NetLabel passes security attributes between itself and various LSMs
+> through the netlbl_lsm_secattr struct.  The netlbl_lsm_secattr struct
+> is an abstraction not only for the underlying labeling protocols, e.g.
+> CIPSO and CALIPSO, but also for the LSMs.  Multiple LSMs call into
+> NetLabel for the same inbound packet using netlbl_skbuff_getattr() and
+> then translate the attributes into their own label representation.
+>
+> Outbound traffic is a bit more complicated as it involves changing the
+> state of either a sock, via netlbl_sock_setattr(), or a packet, via
+> netlbl_skbuff_setattr(), but in both cases we are once again dealing
+> with netlbl_lsm_secattr struct, not a LSM specific label.  Since the
+> underlying labeling protocol is configured within the NetLabel
+> subsystem and outside the individual LSMs, there is no worry about
+> different LSMs requesting different protocol configurations (that is a
+> separate system/network management issue). The only concern is that
+> the on-the-wire representation is the same for each LSM that is using
+> NetLabel based labeling.  While some additional work would be
+> required, it shouldn't be that hard to add NetLabel/protocol code to
+> ensure the protocol specific labels are the same, and reject/drop the
+> packet if not.
+
+Indeed, we've discussed this, and I had at one point implemented it.
+The problem is that for any meaningful access control policies you will
+never get the two LSMs to agree on a unified network representation.
+SELinux transmits the MLS component of the security context. Smack passes
+the text of its context. Unless the Smack label is completely in step with
+the MLS component of the SELinux context there is no hope of a common
+network representation. If a *very talented* sysadmin could create such a
+policy, you would have to wonder why, because Smack would be duplicating
+the SELinux MLS policy.
+
+So there's really no value in pursuing that approach.
+
+> Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
+> require some additional work to convert over to a lsm_prop instead of
+> a u32/secid, but if you look at the caching code that should be
+> trivial.  It might be as simple as adding a lsm_prop to the
+> netlbl_lsm_secattr::attr struct since the cache stores a full secattr
+> and not just a u32/secid.
+
+Indeed. But with no viable users it seems like a lower priority task.
+
+And to be clear, I have no problem with netlabel as written. Multiple tag
+support isn't simple (we did it for Trusted IRIX) and the limited space
+available for IP options make it tricky.
+
