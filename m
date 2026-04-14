@@ -1,234 +1,104 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CDB318ED6
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776198491; cv=pass; b=UR9uMSoZQZ+cUtGDwYGie3/prMHdRaE+EIESbDeQnAQn9Q2kiG2GfsGw4JBWNLtYKqcWiLLsuAsvOlhNAyzwjo0T8SuAcv8mbCp+/RGYeHVk4TeckYZj4YB/wLarRmH15B3z31rMJ84q74eHQIt9xq8WADsz8FNuSDqmTp/vBUI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776198491; c=relaxed/simple;
-	bh=SZNreY6ilaQZcfu+hbcMb9jeeliOvd2TnQQxoDEAWuI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GRozXFp5W8lRbG9OUbqnXknRa+F0J5FeEBwkQAbVpEVJ4YJCQSAqbsEblOrjhG84wxPK4pAHoNCzYjqM6AziF1jqhLs9rYuzC4NLKr9y0ipxIwiOnN53OresEPCmJC1YI04vvSec45brpj1KIET9pQzYV8BCUdNfTZ/UpZVPcfg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=AxWq4HDJ; arc=pass smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F49230C629
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776198540; cv=none; b=gD4pYAfVsIA7v1jXNOMbwugGIWJUg9HgP1qQ26/fSgw8KKV6zq9kFLr0Z0MYAZczx4o3wP/2OO9SP9FZVJahswmfAEMBvtifVEH9YwxhPwrwRrMrd/BIuNH7jWaoLpzxFxE1T/RUQNCOsJ9NonaDp8Cu9n9U/v0slBgLy9rVKDs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776198540; c=relaxed/simple;
+	bh=gwUrvQANOrl5+hIYKDoSKc3QbIN6SXai4MjyVD4XqPY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=YlzBo0t7++ho1EqDes/XE8dz1dmbzbBc+chuU+7Q1+NiHsEhEjm+DZeElGCxhY1z6FaU9Woe/gpUtCxo6+NVzYvL0QWryCUNHuD4oVyRRgtl6iv9HAEL44h9cCaiKAOQlrHGLABJOUaD799GrMLRHyE2DFriPUrqAaZSTyfswXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dmVqr0f3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="AxWq4HDJ"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2b24fdac394so54346975ad.3
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:28:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776198490; cv=none;
-        d=google.com; s=arc-20240605;
-        b=l0WMa4dG/6xBB4vxPS/r7fL/N76FssQJExPYO86JKGnOURdMXFdJRBCBqZc++s0Zpc
-         9HDpupvacO3fF6PXGilqrxCfIBVVvjDz0dfn0rbdqvPhWAcD0NOV5LQF0PGT2mM2jxyM
-         R+TKnqfQh81kkgig1+jOrNf6TdHOGNW9SrQJKkh2i69VQ+H00175ZNNt0WdOSh0xOt+1
-         ZsYmmgs+QZyzVTwUpxuwjjSKA1gYixNgjH6LqTShaZtDxHqhYDKbhXkEGBy9Q6w+IqLf
-         fLhJlY42UNQG3R1ETGcE+MTwCHHYF/ueHCfE572e6qxPvAhSxJSO/KBEWFGSdd4IRArS
-         8Y9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4+V4wukdzxX/SIEN/WV7x1rli0RNhXIqb9fJKBWExgk=;
-        fh=CqzdJkjRzAniTHE2zNb9pBaKUHnvESqmWWAu0Uj5mfk=;
-        b=OFNO+Coj2HPxLkcwC1nEJ6EvTFVQJyrE0Ch6oZnUfJ7OPKxaVaKLXFpAlrIAcj0iSO
-         TAkZs/DCT+6Nm3ylVV8VfOSPyzyGfiZ7yF45zhrErtRKrW6zqkle1mcQDqUJAIiIja6u
-         +vuqLWJ9/Fh2jrZiBtIxuJebYzooRcWsbirVM9FMzIO7cGXqWbmmTA+9XRfhysWTELk6
-         4JTC+MeO+llPV+rG4ORi6KHEB6VcQ8oQUILcJrL7HOpJnSXXCC/Dh3FhBElwNek+9QW8
-         RW7/SctfF/ii86KTlnF20Fu3PY1onRjzEWoGpqTZLKBDEo596DB5B3p5tO348LH3vnQ1
-         yfOg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1776198490; x=1776803290; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4+V4wukdzxX/SIEN/WV7x1rli0RNhXIqb9fJKBWExgk=;
-        b=AxWq4HDJRMYWRZNqKN510OSiQh3m40hpYrIwI+wHHNJ3C7YXKCZw8JSd3V0SOAZUyw
-         eJpEL0t+vRKgNARUCvdwmYLx7r6jhVIbeR0fnZgsfNcZ4HBFJ61yF7nE7xnvzipQD1TU
-         AVO1hPICbmRqoxcSi1gfmCLa+nE9gk+AL58pH4AGtU6FmA5cSXoBA+RVhZWoueDa3VkH
-         ih95DyyKUXB3VIL1bXcz4EI4VLowZ9E+bqM7Blvi+knHFapkeW0BEAgsEgIeVHFKgXBt
-         cwy7vUqbOKYZIA+LCmHRO6nBs3PIl0R+hEuqqFhc4fRrYmhTkdEXpywZ1zx3YCFJ+cHf
-         K+dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776198490; x=1776803290;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4+V4wukdzxX/SIEN/WV7x1rli0RNhXIqb9fJKBWExgk=;
-        b=cp3AQA0XP3wp9e8PDR1m/8+cW4f1riWjv6hIqzpOioMun+WahLTjS770BODLFqWRZx
-         LQC3GdpsdBgIXGhP3CtkSHrgs8Usv4ddrk/c5Z0AGwcjbiExhkwyNmnG7B2Be7iiBkRM
-         Peal4q9GtopaHxCYVXMsNkD2YkDyh1/BiICIyYZRBFJYatWlAbIdvF/932q9WcorNd4K
-         8Qp+0mJo7D6FdiIwpJmA/EsWxk6tF8XTofcW+rf7rKMMfjGTfIdOaVnUGyxIG7nfXpfd
-         YjUlq/S+cl8SxzoWQaSsdcaN7XkSE/dqZCyYSr+zCVvXh/jcvJxPS6aw8gnYEJhlpC8Z
-         Ekew==
-X-Forwarded-Encrypted: i=1; AFNElJ/XJPE0T0yUmc10yDtC9nTlTvU69WXqxTOUB1s7t/337GWXeEiklLw2TuBablPeDfOwwgA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbXwsqMqqd3y3q7asfboLiPIS2JXnlPaHPyqFsmoQ2XPMb7ryF
-	+3V2EvOmQcWaK7f4c73G+aYteEyWyfmo3mzxpWpyxRtw3h3ByBM5Ny6/EyXqLH6/bBhZ011iA1Q
-	YVwXgjkD/C6sDxKZ9eXE0hitv6MIpAKHmOh/d7x4r
-X-Gm-Gg: AeBDiesVsIwYT8PdzNU0RojRhEQFavwsWI+zdDhCI3zgIM4qj7KqtMemSSDsKJqPQUi
-	uUUKDYOiC27FSPJN0ek01sUn3kROiTIgBv4A1CT/vCqvCRgO+qcCjvS/38rEy9pRSOGPJx8cXt+
-	+WI8m9KTR6NdH3R5YXPYeAu1qybEbeYG2T/sNHjfK/pVgq7F6zdcQx4xNK7P9mOIvekKOLkklzt
-	ceUdrKFMEFlX8OzRcKPDs+8yCnkhsu1ArT/RAVLn4ePe7ciH/jqIXzOn5rf8rXzdn3VlIlZPdYW
-	VSumG0I=
-X-Received: by 2002:a17:902:9a8e:b0:2b0:ac1e:9720 with SMTP id
- d9443c01a7336-2b2d5a459b2mr142509675ad.23.1776198489857; Tue, 14 Apr 2026
- 13:28:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dmVqr0f3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1882C19425;
+	Tue, 14 Apr 2026 20:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776198540;
+	bh=gwUrvQANOrl5+hIYKDoSKc3QbIN6SXai4MjyVD4XqPY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=dmVqr0f3mHKeei8uPwOnfPoHBGpPA6U8+ScyxwHPUuLnpQDEWF5ho/TCqJCiOcLAb
+	 dxaKHk4TmEgY2BHFB0Ezd0dXKJpq3LXjLm32OILff7ak4P0JOTabHVP4p1GrWuGY/O
+	 T+WvDVRmphAADAjVzfLV356gtD8Vnw57Pl0fisyV/Hvk32fqWphVD8JyGdU0GCnxen
+	 7NTRw3/7SnDY+LgMuwl59PvwdjRuQuX8TC61kfFuC8Lq8qCL9IFsfQvZdbi6HYtytb
+	 QQD71tw5Jn2jJmBxVDtGLijP3DzvDJxwvYpOXVo8Gf85JKTHy0/F1IbrNrZZDGwYRe
+	 FBiGbZQsSbGfg==
+Content-Type: multipart/mixed; boundary="===============3782200397955678187=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal> <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal> <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca> <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
-In-Reply-To: <20260413231920.GS3694781@ziepe.ca>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 14 Apr 2026 16:27:58 -0400
-X-Gm-Features: AQROBzDV1U7-Lr_78p5lvbSYJBsit-JnR3MD284PiQF66a4KQgj72Qdddd-aJXA
-Message-ID: <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Leon Romanovsky <leon@kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Itay Avraham <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
-	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <83d5ae9a86ff32e179554c24e012a6a1af045faf164cfd059a7e683615e6f76d@mail.kernel.org>
+In-Reply-To: <20260414194804.1428676-1-jolsa@kernel.org>
+References: <20260414194804.1428676-1-jolsa@kernel.org>
+Subject: Re: [PATCH bpf 1/2] libbpf: Fix btf object leak in load_module_btfs
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: bpf@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 14 Apr 2026 20:28:59 +0000 (UTC)
 
-On Mon, Apr 13, 2026 at 7:19=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> wrot=
-e:
-> On Mon, Apr 13, 2026 at 06:36:06PM -0400, Paul Moore wrote:
-> > On Mon, Apr 13, 2026 at 12:42=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca>=
- wrote:
-> > > On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
-> > > > > We are not limited to LSM solution, the goal is to intercept comm=
-ands
-> > > > > which are submitted to the FW and "security" bucket sounded right=
- to us.
-> > > >
-> > > > Yes, it does sound "security relevant", but without a well defined
-> > > > interface/format it is going to be difficult to write a generic LSM=
- to
-> > > > have any level of granularity beyond a basic "load firmware"
-> > > > permission.
-> > >
-> > > I think to step back a bit, what this is trying to achieve is very
-> > > similar to the iptables fwmark/secmark scheme.
-> >
-> > Points for thinking outside the box a bit, but from what I've seen
-> > thus far, it differs from secmark in a few important areas.  The
-> > secmark concept relies on the admin to configure the network stack to
-> > apply secmark labels to network traffic as it flows through the
-> > system, the LSM then applies security policy to these packets based on
-> > their label.  The firmware LSM hooks, at least as I currently
-> > understand them, rely on the LSM hook callback to parse the firmware
-> > op/request and apply a security policy to the request.
+--===============3782200397955678187==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+
+[ ... ]
+
+> @@ -5771,6 +5770,8 @@ static int load_module_btfs(struct bpf_object *obj)
+>  		return 0;
 >
-> That was what was proposed because the idea was to combine the
-> parse/clasification/decision steps into one eBPF program, but I think
-> it can be split up too.
+>  	while (true) {
+> +		struct btf *btf = NULL;
+> +
+>  		err = bpf_btf_get_next_id(id, &id);
+
+[ ... ]
+
+> @@ -5837,6 +5838,7 @@
+>  		continue;
 >
-> > We've already talked about the first issue, parsing the request, and
-> > my suggestion was to make the LSM hook call from within the firmware
-> > (the firmware must have some way to call into the kernel/driver code,
-> > no?)
->
-> No, that's not workable on so many levels. It is sort of anaologous to
-> asking the NIC to call the LSM to apply the secmark while sending the
-> packet.
+>  err_out:
+> +		btf__free(btf);
+>  		close(fd);
+>  		return err;
+>  	}
 
-From the LSM's perspective it really doesn't matter who calls the LSM
-hook as long as the caller can be trusted to handle the access control
-verdict properly.
+When strdup(name) fails a few lines above this, btf_module_cnt has
+already been incremented and mod_btf->btf already holds the btf
+pointer:
 
-> The proper flow has the kernel evaluate the packet/command *before* it
-> delivers it to HW, not after.
+    mod_btf = &obj->btf_modules[obj->btf_module_cnt++];
+    mod_btf->btf = btf;
+    ...
+    mod_btf->name = strdup(name);
+    if (!mod_btf->name) {
+        err = -ENOMEM;
+        goto err_out;
+    }
 
-From what I can see that's an artificial constraint since we've
-already chosen to trust the device.  After all, if we don't trust the
-device, why are we talking to it?
+Can this double-free btf?  The new btf__free(btf) here frees the
+object, but bpf_object_post_load_cleanup() will iterate btf_module_cnt
+entries and call btf__free(obj->btf_modules[i].btf) on the same
+pointer.  Similarly, close(fd) here and close(obj->btf_modules[i].fd)
+in cleanup would double-close the fd.
 
-> > so that only the firmware would need to parse the request.  If we
-> > wanted to adopt a secmark-esque approach, one could develop a second
-> > parsing mechanism that would be responsible for assigning a LSM label
-> > to the request, and then pass the firmware request to the LSM, but I
-> > do worry a bit about the added complexity associated with keeping the
-> > parser sync'd with the driver/fw.
->
-> In practice it would be like iptables, the parser would be entirely
-> programmed by userspace and there is nothing to keep in sync.
+This is addressed by the next patch in the series (36358f0b8f1b
+"libbpf: Prevent double close of btf objects") which defers the
+btf_module_cnt increment until after strdup succeeds.
 
-You've mentioned a few times now that the firmware/request will vary
-across not only devices, but firmware revisions too, this implies
-there will need to be some effort to keep whatever parser you develop
-(BPF, userspace config, etc.) in sync with the parser built into the
-firmware.  Or am I misunderstanding something?
 
-> > However, even if we solve the parsing problem, I worry we have
-> > another, closely related issue, of having to categorize all of the
-> > past, present, and future firmware requests into a set of LSM specific
-> > actions.
->
-> Why? secmark doesn't have this issue? The classifer would return the
-> same kind of information as secmark, some user provided label that is
-> delivered to the LSM policy side.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-I think there is a misunderstanding in either how secmark works or how
-the LSMs use secmark labels when enforcing their security policy.
-
-The secmark label is set on a packet to represent the network
-properties of a packet.  While the rules governing how a packet's
-secmark is set and the semantic meaning of that secmark label is going
-to be LSM and solution specific, secmark labels represent the
-properties of a packet and not the operation, e.g.
-send/receive/forward/etc., being requested at a given access control
-point.  The access control point itself represents the requested
-operation.  This is possible because the number of networking
-operations on a given packet is well defined and fairly limited; at a
-high level the packet is either being sent from the node, received by
-the node, or is passing through the node.
-
-As I understand the firmware controls being proposed here, encoded
-within the firmware request blob is the operation being requested.
-While we've discussed possible solutions on how to parse the request
-blob to determine the operation, we haven't really discussed how to
-represent the requested operation to the LSMs.  I'm assuming there
-isn't a well defined set of operations, and like the request format
-itself, the set of valid operations will vary from device and firmware
-revision.  I hope you can understand both how this differs from
-secmark and that it is a challenge that really hasn't been addressed
-in the proposals we've discussed.
-
-At a very high level the access control decision for firmware/device
-requests depends on whether the LSM wants to allow process A to do B
-to device C.  The identity/credentials associated with process A are
-easy to understand, we have plenty of examples both inside and outside
-of the LSM on how to do that.  The device identity/attributes
-associated with device C can be a bit trickier, but once again we have
-plenty of examples to draw from, and we can even fall back to a
-generic "kernel" id/attribute if the LSM chooses not to distinguish
-entities below the userspace/kernel boundary.  I think the hardest
-issue with the firmware request hooks is going to be determining what
-operation is being requested, the "B", portion of access request
-tuple.  If we can create a well defined set of operations and leave it
-to the parser to characterize the operation we've potentially got a
-solution, but if the operation is truly going to be arbitrary then we
-have a real problem.  How do you craft a meaningful access control
-policy when you don't understand what is being requested?
-
---=20
-paul-moore.com
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24420241619
+--===============3782200397955678187==--
