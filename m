@@ -1,67 +1,85 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4675939A04F
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 08:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69612EDD78
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 08:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776155703; cv=none; b=agEL6Te5U5LMSI9wvTvKFwxDnLbi/WfJIYM8fvKVsQ8ygbo3VaqUA5HBAaFFnoFJWd9vneETTWG7SUOBruWpHIxsnCK+WI7mYOzMQd3rOCrz9ZgpfYhxwRdxIZKPMaM+vYhn/qa75n/1I5qPlEmd3j3zer647rnb2EVR6g3NWFU=
+	t=1776156838; cv=none; b=X4LOTgDPObLFAC5V1yHnkM3DA3wFJ/UJlV7UlZPTzuWLAwWT7jx4sEAmy79ffInxUTSpT64yZO6eLC1g2iVuZK8BYngiCYKMneBhZhQZmIadh+bBeyZvyYiQ9Rb8l0oDqb8K6EOFep+5LzbyLjdNBnjrLiqxLjJJkSwNtQQkoR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776155703; c=relaxed/simple;
-	bh=Sb5dc5g3KATrWpL6IqWbGiPcOORiFJ0aPfa+MYA2BWA=;
+	s=arc-20240116; t=1776156838; c=relaxed/simple;
+	bh=OVu9KdSJZseM7Nt2ItB4OpCFv/h6niQO/sezNN27FOY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C4u1R8b4wkjQbuN93Q1mSvkNnzdRZ35jsiKkAGXUi8rhAof8OMpbmnvjV4pl6uCoB7Tvq1BLkq6jpi3e2ZzpeacGkKnO5b3Oqg3VNLtniLUlU2Mc1KtTpnLKVclHJ12NIBXB3SZRgHMLCUwkOZF4MJdx9fMqcnXbx5oNvPct2uc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jHvxIS3R; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=QMqQfvkFoqycBXzgFP0wqQH6fsdfx0mPEkGrmQF6dxGiqh6B+yPzHlnI+joUcykntmkIfJrzpEQjs04kNF5K8Xu3PCNZy1nfLn/dudDdu5HIgHCIlxwpc262KxQPlQB+C50I6Mt+utk5y4PRthU6ElkdYraOmhmtL+9zddjY/18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CKKyqhqO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=D8045Z7D; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jHvxIS3R"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-671ae79e617so1886474a12.3
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 01:35:00 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CKKyqhqO";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="D8045Z7D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776156835;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oxmBacf55etftW8UnPkV/EpOImxHgh4CswOaaLPDOw4=;
+	b=CKKyqhqO2So0XpOB4Uh/L9Kq3rF8sqLrwta2N8pLYMrogylHIgUicCxeMU9HRexeSicwts
+	ryvVpSAg5otUrSF0cqmkD9nQCFSiYE3zghYUchT/hVf9rw6DZrTGxATC6+6sYtVBi0gObC
+	PLlgM6rO4wcefbgrdtsUTaDEAgeerAw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-654-Pwns3EimN4C3w0m2xlE7nw-1; Tue, 14 Apr 2026 04:53:54 -0400
+X-MC-Unique: Pwns3EimN4C3w0m2xlE7nw-1
+X-Mimecast-MFC-AGG-ID: Pwns3EimN4C3w0m2xlE7nw_1776156833
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-488c74405ecso32623625e9.1
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 01:53:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776155699; x=1776760499; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1776156833; x=1776761633; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wYQaAq2jbQGVhlnw3hA2xp1hOS8rpTLqnTmsZDTPVAA=;
-        b=jHvxIS3RyQcJglbSAQE3nDkZaDfFRs801tyAKq8B44V5py1RzfW3kGHgyY0MQKc4Us
-         9tAQg3LGcNY6eT07PzbwfGPB/qEPWSPyB4GfWk0tz/PsWxbpOtfwaoZAxYnSuM3Nd3hq
-         PHF6ohpq/wffXJoPY+harQFiiGazW7hgkgYZg9P2fqjhtPYMzx4zQywxxG0MxtWJuVkW
-         71yJ4T5sA7MvVLi+07vpMU2LC9ejqp6P2PebC/ZE5H/jT4z9t07oKVDnekqB1vwKXzy+
-         YgtFY8WnrSfcOlLsRJwzzQ54Czbrsja6omDhrf52t53DTX6FiodcBfRafdIH8hAkc8Y+
-         YNxA==
+        bh=oxmBacf55etftW8UnPkV/EpOImxHgh4CswOaaLPDOw4=;
+        b=D8045Z7DM4W6TRMmcU3o9sEfc1br3fLGCCWbiZy6gZ036NAzT2SNL1ZO0JRVW9NAv7
+         +/L+RVVPNigrXF2DTqzeIkotIPNfokQwJlrQj5oUABBwTuD4dKek5A2WdNiDzYj3S+uZ
+         L+V/TSILikmX0dFpylurwkW4cfw8vTYf0J50Xl3K60H7BGw56Kxx5bCe3AtsBCQJqyE4
+         ZP6Z+02zx609KNdcioUQv61v9vxZ085+TxmI0XxZ8uYCRh5+ukpYnv4RnljYl7uJXE7o
+         2QmZ2mQTdTw91jnJEA4CyPcHyrNgZyJ2USNACTRucftITeH+uT4Xp798U2m5zXwONzmQ
+         d8hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776155699; x=1776760499;
+        d=1e100.net; s=20251104; t=1776156833; x=1776761633;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wYQaAq2jbQGVhlnw3hA2xp1hOS8rpTLqnTmsZDTPVAA=;
-        b=Z4HlK5N6ngu50VgJzwYv7daukHdY/PNLf+qATtI5y5cK8EsTTDtW8VLZpAnCrf9vgc
-         bG5ZmVIS+jEvsx8szZZwI4UUJ53MdRkMBavxBXy3OhBqICcjj38T8Cvbpe/YdiRoO172
-         dygzzQJ4ssAAvtzmTiExtITXC7l+yHMueO+esEYjS7K0EhCyog0/A8MqFnzZcCljtjuf
-         FApv0sV0lHsGC8GbT3xRs9XBlrOlnXvrkf/1LhICoPxMQrkc77vVoSGBQokE8TaAxPPz
-         4GBZNx8Q0YcdN93rS9UWjp4ddBIaYlW0+lyc7kickMxOCiCilxsqN6AqI4ZqmPBJZtPb
-         KpMg==
-X-Forwarded-Encrypted: i=1; AFNElJ9HdydOm/9Ygw4Nk6OtBeucylqMKwEwDOwzY1CZoYb0abvnQfhSI1JVXb3tVbBD0byP64g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCkCHpVGwkOJmX73fJSmV2ucFkltkJY1dC+4wYhnFLqlm0lDqF
-	4B62AM7fsPLd8Wfg4OJnOJpNjP2qtl4UoL+Vt65hE3QNGVLHNXz/GeeH
-X-Gm-Gg: AeBDiese8XaIrsTzz09JjfBxbO3vYDYmZqoSnzsBwU074nbhjn6apV4yh+HPC/0r/Bd
-	o5gNbCMQb5cOJumVDSS3G6VInxIX62uuNzCNEVZn1r9fVoC0JDEXiSyQnd6WYhLnMixIY5AMkyu
-	1kIqnFVlDXJ+fNxAI2hgVQgb7PP/rThqUhYYT7GYgqBc9o0fdZj/RmR3GYqK7Sc+4OPlrTwofLk
-	vR9uZrPgDauP33poNu0jp5OHmc6lcgFshLBnTEAQ7u5KjPAF9DlIkvQRG3NQqkPOL/g5myJ7LnZ
-	wN3yP9K/gjGhvXIuZk+d5rXjj4u/GUQbAOiwvX3Q4+loTNPD/2qZxhhnbs3xMw2hmc74S6lQlfU
-	e6/tqIrk7XCuUzv8euq1vygWD/8+0sgM2pttldj87FTdIXSvJs8BCFDLMlg6MddatzPF508V/rh
-	OOfeeb+5gPaxuinCGgxQKbslZ/OBsXeOm33UkBU86ZpjAiaKoTemDRcW0STTg1lmRwGMlJou/d5
-	T7z1ei6
-X-Received: by 2002:a05:6402:4545:b0:66e:8ce7:630d with SMTP id 4fb4d7f45d1cf-670785a08aemr5637365a12.10.1776155699246;
-        Tue, 14 Apr 2026 01:34:59 -0700 (PDT)
-Received: from ?IPV6:2a02:8109:a307:d900:2caa:994a:1164:dca? ([2a02:8109:a307:d900:2caa:994a:1164:dca])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-671c4f6049bsm391016a12.13.2026.04.14.01.34.57
+        bh=oxmBacf55etftW8UnPkV/EpOImxHgh4CswOaaLPDOw4=;
+        b=I+g1sPJbXXOS0QcnV1+KEiXNxu7+rhj6bNwuYgvE72mFQB11Hld7F9VzK9yN4TU+kt
+         1HyBIhhEB2wECjC0CMdAntyjbkHGoDnwnZfFn1vcTaf3IYtuHmoob7zflw7ydRoLwfAw
+         ViXFfH+DYKTf1Samj6oBqpFgCB5RUWgFYZ7mhqMS9u5yZDjzNIPWYoUrMi3Jfdsk5RV5
+         WFIYeroSOS2OcR+OQ/Nqz6z6Z13uxZEPsRsVN7+hI4jb8+G7fX2T60n7eq7S4DIp43dD
+         oHC817Kz/cYQbq+tv+nuVrAc/wF/5RbGfCR9WUXlZTWTCUb+IkypWjqLRiraap6K45ao
+         5+Tg==
+X-Forwarded-Encrypted: i=1; AFNElJ+DmeGxXcvnZC6ReeBCMqfN2ErU+/4nH2GIhClOmy0EsSs6FRxxSWN56foGdmLoGDHVaxo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrJE3xhJVPaL4mK4H/bQhdPOgkUs5SU6cjnGftPznObFa1OWGL
+	R0BDog+PKF+EJEvPB+s6T8xuH2J6mG9COxEc9GZYgd8niazxNC9iD2H2jMSCoqse5ovTFB8tDXx
+	K1Z3OokTRuE5PYCKYmDhGUnY1Yy9C6tj0dLdvoPNnrZcXFm9JlWvoVA==
+X-Gm-Gg: AeBDiesTYE5/QHv1ArAtKMmSqit0qeUYEmjEoT1gnAmjEP3EZ5eWy2KOFIzuBYDxiDW
+	vfBm7pI3qr039dcl2GC1BGeztMTjAh0MxEQx3ujYs1pJWuCgKXZY9OHpDkmgaG8sgRvth8CdCwj
+	Zjjz9NGfkEp8YeKiPZQzxkUoMKnX7IQ0PZO/ygeM1GF8fEGkI41Ea44YP6AVzcvHXqg4b+Da2XC
+	TL2ztLKYX1SFwqdUUlLL4g9ryOyx66B72NcPxmB/xpwZL6Ic751nzeEy8lEPGdy3o5lGjSwO9kt
+	Lv83wLpmBAF9FdkF/LPQWkTTkEN08NO44c4+AsvujnnvEoFpsg/frhxhs2mSN/DgSPWNC5oLi1u
+	cbxXAhuoYr770IdNyS775H63tTcF0vtUI1JdWsYKrlJBSTttYEmZ2oNkZ
+X-Received: by 2002:a05:600c:3150:b0:486:fcc7:d6a with SMTP id 5b1f17b1804b1-488d67f4c4dmr251372745e9.13.1776156833169;
+        Tue, 14 Apr 2026 01:53:53 -0700 (PDT)
+X-Received: by 2002:a05:600c:3150:b0:486:fcc7:d6a with SMTP id 5b1f17b1804b1-488d67f4c4dmr251372295e9.13.1776156832656;
+        Tue, 14 Apr 2026 01:53:52 -0700 (PDT)
+Received: from [192.168.88.32] ([216.128.11.125])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d6f4bf2b4sm23579778f8f.20.2026.04.14.01.53.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2026 01:34:57 -0700 (PDT)
-Message-ID: <e6872b9f-ef6d-40a1-8ad6-c75bad92e60a@gmail.com>
-Date: Tue, 14 Apr 2026 09:34:56 +0100
+        Tue, 14 Apr 2026 01:53:52 -0700 (PDT)
+Message-ID: <c79bdb62-eab2-4bf3-af8b-3875730adc53@redhat.com>
+Date: Tue, 14 Apr 2026 10:53:49 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,247 +87,93 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next v2 03/18] bpf: Implement lookup, delete,
- update for resizable hashtab
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
- kernel-team@meta.com, eddyz87@gmail.com, memxor@gmail.com,
- herbert@gondor.apana.org.au
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
- <20260408-rhash-v2-3-3b3675da1f6e@meta.com>
- <DHSBDLRKCAQO.1IPJTSEMPESV7@etsalapatis.com>
+Subject: Re: [PATCH net v7 1/2] net, bpf: fix null-ptr-deref in
+ xdp_master_redirect() for down master
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, netdev@vger.kernel.org,
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Jussi Maki <joamaki@gmail.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260411005524.201200-1-jiayuan.chen@linux.dev>
+ <20260411005524.201200-2-jiayuan.chen@linux.dev>
 Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <DHSBDLRKCAQO.1IPJTSEMPESV7@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260411005524.201200-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 4/13/26 9:37 PM, Emil Tsalapatis wrote:
-> On Wed Apr 8, 2026 at 11:10 AM EDT, Mykyta Yatsenko wrote:
->> From: Mykyta Yatsenko <yatsenko@meta.com>
->>
->> Use rhashtable_lookup_likely() for lookups, rhashtable_remove_fast()
->> for deletes, and rhashtable_lookup_get_insert_fast() for inserts.
->>
->> Updates modify values in place under RCU rather than allocating a
->> new element and swapping the pointer (as regular htab does). This
->> trades read consistency for performance: concurrent readers may
->> see partial updates. Users requiring consistent reads should use
->> BPF_F_LOCK.
->>
->> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->> ---
->>   kernel/bpf/hashtab.c | 141 ++++++++++++++++++++++++++++++++++++++++++++++++---
->>   1 file changed, 134 insertions(+), 7 deletions(-)
->>
->> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
->> index 9e7806814fec..ea7314cc3703 100644
->> --- a/kernel/bpf/hashtab.c
->> +++ b/kernel/bpf/hashtab.c
->> @@ -2755,6 +2755,11 @@ struct bpf_rhtab {
->>   	u32 elem_size;
->>   };
->>   
->> +static inline void *rhtab_elem_value(struct rhtab_elem *l, u32 key_size)
->> +{
->> +	return l->data + round_up(key_size, 8);
->> +}
->> +
->>   static struct bpf_map *rhtab_map_alloc(union bpf_attr *attr)
->>   {
->>   	return ERR_PTR(-EOPNOTSUPP);
->> @@ -2769,33 +2774,155 @@ static void rhtab_map_free(struct bpf_map *map)
->>   {
->>   }
->>   
->> +static void *rhtab_lookup_elem(struct bpf_map *map, void *key)
->> +{
->> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
->> +	/* Using constant zeroed params to force rhashtable use inlined hashfunc */
->> +	static const struct rhashtable_params params = { 0 };
->> +
->> +	return rhashtable_lookup_likely(&rhtab->ht, key, params);
->> +}
->> +
->>   static void *rhtab_map_lookup_elem(struct bpf_map *map, void *key) __must_hold(RCU)
->>   {
->> -	return NULL;
->> +	struct rhtab_elem *l;
->> +
->> +	l = rhtab_lookup_elem(map, key);
->> +	return l ? rhtab_elem_value(l, map->key_size) : NULL;
->> +}
->> +
->> +static int rhtab_delete_elem(struct bpf_rhtab *rhtab, struct rhtab_elem *elem)
->> +{
->> +	int err;
->> +
->> +	err = rhashtable_remove_fast(&rhtab->ht, &elem->node, rhtab->params);
->> +	if (err)
->> +		return err;
->> +
->> +	bpf_map_free_internal_structs(&rhtab->map, rhtab_elem_value(elem, rhtab->map.key_size));
->> +	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
->> +	return 0;
->>   }
->>   
->>   static long rhtab_map_delete_elem(struct bpf_map *map, void *key)
->>   {
->> -	return -EOPNOTSUPP;
->> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
->> +	struct rhtab_elem *l;
->> +
->> +	guard(rcu)();
->> +	l = rhtab_lookup_elem(map, key);
->> +	return l ? rhtab_delete_elem(rhtab, l) : -ENOENT;
->> +}
->> +
->> +static void rhtab_read_elem_value(struct bpf_map *map, void *dst, struct rhtab_elem *elem,
->> +				  u64 flags)
->> +{
->> +	void *src = rhtab_elem_value(elem, map->key_size);
->> +
->> +	if (flags & BPF_F_LOCK)
->> +		copy_map_value_locked(map, dst, src, true);
->> +	else
->> +		copy_map_value(map, dst, src);
->>   }
->>   
->>   static int rhtab_map_lookup_and_delete_elem(struct bpf_map *map, void *key, void *value, u64 flags)
->>   {
->> -	return -EOPNOTSUPP;
->> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
->> +	struct rhtab_elem *l;
->> +	int err;
->> +
->> +	if ((flags & ~BPF_F_LOCK) ||
->> +	    ((flags & BPF_F_LOCK) && !btf_record_has_field(map->record, BPF_SPIN_LOCK)))
->> +		return -EINVAL;
->> +
->> +	/* Make sure element is not deleted between lookup and copy */
->> +	guard(rcu)();
->> +
->> +	l = rhtab_lookup_elem(map, key);
->> +	if (!l)
->> +		return -ENOENT;
->> +
->> +	rhtab_read_elem_value(map, value, l, flags);
->> +	err = rhtab_delete_elem(rhtab, l);
->> +	if (err)
->> +		return err;
->> +
->> +	check_and_init_map_value(map, value);
->> +	return 0;
->>   }
->>   
->> -static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *value, u64 map_flags)
->> +static long rhtab_map_update_existing(struct bpf_map *map, struct rhtab_elem *elem, void *value,
->> +				      u64 map_flags)
->>   {
->> -	return -EOPNOTSUPP;
->> +	if (map_flags & BPF_NOEXIST)
->> +		return -EEXIST;
->> +
->> +	if (map_flags & BPF_F_LOCK)
->> +		copy_map_value_locked(map, rhtab_elem_value(elem, map->key_size), value, false);
->> +	else
->> +		copy_map_value(map, rhtab_elem_value(elem, map->key_size), value);
+On 4/11/26 2:55 AM, Jiayuan Chen wrote:
+> syzkaller reported a kernel panic in bond_rr_gen_slave_id() reached via
+> xdp_master_redirect(). Full decoded trace:
 > 
-> It looks like Sashiko is accurate about special fields not getting handled here.
+>   https://syzkaller.appspot.com/bug?extid=80e046b8da2820b6ba73
 > 
-
-Special fields are not copied, this is similar to other maps.
-
->> +	return 0;
->>   }
->>   
->> -static void rhtab_map_free_internal_structs(struct bpf_map *map)
->> +static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *value, u64 map_flags)
->>   {
->> +	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
->> +	struct rhtab_elem *elem, *tmp;
->> +
->> +	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST))
->> +		return -EINVAL;
->> +
->> +	if ((map_flags & BPF_F_LOCK) && !btf_record_has_field(map->record, BPF_SPIN_LOCK))
->> +		return -EINVAL;
->> +
->> +	guard(rcu)();
->> +	elem = rhtab_lookup_elem(map, key);
->> +	if (elem)
->> +		return rhtab_map_update_existing(map, elem, value, map_flags);
->> +
->> +	if (map_flags & BPF_EXIST)
->> +		return -ENOENT;
->> +
->> +	/* Check max_entries limit before inserting new element */
->> +	if (atomic_read(&rhtab->ht.nelems) >= map->max_entries)
->> +		return -E2BIG;
->> +
->> +	elem = bpf_mem_cache_alloc(&rhtab->ma);
->> +	if (!elem)
->> +		return -ENOMEM;
->> +
->> +	memcpy(elem->data, key, map->key_size);
->> +	copy_map_value(map, rhtab_elem_value(elem, map->key_size), value);
->> +
->> +	tmp = rhashtable_lookup_get_insert_fast(&rhtab->ht, &elem->node, rhtab->params);
->> +	if (tmp) {
->> +		bpf_mem_cache_free(&rhtab->ma, elem);
->> +		if (IS_ERR(tmp))
->> +			return PTR_ERR(tmp);
->> +
->> +		return rhtab_map_update_existing(map, tmp, value, map_flags);
->> +	}
->> +
->> +	return 0;
->>   }
+> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter, a per-CPU
+> counter that bonding only allocates in bond_open() when the mode is
+> round-robin. If the bond device was never brought up, rr_tx_counter
+> stays NULL.
 > 
-> Note: I am actually skeptical about Sashiko's warning here. Sure, the
-> update may get overwritten even as we are returning 0, but we are
-> providing no guarantees about how long the write will survive in the
-> map, and there is no inherent atomicity between an update and any other
-> operations.
+> The XDP redirect path can still reach that code on a bond that was
+> never opened: bpf_master_redirect_enabled_key is a global static key,
+> so as soon as any bond device has native XDP attached, the
+> XDP_TX -> xdp_master_redirect() interception is enabled for every
+> slave system-wide. The path xdp_master_redirect() ->
+> bond_xdp_get_xmit_slave() -> bond_xdp_xmit_roundrobin_slave_get() ->
+> bond_rr_gen_slave_id() then runs against a bond that has no
+> rr_tx_counter and crashes.
 > 
-
-Right, either way can't guarantee that user going to see it's write 
-anyway, if concurrent writers exist.
-
->>   
->>   static int rhtab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
->>   {
->> -	return -EOPNOTSUPP;
->> +	struct bpf_insn *insn = insn_buf;
->> +	const int ret = BPF_REG_0;
->> +
->> +	BUILD_BUG_ON(!__same_type(&rhtab_lookup_elem,
->> +				  (void *(*)(struct bpf_map *map, void *key)) NULL));
->> +	*insn++ = BPF_EMIT_CALL(rhtab_lookup_elem);
->> +	*insn++ = BPF_JMP_IMM(BPF_JEQ, ret, 0, 1);
->> +	*insn++ = BPF_ALU64_IMM(BPF_ADD, ret,
->> +				offsetof(struct rhtab_elem, data) + round_up(map->key_size, 8));
->> +
->> +	return insn - insn_buf;
->> +}
->> +
->> +static void rhtab_map_free_internal_structs(struct bpf_map *map)
->> +{
->>   }
+> Fix this in the generic xdp_master_redirect() by refusing to call into
+> the master's ->ndo_xdp_get_xmit_slave() when the master device is not
+> up. IFF_UP is only set after ->ndo_open() has successfully returned,
+> so this reliably excludes masters whose XDP state has not been fully
+> initialized. Drop the frame with XDP_ABORTED so the exception is
+> visible via trace_xdp_exception() rather than silently falling through.
+> This is not specific to bonding: any current or future master that
+> defers XDP state allocation to ->ndo_open() is protected.
 > 
-> This gets filled in in later patches, but the fact it's here and a no-op
-> debatably the line into being non-bisectable. Can we move it to the walk
-> patch, since that's where it gets populated?
+> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+> Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
+> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
+>  net/core/filter.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index cf2113af4bc9..9ec70c4b7723 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4398,6 +4398,8 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+>  	struct net_device *master, *slave;
+>  
+>  	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
+> +	if (unlikely(!(master->flags & IFF_UP)))
+> +		return XDP_ABORTED;
+>  	slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
 
-I think this is bisectable, because with this patch you can't create 
-resizable hashmap anyway (allocation support comes as the last patch of 
-the series). Alexei suggested to to merge these patches, so I'll do that.
+The AI review noted that the master could be (theoretically) NULL here.
+Since that event is not a regression (unconditional `master` dereference
+already present) and syzkaller failed to trigger it (despite being the
+sort of thing syzkaller is very good to find) make me thing it's better
+to eventually follow-up instead requesting another revision here, but
+please have a look.
 
->>   
->>   static int rhtab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
-> 
+Thanks,
+
+Paolo
+
+>  	if (slave && slave != xdp->rxq->dev) {
+>  		/* The target device is different from the receiving device, so
 
