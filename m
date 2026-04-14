@@ -1,155 +1,197 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BE222332E;
-	Tue, 14 Apr 2026 20:34:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06712D1931
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.139.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776198866; cv=none; b=bPGu7s2EgvLQOqQMPcPhPI2P8Kl4OENmfnslyaC33HHhX+LeHKozCpOm4wVVkfxScTA/incZfZHrhLf1Y1s6IOhfK1vzYMKPET5eTTrVTOz7k1jUSUwcth1w36m+agZZEaUXsaz7bEO+nxG9+kh3he11Ge8iXLE2kKGOg3izYLM=
+	t=1776198931; cv=none; b=C2ztO+LheUY6sROz6LLHeRY+hjrEK0JmUYWDXHoSWItqmRHLG6YBr0zQ8fP9ujd2plbKcMEILv0wIWfKTDLmEEPC8k6Mx9BUFD9SwEEsixizYM2o86qxnWx/6lCthi926Hl7HwWnpPcXF4Uxwxvs8yQw9hQwO69Qg/8t9mLxfyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776198866; c=relaxed/simple;
-	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cue/pNAKowuF4W16OQOYwmIpHARygNiWuD/1qkHZD7NmeIt8yidRThnTBAvd4zeDFLrMzAnmZDeJhYM1faAYjSFoKQ79lK78Vh+NYa8Yvk9JkcEjHm4N1DCdi6v+3pJggP9vHm6G+c35d/m62sFF3KI5bycaOfkHKcyNwWoW9vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=as5O93zt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776198931; c=relaxed/simple;
+	bh=adOm0b5PLKbcD+/RPQsz466lOD3unkYQdbCXBZX4Fb0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T8oSQ6h1rEFMzpPKVR/AQ1JJQ6aPX6D5IGfrcJmeLw06ScAePjouov/ArvrikNxdWRlZK79FnmtpDtfs/FmaFjNaXPh2xRIPQXrpVSOzfaeBut98H2LsBb57fe4wsfVWK496j5ptBNICAFLYgknxTbtb4QWmCwenSi/hkANUS0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu; spf=pass smtp.mailfrom=columbia.edu; dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b=lRFBKYLM; arc=none smtp.client-ip=148.163.139.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="as5O93zt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781CBC19425;
-	Tue, 14 Apr 2026 20:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776198866;
-	bh=XYHZBZZq/WlKpnfk8V8nvtrvlc9gsMQNaF0WcYETyqA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=as5O93ztneTN0G6XdHqJvjzPW88jPn4thvhZqK2fpeqnxRIbjEtqiL5BTUJzXVEvQ
-	 OXHsmNV6+s61r1x6ViUiMdaJ1yXwPOKJHabD6VxNnvW5kt3jI8cga9KBIXnaEZxzfm
-	 8EVdyH5fbZuUm4fy7gjeclQ4JzndkIspECCZVMAkCzsqUx2fdSMgqDcjAFyxd8Nj5X
-	 SnyWNdgL56bz45xrfLk5J9RUbB4BEy3912lGi6MaRC08ssl/EZSvhvGNFXwLeQh0LF
-	 6NQ58fVtuIzclzZkYlaGGO1WSjYbL5E5YGhg4Ul6bVIDVNkfbarSrV93nP0qUuDc9b
-	 KAhIncF4Lrfog==
-Date: Tue, 14 Apr 2026 13:34:18 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Nicolas Schier <nsc@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild/btf: Remove broken module relinking exclusion
-Message-ID: <20260414203418.GA1022044@ax162>
-References: <20260410131343.2519532-1-petr.pavlu@suse.com>
+	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b="lRFBKYLM"
+Received: from pps.filterd (m0167075.ppops.net [127.0.0.1])
+	by mx0b-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63EKRIf1878452
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 16:35:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps01; bh=nLeT
+	RRGmHX5BMpVtP+w58//ItyrkZ9dOA8UVe6ev+tk=; b=lRFBKYLMi6M71+q2z04O
+	PrgzuYcimOMwgpRqxfzegjL42voJYBu14rD6eghtLednwYVfY1arPN4h3/UUYcWg
+	fpyO5gUQMknmKcePDV1qnAgnCGWC1S5BibH7IfdGD176gCMdNha0TKOaqDUMVz50
+	6wNzTXwqXBaDcuOnVSQ/Uewn/tKDOMEq0g4RFr+0og+ZRoB3rwUx0zgVtXbSViRW
+	JKoq3v5fZzippF3MJoFOvOIH0bdxJ1Ber868W0eEEnugnBkaxL5dZgOYHlU+G+z+
+	cY521DDO7UJSxS4hBRY6MxiT6sxRO/2Mb5uQsJLhIxVSXJ+IrvOBMiGFsKLDa0vk
+	4Q==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 4dh86003y9-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 16:35:22 -0400 (EDT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8dacf883e77so1178178785a.2
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:35:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776198922; x=1776803722;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nLeTRRGmHX5BMpVtP+w58//ItyrkZ9dOA8UVe6ev+tk=;
+        b=IlPJh+wESorqrvFjuEDKsRx/N6hSmsVe9olWTeHfsp71EaSvNzEsHDmNxKiTgUS18P
+         f+PvMbemFtZuZEsEXxHTMk+9qq1o/1QdncjXApbSO3WtEDJYULSoZ8nActP0GzjZyipH
+         1174rkGlmc688T12Kc4XAqGFeHwLzvz46k3ab3Qin/RDO7F9X+Vo9lhKvMsrIoxbMy32
+         t7pR+d923ndLre740syj6fYCRU/i67SypmubYopLxZssXMtlL2pt3w92vUn12EeZjpWe
+         5A6iT7wpyCGKAgOWep34aRBnVbohjcmmDfRUIrVwDlOavSTZBpIzd6hpWKR5RpzxjAKF
+         AfLA==
+X-Forwarded-Encrypted: i=1; AFNElJ+9eulfum45Jo0/n9IYh2u3t1OluxvJBNyhF6pgUG5/tNS+wDtYnBMH/YW6/N/eyFGgBRk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxidhy18RTD7hAwZaFZpKCjJUTkCb7dpHHVtAy+YJbfotJiL7MZ
+	Ng7qzDFEWWQMuEIlB215XmsQdq1xSK8bvS53fQJGnlrsPSSEyos7yWkn2Zi1lh8gaQjPLqyT1x+
+	J1Hjb8QfYWf27BcIGlrfZxTqaTvUwWk4V8cFVuVYLz7EnWwNbIw==
+X-Gm-Gg: AeBDievT+Sz6EeTxTukRW5naeXSgjflRoBsE2bctNQmwnjT0CuK+xgn+NMcTfQBGL25
+	FWNXkNdkNTQ817KbtRHYH+I2J/JMGmhmymdyR6e9tIGkMPtyx0ZDvK+DbjTTZfHx15cBcbrLAC9
+	UlhieTVKMTgyXaPSOaxsr0nkBLNrxMr7l7MX/DzLA/KC0f6bSuwbAFJ92H/pZiBAUrCpw/nk7oE
+	lDWKWJJ3TvwBFuCClyniam3PYftsewajHL8Or//L0e1qe4TXjov+lRJ5zedGxKQUI2Se5haZLFv
+	NZu7rJKtaPKeZAwTZZum/2k2Mrzk9nf1ZzCkjcjvYoNIg9X7fSrRtZRPE1asIVlUswy4ZKcvBwn
+	379A5EebGHB1S16qQUm6MbDrxx593caHL5sVBqlMod1iW8Ql0w7ZedUMx1NqAjqcjMUHYB+o=
+X-Received: by 2002:a05:620a:468e:b0:8d8:2a0:e17a with SMTP id af79cd13be357-8ddcfcb2d46mr2770767485a.50.1776198921792;
+        Tue, 14 Apr 2026 13:35:21 -0700 (PDT)
+X-Received: by 2002:a05:620a:468e:b0:8d8:2a0:e17a with SMTP id af79cd13be357-8ddcfcb2d46mr2770761585a.50.1776198921305;
+        Tue, 14 Apr 2026 13:35:21 -0700 (PDT)
+Received: from [192.168.1.62] (dyn-160-39-33-242.dyn.columbia.edu. [160.39.33.242])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ddb915b46bsm1196176385a.33.2026.04.14.13.35.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Apr 2026 13:35:20 -0700 (PDT)
+Message-ID: <7dc54b9c-ba2b-4044-8cb7-b95ce89f1e09@columbia.edu>
+Date: Tue, 14 Apr 2026 16:35:19 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260410131343.2519532-1-petr.pavlu@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] Towards Unified and Extensible Memory Reclaim
+ (reclaim_ext)
+To: John Hubbard <jhubbard@nvidia.com>, Matthew Wilcox <willy@infradead.org>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Cc: Gregory Price <gourry@gourry.net>,
+        "Lorenzo Stoakes (Oracle)" <ljs@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shakeel Butt <shakeel.butt@linux.dev>,
+        lsf-pc@lists.linux-foundation.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        David Hildenbrand <david@kernel.org>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Chen Ridong <chenridong@huaweicloud.com>,
+        Emil Tsalapatis <emil@etsalapatis.com>,
+        Alexei Starovoitov <ast@kernel.org>, Yuanchu Xie <yuanchu@google.com>,
+        Wei Xu <weixugc@google.com>, Kairui Song <ryncsn@gmail.com>,
+        Nhat Pham <nphamcs@gmail.com>, Barry Song <21cnbao@gmail.com>,
+        David Stevens <stevensd@google.com>, Vernon Yang <vernon2gm@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        wangzicheng <wangzicheng@honor.com>,
+        "T . J . Mercier" <tjmercier@google.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Meta kernel team <kernel-team@meta.com>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20260325210637.3704220-1-shakeel.butt@linux.dev>
+ <20260325190547.abb7309fb63473b57b7a90a0@linux-foundation.org>
+ <acTaRgusrxfCoKqe@tiehlicka>
+ <ac05d923-7871-4691-8d26-eff41b3a3db0@lucifer.local>
+ <CAJHvVchSfGDubPhir0SgZfr_BcpN5oq_7AY4AZ587_ucgY4Apw@mail.gmail.com>
+ <acWXdvHx9mYqvT2w@gourry-fedora-PF4VCD3F>
+ <CAJHvVciAmX9OFLBSahwvXL=E+3xnDsL2aE4WKfDBFqaT1Gu+Qg@mail.gmail.com>
+ <acX8_XMQYA0-NGUW@casper.infradead.org>
+ <6f40c513-af3e-45b6-9000-c61494a23bd3@columbia.edu>
+ <70fd648a-efa1-465a-8e6a-51411dfd50b8@nvidia.com>
+Content-Language: en-US
+From: Tal Zussman <tz2294@columbia.edu>
+In-Reply-To: <70fd648a-efa1-465a-8e6a-51411dfd50b8@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=e402j6p/ c=1 sm=1 tr=0 ts=69dea50a cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=GaPK54s0Se3oFqK5NkZy0g==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=x7bEGLp0ZPQA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Da8U98TiO7q1upZEImrf:22 a=HpS3TJQ9O3Ob1ozEcmik:22
+ a=N54-gffFAAAA:8 a=tHa68p0SAAAA:8 a=zHSXLxmVE_XwShEkr-4A:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22 a=ufIsyHvWW7FwcMbVRpPq:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDE5MiBTYWx0ZWRfXwY7IvSzmzMiR
+ JbcBrVkWpkZ0eo3I/wtXeoatsnMUMvftb5C8cS2qPfpVNqbGKRFDjYR/D2SCXkOA7jRnSG763+9
+ vJtG2f/S4vno7WGfKSRlhxh4+U4vDrec6jXpeDiKtLpW4ibqEr6nNcx7M6Q/Yq6ST8N6kF76nUZ
+ u5f2eCGq1zzghafcnissC015iw6W2Vek1Ufdcco2FLCwpYC56W7FDA1Ns+11vVp8OrQ0ZPc/E+n
+ rcHKGbZaW/I4OcngViL1FrgJaPA3zPah5+Pjca0vcB+LR8ufOJyoedXsX3gaLuLwhVhHPA22qdZ
+ uSNd1s2GTE6ShSUHRjbbd/9ubb7WAkoJFkn0JC1EU6/xnFbMIHT1EFYqPx44PGLIKUVefTs6zo2
+ buV4jRsw2XQff+aKOU7kOrx2es1ww700+NK5M3igyl8XmZAE+FDVKHMTslqRIptNcinM22LNAYV
+ 3s7B+otL5EY08+OR0Sw==
+X-Proofpoint-GUID: Ggd-1hEDdSfgjWXJNVEVuhwHmR-soz49
+X-Proofpoint-ORIG-GUID: Ggd-1hEDdSfgjWXJNVEVuhwHmR-soz49
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11759
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=10 bulkscore=10 priorityscore=1501 clxscore=1015 phishscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 lowpriorityscore=10 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604140192
 
-On Fri, Apr 10, 2026 at 03:13:29PM +0200, Petr Pavlu wrote:
-> Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
-> and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
-> to enable generation of split BTF for kernel modules. This change required
-> the %.ko Makefile rule to additionally depend on vmlinux, which is used as
-> a base for deduplication. The regular ld_ko_o command executed by the rule
-> was then modified to be skipped if only vmlinux changes. This was done by
-> introducing a new if_changed_except command and updating the original call
-> to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
-> 
-> Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
-> in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
-> from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
-> previous logic to skip relinking modules if only vmlinux changes. The issue
-> is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
-> prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
-> retains the raw './vmlinux'. As a result, if_changed_except doesn't
-> correctly filter out vmlinux. Consequently, with
-> CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
-> changes.
-> 
-> It is possible to fix this Makefile issue. However, having the %.ko rule
-> update the resulting file in place without starting from the original
-> inputs is rather fragile. The logic is harder to debug if something breaks
-> during a subsequent .ko update because the old input is lost due to the
-> overwrite. Additionally, it requires that the BTF processing is idempotent.
-> For example, sorting id+flags BTF_SET8 pairs in .BTF_ids by resolve_btfids
-> currently doesn't have this property.
-> 
-> One option is to split the %.ko target into two rules: the first for
-> partial linking and the second one for generating the BTF data. However,
-> this approach runs into an issue with requiring additional intermediate
-> files, which increases the size of the build directory. On my system, when
-> using a large distribution config with ~5500 modules, the size of the build
-> directory with debuginfo enabled is already ~25 GB, with .ko files
-> occupying ~8 GB. Duplicating these .ko files doesn't seem practical.
-> 
-> Measuring the speed of the %.ko processing shows that the link step is
-> actually relatively fast. It takes about 20% of the overall rule time,
-> while the BTF processing accounts for 80%. Moreover, skipping the link part
-> becomes relevant only during local development. In such cases, developers
-> typically use configs that enable a limited number of modules, so having
-> the %.ko rule slightly slower doesn't significantly impact the total
-> rebuild time. This is supported by the fact that no one has complained
-> about this optimization being broken for the past two years.
-> 
-> Therefore, remove the logic that prevents module relinking when only
-> vmlinux changes and simplify Makefile.modfinal.
-> 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-If the BPF folks want to take this since it deals with BTF:
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
-
-Otherwise, either Nicolas can take this for 7.1 or I will pick it up for
-7.2 when 7.1-rc1 is out.
-
-> ---
-> My previous attempt to fix this logic can be found at
-> https://lore.kernel.org/linux-modules/20260402141911.1577711-1-petr.pavlu@suse.com/
-> ---
->  scripts/Makefile.modfinal | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
+On 4/8/26 8:21 PM, John Hubbard wrote:
+> On 3/27/26 12:12 PM, Tal Zussman wrote:
+>> On 3/26/26 11:43 PM, Matthew Wilcox wrote:
+>>> On Thu, Mar 26, 2026 at 01:47:43PM -0700, Axel Rasmussen wrote:
+>>>> On Thu, Mar 26, 2026 at 1:30 PM Gregory Price <gourry@gourry.net> wrote:
+> ...
+>> Yeah, unfortunately it's not so straightforward. As a simple illustrative
+>> example, consider a file-search workload, where you search through a large
+>> number of files over and over again (e.g., a poor kernel developer trying to
+>> understand how the page cache works). This follows an MRU, rather than LRU,
+>> pattern, and readahead doesn't help much, leading the active/inactive and
+>> MGLRU policies to have similar performance (~40s runtime in a specific
+>> benchmark we ran). In comparison, using cache_ext (our eBPF-based caching
+>> framework), we can run an MRU policy and it goes down to 20s.
 > 
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index adcbcde16a07..01a37ec872b9 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -46,17 +46,9 @@ quiet_cmd_btf_ko = BTF [M] $@
->  		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
->  	fi;
->  
-> -# Same as newer-prereqs, but allows to exclude specified extra dependencies
-> -newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
-> -
-> -# Same as if_changed, but allows to exclude specified extra dependencies
-> -if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
-> -	$(cmd);                                                              \
-> -	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
-> -
->  # Re-generate module BTFs if either module's .ko or vmlinux changed
->  %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
-> -	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
-> +	+$(call if_changed,ld_ko_o)
->  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
->  endif
+> That's dramatic!
 > 
-> base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+> ...
+>> It's been well-known in the academic realm for a while that there isn't
+>> really a "one-size-fits-all" policy that works *best* for all workloads.
+> 
+> I think that that point has been less clear, outside of academia. In fact,
+> MGRLU (to the extent that we believed we would eventually get rid of LRU,
+> in favor of MGLRU) doubled down on the idea of one size fits all. So this
+> is interesting.
+> 
+>> Yes, you can make a general policy that works *well*, but if you really care
+>> about a workload's performance and want to squeeze out the last 10-20% (or
+>> more) of performance, you need to be able to (1) experiment and (2) take
+>> advantage of application-level insights. Being able to extend reclaim (in
+>> our case with eBPF) enables that.
+>> 
+>> We wrote a paper about this that was published a few months ago [1]. Happy
+>> to answer any questions and continue the discussion!
+>> 
+>> [1] https://dl.acm.org/doi/pdf/10.1145/3731569.3764820
+>> 
+> 
+> Excellent work, I was delighted to find a well-balanced description of
+> both older and more recent history of the Linux page cache there.
+> 
+> It's helpful to read this, even if we go with a non-eBPF approach.
+> 
+
+That's great to hear, thank you!
+
+> 
+> thanks,
 > -- 
-> 2.53.0
+> John Hubbard
 > 
+
