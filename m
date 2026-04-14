@@ -1,154 +1,166 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92C23E6DD4
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1393E6DD4
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776173067; cv=none; b=PAR5CCtVM7DtZAXWzKz1AOcqsapcwLSc8C+TY8EGfFsBlBvZwJv4efk40D/ndYHj7XDj+RWVMbjLrIeyEsh3rKX0ODIKD/Twxm6Efz8RgpR8xgFQFj14a8QmUlq+yJ5fr2wGL9ULVDHJTBT50rpjVq4/P80dhTeXyVrgBMxk3Ok=
+	t=1776173083; cv=none; b=gATm36HlfWPwJd6HDavqh9ASgEoeYEKaLoh0TuVZQo3jZLXB7MdCwm90nsL/7/BBpBpuIPvn18MeQ7ry48VXed+uHnX607AvRvy8gZVBrOPS4wnhfSa6BL+lm6iHKoYhHRikXQE8mw3HHYnjgMocIoLkQnGIkGO5uoepz+VavM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776173067; c=relaxed/simple;
-	bh=hrlp+8/wSmW3Jx7uBVXodU++OJHYVgQMsMTogDvagaY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=sDCLTCpVBIiK8t2fedKkaSSic1DAUcdZJuldY87otpMfbD12Zy5CHvJSMwRYrMXpt0JxhQosASbhN+LBJSBGjqvbCdRHVYXoIY0WiKds5YNmuJw4EWAqQfFAlzIJ2YrJHiE3TnI0lfT5aj7IifE4pw+tJm/ag0axhWL6N9qP3GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=X6A4tqU3; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1776173083; c=relaxed/simple;
+	bh=7WEm9mWebfGrU7XBfffEDTPMXRxQv4vRzgDzjIPWxug=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CqWza8TtjqOSgyrxGsmp4ZQTY4N91OCp6XnSqsxptmjFvjVOOMNCtYdp8oEf106+vup7N5IroZ1Cb6AJVcxMv2Gkl98atJZ9H+lvXD9eCjFncCL2WfMsWVkJANx3r08ua+vGu33J+jX6t78VSGmV82Y7XPbVQqbvQvikls+DqNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BUwEFf8m; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="X6A4tqU3"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 3638AC5AAAC;
-	Tue, 14 Apr 2026 13:25:01 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 15A6960410;
-	Tue, 14 Apr 2026 13:24:24 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 91474104500A2;
-	Tue, 14 Apr 2026 15:24:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776173062; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=cMPO/P6ZptnY7PwA9Kq6DHiKsIFPvqoz4r+zqZlAlBc=;
-	b=X6A4tqU3MkoqM6hdV2BYcurk14+6JZDEN/gbqla0kWX1zkUOVhzepr1g+eqrPNbNUv/huV
-	YvRVcaXQMDSoKNvHHEev5avgGrcMFEKbpEaqiYiDYgm7Bt3jlvoqJQ5ERrTOmbM6hkpZ4c
-	lSZlrap8zNk/UzuRZwSWbVolH6CoRl3/X0CCVwBfc1YF32vGuKDzOTtnFMST1koqfhy2JQ
-	FHgxzpJuT7y8RT0NzKx5KsKEo6MlgAJgguOw61CCS91aw38/mmn96yQctauQKN1Mw/26EC
-	Mku30aEpcpuqoVCUdGMmoRzHpFjahdvvfYrXfOquex2Iaj6Ff2PksIHe5lfBCw==
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BUwEFf8m"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776173078;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=l2Dz7WuyC1JD2lPyLZaTDuaCzH3iQxVlxQ4Rll2XrU0=;
+	b=BUwEFf8mn/tl8CH82+7j3T+V5lym3MPnT0AJBGl1zKSpp+oDkM6uZSXg4pPGooM7jqeDXd
+	v0x+KVlABIdiGX/VCciBtf/qzbdvmtG/k33mvSCQvt7JckmDmvsBIjI2I74b0ymxWd0QTc
+	HropTGMaViz3BZ4J502T+4jGjump8lQ=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	eddyz87@gmail.com,
+	qmo@kernel.org,
+	dxu@dxuuu.xyz,
+	leon.hwang@linux.dev,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v4 0/8] bpf: Introduce global percpu data
+Date: Tue, 14 Apr 2026 21:24:12 +0800
+Message-ID: <20260414132421.63409-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 14 Apr 2026 15:24:14 +0200
-Message-Id: <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
-Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, "David Ahern" <dsahern@kernel.org>, "Thomas
- Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, "Borislav
- Petkov" <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Shuah Khan"
- <shuah@kernel.org>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Andrey Ryabinin"
- <ryabinin.a.a@gmail.com>, "Alexander Potapenko" <glider@google.com>,
- "Dmitry Vyukov" <dvyukov@google.com>, "Vincenzo Frascino"
- <vincenzo.frascino@arm.com>, "Andrew Morton" <akpm@linux-foundation.org>,
- <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>,
- <linux-arm-kernel@lists.infradead.org>, <kasan-dev@googlegroups.com>,
- <linux-mm@kvack.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Andrey Konovalov" <andreyknvl@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-3-1a5831230821@bootlin.com>
- <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
-In-Reply-To: <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
-> On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foundat=
-ion)
-> <alexis.lothore@bootlin.com> wrote:
->>
->> Add a new Kconfig option CONFIG_BPF_JIT_KASAN that automatically enables
->> KASAN (Kernel Address Sanitizer) memory access checks for JIT-compiled
->> BPF programs, when both KASAN and JIT compiler are enabled. When
->> enabled, the JIT compiler will emit shadow memory checks before memory
->> loads and stores to detect use-after-free, out-of-bounds, and other
->> memory safety bugs at runtime. The option is gated behind
->> HAVE_EBPF_JIT_KASAN, as it needs proper arch-specific implementation.
->>
->> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boo=
-tlin.com>
->> ---
->>  kernel/bpf/Kconfig | 9 +++++++++
->>  1 file changed, 9 insertions(+)
->>
->> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
->> index eb3de35734f0..28392adb3d7e 100644
->> --- a/kernel/bpf/Kconfig
->> +++ b/kernel/bpf/Kconfig
->> @@ -17,6 +17,10 @@ config HAVE_CBPF_JIT
->>  config HAVE_EBPF_JIT
->>         bool
->>
->> +# KASAN support for JIT compiler
->> +config HAVE_EBPF_JIT_KASAN
->> +       bool
->> +
->>  # Used by archs to tell that they want the BPF JIT compiler enabled by
->>  # default for kernels that were compiled with BPF JIT support.
->>  config ARCH_WANT_DEFAULT_BPF_JIT
->> @@ -101,4 +105,9 @@ config BPF_LSM
->>
->>           If you are unsure how to answer this question, answer N.
->>
->> +config BPF_JIT_KASAN
->> +       bool
->> +       depends on HAVE_EBPF_JIT_KASAN
->> +       default y if BPF_JIT && KASAN_GENERIC
->
-> Should this be "depends on KASAN && KASAN_GENERIC"?
+This patch set introduces global percpu data, similar to commit
+6316f78306c1 ("Merge branch 'support-global-data'"), to reduce restrictions
+in C for BPF programs.
 
-Meaning, making it an explicit user-selectable option ?
+With this enhancement, it becomes possible to define and use global percpu
+variables, like the DEFINE_PER_CPU() macro in the kernel
+include/linux/percpu-defs.h.
 
-If so, the current design choice is voluntary and based on the feedback
-received on the original RFC, where I have been suggested to
-automatically enable the KASAN instrumentation in BPF programs if KASAN
-support is enabled in the kernel ([1]). But if a user-selectable toggle
-is eventually a better solution, I'm fine with changing it.
+The section name for global peurcpu data is ".percpu". Even though, a one-byte
+percpu variable (e.g., char run SEC(".percpu") = 0;) can trigger a crash
+with Clang 17 [1], users are expected to use such small variables as global
+percpu data with newer Clang versions, which don't have the issue.
 
-[1] https://lore.kernel.org/bpf/CAADnVQLX7RSnOqQuU32Cgq-e0MVqyeNrtCQSBbk0W2=
-xGkE-ZNw@mail.gmail.com/
+The idea stems from the bpfsnoop [2], which itself was inspired by
+retsnoop [3]. During testing of bpfsnoop on the v6.6 kernel, two LBR
+(Last Branch Record) entries were observed related to the
+bpf_get_smp_processor_id() helper.
 
->
->
->> +
->>  endmenu # "BPF subsystem"
->>
->> --
->> 2.53.0
->>
+Since commit 1ae6921009e5 ("bpf: inline bpf_get_smp_processor_id() helper"),
+the bpf_get_smp_processor_id() helper has been inlined on x86_64, reducing
+the overhead and consequently minimizing these two LBR records.
 
+However, the introduction of global percpu data offers a more robust
+solution. By leveraging the percpu_array map and percpu instruction,
+global percpu data can be implemented intrinsically.
 
+This feature also facilitates sharing percpu information between tail
+callers and callees or between freplace callers and callees through a
+shared global percpu variable. Previously, this was achieved using a
+1-entry percpu_array map, which this patch set aims to improve upon.
 
+Links:
+[1] https://lore.kernel.org/bpf/fd1b3f58-c27f-403d-ad99-644b7d06ecb3@linux.dev/
+[2] https://github.com/bpfsnoop/bpfsnoop
+[3] https://github.com/anakryiko/retsnoop
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Changes:
+v3 -> v4:
+* Drop duplicate blank lines in verifier.
+* Add percpu data feature probe in libbpf.
+* Update percpu_array map using BPF_F_ALL_CPUS flag for lskel, if no cpu flag
+  is set.
+* Add two tests to verify verifier log.
+* Add a test to verify mov64_percpu_reg instruction.
+* Add a test to verify bpf_iter for percpu data map.
+* Update percpu_array map using BPF_F_ALL_CPUS flag in libbpf
+  (per Alexei and Andrii).
+* Address comments from Andrii:
+  * Use .percpu as section identifier.
+  * Use bpf_jit_supports_percpu_insn() instead of CONFIG_SMP.
+  * Drop bpf_map__is_internal_percpu() API.
+  * Drop unnecessary __aligned(8) in libbpf, verified by selftest.
+  * Make mmap data read-only after loading prog.
+v3: https://lore.kernel.org/bpf/20250526162146.24429-1-leon.hwang@linux.dev/
+
+v2 -> v3:
+  * Use ".data..percpu" as PERCPU_DATA_SEC.
+  * Address comment from Alexei:
+    * Add u8, array of ints and struct { .. } vars to selftest.
+v2: https://lore.kernel.org/bpf/20250213161931.46399-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+  * Address comments from Andrii:
+    * Use LIBBPF_MAP_PERCPU and SEC_PERCPU.
+    * Reuse mmaped of libbpf's struct bpf_map for .percpu map data.
+    * Set .percpu struct pointer to NULL after loading skeleton.
+    * Make sure value size of .percpu map is __aligned(8).
+    * Use raw_tp and opts.cpu to test global percpu variables on all CPUs.
+  * Address comments from Alexei:
+    * Test non-zero offset of global percpu variable.
+    * Test case about BPF_PSEUDO_MAP_IDX_VALUE.
+v1: https://lore.kernel.org/bpf/20250127162158.84906-1-leon.hwang@linux.dev/
+
+rfc -> v1:
+  * Address comments from Andrii:
+    * Keep one image of global percpu variable for all CPUs.
+    * Reject non-ARRAY map in bpf_map_direct_read(), check_reg_const_str(),
+      and check_bpf_snprintf_call() in verifier.
+    * Split out libbpf changes from kernel-side changes.
+    * Use ".percpu" as PERCPU_DATA_SEC.
+    * Use enum libbpf_map_type to distinguish BSS, DATA, RODATA and
+      PERCPU_DATA.
+    * Avoid using errno for checking err from libbpf_num_possible_cpus().
+    * Use "map '%s': " prefix for error message.
+rfc: https://lore.kernel.org/bpf/20250113152437.67196-1-leon.hwang@linux.dev/
+
+Leon Hwang (8):
+  bpf: Drop duplicate blank lines in verifier
+  bpf: Introduce global percpu data
+  libbpf: Probe percpu data feature
+  libbpf: Add support for global percpu data
+  bpf: Update per-CPU maps using BPF_F_ALL_CPUS flag
+  bpftool: Generate skeleton for global percpu data
+  selftests/bpf: Add tests to verify global percpu data
+  selftests/bpf: Add a test to verify bpf_iter for global percpu data
+
+ kernel/bpf/arraymap.c                         |  41 ++-
+ kernel/bpf/fixups.c                           |  31 ++
+ kernel/bpf/syscall.c                          |  15 +
+ kernel/bpf/verifier.c                         |  27 +-
+ tools/bpf/bpftool/gen.c                       |  24 +-
+ tools/lib/bpf/bpf_gen_internal.h              |   3 +-
+ tools/lib/bpf/features.c                      |  35 +++
+ tools/lib/bpf/gen_loader.c                    |   3 +-
+ tools/lib/bpf/libbpf.c                        |  67 ++++-
+ tools/lib/bpf/libbpf_internal.h               |   2 +
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../bpf/prog_tests/global_data_init.c         | 276 ++++++++++++++++++
+ .../bpf/progs/test_global_percpu_data.c       | 102 +++++++
+ 13 files changed, 582 insertions(+), 46 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+
+--
+2.53.0
 
