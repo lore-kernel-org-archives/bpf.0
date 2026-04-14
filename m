@@ -1,181 +1,135 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7817F3E6DDA
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07DA189B84
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776173163; cv=none; b=JlLEpnE32nfXrOUZDSUp3yVJuQ6pXFyM0DlyPqwF9uDD0pjoPOfIydg0vRhv0S71ZNVZyJm1OPczlOiv36BHlSlei2YKLRWe2595jqaZRXilR9hTwI5jgKWKRHP8l4uhwScwkWIVTmkQq6LOCdHodXGqmVoUoCscvM3rKQn4dV4=
+	t=1776174237; cv=none; b=pm1Us2L0TYO3a+wv5jz0MfABNBWWCFzX1jWeHiTIJl00iHPJKk1mDWfNMbtO3YXe6UX/htgc/cVW+LTpOzSRgGH54PtT3kPuDVpRu1PFu5TXUSQwyPy52BSVi1oSHGaxvvhEBrMiBcf380dVnSJPlWMcHFtM98kHgZFaEvW7GeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776173163; c=relaxed/simple;
-	bh=zSQdD2Q0MsdiSayYIbFrHXBJOq4ODP5pBF6xVJ9Z+rY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KeZcH9xHvrQDxtrhKTThZup1tvKcb7TjCOVtfJ9BmoTQOw3/gfVVDe67RnQowoXXwiP+WkD43C9TPvIeQ73RGBNqtvZiqnpdi027ziupw7AvWLwV2BVok9rnbdHNmwFBa6USeIg7xcYo2MekM0+Sy5jweP4CQZAjOtEl4Gwoy00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QkGhQ7Ov; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776174237; c=relaxed/simple;
+	bh=7Qsjc8sieTy2NunPo1IUnobN9kKlNcjdypUZQ9CE4Zc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=g/GdwK/+9o4RfTLE6v/OasI8T6bqinevbmT59eIF5AYkRSEur9ON6lEi42Axw3z09s5c6D10psYUEOUnpknwrWaXAEHNo9U6rYOKYphsPClUyLs2ET8UV9VrW6zDgGSEeQhgkFkkR/fwG1YGoglia2FV0uxnvihcX9agGxOx8So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=S6AAfSv+; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QkGhQ7Ov"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776173160;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SLsBEILRFj2uxpy0K8iic1oVr+hSITfXzsUFYSG7iJk=;
-	b=QkGhQ7Ovf1X3ZPSHr91p0lFuorOSL4dJtDHvSdPLMxTHCYpvuCkPlAc+hegAa7HQY6Y3OR
-	vuSz/+gAJTy5QWsZbONAteFjfzy+bVKPD9KuB705zRjOqzjIl0tye91ULw7Otrmb+gjiof
-	gW4azHU87z23lc2uywnpBMHXIdf6vyQ=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	yonghong.song@linux.dev,
-	song@kernel.org,
-	eddyz87@gmail.com,
-	qmo@kernel.org,
-	dxu@dxuuu.xyz,
-	leon.hwang@linux.dev,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v4 8/8] selftests/bpf: Add a test to verify bpf_iter for global percpu data
-Date: Tue, 14 Apr 2026 21:24:20 +0800
-Message-ID: <20260414132421.63409-9-leon.hwang@linux.dev>
-In-Reply-To: <20260414132421.63409-1-leon.hwang@linux.dev>
-References: <20260414132421.63409-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="S6AAfSv+"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 210641A32A8;
+	Tue, 14 Apr 2026 13:43:54 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E416660410;
+	Tue, 14 Apr 2026 13:43:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 450DD10450118;
+	Tue, 14 Apr 2026 15:43:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776174232; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=fBYaHCpG8hC1NEAoLKhT2eDDnp5ePCFis5i2nukgCY4=;
+	b=S6AAfSv+oUeOvIrxD+z5bbdfpbvEOB21uXEtXvB4AqMh4FY8aCuyB3wHwx9r7WuVdHJYL+
+	rD0/08M7IBbmkTkrkT4y4rKcwWyqFckHbY0d9PtwNrkx7DaSk7KT0vztBafKaTOmUOws5w
+	qAGaNH/SCsFaeSpXq+U1fXnRnSb6RTAFiP4wAme1fA2E/ecJefwxeRaUPgj3ZmXhRt7wxY
+	aas0aDmqQnMSQ8xEcyHooL1//5S5S9RSul/ZsJlUWSIBozq2b3PI6l6xl3ldUHUduj47SE
+	koioV9P/g0ItanZHdEow/RtOOTONKeljDR3QB5PLNB90x26lfEpu4eQqk7yUEg==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 14 Apr 2026 15:43:42 +0200
+Message-Id: <DHSX7PABLUSN.1VYMRZ02DFZEL@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 8/8] selftests/bpf: add tests to validate
+ KASAN on JIT programs
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, "David Ahern" <dsahern@kernel.org>, "Thomas
+ Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, "Borislav
+ Petkov" <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Shuah Khan"
+ <shuah@kernel.org>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+ "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Andrey Ryabinin"
+ <ryabinin.a.a@gmail.com>, "Alexander Potapenko" <glider@google.com>,
+ "Dmitry Vyukov" <dvyukov@google.com>, "Vincenzo Frascino"
+ <vincenzo.frascino@arm.com>, "Andrew Morton" <akpm@linux-foundation.org>,
+ <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>,
+ <linux-arm-kernel@lists.infradead.org>, <kasan-dev@googlegroups.com>,
+ <linux-mm@kvack.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Andrey Konovalov" <andreyknvl@gmail.com>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-8-1a5831230821@bootlin.com>
+ <CA+fCnZekgcEgsZnRrOB=+HoG=neRg=oLTt2jStyrPJ6mYf2ctQ@mail.gmail.com>
+In-Reply-To: <CA+fCnZekgcEgsZnRrOB=+HoG=neRg=oLTt2jStyrPJ6mYf2ctQ@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
+> On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Foundat=
+ion)
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> Add a basic KASAN test runner that loads and test-run programs that can
+>> trigger memory management bugs. The test captures kernel logs and ensure
+>> that the expected KASAN splat is emitted by searching for the
+>> corresponding first lines in the report.
+>>
+>> This version implements two faulty programs triggering either a
+>> user-after-free, or an out-of-bounds memory usage. The bugs are
+>> triggered thanks to some dedicated kfuncs in bpf_testmod.c, but two
+>> different techniques are used, as some cases can be quite hard to
+>> trigger in a pure "black box" approach:
+>> - for reads, we can make the used kfuncs return some faulty pointers
+>>   that ebpf programs will manipulate, they will generate legitimate
+>>   kasan reports as a consequence
+>> - applying the same trick for faulty writes is harder, as ebpf programs
+>>   can't write kernel data freely. So ebpf programs can call another
+>>   specific testing kfunc that will alter the shadow memory matching the
+>>   passed memory (eg: a map). When the program will try to write to the
+>>   corresponding memory, it will trigger a report as well.
+>>
+>> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boo=
+tlin.com>
+>> ---
+>> The way of bringing kasan_poison into bpf_testmod is definitely not
+>> ideal.  But I would like to validate the testing approach (triggering
+>> real faulty accesses, which is hard on some cases, VS manually poisoning
+>> BPF-manipulated memory) before eventually making clean bridges between
+>> KASAN APIs and bpf_testmod.c, if the latter approach is the valid one.
+>
+> Would it make sense to put these tests into KASAN KUnit tests in
+> mm/kasan/kasan_test_c.c? I assume there is a kernel API to JIT BPF
+> programs from the kernel itself?
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 53 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 36 +++++++++++++
- 2 files changed, 89 insertions(+)
+Possibly indeed, but I think one important use case will be the
+possibility to run those tests in BPF CI ([1]), and this depends on
+those tests being integrated in the test_progs framework
+(tools/testing/selftests/bpf)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 0b0384b6515e..9ff09ff1981c 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -269,6 +269,57 @@ static void test_global_percpu_data_verifier_failure(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (err == -EOPNOTSUPP) {
-+		test__skip();
-+		goto out;
-+	}
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -282,4 +333,6 @@ void test_global_percpu_data(void)
- 		test_global_percpu_data_lskel();
- 	if (test__start_subtest("verifier_failure"))
- 		test_global_percpu_data_verifier_failure();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index 947721c21f30..0ddb820509eb 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -63,4 +63,40 @@ int verifier_percpu_read(void *ctx)
- 	return c == 'd';
- }
- 
-+volatile const __u32 num_cpus = 0;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	struct {
-+		int data;
-+		char run;
-+		struct {
-+			char set;
-+			int i;
-+			int nums[7];
-+		} struct_data;
-+		int nums[7];
-+	} *pptr = ctx->value;
-+	__u32 step;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	/* percpu array element size is aligned to 8 */
-+	step = (sizeof(*pptr) + 7) & ~7;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += pptr->struct_data.nums[6];
-+		pptr = (void *)pptr + step;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.53.0
+[1] https://github.com/kernel-patches/bpf/pulls
+
+> There, you can just call kasan_poison(), some tests already do this.
+> And you can also extend the KASAN KUnit test framework to find out
+> whether the bad access is a read or write, if you want to check this.
+
+Alexis
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
