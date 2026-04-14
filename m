@@ -1,32 +1,32 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610FD3939A2
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 11:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6AB3CF689
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 11:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776165852; cv=none; b=W/Uy3cMuWs8+XJTj5eTjuKkljg4iInQ1vdfc4+ySFj664dEzQvgo7J/EH3zvLyLSCE4Rg7aWbc6aOH/NtCLy0DIUwv5xZ00EsLXklH1Orvo9ELDNNAZQ46W8NpziIJhPEKJ/MoDg9M6i1mVcPVyq+APEMgyKV073E2u/mgVCHcI=
+	t=1776165863; cv=none; b=t5g8IaT2kbEY5vE10f9bhE1+HGPOvvZuPdGeV63Q/5/oF3Yrps6/OqIdtTqFOKns8Go+ZOYqXFICWTaTXEsYTrg3/h7dEMClI0hUYXIIBge9SwWqJuJWcsKV7Fm9GJafGVVCux/C84GPV+PY9MqN7kMS4dIKfFMTVWLEYdM8HtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776165852; c=relaxed/simple;
-	bh=hmsqy4cV2LA86UGh87Xqb0jXa1P+m8YQHKjlqn5mTEU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TDNrnLBew35cW4TCH5f1kEHFVjZRf0VhucDe4DHzitX4L6V46XlGpEbgBUGZEVBn2zDiLeUNBx14aOZFwk36/0W4M4zOnvMG/4mCG0xd+ylLrxuzkJ++bsL2qDjbvJ9egmGnxxWveY7Tiocd4NlxJv+Kr7MDC0jBHMZdQYxYQG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Bzm7PEnX; arc=none smtp.client-ip=95.215.58.176
+	s=arc-20240116; t=1776165863; c=relaxed/simple;
+	bh=0XKwPrVsLYqMkdidCVFKYLqUJ4c4EfyJ1ob1+L0+szc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g3bK0jHTI7X790rwfrKwF95Od9vPMhSA7S4y8b3htX5Z/Sxvu7V1hAWG3hJIFrGK2QndEL1sZZxRpqui6qzIxkQMNlIWzHJR7cKIuh9qaELGg7aU7+jCiZeX3tf62zET3jbate2mzo3G0xDqmKmL4zXfduUxPE0gl+wN4q7QNW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xI+6m4mw; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Bzm7PEnX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xI+6m4mw"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776165849;
+	t=1776165859;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8D6l9IqgXenCYoi0Zzds89afKEXhHv1Gdqt5MlYQ8P0=;
-	b=Bzm7PEnXtbS1ZFhPk5sBnr9bC0pzse8lilkNeecuWcgm7+fTqLlH9X19uykVXSda/sKwY0
-	LIwHBoe2TSHRrq9A3sLBcPK5HZ6ScpPCUZExBhTlXt61AHHbur18X4oKy3ebDnp0RM3fr2
-	Ye7aZoMU/+fa4hmmShnTAr8cexjhW3I=
+	bh=9yPm78UqHyZkm1QqrS3WLRW2slYckpyvj6iqSa7dJaU=;
+	b=xI+6m4mw4iR24mWikEbqUbtnMYM5+ZpcfMM5M6FbhOQ4Uufl8H2/De2LPdo8YObnMU+8Ud
+	8Z2Ami6lZae5H3ObtR+5Ex8+w/cyMVqW7NSK4cZ7tjfp+iKINoDXYnJqAchxvk38DA+ZxR
+	9EAsw2MiFlpnwzkFoGHnYiv6jAeT5rI=
 From: KaFai Wan <kafai.wan@linux.dev>
 To: edumazet@google.com,
 	ncardwell@google.com,
@@ -52,12 +52,9 @@ To: edumazet@google.com,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: Quan Sun <2022090917019@std.uestc.edu.cn>,
-	Yinhao Hu <dddddd@hust.edu.cn>,
-	Kaiyan Mei <M202472210@hust.edu.cn>
-Subject: [PATCH bpf-next 1/2] bpf: tcp: Reject TCP_NODELAY from BPF hdr opt callbacks
-Date: Tue, 14 Apr 2026 19:23:09 +0800
-Message-ID: <20260414112310.1285783-2-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover TCP_NODELAY in hdr opt callback
+Date: Tue, 14 Apr 2026 19:23:10 +0800
+Message-ID: <20260414112310.1285783-3-kafai.wan@linux.dev>
 In-Reply-To: <20260414112310.1285783-1-kafai.wan@linux.dev>
 References: <20260414112310.1285783-1-kafai.wan@linux.dev>
 Precedence: bulk
@@ -69,47 +66,101 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-A BPF_SOCK_OPS program can enable
-BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
+Add a sockops test program that enables
+BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG on connection setup and calls
 bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB.
 
-That reaches __tcp_sock_set_nodelay(), which may call
-tcp_push_pending_frames(). The transmit path then computes TCP
-options again, re-enters bpf_skops_hdr_opt_len(), and invokes the
-same BPF callback recursively. This can loop until the kernel
-stack overflows.
+Exercise the connection by sending data after the socket is
+established. Before the fix, this setup can recurse through
+tcp_push_pending_frames() and bpf_skops_hdr_opt_len() until the
+kernel hits a stack guard page. After the fix, the connection
+continues to make forward progress and the data exchange completes.
 
-TCP_NODELAY is not safe from the header option callback context.
-Reject it with -EOPNOTSUPP when TCP header option callbacks are
-enabled on the socket, so the callback cannot recurse back into
-tcp_push_pending_frames() through do_tcp_setsockopt().
-
-Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn/
-Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- net/ipv4/tcp.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/tcp_hdr_options.c          | 34 +++++++++++++++++++
+ .../bpf/progs/test_misc_tcp_hdr_options.c     | 18 ++++++++++
+ 2 files changed, 52 insertions(+)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 202a4e57a218..7ac4c98be19d 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4004,7 +4004,10 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+index 56685fc03c7e..f361f9c7bf59 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+@@ -513,6 +513,39 @@ static void misc(void)
+ 	bpf_link__destroy(link);
+ }
  
- 	switch (optname) {
- 	case TCP_NODELAY:
--		__tcp_sock_set_nodelay(sk, val);
-+		if (val && BPF_SOCK_OPS_TEST_FLAG(tp, BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG))
-+			err = -EOPNOTSUPP;
-+		else
-+			__tcp_sock_set_nodelay(sk, val);
- 		break;
++static void hdr_sockopt(void)
++{
++	const char send_msg[] = "MISC!!!";
++	char recv_msg[sizeof(send_msg)];
++	const unsigned int nr_data = 2;
++	struct bpf_link *link;
++	struct sk_fds sk_fds;
++	int i, ret;
++
++	link = bpf_program__attach_cgroup(misc_skel->progs.misc_hdr_sockopt, cg_fd);
++	if (!ASSERT_OK_PTR(link, "attach_cgroup(misc_hdr_sockopt)"))
++		return;
++
++	if (sk_fds_connect(&sk_fds, false)) {
++		bpf_link__destroy(link);
++		return;
++	}
++
++	for (i = 0; i < nr_data; i++) {
++		ret = send(sk_fds.active_fd, send_msg, sizeof(send_msg), 0);
++		if (!ASSERT_EQ(ret, sizeof(send_msg), "send(msg)"))
++			goto check_linum;
++
++		ret = read(sk_fds.passive_fd, recv_msg, sizeof(recv_msg));
++		if (!ASSERT_EQ(ret, sizeof(send_msg), "read(msg)"))
++			goto check_linum;
++	}
++
++check_linum:
++	sk_fds_close(&sk_fds);
++	bpf_link__destroy(link);
++}
++
+ struct test {
+ 	const char *desc;
+ 	void (*run)(void);
+@@ -526,6 +559,7 @@ static struct test tests[] = {
+ 	DEF_TEST(fastopen_estab),
+ 	DEF_TEST(fin),
+ 	DEF_TEST(misc),
++	DEF_TEST(hdr_sockopt),
+ };
  
- 	case TCP_THIN_LINEAR_TIMEOUTS:
+ void test_tcp_hdr_options(void)
+diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+index d487153a839d..e1dc7246193e 100644
+--- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
++++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+@@ -326,4 +326,22 @@ int misc_estab(struct bpf_sock_ops *skops)
+ 	return CG_OK;
+ }
+ 
++SEC("sockops")
++int misc_hdr_sockopt(struct bpf_sock_ops *skops)
++{
++	int true_val = 1;
++
++	switch (skops->op) {
++	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
++	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
++		set_hdr_cb_flags(skops, 0);
++		break;
++	case BPF_SOCK_OPS_HDR_OPT_LEN_CB:
++		bpf_setsockopt(skops, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
++		break;
++	}
++
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
