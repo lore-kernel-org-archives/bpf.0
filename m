@@ -1,175 +1,274 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AB622A4EE;
-	Tue, 14 Apr 2026 15:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204D940DFA7
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 15:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776179796; cv=none; b=s5Euf08BOgFfTmr4DXxNWkXtPJqAJw8u85iTp848bQQnXDzQAiNC2nfNoJGtjWYmxMkSSC40MHJrlUDiF4k1hYh2d/j3fxIQCH+L8LukTYyGXDM+wfHpf99N8oVtuH6OCiXebr24ZXs7/ksu8s00eaGUcv3qM8HyXRaHC4Lqk+A=
+	t=1776180369; cv=none; b=SPpUx3I6WlyB/oHOLNjK/z4AaRNwdmaCNi9d5DX+lPxs7KF0UEJ+k9nmGSUxPdXOCYfkCcVcsNYxbhSXX8jS+P34xeAfuUPQBCMLDbJE/N8yAw9WxGlyDqeQ9v70MgDK/Kcoz7Qk1ZHP6ED1bxM1db8Fzh6Oa7vagp+E1cLc6yE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776179796; c=relaxed/simple;
-	bh=taFpJsD3cqIQOrfDn60ksBezLhwXN4BUzm+oTo6qMes=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qbBNyWxXMFQS4glpNMLtWod52AO0MGInVQln/12fB9ulpdqXHD5gEsf7riEM8SYZVSFTIYXYP1gPuD5AKSBsdeatBtXD2MZoCvLbKtpdOV8jxAyx3C1Znfth+/LEwP3lknniqXcEaQykfGXjE2ye8fYyUfsvcwiltsTGCAoin4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=wMlkdLdy; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1776180369; c=relaxed/simple;
+	bh=BqLjmjt93qTdBgGkC6yjJjjdQGRrcRtGjCClSimgoZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NecoUbJjPnBJ/+so7729HVhGAlQj1y4Qm9YGeAYhGAQc7A1Re5QPfjhfjjFq9qkjlszKfzf3fuOoGF+m3wwyB3lQe5xHoAp1eKln7gzb4BSBJlfxmGmHc9tWjtuFEJEgipUHoB4oIAvUhPxJVrT+eHyHdZyYY1dI9xhWkk9XhmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ept8qdxj; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="wMlkdLdy"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCeWL-00FB5S-Cc; Tue, 14 Apr 2026 16:13:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=4eT1He741IBIbbJ2jmi515EMC/YD4I27qYRlmYaD+Bo=; b=wMlkdLdytFjiDq4XynqAPmggfN
-	OknHwajgelQAKtjdqwm38RwDRn3oVGeup/b36BGlYufvwIZ7aRZzB3KH/V6vh1uXRQsU5NubiUFFZ
-	BXcAlO7LwlQAqP24AYRNbx33oO8d7LuIHugLDBYkeNaGQuFBvBOi9f3qt1Fz8M461WSBcyhujY0Yp
-	PWpzpUYu87OsiQeJ01+ssM2NPFOjeonOcSbNi1bhrVZnRVcmNpzY5PD8V78KroYsJsbdviOXhIsp1
-	Bd4CKvB96mud5vqejnFe5djIHJSMb68MwfAq4+np+EqFn4XbjcW/J7QRng8T/wvaYS7INf5bZcfG2
-	TN0+k61Q==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1wCeWL-0000Uf-1x; Tue, 14 Apr 2026 16:13:41 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1wCeWF-00DhbX-Jw; Tue, 14 Apr 2026 16:13:35 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Tue, 14 Apr 2026 16:13:19 +0200
-Subject: [PATCH bpf v4 5/5] bpf, sockmap: Take state lock for af_unix iter
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ept8qdxj"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4852b81c73aso54380975e9.3
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 08:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776180365; x=1776785165; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9tUKxGMHC0UDPNw0oVjzyTegsE8nihYWyTCLi91CQkQ=;
+        b=Ept8qdxjZY60mO/ysRPbb/E8OfSiF51NJUCzMDA0N4Nvwx30Lc85htjpsXed5aZhUo
+         NTMjyMWdJbvru1bi6BDXZZDjjNVvNAWzAUhe3oAFYt938qQCarFAfHwsMo5NJ6a60Khh
+         HBqpR0qaICJhu/mbV4/Xvl/a/xKUiCTDGvHus67yU1SZOdvh73XVEf5z9r449xp6o2t9
+         VQ9iX/XVuZeedAxCGyu1moUsO3nfgQ4ZLaGfTPonqAC/4EFkZTTQ3JMx9tYoDfmaXEOk
+         IHBAFq6pL/5XnxAFLi7/ziXVVGEprm+YnC5SuDyV2WYqvZQvKmwK/Ryfy/CpJ6Cfz2Fd
+         Xbzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776180365; x=1776785165;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9tUKxGMHC0UDPNw0oVjzyTegsE8nihYWyTCLi91CQkQ=;
+        b=NQTAokH3/Q3P/w99tcfkhx+VFHsRZC1ODEgTx0nriZI6EV+SpmWogA5h3zKb+3gfMT
+         MHUJFGZ6+h78hL6hTojpkRVv3KRFOtUrF/FdecoI7A0GbbQmE7U+4zCNlh+Xp42w5ayP
+         7fz/FINbZKUVQTpzW7rHv+heSbxKfAOW/+YREavdKXBDVUCMnr1AeqC4Xlj6d5FjHlGH
+         o/PLWRFJmBzvNN5oma0adcaaWtCwAEbVjQ88AvKG0xC4k7vK4F7IhxA3DNhlg5A3ilLM
+         7rTEefFsycZEgZq0soK9x9tb2U+GuV6IvH1jDSe6EShgrbIaVPb5GVIkKIodn+aHmeoP
+         yRcw==
+X-Forwarded-Encrypted: i=1; AFNElJ/GFqxbhgN39L3i2COdE0+wz50CSvX2ljX2cJFAFK6FDfrcyaM6ivVGSr8zgxE77rDGSww=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzL4Sd9FdhAHwi35ifIAmALr0xMSDvGe4D1Uxh67pP3ZLH0v0ft
+	QEGhWu84YUqG6+QpDz5/UIt7vcNd1wLi6PJZGDOHHPg5bz2b6FQUQt4x
+X-Gm-Gg: AeBDiesxVXZBVrP0oemRnClL+GVJ/sArWLLp8WUqPmK18rRIg4q5zKM76JEHWwu+BwC
+	bTXr02ff/mWKK2fB/uys+aH7ytEWo1HG/sFbq7PFsA+DgnXdyL5gsczQn7jMJo9kICWMCR30iuH
+	5M7krQzJCKn1iZsdZdEXWbXafuJNRnxuKWwH4vSoZE01ag5t3qqMeQxvkpaBg+GSfRJSP8wRBae
+	vuApmg8dITM/NEtPpp+EC7m7ms1ksKupBbHuXc7U+/0xfnRK/CF/x95lT+xbXzMoTc6vcOjPWaD
+	NBmdqUGiAMsqni1UaEbVx8LjZdIN06McDLO5cgRGCzc2CNtwINRksYMGzUn3wfKDYN+tTSs+ZpN
+	zRzjQECqnoApILSQz4zZB+lpfxsA1eHtGj4wQmKEVslNImgzMldtkTxL79gxbN+76vB5h9+4VgR
+	4yZSYqp1Bks2aYsazc+FN6NiZnPnwuInYdqze7QM1DsdraufTnnRQ/+n7VfLseme/2b8LfFVx43
+	2RAVH+XxIFxDOV5R+I9oi9rHL1tJ3qe0phkM967YgvjS4+8WiMk9imJviPpKb2FF5uFi915zZDF
+	QNBF4hC0WJNdRgRalwlwZSGgoLsZySeLWE7i2HZssO0=
+X-Received: by 2002:a05:600c:314b:b0:488:b241:2c5f with SMTP id 5b1f17b1804b1-488d687c076mr214204155e9.26.1776180365151;
+        Tue, 14 Apr 2026 08:26:05 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e002e3feaf8ac5b1b0d.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:2e3f:eaf8:ac5b:1b0d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488ee049333sm58589345e9.15.2026.04.14.08.26.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2026 08:26:04 -0700 (PDT)
+Date: Tue, 14 Apr 2026 17:26:02 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Yihan Ding <dingyihan@uniontech.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@uniontech.com
+Subject: Re: [PATCH bpf] bpf: allow UTF-8 literals in bpf_bprintf_prepare()
+Message-ID: <ad5ciqi7KAq0C9A3@mail.gmail.com>
+References: <20260414014001.814324-1-dingyihan@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260414-unix-proto-update-null-ptr-deref-v4-5-2af6fe97918e@rbox.co>
-References: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-In-Reply-To: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Cong Wang <cong.wang@bytedance.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260414014001.814324-1-dingyihan@uniontech.com>
 
-When a BPF iterator program updates a sockmap, there is a race condition in
-unix_stream_bpf_update_proto() where the `peer` pointer can become stale[1]
-during a state transition TCP_ESTABLISHED -> TCP_CLOSE.
+On Tue, Apr 14, 2026 at 09:40:01AM +0800, Yihan Ding wrote:
+> bpf_bprintf_prepare() currently rejects any non-ASCII byte in the format
+> string, such as UTF-8 Chinese text.
+> 
+> All BPF formatted output helpers that go through bpf_bprintf_prepare(),
+> such as bpf_trace_printk(), bpf_seq_printf() and bpf_snprintf(), only
+> need ASCII parsing for conversion specifiers. Plain text does not need
+> that restriction, but today any byte >= 0x80 makes the format fail
+> validation.
+> 
+> As a result, UTF-8 text literals are rejected even when they are not part
+> of a format specifier. In practice, an ASCII-only bpf_trace_printk()
+> format works, while the same format with UTF-8 literal text produces no
+> trace output.
+> 
+> Allow non-ASCII bytes in plain text while keeping the existing control
+> character checks and keeping format specifiers ASCII-only. This preserves
+> the current parsing rules for '%' sequences and allows valid UTF-8 text
+> to be emitted.
 
-        CPU0 bpf                          CPU1 close
-        --------                          ----------
-// unix_stream_bpf_update_proto()
-sk_pair = unix_peer(sk)
-if (unlikely(!sk_pair))
-   return -EINVAL;
-                                     // unix_release_sock()
-                                     skpair = unix_peer(sk);
-                                     unix_peer(sk) = NULL;
-                                     sock_put(skpair)
-sock_hold(sk_pair) // UaF
+Nice! I can finally print proper French from BPF :)
 
-More practically, this fix guarantees that the iterator program is
-consistently provided with a unix socket that remains stable during
-iterator execution.
+> 
+> Extend the trace_printk selftest accordingly by emitting both ASCII and
+> UTF-8 strings and verifying that both appear in the trace output.
+> 
+> Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
+> Signed-off-by: Yihan Ding <dingyihan@uniontech.com>
 
-[1]:
-BUG: KASAN: slab-use-after-free in unix_stream_bpf_update_proto+0x155/0x490
-Write of size 4 at addr ffff8881178c9a00 by task test_progs/2231
-Call Trace:
- dump_stack_lvl+0x5d/0x80
- print_report+0x170/0x4f3
- kasan_report+0xe4/0x1c0
- kasan_check_range+0x125/0x200
- unix_stream_bpf_update_proto+0x155/0x490
- sock_map_link+0x71c/0xec0
- sock_map_update_common+0xbc/0x600
- sock_map_update_elem+0x19a/0x1f0
- bpf_prog_bbbf56096cdd4f01_selective_dump_unix+0x20c/0x217
- bpf_iter_run_prog+0x21e/0xae0
- bpf_iter_unix_seq_show+0x1e0/0x2a0
- bpf_seq_read+0x42c/0x10d0
- vfs_read+0x171/0xb20
- ksys_read+0xff/0x200
- do_syscall_64+0xf7/0x5e0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+Not sure if this should go to bpf or bpf-next. I'll let the maintainers
+decide.
 
-Allocated by task 2236:
- kasan_save_stack+0x30/0x50
- kasan_save_track+0x14/0x30
- __kasan_slab_alloc+0x63/0x80
- kmem_cache_alloc_noprof+0x1d5/0x680
- sk_prot_alloc+0x59/0x210
- sk_alloc+0x34/0x470
- unix_create1+0x86/0x8a0
- unix_stream_connect+0x318/0x15b0
- __sys_connect+0xfd/0x130
- __x64_sys_connect+0x72/0xd0
- do_syscall_64+0xf7/0x5e0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> ---
+> Testing:
+> - Reproduced on x86_64 without this patch: ASCII trace output works, while
+>    UTF-8 literal text in bpf_trace_printk() is rejected and produces no trace
+>    output.
+> - Verified with tools/testing/selftests/bpf: ./test_progs -t trace_printk
+> 
+>  kernel/bpf/helpers.c                          | 21 +++++++++++++-----
+>  .../selftests/bpf/prog_tests/trace_printk.c   | 22 ++++++++++++++-----
+>  .../selftests/bpf/progs/trace_printk.c        |  5 +++++
+>  3 files changed, 38 insertions(+), 10 deletions(-)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 6eb6c82ed2ee..e2f103297e4a 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -845,7 +845,13 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+>  		data->buf = buffers->buf;
+>  
+>  	for (i = 0; i < fmt_size; i++) {
+> -		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i])) {
+> +		unsigned char c = fmt[i];
+> +
+> +		/*
+> +		 * Permit non-ASCII bytes in plain text so UTF-8 messages can be
+> +		 * emitted, while keeping format specifiers ASCII-only.
+> +		 */
+> +		if (isascii(c) && !isprint(c) && !isspace(c)) {
+>  			err = -EINVAL;
+>  			goto out;
+>  		}
+> @@ -867,6 +873,10 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+>  		 * always access fmt[i + 1], in the worst case it will be a 0
+>  		 */
+>  		i++;
+> +		if (!isascii((unsigned char)fmt[i])) {
+> +			err = -EINVAL;
+> +			goto out;
+> +		}
+>  
+>  		/* skip optional "[0 +-][num]" width formatting field */
+>  		while (fmt[i] == '0' || fmt[i] == '+'  || fmt[i] == '-' ||
+> @@ -881,8 +891,9 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+>  		if (fmt[i] == 'p') {
+>  			sizeof_cur_arg = sizeof(long);
+>  
+> -			if (fmt[i + 1] == 0 || isspace(fmt[i + 1]) ||
+> -			    ispunct(fmt[i + 1])) {
+> +			if (fmt[i + 1] == 0 ||
+> +			    isspace((unsigned char)fmt[i + 1]) ||
+> +			    ispunct((unsigned char)fmt[i + 1])) {
 
-Freed by task 2236:
- kasan_save_stack+0x30/0x50
- kasan_save_track+0x14/0x30
- kasan_save_free_info+0x3b/0x70
- __kasan_slab_free+0x47/0x70
- kmem_cache_free+0x11c/0x590
- __sk_destruct+0x432/0x6e0
- unix_release_sock+0x9b3/0xf60
- unix_release+0x8a/0xf0
- __sock_release+0xb0/0x270
- sock_close+0x18/0x20
- __fput+0x36e/0xac0
- fput_close_sync+0xe5/0x1a0
- __x64_sys_close+0x7d/0xd0
- do_syscall_64+0xf7/0x5e0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+Why is this change needed? isspace and ispunct already cast to unsigned
+char.
 
-Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-Fixes: 2c860a43dd77 ("bpf: af_unix: Implement BPF iterator for UNIX domain socket.")
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- net/unix/af_unix.c | 2 ++
- 1 file changed, 2 insertions(+)
+>  				if (tmp_buf)
+>  					cur_arg = raw_args[num_spec];
+>  				goto nocopy_fmt;
+> @@ -958,8 +969,8 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
+>  			fmt_ptype = fmt[i];
+>  fmt_str:
+>  			if (fmt[i + 1] != 0 &&
+> -			    !isspace(fmt[i + 1]) &&
+> -			    !ispunct(fmt[i + 1])) {
+> +			    !isspace((unsigned char)fmt[i + 1]) &&
+> +			    !ispunct((unsigned char)fmt[i + 1])) {
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 590a30d3b2f7..15b48cc6e9b0 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -3737,6 +3737,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
- 		return 0;
- 
- 	lock_sock(sk);
-+	unix_state_lock(sk);
- 
- 	if (unlikely(sock_flag(sk, SOCK_DEAD))) {
- 		ret = SEQ_SKIP;
-@@ -3748,6 +3749,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
- 	prog = bpf_iter_get_info(&meta, false);
- 	ret = unix_prog_seq_show(prog, &meta, v, uid);
- unlock:
-+	unix_state_unlock(sk);
- 	release_sock(sk);
- 	return ret;
- }
+Same here.
 
--- 
-2.53.0
+>  				err = -EINVAL;
+>  				goto out;
+>  			}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+> index e56e88596d64..f7b03dc4eaf4 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+> @@ -6,18 +6,21 @@
+>  #include "trace_printk.lskel.h"
+>  
+>  #define SEARCHMSG	"testing,testing"
+> +#define SEARCHMSG_UTF8	"中文,测试"
+>  
+>  static void trace_pipe_cb(const char *str, void *data)
+>  {
+>  	if (strstr(str, SEARCHMSG) != NULL)
+> -		(*(int *)data)++;
+> +		((int *)data)[0]++;
+> +	if (strstr(str, SEARCHMSG_UTF8) != NULL)
+> +		((int *)data)[1]++;
+>  }
+>  
+>  void serial_test_trace_printk(void)
+>  {
+>  	struct trace_printk_lskel__bss *bss;
+>  	struct trace_printk_lskel *skel;
+> -	int err = 0, found = 0;
+> +	int err = 0, found[2] = {};
+>  
+>  	skel = trace_printk_lskel__open();
+>  	if (!ASSERT_OK_PTR(skel, "trace_printk__open"))
+> @@ -46,11 +49,20 @@ void serial_test_trace_printk(void)
+>  	if (!ASSERT_GT(bss->trace_printk_ret, 0, "bss->trace_printk_ret"))
+>  		goto cleanup;
+>  
+> -	/* verify our search string is in the trace buffer */
+> -	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, &found, 1000),
+> +	if (!ASSERT_GT(bss->trace_printk_utf8_ran, 0, "bss->trace_printk_utf8_ran"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_GT(bss->trace_printk_utf8_ret, 0, "bss->trace_printk_utf8_ret"))
+> +		goto cleanup;
+> +
+> +	/* verify our search strings are in the trace buffer */
+> +	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, found, 1000),
+>  		 "read_trace_pipe_iter");
+>  
+> -	if (!ASSERT_EQ(found, bss->trace_printk_ran, "found"))
+> +	if (!ASSERT_EQ(found[0], bss->trace_printk_ran, "found"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_EQ(found[1], bss->trace_printk_utf8_ran, "found_utf8"))
+>  		goto cleanup;
+>  
+>  cleanup:
+> diff --git a/tools/testing/selftests/bpf/progs/trace_printk.c b/tools/testing/selftests/bpf/progs/trace_printk.c
+> index 6695478c2b25..97afe8b149b0 100644
+> --- a/tools/testing/selftests/bpf/progs/trace_printk.c
+> +++ b/tools/testing/selftests/bpf/progs/trace_printk.c
+> @@ -10,13 +10,18 @@ char _license[] SEC("license") = "GPL";
+>  
+>  int trace_printk_ret = 0;
+>  int trace_printk_ran = 0;
+> +int trace_printk_utf8_ret = 0;
+> +int trace_printk_utf8_ran = 0;
+>  
+> -const char fmt[] = "Testing,testing %d\n";
+> +static const char fmt[] = "Testing,testing %d\n";
+> +static const char utf8_fmt[] = "中文,测试 %d\n";
 
+The build is failing because you made these static.
+
+>  
+>  SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+>  int sys_enter(void *ctx)
+>  {
+>  	trace_printk_ret = bpf_trace_printk(fmt, sizeof(fmt),
+>  					    ++trace_printk_ran);
+> +	trace_printk_utf8_ret = bpf_trace_printk(utf8_fmt, sizeof(utf8_fmt),
+> +						 ++trace_printk_utf8_ran);
+>  	return 0;
+>  }
+
+Please put the selftest coverage extensions in a second patch.
+
+pw-bot: cr
+
+> -- 
+> 2.20.1
+> 
