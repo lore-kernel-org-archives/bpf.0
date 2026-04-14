@@ -1,207 +1,110 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FBA27380A
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 14:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776176990; cv=none; b=I+K1yFWAV557DHmKN1cRjwwqGR43RgMrYBApT/E1Iv4BOSl1t1tJMtTXPID6zizUDB/w4Q5x3Sfx1yzr8xMBlQbISmzs+5gjrevt/YpWhq4z6Zk5LWUg+oWrz/3vAdvZmPjR3W7wam7VQYIoCznPdjgE8X4OS2n5QArywYG6KyY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776176990; c=relaxed/simple;
-	bh=6z5ZXTYPoAXpbPM6XzJpPVsG2nyNI96mXM+LnGFnXZo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ju3RKaGhLxPF2Uw/yihKLw2kEZrUNUApSHt0g3p+TVd9d5dEB3ftMr4c5GC8f3+WR/8HOWaoJeEGLuc6ZkiEMg6H/Y0+AM69B/T5AxLHHLLNCWTw2fU+kAv4zDd12qvwZcQspObUcuCKGM3tsOUQeJBj6haa8NV0SIyZFcR/FXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SxtIUDNV; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DFD3E8C5E
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 14:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776176994; cv=pass; b=i1hRavO0XBpOoUxgSeJONeenn8EXwlFe332WR4ETmGVB7u8bSbiKT6+T8GSpzOMpgljbd4GXRdFfBrIK9UqMibt7YgC8GhUnO/e7DI+TCe5qSSHPdcATRfAveyRS2d/rGz0fdAgUll9PC5+hzehprcs8Vx2MxNzUHjzm8iK5oSk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776176994; c=relaxed/simple;
+	bh=DYwEuGP6607kKSiEAJ/bJtWXPBAVsuNfRAS7za1yxH0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GSGKuko18bWhFT0T/Ymsx4JIPug6moebanGA61OK9FrD41H7G4sOpaWjar8dAb1AeGIuAyyhLP7ddFSlrFxFYVl+1o74tRJ+gqWgjcmqdGSPKTCOgQvFLp0rkFIoEmewmavNFe5LM4DD4RA3JPmi5oTVnDb0Hf63y+16U6DOXec=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qo7phO1E; arc=pass smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SxtIUDNV"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63EDdDLw1843301;
-	Tue, 14 Apr 2026 14:29:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=YjAnSX5zyRx35H14kLZgKz9J3KMf
-	UuvZPe4gzyVoh88=; b=SxtIUDNVYCdsePtpf4FbbQlG1JNkI1P1RLQlHerJ3E+M
-	syxRsgXwi5nDjHtpNK7TvZfUpTMq6hT6hA3b1py6pnYxIVhIfb1q9oGeJFTn/Hjx
-	7wa2ZiE/l3n+WMA9d+p29kbUyEaVKl3DR7p6YsjuGOZEcX8unyMsWfrDSlCL0l0M
-	mqjpiKCt2rG0RubH0NAHnlj2ZnveNvEWcHBzk4igmbvx8RCjN6EYHSPRmr/jAK8C
-	kHmjBYRKIzlr17lL2ehnFr+HjEKnfwIaMn838WVbz51nISFtonu/bXb9HA+upK6x
-	8cw9AjZEcmsXGTHDe7ZI6ygAPkPWQt0/pKDEQiUqZg==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89mk5qx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 14:29:35 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63ED82v0031191;
-	Tue, 14 Apr 2026 14:29:34 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg10y9xqt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 14:29:34 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63EETX1e30540388
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Apr 2026 14:29:33 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9B3F958051;
-	Tue, 14 Apr 2026 14:29:33 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ABA345805C;
-	Tue, 14 Apr 2026 14:29:31 +0000 (GMT)
-Received: from thinkpad-p1.aag-de.ibm.com (unknown [9.52.219.66])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Apr 2026 14:29:31 +0000 (GMT)
-From: Maxim Khmelevskii <max@linux.ibm.com>
-To: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: [PATCH bpf-next] s390/bpf: inline smp_processor_id and current_task
-Date: Tue, 14 Apr 2026 16:29:26 +0200
-Message-ID: <20260414142930.528751-1-max@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qo7phO1E"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488b0046078so56419165e9.1
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 07:29:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776176991; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MqWEiS7LMAY2fjfg28BgwtYX8QOVtd0mWh5uGkco0cqvxYdJ5nFl7bVzWdGJproW9o
+         hIWvoDGo/cTsVEpYWa1/2AwUHvj7VKDI8JFgWZWLyE19UdWuvuIJKcKs2gkfejnPir2V
+         aZFZRgd1MCEXZOWQcxbzfeKaCnMObhBHak5d5HesW6CnVz7wUl2btBDcOVrxmTa7P/bg
+         a7cRqDLdXsG9eMGgNu72eE+ok0gyG2L2Gb/v/8fz/gdGiBE9wAPwuF10wfESMymkomBA
+         At/Z5P1DQoWA3C4b+WE2Z8Zj340PXHKpKc31l1YIZoHiIfZ4s1IPjxNvQzlrIes7YDA/
+         4Ayg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DYwEuGP6607kKSiEAJ/bJtWXPBAVsuNfRAS7za1yxH0=;
+        fh=R7U1+2Hv9a+u3AMR4aV7olFLYFbGkCEcQ3uEpLxIK50=;
+        b=NCOPRiWNRLzQZHQ71Hum1wu0gqJkXBluSgdu0rOrEVqBjxR8v57/+chaO4M6FtUgP1
+         GlzNTGu8CvbwFGVjcsi/bi/2GvTI1xc/pGGHvGRQixwwlgiyq0MDQMkYhravSXedEZzj
+         yanWZcMaX0zbqoTuU8MLiL4/xlGy+hsNzbhiw3iBrNqA/BLhCPZFE0S9/tv3jXieRWU1
+         X//CG+xGfFEApmIlfM34I4/xSIKm55OZwu1ENgVBzCfZz5eoC3V3CWz/QCG72BZGJbhk
+         kCpS092UXN6V9ueeqMzMCBCha2hn8Sn6Ok+onAO3r9Lw5pkMixVKeyBb4cE2IQrQ43eA
+         bKPA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776176991; x=1776781791; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DYwEuGP6607kKSiEAJ/bJtWXPBAVsuNfRAS7za1yxH0=;
+        b=qo7phO1EViiyoOTdAEOLoYrV6BC8F9Q8ZlTRIxqAc9fpW+QTE7SYdnHN4Be/6VFLVe
+         QLiIa0otYAUAZMBFoDOjj5PBwWvuqrjYJnTqhiBG5Cn9Xh2/Jz4rhQO5s0pHCtBZQ40k
+         wHA/tak4bhPbtnF5mnY/TYQM9hd/KTo/lOg4MWYxI731w25sGJ7z7lxvEZl8GdwmqgT4
+         jnzTDofjwmVUucbkZdhmZSAnSslN5/snDsjb9MhXvOUhixwpfaT09D5wKQgYta4i6wIo
+         rnf3yDQVBp3hfzErpYz9KZLMF6kzsktfwM3Bqw7jya8iQXgMWmphl1S9m8pGHjQVXb1N
+         a1mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776176991; x=1776781791;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DYwEuGP6607kKSiEAJ/bJtWXPBAVsuNfRAS7za1yxH0=;
+        b=rXm2IYA+XFlwmk9LZfYvgjgBHRkJ1Xd8QCLmZNmNbuVYKsX4H988m0euWV1JM1E+dt
+         QkvRFUZ7zWmI7A9dCjBCaf9wT6vBWpUkDz8LjEKhV4ojEEOLw+5DKjbngyq1q7UIX5Vo
+         M3levnu3RZBv8VY+Y6ABz+45Pue/cJkMK8BaQboEV/tSxkporWfYMbJyEbAT71GFwhHa
+         OSbqmlecCk2oOFBjkSTkIyBOw+ytKH93rHYHs5rDs0+6xMfT5xJb0fY2Sq3egKMWIBNR
+         Dhz+K15PIRvDp38x3t7fnxyvrl3+4/WPtyrlThCbYbuBvcEQEiEUptx5LPfxJ8Az+tvI
+         oZsQ==
+X-Gm-Message-State: AOJu0YxyH1OWMfmtR0mvM41kQqcfg8bkTj1Us66xYzIk8VoZGliDfMMI
+	KDgHZKAK/j8LGKBvUqjLL7R66G9D7815EgKYGZYOCCf4GsFflTvozA5LToVaqm+BROwTSdXYxpz
+	2GHSDDTrHy7KcpJvovcfvqk27HJ9t4Iw=
+X-Gm-Gg: AeBDietQ4CsaSe3tPd9VDvWA4dWNXfsaaf8dvnOM1DQDrbdB2g8emucK4Xajm1NxQJM
+	0axjIDPNFmyxVyMdwjqBCo2eMmlVzyFDtYJpwLuzr2wj4xWpieOEzgh+o727B8qpoG/DbmDTMBw
+	Gprji8AhmFuxrPsCMCFjkQkpMTgjY5k34ESeJ40XhDJWbK7FQsa0ND32n6kQeIsXk4ePcPhFsuh
+	4PJypqXh5lYKLFQtao/+xp9YklkaUNUr5GFJV4vvBh7HjqMcMvUXnvEDSk8YbF/C3uG+0pbRGwa
+	n/XCUGarTzKUE6UnMim1FxF7YEcMdTL+sRpX8TpECrbQT3buJIZUsKDwo8izwawA/XtaV0Cvoa1
+	jKWINK+miAhbMCONkbWucKXEDrg==
+X-Received: by 2002:a05:6000:2c02:b0:43d:75a2:44a1 with SMTP id
+ ffacd0b85a97d-43d75a2463emr14084957f8f.47.1776176991506; Tue, 14 Apr 2026
+ 07:29:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDEzNCBTYWx0ZWRfX0IN6RLOTCZ8y
- 2sBaWW50O+mbko41o95tba84mR1bcDQCHmGXm8M4tLNshiswRdKLw7s31lzQ5V5qjzrpkfOQWuR
- QhwZyJnAs2S5GpdyNec3LmXEJ/whWy8WYuYD/wyTfSrTmScqP9sCpUVXjZXNF6l1s4KC7pPabFA
- N9FDC5yZLyRy+l6+PPiLdj3rBPmSbcIZfTpkekPBUev49kF1FJStjMxBMb6RCSVHASs8Pyinyjz
- mQI6qa9/fu9FY/OnDt0SPun/VsJxhgcp4PZYxmlAL5JYBpNh/+opzWae4/IKZQnfD8oWdLHUM46
- NBCg0bc12FaOAlEqIq78WDjpKIgCZhwZ1zNnOwNzRPfRybid/ONL+lVfuV5O5OexKgmEk4MYOzX
- w08InAvhvKBRrMaS0JIcQRL39Nx2JOKd8wwT35qe4CDcL4QCWuNmgDxGkRj7m1dIMOMqE21nDdl
- WvRXqeUwh0dbh+8FOIQ==
-X-Authority-Analysis: v=2.4 cv=eJ4jSnp1 c=1 sm=1 tr=0 ts=69de4f50 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=NEAV23lmAAAA:8
- a=VnNF1IyMAAAA:8 a=xk9cym82weemkfCegS0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: Mnc2js8KdH3KEWTsikY5JMl_lK_7U-mV
-X-Proofpoint-ORIG-GUID: Mnc2js8KdH3KEWTsikY5JMl_lK_7U-mV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-14_03,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- clxscore=1011 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604070000
- definitions=main-2604140134
+References: <20260414071507.29804-1-yangtiezhu@loongson.cn> <20260414071507.29804-2-yangtiezhu@loongson.cn>
+In-Reply-To: <20260414071507.29804-2-yangtiezhu@loongson.cn>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 14 Apr 2026 07:29:39 -0700
+X-Gm-Features: AQROBzBAOST6EG1FhjwDMHKuc_5-NsRFYzA_M5anxwVzBX7qIYhfu6GIOUUTcKc
+Message-ID: <CAADnVQ+9tr5wh+Lx86mo5NZ9OZ=6KAyrwL3jAHhC=0jfZ5SQeg@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] selftests/bpf: Only define
+ ENABLE_ATOMICS_TESTS for cpuv4 runner
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Yonghong Song <yonghong.song@linux.dev>, 
+	Eduard <eddyz87@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Inline these calls in bpf jit:
- - bpf_get_smp_processor_id()
- - bpf_get_current_task()
- - bpf_get_current_task_btf()
+On Tue, Apr 14, 2026 at 12:23=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.c=
+n> wrote:
+>
+> Currently, ENABLE_ATOMICS_TESTS is added to the global TRUNNER_BPF_CFLAGS=
+.
+> This causes build failures when the default test_progs runner (typically
+> uses -mcpu=3Dv3) attempts to compile atomic operations on 8-bit and 16-bi=
+t
+> variables. The BPF backend for Clang only supports BPF_B and BPF_H atomic
+> instructions when -mcpu=3Dv4 is explicitly specified.
 
-s390 has a 8 KiB per-CPU prefix area in the CPU's
-virtual address space, called the lowcore. It is a
-struct that contains the cpu number and a pointer
-to the current task. These are exactly the values
-returned by the BPF helpers.
-
-Emit a load from the lowcore instead of a helper
-function call.
-
-JIT output for `bpf_get_smp_processor_id`:
-
- Before:                       After:
----------------               ----------------
-brasl   %r14,0x3ffe0385460    ly      %r14,928
-lgr     %r14,%r2
-
-JIT output for `bpf_get_current_task`:
-
- Before:                        After:
----------------                ----------------
-brasl   %r14,0x3ffe0362a90     lg      %r14,832
-lgr     %r14,%r2
-
-Benchmark using [1] on KVM(virtme-ng).
-
-./benchs/run_bench_trigger.sh glob-arr-inc arr-inc hash-inc
-
-+---------------+--------------------+--------------------+--------------+
-|     Name      |       Before       |       After        |   % change   |
-|---------------+--------------------+--------------------+--------------|
-| glob-arr-inc  | 244.954 ± 0.654M/s | 278.501 ± 0.834M/s |   + 13.70%   |
-| arr-inc       | 311.597 ± 1.016M/s | 313.610 ± 0.331M/s |   + 0.65%    |
-| hash-inc      | 47.421 ± 0.017M/s  | 47.600 ± 0.004M/s  |   + 0.38%    |
-+---------------+--------------------+--------------------+--------------+
-
-[1] https://github.com/anakryiko/linux/commit/8dec900975ef
-
-Signed-off-by: Maxim Khmelevskii <max@linux.ibm.com>
-Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- arch/s390/net/bpf_jit_comp.c | 37 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
-
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index d08d159b6319..93ab2fb16b99 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -27,6 +27,7 @@
- #include <asm/extable.h>
- #include <asm/dis.h>
- #include <asm/facility.h>
-+#include <asm/lowcore.h>
- #include <asm/nospec-branch.h>
- #include <asm/set_memory.h>
- #include <asm/text-patching.h>
-@@ -1777,6 +1778,30 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		int j, ret;
- 		u64 func;
- 
-+		/* Implement helper call to bpf_get_smp_processor_id() inline */
-+		if (insn->src_reg == 0 &&
-+		    insn->imm == BPF_FUNC_get_smp_processor_id) {
-+			const u32 *cpu_nr = &get_lowcore()->cpu_nr;
-+
-+			/* ly %b0, cpu_nr */
-+			EMIT6_DISP_LH(0xe3000000, 0x0058, BPF_REG_0, REG_0, REG_0,
-+				      (unsigned long)cpu_nr);
-+			break;
-+		}
-+
-+		/* Implement helper call to bpf_get_current_task/_btf() inline */
-+		if (insn->src_reg == 0 &&
-+		    (insn->imm == BPF_FUNC_get_current_task ||
-+		     insn->imm == BPF_FUNC_get_current_task_btf)) {
-+			const u64 *current_task =
-+				&get_lowcore()->current_task;
-+
-+			/* lg %b0, current_task */
-+			EMIT6_DISP_LH(0xe3000000, 0x0004, BPF_REG_0, REG_0, REG_0,
-+				      (unsigned long)current_task);
-+			break;
-+		}
-+
- 		ret = bpf_jit_get_func_addr(fp, insn, extra_pass,
- 					    &func, &func_addr_fixed);
- 		if (ret < 0)
-@@ -3076,3 +3101,15 @@ bool bpf_jit_supports_timed_may_goto(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_inlines_helper_call(s32 imm)
-+{
-+	switch (imm) {
-+	case BPF_FUNC_get_smp_processor_id:
-+	case BPF_FUNC_get_current_task:
-+	case BPF_FUNC_get_current_task_btf:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
--- 
-2.53.0
-
+Sounds like llvm bug.
+I don't see why -mcpu=3Dv3 wouldn't emit them.
