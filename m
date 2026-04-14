@@ -1,122 +1,148 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787463E95A9;
-	Tue, 14 Apr 2026 15:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B2322A4EE;
+	Tue, 14 Apr 2026 15:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776179720; cv=none; b=Jyn1Ge/pYsheqhM7Cz89oJq5LmRdnUUgJFcEgz9bi0/zvHnocplSHWIDJlI41V9/mlMR9O3YuPGut4dz8uWhfPEltkWGjE1qBs+kUI6QwWvbgHWyNJoIJjggzO9ReUd619BVGCCBaMzXKqRpmEfHIHmtbLP/vicC7D+KoB7imrY=
+	t=1776179773; cv=none; b=l3o3zCitLKyMo3qi2Bm4y7inKR2PNyLzvVobpZ59stVoG3DIU1P82iNCK4VRnibV9gjmGcQupOAa6iuVTOxvN2uSRYIwS6+Ug8i//kXdmb8+Kl849gwXMdmNymWKYkoHUXEvXkpNSoZztB2kirYaLwkiydi+NQ/FzarCI32AMh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776179720; c=relaxed/simple;
-	bh=j9M29PHUu4QzpxXOdZ8HdXPKWG1HRS2IhD1l2gJjzz0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=OUrwpFYuYJoYGLfXFqwdWwq7hwZIY9gVXLlo9UleTLjiScoFqICyUPJa32PSdUZZXapiauAKQgywGNcTh+smNpwzeS/Nu+rL1IiCAaEBFldoFpJn6mDed18c3OUhjua5rvYMx6Lr3cdQ83qIL90yGopO56/83k7rDXj9+lQu3fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=jJdRn+Pj; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1776179773; c=relaxed/simple;
+	bh=xj9pUya5DRk6xrlAWUYqxjpSpcrRTIPYrDQmWtkDJAQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=q6WjN9FRtUdBDvbmrYaMnS7iQ/1MNFW7fIRh5Y420ZoCDWAFvmFPvQvewBX3v//3E1x9H2UaXcZWpyZrFVxnddow5ZRlbCDJPcnF2H4RvAJ5r2i95sc+B2JQMEx09vC+sIYKRIp71jF8NiN/bA/wFUByjoqktNz46TxBXWR7Unk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=nmoNkIKw; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="jJdRn+Pj"
-Received: by linux.microsoft.com (Postfix, from userid 1231)
-	id 5717720B6F01; Tue, 14 Apr 2026 08:15:11 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5717720B6F01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1776179711;
-	bh=76UaCt7m9qkU00fT5oqnIBRKGwTRxVqIsQNXt0w0ZGQ=;
-	h=From:To:Subject:Date:From;
-	b=jJdRn+Pj80pI4jVUiXvqv7FzQ1idXvrx/bcuGRBLQTKeJ1vCNNfB1JCfLl6GWh5PI
-	 D59f6qAl54DYHzp1mKXOJoIoex3EnVH5tG4lWlqqGoqtmBfMNnbxrNlt11QkImSoyJ
-	 PHrOsRq4X/6NQItha9nrV38lfGx63ktxEoN/WFf8=
-From: Aditya Garg <gargaditya@linux.microsoft.com>
-To: kys@microsoft.com,
-	haiyangz@microsoft.com,
-	wei.liu@kernel.org,
-	decui@microsoft.com,
-	longli@microsoft.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	kotaranov@microsoft.com,
-	horms@kernel.org,
-	ssengar@linux.microsoft.com,
-	jacob.e.keller@intel.com,
-	dipayanroy@linux.microsoft.com,
-	ernis@linux.microsoft.com,
-	shirazsaleem@microsoft.com,
-	kees@kernel.org,
-	sbhatta@marvell.com,
-	leitao@debian.org,
-	netdev@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org,
-	gargaditya@microsoft.com,
-	gargaditya@linux.microsoft.com
-Subject: [PATCH net-next 0/2] net: mana: Avoid queue struct allocation failure under memory fragmentation
-Date: Tue, 14 Apr 2026 08:13:28 -0700
-Message-ID: <20260414151456.687506-1-gargaditya@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.7
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="nmoNkIKw"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWO-00FB5o-IW; Tue, 14 Apr 2026 16:13:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=wg8YTxZZZ0aBAF60rNfWCIPwUzWH/QpbjE2Qtc07f+o=
+	; b=nmoNkIKwz3/gXR/2holNt66mgELdYed0PSHFweG8/saAL49GSWtrtUnhrkWh89jQnRLWsM3MC
+	O7AjRbNurCpf2r1TUxmKq2SrIY8RLs+jzivI3B8/5pyo0Acl+knN6bcacN0cp738l4A7WpjD2REjg
+	TetLCN6mkLvJHKOfH8ET8sIcI2R99kZMt33ow2aNPeLDzRmuJ6WPTqWArCR6KTK6KB8abwRj0Vd6D
+	tMRSREEZoVUKEV7BKwUID+pLMQ+y+EkHOPcmHJMeiJtOPzsaJe6e8U4N9L9L22ABr42eFMGikxdz8
+	j/8VGe5EDn4A7WELbIsU3llSRqgeCN+x7cFyYg==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWJ-0000UL-5R; Tue, 14 Apr 2026 16:13:39 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1wCeW8-00DhbX-KI; Tue, 14 Apr 2026 16:13:28 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH bpf v4 0/5] bpf, sockmap: Fix af_unix null-ptr-deref in
+ proto update
+Date: Tue, 14 Apr 2026 16:13:14 +0200
+Message-Id: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/43NTQrCMBAF4KtI1o5MJtpYV95DXDTJRAPShPSHS
+ undDd0UXHX53jDfm0XHOXAnbodZZB5DF2Jbwvl4EPbdtC+G4EoWhFShpBqGNkyQcuwjDMk1PUM
+ 7fD6Q+gyOM3uoGtJKGWuMv4rCpFKGaZ14CJO8eJbyHbo+5u86O8r1tH9hlCCBpWvY6PLh3T2bO
+ J1sXOmRNo5Q7+AIEGqPtVQKWds/Tm2cwmoHpwpHHq0+S7QXUhu3LMsPStw6v3EBAAA=
+X-Change-ID: 20260129-unix-proto-update-null-ptr-deref-6a2733bcbbf8
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
+ =?utf-8?q?=E9=92=B1=E4=B8=80=E9=93=AD?= <yimingqian591@gmail.com>
+X-Mailer: b4 0.15.2
 
-The MANA driver can fail to load on systems with high memory
-utilization because several allocations in the queue setup paths
-require large physically contiguous blocks via kmalloc. Under memory
-fragmentation these high-order allocations may fail, preventing the
-driver from creating queues at probe time or when reconfiguring
-channels, ring parameters or MTU at runtime.
+Updating sockmap/sockhash using a unix sock races unix_stream_connect():
+when sock_map_sk_state_allowed() passes (sk_state == TCP_ESTABLISHED),
+unix_peer(sk) in unix_stream_bpf_update_proto() may still return NULL.
 
-Allocation sizes that are problematic:
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+Changes in v4:
+- Circle back to v1 approach
+- More details in commit messages [Martin]
+- Make unix iter take the state lock [Kaniyuki]
+- Link to v3: https://lore.kernel.org/r/20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co
 
-  mana_create_txq -> tx_qp flat array (sizeof(mana_tx_qp) = 35528):
-    16 queues (default): 35528 * 16 =  ~555 KB contiguous
-    64 queues (max):     35528 * 64 = ~2220 KB contiguous
+Changes in v3:
+- Drop sparse annotations [Martin]
+- Keep lock_sock() along the unix_state_lock() [Kaniyuki]
+- Unify BPF iter af_unix locking [Kaniyuki, Martin]
+- Link to v2: https://lore.kernel.org/r/20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co
 
-  mana_create_rxq -> rxq struct with flex array
-  (sizeof(mana_rxq) = 35712, rx_oobs=296 per entry):
-    depth 1024 (default): 35712 + 296 * 1024 =  ~331 KB per queue
-    depth 8192 (max):     35712 + 296 * 8192 = ~2403 KB per queue
+Changes in v2:
+- Instead of probing for unix peer, make sockmap take the right lock [Martin]
+- Annotate data races [Kaniyuki, Martin]
+- Extend bpf unix iter selftest to attempt a deadlock
+- Link to v1: https://lore.kernel.org/r/20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co
 
-  mana_pre_alloc_rxbufs -> rxbufs_pre and das_pre arrays:
-    16 queues, depth 1024 (default): 16 * 1024 * 8 =  128 KB each
-    64 queues, depth 8192 (max):     64 * 8192 * 8 = 4096 KB each
+To: John Fastabend <john.fastabend@gmail.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+To: Eric Dumazet <edumazet@google.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Willem de Bruijn <willemb@google.com>
+To: "David S. Miller" <davem@davemloft.net>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Simon Horman <horms@kernel.org>
+To: Yonghong Song <yhs@fb.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: KP Singh <kpsingh@kernel.org>
+To: Stanislav Fomichev <sdf@fomichev.me>
+To: Hao Luo <haoluo@google.com>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+To: Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
 
-This series addresses the issue by:
-  1. Converting the tx_qp flat array into an array of pointers with
-     per-queue kvzalloc (~35 KB each), replacing a single contiguous
-     allocation that can reach ~2.2 MB at 64 queues.
-  2. Switching rxbufs_pre, das_pre, and rxq allocations to
-     kvmalloc/kvzalloc so the allocator can fall back to vmalloc
-     when contiguous memory is unavailable.
+---
+Michal Luczaj (5):
+      bpf, sockmap: Annotate af_unix sock::sk_state data-races
+      bpf, sockmap: Fix af_unix iter deadlock
+      selftests/bpf: Extend bpf_iter_unix to attempt deadlocking
+      bpf, sockmap: Fix af_unix null-ptr-deref in proto update
+      bpf, sockmap: Take state lock for af_unix iter
 
-Throughput testing confirms no regression. Since kvmalloc falls
-back to vmalloc under memory fragmentation, all kvmalloc calls
-were temporarily replaced with vmalloc to simulate the fallback
-path (iperf3, GBits/sec):
+ net/core/sock_map.c                               |  4 ++--
+ net/unix/af_unix.c                                |  9 +++++----
+ net/unix/unix_bpf.c                               |  3 +++
+ tools/testing/selftests/bpf/progs/bpf_iter_unix.c | 10 ++++++++++
+ 4 files changed, 20 insertions(+), 6 deletions(-)
+---
+base-commit: 0f00132132937ca01a99feaf8985109a9087c9ff
+change-id: 20260129-unix-proto-update-null-ptr-deref-6a2733bcbbf8
 
-                 Physically contiguous         vmalloc region
-  Connections      TX          RX              TX          RX
-  --------------------------------------------------------------
-  1                47.2        46.9            46.8        46.6
-  16               181         181             181         181
-  32               181         181             181         181
-  64               181         181             181         181
-
-Aditya Garg (2):
-  net: mana: Use per-queue allocation for tx_qp to reduce allocation
-    size
-  net: mana: Use kvmalloc for large RX queue and buffer allocations
-
- .../net/ethernet/microsoft/mana/mana_bpf.c    |  2 +-
- drivers/net/ethernet/microsoft/mana/mana_en.c | 61 +++++++++++--------
- .../ethernet/microsoft/mana/mana_ethtool.c    |  2 +-
- include/net/mana/mana.h                       |  2 +-
- 4 files changed, 39 insertions(+), 28 deletions(-)
-
--- 
-2.43.0
+Best regards,
+--  
+Michal Luczaj <mhal@rbox.co>
 
