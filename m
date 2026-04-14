@@ -1,159 +1,96 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9937B3E63BE
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 14:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776177380; cv=pass; b=Vm6B6nSyk7jMk1aa1gZccSV+DB6Hr1BbmLpUU5912c6Z1tHb1h7/uzojunZx+OW9k6YyJSuGk6L60S4b1KRWjK1Syy/JZB5jcWnM40TxeyDSGbXMYeKPimPSntUJA7Q0caKkb380T8jPo6fCINs/uw5fqdxJpN1rdtFin5OcWAI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776177380; c=relaxed/simple;
-	bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eV5IxLN3fcfJCGE01arFh6vgNhPNtRkYVhM16dhAKotrdrdAMztwl33611HHvb8AXE8g52u3S6SKY66k9yQD2KbiNYOqqJkWy+IkOl2FGVqRVfDTgBPx8wAEd6DHWLfPF040Kqeej1JCN9dgZXjNDR8y2Jyx7Q7EcJP5DawThJs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PUlTTsC3; arc=pass smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648FD27470;
+	Tue, 14 Apr 2026 14:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776177527; cv=none; b=nWhKO/5CI0mrn2sGJvbSsPwCqb/e4YRFGLfP8VgnMD/tcQeGJSs62es36WY4lbJ1Esn8pQOQPKilw6P/BpWvfzkH3PIk79Cfympn/b3t3uEnt2ylkj9A97nXGo7lPVfFGRjgg3riyCPO2moH2cLCPEzrJjTpXikrE6eCg8es8yg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776177527; c=relaxed/simple;
+	bh=SaKNOQNfKw/kzQKlH3xQLY1T00fTHDQzv6EOXYfqc4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QlDEdQ2j/Vvpc3k/igG6VC7uaJhzz9zctzaIlh7T0zKqTuqn0BGMK/6ihMvgzZy5KMJIuo1D8/toFLk9/Hxb+WZVvzWAZlDf1939T5Vs7x1di+stGEMVde6Dz24RRUpigkTtCfSoHbljMtFxHAR7JkOcmAaQaWtDegY7ZzqnJ9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7xi0g79; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PUlTTsC3"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43cfd96354aso3352963f8f.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 07:36:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776177377; cv=none;
-        d=google.com; s=arc-20240605;
-        b=S3jHq2CawCb55MLd/tP1vDw189W5sKBtYfkbl2oMIg+9jjmjikIqjD5nxv1UIhY40d
-         GrQNYbfpzMnvJ8J1fv81p++WGUpenDHlvtPRp9MDzj/1uPDpMnCkLst8mYedkNjSrn4x
-         P9HlSzgJedqUA5loV29VbEiss/EGwSARzBV/exRO8QzPaB4PJ6vQuNRSkZjLPizlRF9/
-         UqCS6wOLuFGNERLM86zOP86YR3X77utVHjmdLZ/PfSW+lQMF/rzur0NFQu1783e9vaZT
-         PcFvdPEdZuuRnSNTqVgwscEAMrgDL78rA/uOveErAdXI1OlFbEKEqdCB5W9yZfH3bV/J
-         MfNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
-        fh=jstbK+bGUZwbf8o2Jcu5XJlszY/wQr2TsvKfkvgWyV0=;
-        b=ZQv+G+oXi8uLJY3Mya4i3T+/ngQRvqpQnKTDCJZUIEyUC7Pvl0gSH47aUarnquEOy2
-         3V86Isnocvr63JeYSptHr+xW170Pek1Il68OTJSrGuD35gMxrNtR8ZiqCUjAZ9sW1YIP
-         XhSzA9+ydjZ4/PD7EvUXPVnFwn5mZ9BQ9tqNH+tu4/q9H93Zwmrkzh/+PZlrxU5d9h3q
-         EQKWIlBhsqXWCjgeeDiQv6nXfUrwXkTFHeynweTfmsWGd+LZfkCmSV4vAwPT+1EQbpou
-         0q0/n/GhrTx4gI7TYbaRUwKlpRIealgTbC6WHLUzpJxFiIkXFQxEjtFoCwCLuaD74k/P
-         tBjw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776177377; x=1776782177; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
-        b=PUlTTsC3aVAA+ZyekIkeHjny6kIG/LHQHmycQcAXH+odg5/6txPL3MKJH3GJyCQkHB
-         0VHbMgZt+XaHaCWA8ttAcZZRvO9ODJnXuOO+uOmKq04OuxGu3oOF05P46AdjIMAgq75p
-         1g2iSwJfqj1jIgnuoynfpGVWG9myXYm/pK7dBPifH9KZ0tNoF/wBaemcMV1l1xlz8J3/
-         ZWuFPRlIE6qzOnT4UWRA/IGRTHcr8Y3+4IdOq2AILgI1Oof/ygFLMrlBqux+n4oEboCa
-         Je1BfpUWrlRD9q+IG7jTww/eAr705R3WQH9YwLOz0cBjR8AkMQxl/K7pKJ6lWajvDIts
-         hEmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776177377; x=1776782177;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AnsEV6VHaHqEew+Xa56Ltrfs2MD3YtoIUeXjaty5EkY=;
-        b=obvQjya/63qDXK5Mkcgh4+qvfXH+IORzQ/yLL1+W8GCEvGdi9RrTqNfyuQ6J/L4XRy
-         xHWytAI15A2dYpaZbi77cMLXrjCNTd1wsZ2C6V2zk0ys7pkPJRKkS6jVH5uBF3TDDo6y
-         +0fzm+x5KWXKsJjDY8GlHYsw3djb+3F3ybk6uwsewMF9Y2dG/DDT0HGU8o2bLQHo+QYr
-         mvlxOZ4SjTxZ7ltwaKtEfcxze9nyVloBLMvPUQ0WapNli2QE84iDyOwgTpXNeKH+2Yho
-         npO7CqW1Y66d02pqTDaHnID/Sz0465XvrF7zEa7yTUXYqU6uYHVBdg7vkS8Ysax/6d/m
-         Db1A==
-X-Forwarded-Encrypted: i=1; AFNElJ/5ZXeNyDFJuL+dCLQJ9PtQ8oz3JENfEZ7oUzWaU7tyc79EdCCEnx5JhGZ2qlZCrSBgSgs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3Kd4TzmgIJghO4K1goAzlVEh5K01g90tkg0HkctjyD1kpj4rT
-	NaDVg+73im5vDQUtgxb1SWOyLriggDzsHpOY/N5UVsI2ICmTc/AeX+7Lty4wZJfnMXZtu8vvzjK
-	6L6UpkFrrIkmRaHK4eWkjSCodoMXPQJU=
-X-Gm-Gg: AeBDiesa9dILhW/rkAUYoocwEPWw/GOr+zg4Rubh/u8h3EDKoIuhvQyxNxckeeIfzAw
-	KZEveEaLywkfAEdaxmbTUb2oJNFOh//pzeQ+KHU0aO5x8xJ1apqKOjXo0cJBOXPqhfS69eUFWxt
-	8q2UoSs2xjAe9BcacL+M10KafCQTX5M9IXHrrLJwytf55qQOlsQvxjaQHo1NbxwVRNmwcNMK/tN
-	MscOX3yFtN/W9boI36Ux3gwgFv995t6DxmWwmF1G1jBb7KCLogil+/jD8n76wep5LQfje7TaHbu
-	cg7OJn+JAnnwCSY6iQtpmL7IZuR6bYv8mzxX9wb+qWbtLByeI3Lq/xWEMBuKjKOy6Ilt/fnwSRb
-	dpAhSvrILarNdE58w8IM7C1xiFA==
-X-Received: by 2002:a05:6000:1a86:b0:43d:6e0:9458 with SMTP id
- ffacd0b85a97d-43d642c08b5mr27685966f8f.39.1776177376758; Tue, 14 Apr 2026
- 07:36:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7xi0g79"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF20C19425;
+	Tue, 14 Apr 2026 14:38:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776177527;
+	bh=SaKNOQNfKw/kzQKlH3xQLY1T00fTHDQzv6EOXYfqc4Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R7xi0g79ycoWhkT3WE0m80xpgZOvBxxKj/DFuI5g4ONtIZXLUigqmplQZa1Gxt1UE
+	 bgh395D/HCIHk9BFFcBVe6JMZ5fW+fRgNmDnqJWoRlttm6hW73pSNj5nYuJxqgX6EX
+	 zdtOHTnQYQy34DikVPuGZqEx/NvMbIp1/WGFY+AZEQrS5ZLSC3E081MDRWqbpQ5ti/
+	 GomAnBCWAAyfJU6j5bKpp+pX0sDKpY2FOxDGKS8kt6h0ObI2puZPGYDDhY3CpHXagX
+	 2uktJudn1CLy0cTQGtYZcl658cwk0bfV4v3ncoTHkQBQUpFqiX/+KL83Nhhk/DceDm
+	 Y7sk+tIVw+DHg==
+Date: Tue, 14 Apr 2026 15:38:42 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the origin
+ tree
+Message-ID: <a2749894-503f-41a4-98c9-2442ad22ff9e@sirena.org.uk>
+References: <ad4whCJuB-viVAae@sirena.org.uk>
+ <CAADnVQLz6-LK4+qad_XqEZXrspttpe4b49jRZ6wUCgEhJeTvgw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com> <20260413-kasan-v1-1-1a5831230821@bootlin.com>
- <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com> <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
-In-Reply-To: <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 14 Apr 2026 07:36:05 -0700
-X-Gm-Features: AQROBzD11iC8gAKSEnmD0t_Id88yG4ZENQr7azgzst5W9dho6pOaDHcgJ_Mytlo
-Message-ID: <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, ebpf@linuxfoundation.org, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Xu Kuohai <xukuohai@huawei.com>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	kasan-dev <kasan-dev@googlegroups.com>, linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="r+G3QLXOXTpIj1Yj"
+Content-Disposition: inline
+In-Reply-To: <CAADnVQLz6-LK4+qad_XqEZXrspttpe4b49jRZ6wUCgEhJeTvgw@mail.gmail.com>
+X-Cookie: Academicians care, that's who.
 
-On Tue, Apr 14, 2026 at 6:13=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
->
-> Hi Andrey, thanks for the prompt review !
->
-> On Tue Apr 14, 2026 at 12:19 AM CEST, Andrey Konovalov wrote:
-> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF Found=
-ation)
-> > <alexis.lothore@bootlin.com> wrote:
-> >>
->
-> [...]
->
-> >> +#ifdef CONFIG_KASAN_GENERIC
-> >> +void __asan_load1(void *p);
-> >> +void __asan_store1(void *p);
-> >> +void __asan_load2(void *p);
-> >> +void __asan_store2(void *p);
-> >> +void __asan_load4(void *p);
-> >> +void __asan_store4(void *p);
-> >> +void __asan_load8(void *p);
-> >> +void __asan_store8(void *p);
-> >> +void __asan_load16(void *p);
-> >> +void __asan_store16(void *p);
-> >> +#endif /* CONFIG_KASAN_GENERIC */
-> >
-> > This looks ugly, let's not do this unless it's really required.
-> >
-> > You can just use kasan_check_read/write() instead - these are public
-> > wrappers around the same shadow memory checking functions. And they
-> > also work with the SW_TAGS mode, in case the BPF would want to use
-> > that mode at some point. (For HW_TAGS, we only have kasan_check_byte()
-> > that checks a single byte, but it can be extended in the future if
-> > required to be used by BPF.)
->
-> ACK, I'll try to use those kasan_check_read and kasan_check_write rather
-> than __asan_{load,store}X.
 
-No. The performance penalty will be too high.
-hw_tags won't work without corresponding JIT work.
-I see no point sacrificing performance for aesthetics.
-__asan_load/storeX is what compilers emit.
-In that sense JIT is a compiler it should emit exactly the same.
+--r+G3QLXOXTpIj1Yj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Apr 14, 2026 at 07:09:44AM -0700, Alexei Starovoitov wrote:
+
+> But how come you're saying it was discovered "today" ?
+
+> Paul's commit ad6ef775cbeff was committed to rcu tree on Mar 30,
+> while Kumar's 57b23c0f612dc was committed to bpf-next on Apr 7.
+
+> "today" is April 14.
+
+> My only explanation is that rcu tree was not in linux-next until today?!
+
+We're in the merge window, this means things get sent to Linus and end
+up in his tree.  This in turn means that they are seen in different
+orders, and sometimes depending on context in different forms.  -next
+is merged sequentially, it's not an octopus merge of all the trees at
+once.  Some variation of this will likely have been seen before, but not
+this exact combination.
+
+--r+G3QLXOXTpIj1Yj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmneUXEACgkQJNaLcl1U
+h9CTlwf/V5apJckYAKX8vqhAGBW1VKms7zFRTDVsiDnVZX3+uA0WBLw51iyXSIlB
+Y59qk/2neBd3KbzoqqM2fBI8+x4+XYvkM/J82+xBuWm39brlQ0JT2OrI4/ZUb4W3
+zC73vs5Bf+NEzkPcmH883gCa9KcC+5bp49vMOrOn0mTwITsgqQCsdUZ+R+8fW9sx
+5YteqtdXh8EHKrCF+yqo/mqWVVjCeBqNWg2bLjl/R3KmicP//WrMsJ5Ix4BwmnD8
+/nMGTLbSSQSdtUfRoUfFu28a3Kt6lYCHRIahkovNfQcliR54pTjct5oOjrpMqbLN
+3sIc1nQkmtuVhgxU1eYwJbZPQro06Q==
+=enOS
+-----END PGP SIGNATURE-----
+
+--r+G3QLXOXTpIj1Yj--
