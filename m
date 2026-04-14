@@ -1,87 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEFF3242B8
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:42:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D42345CAA;
+	Tue, 14 Apr 2026 20:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776199359; cv=none; b=RitqAEpu+AJOjkDG7Ju/9WakT9J3phNnrK/zzQHEMH1fGsD9s+/aS+YscFIOiIhdLrClNeji8VnM9gQwI+9+ALye9MWfHLVnJgY+Uvn5uE46i9Ufq47AqHph/2Ji21RfiOVfMF7LfV8OglOxCQQk1gt5OSUnxyEUrDqaihK5ZF0=
+	t=1776199474; cv=none; b=ayDAx+TeySqL4xuq7THVVppCSRTLWIxZ+P1SRrTDUjDc2JrCJfk6uF2r2jGfxA4OJ7sxA+SAqo44LJPrsNy3TZ/O94htwCZEXVr3JuSw3sAABVFUL6UZXE3j4NwcEqtr+4dPyQ/eH68E9X+3+smEX8PsU+2m5EsXme5hWaQR7qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776199359; c=relaxed/simple;
-	bh=8R2glEnKumosOR7bZ4t9uuLJ78O60DJfK4xmyzrFy2Y=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fWPaLAvVD/dZAKG0fOG4wVUFlO5+zb9BKzQUCiU1WnZ/wo3avrmYpldecZYD8jCawyOGg8Z8H+yAT47+Zwi3hTcjGw3lom1wAyKYz2kOQ2TO9seA0eT862iYT5eK7+3v0uN3eEGZY06rFc7hqTpgZIOOuxxbnT6eQweVAoBay0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QLEZGkfA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776199474; c=relaxed/simple;
+	bh=L8bWJr7FXUdlTXBxL69DdsJ20JowQnELYHkBWQ0j71o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
+	 References:In-Reply-To; b=ZmWG5uszWwbTG1lnUg84uX4Yyr6i3SRSfCm0DY7HTbbb+xRkzOXfHhK2lR32+a4IYrui09SFtr/Z53ZGkYJeRX3qn2kLM/ZB+SVPOkCaoiqbf/a26b8XML4fev8wzAAbAeL7C0UbtMdP74D8cLQTdDHIkAiL/Ubk25KgeAUU+eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tp0oFwTf; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QLEZGkfA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2770C19425;
-	Tue, 14 Apr 2026 20:42:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776199359;
-	bh=8R2glEnKumosOR7bZ4t9uuLJ78O60DJfK4xmyzrFy2Y=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=QLEZGkfAkYzhUNrxptZSQxr6HC39Juiwu/SNHanoe84e9DXOszLaYXymkdvlGNl0P
-	 2zu6r8myw8pjggt0+eL+00FtrNYzLRh00BjHtP0yYYnoT+1rH5TN3+Nxw2/t8jWsKo
-	 fIifd2Vzojrips2JajWOMvcg4+h48oJ35t1rydDj3N+ZjFj0IWu8eVH4T+tFHMSfHX
-	 xD/+qc4oORj03pPGaWv9Z5kXb4M6w6DdGCMmpSobjPtPdGCVdr1XW8Hw5qmPJkq6ua
-	 5+Y5t2Sg1q4kn8nuJ/PrCp5QC8mOnCbznQ+MYoMIpkuyBEWV2qS7nfQtcZqqLgap0Z
-	 EzV4BzwLVo6xA==
-Content-Type: multipart/mixed; boundary="===============0605025376558028593=="
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tp0oFwTf"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 36C6FC5AAB7;
+	Tue, 14 Apr 2026 20:45:05 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id CCCED60410;
+	Tue, 14 Apr 2026 20:44:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4D13710450F98;
+	Tue, 14 Apr 2026 22:44:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1776199466; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=L8bWJr7FXUdlTXBxL69DdsJ20JowQnELYHkBWQ0j71o=;
+	b=tp0oFwTf5VHzsnEQcoI6YFXubpXr48s6UWlXK4aDR8EDMSSF+/OjNf6hUwJE2BAbHAdgPz
+	v2f4A8tTxVtK7dqJZfFAdjP+hWDl0Fam9eGGy91tNDrdqr1jGCVU5mlUKQsx7dKkw5Fj/o
+	8xB9Inm9XOYYzG+OqKhmNW03MF+ALRZMBSynxDWIF5QBxopuN97KxRbIxhOyfKSB9o6wkS
+	91454gD3J6J7wN/TaEOT0JgO64Dp+ztksnjtLIOwoMGIkVJ9RQPJZYo6iGmJA9iAtEHlyl
+	YSu689PmkWekOvBlF+bpB2iuXK1nNSBHe1tFVeClAIGo4vy+Vjuo6lCfP898kw==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <9048dfaef437494bad8b50e56ea108c012cbbceaf5225f2b0086aae45b83d204@mail.kernel.org>
-In-Reply-To: <20260414195019.684531-2-alan.maguire@oracle.com>
-References: <20260414195019.684531-2-alan.maguire@oracle.com>
-Subject: Re: [PATCH bpf-next 1/6] bpf: Extend BTF UAPI vlen, kinds to use unused bits
-From: bot+bpf-ci@kernel.org
-To: alan.maguire@oracle.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,qmo@kernel.org,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 14 Apr 2026 20:42:38 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 14 Apr 2026 22:44:13 +0200
+Message-Id: <DHT65O6DS001.14GNQMXFJZHTN@bootlin.com>
+Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
+ Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
+ <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
+ <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
+ Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
+ FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
+ <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-1-1a5831230821@bootlin.com>
+ <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
+ <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
+ <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
+ <DHT3JV7GTOBL.29205LGGNEDSH@bootlin.com>
+ <CAADnVQ+c9h_wuNwj8pjx885oNErGY7bxxCwKi+DiJ0XKSpyYfg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+c9h_wuNwj8pjx885oNErGY7bxxCwKi+DiJ0XKSpyYfg@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
---===============0605025376558028593==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue Apr 14, 2026 at 9:16 PM CEST, Alexei Starovoitov wrote:
+> On Tue, Apr 14, 2026 at 11:41=E2=80=AFAM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> On Tue Apr 14, 2026 at 4:36 PM CEST, Alexei Starovoitov wrote:
+>> > On Tue, Apr 14, 2026 at 6:13=E2=80=AFAM Alexis Lothor=C3=A9
+>> > <alexis.lothore@bootlin.com> wrote:
+>> >>
+>> >> Hi Andrey, thanks for the prompt review !
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index a62d78581207..1663970fc1bf 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+[...]
 
-[ ... ]
+>> > No. The performance penalty will be too high.
+>>
+>> Since we are mentioning it, I did not consider yet any performance
+>> comparision/benchmarking (and I am not really familiar with usual bpf
+>> performance validation practices for new bpf features). Is there any
+>> existing test I should take a look at for this ? Maybe some specific
+>> benches in tools/testing/selftests/bpf/bench ?
+>
+> So far everything in bpf/bench/ measures bpf infra like
+> maps, kprobes, tracepoints, etc.
+> We don't have benchmarks for bpf programs.
+> So we don't know how well JITs are generating code
+> and how much inlining done by the verifier, JITs actually helps.
+>
+> Puranjay is working on creating a SPECint like set of benchmarks.
+>
+> For this kasan work we should make the best decisions from
+> performance point of view, like not wasting unnecessary call
+> and not saving unnecessary registers. btw in the other patch
+> I think you can skip saving of r10 and r11.
 
-> @@ -289,7 +288,7 @@ enum verifier_phase {
->  struct resolve_vertex {
->  	const struct btf_type *t;
->  	u32 type_id;
-> -	u16 next_member;
-> +	u32 next_member;
->  };
+Noted, I'll do some checks and tests without those two.
 
-The next_member field is widened to u32 here, but
-env_stack_set_next_member() still takes a u16 parameter:
+> But we cannot quantify yet that avoiding extra call gives us N%.
+>
+> You can micro-benchmark, of course, but gotta be careful
+> interpreting the results. It might be too easy to get into
+> thinking that JIT must inline __asan_load() for the sake of performance.
 
-static void env_stack_set_next_member(struct btf_verifier_env *env,
-                                      u16 next_member)
-{
-        env->stack[env->top_stack - 1].next_member = next_member;
-}
+Ok, interesting, thanks for those details
 
-Both callers, btf_struct_resolve() and btf_datasec_resolve(), now use
-u32 loop iterators and pass i + 1 to this function.  For vlen values
-above 65535, the u16 parameter would silently truncate the index,
-causing the resolve loop to resume at the wrong member.
+Alexis
 
-Should the next_member parameter be u32 to match the struct field?
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24420385267
---===============0605025376558028593==--
