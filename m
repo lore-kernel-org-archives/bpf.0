@@ -1,148 +1,142 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3232D82899
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 09:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776158267; cv=none; b=Kxu6vqhXvA9rOL7bI++l6Mduu8M6FnQZNywK78Y90YEiZY9PqDGPAU3kIdBy9cOVotIU3KTYFXBFzw8/wPIKaYJrKxptr05udFy/CuaUqG0/ifOwMS6H5FxWNmwrVOgqtjgu07vGrkbzyaM25D2E5+lRIYBYSo4Cc/zqSYIUbZM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776158267; c=relaxed/simple;
-	bh=y9RBwNlL7JFhRplM8GzxiuHZYoF1Od4tFFoLb5d65OE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=P7KN4ISH5vXettraE3Abp43aYhAYvT/rhoZ4pWtRKxmygG+hDGMvA//izWWDJUytqRfR85Gj3koG5y/+HZVTO74iJUpafivwVd1H/hEWExKYJqGyuBTp4M5TgyQTjt6euKAG6acm9l+fn/WrrkyKJxD5HG14l9tsUKS5dgV54yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PXb9T8Pj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=QwvkhqBo; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC88C3C9EE9
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 09:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776159507; cv=pass; b=EA88IOx6Ogjl7ZaUd7PjH902pGjCAIBw/nA/WN0qUnbf7X7rLasa5w1IBaxXpu3M4MBbiXr4nFxYH9/YLBqIi2DMTtP9V3lDD9EkvV6o3xgH8qG4bprpcZ6pcnY5fdo7lugK1tHiOFV47I8W3THj5yvwFgftqaBJXru4SsB4WDU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776159507; c=relaxed/simple;
+	bh=kcjdDEKz8nZvddy7P6HkRER9j+LwEmEbznRAnp0HJSg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KBf1C/VcXQ4eH3GBLDcD9XyLPaWjbUQ9VHJfNXGJ9o+QDX/JLQl1Y5f2RAKhCr/5tLAMaMBIGKhEc6IvjxqD/OWE4qe1SeM5X4aQYOBk1/Mz/+96EBnwAt0HvUEgZo111LmWq5/V9hx/DTvW8m1sjW28AdPXI4w/oVEYACK4+Z8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4r8a+4O; arc=pass smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PXb9T8Pj";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="QwvkhqBo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776158265;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8o+jTcPee9ytS2fBNgNkDGXbrpoLlX9QLHbrMcVIiqY=;
-	b=PXb9T8PjQrlpvT93q8c0B6rv2otrPLefXYMTDpmW8vMLFnZ1gHmm/9QoJ8058bqFMdUe//
-	XURhNqAJBzmA9DnQYNrBq1lNmtAihkzqNUxqT6CE37izcvpxihJ2amF1sy94E/Jwj9GPuV
-	oja0Or83mVb4H7ncyQxD5rD27INGU68=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-665-xTjCX2ZaNauH30_iZg_qjQ-1; Tue, 14 Apr 2026 05:17:43 -0400
-X-MC-Unique: xTjCX2ZaNauH30_iZg_qjQ-1
-X-Mimecast-MFC-AGG-ID: xTjCX2ZaNauH30_iZg_qjQ_1776158263
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-43d77286244so1433680f8f.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 02:17:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4r8a+4O"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b9c3a9fe80fso701547866b.3
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 02:38:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776159503; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jPt2+pkn3cDYTE29M7zvOxGXtp82fijqgYWhkXL2/rLr7gYCDUD4h2Kz0QmSFqmy2+
+         JnO0h5PI7QlQ4+3l2ZV+V7cQAk75nFScDISCC3ZIaK5S/aInZcRuuPFpkOtm6nSYWQXy
+         8+m2id4E2CBR98ULz5rJcd6lRcqNkIlDOKQ99y//L5UbtWbyYh8d+9oM4VGQrL07fxpl
+         jTqQsra/z12UNSh6lo8FQ2f/eqFyZZ0v1SoQ/bUrZOh/Y57t/C/r2ur0073P8RHheKXV
+         DfP7Ygtjs60xI64vKQxgUOqfTfYAs2Lm5l6sI8bHdlUqVafFEZmmikH9kb3JWuq/YOnh
+         WlIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kcjdDEKz8nZvddy7P6HkRER9j+LwEmEbznRAnp0HJSg=;
+        fh=CEFYLfGgdOrJ4tNfcYBCw0GsiELtD9rPMaq5zdywx9c=;
+        b=AqCDtSVjStbDnhxkpG80bN+rbE6QcK8MnlkMCGBOgHJn7Z4O/6LruWdPJGL3ds1rTb
+         rwTrdDiLnalxKU3tYoHJmJkct79xExEf9jxXNgA9VFe/innTopN8t+wikdyzKDP7lm3o
+         h3VyW0q9DeAT9pV2twwkzUQXuCluSbqNL4aAJPgbvNQgz1lbA/dLQWTPC7+cADu7Fjtu
+         p/x+Sp4Ifvqn3ytrq2+rYW2eJVG5RQyTiyo5QwVSCpGdbFlCCOb/PBalmBqJ8TJ6PxFx
+         sFlCUzimF5CJJZw04XSEacfFWzwuyMGsSH24GFXs+BNnuPp85ChwipKMtoGCegEu9o+2
+         40tA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1776158262; x=1776763062; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8o+jTcPee9ytS2fBNgNkDGXbrpoLlX9QLHbrMcVIiqY=;
-        b=QwvkhqBocpRUN3Z3uFUBBkMcOb0r89fhAUb646TnrDrZth+UeQmuw5UMofKTJlH91X
-         cNv5ESVBbs6v7JphaOvQXXD81RJnk9qXDCMD4hfWtyJ6NZD3Z43irt1C4Q9wD5bTHg9+
-         9uYhRYdfWDwmCoVcW9BJLez4m7dizBojugOUFpt26amZ0PlB6tsQbIwlQMNyqGuR+ouC
-         TJLq+E6+P1fbjvmpKxrwY9fMc6NIvO8mTQ0sdeRWggwhidXJV8yUxY1ydPBVatowsM8h
-         /R7hFe6lwAtGo048Sl3gz6YxS4ExCD0+UtxugVv9P/uPNPAoOxaYvUDTrNQ2I4pkt/d6
-         BaMA==
+        d=gmail.com; s=20251104; t=1776159503; x=1776764303; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kcjdDEKz8nZvddy7P6HkRER9j+LwEmEbznRAnp0HJSg=;
+        b=A4r8a+4OXbJvHsYpWSYVP2jAqKcCoJ0olCQVy7XU+UHe/bE0TKVUaH/NXWOCfiD4ch
+         20AduCqgSvH6iOAXLnMr74BSB+jn17dKZVL/SdnwZ4JiKpRNeyAfVQ4r3EejIQHA4gOx
+         jeDJ0GWUxYDeC21Q0rwEGXKaooy0mt7+/aZnTRP3j0qrTkqcTDgm6LbM+mhjYusIF/HW
+         h1o3V/Rxn4HToJGE45pNNg32MhWxVjenP7IfqO9oVWd7KBYLRAt4Fvbd+uzT90FOyvsv
+         iM74lDeMoJturyv/nZlbZJrfXXYDxJbWnUz2HDaF58uGgxRkf3xfHE6AA7IKZ3Jo30jz
+         h7+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776158262; x=1776763062;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8o+jTcPee9ytS2fBNgNkDGXbrpoLlX9QLHbrMcVIiqY=;
-        b=jfn9mkIuHiyxoPlQHHqrUijSm4N5PQ+O/PyuXiOnJigiNtn9JCCJhyKDf4qxHqA8iN
-         G47TqVEAUFlXvlzRXu5WC7lQXxU7AJAWJhUUnjaqcNVtWYWEyj1pzvLnzqaE/nBI7s0O
-         2M3ty+PySSCfKy450Cio9ElWtmXYGGogGVCiDWT6OC+w9Jb6SlrRNDIZEmAP0yDV3goJ
-         y3BfQtgm92sj6dvIonfz2FbXsobO/SEGJeQONT/UlIl++yT2gSllSN1ejakfUtesAqOg
-         o3SVRsKeovQ+G5M3BddyOaJkUo+X3jfdMO7+rMg+azDW6rYPuQDZm6hTHJj5NEetaB+T
-         d/mA==
-X-Forwarded-Encrypted: i=1; AFNElJ9UrNFm0Te6lDVdGuxRE1QvRlQcE7SYaCRj0bUfGtgs2ieG/HhEvnJS9owA+b5/itRHHkc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrZO5BseDbeRzJvkAWxr/5sS8I/oqyDm7cEyz5YQmuaEUmYS/Y
-	vsg88DT1CNsR/QFiww8sRTUD1olHPnIcY/p7UhriD8syechO9SgULN4Zw7rPwoalAc4OU9poHkw
-	iZaM3Bp1rforSosQXy35bFw2GCkn/dVl0TIm0rR4pUVEd9pshA6S9Ug==
-X-Gm-Gg: AeBDiesej+H2/bzi+05bj0XRK5YllCe0Tn9sEghgKpczS5na9oXAcwIJF2kHfBJtC17
-	emeFw66oTVEpA0BZKlcRQsv4l0Hnd/fZmpzytKBnfvYEFhe06E0AF1486VZVj+u8tjQazaZc0Fr
-	BeCh2+3/VADmFtvCjbt1Np90AVoBxjEjAOhwKuDJO5Z9A33cbSS5d3vTgVp2FOAhSC8U7Kdn1C/
-	vEvShgW3Ja3ziC5NbsCGAUJyhnLvyNPdirLNJXwW8wHVpCwE6V97Z8MnGZPIGUefnHKue1PKcIm
-	GQ2vGKYNY/6Syv88pKgGrCgRhz4HzP2dIB0b9vKWb9+KEtFJSqlv8umesRcavoOmPFvgcaSCizK
-	v/MtS9dDpgmdaqUZwIvAoWZRmT2tOJ5ap0ue4iWaITek6DydgQN8apFDk
-X-Received: by 2002:a05:600c:a404:b0:487:1108:48b8 with SMTP id 5b1f17b1804b1-488d67b8d97mr197779185e9.2.1776158262593;
-        Tue, 14 Apr 2026 02:17:42 -0700 (PDT)
-X-Received: by 2002:a05:600c:a404:b0:487:1108:48b8 with SMTP id 5b1f17b1804b1-488d67b8d97mr197778675e9.2.1776158262108;
-        Tue, 14 Apr 2026 02:17:42 -0700 (PDT)
-Received: from [192.168.88.32] ([216.128.11.125])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488ede2ba5asm32868935e9.12.2026.04.14.02.17.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2026 02:17:41 -0700 (PDT)
-Message-ID: <04cafd50-7af5-4835-b0df-67393d9f5a51@redhat.com>
-Date: Tue, 14 Apr 2026 11:17:39 +0200
+        d=1e100.net; s=20251104; t=1776159503; x=1776764303;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kcjdDEKz8nZvddy7P6HkRER9j+LwEmEbznRAnp0HJSg=;
+        b=J8CTbD1SlxUTvJ1jM3fVsEBgj7UtbnCPSyPwmrHfuY3M+K1m3DjJZsUS6tCMwiHkXx
+         Imxhw6/uE3hjWXZx3AqoBCHvUGH4FFSiS/pDgjuiOyJqgSFrtIWc5YRcDpdevc5I5vTD
+         TlZ7PoQ9xbNMwk4awvHOEk5sMKqu2PZKHfErHgJkuPqlWICyTU7Tj9jOFV41HoHxd+eH
+         n7QvoaDch5croo0g6HeZqHbk5u9CrNMKpapCgRW0LtJnf5uDZAwla7ncwuJWZk9Pfucg
+         lh9o39veVQNya+CkjI1qxr6nqZsYBE9sEGGbw0vwouCyPLj6MVavyxHN9NglIwgVCFHn
+         PHRg==
+X-Gm-Message-State: AOJu0YxdIGvCOV6mY9I0P7cJ8T17bmk64thPgjtdkQrymWO0nvqt0Y5Y
+	bWP95CwxdZ3fjYc7HEexe5Evd1v8Mulzu+4dh9G83S5qAqirSWC9boUgQy9aikhioD2Hpkrlk4s
+	Vpy6pBchpe17GcDxXj/ZGSPkoh2gPObKwcbWCpSTX8w==
+X-Gm-Gg: AeBDietKTUiekrOzPAaPa5QvzzrDe/r9nYz+dBIlqMnRuNWudOdw3n0QKTu3hI+HGrR
+	h1Y2ZRGlzOSPDt1/NIHBqOV2IqcnUSapOFOcrMNGafq4ZztN/uFYVsXRP+zDWM8rlSaUPRjXT+i
+	pLrPE6XPTdzVt0snU3UBUzQdTOzWOxLhM/92V6RMLElk4rCwehpAluWRg2BsJRDMSGd7uzhjBJ9
+	leu3jC3CbzHe2Gbpy6qFKr8tpT2nri+Zq1FuuuuJ9sPQHiANjm78ANW+8WtRA50TiYCwQC7Uiwl
+	a1dCD0fEKIcd3zrzz8n0+cPw3CyqG9fdQw==
+X-Received: by 2002:a17:907:1c16:b0:b9c:d04:e05f with SMTP id
+ a640c23a62f3a-b9d72658a55mr959935566b.32.1776159502686; Tue, 14 Apr 2026
+ 02:38:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 2/2] selftests/bpf: verify syncookie
- statistics in tcp_custom_syncookie
-From: Paolo Abeni <pabeni@redhat.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, Eric Dumazet <edumazet@google.com>,
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: netdev@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260411013211.225834-1-jiayuan.chen@linux.dev>
- <20260411013211.225834-2-jiayuan.chen@linux.dev>
- <CAAVpQUCCZVogDUUTfr3k-JxV52kpVvdYzqFC68-J3n6_ugd4Uw@mail.gmail.com>
- <6b22a595-cd65-42ec-b332-c835273bc174@redhat.com>
-Content-Language: en-US
-In-Reply-To: <6b22a595-cd65-42ec-b332-c835273bc174@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260413191111.3426023-1-puranjay@kernel.org> <20260413191111.3426023-2-puranjay@kernel.org>
+ <dd645fcf-76dc-4c68-8b6f-1a168cafd44f@huaweicloud.com>
+In-Reply-To: <dd645fcf-76dc-4c68-8b6f-1a168cafd44f@huaweicloud.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Tue, 14 Apr 2026 10:38:11 +0100
+X-Gm-Features: AQROBzA5ZqN85V-5pwDPQTcpuLbGTsQR3YyYyNFZOhVjcHyYWB-ouK4sX2jSl08
+Message-ID: <CANk7y0js0YxPFX1HqpYumN-ji6-OkKi4YO5=CRz8nx8aTzYxPw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf, arm64: Remove redundant
+ bpf_flush_icache() after pack allocator finalize
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Pu Lehui <pulehui@huawei.com>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/14/26 11:08 AM, Paolo Abeni wrote:
-> On 4/14/26 7:50 AM, Kuniyuki Iwashima wrote:
->> On Fri, Apr 10, 2026 at 6:32 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
->>>
->>> Add read_tcpext_snmp() helper to network_helpers which reads a
->>> TcpExt SNMP counter via nstat, and use it in the tcp_custom_syncookie
->>> test to verify that LINUX_MIB_SYNCOOKIESRECV is incremented and
->>> LINUX_MIB_SYNCOOKIESFAILED stays unchanged across a successful
->>> BPF custom syncookie validation.
->>>
->>> The delta is captured between start_server() and accept(), which
->>> covers the full SYN/ACK/cookie-check path for one connection.
->>>
->>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->>> ---
->>>  tools/testing/selftests/bpf/network_helpers.c | 22 +++++++++++++++++++
->>>  tools/testing/selftests/bpf/network_helpers.h |  1 +
->>>  .../bpf/prog_tests/tcp_custom_syncookie.c     | 20 +++++++++++++++++
->>
->> As you touch bpf selftest helper files, please rebase on bpf-next
->> to avoid possible conflicts and tag bpf-next in the Subject.
-> 
-> To hopefully  minimize the conflicts handling I'm going to apply patch
-> 1/2 to net-next. Please resubmit patch 2/2 to bpf-next after the
-> relevant net core reach there.
+On Tue, Apr 14, 2026 at 2:56=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com=
+> wrote:
+>
+> On 4/14/2026 3:11 AM, Puranjay Mohan wrote:
+> > bpf_flush_icache() calls flush_icache_range() to clean the data cache
+> > and invalidate the instruction cache for the JITed code region. However=
+,
+> > since commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+> > management"), this flush is redundant.
+> >
+> > bpf_jit_binary_pack_finalize() copies the JITed instructions to the ROX
+> > region via bpf_arch_text_copy() -> aarch64_insn_copy() -> __text_poke()=
+,
+> > and __text_poke() already calls flush_icache_range() on the written
+> > range. The subsequent bpf_flush_icache() repeats the same cache
+> > maintenance on an overlapping range, including an unnecessary second
+> > synchronous IPI to all CPUs via kick_all_cpus_sync().
+> >
+>
+> So icache is flushed twice: once per instruction and again after all
+> instructions are copied. I think it's better to remove the per-instructio=
+n
+> flush and retain the single final flush to avoid repeating flush overhead
+> for each instruction.
 
-Uhmm... the original feature went through the bpf tree, so I guess both
-patches could/should via bpf-next. Hopefully conflict into the tcp code
-should be minimal.
+No, bpf_jit_binary_pack_finalize() is called at the end after the
+whole program is jited, and it calls: bpf_arch_text_copy(ro_header,
+rw_header, rw_header->size); which does aarch64_insn_copy(dst, src,
+len), this calls __text_poke() which copies the whole program and then
+does flush_icache_range((uintptr_t)addr, (uintptr_t)addr + len); once.
+This is correct, after this we don't need to call flush_icache_range()
+on the same range again.
 
-@Eric, @Daniel: please LMK if you prefer otherwise.
-/P
-
+If we had been calling flush_icache_range() for each instruction, the
+system would hang due to the storm of IPIs.
