@@ -1,105 +1,138 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28ADE3E63AD;
-	Tue, 14 Apr 2026 16:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977DB3E63AD;
+	Tue, 14 Apr 2026 16:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776182457; cv=none; b=lSyWhskC59Bo74JikAsG5g+PE+gcvkVEEsffBPBslQm0aQsbrile6Xz86xzQkjIRto+26z04XIkG1AJ+Ff37y6cJbyRfIMFBHO7IURFO/xSWOC5P2Z7t3iqc4z0aVE/U4IabM8zcwZcMVktpI6ham9NtyAaQGqfgSwFFpkVHfmo=
+	t=1776183954; cv=none; b=VVHx0OanypFNSMDWz4p3/jTbhpC8dorN+0Izl8+b1V5OkvMJRWEx2DwcL5RWFiBuKwc9/972TZz8PaOCOWof3kHzNqGP5Z9Y5PEeZ7DZ6T6NTcvoYACuOxe3cPAPha983+6P0QF/iGud0o8UskeiWTejYgGvAeUgaRqcCFscir8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776182457; c=relaxed/simple;
-	bh=iqcWvzGfXMfXkBPjvGQtMzc0oZwiS8MdvkTlX4lzKlg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hLzdNFett7F+u+tgfKkfuHhanljOW0QcfUdRS19jmDWQHrE6+FEiEUQs7MfhnGv8OKt3LcyFaGD1H50RsaTa5sAmG0lcpWOl6Uys1I6/qV2xgk1VFEC8/T+Da4oJr484ZV1KXQaVN+sBMJAfbwUWBhbrX9tIOEUUC/4aJTaJMyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=oab2yZPg; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1776183954; c=relaxed/simple;
+	bh=Pcyrn7JG3ewn9GNhB9mdBYsssc5Tuw63EIywbgXW9Po=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Oyu96OSrXirrM7ThElFrtoH5KSK23EE9qzJE+9oK82yTi7aj04onnvkrptsmAWSWYHrJgKf3UljgnpVcIYi8cxAG8Sq0EE2cIWteQuhHonYGs4NCJbz7PJ9LkxrLO5zVnZx4XKPh6QzJIbeYsgM+xdG564Ag6TctVtHnWTo+qQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=HmEoCYSZ; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="oab2yZPg"
-Received: by linux.microsoft.com (Postfix, from userid 1204)
-	id 09A2F20B6F01; Tue, 14 Apr 2026 09:00:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 09A2F20B6F01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1776182456;
-	bh=AWR6CQPjTVmxYhdo1VXWE39RpfMb8XUKUa90FYqMfu8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oab2yZPg/3kwwxBCu4UfIDmtQpvY7FWtl7/FcQmGIPSZOLFVg2vqodagLku76f2jE
-	 B/1omNyulPRBqOCwKQ4iCz/ay47736GfpJHNa8INB3S/VoJu+erocjRlI/lMFDWYlX
-	 Jj35Nxbln7/5q+9Zj5N/m+vmoCu5EaTrsydliUW4=
-Date: Tue, 14 Apr 2026 09:00:56 -0700
-From: Dipayaan Roy <dipayanroy@linux.microsoft.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, pabeni@redhat.com, leon@kernel.org,
-	longli@microsoft.com, kotaranov@microsoft.com, horms@kernel.org,
-	shradhagupta@linux.microsoft.com, ssengar@linux.microsoft.com,
-	ernis@linux.microsoft.com, shirazsaleem@microsoft.com,
-	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-	stephen@networkplumber.org, jacob.e.keller@intel.com,
-	leitao@debian.org, kees@kernel.org, john.fastabend@gmail.com,
-	hawk@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-	ast@kernel.org, sdf@fomichev.me, dipayanroy@microsoft.com
-Subject: Re: [PATCH net-next v6 0/2] net: mana: add ethtool private flag for
- full-page RX buffers
-Message-ID: <ad5kuCZz+gR1TlSh@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20260407200216.272659-1-dipayanroy@linux.microsoft.com>
- <20260409183509.0b24dea6@kernel.org>
- <20260412125917.4fa8fc8d@kernel.org>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="HmEoCYSZ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=5ZT/ZSPaEXQkwRPD3ThOEiS+5XNw6fHfC2qpPZBaJuM=; b=HmEoCYSZMK81/wKbu2y/rD7Y/p
+	fhVbiCLOR6uiD7WC9ryDJbxlp+jZ33WlkDGBWKlhdHYqp5tEdJkgqBK/yO31fOh663PF9alVGVS/V
+	6JvXBWqFEmN+79mNRa5X0RELQ23gG0SrAk/8Srgw/BOu72BhHt4/rS/icqwKWE58BvFHVOg99uXqn
+	xBMHRvtD1qvlROlGpiMsoatcew2uu658EPTq6prrBqKHRxjM1R4Z3IGVKWa51i+jhsVnXgxAJ3GVp
+	6gSPOiapOhOR0pwwdcsKaXNbCgeBQVgfxVcb8m1rUeTn1QfJvwQoYxSgCk8mrhU1AcifZSycfzod4
+	jWQy3ecw==;
+Received: from [179.244.2.202] (helo=[192.168.68.133])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1wCga4-00FydE-TD; Tue, 14 Apr 2026 18:25:41 +0200
+Message-ID: <aa97dc1f-02d2-4da6-aa17-9619e2b6f999@igalia.com>
+Date: Tue, 14 Apr 2026 13:25:34 -0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260412125917.4fa8fc8d@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] bpf: deduce_bounds_64_from_32 tightening with
+ circular range logic
+To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+ ast@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-dev@igalia.com
+References: <20260410124035.297632-1-koike@igalia.com>
+ <zeqb2e3d67as3an4u6h6dgvqymchgiyvx2p7mu5u7ns5rx66xf@j5flwnwsud6b>
+Content-Language: en-US
+From: Helen Koike <koike@igalia.com>
+In-Reply-To: <zeqb2e3d67as3an4u6h6dgvqymchgiyvx2p7mu5u7ns5rx66xf@j5flwnwsud6b>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Apr 12, 2026 at 12:59:17PM -0700, Jakub Kicinski wrote:
-> On Thu, 9 Apr 2026 18:35:09 -0700 Jakub Kicinski wrote:
-> > On Tue,  7 Apr 2026 12:59:17 -0700 Dipayaan Roy wrote:
-> > > This behavior is observed on a single platform; other platforms
-> > > perform better with page_pool fragments, indicating this is not a
-> > > page_pool issue but platform-specific.  
-> > 
-> > Well, someone has to run some experiments and confirm other ARM
-> > platforms are not impacted, with data. I was hoping to do it myself
-> > but doesn't look like that will happen in time for the merge window :(
+Hi Shung-Hsi Yu,
+
+
+Thanks for your reply,
+
+On 4/14/26 5:26 AM, Shung-Hsi Yu wrote:
+> Hi Helen,
 > 
-> Please repost with the perf analysis on other commercially available
-> ARM platform. Something like:
+> On Fri, Apr 10, 2026 at 09:40:27AM -0300, Helen Koike wrote:
+> ...
+>> This is a follow-up from discussion:
+>>    https://lore.kernel.org/all/7fb97184-baaa-4639-a0b9-ac289bf2e54d@igalia.com/
 > 
->   This is a workaround applicable to only some platforms. Modifying
->   driver X to use a similar workaround on [Ampere Max|nVidia
->   Grace|Amazon Graviton 3|..] the performance for split pages is
->   y% higher than when using single pages.
-> -- 
-> pw-bot: cr
+> Base on the original thread, I see that motivation of the patchset came
+> from a Syzkaller reported issue[1]. Can you try to run the reproducer
+> again and see if you can still get it to reproduce on the bpf-next tree?
 
-Hi Jakub,
+I just tested on bpf-next/master ("71b500afd2f7") and I couldn't 
+reproduce the issue from Syzbot anymore. It seems that the branch 
+causing the issue is pruned now, fixing the error in that case.
 
-I ran the same experiment on an alternate ARM64 platform from a
-different vendor, which I was able to access only recently. I still see
-roughly a 5% overhead from the atomic refcount operation itself, but on
-that platform there is no throughput drop when using page fragments
-versus full-page mode. In both cases, the setup reaches line rate. That
-suggests the atomic overhead alone does not explain the throughput loss
-on the specific hardware we are discussing.
+But I still get the failures of the kselftests from patch 2/2:
 
-I also received an update from the hardware team. They collected PCIe
-traces and observed stalls on this particular ARM64 prcossor
-when running with page fragments, while those stalls are not seen in
-full-page mode. The exact root cause is still under investigation, but
-their current assessment is that this is likely a microarchitectural
-issue in the PCIe root port. Based on that, they are asking for a
-software workaround that uses full pages until the issue is fully
-understood.
+     * verifier_bounds/deduce64_from_32_block_change:FAIL
+     * verifier_bounds/deduce64_from_32_block_change_signed:FAIL
+     * 
+verifier_bounds/deduce64_from_32_block_change_conservative_signed:FAIL
+     * verifier_bounds/deduce64_from_32_wrapping_32bit:FAIL
 
-For that reason, I am asking whether this could be accepted as an
-ethtool private flag rather than as a generic driver change,
-since the problem is still specific to one CPU/platform.
-Please let me know whether you think this patch with private flag
-would be acceptable here.
 
-Regards
-Dipayaan Roy
+How do you suggest we should proceed?
+
+> I tried it myself, but I somehow can't get the bpf-next kernel to boot
+> when KMSAN enabled.
+> 
+> Given check_cond_jmp_op showed up the the kernel stack of the report,
+> I'm guessing it might have be resolved with Paul's "Fix invariant
+> violations and improve branch detection" patchset[2].
+
+Thanks for the pointer!
+
+> 
+> Side note: were you able to figure out why we get "KMSAN: uninit-value"
+> within reg_bounds_sanity_check() in the original Syzkaller report[1]
+> with the follow call?
+> 
+> 	verifier_bug(env, "REG INVARIANTS VIOLATION (%s): %s u64=[%#llx, %#llx] "
+> 		     "s64=[%#llx, %#llx] u32=[%#x, %#x] s32=[%#x, %#x] var_off=(%#llx, %#llx)",
+> 		     ...);
+
+Unfortunately no. I investigated a bit but I didn't continue :(
+
+
+Thanks,
+Helen
+
+> 
+> 1: https://syzkaller.appspot.com/bug?id=6f35b4962ae3653e4190d0ff3e30b882ebe86755
+> 2: https://lore.kernel.org/bpf/cover.1775142354.git.paul.chaignon@gmail.com/
+> 
+>> I didn't tag this as v2 since it is a completely different
+>> implementation.
+>>
+>> I did do an implementation[1] without circular range logic, by using
+>> if/elses blocks, but it feels I'm always missing a corner case and using
+>> circular range logic feels safer.
+>>
+>> Eduard, I didn't use the exact code you pointed, since it seems it is
+>> covered by your RFC, so I used the logic just for this case while your
+>> RFC doesn't move forward.
+>>
+>> Please let me know what you think.
+>>
+>> [1]
+>> https://github.com/helen-fornazier/linux/commits/bpf-min-max-if-else-solution/
+>> (3 last commits)
+>>
+>> Thanks,
+>> Helen
+> ...
+
