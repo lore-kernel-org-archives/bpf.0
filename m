@@ -1,110 +1,157 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFB422FE0E
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776175043; cv=none; b=R2me8FE/QGpNGV4yhCvF6S0Mkc3Q621WAcmDMOBoHXygV+ocu+6oaLYaIWkAqveeJS3ADNWfXFXFhzMzb23D9c32uWl2RJxmgZEMPkD6AjhtJY3oA2naMBleCaEJSgezywcwoaLXOsciPBOcBHermfchjQfyb0ixaksAhb+y/F0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776175043; c=relaxed/simple;
-	bh=WdrZQIlF6dqAmWcBYZjdasD1nN4EJsN+jX8ww4GW1rk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W3vCihn/bW2uHiUTpZIt7ilddi2p/D8Tgxg9e1Z57XEN+Fw7/ydHbHy5vVme5vrlRmztMVBx/UPoxyfJGH3xX1kHJyZZcFZaxDMNd1j3GX9ImEmrFH2BStfPzgmUfsUQu89yQYr9bj7oGr2Ph55h1GwqBcgdOYnHY6Ri6m972rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gs7/E/on; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A713E866C
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 14:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776175801; cv=pass; b=ceY0SOOKzgHmrkfzX5Zo2EiZ4Vu+EfPgOwIzkNmjT1McVFPLWOeY94cNR3jqY/1ngpUujK4mro4RsF0dRlPd5b/4ytBUiHMdHP3WWezIhXlfGupC/xCKuqs42K0a/haDK2YY7PAFuyAHYRPnHg7XjL2UjJh5U0Q3WuI4JD+UPmQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776175801; c=relaxed/simple;
+	bh=nvHkXaKy+A4a3zjmlxYTM7ZEfGs/MAzu/4aP88j9k0U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k947CrGcVPp5YQ10Eros391dxojOUMF9I0fIyTYamCXouGEA9/+8e3u38NEpe9e2cLsKOUwudYBrIAmdnXPtJrHIAyPAogO/9tWhyrNmCL5/MccdCB2Yaro0Z6epnuicByIelZa/kdU5jEU5TBLwTkp5vdhSCjafyoic5GypSYQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gswqI5Ai; arc=pass smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gs7/E/on"
-Message-ID: <a70e73a95a02a3747925afdfde26591a0cc6bae3.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776175029;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nq/O3jFcXuGXkm/xRXy/eNIPKG9sl6o8TkqLD7aFLzo=;
-	b=Gs7/E/onVm21TQ0DizrQJ9kIkWd1JeeOPsROBicpQwN78nToieX1UfoM6JJaew1mL7dmdH
-	JczeM3DTeg0OSOqm/FYoJc1a7CDid6vFFWuKgcu9uce5DQ+yQrafRRzC8tvgY9S7Ormbod
-	n6rNEp+SoOpLs139FL/7tEGykOS8k6Y=
-Subject: Re: [PATCH bpf-next 1/2] bpf: tcp: Reject TCP_NODELAY from BPF hdr
- opt callbacks
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: edumazet@google.com, ncardwell@google.com, kuniyu@google.com, 
- davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
- pabeni@redhat.com,  horms@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org,  martin.lau@linux.dev, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org,  yonghong.song@linux.dev,
- jolsa@kernel.org, shuah@kernel.org, sdf@fomichev.me, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-Cc: Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu
- <dddddd@hust.edu.cn>,  Kaiyan Mei <M202472210@hust.edu.cn>
-Date: Tue, 14 Apr 2026 21:56:53 +0800
-In-Reply-To: <20260414112310.1285783-2-kafai.wan@linux.dev>
-References: <20260414112310.1285783-1-kafai.wan@linux.dev>
-	 <20260414112310.1285783-2-kafai.wan@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gswqI5Ai"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488e1a8ac40so44348805e9.2
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 07:09:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776175798; cv=none;
+        d=google.com; s=arc-20240605;
+        b=hBFPX6Iqk8jQixTvmMhauvNvaHjBtZb6BxRJrS6468bF+JLnexTLezXFT2UD5U7mcK
+         YuXr0wfvQ52mHF0PLLqom+23a6Y/uBtnC6cZr5Jk+5QdTjjqEC5QURBxr2QIDyFx/viT
+         PiszvCAhd6X5iuAEguzArhZVpMIR2R4XkpPCZPe8I0dEKzDbSwu8ohudQCrjS/ovQDhF
+         2TO0qLJP16BZwlHUOy06Jkf29cmd74LlgwR4shlTTp76aHyG1pEHmifVnAwMdGRR39Nv
+         YF9rytd+q/abFdl2dO6EZpqV7Pd98X1rytmu8jglF0oD1eDSceBrU1GKAMZPi2FZWxpL
+         8C3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=n8OdkUuaCi8mFEcW4isBiQRI/EoubzWNeked/wrjNEo=;
+        fh=6dnwr7ZOxhA2aZGGqirfP1GHL1bN/FI++1U+y5xkrPc=;
+        b=amirQyrg42MTGiYZyRDZZCtouEV0Y1717GdwKf1ZIg8sr99w2QtO3bnUmS/98K1ASg
+         l8Jl+L6KKnc8aPb5hzPTE2vdtdp4oE0KMbCB0UAwHrSnyK5OhloLwTSc3/+eth8RQlcN
+         nfJWF9Vv74t9LBz/bH+UxdXvStGUi02pF95xsqNYLIz8MApWv2jVijdDCfO8jEZysuXb
+         vktmlcd/frFi0yXoi2gjsfN1gxWyUqHJS4PYFoD7CN3Z+Rrc862Ag50zC0cO9rF+Fwo8
+         eF4oixi9aDDUxWZzjMu8hixnUzFYqCnSB/04BFcEqp+uQIx2q/CV0RNhKaZ39UekQHPC
+         Q9rA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776175798; x=1776780598; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n8OdkUuaCi8mFEcW4isBiQRI/EoubzWNeked/wrjNEo=;
+        b=gswqI5AiSbaSDAYRGW455cKj1KqTro3m3iqxu9ueQB5CZ1xINl91Ix/qt1oQCQDh1W
+         RFyMfJLn1DuFz9plEYecBgx4eDm+z91ckMn6HsbTt5+s/nc5CMWcXsfgkLyBFWI7+8Qe
+         Zp+fcsietmru03PFKldQobqh5bg3g/I5jfzgifuMP8Bg0Ifkmf//YQo9IyyqUITyITav
+         0TB+8jdwDHykIJTpqwZog0LV3xXg9Q3O6hUxMPsc5a4jUV/lo/uJnWYpeX3ycZboXJtK
+         vK4ZnZXAmu8z84wKPF711kZkM+b6h1pskwbFvH75NdNYKAurNJCS16W1xpyPstwH+Ukm
+         Ms3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776175798; x=1776780598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=n8OdkUuaCi8mFEcW4isBiQRI/EoubzWNeked/wrjNEo=;
+        b=HXdtbKtdBDRhjAxeUF/wSY/IbNo2Y/jLbqFHgnWUwnqrYpSYKCsNn23TPACl0Y7/Ii
+         /aek8Cl6GKvucQ9JOuFCQtqY8yg1N3YtIyEHTWttggQ8ODN+Vcu25m9EOVOGJrdYL57+
+         sZMEBL+0jQn3mal3ZY5DZGwv/PlRrKrMFAolju9GFIX5nFjrCRk1rrg+AAzBM8bIshiH
+         4OtjYaH+bB+4wdSXggxLLIbK3mkxP1Qi/QieT/hVyPYI2mxKth+pFfHJe7JXaL27mtB6
+         2Yk+O98vK3Orj3PniT6JJ6QLa+nNuhjcwnYWAPKvksO2cCEx3NrcMfXSPGusXa4YDlZ8
+         kqiQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9G8DGQSrm5KfJQA4ikPZuLg7Cgv/7XLfkD+YYVTjeNCGSnKKXcbqvdTntDCL6Rd1zWKCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFESZqfxSbXBkwUisW7OWQyS5/tR1KPMBMZkoFz4r5Z69DBQlF
+	Q1sc+tlz++43NuV/Y9E0ANDavz8/sm6603RfTQSHThCKUNkQoWOmja1XugwabvkR861s8dn3vfW
+	KnuzEbmk3bNDyyaSxkAR+kQXPQFUrvG8=
+X-Gm-Gg: AeBDietJ/jS6+I+4DMglLfAATU2dxtS+VjAdEnvPHSQsiFGzVrLn1wCZpGdS6COX7s3
+	M/xt5V/qNwAMYYsRAR9gvxe4HHeO24CufSqRfWVhgGJK1XnYG0UNKxytz6/vWzKqkzHbCL2fgwN
+	NNV50q9rTuzrOrP1vB77Hw4gDbaPmJpgnvdDK3QTS3gEdEIGNTdvwwI6102tMCxV+Q1tkwvwS2n
+	eAej5fQeVdUVj9Ved/1BZzHJwxs4ADVF7M99f1yGnojTx38OityY9jju+ltEXoRXToIzNVfpQ9R
+	m+WaAUYSACrbdigqxZoMoop1/X/b+0/k3O+PXR5cq1bWNq3urHc7DbHvrszfGsrJt47E4fjGdxY
+	x0GIkZ7JrCxRAQ1B5vIQZ/8d5rg==
+X-Received: by 2002:a05:600d:8449:b0:486:fdba:f5db with SMTP id
+ 5b1f17b1804b1-488d664f29emr197490795e9.0.1776175796268; Tue, 14 Apr 2026
+ 07:09:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+References: <ad4whCJuB-viVAae@sirena.org.uk>
+In-Reply-To: <ad4whCJuB-viVAae@sirena.org.uk>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 14 Apr 2026 07:09:44 -0700
+X-Gm-Features: AQROBzAq8LwGSoUQB6Tp7PVEnWgUkhAM1WnjY5UlIcDEYXRlptGcA56OQDX1H8w
+Message-ID: <CAADnVQLz6-LK4+qad_XqEZXrspttpe4b49jRZ6wUCgEhJeTvgw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the origin tree
+To: Mark Brown <broonie@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Networking <netdev@vger.kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-04-14 at 19:23 +0800, KaFai Wan wrote:
+On Tue, Apr 14, 2026 at 5:18=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> Hi all,
+>
+> Today's linux-next merge of the bpf-next tree got a conflict in:
+>
+>   include/linux/rcupdate.h
+>
+> between commit:
+>
+>   ad6ef775cbeff ("rcu-tasks: Document that RCU Tasks Trace grace periods =
+now imply RCU grace periods")
+>
+> from the origin tree and commit:
+>
+>   57b23c0f612dc ("bpf: Retire rcu_trace_implies_rcu_gp()")
+>
+> from the bpf-next tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> diff --combined include/linux/rcupdate.h
+> index 18a85c30fd4f3,bfa765132de85..0000000000000
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@@ -205,15 -205,6 +205,6 @@@ static inline void exit_tasks_rcu_start
+>   static inline void exit_tasks_rcu_finish(void) { }
+>   #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
+>
+> - /**
+> -  * rcu_trace_implies_rcu_gp - does an RCU Tasks Trace grace period impl=
+y an RCU grace period?
+> -  *
+> -  * Now that RCU Tasks Trace is implemented in terms of SRCU-fast, a
+> -  * call to synchronize_rcu_tasks_trace() is guaranteed to imply at leas=
+t
+> -  * one call to synchronize_rcu().
+> -  */
+> - static inline bool rcu_trace_implies_rcu_gp(void) { return true; }
+> -
 
-AI is right and I'm late for the issue. Please ignore this. Sorry for the n=
-oise.
+Right. I mentioned it in my bpf-next PR.
 
-> A BPF_SOCK_OPS program can enable
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
-> bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB.
->=20
-> That reaches __tcp_sock_set_nodelay(), which may call
-> tcp_push_pending_frames(). The transmit path then computes TCP
-> options again, re-enters bpf_skops_hdr_opt_len(), and invokes the
-> same BPF callback recursively. This can loop until the kernel
-> stack overflows.
->=20
-> TCP_NODELAY is not safe from the header option callback context.
-> Reject it with -EOPNOTSUPP when TCP header option callbacks are
-> enabled on the socket, so the callback cannot recurse back into
-> tcp_push_pending_frames() through do_tcp_setsockopt().
->=20
-> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@=
-std.uestc.edu.cn/
-> Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
-> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> ---
-> =C2=A0net/ipv4/tcp.c | 5 ++++-
-> =C2=A01 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 202a4e57a218..7ac4c98be19d 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -4004,7 +4004,10 @@ int do_tcp_setsockopt(struct sock *sk, int level, =
-int optname,
-> =C2=A0
-> =C2=A0	switch (optname) {
-> =C2=A0	case TCP_NODELAY:
-> -		__tcp_sock_set_nodelay(sk, val);
-> +		if (val && BPF_SOCK_OPS_TEST_FLAG(tp, BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FL=
-AG))
-> +			err =3D -EOPNOTSUPP;
-> +		else
-> +			__tcp_sock_set_nodelay(sk, val);
-> =C2=A0		break;
-> =C2=A0
-> =C2=A0	case TCP_THIN_LINEAR_TIMEOUTS:
+But how come you're saying it was discovered "today" ?
 
---=20
-Thanks,
-KaFai
+Paul's commit ad6ef775cbeff was committed to rcu tree on Mar 30,
+while Kumar's 57b23c0f612dc was committed to bpf-next on Apr 7.
+
+"today" is April 14.
+
+My only explanation is that rcu tree was not in linux-next until today?!
