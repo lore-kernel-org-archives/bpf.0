@@ -1,32 +1,32 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1706B3E6382
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5283E51FF
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776173142; cv=none; b=BQ4Q9T9HQt764r3UGwCpI+jNMDe4iC/3/GOOPPbUWgXd/OCyKhYIHhm8r8zr3QGosOSU9CUtKZYtt3zxIp8RY7iO+1M8JmlV+5S8el1HI0cpv9aqtqSKkiGLKp+AIxqRRUBTLEoDGT2PCn+dvkrlS61/m4Bfg8LjcD+DT510e1I=
+	t=1776173147; cv=none; b=QbWAhSxSncVzJYwqwFTUHW4PJs+WDTBSLPV50KkGqXwptw507l4hht7s620cPPEMH4+/yItEGUEW/ygF4bmw+afuhn+W12iYbSYDwT2NtZDe4J88vl6FUVG5Rd3SAxwOcSxBEEBEA5VGu/58GzYOrO8Pr6sL3OI5+Q8XISAhPU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776173142; c=relaxed/simple;
-	bh=37bYhIfLR5jJocQuk1VUy6440mBY2p/F6kd0ng47NGo=;
+	s=arc-20240116; t=1776173147; c=relaxed/simple;
+	bh=waUXf3Jqbvzm4E3k6uLnnYuQwXpeViHcirUx1HVQhOI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QyBfek2FArwGZYmyE7XRHUgXkdXo27vCIgxLuLptigQH1n6wyhg2OUuao1o+7SmelmdbgUNVGTvAHGa2r0rXw3pYBS/QYGM8Y14i5/8VnZVl0E2RCWmDw8LQ8J0TvjmFU+P0A8uSABmqx/w8jZOCYw7BEG5G2CaDQnbhfNwccGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HSBlM/qe; arc=none smtp.client-ip=95.215.58.173
+	 MIME-Version; b=VT+l+szzx68vf/4DZZjG94wMrSYXBH+8dQE8hR/YT6hoFD90bW09v1o/lF4OqsiS+41AO6zKkbL6O5Udu9qKoyw6dvBxvDps4pCD3CaUVIqGj0vuEZo/Rnon8/36+YsseVaD+r3MSbZ7ybkgJ97Mu0mivZRx0XfR0GdMT3qRJ3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hRVzDDEC; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HSBlM/qe"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hRVzDDEC"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776173139;
+	t=1776173144;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=EtguGQRGzagy0tyebqTER4P9M/UvCjp0lGNI1HHa9aY=;
-	b=HSBlM/qe/6f5aojrpdn/IX4qQMH+MzbZ5u9P2+X5Lf9If+LE5Jh2ULnmgrGx4lixAB6N8Y
-	z8uziejucEk8OJFhpKdeeIkbgN8SZo01ALv683qt7gOdCrqfzizPVjqkl8gHwcYrPx3MW5
-	yip+gWvvaOntfdwbRKnL5StclaVjTXQ=
+	bh=rLhuO6umau2jGMSqyUh9o4RuZqsZkSpK8JCnskaghHQ=;
+	b=hRVzDDECuDxZAUF83w0sNSo4/GwnqOYlu6bL5klSwDuvd/w2rgnBh/F8AMVcq2LQsejCBI
+	C5VaOsvwXl2dcgSNvto0/yL5mNutalWsGixBRAKl5Fopu2wAzmjQbN3gDqjzftGTnE7g5i
+	mFXXw6N87++j3SeRCRaabypaRaXFJ9g=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -39,9 +39,9 @@ Cc: ast@kernel.org,
 	dxu@dxuuu.xyz,
 	leon.hwang@linux.dev,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v4 5/8] bpf: Update per-CPU maps using BPF_F_ALL_CPUS flag
-Date: Tue, 14 Apr 2026 21:24:17 +0800
-Message-ID: <20260414132421.63409-6-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v4 6/8] bpftool: Generate skeleton for global percpu data
+Date: Tue, 14 Apr 2026 21:24:18 +0800
+Message-ID: <20260414132421.63409-7-leon.hwang@linux.dev>
 In-Reply-To: <20260414132421.63409-1-leon.hwang@linux.dev>
 References: <20260414132421.63409-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -53,46 +53,120 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-When updating per-CPU maps via the lightweight skeleton loader, use
-a single value slot across all CPUs. This avoids two potential issues
-when updating on an M-CPU kernel with N cached slots (N < M), especially
-when N is much smaller than M:
+Enhance bpftool to generate skeletons that properly handle global percpu
+variables. The generated skeleton now includes a dedicated structure for
+percpu data, allowing users to initialize and access percpu variables more
+efficiently.
 
-1) The update may trigger a page fault when copying data from the last
-   slot, as the read may go beyond the allocated buffer.
-2) The update may copy unexpected data from slots [N, M-1].
+For global percpu variables, the skeleton now includes a nested
+structure, e.g.:
+
+struct test_global_percpu_data {
+	struct bpf_object_skeleton *skeleton;
+	struct bpf_object *obj;
+	struct {
+		struct bpf_map *percpu;
+	} maps;
+	// ...
+	struct test_global_percpu_data__percpu {
+		int data;
+		char run;
+		struct {
+			char set;
+			int i;
+			int nums[7];
+		} struct_data;
+		int nums[7];
+	} *percpu;
+
+	// ...
+};
+
+  * The "struct test_global_percpu_data__percpu *percpu" points to
+    initialized data, which is actually "maps.percpu->mmaped".
+  * Before loading the skeleton, updating the
+    "struct test_global_percpu_data__percpu *percpu" modifies the initial
+    value of the corresponding global percpu variables.
+  * After loading the skeleton, "maps.percpu->mmaped" has been marked as
+    read-only. If users want to update the global percpu variables, they
+    have to update the "maps.percpu" map instead.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/syscall.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/bpf/bpftool/gen.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index b73b25c63073..f0f3785ef57d 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1785,6 +1785,21 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
- 		goto err_put;
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 2f9e10752e28..ec63eb871443 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -92,7 +92,7 @@ static void get_header_guard(char *guard, const char *obj_name, const char *suff
+ 
+ static bool get_map_ident(const struct bpf_map *map, char *buf, size_t buf_sz)
+ {
+-	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
++	static const char *sfxs[] = { ".data", ".rodata", ".bss", ".percpu", ".kconfig" };
+ 	const char *name = bpf_map__name(map);
+ 	int i, n;
+ 
+@@ -117,7 +117,7 @@ static bool get_map_ident(const struct bpf_map *map, char *buf, size_t buf_sz)
+ 
+ static bool get_datasec_ident(const char *sec_name, char *buf, size_t buf_sz)
+ {
+-	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
++	static const char *pfxs[] = { ".data", ".rodata", ".bss", ".percpu", ".kconfig" };
+ 	int i, n;
+ 
+ 	/* recognize hard coded LLVM section name */
+@@ -254,6 +254,11 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
+ 	return NULL;
+ }
+ 
++static bool bpf_map_is_percpu_data(const struct bpf_map *map)
++{
++	return bpf_map__is_internal(map) && bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY;
++}
++
+ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+ {
+ 	size_t tmp_sz;
+@@ -263,13 +268,12 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+ 		return true;
  	}
  
-+	/*
-+	 * When updating per-CPU maps via the lightweight skeleton
-+	 * loader, use a single value slot across all CPUs. This avoids
-+	 * two potential issues when updating on an M-CPU kernel with
-+	 * N cached slots (N < M), especially when N is much smaller
-+	 * than M:
-+	 * 1) The update may trigger a page fault when copying data from
-+	 *    the last slot, as the read may go beyond the allocated
-+	 *    buffer.
-+	 * 2) The update may copy unexpected data from slots [N, M-1].
-+	 */
-+	if (bpfptr_is_kernel(uattr) && bpf_map_supports_cpu_flags(map->map_type) &&
-+	    !(attr->flags & (BPF_F_CPU | BPF_F_ALL_CPUS)))
-+		attr->flags |= BPF_F_ALL_CPUS;
-+
- 	err = bpf_map_check_op_flags(map, attr->flags, ~0);
- 	if (err)
- 		goto err_put;
+-	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
+-		return false;
+-
+-	if (!get_map_ident(map, buf, sz))
+-		return false;
++	if (bpf_map__is_internal(map) &&
++	    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_map_is_percpu_data(map)) &&
++	    get_map_ident(map, buf, sz))
++		return true;
+ 
+-	return true;
++	return false;
+ }
+ 
+ static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
+@@ -669,7 +673,7 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
+ 		if (!get_map_ident(map, ident, sizeof(ident)))
+ 			continue;
+ 		if (bpf_map__is_internal(map) &&
+-		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
++		    ((bpf_map__map_flags(map) & BPF_F_MMAPABLE) || bpf_map_is_percpu_data(map)))
+ 			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zu);\n",
+ 			       ident, bpf_map_mmap_sz(map));
+ 		codegen("\
+@@ -847,7 +851,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+ 	bpf_object__for_each_map(map, obj) {
+ 		const char *mmap_flags;
+ 
+-		if (!is_mmapable_map(map, ident, sizeof(ident)))
++		if (!is_mmapable_map(map, ident, sizeof(ident)) || bpf_map_is_percpu_data(map))
+ 			continue;
+ 
+ 		if (bpf_map__map_flags(map) & BPF_F_RDONLY_PROG)
 -- 
 2.53.0
 
