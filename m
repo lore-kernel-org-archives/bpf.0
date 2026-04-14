@@ -1,184 +1,259 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21063ECBDC;
-	Tue, 14 Apr 2026 14:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40F013D891;
+	Tue, 14 Apr 2026 14:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776176662; cv=none; b=Pn6SM+rhlhmLrWqGFwKAyNYtfOBt+leyZkWbfx4kzP5Y4UgAlwHWaNyV5KgNoArfAjZS3yzqzJiTF11GJYqBKsvmNXo7ilkm2peKcaKaCmAbLXVkTdzPccOoTd+vX1mvIqWY9K4lIoq0ZDw4QFTL/DSvzgkBfc1YQBveKHBduFk=
+	t=1776176893; cv=none; b=jUoA94/cZRmz1uYBLYLBBpCuncxruInG7qNUKhSGTugrWKuu2QgiMTscH7R4wXpPiJbIiKC2uYU1dlgLDkcMobV6PPL9PRyesVI20pMm1uHip8nFETuNiETP2Jrap+nDLfDpDZan8bHVAbXP+q+7Vu8/6MjOuijM6PN4wZHfVkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776176662; c=relaxed/simple;
-	bh=JOrKkTDm1XzgTTaELyjAW2UoqQARrYaRgnDxMrWX3CU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=N0llUwFA6B9AzDj4X4WR4e9b8ZqqIWJnF0/fe7m1RBsgu6uSn7GG7JlhgbIlfr5RVxJANruwHhAsqxG31VmI3fOjAvm6isJKDJtNsaFDvoYOQIHdAY/QMebxHMK85DgXoxEZKEY1MNIGmjB2CHZOJID33rEo4El2TFLO+pWZP2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Fm6WRvaC; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1776176893; c=relaxed/simple;
+	bh=p8Zy4nEBkR+9ygIdN12Yw4cEGuBqrwNG0zv+nsgBx1Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=TVe5WMhvnnu2uasAPZNLy2TPp6K1opV2uKgiQvwNNL9q4mCEvHQCO+vDInYGNlb5t+5bj9q7Qny/MBOVGcAewREKgwSxrj4Y8HvgZgSGdM7gfuUwn++cv6xPTdaxe6rK5TtZTr829kkUPw1Y6oC/+hiFGiA8zhf41zPrSVWCx9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=I6KproVw; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Fm6WRvaC"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63EDdDLY1843301;
-	Tue, 14 Apr 2026 14:24:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=ZNJzfHIy1flRiox+Cj0xOPKmjQyx
-	791M6XLeQQKnW8Q=; b=Fm6WRvaC8aUGGI2q3l20RW2RyWuxTDY3Dxyci8Zec4/A
-	rDyjUAzOcnHX0eWDo83vlRIsqFBZbGn0xKPWjsIdzXHn7uXzS+ZceNqcVSX23l3M
-	YKFTqYE911/Wd+/XRPMqqYxsAoDp7UzjynKNQ+QaLGia+IVHh7nuR8jxCCtZJcfl
-	qffqaPDf4u9qRb7n/HPzH56zZclF306VOlob95+GSbbJbE/xIH88jaFmsWqfBnPt
-	geXEncCKOybadwoP79OalyvdR9a9qJ3PKQTIxgMvKgIHCA0lcHu9PHFtjb72ivEu
-	O0Pzs+R+/ypetC/4xeAg9NsyjdH293jT8Bl0kbZbag==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89mk503-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 14:24:03 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63EE114X003557;
-	Tue, 14 Apr 2026 14:24:02 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg1mn9tbh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 14:24:02 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63EENwjB61800822
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 14 Apr 2026 14:23:58 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A162020040;
-	Tue, 14 Apr 2026 14:23:58 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7954B20043;
-	Tue, 14 Apr 2026 14:23:58 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 14 Apr 2026 14:23:58 +0000 (GMT)
-From: Mikhail Zaslonko <zaslonko@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org
-Cc: zaslonko@linux.ibm.com, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, bpf@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Thorsten Blum <thorsten.blum@linux.dev>
-Subject: [PATCH] tools/headers: Sync stddef.h  with include/uapi to fix BPF
-Date: Tue, 14 Apr 2026 16:23:56 +0200
-Message-ID: <20260414142358.3090333-1-zaslonko@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="I6KproVw"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWJ-00FB59-OP; Tue, 14 Apr 2026 16:13:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=X2qj25w98WiHnwStskIYNOIACWJIKBz1Po4lV2H/JLA=; b=I6KproVwiOhp3VkHnpZ4puOYjM
+	jKpsGVpJbMxuZqvrxuHCMXyXTQfaKrPISdyNIQRYV9QMuHwyJ6Ghdg6G8a1akSCYg1+ufMdLCZp2Z
+	UIilcls5V1RJJ4R+B79hmzYUk9uZxU/Xb1uvuuWqSDmOjWPmZEfDUYgrf8aKzn3pXLevKjmnXvc3B
+	dLIYQU1/ExoUVMtumBvM/yeMVU5SmJoosBwO5ZYXjqZYncQwBfHuBDVxTQLggP8pkOk0mSC7JQtlN
+	CPLJPm5Nusx1R+o0y4n3z5IFzbyvGi/KFHkTYRlyg6P2c1037Nx4I+e8KXQVUo86ZLVCiDNeVnDdn
+	9bg+S5jQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wCeWI-0001rb-Ku; Tue, 14 Apr 2026 16:13:38 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1wCeWE-00DhbX-8g; Tue, 14 Apr 2026 16:13:34 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Tue, 14 Apr 2026 16:13:18 +0200
+Subject: [PATCH bpf v4 4/5] bpf, sockmap: Fix af_unix null-ptr-deref in
+ proto update
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE0MDEzNCBTYWx0ZWRfX4d6rM9YEPyT/
- 8fays1TFveSaphs0NhwqI5xBSSzBPhpmuXXpxiAQR5xYS6bBn3C1Opb60s/Wrm2v+m2C2aeT0gv
- AL4Jfijjf3+khhOYangQgBKNmdbqFNXVpXEZSjcbr7uB523+D/6K2JLRnNwH37464JX43RuRXTE
- YbUWO4whaJi/qHwf4aUrBRaO22dmN2MSQDkYzOCfShlYdZKUM45ytAKidw4gyd9VR2ZiYiRwasB
- pMqIUQe3osVujZihViouSAsN/jHBY5/OqcrKjvaI+Pf+DgVT92v86iKfWmVFY/68jDvi0oSTwry
- 3QICaJAJh63t16pNqNeBfVFH2/tGBDPPqk+sgQ8psNwERclA6ZMXMc8f6FE8PSwv8msezEMTHN6
- JPUtWjkf2ZcNrNq/Ui+Mq/1poZKk4xll1qc91Pboq6T2J0WKPhnlzIujE+KjPXeQ0Mh84GVas8r
- d2xaLcpS+eYPNKOf2yg==
-X-Authority-Analysis: v=2.4 cv=eJ4jSnp1 c=1 sm=1 tr=0 ts=69de4e03 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=ol3PeIhsCAbECCkJWCcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 9xiH3teEbnQ8nvCux1aTUCRKLj1x8TUm
-X-Proofpoint-ORIG-GUID: 9xiH3teEbnQ8nvCux1aTUCRKLj1x8TUm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-14_03,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
- clxscore=1011 bulkscore=0 suspectscore=0 spamscore=0 impostorscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604070000
- definitions=main-2604140134
+Message-Id: <20260414-unix-proto-update-null-ptr-deref-v4-4-2af6fe97918e@rbox.co>
+References: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
+In-Reply-To: <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Yonghong Song <yhs@fb.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Cong Wang <cong.wang@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>, 
+ =?utf-8?q?=E9=92=B1=E4=B8=80=E9=93=AD?= <yimingqian591@gmail.com>
+X-Mailer: b4 0.15.2
 
-tools/include/uapi/linux/stddef.h is a copy of include/uapi/linux/stddef.h
-used by the tools build. But it occurred to be an older snapshot, what
-causes the BPF selftests build failures in manual selftests builds:
-  In file included from test_tag.c:18:
-  /usr/include/linux/if_alg.h:45:22: error: expected ‘:’, ‘,’, ‘;’, ‘}’ or ‘__attribute__’ before ‘__counted_by’
-     45 |         __u8    iv[] __counted_by(ivlen);
-        |                      ^~~~~~~~~~~~
+unix_stream_connect() sets sk_state (`WRITE_ONCE(sk->sk_state,
+TCP_ESTABLISHED)`) _before_ it assigns a peer (`unix_peer(sk) = newsk`).
+sk_state == TCP_ESTABLISHED makes sock_map_sk_state_allowed() believe that
+socket is properly set up, which would include having a defined peer. IOW,
+there's a window when unix_stream_bpf_update_proto() can be called on
+socket which still has unix_peer(sk) == NULL.
 
-Commit dacbfc167808 ("crypto: af_alg - Annotate struct af_alg_iv
-with __counted_by") added __counted_by() to a uapi header
-(include/uapi/linux/if_alg.h), but tools/include/uapi/linux/stddef.h
-was not updated.
+         CPU0 bpf                            CPU1 connect
+         --------                            ------------
 
-Sync tools/include/uapi/linux/stddef.h with include/uapi/linux/stddef.h
-to fix selftests/bpf build.
+                                WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
+sock_map_sk_state_allowed(sk)
+...
+sk_pair = unix_peer(sk)
+sock_hold(sk_pair)
+                                sock_hold(newsk)
+                                smp_mb__after_atomic()
+                                unix_peer(sk) = newsk
 
-Fixes: dacbfc167808 ("crypto: af_alg - Annotate struct af_alg_iv with __counted_by")
-Signed-off-by: Mikhail Zaslonko <zaslonko@linux.ibm.com>
+BUG: kernel NULL pointer dereference, address: 0000000000000080
+RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
+Call Trace:
+  sock_map_link+0x564/0x8b0
+  sock_map_update_common+0x6e/0x340
+  sock_map_update_elem_sys+0x17d/0x240
+  __sys_bpf+0x26db/0x3250
+  __x64_sys_bpf+0x21/0x30
+  do_syscall_64+0x6b/0x3a0
+  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+Initial idea was to move peer assignment _before_ the sk_state update[1],
+but that involved an additional memory barrier, and changing the hot path
+was rejected.
+Then a NULL check during proto update in unix_stream_bpf_update_proto() was
+considered[2], but the follow-up discussion[3] focused on the root cause,
+i.e. sockmap update taking a wrong lock. Or, more specifically, missing
+unix_state_lock()[4].
+In the end it was concluded that teaching sockmap about the af_unix locking
+would be unnecessarily complex[5].
+Complexity aside, since BPF_PROG_TYPE_SCHED_CLS and BPF_PROG_TYPE_SCHED_ACT
+are allowed to update sockmaps, sock_map_update_elem() taking the unix
+lock, as it is currently implemented in unix_state_lock():
+spin_lock(&unix_sk(s)->lock), would be problematic. unix_state_lock() taken
+in a process context, followed by a softirq-context TC BPF program
+attempting to take the same spinlock -- deadlock[6].
+This way we circled back to the peer check idea[2].
+
+[1]: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
+[2]: https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/
+[3]: https://lore.kernel.org/netdev/7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev/
+[4]: https://lore.kernel.org/netdev/CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com/
+[5]: https://lore.kernel.org/bpf/CAAVpQUAHijOMext28Gi10dSLuMzGYh+jK61Ujn+fZ-wvcODR2A@mail.gmail.com/
+[6]: https://lore.kernel.org/bpf/dd043c69-4d03-46fe-8325-8f97101435cf@linux.dev/
+
+Summary of scenarios where af_unix/stream connect() may race a sockmap
+update:
+
+1. connect() vs. bpf(BPF_MAP_UPDATE_ELEM), i.e. sock_map_update_elem_sys()
+
+   Implemented NULL check is sufficient. Once assigned, socket peer won't
+   be released until socket fd is released. And that's not an issue because
+   sock_map_update_elem_sys() bumps fd refcnf.
+
+2. connect() vs BPF program doing update
+
+   Update restricted per verifier.c:may_update_sockmap() to
+
+      BPF_PROG_TYPE_TRACING/BPF_TRACE_ITER
+      BPF_PROG_TYPE_SOCK_OPS (bpf_sock_map_update() only)
+      BPF_PROG_TYPE_SOCKET_FILTER
+      BPF_PROG_TYPE_SCHED_CLS
+      BPF_PROG_TYPE_SCHED_ACT
+      BPF_PROG_TYPE_XDP
+      BPF_PROG_TYPE_SK_REUSEPORT
+      BPF_PROG_TYPE_FLOW_DISSECTOR
+      BPF_PROG_TYPE_SK_LOOKUP
+
+   Plus one more race to consider:
+
+            CPU0 bpf                            CPU1 connect
+            --------                            ------------
+
+                                   WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
+   sock_map_sk_state_allowed(sk)
+                                   sock_hold(newsk)
+                                   smp_mb__after_atomic()
+                                   unix_peer(sk) = newsk
+   sk_pair = unix_peer(sk)
+   if (unlikely(!sk_pair))
+      return -EINVAL;
+
+                                                 CPU1 close
+                                                 ----------
+
+                                   skpair = unix_peer(sk);
+                                   unix_peer(sk) = NULL;
+                                   sock_put(skpair)
+   // use after free?
+   sock_hold(sk_pair)
+
+   2.1 BPF program invoking helper function bpf_sock_map_update() ->
+       BPF_CALL_4(bpf_sock_map_update(), ...)
+
+       Helper limited to BPF_PROG_TYPE_SOCK_OPS. Nevertheless, a unix sock
+       might be accessible via bpf_map_lookup_elem(). Which implies sk
+       already having psock, which in turn implies sk already having
+       sk_pair. Since sk_psock_destroy() is queued as RCU work, sk_pair
+       won't go away while BPF executes the update.
+
+   2.2 BPF program invoking helper function bpf_map_update_elem() ->
+       sock_map_update_elem()
+
+       2.2.1 Unix sock accessible to BPF prog only via sockmap lookup in
+             BPF_PROG_TYPE_SOCKET_FILTER, BPF_PROG_TYPE_SCHED_CLS,
+             BPF_PROG_TYPE_SCHED_ACT, BPF_PROG_TYPE_XDP,
+             BPF_PROG_TYPE_SK_REUSEPORT, BPF_PROG_TYPE_FLOW_DISSECTOR,
+             BPF_PROG_TYPE_SK_LOOKUP.
+
+             Pretty much the same as case 2.1.
+
+       2.2.2 Unix sock accessible to BPF program directly:
+             BPF_PROG_TYPE_TRACING, narrowed down to BPF_TRACE_ITER.
+
+             Sockmap iterator (sock_map_seq_ops) is safe: unix sock
+             residing in a sockmap means that the sock already went through
+             the proto update step.
+
+             Unix sock iterator (bpf_iter_unix_seq_ops), on the other hand,
+             gives access to socks that may still be unconnected. Which
+             means iterator prog can race sockmap/proto update against
+             connect().
+
+             BUG: KASAN: null-ptr-deref in unix_stream_bpf_update_proto+0x253/0x4d0
+             Write of size 4 at addr 0000000000000080 by task test_progs/3140
+             Call Trace:
+              dump_stack_lvl+0x5d/0x80
+              kasan_report+0xe4/0x1c0
+              kasan_check_range+0x125/0x200
+              unix_stream_bpf_update_proto+0x253/0x4d0
+              sock_map_link+0x71c/0xec0
+              sock_map_update_common+0xbc/0x600
+              sock_map_update_elem+0x19a/0x1f0
+              bpf_prog_bbbf56096cdd4f01_selective_dump_unix+0x20c/0x217
+              bpf_iter_run_prog+0x21e/0xae0
+              bpf_iter_unix_seq_show+0x1e0/0x2a0
+              bpf_seq_read+0x42c/0x10d0
+              vfs_read+0x171/0xb20
+              ksys_read+0xff/0x200
+              do_syscall_64+0xf7/0x5e0
+              entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+             While the introduced NULL check prevents null-ptr-deref in the
+             BPF program path as well, it is insufficient to guard against
+             a poorly timed close() leading to a use-after-free. This will
+             be addressed in a subsequent patch.
+
+Reported-by: Michal Luczaj <mhal@rbox.co>
+Closes: https://lore.kernel.org/netdev/ba5c50aa-1df4-40c2-ab33-a72022c5a32e@rbox.co/
+Reported-by: 钱一铭 <yimingqian591@gmail.com>
+Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
+Fixes: c63829182c37 ("af_unix: Implement ->psock_update_sk_prot()")
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- tools/include/uapi/linux/stddef.h | 39 +++++++++++++++++++++++++++----
- 1 file changed, 35 insertions(+), 4 deletions(-)
+ net/unix/unix_bpf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/include/uapi/linux/stddef.h b/tools/include/uapi/linux/stddef.h
-index c53cde425406..111b097ec00b 100644
---- a/tools/include/uapi/linux/stddef.h
-+++ b/tools/include/uapi/linux/stddef.h
-@@ -1,11 +1,13 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _LINUX_STDDEF_H
--#define _LINUX_STDDEF_H
--
-+#ifndef _UAPI_LINUX_STDDEF_H
-+#define _UAPI_LINUX_STDDEF_H
- 
-+#ifdef __KERNEL__
-+#include <linux/compiler_types.h>
-+#endif
- 
- #ifndef __always_inline
--#define __always_inline __inline__
-+#define __always_inline inline
- #endif
- 
- /* Not all C++ standards support type declarations inside an anonymous union */
-@@ -36,6 +38,11 @@
- 		struct __struct_group_tag(TAG) { MEMBERS } ATTRS NAME; \
- 	} ATTRS
- 
-+#ifdef __cplusplus
-+/* sizeof(struct{}) is 1 in C++, not 0, can't use C version of the macro. */
-+#define __DECLARE_FLEX_ARRAY(T, member)	\
-+	T member[0]
-+#else
- /**
-  * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
-  *
-@@ -52,3 +59,27 @@
- 		TYPE NAME[]; \
+diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
+index e0d30d6d22ac..57f3124c9d8d 100644
+--- a/net/unix/unix_bpf.c
++++ b/net/unix/unix_bpf.c
+@@ -185,6 +185,9 @@ int unix_stream_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool r
+ 	 */
+ 	if (!psock->sk_pair) {
+ 		sk_pair = unix_peer(sk);
++		if (unlikely(!sk_pair))
++			return -EINVAL;
++
+ 		sock_hold(sk_pair);
+ 		psock->sk_pair = sk_pair;
  	}
- #endif
-+
-+#ifndef __counted_by
-+#define __counted_by(m)
-+#endif
-+
-+#ifndef __counted_by_le
-+#define __counted_by_le(m)
-+#endif
-+
-+#ifndef __counted_by_be
-+#define __counted_by_be(m)
-+#endif
-+
-+#ifndef __counted_by_ptr
-+#define __counted_by_ptr(m)
-+#endif
-+
-+#ifdef __KERNEL__
-+#define __kernel_nonstring	__nonstring
-+#else
-+#define __kernel_nonstring
-+#endif
-+
-+#endif /* _UAPI_LINUX_STDDEF_H */
+
 -- 
 2.53.0
 
