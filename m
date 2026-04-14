@@ -1,265 +1,128 @@
-Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FCC38F64A
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 17:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B872DEA6E
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 17:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776187526; cv=none; b=gQbgQmFnnvcMIv1QyydVHwQQaO4pTwWyyIVlOpUauUDwwTCvsnJ8gH51Iwn0m5ZDR5+WNzg0nJozTJ5H4P1etCfCUJTxTpauY+20c0Louki8ypEfpLOZjuVmYCjrzFl1YCf2d68U0agOZNT6yO+b/+9d6yocEbpFNOVeHjowpLU=
+	t=1776188783; cv=none; b=Au6pIINJFelbl/wCMyBHxBbYVRVqIIVbu4yWC1Hr4QhwneT/cGXr3/Z81ZIAJ9q9O7/ghqFfEeomKSTyPqXQHgqpQ6loZHNa4nJUVaOQyT+zNjym7I6XqCgmTEi8Sfsl7p+8wziPY6OlyiTY+yZO1dm00tXFoFIkfpDTG/ovNeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776187526; c=relaxed/simple;
-	bh=1R8ck4miS/ptVkXJyvQbxFUMSaydM6XzvJ8O7WgZWIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oQQh7Rwov86cmbd3NNtZy0yWfB5FnWsJymuuAQ8dySCl0kKOkpMUMcu83wC8x3IoUF9q7WUxI3RUZ6QSzZKqFd0HzZNNJN6qAplqX29M1KSGGixp/AnPLYOu0/KJea3HXuEAmFc27Y7OeAaqHsvll9OTq2jEuh/nZ7Hi6WC/aYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=lKg6Cz9m; arc=none smtp.client-ip=66.163.187.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1776188783; c=relaxed/simple;
+	bh=uNmh5GwRUS7H5s5/4a0S42VIQz+76GdCAMVMpc0ashU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ePr/SKG/kEDKfwT9NxbwS+vsg/RWA6mDPqKT8YKObvDS2a0i470PA2fAX7pRsrwXHK2G38tw+bANRvv5KVK04NWjA1KQ3KQghAx6dgQMRT4DAgW1VvqXPgZk1xrVmfZKYJniPmQSXA57tmq8GjACzJzQ21m941UUj/Vromr5QtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Hzuhntmf; arc=none smtp.client-ip=74.125.82.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="lKg6Cz9m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776187524; bh=kj1sfOzHMYPt1j5hcLFkJwgzxKgQtthmIu4jaY8YNj4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lKg6Cz9mOYP1MTux/LT1po4vNffBoBYUq4Xpt1gqnU0DVXRivpsdASB2LxI/f1OkBU91uLvtRcytGxnIH0uS9CSQ0lga1kCQ/RfZJ5R0qdxiTkXfr3NllnIaCDczsE7Hqf0qNuQ70vOnROEzYwEG+9L/U/lHwdpgiSzyPo8oOi6vvoEunbFvi9R1gMHOflIIr2CCsTV+WdWmZFLZ9uKBDXFw5Ai06fJKcC4oKGvigb6URhR8cTfgWwq/xOk4R/AkD2zRCIl72TvKmeWhvtFZHoRt0v65dVHRDqEnxnSXD37P1y53TlwW9OMDYCDQgcKOXl71AcaaQ8XZfZrpPybuRw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776187524; bh=bgMLCAcRTpxrwutmpZR6XPF2MB8+t8tjnRWtG7p7coq=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=lmwk/ua+D2kBMbRGl/Oo6ynm3/3q/snua5TOSNISzFsjq6/RVaVy3Bs7hOlusHNOEx2HWwPA0v94Dqg2IPjAVADJEcxXPeDhmVYHH/ULfeLygw1qqdPsoZz/xKGGQlYkj6FGXOIIsaz2ojJ3DmYgNv4JJjeCfhJUBeZAehTzcqDKERa+5qz764JPElr3XrqW8IezmUWinonMC3hWIowgCPE+H2t9wiDc9hj1lbAdNIKYH620IiAuohZph1Plcbmv0iH7w1yZ8+mCb9UbBDI5Aj1PR+DfhjEX1RH2xzzQjj1iicUtBAYJYRCuLoQEn4UBqFk9qgGmewVkh9nz6LP8+w==
-X-YMail-OSG: GFhkpDoVM1miKjVoM.uwrYUwzunfusklP7VPzKJwE7O06Em3K18yBDscxfjeovn
- 7nJneKeH9noG7rZ_Tu2u5LFlGrjAU6bq1UPsnK3rTMJGBzIWPFPUVhLcDX.01cN1v4HN9qHkWLJh
- eYuduXAtuCxuhizj9.aik8s0xm2ipm_LHCz5nxKWINblTD9hfY1KoGFK5T8n7jkoJBZyTGNFLU7l
- MSGhp8zga3c7AiPYhlx0QYiRDE_3FnE9xjE4GWChym9yDJD4JeVKjNCRCU81SHEaIqwfgUU7bFmN
- 4JYe1pEfCPZZKI_EnLxNcCX31QQQ8gZaeQQbdgjCRDEflGbdXRqIF3XRPTxnX.A1E9ppOdvZQ6Rj
- _uTwypRhpNCzR.yWu.OpX9_YOApqbkVL1yT.ZkzVcnE_ulS_dT7CqPg46erp360ppoEM58bw7R8u
- gAMHHhROjPN8fBSuUFEq9ozBrrT5ADyMvMaZqbCrhYJebGs1vIpCnqPfqCKY6hCZT3YMKqqIw_RK
- 9Mf3NXp2ue1UUu9BOYJ1gt85MkPbA1wbLZYBlSrjVij9PHaWfSEWZ6CfUs.bC8dvSQyclLWb85.2
- dhQDm8MslR5EOjmzDv4MlLaCByfBgWdaH26dJjftyoPVd_DP_jbLdYnox6eE5W5S7_XSFbpBKj68
- LVbeZKY3QP0O1htLsUZHzaDTpy93gjwNls801GYQQGZGv5ct1Lng4O.dnmqd3O_iNs_54zDYck2C
- F5g_LQUZuTGILTTiNJfWWcdFAl.dguR7Y_u74MjqO6kTF8PhrxlPFm8zwRlr3UeTY9sBBxlyZnzi
- grjYit19CPDqMscCvXvyEmq5.p.Q5TTqqdhXYXQ4uGMG9BwQam4jP5wken_F4kMZsPZdx_N4XxNi
- bvwXyG9dLNc6BfUxWmViN8ijKPkteIsxi961WDFBsAZaE5qL95aMwL3ssKzKVGIyV2pbH7FanoVB
- 1ASRzntLh9DEFWs1NKj9VSY4fCZ9BUbRPBg22tXubyUzL4HdQgvqt7Vt0gRjX1AjCmaHHmFmC9jt
- HFAp6iViR4iU6mPXGWxmvNcf06KtL0Zd8VTyENX18xd1z24XrP5DW6Jxm6wdKxFKNKhlnBGT86XJ
- uiwr0yU_Goy2Ij7SVwVNoua0KJCw_kG47C9VrXFPt7zwvfA8UNivLUQz.i8n965bTYBVEvmdlYl5
- U7IISiSGwcrTaqcXj8qVhoM1PvBEJZAasAbax0TyHebOugNe9m4dvqCxxBo8ZtM_t.O2mvZ0kYjt
- UXNhp2KzoGZoA6pKZ_v1GL8NKgADXkjXLWqMlH9jgAm1QiFVqnGIXvY0I52pw1r_qHvfzvpDgQXf
- n1ayfeYTa7.2d1.VuJ_.NL2_rgiRvNLxPfy4a0pHbe30yYI2qPsRbxxSqQhPE8r6svR02CfCEtQw
- PVmySonj.rAzSzrWQLC6Ko0ci0tLQ79bIa.KY1oufgCc1TxxYaumpT9dnUJKePyrELMpsTA6XDLr
- EC.1SPEn2jfXm3XrXg3GwherzMjRzxtvUrfp45fPHBvzWUO0FiLrMzTswwwiDwSAB454DGKD7YIk
- 3evDvx6yrIIFhWxuLw4kvbZKRZp2QLy_kVDRueJj2AmM4t4SFIfFoQIKWaKKUcZmuRPFtD8ALf3Q
- PSzs68Oq7th9Tp8Nanc4jWwLn5_ssQe7HYGBpikpkADb.2vf_PAGIIH8fVuvv4hW51PpK13g_zpI
- UZLTo3Fnlb522fsB_gQzhTwSVPFqzA2W5zzHNgp2hbvitLQDR8z4hMQs13j0LdB4.Z4tLyP5UEw6
- 3BAv9iVpe4FWk3TasqKzqHHJYsNInkbyQleW0raWsz.b9q8gYqOSYWq.OeFYr6JEyi.Uqx6Zlonn
- gE7FGshmgeKRxsvWVLzWv1pSqEc2lpVQRfKVTXZL9aNUX65.b4nGiIjIZNCcmkf0AJ5cVjE1c8qC
- 7K.1uh5_IvUjy1jIttZI2XX6mm2foNVd2WpXj_3p3IW40V0WwLJ03_XvpsHf6f.q.ES2UthI2EG4
- iddwBfxxy9yTi2Zc.nFCTAvsAH2JRNifweCLeYtEEw5XQPZYe_epLhpxpdh_hu.92jOYOqAIxLiQ
- wFqHkyjoc1lHo_.d0LR1wbriOjl8MMRkZgR2lIhcbp_kTYyJvIHb5ROtHi8LQ3wchvHgkAormXQG
- iyX9GbH9wdyJRZ8P2pUhMFikVgIFb4wA7IRbHwSUYQsoNAnI8q0Oz6oJyl1Hh5lkEtIkuPdLZRSX
- ZEb.bUvPlcHIcCXy_tk5kTmuTiHYYR7zwQIFujMLOdr_LoexoHU5wDYhdk_Ln
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 30480471-503a-4ddb-98f5-de4e115036aa
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Tue, 14 Apr 2026 17:25:24 +0000
-Received: by hermes--production-gq1-6dfcf9f8b-xb5j9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2513f61ee43f0821ef423277142ceb5b;
-          Tue, 14 Apr 2026 17:05:04 +0000 (UTC)
-Message-ID: <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
-Date: Tue, 14 Apr 2026 10:05:02 -0700
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Hzuhntmf"
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1273349c56bso8063670c88.0
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 10:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776188781; x=1776793581; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jhogzkt+ToHFbDOLRYWGhZKULinaXeF/7S6zFLWOnQU=;
+        b=HzuhntmfTZsXGbw4XXSCtjGgX6Grr7Ht4yxLQsW41946e0rLRtnQ6+QqxutEC71Yoh
+         Mf0Py5C8ANXeh5U8DwCU8aMaYhJ3xlvunOCaIuV8R32yTZNuFmTAXfRVRp92Xzf3nl6u
+         waKT3wPaMtj7eU+EPmanRMLcW+FwdlVeKicNj9Kpz0/OML0B3MXCSQyP1mgBiOVGN6C9
+         6+/jpJxcMYjhejgyWZfYLcsqtxRitMYk4w8pOJo8FJwfRKg8KLDgkBF+v6Q2UdO7Uzui
+         y05RyDn4sPxMRGMDV81q+lzKlRtcPz6vZ0RaV64amIzzxeB1DTYiiYvvw8A3cOKdqawg
+         PKsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776188781; x=1776793581;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jhogzkt+ToHFbDOLRYWGhZKULinaXeF/7S6zFLWOnQU=;
+        b=oSMBJ4CwnCI6RRCBFziSZf94DVxUee62twFlTaeLa9JpbsaQVTSjGmCxUmVPxG9ysg
+         hCBTWmcMUJ9ehgWUcHh+g1zUtVwBb/S5b6Gn69Rx4DyF03LWpHhFi0kT7q0CmMjVf9zZ
+         vj/w4+4cdjFLM3PhPgRcY5XtbhLUt3vNzP8ZTwJRI+yI23IC9UhaCtsONGoy18U7g0vH
+         AIHq2wwUtDhtHQsGG3C3vVpHJRuVVWpKbEM6Evd8P5Javv9s19vS3n7QCmp/FXybtnAh
+         An+aIeCX0cI3hrLHauV075Oj8OX+4DVNeBxd1q+uwdBKAIZO1PCxtj5cQ7UwRvUMPTQo
+         MOnw==
+X-Forwarded-Encrypted: i=1; AFNElJ/SQHjiaWnCK8rQe5fK3hssSr5Te2ZbdOLa0JnlI4b07Xb6RMmCN8d7lOxIrlrUY8iwtA0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWGSq8a1lUoLBT+m1OY2CaaozNORpXnfMe0FYl405ACzhSQGzI
+	16EIACiHLUyXuN5CXQxeXf3mwPgjIfm3fDt2aLvQR61yiC+sodtN1AAvQAtGPPwgumY=
+X-Gm-Gg: AeBDieuJbO4KCEB1bWedSaK6+PqPs474Ctj+26zOxexUqRhSaLdd5mpOPSyMsywPp2C
+	kgmux+gqn6pSk31MuIqQCS88yHTBApKCdcsoo2U4ONMUqbpd3oz66rxnPsfaoyWxm31/W/EWhu3
+	sE+JSGYIxJqLnoP8bOrD2BQhANgJ7X1IArUZPXOzyssmf4jscNP1QKWLsBgUfz9Y2c3TuhLJVcz
+	lL8B3HHMh8PcMcaLFKLM6FeH9cjNLdurHKLlxBR7RyGwnHypWRk2cO874VQct0QMgbUQk/hSNIx
+	h32oooL3PjEVrbqe8fgLgIBkdrtpDpquxZBNf7Lyu6QvslHLV1qQOVUHGBecMyl4FjKrkddV+me
+	oE0aT39yEmSw1ebD1/NrfokAID1yT2emG/giDMesUVLQ/ig4+Ae8ZCu/9vxBeEHL9aI+6hK+Y+b
+	XGhyzM1xyUJtQ/9yJbSz35qlrrkA==
+X-Received: by 2002:a05:7023:b0f:b0:128:d5bd:357f with SMTP id a92af1059eb24-12c34f09283mr9977428c88.30.1776188780512;
+        Tue, 14 Apr 2026 10:46:20 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::cfa6])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c346fb031sm18426033c88.13.2026.04.14.10.46.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Apr 2026 10:46:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Jason Gunthorpe <jgg@ziepe.ca>, Paul Moore <paul@paul-moore.com>
-Cc: Leon Romanovsky <leon@kernel.org>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
- <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
- Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20260413231920.GS3694781@ziepe.ca>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Date: Tue, 14 Apr 2026 13:46:18 -0400
+Message-Id: <DHT2DG579UVO.349TWXB1RYHYY@etsalapatis.com>
+Cc: "Mykyta Yatsenko" <yatsenko@meta.com>
+Subject: Re: [PATCH RFC bpf-next v2 11/18] libbpf: Support resizable
+ hashtable
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
+ <kafai@meta.com>, <kernel-team@meta.com>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <herbert@gondor.apana.org.au>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
+ <20260408-rhash-v2-11-3b3675da1f6e@meta.com>
+In-Reply-To: <20260408-rhash-v2-11-3b3675da1f6e@meta.com>
 
-On 4/13/2026 4:19 PM, Jason Gunthorpe wrote:
-> On Mon, Apr 13, 2026 at 06:36:06PM -0400, Paul Moore wrote:
->> On Mon, Apr 13, 2026 at 12:42 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->>> On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
->>>>> We are not limited to LSM solution, the goal is to intercept commands
->>>>> which are submitted to the FW and "security" bucket sounded right to us.
->>>> Yes, it does sound "security relevant", but without a well defined
->>>> interface/format it is going to be difficult to write a generic LSM to
->>>> have any level of granularity beyond a basic "load firmware"
->>>> permission.
->>> I think to step back a bit, what this is trying to achieve is very
->>> similar to the iptables fwmark/secmark scheme.
->> Points for thinking outside the box a bit, but from what I've seen
->> thus far, it differs from secmark in a few important areas.  The
->> secmark concept relies on the admin to configure the network stack to
->> apply secmark labels to network traffic as it flows through the
->> system, the LSM then applies security policy to these packets based on
->> their label.  The firmware LSM hooks, at least as I currently
->> understand them, rely on the LSM hook callback to parse the firmware
->> op/request and apply a security policy to the request.
-> That was what was proposed because the idea was to combine the
-> parse/clasification/decision steps into one eBPF program, but I think
-> it can be split up too.
+On Wed Apr 8, 2026 at 11:10 AM EDT, Mykyta Yatsenko wrote:
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
->> We've already talked about the first issue, parsing the request, and
->> my suggestion was to make the LSM hook call from within the firmware
->> (the firmware must have some way to call into the kernel/driver code,
->> no?)
-> No, that's not workable on so many levels. It is sort of anaologous to
-> asking the NIC to call the LSM to apply the secmark while sending the
-> packet.
+> Add BPF_MAP_TYPE_RHASH to libbpf's map type name table and feature
+> probing so that libbpf-based tools can create and identify resizable
+> hash maps.
 >
-> The proper flow has the kernel evaluate the packet/command *before* it
-> delivers it to HW, not after.
->
->> so that only the firmware would need to parse the request.  If we
->> wanted to adopt a secmark-esque approach, one could develop a second
->> parsing mechanism that would be responsible for assigning a LSM label
->> to the request, and then pass the firmware request to the LSM, but I
->> do worry a bit about the added complexity associated with keeping the
->> parser sync'd with the driver/fw.
-> In practice it would be like iptables, the parser would be entirely
-> programmed by userspace and there is nothing to keep in sync.
->
->> However, even if we solve the parsing problem, I worry we have
->> another, closely related issue, of having to categorize all of the
->> past, present, and future firmware requests into a set of LSM specific
->> actions.  
-> Why? secmark doesn't have this issue? The classifer would return the
-> same kind of information as secmark, some user provided label that is
-> delivered to the LSM policy side.
->
-> When I talk about a classifier I mean a user programmable classifer
-> like iptables. secmark obviously doesn't raise future looking
-> questions (like what if there is httpv3?) nor should this.
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-Secmark has already failed. As I mentioned before, you can't fit the
-label information from more than one LSM in a u32. There's going to have
-to be some performance degrading hash-magic invoked to make that happen,
-and when I've looked into what it would take I was very unhappy.
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
->> The past and present requests are just a matter of code,
->> that isn't too worrying, but what do we do about unknown future
->> requests?  Beyond simply encoding the request into a operation
->> token/enum/int, what additional information beyond the action type
->> would a LSM need to know to apply a security policy?  Would it be
->> reasonable to blindly allow or reject unknown requests?  If so, what
->> would break?
-> I am proposing something like SECMARK.
+> ---
+>  tools/lib/bpf/libbpf.c        | 1 +
+>  tools/lib/bpf/libbpf_probes.c | 3 +++
+>  2 files changed, 4 insertions(+)
 >
-> Eg from Google:
->
-> iptables -t mangle -A INPUT -p tcp --dport 80 -j SECMARK --selctx system_u:object_r:httpd_packet_t:s0
->
-> Which is 'match a packet to see that byte offset XX is 0080 and if so
-> tag it with the thing this string describes'
->
-> So I'm imagining the same kind of flexability. User provides the
-> matching and whatever those strings are. The classifer step is fully
-> flexible. No worry about future stuff.
->
-> I'm guessing when Casey talks about struct lsm_prop it is related to
-> the system_u string?
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 9ea41f40dc82..a0324e5b6085 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -192,6 +192,7 @@ static const char * const map_type_name[] =3D {
+>  	[BPF_MAP_TYPE_CGRP_STORAGE]		=3D "cgrp_storage",
+>  	[BPF_MAP_TYPE_ARENA]			=3D "arena",
+>  	[BPF_MAP_TYPE_INSN_ARRAY]		=3D "insn_array",
+> +	[BPF_MAP_TYPE_RHASH]			=3D "rhash",
+>  };
+> =20
+>  static const char * const prog_type_name[] =3D {
+> diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.=
+c
+> index b70d9637ecf5..e40819465ddc 100644
+> --- a/tools/lib/bpf/libbpf_probes.c
+> +++ b/tools/lib/bpf/libbpf_probes.c
+> @@ -309,6 +309,9 @@ static int probe_map_create(enum bpf_map_type map_typ=
+e)
+>  		value_size	=3D sizeof(__u64);
+>  		opts.map_flags	=3D BPF_F_NO_PREALLOC;
+>  		break;
+> +	case BPF_MAP_TYPE_RHASH:
+> +		opts.map_flags	=3D BPF_F_NO_PREALLOC;
+> +		break;
+>  	case BPF_MAP_TYPE_CGROUP_STORAGE:
+>  	case BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE:
+>  		key_size	=3D sizeof(struct bpf_cgroup_storage_key);
 
-Yeah, that would be it. Lets say your system supports SELinux and AppArmor.
-You'll need to be able to specify an SELinux context, an AppArmor context,
-or both. Iptables can't do that because of the limitations of a secmark.
-
->>> ... Once classified we want this to work with more than SELinux
->>> only, we have a particular interest in the eBPF LSM.
->> One of the design requirements for the LSM framework is that it
->> provides an abstraction layer between the kernel and the underlying
->> security mechanisms implemented by the various LSMs.  Some operations
->> will always fall outside the scope of individual LSMs due to their
->> nature, but as a general rule we try to ensure that LSM hooks are
->> useful across multiple LSMs.
-> I don't know much about SECMARK but Google is telling me it doesn't
-> work with anything but SELinux LSM? We'd just like to avoid this
-> pitful and I guess that is why Casey brings up lsm_prop?
-
-Google is wrong. (Imagine that!) Smack uses secmarks. It's one of the
-reasons you can't use SELinux and Smack at the same time. There is code
-in iptables that implies it only works for SELinux, but it isn't true.
-That's why you want an lsm_prop instead of a secid. The limitation of a
-secmark is imposed by the IP stack implementation. It would be very
-frustrating if you introduced yet another scheme with that limitation.
-
->>> Following the fwmark example, if there was some programmable in-kernel
->>> function to convert the cmd into a SELinux label would we be able to
->>> enable SELinux following the SECMARK design?
->> As Casey already mentioned, any sort of classifier would need to be
->> able to support multiple LSMs.  The only example that comes to mind at
->> the moment is the NetLabel mechanism which translates between
->> on-the-wire CIPSO and CALIPSO labels and multiple LSMs (Smack and
->> SELinux currently).
-> Ok, I think they can look into that, it is a good lead
-
-Netlabel has a similar issue to secmarks with its use of secids, and
-currently supports only a single CIPSO tag in the IP header, making
-multiple concurrent LSM support impossible. If you're defining a new
-mechanism you can avoid this limitation.
-
->>> Would there be an objection if that in-kernel function was using a
->>> system-wide eBPF uploaded with some fwctl uAPI?
->> We'd obviously need to see patches, but there is precedent in
->> separating labeling from enforcement.  We've discussed SecMark and
->> NetLabel in the networking space, but technically, the VFS/filesystem
->> xattr implementations could also be considered as a labeling mechanism
->> outside of the LSM.
-> Makes sense
->
->>> Finally, would there be an objection to enabling the same function in
->>> eBPF by feeding it the entire command and have it classify and make a
->>> security decision in a single eBPF program?
->> Keeping in mind that from an LSM perspective we need to support
->> multiple implementations, both in terms of language mechanics (eBPF,
->> Rust, C) and security philosophies (Smack, SELinux, AppArmor, etc.),
->> so it would be very unlikely that we would want a specific shortcut or
->> mechanism that would only work for one language or philosophy.
-> Okay, it is good to understand the sensitivities
->
->>> Is there some other way to enable eBPF?
->> If one develops a workable LSM hook then I see no reason why one
->> couldn't write a BPF LSM to use that hook; that's what we do today.
-> I was thinking that too
->
->> However, it seems like direct reuse of secmark isn't what is needed,
->> or even wanted, you were just using that as an example of separating
->> labeling from enforcement, yes?
-> Yes, and looking for a coding example to guide implementing it, and to
-> recast this discussion to something more concrete. It is very helpful
-> to think of this a lot like deep packet inspection and
-> classification.
->
-> That the packets are delivered to FW and execute commands is not
-> actually that important. IP packets are also delivered to remote CPUs
-> and execute commands there too <shrug>
->
-> At the end of the day the task is the same - deep packet inspection,
-> classification. labeling, policy decision, enforcement.
->
-> Thanks,
-> Jason
->
