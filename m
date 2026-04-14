@@ -1,135 +1,275 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF6B2E228D
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 07:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776150015; cv=pass; b=OcmvkcB5tWjWrvIBWpp+8Vre9U0bIm73GsJt2+6mxwhGF3WZqZA1b44p17e7ymTKghqlCur+5psYw846Fk2N0QXRHkqv9yZjY30qy3Prwgs2uvM1CAYIQ1tkUoRVSTJZC83SXeERfQn5b7SmLYHLgTVqdn1zpRU4TSlWHtisuxo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776150015; c=relaxed/simple;
-	bh=FSBUggxj4HWo0N2lK+Hwhq6VzkB4OZVykHxnRZBfbF8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lOvcBRJm/YslXOUpM91IwgEYt3k3oAtQk8loPx0VpRNVwWSf87zCYe42zBWE9SolwcVkhrlsXkq0w57ZJnhZs7YSKYPHQfiBV6tfFdGN9WTKI8k9W1ZLaR6C4bWDMntk1PutZ/PaPYZq4xFG9u+pbHkoUeyyIfOfVPktm8acrYY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ba7H4cd+; arc=pass smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C77B2D8364;
+	Tue, 14 Apr 2026 07:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776150321; cv=none; b=QODWjjlb7biLGcrogGgi955aEpiYumbA9jZ4qcRQHSgR2SkM4+ZSI59s6G7P99NCHuIlBj3OXR7ZbtHJFcri9w9ROTwUoFPpYOY1AR6xDtBZLWGGwCPln9ARx0DuV9eT5mXXzu0F/y/gGXy91VCbF3gTG6S5QupEYsSr2duWkNc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776150321; c=relaxed/simple;
+	bh=eiK/74tfdqHKat9y+xuL2tR+KmBCHs426kLj5QskTbI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FlVb9OTZfl/eQCeF+Mu560PDCkACbA74sB+SAh0z1lFMIcPKrZm7V7v6onuftw8XXEigDKnW1egzJODBlqVwdbKlpOAxTYayMbAvDGIz6JB9eCPOiYPD5bBO0PwixaGgqBVmW0KiAN/boij8TWtXQGPMdEuU4KtH/4s1lXmiqRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fn2fTE3v; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ba7H4cd+"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-79a535e7c00so61573957b3.3
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 00:00:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776150005; cv=none;
-        d=google.com; s=arc-20240605;
-        b=f3WoqPilgmEhPqJQWD02uGJ/Dpq7d+ZsaYHUbYIvUM0gN2cJd0pqMD4j9gkvfiwrIk
-         MPIj1NdJl+JfKderKSNwKdlvKVpdIItUF8jHZijfT5zA2NQ/602EvWbCs1coC1ZKoLTN
-         P6HJHw2lP9SaJyS77zT+5poHQhkzHZR95NIBb69mplro+wCSQjMzmaLEYQLCLZS9uHh6
-         zFQXAQ1Zq5dvH7oHZ947qNf0Hbabx8GxniP/aZo+Wb3fovNVLXc+3jqT2Z5zJf+WEmUB
-         z+7TJaEtJgQfyU20R+9urdB53CT2MYuegE9wjEkdptGgSsEyzYzM6Wm7qDomDekhPOnK
-         /Q5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2MgkN9CqIuRCkkTCnfBEkBgXFdIwwMDPeAwkUBmgo6E=;
-        fh=6xL71wcWg8z0ejJpFpHfbL2vVGifKLdKQ1fJbHSW8PE=;
-        b=h+fIpgTqsGADKHS8rU4a5sU0UVvdEfk9pqZf1z6yqSuyCeTDFrxhF6CmJcW4AWjIpS
-         Im1AvSaprRajZ0pYBTMMP7zZLAMFbixUZRiLOTPy8E8/PVhOWlOgLp+prVdsylcm5+WQ
-         hExwhHNXPE1+jlXXwZMhZmcyPaRp+ybMw/AJEhOHmj7Ul1Tyvicja6sOnCXEXw6VEwwE
-         MSrub4WnVoBhfPfUXUn3iTx5n67osR/hpHMe69PRD1VkE5SMD4h1NejBeVeAG0VrgquA
-         /ZpxnqwQb6UrYdOkvpyCL2ZHBKhV+VPIMxZ20lxiJv4kxDw5XsxeIRHQJ5leA6ddMRgt
-         RT2A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776150005; x=1776754805; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2MgkN9CqIuRCkkTCnfBEkBgXFdIwwMDPeAwkUBmgo6E=;
-        b=Ba7H4cd+faeu5C2Vu6TTEF78+KXmb9/wBFB7jM0VU9q6ad3zxDl9vOy7fIlPPC3XHi
-         KdQP7i1bkP1DAVlRlGZx6xV5xqsChR7885fxCptvJHHAguYvB6g6SU71/6S2NJLRUVbl
-         hE3poTrlMNnIbrCgdSk+nN8JLRcAZmFNklPeDY5x4nf9TDfCplxR3QPc8mAeVh7jFcSp
-         4yaXux3RuMK1az1534xF3Ma58ltkFjg9dcG3ns0CaoObt+6sDIczXXbMvgDQZBj2L7eM
-         v00GL4jxM4XjgqEdPnmG3eobvZxEguLYGUozGpae+8kTYWwBpPgG7RMnN0RowcHFvYgK
-         5UBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776150005; x=1776754805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2MgkN9CqIuRCkkTCnfBEkBgXFdIwwMDPeAwkUBmgo6E=;
-        b=OPpmBsRSbrUSBAdNPu9mYBC5u9z1nz81s0VSjHpuYbx48WjDgxxVj2kGvu3kjfu3HP
-         wZW49CYkiwXbK4wFyji7xz51S+Y+t67NNtvppfcmg+WpzvsQ6+/PzAe4PFrrR9aq77rV
-         mEPS+kKal3Gtb7qV1+i281xBEPYHR6QXvL0ep/E8W32NkUleockxxEXFTE0kYbKoE3nh
-         Of2QZgHNzy+Kd9oS/1sX81T6QfHsn3CALMRLjJtWSxN7NW9Xk8e6bxFjtE1F8uapSzU9
-         nGXeeQAwNQpsE2ZHP/qdnSBooggGW0UCe9spVmpgxP9Kbqtkj5HEkrZ7YoOXew09tLn8
-         W9jA==
-X-Forwarded-Encrypted: i=1; AFNElJ/C4B7BpXSDZsXF0tys0cEXvoJj/AIeNOVerNloD09IqMktdbQPpt1DYEeB+z0htFgUGvY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyy2zBVr/YR9tjdqOz4XYZy/KmgGnAxTbR4HNYXWWnRsXFaahAC
-	9HcNls2ROk7cf72tvvKFiJGLm23hXW4c+eVmdUSJqhaSiCeTa8qdXwTySu1rbXPDNrnGFv8bi+q
-	L+CeWTJ0R1SlqfpJ3Mwe+bAxKkxvQtQE=
-X-Gm-Gg: AeBDiesWpod14KOv6XQYdJKZS2fPBVaNzDVWYeXw47YgQR6kEGVXpPDOxebjdttOmhl
-	HZwQ07+/YAyth09t2tLoxLPCtJKRfQRviSia8SDiBFjrSa27vqj445r0PJkwRqPu1SS7rbaFzMH
-	hxvsKrwRl7NnwkWIzWorPN0pYR8FbAJq/vqItkCeUvezrrrJfvi3V8B8CeCPH3YT9vCJAkSEgdP
-	SAxEQajf55pduSes29y3q3oNIztQvzK1CIm227wFw6dIcI3a6K2olrwbwauJniKxKwah7t2wfiQ
-	aaZywTB6pXZnpljUEPYzWAmIdBNKlDlvt4OjUlm7
-X-Received: by 2002:a05:690c:c4f3:b0:799:3a3:2f25 with SMTP id
- 00721157ae682-7af71b5097dmr185894167b3.38.1776150004743; Tue, 14 Apr 2026
- 00:00:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fn2fTE3v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1776150318; x=1807686318;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=eiK/74tfdqHKat9y+xuL2tR+KmBCHs426kLj5QskTbI=;
+  b=Fn2fTE3vVvfUdIADVRAKn4TPpHbzUg16IHXJ3ZAZ+aoAi32OOL2TMolU
+   djMjclKSSyoBJLXrXVA31CUtMAC5ANppQa9yyjfU+nhTOHQ2srsTlv/cn
+   TmxUnr2AQFkf+mS1BCyt1tjAJJ9sX9Ptvz1/URQBg7HBrowEEySp2yQll
+   rh4u+shvrXhNh7S3UUwEoX24i2naL3W1O1jIDBfV49yCuD1jMy1JU6i7w
+   jdqpw436O0OmwJim6PcXd0mCt2UXqzFAWfWbQonCJFsfaSOJE90D28YHu
+   IzoIQ627/Lsc8e/xA8Ry+QBveKdotFR4mUNzGGyE9IKKvrza0lwrRrVr2
+   g==;
+X-CSE-ConnectionGUID: jyphCPPcQyCTKwthCGYGNA==
+X-CSE-MsgGUID: 1qsQrYCTRUKEHjuVxxT6MQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11758"; a="99742428"
+X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
+   d="scan'208";a="99742428"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:05:16 -0700
+X-CSE-ConnectionGUID: iKbeaX9HTBuu2VDH9NVUcg==
+X-CSE-MsgGUID: hlP3smgrTDWFTsEeAX0Teg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,179,1770624000"; 
+   d="scan'208";a="231744498"
+Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2026 00:05:12 -0700
+Date: Tue, 14 Apr 2026 00:05:12 -0700
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
+	Nikolay Borisov <nik.borisov@suse.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	David Kaplan <david.kaplan@amd.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	Asit Mallick <asit.k.mallick@intel.com>,
+	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v10 00/12] VMSCAPE optimization for BHI variant
+Message-ID: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
+X-B4-Tracking: v=1; b=H4sIAJzm3WkC/23SzWrDMAwH8FcpPi/Fkr+infYeYwfbclZDm5SkC
+ x2l7z6nbGtTfJRAP/hLuogpjTlN4nVzEWOa85SHvhQgXzYi7nz/mZrMpSFQopEEtpkPU/TH1IR
+ daNixtkTOddiJMnEcU5fPN+79o9S7PJ2G8fumz7B0fx3UK2eGRjbsDXQyASnNb/vcf523uT+l/
+ TYOB7FoM/4LIMGsBSwCQQzMFJUnWxfUg4BuLagiGEcqolE6kaoL+i4A0FrQRQDPnnWyxBzrgnk
+ QcL3P2TQlB7K1SaMKUtYFexdQwlqwyyYtSGYDxoGuC+5PsFI9p3BFCM5655yn1nd1oX0Qnq/ZF
+ sG2IRjUQflAdYHugpa4Fmi5pmawIWJ5r0qK6/X6A+rjXXW9AgAA
+X-Change-ID: 20250916-vmscape-bhb-d7d469977f2f
+X-Mailer: b4 0.16-dev
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408175217.1011024-1-song@kernel.org> <CAADnVQKMyGyw6vYVPVgT_G-CfbabARTiisd0dKV4U+8SY3qcEQ@mail.gmail.com>
- <CAPhsuW4uCU0SitRErVGr9B3RA9_MCxtGopHcpyZzw-Nm46fGEA@mail.gmail.com>
-In-Reply-To: <CAPhsuW4uCU0SitRErVGr9B3RA9_MCxtGopHcpyZzw-Nm46fGEA@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 14 Apr 2026 14:59:28 +0800
-X-Gm-Features: AQROBzAq1Nd21caQjX3XYQkSSvKXjcxB7DOSBwIH9zxOUVeDVQ9U2AGjnqjw2Cs
-Message-ID: <CALOAHbBRVbGEm9ueoxTR4ToxPEvW9U2=8PRxfSWpotf_AkRfmA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add BPF struct_ops + livepatch
- integration test
-To: Song Liu <song@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Apr 14, 2026 at 5:43=E2=80=AFAM Song Liu <song@kernel.org> wrote:
->
-> On Sun, Apr 12, 2026 at 2:02=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> [...]
-> > >
-> > > This shows an alternative solution to the idea proposed in [1]. This
-> > > approach doesn't need any kernel change.
-> > >
-> > > [1] https://lore.kernel.org/bpf/20260402092607.96430-1-laoar.shao@gma=
-il.com/
-> > > ---
-> > >  tools/testing/selftests/bpf/Makefile          |   2 +-
-> > >  .../selftests/bpf/prog_tests/test_klp_bpf.c   | 109 ++++++++++++
-> > >  .../selftests/bpf/progs/test_klp_bpf.c        |  26 +++
-> > >  .../testing/selftests/bpf/test_kmods/Makefile |   3 +-
-> > >  .../selftests/bpf/test_kmods/test_klp_bpf.c   | 166 ++++++++++++++++=
-++
-> > >  .../selftests/bpf/test_kmods/test_klp_bpf.h   |  12 ++
-> > >  6 files changed, 316 insertions(+), 2 deletions(-)
-> >
-> > It looks good, but takes 1.6 seconds on a non-debug kernel.
-> > This example can stay out of the tree.
->
-> Sure. This is not a typical self test to begin with.
+v10:
+- Add patches to define EXPORT_STATIC_CALL_FOR_MODULES() and
+  EXPORT_STATIC_CALL_FOR_KVM(), so that vmscape_predictor_flush static key
+  is only accessible to KVM and not to other kernel modules. (PeterZ)
+  (Borisov earlier objected to exporting the static key to all modules, but
+  now the static key is only exported to KVM. I guess that resolves the
+  concern.)
+- Avoid an explicit call to vmscape_mitigation_enabled() and instead use
+  static_call_query() in VMexit hot path. (Sean)
+- Drop vmscape_mitigation_enabled(), as it is no longer needed.
+- Rebased to v7.0
 
-How about adding this test case to
-tools/testing/selftests/livepatch/test_modules/? It would serve as an
-excellent demonstration of how livepatching can be leveraged for more
-creative kernel extensions.
+v9: https://lore.kernel.org/r/20260402-vmscape-bhb-v9-0-94d16bc29774@linux.intel.com
+- Use global variables for BHB loop counters instead of ALTERNATIVE-based
+  approach. (Dave & others)
+- Use 32-bit registers (%eax/%ecx) for loop counters, loaded via movzbl
+  from 8-bit globals. 8-bit registers (e.g. %ah in the inner loop) caused
+  performance regression on certain CPUs due to partial-register stalls. (David Laight)
+- Let BPF save/restore %rax/%rcx as in the original implementation, since
+  it is the only caller that needs these registers preserved across the
+  BHB clearing sequence.
+- Drop Reviewed-by from patch 2/10 as the implementation changed significantly.
+- Apply Tested-by from Jon Kohler to the series (except patch 2/10).
+- Fix commit message grammar. (Borislav)
+- Rebased to v7.0-rc6.
 
---=20
-Regards
-Yafang
+v8: https://lore.kernel.org/r/20260324-vmscape-bhb-v8-0-68bb524b3ab9@linux.intel.com
+- Use helper in KVM to convey the mitigation status. (PeterZ/Borisov)
+- Fix the documentation for default vmscape mitigation. (BPF bot)
+- Remove the stray lines in bug.c (BPF bot).
+- Updated commit messages and comments.
+- Rebased to v7.0-rc5.
+
+v7: https://lore.kernel.org/r/20260319-vmscape-bhb-v7-0-b76a777a98af@linux.intel.com
+- s/This allows/Allow/ and s/This does adds/This adds/ in patch 1/10 commit
+  message (Borislav).
+- Minimize register usage in BHB clearing seq. (David Laight)
+  - Instead of separate ecx/eax counters, use al/ah.
+  - Adjust the alignment of RET due to register size change.
+  - save/restore rax in the seq itself.
+  - Remove the save/restore of rax/rcx for BPF callers.
+- Rename clear_bhb_loop() to clear_bhb_loop_nofence() to make it
+  obvious that the LFENCE is not part of the sequence (Borislav).
+- Fix Kconfig: s/select/depends on/ HAVE_STATIC_CALL (PeterZ).
+- Rebased to v7.0-rc4.
+
+v6: https://lore.kernel.org/r/20251201-vmscape-bhb-v6-0-d610dd515714@linux.intel.com
+- Remove semicolon at the end of asm in ALTERNATIVE (Uros).
+- Fix build warning in vmscape_select_mitigation() (LKP).
+- Rebased to v6.18.
+
+v5: https://lore.kernel.org/r/20251126-vmscape-bhb-v5-2-02d66e423b00@linux.intel.com
+- For BHI seq, limit runtime-patching to loop counts only (Dave).
+  Dropped 2 patches that moved the BHB seq to a macro.
+- Remove redundant switch cases in vmscape_select_mitigation() (Nikolay).
+- Improve commit message (Nikolay).
+- Collected tags.
+
+v4: https://lore.kernel.org/r/20251119-vmscape-bhb-v4-0-1adad4e69ddc@linux.intel.com
+- Move LFENCE to the callsite, out of clear_bhb_loop(). (Dave)
+- Make clear_bhb_loop() work for larger BHB. (Dave)
+  This now uses hardware enumeration to determine the BHB size to clear.
+- Use write_ibpb() instead of indirect_branch_prediction_barrier() when
+  IBPB is known to be available. (Dave)
+- Use static_call() to simplify mitigation at exit-to-userspace. (Dave)
+- Refactor vmscape_select_mitigation(). (Dave)
+- Fix vmscape=on which was wrongly behaving as AUTO. (Dave)
+- Split the patches. (Dave)
+  - Patch 1-4 prepares for making the sequence flexible for VMSCAPE use.
+  - Patch 5 trivial rename of variable.
+  - Patch 6-8 prepares for deploying BHB mitigation for VMSCAPE.
+  - Patch 9 deploys the mitigation.
+  - Patch 10-11 fixes ON Vs AUTO mode.
+
+v3: https://lore.kernel.org/r/20251027-vmscape-bhb-v3-0-5793c2534e93@linux.intel.com
+- s/x86_pred_flush_pending/x86_predictor_flush_exit_to_user/ (Sean).
+- Removed IBPB & BHB-clear mutual exclusion at exit-to-userspace.
+- Collected tags.
+
+v2: https://lore.kernel.org/r/20251015-vmscape-bhb-v2-0-91cbdd9c3a96@linux.intel.com
+- Added check for IBPB feature in vmscape_select_mitigation(). (David)
+- s/vmscape=auto/vmscape=on/ (David)
+- Added patch to remove LFENCE from VMSCAPE BHB-clear sequence.
+- Rebased to v6.18-rc1.
+
+v1: https://lore.kernel.org/r/20250924-vmscape-bhb-v1-0-da51f0e1934d@linux.intel.com
+
+Hi All,
+
+These patches aim to improve the performance of a recent mitigation for
+VMSCAPE[1] vulnerability. This improvement is relevant for BHI variant of
+VMSCAPE that affect Alder Lake and newer processors.
+
+The current mitigation approach uses IBPB on kvm-exit-to-userspace for all
+affected range of CPUs. This is an overkill for CPUs that are only affected
+by the BHI variant. On such CPUs clearing the branch history is sufficient
+for VMSCAPE, and also more apt as the underlying issue is due to poisoned
+branch history.
+
+Below is the iPerf data for transfer between guest and host, comparing IBPB
+and BHB-clear mitigation. BHB-clear shows performance improvement over IBPB
+in most cases.
+
+Platform: Emerald Rapids
+Baseline: vmscape=off
+Target: IBPB at VMexit-to-userspace Vs the new BHB-clear at
+	VMexit-to-userspace mitigation (both compared against baseline).
+
+(pN = N parallel connections)
+
+| iPerf user-net | IBPB    | BHB Clear |
+|----------------|---------|-----------|
+| UDP 1-vCPU_p1  | -12.5%  |   1.3%    |
+| TCP 1-vCPU_p1  | -10.4%  |  -1.5%    |
+| TCP 1-vCPU_p1  | -7.5%   |  -3.0%    |
+| UDP 4-vCPU_p16 | -3.7%   |  -3.7%    |
+| TCP 4-vCPU_p4  | -2.9%   |  -1.4%    |
+| UDP 4-vCPU_p4  | -0.6%   |   0.0%    |
+| TCP 4-vCPU_p4  |  3.5%   |   0.0%    |
+
+| iPerf bridge-net | IBPB    | BHB Clear |
+|------------------|---------|-----------|
+| UDP 1-vCPU_p1    | -9.4%   |  -0.4%    |
+| TCP 1-vCPU_p1    | -3.9%   |  -0.5%    |
+| UDP 4-vCPU_p16   | -2.2%   |  -3.8%    |
+| TCP 4-vCPU_p4    | -1.0%   |  -1.0%    |
+| TCP 4-vCPU_p4    |  0.5%   |   0.5%    |
+| UDP 4-vCPU_p4    |  0.0%   |   0.9%    |
+| TCP 1-vCPU_p1    |  0.0%   |   0.9%    |
+
+| iPerf vhost-net | IBPB    | BHB Clear |
+|-----------------|---------|-----------|
+| UDP 1-vCPU_p1   | -4.3%   |   1.0%    |
+| TCP 1-vCPU_p1   | -3.8%   |  -0.5%    |
+| TCP 1-vCPU_p1   | -2.7%   |  -0.7%    |
+| UDP 4-vCPU_p16  | -0.7%   |  -2.2%    |
+| TCP 4-vCPU_p4   | -0.4%   |   0.8%    |
+| UDP 4-vCPU_p4   |  0.4%   |  -0.7%    |
+| TCP 4-vCPU_p4   |  0.0%   |   0.6%    |
+
+[1] https://comsec.ethz.ch/research/microarch/vmscape-exposing-and-exploiting-incomplete-branch-predictor-isolation-in-cloud-environments/
+
+---
+Pawan Gupta (12):
+      x86/bhi: x86/vmscape: Move LFENCE out of clear_bhb_loop()
+      x86/bhi: Make clear_bhb_loop() effective on newer CPUs
+      x86/bhi: Rename clear_bhb_loop() to clear_bhb_loop_nofence()
+      x86/vmscape: Rename x86_ibpb_exit_to_user to x86_predictor_flush_exit_to_user
+      x86/vmscape: Move mitigation selection to a switch()
+      x86/vmscape: Use write_ibpb() instead of indirect_branch_prediction_barrier()
+      static_call: Add EXPORT_STATIC_CALL_FOR_MODULES()
+      kvm: Define EXPORT_STATIC_CALL_FOR_KVM()
+      x86/vmscape: Use static_call() for predictor flush
+      x86/vmscape: Deploy BHB clearing mitigation
+      x86/vmscape: Resolve conflict between attack-vectors and vmscape=force
+      x86/vmscape: Add cmdline vmscape=on to override attack vector controls
+
+ Documentation/admin-guide/hw-vuln/vmscape.rst   | 15 ++++-
+ Documentation/admin-guide/kernel-parameters.txt |  6 +-
+ arch/x86/Kconfig                                |  1 +
+ arch/x86/entry/entry_64.S                       | 21 ++++---
+ arch/x86/include/asm/cpufeatures.h              |  2 +-
+ arch/x86/include/asm/entry-common.h             | 13 ++--
+ arch/x86/include/asm/kvm_types.h                |  1 +
+ arch/x86/include/asm/nospec-branch.h            | 15 +++--
+ arch/x86/kernel/cpu/bugs.c                      | 84 +++++++++++++++++++++----
+ arch/x86/kvm/x86.c                              |  4 +-
+ arch/x86/net/bpf_jit_comp.c                     |  4 +-
+ include/linux/kvm_types.h                       | 13 +++-
+ include/linux/static_call.h                     |  8 +++
+ 13 files changed, 150 insertions(+), 37 deletions(-)
+---
+base-commit: 028ef9c96e96197026887c0f092424679298aae8
+change-id: 20250916-vmscape-bhb-d7d469977f2f
+
+Best regards,
+--  
+Thanks,
+Pawan
+
+
