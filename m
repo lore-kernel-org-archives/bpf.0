@@ -1,196 +1,113 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B18F34CFD6
-	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 20:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776199479; cv=pass; b=egZ/L3FZW7s1DUzr2FAVzAVMGzilxgHB+4R/zIB/5Gc/AYHuEdjaJir+QCgyWT75fZlXMr+3pGLRUU2xlAN0N5ngZNZwHInt0eIDwBcoFtMBgWZwZdj4JatJ9U2JHYYxQBnwEJmzdpec18J/iUA/u+Xz4FIrMQrNwlUJZMLvelg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776199479; c=relaxed/simple;
-	bh=aQ0aNEU1NKIVhrIy+q01cYGQ+H3qfAr9fLe4K4e+a7A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TSD2V1u7WkCGD3TGVb368F0S+78ihPIjQsktqL60M3INUK9gZY+V/ZPw8OsVgImF+LhzREQBLAcuiwL7B8SKRTtdtbJd2aiMoAuqCHCt84hRAnqT7VQrmN1tg0YfUiaSBPhPgYJtVjF7H3gONEyx247r7lacL+1mRnCN1TWqJlk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Mq38fDxg; arc=pass smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A822013DDA4
+	for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 21:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776200555; cv=none; b=LuU3P5eSUw1TS3Je7MSqFHheJ9hDitEjMKERqKC3MLHZeZeMZVcAF6AX1I3COkzbSxXUYW45D6B8CeuEHisiGsqnzXiLjfqv5571kJ2XdXL4s/9l+VzzkrFllip51X5dXbVYBOmOPV7NKiYXdZXEVOSGDz+Y2k3CYN7lD9WfS44=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776200555; c=relaxed/simple;
+	bh=gkMp0JvEEAhv+Oe6iz2+czHZdRbwUE+6Ym4ue+9OlpM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=JvfWpakzFObT7eQfqQxRNiuU1g++DrRY2TVSu+61gGImWK2DbWbZejZORYS5LHr+j0erQQRyVJS5E5bNhU8/oWsIXkzj7vpT6wHx6qzqPTXK5doGupXfY4gijJUzz7c7Nd+esQJS0mcf8xmYAXyDvvckbZZpjRrp4tRBkxU6Qfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSAj/XYo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Mq38fDxg"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35dac556bb2so3510938a91.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 13:44:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776199476; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fbsrpL8sFUuC2Yr3VPIZAAfS85f5je+Qe+8VRUaJOII+9Wr4GnFAgqj+jnK5muAgO1
-         4r678BkIv7re7k4GnOcF8nlGaSauJmHvIdkHm9xAcwJTFUEVuS7W5wJouarcpdV/0M2w
-         W5liZy3s2HzOd9LySCnZuZmf7fvVQhVAbdyNAFPVyflAqneiCysqxlIWaE36yK291gol
-         9Pd93DPf8HPY3kvTnaSkCU6Ryb5kQSssLkNb1c8zyVGergnJ7J3nIoL/6bU09M+cv+dV
-         dRHuwixuyjzI29RbTFjJ6nuM9cDbr01G0WwvFl8R8HIZrwsyxzoUyJcWCuSOxSvx7upt
-         dyqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NK52TA8NFT/IbeGeLW1RBad6qmXIJT5VQoTcm/weixc=;
-        fh=XmKHd0bOZCIAfY4/AUy1z13vuqazj/PMbV7onPUEwC8=;
-        b=C1KgJG8MiiXHeaHAW8ZXOi4zGQRAZFZ+QkNQx+BD7K6FNYONi3xi5fDv6WPSLMzUF5
-         ySyJOt4P8Eov/VDY7Fi3Ih/0RnvsEvywBqkk7TwjaDbf47Sqfpk80oPYdMZAqg+hNB1j
-         c5J/KV70bZYsJtx80C5szetdLK9fZpsvPw2MRFoSTVYsmalRZSyz1sxpbWQJuVZSbUTn
-         rs7Kxwz/mfAGVcOHaC0flkjLFA3/achomiiZttFWvU3AYK+ZeVAX/TA8iPhKtzG5pING
-         GmHHVpuhWvObzI6gXPD/wLXDTmX9QdjaIQRYEwRcjS8pX1wHjbNuiIcy9biDWCPya5E8
-         XwQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1776199476; x=1776804276; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NK52TA8NFT/IbeGeLW1RBad6qmXIJT5VQoTcm/weixc=;
-        b=Mq38fDxgkRfbZriNhJABnogX4gz7zpqK0Au2qqDIFMX2ogbyvFEPsYjnLGTXlpO2Si
-         lW1aaS5H/r2peKduY50ri7h0VcaUV0dGMn2HR0TTNrcnMkksZEb+CN4/ZJprW6ZTc4sV
-         vDqSqP5yGnHQEepEQe2byxcoIpBgAabX4QoRoIe2qY4uAaWo9Fv/fdL+xrYqespMfRhr
-         CepcKaXSgv+DM7QAAW1CNNtc4sdRDzW+5zSK4iYBZ6Nm4drYrkQ5E7YWpiw2IGT81Y8U
-         FRklGCDNW+FbZIMM4Va/IH57P7gti6geKYN7jVTnAu2yrwx6o52NsPoEPbRpdXGQpQzN
-         XR/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776199476; x=1776804276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NK52TA8NFT/IbeGeLW1RBad6qmXIJT5VQoTcm/weixc=;
-        b=OOncNDsfZiAbpYQhybH0lYsRf/xr8p6t5hCndwQFeBT0z4oOq6v5qRw6ge5FeHt6Xy
-         4kig206o/YNqdpoACDC/UVWFW/RpJc+jdvljDFdc1XFuNZigTkEE2+f92PIX81mT8Vl2
-         hQxYuUnYlmrLHtQppM0Sou4wc/8J3JYNF4zn3p3MbtS29vTeMsoHxJ0d9gtrGZvVnDia
-         NSCmzCHbhTnFfjgS2BRmsq2tzplIlP80B0kWPKSXdBZEjD9pp5ZK8GnND8KPPSEV/YNE
-         R/Bi9t+iuqjIahMf+ZbxEN/w2CD4Uwdp6HAvIg7K9XEQFf0ltE489eJ1FB3XV4wg7mK6
-         hm4Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+uthulHLIHHojj7PXIT+eWqcZ1IeGbLdwfuGG85usGv9SSDyz6CfnhmjweaZ3zB9C9qGQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyznmKhn2EfJMzS3fXVFhyfR//Dtk3OkmODNLotG9bKAZKRDoDR
-	TTtSQRm2/2eZyy1fN8Y6tPG0yAW9zoKaNSJLvnR+9C9yDpMXGaBHYphc3pdlsejQUYbebaB3QYJ
-	wn1yrX5aBgSJ3jp0Dm0U84oACKjHFofnZUGOovRWq
-X-Gm-Gg: AeBDievkpIDldeShFo0rbzHCDQcuxw1s4nf5MzslSHlo2U9dVYotJLs5W84SiCmjgFR
-	qyOz64UaNntWi/EolJPPSdZzD5AAj3OyZI5CH8cedp1yK2Ch4LLkvlaVMHaFtRF4fPqOR1qcgex
-	vHHKkdVsbDkVLtizulBeLvtAeU6QtwYoS5w103iK4cAV4LYL8+4Au2DevtOu76i4X25Yo+c8YFv
-	jx5u6n3cWEGGpEWs+83dL5eHBNms9LVof7gtNP2fN6FLtfOpq77xIJ53AKFOONaIoxgKlRZN6el
-	OJNElc8=
-X-Received: by 2002:a17:90b:4d0e:b0:35c:b02:b5c1 with SMTP id
- 98e67ed59e1d1-35e4254fa24mr18173516a91.2.1776199475615; Tue, 14 Apr 2026
- 13:44:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSAj/XYo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2262BC19425;
+	Tue, 14 Apr 2026 21:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776200555;
+	bh=gkMp0JvEEAhv+Oe6iz2+czHZdRbwUE+6Ym4ue+9OlpM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=LSAj/XYoXQFg4DKK9G2hlOx0A9eg2qkHtMMNDo8KkXMp824OYAxh12fn9PKbHnXuu
+	 RuLQWHJXmRKintl29NCKpXy7zp7PMUKmu4b1NAnMNl4YaDteJksmoqo6xZK1pSavZX
+	 KircznJUbXeD0EV3K5XEna9npv0NseSW+cOJOnVGIsFTNfvY3hNR1EBT2GOxPyasxj
+	 ZLpjHEBlfK7V0yIChsSRsftHeFsjSP8f3hGlSPPdhghun2cgne60r9iaumS/KQ7/IR
+	 pKetFOKk43q/rLAXTLs4fW8AN/jz78cDBY6yxDoSBLO1gI6a7u0yqOIht2ntxCiENz
+	 YFhPHKAOUUOxw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 5/8] bpf: Update per-CPU maps using
+ BPF_F_ALL_CPUS flag
+Reply-To: sashiko@lists.linux.dev
+To: "Leon Hwang" <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260414132421.63409-6-leon.hwang@linux.dev>
+References: <20260414132421.63409-6-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 14 Apr 2026 21:02:34 +0000
+Message-Id: <20260414210235.2262BC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal> <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal> <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca> <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca> <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
- <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com> <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
-In-Reply-To: <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 14 Apr 2026 16:44:23 -0400
-X-Gm-Features: AQROBzCEfz_j_XIQqt_9SrRpougQ4lYANU563js1WLhMuxDlob1XiduX3tGAPf0
-Message-ID: <CAHC9VhRoaECt03Rs-ZyoGhW2_qZkA_1weTYYjiXc41Yf5U8A_g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Itay Avraham <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
-	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 14, 2026 at 4:10=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
-> On 4/14/2026 12:09 PM, Paul Moore wrote:
-> > On Tue, Apr 14, 2026 at 1:05=E2=80=AFPM Casey Schaufler <casey@schaufle=
-r-ca.com> wrote:
+Sashiko AI review found 1 potential issue(s):
+- [High] The patch unconditionally forces the BPF_F_ALL_CPUS flag for any k=
+ernel-originated per-CPU map update that omits CPU flags, breaking the bpf_=
+sys_bpf() helper API for BPF_PROG_TYPE_SYSCALL programs.
+--
 
-...
+commit 357a4fab1d0fc8586bb52bd3aab10e26fd39a2a6
+Author: Leon Hwang <leon.hwang@linux.dev>
 
-> > For those of you who are interested in a more detailed explanation,
-> > here ya go ...
-> >
-> > NetLabel passes security attributes between itself and various LSMs
-> > through the netlbl_lsm_secattr struct.  The netlbl_lsm_secattr struct
-> > is an abstraction not only for the underlying labeling protocols, e.g.
-> > CIPSO and CALIPSO, but also for the LSMs.  Multiple LSMs call into
-> > NetLabel for the same inbound packet using netlbl_skbuff_getattr() and
-> > then translate the attributes into their own label representation.
-> >
-> > Outbound traffic is a bit more complicated as it involves changing the
-> > state of either a sock, via netlbl_sock_setattr(), or a packet, via
-> > netlbl_skbuff_setattr(), but in both cases we are once again dealing
-> > with netlbl_lsm_secattr struct, not a LSM specific label.  Since the
-> > underlying labeling protocol is configured within the NetLabel
-> > subsystem and outside the individual LSMs, there is no worry about
-> > different LSMs requesting different protocol configurations (that is a
-> > separate system/network management issue). The only concern is that
-> > the on-the-wire representation is the same for each LSM that is using
-> > NetLabel based labeling.  While some additional work would be
-> > required, it shouldn't be that hard to add NetLabel/protocol code to
-> > ensure the protocol specific labels are the same, and reject/drop the
-> > packet if not.
->
-> Indeed, we've discussed this, and I had at one point implemented it.
-> The problem is that for any meaningful access control policies you will
-> never get the two LSMs to agree on a unified network representation.
+bpf: Update per-CPU maps using BPF_F_ALL_CPUS flag
 
-That is also not correct.  In the early days when SELinux was first
-being used to displace the old CMW/MLS UNIXes NetLabel/CIPSO was used
-to interoperate between the systems and it did so quite well despite
-the SELinux TE/MLS policy being quite different than the CMW MLS
-policies.  Yes, there were aspects of the SELinux policy that made
-this easier - it had a MLS component after all - but they were still
-*very* different policies.
+This commit modifies map_update_elem() to automatically apply the
+BPF_F_ALL_CPUS flag for kernel-originated updates to per-CPU maps when no
+CPU flags are specified. This is intended to fix potential out-of-bounds
+reads when updating maps via the lightweight skeleton loader on systems whe=
+re
+the number of cached slots is less than the number of CPUs.
 
-> SELinux transmits the MLS component of the security context. Smack passes
-> the text of its context.
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index b73b25c630734..f0f3785ef57d0 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1785,6 +1785,21 @@ static int map_update_elem(union bpf_attr *attr, b=
+pfptr_t uattr)
+>  		goto err_put;
+>  	}
+> =20
+> +	/*
+> +	 * When updating per-CPU maps via the lightweight skeleton
+> +	 * loader, use a single value slot across all CPUs. This avoids
+> +	 * two potential issues when updating on an M-CPU kernel with
+> +	 * N cached slots (N < M), especially when N is much smaller
+> +	 * than M:
+> +	 * 1) The update may trigger a page fault when copying data from
+> +	 *    the last slot, as the read may go beyond the allocated
+> +	 *    buffer.
+> +	 * 2) The update may copy unexpected data from slots [N, M-1].
+> +	 */
+> +	if (bpfptr_is_kernel(uattr) && bpf_map_supports_cpu_flags(map->map_type=
+) &&
+> +	    !(attr->flags & (BPF_F_CPU | BPF_F_ALL_CPUS)))
+> +		attr->flags |=3D BPF_F_ALL_CPUS;
 
-Arguably the NetLabel/CIPSO interoperability challenge between SELinux
-and Smack is due more to differences in how Smack encodes its security
-labels into MLS attributes than from any inherent interop limitation.
-In fact, I thought the "cipso2" Smack interface was intended to
-resolve this by allowing admins to control how a Smack/CIPSO
-translation so that Smack could interop with MLS systems, is that not
-the case?
+Does this unintentionally break the bpf_sys_bpf() helper API for
+BPF_PROG_TYPE_SYSCALL programs?
 
-> Unless the Smack label is completely in step with
-> the MLS component of the SELinux context there is no hope of a common
-> network representation. If a *very talented* sysadmin could create such a
-> policy, you would have to wonder why, because Smack would be duplicating
-> the SELinux MLS policy.
+Because bpf_sys_bpf() also wraps the pointer with KERNEL_BPFPTR,
+bpfptr_is_kernel(uattr) will evaluate to true for any eBPF program calling =
+it.
 
-Interoperability wouldn't be a problem if everyone the "right" systems :D
+Prior to this patch, a BPF_PROG_TYPE_SYSCALL program could legitimately
+update a per-CPU map with distinct values for each CPU by providing an array
+of num_possible_cpus() elements and omitting any CPU flags, which mirrors
+standard user-space API semantics.
 
-> > Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
-> > require some additional work to convert over to a lsm_prop instead of
-> > a u32/secid, but if you look at the caching code that should be
-> > trivial.  It might be as simple as adding a lsm_prop to the
-> > netlbl_lsm_secattr::attr struct since the cache stores a full secattr
-> > and not just a u32/secid.
->
-> Indeed. But with no viable users it seems like a lower priority task.
+With this change, it appears the kernel silently overrides attr->flags by
+setting BPF_F_ALL_CPUS. This truncates the internal value_size calculation
+down to a single element (map->value_size), reads only the first element
+of the BPF program's provided buffer, and incorrectly replicates it across
+all CPUs.
 
-You need to be very careful about those "viable users" claims ...
-
-> And to be clear, I have no problem with netlabel as written. Multiple tag
-> support isn't simple (we did it for Trusted IRIX) and the limited space
-> available for IP options make it tricky.
-
-That's an entirely different problem from the LSM and protocol
-abstractions, but yeah.
+Should this workaround for the skeleton loader be constrained to
+bpftool gen skeleton instead of mutating the core syscall handler?
 
 --=20
-paul-moore.com
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260414132421.6340=
+9-1-leon.hwang@linux.dev?part=3D5
