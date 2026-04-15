@@ -1,63 +1,63 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303163CE48A
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 08:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55DCC3CF03E
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 08:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776241650; cv=none; b=R3f8GvMVNNyAvt59n6c1TBN17KtZ2Dyii2ZkwzDEqT5IR5Sv1AyJyx02LQwvpeiKTxCmJCZijL488i7Gqsi2da4tRrk4dKu1W4jVUTq6zpFUiIXmnO+ro16myfTRYyiJvV58eACryIYAFIFyQUAgSs9W5e9YDq3RxnFtkdBJgTw=
+	t=1776241656; cv=none; b=ZYlY3tOe0c+qsgRcNLroAis4Bc4wiWA0YYyx0kYmMRy4gdx446TQFVPgf2UaPd6KAFqWIDQ2wTajzvx6ikjuVtVLMmipGo0mDq8EvhQeze1wIFMSrq2uQVQnAWQ8TAXkKiFZIQQ3fdoRicmz5w05RqjEstHsFQZldkIq6/VoQpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776241650; c=relaxed/simple;
-	bh=Vc79RT/MbkG5ZKWo1KckWKV8kTJS7NNt2rnqW0KmxjQ=;
+	s=arc-20240116; t=1776241656; c=relaxed/simple;
+	bh=w3ecYzeaYIX144bVqfj87tUxIv4KDadRulXpFJ/Fy+0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J18IWhFLT8FPJ/HLSMS4GNqoKp1y2U5oIs+3/omgRbl1oqrQlfWBlBztlBa6B6JX2iTtV4AftDlCS3C/q+AeaGSNOpUnHkH1ogWZO3YJMGEmscrOceKzXy8SAXP5J1JLYZWs1CLfut6pFZM/Mfqnrq4B8uqk01Q4sWdnjBgEVr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iIdLgQTA; arc=none smtp.client-ip=209.85.214.174
+	 MIME-Version; b=i+Y/T/tvNWMUwv5CQtptdP/8CXCOBYvk2uaei41ZmL0lBphd1YdPeSMs+HVY5hDBeB6qt7Jr2dMYFRm79ra2e/zQCOYYYuvpQ7wmHXxiVdJGkrwAdZhcKiOqXJXI5YST30TZZ9ubBjI+FTAixIE8dBYvMllzMyb0nAjlAzKbEMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SVGWEQsW; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iIdLgQTA"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2aaed195901so28974105ad.0
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:27:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SVGWEQsW"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c795f096fa5so47866a12.3
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:27:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776241649; x=1776846449; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776241654; x=1776846454; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=x78Ky5Ro4yhFj7Z+oKIQ0GQBczDEQvkM6QMGsDNo2XA=;
-        b=iIdLgQTAAXS/f4HLEdap/blWh3ABudtVt+sspSoBGkUeM6ByTjiByrCpMTfc2f2hwn
-         6ULfhTRx1RqjAT+KD5xueqk/qd85TmINbqvKcrH0FBo4HJlep3zyU42nrSvysIMzeNFS
-         O9IlGNXMhrAe4b+PSnnI9LPadmHhTqsXOOHGl9JyIJ93Ro5ytqZMjZ/X4NCZtntGwCzb
-         OdQV/JgJ4er6diUt5imr0XezDK9wEqlTud7E3HGZZkE7Qd+qi/wqPsJRcLQawwy5ONYy
-         lh53DNjMfhW1R4Uww8oQRt0SpMB6JmIhrxURzr/LJhH0g32iOKoH0E/K9zlpqrICK6f6
-         x1kg==
+        bh=2HPTqFxSpqPQ2VPcQ/yN5CAn5MjWpzRzTPnq/lPxxAM=;
+        b=SVGWEQsWW8PCfLBa3t+5vAwDgtq09Ia9s0y7qw8d5hAp8d1NbzP0cbObFlXTzpGMOF
+         9DRhWeInJWLIlCIw1vMaM7n3Dhl2R5dRKK4dLFxoao84b9K9vlcokKt5TJGfmf8QzTVT
+         8xuwUS6LRuVMRTUX6Eip7QRqT04bwYkRKzN7mBlMYe8GmK1xbfklmv2TtE/cS2gDmwpZ
+         O8+tDDWnT3mF5617Cd9F060F8FTzAggKCmph18XsW7OQXdLH6HEcr6mWPHYUV9WInx/B
+         MqfTx8xY2dL+ow/cSHXF7bEQZB6QZ0cKHwUCq2SnZjhrIyEOdWaQCHv/f8/S5voE3IDl
+         12pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776241649; x=1776846449;
+        d=1e100.net; s=20251104; t=1776241654; x=1776846454;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=x78Ky5Ro4yhFj7Z+oKIQ0GQBczDEQvkM6QMGsDNo2XA=;
-        b=dJf1ABqmOp+wip9Sif3C2arZb3P9//pVOe+RCm6Gzy7x35l+KtcgxzwAZcZXrwbe8m
-         6+26aijtBmeZaWhGs2fmqFe9mwV81PliTCSWaodY5PfhHRdAtBJ9CgEJeCSFe4l0B2GM
-         XZdjbMoPLnh3nV9tno9CT05gxxZpbXBrUogc86059GKTQ7CgaWovajebfafacmSb9WCL
-         t9NI44H4ujLyLO+0qQU8vIeFn+bjq/4K4GdsMROm7xXziK03aPT3gOuKtTnRz2GcQib0
-         Kt7sjMOEuiB0Nq1t8cu0CtJyevUijvcnJt9E3yEsDlQxJLhuk6p3lNevAZqtb+RL9BkV
-         4H+A==
-X-Gm-Message-State: AOJu0Yw+m5urditEghu4TMWA15h/UFgfNeY6ICbd9b+Bm1pCFkE+4O7r
-	iijD+TMufEHBcJ+TrhtvuXgYhOobudzzT2HUUgVzSoAWYwwvYJRCdacn
-X-Gm-Gg: AeBDiesiu1r7hhfDVPOFm59BJsxIXO3Qe6vu44uS5AbitQYDEjIGKLBudYBpTJ2h6LC
-	Touc2+EdI6RptgcRBzFxow/VS9cRdHttOA6bg75VsYk383zwKfn3SiDG2Ufvh6UI118TlcT3oX2
-	vnDpqp+G2Jww+Y2RhFRDwt/hBDzmfgLvmcKSPA33Vgt2U4fNZV8vRFOXs7MWTPxFXVydw8G7vFJ
-	dmfqA4mvSfGmosbzPqSBuQJ/zvLZJjR4vnSHLiD8xzR6x1aVCrCW8VktKppd3VRveeMvnYVUjZt
-	1995a42SXU6FFE+Ut//q8cq03a/+aFUvS5Ss4Hkc6E46ez8p6q4w9v6aQ30wcS8JlgGNECsidMI
-	2cltqBtX7nCsmvow3JFAFpSOcJWhkie6N6jV4Q47cuGPJtHJfu3kX8to2oJ8XN+45EtGCdk8wGD
-	igy/vv2T/S1h4ZhULbyZtOzoPlyXpko0iusrNeMjbDvAOx5RiUaeLcWCzzoFpUPbwqGei9FNRKr
-	fZPkQQv7C7YnlEciF0=
-X-Received: by 2002:a17:903:1b6e:b0:2ae:3b9b:db34 with SMTP id d9443c01a7336-2b2d5aa0becmr224418955ad.42.1776241648612;
-        Wed, 15 Apr 2026 01:27:28 -0700 (PDT)
+        bh=2HPTqFxSpqPQ2VPcQ/yN5CAn5MjWpzRzTPnq/lPxxAM=;
+        b=OWFPzwb8fRbaakZjMcdwPUjJ4b0/guayKYSWORbtFt9uBJiLotLbtT4amdjFt2l1q+
+         9XVH2lG3dyQqOEHlgRGkeykjP0z28zk505rHpcNLaifRy0ygQ94hQQpoJB7RChFwMobo
+         T/30x3j6Z1FaMYif4+FCv7bsqkbD2Vm13qT9Wq2cjlFdtZ/3GVg3BtHn2FKa8SayYPB8
+         8guheitM9BYV/VnZMj3gCAOMrcPUayZMPbsEOwsRUCu5yb2zPiXkU0chSkbUikv51nL8
+         SV1cC3fOtoGNXBGzobmqe0i/kaYoQ2CA+aCHtuEoHHcu8M8g0VrliJGFpnsQeCJRFwKh
+         DjXg==
+X-Gm-Message-State: AOJu0Yx+J0YGdHb8JBYqsubMVIirL/3aJ9qs0myl3IuZ3iMmttGHMwQJ
+	5xPlBRKQjbX7MqVhMkFfKWaY+eJxroYa64jGf19hcE+1qKt9e+RGZU5o
+X-Gm-Gg: AeBDiesmHkkBY31Fqzu3KpUS4mSQEfdPVwymAOYImttL5tjssiJH88fk6LNFgaQqnKk
+	akospDungkwKOVBe7fV4ZMbfT7zAP9H5CSGf7ikOOD/JIFn7ERyDlmqhco6nH0KZy7ckKRlxzY5
+	fPRK1+F+0g9d4kFVAlwgvSPtH6MZ6s73boJX11i9WHQT8B2cHKl+LkEDq31YXp88zGWzXz0hiZz
+	Yw4GEKh93M7WxZNYl7l+00Mu7eME5f7Krfr9089GCMPvCKOK/5pYnswW/c2PgD38hzx6mXZaRh7
+	PpziccWn523FyjtgKFa6WNg2dsO5ciOqJOLX4JqN+lrEb51kt0oZbiTRX6ui1ACvtGdeXR+5L9d
+	MJ6IGswLGNX814GJ5OLChdD0FwRVsQ+hyJ/+6jQu6ybmlo81CWgJKTLWaySvuYSF1bp5ri6VYsl
+	v8HklkBqE1UR1tJxf4zs6aNlDx4KP7zwTgT3cgKnw79ECwIARds6zYA6xAlFjywQHvY4FntYG/Y
+	FbpZLpw
+X-Received: by 2002:a17:903:2785:b0:2b2:45b7:306e with SMTP id d9443c01a7336-2b2d593683cmr144363155ad.3.1776241653713;
+        Wed, 15 Apr 2026 01:27:33 -0700 (PDT)
 Received: from KERNELXING-MB0.tencent.com ([43.132.141.25])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4782a93c7sm12174215ad.62.2026.04.15.01.27.24
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4782a93c7sm12174215ad.62.2026.04.15.01.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 01:27:27 -0700 (PDT)
+        Wed, 15 Apr 2026 01:27:32 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -75,9 +75,9 @@ To: davem@davemloft.net,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH RFC net-next v4 04/14] xsk: cache data buffers to avoid frequently calling kmalloc_reserve
-Date: Wed, 15 Apr 2026 16:26:44 +0800
-Message-Id: <20260415082654.21026-5-kerneljasonxing@gmail.com>
+Subject: [PATCH RFC net-next v4 05/14] xsk: add direct xmit in batch function
+Date: Wed, 15 Apr 2026 16:26:45 +0800
+Message-Id: <20260415082654.21026-6-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260415082654.21026-1-kerneljasonxing@gmail.com>
 References: <20260415082654.21026-1-kerneljasonxing@gmail.com>
@@ -91,177 +91,89 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Xing <kernelxing@tencent.com>
 
-It's beneficial for small data transmission.
+Add batch xmit logic.
 
-Replace per-SKB kmalloc_reserve() with on-demand bulk allocation from
-skb_small_head_cache for small packets.
-
-Add a persistent per-socket data buffer cache (batch.data_cache /
-batch.data_count) that survives across batch cycles, similar to how
-batch.send_queue caches built SKBs.
-
-Inside the Phase-1 per-descriptor loop, when a small packet needs a
-data buffer and the cache is empty, a single kmem_cache_alloc_bulk()
-refills it with generic_xmit_batch objects. Subsequent small packets
-pop directly from the cache. Large packets bypass the cache entirely
-and fall back to kmalloc_reserve(). Unused buffers remain in the
-cache for the next batch.
-
-I observed that kmalloc_reserve() consumes nearly 40% which seems
-unavoidable at the first glance, thinking adding the bulk mechanism
-should contribute to the performance. That's the motivation of this
-patch. Now, the feature gives us around 10% improvement.
+Only grabbing the lock and disable bottom half once and sent all
+the aggregated packets in one loop. Via skb->list, the already built
+skbs can be handled one by one.
 
 Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
- include/net/xdp_sock.h |  2 ++
- net/core/skbuff.c      | 27 ++++++++++++++++++++++-----
- net/xdp/xsk.c          | 24 ++++++++++++++++++++----
- 3 files changed, 44 insertions(+), 9 deletions(-)
+ include/net/xdp_sock.h |  1 +
+ net/core/dev.c         | 41 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
 
 diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index 84f0aee3fb10..2151aab8f0a1 100644
+index 2151aab8f0a1..0609e3b04279 100644
 --- a/include/net/xdp_sock.h
 +++ b/include/net/xdp_sock.h
-@@ -51,6 +51,8 @@ struct xsk_batch {
- 	struct sk_buff **skb_cache;
- 	struct xdp_desc *desc_cache;
- 	struct sk_buff_head send_queue;
-+	unsigned int data_count;
-+	void **data_cache;
- };
+@@ -141,6 +141,7 @@ struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+ 			      struct sk_buff *allocated_skb,
+ 			      struct xdp_desc *desc);
+ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err);
++int xsk_direct_xmit_batch(struct xdp_sock *xs, struct net_device *dev);
  
- struct xdp_sock {
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index f29cecacd8bb..5726b1566b2b 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -661,9 +661,11 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
- 	unsigned int total_truesize = 0;
- 	struct sk_buff *skb = NULL;
- 	int node = NUMA_NO_NODE;
-+	void **dc = batch->data_cache;
-+	unsigned int dc_count = batch->data_count;
- 	u32 i = 0, j, k = 0;
- 	bool need_alloc;
--	u8 *data;
-+	void *data;
+ /**
+  *  xsk_tx_metadata_to_compl - Save enough relevant metadata information
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 4519f0e59beb..e33a2406d8ca 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -163,6 +163,7 @@
+ #include <net/page_pool/memory_provider.h>
+ #include <net/rps.h>
+ #include <linux/phy_link_topology.h>
++#include <net/xdp_sock.h>
  
- 	base_len = max(NET_SKB_PAD, L1_CACHE_ALIGN(dev->needed_headroom));
- 	if (!(dev->priv_flags & IFF_TX_SKB_NO_LINEAR))
-@@ -683,6 +685,13 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
- 		nb_pkts = skb_count;
- 
- alloc_data:
-+	if (dc_count < nb_pkts && !(gfp_mask & KMALLOC_NOT_NORMAL_BITS))
-+		dc_count += kmem_cache_alloc_bulk(
-+				net_hotdata.skb_small_head_cache,
-+				gfp_mask | __GFP_NOMEMALLOC | __GFP_NOWARN,
-+				batch->generic_xmit_batch - dc_count,
-+				&dc[dc_count]);
-+
- 	/*
- 	 * Phase 1: Allocate data buffers and initialize SKBs.
- 	 * Pre-scan descriptors to determine packet boundaries, so we can
-@@ -710,10 +719,17 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
- 
- 			skb = skbs[skb_count - 1 - i];
- 			skbuff_clear(skb);
--			data = kmalloc_reserve(&size, gfp_mask, node, skb);
--			if (unlikely(!data)) {
--				*err = -ENOBUFS;
--				break;
-+			if (dc_count &&
-+			    SKB_HEAD_ALIGN(size) <= SKB_SMALL_HEAD_CACHE_SIZE) {
-+				data = dc[--dc_count];
-+				size = SKB_SMALL_HEAD_CACHE_SIZE;
-+			} else {
-+				data = kmalloc_reserve(&size, gfp_mask,
-+						       node, skb);
-+				if (unlikely(!data)) {
-+					*err = -ENOBUFS;
-+					break;
-+				}
- 			}
- 			__finalize_skb_around(skb, data, size);
- 			/* Replace skb_set_owner_w() with the following */
-@@ -762,6 +778,7 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
- 	while (k < i)
- 		kfree_skb(skbs[skb_count - 1 - k++]);
- 
-+	batch->data_count = dc_count;
- 	batch->skb_count = skb_count - i;
- 
- 	return j;
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index f97bc9cf9b9a..7a6991bc19a8 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -1229,14 +1229,22 @@ static void xsk_delete_from_maps(struct xdp_sock *xs)
+ #include "dev.h"
+ #include "devmem.h"
+@@ -4893,6 +4894,46 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
  }
+ EXPORT_SYMBOL(__dev_queue_xmit);
  
- static void xsk_batch_reset(struct xsk_batch *batch, struct sk_buff **skbs,
--			    struct xdp_desc *descs, unsigned int size)
--{
-+			    struct xdp_desc *descs, void **data,
-+			    unsigned int size)
++int xsk_direct_xmit_batch(struct xdp_sock *xs, struct net_device *dev)
 +{
-+	if (batch->data_count)
-+		kmem_cache_free_bulk(net_hotdata.skb_small_head_cache,
-+				     batch->data_count,
-+				     batch->data_cache);
-+	kfree(batch->data_cache);
- 	if (batch->skb_count)
- 		kmem_cache_free_bulk(net_hotdata.skbuff_cache,
- 				     batch->skb_count,
- 				     (void **)batch->skb_cache);
- 	kfree(batch->skb_cache);
- 	kvfree(batch->desc_cache);
-+	batch->data_cache = data;
-+	batch->data_count = 0;
- 	batch->skb_cache = skbs;
- 	batch->desc_cache = descs;
- 	batch->skb_count = 0;
-@@ -1272,7 +1280,7 @@ static int xsk_release(struct socket *sock)
- 	xskq_destroy(xs->tx);
- 	xskq_destroy(xs->fq_tmp);
- 	xskq_destroy(xs->cq_tmp);
--	xsk_batch_reset(&xs->batch, NULL, NULL, 0);
-+	xsk_batch_reset(&xs->batch, NULL, NULL, NULL, 0);
- 
- 	sock_orphan(sk);
- 	sock->sk = NULL;
-@@ -1620,6 +1628,7 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
- 		struct xsk_batch *batch = &xs->batch;
- 		struct xdp_desc *descs;
- 		struct sk_buff **skbs;
-+		void **data;
- 		unsigned int size;
- 		int ret = 0;
- 
-@@ -1638,14 +1647,21 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
- 			ret = -ENOMEM;
- 			goto out;
- 		}
-+		data = kmalloc_array(size, sizeof(void *), GFP_KERNEL);
-+		if (!data) {
-+			kfree(skbs);
-+			ret = -ENOMEM;
-+			goto out;
++	u16 queue_id = xs->queue_id;
++	struct netdev_queue *txq = netdev_get_tx_queue(dev, queue_id);
++	struct sk_buff_head *send_queue = &xs->batch.send_queue;
++	int ret = NETDEV_TX_BUSY;
++	struct sk_buff *skb;
++
++	local_bh_disable();
++	HARD_TX_LOCK(dev, txq, smp_processor_id());
++	while ((skb = __skb_dequeue(send_queue)) != NULL) {
++		struct sk_buff *orig_skb = skb;
++		bool again = false;
++
++		skb = validate_xmit_skb_list(skb, dev, &again);
++		if (skb != orig_skb) {
++			dev_core_stats_tx_dropped_inc(dev);
++			kfree_skb_list(skb);
++			ret = NET_XMIT_DROP;
++			break;
 +		}
- 		descs = kvcalloc(size, sizeof(struct xdp_desc), GFP_KERNEL);
- 		if (!descs) {
-+			kfree(data);
- 			kfree(skbs);
- 			ret = -ENOMEM;
- 			goto out;
- 		}
- 
--		xsk_batch_reset(batch, skbs, descs, size);
-+		xsk_batch_reset(batch, skbs, descs, data, size);
- out:
- 		mutex_unlock(&xs->mutex);
- 		return ret;
++
++		if (netif_xmit_frozen_or_drv_stopped(txq)) {
++			__skb_queue_head(send_queue, skb);
++			break;
++		}
++		skb_set_queue_mapping(skb, queue_id);
++		ret = netdev_start_xmit(skb, dev, txq, false);
++		if (ret != NETDEV_TX_OK) {
++			if (ret == NETDEV_TX_BUSY)
++				__skb_queue_head(send_queue, skb);
++			break;
++		}
++	}
++	HARD_TX_UNLOCK(dev, txq);
++	local_bh_enable();
++
++	return ret;
++}
++
+ int __dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
+ {
+ 	struct net_device *dev = skb->dev;
 -- 
 2.41.3
 
