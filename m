@@ -1,153 +1,97 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A71221CA13
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 05:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F9F40DFCB
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 06:08:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776232557; cv=none; b=Oh5Sga6sBfgZdl+uZVojC1+gDPQCmzirlbOUo9NAyqaxzQDWqX8BdK9P8V08+440qobiVfE5AVWHz6DYFyyebScH/jIMsMvOTiO7RwJ86tAgc1dSqaGe3OHNDQwsiwOb/537pfybJlO3GU9/5hVv7pU7cRluuYa665awa/UPZd4=
+	t=1776233338; cv=none; b=tODSQIp5qXdBndRVtVLqPrfmw9pwFb66gVfveY1SPpqVLlPBp0ySEGttD+Yz5XgcvnM0rzMXf6n9O2C6vvjbkMGYKiZ/YsFYZzaG0PAgW3gJSrWYGW206QTSGfoxPyjdc10Odf6YhzVkTRkMnrOTtwMGPSSrcfl5K6jMBDp/K24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776232557; c=relaxed/simple;
-	bh=mun1sf8kmKZk08Nymw1fIkZAY0k5mSEpHquJTLuAa90=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UyyuEmntPWK0+oEpI9UORHk7XWxQxghOSLZ0HImoN8gyR9mIxQRMxE/kbfFxuMom1VIy2Kflo4iMMMt4wSJ1nWWf9xrZtFgDBOEWsFw1WB5w/2H0UEH4hKXswxzFyk4zydUUqdTpYDl5934eimhY1j4/j2ft1RgGgssqT7jff0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dOTrjE3A; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776233338; c=relaxed/simple;
+	bh=laglfAjx6/TGzNPwU7R3Bjf98fFj5WsnD9jySMFBy/k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eYDFzJYEaVOUjJzWskZCB3i6Fn1dGs/8pyMv/MZolDO+IZxmLtPEJItSBoBXASrvTbB9SzruscCGxd4mRLkqnzkq5BiaqJkWUh+sLDeFRhPvHxG0I8CiC/C9aiLx78ZjMo2/KozamcvLVf8ViRT0XgZMDKPx7paiaSyNSnmg4bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=UFFzuoQr; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dOTrjE3A"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-35da9692ec3so5798268a91.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 22:55:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="UFFzuoQr"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b9c3e2cf3c0so997518466b.1
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 23:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776232555; x=1776837355; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DS2EJhxlzryfSIx+ZY5iXdPRGbh5lfuGbvnIsk11xco=;
-        b=dOTrjE3ApOQZjYOC29oWLXX3/nsQyzTJhhEmPP7zq5WYVRfOB94uJYdzsEKm1SutRL
-         dZtZ6CXmAMrQgW7LEnw+D761oIh4Zw1T4TN22rz3Qqiv7bEu8Mbb9rZekibBdStk+rt1
-         IvH5FXWoeZLfSx11Jc6vv793tGT0yKyjwveQD5n1CaskYd7RX+64/ZveKFnK9/jC9hQ7
-         MDyb/5aphgPPzded7p+57tbAWkrqS1SBcLxx/oUYijM+/Z/w0Zdyn3UlIFD1sFhTQ6Pj
-         J3bjD1pfpN4bZabKu8jr9yXDPOywMmjCyK/6PuWgwshVuQko2ghVIFrkEMSvMqywZjP1
-         8twQ==
+        d=linux-foundation.org; s=google; t=1776233336; x=1776838136; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2wSHEDrB2fOFgpOMdm6eaGOM9h1Tbw3+MszPYGUFbNQ=;
+        b=UFFzuoQrWL/Ud6Rg15JkobbjejQr8o3OL+ZZ2E9VHwItbYRo7HYHPrBSU+pH4tfAj6
+         kPANYRKmraJY9ftecg8P1icce6T1ymzhDlqtQCou0jwJqxTH26K4bJQo5/3R7MVYYTPQ
+         23HQSP+kIV7WgKfMQutKB4GmYFxKz0GDWVn80=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776232555; x=1776837355;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DS2EJhxlzryfSIx+ZY5iXdPRGbh5lfuGbvnIsk11xco=;
-        b=Le0YZaU4uOwZZ0sbyCo5Tnucs6Knm7bg6N5ErHdQk3sNA3cz6lwMvMiymPEDdx6Zle
-         kEDzjIxEmpBSFuoVaLCNeJEV4bI8KTpoVqQe4lg62d99brGwKypxObz6cYGfqAGJkJJu
-         o6clQrgcKb4HqyN+cacmPAHyw4m39/BiO84itoyJ8MZGt2WbO7PzTIgOc6Z7cg2nds/C
-         2rpV31G3tuoeqjauP4EXPTGLrwGAR4eukHHxpfG2EIizDr2saeemYukweM7UQNI11UIb
-         EMNxPM4eSEUxj5l1vw+k6UKSfcIOSh2/O0p79sGkLDwaHeNl96tyoEgUhb2PN/wXWEjA
-         J7YA==
-X-Gm-Message-State: AOJu0YygfXZ1zX26JCL6d5KHUWJWGuQ7MCNmnNmMDWkcedmGRsA2ZMBf
-	A6q0N2w9Mudi9cX5qZM7ZyQpkn6VUVNoQ+aFRGNfTMpug/dtPZpHteM4EXrzPS0i
-X-Gm-Gg: AeBDieuaBa9P8lbtCeybJUzDlU3iNSkb3ZT90P0imxFNc4uKPb/d9gEn11V42tqoS4U
-	hI7O8TaIbFVABnCq0Cd5lP0vG+cR6o3mDshORBwlB9E2gRpzr+4tZOTYPuiMlEvBDjkfeyduJRW
-	I7NgMzMGxM6gBOX1AX24ycl6NadZNi9jCVpCjyJCjf/q7hiJO14mUz1u2se/pr7MMnk6/dJ9myf
-	LXBPYhv27W8G5gOn6W7IK8jSiWpb3ECxDeV5JEa0MBfPlVDzTwEcWDuYLf1i1nw9esTr2wzc/XI
-	hhq9WLcITwQgc+7wjCzVm51lSEgfcbqiaqVc9hEigQDWtbOQBLqSBYIw0AhrtEXtrRHHlJhBAW1
-	7w5d3HmHcrtvvC44jUIKJhSku2/Dz6HwXXCgZUey/dklbLaqaLlmTAfW04lsfq11l1qDyVol5Sq
-	v4FVyW8Ls+eJh4xxTNuX+E23ODqrzHtRkDmH104KSnkqGj+JJAr+nb
-X-Received: by 2002:a17:90b:1850:b0:35f:bcfc:27b8 with SMTP id 98e67ed59e1d1-35fbcfc2b0emr9507734a91.7.1776232555418;
-        Tue, 14 Apr 2026 22:55:55 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b478115de4sm8544415ad.27.2026.04.14.22.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2026 22:55:54 -0700 (PDT)
-Message-ID: <6fe22c1f033064a68fe170e6135611cac72ee59d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: verify kallsyms entries
- for token-loaded subprograms
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Date: Tue, 14 Apr 2026 22:55:51 -0700
-In-Reply-To: <20260415012106.5C63CC19425@smtp.kernel.org>
-References: <20260414-subprog-token-fix-v2-2-59146c31f6f1@gmail.com>
-	 <20260415012106.5C63CC19425@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1776233336; x=1776838136;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2wSHEDrB2fOFgpOMdm6eaGOM9h1Tbw3+MszPYGUFbNQ=;
+        b=ZAnthsZInmPZ6uxgO0bCm3E0m3xv6ZFjfXyLLT5Owi3XZyRpjMLXMnIdEgVhDU8OCc
+         PkPE1diYvIke7OgIGTEvaXEoV4zsiOxex6CyDYEpnQmI2WcVtkZB6su36TBWyq2KxlNv
+         C2wO2YFBS6WXIESJ3XeWGCqHZYcZN2zORpaH7xf6zGSOQTnEFUOSqSr0CtQuzxG1o+wW
+         iOsg0hVaSAS+Dkq3GMR1e9Avv3IlyGIxPQo5OjKTezl+e7dr52jygKMdLpdk4uW7lMvW
+         waFyRxQDDjw5uBDmb0w6Rn+jZAvKBFOhv/d78hr9cFU20CK4aA5/ZO3mxvjsaq0SAVnp
+         RTkw==
+X-Forwarded-Encrypted: i=1; AFNElJ8bnjCTLzoBvJ8Czq3LDQlx00+FAEq/P+C65RW0R16Hi9M2FTQyQMJVYBBHlbyuMq8mv4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxB5qQ0CtQE1+wTE7UXjKfN2yJxMAYu7MH+zJw+OsK2ELBEml4F
+	zKOMVNvfgiX4VI3ruBcD1bNcWWSwuRF9NOdTRkOCzyea5ew1QBhXMQqVK18+5xJKK4RTjnzPy3W
+	bYOGZTpE=
+X-Gm-Gg: AeBDiet6SO2L23AfE4b1jbi5o5p/W3KkDaPd4woR1oa1DZG5iXic1rRn7mo4xrGRi/P
+	PQbP+tAkdwI7p+zRSH0gFLYUdrFHX9VkJ+3HEGrmxHImdGFMiQS7bfBitq4RJVs0MZDlxz+hHGc
+	jzDXt6dso0zZMFn/O8Zar6NWip58yeaoKuRo82bJQlTBl/ci2DyRBDnHSIP+cPPLLwaeH1y0BVN
+	RUjYtZ9zfywOsnWqet7JqDJRo08wO5tatBJ2jlkPxePpo5UE74yJb01T75aVeZmFHjSKsPFKSTd
+	BJuog7VcJGcUB7vVZK/npzuHb+pdSkzXovdmO9dy55cTO7zcI7UeSx192zQVvAlKPlLLdMiahXH
+	V2xPgXZfnJLPUAdkl+JodCgD6zMtPKfYACq6gZtgVQSpy3ZoJuj0cXPJqkdw0tTM5vTRPZh8HYL
+	h4o42oQMOdFJ6OaIevTwk5he7LTNb++PhpRAjx9gdiTo9GYChBEI+fpkrQrOwqvcmPUYJkGtZk
+X-Received: by 2002:a17:907:c817:b0:b9c:80d5:f023 with SMTP id a640c23a62f3a-b9d7260e0cemr1295801766b.18.1776233335734;
+        Tue, 14 Apr 2026 23:08:55 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ba17392e673sm22461666b.17.2026.04.14.23.08.54
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Apr 2026 23:08:54 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-671ff4b716cso2398039a12.1
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 23:08:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8PQXGzJ16CWySiqdf0CEmoziffqECya/AsN6ymovI1lCiQPYZ+zYtlkHqnxNXIbQ7eDU0=@vger.kernel.org
+X-Received: by 2002:a05:6402:21d2:b0:66e:d697:71ee with SMTP id
+ 4fb4d7f45d1cf-6707a475ad3mr8825487a12.15.1776233334075; Tue, 14 Apr 2026
+ 23:08:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <177601563477.7932.4081917600853246368.tglx@xen13>
+ <177601564263.7932.2238613098642404049.tglx@xen13> <ad8OGZmCVRc1C-Ck@MacBook-Pro-49.local>
+ <CAHk-=wj56cA+_m8YL-5HuHeSDsA_pvuH8Lu=K4JG82iw=G6bAA@mail.gmail.com>
+ <CAADnVQK4MOCe=oJPgUXwZdwTu7ZK_WjmpO0jk87A+j0zJeaCTg@mail.gmail.com>
+ <CAADnVQJ=MoiX4=guPWhL9vtnAELkpNx=GNm8RA1-aV424UFz2A@mail.gmail.com>
+ <CAHk-=wj-bwQkr9To3Z_fRTYF8tZK+WMVWJ8k=ACZVenZbQfUuw@mail.gmail.com> <CAADnVQLbxLmr43kgQ-KP7QAhyOoE5Abcj3tCOu4KS-c2CJ_ZKA@mail.gmail.com>
+In-Reply-To: <CAADnVQLbxLmr43kgQ-KP7QAhyOoE5Abcj3tCOu4KS-c2CJ_ZKA@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 14 Apr 2026 23:08:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgf92sapt=+5G=gooeJkPbpdq87CG5YuoF8zkExOo3=sw@mail.gmail.com>
+X-Gm-Features: AQROBzDo81hYhiNMLphiYkwlRIT5MAVgpaMvHF3Dlrjrh3__-hxJlXeZxUK8YEg
+Message-ID: <CAHk-=wgf92sapt=+5G=gooeJkPbpdq87CG5YuoF8zkExOo3=sw@mail.gmail.com>
+Subject: Re: [GIT pull] timers/core for v7.1-rc1
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2026-04-15 at 01:21 +0000, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] The test modifies global sysctls (`perf_event_paranoid` and `k=
-ptr_restrict`) while running in parallel, causing race conditions and poten=
-tial host state leakage.
-> --
->=20
-> commit 9e0a167112286dfb5b44d5686732b8297533a10b
-> Author: Eduard Zingerman <eddyz87@gmail.com>
->=20
-> selftests/bpf: verify kallsyms entries for token-loaded subprograms
->=20
-> This commit adds a test to verify that both the main program and its glob=
-al
-> subprogram appear in /proc/kallsyms when loaded using a user namespace BP=
-F
-> token. It temporarily modifies global sysctl variables to allow reading
-> kallsym addresses.
->=20
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/tes=
-ting/selftests/bpf/prog_tests/token.c
-> > index b81dde283052e..89da527ed9304 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/token.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/token.c
->=20
-> [ ... ]
->=20
-> > @@ -1194,4 +1252,23 @@ void test_token(void)
-> > =20
-> >  		subtest_userns(&opts, userns_bpf_token_info);
-> >  	}
-> > +	if (test__start_subtest("obj_priv_prog_kallsyms")) {
-> > +		char perf_paranoid_orig[32] =3D {};
-> > +		char kptr_restrict_orig[32] =3D {};
-> > +		struct bpffs_opts opts =3D {
-> > +			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
-> > +			.progs =3D bit(BPF_PROG_TYPE_XDP),
-> > +			.attachs =3D ~0ULL,
-> > +		};
-> > +
-> > +		sysctl_set("/proc/sys/kernel/perf_event_paranoid", perf_paranoid_ori=
-g, "0");
-> > +		sysctl_set("/proc/sys/kernel/kptr_restrict", kptr_restrict_orig, "0"=
-);
->=20
-> The BPF selftest framework executes test_token() concurrently with other
-> tests because it lacks the serial_test_ prefix.
->=20
-> If another parallel test modifies or relies on these sysctls simultaneous=
-ly,
-> can this create a race condition where the parallel test reads the
-> already-modified "0" as its original state?=20
->=20
-> This could result in the host permanently retaining the lowered security
-> settings once the tests complete.
->=20
-> Should this test be renamed to serial_test_token() to prevent concurrent
-> modification of global system state?
+On Tue, 14 Apr 2026 at 22:46, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> Yep. Works.
+> Tested-by: Alexei Starovoitov <ast@kernel.org>
 
-I don't think that we have tests that rely on these parameters atm,
-but suggestion makes sense.
+Thanks. Fix pushed out,
 
->=20
-> > +
-> > +		subtest_userns(&opts, userns_obj_priv_prog_kallsyms);
-> > +
-> > +		if (perf_paranoid_orig[0])
-> > +			sysctl_set("/proc/sys/kernel/perf_event_paranoid", NULL, perf_paran=
-oid_orig);
-> > +		if (kptr_restrict_orig[0])
-> > +			sysctl_set("/proc/sys/kernel/kptr_restrict", NULL, kptr_restrict_or=
-ig);
-> > +	}
-> >  }
+               Linus
