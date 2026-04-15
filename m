@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0C5282F0E
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:08:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9920D2C08BC
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776215315; cv=none; b=qNvBm6+JDNJCTRPqinmQa2fDQhkfF52Cn+X7FlYqfuhDNt+Rd0TF7HbX50Pl7DDktky4zqM7S6Gs44rGPJgMu2yKRQDoUO2J3tCKK4aLN8NahQNoa9sFCZklornfOMke7OUSHNXYhOVgiAXnn2j/vPekeDYMMam4VmBwJTREzn8=
+	t=1776216066; cv=none; b=nuiXucdzN2WKdxseOUopohEYBWJi4XFaD//QBHh8t1pop10kRJ7yFW2JHUb7aKUYViLH+rwdTbRFXgkk8d5FsgWeyeVnLqEb+wJXvAJn93RKTni70PE2tAzjstdNqDPdjymEzaVEet9ueutVoGerhZfet9vzTpbdgfDzOOpCsGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776215315; c=relaxed/simple;
-	bh=RKBw4JJ7pGSwHsfhXe7EpSi8RZ/bYMuxqoez4J4gYf0=;
+	s=arc-20240116; t=1776216066; c=relaxed/simple;
+	bh=ELDzSRYIArY3PqS7ANfGmaFcXQZx+0bAVMcKbrvdsmE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=shxh6+eE2RRcs1gQfKE36dt8h+vFXlH4fSzrQXHUdausDVfI4FbjCweKbfyTCrjQnw3lilrjb1Bj851MSF8uU51noyCXK8h7PwUREM2E7fcvIftWuS9qgLP4s5/jIDheNau8OBRkwQ3AQ8e2ucVyb8w6wsd7o96ZJeHa0Kh15Xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTOB+iZ1; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=HOX++19EPptHY/RZlBvtdzlwvCG41yePhowJ/qh3vyDt6Iww2aOdO/VdWPkwptsleG8tmoJ6Ibq/hkk/bFQT2/UNuxxVueya73xadVBYK34RaJZx06n2r61Xf3G7JvdNmdhXDkMTJfuR9QcrdxAwV3qzd6amIAhcwwAzk0SwZkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=luqfcHzZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTOB+iZ1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DA5C19425;
-	Wed, 15 Apr 2026 01:08:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="luqfcHzZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C63CC19425;
+	Wed, 15 Apr 2026 01:21:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776215314;
-	bh=RKBw4JJ7pGSwHsfhXe7EpSi8RZ/bYMuxqoez4J4gYf0=;
+	s=k20201202; t=1776216066;
+	bh=ELDzSRYIArY3PqS7ANfGmaFcXQZx+0bAVMcKbrvdsmE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=fTOB+iZ1Nr993ltcDEXMbiBuENwHVPBarV5YgLxT1khI5BhNodFo3fHom6GASOH7E
-	 R0I7vNMRtT2z6B75WL8CNluJGLMsfbFR66XkfaEL19a1WbqMHvhvnY1io4rStfvAXw
-	 iFklPWZsHZ8AGhylRMzJuycJ46nhXcqKI1S24zNE729UEAXzcUQYfVEKQMnN6w4KKs
-	 F9IMjDVGxZ4cZtnzl1YN4YG5cvpxNHw8lwW4AzJcFtscNVgxkfThyt0qTxz7sfRjMM
-	 9sabCpeiTt2ouNtd7LX3TdC87gnypS4ggypkdCtDiEDlRs45aoqaP90v0prFtmeP/g
-	 6qeQSNCg+yRBA==
+	b=luqfcHzZnWhKaRiNOOGWtkhlQXdM6nA0U2jqzDln/MoAX0pT9fllQCD3m3ISYrQb8
+	 Nq6jAPeIDYJjLmQxlwiMhUNOi87A3lo/JzW0mBOB3TpdM3tpy6vDGY5tWrrbKbrXBj
+	 q3ifPxKNarDI+4X17PY1YcC1NQgmD1jtOzrNQaeRsWL9W+MgF39hXnq27/mZ3YSFej
+	 tjaAKLL0q8ZGA7I4c+4pzid9cBVOCm5t01S9gBNXZxxHqM8QrNyObSLCrOgng4SeWp
+	 SgOGb9Y007uyqTMpdV9kHDkFxIgHTcYtu/z4IOMiMxVcKMm68fIiUZ7aGF+Pb7mBNg
+	 jprGrqgiDpqGw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: copy BPF token from main program
- to subprograms
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: verify kallsyms entries
+ for token-loaded subprograms
 Reply-To: sashiko@lists.linux.dev
 To: "Eduard Zingerman" <eddyz87@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260414-subprog-token-fix-v2-1-59146c31f6f1@gmail.com>
-References: <20260414-subprog-token-fix-v2-1-59146c31f6f1@gmail.com>
+In-Reply-To: <20260414-subprog-token-fix-v2-2-59146c31f6f1@gmail.com>
+References: <20260414-subprog-token-fix-v2-2-59146c31f6f1@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Apr 2026 01:08:34 +0000
-Message-Id: <20260415010834.C7DA5C19425@smtp.kernel.org>
+Date: Wed, 15 Apr 2026 01:21:05 +0000
+Message-Id: <20260415012106.5C63CC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,58 +45,71 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 1 potential issue(s):
-- [High] BPF token capability delegation is ignored for JIT blinding becaus=
-e blinding_requested is evaluated before the token is attached.
+- [Medium] The test modifies global sysctls (`perf_event_paranoid` and `kpt=
+r_restrict`) while running in parallel, causing race conditions and potenti=
+al host state leakage.
 --
 
-commit 6cda306e3c0e6ae78f183769fc6ebeb4369f35c3
+commit 9e0a167112286dfb5b44d5686732b8297533a10b
 Author: Eduard Zingerman <eddyz87@gmail.com>
 
-bpf: copy BPF token from main program to subprograms
+selftests/bpf: verify kallsyms entries for token-loaded subprograms
 
-This patch fixes an issue where bpf_jit_subprogs() omits copying the BPF
-token to subprograms' aux data. By copying prog->aux->token, subprograms
-inherit the same capability delegation as the main program, allowing
-bpf_prog_kallsyms_add() to succeed for token-loaded subprograms.
+This commit adds a test to verify that both the main program and its global
+subprogram appear in /proc/kallsyms when loaded using a user namespace BPF
+token. It temporarily modifies global sysctl variables to allow reading
+kallsym addresses.
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1110,6 +1110,7 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
->  		func[i]->aux->exception_cb =3D env->subprog_info[i].is_exception_cb;
->  		func[i]->aux->changes_pkt_data =3D env->subprog_info[i].changes_pkt_da=
-ta;
->  		func[i]->aux->might_sleep =3D env->subprog_info[i].might_sleep;
-> +		func[i]->aux->token =3D prog->aux->token;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
+ng/selftests/bpf/prog_tests/token.c
+> index b81dde283052e..89da527ed9304 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/token.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/token.c
 
-While this ensures the token is propagated for bpf_prog_kallsyms_add(), does
-the token delegation still fail for JIT blinding?
+[ ... ]
 
-Looking at bpf_prog_alloc(), it sets:
-    fp->blinding_requested =3D bpf_jit_blinding_enabled(fp);
+> @@ -1194,4 +1252,23 @@ void test_token(void)
+> =20
+>  		subtest_userns(&opts, userns_bpf_token_info);
+>  	}
+> +	if (test__start_subtest("obj_priv_prog_kallsyms")) {
+> +		char perf_paranoid_orig[32] =3D {};
+> +		char kptr_restrict_orig[32] =3D {};
+> +		struct bpffs_opts opts =3D {
+> +			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
+> +			.progs =3D bit(BPF_PROG_TYPE_XDP),
+> +			.attachs =3D ~0ULL,
+> +		};
+> +
+> +		sysctl_set("/proc/sys/kernel/perf_event_paranoid", perf_paranoid_orig,=
+ "0");
+> +		sysctl_set("/proc/sys/kernel/kptr_restrict", kptr_restrict_orig, "0");
 
-And bpf_jit_blinding_enabled() calls bpf_token_capable(prog->aux->token,
-CAP_BPF) to bypass JIT hardening for privileged users.
+The BPF selftest framework executes test_token() concurrently with other
+tests because it lacks the serial_test_ prefix.
 
-However, at the time of bpf_prog_alloc(), prog->aux->token is unconditional=
-ly
-NULL, as it gets assigned later in bpf_prog_load(). As a result,
-bpf_token_capable() falls back to checking the current process's global
-capabilities.
+If another parallel test modifies or relies on these sysctls simultaneously,
+can this create a race condition where the parallel test reads the
+already-modified "0" as its original state?=20
 
-If an unprivileged user provides a valid BPF token granting CAP_BPF, the ch=
-eck
-fails, and blinding_requested is set to true. This state is then copied to
-all subprograms in bpf_jit_subprogs():
-    func[i]->blinding_requested =3D prog->blinding_requested;
+This could result in the host permanently retaining the lowered security
+settings once the tests complete.
 
-Are token holders incorrectly forced into JIT hardening due to this sequenc=
-e,
-disabling direct tail-call optimizations?
+Should this test be renamed to serial_test_token() to prevent concurrent
+modification of global system state?
 
->  		if (!i)
->  			func[i]->aux->exception_boundary =3D env->seen_exception;
+> +
+> +		subtest_userns(&opts, userns_obj_priv_prog_kallsyms);
+> +
+> +		if (perf_paranoid_orig[0])
+> +			sysctl_set("/proc/sys/kernel/perf_event_paranoid", NULL, perf_paranoi=
+d_orig);
+> +		if (kptr_restrict_orig[0])
+> +			sysctl_set("/proc/sys/kernel/kptr_restrict", NULL, kptr_restrict_orig=
+);
+> +	}
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260414-subprog-to=
-ken-fix-v2-0-59146c31f6f1@gmail.com?part=3D1
+ken-fix-v2-0-59146c31f6f1@gmail.com?part=3D2
