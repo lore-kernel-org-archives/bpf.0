@@ -1,111 +1,114 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDB23CE4AF
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 08:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD983CD8B7
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 08:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776241420; cv=none; b=o3GNAdK0PRe7T6RcMScLfOYH/2T7w8M7KX5xA1eLVeojC7elOObKgKdvX3mv691fr/HaDUFWIxc0wCBmXejB21SiywFVcmD+ZPOrIM4iESODMshVtF6aJAQ6pv6ikzYHESY3rji6ppqYCd5yYK8Aopj7IJ7vcFDKB7xW/gagzaY=
+	t=1776241504; cv=none; b=VdJxlT3GjYjZU69j/5CWRJuEkR5IAqeOP1sItAQYkfQ+aR3kZCbR53gJQI6H6TKK0i+5tII0eP0Coeb3lev6ZU762aigdC7RQ1Uc4SLUO2o+k1jpqoxwLcn2ZAla8X/1vbUZOLi2BKX1jyZMqnLnywEeC5ngvuzjnbeNsLq0FzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776241420; c=relaxed/simple;
-	bh=PHbelQtjpt7RIOSYwYNo0wlI+8//Q6hsPIBWJoezvZA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R3+0XzS3ljpxfc4Ad7JZjCCeKUYtq4FYfRMMSrwfRTKXY6DO5Md+6WtWn5A/vBhr7H/+YW4kzEoRQAL7ev3GepDQ89JesEWrwdAoJD/Re+KHNk/0fef4JxDEPY52voAxDaGagyWTOL/MxpyrZkx9lbtGwsTwXvu46Aqoy6qALds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MzHBmVSB; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776241504; c=relaxed/simple;
+	bh=VhR0eFsn+I0v/Eg6siW9gMGJOZDp2bozUV748H0mBsQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dSbWeb+WxhX6HagZuJqRlSynWWWE0CrbctckpLY5nMySneSkdbGMgrtnN0nl1QyZRCYPveVdOuPOeeINZrEvKfp05PJXL+YSunGkycmk2gh0+qjkygRKiR6E8XS5s/Xy0kUkiooqReA8YWwA6VgPOXdwL3V+ythR05NYOtpDU+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=loqRQyhD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MzHBmVSB"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488af9fdaa7so44946965e9.1
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776241417; x=1776846217; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Jd24Fd4zRjvKri3Tyf11h9vJHAqmEDSN1hLN3ri3ss=;
-        b=MzHBmVSBmluqDflomOycuN0iahpySNwv1ejBBm1JNt5x+jnl67CZBj7W1WKVF+9vQF
-         P3T7d3nFog2W9Dnnzhsg5/bP+EaOvgQoY81dQI3UrD0i6uI6TyYfI580tRtbuTdAfSTM
-         8VTqYEpBVVLbq2q8JWKgmCZKZ2/AD/P0DCxfDT5kj0Xrmhikuei4z86/7NJRoOR2fLpl
-         dRukLqoapXH5gMWjJIeFb+iMfA5ySqQBCw3Ah4CNCZvkBJvvK5g9tt6prktb3zgrfF7e
-         ep4mlmYUhGvRYlCqDtbEa9gJrnk+G/xxOf6nM/aVIo/3KEkHAMy/xFrGWBKz48WRED6D
-         In9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776241417; x=1776846217;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0Jd24Fd4zRjvKri3Tyf11h9vJHAqmEDSN1hLN3ri3ss=;
-        b=js6Av3UGf1DPVAzeEn2c8c8lmXR8oqy1rSF7J2GC3Dzq2boDSvcxZL8yd/v9kEihDe
-         EtYUf4i5koZ3i8QMP6HrOwJGqzyy9nNIRtCPybwYuUMDhRzrzJwbapMetv30tXuWSV1n
-         1SPx3jzPRCpy6GXhc2pwPSLHqoxRgmSVjBxcq/0exRqeb8d3yB9iusU3ZB44Z9pn2hl8
-         LkDCGihxk0b9qcvPVhNXOl1fFjC7H4GMUIkkuuMUNLHH9pn8eOKbF68CeGuvEcBf6zn+
-         SfkokwVhKXQYPGJkZMnaNqV4o1R+2A+clF8qUvFjPVm1asWs0U/9eQH4nmmpRIJLOwxC
-         5o3g==
-X-Forwarded-Encrypted: i=1; AFNElJ9KouSmh/Tl4Lo1yMTgUnc/HgFsylWdoTdw2D6yyIC0aYPl7zPEAV7LejvI8KG2XHbPREk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz03HCCCcsCCN8Kq6yUz2MhihxWNuVZLOjhjwWxwSb4DnHI9aXY
-	ASnf/1SNnbcuhAhGoeVf/VG0O+3xfW5tdzvht9KE1b/gCWyqdFKQ9oLg
-X-Gm-Gg: AeBDietlh0bXkn3cQKKbnVkqYLutGQfe/yuWLHF1wQJY80bFqhbzPRn5yxGVZKhi4Ab
-	FmI2PfDxb9J8Vn33MIx00xH07vFBVbym4jKJg0lDaNMezSnEpakpUQ/EYhMdyEfgKAywNbTXpHv
-	jrZfvFFUBNphrpVvvUGjx6pX05rVtLjZhqhzrg0FxjSk+K7SNAt2tOO5qtNrsLbpKUFkd46S93a
-	CkhOQGcJ19j7k5aqVs26V6UJVkBN9UabZuMFXhKIYkxYWz+dtKnooOcH/Hs5PQMyRTirzqbGokY
-	V9fzI/brZQ70eI6WZRz/rI3OXOb01n70INWuYmPOivPE25HLute1uBNai3xNR7t9mceJaINgwm/
-	qL3efX0A8M4dK7fnFt+v11Gc1VV1rs8BlrttOkgnI/Blk8+WkRzkbQk5Wugh/SnFM1r14nVSJRO
-	oVLPnWWPA=
-X-Received: by 2002:a05:600c:45c6:b0:488:a797:f0ac with SMTP id 5b1f17b1804b1-488d6ac2226mr245021055e9.28.1776241417203;
-        Wed, 15 Apr 2026 01:23:37 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f0948731sm15803755e9.5.2026.04.15.01.23.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 01:23:36 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 15 Apr 2026 10:23:34 +0200
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	bpf@vger.kernel.org, kafai@fb.com, eddyz87@gmail.com,
-	songliubraving@fb.com, yhs@fb.com, martin.lau@kernel.org,
-	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf 2/2] libbpf: Prevent double close of btf objects
-Message-ID: <ad9LBouzrr8vaUJa@krava>
-References: <20260414194804.1428676-2-jolsa@kernel.org>
- <3980e25bb714eb481b5c90ff23d5ce1beb39f94267394f8459dab233b668ad54@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="loqRQyhD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45203C2BCB0;
+	Wed, 15 Apr 2026 08:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776241504;
+	bh=VhR0eFsn+I0v/Eg6siW9gMGJOZDp2bozUV748H0mBsQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=loqRQyhDTCG0Mnc4R29aed/BCcIP9CSv7xdrS76ddn/rZEBbSrxizDQa4sSuvd7zu
+	 Ww5rrJeJm+OMXqQpiQt6OkhDkRQdKwIfgG4Z4Wc0j63v0/l5Y1JImg0/wGRxAFC57M
+	 cDgItsv2LyxPYFnLEGefPiFjKqi5qbMCcaxpo+r1EtLfZxutpL1sOpr2uqX8bMSHED
+	 wlcKTSZCgpDTRUnbWwlzz5aJB1Gc+G/XseKULD4oNCKG9atGB6Rj+ZJcppKRQ3NlLo
+	 ipN4ATh2sRXby/25LKAxJRm6jlnsmopgNL4JyYwTX4cTjbeFpCzio23Z1ryDdKwtWr
+	 IySLWCwv0nMhQ==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>
+Subject: [PATCHv2 bpf] libbpf: Prevent double close of btf objects
+Date: Wed, 15 Apr 2026 10:24:52 +0200
+Message-ID: <20260415082452.1489147-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3980e25bb714eb481b5c90ff23d5ce1beb39f94267394f8459dab233b668ad54@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 14, 2026 at 08:29:01PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index b60ac8094a9e..33e7a09915dd 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -5825,7 +5825,7 @@ static int load_module_btfs(struct bpf_object *obj)
-> >  		if (err)
-> >  			goto err_out;
-> >
-> > -		mod_btf = &obj->btf_modules[obj->btf_module_cnt++];
-> > +		mod_btf = &obj->btf_modules[obj->btf_module_cnt];
-> 
-> [ ... ]
-> 
-> > @@ -5835,6 +5835,7 @@ static int load_module_btfs(struct bpf_object *obj)
-> >  			err = -ENOMEM;
-> >  			goto err_out;
-> >  		}
-> > +		obj->btf_module_cnt++;
-> >  		continue;
-> 
-> The fix looks correct.  Would it make sense to add a Fixes: tag?
-> The double close was introduced when fd tracking and the err_out
-> error path with close(fd) were added to load_module_btfs():
-> 
-> Fixes: 91abb4a6d79d ("libbpf: Support attachment of BPF tracing programs to kernel modules")
+Sashiko found possible double close of btf object fd [1],
+which happens when strdup in load_module_btfs fails at which
+point the obj->btf_module_cnt is already incremented.
 
-right, will add
+The error path close btf fd and so does later cleanup code in
+bpf_object_post_load_cleanup function.
 
-jirka
+Incrementing obj->btf_module_cnt only if there's no failure
+and releasing btf object in error path.
+
+Fixes: 91abb4a6d79d ("libbpf: Support attachment of BPF tracing programs to kernel modules")
+[1] https://sashiko.dev/#/patchset/20260324081846.2334094-1-jolsa%40kernel.org
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+v2 changes:
+- squashed patches together, because they depend on each other [ci]
+- added Fixes tag [ci]
+
+ tools/lib/bpf/libbpf.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8b0c3246097f..79d9607d26e2 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5806,7 +5806,6 @@ static int load_module_btfs(struct bpf_object *obj)
+ {
+ 	struct bpf_btf_info info;
+ 	struct module_btf *mod_btf;
+-	struct btf *btf;
+ 	char name[64];
+ 	__u32 id = 0, len;
+ 	int err, fd;
+@@ -5825,6 +5824,8 @@ static int load_module_btfs(struct bpf_object *obj)
+ 		return 0;
+ 
+ 	while (true) {
++		struct btf *btf = NULL;
++
+ 		err = bpf_btf_get_next_id(id, &id);
+ 		if (err && errno == ENOENT)
+ 			return 0;
+@@ -5878,7 +5879,7 @@ static int load_module_btfs(struct bpf_object *obj)
+ 		if (err)
+ 			goto err_out;
+ 
+-		mod_btf = &obj->btf_modules[obj->btf_module_cnt++];
++		mod_btf = &obj->btf_modules[obj->btf_module_cnt];
+ 
+ 		mod_btf->btf = btf;
+ 		mod_btf->id = id;
+@@ -5888,9 +5889,11 @@ static int load_module_btfs(struct bpf_object *obj)
+ 			err = -ENOMEM;
+ 			goto err_out;
+ 		}
++		obj->btf_module_cnt++;
+ 		continue;
+ 
+ err_out:
++		btf__free(btf);
+ 		close(fd);
+ 		return err;
+ 	}
+-- 
+2.53.0
+
