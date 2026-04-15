@@ -1,107 +1,69 @@
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60A3314B9A;
-	Wed, 15 Apr 2026 03:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BA631A555
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 03:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776223372; cv=none; b=iOinphL7oQVhK1+f4Jc9bNoJ36ZDrUXgBZqD740h+lNkZ5CES2CwhDHznjCw72BuBGsC9GYlAVpa4YX7Gypf22V4I4pTe4Q67zmivxIceDRb02hof+Oou0I9JOnTV14wHS/qOrBNB5bBwntb2mm4duuU5qBITS5ZalrrdfE+aaY=
+	t=1776223672; cv=none; b=d5pK47GRd26ShnG20nV3xUYy9BLn/tfPXLHAGM7CmR9HPFbueTSpRl2r9KmkNpdjMG6qxq00I3tdBZ5F6fJ2x6bRwdy5JvbyQKcZ6j9GQv7+NyBSKEwU1hYGbmxEwKChtpO7Krg07qe2V39Zp6F4TmikHR6ldqae4EbL5JvYpgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776223372; c=relaxed/simple;
-	bh=pBAvKrjns/Axo5ceFYD/aQv5TnGYVr27iIEO46ZGJXc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T+CJLSlY9QWDKxqzSQzrzpiyLErWOe8xtCnPHz7Dr6/bEE/Kcf+9mxF1vSl9uhFhSTXOBUyhDYjslI695Tr+8Di2VeIaIVxspTwz+RZOdSaGGSv50L/sX6SXz2ZMZE3sCjM+RT+IjN6loiJY3ZLYgEMst1d3A7RH08Ryg0Kjrrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=dtkaDLHK; arc=none smtp.client-ip=54.207.22.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1776223672; c=relaxed/simple;
+	bh=BSLWZEeyiGLkWmdhgkHUXyMzVLOfv2SFYvbaK/XLBCc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M0sNsajP+uQIH3AEDAhaL8nscO86f2/aSrU1NbqzHHovsXSH1DXRVVQMnylqxjWqLIvNdo1ZhZj1EhmzzWPXuOX25Axsrijo+7FawDP1okYdK40dZL98NLyPfCKFXlTpnxa80ti4tTniCPaPP9/3v/vzWgCaDKlsAolzDlfBmAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=YLdk8kpP; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="dtkaDLHK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1776223305;
-	bh=7Q/bNUTr7Undg4sbUXiYVFibGM5GckgNLQ+IrrLRbM0=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=dtkaDLHKQB6Df6r9HYGCgg7c3XR+PkpHP/K3aX8e9+Nq8PXpIhzn4QUbX/D/E+aO8
-	 U9LRudHu1NGCyycm2kPN6N9WSxphOJHgHLA5NZexQEqPey86Uik0aeZh0qAfi6iPp/
-	 ySEo2FuPTdUMjKzith8p41r34vjHHRTuDitvebBs=
-X-QQ-mid: zesmtpip4t1776223298t05808512
-X-QQ-Originating-IP: lFugxt8XLSNjQ0M6410ZIjLkj2o19alX1P90p5h9huQ=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 15 Apr 2026 11:21:30 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8791305521629641831
-EX-QQ-RecipientCnt: 10
-From: Yihan Ding <dingyihan@uniontech.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	paul.chaignon@gmail.com,
-	alan.maguire@oracle.com,
-	kernel@uniontech.com,
-	Yihan Ding <dingyihan@uniontech.com>
-Subject: [PATCH bpf v2 0/2] bpf: allow UTF-8 literals in bpf_bprintf_prepare()
-Date: Wed, 15 Apr 2026 11:21:24 +0800
-Message-Id: <20260415032126.1096299-1-dingyihan@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="YLdk8kpP"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
+	from:content-type:reply-to; bh=pFYq5Hzm0sI905yTElU9H8Zj3dJTGquQpnLSoQkCffo=; 
+	b=YLdk8kpPd5V4q6btphKCcCAqcUfB8dUkB6j87N2dxmWKdyoatR1hpvxphao/h2YSqx0kPlLt3du
+	bTf+hUjS4li4lc07d5ZibH/lgnR5Mxl5aA1R96rSdoewmFR11ujz7FkdL1ZnAIVkIPTUbJTw6Cih1
+	z9NOsn8lQErgINPQEu1XZmfkX7lOeVmrhIUzlz4NE+AUSZmsbPiqv29jxOPf76CWs6+GjII4T3hUy
+	2s2FpaLzIo+Zq7Yz9b0uiI9RIVLI1WmRN45Au8anpMKIIh39fSGagfaVkdEFz0r59VNsFgXiywSTS
+	IcX+8yb4+YtJNJvorSqlm/xTBBcMmjYEQLAw==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1wCqVI-006BIM-1w;
+	Wed, 15 Apr 2026 11:27:44 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 15 Apr 2026 11:27:43 +0800
+Date: Wed, 15 Apr 2026 11:27:43 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
+	eddyz87@gmail.com, memxor@gmail.com,
+	Mykyta Yatsenko <yatsenko@meta.com>
+Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
+Message-ID: <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: MDqtQ4jGWXAGyeu7S9Gt5sQofeniFH5CEM/L454SCriDtsg4CTfaqjVu
-	UzSMxPD3qJt1p2if0RZGSTqbxOsVkWjR4hsGKdh5Un9ePahLTLDmvNS4XlrBJpgG/kJjZzj
-	KcaEGCyYqklPBEGuMz4Adw5kO2o/VlE6GV10qwkinLfWMJUhO1E3idXmElQ0VifnWsjtv3O
-	h2VNzCU9zF3yZ5ogJQmyvCRDxyCAla/AF4xLtm4hH4Jsdegkp9XbJF6oLYRrr/ggBNSQWle
-	R+Fx6G8RU/1nkAD9FM5adkI6br8GltrXp2McslZp8qtVjDtmG/XM6nTzE8xBE3Fg7p/zMYN
-	f2bXMdhGOfWXTo/vB5Dj7cse1n79cb+6cwoQ3WDC6X2P/KKkF9pZ3v5sSAxk6l8roqV7siw
-	n72Am2BiEBnhVOfEybviqtpmIi5pt7mJMcbAD8WnQWyiHJMos7BLCk/xbHzxLJxeQ+aQ2YG
-	Q03hlq6OveVNxf6k8Rqt88jDZSctP8xjtZKMvgFwaNUu01n4Ru7ffgqQhZyPEpPeLKfQZGb
-	wC8tuI5VywFS/Motr1REQyR9J3p5+E2uXI5vZs77KxVXNM3d12/mYD4p25stU3caHPlFrv3
-	kgHhYKvka9PSfRBXpgcY27BUx8hHwmm0b9sRNgb69eeZ4NkpySSwiS2QSM6iEAigrA+thac
-	J1MFp1F8I1vV78WM89uOx3iOvldGwMzMS9pUNyYSIeP7Ut35v8brJbHPYGv/8D3ENnOEpAU
-	60CZp9hEM6VNe2D52owypyeT9nmdYz0xT0JSxMF5xpRx8FrV8SSvR/C69NMgu9wJytU4P57
-	igSnMCEaGNLOXvYhuP61iHw3lz+ReTh/EQF7CHrHQJQSrXrnYKtbJXgXxZZ3Y8H5uNR/yIs
-	THPr/NkCeQk/42ao6t5Il/qFQ32TstjDwlaZsJpl97ZDcGhSfnAuzBcTaO/hCin998zoQa4
-	F40xtfsP5/Hz/6D2juSaeiqSmR/QVVwVotd4JRvNdeM20HDka5x0tqNhFIjtQsz1SLj+ohw
-	PfFQKsbJsP/grmH637
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
 
-bpf_bprintf_prepare() currently rejects any non-ASCII byte in format
-strings, so helpers such as bpf_trace_printk() fail to emit UTF-8
-literal text even when those bytes are not part of a format specifier.
+On Wed, Apr 08, 2026 at 08:10:05AM -0700, Mykyta Yatsenko wrote:
+>
+>       rhashtable: Add rhashtable_walk_enter_from()
 
-Keep plain text permissive while continuing to parse '%' sequences as
-ASCII-only, then extend trace_printk selftests to cover both the valid
-UTF-8 literal case and the invalid non-ASCII-after-'%' case.
+Rhashtable walking is strongly discouraged because there is no
+way to provide a consistent walk on a hash table that can be resized
+or rehashed during the walk.
 
-Changes in v2:
-- split the core change and selftest updates into two patches
-- drop unnecessary isspace()/ispunct() casts
-- add comments to clarify plain-text vs format-specifier handling
-- add a negative selftest for non-ASCII bytes inside '%' sequences
+So the question is why do you need to be able to walk through the
+hash table, and do you need consistency guarantees such as walking
+through every entry once and once only?
 
-Testing:
-- Reproduced on x86_64 without the core fix: ASCII trace output works,
-  while UTF-8 literal text in bpf_trace_printk() is rejected and
-  produces no trace output
-- Verified with tools/testing/selftests/bpf: ./test_progs -t trace_printk
-
-Yihan Ding (2):
-  bpf: allow UTF-8 literals in bpf_bprintf_prepare()
-  selftests/bpf: cover UTF-8 trace_printk output
-
- kernel/bpf/helpers.c                          | 16 +++++++++++-
- .../selftests/bpf/prog_tests/trace_printk.c   | 26 +++++++++++++++----
- .../selftests/bpf/progs/trace_printk.c        |  9 +++++++
- 3 files changed, 45 insertions(+), 6 deletions(-)
-
+Cheers,
 -- 
-2.20.1
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
