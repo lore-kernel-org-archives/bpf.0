@@ -1,114 +1,205 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C823254AE
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 09:35:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7786432A3C8
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 09:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776245739; cv=none; b=nrUsx+TiAGmHeGJYYAGCM8o5PCxOitfwnvIa/4fCqk2egajzcDW8V2Ma6tkXj0narK+LI9GUXs52niRZppT4Xuyh9wMixTzLsEsyqK6lhhz3ZhA+PzXjsfsop+5QU6ut6/v7+dOVzMQabNM+Na0NDpiVv/25GFIaKXffLY2XevI=
+	t=1776245881; cv=none; b=bUrBbLFf8WPVMOB+JzvFgfMOc1XZN/lzk5M0nR/bsuqXlBNPs9J4dcY4WrjULPFJdcG1ps0dPqs/JXhV/Y/0Nm3RkSQmbkl/oIby3zD5L6UX5UTZcFHihMMqDiiFzoEyczpFE7Dr0UsI8nYsiRP9hJmKj9brMVWgo0rR+H6B5eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776245739; c=relaxed/simple;
-	bh=k7AlI8mUl0XizO+Uds2aYZ4w7uUQqGjZyEswaepdT6c=;
+	s=arc-20240116; t=1776245881; c=relaxed/simple;
+	bh=mcYi8VmykU5CBwf3ecUrQNP7fc0qFK+CcKZj81u7QF0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=a+KcLQVEgD+67Dcak3DWldxdVh+s4ovZTWHZMGQ73BefnDFEAmFwyw1WijMiqwCClomf8wZr6NlYWPLoJCtIxZzrONUufbFjT/TXhFgW5y/bt6mnt/0Nc/uwEXuN2vfFylgr/sG7FVGGzlR4Rsth/zmjw5AxyfYbXnMaBMUTKb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Coc22Yx2; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=AIpAuDklmhZ+7ZLIk8wjma5jQPb9rsqfCz0nldPPZOz5L2SqDuIX4oO7Cb0/eE6GLaV4rv+rlANZTTN7cZd2vCj47zKr2xw92Bd7k741tr7PEVmGUwxpcSB2bKzAQ8VcfymwdJxeaMrUqZu5IDT3kzOrTFeVcpUPyq0FP6/36hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r+tSCxq1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Coc22Yx2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A4BFC19424;
-	Wed, 15 Apr 2026 09:35:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r+tSCxq1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CECEC19424;
+	Wed, 15 Apr 2026 09:38:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776245739;
-	bh=k7AlI8mUl0XizO+Uds2aYZ4w7uUQqGjZyEswaepdT6c=;
+	s=k20201202; t=1776245881;
+	bh=mcYi8VmykU5CBwf3ecUrQNP7fc0qFK+CcKZj81u7QF0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Coc22Yx2d0LaImt//9fYSYQ1C7DGLP+rNG9fP0aGHsYKEjJyr3TWPYMMHciFSpK9J
-	 Fe5PExCsFd6Iw0jJh5dIfA8NKNPmg1AW6VSiTlgCRQ4sGynL6LpHZ4ZJlcugKSUGzD
-	 kgYLeM69ESCr9hEc3DWaboZxwM0hDd/Mqv2g+d8k1lHyuzN01p0u1zCKvZsYzrmf39
-	 qTjg7a7JY9ajeFe8yd18Vm8y7LrXO3C6ExZkQ3w/PaVsHsHMHbaMw5/4o5XsX9GPVX
-	 3GyDSYkA1XyJI6gm3xlWjo6ZaoWpwNO8rqs1evR6kRi3GKE6iNwc9CRap/6LiC4ohR
-	 /uOwDxMX6gbcQ==
+	b=r+tSCxq1I9Nz6Cb+SYh/66Q9D4okh7rR/VUUzIMKajua8C9xazXmbPJEtaCwaBTRQ
+	 sWkyAeKMpJUeqyDvRG792iUPWrnKWrpCN1e/YFm7U8096nZ6gm2viPpnX92XiVLc7J
+	 zuURQY/C+vIzUkNXjdNIkJU/enXUp+40k6RhOI2D/uJCXM2Xs7L5XKuVzTkMINOUgW
+	 +oSyAMTEk7O5mJa7t3D7MA2Ao7OteyAxKNqAeFgBikvoQh0DwUSYD4WF/XbNFnv4Pf
+	 8gtxZpXj3nI/GTCJgAdshLuyLBXj/zSPXojriBRyDXKMmd5o6gWUAfUmhCTCUfBJ3V
+	 LZiHr9Lc+9SyQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC net-next v4 06/14] xsk: support dynamic xmit.more
- control for batch xmit
+Subject: Re: [PATCH RFC net-next v4 11/14] xsk: support batch xmit main
+ logic
 Reply-To: sashiko@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260415082654.21026-7-kerneljasonxing@gmail.com>
-References: <20260415082654.21026-7-kerneljasonxing@gmail.com>
+In-Reply-To: <20260415082654.21026-12-kerneljasonxing@gmail.com>
+References: <20260415082654.21026-12-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Apr 2026 09:35:38 +0000
-Message-Id: <20260415093539.4A4BFC19424@smtp.kernel.org>
+Date: Wed, 15 Apr 2026 09:38:00 +0000
+Message-Id: <20260415093801.0CECEC19424@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [High] Stalled TX queue due to missing hardware doorbell ring on early lo=
-op exit
+Sashiko AI review found 5 potential issue(s):
+- [Critical] TOCTOU race on socket state pointers leading to NULL pointer d=
+ereference and Use-After-Free.
+- [Critical] Integer underflow in `xsk_alloc_batch_skb()` leading to massiv=
+e OOB memory allocation and kernel crash.
+- [Critical] Unconditional dropping of partially built packets (`xs->skb`) =
+causes buffer leaks and packet stream corruption.
+- [High] Double cancellation of CQ slots and incorrect TX pointer manipulat=
+ion on SKB build failure.
+- [High] Infinite `-EAGAIN` livelock and stat inflation when packets span b=
+atch boundaries.
 --
 
-commit 6d7c8f2ad056eb4cb2eec8d360e632f9ef9044f5
+commit 4041fe3cb310f6f01b04ae2ff1fbd04cf0aa2713
 Author: Jason Xing <kernelxing@tencent.com>
+xsk: support batch xmit main logic
 
-xsk: support dynamic xmit.more control for batch xmit
+This commit implements the core logic for batched transmission in AF_XDP
+sockets via __xsk_generic_xmit_batch(). It introduces a loop to read
+descriptors, reserve completion queue slots, allocate SKBs, and transmit
+packets in batches.
 
-This commit updates xsk batch transmission to only set xmit.more to false f=
-or
-the last skb in the send queue, aiming to reduce unnecessary IRQs and impro=
-ve
-batching performance.
-
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4873,6 +4873,7 @@ int xsk_direct_xmit_batch(struct xdp_sock *xs, stru=
-ct net_device *dev)
->  	struct sk_buff_head *send_queue =3D &xs->batch.send_queue;
->  	int ret =3D NETDEV_TX_BUSY;
->  	struct sk_buff *skb;
-> +	bool more =3D true;
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index b4f3cc7125804..16e47f6fc30ec 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+[ ... ]
+> @@ -914,6 +914,122 @@ struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+>  	return ERR_PTR(err);
+>  }
 > =20
->  	local_bh_disable();
->  	HARD_TX_LOCK(dev, txq, smp_processor_id());
+> +static int __xsk_generic_xmit_batch(struct xdp_sock *xs)
+> +{
+> +	struct xsk_buff_pool *pool =3D xs->pool;
+> +	struct xsk_batch *batch =3D &xs->batch;
+> +	struct xdp_desc *descs =3D batch->desc_cache;
+> +	struct net_device *dev =3D xs->dev;
+> +	u32 max_batch, max_budget;
+> +	bool sent_frame =3D false;
+> +	struct sk_buff *skb;
+> +	u32 cons_descs;
+> +	int err =3D 0;
+> +	u32 i =3D 0;
+> +
+> +	mutex_lock(&xs->mutex);
+
+Can a TOCTOU race occur here with a concurrent socket bind() or setsockopt(=
+)?
+
+The pointers for pool, dev, and batch->desc_cache are read before the mutex
+is acquired. If another thread modifies the socket state, could these
+pointers be NULL or freed by the time xsk_is_bound() is checked, leading to
+a use-after-free or NULL pointer dereference when accessing dev or descs?
+
+> +
+> +	/* Since we dropped the RCU read lock, the socket state might have chan=
+ged. */
+> +	if (unlikely(!xsk_is_bound(xs))) {
+[ ... ]
+> +	for (i =3D 0; i < max_budget; i +=3D cons_descs) {
+> +		u32 nb_pkts =3D 0;
+> +		u32 nb_descs;
+[ ... ]
+> +		cons_descs =3D xskq_cons_read_desc_batch_copy(xs->tx, pool, descs,
+> +							    nb_descs, &nb_pkts);
+> +		if (cons_descs < nb_descs) {
+> +			u32 delta =3D nb_descs - cons_descs;
+> +
+> +			xsk_cq_cancel_locked(pool, delta);
+> +			xs->tx->queue_empty_descs +=3D delta;
+> +			if (!cons_descs) {
+> +				err =3D -EAGAIN;
+> +				goto out;
+> +			}
+
+Could this lead to an infinite -EAGAIN livelock and inflated statistics?
+
+If a multi-fragment packet spans beyond the nb_descs batch limit without an
+end-of-packet descriptor, xskq_cons_read_desc_batch_copy() might safely
+rewind the fragments and return 0. The code then treats these valid
+descriptors as empty, adds to queue_empty_descs, and returns -EAGAIN,
+causing the application to loop infinitely hitting the same boundary.
+
+> +			nb_descs =3D cons_descs;
+> +		}
+> +
+> +		cons_descs =3D xsk_alloc_batch_skb(xs, nb_pkts, nb_descs, &err);
+
+Does this calculation of nb_pkts trigger an integer underflow?
+
+If a batch contains only fragments without an end-of-packet flag, nb_pkts
+will be 0. Inside xsk_alloc_batch_skb(), if there is an existing partially
+built skb (xs->skb !=3D NULL), the code may decrement nb_pkts. Since nb_pkts
+is unsigned, nb_pkts-- would underflow to 0xFFFFFFFF, resulting in a
+massive out-of-bounds memory allocation.
+
+> +		/* Return 'nb_descs - cons_descs' number of descs to the
+> +		 * pool if the batch allocation partially fails
+> +		 */
+> +		if (cons_descs < nb_descs) {
+> +			xskq_cons_cancel_n(xs->tx, nb_descs - cons_descs);
+> +			xsk_cq_cancel_locked(pool, nb_descs - cons_descs);
+> +		}
+
+Can this cause a double cancellation of completion queue slots?
+
+If xsk_build_skb() fails inside xsk_alloc_batch_skb() due to memory limits,
+it already calls xsk_cq_cancel_locked() internally:
+
+net/xdp/xsk.c:xsk_build_skb() {
+	...
+	if (err =3D=3D -EOVERFLOW) {
+		...
+	} else {
+		xsk_cq_cancel_locked(xs->pool, 1);
+	}
+}
+
+Calling xsk_cq_cancel_locked() again here for the failed descriptors would
+underflow the completion queue pointers, potentially corrupting the user
+space ring buffer.=20
+
+Also, does xsk_build_skb() advancing the TX consumer pointer on -EOVERFLOW
+conflict with the rewind happening here?
 
 [ ... ]
-
-> @@ -4892,8 +4893,12 @@ int xsk_direct_xmit_batch(struct xdp_sock *xs, str=
-uct net_device *dev)
->  			__skb_queue_head(send_queue, skb);
->  			break;
->  		}
+> +		if (err)
+> +			goto out;
+> +	}
 > +
-> +		if (!skb_peek(send_queue))
-> +			more =3D false;
+> +	/* Maximum budget of descriptors have been consumed */
+> +	if (xskq_has_descs(xs->tx))
+> +		err =3D -EAGAIN;
 > +
->  		skb_set_queue_mapping(skb, queue_id);
-> -		ret =3D netdev_start_xmit(skb, dev, txq, false);
-> +		ret =3D netdev_start_xmit(skb, dev, txq, more);
->  		if (ret !=3D NETDEV_TX_OK) {
->  			if (ret =3D=3D NETDEV_TX_BUSY)
->  				__skb_queue_head(send_queue, skb);
->  			break;
->  		}
->  	}
+> +out:
+> +	if (xs->skb)
+> +		xsk_drop_skb(xs->skb);
 
-If an error occurs and the loop breaks early, does this leave previously
-transmitted packets stalled in the driver's TX ring?
+Does unconditionally dropping the partially built xs->skb corrupt the packet
+stream?=20
 
-Since more is passed as true for all packets prior to the failure, the
-network driver defers ringing the hardware TX doorbell.
+If transmission hits a NETDEV_TX_BUSY (-EAGAIN) or a valid multi-fragment
+packet spans a batch boundary, the code drops the fragments processed so fa=
+r.=20
+Because the completion queue slots and TX pointers for these early fragments
+might not be properly rewound or notified, does this permanently leak buffe=
+rs
+and merge unrelated fragments into corrupted packets on the next sendmsg()
+retry?
 
-If the code breaks out of the loop due to validate_xmit_skb_list() failing,
-netif_xmit_frozen_or_drv_stopped(), or netdev_start_xmit() returning
-NETDEV_TX_BUSY, the loop terminates without ever passing more =3D false to =
-the
-driver.
-
-Could this omission prevent the hardware from being notified to transmit
-the successfully processed packets that preceded the error?
+> +
+> +	/* If send_queue has more pending skbs, we must to clear
+> +	 * the rest of them.
+> +	 */
+> +	while ((skb =3D __skb_dequeue(&batch->send_queue)) !=3D NULL) {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260415082654.2102=
-6-1-kerneljasonxing@gmail.com?part=3D6
+6-1-kerneljasonxing@gmail.com?part=3D11
