@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7EE390CB4
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 21:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505AE285C8B
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 21:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776287909; cv=none; b=WA4P4ijbfT3mFTtYP8R3CtAXJcyepsamVNISXCYir1Vh9UUf2eooRE3D0XduGe2vmfIFEStSRm1qzGDdAt3kIwL6I0/C9inoBImq00NAc+CDMoigZbuTYlwSVyZ3Q5HXgUZXXy8m9PX0KL8v3EeHni/CWmJRSwzjgnaorm2bQ6A=
+	t=1776287945; cv=none; b=qsms7V/0l5jhJ3zYY4h2VXADxbOQwrAH0fGq4kkv+8xApZCff6gGNi6RKL0y7qXWFY2T6IYW9QDfT3jvJfuwn6s/uFMhOudQR0Rg3mK1kmIspVPS24X2jdih89p+hKs/0A5fordXL9ituGjpbJEZBXpZN2xS8uCZy19rgrAGRgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776287909; c=relaxed/simple;
-	bh=QmRFVpg6ut/wEgp+itg9S5io9UBrviUQMakUJ9yf9fk=;
+	s=arc-20240116; t=1776287945; c=relaxed/simple;
+	bh=yFPrCzieF7tSGMxGBfsF/wTmYsiphElqGS5F4SLPJE8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mi3dWLWhHqOBbcRxhCNSu+EsLqdrB7VZhLfPghQTFcabej4FOx0J6ochk+4Rla8btNKeNKBsmSxjnPXseYyjKO+KxIuDwovYVzqYZLlOcrlAmnClaBSgSy5BBeYNYfPFeLcmdXGBGoVdYj0s6AW2EMpczx7sLqeWfc3xpTum6vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qt+I8NmT; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=B7m46lE/zON1gEh9wf4zgfT+wcH/HDD3+ZixiNEtOZX9WYNQbu4p7oDVgJmGr0n6UA35a4GvGayK+9U/brIv22TZ/7lCNY6I/jYxE2kzkAlbIMPSeoJJ89fZk/AHiyDO8Yac3g83h9BiJFysg0S9bsPRIqYgSJSDdUGLHz59wjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdBMVOjx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qt+I8NmT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAFFC19424;
-	Wed, 15 Apr 2026 21:18:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdBMVOjx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCC4C19424;
+	Wed, 15 Apr 2026 21:19:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776287908;
-	bh=QmRFVpg6ut/wEgp+itg9S5io9UBrviUQMakUJ9yf9fk=;
+	s=k20201202; t=1776287945;
+	bh=yFPrCzieF7tSGMxGBfsF/wTmYsiphElqGS5F4SLPJE8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Qt+I8NmTMt9uWqi4i8C3QNs4CFvZ+edF2Gf9zD9+0+potWC5ZT7SWatCe6k3ovAlk
-	 7nUpRSR2ImCGOH3qKChtHMQn3bLiZ4DWlOTC43wC6Nxq7oPitZEyRiKaS/RuFsns9K
-	 LU4+D4LjDol6dLj+lhhaF9rSbK6EnL5HJBWt+W4oHSGkYF2965TzAVY8/bE0vd2IwV
-	 Y0squ1XZ/kusCVSuiNrLs4bx537d8rC0HIS+IYjSAgWqVTNUmwUMIW7nHp7fy35u9g
-	 b1rvZCKyCvqfNO7sKoxWHt+s78XWOwqWmU1YOe5WEcdJVmid70tTtvHtCDIvn5JzQF
-	 +euclmgW2ow6g==
+	b=hdBMVOjxPn+VXdkNSc6WXNALF/j13ZcLfS5b2lPRXRuMEBLOP8B3UrTG+qFkVyw6n
+	 bJ55M+aAJk8Yf/USdqlmI0crUhZ3nid9ourMTIFqBJykW7rs/GDZQhpxFPevF8MCAR
+	 ZLUI+PIQRiSVQ2wvED9zEoR5MoJkxFG2eQgvu4UJXY1dMUY7uuu/kD5Vi/Z8ZhmdVs
+	 O/I2KncC3vNPEQGGIV1unUNjIR6UrtARBYK/gSwYzpB7tECoAwxT+NuUthDXKyHnCH
+	 KmIzTGrKvi2IJ14u/fm3lhY9bWz0vD5L1tri8ZINhHm4Fe+7r92WcQlLDHJCbYhjMs
+	 vohae6puGNkIw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 02/11] selftests/bpf: Fix test_kmods KDIR to
- honor O= and distro kernels
+Subject: Re: [PATCH bpf-next v5 07/11] selftests/bpf: Allow test_progs to
+ link with a partial object set
 Reply-To: sashiko@lists.linux.dev
 To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260415-selftests-bpf_misconfig-v5-2-03d0a52a898a@suse.com>
-References: <20260415-selftests-bpf_misconfig-v5-2-03d0a52a898a@suse.com>
+In-Reply-To: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
+References: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Apr 2026 21:18:28 +0000
-Message-Id: <20260415211828.BFAFFC19424@smtp.kernel.org>
+Date: Wed, 15 Apr 2026 21:19:04 +0000
+Message-Id: <20260415211904.CBCC4C19424@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,88 +45,74 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 2 potential issue(s):
-- [High] Skipping module compilation in permissive mode fatally breaks `rsy=
-nc` during out-of-tree builds.
-- [Medium] Silently omitting the kernel modules converts a build skip into =
-unconditional runtime test suite failures.
+- [Medium] Moving `$(TRUNNER_TEST_OBJS)` to order-only prerequisites silent=
+ly breaks incremental linking for BPF programs and headers.
+- [Medium] Linking with a partial object set introduces a regression that c=
+auses the test runner to unconditionally abort at runtime.
 --
 
-commit 7696fe9d292ef9e4b288adf6be9f441665f1447a
+commit 26b01d6050c56240db40d2043c1d68b4a725414c
 Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
 
-selftests/bpf: Fix test_kmods KDIR to honor O=3D and distro kernels
+selftests/bpf: Allow test_progs to link with a partial object set
 
-This commit updates test_kmods/Makefile to respect out-of-tree builds using
-O=3D and KBUILD_OUTPUT. It also introduces a permissive mode that silently
-skips building modules if the kernel directory is missing.
+This commit modifies the Makefile to move test objects to the order-only
+prerequisite list and uses wildcard expansion to only link built test
+objects. This allows the test suite to link even if some test objects
+fail to compile.
 
 > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
 ts/bpf/Makefile
 > --- a/tools/testing/selftests/bpf/Makefile
 > +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -296,7 +296,7 @@ $(addprefix test_kmods/,$(subst .ko,%ko,$(TEST_KMODS)=
-)): $(VMLINUX_BTF) $(RESOLV
-> =20
->  $(TEST_KMOD_TARGETS): $(addprefix test_kmods/,$(TEST_KMODS))
->  	$(call msg,MOD,,$@)
-> -	$(Q)cp test_kmods/$(@F) $@
-> +	$(Q)$(if $(PERMISSIVE),if [ -f test_kmods/$(@F) ]; then )cp test_kmods/=
-$(@F) $@$(if $(PERMISSIVE),; fi)
-
-Does skipping the cp command leave the target file missing from
-TEST_KMOD_TARGETS, which is subsequently included in TRUNNER_EXTRA_FILES?
-
-During an out-of-tree build where O=3D is set, the rule
-$(TRUNNER_BINARY)-extras runs rsync -aq $$^ $(TRUNNER_OUTPUT)/. Since $$^
-evaluates to the prerequisites, it passes the missing .ko file path directly
-to rsync.
-
-Because the file was never created, does this cause rsync to fail fatally
-with a No such file or directory error and abort the build?
-
-Note that while the later patch selftests/bpf: Tolerate missing files
-during install adds --ignore-missing-args to fix make install, it does not
-modify the $(TRUNNER_BINARY)-extras target, leaving out-of-tree make all
-broken.
-
-> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/test=
-ing/selftests/bpf/test_kmods/Makefile
-> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
-> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
 [ ... ]
-> @@ -14,8 +16,24 @@ $(foreach m,$(MODULES),$(eval obj-m +=3D $(m:.ko=3D.o)=
-))
-> =20
->  CFLAGS_bpf_testmod.o =3D -I$(src)
-> =20
-> +# When BPF_STRICT_BUILD !=3D 0, a missing KDIR is fatal (the default).
-> +# When permissive, skip silently.
-> +PERMISSIVE :=3D $(filter 0,$(BPF_STRICT_BUILD))
-> +
->  all:
-> -	$(Q)$(MAKE) -C $(KDIR) M=3D$(TEST_KMOD_DIR) modules
-> +ifeq ($(PERMISSIVE),)
-> +	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O),O=3D$(KMOD_O),KBUILD_OUTPUT=3D) \
-> +		M=3D$(TEST_KMOD_DIR) modules
-> +else ifneq ("$(wildcard $(KDIR))", "")
-> +	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O),O=3D$(KMOD_O),KBUILD_OUTPUT=3D) \
-> +		M=3D$(TEST_KMOD_DIR) modules
-> +endif
+> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
+> -			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
+> +$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
+>  			     $(TRUNNER_LIB_OBJS)			\
+>  			     $(TRUNNER_BPFTOOL)				\
+>  			     $(OUTPUT)/veristat				\
+> -			     | $(TRUNNER_BINARY)-extras
+> +			     | $(TRUNNER_BINARY)-extras			\
+> +			     $(TRUNNER_TEST_OBJS)
 
-If permissive mode silently skips module compilation, does this convert a
-build skip into unconditional runtime test suite failures?
+Will moving TRUNNER_TEST_OBJS to the order-only prerequisites break
+incremental builds?
 
-While test_progs.c attempts to gracefully skip tests by checking
-env.has_testmod, other runners and tests fail unconditionally.
+In GNU Make, order-only prerequisites ensure build order but do not trigger
+a rebuild of the target when they are updated.
 
-For example, test_verifier.c explicitly calls load_bpf_testmod() and
-immediately returns EXIT_FAILURE if it fails, aborting the entire
-verification test suite.
+Modifying a BPF program correctly recompiles the BPF object and the test
+object file. However, because TRUNNER_TEST_OBJS is no longer a normal
+prerequisite, it appears the binary will not be relinked unless a manual
+clean is performed, silently ignoring changes to BPF programs.
 
-Similarly, tests like bpf_mod_race.c contain strict assertions
-(ASSERT_OK(load_bpf_testmod(false), ...)) in their recovery paths that fail
-when the module is missing.
+>  	$$(call msg,BINARY,,$$@)
+> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS)=
+ $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+> +	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$(if $(PERMISSIVE),$$(wildcard =
+$(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS)) $$^) $$(LDLIBS) $$(LLVM_LDLIBS)=
+ $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+
+Does linking with a partial object set cause the test framework to
+unconditionally abort at runtime?
+
+The test framework dynamically generates prog_tests/tests.h which expands
+into weak symbols in test_progs.c. If a test object is omitted due to a bui=
+ld
+failure, its weak symbols correctly resolve to NULL.
+
+During initialization, the test_progs binary iterates over registered tests
+and validates that every test has a valid function pointer. It prints an er=
+ror
+and immediately aborts via exit(EXIT_ERR_SETUP_INFRA) if it encounters a NU=
+LL
+pointer.
+
+While this is addressed later in the series by commit 6ad669628925e
+("selftests/bpf: Skip tests whose objects were not built"), does this patch
+introduce a temporary break in test infrastructure functionality?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260415-selftests-=
-bpf_misconfig-v5-0-03d0a52a898a@suse.com?part=3D2
+bpf_misconfig-v5-0-03d0a52a898a@suse.com?part=3D7
