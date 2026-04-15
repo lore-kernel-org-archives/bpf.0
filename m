@@ -1,97 +1,201 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F9F40DFCB
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 06:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33A13921F8
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 07:12:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776233338; cv=none; b=tODSQIp5qXdBndRVtVLqPrfmw9pwFb66gVfveY1SPpqVLlPBp0ySEGttD+Yz5XgcvnM0rzMXf6n9O2C6vvjbkMGYKiZ/YsFYZzaG0PAgW3gJSrWYGW206QTSGfoxPyjdc10Odf6YhzVkTRkMnrOTtwMGPSSrcfl5K6jMBDp/K24=
+	t=1776237169; cv=none; b=ZD0ffLBZB1MHWnAeh3t6438LUu1z283NE0tJCKZwmeimeExOTJ118dZ9+ehaDpUKCiOnGWvC5a2zJRsoqAqSBHTZ3lOqTanC8zTbk23f7h6hfKcfSTrEyJyID72cpaCtx2EUQAOd/oMiLQ5NphI8f6h8Gfwo7W8hlytMpGSDY7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776233338; c=relaxed/simple;
-	bh=laglfAjx6/TGzNPwU7R3Bjf98fFj5WsnD9jySMFBy/k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eYDFzJYEaVOUjJzWskZCB3i6Fn1dGs/8pyMv/MZolDO+IZxmLtPEJItSBoBXASrvTbB9SzruscCGxd4mRLkqnzkq5BiaqJkWUh+sLDeFRhPvHxG0I8CiC/C9aiLx78ZjMo2/KozamcvLVf8ViRT0XgZMDKPx7paiaSyNSnmg4bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=UFFzuoQr; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1776237169; c=relaxed/simple;
+	bh=3I7702ceSydfqaaMeSGnzV2CbViGuf3igaLyaU0P0j4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HZmKslhrkKbjDCq+t+kuQXYNcEef4kv5UQ7pFRTgH7CzZAbu75TZv2DMc/GJ/bYJRUlJod0MlZG812d1A6PUho3/fh7dg5KfIKDVVh2L8rjSIjUgrlmBq8Rm2u89P/xljMHyAeWFpn7nuGTgGFxGDCguI0uE5ZlmxF7Jkhu2e7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ur9b0v08; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="UFFzuoQr"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b9c3e2cf3c0so997518466b.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 23:08:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ur9b0v08"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c76b994f7a8so2304219a12.3
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 00:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1776233336; x=1776838136; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2wSHEDrB2fOFgpOMdm6eaGOM9h1Tbw3+MszPYGUFbNQ=;
-        b=UFFzuoQrWL/Ud6Rg15JkobbjejQr8o3OL+ZZ2E9VHwItbYRo7HYHPrBSU+pH4tfAj6
-         kPANYRKmraJY9ftecg8P1icce6T1ymzhDlqtQCou0jwJqxTH26K4bJQo5/3R7MVYYTPQ
-         23HQSP+kIV7WgKfMQutKB4GmYFxKz0GDWVn80=
+        d=gmail.com; s=20251104; t=1776237167; x=1776841967; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fYUlJNwbejT61N5mhS5KKBtXDFEFhfy7OHMbarqXtps=;
+        b=Ur9b0v08IlgJVq9G9yhP0RoWoWMWH282HZ7HG2oieKzF/jGAW0/xKQodpHlBgwr5+T
+         fl6Y4AHAt9wExRo4KZXx5vMrht4ayPy45LwWMH4B8+7sHfB6wCxTPQ3x9p9KcF0FYEM6
+         3P/oJUSemblt62HZtDvdjxKEBC5IFoYTlBaWGhJhd4reoGnvLhyH53WmOneaWcD5rXOl
+         nqschY8zRs+3whOOyTJHdrIEgxl998Xm01JKYZemQ2w+HUfGd0g5OF+PUIHHaRzEttOc
+         x4GtWNX48XM4TaSShVrdUs1opznbXc3xmlpvAHsByCE9rDs8QAkRn0oOrSiRfX/psxgR
+         1iCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776233336; x=1776838136;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2wSHEDrB2fOFgpOMdm6eaGOM9h1Tbw3+MszPYGUFbNQ=;
-        b=ZAnthsZInmPZ6uxgO0bCm3E0m3xv6ZFjfXyLLT5Owi3XZyRpjMLXMnIdEgVhDU8OCc
-         PkPE1diYvIke7OgIGTEvaXEoV4zsiOxex6CyDYEpnQmI2WcVtkZB6su36TBWyq2KxlNv
-         C2wO2YFBS6WXIESJ3XeWGCqHZYcZN2zORpaH7xf6zGSOQTnEFUOSqSr0CtQuzxG1o+wW
-         iOsg0hVaSAS+Dkq3GMR1e9Avv3IlyGIxPQo5OjKTezl+e7dr52jygKMdLpdk4uW7lMvW
-         waFyRxQDDjw5uBDmb0w6Rn+jZAvKBFOhv/d78hr9cFU20CK4aA5/ZO3mxvjsaq0SAVnp
-         RTkw==
-X-Forwarded-Encrypted: i=1; AFNElJ8bnjCTLzoBvJ8Czq3LDQlx00+FAEq/P+C65RW0R16Hi9M2FTQyQMJVYBBHlbyuMq8mv4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB5qQ0CtQE1+wTE7UXjKfN2yJxMAYu7MH+zJw+OsK2ELBEml4F
-	zKOMVNvfgiX4VI3ruBcD1bNcWWSwuRF9NOdTRkOCzyea5ew1QBhXMQqVK18+5xJKK4RTjnzPy3W
-	bYOGZTpE=
-X-Gm-Gg: AeBDiet6SO2L23AfE4b1jbi5o5p/W3KkDaPd4woR1oa1DZG5iXic1rRn7mo4xrGRi/P
-	PQbP+tAkdwI7p+zRSH0gFLYUdrFHX9VkJ+3HEGrmxHImdGFMiQS7bfBitq4RJVs0MZDlxz+hHGc
-	jzDXt6dso0zZMFn/O8Zar6NWip58yeaoKuRo82bJQlTBl/ci2DyRBDnHSIP+cPPLLwaeH1y0BVN
-	RUjYtZ9zfywOsnWqet7JqDJRo08wO5tatBJ2jlkPxePpo5UE74yJb01T75aVeZmFHjSKsPFKSTd
-	BJuog7VcJGcUB7vVZK/npzuHb+pdSkzXovdmO9dy55cTO7zcI7UeSx192zQVvAlKPlLLdMiahXH
-	V2xPgXZfnJLPUAdkl+JodCgD6zMtPKfYACq6gZtgVQSpy3ZoJuj0cXPJqkdw0tTM5vTRPZh8HYL
-	h4o42oQMOdFJ6OaIevTwk5he7LTNb++PhpRAjx9gdiTo9GYChBEI+fpkrQrOwqvcmPUYJkGtZk
-X-Received: by 2002:a17:907:c817:b0:b9c:80d5:f023 with SMTP id a640c23a62f3a-b9d7260e0cemr1295801766b.18.1776233335734;
-        Tue, 14 Apr 2026 23:08:55 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ba17392e673sm22461666b.17.2026.04.14.23.08.54
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Apr 2026 23:08:54 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-671ff4b716cso2398039a12.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 23:08:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ8PQXGzJ16CWySiqdf0CEmoziffqECya/AsN6ymovI1lCiQPYZ+zYtlkHqnxNXIbQ7eDU0=@vger.kernel.org
-X-Received: by 2002:a05:6402:21d2:b0:66e:d697:71ee with SMTP id
- 4fb4d7f45d1cf-6707a475ad3mr8825487a12.15.1776233334075; Tue, 14 Apr 2026
- 23:08:54 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776237167; x=1776841967;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fYUlJNwbejT61N5mhS5KKBtXDFEFhfy7OHMbarqXtps=;
+        b=HOfWL4AUyijtBGsK49V4rr0WFuPZ/FahzqUqvKGqAK94hQtqsxcQjZ9zsDutbZOMIM
+         BnqjreBOBLJzJUjRu2dRRFjxbTAQLxwHl/c3u1kHHubnMXPvoR1h1RoVhx1PhMNQCc2D
+         41gpQwFj4QunzJWFw73TMNhdyAAUyazYjM8KNa0xzjmsBq7/K/jgpO/3/Xq5eNv2avoH
+         g4D5mL1l9cpqLtb8cAHII2zthVavylcPMcFkT+baijrYd7g9otNVHDEzUD7URe7ZxsQL
+         9cFpDc3xkL+SBPZuUYJkvUxp51QMaoMsvT6H60feZxtPJ+6svOXwG2wmdPj9Iax+dNB1
+         9jUQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8dv/LLpPIOtjiXUQvlbWxx2kkUGrCuq803i35fFLVmRwzUsHLgdd5fpdUfP+AkNp/PeeM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn2qbg+CMvtPbq4BLQLwU5+T4yBbkeh2QgwN3kCE/9mwuVdaJr
+	XMqCmCuMpCAk4FcP2jELHedarg0DT5tz1Xz78KYEgbhihXVdvrNeqO9a
+X-Gm-Gg: AeBDietT0RC8qpktXmDHnnBgRqdp35cNLee3HlJV2jNElkBzYNn6deMUPoaArA3BlbZ
+	ZI5lSZGIMRBrV9ZOhHNquZ9CV3SLYaG3HmVl+dlnOWgK/zx7IPNya22fYNcCA+NYtBla0qJbvcR
+	VxqlGNBK24oOiX/eAz1c6GbbXQkgS+aUGOT0wySrWmapMb0bBbNawXgAk1EqESFYRgbuHcwYybq
+	7N+JIvQSUVWrPKc59RL2xnhhu8c042laStqO77IDfpcIFzmDpoogat5CLoYBpHsMfa2VBb3iipJ
+	y6TJm2Ipj4eHO5B8L8e8vBfcC61Oi10j5DsyCSXQUexktgyCiqu6oX41VVmvKs9mff/TK3ipfhP
+	n6W7wtv9yUBpTWJAtCw3Ow93sYertNRSBO+cUIEJhaOHs/J+Ni+tbUv0Qt+CzPOlke0gXotyF0f
+	MuCfqPB4PzhG7L3fTw8U8A5h7ceLRC4eik8H5vUNq51wRr93fOC1Xm80x5EOKImbeHKkgJb3rZH
+	Ndymv1wzEOwyKHPm5v3BgNFJRM=
+X-Received: by 2002:a17:903:2acb:b0:2b2:50f6:cdd9 with SMTP id d9443c01a7336-2b2d59764f9mr197248345ad.8.1776237167209;
+        Wed, 15 Apr 2026 00:12:47 -0700 (PDT)
+Received: from ?IPv6:2605:8d80:58a1:f9b:2b0e:4f42:1db7:16dc? ([2605:8d80:58a1:f9b:2b0e:4f42:1db7:16dc])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b47826ea53sm10630845ad.52.2026.04.15.00.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 00:12:46 -0700 (PDT)
+Message-ID: <16990d86263fb24079e6f0b476a8854ec2366932.camel@gmail.com>
+Subject: Re: [PATCH 1/2] bpf: deduce_bounds_64_from_32 tightening with
+ circular range logic
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Helen Koike <koike@igalia.com>, harishankar.vishwanathan@gmail.com, 
+	paul.chaignon@gmail.com, shung-hsi.yu@suse.com
+Cc: andrii@kernel.org, yonghong.song@linux.dev, ast@kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+Date: Wed, 15 Apr 2026 00:12:45 -0700
+In-Reply-To: <20260410124035.297632-1-koike@igalia.com>
+References: <20260410124035.297632-1-koike@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <177601563477.7932.4081917600853246368.tglx@xen13>
- <177601564263.7932.2238613098642404049.tglx@xen13> <ad8OGZmCVRc1C-Ck@MacBook-Pro-49.local>
- <CAHk-=wj56cA+_m8YL-5HuHeSDsA_pvuH8Lu=K4JG82iw=G6bAA@mail.gmail.com>
- <CAADnVQK4MOCe=oJPgUXwZdwTu7ZK_WjmpO0jk87A+j0zJeaCTg@mail.gmail.com>
- <CAADnVQJ=MoiX4=guPWhL9vtnAELkpNx=GNm8RA1-aV424UFz2A@mail.gmail.com>
- <CAHk-=wj-bwQkr9To3Z_fRTYF8tZK+WMVWJ8k=ACZVenZbQfUuw@mail.gmail.com> <CAADnVQLbxLmr43kgQ-KP7QAhyOoE5Abcj3tCOu4KS-c2CJ_ZKA@mail.gmail.com>
-In-Reply-To: <CAADnVQLbxLmr43kgQ-KP7QAhyOoE5Abcj3tCOu4KS-c2CJ_ZKA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 14 Apr 2026 23:08:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgf92sapt=+5G=gooeJkPbpdq87CG5YuoF8zkExOo3=sw@mail.gmail.com>
-X-Gm-Features: AQROBzDo81hYhiNMLphiYkwlRIT5MAVgpaMvHF3Dlrjrh3__-hxJlXeZxUK8YEg
-Message-ID: <CAHk-=wgf92sapt=+5G=gooeJkPbpdq87CG5YuoF8zkExOo3=sw@mail.gmail.com>
-Subject: Re: [GIT pull] timers/core for v7.1-rc1
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	X86 ML <x86@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 14 Apr 2026 at 22:46, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> Yep. Works.
-> Tested-by: Alexei Starovoitov <ast@kernel.org>
+On Fri, 2026-04-10 at 09:40 -0300, Helen Koike wrote:
+> Unify handling of signed and unsigned using circular range logic.
+>=20
+> Signed and unsigned numbers follows the same order in bit
+> representation. We can think of it as a clock, were 12h is
+> 0x0000_0000 and 11h is 0xFFFF_FFFF, regardless of its sign.
+>=20
+> Then, instead of dealing with max and min, we deal with a base and len,
+> where len =3D max - min.
+>=20
+> Example:
+>     range [-1, 3] is represented by base=3D0xFFFF_FFFF len=3D4
+>     since (u32)3 - (u32)-1 is 4.
+>=20
+> And we can verify if a value v is in range if:
+>     (u32)(v - base) <=3D len
+> which is true if v is signed -1 or v is unsigned 0xFFFF_FFFF.
+>=20
+> This automatically handles the wrapping case, discarding the need to
+> check if it crosses the signed range or not and handle each case.
+>=20
+> It also fixes the following current issues:
+> * [(u32)umin, (u32)umax] falling outside of [u32_min_value, u32_max_value=
+]
+> * [(u32)umin, (u32)umax] falling in the gap [(u32)s32_max_value, (u32)s32=
+_min_value]
+>=20
+> Fixes: c51d5ad6543c ("bpf: improve deduction of 64-bit bounds from 32-bit=
+ bounds")
+> [Circular representation]
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Helen Koike <koike@igalia.com>
+>=20
+> ---
+>=20
+> This is a follow-up from discussion:
+>   https://lore.kernel.org/all/7fb97184-baaa-4639-a0b9-ac289bf2e54d@igalia=
+.com/
+>=20
+> I didn't tag this as v2 since it is a completely different
+> implementation.
+>=20
+> I did do an implementation[1] without circular range logic, by using
+> if/elses blocks, but it feels I'm always missing a corner case and using
+> circular range logic feels safer.
+>=20
+> Eduard, I didn't use the exact code you pointed, since it seems it is
+> covered by your RFC, so I used the logic just for this case while your
+> RFC doesn't move forward.
+>=20
+> Please let me know what you think.
+>=20
+> [1]
+> https://github.com/helen-fornazier/linux/commits/bpf-min-max-if-else-solu=
+tion/
+> (3 last commits)
+>=20
+> Thanks,
+> Helen
+> ---
+>  kernel/bpf/verifier.c | 77 +++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 64 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 8c1cf2eb6cbb..2944c17d2b7b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2700,6 +2700,48 @@ static void deduce_bounds_64_from_64(struct bpf_re=
+g_state *reg)
+>  	}
+>  }
+> =20
+> +/*
+> + * Find the smallest v >=3D lo such that (u32)v is in the circular u32 r=
+ange
+> + * [b_min, b_max] (b_len =3D b_max - b_min wraps naturally for wrapping =
+ranges).
+> + */
+> +static u64 u64_tighten_umin(u64 lo, u64 hi, u32 b_min, u32 b_max)
+> +{
+> +	u32 b_len =3D b_max - b_min;
+> +	u64 a_len =3D hi - lo;
+> +	u64 cand;
+> +
+> +	/* lo32(lo) already in [b_min, b_max]? */
+> +	if ((u32)((u32)lo - b_min) <=3D b_len)
+> +		return lo;
+> +	/* Set lo32 to b_min and check if it's in the range [lo, hi] */
+> +	cand =3D (lo & ~(u64)U32_MAX) | b_min;
+> +	if (cand - lo <=3D a_len)
+> +		return cand;
+> +	/* Advance to the next 2^32 block */
+> +	return cand + BIT_ULL(32);
+> +}
 
-Thanks. Fix pushed out,
+Hi Helen, Harishankar, Shung-Hsi, Paul,
 
-               Linus
+I think this algorithm is correct and covers all cases discussed earlier.
+I also prepared simple correctness check using cbmc in [1].
+It shows that for any valid input register state deduce_bounds_64_from_32
+does not loose any values (check_soundness() function in [1], which validat=
+es).
+It also shows that there exist invalid input register state,
+such that deduce_bounds_64_from_32() "fixes" it to be valid
+(check_invalid_preserved() function in [1], which produces a counter-exampl=
+e).
+
+Now, the question is whether we want check_invalid_preserved() to hold.
+Harishankar is working on an extension to simulate_both_branches_taken()
+checking for additional cases of invariant violation.
+Disagreement between 64-bit and 32-bit ranges is one of such violations.
+The logic in deduce_bounds_64_from_32() can be extracted as "intersect"
+function producing a signal describing if intersection actually exist.
+So, the question is for Harishankar, would you like to have such
+"intersect" function?
+
+[1] https://github.com/eddyz87/deduce-bounds-64-from-32-checks
+
+[...]
