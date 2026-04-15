@@ -1,122 +1,162 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E281F2367CF
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 02:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776220024; cv=none; b=ci1mAdPMI34k3ELHPvjJX63sKk/uSVk4UNbbxGdS/Q5kaL4DAiahkPBKoSxb/vRU08VlerSnJZ3uGWRAqYpR0RX7UigKrgfdzrOke9tiURlBJKufuv6PGeri1ESQw/wo9jJXtBjDlBmVzF6LOGIjI+Zsi7dA1SE0G7qHYhXDSMk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776220024; c=relaxed/simple;
-	bh=se/vKvsQL2DCtfKDUVWcw0v6I+7KYGglI/4Bflx1lI0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KL6wEaK/vzQbKWwf4KzBA3r9nn4HcDTVlTLs7rqrXwyqi2OBMiyyzFj4LbRIf7VIF/NSq0o4TK31ZXo4Yag5D9hsnDcWmt5gF+nCj3VsVfrYEKqTWyhMuLermxCisWNBeM6xThP5PUb+KHFROmDEQ/gFkq5nmuFfXBX/8fUQnBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h4E6fgUc; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64243126B2
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 02:27:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776220070; cv=pass; b=TF3izvyWJLrMQJT3XjrWZLeoEhPUO4+Aw1t1jiuaaJaFs/gp4hjjXzPpsP5zPfcs+V1dZrl8LCRGKD8VOSmJ0l/3QFwOgBOhHivCJ4ZrEQuZBdJt7y4VBxP8dM++FT2kgrS4DxTU/W3yuDm/F/39zIPH87AGcs9A72h8d3XfxDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776220070; c=relaxed/simple;
+	bh=Rg3JlwOrlQ5XbvGJDFfZ8rC8vvU78IBNAeleJd26Fm0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rwdf9b2NRMuX7k+UOKtR/rNfL2jX1Vims6EJUuf4saEbzR2hOx+20j5iWaE8mNfleN2hPqL4dEzHAfOstn4hQtHJOGvIu7dW4oY0XieIxZsbZqS2r8KkCDv+HqiIL/t8uGqMK5ow1+GgT36XzSzwv8pOzqRd+Ffq0YU/WPGMDnM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nThoP3a6; arc=pass smtp.client-ip=209.85.167.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h4E6fgUc"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c70e27e2b74so2425621a12.0
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 19:27:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nThoP3a6"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-4670676ba03so2078774b6e.1
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 19:27:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776220068; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Vq+9iojckx6Cgz4dX4P0/X3c38mnUQwSD72sgDdR8K5n6TbnFpWQts5RIq0hHmvL6F
+         ufAId96Zsk3hdsJMKs1tMg4/it+x3L9OI4EmUOBhufxT3mvbk9FMttYIvD5WwgLfcpVl
+         OznNxj0h1y/rTigstsvzEoDEjcMdL6wVlTilibR8fWHYry77Ix3WuWjMayKywoPk/IF2
+         7ceBXDUL4jJ1ixeSBwzTPRrvIZZism5b6uAeWRcEFZQ2MyQX6O2IdF2YiKKxudht2k+n
+         9FL7ARS10yTkep5u6UUSVIaVi+TRIF9eHAg1iiSuqBmF7v9aj1giDbfutEaHLlktp8U6
+         iplw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=P9QwzqZ+lHxRLuVTrCD+/Bo3+jO92j08BnbVftYHz5s=;
+        fh=zKTE2Mx0WJiJwT4iP1DxXUacAv/DPH0cktBlEb0li+U=;
+        b=iRktErTCyZnI236t+RxjGcGR1c/gnDWFUWzKGpgxfXOp/x0FKoUjM/0ETKUCpr2ay4
+         s8Q7BcBN7tHkR7We/KESKLnmlJAN8nNqw04ljwTOxfvgj86iDemKKG+6F2zJtGP8dl+j
+         MZ61CCpH51E6KMRoT3/B63J/k17wfd9pj4QqRgA2sUr55aCYpGPVv1giBOJm1VrOyxxX
+         xMbQLKPfwkY9oWM/MMRb9JEzFs+gLChCwSHdHIWlzYe/932mVj8x4PAFB4+jAeix5k94
+         VcSj42JYwbtmnenCtJrrb7mZmwfr3PTNenA4WaDd49Cx1cQRlE1kldZdckoDdpy3p8Qa
+         IiiA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776220022; x=1776824822; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IS60+FjovzFguj9ModkEOLa8EBlu6WeVu5VNYjZqwzI=;
-        b=h4E6fgUcR3LZKLSmtkGZXPPp5IUI1VEbvwJkGWoUs+5qMrW7W9wsG/vcyVIb0oVIKQ
-         862tixORmrB9AOtw4LOSc0fUsi8Pq6xKvSzEeJigAeR0K/RftafIplf6CjbZQgwVffcQ
-         IBxDDsRzxewhyAvpT9v46cM6tg56FjqEoeGny52J/yzdpJynenJpatX4xYcCqHyM0+vQ
-         otG4/4JEcmsvs6Na3bs1+UTMqA6Vd38vs3ngg8Ar7IJNhvEguJlMNDgbVEuPfCecuxUY
-         OvUqoBDkgnW/er8NoWzxdqR30J5LYWdzI7lkNmrblxoWXKQGkYe4PD9yir5/tGiw/ksG
-         FMJA==
+        d=gmail.com; s=20251104; t=1776220068; x=1776824868; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P9QwzqZ+lHxRLuVTrCD+/Bo3+jO92j08BnbVftYHz5s=;
+        b=nThoP3a6QV15V/QYb+llb/mqb2X7S+PS9ZMtz6XDoc9LEex6mQ0cxHAlGcG6/yXVVI
+         m5O/vIGSpELEnzvnWv1mv4WrxVILMF4EVORgmbxJbB1ZrbTQsFClgttA/mAn/EeHVFfl
+         5UiWJxX3OSirodOGcOY2GS6DioG8RFao1UXkHB8KSaw5E6EcOTs3yNZU8wYw8K/Ji3c5
+         53MEk2QYpyJuej400QO+XG9FNVB6ixTPZEigZEN8LbpORvp4iLpDEXsWva887QvkCvVB
+         ozGHdRj3Bg8UrW1LAeh8+/AZnhvMU++/7FpZb+NOagYCMAMzorNHW/u5M9m8c1hv/HUs
+         LiQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776220022; x=1776824822;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IS60+FjovzFguj9ModkEOLa8EBlu6WeVu5VNYjZqwzI=;
-        b=ZIPRIZo0JmccFRXf7eq2j0HSViiKzhYcfNgBwhgNZGOJQb4nWyFdWBTVSVrKRykJTX
-         AqoUaQgMSfo0yhCfODYmSHvDGf6QLTiqlJzRSr5os9Z7xJ3Lp8HamQaJ7AgeFeIO3lOe
-         QYoMDxHuWSRHhhDMX/0i2oATo8lZZmz3J9/CB0kBcRiPjTkSXhEmKPDGtnayVgDcSuJQ
-         abMyxP/rD5QUs1w7ND1rEhpVO7NTDI0TPtjj1ew6oqhzqIQYmCLt1UkLTelTYy5elTgN
-         BuknGtHWjlPPMXFyHVlxow9kVq4SU5OF6oY5zueiLK8uKDDFJvikZFr6ViKHtbw32ghx
-         TAtg==
-X-Forwarded-Encrypted: i=1; AFNElJ/dck4ysHx6NX9BYdSQbZF36Lpku9CD0ePSbYlxOZ0NzuD+0F97HYFTDFTjaP6+C8bKcWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRpwC6TbOtlhAw+L3GzS0v45STA0QsJJg8hND/skjEA22PD0kU
-	VLZuxJG3fMGg6AnhhEjPO43WcsPFct42Wi5y2Jgylum5m7N5x4bN7TCX
-X-Gm-Gg: AeBDiesAdHPiBF7IMLT/rhvDVtVcf8xgdwDyLEJzz04QKiRdM3E8ma4l3uhvGIT8HpA
-	cscS2vLfVs/Ssu+FBxepO5P9wBC+vhYdUIcxNJ5pvqMqtBV1uZjCuY7oL6wH7buLxthfdVBRwmL
-	hRZVktZeO2czhdpF59polDWSqme/SCjpBIT54ChbzggtwKFUHD7r2ehAyBH4Hl/lD/Vu5wZs1zc
-	p61ne/5s+nuVZn5TmYy/xMMumyHNMxpnCDQikX6hpEnl4zv+nmUFcBjDenEYdf78+a9sVHccU/1
-	cOEhx/D56cvpdUYlcRDkp51EHVxh5f5fKQSJ2L+OuFb5lh/CP5zIi2FqMz7h38ElQ1/W3EcRofw
-	E4vJlS5Un9JZZJobYvtv2MFx0OIFHLY+o4OoFkxTBeWSvl+OQLrWjbY4Wb3t2GlYEcEQH0C+YxL
-	lXuIxXdC/8I6U0TXRqTTrZPseCur+Z5UZM0qcrkti9e2vfBX0BL62iJJA9to5bB7hww/tgds0ZX
-	ZEq9pRx6EEYZDdIrUbs795uQ3szpss2UAgNjH4k2h6JP+ow4Cq+2SQ9rocopAM8qfbhUpXZbhJo
-X-Received: by 2002:a05:6a21:3286:b0:398:7e11:ad6 with SMTP id adf61e73a8af0-39fe373c516mr20699334637.0.1776220022218;
-        Tue, 14 Apr 2026 19:27:02 -0700 (PDT)
-Received: from MacBook-Pro-49.local ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79581a3015sm187924a12.16.2026.04.14.19.27.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2026 19:27:01 -0700 (PDT)
-Date: Tue, 14 Apr 2026 19:27:00 -0700
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Slava Imameev <slava.imameev@crowdstrike.com>
-Cc: ameryhung@gmail.com, andrii@kernel.org, ast@kernel.org, 
-	bot+bpf-ci@kernel.org, bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, 
-	eddyz87@gmail.com, ihor.solodrai@linux.dev, kernel-team@meta.com, 
-	martin.lau@kernel.org, memxor@gmail.com, netdev@vger.kernel.org, 
-	yonghong.song@linux.dev, linux-open-source@crowdstrike.com
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Use kmalloc_nolock() universally in
- local storage
-Message-ID: <ydbdk5fj3mbjoninyt5lcg5czcrcgghk6ownothijy667zn6h3@eczgskgj43iw>
-References: <CAADnVQKeFF--bgnZZSU12UY0muuwYA=7EdzLyOi837oZs+bXTA@mail.gmail.com>
- <20260413034829.39307-1-slava.imameev@crowdstrike.com>
+        d=1e100.net; s=20251104; t=1776220068; x=1776824868;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=P9QwzqZ+lHxRLuVTrCD+/Bo3+jO92j08BnbVftYHz5s=;
+        b=RVjd3eDwI99ca/32mTQSQ7E4RPtLw8TUkXwArxT3p0Xv3qLFVMScPHfvU/tWorEU3w
+         GZt5xkode1r2p7YgQ+TexrtmRGnwgiSPKBUZc/+7ZzbPBYSmGvD78dFBtWpvJIorYyP4
+         hghSi9rtR60mmg3b/SvM67htDHdYzRIEjiZqlf4fnf1aziTR5NyYlnty0BE2syjsOWju
+         yCrK0YIyu8DJAZFyQjG36+orOGkoSjzOs9ZJ37qNWWFEqrDuC4Sm3FmBkZrv6TZSNcmW
+         NDSzoF5tgP65T8sknoyqxl/AyRqrKFwVwVjpLfNA+M4+0EwPceeGL1FBpTTnD5bQZWig
+         FsRA==
+X-Forwarded-Encrypted: i=1; AFNElJ+6f20884l9H+6/zCpcWukEPIU+YH1E9C9Ze35tslySF3wp0qbN1AMle5G9AkwmnYOKo2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKruWYuV0Te8l5ulQB2h7wk635CvT9EgBLOqKerh52WZrnPho5
+	7Xify9LHpRcqHqMD8TMXdRpautBerCAkiq8r+Ni+h+M3zdO9VbTHuCitOCYT+lf3J601UId6sg+
+	Cqu4tr04Zr3KVdU+ZutLLZLV7CrynzwA=
+X-Gm-Gg: AeBDieugNxgmTnS5cMzjmfG29skitKeL+y8BadCmvAD7f1tlHMNi+G+vY2mgRtqb+Df
+	8xeMpdXNeb8O8oaUiHx8RRCADQqaJZUp4MXd4uxeY+COuz8FZrgNY1hlB1SsA9ireSly+EPF5//
+	CtgeR/GQC2XboZiSzEiioLoXm/YJ1b/g/Jev+3EF4joPSL+WnWAkGKdv4pj0eaovpNm1HfmxxrR
+	vcYTYFqOwVpir4SKeSdz1sakqFjCvl9DDPteiw6KCpNn+rhoETushgX1rA76kT6+eVE4WiLD/xv
+	ZSW8LBMTaaPJVMnoDg==
+X-Received: by 2002:a05:6808:1c0d:b0:46a:6d33:65a8 with SMTP id
+ 5614622812f47-4789fb11b45mr9672786b6e.32.1776220068530; Tue, 14 Apr 2026
+ 19:27:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260413034829.39307-1-slava.imameev@crowdstrike.com>
+References: <20260413040506.26640-1-yangtiezhu@loongson.cn> <20260413040506.26640-6-yangtiezhu@loongson.cn>
+In-Reply-To: <20260413040506.26640-6-yangtiezhu@loongson.cn>
+From: Hengqi Chen <hengqi.chen@gmail.com>
+Date: Wed, 15 Apr 2026 10:27:37 +0800
+X-Gm-Features: AQROBzCWeMr501FjNgFKBxyyGLNQVfp1RmcgcvkIqZvV0x5R_9jReZCjhCbJTzw
+Message-ID: <CAEyhmHSoY9Pd+XMdKCUmv_P9xUm6A9VeY1UnXJNQnGwz8Rhfvw@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] selftests/bpf: Make CAN_USE_LOAD_ACQ_STORE_REL
+ usable for LoongArch
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 13, 2026 at 01:48:29PM +1000, Slava Imameev wrote:
-> On Fri, 10 Apr 2026 21:39:00 -0700 Alexei Starovoitov wrote:
-> > >
-> > >
-> > > This allows value sizes up to ~65KB. Before this patch, socket and
-> > > inode storage used bpf_map_kzalloc() (backed by regular kmalloc)
-> > > which could handle those large sizes. After this patch, any
-> > > elem_size above KMALLOC_MAX_CACHE_SIZE will silently fail: the map
-> > > creation succeeds via bpf_local_storage_map_alloc_check() but every
-> > > element allocation returns NULL.
-> > >
-> > > Should BPF_LOCAL_STORAGE_MAX_VALUE_SIZE be updated to use
-> > > KMALLOC_MAX_CACHE_SIZE instead of KMALLOC_MAX_SIZE now that all
-> > > storage types go through kmalloc_nolock()?
-> > >
-> > > Slava Imameev raised the same concern for task storage in
-> > > https://lore.kernel.org/bpf/20260410014341.47043-1-slava.imameev@crowdstrike.com/
-> > 
-> > Right. Let's update it, but I don't think it's a regression.
-> > On a loaded system kmalloc_large() rarely succeeds for order 2+.
-> > That's why kmalloc_nolock() doesn't attempt to bridge that gap.
-> > One or two contiguous physical pages is the best one can expect.
-> > In early bpf days we picked KMALLOC_MAX_SIZE assuming that
-> > it's a realistic max for kmalloc().
-> > It turned out to be wishful thinking.
-> > kmalloc_large concept should really be removed.
-> > It deceives users into thinking that it's usable.
-> 
-> In defense of supporting 8KB-64KB allocations for local
-> storage, we can consider BPF_MAP_TYPE_HASH with BPF_F_NO_PREALLOC
-> as providing similar functionality to replace the missing 8KB-64KB
-> local storage allocation support. However, these map entry
-> allocations can also fail with similar probability since they
-> depend on the same underlying allocator.
+On Mon, Apr 13, 2026 at 12:05=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.c=
+n> wrote:
+>
+> In order to do the following load-acquire and store-release tests
+> on LoongArch:
+>
+>   sudo ./test_progs -t verifier_load_acquire
+>   sudo ./test_progs -t verifier_store_release
+>   sudo ./test_progs -t verifier_precision/bpf_load_acquire
+>   sudo ./test_progs -t verifier_precision/bpf_store_release
+>   sudo ./test_progs -t compute_live_registers/atomic_load_acq_store_rel
+>
+> it needs to make CAN_USE_LOAD_ACQ_STORE_REL usable for LoongArch.
+>
 
-I really hope that 64kb task local storage is not your production code.
-Severs easily have 50k threads. Sometimes more.
-64k * 50k = 3 Gbytes of memory wasted.
-You need to redesign it from ground up.
+rephrase it as enable for LoongArch ?
+
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+
+Other than that,
+
+Acked-by: Hengqi Chen <hengqi.chen@gmail.com>
+
+>  tools/testing/selftests/bpf/progs/bpf_misc.h           | 4 ++--
+>  tools/testing/selftests/bpf/progs/verifier_precision.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing=
+/selftests/bpf/progs/bpf_misc.h
+> index c9bfbe1bafc1..19f0bf44a9e1 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
+> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+> @@ -257,8 +257,8 @@
+>
+>  #if __clang_major__ >=3D 18 && defined(ENABLE_ATOMICS_TESTS) &&         =
+ \
+>         (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) ||  \
+> -        (defined(__TARGET_ARCH_riscv) && __riscv_xlen =3D=3D 64)) || \
+> -         (defined(__TARGET_ARCH_powerpc))
+> +       (defined(__TARGET_ARCH_riscv) && __riscv_xlen =3D=3D 64) || \
+> +       defined(__TARGET_ARCH_powerpc) || defined(__TARGET_ARCH_loongarch=
+))
+>  #define CAN_USE_LOAD_ACQ_STORE_REL
+>  #endif
+>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/too=
+ls/testing/selftests/bpf/progs/verifier_precision.c
+> index 4794903aec8e..6f325876efdd 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_precision.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
+> @@ -75,8 +75,8 @@ __naked int bpf_end_to_be(void)
+>
+>  #if (defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_x86) || \
+>         (defined(__TARGET_ARCH_riscv) && __riscv_xlen =3D=3D 64) || \
+> -       defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390)) && \
+> -       __clang_major__ >=3D 18
+> +       defined(__TARGET_ARCH_arm) || defined(__TARGET_ARCH_s390) || \
+> +       defined(__TARGET_ARCH_loongarch)) && __clang_major__ >=3D 18
+>
+>  SEC("?raw_tp")
+>  __success __log_level(2)
+> --
+> 2.42.0
+>
