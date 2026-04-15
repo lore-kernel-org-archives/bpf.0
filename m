@@ -1,245 +1,122 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA7D2882DE
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 02:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776219966; cv=pass; b=VUjPO4ICC24ivplU5+CjVcx4RBm6slz2tocv2v2z8kpg5hoSJPlMtwQi3G5IbfTSPpjorfTLowJJEhxiYwoece3dyNJAkP0sGnf8hXMDoMz7sqxORbDeex65m/AVzghjFRd7X/zEoo/aahmrjsdNY27YdSvUSPQecHnYAqRErtg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776219966; c=relaxed/simple;
-	bh=MRxcm7Tt46pg3Kzyyf0G+uZbnfC1nYlRE224oNDetjQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kadoj6q4aNig5qJE9AJ3UJwuJAYvyQSF5RRCX1K9apFIfBmz+jkV9kyMItQUTBkgo9NkTUlKkwDOGvuR77CSCmElLTG8nRjdRuX1lrCFrHWamqwjFfbq5Yz3c7/E/aS0MiY0+5Vbfa453fXlaPE5uvBxlJBlJl2EHaCOsXBEJTM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jIScvV3X; arc=pass smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E281F2367CF
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 02:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776220024; cv=none; b=ci1mAdPMI34k3ELHPvjJX63sKk/uSVk4UNbbxGdS/Q5kaL4DAiahkPBKoSxb/vRU08VlerSnJZ3uGWRAqYpR0RX7UigKrgfdzrOke9tiURlBJKufuv6PGeri1ESQw/wo9jJXtBjDlBmVzF6LOGIjI+Zsi7dA1SE0G7qHYhXDSMk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776220024; c=relaxed/simple;
+	bh=se/vKvsQL2DCtfKDUVWcw0v6I+7KYGglI/4Bflx1lI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KL6wEaK/vzQbKWwf4KzBA3r9nn4HcDTVlTLs7rqrXwyqi2OBMiyyzFj4LbRIf7VIF/NSq0o4TK31ZXo4Yag5D9hsnDcWmt5gF+nCj3VsVfrYEKqTWyhMuLermxCisWNBeM6xThP5PUb+KHFROmDEQ/gFkq5nmuFfXBX/8fUQnBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h4E6fgUc; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jIScvV3X"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-685013eb590so3931675eaf.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 19:26:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776219963; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YZAQRt11yJkLlyOiWlvgTypnJlaI9enI/qCPtU0yp6jG0ZAYIibFSUoMAzwc4wYVhJ
-         LNVnyIN3n3YmWZDcILYP3bvFfXg21IMsLc36hjZjL4kItA0ZhAQ2eQDwNFZpqYSRLn+P
-         O/OJA1B6wE9jv5mlEutEE9P+bUUdAfqYNdUm1zs7hudnmt7DXbyuVdhKINCdrnKwT0Ld
-         jniskkrKWD5AC+bbQEZvos1dTYNtL7UN034ci6ElyPxXzEW4c/P8mGsNdBNDSCxrpc2g
-         jKKtqQEOfwc7CPV5+bGZg+h7mlsDMk9NxG4jhh1Qd/TGugbcfvrXqbeG8bpfKLYJ+/fc
-         HhgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gp8opaCO4NhzR0MzPaxnczut02ydEKc5TESqHBl8R9A=;
-        fh=e7PVUNfQpoExfKUv3/5b5VT/14M1xs4qhzOmYAyfjbk=;
-        b=dLrKsL09KSEc3XTeh5j9dSR43u+/CtXymk0OwNGJCBPoqw9wecqNUqrdwuV2FJNWI3
-         94zRklij3pyxEkWucYs0sYM7v8mXkVxmHWuyHM3yVjTwo/Q28UshzOzkBgCViyA4a5si
-         s1y5Ug+PYB2cEBhzxWzcmiTVekt0dE7sixn5Jpmw/RpZd2jEJrhqrvLHiGuhmDoxpynr
-         IXBBmiuHPt3QDJJH+2ovJytniIcFLXHbVEoAfYq+/DggTpFGDmPoX9vZBvtAoOllLEXt
-         pjFY27jyBKfDvN3wHi6TuXe2ekA3OE3foT9zUv5OOvrwdiJqgk1fI0ls0ABlZ1bK6FyS
-         uQHw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h4E6fgUc"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c70e27e2b74so2425621a12.0
+        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 19:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776219963; x=1776824763; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gp8opaCO4NhzR0MzPaxnczut02ydEKc5TESqHBl8R9A=;
-        b=jIScvV3X+DvoRN+vwAoa+FYu9MMYHNIraxziBNJhoQ221vjrC0+raCx0RTFnOCdP56
-         /rrBEkPF10A3gYXzNYxitfcrpGudAae+yBQTk/YRGcfkL8ujAqNGWf81ysc5TmSLfmZB
-         xXVM0zFdXl7QHC1U+ESBcceBrCpsgggyvIiHPwAyaSbATmeLzp8gF+5ryhj5MnRYyBPN
-         FPTPKiO88s0o3vS5b2LzbuoR9OtMRKe682u2jCryAT7Zhi6MV2ghA1Fsaq1JYCzIkqQr
-         S94d5zkHW9uylnSVqw1PoNo5ofwrEyV370HrZbiC5+mo1WwPeE80dOG74t9FqqAc5HjM
-         naZA==
+        d=gmail.com; s=20251104; t=1776220022; x=1776824822; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IS60+FjovzFguj9ModkEOLa8EBlu6WeVu5VNYjZqwzI=;
+        b=h4E6fgUcR3LZKLSmtkGZXPPp5IUI1VEbvwJkGWoUs+5qMrW7W9wsG/vcyVIb0oVIKQ
+         862tixORmrB9AOtw4LOSc0fUsi8Pq6xKvSzEeJigAeR0K/RftafIplf6CjbZQgwVffcQ
+         IBxDDsRzxewhyAvpT9v46cM6tg56FjqEoeGny52J/yzdpJynenJpatX4xYcCqHyM0+vQ
+         otG4/4JEcmsvs6Na3bs1+UTMqA6Vd38vs3ngg8Ar7IJNhvEguJlMNDgbVEuPfCecuxUY
+         OvUqoBDkgnW/er8NoWzxdqR30J5LYWdzI7lkNmrblxoWXKQGkYe4PD9yir5/tGiw/ksG
+         FMJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776219963; x=1776824763;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gp8opaCO4NhzR0MzPaxnczut02ydEKc5TESqHBl8R9A=;
-        b=ecSSrFSds/iBP6rxgxKVBVTrbUKKb1fQlcft8iHF340azy/VzCsbYmQRlKe8Z265PL
-         M+CJpE9sUN0EbgekkR9gp3zL+/oi53M9qqq0LfG2TCFkXeWpKHWI+N9x27rR+do8Gf3K
-         Fti6HQOrzH39RPXprnbRyCl1536VblTDsV8TsO/R/tSiitZJirt7G/Q1KmEp7m71utQk
-         UB3Zl3wnP9Hk9mtBfMqg2TiBbXn7hMFTAwi8wtmQBf4L3oTQj7Yk+QWLEu9+FWexjgWp
-         HRDKU1qJn8c2AWUKkN4b5KdOmPzMr6EytV4NVfQa82tde0p78GL+NqIiSmJtfx8NVZAF
-         vlzg==
-X-Forwarded-Encrypted: i=1; AFNElJ/P9TJDQZ4FfTFRMcYT6oSUg2QXx5+M+iL1lr6WaGxeP8dxaccTcmnxXn24ODpxDDz7qtU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPZYZYltDh/g9KN9zTUXm7DHdkw3S2RKvv7xPKML+YBo/x4exO
-	oUpPo1otnaoHpt7HoQ9DpS4kCDAUlNnmUzmCME+C7z3t3oUKdlUo8/giurvvyQZse/LBbgg32WW
-	d/pIwDnxFkVmLJamBd9K/rhD679lu+Bs=
-X-Gm-Gg: AeBDievcmXerddEuekApfGirM35YL7z0UtblzlFTSIO9qapL9ggWju+AGS2YfbTVNRg
-	0Vv2BzkKZiU/7gP8ptE8ebH9RccxZYvPaLpmlGUvZojcog9eHOG/BccAB2KNtnH3OtjUNxSWlCU
-	1GFsLXWatb/PQGvOPF7P6rg1xJoMsRwVb1rZPdEjVOiA0g5bs6BRE9SyV0nCYBzh/eWC20/glbh
-	T2c57U1Dq3vKiT5spuU9iC16tpBhpCcDMJZV8nFK4NMgglvCkJ5UqyFBJpRL16Iywl3kJ+U8gBJ
-	byLdUxGAAXKBmDFpwQ==
-X-Received: by 2002:a05:6820:4a19:b0:68d:bb0e:9c97 with SMTP id
- 006d021491bc7-68dbb0eababmr6173327eaf.7.1776219962919; Tue, 14 Apr 2026
- 19:26:02 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776220022; x=1776824822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IS60+FjovzFguj9ModkEOLa8EBlu6WeVu5VNYjZqwzI=;
+        b=ZIPRIZo0JmccFRXf7eq2j0HSViiKzhYcfNgBwhgNZGOJQb4nWyFdWBTVSVrKRykJTX
+         AqoUaQgMSfo0yhCfODYmSHvDGf6QLTiqlJzRSr5os9Z7xJ3Lp8HamQaJ7AgeFeIO3lOe
+         QYoMDxHuWSRHhhDMX/0i2oATo8lZZmz3J9/CB0kBcRiPjTkSXhEmKPDGtnayVgDcSuJQ
+         abMyxP/rD5QUs1w7ND1rEhpVO7NTDI0TPtjj1ew6oqhzqIQYmCLt1UkLTelTYy5elTgN
+         BuknGtHWjlPPMXFyHVlxow9kVq4SU5OF6oY5zueiLK8uKDDFJvikZFr6ViKHtbw32ghx
+         TAtg==
+X-Forwarded-Encrypted: i=1; AFNElJ/dck4ysHx6NX9BYdSQbZF36Lpku9CD0ePSbYlxOZ0NzuD+0F97HYFTDFTjaP6+C8bKcWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRpwC6TbOtlhAw+L3GzS0v45STA0QsJJg8hND/skjEA22PD0kU
+	VLZuxJG3fMGg6AnhhEjPO43WcsPFct42Wi5y2Jgylum5m7N5x4bN7TCX
+X-Gm-Gg: AeBDiesAdHPiBF7IMLT/rhvDVtVcf8xgdwDyLEJzz04QKiRdM3E8ma4l3uhvGIT8HpA
+	cscS2vLfVs/Ssu+FBxepO5P9wBC+vhYdUIcxNJ5pvqMqtBV1uZjCuY7oL6wH7buLxthfdVBRwmL
+	hRZVktZeO2czhdpF59polDWSqme/SCjpBIT54ChbzggtwKFUHD7r2ehAyBH4Hl/lD/Vu5wZs1zc
+	p61ne/5s+nuVZn5TmYy/xMMumyHNMxpnCDQikX6hpEnl4zv+nmUFcBjDenEYdf78+a9sVHccU/1
+	cOEhx/D56cvpdUYlcRDkp51EHVxh5f5fKQSJ2L+OuFb5lh/CP5zIi2FqMz7h38ElQ1/W3EcRofw
+	E4vJlS5Un9JZZJobYvtv2MFx0OIFHLY+o4OoFkxTBeWSvl+OQLrWjbY4Wb3t2GlYEcEQH0C+YxL
+	lXuIxXdC/8I6U0TXRqTTrZPseCur+Z5UZM0qcrkti9e2vfBX0BL62iJJA9to5bB7hww/tgds0ZX
+	ZEq9pRx6EEYZDdIrUbs795uQ3szpss2UAgNjH4k2h6JP+ow4Cq+2SQ9rocopAM8qfbhUpXZbhJo
+X-Received: by 2002:a05:6a21:3286:b0:398:7e11:ad6 with SMTP id adf61e73a8af0-39fe373c516mr20699334637.0.1776220022218;
+        Tue, 14 Apr 2026 19:27:02 -0700 (PDT)
+Received: from MacBook-Pro-49.local ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79581a3015sm187924a12.16.2026.04.14.19.27.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2026 19:27:01 -0700 (PDT)
+Date: Tue, 14 Apr 2026 19:27:00 -0700
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Slava Imameev <slava.imameev@crowdstrike.com>
+Cc: ameryhung@gmail.com, andrii@kernel.org, ast@kernel.org, 
+	bot+bpf-ci@kernel.org, bpf@vger.kernel.org, clm@meta.com, daniel@iogearbox.net, 
+	eddyz87@gmail.com, ihor.solodrai@linux.dev, kernel-team@meta.com, 
+	martin.lau@kernel.org, memxor@gmail.com, netdev@vger.kernel.org, 
+	yonghong.song@linux.dev, linux-open-source@crowdstrike.com
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Use kmalloc_nolock() universally in
+ local storage
+Message-ID: <ydbdk5fj3mbjoninyt5lcg5czcrcgghk6ownothijy667zn6h3@eczgskgj43iw>
+References: <CAADnVQKeFF--bgnZZSU12UY0muuwYA=7EdzLyOi837oZs+bXTA@mail.gmail.com>
+ <20260413034829.39307-1-slava.imameev@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260413040506.26640-1-yangtiezhu@loongson.cn> <20260413040506.26640-5-yangtiezhu@loongson.cn>
-In-Reply-To: <20260413040506.26640-5-yangtiezhu@loongson.cn>
-From: Hengqi Chen <hengqi.chen@gmail.com>
-Date: Wed, 15 Apr 2026 10:25:50 +0800
-X-Gm-Features: AQROBzAYMUwwbM_D7VxSXaSrDZ-TdfqCtp088Lx3Nk63PjxURNHrlxO41NLFNU4
-Message-ID: <CAEyhmHShzVtNg-ct0PGXGfMuF_4i7-BG-bfXvPrwS1wbCcKmZw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] LoongArch: BPF: Support load-acquire and
- store-release instructions
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260413034829.39307-1-slava.imameev@crowdstrike.com>
 
-On Mon, Apr 13, 2026 at 12:05=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.c=
-n> wrote:
->
-> Use the LoongArch common memory access instructions with the barrier dbar
-> to support the BPF load-acquire and store-release instructions.
->
-> With this patch, the following testcases passed on LoongArch if the macro
-> CAN_USE_LOAD_ACQ_STORE_REL is usable in bpf selftests:
->
->   sudo ./test_progs -t verifier_load_acquire
->   sudo ./test_progs -t verifier_store_release
->   sudo ./test_progs -t verifier_precision/bpf_load_acquire
->   sudo ./test_progs -t verifier_precision/bpf_store_release
->   sudo ./test_progs -t compute_live_registers/atomic_load_acq_store_rel
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  arch/loongarch/net/bpf_jit.c | 98 +++++++++++++++++++++++++++++++++++-
->  1 file changed, 97 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index c9a32f124f5e..805f95cbe798 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -344,6 +344,99 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx, i=
-nt insn)
->  #undef jmp_offset
->  }
->
-> +static int emit_atomic_ld_st(const struct bpf_insn *insn, struct jit_ctx=
- *ctx)
-> +{
-> +       const u8 t1 =3D LOONGARCH_GPR_T1;
-> +       const u8 src =3D regmap[insn->src_reg];
-> +       const u8 dst =3D regmap[insn->dst_reg];
-> +       const s16 off =3D insn->off;
-> +       const s32 imm =3D insn->imm;
-> +
-> +       switch (imm) {
-> +       /* dst_reg =3D load_acquire(src_reg + off16) */
-> +       case BPF_LOAD_ACQ:
-> +               switch (BPF_SIZE(insn->code)) {
-> +               case BPF_B:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldbu, dst, src, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxbu, dst, src, t1);
-> +                       }
-> +                       break;
-> +               case BPF_H:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldhu, dst, src, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxhu, dst, src, t1);
-> +                       }
-> +                       break;
-> +               case BPF_W:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldwu, dst, src, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxwu, dst, src, t1);
-> +                       }
-> +                       break;
-> +               case BPF_DW:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, ldd, dst, src, off);
+On Mon, Apr 13, 2026 at 01:48:29PM +1000, Slava Imameev wrote:
+> On Fri, 10 Apr 2026 21:39:00 -0700 Alexei Starovoitov wrote:
+> > >
+> > >
+> > > This allows value sizes up to ~65KB. Before this patch, socket and
+> > > inode storage used bpf_map_kzalloc() (backed by regular kmalloc)
+> > > which could handle those large sizes. After this patch, any
+> > > elem_size above KMALLOC_MAX_CACHE_SIZE will silently fail: the map
+> > > creation succeeds via bpf_local_storage_map_alloc_check() but every
+> > > element allocation returns NULL.
+> > >
+> > > Should BPF_LOCAL_STORAGE_MAX_VALUE_SIZE be updated to use
+> > > KMALLOC_MAX_CACHE_SIZE instead of KMALLOC_MAX_SIZE now that all
+> > > storage types go through kmalloc_nolock()?
+> > >
+> > > Slava Imameev raised the same concern for task storage in
+> > > https://lore.kernel.org/bpf/20260410014341.47043-1-slava.imameev@crowdstrike.com/
+> > 
+> > Right. Let's update it, but I don't think it's a regression.
+> > On a loaded system kmalloc_large() rarely succeeds for order 2+.
+> > That's why kmalloc_nolock() doesn't attempt to bridge that gap.
+> > One or two contiguous physical pages is the best one can expect.
+> > In early bpf days we picked KMALLOC_MAX_SIZE assuming that
+> > it's a realistic max for kmalloc().
+> > It turned out to be wishful thinking.
+> > kmalloc_large concept should really be removed.
+> > It deceives users into thinking that it's usable.
+> 
+> In defense of supporting 8KB-64KB allocations for local
+> storage, we can consider BPF_MAP_TYPE_HASH with BPF_F_NO_PREALLOC
+> as providing similar functionality to replace the missing 8KB-64KB
+> local storage allocation support. However, these map entry
+> allocations can also fail with similar probability since they
+> depend on the same underlying allocator.
 
-See commit fe5757553bf9ebe45ae8ecab5922f6937c8d8dfc, need double check here=
-.
-
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, ldxd, dst, src, t1);
-> +                       }
-> +                       break;
-> +               }
-> +               emit_insn(ctx, dbar, 0b10100);
-> +               break;
-> +       /* store_release(dst_reg + off16, src_reg) */
-> +       case BPF_STORE_REL:
-> +               emit_insn(ctx, dbar, 0b10010);
-> +               switch (BPF_SIZE(insn->code)) {
-> +               case BPF_B:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, stb, src, dst, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, stxb, src, dst, t1);
-> +                       }
-> +                       break;
-> +               case BPF_H:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, sth, src, dst, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, stxh, src, dst, t1);
-> +                       }
-> +                       break;
-> +               case BPF_W:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, stw, src, dst, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, stxw, src, dst, t1);
-> +                       }
-> +                       break;
-> +               case BPF_DW:
-> +                       if (is_signed_imm12(off)) {
-> +                               emit_insn(ctx, std, src, dst, off);
-> +                       } else {
-> +                               move_imm(ctx, t1, off, false);
-> +                               emit_insn(ctx, stxd, src, dst, t1);
-> +                       }
-> +                       break;
-> +               }
-> +               break;
-> +       default:
-> +               pr_err_once("bpf-jit: invalid atomic load/store opcode %0=
-2x\n", imm);
-> +               return -EINVAL;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
->  static int emit_atomic_rmw(const struct bpf_insn *insn, struct jit_ctx *=
-ctx)
->  {
->         const u8 t1 =3D LOONGARCH_GPR_T1;
-> @@ -1326,7 +1419,10 @@ static int build_insn(const struct bpf_insn *insn,=
- struct jit_ctx *ctx, bool ext
->         case BPF_STX | BPF_ATOMIC | BPF_H:
->         case BPF_STX | BPF_ATOMIC | BPF_W:
->         case BPF_STX | BPF_ATOMIC | BPF_DW:
-> -               ret =3D emit_atomic_rmw(insn, ctx);
-> +               if (bpf_atomic_is_load_store(insn))
-> +                       ret =3D emit_atomic_ld_st(insn, ctx);
-> +               else
-> +                       ret =3D emit_atomic_rmw(insn, ctx);
->                 if (ret)
->                         return ret;
->                 break;
-> --
-> 2.42.0
->
+I really hope that 64kb task local storage is not your production code.
+Severs easily have 50k threads. Sometimes more.
+64k * 50k = 3 Gbytes of memory wasted.
+You need to redesign it from ground up.
