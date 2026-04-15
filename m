@@ -1,137 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C75529D288
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 20:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3ECB2BDC3F
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 20:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776283255; cv=none; b=bXTGtW5gGa37g51k7dHqTWpATKbiyMpXKjJ/7+jAtzrQBH68ylHO/Bo76kQUyuXEoDrhUwKJL6feaLtzHZlibmxPAcVei7+v1Fyiu65g8G/d1YX2O90RCGsi+rtNtDKlVVr0ilgATz1/8fJXryGof5GDwvVfHXIZGJpXjE425O0=
+	t=1776283447; cv=none; b=dCHmTAWR+zTeB1tkFnrsF/508mDICzdSb3oVfpDz7YIDcubOZhRpocMJoVYcgkhXxsbqxpckQpgFCMYDFr615rZzjkX0gqV1zfIIFbudc5RAkhv44GUJxRS3cXqIAi+f8p2+F0n1AbBrFgKNVzDH1jj9x/67bIwgPSC5aJ7Cq5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776283255; c=relaxed/simple;
-	bh=5Si8SFkPlQbj4ZK/Nv7vKd6bP9Wbmf0ulJ+tfMLqY+E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E6o6gnTDvViH6eHIZKcvtSon3U6KdcqXZ7QbfC6Pne2Id3YFGnbgUML3M0V6I0Qam5TcSyY9RClZQRam5pz5CiBqGLxBBUmnguOMvyfADxBuCseMkgYsZOAllHNFTwDl5DiA+bDPr6X1SXHj4nGfOeW+sqjp+eqyvAqO7Bbzikk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ef26ViPs; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776283447; c=relaxed/simple;
+	bh=2WI2BdTwalczZWHvA8hyF7AEdJKJN+UBWccprafsFxk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Da8ytJ5936yupyNZ4+OlwfdFgTxprHpZU0rpJYCvhXA5vL/egz4UBrVigKuiqLHUEpWB2vzHAuzoJTpwzKX5nov0uWzMlCYOSAJIAJZWO/2HI/Q+F6AYRhFxvN0wHWWLiTwno3XLsFLbjP03HS7yOM3WtLUa0asr5+bkc4SRPL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WiCzvkDx; arc=none smtp.client-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ef26ViPs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776283253;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rrx/maKRkin5kg0qAPTHBpet2FFANooNBkjHVIfFRwc=;
-	b=Ef26ViPseq8hYVOGvQtEhFaCk7EL7x0RlN1DeDlRwKgGTNI5BKSAi2miqmX4YsBPCEqZTb
-	dAM8ttgw3DkrMMXz5i3lhq3dLc7b04lce1WK7NHZoMqwvX8Dd9cEIVx0IVo5X1o0CqPPQb
-	8DcZzZ5FK7QB91odnU0imAXQ3Uu8iBA=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-248-ePna1xj0NpCInMiWySBo9w-1; Wed,
- 15 Apr 2026 16:00:49 -0400
-X-MC-Unique: ePna1xj0NpCInMiWySBo9w-1
-X-Mimecast-MFC-AGG-ID: ePna1xj0NpCInMiWySBo9w_1776283241
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2BEAC1956048;
-	Wed, 15 Apr 2026 20:00:41 +0000 (UTC)
-Received: from grbell-thinkpadx1carbongen9.rmtusnh.csb (unknown [10.22.88.181])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 493B61800446;
-	Wed, 15 Apr 2026 20:00:37 +0000 (UTC)
-From: Gregory Bell <grbell@redhat.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	andrii@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WiCzvkDx"
+Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2d52c7f92b1so6456035eec.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 13:04:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776283445; x=1776888245; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qod7PqjI7roRANaNNOsy5/Ew/HuaCLYtUp2A3OMivYw=;
+        b=WiCzvkDx3NTLFGTg6+3ILulLdbKUcJGAe36fJbiO7mrYTJx309e2eDmD/cl+6SnAjd
+         W6qgcml8inoxaO5fuKjhOfG6FYh3RN9pU8vpsfhJE8hv9v40UyE7yHU1yrHHtvMhFePr
+         dpKO/4G4Bkh9qK6a7VeYDQVhPvRnG9XhPCPbSKVDnxidBIDzE47FgWvQHCRSMRC0OaCZ
+         IJPygcBSVhLUEMZpQTM4jMB880yFXyiwV45b6ekkkrYbDmQDH82EUJWSNJf4B1c1y4Kv
+         yIQmUCnPFBPZBMtX4y063fMfT3GKdXq/VxyLUiLASi0Vyu55fgMRAbATsRqIBZYkc1vk
+         NX1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776283445; x=1776888245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qod7PqjI7roRANaNNOsy5/Ew/HuaCLYtUp2A3OMivYw=;
+        b=XeD6sEQ1+Lj7I1hucKXwyYp633CZRJLSe/LLWYkmOc3HNUWqwtYeJq/8PeC7aYBDPt
+         koVLP/CHU0s5yDNbvZJP5017GOpRr/c9cd1oO8+9WLgkR5nf22s1Amju+WyhMMPEbw/R
+         MVvO2+y4lDqYY+P8iQl7KNJws1Zl2WKwikOczn8XjKCy0YWbmxKTTa0F/kBgrRIJEuL3
+         tVegLkF19CR9s0Iv/d7lZDYS6hvKF73RopxBlUd3RMQzU9E9qqJkIJUM9y47d1mR7ny2
+         HyNeR0Du1ccJc1QCjpxv6d5qpq7VMbCEclQRG7TEfqtQEu9QFKywpOXIua2ltbetqMuR
+         T9HQ==
+X-Gm-Message-State: AOJu0Yxr+3zuSPkmDUUbjqseovTHHjLQoJLLCdL0HXyhOE7e2QXJC5BN
+	g0g1lD1hdLksclJIVLGcumIMYpO0jcroU8Z9hjfXVPCLsK4khXPINa+2eQc6iYSn
+X-Gm-Gg: AeBDieukVw/pIZyHoKRysHG1lor0f34G/Fj8O58Wj7b7XRJWtpiickDlKQfBv47hKOC
+	9IDA8QtZP436gJuUtVbIs/+gwtrQqVI8w3SQR7p1gqbU9aDpHwe+vVWXolP5l8XyN3qywFYsx5n
+	RNEhsC/McVXIDHwfM3XQNpDBAaF+JSJEBLAOVjjflm3y3QF+Kuw8SNFAJXB7pHorqV9f0LN+340
+	H1RmAgp0+xlDuHUEa/E9DUkxUNDMPX15zaRPZJ3oLYdABt7YY1eDk7br6axNlmCdNLR4wFmuuN2
+	fWpdtvhfThT/U95GM7PLt4eKIZvGWXyW85OT0fuBl1I3V7up4QvmzN3Nilj5qtsZvALRSskpL3z
+	9aOw7vLVma4lML1A5OxVbepLjdEHlckH0u12Qj8ENYWx504/zyYs8U+lt2mPnkEb3qVEBZsqZy+
+	Duk89aHyFRrWfb1azFVXW/+ePifxMSlXaVpqp8+ot8cf0aGaDwTV/3HKQXk4CLPx34RHfWoVLWl
+	xE+oMHfSxHeggo=
+X-Received: by 2002:a05:7300:e2cc:b0:2c1:27c:7598 with SMTP id 5a478bee46e88-2d5898a56a7mr12963279eec.30.1776283445296;
+        Wed, 15 Apr 2026 13:04:05 -0700 (PDT)
+Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::cdb0])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c605851sm4163518eec.9.2026.04.15.13.04.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 13:04:04 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: daniel@iogearbox.net,
 	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
+	kernel-team@fb.com,
 	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	alan.maguire@oracle.com,
-	Gregory Bell <grbell@redhat.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Use local type for bpf_fou_encap in test_tunnel_kern
-Date: Wed, 15 Apr 2026 16:00:14 -0400
-Message-ID: <4cc7a73bd36f3611150cbc3a45cf9732a2dc8f6d.1776280396.git.grbell@redhat.com>
-In-Reply-To: <cover.1776280396.git.grbell@redhat.com>
-References: <cover.1776280396.git.grbell@redhat.com>
+	eddyz87@gmail.com,
+	ctao@meta.com
+Subject: [PATCH bpf-next v4 0/2] bpf: copy BPF token from main program to subprograms
+Date: Wed, 15 Apr 2026 13:03:54 -0700
+Message-ID: <20260415-subprog-token-fix-v4-0-9bd000e8b068@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260414-subprog-token-fix-96c29ffa7e12
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Replace the forward-declared struct bpf_fou_encap with the existing
-bpf_fou_encap___local type in the bpf_skb_set_fou_encap and
-bpf_skb_get_fou_encap declarations. This removes the need for
-the forward declaration and the explicit casts at each call.
+bpf_jit_subprogs() omits aux->token when it creates a struct
+bpf_prog_aux instances for a subprograms.
+This means that for programs loaded via BPF token (i.e., from a
+non-init user namespace), subprograms fail the bpf_token_capable()
+check in bpf_prog_kallsyms_add() and don't appear in /proc/kallsyms.
+Which in-turn makes it impossible to freplace such subprograms.
 
-Fixes: d17f9b3 ("selftests/bpf: Fix compilation failure when CONFIG_NET_FOU!=y")
-Signed-off-by: Gregory Bell <grbell@redhat.com>
+Changelog:
+v3 -> v4:
+- check sysctl_set calls for errors (sashiko).
+v2 -> v3:
+- mark selftest as serial (sashiko).
+v1 -> v2:
+- target bpf-next tree (fixups.c) instead of bpf tree (verifier.c).
+
+v1: https://lore.kernel.org/bpf/20260414-subprog-token-fix-v1-0-5b1a38e01546@gmail.com/T/
+v2: https://lore.kernel.org/bpf/20260414-subprog-token-fix-v2-0-59146c31f6f1@gmail.com/T/
+v3: https://lore.kernel.org/bpf/20260415-subprog-token-fix-v3-0-6fefe1d51646@gmail.com/T/
 ---
- tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+Eduard Zingerman (2):
+      bpf: copy BPF token from main program to subprograms
+      selftests/bpf: verify kallsyms entries for token-loaded subprograms
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index 32127f1cd687..80ed5e8f2b06 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -36,12 +36,10 @@ enum bpf_fou_encap_type___local {
- 	FOU_BPF_ENCAP_GUE___local,
- };
- 
--struct bpf_fou_encap;
--
- int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
--			  struct bpf_fou_encap *encap, int type) __ksym;
-+			  struct bpf_fou_encap___local *encap, int type) __ksym;
- int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
--			  struct bpf_fou_encap *encap) __ksym;
-+			  struct bpf_fou_encap___local *encap) __ksym;
- struct xfrm_state *
- bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts,
- 		       u32 opts__sz) __ksym;
-@@ -781,7 +779,7 @@ int ipip_gue_set_tunnel(struct __sk_buff *skb)
- 	encap.sport = 0;
- 	encap.dport = bpf_htons(5555);
- 
--	ret = bpf_skb_set_fou_encap(skb, (struct bpf_fou_encap *)&encap,
-+	ret = bpf_skb_set_fou_encap(skb, &encap,
- 				    bpf_core_enum_value(enum bpf_fou_encap_type___local,
- 							FOU_BPF_ENCAP_GUE___local));
- 	if (ret < 0) {
-@@ -820,7 +818,7 @@ int ipip_fou_set_tunnel(struct __sk_buff *skb)
- 	encap.sport = 0;
- 	encap.dport = bpf_htons(5555);
- 
--	ret = bpf_skb_set_fou_encap(skb, (struct bpf_fou_encap *)&encap,
-+	ret = bpf_skb_set_fou_encap(skb, &encap,
- 				    FOU_BPF_ENCAP_FOU___local);
- 	if (ret < 0) {
- 		log_err(ret);
-@@ -843,7 +841,7 @@ int ipip_encap_get_tunnel(struct __sk_buff *skb)
- 		return TC_ACT_SHOT;
- 	}
- 
--	ret = bpf_skb_get_fou_encap(skb, (struct bpf_fou_encap *)&encap);
-+	ret = bpf_skb_get_fou_encap(skb, &encap);
- 	if (ret < 0) {
- 		log_err(ret);
- 		return TC_ACT_SHOT;
--- 
-2.52.0
-
+ kernel/bpf/fixups.c                                |  1 +
+ tools/testing/selftests/bpf/Makefile               |  1 +
+ tools/testing/selftests/bpf/prog_tests/token.c     | 86 +++++++++++++++++++++-
+ .../selftests/bpf/prog_tests/unpriv_bpf_disabled.c | 21 +-----
+ tools/testing/selftests/bpf/progs/token_kallsyms.c | 19 +++++
+ tools/testing/selftests/bpf/sysctl_helpers.c       | 37 ++++++++++
+ tools/testing/selftests/bpf/sysctl_helpers.h       |  8 ++
+ 7 files changed, 150 insertions(+), 23 deletions(-)
+---
+base-commit: 71b500afd2f7336f5b6c6026f2af546fc079be26
+change-id: 20260414-subprog-token-fix-96c29ffa7e12
