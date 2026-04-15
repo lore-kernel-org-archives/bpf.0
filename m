@@ -1,69 +1,76 @@
-Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52BA631A555
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 03:27:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053A232A3EC
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 03:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776223672; cv=none; b=d5pK47GRd26ShnG20nV3xUYy9BLn/tfPXLHAGM7CmR9HPFbueTSpRl2r9KmkNpdjMG6qxq00I3tdBZ5F6fJ2x6bRwdy5JvbyQKcZ6j9GQv7+NyBSKEwU1hYGbmxEwKChtpO7Krg07qe2V39Zp6F4TmikHR6ldqae4EbL5JvYpgE=
+	t=1776224831; cv=none; b=mAC2N6YznWDmsERYBH8jGO1zXjqZYpjHaRu+3ESbRPy278G+59XyeVu6PyQgiCp6wjMtWhQzA4Fw1NyxJklMhjE+Vry5g8WRMN3YSlleuWpCaKE0qrbjtKFNLPWvjYBMUA53qBi4c/0P44OMIGa4waoI3xOh0AyB7wIubBMaZOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776223672; c=relaxed/simple;
-	bh=BSLWZEeyiGLkWmdhgkHUXyMzVLOfv2SFYvbaK/XLBCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M0sNsajP+uQIH3AEDAhaL8nscO86f2/aSrU1NbqzHHovsXSH1DXRVVQMnylqxjWqLIvNdo1ZhZj1EhmzzWPXuOX25Axsrijo+7FawDP1okYdK40dZL98NLyPfCKFXlTpnxa80ti4tTniCPaPP9/3v/vzWgCaDKlsAolzDlfBmAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=YLdk8kpP; arc=none smtp.client-ip=180.181.231.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+	s=arc-20240116; t=1776224831; c=relaxed/simple;
+	bh=8Fhipxe7y3f0Q5g6ZxelI3bBZS834wn1hM9Sq09qjb4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=GATWHADWw54jVPVOedzc4kXr7UDZfEbXROQy3Dzdeagrj3/WZ3LEEV1rScVzQDc3qwPtgUuR2CrN+1M2ln4SwkQR/VCs/XfBc9RDedNN5A3R+qRjmwHqmTuLfFssYasZqnH1xDjlg9KD8SG7e9TV+hA4x29uwfjeVuTHycCp86M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tRERVpHt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="YLdk8kpP"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
-	from:content-type:reply-to; bh=pFYq5Hzm0sI905yTElU9H8Zj3dJTGquQpnLSoQkCffo=; 
-	b=YLdk8kpPd5V4q6btphKCcCAqcUfB8dUkB6j87N2dxmWKdyoatR1hpvxphao/h2YSqx0kPlLt3du
-	bTf+hUjS4li4lc07d5ZibH/lgnR5Mxl5aA1R96rSdoewmFR11ujz7FkdL1ZnAIVkIPTUbJTw6Cih1
-	z9NOsn8lQErgINPQEu1XZmfkX7lOeVmrhIUzlz4NE+AUSZmsbPiqv29jxOPf76CWs6+GjII4T3hUy
-	2s2FpaLzIo+Zq7Yz9b0uiI9RIVLI1WmRN45Au8anpMKIIh39fSGagfaVkdEFz0r59VNsFgXiywSTS
-	IcX+8yb4+YtJNJvorSqlm/xTBBcMmjYEQLAw==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1wCqVI-006BIM-1w;
-	Wed, 15 Apr 2026 11:27:44 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 15 Apr 2026 11:27:43 +0800
-Date: Wed, 15 Apr 2026 11:27:43 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
-	eddyz87@gmail.com, memxor@gmail.com,
-	Mykyta Yatsenko <yatsenko@meta.com>
-Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
-Message-ID: <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tRERVpHt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EBC4C19424;
+	Wed, 15 Apr 2026 03:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776224830;
+	bh=8Fhipxe7y3f0Q5g6ZxelI3bBZS834wn1hM9Sq09qjb4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=tRERVpHt6b0aCpjpoypI9hWwwtsn+xqe+AhWSsexjg1FabdoGlpDA2PILuCZvYwdn
+	 3l6Tx0O192hqEpMtnWYzKu1xb1S4ylIr+u/d8cq/wD5B8aeESyXbUX1bSL7qCtav7T
+	 AyOIqFZaHQFDvrvsisezegL09JhXLEi1JktsCVzgg+De2A6pKgLWsHl0YMsEzJAZiQ
+	 uQ1EULCZIDAmtu6kKlT9O4dqjVhgOOOZ9WE6J1hn5/NQKr4tGJNdTZNzZzVRwyXvRn
+	 86Bidn65xMSPJYxS3BXtQnLmQX+b4B62rubAbRxdZzvgc2UrtlDEFCrvDbk6rJgny/
+	 ghBdczblrGyYA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F953809A33;
+	Wed, 15 Apr 2026 03:46:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] BPF changes for 7.1
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177622480029.1597933.8340078808998982134.git-patchwork-notify@kernel.org>
+Date: Wed, 15 Apr 2026 03:46:40 +0000
+References: <20260413174732.87983-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260413174732.87983-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@kernel.org, memxor@gmail.com, eddyz87@gmail.com
 
-On Wed, Apr 08, 2026 at 08:10:05AM -0700, Mykyta Yatsenko wrote:
->
->       rhashtable: Add rhashtable_walk_enter_from()
+Hello:
 
-Rhashtable walking is strongly discouraged because there is no
-way to provide a consistent walk on a hash table that can be resized
-or rehashed during the walk.
+This pull request was applied to bpf/bpf.git (master)
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-So the question is why do you need to be able to walk through the
-hash table, and do you need consistency guarantees such as walking
-through every entry once and once only?
+On Mon, 13 Apr 2026 10:47:31 -0700 you wrote:
+> Hi Linus,
+> 
+> The following changes since commit d8a9a4b11a137909e306e50346148fc5c3b63f9d:
+> 
+>   Merge tag 'v7.0-rc6-smb3-client-fix' of git://git.samba.org/sfrench/cifs-2.6 (2026-04-02 21:04:28 -0700)
+> 
+> are available in the Git repository at:
+> 
+> [...]
 
-Cheers,
+Here is the summary with links:
+  - [GIT,PULL] BPF changes for 7.1
+    https://git.kernel.org/bpf/bpf/c/f5ad4101009e
+
+You are awesome, thank you!
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
