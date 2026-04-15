@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615BE29D288
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 20:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C75529D288
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 20:00:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776283246; cv=none; b=Gd+YjE9kOQ7JPN5QnEsaWQ6d3Xur1ymDcC4K7nNi0rTXFb0n6wLbRT8gU04h3K7FjGI4epVZGtXNFm2UFu1yod09rZgY42ZrLXiFwCytuINxjdYmNhx2O4szk8ud8XlwCdQxs864Ovrmx3ejkLGJYWH37JhPGv5+9UOvrOiO4aM=
+	t=1776283255; cv=none; b=bXTGtW5gGa37g51k7dHqTWpATKbiyMpXKjJ/7+jAtzrQBH68ylHO/Bo76kQUyuXEoDrhUwKJL6feaLtzHZlibmxPAcVei7+v1Fyiu65g8G/d1YX2O90RCGsi+rtNtDKlVVr0ilgATz1/8fJXryGof5GDwvVfHXIZGJpXjE425O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776283246; c=relaxed/simple;
-	bh=VingE3z2/JrbcWRMIUQafD2hvAWqVw1ne/xNOQlvf2M=;
+	s=arc-20240116; t=1776283255; c=relaxed/simple;
+	bh=5Si8SFkPlQbj4ZK/Nv7vKd6bP9Wbmf0ulJ+tfMLqY+E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QAP/kAJiS4GoR/yrSItSDz2gRfOx9cY1sO2T/G98p9W1HpdpDbrLgyBKv7U/mCHCbRhMSkEh+T+4u/RmRbifcMOs3NLNyo98Y7mhYVehcAQDtcznZk3U0WXZOOwHQ4Hbi00ihbkcZ1dAiLO5Ha2U+H2mZUksRBf7EwP39zIQRXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KCDRBX8z; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=E6o6gnTDvViH6eHIZKcvtSon3U6KdcqXZ7QbfC6Pne2Id3YFGnbgUML3M0V6I0Qam5TcSyY9RClZQRam5pz5CiBqGLxBBUmnguOMvyfADxBuCseMkgYsZOAllHNFTwDl5DiA+bDPr6X1SXHj4nGfOeW+sqjp+eqyvAqO7Bbzikk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ef26ViPs; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KCDRBX8z"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ef26ViPs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776283244;
+	s=mimecast20190719; t=1776283253;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dvX26OMbKxfDvkOdNzH/J3ynx06A90edix2CwvcDeis=;
-	b=KCDRBX8zVsJSaOVxoOdER5BPOl+8V2fE+Sx2B76JJpluYVI1wVkwv6nEPKTw4liA1Isc3r
-	evQXCp5NT8o6qSC8Gn2EnmxKIj+xzdVUXjszf3uYNfpqA/iCGFP/UT9F4Ip98T3Pq1gnae
-	+UALp7Y4L9IE2ojG105cHMsx8sv8XUo=
+	bh=rrx/maKRkin5kg0qAPTHBpet2FFANooNBkjHVIfFRwc=;
+	b=Ef26ViPseq8hYVOGvQtEhFaCk7EL7x0RlN1DeDlRwKgGTNI5BKSAi2miqmX4YsBPCEqZTb
+	dAM8ttgw3DkrMMXz5i3lhq3dLc7b04lce1WK7NHZoMqwvX8Dd9cEIVx0IVo5X1o0CqPPQb
+	8DcZzZ5FK7QB91odnU0imAXQ3Uu8iBA=
 Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-458-QNOZjMsTPFeIVq-6tDiHSw-1; Wed,
- 15 Apr 2026 16:00:38 -0400
-X-MC-Unique: QNOZjMsTPFeIVq-6tDiHSw-1
-X-Mimecast-MFC-AGG-ID: QNOZjMsTPFeIVq-6tDiHSw_1776283235
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-248-ePna1xj0NpCInMiWySBo9w-1; Wed,
+ 15 Apr 2026 16:00:49 -0400
+X-MC-Unique: ePna1xj0NpCInMiWySBo9w-1
+X-Mimecast-MFC-AGG-ID: ePna1xj0NpCInMiWySBo9w_1776283241
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C1651955DE3;
-	Wed, 15 Apr 2026 20:00:35 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2BEAC1956048;
+	Wed, 15 Apr 2026 20:00:41 +0000 (UTC)
 Received: from grbell-thinkpadx1carbongen9.rmtusnh.csb (unknown [10.22.88.181])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 525C51800446;
-	Wed, 15 Apr 2026 20:00:31 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 493B61800446;
+	Wed, 15 Apr 2026 20:00:37 +0000 (UTC)
 From: Gregory Bell <grbell@redhat.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -61,9 +61,9 @@ Cc: ast@kernel.org,
 	shuah@kernel.org,
 	alan.maguire@oracle.com,
 	Gregory Bell <grbell@redhat.com>
-Subject: [PATCH bpf-next 1/2] selftests/bpf: Use local type for flow_offload_tuple_rhash in xdp_flowtable
-Date: Wed, 15 Apr 2026 16:00:13 -0400
-Message-ID: <f6f80e1f34489ef0f3c47601e9d752da0d0259e5.1776280396.git.grbell@redhat.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Use local type for bpf_fou_encap in test_tunnel_kern
+Date: Wed, 15 Apr 2026 16:00:14 -0400
+Message-ID: <4cc7a73bd36f3611150cbc3a45cf9732a2dc8f6d.1776280396.git.grbell@redhat.com>
 In-Reply-To: <cover.1776280396.git.grbell@redhat.com>
 References: <cover.1776280396.git.grbell@redhat.com>
 Precedence: bulk
@@ -75,43 +75,63 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Define flow_offload_tuple_rhash___local and use it in place of the
-forward-declared kernel type for the bpf_xdp_flow_lookup kfunc return
-type and tuplehash variable. This is consistent with how
-bpf_flowtable_opts___local is already handled in the same file and
-avoids relying on a forward declaration of the struct.
+Replace the forward-declared struct bpf_fou_encap with the existing
+bpf_fou_encap___local type in the bpf_skb_set_fou_encap and
+bpf_skb_get_fou_encap declarations. This removes the need for
+the forward declaration and the explicit casts at each call.
 
-Fixes: eeb23b5 ("selftests/bpf: fix compilation failure when CONFIG_NF_FLOW_TABLE=m")
+Fixes: d17f9b3 ("selftests/bpf: Fix compilation failure when CONFIG_NET_FOU!=y")
 Signed-off-by: Gregory Bell <grbell@redhat.com>
 ---
- tools/testing/selftests/bpf/progs/xdp_flowtable.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_flowtable.c b/tools/testing/selftests/bpf/progs/xdp_flowtable.c
-index 7fdc7b23ee74..e67daa02749d 100644
---- a/tools/testing/selftests/bpf/progs/xdp_flowtable.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_flowtable.c
-@@ -15,7 +15,10 @@ struct bpf_flowtable_opts___local {
- 	s32 error;
+diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+index 32127f1cd687..80ed5e8f2b06 100644
+--- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+@@ -36,12 +36,10 @@ enum bpf_fou_encap_type___local {
+ 	FOU_BPF_ENCAP_GUE___local,
  };
  
--struct flow_offload_tuple_rhash *
-+struct flow_offload_tuple_rhash___local {
-+};
-+
-+struct flow_offload_tuple_rhash___local *
- bpf_xdp_flow_lookup(struct xdp_md *, struct bpf_fib_lookup *,
- 		    struct bpf_flowtable_opts___local *, u32) __ksym;
+-struct bpf_fou_encap;
+-
+ int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
+-			  struct bpf_fou_encap *encap, int type) __ksym;
++			  struct bpf_fou_encap___local *encap, int type) __ksym;
+ int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
+-			  struct bpf_fou_encap *encap) __ksym;
++			  struct bpf_fou_encap___local *encap) __ksym;
+ struct xfrm_state *
+ bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts,
+ 		       u32 opts__sz) __ksym;
+@@ -781,7 +779,7 @@ int ipip_gue_set_tunnel(struct __sk_buff *skb)
+ 	encap.sport = 0;
+ 	encap.dport = bpf_htons(5555);
  
-@@ -67,7 +70,7 @@ int xdp_flowtable_do_lookup(struct xdp_md *ctx)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
- 	struct bpf_flowtable_opts___local opts = {};
--	struct flow_offload_tuple_rhash *tuplehash;
-+	struct flow_offload_tuple_rhash___local *tuplehash;
- 	struct bpf_fib_lookup tuple = {
- 		.ifindex = ctx->ingress_ifindex,
- 	};
+-	ret = bpf_skb_set_fou_encap(skb, (struct bpf_fou_encap *)&encap,
++	ret = bpf_skb_set_fou_encap(skb, &encap,
+ 				    bpf_core_enum_value(enum bpf_fou_encap_type___local,
+ 							FOU_BPF_ENCAP_GUE___local));
+ 	if (ret < 0) {
+@@ -820,7 +818,7 @@ int ipip_fou_set_tunnel(struct __sk_buff *skb)
+ 	encap.sport = 0;
+ 	encap.dport = bpf_htons(5555);
+ 
+-	ret = bpf_skb_set_fou_encap(skb, (struct bpf_fou_encap *)&encap,
++	ret = bpf_skb_set_fou_encap(skb, &encap,
+ 				    FOU_BPF_ENCAP_FOU___local);
+ 	if (ret < 0) {
+ 		log_err(ret);
+@@ -843,7 +841,7 @@ int ipip_encap_get_tunnel(struct __sk_buff *skb)
+ 		return TC_ACT_SHOT;
+ 	}
+ 
+-	ret = bpf_skb_get_fou_encap(skb, (struct bpf_fou_encap *)&encap);
++	ret = bpf_skb_get_fou_encap(skb, &encap);
+ 	if (ret < 0) {
+ 		log_err(ret);
+ 		return TC_ACT_SHOT;
 -- 
 2.52.0
 
