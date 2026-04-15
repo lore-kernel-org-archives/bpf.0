@@ -1,153 +1,120 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5895431619B
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 16:03:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56CE78F3A
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 16:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776269004; cv=none; b=pWK9vX8w9TNxcgB4hPlMy6w8TXoDRu7cqlNBG67dtvf7YAxCRwNY/aK8NIe3jB4mITzMyo88dC+Ffaen2dHNPrPMO0uR8i9XS0d2JYkEpiq7Ri9c34nSgugLoXGE6KbwlNmRNht44bMKVAG24erO2OT7CnSZ3Fzc06xMULZ2Hzk=
+	t=1776269258; cv=none; b=GSWsm7ex0z79AcP05Jc3/0Hgpv73SZWEBEEHnMcQUQce+jNbrTkK4QUHeShV2dudv3uGtoDMYOG/s5RayZCCBcLmwIUu4+C1ZwAPOzwiBAxCiQRKKVoGowiv4WKnmjt1mV/tp2gG3Ki0Bi6xPN4mMm3jItscBPZ4BfHdX8OgmOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776269004; c=relaxed/simple;
-	bh=RERTq8I3MIF1yMkiB6wZkHJkgJHv+ltcECYK8aKlT20=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EpnYQtuifXZByPZ0acFgB6OU3tRLrmEiOVTw0GkFfo8tgVyEo5YzcIXsdnTSgOjm4jGjZ1GH3+TqoLPItarlFeBGLElOm+tXgGI/z1BpwCWOxlxF8Vy5zCEjYQAqnDiKg6DXauZ/wlroQ0+YQoSXZb0vZ9ubvrljNsTSTQ8gy1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUrotkQn; arc=none smtp.client-ip=209.85.221.49
+	s=arc-20240116; t=1776269258; c=relaxed/simple;
+	bh=ecnv8XL1XmC67FEVworOKiot9VKxc0X8M7HprD8xhvQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CYDfaq3RvgBiXPh9hjJv+mL0Wr+oQKCZkR+AAAs1CmpxNzToFPl7x4bYxa/Wcvf7LGUsRcyaU7GQ35qQzQiqUHlMtmaoA95ngRac4xxzX97Knfk24HqUQXf4652tGBT/KiXQn9p7WlCk7DTpmAJ1Wes27vyeep4SKUCF6e3M6XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lpD0RIR1; arc=none smtp.client-ip=209.85.217.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUrotkQn"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d70c30767so2338191f8f.0
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 09:03:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lpD0RIR1"
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-60fa13bde2dso2200421137.3
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 09:07:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776269001; x=1776873801; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6aoMj0PyvdjaOSOF6R9+rApmF70RjoEgTTBHQu7dCmw=;
-        b=iUrotkQniuAiCMCpz95adUmYDNrzHKU2fxsPMf7eBiy4Z9bDYwsQWIYUpEoFVoWRgH
-         maFcP7yd0a4kQm6Mh9o1knr284/KwvRAzUrMZQqeMuZg8RKofPbMXFfLaQck3ffO/R/f
-         0ZFs3HKCPIfMLyvDYENyY+uaqjWF46NGp625Eea36YHYRq47cvZL17f9XDqfDLvsazid
-         OuUSyQP1PNuqjvhAT+iWlaCOIwfDviUkpyUV9cAf2XzPyyIihAJTjJnahcjhADM/KIgm
-         rvgqvXC62AG6Vw6Gf+JOHBpUydwEwMGP5FyjyQn3AsLxSRWc/+N9vzQ79oij+lha4PQT
-         hrOA==
+        d=gmail.com; s=20251104; t=1776269256; x=1776874056; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dsZCdCBlGt9BLFbhDcrPv5btCZKSWDJNiSHEBV1eByA=;
+        b=lpD0RIR1MOLsBiybdFql3opdoC9CdWkg/l6wLXeqDvgPThs6+/mutKLV1VvHNn5LGv
+         BR6Wsdc0FawQuj2CtJe8OzHeNTkl4k+1zfCQZu2xAdGaEFgTku8o9iHrPNkwutcXaf6b
+         2VLE2hA/Ml+7rNBJmJgjOR9ieEyLHVcY76HGuU4bgmsAUvSohtUbGOSyZnLgHnUEK/bo
+         vUMuEjiDijFxsHfBYZ3+t1FdV2GinAkjZbngIfiwefk2Awytyqt6sc9bQZnkErmQ4Kjz
+         AN/UmV0qXsaAV+Gc6A38gaXmhVTVHYVtkHWreA9e/RVN/1oyP3ONcRzk1EeyO8moTF4I
+         6Odg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776269001; x=1776873801;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6aoMj0PyvdjaOSOF6R9+rApmF70RjoEgTTBHQu7dCmw=;
-        b=LWUQyBmPm/B0/kxq9on0v1cvUXKNqqVNIXXOJRo/BQHmQYeP77L+6nuUL0nTnzdSlz
-         kYU4TIs4WU1VcQ+bmpfAvyKbOTN5cWGWkHCNgzYmN7bPXdKqYer6uEZ2OSyVRK87KF5s
-         RN6F9E7141o0nLj7v5m1VnIBcu9F8Ym/pk4xV7cR5SrZ3habyh0Rp1pmNxti2W2YqrKC
-         u8TH50/D7P43hflL9Ews6AivplC2w/4KricdggxC28Okd1WoVtgynKibRZg65bTogS4i
-         dMiW3CuwI2vwbbqLZtBWlqLS/G6UXmoa2iI4befz6PDpAOLKTeRac5Lv70k/s7DZH6dM
-         Z4Pw==
-X-Gm-Message-State: AOJu0YzikHVbjDW/l0hK5bNfrV5Gd7+SNT2qPQOgaX/zsXlEBXSlfkaQ
-	IOgLQ/Tia4coD1KRrCPKIGm9imj/uspBou6dsy75CZU2YiHELJPu8JwN
-X-Gm-Gg: AeBDiethjjv+SWkdBiFHbO4WRN8xqbtIGZEkydr+kMPxdcPcORFxcJwemkMs2eBlCYI
-	ITySH1K+Gd5+1rvX6KThopVmPY8GDymLAiTXbpdH9l7zyGoNRDay0+db6MYc60+Q/Ww4gNAKndt
-	FGL9p98Q1ibzs29zWBF80EG+DKfzCR58Yzuxb7tf6vootnqKwgbFnen39fwb3DcjlCPyY/V1ysc
-	B88YnF/hFaZ6di7xLVUgsGNp7aGMyH9kzh4mh0Sr/u9mu0lg1XHJRZhaET582kmJ4tHTl2tWXSK
-	5FbF+sRtQqlmvu7+MsPHgmnvA83XqSI983cMatZl0IAM2uUAghTJcvHKbi6RkKB930SnMCLqL7Y
-	nDnFMnovQiXo2n5JWJtrwy5lznKZ7vnreEtP8SLGJa8blbxgnSGFcMt066DxoudgyLpyOAMme7Z
-	ctW/NVHy3AbR6UhIYdtOUrd9oAI43Si4b1xVRyd0cvYgIQfW8AhLRTwmyvH2kH
-X-Received: by 2002:a05:6000:4205:b0:43d:772d:2b61 with SMTP id ffacd0b85a97d-43eb10ceeadmr19592f8f.15.1776268999156;
-        Wed, 15 Apr 2026 09:03:19 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:cbe8:6434:118f:886d? ([2620:10d:c092:500::5:3ecd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43ead3d5f06sm6539936f8f.17.2026.04.15.09.03.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Apr 2026 09:03:18 -0700 (PDT)
-Message-ID: <235f4a5d-c5fc-4980-a075-284e966c4fc6@gmail.com>
-Date: Wed, 15 Apr 2026 17:03:17 +0100
+        d=1e100.net; s=20251104; t=1776269256; x=1776874056;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dsZCdCBlGt9BLFbhDcrPv5btCZKSWDJNiSHEBV1eByA=;
+        b=QxdFAZDJzH4D94oI3RC9lDepLoSQ9CA44cfffOi5c444U5/9gg4nfG92gvY3SZlif5
+         QPtlLvuN4lGiojud1IigizW9jAQWfTO2/bEE6cT6epEN7Dd6VgcxGrDqkaleKr0bBu/n
+         Im6bie8ZOSG6YRK51oXvrdL2ETSGJQGqKgzgjc45uZt4Txr/0juok8rKpt2ULI5IloCW
+         i1LkzB9ZQoBbHOD9PbIb/eYfmIM742cl7IMO+i4V20fTQe3Ot7CT8yv+7OXBWmJhGyvm
+         NGjfMllvr+HzgEZqoaExuGB05q9enjdgXeQitRxsAjqQ+XCXMkT0G+urSD1FJzjDuMxM
+         FLMQ==
+X-Gm-Message-State: AOJu0YyX+9AE4YxdtSilLq3FG4/vp5x8fJtTsttNN3aPXBzb4C76KWx5
+	1L59C0953jxkkh1/8i+kb8C+JypnwaM/hUacVg+0TUgjMUoRZIVCjvQ2nlrsmhoN
+X-Gm-Gg: AeBDieskScYlFSADmL8cgQ/Xp6Htjm6ykPNbqS5SvNQfWoZL18Dv4enehK/QprJN0Nx
+	IvtlvKFzUQh1Mzh2xwSNABol9QpsVQZTDxzza1Tqx/SciUl74lUQEeew0YeR/ysFVS1WGO+pb7q
+	JPolsxN3EAOzjhJw2GxRRvrQbXK27cMxmslxVq1u1uWgeJG11XAoRoMeUM+rOsyMg0jQy4Vdh60
+	deLBgaOkxki4qLLCmY0vp4WWUbpfcVEj9ti6HIQV4I1tHtKeGE41IGs2Q41TLBNI3Z8hWERzq6X
+	zxO46WkjEVcGzCcr2Ezzh2eVZ41yqOEQVytq+Ubf4jyprtfnHnvGajwUCqmH69R4VhxA1D2RhZl
+	yIaWhDZ/UcsCK6FgYLtm1VvM+Rhzl36KC59d6Q4mMKJE+OOY/+K6weNk7UMZp82jxq84VTy08q1
+	zdpSEoch3CaJolT5cDiyGciz0/T24eZNZWqQS48buIq8EXo6l2gnQaLnY5rNOxv+XxiUnsCh2fs
+	pDBeKkepnmcmMl4Z1fEUKwkQr3Xe6I=
+X-Received: by 2002:a05:6102:3f05:b0:607:798e:18c1 with SMTP id ada2fe7eead31-609fe5872aamr10645257137.5.1776269256432;
+        Wed, 15 Apr 2026 09:07:36 -0700 (PDT)
+Received: from lima-default (pool-108-50-252-180.nwrknj.fios.verizon.net. [108.50.252.180])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ae6c959839sm14883736d6.14.2026.04.15.09.07.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 09:07:35 -0700 (PDT)
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Subject: [PATCH bpf-next 0/2] Detect and prune dead branches using intersection checks
+Date: Wed, 15 Apr 2026 12:07:26 -0400
+Message-ID: <20260415160728.657270-1-harishankar.vishwanathan@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 5/6] selftests/bpf: Test BTF sanitization
- rejection for invalid vlen
-To: sashiko@lists.linux.dev, Alan Maguire <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org
-References: <20260414195019.684531-6-alan.maguire@oracle.com>
- <20260414222624.A722AC19425@smtp.kernel.org>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260414222624.A722AC19425@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+This patchset improves the BPF verifier's dead branch detection and pruning by
+introducing intersection checks for the verifier's abstract domains (u64, s64,
+u32, s32, and tnum). 
 
+Previously, the verifier could detect only ill-formed ranges (e.g., umin > umax)
+to detect dead branches during simulation [1]. This patchset expands upon that
+by identifying situations where the abstract values across different domains for
+a given register no longer intersect. If there is no concrete integer value that
+simultaneously satisfies the bounds of all tracked domains, the verifier can
+safely deduce that the branch is dead code. As a proof of correctness, the C
+implementation for each of the 10 domain intersection checks has been formally
+verified against a logical specification using the Agni framework [2].
 
-On 4/14/26 11:26 PM, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 3 potential issue(s):
-> - [Low] Leaking the BTF object on unexpected success of sanitization.
-> - [Low] Lack of error checks for BTF construction calls.
-> - [Low] Using `BTF_MAX_VLEN` as the `byte_sz` argument in `btf__add_datasec()`.
-> --
-> 
-> commit 9c5af444155b34aa840793bf185bc0c0aaa04f3f
-> Author: Alan Maguire <alan.maguire@oracle.com>
-> 
-> selftests/bpf: Test BTF sanitization rejection for invalid vlen
->      
-> This patch adds a selftest to verify that BTF objects with extended vlen
-> are properly rejected by kernels that do not support the extended feature.
-> It simulates the lack of support using the feature cache and checks if
-> sanitization fails when the vlen limit is surpassed.
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
->> index 652b51efafc27..f41cea5a769a2 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
-> [ ... ]
->> @@ -95,3 +95,65 @@ void test_btf_sanitize_layout(void)
->> +static void test_btf_sanitize_extended(void)
->> +{
-> [ ... ]
->> +	btf = btf__new_empty();
->> +	if (!ASSERT_OK_PTR(btf, "empty_btf"))
->> +		goto out;
->> +	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
->> +	btf__add_var(btf, "var1", 0, 1);
-> 
-> Are we missing error checks on these btf__add_*() calls?
-> 
-> If any of these allocations silently fail, the test might proceed with an
-> incomplete BTF object that hasn't actually surpassed the vlen limit. This
-> would cause the subsequent bpf_object__sanitize_btf() call to unexpectedly
-> succeed, failing the test for the wrong reason.
-> 
->> +	btf__add_datasec(btf, "datasec1", BTF_MAX_VLEN);
-> 
-> Is it intentional to use BTF_MAX_VLEN for the byte_sz argument here?
-> 
-> BTF_MAX_VLEN is a bitmask representing the maximum number of items, not a byte
-> size. Using a proper calculated byte size like 0x10000 * 4 might be clearer.
-> 
->> +	for (i = 0; i <= 0xffff; i++)
->> +		btf__add_datasec_var_info(btf, 2, i * 4, 4);
->> +
->> +	/* Sanitization should fail here as vlen surpasses unextended limit. */
->> +	sanitized = bpf_object__sanitize_btf(skel->obj, btf);
->> +	if (!ASSERT_ERR_PTR(sanitized, "bpf_object__sanitize_btf_should_fail")) {
->> +		sanitized = NULL;
-> 
-> If the first bpf_object__sanitize_btf() call unexpectedly succeeds, sanitized
-> will hold a valid pointer.
-> 
-> Doesn't setting it to NULL before the goto out path leak the memory, since
-> btf__free(sanitized) will be called with a NULL pointer at the end of the
-> function?
-> 
+Patch 1 introduces reg_bounds_intersect() which implements intersection checks
+for all 10 domain pairs and uses this in simulate_both_branches_taken() to
+improve dead branch detection, and in reg_bounds_sync() to exit early on invalid
+inputs that have no intersection. 
 
-This is no leak, but setting to NULL is not needed, because btf__free() 
-checks IS_ERR_OR_NULL(btf).
+Patch 2 (Paul) adds an accompanying selftest that relies on an empty
+intersection between tnum and u64 state, something that is detectable only by
+the new logic. 
 
->> +		goto out;
->> +	}
->> +	/* Now switch extended feature on and ensure success. */
-> 
+[1] commit b254c6d816e5 ("bpf: Simulate branches to prune based on range violations")
+[2] https://github.com/bpfverif/agni
+
+Harishankar Vishwanathan (1):
+  bpf/verifier: Use intersection checks when simulating to detect dead
+    branches
+
+Paul Chaignon (1):
+  selftests/bpf: Test for empty intersection of tnum and u64
+
+ kernel/bpf/verifier.c                         | 224 +++++++++++++++++-
+ .../selftests/bpf/progs/verifier_bounds.c     |  25 ++
+ 2 files changed, 244 insertions(+), 5 deletions(-)
+
+-- 
+2.51.0
 
