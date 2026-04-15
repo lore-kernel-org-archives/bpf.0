@@ -1,63 +1,63 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A69837F8B3
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 18:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C683803F5
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 18:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776278127; cv=none; b=YYLPrXhpKk6SwycZ6fqHO4QXZpLa3MwZxtanEKTu6wrt/8zJgr81KUFHITNoMwe4blDrljlT6CH6eTpIBY9+dF8SBuEEJxCdvhFMV4ai2PPyZ/mp7T4tMbKM7g45Fr0nxwe5/AvFO59hBySjJRsPZm1q4qqAmNuedEnFBgjw010=
+	t=1776278129; cv=none; b=V7k2TV5v6s22gCr9VgeyzgEcjGKXLlIHWz1uLcR/ucQhlMHmpXTs8mQ+5iKW6k4v9JjMcpYDLOiuSWnoKJsCprr9/lUPDp1zJu+nnfWwV7EuGX9ausY65jsKj4TllEM3AF1hiknwiCKyEkXeLhVGPuKbkX7NGIJieaGBu0pGxec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776278127; c=relaxed/simple;
-	bh=pggxb5klrCa31iAHEsZWCNSyt4ephJB6XKes0lC1k6Q=;
+	s=arc-20240116; t=1776278129; c=relaxed/simple;
+	bh=UUXJ9rgYRhxBNoctNZA1rfdM05pY4KMQdacXwbpQ63k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RhzBqdTFtUik6Vd8AEBwSOaMUgUFxA9kId5NhZv3moY79ufw3xTbZogadN8g4HYVW3D4/a1wyWgz80Ul3Cr/+gbcTsTgBaXAI8v4KE2taSKqQJEUm19+9ujRfVgIfmvZKzHrlTfDqfA0KaX7pKVI8GHjcCPUPdQ2Wu9eeuW7qQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DyEnuHnR; arc=none smtp.client-ip=74.125.82.173
+	 MIME-Version:Content-Type; b=eAAlIrNWZn/im5nmV6yMa4Ig6Pfaod//BHLPaVkf4X+FCihWqDvGIIFQ3kOAjHy8NJofvH1MIich9C2ZS/4cdzzh1cXTh34wT9wjyih9fCbPMp1OMhZ+Xo7yKAwIe/BGXG5H8HChYtspw6U3GQUj8y3ToF/jtlRLid5leyqEw5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UCi6HFtL; arc=none smtp.client-ip=74.125.82.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DyEnuHnR"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2c156c4a9efso9713717eec.1
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 11:35:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UCi6HFtL"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2dbb4ad19a5so981822eec.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 11:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776278125; x=1776882925; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776278127; x=1776882927; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zru8FySz5AhiaWwf6Upr4P1h7py/Mu2zPj3hDHMgLYM=;
-        b=DyEnuHnRLKdUW1s4KNUZoXnr484UprREKCc2SML7w6XJsGOixlVo0j/Yq5AMGlxWUr
-         MDYPqRdxuYvGhnOjTxjVq/OTmClpgGZFPoddUp6SZqxKkxa9hV9yRo4fZ570OFcc8Cnv
-         njAeM2WYbJyd37/2qon6pXvXcefGcDkTnWNdv3oEw1dTEo2v+mDbguVeUR72rmOSVkWP
-         gxtO7lDQ04JL3oOAch7lCk97XTYoi3T9bzLfBi+f64c7urw50xJT6T8ObM3jRCYNGias
-         rpOVaxIws/qSeiecYggWr3mO/pgBHoyhIMLBCqRPVLNrFi8kXgvXHEJBk8UGN9OtnD1D
-         nDHw==
+        bh=vLBjzOG+srjBbZtELHISfuU2qJuDbOTqGUjOeR9PV7U=;
+        b=UCi6HFtL3YpXFMyKr1bhFblTA8RctxotjBzgVuSaSHrr1m7XQ1ESETaWSHHNqZ8oaw
+         NuwNvflpaBI6+8wakzVdcpPKuRlVn/+/Aukaf0u7ilEU2P4qVJgxHL24scGtym30hFBs
+         GkiS1/fYRE/MZd0Mb6AujXk/8VF4N3n8XvO8IAuQErIWMZvFv66RkI/emZ4rITQWf3/M
+         l25N7kcUkpFIEoyaGtLOnrQlBEgJ5M2Jeu4li87Gt6D2VtcUjT6iY+wlUDky93ImN9ms
+         xzlLMtM4O5nn0ezOsQFJ/n0k+gw/KWzhLlgqY2+yYQ7p8+ANCJC0O96B0TJfT4et5doZ
+         sLUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776278125; x=1776882925;
+        d=1e100.net; s=20251104; t=1776278127; x=1776882927;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Zru8FySz5AhiaWwf6Upr4P1h7py/Mu2zPj3hDHMgLYM=;
-        b=cneUJe4CAfxOFu2gp5DHyOAZT4feDso7rJEKVsWh1Ca0XQ8Z7QDANivuZppiFA4IRe
-         GfgVqVYVmRuKwgPkaP2pXnNYFWlx/VeWGXy2HDSwYwEHA6N38Kaf65vKrdLQD6WnTqim
-         mycFkjs13lZ2lOLoWEaJzMi7S5G8IdrHmfalPKXQw6JkHYK/est+z9GwFQFtP5uNp7rA
-         5o3c3UheJFrqxE5wRJFwIraqxn/lbLv3F4wM69r33bXpVeZ2Cz0+KtXGM8/5zhWnc5Ex
-         dRga9VRJfJwhkIYYTUWktogSI6Iw2EfTkHiCH8GR/1OSmrA2iMiyLOHTv0DYN01EIDjJ
-         z6xg==
-X-Gm-Message-State: AOJu0YwJ4emYHpG/gMWWGzhc4Yj04eaIpEtobPRpfgOBroBbQul9OCTg
-	TDR7ogS64zn5BsdPaBJamksBIcMbsmG/Jjq+OW0N81MnnVa/ONNrLdUW2CVEiKZL
-X-Gm-Gg: AeBDieswjNEropDwrhQvz7BVgFLqwvJzZtm0pt6n437ogvk7y4AITl3o6FftDeJ+AW6
-	EiBuLDY8TroRr+eQH4IeF+yKJpWkNe1SvbqlhPrGdYq1PHZfNMV+48TuZLRgTKbKHq5YXq6rH/K
-	5hoZh6yrDLaIJOeu0XYdnJYNv7ypBqSg1e/QJTFm/t/qkz9PSCNeCAxW/VNAWtQsBtgabj4RXB1
-	igpP4Hj6uSaBtfFFiOPGQAdSmhdpntMU1uupVBRrJXRUganuk5KRbEm+hkyXSAExpngVgUBXKd+
-	hHthejGqCWozH1+8lAFdZQbv38HXHVaj160vH6KMl7016AIzU6+0zA12iftaRYkGq+d5sntXEdf
-	ngsMUL3hdxd5VBP6cLO5N63MoUljqStEvmKqyTPqcgbrq1t9V3HMMmh+EShYHdWdlpaKt23JjZc
-	xArmbVGngsdUjMOtyaJIvL1Jl0DKfIsRhCSuipeRiN6bfLy3I6jnYf1+7bx3GZI+LC4jpnGj25O
-	lbi
-X-Received: by 2002:a05:7300:fb88:b0:2cb:7663:322a with SMTP id 5a478bee46e88-2d587d83e1emr13023185eec.13.1776278125116;
-        Wed, 15 Apr 2026 11:35:25 -0700 (PDT)
+        bh=vLBjzOG+srjBbZtELHISfuU2qJuDbOTqGUjOeR9PV7U=;
+        b=D4K6w+S8aq0Qr3hQ300mvzDar8Es4bRvJV3AbNG8ttx34GbAWd0OQ0TXy1Oh7d9GOy
+         iymzcHRIGc2TPm0OeL4yPQ/sb7RYSC68OVJ990NAgF2B/5PHYHWExAf1Bg4FTx6zOFua
+         DgriHhyGVIZ/48ZBbkQCe94TRwobpEf1Bg7Vj6wMh4ngk9fZTsE7r7FYYgVsw0njGrJK
+         dTU1613QIVMr/haosuVQhslKUi7XJZRCeJUv4Pr+69kw6FPliMhbM6ldX+IrwKaTmBr3
+         bqIWmKzgB+VuTwB5V8AOqmZByR5nQNw2+88HvLH6MbWddsUcY3xif9LMG1FjdEdssCIH
+         w2Ng==
+X-Gm-Message-State: AOJu0YySBa+TNHtbGNsJuIhTBbVoEriMQTrC8IL2BZpBZzeCNQCQQZo+
+	BLOKFSd6fEbm1mZO0emYaKR36BUyni5kW/gTlIyCelxblbGmPZwC3POQCIPkeVBG
+X-Gm-Gg: AeBDieuuciRhrZ39LKdqOOLTMuWsEPiIcVxWule4SnxpqbrYbCL8p97lOde6b1zhZW+
+	56ctbGK5uoihZ5IKdoRDEKAKzf0/avMiuK3WCiGGiZw708XRuaRXu2pS0Gc/WzoJtnCaiWl4+z+
+	HsNCzHO4bJwqSDX3fa30vNlJXCjmbKHtWnCBXY+QNKO9Erm+yweJrhdrv0n/xpVjPFfRI6Uw7Cr
+	+VYYIrT6aNplAXF2ubjercFcrlckY5CMzjKKAgJjVpv9aQ/51MiC3OZOthYP5cZvF7cqf0BkJCu
+	31zagDjfNN30IrMT1AJptE6KVvHJGijkCXgiRhix3rPrxl//92MXI2hlLl2fp2/eJ59wDT5GC9x
+	n2nXIT/yDAWeV9LwZ0YTruGIa8ZfgCcL/1cZYYRo8KPKNwP5yAq3JTyyJE9VqzgUMM0pT+Wy+cu
+	mM2XJMFPaDo73JZGPozXzwe2E4ah79L883G+shqx34cQuafLvq7aBZj1y4k9hoS6bKGqjn3aRZH
+	YFu
+X-Received: by 2002:a05:7300:dc8e:b0:2df:919f:ce59 with SMTP id 5a478bee46e88-2df919fd26dmr283904eec.19.1776278126522;
+        Wed, 15 Apr 2026 11:35:26 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::cdb0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8f960dd1sm3759720eec.25.2026.04.15.11.35.23
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8f960dd1sm3759720eec.25.2026.04.15.11.35.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 11:35:24 -0700 (PDT)
+        Wed, 15 Apr 2026 11:35:26 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -68,9 +68,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	ctao@meta.com
-Subject: [PATCH bpf-next v3 1/2] bpf: copy BPF token from main program to subprograms
-Date: Wed, 15 Apr 2026 11:35:13 -0700
-Message-ID: <20260415-subprog-token-fix-v3-1-6fefe1d51646@gmail.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: verify kallsyms entries for token-loaded subprograms
+Date: Wed, 15 Apr 2026 11:35:14 -0700
+Message-ID: <20260415-subprog-token-fix-v3-2-6fefe1d51646@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260415-subprog-token-fix-v3-0-6fefe1d51646@gmail.com>
 References: <20260415-subprog-token-fix-v3-0-6fefe1d51646@gmail.com>
@@ -83,34 +83,277 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-bpf_jit_subprogs() copies various fields from the main program's aux to
-each subprogram's aux, but omits the BPF token. This causes
-bpf_prog_kallsyms_add() to fail for subprograms loaded via BPF token,
-as bpf_token_capable() falls back to capable() in init_user_ns when
-token is NULL.
+Add a test that loads an XDP program with a global subprogram using a
+BPF token from a user namespace, then verifies that both the main
+program and the subprogram appear in /proc/kallsyms.
 
-Copy prog->aux->token to func[i]->aux->token so that subprograms
-inherit the same capability delegation as the main program.
+This exercises the bpf_prog_kallsyms_add() path for subprograms and
+would have caught the missing aux->token copy in bpf_jit_subprogs().
 
-Fixes: d79a35497547 ("bpf: Consistently use BPF token throughout BPF verifier logic")
-Signed-off-by: Tao Chen <ctao@meta.com>
+load_kallsyms_local() filters out kallsyms with zero addresses.
+For a process with limited capabilities to read kallsym addresses the
+following sysctl variables have to be set to zero:
+- /proc/sys/kernel/perf_event_paranoid
+- /proc/sys/kernel/kptr_restrict
+Set these variables using sysctl_set() utility function extracted from
+unpriv_bpf_disabled.c to a separate c/header.
+Since the test modifies global system state, mark it as serial.
+
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/fixups.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/Makefile               |  1 +
+ tools/testing/selftests/bpf/prog_tests/token.c     | 83 +++++++++++++++++++++-
+ .../selftests/bpf/prog_tests/unpriv_bpf_disabled.c | 21 +-----
+ tools/testing/selftests/bpf/progs/token_kallsyms.c | 19 +++++
+ tools/testing/selftests/bpf/sysctl_helpers.c       | 26 +++++++
+ tools/testing/selftests/bpf/sysctl_helpers.h       |  7 ++
+ 6 files changed, 134 insertions(+), 23 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 67c9b28767e1..dd00a680e4ea 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1110,6 +1110,7 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->exception_cb = env->subprog_info[i].is_exception_cb;
- 		func[i]->aux->changes_pkt_data = env->subprog_info[i].changes_pkt_data;
- 		func[i]->aux->might_sleep = env->subprog_info[i].might_sleep;
-+		func[i]->aux->token = prog->aux->token;
- 		if (!i)
- 			func[i]->aux->exception_boundary = env->seen_exception;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index f75c4f52c028..da81a1853cfd 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -750,6 +750,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
+ 			 btf_helpers.c		\
+ 			 cap_helpers.c		\
+ 			 unpriv_helpers.c 	\
++			 sysctl_helpers.c	\
+ 			 netlink_helpers.c	\
+ 			 jit_disasm_helpers.c	\
+ 			 io_helpers.c		\
+diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testing/selftests/bpf/prog_tests/token.c
+index b81dde283052..cf5b94512cff 100644
+--- a/tools/testing/selftests/bpf/prog_tests/token.c
++++ b/tools/testing/selftests/bpf/prog_tests/token.c
+@@ -1,9 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2023 Meta Platforms, Inc. and affiliates. */
+ #define _GNU_SOURCE
+-#include <test_progs.h>
+ #include <bpf/btf.h>
+-#include "cap_helpers.h"
+ #include <fcntl.h>
+ #include <sched.h>
+ #include <signal.h>
+@@ -15,9 +13,17 @@
+ #include <sys/stat.h>
+ #include <sys/syscall.h>
+ #include <sys/un.h>
++
++#include "bpf_util.h"
++#include "cap_helpers.h"
++#include "sysctl_helpers.h"
++#include "test_progs.h"
++#include "trace_helpers.h"
++
+ #include "priv_map.skel.h"
+ #include "priv_prog.skel.h"
+ #include "dummy_st_ops_success.skel.h"
++#include "token_kallsyms.skel.h"
+ #include "token_lsm.skel.h"
+ #include "priv_freplace_prog.skel.h"
  
+@@ -1045,6 +1051,58 @@ static int userns_obj_priv_implicit_token_envvar(int mnt_fd, struct token_lsm *l
+ 	return -EINVAL;
+ }
+ 
++static bool kallsyms_has_bpf_func(struct ksyms *ksyms, const char *func_name)
++{
++	char name[256];
++	int i;
++
++	for (i = 0; i < ksyms->sym_cnt; i++) {
++		if (sscanf(ksyms->syms[i].name, "bpf_prog_%*[^_]_%255s", name) == 1 &&
++		    strcmp(name, func_name) == 0)
++			return true;
++	}
++	return false;
++}
++
++static int userns_obj_priv_prog_kallsyms(int mnt_fd, struct token_lsm *lsm_skel)
++{
++	const char *func_names[] = { "xdp_main", "token_ksym_subprog" };
++	LIBBPF_OPTS(bpf_object_open_opts, opts);
++	struct token_kallsyms *skel;
++	struct ksyms *ksyms = NULL;
++	char buf[256];
++	int i, err;
++
++	snprintf(buf, sizeof(buf), "/proc/self/fd/%d", mnt_fd);
++	opts.bpf_token_path = buf;
++	skel = token_kallsyms__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "token_kallsyms__open_opts"))
++		return -EINVAL;
++
++	err = token_kallsyms__load(skel);
++	if (!ASSERT_OK(err, "token_kallsyms__load"))
++		goto cleanup;
++
++	ksyms = load_kallsyms_local();
++	if (!ASSERT_OK_PTR(ksyms, "load_kallsyms_local")) {
++		err = -EINVAL;
++		goto cleanup;
++	}
++
++	for (i = 0; i < ARRAY_SIZE(func_names); i++) {
++		if (!ASSERT_TRUE(kallsyms_has_bpf_func(ksyms, func_names[i]),
++				 func_names[i])) {
++			err = -EINVAL;
++			break;
++		}
++	}
++
++cleanup:
++	free_kallsyms_local(ksyms);
++	token_kallsyms__destroy(skel);
++	return err;
++}
++
+ #define bit(n) (1ULL << (n))
+ 
+ static int userns_bpf_token_info(int mnt_fd, struct token_lsm *lsm_skel)
+@@ -1082,7 +1140,7 @@ static int userns_bpf_token_info(int mnt_fd, struct token_lsm *lsm_skel)
+ 	return err;
+ }
+ 
+-void test_token(void)
++void serial_test_token(void)
+ {
+ 	if (test__start_subtest("map_token")) {
+ 		struct bpffs_opts opts = {
+@@ -1194,4 +1252,23 @@ void test_token(void)
+ 
+ 		subtest_userns(&opts, userns_bpf_token_info);
+ 	}
++	if (test__start_subtest("obj_priv_prog_kallsyms")) {
++		char perf_paranoid_orig[32] = {};
++		char kptr_restrict_orig[32] = {};
++		struct bpffs_opts opts = {
++			.cmds = bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
++			.progs = bit(BPF_PROG_TYPE_XDP),
++			.attachs = ~0ULL,
++		};
++
++		sysctl_set("/proc/sys/kernel/perf_event_paranoid", perf_paranoid_orig, "0");
++		sysctl_set("/proc/sys/kernel/kptr_restrict", kptr_restrict_orig, "0");
++
++		subtest_userns(&opts, userns_obj_priv_prog_kallsyms);
++
++		if (perf_paranoid_orig[0])
++			sysctl_set("/proc/sys/kernel/perf_event_paranoid", NULL, perf_paranoid_orig);
++		if (kptr_restrict_orig[0])
++			sysctl_set("/proc/sys/kernel/kptr_restrict", NULL, kptr_restrict_orig);
++	}
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
+index 472f4f9fa95f..64404602b9ab 100644
+--- a/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
++++ b/tools/testing/selftests/bpf/prog_tests/unpriv_bpf_disabled.c
+@@ -8,6 +8,7 @@
+ 
+ #include "cap_helpers.h"
+ #include "bpf_util.h"
++#include "sysctl_helpers.h"
+ 
+ /* Using CAP_LAST_CAP is risky here, since it can get pulled in from
+  * an old /usr/include/linux/capability.h and be < CAP_BPF; as a result
+@@ -36,26 +37,6 @@ static void process_perfbuf(void *ctx, int cpu, void *data, __u32 len)
+ 		got_perfbuf_val = *(__u32 *)data;
+ }
+ 
+-static int sysctl_set(const char *sysctl_path, char *old_val, const char *new_val)
+-{
+-	int ret = 0;
+-	FILE *fp;
+-
+-	fp = fopen(sysctl_path, "r+");
+-	if (!fp)
+-		return -errno;
+-	if (old_val && fscanf(fp, "%s", old_val) <= 0) {
+-		ret = -ENOENT;
+-	} else if (!old_val || strcmp(old_val, new_val) != 0) {
+-		fseek(fp, 0, SEEK_SET);
+-		if (fprintf(fp, "%s", new_val) < 0)
+-			ret = -errno;
+-	}
+-	fclose(fp);
+-
+-	return ret;
+-}
+-
+ static void test_unpriv_bpf_disabled_positive(struct test_unpriv_bpf_disabled *skel,
+ 					      __u32 prog_id, int prog_fd, int perf_fd,
+ 					      char **map_paths, int *map_fds)
+diff --git a/tools/testing/selftests/bpf/progs/token_kallsyms.c b/tools/testing/selftests/bpf/progs/token_kallsyms.c
+new file mode 100644
+index 000000000000..c9f9344f3eb2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/token_kallsyms.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++__weak
++int token_ksym_subprog(void)
++{
++	return 0;
++}
++
++SEC("xdp")
++int xdp_main(struct xdp_md *xdp)
++{
++	return token_ksym_subprog();
++}
+diff --git a/tools/testing/selftests/bpf/sysctl_helpers.c b/tools/testing/selftests/bpf/sysctl_helpers.c
+new file mode 100644
+index 000000000000..e58c23adaa3e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/sysctl_helpers.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdio.h>
++#include <errno.h>
++#include <string.h>
++
++#include "sysctl_helpers.h"
++
++int sysctl_set(const char *sysctl_path, char *old_val, const char *new_val)
++{
++	int ret = 0;
++	FILE *fp;
++
++	fp = fopen(sysctl_path, "r+");
++	if (!fp)
++		return -errno;
++	if (old_val && fscanf(fp, "%s", old_val) <= 0) {
++		ret = -ENOENT;
++	} else if (!old_val || strcmp(old_val, new_val) != 0) {
++		fseek(fp, 0, SEEK_SET);
++		if (fprintf(fp, "%s", new_val) < 0)
++			ret = -errno;
++	}
++	fclose(fp);
++
++	return ret;
++}
+diff --git a/tools/testing/selftests/bpf/sysctl_helpers.h b/tools/testing/selftests/bpf/sysctl_helpers.h
+new file mode 100644
+index 000000000000..28d7e209df72
+--- /dev/null
++++ b/tools/testing/selftests/bpf/sysctl_helpers.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __SYSCTL_HELPERS_H
++#define __SYSCTL_HELPERS_H
++
++int sysctl_set(const char *sysctl_path, char *old_val, const char *new_val);
++
++#endif
 
 -- 
 2.53.0
