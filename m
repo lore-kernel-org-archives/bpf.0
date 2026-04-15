@@ -1,336 +1,168 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from sonic307-8.consmr.mail.bf2.yahoo.com (sonic307-8.consmr.mail.bf2.yahoo.com [74.6.134.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB80388E51
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 21:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776289218; cv=pass; b=OLvS3erB5U2t74Or8zpTl2wfsMSTqGH3PMAEERf/vdNaH1IWjVuW1PDmTS5uuZeXLp/lfnaeklXX6Pw7JY8kCik17HgYqZQBt8H6128EYWVAXHXMU6Oq/ouIlhopb5xjtCPb0vJH/R6zts73Q5J9wMlrb9reAgvggos5sfGfB6Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776289218; c=relaxed/simple;
-	bh=8UR0cDfhMut89P6pq2m3AtdE1q+9Y0wHgL4ZA4SRoPM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mXqXj0To3tmtdA/Oj7mC5I98y0Y5Y5edUuNhmhN8Mp0R/CZ5nenTVQioZbgPYhbX+/nhaw1zgroWikc3w60wJ9FGHv9uDgD5CSVYfw8/Mp716Ku2AYCPOo08SgGzwFfPabmTzLsk43zmILwrxiyOIKARthN3vqdEINDQWKcvbxI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=BcOtAwql; arc=pass smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9C7382F10
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 21:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.6.134.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776289332; cv=none; b=DGz8opPm5jCGc+qSkGUNRjLakCtb3HkQ49fSwS/I6Okgeut5In6b6L8aklUjUWOKAi/AzsvGtz2h49eCrHpfmZvsw3ONrvxHpTBoN50pkXficUSxG2KxilTs/RVaGUQonk/Qa4/JfXEWKE3QhvXbNL8FG7YSGr8+XCKpNb1vHRk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776289332; c=relaxed/simple;
+	bh=1VRzEwc9as955hJAJQZkD8aoU2tfmXZsG3lk/RyK87w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BUjD4aloxtui1oR7YZ9d2ihOEa6131soHOAciEaUw1LU9BJcLQA5tcL3H/1d/BF2H71K3USomjnkcO3gaFN5kRHLcsgy75y2/vmN5XW7WVijDH0I5snA4aEecbjW9AUFvBVGYZiVQoolBJaK70NPmrJ4nrYK+Td8RfugdDWyZXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=TTLAK2G1; arc=none smtp.client-ip=74.6.134.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="BcOtAwql"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b23fcf90b2so68980075ad.3
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 14:40:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776289216; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZEdtdADg+aeI6/WF4/6IWgN7QOYHsUnLo664TgMZdE9jn5zSmAppO63zueuX9A9h9e
-         vb7I9zVddP2BOiWe69t+NlXVgaPDrqQg7C7zl9C9/9eYygjdMfyhe/Tfs0Ysmn0Ctwk8
-         6LGw+QNYlzVqftG4pLuGUt5sctuVLJEb2BjE5PWRBrHQBmhGyB6UIFvanXq+keG/GOIe
-         nuTo/hAJW2SSfiqI3+JEByVHu5KXFuGw0wOBr1apuyJzm6+fachxASJK9cexaCgfHM3m
-         BnR4ra3dVRyOWSHhOq3I1sIQIOJjd3Q6AZ07RPZPN1839SON7QFp8xfy3dpwa8kZfx3U
-         ltjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XAztYF0GmlO3kNqglTk5wxwxcVj4RUNUTqhb0zF4bE8=;
-        fh=jDWNtZLw2Lsbg3TzZsy5+vkTtM6sbN11z+l/z+I4eYM=;
-        b=WxXGlAJIImeZc30mZIrbpL2DUliuNRtk4MGHWlXuKCEXuxtGvcd+4u1uErfz2eV8Eh
-         StRdmWoriQ3ueOULGlYsOvHZ55ovKNiUvz9jsOEnNzXPNqQgQROIi6OXObWUY+F0VA23
-         U+JzVJ6dEUe+NffHULbpChHXcKullOb1UnuUwIXklWn47Y1lBjB6kEZelKuZRHww0/cM
-         dqetyFdgMWhMNwYBFnLU8Heb6X7hiSekHlMLJQZmrOPxHNmHI3FKYEVHdAVcZ8n2CECp
-         KYJk1zPzf/zLZ5MoSqkhTiLc+e7DR74iv4qkSsCzkUgD40LUTHTknxt8KLnVcVd3QB2k
-         uCZA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1776289216; x=1776894016; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XAztYF0GmlO3kNqglTk5wxwxcVj4RUNUTqhb0zF4bE8=;
-        b=BcOtAwqlEurfknwp7jdNCxVQeHrdkO5jKP42hmDqgS5W5QQx01RLTeKPzlrw+X2fFt
-         6C/3ow8TDL/OMILDXBf5nxTZh+3utD9QRDi5a+eOZie7KaJQ2ERJdc7jCELB5vsNmojf
-         50vbRbE1lxvh3eoa9HBxtih2siyloGwx+GXsUFlE/xVSSTA5jHG3kvNlle0fB4RTls4/
-         S9tkZlnIw5J02o62E7bwToewDq221Y8c6ZzskLdvPhImUb7Iafg9onU1DIpwvgFFvNGR
-         ZztUWosIm/WHs6rWK1nEJOF97zLA3783cW/e1YtDY3Dcq6tZABDB3vk8Uslaxpb+O2gW
-         GcQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776289216; x=1776894016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XAztYF0GmlO3kNqglTk5wxwxcVj4RUNUTqhb0zF4bE8=;
-        b=WgyAc+GrrUYgsHUs29oDKSqgb4pzwAZ7xLvWg2aHodIrcflZJ1fSIzn6jp7e5c04F4
-         Iht3VI8aJbwYN4GmU3n2wS+bASu6aTfO5UO7zgOR31wSy3OBlE5eGYryUjltCm6amOS4
-         xykPvmXsbfsSehIMLVA3TWzzSFIcNauzgRoTIYU4SsrLjPtvPXYhJ0zOCqK7LDMa0ek7
-         jhphM/bJvCZ63dQRcHcAz+wYfjF54xqgrIcoR4WXfHUu/KOncZH6epycLSkuHYsTUQ4P
-         qJ+cCw8FvJGhcnQYmbUqf6i+ghnmNKJ+iSzxgeABM+PxWedWSA/Q3ohRlDtyEDeBFeEy
-         Ug1Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+KVelJLRFgWUDLsA4lWnHqyjiDG26rjHbFITQpouU1L92ekam/RWBCLAF3ouma/HTQtHE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWdfgpi7r6XoQcnf5QhRhCnA2biBCCH2kI2mucucwftUMSauko
-	yO82BHEznQpeMFX9Eqd+e0fPcLMunDwPTPUzIrp43UQbuCJ0rgJKhTMjV1jP+BchTv/mZpTd4zx
-	wPr7mNEwhDPbKPGvKSWpEd0n5plIQaRuKDowBotj+
-X-Gm-Gg: AeBDieuMDZ0vt3Xgx7FOB8HhH3NAZMsyoQUInU4P2L3+UhOgsarfsPvfU4PLgL20bUf
-	hRolmEQO7+uLkCh8knR+bYpmeyokMIV/rTimi7e9xcFZQ3jYwpw3tx5IotrHbeqbolQ2zcn8o1I
-	/Gc+Jp4bgsBzfzkPxBHmr+hU5YiD8WHru6X1pE/POb9ekKhSDwraN4PIH6j73Yj/Dl0k9DUwgPX
-	0gMad89zgjtHzkAI6rSQg6KuJBvhVU78BKAaAxcX0XiYVXkbWiPt9mnrTbdejEFELu5CgqVTL26
-	IdWGnjk=
-X-Received: by 2002:a17:902:d507:b0:2b4:5cd0:b6c3 with SMTP id
- d9443c01a7336-2b45cd0bb63mr176613365ad.29.1776289216207; Wed, 15 Apr 2026
- 14:40:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="TTLAK2G1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776289329; bh=PCIEZUDtvL4fKDuA56MB9W3LMeOH6yBvvyQFCUOW0uA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=TTLAK2G1HeLAFP4TmtPsqh/eJfa33JliVMSitMRGe0q7WDUaTnhiqsbFVMDIgts1ysD18et1zco9fgtsSAgjWKZ3KRkuuogJ5S6BifKldLXn5fxdjLWAT9uepeEz29GLcHj5vjqmBkGul627vTIuFW2NYWo74v2FUeRLTH7P48+UNCLxXUjz9HhcBP+9sA11Nnp9luWiM8C3UNo9EA18MRh8FH+ndWqgxPxrKLQZpaLoaCA4i/wnt2USMGHIuwxU2JOC9C67wcyiM9IUgrQGQRu38o9LNUUl5/6n11fmyiLc+Psac/IhjmE6ULenCzicLhTOvVC5pHulq86hjiil+w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776289329; bh=+MI0CaIqgHCt7nNpbTVJdIH/vA+yXsUf/AZPjAcl4HC=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=cSyCTs3E7GEcf+SH4askkuC8aUCO50n2dLoXa/KwF9sXNChyxGEo8397xs8u2kcnb+6gq7gdUAWIwBrpm2Uo1raxjqHIL/0CTCjzWU+jmVUigmhtSypKPlyzrr8uzzowsZzEDCLLWvGXvDLS3houOEmHkelrmtctuysQZoo8rSuHquLDsuzd0Efe1X+GgRGidLGC23ydYhh3WKR8/ARVyMgefPZjNTVUAnUkwtVxUyyeb5AWgUZ8QdTD0S8aVbhFzG7fmB+n8hLrBtDg2jnnOYnThBClCAXfr5N4g74dPZfAwTZsTT3szG3Lm6HJWuUfDE9EUy4+ltVNmWvL7tTODw==
+X-YMail-OSG: OTWDq0wVM1kWBKlAClbtD.6W.Rgce4yInLQVN97jyOJxSa1hGgVXGNaz8TPVgxy
+ wm5N0OZz2yEOydYM1i9uZWkp53km0ZmaQkIg_xaEAQozcV1Di9tdpXDzSQWS1GhrMcTVr3m201Bf
+ 40FW9DxdNkcJtDsTRUNTPDV9kKxT42IPULUl3WPiN7iJCfkWKxlDyLXiE8eTt0KGHvmb.OoGEgBy
+ AoXITcef2y4r_WqBS2gLbeKfpnr1RVZihFcNWgCsuIY63wgZbLoMSXSSjm1XtlxfjrPk.DP6XoZC
+ biDFbDHSnoY5P9o7u2G.zZilDjVYT.qCa0GNh_g_RDahhSok_q3mp79XDGMCZAGQ.GG.syh6lTHX
+ P7fXQ8bkTWUIQA8pTh0KLK6O_1mk6agZcCD3Ba8WhDTDCI7CxauFy.kkMolNdYB_qGXENI.wK3n3
+ eBbZ.zjPooFiUCULsa6jzGX.C7VFGzcpLXp1s9hOl1yvdRHIBO0LmhANf.o2aFhh7tnWhAssqd41
+ e_7RHNS.i_dixFkALoTeixj6VYYlduEwIzAcQU5DS8ILULg9kFLEmT4DNKPS0CkuuJeRHBCmrG3o
+ AN0p75xLlz27f3QoKImoBCNd.2n7G78LfZfgTQ0Qjzg2SUpjIcYwmgzopERLZ92zOXS3Tciopgwy
+ yCK65MgTPVZ5BKNBwRd5qxwDf0FBmVAPEhU5ZhPw9k.NIUN13Fmbh3t8EQ7c0wJU4UUTYAWoGELY
+ .LJrht6FcvDWGCYBfkzbVmb6XFam4HNtRSKaUTlA9OiHwHtm4gMX6iAVbf.ULGI8J3eJrnntvS0p
+ XpUvYDl0cC3V.rXaUlnGmT7GMnjYPfVDhGwbXH9KtEfnW30DQXVtyassb5E4w9w8Vf7IngNVsRXO
+ mn3heo2tZw.TslL5cexILIeli0HuHhHv1gRQeKHyrrreLLWuSlxsrfNCTw1L1pITqKrl_dgGrjyu
+ viLWNKZR5sCA6YzRt6RbMZQt5xVnI0HbQwMsQWV_gN5.f2AruKDVsBxY4TFUyvDhbJjwFNlf3fz2
+ UVUZFtplvxfr5uMIzH2lrhuZ1GGcR0IjajNfhfkiXLpQs9ENLFaZ4fjYKayEcBz5vZ51jv_PSS64
+ 4K8wVVo4mekXJZGTTq1T8UA0tcFgUGXEBuIXeAVcudJcqwA0mfOcXvy1_5jPVTKsMvLeCcN65g6w
+ xrm73ukJDYwf.jg46aqpYnZ6TPb.GN0YXJIRAb9s2BOY0f4DZxCSMUXfAdsLJOxSCd9OC8VMQsIU
+ gmw5mLLKSQQWibutpi_be0SxKGt3H1XNppl0cQ7R99F8GcVjzUNg0y9dGrr34MOOURzBwF3U33Ku
+ K8LCt.8.s_uWAIRmEKnx6a.V1bPc1dUMi_NIyNSxu.i2B1kHAPIkQgYd8HRjO4E3fM_qPEonpCnI
+ skpVSJd3.ApsyiDhpSaV1ChED8ZpoUR4gG42uRBcYph2GHBrpLPUAC2LeOuFRWfAWXf.t.pcgEtd
+ I8.UAg67i33D8xJhxToGhcBAnnFzFVSU0F8X2ApA.R4cvXHwS6ZBOO_7n5mk6N2LjeT8O5D87MHa
+ YsbmoFSX3my0K6SGsK4XAgU.IuU4.sRCz52du8xWXED03Gi9wbAKiSdf7dok7tBZ7eOoBFGnKsXx
+ G5aUNd9kJb6PXeflkbmlkl.Hs5P9Vsi8qtExRZMzAot9nsj2JxmaUkbKB9tHX1vrw_3Qx6syt5_.
+ BVYaEa2QtTpNlEdb.hpQJTLRIT5szY2eni9XytJwEoClRDx5LWvfA9V10yoTKxAu5F_Df4GD..UB
+ bd.4yenjrfIj3EkXhPq3NBD3gAwoVihMUlAl3ODeP29zNpyOq0_N0WAiC6APoM07UeLtKQyjRvE.
+ qnp9CFNvRm7fPc5FDQJeNuDkfKYHAQjzJIvKrokib13kmBLEV5owRT_LJ1ubfTS8aeSlgP5SNQIE
+ kOdiOmBLN0dOFrUYyr8ZwYTJVNITmEKnN5uDKN28VKEMM7BwTMxmAAOxmndwH1xJH0Ae6jLHZfJv
+ qxgF70jsVRzidZkW32xeYRfkwwhxR1woQAEr0QbYBG2sdw3GyfzgdHXaDZLdQS1EWuQh3h5N.BeU
+ mHAuyoXwIrnAH89NmLZq0xjL6gWB1FuxCdLDovUk8Oxny3CjWzGWxtLnW6L7xlF5SHDrqX6bu3mq
+ ue50btk6e7y1bf2iXuJf1pQAdHL5rTGCQi5z5ROlkBGtq_MzNHPTQSjrKvrZYdvCHiFwjRie0rI1
+ 8d2LalaiufdwZdKZYuWCgbmv.p9efZbZyLJR8Zs1qEF8r8gNBIpCazw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 2d41aabe-9af5-437d-8e9e-568444c670cb
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.bf2.yahoo.com with HTTP; Wed, 15 Apr 2026 21:42:09 +0000
+Received: by hermes--production-gq1-6dfcf9f8b-h78wr (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b799781f33bb01013e1e244a638df756;
+          Wed, 15 Apr 2026 21:21:52 +0000 (UTC)
+Message-ID: <a77f43dc-f05f-4dd3-9f0f-296447c44e8d@schaufler-ca.com>
+Date: Wed, 15 Apr 2026 14:21:50 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal> <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal> <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca> <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca> <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
-In-Reply-To: <20260415134705.GG2577880@ziepe.ca>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 15 Apr 2026 17:40:04 -0400
-X-Gm-Features: AQROBzCNI3m8c-jwsYPK1Y_GRo5FoCh3UrWW71P1zu__g4Bit16U6EWg6GpNPb8
-Message-ID: <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Leon Romanovsky <leon@kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Itay Avraham <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
-	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Paul Moore <paul@paul-moore.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
+ <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+ Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal>
+ <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal>
+ <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal>
+ <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca>
+ <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+ <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
+ <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
+ <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
+ <CAHC9VhRoaECt03Rs-ZyoGhW2_qZkA_1weTYYjiXc41Yf5U8A_g@mail.gmail.com>
+ <a5fe292b-77c8-4190-8989-1d32cadb5689@schaufler-ca.com>
+ <CAHC9VhS1sVMGHpO-5Zn0K0w6suTB-i_SwvouDpEmT8sXffsRfg@mail.gmail.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHC9VhS1sVMGHpO-5Zn0K0w6suTB-i_SwvouDpEmT8sXffsRfg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Wed, Apr 15, 2026 at 9:47=E2=80=AFAM Jason Gunthorpe <jgg@ziepe.ca> wrot=
-e:
-> On Tue, Apr 14, 2026 at 04:27:58PM -0400, Paul Moore wrote:
-> > On Mon, Apr 13, 2026 at 7:19=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> =
-wrote:
-> > > On Mon, Apr 13, 2026 at 06:36:06PM -0400, Paul Moore wrote:
-> > > > On Mon, Apr 13, 2026 at 12:42=E2=80=AFPM Jason Gunthorpe <jgg@ziepe=
-.ca> wrote:
-> > > > > On Sun, Apr 12, 2026 at 09:38:35PM -0400, Paul Moore wrote:
-
-...
-
-> > > > We've already talked about the first issue, parsing the request, an=
-d
-> > > > my suggestion was to make the LSM hook call from within the firmwar=
-e
-> > > > (the firmware must have some way to call into the kernel/driver cod=
-e,
-> > > > no?)
-> > >
-> > > No, that's not workable on so many levels. It is sort of anaologous t=
-o
-> > > asking the NIC to call the LSM to apply the secmark while sending the
-> > > packet.
-> >
-> > From the LSM's perspective it really doesn't matter who calls the LSM
-> > hook as long as the caller can be trusted to handle the access control
-> > verdict properly.
+On 4/15/2026 2:03 PM, Paul Moore wrote:
+> On Tue, Apr 14, 2026 at 6:42 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> On 4/14/2026 1:44 PM, Paul Moore wrote:
+>>> On Tue, Apr 14, 2026 at 4:10 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>>>> On 4/14/2026 12:09 PM, Paul Moore wrote:
+>>>>> On Tue, Apr 14, 2026 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
+> ..
 >
-> The NIC doesn't know anything more than the kernel to call the LSM
-> hook. It can't magically generate the label the admin wants to use any
-> better than the kernel can.
+>> CMW MLS and SELinux MLS can be mapped. They have the same components.
+> Yes, one of the fields in a full SELinux label can be an MLS field,
+> but that doesn't mean there isn't translation needed.  The important
+> point is that security label translation, mapping, etc. is necessary,
+> possible, and has been proven to work across a variety of systems.
 
-The NIC presumably knows how to parse the firmware request and extract
-whatever security relevant info is needed to pass to the kernel so the
-driver can make an access control request.
+I'm not especially concerned about translation between systems.
+The problem at hand is negotiating between LSMs on the same system.
 
-> Just like you could never get everyone to agree on a fixed set of
-> labels for network packets we could never get agreemnt on a fixed set
-> of labels for command packets either.
-
-I don't follow you here ... I'm guessing you are talking about secmark
-labels?  The secmark concept was created not due to any disagreements
-on packet labels, but rather the challenges and impacts associated
-with packet matching directly in the SELinux code.  Secmark was seen
-as a more elegant approach to packet matching than the older
-"compat_net" SELinux code it replaced.  Even with secmark on SELinux,
-the packet labels need to be defined in the SELinux policy, the
-netfilter code simply assigns these labels to packets using the
-netfilter config.
-
-> > > > so that only the firmware would need to parse the request.  If we
-> > > > wanted to adopt a secmark-esque approach, one could develop a secon=
-d
-> > > > parsing mechanism that would be responsible for assigning a LSM lab=
-el
-> > > > to the request, and then pass the firmware request to the LSM, but =
-I
-> > > > do worry a bit about the added complexity associated with keeping t=
-he
-> > > > parser sync'd with the driver/fw.
-> > >
-> > > In practice it would be like iptables, the parser would be entirely
-> > > programmed by userspace and there is nothing to keep in sync.
-> >
-> > You've mentioned a few times now that the firmware/request will vary
-> > across not only devices, but firmware revisions too,
 >
-> I never said firmware revisions, part of the requirement is strong ABI
-> compatability in these packets.
+>>>> SELinux transmits the MLS component of the security context. Smack passes
+>>>> the text of its context.
+>>> Arguably the NetLabel/CIPSO interoperability challenge between SELinux
+>>> and Smack is due more to differences in how Smack encodes its security
+>>> labels into MLS attributes than from any inherent interop limitation.
+>> Yes. That is correct. The big issue I see is that SELinux does not represent
+>> the entire context in the CIPSO header. Thus, you're up against many SELinux
+>> contexts having the same wire representation, where Smack will have a unique
+>> on wire for each context ...
+> That isn't always true is it?  From my understanding of the "cipso2"
+> interface an admin could easily map multiple Smack labels to a single
+> CIPSO label.
 
-That was my mistake; it was Leon.
+True, but you can't map multiple Smack labels to the same CIPSO label
+without introducing ambiguity.
 
-Leon mentioned that different firmware revisions would have different
-parameters for a given opcode, and that one would need to inspect
-those parameters to properly filter the command.  Is that not true, or
-am I misreading or misunderstanding Leon's comments?
-
-https://lore.kernel.org/all/20260310175759.GD12611@unreal
-
-> > this implies there will need to be some effort to keep whatever
-> > parser you develop (BPF, userspace config, etc.) in sync with the
-> > parser built into the firmware.  Or am I misunderstanding something?
+> It's important to remember that if you wanted to utilize CIPSO to
+> communicate between SELinux and Smack, the label translation is not
+> between SELinux and Smack but rather between SELinux and CIPSO as well
+> as between Smack and CIPSO.
 >
-> I would not use the word "sync". It is very similar to deep packet
-> inspection, if you want to look inside, say, RPC messages carried
-> within HTTP then you have to keep up to date. How onerous that is
-> depends on what the admin's labeling goals are.
+>>>>> Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
+>>>>> require some additional work to convert over to a lsm_prop instead of
+>>>>> a u32/secid, but if you look at the caching code that should be
+>>>>> trivial.  It might be as simple as adding a lsm_prop to the
+>>>>> netlbl_lsm_secattr::attr struct since the cache stores a full secattr
+>>>>> and not just a u32/secid.
+>>>> Indeed. But with no viable users it seems like a lower priority task.
+>>> You need to be very careful about those "viable users" claims ...
+>> Today there are no users.
+> That you are aware of at the moment.  You are also well aware of my
+> feelings on this issue and ultimately I'm the one who has to sign off
+> on that stuff.
 
-I'm not sure what to say here, that sounds like a synchronization task
-to me, but if you have another term you prefer I'm happy to use that
-instead.
+Understood. There are a serious number of considerations that need to
+be worked through.
 
-> > > > However, even if we solve the parsing problem, I worry we have
-> > > > another, closely related issue, of having to categorize all of the
-> > > > past, present, and future firmware requests into a set of LSM speci=
-fic
-> > > > actions.
-> > >
-> > > Why? secmark doesn't have this issue? The classifer would return the
-> > > same kind of information as secmark, some user provided label that is
-> > > delivered to the LSM policy side.
-> >
-> > I think there is a misunderstanding in either how secmark works or how
-> > the LSMs use secmark labels when enforcing their security policy.
-> >
-> > The secmark label is set on a packet to represent the network
-> > properties of a packet.  While the rules governing how a packet's
-> > secmark is set and the semantic meaning of that secmark label is going
-> > to be LSM and solution specific,
 >
-> "network properties" are a bit vauge ...
+>> There are other problems (e.g. mount options) that have yet to be addressed.
+> The existence of one problem does not mean another does not exist.
 
-That is one of the main reasons we moved from the old "compat_net"
-solution to secmark so that we could leverage all of netfilter's
-packet matching capabilities.  Once again, if the issue is simply a
-matter of phrasing, please let me know what terminology you would
-prefer.
+True enough.
 
-> > secmark labels represent the properties of a packet and not the
-> > operation, e.g.  send/receive/forward/etc., being requested at a
-> > given access control point.
->
-> Yes, still aligned.
->
-> > The access control point itself represents the requested
-> > operation.  This is possible because the number of networking
-> > operations on a given packet is well defined and fairly limited; at a
-> > high level the packet is either being sent from the node, received by
-> > the node, or is passing through the node.
->
-> I think we have the same split, fwctl send/recive analog is also very
-> limited.
-
-Sure, but I thought the goal was to enforce access controls on the
-firmware requests based on the opcodes/parameters contained within the
-firmware request blob/mailbox?  Or are you happy with a single
-send/receive level of granularity?
-
-> > As I understand the firmware controls being proposed here, encoded
-> > within the firmware request blob is the operation being requested.
->
-> I am not proposing that kind of interpretation, I want to stay in the
-> secmark model.
->
-> When the packet blob is sent into the kernel at the uAPI boundary
-> (send_msg, send, write, FWCTL_CMD_RPC, etc) that is your access
-> control point.
->
-> Deep inspection on the packet blob determines the secmark.
-
-... and this would be done by your BPF classifier, yes?
-
-> LSM takes the secmark and determines if the access control point
-> accept/rejects.
-
-At this point I think it would be helpful to write out the
-subject-access-object triple for an example operation and explain how
-an LSM could obtain each component of the access request.
-
-> > While we've discussed possible solutions on how to parse the request
-> > blob to determine the operation, we haven't really discussed how to
-> > represent the requested operation to the LSMs.
->
-> I don't understand this? The secmark example I pulled up is this:
->
-> iptables -t mangle -A INPUT -p tcp --dport 80 -j SECMARK --selctx system_=
-u:object_r:httpd_packet_t:s0
->
-> The "represent the requested operation" is the string
-> "system_u:object_r:httpd_packet_t:s0", which is entirely admin
-> defined, right?
-
-No it isn't.  The string you've identified is the packet's secmark
-label, one of two packet object labels in SELinux (we'll ignore the
-other for our discussion).  Ignoring the managment controls, the
-"requested operation" in SELinux is going to be either send, receive,
-forward_in, or forward_out.  If we look at some example
-subject-op-object triples for a secmark packets, entering or leaving
-the system you might see the following:
-
- httpd_t RECV httpd_packet_t
- browser_t SEND httpd_packet_t
-
-> > I'm assuming there isn't a well defined set of operations, and like
-> > the request format itself, the set of valid operations will vary
-> > from device and firmware revision.  I hope you can understand both
-> > how this differs from secmark and that it is a challenge that really
-> > hasn't been addressed in the proposals we've discussed.
->
-> I still don't see the difference from iptables. IPSEC, SIP, DNS, HTTP,
-> etc are all protocols with the same lack of any commonality.
->
-> > At a very high level the access control decision for firmware/device
-> > requests depends on whether the LSM wants to allow process A to do B
-> > to device C.  The identity/credentials associated with process A are
-> > easy to understand, we have plenty of examples both inside and outside
-> > of the LSM on how to do that.  The device identity/attributes
-> > associated with device C can be a bit trickier, but once again we have
-> > plenty of examples to draw from, and we can even fall back to a
-> > generic "kernel" id/attribute if the LSM chooses not to distinguish
-> > entities below the userspace/kernel boundary.
->
-> I think I would feed that into the classifier as well. Like iptables
-> can have a netdev argument to only match against specific devices, we
-> can have the same logical thing.
->
-> > I think the hardest issue with the firmware request hooks is going
-> > to be determining what operation is being requested, the "B",
-> > portion of access request tuple.  If we can create a well defined
-> > set of operations and leave it to the parser to characterize the
-> > operation we've potentially got a solution, but if the operation is
-> > truly going to be arbitrary then we have a real problem.  How do you
-> > craft a meaningful access control policy when you don't understand
-> > what is being requested?
->
-> Same as for networking. Admin understands, admin defines, kernel is
-> just a programmable classifier.
-
-Are you able to define all of the firmware request operations at this
-point in time?  That is my largest concern at this point, and perhaps
-the answer is a simple "yes", but I haven't seen it yet.
-
---=20
-paul-moore.com
