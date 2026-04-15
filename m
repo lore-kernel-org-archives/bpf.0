@@ -1,150 +1,173 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D7E3DE45D
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 15:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937923E3163
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 15:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776268102; cv=none; b=D3yfnyttqVDZ87KhO3TDbFKgvr4W/8rRbT2rFjMAM3OhgVUzyL9NhcJoTojOrsMqk3qbNLIcCO85ASnf+S14kH5A/xBzfoae+LtVE0aMUsXa/LrfIba3WuEVKMd6UC42xwx0F7U+uKkKmKWQFOATI37/YVl+8KjQpZoeUe/ub+8=
+	t=1776268112; cv=none; b=n2metesA2f+5HQJvWfEXazy3Xo4TcRrf9Qcs8eo/I8rPauYMwcpG77OoC3lMi7HdcSHgbAe4oQG9aodmPJXvfNs5TT6pxs67dirVCvNh2LGELY9ZgrGn7SsOkc61u6Uxfb1c9SPVpB8dVbfVmLr3jfc+bkBLSgccc1T8P+qyuO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776268102; c=relaxed/simple;
-	bh=+N13We6u1aTuDl065kI8NF7yQBpuUo5PFRNdhNo0bb4=;
+	s=arc-20240116; t=1776268112; c=relaxed/simple;
+	bh=4U+lGXzdrqaxB/1sHdVpDCnsS8PBYriLa1JgIX2Uijw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RK354UwwL3qrIh10srQj4ki53t+/7M/QkOWPk3TWv8Y49yBfdaeFdvAB3HnvRRvg/hgam9I8+ZFtsZUpruU0CuT9N++A2IS8HEf0gaGh6IYRqyympFyY6IKvNXSyK7AxwU7AS6sO8jvg4ukocFvewcYab1wjgzjtnQCAQmiqIBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PHd987CT; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=AHmYGQ2XVULhcVMo3pfRBtzNsyNeAqWc7hrhWQb6ihd7ueNGfp0/d7qq0sQgLgdpogIOIsHpwzfeZQBmmAY3Ui4xZRWbrbEr6SAU9wkHl7HsJwcypfJv73apjWTJbyW3iH/JYsrlecwVM/m+4Xp0jxLeX/8lhP1WUF88ZgVQl64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ABQ7sPWh; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PHd987CT"
-Message-ID: <15d50eb0-685f-49b8-986c-bd54262865d8@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776268087;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q0ir231c0MGV6mGNBlLaPWnwdLwfewiRnCNnLDv3p10=;
-	b=PHd987CTVEMNQ8ZUbkftc92HFo/CPILriZ61sNlfDKzl9YpQni4+xU+KdOPrAYVCo7gl6B
-	WEs8rD+RjL96mMhV3K1HTrnP4gMNRe/jSrlMzaoi9i97PoJRWh5+HVmDjOVh4YC5ZJrIZz
-	0oHWxv0N9Lflpco0WQZQEBY/Qch3IHc=
-Date: Wed, 15 Apr 2026 08:47:50 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ABQ7sPWh"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so107234355e9.2
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 08:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776268106; x=1776872906; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HynLTqHYNy+686QPoe/hx3nOpHjVAP0O5bTsZ35kxyk=;
+        b=ABQ7sPWh9a1lSMAlAa7JiTSPDp7XGPXlNwDJlPCYmGS+bcySfExvCSdPUBrFbnvKmx
+         Re3C3Vq37iuP2gDm/DZpHAJiaNhDUyuNSlMtz7if3ExqSQ0yMK59DZUjivIIdnpAT/B2
+         FnKdfA2EAs/FBhNyIxHlD/TSo6rmt1QdKWlbq9oGZ1oPisKVFLU7PsA1/lFmOQAHo4DJ
+         H8Yl30Z9i29niVIRjfkL41Vk6etD1BO/VuRW/Ymh4F6dc5zirvWXHO9mq4uZ2xi/fq53
+         ukY4NXLyiF0GsG7D6F17fnyrSQTIqcvYxaXIoTgEIR7z70KMqwm1t2sj7KRw2sucMXn7
+         27Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776268106; x=1776872906;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HynLTqHYNy+686QPoe/hx3nOpHjVAP0O5bTsZ35kxyk=;
+        b=TxDrKRWrwug4CeSnMNGLpJHE/UrjiJ2XFavo6VITB7jGpgQAv/wj7WYYCBKpJD730Z
+         PPgCHpwTvhOTTWMcXrTPo+xlC2t2WcH3x1wHbO+h9CrdMyoyi/H+hFuyPNzAKSf5YmZD
+         ANaQMRE+LdmlOD+9NLykZPEyrXyhakacKTWZGVpezR5nwwap4pbnZuhueBV875s04Lhb
+         JbUPRNQC58Q53nk669SOLwoZ83ki9nQpHZ2SkNIiZc+YN2NMYfoyWsUAF/L/QcfRBRf5
+         RdlBB37AQcyKikOvcp4mDAnIqKoYNgQ80oDP5NOHhG2ZEwONuTH8fDfpfE3UijlLGuCi
+         +07g==
+X-Gm-Message-State: AOJu0YyGR/3vwoSg9AXkP80ox8vxEA+3minscNXkoaCVGBdR2kyaf1DN
+	8mWVzfLXxOPvKzMNeZRFVj+6RJ10dxObvnYvxLb6spGTszzxCpOf+QK/
+X-Gm-Gg: AeBDietGBu4coah2teqOrX1PBSKpimXyuADCfTTkkSUld4f5NcOIo+83eol8/DGHlIQ
+	FlUMlY/xogYidHsYa2QbOOOYrE3+G0NAOzQuRuUKUqGlZPaqhk/ypoblEDCLCDIzp+P8xXN6ksZ
+	gB6IlnLuqDdSW5sCdgy9ooWV6KvBaPy0zQvDbiGPHgHLO4bdurFFGDI2XPoP9XrBAPLFIBO6T06
+	+MPCvg+KcqV1WW8PMCNcrRz5HqyedDqb9u5jDw+zn18PJL9tXQ9yyjyH8kxkHbO1K3UsoP8afHi
+	oWr/ABtE2KJ783vbdLiWFILL1l4ATyk4LNp136BNaMMRxL1wDdNdkwja3nL8H64Auz0ONP1OM0e
+	8cugGJM5bK4Wt6UOgf1IyZ4/iwCxiKDG16OYJrmvDOLrjbLTv5pJOYr1XXEhe7y5TTyNo02xkhf
+	v1eiwDm1h5q6iirSQzwtNS5RAuQl3ImWAOLQltlYABnnVJbCC3XISPxlMghVrG
+X-Received: by 2002:a05:600c:2d47:b0:488:dfbc:490c with SMTP id 5b1f17b1804b1-488dfbc4b2cmr143916905e9.16.1776268106031;
+        Wed, 15 Apr 2026 08:48:26 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:cbe8:6434:118f:886d? ([2620:10d:c092:500::5:3ecd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f4352af8sm4364775e9.0.2026.04.15.08.48.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2026 08:48:25 -0700 (PDT)
+Message-ID: <e41d94d4-bbef-4d04-a6ef-8f885aab9b72@gmail.com>
+Date: Wed, 15 Apr 2026 16:48:24 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] kbuild/btf: Remove broken module relinking exclusion
-To: Petr Pavlu <petr.pavlu@suse.com>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Sasha Levin <sashal@kernel.org>, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260410131343.2519532-1-petr.pavlu@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/6] bpf: Extend BTF UAPI vlen, kinds to use
+ unused bits
+To: sashiko@lists.linux.dev, Alan Maguire <alan.maguire@oracle.com>
+Cc: bpf@vger.kernel.org
+References: <20260414195019.684531-2-alan.maguire@oracle.com>
+ <20260414211101.59F73C19425@smtp.kernel.org>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260410131343.2519532-1-petr.pavlu@suse.com>
-Content-Type: text/plain; charset=UTF-8
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260414211101.59F73C19425@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 4/10/26 6:13 AM, Petr Pavlu wrote:
-> Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
-> and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
-> to enable generation of split BTF for kernel modules. This change required
-> the %.ko Makefile rule to additionally depend on vmlinux, which is used as
-> a base for deduplication. The regular ld_ko_o command executed by the rule
-> was then modified to be skipped if only vmlinux changes. This was done by
-> introducing a new if_changed_except command and updating the original call
-> to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
+On 4/14/26 10:11 PM, sashiko-bot@kernel.org wrote:
+> Sashiko AI review found 2 potential issue(s):
+> - [High] The `env_stack_set_next_member()` helper takes a `u16` argument, which truncates the new 24-bit BTF `vlen` and causes an O(N^2) infinite-loop-like CPU lockup (Denial of Service).
+> - [Medium] UAPI Source Breakage: Converting `BTF_MAX_*` macros to `enum btf_max` removes preprocessor macros, breaking existing userspace compilation.
+> --
 > 
-> Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
-> in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
-> from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
-> previous logic to skip relinking modules if only vmlinux changes. The issue
-> is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
-> prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
-> retains the raw './vmlinux'. As a result, if_changed_except doesn't
-> correctly filter out vmlinux. Consequently, with
-> CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
-> changes.
+> commit d88c0688f1be53ae1871dacf198a4a18b2e56ae0
+> Author: Alan Maguire <alan.maguire@oracle.com>
 > 
-> It is possible to fix this Makefile issue. However, having the %.ko rule
-> update the resulting file in place without starting from the original
-> inputs is rather fragile. The logic is harder to debug if something breaks
-> during a subsequent .ko update because the old input is lost due to the
-> overwrite. Additionally, it requires that the BTF processing is idempotent.
-> For example, sorting id+flags BTF_SET8 pairs in .BTF_ids by resolve_btfids
-> currently doesn't have this property.
+> bpf: Extend BTF UAPI vlen, kinds to use unused bits
 > 
-> One option is to split the %.ko target into two rules: the first for
-> partial linking and the second one for generating the BTF data. However,
-> this approach runs into an issue with requiring additional intermediate
-> files, which increases the size of the build directory. On my system, when
-> using a large distribution config with ~5500 modules, the size of the build
-> directory with debuginfo enabled is already ~25 GB, with .ko files
-> occupying ~8 GB. Duplicating these .ko files doesn't seem practical.
+> This commit expands the BTF maximum vlen from 16 bits to 24 bits, allowing
+> up to 16 million members. It also extends the BTF kind encoding from 5 to 7
+> bits, and converts the BTF_MAX_* constants to an enum to expose them in
+> kernel BTF.
 > 
-> Measuring the speed of the %.ko processing shows that the link step is
-> actually relatively fast. It takes about 20% of the overall rule time,
-> while the BTF processing accounts for 80%. Moreover, skipping the link part
-> becomes relevant only during local development. In such cases, developers
-> typically use configs that enable a limited number of modules, so having
-> the %.ko rule slightly slower doesn't significantly impact the total
-> rebuild time. This is supported by the fact that no one has complained
-> about this optimization being broken for the past two years.
+> Link: https://lore.kernel.org/bpf/CAEf4BzZx=X6vGqcA8SPU6D+v6k+TR=ZewebXMuXtpmML058piw@mail.gmail.com/
 > 
-> Therefore, remove the logic that prevents module relinking when only
-> vmlinux changes and simplify Makefile.modfinal.
+>> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+>> index 638615ebddc22..618167cab4e61 100644
+>> --- a/include/uapi/linux/btf.h
+>> +++ b/include/uapi/linux/btf.h
+>> @@ -33,20 +33,22 @@ struct btf_header {
+>>   	__u32	layout_len;	/* length of layout section	*/
+>>   };
+>>   
+>> -/* Max # of type identifier */
+>> -#define BTF_MAX_TYPE	0x000fffff
+>> -/* Max offset into the string section */
+>> -#define BTF_MAX_NAME_OFFSET	0x00ffffff
+>> -/* Max # of struct/union/enum members or func args */
+>> -#define BTF_MAX_VLEN	0xffff
+>> +enum btf_max {
+>> +	/* Max possible kind */
+>> +	BTF_MAX_KIND =		0x0000007f,
+>> +	/* Max # of type identifier */
+>> +	BTF_MAX_TYPE =		0x000fffff,
+>> +	/* Max offset into the string section */
+>> +	BTF_MAX_NAME_OFFSET =	0x00ffffff,
+>> +	/* Max # of struct/union/enum members or func args */
+>> +	BTF_MAX_VLEN =		0x00ffffff,
+>> +};
+> 
+> Could replacing these #define macros with an enum break existing userspace
+> applications?
+> 
+> Programs using #ifdef BTF_MAX_VLEN or evaluating #if BTF_MAX_VLEN == ...
+> for conditional compilation will fail to build without the preprocessor
+> macros.
+> 
+> Would it be better to redefine the macros alongside the enums
+> (e.g., #define BTF_MAX_VLEN BTF_MAX_VLEN) to maintain UAPI backward
+> compatibility while still exposing the constants to BTF?
+> 
 
-The change makes sense to me.
+Looks like this is done on purpose and we don't expect anyone actually 
+use #ifdef BTF_MAX_VLEN, so it's an acceptable change.
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
-Thank you!
-
+> [ ... ]
 > 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
-> My previous attempt to fix this logic can be found at
-> https://lore.kernel.org/linux-modules/20260402141911.1577711-1-petr.pavlu@suse.com/
-> ---
->  scripts/Makefile.modfinal | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
+>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>> index a62d785812076..1663970fc1bf6 100644
+>> --- a/kernel/bpf/btf.c
+>> +++ b/kernel/bpf/btf.c
+>> @@ -289,7 +288,7 @@ enum verifier_phase {
+>>   struct resolve_vertex {
+>>   	const struct btf_type *t;
+>>   	u32 type_id;
+>> -	u16 next_member;
+>> +	u32 next_member;
+>>   };
 > 
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index adcbcde16a07..01a37ec872b9 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -46,17 +46,9 @@ quiet_cmd_btf_ko = BTF [M] $@
->  		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
->  	fi;
->  
-> -# Same as newer-prereqs, but allows to exclude specified extra dependencies
-> -newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
-> -
-> -# Same as if_changed, but allows to exclude specified extra dependencies
-> -if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
-> -	$(cmd);                                                              \
-> -	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
-> -
->  # Re-generate module BTFs if either module's .ko or vmlinux changed
->  %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
-> -	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
-> +	+$(call if_changed,ld_ko_o)
->  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
->  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
->  endif
+> Does the env_stack_set_next_member() helper also need its next_member
+> argument updated to u32?
 > 
-> base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+> Looking at env_stack_set_next_member() in kernel/bpf/btf.c:
+> 
+> static void env_stack_set_next_member(struct btf_verifier_env *env,
+> 				      u16 next_member)
+> {
+> 	env->stack[env->top_stack - 1].next_member = next_member;
+> }
+> 
+> Since the argument is still u16, won't this silently truncate the i + 1
+> index for any struct or datasec member beyond 65,535?
+> 
+> If this happens, when the verifier resumes resolution of the struct, could
+> it restart from the truncated index and redundantly iterate over
+> already-resolved members? With a very large number of members, could this
+> cause excessive CPU usage or soft lockups?
+> 
 
