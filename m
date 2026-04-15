@@ -1,78 +1,74 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3ECA2D8378
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 18:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20381EB5E3
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 18:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776276747; cv=none; b=nyQMFnT+vzVbGG84W6Tc8o6sdKXikg5cpKm8+auIXz9smgWD37WSoUUe435SpxddtZdhcN3KYCije56BlIieByS67hXIdxpQjGOeto4Kg8FFiw9SwegyjyKUiN9tov28j0BXWCb0cQVQI8vJZ3KTz4LPDAY1WbtWVV0PhJTjHqA=
+	t=1776276779; cv=none; b=Cwu3f6so7IFT3Oy1nZ+H7D2Caf2bbzla83YS31yeqoG7V53Z+Pc2ilLMZtiz02O1W2SqRvG3kK6cIOxwhWtNswg0o1pJ0GBe/9DvaiA5oXnFfLi3yOnlHrCG124lSel8ODjYNoYZevKAqtzlZFEtbGEaOyN//Nf5buGPH1OAftE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776276747; c=relaxed/simple;
-	bh=voQLvckIkJzkb4rTethDLss0rurjppMwVLV4hrYSiiU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=M4wPbuvu2JYfp0H6exd9XlAspzyglcI4kJ8tO4rcjcWH4JU27/qCvlnz4frWr3Oc7adS2l5XFpywvsgu2Dojj/lhjK29/WxPP7dxZVVtPxFTaIsi7Ct9dW5/R7a7EoGcCoM8X8UgozqBWOkXmD7sKqLzzkI6M+CpRfxo38q1/9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ryPk6V4p; arc=none smtp.client-ip=74.125.82.170
+	s=arc-20240116; t=1776276779; c=relaxed/simple;
+	bh=xuBugwAPRWxTp/rGLYw2T3rsOVKCDWNhWWPbUlOApb4=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=UZEU25KsDV8Z2eo2zwsCIJHvrE5uAs/0VWiq7SUNpBtavKAbNn9qbvR5VbVrCEMyTvQ3jZh0+zVXzzZqdHobZQ/FeGoKa6V9NRp8ua3Q/bWk6oQ0OpgX/xx6xhCnRl6fFK0HHkFmnBQKmD+3fueWQUYrmQa/jfnY9BnS9m4sWvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NO8LwNh2; arc=none smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ryPk6V4p"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2d8ffdc31d0so7781338eec.0
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 11:12:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NO8LwNh2"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-12c19d23b19so8527625c88.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 11:12:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776276746; x=1776881546; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776276777; x=1776881577; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C271EoITCL0CMSCappHhm5qKCGcKdaqAjj4Be8M/ZZQ=;
-        b=ryPk6V4p23xU61UeVBaUKTI3AQPGvPLY7Ty41VIEhmASt9+K2sBPXHd/XQPDKzaOH/
-         F+xvNE66BIcrh+HpWCkiFfeU20PGSHtYYRAZoeE8rUFtRY0RfBqDOg+iW4I7fxmCHZ55
-         dn0t1H8n4lGUKevjfoVh/kPQ0KNRUtivzUjoFFqSmbVZA+QS/6kPKf21mggUveTHh8nf
-         iyjvlo05+zF2nOzax7XYOZ/vILhuY2fDjR5RC1LyPMPeGxT2iFHYNQ2I6A7Md43TgzdX
-         Qqej+IW7SWw2C2SGRlCFZ7keEbLkFLBowbMoKbchT8HnhIETWRgZHNZk2YE7Zf5DcNLA
-         NiZg==
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IJGjylw6DdMpKyotHh1RaXqArO8pofJ71mbPiDBvte8=;
+        b=NO8LwNh2ZsQFdsw04/zOkxa86S9TnRixiRC6wlen/1/gFVCsToQW5re+6BRkjL4vWn
+         QoW434n7Ho+dmV0rQ0ygiBAkQA7BW3SObDK0bFKkd1kXQCqBtaysZmiIvgNd7LUIwyqf
+         g7XlPPFuLPbIG0NSYlWMYcvIdBXVI8Xgp9cH967iIQPirueBpWTPgbXV04eZAMDM3b3F
+         vGCVwwqcr39hBEE4Qby96hDdh2El5skcuJsUWvz2Gspi11w82vWEu5tyYPPROkRaKdOU
+         8wh5N2iE8qtSc+j5YRu6CYpCTq1tAFc0ZGMwL827s0GcGFqed5Ny3zl2/Dk5CQXC2kUG
+         iPPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776276746; x=1776881546;
+        d=1e100.net; s=20251104; t=1776276777; x=1776881577;
         h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :in-reply-to:date:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C271EoITCL0CMSCappHhm5qKCGcKdaqAjj4Be8M/ZZQ=;
-        b=lxf/lSOy0uE2GBNzsV6xBF8eSoqfN0UtU/Deub4jrHtNsOcIKSN/D1dFLYOIgTyOre
-         6U4CuCnju9bdvv2RtAA7/OgqQj8pM7XYUtgfSAYUjsanPNNVRDymPeUP11e/gXVzsFHq
-         9Byp/+VM7c4wsn5ra9/TqZE6x/J/WuqdVRh2HulEp5hJXUArtrUppIcKb8OWS1zneSt/
-         1SQ5F4J2PheUMktfLBtAyb8nks7x8ouOkxt/MkaxZM25W11LEXArgeUGLWitgs9vtxtv
-         4kuQx6UySiVpsCW2oUbPttV46OZgXFgldM7na+skvQ4StmzvVR/cZRWqeqQsWmi3T4XJ
-         EAeA==
-X-Forwarded-Encrypted: i=1; AFNElJ90XV9mY7jNr0+JDljcuRuX5HOw+qNJleVOE9Dwm3NA3rs87PCcl5Hj5DIH5f9E16wBU2I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo8g4SnMFAYpjIJSG6kdY2cSlTqB21VM6XDJiNsZQnvLhrnpeL
-	2sdVjWxEom/N+mmIBly4Gtvk2tEm8UMOmrC1m/psm0IfYzvNwOg9kFID
-X-Gm-Gg: AeBDietaqS+l6yjQ/EFImAhhNYVHRWo/8jIjmWelxse499eViQ8dEaSvxMoUgU+6lhk
-	SRJxgNUoooOmpI1nl/tUNCu2nAan1E04/OAUkt4vRAtfvgd8tt11dkE2LDAeFU4H+xtted682DD
-	mCvOH5hGH8MxYZNZTjSvB4+ED16+wGfEzeIhWc/vyVUDpFb0rMKnPas/mw71c/SH0NB2J6ZDOI6
-	muRgHySAxOvzVXtRG1fzIXismwQiUgYwZ3kq8d+UotJZxwxifgAgPDt5fApQMbPGbGr4KdqWOyQ
-	PL7D+PxqioWCPrt0fj4xzKG/rMmCWlRKCodvnL7+mMSRYgWj7VW4ySxfxUHs9MpMjW1tmY13uOC
-	AahMG+EvoZhhPTbhcynJH4G09QZnFUY8M65AlhF3/wZg9HpmptkNxzc7IgwtDcPi0ZPTjUE3PCi
-	R69HJtUqLqhQs5754mAajARrgBAkk6kkiXhlQs5FDCJ8f8CXBj5QNPkhYM1oZC9DlDFTFpuPbOb
-	/fXtQ==
-X-Received: by 2002:a05:7300:3722:b0:2df:7fe3:96a with SMTP id 5a478bee46e88-2df7fe30d71mr361058eec.0.1776276745746;
-        Wed, 15 Apr 2026 11:12:25 -0700 (PDT)
+        bh=IJGjylw6DdMpKyotHh1RaXqArO8pofJ71mbPiDBvte8=;
+        b=bVZdOV5XD2FCCR2Pja3JbfjW5Q5Q2V1INCdtzF71VcGi3J43iIvEgSi6ZaqSeKET/K
+         nmxvQ381cJJ6FIvuLjoKFUn/QcLB+6L5hfT+OHrP5y0TyiT+/zub3sYJFvBLkUzo+lOJ
+         q2XGEfmHRYgRgdb7WqQU5EbngQoRgNyAe2t1nULuDpXMO4ipQNIS5YmM5v5WMudnKEHb
+         d/3AZ+7Z5YXxqqCBkbLvqybZNR+AJ1nqQgryYdKD6Pcc0i27nLb5csdPJRR0APSvKW62
+         1dnUJTKyPNfU8GT8Fc0Fq+n2AibIQjhxcORhMrfOoBIxIiYdzB9xP2xbf220HfqRG1vS
+         ncOQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/GMCAxB1lo5/sK3SDFkiUomW8N2LHISPR7y2aaIgk0S0EAFJW4SJiy6pa/ViAB3G4qqyM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPbeapRqFDnetclg0HXM6h2B0f/aZSHNte/7r6NsPbZPcmiuJ8
+	zqDe3SiecIF0c8r3jj4wA5mqrv4pulqhzuSzW6m7diJLlqE1ZDVzFaDU
+X-Gm-Gg: AeBDievblwiWZyDIR1tKPrQphTP+YHF6+g4gzgU/Hpto+bKoK+JA20n3BqjeQY9Zmmm
+	b33notxLe6YiL//7aI9RIi/3v+ZI8fuZ1OezWFNDcA1h/GIEzezSTBghHo678wK7xQR1gd36VzY
+	EgTw+a2ZW6UoaF4l7HXkfIJZS9mLiiVuh6SzYSgpqO0q2iz7AOmX0fG2ch0htq4Uq+4/3YSqh2C
+	Z2MlsNSGzJrHaVBqZdpcEPkhP6+714wcaiFPG0DrnZ7XxiH4C+yE41UtskgRM7KNt1s3+adaGLr
+	YoegNU0J3st0lbky/tIT2Ou8Ppkua4/OkRi5Ptp1OTOMZC4MzVjsiZt3j5xwUrRlG3/UE/Qw/AU
+	zbAsnpcIiqUR29I5DMZngA98mjjN8bjOzDdDOGo591SIvsjAur49XeL/GKG764WzFDGwuP4k+EJ
+	CAnOGp8QnchSy+rdliCzgWNZn6HCkA539cPT5knTL5J7MuVb6dupO0z6gXjIv6jIhSQXetJungc
+	vWNYA==
+X-Received: by 2002:a05:7022:790:b0:119:e56b:98b9 with SMTP id a92af1059eb24-12c34eeae15mr12703540c88.32.1776276776885;
+        Wed, 15 Apr 2026 11:12:56 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:21dc:2944:7f23:f4d7? ([2620:10d:c090:500::cdb0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c10a9a3sm4344814eec.2.2026.04.15.11.12.24
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c606925sm4601940eec.12.2026.04.15.11.12.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 11:12:25 -0700 (PDT)
-Message-ID: <e055c5e1112e42c03c929282b95d5ec2b31295e4.camel@gmail.com>
+        Wed, 15 Apr 2026 11:12:56 -0700 (PDT)
+Message-ID: <c948fe66d53d09eed5c72d33abc54ed25b463c09.camel@gmail.com>
 Subject: Re: [PATCH 1/2] bpf: deduce_bounds_64_from_32 tightening with
  circular range logic
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Cc: Helen Koike <koike@igalia.com>, paul.chaignon@gmail.com, 
-	shung-hsi.yu@suse.com, andrii@kernel.org, yonghong.song@linux.dev,
- ast@kernel.org, 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel-dev@igalia.com
-Date: Wed, 15 Apr 2026 11:12:23 -0700
-In-Reply-To: <CAM=Ch07+xVRHvRJBqQukCrU-br=HHyFWbdjbP+vOB6XKaOOYag@mail.gmail.com>
+To: Helen Koike <koike@igalia.com>, andrii@kernel.org,
+ shung-hsi.yu@suse.com, 	yonghong.song@linux.dev, ast@kernel.org,
+ bpf@vger.kernel.org, 	linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+Date: Wed, 15 Apr 2026 11:12:55 -0700
+In-Reply-To: <20260410124035.297632-1-koike@igalia.com>
 References: <20260410124035.297632-1-koike@igalia.com>
-	 <16990d86263fb24079e6f0b476a8854ec2366932.camel@gmail.com>
-	 <CAM=Ch07+xVRHvRJBqQukCrU-br=HHyFWbdjbP+vOB6XKaOOYag@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
@@ -83,58 +79,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, 2026-04-15 at 12:19 -0400, Harishankar Vishwanathan wrote:
-> On Wed, Apr 15, 2026 at 3:12=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Fri, 2026-04-10 at 09:40 -0300, Helen Koike wrote:
-> > > Unify handling of signed and unsigned using circular range logic.
-> [...]
+On Fri, 2026-04-10 at 09:40 -0300, Helen Koike wrote:
+> Unify handling of signed and unsigned using circular range logic.
 >=20
-> > Hi Helen, Harishankar, Shung-Hsi, Paul,
-> >=20
-> > I think this algorithm is correct and covers all cases discussed earlie=
-r.
-> > I also prepared simple correctness check using cbmc in [1].
-> > It shows that for any valid input register state deduce_bounds_64_from_=
-32
-> > does not loose any values (check_soundness() function in [1], which val=
-idates).
-> > It also shows that there exist invalid input register state,
-> > such that deduce_bounds_64_from_32() "fixes" it to be valid
-> > (check_invalid_preserved() function in [1], which produces a counter-ex=
-ample).
+> Signed and unsigned numbers follows the same order in bit
+> representation. We can think of it as a clock, were 12h is
+> 0x0000_0000 and 11h is 0xFFFF_FFFF, regardless of its sign.
 >=20
-> IIUC, this patch enhances the new deduce_bounds_64_from_32, while
-> also having the property that it "maintains invalid input register states=
-".
+> Then, instead of dealing with max and min, we deal with a base and len,
+> where len =3D max - min.
+>=20
+> Example:
+>     range [-1, 3] is represented by base=3D0xFFFF_FFFF len=3D4
+>     since (u32)3 - (u32)-1 is 4.
+>=20
+> And we can verify if a value v is in range if:
+>     (u32)(v - base) <=3D len
+> which is true if v is signed -1 or v is unsigned 0xFFFF_FFFF.
+>=20
+> This automatically handles the wrapping case, discarding the need to
+> check if it crosses the signed range or not and handle each case.
+>=20
+> It also fixes the following current issues:
+> * [(u32)umin, (u32)umax] falling outside of [u32_min_value, u32_max_value=
+]
+> * [(u32)umin, (u32)umax] falling in the gap [(u32)s32_max_value, (u32)s32=
+_min_value]
+>=20
+> Fixes: c51d5ad6543c ("bpf: improve deduction of 64-bit bounds from 32-bit=
+ bounds")
+> [Circular representation]
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Helen Koike <koike@igalia.com>
+>=20
+> ---
 
-It enhances deduce_bounds_64_from_32, but it does *not* maintain the
-invalid stays invalid property. It can be adjusted to provide a signal
-when 64-bit and 32-bit ranges do not intersect.
-In any case, I see that you handle this situation already in [1].
-Therefore, I think we can proceed with this patch as-is.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-[1] https://lore.kernel.org/bpf/20260415160728.657270-1-harishankar.vishwan=
-athan@gmail.com/T/#t
-
->=20
-> > Now, the question is whether we want check_invalid_preserved() to hold.
-> > Harishankar is working on an extension to simulate_both_branches_taken(=
-)
-> > checking for additional cases of invariant violation.
-> > Disagreement between 64-bit and 32-bit ranges is one of such violations=
-.
-> > The logic in deduce_bounds_64_from_32() can be extracted as "intersect"
-> > function producing a signal describing if intersection actually exist.
-> > So, the question is for Harishankar, would you like to have such
-> > "intersect" function?
->=20
-> I  think using the new reg_bounds_intersect() "intersection checks"
-> introduced in [1] to exit early in sync is still useful because
-> the other sub-sync function might still "fix" the bounds
->=20
-> [1] https://lore.kernel.org/bpf/20260415160728.657270-2-harishankar.vishw=
-anathan@gmail.com/T/#u
->=20
-> > [...]
+[...]
