@@ -1,107 +1,140 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CF03314D9
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 04:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F1140DFCB;
+	Wed, 15 Apr 2026 04:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776226215; cv=none; b=HstGnEbcRNk1Bi935aN48yzaoyqxlch+N6oXXtKMpVxonJDwEnfRUMv+R6Yc2IYHhlYp/gXDuxJSyLBswLgybTtA5UzyoksTrOahg5+FiHrR1ebBwi3ads+OscqnhIPtdPqTBNeVPOOqv9JMGAQiAwaw046yT2U7vGOvQmqvh+A=
+	t=1776226469; cv=none; b=SIiYBS2wF5cnG90ABSpwzW44iEB9NA3HQ0E7vis6bQl7/IyjSFa0l6KOXUvRXfIouTVowVqJd8hiIqrW6+0jJU+hWTURoDJc3WBBYYIRKAKl1QI3WRJ2RO2Xq2SVm0NE9sabkD95MnIHuHzb9ttMAH35cWO5jKKX+nOrp/JQOpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776226215; c=relaxed/simple;
-	bh=zkApGiSInqzXbB26x7CUMq4yRKV2lt6LCi0JnsfcxAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jOwoQVtSe1TBURPqkoqIorRiOT6WuzpcPWUIZcfBm8YOfi4bzAamhsgHWdszKHg3i+eGrvl2jGqqoNIhp/DdlB9OAavFqUhJVHoZPcDpekjP5RgN6betBbPdln5tY81p666iAReVidt1kFsuQCJLY3T1LFhsLUhbOc8vHOcG39g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H6PrEiwy; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776226469; c=relaxed/simple;
+	bh=t61rgIDLlTy5J7V6+PacS/C1vg1XRLE74hWnDzh1O8Q=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ith047HAfzpx35BPKjdeQnqIiObylXS0y9gLTaJVzynTipJ8fiHdAfn7+LZEe6vk60AWPG38oz6wrSAEFE1oLVQny2D1XH2cv9fvGT4QcCaWbtEGc7V4Tn/3XJS3hN5UNcc9CIiX7G1pNr47klETTr9LnNpZEvwcTTAJIW/g7ps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=KqKudZ3I; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H6PrEiwy"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35dac556bb2so3663778a91.1
-        for <bpf@vger.kernel.org>; Tue, 14 Apr 2026 21:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776226212; x=1776831012; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o49lAbSkVPQfOGvZ59d8lsdkqFWXCoqrf4wAVQyoM3M=;
-        b=H6PrEiwyOvCWV0iWkf3U3JsNaoDUu2u5mt5qkJ+GwKaTCcx7WY2sCOoSn8Gq1qu4fx
-         fveHRUOqEvnLEH6vqvgWsr5AIzzLGmZNgca7CdiYHvHma3zJs4TNHVkl/wk2Z7ajHzco
-         VRqhRLkYA2v7zAx0CsYDEKt/IdJBLqZCwQpg9KAHdZeAeSPeCJts/OWVvwGAh4rMo1oE
-         jfC+d2jDQJB9E70vSA39PEmrehJu8jPtHmauK/ulsYbP3qWibSHMZPt9kZCi5OcI2gzV
-         pnbNPcOtK7NPbAbJj4ieJ4OQgiRGLNWaM6Ct8xjZ9qXlEYC9txX0g1x0NwDoZCT3/wDC
-         ndUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776226212; x=1776831012;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o49lAbSkVPQfOGvZ59d8lsdkqFWXCoqrf4wAVQyoM3M=;
-        b=rZPRFxlS3sR68oJVN2xXU/dS1h/4o0H5yowWSKVw3nPMth8V9RLGaZWUGryiYufVsF
-         01GExcKdVf17Ohjxqu7kF/zvUBNlRIzCGb1p5s2VWpj9lQ6Uhik0c0KFKTqkzrXpZ+t9
-         x5C7O1mTpvkJFKRL8E/t0fRYaItSzeEG6b2SPzUp5wH6x8PT8aM4+DD6gkK1Cn5ll4go
-         r7FQ0BosFGEhkrdOq819D+ahpv8F9aTBKn6ijsmXz9TdM6Npy+jPnFNF0o6zzanP/0Aj
-         GwG2iDHwXWXO5Zsl+g+VUA+JDnsC1HSlRn3M2dlZeCiw7Y8A1ZD1/POtekh2H645z2T1
-         Ynsg==
-X-Forwarded-Encrypted: i=1; AFNElJ/FKWwACNobaCQsvX6X6w4sZPtwoTB5oq6gdZUe9UKEhy7pq8SZbefK6h+OcVhkFvi549w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjgGDwIKw6GC9WSAmnlMM0kn4ZNVsEQrKlFc+8ixluVzLd8Xto
-	0soj+3SBCX1dCRBj2t918WC7tX4RFy8wsivD561W+803OI9NpdWQCpkm
-X-Gm-Gg: AeBDietDFqfOUhvnvFJtUje6HEoD7Qy+ScX5FRBPu79po01EAhjl1xJ+L4+X3b1OhJR
-	zmq3bl6a6WsOX42QWbBUy8Lc9CPIlYDLxoZispiTZhf+J3PRW1BKN9wvWRP8JA0ZDBLmaw22uAu
-	TKD4fGgwlygfDNRtRRdmqixIG+6Ik8keslOXPouctZsLpW6LxfzZXwQi4EQsmiWskuhqNCOP7y5
-	hLAicyzfhl7ZYL8TeehK7vzr88yzD2D5bQksFM3pZM/XkhBZ8lMdR8U4LwzqxZljv3paxgLw4Wu
-	GgfJZb4ZBk7yBiGHogLAYBymAEmmV7ga6L5DleF2KqIlR/R9mgQ6UmLC3sx0JCfzwY02Qyyc7iU
-	HRxh7/RQsJ/r3Pja7uba7OAHiOJylrEI4hEICCHj3lTNnGqdx4NRmU3QbM6Nif42Szc7oPUNEeB
-	p2EuvwAIESD6rDesAnFU2S28h7aqGxCA0D13TavQ7qBr1OJJV2ZZUmQMFvZLu5FRivrNnZTxasx
-	0zMd5cZSAKUuCjENwgDkv50f1Apn3NgBLtM7tBWrzX9i/J4DPGXp759VJfdygBe/FzC4W0=
-X-Received: by 2002:a17:90b:48c6:b0:35f:b714:e516 with SMTP id 98e67ed59e1d1-35fb714ed7bmr9126467a91.16.1776226212115;
-        Tue, 14 Apr 2026 21:10:12 -0700 (PDT)
-Received: from MacBook-Pro-49.local ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35fd0a07ad9sm305071a91.10.2026.04.14.21.10.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2026 21:10:11 -0700 (PDT)
-Date: Tue, 14 Apr 2026 21:10:10 -0700
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org
-Subject: Re: [GIT pull] timers/core for v7.1-rc1
-Message-ID: <ad8OGZmCVRc1C-Ck@MacBook-Pro-49.local>
-References: <177601563477.7932.4081917600853246368.tglx@xen13>
- <177601564263.7932.2238613098642404049.tglx@xen13>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="KqKudZ3I"
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63ELkjh44043025;
+	Wed, 15 Apr 2026 04:12:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=z+uGjOz/K2bKKzJrpvV77wqUuie0Yh0+TDwv1BGHozA=; b=KqKu
+	dZ3IsoBF8pN5HyuX2X7DxQe1onhjyL/eKudfSAFXXw6YAoglnbcq5atTQTXlH5rM
+	322EFT2yhlh3P435txZ/Wz5LbZX7owhJeX3OHrdu60DOT0VG6D7OyylZYgrAuJh5
+	YZHIlKsH8shm9U7WieGIMIYr3kolmIBnI04J2wdeTQx6bflVY/wMYCI1mIZCiccS
+	LGUdGEjSWY/efbXLUHQ+dnqDAbL2/A8oV9pTKlDws9PASfccaxEQjVeX3SPfiJzx
+	o2QOMshRoY9PFEXo3E6TDmk3YLKac+ejkild5jBwEsqZnk4lVdFHkUJlFx2bHbju
+	xGG+Lj+7goaxvIqbIA==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4dh85vectn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 15 Apr 2026 04:12:02 +0000 (GMT)
+Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 15 Apr 2026 04:11:53 +0000
+From: Slava Imameev <slava.imameev@crowdstrike.com>
+To: <alexei.starovoitov@gmail.com>
+CC: <ameryhung@gmail.com>, <andrii@kernel.org>, <ast@kernel.org>,
+        <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <clm@meta.com>,
+        <daniel@iogearbox.net>, <eddyz87@gmail.com>, <ihor.solodrai@linux.dev>,
+        <kernel-team@meta.com>, <linux-open-source@crowdstrike.com>,
+        <martin.lau@kernel.org>, <memxor@gmail.com>, <netdev@vger.kernel.org>,
+        <slava.imameev@crowdstrike.com>, <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Use kmalloc_nolock() universally in local storage
+Date: Wed, 15 Apr 2026 14:11:50 +1000
+Message-ID: <20260415041150.60473-1-slava.imameev@crowdstrike.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <ydbdk5fj3mbjoninyt5lcg5czcrcgghk6ownothijy667zn6h3@eczgskgj43iw>
+References: <ydbdk5fj3mbjoninyt5lcg5czcrcgghk6ownothijy667zn6h3@eczgskgj43iw>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <177601564263.7932.2238613098642404049.tglx@xen13>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH013.crowdstrike.sys (10.100.11.83) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Authority-Analysis: v=2.4 cv=LMZWhpW9 c=1 sm=1 tr=0 ts=69df1012 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=VwQbUJbxAAAA:8
+ a=pl6vuDidAAAA:8 a=o72gW7uVigxhCowoDf4A:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE1MDAzNSBTYWx0ZWRfXx+eDEf62lDdj
+ RUKkD9RctDetIm2wPRB+TDc4Eu9lhvyMtRkoCtywDTVAcFHre5PXv/ngAy07VRVjwTL1YoQeSG2
+ yepEE3cPynKNGjHIAZuJRmQw/McSQ3GKgnjZR/FZtPH1BKpz5FyHh+zNtHS6xTOnSLoTFcFKSrZ
+ sCgLZo4jldP8T6cNL3E6l9o6HvZ/AmBFw7zKguDp+l51TXpPnbi94xNp4m91qSPpVEHG2xrPRNk
+ l20q7NuWcK0xRTQRfPHRO2tUdgNAzF1PG/mxTTaJkHPjT2NMSocYL45hmAsmxHkrAE/kSszi9jQ
+ 7ESVc76UER/jAhTrpVZ2S9xSM5cQGaqw3V/KteOF5CONIAU+nZ+xLrcsmoWThdRLpMv3ZomAUMv
+ KfL5T9M6RZnDfwx3eiH3IxpiYmkzHV6EiveFPabsORjt2RtKpyymWVLNVm+WCvlkw9O29SbePdy
+ k6UPbUjMC8OZafB0SPw==
+X-Proofpoint-GUID: wXJeCFlbJ8nw-sOHS2drrxIdozr37DIQ
+X-Proofpoint-ORIG-GUID: wXJeCFlbJ8nw-sOHS2drrxIdozr37DIQ
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11759
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 suspectscore=0 impostorscore=0 adultscore=0
+ phishscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604150035
 
-On Sun, Apr 12, 2026 at 07:46:25PM -0800, Thomas Gleixner wrote:
-> Linus,
+On Tue, 14 Apr 2026 19:27:00 -0700 Alexei Starovoitov wrote:
+> On Mon, Apr 13, 2026 at 01:48:29PM +1000, Slava Imameev wrote:
+> > On Fri, 10 Apr 2026 21:39:00 -0700 Alexei Starovoitov wrote:
+> > > >
+> > > >
+> > > > This allows value sizes up to ~65KB. Before this patch, socket and
+> > > > inode storage used bpf_map_kzalloc() (backed by regular kmalloc)
+> > > > which could handle those large sizes. After this patch, any
+> > > > elem_size above KMALLOC_MAX_CACHE_SIZE will silently fail: the map
+> > > > creation succeeds via bpf_local_storage_map_alloc_check() but every
+> > > > element allocation returns NULL.
+> > > >
+> > > > Should BPF_LOCAL_STORAGE_MAX_VALUE_SIZE be updated to use
+> > > > KMALLOC_MAX_CACHE_SIZE instead of KMALLOC_MAX_SIZE now that all
+> > > > storage types go through kmalloc_nolock()?
+> > > >
+> > > > Slava Imameev raised the same concern for task storage in
+> > > > https://urldefense.com/v3/__https://lore.kernel.org/bpf/20260410014341.47043-1-slava.imameev@crowdstrike.com/__;!!BmdzS3_lV9HdKG8!ytFHcGR6fq4YVQZ74Z_LwJ5IKsEaF2vnY03x8-IS51cQyN3SkHYa-6G_vUxk2lW7xvWMNEfSArwyIGXuxeEhe62whEC8AyDpmA$
+> > >
+> > > Right. Let's update it, but I don't think it's a regression.
+> > > On a loaded system kmalloc_large() rarely succeeds for order 2+.
+> > > That's why kmalloc_nolock() doesn't attempt to bridge that gap.
+> > > One or two contiguous physical pages is the best one can expect.
+> > > In early bpf days we picked KMALLOC_MAX_SIZE assuming that
+> > > it's a realistic max for kmalloc().
+> > > It turned out to be wishful thinking.
+> > > kmalloc_large concept should really be removed.
+> > > It deceives users into thinking that it's usable.
+> >
+> > In defense of supporting 8KB-64KB allocations for local
+> > storage, we can consider BPF_MAP_TYPE_HASH with BPF_F_NO_PREALLOC
+> > as providing similar functionality to replace the missing 8KB-64KB
+> > local storage allocation support. However, these map entry
+> > allocations can also fail with similar probability since they
+> > depend on the same underlying allocator.
 > 
-> please pull the latest timers/core branch from:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers-core-2026-04-12
-> 
-> up to:  ff1c0c5d0702: Merge branch 'timers/urgent' into timers/core
-> 
-> Updates for the timer/timekeeping core:
+> I really hope that 64kb task local storage is not your production code.
+> Severs easily have 50k threads. Sometimes more.
+> 64k * 50k = 3 Gbytes of memory wasted.
+> You need to redesign it from ground up.
 
-Looks like it breaks the boot for me.
-It hangs at
-[    1.036914] cfg80211: failed to load regulatory.db
-[    1.037396] clk: Disabling unused clocks
+This was a research project to replace LRU maps with task
+storage. We implemented a garbage collector using a BPF task
+iterator to release inactive task allocations. While iterating
+over tens of thousands of tasks might be questionable, this was a
+proof of concept that, when combined with other measures, could
+potentially keep memory pressure in the tens of MBs.
 
-if I wait few minutes and then Ctrl-C then I see:
-
-^C[  190.319574] ata6: SATA link down (SStatus 0 SControl 300)
-[  190.320442] ata3: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
-[  190.320869] ata3.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
-[  190.321168] ata3.00: applying bridge limits
-
-but it still hangs later.
-
-Reverting the whole pull fixes the issue.
-
-The boot is standard qemu-system-x86_64 --enable-kvm -machine q35 -smp 8 -s -cpu host
+8KB would be sufficient for 99.9% of our allocations, but
+sometimes we need 12KB or more. The alternative to task storage
+could be BPF_MAP_TYPE_HASH with BPF_F_NO_PREALLOC and a garbage
+collector, as we want to reduce dependency on preallocated LRU
+maps.
