@@ -1,98 +1,85 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BCC34D3B5
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 12:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BEB2DC765;
+	Wed, 15 Apr 2026 12:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776255262; cv=none; b=ljO5cXhfAhsT5x2CmE6RMValfMcceoMutHDwy//d7cdbT0hDzSqp2/iBmrikBFvaN2UWarkZ/3V7HFq64820wPR40LiNfjSHZv83xmmJcpwMX4nEIYJax3NSzwRkvjVi1XW1pzanfuDmeGFlMCxwVwPDq+c2IqYAqgTkfXoSiv4=
+	t=1776256698; cv=none; b=pVh4Nr7XtjMvW08fD6Cxli7IFjyHXih7HTIMF9Z9gPUKPNAJNmLwxJTCheFd+NVfZHIPjrpczNz+RtyhCJ3KAmWfX1C0a7yCe9fmWZLVlbeCDIEOi0EAIIJnnINdM2u6L7S9FMRMTeruSu0h9vSmhs49/J/Ik/8HtDThU1RfPUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776255262; c=relaxed/simple;
-	bh=tvx3EwdQKn32rL47uctv5zJriKhK6Az0ph7ay/L0FBY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BEmdoVot6S9sSfRMLXfdqx/rYvr8jOtoK+4Ph9JYCrStYEtatO9brpaK6u0DpnyadL0+TEP++ypOhXx0xnQdsTIXdVu9S1A8tmpdlf7GyhuagBMjvsB6OPiAaYmP6riam3qdLg3KV7sogMHv/thXwcQwuGgNNPEmgLGQ99SGsY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=SW4GsgoF; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1776256698; c=relaxed/simple;
+	bh=p340FmAH97IMVG74X8N25pPtvw4YgnFTmmYmNrvVRsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gK+WffdylXx8PfX88thDLg7XEn4RyTqe88VODgreFy70xysgvqtUQ+/qbCOKPqPRo1FEvPlQpez3qx5ulr9gID3b3xESoT5LLB5xBkH7t4WfdAAdBlP2Vto4HhizQuUdLzbqgA4oUDPt/XttBC6z8kHE81r7sk/ZDyOaRHjnSOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=VXD/xn0h; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="SW4GsgoF"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=CZIMPaKWVsIl8Yv5++m+1N7i7BgjFkeCRIdk77MXJmQ=; b=SW4GsgoFIoS8ovi3AGbvCUUdRz
-	qAfkSey0PmoHnWmfTEnj5eUATmoVQst2w4lRoG//Ac8MJXTeIQP7yCb77CNKkXGDaMVYamiSYDpfN
-	nuPTU45/BwwoMQ0ElkPaUUvlm+K5r5kYaMB6FltRo+3+TRR8FP+ji1XXw7BoUg7nkAcvUwnadC+zH
-	Bqr19r2fh9TKDRcRVpLJZeYX2s/O7NpMXO1Q/mBrHRbwR9Ue8jKos+sbGiy6iwyoqDv1axCiQ07ac
-	976kje+sxgEOirEUJXDHk6ZS9lbVm+iD+0c+hKOYZoY/5CkXxUAAZfbPi7O+IAZD/w0qtAuRomfCS
-	hcI0aTGg==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wCz88-000Os0-13;
-	Wed, 15 Apr 2026 14:14:04 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	puranjay@kernel.org,
-	xukuohai@huaweicloud.com
-Subject: [PATCH bpf 1/2] bpf, arm64, insn: Reject out-of-range B.cond targets
-Date: Wed, 15 Apr 2026 14:14:02 +0200
-Message-ID: <20260415121403.639619-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="VXD/xn0h"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=eRHac6+7OjGhQ4pPHk0arofb9sWAo1B2RbgwlWeamq0=; b=VXD/xn0hXIMU1iK3HIIAIyKapC
+	OMlDpvUPFyN1cbc5rT+/MmehfjNFi2HHrnkB/3Jg7DeHi62tq31iZC+exinlj8mXgnvccnNw6OT9Z
+	O9wYYry02IDoO1b/ysgwAjt5tdzY2ZbadG0m6aQKFgi9PIGxJU58VXorrpiQV6Mua+WAsI6j+s2vp
+	0oXWPFE1B0dLlYgZPUZxCf7u6HRD8yBBdJQPpDyRGYflPiz30oo8X4I6UL5iavX3ijMHYlUNKP4nm
+	iukmmtUTOM2hXYWgUv0msL8nchlFPgROY32FP/a4isRqWC4dm/1arhgNSsOpPz68yRXI9eI7u4tMd
+	0RxlCEBQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wCzVQ-00Dq5O-18;
+	Wed, 15 Apr 2026 12:38:08 +0000
+Date: Wed, 15 Apr 2026 05:38:01 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Pu Lehui <pulehui@huawei.com>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/2] bpf, arm64: Remove redundant
+ bpf_flush_icache() after pack allocator finalize
+Message-ID: <ad-GmdGbXrZAi7WA@gmail.com>
+References: <20260413191111.3426023-1-puranjay@kernel.org>
+ <20260413191111.3426023-2-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27972/Wed Apr 15 08:24:27 2026)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260413191111.3426023-2-puranjay@kernel.org>
+X-Debian-User: leitao
 
-aarch64_insn_gen_cond_branch_imm() calls label_imm_common() to
-compute a 19-bit signed byte offset for a conditional branch,
-but unlike its siblings aarch64_insn_gen_branch_imm() and
-aarch64_insn_gen_comp_branch_imm(), it does not check whether
-label_imm_common() returned its out-of-range sentinel (range)
-before feeding the value to aarch64_insn_encode_immediate().
+On Mon, Apr 13, 2026 at 12:11:08PM -0700, Puranjay Mohan wrote:
+> bpf_flush_icache() calls flush_icache_range() to clean the data cache
+> and invalidate the instruction cache for the JITed code region. However,
+> since commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+> management"), this flush is redundant.
+> 
+> bpf_jit_binary_pack_finalize() copies the JITed instructions to the ROX
+> region via bpf_arch_text_copy() -> aarch64_insn_copy() -> __text_poke(),
+> and __text_poke() already calls flush_icache_range() on the written
+> range. The subsequent bpf_flush_icache() repeats the same cache
+> maintenance on an overlapping range, including an unnecessary second
+> synchronous IPI to all CPUs via kick_all_cpus_sync().
+> 
+> Remove the redundant bpf_flush_icache() call and its now-unused
+> definition.
+> 
+> Fixes: 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory management")
+> Acked-by: Song Liu <song@kernel.org>
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 
-aarch64_insn_encode_immediate() unconditionally masks the value
-with the 19-bit field mask, so an offset that was rejected by
-label_imm_common() gets silently truncated. With the sentinel
-value SZ_1M, the resulting field ends up with bit 18 (the sign
-bit of the 19-bit signed displacement) set, and the CPU decodes
-it as a ~1 MiB *backward* branch, producing an incorrectly
-targeted B.cond instruction. For code-gen locations like the
-emit_bpf_tail_call() this function is the only barrier between
-an overflowing displacement and a silently miscompiled branch.
-
-Fix it by returning AARCH64_BREAK_FAULT when the offset is out
-of range, so callers see a loud failure instead of a silently
-misencoded branch. validate_code() scans the generated image
-for any AARCH64_BREAK_FAULT and then lets the JIT fail.
-
-Fixes: 345e0d35ecdd ("arm64: introduce aarch64_insn_gen_cond_branch_imm()")
-Fixes: c94ae4f7c5ec ("arm64: insn: remove BUG_ON from codegen")
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Puranjay Mohan <puranjay@kernel.org>
----
- arch/arm64/lib/insn.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
-index cc5b40917d0d..37ce75f7f1f0 100644
---- a/arch/arm64/lib/insn.c
-+++ b/arch/arm64/lib/insn.c
-@@ -338,6 +338,8 @@ u32 aarch64_insn_gen_cond_branch_imm(unsigned long pc, unsigned long addr,
- 	long offset;
- 
- 	offset = label_imm_common(pc, addr, SZ_1M);
-+	if (offset >= SZ_1M)
-+		return AARCH64_BREAK_FAULT;
- 
- 	insn = aarch64_insn_get_bcond_value();
- 
--- 
-2.43.0
-
+Acked-by: Breno Leitao <leitao@debian.org>
