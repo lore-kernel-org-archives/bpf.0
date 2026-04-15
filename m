@@ -1,63 +1,63 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5399328B5E
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 08:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303163CE48A
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 08:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776241646; cv=none; b=lhPS5aeIy2ClfF1nlmW+Kpz3EMvsNgw/5E7R78/qabyQ2xukFPC4PhZaH9mrjVAVJcDDNgdLcDTNJO1m1qjjtWT+fHE/lT5hQXaVa3EDSTcdE4JbtZ1Oxb2+LMt+cj1IS1CsMK9Uc4t6peCRZjZkbjv9mR/a5HCO6L8Qwj3tMwI=
+	t=1776241650; cv=none; b=R3f8GvMVNNyAvt59n6c1TBN17KtZ2Dyii2ZkwzDEqT5IR5Sv1AyJyx02LQwvpeiKTxCmJCZijL488i7Gqsi2da4tRrk4dKu1W4jVUTq6zpFUiIXmnO+ro16myfTRYyiJvV58eACryIYAFIFyQUAgSs9W5e9YDq3RxnFtkdBJgTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776241646; c=relaxed/simple;
-	bh=ssYHrGn+a7n9S52P2+6nPHQRnVP+OUA5wKpSU3REoRI=;
+	s=arc-20240116; t=1776241650; c=relaxed/simple;
+	bh=Vc79RT/MbkG5ZKWo1KckWKV8kTJS7NNt2rnqW0KmxjQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=j3PosLxEirrdPi8zKom36OCD7XFmF+4ezVaZmU+Z2Ak1uQhhuIHhN60xUGj/LLYYUhtOWBKzFU8yAzGcUdjrI7IYJLG58bUgsp4JNFCIpE4f91Aqay8XYL8+LbxWFPDbiFvLCZNf5GnuTYGzXynpqh3u84GlxkAjnYUY48Vxgxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YaTXpYle; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version; b=J18IWhFLT8FPJ/HLSMS4GNqoKp1y2U5oIs+3/omgRbl1oqrQlfWBlBztlBa6B6JX2iTtV4AftDlCS3C/q+AeaGSNOpUnHkH1ogWZO3YJMGEmscrOceKzXy8SAXP5J1JLYZWs1CLfut6pFZM/Mfqnrq4B8uqk01Q4sWdnjBgEVr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iIdLgQTA; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YaTXpYle"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b458ca2296so22562665ad.0
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:27:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iIdLgQTA"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2aaed195901so28974105ad.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:27:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776241644; x=1776846444; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776241649; x=1776846449; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rAZbJp+IhFF4A64f6LPVjeeM4XK+lI0NETlZJk9Rujg=;
-        b=YaTXpYle7F5kCgkWU6kApC/NFZjCCi2A9xq3NePiXBzmKCLJEgL4bPdCixl4wQmm4n
-         PmnZZOAUh/FpBqFs+fJgYKfa9Wi4Omz9bGr1aciVjGrFqR83L51GvaLes8EKagxXKO5j
-         4cOMHSH7Wffd9gCZ9IKOv3TKQILCRGXRqatNLo+FJgecnQnL8cUY+IPtCjD/IfJVZqAl
-         DvY2YoXY4pQLOduMglsYB/9AXzSlDbtokwKH1sDG1xIIqNUyjwYEZjcGzn1VxVQl1zyJ
-         w/YSEYcY7CzQMcpyYNxCFODxEgiivhf6NurKCwoiZ+v7lvGioxvgVI4KOHCgQeEcDeDE
-         otDg==
+        bh=x78Ky5Ro4yhFj7Z+oKIQ0GQBczDEQvkM6QMGsDNo2XA=;
+        b=iIdLgQTAAXS/f4HLEdap/blWh3ABudtVt+sspSoBGkUeM6ByTjiByrCpMTfc2f2hwn
+         6ULfhTRx1RqjAT+KD5xueqk/qd85TmINbqvKcrH0FBo4HJlep3zyU42nrSvysIMzeNFS
+         O9IlGNXMhrAe4b+PSnnI9LPadmHhTqsXOOHGl9JyIJ93Ro5ytqZMjZ/X4NCZtntGwCzb
+         OdQV/JgJ4er6diUt5imr0XezDK9wEqlTud7E3HGZZkE7Qd+qi/wqPsJRcLQawwy5ONYy
+         lh53DNjMfhW1R4Uww8oQRt0SpMB6JmIhrxURzr/LJhH0g32iOKoH0E/K9zlpqrICK6f6
+         x1kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776241644; x=1776846444;
+        d=1e100.net; s=20251104; t=1776241649; x=1776846449;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rAZbJp+IhFF4A64f6LPVjeeM4XK+lI0NETlZJk9Rujg=;
-        b=KW7ukdUtgh6PZdyd4Vd8unCfp8qwmFN8iD9caPOSsD+l1ZB0Aa+L++XWFxJcnZeRFx
-         DJ3raQCAqKmQMykV4yFcpKCH8ytbuGh+Blra7aJKT3UhXQxy8qlSZDr99jN1bqnknNIk
-         EMewht/c8x3iPdOfMndx5Gn1xPD60fWGjGTCTNMILDLGqHgG+WOtRT3fP8MrSmHD/bgs
-         kuQl3lEvekhLJYZnA2adCnt7SMlVyis7Y5uuxRvc9Ll08HKdL9Epb4YPXvH2rDOzU4zS
-         Fl8D3M9cNm7b89PxRdrUykteuAq1x1ZMj9IhR7s2nH8fuj0V1cKw9XnJsyzemMGvIj7F
-         43ow==
-X-Gm-Message-State: AOJu0YxGMWclt1DxKi3xjY2+xMwu7L8WTJPbPSMEeNfDif27FbGbavz9
-	u4G2VdZv56vNxfZTfxoQLks54iUN5qxQyMQI+ai0lbXjwkQRmg1d98Zo
-X-Gm-Gg: AeBDiestP8Ec7rdL51OGxA7J/jflVjsuShLP0oUJpqtb7L+NFGKB+Aa5E6YLdMJIBqc
-	I+rpGM3zYLnKoZM4jV2G3BvIcWGwmQvqsJYOejlepwE9hs3Urj1xAjq6sEe/jFb1IMJK3MR+VWW
-	GHtNs5Rw5b2xLMQ8KRf+ZHwhYc5BCH0PX1ZstlV+nFOsiIKvpH3alL7/5p3cl3NecJQ5nwV40mb
-	0VA0Ajewauj3ICZpQWmyF4RJQlx8IAFK5T1yBAELDOFj8EUL+H7tpL0FUMqg9hkHiawgRINSNw4
-	h3KCPXz68+2xcajzwR202PVjt/6HK3BJcAqP46z9BnnQNnooAdK11Ykv3bQ41L3JzsyBx5rTzLA
-	v1CYrdGiAj/QCZko/nhcU7Ku7ByxsOsJ2nNhFgMOK0Zze/bm4TUdQfRfa5n1k9UadvThM+MJlqk
-	TTa8nZo+y0x0cagAAoyxhCPhKoYLlOAM//I7oee+z9x8khebz806mhnIg6anRTg9u9fU8ByxFdX
-	TP5sJwD
-X-Received: by 2002:a17:902:da82:b0:2b4:6470:75f4 with SMTP id d9443c01a7336-2b4647078femr91789535ad.28.1776241643898;
-        Wed, 15 Apr 2026 01:27:23 -0700 (PDT)
+        bh=x78Ky5Ro4yhFj7Z+oKIQ0GQBczDEQvkM6QMGsDNo2XA=;
+        b=dJf1ABqmOp+wip9Sif3C2arZb3P9//pVOe+RCm6Gzy7x35l+KtcgxzwAZcZXrwbe8m
+         6+26aijtBmeZaWhGs2fmqFe9mwV81PliTCSWaodY5PfhHRdAtBJ9CgEJeCSFe4l0B2GM
+         XZdjbMoPLnh3nV9tno9CT05gxxZpbXBrUogc86059GKTQ7CgaWovajebfafacmSb9WCL
+         t9NI44H4ujLyLO+0qQU8vIeFn+bjq/4K4GdsMROm7xXziK03aPT3gOuKtTnRz2GcQib0
+         Kt7sjMOEuiB0Nq1t8cu0CtJyevUijvcnJt9E3yEsDlQxJLhuk6p3lNevAZqtb+RL9BkV
+         4H+A==
+X-Gm-Message-State: AOJu0Yw+m5urditEghu4TMWA15h/UFgfNeY6ICbd9b+Bm1pCFkE+4O7r
+	iijD+TMufEHBcJ+TrhtvuXgYhOobudzzT2HUUgVzSoAWYwwvYJRCdacn
+X-Gm-Gg: AeBDiesiu1r7hhfDVPOFm59BJsxIXO3Qe6vu44uS5AbitQYDEjIGKLBudYBpTJ2h6LC
+	Touc2+EdI6RptgcRBzFxow/VS9cRdHttOA6bg75VsYk383zwKfn3SiDG2Ufvh6UI118TlcT3oX2
+	vnDpqp+G2Jww+Y2RhFRDwt/hBDzmfgLvmcKSPA33Vgt2U4fNZV8vRFOXs7MWTPxFXVydw8G7vFJ
+	dmfqA4mvSfGmosbzPqSBuQJ/zvLZJjR4vnSHLiD8xzR6x1aVCrCW8VktKppd3VRveeMvnYVUjZt
+	1995a42SXU6FFE+Ut//q8cq03a/+aFUvS5Ss4Hkc6E46ez8p6q4w9v6aQ30wcS8JlgGNECsidMI
+	2cltqBtX7nCsmvow3JFAFpSOcJWhkie6N6jV4Q47cuGPJtHJfu3kX8to2oJ8XN+45EtGCdk8wGD
+	igy/vv2T/S1h4ZhULbyZtOzoPlyXpko0iusrNeMjbDvAOx5RiUaeLcWCzzoFpUPbwqGei9FNRKr
+	fZPkQQv7C7YnlEciF0=
+X-Received: by 2002:a17:903:1b6e:b0:2ae:3b9b:db34 with SMTP id d9443c01a7336-2b2d5aa0becmr224418955ad.42.1776241648612;
+        Wed, 15 Apr 2026 01:27:28 -0700 (PDT)
 Received: from KERNELXING-MB0.tencent.com ([43.132.141.25])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4782a93c7sm12174215ad.62.2026.04.15.01.27.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4782a93c7sm12174215ad.62.2026.04.15.01.27.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 01:27:23 -0700 (PDT)
+        Wed, 15 Apr 2026 01:27:27 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -75,9 +75,9 @@ To: davem@davemloft.net,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH RFC net-next v4 03/14] xsk: add xsk_alloc_batch_skb() to build skbs in batch
-Date: Wed, 15 Apr 2026 16:26:43 +0800
-Message-Id: <20260415082654.21026-4-kerneljasonxing@gmail.com>
+Subject: [PATCH RFC net-next v4 04/14] xsk: cache data buffers to avoid frequently calling kmalloc_reserve
+Date: Wed, 15 Apr 2026 16:26:44 +0800
+Message-Id: <20260415082654.21026-5-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260415082654.21026-1-kerneljasonxing@gmail.com>
 References: <20260415082654.21026-1-kerneljasonxing@gmail.com>
@@ -91,243 +91,177 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Xing <kernelxing@tencent.com>
 
-Support allocating and building skbs in batch.
+It's beneficial for small data transmission.
 
-There are three steps for one batched allocation:
-1. Reserve the skb and count the skb->truesize. It provides a way
-   that for later patch to speed up small data transmission by
-   diminishing the impact of kmalloc_reserve().
-2. Add the total of truesize to sk_wmem_alloc at one time. The load and
-   store of sk_wmem_alloc is time-consuming, so this batch process makes
-   it gain the performance improvement.
-3. Copy data and then finish initialization of each skb.
+Replace per-SKB kmalloc_reserve() with on-demand bulk allocation from
+skb_small_head_cache for small packets.
 
-This patch uses kmem_cache_alloc_bulk() to complete the batch allocation
-which relies on the global common cache 'net_hotdata.skbuff_cache'. Use
-a xsk standalone skb cache (namely, xs->skb_cache) to store allocated
-skbs instead of resorting to napi_alloc_cache that was designed for
-softirq condition.
+Add a persistent per-socket data buffer cache (batch.data_cache /
+batch.data_count) that survives across batch cycles, similar to how
+batch.send_queue caches built SKBs.
 
-After allocating memory for each of skbs, in a 'for' loop, the patch
-borrows part of __alloc_skb() to initialize skb and then calls
-xsk_build_skb() to complete the rest of initialization process, like
-copying data and stuff. To achieve a better result, the allocation
-function only uses the function we need to keep it super clean, like
-skb_set_owner_w() that is simplified into two lines of codes.
+Inside the Phase-1 per-descriptor loop, when a small packet needs a
+data buffer and the cache is empty, a single kmem_cache_alloc_bulk()
+refills it with generic_xmit_batch objects. Subsequent small packets
+pop directly from the cache. Large packets bypass the cache entirely
+and fall back to kmalloc_reserve(). Unused buffers remain in the
+cache for the next batch.
 
-Add batch.send_queue and use the skb->list to make skbs into one chain
-so that they can be easily sent which is shown in the subsequent patches.
-
-In terms of freeing skbs process, napi_consume_skb() in the tx completion
-would put the skb into global cache 'net_hotdata.skbuff_cache' that
-implements the deferred freeing skb feature to avoid freeing skb one
-by one to improve the performance.
+I observed that kmalloc_reserve() consumes nearly 40% which seems
+unavoidable at the first glance, thinking adding the bulk mechanism
+should contribute to the performance. That's the motivation of this
+patch. Now, the feature gives us around 10% improvement.
 
 Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
- include/net/xdp_sock.h |   3 +
- net/core/skbuff.c      | 121 +++++++++++++++++++++++++++++++++++++++++
- net/xdp/xsk.c          |   7 +++
- 3 files changed, 131 insertions(+)
+ include/net/xdp_sock.h |  2 ++
+ net/core/skbuff.c      | 27 ++++++++++++++++++++++-----
+ net/xdp/xsk.c          | 24 ++++++++++++++++++++----
+ 3 files changed, 44 insertions(+), 9 deletions(-)
 
 diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index 90c709fd1239..84f0aee3fb10 100644
+index 84f0aee3fb10..2151aab8f0a1 100644
 --- a/include/net/xdp_sock.h
 +++ b/include/net/xdp_sock.h
-@@ -47,8 +47,10 @@ struct xsk_map {
- 
- struct xsk_batch {
- 	u32 generic_xmit_batch;
-+	unsigned int skb_count;
+@@ -51,6 +51,8 @@ struct xsk_batch {
  	struct sk_buff **skb_cache;
  	struct xdp_desc *desc_cache;
-+	struct sk_buff_head send_queue;
+ 	struct sk_buff_head send_queue;
++	unsigned int data_count;
++	void **data_cache;
  };
  
  struct xdp_sock {
-@@ -136,6 +138,7 @@ INDIRECT_CALLABLE_DECLARE(void xsk_destruct_skb(struct sk_buff *));
- struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 			      struct sk_buff *allocated_skb,
- 			      struct xdp_desc *desc);
-+int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err);
- 
- /**
-  *  xsk_tx_metadata_to_compl - Save enough relevant metadata information
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 4045d7c484a1..f29cecacd8bb 100644
+index f29cecacd8bb..5726b1566b2b 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
-@@ -83,6 +83,7 @@
- #include <net/psp/types.h>
- #include <net/dropreason.h>
- #include <net/xdp_sock.h>
-+#include <net/xsk_buff_pool.h>
+@@ -661,9 +661,11 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
+ 	unsigned int total_truesize = 0;
+ 	struct sk_buff *skb = NULL;
+ 	int node = NUMA_NO_NODE;
++	void **dc = batch->data_cache;
++	unsigned int dc_count = batch->data_count;
+ 	u32 i = 0, j, k = 0;
+ 	bool need_alloc;
+-	u8 *data;
++	void *data;
  
- #include <linux/uaccess.h>
- #include <trace/events/skb.h>
-@@ -647,6 +648,126 @@ static void *kmalloc_reserve(unsigned int *size, gfp_t flags, int node,
- 	return obj;
- }
+ 	base_len = max(NET_SKB_PAD, L1_CACHE_ALIGN(dev->needed_headroom));
+ 	if (!(dev->priv_flags & IFF_TX_SKB_NO_LINEAR))
+@@ -683,6 +685,13 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
+ 		nb_pkts = skb_count;
  
-+#ifdef CONFIG_XDP_SOCKETS
-+int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err)
-+{
-+	struct xsk_batch *batch = &xs->batch;
-+	struct xdp_desc *descs = batch->desc_cache;
-+	struct sk_buff **skbs = batch->skb_cache;
-+	u32 alloc_descs, base_len, wmem, sndbuf;
-+	gfp_t gfp_mask = xs->sk.sk_allocation;
-+	u32 skb_count = batch->skb_count;
-+	struct net_device *dev = xs->dev;
-+	unsigned int total_truesize = 0;
-+	struct sk_buff *skb = NULL;
-+	int node = NUMA_NO_NODE;
-+	u32 i = 0, j, k = 0;
-+	bool need_alloc;
-+	u8 *data;
+ alloc_data:
++	if (dc_count < nb_pkts && !(gfp_mask & KMALLOC_NOT_NORMAL_BITS))
++		dc_count += kmem_cache_alloc_bulk(
++				net_hotdata.skb_small_head_cache,
++				gfp_mask | __GFP_NOMEMALLOC | __GFP_NOWARN,
++				batch->generic_xmit_batch - dc_count,
++				&dc[dc_count]);
 +
-+	base_len = max(NET_SKB_PAD, L1_CACHE_ALIGN(dev->needed_headroom));
-+	if (!(dev->priv_flags & IFF_TX_SKB_NO_LINEAR))
-+		base_len += dev->needed_tailroom;
-+
-+	if (xs->skb)
-+		nb_pkts--;
-+
-+	if (skb_count >= nb_pkts)
-+		goto alloc_data;
-+
-+	skb_count += kmem_cache_alloc_bulk(net_hotdata.skbuff_cache,
-+					   gfp_mask,
-+					   nb_pkts - skb_count,
-+					   (void **)&skbs[skb_count]);
-+	if (skb_count < nb_pkts)
-+		nb_pkts = skb_count;
-+
-+alloc_data:
-+	/*
-+	 * Phase 1: Allocate data buffers and initialize SKBs.
-+	 * Pre-scan descriptors to determine packet boundaries, so we can
-+	 * batch the sk_wmem_alloc charge in Phase 2.
-+	 */
-+	need_alloc = !xs->skb;
-+	wmem = sk_wmem_alloc_get(&xs->sk);
-+	sndbuf = READ_ONCE(xs->sk.sk_sndbuf);
-+	for (j = 0; j < nb_descs; j++) {
-+		if (need_alloc) {
-+			u32 size = base_len;
-+
-+			if (!(dev->priv_flags & IFF_TX_SKB_NO_LINEAR))
-+				size += descs[j].len;
-+
-+			if (i >= nb_pkts) {
-+				*err = -EAGAIN;
-+				break;
-+			}
-+
-+			if (wmem + size + total_truesize > sndbuf) {
-+				*err = -EAGAIN;
-+				break;
-+			}
-+
-+			skb = skbs[skb_count - 1 - i];
-+			skbuff_clear(skb);
-+			data = kmalloc_reserve(&size, gfp_mask, node, skb);
-+			if (unlikely(!data)) {
-+				*err = -ENOBUFS;
-+				break;
-+			}
-+			__finalize_skb_around(skb, data, size);
-+			/* Replace skb_set_owner_w() with the following */
-+			skb->sk = &xs->sk;
-+			skb->destructor = sock_wfree;
-+			total_truesize += skb->truesize;
-+			i++;
-+			need_alloc = false;
-+		}
-+		if (!xp_mb_desc(&descs[j]))
-+			need_alloc = true;
-+	}
-+	alloc_descs = j;
-+
-+	/*
-+	 * Phase 2: Batch charge sk_wmem_alloc.
-+	 * One refcount_add() replaces N per-SKB skb_set_owner_w() calls,
-+	 * which gains much performance improvement.
-+	 */
-+	if (total_truesize)
-+		refcount_add(total_truesize, &xs->sk.sk_wmem_alloc);
-+
-+	/* Phase 3: Build SKBs with packet data */
-+	for (j = 0; j < alloc_descs; j++) {
-+		if (!xs->skb) {
-+			skb = skbs[skb_count - 1 - k];
-+			k++;
-+		}
-+
-+		skb = xsk_build_skb(xs, skb, &descs[j]);
-+		if (IS_ERR(skb)) {
-+			*err = PTR_ERR(skb);
-+			break;
-+		}
-+
-+		if (xp_mb_desc(&descs[j])) {
-+			xs->skb = skb;
-+			continue;
-+		}
-+
-+		xs->skb = NULL;
-+		__skb_queue_tail(&batch->send_queue, skb);
-+	}
-+
-+	/* Phase 4: Reclaim unused allocated SKBs */
-+	while (k < i)
-+		kfree_skb(skbs[skb_count - 1 - k++]);
-+
-+	batch->skb_count = skb_count - i;
-+
-+	return j;
-+}
-+#endif
-+
- /* 	Allocate a new skbuff. We do this ourselves so we can fill in a few
-  *	'private' fields and also do memory statistics to find all the
-  *	[BEEP] leaks.
+ 	/*
+ 	 * Phase 1: Allocate data buffers and initialize SKBs.
+ 	 * Pre-scan descriptors to determine packet boundaries, so we can
+@@ -710,10 +719,17 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
+ 
+ 			skb = skbs[skb_count - 1 - i];
+ 			skbuff_clear(skb);
+-			data = kmalloc_reserve(&size, gfp_mask, node, skb);
+-			if (unlikely(!data)) {
+-				*err = -ENOBUFS;
+-				break;
++			if (dc_count &&
++			    SKB_HEAD_ALIGN(size) <= SKB_SMALL_HEAD_CACHE_SIZE) {
++				data = dc[--dc_count];
++				size = SKB_SMALL_HEAD_CACHE_SIZE;
++			} else {
++				data = kmalloc_reserve(&size, gfp_mask,
++						       node, skb);
++				if (unlikely(!data)) {
++					*err = -ENOBUFS;
++					break;
++				}
+ 			}
+ 			__finalize_skb_around(skb, data, size);
+ 			/* Replace skb_set_owner_w() with the following */
+@@ -762,6 +778,7 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb_pkts, u32 nb_descs, int *err
+ 	while (k < i)
+ 		kfree_skb(skbs[skb_count - 1 - k++]);
+ 
++	batch->data_count = dc_count;
+ 	batch->skb_count = skb_count - i;
+ 
+ 	return j;
 diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index ecd5b9c424b8..f97bc9cf9b9a 100644
+index f97bc9cf9b9a..7a6991bc19a8 100644
 --- a/net/xdp/xsk.c
 +++ b/net/xdp/xsk.c
-@@ -25,6 +25,7 @@
- #include <linux/vmalloc.h>
- #include <net/xdp_sock_drv.h>
- #include <net/busy_poll.h>
-+#include <net/hotdata.h>
- #include <net/netdev_lock.h>
- #include <net/netdev_rx_queue.h>
- #include <net/xdp.h>
-@@ -1230,10 +1231,15 @@ static void xsk_delete_from_maps(struct xdp_sock *xs)
- static void xsk_batch_reset(struct xsk_batch *batch, struct sk_buff **skbs,
- 			    struct xdp_desc *descs, unsigned int size)
- {
-+	if (batch->skb_count)
-+		kmem_cache_free_bulk(net_hotdata.skbuff_cache,
-+				     batch->skb_count,
-+				     (void **)batch->skb_cache);
- 	kfree(batch->skb_cache);
- 	kvfree(batch->desc_cache);
- 	batch->skb_cache = skbs;
- 	batch->desc_cache = descs;
-+	batch->skb_count = 0;
- 	batch->generic_xmit_batch = size;
+@@ -1229,14 +1229,22 @@ static void xsk_delete_from_maps(struct xdp_sock *xs)
  }
  
-@@ -1946,6 +1952,7 @@ static int xsk_create(struct net *net, struct socket *sock, int protocol,
+ static void xsk_batch_reset(struct xsk_batch *batch, struct sk_buff **skbs,
+-			    struct xdp_desc *descs, unsigned int size)
+-{
++			    struct xdp_desc *descs, void **data,
++			    unsigned int size)
++{
++	if (batch->data_count)
++		kmem_cache_free_bulk(net_hotdata.skb_small_head_cache,
++				     batch->data_count,
++				     batch->data_cache);
++	kfree(batch->data_cache);
+ 	if (batch->skb_count)
+ 		kmem_cache_free_bulk(net_hotdata.skbuff_cache,
+ 				     batch->skb_count,
+ 				     (void **)batch->skb_cache);
+ 	kfree(batch->skb_cache);
+ 	kvfree(batch->desc_cache);
++	batch->data_cache = data;
++	batch->data_count = 0;
+ 	batch->skb_cache = skbs;
+ 	batch->desc_cache = descs;
+ 	batch->skb_count = 0;
+@@ -1272,7 +1280,7 @@ static int xsk_release(struct socket *sock)
+ 	xskq_destroy(xs->tx);
+ 	xskq_destroy(xs->fq_tmp);
+ 	xskq_destroy(xs->cq_tmp);
+-	xsk_batch_reset(&xs->batch, NULL, NULL, 0);
++	xsk_batch_reset(&xs->batch, NULL, NULL, NULL, 0);
  
- 	INIT_LIST_HEAD(&xs->map_list);
- 	spin_lock_init(&xs->map_list_lock);
-+	__skb_queue_head_init(&xs->batch.send_queue);
+ 	sock_orphan(sk);
+ 	sock->sk = NULL;
+@@ -1620,6 +1628,7 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
+ 		struct xsk_batch *batch = &xs->batch;
+ 		struct xdp_desc *descs;
+ 		struct sk_buff **skbs;
++		void **data;
+ 		unsigned int size;
+ 		int ret = 0;
  
- 	mutex_lock(&net->xdp.lock);
- 	sk_add_node_rcu(sk, &net->xdp.list);
+@@ -1638,14 +1647,21 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
+ 			ret = -ENOMEM;
+ 			goto out;
+ 		}
++		data = kmalloc_array(size, sizeof(void *), GFP_KERNEL);
++		if (!data) {
++			kfree(skbs);
++			ret = -ENOMEM;
++			goto out;
++		}
+ 		descs = kvcalloc(size, sizeof(struct xdp_desc), GFP_KERNEL);
+ 		if (!descs) {
++			kfree(data);
+ 			kfree(skbs);
+ 			ret = -ENOMEM;
+ 			goto out;
+ 		}
+ 
+-		xsk_batch_reset(batch, skbs, descs, size);
++		xsk_batch_reset(batch, skbs, descs, data, size);
+ out:
+ 		mutex_unlock(&xs->mutex);
+ 		return ret;
 -- 
 2.41.3
 
