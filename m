@@ -1,168 +1,129 @@
-Received: from sonic307-8.consmr.mail.bf2.yahoo.com (sonic307-8.consmr.mail.bf2.yahoo.com [74.6.134.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9C7382F10
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 21:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.6.134.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1AB6381B0E;
+	Wed, 15 Apr 2026 21:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776289332; cv=none; b=DGz8opPm5jCGc+qSkGUNRjLakCtb3HkQ49fSwS/I6Okgeut5In6b6L8aklUjUWOKAi/AzsvGtz2h49eCrHpfmZvsw3ONrvxHpTBoN50pkXficUSxG2KxilTs/RVaGUQonk/Qa4/JfXEWKE3QhvXbNL8FG7YSGr8+XCKpNb1vHRk=
+	t=1776289404; cv=none; b=V5VAUyAWswNzzG15xm7m0j0NHXibvrwcCD9ZCzHqpl21/sFCEt24VAVO+8KdrT22mQJxgnras0IsvyRtVSRlxrnjvgs+ArqHEF/Iqc2RoOAc9StuHQ6mFaW9iCGur7jrX1odY6Ph+09imIvkUU7Z6OeaDczDtygQeLcKuhS85pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776289332; c=relaxed/simple;
-	bh=1VRzEwc9as955hJAJQZkD8aoU2tfmXZsG3lk/RyK87w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BUjD4aloxtui1oR7YZ9d2ihOEa6131soHOAciEaUw1LU9BJcLQA5tcL3H/1d/BF2H71K3USomjnkcO3gaFN5kRHLcsgy75y2/vmN5XW7WVijDH0I5snA4aEecbjW9AUFvBVGYZiVQoolBJaK70NPmrJ4nrYK+Td8RfugdDWyZXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=TTLAK2G1; arc=none smtp.client-ip=74.6.134.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	s=arc-20240116; t=1776289404; c=relaxed/simple;
+	bh=Hx3fqxnlCYc3RSrNwt5h8aHCuamxN2L4FSlmbkpYEaY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tI47sVwTe1nPSEhZqPnzjQu4iyqNPq5w5E73L8Ct8tZZMV9mcHmMUNXJyBcE8WnPziYYTbwS4IRfbGjOY2fiOdX6Hs4kl2YVUQos59iOPiJzJp1sbZvgZILqJy57AbukK2qvM1BjmhcJTo6Lon515Af2VzUfZL7ORwPL6D3Tyr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BbKrraLJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="TTLAK2G1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776289329; bh=PCIEZUDtvL4fKDuA56MB9W3LMeOH6yBvvyQFCUOW0uA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=TTLAK2G1HeLAFP4TmtPsqh/eJfa33JliVMSitMRGe0q7WDUaTnhiqsbFVMDIgts1ysD18et1zco9fgtsSAgjWKZ3KRkuuogJ5S6BifKldLXn5fxdjLWAT9uepeEz29GLcHj5vjqmBkGul627vTIuFW2NYWo74v2FUeRLTH7P48+UNCLxXUjz9HhcBP+9sA11Nnp9luWiM8C3UNo9EA18MRh8FH+ndWqgxPxrKLQZpaLoaCA4i/wnt2USMGHIuwxU2JOC9C67wcyiM9IUgrQGQRu38o9LNUUl5/6n11fmyiLc+Psac/IhjmE6ULenCzicLhTOvVC5pHulq86hjiil+w==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1776289329; bh=+MI0CaIqgHCt7nNpbTVJdIH/vA+yXsUf/AZPjAcl4HC=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=cSyCTs3E7GEcf+SH4askkuC8aUCO50n2dLoXa/KwF9sXNChyxGEo8397xs8u2kcnb+6gq7gdUAWIwBrpm2Uo1raxjqHIL/0CTCjzWU+jmVUigmhtSypKPlyzrr8uzzowsZzEDCLLWvGXvDLS3houOEmHkelrmtctuysQZoo8rSuHquLDsuzd0Efe1X+GgRGidLGC23ydYhh3WKR8/ARVyMgefPZjNTVUAnUkwtVxUyyeb5AWgUZ8QdTD0S8aVbhFzG7fmB+n8hLrBtDg2jnnOYnThBClCAXfr5N4g74dPZfAwTZsTT3szG3Lm6HJWuUfDE9EUy4+ltVNmWvL7tTODw==
-X-YMail-OSG: OTWDq0wVM1kWBKlAClbtD.6W.Rgce4yInLQVN97jyOJxSa1hGgVXGNaz8TPVgxy
- wm5N0OZz2yEOydYM1i9uZWkp53km0ZmaQkIg_xaEAQozcV1Di9tdpXDzSQWS1GhrMcTVr3m201Bf
- 40FW9DxdNkcJtDsTRUNTPDV9kKxT42IPULUl3WPiN7iJCfkWKxlDyLXiE8eTt0KGHvmb.OoGEgBy
- AoXITcef2y4r_WqBS2gLbeKfpnr1RVZihFcNWgCsuIY63wgZbLoMSXSSjm1XtlxfjrPk.DP6XoZC
- biDFbDHSnoY5P9o7u2G.zZilDjVYT.qCa0GNh_g_RDahhSok_q3mp79XDGMCZAGQ.GG.syh6lTHX
- P7fXQ8bkTWUIQA8pTh0KLK6O_1mk6agZcCD3Ba8WhDTDCI7CxauFy.kkMolNdYB_qGXENI.wK3n3
- eBbZ.zjPooFiUCULsa6jzGX.C7VFGzcpLXp1s9hOl1yvdRHIBO0LmhANf.o2aFhh7tnWhAssqd41
- e_7RHNS.i_dixFkALoTeixj6VYYlduEwIzAcQU5DS8ILULg9kFLEmT4DNKPS0CkuuJeRHBCmrG3o
- AN0p75xLlz27f3QoKImoBCNd.2n7G78LfZfgTQ0Qjzg2SUpjIcYwmgzopERLZ92zOXS3Tciopgwy
- yCK65MgTPVZ5BKNBwRd5qxwDf0FBmVAPEhU5ZhPw9k.NIUN13Fmbh3t8EQ7c0wJU4UUTYAWoGELY
- .LJrht6FcvDWGCYBfkzbVmb6XFam4HNtRSKaUTlA9OiHwHtm4gMX6iAVbf.ULGI8J3eJrnntvS0p
- XpUvYDl0cC3V.rXaUlnGmT7GMnjYPfVDhGwbXH9KtEfnW30DQXVtyassb5E4w9w8Vf7IngNVsRXO
- mn3heo2tZw.TslL5cexILIeli0HuHhHv1gRQeKHyrrreLLWuSlxsrfNCTw1L1pITqKrl_dgGrjyu
- viLWNKZR5sCA6YzRt6RbMZQt5xVnI0HbQwMsQWV_gN5.f2AruKDVsBxY4TFUyvDhbJjwFNlf3fz2
- UVUZFtplvxfr5uMIzH2lrhuZ1GGcR0IjajNfhfkiXLpQs9ENLFaZ4fjYKayEcBz5vZ51jv_PSS64
- 4K8wVVo4mekXJZGTTq1T8UA0tcFgUGXEBuIXeAVcudJcqwA0mfOcXvy1_5jPVTKsMvLeCcN65g6w
- xrm73ukJDYwf.jg46aqpYnZ6TPb.GN0YXJIRAb9s2BOY0f4DZxCSMUXfAdsLJOxSCd9OC8VMQsIU
- gmw5mLLKSQQWibutpi_be0SxKGt3H1XNppl0cQ7R99F8GcVjzUNg0y9dGrr34MOOURzBwF3U33Ku
- K8LCt.8.s_uWAIRmEKnx6a.V1bPc1dUMi_NIyNSxu.i2B1kHAPIkQgYd8HRjO4E3fM_qPEonpCnI
- skpVSJd3.ApsyiDhpSaV1ChED8ZpoUR4gG42uRBcYph2GHBrpLPUAC2LeOuFRWfAWXf.t.pcgEtd
- I8.UAg67i33D8xJhxToGhcBAnnFzFVSU0F8X2ApA.R4cvXHwS6ZBOO_7n5mk6N2LjeT8O5D87MHa
- YsbmoFSX3my0K6SGsK4XAgU.IuU4.sRCz52du8xWXED03Gi9wbAKiSdf7dok7tBZ7eOoBFGnKsXx
- G5aUNd9kJb6PXeflkbmlkl.Hs5P9Vsi8qtExRZMzAot9nsj2JxmaUkbKB9tHX1vrw_3Qx6syt5_.
- BVYaEa2QtTpNlEdb.hpQJTLRIT5szY2eni9XytJwEoClRDx5LWvfA9V10yoTKxAu5F_Df4GD..UB
- bd.4yenjrfIj3EkXhPq3NBD3gAwoVihMUlAl3ODeP29zNpyOq0_N0WAiC6APoM07UeLtKQyjRvE.
- qnp9CFNvRm7fPc5FDQJeNuDkfKYHAQjzJIvKrokib13kmBLEV5owRT_LJ1ubfTS8aeSlgP5SNQIE
- kOdiOmBLN0dOFrUYyr8ZwYTJVNITmEKnN5uDKN28VKEMM7BwTMxmAAOxmndwH1xJH0Ae6jLHZfJv
- qxgF70jsVRzidZkW32xeYRfkwwhxR1woQAEr0QbYBG2sdw3GyfzgdHXaDZLdQS1EWuQh3h5N.BeU
- mHAuyoXwIrnAH89NmLZq0xjL6gWB1FuxCdLDovUk8Oxny3CjWzGWxtLnW6L7xlF5SHDrqX6bu3mq
- ue50btk6e7y1bf2iXuJf1pQAdHL5rTGCQi5z5ROlkBGtq_MzNHPTQSjrKvrZYdvCHiFwjRie0rI1
- 8d2LalaiufdwZdKZYuWCgbmv.p9efZbZyLJR8Zs1qEF8r8gNBIpCazw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 2d41aabe-9af5-437d-8e9e-568444c670cb
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.bf2.yahoo.com with HTTP; Wed, 15 Apr 2026 21:42:09 +0000
-Received: by hermes--production-gq1-6dfcf9f8b-h78wr (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b799781f33bb01013e1e244a638df756;
-          Wed, 15 Apr 2026 21:21:52 +0000 (UTC)
-Message-ID: <a77f43dc-f05f-4dd3-9f0f-296447c44e8d@schaufler-ca.com>
-Date: Wed, 15 Apr 2026 14:21:50 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BbKrraLJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A598C19424;
+	Wed, 15 Apr 2026 21:43:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776289404;
+	bh=Hx3fqxnlCYc3RSrNwt5h8aHCuamxN2L4FSlmbkpYEaY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=BbKrraLJpcEADM/I5rZj6RzL4L5iJJlqob+Bdwel76eFbVLfcNo0jLkz8CZla5BG1
+	 QNpeQhV13/B8+wa8DMQaA8DM/0vSqs787Nrh7McF93qObTN7iBx+T5yyidI8XCq1Kx
+	 lzrAldiHEke9OEg0WQMQEIkwcePvLVEC1YNjiT50X+AjlbyVZ+J3UdqFJm9ALuKo+R
+	 B6SYZcj1N7VT6NAdJqou9h9LUyJ0Sjuv3PnbGbqjIdxqEdxJSZWVdvPBOaVSVUwZSQ
+	 vJhaLI7NgcYpxlFVvV8F3LGhS/p7iXn6MTAhrAXJmSbOF1H0vg9Uz5VpOBYtk55qr3
+	 +VPvAhAYlvcZw==
+Content-Type: multipart/mixed; boundary="===============2522503836257251815=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh
- <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Itay Avraham <itayavr@nvidia.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
- Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
- <20260409121230.GA720371@unreal>
- <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
- <20260409124553.GB720371@unreal>
- <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
- <20260412090006.GA21470@unreal>
- <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
- <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
- <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
- <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com>
- <CAHC9VhRoaECt03Rs-ZyoGhW2_qZkA_1weTYYjiXc41Yf5U8A_g@mail.gmail.com>
- <a5fe292b-77c8-4190-8989-1d32cadb5689@schaufler-ca.com>
- <CAHC9VhS1sVMGHpO-5Zn0K0w6suTB-i_SwvouDpEmT8sXffsRfg@mail.gmail.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhS1sVMGHpO-5Zn0K0w6suTB-i_SwvouDpEmT8sXffsRfg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.25495 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Message-Id: <7be2eda557c07a9319e8197c1e96e5f4b3b08bc57de6d8384fb0755b63a90b16@mail.kernel.org>
+In-Reply-To: <20260415-selftests-bpf_misconfig-v5-10-03d0a52a898a@suse.com>
+References: <20260415-selftests-bpf_misconfig-v5-10-03d0a52a898a@suse.com>
+Subject: Re: [PATCH bpf-next v5 10/11] selftests/bpf: Skip tests whose objects were not built
+From: bot+bpf-ci@kernel.org
+To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 15 Apr 2026 21:43:24 +0000 (UTC)
 
-On 4/15/2026 2:03 PM, Paul Moore wrote:
-> On Tue, Apr 14, 2026 at 6:42 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> On 4/14/2026 1:44 PM, Paul Moore wrote:
->>> On Tue, Apr 14, 2026 at 4:10 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->>>> On 4/14/2026 12:09 PM, Paul Moore wrote:
->>>>> On Tue, Apr 14, 2026 at 1:05 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
-> ..
+--===============2522503836257251815==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index 7fe16b5131b1..759e76d76c57 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+
+[ ... ]
+
+> @@ -2049,12 +2070,16 @@ int main(int argc, char **argv)
+>  		test->should_run = should_run(&env.test_selector,
+>  					      test->test_num, test->test_name);
 >
->> CMW MLS and SELinux MLS can be mapped. They have the same components.
-> Yes, one of the fields in a full SELinux label can be an MLS field,
-> but that doesn't mean there isn't translation needed.  The important
-> point is that security label translation, mapping, etc. is necessary,
-> possible, and has been proven to work across a variety of systems.
+> +		if (test->run_test && test->run_serial_test) {
+>  			fprintf(stderr, "Test %d:%s must have either test_%s() or serial_test_%sl() defined.\n",
+>  				test->test_num, test->test_name, test->test_name, test->test_name);
+>  			exit(EXIT_ERR_SETUP_INFRA);
+>  		}
+> +		if (!test->run_test && !test->run_serial_test) {
+> +			test->not_built = true;
+> +			test->should_run = false;
+> +			continue;
+> +		}
 
-I'm not especially concerned about translation between systems.
-The problem at hand is negotiating between LSMs on the same system.
+This sets not_built unconditionally, regardless of what should_run()
+returned.  The commit message says:
 
+  "Tests filtered out by -t/-n remain invisible as before"
+
+but doesn't this do the opposite?  When should_run() already returned
+false because of -t/-n filtering, the test still gets not_built = true.
+
+> @@ -2106,9 +2131,18 @@ int main(int argc, char **argv)
 >
->>>> SELinux transmits the MLS component of the security context. Smack passes
->>>> the text of its context.
->>> Arguably the NetLabel/CIPSO interoperability challenge between SELinux
->>> and Smack is due more to differences in how Smack encodes its security
->>> labels into MLS attributes than from any inherent interop limitation.
->> Yes. That is correct. The big issue I see is that SELinux does not represent
->> the entire context in the CIPSO header. Thus, you're up against many SELinux
->> contexts having the same wire representation, where Smack will have a unique
->> on wire for each context ...
-> That isn't always true is it?  From my understanding of the "cipso2"
-> interface an admin could easily map multiple Smack labels to a single
-> CIPSO label.
-
-True, but you can't map multiple Smack labels to the same CIPSO label
-without introducing ambiguity.
-
-> It's important to remember that if you wanted to utilize CIPSO to
-> communicate between SELinux and Smack, the label translation is not
-> between SELinux and Smack but rather between SELinux and CIPSO as well
-> as between Smack and CIPSO.
+>  	for (i = 0; i < prog_test_cnt; i++) {
+>  		struct prog_test_def *test = &prog_test_defs[i];
+> +		struct test_state *state = &test_states[i];
 >
->>>>> Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
->>>>> require some additional work to convert over to a lsm_prop instead of
->>>>> a u32/secid, but if you look at the caching code that should be
->>>>> trivial.  It might be as simple as adding a lsm_prop to the
->>>>> netlbl_lsm_secattr::attr struct since the cache stores a full secattr
->>>>> and not just a u32/secid.
->>>> Indeed. But with no viable users it seems like a lower priority task.
->>> You need to be very careful about those "viable users" claims ...
->> Today there are no users.
-> That you are aware of at the moment.  You are also well aware of my
-> feelings on this issue and ultimately I'm the one who has to sign off
-> on that stuff.
+> -		if (!test->should_run)
+> +		if (!test->should_run) {
+> +			if (test->not_built && !env.get_test_cnt &&
+> +			    !env.list_test_names) {
+> +				state->tested = true;
+> +				state->skip_cnt = 1;
+> +				env.not_built_cnt++;
+> +				print_test_result(test, state);
+> +			}
+>  			continue;
+> +		}
 
-Understood. There are a serious number of considerations that need to
-be worked through.
+Then here, every not-built test is printed and counted as skipped,
+even ones the user excluded with -t or -n.  Running something like
+"./test_progs -t my_test" on a partial build would print
+"SKIP (not built)" for all unbuilt tests, and inflate both succ_cnt
+and skip_cnt in calculate_summary_and_print_errors().
 
->
->> There are other problems (e.g. mount options) that have yet to be addressed.
-> The existence of one problem does not mean another does not exist.
+The same issue applies to the server_main() loop:
 
-True enough.
+> @@ -1772,6 +1780,19 @@ static void server_main(void)
+> +	/* mark not-built tests as skipped */
+> +	for (int i = 0; i < prog_test_cnt; i++) {
+> +		struct prog_test_def *test = &prog_test_defs[i];
+> +		struct test_state *state = &test_states[i];
+> +
+> +		if (test->not_built) {
 
+This also has no check against the original test selector, so in
+parallel mode with -t, all not-built tests are surfaced as well.
+
+Would it make sense to preserve the original should_run() result and
+only set not_built when the test was actually selected?
+
+This was also flagged in an earlier review of v5:
+https://sashiko.dev/#/patchset/20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com?part=10
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24478691588
+--===============2522503836257251815==--
