@@ -1,161 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2961AB6F1;
-	Wed, 15 Apr 2026 00:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0C5282F0E
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 01:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776214115; cv=none; b=AD8ix5KKYLUQtfWtoYbA4OFyjSk0MsQ09CYIx2G4m6ApTsjo5Lt31oqyGVTa0oahwZU+BtLJ9yz4fW2ylRwyr+LAVkwUZ/V4EB7KNvlKOFEBh7olEQ/Cuouq59HJUCWBNBTqxjXYv4mBrwVw1R/Y9ejeIfdjA1VRm7IBOiaJa/M=
+	t=1776215315; cv=none; b=qNvBm6+JDNJCTRPqinmQa2fDQhkfF52Cn+X7FlYqfuhDNt+Rd0TF7HbX50Pl7DDktky4zqM7S6Gs44rGPJgMu2yKRQDoUO2J3tCKK4aLN8NahQNoa9sFCZklornfOMke7OUSHNXYhOVgiAXnn2j/vPekeDYMMam4VmBwJTREzn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776214115; c=relaxed/simple;
-	bh=mW91gxYwTlvKqUJGoRBY+v2gmJFrE5XfEZD9VwbzElw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=rDny4hAXj4HkQDXrG4GGQrmtsp22wz61uPq8RzwZuGMTxWkStZ04zgj9gLpF/iZuyswejg6wKxwwqDpFF3Ng7UEjlNnGQeVqfNjoE8GXGhh32whPnYQzD80OpWazdoqJyXQoIpmPmJZMHkqKP3yxAZ3/30cR3I6EGqM4MjH6ph8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyN3Hygk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776215315; c=relaxed/simple;
+	bh=RKBw4JJ7pGSwHsfhXe7EpSi8RZ/bYMuxqoez4J4gYf0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=shxh6+eE2RRcs1gQfKE36dt8h+vFXlH4fSzrQXHUdausDVfI4FbjCweKbfyTCrjQnw3lilrjb1Bj851MSF8uU51noyCXK8h7PwUREM2E7fcvIftWuS9qgLP4s5/jIDheNau8OBRkwQ3AQ8e2ucVyb8w6wsd7o96ZJeHa0Kh15Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fTOB+iZ1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyN3Hygk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73F53C19425;
-	Wed, 15 Apr 2026 00:48:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fTOB+iZ1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DA5C19425;
+	Wed, 15 Apr 2026 01:08:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776214115;
-	bh=mW91gxYwTlvKqUJGoRBY+v2gmJFrE5XfEZD9VwbzElw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MyN3HygkKkxkd/IkpE75BE+GrsvxDwO1y/n3zWRajh41BWuHrOFmJZ+IpbFICR0gF
-	 9cK6Uv/Aup5KaPKz8817etI4ueOJeDeeaYDjhB7oKlOy3t24+9faZKngJ1hEJDEsz8
-	 ahteyawo+JsqIM+JsKrGHknlv8z9J1RmZhK5LgN4gwke2/8yibJI5OAYZb8Vz4XxTe
-	 tVMMNrJHs76ntX9dfcUfamBxfHors3YGi3+ydZy50Fh3fUvA78CkSj+zdQmv66EEI4
-	 dBZEq3hyWz5yxZVqp/5G6p6iVhwkR076lw9p910xWCtCi0nfGfflXvTH6rYfhCNyV+
-	 nlusYRe68f33g==
-Date: Wed, 15 Apr 2026 09:48:28 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
- joe.lawrence@redhat.com, rostedt@goodmis.org,
- mathieu.desnoyers@efficios.com, kpsingh@kernel.org,
- mattbobrowski@google.com, song@kernel.org, jolsa@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- yonghong.song@linux.dev, live-patching@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return
- overriding for livepatched functions
-Message-Id: <20260415094828.479ad388ac1eb5cd7ee84535@kernel.org>
-In-Reply-To: <CALOAHbAOx=C4b+4xQwRf59xvY0vbMPfOjO5LMDghC4Ryksv++Q@mail.gmail.com>
-References: <20260402092607.96430-1-laoar.shao@gmail.com>
-	<20260410133844.56ab7964da7628d1c3482acb@kernel.org>
-	<CALOAHbAOx=C4b+4xQwRf59xvY0vbMPfOjO5LMDghC4Ryksv++Q@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1776215314;
+	bh=RKBw4JJ7pGSwHsfhXe7EpSi8RZ/bYMuxqoez4J4gYf0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=fTOB+iZ1Nr993ltcDEXMbiBuENwHVPBarV5YgLxT1khI5BhNodFo3fHom6GASOH7E
+	 R0I7vNMRtT2z6B75WL8CNluJGLMsfbFR66XkfaEL19a1WbqMHvhvnY1io4rStfvAXw
+	 iFklPWZsHZ8AGhylRMzJuycJ46nhXcqKI1S24zNE729UEAXzcUQYfVEKQMnN6w4KKs
+	 F9IMjDVGxZ4cZtnzl1YN4YG5cvpxNHw8lwW4AzJcFtscNVgxkfThyt0qTxz7sfRjMM
+	 9sabCpeiTt2ouNtd7LX3TdC87gnypS4ggypkdCtDiEDlRs45aoqaP90v0prFtmeP/g
+	 6qeQSNCg+yRBA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: copy BPF token from main program
+ to subprograms
+Reply-To: sashiko@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260414-subprog-token-fix-v2-1-59146c31f6f1@gmail.com>
+References: <20260414-subprog-token-fix-v2-1-59146c31f6f1@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 15 Apr 2026 01:08:34 +0000
+Message-Id: <20260415010834.C7DA5C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On Sun, 12 Apr 2026 21:50:31 +0800
-Yafang Shao <laoar.shao@gmail.com> wrote:
+Sashiko AI review found 1 potential issue(s):
+- [High] BPF token capability delegation is ignored for JIT blinding becaus=
+e blinding_requested is evaluated before the token is attached.
+--
 
-> On Fri, Apr 10, 2026 at 12:38 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi Yafang,
-> >
-> > On Thu,  2 Apr 2026 17:26:03 +0800
-> > Yafang Shao <laoar.shao@gmail.com> wrote:
-> >
-> > > Livepatching allows for rapid experimentation with new kernel features
-> > > without interrupting production workloads. However, static livepatches lack
-> > > the flexibility required to tune features based on task-specific attributes,
-> > > such as cgroup membership, which is critical in multi-tenant k8s
-> > > environments. Furthermore, hardcoding logic into a livepatch prevents
-> > > dynamic adjustments based on the runtime environment.
-> > >
-> > > To address this, we propose a hybrid approach using BPF. Our production use
-> > > case involves:
-> > >
-> > > 1. Deploying a Livepatch function to serve as a stable BPF hook.
-> > >
-> > > 2. Utilizing bpf_override_return() to dynamically modify the return value
-> > >    of that hook based on the current task's context.
-> >
-> > First of all, I don't like this approach to test a new feature in the
-> > kernel, because it sounds like allowing multiple different generations
-> > of implementations to coexist simultaneously. The standard kernel code
-> > is not designed to withstand such implementations.
-> 
-> However, this approach is invaluable for rapidly deploying new kernel
-> features to production servers without downtime. Upgrading kernels
-> across a large fleet remains a significant challenge.
+commit 6cda306e3c0e6ae78f183769fc6ebeb4369f35c3
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-I think that downtime should be accepted as a cost for stability in
-general. If your new kernel feature has a bug and causes a crash,
-anyway it gets your servers down.
+bpf: copy BPF token from main program to subprograms
 
-> >
-> > For example, if you implement a well-designed framework in a specific
-> > subsystem, like Schedext, which allows multiple implementations extended
-> > with BPF to coexist, there's no problem (at least it's debatable).
-> >
-> > But if it is for any function, it is dangerous feature. Bugs that occur
-> > in kernels that use this functionality cannot be addressed here. They
-> > need to be treated the same way as out-of-tree drivers or forked kernels.
-> > I mean, add a tainted flag for this feature. And we don't care of it.
-> 
-> Agreed. This should be handled as an OOT module rather than part of
-> the core kernel.
-> 
-> >
-> > >
-> > > A significant challenge arises when atomic-replace is enabled. In this
-> > > mode, deploying a new livepatch changes the target function's address,
-> > > forcing a re-attachment of the BPF program. This re-attachment latency is
-> > > unacceptable in critical paths, such as those handling networking policies.
-> > >
-> > > To solve this, we introduce a hybrid livepatch mode that allows specific
-> > > patches to remain non-replaceable, ensuring the function address remains
-> > > stable and the BPF program stays attached.
-> >
-> > Can you share your actual problem to be solved?
-> 
-> Here is an example we recently deployed on our production servers:
-> 
->   https://lore.kernel.org/bpf/CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh1gy5hy9Yqgeo4C0iA@mail.gmail.com/
-> 
-> In one of our specific clusters, we needed to send BGP traffic out
-> through specific NICs based on the destination IP. To achieve this
-> without interrupting service, we live-patched
-> bond_xmit_3ad_xor_slave_get(), added a new hook called
-> bond_get_slave_hook(), and then ran a BPF program attached to that
-> hook to select the outgoing NIC from the SKB. This allowed us to
-> rapidly deploy the feature with zero downtime.
+This patch fixes an issue where bpf_jit_subprogs() omits copying the BPF
+token to subprograms' aux data. By copying prog->aux->token, subprograms
+inherit the same capability delegation as the main program, allowing
+bpf_prog_kallsyms_add() to succeed for token-loaded subprograms.
 
-In this case, you can make specific livepatch or kernel module
-to replace the kernel function without using BPF on your server.
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -1110,6 +1110,7 @@ int bpf_jit_subprogs(struct bpf_verifier_env *env)
+>  		func[i]->aux->exception_cb =3D env->subprog_info[i].is_exception_cb;
+>  		func[i]->aux->changes_pkt_data =3D env->subprog_info[i].changes_pkt_da=
+ta;
+>  		func[i]->aux->might_sleep =3D env->subprog_info[i].might_sleep;
+> +		func[i]->aux->token =3D prog->aux->token;
 
-The BGP trafic in bonding device seems very specific, so it may not
-cause a trouble, but this is very generic change, which allows
-user to change more core kernel feature, e.g. memory management
-or scheduler etc.
+While this ensures the token is propagated for bpf_prog_kallsyms_add(), does
+the token delegation still fail for JIT blinding?
 
-Excessive degrees of freedom introduce uncertainty and instability
-into a system. While the functionality is interesting, it would be
-a way to generalize schedext in an uncontrolled way.
+Looking at bpf_prog_alloc(), it sets:
+    fp->blinding_requested =3D bpf_jit_blinding_enabled(fp);
 
-At a minimum, some form of build time and runtime constraint, along
-with a taint flag that clearly indicates in the crash logs that this
-feature is being used, would be necessary. (It means this is should
-not be used in production environment.)
+And bpf_jit_blinding_enabled() calls bpf_token_capable(prog->aux->token,
+CAP_BPF) to bypass JIT hardening for privileged users.
 
-Thank you,
-> 
-> [...]
-> 
-> -- 
-> Regards
-> Yafang
+However, at the time of bpf_prog_alloc(), prog->aux->token is unconditional=
+ly
+NULL, as it gets assigned later in bpf_prog_load(). As a result,
+bpf_token_capable() falls back to checking the current process's global
+capabilities.
 
+If an unprivileged user provides a valid BPF token granting CAP_BPF, the ch=
+eck
+fails, and blinding_requested is set to true. This state is then copied to
+all subprograms in bpf_jit_subprogs():
+    func[i]->blinding_requested =3D prog->blinding_requested;
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Are token holders incorrectly forced into JIT hardening due to this sequenc=
+e,
+disabling direct tail-call optimizations?
+
+>  		if (!i)
+>  			func[i]->aux->exception_boundary =3D env->seen_exception;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260414-subprog-to=
+ken-fix-v2-0-59146c31f6f1@gmail.com?part=3D1
