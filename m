@@ -1,108 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3B737F742;
-	Wed, 15 Apr 2026 21:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776290096; cv=none; b=hZ+U++7s/9DN7mAbFT1I5zbBdkctkYea/6ccsbKC4yD4tjf/WD+u3Tsmgeflnq51azhA6IBsCPYk9NLhyt1PxPa+huEakCfIiCIjehKCbIarZZaQrYTh2cdD7G3y8pZfmpgOeEe0w9dhuiX0C2wA3VttKw/TNmzeFdbZ4aZ4KSE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776290096; c=relaxed/simple;
-	bh=TZYFKbFO+bWgfI+VnjBD8YlmOVr1OUyHfh1/1awWrzQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SisNT13UrlGjJ3MyUTU2iXrAztvHkUx2N3FPV9Rz0AaQuxTf4kZEGQDldQ9kcX0RS8GmKakLtSJ2LZKiIi0dGCvN348isXNre5jrcMaYr3Ui1ZoRZ9lJNRwfMpTqzfPsWm6ajHYKXUhFEd6p7yKPqmAVSV+Z6u0Z8AwCG8JlWEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhM+q2hh; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4CD2192F9
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 22:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776292338; cv=pass; b=oRj4U8YPoiVginkipxGQIeZ9lGhfYApS33PNrHPt4NRiIm+gh6lv9z+I4ktXJaSn8+k1LnvyXahWLYjwP8/elRet3aRVmxAlJo8ltyfBrOHI3yc6DVevM5Uhokv0FyvO6tNZWnZVJZZ1C/6gzY/yq6HLYiZ6j/RCNH7r+GtH9Us=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776292338; c=relaxed/simple;
+	bh=OkIyyobTg+h8YwlTfvgCqPTo1HQ77YRqp3DS+hvi0mA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BawhNJKErozOgHoOpJ+VjmTXW4Y4cudcCkzz0Hpox+8O0qC/yS+O2Pe30i/s0LkV3Ejap6bT0Vylm13h7Hqi10ObzVDh311ya+sfzqy+jdUdOKYVdhUul9rPXcXKBelvWSJjBTOWKZNouwHs7QttJY8Ssf3LCvcjWvXeTvv6J1k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OMJJAxTS; arc=pass smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhM+q2hh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 374EDC19424;
-	Wed, 15 Apr 2026 21:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776290095;
-	bh=TZYFKbFO+bWgfI+VnjBD8YlmOVr1OUyHfh1/1awWrzQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=GhM+q2hh7e6EsSX9fvSD37JJU8+QL6Nph36Ukot21F5hh+DZFS4AXFLLun6tAHPPX
-	 q3uNINLhzsK6sZLJ19Sq14PsiGD0y9+NabbB6rAQfGD7UR2GGb1vNSWt9zsxVNWw+1
-	 rgbQtYfN8BTMT4seC8yzSzDo8Mrz8KLIehjqnbVi5DebNZbTjQcbpZglM3FYtYVoZY
-	 GZl5TiT1QDr8dbXFwtl1k7mmkAQ0n6ovBwkEkd4ZRNdLegvTVUd1AbsVzF/yP8abSO
-	 JADzfx0jMBqjSIq8Bbe4DQkqvdwx541jCCVWjD92HtYHwHBbg8XGo7ZoAnEhmQ5tkT
-	 t0JrU6NX5rkIw==
-Content-Type: multipart/mixed; boundary="===============3319286475227976617=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OMJJAxTS"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-79ab3e26cceso72166677b3.3
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 15:32:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776292336; cv=none;
+        d=google.com; s=arc-20240605;
+        b=k8ba6A5KtrXKq+it6D3GCy3DgYofh6p7z5PBTxxa5MK6uKQ5omWUYeVZcB2/1BEcam
+         +9oco80lFJCRS9sYLRQ1Ob8gxtB65h1/Cd0JSEiTUKbGp0OWIhte2On25KtjeYmVRGTg
+         wz6xx2r956yaQ8d3xCMZs04v78lGFIgUwxqHYkoV8GyCEz51qndna+/n67SV30oHL+vv
+         b8vSgCduCEZzYQlqTqgZ/Xt4CkPkD547xCx+KsqsZ/u1WD9bp4jyoxVYdzY/F7dUSD/f
+         rMjfU2Yl9IB3gjiMBYFqXygg0T4/ujrxBsXWOcBdg8X8MMasL2hVWO0atl7H32wIbPqd
+         ZY3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WujiemL7ZvBsP6uCAyYQnT/jkTe0VWchy8ZVod5OOzk=;
+        fh=PvYPcwWkAFTdNDlHuRMEXK4H0X8YFjGgiYsXgOFIKvA=;
+        b=SirvndlpdbXu2+7i5hBXcK12woQnpax4h0eOpkymuXByEvmIXNZEsihtV3PDn5wTp6
+         HwK3oqe27Y8XoZ8Anxwa01+bLM8L3Gxpg4bsKbjUU31r7n2GJchweQigK591lud6ZyvJ
+         oqys9Cu7CrKLiQvF89VGSTCOukfXdxrWabfWHC+sF/E88AvjBDtCMRI756VuMAhPJNzq
+         Ggc2Eg+n3Y2wejRqsgIxdQ/b45ZBXJMfA+eN0iN+dxADTOVDQm9BtAjMFBVfTbRkiJot
+         UDCV+8MbOna3k2RFioxqk1oSttF1eFz3M74OmRfi4RKTiyCzoN3JXXOfF48fXffgEqAz
+         MFAQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776292336; x=1776897136; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WujiemL7ZvBsP6uCAyYQnT/jkTe0VWchy8ZVod5OOzk=;
+        b=OMJJAxTSTbBO6LH0ye9RVRZFWL/a/eEGxghfqe5n7oTmZog69NPRtN6IhEo/JwwD5o
+         TtxflkzfgqbYoF93yEjKtf+h3hnNTXha0t1M0Rn1CByuMD0RG88FfuiM6tyGQqqEKr4c
+         qa2HwBaZeEEJKzwCHBZTnQmog+89s2r9fRx6b6/SQsEOYOZUfd2KrWf/RCfFY2Hayo4I
+         F+hS8zlEkvkNFUNHPVC+ZpCAHZOu51Z1y+CJ0vP3ct6me0Ixpobr418YBR75VqGmmcUY
+         tQM2X4VqMp8EDi8DywZNZLj8MwPSZ1VKHDu6+LqxDRdAGnCj/nqD7Gc4ZXtL+UREhp8X
+         rK3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776292336; x=1776897136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WujiemL7ZvBsP6uCAyYQnT/jkTe0VWchy8ZVod5OOzk=;
+        b=nhP0hMK/VfRjl31iuTxwM1FU4GXpS6o9ZvtE7Tx5FA8BLKtkSgmPE4zau0jiyG7EQy
+         tqueTWIuH8/ihnkSi/fs6vM+WqtOt5z1O9opJWT/PjUgIgpOq8Qq33bZOK/XqcxRIb7T
+         UdBTpcfXUsT517r4HQkbAl31TYZfPv4CDSV/lxsnfr65/Ox9eYqoGJGHu2MB731BTYBZ
+         +wSUDjxxzijeh9BvlicaS4IQtH98NAfzGqqoVQ0yJk6T3GDRxeXJAMN3w+lZg3TYOzAJ
+         N9Z8JipTOqKhNfPpWSrT07OH1Hvcry/4iMOxrOgMK/6vPWug4n+hSr93/HAyW9RfbtC+
+         6d6g==
+X-Gm-Message-State: AOJu0YysXiLVFUkcy0CUVm/PvL3UCiknzuJiP8ga79DSetGpvB+dP2HW
+	pBvqoUneDeXWrzuZqSvWVEq5bbzbUJ2LdpPm7v4BgD1hES4FoVEdM+Fca5yC5t9tKDpeB8yDMNQ
+	ByzSvLdRqdY6qlG8Otv0QzKK6noa+Kqg=
+X-Gm-Gg: AeBDieuo1D0HDNhQ3wII3uDlt5mC0ag76n+5En++Y/PfRUENHRGsmuX4NqGzQHynPbw
+	nvRSZD/1kphTbHtIAED48BXG5aclIKOHNM86axEfiTYebXU39cfkyBiWSqbDHdg3I49k6f9vr+e
+	xUYUjjNdaE4EZXA11bPdfTZof/5DrZQB9I7tI9n389yvKUycbYK0H8nUFajStB6rl2visTgaz2p
+	iXe0zEmUwTspWsoihTGSk/F88+K/zY6VWIbGr5XyCylxbCWPbtJohl+pO+FSvErMpzk0iKXLSwP
+	+6JPNcp9GqtHih5KnQ==
+X-Received: by 2002:a05:690c:85:b0:79a:d2ba:3c24 with SMTP id
+ 00721157ae682-7af7213be32mr249230147b3.41.1776292336472; Wed, 15 Apr 2026
+ 15:32:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <15b5d4de8ec1d989cc4d066c0ed1699deaa80562fefe0b13edba930fce880dcf@mail.kernel.org>
-In-Reply-To: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
-References: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
-Subject: Re: [PATCH bpf-next v5 07/11] selftests/bpf: Allow test_progs to link with a partial object set
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 15 Apr 2026 21:54:55 +0000 (UTC)
+References: <20260412045826.254200-1-yonghong.song@linux.dev> <20260412050000.262030-1-yonghong.song@linux.dev>
+In-Reply-To: <20260412050000.262030-1-yonghong.song@linux.dev>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 15 Apr 2026 15:32:05 -0700
+X-Gm-Features: AQROBzB5d0wOP3IMe9lbaY--KWUPZ2j_Xf5kd72AMgi-A-i9XcelX8Tz7IBrGv4
+Message-ID: <CAMB2axPoszkZqHYh8g3bH0V-c4-BzLX3ywSsF0fFyQOmN0Vp5Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 10/18] bpf: Fix interaction between stack
+ argument PTR_TO_STACK and dead slot poisoning
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============3319286475227976617==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index ee7bbfcd661b..128ea61fd986 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -754,14 +754,14 @@ endif
->  # some X.test.o files have runtime dependencies on Y.bpf.o files
->  $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
+On Sat, Apr 11, 2026 at 10:01=E2=80=AFPM Yonghong Song <yonghong.song@linux=
+.dev> wrote:
 >
-> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
-> -			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
-> +$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
->  			     $(TRUNNER_LIB_OBJS)			\
->  			     $(TRUNNER_BPFTOOL)				\
->  			     $(OUTPUT)/veristat				\
-> -			     | $(TRUNNER_BINARY)-extras
-> +			     | $(TRUNNER_BINARY)-extras			\
-> +			     $(TRUNNER_TEST_OBJS)
+> The "poison dead stack slots" mechanism (commit 2cb27158adb3) uses
+> static liveness analysis to identify dead stack slots and poisons them
+> as a safety check. However, the static liveness pass cannot track
+> indirect stack references through pointers passed via stack arguments.
+>
+> For register-passed PTR_TO_STACK (e.g., R1 =3D fp-8 passed to a static
+> subprog), the liveness abstract tracker carries frame/offset info
+> through registers. When the callee dereferences R1, the tracker
+> attributes the read to the parent frame's stack slot, correctly marking
+> it alive. So no poisoning issue arises.
+>
+> For stack-argument-passed PTR_TO_STACK (e.g., fp-8 stored via
+> *(r12-8) =3D r1), the value goes through BPF_REG_STACK_ARG_BASE (r12)
+> which the liveness pass does not track. When the callee loads the
+> pointer from its incoming stack arg and dereferences it, the liveness
+> pass cannot attribute the read back to the parent frame. The parent's
+> stack slot is determined dead and poisoned before the callee even
+> starts. The callee's subsequent dereference then fails with "slot
+> poisoned by dead code elimination".
+>
+> Fix this by allowing STACK_POISON reads in check_stack_read_fixed_off()
+> when the read targets a parent frame's stack (reg_state !=3D state).
+> Same-frame STACK_POISON reads remain rejected to preserve the safety
+> check for real liveness bugs. Cross-frame reads are safe to allow
+> because:
+>   - The pointer to the parent's stack was already validated by the
+>     verifier.
+>   - The slot contained valid data before being (incorrectly) poisoned.
+>   - The read returns an unknown scalar, which is conservative.
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
 
-Does moving TRUNNER_TEST_OBJS to the order-only prerequisite list
-break incremental builds in the default (BPF_STRICT_BUILD=1) case?
+While liveness of stack arg handled differently, can R12 base
+arguments cause some OOB in liveness.c? For example, can
+arg_track_xfer() reference at_out[12] while at_out is defined in
+compute_subprog_args() as struct arg_track at_out[MAX_BPF_REG]?
 
-Order-only prerequisites ensure build ordering but do not cause the
-target to be rebuilt when they are updated.  If a developer edits a
-test source file, the corresponding .test.o is correctly recompiled
-via the pattern rule and .d dependencies, but because
-TRUNNER_TEST_OBJS is no longer a normal prerequisite of
-$(OUTPUT)/$(TRUNNER_BINARY), the binary will not be relinked to
-pick up the new object.  The developer would need to run make clean
-or touch a normal prerequisite to get the updated test code linked
-into the binary.
-
->  	$$(call msg,BINARY,,$$@)
-> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-> +	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$(if $(PERMISSIVE),$$(wildcard $(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS)) $$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-
-When PERMISSIVE is set and some .test.o files are absent, the
-resulting binary still contains entries in the prog_test_defs[]
-array for the missing tests (via tests.h and __weak symbols), but
-both run_test and run_serial_test resolve to NULL.  The existing
-validation in test_progs.c main():
-
-    if ((test->run_test == NULL && test->run_serial_test == NULL) ||
-        (test->run_test != NULL && test->run_serial_test != NULL)) {
-            ...
-            exit(EXIT_ERR_SETUP_INFRA);
-    }
-
-will abort the entire test run.  This is addressed later in the
-series by commit ec7dae68360b ("selftests/bpf: Skip tests whose
-objects were not built"), which replaces the abort with a skip
-marker.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24478691588
---===============3319286475227976617==--
+>  kernel/bpf/verifier.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e664d924e8d4..bfeecd73e66e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5764,6 +5764,13 @@ static int check_stack_read_fixed_off(struct bpf_v=
+erifier_env *env,
+>                                         }
+>                                         if (type =3D=3D STACK_INVALID && =
+env->allow_uninit_stack)
+>                                                 continue;
+> +                                       /*
+> +                                        * Cross-frame reads may hit slot=
+s poisoned by dead code elimination.
+> +                                        * Static liveness can't track in=
+direct references through pointers,
+> +                                        * so allow the read conservative=
+ly.
+> +                                        */
+> +                                       if (type =3D=3D STACK_POISON && r=
+eg_state !=3D state)
+> +                                               continue;
+>                                         if (type =3D=3D STACK_POISON) {
+>                                                 verbose(env, "reading fro=
+m stack off %d+%d size %d, slot poisoned by dead code elimination\n",
+>                                                         off, i, size);
+> @@ -5819,6 +5826,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+>                                 continue;
+>                         if (type =3D=3D STACK_INVALID && env->allow_unini=
+t_stack)
+>                                 continue;
+> +                       if (type =3D=3D STACK_POISON && reg_state !=3D st=
+ate)
+> +                               continue;
+>                         if (type =3D=3D STACK_POISON) {
+>                                 verbose(env, "reading from stack off %d+%=
+d size %d, slot poisoned by dead code elimination\n",
+>                                         off, i, size);
+> --
+> 2.52.0
+>
+>
