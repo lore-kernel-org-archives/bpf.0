@@ -1,149 +1,117 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822982D63F8
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 19:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D11121D3F4
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 20:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776281534; cv=none; b=mPSuclYir/6+2WR8xWZJrkC8GqJPgS9l14/Y32glm696cepi/8d+0SZdhOieCxapnqrDrti1zuCENXTMm3tEUH/ZEVk20FPeMBsgf7BxbRtPNJ5egfmpxsQeGFAIIhtusbVoP/qUXXq6MfzuW0/zU7uU20P/ipjOGXv9rjjPqLw=
+	t=1776283239; cv=none; b=tHQI/99a5Ft1zJzCgmHnxtXrKc7iXWjQsuvcsTGEFbejYY33nkw50rKkGvE2fhA/fdfCURhdimYWpCq8r+2BkqBaioGSiMAYRbzqcji10xIqYPcOoyfE9i8oZk5tnDWxLAKzFLHEeO4vBC7pNQtuvP5Vw2pe40sn6a1dwq4HBPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776281534; c=relaxed/simple;
-	bh=STr3ytdwHXCKXbD/oqlkTHF4bjtfg6nYMJTiZzXVZrs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZGT7F8Z4PD55zfAaVgHNaaD01KEd8OKdtwKSToq8gZYt5trPYkWGrxO0J2CZSagZ9G3A5hU+TqMG3R6LxDGYjL8Uh6hGoyu9a7ccoFZKbHA0BKiOLhJk84U0+Yza0w+SXNGn2uwPNUnX9yloesuabwvtMfVKLjvD3kbV4a4qMe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q31zCt1c; arc=none smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776283239; c=relaxed/simple;
+	bh=BbP/AOA8v9F/vBRq/NU6JOvUgvclQ6IE1liN3LTUCcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kFFvelYSQJft33Nxf7pBVlaNy0MXMyd/SZgS8sRj/ibvHxyErQBQuTRLpLtZFPbXGQ/AKLVJMGFm/oBOIIOmZUZ7ByJjFLA35SBrv/sq02x/QkthT4odHK6QmjsYoWk7x5Y+/0Ht/ZDybS72n53F+2Ntu5m6eNAknsSNwcAWqOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WHcaEy+X; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q31zCt1c"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2dee127b3c5so1335640eec.1
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 12:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776281532; x=1776886332; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xQDjnxsRJ1VgLaxh3r+cVvaXvxLdFW+s3hShCjWRoJY=;
-        b=q31zCt1cKPavHndfh+IedwbHmmQVsqtfUFbdD9wwv4OLo4fxEvZ8JrWYmlhP7hgVK6
-         z/AyeByyyZNqW0m18SvmNZuv3CW4Gcc6ubYvvV/qu2tE2gN56G8GbOSTXjvdWoLV5z1J
-         fIJX+1zY0Qtjsvz69qyPgqGFeugQFE+h9c7GCrrGlsq2AJlm7SC3SPVty3VXv8Udng8r
-         3U8IhlQ54Qsb40XgG6xfRgDO+N9lqUmDhnV/w4zndwNgNRm0OUH6IgafHTEk2BeUPLLd
-         YeuQQ5mjcDE/kZBxWIy4fOJNfbWydb/TpTgAxVm1EyA4zhN77hIOgwxdqe3O6uzMe8PM
-         2EQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776281532; x=1776886332;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xQDjnxsRJ1VgLaxh3r+cVvaXvxLdFW+s3hShCjWRoJY=;
-        b=nYTYxccARJRXuwQXu8YGRaHAw6GjNvZ7wyJQVoQ4Ti5TLSAgyjfEVGPjkRlrXOZ0qB
-         XQy9c6NjR6BubH16s2aRbSAdqPjcybGTUs6Ilu9A9JZXxjPjhZI+ip1fFFYqqk4CQuAN
-         iyqODcAAr0p0du2yw/tk16j63EXXo0IxWEHuFRfCFFai097ejkeqrZaOUnkQ6aYqR2fR
-         tAVCeg17SbIZu5kAptnLSwcnDsANgW+va68wpDgJHK0u38fPoMIh/ReIbYLbFdw6o/6Q
-         dyvs6A6AkQMyJgPnYM9tT9HmFuxGi6ePdSFYl3L/YlhtmR/SqP8+/vHx8rfrOK34JFbq
-         Uf9w==
-X-Gm-Message-State: AOJu0YwbO38LTrXbrgS/zI4ItesmgxCWrX1IJmMRGqzoJq7yxXGrh8/m
-	XGTrjr6M0FerMxMnhsBGbLBF3JTPXKg8FNjBQWxXmZtetnE6bbJe1dxL
-X-Gm-Gg: AeBDievbJwwC6VTN1xKoAJERqohZw6DC9gDUHoHJGTZgyRTSbLA0elnsw2aNy9jV3Iy
-	GEYzVQOIvGn7HKASlv3SFf6wIyNhSxja9JwLzRUo0M7guAodaS03P7CI9e5+VatdExS656LokiU
-	uUh264Sx7sliwzYX/OV4ARyX37xvZS5npSWKmZ+n8aPbolKYJ2OYFC1S8BktK8bk8RDQ2W6zFCI
-	hTNaM4VC28Vjhixbt0mGF9tvhfjWJaZKKu8a4kCqDCUmAff6DhbKzmmKzjfOgZvhRJUmhCDNAdc
-	IYil/7DWWK3weXkKdBrvnrxkOWo4camwd9AAZs06c5or00AZH5Iktg2JH+sAqNzaIJlFqEo4bVq
-	0rfhBSMV34lQD1KxUbAJuEDwlqKEdJ4Zs4Yo4ZqVf41nQmWQrymo+Adj24RM8vk96EEiRBECsH4
-	kuAQ8rMJIVm2Ketn2ShEiZwmUzRhwX9++cE0RlNxLPEAiuQK0uPtODxGogkc8pVJGg8x9/TzmFz
-	5zDvQ==
-X-Received: by 2002:a05:7301:470e:b0:2d8:1efe:51dc with SMTP id 5a478bee46e88-2d81efe56c0mr6296618eec.6.1776281532185;
-        Wed, 15 Apr 2026 12:32:12 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:21dc:2944:7f23:f4d7? ([2620:10d:c090:500::cdb0])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8fe4ea2bsm4019815eec.31.2026.04.15.12.32.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 12:32:11 -0700 (PDT)
-Message-ID: <f6016087c52b0a84cb2cb871cf62674ae1fb472f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: verify kallsyms entries
- for token-loaded subprograms
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Date: Wed, 15 Apr 2026 12:32:10 -0700
-In-Reply-To: <20260415191738.226BFC19424@smtp.kernel.org>
-References: <20260415-subprog-token-fix-v3-2-6fefe1d51646@gmail.com>
-	 <20260415191738.226BFC19424@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WHcaEy+X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776283237;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=15PtybODMJ7suSOD+R2pBnghD+nP2cyGJ50nP85AKxA=;
+	b=WHcaEy+X6uXBtS9dl4+ir+KYQPIr3PvImMpq0NyIAAI+H7aZtR9ty36/WsDGDFPYXEGR1D
+	3Yv7xGgUnX05YHFS04W84Iwh4cMeRFZ7QB+6w48fhREIUiOGs4ExFWuQrVTJJvvKzATJBb
+	Ojmohu103x9NgB/lP/rXheeVtw19gHs=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-624-4dNQZr5UPhS2cmms9tMMgg-1; Wed,
+ 15 Apr 2026 16:00:29 -0400
+X-MC-Unique: 4dNQZr5UPhS2cmms9tMMgg-1
+X-Mimecast-MFC-AGG-ID: 4dNQZr5UPhS2cmms9tMMgg_1776283226
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 26C8A1800366;
+	Wed, 15 Apr 2026 20:00:26 +0000 (UTC)
+Received: from grbell-thinkpadx1carbongen9.rmtusnh.csb (unknown [10.22.88.181])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D086A1800446;
+	Wed, 15 Apr 2026 20:00:21 +0000 (UTC)
+From: Gregory Bell <grbell@redhat.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	alan.maguire@oracle.com,
+	Gregory Bell <grbell@redhat.com>
+Subject: [PATCH bpf-next 0/2] selftests/bpf: Use local types for kfunc declarations
+Date: Wed, 15 Apr 2026 16:00:12 -0400
+Message-ID: <cover.1776280396.git.grbell@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Wed, 2026-04-15 at 19:17 +0000, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] Unchecked return values of `sysctl_set()` in `serial_test_toke=
-n()` can lead to confusing test failures.
-> --
->=20
-> commit e7dc629b9f37dc08742ff9bbddeaaf65c1e34956
-> Author: Eduard Zingerman <eddyz87@gmail.com>
->=20
-> selftests/bpf: verify kallsyms entries for token-loaded subprograms
->=20
-> This commit adds a test to verify that both the main XDP program and its
-> global subprogram appear in /proc/kallsyms when loaded using a user
-> namespace BPF token. It also introduces a sysctl_set utility to configure
-> system parameters needed to read kallsyms.
->=20
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/tes=
-ting/selftests/bpf/prog_tests/token.c
-> > index b81dde283052e..cf5b94512cff4 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/token.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/token.c
->=20
-> [ ... ]
->=20
-> > @@ -1194,4 +1252,23 @@ void test_token(void)
-> > =20
-> >  		subtest_userns(&opts, userns_bpf_token_info);
-> >  	}
-> > +	if (test__start_subtest("obj_priv_prog_kallsyms")) {
-> > +		char perf_paranoid_orig[32] =3D {};
-> > +		char kptr_restrict_orig[32] =3D {};
-> > +		struct bpffs_opts opts =3D {
-> > +			.cmds =3D bit(BPF_BTF_LOAD) | bit(BPF_PROG_LOAD),
-> > +			.progs =3D bit(BPF_PROG_TYPE_XDP),
-> > +			.attachs =3D ~0ULL,
-> > +		};
-> > +
-> > +		sysctl_set("/proc/sys/kernel/perf_event_paranoid", perf_paranoid_ori=
-g, "0");
-> > +		sysctl_set("/proc/sys/kernel/kptr_restrict", kptr_restrict_orig, "0"=
-);
->=20
-> Should the return values of these sysctl_set calls be checked?
->=20
-> If the test is executed in an environment where these sysctls are read-on=
-ly
-> or inaccessible (such as inside a container), sysctl_set will silently fa=
-il.
->=20
-> This would cause load_kallsyms_local to read zeroed addresses because
-> kptr_restrict wasn't successfully disabled, resulting in confusing test
-> failures later at ASSERT_TRUE instead of catching the setup failure early=
-.
->=20
-> Would it be better to wrap these with ASSERT_OK?
+The xdp_flowtable and test_tunnel_kern selftests were previously
+rewritten to compile with CONFIG_NF_FLOW_TABLE=m and CONFIG_NET_FOU=m.
+While the compilation issues were resolved, the tests fail at
+runtime. In test_tunnel_kern.c, struct bpf_fou_encap___local is
+defined with the correct fields but the kfunc declarations still
+reference the forward-declared struct bpf_fou_encap. Similarly,
+xdp_flowtable.c uses a forward-declared struct flow_offload_tuple_rhash
+as the return type for bpf_xdp_flow_lookup(). Clang emits these forward
+declarations as BTF FWD types, which fail to resolve against the
+module-defined STRUCT types at run time:
 
-Makes sense.
+libbpf: extern (func ksym) 'bpf_xdp_flow_lookup': func_proto [51] incompatible with nf_flow_table [128640]
+libbpf: extern (func ksym) 'bpf_skb_get_fou_encap': func_proto [79] incompatible with fou [135045]
 
-> > +
-> > +		subtest_userns(&opts, userns_obj_priv_prog_kallsyms);
-> > +
-> > +		if (perf_paranoid_orig[0])
-> > +			sysctl_set("/proc/sys/kernel/perf_event_paranoid", NULL, perf_paran=
-oid_orig);
-> > +		if (kptr_restrict_orig[0])
-> > +			sysctl_set("/proc/sys/kernel/kptr_restrict", NULL, kptr_restrict_or=
-ig);
-> > +	}
-> >  }
+This patch updates both selftests to use ___local type suffixes
+for kernel struct type, replacing the forward declarations.
+
+struct flow_offload_tuple_rhash___local is defined without fields
+because the test only uses the returned pointer for a null check.
+This avoids needing to locally define its nested types,
+struct rhash_head and struct flow_offload_tuple.
+
+I understand that fixing selftests for specific config options is
+generally not a priority, but since these tests were already
+rewritten to support these configs, they should work correctly
+with them.
+
+Fixes: d17f9b3 ("selftests/bpf: Fix compilation failure when CONFIG_NET_FOU!=y")
+Fixes: eeb23b5 ("selftests/bpf: fix compilation failure when CONFIG_NF_FLOW_TABLE=m")
+
+Signed-off-by: Gregory Bell <grbell@redhat.com>
+
+Gregory Bell (2):
+  selftests/bpf: Use local type for flow_offload_tuple_rhash in
+    xdp_flowtable
+  selftests/bpf: Use local type for bpf_fou_encap in test_tunnel_kern
+
+ tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 12 +++++-------
+ tools/testing/selftests/bpf/progs/xdp_flowtable.c    |  7 +++++--
+ 2 files changed, 10 insertions(+), 9 deletions(-)
+
+-- 
+2.52.0
+
