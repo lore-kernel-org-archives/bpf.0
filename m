@@ -1,152 +1,179 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B35386571
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 21:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776286814; cv=none; b=V8d4bb1sMi93wePW127jdxZlG3rIgCD++H7TeKZ4SsSflwlo6P2lOqpWkBbAiSFgWnMlNdUJM2gXa9LBfJTz1lzrDFZGd//NHHEFOxdHPfQY6bm6vRI8kubTe2DZvnxP7QKrfEtiPSndZID1TN2FKNh0uwM2YQICWZUToM4LoaI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776286814; c=relaxed/simple;
-	bh=kCNYcmfNgjCtuuNJpdXVk9xztupOqrlgLYIOM5DXg/U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eBG+jnuMWpaxkyCdJEGwSjPWDDGfZ0UfZxP4RwNPteaoFPlyKRoNBtVrPjATNlTyEYO24zV6KAR1pClMcny9amyrmY83egU4VFsJc1z2lnsD4DEKZdkaaOxO6C3P92j61pyD5ZqgFKRhz1Rj8BKxvMiwI01JRxZkcMrqlAMlQ6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RFduFoqM; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A0F279334
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 21:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776287024; cv=pass; b=FHTwkB2a1isQcPtuYwIS8dnFytppd4KXogw7rRtN52Deu9HvEUUGGbFGgMk2XcQqqwmJ7Iv5TSoT9/eZZnXbbToKCf4eU/eJ5Qb5/9BahBqa8R4Yp3U/xX7tznHj2LAsdzzShar8fP9gx9KszW5g+I18UELibXnRNtTseQGh/ao=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776287024; c=relaxed/simple;
+	bh=GaaNZcjpodnsAzv4m2iPX05Zq7otswTnvY9FgzS0EHY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kdgBZNUJ3E628rqEb8wBc5X9oRG+0/6NaGFxHNvu+QvPGnrB7LHSBiV0QcmChshnqe5oVvYPdNT9IVqy3eQQIEwJKuKxJ1n8ocwewUiKBBGBBwKlcYySNXa1y9MAVjCMnNbNDpzSHCsSqyLZwXnxM6ePp3t0yyorKj4ggU9Evno=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XsRY/SFM; arc=pass smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RFduFoqM"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso88102225e9.2
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 14:00:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XsRY/SFM"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c76c60c7502so1165a12.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 14:03:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776287023; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FmnVNMga2kceTv21tOXrUxJlxs3NILC0ab/KhC9szhKee+Xje+Y889L0oRMPktkW8k
+         wJlMKtIlUhf6bhu/9utCjL8m/cyMb7EB3dpoPgrRCVkejBHXqQHY9bot0jgkLp5kknNS
+         id++qr6lpUi3AUK8/fBtWEc3B8F4UrsbQNgAAExyyDpzI8nzJz8dWkcjqWzWFbCGOZwR
+         BzAft2IE960LU5lnTxMw/p7yYY/I3t4bpk/1YVk6DKsaFK/G6SEV2ZoD8f5ivw/D91d9
+         N+L+7EEd3p6Vsicl2JcebZkOHf87ud9Kovsd9lcaFB4JH2C3J4Nu6LpFoIeA9w5HteYv
+         O+eQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+83jR3u+OMYuyXETY5Yv8xOj3xNbNwA4cnwnv5DT6dU=;
+        fh=iIwsyDgdgwTzvoTyE8SLXqSaPQTT39NcXbanmJ5Q78c=;
+        b=DIdSzxeU88/DZAiAewzkRu/CjGJeO6RCu3fWplo4Yp3figFJTWjgXyOWgL9hS58/QA
+         VBmWVabuZk/ji9Yj0ND41OeY4khRKAGb3vGhE2Q2IBN86PnhNmTD1SJnT2q4X1RaPVDd
+         ka1D4BwxDv5U7h2Hcwrndo+ej5EUrHzzgxeEKncXkZuF0VQvN6/bcdFGEEK8bGIvRjdT
+         YeOVvNEi+UYnAxcHqQN4XzVNH8xYV1Xm+6ipMS5txMzw+DRwO/SYVbjKqRe+tHqi0okm
+         45NfOJQyUovo/1R5J7vzQv8E/TCOHb4CFJUrzDtjAPNao/BSSAXeWDbq1yQjBMGNQ8+D
+         087g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776286811; x=1776891611; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QarwDcfAAe06CKb3JY8/kgN2OyTVrb9EUoTBmrcnojU=;
-        b=RFduFoqMvvvhOqgmmufpKlZw5R3+T/9440CuubpYvkBfWb0CFPVtxDCdEsDBdsoFsG
-         QR039W0vh3ovdYwq30xkoCix1bJHA/w90fQCRGf4exc1ZdA+58iRrw++1vS6wy+ymC+W
-         hB6ISE9GgOTRNSedbgMv6IGCnKhc8yxK205kCKPZzjGjP5VixLpTQP75YQ/d46VCO8JF
-         kkdYfV0HTPzbvs8xaXjUnNn62QqXppPpsqhuwmqkErQQj24Fy+UpCrFxgKAHkK/5eoMU
-         Nm46OuDGSUNj6QczZIMUSQZVG215kJz4yDpLbgxd3eD53/VTPJ4+FTz50CeLNwApGe2j
-         5SFg==
+        d=paul-moore.com; s=google; t=1776287023; x=1776891823; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+83jR3u+OMYuyXETY5Yv8xOj3xNbNwA4cnwnv5DT6dU=;
+        b=XsRY/SFMGYJCRXoivRO3oa5bLJ71GiHRIJmHzS5CrF5VUjJdd+hV8k6h8Hc8acy5UA
+         yzCv2maRQmr3UoQgWe2BwKVdIFSSWgXAb058iwgFF5JGOAuxjg1etk+/4PjX0jNPtUfU
+         F196m2hDsOIS+hHWcXKTv65cuesfDho6jb7u0fZwDdvNVDz96meOZVK0rjbpVwrZzRTv
+         T/LRK7lfQK/1zur7SEA8te1lqaqQp1WcYuRZzZQSO6vMSPwTZTOQtXueZqAS1KEiib8l
+         St6JQ9G58yL/vXw8hfuKPmmqe3FCUg92QZH0BSvagOrhGJLUUSTgse7gFR8UZkuZe3mB
+         snIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776286811; x=1776891611;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QarwDcfAAe06CKb3JY8/kgN2OyTVrb9EUoTBmrcnojU=;
-        b=U6N8L89yHoZVEGhlAqjBr3xw0S4kkHPk63FA8o26KUzHUwXTeJdT5RXgw4zR/hLCX8
-         7uXrPnUdqiUfyn0FqnG06wsqfd3RJQdfJ/1/k8v1IdN/n1Pv7TDjTNhI+5hWPIkhwAKg
-         czGVpVzam15Vq+XgTD+JCb/lxQBde582tbHna2qP55t4z+0Oq0fsaKL9k5NMnPeEsgPE
-         rOCAHroejmLqvl65aXGkqXbeUkTw55QBTkCnYwnmvE0BqT5M/1DERjTfpgTkE/yf5lvy
-         ZYuL0P1Smf7jEVCldPhK5JPgcqy3BO8Oiv4lMwvII85ou4PI/v9AYeZCo9I4zPTGnV1r
-         0Ggw==
-X-Gm-Message-State: AOJu0YyWIrdMgHSn4fhlyIY2s8VFstgr8VnwBBIcenq5eJPTB3qlxSVi
-	b/EAAkdGGBVVi3L1aA493SrXnBEWAfTYqd9hTCapM7DKUh0pVV2L2BsfwdGMjWajEzY=
-X-Gm-Gg: AeBDievyzrwue3l7yv28Z4uWzC+jIbPlzpUOlSGtcJdXmyxml9vlfihNTT7M+S/wg7y
-	NvJBQckanqbaZCGKYAePC8mEBUiX4U3myGo7f/VztxYZmbXXcHBRNQcX6KeHAZRa3DtMWc0X/ps
-	n3lhabRFx1qeI2ZqpymVG9xT6C6b2YG3yGK+yYTKx/evcc59BB2uTfpPmoJsIQnngtr9i0upOxP
-	tovisZkgXXdz86icOinWJuzFtS8Gw/TUy4broln0Y0fs2FRAeA+MZ4K7sY1uT9xHtnfrOcy8WBX
-	jF+kg2VzEIn7vJh1SL3QC6Im2pZhaKAXT6J8cfQlrqUFIqY6y6N7VbvQxQ7V5ti4TxTY94tP+ic
-	zcmChC5a6zey/7wilwgpGvXSa53HuzpYxEQuP66P4ela9+rGAdfycs14+HTbEnD/FaSbFP/KbGa
-	hC7FX7ZdOVdzA=
-X-Received: by 2002:a05:600c:474c:b0:487:219e:42d with SMTP id 5b1f17b1804b1-488d67e72b7mr297880475e9.11.1776286811412;
-        Wed, 15 Apr 2026 14:00:11 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c5e61cd32sm3511675c88.3.2026.04.15.14.00.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 14:00:10 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 15 Apr 2026 17:59:29 -0300
-Subject: [PATCH bpf-next v5 11/11] selftests/bpf: Tolerate missing files
- during install
+        d=1e100.net; s=20251104; t=1776287023; x=1776891823;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+83jR3u+OMYuyXETY5Yv8xOj3xNbNwA4cnwnv5DT6dU=;
+        b=gvO2Ca11tUH7HS5Zr+vc0jIgNememb/fx3reVHoMAe+FyaX1149qEjmZn9IDXDSQ5o
+         fA0Rku3mN0sY5BP7qYSDaUlBKI5/WGPRNW9TOa3nSIZsmdGGXFjJswNgEbBqFFT1kboM
+         KfJD6NzhLwd3lVIaJiD7h3vJD7dX/2lSN6f3CKXn/jTFMg67yoonIakIk8FXoHWKkJOz
+         4LQ3sry/BOlcwCHf/fejnuvVQY21FUYVpgCqjaM1AWuMtALZm8o/4H0eFvfH0oPdg4Vl
+         wQMDa6y5U8AeFryGNWqVgwLSZ/SYG3Fqe1On3y2FfYf6aeAVzrj7XGtlNoTvFYSpiHma
+         efDQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9RdgoYBYx2cBsIjL0PdreSfsbnkmlkdUNhM04JWnaPg25TCfCEWlI6P7MEDajsWKvtyns=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy92qi5reCSseI28hI7Lenj02/YEQO8968rzVxYzA/dK7JKbKeU
+	yKRI4BPoAGOAQYhQPgRCuHbOvH4xOUm7G+t6ENm9kjgFj0N+QzxvJRlGZ2WAohzj/yWBsuv5LOP
+	9HABxkfyEJSghigVYa8As+DQ0gy1DHfStiQhsaw7L
+X-Gm-Gg: AeBDieu2x8P8qY4JOWgKghpiLTW2EqfEWE/TKlWcLMhBWVsla4VecCYKJHBrisTUuU2
+	p3Up7c1djiYZ9RjO9JNQx9GOPz3DOw7mgGzsAyKzrfKkP2S9wT1lZMkJ4OhrU1N2mFXIraMW3KF
+	d7oqhZfO4oES2M1wqpKleqA3+c2c2cX432DT/Yjd4XdKHzw1HCTr+GnliX3QqbfPAnTwD6xBtEZ
+	hnoNSygYRY9IeUQyARIBKKvICKfyx7tv7FO2LVKfNpEGakHcSQEKZQbl0jouIWFiuNegYPHa6wT
+	ePPh0Mw=
+X-Received: by 2002:a17:903:2484:b0:2b4:5d0c:7a85 with SMTP id
+ d9443c01a7336-2b5eaa22380mr5127465ad.3.1776287022908; Wed, 15 Apr 2026
+ 14:03:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260415-selftests-bpf_misconfig-v5-11-03d0a52a898a@suse.com>
-References: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
-In-Reply-To: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Alan Maguire <alan.maguire@oracle.com>, 
- "Ricardo B. Marliere" <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1776286765; l=2151;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=kCNYcmfNgjCtuuNJpdXVk9xztupOqrlgLYIOM5DXg/U=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QO52q6ndPD+Zuqj9KzWJiSAHcc5GMQVf/6C90MqwRBbzhXDP7EeLoTE9HyFcc5JRBU9VIP7yPpd
- 2CYO84FdEcwc=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260409121230.GA720371@unreal> <2dd138a2ae87f90c55dbc3178d9c798294fd4450.camel@huaweicloud.com>
+ <20260409124553.GB720371@unreal> <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal> <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca> <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca> <4cf6b20b-f53b-4b5e-ba03-c7ac01bec0c2@schaufler-ca.com>
+ <CAHC9VhTm9MG-NzdwxtqJA6LZeTEsmUjyy8da2=8KOVxgDtEqWQ@mail.gmail.com>
+ <53a532e8-5981-49b4-896e-0bf5021ff78b@schaufler-ca.com> <CAHC9VhRoaECt03Rs-ZyoGhW2_qZkA_1weTYYjiXc41Yf5U8A_g@mail.gmail.com>
+ <a5fe292b-77c8-4190-8989-1d32cadb5689@schaufler-ca.com>
+In-Reply-To: <a5fe292b-77c8-4190-8989-1d32cadb5689@schaufler-ca.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 15 Apr 2026 17:03:30 -0400
+X-Gm-Features: AQROBzBz2q68BZW8dTm1i7JCyf7T-jJ8N457zfM2449jgU9ei1obevOWDfD4MWI
+Message-ID: <CAHC9VhS1sVMGHpO-5Zn0K0w6suTB-i_SwvouDpEmT8sXffsRfg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Roberto Sassu <roberto.sassu@huaweicloud.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Itay Avraham <itayavr@nvidia.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>, 
+	Maher Sanalla <msanalla@nvidia.com>, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+On Tue, Apr 14, 2026 at 6:42=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
+> On 4/14/2026 1:44 PM, Paul Moore wrote:
+> > On Tue, Apr 14, 2026 at 4:10=E2=80=AFPM Casey Schaufler <casey@schaufle=
+r-ca.com> wrote:
+> >> On 4/14/2026 12:09 PM, Paul Moore wrote:
+> >>> On Tue, Apr 14, 2026 at 1:05=E2=80=AFPM Casey Schaufler <casey@schauf=
+ler-ca.com> wrote:
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic. Also
-add --ignore-missing-args to the TEST_INST_SUBDIRS rsync loop so that
-subdirectories with no .bpf.o files (e.g. when a test runner flavor was
-skipped) do not abort installation.
+...
 
-Note that the INSTALL_SINGLE_RULE override applies globally to all file
-categories including static source files (TEST_PROGS, TEST_FILES). These
-are version-controlled and should always be present, so the practical risk
-is negligible.
+> CMW MLS and SELinux MLS can be mapped. They have the same components.
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Yes, one of the fields in a full SELinux label can be an MLS field,
+but that doesn't mean there isn't translation needed.  The important
+point is that security label translation, mapping, etc. is necessary,
+possible, and has been proven to work across a variety of systems.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 163552458327..1f4a8e1f7932 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -969,11 +969,22 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# When permissive, tell rsync to ignore missing source arguments so that
-+# partial builds do not abort installation.
-+ifneq ($(PERMISSIVE),)
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+endif
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
--	@for DIR in $(TEST_INST_SUBDIRS); do		  \
--		mkdir -p $(INSTALL_PATH)/$$DIR;   \
--		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
-+	@for DIR in $(TEST_INST_SUBDIRS); do				  \
-+		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
-+		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-+			$(OUTPUT)/$$DIR/*.bpf.o				  \
-+			$(INSTALL_PATH)/$$DIR;				  \
- 	done
- endef
+> >> SELinux transmits the MLS component of the security context. Smack pas=
+ses
+> >> the text of its context.
+> > Arguably the NetLabel/CIPSO interoperability challenge between SELinux
+> > and Smack is due more to differences in how Smack encodes its security
+> > labels into MLS attributes than from any inherent interop limitation.
+>
+> Yes. That is correct. The big issue I see is that SELinux does not repres=
+ent
+> the entire context in the CIPSO header. Thus, you're up against many SELi=
+nux
+> contexts having the same wire representation, where Smack will have a uni=
+que
+> on wire for each context ...
 
--- 
-2.53.0
+That isn't always true is it?  From my understanding of the "cipso2"
+interface an admin could easily map multiple Smack labels to a single
+CIPSO label.
 
+It's important to remember that if you wanted to utilize CIPSO to
+communicate between SELinux and Smack, the label translation is not
+between SELinux and Smack but rather between SELinux and CIPSO as well
+as between Smack and CIPSO.
+
+> >>> Use of the NetLabel translation cache, e.g. netlbl_cache_add(), would
+> >>> require some additional work to convert over to a lsm_prop instead of
+> >>> a u32/secid, but if you look at the caching code that should be
+> >>> trivial.  It might be as simple as adding a lsm_prop to the
+> >>> netlbl_lsm_secattr::attr struct since the cache stores a full secattr
+> >>> and not just a u32/secid.
+> >> Indeed. But with no viable users it seems like a lower priority task.
+> > You need to be very careful about those "viable users" claims ...
+>
+> Today there are no users.
+
+That you are aware of at the moment.  You are also well aware of my
+feelings on this issue and ultimately I'm the one who has to sign off
+on that stuff.
+
+> There are other problems (e.g. mount options) that have yet to be address=
+ed.
+
+The existence of one problem does not mean another does not exist.
+
+--=20
+paul-moore.com
