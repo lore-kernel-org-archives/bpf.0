@@ -1,239 +1,210 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD681DE894
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 12:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776257692; cv=none; b=g/XBZBQ3+UkImzHxg7SCwX9RJBosT0jOGmNfbAzNVgMB70q8A+tKjUg8VO6jy1QhVJ85Jtjed1eN7M9wz8Xe7hjeMayYbQUmymFGnVTCSFMdwDUApQyh25UpMx8z9X70BkRnODFNOFhyb8Djl+0pv1ZfyCIucoaNWfC3bcf1jV8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776257692; c=relaxed/simple;
-	bh=UBm5duZotiH1dCT+9iLudUQTbkbjRpMAtnKj/RNYO7o=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l8AgbpXmb8lIglIBFDi/Pph9tpHTOZsTm3u61oXlV6F4SUdwRJu4eW+0gtTkPNL6SyJX2N2KoI8PjB/wlJo2pJUK+uv3zeG8Yb/4AH6Mm8gBcYtmzK/CQKJMa7eOEgkprrTYWhW+GIpow51TeYGb8Xk2OGxGV6nEJyXDdCzAOSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d62NeO5z; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DEC1514F8
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 13:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776259198; cv=pass; b=pjjwzsiR8u6XFrisp1cgj85Nu5W9at4MU29uJsk6/56PfkOeloq/blENWfajT1myXFDdfUAZYJSLkU4TMnSz8sqPuygWSzYlS6UoiWxosvMlYymivI7dzFURQPDrEu51Bd4m4zoXj3RdFG7b1gC/l/8KecHKcJrrt7vIq8qOyPc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776259198; c=relaxed/simple;
+	bh=cVvVDK2MRWzZyXz3GUm3WQXQ9PZPcYLa/itSN6r995Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AG64TUotISG+QXE/XdgLmT1iIpcJm/ruYzRvTqlNn1TOmYwDtYtq47R2UWA5PsZMW/H0pZSv4aoXWZa24+G3yZz7YUGRIY9582S3F6qUrqX9I+lueDhX5/ZSuVdPdvwlGMqdChjO9e2XkJE098q70FHhqLHsvyrNPTCRkN0IdS0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lXEFxcfu; arc=pass smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d62NeO5z"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43cfce3a195so4205502f8f.2
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 05:54:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lXEFxcfu"
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2dec803f9f0so238201eec.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 06:19:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776259196; cv=none;
+        d=google.com; s=arc-20240605;
+        b=j3YaQWqjeSKVDKOPy+udbumJ/2WVYyWumsDVSiSKlnUT3AqF60sjsvu4xoMm8HlDCF
+         UFybcaKKDDNykwGVmMUfrfT7KvJ5X6laTmLtrh1qTSYmjJWFGBNTQq1hPQ+zVcyTp92g
+         sBlLTHzPuTCwKri0qtp0edWXomZewRaUJdO0n6oyAd/QfzZDrbe28TZsEc7kGpwny3O6
+         tAW2an0/RZKSbarRnFzPHV2FUCzOZu/CyfKDw5lHbCgwLQBaEr96LHWzHAapn5JLv25z
+         izFIHEsEkOn94RlIpiF5Y9pl8LLmh1LQHS+otqV0OGxENqGmjb6jpEu4TOhtjvsp2Clc
+         Covw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=reYav/f2RX+zYG9Jz25IFXarapNrYkmH4ZhSUflT7K8=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=PMt+p4E2xLJ3l8SOciqgaeV98WnoHNVXClU9VcKtJsN8LH7iOc062rd0rUR377DCU/
+         a5GjmfSw50wTF3H2eeSVc5jsuPgjBWzeRXV5Y5VCR/qK7UhDlJnfnO/8FCzxO0rQDbMY
+         N0wum6y7IPL06YUVAgmiRfSQh0CIyqulkwcZBShoLeAFgYhWMcFeLQtIFqvrxjQUtmGn
+         ARNUrs2atdEUbzN5J9YTvIrGTuAGWbDHUx8yzpON3EVzlKWvs+Z8qFQKfOf1ztoHQ9a7
+         4RETrYSKawxhNsQaBawpn2498WJe+0zif1PpENn/UuOAl9yEWdobTA5DdRXw6PDOfCmx
+         9NqQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776257689; x=1776862489; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UnE/seawMs4tAhMl+l9eM5XewVHij4Y86ci6Osr1d/Q=;
-        b=d62NeO5zBAz5WOCvofEJRyWuoxo4wKeVQ6TJrX89YC3QzDEVXBz3hKPX7VJSUZfCwr
-         xI2MK7NeX8r0iB4lVhpYmDykCtqMymJob1elUgSedQ412azfLjzIanHMm82qq1bWEdJg
-         vOKv8BzqtOfUJCbuapAOcjcsTUggJ9YnGwS10REtajD6LXTnNhKJ5l/BvCqM6d9sgiyO
-         ssPU/GIKca/bw8HX8VL4fp8HKLr3sVnFNjee6tJbNlqkdf3OmeFjGWMMTqTAdltkw9rc
-         0/GJWMVs9L5GiLujEZmjoqTi+qAgjHmo9ufFrG6OSDpdDkkV2oKPS5vXuwbQUlLTpAqU
-         vWJA==
+        d=gmail.com; s=20251104; t=1776259196; x=1776863996; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=reYav/f2RX+zYG9Jz25IFXarapNrYkmH4ZhSUflT7K8=;
+        b=lXEFxcfu//HBvVSNqmT3i4XNVCaAMh+Cv9WkoQ+ceRVEgyWVyI6CQIXmAux0Mba8Yh
+         C+QUZhf96COYaGiRqjWVQ4HJWUhVug03QxBMb7WRulHEDfB2y9jEvx0mxR6+uFy/ZUD/
+         4wS0QbFLmQrymDHSaxRhN+G6Mf7zmKfqAQJ6i434qOWMTjeJxK77XMHimAGmoJPFYsiP
+         ocy6pWPaSLLGUFl38Mgifwa83g6yRUs0dc/+/G4IERnS4VzR1pXZpyXqzq4V8kE2ztol
+         EqmyYOKqmwbK3ZwXpf4Fdrkll2mpXRz58FsNIkkQD878iMw83FMGS8A51cjyd+QwxIIH
+         fmhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776257689; x=1776862489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UnE/seawMs4tAhMl+l9eM5XewVHij4Y86ci6Osr1d/Q=;
-        b=qsJw/YH5zjQ4SsPlKYFDIlOJjM7chgiUMzdW6SbIJQfUTkUhgyM55Z4QPkRj+kXyfR
-         XHk2VXAVrQZlQZyd97BI0i8UMgivdUdWZJYxv9HIvmIi7jy8IdSa2mW026R3tltFFG1E
-         UYsaFula+dtmog8uBcvGi8MkK9RQJKjuD1rUhRmvXwyUZKzwbwTs1Mgvr/PL6r+iWpCz
-         d8bxlhDtmFI89G5HngEBqt/yCD5it8SIcApxxf1fSPZ6V9vJgoakRUIjeI/vqSPMcZD9
-         dOZ2hzQDbs7PZ7VrSBaDRK6WhXn8G+1yqPe/tAo2LK1i/gQLHHwEGcpBNrvTmqMNUw8o
-         /XGA==
-X-Forwarded-Encrypted: i=1; AFNElJ+9mUyLF+rTRY4ue6Er2Dial4dLVLIHoC5+vjWZukmagMNsfcYezYmiWibmOAeesfJc+t4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVx6SYTVsoWF353FO+iIs2kw5cMmtrrh3lOt8BF4jobddoBwuJ
-	+QRS+8pf+XcP1GrGFtWG1bSZQdYQQKW/ILpS58mza1Son1bu0c5EN68A
-X-Gm-Gg: AeBDietAtRRtzbWAJXnDpEc76Qbeh1Iub03tlgvgd0/fKKCbQGaWKRLw3Ap8RdaD8j9
-	moM78y63ERZjCWZIf5Tt2ueyG5NK/WEDbQANv1KxIGhIj69CkrbBjUsKyV+aLz6A+QfS/4sWE44
-	wdSIA7W5gasXkpLXegwnx8bynLyaVXqeT2UbxIX/WFyCcoDT5fk8pb3zZSykZZOqfB7pIf6BQl+
-	doVCa6dlmSmkwMMYvsxdRZGfnH4NFqkHd1xGbYpyCFJGohpJPPz95FqhX6DinyEzEw/AjFHBeXT
-	9I6gd4a1GbBPg7JTFgR9mfHKgtXziPJTmOK7wPzue9UJmIR63yjgxHSGAdEs9UeUrKuGEZnZ8kd
-	cZ498FmV0ISdTI/QxRavSIFq31eWthTu3UQFRF/4EWzEYsgFMlTasqbPhbmXCuIGSn5EJqlVlTY
-	E5LdxeOzE=
-X-Received: by 2002:a05:6000:2c06:b0:439:a95b:3c43 with SMTP id ffacd0b85a97d-43d6426b475mr32714440f8f.21.1776257688798;
-        Wed, 15 Apr 2026 05:54:48 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43ead3564d8sm5581124f8f.10.2026.04.15.05.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 05:54:48 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 15 Apr 2026 14:54:46 +0200
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCHv2 bpf] libbpf: Prevent double close of btf objects
-Message-ID: <ad-KltDa7xMA1EC1@krava>
-References: <20260415082452.1489147-1-jolsa@kernel.org>
- <3cb314b6-7dd4-4a49-9d7e-5021c7773936@oracle.com>
+        d=1e100.net; s=20251104; t=1776259196; x=1776863996;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=reYav/f2RX+zYG9Jz25IFXarapNrYkmH4ZhSUflT7K8=;
+        b=R0NUAH2lawPsYHAPXDfNrijjBJqKOEndBVdezJQdTIoyq0VmAaub/c9ItnilnIHWCs
+         n2CI8F1YFENeI9084SE0ezLbEVj772IpspjdIJ9Zefirm47Zrp3GvKze7xWR7cK9tuTp
+         GP1TaV6A3YG+ySKn0lfiw5EJ/rBiwezshKY0xTP/6aX5nII31I7gkH1U/XMU76HzrPB2
+         7jlJI405yWC0v/ZOWP2SECYibRNn007hRUwAgUzBVAbw0hu8IMiri6e+RmWULoO3sLII
+         ogv2ZEKlDvHFt/u2XYu4OKfc91TfYyini9avFcvVcxppukMxbadUqpIbuHa9XafvhhB5
+         D3pQ==
+X-Gm-Message-State: AOJu0YzUpDTL5NEneW3BZNz6wIRB+GxgpvtTzfydlIVDHoyYhsssWKB8
+	wv2TqBbshAgWAxYEWyVgEIG5wORzuED5rHTqkF0VSBKi49qtWesaE5ooA+cKBE4zu+2nzlKwbJp
+	Tut7P1EHaiyZccCmkWGvfSiyjgnopZZtDNACWUjeKZzAY
+X-Gm-Gg: AeBDieuMuJEV3DN7slgm/4C+4nqIeTxVsNL9aRkUJimlw7qv6T3P5eyCgE5yOpc/6yE
+	VMMk8b6ZGef/6RYJ07DlZNWQetkJW4k3KY0Wm1npaZIB3cLAzhLVGo9C2Jeyc7BHk2D68sXwg9C
+	tb8xjqGKBzqjNgl74RhoQ/fdzHYWk3DuRivcFpf6wMtyeLxLhAwmkOTOPbbkErOGh1+1boRYPB4
+	hwh69+60KPGHziNi3UlweAkxG0MlXwccLAnF3Sl8Ym/ZqZv2SDyKe/81O/1WUBuE8Pa5+d2ZXIq
+	uxnQOVSliNLnmO9fIA==
+X-Received: by 2002:a05:7301:4196:b0:2de:ed01:550e with SMTP id
+ 5a478bee46e88-2deed109858mr666443eec.8.1776259196005; Wed, 15 Apr 2026
+ 06:19:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3cb314b6-7dd4-4a49-9d7e-5021c7773936@oracle.com>
+References: <20260415082654.21026-3-kerneljasonxing@gmail.com> <20260415085204.3F87AC19424@smtp.kernel.org>
+In-Reply-To: <20260415085204.3F87AC19424@smtp.kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Wed, 15 Apr 2026 21:19:15 +0800
+X-Gm-Features: AQROBzCTbko2gkyRBF0aL5pTN-Jlo3x3SnxbUODTV8U0Vj3aNOjitv5gNgR5c5Q
+Message-ID: <CAL+tcoDS_R9AFX1jJCuO0ikk23g6e0WLMayUUZyUEYrWVhcFSA@mail.gmail.com>
+Subject: Re: [PATCH RFC net-next v4 02/14] xsk: extend xsk_build_skb() to
+ support passing an already allocated skb
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 15, 2026 at 12:35:59PM +0100, Alan Maguire wrote:
-> On 15/04/2026 09:24, Jiri Olsa wrote:
-> > Sashiko found possible double close of btf object fd [1],
-> > which happens when strdup in load_module_btfs fails at which
-> > point the obj->btf_module_cnt is already incremented.
+On Wed, Apr 15, 2026 at 4:52=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Sashiko AI review found 1 potential issue(s):
+> - [High] Inconsistent ownership semantics of `allocated_skb` on error pat=
+hs lead to a memory leak in the zero-copy path.
+> --
+>
+> commit a6016c1c59927d7e151f38b7f237ad699db86b1e
+> Author: Jason Xing <kernelxing@tencent.com>
+>
+> xsk: extend xsk_build_skb() to support passing an already allocated skb
+>
+> This patch extends xsk_build_skb() to accept an allocated_skb parameter,
+> allowing the batch feature to reuse an already allocated skb instead of
+> allocating a new one.
+>
+> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > index 1194268ae8676..becc8ebfd82f8 100644
+> > --- a/net/xdp/xsk.c
+> > +++ b/net/xdp/xsk.c
+>
+> [ ... ]
+>
+> > @@ -793,15 +797,16 @@ static struct sk_buff *xsk_build_skb_zerocopy(str=
+uct xdp_sock *xs,
+> >       return skb;
+> >  }
 > >
-> 
-> nit: maybe the subject should be something like
-> 
-> libbpf: Prevent double close, leak of btf objects
-> 
-> ...to reflect the leak fix too?
-
-so the btf object leak is introduced by moving the obj->btf_module_cnt++
-below, because before that it was released in bpf_object_post_load_cleanup
-even when the strdup failed
-
-now if strdup fails, obj->btf_module_cnt is not incremented yet and
-bpf_object_post_load_cleanup won't release it
-
->  
-> > The error path close btf fd and so does later cleanup code in
-> > bpf_object_post_load_cleanup function.
-> > 
-> > Incrementing obj->btf_module_cnt only if there's no failure
-> > and releasing btf object in error path.
-> > 
-> > Fixes: 91abb4a6d79d ("libbpf: Support attachment of BPF tracing programs to kernel modules")
-> > [1] https://sashiko.dev/#/patchset/20260324081846.2334094-1-jolsa%40kernel.org
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> 
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> 
-> > ---
-> > v2 changes:
-> > - squashed patches together, because they depend on each other [ci]
-> > - added Fixes tag [ci]
-> > 
-> >  tools/lib/bpf/libbpf.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 8b0c3246097f..79d9607d26e2 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -5806,7 +5806,6 @@ static int load_module_btfs(struct bpf_object *obj)
+> > -static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+> > -                                  struct xdp_desc *desc)
+> > +struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+> > +                           struct sk_buff *allocated_skb,
+> > +                           struct xdp_desc *desc)
 > >  {
-> >  	struct bpf_btf_info info;
-> >  	struct module_btf *mod_btf;
-> > -	struct btf *btf;
-> >  	char name[64];
-> >  	__u32 id = 0, len;
-> >  	int err, fd;
-> > @@ -5825,6 +5824,8 @@ static int load_module_btfs(struct bpf_object *obj)
-> >  		return 0;
-> >  
-> >  	while (true) {
-> > +		struct btf *btf = NULL;
-> > +
-> >  		err = bpf_btf_get_next_id(id, &id);
-> >  		if (err && errno == ENOENT)
-> >  			return 0;
-> > @@ -5878,7 +5879,7 @@ static int load_module_btfs(struct bpf_object *obj)
-> >  		if (err)
-> >  			goto err_out;
-> >  
-> > -		mod_btf = &obj->btf_modules[obj->btf_module_cnt++];
-> > +		mod_btf = &obj->btf_modules[obj->btf_module_cnt];
-> >  
-> >  		mod_btf->btf = btf;
-> >  		mod_btf->id = id;
-> > @@ -5888,9 +5889,11 @@ static int load_module_btfs(struct bpf_object *obj)
-> >  			err = -ENOMEM;
-> >  			goto err_out;
-> >  		}
-> > +		obj->btf_module_cnt++;
-> >  		continue;
-> >  
-> >  err_out:
-> > +		btf__free(btf);
-> >  		close(fd);
-> >  		return err;
-> >  	}
-> 
-> the err_out label within the loop is a bit confusing, needed more now I guess
-> since btf is in loop scope. only way round it would be to haul btf back up
-> to global scope and explicitly NULL it at the start of each iteration. That way 
-> we could break out of the loop to do error handling. Not a big deal though.
+> >       struct net_device *dev =3D xs->dev;
+> >       struct sk_buff *skb =3D xs->skb;
+> >       int err;
+> >
+> >       if (dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
+> > -             skb =3D xsk_build_skb_zerocopy(xs, desc);
+> > +             skb =3D xsk_build_skb_zerocopy(xs, allocated_skb, desc);
+> >               if (IS_ERR(skb)) {
+> >                       err =3D PTR_ERR(skb);
+> >                       skb =3D NULL;
+> >                       goto free_err;
+>
+> Does this leak allocated_skb on the zero-copy error path?
+>
+> If xsk_build_skb_zerocopy() fails on the first descriptor (e.g., if
+> xsk_skb_metadata() returns an error due to invalid metadata), it returns =
+an
+> ERR_PTR without freeing the SKB.
+>
+> Because skb is then explicitly set to NULL before jumping to free_err,
+> kfree_skb() is skipped.
+>
+> While the original code also had a leak here for internally allocated SKB=
+s,
 
-I guess you mean something like below (untested).. looks better, will check
+Awesome! sashiko spotted a real bug prior to the series. I will cook a
+standalone patch to fix that first.
 
-thanks,
-jirka
+Also I checked the MAX_SKB_FRAGS situation in xsk_build_skb_zerocopy()
+that has the absolutely same issue.
 
+While reviewing the whole destruction of skb in the error conditions,
+I realized that there is one problem in between patch 2 and 13. Here
+at least I need to add the following codes to make sure no wrong
+accounting happen:
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 3bf81b838075..19bc786decbc 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -904,14 +904,16 @@ struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+        if (skb && !skb_shinfo(skb)->nr_frags)
+                kfree_skb(skb);
 
----
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 8b0c3246097f..3a80a018fc7d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5852,11 +5852,12 @@ static int load_module_btfs(struct bpf_object *obj)
- 		info.name = ptr_to_u64(name);
- 		info.name_len = sizeof(name);
- 
-+		btf = NULL;
- 		err = bpf_btf_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			err = -errno;
- 			pr_warn("failed to get BTF object #%d info: %s\n", id, errstr(err));
--			goto err_out;
-+			break;
- 		}
- 
- 		/* ignore non-module BTFs */
-@@ -5870,15 +5871,15 @@ static int load_module_btfs(struct bpf_object *obj)
- 		if (err) {
- 			pr_warn("failed to load module [%s]'s BTF object #%d: %s\n",
- 				name, id, errstr(err));
--			goto err_out;
-+			break;
- 		}
- 
- 		err = libbpf_ensure_mem((void **)&obj->btf_modules, &obj->btf_module_cap,
- 					sizeof(*obj->btf_modules), obj->btf_module_cnt + 1);
- 		if (err)
--			goto err_out;
-+			break;
- 
--		mod_btf = &obj->btf_modules[obj->btf_module_cnt++];
-+		mod_btf = &obj->btf_modules[obj->btf_module_cnt];
- 
- 		mod_btf->btf = btf;
- 		mod_btf->id = id;
-@@ -5886,16 +5887,16 @@ static int load_module_btfs(struct bpf_object *obj)
- 		mod_btf->name = strdup(name);
- 		if (!mod_btf->name) {
- 			err = -ENOMEM;
--			goto err_out;
-+			break;
- 		}
--		continue;
-+		obj->btf_module_cnt++;
-+	}
- 
--err_out:
-+	if (err) {
-+		btf__free(btf);
- 		close(fd);
--		return err;
- 	}
--
--	return 0;
-+	return err;
- }
- 
- static struct bpf_core_cand_list *
+-       if (err =3D=3D -EOVERFLOW) {
+-               /* Drop the packet */
+-               xsk_inc_num_desc(xs->skb);
+-               xsk_drop_skb(xs->skb);
+-               xskq_cons_release(xs->tx);
+-       } else {
+-               /* Let application retry */
+-               xsk_cq_cancel_locked(xs->pool, 1);
++       if (!allocated_skb) {
++               if (err =3D=3D -EOVERFLOW) {
++                       /* Drop the packet */
++                       xsk_inc_num_desc(xs->skb);
++                       xsk_drop_skb(xs->skb);
++                       xskq_cons_release(xs->tx);
++               } else {
++                       /* Let application retry */
++                       xsk_cq_cancel_locked(xs->pool, 1);
++               }
+        }
+
+        return ERR_PTR(err);
+
+And the above part will be removed in patch 13. It prevents someone
+from bisecting in between two patches and triggering the issue.
+
+Thanks,
+Jason
+
+> this patch extends the issue to caller-provided SKBs. In copy mode,
+> xsk_build_skb() correctly frees allocated_skb on error, but the zero-copy
+> path does not.
+>
+> Could this lead to memory exhaustion if a caller assumes xsk_build_skb()
+> always consumes or frees the provided SKB on error?
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260415082654.21=
+026-1-kerneljasonxing@gmail.com?part=3D2
