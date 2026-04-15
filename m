@@ -1,205 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7786432A3C8
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 09:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4406033508E
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 09:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776245881; cv=none; b=bUrBbLFf8WPVMOB+JzvFgfMOc1XZN/lzk5M0nR/bsuqXlBNPs9J4dcY4WrjULPFJdcG1ps0dPqs/JXhV/Y/0Nm3RkSQmbkl/oIby3zD5L6UX5UTZcFHihMMqDiiFzoEyczpFE7Dr0UsI8nYsiRP9hJmKj9brMVWgo0rR+H6B5eM=
+	t=1776245903; cv=none; b=IbnwufJNNVPMSjWK0VWqzO/OiQTaWtlg3Jnyvk5UL4WL+W+iGeoghcaK0hc+8wLCeoIMMrNPNOUfn/oF1etnYnOTZzoqOEjvXrV7/Jxsu+a60dTGlDZ9oSSrD1ublUZz8SwnDEa3tcX2gmsLFdgF1kk5TuRowd+vVUvBpsgU598=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776245881; c=relaxed/simple;
-	bh=mcYi8VmykU5CBwf3ecUrQNP7fc0qFK+CcKZj81u7QF0=;
+	s=arc-20240116; t=1776245903; c=relaxed/simple;
+	bh=zwgYlL19DvhIVwWyFTh/KrcLCLhUUdYW0ZJXOZ2NGjI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=AIpAuDklmhZ+7ZLIk8wjma5jQPb9rsqfCz0nldPPZOz5L2SqDuIX4oO7Cb0/eE6GLaV4rv+rlANZTTN7cZd2vCj47zKr2xw92Bd7k741tr7PEVmGUwxpcSB2bKzAQ8VcfymwdJxeaMrUqZu5IDT3kzOrTFeVcpUPyq0FP6/36hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r+tSCxq1; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=sMuO6IDbBgJNdvfhIMhlGJFamY5yVoU7CAJK32OmRNf5inPoaVbVvaYZZIdLIwfm2Sp5rRwGOAnI9wLhSLmfeWXDvMw1Q9lNpeSXsZcgTwSnWkwxofVhwahKPKeiErGYpt6RbDLKZZ2ZzgKT5Dq9j4Z2pMgqH9lMMTX2pPKHjQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLDBGRZC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r+tSCxq1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CECEC19424;
-	Wed, 15 Apr 2026 09:38:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLDBGRZC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A76C19424;
+	Wed, 15 Apr 2026 09:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776245881;
-	bh=mcYi8VmykU5CBwf3ecUrQNP7fc0qFK+CcKZj81u7QF0=;
+	s=k20201202; t=1776245902;
+	bh=zwgYlL19DvhIVwWyFTh/KrcLCLhUUdYW0ZJXOZ2NGjI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=r+tSCxq1I9Nz6Cb+SYh/66Q9D4okh7rR/VUUzIMKajua8C9xazXmbPJEtaCwaBTRQ
-	 sWkyAeKMpJUeqyDvRG792iUPWrnKWrpCN1e/YFm7U8096nZ6gm2viPpnX92XiVLc7J
-	 zuURQY/C+vIzUkNXjdNIkJU/enXUp+40k6RhOI2D/uJCXM2Xs7L5XKuVzTkMINOUgW
-	 +oSyAMTEk7O5mJa7t3D7MA2Ao7OteyAxKNqAeFgBikvoQh0DwUSYD4WF/XbNFnv4Pf
-	 8gtxZpXj3nI/GTCJgAdshLuyLBXj/zSPXojriBRyDXKMmd5o6gWUAfUmhCTCUfBJ3V
-	 LZiHr9Lc+9SyQ==
+	b=kLDBGRZCPYmTFkTDOAsU/I3BN0l5P/TV/I+6E73eoCGQHHBojnfCyB6Plrxs5H/Ii
+	 CsnTUOZJYHZ6/D7gm+xGYdrrDFB0H6mC/4j+9poQSvWzk2cwywHF7HYWpnKkjt0K9g
+	 ktOVrZKrKteTO4tUp0cjUBxtBx7u0iuaUlds0grI3N2noV5fzJxSjJWfsClEi9HB6C
+	 UMlK/hDLNBe6Awf6RjUCvPwrN+iPaYvLYYoxSJPCvRA5QpydyMjwJy4OZab0gnyuBZ
+	 /H66haqVBOhSOy5chl/Eny0twe+XV6BrqDNqROjEdVRggvjeMtbryZbkt+i072vbZN
+	 bnvtv8TLgxoJA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC net-next v4 11/14] xsk: support batch xmit main
- logic
+Subject: Re: [PATCH RFC net-next v4 04/14] xsk: cache data buffers to avoid
+ frequently calling kmalloc_reserve
 Reply-To: sashiko@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260415082654.21026-12-kerneljasonxing@gmail.com>
-References: <20260415082654.21026-12-kerneljasonxing@gmail.com>
+In-Reply-To: <20260415082654.21026-5-kerneljasonxing@gmail.com>
+References: <20260415082654.21026-5-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 15 Apr 2026 09:38:00 +0000
-Message-Id: <20260415093801.0CECEC19424@smtp.kernel.org>
+Date: Wed, 15 Apr 2026 09:38:21 +0000
+Message-Id: <20260415093822.79A76C19424@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 5 potential issue(s):
-- [Critical] TOCTOU race on socket state pointers leading to NULL pointer d=
-ereference and Use-After-Free.
-- [Critical] Integer underflow in `xsk_alloc_batch_skb()` leading to massiv=
-e OOB memory allocation and kernel crash.
-- [Critical] Unconditional dropping of partially built packets (`xs->skb`) =
-causes buffer leaks and packet stream corruption.
-- [High] Double cancellation of CQ slots and incorrect TX pointer manipulat=
-ion on SKB build failure.
-- [High] Infinite `-EAGAIN` livelock and stat inflation when packets span b=
-atch boundaries.
+Sashiko AI review found 2 potential issue(s):
+- [High] Cached data buffers are consumed without validating current alloca=
+tion flags, potentially violating memory placement constraints.
+- [Medium] Meaningful code and commit message mismatch regarding cache refi=
+ll logic.
 --
 
-commit 4041fe3cb310f6f01b04ae2ff1fbd04cf0aa2713
+commit 5a442e9c44f0a64a147908843084cffe5e2fed9f
 Author: Jason Xing <kernelxing@tencent.com>
-xsk: support batch xmit main logic
 
-This commit implements the core logic for batched transmission in AF_XDP
-sockets via __xsk_generic_xmit_batch(). It introduces a loop to read
-descriptors, reserve completion queue slots, allocate SKBs, and transmit
-packets in batches.
+xsk: cache data buffers to avoid frequently calling kmalloc_reserve
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index b4f3cc7125804..16e47f6fc30ec 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
+This commit introduces a per-socket data buffer cache for small packets
+to reduce kmalloc_reserve() overhead. It adds bulk allocation from
+skb_small_head_cache and persists unused buffers across batch cycles.
+
+>     Inside the Phase-1 per-descriptor loop, when a small packet needs a
+>     data buffer and the cache is empty, a single kmem_cache_alloc_bulk()
+>     refills it with generic_xmit_batch objects. Subsequent small packets
+>     pop directly from the cache. Large packets bypass the cache entirely
+>     and fall back to kmalloc_reserve(). Unused buffers remain in the
+>     cache for the next batch.
+
+Is this description accurate? Looking at the implementation below, the bulk
+allocation happens outside the Phase-1 loop. If the cache runs empty during
+the loop, it appears to fall back to kmalloc_reserve() for each subsequent
+packet rather than refilling the cache via kmem_cache_alloc_bulk(). Could
+the commit message be updated to match the actual execution flow?
+
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index c7e42c2966cdd..3b3969adfd23f 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
 [ ... ]
-> @@ -914,6 +914,122 @@ struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
->  	return ERR_PTR(err);
->  }
+> @@ -709,10 +718,17 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u32 nb=
+_pkts, u32 nb_descs, int *err
 > =20
-> +static int __xsk_generic_xmit_batch(struct xdp_sock *xs)
-> +{
-> +	struct xsk_buff_pool *pool =3D xs->pool;
-> +	struct xsk_batch *batch =3D &xs->batch;
-> +	struct xdp_desc *descs =3D batch->desc_cache;
-> +	struct net_device *dev =3D xs->dev;
-> +	u32 max_batch, max_budget;
-> +	bool sent_frame =3D false;
-> +	struct sk_buff *skb;
-> +	u32 cons_descs;
-> +	int err =3D 0;
-> +	u32 i =3D 0;
-> +
-> +	mutex_lock(&xs->mutex);
+>  			skb =3D skbs[skb_count - 1 - i];
+>  			skbuff_clear(skb);
+> -			data =3D kmalloc_reserve(&size, gfp_mask, node, skb);
+> -			if (unlikely(!data)) {
+> -				*err =3D -ENOBUFS;
+> -				break;
+> +			if (dc_count &&
+> +			    SKB_HEAD_ALIGN(size) <=3D SKB_SMALL_HEAD_CACHE_SIZE) {
 
-Can a TOCTOU race occur here with a concurrent socket bind() or setsockopt(=
-)?
+If the socket's sk_allocation (which populates gfp_mask) was modified to
+require restricted memory placement (e.g. __GFP_DMA), could this code use a
+standard memory buffer left over from a previous batch?
 
-The pointers for pool, dev, and batch->desc_cache are read before the mutex
-is acquired. If another thread modifies the socket state, could these
-pointers be NULL or freed by the time xsk_is_bound() is checked, leading to
-a use-after-free or NULL pointer dereference when accessing dev or descs?
+While the bulk allocation check before the loop correctly avoids allocating
+from skb_small_head_cache if KMALLOC_NOT_NORMAL_BITS is set, the
+consumption path here only checks dc_count. Does this need to validate
+gfp_mask against KMALLOC_NOT_NORMAL_BITS before consuming from the cache,
+to ensure memory placement constraints are not bypassed?
 
-> +
-> +	/* Since we dropped the RCU read lock, the socket state might have chan=
-ged. */
-> +	if (unlikely(!xsk_is_bound(xs))) {
-[ ... ]
-> +	for (i =3D 0; i < max_budget; i +=3D cons_descs) {
-> +		u32 nb_pkts =3D 0;
-> +		u32 nb_descs;
-[ ... ]
-> +		cons_descs =3D xskq_cons_read_desc_batch_copy(xs->tx, pool, descs,
-> +							    nb_descs, &nb_pkts);
-> +		if (cons_descs < nb_descs) {
-> +			u32 delta =3D nb_descs - cons_descs;
-> +
-> +			xsk_cq_cancel_locked(pool, delta);
-> +			xs->tx->queue_empty_descs +=3D delta;
-> +			if (!cons_descs) {
-> +				err =3D -EAGAIN;
-> +				goto out;
-> +			}
-
-Could this lead to an infinite -EAGAIN livelock and inflated statistics?
-
-If a multi-fragment packet spans beyond the nb_descs batch limit without an
-end-of-packet descriptor, xskq_cons_read_desc_batch_copy() might safely
-rewind the fragments and return 0. The code then treats these valid
-descriptors as empty, adds to queue_empty_descs, and returns -EAGAIN,
-causing the application to loop infinitely hitting the same boundary.
-
-> +			nb_descs =3D cons_descs;
-> +		}
-> +
-> +		cons_descs =3D xsk_alloc_batch_skb(xs, nb_pkts, nb_descs, &err);
-
-Does this calculation of nb_pkts trigger an integer underflow?
-
-If a batch contains only fragments without an end-of-packet flag, nb_pkts
-will be 0. Inside xsk_alloc_batch_skb(), if there is an existing partially
-built skb (xs->skb !=3D NULL), the code may decrement nb_pkts. Since nb_pkts
-is unsigned, nb_pkts-- would underflow to 0xFFFFFFFF, resulting in a
-massive out-of-bounds memory allocation.
-
-> +		/* Return 'nb_descs - cons_descs' number of descs to the
-> +		 * pool if the batch allocation partially fails
-> +		 */
-> +		if (cons_descs < nb_descs) {
-> +			xskq_cons_cancel_n(xs->tx, nb_descs - cons_descs);
-> +			xsk_cq_cancel_locked(pool, nb_descs - cons_descs);
-> +		}
-
-Can this cause a double cancellation of completion queue slots?
-
-If xsk_build_skb() fails inside xsk_alloc_batch_skb() due to memory limits,
-it already calls xsk_cq_cancel_locked() internally:
-
-net/xdp/xsk.c:xsk_build_skb() {
-	...
-	if (err =3D=3D -EOVERFLOW) {
-		...
-	} else {
-		xsk_cq_cancel_locked(xs->pool, 1);
-	}
-}
-
-Calling xsk_cq_cancel_locked() again here for the failed descriptors would
-underflow the completion queue pointers, potentially corrupting the user
-space ring buffer.=20
-
-Also, does xsk_build_skb() advancing the TX consumer pointer on -EOVERFLOW
-conflict with the rewind happening here?
-
-[ ... ]
-> +		if (err)
-> +			goto out;
-> +	}
-> +
-> +	/* Maximum budget of descriptors have been consumed */
-> +	if (xskq_has_descs(xs->tx))
-> +		err =3D -EAGAIN;
-> +
-> +out:
-> +	if (xs->skb)
-> +		xsk_drop_skb(xs->skb);
-
-Does unconditionally dropping the partially built xs->skb corrupt the packet
-stream?=20
-
-If transmission hits a NETDEV_TX_BUSY (-EAGAIN) or a valid multi-fragment
-packet spans a batch boundary, the code drops the fragments processed so fa=
-r.=20
-Because the completion queue slots and TX pointers for these early fragments
-might not be properly rewound or notified, does this permanently leak buffe=
-rs
-and merge unrelated fragments into corrupted packets on the next sendmsg()
-retry?
-
-> +
-> +	/* If send_queue has more pending skbs, we must to clear
-> +	 * the rest of them.
-> +	 */
-> +	while ((skb =3D __skb_dequeue(&batch->send_queue)) !=3D NULL) {
+> +				data =3D dc[--dc_count];
+> +				size =3D SKB_SMALL_HEAD_CACHE_SIZE;
+> +			} else {
+> +				data =3D kmalloc_reserve(&size, gfp_mask,
+> +						       node, skb);
+> +				if (unlikely(!data)) {
+> +					*err =3D -ENOBUFS;
+> +					break;
+> +				}
+>  			}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260415082654.2102=
-6-1-kerneljasonxing@gmail.com?part=3D11
+6-1-kerneljasonxing@gmail.com?part=3D4
