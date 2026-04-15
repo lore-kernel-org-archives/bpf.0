@@ -1,149 +1,268 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9831324B2C
-	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 10:49:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AA136CE06
+	for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 11:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776250161; cv=none; b=RyJsmkksbIGE68+HfK/yg4veqUCmNOCRE3YpjM5JZzOHVQtEmvm4P5SO2S7MFawRertSWLu5tQCVz+C1qNg/+TQlFV6OdoASPmthGNPKVXPykcxqEWC4E9iv1zPua9R83Qt7oIX7w6acJJ6o5M8GFlZh7JxVRSxIZndgp8PPepE=
+	t=1776251726; cv=none; b=TshV3/d9qA+b6SWeRtOd4pD9k59ZTJIHw9P2hMxbw6CIdxGLVgSGM4H8Zi/OxfzyK2DZ83dkseETdyfVSs4IwG4mMc1GO4fHWEJF/25WTZ/c6/RkUF4ZroGPt6oM4893pyB5P3M6JtWtoBmj32mnlhx9iiAVOB8kBPWSvra3OP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776250161; c=relaxed/simple;
-	bh=I14BmVJXxDlFKWq3Os4T8qNRubEmA8Q6L1/fdrYthtA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ool0vT2ekqoOZ5AKoLfvhSt5AQFGMa4w7AChfv3hph1UpcwSq/0GRb7sADsRzUukNDGVrFLM9o6BFyu4ty9cK/CatSIPwxebm4uL34FMhzlhvVUiY5XVK11zOgirn2sfltEtNjNJT8Iem+w7oRQb6GCgI/BG3XL2KB4BZXYVX50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fh8JYbuO; arc=none smtp.client-ip=209.85.128.47
+	s=arc-20240116; t=1776251726; c=relaxed/simple;
+	bh=QRW4cFrbMQspnR5bFc+E5SlCvH1Q4q2xLEWb48Z62h0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C/0k6rFpP9idQXt6PjKd73YKxmosE0UsYGSsjlHX8QMTl/wjlaZsCib7ciwglYXk/nh28VscdgPzTbd7WKrlqt6leWyfMYhczEj12rG8b2faGPNPr52Fhybjtq3j+bwA50HBExyCBqa/NywWeQw5R7KQ9J51H9566yAkpWVOJyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rjLbmHSs; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fh8JYbuO"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-488a4bc360bso36783435e9.0
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 03:49:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rjLbmHSs"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43d734223e4so2266457f8f.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 04:15:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776250158; x=1776854958; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TZ9DolBx7oWdXo3o6819JtHACfT0Arv3+O2nQR4ONHw=;
-        b=fh8JYbuOCDpbruvidBGWBQuBZYEKgfABTnvMaU9xKt2U368d/RKO85iGcStVv/vCXR
-         JAKpRSyA+fS+WxHGoDEgx4+CkB97KIqj85t2XT6Yh6HsAaBI9ZPvfohH+C+6grrvDsOb
-         ATke8z6NNQyfIndN8tDitiO1gVAiBoj4aQSNPKxyuuumZ9rQHqFfM6YALdR5AYI78TrA
-         Gf+g4WXAQwrGfkrXtP+fzfVC5e0V1UdKPwh6mgZYtF0nvAiaV4c+fRGQ84c3QY4uaapN
-         WgbDpwrNNdEko6p21Ojk6zo74pAzvcfxjR9SKe57hsGGinjF2izXnQN6SjuIm4ZXH1lg
-         3UiQ==
+        d=gmail.com; s=20251104; t=1776251723; x=1776856523; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B0qX3fctM8OielX4qujxT2g876ufFYUQ7wZPzGv2NyI=;
+        b=rjLbmHSsAQETibOQAFN73CDvB6+n9Iuvgwnbxyg+36+J8yAtMaa1n48J48QojDULE1
+         HcZZ2g3nswi4Z58aAwovinzhpaKibAcEpY/UvWPCQ4Hgfp+Do409unZRoXgDsC8dQkmF
+         w66yloIYJiPbc13JPOyGDlSOY0bzypYFSjXolcvZsJ3tUCeVJFJ5Iu/z0Bo3UH/nvHVC
+         KUTiiFlLYvTo7m0EOIo8FV5mXI7SYYPOlmV6VempSbfFsWgDpB/nH5o03bCVP+HrKkMI
+         8rUv2dG/aY4rH/BFHYZaH1VBGpbFucKJHr/k84jo4EI5L5jKnH5A+EsjLIBTxVVkrnvt
+         deJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776250158; x=1776854958;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TZ9DolBx7oWdXo3o6819JtHACfT0Arv3+O2nQR4ONHw=;
-        b=WHbtXHOJA0mVR0CiZ14DHDOiJa9gZSMEubHPIWFV56TcsTveEG6GJRPsH/E+NBKT4z
-         Uo147/+l7VvPNbYlDVUOUMmAVDJIiF0r2TasBCGmOBgx0YquWg0GItWrOnOkcFI06rbo
-         8x9dmX2JwmnT/CjbqBPFRC+pMUi/wYH3F1e5RWNhuYBXibDe2+DbVkQj9HE6oyT3hHIz
-         vyRKjnQdQOTMBLrOz+WibKwbwoofTC6QAAyPnBi5OTjdlH/Q0cEDSE+6xg8QNRuHhJpC
-         gpr03oye9BGYCoq6Rsmu2a+cz1tCzVaZ9o84Blv73FW2ETPAMfFK1orG3nkRuXduQ5z7
-         aqlg==
-X-Gm-Message-State: AOJu0YyF5HB//+mJDb76uFTzXDcZV2Z+Fe1bmoJHxtAgDE2Ec9BA3AkU
-	2S540GXfz7LPQnn1QjJFlXfAAAS8s6u7nF91yoSo/+fe6rX1wSUSQOAY
-X-Gm-Gg: AeBDievWriGwfQNBuuWXVFKpPtdDlSVp2IGygpslgYdq7VBc2JzvD6aXhABZJpsz1FX
-	gSEDz+CwqBovPXcrjc90UXRGdx7q9/mSLWR7lOggohoXTnk1AFNcqnFR2kSXs8+wJF10HM9Iqcd
-	D1NLKTh8WCmmQPlCRobCx3CKB5IVaCNmaD2ojRfFOvw0O8fQptlaGtMuZCZjB2KFt/CYjnhnHfE
-	aCb/eVkvEoxM1pf9lwece5YktXU4wBRgoEQCAF/q71GYYQbmhaninA61KFMt+ajoibwBzmVPuZN
-	zvzouCNCaaKVprXmRl1ecBq4/0tUtD9n/0MYHhSowHyrgqw2d8qTq/hHoQKpdY0rH9xWTNZ2gNw
-	YrnopTI6ftY+29AKI3AV856FsNTU66nN3UJFdvatilt1vGw85xjTo8H8AwG/ytLiCxBvW0JxOTW
-	QnXihCjoBHy9jCSFJfSkJDkwXpO/ww+AdqdLnEJkejEBsgnkrCbTELSbTT6nVxCLQEecQIKFpzl
-	z/ELpcBFCENqTx1s/P2LKKPbowvqPZl2GLTKKP8IEpdPpPy9Z+kISHuWi+LVL/r+iMT4N4MZB5L
-	T7lz/fyIXPHcuavc7ay3G+PEEfblPPJeSvyZkQIC/hyBmRfytkhOFA==
-X-Received: by 2002:a05:600c:a109:b0:488:a977:8de with SMTP id 5b1f17b1804b1-488d6839866mr202485885e9.16.1776250158106;
-        Wed, 15 Apr 2026 03:49:18 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e002eae79bbf3d352f3.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:2eae:79bb:f3d3:52f3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f095ceeesm22206885e9.8.2026.04.15.03.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 03:49:17 -0700 (PDT)
-Date: Wed, 15 Apr 2026 12:49:15 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Yihan Ding <dingyihan@uniontech.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
-	alan.maguire@oracle.com, kernel@uniontech.com
-Subject: Re: [PATCH bpf v2 1/2] bpf: allow UTF-8 literals in
- bpf_bprintf_prepare()
-Message-ID: <ad9tK74n_7J4FGtq@mail.gmail.com>
-References: <20260415032126.1096299-1-dingyihan@uniontech.com>
- <20260415032126.1096299-2-dingyihan@uniontech.com>
- <ad9sKyzvsYqgu_yY@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1776251723; x=1776856523;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B0qX3fctM8OielX4qujxT2g876ufFYUQ7wZPzGv2NyI=;
+        b=WGkhKGRo+LyeI3FNsyOvkSMbqhkQgJym5Wx6q364GSNK8YJS12Q6026ayVUoxr77hL
+         9OXA8s7OLkmxsvwK0JGntqDniPyFeZMw0a/oNcKGWPkzkGZieIz+tji3HR25ingFdHGX
+         aByQbjGnvq1btO+RbqbVXzmbvpCBRLl68Rwal0S83wiKen+71mEUptc1TkC9ny88fGqx
+         c/nfDCWH1OVTBj+S8Hs8FUTxOj7d75yhGKphtmPVG4IUbepTEOOKHJ13q1btEGuqKiLm
+         AUKHc4OqpMWsvlgPlVY8zbGrbEny4sexVx2dPPZvg+ExQgLcmL4NKlI3c5+vznbxRdkF
+         I1og==
+X-Forwarded-Encrypted: i=1; AFNElJ8ZsSR4sFn2+aDbd99NyJIXDWqS1I/MJHpcP0t/jzTHTcfbh5zsOULmVcXDulApIVmEbRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywalyl3cNFO/h2CUGtiCCWZ1WA9vOofxQ9sYjMdP5kTF6XmNeHh
+	wmk3HmwJTDXUviUX5EQC9z5z2BnlsQu7alX4N+NFZhbpNf8dLjTU2OCs
+X-Gm-Gg: AeBDiev//y2P8uq36kJQ7dq8gKDXfPMZsINSpd4S9HbuRL1+D/B+/MJVM/nVjjML3hW
+	7YT0fjxPdzvgx0BsLy4iXmYduC9DR9WlNj4IlpkmsFIAOL0CaAP7MDodb8EPRyygqUzvZT2gIqA
+	/VzGz2SgdcUT2RaaIjt7sQDgLekimMAdnOizS+xWpAMu0gEESK6sT+ZMVd11krcVStiWy480GxY
+	W8xiu/h78xGxtDIS3i8yrgzPojBvHAapTQK+LceoMI/PRSLP2rs6pbiRSyLH6vP50dzT1iOp4ZE
+	jgclAgB+GbjmL6hU5n/2DngXRBFVRrvM+nswMg2qyyGBGkuqYOuwV4eWsb3RVGb/vZGM71Lp5+4
+	a+sQSNbl7eAr77NEA6nCscKpXySIcHXPqzatczFvAOIZq5xgx5LLheN+Ip4kEt/oAZyU+kNjZUS
+	r2S1+iHjn4vUTxyGN4PoERQxeNiCgIudctcOvU+RQccIoQkm5q3tkMxCK0dYos
+X-Received: by 2002:a05:6000:2804:b0:43b:9d69:43a with SMTP id ffacd0b85a97d-43d5957372dmr24763925f8f.8.1776251722833;
+        Wed, 15 Apr 2026 04:15:22 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:cbe8:6434:118f:886d? ([2620:10d:c092:500::5:3ecd])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43ead3fd3b7sm4842013f8f.35.2026.04.15.04.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2026 04:15:22 -0700 (PDT)
+Message-ID: <c817ff57-c555-4057-9824-6980a1029fc0@gmail.com>
+Date: Wed, 15 Apr 2026 12:15:19 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad9sKyzvsYqgu_yY@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC bpf-next v2 08/18] bpf: Implement iterator APIs for
+ resizable hashtab
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com, eddyz87@gmail.com, memxor@gmail.com,
+ herbert@gondor.apana.org.au
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
+ <20260408-rhash-v2-8-3b3675da1f6e@meta.com>
+ <DHT2G66ICGQ6.QY3NGX24ZE12@etsalapatis.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <DHT2G66ICGQ6.QY3NGX24ZE12@etsalapatis.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 15, 2026 at 12:45:02PM +0200, Paul Chaignon wrote:
-> On Wed, Apr 15, 2026 at 11:21:25AM +0800, Yihan Ding wrote:
-> > bpf_bprintf_prepare() only needs ASCII parsing for conversion
-> > specifiers. Plain text can safely carry bytes >= 0x80, so allow
-> > UTF-8 literals outside '%' sequences while keeping ASCII control
-> > bytes rejected and format specifiers ASCII-only.
-> > 
-> > This keeps existing parsing rules for format directives unchanged,
-> > while allowing helpers such as bpf_trace_printk() to emit UTF-8
-> > literal text.
-> > 
-> > Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
-> > Suggested-by: Paul Chaignon <paul.chaignon@gmail.com>
-> 
-> I don't think this tag is appropriate here. If you want to give credit
-> for changes made after reviews, you can do so in the Changelogs of the
-> cover letter :)
-> 
-> > Signed-off-by: Yihan Ding <dingyihan@uniontech.com>
-> > ---
-> >  kernel/bpf/helpers.c | 16 +++++++++++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index 6eb6c82ed2ee..6319b39c92f9 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -845,7 +845,13 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
-> >  		data->buf = buffers->buf;
-> >  
-> >  	for (i = 0; i < fmt_size; i++) {
-> > -		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i])) {
-> > +		unsigned char c = fmt[i];
-> > +
-> > +		/*
-> > +		 * Permit bytes >= 0x80 in plain text so UTF-8 literals can pass
-> > +		 * through unchanged, while still rejecting ASCII control bytes.
-> > +		 */
-> > +		if (isascii(c) && !isprint(c) && !isspace(c)) {
-> >  			err = -EINVAL;
-> >  			goto out;
-> >  		}
-> > @@ -867,6 +873,14 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
-> >  		 * always access fmt[i + 1], in the worst case it will be a 0
-> >  		 */
-> >  		i++;
-> > +		/*
-> > +		 * The format parser below only understands ASCII conversion
-> > +		 * specifiers and modifiers, so reject non-ASCII after '%'.
-> > +		 */
-> > +		if (!isascii((unsigned char)fmt[i])) {
-> > +			err = -EINVAL;
-> > +			goto out;
-> > +		}
-> 
-> Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
 
-Actually, this patch will require changes to fixup the existing
-test_snprintf_negative() selftest that is currently failing. That fixup
-needs to be in this commit to not break selftests during bisections.
 
+On 4/14/26 6:49 PM, Emil Tsalapatis wrote:
+> On Wed Apr 8, 2026 at 11:10 AM EDT, Mykyta Yatsenko wrote:
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>
+>> Wire up seq_file BPF iterator for BPF_MAP_TYPE_RHASH so that
+>> bpf_iter and bpftool map dump work with resizable hash maps.
+>>
+>> Use rhashtable_walk_enter_from() with a saved last_key to resume
+>> iteration across read() calls without linear skip from the
+>> beginning on each seq_start.
+>>
+>> Also implement rhtab_map_seq_show_elem() for bpftool map dump
+>> in non-iterator mode.
+>>
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 > 
-> >  
-> >  		/* skip optional "[0 +-][num]" width formatting field */
-> >  		while (fmt[i] == '0' || fmt[i] == '+'  || fmt[i] == '-' ||
-> > -- 
-> > 2.20.1
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> 
+>> ---
+>>   kernel/bpf/hashtab.c | 98 +++++++++++++++++++++++++++++++++++++++++++++++++---
+>>   1 file changed, 94 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+>> index a79d434dc626..492c6a9154b6 100644
+>> --- a/kernel/bpf/hashtab.c
+>> +++ b/kernel/bpf/hashtab.c
+>> @@ -3008,6 +3008,19 @@ static int rhtab_map_get_next_key(struct bpf_map *map, void *key, void *next_key
+>>   
+>>   static void rhtab_map_seq_show_elem(struct bpf_map *map, void *key, struct seq_file *m)
+>>   {
+>> +	void *value;
+>> +
+>> +	/* Guarantee that hashtab value is not freed */
+>> +	guard(rcu)();
+>> +
+>> +	value = rhtab_map_lookup_elem(map, key);
+>> +	if (!value)
+>> +		return;
+>> +
+>> +	btf_type_seq_show(map->btf, map->btf_key_type_id, key, m);
+>> +	seq_puts(m, ": ");
+>> +	btf_type_seq_show(map->btf, map->btf_value_type_id, value, m);
+>> +	seq_putc(m, '\n');
+>>   }
+>>   
+>>   static long bpf_each_rhash_elem(struct bpf_map *map, bpf_callback_t callback_fn,
+>> @@ -3201,36 +3214,113 @@ struct bpf_iter_seq_rhash_map_info {
+>>   	struct bpf_map *map;
+>>   	struct bpf_rhtab *rhtab;
+>>   	struct rhashtable_iter iter;
+>> -	u32 skip_elems;
+>> +	void *last_key;
+> 
+> Nit: Could we avoid adding skip_elems to this in the first place since
+> it's never used?
+> 
+
+Definitely yes, thanks for noticing.
+
+>>   	bool iter_active;
+>>   };
+>>   
+> 
+> Question: Would it make sense/be worth annotating the seq functions with
+> __acquires/__releases(RCU)?
+> 
+
+I guess it won't hurt.
+
+>>   static void *bpf_rhash_map_seq_start(struct seq_file *seq, loff_t *pos)
+>>   {
+>> -	return NULL;
+>> +	struct bpf_iter_seq_rhash_map_info *info = seq->private;
+>> +	struct rhtab_elem *elem;
+>> +	void *key = *pos > 0 ? info->last_key : NULL;
+>> +
+>> +	scoped_guard(rcu) {
+>> +		rhashtable_walk_enter_from(&info->rhtab->ht, &info->iter,
+>> +					   key, info->rhtab->params);
+>> +		rhashtable_walk_start(&info->iter);
+>> +	}
+>> +	info->iter_active = true;
+>> +
+>> +	elem = rhtab_iter_next(&info->iter);
+>> +	if (!elem)
+>> +		return NULL;
+>> +	/*
+>> +	 * if *pos is not 0, previously iteration failed on this elem,
+>> +	 * so we are restarting it. That's why no need to increment *pos.
+>> +	 */
+>> +	if (*pos == 0)
+>> +		++*pos;
+>> +	return elem;
+>>   }
+>>   
+>>   static void *bpf_rhash_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+>>   {
+>> -	return NULL;
+>> +	struct bpf_iter_seq_rhash_map_info *info = seq->private;
+>> +	struct rhtab_elem *elem = v;
+>> +
+>> +	/* Save current key for O(1) resume in next seq_start */
+>> +	memcpy(info->last_key, elem->data, info->map->key_size);
+>> +
+>> +	++*pos;
+>> +
+>> +	return rhtab_iter_next(&info->iter);
+>> +}
+>> +
+>> +static int __bpf_rhash_map_seq_show(struct seq_file *seq,
+>> +				    struct rhtab_elem *elem)
+>> +{
+>> +	struct bpf_iter_seq_rhash_map_info *info = seq->private;
+>> +	struct bpf_iter__bpf_map_elem ctx = {};
+>> +	struct bpf_iter_meta meta;
+>> +	struct bpf_prog *prog;
+>> +	int ret = 0;
+>> +
+>> +	meta.seq = seq;
+>> +	prog = bpf_iter_get_info(&meta, elem == NULL);
+>> +	if (prog) {
+>> +		ctx.meta = &meta;
+>> +		ctx.map = info->map;
+>> +		if (elem) {
+>> +			ctx.key = elem->data;
+>> +			ctx.value = rhtab_elem_value(elem, info->map->key_size);
+>> +		}
+>> +		ret = bpf_iter_run_prog(prog, &ctx);
+>> +	}
+>> +
+>> +	return ret;
+>>   }
+>>   
+>>   static int bpf_rhash_map_seq_show(struct seq_file *seq, void *v)
+>>   {
+>> -	return 0;
+>> +	return __bpf_rhash_map_seq_show(seq, v);
+>>   }
+>>   
+>>   static void bpf_rhash_map_seq_stop(struct seq_file *seq, void *v)
+>>   {
+>> +	struct bpf_iter_seq_rhash_map_info *info = seq->private;
+>> +
+>> +	if (!v)
+>> +		(void)__bpf_rhash_map_seq_show(seq, NULL);
+>> +
+>> +	if (info->iter_active) {
+>> +		rhashtable_walk_stop(&info->iter);
+>> +		rhashtable_walk_exit(&info->iter);
+>> +		info->iter_active = false;
+>> +	}
+>>   }
+>>   
+>>   static int bpf_iter_init_rhash_map(void *priv_data, struct bpf_iter_aux_info *aux)
+>>   {
+>> +	struct bpf_iter_seq_rhash_map_info *info = priv_data;
+>> +	struct bpf_map *map = aux->map;
+>> +
+>> +	info->last_key = kmalloc(map->key_size, GFP_USER);
+>> +	if (!info->last_key)
+>> +		return -ENOMEM;
+>> +
+>> +	bpf_map_inc_with_uref(map);
+>> +	info->map = map;
+>> +	info->rhtab = container_of(map, struct bpf_rhtab, map);
+>> +	info->iter_active = false;
+>>   	return 0;
+>>   }
+>>   
+>>   static void bpf_iter_fini_rhash_map(void *priv_data)
+>>   {
+>> +	struct bpf_iter_seq_rhash_map_info *info = priv_data;
+>> +
+>> +	kfree(info->last_key);
+>> +	bpf_map_put_with_uref(info->map);
+>>   }
+>>   
+>>   static const struct seq_operations bpf_rhash_map_seq_ops = {
+> 
+
