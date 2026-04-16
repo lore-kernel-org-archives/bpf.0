@@ -1,131 +1,125 @@
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59EE2E424F
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 16:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776357677; cv=pass; b=SbvG7SKdnhTmmShEpld28WmRGmvG928rYUiIEYRDp0HcVjghpXYj5SyQ8O1viLzCczm1UeT3V6WG8qiUlHbF9mfd1GF55OBxZqmMvrHeZKw7sWgVEMt2/j6nsYvU+9dVesT5lvz9tZ5jbbth412tNUulN/s/1BZ44Wfi5E5ldAI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776357677; c=relaxed/simple;
-	bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=krrmuey86VQjXUBXopWeEE+oDzsAAqipEmJj3KNZrUrAOS4flPLF9NdFp+H3+IukrFALjKWc3MrqHpa4XUcDRjZjzx9yHFDDRuH+/Y99Qf9xqgA3BhTsgCrLGX6ltM348uyi8lxhYvuPu61HJACPp/rXXGzBsZFchV8GK5rxM4o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rqqPV4pt; arc=pass smtp.client-ip=74.125.224.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D7126B764
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 17:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776360227; cv=none; b=SwXGKe2LbKKtqIMpEwIWWNEdKhzAYnDHBU7gAASTMhgbIInFF8jRKQ2jlJct7N8FoGttZiQ6XWR8KMHs3HdOsF6PeV+cUUcutXd3SpfFrLprIDHyCOw9NXICwphN/yLspIQucDIc++WUFMCMgJL7LQbIHJG860XNPTU4UV+q9MU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776360227; c=relaxed/simple;
+	bh=+H3j9a+dISNE9VQDxTVFXesACRHCuwV4w7IB8zYETuA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TzGdRMw92VZck6Ma1w5cjZZmZH1dY5pVS/noDGF5vYIGHwCO3ClfmgdzCORzcqwL/+YwZn/GyAAJOQwPt0RSryaKadBqRhkujdWPexVg3GQoM2c57//ckkUFXOQmMYB/QwN5UCdzqSZlJe9g1AFBAnALTmpnzyJoS679h+vrlig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QoQrpxVG; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rqqPV4pt"
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-6501725d888so6609586d50.0
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 09:41:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776357676; cv=none;
-        d=google.com; s=arc-20240605;
-        b=gynKWWEI1hHuQUA0S5nPCBHyHmz1LGD45d1iM4Ww513PG63QNBpbmbym2xJ97iOHjc
-         1LqNb9QuoMciKLVABcG4WVyoO9DuTCubpWPlgiNECOsg12FN9yyhjbA3fG11roOwOojj
-         BiDkd85gBdNnhlr3ufIrV4NXonUSyKViZZlqTgOYIVQ98rRE+XM0yWrMKqenYFCqCdnr
-         L4cmAscD46cvnMnxr4G8kKcyrX6XT/97ApLhqaKXY5KY/bRl9SsNJgvUW2hUwrhaU2Ch
-         vkhXw+mpX4aA1/rsOoHrtwdtly+27Gf6sajBR7h9eQmC/bPBJF0XsdSriJvEifLU5Dfm
-         ww7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
-        fh=k46G+QkEBkhTYCOgPcgjZ7z/24hNT1V/8re8Do7esjQ=;
-        b=SbHjDJCs/fcPO4pEe0tMCLk+fPHEHji1vj74uHemVI1SaXvsrsTdsgl31LDGN79Aho
-         jOoDAWWfoofz2WT+CVK7EZXi7scENLGbDcl0XlqchiE3VeBTxgPha81po8aeEo1nd8kf
-         dJfjPppV/JvcG8+1pyg68gU7cX1ksROfuAyztqJM8/DsD62YR+YlRgo+0wdkRcRJQQIt
-         Ln23FdKZbcfss/iTtum5dVfls52p64czvNPqgofyqxNBTaDom36SYXBmfdrX5b2i51lI
-         bgNJ+E1gbxsOKhGMhiPous3nFFNX/UqxObd3NrESmmQeZOoZlWZMcZLOaMVmHRouyYVN
-         tcYg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QoQrpxVG"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a8fba3f769so38140905ad.2
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 10:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776357676; x=1776962476; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
-        b=rqqPV4ptfA2smyAnVMlU1BXQYkBbJtdaUAzdg90i9nFjb2ILGyAbYpqFlhifn9jdto
-         Ah//wieTINiPdJXcjOSloUqRwsUNZwiHOJcyjN/Cv+PXCcu1tQg7xhc/nFRz4NPY/KCd
-         xw9M6cyt0AtBgBtEufRzgsSQveqCmFkPv3jf51Oissfeu2XSKgD1dcYeCRxJQt3Nix3j
-         9p3aZcUsSABUygQ5lUrRmgUEc7nYSGXlDpyWSe6SmaEO58MKNe2UGdrnA9YoXkciopgj
-         tuIPuO4G4B3vH0Sbeq6weKSqhAhnlomLtcntvorebx028IYTQgvBcS3qBgBaejnSlXIO
-         PTrA==
+        d=gmail.com; s=20251104; t=1776360226; x=1776965026; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mq9tMp8b9KWPsVYL3iUYjRD5ZyZ+Dizhj6FHjl3l0fo=;
+        b=QoQrpxVG7CYz6+n2m1p7oMIomv/IC77/E7PB3fSahVnULq/bt57mky00sZZHkVuZL2
+         LLymRLLVQDT4cE8f5fUJE4QKhayTuURUrdT1t22KEs6ipFgLoMYLFLuxyougEUU2ZnNp
+         A8WCvE8Lau/5Z53SyVmaHYeFaYN11rqL8KQFFlnjJnr5N1Ug8IQoss8br2CSQU6OTxnG
+         SDs4tTF6L+dgRG0Fn6iV6cHb0APakOP1+b96cHNTK05ahTEWKPdLyfm5aV8ebzuzlDzk
+         sZh3Wk2lDEtJCq/E4Cy9mpWldDv3d1bdZajfHyL9fVFGhohyEfyWx/RTDfEi9+VqfLq7
+         ma4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776357676; x=1776962476;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
-        b=Y7c70qRb4kJYhrmxd3nhd+NUoxgW9O1gLHroB5GSg1JW0AxwRsLSwhufKr6nJ4CUnR
-         DphQrmHJrjDhuIg4ylqldPaXb5ypLGD0KWy1HfCR6e8/o5AytJOJBqYw6EYNZj+pdik6
-         FDIiknA928o0H4khLp/IrIe9DUCDsXhmik1H5xWad9Ejr1MwOLH1X4X88/r216IWFZus
-         dgIjrcAbo2nRch/SAMj9EsIlBE6bbN51UCStzSEsQClJwwpcsk4tLsd0iXlZK9U6EiWm
-         1w1CTk+70cjJ+/dBIDOXELUdrXU2U7fdGKQdh4RDIVY3lR5bKnTpB485fUE5VQc1jMrA
-         5PxQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8jpmJVFq9T7iZo7BXmyqWfZpyc8vz1jDFqiPI0LQRuxqmQQHbVLL1gYBm/FDYAMRgbfQM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBynpfSbMKehv/l181BfuZsopxkatf6WMX+gFBHv+Vc2CsRUSt
-	kxfrm4lKry8LcRgcJB5p1SpkVHvTFzN2jh6yvsXc0fvx0cyrGrPb7XYz57/MQNvWSbfAnspJJtM
-	XKvN/BALTIltHjZMaLpPdYl1II6lozQg=
-X-Gm-Gg: AeBDievP+HkOsSonlyOPFhv9zmMQLTE7q5nPSs77IaO7jTlC51mDwFIiu/cw5ndjPpK
-	wTSvIyzeYdVlWa/V66itNmSueJdlrthWR1Xj98ewDzXyFuWoIX36aLoh4DSqe6U1S+lpjNcnJxQ
-	Z5ufc4xSXaO3S/Aig7QDDcAyWD/5hQgjewKakU1BnlH/jrtqu+tsu0rfq65k1ttkLkc1V4fuTBa
-	E4X6D06nznUobSud/oSS7rY2l5R6HIGWFkeTFlJsqOacstHJnYINYD+ZdGqwFBDqDL7flWavpM7
-	ymOIn2zoFEzYzDTsJtoOnGnyTZPuCf7Atdw23tsVqd1dXjq5c0XWHkKt
-X-Received: by 2002:a05:690e:b4e:b0:651:cf29:430b with SMTP id
- 956f58d0204a3-651cf294640mr16497847d50.12.1776357675652; Thu, 16 Apr 2026
- 09:41:15 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776360226; x=1776965026;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mq9tMp8b9KWPsVYL3iUYjRD5ZyZ+Dizhj6FHjl3l0fo=;
+        b=kBwLHlq9VhwrFbi38SWsyfTpq+1M981CwtiMrcaJKaNGsr1I0/0h7l0e+wJIt5eHP6
+         Q3SCQAEuyhunL4vM1euQjkU1QHGe3fe5fEqFbzYjN9QbRqXM6hrZAGJ0VWhJnJ654R/n
+         SZ/eyRRHwM+W6MD4fr68oGUL6tC3sQfuaR7q35Z8QCdPmQnjLZfizxF8+i0WmNSrbDsE
+         QBP8PpGadFpUXFdNc0NV5zytfaq00jhvFfDJ1rFK5OULpEG6m9Mm6MxqS5MbLnl8t423
+         gzgHdKm12kdX5UUYy5ETROPih6cuHq0/HGYW1BnnszlevmCibg6f+0MiH6lEpC9OPfNY
+         XJFA==
+X-Forwarded-Encrypted: i=1; AFNElJ+g+dNinmIPpgSPPcPF7JUCtcfwqkxpb2kqo1kr9j2we9eYtOFBv11ojQSGh4fH2lzH0I8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMiXYkdGxvT7coq/DlFQOvvRfRbjePGE6bl+Oi8q06SB3Ofd5V
+	kKaGIG5vdfgxAugXfIH1VGmIfel3CUE9gBaSaetnbg7DD3VF/te9YIES
+X-Gm-Gg: AeBDievqlqrjqRVHWN30LKjJCHCgBx7zImjB43OfVSaqx7Q6p88/yMLa0GqSJVS9/Be
+	te4udmKWNr7tN042K5g1Na+zOO2oFAJFyhy5TiA7Jyg+JOy5JdpqvNvoMopM+LHyf1+hlDdT96e
+	7HozQbStE2OdxCTS7qjogW61YeOmFzPrK7cf40tcwAnl22Z5jPDNIvnz6kV2oi2ce3bVn7YeIZ2
+	CJ692GVpqcVMeDdvSPoZ+cJi6W77lFsbCejml6FAX4OWUVKvC3NfNQyZRCgqkhXRZsQb+d5+xHA
+	Dw4H4DgAD3CZS3Q6nw287bCfDJhVAW/CfiywLIpQE/vdMPB0TBPxuqP0hyL7HFVy9og6vfvBLWA
+	z0yx+BJme4HL95nPLEX9FIkt4b0nzil8BOhP4p+Wa7tjHlPEGpHjIGBI5KLTu+ba77Q/JZdnECq
+	cDaVcbKZWGm+pO0v0CnwvauWBIuTxHneNkn6aDBTPZN/YrWiC1rz4XXB2O58wO5tU=
+X-Received: by 2002:a17:903:2593:b0:2ae:5eab:132e with SMTP id d9443c01a7336-2b2d597d5cbmr206813595ad.12.1776360225380;
+        Thu, 16 Apr 2026 10:23:45 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4780ef736sm80024695ad.8.2026.04.16.10.23.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2026 10:23:44 -0700 (PDT)
+Message-ID: <e98c9357265b69575200f8e88ca76b99c2d05e59.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf/verifier: Use intersection checks when
+ simulating to detect dead branches
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
+	bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Paul Chaignon
+ <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,  Srinivas
+ Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Date: Thu, 16 Apr 2026 10:23:41 -0700
+In-Reply-To: <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
+References: <20260415160728.657270-1-harishankar.vishwanathan@gmail.com>
+		 <20260415160728.657270-2-harishankar.vishwanathan@gmail.com>
+	 <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260416144808.149543-1-sun.jian.kdev@gmail.com> <DHUOZVP8JZ80.28GPGA99P0ORD@gmail.com>
-In-Reply-To: <DHUOZVP8JZ80.28GPGA99P0ORD@gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Fri, 17 Apr 2026 00:41:08 +0800
-X-Gm-Features: AQROBzClBlvOAFz1tUWZddCMy79tEJl10vNs0W2s8S8p-heBZnoA15xrRfXktjs
-Message-ID: <CABFUUZEi1tkbzZxbT4FQuotVxFhoe_Gk9R1Ov7dkWf1dDqHUjw@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: reject ERR_PTR map->record in map_check_btf
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, bpf@vger.kernel.org, john.fastabend@gmail.com, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 16, 2026 at 11:42=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu Apr 16, 2026 at 7:48 AM PDT, Sun Jian wrote:
-> > btf_parse_fields() returns an ERR_PTR() when it encounters an invalid
-> > special field in map value BTF.
-> >
-> > For example, an invalid kptr-annotated field whose tagged pointee is no=
-t
-> > a full struct type can make btf_parse_fields() fail with -EINVAL.
-> >
-> > map_check_btf() stores the result in map->record, but currently only
-> > handles the successful non-NULL case explicitly. ERR_PTR() results are
-> > not rejected immediately before proceeding with the rest of map BTF
-> > setup.
->
-> yes. So ?
->
-> > Handle IS_ERR(map->record) explicitly in map_check_btf() and return the
-> > underlying error code immediately.
->
-> why ?
->
-> pw-bot: cr
+On Wed, 2026-04-15 at 18:10 -0700, Eduard Zingerman wrote:
+> On Wed, 2026-04-15 at 12:07 -0400, Harishankar Vishwanathan wrote:
+> > This commit introduces checks to detect if the ranges and/or tnums have
+> > intersections between them, and uses the checks in
+> > simulate_both_branches_taken and reg_bounds_sync.
+> >=20
+> > The verifier is known to evolve the reg_states correctly (i.e. soundly)
+> > on a live branch. In a previous commit [1], we used the ill-formedness
+> > of a range (e.g. umin > umax), identified by range_bounds_violation, to
+> > detect dead branches and prune the branch along which the ill-formednes=
+s
+> > occurs.
+> >=20
+> > Another opportunity to prune branches is when the ranges and/or tnums
+> > have don't intersect. When the verifier evolves the reg_state along a
+> > dead branch, it is possible that abstract value in one domain (e.g tnum=
+)
+> > doesn't match with the abstract value in the other domain (e.g. u64), s=
+o
+> > that there is no single value x, that is contained in both the abstract
+> > values.
+> >=20
+> > First, we introduce intersection checks for each of the 5 domains (for =
+a
+> > total of 10 domain pairs), and wrap it in reg_bounds_intersect.
+>=20
+> Hi Harishankar,
+>=20
+> I thought some more on the topic if checks for all 10 domain pairs are
+> necessary and now have some doubts. Ideally, what one wants to check
+> is that there exist a value included in all 5 domains.  Unfortunately,
+> it is too complicated to encode such a check, so the patch-set
+> approximates this doing pairwise intersections.
 
-Thanks for the feedback.
+Speaking of which, how hard would it be to figure out the witness value?
+Assuming that __update_reg64_bounds() happened would it be sufficient
+to check tmin, tnum_step(..., tmin) and tmax?
 
-What I can show is only that an invalid map value BTF record is carried
-past map_check_btf() on the old code, instead of being rejected there.
-
-I couldn't demonstrate a stronger observable bad outcome beyond that, so I'=
-ll
-drop this patch.
+[...]
