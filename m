@@ -1,145 +1,131 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC7E19E98D
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 16:30:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776357061; cv=none; b=t1duKDifG4nVjfg9rRL9oy+fd9xpZexmkTWr+XPYU7K3yCu4px3CqPdz4ioFd3bOKiY/rQCnNMJ3bQDop6wKXToHdvl81FvGogiA6RvuXyCSbdqehbCO8v50UPM3L67F49xUl3o+OgrimoMC9PuWsLY7Ad3mq71nhp2DSMOPftM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776357061; c=relaxed/simple;
-	bh=ENyAsrQJvZjtpMHcZswI9VmcBOq3LV2ND9Z2QGd+eWM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SsJ6KlShyVhifinnHBzmpjKgbcfXQhqgz6qpLChAZZCsdy5my6H0lsgqjgBTpqbt6ZYhim9Hx/kYFYPGcvnohFxw6Vh6g90gflKskbNh+esXL+DiSlZUkmZrnlYRL/oAF9VhHm3mNrDXtZcBJvSB0gDuUIRLrw3gBbdDW/WqU+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N2RsY8VT; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59EE2E424F
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 16:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776357677; cv=pass; b=SbvG7SKdnhTmmShEpld28WmRGmvG928rYUiIEYRDp0HcVjghpXYj5SyQ8O1viLzCczm1UeT3V6WG8qiUlHbF9mfd1GF55OBxZqmMvrHeZKw7sWgVEMt2/j6nsYvU+9dVesT5lvz9tZ5jbbth412tNUulN/s/1BZ44Wfi5E5ldAI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776357677; c=relaxed/simple;
+	bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=krrmuey86VQjXUBXopWeEE+oDzsAAqipEmJj3KNZrUrAOS4flPLF9NdFp+H3+IukrFALjKWc3MrqHpa4XUcDRjZjzx9yHFDDRuH+/Y99Qf9xqgA3BhTsgCrLGX6ltM348uyi8lxhYvuPu61HJACPp/rXXGzBsZFchV8GK5rxM4o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rqqPV4pt; arc=pass smtp.client-ip=74.125.224.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N2RsY8VT"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso99330165e9.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 09:30:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rqqPV4pt"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-6501725d888so6609586d50.0
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 09:41:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776357676; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gynKWWEI1hHuQUA0S5nPCBHyHmz1LGD45d1iM4Ww513PG63QNBpbmbym2xJ97iOHjc
+         1LqNb9QuoMciKLVABcG4WVyoO9DuTCubpWPlgiNECOsg12FN9yyhjbA3fG11roOwOojj
+         BiDkd85gBdNnhlr3ufIrV4NXonUSyKViZZlqTgOYIVQ98rRE+XM0yWrMKqenYFCqCdnr
+         L4cmAscD46cvnMnxr4G8kKcyrX6XT/97ApLhqaKXY5KY/bRl9SsNJgvUW2hUwrhaU2Ch
+         vkhXw+mpX4aA1/rsOoHrtwdtly+27Gf6sajBR7h9eQmC/bPBJF0XsdSriJvEifLU5Dfm
+         ww7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
+        fh=k46G+QkEBkhTYCOgPcgjZ7z/24hNT1V/8re8Do7esjQ=;
+        b=SbHjDJCs/fcPO4pEe0tMCLk+fPHEHji1vj74uHemVI1SaXvsrsTdsgl31LDGN79Aho
+         jOoDAWWfoofz2WT+CVK7EZXi7scENLGbDcl0XlqchiE3VeBTxgPha81po8aeEo1nd8kf
+         dJfjPppV/JvcG8+1pyg68gU7cX1ksROfuAyztqJM8/DsD62YR+YlRgo+0wdkRcRJQQIt
+         Ln23FdKZbcfss/iTtum5dVfls52p64czvNPqgofyqxNBTaDom36SYXBmfdrX5b2i51lI
+         bgNJ+E1gbxsOKhGMhiPous3nFFNX/UqxObd3NrESmmQeZOoZlWZMcZLOaMVmHRouyYVN
+         tcYg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776357058; x=1776961858; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KqNhMV3HyPvDMPeq6YZBtjpLi8MPodQzMfsjjdgpfZ0=;
-        b=N2RsY8VTkkxWPCcV4qG5DlXn0abqmFjOgcyaSuklxzEKcICiN0GKca9uFAWVeaY1kX
-         X4fdLIvIr5P05BPDoU1yMeBzkTEfYbGzy4GH3t3C7EPWAyp4IyHuXerwq3bhGbxZUuZQ
-         bhPibuB6R1XSK4AAg29yglysxosB9mN5TNm6GK9A+pFHTr7KKCaGO6VopvkbhUo4S7RF
-         luDMkexqa/856h0NeQ+rmt8Q1Fk7SEE1dpLZZ5wL/hSssvZsnmAKo8Ck/0Ah+0BU83Qp
-         5RjYL9/zlgA53q5wXKtTS5IkgC+YgKuKcfBb0yHdhtFmCsi2Ujl2AYeKA/5XvmOcN/s2
-         Nf+A==
+        d=gmail.com; s=20251104; t=1776357676; x=1776962476; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
+        b=rqqPV4ptfA2smyAnVMlU1BXQYkBbJtdaUAzdg90i9nFjb2ILGyAbYpqFlhifn9jdto
+         Ah//wieTINiPdJXcjOSloUqRwsUNZwiHOJcyjN/Cv+PXCcu1tQg7xhc/nFRz4NPY/KCd
+         xw9M6cyt0AtBgBtEufRzgsSQveqCmFkPv3jf51Oissfeu2XSKgD1dcYeCRxJQt3Nix3j
+         9p3aZcUsSABUygQ5lUrRmgUEc7nYSGXlDpyWSe6SmaEO58MKNe2UGdrnA9YoXkciopgj
+         tuIPuO4G4B3vH0Sbeq6weKSqhAhnlomLtcntvorebx028IYTQgvBcS3qBgBaejnSlXIO
+         PTrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776357058; x=1776961858;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KqNhMV3HyPvDMPeq6YZBtjpLi8MPodQzMfsjjdgpfZ0=;
-        b=P01o9hC5K4e5jBe6rG9Kxn6L7bl5iXqRdcF5AmcykOaLnFEQqgrIDvdbr2hg3KBbPE
-         1K7MCXndTyxcV5fuzbSzIdlOVh/LnWnsvMpnEQpKRSyo/WVF0WCa7SM+e+3RpOuhV0Oi
-         oKFj8deQr6lb7Wn/j1bITtKdKAWWfKQ8z2RTMN76RTJ9rsxrRQmZTqXROmDWpY/rUf7I
-         xLmnvj3FBMNkfTinI/xTPAdBqyDpDzH+7uFfl27fNzy1+gGk2AuEugQ7FaGiIHqxrpE2
-         /S7GLCS0Tk0mDtO68Dr/z8c/Og0j7yNaIxYS6/q2TZA/KeODtaw+umhd4cSvk+LnGRd9
-         JzzQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8ruEn5ju2hiZ11YIGdrsm0Vwz4t4CupaK4ZHgPAI+9Q5Lp6oAmxfe33nfuqZh6UJboUwc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnmZ5nb4Q1Pyh/99ECoim7H0xSVPcto4y2zCK0DZD0g90r+qfq
-	CN2X1S3d+gGOVgR5AVuHgM4DsNT1UioMWD4TLqUsT3tZuK5osBr8skXX
-X-Gm-Gg: AeBDiet379HJKkszmA7mwB8+npeQJBKeyfb3N6k82A9QKVxrFdxLwG1zswLRQiHzFO3
-	9xKGl5Gr3JeoHyJYvRgf7ysq7Jwa6Vy7cvroULZFmtG2FahlTidFT4ux3s0KBkAqFUlamcS2VBJ
-	uB2ji5JoKG6Ak/acXrWfRsIpCSd8PJ5Iv5ivejpZGIpxm1+batXehN3DLIxOaQ/38Sg3Kpp0/lE
-	Duglfn2pEWX+wCv0Z9FRnpWtwZfhTTSBHn4DFr5SJlFYcUjDJEANiXy8CjPtGkxyKxBf6Rk4ZAp
-	VBZaFZyCcGMO5aBnpTFFt+Y8qRxEJVkbXlAJaTjz34BwjQn8EXQr/ebIy3aXZz7Yn8x4IwFfbOh
-	E3+zzxrfUuwaFJdxC89SVTT1lqxsOH2gmK/RJJd2WkPalYU+McoYKJ3TKLH7WG200El2ZOgYWc5
-	1zeIAjC0umtZdltKBPM0JZnvJcIJUP4yHh/zOkNALzXGE1juK+4+8CG/L31U0=
-X-Received: by 2002:a05:600c:c0da:b0:485:4bd1:4c64 with SMTP id 5b1f17b1804b1-488d68a10e2mr319825755e9.31.1776357058246;
-        Thu, 16 Apr 2026 09:30:58 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:5895:d15:8047:4abc? ([2620:10d:c092:500::4:7fe8])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f5854163sm66463385e9.13.2026.04.16.09.30.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Apr 2026 09:30:57 -0700 (PDT)
-Message-ID: <bb363b68-0336-4682-b2c3-551610c97b40@gmail.com>
-Date: Thu, 16 Apr 2026 17:30:56 +0100
+        d=1e100.net; s=20251104; t=1776357676; x=1776962476;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZCkymTlMbYjM2Jgv7zubGpd6CV3qwcTJotFjegi+2Fo=;
+        b=Y7c70qRb4kJYhrmxd3nhd+NUoxgW9O1gLHroB5GSg1JW0AxwRsLSwhufKr6nJ4CUnR
+         DphQrmHJrjDhuIg4ylqldPaXb5ypLGD0KWy1HfCR6e8/o5AytJOJBqYw6EYNZj+pdik6
+         FDIiknA928o0H4khLp/IrIe9DUCDsXhmik1H5xWad9Ejr1MwOLH1X4X88/r216IWFZus
+         dgIjrcAbo2nRch/SAMj9EsIlBE6bbN51UCStzSEsQClJwwpcsk4tLsd0iXlZK9U6EiWm
+         1w1CTk+70cjJ+/dBIDOXELUdrXU2U7fdGKQdh4RDIVY3lR5bKnTpB485fUE5VQc1jMrA
+         5PxQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8jpmJVFq9T7iZo7BXmyqWfZpyc8vz1jDFqiPI0LQRuxqmQQHbVLL1gYBm/FDYAMRgbfQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBynpfSbMKehv/l181BfuZsopxkatf6WMX+gFBHv+Vc2CsRUSt
+	kxfrm4lKry8LcRgcJB5p1SpkVHvTFzN2jh6yvsXc0fvx0cyrGrPb7XYz57/MQNvWSbfAnspJJtM
+	XKvN/BALTIltHjZMaLpPdYl1II6lozQg=
+X-Gm-Gg: AeBDievP+HkOsSonlyOPFhv9zmMQLTE7q5nPSs77IaO7jTlC51mDwFIiu/cw5ndjPpK
+	wTSvIyzeYdVlWa/V66itNmSueJdlrthWR1Xj98ewDzXyFuWoIX36aLoh4DSqe6U1S+lpjNcnJxQ
+	Z5ufc4xSXaO3S/Aig7QDDcAyWD/5hQgjewKakU1BnlH/jrtqu+tsu0rfq65k1ttkLkc1V4fuTBa
+	E4X6D06nznUobSud/oSS7rY2l5R6HIGWFkeTFlJsqOacstHJnYINYD+ZdGqwFBDqDL7flWavpM7
+	ymOIn2zoFEzYzDTsJtoOnGnyTZPuCf7Atdw23tsVqd1dXjq5c0XWHkKt
+X-Received: by 2002:a05:690e:b4e:b0:651:cf29:430b with SMTP id
+ 956f58d0204a3-651cf294640mr16497847d50.12.1776357675652; Thu, 16 Apr 2026
+ 09:41:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
+References: <20260416144808.149543-1-sun.jian.kdev@gmail.com> <DHUOZVP8JZ80.28GPGA99P0ORD@gmail.com>
+In-Reply-To: <DHUOZVP8JZ80.28GPGA99P0ORD@gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Fri, 17 Apr 2026 00:41:08 +0800
+X-Gm-Features: AQROBzClBlvOAFz1tUWZddCMy79tEJl10vNs0W2s8S8p-heBZnoA15xrRfXktjs
+Message-ID: <CABFUUZEi1tkbzZxbT4FQuotVxFhoe_Gk9R1Ov7dkWf1dDqHUjw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: reject ERR_PTR map->record in map_check_btf
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>,
- Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
- <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
- <CAADnVQJCpJ0bTVPQ0LwoNubsK7-HsdePWgdMz8DX=v9cjgvyKQ@mail.gmail.com>
- <aeBxQn8ATaNuEF4X@gondor.apana.org.au> <DHUN1UJ0DLBC.3UC7SXBAV2FOW@gmail.com>
- <96b6f76e-1dc9-4d54-9f92-8586796ef607@gmail.com>
- <CAADnVQJuOP5zViH-hiie2M5wVNFrjD=WddBoAT2NkeNb08Roeg@mail.gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAADnVQJuOP5zViH-hiie2M5wVNFrjD=WddBoAT2NkeNb08Roeg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, bpf@vger.kernel.org, john.fastabend@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Apr 16, 2026 at 11:42=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu Apr 16, 2026 at 7:48 AM PDT, Sun Jian wrote:
+> > btf_parse_fields() returns an ERR_PTR() when it encounters an invalid
+> > special field in map value BTF.
+> >
+> > For example, an invalid kptr-annotated field whose tagged pointee is no=
+t
+> > a full struct type can make btf_parse_fields() fail with -EINVAL.
+> >
+> > map_check_btf() stores the result in map->record, but currently only
+> > handles the successful non-NULL case explicitly. ERR_PTR() results are
+> > not rejected immediately before proceeding with the rest of map BTF
+> > setup.
+>
+> yes. So ?
+>
+> > Handle IS_ERR(map->record) explicitly in map_check_btf() and return the
+> > underlying error code immediately.
+>
+> why ?
+>
+> pw-bot: cr
 
+Thanks for the feedback.
 
-On 4/16/26 4:36 PM, Alexei Starovoitov wrote:
-> On Thu, Apr 16, 2026 at 8:10 AM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
->>
->>
->>
->> On 4/16/26 3:11 PM, Alexei Starovoitov wrote:
->>> On Wed Apr 15, 2026 at 10:18 PM PDT, Herbert Xu wrote:
->>>> On Tue, Apr 14, 2026 at 10:13:21PM -0700, Alexei Starovoitov wrote:
->>>>>
->>>>> No need for such guarantees. It's best-effort only.
->>>>> If the walk skips entries it's fine.
->>>>> As long as it terminates eventually it's good.
->>>>
->>>> There is no guarantee that this walk will terminate (unless you
->>>> finish it in one go).  In a pathological scenario, after each
->>>> walk attempt, the hash table could be rehashed such that the
->>>> entry that you're resuming from gets moved back to bucket 0.
->>>>
->>>> More practically, the walk is essentially useless if you encounter
->>>> a rehash/resize event before calling rhashtable_walk_enter_from,
->>>> because half of the hash table could be missed because the entry
->>>> got moved near the end.
->>>>
->>>> I think a better interface is to detect such a rehash/resize event
->>>> and then fail the rhashtable_walk_enter_from call.
->>>
->>> that's certainly a cleaner interface. the user can retry
->>> if resize occurs.
->>>
->> There is a problem though is the get_next_key interface:
->>
->> int get_next_key(struct bpf_map *map, void *key, void *next_key)
->>
->> we cant store any metadata (table address) to check if rehash took
->> place. Am I missing any way out of it?
-> 
-> Why store anything?
-> rhashtable_walk_start_check() already returns -EAGAIN if resize
-> happened. Propagate it as error from get_next_key() ?
+What I can show is only that an invalid map value BTF record is carried
+past map_check_btf() on the old code, instead of being rejected there.
 
-Do we care if a resize happened between two separate get_next_key()?
-
-  get_next_key(a) → b
-                    ← rehash happens here
-  get_next_key(b) → c
-
-The second call has no way to know that a rehash occurred. Because each 
-call to get_next_key() initializes/destroys a new walker and only active 
-walker can detect rehash took place.
-
-
-
+I couldn't demonstrate a stronger observable bad outcome beyond that, so I'=
+ll
+drop this patch.
