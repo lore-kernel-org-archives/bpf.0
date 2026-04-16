@@ -1,115 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C91E2D46B3
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 18:11:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DBD33CEBB
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 18:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776363064; cv=none; b=QmKf/DCZQa505aQOFiwBZdbe2zRjfYNw9pV+godkOqo5nDIjRzNbVGxFxXlt8Q6SSNlEJCrOzQP+Fb1yTbj68NlUbXXCPWDiWD/leJWlbocxlP+crn6/Wt22qajP9ZLmU9nUV80yjvrVx5w0i7VNLP78ZhhUncmOArka6nGCSdU=
+	t=1776364797; cv=none; b=idazV+dGhlwOLhKx0KlkKqRxObvXMZ227SlXDkW6LqS6tFwEBVhEB/l5rowPrkcCSxWV0o+maOPtEiMIkPuvoqROnVaIpAcDeCjyi8oeWUOqyLwwTQpAvDuKDqC9rnoyCVAGXpTJv2bkaVGQqkGsCEAzYaT1N37a0MztOlECVv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776363064; c=relaxed/simple;
-	bh=YRyRbra96qCzvtTHVGNhul3Mwrs6dZoxF/LhbhazlWM=;
+	s=arc-20240116; t=1776364797; c=relaxed/simple;
+	bh=9a7cxZJecZKONkuJBzE/YZF372Udpp5zC9cnCGonXXA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=h5RnuAU4uGXr7v/cWeHOLPyG22sznbJwBksdxJPJFgiRl9Qx4gXeLbvqJPFTvnXVQVyvuUZoHbcyrI0NtieoVVCr2tyh523FLzhoF6elgcTw9BbuyM6t08B/dkbeTB3QCOYW5a3XseZLV2TwauGgHjtipj1SheTjsm6NQQuTybA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5+yrJLw; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=XC2qOCvZhvQ+daE6ji8QzRGO1TxTpHbN6Ps24S8riL9gLLrn+Vm64v1Ws10CEcgzXrYXxl7xEPAmqcnJiWdd3JlgiWqR6uxtzHjZM/SvwRxAlymjUpA2gHpYK/jVpcCxs1IU6WByHvrigPC/DSZTl9/Du6bzjiv1HDhmUZwiMHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHC0otFr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5+yrJLw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8090C2BCAF;
-	Thu, 16 Apr 2026 18:11:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHC0otFr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DEBC2BCAF;
+	Thu, 16 Apr 2026 18:39:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776363063;
-	bh=YRyRbra96qCzvtTHVGNhul3Mwrs6dZoxF/LhbhazlWM=;
+	s=k20201202; t=1776364797;
+	bh=9a7cxZJecZKONkuJBzE/YZF372Udpp5zC9cnCGonXXA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=N5+yrJLwGxW6aac4QXrOPkVZZT9HHj2cnZz1ks/OiPR1Q6pbtpx2MhQwFrlXKY3Dh
-	 b4gLmGNKbMIUnwurUpG3+wPmHM0OXJZkkVOG8v0xwohHK3XC1GQCmVp8TB078d9qZj
-	 QICmCaiDjHBy0wjFDQgmMEuKcecbc+NNrVH6qPe0yqMu4aqEZdUGk1Uu8vOXIpvO64
-	 xMg9ELmqFdpRc2fvv4SAEMhLUXt9gGUEISl6FLnUQ9b8WRq3guFmL7NIm1mMxfjV9U
-	 5Q4FLLRyNkhknpN2+7Nkl6jZ4hnWbyjMNiKaPF4Q9Lk+fuiebuWo8ZEAGDrgFHUi8o
-	 xr9H5rEJ1N2sA==
+	b=PHC0otFreb/mf5k0pWDXIaZyTOsr+8qGp0NFQmE2H5SSqimSnT4GusBMF8tdWt6CB
+	 8C1yxKq0wR8nDYoVfoFtk+gywNgfbjxGAw7Y+1nxYaIGJ1CJz1vJ7G6rg8bUu3x2TU
+	 69EpOOKwEBkZo05kS6KZe1oCxcwtbtdJ4WHErFbJRRoLQ7lQeqXDcmGTcqzMBJAoyV
+	 HXsRjgkg7EPWrZnF7kvOXr0h56vkXH++qw7fYu0DCzc67cpzDTU9f8GFLAzSCppu9K
+	 sshmcVv03CNaGE7CdHyRm2HpO9M6pbWRirTufPbZUspOVOwQ0sTdmvd2gSW4+3tbuD
+	 rftxAMKWUJVbA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 08/11] selftests/bpf: Allow test_progs to
- link with a partial object set
+Subject: Re: [PATCH RFC bpf-next 1/7] bpf/verifier: Use intersection checks
+ when simulating to detect dead branches
 Reply-To: sashiko@lists.linux.dev
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+To: "Paul Chaignon" <paul.chaignon@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416-selftests-bpf_misconfig-v6-8-7efeab504af1@suse.com>
-References: <20260416-selftests-bpf_misconfig-v6-8-7efeab504af1@suse.com>
+In-Reply-To: <681fc6e748330e6a765a89f7193c17b33d4ea26f.1776344897.git.paul.chaignon@gmail.com>
+References: <681fc6e748330e6a765a89f7193c17b33d4ea26f.1776344897.git.paul.chaignon@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 18:11:03 +0000
-Message-Id: <20260416181103.B8090C2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 18:39:56 +0000
+Message-Id: <20260416183957.24DEBC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [Medium] In permissive mode, moving test objects to order-only prerequisi=
-tes breaks incremental builds.
-- [Low] In the default non-permissive mode, the linker command duplicates a=
-ll test object files, causing 'multiple definition' linker errors.
+Sashiko AI review found 1 potential issue(s):
+- [Critical] Returning early from `reg_bounds_sync` on `!reg_bounds_interse=
+ct(reg)` masks verifier soundness bugs and turns them into exploitable bran=
+ch-pruning vulnerabilities.
 --
 
-commit 9ee39343705c1b6b0ebaf3f229944fadafcd695b
-Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
+commit 6f55ebe5b292297be4b3fa774e1c6b87de6d0862
+Author: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 
-selftests/bpf: Allow test_progs to link with a partial object set
+bpf/verifier: Use intersection checks when simulating to detect dead branch=
+es
 
-This commit modifies the Makefile to support a PERMISSIVE mode, shifting
-TRUNNER_TEST_OBJS to an order-only prerequisite when enabled. It also alters
-the linker command to filter built objects.
+This commit introduces a new check to detect if register bounds across
+domains (u64, s64, u32, s32, tnum) have an intersection. It uses this new
+check to prune dead branches and to exit early during register bounds
+synchronization.
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 5ad50d3ff2f8c..79991dc98ddda 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 9e4980128151b..1d5d2b7e5140b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
 [ ... ]
-> @@ -758,14 +758,15 @@ endif
->  # some X.test.o files have runtime dependencies on Y.bpf.o files
->  $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
-> =20
-> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
-> +$(OUTPUT)/$(TRUNNER_BINARY): $(if $(PERMISSIVE),,$(TRUNNER_TEST_OBJS))	\
->  			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
->  			     $(TRUNNER_LIB_OBJS)			\
->  			     $(TRUNNER_BPFTOOL)				\
->  			     $(OUTPUT)/veristat				\
-> -			     | $(TRUNNER_BINARY)-extras
-> +			     | $(TRUNNER_BINARY)-extras			\
-> +			     $(if $(PERMISSIVE),$(TRUNNER_TEST_OBJS))
 
-When PERMISSIVE is set, $(TRUNNER_TEST_OBJS) are moved exclusively to the
-order-only prerequisites list.
+> @@ -2345,12 +2345,15 @@ static void __reg_bound_offset(struct bpf_reg_sta=
+te *reg)
+>  static void reg_bounds_sync(struct bpf_reg_state *reg)
+>  {
+> -	/* If the input reg_state is invalid, we can exit early */
+> -	if (range_bounds_violation(reg))
+> +	/* If the input reg_state has no intersection between abstract values, =
+it is
+> +	 * invalid. We can exit early, ensuring that subsequent operations don't
+> +	 * inadvertently fix the reg_state.
+> +	 */
+> +	if (!reg_bounds_intersect(reg))
+>  		return;
 
-Since order-only prerequisites do not trigger a rebuild if they are newer t=
-han
-the target, could this regression break incremental builds? If a test C file
-is modified, the .test.o object file will be properly recompiled, but it
-appears the test binary will not be relinked because none of its normal
-prerequisites have changed.
+Does returning early from reg_bounds_sync() here mask verifier soundness
+bugs and potentially turn them into exploitable branch-pruning regressions?
 
->  	$$(call msg,BINARY,,$$@)
-> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS)=
- $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-> +	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$(if $(PERMISSIVE),$$(wildcard =
-$(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS)) $$^) $$(LDLIBS) $$(LLVM_LDLIBS)=
- $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+If a buggy arithmetic operation produces a register state with disjoint
+domains (e.g., conflicting u32 and u64 bounds) but does not immediately
+have a min > max within a single domain, reg_bounds_intersect() will
+return false.
 
-When PERMISSIVE is empty (the default behavior), $(TRUNNER_TEST_OBJS) is ad=
-ded
-as a normal prerequisite, appearing at the beginning of the $$^ variable.
+This causes reg_bounds_sync() to exit early, explicitly skipping
+__update_reg_bounds() and __reg_deduce_bounds().
 
-The modified recipe prepends $(TRUNNER_TEST_OBJS) to $$^ in the filter
-command, making the expression evaluate to:
+Before this patch, running those deduction functions on disjoint domains
+would cross-constrain the bounds and naturally produce a state with
+min > max (range_bounds_violation). This explicit violation would
+subsequently trigger a verifier panic in reg_bounds_sanity_check(),
+safely rejecting the broken program.
 
-$$(filter %.a %.o, $(TRUNNER_TEST_OBJS) $$^)
+By skipping the deduction, the state retains its logically impossible
+disjoint domains but avoids generating a range_bounds_violation. Because
+reg_bounds_sanity_check() was not updated to also fail when
+!reg_bounds_intersect() is true, the broken state silently passes all
+verifier sanity checks.
 
-Because Make's filter function retains all matched words and does not
-deduplicate them, will this regression pass every .test.o file twice to the
-linker and cause multiple definition errors?
+When this disjoint register is later evaluated at a conditional jump,
+simulate_both_branches_taken() will see !reg_bounds_intersect() and
+conclude that the branches are dead, pruning them from verification.
+This could allow out-of-bounds memory accesses in the unverified branches,
+which the verifier assumes are dead but the kernel will still execute at
+runtime.
+
+Should reg_bounds_sanity_check() be updated to also fail if
+!reg_bounds_intersect(reg) is true?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416-selftests-=
-bpf_misconfig-v6-0-7efeab504af1@suse.com?part=3D8
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1776344897.gi=
+t.paul.chaignon@gmail.com?part=3D1
