@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A09D8248B
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 18:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6492E30BBB6
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 18:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776365600; cv=none; b=fS+hTav3ewB+LvoEJC2P2oUsM6GeLSgWn+3fbd/9nfcYZGzW5KKAk0VzO+KlB/BMyQClTKxWucfM2kyCe3h1qjjObCHXgWNX2TQKr0eQPLBa85Wt9FrsnBMYBPFdAoCGYwK8+9AUXeicpMD9mMbYs3M8wjfofaf/s9cjzjSzu08=
+	t=1776365646; cv=none; b=nHW3BwjtGAdlHLj7J7tzW8YgIEOrJ8h2cdH5m8j9eXYqURd7EwaVCX94GNjXfU8U3v0LYTTrV7bj1rAn5WThN02LINk5FJCj66yah7qL4OU9kpIf6jyea0XrW1ePA2xzpyu8ufjprlkOTAUdkSx+d5GKEZn8iEDdvtXi6E+YQSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776365600; c=relaxed/simple;
-	bh=/r8Rd/hpqoIocaRq4e/YLwAoCue46AOgUJ7i8y2CJoo=;
+	s=arc-20240116; t=1776365646; c=relaxed/simple;
+	bh=SSiXkMrPi9Ht5KwQybWkDAxhxv5IkDhf1eRipj/UJjw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=L2ednMOKsvXbuyl82gFy8bkL74Dkwg2ccVtRrqKu3FvPNPmXZ5vnPpStYQGUEO2YygcXS8wzc1yZSO/F753cjcIrzWFmNQNOaAesazSuzX+Vcis6Kz0l/fbV8pQOa34jAMQ9v2bIHFOuXyvUz+q9eJPNo9VLK7no+6OR3EPujZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i2d8rkOH; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=kpXFpu62yvbIkSQA1x8mIYk1RI/IJ9j4AFURL+K7SQiSp0fLkVUB2YsH4DOwAUlTCGFMW78xoWuAFiNXZB2Y8+SCekryRCMOlTvFjVSux7iRA61R1kxbFx21KvU6jMjPsSABFEauUc16/4s7poot0UQ8DclGVQMxa4mNvDxmoQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZF9N+6uj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i2d8rkOH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2262BC2BCAF;
-	Thu, 16 Apr 2026 18:53:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZF9N+6uj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84FEC2BCAF;
+	Thu, 16 Apr 2026 18:54:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776365600;
-	bh=/r8Rd/hpqoIocaRq4e/YLwAoCue46AOgUJ7i8y2CJoo=;
+	s=k20201202; t=1776365646;
+	bh=SSiXkMrPi9Ht5KwQybWkDAxhxv5IkDhf1eRipj/UJjw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=i2d8rkOHE14ImcbcSxgYDEWWtLjKL0BvjPMiSFry7kdPFi+XKoujzhGD5Im4bKBOT
-	 0ZDU54zZbyCAK+JK9jy8wtZkvg7/Uydia4IkmlQ4mNXjpp8VAkMLjfJGfIDi8P1oLB
-	 kY28GFyVnCQXvnfd3w2Y+aHyShJw0KP9wamiI+yPGGWpKyoNw/8vvbDfkC77HfZvKp
-	 p8djveXA5RS5n7O9aIs54b/IF0iDvr/bl5aOhxs84E4faCxcAoPAzPkcG+BZzKkRi6
-	 9ZxIca5IM1LOyA4Hh3EMq+kui/USISwEZljCCTmxH+v4+a6wPhT/XFc0p+60fLfkAP
-	 zTHRYkEeT5kaQ==
+	b=ZF9N+6ujHVyDAMrA4u9D/mxMz+UCsC07qRuOPT0Kl01X9tIgUgn5XBfcd9xbwFTaR
+	 g0UG/n5eZnfKg9C4n1DMPXBa1NwKdJuya47sb8VNC/4OLxvU5t/hhfolM4rqagT7S6
+	 xy7ULEsvBQwyd3P3F3b8+K9/nBUoiI3PKLPU29Bi2ob/6rlzXARM71mNJxjxW218PU
+	 bKw0EUwtiqubPT7wdtey/pXRgGfGMOMe45YfA9ixtkGKWBJKDhoNbLBQGdh+x5aC4q
+	 zZ+cxy1oUQPne1wP6DTPCfK/nJQRCeuxmwss6DVWrcWhlH3ECWqQW/OsNM59Wz4Fqg
+	 bowYhoQXuqY9g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 2/7] selftests/bpf: Test for empty
- intersection of tnum and u64
+Subject: Re: [PATCH net-next v7 4/7] net: bcmgenet: add XDP_TX support
 Reply-To: sashiko@lists.linux.dev
-To: "Paul Chaignon" <paul.chaignon@gmail.com>
+To: "Nicolai Buchwitz" <nb@tipi-net.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <cf4061f2e91d271f1f44160a0b87a87ec6df5428.1776344897.git.paul.chaignon@gmail.com>
-References: <cf4061f2e91d271f1f44160a0b87a87ec6df5428.1776344897.git.paul.chaignon@gmail.com>
+In-Reply-To: <20260416054743.1289191-5-nb@tipi-net.de>
+References: <20260416054743.1289191-5-nb@tipi-net.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 18:53:19 +0000
-Message-Id: <20260416185320.2262BC2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 18:54:05 +0000
+Message-Id: <20260416185405.E84FEC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,94 +44,126 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 2 potential issue(s):
-- [Medium] Fragile test design relies on verifier's ignorance of `bpf_get_p=
-random_u32()` bounds, risking silent test decay.
-- [Low] Misplaced and factually incorrect inline comments misrepresent veri=
-fier state.
+- [Critical] Local XDP_TX mishandles XDP metadata, leading to buffer underf=
+low, metadata destruction, and incorrect DMA mappings.
+- [High] Unconditional access to `netdev_get_tx_queue(dev, ring->index)` du=
+ring XDP TX reclaim causes an out-of-bounds array access.
 --
 
-commit 8da3729bc39d37f67823aa031e7ba1b8b0d69fe0
-Author: Paul Chaignon <paul.chaignon@gmail.com>
+commit bdb3ec6dd3fa70f6fc80f2e6b98851c833a05d8a
+Author: Nicolai Buchwitz <nb@tipi-net.de>
 
-selftests/bpf: Test for empty intersection of tnum and u64
+net: bcmgenet: add XDP_TX support
 
-This patch adds a verifier selftest for the case where tnum and u64
-don't intersect on a branch, allowing the verifier to deduce that the
-branch is dead code.
+This commit adds local XDP_TX and ndo_xdp_xmit support to the bcmgenet
+driver. It dedicates ring 16 for XDP TX, prepends the required 64-byte
+Transmit Status Block (TSB) to the frames, and piggybacks TX completion
+reclamation onto the RX NAPI poll loop.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/=
-testing/selftests/bpf/progs/verifier_bounds.c
-> index c1ae013dee29c..151c7a479a6b8 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> @@ -2184,4 +2184,29 @@ __naked void tnums_equal_impossible_constant(void =
-*ctx)
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
+/ethernet/broadcom/genet/bcmgenet.c
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+[ ... ]
+> @@ -2043,6 +2069,9 @@ static void bcmgenet_tx_reclaim_all(struct net_devi=
+ce *dev)
+>  	do {
+>  		bcmgenet_tx_reclaim(dev, &priv->tx_rings[i++], true);
+>  	} while (i <=3D priv->hw_params->tx_queues && netif_is_multiqueue(dev));
+> +
+> +	/* Also reclaim XDP TX ring */
+> +	bcmgenet_tx_reclaim(dev, &priv->xdp_tx_ring, true);
+>  }
+
+When bcmgenet_tx_reclaim() is called here with all =3D true, it executes
+this cleanup path:
+
+	if (all) {
+		...
+		txq =3D netdev_get_tx_queue(ring->priv->dev, ring->index);
+		netif_tx_wake_queue(txq);
+	}
+
+Since xdp_tx_ring.index is DESC_INDEX (16), but dev->num_tx_queues is at
+most 5, does this cause an out-of-bounds array access when retrieving the
+netdev transmit queue?
 
 [ ... ]
-
-> +SEC("socket")
-> +__description("dead branch: tnum and u64 don't intersect on true branch")
-> +__success
-> +__naked void empty_tnum_u64_intersection(void *ctx)
+> @@ -2299,11 +2328,96 @@ static struct sk_buff *bcmgenet_xdp_build_skb(str=
+uct bcmgenet_rx_ring *ring,
+>  	return skb;
+>  }
+> =20
+> +static bool bcmgenet_xdp_xmit_frame(struct bcmgenet_priv *priv,
+> +				     struct xdp_frame *xdpf, bool dma_map)
 > +{
-> +	asm volatile("									\
-> +	call %[bpf_get_prandom_u32];							\
-> +	r6 =3D r0;									\
-> +	r1 =3D 0xe00000002 ll;								\
-> +	r2 =3D 0xf00000000 ll;								\
-> +	if r6 s< r1 goto +2;								\
+[ ... ]
+> +	if (dma_map) {
+[ ... ]
+> +	} else {
+> +		struct page *page =3D virt_to_page(xdpf->data);
+> +
+> +		/* For local XDP_TX the caller already prepended the TSB
+> +		 * into xdpf->data/len, so dma_len =3D=3D xdpf->len.
+> +		 */
+> +		dma_len =3D xdpf->len;
+> +		mapping =3D page_pool_get_dma_addr(page) +
+> +			  sizeof(*xdpf) + xdpf->headroom;
+> +		dma_sync_single_for_device(kdev, mapping, dma_len,
+> +					   DMA_BIDIRECTIONAL);
+> +	}
 
-Will this test silently decay if the verifier improves its tracking of help=
-er
-return values?=20
+Does this correctly calculate the mapping offset?=20
 
-bpf_get_prandom_u32() returns a 32-bit unsigned integer. If the verifier is
-updated to track that this helper returns a value bounded by 0xffffffff, it
-will statically deduce that the condition r6 s< 0xe00000002 is always true.=
-=20
+xdpf->headroom evaluates to the offset from data_hard_start to the start of
+the frame. The offset from the start of the page to data_hard_start
+(XDP_PACKET_HEADROOM, 256 bytes) appears to be omitted here, potentially
+causing the hardware to read from an uninitialized offset hundreds of bytes
+before the actual packet.=20
 
-This would prune the fallthrough path as dead code, causing the test to
-silently pass without ever exercising the complex tnum vs u64 intersection
-logic it was explicitly created to test.
+Furthermore, if metadata is present, it looks like this maps data_meta
+instead of the TSB at data.
 
-Could we use a true 64-bit unknown scalar, such as bpf_ktime_get_ns(), to
-ensure the test remains robust?
+[ ... ]
+> +	case XDP_TX:
+> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
+> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
+> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
+> +		 * up xdp->data into the RSB area (which is no longer needed
+> +		 * after the BPF program ran) and zero it.
+> +		 */
+> +		if (xdp->data - xdp->data_hard_start <
+> +		    sizeof(struct status_64) + sizeof(struct xdp_frame)) {
 
-> +	/* On fallthrough, r6's u64=3D[0xe00000002;0xf00000000] */			\
-> +	/*                      tnum=3D(0xe00000000; 0x1ffffffff) */			\
-> +	if r6 s> r2 goto +1;								\
+Does this correctly account for XDP metadata?=20
 
-Are these inline comments misplaced?=20
+If metadata is present, xdp->data_meta will be lower than xdp->data. By
+using xdp->data in this check instead of xdp->data_meta, could subtracting
+sizeof(struct status_64) push the metadata boundary below
+data_hard_start + sizeof(struct xdp_frame) and cause an out-of-bounds
+write when xdp_convert_buff_to_frame() is called?
 
-The upper bound of 0xf00000000 is only established after the=20
-if r6 s> r2 goto +1 instruction falls through, not before it.=20
+> +			page_pool_put_full_page(ring->page_pool, rx_page,
+> +						true);
+> +			return XDP_DROP;
+> +		}
+> +		xdp->data -=3D sizeof(struct status_64);
+> +		xdp->data_meta -=3D sizeof(struct status_64);
+> +		memset(xdp->data, 0, sizeof(struct status_64));
 
-> +	/* On fallthrough, r6's tnum=3D(0xe00000001; 0x100000000) */			\
-> +	/* It doesn't intersect with the u64 so the condition is always false *=
-/	\
-> +	if w6 =3D=3D 1 goto +1;								\
+Does this memset() overwrite the packet metadata?=20
 
-Does this tnum state actually exist on the fallthrough?=20
+Since xdp->data was just decremented by 64 bytes, the memory region it
+clears appears to perfectly overlap with the space previously occupied by
+the BPF metadata.
 
-According to the verifier log in the commit message, the tnum state of
-(0xe00000001; 0x100000000) only exists on the true branch of=20
-if w6 =3D=3D 1 goto +1, not on the fallthrough.=20
-
-Describing the taken branch as a fallthrough and placing the state annotati=
-ons
-before the instructions that actually establish them might make the test co=
-de
-confusing for maintainers trying to understand the exact verifier state at
-each step.
-
-> +	exit;										\
-> +	r10 =3D 0;									\
-> +	exit;										\
-> +"	:
-> +	: __imm(bpf_get_prandom_u32)
-> +	: __clobber_all);
-> +}
+> +		xdpf =3D xdp_convert_buff_to_frame(xdp);
+> +		if (unlikely(!xdpf)) {
+> +			page_pool_put_full_page(ring->page_pool, rx_page,
+> +						true);
+> +			return XDP_DROP;
+> +		}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1776344897.gi=
-t.paul.chaignon@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416054743.1289=
+191-1-nb@tipi-net.de?part=3D4
