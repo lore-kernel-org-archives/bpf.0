@@ -1,125 +1,103 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F3C331A63
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931181E1DF0
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776366401; cv=none; b=beIopbWkVRzJDcjucX3pg5KOZV+fVLXF/obxXLRbXkm1KQw7PH+1lCkq55twPyyIefh8WCeAssULzPyP2EV4EuA1jiq++KYX2gqyh8HWLatrsfW7BMPNfj9z4CT0IuCN1YZ0h2sIk0noCsvGZ2SmBABGDPLXeVPWshUgfRxyd+o=
+	t=1776366525; cv=none; b=UGZYS2UUkfGWT19p3r0SVze5/jdvG0arG+mZFm5BV2TWk0XQJPfm51jtgbHe3oK3MBfkxlP+ruIJEC+CS0w4A5y7lPiVGZ8plbJ9mnX5/xA8Y1Eb8hmP98uvGV4DTjP4XA83XeqOoJZkDGvHObvg0Qitp8cbD72xlaEm9BIPVOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776366401; c=relaxed/simple;
-	bh=t2BU4POuNqnQHfs1v7jsAchuyRFNIXmVxb2kXc0/Yr4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kh4Mt1ZcBfwA/8PbVevQgwHQypHRdjLnL+tNAavbIDoVj7xMNmbiM2Nk1U+BCL9V9Rba6ScUOOXR5gxj5OovSWoSk7UaVBD45nw4/8rMKyUuuQU+D7j2CACdvbKyA/vKIPrFQCqKiI5wsMT1+Yqi47KxXkXtiVx/jpEsnab+BEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uYpWJ3Av; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776366525; c=relaxed/simple;
+	bh=skp8D+mRw7iVmt/tyPY3MBhHGJ8R1OmmR29mhRWbx0Q=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=gx6c8NDMjmURPEPHXcCw0Cx7gu3ewSoc2srRx+0f/eC79q0+bUUgiUUswaIrOKMdnb1zGlToVZAbodho9np726RWZHb6J5cfARn6Jq521zW9Yna6eBciEhrj+0UmlzLBQSjwUnLzybgyIUtdXE4g74Lf8h08vgcBPQcTZ9RVq08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ot4vByUo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uYpWJ3Av"
-Date: Thu, 16 Apr 2026 12:06:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776366387;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KKcufqME6AclWOFSO2Pn6FBNuFdVFsZOL3F1tIQrun8=;
-	b=uYpWJ3AvnglL9gowTEPCFHr5rS3M/bKDfOJc6Zt7jlmhEMLTVSQ1Kn1x+DyimYbmr615FE
-	b4aoy+ytRdu1mZKA53vfSV5V/PnW2CBvxGXWtf5B0oe9AHL/DV4MDqAvfMgTGiJg3aDdNT
-	wqbz7hytcBdUoegyOeZiNizyxMENf20=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: KaFai Wan <kafai.wan@linux.dev>
-Cc: daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	shuah@kernel.org, jiayuan.chen@linux.dev, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr
- opt callbacks
-Message-ID: <2026416184330.-HAW.martin.lau@linux.dev>
-References: <20260416112308.1820332-1-kafai.wan@linux.dev>
- <20260416112308.1820332-3-kafai.wan@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ot4vByUo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F970C2BCAF;
+	Thu, 16 Apr 2026 19:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776366525;
+	bh=skp8D+mRw7iVmt/tyPY3MBhHGJ8R1OmmR29mhRWbx0Q=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=Ot4vByUodcr02fl9+NYR0bj2H3F874tZm6adFTS/4JIrqkR7n0+IvlPHzUZxEPvPy
+	 g9lvhZqv4O3CBYx8ELAG1cI1gn3hTkzljZD530ueyOEIU/rJE3Xo+U9e1sVNT5FUZn
+	 /L4gSfHfSV9TC9qbH7cFNgmKYFtHmzI/24J/QFGtkpkhBm9O54Q0aCqQpJZijsKE7B
+	 GF02DP240Zf9Ana+OZVj5WzTi4eCqZ4A+flJjw8R+KqR8SC3tqYej000m8p81p2bS3
+	 8Qd71UAglDR8ple7wjX6ymOrzupo3aNwX8pOw0/qAsOQOYVbHmEY/CfF3/0+4Vu2bg
+	 KJ9iZzhfRhEZw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC bpf-next 3/7] selftests/bpf: Fix reg_bounds to prune
+ on range violations
+Reply-To: sashiko@lists.linux.dev
+To: "Paul Chaignon" <paul.chaignon@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <91b8f1840277989ac65d05a9ad5e683a98d3d6ec.1776344897.git.paul.chaignon@gmail.com>
+References: <91b8f1840277989ac65d05a9ad5e683a98d3d6ec.1776344897.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 16 Apr 2026 19:08:44 +0000
+Message-Id: <20260416190845.5F970C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260416112308.1820332-3-kafai.wan@linux.dev>
-X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 16, 2026 at 07:23:08PM +0800, KaFai Wan wrote:
-> index 56685fc03c7e..2d738c0c4259 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-> @@ -513,6 +513,59 @@ static void misc(void)
->  	bpf_link__destroy(link);
->  }
->  
-> +static void hdr_sockopt(void)
-> +{
-> +	const char send_msg[] = "MISC!!!";
-> +	char recv_msg[sizeof(send_msg)];
-> +	const unsigned int nr_data = 2;
-> +	struct bpf_link *link;
-> +	struct sk_fds sk_fds;
-> +	int i, ret, true_val = 1;
-> +
-> +	lport_linum_map_fd = bpf_map__fd(misc_skel->maps.lport_linum_map);
-> +
-> +	link = bpf_program__attach_cgroup(misc_skel->progs.misc_hdr_sockopt, cg_fd);
-> +	if (!ASSERT_OK_PTR(link, "attach_cgroup(misc_hdr_sockopt)"))
-> +		return;
-> +
-> +	if (sk_fds_connect(&sk_fds, false)) {
-> +		bpf_link__destroy(link);
-> +		return;
-> +	}
-> +
-> +	ret = setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
-> +	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY) active"))
-> +		goto check_linum;
-> +
-> +	ret = setsockopt(sk_fds.passive_fd, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
+Sashiko AI review found 1 potential issue(s):
+- [Medium] The early return in `reg_state_cond` silently discards updates, =
+incorrectly preventing mathematically impossible branches from being pruned.
+--
 
-Why are these two setsockopt(TCP_NODELAY) calls needed?
+commit 9c1398626b454db27a318d8fb3f946b257c46b99
+Author: Paul Chaignon <paul.chaignon@gmail.com>
 
-Instead of creating a new "void hdr_sockopt(void)", can the test be done in the
-existing "void misc(void)" by doing bpf_setsockopt(TCP_NODELAY) in the
-misc_estab() bpf prog?
+selftests/bpf: Fix reg_bounds to prune on range violations
 
-The PASSIVE_ESTABLISHED_CB can do the bpf_setsockopt(TCP_NODELAY, 0)
-if it wants to keep the same expectation on Nagle. The
-BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB
-can do bpf_setsockopt(TCP_NODELAY, 1) to test recursion and
-the error return value.
+This patch updates the reg_bounds selftest to correctly detect and prune
+dead branches by checking for ill-formed ranges. It marks branches as
+invalid if their ranges become ill-formed, matching the verifier logic.
 
->  void test_tcp_hdr_options(void)
-> diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-> index d487153a839d..a8cf7c4e7ed2 100644
-> --- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-> +++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-> @@ -28,6 +28,12 @@ unsigned int nr_data = 0;
->  unsigned int nr_syn = 0;
->  unsigned int nr_fin = 0;
->  unsigned int nr_hwtstamp = 0;
-> +unsigned int nr_hdr_sockopt_estab = 0;
-> +unsigned int nr_hdr_sockopt_estab_err = 0;
-> +unsigned int nr_hdr_sockopt_len = 0;
-> +unsigned int nr_hdr_sockopt_len_err = 0;
-> +unsigned int nr_hdr_sockopt_write = 0;
-> +unsigned int nr_hdr_sockopt_write_err = 0;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
+testing/selftests/bpf/prog_tests/reg_bounds.c
+> index 71f5240cc5b7e..c0b3a357a0f4c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+[ ... ]
+> @@ -837,6 +850,8 @@ static void reg_state_cond(enum num_t t, struct reg_s=
+tate *x, struct reg_state *
+>  		z2 =3D y->r[t];
+> =20
+>  		range_cond(t, z1, z2, op, &z1, &z2);
+> +		if (!is_valid_range(t, z1) || !is_valid_range(t, z2))
+> +			return;
 
-nr_hdr_sockopt_estab, nr_hdr_sockopt_len, and nr_hdr_sockopt_write
-are unnecessary. These tests have already been covered in some ways.
+Does this early return prevent the invalid ranges from being written back
+to newx and newy?
 
-Mostly a nit. The new counters are used in both connections. Note the
-existing nr_xxx is exclusively used in either active or passive,
-so there is no parallel counting in practice.
+If range_cond() produces an invalid range, the function returns immediately
+and bypasses the write-back of xx and yy at the end of the function:
 
-Instead of counting, just use a bool nodelay_est_ok,
-nodelay_hdr_len_err, nodelay_write_err and assert them
-to be true in userspace.
+	if (newx)
+		*newx =3D xx;
+	if (newy)
+		*newy =3D yy;
+
+This leaves the output registers with their previous valid state.
+
+When sim_case() later checks if the branch is valid:
+
+	reg_state_cond(cond_t, tr1, tr2, op, tr1, tr2, "TRUE");
+	if (is_valid_reg(tr1) && is_valid_reg(tr2))
+		tr1->valid =3D tr2->valid =3D true;
+
+won't it incorrectly evaluate the old valid state and mark the impossible
+branch as valid, defeating the pruning logic?
+
+> =20
+>  		if (newx) {
+>  			snprintf(buf, sizeof(buf), "%s R1", ctx);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1776344897.gi=
+t.paul.chaignon@gmail.com?part=3D3
