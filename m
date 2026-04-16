@@ -1,167 +1,108 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758EF279355
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 17:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2D31D5CC6
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 18:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776361918; cv=none; b=kpZFdQ8OBRmdxT6U6+f8+XVmAUenIoA2o8SqhZhwpNiAr+C9Ri2pwLtLEN7mVZFYc1ayyrgRkph5XflmTo7umw3agd+f5kxOqzVSpVkW0sLnc/0xW38g67aj+PYI7vv5DMcT36957dW+nyknOnpgvzXsCnDw9+ZFgt1DI7u+ju8=
+	t=1776362941; cv=none; b=KXyUN7dohoVTXkNVpwevIx6vwwq7Mmqw7ej3MnXVf7euHzRy6mwUjl1/ntU0xtKaOp3qpwaL3JeYW9Qj+0a44piwEIl1pgh6/jxji/7da6T7/aKLlE+fTnJurkaC+VSkwbIq/+hdZrAy6GfJrbMJi5WKxgw25GE6JO+eDxYIDW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776361918; c=relaxed/simple;
-	bh=1EH6/eggcrN+2q9BPJj+q+jQoBGLudz6LP8XGzBakHo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qfMK2J4IFnsJ6vL3s/FkPR8wn3bNhh8CSv3mRC/FJfLI+6HkxNifigoioHF0BE+Qv1V7Kq9DEbms2sKqrA2YBDDROwP/BnCGnOkglAlFZPxkLtpSTnSLwREuCrQFnFE34HWCHRR551dFRt5s/WwEaewTQCYdJvoUz8ykdFF9c9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YTTA8rxb; arc=none smtp.client-ip=209.85.128.51
+	s=arc-20240116; t=1776362941; c=relaxed/simple;
+	bh=q96H2y289w9fbuU+NhDDs/a/MzIp7y85zyU5pz4tN6o=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YcXqfZgiQTgqDL4sTYwboLF+/bQka5Vrxa7yx/F/BN7oetBCWKG+cqBVAFZxBpYxCTGtRQ8arYZcUe8xkKZU03Tjr7QADaErQnoclphhndIPaUPfxN7qhTWpQhxAUyMQc2XZLDrQ5KbFvcihAwF4EZaiGH4b+8JCtQvBNe6+KQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fE0f8gmU; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YTTA8rxb"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso100223585e9.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 10:51:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fE0f8gmU"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43cfd832155so5759581f8f.1
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 11:08:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776361916; x=1776966716; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9lw0+OPmfDnGiyamEFF6WGsMRzAbLtpadOQYAgY907c=;
-        b=YTTA8rxbnB+J5CV2XcmJ3SSlXScX1XSU1qeDd81CYlVmJKQzbKNrCjk63Iq6ollpF0
-         31MORBfn4TzuRioNpWoCeJDl0aLDitj1U23rvWxCQzGeE0CTK3YZtWdiLo94BHrHognd
-         QKhl49brpU7G82ZWN88jp0fTu6dQz28jPX+7yaAnE+4gt+Qe/9lHpfJAP6Vp7ll6FA3n
-         6OKwcuwr67BrhfXcGbZa/MA3VL2FZ9JPcRTzscAvu9+XqTaYFI3mpfLd5gW/eA9eGBrw
-         5nrQnU7Gf9N/vNvgt8qraEfQT+eVLgf3AwccITrupzuL5gAWPeQWJwoSWR7tiPmfevNK
-         jwJQ==
+        d=gmail.com; s=20251104; t=1776362938; x=1776967738; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+W/vpusUQHiaTDKMH+oISsU2AULmLrbcqM59LSjN2Jo=;
+        b=fE0f8gmU3hcBH9vNG0puZA7Epj0DxjMBVhVcEUx/k4T8grsG8WjoSjpMtJJaDXC5f9
+         tEugL4KCsej9GdPyGTfy0FeEWiv9+6x2PtObfF6E7NtZawyCpJEgnBKvekIM8YDjvc55
+         aywwkIC9B7jMaRItHy04lx0xPDM1y1ScyT616gRMPoCS2Mix6RQLlpZdWXr8lik8Y2MJ
+         clb7pRyPYbY1Fn+boFvyQxu78monvM4CPsp+nkDTsEYmAL9qie9Wxz4md3IWOQkE7VMy
+         nHhxHu/ts6gxALG8MPgFf91PlgvTAvDsxzjp3s2IX4MjutEY/wMpqgdkBqkN/D3VcFm8
+         9Nuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776361916; x=1776966716;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9lw0+OPmfDnGiyamEFF6WGsMRzAbLtpadOQYAgY907c=;
-        b=mKbEo0LIq1TorpwjpBrFglBu18YvJxoIXeT27fcuL0SOn08UXDUmbsklQ2zJa5QUS+
-         3OqtxM2w6JQhd4je/Lyn6b9lB9Ca5krxM0sIEIBA0aOQPml4kYW1IGwYLQ49awEvZBuL
-         XZbAGP4N6IhAOmeBG3N3EBuRtSbl44Fobo2OEhNnDgNZxZDm6RI6VcZ0hJ7y9sSfGr7b
-         LnkDsKz+kiBEtCbavZF+mHjxATTEpqj8AUq8Pid6AQyXjscuLdTgFd+of9wWcE3WCKfM
-         ch88MOXh6meDhwnEaBSbRXbN+r0nRJRuvhCGXsX/5/GHPuhTFSr1Z9PekNfGbySJBzfL
-         G+mA==
-X-Forwarded-Encrypted: i=1; AFNElJ++lPXdapdwe7meNi+AytuEqmzSi5J+fVPx86Px5CxLfxRDi1G+zB3TCE1tEfnFnWlQhHM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4/eZbG1z0Pfztmw+SWtBQ8h+qRPXB605PyHImrIuHNm0ASn2/
-	jQu0AbN91BnSO6EMqALzer697Yl+e+BbMnFjIl3T3Yb7+MJt0lIoeqhR
-X-Gm-Gg: AeBDieuGvUOoPQ2+uxYvFhjCDH87rp3msyaQ1hKQcBBXKnGYb06o1Vlkfgq1Nk3IeaJ
-	EmgcoXzMU07fhulYn5xVg7vrd6iDzE51uxzpXNE0GeBX743AdAq5alsY5woX+ahd9sNBRzgZZgz
-	vX8WCL+jeCNP0T0EAe+FDlUnbzVWlX1Z+vBCie693e+9zTM/d/QNhJpaTmsKeryLH/X+j7UpcrX
-	/NVnyP/TB5hSUNqOJwA0IB2cpPTiNjoJQTO9oC+iokKB4GX7UQfE1/Anh2PRigYx4xcyJoyuaWe
-	XX9ksvBJvSEI0DClUtNmf64f8NUfs91v8w1fSFK0jVxB8pKwBFJFkOrI+HmGGQvG/XOrekcYg3I
-	kdUa35q9LCp2Yilf6xE1p7vUOhQ6Oh9kAMkY1mjJiw3gNFqh1XJw91XRbnsJTT0oYdrWnJUpKP4
-	Kwhl00RCgxLZGL04x3ylvg0tbp8rTwc0HFD2tyt0YQT7q9MM9Nl3HQWVvSVhGju3++/rbklQwZ2
-	6WtnDKWSxIOR05qm1bExkTANhgSB97lyX2p4RQAfXMCMgNXIiH7OnMed4DDpuioNa3hbjB+FXza
-	VsVzgA9sWdxJvtkP6/k+3sxuiWbC6GRvVlsPRmSP3YjdOje5bsD1
-X-Received: by 2002:a05:600c:a105:b0:485:3af5:7e53 with SMTP id 5b1f17b1804b1-488d6839821mr261694475e9.19.1776361915648;
-        Thu, 16 Apr 2026 10:51:55 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e00b55a04a9836ebec0.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:b55a:4a9:836e:bec0])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f5818d70sm119654275e9.4.2026.04.16.10.51.54
+        d=1e100.net; s=20251104; t=1776362938; x=1776967738;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+W/vpusUQHiaTDKMH+oISsU2AULmLrbcqM59LSjN2Jo=;
+        b=YvpmuluAuVdDQfda+LVbuffnUTYxLhQoDd8QU2+P4GxgGIOIrmP6pWQCwB2z7U+PS0
+         neIssW2Z1xy5oHkyA7CXVqoIgdiDFPJcQw56p8WB3L5V4VGTNlynMULs8x6dOSesELag
+         nughhmPTVfJU9UwNobBwXoUeryJGqEWzFzCLicb0SJaypAZ+ZwDM35EwHIFz9+IXDdef
+         YMxj60ap/PyVTdbHRVeEoTJab++sZqrdP4SL6lJPLiIQj8o6UOTHbla/HfCDwZhpZ2j2
+         4KSGHe+Sg+xpgrmIQrOh8qh8tLMZiDpua/aE2n6Oc+S1T5oAFoU8aRTeJBwdQywRhK4Y
+         nA6Q==
+X-Gm-Message-State: AOJu0YxAzuNurBfWdhKdjmP6fpWBI/K8WaPAUBlPex2eY4wj1CIyTQgQ
+	3DNRM38nAVRfQyaP3vxw5ZBCu3UA0eLfDNE/bhOp3EdYEzg1RyEHOFyu
+X-Gm-Gg: AeBDiet2G5gEdzW5xRYP737Celrd5UDkbekdXIGebwO/MMJiQhHtNsUIDrcUZSmYOfY
+	SDlHJYRlYFEL2yfEb4E3GiZV5u6BZ1WQqYRX6CK3SV4PPD/k3hckRMk9PHYrVkFSNcbfgBcWZvU
+	s7c3eK2D0x7mrmEQswWp1FX3Oanf6qvVaHXANCdl/ZSLXNT7QB2U/dXN4AK1PzZGqil0zFFOgxe
+	b1SvuljUQ/BOYjQezsGDAF+6Fus+BtjOBrWSPwPWQcLawAT5k6E6cZsMAixksYmOlSiraw8JW1j
+	fseD1cbKG601wLADF5emBAv6qSNSW/V95HY1zF6Sjf5039QQppXfEiDjjbd11Uogzr8EDCv5hZr
+	JaWsPA/U2Rw3EYcT6XMeh9hgT0ErXi3ukdTweoTcsEJgnSydwZMSJBJ7+2/IJHnAviMmhZ2cBV5
+	CPkYG1GB079uPefYw4+r+4GDog
+X-Received: by 2002:a05:6000:2305:b0:43d:77c6:be6e with SMTP id ffacd0b85a97d-43fe149919cmr587962f8f.31.1776362938037;
+        Thu, 16 Apr 2026 11:08:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:42::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43ead3d5f06sm16144018f8f.17.2026.04.16.11.08.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 10:51:55 -0700 (PDT)
-Date: Thu, 16 Apr 2026 19:51:53 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: sashiko@lists.linux.dev
-Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test for empty intersection
- of tnum and u64
-Message-ID: <aeEhua0q1C8xCO0F@mail.gmail.com>
-References: <20260415160728.657270-3-harishankar.vishwanathan@gmail.com>
- <20260415182952.C7B77C19424@smtp.kernel.org>
+        Thu, 16 Apr 2026 11:08:57 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next 0/2] bpf: Fix NULL deref when storing scalar into
+ kptr slot
+Date: Thu, 16 Apr 2026 11:08:06 -0700
+Message-Id: <20260416-kptr_crash-v1-0-5589356584b4@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260415182952.C7B77C19424@smtp.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIYl4WkC/x3MUQqDMBAFwKss79tATKOFXEWkxLjWpZCGjYgg3
+ l1wDjAnKqtwRaATyrtU+WcEahtCWmP+spEZgeCs661ve/Mrm36Sxrqa7u0iv7rkvbVoCEV5keP
+ JBkxlMZmPDeN13fQAGldmAAAA
+X-Change-ID: 20260416-kptr_crash-572ae35c4400
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ eddyz87@gmail.com, memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, Hiker Cl <clhiker365@gmail.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776362936; l=755;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=q96H2y289w9fbuU+NhDDs/a/MzIp7y85zyU5pz4tN6o=;
+ b=ujLxUtac6YIltWbpx/6rQPaTs0r/j9TtcMwv1bpAFskYYxjPVITybQM9Uo7DXeWYCb3oNrUiT
+ vDnJywQtN7kBq/xQkOQMlEVne6W0jonlu5u8cp4d2B/sDzWJGPdgED2
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-On Wed, Apr 15, 2026 at 06:29:52PM +0000, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 2 potential issue(s):
-> - [Medium] The test relies on the verifier treating the return value of `bpf_get_prandom_u32()` as a completely unbounded 64-bit scalar. If the verifier is improved to track its true 32-bit bounds, the test will silently stop testing the intended logic.
-> - [Medium] The inline comments in `empty_tnum_u64_intersection` incorrectly describe the verifier state at the wrong instruction boundaries and use incorrect terminology.
-> --
-> 
-> commit f07d8c6131ab63ef38acb708d393fc328146ef7c
-> Author: Paul Chaignon <paul.chaignon@gmail.com>
-> 
-> selftests/bpf: Test for empty intersection of tnum and u64
-> 
-> This commit adds a verifier selftest for a scenario where the tnum and u64
-> values don't intersect on a branch. It uses bpf_get_prandom_u32() and
-> conditional jumps to test if the verifier correctly deduces that the branch
-> is dead code.
-> 
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > index c1ae013dee29c..151c7a479a6b8 100644
-> > --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> 
-> [ ... ]
-> 
-> > @@ -2184,4 +2184,29 @@ __naked void tnums_equal_impossible_constant(void *ctx)
-> >  	: __clobber_all);
-> >  }
-> >  
-> > +SEC("socket")
-> > +__description("dead branch: tnum and u64 don't intersect on true branch")
-> > +__success
-> > +__naked void empty_tnum_u64_intersection(void *ctx)
-> > +{
-> > +	asm volatile("									\
-> > +	call %[bpf_get_prandom_u32];							\
-> > +	r6 = r0;									\
-> 
-> Since bpf_get_prandom_u32() returns a u32, its runtime value is strictly
-> within [0, 0xffffffff]. If a future verifier update bounds prandom_u32() to
-> this range, the verifier will accurately determine that the jump
-> (r6 s< 0xe00000002) is always taken and prune the fallthrough path as dead
-> code.
-> 
-> Would this cause the test to silently pass while no longer providing any test
-> coverage for the tnum intersection logic? Could a truly unknown 64-bit value
-> be constructed instead to prevent this test fragility?
+map_kptr_match_type() accesses reg->btf before confirming the register
+is PTR_TO_BTF_ID. A scalar store into a kptr slot has no btf, causing
+a NULL pointer dereference. Guard base_type() first.
 
-That's not a bad comment, but I would expect bpf_get_prandom_u32_proto
-to be part of the API at this point. Many other selftests use it to
-retrieve a RET_INTEGER from the verifier's point of view. If we were to
-ever change that, we'd likely get more than one failure.
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Mykyta Yatsenko (2):
+      bpf: Fix NULL deref in map_kptr_match_type for scalar regs
+      selftests/bpf: Reject scalar store into kptr slot
 
-> 
-> > +	r1 = 0xe00000002 ll;								\
-> > +	r2 = 0xf00000000 ll;								\
-> > +	if r6 s< r1 goto +2;								\
-> > +	/* On fallthrough, r6's u64=[0xe00000002;0xf00000000] */			\
-> 
-> Are these inline comments describing the verifier state accurately? The upper
-> bound of 0xf00000000 does not seem to be established until the fallthrough of
-> the next instruction (if r6 s> r2 goto +1).
+ kernel/bpf/verifier.c                             |  5 ++++-
+ tools/testing/selftests/bpf/progs/map_kptr_fail.c | 15 +++++++++++++++
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+---
+base-commit: 009c77e8c29f17614b4f197e08afd91916599dd7
+change-id: 20260416-kptr_crash-572ae35c4400
 
-The convention seems to be that comments explain the next line, not the
-previous (cf. other tests and [1]).
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
-1: https://lore.kernel.org/bpf/CAADnVQJ2hX6E1_p557MYJOQLxXROzDxezwr-x79A7MyZZLzJuA@mail.gmail.com/
-
-> 
-> > +	/*                      tnum=(0xe00000000; 0x1ffffffff) */			\
-> > +	if r6 s> r2 goto +1;								\
-> > +	/* On fallthrough, r6's tnum=(0xe00000001; 0x100000000) */			\
-> 
-> Does this tnum state actually describe the fallthrough path? It appears to
-> describe the mathematically deduced state on the jump target (true branch) of
-> the w6 == 1 check, making the term "fallthrough" incorrect here.
-
-Same here.
-
-> 
-> > +	/* It doesn't intersect with the u64 so the condition is always false */	\
-> > +	if w6 == 1 goto +1;								\
-> 
-> -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260415160728.657270-1-harishankar.vishwanathan@gmail.com?part=2
-> 
