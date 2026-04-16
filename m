@@ -1,65 +1,65 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC30539FCBA
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 12:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACACD3B8BD8
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 12:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776342740; cv=none; b=eYUTLRtcT3EhBAT35empZMlJSZgj+z2WmjdK0087oWlfMfO5nZfSdChSkZvvvncwju7rRD2Eew/aPq1CxLI6x6+NXTofJJ1nD0i353a2UdVzIZ2w3yMHNy1YE/g2RrKIU2dj94loF3LrR4FlU0y9eCj5TtuymLGdL9GNXK0Ep0c=
+	t=1776342818; cv=none; b=OPfCBDjG1ORSev2WyD1Dx5xB5S1w67S2Btz31y9O4rH2nHPGbpK7aMgcZOYM9icxyHSAXGTMsEvXh4hI2Rj4vyAkBARrJN31SdWUVUKnMFXlyC8+xkjXYQcjORnKrY7wXh1XsIpYmJGKnmF8tDh9U7km6SWcVKrQt9TDM6eoqpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776342740; c=relaxed/simple;
-	bh=ydAOpVCxaRGkSIoafmuBHFbulVKKEekBMag+Ywm0+ZQ=;
+	s=arc-20240116; t=1776342818; c=relaxed/simple;
+	bh=CEb3cuo/uAP88ESWyuNyMkZh7DTfU9K7tpZY9polNZ8=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=p71TDvo48zZvF3aJLase8Z+S3XNz9sw6AWHNgb0Oh20Xsaj209QYK91pqWCKRKcygiZoXBp4ZlgPIKtrtiJObyhgBz/jVowa8FYdDtOWfiC+Eyd0vGcPlO/A2gUrLFhpwNJ6t48d5OR16nIGUDIpBGkCCUb52aJKbJKGMRBZ6V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i0lWgpDC; arc=none smtp.client-ip=209.85.128.180
+	 Mime-Version:Content-Type; b=AKRv/dPIaTofbxUV6MiHNtqe4j0u1pvoyDGJssuQXysjgg7poS2XlCELIRHduNPbFYEl33h4YIwoP3q4P4pVhvbCB2wHzWF9N1eqCpOtyusmnngvOjO6cCZw37Yty+9VmR6TN5IJ5z3HrdfcODwcw9PskdNDH+XTGZNNDalM7I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7GJG2gO; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i0lWgpDC"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7b23713eac9so50832857b3.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 05:32:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7GJG2gO"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-79a60975dc5so92319267b3.0
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 05:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776342738; x=1776947538; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776342816; x=1776947616; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cynS+faVTPFVRdqWHrSyVI/SVlDQMOa5TP6GL64bMWc=;
-        b=i0lWgpDC86BgdDo2jVoVzTjLVHmICOY16xDo9g/PF2qC/ZA/HrhemCoKLYgIpekUNh
-         5m8FYqtMsaO51BJXwaciJAUknGa1c4qV815pWJa4/fDgnC/O9ZYhiv+IvptB6WMBWeZL
-         MAgc968SIfqwZHDe6UkdSIOUANlDu/BtQLyuu+ZlY5J2nslCailSPB2ZRFEKFLDy5bgf
-         HgoBqYUFGTjWgU8T7ogzm1wjzQ6OASJpd+ml8hSZlBoa565IM3FSi27eH6Ho+bzXPTwD
-         70+6M292UMahgrsfnyTP18kG6+Kbj8oU7W8WpD9WzbvwS3Ex6oiAL8l7lD7Gj3yUmEGn
-         FsTQ==
+        bh=LArw8lu+z3P+Njr288piMWTqVUwbnY19SMC1K2R3E/8=;
+        b=V7GJG2gOVXPXgEcWQ/6GxvBr9fAZXecoBQKOmbmF6wvO2XZB8MRBS/u6R34kQ6AYbZ
+         dYY6FlHa+Edmfc9f1h6SDUcullyvuyeuYEnfZKWF1TFkZpeHOVjsB/pYwL7C+TXbiUV/
+         2y1TA1D4YpQ42Yg52hDz3yc+V3EQi+zt+wQGF3zaMsbW6+pdQ+CokgFzDHY20MqdzrMa
+         5IUmVSMLejNWAAgnwUV/B6+awLkYCf5GatPGp/gJktsBfqABRplmATqWXgU8BtmHMTT1
+         Y2h0ZQ9p5VicyI3QtbEpzwIXWSolxXkBfSEE86HvCxevq/L0s+QPS1f5AgbJS0aEJrS8
+         0HNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776342738; x=1776947538;
+        d=1e100.net; s=20251104; t=1776342816; x=1776947616;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cynS+faVTPFVRdqWHrSyVI/SVlDQMOa5TP6GL64bMWc=;
-        b=sppW4o3KmhNh0qvAutco38Gf56S7KYRT+KYG3VGkld1Q6AHSE+jJb/tvvTC597ZUNw
-         fi1KOKo7vRgOYJU0k4P8SE5M+SdHzGEfsTKH0QacZtpPq5AEj4408OZoaAwqyyNxA2js
-         sFhK69Gzp374m0eBmgDpIXy6bLIj2IsWdXJ6V8AIVDGHbqKYiZIlkFJzW3xu0TRisqYV
-         d2yFJNVgyzvqhAko0FfcOpGcye0FYggsPfL2Knd268XWfdJBipofJwJKR8XMkArdfOlS
-         blS3S83FgY5Vz0s0RoS7yT9aVCVicAuB/tkWca5P/jiZSWdTyMzIh8e0THGzXHHEO3Z/
-         y9PQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+uxU5W9JBTKrxcJlcDjvOgx9UjXei2AWRyqhgpvjCkqxPHx5rODkOz/TG3LQy5QCik3io=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxv3wQMX+3EcCHOXsKlb+trxwkwOPVWJ9zmP8pSAuyPul7pcHsz
-	wACg3ZDjsrXjfD8b782A9vq2gxjh9Z5F4UVv7Tg0WBwnFYwvXVRvhvwS
-X-Gm-Gg: AeBDieulnMJpYnxZOS3qpEiqw4ySIp3WrUmHZGNeGNEOlw6BK4l81Lv7EgU9RbipnTk
-	Byqg86yGqERQJfX2GzX/cVOniKmhXW4HV71aWnZU1hu58b3Mo2BlKWedn6JlzGtGgTetBZLUBal
-	1xQB8zSy1RexhjcfaxO6JK8CL6Akprb9GVzUNWlu1nksCkFDr9kfHx+cjhkBQHkDm910SWq1ANX
-	nS1PukZTh+ylu85uvgVYsR9OvEP1JsGxOVSskZhIyFwvXDA4ACrlKMxihDdD8z1iZs4EcyZARKT
-	rSj+yElzGbP2C1qTYbOI7jaL04pWXBExmr7hvp0C+6LUKVGr70wjd5Ei0t4le8oqTOPTr8YkXqD
-	0SYaWEyVazrxZ6FlvyZAok1I09hBLcKGAmgBUFtJckGJ65Fx5OA9tWcxOpfhOioidSnzNaZKzm+
-	Co/2SN8qykIDGLrvxo6QIkKdXIb4Td2lkC8LOu3TVPKTM1NMmGGL4cjWewN9s7h/qhm5yTwlcGn
-	fjdTBfCF/Mfr6w=
-X-Received: by 2002:a05:690c:6987:b0:7b6:de92:adb5 with SMTP id 00721157ae682-7b6de92bb2bmr84653277b3.49.1776342737764;
-        Thu, 16 Apr 2026 05:32:17 -0700 (PDT)
+        bh=LArw8lu+z3P+Njr288piMWTqVUwbnY19SMC1K2R3E/8=;
+        b=EnYsBm8h0SY1av9S1S3cXGK5sLeFg4Z+bEwUVU87aHOvgEIrWOENcrv49IewhtJiBO
+         zb+0yD2XC8nLGMal8oHHpdm7m7jVQ4hCmRjSg8aafT+SaN4S631nySqLGqQFb/eDxdkL
+         DnFOcBrtpBL6g1l11VN4h6JQUnYNmxJG9fxfS3bHhVcpYRLI97CUdX+/tYB/6ezG+6aa
+         +bv+b5LOYvWc94qWQKiCJ48dMkEI1uoqwI/dDnForjetlrbZOPwHFlJCxYj3cgMvwwAH
+         qvKVZGumNKQDGCJF/lzFayyHk9gcMS1yewpS2QvLn0uid3fe6JnZGVK9H+niTqBrE400
+         AQVA==
+X-Forwarded-Encrypted: i=1; AFNElJ9kNFxnaz9/Cu4YKFAfj0vgvXf+0RmGuTmfAZIaNkI1QRnu0vawLlgOZrA9sKIyZealHsE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8BV2aGa6g/j69IA81eBszdgCWkdVgdUPzuBQqpzCcSdCIY9ct
+	/JGIcthZ4jVugQu0k01E8AB4hJ3cez5SvLs/p1IXcTY3iEuZvYL6a2yA
+X-Gm-Gg: AeBDieuIfk5RGJrS06MIYvbC4H4A2TB4Zpt8a/KQ7Y9/ftKyjZKwhhkPGkx6TnayVjw
+	54Pn+eCB4guFhlsOgLtBY4HHHKiyYjjVZHk3UH+vZjFcUytGW3Y4gc2zN2/ZDP1Fcs6zHjj3SSe
+	1jYPPyP6gpCjLcMjWcDvDfzalzOcSepBaMD9pTTpERziF+a7yMJ/JLbSNVbqH/yMfDUyztltBj4
+	gvgsoKEewSU/5S1gQ3Q1aW1QM3txaHeaIGmiCkGHQG/Qr/XI8NJSxUXB7+lZJOth+AU2rPTkJVA
+	zDOKftL/js/jnMIDh9QAhkE2ISSSKAuISq4Jw88zn+zhu92qlu7Ztq9CPyllgYmZMLg57hnaYII
+	MKH0N7j/Jf/rGJwmRKM6clH6Befdn9HLMgf3CgaLVOLHxta3nXQTfvFgOPwawFReRtR+4vJ5MSG
+	B3B+KERKMhrJcOopE+DOMXD3uaiNgUWxoyNJ/ShBpKhE/3JB4dkPi4ipv35Nxn9PW5CMKJy3XkX
+	lXBuOgKLefgtc7AsmZtxYF7Xg==
+X-Received: by 2002:a05:690c:6e85:b0:7b8:f152:753a with SMTP id 00721157ae682-7b8f15278bfmr15108987b3.19.1776342815689;
+        Thu, 16 Apr 2026 05:33:35 -0700 (PDT)
 Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7b769411295sm21733707b3.42.2026.04.16.05.32.14
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7b7693179a5sm21853427b3.36.2026.04.16.05.33.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 05:32:14 -0700 (PDT)
-Date: Thu, 16 Apr 2026 08:32:13 -0400
+        Thu, 16 Apr 2026 05:33:35 -0700 (PDT)
+Date: Thu, 16 Apr 2026 08:33:34 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Nick Hudson <nhudson@akamai.com>, 
  bpf@vger.kernel.org, 
@@ -67,24 +67,20 @@ To: Nick Hudson <nhudson@akamai.com>,
  Willem de Bruijn <willemb@google.com>, 
  Martin KaFai Lau <martin.lau@linux.dev>
 Cc: Nick Hudson <nhudson@akamai.com>, 
- Max Tottenham <mtottenh@akamai.com>, 
- Anna Glasgall <aglasgal@akamai.com>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
  Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
  Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
  Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.30d031033dc61@gmail.com>
-In-Reply-To: <20260416075514.927101-6-nhudson@akamai.com>
+Message-ID: <willemdebruijn.kernel.2a800b32a572a@gmail.com>
+In-Reply-To: <20260416075514.927101-7-nhudson@akamai.com>
 References: <20260416075514.927101-1-nhudson@akamai.com>
- <20260416075514.927101-6-nhudson@akamai.com>
-Subject: Re: [PATCH bpf-next v4 5/6] bpf: clear decap tunnel GSO state in
- skb_adjust_room
+ <20260416075514.927101-7-nhudson@akamai.com>
+Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: tc_tunnel validate decap
+ GSO state
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,88 +92,129 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Nick Hudson wrote:
-> On shrink in bpf_skb_adjust_room(), clear tunnel-specific GSO flags
-> according to the decapsulation flags:
+> Require BPF_F_ADJ_ROOM_DECAP_L4_UDP and BPF_F_ADJ_ROOM_DECAP_L4_GRE enum
+> values at runtime using CO-RE enum existence checks so missing kernel
+> support fails fast instead of silently proceeding.
 > 
-> - BPF_F_ADJ_ROOM_DECAP_L4_UDP clears SKB_GSO_UDP_TUNNEL{,_CSUM}
-> - BPF_F_ADJ_ROOM_DECAP_L4_GRE clears SKB_GSO_GRE{,_CSUM}
-> - BPF_F_ADJ_ROOM_DECAP_IPXIP4 clears SKB_GSO_IPXIP4
-> - BPF_F_ADJ_ROOM_DECAP_IPXIP6 clears SKB_GSO_IPXIP6
+> After bpf_skb_adjust_room() decapsulation, inspect skb_shared_info and
+> sk_buff state for GSO packets and assert that the expected tunnel GSO
+> bits are cleared and encapsulation matches the remaining tunnel state.
 > 
-> When all tunnel-related GSO bits are cleared, also clear
-> skb->encapsulation.
-> 
-> Handle the ESP inside a UDP tunnel case where encapsulation should remain
-> set.
-> 
-> If UDP decap is performed, clear encap_hdr_csum and remcsum_offload.
-> 
-> Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-> Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-> Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-> Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
 > Signed-off-by: Nick Hudson <nhudson@akamai.com>
 > ---
->  net/core/filter.c | 38 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
+>  .../selftests/bpf/progs/test_tc_tunnel.c      | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
 > 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 7f8d43420afb..e113ae2f3f14 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3667,6 +3667,44 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
->  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
->  			skb_increase_gso_size(shinfo, len_diff);
+> diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> index 7376df405a6b..74dfb694a210 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> @@ -6,6 +6,7 @@
 >  
-> +		/* Selective GSO flag clearing based on decap type.
-> +		 * Only clear the flags for the tunnel layer being removed.
-> +		 */
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> +		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +					 SKB_GSO_UDP_TUNNEL_CSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-> +					      SKB_GSO_UDP_TUNNEL_CSUM);
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-> +		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_GRE |
-> +					      SKB_GSO_GRE_CSUM);
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-> +			shinfo->gso_type &= ~SKB_GSO_IPXIP4;
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-> +			shinfo->gso_type &= ~SKB_GSO_IPXIP6;
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_endian.h>
+> +#include <bpf/bpf_core_read.h>
+>  #include "bpf_tracing_net.h"
+>  #include "bpf_compiler.h"
+>  
+> @@ -37,6 +38,23 @@ struct vxlanhdr___local {
+>  
+>  #define	EXTPROTO_VXLAN	0x1
+>  
+> +#define SKB_GSO_UDP_TUNNEL_MASK	(SKB_GSO_UDP_TUNNEL |			\
+> +				 SKB_GSO_UDP_TUNNEL_CSUM |		\
+> +				 SKB_GSO_TUNNEL_REMCSUM)
+
+Leftover remcsum reference?
+
 > +
-> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-> +		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-> +			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +						  SKB_GSO_UDP_TUNNEL_CSUM |
-> +						  SKB_GSO_GRE |
-> +						  SKB_GSO_GRE_CSUM |
-> +						  SKB_GSO_IPXIP4 |
-> +						  SKB_GSO_IPXIP6 |
-> +						  SKB_GSO_ESP)))
-> +				if (skb->encapsulation)
-> +					skb->encapsulation = 0;
+> +#define SKB_GSO_TUNNEL_MASK		(SKB_GSO_UDP_TUNNEL_MASK |		\
+
+Odd indentation?
+
+> +				 SKB_GSO_GRE |				\
+> +				 SKB_GSO_GRE_CSUM |			\
+> +				 SKB_GSO_IPXIP4 |			\
+> +				 SKB_GSO_IPXIP6 |			\
+> +				 SKB_GSO_ESP)
 > +
-> +			if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) {
-> +				skb->encap_hdr_csum = 0;
-
-This field is not used with UDP_L4.
-
-Similar to remcsum, I'd ignore it entirely in this series.
-
-> +				skb->remcsum_offload = 0;
-
-Why still include remote checksum handling?
-
-> +			}
-> +		}
+> +#define BPF_F_ADJ_ROOM_DECAP_L4_MASK	(BPF_F_ADJ_ROOM_DECAP_L4_UDP |	\
+> +				 BPF_F_ADJ_ROOM_DECAP_L4_GRE)
 > +
->  		/* Header must be checked, and gso_segs recomputed. */
->  		shinfo->gso_type |= SKB_GSO_DODGY;
->  		shinfo->gso_segs = 0;
+> +#define BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK	(BPF_F_ADJ_ROOM_DECAP_IPXIP4 |	\
+> +					 BPF_F_ADJ_ROOM_DECAP_IPXIP6)
+> +
+>  #define	VXLAN_FLAGS     bpf_htonl(1<<27)
+>  #define	VNI_ID		1
+>  #define	VXLAN_VNI	bpf_htonl(VNI_ID << 8)
+> @@ -592,6 +610,8 @@ int __encap_ip6vxlan_eth(struct __sk_buff *skb)
+>  static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  {
+>  	__u64 flags = BPF_F_ADJ_ROOM_FIXED_GSO;
+> +	struct sk_buff *kskb;
+> +	struct skb_shared_info *shinfo;
+>  	struct ipv6_opt_hdr ip6_opt_hdr;
+>  	struct gre_hdr greh;
+>  	struct udphdr udph;
+> @@ -621,6 +641,11 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  		break;
+>  	case IPPROTO_GRE:
+>  		olen += sizeof(struct gre_hdr);
+> +		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
+> +						BPF_F_ADJ_ROOM_DECAP_L4_GRE))
+> +			return TC_ACT_SHOT;
+> +		flags |= BPF_F_ADJ_ROOM_DECAP_L4_GRE;
+> +
+>  		if (bpf_skb_load_bytes(skb, off + len, &greh, sizeof(greh)) < 0)
+>  			return TC_ACT_OK;
+>  		switch (bpf_ntohs(greh.protocol)) {
+> @@ -634,6 +659,10 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  		break;
+>  	case IPPROTO_UDP:
+>  		olen += sizeof(struct udphdr);
+> +		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
+> +						BPF_F_ADJ_ROOM_DECAP_L4_UDP))
+> +			return TC_ACT_SHOT;
+> +		flags |= BPF_F_ADJ_ROOM_DECAP_L4_UDP;
+>  		if (bpf_skb_load_bytes(skb, off + len, &udph, sizeof(udph)) < 0)
+>  			return TC_ACT_OK;
+>  		switch (bpf_ntohs(udph.dest)) {
+> @@ -655,6 +684,35 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  	if (bpf_skb_adjust_room(skb, -olen, BPF_ADJ_ROOM_MAC, flags))
+>  		return TC_ACT_SHOT;
+>  
+> +	kskb = bpf_cast_to_kern_ctx(skb);
+> +	shinfo = bpf_core_cast(kskb->head + kskb->end, struct skb_shared_info);
+> +	if (!shinfo->gso_size)
+> +		return TC_ACT_OK;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
+> +	    (shinfo->gso_type & SKB_GSO_UDP_TUNNEL_MASK))
+> +		return TC_ACT_SHOT;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
+> +	    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
+> +		return TC_ACT_SHOT;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
+> +	    (shinfo->gso_type & SKB_GSO_IPXIP4))
+> +		return TC_ACT_SHOT;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
+> +	    (shinfo->gso_type & SKB_GSO_IPXIP6))
+> +		return TC_ACT_SHOT;
+> +
+> +	if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
+> +		     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
+> +		if ((shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && !kskb->encapsulation)
+> +			return TC_ACT_SHOT;
+> +		if (!(shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && kskb->encapsulation)
+> +			return TC_ACT_SHOT;
+> +	}
+> +
+>  	return TC_ACT_OK;
+>  }
+>  
 > -- 
 > 2.34.1
 > 
