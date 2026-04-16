@@ -1,97 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38D534CFD1;
-	Thu, 16 Apr 2026 14:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F5333120C
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776348644; cv=none; b=HVOGU+kOv2nwNiTr2ss+9RYKezuXb0Kr4ZI8VXxzURwf3oW5FZEsaFSFigULZDA/koILAqK2fjLJpUhykGpM2zxZ27jsqJ++BTr5OzFDJ7ZHzqjlqjrV04VvqpqmH5KdeLFUjTwrFMlvvP6Tk2Cm4/VCa7WNElDzVvfMj2QB2sM=
+	t=1776348676; cv=none; b=hkqvLfNF5s7jKUwJBwqrNl7xJDdf609+5D5iUnI3FAqYBWD27KZ7TRWO1SqHksaCx8Dt6Wln4Agx/DpEvQ5ktcecXEoeGhzKonR5Ec43+yOdu5g+jNkUqgkxPftd0iRKLOTosnjl2fUkbT9I17hPzU1HLPm4KU+ATc9rEnIC1PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776348644; c=relaxed/simple;
-	bh=pX7i/5+LnUDc6Duofn2BILOt1Pooo9KnzAacs/0u3mc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Vx+bnNimzc3g1B0NOQwvrk+8thAhS/RGmaJXPlyHXYfW/yoeaQPp2x8IPKCXOeZwIfffdoxvnlQ4RTAanXfAFY9Q40fYV4Z1sZEVkePXl50n4sQsL7dHWeFuPkkLoJHcSBVsW7uAc0zii1sTabxT3iCFndWWCBvwBwGbTPRzPMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qbQZX91S; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776348676; c=relaxed/simple;
+	bh=Jo2wLJ3Vk0m3DAWZWBw5zk9FjZbusVRlJ3p3VXn42iQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=b0VYtCu7bvVdtPshSkyAUFxFo8jQtfiOc/T1NlnGYwlDP4PwtsUbBdu1onwZd4p/ZRSIQ+X8udBFJ1PwBP31UbjOHRIKdiVtz+hJ9k3CgMjkivqQpnlndufw1TI5EQQb8HNwvcvppAn8ZehL3fhJIOHZ6w7zk7+kyN4Xd5/QKzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j9YG+DcR; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qbQZX91S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A624C2BCAF;
-	Thu, 16 Apr 2026 14:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776348644;
-	bh=pX7i/5+LnUDc6Duofn2BILOt1Pooo9KnzAacs/0u3mc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qbQZX91Sd215h+Ii0G9MyMrp1sFoxhOe8u2y/puzg+ZYxqg0xm3EhwJvuCA/u5VtC
-	 7CghDvGUyP8TBsM+zm/eUu+dSS7gmPD5J0B6bdyiYCGQtXFTdNveDjPop9poLtw3F6
-	 /lHb28E1fLBZhgTrVKpod42Q0Ga+WSBGYlpRbKfYJeQYbE6Df+ASgGeiDuFfV4/Wxi
-	 J89STjeG5ZSjR0JsPEj94nnuhdE30xG4IFvUvzRjwEW1B4czQfjPyxmbhEnfaUyvIj
-	 5Iry5Ci71iVVbWVT5sVreZaFkOBXKnU6++eg6A3s5pHzCJQzPNcyomhTVE4OrxfrBs
-	 UgGhllICwEx8g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE13380AA61;
-	Thu, 16 Apr 2026 14:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j9YG+DcR"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c6e2355739dso3666014a12.2
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 07:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776348674; x=1776953474; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/2LEegCsou5Ku+cEMPUyMrHkJkU+oGi9hyRt3vijjuw=;
+        b=j9YG+DcR4OL2oj7cW58gjroBInoqRwPaXvyBqes4YuDR1N0/lMNBUFVx5Eiln0q11l
+         ExJtoYHLx4teg+LYLOwznGJXY/nzBJJ5T1wJf+X8Z6XPvnMBH4yR5gli1JcFA0hKBEbK
+         dvdj8sMtlQFg3c7AXhxb1wMnvKprdTxvY2XIbiB28YenVUm1/UN0F5RO02hcnmQOCOzl
+         K1FnqVoDS26p5OYAfvOFairKORWY2YRMVT/cfo471cFo7caW90Dki4HhHggToRRPqQ5V
+         uvC5L8MHgXn5+pGGsEWBNIaOvqi/f5MWz7UaB3Qd1FMtVni1rSMddk3D7t1pCLkmcVH9
+         sCkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776348674; x=1776953474;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/2LEegCsou5Ku+cEMPUyMrHkJkU+oGi9hyRt3vijjuw=;
+        b=TNxY/psWKDmipdw349ZNZEe44KbhyGvSnR4Jn9+sRJpmvlnLLV0jDZx1Y5Y4tnT1TE
+         ROWQmBqDP5l4gI3B9+Fi5KYIcTDvziPVvOcdPf+ByeVtlyYN8x7lhXK6nnNYpFy+iUF7
+         EFISMtZIgWSPlK+l6YYUrgVyImISfmTV6s3+yUalUoaXPmPp3mh1bGaHBfKXinwIgTPU
+         z3389PGn1pxiMc2eR1qwVkk1By/LPt/LHH5saCbXbbee1SYI5yrzdl6DydByfFPVDQsR
+         iy2XyK3nVYwqz3IIfntTaIdUkkgokvJHrbpzviye3vjX1T9K8piOez7dJDlX4/iZzUjd
+         YZbA==
+X-Forwarded-Encrypted: i=1; AFNElJ/c/84uY20SwEiMWRpyCXulid+WBB7S7scpTKv0S+EVpmyZ/7xh+1sAN6O2AggxwmMIzmc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl11uaEVo1T3Pg35TrN+xeg6zS4mjjG09Ii7KgAhKzAFNMB2Lo
+	txrHIwVw7OKcOOx78AF47CHSZmkCPLz7P4IjDRFm5EWcZRCz+f32c/I1
+X-Gm-Gg: AeBDieufaB5lKmiPZ88m3HU0k4MQUi4LuF7nx0stAOVU8rOqcucRslq9vjCc9d+qqPh
+	nXim9JWG4c3dz3yC7x9o8YPPrkyGFc1hiBwnaA5dSp+04aLoQdAR8TpdmutuGknvtu4+AJb1Ze0
+	GSKPEvUG5XAh70QJGp0YuSAtczIOwSSLiMEeB00td8miMKOcpLEhhuwcLdHkyFRWT3a+KdMwM0f
+	qRT10YDVQTNWW/yZVBFkCQvV4kUrae/enwUnaOP9Otd81TCASUVQCz+W97NwihwPQZuCCC9MQw0
+	jhiIQJbAU14vHGcO+J2JRqLrE7YqCKSsCmDA0j5OZjJbjf2DMmwf9JJM8Mgma6xj3RMq+vHZT+q
+	MNaNcQ5bOFIHicsziwb9l0U4hSs4kObXp8SiM0hny9ebdtxdExB0+rx2OVUBbA1CBGMCwsPlkbX
+	CcjCu8pClnyZfCKvf9r/+v2LLkjOsTGLFbSkZj1AJ8G0tawqTyY70tNliN/n1Z6RosIRyh8iyAG
+	SX2KWf4NFklbgcn9MuJFtZOyiG41wMBWMCL43LFfW7se1+tD6+jlFRG
+X-Received: by 2002:a05:6a20:748b:b0:39c:1f:3211 with SMTP id adf61e73a8af0-39fe3d618e2mr26680940637.20.1776348674000;
+        Thu, 16 Apr 2026 07:11:14 -0700 (PDT)
+Received: from localhost ([2601:600:837f:c470:1879:8422:922b:e5d3])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7957ece9d4sm4726935a12.5.2026.04.16.07.11.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Apr 2026 07:11:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v15 0/5] emit ENDBR/BTI instructions for indirect
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177634861305.3246567.7251798812226371156.git-patchwork-notify@kernel.org>
-Date: Thu, 16 Apr 2026 14:10:13 +0000
-References: <20260416064341.151802-1-xukuohai@huaweicloud.com>
-In-Reply-To: <20260416064341.151802-1-xukuohai@huaweicloud.com>
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- yonghong.song@linux.dev, puranjay@kernel.org, a.s.protopopov@gmail.com,
- alexis.lothore@bootlin.com, list+bpf@vahedi.org, linux@armlinux.org.uk,
- yangtiezhu@loongson.cn, hengqi.chen@gmail.com,
- johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
- hbathini@linux.ibm.com, chleroy@kernel.org, naveen@kernel.org,
- luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
- pulehui@huawei.com, iii@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
- davem@davemloft.net, udknight@gmail.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 16 Apr 2026 07:11:12 -0700
+Message-Id: <DHUN1UJ0DLBC.3UC7SXBAV2FOW@gmail.com>
+Cc: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, "bpf"
+ <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Martin Lau" <kafai@meta.com>, "Kernel Team" <kernel-team@meta.com>,
+ "Eduard" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Mykyta Yatsenko" <yatsenko@meta.com>
+Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Herbert Xu" <herbert@gondor.apana.org.au>
+X-Mailer: aerc 0.21.0
+References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
+ <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
+ <CAADnVQJCpJ0bTVPQ0LwoNubsK7-HsdePWgdMz8DX=v9cjgvyKQ@mail.gmail.com>
+ <aeBxQn8ATaNuEF4X@gondor.apana.org.au>
+In-Reply-To: <aeBxQn8ATaNuEF4X@gondor.apana.org.au>
 
-Hello:
+On Wed Apr 15, 2026 at 10:18 PM PDT, Herbert Xu wrote:
+> On Tue, Apr 14, 2026 at 10:13:21PM -0700, Alexei Starovoitov wrote:
+>>
+>> No need for such guarantees. It's best-effort only.
+>> If the walk skips entries it's fine.
+>> As long as it terminates eventually it's good.
+>
+> There is no guarantee that this walk will terminate (unless you
+> finish it in one go).  In a pathological scenario, after each
+> walk attempt, the hash table could be rehashed such that the
+> entry that you're resuming from gets moved back to bucket 0.
+>
+> More practically, the walk is essentially useless if you encounter
+> a rehash/resize event before calling rhashtable_walk_enter_from,
+> because half of the hash table could be missed because the entry
+> got moved near the end.
+>
+> I think a better interface is to detect such a rehash/resize event
+> and then fail the rhashtable_walk_enter_from call.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 16 Apr 2026 06:43:36 +0000 you wrote:
-> On architectures with CFI protection enabled that require landing pad
-> instructions at indirect jump targets, such as x86 with CET/IBT enabled
-> and arm64 with BTI enabled, kernel panics when an indirect jump lands on
-> a target without landing pad. Therefore, the JIT must emit landing pad
-> instructions for indirect jump targets.
-> 
-> The verifier already recognizes which instructions are indirect jump
-> targets during the verification phase. So we can store this information
-> in env->insn_aux_data and pass it to the JIT as new parameter, allowing
-> the JIT to consult env->insn_aux_data to determine which instructions are
-> indirect jump targets.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v15,1/5] bpf: Move constants blinding out of arch-specific JITs
-    https://git.kernel.org/bpf/bpf/c/d3e945223e01
-  - [bpf,v15,2/5] bpf: Pass bpf_verifier_env to JIT
-    https://git.kernel.org/bpf/bpf/c/d9ef13f72711
-  - [bpf,v15,3/5] bpf: Add helper to detect indirect jump targets
-    https://git.kernel.org/bpf/bpf/c/07ae6c130b46
-  - [bpf,v15,4/5] bpf, x86: Emit ENDBR for indirect jump targets
-    https://git.kernel.org/bpf/bpf/c/9a0e89dcc9be
-  - [bpf,v15,5/5] bpf, arm64: Emit BTI for indirect jump target
-    https://git.kernel.org/bpf/bpf/c/f6606a44bc43
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+that's certainly a cleaner interface. the user can retry
+if resize occurs.
 
