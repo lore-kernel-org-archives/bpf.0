@@ -1,149 +1,183 @@
-Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4893845D9;
-	Thu, 16 Apr 2026 12:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776341104; cv=none; b=DhlhmUbfrBWbxk67uz7LenGisUIahOa597GSwQdOrye3kpEGlF/mtiZGFgmeVzKHcBGSpvKsPXRXtH9xbf4iMT0DwNEHuy8JDenYIcviWImNhAvTyCWyqwoRRunpN7UZSsueUQuImMIbdf2ivFP//vvrs4OqHAV90MJWLTGAigc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776341104; c=relaxed/simple;
-	bh=H430vWjWAvf4Ag3QNKOR1u06qEqaJ+Xj6lZ/rFlnbOU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qjyJ1t6KBHm3naaiNyJzvSyWNkiXySPgnYKSM6ZC2485Sa0zQNWgwGfxxnj4GPeNuNNiUG3WBrnEx+9K62BYtU061o7f/eoetLUW9rHsjk/ROym/7r6hu/5BEjnIhgbXm7YWJLRP2Pa32YljZIhrjXdzubwTf7TvMAs0kYB0Kio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=jfUuVbOJ; arc=none smtp.client-ip=54.204.34.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B0637997E
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 12:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776341967; cv=pass; b=JcIDfyBgQMgAX3hV9khcqCYgDd1k22roXQV6JMg3xTu6UcBUFlRNCDsYel74jNHbBqh7gKvmkuHmSXkyUADei8lGw7vnQge83dU7IduUEm2c/TctaifWQ3xpRl60tDzitX7pszk0fmbEBfGyeQSY8LvhOdQ5pPoPNIUpavNVvSQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776341967; c=relaxed/simple;
+	bh=tUtN6Xxl6/8ZUOe0081FLqroxi56blaLuoccETQ6u14=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Kw2wcxrl6TruvicaXIT4DiWiSjgbg3qJNg/hNUvdJO+uXzE4jw5/z4fzPxTCzL8tTv2m/tFs9UWjUWXIuyoVHpY32CqOGvurktcMGatAgXTN7rD2j7BOP71f60cfYfoqthpbV2gcUQab8DYVJ6cyLn+DnYV2wWlOfWC3NkKsVo4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BiREAZhb; arc=pass smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="jfUuVbOJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1776341098;
-	bh=5HOwmbaDA/J8hYTOgZip5HkA0zaO7CmZ3rRrbLHj3e4=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=jfUuVbOJaFTMih/vW7edaXDWsdmRK+Saw24j6CA3ce4w3ASllmNWRpvWikSQbudvr
-	 aQJQWJT9Ll+4fAVPWiYLbvo6ZjvZfJvQll7VjgHaSbqCNqNBTN5PjmYawdcxkXLNz4
-	 KOkrnwdD08ZIGfjAS/2CBo7hOOurwKlByPbnru9g=
-X-QQ-mid: zesmtpip3t1776340958t3c23c2c5
-X-QQ-Originating-IP: dlTyD/VH2KbXh+3uhbcZvulXvtVs/W2VqQFnVeAiJq8=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 16 Apr 2026 20:02:36 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9829649568359731250
-EX-QQ-RecipientCnt: 9
-From: Yihan Ding <dingyihan@uniontech.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org,
-	alan.maguire@oracle.com,
-	paul.chaignon@gmail.com,
-	linux-kernel@vger.kernel.org,
-	Yihan Ding <dingyihan@uniontech.com>
-Subject: [PATCH bpf v3 1/2] bpf: allow UTF-8 literals in bpf_bprintf_prepare()
-Date: Thu, 16 Apr 2026 20:01:41 +0800
-Message-Id: <20260416120142.1420646-2-dingyihan@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20260416120142.1420646-1-dingyihan@uniontech.com>
-References: <20260416120142.1420646-1-dingyihan@uniontech.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BiREAZhb"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5a0ff30b240so10675482e87.0
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 05:19:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776341964; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HW/0NThZ40KanRV4oQ99/jn5Gw71Ujah45z9rNu3O4blyBmBSkJC45SHpecCFWvVtd
+         XdR403NSndiCihldnMCb7pj8+gmShVqqViyady7BZdOcAq22UoCMaY3rWWZcE+5t4x08
+         VIerW8dFc5vVBAi3fSrecXjsKs0GDLE7O+wOIsHzhHSrGo/yxTifQ/pD/hqQBAkgpPGz
+         JsQ9TYiWWBij94PJF3MloeUAekK8v4MOUO9/KBW0lWXtoaB+OxoMRTN5ygAiO8mm5pPi
+         ltFUecK1dK1eMj5WzoZVwA701aMdL5cbI5cy3TEDLVm7TyNkojaD3R4BxisMFS8gMl1y
+         H5CQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ILKzf2TXIFnuxQeSOZRYDomaIK5WqLDrf3a3oWRfbEo=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=WSIT9N2q77xge1lXKyu6gaMiASvyRb0jZorWs+H5pEkAgmQpqRfKcYvON/no2s4GSl
+         tnLsjDQsrgYcoCLfwPX/VUL0y3o/w7WqqwNyNGOLOIMnNP71jEQe/946wZFBV2mRxfIH
+         nMN/riurmqgDUBT4seSBjFhVC0iE5+mXwXmjRrOoLQXs8OWFCx1jNxULoGdr/luwNvrG
+         7ujBgoCNX67Ig4rVQ+aVRP9D/zgWkcRLt/By3WzLCYMo3xePYx+fXPML5e5sJOLO1QFi
+         pCblTGb0tYYKj/8cMKK+/4y/vSLrAOYEzwIJbTgP+k+wC8cRV9uolH2VAxxqOx6+/Gen
+         Q7UQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776341964; x=1776946764; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ILKzf2TXIFnuxQeSOZRYDomaIK5WqLDrf3a3oWRfbEo=;
+        b=BiREAZhbkW+8bOdZ3xFO3Isc6V+A5bTUqqZ6s0vvU0k2KW/yTIfxgXgF/iQMmAUoo9
+         BWj/ePcm5qLGfLCILTNpLHVnIZF50VqhZfAxrj2/ZyOTGxEK8Q6O44HKCxbA/JTNlAR5
+         0O0zIJmdnCThHCbSBZKrkjZhaSPXGeL4Y2QyT6SfR1QhLPpybrQxN0KSO+G+nIK1YIC4
+         T7crnYEhbMFV91s5li2xHpwPL8sTQtRmmGq9ud8bgwFfizcFVkD3VVtXdipElQBjuL77
+         nOlOzfgThgXzW+yuJ9Kj3gJKBDw37Je+d6yfcoZgaIzVMeBqfLKS5949SxizGai82jRy
+         XrWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776341964; x=1776946764;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ILKzf2TXIFnuxQeSOZRYDomaIK5WqLDrf3a3oWRfbEo=;
+        b=DuFqfdM3f5Nu/EyccJITOQRKAgkuv5nWmjbPFJExkdYiwT0dcZySeqSaPUuvMRupLn
+         TvR5gAiajRsLgs6pWVYS2e1Cuf8JG9sjh8qTNksXRsYC8Gb2XKMAxUNZ5BOo1FI1Fg5N
+         dvSqV0gpAdiQgJiElOazHvqQvN9jPVdhoNwHal5IAS9yO03IPFNXHzldk1pMb/q7aUbc
+         uxJLk6ksFAAQu2sGIkdfSsGalavnxKT8vcF+/zLvuvc8mXQ8N6hYqly6S8BZU4OkwcRv
+         Nnzj64rSDIFmtRGiwmjcAcjWZ8kV4H+KSPeOKj20h56lpzDbqXVoNk5BcT1oeXOBHYha
+         vDiw==
+X-Gm-Message-State: AOJu0YyaXpw+D9ONgyn5+6tfsDccJftqhMTes1dzm5VK0MTj3g0Xyqlw
+	jT7HN3fBPZC7KxDLJsHBvEuHcqFr77stuVgOkzhLgf5iZN0JLf1eA6m4xTdzrYScXRlgqxr8wHb
+	k33aLjkkGwRafs4xtF4OuhJ1Atfh5zaYRBWwBJ+Y=
+X-Gm-Gg: AeBDiev6oeyIkjPGEP9OhCcn9nwEqauNrh1D8nx3W2UMzLRRwYuFpFQqL5lzMb6wrKL
+	NlA/SvyYjFPnaF/8ygBrrrP8HCuzr9qzs2WDuQwoZ6hmG5UJONBgJ2U2ZKratZWakpAU70I8CfT
+	GiCf/WMa0JBYAPF+Lr6iOznJ4xOY7q3DiT36EljlTmOrPxIoyCVhn46XlFB7oAR2Bka9N6PZnhE
+	zI8la4ClQ9idnd4XruGsPo/+OcmAuyhzFAP58eGq0vmraS3DgDrOdGTAMWIx0NgKKQpEDz16ZRp
+	ICUJrqJrzWUrnh5tCrQFfeeGYGNwew==
+X-Received: by 2002:a05:6512:3192:b0:5a2:bb8e:d4f4 with SMTP id
+ 2adb3069b0e04-5a3ef906681mr8036490e87.15.1776341963805; Thu, 16 Apr 2026
+ 05:19:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: NeiWbSP+6EVLLr3p+rr4xVHvaSuAeCvIg8+5d20a8MRe1wBpBuWChN8b
-	Dj9GVPWqzoSuqBQvDz8aWG6+zcj4NnNeeZ0oL/DriIjOqC1Nm9zd9ZONLV6yK2mf9q42zme
-	6SJ/Z4R5FGD/KkzHbeDl+2Q3zvUzzKRO9U9LpA/Zu/3sMmy41oAzvKZSy3uVxI9h9BV/bGx
-	RPvVyH5ccdkao75cZzUx+KypOwxZqCg/pdQJFgVUnvklMS1RFaq0vAXdey8sSA18B5lyVzS
-	n3yxmATBPB7vcP0lfbIG1gKxZL6dBqj2IbuFNDZld1u8PYsRwflpd8r2JN3Wya7WS59gMzI
-	rHYhjJdsGoyqDdSconi6NV6gBmShck+u94rB7TWbbJZHzAK+pUPZKCoKA5WevAwPH2f8kM6
-	b697JuqF3A+UbXzhJkY0ED5BPlqeObtwP2dsC1wMnEpftpKf+Fotk9Av8bRx3vqMWQu3usw
-	4PYWxOL5EYqHWW/qBmOiDC5HZCMVJsnFi/5QRuntJwqEkDPFN0uaTs4dXJ99NpSJccS14M3
-	Z1cDEkMe/LRO1YF/x+mQIhlwKOilIZJTHaHkfvznhClRGWmoTLeBMc6W3NHWf3Ol0ATTuJQ
-	Y0IK4kD55cBNAnKHPQ5OIEQOIijzYDbnJ9zv3xqR5sj5xuaBxzuuTD/q5PotM8sgG08nqT4
-	3FzwDW3r/DR0Ju1Ih9AskG2iYmyHoR3sV2MqQrdE0IRxxaK23V4KF0Z/Tv7/qq4EVSEeefG
-	hw9rHuNrEUoJX91IvQDrMB2r0W+VsGG35AlWrqXsjmyoiQoyLbFiqSNQ8nqsr4IFa1T5nQT
-	g9x8dHDpzywUnOC5Mpoesukap9wigaV+yLAYYatmLt60hgcy3CS6orLIj4XwgIX9LDTFS4d
-	oVvJVxwXr1VVmYoT1AmanFfK4TSHCfA/qeDsVG6HlztMH9/a0+toANqlRze97aQVm2Ufi77
-	r8sRt7/S8tE+cBHuF5qL4Bp1Qnu2w6N0qBUN58ibXj+07q+XJV5XhZqyh++mDdawrgcW0Vg
-	M4440GSAuorgoghn0qYyLxZz1XHnpXMxaZVnxappD7cHCwNZcmGq18Lxpmp7w=
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-X-QQ-RECHKSPAM: 0
+References: <20260415082654.21026-5-kerneljasonxing@gmail.com>
+ <20260415093822.79A76C19424@smtp.kernel.org> <CAL+tcoDbMq9s5tQkpBQfjWZGajUtJxhYzxJ9vD-hpq7uU3RYNQ@mail.gmail.com>
+In-Reply-To: <CAL+tcoDbMq9s5tQkpBQfjWZGajUtJxhYzxJ9vD-hpq7uU3RYNQ@mail.gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 16 Apr 2026 20:18:46 +0800
+X-Gm-Features: AQROBzDX6UeNBNYFxkf6uUL0MhYAcF7vDabM4TqiAgTIdXevyhyLpwRjeOgewnE
+Message-ID: <CAL+tcoAvMFo848fHqgCbTxrA_mt71DcRAuD9WEfSsBgdR7jrvA@mail.gmail.com>
+Subject: Re: [PATCH RFC net-next v4 04/14] xsk: cache data buffers to avoid
+ frequently calling kmalloc_reserve
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-bpf_bprintf_prepare() only needs ASCII parsing for conversion
-specifiers. Plain text can safely carry bytes >= 0x80, so allow
-UTF-8 literals outside '%' sequences while keeping ASCII control
-bytes rejected and format specifiers ASCII-only.
+On Thu, Apr 16, 2026 at 10:45=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.=
+com> wrote:
+>
+> On Wed, Apr 15, 2026 at 5:38=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+> >
+> > Sashiko AI review found 2 potential issue(s):
+> > - [High] Cached data buffers are consumed without validating current al=
+location flags, potentially violating memory placement constraints.
+> > - [Medium] Meaningful code and commit message mismatch regarding cache =
+refill logic.
+> > --
+> >
+> > commit 5a442e9c44f0a64a147908843084cffe5e2fed9f
+> > Author: Jason Xing <kernelxing@tencent.com>
+> >
+> > xsk: cache data buffers to avoid frequently calling kmalloc_reserve
+> >
+> > This commit introduces a per-socket data buffer cache for small packets
+> > to reduce kmalloc_reserve() overhead. It adds bulk allocation from
+> > skb_small_head_cache and persists unused buffers across batch cycles.
+> >
+> > >     Inside the Phase-1 per-descriptor loop, when a small packet needs=
+ a
+> > >     data buffer and the cache is empty, a single kmem_cache_alloc_bul=
+k()
+> > >     refills it with generic_xmit_batch objects. Subsequent small pack=
+ets
+> > >     pop directly from the cache. Large packets bypass the cache entir=
+ely
+> > >     and fall back to kmalloc_reserve(). Unused buffers remain in the
+> > >     cache for the next batch.
+> >
+> > Is this description accurate? Looking at the implementation below, the =
+bulk
+> > allocation happens outside the Phase-1 loop. If the cache runs empty du=
+ring
+> > the loop, it appears to fall back to kmalloc_reserve() for each subsequ=
+ent
+> > packet rather than refilling the cache via kmem_cache_alloc_bulk(). Cou=
+ld
+> > the commit message be updated to match the actual execution flow?
+>
+> Will update it.
+>
+> >
+> > > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> > > index c7e42c2966cdd..3b3969adfd23f 100644
+> > > --- a/net/core/skbuff.c
+> > > +++ b/net/core/skbuff.c
+> > [ ... ]
+> > > @@ -709,10 +718,17 @@ int xsk_alloc_batch_skb(struct xdp_sock *xs, u3=
+2 nb_pkts, u32 nb_descs, int *err
+> > >
+> > >                       skb =3D skbs[skb_count - 1 - i];
+> > >                       skbuff_clear(skb);
+> > > -                     data =3D kmalloc_reserve(&size, gfp_mask, node,=
+ skb);
+> > > -                     if (unlikely(!data)) {
+> > > -                             *err =3D -ENOBUFS;
+> > > -                             break;
+> > > +                     if (dc_count &&
+> > > +                         SKB_HEAD_ALIGN(size) <=3D SKB_SMALL_HEAD_CA=
+CHE_SIZE) {
+> >
+> > If the socket's sk_allocation (which populates gfp_mask) was modified t=
+o
+> > require restricted memory placement (e.g. __GFP_DMA), could this code u=
+se a
+> > standard memory buffer left over from a previous batch?
+> >
+> > While the bulk allocation check before the loop correctly avoids alloca=
+ting
+> > from skb_small_head_cache if KMALLOC_NOT_NORMAL_BITS is set, the
+> > consumption path here only checks dc_count. Does this need to validate
+> > gfp_mask against KMALLOC_NOT_NORMAL_BITS before consuming from the cach=
+e,
+> > to ensure memory placement constraints are not bypassed?
+>
+> I can add the check but it seems meaningless to me. In the whole
+> implementation of xsk, there is no place where sk_allocation can be
+> set to a different value other than GPF_KERNEL.
 
-This keeps existing parsing rules for format directives unchanged,
-while allowing helpers such as bpf_trace_printk() to emit UTF-8
-literal text.
+After a few rounds of investigation, I finally gave up the idea of
+using KMALLOC_NOT_NORMAL_BITS. The reason has been explained.
 
-Update test_snprintf_negative() in the same commit so selftests keep
-matching the new plain-text vs format-specifier split during bisection.
-
-Fixes: 48cac3f4a96d ("bpf: Implement formatted output helpers with bstr_printf")
-Signed-off-by: Yihan Ding <dingyihan@uniontech.com>
----
- kernel/bpf/helpers.c                            | 17 ++++++++++++++++-
- .../testing/selftests/bpf/prog_tests/snprintf.c |  3 ++-
- 2 files changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6eb6c82ed2ee..d51f1b612f1d 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -845,7 +845,13 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- 		data->buf = buffers->buf;
- 
- 	for (i = 0; i < fmt_size; i++) {
--		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i])) {
-+		unsigned char c = fmt[i];
-+
-+		/*
-+		 * Permit bytes >= 0x80 in plain text so UTF-8 literals can pass
-+		 * through unchanged, while still rejecting ASCII control bytes.
-+		 */
-+		if (isascii(c) && !isprint(c) && !isspace(c)) {
- 			err = -EINVAL;
- 			goto out;
- 		}
-@@ -867,6 +873,15 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_size, const u64 *raw_args,
- 		 * always access fmt[i + 1], in the worst case it will be a 0
- 		 */
- 		i++;
-+		c = fmt[i];
-+		/*
-+		 * The format parser below only understands ASCII conversion
-+		 * specifiers and modifiers, so reject non-ASCII after '%'.
-+		 */
-+		if (!isascii(c)) {
-+			err = -EINVAL;
-+			goto out;
-+		}
- 
- 		/* skip optional "[0 +-][num]" width formatting field */
- 		while (fmt[i] == '0' || fmt[i] == '+'  || fmt[i] == '-' ||
-diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/testing/selftests/bpf/prog_tests/snprintf.c
-index 594441acb707..4e4a82d54f79 100644
---- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
-@@ -114,7 +114,8 @@ static void test_snprintf_negative(void)
- 	ASSERT_ERR(load_single_snprintf("%--------"), "invalid specifier 5");
- 	ASSERT_ERR(load_single_snprintf("%lc"), "invalid specifier 6");
- 	ASSERT_ERR(load_single_snprintf("%llc"), "invalid specifier 7");
--	ASSERT_ERR(load_single_snprintf("\x80"), "non ascii character");
-+	ASSERT_OK(load_single_snprintf("\x80"), "non ascii plain text");
-+	ASSERT_ERR(load_single_snprintf("%\x80"), "non ascii in specifier");
- 	ASSERT_ERR(load_single_snprintf("\x1"), "non printable character");
- 	ASSERT_ERR(load_single_snprintf("%p%"), "invalid specifier 8");
- 	ASSERT_ERR(load_single_snprintf("%s%"), "invalid specifier 9");
--- 
-2.20.1
-
+Thanks,
+Jason
