@@ -1,161 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776013EDAC3
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C91438E113
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 20:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776369382; cv=none; b=K08TQBPyP7gpiddpWbTtUjr6vQFd/rzkI14LXPxteAvpkRR9D+yt9viOOB3M9HwOkBS8mySl0y6EbV3BdvwhMJAx/euX+ygGXpMWltyhSVjohf5MVwL1UwNEy0W0u3bOMY8XjXMgMg2G5/mZGiEIpvkwmyawOiWF1/LN4MRrWHQ=
+	t=1776369708; cv=none; b=MoehbGmwnFNXo5hN2/tiMLPhqevEh+nZZUjf3n0Gf37FHgmK4Loqgoco2VnpLnPvx/DozVa2vT1RSMDYSthSGzvNh5gw7SGptECjhFpCE44MaOeuqC2yCPyGT1xpGHukhWRokIeC3UerpCDK4J3XcirU/eeYi9PjaJC8Zg0pZXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776369382; c=relaxed/simple;
-	bh=O/sbFjUtgqcHVkPobj0IRkhSqE6sGf3c8ikZSu5v0Is=;
+	s=arc-20240116; t=1776369708; c=relaxed/simple;
+	bh=NrKtZ6SUjErtkxzqrmTJW6REPsTKyQi04NAxwsh/wNc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RaOD6qmGshT98yoin+BIStsbjgpn6UssX84VKTyqEHUrrytwW6a5B/58Jo2qGwnzKkag88ikL1zc22+Vn6d84enplAtHmf82Z4hSJaSVia2yMF5VcyrdJycDeMhTxrzQvjWycsMWcEmfDxC0QhsSJGaZrQTp1ssURXzM0dseoSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fXJ3gY5P; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=ee/htH8z6FW+mkj6cWWApJXiVjIBzusUiNK4TejuLz3Q6U6bO4xSBdNHl1MKbb0+8cV+8hYztBGV6EOVSCfonTteRzjFMGUxQez9dZ2NgaL2Y6JwnJH0WbuBCSDIJKwHqye5bAXOVQCwQd9iWD97ha2xPok6vobYoaWo4RdQMRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bw7wrhwy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fXJ3gY5P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E76C2BCAF;
-	Thu, 16 Apr 2026 19:56:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bw7wrhwy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900AAC2BCAF;
+	Thu, 16 Apr 2026 20:01:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776369381;
-	bh=O/sbFjUtgqcHVkPobj0IRkhSqE6sGf3c8ikZSu5v0Is=;
+	s=k20201202; t=1776369707;
+	bh=NrKtZ6SUjErtkxzqrmTJW6REPsTKyQi04NAxwsh/wNc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=fXJ3gY5Pvgnn7dHEz79B4Miewb0xHiYOVUIahrxMTngq4pjQpOn4QFt55G0A1OTGL
-	 B+9qB9t2YTA2A2Rf7BcVSycqU8EuMZ2khUz/ptYaqUo8sw/N0I8xF56AIqZJm9bwYb
-	 K24wWQMUsQtM7H/qSrkBMfHmvgwLW5n4N5e39iDWIq1vgNHkDtAvX3BbPhmhFmcgmd
-	 4T78IY3lAJueZxPZF4jmMsGL2D3nRF9VE0MwR0dJ2bh9+/l4+PSbDRCnrQjvXGVjpn
-	 yg4KxoenOLUU18vn6tWezO2XcV7jQN8l/g5bARpJUSrlHgg5IyLEp39greaf7zsP9Z
-	 EsG2WXAUAADpQ==
+	b=bw7wrhwySBopyBGn2ozarMXJ7rAKMRcbrAbxiBdA035ItutWid5NWnwO+GD55D1Zs
+	 eWTxqZ50DrxJk06n2scckIsKX6vbh2F6UpT2+G8jWXtx/B24AOLG7Ua0G+0Je6rkcZ
+	 yMJ3q4BE0qUC6d1VhDO2CDh7LUXOaX2eDNP5HwP1eNI4f/+j1g4dD+8AN+ws8SQfRE
+	 dnG5j8kErbaFAF+NYthDVsI7VChuLFHdbNc7Pi00Rq3r7VfDDl0udCNOMrqZLmTq+V
+	 PpPI3uUTIgqQqTxOpWbisoodeBB+qX6xAcri5+Vy7jkf3uZMywZr/9JVaV98Z+HVCj
+	 C/ycBjfgMTOJQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 02/10] crypto: pkcs7: add ability to extract signed
- attributes by OID
+Subject: Re: [PATCH v2 bpf-next 3/8] libbpf: Add feature for kernel extended
+ vlen/kind support
 Reply-To: sashiko@lists.linux.dev
-To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
+To: "Alan Maguire" <alan.maguire@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416173500.176716-3-bboscaccy@linux.microsoft.com>
-References: <20260416173500.176716-3-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260416143904.1220662-4-alan.maguire@oracle.com>
+References: <20260416143904.1220662-4-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 19:56:20 +0000
-Message-Id: <20260416195621.44E76C2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 20:01:47 +0000
+Message-Id: <20260416200147.900AAC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Premature termination of signer iteration loop on missing or malfo=
-rmed attributes.
-- [Medium] Multi-valued attributes and repeated OIDs silently overwrite eac=
-h other, returning the last match.
+Sashiko AI review found 1 potential issue(s):
+- [High] Feature probe `probe_kern_btf_vlen_kind_extended` is malformed and=
+ always fails, breaking extended BTF support.
 --
 
-commit ee97b7abf11653ef22c6a659603d361105f1df57
-Author: James Bottomley <James.Bottomley@HansenPartnership.com>
+commit 45c7cfd438137b97d67612513eb9d60104376b8f
+Author: Alan Maguire <alan.maguire@oracle.com>
 
-crypto: pkcs7: add ability to extract signed attributes by OID
+libbpf: Add feature for kernel extended vlen/kind support
 
-Signers may add any information they like in signed attributes and sometimes
-this information turns out to be relevant to specific signing cases. This a=
-dds
-an api pkcs7_get_authattr() to extract the value of an authenticated attrib=
-ute
-by specific OID.
+This commit adds a feature check for kernel extended vlen/kind support, and
+rejects BTF that uses extended vlens/kinds if the kernel does not support i=
+t.
 
-> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_ke=
-ys/pkcs7_parser.c
-> index 6e3ffdac83ace..d467866f7d930 100644
-> --- a/crypto/asymmetric_keys/pkcs7_parser.c
-> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
-[ ... ]
-> +int pkcs7_aa_note_attr(void *context, size_t hdrlen,
-> +		       unsigned char tag,
-> +		       const void *value, size_t vlen)
-> +{
-> +	struct pkcs7_aa_context *ctx =3D context;
-> +
-> +	if (ctx->found) {
-> +		ctx->data =3D value;
-> +		ctx->len =3D vlen;
-> +	}
-> +
-> +	return 0;
-> +}
-
-Does this callback return the last matching value instead of the first?
-
-If an attribute contains multiple values (as allowed by the SET OF ANY sche=
-ma),
-or if there are multiple attributes with the same OID, this callback will be
-invoked repeatedly, unconditionally overwriting ctx->data.
-
-This seems to result in the last parsed value being returned, which contrad=
-icts
-the kernel-doc stating it will return the first one in parse order.
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index 4f19a0d79b0cf..f835931f4afe7 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
 
 [ ... ]
-> +/**
-> + * pkcs7_get_authattr - get authenticated attribute by OID
-> + * @pkcs7: The preparsed PKCS#7 message
-> + * @oid: the enum value of the OID to find
-> + * @_data: Place to return a pointer to the attribute value
-> + * @_len: length of the attribute value
-> + *
-> + * Searches the authenticated attributes until one is found with a
-> + * matching OID.  Note that because the attributes are per signer
-> + * there could be multiple signers with different values, but this
-> + * routine will simply return the first one in parse order.
-> + *
-> + * Returns -ENODATA if the attribute can't be found
-> + */
-> +int pkcs7_get_authattr(const struct pkcs7_message *pkcs7,
-> +		       enum OID oid,
-> +		       const void **_data, size_t *_len)
+
+> +static int probe_kern_btf_vlen_kind_extended(int token_fd)
 > +{
-> +	struct pkcs7_signed_info *sinfo =3D pkcs7->signed_infos;
-> +	struct pkcs7_aa_context ctx;
-> +
-> +	ctx.data =3D NULL;
-> +	ctx.oid_to_find =3D oid;
-> +
-> +	for (; sinfo; sinfo =3D sinfo->next) {
-> +		int ret;
-> +
-> +		/* only extract OIDs from validated signers */
-> +		if (!sinfo->verified)
-> +			continue;
-> +
-> +		ret =3D asn1_ber_decoder(&pkcs7_aa_decoder, &ctx,
-> +				       sinfo->authattrs, sinfo->authattrs_len);
-> +		if (ret < 0 || ctx.data !=3D NULL)
-> +			break;
+> +	static const char strs[] =3D "\0int\0foo\0bar";
+> +	__u32 types[EXTEND_TYPE_LEN] =3D {
+> +		/* int */
+> +		BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
+> +		/* var */
+> +		BTF_TYPE_ENC(5 /* "foo" */, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), 1),
 
-Can this loop terminate prematurely if a signer has missing or malformed
-attributes?
+Is this BTF_KIND_VAR type missing its required trailing struct btf_var
+payload? Without it, the kernel's BTF parser might become misaligned
+and reject the entire raw BTF payload.
 
-If a verified signer lacks authenticated attributes (sinfo->authattrs =3D=
-=3D NULL),
-asn1_ber_decoder() might return a negative error code. Because the condition
-breaks on ret < 0, this will immediately abort the search across all remain=
-ing
-signers instead of skipping the current one.
+> +		/* datasec */
+> +		BTF_TYPE_ENC(9 /* "bar" */, BTF_INFO_ENC(BTF_KIND_DATASEC, EXTEND_VLEN=
+, 0), 0),
 
-This could cause operations like Hornet LSM BPF program verification to fai=
-l if
-a valid signature is shadowed by an earlier one lacking attributes.
+Looking at BTF_INFO_ENC(kind, kflag, vlen), it appears EXTEND_VLEN is being
+passed as the kflag argument rather than vlen. This leaves vlen as 0 and
+sets the kflag bit. Could the kernel's btf_datasec_check_meta() reject this?
 
-> +	}
-> +
-> +	if (!ctx.data)
-> +		return -ENODATA;
-> +
-> +	*_data =3D ctx.data;
-> +	*_len =3D ctx.len;
-> +
-> +	return 0;
-> +}
+Additionally, the size argument to BTF_TYPE_ENC here is 0. Will the kernel
+reject this DATASEC type since a zero size usually returns -EINVAL?
+
+Finally, if vlen evaluates to 0, will the appended EXTEND_VLEN
+btf_var_secinfo structures below be parsed by the kernel as independent
+trailing BTF types? If the first struct evaluates to BTF_KIND_UNKN, the
+entire probe might fail unconditionally.
+
+> +	};
+> +	struct btf_var_secinfo *s;
+> +	__u32 *types_data;
+
+[ ... ]
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416173500.1767=
-16-1-bboscaccy@linux.microsoft.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416143904.1220=
+662-1-alan.maguire@oracle.com?part=3D3
