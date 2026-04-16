@@ -1,103 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931181E1DF0
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AF334DB54
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776366525; cv=none; b=UGZYS2UUkfGWT19p3r0SVze5/jdvG0arG+mZFm5BV2TWk0XQJPfm51jtgbHe3oK3MBfkxlP+ruIJEC+CS0w4A5y7lPiVGZ8plbJ9mnX5/xA8Y1Eb8hmP98uvGV4DTjP4XA83XeqOoJZkDGvHObvg0Qitp8cbD72xlaEm9BIPVOI=
+	t=1776367589; cv=none; b=UnoUi4S835fRpMb5lPELi+laRTfCnezQI87kNlsBUaRPsMT/hyqYwQDrS7z0zMco5Ji7dqdipsQ3Ee5TnkNSmH7NzLlLdG9lehGDY9CnRgmLOh3R7IVmrAMyEdbyntFldSJzqA6M+l6CnB8JAw+gPP1czcLrmJlWzjczX+sFhTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776366525; c=relaxed/simple;
-	bh=skp8D+mRw7iVmt/tyPY3MBhHGJ8R1OmmR29mhRWbx0Q=;
+	s=arc-20240116; t=1776367589; c=relaxed/simple;
+	bh=EtacrmaPBkZpVVdwiz2utfHJg2pYuqpvObhVeG+QoOc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gx6c8NDMjmURPEPHXcCw0Cx7gu3ewSoc2srRx+0f/eC79q0+bUUgiUUswaIrOKMdnb1zGlToVZAbodho9np726RWZHb6J5cfARn6Jq521zW9Yna6eBciEhrj+0UmlzLBQSjwUnLzybgyIUtdXE4g74Lf8h08vgcBPQcTZ9RVq08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ot4vByUo; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=I21eCmY8cdUYOG4HOFk013lHkgNQ0uCB1L7tnYzVhEL4iWvyAcs67RAJXsHGxvpkFOuAyJ6cnfwbb2crhF565HWBNUchUVe48bOvlScGFAfSsuJ+HlEKMqhTZrxyA9LM0SQZiMELqvmMZRGAS4w0Dg/gKs23z2n0ganZ6ghB+C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAZJTQWE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ot4vByUo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F970C2BCAF;
-	Thu, 16 Apr 2026 19:08:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAZJTQWE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC0FC2BCAF;
+	Thu, 16 Apr 2026 19:26:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776366525;
-	bh=skp8D+mRw7iVmt/tyPY3MBhHGJ8R1OmmR29mhRWbx0Q=;
+	s=k20201202; t=1776367589;
+	bh=EtacrmaPBkZpVVdwiz2utfHJg2pYuqpvObhVeG+QoOc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Ot4vByUodcr02fl9+NYR0bj2H3F874tZm6adFTS/4JIrqkR7n0+IvlPHzUZxEPvPy
-	 g9lvhZqv4O3CBYx8ELAG1cI1gn3hTkzljZD530ueyOEIU/rJE3Xo+U9e1sVNT5FUZn
-	 /L4gSfHfSV9TC9qbH7cFNgmKYFtHmzI/24J/QFGtkpkhBm9O54Q0aCqQpJZijsKE7B
-	 GF02DP240Zf9Ana+OZVj5WzTi4eCqZ4A+flJjw8R+KqR8SC3tqYej000m8p81p2bS3
-	 8Qd71UAglDR8ple7wjX6ymOrzupo3aNwX8pOw0/qAsOQOYVbHmEY/CfF3/0+4Vu2bg
-	 KJ9iZzhfRhEZw==
+	b=kAZJTQWEmWVjTRtWLIt1elnkO4kStXQh4UFjOyTKttqieyEqaHcC/ASfoWHASiD17
+	 BscEg82b+Z3l0R/6iDOXPtnQ28ilV7lSacuKgfPO4NPe2Ec12cxQg+HXlXzRGYNfCi
+	 Fk1UleCF9MP38sNaeu0bHTOkkzfJzMTTUv5rMyaxZ67iLsA2XAz08T957WvbHGokLp
+	 lwdC65888G+//q27tYadryLcsBx3CzDshqLStkOZKqQYeyl0npSiG7zO8KCGEqnoy/
+	 aJzB481Wa/ap1r4z6ZROHgYJnWgeBETCBlhBeAnYgQbgWljQ3/sMSnjCk3n92XmiKb
+	 cC85VYTm7GgkA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 3/7] selftests/bpf: Fix reg_bounds to prune
- on range violations
+Subject: Re: [PATCH v4 01/10] crypto: pkcs7: add flag for validated trust on
+ a signed info block
 Reply-To: sashiko@lists.linux.dev
-To: "Paul Chaignon" <paul.chaignon@gmail.com>
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <91b8f1840277989ac65d05a9ad5e683a98d3d6ec.1776344897.git.paul.chaignon@gmail.com>
-References: <91b8f1840277989ac65d05a9ad5e683a98d3d6ec.1776344897.git.paul.chaignon@gmail.com>
+In-Reply-To: <20260416173500.176716-2-bboscaccy@linux.microsoft.com>
+References: <20260416173500.176716-2-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 19:08:44 +0000
-Message-Id: <20260416190845.5F970C2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 19:26:28 +0000
+Message-Id: <20260416192628.DAC0FC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [Medium] The early return in `reg_state_cond` silently discards updates, =
-incorrectly preventing mathematically impossible branches from being pruned.
+Sashiko AI review found 2 potential issue(s):
+- [Critical] Stateful Trust Validation / Blacklist Trust Confusion (Authent=
+ication Bypass)
+- [Low] API Export Constraint Mismatch
 --
 
-commit 9c1398626b454db27a318d8fb3f946b257c46b99
-Author: Paul Chaignon <paul.chaignon@gmail.com>
+commit 4ed8f1fbacef58172cae707b05aaa2b29ba6f7c1
+Author: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-selftests/bpf: Fix reg_bounds to prune on range violations
+crypto: pkcs7: add flag for validated trust on a signed info block
 
-This patch updates the reg_bounds selftest to correctly detect and prune
-dead branches by checking for ill-formed ranges. It marks branches as
-invalid if their ranges become ill-formed, matching the verifier logic.
+This patch adds a flag to struct pkcs7_signed_info to indicate if a
+signer has passed trust validation. It also exports
+verify_pkcs7_message_sig() so modules can access the trusted object.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
-testing/selftests/bpf/prog_tests/reg_bounds.c
-> index 71f5240cc5b7e..c0b3a357a0f4c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index e0761436ec7f4..9bda49295bd02 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -380,6 +380,7 @@ int verify_pkcs7_message_sig(const void *data, size_t=
+ len,
+>  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL(verify_pkcs7_message_sig);
+
+This isn't a bug, but should this be exported using EXPORT_SYMBOL_GPL to
+match the rest of the PKCS#7 subsystem?
+
+Other cryptographic verification and parsing functions like
+verify_pkcs7_signature(), pkcs7_parse_message(), and pkcs7_verify()
+are strictly exported as EXPORT_SYMBOL_GPL.
+
 [ ... ]
-> @@ -837,6 +850,8 @@ static void reg_state_cond(enum num_t t, struct reg_s=
-tate *x, struct reg_state *
->  		z2 =3D y->r[t];
-> =20
->  		range_cond(t, z1, z2, op, &z1, &z2);
-> +		if (!is_valid_range(t, z1) || !is_valid_range(t, z2))
-> +			return;
 
-Does this early return prevent the invalid ranges from being written back
-to newx and newy?
+> diff --git a/crypto/asymmetric_keys/pkcs7_trust.c b/crypto/asymmetric_key=
+s/pkcs7_trust.c
+> index 9a87c34ed1733..78ebfb6373b61 100644
+> --- a/crypto/asymmetric_keys/pkcs7_trust.c
+> +++ b/crypto/asymmetric_keys/pkcs7_trust.c
+> @@ -127,6 +127,7 @@ static int pkcs7_validate_trust_one(struct pkcs7_mess=
+age *pkcs7,
+>  		for (p =3D sinfo->signer; p !=3D x509; p =3D p->signer)
+>  			p->verified =3D true;
+>  	}
+> +	sinfo->verified =3D true;
+>  	kleave(" =3D 0");
+>  	return 0;
+>  }
 
-If range_cond() produces an invalid range, the function returns immediately
-and bypasses the write-back of xx and yy at the end of the function:
+Is this verified flag persistent across multiple trust validation passes?
 
-	if (newx)
-		*newx =3D xx;
-	if (newy)
-		*newy =3D yy;
+When verify_pkcs7_message_sig() checks a message against the blacklist keyr=
+ing
+first:
 
-This leaves the output registers with their previous valid state.
+verify_pkcs7_message_sig()
+  is_key_on_revocation_list()
+    pkcs7_validate_trust(pkcs7, blacklist_keyring)
+      pkcs7_validate_trust_one()
+        sinfo->verified =3D true;
 
-When sim_case() later checks if the branch is valid:
+If a signature matches a blacklisted key, sinfo->verified is set to true.
 
-	reg_state_cond(cond_t, tr1, tr2, op, tr1, tr2, "TRUE");
-	if (is_valid_reg(tr1) && is_valid_reg(tr2))
-		tr1->valid =3D tr2->valid =3D true;
+If the validation later aborts because a different signature fails to verify
+and returns -EKEYREJECTED, the blacklist check will abort and the caller
+might interpret the result as not blacklisted.
 
-won't it incorrectly evaluate the old valid state and mark the impossible
-branch as valid, defeating the pruning logic?
+When the same message is subsequently validated against the trusted keyring,
+another valid signature could cause the overall trust check to succeed.
 
-> =20
->  		if (newx) {
->  			snprintf(buf, sizeof(buf), "%s R1", ctx);
+Could this allow a caller to mistakenly extract attributes from the first
+signer block where verified is true, which in this scenario would be the
+blacklisted signature?
+
+Would it be better to clear the verified flags before validation, or keep
+them scoped to the specific keyring being checked?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1776344897.gi=
-t.paul.chaignon@gmail.com?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416173500.1767=
+16-1-bboscaccy@linux.microsoft.com?part=3D1
