@@ -1,127 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B10352C34
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 12:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35909396B68
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 13:03:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776344002; cv=none; b=PCAgHfGdK4Y5p9aAMkavBIgljqe6Bdt+YaKEfjCrg5EBC5AdpQoUv96S1oODJkxqJnlBc82POy/iC0hgRuxS9tbSS5v5TbMxcewLomUMPXJLBE5cFiu9/Gs3ZFkLahy6L+YPlZ/CD3xzmX3a60Ilk3OrB5+7mHA+AUoHM74CAME=
+	t=1776344593; cv=none; b=lmos77z1vGPZJjCVOrc5ruwzRPpTFCmM1xGA6J3qA9Q2DgdC+iDrymh1SE32x56juVTdG7HVOWY6PPdfjj78fYSlJBdXn9BPnyTJ8Mu00JGPG8CIh8YVx9Ii4XVC7tk12Y4ZrGVG+v0KyEBT0e02y2F2AZ/VFkinDre+bznsqxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776344002; c=relaxed/simple;
-	bh=pMGl1NyQIOKOPoS3meUph0ZjEoSeWKYbxnd36apMuvA=;
+	s=arc-20240116; t=1776344593; c=relaxed/simple;
+	bh=oWEIc+lUhdxSETwB1umCKp0ytYefDHz9aJtoED2gv8E=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=W5DdTqC9CEMER9HDAPlzadtcnRszaEK77jvDwhIVk9nOpneSFuM6QKK7XBQwMFOY3bI6C0WknxN6+kOysrq6FuWh3iFY6LdTNZVkCoX74KBN7i8glNw+C8rW6ltjSscO0SON9zs1EsANPybiMLuU3oKXuvfibdBGC7/v36lCH8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0wZ5urz; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=jlqjCpIlO6JqnYHjfsYH/uzTw2+W1aLb+vTmypKwCcHCSNSs81uA4+Kmv/zMalrYcvaVPvD6IsJSRH3nykXSPHuNovcTxtBMgkAFrednZSbcqNuKTa3MK4QoKMXamfb+dHM0Q3mNqbOVZhn13vIB/j15LVKLIhMJ5nnFFWty6Lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hkG0rf8x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0wZ5urz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF09C2BCAF;
-	Thu, 16 Apr 2026 12:53:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hkG0rf8x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E370FC2BCAF;
+	Thu, 16 Apr 2026 13:03:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776344001;
-	bh=pMGl1NyQIOKOPoS3meUph0ZjEoSeWKYbxnd36apMuvA=;
+	s=k20201202; t=1776344593;
+	bh=oWEIc+lUhdxSETwB1umCKp0ytYefDHz9aJtoED2gv8E=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=f0wZ5urzEWrJDZ+AFUwzP250XcFFYKIkkCz7VWEh6D/N5AYi+NF6Qi88rCi0hGfkg
-	 5wS+dMAXVx94R/rhybn5jdmytDrvjP7EvLVwycIpoJeeogTUPsZ4Rw/aoe1qiPBNGl
-	 hnRAFRzE+8X1kq+LYZ8jh7KryRg1Qgcw5Zi6a6c689RKIbKiW/rZfkgZoPGCc/nyMy
-	 S9K/R6Pux1jhrigUY8B+afx36oVRJR1Cd8i2Vc1Yy9SSiH1Ppvnt0P4b6X0Sv0mEuu
-	 HqGnyQUxjUqhBNJMNA+Tqi9wFyH5VRtoNBt8Mb4hhJWtGeE+zr3cBUQ5qx6hDoFe4s
-	 PtBNBmx0FkupA==
+	b=hkG0rf8xr1x40ybbYg3G9olG275FDvlYbCrNwUmgejYgs1v+CumxT9EwIe+JYg0v+
+	 t/TKGSXpDW8kDcNeqD8czkkg5HMVmxWMvKR67qNl/XOH4qfXpVASvXJc8W52/x21hj
+	 B3hbQQiUmckdJFFxc9pyt3xh29XkIQlOwD31w9T1N67+Dn2C4U8RAvRImaXN8/PZD5
+	 0HaC9eMDTI4jy7516ql5ywDJb8urA8VGDqgdKeH/oss6F1A8o7rbfZlSaXceLH1zog
+	 EtLlXMOuV5JstI97peVpBic1ci0aaE6qE2dmfVAZvFdpb+/Zc+nOZOaH9RWbKw0XLb
+	 7XbfWxppNAigw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 02/11] selftests/bpf: Fix test_kmods KDIR to
- honor O= and distro kernels
+Subject: Re: [PATCH bpf v3 1/2] bpf: allow UTF-8 literals in
+ bpf_bprintf_prepare()
 Reply-To: sashiko@lists.linux.dev
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+To: "Yihan Ding" <dingyihan@uniontech.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416-selftests-bpf_misconfig-v6-2-7efeab504af1@suse.com>
-References: <20260416-selftests-bpf_misconfig-v6-2-7efeab504af1@suse.com>
+In-Reply-To: <20260416120142.1420646-2-dingyihan@uniontech.com>
+References: <20260416120142.1420646-2-dingyihan@uniontech.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 12:53:20 +0000
-Message-Id: <20260416125321.7AF09C2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 13:03:12 +0000
+Message-Id: <20260416130312.E370FC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [Medium] Relative paths passed via `O=3D` are incorrectly evaluated from =
-the kernel source root instead of the invocation directory.
-- [Medium] The `make clean` target unconditionally fails and aborts the bui=
-ld if the kernel source tree is unconfigured and distro headers are missing.
+Sashiko AI review found 1 potential issue(s):
+- [Medium] UTF-8 literals are incorrectly rejected when placed immediately =
+after '%s' or '%p' format specifiers.
 --
 
-commit 533e8d39cc98f56f3dff4f8c5bff0dcd49fc6ef1
-Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
+commit c7ffc79748019b47230d65f7c4646b2bba78f020
+Author: Yihan Ding <dingyihan@uniontech.com>
 
-selftests/bpf: Fix test_kmods KDIR to honor O=3D and distro kernels
+bpf: allow UTF-8 literals in bpf_bprintf_prepare()
 
-This commit modifies test_kmods/Makefile to honor O=3D and KBUILD_OUTPUT, a=
-nd
-adds a fallback to /lib/modules/$(uname -r)/build for distro kernels. It al=
-so
-makes missing KDIR silently skipped when building in permissive mode.
+This commit modifies bpf_bprintf_prepare() to permit bytes >=3D 0x80 in
+plain text, allowing UTF-8 literals to pass through unchanged while still
+rejecting ASCII control bytes.
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/test=
-ing/selftests/bpf/test_kmods/Makefile
-> index 63c4d3f6a12f6..10f202bd0d8c2 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
-> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-> @@ -1,5 +1,7 @@
->  TEST_KMOD_DIR :=3D $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST=
-)))))
-> -KDIR ?=3D $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +SRCTREE_KDIR :=3D $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +KMOD_O :=3D $(or $(O),$(KBUILD_OUTPUT))
-
-Will this break out-of-tree builds if a user passes a relative path?
-
-If a user builds selftests with a relative O=3D path (e.g. make O=3Dout), K=
-MOD_O
-captures this relative string and passes it unaltered to the kernel build
-system via make -C $(KDIR) O=3D$(KMOD_O).
-
-Because make -C changes the working directory to $(KDIR) before evaluating
-O=3D, the relative path will be evaluated relative to the kernel root rather
-than the directory where make was originally invoked.
-
-[ ... ]
-> @@ -14,8 +16,24 @@ $(foreach m,$(MODULES),$(eval obj-m +=3D $(m:.ko=3D.o)=
-))
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index bb95e287b0dc8..2bb60200c2665 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -845,7 +845,13 @@ int bpf_bprintf_prepare(const char *fmt, u32 fmt_siz=
+e, const u64 *raw_args,
+>  		data->buf =3D buffers->buf;
 > =20
->  CFLAGS_bpf_testmod.o =3D -I$(src)
-> =20
-> +# When BPF_STRICT_BUILD !=3D 0, a missing KDIR is fatal (the default).
-> +# When permissive, skip silently.
-> +PERMISSIVE :=3D $(filter 0,$(BPF_STRICT_BUILD))
+>  	for (i =3D 0; i < fmt_size; i++) {
+> -		if ((!isprint(fmt[i]) && !isspace(fmt[i])) || !isascii(fmt[i])) {
+> +		unsigned char c =3D fmt[i];
 > +
->  all:
-> -	$(Q)$(MAKE) -C $(KDIR) M=3D$(TEST_KMOD_DIR) modules
-> +ifeq ($(PERMISSIVE),)
-> +	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O),O=3D$(KMOD_O),KBUILD_OUTPUT=3D) \
-> +		M=3D$(TEST_KMOD_DIR) modules
+> +		/*
+> +		 * Permit bytes >=3D 0x80 in plain text so UTF-8 literals can pass
+> +		 * through unchanged, while still rejecting ASCII control bytes.
+> +		 */
+> +		if (isascii(c) && !isprint(c) && !isspace(c)) {
+>  			err =3D -EINVAL;
+>  			goto out;
+>  		}
 
-[ ... ]
+Does this change overlook the lookahead checks performed on characters
+immediately following format specifiers like %s and %p?
 
->  clean:
-> -	$(Q)$(MAKE) -C $(KDIR) M=3D$(TEST_KMOD_DIR) clean
-> +ifeq ($(PERMISSIVE),)
-> +	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O),O=3D$(KMOD_O),KBUILD_OUTPUT=3D) \
-> +		M=3D$(TEST_KMOD_DIR) clean
+For example, looking at the parsing logic for %s:
 
-Does this unconditionally abort make clean if the kernel source tree is
-unconfigured and distro headers are missing?
+kernel/bpf/helpers.c:bpf_bprintf_prepare() {
+    ...
+		} else if (fmt[i] =3D=3D 's') {
+			fmt_ptype =3D fmt[i];
+fmt_str:
+			if (fmt[i + 1] !=3D 0 &&
+			    !isspace(fmt[i + 1]) &&
+			    !ispunct(fmt[i + 1])) {
+				err =3D -EINVAL;
+				goto out;
+			}
+    ...
+}
 
-If the system lacks installed kernel headers, /lib/modules/$(uname -r)/build
-will not exist. In the default strict mode, GNU Make's -C flag will
-immediately throw a fatal 'No such file or directory' error and abort the
-make clean process.
+Because the initial loop now permits bytes >=3D 0x80, these bytes can appear
+immediately after a format specifier. If a UTF-8 literal is placed immediat=
+ely
+after the specifier, such as in the string "%s=E4=BD=A0=E5=A5=BD", fmt[i + =
+1] will be the
+first byte of the UTF-8 character.
 
-> +else ifneq ("$(wildcard $(KDIR))", "")
-> +	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O),O=3D$(KMOD_O),KBUILD_OUTPUT=3D) \
-> +		M=3D$(TEST_KMOD_DIR) clean
-> +endif
+Since isspace() and ispunct() only match ASCII characters, both will
+evaluate to false. Will this cause the parser to incorrectly reject valid
+UTF-8 strings with -EINVAL?
+
+A similar lookahead check exists for %p:
+
+kernel/bpf/helpers.c:bpf_bprintf_prepare() {
+    ...
+		if (fmt[i] =3D=3D 'p') {
+			sizeof_cur_arg =3D sizeof(long);
+
+			if (fmt[i + 1] =3D=3D 0 || isspace(fmt[i + 1]) ||
+			    ispunct(fmt[i + 1])) {
+				if (tmp_buf)
+					cur_arg =3D raw_args[num_spec];
+				goto nocopy_fmt;
+			}
+    ...
+}
+
+If fmt[i + 1] is a UTF-8 character, it won't match isspace() or ispunct().
+It will then fall through to the %pI4/%pi4 checks and also be rejected with
+-EINVAL.
+
+Can the lookahead checks be updated to also permit bytes >=3D 0x80, matching
+the new plain text parsing rules?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416-selftests-=
-bpf_misconfig-v6-0-7efeab504af1@suse.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416120142.1420=
+646-1-dingyihan@uniontech.com?part=3D1
