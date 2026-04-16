@@ -1,229 +1,234 @@
-Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [67.231.157.127])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE413264CB;
-	Thu, 16 Apr 2026 08:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.157.127
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2DA381AF1
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 08:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776328807; cv=none; b=W6ypn29DARyQqOBByzMOCkq8pLb0ASuDbdP1jgk7KSjjhST36LfIMePEtTS8Cv0k5RzF/hfn9tojjmYGUKDDdVz+uCCACoIsrK7r3W48zoUYlMTlL4bbni/uqqe/RU9e5tWOiJIw/r6QEC16GB/MfGNOAU8pwNo6mNzO0CJEtYA=
+	t=1776329013; cv=none; b=ulelbjJi0nXhJXsCpl+gAH0IO12PZIy8sJECvqTqp8VX4Qcr6eDW4/gJfvkBUAVFG+cv6fS5JAhwQJD0x47SwUaYR5kMJHkHPkSPwN8bSK3Qq+R7TYrC/hZjgeh86bNG4HjhL/UPuSG1Mopr7lg4wJYIKHrUtmDG5VSAF1GkVRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776328807; c=relaxed/simple;
-	bh=iw3pkpi0rpWv34W0Zy1IDNbxE46IPAKhAcqKQwIkudY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Z7fLdT5BWr15T3ceKKv6gAwrEzkGxOvCTZ9f0Hgzt+dULkHzP/quIr8uQsLQHpDIrb+v3OsgXE5bzRoa9SFbrGph81mHvLxGltd/hsgKjYY/13OlkG6WvNW61teRbMGZQQouEIrduM2aj7z+QqBJcF9jle4Ah3iCMs2v8KOp9q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=fail smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=YJHbmZXU; arc=none smtp.client-ip=67.231.157.127
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=akamai.com
+	s=arc-20240116; t=1776329013; c=relaxed/simple;
+	bh=jy/rxoo1p+ve/buQpTXSWcCvo/2NKUN0XefnO0bJeYI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rv1CtAJanEBcdaH8YsA5EPwcS4z2q4+yxraKzZAgv2+mwXvOZE2/VV80YYKpZHzlrFP6Q6Xl7mxYSgJUTMktacomrfW1ElLdnFcFwWIfEc1rZJa+GQGrH+rCRF6irXN1cEjdKT0jd44j+McT2Ncp+vlPm0Cyw/Rp2kFyUstGksw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HxUqOQb9; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="YJHbmZXU"
-Received: from pps.filterd (m0050096.ppops.net [127.0.0.1])
-	by m0050096.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 63G61iGL126706;
-	Thu, 16 Apr 2026 08:55:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=jan2016.eng; bh=tvzeqXY17
-	UbphjoJsIOIquKsB7eKxzv9kuXvY8AZYjc=; b=YJHbmZXULp7LIMi4dPefFoNTo
-	q58ECJrbdA98igfq4JRlz2J/s+g2rBuY9Fel4I2I5s3Zp1GCL8EOMCghOy6Yha7P
-	SIVqO7tfVxw/cc7oA7zQTNak7S7uxyinKxJaVV+lQrhvhWtTLLqUhLMLB3ES/fHx
-	op0zNHlWIwJEANxRlASMSoeDlr11sQ79VDYXRRZ7jmqRJVKRxga8fcxe8a5SR6iV
-	ihLAF8ehzug7PP9i28k3eO0HnxZGsad5OqyxMLSUyU8l0cYE2Abxdf8CGHkh3fFg
-	LfebAR2nPHx+biGwI1oLR/0XHPcQ0nlNkM1K2nPb5PIY7aUUWmXHGxPfFKzLA==
-Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18])
-	by m0050096.ppops.net-00190b01. (PPS) with ESMTPS id 4dfeq6ud2t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Apr 2026 08:55:24 +0100 (BST)
-Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
-	by prod-mail-ppoint1.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63G7fdX0018471;
-	Thu, 16 Apr 2026 03:55:23 -0400
-Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
-	by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 4dj2x560nc-1;
-	Thu, 16 Apr 2026 03:55:23 -0400 (EDT)
-Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
-	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id A168991;
-	Thu, 16 Apr 2026 07:55:21 +0000 (UTC)
-From: Nick Hudson <nhudson@akamai.com>
-To: bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
-        Anna Glasgall <aglasgal@akamai.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 3/6] bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel decapsulation
-Date: Thu, 16 Apr 2026 08:55:11 +0100
-Message-Id: <20260416075514.927101-4-nhudson@akamai.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260416075514.927101-1-nhudson@akamai.com>
-References: <20260416075514.927101-1-nhudson@akamai.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HxUqOQb9"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ba25fd27571so118935666b.0
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 01:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1776329009; x=1776933809; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Uu1RbogMjn1UvtlxIpHTcIOE9rQqKJsfEs8vLHXRnk8=;
+        b=HxUqOQb9hSR2kgprFbPoLPGmAQEVFu5rStOLOMWn9UNcEszo3B+jCDaGSEu3H6l/Hi
+         5gMGmr8COlvkldH6y8uGsK6rbuiiPrrWARBa5zggr0mbHw/J83bCTCQEffNcMBGarOZf
+         RLgm+Yd4xpkBWOnATieXV50QUPwjdmVqOdzINowmo9fP6ArTBVnp/Jkaj7EKFAZxwrka
+         b4G1FEztgmuGjR0RsIQC0e0p9GCzat8KegLhHu1+CAXWsdDpT9xEYWMp74hkhMVW4wnk
+         Hzg/3qKfjRd0Ry2yeebR0GsL52A2+nbup213cAWaophXM4wnBZ4C3Es7zh2kkDDGBX2e
+         hGvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776329009; x=1776933809;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uu1RbogMjn1UvtlxIpHTcIOE9rQqKJsfEs8vLHXRnk8=;
+        b=P3NHvDZ4xmzSmyPOg8OsSuaOr+ujc8fx8TumRnZ3zcATmVmJTul9uJe8r6bOkzK1XE
+         abGdwIIJdF8zBidML7OmkP5oQdiWsE0dALbOItzzlbH1ax3E68dJ55lVx/IqgGTbbHYJ
+         foOWnQ0NhWotkyNKXZN3K7tI0OotzI9i5ojCqFN8PH86sxZJHVbty2Qgk3blyqNGsn64
+         qkEGMb7ejEiLVx7i6GlYKAIYJnVvlwEQU6F7tmQSl8mEQTfNvJkrTFjOikyKzQLaqjN2
+         Rv+hrdqZFJRLqB3A7p/95YfzsPPVleogAAYethUal61g6hm2E9LifV/Zui58pMoOO8R4
+         56Ig==
+X-Forwarded-Encrypted: i=1; AFNElJ/22lpypcHUUl4wwbTqFiDhMws/zqbA6UymGbP3naVsVS/uCgeX4gG8f6Y6DDrcHmLc9yk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywqex0z86YdBp+SuqtXIm1Pte58qPBHwBzoomWf/WmVgFbk2XRY
+	JquSX8BQMeMLc43L1+t6COVWMgQag2s8WEi0tmV98kYbeyCD8F0RLcdLXiFG9QJP4w==
+X-Gm-Gg: AeBDiev+8oEzn0HZRTbeTh57QAFe/KjzgktTE69e5j6iL8sndotjZAM2SdFjWrF7jrH
+	RE69xKuEgAGzuTdHhsqp2E6U/yixIlgzhshX4rws9zlb2x2x32t8s4tf0EF/oJ6RCMcSnzK+RKg
+	b+3CiWUm9kkorO/6eKiFp5xlgRsyXsDuMC2c30McxT5XXWDgqxo+ys+2CVAqNB6MVTkbAT1R63J
+	3EprsXfbwQSMFmOUGIzpf68TPCK1tkJXwiUnaOx2OPNs+DNWeYM5kAeiIDuyfuF5UbzuaBgxtyz
+	02+OXurJI+sQU+LWOSu55BMyyfc1RP8h0JOZnRatj96vlcrLMV7/lp5/Nqxe3GlwuP/Pkj1b7hx
+	vABaGWL+f51ZK1eIoF12cf1TLwBiMpG9CljYNvZnJfKxDX9PASw9fXIfldiBLPFY9a8m1F0wxg0
+	vaeAEADaZphE1KeDGEtXEmUB9gMhBrJ5JOTJBF/X15WTKAftqFBPtg/+ixhhcOSauCh4WhzrcF0
+	2sKrXmI8V1T
+X-Received: by 2002:a17:907:ca2a:b0:b8f:e98b:4952 with SMTP id a640c23a62f3a-b9d729bd5a9mr1014295866b.41.1776329008744;
+        Thu, 16 Apr 2026 01:43:28 -0700 (PDT)
+Received: from google.com (57.35.34.34.bc.googleusercontent.com. [34.34.35.57])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ba1773c351fsm140213566b.30.2026.04.16.01.43.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2026 01:43:28 -0700 (PDT)
+Date: Thu, 16 Apr 2026 08:43:24 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>
+Subject: Re: [PATCH v2 1/4] bpf: add firmware command validation hook
+Message-ID: <aeChLBMdLW2AEHpR@google.com>
+References: <20260331-fw-lsm-hook-v2-0-78504703df1f@nvidia.com>
+ <20260331-fw-lsm-hook-v2-1-78504703df1f@nvidia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- malwarescore=0 mlxscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
- mlxlogscore=596 spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2604070000 definitions=main-2604160071
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDA3MyBTYWx0ZWRfX0UTawQywIhZa
- W0m6a8Z7gVyby2bJr4QzUr3VJKvrEFVFOk3lB+H+tzNcmmj+bM40BualtRNabM2dylwcxRa4bZK
- R9MOkw1p+WSaa2zFxCHx8k+DXP8/XS3BP+Z5YdhhkyMQqqEM42/rfn0RVyysetMCdFHJ/xB6aXn
- hVHg16mMslV7I56RAGWHvDyTzRnjM2VC1218tBuCq7/VDq4dClMi25tWiT+E4V7z5xaJrsA2laE
- L51o8enY/mh4Lo0UeV9qFcJfw1LfwKiEp9oMv+n3H+QHSqW9lQOSKEKCaA58KzC9axBtRumqG2T
- cc4xZ5HRlWz9gVR6lj6z338yLaUgZi8GHzCno3ZFV8brriCulDnj2fIX7X4WiZvRdzqsF2havxs
- na7PrqWWoaoO6H5WdfyOti5I3GsVhQhoa+ZAB3N/lRPuaWbs069DSJGgufxTV9cV/qfR1z2JrXe
- n8FaA3fAMflyN5KQiuQ==
-X-Proofpoint-ORIG-GUID: h1or0D8FYIWjHDVLTdqHAO2oRmRdJVcL
-X-Authority-Analysis: v=2.4 cv=bsV8wkai c=1 sm=1 tr=0 ts=69e095ec cx=c_pps
- a=StLZT/nZ0R8Xs+spdojYmg==:117 a=StLZT/nZ0R8Xs+spdojYmg==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
- a=8P__5Em-pwOPtXrf4HJ0:22 a=X7Ea-ya5AAAA:8 a=KfGVUnEDJfcTcdlxACkA:9
-X-Proofpoint-GUID: h1or0D8FYIWjHDVLTdqHAO2oRmRdJVcL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- malwarescore=0 spamscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604160073
+In-Reply-To: <20260331-fw-lsm-hook-v2-1-78504703df1f@nvidia.com>
 
-Add new bpf_skb_adjust_room() decapsulation flags:
+On Tue, Mar 31, 2026 at 08:56:33AM +0300, Leon Romanovsky wrote:
+> From: Chiara Meiohas <cmeiohas@nvidia.com>
+> 
+> Drivers communicate with device firmware either via register-based
+> commands (writing parameters into device registers) or by passing
+> a command buffer using shared-memory mechanisms.
+> 
+> The proposed fw_validate_cmd hook is intended for the command buffer
+> mechanism, which is commonly used on modern, complex devices.
+> 
+> This hook allows inspecting firmware command buffers before they are
+> sent to the device.
+> The hook receives the command buffer, device, command class, and a
+> class-specific id:
+>   - class_id (enum fw_cmd_class) allows BPF programs to
+>     differentiate between classes of firmware commands.
+>     In this series, class_id distinguishes between commands from the
+>     RDMA uverbs interface and from fwctl.
+>   - id is a class-specific device identifier. For uverbs, id is the
+>     RDMA driver identifier (enum rdma_driver_id). For fwctl, id is the
+>     device type (enum fwctl_device_type).
+> 
+> The mailbox format varies across vendors and may even differ between
+> firmware versions, so policy authors must be familiar with the
+> specific device's mailbox format. BPF programs can be tailored to
+> inspect the mailbox accordingly, making BPF the natural fit.
+> Therefore, the hook is defined using the LSM_HOOK macro in bpf_lsm.c
+> rather than in lsm_hook_defs.h, as it is a BPF-only hook.
+> 
+> Signed-off-by: Chiara Meiohas <cmeiohas@nvidia.com>
+> Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
+> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> ---
+>  include/linux/bpf_lsm.h | 41 +++++++++++++++++++++++++++++++++++++++++
+>  kernel/bpf/bpf_lsm.c    | 11 +++++++++++
+>  2 files changed, 52 insertions(+)
+> 
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index 643809cc78c33..7ad7e153f486c 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -12,6 +12,21 @@
+>  #include <linux/bpf_verifier.h>
+>  #include <linux/lsm_hooks.h>
+>  
+> +struct device;
+> +
+> +/**
+> + * enum fw_cmd_class - Class of the firmware command passed to
+> + * bpf_lsm_fw_validate_cmd.
+> + * This allows BPF programs to distinguish between different command classes.
+> + *
+> + * @FW_CMD_CLASS_UVERBS: Command originated from the RDMA uverbs interface
+> + * @FW_CMD_CLASS_FWCTL: Command originated from the fwctl interface
+> + */
+> +enum fw_cmd_class {
+> +	FW_CMD_CLASS_UVERBS,
+> +	FW_CMD_CLASS_FWCTL,
+> +};
+> +
+>  #ifdef CONFIG_BPF_LSM
+>  
+>  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> @@ -53,6 +68,24 @@ int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
+>  int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
+>  bool bpf_lsm_has_d_inode_locked(const struct bpf_prog *prog);
+>  
+> +/**
+> + * bpf_lsm_fw_validate_cmd() - Validate a firmware command
+> + * @in: pointer to the firmware command input buffer
+> + * @in_len: length of the firmware command input buffer
+> + * @dev: device associated with the command
+> + * @class_id: class of the firmware command
+> + * @id: device identifier, specific to the command @class_id
+> + *
+> + * Check permissions before sending a firmware command generated by
+> + * userspace to the device.
+> + *
+> + * Return: Returns 0 if permission is granted, or a negative errno
+> + * value to deny the operation.
+> + */
+> +int bpf_lsm_fw_validate_cmd(const void *in, size_t in_len,
+> +			    const struct device *dev,
+> +			    enum fw_cmd_class class_id, u32 id);
+> +
+>  #else /* !CONFIG_BPF_LSM */
+>  
+>  static inline bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+> @@ -104,6 +137,14 @@ static inline bool bpf_lsm_has_d_inode_locked(const struct bpf_prog *prog)
+>  {
+>  	return false;
+>  }
+> +
+> +static inline int bpf_lsm_fw_validate_cmd(const void *in, size_t in_len,
+> +					  const struct device *dev,
+> +					  enum fw_cmd_class class_id, u32 id)
+> +{
+> +	return 0;
+> +}
+> +
+>  #endif /* CONFIG_BPF_LSM */
+>  
+>  #endif /* _LINUX_BPF_LSM_H */
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index 0c4a0c8e6f703..fbdc056995fee 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -28,12 +28,23 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
+>  }
+>  
+>  #include <linux/lsm_hook_defs.h>
+> +
+> +/*
+> + * fw_validate_cmd is not in lsm_hook_defs.h because it is a BPF-only
+> + * hook — mailbox formats are device-specific, making BPF the natural
+> + * fit for inspection.
+> + */
+> +LSM_HOOK(int, 0, fw_validate_cmd, const void *in, size_t in_len,
+> +	 const struct device *dev, enum fw_cmd_class class_id, u32 id)
+> +EXPORT_SYMBOL_GPL(bpf_lsm_fw_validate_cmd);
+> +
 
-- BPF_F_ADJ_ROOM_DECAP_L4_GRE
-- BPF_F_ADJ_ROOM_DECAP_L4_UDP
-- BPF_F_ADJ_ROOM_DECAP_IPXIP4
-- BPF_F_ADJ_ROOM_DECAP_IPXIP6
+If you decide to stick w/ this BPF LSM based workaround, you can drop
+the reliance on LSM_HOOK() entirely here.
 
-These flags let BPF programs describe which tunnel layer is being
-removed, so later changes can update tunnel-related GSO state
-accordingly during decapsulation.
-
-This patch only introduces the UAPI flag definitions and helper
-documentation.
-
-Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Nick Hudson <nhudson@akamai.com>
----
- include/uapi/linux/bpf.h       | 34 ++++++++++++++++++++++++++++++++--
- tools/include/uapi/linux/bpf.h | 34 ++++++++++++++++++++++++++++++++--
- 2 files changed, 64 insertions(+), 4 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c021ed8d7b44..4a53e731c554 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3010,8 +3010,34 @@ union bpf_attr {
-  *
-  *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
-  *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
-- *		  Indicate the new IP header version after decapsulating the outer
-- *		  IP header. Used when the inner and outer IP versions are different.
-+ *		  Indicate the new IP header version after decapsulating the
-+ *		  outer IP header. Used when the inner and outer IP versions
-+ *		  are different. These flags only trigger a protocol change
-+ *		  without clearing any tunnel-specific GSO flags.
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
-+ *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
-+ *		  when decapsulating a GRE tunnel.
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
-+ *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
-+ *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
-+ *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
-+ *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
-+ *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
-+ *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
-+ *		  or IPv4-in-IPv6).
-+ *
-+ *		When using the decapsulation flags above, the skb->encapsulation
-+ *		flag is automatically cleared if all tunnel-specific GSO flags
-+ *		(SKB_GSO_UDP_TUNNEL, SKB_GSO_UDP_TUNNEL_CSUM, SKB_GSO_GRE,
-+ *		SKB_GSO_GRE_CSUM, SKB_GSO_IPXIP4, SKB_GSO_IPXIP6) have been
-+ *		removed from the packet. This handles cases where all tunnel
-+ *		layers have been decapsulated.
-  *
-  * 		A call to this helper is susceptible to change the underlying
-  * 		packet buffer. Therefore, at load time, all checks on pointers
-@@ -6221,6 +6247,10 @@ enum bpf_adj_room_flags {
- 	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
- 	BPF_F_ADJ_ROOM_DECAP_L3_IPV4	= (1ULL << 7),
- 	BPF_F_ADJ_ROOM_DECAP_L3_IPV6	= (1ULL << 8),
-+	BPF_F_ADJ_ROOM_DECAP_L4_GRE	= (1ULL << 9),
-+	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
-+	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
-+	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
- };
- 
- enum {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index ca35ed622ed5..f4c2fbd8fe68 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3010,8 +3010,34 @@ union bpf_attr {
-  *
-  *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
-  *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
-- *		  Indicate the new IP header version after decapsulating the outer
-- *		  IP header. Used when the inner and outer IP versions are different.
-+ *		  Indicate the new IP header version after decapsulating the
-+ *		  outer IP header. Used when the inner and outer IP versions
-+ *		  are different. These flags only trigger a protocol change
-+ *		  without clearing any tunnel-specific GSO flags.
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
-+ *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
-+ *		  when decapsulating a GRE tunnel.
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
-+ *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
-+ *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
-+ *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
-+ *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
-+ *
-+ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
-+ *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
-+ *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
-+ *		  or IPv4-in-IPv6).
-+ *
-+ *		When using the decapsulation flags above, the skb->encapsulation
-+ *		flag is automatically cleared if all tunnel-specific GSO flags
-+ *		(SKB_GSO_UDP_TUNNEL, SKB_GSO_UDP_TUNNEL_CSUM, SKB_GSO_GRE,
-+ *		SKB_GSO_GRE_CSUM, SKB_GSO_IPXIP4, SKB_GSO_IPXIP6) have been
-+ *		removed from the packet. This handles cases where all tunnel
-+ *		layers have been decapsulated.
-  *
-  * 		A call to this helper is susceptible to change the underlying
-  * 		packet buffer. Therefore, at load time, all checks on pointers
-@@ -6221,6 +6247,10 @@ enum bpf_adj_room_flags {
- 	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
- 	BPF_F_ADJ_ROOM_DECAP_L3_IPV4	= (1ULL << 7),
- 	BPF_F_ADJ_ROOM_DECAP_L3_IPV6	= (1ULL << 8),
-+	BPF_F_ADJ_ROOM_DECAP_L4_GRE	= (1ULL << 9),
-+	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
-+	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
-+	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
- };
- 
- enum {
--- 
-2.34.1
-
+>  #undef LSM_HOOK
+>  
+>  #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
+>  BTF_SET_START(bpf_lsm_hooks)
+>  #include <linux/lsm_hook_defs.h>
+>  #undef LSM_HOOK
+> +BTF_ID(func, bpf_lsm_fw_validate_cmd)
+>  BTF_SET_END(bpf_lsm_hooks)
+>  
+>  BTF_SET_START(bpf_lsm_disabled_hooks)
+> 
+> -- 
+> 2.53.0
+> 
