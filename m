@@ -1,64 +1,64 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86635175A7F
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 13:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25FBC3BAD90
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 13:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776345102; cv=none; b=rLrOZ1cMfpeA0IswPCQoPHsxf8rpgZTGzU7KbOwgfkspJn8Gvoc8DN4MU0+UsxSaFryH68wDTrUXiFlXtkycdY+771qv6naW/RjJtlbE4g/lYM68qcmLUWx0NiUb8xhYbGF6vNtyVL1pjq8kZ0DGNTNyWC3C7xQTmdr5F0qVHgE=
+	t=1776345152; cv=none; b=sMV3PtoZqNW6Pa6mV/HlzAo5S9gQ0oRw7ZBAyRkoEkNfk2Mvgt0p7KuI+pPUSRckHaQGavXcR6dbN37qKevDUX40tIXCsRf489UBvutcYNg/mfU3kBJmrlJJW7anqT5qk1QY/irQBRs5bWHBqoYS5FH/QZIuItT+9Z0l//X1Ro4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776345102; c=relaxed/simple;
-	bh=0vWpt09VZ2WRx3a3MU6mJCg+aWiS4N05k5nlpuobxE0=;
+	s=arc-20240116; t=1776345152; c=relaxed/simple;
+	bh=pfxbq24fIUvRTm0dHdrJz9bKVk6+8TOJwCg9WtamenY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zoa6WtgSpYVoKUOpQwDseY8F1MHaZNxPjKU1eqisFWnuGxLXoShJMwxnpbnNF3wnf/BLvFFNq0l8uy/KddSHCRod6bLFqWAtKHbW1rP3UShYzddxZNDDMBhkfTJ/0Qhlol6VuhW53GzSJhVaRd19wOgJXr+mxHSHRLFEX1ekaZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nf2sNxJq; arc=none smtp.client-ip=209.85.128.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=fxDoOoFC/NKsCOFx8xdtjPTXgJNw6DW/6rSVB5LwIUkVtBYRBBd5cCwrKzwc5KEhFXuixrQddmN4r6snaft8vNI195cuB9oeb+LS1192XwDrUI+Y5oQB7dLOlWLIdgofhYFSk7GWRliCwhwz0roYIFDQ0tFBTKPf0UnW/uKtydE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NwGvx15O; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nf2sNxJq"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso77958505e9.1
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 06:11:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NwGvx15O"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488b00ed86fso80602165e9.3
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 06:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776345099; x=1776949899; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776345148; x=1776949948; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cOqJ9s6oehBiqrJEO6CFeG47ZHKiSvpClr6y9D+4zJg=;
-        b=Nf2sNxJqC9HQQAHJb8MrNWYD/CSJ6mGfsIxJ9ftfp7c7/rl1d2DPA9keBfZe9G0mk/
-         FxMmO9GjhGRHu/Kh/YEwIhvsY7sBDwqbh6FzU2DNIzsQ+WhAZDvn8I8dvi235XL4ciMG
-         s64Wv4Z8yYUnNAvkaj3jOCspED2+X6gnXl1adWGQXw7B1pY6VIlWq6N5bDBLQzqXhQ5s
-         2/Hb55W0cz8hTppv5y17Cv7+igta6MVIoBGqUQ/57/Uz1NesC7pqyQGW3tBXIPdeJoS+
-         rfYoeyRPEOBAjpZzGg/qlUqkIdpP4QFYy+/vsUME8OJFlsdOnKd0UUeJnzXx7ihIFNnm
-         LV5Q==
+        bh=uLVEXsp93VdYlkCcC2fl6I0++SNNEDM8hG9YVaspNcc=;
+        b=NwGvx15OxJR532AImc0CUbz3ueRnORzf40Q0diY0qJsL/eAygRSF4sTpwhfLC2RNyb
+         +Y6Wexid0dtVkj5G/K1goAKR9kg5J4DgtXhSgYL8kFffIj4xcsYU3Ib+gBVbUdaYxntI
+         cg8fsq4F/6wSIYhgfooHRQZ6byhB8q0O5ce/wXD18OH8VoZaWIBNTKURWwHNKsQKpJIS
+         riJ02asL6SZuk6Nbj5e8QxtpilTjrsj9ZVqFkl1EpYCi62oO/zhTdukr4GiPos76P44T
+         NIX0e9qG/B1xs6lAeZsHYL8Hic2noTBwqeKrHc3dhHZBzlAD0hqx59+IMn1T2NKdv8ym
+         wztQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776345099; x=1776949899;
+        d=1e100.net; s=20251104; t=1776345148; x=1776949948;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cOqJ9s6oehBiqrJEO6CFeG47ZHKiSvpClr6y9D+4zJg=;
-        b=oZshI7CSNSWGL4MzMuZrVR5CoS1XCfokQ1J2Dm/TBYOmc7A6KUy0Adz1p+B94kd8Zx
-         jsgiiUU//0ArLo48BQeofpfpo6n/IoI1yWadwjm7CMiJcldPGC5DcTLC8/dwo/Gg5l4i
-         F8f0Zv07fiDCRBiypnMHrul2YL0ldHbpOp1p4XTSqJaYbvAX1sxSE5iIlHAnXkLKY2tw
-         ZRdOjqxQmMxpHMJo0rbaJaqEMFGpQEQgQSV4umOi3RFTFbKuA721dn6GDtGjwOfLX7+2
-         NtkzaPEF10w2kqtK+aYD5yFJ7ACrcgqlMUOyLkTuBezhvsOUTdQktKfDMpEMBGbzPuf0
-         8cXg==
-X-Gm-Message-State: AOJu0YxIXfos3BRPEl7VEH3ltut1n8u/+PXaGurcZS32gFCOQkOatkhR
-	xZlkjMjwPTOIkt5446CetUOo+YGZeXhqlhwHx/iMlhgil+qRRfp7jD20Uge9/RwJ
-X-Gm-Gg: AeBDietciuwWFgvujUXDTXH4V043BGNpVSujqJayXlkHC59VzcBj+yA6/yK46/ILvRJ
-	QP96n/zbWWUa/3eTj9/WvD0OWNUpIr6QRDEpr2Gkh2IbjM03rJhO+Du3tDDDAT/cDVr+UlW5im+
-	26An/gT5omAr743idcKpUYR5/g3LxtpePYpQKtfHHGrSGgTdUpGHajMqR037aciF2IKXGEESBwm
-	dwB3uKp/R0Au9EI9Ewg2TSA0yxnuhB4A2XPjqoJPeaV+FKnRStWkjL4wDzSIspgcYICDStqwTaC
-	DR3hqT0IITK460rqRIUfVDu3HtCULEtRTnr3PiwwqY0PdwYnA8cqhX/Ry86BJfFiNeh0EsqdSvU
-	0jJd3MpZK9CNDrkzivbuzw006nP1HAylS9yS1/i6hPSHUgL6B5YlOGB5optDduzD286Db83sATl
-	is0z0OdpDfRu3cUzQ8Cp1ivhy7NGwiOM6xwxXNCr6JjElgW4aW0V0iTSACH69p1oc80REZTygwe
-	SjevOjY4fOwa0ICGDa6HDXMq4PAU04ZPgUrrUZ6yhLly2POL+1KYz+qVGx/rTpyLFhczqYu/t+r
-	4d61o89Fu0vyUWPFKRVCYzG/sXhGb2Cjxef1glAlRAoDeZYAgjDm
-X-Received: by 2002:a05:600c:8b27:b0:486:f634:ef1 with SMTP id 5b1f17b1804b1-488d687664emr339471615e9.17.1776345098666;
-        Thu, 16 Apr 2026 06:11:38 -0700 (PDT)
+        bh=uLVEXsp93VdYlkCcC2fl6I0++SNNEDM8hG9YVaspNcc=;
+        b=Sg3xZaOWfcVwJ6sSB7FyASK4aLuF0zjezzvxUHGT6soUbHoWFfX6tYa5/I8iUygZha
+         LkfLhiLKpdncABAALCoet6VJMbKP57ioDIrcgSSLViv+bCnr1ZnmyRUTuHiTWsjOhVA4
+         OyTspWmGpfpCJTRxmZC33uz59BhVpQ9f40Scws3/pNPQpBZeHZzRbjFjGjNzs4aWFbM0
+         WuFzONZRYN0dPOwCWzYmtsfhbVvYMcZpoLeoLDgfMiGATxvSnN5scmoe7napQBjPwAZx
+         hcGHdqSnY6f7hgF35jt0wmjuDJNfK9KJ2gRKTVAcB2g0ElmNmrqfAxsQKfVjXT87bBQJ
+         wg5w==
+X-Gm-Message-State: AOJu0YytiauoxryWreYLOPgr0iDKDaBJY9K2/eHt0sDgZ2Eko+CLymCX
+	pyg0aYHltQHmJQ5ysTR0rvVsXCHB0q3Ly8IPOK0koBMKNNtM5W+hbXhz1UewQ7Ud
+X-Gm-Gg: AeBDietB3t0zq2emCRBIIaV+RnoId6BdCkQB2dTGjfV6VC9Hp4/DOIKMpOAHOLvrEkf
+	GUDoqRAsoKIzqFCIkBb7IwIWR7y68gYqhAlqANgr3NS0EHH3L95csqI5fGmt/plrpeBosy8z/Sg
+	boTWKU1k4dFbzd1BblPKf+dnSCsM8PQ2Vd0BnNgcCv2etk70K1+BJn0rFPf2Z/hM7aIoezE9WL5
+	Ll6JdxY+0hcIdf1g0zwT3WjaLr25IuYw86UTj+QLB1+wR6RjaTOmxMtbyQMpxW4omLMBIoEZ8cx
+	TCsv5rEXCQyV7maBknJPsgQ24nFiYZiy3zpZSKqn/inuGARKu4GKmo/fn0pmIziVOz1dEyrCwg4
+	54wNpDnyrPmlTrzYjN7d7UPzLKGr2OLlDmsVZgReJD98P2saU0+7Elwy3Z3YPnbVC1OiDw+vCun
+	KQSCS5nrdVMgbe8y53YkEN1q0ETQw94G7VTr9iDPxsTTJtEkMjd5Po+BZTWcb85vd9I0uIsMgPp
+	k4BQvsn8meBgcUCUr9ZtsWBd8q9f1c5LE8oSvpH2eI1TzM2wqxJktNGzghrkS+aHkfUmd+11LrS
+	R6SDg3+KSS5ses1QJYbevqxPG9oE2zSiGcFpNOb/ErpIj1foA7Nt
+X-Received: by 2002:a05:600d:d:b0:488:ba5f:984f with SMTP id 5b1f17b1804b1-488d67b8dadmr288237565e9.6.1776345148375;
+        Thu, 16 Apr 2026 06:12:28 -0700 (PDT)
 Received: from mail.gmail.com (2a01cb0889497e00b55a04a9836ebec0.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:b55a:4a9:836e:bec0])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f5854163sm53613345e9.13.2026.04.16.06.11.37
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f58165e1sm50870405e9.2.2026.04.16.06.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 06:11:38 -0700 (PDT)
-Date: Thu, 16 Apr 2026 15:11:36 +0200
+        Thu, 16 Apr 2026 06:12:27 -0700 (PDT)
+Date: Thu, 16 Apr 2026 15:12:26 +0200
 From: Paul Chaignon <paul.chaignon@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Helen Koike <koike@igalia.com>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH RFC bpf-next 1/7] bpf/verifier: Use intersection checks when
- simulating to detect dead branches
-Message-ID: <681fc6e748330e6a765a89f7193c17b33d4ea26f.1776344897.git.paul.chaignon@gmail.com>
+Subject: [PATCH RFC bpf-next 2/7] selftests/bpf: Test for empty intersection
+ of tnum and u64
+Message-ID: <cf4061f2e91d271f1f44160a0b87a87ec6df5428.1776344897.git.paul.chaignon@gmail.com>
 References: <cover.1776344897.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -82,301 +82,66 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1776344897.git.paul.chaignon@gmail.com>
 
-From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Thanks to the previous patch, if the tnum and u64 don't intersect on a
+branch, we can deduce the branch is dead code. This patch adds a
+verifier selftest for that case, with an invalid r10 write on the dead
+branch.
 
-This commit introduces checks to detect if the ranges and/or tnums have
-intersections between them, and uses the checks in
-simulate_both_branches_taken and reg_bounds_sync.
+Without the previous patch, this selftest fails as follows:
 
-The verifier is known to evolve the reg_states correctly (i.e. soundly)
-on a live branch. In a previous commit [1], we used the ill-formedness
-of a range (e.g. umin > umax), identified by range_bounds_violation, to
-detect dead branches and prune the branch along which the ill-formedness
-occurs.
+  0: call bpf_get_prandom_u32#7  ; R0=scalar()
+  1: r6 = r0                     ; R0=scalar(id=1) R6=scalar(id=1)
+  2: r1 = 0xe00000002            ; R1=0xe00000002
+  4: r2 = 0xf00000000            ; R2=0xf00000000
+  6: if r6 s< r1 goto pc+2       ; R1=0xe00000002 R6=scalar(id=1,smin=umin=0xe00000002,umax=0x7fffffffffffffff,var_off=(0x0; 0x7fffffffffffffff))
+  7: if r6 s> r2 goto pc+1       ; R2=0xf00000000 R6=scalar(id=1,smin=umin=0xe00000002,smax=umax=0xf00000000,var_off=(0xe00000000; 0x1ffffffff))
+  8: if w6 == 0x1 goto pc+1      ; R6=scalar(id=1,smin=umin=0xe00000002,smax=umax=0xf00000000,var_off=(0xe00000000; 0x1ffffffff))
+  9: exit
 
-Another opportunity to prune branches is when the ranges and/or tnums
-have don't intersect. When the verifier evolves the reg_state along a
-dead branch, it is possible that abstract value in one domain (e.g tnum)
-doesn't match with the abstract value in the other domain (e.g. u64), so
-that there is no single value x, that is contained in both the abstract
-values.
+  from 8 to 10: R0=scalar(id=1,smin=umin=0xe00000002,smax=umax=0xf00000000,smin32=umin32=1,smax32=umax32=1,var_off=(0xe00000001; 0x100000000)) R1=0xe00000002 R2=0xf00000000 R6=scalar(id=1,smin=umin=0xe00000002,smax=umax=0xf00000000,smin32=umin32=1,smax32=umax32=1,var_off=(0xe00000001; 0x100000000)) R10=fp0
+  10: R0=scalar(id=1,smin=umin=0xe00000002,smax=umax=0xf00000000,smin32=umin32=1,smax32=umax32=1,var_off=(0xe00000001; 0x100000000)) R1=0xe00000002 R2=0xf00000000 R6=scalar(id=1,smin=umin=0xe00000002,smax=umax=0xf00000000,smin32=umin32=1,smax32=umax32=1,var_off=(0xe00000001; 0x100000000)) R10=fp0
+  10: (b7) r10 = 0
+  frame pointer is read only
 
-First, we introduce intersection checks for each of the 5 domains (for a
-total of 10 domain pairs), and wrap it in reg_bounds_intersect.
-
-Next, in simulate_both_branches_taken, we use reg_bounds_intersect
-instead of the existing range_bounds_violation to detect dead branches.
-Because the new check in reg_bounds_intersect also checks for
-range_bounds_violation, we are strictly increasing the detection of dead
-branches when using the new check.
-
-Finally, this commit also replaces the early exit in reg_bounds_sync. In
-an older commit [2] we detected invalid inputs to reg_bounds_sync using
-range_bounds_violation, i.e. checking for ill-formed ranges (e.g. umin >
-umax), and exited early. If the inputs to reg_bounds_sync do not have
-any intersection, they are also invalid. This way, we ensure that
-subsequent operations in reg_bounds_sync don't inadvertently "fix" the
-reg_state to become valid. This is important for example, when we
-simulate_both_branches_taken; the call to reg_bounds_sync won't fix the
-reg_state bounds, so we can still detect dead branches using
-reg_bounds_intersect.
-
-[1] commit b254c6d816e5 ("bpf: Simulate branches to prune based on range violations")
-[2] commit a2a14e874b4e ("bpf: Exit early if reg_bounds_sync gets invalid inputs")
-
-Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
- kernel/bpf/verifier.c | 213 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 208 insertions(+), 5 deletions(-)
+ .../selftests/bpf/progs/verifier_bounds.c     | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9e4980128151..1d5d2b7e5140 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2345,12 +2345,15 @@ static void __reg_bound_offset(struct bpf_reg_state *reg)
- 	reg->var_off = tnum_or(tnum_clear_subreg(var64_off), var32_off);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index c1ae013dee29..151c7a479a6b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -2184,4 +2184,29 @@ __naked void tnums_equal_impossible_constant(void *ctx)
+ 	: __clobber_all);
  }
  
--static bool range_bounds_violation(struct bpf_reg_state *reg);
-+static bool reg_bounds_intersect(struct bpf_reg_state *reg);
- 
- static void reg_bounds_sync(struct bpf_reg_state *reg)
- {
--	/* If the input reg_state is invalid, we can exit early */
--	if (range_bounds_violation(reg))
-+	/* If the input reg_state has no intersection between abstract values, it is
-+	 * invalid. We can exit early, ensuring that subsequent operations don't
-+	 * inadvertently fix the reg_state.
-+	 */
-+	if (!reg_bounds_intersect(reg))
- 		return;
- 	/* We might have learned new bounds from the var_off. */
- 	__update_reg_bounds(reg);
-@@ -2397,6 +2400,206 @@ static bool const_tnum_range_mismatch_32(struct bpf_reg_state *reg)
- 	       reg->s32_min_value != sval32 || reg->s32_max_value != sval32;
- }
- 
-+/*
-+ * Check if a reg_state's bounds in all domains (u64, s64, u32, s32, tnum)
-+ * intersect. This ensures that for every pair of abstract values, there is
-+ * *at least one* value x, such that x is a member of both abstract values.
-+ * If there is no intersection between *any* pair of abstract values (10 pairs
-+ * from the five domains), return false. Otherwise, return true.
-+ */
-+static bool reg_bounds_intersect(struct bpf_reg_state *reg)
++SEC("socket")
++__description("dead branch: tnum and u64 don't intersect on true branch")
++__success
++__naked void empty_tnum_u64_intersection(void *ctx)
 +{
-+	u64 umin = reg->umin_value, umax = reg->umax_value;
-+	s64 smin = reg->smin_value, smax = reg->smax_value;
-+	u32 u32_min = reg->u32_min_value, u32_max = reg->u32_max_value;
-+	s32 s32_min = reg->s32_min_value, s32_max = reg->s32_max_value;
-+	struct tnum t = reg->var_off;
-+	struct tnum t32 = tnum_subreg(t);
-+	u64 tmin = t.value, tmax = t.value | t.mask;
-+	u32 t32_min = t32.value, t32_max = t32.value | t32.mask;
-+
-+	/*
-+	 * If the min > max, then the range itself is ill-formed, so there can be no
-+	 * intersection in abstract values across domains.
-+	 */
-+	if (range_bounds_violation(reg))
-+		return false;
-+
-+	/*
-+	 * If the var_off is ill-formed, there can be no intersection in abstract
-+	 * values across domains.
-+	 */
-+	if ((t.value & t.mask) != 0)
-+		return false;
-+
-+	/*
-+	 * Intersect u64 with s64. We map the s64 range to u64 domain and check if
-+	 * there is an intersection. If s64 range does not cross the -1/0 sign
-+	 * boundary, then we can treat it as a u64 range and check if its bounding
-+	 * values are outside the u64 range. If s64 range crosses the sign boundary,
-+	 * then it spans the u64 intervals [0, smax] and [smin, U64_MAX].
-+	 * Intersection exists if the u64 range overlaps either of these components.
-+	 */
-+	if ((u64)smin <= (u64)smax) { /* s64 does not cross the sign boundary */
-+		if ((u64)smax < umin || umax < (u64)smin)
-+			return false;
-+	} else {
-+		if ((u64)smin > umax && (u64)smax < umin)
-+			return false;
-+	}
-+
-+	/*
-+	 * Intersect u64 with tnum. If the bounding values of tnum when mapped to
-+	 * the u64 domain are outside the bounding values of u64, there is no
-+	 * intersection. However, it is also possible that the tnum "jumps over" the
-+	 * u64, making the u64 range lie entirely "in-between" the tnum:
-+	 *
-+	 * u64:  ----[xxxxxx]------
-+	 * tnum: -x-----------x----
-+	 *
-+	 * In this case, if the next tnum value after umin is beyond umax, there is
-+	 * no intersection.
-+	 */
-+	if (tmax < umin || tmin > umax)
-+		return false;
-+	if (t.value != (umin & ~t.mask)) {
-+		if (tnum_step(t, umin) > umax)
-+			return false;
-+	}
-+
-+	/*
-+	 * Intersect s64 with tnum. Similar to u64-tnum, but we map s64 to u64
-+	 * domain and check if there is an intersection with tnum. If s64 range does
-+	 * not cross the -1/0 sign boundary, we can treat it as a normal u64 range
-+	 * and check intersection with the tnum as above. If s64 range crosses
-+	 * the sign boundary, it spans the u64 intervals [0, smax] and [smin,
-+	 * U64_MAX]. Intersection exists if the tnum overlaps either of these
-+	 * components. The tnum cannot "jump over" either of these two intervals,
-+	 * because they contain endpoints 0 and U64_MAX respectively. So it is
-+	 * sufficient to check if the bounding values of tnum are outside the
-+	 * bounding values of the mapped s64.
-+	 */
-+	if ((u64)smin <= (u64)smax) { /* s64 does not cross the sign boundary */
-+		if (tmax < (u64)smin || tmin > (u64)smax)
-+			return false;
-+		if (t.value != ((u64)smin & ~t.mask)) {
-+			if (tnum_step(t, (u64)smin) > (u64)smax)
-+				return false;
-+		}
-+	} else { /* s64 crosses the sign boundary */
-+		if (tmin > (u64)smax && tmax < (u64) smin)
-+			return false;
-+	}
-+
-+	/* Intersect u32 with s32. This case is similar to u64-s64 */
-+	if ((u32)s32_min <= (u32)s32_max) {
-+		if ((u32)s32_max < u32_min || u32_max < (u32)s32_min)
-+			return false;
-+	} else {
-+		if ((u32)s32_min > u32_max && (u32)s32_max < u32_min)
-+			return false;
-+	}
-+
-+	/* Intersect u32 with tnum. This case is similar to u64-tnum */
-+	if (t32_min > u32_max || t32_max < u32_min)
-+		return false;
-+	if ((t32.value != (u32_min & ~t32.mask)) && (tnum_step(t32, u32_min) > u32_max))
-+		return false;
-+
-+	/* Intersect s32 with tnum. This case is similar to s64-tnum */
-+	if ((u32)s32_min <= (u32)s32_max) {
-+		if (t32_min > (u32)s32_max || t32_max < (u32)s32_min)
-+			return false;
-+		if (t32.value != ((u32)s32_min & ~t32.mask)) {
-+			if (tnum_step(t32, (u32)s32_min) > (u32)s32_max)
-+				return false;
-+		}
-+	} else {
-+		if (t32_min > (u32)s32_max && t32_max < (u32)s32_min)
-+			return false;
-+	}
-+
-+	/*
-+	 * Intersect u64 with u32. If the u64 range spans >=U32_MAX values then an
-+	 * intersection is guaranteed, so we skip that case. Otherwise, we map the
-+	 * u64 bounds to the u32 domain and check if the new u32 range intersects
-+	 * with the u32 bounds. When mapped, the u64 range might cross the U32_MAX
-+	 * boundary. If it doesn't cross the boundary, it forms a single contiguous
-+	 * range: [(u32)umin, (u32)umax] that we can check intersection with u32
-+	 * bounds. If it does cross the U32_MAX boundary, we get two contiguous
-+	 * ranges: [0, (u32)umax] and [(u32)umin, U32_MAX]. We check if any part of
-+	 * the u32 bounds overlaps with either segment, which is equivalent to
-+	 * ensuring the u32 bounds are not trapped between (u32)umax and (u32)umin.
-+	 */
-+	if (umax - umin < U32_MAX) { /* u64 range does not span the entire 32-bit domain */
-+		if ((u32)umin <= (u32)umax) { /* mapped u32 range is a single contiguous range */
-+			if ((u32)umax < u32_min || u32_max < (u32)umin)
-+				return false;
-+		} else { /* mapped u32 range crosses the U32_MAX boundary */
-+			if ((u32)umin > u32_max && (u32)umax < u32_min)
-+				return false;
-+		}
-+	}
-+
-+	/*
-+	 * Intersect u64 with s32. This case is similar to u64-u32, but the u64
-+	 * range is mapped to the s32 domain, where it might cross the
-+	 * S32_MIN/S32_MAX boundary. If it doesn't cross the S32_MIN/S32_MAX
-+	 * boundary (it might still cross the -1/0 sign boundary), we check for
-+	 * overlap in the standard way. Otherwise, we get two contiguous ranges (one
-+	 * of which crosses the S32_MIN/S32_MAX boundary, and might also cross the
-+	 * -1/0 sign boundary): [S32_MIN, (s32)umax] and [(s32)umin, S32_MAX].
-+	 * Intersection exists if the s32 bounds overlap with either segment, which
-+	 * is equivalent to ensuring the s32 bounds are not trapped between
-+	 * (s32)umax and (s32)umin.
-+	 */
-+	if (umax - umin < U32_MAX) { /* u64 range does not span the entire 32-bit domain */
-+		if ((s32)umin <= (s32)umax) { /* mapped s32 range is a single contiguous range */
-+			if ((s32)umax < s32_min || s32_max < (s32)umin)
-+				return false;
-+		} else { /* mapped s32 range crosses the S32_MIN/S32_MAX boundary */
-+			if ((s32)umin > s32_max && (s32)umax < s32_min)
-+				return false;
-+		}
-+	}
-+
-+	/*
-+	 * Intersect s64 with u32. This case is similar to u64-u32, but the s64
-+	 * range is mapped to the u32 domain, where it might cross the U32_MAX
-+	 * boundary. If it doesn't, we check for overlap the standard way. If it
-+	 * does, we check that the u32 bounds are not trapped between (u32)smax and
-+	 * (u32)smin.
-+	 */
-+	if ((u64)smax - (u64)smin < U32_MAX) { /* s64 range does not span the entire 32-bit domain */
-+		if ((u32)smin <= (u32)smax) { /* mapped u32 range is a single contiguous range */
-+			if ((u32)smax < u32_min || u32_max < (u32)smin)
-+				return false;
-+		} else { /* mapped u32 range crosses the U32_MAX boundary */
-+			if ((u32)smin > u32_max && (u32)smax < u32_min)
-+				return false;
-+		}
-+	}
-+
-+	/*
-+	 * Intersect s64 with s32. This case is similar to u64-u32, but the s64
-+	 * range is mapped to the s32 domain where it might cross the
-+	 * S32_MAX/S32_MIN boundary. If it doesn't, we check for overlap the
-+	 * standard way. If it does, we check that the s32 bounds are not trapped
-+	 * between (s32)smax and (s32)smin.
-+	 */
-+	if ((u64)smax - (u64)smin < U32_MAX) { /* s64 range does not span the entire 32-bit domain */
-+		if ((s32)smin <= (s32)smax) { /* mapped s32 range does not cross S32_MAX/S32_MIN boundary */
-+			if ((s32)smax < s32_min || s32_max < (s32)smin)
-+				return false;
-+		} else { /* mapped s32 range crosses the S32_MAX boundary */
-+			if ((s32)smin > s32_max && (s32)smax < s32_min)
-+				return false;
-+		}
-+	}
-+
-+	return true;
++	asm volatile("									\
++	call %[bpf_get_prandom_u32];							\
++	r6 = r0;									\
++	r1 = 0xe00000002 ll;								\
++	r2 = 0xf00000000 ll;								\
++	if r6 s< r1 goto +2;								\
++	/* On fallthrough, r6's u64=[0xe00000002;0xf00000000] */			\
++	/*                      tnum=(0xe00000000; 0x1ffffffff) */			\
++	if r6 s> r2 goto +1;								\
++	/* On fallthrough, r6's tnum=(0xe00000001; 0x100000000) */			\
++	/* It doesn't intersect with the u64 so the condition is always false */	\
++	if w6 == 1 goto +1;								\
++	exit;										\
++	r10 = 0;									\
++	exit;										\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
 +}
 +
- static int reg_bounds_sanity_check(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *reg, const char *ctx)
- {
-@@ -15493,7 +15696,7 @@ static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode,
- 	 * reg_states in the FALSE branch (i.e. reg1, reg2), the FALSE branch must be dead. Only
- 	 * TRUE branch will be taken.
- 	 */
--	if (range_bounds_violation(&env->false_reg1) || range_bounds_violation(&env->false_reg2))
-+	if (!reg_bounds_intersect(&env->false_reg1) || !reg_bounds_intersect(&env->false_reg2))
- 		return 1;
- 
- 	/* Jump (TRUE) branch */
-@@ -15505,7 +15708,7 @@ static int simulate_both_branches_taken(struct bpf_verifier_env *env, u8 opcode,
- 	 * reg_states in the TRUE branch (i.e. true_reg1, true_reg2), the TRUE branch must be dead.
- 	 * Only FALSE branch will be taken.
- 	 */
--	if (range_bounds_violation(&env->true_reg1) || range_bounds_violation(&env->true_reg2))
-+	if (!reg_bounds_intersect(&env->true_reg1) || !reg_bounds_intersect(&env->true_reg2))
- 		return 0;
- 
- 	/* Both branches are possible, we can't determine which one will be taken. */
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
