@@ -1,122 +1,148 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A46933D6FD
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 07:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA6B37267E;
+	Thu, 16 Apr 2026 07:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776325429; cv=none; b=R9ATLy4hgSA1fWnPZb8angG5c0dIe6yeoQc+SSX7zPNOai/jtnyosxUT/aVMnE0IMQZ1g6QS9QcFiPo3BYGTFEN7S6Jp0f97oDVcp/3Jqvrfnjj7LHuHZoh2xAJ/VbG7+asHKfwDuCyu6ea4vtNH9RITubW4+ntp3BxDaj9V/kM=
+	t=1776326136; cv=none; b=eDo3NhtYmJdM9VcY36QJJaw3u0tIH+aw7/SvFAcvCNu0P1Mr4H6xAd/FbZ258JEQ+KrhUroQQAY8D6w3A89dBt0bzuBvl5TUDXfLUvTb0xjHbAt2uqBajxyEbizabpLoNIRbJ9GJ/o3JWZGx6Ed6/Fi8sMB7LGjoNCmux9HMP5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776325429; c=relaxed/simple;
-	bh=LURWwFmN6Lhm3n+L2kmQVrHIUNNBhmNaLACiuEKH+p0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g1BFGolWvq92deTTtFgjFHhnjdAP4umfP+M5p2b5P/Ff5O+NLqThuDF4jRYfGvOR1HcgTbyvRw6nlFViiR2axSACWZRQ/ABxzlWJym6VEJKURsM1yQCEr/i+WfQoeJxaaZDaK+Yuv7UtbZ+guf9ABtemI8IDCWPlMjdrvzuf3C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bn8fPwRy; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776326136; c=relaxed/simple;
+	bh=QYXw9LtRFflxyok8cvGwn5NcAzPKkeU75c3UWatbWgU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JDtc3D/5eWmXBoD1VIj8ulsBbiiq2y0CdaDt456W/Zefic0tB1EhlButmRh2qI+LWgN2UY0wUp3xH/1ekQChjU+xzs+IieeSj1PaKJipi79f7OtrT+XJ3sM0r85kLnSxQDuTK17CBwm6bTFG9r9qsCL0uOeqdsPxTJCpN4IGFJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=hscZot2L; arc=none smtp.client-ip=67.231.149.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bn8fPwRy"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82f4c3619b0so1744145b3a.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 00:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776325427; x=1776930227; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LURWwFmN6Lhm3n+L2kmQVrHIUNNBhmNaLACiuEKH+p0=;
-        b=bn8fPwRyteXquyoe2czMzelpphv20JKmOVwZFLTuQjA3eeXNWhUWbKC+o0jGCfNSX1
-         SwDzwyuZU5Px5N56RD2fZJA7X8n+njERrks/UuGUxmn/Ns6cjbft+96N0uoT2xXCUlil
-         VoByaAf3cJNvuLiEjYUVZ9hVBKhuR/8Uf/POIgNIXr4Q4P4QceFBRkd7g5zQWMKFNbqF
-         KD26+82auGP8kORuKPwexoHznD6GXwAU1ShnTUZ15NqDSSyE4yUQ8U7JblSBSPud933L
-         6LhfYmENYQV+eEOsqbxS2sssO/bvVd061jug/pUArd1AxmTges2olkpCtBTTgSgh8PtL
-         LJ8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776325427; x=1776930227;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LURWwFmN6Lhm3n+L2kmQVrHIUNNBhmNaLACiuEKH+p0=;
-        b=j9go2hITb/sCpDmhEiCJhbFPSNyUcEUn2TwvpTQUu14bjtOai/VV36A1vDn1fYelq2
-         OFL8SmA2qcn4w7SdZpf7XxAHIrxeTukRUk8HuNI3o2TkWTz9v7KN8nY+f0FkuD9iq5el
-         GsToBvN5lBQ2FIEVeO8okZH015WJOKCm3H7JVdUHuO9vgaPn2rar5S0I91NXHs2UGWfo
-         j3dymbOCkV+QlvK+gYfYgV84GTuv53QKRf87tZZhEdADdJ0fu5Pojq1+SbLp6z20Urrz
-         UHkZF8SnzTrgBSdO4SSPZShpaf72y5JMcBTSOTCY5GA7ugQDyt3I4UnoYuyqHO3D9aAw
-         9Drg==
-X-Forwarded-Encrypted: i=1; AFNElJ8Eaf81hMbbHI98x+M7dgUe4/fhw+Qo//pDZr9sJj7N9SS5pjWILNNByTm/5wvhRcwNPLY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0InvtCtslr9GZHZK+UE3hHyZdi2xUD06tJiwdmOTgs9WmGRGH
-	NWxZRUyzX1B1zhoihZscEDOhD2x7AV8vFKsterV5UrDRZrVf4hbHsKrk
-X-Gm-Gg: AeBDieviUE/hJ/4dy1x+jGLeBZqDxKqN46RRtFU8pkdb700VEB8NGO+jmtEV1AGqHt4
-	wU+4ymWP+5P3ZQ1ErmQszcrVTFIo+OGM/NK5MlN/AON0WuAWDq0viRf5i+GuY52i9OHcVvGXgHG
-	tm0QXcY8uzScAbkoguhT3wdVH+oCZSSVv9i7iQf9oH9N2aBuPWcQf2/cKJP9WWMH+piuckScJnX
-	nnU+nCTKO9KKu3bcQGh8TjqDGeR/9Vt0szjianSBla5yDeOx9EmoUOz0QRIKAU7sKy1nA1D/LRD
-	C5q3gV+SrVLhpf63aHNwuC7aJ0BvUMopG41bWe9CiPEXx9px+meqVZKMMBxvjW9A8K8sqBgr8Xi
-	1dUTfbbxJRaVtrfDFJdVDRG9zHoTGMa88jsfvAAiDPWf/WbVnCeJ58GrjuvKgTkrzVC/Y9qWJrT
-	oQhchXMnQHbYs5In2/3PxiXVoFd/JWQELigkqdLaWzzGG2bzjtR50=
-X-Received: by 2002:a05:6a00:4b04:b0:82f:6bd2:eac5 with SMTP id d2e1a72fcca58-82f6bd35957mr5136022b3a.2.1776325427368;
-        Thu, 16 Apr 2026 00:43:47 -0700 (PDT)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f673e38ccsm4366170b3a.33.2026.04.16.00.43.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 00:43:46 -0700 (PDT)
-Message-ID: <ffb759d53577d1fe05b31373cd0a5bdd6661f547.camel@gmail.com>
-Subject: Re: [PATCH 1/2] bpf: deduce_bounds_64_from_32 tightening with
- circular range logic
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc: Helen Koike <koike@igalia.com>, harishankar.vishwanathan@gmail.com, 
-	paul.chaignon@gmail.com, andrii@kernel.org, yonghong.song@linux.dev, 
-	ast@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-dev@igalia.com
-Date: Thu, 16 Apr 2026 00:43:44 -0700
-In-Reply-To: <7tgaeg4mpuoage626jaxu6sl6yht2ace4saog7yyx33pope7xk@kixri3atcb5q>
-References: <20260410124035.297632-1-koike@igalia.com>
-	 <16990d86263fb24079e6f0b476a8854ec2366932.camel@gmail.com>
-	 <7tgaeg4mpuoage626jaxu6sl6yht2ace4saog7yyx33pope7xk@kixri3atcb5q>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="hscZot2L"
+Received: from pps.filterd (m0122332.ppops.net [127.0.0.1])
+	by mx0a-00190b01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63G4u5tX2832352;
+	Thu, 16 Apr 2026 08:55:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=jan2016.eng; bh=QujEQLwB7Hxzlp0pLiE3nC4vO+Nxk0yWB
+	WMoGt7WB3Y=; b=hscZot2LMmc90cgMYy8Hfxk66M0xw0IE6AFS7pXjrQi2sf2g2
+	Z91xsvZySf36UAuzWNo+943N8KmR4RI+fVqYOSF1V6NUgyROoygK3sVj90GzRi9P
+	ffOlF4nmWNUl3Mh2uc/Bczy1APutTwK75SkcKmsomCtnu/psKaxiYmY1i1aIt6E/
+	iCLP0gWnUKPhlsLuo+EPbYyoIB6BqcY9rO2+XzQuQS11XlxnW8eiOWzu5avGXPa7
+	pwJdZ6t0IKJ0tl8TkfjwIq+/FYotUtj2a2Pu/qPS7lTiupOk3zqUf3vTP0ibtHs0
+	DTH2qXK6pJ3V5vFiLrR3v8ibb6qIDvmOO1OCw==
+Received: from prod-mail-ppoint5 (prod-mail-ppoint5.akamai.com [184.51.33.60])
+	by mx0a-00190b01.pphosted.com (PPS) with ESMTPS id 4dfeerwd4w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Apr 2026 08:55:18 +0100 (BST)
+Received: from pps.filterd (prod-mail-ppoint5.akamai.com [127.0.0.1])
+	by prod-mail-ppoint5.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63G7ff8E011501;
+	Thu, 16 Apr 2026 00:55:17 -0700
+Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
+	by prod-mail-ppoint5.akamai.com (PPS) with ESMTP id 4dj2yre0b4-1;
+	Thu, 16 Apr 2026 00:55:17 -0700 (PDT)
+Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
+	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id 34B578D;
+	Thu, 16 Apr 2026 07:55:16 +0000 (UTC)
+From: Nick Hudson <nhudson@akamai.com>
+To: bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
+        Anna Glasgall <aglasgal@akamai.com>
+Subject: [PATCH bpf-next v4 0/6] bpf: decap flags and GSO state updates
+Date: Thu, 16 Apr 2026 08:55:08 +0100
+Message-Id: <20260416075514.927101-1-nhudson@akamai.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ spamscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2604070000 definitions=main-2604160071
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDA3MyBTYWx0ZWRfX6ltBp5YTlNsF
+ CUHIkuUU2gbnehh7MjsqdAHFuJ0NEDFcFWhYOi6jz667zFJ/01GM7yOU07+L4cplm0kw8aEmhgg
+ aUGGenCOzSH5hl18DNKL8Dbo01zq3Ta/px6j1l58eTDivDVmJTIbJzyAaqWt8Wj0Jby0pjxnLnC
+ Vbg/hOTqcXl4BLZqVjiUH1dhon9NegUMEtR+dEzOExQAc5DV+fXBT4fJOEz1NVHL7c6Oc95NYb7
+ cNJT3vq2tTz1auB7zLU1QoQnxv7HVK8o0857/0mW9hWjgrer/yQlBAizURQMXEr02Oh/IcvxJzZ
+ ujIAJB3YCdx4DIRgTon5e1YMIIqlw2HzXweLtE2he38Wd1RM9G6UXkYYFJjNhvSgEaxWLW7V5SO
+ stsLD2uQbw7ZLPP/Bdj09L0pU2KHZjuYJc00b0CccZoIR3/EN0NhVnRS6OrFVB9iwH2VNkz6XVR
+ u1JSZfxPz/+yHh2gHVw==
+X-Proofpoint-GUID: qEaD0OSzD_WEr5eZ1fO6Kmni69vUGPNN
+X-Proofpoint-ORIG-GUID: qEaD0OSzD_WEr5eZ1fO6Kmni69vUGPNN
+X-Authority-Analysis: v=2.4 cv=CMgamxrD c=1 sm=1 tr=0 ts=69e095e6 cx=c_pps
+ a=NpDlK6FjLPvvy7XAFEyJFw==:117 a=NpDlK6FjLPvvy7XAFEyJFw==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
+ a=4OENtXgxWbduB0e82o7S:22 a=X7Ea-ya5AAAA:8 a=1oy85zK9C34BhurvvrYA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015
+ suspectscore=0 spamscore=0 adultscore=0 priorityscore=1501 bulkscore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604160073
 
-On Thu, 2026-04-16 at 11:52 +0800, Shung-Hsi Yu wrote:
-> On Wed, Apr 15, 2026 at 12:12:45AM -0700, Eduard Zingerman wrote:
-> > On Fri, 2026-04-10 at 09:40 -0300, Helen Koike wrote:
-> > > Unify handling of signed and unsigned using circular range logic.
-> [...]
-> > Hi Helen, Harishankar, Shung-Hsi, Paul,
-> >=20
-> > I think this algorithm is correct and covers all cases discussed earlie=
-r.
-> > I also prepared simple correctness check using cbmc in [1].
->=20
-> Given the "Fix invariant violations and improve branch detection" is
-> merged and the original Syzkaller reproducer no longer triggers an issue,
-> teaching the verfier how to do better bound deduction (i.e., precision
-> improvement) seems less appealing than before, unless:
+This series extends bpf_skb_adjust_room() with decapsulation-specific
+flags and tunnel GSO state updates for decap use cases.
 
-There is only so much information that can be gained from 32->64
-tightening. I think this patch-set makes such tightening as precise as
-it can be. Which is a nice property, hence I'd like to proceed merging
-it.
+Motivation
+----------
 
-> 1. LLVM produced program show similar pattern and was rejected by the
-> =C2=A0=C2=A0 verifier, which will be fixed by this patchset
-> 2. We're proceeding with cnum RFC as a whole, and this marks the first
-> =C2=A0=C2=A0 step (I am assuming this is the case?)
+When BPF decapsulates tunneled packets, skb GSO state needs to be updated
+to match the removed tunnel layer. This includes clearing the corresponding
+tunnel GSO type bits and resetting encapsulation state once no tunnel GSO
+flags remain.
 
-This is likely, I'm about to share the RFC.
+Series Overview
+---------------
 
-> My understanding is that we just need the verifier to be smart enough
-> to accept safe LLVM-generated program, where as Syzkaller-generated one
-> is not as much of a concern if it does not causes any issue. cnum
-> improvement make sense because it simplifies the code, and could
-> potentially be the last time we have to touch 32->64 deduction (famous
-> last word).
->=20
-> Shung-Hsi
->=20
-> [...]
+- Name the adjust_room flag enum for CO-RE lookups.
+- Refactor adjust_room helper masks for maintainable validation logic.
+- Add new DECAP flags to UAPI.
+- Add guard rails for incompatible/invalid decap flag combinations.
+- Implement decap GSO flag clearing.
+- Add selftests to validate decap GSO state transitions.
+
+Changes v3 -> v4:
+- Patch 5: drop SKB_GSO_TUNNEL_REMCSUM handling from this series.
+- Patch 5: clear encap_hdr_csum and remcsum_offload directly on UDP decap.
+
+Changes v2 -> v3:
+- Add a new selftests patch to validate decap GSO state behavior.
+- Reorder the series so helper-mask refactoring precedes UAPI DECAP flag additions.
+- Refresh patch 2 and patch 3 split to keep refactoring behavior-neutral.
+- Patch 5: add decap tunnel GSO-state checks in
+  "bpf: clear decap tunnel GSO state in skb_adjust_room" (per Gemini/sashiko).
+
+Changes v1 -> v2:
+- Patch 3: decap flag acceptance intentionally remains L3-only while adding helper masks.
+- Patch 4: decap with L4/IPXIP support enabled with guard rails.
+
+Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Nick Hudson <nhudson@akamai.com>
+
+Nick Hudson (6):
+  bpf: name the enum for BPF_FUNC_skb_adjust_room flags
+  bpf: refactor masks for ADJ_ROOM flags and encap validation
+  bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel decapsulation
+  bpf: allow new DECAP flags and add guard rails
+  bpf: clear decap tunnel GSO state in skb_adjust_room
+  selftests/bpf: tc_tunnel validate decap GSO state
+
+ include/uapi/linux/bpf.h                      |  36 +++++-
+ net/core/filter.c                             | 118 +++++++++++++++---
+ tools/include/uapi/linux/bpf.h                |  36 +++++-
+ .../selftests/bpf/progs/test_tc_tunnel.c      |  58 +++++++++
+ 4 files changed, 225 insertions(+), 23 deletions(-)
+
+-- 
+2.34.1
+
