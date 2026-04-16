@@ -1,64 +1,64 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F5333120C
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C133DEAC9
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776348676; cv=none; b=hkqvLfNF5s7jKUwJBwqrNl7xJDdf609+5D5iUnI3FAqYBWD27KZ7TRWO1SqHksaCx8Dt6Wln4Agx/DpEvQ5ktcecXEoeGhzKonR5Ec43+yOdu5g+jNkUqgkxPftd0iRKLOTosnjl2fUkbT9I17hPzU1HLPm4KU+ATc9rEnIC1PI=
+	t=1776348943; cv=none; b=ZAbRqD8x9hQw0/pq+wKUU8ZeWE4wxgj7HyiDt7tX3VzbGvPfkYcz75fTr2dU8y4HTPw3Iy+IfeoTbDl0ztZ6wP1EreK2G/N68tkkymwl0G8tYc965+oei2y2wi9HAAgikeml7YtBU5Gwqr4GhF4D77twTueMasEbDMVYi56XkUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776348676; c=relaxed/simple;
-	bh=Jo2wLJ3Vk0m3DAWZWBw5zk9FjZbusVRlJ3p3VXn42iQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=b0VYtCu7bvVdtPshSkyAUFxFo8jQtfiOc/T1NlnGYwlDP4PwtsUbBdu1onwZd4p/ZRSIQ+X8udBFJ1PwBP31UbjOHRIKdiVtz+hJ9k3CgMjkivqQpnlndufw1TI5EQQb8HNwvcvppAn8ZehL3fhJIOHZ6w7zk7+kyN4Xd5/QKzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j9YG+DcR; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1776348943; c=relaxed/simple;
+	bh=H0AdrbRbLJxnehymYB3NKN/Zt28eIPVt2vIZTopE+bk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=drL8JnYVxDa+VTVPwr3inhVs4o1Ok4/s6dGPSUdwHbHhe3Ovby8A61YvnsUeFDTXrXPF3e+vZnFq9t9P2lWcXuHeJC9LBaOCNzP/XImqx0h1IA6Ch3SFlOaaoyhYxIS0WVAY7bLezZ9ERp6APKbmzxpzwmQ62bpr+Tt3mefirFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PRqp9F8z; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j9YG+DcR"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c6e2355739dso3666014a12.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 07:11:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PRqp9F8z"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-8296d553142so4185296b3a.3
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 07:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776348674; x=1776953474; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1776348941; x=1776953741; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/2LEegCsou5Ku+cEMPUyMrHkJkU+oGi9hyRt3vijjuw=;
-        b=j9YG+DcR4OL2oj7cW58gjroBInoqRwPaXvyBqes4YuDR1N0/lMNBUFVx5Eiln0q11l
-         ExJtoYHLx4teg+LYLOwznGJXY/nzBJJ5T1wJf+X8Z6XPvnMBH4yR5gli1JcFA0hKBEbK
-         dvdj8sMtlQFg3c7AXhxb1wMnvKprdTxvY2XIbiB28YenVUm1/UN0F5RO02hcnmQOCOzl
-         K1FnqVoDS26p5OYAfvOFairKORWY2YRMVT/cfo471cFo7caW90Dki4HhHggToRRPqQ5V
-         uvC5L8MHgXn5+pGGsEWBNIaOvqi/f5MWz7UaB3Qd1FMtVni1rSMddk3D7t1pCLkmcVH9
-         sCkQ==
+        bh=H0AdrbRbLJxnehymYB3NKN/Zt28eIPVt2vIZTopE+bk=;
+        b=PRqp9F8zbBVU9Rs29Bjt8QFUOZxkBobwQfNzggoCXIdRfHMo0o4MPlWeksLTN3Gds2
+         Jg0U4LsioFUeRIcKd00rKHkSvGhm32RroT6R+mCZC97fwGCgZwWPMau0Lhhuvtotg+RQ
+         SEMXWFgs/+UZuk81XCv3oGW5TTskThmBze8L2WAhcFTHPYlAbidKC3FdaAljjcqfowpP
+         dLB3t66kS2O5xLGAmZHU/SEnd2xRBk+wF/X36ZdFaWX9ZBFI9InEvIBo4b2E1Y2PKj9Y
+         yHnpbFw4wdh2HBXT2n4xah1+gg9/R3jYT3+ju2stlNX6EjH9MFoIbPbfNUAfxsSWpdk7
+         2eVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776348674; x=1776953474;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1776348941; x=1776953741;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/2LEegCsou5Ku+cEMPUyMrHkJkU+oGi9hyRt3vijjuw=;
-        b=TNxY/psWKDmipdw349ZNZEe44KbhyGvSnR4Jn9+sRJpmvlnLLV0jDZx1Y5Y4tnT1TE
-         ROWQmBqDP5l4gI3B9+Fi5KYIcTDvziPVvOcdPf+ByeVtlyYN8x7lhXK6nnNYpFy+iUF7
-         EFISMtZIgWSPlK+l6YYUrgVyImISfmTV6s3+yUalUoaXPmPp3mh1bGaHBfKXinwIgTPU
-         z3389PGn1pxiMc2eR1qwVkk1By/LPt/LHH5saCbXbbee1SYI5yrzdl6DydByfFPVDQsR
-         iy2XyK3nVYwqz3IIfntTaIdUkkgokvJHrbpzviye3vjX1T9K8piOez7dJDlX4/iZzUjd
-         YZbA==
-X-Forwarded-Encrypted: i=1; AFNElJ/c/84uY20SwEiMWRpyCXulid+WBB7S7scpTKv0S+EVpmyZ/7xh+1sAN6O2AggxwmMIzmc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyl11uaEVo1T3Pg35TrN+xeg6zS4mjjG09Ii7KgAhKzAFNMB2Lo
-	txrHIwVw7OKcOOx78AF47CHSZmkCPLz7P4IjDRFm5EWcZRCz+f32c/I1
-X-Gm-Gg: AeBDieufaB5lKmiPZ88m3HU0k4MQUi4LuF7nx0stAOVU8rOqcucRslq9vjCc9d+qqPh
-	nXim9JWG4c3dz3yC7x9o8YPPrkyGFc1hiBwnaA5dSp+04aLoQdAR8TpdmutuGknvtu4+AJb1Ze0
-	GSKPEvUG5XAh70QJGp0YuSAtczIOwSSLiMEeB00td8miMKOcpLEhhuwcLdHkyFRWT3a+KdMwM0f
-	qRT10YDVQTNWW/yZVBFkCQvV4kUrae/enwUnaOP9Otd81TCASUVQCz+W97NwihwPQZuCCC9MQw0
-	jhiIQJbAU14vHGcO+J2JRqLrE7YqCKSsCmDA0j5OZjJbjf2DMmwf9JJM8Mgma6xj3RMq+vHZT+q
-	MNaNcQ5bOFIHicsziwb9l0U4hSs4kObXp8SiM0hny9ebdtxdExB0+rx2OVUBbA1CBGMCwsPlkbX
-	CcjCu8pClnyZfCKvf9r/+v2LLkjOsTGLFbSkZj1AJ8G0tawqTyY70tNliN/n1Z6RosIRyh8iyAG
-	SX2KWf4NFklbgcn9MuJFtZOyiG41wMBWMCL43LFfW7se1+tD6+jlFRG
-X-Received: by 2002:a05:6a20:748b:b0:39c:1f:3211 with SMTP id adf61e73a8af0-39fe3d618e2mr26680940637.20.1776348674000;
-        Thu, 16 Apr 2026 07:11:14 -0700 (PDT)
+        bh=H0AdrbRbLJxnehymYB3NKN/Zt28eIPVt2vIZTopE+bk=;
+        b=VrV+wKBztJRowS6Nzv5dGnokVsBFLKjfAFGpi+BefIPrfcxn6AVke+DBVdu1d3yIIO
+         F3OnFStf02J0IZyh/hYFRK2/8U+ctzvqvkScrJBob7axZdKC0VSokoYMg74Rc0qWRuzX
+         Mnli+gifepGpjC88lZe1F7vx8MNY1gfNWE0EnQbeMpMuoY/f/1c78MJOCE9N3lQ7vQ0S
+         JKAIxpQRVlnl936ynZq2gAO/sBirA98/9mob2U5dLvtfZdhc57lRwaFnljBMq/V7Y6qU
+         ZXdYDuAToUZFQa2Dz3H+1sm4T0Yem6tEvE6VUa3sUg7dOxOSyQb38HU349ZiOuqcvNS8
+         p8qw==
+X-Forwarded-Encrypted: i=1; AFNElJ96Dsa8dstU5N3X+D76r4lZyQKkW13qLtjqGulpH5xF18WzDg0AqM4Zwn1NlYrZ68x+9SQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMVPzJS9IKYWV0ptmGt6x1MXbf/uzEokxa9S4JhaFry4xV4KYN
+	fC4k3L7zPMCiVazd2fMyvGV++h4MA2ww8E5+7bJFzf8cYEl1YZXCX/Wp
+X-Gm-Gg: AeBDievGDdvDDeV8YvZC5VFX+ELVqj29H+/+vekD+01Sj9DEXclKP/DmK+9mUFK/Z6n
+	XZm55KCyViA+z0dGvzUbHpnnHzWzzGdivbky4TY+8lSkbSTg39solPHFvgtTvBl088LsDSqMsMR
+	fjqSszHPMdBtj8L7LZZBmItERpbufeM31X3rIOlIWzC9S/HAiFvp2K9UP6SANQLrw4/xgirckdX
+	8oz1q8HcY+jLWUAuh5AdgFYIZD68bVTYtYgItpDknChKErag/aDq4/vF4zjH/6PcG1HpiVrp0Tp
+	E07Fw1UK6L164rjJ5WVI/TDt7dSDtIkMezZFlOrWK0U1yXDjNBqzByfq51CljX7AGbV+drw0jOG
+	9CuV36euDaAPALUqSC2OobXRk9vYT4gSQ9XkspBPBj8vw5QEukmcf7mhlVXLA/Kj9tqA1jZWhmU
+	I084piTg1EH4grhrM59dKu1R8/BqsocihEEgMwtGcGegh2WKz6uQvBtZphWuNpLruCR2xBBWHqe
+	aTJC8MkcCc7r8UlgNTIyh9Z2mrXgi2QZMEn6GbjpSpjJbS04ppmDucvzIX3CSCRDRw=
+X-Received: by 2002:aa7:9e83:0:b0:82f:2d48:f906 with SMTP id d2e1a72fcca58-82f2d49169amr13133723b3a.12.1776348940723;
+        Thu, 16 Apr 2026 07:15:40 -0700 (PDT)
 Received: from localhost ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7957ece9d4sm4726935a12.5.2026.04.16.07.11.12
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f6744e193sm5684163b3a.57.2026.04.16.07.15.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Apr 2026 07:11:13 -0700 (PDT)
+        Thu, 16 Apr 2026 07:15:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,44 +67,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 16 Apr 2026 07:11:12 -0700
-Message-Id: <DHUN1UJ0DLBC.3UC7SXBAV2FOW@gmail.com>
-Cc: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, "bpf"
- <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Martin Lau" <kafai@meta.com>, "Kernel Team" <kernel-team@meta.com>,
- "Eduard" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "Mykyta Yatsenko" <yatsenko@meta.com>
-Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
+Date: Thu, 16 Apr 2026 07:15:38 -0700
+Message-Id: <DHUN58WZBKWO.PDU8NW80LH0M@gmail.com>
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Herbert Xu" <herbert@gondor.apana.org.au>
+To: "Alan Maguire" <alan.maguire@oracle.com>, "Mykyta Yatsenko"
+ <mykyta.yatsenko5@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>
+Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <qmo@kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 3/6] libbpf: Add feature for kernel extended
+ vlen/kind support
 X-Mailer: aerc 0.21.0
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
- <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
- <CAADnVQJCpJ0bTVPQ0LwoNubsK7-HsdePWgdMz8DX=v9cjgvyKQ@mail.gmail.com>
- <aeBxQn8ATaNuEF4X@gondor.apana.org.au>
-In-Reply-To: <aeBxQn8ATaNuEF4X@gondor.apana.org.au>
+References: <20260414195019.684531-1-alan.maguire@oracle.com>
+ <20260414195019.684531-4-alan.maguire@oracle.com>
+ <ba42c4f7-0bce-4aa9-be90-e102ea04336f@gmail.com>
+ <2d08ed60-9180-4804-8339-7d0e56640183@oracle.com>
+In-Reply-To: <2d08ed60-9180-4804-8339-7d0e56640183@oracle.com>
 
-On Wed Apr 15, 2026 at 10:18 PM PDT, Herbert Xu wrote:
-> On Tue, Apr 14, 2026 at 10:13:21PM -0700, Alexei Starovoitov wrote:
->>
->> No need for such guarantees. It's best-effort only.
->> If the walk skips entries it's fine.
->> As long as it terminates eventually it's good.
+On Thu Apr 16, 2026 at 1:57 AM PDT, Alan Maguire wrote:
+> On 15/04/2026 16:57, Mykyta Yatsenko wrote:
+>>=20
+>>=20
+>> On 4/14/26 8:50 PM, Alan Maguire wrote:
+>>> Add feature check for kernel extended vlen/kind support, and reject
+>>> BTF that uses extended vlens/kinds if the kernel does not support
+>>> it.=C2=A0 There is no reasonable path to generally sanitize such BTF.
+>>>
+>>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+>>> ---
+>>> =C2=A0 tools/lib/bpf/features.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 39 +++++++++++++++++++++++++++++++++
+>>> =C2=A0 tools/lib/bpf/libbpf.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 17 +++++++++++++-
+>>> =C2=A0 tools/lib/bpf/libbpf_internal.h |=C2=A0 2 ++
+>>> =C2=A0 3 files changed, 57 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+>>> index 4f19a0d79b0c..4a75d6717bbb 100644
+>>> --- a/tools/lib/bpf/features.c
+>>> +++ b/tools/lib/bpf/features.c
+>>> @@ -615,6 +615,42 @@ static int probe_kern_btf_layout(int token_fd)
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 (char *)layout, token_fd));
+>>> =C2=A0 }
+>>> =C2=A0 +static int probe_kern_btf_vlen_kind_extended(int token_fd)
+>>> +{
+>>> +=C2=A0=C2=A0=C2=A0 struct btf *btf;
+>>> +=C2=A0=C2=A0=C2=A0 int ret =3D 0;
+>>> +=C2=A0=C2=A0=C2=A0 __s32 id;
+>>> +=C2=A0=C2=A0=C2=A0 int err;
+>>> +
+>>> +=C2=A0=C2=A0=C2=A0 btf =3D btf__load_vmlinux_btf();
+>>> +=C2=A0=C2=A0=C2=A0 err =3D libbpf_get_error(btf);
+>>> +=C2=A0=C2=A0=C2=A0 if (err)
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return err;
+>>> +=C2=A0=C2=A0=C2=A0 id =3D btf__find_by_name_kind(btf, "btf_max", BTF_K=
+IND_ENUM);
+>>=20
+>> Looks like if id > 0 then extended vlen and kinds are available, so ther=
+e is no point to continue processing the enum and checking value of the BTF=
+_MAX_VLEN. Or is there a scenario, where BTF_MAX_VLEN goes back to 0xffff?
+>>=20
 >
-> There is no guarantee that this walk will terminate (unless you
-> finish it in one go).  In a pathological scenario, after each
-> walk attempt, the hash table could be rehashed such that the
-> entry that you're resuming from gets moved back to bucket 0.
->
-> More practically, the walk is essentially useless if you encounter
-> a rehash/resize event before calling rhashtable_walk_enter_from,
-> because half of the hash table could be missed because the entry
-> got moved near the end.
->
-> I think a better interface is to detect such a rehash/resize event
-> and then fail the rhashtable_walk_enter_from call.
+> True, the enum presence is enough here. However another point the
+> bots made here needs to be addressed; other BTF kernel probes rely
+> on the bpf syscall, loading BTF into the kernel to check for feature
+> support. We're better off using that approach here too since it will
+> work even in container envs which don't have /sys/kernel/btf availability=
+.
 
-that's certainly a cleaner interface. the user can retry
-if resize occurs.
+If containers cannot access vmlinux BTF than they will fail loading
+all progs that need CO-RE. So I don't think we really need syscall
+based feature detection. If it's easy enough, sure, we can have it too.
+But enum is enough. The verifier exposes its features via BPF_FEAT* enum on=
+ly.
+See enum bpf_features.
 
