@@ -1,127 +1,284 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AF334DB54
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAC239C65C
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776367589; cv=none; b=UnoUi4S835fRpMb5lPELi+laRTfCnezQI87kNlsBUaRPsMT/hyqYwQDrS7z0zMco5Ji7dqdipsQ3Ee5TnkNSmH7NzLlLdG9lehGDY9CnRgmLOh3R7IVmrAMyEdbyntFldSJzqA6M+l6CnB8JAw+gPP1czcLrmJlWzjczX+sFhTk=
+	t=1776367864; cv=none; b=ZD5MX3p40cxKy5TvODUItg4mZ7ZQLHFl8BQb4hzMsX6h7TadB7Ww2yiM/pY4+rzNn1573vjjo7Q/L0G+hSTrvBXkOauljtTNTF5+K1oOCz0KeZlLcyWE5ha3s53jokE5jkbahboWa82q7AGvM5v2d8N1FtXM52zb7A0n+RgjwnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776367589; c=relaxed/simple;
-	bh=EtacrmaPBkZpVVdwiz2utfHJg2pYuqpvObhVeG+QoOc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=I21eCmY8cdUYOG4HOFk013lHkgNQ0uCB1L7tnYzVhEL4iWvyAcs67RAJXsHGxvpkFOuAyJ6cnfwbb2crhF565HWBNUchUVe48bOvlScGFAfSsuJ+HlEKMqhTZrxyA9LM0SQZiMELqvmMZRGAS4w0Dg/gKs23z2n0ganZ6ghB+C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAZJTQWE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776367864; c=relaxed/simple;
+	bh=z9bLWncSjhzFxQPf0YzFoK/4VaKp6/bw/D+iTagQOHo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nSrXQ2FHgKBEqQ7MAcM5ZBPJK3gal1My+Xl/8vum3ttybLH2tKn63Hn6GBq2KxpKtjBQc5Isdy8G+w1rXHowT33Jm4bOdrl2rD/dZZu9CymJMfKAhWLfcLowtagCwlP7mImGXWR02RGtPXn7h0CZnRc3OPGS0lUZ0N5hjPh5okg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Nft8igBx; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAZJTQWE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC0FC2BCAF;
-	Thu, 16 Apr 2026 19:26:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776367589;
-	bh=EtacrmaPBkZpVVdwiz2utfHJg2pYuqpvObhVeG+QoOc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=kAZJTQWEmWVjTRtWLIt1elnkO4kStXQh4UFjOyTKttqieyEqaHcC/ASfoWHASiD17
-	 BscEg82b+Z3l0R/6iDOXPtnQ28ilV7lSacuKgfPO4NPe2Ec12cxQg+HXlXzRGYNfCi
-	 Fk1UleCF9MP38sNaeu0bHTOkkzfJzMTTUv5rMyaxZ67iLsA2XAz08T957WvbHGokLp
-	 lwdC65888G+//q27tYadryLcsBx3CzDshqLStkOZKqQYeyl0npSiG7zO8KCGEqnoy/
-	 aJzB481Wa/ap1r4z6ZROHgYJnWgeBETCBlhBeAnYgQbgWljQ3/sMSnjCk3n92XmiKb
-	 cC85VYTm7GgkA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 01/10] crypto: pkcs7: add flag for validated trust on
- a signed info block
-Reply-To: sashiko@lists.linux.dev
-To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416173500.176716-2-bboscaccy@linux.microsoft.com>
-References: <20260416173500.176716-2-bboscaccy@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 19:26:28 +0000
-Message-Id: <20260416192628.DAC0FC2BCAF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Nft8igBx"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488aa77a06eso136653925e9.0
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 12:30:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776367858; x=1776972658; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tJoTKCDT/C9x9VHU0j1JtllxUGFfVK8CXNU+bUWKbTg=;
+        b=Nft8igBx0PIX9nar2KYvj/SvO+zTh6eh7DA3DNAr6xLShyq+LpKp8awnyB6HQLdy3u
+         rFlW0B9A4oM0icUD06m9YvlOAHKY2OW+ciaqcXZnoJ6m9H6ueRE3B1a207XGuhWNc/h3
+         MIOQHDoULA8EGC6wsguzadGknnI9PvdUTpTs2Wuvk+Nsvlxw0menKzO3SBARONwFlxF7
+         S7QL29XvBuDN0BqMINAqUgIWvnYkLkob3cSaVVm7M4/+2IFzxQLfgPDflam5mvbXLsdv
+         7yUTP3sm3pvMtH1qQmDQWhIjBA3SZbBLljMMDG1nYLLAb19EEGAq0M8oTpo2ENHyhGql
+         LiRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776367858; x=1776972658;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tJoTKCDT/C9x9VHU0j1JtllxUGFfVK8CXNU+bUWKbTg=;
+        b=ZrDeX4WUd37bxSDSzuTZm67Av9Ow92zJWbCrb7QgMSegP0ljZEpzmEOD2HqITKfhs+
+         YJuh5++3BAGWwEuJ7DTcp3HJffwftm2sV2ujOZhf+VrS+awwYY0R/K4DwqO78VPdk2Nv
+         JYCH+YLYxJYmlepiXIIbHMxCVAXOFp8aiLrmK2GB/KhAsaLKceetgex3tGMR+4Wpvypa
+         Mgo1yKHd5/QwRyIPscNTJqzxrkIY1Nscg93iyI7TbX/m6+1VR6RZ8N7C2ukjgG5ziRwH
+         SfuUlBw3bA4HryqLMfPYbSWBswoI3Yhm5Gm4f8sWLBIgIOdoxrPQN6iACZHDhkxXVhyC
+         s9Mw==
+X-Gm-Message-State: AOJu0YwaCWhmmJNKBYxnVDwWFyVDMs27fYSwKIhAVPkS5gW9UbMPcTV2
+	CgrBI54/hArZ5h3IVOq17zo3ajSPm2iXrctY8cYPHb6A+tfpEWwwBC4NXnpIfo/o2bE=
+X-Gm-Gg: AeBDieuqkcrbHGALVYc40xzn1MdXoijhDlnx/9wBBotfi4n2I2lBWdPNpAJTh61aaIJ
+	0W5aQlRxpjmOPYEBGdtpLJ5fK6B3O+R0LKGIMsCSMA5aeqq9iCU2OCtrHCh2AhhwhifGg0mBw1d
+	/sXEyzOleLuDJKH9+h86l5eqn5wSgKS6l+98ba0C6a/P9MjtsF4mQFuyCgpmcPRYoGlx/XiOeFn
+	N5GRRwW+3AcdYGZ5Z4lIWVyyWerbJlDnBMeulWooj7I3JWx6AUjY01sKXp+Gp6uiCzfqZ70cWMi
+	0e6PqMUfrP7Xite7eqanEMlQsCWwO0BlVe6J/62MTfFORqgQDl6oMdviWt1VqhRBdtwmwtHVf4O
+	tZyfxDaD9kVJC9lZLpMQ9UrSQl2dQC+tch9Tll4yYCEamvf4ISITSntxLZ8RylN7JeZiUWfbg3o
+	IMVkes2J9dh7JgMi9oTET4c0/7UnxUkBTH1g==
+X-Received: by 2002:a05:600c:c108:b0:477:76bf:e1fb with SMTP id 5b1f17b1804b1-488fb290039mr1844955e9.16.1776367856830;
+        Thu, 16 Apr 2026 12:30:56 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:dc8:ce28:aaff:fe86:149c])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c10a9a3sm10197219eec.2.2026.04.16.12.30.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2026 12:30:55 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH bpf-next v7 00/11] selftests/bpf: Tolerate partial builds
+ across kernel configs
+Date: Thu, 16 Apr 2026 16:30:49 -0300
+Message-Id: <20260416-selftests-bpf_misconfig-v7-0-a078e18012e4@suse.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAOk44WkC/43O3UrDQBAF4Fcpe+3q7G8Sr3wPEZlsZtuVJimZN
+ FRK391NRAiBqpczc+bjXAXTkIjF8+4qBpoSp77LQ/GwE+GA3Z5kavIsNGgPFpRkOsaReGRZn+J
+ 7mzj0XUx7aYMxFF1wvkGRv08DxXRZ5FeRo7Kjyyjevi98rj8ojDM8Z2tkkvWAXTjMq5/0U4s80
+ jAnDonHfvhcak5qMf9sNCkJ0iBZHQBj4eMLn5keQ98uNSa9Zsx9Rmcmgi8ATAlYNRvGrBl/nzG
+ ZcWWBSimrvQkbxv6TsZmpKmWjA4pNLDaMWzHK3WdcZsA0gE5jWZW4Yfya+aWNz0xBkbB2YDGqF
+ XO73b4ALEgEc14CAAA=
+X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Alan Maguire <alan.maguire@oracle.com>, 
+ "Ricardo B. Marliere" <rbm@suse.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openssh-sha256; t=1776367852; l=8582;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=z9bLWncSjhzFxQPf0YzFoK/4VaKp6/bw/D+iTagQOHo=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QEKs8cJo+NcxkONGKdt2uSWEVcsqvYnxof7pI+iwYfcQ8IQ1TlNH29lcvBNF/n0U8sq2ZWKZA7h
+ zNoBUBfylgAA=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Sashiko AI review found 2 potential issue(s):
-- [Critical] Stateful Trust Validation / Blacklist Trust Confusion (Authent=
-ication Bypass)
-- [Low] API Export Constraint Mismatch
---
+Currently the BPF selftests can only be built by using the minimum kernel
+configuration defined in tools/testing/selftests/bpf/config*. This poses a
+problem in distribution kernels that may have some of the flags disabled or
+set as module. For example, we have been running the tests regularly in
+openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+special package [3] that build the tests against an auxiliary vmlinux with
+the BPF Kconfig. We keep a list of known issues that may happen due to,
+amongst other things, configuration mismatches [4] [5].
 
-commit 4ed8f1fbacef58172cae707b05aaa2b29ba6f7c1
-Author: James Bottomley <James.Bottomley@HansenPartnership.com>
+The maintenance of this package is far from ideal, especially for
+enterprise kernels. The goal of this series is to enable the common usecase
+of running the following in any system:
 
-crypto: pkcs7: add flag for validated trust on a signed info block
+```sh
+make -C tools/testing/selftests install \
+     SKIP_TARGETS= \
+     TARGETS=bpf \
+     BPF_STRICT_BUILD=0 \
+     O=/lib/modules/$(uname -r)/build
+```
 
-This patch adds a flag to struct pkcs7_signed_info to indicate if a
-signer has passed trust validation. It also exports
-verify_pkcs7_message_sig() so modules can access the trusted object.
+As an example, the following script targeting a minimal config can be used
+for testing:
 
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index e0761436ec7f4..9bda49295bd02 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -380,6 +380,7 @@ int verify_pkcs7_message_sig(const void *data, size_t=
- len,
->  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
->  	return ret;
->  }
-> +EXPORT_SYMBOL(verify_pkcs7_message_sig);
+```sh
+make defconfig
+scripts/config --file .config \
+               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+               --enable DEBUG_INFO_BTF \
+               --enable BPF_SYSCALL \
+               --enable BPF_JIT
+make olddefconfig
+make -j$(nproc)
+make -j$(nproc) -C tools/testing/selftests install \
+     SKIP_TARGETS= \
+     TARGETS=bpf \
+     BPF_STRICT_BUILD=0
+```
 
-This isn't a bug, but should this be exported using EXPORT_SYMBOL_GPL to
-match the rest of the PKCS#7 subsystem?
+This produces a test_progs binary with 583 subtests, against the total of
+714. Many of them will still fail or be skipped at runtime due to lack of
+symbols, but at least there will be a clear way of building the tests.
 
-Other cryptographic verification and parsing functions like
-verify_pkcs7_signature(), pkcs7_parse_message(), and pkcs7_verify()
-are strictly exported as EXPORT_SYMBOL_GPL.
+[1]: https://openqa.opensuse.org/tests/5811715
+[2]: https://openqa.opensuse.org/tests/5811730
+[3]: https://src.opensuse.org/rmarliere/kselftests
+[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
+[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
 
-[ ... ]
+Assisted-by: {codex,claude}
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Ricardo B. Marliere <rbm@suse.com>
+---
+Changes in v7:
+- Use $(abspath) for KMOD_O so relative O= paths resolve correctly
+  when make -C changes directory (patch 2)
+- Guard make clean against missing KDIR unconditionally; there is
+  nothing to clean when kernel headers are absent (patch 2)
+- Drop explicit $(TRUNNER_TEST_OBJS) from linker filter in strict mode;
+  $^ already contains them as normal prerequisites (patch 8)
+- Link to v6: https://patch.msgid.link/20260416-selftests-bpf_misconfig-v6-0-7efeab504af1@suse.com
 
-> diff --git a/crypto/asymmetric_keys/pkcs7_trust.c b/crypto/asymmetric_key=
-s/pkcs7_trust.c
-> index 9a87c34ed1733..78ebfb6373b61 100644
-> --- a/crypto/asymmetric_keys/pkcs7_trust.c
-> +++ b/crypto/asymmetric_keys/pkcs7_trust.c
-> @@ -127,6 +127,7 @@ static int pkcs7_validate_trust_one(struct pkcs7_mess=
-age *pkcs7,
->  		for (p =3D sinfo->signer; p !=3D x509; p =3D p->signer)
->  			p->verified =3D true;
->  	}
-> +	sinfo->verified =3D true;
->  	kleave(" =3D 0");
->  	return 0;
->  }
+Changes in v6:
+- Add --ignore-missing-args to -extras rsync so out-of-tree permissive
+  builds do not abort when .ko files are absent (patch 2)
+- Use $(abspath) for KMOD_O so relative O= paths resolve correctly
+  when make -C changes directory (patch 2)
+- Guard make clean against missing KDIR unconditionally so cleaning
+  does not abort when kernel headers are absent (patch 2)
+- Remove stale skeleton headers in early-exit paths when .bpf.o is
+  missing on incremental builds (patch 3)
+- Fix strict-mode skeleton rules: use && before temp file cleanup so
+  bpftool failures are not masked by rm -f exit code (patch 3)
+- Track test filter selection separately from not_built so -t/-n flags
+  are respected for unbuilt tests (patch 7)
+- Make TRUNNER_TEST_OBJS order-only only in permissive mode, preserving
+  incremental relinking in strict builds (patch 8)
+- Drop explicit $(TRUNNER_TEST_OBJS) from linker filter in strict mode;
+  they are already in $^ as normal prerequisites (patch 8)
+- Reorder: move skip-unbuilt-tests patch before partial-linking patch
+  for bisectability
+- Link to v5: https://patch.msgid.link/20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com
 
-Is this verified flag persistent across multiple trust validation passes?
+Changes in v5:
+- Add BPF_STRICT_BUILD toggle as patch 1 so every subsequent patch
+  gates tolerance behind PERMISSIVE from the start, making the series
+  bisectable with strict-by-default at every point
+- Fix O= commit message; make parent cp conditional (patch 2)
+- Tolerate linked skeleton failures (patch 3)
+- Skip feature detection for emit_tests (patch 4)
+- Clarify bench is all-or-nothing in commit message (patch 8)
+- Move stack_mprotect() to testing_helpers.c, drop weak stubs (patch 9)
+- Report not-built tests as "SKIP (not built)" in output (patch 10)
+- Drop overly broad 2>/dev/null || true from install rsync; rely solely
+  on --ignore-missing-args which already handles absent files (patch 11)
+- Link to v4: https://patch.msgid.link/20260406-selftests-bpf_misconfig-v4-0-9914f50efdf7@suse.com
 
-When verify_pkcs7_message_sig() checks a message against the blacklist keyr=
-ing
-first:
+Changes in v4:
+- Drop the test_kmods kselftest module flow patch: lib.mk gen_mods_dir
+  invokes $(MAKE) -C $(TEST_GEN_MODS_DIR) without forwarding
+  RESOLVE_BTFIDS, breaking ASAN and GCC BPF CI builds (Makefile.modfinal
+  cannot find resolve_btfids in the kbuild output tree)
+- Link to v3:
+  https://patch.msgid.link/20260406-selftests-bpf_misconfig-v3-0-587a1114263c@suse.com
 
-verify_pkcs7_message_sig()
-  is_key_on_revocation_list()
-    pkcs7_validate_trust(pkcs7, blacklist_keyring)
-      pkcs7_validate_trust_one()
-        sinfo->verified =3D true;
+Changes in v3:
+- Split test_kmods patch into two: fix KDIR handling (O= passthrough,
+  EXTRA_CFLAGS/EXTRA_LDFLAGS clearing) and wire into lib.mk via
+  TEST_GEN_MODS_DIR
+- Pass O= through to the kernel module build so artifacts land in the
+  output tree, not the source tree
+- Clear EXTRA_CFLAGS and EXTRA_LDFLAGS when invoking the kernel build to
+  prevent host flags (e.g. -static) leaking into module compilation
+- Replace the bespoke test_kmods pattern rule with lib.mk module
+  infrastructure (TEST_GEN_MODS_DIR); lib.mk now drives build and clean
+  lifecycle
+- Make the .ko copy step resilient: emit SKIP instead of failing when a
+  module is absent
+- Expand the uprobe weak stub comment in bpf_cookie.c to explain why
+  noinline is required
+- Link to v2:
+  https://patch.msgid.link/20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com
 
-If a signature matches a blacklisted key, sinfo->verified is set to true.
+Changes in v2:
+- Skip test_kmods build/clean when KDIR directory does not exist
+- Use `Module.symvers` instead of `.config` for in-tree detection
+- Fix skeleton order-only prereqs commit message
+- Guard BTFIDS step when .test.o is absent
+- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
+- Link to v1:
+  https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
 
-If the validation later aborts because a different signature fails to verify
-and returns -EKEYREJECTED, the blacklist check will abort and the caller
-might interpret the result as not blacklisted.
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev
 
-When the same message is subsequently validated against the trusted keyring,
-another valid signature could cause the overall trust check to succeed.
+---
+Ricardo B. Marlière (11):
+      selftests/bpf: Add BPF_STRICT_BUILD toggle
+      selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
+      selftests/bpf: Tolerate BPF and skeleton generation failures
+      selftests/bpf: Avoid rebuilds when running emit_tests
+      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+      selftests/bpf: Tolerate test file compilation failures
+      selftests/bpf: Skip tests whose objects were not built
+      selftests/bpf: Allow test_progs to link with a partial object set
+      selftests/bpf: Tolerate benchmark build failures
+      selftests/bpf: Provide weak definitions for cross-test functions
+      selftests/bpf: Tolerate missing files during install
 
-Could this allow a caller to mistakenly extract attributes from the first
-signer block where verified is true, which in this scenario would be the
-blacklisted signature?
+ tools/testing/selftests/bpf/Makefile               | 165 ++++++++++++++-------
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  17 ++-
+ tools/testing/selftests/bpf/prog_tests/iters.c     |   3 +-
+ tools/testing/selftests/bpf/prog_tests/test_lsm.c  |  22 ---
+ tools/testing/selftests/bpf/test_kmods/Makefile    |  21 ++-
+ tools/testing/selftests/bpf/test_progs.c           |  50 ++++++-
+ tools/testing/selftests/bpf/test_progs.h           |   1 +
+ tools/testing/selftests/bpf/testing_helpers.c      |  17 +++
+ tools/testing/selftests/bpf/testing_helpers.h      |   1 +
+ 9 files changed, 205 insertions(+), 92 deletions(-)
+---
+base-commit: 1f5ffc672165ff851063a5fd044b727ab2517ae3
+change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
 
-Would it be better to clear the verified flags before validation, or keep
-them scoped to the specific keyring being checked?
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416173500.1767=
-16-1-bboscaccy@linux.microsoft.com?part=3D1
