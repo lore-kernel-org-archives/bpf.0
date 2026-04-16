@@ -1,32 +1,32 @@
 Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ECC33793CB;
-	Thu, 16 Apr 2026 05:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C3B37B011;
+	Thu, 16 Apr 2026 05:48:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776318509; cv=none; b=ocsT8iX3VZggwL2l8kttNz3XryboI394TvFBmMCInNQD1mf1Vq2GgYMGMqlnLHSLDvGfkBgHL+icS1gnodwrnAJ5gkgkni5oMFtHFxRU4LGSFPdmuMLMNIrswaSUuajKOOCuBc4+V+bJNXuHPL3arse8SgpK7L+ITV1HYJYJVoE=
+	t=1776318511; cv=none; b=vDyb7JbcYW+3D5IcKMM7BDT4i4Gt6g0pgUc3EfNPJ4t0LPtKkobBfN6omkncFh1+SwLZX/MriIJeT4lS/U9QfC96SPCez585GnP2Um06IygL24hzBtDq3mZadf3AX7tHo+fzmjG7lp8iu7oTs7X2EYaB9JEYM7BXfTYWP5NTotM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776318509; c=relaxed/simple;
-	bh=/sr1gp+8osRxv1Kdpu5BA24lxa7W7rdV8Lvsayp3oZQ=;
+	s=arc-20240116; t=1776318511; c=relaxed/simple;
+	bh=JduuRmjnQ2e4ZIusUDR/+qE0uE73yAgWetgwlpGCwBM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CB23lPtwAZGxzG4LNIbhKu84L01M/wR6O+TTiJF8G6ehjt7syky1GR+gMt+7rKhpV3Q3DR0Gy1Gdz941V0o38GI1nVDtuX+X4ihNmoZI90JPPU++sBSnckk3JWBkQt1SqMQjA5V45z60GdFBDy/gOmf0fc4k0S1V2wXVrrh8JNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=o0rvcaVu; arc=none smtp.client-ip=194.13.80.246
+	 MIME-Version; b=XucL1CVFmMVggUQ0454k4H6H2sjf/w20g6MvdQJzc5bfZjxquPqdqL5lcRrcYMzaexjKuaazSBJSL+XEPhvPM+bj14niMVn3ZvKOnN/l0xsKREmbOeJSFcwk4tun97F1bj0bWi8kARXCT+slUndF0Wki0tLt7sh91xwdJdvP0YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=FrlfYbEJ; arc=none smtp.client-ip=194.13.80.246
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="o0rvcaVu"
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 93A31A384A;
-	Thu, 16 Apr 2026 07:48:19 +0200 (CEST)
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="FrlfYbEJ"
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 58506A385A;
+	Thu, 16 Apr 2026 07:48:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1776318500; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1776318508; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=1ri5NiV70JW9wf0XT4tPsyNqYt/zDzgv4j2CdT3IOd0=;
-	b=o0rvcaVuK5wHhUps4iM0cCZxs6q+CNdMo/tMSbttfNS24hoTYoSG5jcGoO8ClgVW4domnt
-	qd0a5EeFm4eqDRLlUIifEOYFKmRKI5nJKbPJQV42MVE88SbpJN4/6rk+n/99Kre42R8IP3
-	YvAVALthvv+evYSjwOOlk7j06rOs0wAu5c38gFf+r0pbpzKdlN1AgYzZRErlmQLjdVRSyt
-	yLp4z9FoeO2bR9AQ6NhINvaRx7IqIhF50QRDvcPjBSmPQ95v78hCn4IFor2WDHgRF+AysW
-	M+VktHa1Y67C0jaKFFJ5nlQBAG23mNAuaOb0jal8JsplVxuayius93aNYXadFA==
+	bh=GL8ocY6ZzsUaFYQwSxltAT8UjlwwI/5h791H7au6scU=;
+	b=FrlfYbEJjE81SAb1wxyBbFGr5ULp9qGYOfm34musx5LtmvDaU961S94Z7YUM3/Bd92DNX2
+	5s8oKjLURon2GA8VeKaeq6Naf72SvTmGMRqUr610vNbnzJxjuul0D98FtOvwsv8g46wMU1
+	OQjn1eH9BCip1fGEm6Zi1lX+1eZGEe7dXAZvMfPTc4m8nA7/4WVIPlW+L9lusBad7kyvU7
+	G54ARMEMuT38d+jMZXRApquDXizJ+TWVDgUdr7artQ+zXaiWf19BA0VnSFTKfMzMKhQsEp
+	yk2ened8Pmsagu48LYyu18piWjRC2b6zrTTyTPV5jQZ3zKm5QxpAEfnVhkU4qw==
 From: Nicolai Buchwitz <nb@tipi-net.de>
 To: netdev@vger.kernel.org
 Cc: Justin Chen <justin.chen@broadcom.com>,
@@ -39,6 +39,7 @@ Cc: Justin Chen <justin.chen@broadcom.com>,
 	Eric Dumazet <edumazet@google.com>,
 	Paolo Abeni <pabeni@redhat.com>,
 	Nicolai Buchwitz <nb@tipi-net.de>,
+	Mohsin Bashir <hmohsin@meta.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -48,9 +49,9 @@ Cc: Justin Chen <justin.chen@broadcom.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v7 2/7] net: bcmgenet: register xdp_rxq_info for each RX ring
-Date: Thu, 16 Apr 2026 07:47:34 +0200
-Message-ID: <20260416054743.1289191-3-nb@tipi-net.de>
+Subject: [PATCH net-next v7 7/7] net: bcmgenet: reject MTU changes incompatible with XDP
+Date: Thu, 16 Apr 2026 07:47:39 +0200
+Message-ID: <20260416054743.1289191-8-nb@tipi-net.de>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260416054743.1289191-1-nb@tipi-net.de>
 References: <20260416054743.1289191-1-nb@tipi-net.de>
@@ -63,84 +64,53 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-Register an xdp_rxq_info per RX ring and associate it with the ring's
-page_pool via MEM_TYPE_PAGE_POOL. This is required infrastructure for
-XDP program execution: the XDP framework needs to know the memory model
-backing each RX queue for correct page lifecycle management.
+Add a minimal ndo_change_mtu that rejects MTU values too large for
+single-page XDP buffers when an XDP program is attached. Without this,
+users could change the MTU at runtime and break the XDP buffer layout.
 
-No functional change - XDP programs are not yet attached or executed.
+When no XDP program is attached, any MTU change is accepted, matching
+the existing behavior without ndo_change_mtu.
 
 Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
 Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Reviewed-by: Mohsin Bashir <hmohsin@meta.com>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 18 ++++++++++++++++++
- drivers/net/ethernet/broadcom/genet/bcmgenet.h |  2 ++
- 2 files changed, 20 insertions(+)
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 94732414b48b..dd00196b9d4b 100644
+index e74494be7a23..e74cc055210c 100644
 --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
 +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -2778,7 +2778,23 @@ static int bcmgenet_rx_ring_create_pool(struct bcmgenet_priv *priv,
- 		return err;
- 	}
- 
-+	err = xdp_rxq_info_reg(&ring->xdp_rxq, priv->dev, ring->index, 0);
-+	if (err)
-+		goto err_free_pp;
-+
-+	err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq, MEM_TYPE_PAGE_POOL,
-+					 ring->page_pool);
-+	if (err)
-+		goto err_unreg_rxq;
-+
- 	return 0;
-+
-+err_unreg_rxq:
-+	xdp_rxq_info_unreg(&ring->xdp_rxq);
-+err_free_pp:
-+	page_pool_destroy(ring->page_pool);
-+	ring->page_pool = NULL;
-+	return err;
+@@ -4087,6 +4087,20 @@ static int bcmgenet_xdp_xmit(struct net_device *dev, int num_frames,
+ 	return sent;
  }
  
- /* Initialize a RDMA ring */
-@@ -2807,6 +2823,7 @@ static int bcmgenet_init_rx_ring(struct bcmgenet_priv *priv,
- 	if (ret) {
- 		for (i = 0; i < ring->size; i++)
- 			bcmgenet_free_rx_cb(ring->cbs + i, ring->page_pool);
-+		xdp_rxq_info_unreg(&ring->xdp_rxq);
- 		page_pool_destroy(ring->page_pool);
- 		ring->page_pool = NULL;
- 		return ret;
-@@ -3012,6 +3029,7 @@ static void bcmgenet_destroy_rx_page_pools(struct bcmgenet_priv *priv)
- 	for (i = 0; i <= priv->hw_params->rx_queues; ++i) {
- 		ring = &priv->rx_rings[i];
- 		if (ring->page_pool) {
-+			xdp_rxq_info_unreg(&ring->xdp_rxq);
- 			page_pool_destroy(ring->page_pool);
- 			ring->page_pool = NULL;
- 		}
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.h b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-index 11a0ec563a89..82a6d29f481d 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.h
-@@ -16,6 +16,7 @@
- #include <linux/dim.h>
- #include <linux/ethtool.h>
- #include <net/page_pool/helpers.h>
-+#include <net/xdp.h>
- 
- #include "../unimac.h"
- 
-@@ -579,6 +580,7 @@ struct bcmgenet_rx_ring {
- 	u32		rx_max_coalesced_frames;
- 	u32		rx_coalesce_usecs;
- 	struct page_pool *page_pool;
-+	struct xdp_rxq_info xdp_rxq;
- 	struct bcmgenet_priv *priv;
- };
- 
++static int bcmgenet_change_mtu(struct net_device *dev, int new_mtu)
++{
++	struct bcmgenet_priv *priv = netdev_priv(dev);
++
++	if (priv->xdp_prog && new_mtu > PAGE_SIZE - GENET_RX_HEADROOM -
++	    SKB_DATA_ALIGN(sizeof(struct skb_shared_info))) {
++		netdev_warn(dev, "MTU too large for single-page XDP buffer\n");
++		return -EINVAL;
++	}
++
++	WRITE_ONCE(dev->mtu, new_mtu);
++	return 0;
++}
++
+ static const struct net_device_ops bcmgenet_netdev_ops = {
+ 	.ndo_open		= bcmgenet_open,
+ 	.ndo_stop		= bcmgenet_close,
+@@ -4097,6 +4111,7 @@ static const struct net_device_ops bcmgenet_netdev_ops = {
+ 	.ndo_eth_ioctl		= phy_do_ioctl_running,
+ 	.ndo_set_features	= bcmgenet_set_features,
+ 	.ndo_get_stats64	= bcmgenet_get_stats64,
++	.ndo_change_mtu		= bcmgenet_change_mtu,
+ 	.ndo_change_carrier	= bcmgenet_change_carrier,
+ 	.ndo_bpf		= bcmgenet_xdp,
+ 	.ndo_xdp_xmit		= bcmgenet_xdp_xmit,
 -- 
 2.51.0
 
