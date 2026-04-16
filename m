@@ -1,131 +1,135 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36743CCFC3
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A7639B94A
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776349131; cv=none; b=CtRfF88qOkxMP7VdWVb+a9FNynfhT1Pkv9QbDJI1PAUC/e6DDCZclOLRV6v/zoFtI61RrqAiW+SQ/Pzk84NDfa0+KPjsN1ORqxQfg51PnU+uLwoLNYGe6WKu1Tme9c/CFz2HxpQsHT1MCoPnP9uhuGUPnpVBiWzEFW25aZTFqH8=
+	t=1776349285; cv=none; b=RbL6rT/7Mw51SKXvXt32KYfzlFykk5lrr99zIzU7tvmnHiC4IDAkdqiWXTI/VUENiK9zCH/DJcxH6H1YG2jppQseE8ISbc+8NZA41nc2CcGbdBMFmRUeNGjERwhS7vUxhc3MEznhZEJNK7mV99R9yB/+QdKYsYPY37llocveWxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776349131; c=relaxed/simple;
-	bh=smAy18PTxlqKtr0fAfOQjvSthiR1gMkFArrDRBaE+8w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=f0wevMLG8YNCkw7WRVQT6pyVIV4e65c9bznMLOTnhtafrhFvZudswElS3s6jxLHi+eFR5C1PPzBqSAgR1UKkCJ6OsV9NQtJl+UteXJpM6TJVJ9DfZD1Wzalvi0Q+8UhJXma342L2GJbl1Un13MepMFcfHUjsZQmByVpOc2TXcn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fryhxCdq; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776349285; c=relaxed/simple;
+	bh=AW0rKmnNte/ZCdL+tkUZ7j/KqSlwEiKNla1+5Cd8EG8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=skJZK3j0ZMWxEOvZASr1Y3Jod8abK1ii1U2wzQvplRBf1cOttJHSu8A8JFl1Rz2UQrtQuA3v4G4lUarXGjSnfyeFiDD0+rpjMB9IhGW3X7raPyMz1fXy0qF6L5vfru25O6sq8Oiiw3O8NGRLOthJ3NtgxgmptmKvJTJ33AoteGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u2QB+c40; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fryhxCdq"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c79467f124dso1644166a12.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 07:18:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776349130; x=1776953930; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t4m0FAz6UNeMEXijwgItkdeyvCcIHaqfir++jBgGhak=;
-        b=fryhxCdqjRcaftLUrTujK4dZQO1gPoDU2/SGTHdgY7VzrlFhoVTKQ2WaWuH1b3j0y9
-         8dMAhuNIEbKG//G3cleEB/9WtFO37uXf8dhUy20svJZ29tJSLS2s3iK4d3M0CM5YEg+q
-         DodDxXUoPViNJ39TowU0IiVCTxnCXgXDSlXAOkoFE0cuy37CreF50Z0pNOhmxq5ODFOf
-         O8tg2gddQgUPTXykgRvp2sbG7rasqfgcL0VBXhqSMx5trWZ1pUoqg8uy1gM7ASg2VsMM
-         usCAWMKRLJSqDx0r3bJf3NmLmNRZ/f9UQcasg+UjRD3GywJe0lydj9m8Gk5SYrJYJsrZ
-         g2ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776349130; x=1776953930;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t4m0FAz6UNeMEXijwgItkdeyvCcIHaqfir++jBgGhak=;
-        b=cHnsFLeExDnwpOBWpVqzYI90xR5tUjxTg+uMF7aXMD2r3L3B6GqqBEiwohPcxw812j
-         R4LxEidHDE2BxYrsbj0akN35YqLBuRuv9RyTIzo4Nwy9+l9eGkpTUVFwi0ma1Pb7hQ/9
-         +67unqp51c7jevL2oDFB7lonF/FnSmvwU1ZqJ39pTHUQZT1mChMnOQQ/BqmzQbzkfxCu
-         XXC0bu545VWTt/7EOCmonTj4iNb003K4StUFir0MVzR3lsN4SlMKH8bxJ7BpB+96J0Q5
-         cr4bvAnLTdOacAI+TiD8GOm6LKmVnovsMo6U0/XwL5oXD1VHlju+hLgJdfYw+F0T1Ghi
-         1yaw==
-X-Gm-Message-State: AOJu0Yy3D0sNS9RHOWlvBNAx9WY8ooOHI3w1MuIVj/AGz1I5FfS6G5H/
-	ZIVvjZz8y1XUzXuWSMK8PWgy2BMH4bllgJjjGdbGFg10BZ1SahRZcHjg
-X-Gm-Gg: AeBDievfCO9ZLoaAB2ClBasa0ugkPGrSyqoJWvEV8C9FDpULidextn6LllHoz2lxoEe
-	RDhPo2xbwrRtDIjiwyQ/tvFQ1SM5FHAhbZAhvoQClUU0r0TQnVI5l5bAsUaXrv2BhDJl1npdRMI
-	Jxkwq0+CDmpr8jkR3GeqNtuONBtcpk6CTCFk3Q8vPk+VoavidccAprJDx0RSK+uMOlZ6P/li5zI
-	LYgFXP78gkwocudEOHS8F+WrhRnnIRbWvaQ2V/JTDq+3dy/pT0eoYeT44kYpbnGikYgS6LQ0cEH
-	6O9hyQ39G6kvH8dQAr8EAwtfV5k6Ql+tj4kJ5stryRUcnhg4UMBzrvULAKAV4fscbAQyQVcsuG8
-	vfpfBA92GtsKJ89iOKH+wiBWl17u18AqcdI7ChdiZJL7xHwVgMDYusSsxN3yWg21AqYQMzIRLPD
-	jANM1/TL2tTAelRdqCF8uvON4GBphmdIcvl2GGIY43HBbq5A8LpYZU09LNrzbxPx9eKMk6h2teu
-	U/lqZzqncrDNNmMP55xGxXYlKCR2QM8oFf4xZmEwZEZCgL1xQpg/bCrvJfw2MxyFJo=
-X-Received: by 2002:a05:6a20:12d2:b0:398:9ae9:710f with SMTP id adf61e73a8af0-39fe3d53b21mr28501431637.13.1776349129943;
-        Thu, 16 Apr 2026 07:18:49 -0700 (PDT)
-Received: from localhost ([2601:600:837f:c470:1879:8422:922b:e5d3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c79581a31a8sm4408141a12.18.2026.04.16.07.18.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Apr 2026 07:18:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u2QB+c40"
+Message-ID: <06642779-578a-4d79-b687-080ad8f96791@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776349281;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lybRB8EHBvG98b0S3Tdfov2Z9XbgshEZtlTkAYVvF/o=;
+	b=u2QB+c40Yb96hX7ZFUO3K9KTIfPbAQbT73fAeLyAvUODDX4snby4VQ9bSt8dA1d0Wur8b0
+	EpieZ1TAZkMr4TTyFOyfUuqqHMbHA5jZ2KlW1bUs6NdNXPNLBiJKME9OaLYPrnpuHp2pRk
+	fKgaKE7U6NvRUKwRx9941UnSdHfAWzo=
+Date: Thu, 16 Apr 2026 07:21:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 16 Apr 2026 07:18:48 -0700
-Message-Id: <DHUN7O2WOLPC.107WH88I4E15I@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 1/6] bpf: name the enum for
- BPF_FUNC_skb_adjust_room flags
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <sashiko@lists.linux.dev>, "Nick Hudson" <nhudson@akamai.com>
-X-Mailer: aerc 0.21.0
-References: <20260416075514.927101-2-nhudson@akamai.com>
- <20260416100225.178D6C2BCAF@smtp.kernel.org>
-In-Reply-To: <20260416100225.178D6C2BCAF@smtp.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v4 10/18] bpf: Fix interaction between stack
+ argument PTR_TO_STACK and dead slot poisoning
+Content-Language: en-GB
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260412045826.254200-1-yonghong.song@linux.dev>
+ <20260412050000.262030-1-yonghong.song@linux.dev>
+ <CAMB2axPoszkZqHYh8g3bH0V-c4-BzLX3ywSsF0fFyQOmN0Vp5Q@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAMB2axPoszkZqHYh8g3bH0V-c4-BzLX3ywSsF0fFyQOmN0Vp5Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu Apr 16, 2026 at 3:02 AM PDT, sashiko-bot wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] The newly named `enum bpf_adj_room_flags` will not be emitted =
-into the kernel's BTF, rendering the intended CO-RE lookups non-functional.
-> --
->
-> commit d9be60117de7ebbae2642c8a29e31a5aa11ff502
-> Author: Nick Hudson <nhudson@akamai.com>
->
-> bpf: name the enum for BPF_FUNC_skb_adjust_room flags
->
-> This commit names the previously anonymous enum for BPF_FUNC_skb_adjust_r=
-oom
-> flags to bpf_adj_room_flags. The stated goal is to enable CO-RE lookups i=
-n
-> BPF programs.
->
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index c8d400b7680a8..bc4b25eb72ce5 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -6209,7 +6209,7 @@ enum {
->>  };
->> =20
->>  /* BPF_FUNC_skb_adjust_room flags. */
->> -enum {
->> +enum bpf_adj_room_flags {
->
-> Since this enum is only declared in the UAPI header and never actually us=
-ed as
-> a variable, parameter, or struct field type in the kernel C code, will th=
-e
-> compiler generate DWARF debug information for it?
->
-> If it is omitted from the DWARF info, pahole will not emit it into the
-> vmlinux BTF. This causes libbpf CO-RE checks for these values to silently
-> evaluate to false regardless of the kernel version, which seems to defeat=
- the
-> purpose of this patch.
->
-> Does the kernel need to explicitly force the emission of this type into t=
-he
-> target BTF, for example by using BTF_TYPE_EMIT(enum bpf_adj_room_flags) i=
-n a
-> compiled C file?
 
-Nick,
 
-take bots feedback with a grain of salt.
-I suspect the bot is wrong here, but do you homework.
+On 4/15/26 3:32 PM, Amery Hung wrote:
+> On Sat, Apr 11, 2026 at 10:01 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> The "poison dead stack slots" mechanism (commit 2cb27158adb3) uses
+>> static liveness analysis to identify dead stack slots and poisons them
+>> as a safety check. However, the static liveness pass cannot track
+>> indirect stack references through pointers passed via stack arguments.
+>>
+>> For register-passed PTR_TO_STACK (e.g., R1 = fp-8 passed to a static
+>> subprog), the liveness abstract tracker carries frame/offset info
+>> through registers. When the callee dereferences R1, the tracker
+>> attributes the read to the parent frame's stack slot, correctly marking
+>> it alive. So no poisoning issue arises.
+>>
+>> For stack-argument-passed PTR_TO_STACK (e.g., fp-8 stored via
+>> *(r12-8) = r1), the value goes through BPF_REG_STACK_ARG_BASE (r12)
+>> which the liveness pass does not track. When the callee loads the
+>> pointer from its incoming stack arg and dereferences it, the liveness
+>> pass cannot attribute the read back to the parent frame. The parent's
+>> stack slot is determined dead and poisoned before the callee even
+>> starts. The callee's subsequent dereference then fails with "slot
+>> poisoned by dead code elimination".
+>>
+>> Fix this by allowing STACK_POISON reads in check_stack_read_fixed_off()
+>> when the read targets a parent frame's stack (reg_state != state).
+>> Same-frame STACK_POISON reads remain rejected to preserve the safety
+>> check for real liveness bugs. Cross-frame reads are safe to allow
+>> because:
+>>    - The pointer to the parent's stack was already validated by the
+>>      verifier.
+>>    - The slot contained valid data before being (incorrectly) poisoned.
+>>    - The read returns an unknown scalar, which is conservative.
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+> While liveness of stack arg handled differently, can R12 base
+> arguments cause some OOB in liveness.c? For example, can
+> arg_track_xfer() reference at_out[12] while at_out is defined in
+> compute_subprog_args() as struct arg_track at_out[MAX_BPF_REG]?
+
+Yes. The v4 does not have this issue as it does not have arg_track_xfer()
+yet when I posted it. But on top of the latest master, this is indeed an
+issue and I am aware of this. Thanks for pointing it out!
+
+>
+>>   kernel/bpf/verifier.c | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index e664d924e8d4..bfeecd73e66e 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -5764,6 +5764,13 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+>>                                          }
+>>                                          if (type == STACK_INVALID && env->allow_uninit_stack)
+>>                                                  continue;
+>> +                                       /*
+>> +                                        * Cross-frame reads may hit slots poisoned by dead code elimination.
+>> +                                        * Static liveness can't track indirect references through pointers,
+>> +                                        * so allow the read conservatively.
+>> +                                        */
+>> +                                       if (type == STACK_POISON && reg_state != state)
+>> +                                               continue;
+>>                                          if (type == STACK_POISON) {
+>>                                                  verbose(env, "reading from stack off %d+%d size %d, slot poisoned by dead code elimination\n",
+>>                                                          off, i, size);
+>> @@ -5819,6 +5826,8 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
+>>                                  continue;
+>>                          if (type == STACK_INVALID && env->allow_uninit_stack)
+>>                                  continue;
+>> +                       if (type == STACK_POISON && reg_state != state)
+>> +                               continue;
+>>                          if (type == STACK_POISON) {
+>>                                  verbose(env, "reading from stack off %d+%d size %d, slot poisoned by dead code elimination\n",
+>>                                          off, i, size);
+>> --
+>> 2.52.0
+>>
+>>
 
