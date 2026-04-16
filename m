@@ -1,132 +1,200 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D283E2AD00
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 01:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776301854; cv=none; b=gE1NgNXbCHb7Nub4hYKamSLwJYOnbyYTQvAeE2PkshduPmnL8cjPkeUOnZH1LLLwvJCVuq/SonbfEXrDtHqjQuBtj6DAn3Qqc4MtRKieQts0DlE7GObh9V0tm9tc0NIO33YJh/PNORBEP+5WqF1gxQO+ZqqWbjZWK8f+5hgqubM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776301854; c=relaxed/simple;
-	bh=nR5KmZg+iOgFpJDYb0z/sk4QWEv9D2q8SZC1cx1KZSU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MYdXP1xzvB+DQpt8a8mcYTI6TIRYcgOipmAKGemjQfK9ojr62MgyhUK1YexJIbNldRbQQYftSnzxMCj3cW79I0dUhfvg++E7TTRxKE7RwHUN4YoSbyF3xHTplJpS91WF5bVJRnhXIBXW5EHatgaCjvsMgf+kawFWNyRDPCTAp0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EwNTSbNb; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A5E217F27
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 01:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776302345; cv=pass; b=T7Eqa+6iJtAMpL3Fpvq7Oz92PEb9kL171PdSBh7+JB31mKrZEYckMuxK3YeZZ/HWPxT9XExaFCpXfMgEdTt7p2mhadPlXbE+YNAXRrI/45d1FAjc2Hozamyix/lXqOwpjlGmg1i5zXwn+Uw8wuN55b/mVsdfi3Tr+hjBfMSErqc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776302345; c=relaxed/simple;
+	bh=XCtJXo6oKu5qJcO35V9S1Ifbd7LnW/zGipwZFVwFPkU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rtGkJx4w4LBftCxWCK88YH5cRhQTX0KjL6FLHaSz9boXbsWBySL2XqkZtbljoBDWoskiCnDSERxr3mYzvwb8t+6pnIR/dzU6z6YYmXuYMHtEvXAYyS5vnBf3v2aJfUJpAKRx+/hTdyD8qWnQewU9A+XzGVoHFAhT3uqoZ0Wfkhc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rfedMLCG; arc=pass smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EwNTSbNb"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1279eced0b9so10857293c88.0
-        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 18:10:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rfedMLCG"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5a2c9c5ff87so7578096e87.0
+        for <bpf@vger.kernel.org>; Wed, 15 Apr 2026 18:19:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776302342; cv=none;
+        d=google.com; s=arc-20240605;
+        b=f/A2XZ/biUzUTn7swhU+2z40UxQ1sjIZiJII+OY+F+wZzRZg1IxTMnaOmIW4SRtJBW
+         jXROdoLfshP0phfi7joyXk2zQWaQSgqIntur4jU/ERp9fqllG5hdbvwSollaRxnhtrnK
+         jwomCmlXinTyyCGqRYfljM6RKCOxcb6REszJKnV7nRlnBU8RnmmL/d/hmf8eYZXIDW8L
+         CvHDLEK6W0mhtprUhEAuvyzbAEg6PkgaA7OQ/6kcMbnu/fFVHDrYqZyW55zHYP/YD+5Q
+         9dt3M3FJTdDh1N0ermN2GXF6RlS2SzreUb0yc3fOSyI4XY44Ro1bPwcK5K9RG7h6O2PD
+         gWkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jZNhlsmlO+2dvKw7ULeWGa/3ZgJ/3xNp9y/uk0LituQ=;
+        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
+        b=GGtQhqDH33CUGtJCfvnjyR5txhJtcXa7P10abjeIprl8tgDty3B37YhDA+2tZVh+3m
+         kF2HG/i+1hxUzmI2aeD2JcfwaFmubmEebkonTBoyMHRt5xokSTDCw4fYt7PcXDpda8AW
+         pz9kp2/WIygnreGbjKjDLBoA56Hbp9p9X/e2LGpXtvg4JXT3Mk/BW1rSUI+GStVLHrME
+         nTlDelZmvvDsDeByBkrwCe1wdQY7bVOtuO/AW0CMyI1cUkfj768KnS0QTtTSS2WECRsp
+         qdUrer/QCSo79E5bJ4dhjWBygNKtWm4GaabWTDyaGtgOPnaIKF+Xa42fTu1Dx/8sBFm7
+         N0UQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776301852; x=1776906652; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=w/2DhHX/AcUDzYaRkgycqJhyDudsJEwLnbM/jW01VZA=;
-        b=EwNTSbNbgGpMI5CiJZkLEbr2p9VBnwqNtxD4apQW7p/KOT7QquiDQVJzK0yEPXi/Hu
-         o20Ip5ZlDFm1n1qoyGXIAV6vfrWMOoGIKQ0QLELILfw01i/qDBbp6Y/WyIUCY+cuXRSy
-         N5y1m4ktUepoJWohLTnwSPJ75KkePOO17HUqDkjG4Jpb2nyluPjUVZF134LHf4RAtgMT
-         YIqWubcShP2Xh1VxcJGokt0N3vI6sYWLlTx8xuxdxwxGw/rKiBk4b3WAC9sEtaRHUUuu
-         DT/HTEhfFfK0x4wqX2G0XH1qEGa7O+xO0Xb5kdnutn7aZyrik0rtZWcEfmVEImTmW8Wp
-         vnUw==
+        d=gmail.com; s=20251104; t=1776302342; x=1776907142; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jZNhlsmlO+2dvKw7ULeWGa/3ZgJ/3xNp9y/uk0LituQ=;
+        b=rfedMLCGdSPAAoDpSqRsQoXR6S6NUlCdyk4y7fHEad/hra5O/MMZP0utTZwNvfwFb+
+         TMibOGRMfgzAC+aOsGE+iPwREhj4qxffb+4ZsvICVUzFJ/905ThyrkeChmlCT5o3KhLI
+         0J08p6/CPm2bwl+DDbOm+mx3nU7m030rLOlAerWAgJOiPQrnM9C3OvT4UIUmAESb3Cgl
+         TIh4bFEK0RD6m/YhQOKrDNhF6H21kLLTYLFPdBv93bftRxeyxfkIU4TejUxpESHjnW1k
+         VqfOJFryG2wJwpqaoLaClX2a7XCL1IfrjcfFc1YdXTddDScSO5Q4/uGz1ygGsTE1ebZn
+         pNAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776301852; x=1776906652;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w/2DhHX/AcUDzYaRkgycqJhyDudsJEwLnbM/jW01VZA=;
-        b=nHKFjqxPI3U4yORxNL2mRTZu3v1SMGJqeANq45wNvimVoY4TIHKwtuCep8HoT/o5jy
-         dGiN2XDTL1hUsRRnSeAlB1NTvbFVNa504IDGR8rDj+RTWltzZSkgry27duzFW0dcakEZ
-         2yEg84kmeQF+2u1A9rB0a1lUtSFNVInLWpmoOy+Go4f4yEpuTD4/Y2cebLEmTjVGE/cD
-         SYrkTdA2OomiIiztuSssGAQnf0jWY2nMiYanhqm5Gw4NwTXqMJ0Qff97wt9WQ3ibywCO
-         8fKrtVUnX9GlFhdZt4H260QegG2foWLEQhwVK2AVM0SMocaznaoLN89bSAt1l7dr/ynB
-         ZWbg==
-X-Forwarded-Encrypted: i=1; AFNElJ9UwejY4G7Qz4WlbrHymb2TfUTT9tRmVhXDrLUcr94V5L8tdBlMnDPQ7sPoD8arvbJ9b6k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yye8smtFjkRjwzNXsSrRjPojD2PjMnSqn4YHfqF0Q59MkZiYqth
-	1lPE6AWJe+Y3ZzTy4HeG53UFe8LOUAjOJ0Y3bmNdvFLjIlW2UKIiE4/f
-X-Gm-Gg: AeBDievr4gU3i1kGuCB9xw0qViVImHHX64wL6vtR30fImBp+DRZOn6U9rkffJU79dz8
-	4/FsX7eySDxgZz8Hb0Jy9Q9iU8Cf2fiziJ+aT3gUVgwpzOTId2bCbcvRuXmCQp7MVXBRXwU6SLl
-	0bfSJZKBZ/O19fK8/QPDreOqg49wdYynUE+QxY2uVfTkURvnmlX+tbxdRh4qt+XKEevy/l8lEu+
-	FUzep6aDCFReJ4ali9UU5krCx60rVpLg4/SmFTCUUKc6YRhqLZ7RHYWblE/BbrqiBHwFjiUm6XM
-	4hyAU9NIWLSC46llZ4bUCcJ2CI5FiG7rBRXoaqwPjjoT/HvuDcSwjCFHkSfFWzRDfpML0ztKM11
-	xy+a2gG157BEzVFmNMrn0SfKwfmPkWqf5RADBnoWcAgqleUwxP2QmG4UorpEWeoTfls3BbwR34S
-	mbvIvcvhgi9XXfwc/vN1k8axn80lubZKXIfjZy7P272PcTuInHAbgfNQ2jyp5AX7R4aTIYHthU+
-	X8nvTdo
-X-Received: by 2002:a05:693c:3007:b0:2de:2f38:a7d6 with SMTP id 5a478bee46e88-2de2f38a8e0mr2979489eec.13.1776301851743;
-        Wed, 15 Apr 2026 18:10:51 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:f669:42fc:9948:a037? ([2620:10d:c090:500::2:7c3f])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8eb8443csm5258543eec.14.2026.04.15.18.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 18:10:51 -0700 (PDT)
-Message-ID: <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf/verifier: Use intersection checks when
- simulating to detect dead branches
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
-	bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Paul Chaignon
- <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,  Srinivas
- Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
- <santosh.nagarakatte@rutgers.edu>
-Date: Wed, 15 Apr 2026 18:10:49 -0700
-In-Reply-To: <20260415160728.657270-2-harishankar.vishwanathan@gmail.com>
-References: <20260415160728.657270-1-harishankar.vishwanathan@gmail.com>
-	 <20260415160728.657270-2-harishankar.vishwanathan@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+        d=1e100.net; s=20251104; t=1776302342; x=1776907142;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jZNhlsmlO+2dvKw7ULeWGa/3ZgJ/3xNp9y/uk0LituQ=;
+        b=XlbPsegHlA5YFYhV1dwkXHAFNaqW9k7R28B6+FQ+uwQEFsjDjUGDgeFUf/nntpf8eX
+         14UCSF7oMWIgTxsk0xKqvz0Dr6IwtMINEgRRpQTDffOmj5zm8Bjhv/Pi6NR/SE5PJC39
+         PKlococ7ty6EarToacnVW8YDJyNwY+xhshFqPxlGvVeD2gyJv9If20hQb3xc0IuaSze0
+         n/3iObi9HukRI6N7QeGDAVnNNnoe8hxOuYgPOx6+bjPYgVDHHgirZ5EQRPekuKDSDWmk
+         urZe7mVPVf3bNvkIeHNKGM0cSM5XfaDgn6mEC9AMa0tzHiHxsYMHJFwlzSVGFJF/RHqE
+         vhvA==
+X-Gm-Message-State: AOJu0Ywh9exyKhBLlSyFBwRTowZ7NAAPCI6CrmDXTkkviLAvYmlBhztD
+	xJnh3nw60bMfbZBSiw7chQKis3V607KAFcVHHIlCNXtkpoupQ1iOxj/HCuMyTe2MLzPBGgMU+pe
+	wvHCycPFoVQKvAtOb4CVewmxPK9yf9BMaS3uicKv0EA==
+X-Gm-Gg: AeBDiesbu2l1FtWKjKRwqaod9OdaxODZuy0dBQyIsbccqE+djNNH/xo7BU5V5A67+KS
+	yJe/TVX89jqsC/rf0WkbU1Ig+JmGvxd/6FMTQOdgdULAeZ4gWb+eSCXFCsnu+S72fKFJmGFeGHm
+	+COTmmABKim6FDl72M/QffIIaaimVK0sG5s3Ngn3XfV7I1HSg0OJ/4GpBlH/PUNiIvflbmTJ4JG
+	F9T5S6WGiYGcaws+2NzCekOG8vd8JOqDHdlRqyHMnH+z52b87X9yNkhpRoZWTXaORbBZw71Wx0X
+	vGIBtSFfmjP17U9ZkKMURJNXK4p9
+X-Received: by 2002:a05:6512:3a90:b0:5a2:b903:3b43 with SMTP id
+ 2adb3069b0e04-5a3efb2c5a2mr9974360e87.7.1776302341381; Wed, 15 Apr 2026
+ 18:19:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260415082654.21026-4-kerneljasonxing@gmail.com> <20260415091743.97FA1C19424@smtp.kernel.org>
+In-Reply-To: <20260415091743.97FA1C19424@smtp.kernel.org>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 16 Apr 2026 09:18:23 +0800
+X-Gm-Features: AQROBzDY8Xm2_8Cu4ecozfQPST7XLRuJGrF9Z76mRu-0wA7GQDyWPFtrQn7sF58
+Message-ID: <CAL+tcoD9g4M9iv+oLzSzPs1pcyQDe+R9wnHvn-DfnuZVysxbSQ@mail.gmail.com>
+Subject: Re: [PATCH RFC net-next v4 03/14] xsk: add xsk_alloc_batch_skb() to
+ build skbs in batch
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2026-04-15 at 12:07 -0400, Harishankar Vishwanathan wrote:
-> This commit introduces checks to detect if the ranges and/or tnums have
-> intersections between them, and uses the checks in
-> simulate_both_branches_taken and reg_bounds_sync.
->=20
-> The verifier is known to evolve the reg_states correctly (i.e. soundly)
-> on a live branch. In a previous commit [1], we used the ill-formedness
-> of a range (e.g. umin > umax), identified by range_bounds_violation, to
-> detect dead branches and prune the branch along which the ill-formedness
-> occurs.
->=20
-> Another opportunity to prune branches is when the ranges and/or tnums
-> have don't intersect. When the verifier evolves the reg_state along a
-> dead branch, it is possible that abstract value in one domain (e.g tnum)
-> doesn't match with the abstract value in the other domain (e.g. u64), so
-> that there is no single value x, that is contained in both the abstract
-> values.
->=20
-> First, we introduce intersection checks for each of the 5 domains (for a
-> total of 10 domain pairs), and wrap it in reg_bounds_intersect.
+On Wed, Apr 15, 2026 at 5:17=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Sashiko AI review found 2 potential issue(s):
+> - [High] Pre-allocated SKB and socket memory charge (`sk_wmem_alloc`) are=
+ permanently leaked when zerocopy metadata processing fails.
+> - [High] Double-free and Use-After-Free of `xs->skb` when fragment alloca=
+tion fails with `-EAGAIN` in copy mode.
+> --
+>
+> commit 3ef2c03b6204759327ab337fe34617d9dd8e04ef
+> Author: Jason Xing <kernelxing@tencent.com>
+>
+> xsk: add xsk_alloc_batch_skb() to build skbs in batch
+>
+> This commit introduces xsk_alloc_batch_skb() to support allocating and
+> building skbs in batch. It reserves skbs, batches the sk_wmem_alloc charg=
+e,
+> and then copies data to complete initialization.
+>
+> > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> > --- a/net/core/skbuff.c
+> > +++ b/net/core/skbuff.c
+>
+> [ ... ]
+>
+> > +     /* Phase 3: Build SKBs with packet data */
+> > +     for (j =3D 0; j < alloc_descs; j++) {
+> > +             if (!xs->skb) {
+> > +                     skb =3D skbs[skb_count - 1 - k];
+> > +                     k++;
+> > +             }
+> > +
+> > +             skb =3D xsk_build_skb(xs, skb, &descs[j]);
+> > +             if (IS_ERR(skb)) {
+> > +                     *err =3D PTR_ERR(skb);
+> > +                     break;
+> > +             }
+>
+> Can this lead to a double-free and use-after-free of xs->skb if a fragmen=
+t
+> allocation fails?
+>
+> If xsk_build_skb() fails to allocate a page for a subsequent fragment in =
+copy
+> mode, it frees the partially built skb and returns -EAGAIN. However, it
+> leaves xs->skb pointing to this freed memory.
+>
+> When this loop breaks and returns -EAGAIN up the call chain, the caller
+> __xsk_generic_xmit_batch() checks xs->skb and calls xsk_drop_skb(xs->skb)=
+,
+> which would double-free the skb. Furthermore, any subsequent transmission=
+s
+> could dereference the dangling pointer. Should xs->skb be explicitly clea=
+red
+> when handling this error?
 
-Hi Harishankar,
+Ah, great job! Sashiko again found a real pre-existing bug! I will
+include it in my separate fixes.
 
-I thought some more on the topic if checks for all 10 domain pairs are
-necessary and now have some doubts. Ideally, what one wants to check
-is that there exist a value included in all 5 domains.  Unfortunately,
-it is too complicated to encode such a check, so the patch-set
-approximates this doing pairwise intersections.  Since we already are
-talking about an approximation, it might be fine to do additional
-simplifications.
+The corresponding fix would be adding a more strict check in
+xsk_build_skb() to exclude the case and let the caller to free it:
+free_err:
+        if (skb && !xs->skb && !skb_shinfo(skb)->nr_frags)
+                kfree_skb(skb);
 
-For example, given the current implementations for
-is_scalar_branch_taken(), regs_refine_cond_op(),
-deduce_bounds_64_from_64() is it ever possible for u64 range not to
-intersect with s64 range?
+>
+> > +
+> > +             if (xp_mb_desc(&descs[j])) {
+> > +                     xs->skb =3D skb;
+> > +                     continue;
+> > +             }
+> > +
+> > +             xs->skb =3D NULL;
+> > +             __skb_queue_tail(&batch->send_queue, skb);
+> > +     }
+> > +
+> > +     /* Phase 4: Reclaim unused allocated SKBs */
+> > +     while (k < i)
+> > +             kfree_skb(skbs[skb_count - 1 - k++]);
+>
+> Does this permanently leak the pre-allocated skb and its socket memory ch=
+arge
+> if xsk_build_skb() fails?
+>
+> When xsk_build_skb() encounters an error like a zerocopy metadata process=
+ing
+> failure, it returns an ERR_PTR() without freeing the skb. Because k was
+> already incremented before the xsk_build_skb() call, the Phase 4 loop sta=
+rts
+> reclaiming at the next skb.
+>
+> The failed skb at index k - 1 is bypassed. Since it is never freed,
+> sock_wfree is skipped, leaking both the skb and the batched sk_wmem_alloc
+> charge.
 
-After spending some time with pen and paper for BPF_JLE operation I
-suspect that it is not possible. I also encoded this as a small cbmc
-test: https://github.com/eddyz87/intersection-check.
-I suspect that same reasoning applies for other operations.
+This is the pre-existing bug that you pointed out in patch 2. I'll
+take care of it for sure.
 
-I'd suggest to drop the u32/s32 and u64/s64 checks, unless a counter
-example can be found. I'm not sure about 64/32-bit checks.
-Wdyt?
+Thanks,
+Jason
 
-[...]
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260415082654.21=
+026-1-kerneljasonxing@gmail.com?part=3D3
