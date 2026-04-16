@@ -1,125 +1,211 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D7126B764
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 17:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A6B0233723;
+	Thu, 16 Apr 2026 17:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776360227; cv=none; b=SwXGKe2LbKKtqIMpEwIWWNEdKhzAYnDHBU7gAASTMhgbIInFF8jRKQ2jlJct7N8FoGttZiQ6XWR8KMHs3HdOsF6PeV+cUUcutXd3SpfFrLprIDHyCOw9NXICwphN/yLspIQucDIc++WUFMCMgJL7LQbIHJG860XNPTU4UV+q9MU=
+	t=1776360916; cv=none; b=jmc+nRdJnB16EQp58QekG+Z1NJjnnj3qsNRg+9t1z8O+AKYBmpY0vYVGTzjRZ2Ah/bakaF1PRHnCO6Bt+u8HHkQIlwP0wbv1Xuk5DDxv2DbJC+1ZXm90h4IRXLP3IfkPeDw8MzqgYU6jLwY7h2pfAwiykDb7suqTEqVhYclP0Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776360227; c=relaxed/simple;
-	bh=+H3j9a+dISNE9VQDxTVFXesACRHCuwV4w7IB8zYETuA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TzGdRMw92VZck6Ma1w5cjZZmZH1dY5pVS/noDGF5vYIGHwCO3ClfmgdzCORzcqwL/+YwZn/GyAAJOQwPt0RSryaKadBqRhkujdWPexVg3GQoM2c57//ckkUFXOQmMYB/QwN5UCdzqSZlJe9g1AFBAnALTmpnzyJoS679h+vrlig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QoQrpxVG; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776360916; c=relaxed/simple;
+	bh=kqha0qiMM4Du35H8cIJF7rKdngSpdJtw9bX8eipCtqw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sWFv9V0snKIbghZ5BMXKFcQoygHxijpwipacPMLwadbXC0mmZ6zUKjLxCt7iLwcCKcYof+XmKy0ZQvfTJGy0kfBvFY3LCA4vEmz9vJKVZSVbLfEvo/S8c9e06deTekRxBWtbm++D48B9rY5MrPZJWX37BFmpllbp4EwrOB/YMJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=NMwTvvtg; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QoQrpxVG"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a8fba3f769so38140905ad.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 10:23:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776360226; x=1776965026; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mq9tMp8b9KWPsVYL3iUYjRD5ZyZ+Dizhj6FHjl3l0fo=;
-        b=QoQrpxVG7CYz6+n2m1p7oMIomv/IC77/E7PB3fSahVnULq/bt57mky00sZZHkVuZL2
-         LLymRLLVQDT4cE8f5fUJE4QKhayTuURUrdT1t22KEs6ipFgLoMYLFLuxyougEUU2ZnNp
-         A8WCvE8Lau/5Z53SyVmaHYeFaYN11rqL8KQFFlnjJnr5N1Ug8IQoss8br2CSQU6OTxnG
-         SDs4tTF6L+dgRG0Fn6iV6cHb0APakOP1+b96cHNTK05ahTEWKPdLyfm5aV8ebzuzlDzk
-         sZh3Wk2lDEtJCq/E4Cy9mpWldDv3d1bdZajfHyL9fVFGhohyEfyWx/RTDfEi9+VqfLq7
-         ma4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776360226; x=1776965026;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mq9tMp8b9KWPsVYL3iUYjRD5ZyZ+Dizhj6FHjl3l0fo=;
-        b=kBwLHlq9VhwrFbi38SWsyfTpq+1M981CwtiMrcaJKaNGsr1I0/0h7l0e+wJIt5eHP6
-         Q3SCQAEuyhunL4vM1euQjkU1QHGe3fe5fEqFbzYjN9QbRqXM6hrZAGJ0VWhJnJ654R/n
-         SZ/eyRRHwM+W6MD4fr68oGUL6tC3sQfuaR7q35Z8QCdPmQnjLZfizxF8+i0WmNSrbDsE
-         QBP8PpGadFpUXFdNc0NV5zytfaq00jhvFfDJ1rFK5OULpEG6m9Mm6MxqS5MbLnl8t423
-         gzgHdKm12kdX5UUYy5ETROPih6cuHq0/HGYW1BnnszlevmCibg6f+0MiH6lEpC9OPfNY
-         XJFA==
-X-Forwarded-Encrypted: i=1; AFNElJ+g+dNinmIPpgSPPcPF7JUCtcfwqkxpb2kqo1kr9j2we9eYtOFBv11ojQSGh4fH2lzH0I8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMiXYkdGxvT7coq/DlFQOvvRfRbjePGE6bl+Oi8q06SB3Ofd5V
-	kKaGIG5vdfgxAugXfIH1VGmIfel3CUE9gBaSaetnbg7DD3VF/te9YIES
-X-Gm-Gg: AeBDievqlqrjqRVHWN30LKjJCHCgBx7zImjB43OfVSaqx7Q6p88/yMLa0GqSJVS9/Be
-	te4udmKWNr7tN042K5g1Na+zOO2oFAJFyhy5TiA7Jyg+JOy5JdpqvNvoMopM+LHyf1+hlDdT96e
-	7HozQbStE2OdxCTS7qjogW61YeOmFzPrK7cf40tcwAnl22Z5jPDNIvnz6kV2oi2ce3bVn7YeIZ2
-	CJ692GVpqcVMeDdvSPoZ+cJi6W77lFsbCejml6FAX4OWUVKvC3NfNQyZRCgqkhXRZsQb+d5+xHA
-	Dw4H4DgAD3CZS3Q6nw287bCfDJhVAW/CfiywLIpQE/vdMPB0TBPxuqP0hyL7HFVy9og6vfvBLWA
-	z0yx+BJme4HL95nPLEX9FIkt4b0nzil8BOhP4p+Wa7tjHlPEGpHjIGBI5KLTu+ba77Q/JZdnECq
-	cDaVcbKZWGm+pO0v0CnwvauWBIuTxHneNkn6aDBTPZN/YrWiC1rz4XXB2O58wO5tU=
-X-Received: by 2002:a17:903:2593:b0:2ae:5eab:132e with SMTP id d9443c01a7336-2b2d597d5cbmr206813595ad.12.1776360225380;
-        Thu, 16 Apr 2026 10:23:45 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4780ef736sm80024695ad.8.2026.04.16.10.23.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 10:23:44 -0700 (PDT)
-Message-ID: <e98c9357265b69575200f8e88ca76b99c2d05e59.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf/verifier: Use intersection checks when
- simulating to detect dead branches
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
-	bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Paul Chaignon
- <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,  Srinivas
- Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
- <santosh.nagarakatte@rutgers.edu>
-Date: Thu, 16 Apr 2026 10:23:41 -0700
-In-Reply-To: <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
-References: <20260415160728.657270-1-harishankar.vishwanathan@gmail.com>
-		 <20260415160728.657270-2-harishankar.vishwanathan@gmail.com>
-	 <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="NMwTvvtg"
+Received: from narnia.corp.microsoft.com (unknown [40.78.12.246])
+	by linux.microsoft.com (Postfix) with ESMTPSA id CD5EA20B7128;
+	Thu, 16 Apr 2026 10:35:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CD5EA20B7128
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1776360910;
+	bh=DZKm0Alwrv4Z1eZ0BB8iScYAw3YwStuCulMKFBkNkcw=;
+	h=From:To:Subject:Date:From;
+	b=NMwTvvtg59odIXENYx3Fqr80Jup+isq9y1mcPM3kf1FWP0HFOT5A6GdpXFmpfRC9H
+	 dSlOpPEF+rewBNvkni/5gPEB6uUxLtCNxOs7M4iGrmZvqd652ZsYwmvdkThCtfyb5r
+	 oJrBudSRMsuhJS9lvfDiE5I9/VOnE3/Hqihvq6cE=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	James.Bottomley@HansenPartnership.com,
+	dhowells@redhat.com,
+	Fan Wu <wufan@kernel.org>,
+	Ryan Foster <foster.ryan.r@gmail.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Song Liu <song@kernel.org>
+Subject: [PATCH v4 00/10] Reintroduce Hornet LSM
+Date: Thu, 16 Apr 2026 10:33:21 -0700
+Message-ID: <20260416173500.176716-1-bboscaccy@linux.microsoft.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2026-04-15 at 18:10 -0700, Eduard Zingerman wrote:
-> On Wed, 2026-04-15 at 12:07 -0400, Harishankar Vishwanathan wrote:
-> > This commit introduces checks to detect if the ranges and/or tnums have
-> > intersections between them, and uses the checks in
-> > simulate_both_branches_taken and reg_bounds_sync.
-> >=20
-> > The verifier is known to evolve the reg_states correctly (i.e. soundly)
-> > on a live branch. In a previous commit [1], we used the ill-formedness
-> > of a range (e.g. umin > umax), identified by range_bounds_violation, to
-> > detect dead branches and prune the branch along which the ill-formednes=
-s
-> > occurs.
-> >=20
-> > Another opportunity to prune branches is when the ranges and/or tnums
-> > have don't intersect. When the verifier evolves the reg_state along a
-> > dead branch, it is possible that abstract value in one domain (e.g tnum=
-)
-> > doesn't match with the abstract value in the other domain (e.g. u64), s=
-o
-> > that there is no single value x, that is contained in both the abstract
-> > values.
-> >=20
-> > First, we introduce intersection checks for each of the 5 domains (for =
-a
-> > total of 10 domain pairs), and wrap it in reg_bounds_intersect.
->=20
-> Hi Harishankar,
->=20
-> I thought some more on the topic if checks for all 10 domain pairs are
-> necessary and now have some doubts. Ideally, what one wants to check
-> is that there exist a value included in all 5 domains.  Unfortunately,
-> it is too complicated to encode such a check, so the patch-set
-> approximates this doing pairwise intersections.
+This patch series introduces the next iteration of the Hornet LSM.
+Hornet’s goal is to provide a secure and extensible in-kernel
+signature verification mechanism for eBPF programs.
 
-Speaking of which, how hard would it be to figure out the witness value?
-Assuming that __update_reg64_bounds() happened would it be sufficient
-to check tmin, tnum_step(..., tmin) and tmax?
+Hornet addresses concerns from users who require strict audit trails and
+verification guarantees for eBPF programs, especially in
+security-sensitive environments. Many production systems need assurance
+that only authorized, unmodified eBPF programs are loaded into the
+kernel. Hornet provides this assurance through cryptographic signature
+verification.
 
-[...]
+The currently accepted loader-plus-map signature verification scheme,
+mandated by Alexei and KP, is simple to implement and generally
+acceptable if users and administrators are satisfied with it. However,
+verifying both the loader and the maps offers additional benefits
+beyond verifying the loader alone:
+
+1. Security and Audit Integrity
+
+A key advantage is that the LSM hook for authorizing BPF program loads
+can operate after signature verification. This ensures:
+
+* Access control decisions are based on verified signature status.
+* Accurate system state measurement and logging.
+* Log entries claiming a verified signature are truthful, avoiding
+  misleading records where only the loader was verified while the actual
+  BPF program verification occurs later without logging.
+
+2. TOCTOU Attack Prevention
+
+The current map hash implementation may be vulnerable to a TOCTOU
+attack because it allows unfrozen maps to cache a previously
+calculated hash. The accepted “trusted loader” scheme cannot detect
+this and may permit loading altered maps.
+
+3. Supply Chain Integrity
+
+Verify that eBPF programs and their associated map data have not been
+modified since they were built and signed, in the kernel proper, may
+aid in protecting against supply chain attacks.
+
+This approach addresses concerns from users who require strict audit
+trails and verification guarantees, especially in security-sensitive
+environments. Map hashes for extended verification are passed via the
+existing PKCS#7 UAPI and verified by the crypto subsystem. Hornet then
+calculates the program’s verification state.  Hornet itself does not
+enforce a policy on whether unsigned or partially signed programs
+should be rejected. It delegates that decision to downstream LSMs
+hook, making it a composable building block in a larger security
+architecture.
+
+Changes in V4:
+- IPE integration
+- Arbitrary keyring support
+
+Link to V3: https://lore.kernel.org/linux-security-module/20260326060655.2550595-1-bboscaccy@linux.microsoft.com/
+
+Changes in V3:
+- Updated for signed attribute patch series changes
+- Added some new result enum values
+- Minor documentation clarification
+- Misc style fixes
+- Added missing signed-off-by tags
+
+Link to V2: https://lore.kernel.org/linux-security-module/20260227233930.2418522-1-bboscaccy@linux.microsoft.com/
+
+Changes in V2:
+- Addressed possible TocTou races in hash verification
+- Improved documentation and tooling
+- Added Alexie's nack
+
+Link to RFC: https://lore.kernel.org/linux-security-module/20251211021257.1208712-1-bboscaccy@linux.microsoft.com/
+
+
+Blaise Boscaccy (6):
+  lsm: security: Add additional enum values for bpf integrity checks
+  security: Hornet LSM
+  hornet: Introduce gen_sig
+  hornet: Add a light skeleton data extractor scripts
+  selftests/hornet: Add a selftest for the Hornet LSM
+  ipe: Add BPF program load policy enforcement via Hornet integration
+
+James Bottomley (3):
+  crypto: pkcs7: add flag for validated trust on a signed info block
+  crypto: pkcs7: add ability to extract signed attributes by OID
+  crypto: pkcs7: add tests for pkcs7_get_authattr
+
+Paul Moore (1):
+  lsm: framework for BPF integrity verification
+
+ Documentation/admin-guide/LSM/Hornet.rst     | 321 +++++++++++++++
+ Documentation/admin-guide/LSM/index.rst      |   1 +
+ MAINTAINERS                                  |   9 +
+ certs/system_keyring.c                       |   1 +
+ crypto/asymmetric_keys/Makefile              |   4 +-
+ crypto/asymmetric_keys/pkcs7_aa.asn1         |  18 +
+ crypto/asymmetric_keys/pkcs7_key_type.c      |  44 ++-
+ crypto/asymmetric_keys/pkcs7_parser.c        |  81 ++++
+ crypto/asymmetric_keys/pkcs7_parser.h        |   1 +
+ crypto/asymmetric_keys/pkcs7_trust.c         |   1 +
+ include/crypto/pkcs7.h                       |   4 +
+ include/linux/lsm_hook_defs.h                |   5 +
+ include/linux/oid_registry.h                 |   3 +
+ include/linux/security.h                     |  28 ++
+ include/uapi/linux/lsm.h                     |   1 +
+ scripts/Makefile                             |   1 +
+ scripts/hornet/Makefile                      |   5 +
+ scripts/hornet/extract-insn.sh               |  27 ++
+ scripts/hornet/extract-map.sh                |  27 ++
+ scripts/hornet/extract-skel.sh               |  27 ++
+ scripts/hornet/gen_sig.c                     | 392 +++++++++++++++++++
+ scripts/hornet/write-sig.sh                  |  27 ++
+ security/Kconfig                             |   3 +-
+ security/Makefile                            |   1 +
+ security/hornet/Kconfig                      |  11 +
+ security/hornet/Makefile                     |   7 +
+ security/hornet/hornet.asn1                  |  13 +
+ security/hornet/hornet_lsm.c                 | 346 ++++++++++++++++
+ security/ipe/Kconfig                         |  14 +
+ security/ipe/audit.c                         |  15 +
+ security/ipe/eval.c                          |  73 +++-
+ security/ipe/eval.h                          |   5 +
+ security/ipe/hooks.c                         |  37 ++
+ security/ipe/hooks.h                         |  11 +
+ security/ipe/ipe.c                           |   3 +
+ security/ipe/policy.h                        |  14 +
+ security/ipe/policy_parser.c                 |  27 ++
+ security/security.c                          |  75 +++-
+ tools/testing/selftests/Makefile             |   1 +
+ tools/testing/selftests/hornet/Makefile      |  63 +++
+ tools/testing/selftests/hornet/loader.c      |  21 +
+ tools/testing/selftests/hornet/trivial.bpf.c |  33 ++
+ 42 files changed, 1794 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+ create mode 100644 crypto/asymmetric_keys/pkcs7_aa.asn1
+ create mode 100644 scripts/hornet/Makefile
+ create mode 100755 scripts/hornet/extract-insn.sh
+ create mode 100755 scripts/hornet/extract-map.sh
+ create mode 100755 scripts/hornet/extract-skel.sh
+ create mode 100644 scripts/hornet/gen_sig.c
+ create mode 100755 scripts/hornet/write-sig.sh
+ create mode 100644 security/hornet/Kconfig
+ create mode 100644 security/hornet/Makefile
+ create mode 100644 security/hornet/hornet.asn1
+ create mode 100644 security/hornet/hornet_lsm.c
+ create mode 100644 tools/testing/selftests/hornet/Makefile
+ create mode 100644 tools/testing/selftests/hornet/loader.c
+ create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+
+-- 
+2.53.0
+
