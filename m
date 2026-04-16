@@ -1,190 +1,199 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523E724336D
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 22:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BB3379993
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 22:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776378949; cv=none; b=DrkK4xca99d+YEZCE/JhYaJxa6CcNjnT7pFBEAkZ5MsVQBasjOjDpb3ZdYvx0Ik7QVOERiu+ye6SAtSk8PNMNAYBgjgvurCpFDDTdrT3vj2ihkdB2Gpi+fW+Y9Qw8x7lqCZGyvFDOXeDi/Blk9zX2oXESOOk4joj4fh25kntHAU=
+	t=1776379493; cv=none; b=ZLsm64VLq8Zs4HEtS163TfO31XSvun4JA+GBGv9LS84ve7YD+nYhC40Mna/RszLNRSzA/w8ZAqJq0jpLQ3/1OzldV7wqjtRkpGwStv2v9x1ulHaRnwq8Y7A28wah/WtmjCJG+d77e2zLghggC9aae7eryVR39amJ179COrgaBI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776378949; c=relaxed/simple;
-	bh=QWfrlipXQsOy06lz6vFBWissQz/4ZX9aVwggQjyoGYU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFlbXG/oVIbYM2vO1QnyM6A+l8o1/q5rDqAx0peWS6qOEWfNoWJ6VqSsXsztYO2CmShcsaOgJHEfgMtddf8uzhTN2UpBZ+2jerPVH3Z/UFw9s2SsgmM/drNKAWHbY/AYmo65JWJwhA1wBkX3ZeCGfVPx5sQ5WtO9XPsFFvQxbqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EMSqe8sS; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776379493; c=relaxed/simple;
+	bh=QnH1vIimESyZ2peW1iohZ3MwmBA4oBxKLRs7rK4wSqQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ggxgkqFzE3B4lND3H3/xoRJ9Rw0U+HQ/q18by+vTa0KfWPOOLqbf9y6RPP/OHxjU/mZ0Znk+1FdgLoK0bTypiBHvRU3hXvpPejSWb9jyVi/wGOJm+5DwBVMH4s9rGLJtCfE4z/UlLafkQI0rjtpn/kVZ+QCDZ+/jRoV4ISC1Xeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VeIywNGF; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EMSqe8sS"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so767435e9.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 15:35:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VeIywNGF"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f7bec24fdso47220b3a.2
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 15:44:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776378947; x=1776983747; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LQR71K9y6cyOEBCESH0pgQ7cpkLOqqoQKhR9kTbYgkg=;
-        b=EMSqe8sS/fCwSglUHKoycTUsUERTMzxPdUCdrTlBpX2ZNTWMwnGGRxCTQnr8N5T+PG
-         AIFq2ATqNubyRAanxIhGS8mHra8x6jy/aKQMq1YMh6C9UGv0kFz4tQHcS6dojTCr1vlt
-         b9sGvBDGl1Wspe1kEhFpyWTFa6IpoyRcIBIpfuE+HpT46s/9wvsih7OQeCOm6s9bna/e
-         JCu9xOJJUL+HqF7/KmQlU4Fun6rJkUQZRDfZTXGfCbNm4XcQHtnzkjxjVUyscBW75sA1
-         DMxrX+Cgk5H3fOEITxWsS03y6hVDNYblCI5sdgjMgEY+g3liJueAdznqLuSZEUMO/73T
-         +Lug==
+        d=google.com; s=20251104; t=1776379491; x=1776984291; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UqyYEqZgyMpoZKxskZj0QRqQl7ttahHyrPikYOVHCGs=;
+        b=VeIywNGFDT898urzHsB6Lhv0CzlE8C3vn6rrp3ax65KnTTLVOjOmQaJ+bco7wSJcEK
+         Uy2LteuxTCZUjkfGmcCfIm4Fo2uEZTOoWx5DyDzyt9YbtQhMuczlsGBBysKy9fqF8fpu
+         KecMu0Mc4aRkDSV5sL7F5BhQtELHwHFx5LOSL/h6sLPYcGPdO68JwgPnKMwqygpU5OsU
+         wYtHN1iyi0qbTfX9FV81jWlwUJHqQnESeK1b9u3YR1ZmbdLLxZZNcW/3Swyvej0rCDDe
+         9ZQDd3gYL35i9oiaMKBf1YXy9Vm18CoXnTB4wWFJQSeoqAdWfBeUctSDwor4lSHE2cal
+         jfBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776378947; x=1776983747;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LQR71K9y6cyOEBCESH0pgQ7cpkLOqqoQKhR9kTbYgkg=;
-        b=O/UQWwF/VghnPeEL3wX7prhrlvkeQa/+BCC0qlQwhrCMiCgnB0hz6vYepzf+ITvSc4
-         uVWZ5STGL7Bm4NDPMQa5MilonPL3DKnxrv6bhML+vu/J1bNPC67aDymsLoOMou+5opae
-         dz2WI3403xND7ORNeoNHcWJmVHsgR65oZqi3aE6TSQs4NpXWem22J4bs//XsnpP0WEW+
-         Qr6Mx8skDBxyEqauZ7DnK8Jal9z2CBTXITnZiMjK8ZInWGLRnoYRqlnuSOOkDvkcSHim
-         /yZGfqQlqZpJ9vTKLWaacKdy1CGU+WBznB6FFwMU3BwuVtjC1OvgF5CFCEYQ4TwvNkkf
-         ToVQ==
-X-Gm-Message-State: AOJu0YwalC5LT2GfCQrfJA7ewvQrS1mn7CPZB0HJaaZCiudMLFTAAlsi
-	v1lASVO8a3oH3Yk7L5bxoo5Y/q+5tSZ/mst8FQqwMt7iKF0hJEpHYO+i
-X-Gm-Gg: AeBDietPROGrtkYlKh8cuipXdUhig9ymb9YfB1ErrlzBDUT9hiwCjX+YxkWnvoAQmQB
-	rht9JHYBgT0SdNiOt1+Z6SXY2TmfHwhnfk/xPzTWwIEMLcvxxZpET8UFgELQctWut/XtgNuitgR
-	vwwWn0ig1tBqsACY5OGAXgAkJSSPGtc6KRwUv+irGuTD3dlYWojC3EvG4Znut6tmFrSS+qqCUxV
-	Jc3oPZIabkpVfR7LDNy9MvHoxh5/5pknJGU4sBvWdL1Om8U/rF3IxdOoQbVrrjF7gajPPMKAtEF
-	g+god/mJEPzvR448DZYxVGwGbR+yUeOavnw0RDG2LoblsX/KePPvJeQ6rPVC64Tc705aGW2gD/V
-	Z5CaWvR4LpLfbUDIZF5Jx3tpIs3xjallEcysL/nDVnrwawRssvswAv5tlkrbhmwdy7qtVWPDYrA
-	2VCYX2e06jAjMVMm+dyBqzTOtAPCMqz+TzrmG8+6MwY/aKGrwemzhCNiNbZb4FIkU6zgwZq4nD/
-	a4sdBTnqmIxHzjEspmc41C2IXwBu3qWnuI4lJYe1RtQ7zzwRvrrTQCLD/HeztvK9Tb3W0rgt2/6
-	vIpjkOpkdaZ/GhR+QC8UbfJGdXoBLwwADDFj+5/KWh2xvv4RzzexSw==
-X-Received: by 2002:a05:600c:a309:b0:488:dfbc:490c with SMTP id 5b1f17b1804b1-488fb765df6mr3363695e9.16.1776378946564;
-        Thu, 16 Apr 2026 15:35:46 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0092ca608f43e4326a.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:92ca:608f:43e4:326a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f581d836sm79610725e9.7.2026.04.16.15.35.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 15:35:45 -0700 (PDT)
-Date: Fri, 17 Apr 2026 00:35:44 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Yihan Ding <dingyihan@uniontech.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, shuah@kernel.org, alan.maguire@oracle.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: cover UTF-8 trace_printk output
-Message-ID: <aeFkQND58p4BHdWS@mail.gmail.com>
-References: <20260416120142.1420646-1-dingyihan@uniontech.com>
- <20260416120142.1420646-3-dingyihan@uniontech.com>
+        d=1e100.net; s=20251104; t=1776379491; x=1776984291;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UqyYEqZgyMpoZKxskZj0QRqQl7ttahHyrPikYOVHCGs=;
+        b=Kp2uInOW4DakQ+y/rxOmgth5lJchfv/KXyz+7LnyGUfkcKV5oqpkYZ7vZ9KD3mN/76
+         x8Lx1qBFOyp+9Abm2EFtYq/xajpbGjB4i1iAsWwOkQafQ/NFy93I2cSeOo2HpbUiK8dR
+         dXqzrCOvcCTgnr5y7eUXEW6/ChdN3nBb8Vcku6I5KOoZF1+RUVxbn6VM/f9bSiBbFXTH
+         ibJbd2tbLyMjf8fxSISak5RiOCH6l0KNgcEl4QXn4ZNY+T23eHMNYjgErpws9PEwa9AL
+         Js1rdx/U66tk6+oJ1AMDL5qBcLdxAGgYdtBqALiSyKJfLex3jpv1EHyctv/HKV52qmvb
+         FYZA==
+X-Forwarded-Encrypted: i=1; AFNElJ9G5KYr+gAYre/AHQ6Sgj0zz/8jHVSqvjS85Ro1yf++f75frbwP0Nipr+PrTlhw8/KLJOs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMCh0iCRfp7g7elNOB2ZqwdjtsWp1n7PcSvv9WyVd5yxtbwlGY
+	HmV8Qpz3Tj/i6Gk8RPlQ8diGeHsrjJUMu+ti7cYFJrMrKeWJXadCtcFy/Ta9yJIbJ+BZTNmHlMT
+	WMEm//g==
+X-Received: from pfbho13.prod.google.com ([2002:a05:6a00:880d:b0:7ba:8e68:3140])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:439b:b0:82f:8696:5a75
+ with SMTP id d2e1a72fcca58-82f8c8bb700mr145981b3a.28.1776379491191; Thu, 16
+ Apr 2026 15:44:51 -0700 (PDT)
+Date: Thu, 16 Apr 2026 15:44:49 -0700
+In-Reply-To: <20260414-vmscape-bhb-v10-8-efa924abae5f@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260416120142.1420646-3-dingyihan@uniontech.com>
+Mime-Version: 1.0
+References: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com> <20260414-vmscape-bhb-v10-8-efa924abae5f@linux.intel.com>
+Message-ID: <aeFmYd1ybZnVlAYW@google.com>
+Subject: Re: [PATCH v10 08/12] kvm: Define EXPORT_STATIC_CALL_FOR_KVM()
+From: Sean Christopherson <seanjc@google.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>, Nikolay Borisov <nik.borisov@suse.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Josh Poimboeuf <jpoimboe@kernel.org>, David Kaplan <david.kaplan@amd.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	David Laight <david.laight.linux@gmail.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, David Ahern <dsahern@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	Asit Mallick <asit.k.mallick@intel.com>, Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, Apr 16, 2026 at 08:01:42PM +0800, Yihan Ding wrote:
-> Extend trace_printk coverage to verify that UTF-8 literal text is
-> emitted successfully and that '%' parsing still rejects non-ASCII
-> bytes once format parsing starts.
+On Tue, Apr 14, 2026, Pawan Gupta wrote:
+> EXPORT_SYMBOL_FOR_KVM() exists to export symbols to KVM modules. Static
+> calls need the same treatment when the core kernel defines a static_call
+> that KVM needs access to (e.g. from a VM-exit path).
 > 
-> Use an explicitly invalid format string for the negative case so the
-> ASCII-only parser expectation is visible from the test code itself.
+> Define EXPORT_STATIC_CALL_FOR_KVM() as the static_call analogue of
+> EXPORT_SYMBOL_FOR_KVM(). The same three-way logic applies:
 > 
-> Signed-off-by: Yihan Ding <dingyihan@uniontech.com>
-
-The test makes sense and I verified it fails as expected without the
-fix.
-
-Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
-
+>   - KVM_SUB_MODULES defined: export to "kvm," plus all sub-modules
+>   - KVM=m, no sub-modules: export to "kvm" only
+>   - KVM built-in: no export needed (noop)
+> 
+> As with EXPORT_SYMBOL_FOR_KVM(), allow architectures to override the
+> definition (e.g. to suppress the export when kvm.ko itself will not be
+> built despite CONFIG_KVM=m). Add the x86 no-op override in
+> arch/x86/include/asm/kvm_types.h for that case.
+> 
+> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 > ---
->  .../selftests/bpf/prog_tests/trace_printk.c   | 28 +++++++++++++++----
->  .../selftests/bpf/progs/trace_printk.c        | 10 +++++++
->  2 files changed, 32 insertions(+), 6 deletions(-)
+>  arch/x86/include/asm/kvm_types.h |  1 +
+>  include/linux/kvm_types.h        | 13 ++++++++++++-
+>  2 files changed, 13 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-> index e56e88596d64..a5a8104c1ddd 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-> @@ -6,18 +6,21 @@
->  #include "trace_printk.lskel.h"
+> diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
+> index d7c704ed1be9..bceeaed2940e 100644
+> --- a/arch/x86/include/asm/kvm_types.h
+> +++ b/arch/x86/include/asm/kvm_types.h
+> @@ -15,6 +15,7 @@
+>   * at least one vendor module is enabled.
+>   */
+>  #define EXPORT_SYMBOL_FOR_KVM(symbol)
+> +#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
+>  #endif
 >  
->  #define SEARCHMSG	"testing,testing"
-> +#define SEARCHMSG_UTF8	"中文,测试"
->  
->  static void trace_pipe_cb(const char *str, void *data)
->  {
->  	if (strstr(str, SEARCHMSG) != NULL)
-> -		(*(int *)data)++;
-> +		((int *)data)[0]++;
-> +	if (strstr(str, SEARCHMSG_UTF8))
-> +		((int *)data)[1]++;
->  }
->  
->  void serial_test_trace_printk(void)
->  {
->  	struct trace_printk_lskel__bss *bss;
->  	struct trace_printk_lskel *skel;
-> -	int err = 0, found = 0;
-> +	int err = 0, found[2] = {};
->  
->  	skel = trace_printk_lskel__open();
->  	if (!ASSERT_OK_PTR(skel, "trace_printk__open"))
-> @@ -46,11 +49,24 @@ void serial_test_trace_printk(void)
->  	if (!ASSERT_GT(bss->trace_printk_ret, 0, "bss->trace_printk_ret"))
->  		goto cleanup;
->  
-> -	/* verify our search string is in the trace buffer */
-> -	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, &found, 1000),
-> -		 "read_trace_pipe_iter");
-> +	if (!ASSERT_GT(bss->trace_printk_utf8_ran, 0, "bss->trace_printk_utf8_ran"))
-> +		goto cleanup;
+>  #define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
+> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> index a568d8e6f4e8..c81f4fdba625 100644
+> --- a/include/linux/kvm_types.h
+> +++ b/include/linux/kvm_types.h
+> @@ -13,6 +13,8 @@
+>  	EXPORT_SYMBOL_FOR_MODULES(symbol, __stringify(KVM_SUB_MODULES))
+>  #define EXPORT_SYMBOL_FOR_KVM(symbol) \
+>  	EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
+> +#define EXPORT_STATIC_CALL_FOR_KVM(symbol) \
+> +	EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
+>  #else
+>  #define EXPORT_SYMBOL_FOR_KVM_INTERNAL(symbol)
+>  /*
+> @@ -27,7 +29,16 @@
+>  #define EXPORT_SYMBOL_FOR_KVM(symbol)
+>  #endif /* IS_MODULE(CONFIG_KVM) */
+>  #endif /* EXPORT_SYMBOL_FOR_KVM */
+> -#endif
 > +
-> +	if (!ASSERT_GT(bss->trace_printk_utf8_ret, 0, "bss->trace_printk_utf8_ret"))
-> +		goto cleanup;
+> +#ifndef EXPORT_STATIC_CALL_FOR_KVM
+> +#if IS_MODULE(CONFIG_KVM)
+> +#define EXPORT_STATIC_CALL_FOR_KVM(symbol) EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm")
+> +#else
+> +#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
+> +#endif /* IS_MODULE(CONFIG_KVM) */
+> +#endif /* EXPORT_STATIC_CALL_FOR_KVM */
 > +
-> +	if (!ASSERT_LT(bss->trace_printk_invalid_spec_ret, 0,
-> +		       "bss->trace_printk_invalid_spec_ret"))
-> +		goto cleanup;
-> +
-> +	/* verify our search strings are in the trace buffer */
-> +	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, found, 1000),
-> +		  "read_trace_pipe_iter");
-> +
-> +	if (!ASSERT_EQ(found[0], bss->trace_printk_ran, "found"))
-> +		goto cleanup;
->  
-> -	if (!ASSERT_EQ(found, bss->trace_printk_ran, "found"))
-> +	if (!ASSERT_EQ(found[1], bss->trace_printk_utf8_ran, "found_utf8"))
->  		goto cleanup;
->  
->  cleanup:
-> diff --git a/tools/testing/selftests/bpf/progs/trace_printk.c b/tools/testing/selftests/bpf/progs/trace_printk.c
-> index 6695478c2b25..f4c538ec3ebd 100644
-> --- a/tools/testing/selftests/bpf/progs/trace_printk.c
-> +++ b/tools/testing/selftests/bpf/progs/trace_printk.c
-> @@ -10,13 +10,23 @@ char _license[] SEC("license") = "GPL";
->  
->  int trace_printk_ret = 0;
->  int trace_printk_ran = 0;
-> +int trace_printk_invalid_spec_ret = 0;
-> +int trace_printk_utf8_ret = 0;
-> +int trace_printk_utf8_ran = 0;
->  
->  const char fmt[] = "Testing,testing %d\n";
-> +static const char utf8_fmt[] = "中文,测试 %d\n";
-> +/* Non-ASCII bytes after '%' must still be rejected. */
-> +static const char invalid_spec_fmt[] = "%\x80\n";
->  
->  SEC("fentry/" SYS_PREFIX "sys_nanosleep")
->  int sys_enter(void *ctx)
->  {
->  	trace_printk_ret = bpf_trace_printk(fmt, sizeof(fmt),
->  					    ++trace_printk_ran);
-> +	trace_printk_utf8_ret = bpf_trace_printk(utf8_fmt, sizeof(utf8_fmt),
-> +						 ++trace_printk_utf8_ran);
-> +	trace_printk_invalid_spec_ret = bpf_trace_printk(invalid_spec_fmt,
-> +							 sizeof(invalid_spec_fmt));
->  	return 0;
->  }
-> -- 
-> 2.20.1
-> 
+> +#endif /* KVM_SUB_MODULES */
+
+I think I'd prefer to require EXPORT_SYMBOL_FOR_KVM and EXPORT_STATIC_CALL_FOR_KVM
+to come as a pair from arch code.  I can't think of a scenario where arch code
+should override one but not the other.  The end result is slightly less ugly :-)
+
+---
+ arch/x86/include/asm/kvm_types.h |  1 +
+ include/linux/kvm_types.h        | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/kvm_types.h b/arch/x86/include/asm/kvm_types.h
+index d7c704ed1be9..bceeaed2940e 100644
+--- a/arch/x86/include/asm/kvm_types.h
++++ b/arch/x86/include/asm/kvm_types.h
+@@ -15,6 +15,7 @@
+  * at least one vendor module is enabled.
+  */
+ #define EXPORT_SYMBOL_FOR_KVM(symbol)
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
+ #endif
+ 
+ #define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE 40
+diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+index a568d8e6f4e8..be602d3f287e 100644
+--- a/include/linux/kvm_types.h
++++ b/include/linux/kvm_types.h
+@@ -13,6 +13,8 @@
+ 	EXPORT_SYMBOL_FOR_MODULES(symbol, __stringify(KVM_SUB_MODULES))
+ #define EXPORT_SYMBOL_FOR_KVM(symbol) \
+ 	EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol) \
++	EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm," __stringify(KVM_SUB_MODULES))
+ #else
+ #define EXPORT_SYMBOL_FOR_KVM_INTERNAL(symbol)
+ /*
+@@ -23,11 +25,17 @@
+ #ifndef EXPORT_SYMBOL_FOR_KVM
+ #if IS_MODULE(CONFIG_KVM)
+ #define EXPORT_SYMBOL_FOR_KVM(symbol) EXPORT_SYMBOL_FOR_MODULES(symbol, "kvm")
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol) EXPORT_STATIC_CALL_FOR_MODULES(symbol, "kvm")
+ #else
+ #define EXPORT_SYMBOL_FOR_KVM(symbol)
++#define EXPORT_STATIC_CALL_FOR_KVM(symbol)
+ #endif /* IS_MODULE(CONFIG_KVM) */
++#else
++#ifndef EXPORT_STATIC_CALL_FOR_KVM
++#error Must #define EXPORT_STATIC_CALL_FOR_KVM if #defining EXPORT_SYMBOL_FOR_KVM
++#endif
+ #endif /* EXPORT_SYMBOL_FOR_KVM */
+-#endif
++#endif /* KVM_SUB_MODULES */
+ 
+ #ifndef __ASSEMBLER__
+ 
+
+base-commit: 56b7ace84970ff647b095849e80bc36c094760aa
+--
