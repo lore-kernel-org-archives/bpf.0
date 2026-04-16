@@ -1,169 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6492E30BBB6
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 18:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F5093002B3
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776365646; cv=none; b=nHW3BwjtGAdlHLj7J7tzW8YgIEOrJ8h2cdH5m8j9eXYqURd7EwaVCX94GNjXfU8U3v0LYTTrV7bj1rAn5WThN02LINk5FJCj66yah7qL4OU9kpIf6jyea0XrW1ePA2xzpyu8ufjprlkOTAUdkSx+d5GKEZn8iEDdvtXi6E+YQSk=
+	t=1776366309; cv=none; b=qS/PqxSP91mxN8O5l0AkpFP3GC6tv3Ber/oH5qJFDerDf1hgvXW8IToSLfQSRUoz/VvUQKw1/T9559f6NKNpQ+9WkasdfKuXaDgmD9xnKhgyvGGyutJDS/QmOC/3fG/RQrOB7aHCeU7Q0En05u2xJpDr8UeV1zWUMQHsLK0oFpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776365646; c=relaxed/simple;
-	bh=SSiXkMrPi9Ht5KwQybWkDAxhxv5IkDhf1eRipj/UJjw=;
+	s=arc-20240116; t=1776366309; c=relaxed/simple;
+	bh=4HS41cJi6ZLUpGL6ig3IW6O406cwvxfsn3tbfPPuT/4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kpXFpu62yvbIkSQA1x8mIYk1RI/IJ9j4AFURL+K7SQiSp0fLkVUB2YsH4DOwAUlTCGFMW78xoWuAFiNXZB2Y8+SCekryRCMOlTvFjVSux7iRA61R1kxbFx21KvU6jMjPsSABFEauUc16/4s7poot0UQ8DclGVQMxa4mNvDxmoQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZF9N+6uj; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=dDiQih+TarMEfKTepXwjYTOVlfR8K9LOd3katzv2ERhmAeyXqccMjJJLRezqmY5xBYNOcz0iQtyCNunwFzH8wSebIz4JWtX5uGr4Ty0PLaQbvMDAhVuRKyYEOyu8Ftg3cqFUSyCeoZMxjsjoCVqKEInlFBhYxtR0QBaw1+LC/Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=drrFAzIu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZF9N+6uj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84FEC2BCAF;
-	Thu, 16 Apr 2026 18:54:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="drrFAzIu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F093C2BCAF;
+	Thu, 16 Apr 2026 19:05:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776365646;
-	bh=SSiXkMrPi9Ht5KwQybWkDAxhxv5IkDhf1eRipj/UJjw=;
+	s=k20201202; t=1776366308;
+	bh=4HS41cJi6ZLUpGL6ig3IW6O406cwvxfsn3tbfPPuT/4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ZF9N+6ujHVyDAMrA4u9D/mxMz+UCsC07qRuOPT0Kl01X9tIgUgn5XBfcd9xbwFTaR
-	 g0UG/n5eZnfKg9C4n1DMPXBa1NwKdJuya47sb8VNC/4OLxvU5t/hhfolM4rqagT7S6
-	 xy7ULEsvBQwyd3P3F3b8+K9/nBUoiI3PKLPU29Bi2ob/6rlzXARM71mNJxjxW218PU
-	 bKw0EUwtiqubPT7wdtey/pXRgGfGMOMe45YfA9ixtkGKWBJKDhoNbLBQGdh+x5aC4q
-	 zZ+cxy1oUQPne1wP6DTPCfK/nJQRCeuxmwss6DVWrcWhlH3ECWqQW/OsNM59Wz4Fqg
-	 bowYhoQXuqY9g==
+	b=drrFAzIuqaLUtYr5TQ3og1sZqMSd62qzQzLGIgCfXM3ks6He/a0J7ZTod/aoeFh8T
+	 V7I6hW5yV4qhYDez85fnxN/qM4HquDsXG9f4LwxBZCzj9IRqqUzErMzaGve9mm9RTb
+	 75x68NNX/V5ZK3fdYj6ZDdfxEZOjgkiu2p8b/UWRKYaOH/GzKIXZJcYprGgl5w2b6T
+	 ICQxguWPVgFqpoBXbmRVzDPD+9AqTaDeS0Vdw4i/9GRLVjonL1C1DCpsit7jJpKcH1
+	 CqkANTF2tFEojo61Toj0M0z9xqHV1kLhhaEr5FGdF/LjP587A75ec8yfD9iEq4GJ3B
+	 fJwjjWSjNJp1g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v7 4/7] net: bcmgenet: add XDP_TX support
+Subject: Re: [PATCH v2 bpf-next 1/8] bpf: Extend BTF UAPI vlen, kinds to use
+ unused bits
 Reply-To: sashiko@lists.linux.dev
-To: "Nicolai Buchwitz" <nb@tipi-net.de>
+To: "Alan Maguire" <alan.maguire@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416054743.1289191-5-nb@tipi-net.de>
-References: <20260416054743.1289191-5-nb@tipi-net.de>
+In-Reply-To: <20260416143904.1220662-2-alan.maguire@oracle.com>
+References: <20260416143904.1220662-2-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 18:54:05 +0000
-Message-Id: <20260416185405.E84FEC2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 19:05:07 +0000
+Message-Id: <20260416190508.8F093C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [Critical] Local XDP_TX mishandles XDP metadata, leading to buffer underf=
-low, metadata destruction, and incorrect DMA mappings.
-- [High] Unconditional access to `netdev_get_tx_queue(dev, ring->index)` du=
-ring XDP TX reclaim causes an out-of-bounds array access.
+Sashiko AI review found 1 potential issue(s):
+- [High] UAPI C preprocessor breakage: Converting `BTF_MAX_*` constants to =
+self-referential macros breaks existing `#if` evaluations in userspace.
 --
 
-commit bdb3ec6dd3fa70f6fc80f2e6b98851c833a05d8a
-Author: Nicolai Buchwitz <nb@tipi-net.de>
+commit ba6ded5102d9dc62d6101147f738a8a12d499303
+Author: Alan Maguire <alan.maguire@oracle.com>
 
-net: bcmgenet: add XDP_TX support
+bpf: Extend BTF UAPI vlen, kinds to use unused bits
 
-This commit adds local XDP_TX and ndo_xdp_xmit support to the bcmgenet
-driver. It dedicates ring 16 for XDP TX, prepends the required 64-byte
-Transmit Status Block (TSB) to the frames, and piggybacks TX completion
-reclamation onto the RX NAPI poll loop.
+This commit extends BTF maximum vlen from 16 to 24 bits and kinds from
+5 to 7 bits to support upcoming BTF location information. It converts the
+BTF_MAX_* macros to an enum so they are encoded in kernel BTF, leaving
+self-referential macros for backward compatibility.
 
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
-/ethernet/broadcom/genet/bcmgenet.c
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+Link: https://lore.kernel.org/bpf/CAEf4BzZx=3DX6vGqcA8SPU6D+v6k+TR=3DZewebX=
+MuXtpmML058piw@mail.gmail.com/
+
+> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+> --- a/include/uapi/linux/btf.h
+> +++ b/include/uapi/linux/btf.h
 [ ... ]
-> @@ -2043,6 +2069,9 @@ static void bcmgenet_tx_reclaim_all(struct net_devi=
-ce *dev)
->  	do {
->  		bcmgenet_tx_reclaim(dev, &priv->tx_rings[i++], true);
->  	} while (i <=3D priv->hw_params->tx_queues && netif_is_multiqueue(dev));
+> +enum btf_max {
+> +	/* Max possible kind */
+> +	BTF_MAX_KIND =3D		0x0000007f,
+> +	/* Max # of type identifier */
+> +	BTF_MAX_TYPE =3D		0x000fffff,
+> +	/* Max offset into the string section */
+> +	BTF_MAX_NAME_OFFSET =3D	0x00ffffff,
+> +	/* Max # of struct/union/enum members or func args */
+> +	BTF_MAX_VLEN =3D		0x00ffffff,
+> +};
 > +
-> +	/* Also reclaim XDP TX ring */
-> +	bcmgenet_tx_reclaim(dev, &priv->xdp_tx_ring, true);
->  }
+> +/*
+> + * Macros needed for backwards compatibility; enum above ensures values
+> + * make it into BTF.
+> + */
+> +#define BTF_MAX_TYPE		BTF_MAX_TYPE
+> +#define BTF_MAX_NAME_OFFSET	BTF_MAX_NAME_OFFSET
+> +#define BTF_MAX_VLEN		BTF_MAX_VLEN
 
-When bcmgenet_tx_reclaim() is called here with all =3D true, it executes
-this cleanup path:
+Will these self-referential macros break existing C preprocessor logic in
+userspace?
 
-	if (all) {
-		...
-		txq =3D netdev_get_tx_queue(ring->priv->dev, ring->index);
-		netif_tx_wake_queue(txq);
-	}
+While #ifdef BTF_MAX_VLEN will still evaluate to true, the preprocessor
+does not have visibility into enum values. When evaluating #if directives
+like #if BTF_MAX_VLEN =3D=3D 0xffff, the macro expands to the identifier
+BTF_MAX_VLEN, which is treated as an undefined symbol and evaluates to 0.
 
-Since xdp_tx_ring.index is DESC_INDEX (16), but dev->num_tx_queues is at
-most 5, does this cause an out-of-bounds array access when retrieving the
-netdev transmit queue?
+This means the check silently evaluates to false, which might break
+build-time feature detection for userspace programs depending on this heade=
+r.
 
-[ ... ]
-> @@ -2299,11 +2328,96 @@ static struct sk_buff *bcmgenet_xdp_build_skb(str=
-uct bcmgenet_rx_ring *ring,
->  	return skb;
->  }
-> =20
-> +static bool bcmgenet_xdp_xmit_frame(struct bcmgenet_priv *priv,
-> +				     struct xdp_frame *xdpf, bool dma_map)
-> +{
-[ ... ]
-> +	if (dma_map) {
-[ ... ]
-> +	} else {
-> +		struct page *page =3D virt_to_page(xdpf->data);
-> +
-> +		/* For local XDP_TX the caller already prepended the TSB
-> +		 * into xdpf->data/len, so dma_len =3D=3D xdpf->len.
-> +		 */
-> +		dma_len =3D xdpf->len;
-> +		mapping =3D page_pool_get_dma_addr(page) +
-> +			  sizeof(*xdpf) + xdpf->headroom;
-> +		dma_sync_single_for_device(kdev, mapping, dma_len,
-> +					   DMA_BIDIRECTIONAL);
-> +	}
-
-Does this correctly calculate the mapping offset?=20
-
-xdpf->headroom evaluates to the offset from data_hard_start to the start of
-the frame. The offset from the start of the page to data_hard_start
-(XDP_PACKET_HEADROOM, 256 bytes) appears to be omitted here, potentially
-causing the hardware to read from an uninitialized offset hundreds of bytes
-before the actual packet.=20
-
-Furthermore, if metadata is present, it looks like this maps data_meta
-instead of the TSB at data.
-
-[ ... ]
-> +	case XDP_TX:
-> +		/* Prepend a zeroed TSB (Transmit Status Block).  The GENET
-> +		 * MAC has TBUF_64B_EN set globally, so hardware expects every
-> +		 * TX buffer to begin with a 64-byte struct status_64.  Back
-> +		 * up xdp->data into the RSB area (which is no longer needed
-> +		 * after the BPF program ran) and zero it.
-> +		 */
-> +		if (xdp->data - xdp->data_hard_start <
-> +		    sizeof(struct status_64) + sizeof(struct xdp_frame)) {
-
-Does this correctly account for XDP metadata?=20
-
-If metadata is present, xdp->data_meta will be lower than xdp->data. By
-using xdp->data in this check instead of xdp->data_meta, could subtracting
-sizeof(struct status_64) push the metadata boundary below
-data_hard_start + sizeof(struct xdp_frame) and cause an out-of-bounds
-write when xdp_convert_buff_to_frame() is called?
-
-> +			page_pool_put_full_page(ring->page_pool, rx_page,
-> +						true);
-> +			return XDP_DROP;
-> +		}
-> +		xdp->data -=3D sizeof(struct status_64);
-> +		xdp->data_meta -=3D sizeof(struct status_64);
-> +		memset(xdp->data, 0, sizeof(struct status_64));
-
-Does this memset() overwrite the packet metadata?=20
-
-Since xdp->data was just decremented by 64 bytes, the memory region it
-clears appears to perfectly overlap with the space previously occupied by
-the BPF metadata.
-
-> +		xdpf =3D xdp_convert_buff_to_frame(xdp);
-> +		if (unlikely(!xdpf)) {
-> +			page_pool_put_full_page(ring->page_pool, rx_page,
-> +						true);
-> +			return XDP_DROP;
-> +		}
+Could these macros be defined to their exact integer literals after the enum
+block instead?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416054743.1289=
-191-1-nb@tipi-net.de?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416143904.1220=
+662-1-alan.maguire@oracle.com?part=3D1
