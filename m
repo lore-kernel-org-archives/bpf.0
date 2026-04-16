@@ -1,36 +1,35 @@
-Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.77.159])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C57134E75A;
-	Thu, 16 Apr 2026 12:04:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.77.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CF734E75A;
+	Thu, 16 Apr 2026 12:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776341069; cv=none; b=Qovn+DkWGvfZx5nqSp/MsNHFiC2BNPjWCu8ifEovo+OoO1fMlUmzgSI+56dF4pP1o+PmcEHZYx/rXnTOtMsXmJR24Fc+JZc7E8Iz6ODrSwlC0mhh0Z9cKfABYNCwS0nmGa9koSduUoTOFiMkDUFdCh/nw3Ez+OC/cM/DQYt8bBE=
+	t=1776341083; cv=none; b=svXCzXWqbp7suCe5MTRs3orUWb0jk29Kg8os7hTHji4AxwGm5gIptkKMrpXonRHFiSm9NmW9MoUfi75Cx184XdnSu4+lC090PuKcC2IcRsmPYQhF5KvkkiWgX5HgngyRu7iGwhH0oW9bQPHuCCx7Rvo3ecTplEcGCIl8wu8pBXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776341069; c=relaxed/simple;
-	bh=2RWoAJVntLClYbXMgY4e7S6tPe1KtrZ64VoBRPJAbkk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TEu++/g18huCYLIGdtlMAfdvlBouAmCzpjE8xwOmHeK16J/F1xTb0q4jpZiwLTp1m/cqVi8LPuaeSZnxk3voicGZ7cQ7Kfivg0RYuPWQ7KJr3WgEGDshcul2DsPqf9oTVDIg3J7d+V1BoR3PtQYgb4wphvtxMPVV7Yh/A2C1FMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=DKsAdI9u; arc=none smtp.client-ip=114.132.77.159
+	s=arc-20240116; t=1776341083; c=relaxed/simple;
+	bh=vZNQNpIw4H7SO1r5j8NSoLxVTOhROOOBFl1MGRPInRY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LnxiWosurg+eCKbEKXk8pryDG5VIAeRJ576PkBsAWPJs3srIR5ooLUzy4L5Ffa9X+PnIfbQXWxnKKenhXibq6rWZiNq484ySgVlLYFrpYWsr41sqICfTuOiEcZvF+Ub9aiZv8VhSZf17R2X4FO8C+z4/ATzkUtWyA57RQRTAua0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=AmK0Xfqn; arc=none smtp.client-ip=54.243.244.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="DKsAdI9u"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="AmK0Xfqn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1776340968;
-	bh=p+9hmRcBGjUD7hAYTrYwIVaa7QHqLTPJpo+ZwKhtW58=;
+	s=onoh2408; t=1776340959;
+	bh=mDM9a3qQvuS6VfQ/YyHNR+fXyCQC+/YdCMpedCf5Qk8=;
 	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=DKsAdI9ux2/04cT1ABwuvtFoAoy5BpHUlqYjp9JzoKNLwfk8sKMw6+lxiaiC+xD8m
-	 spLm5UVR+NGFSt3coecBUTHHrRRLOpYZj6PyweErd1hy27/dTNHHMYZaYVpFoUkUy3
-	 sYX1mRwXEguY4ItMOdQJ7AGsH1QPGb4Ai6UnaJqs=
-X-QQ-mid: zesmtpip3t1776340961t6cd7fa8a
-X-QQ-Originating-IP: sla+t2bIx/UvTPWfXH3ZZeAngiUnb3FrcVltf9bh598=
+	b=AmK0XfqneUtYOEOUt7T7+uXNtmkhzaXtHxCZQUxStsf/uXrzs05zrlm+Ty4n0iHd/
+	 v28WljjCxz0xsFOSMfwjABUBRsQadM0B5pGFrprWk8pJH/ikhsmUEIXxiV/j31kM1E
+	 HdXAQwGKQ6Fwqs6PuI2aXDNA7qIb05WCK2MFgFkw=
+X-QQ-mid: zesmtpip3t1776340954t67847af5
+X-QQ-Originating-IP: AeRIYq/GtQf3GJPLFbv9aWR3EIAGACME5UHwUvPa9r4=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 16 Apr 2026 20:02:40 +0800 (CST)
+	id ; Thu, 16 Apr 2026 20:01:44 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 17050199014614233316
+X-BIZMAIL-ID: 13703673177878313586
 EX-QQ-RecipientCnt: 9
 From: Yihan Ding <dingyihan@uniontech.com>
 To: bpf@vger.kernel.org
@@ -42,139 +41,80 @@ Cc: ast@kernel.org,
 	paul.chaignon@gmail.com,
 	linux-kernel@vger.kernel.org,
 	Yihan Ding <dingyihan@uniontech.com>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: cover UTF-8 trace_printk output
-Date: Thu, 16 Apr 2026 20:01:42 +0800
-Message-Id: <20260416120142.1420646-3-dingyihan@uniontech.com>
+Subject: [PATCH bpf v3 0/2] bpf: allow UTF-8 literals in bpf_bprintf_prepare()
+Date: Thu, 16 Apr 2026 20:01:40 +0800
+Message-Id: <20260416120142.1420646-1-dingyihan@uniontech.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20260416120142.1420646-1-dingyihan@uniontech.com>
-References: <20260416120142.1420646-1-dingyihan@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: OWhN4QRntHSG5GnzBclCdmoQKfNkWB3VHwfgNjrtsitstuxPFc0boGFh
-	HkUpZpCLsmr1Zwx26lLEN18XfZlhcWbPr2bjoJl1tWfx/u927JCCZgJCcle4EaNNU7JxLb2
-	y4q+WPNoBzAmoPlopNm3WK3wTLoybx1lodKICeH6kt6NqamPkzz1YS5w+0VcgY0rJaoWAiJ
-	dJL9FXLjs/pYsq53ZSimcu+Yht0CT3fTbtw4XffR2SRhzqBDFC5uu10C8MbFk4X3CieL9GL
-	C3SJqrA2Hb5+ZInhW/oT3rNlvOttays9QkWaWQieQO+1FdnfglBaKhXg3Sx/gxQ6e/NsfpN
-	3NgetSorN0txzUauEUcG5Hxt883ZUvAySCwdXx5vlWn4fMMgN7KAlZiGe2X9s+IF65mrNfx
-	2naMw4ZPY5T/R1kYE4f+/m1D/k0HpER+b5pK4+oSVGz8IFEFo99bBA+hW3efwpSqkce4bQD
-	WpJBg1txyCsR6MAlET+EZq6NSI8iT0zOSZz+V+PyABDCF+2CoLUaFr98S6x+el1n9G1szjh
-	mquqfp5il4Oih5jn3W8YbCrjsW++HFx7Hf/5r5n9Zpfw5DWaBup7LXC3/P6jyKv3j29pMkb
-	jwJicaI8q1q0hO0pPjvnc31vT7Mj/IUPXsO9SY6ZQWqHMItIH0p3kgzzU3MlpYJTv7rxlCp
-	A/JvaFtNRG09WPkED9n4ynqdDzlPg5IUrgJV+bCLa6EXVMRVikOE+qaTlglrsq0SCYEysU9
-	tVUv6lc5Pg4iejiGhCLV0KlZW1sodlV8JzsroMD4/IsMT5HT5U6FqJSYphGybR+8lM/KPkb
-	w5BYok+QQQuA7/hsvQ5swwfpQwCFJUMuc7mhuAYH2FIID1wYYplRaqryry6dpqZQ9JIGpLI
-	KcOoE2+byWQVhwJjT0V1rmikjLi2Y8nWx4vT8JaCTU4CK+HBm+svzWW6n9NgQ9H2fcGSvXH
-	rxaVrFFDoGtG3kUC8Y5Kfv/YJ6oygJEB0tRSbTPJOX6jhNR32ZiENerdbiV4csbaRaAYeWI
-	ebqmtcjyYjp29Wh/K1iwAYupWW7+PnYtufnA8swQ==
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+X-QQ-XMAILINFO: N4i6onhdodx6eptcjDkzw0pwtYj7m7cjpBsL80tcw0FQyFWXaRgxeXdC
+	UaBSJ38XeXFgCyO6Wh5/EpD6ELpD/dqiXuaPf88d5F64lj2vowAmg87KKjGtMPCRYP+30v/
+	G7UmAOznm1EtEYmRQUIU6nrMy3+4JNiZuyElCkA/pvFK8+6GswADrlkCYTy/XVrwXYTiF+o
+	b15QIDnGV/UzcHMQYZp61idgoLGsdDPV6fjdp00FgkoyK6LtmVOWLY+A5CkjRapqbTwVG4g
+	jF+VSxyz2b9SWxm2diGslZ9aiUPFmILgzyCmTGjfLjpjA3NNO5NE5jzorm8gBnHYKw5AI6h
+	OOk3M7VNAgIEP24Nuf5TXNVfoD5phLI0rO/pBN7vV27U1pCzitioJCRWjX1DnUFSObSzItA
+	SweNcuJ9piINaBZl3Jyr8Ii1KNfMubBpnBFA8tqy4pfYS7n5/G3SvYupWJyQ+MPQstI5diL
+	AxkSrYWPfc9u0NlhQllGRbhR9rocbRIpgVMXShyBhNWu1Wpe1qqWQp/90E0i7mv7VIGolmv
+	Mo1K6vw8hsbG7uh+IjjjQHDDsxKkssfEQK19l07JBFPhzZY8dolpVwYEwY64LKl+NHir4ul
+	eXAfql4O17ATCaxt2JzFguuS8zv9oH9ZN5sTS5A0O8cotGJaidJVo6aXvlIh1REugrLSQ5a
+	JFdZa1sCXHjicNpa8+tGsNvWZypLb0Wg6bx4HLubUY5jE9bSF9Js9gVxIRPh7WuESb70OKG
+	sXEs8hw6pYrhtOhAMTK04cc6Dp8tzAVtYSvaYKHeK03guflcihbTFkmxN8GtDxesdoo/Owe
+	YeGoL5aBG2kWKqBpYeSGVnRuOLZ6XTyJs58lCFNtf55Q7HBw7jv1qMMkFkI/3t2Me07eTUR
+	cTdW65t8MDLBJQ7AII1QGBkIlWIOXz9ixat1xTc5tWAJ38Z4Vk3HFt1ywvOmW7qel8WSokt
+	4mwDCsvwJo8qoR3kfRKY5Kry/RpBSk2qcufjCoteTdiKkorf0UhnSmcwzifTf1CgIkAtrLp
+	xm8r6qotcQBqgED3VM
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
 X-QQ-RECHKSPAM: 0
 
-Extend trace_printk coverage to verify that UTF-8 literal text is
-emitted successfully and that '%' parsing still rejects non-ASCII
-bytes once format parsing starts.
+bpf_bprintf_prepare() currently rejects any non-ASCII byte in format
+strings, so helpers such as bpf_trace_printk() fail to emit UTF-8
+literal text even when those bytes are not part of a format specifier.
 
-Use an explicitly invalid format string for the negative case so the
-ASCII-only parser expectation is visible from the test code itself.
+Keep plain text permissive while continuing to parse '%' sequences as
+ASCII-only. Patch 1 updates snprintf_negative() at the same time so the
+selftests stay consistent during bisection. Patch 2 then extends
+trace_printk coverage for both the valid UTF-8 literal case and the
+invalid non-ASCII-after-'%' case.
 
-Signed-off-by: Yihan Ding <dingyihan@uniontech.com>
----
+Changes in v3:
+- drop Suggested-by trailers and move review credit into this changelog
+- update test_snprintf_negative() in patch 1/2 so plain non-ASCII text is
+  accepted while non-ASCII after '%' is still rejected, keeping
+  ./test_progs -t snprintf aligned with the new behavior.
+- clarify the trace_printk negative case with an explicit invalid format
+  string and comment
+- address Paul Chaignon's review feedback and keep the negative coverage
+  requested earlier by Alan Maguire
+
+Changes in v2:
+- split the core change and selftest updates into two patches
+- drop unnecessary isspace()/ispunct() casts
+- add comments to clarify plain-text vs format-specifier handling
+- add a negative selftest for non-ASCII bytes inside '%' sequences
+
+Testing:
+- Reproduced on x86_64 without the core fix: ASCII trace output works,
+  while UTF-8 literal text in bpf_trace_printk() is rejected and
+  produces no trace output
+- Verified with tools/testing/selftests/bpf: ./test_progs -t trace_printk
+- Verified with tools/testing/selftests/bpf: ./test_progs -t snprintf
+
+Yihan Ding (2):
+  bpf: allow UTF-8 literals in bpf_bprintf_prepare()
+  selftests/bpf: cover UTF-8 trace_printk output
+
+ kernel/bpf/helpers.c                          | 17 ++++++++++-
+ .../selftests/bpf/prog_tests/snprintf.c       |  3 +-
  .../selftests/bpf/prog_tests/trace_printk.c   | 28 +++++++++++++++----
  .../selftests/bpf/progs/trace_printk.c        | 10 +++++++
- 2 files changed, 32 insertions(+), 6 deletions(-)
+ 4 files changed, 50 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-index e56e88596d64..a5a8104c1ddd 100644
---- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
-@@ -6,18 +6,21 @@
- #include "trace_printk.lskel.h"
- 
- #define SEARCHMSG	"testing,testing"
-+#define SEARCHMSG_UTF8	"中文,测试"
- 
- static void trace_pipe_cb(const char *str, void *data)
- {
- 	if (strstr(str, SEARCHMSG) != NULL)
--		(*(int *)data)++;
-+		((int *)data)[0]++;
-+	if (strstr(str, SEARCHMSG_UTF8))
-+		((int *)data)[1]++;
- }
- 
- void serial_test_trace_printk(void)
- {
- 	struct trace_printk_lskel__bss *bss;
- 	struct trace_printk_lskel *skel;
--	int err = 0, found = 0;
-+	int err = 0, found[2] = {};
- 
- 	skel = trace_printk_lskel__open();
- 	if (!ASSERT_OK_PTR(skel, "trace_printk__open"))
-@@ -46,11 +49,24 @@ void serial_test_trace_printk(void)
- 	if (!ASSERT_GT(bss->trace_printk_ret, 0, "bss->trace_printk_ret"))
- 		goto cleanup;
- 
--	/* verify our search string is in the trace buffer */
--	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, &found, 1000),
--		 "read_trace_pipe_iter");
-+	if (!ASSERT_GT(bss->trace_printk_utf8_ran, 0, "bss->trace_printk_utf8_ran"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GT(bss->trace_printk_utf8_ret, 0, "bss->trace_printk_utf8_ret"))
-+		goto cleanup;
-+
-+	if (!ASSERT_LT(bss->trace_printk_invalid_spec_ret, 0,
-+		       "bss->trace_printk_invalid_spec_ret"))
-+		goto cleanup;
-+
-+	/* verify our search strings are in the trace buffer */
-+	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, found, 1000),
-+		  "read_trace_pipe_iter");
-+
-+	if (!ASSERT_EQ(found[0], bss->trace_printk_ran, "found"))
-+		goto cleanup;
- 
--	if (!ASSERT_EQ(found, bss->trace_printk_ran, "found"))
-+	if (!ASSERT_EQ(found[1], bss->trace_printk_utf8_ran, "found_utf8"))
- 		goto cleanup;
- 
- cleanup:
-diff --git a/tools/testing/selftests/bpf/progs/trace_printk.c b/tools/testing/selftests/bpf/progs/trace_printk.c
-index 6695478c2b25..f4c538ec3ebd 100644
---- a/tools/testing/selftests/bpf/progs/trace_printk.c
-+++ b/tools/testing/selftests/bpf/progs/trace_printk.c
-@@ -10,13 +10,23 @@ char _license[] SEC("license") = "GPL";
- 
- int trace_printk_ret = 0;
- int trace_printk_ran = 0;
-+int trace_printk_invalid_spec_ret = 0;
-+int trace_printk_utf8_ret = 0;
-+int trace_printk_utf8_ran = 0;
- 
- const char fmt[] = "Testing,testing %d\n";
-+static const char utf8_fmt[] = "中文,测试 %d\n";
-+/* Non-ASCII bytes after '%' must still be rejected. */
-+static const char invalid_spec_fmt[] = "%\x80\n";
- 
- SEC("fentry/" SYS_PREFIX "sys_nanosleep")
- int sys_enter(void *ctx)
- {
- 	trace_printk_ret = bpf_trace_printk(fmt, sizeof(fmt),
- 					    ++trace_printk_ran);
-+	trace_printk_utf8_ret = bpf_trace_printk(utf8_fmt, sizeof(utf8_fmt),
-+						 ++trace_printk_utf8_ran);
-+	trace_printk_invalid_spec_ret = bpf_trace_printk(invalid_spec_fmt,
-+							 sizeof(invalid_spec_fmt));
- 	return 0;
- }
 -- 
 2.20.1
-
