@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EF633688C
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776013EDAC3
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 19:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776369356; cv=none; b=bpX8bJtxlpWLWouVadH6NA8jhvRzykM1E9V1+YzA8zmEgRiLX5YIkbbrJu9qtvBTFo+PEdGxDKry0qB+heFVSQYbP4xOYMD9wmhk8KhQelVtpQXMMwxCZTSsVtQF6Yeon++Gl84fvIoWYC8GddxL1Y0W4qjoTxTAKVPVp8D5IPk=
+	t=1776369382; cv=none; b=K08TQBPyP7gpiddpWbTtUjr6vQFd/rzkI14LXPxteAvpkRR9D+yt9viOOB3M9HwOkBS8mySl0y6EbV3BdvwhMJAx/euX+ygGXpMWltyhSVjohf5MVwL1UwNEy0W0u3bOMY8XjXMgMg2G5/mZGiEIpvkwmyawOiWF1/LN4MRrWHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776369356; c=relaxed/simple;
-	bh=spZAlu2aB0NDR9D7cJgSQ80nNP7vdRYL1t6d5PtW580=;
+	s=arc-20240116; t=1776369382; c=relaxed/simple;
+	bh=O/sbFjUtgqcHVkPobj0IRkhSqE6sGf3c8ikZSu5v0Is=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JI3FMzVLonjcX4TXS3zwU249LfrLj7wgOx7PIJbkJycPKOLmLKIxLMIyPX1FrgM6OWOzPJzgxXJ3IVTOoUFhzynxNUwtGmCvpGAOfD/MOl/WnySN7DLJ+mcA+nXfvA7i1q2CzLNqnNORacAE3ye1p4CjOnfkEWWw9hUwX4iKcKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAVZNh6j; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=RaOD6qmGshT98yoin+BIStsbjgpn6UssX84VKTyqEHUrrytwW6a5B/58Jo2qGwnzKkag88ikL1zc22+Vn6d84enplAtHmf82Z4hSJaSVia2yMF5VcyrdJycDeMhTxrzQvjWycsMWcEmfDxC0QhsSJGaZrQTp1ssURXzM0dseoSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fXJ3gY5P; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gAVZNh6j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FFD1C2BCAF;
-	Thu, 16 Apr 2026 19:55:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fXJ3gY5P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E76C2BCAF;
+	Thu, 16 Apr 2026 19:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776369355;
-	bh=spZAlu2aB0NDR9D7cJgSQ80nNP7vdRYL1t6d5PtW580=;
+	s=k20201202; t=1776369381;
+	bh=O/sbFjUtgqcHVkPobj0IRkhSqE6sGf3c8ikZSu5v0Is=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=gAVZNh6j3Tch4LDYty2GHdTOJ1HYvdRi+yTCfn7AH6YQnqVJlHo4/xR7q69xAtWzN
-	 7oHYFekKaW2E+z+Vwedk6shmOWhoihI8ywqzGqivkact0NtldHhsffnGQfl46a7RUq
-	 baDhrty+hFHzokMRuymcjM/ltVhh4QMYxoHUERihycD82z1EUexq/TpTZvY707wbl3
-	 wU+icM8iumz68dIf3Vq0jxFqN0/MHkKTRLVVSktsZTOmB6YmhM1N6aeYJT+PyXqxDS
-	 DlglpLXryObLRM+b1ypZsEOz7y7rkcu7+9m/qYelN8IqYB9qjhFLrufaXP2kY7U85d
-	 +H9M918hbwoLQ==
+	b=fXJ3gY5Pvgnn7dHEz79B4Miewb0xHiYOVUIahrxMTngq4pjQpOn4QFt55G0A1OTGL
+	 B+9qB9t2YTA2A2Rf7BcVSycqU8EuMZ2khUz/ptYaqUo8sw/N0I8xF56AIqZJm9bwYb
+	 K24wWQMUsQtM7H/qSrkBMfHmvgwLW5n4N5e39iDWIq1vgNHkDtAvX3BbPhmhFmcgmd
+	 4T78IY3lAJueZxPZF4jmMsGL2D3nRF9VE0MwR0dJ2bh9+/l4+PSbDRCnrQjvXGVjpn
+	 yg4KxoenOLUU18vn6tWezO2XcV7jQN8l/g5bARpJUSrlHgg5IyLEp39greaf7zsP9Z
+	 EsG2WXAUAADpQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 06/11] selftests/bpf: Tolerate test file
- compilation failures
+Subject: Re: [PATCH v4 02/10] crypto: pkcs7: add ability to extract signed
+ attributes by OID
 Reply-To: sashiko@lists.linux.dev
-To: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416-selftests-bpf_misconfig-v7-6-a078e18012e4@suse.com>
-References: <20260416-selftests-bpf_misconfig-v7-6-a078e18012e4@suse.com>
+In-Reply-To: <20260416173500.176716-3-bboscaccy@linux.microsoft.com>
+References: <20260416173500.176716-3-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 19:55:54 +0000
-Message-Id: <20260416195555.7FFD1C2BCAF@smtp.kernel.org>
+Date: Thu, 16 Apr 2026 19:56:20 +0000
+Message-Id: <20260416195621.44E76C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,76 +45,117 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 2 potential issue(s):
-- [High] Tolerating test compilation failures breaks the build at the linke=
-r step.
-- [High] Omitting test objects causes the test suite runner to abort at sta=
-rtup.
+- [High] Premature termination of signer iteration loop on missing or malfo=
+rmed attributes.
+- [Medium] Multi-valued attributes and repeated OIDs silently overwrite eac=
+h other, returning the last match.
 --
 
-commit 3b7eac5b82169326acf885f820b425d42e131d71
-Author: Ricardo B. Marli=C3=A8re <rbm@suse.com>
+commit ee97b7abf11653ef22c6a659603d361105f1df57
+Author: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-selftests/bpf: Tolerate test file compilation failures
+crypto: pkcs7: add ability to extract signed attributes by OID
 
-This commit modifies the selftests build system to make per-test compilation
-failures non-fatal when permitted. It removes the output object on failure
-and skips the post-processing step for missing objects.
+Signers may add any information they like in signed attributes and sometimes
+this information turns out to be relevant to specific signing cases. This a=
+dds
+an api pkcs7_get_authattr() to extract the value of an authenticated attrib=
+ute
+by specific OID.
 
-> Make the per-test compilation non-fatal: remove the output object on
-> failure and print a SKIP-TEST marker to stderr. Guard the BTFIDS
-> post-processing step so it is skipped when the object file is absent. The
-> linker step will later ignore absent objects, allowing the remaining tests
-> to build and run.
+> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_ke=
+ys/pkcs7_parser.c
+> index 6e3ffdac83ace..d467866f7d930 100644
+> --- a/crypto/asymmetric_keys/pkcs7_parser.c
+> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
+[ ... ]
+> +int pkcs7_aa_note_attr(void *context, size_t hdrlen,
+> +		       unsigned char tag,
+> +		       const void *value, size_t vlen)
+> +{
+> +	struct pkcs7_aa_context *ctx =3D context;
+> +
+> +	if (ctx->found) {
+> +		ctx->data =3D value;
+> +		ctx->len =3D vlen;
+> +	}
+> +
+> +	return 0;
+> +}
 
-Is this description accurate regarding the linker step?
+Does this callback return the last matching value instead of the first?
 
-During linking, the Makefile rules pass the literal list of prerequisites to
-the compiler. When a compilation fails and the object file is deleted, that
-missing file is still passed to the linker.
+If an attribute contains multiple values (as allowed by the SET OF ANY sche=
+ma),
+or if there are multiple attributes with the same OID, this callback will be
+invoked repeatedly, unconditionally overwriting ctx->data.
 
-This causes a fatal "No such file or directory" error that halts the build.
-
-I notice this is addressed later in the series by the patch "selftests/bpf:
-Allow test_progs to link with a partial object set", but it causes a build
-regression in this specific commit.
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index b3eaa4a93707c..5ad50d3ff2f8c 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -708,11 +708,14 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:		=
-	\
->  		      $(TRUNNER_TESTS_DIR)/%.c				\
->  		      | $(TRUNNER_OUTPUT)/%.test.d
->  	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
-> -	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$=
-(LDLIBS) -o $$(@F)
-> +	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$=
-(LDLIBS) -o $$(@F) $(if $(PERMISSIVE),|| \
-> +		($(RM) $$(@F); printf '  %-12s %s\n' 'SKIP-TEST' '$$(notdir $$@)' 1>&2=
-))
-
-How does the test suite handle the missing objects at runtime?
-
-The test framework generates the test header by scanning the source files
-directly, so a test definition is emitted even if its object file was
-skipped.
-
-Because the compiled object is missing, the weak function pointers for that
-test resolve to a null pointer during linking. When the test runner validat=
-es
-these pointers at startup, it prints an error and aborts the entire test
-framework setup.
-
-This prevents the remaining tests from running.
-
-I see this is resolved later in the series by the patch "selftests/bpf: Skip
-tests whose objects were not built", but it introduces a runtime regression
-here.
+This seems to result in the last parsed value being returned, which contrad=
+icts
+the kernel-doc stating it will return the first one in parse order.
 
 [ ... ]
+> +/**
+> + * pkcs7_get_authattr - get authenticated attribute by OID
+> + * @pkcs7: The preparsed PKCS#7 message
+> + * @oid: the enum value of the OID to find
+> + * @_data: Place to return a pointer to the attribute value
+> + * @_len: length of the attribute value
+> + *
+> + * Searches the authenticated attributes until one is found with a
+> + * matching OID.  Note that because the attributes are per signer
+> + * there could be multiple signers with different values, but this
+> + * routine will simply return the first one in parse order.
+> + *
+> + * Returns -ENODATA if the attribute can't be found
+> + */
+> +int pkcs7_get_authattr(const struct pkcs7_message *pkcs7,
+> +		       enum OID oid,
+> +		       const void **_data, size_t *_len)
+> +{
+> +	struct pkcs7_signed_info *sinfo =3D pkcs7->signed_infos;
+> +	struct pkcs7_aa_context ctx;
+> +
+> +	ctx.data =3D NULL;
+> +	ctx.oid_to_find =3D oid;
+> +
+> +	for (; sinfo; sinfo =3D sinfo->next) {
+> +		int ret;
+> +
+> +		/* only extract OIDs from validated signers */
+> +		if (!sinfo->verified)
+> +			continue;
+> +
+> +		ret =3D asn1_ber_decoder(&pkcs7_aa_decoder, &ctx,
+> +				       sinfo->authattrs, sinfo->authattrs_len);
+> +		if (ret < 0 || ctx.data !=3D NULL)
+> +			break;
+
+Can this loop terminate prematurely if a signer has missing or malformed
+attributes?
+
+If a verified signer lacks authenticated attributes (sinfo->authattrs =3D=
+=3D NULL),
+asn1_ber_decoder() might return a negative error code. Because the condition
+breaks on ret < 0, this will immediately abort the search across all remain=
+ing
+signers instead of skipping the current one.
+
+This could cause operations like Hornet LSM BPF program verification to fai=
+l if
+a valid signature is shadowed by an earlier one lacking attributes.
+
+> +	}
+> +
+> +	if (!ctx.data)
+> +		return -ENODATA;
+> +
+> +	*_data =3D ctx.data;
+> +	*_len =3D ctx.len;
+> +
+> +	return 0;
+> +}
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416-selftests-=
-bpf_misconfig-v7-0-a078e18012e4@suse.com?part=3D6
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416173500.1767=
+16-1-bboscaccy@linux.microsoft.com?part=3D2
