@@ -1,219 +1,224 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512E73BA248
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9052831E82A
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776350370; cv=none; b=ayTTqHQR45aI5dnEQU5HhQGsdiP+5yIPVtQzrmaToMHBtBxIUi5VD/2OA3hSPXphqAvHHFCHuyZenaZ0eU6SMYS8ipeCq5flR7rOOYkk9CyXmfTpE01U2mSuCgLB2qd1P9hJc27yavxlKvcv9yAc6R+Z06rfmKddhhnr1JUt4s0=
+	t=1776350400; cv=none; b=KYCbMl+ZSaAuRmD1pfZMOsg6T0wras4IIzNfF+oMrJjH3VwmafPjkwWD4Kee5AuTOEZUAdOQkHSzg9dm4bnXj+ilTrkSiHj4lo3vPEHmLSgvY0sBmXExlJEez7+WzFAx7qZ9t4xU6eTa8YrRvPYtgZwyX7DpVO3BTDf5xqVz6aA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776350370; c=relaxed/simple;
-	bh=0n3TgSeJpuxnKqt4AwYtkRLrUV2c3rn39UVb/oC8Cl8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E/yCabHR7x7ncESKNJTXzYNH6z3IP+aIyyQSwAsjnK6zdgbHXXO+MJjEdhC5C9mJy+tEOB6aEvN2cl3IikN0R3wAC0KOmS6katzLZeYpgMoB9TY3oGPHJRVOLHLLsSdI2VZtyGblbO5FRJNbs3Q7XhiNINHRo6YjfWvS8uZ9YbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QkZ55DIK; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776350400; c=relaxed/simple;
+	bh=eGDr6P5GctIBCvB1z0AHYvwijEEDuEcwrCAFDkNggUg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=adhNg2BF5/o7j2tdj6TYoxxSQPwDsMdVSkCY9aylmtuf0N284XZg8V/G0qSIxGElqzSsM6wRyso99LbOY+L0Sn/g2sSxyUGHZgOrLGmvrtNfA0umw+85C4y5lCfowT0AOzkJZ200PmnCE4zMNd9lcdbU+gO8ZVkD3McBkAv7TDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=U74gU3R2; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QkZ55DIK"
-Message-ID: <b144edf8-ad46-4382-8563-4fd90ac5b2c3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776350366;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wgCGnxAM0ScScvqyD1+YA0QNPU2ULs2COW80gUR6oaE=;
-	b=QkZ55DIKqU2sdLMx2eqMSDl6M3UW5WMxejbAVe3pKWJV5Kx2uoMRyKE9/liAXcEO70adQt
-	i2p2iVmnmihgLK+E9Jt0p7PT9fnRvswWLHHx6Zq2B789XzWS3i7EUxZtKq5AykH7habdbE
-	4QPpQtdBY1VNs1nkWKgwf2MrrwMIjqQ=
-Date: Thu, 16 Apr 2026 07:39:19 -0700
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="U74gU3R2"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63G6lZ3B2136522;
+	Thu, 16 Apr 2026 14:39:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=BS2U+
+	t7bdIJqUrlg/RpVjklvWn+G4KCrFkMO8OG//AU=; b=U74gU3R2lYLm9cRpE//Zv
+	lTWgPsWTEk6FFFeWlURI6At5xFFzwVSFmNJCkZQRm0H1HytfDKW54ttzPlmU1UQR
+	UvGtQmVqCt4UjYlFnkIn/QndhofZ9xOUm0PpEt905fUs7LlONSdkCqoRS7H71op2
+	QMPJSNH0pPnSxYQiYzncRgwhi1CDGHy2NPMZf7szgPTOQuWjYOIt61FlRqP28tLh
+	iTfXsb16OcdJ6Sot6t6FhVoneSarY9pSvveVJKy4xrM9TQfHydFYRxJqyEVzKiv/
+	AZkljeDzm86wFuX3Sf21d0aPIhy7qhnTDGsrCMS+SEZAgVVXvUjBbDY9khOAuYLm
+	w==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dh8687rn2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 16 Apr 2026 14:39:41 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63GEdSJI017914;
+	Thu, 16 Apr 2026 14:39:41 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dh7nqkmjj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 16 Apr 2026 14:39:41 +0000 (GMT)
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 63GEdXaZ018534;
+	Thu, 16 Apr 2026 14:39:40 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-52-74.vpn.oracle.com [10.154.52.74])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4dh7nqkm1k-4;
+	Thu, 16 Apr 2026 14:39:40 +0000 (GMT)
+From: Alan Maguire <alan.maguire@oracle.com>
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+        yonghong.song@linux.dev, jolsa@kernel.org, qmo@kernel.org,
+        mykyta.yatsenko5@gmail.com, bpf@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 3/8] libbpf: Add feature for kernel extended vlen/kind support
+Date: Thu, 16 Apr 2026 15:38:59 +0100
+Message-ID: <20260416143904.1220662-4-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260416143904.1220662-1-alan.maguire@oracle.com>
+References: <20260416143904.1220662-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 06/18] bpf: Use argument index instead of
- register index in kfunc verifier logs
-Content-Language: en-GB
-To: Amery Hung <ameryhung@meta.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>,
- Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
-References: <20260412045826.254200-1-yonghong.song@linux.dev>
- <20260412045857.256260-1-yonghong.song@linux.dev>
- <CAADnVQ+0JgQDosS5=+h=mUJM_Dn=bK-XBpiq1LfamUHTSTOEZA@mail.gmail.com>
- <CAP17u3PdGDRfE09g7rDqTaMZG_Q_Py1zVb3xKaVQUccUMVN5zw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAP17u3PdGDRfE09g7rDqTaMZG_Q_Py1zVb3xKaVQUccUMVN5zw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-16_03,2026-04-16_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
+ malwarescore=0 suspectscore=0 mlxscore=0 adultscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2604070000
+ definitions=main-2604160141
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDE0MCBTYWx0ZWRfX5ET8D6gtL//c
+ kEDHnhroqKouLy/w0RfZxJyGx7rb9X509jjzUm98yPBwd4y8lmgX1dYu5VnamYc79R8zZgECGPn
+ uIDBCQpQ26ImVV5rfdUC1Fpg9zv21L+cHqs9k7TXHOcHIw249Y4NHTXxNVdqs8IN5yf+fDR3Q4E
+ 6gxcidG/iU+xg/1NKONsRB56AXSSeGu1jdOwGEw42wY0VK6Klj/AzgTHCgEyBJfReA3cFf61yTF
+ 6TathIZ9et9WK/Y4MA7q04DnXkifVHBHxRXlB78odBTlJXRcNVkJf2+i9uv733niWXs7IQ5g+K3
+ fOORZkHPdIwIR/CKpKQZgjt169WsLfoTrPfE7CLbpf7Bk3ItwFTbZ0i1FAKVhZKzBGkePAiMc+B
+ ZTDW/0Mnc82wbENXU9KzMm6ZpQre+XIbSvi1PrAUeM5Bh0dq/AhC07/LK8LYxV8mAUSqZjnfAqT
+ z0r4iyGNKoBhvDaMmaEhXXVxAtEe46m6xlqq5d3c=
+X-Proofpoint-GUID: ZvoezZS3oC865Hj-VNAOYzF9XGjTsNLA
+X-Proofpoint-ORIG-GUID: ZvoezZS3oC865Hj-VNAOYzF9XGjTsNLA
+X-Authority-Analysis: v=2.4 cv=JY6Ma0KV c=1 sm=1 tr=0 ts=69e0f4ad b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=3I1J8UUJPc9JN9BFgKH3:22 a=yPCof4ZbAAAA:8 a=uV4W3spB8yPNDTg_6iAA:9 cc=ntf
+ awl=host:13825
 
+Add feature check for kernel extended vlen/kind support, and reject
+BTF that uses extended vlens/kinds if the kernel does not support
+it.  There is no reasonable path to generally sanitize such BTF.
 
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tools/lib/bpf/features.c        | 43 +++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c          | 17 ++++++++++++-
+ tools/lib/bpf/libbpf_internal.h |  2 ++
+ 3 files changed, 61 insertions(+), 1 deletion(-)
 
-On 4/15/26 4:23 PM, Amery Hung wrote:
-> On Sun, Apr 12, 2026 at 3:01 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->> On Sat, Apr 11, 2026 at 9:59 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->>> For kfunc argument checking, use the argument index (arg#0, arg#1, ...)
->>> instead of the register index (R1, R2, ...) in verifier log messages.
->>> This is a preparation for future stack-based arguments where kfuncs can
->>> accept more than 5 arguments. Stack arguments won't have a corresponding
->>> register, so using argument index is more appropriate.
->>>
->>> Since some functions like check_mem_access(), check_stack_read_var_off(),
->>> and check_stack_range_initialized() are shared between kfunc argument
->>> checking (check_kfunc_args) and other paths (check_func_arg, do_check_insn, ...),
->>> introduce a `reg_or_arg` encoding: a non-negative value represents a register
->>> index, while a negative value encodes an argument index as -(argno + 1).
->>> The helper reg_arg_name() decodes this to produce either "R%d" or
->>> "arg#%d" for log messages.
->>>
->>> For check_func_arg() callers, in certain cases, the register index is
->>> preserved so existing helper function logs remain unchanged (e.g., "R1", "R2").
->>>
->>> Update selftests to expect the new "arg#N" format in kfunc error
->>> messages.
->>>
->>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>> ---
->>>   include/linux/bpf_verifier.h                  |   1 +
->>>   kernel/bpf/verifier.c                         | 466 +++++++++---------
->>>   .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
->>>   .../selftests/bpf/prog_tests/linked_list.c    |   4 +-
->>>   .../selftests/bpf/progs/cpumask_failure.c     |   4 +-
->>>   .../testing/selftests/bpf/progs/dynptr_fail.c |   6 +-
->>>   .../selftests/bpf/progs/iters_testmod.c       |   6 +-
->>>   .../bpf/progs/local_kptr_stash_fail.c         |   2 +-
->>>   .../selftests/bpf/progs/map_kptr_fail.c       |   4 +-
->>>   .../bpf/progs/mem_rdonly_untrusted.c          |   2 +-
->>>   .../bpf/progs/nested_trust_failure.c          |   2 +-
->>>   .../selftests/bpf/progs/res_spin_lock_fail.c  |   2 +-
->>>   .../testing/selftests/bpf/progs/stream_fail.c |   2 +-
->>>   .../selftests/bpf/progs/task_kfunc_failure.c  |   4 +-
->>>   .../bpf/progs/verifier_cgroup_storage.c       |   4 +-
->>>   .../selftests/bpf/progs/verifier_ctx.c        |   2 +-
->>>   .../bpf/progs/verifier_ref_tracking.c         |   2 +-
->>>   .../selftests/bpf/progs/verifier_sock.c       |   6 +-
->>>   .../selftests/bpf/progs/verifier_unpriv.c     |   4 +-
->>>   .../selftests/bpf/progs/verifier_vfs_reject.c |   8 +-
->>>   .../testing/selftests/bpf/progs/wq_failures.c |   4 +-
->>>   tools/testing/selftests/bpf/verifier/calls.c  |   6 +-
->>>   .../testing/selftests/bpf/verifier/map_kptr.c |  10 +-
->>>   23 files changed, 286 insertions(+), 267 deletions(-)
->>>
->>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->>> index 05b9fe98b8f8..291f11ddd176 100644
->>> --- a/include/linux/bpf_verifier.h
->>> +++ b/include/linux/bpf_verifier.h
->>> @@ -910,6 +910,7 @@ struct bpf_verifier_env {
->>>           * e.g., in reg_type_str() to generate reg_type string
->>>           */
->>>          char tmp_str_buf[TMP_STR_BUF_LEN];
->>> +       char tmp_reg_arg_name_buf[16];
->>>          struct bpf_insn insn_buf[INSN_BUF_SIZE];
->>>          struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
->>>          struct bpf_scc_callchain callchain_buf;
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index 54296d818d35..01df990f841a 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -2179,6 +2179,18 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
->>>          return &elem->st;
->>>   }
->>>
->>> +static const char *reg_arg_name(struct bpf_verifier_env *env, int reg_or_arg)
->>> +{
->>> +       char *buf = env->tmp_reg_arg_name_buf;
->>> +       int len = sizeof(env->tmp_reg_arg_name_buf);
->>> +
->>> +       if (reg_or_arg >= 0)
->>> +               snprintf(buf, len, "R%d", reg_or_arg);
->>> +       else
->>> +               snprintf(buf, len, "arg#%d", -(reg_or_arg + 1));
->>> +       return buf;
->>> +}
->> The patches 1-4 make sense, but 5, 6 are too hacky.
->>
->> -       { "incorrect_head_var_off1", "R1 doesn't have constant offset" },
->> +       { "incorrect_head_var_off1", "arg#0 doesn't have constant offset" },
->>
->> This just sucks.
->> It degrades output for no good reason.
->>
->> Instead of inband negative vs positive signalling rename all
->> 'regno' to 'argno' and always pass whatever argno you need 1,2,..5,6, etc
-> +1 to avoid using a negative/positive range to signal a stack argument
-> or not, and to eliminate passing regno/argno.
-
-This is what I plan to do.
-
->
->> Pass ptr_reg and size_reg as bpf_reg_state the way patches 1-4 are doing.
->> If argno <= 5 keep 'R%d' output, so all selftest don't change.
->> For argno >= 6 print '*(R12-xx)' where xx is where that arg lives.
->> Printing arg# is too cryptic. Humans/agents need to do mental
->> gymnastics to understand what it means.
->> The output must be easy to consume by agents.
->>
->> I was also thinking whether we can get rid of this 'argno' too.
->> cur_regs - reg is that number for <= 5 and
->> some spilled_ptr - reg for >= 6.
->> Technically we can
->>
->> u32 argno = cur_regs - reg;
->> if (argno <= 5) use it
->> else
->>     argno = spilled_ptr - reg.
->>
->> Feels a bit hacky. Need to sleep on it.
-> The else case is actually even less pretty:
->      argno = spilled_ptr - constainer_of(reg, struct
-> bpf_stack_arg_state, spilled_ptr);
->
-> How about dropping slot_type since it is always STACK_SPILL or
-> STACK_MISC and that can be inferred anytime by just calling
-> is_spillable_regtype():
-> -struct bpf_stack_arg_state *stack_arg_slots;
-> +bpf_reg_state *stackarg_regs;
-
-This is what I planned to use
-    bpf_reg_state *stack_args;
-in bpf_func_state.
-But looks like stackarg_regs should be a better name.
-
->
-> Then:
-> argno = reg - (reg < stackargs_regs) ? cur_regs :  stackarg_regs;
-
-This is a little bit tricky. In bpf_verifier.h, I see
-
-struct bpf_stack_state {
-         struct bpf_reg_state spilled_ptr;   <=== for stack state
-         u8 slot_type[BPF_REG_SIZE];
-};
-
-struct bpf_verifier_env {
-	...
-	struct bpf_reg_state fake_reg[1];
-	...
-	struct bpf_reg_state true_reg1, true_reg2, false_reg1, false_reg2;
-}
-
-In kernel/bpf/states.h, we have
-	static struct bpf_reg_state unbound_reg;
-
-Maybe others, I didn't check.
-This will make things complicated.
-
-I would prefer the previous approach to have a nonnegative number
-to represent regno and argno (for stack arguments purpose).
-
->
->> pw-bot: cr
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index 4f19a0d79b0c..f835931f4afe 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -615,6 +615,46 @@ static int probe_kern_btf_layout(int token_fd)
+ 						 (char *)layout, token_fd));
+ }
+ 
++#define EXTEND_TYPE_LEN	((3 * sizeof(struct btf_type) + sizeof(__u32))/sizeof(__u32))
++#define EXTEND_VLEN		0x10000
++#define EXTEND_SECINFO_LEN	(EXTEND_VLEN * sizeof(struct btf_var_secinfo)/sizeof(__u32))
++
++static int probe_kern_btf_vlen_kind_extended(int token_fd)
++{
++	static const char strs[] = "\0int\0foo\0bar";
++	__u32 types[EXTEND_TYPE_LEN] = {
++		/* int */
++		BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
++		/* var */
++		BTF_TYPE_ENC(5 /* "foo" */, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), 1),
++		/* datasec */
++		BTF_TYPE_ENC(9 /* "bar" */, BTF_INFO_ENC(BTF_KIND_DATASEC, EXTEND_VLEN, 0), 0),
++	};
++	struct btf_var_secinfo *s;
++	__u32 *types_data;
++	__u32 i;
++	int ret;
++
++	types_data = calloc(EXTEND_TYPE_LEN + EXTEND_SECINFO_LEN, sizeof(__u32));
++	if (!types_data)
++		return -ENOMEM;
++	memcpy(types_data, types, sizeof(types));
++
++	for (i = 0, s = (struct btf_var_secinfo *)&types_data[EXTEND_TYPE_LEN];
++	     i < EXTEND_VLEN; i++, s++) {
++		s->type = 2;
++		s->offset = 4 * i;
++		s->size = 4;
++	}
++
++	ret = probe_fd(libbpf__load_raw_btf((char *)types_data,
++					    (EXTEND_TYPE_LEN + EXTEND_SECINFO_LEN) * sizeof(__u32),
++					    strs, sizeof(strs), token_fd));
++	free(types_data);
++
++	return ret;
++}
++
+ typedef int (*feature_probe_fn)(int /* token_fd */);
+ 
+ static struct kern_feature_cache feature_cache;
+@@ -699,6 +739,9 @@ static struct kern_feature_desc {
+ 	[FEAT_BTF_LAYOUT] = {
+ 		"kernel supports BTF layout", probe_kern_btf_layout,
+ 	},
++	[FEAT_BTF_VLEN_KIND_EXTENDED] = {
++		"kernel supports extended BTF vlen/kind", probe_kern_btf_vlen_kind_extended,
++	},
+ };
+ 
+ bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8b0c3246097f..5f19d8ac17a9 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3139,10 +3139,11 @@ static bool btf_needs_sanitization(struct bpf_object *obj)
+ 	bool has_enum64 = kernel_supports(obj, FEAT_BTF_ENUM64);
+ 	bool has_qmark_datasec = kernel_supports(obj, FEAT_BTF_QMARK_DATASEC);
+ 	bool has_layout = kernel_supports(obj, FEAT_BTF_LAYOUT);
++	bool has_vlen_kind_extended = kernel_supports(obj, FEAT_BTF_VLEN_KIND_EXTENDED);
+ 
+ 	return !has_func || !has_datasec || !has_func_global || !has_float ||
+ 	       !has_decl_tag || !has_type_tag || !has_enum64 || !has_qmark_datasec ||
+-	       !has_layout;
++	       !has_layout || !has_vlen_kind_extended;
+ }
+ 
+ struct btf *bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *orig_btf)
+@@ -3156,6 +3157,7 @@ struct btf *bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *orig_bt
+ 	bool has_enum64 = kernel_supports(obj, FEAT_BTF_ENUM64);
+ 	bool has_qmark_datasec = kernel_supports(obj, FEAT_BTF_QMARK_DATASEC);
+ 	bool has_layout = kernel_supports(obj, FEAT_BTF_LAYOUT);
++	bool has_vlen_kind_extended = kernel_supports(obj, FEAT_BTF_VLEN_KIND_EXTENDED);
+ 	int enum64_placeholder_id = 0;
+ 	const struct btf_header *hdr;
+ 	struct btf *btf = NULL;
+@@ -3217,6 +3219,19 @@ struct btf *bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *orig_bt
+ 	for (i = 1; i < btf__type_cnt(btf); i++) {
+ 		t = (struct btf_type *)btf__type_by_id(btf, i);
+ 
++		/*
++		 * If BTF uses extended vlen/kind and kernel does not support
++		 * it, there is nothing we can do.
++		 */
++		if (!has_vlen_kind_extended) {
++			if (btf_vlen(t) > 0xffff || btf_kind(t) > 0x1f) {
++				pr_debug("Unsupported %s for id %u\n",
++					 btf_kind(t) > 0x1f ? "BTF kind" : "BTF vlen", i);
++				btf__free(btf);
++				return ERR_PTR(-EINVAL);
++			}
++		}
++
+ 		if ((!has_datasec && btf_is_var(t)) || (!has_decl_tag && btf_is_decl_tag(t))) {
+ 			/* replace VAR/DECL_TAG with INT */
+ 			t->info = BTF_INFO_ENC(BTF_KIND_INT, 0, 0);
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 3781c45b46d3..9ca0796210d2 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -398,6 +398,8 @@ enum kern_feature_id {
+ 	FEAT_UPROBE_SYSCALL,
+ 	/* Kernel supports BTF layout information */
+ 	FEAT_BTF_LAYOUT,
++	/* Kernel supports BTF vlen > 65535, kind > 31 */
++	FEAT_BTF_VLEN_KIND_EXTENDED,
+ 	__FEAT_CNT,
+ };
+ 
+-- 
+2.39.3
 
