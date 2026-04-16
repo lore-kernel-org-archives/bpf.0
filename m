@@ -1,141 +1,217 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [67.231.157.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC1D38B123
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 08:06:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E13A37C0FE;
+	Thu, 16 Apr 2026 08:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.157.127
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776326774; cv=none; b=sD8M3af20Ssb1mmbKkv1DuhhNzIEdZY6cE2fV2mcdIqYU0f+25TgWeokr8HygucYDu0mT1UariGy7F3BYD0mlR5MyWHW6fgeYaJF+S+YYVVAcFWjdnkskUXanlYRnA+m14TefNyUhRvBmP8rWJWgKynBNFW6QgFB5YWzJHvY0Mo=
+	t=1776327968; cv=none; b=u0hnU91336kq1/xLCj7mH05ZYjAm9BnyWKEyLu4mmdF5J7rt49QpbTpQMXOZSD/nMgiBUHy0t5LMLleInkpfImMSrlDvib4NO4qvsFNmfgbK+oy8AYa7b50mcFkvOgBzcr0Qxj7XCDPcAHj6B200cx4fmiFC9GVW5WPo+Ipts0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776326774; c=relaxed/simple;
-	bh=Ru2dAGDmXt2BWDG4LBRI+9WbLDGbJdMohF9oYmlNENI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mn8lEJcE+SPxY3rIZZTdF1a4LKlmWVTbQbWK4hRSd/F4HTtNR0ur9jUqe+2ngc9p645wZ5lRWdO2LPE4U9KuTRfNab0KLvX2u3Fvvg6TMsz+XWjvcU6lDngatAibkgNgxXpTTOMLDWbWwPd0rVMs1Ub1/WTxcD9aUrBFcWG74WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UQsbz+Ec; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=G8B6iMCl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776327968; c=relaxed/simple;
+	bh=1nxOWCvVhVLJxrNEAhQo//rSDUMpOGN+mm74aJAO0DI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=EU+/7qcMba9yju17arWotZauTTAZ+uRrSPX2DKpB50vSn9+SnnQJ+e0VtHl06YoAmoh1XSNhAo6ZBpMYfUmXru3BJCmQt9g23KfEYHpbOrk4366/2DqYlIXMzAULP8u3C09ggqO10GX6UHH2+IYveakBLL2B5NxTUrRoCgfnrzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=myYBazHI; arc=none smtp.client-ip=67.231.157.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UQsbz+Ec";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="G8B6iMCl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776326772;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WJyyJYZcE0qwxf80pcu1qJxxfSACe3cGGgbV2D39A3A=;
-	b=UQsbz+EcEgR2rbPv3GbKf2fbrZOABO8gkBytREmZ/sBoxg/tnnzj1zr3Uql2U3zBjxxdTp
-	NQ+5qhDXY3h+lxeegWb9phDW3E6rElr0hbbdeSNzYuNi3SmxrGdCZ1JaDCkHm8LIUQTS3i
-	05Y5wNzPEi0uV6f09TJIvfajZPnEjOA=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-77-A2YRIfezOJmhG-3IOzd3Ng-1; Thu, 16 Apr 2026 04:06:09 -0400
-X-MC-Unique: A2YRIfezOJmhG-3IOzd3Ng-1
-X-Mimecast-MFC-AGG-ID: A2YRIfezOJmhG-3IOzd3Ng_1776326768
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-43d03065782so4658635f8f.0
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 01:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1776326768; x=1776931568; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WJyyJYZcE0qwxf80pcu1qJxxfSACe3cGGgbV2D39A3A=;
-        b=G8B6iMCl/xN7TnIVwNj+aX1dyLzNM4Z+/nUVjtBnNBk26k75hjkIinHjPWczobgxIC
-         4PWiyZ5l/ojEovkqyXhuH+9TY5WS7iluuPltxj2zEu86JCIigBqxioX7O9wZB5jUSkUr
-         w4S0k8ot0Y7fV5LSO0OBKQ+O6jjuNzimjB1cpuAS08tHaCtwzSa6Rq4wI7oqBk+0Bu5g
-         obm0vgFhDjg2h7pz8fLs15diEs/L8D1980IPvAsCa4dlKCva4g5y/uASt7twCKP27LyP
-         OrJMKVgjLRV1I8bglb6epVkwooJqARY9Y3+GAN/RBs0o3mAlDJrw/DtsWwYWu0xVkAlm
-         CP3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776326768; x=1776931568;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WJyyJYZcE0qwxf80pcu1qJxxfSACe3cGGgbV2D39A3A=;
-        b=L5ELvcyzKWSpFmltOQn34oRm61BqozYqY9BNx2VTB54fcUtqEj6Vp83h1KCJOo8FTe
-         DNhEo0wh1bKhjUeHXTcuHL4hw+4trpQGuy07ZdwkoxIBBiByEph8QqusMlBd+4yKLLEN
-         Qu35oNd9S+xGYsKkULZcLEwiiff5qUDf8aLhjrZfaS5mfICQPzp9PcXmNIzVtq5kqkQH
-         b878af5avS8CN8rstyYXXqVPSSf3SvTcSIH5cs85IxDGBVo3Uxm2QfoZZhPl8yea7PO5
-         BNdLgeKSnd6VINmCD3qtof5+zD9D0Cnyw0y9jeaWzMGyMN6dfCLrXVHRaJUwFKJSrEsL
-         JYwA==
-X-Forwarded-Encrypted: i=1; AFNElJ+j5KgrivXPn265I9pg1xSdU+8poCpXqaxdPsKlxhB5L/PJ8fXF67i3/J61zXuu9XKLV7k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBhggibP1lvq25ugAzhBUYDQrUMuZ7iy3MrvVqNpHi4FDh+Ai8
-	6KwO+CcodhhsktLlOnpyfYcfjOMUd/CW+dazcUBFvGE50rxmYRsQ4zWnavyyPa3sLrV8sG6khp6
-	Wa3BVUMbzECwWLuqfZtgdQAD6TiJKuUkdXTNqNmCKQTgo9r55c0CYlQ==
-X-Gm-Gg: AeBDiesKXeo0EmHY1b8/Xu2x7/R4bXVxOYolaCZuNfcQ4fVk+uIhK2R60szvAmMIpTu
-	AV1JBkzpCzAoxA43EZpqD1vhv5aSfhEslpK3H9pNAwSh8jzzs9TuI8d/c0+iM/336oXEgXJm96l
-	oe5R6G4lyvRi3GqEWUs4rENypsXxAhounNuqFS8ugdS6AZdybP6f40T/YMZezFoOswfOabz+UV4
-	pxr7XSu14EaDRms02tSLqKcgc8lFWQJF4g4Iby1UhB+yILks2x9jTgLMCZYl2RtMEY3xEsJGYaD
-	a9oCrRZWs9JoGOGZzTy7B+RHOAy4a/xptBstKx1cwFYFWwnsxD6FGKfH6bLbnvzWJYt/3rdP9l4
-	/c4QBNU5gxpvPUugYrOupv5wGTa06jJyy4r4Ug3fXA8KH1jPL2BDtECExU2JWXmaAYec=
-X-Received: by 2002:a05:600c:c0da:b0:488:936a:6220 with SMTP id 5b1f17b1804b1-488d685b577mr291004235e9.21.1776326767706;
-        Thu, 16 Apr 2026 01:06:07 -0700 (PDT)
-X-Received: by 2002:a05:600c:c0da:b0:488:936a:6220 with SMTP id 5b1f17b1804b1-488d685b577mr291003615e9.21.1776326767184;
-        Thu, 16 Apr 2026 01:06:07 -0700 (PDT)
-Received: from [192.168.88.32] ([150.228.93.122])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f0a6da96sm41903285e9.13.2026.04.16.01.06.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Apr 2026 01:06:06 -0700 (PDT)
-Message-ID: <2d4193fe-354f-4318-ac65-30c375a90f6b@redhat.com>
-Date: Thu, 16 Apr 2026 10:06:05 +0200
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="myYBazHI"
+Received: from pps.filterd (m0050096.ppops.net [127.0.0.1])
+	by m0050096.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 63G46r9K4066359;
+	Thu, 16 Apr 2026 08:55:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=jan2016.eng; bh=qkcLPcX1Y
+	1ZicE4oz8QgaXDnvJeJIEpnpLV+KZs8YiA=; b=myYBazHIS+TfFTOSTsKB4ZAf2
+	FKfWLRLKnFNQwxfO/8WvBteFYuaXRV48qeQmIvT1wbzWTe8UypaoZx0fVmf7jEpg
+	6W4M1A2NWLpaq6lHjCqqWoM4yqXeewiLlj9WWS4uxFk/PiqYenZRMf2u/T52k2Ov
+	c2mgw4Wj/CAk73jf5xTJLbEipM81qunvIItiqd1PjLxzyCho457Jx1Wo4vJN+Qxm
+	kWJy6ngyRdrRgFKlZSE8stTTPIy1zqGgCvuBhZVWL/TE5sxRk3G0uAhabbotJmIi
+	iHPQixfH5QJaUYsiGDM53kejwQWwo8h6sm4ZU9LfD1IiuF8XyvO3lmhae4RPQ==
+Received: from prod-mail-ppoint2 (prod-mail-ppoint2.akamai.com [184.51.33.19])
+	by m0050096.ppops.net-00190b01. (PPS) with ESMTPS id 4dfeq6ud3d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Apr 2026 08:55:30 +0100 (BST)
+Received: from pps.filterd (prod-mail-ppoint2.akamai.com [127.0.0.1])
+	by prod-mail-ppoint2.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63G7fhUv025247;
+	Thu, 16 Apr 2026 03:55:29 -0400
+Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
+	by prod-mail-ppoint2.akamai.com (PPS) with ESMTP id 4dj2v8e0a0-1;
+	Thu, 16 Apr 2026 03:55:29 -0400 (EDT)
+Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
+	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id D798D8D;
+	Thu, 16 Apr 2026 07:55:27 +0000 (UTC)
+From: Nick Hudson <nhudson@akamai.com>
+To: bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nick Hudson <nhudson@akamai.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 6/6] selftests/bpf: tc_tunnel validate decap GSO state
+Date: Thu, 16 Apr 2026 08:55:14 +0100
+Message-Id: <20260416075514.927101-7-nhudson@akamai.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260416075514.927101-1-nhudson@akamai.com>
+References: <20260416075514.927101-1-nhudson@akamai.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 0/7] net: bcmgenet: add XDP support
-To: Nicolai Buchwitz <nb@tipi-net.de>, netdev@vger.kernel.org
-Cc: Justin Chen <justin.chen@broadcom.com>, Simon Horman <horms@kernel.org>,
- Mohsin Bashir <mohsin.bashr@gmail.com>, Doug Berger <opendmb@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
-References: <20260416054743.1289191-1-nb@tipi-net.de>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260416054743.1289191-1-nb@tipi-net.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ spamscore=0 mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2604070000 definitions=main-2604160071
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDA3MyBTYWx0ZWRfXzLmKFo4oqgU4
+ F68lWMLzSCs7kXuBjv0F6PeQ2N/iVsgmlg93dmR7xvn/IbWTIPgLMKXJOsjiuHxRSMssCQvNqfc
+ v/QzLlOenOlbGabxa8tSbIAqJOX5H44V2osM1Jo/4x4fXkctsotPjMzXMx7lLxMxz9cguLVkfz1
+ zQLJLh6cQOoi/PO3A+HmrNtX72W3v4XBpA16bKKQHl8qXWw+ZXDK/4g2eNbCXl8n8t9mDl5ZW47
+ zu7yoFsmX2sLmIq0YGy7B1mSMxPD5cF7Yyn+aM37zkjc/ORnBpNjZrp+rDsqrFy/EFBO6iCHmce
+ cHxKBwVxTGmyevj5NB25bWWkr9BsDIRaupweQ/T4Th+MYh6J1P3XITOrOmETvl0O8qNl2anFV2m
+ oHKFmnSqvGW33l2h/kIcwAfe3pP7C8HJ+XYsL2u8OaLX5CvTLP7KUvwOgq5IEKdxB7uOhpBFWXC
+ nZplPs2fZitF/OI5DRw==
+X-Proofpoint-ORIG-GUID: pjQx7DjXyoBwf2cIj79D8k8MMxyoqHM2
+X-Authority-Analysis: v=2.4 cv=bsV8wkai c=1 sm=1 tr=0 ts=69e095f2 cx=c_pps
+ a=BpD+HMUBsFIkYY1OQe22Yw==:117 a=BpD+HMUBsFIkYY1OQe22Yw==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
+ a=8P__5Em-pwOPtXrf4HJ0:22 a=X7Ea-ya5AAAA:8 a=70DEBb0-UiQd8ec9lQUA:9
+X-Proofpoint-GUID: pjQx7DjXyoBwf2cIj79D8k8MMxyoqHM2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ malwarescore=0 spamscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604160073
 
-On 4/16/26 7:47 AM, Nicolai Buchwitz wrote:
-> Add XDP support to the bcmgenet driver, covering XDP_PASS, XDP_DROP,
-> XDP_TX, XDP_REDIRECT, and ndo_xdp_xmit.
-> 
-> The first patch converts the RX path from the existing kmalloc-based
-> allocation to page_pool, which is a prerequisite for XDP. The remaining
-> patches incrementally add XDP functionality and per-action statistics.
-> 
-> Tested on Raspberry Pi CM4 (BCM2711, bcmgenet, 1Gbps link):
-> - XDP_PASS: 943 Mbit/s TX, 935 Mbit/s RX (no regression vs baseline)
-> - XDP_PASS latency: 0.164ms avg, 0% packet loss
-> - XDP_DROP: all inbound traffic blocked as expected
-> - XDP_TX: TX counter increments (packet reflection working)
-> - Link flap with XDP attached: no errors
-> - Program swap under iperf3 load: no errors
-> - Upstream XDP selftests (xdp.py): pass_sb, drop_sb, tx_sb passing
-> - XDP-based EtherCAT master (~37 kHz cycle rate, all packet processing
->   in BPF/XDP), stable over multiple days
+Require BPF_F_ADJ_ROOM_DECAP_L4_UDP and BPF_F_ADJ_ROOM_DECAP_L4_GRE enum
+values at runtime using CO-RE enum existence checks so missing kernel
+support fails fast instead of silently proceeding.
 
-## Form letter - net-next-closed
+After bpf_skb_adjust_room() decapsulation, inspect skb_shared_info and
+sk_buff state for GSO packets and assert that the expected tunnel GSO
+bits are cleared and encapsulation matches the remaining tunnel state.
 
-We have already submitted our pull request with net-next material for
-v7.1, and therefore net-next is closed for new drivers, features, code
-refactoring and optimizations. We are currently accepting bug fixes only.
+Signed-off-by: Nick Hudson <nhudson@akamai.com>
+---
+ .../selftests/bpf/progs/test_tc_tunnel.c      | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-Please repost when net-next reopens after Apr 26th.
-
-RFC patches sent for review only are obviously welcome at any time.
-
-See:
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+index 7376df405a6b..74dfb694a210 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+@@ -6,6 +6,7 @@
+ 
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
++#include <bpf/bpf_core_read.h>
+ #include "bpf_tracing_net.h"
+ #include "bpf_compiler.h"
+ 
+@@ -37,6 +38,23 @@ struct vxlanhdr___local {
+ 
+ #define	EXTPROTO_VXLAN	0x1
+ 
++#define SKB_GSO_UDP_TUNNEL_MASK	(SKB_GSO_UDP_TUNNEL |			\
++				 SKB_GSO_UDP_TUNNEL_CSUM |		\
++				 SKB_GSO_TUNNEL_REMCSUM)
++
++#define SKB_GSO_TUNNEL_MASK		(SKB_GSO_UDP_TUNNEL_MASK |		\
++				 SKB_GSO_GRE |				\
++				 SKB_GSO_GRE_CSUM |			\
++				 SKB_GSO_IPXIP4 |			\
++				 SKB_GSO_IPXIP6 |			\
++				 SKB_GSO_ESP)
++
++#define BPF_F_ADJ_ROOM_DECAP_L4_MASK	(BPF_F_ADJ_ROOM_DECAP_L4_UDP |	\
++				 BPF_F_ADJ_ROOM_DECAP_L4_GRE)
++
++#define BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK	(BPF_F_ADJ_ROOM_DECAP_IPXIP4 |	\
++					 BPF_F_ADJ_ROOM_DECAP_IPXIP6)
++
+ #define	VXLAN_FLAGS     bpf_htonl(1<<27)
+ #define	VNI_ID		1
+ #define	VXLAN_VNI	bpf_htonl(VNI_ID << 8)
+@@ -592,6 +610,8 @@ int __encap_ip6vxlan_eth(struct __sk_buff *skb)
+ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ {
+ 	__u64 flags = BPF_F_ADJ_ROOM_FIXED_GSO;
++	struct sk_buff *kskb;
++	struct skb_shared_info *shinfo;
+ 	struct ipv6_opt_hdr ip6_opt_hdr;
+ 	struct gre_hdr greh;
+ 	struct udphdr udph;
+@@ -621,6 +641,11 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ 		break;
+ 	case IPPROTO_GRE:
+ 		olen += sizeof(struct gre_hdr);
++		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
++						BPF_F_ADJ_ROOM_DECAP_L4_GRE))
++			return TC_ACT_SHOT;
++		flags |= BPF_F_ADJ_ROOM_DECAP_L4_GRE;
++
+ 		if (bpf_skb_load_bytes(skb, off + len, &greh, sizeof(greh)) < 0)
+ 			return TC_ACT_OK;
+ 		switch (bpf_ntohs(greh.protocol)) {
+@@ -634,6 +659,10 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ 		break;
+ 	case IPPROTO_UDP:
+ 		olen += sizeof(struct udphdr);
++		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
++						BPF_F_ADJ_ROOM_DECAP_L4_UDP))
++			return TC_ACT_SHOT;
++		flags |= BPF_F_ADJ_ROOM_DECAP_L4_UDP;
+ 		if (bpf_skb_load_bytes(skb, off + len, &udph, sizeof(udph)) < 0)
+ 			return TC_ACT_OK;
+ 		switch (bpf_ntohs(udph.dest)) {
+@@ -655,6 +684,35 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ 	if (bpf_skb_adjust_room(skb, -olen, BPF_ADJ_ROOM_MAC, flags))
+ 		return TC_ACT_SHOT;
+ 
++	kskb = bpf_cast_to_kern_ctx(skb);
++	shinfo = bpf_core_cast(kskb->head + kskb->end, struct skb_shared_info);
++	if (!shinfo->gso_size)
++		return TC_ACT_OK;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
++	    (shinfo->gso_type & SKB_GSO_UDP_TUNNEL_MASK))
++		return TC_ACT_SHOT;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
++	    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
++		return TC_ACT_SHOT;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
++	    (shinfo->gso_type & SKB_GSO_IPXIP4))
++		return TC_ACT_SHOT;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
++	    (shinfo->gso_type & SKB_GSO_IPXIP6))
++		return TC_ACT_SHOT;
++
++	if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
++		     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
++		if ((shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && !kskb->encapsulation)
++			return TC_ACT_SHOT;
++		if (!(shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && kskb->encapsulation)
++			return TC_ACT_SHOT;
++	}
++
+ 	return TC_ACT_OK;
+ }
+ 
+-- 
+2.34.1
 
