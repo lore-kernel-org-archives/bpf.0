@@ -1,177 +1,141 @@
-Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5C637267E;
-	Thu, 16 Apr 2026 07:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC1D38B123
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 08:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776326157; cv=none; b=f1jgwT8eDH+6Cy3HkRkMa26GaYo27kFZKnAeHl3daI7Wszv+UrHj0uPDI8uPalJ1wqib0HHENGU+LOd76aKoBL5hyN3mzLGGrNDODSOK4o0LegKAur8K8+xk+2Qvt68YytBzi81P4cfZyoY+FVIpJqGVa2KXbv9koPtOpRLcYeM=
+	t=1776326774; cv=none; b=sD8M3af20Ssb1mmbKkv1DuhhNzIEdZY6cE2fV2mcdIqYU0f+25TgWeokr8HygucYDu0mT1UariGy7F3BYD0mlR5MyWHW6fgeYaJF+S+YYVVAcFWjdnkskUXanlYRnA+m14TefNyUhRvBmP8rWJWgKynBNFW6QgFB5YWzJHvY0Mo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776326157; c=relaxed/simple;
-	bh=wj0B9XnoeiSjT9OUedGk3dbAhADULSpsOmZbdeVYZsM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CMkDdqpKorYv5ggeUhlG+LMNoXDkL5QtL4Nllgiz6J9ar3JHmIjfk4217fWmmyh62lRGBOB1704NlAG66qWYj1LjVpXBwrXgnw3S+//tbWMLKKQJ+kZCv98QhaLFj6F+ZxRzcoAV2RiTuC6oynvrzC0pcWhNvVRXfa3UggsuNZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=fail smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=dMp9ET5t; arc=none smtp.client-ip=67.231.149.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=akamai.com
+	s=arc-20240116; t=1776326774; c=relaxed/simple;
+	bh=Ru2dAGDmXt2BWDG4LBRI+9WbLDGbJdMohF9oYmlNENI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Mn8lEJcE+SPxY3rIZZTdF1a4LKlmWVTbQbWK4hRSd/F4HTtNR0ur9jUqe+2ngc9p645wZ5lRWdO2LPE4U9KuTRfNab0KLvX2u3Fvvg6TMsz+XWjvcU6lDngatAibkgNgxXpTTOMLDWbWwPd0rVMs1Ub1/WTxcD9aUrBFcWG74WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UQsbz+Ec; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=G8B6iMCl; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="dMp9ET5t"
-Received: from pps.filterd (m0122333.ppops.net [127.0.0.1])
-	by mx0a-00190b01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63G68NSg3779255;
-	Thu, 16 Apr 2026 08:55:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=jan2016.eng; bh=Of40J5Wnw
-	9aBuZ0K80eVPgv5rPioXRjQOLCpWmNfeok=; b=dMp9ET5tzwM7IMV6oM+2SQJdC
-	FxNE201EgB9irvYMsySjhtisR+r7qvDWRK/FwgqJRGODntWVBBjs1gEMfbzj8hJV
-	5zLJm1hJu1qZdtNfaXbVdlTY3zLGdPWdRGkZrIzxBSmei1f8X5SCMJ6rjbG9NQkE
-	QiZvcB9+H6V/0xuVpgtCQ21ONmPvlsD/M6+WVMV+EPc00dLAMT4brv/OzYrYWPu8
-	fpkpPrKUxZNPo3F1ep7UHksoJjiwSavElD7ZVg1MpVhkbqMabbVQTXtBHuSS0feG
-	6xnk7Ldivojv+BsG64kICqpcLHOMMi0ryYfs+e7VUklEk7wsYDIy5VwzUXPkg==
-Received: from prod-mail-ppoint6 (prod-mail-ppoint6.akamai.com [184.51.33.61])
-	by mx0a-00190b01.pphosted.com (PPS) with ESMTPS id 4dfegxnmtm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Apr 2026 08:55:29 +0100 (BST)
-Received: from pps.filterd (prod-mail-ppoint6.akamai.com [127.0.0.1])
-	by prod-mail-ppoint6.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63G7QZWZ006738;
-	Thu, 16 Apr 2026 03:55:27 -0400
-Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
-	by prod-mail-ppoint6.akamai.com (PPS) with ESMTP id 4dj2yvx0tq-1;
-	Thu, 16 Apr 2026 03:55:27 -0400 (EDT)
-Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
-	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id A46D68D;
-	Thu, 16 Apr 2026 07:55:25 +0000 (UTC)
-From: Nick Hudson <nhudson@akamai.com>
-To: bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
-        Anna Glasgall <aglasgal@akamai.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 5/6] bpf: clear decap tunnel GSO state in skb_adjust_room
-Date: Thu, 16 Apr 2026 08:55:13 +0100
-Message-Id: <20260416075514.927101-6-nhudson@akamai.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260416075514.927101-1-nhudson@akamai.com>
-References: <20260416075514.927101-1-nhudson@akamai.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UQsbz+Ec";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="G8B6iMCl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776326772;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WJyyJYZcE0qwxf80pcu1qJxxfSACe3cGGgbV2D39A3A=;
+	b=UQsbz+EcEgR2rbPv3GbKf2fbrZOABO8gkBytREmZ/sBoxg/tnnzj1zr3Uql2U3zBjxxdTp
+	NQ+5qhDXY3h+lxeegWb9phDW3E6rElr0hbbdeSNzYuNi3SmxrGdCZ1JaDCkHm8LIUQTS3i
+	05Y5wNzPEi0uV6f09TJIvfajZPnEjOA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-77-A2YRIfezOJmhG-3IOzd3Ng-1; Thu, 16 Apr 2026 04:06:09 -0400
+X-MC-Unique: A2YRIfezOJmhG-3IOzd3Ng-1
+X-Mimecast-MFC-AGG-ID: A2YRIfezOJmhG-3IOzd3Ng_1776326768
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-43d03065782so4658635f8f.0
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 01:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1776326768; x=1776931568; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WJyyJYZcE0qwxf80pcu1qJxxfSACe3cGGgbV2D39A3A=;
+        b=G8B6iMCl/xN7TnIVwNj+aX1dyLzNM4Z+/nUVjtBnNBk26k75hjkIinHjPWczobgxIC
+         4PWiyZ5l/ojEovkqyXhuH+9TY5WS7iluuPltxj2zEu86JCIigBqxioX7O9wZB5jUSkUr
+         w4S0k8ot0Y7fV5LSO0OBKQ+O6jjuNzimjB1cpuAS08tHaCtwzSa6Rq4wI7oqBk+0Bu5g
+         obm0vgFhDjg2h7pz8fLs15diEs/L8D1980IPvAsCa4dlKCva4g5y/uASt7twCKP27LyP
+         OrJMKVgjLRV1I8bglb6epVkwooJqARY9Y3+GAN/RBs0o3mAlDJrw/DtsWwYWu0xVkAlm
+         CP3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776326768; x=1776931568;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WJyyJYZcE0qwxf80pcu1qJxxfSACe3cGGgbV2D39A3A=;
+        b=L5ELvcyzKWSpFmltOQn34oRm61BqozYqY9BNx2VTB54fcUtqEj6Vp83h1KCJOo8FTe
+         DNhEo0wh1bKhjUeHXTcuHL4hw+4trpQGuy07ZdwkoxIBBiByEph8QqusMlBd+4yKLLEN
+         Qu35oNd9S+xGYsKkULZcLEwiiff5qUDf8aLhjrZfaS5mfICQPzp9PcXmNIzVtq5kqkQH
+         b878af5avS8CN8rstyYXXqVPSSf3SvTcSIH5cs85IxDGBVo3Uxm2QfoZZhPl8yea7PO5
+         BNdLgeKSnd6VINmCD3qtof5+zD9D0Cnyw0y9jeaWzMGyMN6dfCLrXVHRaJUwFKJSrEsL
+         JYwA==
+X-Forwarded-Encrypted: i=1; AFNElJ+j5KgrivXPn265I9pg1xSdU+8poCpXqaxdPsKlxhB5L/PJ8fXF67i3/J61zXuu9XKLV7k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBhggibP1lvq25ugAzhBUYDQrUMuZ7iy3MrvVqNpHi4FDh+Ai8
+	6KwO+CcodhhsktLlOnpyfYcfjOMUd/CW+dazcUBFvGE50rxmYRsQ4zWnavyyPa3sLrV8sG6khp6
+	Wa3BVUMbzECwWLuqfZtgdQAD6TiJKuUkdXTNqNmCKQTgo9r55c0CYlQ==
+X-Gm-Gg: AeBDiesKXeo0EmHY1b8/Xu2x7/R4bXVxOYolaCZuNfcQ4fVk+uIhK2R60szvAmMIpTu
+	AV1JBkzpCzAoxA43EZpqD1vhv5aSfhEslpK3H9pNAwSh8jzzs9TuI8d/c0+iM/336oXEgXJm96l
+	oe5R6G4lyvRi3GqEWUs4rENypsXxAhounNuqFS8ugdS6AZdybP6f40T/YMZezFoOswfOabz+UV4
+	pxr7XSu14EaDRms02tSLqKcgc8lFWQJF4g4Iby1UhB+yILks2x9jTgLMCZYl2RtMEY3xEsJGYaD
+	a9oCrRZWs9JoGOGZzTy7B+RHOAy4a/xptBstKx1cwFYFWwnsxD6FGKfH6bLbnvzWJYt/3rdP9l4
+	/c4QBNU5gxpvPUugYrOupv5wGTa06jJyy4r4Ug3fXA8KH1jPL2BDtECExU2JWXmaAYec=
+X-Received: by 2002:a05:600c:c0da:b0:488:936a:6220 with SMTP id 5b1f17b1804b1-488d685b577mr291004235e9.21.1776326767706;
+        Thu, 16 Apr 2026 01:06:07 -0700 (PDT)
+X-Received: by 2002:a05:600c:c0da:b0:488:936a:6220 with SMTP id 5b1f17b1804b1-488d685b577mr291003615e9.21.1776326767184;
+        Thu, 16 Apr 2026 01:06:07 -0700 (PDT)
+Received: from [192.168.88.32] ([150.228.93.122])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f0a6da96sm41903285e9.13.2026.04.16.01.06.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Apr 2026 01:06:06 -0700 (PDT)
+Message-ID: <2d4193fe-354f-4318-ac65-30c375a90f6b@redhat.com>
+Date: Thu, 16 Apr 2026 10:06:05 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2604070000 definitions=main-2604160069
-X-Authority-Analysis: v=2.4 cv=fKsJG5ae c=1 sm=1 tr=0 ts=69e095f1 cx=c_pps
- a=WPLAOKU3JHlOa4eSsQmUFQ==:117 a=WPLAOKU3JHlOa4eSsQmUFQ==:17
- a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
- a=5uIk5skAYop0meUMGpPt:22 a=X7Ea-ya5AAAA:8 a=1wbUKRMHqSFGxWi5NAsA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDA3MyBTYWx0ZWRfX98veyOSdwgzJ
- lenq9o1ehXTiReRM72WyH0rb2uItgmRgVgM4gO9munbDEjhyF3kUFt3heLwI1u4BEgi7XdF2euU
- RQ9aEAA5BUmxMacXEDQOWUpdrpIhwy3imFwpXkm0ZsID0cZLNch1WJ60+MyhF0o34hTWPCUUbvV
- hiAjTDeVfbDCfxG7TM/XrgqM4N3xCVvEVSHYU/RcNFfm6ydgLZJp9CASVihpLvijcadl066XL9D
- oyyViQS6t5hRW5KFk2aHVHXnSp5QEHNKIpzMY4GdEAfagC3uMuFxx5Olr4vDaHCBeUNvwZV9FeU
- kxwJSM+ceO9RBN9ZIZdCKFgWQ2u3oq+fipw6B5Ve3vLvTm2xYSWQLV9vhG8KdyefluFKXqSzkNe
- U6n4BRYN2sH1WKIT/ZfPdKpA79mbnG+dfAYLh6OSnRPwZ9L3SaqxZJSyJYhnZZcLnKbs9tzemS7
- KC+qIOObdoxi7jMT4Gw==
-X-Proofpoint-GUID: TcZDaEQA-wgYGMQX3wOHrxGvP0UjW0-N
-X-Proofpoint-ORIG-GUID: TcZDaEQA-wgYGMQX3wOHrxGvP0UjW0-N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-16_02,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- phishscore=0 clxscore=1015 suspectscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604160073
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 0/7] net: bcmgenet: add XDP support
+To: Nicolai Buchwitz <nb@tipi-net.de>, netdev@vger.kernel.org
+Cc: Justin Chen <justin.chen@broadcom.com>, Simon Horman <horms@kernel.org>,
+ Mohsin Bashir <mohsin.bashr@gmail.com>, Doug Berger <opendmb@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
+References: <20260416054743.1289191-1-nb@tipi-net.de>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260416054743.1289191-1-nb@tipi-net.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On shrink in bpf_skb_adjust_room(), clear tunnel-specific GSO flags
-according to the decapsulation flags:
+On 4/16/26 7:47 AM, Nicolai Buchwitz wrote:
+> Add XDP support to the bcmgenet driver, covering XDP_PASS, XDP_DROP,
+> XDP_TX, XDP_REDIRECT, and ndo_xdp_xmit.
+> 
+> The first patch converts the RX path from the existing kmalloc-based
+> allocation to page_pool, which is a prerequisite for XDP. The remaining
+> patches incrementally add XDP functionality and per-action statistics.
+> 
+> Tested on Raspberry Pi CM4 (BCM2711, bcmgenet, 1Gbps link):
+> - XDP_PASS: 943 Mbit/s TX, 935 Mbit/s RX (no regression vs baseline)
+> - XDP_PASS latency: 0.164ms avg, 0% packet loss
+> - XDP_DROP: all inbound traffic blocked as expected
+> - XDP_TX: TX counter increments (packet reflection working)
+> - Link flap with XDP attached: no errors
+> - Program swap under iperf3 load: no errors
+> - Upstream XDP selftests (xdp.py): pass_sb, drop_sb, tx_sb passing
+> - XDP-based EtherCAT master (~37 kHz cycle rate, all packet processing
+>   in BPF/XDP), stable over multiple days
 
-- BPF_F_ADJ_ROOM_DECAP_L4_UDP clears SKB_GSO_UDP_TUNNEL{,_CSUM}
-- BPF_F_ADJ_ROOM_DECAP_L4_GRE clears SKB_GSO_GRE{,_CSUM}
-- BPF_F_ADJ_ROOM_DECAP_IPXIP4 clears SKB_GSO_IPXIP4
-- BPF_F_ADJ_ROOM_DECAP_IPXIP6 clears SKB_GSO_IPXIP6
+## Form letter - net-next-closed
 
-When all tunnel-related GSO bits are cleared, also clear
-skb->encapsulation.
+We have already submitted our pull request with net-next material for
+v7.1, and therefore net-next is closed for new drivers, features, code
+refactoring and optimizations. We are currently accepting bug fixes only.
 
-Handle the ESP inside a UDP tunnel case where encapsulation should remain
-set.
+Please repost when net-next reopens after Apr 26th.
 
-If UDP decap is performed, clear encap_hdr_csum and remcsum_offload.
+RFC patches sent for review only are obviously welcome at any time.
 
-Co-developed-by: Max Tottenham <mtottenh@akamai.com>
-Signed-off-by: Max Tottenham <mtottenh@akamai.com>
-Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
-Signed-off-by: Nick Hudson <nhudson@akamai.com>
----
- net/core/filter.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 7f8d43420afb..e113ae2f3f14 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3667,6 +3667,44 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
- 			skb_increase_gso_size(shinfo, len_diff);
- 
-+		/* Selective GSO flag clearing based on decap type.
-+		 * Only clear the flags for the tunnel layer being removed.
-+		 */
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-+		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-+					 SKB_GSO_UDP_TUNNEL_CSUM)))
-+			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-+					      SKB_GSO_UDP_TUNNEL_CSUM);
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-+		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-+			shinfo->gso_type &= ~(SKB_GSO_GRE |
-+					      SKB_GSO_GRE_CSUM);
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-+		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-+			shinfo->gso_type &= ~SKB_GSO_IPXIP4;
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-+		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-+			shinfo->gso_type &= ~SKB_GSO_IPXIP6;
-+
-+		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-+		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-+			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-+			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-+						  SKB_GSO_UDP_TUNNEL_CSUM |
-+						  SKB_GSO_GRE |
-+						  SKB_GSO_GRE_CSUM |
-+						  SKB_GSO_IPXIP4 |
-+						  SKB_GSO_IPXIP6 |
-+						  SKB_GSO_ESP)))
-+				if (skb->encapsulation)
-+					skb->encapsulation = 0;
-+
-+			if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) {
-+				skb->encap_hdr_csum = 0;
-+				skb->remcsum_offload = 0;
-+			}
-+		}
-+
- 		/* Header must be checked, and gso_segs recomputed. */
- 		shinfo->gso_type |= SKB_GSO_DODGY;
- 		shinfo->gso_segs = 0;
--- 
-2.34.1
+See:
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
 
