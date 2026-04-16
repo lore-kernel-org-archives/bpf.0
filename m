@@ -1,137 +1,112 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36C52DEA6E
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 22:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0276A32FA14
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 22:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776377791; cv=none; b=uTJO0j1ujp6WRyLv9cEQfsaIJ+Ve7ewCiCj+tTB9WVtHgsxkNzp7i27DwnYpLV+5USMWbOo1QlT6iYWR5V0SgdBW2ZlLuX2zGqfQ381spzkK1utRUXlCEwNeD5XgzABJobaMaM5lVDa4YT4ZCEn5z1iA00ME3TQLzOTw8xY7O9A=
+	t=1776377838; cv=none; b=Ypw4KK2DfbrD2q8XUnOlmrShDXtddBU7PJodNiJ2b7tcpQ8kk5yk4kwN8Zd25HW5RMYhrFrF22vq3TwcCRx6O0ucw/BGjitee3tC4TCMI1xNzbWrui4WVrjnTCcAls/dN63ig2EgnZYJ9GtFKPEOcMXIkg+0B4pcX6VFS5uQc1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776377791; c=relaxed/simple;
-	bh=hzVWauLZri7wQAx35mCcwgfkvHfMbH0b/GBNtVgnK94=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PoPX0CNKULZj3RlkRO+ZS6l/WQhXx5eqmDafWj/IRXi7maW51342MkzDO/A0NpxQaZme71kLBpw1Ywd8TpQVi8YKjjJrHpUAsmyX+23+0aX5rpkOCK2NWSp9O5tzoG1Uu6Tijz2TH47NH03zlHMLY5u33oRoEe0+a80AC5WP2Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rfKVC0dN; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776377838; c=relaxed/simple;
+	bh=Ed3ZpPCN1qwX2Y9+xn3FctY5fvt35o+FfZD2fHDwYCk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=I4D7iLAf6PjgneUb8buOzQWGdn5FhpHNs6FBTwZWVJEKA8SpmhxhaicyXfznCKZV58Q28He6MDjENiI17cFE74wRpmW4gZwdmWiOltp9sIJ/ObmlAQYTRHOQjry1oR8gI32Ihk5ZKZdyjbRmhzCSAOKE5+JIOr/apLKvSpFh0vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pV7ZbU+T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rfKVC0dN"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4888375f735so322695e9.3
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 15:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776377788; x=1776982588; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LJ6nCSobDok6Wl4PJhiNgWjX0izjH5Pk61ivcyKTJTU=;
-        b=rfKVC0dN/Ds+IFqNonYoyqbOfvFov1f0sTaGFR+kNibzNAzYYYhNOvRiHBP1FXin/S
-         WutjJBvOENUTQq70xY3Uwd5tpkzq3CHgBVNcYUo5bpWcrFhdSXZ05wHsD1GacEsqZHqM
-         PgnBxVV0IlMwIKqM/XnctjHGLUbxjy1jQ4K3Y8Sr6K5Q3veIaP/Os+LR/lU4mQzCd//8
-         WqYb5NMqJmL/YKO/ws9wffOpE10elRdboc2uGhtvScrVSY8+Ns4h6uA6/AM4xlOV5Tcp
-         S+aYIUVvH1yY2JSdYTHzs6ZVYQj859eeQoxuM5dsfQomu9usotqKoMAc+waAKIlE5Q54
-         hd/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776377788; x=1776982588;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LJ6nCSobDok6Wl4PJhiNgWjX0izjH5Pk61ivcyKTJTU=;
-        b=SINj7M0Lwn6s2lSQjWnVeU/BymAslnrOCukM7f0gcxZcwuzJoZcE3W1ccaguC7sc8G
-         BhAHEZa29VU8zl6tr8ySLdsh3pUIHFhMbaBkcKXdo2m6blJG4nXqdWYlcyPJ9gAtqYtn
-         ZxD/DRoJC1Yy5C7gGdcgQV+I2sUayneCH90x3yoS+UK4O1Mvbj/AvnHD9pzm5KGd6Nwv
-         2ZU4dGH0nS4WeDTJensUy0ekfmIM9kGUIXujmbeoKg2AmfTM6ukmOZeyoX9SR2cjrn4m
-         1PV5AWV2c9MisfXZuIPExoAA/WIfQG1scks9HywlYC5yoRGXe1x3Endk4XKlmoW4Eh3B
-         rAIg==
-X-Gm-Message-State: AOJu0YyK9SHIQuHwORhvS5OZrVdtmXFD6C4WO/gIuAhdn+X+97kS4XT1
-	wdbn3FZHn8WcUkU8YFv+Qhvwr5MQe2DBGIHA2YT3SMWrTu56Czta61Je
-X-Gm-Gg: AeBDiesueU7RjHL3jBhbw5CWs2HSRuciEI6w4ZUlgUQl9M2WXWZN0lguhKk6e5HyfD7
-	J/O27A932sabFtjo++4qS4/fD3Q9r7+pkqf7FQQkP4j0u8mZF8FqmddfS/zp7fVRbRzqVM8PfBd
-	B54SeatfLokHBS8gSVC18CqDncxpUj3iCSqtvGEbPhQHvFRlL9cbHqpscCHfQjS/fPunxWHpw7N
-	kBbG4xONo6rwZag5+75niFR3dwishnm7EYFQYTUASt/zkruNSSjRxBwrWrSVeezAQPZIxQFnVvB
-	Fmx1Eb33A8z1YwbDxHJ1fw22/1cV9tohx/aU6uJf7wu8hOzScDMewnJ9lgzD4VMMX+MmFFC1csp
-	Y7waoYpZ3XzZRqPR6C2UjhaSXctkqo0BzQV97s/ZTp+Oj1aq451300OvdNV4YxKiKkg85CRvd51
-	cx93VPHbxXlBvfVdUFq8nqWY92LP3gOjTuY+puIg5XCl2ux4EeowXlud3l3tgxk1Ede9TAGpYYf
-	wmIOvtSrmSJnEyDbqHCt4VhbiYiKv1XqRwCIGzS8iz3grocD0pTMMmEotypzRDqiEH+9zc4G9DP
-	Ku0Tj9GM9TaxGcGiDFohlXPSEVU/2KRlVDa0qqaAk1hfrYJl8u+MBw==
-X-Received: by 2002:a05:600c:4451:b0:488:9e54:94c8 with SMTP id 5b1f17b1804b1-488fb7a1a74mr3805545e9.31.1776377788031;
-        Thu, 16 Apr 2026 15:16:28 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0092ca608f43e4326a.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:92ca:608f:43e4:326a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fb7a0589sm2177175e9.19.2026.04.16.15.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 15:16:27 -0700 (PDT)
-Date: Fri, 17 Apr 2026 00:16:25 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
-	eddyz87@gmail.com, memxor@gmail.com,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Hiker Cl <clhiker365@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Fix NULL deref in map_kptr_match_type
- for scalar regs
-Message-ID: <aeFfuZ4SGFJ1xS5B@mail.gmail.com>
-References: <20260416-kptr_crash-v1-0-5589356584b4@meta.com>
- <20260416-kptr_crash-v1-1-5589356584b4@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pV7ZbU+T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840A3C2BCAF;
+	Thu, 16 Apr 2026 22:17:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776377837;
+	bh=Ed3ZpPCN1qwX2Y9+xn3FctY5fvt35o+FfZD2fHDwYCk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=pV7ZbU+TTS++VRBxZT9mjKSMDYuGDzXJRWfj4u72dJhqTd/5A0wsLuT36FvRySQxt
+	 m7ylsy4Rk7H6q0qnDtXtTA7m8+kGp18DHPqoajbdqr+vFJsS7ykXUOEeb787kPCtcq
+	 gt2U+wRm2lpi0bilXn0IJR7jkzI0sOz8MfGsaOHyvX12gjMyJt2QWeNau12NSqXb3t
+	 5g4tEJRNC36q+wvXE7MB8jmkMaxrcZNKWnrTMokEmeYPbGCLW+X9FKfoYkLgduNEXO
+	 7Q5vb42/6D/7APXqZESCyPQ4QuW5Sgmh7nnEWWMWPSNEGeHc2Xp4AJGWJM3i3XKDb+
+	 vBgzo9prJ1hSQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 10/10] ipe: Add BPF program load policy enforcement
+ via Hornet integration
+Reply-To: sashiko@lists.linux.dev
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260416173500.176716-11-bboscaccy@linux.microsoft.com>
+References: <20260416173500.176716-11-bboscaccy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 16 Apr 2026 22:17:16 +0000
+Message-Id: <20260416221717.840A3C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260416-kptr_crash-v1-1-5589356584b4@meta.com>
 
-On Thu, Apr 16, 2026 at 11:08:07AM -0700, Mykyta Yatsenko wrote:
-> From: Mykyta Yatsenko <yatsenko@meta.com>
-> 
-> Commit ab6c637ad027 ("bpf: Fix a bpf_kptr_xchg() issue with local
-> kptr") refactored map_kptr_match_type() to branch on btf_is_kernel()
-> before checking base_type(). A scalar register stored into a kptr
-> slot has no btf, so the btf_is_kernel(reg->btf) call dereferences
-> NULL.
-> 
-> Move the base_type() != PTR_TO_BTF_ID guard before any reg->btf
-> access.
-> 
-> Fixes: ab6c637ad027 ("bpf: Fix a bpf_kptr_xchg() issue with local kptr")
-> Reported-by: Hiker Cl <clhiker365@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=221372
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+Sashiko AI review found 3 potential issue(s):
+- [Low] Build failure when CONFIG_IPE_PROP_BPF_SIGNATURE is disabled due to=
+ unconditional access to a conditionally compiled field.
+- [Low] The commit message provides an incorrect property name in the examp=
+le policy.
+- [Low] The example policy in the commit message may be insecure depending =
+on the integrity provider's keyring semantics.
+--
 
-I believe this should be sent to bpf, not bpf-next (though it currently
-applies cleanly to both). With that:
+commit 81e945a1fa4e8ba5734149eaa67ab6ab459e3ad6
+Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 
-Acked-by: Paul Chaignon <paul.chaignon@gmail.com>
+ipe: Add BPF program load policy enforcement via Hornet integration
 
-> ---
->  kernel/bpf/verifier.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 9e4980128151..a4f3f367988c 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -4544,6 +4544,9 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
->  	int perm_flags;
->  	const char *reg_name = "";
->  
-> +	if (base_type(reg->type) != PTR_TO_BTF_ID)
-> +		goto bad_type;
-> +
->  	if (btf_is_kernel(reg->btf)) {
->  		perm_flags = PTR_MAYBE_NULL | PTR_TRUSTED | MEM_RCU;
->  
-> @@ -4556,7 +4559,7 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
->  			perm_flags |= MEM_PERCPU;
->  	}
->  
-> -	if (base_type(reg->type) != PTR_TO_BTF_ID || (type_flag(reg->type) & ~perm_flags))
-> +	if (type_flag(reg->type) & ~perm_flags)
->  		goto bad_type;
->  
->  	/* We need to verify reg->type and reg->btf, before accessing reg->btf */
-> 
-> -- 
-> 2.52.0
-> 
-> 
+This commit adds support for the bpf_prog_load_post_integrity LSM hook,
+enabling IPE to make policy decisions about BPF program loading based on
+integrity verdicts provided by the Hornet LSM.
+
+>     Example policy for bpf signature enforcement:
+>      DEFAULT op=3DBPF_PROG_LOAD action=3DDENY
+>      op=3DBPF_PROG_LOAD is_kernel=3DTRUE action=3DALLOW
+
+This isn't a bug in the code, but there appears to be a typo in the example
+policy. Should is_kernel=3DTRUE be bpf_kernel=3DTRUE to match the property =
+defined
+in the property_tokens array?
+
+>      op=3DBPF_PROG_LOAD bpf_signature=3DOK action=3DALLOW
+
+Also in the example policy, is it safe to use bpf_signature=3DOK without a
+keyring restriction like bpf_keyring=3DBUILTIN?
+
+If the underlying LSM validates signatures against user-provided keyrings,
+could an attacker bypass the policy by signing a malicious BPF program with
+their own key?
+
+> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> index 21439c5be3364..9a6d583fea125 100644
+> --- a/security/ipe/eval.c
+> +++ b/security/ipe/eval.c
+
+[ ... ]
+
+> @@ -297,6 +342,32 @@ static bool evaluate_property(const struct ipe_eval_=
+ctx *const ctx,
+
+[ ... ]
+
+> +	case IPE_PROP_BPF_KERNEL_FALSE:
+> +		return !ctx->bpf_kernel;
+> +	case IPE_PROP_BPF_KERNEL_TRUE:
+> +		return ctx->bpf_kernel;
+>  	default:
+
+If CONFIG_IPE_PROP_BPF_SIGNATURE is disabled, will this cause a build failu=
+re?
+
+The bpf_kernel field in struct ipe_eval_ctx is only defined within an
+ifdef CONFIG_IPE_PROP_BPF_SIGNATURE block.
+
+Could this access be abstracted through a helper function with a fallback
+stub like evaluate_bpf_sig()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416173500.1767=
+16-1-bboscaccy@linux.microsoft.com?part=3D10
