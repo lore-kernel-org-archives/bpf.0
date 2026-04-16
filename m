@@ -1,64 +1,64 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78713B7757
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 13:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7970344DAD
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 13:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776345163; cv=none; b=h8Tz/Y6VOT2ku3GrUiY0lOGtfU2Enm1o90Jt+Bf5KjUlqzyymNrLfhTyTkVFH86eWxcmePz9GWCn2t+XeW0Uo8apoHqxsx9WqGd8bOjdxHT+aoDMWZgvCLavGFEvPVuLv3MA2ciVThPfBhcCs6JkbLCvV296Qw+PECaH31RvABc=
+	t=1776345174; cv=none; b=GoTBErPY1vLi1x8+LM+XBjHVSeAI2Zx6n9Oa2bgiNULdAEkaPfKgu0ZiSnZ7CgczSqzvrgEavAkAu+i+ScIY2gDya6hbUtwYDdP4QU20KgED/Zn6iVA/aPFam5s5cWLWZwDyxF4Rcpc2K6r04KwJKVSOiJkMaTMN1ilun6hhqXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776345163; c=relaxed/simple;
-	bh=o8Pe5lEY29vbYQXJQId9J8NjnPLir8Iu/lijWh3rw8A=;
+	s=arc-20240116; t=1776345174; c=relaxed/simple;
+	bh=Z50jSNeLeGTyMRpxmGVh8iUwVhsSEfaUGZ+I1whNrdw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IexQgus3S7cgCMGiqVjjWEN3u4Yvu9YTf1Q5rpFwaFv8kQJbu2iVuszy/voriXGs5TVXiF3E+Tfyhzmh7zu4vSx1hWLrQZ1FMJeFvJ5vO93JzvF5gu4ttq9uSXfY2k/h6VYbIghCuXjVzuoEFYzNWjl+WBBHIO534CYsIkHWXIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rX6ItHrX; arc=none smtp.client-ip=209.85.221.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=VqsWMavIYBHACfDIYrq0WtkHiLwXI1ea33vQAv4uBzSJGj1zEa7VrMC2owaLzztICelfm7LxId1XqSZj1AyKaZgJOzrUApB7YETy4wsRAVlp02kd8Q8YwgUqK7BppfwJeQ1xEoUeZlnRNcIKQddQxUJ0FMxTdXYzNoEb4YKdLBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYsjQQ18; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rX6ItHrX"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d572f7437so5035463f8f.1
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 06:12:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYsjQQ18"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48897fd88ebso80905815e9.2
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 06:12:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776345160; x=1776949960; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776345171; x=1776949971; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GU+0y83TWIH6HB2fWAcA8BpsdL5SuyYgPIuspz45kmY=;
-        b=rX6ItHrXB46mp2hCTs3vAXJ5Y834T1LPpQHM5cRqK+P6cFHSJwc7uXoDGSXrGm5t6y
-         quTqHvbqct0qxSYIZ39p+fAAalSsLZj0KSnLIEdIKkIUG9O6oqFzVKwdsKFBLC3cW745
-         aA1w3O0Z/ZqDHE0wPWUKHG0Q9habFUu4SnaoQlzIzNwCkAEK9dtPWUNvN75e+oIyl8R9
-         Ijk8XVpYu/9dzadpCkSVgCkG4T2xnSeQ2PxrhLBrhqRFSxmZ1pSPJPZulVRjNK5JSSsM
-         LD9S8xbpqgGcrD8XzCdqDHBApmIzr80IE0Wg/V7I31dfbo6103vHjWfXWft6/9voJwwp
-         L30A==
+        bh=cqW69gPfsBdFMFFtMxVFS6nM1cBA288eCVvqNT4w9vA=;
+        b=iYsjQQ18dv65kXN8OvpGHYkhr25JhyKqj1EF0xeuNyq5AKghKnbTTomZxqZLX9RA9P
+         n9gjz2MFojJ993XkaMEldmu1Ji+LzjKU77pQhPl0xBeDe366hoAmKX5bvTXn2/O9xpwp
+         1OpZbC3WAd5WdX+fgh5aCbkHavy4JhlLJo52aDe+ItSxZ+R5iELi3K+Mc0fFiJgcza2a
+         5v/+AjDlfsHD7dAHmojnsCg50v+ZA0kKZ6OVQe5Y+PeuDMAXV7+6Y2QarmnGBkJPKTk+
+         s3vJk97F0CjWNNhGjqbBfF32DhkNQnZFQFDxat1aYhOV7JfXvEmLu7taBzunPedmygBo
+         y8ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776345160; x=1776949960;
+        d=1e100.net; s=20251104; t=1776345171; x=1776949971;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GU+0y83TWIH6HB2fWAcA8BpsdL5SuyYgPIuspz45kmY=;
-        b=dOdM48myXeyJ0Co46JxL85lnvD60ayc0vqZnL9hT8GpQsyEGeF5QUD1lnTLH0ruwa4
-         7t3wgvJHcpEqpGUELNhWMmgUaXEgWT6a+MRB1sAdLsSBOF/jGraAsDiQ7Iykeb6WCogN
-         FSE/0GBXXIU4EuKf00v3g6gmy9P+7cPGiWcRkvYxLCySIHtVG7KwLQPJZx8BPYwCQbf1
-         luEsvnG1/ZxSz8FRc/ITnmLVUy+d5T7DRKgNS9SGjvjsDuwsij8pZa73h2JjT53oYqFw
-         x4JzUdkxnqRDjQQDaFPViU4wmGOrI2OzUjGGBR7aoZXXhl20Hc94yTdG6oNdIdShqtyG
-         ISGg==
-X-Gm-Message-State: AOJu0YwZaVApsiQ+2Vo6DWHGnuA2smArnOF4TIemOznZkwiY9wFOlhhq
-	szsdP9EJBS1yhuWPsTgf8Y1nU0H/LuIcWZLTM5PcK3POQd4+/J/is1ZWi4ReanQ/
-X-Gm-Gg: AeBDiesHhBKwX5sYUxWaR8+g0/9xD8DwTVALmoxZtdwi+YIOIc7jEaDSVrKg+97q5Z+
-	uvtWnSR09jBB+ERvROH4/S+JjUc2sf+PXuK9FoTw0gD5VRz6QTZHreHDEKbpkKieUtz7lKfykp2
-	TD9DAxUlE6wCm1TeuKXSWhhZiIqW+FCqfmse/KP2xyKbWGWuN2Q9G6txUjlyRrgAREiGJTOAwQu
-	opbgE+52mvdX1XfCVorJz8rpo8+tB/hC93xcYSb5AcIb64T9p2nDQwiyOtomTWwTvB+u8bORIw/
-	Mx4eiZuKdx3kmD4JEBCLTS3e84kqiJcTha75KFWB/0fVcYvSUtiYZV1Rt31DxLVyecSW8nSaFDw
-	wTJyLB0r9Gphj4ukgyXDjmqQjvKFJkGybBv+LgdK3nu37avkl+Yb/4FFTLxNjEVcyfsM7T6mIjN
-	+vNgZGBc/giASEEF4cbY3/tFkR49MxF8iUHFUJq/t0sZSCd7AoE32TxuUBcfJBMmAHULwPwuI64
-	zu2qxVojLh0aE44P1NoV7mXA3NqwAPxB4N1zmq3mSfZXJnHV3vqs94RSuGU9GJpy5V6VvuDhdJJ
-	QYsEpdfSEskUIxXAGBLDy7LX0tvv8ASwhLvX2a2V/BLViYONP/fHHnknGPO+8Ww=
-X-Received: by 2002:adf:f1d0:0:b0:43d:68e7:5f0b with SMTP id ffacd0b85a97d-43d68e75f44mr23449814f8f.8.1776345160216;
-        Thu, 16 Apr 2026 06:12:40 -0700 (PDT)
+        bh=cqW69gPfsBdFMFFtMxVFS6nM1cBA288eCVvqNT4w9vA=;
+        b=KhFcYU5/5PL9E+6mKBeVcO8pqQAj6Caz3qaODVlrxjPnvwthjKYwqBtZPJGne3rcLl
+         TjON1+ZbJnnCw+8p8/xBEnkdak6nA+paVQCVES6MXN4ZLPjPQ/taI8DI8NYH7y6r7GKo
+         0fTo2x9edRqN2l/WmrITnx2/TvYEgu9ulrubt+WWPpCOezfyQrAcb/VxFkgxSEyUvIge
+         6FnFDgbh/JF0vGZMwLkq54nqxuCnaBbuXT2FE7p0bxSzKn2Xz2qFq5T0YsVVKYo+SKEC
+         eAOwPP5prlehiJCE7r/e5Y1SmtEDrzzhOS1yiW4pPWaeYShgubVxRXoQGbdyqIHim/ve
+         R/uQ==
+X-Gm-Message-State: AOJu0YwbOfeo5jwsghiaK1TpX69h9HFuqfjMMJNEcibLtj7dYcOU/+0Z
+	USHVdP3eHQsVpdxsh/5Pbw1xmDBeAKeM0POFsuk+6AVaXa90IW1TCVDhC/wPLN33
+X-Gm-Gg: AeBDieu1iP3cnkZOxxopGdVMAvLfe2PCXwq6LLJH9l/TmW+pD4HW8RDEwILQEKMZUjl
+	VMmPiAfr/kN0F7/FTqB+gohgjAcCA21FoIqVtlH2h/YVkhJuvbc/hBVZO4KbvtmRW5RuDRKQ2WX
+	FP3LvhBQ5Ox1ghmc8xDD4A/IHpnZ26vGLqLzaeCYF/GqYB8FME6DimZAVwy9Csvffq2FRu/VkKP
+	VyWiGWxBgIQRPX7aNdifdbYlQk23zq/A4SETk+1QKFcK9+GC8xeL616HXpUHCc4C0qDJ5QBDkQq
+	E/xhdcNtJ+lsWwtedQtN68NiM9FZAU0qTEuXNI9JmI5GcNzply06Ku8AOa3tBQ2mZkTPsVcsy32
+	eWigN+iWZPG4DKC6j0LJnXYgPeAQNWAcJ8na03Zp7MmHwCXm4JfHZXQ/onj2uoJO0BOK4VMPaC4
+	RfSU6SODwJyNcMa3A2Ppi9deh9Ak9jjtHUfy6C8uo+mFc4IeDlDzMDT5gubwz5dFtUZKYKHEFjR
+	jLX4jkA/nt2+lHuciF16klCKM7/seXyWAUe7AxePUxlg8+A2GlKoDA2VYTL+PvKvu9x4WfsRvUj
+	dr7bBt90n96cwkN3vv8GiH42yrUeD8igB3Jwtsd9zYGRoM4gHboe
+X-Received: by 2002:a05:600c:5249:b0:488:c40b:c8bf with SMTP id 5b1f17b1804b1-488d680577dmr344793685e9.2.1776345170809;
+        Thu, 16 Apr 2026 06:12:50 -0700 (PDT)
 Received: from mail.gmail.com (2a01cb0889497e00b55a04a9836ebec0.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:b55a:4a9:836e:bec0])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43ead3d5fe1sm13688320f8f.22.2026.04.16.06.12.39
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f5827145sm56855405e9.13.2026.04.16.06.12.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 06:12:39 -0700 (PDT)
-Date: Thu, 16 Apr 2026 15:12:37 +0200
+        Thu, 16 Apr 2026 06:12:50 -0700 (PDT)
+Date: Thu, 16 Apr 2026 15:12:48 +0200
 From: Paul Chaignon <paul.chaignon@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Helen Koike <koike@igalia.com>,
 	Yonghong Song <yonghong.song@linux.dev>
-Subject: [PATCH RFC bpf-next 3/7] selftests/bpf: Fix reg_bounds to prune on
- range violations
-Message-ID: <91b8f1840277989ac65d05a9ad5e683a98d3d6ec.1776344897.git.paul.chaignon@gmail.com>
+Subject: [PATCH RFC bpf-next 4/7] bpf: Improve 64bits bounds refinement from
+ u32 bounds
+Message-ID: <b2a0346a5b0818008503b721c62621918d84ad0a.1776344897.git.paul.chaignon@gmail.com>
 References: <cover.1776344897.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -82,95 +82,147 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1776344897.git.paul.chaignon@gmail.com>
 
-Since commit b254c6d816e5 ("bpf: Simulate branches to prune based on
-range violations"), we use range ill-formedness as a signal to detect
-dead branches. That logic was however not reflected in the reg_bounds
-selftests and can cause test case failures. For example, the
-"(s64)[0xffffffff00000002; 0] (u32)<op> S64_MIN+1" test case currently
-fails with:
+This patch improves the refinement of 64bit bounds from the u32 bounds.
 
-  19: w0 = w6                  ; R6=scalar(smin=0xffffffff00000002,smax=0)
-  20: w0 = w7                  ; R7=0x8000000000000001
-  21: if w6 == w7 goto pc+3
-  21: R6=scalar(smin=0xffffffff00000002,smax=0) R7=0x8000000000000001
-  [...]
+u32:     xxx         xxx         xxx         xxx         xxx
+     |-----------------------------|-----------------------------|
+u64:                        xxxxxxx
 
-  ACTUAL   FALSE1: scalar(u64=[0; U64_MAX],u32=[0; 4294967295],s64=[0xffffffff00000002; 0],s32=[S32_MIN; S32_MAX])
-  EXPECTED FALSE1: scalar(u64=[0; U64_MAX],u32=[0; 4294967295],s64=[0xffffffff00000002; 0],s32=[S32_MIN; S32_MAX])
-  ACTUAL   FALSE2: scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
-  EXPECTED FALSE2: scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
-  ACTUAL   TRUE1:  <not found>
-  EXPECTED TRUE1:  scalar(u64=[0xffffffff00000002; 0x7fffffffffffffff],u32=[2147483648; 1],s64=[0xffffffff00000002; 0xffffffff00000001],s32=0x1)
-  ACTUAL   TRUE2:  <not found>
-  EXPECTED TRUE2:  scalar(u64=0x8000000000000001,u32=1,s64=S64_MIN+1,s32=0x1)
+The above diagram represents a u32 range mapped on the u64 line.
+Because the umin64 doesn't match the u32 bounds, it's clear that it
+could be tightened to match the next umin32 value:
 
-The verifier is able to prune the true branch, while reg_bounds tries to
-refine the true-branch values. This patch fixes it by marking branches
-as invalid in reg_bounds if their ranges are ill-formed.
+u32:     xxx         xxx         xxx         xxx         xxx
+     |-----------------------------|-----------------------------|
+u64:                             xx
 
-Fixes: b254c6d816e5 ("bpf: Simulate branches to prune based on range violations")
+This patch implements the logic for this refinement, for the min and
+max bounds of u64 and s64. This refinement only takes place if the 32
+lower bits of umin64 are outside of the u32 range. In that case, we
+update umin64 to the next matching umin32 value. For the max bounds, we
+proceed in the same way, but update umax64 to the previous matching
+umax32 value.
+
+Note that when updating the min, we can run into an overflow. It
+corresponds to the following case and doesn't require special handling.
+
+u32:     xxx         xxx         xxx         xxx         xxx
+     |-----------------------------|-----------------------------|
+u64: xxxxxx                                                   xxxx
+
+This patch also updates reg_bounds to implement the same refinement.
+That change is small because commit 2fefa9c81a25 ("selftests/bpf: Fix
+reg_bounds to match new tnum-based refinement") already implemented
+similar logic to the above in reg_bounds.
+
+Together, these changes to the verifier and reg_bounds fix the selftest
+"(s64)[0xfffffffe000000ff; 0xffffffff00000000] (u32)<op> S64_MIN+255".
+
 Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
- .../selftests/bpf/prog_tests/reg_bounds.c     | 21 +++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c                         | 50 ++++++++++++++++---
+ .../selftests/bpf/prog_tests/reg_bounds.c     | 10 ++--
+ 2 files changed, 47 insertions(+), 13 deletions(-)
 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1d5d2b7e5140..bcf8a38a4d72 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2273,17 +2273,51 @@ static void deduce_bounds_64_from_32(struct bpf_reg_state *reg)
+ 	 */
+ 	__u64 new_umin, new_umax;
+ 	__s64 new_smin, new_smax;
++	__u32 umin_32lower, umax_32lower;
++	__u32 smin_32lower, smax_32lower;
+ 
+ 	/* u32 -> u64 tightening, it's always well-formed */
+-	new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
+-	new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
+-	reg->umin_value = max_t(u64, reg->umin_value, new_umin);
+-	reg->umax_value = min_t(u64, reg->umax_value, new_umax);
++	umin_32lower = reg->umin_value & 0xffffffffULL;
++	if (umin_32lower < reg->u32_min_value || umin_32lower > reg->u32_max_value) {
++		new_umin = (reg->umin_value & ~0xffffffffULL) | reg->u32_min_value;
++		if (new_umin < reg->umin_value)
++			/*
++			 * The potential overflow here corresponds to the
++			 * following case and doesn't require special handling.
++			 *
++			 * u32:     xxx        xxx        xxx        xxx
++			 *      |---------------------|---------------------|
++			 * u64: xxxxxx                                   xxxx
++			 */
++			new_umin += 0x100000000;
++		reg->umin_value = new_umin;
++	}
++	umax_32lower = reg->umax_value & 0xffffffffULL;
++	if (umax_32lower < reg->u32_min_value || umax_32lower > reg->u32_max_value) {
++		new_umax = (reg->umax_value & ~0xffffffffULL) | reg->u32_max_value;
++		if (new_umax > reg->umax_value)
++			/* Cf comment on new_umin for potential overflow. */
++			new_umax -= 0x100000000;
++		reg->umax_value = new_umax;
++	}
++
+ 	/* u32 -> s64 tightening, u32 range embedded into s64 preserves range validity */
+-	new_smin = (reg->smin_value & ~0xffffffffULL) | reg->u32_min_value;
+-	new_smax = (reg->smax_value & ~0xffffffffULL) | reg->u32_max_value;
+-	reg->smin_value = max_t(s64, reg->smin_value, new_smin);
+-	reg->smax_value = min_t(s64, reg->smax_value, new_smax);
++	smin_32lower = reg->smin_value & 0xffffffffULL;
++	if (smin_32lower < reg->u32_min_value || smin_32lower > reg->u32_max_value) {
++		new_smin = (reg->smin_value & ~0xffffffffULL) | reg->u32_min_value;
++		if (new_smin < reg->smin_value)
++			/* Cf comment on new_umin for potential overflow. */
++			new_smin += 0x100000000;
++		reg->smin_value = new_smin;
++	}
++	smax_32lower = reg->smax_value & 0xffffffffULL;
++	if (smax_32lower < reg->u32_min_value || smax_32lower > reg->u32_max_value) {
++		new_smax = (reg->smax_value & ~0xffffffffULL) | reg->u32_max_value;
++		if (new_smax > reg->smax_value)
++			/* Cf comment on new_umin for potential overflow. */
++			new_smax -= 0x100000000;
++		reg->smax_value = new_smax;
++	}
+ 
+ 	/* Here we would like to handle a special case after sign extending load,
+ 	 * when upper bits for a 64-bit range are all 1s or all 0s.
 diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-index 71f5240cc5b7..c0b3a357a0f4 100644
+index c0b3a357a0f4..d38550fc1624 100644
 --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
 +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-@@ -761,6 +761,16 @@ static void print_refinement(enum num_t s_t, struct range src,
- 	print_range(d_t, new, "\n");
- }
+@@ -500,7 +500,7 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+ 	    (s64)x.a >= S32_MIN && (s64)x.b <= S32_MAX)
+ 		return range_intersection(x_t, x, y_cast);
  
-+static bool is_valid_reg(struct reg_state *x)
-+{
-+	enum num_t t;
-+
-+	for (t = first_t; t <= last_t; t++)
-+		if (!is_valid_range(t, x->r[t]))
-+			return false;
-+	return true;
-+}
-+
- static void reg_state_refine(struct reg_state *r, enum num_t t, struct range x, const char *ctx)
- {
- 	enum num_t d_t, s_t;
-@@ -792,6 +802,9 @@ static void reg_state_refine(struct reg_state *r, enum num_t t, struct range x,
+-	if (y_t == U32 && x_t == U64) {
++	if (y_t == U32 && !t_is_32(x_t)) {
+ 		u64 xmin_swap, xmax_swap, xmin_lower32, xmax_lower32;
+ 
+ 		xmin_lower32 = x.a & 0xffffffff;
+@@ -518,8 +518,8 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+ 			 */
+ 			if (xmin_swap < x.a)
+ 				xmin_swap += 0x100000000;
+-			if (xmin_swap == x.b)
+-				return range(x_t, x.b, x.b);
++			if (xmin_swap != x.a)
++				return range(x_t, xmin_swap, x.b);
+ 		} else if (xmax_lower32 < y.a || xmax_lower32 > y.b) {
+ 			/* Same for the umax64, but we want to *decrease*
+ 			 * umax64 to the *maximum* value that matches the u32
+@@ -528,8 +528,8 @@ static struct range range_refine(enum num_t x_t, struct range x, enum num_t y_t,
+ 			xmax_swap = swap_low32(x.b, y.b);
+ 			if (xmax_swap > x.b)
+ 				xmax_swap -= 0x100000000;
+-			if (xmax_swap == x.a)
+-				return range(x_t, x.a, x.a);
++			if (xmax_swap != x.b)
++				return range(x_t, x.a, xmax_swap);
  		}
  	}
  
-+	if (!is_valid_reg(r))
-+		return;
-+
- 	/* keep refining until we converge */
- 	if (keep_going) {
- 		keep_going = false;
-@@ -837,6 +850,8 @@ static void reg_state_cond(enum num_t t, struct reg_state *x, struct reg_state *
- 		z2 = y->r[t];
- 
- 		range_cond(t, z1, z2, op, &z1, &z2);
-+		if (!is_valid_range(t, z1) || !is_valid_range(t, z2))
-+			return;
- 
- 		if (newx) {
- 			snprintf(buf, sizeof(buf), "%s R1", ctx);
-@@ -1401,12 +1416,14 @@ static void sim_case(enum num_t init_t, enum num_t cond_t,
- 	fr1->valid = fr2->valid = false;
- 	tr1->valid = tr2->valid = false;
- 	if (*branch_taken != 1) { /* FALSE is possible */
--		fr1->valid = fr2->valid = true;
- 		reg_state_cond(cond_t, fr1, fr2, rev_op, fr1, fr2, "FALSE");
-+		if (is_valid_reg(fr1) && is_valid_reg(fr2))
-+			fr1->valid = fr2->valid = true;
- 	}
- 	if (*branch_taken != 0) { /* TRUE is possible */
--		tr1->valid = tr2->valid = true;
- 		reg_state_cond(cond_t, tr1, tr2, op, tr1, tr2, "TRUE");
-+		if (is_valid_reg(tr1) && is_valid_reg(tr2))
-+			tr1->valid = tr2->valid = true;
- 	}
- 	if (env.verbosity >= VERBOSE_VERY) {
- 		printf("STEP3 (%s) FALSE R1:", t_str(cond_t)); print_reg_state(fr1, "\n");
 -- 
 2.43.0
 
