@@ -1,142 +1,177 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C69B36E48B
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 21:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB61124A044
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 21:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776376390; cv=none; b=RTXF11so4JfD0lDub69IWV6a2Nlo/8znoEU2EDvQe6D7L/fwaiTMA0hqCHdKmmvUtUQ0BDRZa6dVJSDSZ+DDgxGxyd+UbNFDzaBYi2jsQftya0NeT1cHC8QRRANK5MScijg37J0ki2Mbc3HQzV2Vuc38yq8m6MYNJQ4woh47Y9A=
+	t=1776376554; cv=none; b=Z3VG1RgnDLFl4emOrFr30tOBSczdTZxkf4lDQoXrQGCP0zYLRZWoq4Ihi/1uEZosuWMdeQxEAPRnPZVZknzDdqM7b+z2nIT8mfDiUdJC+xTQ0QSZshRIptkWeQ0/wA68CF2aWsVfDT/r7w+hlRAQlo6Tcgk+6qEqm2/kT9mK9VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776376390; c=relaxed/simple;
-	bh=fc57u1ib7joGvCNK5PYX6Wm4vwMtVJPQEZoKGdGJA14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s7a/JvFqw+eP6KBy+BjCLjdnXKb5gUUfpZO9ED6J7iabUmbSq6AMvywJquprKfvqXZz+W8uofr8oM4xxFTqgPcUWr24egF+2AetNnfC1LxFUgLxYjfYXQ50pR9z9Emj3ge8DsYfXeBah0E4zpPketmnO0pn9zy1umkuKvsp+9gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtIO55Wh; arc=none smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776376554; c=relaxed/simple;
+	bh=vy65xpd69qZg5lRrLPr1sFVtigh4kw6gpNB98qUYPpQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RxcPJGG1Bv/+WEtamSQy9uan0PmpTEtI6FmMAuOekqcKnUE3ugw32rWqY/vc+9kG/jJf88pNYpqG+oS3jDv5GDW1D0ufQOBvu0YlViYBW1TyYZwmCPf3NKXp3FDcTagvRVXBoKm2lmWR7fJAM1IrMKAl0Yu7a54IuN9IEZaxYYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O1MhFiAo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtIO55Wh"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64d5a7926cfso73402d50.2
-        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776376387; x=1776981187; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=E9IBe90RbHchIfC+QQ+bgmf2ghgUb9RVdOaY6yEgPS8=;
-        b=BtIO55WhzA9HHFLI/Ew7CzQHJdbeQHcdgZWEKdIxLpeJuaKX8SHcuoTeOdFkx9R+pI
-         aLwIk3NuCjsmOi/BfqmIQTTWYfwiw5jtOBnxNvsQ8QROq8V5rER2Bp6ro1eCcK3DjLLU
-         ODNYwIc2LCd6AgOQQ8j4qpHc+pLoGFu8woG0ZMzK9kTTHATwsBBUOD0qbki6kcm5LC65
-         Lyr1m7meH1tICVKDUbzUpppvLIuseCdJMUbWIsDZKBDs2QbISF+ckg74FkvNjibmp5td
-         GWNbjLh9SlTTNDz19KGjFMAbWKsxZDZ813iCSlJ+9Wbj4lCldzY0qIBmc5lM+pgS8oT4
-         ZfSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776376387; x=1776981187;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E9IBe90RbHchIfC+QQ+bgmf2ghgUb9RVdOaY6yEgPS8=;
-        b=E2Idss4bCEwB7+LKVAd49pyY7MQ+tjYCQzn7y1DpxB+wPVsxvpaBgoh15Akb/tQc2J
-         Imx3ry6Vtlh51TsrSarkCuj6CRKsWK8MK6NfoLVvRNoXwsXYO6U98dArcfeTHVvSjx23
-         pAHRVRpGSylDdPbaEoVSmrAhBqKudhf9+jYquqqcVB+pGS2BzAJ7ENqgG6y6zOYjCN0E
-         u2eVi9pr+pOn/10fRBzAKjVzGDAOHIsMS/br1UHZtWTB05svjxIKCtGWq87KjD1n/H4I
-         UkWpOxiqAqsitWTcWCUYMAtx1HSUdrwrd5bcHYqchJ+z9fy0q0nmF0QrGoCm1AUsTaBW
-         AciA==
-X-Forwarded-Encrypted: i=1; AFNElJ/RZ9qkMyv/NNnJMkF24k9gB05Q5X2PovrIQs9l3+HXU9Tmnmu54hqGNG1X8m3uHsorJw8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKJlWr/eecA4jYxTr1H8cqbI9eEZ70de4pWJtMb3hcAyl3FPRU
-	+71nlvBkigsAgBo/HmpNwkyy7WrWd9nN9pNDgsvxegHHrlAzmg4JMZH6
-X-Gm-Gg: AeBDietn9ZljmV4UplHsTTqfQ1OK6e4szkrQ6/gQeJa3D8ubnnKyhhZmytVetSbpdqG
-	rSga1HuU+FB3SS5hgwPLPomCt8FwurX/wfPQS+r8ntiiddudGZ4nyBalaII9eGhkjlod6eiRqN7
-	fBE4wmBG2TZnS9SZnZDlR8oSEAQmjnDL7mepar8iH467m/N4IMlFCWkKIfa1YtNTUS2Gbl5dE3T
-	TWAqUkvM72MbuL/2OsNqqBp45U8Ltabho4Qwb9melniEsvN9N1qAQ51D1n8Gndl/uf8lEwD0O8B
-	Uzdw5dgr4hrZ4U0tzbCylTTFhk3Xp2L5XZb2HfC9OS6llgd1uMxfFqOHFVFJRKHEUE/I4ZBEb93
-	R9eKIhx82HmCDV/0brehjZJvqjpe0uWyBaM3l8SRb+oerHj/u1KAl3AoI2zsoEs5q1jJQ/0ZkMI
-	isSu8bisGIqykrEfk/KhX161Xm//nOCr49FDpJzGCf5LTPQsD7uPylhT+K0VM62uFwrZGTnLyBj
-	zA=
-X-Received: by 2002:a05:690e:140f:b0:652:541e:9689 with SMTP id 956f58d0204a3-653107c0003mr474357d50.13.1776376387423;
-        Thu, 16 Apr 2026 14:53:07 -0700 (PDT)
-Received: from suesslenovo ([2600:1700:18fb:6011:9b9d:98c5:f23d:1874])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-652e44c08a5sm2538380d50.1.2026.04.16.14.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 14:53:06 -0700 (PDT)
-Date: Thu, 16 Apr 2026 17:53:05 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Song Liu <song@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	kpsingh@kernel.org, paul@paul-moore.com, mic@digikod.net,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org,
-	gnoack@google.com, jack@suse.cz, jmorris@namei.org,
-	serge@hallyn.com, yonghong.song@linux.dev, martin.lau@linux.dev,
-	m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com,
-	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
-Message-ID: <aeFaQXkKNHFeE-oC@suesslenovo>
-References: <20260407200157.3874806-1-utilityemal77@gmail.com>
- <20260407200157.3874806-9-utilityemal77@gmail.com>
- <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1MhFiAo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D28C2BCAF;
+	Thu, 16 Apr 2026 21:55:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776376554;
+	bh=vy65xpd69qZg5lRrLPr1sFVtigh4kw6gpNB98qUYPpQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=O1MhFiAo9KTivzYJBf/UuMttqZWqCPbthIGXC91Z7tlwQedCzmKKdX6VX+C9FuYOX
+	 t7CGRx7+mIpyLHgK59M3gueY/gYHQKaEQnp6REQ15HibPqANlmEUGK+GdCteK7mja5
+	 0SeULbuMu5YuY8+/9Fo75k34U0TmoyJvA6XyoXia4E2g5lrEqXnvxu2c65nOD/SPdb
+	 oGyJFlHgYR+zbeJkpR9FMaeJq3eYFH90/H4ps1YxEFW5DX0T9lP5BnPtFPjM4SluKH
+	 7FCPPmbwL7V3E9At5jxT12RQpL+5ndTsXgGS8cdD5Yx+rpaGMr4s5c4GU+yx4nau37
+	 5EbwOoFVbdRwQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 09/10] selftests/hornet: Add a selftest for the
+ Hornet LSM
+Reply-To: sashiko@lists.linux.dev
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260416173500.176716-10-bboscaccy@linux.microsoft.com>
+References: <20260416173500.176716-10-bboscaccy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 16 Apr 2026 21:55:53 +0000
+Message-Id: <20260416215554.65D28C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
 
-On Thu, Apr 16, 2026 at 02:12:11PM -0700, Song Liu wrote:
-> On Tue, Apr 7, 2026 at 1:02 PM Justin Suess <utilityemal77@gmail.com> wrote:
-> >
-> > Expose the new BPF_MAP_TYPE_LANDLOCK_RULESET via headers, allowing
-> > programs to utilize the map.
-> >
-> > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
-> 
-> I don't think we can introduce a new map type for this. Instead, we should use
-> existing map with __kptr values.
->
-> Thanks,
-> Song
+Sashiko AI review found 5 potential issue(s):
+- [Medium] Makefile targets lack the `$(OUTPUT)/` prefix, breaking out-of-t=
+ree and standard selftest builds.
+- [Medium] Hardcoded use of the host's `/sys/kernel/btf/vmlinux` breaks cro=
+ss-compilation.
+- [Medium] The host tool `gen_sig` is compiled using the target compiler, b=
+reaking cross-compilation.
+- [Medium] Unconditional build dependency on kernel module signing keys.
+- [Medium] Incorrect use of `bpf_probe_read_str()` to read user-space memor=
+y.
+--
 
-Thanks Song,
+commit d3ed81de44873be8726bc1bb9c61643050622647
+Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 
-That was one initially considered approach.
+selftests/hornet: Add a selftest for the Hornet LSM
 
-I initially decided in favor of the dedicated map type in this RFC after
-seeing the other FD maps for cgroups and sockets. 
+This commit adds a new selftest for the Hornet LSM. It contains a testcase
+that utilizes light skeleton eBPF loaders and exercises hornet's map
+validation.
 
-The main complication is rulesets in Landlock are created as file
-descriptors backed by a kernel object. In the intended model of this
-series, creation of rulesets is is done in userspace to avoid
-redefining the entire landlock ruleset creation API in BPF.
+> diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/self=
+tests/hornet/Makefile
+> new file mode 100644
+> index 0000000000000..432bce59f54e7
+> --- /dev/null
+> +++ b/tools/testing/selftests/hornet/Makefile
 
-I don't think we can pass the FD number via a map, since the FD is
-process specific. And it needs to be done in a way where we can lookup 
-the specific ruleset the FD points to safely.
+[ ... ]
 
-So we'd need some other way to load the ruleset from a file descriptor,
-either through a new userspace side BPF call or similar mechanism.
+> +TEST_GEN_PROGS :=3D loader
+> +TEST_GEN_FILES :=3D vmlinux.h loader.h trivial.bpf.o map.bin sig.bin ins=
+n.bin signed_loader.h
+> +$(TEST_GEN_PROGS): LDLIBS +=3D -lbpf
+> +$(TEST_GEN_PROGS): $(TEST_GEN_FILES)
+> +
+> +include ../lib.mk
+> +
+> +BPF_CFLAGS :=3D -target bpf \
+> +	-D__TARGET_ARCH_$(ARCH) \
+> +	-I/usr/include/$(shell uname -m)-linux-gnu \
+> +	$(KHDR_INCLUDES)
+> +
+> +vmlinux.h:
 
-Is there some other common pattern for FDs --> kptr I can follow?
+Since ../lib.mk prepends $(OUTPUT)/ to all entries in TEST_GEN_FILES and
+TEST_GEN_PROGS, will the generic build infrastructure look for targets like
+$(OUTPUT)/vmlinux.h and fall back to default implicit rules because the
+custom targets lack the $(OUTPUT)/ prefix?
 
-Basically the pattern I need is userspace must create the file
-descriptor, BPF converts that FD into a refcounted kernel object, and
-even if userspace closes the FD BPF needs to hold a reference on the
-underlying ruleset structure.
+> +	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
 
-(In this patch this was accomplished through the map_ops)
+Does this extract the BTF from the host machine's running kernel instead
+of the target kernel? On cross-compiled builds, could this generate
+mismatched architecture types?
 
-Let me know what you think Song. I do understand the benefit of having a
-__kptr instead, the refcounting is all there, and it would allow storing
-rulesets in multiple map types. (and one less map type to maintain).
+> +
+> +trivial.bpf.o: trivial.bpf.c vmlinux.h
+> +	$(CLANG) $(CFLAGS) $(BPF_CFLAGS) -c $< -o $@
+> +
+> +loader.h: trivial.bpf.o
+> +	$(BPFTOOL) gen skeleton -S -k $(CERTDIR)/signing_key.pem -i $(CERTDIR)/=
+signing_key.x509 \
 
-Mickaël, do you have any thoughts on this? I have v2 basically ready,
-although it uses the BPF_MAP_TYPE_LANDLOCK_RULESET it changes a lot on
-the Landlock side.
+Does this create an unconditional build dependency on the kernel module
+signing keys?
 
-I appreciate the feedback from both of you.
+If the target kernel is configured without module signing, or the selftests
+are built on a clean source tree before the keys are generated, will this
+cause the build to fail?
 
-Justin
+> +		-L $< name trivial > $@
+> +
+> +insn.bin: loader.h
+> +	$(SCRIPTSDIR)/extract-insn.sh $< > $@
+> +
+> +map.bin: loader.h
+> +	$(SCRIPTSDIR)/extract-map.sh $< > $@
+> +
+> +$(OUTPUT)/gen_sig: ../../../../scripts/hornet/gen_sig.c
+> +	$(call msg,GEN_SIG,,$@)
+> +	$(Q)$(CC) $(shell $(PKG_CONFIG) --cflags libcrypto 2> /dev/null) \
+> +		  $< -o $@ \
+> +		  $(shell $(PKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+> +
+> +sig.bin: insn.bin map.bin $(OUTPUT)/gen_sig
+> +	$(OUTPUT)/gen_sig --key $(CERTDIR)/signing_key.pem --cert $(CERTDIR)/si=
+gning_key.x509 \
+
+Since gen_sig is executed locally on the host to generate sig.bin, will
+compiling it with $(CC) and $(PKG_CONFIG) (which point to the target
+toolchain) cause an Exec format error during cross-compilation?
+
+Should it be compiled using $(HOSTCC) and host pkg-config instead?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing=
+/selftests/hornet/trivial.bpf.c
+> new file mode 100644
+> index 0000000000000..d38c5b53ff932
+> --- /dev/null
+> +++ b/tools/testing/selftests/hornet/trivial.bpf.c
+
+[ ... ]
+
+> +SEC("tracepoint/syscalls/sys_enter_unlinkat")
+> +int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
+> +{
+> +	char filename[128] =3D { 0 };
+> +	struct task_struct *task;
+> +	unsigned long start_time =3D 0;
+> +	int pid =3D bpf_get_current_pid_tgid() >> 32;
+> +	char *pathname_ptr =3D (char *) BPF_CORE_READ(ctx, args[1]);
+> +
+> +	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
+
+Since pathname_ptr is extracted from args[1] of the sys_enter_unlinkat
+tracepoint, isn't it a user-space pointer?
+
+On architectures with strict user and kernel address space separation, does
+bpf_probe_read_str() fail to read this memory?
+
+Should this use bpf_probe_read_user_str() instead?
+
+> +	task =3D (struct task_struct *)bpf_get_current_task();
+> +	start_time =3D BPF_CORE_READ(task, start_time);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416173500.1767=
+16-1-bboscaccy@linux.microsoft.com?part=3D9
