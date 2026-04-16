@@ -1,97 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C729E3B47C1
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB2DEEA8
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776348198; cv=none; b=TO+f2Az7N7VbZRBEmomFyowGE6Y19OVY4c0HvTEP+C76+11Iihrp/4yHe5b2d4tLB7XoAWDOTmUlR7PFiv2VzvoxHCVzGPBPnj0zLthfn1yorpjdEqF36iHf+P/lWb83AMGIRgDtxvPmVVwFqCFsfazMZzsnRjp+XDpuuOV7gwg=
+	t=1776348330; cv=none; b=DuBP3WXNVFIAVb+YofesB4bYc+ei2sjzoyvPp1xgU9AJkEYcAXaSJ0c3KHalGiJ4udBCAcBnDk9eAibfQmS/BbKOBmkrIQRbe9yB1bHp2wxBOkZTxNyW5Cyl9jmpN48hut7DVYqEMI75KfR36qN8aq4IkQZ2TuSsJcn+sKbu+yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776348198; c=relaxed/simple;
-	bh=Rc0nHgFqyKK6noXq+bsHK12NAMgtqrnQ+R/qdZygFOI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Ut0Ifd0xln164IdXA1DQ9sNEbCWxHgwdWSbCOATTBdqH/VS3MDAr8OUEmG6R502NQbN3GVnB7gwsedpDAZ41GNEtGnDeItKYxeA3RmKmzg7F5pZfELZhHIuNDX5kc3J6WchqHypYABytQMB8IX5H8cwKfPfzqCJWYMNhYGx4fQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZsKf1wnw; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZsKf1wnw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8B0C2BCAF;
-	Thu, 16 Apr 2026 14:03:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776348198;
-	bh=Rc0nHgFqyKK6noXq+bsHK12NAMgtqrnQ+R/qdZygFOI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=ZsKf1wnwldLkTbhRpflUdOY4G2/i6yhSQZEDlV7yiwbTSYdu1zwPuCITOFj8qtqVM
-	 nRRYyyewj4hl+xZVnziiS6iXvWj/nFWqQ7/fiRqYuI0heiWiuEqPN1sKgFcSOhzEnH
-	 cRmiN/uDTDZ0GdBawgZBT8F2aJ+vmfWbAdWDIGamHgOcuT5YL8zeFBHq5m4pnqQ/u6
-	 S2hiNtsRLNut/TArHSw7U4lhsKyBlYr1NMUSXjsSwaaFLVzt0oF8VFHXj6Fpq1rdz0
-	 zM8t3aqHyU5E2G8vG2S5h7FOpobGixisTJ1u2H00wjafZM8fWlDblpxx9XMgH2MA1s
-	 b1kSQpRA1xBMw==
-Content-Type: multipart/mixed; boundary="===============3561077641524916323=="
+	s=arc-20240116; t=1776348330; c=relaxed/simple;
+	bh=ztFfQr19wR0HwC7KfDcAstFQq6/mLpp2xa4htHN5zgk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:Cc:To:Content-Type; b=bwU+XkW3SvQEA47gALTU6A9PXuoh6nDJII/Vui7j0XOrnB80e4GlQyU8w6MTQ2z7n8ghRw89i+1tA1FM/xwGNcwIjTGtVdt4h4jkrPuzWgYZ0n1JUqF9r2yadh7FSNaTSXg6K2Kcy2giPY+Xk6a9Sja3ng4bAZom3P8eunJ7Zkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <jre@pengutronix.de>)
+	id 1wDNLI-0003we-Hp; Thu, 16 Apr 2026 16:05:16 +0200
+Message-ID: <b63e9174-7a3d-4e22-8294-16df07a4af89@pengutronix.de>
+Date: Thu, 16 Apr 2026 16:05:16 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <359bf9b7aa048d9fa626961b925c1b7545e520b088f59560b050e9bc9ac92f27@mail.kernel.org>
-In-Reply-To: <cf4061f2e91d271f1f44160a0b87a87ec6df5428.1776344897.git.paul.chaignon@gmail.com>
-References: <cf4061f2e91d271f1f44160a0b87a87ec6df5428.1776344897.git.paul.chaignon@gmail.com>
-Subject: Re: [PATCH RFC bpf-next 2/7] selftests/bpf: Test for empty intersection of tnum and u64
-From: bot+bpf-ci@kernel.org
-To: paul.chaignon@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,harishankar.vishwanathan@gmail.com,eddyz87@gmail.com,koike@igalia.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 16 Apr 2026 14:03:18 +0000 (UTC)
-
---===============3561077641524916323==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Jonas Rebmann <jre@pengutronix.de>
+Subject: XDP BPF JIT memory leak on armv7
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@pengutronix.de
+To: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Russell King
+ <linux@armlinux.org.uk>, Puranjay Mohan <puranjay@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: jre@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: bpf@vger.kernel.org
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> index c1ae013dee29..151c7a479a6b 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> @@ -2184,4 +2184,29 @@ __naked void tnums_equal_impossible_constant(void *ctx)
+Hello,
 
-[ ... ]
+We have observed a memory leak when using the JIT on armv7 with XDP
+programs in all kernels tested (6.1 to v7.0/master).
 
-> +	if r6 s< r1 goto +2;								\
-> +	/* On fallthrough, r6's u64=[0xe00000002;0xf00000000] */			\
-> +	/*                      tnum=(0xe00000000; 0x1ffffffff) */			\
-> +	if r6 s> r2 goto +1;								\
+kmemleak reports:
 
-Are the inline comments placed correctly? According to the
-verifier log in the commit message itself, on fallthrough of the
-"if r6 s< r1" instruction the state is:
+unreferenced object 0xbf0a1000 (size 4096):
+   comm "ping", pid 818, jiffies 4294949376
+   hex dump (first 32 bytes):
+     00 10 00 00 f1 de fd e7 f1 de fd e7 f1 de fd e7  ................
+     f1 de fd e7 f1 de fd e7 f1 de fd e7 f1 de fd e7  ................
+   backtrace (crc 38a5ba95):
+     kmemleak_vmalloc+0x38/0x94
+     __vmalloc_node_range_noprof+0x624/0x7e0
+     execmem_alloc+0x7c/0x100
+     bpf_jit_binary_alloc+0x64/0xfc
+     bpf_int_jit_compile+0x14c/0x348
+     bpf_jit_subprogs+0x4fc/0xa60
+     bpf_check+0x1840/0x30e0
+     bpf_prog_load+0x720/0xec4
+     __sys_bpf+0x4cc/0x25d4
+     ret_fast_syscall+0x0/0x54
 
-    R6=scalar(smin=umin=0xe00000002,
-              umax=0x7fffffffffffffff,
-              var_off=(0x0; 0x7fffffffffffffff))
+This was reproduced on various debian systems:
+  - stock debian sid with 6.19.12+deb14-armmp-lpae
+  - stock debian 12 with 6.1.0-44-armmp-lpae
 
-The u64 upper bound at this point is 0x7fffffffffffffff, not
-0xf00000000. The values u64=[0xe00000002;0xf00000000] and
-tnum=(0xe00000000; 0x1ffffffff) only appear after the
-"if r6 s> r2" fallthrough. Should these comments be moved below
-the "if r6 s> r2 goto +1" instruction?
+As well as debian sid with custom built kernels with a
+multi_v7_defconfig based config, amongst versions tested: latest master,
+(7.0.0-08391-g1d51b370a0f8), v7.0, v6.18, v6.8, v6.12.
 
-> +	/* On fallthrough, r6's tnum=(0xe00000001; 0x100000000) */			\
-> +	/* It doesn't intersect with the u64 so the condition is always false */	\
-> +	if w6 == 1 goto +1;								\
+Precise reproduction steps:
+Enable the BPF JIT (if not done via CONFIG_BPF_JIT_ALWAYS_ON=y):
+# sysctl -w net.core.bpf_jit_enable=1
 
-Similarly, tnum=(0xe00000001; 0x100000000) is the state on the
-true branch of "if w6 == 1", not on the fallthrough. The commit
-message verifier log confirms this:
+Prepare any simple XDP program:
+$ git clone https://github.com/xdp-project/xdp-tutorial.git
+$ cd xdp-tutorial
+# apt install git cmake build-essential xdp-tools clang pkg-config libelf-dev m4 libpcap-dev llvm libbpf-dev libxdp-dev
+$ ln -s /usr/include/arm-linux-gnueabihf/gnu/stubs-hard.h /usr/include/arm-linux-gnueabihf/gnu/stubs-soft.h
+$ ./configure
+$ cd basic01-xdp-pass
+$ make
 
-    from 8 to 10: R6=scalar(...,
-        var_off=(0xe00000001; 0x100000000))
+Store /proc/vmallocinfo:
+# cat /proc/vmallocinfo > /tmp/vmallocinfo-before
 
-Would "on the true branch" be more accurate here than "on
-fallthrough"?
+Load the program and confirm it is loaded, unload and confirm:
+# ./xdp_pass_user -d lo
+# xdp-loader status
+lo                     xdp_prog_simple   skb      83   d4f8542f2b42fac5
+# ./xdp_pass_user -d lo --unload-all
+# xdp-loader status
+lo                     <No XDP program loaded!>
+  
+Compare /proc/vmallocinfo:
+# cat /proc/vmallocinfo > /tmp/vmallocinfo-after
+# diff -u <(grep bpf_jit_binary_alloc /tmp/vmallocinfo-before) <(grep bpf_jit_binary_alloc /tmp/vmallocinfo-after)
++0x4e292a08-0xae3e49c0    8192 bpf_jit_binary_alloc+0x64/0xfc pages=1 vmalloc
 
+# echo scan > /sys/kernel/debug/kmemleak
+# cat /sys/kernel/debug/kmemleak
+[see above]
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+The backtrace corresponds in commit 1d51b370a0f8 to
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24513066291
---===============3561077641524916323==--
+mm/kmemleak.c:596
+mm/vmalloc.c:4093
+mm/execmem.c:44
+kernel/bpf/core.c:1093
+arch/arm/net/bpf_jit_32.c:2241
+kernel/bpf/fixups.c:1122
+kernel/bpf/verifier.c:20099
+kernel/bpf/syscall.c:3083
+kernel/bpf/syscall.c:6252
+arch/arm/kernel/entry-common.S:44
+
+Each subsequent run introduces an additional leak.
+
+Thanks,
+Jonas
