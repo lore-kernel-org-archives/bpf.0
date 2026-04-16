@@ -1,100 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3E641C72
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 20:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F22C349B02
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 20:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776371534; cv=none; b=eobdX1ofsSOEFvcFuMwQN3SztVrFbuVxXSQPJQ1OHZwyA6/xO7ai7gQZZke3hcmwYofnTRXoyw9dl6Oky5q8hWF/IMoQCqdY/gzC8LCrp5cWu4E7nGqKnqCRay1Ta/tLrnhRtAKRqbsGbQpdRatzwFUbu1bn4Mx3uFh3DxPnVXs=
+	t=1776372242; cv=none; b=a1JaXvmhjitqOqT9ZyslUlbREIeLPEOgFcpNn4105kS4y+3x+jkeeT3fh37lG5GXNdQ+XJmKw+ay56XLDBFPup42E1GPwkgAzlJqTHK2cG8J6MDSVv1gS8jsrNyWuq9etDmyy84vlZqCedgR20wmwQ0q65McE52cJYFOygWaFWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776371534; c=relaxed/simple;
-	bh=p0hSPEgHLLS6gRfA/fYkshYSR+pxd02U49lURAvj7ZA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uiUZHinQZuqIi6G0OT+7tButmVra9/4BNEqXlACAM0t33uoRKkgKAFWAu7TnCdG89JT/b9Air/6GqKekZD/VV82pznS6yo+CcEqYh44630rvVxP+QaO9MVlY+vrPgXi01CUZc7cZb7Ult5yLfVf4YusYm+70Wi2Rx0YQYlUTOw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZGWdVFT0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776372242; c=relaxed/simple;
+	bh=QGIef2DKgkWgTSLm1/zluKhpQGzjhf8XEtto3PhCWRI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EEo3kBeymrOuPJVg9zSfyPF8ubI3nQPaGBaV9f2ibVBvixKJ+qLzo0VBcam9doswQbo3/xlrSb4QTI4oqmRxWYQKhch19+RBSdXcKH2K7AjzDWZ5QFJBqly4M2nBEnEX6Ajqsj+J0ydKVY6gcTJ2e9sFjzcO3vvNPMkVQtdX1Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TR52t+5i; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZGWdVFT0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D04CCC2BCAF;
-	Thu, 16 Apr 2026 20:32:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TR52t+5i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA184C2BCB0
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 20:44:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776371533;
-	bh=p0hSPEgHLLS6gRfA/fYkshYSR+pxd02U49lURAvj7ZA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ZGWdVFT0yfnyqncz2CrDbSlV4+QKOGxyjoizsZosxF8Yyxp5BGA2ai04kBPiq2Flu
-	 QuiFimSsdN+VdBmCttbS3Hs/bGD8DU5w499HILQKDOqmPC7r0GWQiuZDRpMvO+43Bc
-	 Zx2wLWV8iLk9W4mVpXl/HxDb9rTIwEUYECLJsD6iaV6maKY7f07GhyQsrMYcF8OxUj
-	 jjyHXso29QdT4j2KkNMIMfTBk+dCna9lQ6Ja/Lh0vxyIrGokddFxjP9cx/GetkmRjB
-	 aW8RN5Guj7suRTuRdI2Xe/51/1cnfORAZjM/06Ss2P1+pxlRg5qKjOiufHXV4UC2UM
-	 qBO4+ux7XpFJw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 7/8] selftests/bpf: Fix up __u16 vlen
- assumptions
-Reply-To: sashiko@lists.linux.dev
-To: "Alan Maguire" <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416143904.1220662-8-alan.maguire@oracle.com>
-References: <20260416143904.1220662-8-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 20:32:13 +0000
-Message-Id: <20260416203213.D04CCC2BCAF@smtp.kernel.org>
+	s=k20201202; t=1776372241;
+	bh=QGIef2DKgkWgTSLm1/zluKhpQGzjhf8XEtto3PhCWRI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TR52t+5iM48OmNZPMY4itWRLW9UdIQQgLliQ6z/fHESwXjT6VvaaCjbv4hEzgx4r3
+	 MM2GFs2nYRRM6QBnnIJC/AQW9fxpVB1glXpCQz80112AWKzfhjDsezhrUG4fageCso
+	 pLehpbquA1CeUOe8rfoLYY98QL+3aIDwwq6W4gK2/hqodSZRWyzDwEYljXKbO6oXwe
+	 2mNY7d/kLZ4Emv2i2pXbvzJQ2FuCdZ1b3jNkONst4MFBhXZlwbrmwsz8DzZ0Ju2Im/
+	 Jk6vapRPXX29TVJViIMwsknGHlgFyGRe51W9X90x+IY84YHY8Ris+AHOb9D7+/Fc5c
+	 82A4WymUihOSQ==
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8a48deebe95so67866686d6.0
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 13:44:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8AYfkwTGkgNT0KXv5UaxMhdE4QoAYK5L/dhPwWahYTYpx+UHUeq+0AmnmKO09sK7YW5Ns=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+0Fj3pe7KIjPJ+IDsoUAcTdZgYra6w+IXqYuMQ9oj2KpaF6Po
+	vw7f5DsJMxwYBvLfMk/NzMiQjSoRDwB9VfIPz8QogSlqw8a/cSTxvyNLxP94CJLbnjKar1L72Rr
+	oWs4M1tU0TxpRn9yRph019He2Cm3n9Tc=
+X-Received: by 2002:a05:6214:3913:b0:89c:e4c3:dc1e with SMTP id
+ 6a1803df08f44-8b0281103bemr1156536d6.34.1776372241130; Thu, 16 Apr 2026
+ 13:44:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260412174546.18684-1-emil@etsalapatis.com> <aeFFQL-bOTN5dg7V@google.com>
+ <aeFHKUsf86jw1v9W@google.com>
+In-Reply-To: <aeFHKUsf86jw1v9W@google.com>
+From: Song Liu <song@kernel.org>
+Date: Thu, 16 Apr 2026 13:43:49 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4nvpP6UJ0xO0yJ=FcAVOrWDX6ASvcp04kWQfYBx=72mA@mail.gmail.com>
+X-Gm-Features: AQROBzBanASTY0BkJkcgT7VjU9AKRM0hDAO5yFVylM3s9r-i6kiT8TQ7cxX2bF0
+Message-ID: <CAPhsuW4nvpP6UJ0xO0yJ=FcAVOrWDX6ASvcp04kWQfYBx=72mA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 0/9] Introduce arena library and runtime
+To: Matt Bobrowski <mattbobrowski@google.com>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	andrii@kernel.org, memxor@gmail.com, daniel@iogearbox.net, eddyz87@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sashiko AI review found 1 potential issue(s):
-- [Medium] The patch fails to fix the 16-bit assumption for `vlen` in `tool=
-s/testing/selftests/bpf/prog_tests/ctx_rewrite.c`.
---
+On Thu, Apr 16, 2026 at 1:31=E2=80=AFPM Matt Bobrowski <mattbobrowski@googl=
+e.com> wrote:
+[...]
+> >
+> > I haven't had an opportunity to go through this patch series just yet,
+> > but can I just say that it excites me considerably! I've been wanting
+> > to carve out some time to implement something exactly like this for a
+> > very long time (since BPF arena maps were initially introduced) as I
+> > think it's going to be incredibly valuable for BPF users moving
+> > forward.
+>
+> I swear that I also saw a notification stating that this series was
+> applied to bpf/bpf-next.git (master), but upon checking I only see
+> that commit 4c5f21d4dfa ("selftests/bpf: Add tests for non-arena/arena
+> operations") from the series was applied. What's going on there?
 
-commit 033bc70f770dbba15f69901f422f7378dd7cd70e
-Author: Alan Maguire <alan.maguire@oracle.com>
+Part of it was committed. From patchwork-bot:
 
-selftests/bpf: Fix up __u16 vlen assumptions
-
-Fix up a few cases where we assume vlen is 16 bits.
-
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
-/selftests/bpf/prog_tests/btf.c
-> index 0cc347e32db37..a9de328a86976 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-> @@ -8092,7 +8092,7 @@ static struct btf_dedup_test dedup_tests[] =3D {
->  static int btf_type_size(const struct btf_type *t)
->  {
->  	int base_size =3D sizeof(struct btf_type);
-> -	__u16 vlen =3D BTF_INFO_VLEN(t->info);
-> +	__u32 vlen =3D BTF_INFO_VLEN(t->info);
->  	__u16 kind =3D BTF_INFO_KIND(t->info);
-
-Does tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c also need to be
-updated to handle 24-bit vlen values?
-
-Looking at find_field_offset_aux(), mnum is still declared as __u16 and
-assigned the result of btf_vlen():
-
-tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c:find_field_offset_aux(=
-) {
-	const struct btf_type *type =3D btf__type_by_id(btf, btf_id);
-	const struct btf_member *m;
-	__u16 mnum;
-	int i;
-	...
-	m =3D btf_members(type);
-	mnum =3D btf_vlen(type);
-
-	for (i =3D 0; i < mnum; ++i, ++m) {
-	...
-}
-
-If a structure or union has more than 65,535 members, could mnum be
-truncated here, causing the loop to terminate prematurely and failing to
-resolve field offsets?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416143904.1220=
-662-1-alan.maguire@oracle.com?part=3D7
+Here is the summary with links:
+  - [bpf-next,v7,1/9] bpf: Allow instructions with arena source and
+non-arena dest registers
+    (no matching commit)
+  - [bpf-next,v7,2/9] selftests/bpf: Add tests for non-arena/arena operatio=
+ns
+    https://git.kernel.org/bpf/bpf-next/c/4c5f21d4dfa4
+  - [bpf-next,v7,3/9] selftests/bpf: Move bpf_arena_spin_lock.h to the top =
+level
+    (no matching commit)
+  - [bpf-next,v7,4/9] selftests/bpf: Move READ_ONCE/WRITE_ONCE macros
+to bpf_experimental.h
+    (no matching commit)
+  - [bpf-next,v7,5/9] selftests/bpf: Add basic libarena scaffolding
+    (no matching commit)
+  - [bpf-next,v7,6/9] selftests/bpf: Add arena ASAN runtime to libarena
+    (no matching commit)
+  - [bpf-next,v7,7/9] selftests/bpf: Add ASAN support for libarena selftest=
+s
+    (no matching commit)
+  - [bpf-next,v7,8/9] selftests/bpf: Add buddy allocator for libarena
+    (no matching commit)
+  - [bpf-next,v7,9/9] selftests/bpf: Add selftests for libarena buddy alloc=
+ator
+    (no matching commit)
