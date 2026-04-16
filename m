@@ -1,32 +1,32 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6FF399009
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 11:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789293A6B75
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 11:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776338665; cv=none; b=KKuMgKgCljXwYYWE/X44N+9+b5NpnvWWEg4yIP9racG7TZcHPvYN6yxGv+84ZEreB59xRAdjQhbKV3pycy0cQTgeTb4AvO7G62a32uBhS8eydziJJu0CfPoXrlCHaRWujwHQPdIjg4vWzmE77cwcPZNtENHkjORmon/iafBYnW0=
+	t=1776338677; cv=none; b=Kvv2XiKtkjCFRUYFBsUQVRXUXshQVAWToTWjyk97IT0dEVeEryeYaHHkfpXE0qX9o53GkCy1y99db6MGV1sWmWee3Bl/OmzxgrTFXybZM0RMPmsEuU0hHp2eh29yAgqPVPk4R8aVkcgx4ptQQqXhttJ7Am65UfDuzwgUKmIEq+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776338665; c=relaxed/simple;
-	bh=tGOhrptT9PJ5/cvzp6EKffTU5Kr88yNrPL4dsjtp0/E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dy5fobXbgEzyoIaSClMNigqoS014s6XAs20dibZ0NebmwO4EAwtdFIRRm3bxcNdZKZ4LRBk+kPHUzvIujOxnmajqpQAoKB+2avCkFR9oofb/sSbi4KyD45UM8EB7q5QLoRtlNm+mFZkbA3pWS7qQjqbqS1URnootqdBJxzBcFUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UF1KpSD0; arc=none smtp.client-ip=91.218.175.186
+	s=arc-20240116; t=1776338677; c=relaxed/simple;
+	bh=dKUQGdzSULQLFpjO4woDfNNas3V9RQeU8cHdUhNQEJU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gxxnA7fhCjsNNEOxGUT85l6vpQeOpWJenarFMhmdZYsBDa2NryQwDKF/RGBmhni8sLfx61E/2X00HnkRhFdl96Nw8EriFyGEFj65MY4lmMqy1rF3xd1IgHL5Ld9qjejy3T2fQQbkEWoGsu8T8e0WGf7cCddhTO6KEVO/Gbg/qgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tPxOlj1m; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UF1KpSD0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tPxOlj1m"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776338662;
+	t=1776338673;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8AldNZMVHS+FDrWsqQWGH6HMzCXTBhC6l0kEDtweIFA=;
-	b=UF1KpSD0RSSqrsSf0EPQ+pdlhKbgUzEbBpVt3z0hBlQ9KX33ed7Ig5M4GtdluxgiCN2NdE
-	NtRnLLXQ+AAm4swHPVKFRRkpN+J2ZGW/ycKIQwiQNJzvTko3F5O3GFRrx+5/FKPmFEY917
-	a0VVUGPFpWNVuzdxNaUDTio4cDNPofg=
+	bh=0g3FoFi5R4RZ3NBwYcu3bG8S2Vu+l0yHuaglflknQ3U=;
+	b=tPxOlj1mIfymjjjGNuzOmCJiDGCniTAj4kwYlQ8s5hYU3z+RzIFlU/5PRo3Bw3fdyPSXev
+	5+MFfyZmOSWCpGGtNPd71quIwsYBQ2Qv+jl3PK/QUegVHxdIwAtC0dFApp/2bMhlXcqL/D
+	577U9NAVmpVV88aCmkm/2FhWXxvMzKQ=
 From: KaFai Wan <kafai.wan@linux.dev>
 To: martin.lau@linux.dev,
 	daniel@iogearbox.net,
@@ -51,12 +51,9 @@ To: martin.lau@linux.dev,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: Quan Sun <2022090917019@std.uestc.edu.cn>,
-	Yinhao Hu <dddddd@hust.edu.cn>,
-	Kaiyan Mei <M202472210@hust.edu.cn>
-Subject: [PATCH bpf v2 1/2] bpf: Reject TCP_NODELAY in TCP header option callbacks
-Date: Thu, 16 Apr 2026 19:23:07 +0800
-Message-ID: <20260416112308.1820332-2-kafai.wan@linux.dev>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr opt callbacks
+Date: Thu, 16 Apr 2026 19:23:08 +0800
+Message-ID: <20260416112308.1820332-3-kafai.wan@linux.dev>
 In-Reply-To: <20260416112308.1820332-1-kafai.wan@linux.dev>
 References: <20260416112308.1820332-1-kafai.wan@linux.dev>
 Precedence: bulk
@@ -68,73 +65,153 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-A BPF_SOCK_OPS program can enable
-BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
-bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB or
-BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
+Add a sockops selftest for the TCP_NODELAY restriction in
+BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
 
-In these callbacks, bpf_setsockopt(TCP_NODELAY) can reach
-__tcp_sock_set_nodelay(), which can call tcp_push_pending_frames().
+The test program calls bpf_setsockopt(TCP_NODELAY) from
+ACTIVE_ESTABLISHED_CB and PASSIVE_ESTABLISHED_CB to verify that it is
+still allowed outside the TCP header option callbacks.
 
-From BPF_SOCK_OPS_HDR_OPT_LEN_CB, tcp_push_pending_frames() can call
-tcp_current_mss(), which calls tcp_established_options() and re-enters
-bpf_skops_hdr_opt_len().
+It then enables BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG, sends data to
+exercise the TCP header option path, and checks that
+bpf_setsockopt(TCP_NODELAY) returns -EOPNOTSUPP from both
+BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB while the
+connection continues to make forward progress.
 
-BPF_SOCK_OPS_HDR_OPT_LEN_CB
-  -> bpf_setsockopt(TCP_NODELAY)
-    -> tcp_push_pending_frames()
-      -> tcp_current_mss()
-        -> tcp_established_options()
-          -> bpf_skops_hdr_opt_len()
-            -> BPF_SOCK_OPS_HDR_OPT_LEN_CB
-
-From BPF_SOCK_OPS_WRITE_HDR_OPT_CB, tcp_push_pending_frames() can call
-tcp_write_xmit(), which calls tcp_transmit_skb().  That path recomputes
-header option length through tcp_established_options() and
-bpf_skops_hdr_opt_len() before re-entering bpf_skops_write_hdr_opt().
-
-BPF_SOCK_OPS_WRITE_HDR_OPT_CB
-  -> bpf_setsockopt(TCP_NODELAY)
-    -> tcp_push_pending_frames()
-      -> tcp_write_xmit()
-        -> tcp_transmit_skb()
-          -> tcp_established_options()
-            -> bpf_skops_hdr_opt_len()
-          -> bpf_skops_write_hdr_opt()
-            -> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
-
-This leads to unbounded recursion and can overflow the kernel stack.
-
-Reject TCP_NODELAY with -EOPNOTSUPP in bpf_sock_ops_setsockopt()
-when bpf_setsockopt() is called from
-BPF_SOCK_OPS_HDR_OPT_LEN_CB or BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
-
-Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn/
-Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- net/core/filter.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../bpf/prog_tests/tcp_hdr_options.c          | 54 +++++++++++++++++++
+ .../bpf/progs/test_misc_tcp_hdr_options.c     | 40 ++++++++++++++
+ 2 files changed, 94 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index fcfcb72663ca..911ff04bca5a 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5833,6 +5833,11 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
- 	if (!is_locked_tcp_sock_ops(bpf_sock))
- 		return -EOPNOTSUPP;
- 
-+	if ((bpf_sock->op == BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
-+	     bpf_sock->op == BPF_SOCK_OPS_WRITE_HDR_OPT_CB) &&
-+	    IS_ENABLED(CONFIG_INET) && level == SOL_TCP && optname == TCP_NODELAY)
-+		return -EOPNOTSUPP;
-+
- 	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen);
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+index 56685fc03c7e..2d738c0c4259 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+@@ -513,6 +513,59 @@ static void misc(void)
+ 	bpf_link__destroy(link);
  }
  
++static void hdr_sockopt(void)
++{
++	const char send_msg[] = "MISC!!!";
++	char recv_msg[sizeof(send_msg)];
++	const unsigned int nr_data = 2;
++	struct bpf_link *link;
++	struct sk_fds sk_fds;
++	int i, ret, true_val = 1;
++
++	lport_linum_map_fd = bpf_map__fd(misc_skel->maps.lport_linum_map);
++
++	link = bpf_program__attach_cgroup(misc_skel->progs.misc_hdr_sockopt, cg_fd);
++	if (!ASSERT_OK_PTR(link, "attach_cgroup(misc_hdr_sockopt)"))
++		return;
++
++	if (sk_fds_connect(&sk_fds, false)) {
++		bpf_link__destroy(link);
++		return;
++	}
++
++	ret = setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
++	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY) active"))
++		goto check_linum;
++
++	ret = setsockopt(sk_fds.passive_fd, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
++	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY) passive"))
++		goto check_linum;
++
++	for (i = 0; i < nr_data; i++) {
++		ret = send(sk_fds.active_fd, send_msg, sizeof(send_msg), 0);
++		if (!ASSERT_EQ(ret, sizeof(send_msg), "send(msg)"))
++			goto check_linum;
++
++		ret = read(sk_fds.passive_fd, recv_msg, sizeof(recv_msg));
++		if (!ASSERT_EQ(ret, sizeof(send_msg), "read(msg)"))
++			goto check_linum;
++	}
++
++	ASSERT_NEQ(misc_skel->bss->nr_hdr_sockopt_estab, 0, "nr_hdr_sockopt_estab");
++	ASSERT_EQ(misc_skel->bss->nr_hdr_sockopt_estab_err, 0, "nr_hdr_sockopt_estab_err");
++
++	ASSERT_NEQ(misc_skel->bss->nr_hdr_sockopt_len, 0, "nr_hdr_sockopt_len");
++	ASSERT_EQ(misc_skel->bss->nr_hdr_sockopt_len_err, 0, "nr_hdr_sockopt_len_err");
++
++	ASSERT_NEQ(misc_skel->bss->nr_hdr_sockopt_write, 0, "nr_hdr_sockopt_write");
++	ASSERT_EQ(misc_skel->bss->nr_hdr_sockopt_write_err, 0, "nr_hdr_sockopt_write_err");
++
++check_linum:
++	ASSERT_FALSE(check_error_linum(&sk_fds), "check_error_linum");
++	sk_fds_close(&sk_fds);
++	bpf_link__destroy(link);
++}
++
+ struct test {
+ 	const char *desc;
+ 	void (*run)(void);
+@@ -526,6 +579,7 @@ static struct test tests[] = {
+ 	DEF_TEST(fastopen_estab),
+ 	DEF_TEST(fin),
+ 	DEF_TEST(misc),
++	DEF_TEST(hdr_sockopt),
+ };
+ 
+ void test_tcp_hdr_options(void)
+diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+index d487153a839d..a8cf7c4e7ed2 100644
+--- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
++++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+@@ -28,6 +28,12 @@ unsigned int nr_data = 0;
+ unsigned int nr_syn = 0;
+ unsigned int nr_fin = 0;
+ unsigned int nr_hwtstamp = 0;
++unsigned int nr_hdr_sockopt_estab = 0;
++unsigned int nr_hdr_sockopt_estab_err = 0;
++unsigned int nr_hdr_sockopt_len = 0;
++unsigned int nr_hdr_sockopt_len_err = 0;
++unsigned int nr_hdr_sockopt_write = 0;
++unsigned int nr_hdr_sockopt_write_err = 0;
+ 
+ /* Check the header received from the active side */
+ static int __check_active_hdr_in(struct bpf_sock_ops *skops, bool check_syn)
+@@ -326,4 +332,38 @@ int misc_estab(struct bpf_sock_ops *skops)
+ 	return CG_OK;
+ }
+ 
++SEC("sockops")
++int misc_hdr_sockopt(struct bpf_sock_ops *skops)
++{
++	int true_val = 1;
++	int ret;
++
++	switch (skops->op) {
++	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
++	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
++		nr_hdr_sockopt_estab++;
++		set_hdr_cb_flags(skops, 0);
++		ret = bpf_setsockopt(skops, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
++		if (ret)
++			nr_hdr_sockopt_estab_err++;
++		break;
++	case BPF_SOCK_OPS_HDR_OPT_LEN_CB:
++		nr_hdr_sockopt_len++;
++		ret = bpf_setsockopt(skops, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
++		if (ret != -EOPNOTSUPP)
++			nr_hdr_sockopt_len_err++;
++		/* just trigger BPF_SOCK_OPS_WRITE_HDR_OPT_CB */
++		bpf_reserve_hdr_opt(skops, 12, 0);
++		break;
++	case BPF_SOCK_OPS_WRITE_HDR_OPT_CB:
++		nr_hdr_sockopt_write++;
++		ret = bpf_setsockopt(skops, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
++		if (ret != -EOPNOTSUPP)
++			nr_hdr_sockopt_write_err++;
++		break;
++	}
++
++	return CG_OK;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
