@@ -1,119 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF8226158C
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 21:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C69B36E48B
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 21:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776375888; cv=none; b=Gx2owATlZGahKdtvxko4XUcUbTcmpEHxBMTy2IB96gXt5F5H9+gsGsB4s62AVLfeySL7R7RSLsJfeC4hEspwiIjwGCbKiKSkUb/tPwMS6Lwsi+gcOpRQoLB+H+faFdMmffnh0WGYkNsbYJ6eN1cQSaJf4NiFysZJJ3aop0LxTAk=
+	t=1776376390; cv=none; b=RTXF11so4JfD0lDub69IWV6a2Nlo/8znoEU2EDvQe6D7L/fwaiTMA0hqCHdKmmvUtUQ0BDRZa6dVJSDSZ+DDgxGxyd+UbNFDzaBYi2jsQftya0NeT1cHC8QRRANK5MScijg37J0ki2Mbc3HQzV2Vuc38yq8m6MYNJQ4woh47Y9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776375888; c=relaxed/simple;
-	bh=Ng77UU+5RbrbdRpLBR0N0peiElG8uwGglBRSRXNZEAI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gbxMvRFRggyqW2XZR45hL3062IKI/VMNDYraQ8WbSWHjaruGl5g9Khy8Vxgpi6+8EoTBmKTMTR9QTFBsOMcOLUloDrO7xTWXGuMncQgdQiHwLFKpfuscb3sJPLHv9oA+RKpUS6S9+XvjD/+LcFdukdYJYXWKiZeShyIr15k7rsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qCkATr0d; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776376390; c=relaxed/simple;
+	bh=fc57u1ib7joGvCNK5PYX6Wm4vwMtVJPQEZoKGdGJA14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s7a/JvFqw+eP6KBy+BjCLjdnXKb5gUUfpZO9ED6J7iabUmbSq6AMvywJquprKfvqXZz+W8uofr8oM4xxFTqgPcUWr24egF+2AetNnfC1LxFUgLxYjfYXQ50pR9z9Emj3ge8DsYfXeBah0E4zpPketmnO0pn9zy1umkuKvsp+9gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BtIO55Wh; arc=none smtp.client-ip=74.125.224.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qCkATr0d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7713C2BCAF;
-	Thu, 16 Apr 2026 21:44:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776375888;
-	bh=Ng77UU+5RbrbdRpLBR0N0peiElG8uwGglBRSRXNZEAI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=qCkATr0dun8DmxO7W6Fbm4NeTHBOBrfyh4HSbD2kwOxubOv08LkdRFoluiD9wmJc4
-	 K4aUIr1OnK5jiRpXYiweM641pr4zPR+4aPcmYz1dKMc0/ApS3swq2/ZETtr3UY0F9w
-	 jABPTJphcFxbdlWo65MPZ5yfrwG1y8XT/LerZcssPTHQvZrPhw6fkbbV6a6KraK9TX
-	 mXooxBwP8W3u0WyA35exs0z7iodZC1gdwGBjg/tfVjtH/y8TdBRkrUNLfipe9l8oWr
-	 7qUOfgHpOmxeGJcmMk8ZI7CC75QrHz6h8jYBRpHiIB7cAi+lO0NnK5xL/ue8hvi7ab
-	 ObnmC1t7Dm82Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 08/10] hornet: Add a light skeleton data extractor
- scripts
-Reply-To: sashiko@lists.linux.dev
-To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416173500.176716-9-bboscaccy@linux.microsoft.com>
-References: <20260416173500.176716-9-bboscaccy@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 21:44:47 +0000
-Message-Id: <20260416214447.D7713C2BCAF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtIO55Wh"
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-64d5a7926cfso73402d50.2
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 14:53:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776376387; x=1776981187; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=E9IBe90RbHchIfC+QQ+bgmf2ghgUb9RVdOaY6yEgPS8=;
+        b=BtIO55WhzA9HHFLI/Ew7CzQHJdbeQHcdgZWEKdIxLpeJuaKX8SHcuoTeOdFkx9R+pI
+         aLwIk3NuCjsmOi/BfqmIQTTWYfwiw5jtOBnxNvsQ8QROq8V5rER2Bp6ro1eCcK3DjLLU
+         ODNYwIc2LCd6AgOQQ8j4qpHc+pLoGFu8woG0ZMzK9kTTHATwsBBUOD0qbki6kcm5LC65
+         Lyr1m7meH1tICVKDUbzUpppvLIuseCdJMUbWIsDZKBDs2QbISF+ckg74FkvNjibmp5td
+         GWNbjLh9SlTTNDz19KGjFMAbWKsxZDZ813iCSlJ+9Wbj4lCldzY0qIBmc5lM+pgS8oT4
+         ZfSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776376387; x=1776981187;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E9IBe90RbHchIfC+QQ+bgmf2ghgUb9RVdOaY6yEgPS8=;
+        b=E2Idss4bCEwB7+LKVAd49pyY7MQ+tjYCQzn7y1DpxB+wPVsxvpaBgoh15Akb/tQc2J
+         Imx3ry6Vtlh51TsrSarkCuj6CRKsWK8MK6NfoLVvRNoXwsXYO6U98dArcfeTHVvSjx23
+         pAHRVRpGSylDdPbaEoVSmrAhBqKudhf9+jYquqqcVB+pGS2BzAJ7ENqgG6y6zOYjCN0E
+         u2eVi9pr+pOn/10fRBzAKjVzGDAOHIsMS/br1UHZtWTB05svjxIKCtGWq87KjD1n/H4I
+         UkWpOxiqAqsitWTcWCUYMAtx1HSUdrwrd5bcHYqchJ+z9fy0q0nmF0QrGoCm1AUsTaBW
+         AciA==
+X-Forwarded-Encrypted: i=1; AFNElJ/RZ9qkMyv/NNnJMkF24k9gB05Q5X2PovrIQs9l3+HXU9Tmnmu54hqGNG1X8m3uHsorJw8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKJlWr/eecA4jYxTr1H8cqbI9eEZ70de4pWJtMb3hcAyl3FPRU
+	+71nlvBkigsAgBo/HmpNwkyy7WrWd9nN9pNDgsvxegHHrlAzmg4JMZH6
+X-Gm-Gg: AeBDietn9ZljmV4UplHsTTqfQ1OK6e4szkrQ6/gQeJa3D8ubnnKyhhZmytVetSbpdqG
+	rSga1HuU+FB3SS5hgwPLPomCt8FwurX/wfPQS+r8ntiiddudGZ4nyBalaII9eGhkjlod6eiRqN7
+	fBE4wmBG2TZnS9SZnZDlR8oSEAQmjnDL7mepar8iH467m/N4IMlFCWkKIfa1YtNTUS2Gbl5dE3T
+	TWAqUkvM72MbuL/2OsNqqBp45U8Ltabho4Qwb9melniEsvN9N1qAQ51D1n8Gndl/uf8lEwD0O8B
+	Uzdw5dgr4hrZ4U0tzbCylTTFhk3Xp2L5XZb2HfC9OS6llgd1uMxfFqOHFVFJRKHEUE/I4ZBEb93
+	R9eKIhx82HmCDV/0brehjZJvqjpe0uWyBaM3l8SRb+oerHj/u1KAl3AoI2zsoEs5q1jJQ/0ZkMI
+	isSu8bisGIqykrEfk/KhX161Xm//nOCr49FDpJzGCf5LTPQsD7uPylhT+K0VM62uFwrZGTnLyBj
+	zA=
+X-Received: by 2002:a05:690e:140f:b0:652:541e:9689 with SMTP id 956f58d0204a3-653107c0003mr474357d50.13.1776376387423;
+        Thu, 16 Apr 2026 14:53:07 -0700 (PDT)
+Received: from suesslenovo ([2600:1700:18fb:6011:9b9d:98c5:f23d:1874])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-652e44c08a5sm2538380d50.1.2026.04.16.14.53.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2026 14:53:06 -0700 (PDT)
+Date: Thu, 16 Apr 2026 17:53:05 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Song Liu <song@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	kpsingh@kernel.org, paul@paul-moore.com, mic@digikod.net,
+	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org,
+	gnoack@google.com, jack@suse.cz, jmorris@namei.org,
+	serge@hallyn.com, yonghong.song@linux.dev, martin.lau@linux.dev,
+	m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com,
+	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
+Message-ID: <aeFaQXkKNHFeE-oC@suesslenovo>
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
+ <20260407200157.3874806-9-utilityemal77@gmail.com>
+ <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
 
-Sashiko AI review found 4 potential issue(s):
-- [High] Unquoted `printf $(...)` causes binary data corruption and format =
-string evaluation.
-- [High] Overly broad `grep` patterns match struct assignments, leading to =
-payload duplication.
-- [Medium] Unquoted script argument `$1` allows command-line argument injec=
-tion in `gcc`.
-- [Low] Redundant and duplicate scripts create unnecessary maintenance burd=
-en.
---
+On Thu, Apr 16, 2026 at 02:12:11PM -0700, Song Liu wrote:
+> On Tue, Apr 7, 2026 at 1:02 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> >
+> > Expose the new BPF_MAP_TYPE_LANDLOCK_RULESET via headers, allowing
+> > programs to utilize the map.
+> >
+> > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> 
+> I don't think we can introduce a new map type for this. Instead, we should use
+> existing map with __kptr values.
+>
+> Thanks,
+> Song
 
-commit 18ddbefea00184030f4d5a0c406b61b4fd5670fd
-Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+Thanks Song,
 
-hornet: Add a light skeleton data extractor scripts
+That was one initially considered approach.
 
-This commit introduces scripts to extract eBPF instruction and map data
-payloads from autogenerated light skeleton headers for use in signing.
+I initially decided in favor of the dedicated map type in this RFC after
+seeing the other FD maps for cgroups and sockets. 
 
-> diff --git a/scripts/hornet/extract-insn.sh b/scripts/hornet/extract-insn=
-.sh
-> new file mode 100755
-> index 0000000000000..52338f057ff6b
-> --- /dev/null
-> +++ b/scripts/hornet/extract-insn.sh
-[ ... ]
-> +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
-> +    usage
-> +else
-> +    printf $(gcc -E $1 | grep "opts_insn" | \
-                        ^^
+The main complication is rulesets in Landlock are created as file
+descriptors backed by a kernel object. In the intended model of this
+series, creation of rulesets is is done in userspace to avoid
+redefining the entire landlock ruleset creation API in BPF.
 
-Could an unquoted $1 cause gcc to interpret filenames starting with a
-hyphen as command-line options, or fail if the path contains spaces?
+I don't think we can pass the FD number via a map, since the FD is
+process specific. And it needs to be done in a way where we can lookup 
+the specific ruleset the FD points to safely.
 
-> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
+So we'd need some other way to load the ruleset from a file descriptor,
+either through a new userspace side BPF call or similar mechanism.
 
-Does this overly broad grep match both the array declarations and
-subsequent struct assignments?
+Is there some other common pattern for FDs --> kptr I can follow?
 
-If grep matches opts.insns =3D (void *)opts_insn;, the pipeline will extract
-both the hex payload and the struct assignment, leading to payload duplicat=
-ion.
+Basically the pattern I need is userspace must create the file
+descriptor, BPF converts that FD into a refcounted kernel object, and
+even if userspace closes the FD BPF needs to hold a reference on the
+underlying ruleset structure.
 
-Also, can this printf $(...) construct corrupt the binary data?
+(In this patch this was accomplished through the map_ops)
 
-If the extracted payload contains the byte 0x25 (%), printf will evaluate
-it as a format specifier. For example, \x25\x64 (%d) will evaluate to 0. If
-the payload starts with a hyphen, printf will interpret it as an option.
+Let me know what you think Song. I do understand the benefit of having a
+__kptr instead, the refcounting is all there, and it would allow storing
+rulesets in multiple map types. (and one less map type to maintain).
 
-> diff --git a/scripts/hornet/extract-map.sh b/scripts/hornet/extract-map.sh
-> new file mode 100755
-> index 0000000000000..c309f505c6238
-> --- /dev/null
-> +++ b/scripts/hornet/extract-map.sh
-[ ... ]
-> +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
-> +    usage
-> +else
-> +    printf $(gcc -E $1 | grep "opts_data" | \
-> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
-> +fi
+Mickaël, do you have any thoughts on this? I have v2 basically ready,
+although it uses the BPF_MAP_TYPE_LANDLOCK_RULESET it changes a lot on
+the Landlock side.
 
-This isn't a bug, but extract-insn.sh and extract-map.sh appear to duplicate
-the functionality of extract-skel.sh, which cleanly accepts the target
-field (insn or data) as a command-line parameter.
+I appreciate the feedback from both of you.
 
-Could these redundant scripts be consolidated to avoid duplicating the
-unquoted printf and grep issues across multiple files?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416173500.1767=
-16-1-bboscaccy@linux.microsoft.com?part=3D8
+Justin
