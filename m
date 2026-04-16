@@ -1,89 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A773C65F2
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 15:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85783379EF6
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 15:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776353278; cv=none; b=DJ6w7lECMqjNEWOnu3I9uW6dt89pV9YH5VKykxlfvbX31sYHSJyVSrq0lRATPNz/7ilJgVcIyytn8+v/XAxhjyKBR5IILmsAX0td5sZ24Dhj9wtbFpfIjL+Ffa7Arpab03nzWSc0cofeemiCI1ae7ihOjaNHuXdV56Qq8ceJWcQ=
+	t=1776353280; cv=none; b=PRGwL44tNyChBRrwStLhePkZebKJ6o03t+s2+Ny6PFvPETVLWUYuMoZNZCQCTvX3DxifusfRKgBoM7/vPbQuEGK3cFz1CGBllVzu/RErvbwQazb6c6E9WK8tty6WKcrwi0tHXtjAWi+z7LvyRhbPUN8LCXXXKI+v3oNSDqI127I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776353278; c=relaxed/simple;
-	bh=BVmjIMfHcVF65RsNVTz+a8n6kXj3JAokPZ7sgZ3xTrQ=;
+	s=arc-20240116; t=1776353280; c=relaxed/simple;
+	bh=RPJZVAXfH3fU3oPelWcx05PKv3rgZykmAHhfMTp44R8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=s59g4DOk1+t1XBWbqlSnVuoBjNz0SZCxnr/oKgrDoI4/12fcYHPCjaS08/zyhQYYmOQiH4vC19FIRqP4NPZmQXywmhLJpiGNnM0q2zcY5PC8rXP1cMqxTLBWv4rDfDNcudRclfykvWGeA50eWXf8YLkFw2nqIzIBiYO0eF/NP2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pTyMEQfT; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=m/gw1hDR45eWAey/m1D+N7xZxkd2EZp12j+kinxaCOjexqGIzNhmNqPFY0QC7fh9LEdj+xo0nGVntMA6DT0ZTU7HvVsPGvaaSayNKZ9IOlIV4oZ3ieuy/sQwXR7ZXrdb8QW3NreaKN74pkB8PeaZEsFq7k872gmuz0RtnIYpc20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ju93zymr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pTyMEQfT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2671FC2BCAF;
-	Thu, 16 Apr 2026 15:27:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ju93zymr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C96C2BCAF;
+	Thu, 16 Apr 2026 15:27:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776353278;
-	bh=BVmjIMfHcVF65RsNVTz+a8n6kXj3JAokPZ7sgZ3xTrQ=;
+	s=k20201202; t=1776353280;
+	bh=RPJZVAXfH3fU3oPelWcx05PKv3rgZykmAHhfMTp44R8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=pTyMEQfTg8P/BFj6T2pjUon1Uxf/Ke3XNTRrdrHxDhumSLw+1G5nwdb3/9Htjhf0A
-	 Ip2q88Xb1rzUxDLrS+majt1X93SAmw6vdp9wU7Qjmo7utlu+fHiqP6HY9SI9+iKVlo
-	 VWWap5uXA5cQ+Ynj1Lnny12PBDP5FOhBy6npKIcY1uyraqHXaw+8r3+/SZ3w51fVh4
-	 oGcCTi5QEQ9EbVtXP02O3OkFHgHh6+Og1z+i42lw9ZNO+ZeK1ESKJUju50uDMvNFWR
-	 2GlP2+7HZh+SCyH/uaFYin61TJGyFB0xTA0lbc5yv3/87Xh4C48VdweVgM8D+BI7bk
-	 1qA84+P515jpw==
-Content-Type: multipart/mixed; boundary="===============1039291910134732484=="
+	b=Ju93zymrdtae3aC4nGhWdsYL3yjT0NdDrDBpbGKujb/rc8BWRN69BFoVGEyhykxI4
+	 uYe7C3Rfb+RwGKI1bmWncsMEJI7ZxUP+ggfgqTvmnh2pHJ7SFxXvCxkjt7QXVV5WGd
+	 Zv3GSx0VCHoqtGtXd9VegVFSZyKjODNjYY9Y4viADPe2pEb6zuTLQT2XFPuClZZaQm
+	 abDBCPZfNfK3cfAlsY1qYv6dAVWdaHqma80Vz6JDM9ndvxwLN1NRxabtdGKTCoyan/
+	 V6YGHlu4KcBPaxTIuvSqfqRbjzq3kX91laRE4Wb4Bp1cgYFOGvgvmqxclA5/zeBPG3
+	 8FD5aGVFtPlug==
+Content-Type: multipart/mixed; boundary="===============8049481639524996611=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fe90165d5cfe442a4af9b5e75818f1b18cebf63d1ac52c6d7112bcec755c3e0c@mail.kernel.org>
-In-Reply-To: <20260416143904.1220662-6-alan.maguire@oracle.com>
-References: <20260416143904.1220662-6-alan.maguire@oracle.com>
-Subject: Re: [PATCH v2 bpf-next 5/8] selftests/bpf: Test BTF sanitization rejection for invalid vlen
+Message-Id: <a6a080d72e21b45ceb48b61d2e3a04d9d70a9e09f1b34510048ae0e2949b5be9@mail.kernel.org>
+In-Reply-To: <20260416143904.1220662-4-alan.maguire@oracle.com>
+References: <20260416143904.1220662-4-alan.maguire@oracle.com>
+Subject: Re: [PATCH v2 bpf-next 3/8] libbpf: Add feature for kernel extended vlen/kind support
 From: bot+bpf-ci@kernel.org
 To: alan.maguire@oracle.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
 Cc: martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,qmo@kernel.org,mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 16 Apr 2026 15:27:58 +0000 (UTC)
+Date: Thu, 16 Apr 2026 15:27:59 +0000 (UTC)
 
---===============1039291910134732484==
+--===============8049481639524996611==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
-> index 652b51efafc2..1349fc7b34e9 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sanitize.c
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index 4f19a0d79b0c..f835931f4afe 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
 
 [ ... ]
 
-> +static void test_btf_sanitize_extended(void)
+> +static int probe_kern_btf_vlen_kind_extended(int token_fd)
 > +{
+> +	static const char strs[] = "\0int\0foo\0bar";
+> +	__u32 types[EXTEND_TYPE_LEN] = {
+> +		/* int */
+> +		BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
+> +		/* var */
+> +		BTF_TYPE_ENC(5 /* "foo" */, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), 1),
+
+Is the btf_var linkage data missing here?  BTF_KIND_VAR requires a
+trailing struct btf_var (linkage value) after the btf_type.  The
+existing probe_kern_btf_datasec() in the same file includes
+BTF_VAR_STATIC after the VAR type:
+
+tools/lib/bpf/features.c:probe_kern_btf_datasec() {
+    ...
+    BTF_TYPE_ENC(1, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), 1),
+    BTF_VAR_STATIC,
+    ...
+}
+
+Without it, the kernel's btf_var_check_meta() reads into the next
+type's data for the linkage value and rejects it.  EXTEND_TYPE_LEN
+would also need to account for the extra __u32.
+
+> +		/* datasec */
+> +		BTF_TYPE_ENC(9 /* "bar" */, BTF_INFO_ENC(BTF_KIND_DATASEC, EXTEND_VLEN, 0), 0),
+
+Are the BTF_INFO_ENC arguments swapped here?  The macro signature is:
+
+    BTF_INFO_ENC(kind, kind_flag, vlen)
+
+This passes EXTEND_VLEN (0x10000) as kind_flag and 0 as vlen, which
+produces kflag=1 and vlen=0.  The kernel rejects kflag on DATASEC
+types, and vlen=0 means the probe doesn't actually test extended vlen.
+
+Comparing with probe_kern_btf_datasec() which uses the correct order:
+
+    BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 1)
+
+Should this be BTF_INFO_ENC(BTF_KIND_DATASEC, 0, EXTEND_VLEN)?
+
+Additionally, the third argument to BTF_TYPE_ENC here is 0, which
+sets the DATASEC size to 0.  The kernel's btf_datasec_check_meta()
+rejects size == 0.  Should the size reflect the var_secinfo entries,
+something like 4 * EXTEND_VLEN?
+
+These three issues (missing btf_var, swapped BTF_INFO_ENC arguments,
+and zero DATASEC size) each independently cause the kernel to reject
+this BTF, so the probe always fails regardless of actual kernel
+support.  This means FEAT_BTF_VLEN_KIND_EXTENDED is never detected,
+and bpf_object__sanitize_btf() will always reject BTF with extended
+vlen or kind values even on kernels that support them.
+
+> +	};
 
 [ ... ]
-
-> +	if (!ASSERT_OK(kernel_supports(skel->obj, FEAT_BTF_VLEN_KIND_EXTENDED),
-> +		       "vlen_kind_extended_supported"))
-> +		goto out;
-
-Should this be ASSERT_TRUE instead of ASSERT_OK?  kernel_supports()
-returns bool, and ASSERT_OK checks that its argument equals zero:
-
-    #define ASSERT_OK(res, name) ({
-        long long ___res = (res);
-        bool ___ok = ___res == 0;
-        ...
-    })
-
-When the kernel supports extended vlen, kernel_supports() returns
-true (1), so ASSERT_OK sees a nonzero value and fails the assertion.
-This causes the test to skip on kernels that do support the feature,
-which is exactly where it needs to run.
-
-The later assertions in the same function use the correct macros:
-
-> +	if (!ASSERT_FALSE(kernel_supports(skel->obj, FEAT_BTF_VLEN_KIND_EXTENDED),
-> +			  "vlen_kind_extended_feature_missing"))
-> +		goto out;
-> +	if (!ASSERT_TRUE(kernel_supports(skel->obj, FEAT_BTF_FUNC), "other_feature_allowed"))
-> +		goto out;
 
 
 ---
@@ -91,4 +118,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24517220149
---===============1039291910134732484==--
+--===============8049481639524996611==--
