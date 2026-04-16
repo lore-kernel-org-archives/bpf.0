@@ -1,144 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.77.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE46B29AAFD
-	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 12:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C57134E75A;
+	Thu, 16 Apr 2026 12:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.77.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776340993; cv=none; b=PH0akbyx7jLwbR78llAeQqK2LvhxkFE8kY4fmvkXgVFlBwNAGt+RtNmpPiBLnjICVqmmwlnQug/q9PCsOOBVqQ+UprahVQlpgWY795YXjuxtkqW9+XAFJ2WllCiuRIWjcrVEafj9JKxk8bS957ORrWlUGkdSdjxKzDlhnzzA1Z0=
+	t=1776341069; cv=none; b=Qovn+DkWGvfZx5nqSp/MsNHFiC2BNPjWCu8ifEovo+OoO1fMlUmzgSI+56dF4pP1o+PmcEHZYx/rXnTOtMsXmJR24Fc+JZc7E8Iz6ODrSwlC0mhh0Z9cKfABYNCwS0nmGa9koSduUoTOFiMkDUFdCh/nw3Ez+OC/cM/DQYt8bBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776340993; c=relaxed/simple;
-	bh=c0qnYbHYgvfZRtzJ05enFyhyVnoRq1HG/S8FKb3oE7w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cgpyFmBaE263GmLk5EJ3pyKg2bQIXMBoFjX4rjyivPT+co8z988Fhd/j9VLBn3Zhl1+xjO3n9DccHvpGvl0v7BtKKBH521bR4n0xyuAGZcbd605ax6J5njJPRNDm/FUAPFRFifnqQ+GcgnOjACbrNfUq/PPl1VNO3yOF3nvMFCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qTfc/cqV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776341069; c=relaxed/simple;
+	bh=2RWoAJVntLClYbXMgY4e7S6tPe1KtrZ64VoBRPJAbkk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TEu++/g18huCYLIGdtlMAfdvlBouAmCzpjE8xwOmHeK16J/F1xTb0q4jpZiwLTp1m/cqVi8LPuaeSZnxk3voicGZ7cQ7Kfivg0RYuPWQ7KJr3WgEGDshcul2DsPqf9oTVDIg3J7d+V1BoR3PtQYgb4wphvtxMPVV7Yh/A2C1FMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=DKsAdI9u; arc=none smtp.client-ip=114.132.77.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qTfc/cqV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A859C2BCAF;
-	Thu, 16 Apr 2026 12:03:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776340993;
-	bh=c0qnYbHYgvfZRtzJ05enFyhyVnoRq1HG/S8FKb3oE7w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=qTfc/cqVFQKpt6I2eyryxJy/buQu3w9ecP++RAFxUEY8sDnQ3DH1LJbGAkw5R1nPF
-	 GN3/02DHcIzu+/oHXrVS4fkuVUx4bxFZRoq8FNa8RweaQvtH1k1HRDtpWcWqp+H9IJ
-	 IpY5PkBEMSGLLERRhfykso5healolFyIO3U8yHLDQnypC4IZR5r/8dqpXkKsSH9i20
-	 mhr3NihsYBOSVgyApZdZZPX9Om8bSs2DM64WCtsLvcZNthV3hTwbjmWIMny7q5xOdL
-	 yj47JvBxT/CXAALn+PGEtkzt0MK7c4V9+ZJHWK+zAlBtpV83es100b+nCX6KL7fQ8D
-	 xxXbFvJ6PzNyA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 5/6] bpf: clear decap tunnel GSO state in
- skb_adjust_room
-Reply-To: sashiko@lists.linux.dev
-To: "Nick Hudson" <nhudson@akamai.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260416075514.927101-6-nhudson@akamai.com>
-References: <20260416075514.927101-6-nhudson@akamai.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 16 Apr 2026 12:03:12 +0000
-Message-Id: <20260416120313.4A859C2BCAF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="DKsAdI9u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1776340968;
+	bh=p+9hmRcBGjUD7hAYTrYwIVaa7QHqLTPJpo+ZwKhtW58=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=DKsAdI9ux2/04cT1ABwuvtFoAoy5BpHUlqYjp9JzoKNLwfk8sKMw6+lxiaiC+xD8m
+	 spLm5UVR+NGFSt3coecBUTHHrRRLOpYZj6PyweErd1hy27/dTNHHMYZaYVpFoUkUy3
+	 sYX1mRwXEguY4ItMOdQJ7AGsH1QPGb4Ai6UnaJqs=
+X-QQ-mid: zesmtpip3t1776340961t6cd7fa8a
+X-QQ-Originating-IP: sla+t2bIx/UvTPWfXH3ZZeAngiUnb3FrcVltf9bh598=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 16 Apr 2026 20:02:40 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 17050199014614233316
+EX-QQ-RecipientCnt: 9
+From: Yihan Ding <dingyihan@uniontech.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	shuah@kernel.org,
+	alan.maguire@oracle.com,
+	paul.chaignon@gmail.com,
+	linux-kernel@vger.kernel.org,
+	Yihan Ding <dingyihan@uniontech.com>
+Subject: [PATCH bpf v3 2/2] selftests/bpf: cover UTF-8 trace_printk output
+Date: Thu, 16 Apr 2026 20:01:42 +0800
+Message-Id: <20260416120142.1420646-3-dingyihan@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20260416120142.1420646-1-dingyihan@uniontech.com>
+References: <20260416120142.1420646-1-dingyihan@uniontech.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
+X-QQ-XMAILINFO: OWhN4QRntHSG5GnzBclCdmoQKfNkWB3VHwfgNjrtsitstuxPFc0boGFh
+	HkUpZpCLsmr1Zwx26lLEN18XfZlhcWbPr2bjoJl1tWfx/u927JCCZgJCcle4EaNNU7JxLb2
+	y4q+WPNoBzAmoPlopNm3WK3wTLoybx1lodKICeH6kt6NqamPkzz1YS5w+0VcgY0rJaoWAiJ
+	dJL9FXLjs/pYsq53ZSimcu+Yht0CT3fTbtw4XffR2SRhzqBDFC5uu10C8MbFk4X3CieL9GL
+	C3SJqrA2Hb5+ZInhW/oT3rNlvOttays9QkWaWQieQO+1FdnfglBaKhXg3Sx/gxQ6e/NsfpN
+	3NgetSorN0txzUauEUcG5Hxt883ZUvAySCwdXx5vlWn4fMMgN7KAlZiGe2X9s+IF65mrNfx
+	2naMw4ZPY5T/R1kYE4f+/m1D/k0HpER+b5pK4+oSVGz8IFEFo99bBA+hW3efwpSqkce4bQD
+	WpJBg1txyCsR6MAlET+EZq6NSI8iT0zOSZz+V+PyABDCF+2CoLUaFr98S6x+el1n9G1szjh
+	mquqfp5il4Oih5jn3W8YbCrjsW++HFx7Hf/5r5n9Zpfw5DWaBup7LXC3/P6jyKv3j29pMkb
+	jwJicaI8q1q0hO0pPjvnc31vT7Mj/IUPXsO9SY6ZQWqHMItIH0p3kgzzU3MlpYJTv7rxlCp
+	A/JvaFtNRG09WPkED9n4ynqdDzlPg5IUrgJV+bCLa6EXVMRVikOE+qaTlglrsq0SCYEysU9
+	tVUv6lc5Pg4iejiGhCLV0KlZW1sodlV8JzsroMD4/IsMT5HT5U6FqJSYphGybR+8lM/KPkb
+	w5BYok+QQQuA7/hsvQ5swwfpQwCFJUMuc7mhuAYH2FIID1wYYplRaqryry6dpqZQ9JIGpLI
+	KcOoE2+byWQVhwJjT0V1rmikjLi2Y8nWx4vT8JaCTU4CK+HBm+svzWW6n9NgQ9H2fcGSvXH
+	rxaVrFFDoGtG3kUC8Y5Kfv/YJ6oygJEB0tRSbTPJOX6jhNR32ZiENerdbiV4csbaRaAYeWI
+	ebqmtcjyYjp29Wh/K1iwAYupWW7+PnYtufnA8swQ==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+X-QQ-RECHKSPAM: 0
 
-Sashiko AI review found 3 potential issue(s):
-- [High] Non-GSO packets bypass decapsulation state clearing logic, leading=
- to stale encapsulation state.
-- [Medium] GRE decapsulation fails to clear `skb->encap_hdr_csum`.
-- [Medium] `SKB_GSO_TUNNEL_REMCSUM` is not cleared from `gso_type` during U=
-DP decapsulation.
---
+Extend trace_printk coverage to verify that UTF-8 literal text is
+emitted successfully and that '%' parsing still rejects non-ASCII
+bytes once format parsing starts.
 
-commit 11e8db6b3cc9e077f7973f47c48689c42f700960
-Author: Nick Hudson <nhudson@akamai.com>
+Use an explicitly invalid format string for the negative case so the
+ASCII-only parser expectation is visible from the test code itself.
 
-bpf: clear decap tunnel GSO state in skb_adjust_room
+Signed-off-by: Yihan Ding <dingyihan@uniontech.com>
+---
+ .../selftests/bpf/prog_tests/trace_printk.c   | 28 +++++++++++++++----
+ .../selftests/bpf/progs/trace_printk.c        | 10 +++++++
+ 2 files changed, 32 insertions(+), 6 deletions(-)
 
-On shrink in bpf_skb_adjust_room(), clear tunnel-specific GSO flags
-according to the decapsulation flags. Handle ESP inside UDP, and clear
-encap_hdr_csum and remcsum_offload if UDP decap is performed.
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_printk.c b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+index e56e88596d64..a5a8104c1ddd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/trace_printk.c
++++ b/tools/testing/selftests/bpf/prog_tests/trace_printk.c
+@@ -6,18 +6,21 @@
+ #include "trace_printk.lskel.h"
+ 
+ #define SEARCHMSG	"testing,testing"
++#define SEARCHMSG_UTF8	"中文,测试"
+ 
+ static void trace_pipe_cb(const char *str, void *data)
+ {
+ 	if (strstr(str, SEARCHMSG) != NULL)
+-		(*(int *)data)++;
++		((int *)data)[0]++;
++	if (strstr(str, SEARCHMSG_UTF8))
++		((int *)data)[1]++;
+ }
+ 
+ void serial_test_trace_printk(void)
+ {
+ 	struct trace_printk_lskel__bss *bss;
+ 	struct trace_printk_lskel *skel;
+-	int err = 0, found = 0;
++	int err = 0, found[2] = {};
+ 
+ 	skel = trace_printk_lskel__open();
+ 	if (!ASSERT_OK_PTR(skel, "trace_printk__open"))
+@@ -46,11 +49,24 @@ void serial_test_trace_printk(void)
+ 	if (!ASSERT_GT(bss->trace_printk_ret, 0, "bss->trace_printk_ret"))
+ 		goto cleanup;
+ 
+-	/* verify our search string is in the trace buffer */
+-	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, &found, 1000),
+-		 "read_trace_pipe_iter");
++	if (!ASSERT_GT(bss->trace_printk_utf8_ran, 0, "bss->trace_printk_utf8_ran"))
++		goto cleanup;
++
++	if (!ASSERT_GT(bss->trace_printk_utf8_ret, 0, "bss->trace_printk_utf8_ret"))
++		goto cleanup;
++
++	if (!ASSERT_LT(bss->trace_printk_invalid_spec_ret, 0,
++		       "bss->trace_printk_invalid_spec_ret"))
++		goto cleanup;
++
++	/* verify our search strings are in the trace buffer */
++	ASSERT_OK(read_trace_pipe_iter(trace_pipe_cb, found, 1000),
++		  "read_trace_pipe_iter");
++
++	if (!ASSERT_EQ(found[0], bss->trace_printk_ran, "found"))
++		goto cleanup;
+ 
+-	if (!ASSERT_EQ(found, bss->trace_printk_ran, "found"))
++	if (!ASSERT_EQ(found[1], bss->trace_printk_utf8_ran, "found_utf8"))
+ 		goto cleanup;
+ 
+ cleanup:
+diff --git a/tools/testing/selftests/bpf/progs/trace_printk.c b/tools/testing/selftests/bpf/progs/trace_printk.c
+index 6695478c2b25..f4c538ec3ebd 100644
+--- a/tools/testing/selftests/bpf/progs/trace_printk.c
++++ b/tools/testing/selftests/bpf/progs/trace_printk.c
+@@ -10,13 +10,23 @@ char _license[] SEC("license") = "GPL";
+ 
+ int trace_printk_ret = 0;
+ int trace_printk_ran = 0;
++int trace_printk_invalid_spec_ret = 0;
++int trace_printk_utf8_ret = 0;
++int trace_printk_utf8_ran = 0;
+ 
+ const char fmt[] = "Testing,testing %d\n";
++static const char utf8_fmt[] = "中文,测试 %d\n";
++/* Non-ASCII bytes after '%' must still be rejected. */
++static const char invalid_spec_fmt[] = "%\x80\n";
+ 
+ SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+ int sys_enter(void *ctx)
+ {
+ 	trace_printk_ret = bpf_trace_printk(fmt, sizeof(fmt),
+ 					    ++trace_printk_ran);
++	trace_printk_utf8_ret = bpf_trace_printk(utf8_fmt, sizeof(utf8_fmt),
++						 ++trace_printk_utf8_ran);
++	trace_printk_invalid_spec_ret = bpf_trace_printk(invalid_spec_fmt,
++							 sizeof(invalid_spec_fmt));
+ 	return 0;
+ }
+-- 
+2.20.1
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index b87356ac05f75..54a478be04bb3 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-
-[ ... ]
-
-> @@ -3660,6 +3660,44 @@ static int bpf_skb_net_shrink(struct sk_buff *skb,=
- u32 off, u32 len_diff,
->  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
->  			skb_increase_gso_size(shinfo, len_diff);
-> =20
-> +		/* Selective GSO flag clearing based on decap type.
-> +		 * Only clear the flags for the tunnel layer being removed.
-> +		 */
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> +		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +					 SKB_GSO_UDP_TUNNEL_CSUM)))
-> +			shinfo->gso_type &=3D ~(SKB_GSO_UDP_TUNNEL |
-> +					      SKB_GSO_UDP_TUNNEL_CSUM);
-
-Should SKB_GSO_TUNNEL_REMCSUM also be cleared here during UDP decapsulation?
-
-Remote checksum offload properties are tied to the outer tunnel header, and=
-=20
-stripping it without removing the associated REMCSUM GSO flag might leave
-shinfo->gso_type in an invalid state.
-
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-> +		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-> +			shinfo->gso_type &=3D ~(SKB_GSO_GRE |
-> +					      SKB_GSO_GRE_CSUM);
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-> +			shinfo->gso_type &=3D ~SKB_GSO_IPXIP4;
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-> +			shinfo->gso_type &=3D ~SKB_GSO_IPXIP6;
-> +
-> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-> +		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-> +			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +						  SKB_GSO_UDP_TUNNEL_CSUM |
-> +						  SKB_GSO_GRE |
-> +						  SKB_GSO_GRE_CSUM |
-> +						  SKB_GSO_IPXIP4 |
-> +						  SKB_GSO_IPXIP6 |
-> +						  SKB_GSO_ESP)))
-> +				if (skb->encapsulation)
-> +					skb->encapsulation =3D 0;
-
-Because all of this new clearing logic is added inside the if (skb_is_gso(s=
-kb))
-block, do non-GSO packets bypass the state clearing? BPF programs can call
-bpf_skb_adjust_room() to decapsulate non-GSO packets as well.
-
-Could leaving skb->encapsulation set after stripping tunnel headers on non-=
-GSO
-packets cause downstream network stack components to misinterpret the packet
-as still being encapsulated?
-
-> +
-> +			if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) {
-> +				skb->encap_hdr_csum =3D 0;
-> +				skb->remcsum_offload =3D 0;
-> +			}
-
-Does GRE decapsulation (BPF_F_ADJ_ROOM_DECAP_L4_GRE) also need to clear
-skb->encap_hdr_csum? GRE tunnels utilize the encap_hdr_csum flag when
-SKB_GSO_GRE_CSUM is active.
-
-> +		}
-> +
->  		/* Header must be checked, and gso_segs recomputed. */
->  		shinfo->gso_type |=3D SKB_GSO_DODGY;
->  		shinfo->gso_segs =3D 0;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260416075514.9271=
-01-1-nhudson@akamai.com?part=3D5
