@@ -1,95 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E5D283C93;
-	Thu, 16 Apr 2026 23:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776381170; cv=none; b=h6raE/hUlsn7BNvfMMrWlYZlGEAu7g4A29j5SbFzZGSrqR3cwza5umbKcAnSEsWi6h4EhV2hMbAxFWj7FMyCYNmlVAQrwZtAjJL/zrZL9q8uW+rZbNjDUMbu0OscDGRg1m/oj8Vr+LpR7cxbNxtaMWcauEZDzo3hG9RWsOtxJJg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776381170; c=relaxed/simple;
-	bh=mktI0GL8Ho68lYkNQM7lPXFpO5gRK+biY2qAS/eva+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dzTsiE6a4X+YbOFZLm4HrkDsPqXEtatJMQlnnjGVpRCZ2UgUZNibNv9DOqmFywUn9fcmZDNGA2EWe4STw+AWVzrgxh1hxkQxyZXrC2zwbwHt7GWzRDc1eba/jSfNyHf4Fu59XY6J1g+C/WdhDq9fI/fJOlpea/Wrg3mRc84bYqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nUJ4lY8H; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C59283C93
+	for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 23:14:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776381245; cv=pass; b=A/ldAJa2jmFjd6ctiS4jhbMgPO6qDpoyCSr+Kmj9QX/pub4ZsHmbFqLCzQvygY3xbD5iL+V3KVE+FCegGzuCiR+LiTfDRoouIJ9NYkXGu5Sdqwf9cAVOCzPuKWEclU/ReWhXNIOoZwOsZ5+g66yAhYyG/desUeMgB4uifdd16X0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776381245; c=relaxed/simple;
+	bh=U3JHSNhF+GWjJ08xRurIqQb7Wqr4Om/3K92fWZGIO94=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kLdNT1TrjyZRdRvRc9/VPvwa5VE/sAieHG3m63gMzRVFWhgYxqO4LqXw9yvxVy9qClfx30WFzT+ZiemFaGkli7sNTyKlZidzP8oIyd4ZfFOnoYhsY7y+EwZPhatKNTVC9dGNjHU/EW8+DreEMAoVd3oyBs4VybmmKy/J+EkbXYM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M8vtDh/S; arc=pass smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nUJ4lY8H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776381168; x=1807917168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mktI0GL8Ho68lYkNQM7lPXFpO5gRK+biY2qAS/eva+4=;
-  b=nUJ4lY8Hk+tEuKIJe0nx+qM0bwGYoEJqstbiL4wP3T/vpci42QQK55ik
-   xtvzLvKKjiJM+7ftv00TYo9OfITvkbRkC9+QLLf+wEcypt0O7tK6rGUeW
-   xi5iQ0Vg/JanfuPnIMjgz2fKeUJ4bc9wg9xZ6HKqFWnY76tl4mfWOb9Ys
-   ujZvKeoyC2iygrnAONnAxqCE99w2+vUAczylkHuBfcUTB9A2E8FsJ1f68
-   jU/PPWQBlovC8MQIwaMkmaCZMndqqOYNHoGEP5ol9D3Gew4Ks8X51HhKt
-   4Xzszl1n0yjo+D9KInWdFkv4j3exF47YodDeeRODgSXxZrKEiS6+DXcp0
-   g==;
-X-CSE-ConnectionGUID: egg2riftSl+kccWvlUQJ2A==
-X-CSE-MsgGUID: 0Cy0D3nwTG2mGKWUFGHttA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11761"; a="77302291"
-X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
-   d="scan'208";a="77302291"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2026 16:12:47 -0700
-X-CSE-ConnectionGUID: MPoatUXlRk+kaBEhXwEhrQ==
-X-CSE-MsgGUID: r3QQ+mJlQkCflmgz+x26mA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,183,1770624000"; 
-   d="scan'208";a="231123970"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2026 16:12:47 -0700
-Date: Thu, 16 Apr 2026 16:12:34 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
-	Nikolay Borisov <nik.borisov@suse.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	David Kaplan <david.kaplan@amd.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, Asit Mallick <asit.k.mallick@intel.com>,
-	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v10 08/12] kvm: Define EXPORT_STATIC_CALL_FOR_KVM()
-Message-ID: <20260416231234.g6buu3rm2swih35z@desk>
-References: <20260414-vmscape-bhb-v10-0-efa924abae5f@linux.intel.com>
- <20260414-vmscape-bhb-v10-8-efa924abae5f@linux.intel.com>
- <aeFmYd1ybZnVlAYW@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8vtDh/S"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3591cc98871so40007a91.3
+        for <bpf@vger.kernel.org>; Thu, 16 Apr 2026 16:14:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776381243; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Y0vliQLlk/BuaxDXPgQPxdD3a4768xw1WpAn2o1rWXUp0ja6cwc0Saan0dlHFKKm/e
+         uJ9CBeRrRjmLtzw+NzWevtvSZlVysmjJSD+28kJtTuuu6rtX9+vjR+5KJELS4+7Spbdi
+         M/af7B8RzxO04xeGDcnMX8+LJIJHK3F3ThP1c0X7u/Mz9tqWG8r0wafm1DZ7Prn5pQtE
+         ywUwb3of8SBhOOpYZbhUQ9ZiLLtwwga4IoeWQzY0TS0JlOz7oxhdH5ll65R6qYVEKYjr
+         3kx9mRvSMq08tqK/r/SfKFiWDPzZ0HvihBjiDwOWQ/eyLTNWOQuP9E/LooHC9pXTU5V0
+         QJ+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=U3JHSNhF+GWjJ08xRurIqQb7Wqr4Om/3K92fWZGIO94=;
+        fh=ypw/5fet4CANHeQUz+kfgabEvSoH35hHHOlcI8B0sBI=;
+        b=OTCh037/9vGOo0fL3FaLM8yHsLiI+Gieeylh3fxJZeh8m06rqIai4aSNiG5mBgoQar
+         zErnqyHh4GjuKsjvHUyHLMmkfFtEoAMD++crteSnfxtA313O4yvycdCDRsx4Qqmd0gee
+         J9CD7mTnwA8Qyvn5EYVHk1Jef5vvPqTsGxBv1W7rRtQ0Fx+4EPvEPLzFftEpBZLHG33y
+         CqhY8YwSxnB6mYbATSbvriXIwhGtEVb4ZiOQ5n7BcdUQ2XZJ+xDe9iTNyLzCpZGEbPp+
+         n12p2UnbAKtEcz4CZD3LQv4HaAOV1O3kLlv6msTGntqfnXdRhNRPZa1xjVUJlBvstlT6
+         pSHA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776381243; x=1776986043; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U3JHSNhF+GWjJ08xRurIqQb7Wqr4Om/3K92fWZGIO94=;
+        b=M8vtDh/S0PCAZWLMCtxAQOU0D4Cpvo2NLH/KgluATJCC6+bIK/DcQlQZjfFwdn686T
+         9qj+yAlSH+bNZCfTzrud+Hk4yfSfZEoDh7XahgottKeYx8PMISpVuPrgvE8hLKymJeWG
+         TPBYUkc39lUSa8uDSsEO5AR5DGAkkuIUqG6KY4oisDj6Vlok2f/d2WzAXrHKSJND7q0a
+         7NQSCeGr/qkEOoLVx7ONstv0dz2jK2lK/yJrAVaEqBQSA2dOdFlTm8OmSNm8aOkxUQLC
+         rMupS+ZHcGb6FRbVm9vpolxNajo6OWZhqd9kxyT3/rih8VgRH72xmDhdPSQb6NO7GZxx
+         c0mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776381243; x=1776986043;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=U3JHSNhF+GWjJ08xRurIqQb7Wqr4Om/3K92fWZGIO94=;
+        b=Oeq+F365QnV6+O7KL87kORqDa23WpfFtHV2enQxmySsJ6nv/dQyS9N90Qbm2vbyvdo
+         g2Mhc90S3/nnN2baADfxcAYA1tdd3+uxHK8rDiIaSgRfqEbp4k5++CB5XIHGhZsGuTsn
+         E2DNTZkaKDFAqaHmUX+Mz1snW1SlZAc7uslM5kiujdzgyScKqbV1lm2K4kKqeYjfSDFD
+         I0fyaUWYBCpRORlF6qsnfqULKpbRHD4Kigfjj5GuuOuPysfdQWlP6E6U95tNEm9lD3Ih
+         n4A6NTj5r7JVvxPlhlzJ1q+8jzRUIZ6NJfHi6LRA4rza+hdMEqHNmwjkjnVACFK1RLsl
+         XwDg==
+X-Gm-Message-State: AOJu0Yz/jhGgtL4o4ZS7PAU0et7aQD1OJdhyitZZTsKjuHQeYfebQnkN
+	qD8FZUCn8sSVlSjaph4XvYlS4juINZ43g4+N2Y7d56v332r/IJCwxlRa7A144aWrvFHnVixvLGc
+	dH3l5ttq0BisgvoKFw42jouloQJbAzrY=
+X-Gm-Gg: AeBDievdbhjdtZwqDvUh+u3i27qZXf6EUCpFzOzcjVjpIti5SNZftqKCKnO1Ks2OMgv
+	LiIFp94XXqSkm/BA0sEdGs5Qdv4Lptkx2kM4OceyELndTrv+LfqGy5a5lEJo6IpKXJBsvuWFbEE
+	czIA/RNGgxEhdZCp5sKDXslwZmPDTcYcKqt9uIiXmFmQO0k6wFFHc1lQqf15lYjowoXkeE/BOUP
+	KuJm9ormWdUUAgj+ncrlHGksc8dKIkXV24m6f/bs9Vejdgad+FWsFFzywUq5Os4zXSOLFigjPvl
+	DI1zGS9Gfwu+QrwkTaZDRpMjXUkCRuXGH6r1HjvW26qHUoERgqar
+X-Received: by 2002:a17:90a:da8f:b0:35f:c1cc:feee with SMTP id
+ 98e67ed59e1d1-361403c3263mr350564a91.3.1776381243470; Thu, 16 Apr 2026
+ 16:14:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aeFmYd1ybZnVlAYW@google.com>
+References: <20260415160728.657270-1-harishankar.vishwanathan@gmail.com>
+ <20260415160728.657270-2-harishankar.vishwanathan@gmail.com> <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
+In-Reply-To: <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Date: Thu, 16 Apr 2026 19:13:45 -0400
+X-Gm-Features: AQROBzCADLK4SeBSAvC9Bpvj6ZOynJRZDq9yJlDiSSF44qI1WmdbTwdt8tQQXmg
+Message-ID: <CAM=Ch05O+m3gAAz=EW=ZPrhnTMrrMJ51ryMkwROnfkBMVVxnaw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf/verifier: Use intersection checks when
+ simulating to detect dead branches
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Paul Chaignon <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 16, 2026 at 03:44:49PM -0700, Sean Christopherson wrote:
-> I think I'd prefer to require EXPORT_SYMBOL_FOR_KVM and EXPORT_STATIC_CALL_FOR_KVM
-> to come as a pair from arch code.  I can't think of a scenario where arch code
-> should override one but not the other.
+On Wed, Apr 15, 2026 at 9:10=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Wed, 2026-04-15 at 12:07 -0400, Harishankar Vishwanathan wrote:
+[...]
+>
+> For example, given the current implementations for
+> is_scalar_branch_taken(), regs_refine_cond_op(),
+> deduce_bounds_64_from_64() is it ever possible for u64 range not to
+> intersect with s64 range?
 
-Right, will change as you suggested.
+> After spending some time with pen and paper for BPF_JLE operation I
+> suspect that it is not possible. I also encoded this as a small cbmc
+> test: https://github.com/eddyz87/intersection-check.
+> I suspect that same reasoning applies for other operations.
+
+Hi Eduard,
+
+First to confirm if I am reading the CBMC code
+correctly, the precondition for the verification is that the inputs to the
+BPF_JLE code are
+1) register states are valid initial states (at least one concrete
+value satisfying both its u64 and s64 bounds)
+2) the input register states have been passed through
+deduce_bounds_64_from_64()
+
+Without the 2), the verification fails.
+I am assuming the rationale is that any inputs to the BPF_JLE code in
+actual verifier will have passed through reg_bounds_sync()
+in a previous instruction.
+
+If the understanding is correct, then, I had the following questions:
+
+1) Other reg_bounds_sync() functions.
+What if the other reg_bounds_sync() functions update the
+abstract register values in a way that makes the jump operators
+produce no intersection between u64 and s64 (when reg_bound_offset
+and update_reg_bounds are run at the end)? Is this not possible?
+
+2) Other jump operators.
+The CBMC code currently doesn't check for, i.e. JEQ, JNE, JSLE,
+JSLT, JSGE, JSGT, JSET. Could they produce an u64-s64 empty
+intersection?
+
+> I'd suggest to drop the u32/s32 and u64/s64 checks, unless a counter
+> example can be found. I'm not sure about 64/32-bit checks.
+> Wdyt?
+
+Given Paul's tests [1] on the Cilium suite revealed almost no performance
+impact of these checks, should we keep them all to stay on the safe side?
+
+[1] https://lore.kernel.org/bpf/ad_g2QwAfJh64Ba7@mail.gmail.com/
+
+> [...]
