@@ -1,318 +1,364 @@
-Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F58136C9EE
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDCD314A83
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776449002; cv=none; b=fbwqASamEKDq/SRqz3kftJoDiEqSrXw+EGpKaNNbAaXf/jcxSrzP6jYmbsURu9ytpem0n+0xGCH8FCt4fGfz5PuRuxTYjSW1gTOQqU5iqh16o25iwopzDRru+m/TZFxMUJTBkK5lsVQDDwdPKqVpvo0P11bPXIXLxo5KxIZuvLs=
+	t=1776449487; cv=none; b=fwHoHzsp9KE/Xy2b30ADTibIAh25eEQjZw8st2aR8HicuR0hlzy3FgxGSB6Nl7WcHJ/CRWfbWnLcmM82e5VGnU+LRzr05mfKokzVy6S3IN4t/y9HpSBuaDfrI5MkLrtBI41phr9AzfJxC4xnDlcZ7SWo7CHewS+Zk+ckQe707u4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776449002; c=relaxed/simple;
-	bh=dxzHKB8J6kbUKyu0ZCEch3q/D0y+//kBi4xeuwq2G/M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u6qwW7u82P7d2wJspyviA7y38eiVX7ugsy8rABe271ooJGZljlU829G2okI9TgQSxm5Q+LS2ZgeeZVcBOkzlD3GWCDBCU9B/0bGhddxa/GS62YlT36YXiooFBwUgWVJAB/EdmgvVooXH4drou4nYG8gDsYWG1+ztWufNk57J37Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=PqqFybNJ; arc=none smtp.client-ip=84.16.66.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1776449487; c=relaxed/simple;
+	bh=QnA+5qHZJgzv3tgzyyIt8UfWetnEUQ5cHhuMFh3NI+M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OM3YmfhbHKq1BLcMDZ1OfC6TkqNWXoDWWLBTYYZshcLSuk2AuTaO+u1If/0lJmVJVoKE4GteJvtxI61EPOC6hGgSGQKBCswfOuFKMKvH19qeqgMLw892tTrO3yzpgskSYJOB0vZk/BocpYxYQ7+DjyGmQbxq9iOD3zwIDoU6gts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EbAEvUo/; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="PqqFybNJ"
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fy2mh1MQkz1M1;
-	Fri, 17 Apr 2026 20:03:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1776448995;
-	bh=p5Inpj/YtolZ92WKJychXbAh/LIr4WXGTzIPW/VeaAY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PqqFybNJE+ushd3LC44hSobe6sr+OfKszeyfUJWnnzSefVMQiFWWpK7mifYNvstNC
-	 HgKB2ErrKUpsFVSH7qeAc4Eu6YdF01QcvikWpwp/Dv5C/OiFvqYlxLDHsuu+XIxr/d
-	 Z2dAgs7fsrcDaMd3eY578mb02oODCUsmmsEAqIyY=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4fy2mg15v7zFfF;
-	Fri, 17 Apr 2026 20:03:15 +0200 (CEST)
-Date: Fri, 17 Apr 2026 20:03:14 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Justin Suess <utilityemal77@gmail.com>
-Cc: Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, kpsingh@kernel.org, paul@paul-moore.com, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, kees@kernel.org, gnoack@google.com, jack@suse.cz, 
-	jmorris@namei.org, serge@hallyn.com, yonghong.song@linux.dev, martin.lau@linux.dev, 
-	m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com, sdf@fomichev.me, 
-	skhan@linuxfoundation.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
-Message-ID: <20260417.aPh1ooQu8esh@digikod.net>
-References: <20260407200157.3874806-1-utilityemal77@gmail.com>
- <20260407200157.3874806-9-utilityemal77@gmail.com>
- <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
- <aeFaQXkKNHFeE-oC@suesslenovo>
- <CAPhsuW648HdcCbXWMHaJ4uirPWq2WX3Ggx3AGMU6CGzhNYUREg@mail.gmail.com>
- <aeI_CXj6F-nI_DCL@suesslenovo>
- <20260417.ohgoh0Eecome@digikod.net>
- <aeJlHIoSjVPmccDx@suesslenovo>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EbAEvUo/"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4890098abbaso841695e9.0
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 11:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776449476; x=1777054276; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JDK9k3JzrEikRrM/TE53GzqRlBKicGkcXvS0/GRxI4E=;
+        b=EbAEvUo/xa9AHDlDeHPzw0OXwNT10Rrna6iBcCYqlCKVe5EqJ1jb80YxGOe2wdo7T2
+         DmWsBva8tybREVq5jVDvMq3ZX84HVOZC8SkPYjfwBZJFG6dPzHjPZsC8dQsasBLBBCfe
+         Jjd37JRPWOQhwArtXhuGbW7kOZ8bu6PWQ2oZcg9xh7MNFccG3nzEBF1WvRFmyXslxPjY
+         LvcSIY2VTFsoRRjzoSrDOz+cOeWy1xGBs1W85bBCET5FVZrlnlKeN6YbzPeuUKlRmSt8
+         0XmYzz6jP6CFwYNVx8ERe6EW46b4FXFblIPE2/rB6XGJwP6wuIKu688lu7QU0/SICCRW
+         UOGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776449476; x=1777054276;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JDK9k3JzrEikRrM/TE53GzqRlBKicGkcXvS0/GRxI4E=;
+        b=m5ga7l9oopbSvduR8l6B0R41tFZ2pFjyMX2OIsTIsdS+4L31MWXGM8wGyiYedCX/Gz
+         kNyYBxC3rSPqPh5K9U6l2ze8pjvCg7O62JwEbyMsRfWIQ5W+SvcK4/BAXshYM+mpsOLM
+         IrW7fhdHdfSPrbJ4QSzbhSjPb+0r6EH0iTGrbkkIXPpfZlOwPILaWjj/HgxGsMr74Vab
+         XR990zIBVSDQPzsFGnREXfepS7UGT3/ftd74op8LEsuXpcfoTzUBJn5pwWaTyxn8o1So
+         1QXgyAV5CS841lor+FNdx2KKZ3led1dnln04QNevv39voxvbFt2T6IS0CmOA76yD9RlG
+         xGdw==
+X-Forwarded-Encrypted: i=1; AFNElJ+MkslmfiUo8GH80uxfH5pJdSKBj8DgSKv1D1LQLDYsfX6vqcfd398mdZuMvUQGJ+NAfco=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZhEGa5VUTwOizl2DQKp/uzd3LESCOKR6IYTzUTyNcK+3ZtfpS
+	Oo2n7g02cs7I1/+kne3gXgfzvnBCeWrMzGd864yiyphFirHVUVEm2SAX
+X-Gm-Gg: AeBDietcnrjRy6YlxMIOkuAP6obkgAorLPF38uLt4cxgZjtXHEsHlaE+O2E8onClo5E
+	BqfrhsutmY49PvUnnQks1lMDlIXmlNxZMJIbKt2YFaiyt5HTOjAKQrxE4SyQ3RyqfMRfoOYRFmQ
+	3nrVM19SxKznn2T/lguatmlyIEZFiQ9ATr+uD5jUQLbALUxr4pmlxluCaNXVwbLFVIGPx2MsotO
+	hjUHJ96TG6edpEvwSkoZ3jK8RphNqJd7e6Vtv9J/d1YZM0ho6Gtgydn1nXaWh9Vkenj6tBk6AJ8
+	9k3jAx8BJkezqlriLzYalIYkDh2wRc2cBZZO8KRJ7FBiUMm7oGpqrhgp41Ytrup4f1Xyu+KgRLo
+	K6RspOTHgjNtoMcb0Ee/n1htw8fbTQX2PGJTNggMjl8+X0CCmNMEZilhHWhJ2rirwOX8rGHiBDL
+	MzQ3ZDDwzKrlnOShhJ1oRtoIkWe0Vm0W2f7VmCOvz8pWT+DXUL4pRoqdkKHA4qBjsnHmjuj+pdN
+	pE4IZhx8fC7T4vhHtEUsw==
+X-Received: by 2002:a05:600c:4fd1:b0:488:78f2:6b0 with SMTP id 5b1f17b1804b1-488fb78ede0mr57130655e9.29.1776449476060;
+        Fri, 17 Apr 2026 11:11:16 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc0b4c85sm60163415e9.0.2026.04.17.11.11.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Apr 2026 11:11:15 -0700 (PDT)
+Message-ID: <7e798013-d1d9-4845-98bb-ee383eb3af00@gmail.com>
+Date: Fri, 17 Apr 2026 19:11:15 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aeJlHIoSjVPmccDx@suesslenovo>
-X-Infomaniak-Routing: alpha
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 bpf-next 1/6] bpf: Extend BTF UAPI vlen, kinds to use
+ unused bits
+To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, qmo@kernel.org,
+ bpf@vger.kernel.org
+References: <20260417143023.1551481-1-alan.maguire@oracle.com>
+ <20260417143023.1551481-2-alan.maguire@oracle.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260417143023.1551481-2-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 17, 2026 at 12:51:40PM -0400, Justin Suess wrote:
-> On Fri, Apr 17, 2026 at 05:18:05PM +0200, Mickaël Salaün wrote:
-> > On Fri, Apr 17, 2026 at 10:09:13AM -0400, Justin Suess wrote:
-> > > On Thu, Apr 16, 2026 at 04:47:40PM -0700, Song Liu wrote:
-> > > > On Thu, Apr 16, 2026 at 2:53 PM Justin Suess <utilityemal77@gmail.com> wrote:
-> > > > [...]
-> > > > > I don't think we can pass the FD number via a map, since the FD is
-> > > > > process specific. And it needs to be done in a way where we can lookup
-> > > > > the specific ruleset the FD points to safely.
-> > > > >
-> > > > > So we'd need some other way to load the ruleset from a file descriptor,
-> > > > > either through a new userspace side BPF call or similar mechanism.
-> > > > >
-> > > > > Is there some other common pattern for FDs --> kptr I can follow?
-> > > > 
-> > > > I didn't find an exact example like this. There must be a way to achieve
-> > > > this. In the worst case, we can add a kfunc for this.
-> > > >
-> > > 
-> > > I think new kfunc is a doable approach. I could make a kfunc taking a struct
-> > > *task_struct and an FD that looks up a landlock ruleset within a given
-> > > task that returns a trusted kptr.
-> > > 
-> > > Something like:
-> > > 
-> > > struct bpf_landlock_ruleset* bpf_landlock_get_ruleset_from_fd(struct
-> > > task_struct* task, int fd)
+
+
+On 4/17/26 3:30 PM, Alan Maguire wrote:
+> BTF maximum vlen is encoded using 16 bits with a maximum vlen
+> of 65535.  This has sufficed for structs, function parameters
+> and enumerated type values.  However, with upcoming BTF location
+> information - in particular information about inline sites -
+> this limit is surpassed.  Use bits 16-23 - currently unused in
+> BTF info - to extend to 24 bits, giving a max vlen of (2^24 - 1),
+> or 16 million.
 > 
-> Thanks Mickaël and Song,
+> Also extend BTF kind encoding from 5 to 7 bits, giving a maximum
+> available number of kinds of 128.  Since with the BTF location work
+> we use another 3 kinds, we are fast approaching the current limit
+> of 32.
 > 
-> There are definitely pros and cons to both approaches.
+> Convert BTF_MAX_* values to enums to allow them to be encoded in
+> kernel BTF; this will allow us to detect if the running kernel
+> supports a 24-bit vlen or not.  Add one for max _possible_
+> (not used) kind.
 > 
-> I think it would be OK to have a dedicated map and indeed cleaner from
-> the userspace side since there would be no intermediate step to find the
-> task and lookup the fd since that would be handled by the map_ops.
+> Fix up a few places in the kernel where a 16-bit vlen is assumed;
+> remove BTF_INFO_MASK as now all bits are used.
 > 
-> Cons of the new map type:
+> The vlen expansion was suggested by Andrii in [1]; the kind expansion
+> is tackled here too as it may be needed also to support new kinds
+> in BTF.
 > 
-> The main issue is with the new map type is then we are limited to the
-> specific data structure we define in the map. For instance if we want
-> to use a hash or other data structure instead of an array to store
-> rulesets, we'd need to define variants of the landlock map type for
-> all data structures.
+> [1] https://lore.kernel.org/bpf/CAEf4BzZx=X6vGqcA8SPU6D+v6k+TR=ZewebXMuXtpmML058piw@mail.gmail.com/
 > 
-> So this kind of bungles the "data structure" and "data type" layers.
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+
+It looks like all callsites of vlen have been migrated to u32 (except 
+the ones that are guaranteed to work with narrower types: 
+btf_func_linkage(), cs->num_params).
+Extending kind from 5 to 7 bits does not require modifying users at all.
+
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+
+>   include/linux/btf.h            |  4 ++--
+>   include/uapi/linux/btf.h       | 26 ++++++++++++++------------
+>   kernel/bpf/btf.c               | 27 ++++++++++-----------------
+>   tools/include/uapi/linux/btf.h | 26 ++++++++++++++------------
+>   4 files changed, 40 insertions(+), 43 deletions(-)
 > 
-> Pros of the new map type:
-> 
-> The ruleset_fd conversion would be implicitly handled by the map_ops.
-> Userspace could insert the fd and bpf would not have to deal with it at
-> all.
-> 
-> Cons of bpf_landlock_get_ruleset_from_fd:
-> 
-> Awkward conversion step. We need to find the task of the original
-> ruleset creator and recieve the fd before looking it up and converting
-> it to a kptr to the bpf_landlock_ruleset.
-> 
-> Pros of bpf_landlock_get_ruleset_from_fd:
-> 
-> We can use any existing map data structure to store our kptrs.
-> 
-> Not having a dedicated map type simplifies implementation.
-> 
-> ...
-> 
-> Appreciate the feedback from both of you.
-> > 
-> > That looks like a hack that would not handle FD's (object) lifetime
-> > (e.g. what happen when the task is gone?).
-> >
-> 
-> If we take an underlying reference on the ruleset backing the fd, then the fd
-> being closed shouldn't matter right?
-> 
-> This is how the lifetime management works for that
-> bpf_landlock_get_ruleset_from fd, in my draft implementation prior to
-> the RFC:
-> 
->   /**
->    * bpf_landlock_get_ruleset_from_fd - acquire a Landlock ruleset from a task FD
->    * @task: task owning the file descriptor table to look up
->    * @fd: Landlock ruleset file descriptor in @task
->    *
->    * Returns: a referenced opaque Landlock ruleset, or NULL if the FD lookup or
->    * validation fails.
->    */
->   __bpf_kfunc struct bpf_landlock_ruleset *
->   bpf_landlock_get_ruleset_from_fd(struct task_struct *task, int fd)
->   {
->   	struct landlock_ruleset *ruleset;
->     /* does landlock_get_ruleset and increments refcount */
->   	ruleset = landlock_get_task_ruleset_from_fd(task, fd, FMODE_CAN_READ);
->   	if (IS_ERR(ruleset))
->   		return NULL;
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index 48108471c5b1..c82d0d689059 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
+> @@ -415,12 +415,12 @@ static inline bool btf_type_is_array(const struct btf_type *t)
+>   	return BTF_INFO_KIND(t->info) == BTF_KIND_ARRAY;
+>   }
 >   
->   	return (struct bpf_landlock_ruleset *)ruleset;
->   }
-> 
-> The landlock_get_task_ruleset_from_fd increments the usage with
-> landlock_get_ruleset. (This may sleep, so it must be tagged with
-> KF_SLEEPABLE)
-> 
-> If the fd is closed before landlock_get_ruleset_from_fd, then null is returned.
-> The verifier will force the program to do the null check b/c of KF_RET_NULL.
-> 
-> __kptr also have destructor kfuncs. So if we get the reference in
-> bpf_landlock_get_ruleset_from_fd with landlock_get_ruleset_from_fd, and
-> put the reference to the ruleset.
-> 
-> The destructor path looks like this:
-> 
->   /* Define ID for destructor * /
->   BTF_ID_LIST(bpf_landlock_dtor_ids)
->   BTF_ID(struct, bpf_landlock_ruleset)
->   BTF_ID(func, bpf_landlock_put_ruleset_dtor)
->   ...
->   /**
->   * bpf_landlock_put_ruleset - put a Landlock ruleset
->   * @ruleset: Landlock ruleset to put
->   */
->   __bpf_kfunc void
->   bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset)
+> -static inline u16 btf_type_vlen(const struct btf_type *t)
+> +static inline u32 btf_type_vlen(const struct btf_type *t)
 >   {
-> 	  landlock_put_ruleset((struct landlock_ruleset *)ruleset);
+>   	return BTF_INFO_VLEN(t->info);
 >   }
-> 
->   __bpf_kfunc void bpf_landlock_put_ruleset_dtor(void *ruleset)
+>   
+> -static inline u16 btf_vlen(const struct btf_type *t)
+> +static inline u32 btf_vlen(const struct btf_type *t)
 >   {
-> 	  bpf_landlock_put_ruleset(ruleset);
+>   	return btf_type_vlen(t);
 >   }
-> 
->   static int __init bpf_landlock_kfunc_init(void)
->   {
->   	const struct btf_id_dtor_kfunc bpf_landlock_dtors[] = {
->   		{
->   			.btf_id = bpf_landlock_dtor_ids[0],
->   			.kfunc_btf_id = bpf_landlock_dtor_ids[1],
->   		},
+> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+> index 638615ebddc2..618167cab4e6 100644
+> --- a/include/uapi/linux/btf.h
+> +++ b/include/uapi/linux/btf.h
+> @@ -33,20 +33,22 @@ struct btf_header {
+>   	__u32	layout_len;	/* length of layout section	*/
+>   };
+>   
+> -/* Max # of type identifier */
+> -#define BTF_MAX_TYPE	0x000fffff
+> -/* Max offset into the string section */
+> -#define BTF_MAX_NAME_OFFSET	0x00ffffff
+> -/* Max # of struct/union/enum members or func args */
+> -#define BTF_MAX_VLEN	0xffff
+> +enum btf_max {
+> +	/* Max possible kind */
+> +	BTF_MAX_KIND =		0x0000007f,
+> +	/* Max # of type identifier */
+> +	BTF_MAX_TYPE =		0x000fffff,
+> +	/* Max offset into the string section */
+> +	BTF_MAX_NAME_OFFSET =	0x00ffffff,
+> +	/* Max # of struct/union/enum members or func args */
+> +	BTF_MAX_VLEN =		0x00ffffff,
+> +};
+>   
+>   struct btf_type {
+>   	__u32 name_off;
+>   	/* "info" bits arrangement
+> -	 * bits  0-15: vlen (e.g. # of struct's members)
+> -	 * bits 16-23: unused
+> -	 * bits 24-28: kind (e.g. int, ptr, array...etc)
+> -	 * bits 29-30: unused
+> +	 * bits  0-23: vlen (e.g. # of struct's members)
+> +	 * bits 24-30: kind (e.g. int, ptr, array...etc)
+>   	 * bit     31: kind_flag, currently used by
+>   	 *             struct, union, enum, fwd, enum64,
+>   	 *             decl_tag and type_tag
+> @@ -65,8 +67,8 @@ struct btf_type {
 >   	};
->   	int ret;
+>   };
 >   
->   	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
->   					&bpf_landlock_kfunc_set);
->   	if (ret)
->   		return ret;
+> -#define BTF_INFO_KIND(info)	(((info) >> 24) & 0x1f)
+> -#define BTF_INFO_VLEN(info)	((info) & 0xffff)
+> +#define BTF_INFO_KIND(info)	(((info) >> 24) & 0x7f)
+> +#define BTF_INFO_VLEN(info)	((info) & 0xffffff)
+>   #define BTF_INFO_KFLAG(info)	((info) >> 31)
 >   
->   	return register_btf_id_dtor_kfuncs(bpf_landlock_dtors,
->   					   ARRAY_SIZE(bpf_landlock_dtors),
->   					   THIS_MODULE);
+>   enum {
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index a62d78581207..fedead837b9a 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -182,7 +182,6 @@
+>   #define BITS_ROUNDUP_BYTES(bits) \
+>   	(BITS_ROUNDDOWN_BYTES(bits) + !!BITS_PER_BYTE_MASKED(bits))
+>   
+> -#define BTF_INFO_MASK 0x9f00ffff
+>   #define BTF_INT_MASK 0x0fffffff
+>   #define BTF_TYPE_ID_VALID(type_id) ((type_id) <= BTF_MAX_TYPE)
+>   #define BTF_STR_OFFSET_VALID(name_off) ((name_off) <= BTF_MAX_NAME_OFFSET)
+> @@ -289,7 +288,7 @@ enum verifier_phase {
+>   struct resolve_vertex {
+>   	const struct btf_type *t;
+>   	u32 type_id;
+> -	u16 next_member;
+> +	u32 next_member;
+>   };
+>   
+>   enum visit_state {
+> @@ -2031,7 +2030,7 @@ static int env_stack_push(struct btf_verifier_env *env,
 >   }
-> 
-> Good reminder I need to include a test making sure the ruleset
-> remains valid after the FD and/or task is closed. :)
-> 
-> > Why not using proper typing with a dedicated map?
-> > 
-> 
-> I may be misunderstanding, but from what I see, a __kptr DOES give
-> proper typing, __kptr is an annotation not a type.
+>   
+>   static void env_stack_set_next_member(struct btf_verifier_env *env,
+> -				      u16 next_member)
+> +				      u32 next_member)
+>   {
+>   	env->stack[env->top_stack - 1].next_member = next_member;
+>   }
+> @@ -3293,7 +3292,7 @@ static s32 btf_struct_check_meta(struct btf_verifier_env *env,
+>   	struct btf *btf = env->btf;
+>   	u32 struct_size = t->size;
+>   	u32 offset;
+> -	u16 i;
+> +	u32 i;
+>   
+>   	meta_needed = btf_type_vlen(t) * sizeof(*member);
+>   	if (meta_left < meta_needed) {
+> @@ -3369,7 +3368,7 @@ static int btf_struct_resolve(struct btf_verifier_env *env,
+>   {
+>   	const struct btf_member *member;
+>   	int err;
+> -	u16 i;
+> +	u32 i;
+>   
+>   	/* Before continue resolving the next_member,
+>   	 * ensure the last member is indeed resolved to a
+> @@ -4447,7 +4446,7 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
+>   	const struct btf_enum *enums = btf_type_enum(t);
+>   	struct btf *btf = env->btf;
+>   	const char *fmt_str;
+> -	u16 i, nr_enums;
+> +	u32 i, nr_enums;
+>   	u32 meta_needed;
+>   
+>   	nr_enums = btf_type_vlen(t);
+> @@ -4555,7 +4554,7 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
+>   	const struct btf_enum64 *enums = btf_type_enum64(t);
+>   	struct btf *btf = env->btf;
+>   	const char *fmt_str;
+> -	u16 i, nr_enums;
+> +	u32 i, nr_enums;
+>   	u32 meta_needed;
+>   
+>   	nr_enums = btf_type_vlen(t);
+> @@ -4683,7 +4682,7 @@ static void btf_func_proto_log(struct btf_verifier_env *env,
+>   			       const struct btf_type *t)
+>   {
+>   	const struct btf_param *args = (const struct btf_param *)(t + 1);
+> -	u16 nr_args = btf_type_vlen(t), i;
+> +	u32 nr_args = btf_type_vlen(t), i;
+>   
+>   	btf_verifier_log(env, "return=%u args=(", t->type);
+>   	if (!nr_args) {
+> @@ -4929,7 +4928,7 @@ static int btf_datasec_resolve(struct btf_verifier_env *env,
+>   {
+>   	const struct btf_var_secinfo *vsi;
+>   	struct btf *btf = env->btf;
+> -	u16 i;
+> +	u32 i;
+>   
+>   	env->resolve_mode = RESOLVE_TBD;
+>   	for_each_vsi_from(i, v->next_member, v->t, vsi) {
+> @@ -5183,7 +5182,7 @@ static int btf_func_proto_check(struct btf_verifier_env *env,
+>   	const struct btf_type *ret_type;
+>   	const struct btf_param *args;
+>   	const struct btf *btf;
+> -	u16 nr_args, i;
+> +	u32 nr_args, i;
+>   	int err;
+>   
+>   	btf = env->btf;
+> @@ -5278,7 +5277,7 @@ static int btf_func_check(struct btf_verifier_env *env,
+>   	const struct btf_type *proto_type;
+>   	const struct btf_param *args;
+>   	const struct btf *btf;
+> -	u16 nr_args, i;
+> +	u32 nr_args, i;
+>   
+>   	btf = env->btf;
+>   	proto_type = btf_type_by_id(btf, t->type);
+> @@ -5336,12 +5335,6 @@ static s32 btf_check_meta(struct btf_verifier_env *env,
+>   	}
+>   	meta_left -= sizeof(*t);
+>   
+> -	if (t->info & ~BTF_INFO_MASK) {
+> -		btf_verifier_log(env, "[%u] Invalid btf_info:%x",
+> -				 env->log_type_id, t->info);
+> -		return -EINVAL;
+> -	}
+> -
+>   	if (BTF_INFO_KIND(t->info) > BTF_KIND_MAX ||
+>   	    BTF_INFO_KIND(t->info) == BTF_KIND_UNKN) {
+>   		btf_verifier_log(env, "[%u] Invalid kind:%u",
+> diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
+> index 638615ebddc2..618167cab4e6 100644
+> --- a/tools/include/uapi/linux/btf.h
+> +++ b/tools/include/uapi/linux/btf.h
+> @@ -33,20 +33,22 @@ struct btf_header {
+>   	__u32	layout_len;	/* length of layout section	*/
+>   };
+>   
+> -/* Max # of type identifier */
+> -#define BTF_MAX_TYPE	0x000fffff
+> -/* Max offset into the string section */
+> -#define BTF_MAX_NAME_OFFSET	0x00ffffff
+> -/* Max # of struct/union/enum members or func args */
+> -#define BTF_MAX_VLEN	0xffff
+> +enum btf_max {
+> +	/* Max possible kind */
+> +	BTF_MAX_KIND =		0x0000007f,
+> +	/* Max # of type identifier */
+> +	BTF_MAX_TYPE =		0x000fffff,
+> +	/* Max offset into the string section */
+> +	BTF_MAX_NAME_OFFSET =	0x00ffffff,
+> +	/* Max # of struct/union/enum members or func args */
+> +	BTF_MAX_VLEN =		0x00ffffff,
+> +};
+>   
+>   struct btf_type {
+>   	__u32 name_off;
+>   	/* "info" bits arrangement
+> -	 * bits  0-15: vlen (e.g. # of struct's members)
+> -	 * bits 16-23: unused
+> -	 * bits 24-28: kind (e.g. int, ptr, array...etc)
+> -	 * bits 29-30: unused
+> +	 * bits  0-23: vlen (e.g. # of struct's members)
+> +	 * bits 24-30: kind (e.g. int, ptr, array...etc)
+>   	 * bit     31: kind_flag, currently used by
+>   	 *             struct, union, enum, fwd, enum64,
+>   	 *             decl_tag and type_tag
+> @@ -65,8 +67,8 @@ struct btf_type {
+>   	};
+>   };
+>   
+> -#define BTF_INFO_KIND(info)	(((info) >> 24) & 0x1f)
+> -#define BTF_INFO_VLEN(info)	((info) & 0xffff)
+> +#define BTF_INFO_KIND(info)	(((info) >> 24) & 0x7f)
+> +#define BTF_INFO_VLEN(info)	((info) & 0xffffff)
+>   #define BTF_INFO_KFLAG(info)	((info) >> 31)
+>   
+>   enum {
 
-Ok, good.
-
-> 
-> This is what it would look like in an BPF_MAP_TYPE_ARRAY.
-> 
->     struct ruleset_kptr_value {
-> 	    struct bpf_landlock_ruleset __kptr * ruleset;
->     };
-> 
->     struct {
-> 	      __uint(type, BPF_MAP_TYPE_ARRAY);
-> 	      __uint(max_entries, 1);
-> 	      __type(key, __u32);
-> 	      __type(value, struct ruleset_kptr_value);
->     } ruleset_kptr_map SEC(".maps");
-> 
-> So we get proper typing from what I see. (It's not like a __kptr is a
-> special void*, it has a type)
-
-Looks good.
-
-> 
-> > > 
-> > > And tagging it with KF_ACQUIRE + KF_RET_NULL.
-> > > 
-> > > Then keep the existing kfunc for putting the ruleset and enforcing it on
-> > > a struct linux_binprm.
-> > > 
-> > > The BPF program would need to get a reference to a task struct
-> > > of the program creating the rulesets with bpf_task_from_pid for
-> > > instance. Then they could use the task_struct with another plain integer
-> > > map to store FD numbers and then use the rulesets or store them in a map
-> > > of __kptr objects for later usage.
-> > > 
-> > > Would this be more acceptable?
-> > > > > Basically the pattern I need is userspace must create the file
-> > > > > descriptor, BPF converts that FD into a refcounted kernel object, and
-> > > > > even if userspace closes the FD BPF needs to hold a reference on the
-> > > > > underlying ruleset structure.
-> > > > >
-> > > > > (In this patch this was accomplished through the map_ops)
-> > > > >
-> > > > > Let me know what you think Song. I do understand the benefit of having a
-> > > > > __kptr instead, the refcounting is all there, and it would allow storing
-> > > > > rulesets in multiple map types. (and one less map type to maintain).
-> > > > 
-> > > > A new type of map for each FD referenced kernel type is non-starter.
-> > > > It is impossible to add UAPI for a specific use case.
-> > 
-> > This new map type is only about one file descriptor type, similarly to
-> > socket FDs.  From a UAPI point of view, it looks clean and safe,
-> > especially to deal with underlying object lifetime (e.g. reference
-> > tracking).
-> > 
-> > > >
-> > > You've convinced me. I could see a lot of problems if everyone wanting
-> > > to add their specialized maps, it would be difficult to maintain.
-> > 
-> > Is there another way to properly handle kernel object lifetime (not tied
-> 
-> The answer the the lifetime part is yes.
-> 
-> The kptr destructors and the landlock ruleset refcounting give us that
-> abstraction. (along with the KF_ACQUIRE/KF_RELEASE annotations and
-> destructor implementation)
-
-Good.
-
-> 
-> > to the caller) and pass them as file descriptor?
-> This "pass them as a file descriptor" is the tricky part. It would be
-> very convenient if we could send the fd to bpf from userspace and have
-> it be implicitly converted (like in the BPF_MAP_TYPE_LANDLOCK_RULESET
-> implementation) in one step, but I just don't see a way to do that with
-> the bpf_landlock_get_ruleset_from_fd kfunc approach.
-
-Song's idea to have a generic FD map looks promising.
-
-> > 
-> > > 
-> > > It's probably best to keep the specialized map types to core kernel
-> > > interfaces only that are unlikely to change.
-> > 
-> > File descriptors are a stable interface.
-> >
-> No that's correct. I cede that point :)
-> > > 
-> > > > Thanks,
-> > > > Song
-> > > > 
-> > > > > Mickaël, do you have any thoughts on this? I have v2 basically ready,
-> > > > > although it uses the BPF_MAP_TYPE_LANDLOCK_RULESET it changes a lot on
-> > > > > the Landlock side.
-> > > 
-> 
