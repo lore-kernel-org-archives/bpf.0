@@ -1,135 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD573806C1
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 07:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C98939FCAE
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 08:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776411835; cv=none; b=eaC+wm0vQFPGd5Gg/DXVqNSDgRwOo81NQAEZ2vnBd86JK5WFrKmHO+ze3gTtt6dC08feGB1FSXeuvrzcElWHE9EN4GjNZA9SZ3KCPFx+6rKfX+6V6udKF+gxAb8j6rqLcSQascRwOu6ZtAPaRQyVmsoq5YqG6pzqAIWeazdbKKM=
+	t=1776414805; cv=none; b=CiO13YBqxeuZjzJjFQAj7byC9ODxXmxAR21NcZfkBAzNzs5cytIlwHRseTNT+b4Nm2KDKNsOAmiTsXeKGfdg8XL9+RzYNnN9r6wMiHynY/30G/daSsAUEL2EQSHTtiJ+21jq+GHAoVOPFGeu0/cUJmcRq3BCUBjI4NW90qff1xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776411835; c=relaxed/simple;
-	bh=HPVraUh1JoVP651IBRGx+S2UHOpsA3idB5Bb/pekxIg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pbu8l8wyH6ibMvCtv3csspzZxMLCLg39IWLIuKg1XCa5giYKz5HPZSaKlNFpg7U4CInctPjnS54cyBaF4PJhIOMVNhRvauh4lPt5Y+f0L4XBGWT4fwwe81gDQaauQaKmbDG/35FcdqCgDR7IN+UUP8TgVWffd56nKJo/Vi7Y+A8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OVnAmW+3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776414805; c=relaxed/simple;
+	bh=LIxyIoIxkHKjzVXrmmfCh+40fQo4xN+LS87Aos2NtDQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NX5mYTL4emOBBMRo9bKgiQglZrXzzNgjsFB+52MyT091o/aYRk7rd4HswUCgDGrgqWgRXrdwzGZAcnHTQL3VaIPc8BrRL0bmt0wrUmJWhDDJ+Z7XoHX04YZP8TlfMl19rwT1VSd3lc5epJr57wahv+3AfSETLeZjafKSS6JR0L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eN/G8qdU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OVnAmW+3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D843BC19425;
-	Fri, 17 Apr 2026 07:43:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eN/G8qdU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 622BDC19425;
+	Fri, 17 Apr 2026 08:33:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776411834;
-	bh=HPVraUh1JoVP651IBRGx+S2UHOpsA3idB5Bb/pekxIg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=OVnAmW+3SqjU9eG9t9agsceN5BU3N2bYiYlj8VbDmXgli/mSr6m1lVKXgn7Pv1pG+
-	 IQOdcgs0BpfXyqvOpsdgarmuSwR8dv6HN+zxsEtYbjj/UvVd/fnq4an5o9JSHS9oGz
-	 N5UMfT163vfuRsJYrB4YEUtRPbZhFGvSf0luhmTmMNuJ3IY2uJ/890YYMuISp+rv6a
-	 ss4N2LLzoy8hqMN3pTxz/qK16F5MbUpAR7H1d6ZP23dz86NGnnXkqGpQsRGNcsfmt6
-	 gnSIN54Q8fsbn1w1uMxG/5r48bJwlHJ+3s6/UuXbZncSpRFja9mgu/X7MymOG8wQI/
-	 zMOfjQyUs5l0A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf: crypto: reject unterminated type and algorithm
- names
-Reply-To: sashiko@lists.linux.dev
-To: "Pengpeng Hou" <pengpeng@iscas.ac.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260417073128.91029-1-pengpeng@iscas.ac.cn>
-References: <20260417073128.91029-1-pengpeng@iscas.ac.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Apr 2026 07:43:53 +0000
-Message-Id: <20260417074353.D843BC19425@smtp.kernel.org>
+	s=k20201202; t=1776414804;
+	bh=LIxyIoIxkHKjzVXrmmfCh+40fQo4xN+LS87Aos2NtDQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=eN/G8qdUmLkzMD4cmOo+mJ5BFPRusDJenS2p5Kb7mgjH7nY0lL4Xb9LyGKQpHbwhJ
+	 rg0EMzMrEZkV/k5746pL32Y+6SG3WvbQEn+mhTmJYIciWG+/IPhyWhJk5wTjMz69mL
+	 iXmElqBhdrOXPEjzHWvXZvndbvEVJ9lq5ySzP/27j3LgNMrTsCGRn3G4e0RmXz5pz4
+	 tVn/UCW+gAPFjuyE+4SlMmeL6qbRAvo7riQxWR+ZUy3LQg1C87UjkzyMaj4zirPUWt
+	 phC177rwGVBP3qpR0Z1/S/OnnOiLEI4z5DInNaM7tPkVQZ2P1qhD0+KU9RukA2eJ7Z
+	 QS3T6hoSSrzJQ==
+From: Antoine Tenart <atenart@kernel.org>
+To: andrii@kernel.org,
+	eddyz87@gmail.com
+Cc: Antoine Tenart <atenart@kernel.org>,
+	bpf@vger.kernel.org,
+	Paul Houssel <paulhoussel2@gmail.com>,
+	Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf v2 1/2] libbpf: fix deduplication of typedef with base definitions
+Date: Fri, 17 Apr 2026 10:33:17 +0200
+Message-ID: <20260417083319.32716-1-atenart@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Sashiko AI review found 1 potential issue(s):
-- [Critical] In-place validation of `struct bpf_crypto_params` is vulnerabl=
-e to Time-of-Check to Time-of-Use (TOCTOU) race conditions, allowing bypass=
-ing of bounds checks and leading to NULL pointer dereferences and out-of-bo=
-unds reads.
---
+When deduplicating definitions for a module, typedef defined in the base
+are not removed. This is because the hash used for base types differs
+from the one used in the deduplication logic in btf_dedup_struct_type.
 
-commit 3ccfc91c2a01e60f8c9cc4188d35f3073228f1db
-Author: Pengpeng Hou <pengpeng@iscas.ac.cn>
+This was introduced by the referenced commit when moving the typedef
+deduplication logic handling from btf_dedup_ref_type to
+btf_dedup_struct_type, as this also changed the hash logic
+(btf_hash_common to btf_hash_typedef).
 
-bpf: crypto: reject unterminated type and algorithm names
+This also impacts other types referencing those typedef (e.g. const). In
+my test, the BTF section size of the openvswitch module went from 31KB
+to 45KB.
 
-This commit attempts to fix out-of-bounds reads by adding string length che=
-cks
-for the type and algo fields in bpf_crypto_ctx_create(). It returns -EINVAL=
- if
-the strings are not NUL-terminated.
+Cc: Paul Houssel <paulhoussel2@gmail.com>
+Fixes: 3781413465df ("libbpf: Fix BTF dedup to support recursive typedef definitions").
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+---
+ tools/lib/bpf/btf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-> --- a/kernel/bpf/crypto.c
-> +++ b/kernel/bpf/crypto.c
-[ ... ]
-> @@ -155,6 +155,12 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params=
- *params, u32 params__sz,
->  		return NULL;
->  	}
-> =20
-> +	if (strnlen(params->type, sizeof(params->type)) =3D=3D sizeof(params->t=
-ype) ||
-> +	    strnlen(params->algo, sizeof(params->algo)) =3D=3D sizeof(params->a=
-lgo)) {
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index ceb57b46a878..771aeaa0262b 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -4578,12 +4578,14 @@ static int btf_dedup_prep(struct btf_dedup *d)
+ 		case BTF_KIND_RESTRICT:
+ 		case BTF_KIND_PTR:
+ 		case BTF_KIND_FWD:
+-		case BTF_KIND_TYPEDEF:
+ 		case BTF_KIND_FUNC:
+ 		case BTF_KIND_FLOAT:
+ 		case BTF_KIND_TYPE_TAG:
+ 			h = btf_hash_common(t);
+ 			break;
++		case BTF_KIND_TYPEDEF:
++			h = btf_hash_typedef(t);
++			break;
+ 		case BTF_KIND_INT:
+ 		case BTF_KIND_DECL_TAG:
+ 			h = btf_hash_int_decl_tag(t);
+-- 
+2.53.0
 
-Is there a potential time-of-check to time-of-use race condition here?
-If the params pointer refers to a BPF map value, user space or other CPUs
-could concurrently modify the map data.
-
-Could the NUL terminator be overwritten immediately after these strnlen()
-checks pass, causing downstream consumers like bpf_crypto_get_type() to sti=
-ll
-read out-of-bounds?
-
-> +		*err =3D -EINVAL;
-> +		return NULL;
-> +	}
-> +
->  	type =3D bpf_crypto_get_type(params->type);
-
-Looking at the rest of bpf_crypto_ctx_create() in the original code, the sa=
-me
-in-place validation pattern appears to affect other fields:
-
-kernel/bpf/crypto.c:bpf_crypto_ctx_create() {
-    ...
-    if (!!params->authsize ^ !!type->setauthsize) {
-        ...
-    }
-    ...
-    if (params->authsize) {
-        *err =3D type->setauthsize(ctx->tfm, params->authsize);
-    ...
-}
-
-If type->setauthsize is NULL, and params->authsize is initially 0, the XOR
-check passes. If params->authsize is concurrently modified to a non-zero
-value right after, does the later if (params->authsize) condition evaluate
-to true and dereference a NULL pointer?
-
-Similarly, params->key_len is validated against sizeof(params->key):
-
-kernel/bpf/crypto.c:bpf_crypto_ctx_create() {
-    ...
-    if (!params->key_len || params->key_len > sizeof(params->key)) {
-        ...
-    }
-    ...
-    *err =3D type->setkey(ctx->tfm, params->key, params->key_len);
-    ...
-}
-
-Could a concurrent modification to params->key_len after the check lead to =
-an
-out-of-bounds read in type->setkey()?
-
-Should the entire struct bpf_crypto_params be copied to a local stack buffer
-before any validation is performed to prevent these races?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417073128.9102=
-9-1-pengpeng@iscas.ac.cn?part=3D1
