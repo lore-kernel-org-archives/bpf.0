@@ -1,194 +1,318 @@
-Received: from mail-dy1-f193.google.com (mail-dy1-f193.google.com [74.125.82.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-42ad.mail.infomaniak.ch (smtp-42ad.mail.infomaniak.ch [84.16.66.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0EA364E88
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F58136C9EE
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776448986; cv=none; b=jSRZzmdb48WxtlS6RukRZ5e6N8SjV8hnapX4Q17q5bL3m4NdJ4a1xxcJGoMR/dIPdqcvnH9weYqC4LlAWRjjL4m1DMT1nOW9F8XvGzQMjuXT+7L8tReeofQ6cujIeJwjeTaoLuVEJjY+R3hsaPDr+wHcUfF09JBndlSGnU1RueY=
+	t=1776449002; cv=none; b=fbwqASamEKDq/SRqz3kftJoDiEqSrXw+EGpKaNNbAaXf/jcxSrzP6jYmbsURu9ytpem0n+0xGCH8FCt4fGfz5PuRuxTYjSW1gTOQqU5iqh16o25iwopzDRru+m/TZFxMUJTBkK5lsVQDDwdPKqVpvo0P11bPXIXLxo5KxIZuvLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776448986; c=relaxed/simple;
-	bh=KjodOoyjQ0nVOvhjWh1saHGTZu/FNWgXyaFyE+UwguM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=lFwLsAYiHpGFQOTKUY3N0xdz/WmXVkyfRyLVKquYHyY9zwwosq3TAOqncz8L/JEbk977/tIzU3V/aLl3E8r2j6hS9wnIRdtBoOZ1uKNEtp0CJw8B2cnD4pFS7pBiuwtuA2cp1fbfoppqdCsEtKNTFxBwV6alkF75N8+GDVSiwLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=mazXmyWp; arc=none smtp.client-ip=74.125.82.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1776449002; c=relaxed/simple;
+	bh=dxzHKB8J6kbUKyu0ZCEch3q/D0y+//kBi4xeuwq2G/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u6qwW7u82P7d2wJspyviA7y38eiVX7ugsy8rABe271ooJGZljlU829G2okI9TgQSxm5Q+LS2ZgeeZVcBOkzlD3GWCDBCU9B/0bGhddxa/GS62YlT36YXiooFBwUgWVJAB/EdmgvVooXH4drou4nYG8gDsYWG1+ztWufNk57J37Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=PqqFybNJ; arc=none smtp.client-ip=84.16.66.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="mazXmyWp"
-Received: by mail-dy1-f193.google.com with SMTP id 5a478bee46e88-2ba895adfeaso1195657eec.0
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 11:03:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776448983; x=1777053783; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zNfsUi6dKL4uDXHe9b9tC7iPpuj36X282q3k7wwkmRY=;
-        b=mazXmyWp/e5+ay2JDKn8P9F3OTHAYJRqk94gVGA0dwkQeKDilkreR118OLDZ/9F6F+
-         SFmmX7U+2d6Iwl5+1AooSPJG2vX18OMht5aqJYKzX9dYvdpJzaUkJICsQf2CbbYmSbJW
-         aPcg40ehBto5j+gKXQhliK4YNg4Dfcl/4VKYk7pa5C6i+/0FoA9pz+9jQTtuBOFeMRdy
-         OyD7ivlek8N5XUGixSmpNdxy37HOrxZpShGVHILRz/WuW51gj/+f0Yn9f3jW2BICm9Nu
-         npZ9JefXjK1YihQLSpJK+xwpU1vLIPYsSY2s4InaRc2LKPQ6W4cYDkXIKWvjsmJ7BvXU
-         GWiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776448983; x=1777053783;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zNfsUi6dKL4uDXHe9b9tC7iPpuj36X282q3k7wwkmRY=;
-        b=hoRP2SMagWkQk4yDnpFl0k64P0w6E3Tn/RIfHoC3BKpxN45MZUtjIdfLhyu4hOX3rX
-         hmD6FFoOm+gB56F+/Os0xMrUtRdOCfmoSRk3ntEVH8ZtbPXwVuYGnr6ZbaIh2c0VXIG8
-         sAMZ4//FAVV0MmdQo9QhphbBhaK/gjdl3fz551YOJoyKishgi10hncJ8SfjHOU+BNZlV
-         TLmZhjK2IfeY7QuxuicbaFFEukplae22A4irb19+2SQs99jROdLUksi1GrZt4CzlFLqU
-         Z3XGUs9rtFYurgzVRSuk0PMwgvx3FVQsZZ1DvwCCD7rirQlzTdPnHyhK+wKTrIubYevL
-         0WZw==
-X-Forwarded-Encrypted: i=1; AFNElJ9irB1U92AiaYcoUAn0hmUr8FC7DdV6Lnj9DG3eVYk53Qny4TzODQNOVnNyECbAUKv3r/4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1By78jhBXE1r5C6wmYAvC1UADuQteqMX9ygakNShTeOZCIYEi
-	HG/31d/mA7r+2L1F60U7V3KK7U+Foh+opOFtoW0Dpjx2TeaaxtINtZbJCZEf6dQrHOoC8pihiCF
-	yITEmItd6KY2uuzo=
-X-Gm-Gg: AeBDievr22RaEn6g3lwk+KotZXr2ykj6CZYYHYLhU1gVbeVT8T/n+KiVxPMMnSt3TiP
-	V9rDv49GhA4ZH7HXV6BpGJALOAeZIotznw8yxKaH8QvMBD2qOYsIAkU6NWUZXZ8gH+FyIXIjaYa
-	Ukq0FZE+7nwOdmbh+/em4IZyJ8EEkR2PYnCBMFzBZhNLrY7G4n+IsYlEFKytzm3Huf/Ba4EGKDs
-	I5Jg0rr0thmeAADilcKInrIuDD2cEJlzPaYTKk1OK9q521ZBs2DmKBZndjsqMfHEqtSUAh2iKsv
-	8ua4rRqaeKxH8iqhdd6zWefBoTXrGmbMmvAHwQCEymTiwbiq5wMsliSaHNAvn/HivqEfqzOdQFm
-	YZPxr1QluQBDZ/S0LN3Mnl1w3V7I+9Pp9V5fAFK4J3TEHK41KOnFaVbaS8LebYySSMJ2jPAYoMT
-	sNIYMHb+sPLG+OfUk=
-X-Received: by 2002:a05:7301:1693:b0:2d4:7656:4ec1 with SMTP id 5a478bee46e88-2e47873a687mr2272896eec.17.1776448982504;
-        Fri, 17 Apr 2026 11:03:02 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::c769])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53a4a8018sm4052844eec.8.2026.04.17.11.03.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2026 11:03:02 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="PqqFybNJ"
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fy2mh1MQkz1M1;
+	Fri, 17 Apr 2026 20:03:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1776448995;
+	bh=p5Inpj/YtolZ92WKJychXbAh/LIr4WXGTzIPW/VeaAY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PqqFybNJE+ushd3LC44hSobe6sr+OfKszeyfUJWnnzSefVMQiFWWpK7mifYNvstNC
+	 HgKB2ErrKUpsFVSH7qeAc4Eu6YdF01QcvikWpwp/Dv5C/OiFvqYlxLDHsuu+XIxr/d
+	 Z2dAgs7fsrcDaMd3eY578mb02oODCUsmmsEAqIyY=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4fy2mg15v7zFfF;
+	Fri, 17 Apr 2026 20:03:15 +0200 (CEST)
+Date: Fri, 17 Apr 2026 20:03:14 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, kpsingh@kernel.org, paul@paul-moore.com, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, kees@kernel.org, gnoack@google.com, jack@suse.cz, 
+	jmorris@namei.org, serge@hallyn.com, yonghong.song@linux.dev, martin.lau@linux.dev, 
+	m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com, sdf@fomichev.me, 
+	skhan@linuxfoundation.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
+Message-ID: <20260417.aPh1ooQu8esh@digikod.net>
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
+ <20260407200157.3874806-9-utilityemal77@gmail.com>
+ <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
+ <aeFaQXkKNHFeE-oC@suesslenovo>
+ <CAPhsuW648HdcCbXWMHaJ4uirPWq2WX3Ggx3AGMU6CGzhNYUREg@mail.gmail.com>
+ <aeI_CXj6F-nI_DCL@suesslenovo>
+ <20260417.ohgoh0Eecome@digikod.net>
+ <aeJlHIoSjVPmccDx@suesslenovo>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 17 Apr 2026 14:03:00 -0400
-Message-Id: <DHVMLVAMJT7X.GMOA3L4111QN@etsalapatis.com>
-Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "bpf"
- <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Eduard" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>
-Subject: Re: [PATCH bpf-next v7 0/9] Introduce arena library and runtime
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260412174546.18684-1-emil@etsalapatis.com>
- <CAP01T754f+qzWDG=9PyDmOXuL1mn9R9UBAtUor-RdzDGMGZx7Q@mail.gmail.com>
- <DHVIDBPOK7I3.2837ZLDGJOBY@etsalapatis.com>
- <CAP01T75tGi6svN=2oPpw0m+-UcHk2gnOw989fB7GFh6J19ru4g@mail.gmail.com>
- <DHVKPB8FLV9R.7ACP5WZ7Q751@etsalapatis.com>
- <CAADnVQLtxN_+H0KKFdukO48c9zsR9m4RzpEQGhj0RHMUFvu9AA@mail.gmail.com>
-In-Reply-To: <CAADnVQLtxN_+H0KKFdukO48c9zsR9m4RzpEQGhj0RHMUFvu9AA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aeJlHIoSjVPmccDx@suesslenovo>
+X-Infomaniak-Routing: alpha
 
-On Fri Apr 17, 2026 at 1:06 PM EDT, Alexei Starovoitov wrote:
-> On Fri, Apr 17, 2026 at 9:33=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis=
-.com> wrote:
->>
->> On Fri Apr 17, 2026 at 12:15 PM EDT, Kumar Kartikeya Dwivedi wrote:
->> > On Fri, 17 Apr 2026 at 15:43, Emil Tsalapatis <emil@etsalapatis.com> w=
-rote:
->> >>
->> >> On Sun Apr 12, 2026 at 3:22 PM EDT, Kumar Kartikeya Dwivedi wrote:
->> >> > On Sun, 12 Apr 2026 at 19:45, Emil Tsalapatis <emil@etsalapatis.com=
-> wrote:
->> >> >>
->> >> >> Add a new subdirectory to tools/testing/selftests/bpf called libar=
-ena,
->> >> >> along with programs useful for writing arena-based BPF code. This
->> >> >> patchset adds the following:
->> >> >>
->> >> >> 1) libarena, a subdirectory where arena BPF code that is generally=
- useful
->> >> >> to BPF arena programs can be easily added and tested.
->> >> >>
->> >> >> 2) An ASAN runtime for BPF arena programs. BPF arenas allow for ac=
-cessing
->> >> >> memory after it has been freed or if it is out of bounds, making i=
-t more
->> >> >> difficult to triage bugs combined to regular BPF. Use LLVM's recen=
-tly added
->> >> >> support for address-space based sanitization to selectively saniti=
-ze just
->> >> >> the arena accesses.
->> >> >>
->> >> >> 3) A buddy memory allocator that can be reused by BPF programs to =
-handle
->> >> >> memory allocation/deletion. The allocator uses the ASAN runtime to=
- add
->> >> >> address sanitization if requested.
->> >> >>
->> >> >> The patch includes testing for the new allocators and ASAN feature=
-s that
->> >> >> can be built from the top directory using "make libarena_test" and
->> >> >> "make libarena_test_asan". The generated binaries reside in libare=
-na/.
->> >> >> The patch also adds test-progs-based selftests to the codebase for=
- the
->> >> >> libarena code, so the new tests are run by ./test_progs.
->> >> >>
->> >> >
->> >> > I am back in the same position as I was with comments in [0].
->> >> >
->> >> > I.e., again, I don't see anything in the stream output (passing -v =
-to
->> >> > test_libarena_asan) when I build it with clang 23 (LLVM tip).
->> >> > What am I doing wrong? (Leaving aside all feedback about integratin=
-g
->> >> > it in the regular test runner that is still unaddressed, thus tests=
- do
->> >> > not run by default).
->> >> >
->> >> >   [0]: https://lore.kernel.org/bpf/CAP01T75+BoQfQN=3D47NhYYviZttjCP=
-b_CXNpa=3DDUC0=3DxSvdNZdA@mail.gmail.com
->> >>
->> >> The series introduces a selftest for the test runner called libarena.=
- It
->> >> is introduced in patch 9 to avoid creating a runner that does nothing=
- in
->> >> the previous patches. Tests run with test_progs like regular selftest=
-s.
->> >> For ASAN we do not have LLVM22 support in the CI yet so test_progs do=
-esn't
->> >> exercise it.
->> >>
->> >> The stream output is suppressed by a switch in asan.c to make the out=
-put
->> >> of test_libarena_asan legible. Each test that expects to generate ASA=
-N
->> >> will generate a ton of output. I will add userspace logic to consume
->> >> the splats instead of emitting them to keep the output sane.
->> >
->> > Why can't we put everything in test_progs instead of separate test_lib=
-arena?
->> > Then add some logic like existing stream tests for verifying / testing
->> > the generated output in ASAN mode.
->> > For example, libbpf doesn't have its own separate test suite. I think =
-the same
->> > logic should apply to libarena.
->> >
->>
->> libarena is different in that it's BPF code we distribute as source.
->> Plus, the test runner is an example of how to set up the arena state.
->> It's very little code and automatically identifies the selftests without
->> having to explicitly enumerate them, so it's not extra maintenance burde=
-n.
->> For followup patches it's been 0 LOC to either the libarena selftest or =
-the
->> test_progs test.
->
-> I think what Kumar is saying is that we have only one runner in CI:
-> test_progs, so all libarena tests need to be covered by test_progs.
+On Fri, Apr 17, 2026 at 12:51:40PM -0400, Justin Suess wrote:
+> On Fri, Apr 17, 2026 at 05:18:05PM +0200, Mickaël Salaün wrote:
+> > On Fri, Apr 17, 2026 at 10:09:13AM -0400, Justin Suess wrote:
+> > > On Thu, Apr 16, 2026 at 04:47:40PM -0700, Song Liu wrote:
+> > > > On Thu, Apr 16, 2026 at 2:53 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > > > [...]
+> > > > > I don't think we can pass the FD number via a map, since the FD is
+> > > > > process specific. And it needs to be done in a way where we can lookup
+> > > > > the specific ruleset the FD points to safely.
+> > > > >
+> > > > > So we'd need some other way to load the ruleset from a file descriptor,
+> > > > > either through a new userspace side BPF call or similar mechanism.
+> > > > >
+> > > > > Is there some other common pattern for FDs --> kptr I can follow?
+> > > > 
+> > > > I didn't find an exact example like this. There must be a way to achieve
+> > > > this. In the worst case, we can add a kfunc for this.
+> > > >
+> > > 
+> > > I think new kfunc is a doable approach. I could make a kfunc taking a struct
+> > > *task_struct and an FD that looks up a landlock ruleset within a given
+> > > task that returns a trusted kptr.
+> > > 
+> > > Something like:
+> > > 
+> > > struct bpf_landlock_ruleset* bpf_landlock_get_ruleset_from_fd(struct
+> > > task_struct* task, int fd)
+> 
+> Thanks Mickaël and Song,
+> 
+> There are definitely pros and cons to both approaches.
+> 
+> I think it would be OK to have a dedicated map and indeed cleaner from
+> the userspace side since there would be no intermediate step to find the
+> task and lookup the fd since that would be handled by the map_ops.
+> 
+> Cons of the new map type:
+> 
+> The main issue is with the new map type is then we are limited to the
+> specific data structure we define in the map. For instance if we want
+> to use a hash or other data structure instead of an array to store
+> rulesets, we'd need to define variants of the landlock map type for
+> all data structures.
+> 
+> So this kind of bungles the "data structure" and "data type" layers.
+> 
+> Pros of the new map type:
+> 
+> The ruleset_fd conversion would be implicitly handled by the map_ops.
+> Userspace could insert the fd and bpf would not have to deal with it at
+> all.
+> 
+> Cons of bpf_landlock_get_ruleset_from_fd:
+> 
+> Awkward conversion step. We need to find the task of the original
+> ruleset creator and recieve the fd before looking it up and converting
+> it to a kptr to the bpf_landlock_ruleset.
+> 
+> Pros of bpf_landlock_get_ruleset_from_fd:
+> 
+> We can use any existing map data structure to store our kptrs.
+> 
+> Not having a dedicated map type simplifies implementation.
+> 
+> ...
+> 
+> Appreciate the feedback from both of you.
+> > 
+> > That looks like a hack that would not handle FD's (object) lifetime
+> > (e.g. what happen when the task is gone?).
+> >
+> 
+> If we take an underlying reference on the ruleset backing the fd, then the fd
+> being closed shouldn't matter right?
+> 
+> This is how the lifetime management works for that
+> bpf_landlock_get_ruleset_from fd, in my draft implementation prior to
+> the RFC:
+> 
+>   /**
+>    * bpf_landlock_get_ruleset_from_fd - acquire a Landlock ruleset from a task FD
+>    * @task: task owning the file descriptor table to look up
+>    * @fd: Landlock ruleset file descriptor in @task
+>    *
+>    * Returns: a referenced opaque Landlock ruleset, or NULL if the FD lookup or
+>    * validation fails.
+>    */
+>   __bpf_kfunc struct bpf_landlock_ruleset *
+>   bpf_landlock_get_ruleset_from_fd(struct task_struct *task, int fd)
+>   {
+>   	struct landlock_ruleset *ruleset;
+>     /* does landlock_get_ruleset and increments refcount */
+>   	ruleset = landlock_get_task_ruleset_from_fd(task, fd, FMODE_CAN_READ);
+>   	if (IS_ERR(ruleset))
+>   		return NULL;
+>   
+>   	return (struct bpf_landlock_ruleset *)ruleset;
+>   }
+> 
+> The landlock_get_task_ruleset_from_fd increments the usage with
+> landlock_get_ruleset. (This may sleep, so it must be tagged with
+> KF_SLEEPABLE)
+> 
+> If the fd is closed before landlock_get_ruleset_from_fd, then null is returned.
+> The verifier will force the program to do the null check b/c of KF_RET_NULL.
+> 
+> __kptr also have destructor kfuncs. So if we get the reference in
+> bpf_landlock_get_ruleset_from_fd with landlock_get_ruleset_from_fd, and
+> put the reference to the ruleset.
+> 
+> The destructor path looks like this:
+> 
+>   /* Define ID for destructor * /
+>   BTF_ID_LIST(bpf_landlock_dtor_ids)
+>   BTF_ID(struct, bpf_landlock_ruleset)
+>   BTF_ID(func, bpf_landlock_put_ruleset_dtor)
+>   ...
+>   /**
+>   * bpf_landlock_put_ruleset - put a Landlock ruleset
+>   * @ruleset: Landlock ruleset to put
+>   */
+>   __bpf_kfunc void
+>   bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset)
+>   {
+> 	  landlock_put_ruleset((struct landlock_ruleset *)ruleset);
+>   }
+> 
+>   __bpf_kfunc void bpf_landlock_put_ruleset_dtor(void *ruleset)
+>   {
+> 	  bpf_landlock_put_ruleset(ruleset);
+>   }
+> 
+>   static int __init bpf_landlock_kfunc_init(void)
+>   {
+>   	const struct btf_id_dtor_kfunc bpf_landlock_dtors[] = {
+>   		{
+>   			.btf_id = bpf_landlock_dtor_ids[0],
+>   			.kfunc_btf_id = bpf_landlock_dtor_ids[1],
+>   		},
+>   	};
+>   	int ret;
+>   
+>   	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
+>   					&bpf_landlock_kfunc_set);
+>   	if (ret)
+>   		return ret;
+>   
+>   	return register_btf_id_dtor_kfuncs(bpf_landlock_dtors,
+>   					   ARRAY_SIZE(bpf_landlock_dtors),
+>   					   THIS_MODULE);
+>   }
+> 
+> Good reminder I need to include a test making sure the ruleset
+> remains valid after the FD and/or task is closed. :)
+> 
+> > Why not using proper typing with a dedicated map?
+> > 
+> 
+> I may be misunderstanding, but from what I see, a __kptr DOES give
+> proper typing, __kptr is an annotation not a type.
 
-In that case I misunderstood. I agree that everything should be tested
-by test_progs. There's currently the ASAN version of libarena missing,
-but we can add it and turn it off if the compiler doesn't support it.
+Ok, good.
 
-There is the secondary question: Do we want to have a standalone
-libarena runner in addition to the one in test_progs in the codebase?
-Imo we do, for the reasons above.
+> 
+> This is what it would look like in an BPF_MAP_TYPE_ARRAY.
+> 
+>     struct ruleset_kptr_value {
+> 	    struct bpf_landlock_ruleset __kptr * ruleset;
+>     };
+> 
+>     struct {
+> 	      __uint(type, BPF_MAP_TYPE_ARRAY);
+> 	      __uint(max_entries, 1);
+> 	      __type(key, __u32);
+> 	      __type(value, struct ruleset_kptr_value);
+>     } ruleset_kptr_map SEC(".maps");
+> 
+> So we get proper typing from what I see. (It's not like a __kptr is a
+> special void*, it has a type)
+
+Looks good.
+
+> 
+> > > 
+> > > And tagging it with KF_ACQUIRE + KF_RET_NULL.
+> > > 
+> > > Then keep the existing kfunc for putting the ruleset and enforcing it on
+> > > a struct linux_binprm.
+> > > 
+> > > The BPF program would need to get a reference to a task struct
+> > > of the program creating the rulesets with bpf_task_from_pid for
+> > > instance. Then they could use the task_struct with another plain integer
+> > > map to store FD numbers and then use the rulesets or store them in a map
+> > > of __kptr objects for later usage.
+> > > 
+> > > Would this be more acceptable?
+> > > > > Basically the pattern I need is userspace must create the file
+> > > > > descriptor, BPF converts that FD into a refcounted kernel object, and
+> > > > > even if userspace closes the FD BPF needs to hold a reference on the
+> > > > > underlying ruleset structure.
+> > > > >
+> > > > > (In this patch this was accomplished through the map_ops)
+> > > > >
+> > > > > Let me know what you think Song. I do understand the benefit of having a
+> > > > > __kptr instead, the refcounting is all there, and it would allow storing
+> > > > > rulesets in multiple map types. (and one less map type to maintain).
+> > > > 
+> > > > A new type of map for each FD referenced kernel type is non-starter.
+> > > > It is impossible to add UAPI for a specific use case.
+> > 
+> > This new map type is only about one file descriptor type, similarly to
+> > socket FDs.  From a UAPI point of view, it looks clean and safe,
+> > especially to deal with underlying object lifetime (e.g. reference
+> > tracking).
+> > 
+> > > >
+> > > You've convinced me. I could see a lot of problems if everyone wanting
+> > > to add their specialized maps, it would be difficult to maintain.
+> > 
+> > Is there another way to properly handle kernel object lifetime (not tied
+> 
+> The answer the the lifetime part is yes.
+> 
+> The kptr destructors and the landlock ruleset refcounting give us that
+> abstraction. (along with the KF_ACQUIRE/KF_RELEASE annotations and
+> destructor implementation)
+
+Good.
+
+> 
+> > to the caller) and pass them as file descriptor?
+> This "pass them as a file descriptor" is the tricky part. It would be
+> very convenient if we could send the fd to bpf from userspace and have
+> it be implicitly converted (like in the BPF_MAP_TYPE_LANDLOCK_RULESET
+> implementation) in one step, but I just don't see a way to do that with
+> the bpf_landlock_get_ruleset_from_fd kfunc approach.
+
+Song's idea to have a generic FD map looks promising.
+
+> > 
+> > > 
+> > > It's probably best to keep the specialized map types to core kernel
+> > > interfaces only that are unlikely to change.
+> > 
+> > File descriptors are a stable interface.
+> >
+> No that's correct. I cede that point :)
+> > > 
+> > > > Thanks,
+> > > > Song
+> > > > 
+> > > > > Mickaël, do you have any thoughts on this? I have v2 basically ready,
+> > > > > although it uses the BPF_MAP_TYPE_LANDLOCK_RULESET it changes a lot on
+> > > > > the Landlock side.
+> > > 
+> 
