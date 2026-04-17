@@ -1,169 +1,195 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9695239BFE7
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65626396D19
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776445417; cv=pass; b=tjaOJeV8F2H0nHOGFaBMQOFaGiJqCxjsvONE1Ieumt2Wy5ZrUsXR3QggcduHkm9jSKJRWre7U/6ECJBaw2h0cVdPY8YU2mRbAHVM9Oo3LMlQUru5slFh5tIffbKl7UojYAL+v9OF7N4KGcbFYXbvlLWgW1EqChtA9IiGroc0wrU=
+	t=1776445590; cv=pass; b=hXGPmvcdsxqIb3plFfDq2Rk9i3jLLLLAXc3jrxtNEw90ANsuvnyZK6w6X36UKiGd08gkIKHl3CLTg17ngnsWlt2bpf1Z30BPLRUTqEUprM9A9Kb0tGq3s8u88ylaW0NlHZrb53uQCUJ1bn4lu1btz2zImiWUBtdOdfRdsTDeLDM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776445417; c=relaxed/simple;
-	bh=Z/DQ/h2QpnobDh8FN5ax3kLXccZNdK9wUMOqOI5GD9c=;
+	s=arc-20240116; t=1776445590; c=relaxed/simple;
+	bh=/9NoELIhjtPsKswgC5S2LE+1nt0J/KfgNCvQxcX9U4g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iW5EotbEeAqVThpWkBX9keUbI7KJUWG3cKLCyyvq5tJW0EO0dXsFyuOfeBpSYM+hSpsAj71witV4KDvNTrTRpQ/o+LZDjtcGPi0+Qq7lAyOsg3fMNPvFHKexJNLKSD4qgUp6qfWL7+GiBdpGz+2grZtLgw2EtJvigPjyD+SvD4s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPxiKkIW; arc=pass smtp.client-ip=209.85.221.52
+	 To:Cc:Content-Type; b=rExUxA3Zs33zLhSeNMXUyvNFP+IiaMFvlS/f9SNl9Vxi7xOVYUWeYO4895opSvto5JKCauAImv4+JYh8StOrOH0zghrDejQHp2SCdc47NVpV40vsBz0O5mOkrDvL/4aezCF4IuA1QK2Kd+lYu8W4Fun3m2nHD7FTYMLFeJDS1YU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QrVuJAGY; arc=pass smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPxiKkIW"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43eb012ac4fso571507f8f.0
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 10:03:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776445411; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QrVuJAGY"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43d7650202fso786756f8f.2
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 10:06:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776445584; cv=none;
         d=google.com; s=arc-20240605;
-        b=TaUibBzxEOzhXi25s1zZWtJw59KUyKPGSzXBZRL3yJUHA+LfQ7AOsYaGky0LiFEFoV
-         rVS1+ZB/qb2OxO4UELj5xwkITrcLEydPb8mNXC/Zu7UVVEjDlwGP9NvLhuYCjQvFoMKg
-         M0Sq+TRWa2+4LZ+5x9kOt41RK/KLurfglE5TO9UqV+qmukh/7RvlgwtClhAjrWpOj2Oh
-         e6VFEmxjKkkNXVyl8nueEbqE/ZwxP3qH5f7n3vUORw2xfI3jvoPY7AXpFTofoXHh4kOP
-         7dQBakv7ZVhjNWotA6SOY/6Xy1Kxl26FqSCVFlzkndQWRmBJD924nxqCnFNQybJ0JjLP
-         kiWQ==
+        b=bDNZQLd91S/pFNzOZklsfIr2jCElrMrHSZ7F3Vh9zgAktEgu4TuiD7rDzg/fJQyumW
+         0SVPzhszNmiK3jLmH0uLnPk5qCtAcd4AyivUU/oneONqovfn0UvXcZ47O6EGZl+wAlGI
+         89lS8s5geGiAIJVxUqg6t2VOQIGNK+Jl6ZiAPD2adaW9d5//9AeFwBjfKdNo6ZFXdv5X
+         jIhteDueS25rSKj5mMZeWYFuiEFzWKQ5gbh+LZDiSF4fsHSG1TkuAmsfEv0YGGDF0CVa
+         OiMTVleLod0iDDOIBheISOEqpJQZJt6IP5RnpXZPMcRjGh0qi6B1JAwb2z8Cfxp8HExc
+         OAEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=lylHX2HKRCAOi59wI/zvCITjrW4MRuS8CtdU8TNY8Uw=;
-        fh=RRLmYqaSbD8jEKtM9GsC9ESBIiAL7apAIFfRHYNtylc=;
-        b=eoAXr8HzG6vQmt/BP5Rcwe+MJgBSl2I2PWkeU/kIGRKrFUihElPQU0rZ+nbNLen9LZ
-         AEG3+tk6ST1y06FsU5k9Jj/jJX+shjMw+ZpIR8m8/WfDdoycYwTsh1esdeb3ykuG5BCb
-         teaHgqZO4sZZttmTHpg1eCjQgciVJF1cotQYVsK9CAyQKzS5eU3QzjltIcfhXMGSmvsW
-         aVq0rvEKewoS7JSM4YfXvsJWfloHedMILFr1iWHtV2mN65sSq7aog9BKWJ4v/RY8/nLn
-         H5SjRhC6izSeMLGeMe/kFH3EecmSSVd2kTUNo3BaAVkCC6V9ttCoW0cwxKmfVNOCL1kv
-         RnQg==;
+        bh=R8KOgE8iSH6pUrYsWI3NkQsumvdawuSHT21E3osNxUw=;
+        fh=AesC4Vjfd+nZ0HVuePauLzwhpBoDADMa3tB4+FynBRc=;
+        b=JAjelVj+gmzVnjdg7q6K7J3KaMd9OWG0AT+880juVGk4Gx8LHPVu8gbws4m8FZtlNT
+         TTUYrOtQe6dbHtxxhZixRFzkjmJcP3qo7k5lf5NLAk4SdXHTbt6Rj2MKUuvzIEo/JRFI
+         Yte3rzc7frGn8oGXq3r1NfaHpv2RGuL+CwctMI0KzDyuZx3MXM14dndj523tioc+pBkC
+         +VnpwAKDQFwPjmh4avX5DKnxKq4x2TIGCDPShHziBjKXDSDA/YDnXP1IBGuSJ/oEyQyA
+         7u+R+7ht96varbh+/XP8uVXG35eJWUgPz64kbu8n9LTdWgQDeqWqcK3QoDPabJPwG+3M
+         nSNg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776445411; x=1777050211; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776445584; x=1777050384; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lylHX2HKRCAOi59wI/zvCITjrW4MRuS8CtdU8TNY8Uw=;
-        b=jPxiKkIWzVu1JvcObyytyAy3Ms2vW6FGG05FCZN/Mm2EStfnB6XkJJFb/nlR1ly/AC
-         2oVo2wp1xunoP57Ekg+jQsyP5LUlxcCwe+0lalCzZFGp1Sb9lj+JWA1kZRFcdvcBm+Uy
-         M88PTkNTIPIkeNbRqXeqnw6K+/hSIHHwAI5PS8r0FAGU1D4JTHZ6zcanHkmtoSSC6V6r
-         zb7y733rGogNriQUD8/fCnoRyCMSYIJJrbEHIdmGsGj/wSx5+7OM849g/gN1MmDL9XbF
-         CRPxnHjHfFJSy8zK6t/3DEhDk3WwlIpQmBOiYruA3hCNF05yX4NdJqp3fwyix42K38My
-         /Xyw==
+        bh=R8KOgE8iSH6pUrYsWI3NkQsumvdawuSHT21E3osNxUw=;
+        b=QrVuJAGYrNpmK6DQ8VQU1AZl8l953b/uBOWZ+HvSBrlCBb9NMlnZ0vVJjvyakW9lSC
+         LmWHVwIt80Nr6ueCRmkVW1VnBhAZiAMbuRkl4OGctPBFJdMrxm+xIAv4+yWN/FtTqMe4
+         lS+16sVtExfIxW1cSAzAR2t0TCyGedPcWjbXTImco5gb/UxayLHNB7J0sJtFLYs75qNc
+         HM7u+pcTPMH4vi5i+hyOjdw3c6gZqQsTPyb0AQUVYZ1FLZMVWnJMzHc4YQTPS+MqUXpi
+         vEqKpbiSxaf/TwQwUJTe29+VFuzaBeFMQaWweBwJWVnwZb0dvxSVeCXssx/34O/PkRRQ
+         iWqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776445411; x=1777050211;
+        d=1e100.net; s=20251104; t=1776445584; x=1777050384;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lylHX2HKRCAOi59wI/zvCITjrW4MRuS8CtdU8TNY8Uw=;
-        b=M1KHIS17duUlNoF6MokghhcB0GedgQxBXO6oFbW/K0B6UZJUy5Jnf8nuiBN0rOPofv
-         HvqUFNTVsBtaFJapfFtc0lZucL7mgA3SQxOnx7aZVuPNgzOOhEm4q1ye7jsI7IeHVkm+
-         tD8q+3VgOfhp5cFG+SkYhU13T0UUPzrxdJoJY1piV1nsdJENRRSYnRQ5mBnG0vZWsVIT
-         K3fyqyUpzH0y9fypNizIr13MHW09RWka1XlnaDvewa6+V7avc+Od1rmPp1rONvOsJCdU
-         jnlg8coDf/f8BO1eC4LulDIFw1uYC3YPS3xzudoiS7yU5Bq0fCeegGOL3F0XwMBJeVz9
-         1VUg==
-X-Forwarded-Encrypted: i=1; AFNElJ9NXKXHnVe1a+Dm1JPYwoUGol5vROZemPeUtKVr7E+/ajRp4L3txm1dekZXNdSa5dge0QM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNLLXNpGMuBNs/9Wm+FgjpbW+sPjnoDfe9Bha1l5TTKHtB+HpY
-	Znbpc+wvUmG+HQcd4+tMfcw20d7RsR8mn2T7gwGcmP3CLr3rAqO2EXcywvLg7HXZagDpLjYaazz
-	FRijorL/sEfl8JLwMM/wIVYa52DZozWI=
-X-Gm-Gg: AeBDietvgK7IGwDkjcCNbLg/7YYzkqF62c+NcKJmsyhkE5ktn5kjkWIxmO626FucWts
-	7E5FHSBagYGG86X/JuEtgNH32GGhrpEbNbtRLwZR4sZn26BwS9wtA8Ojm0sW+YOhXXc6cwNuiPE
-	YrAzQZbO6hTfaMJ1Dj1fUquzTLFSAhtFDGreFORTnvOheB5xc52tSAdO0/835/l7osENXWKdAzD
-	dTfZth1Sc+0loWNTq30GWEwgZU6Fp3bklu6iqyTu6o1V79Jhwku5b2mo1mpgtXYiqUtk24s1FTa
-	AJwZT1ilUJ9jSnt8BDdCJ3MGPODv3Yiz+hJYTW0JyGs2Jq47wKPg7yU8mhGKB3Bl/ffJuoq4+Qu
-	Pd0aQlfnaFsYJd0DQ0O65wA5NapStAWRj9hK2
-X-Received: by 2002:a05:6000:2287:b0:43e:b0aa:7311 with SMTP id
- ffacd0b85a97d-43fe3e1e29emr5672375f8f.47.1776445411147; Fri, 17 Apr 2026
- 10:03:31 -0700 (PDT)
+        bh=R8KOgE8iSH6pUrYsWI3NkQsumvdawuSHT21E3osNxUw=;
+        b=KkCbknY6G6TzOkojgOLMzWtqpFBxUYww3A9FvdGZCkdzDOc6R49P1jgOGAYskv2x83
+         d7yn0G5bKIjRLObKJ0X+OA/z7m+5teWExgyRV2UHUsyCbd2GxnJU23jmAnpe1bEMZlVm
+         wnvYUqJGhEzdG6bcIMUAMJHJVpNIh0XbU0ZLmhRepBQSy7ObEBilERZ/DdqFJbqLxZLu
+         wVPaCO/QF5vOs/MtjiR8nBXmKdIVJoz6Yy0bFXwQ5J6NOzlyeXco2+Gt740dGOPnsThM
+         1EzimIp5AznDjw3GdztF5e+lfxzf0C91WY2SFW7aFt6sAc6uyLcgGxcg5CPaSbj1dOzQ
+         +UCw==
+X-Forwarded-Encrypted: i=1; AFNElJ9ThA8WOflDYlkBxsvvs1gPHx1Z5SW0S6ajywOf6ff4xjlcsCnL8adg15V2YHgwln4B/AE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfPPTzkBd0j3Ys1hJi6XEnr5MRAwzK7HyMoLAaycFViW/3Z+2H
+	gIxfZC9Nf3wwZQAVFdOCjfUq9NdULkqCXVZeAk2+ntYtdJys9XzIPQrF69rc75udq4+uvOmD4e/
+	QSKoE5HvJMxkv+8n03PZeKavIQn/bMrI=
+X-Gm-Gg: AeBDieuuP5TIAEXV7XJ85lP/SP1fbd5ESDPyAa27HlRVhL/ayUrBeMO5sgdRa2gWjnw
+	3xGQ6TsJ+nI7/0sFt22FrLfXyG29ILCoZ2/R/KYilGyuGWxCvT1TtgH5x0bkkP+UbGhLgibCe8Z
+	6gTvlYvghv5Zok1jYuUIvTCXnhjIutyPlLK5VedwLnApzgqGke/Rqg2yNEqiAuyfUV1UVf5N6WT
+	nF24Qq/ZEr/6LLfazTCiVgcpGXOlN/j6kKy3f0FsEnuThajB6+RS4qUmMJJuE9LdCbpUxOviIAv
+	OyEe0RWZNufS1f2H4a1m3a8BWYUhEhIoDHvAWRylepkH/bcCjgHTZNC572s4KVRAimM397y1zDC
+	PkQMPb5Iocu+vRG+ZFAG3NaM+GrQFxh6oYRC4
+X-Received: by 2002:a05:600c:1554:b0:488:9bf8:7f17 with SMTP id
+ 5b1f17b1804b1-488fb77810bmr55966675e9.14.1776445584037; Fri, 17 Apr 2026
+ 10:06:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260414132421.63409-3-leon.hwang@linux.dev> <72dbcacc4cf2e76dc9de3c045e2fe1f3454d8880197b0db92c7d994ca82dcab0@mail.kernel.org>
- <fef2c9a0-c609-49f4-a165-890aaecfbfd8@linux.dev> <yujp3deu4uko2xkr4dghofpvhrni6szmd7wlozehtzndvhasrl@f2xjf4egi5fd>
- <3556a456-70d3-45e7-affa-355107bac30e@linux.dev> <d0059a19-ab24-4e9c-ac54-dafc932317e9@linux.dev>
-In-Reply-To: <d0059a19-ab24-4e9c-ac54-dafc932317e9@linux.dev>
+References: <20260412174546.18684-1-emil@etsalapatis.com> <CAP01T754f+qzWDG=9PyDmOXuL1mn9R9UBAtUor-RdzDGMGZx7Q@mail.gmail.com>
+ <DHVIDBPOK7I3.2837ZLDGJOBY@etsalapatis.com> <CAP01T75tGi6svN=2oPpw0m+-UcHk2gnOw989fB7GFh6J19ru4g@mail.gmail.com>
+ <DHVKPB8FLV9R.7ACP5WZ7Q751@etsalapatis.com>
+In-Reply-To: <DHVKPB8FLV9R.7ACP5WZ7Q751@etsalapatis.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 17 Apr 2026 10:03:19 -0700
-X-Gm-Features: AQROBzC5poKN0Du2DntSH_FQRzT4zN-u7urq48C4T_6qJ6-jPD9pCbDUthSdva8
-Message-ID: <CAADnVQJ0o38xXn6E5ub7kWyoZPiaevr9mwDNxv0GbxyguVTKUg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/8] bpf: Introduce global percpu data
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
+Date: Fri, 17 Apr 2026 10:06:12 -0700
+X-Gm-Features: AQROBzBRcysTGE_W4h58VKJTeYZtYbRC7u1S-fCLgiytW0-NWjlH5Em4eLJybyE
+Message-ID: <CAADnVQLtxN_+H0KKFdukO48c9zsR9m4RzpEQGhj0RHMUFvu9AA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 0/9] Introduce arena library and runtime
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Yonghong Song <yonghong.song@linux.dev>, 
-	Song Liu <song@kernel.org>, Eduard <eddyz87@gmail.com>, Quentin Monnet <qmo@kernel.org>, 
-	Daniel Xu <dxu@dxuuu.xyz>, kernel-patches-bot@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 17, 2026 at 8:48=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
+On Fri, Apr 17, 2026 at 9:33=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.c=
+om> wrote:
 >
-> On 2026/4/17 09:30, Leon Hwang wrote:
-> > On 15/4/26 10:19, Alexei Starovoitov wrote:
-> >> On Tue, Apr 14, 2026 at 10:19:22PM +0800, Leon Hwang wrote:
-> >>> On 2026/4/14 22:10, bot+bpf-ci@kernel.org wrote:
-> > [...]
-> >>>> In the v3 series, bpf_map_direct_read() itself had a guard
-> >>>> (map->map_type !=3D BPF_MAP_TYPE_ARRAY), which protected all callers=
+> On Fri Apr 17, 2026 at 12:15 PM EDT, Kumar Kartikeya Dwivedi wrote:
+> > On Fri, 17 Apr 2026 at 15:43, Emil Tsalapatis <emil@etsalapatis.com> wr=
+ote:
+> >>
+> >> On Sun Apr 12, 2026 at 3:22 PM EDT, Kumar Kartikeya Dwivedi wrote:
+> >> > On Sun, 12 Apr 2026 at 19:45, Emil Tsalapatis <emil@etsalapatis.com>=
+ wrote:
+> >> >>
+> >> >> Add a new subdirectory to tools/testing/selftests/bpf called libare=
+na,
+> >> >> along with programs useful for writing arena-based BPF code. This
+> >> >> patchset adds the following:
+> >> >>
+> >> >> 1) libarena, a subdirectory where arena BPF code that is generally =
+useful
+> >> >> to BPF arena programs can be easily added and tested.
+> >> >>
+> >> >> 2) An ASAN runtime for BPF arena programs. BPF arenas allow for acc=
+essing
+> >> >> memory after it has been freed or if it is out of bounds, making it=
+ more
+> >> >> difficult to triage bugs combined to regular BPF. Use LLVM's recent=
+ly added
+> >> >> support for address-space based sanitization to selectively sanitiz=
+e just
+> >> >> the arena accesses.
+> >> >>
+> >> >> 3) A buddy memory allocator that can be reused by BPF programs to h=
+andle
+> >> >> memory allocation/deletion. The allocator uses the ASAN runtime to =
+add
+> >> >> address sanitization if requested.
+> >> >>
+> >> >> The patch includes testing for the new allocators and ASAN features=
+ that
+> >> >> can be built from the top directory using "make libarena_test" and
+> >> >> "make libarena_test_asan". The generated binaries reside in libaren=
+a/.
+> >> >> The patch also adds test-progs-based selftests to the codebase for =
+the
+> >> >> libarena code, so the new tests are run by ./test_progs.
+> >> >>
+> >> >
+> >> > I am back in the same position as I was with comments in [0].
+> >> >
+> >> > I.e., again, I don't see anything in the stream output (passing -v t=
+o
+> >> > test_libarena_asan) when I build it with clang 23 (LLVM tip).
+> >> > What am I doing wrong? (Leaving aside all feedback about integrating
+> >> > it in the regular test runner that is still unaddressed, thus tests =
+do
+> >> > not run by default).
+> >> >
+> >> >   [0]: https://lore.kernel.org/bpf/CAP01T75+BoQfQN=3D47NhYYviZttjCPb=
+_CXNpa=3DDUC0=3DxSvdNZdA@mail.gmail.com
+> >>
+> >> The series introduces a selftest for the test runner called libarena. =
+It
+> >> is introduced in patch 9 to avoid creating a runner that does nothing =
+in
+> >> the previous patches. Tests run with test_progs like regular selftests=
 .
-> >>>> The v4 moved this to caller-side checks but appears to have missed
-> >>>> const_reg_xfer().
-> >>>>
-> >>>>
-> >>> Correct.
-> >>>
-> >>> Will add a guard in bpf_map_direct_read() in the next revision:
-> >>>
-> >>>     if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
-> >>>             return -EINVAL;
+> >> For ASAN we do not have LLVM22 support in the CI yet so test_progs doe=
+sn't
+> >> exercise it.
 > >>
-> >> hold on.
-> >>                          map->ops->map_direct_value_addr &&
-> >> -                        map->map_type !=3D BPF_MAP_TYPE_INSN_ARRAY) {
-> >> +                        map->map_type !=3D BPF_MAP_TYPE_INSN_ARRAY &&
-> >> +                        map->map_type !=3D BPF_MAP_TYPE_PERCPU_ARRAY)=
- {
-> >>
-> >> map_direct_value_addr() is set, but then immediately disallowed ?
-> >> Where else it's used?
-> >>
-> >> Even if value_addr is working, then map_direct_value_meta() looks brok=
-en.
-> >>
->
-> IIUC, map_direct_value_meta() is only used for dumping xlated insns. If
-> no available map_direct_value_addr(), map_direct_value_meta() won't be
-> called.
-
-yes, but then xlated insn are bogus, no?
-
+> >> The stream output is suppressed by a switch in asan.c to make the outp=
+ut
+> >> of test_libarena_asan legible. Each test that expects to generate ASAN
+> >> will generate a ton of output. I will add userspace logic to consume
+> >> the splats instead of emitting them to keep the output sane.
 > >
-> > Ah, let me dive deeper.
+> > Why can't we put everything in test_progs instead of separate test_liba=
+rena?
+> > Then add some logic like existing stream tests for verifying / testing
+> > the generated output in ASAN mode.
+> > For example, libbpf doesn't have its own separate test suite. I think t=
+he same
+> > logic should apply to libarena.
 > >
 >
-> As for the above changes, let me explain them using diff snippet.
->
-> @@ -5808,6 +5808,8 @@ int bpf_map_direct_read(struct bpf_map *map, int
-> off, int size, u64 *val,
->         u64 addr;
->         int err;
->
-> +       if (map->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
-> +               return -EINVAL;
->         err =3D map->ops->map_direct_value_addr(map, &addr, off);
->         if (err)
->                 return err;
->
-> It is to guard percpu_array map against const_reg_xfer(). Instead of
-> updating const_reg_xfer(), better to update bpf_map_direct_read(). WDYT?
+> libarena is different in that it's BPF code we distribute as source.
+> Plus, the test runner is an example of how to set up the arena state.
+> It's very little code and automatically identifies the selftests without
+> having to explicitly enumerate them, so it's not extra maintenance burden=
+.
+> For followup patches it's been 0 LOC to either the libarena selftest or t=
+he
+> test_progs test.
 
-yeah and move map_type !=3D BPF_MAP_TYPE_INSN_ARRAY check
-into bpf_map_direct_read() as well.
-To cleanup const_reg_xfer() a bit.
+I think what Kumar is saying is that we have only one runner in CI:
+test_progs, so all libarena tests need to be covered by test_progs.
