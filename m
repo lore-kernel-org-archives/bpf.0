@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84B0D30FC1F
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 11:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D277F355F25;
+	Fri, 17 Apr 2026 11:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776424935; cv=none; b=phu/8Os9qteK0yshZgcO9SlkKV3oJpI1yqhsadvB3ns30DEuQY2ksnmwmEgY0JYiLO5KQ7gw9C41zQfpTPETd1CoJk8o88bhFYNzsImQX+gpkIAK+Rdxqe0mOz7lS3JgNrD33skR4jn1i6dLOjuOgPkK5H04fXp3C/9RMc6mw0Q=
+	t=1776425098; cv=none; b=YT0SuRjYABBmIgrUNn5xRpdeMfGxnCMLYeOKqhS3Lfvi1Bpp5kqPb9jMo0Vp4DMV2AQwKl5oaBo52MkigBynnSuJdw1BYW6+UFcQQHEqhaTOgSqjqhvCo9WHN8HKaueQN8qK+hwRba6OtK0SeFl2DSlQgolb8oV8T3XihIwFFFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776424935; c=relaxed/simple;
-	bh=Bw2x21Toxiyp7btnQq/1/FbIpXIzFyNc9UzvwDfx4u8=;
+	s=arc-20240116; t=1776425098; c=relaxed/simple;
+	bh=qIHzrIjAG7eZMmBid1ybL5n8DAh+tyTX3zK1k+xZ5fs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h0Oxf5ksvbu0gxIx504whQtdnfor0updRzCBEugTMMC7MqnaLvqOb8OhQ9VnLS5F5ZoSDcFqkbio/MtxQkkn95UYSSxGT+IT37A7qQzz2rBlh3uDuVwMvDu9Hsg64DWd+QHDC771rTuoIcZktIIh0JL3jpqMj9TaBcwkQYbUuIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=qnLFjkwS; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=pyNPgQUo1BixkiF9UjGh4oMMv3I2taDcB9nNgr5A0EOT+5yp+WTteNVPZrwLcqlN2pjwUOdof+kbeq8vwiPZmGEQcMiMqeAYtk64199NBT7kD4Tg3iRl0AuPLb5vxkpuarQWGc1BCqSyrDUndS4s5MljaKnJoq/u95PIYSZqRak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RYTGQy11; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="qnLFjkwS"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RYTGQy11"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=5rJ8QjCz8tAOoHk7zoU38Y9W/nUxy5PN6rGyzWZqcRg=; b=qnLFjkwSjBnsUbR+wn5PJJanst
-	phPMyK1vqVlKoy9cZ2TNGVK2mgobhM9XJ6727Y7HaP/GmTU46QqD6jkvSOYx0F8mlD2pPSjE4Yz/S
-	N65756DUcABYvVe9uI4XyPUTO2Zr9zqA0oPMUIFj/Kpw6GVqEodjTUkrSirtEx1yHwJYG/6WU+Rfo
-	VXnGCxeqs8EfwuVG6ICD7UrjClVT+rv55GCVuzuXiTizddbG9LvC8R3OiguwyK2h9/2Q0rMpEQevy
-	yYa/58tir/lDBiU7DL0cgdgJFE/KsVG8LIIcTCk8BygHZ0dh/jKe9w/zZFjx5WFbK/SgYSpjmZhvw
-	ZAqKZddA==;
+	bh=/l/+ed3RRp2/S+303s10M691ayGdGFJnBkltqUFJEhs=; b=RYTGQy11fwIdGrnW/s6GTbhsGA
+	2/BO/hf8V9glLTZsUBGYANcW7rx6jGs4Cg0asOz96wgQ2ylH6iI1+XS7egQU7bDAdFg/Dqp+zcD8S
+	v35+yJGIg9wa1rrBs9MAUn6nyOoKrWAe33bnjlG9PVfWUflORkgxMdlmCixkP7pPuTquIpHz6N1Li
+	drPC+9Sd+BjMQMAK26OK+2amxaoJ3D3vgGdSx3dZwUjy+FOmtldu+f4SSi/UAzhzzwUT/kVUkJgeT
+	4odj9XfYQWaTBFcna6FCU4Scuni1GG9+G35QnwcEo/LTh/JtWHa8RoRuUJbVaTMK/k7WhujtH6V3L
+	8pTWihOg==;
 Received: from sslproxy05.your-server.de ([78.46.172.2])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wDhGn-000Opx-1M;
-	Fri, 17 Apr 2026 13:21:57 +0200
+	id 1wDhJe-000P7F-0u;
+	Fri, 17 Apr 2026 13:24:54 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wDhGn-0002md-0E;
-	Fri, 17 Apr 2026 13:21:56 +0200
-Message-ID: <b64a9ba4-2af7-45d5-8f68-6a64cc498364@iogearbox.net>
-Date: Fri, 17 Apr 2026 13:21:55 +0200
+	id 1wDhJe-0000V9-1C;
+	Fri, 17 Apr 2026 13:24:53 +0200
+Message-ID: <8a34a3da-45c3-4968-9c51-0ecb865d8f9f@iogearbox.net>
+Date: Fri, 17 Apr 2026 13:24:53 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,15 +48,16 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpf, arm32: Reject BPF_PSEUDO_CALL in the JIT
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Cc: Jonas Rebmann <jre@pengutronix.de>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de
-References: <20260417103004.3552500-1-puranjay@kernel.org>
+Subject: Re: XDP BPF JIT memory leak on armv7
+To: Puranjay Mohan <puranjay12@gmail.com>, Jonas Rebmann <jre@pengutronix.de>
+Cc: Alexei Starovoitov <ast@kernel.org>, Russell King
+ <linux@armlinux.org.uk>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel@pengutronix.de
+References: <b63e9174-7a3d-4e22-8294-16df07a4af89@pengutronix.de>
+ <96a56535-6016-402e-ad25-237427c2caaf@iogearbox.net>
+ <CANk7y0h8F2rhosKzHuf7eewuwCofjNLut0pQ=v-gehHdMcT0Bw@mail.gmail.com>
+ <afb5bbb7-3ad7-4632-9909-4c003f8ea44a@pengutronix.de>
+ <CANk7y0h42MFVGpTwNxGPRnUbW6r7uB8EqWR-PGWAd7UJVLqSOw@mail.gmail.com>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -102,55 +103,51 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260417103004.3552500-1-puranjay@kernel.org>
+In-Reply-To: <CANk7y0h42MFVGpTwNxGPRnUbW6r7uB8EqWR-PGWAd7UJVLqSOw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27974/Fri Apr 17 08:24:08 2026)
 
-On 4/17/26 12:30 PM, Puranjay Mohan wrote:
-> The ARM32 BPF JIT does not support BPF-to-BPF function calls
-> (subprogram calls). When insn->src_reg == BPF_PSEUDO_CALL, the
-> imm field contains a pc-relative offset to another BPF function,
-> not a helper function index.
+On 4/17/26 11:56 AM, Puranjay Mohan wrote:
+>> On 2026-04-16 16:36, Daniel Borkmann wrote:
+>>> I don't have access to arm32, but it looks like its completely missing the
+>>> ability to do BPF to BPF calls.. you would need something like the below
+>>> (uncompiled / untested).
+>>
+>> Applying your Patch to latest master leads to a paging error [1] and
+>> segmentation fault in xdp_program__attach when I run
+>> ./xdp_pass_user -d lo
+>>
+>>> I think the problem is that BPF to BPF calls are not supported but the
+>>> JIT doesn't reject them as well, so the best way to fix this would be
+>>> to do:
+>>>
+>>> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+>>> index deeb8f292454..91fef10e88bc 100644
+>>> --- a/arch/arm/net/bpf_jit_32.c
+>>> +++ b/arch/arm/net/bpf_jit_32.c
+>>> @@ -2047,6 +2047,8 @@ static int build_insn(const struct bpf_insn
+>>> *insn, struct jit_ctx *ctx)
+>>>           /* function call */
+>>>           case BPF_JMP | BPF_CALL:
+>>>           {
+>>> +               if (insn->src_reg == BPF_PSEUDO_CALL)
+>>> +                       goto notyet;
+>>>                   const s8 *r0 = bpf2a32[BPF_REG_0];
+>>>                   const s8 *r1 = bpf2a32[BPF_REG_1];
+>>>                   const s8 *r2 = bpf2a32[BPF_REG_2];
+>>>
+>>> This will cause the memory to be freed properly.
+>>
+>> This works for me and resolves the issue.
+>>
+>> Tested-by: Jonas Rebmann <jre@pengutronix.de>
 > 
-> When a program containing BPF-to-BPF calls is loaded, the verifier
-> invokes bpf_jit_subprogs() which calls bpf_int_jit_compile() for each
-> subprogram. Since ARM32 does not reject BPF_PSEUDO_CALL, the JIT
-> silently emits code for the call using the wrong address computation:
-> 
->      func = __bpf_call_base + imm
-> 
-> where imm is actually a pc-relative subprogram offset, producing
-> a bogus function pointer. Because build_body() reports success,
-> bpf_jit_binary_alloc() is reached and a JIT image is allocated.
-> 
-> ARM32 also lacks the jit_data/extra_pass mechanism needed for
-> the second JIT pass in bpf_jit_subprogs(). On the second pass,
-> bpf_int_jit_compile() performs a full fresh compilation,
-> allocating a new JIT binary and overwriting prog->bpf_func. The
-> first allocation is never freed. bpf_jit_subprogs() then detects
-> the function pointer changed and aborts with -ENOTSUPP, but the
-> original JIT binary has already been leaked. Each program
-> load/unload cycle leaks one JIT binary allocation, as reported
-> by kmemleak:
-> 
->      unreferenced object 0xbf0a1000 (size 4096):
->        backtrace:
->          bpf_jit_binary_alloc+0x64/0xfc
->          bpf_int_jit_compile+0x14c/0x348
->          bpf_jit_subprogs+0x4fc/0xa60
-> 
-> Fix this by rejecting BPF_PSEUDO_CALL early in build_insn(),
-> falling through to the existing 'notyet' path. This causes
-> build_body() to fail before any JIT binary is allocated, so
-> bpf_int_jit_compile() returns the original program unjitted.
-> bpf_jit_subprogs() then sees !prog->jited and cleanly falls
-> back to the interpreter.
-> 
-> Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
-> Reported-by: Jonas Rebmann <jre@pengutronix.de>
-> Closes: https://lore.kernel.org/bpf/b63e9174-7a3d-4e22-8294-16df07a4af89@pengutronix.de
-> Tested-by: Jonas Rebmann <jre@pengutronix.de>
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> Thanks for testing, let me send the patch to the list.
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Sounds good, I think it might also be worth to check the other
+JITs which are not mainstream to see if they have the extra
+pass and if not then adding similar not-yet bailout to them.
+
+Cheers,
+Daniel
