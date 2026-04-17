@@ -1,253 +1,162 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020084.outbound.protection.outlook.com [52.101.196.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F381363095
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776450995; cv=none; b=Bpv7A/8fhW/WISFCSVEUv6SQOtJ3HtbvyrVjrM6No42xG1JXKDCZxkNQONquvuvRVtPqqKGpP/yPvlVVuKspLW1JVx6Bcmla64MBDg4MCihaap0Iy3bDNvv0+ApwZsTe2wZ3aCIKGjuChnMM4nBwSxpf2+ofRcSc/2W8cs1r4A4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776450995; c=relaxed/simple;
-	bh=nUBDYLzZaW4p0B2ZFjD+V5dVTauUWeXwCeIunREtbP8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f8q4jaozCl9nZSBUGfseQqq4Q+7RzDjJ6FOLtFrj04K2pmZVL2oMSJjPxnuF38GpZETHIhoez1ceIcygOP2BoCzJAnfAEEY+rI1HgHc/Rntxe6GSS6klhvBZkcKKrvtHlgxO6Qz7eDd1AbpjIr9bNY7IO/CQHFlamEaQvxcapVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HOhO3PW7; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HOhO3PW7"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso9674915e9.3
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 11:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776450990; x=1777055790; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kxyygLf7so+BFh+zGgkdtjhm0tPEJBMXuamZ1cDp5RI=;
-        b=HOhO3PW7QJPETeUJxQ4K0Pn/Sb/kBfyNZdU1U+E6v5F/D4l1n4rbus+qZYvi+F9Tfi
-         GR4V65jMn7Esz0HzWgNqcfIfoN5WMPZHnhfm2JDD0QzQgz0KGYVi8yX7brxA9qx/oi02
-         pdfKBJ6xBTXz7PYgQqxxUOyNZh9VWVZd2jcluivRrVRKSPnvBiTEXytjLtDde6mCkcX6
-         Ym5zaulLb8GrW9p3jbMjuCDXrXm5EC4HJSQX+IeNnmcYbGGVLWiQZT8zBQuOT9gZfuab
-         8sAucJCh0JwPMDN0q42U3yAS/2LM5PxwBIjtWwgGW4gtmfUYbmRJxGANzJ8FIq1SoHGO
-         nlWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776450990; x=1777055790;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kxyygLf7so+BFh+zGgkdtjhm0tPEJBMXuamZ1cDp5RI=;
-        b=B0IBrIE+r6ARLqPfQ712UOCozzHtRDqFfzUUMsor1nyHmzpcoA/7KISjJuMKMAv3hf
-         WRBXTGYI4Y98lGEqFGwcAi4zZ1L4HHHi2EmxO5wSK11/4ncYF+1ZdEc+FU/qMFVEwIN4
-         qoCyyxZMH/GomQ1e21Uc4S964nPQLs/590PdzlLFVeAbDA/6VALFnRNzXW5NdgEYIx4K
-         azoUTSDAKYx4A42xiBaJbYy9F4lNngiF+cd2XH6H0vsuVd8ZzoDTSd2vBYD+dJmVQLkK
-         S/nVUBHISlGpkAKC/QwscIIDku8ox2+6qW6Y+fqVkcVoTrFeM+izq0o74rDBWfacxLCp
-         n4NA==
-X-Forwarded-Encrypted: i=1; AFNElJ8xKhhvKsVl4nZV87WgZ8oqVVzEO62AOCR0+LZrsHGFYwsC2QQEqT6djYi1P0q/4AJRgxs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywrk/i20ZXKDjIJxCD5OceI2sT427oSiTRLGsCJJcXFJWkGbata
-	UW00mK5NvyGxuZMDn/C2cb0rIOEmgX+8LcIO4Zyh+6i1DEbdKApvsXb5
-X-Gm-Gg: AeBDievG3EkZZCxVJwwX4Ozbhl0EX79SNhp+KIqXX6D41lrlFbeV2/zAehPlEdGR47O
-	r02nkNzysQAClqRuGtfbuSi5WTFdHBohIcPzPQzhC71zukrn8t23JGHP+6DG180x992HTTfQYSm
-	fJdV9T52Ta+THnMGpXB4VPBEXeW7RuupxYFHdGMGFV1U/3XsnBXO99EH/O2Hbfo8pHZ7wnGffee
-	uXratnMXa78FgV7rAI1iT943ycVFkxWe8bw1rFzSsoidCbZ4VkPpMRqfas51tCONp1VtynSilEG
-	JuufPlQU6IaZUCfOSu/13JmMVrS3EY32BwMA4CC/ehYZF3zz0EZd3MaXGciTeOFWQGTKqhThl5p
-	SDajcXhfmIQe02mWqI/WwKGJVMbN046Qo5Kah0lH29X2MtWZ5i608BiC3PVvUF/80mRZqVWP9lX
-	IwJIDhYdAYv8n2YvgW/1tHEgVeU36oj/laI2zhZZWceKsP3TQIbxq7p0spJzg/a3mSAmbCmb0Aw
-	dFo6UQc62CdtzWEKTaFFw==
-X-Received: by 2002:a05:600c:b90:b0:488:b99b:4177 with SMTP id 5b1f17b1804b1-488fb78ee4emr55431905e9.25.1776450990290;
-        Fri, 17 Apr 2026 11:36:30 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc10019bsm67662425e9.4.2026.04.17.11.36.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2026 11:36:29 -0700 (PDT)
-Message-ID: <91343a7a-4820-49fc-9ed0-5638ea74e203@gmail.com>
-Date: Fri, 17 Apr 2026 19:36:28 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CF9282F18
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776451595; cv=fail; b=h/1VnExZY0R7JSaXoYQ+F/zA+LJaadn5wZ8/9+TUla3FzITpn95IXcud1nf5qAlesb+FRIejKDh+oW+SjEG73+HvaKHz+Dn4i7r9OdFjVcQeHQwrZHOCcmvzflxN7Wflp448SlqC/oUzTF2VGSo+MoFjquSTv/XI0xNAuiGoVFY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776451595; c=relaxed/simple;
+	bh=umGSuby4sEfoWQLDT0RcJYoX002NBgfIpYkJTGnES8w=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=osMQR3V8QiBoa0aWHnVxwxVafeK/GrcNNGDkuIxRwNZy3OqWqSeRtIcUsi2QJ/pOUkAWfGRBv7E9VagE73HuCObzk6CzDKDuipLumFva2AYznMyqWn1zm8QYAjV5n7+6nQdIXMaCHqYs5Ur49QE6xo7Y7wYO9fZ5JZQPWdrEitc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.196.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Djtf37DhbD2XzyHH4bbB+VVuZJnwEhVfySa+cxe9pnGnIrvqn/vVwLjUKs9kPGNaBRXAwuW056wiTbA1hJzSBaFq3P1V7f4AB59FyEA6Dq5ORrdTcxxB0ecgjETF8Q9pMfevbF6EW8TG5inI0kHCbzN4aRhy12MC9Be/wpMklk6DB1PLVunV/2gLc44ibl0rewCGpCVBc47+WtHaVxzyzwj3KPyRlPNP8UoM+GxcafyxnrVCB+LLbLrsM8VCVmQV1loxTGpA5Bs1DmHMfXtfbxXfqWyRkkM/bh/cCoyWkhFFtdsobvbRmotJGmBmaNEW1FV3RiLu3FLLRNvIHEdLyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/hVgxsVbXcI/AOoS8N3hsYIJbUaGMD8kZR4WEPRzWQs=;
+ b=fEbkbjbJNemf/K6BYMOs2qVpbgJud8Rk3M9prG2TVbGc1O4mBU7lMPjM5esJsJ4rnWL8CCX/979cmWg+E97RHzVecsxcn1GN9tYQd2X9+FjfgWGLeTZMrw8pWBJFHHnCrWSVjvWFuX380wP4Ge9D6epBW5kGF/dDNazRogGZg9xN7LecDnGV7fnALXFwqDY3v/HJ+h1sUGnpEuRJIuGvQSFu4VMsLy8oJo/KOt+qvx2XEg0ZCsxacsIlPCog5mNvoIOOjJpoOH1rTu6lWGQzJmYzmElabJeoU2C3iTXRTCUqoSRuIiDlb8CsIz1jkwgtTAN1nrO10KbfIzU4Q3tKBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
+ by LO0P123MB5942.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:242::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.42; Fri, 17 Apr
+ 2026 18:46:30 +0000
+Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::de8e:2e4f:6c6:f3bf%2]) with mapi id 15.20.9769.046; Fri, 17 Apr 2026
+ 18:46:30 +0000
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: bpf@vger.kernel.org
+Cc: atomlin@atomlin.com
+Subject: [PATCH] libbpf: Report error when a negative kprobe offset is specified
+Date: Fri, 17 Apr 2026 14:46:27 -0400
+Message-ID: <20260417184627.1259158-1-atomlin@atomlin.com>
+X-Mailer: git-send-email 2.51.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BLAPR03CA0179.namprd03.prod.outlook.com
+ (2603:10b6:208:32f::33) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:70::10)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 bpf-next 3/6] bpftool: Support 24-bit vlen
-To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, qmo@kernel.org,
- bpf@vger.kernel.org
-References: <20260417143023.1551481-1-alan.maguire@oracle.com>
- <20260417143023.1551481-4-alan.maguire@oracle.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260417143023.1551481-4-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO0P123MB5942:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0bdf8bb7-faf8-4dfb-43c7-08de9cb1a37b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|366016|1800799024|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	MfqzJyBlz8xtntBBMSTcjZevg0LnO95CdxFrS8y4li+PZrGI/o6Sl1gL2YULO5w+AjCbTKgWOuepmOl1toP/VrLY3lS2aAdKeHKz6CStbsNQ0uud9IP3WZbdHqcG5QWohm00YpqlHt/n5la6ANPKsvEbpiajjSlr9wVnzSKjQbIVw3NwpiFfUo3tSvBO6iBj/Lj0hvj4oVXuI0jGoZDZD0DejFhkTv5gMt5JiLHS1nsM4FumAa9UoXzVHFcjOilqzZo8HRrp2q7yWmQk+IuxtzSxnFNq8ThEP+0JVjVbc2wmGApWWb1Ph2j71KNtjqrtRM3eLKkWForrn3UWhbooPW6FmpbBxY19hpSjMZKZkIgyZsUGUHEb658EcDD1Dku/V1gD2io6Ic1a4kGH9mXs3rUPsh8RpVM2tXMvjR/YpEf9IqZMOrZ/F0eSVwwsAU1PRStbAkPFvEoSSUkEugbA4/y3TX6ZozYRils7sRrlwWHLhlUOa26wOyb4YAwS5suQExeslDtB644eB7yw9Sz8nHv/djCugrtrM5V92NA7nz/EmNnOiRnkmBlSYUP8VUS4vUy1832ABzaro39IxiBpphDSvxBB4aKOTq1tJoN8eRXcCAAjs4/dZ/Hgt+Dzj9UToxX6M41UXl5lSiZR1Ycw35PhphkFVPHhzYMD9SVT1ZKzN8HT6x8jYqPak063nNBcg0gtzD8q3oCKV3Bg2wWTnXWyqJhJ8wN81laeptpjOFc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(18002099003)(56012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Hm7uYthsc3wg+vDHikpIf8x1xLL19Tw5ipCMPLxvGLDRMtDZ/ecPq9NM8/M0?=
+ =?us-ascii?Q?JLom9tqEu6pIFzc8GEfELdmhCq0an5jqvBfsLztEu8PjGfxb25f+Up73HOCC?=
+ =?us-ascii?Q?u82APPUYG/T51mAjQREe6CNXgfok/dsSe/CLy6IdkNc2IoOLUQgaiIDT7iTg?=
+ =?us-ascii?Q?8Sj5SzL+jWCqEHPJv9ytLyxnIV/Xvie1uMkWqEw72ZmtLFOkMSgCas036mu6?=
+ =?us-ascii?Q?TQMSlihwIvuXZHwditcYMkK1pNjLB2oTvsVSG2OujphdoyFUCsUuS9Ov2LvM?=
+ =?us-ascii?Q?k2iCLj7KpTW4103TD/IXR5wtgIHrHOtklvU/gPtgHF6WBfQcZlwB/g9oaYmU?=
+ =?us-ascii?Q?hRswLBY/GcGEtn99ygk49hf8JisvUCVx3sJnHlzDcOAJGIQ7p+T6KV8zTRid?=
+ =?us-ascii?Q?YvaVtgDZ0cnk/eIwHWBdqYLUfK+fI6Nyqo49vkSkYMmoW5JGxPxVmq2WIv92?=
+ =?us-ascii?Q?VNNmmLakiJHVh9y6HVXyv+dXkUpqwV+ZDgMKC7nUajQHOx+XBm9eoHpTp+RX?=
+ =?us-ascii?Q?KxDDiXqODvv4DdE2+TgfGeqPBf6g7dlAD+JYeAfOif3AS7Xst1PtbpXFLtbs?=
+ =?us-ascii?Q?AqaEVUc3BGISHU390Tg/qrqF6jedYWMYp4hZZbI8FEOTep1fjUxS3NHOdpq9?=
+ =?us-ascii?Q?wT3l5oepFlSvlFslQVfRXxeEZclI8ULxqcKVXMddTNR2D9tEKkL3J/AsSU7c?=
+ =?us-ascii?Q?tbLe1uvL3ks4sR9JBBJTN5z2We7BS63vb97kWwxL7p+tuk6qaYYAve2fJUnE?=
+ =?us-ascii?Q?sBrepWgRfQhWAgU9wGreDg+bJi3jqAVeQyWqGSJWwYb21K8IQNuy0T7CzWQX?=
+ =?us-ascii?Q?AJxamyhpz7FFR87gmLidrQTvZhM27fJSolddNs2B/CPRPdeFWrkY6AdkWCpX?=
+ =?us-ascii?Q?NAEEm9NeHQoxz/2H1ITqzixispEE9ErlhEHwKxdrRvxL5Pl5tMhg+V1lJ0Dj?=
+ =?us-ascii?Q?xRKYWN6lKpxbdbaCeoTlv0R3GwbFMfXJsSCxvPUzY2CPK6RJ/WTKnl8YGpvm?=
+ =?us-ascii?Q?PgjCo0KxGHOFN+EE+Yzt3iCDEa0e/c8CYkhnwbg1zgzgQDgM5CLXdCP2e79r?=
+ =?us-ascii?Q?yXypaF8+dRARSjahVKlz9x34xc58CDQgL6mhb+hGFava7veALMaeYXu/Yb14?=
+ =?us-ascii?Q?QN6AedCRkFKUDPczlZnsa1GSvqBlyp4QW48LVeDwkN0tfdDGDOH90RRN92Y3?=
+ =?us-ascii?Q?dBEcuaeVNmHDQDfKBL90VpR94x88IR3Sxulra8VDbL1QSVY9gdBeQjulGcU3?=
+ =?us-ascii?Q?RP1no7rlap2S2fBcvBOWytOEluJ9cDj9HjejuMwHN0SspdABYSX3x4tj5fiY?=
+ =?us-ascii?Q?ZJzL7Y3xURw/weTw1czd5qm4n/zPKDvALcPrLDlottFk2vpSGSpZOMdDSMm+?=
+ =?us-ascii?Q?f+mOeTF4Rd4pdpGzsXCAqY38m9KEWtBAzu7Kvjic5EhCr2f9Log1ajIw9Zgh?=
+ =?us-ascii?Q?EMmEqAjX9GdPE0yNMuq5o/zUjgU1C4SuhGl//g9n9CXCedVgQcbuy+UIIjKQ?=
+ =?us-ascii?Q?oC0rbDsCwiYi9p0E4ip0oLd/kUp/L9G2Bb7uC0xRZViF/5MqA96DE9paGqAg?=
+ =?us-ascii?Q?Hiv8qTGYuSCCZMxE3vQ60NKRqNpmTQp2z5PdS+FQSo/gL1cfjuJ0Lwpsw9Xj?=
+ =?us-ascii?Q?uQiVbZ51radrEtK5vK9xiH2rnOPvPvQi6Spvxn+L2N7yWMJlTdLjtXT6IuwI?=
+ =?us-ascii?Q?1kRCRBCbNOcvQCWqdRbkuv0Aljk1O9ZS7HjoghOtdswmrA2753+pCNhKfF9J?=
+ =?us-ascii?Q?rDp4CB0V7A=3D=3D?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bdf8bb7-faf8-4dfb-43c7-08de9cb1a37b
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2026 18:46:30.0209
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UDbM/RLQusVc3fvZJRy9uNzU1LVTu3THVjHO0eew9gXaGu455xupBmrWutYkAW3vwa6ZTaW6iIL74mBUmMtBUg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB5942
 
+In attach_kprobe(), the parsing logic uses sscanf() to extract the
+target function name and offset from the section definition. Currently,
+if a user specifies a negative offset (e.g., SEC("kprobe/func+-100")),
+the input is not explicitly caught and reported as an error.
 
+This commit updates the logic to explicitly notify the user when a
+negative integer is provided. To facilitate this check, the offset
+variable is changed from unsigned long to long so that sscanf()
+can accurately capture a negative input for evaluation.
 
-On 4/17/26 3:30 PM, Alan Maguire wrote:
-> Adjust btf_vlen() usage to handle 24-bit vlen.
-> 
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->   tools/bpf/bpftool/btf.c        | 17 ++++++-----------
->   tools/bpf/bpftool/btf_dumper.c |  4 ++--
->   tools/bpf/bpftool/gen.c        | 16 +++++++++-------
->   3 files changed, 17 insertions(+), 20 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-> index 2e899e940034..6ef908adf3a4 100644
-> --- a/tools/bpf/bpftool/btf.c
-> +++ b/tools/bpf/bpftool/btf.c
-> @@ -179,8 +179,7 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
->   	case BTF_KIND_STRUCT:
->   	case BTF_KIND_UNION: {
->   		const struct btf_member *m = (const void *)(t + 1);
-> -		__u16 vlen = BTF_INFO_VLEN(t->info);
-> -		int i;
-> +		__u32 i, vlen = BTF_INFO_VLEN(t->info);
->   
->   		if (json_output) {
->   			jsonw_uint_field(w, "size", t->size);
-> @@ -225,9 +224,8 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
->   	}
->   	case BTF_KIND_ENUM: {
->   		const struct btf_enum *v = (const void *)(t + 1);
-> -		__u16 vlen = BTF_INFO_VLEN(t->info);
-> +		__u32 i, vlen = BTF_INFO_VLEN(t->info);
->   		const char *encoding;
-> -		int i;
->   
->   		encoding = btf_kflag(t) ? "SIGNED" : "UNSIGNED";
->   		if (json_output) {
-> @@ -263,9 +261,8 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
->   	}
->   	case BTF_KIND_ENUM64: {
->   		const struct btf_enum64 *v = btf_enum64(t);
-> -		__u16 vlen = btf_vlen(t);
-> +		__u32 i, vlen = btf_vlen(t);
->   		const char *encoding;
-> -		int i;
->   
->   		encoding = btf_kflag(t) ? "SIGNED" : "UNSIGNED";
->   		if (json_output) {
-> @@ -325,8 +322,7 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
->   	}
->   	case BTF_KIND_FUNC_PROTO: {
->   		const struct btf_param *p = (const void *)(t + 1);
-> -		__u16 vlen = BTF_INFO_VLEN(t->info);
-> -		int i;
-> +		__u32 i, vlen = BTF_INFO_VLEN(t->info);
->   
->   		if (json_output) {
->   			jsonw_uint_field(w, "ret_type_id", t->type);
-> @@ -369,8 +365,7 @@ static int dump_btf_type(const struct btf *btf, __u32 id,
->   	case BTF_KIND_DATASEC: {
->   		const struct btf_var_secinfo *v = (const void *)(t + 1);
->   		const struct btf_type *vt;
-> -		__u16 vlen = BTF_INFO_VLEN(t->info);
-> -		int i;
-> +		__u32 i, vlen = BTF_INFO_VLEN(t->info);
->   
->   		if (json_output) {
->   			jsonw_uint_field(w, "size", t->size);
-> @@ -675,7 +670,7 @@ static __u64 btf_name_hasher(__u64 hash, const struct btf *btf, __u32 name_off)
->   static __u64 btf_type_disambig_hash(const struct btf *btf, __u32 id, bool include_members)
->   {
->   	const struct btf_type *t = btf__type_by_id(btf, id);
-> -	int i;
-> +	__u32 i;
+If a negative offset is detected, the loader will now print an
+informative warning stating that the offset must be non-negative,
+and return -EINVAL.
 
-in libbpf, kernel and btf_dumper.c we did not migrate those callsites 
-that use int for vlen, but we do it here. Not an issue, of course, 
-either way it's correct.
+Additionally, free(func) is called in this new error path to prevent
+a memory leak, as the function name string is dynamically allocated
+by sscanf().
 
->   	size_t hash = 0;
->   
->   	hash = btf_name_hasher(hash, btf, t->name_off);
-> diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-> index def297e879f4..9dc8425b1789 100644
-> --- a/tools/bpf/bpftool/btf_dumper.c
-> +++ b/tools/bpf/bpftool/btf_dumper.c
-> @@ -150,7 +150,7 @@ static int btf_dumper_enum(const struct btf_dumper *d,
->   {
->   	const struct btf_enum *enums = btf_enum(t);
->   	__s64 value;
-> -	__u16 i;
-> +	__u32 i;
->   
->   	switch (t->size) {
->   	case 8:
-> @@ -189,7 +189,7 @@ static int btf_dumper_enum64(const struct btf_dumper *d,
->   	const struct btf_enum64 *enums = btf_enum64(t);
->   	__u32 val_lo32, val_hi32;
->   	__u64 value;
-> -	__u16 i;
-> +	__u32 i;
->   
->   	value = *(__u64 *)data;
->   	val_lo32 = (__u32)value;
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index 2f9e10752e28..37159e02f418 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
-> @@ -2094,7 +2094,8 @@ btfgen_mark_type(struct btfgen_info *info, unsigned int type_id, bool follow_poi
->   	struct btf_type *cloned_type;
->   	struct btf_param *param;
->   	struct btf_array *array;
-> -	int err, i;
-> +	__u32 i;
-> +	int err;
->   
->   	if (type_id == 0)
->   		return 0;
-> @@ -2229,7 +2230,8 @@ static int btfgen_mark_type_match(struct btfgen_info *info, __u32 type_id, bool
->   	const struct btf_type *btf_type;
->   	struct btf *btf = info->src_btf;
->   	struct btf_type *cloned_type;
-> -	int i, err;
-> +	int err;
-> +	__u32 i;
->   
->   	if (type_id == 0)
->   		return 0;
-> @@ -2249,7 +2251,7 @@ static int btfgen_mark_type_match(struct btfgen_info *info, __u32 type_id, bool
->   	case BTF_KIND_STRUCT:
->   	case BTF_KIND_UNION: {
->   		struct btf_member *m = btf_members(btf_type);
-> -		__u16 vlen = btf_vlen(btf_type);
-> +		__u32 vlen = btf_vlen(btf_type);
->   
->   		if (behind_ptr)
->   			break;
-> @@ -2286,7 +2288,7 @@ static int btfgen_mark_type_match(struct btfgen_info *info, __u32 type_id, bool
->   		break;
->   	}
->   	case BTF_KIND_FUNC_PROTO: {
-> -		__u16 vlen = btf_vlen(btf_type);
-> +		__u32 vlen = btf_vlen(btf_type);
->   		struct btf_param *param;
->   
->   		/* mark ret type */
-> @@ -2492,8 +2494,9 @@ static struct btf *btfgen_get_btf(struct btfgen_info *info)
->   {
->   	struct btf *btf_new = NULL;
->   	unsigned int *ids = NULL;
-> -	unsigned int i, n = btf__type_cnt(info->marked_btf);
-> +	unsigned int n = btf__type_cnt(info->marked_btf);
->   	int err = 0;
-> +	__u32 i;
->   
->   	btf_new = btf__new_empty();
->   	if (!btf_new) {
-> @@ -2523,8 +2526,7 @@ static struct btf *btfgen_get_btf(struct btfgen_info *info)
->   		/* add members for struct and union */
->   		if (btf_is_composite(type)) {
->   			struct btf_member *cloned_m, *m;
-> -			unsigned short vlen;
-> -			int idx_src;
-> +			__u32 vlen, idx_src;
->   
->   			name = btf__str_by_offset(info->src_btf, type->name_off);
->   
+Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
+---
+ src/libbpf.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/libbpf.c b/src/libbpf.c
+index 42bdba4..cd250fe 100644
+--- a/src/libbpf.c
++++ b/src/libbpf.c
+@@ -12271,7 +12271,7 @@ error:
+ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf_link **link)
+ {
+ 	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, opts);
+-	unsigned long offset = 0;
++	long offset = 0;
+ 	const char *func_name;
+ 	char *func;
+ 	int n;
+@@ -12293,6 +12293,13 @@ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf
+ 		pr_warn("kprobe name is invalid: %s\n", func_name);
+ 		return -EINVAL;
+ 	}
++
++	if (offset < 0) {
++		free(func);
++		pr_warn("kprobe offset must be a non-negative integer: %li\n", offset);
++		return -EINVAL;
++	}
++
+ 	if (opts.retprobe && offset != 0) {
+ 		free(func);
+ 		pr_warn("kretprobes do not support offset specification\n");
+-- 
+2.51.0
 
