@@ -1,114 +1,144 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-190a.mail.infomaniak.ch (smtp-190a.mail.infomaniak.ch [185.125.25.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FE31F63D9
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 15:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08EE2F260C;
+	Fri, 17 Apr 2026 15:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.25.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776438998; cv=none; b=fLgv5q+flJz2H32EMSXW9ZAfAoX9LwNB3karzkSTwGnE2hzZ+OipywVilgiJeoBkeyw/zpyoWx7TE2tgqa6bVeXQhSt+khLQ0kLOTE232kEiibbCs0eeXLcvgBSLEdpoGaRvHk2CcsQSIJdUAXOauaVAaBsx9vaoWYOjUXfVfXM=
+	t=1776439105; cv=none; b=u3MrNHPUiFM8B7T7EVHiIWE51FAzcRL4a/8sTn5Snr1O+L0i0W9ObTVaq9//2zVlm0ppzG30r3xTcYzqYHv8aCNz0HcGuUe1w5LFcpsNwUlr8D97sbLp3AjQnhUmtpnDZ3C/S2d+O/2h6BXU2pODz7lNaTgC99nJCIJTTTNQwiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776438998; c=relaxed/simple;
-	bh=tbb5PuK55DR0wxrBFuUfSi3SU3heSYBo3OJ90k8XXaU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g3wPZC4U0Oex5CBpMGxNZ9yjIqVRu1KnLg+LmPujaWV3HGQVcg212Ts74mK4iLTCzVdn49MPAdA+7OKrRV5UkSLmt4ya2gPBXIis9+TSRo+ES5JnOCLCXVClnjZ+AqfHa3DwJgkUFC4iGYcvIrhe9etKj8dDQaXk95KH3+9tnOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMOTNZ+u; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776439105; c=relaxed/simple;
+	bh=WUoIk2YrUtGxyINUDnF36G5a2VmwxFchcmghsjAdP54=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r2wc0g3AoMliZUmHQwRFGtVz8udD+Kz5eOyKcCKYJbxVryjudLd0Vk5/YxRCD013GfVXqQKYZ8osgGXBzQtO6SZQ0/pdPLHKeObZDePOd2LbjgrCf6HGszjvpdrJ8dWOno6geqlikRQnawihUsFbYY6VzpHPnKawTChtyWDzivw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=cm5NGpNp; arc=none smtp.client-ip=185.125.25.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMOTNZ+u"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d7650202fso707655f8f.2
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 08:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776438996; x=1777043796; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5XgLk78wslS6OB4UDwO3AJCpe86+NMN2+MFJiP0eHB4=;
-        b=RMOTNZ+uHWFQxInUA6WwymBK7wey81CAg1n23RSO+j0sB01LTxkUm5l6XD7uijxa5V
-         5lDKXz+SXIkgk25T0OVA2/p+5Ib3GeIyOFBTQgOrUXSKyQcvmS5PBJ90aptjnvYouSNw
-         MgIisz/jHJS1i/oWz47u4N2J8lWr9kCIA7g3uACufOgSZL6LSJXpodEL9m7PqpAEjR54
-         E21GH8umFQQ440zhZyHQIDxwy44rmuMbi7IC86fOVs63Gvlo8XMsI0oQg8v7gEmXqrBP
-         Mr4/y5TrzaT7WKmJHxzjqIV6+9jyASCtmIeOumXzfREboNHt20pq+hQPvE9jnk2pgxOe
-         Xq7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776438996; x=1777043796;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5XgLk78wslS6OB4UDwO3AJCpe86+NMN2+MFJiP0eHB4=;
-        b=m8k9q+xJNzoivxDzN1V2+ZhJEHT4DwZIfipzXBk8EQAqjL3Pq+85STvoKZ4kruGCq0
-         PqWuMu0+vWhRqAXEWsb9W6o/D8yyfL1muXsI8O8b1nTzaNGNvBx8kzyQu2nxcznk1pev
-         OYCVADm7YgjAjHcbDSo2NqxHkJTru+5u9DsdLAohmMpn8PjEAzSGcgM2jVDCV1W3dYWc
-         7HXCPiTTRXwPMUntSZ4LNdjCnQiPMZCnw51LN8LODG6YexGJjbhM+iFtex3oSrta0NKs
-         HJZvjX3F5DWTkyG4e28cUJpjxquxLHPDodDcU+Hudt9ySUJqPXrNjwT79Cfk7T/GYoRj
-         Szxw==
-X-Forwarded-Encrypted: i=1; AFNElJ/+0YRyhYDZbV8MRaueBri66CZX6ZGvpFin55eUvGvcv+hN69QrLh+8GCNI0AUNO9iB1Ws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFNFOyXeXy92r0THCci6bDyLWAhcARqNUH3Q5RRKqegGowVE80
-	zH5s2M8E0rBisrgaC2kZFBSLtPcA56BKpBY2A9zPem9Za3ytmJGawt/ZGohdR2mN
-X-Gm-Gg: AeBDietPMnQpJ/5r0Y0L7Izq3Opi1mtiwzOe9G9ywlgVBFSLiHkGTOnXJdUTqVE+P2g
-	bpFVo5STU2w+yOEy8fwDnt9t8t1mBB311azTkurY0LuIvODWdkLWbFgEWNlFWt4gafvuOZzpu8x
-	UVfQfI/IEE7f5JZs8Bh/FD6K83ip9JX+jIMWIqYDClvVFKukSdLLx7BG1Wy1VCC3qFUIdBCMFzX
-	4QiBufSqiOzO0EGCeo8CdcldFAxJh++Zmf0RA5HESB9ssblq3vD/PutKMtOja2IrBusli2EoreT
-	7mpp+HQYaWoh2GuC9aI2XkNkxjGI6jOb48BJZDn0rXNvFh1r0XyId/gN1J7xaWh1t9FeUw/DeO7
-	luo1b/sF8FV4dpRh+90efvBEd2Fsw4RGfVe2buObjAXdRQldk/pgXwgZR4QlKB+YWrWI7rpix3Z
-	vp1ErfIc96k+xte7KIvj4HxwWjb4+uOb7wQzv0m33Y4oEF/H1wYqntILkC+XbEHEFlKKhuDgzTV
-	CXUpu4mNjV15h/nBAHL6g==
-X-Received: by 2002:adf:f04d:0:b0:43e:b0fd:5a24 with SMTP id ffacd0b85a97d-43fe3dd3c63mr3471642f8f.17.1776438995713;
-        Fri, 17 Apr 2026 08:16:35 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4e4d6casm4797952f8f.32.2026.04.17.08.16.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2026 08:16:35 -0700 (PDT)
-Message-ID: <4c0e73e1-43c3-48a3-ab89-239fed7e6c23@gmail.com>
-Date: Fri, 17 Apr 2026 16:16:34 +0100
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="cm5NGpNp"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fxz6D1VT1zMhp;
+	Fri, 17 Apr 2026 17:18:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1776439091;
+	bh=fBTJ6d+x4OlIr1oVwOfzUtW9SrmNkEZwqchmlYFYgSw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cm5NGpNpzxUwuAf8Vg+rCleQaZxv8svbEblwFBlJQyCNBeb12A/X+Ts/7ZYiwqCSy
+	 /Z689+YK8ZdAP5FMwpVHeDwl+rpm0M4tyaNinzoqJlgPxP+HWXH9Ya/TLPKIo4RWn7
+	 LEQEOfhLJzVE++rDXp1k8+HPvPOgwnfR2DH9+4eY=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fxz6B13VWz9Tb;
+	Fri, 17 Apr 2026 17:18:10 +0200 (CEST)
+Date: Fri, 17 Apr 2026 17:18:05 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, kpsingh@kernel.org, paul@paul-moore.com, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, kees@kernel.org, gnoack@google.com, jack@suse.cz, 
+	jmorris@namei.org, serge@hallyn.com, yonghong.song@linux.dev, martin.lau@linux.dev, 
+	m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com, sdf@fomichev.me, 
+	skhan@linuxfoundation.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
+Message-ID: <20260417.ohgoh0Eecome@digikod.net>
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
+ <20260407200157.3874806-9-utilityemal77@gmail.com>
+ <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
+ <aeFaQXkKNHFeE-oC@suesslenovo>
+ <CAPhsuW648HdcCbXWMHaJ4uirPWq2WX3Ggx3AGMU6CGzhNYUREg@mail.gmail.com>
+ <aeI_CXj6F-nI_DCL@suesslenovo>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin Lau <kafai@meta.com>, Kernel Team <kernel-team@meta.com>,
- Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
- <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
- <CAADnVQJCpJ0bTVPQ0LwoNubsK7-HsdePWgdMz8DX=v9cjgvyKQ@mail.gmail.com>
- <aeBxQn8ATaNuEF4X@gondor.apana.org.au> <DHUN1UJ0DLBC.3UC7SXBAV2FOW@gmail.com>
- <96b6f76e-1dc9-4d54-9f92-8586796ef607@gmail.com>
- <aeHZJUw-ZRA3ZWVE@gondor.apana.org.au>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <aeHZJUw-ZRA3ZWVE@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aeI_CXj6F-nI_DCL@suesslenovo>
+X-Infomaniak-Routing: alpha
 
-
-
-On 4/17/26 7:54 AM, Herbert Xu wrote:
-> On Thu, Apr 16, 2026 at 04:10:35PM +0100, Mykyta Yatsenko wrote:
->>
->> There is a problem though is the get_next_key interface:
->>
->> int get_next_key(struct bpf_map *map, void *key, void *next_key)
+On Fri, Apr 17, 2026 at 10:09:13AM -0400, Justin Suess wrote:
+> On Thu, Apr 16, 2026 at 04:47:40PM -0700, Song Liu wrote:
+> > On Thu, Apr 16, 2026 at 2:53 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > [...]
+> > > I don't think we can pass the FD number via a map, since the FD is
+> > > process specific. And it needs to be done in a way where we can lookup
+> > > the specific ruleset the FD points to safely.
+> > >
+> > > So we'd need some other way to load the ruleset from a file descriptor,
+> > > either through a new userspace side BPF call or similar mechanism.
+> > >
+> > > Is there some other common pattern for FDs --> kptr I can follow?
+> > 
+> > I didn't find an exact example like this. There must be a way to achieve
+> > this. In the worst case, we can add a kfunc for this.
+> >
 > 
-> Any chance of changing the interface?
+> I think new kfunc is a doable approach. I could make a kfunc taking a struct
+> *task_struct and an FD that looks up a landlock ruleset within a given
+> task that returns a trusted kptr.
 > 
-> If not then perhaps a better solution is to use a linked list
-> in conjunction with rhashtable.  It'll cost a little bit of
-> extra memory, but really provides you with the ideal solution
-> for what you're trying to do.
+> Something like:
 > 
-> Cheers,
+> struct bpf_landlock_ruleset* bpf_landlock_get_ruleset_from_fd(struct
+> task_struct* task, int fd)
 
-Changing interface is practically not possible - this comes from the bpf 
-syscall.
-Linked list solution: we probably can't afford it performance-wise, it's 
-not worth it to pay for the linked list maintenance in insert/delete 
-operations, to make traversals work well.
+That looks like a hack that would not handle FD's (object) lifetime
+(e.g. what happen when the task is gone?).
+
+Why not using proper typing with a dedicated map?
+
+> 
+> And tagging it with KF_ACQUIRE + KF_RET_NULL.
+> 
+> Then keep the existing kfunc for putting the ruleset and enforcing it on
+> a struct linux_binprm.
+> 
+> The BPF program would need to get a reference to a task struct
+> of the program creating the rulesets with bpf_task_from_pid for
+> instance. Then they could use the task_struct with another plain integer
+> map to store FD numbers and then use the rulesets or store them in a map
+> of __kptr objects for later usage.
+> 
+> Would this be more acceptable?
+> > > Basically the pattern I need is userspace must create the file
+> > > descriptor, BPF converts that FD into a refcounted kernel object, and
+> > > even if userspace closes the FD BPF needs to hold a reference on the
+> > > underlying ruleset structure.
+> > >
+> > > (In this patch this was accomplished through the map_ops)
+> > >
+> > > Let me know what you think Song. I do understand the benefit of having a
+> > > __kptr instead, the refcounting is all there, and it would allow storing
+> > > rulesets in multiple map types. (and one less map type to maintain).
+> > 
+> > A new type of map for each FD referenced kernel type is non-starter.
+> > It is impossible to add UAPI for a specific use case.
+
+This new map type is only about one file descriptor type, similarly to
+socket FDs.  From a UAPI point of view, it looks clean and safe,
+especially to deal with underlying object lifetime (e.g. reference
+tracking).
+
+> >
+> You've convinced me. I could see a lot of problems if everyone wanting
+> to add their specialized maps, it would be difficult to maintain.
+
+Is there another way to properly handle kernel object lifetime (not tied
+to the caller) and pass them as file descriptor?
+
+> 
+> It's probably best to keep the specialized map types to core kernel
+> interfaces only that are unlikely to change.
+
+File descriptors are a stable interface.
+
+> 
+> > Thanks,
+> > Song
+> > 
+> > > Mickaël, do you have any thoughts on this? I have v2 basically ready,
+> > > although it uses the BPF_MAP_TYPE_LANDLOCK_RULESET it changes a lot on
+> > > the Landlock side.
+> 
