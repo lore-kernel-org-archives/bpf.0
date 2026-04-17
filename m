@@ -1,152 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344602BEFED;
-	Fri, 17 Apr 2026 20:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A3F2FF17A;
+	Fri, 17 Apr 2026 20:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776457358; cv=none; b=SHlF3Np0OU4tnkGBb476PSA7QY7g1u3NZ6QVOTf+NXhcoKY0O51jlSnYPGL4P+859zahFOdZdw54tUzcKG2JJSsiNtH5y9xixQxtHZRF5mx5qAUJ6z3uFueNS6nWiAOjmTy892V68dfi965Do6eRnKjWfa7C5R99ZpEc3vi+kSw=
+	t=1776457360; cv=none; b=TFkgKw5O5owCmXdYphLLcFG5ytnq2tBmIYGvcD7r9/PBfouIZk/T/C0Shb/ZZHzKUgK37YQ7I9+tqd0lcRXU5Rv0RqczQgY38kf4fW91PpD209oie/s0WUl22QpbhhOpsE2QXjGhFtI0qxC5Rj98ppAqWCOo0z1nSzXrxASOA8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776457358; c=relaxed/simple;
-	bh=IL6zTx+HOobx7dJe/hhBiNKwnu2bkwQuObg1FlHnvoc=;
+	s=arc-20240116; t=1776457360; c=relaxed/simple;
+	bh=oaMhTEP23X7wZ6hsj+T7Q5XqDKrT6ktZZiGB8nhsMd8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Y+QvjDp0J6VW9XU7zvdz6WaylKCpO9TBMOr20zgX5hK+VPFlS3DIuHE748FHfYsIHakCBiibDDn0smiR885mRv4K5oW5LNg9/Dk4qF4oLTCr0aUJKONiZQtE/f6dzHzUi74Yl2lpQT90v0LEKdWrvTEQOgaWSnJZQRcxtTry65E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FOdUoqOo; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=alaWTAycCOiLB+t9cTmVmJZYiI/No8vfgHD8uLPFAaVzlhrRr1jeq8VsdjXbJEtM1XAtSR59HrSzkIYUKEAs452K50kWkIuHNwBU2E7TVNIxJ/tASJmO7CwtceDqZa2m3F9bflTMt6rF3Wy7/7e/DyvVXjON2ttaMK+cTY/AIeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RU8zRq/7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FOdUoqOo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8BDC2BCB3;
-	Fri, 17 Apr 2026 20:22:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RU8zRq/7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75266C19425;
+	Fri, 17 Apr 2026 20:22:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776457357;
-	bh=IL6zTx+HOobx7dJe/hhBiNKwnu2bkwQuObg1FlHnvoc=;
+	s=k20201202; t=1776457359;
+	bh=oaMhTEP23X7wZ6hsj+T7Q5XqDKrT6ktZZiGB8nhsMd8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=FOdUoqOoYO2gcvfPqxAOni6LX492xkdH6H6alTWxbewqNh4vVQ4dyO6eTDhEL401b
-	 eaXejmY7Dmuhd3UUu0JARcxJHMc9w/xM+M512qCRXChczdYOcdddodCNY24YPuiTxc
-	 QjeLVEpuOFc6J5RwCeBWkpgD7B83AVECOwEnP6jTluMzLyKG22UA3mhQ/RHowzjJ5i
-	 AFxOA3kqyin1CZwUx22Ei07NrnKk32Xuq6jz6QTbLPK8l/Iw7UYpl/Op7vjhG2vI5w
-	 Ao12+plWGJgy2OfmexcT+HzKc8q1EMvayeRCJORZoFQqQG6g9oSbF53wAOkjh4sstX
-	 c3+Ucl8xp7azg==
-Content-Type: multipart/mixed; boundary="===============3321761069462388994=="
+	b=RU8zRq/7BNRA/7Pet2D3xQ3/c0+fAiJh0EC7k+LDGHUXpRcGb5LKm6DeL5l/XbY9m
+	 EzIXqeAkwQcmeoGySAJJa0/OGEDpxu4x4vmKUBNHaVPRcJs8wc9VLroPUnkMLRQXgS
+	 1QprW7bmGs5wOnW02yhaq0XZQRGzICG5/YwIz2xDmvU0kViyMk7My3zs1jEwTOftaJ
+	 YQL+5LEY8eo7ViBCImEQbW1iOyT5BdOX+1jkISpsan1RYpVkmdMxArZ0qr2lOZVmPs
+	 6BGE9aAtMN6aZAJVJ8d0wlPiqap8nGMSGItTARAo58aq3Iuh3WsFN3PyM6q2dRZtUh
+	 XpzwsRYsVEY8Q==
+Content-Type: multipart/mixed; boundary="===============5287328911341442696=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <271b995e13e83f4063fef240bbf4e1450c0706b9dfb5ed985aaa18c6196ea4c5@mail.kernel.org>
-In-Reply-To: <20260417192502.194548-9-jolsa@kernel.org>
-References: <20260417192502.194548-9-jolsa@kernel.org>
-Subject: Re: [PATCHv5 bpf-next 08/28] bpf: Add struct bpf_tramp_node object
+Message-Id: <1ef3a598cb11de0fac8dfe1ac94287d3588ca36257f27b0a2407e85f5037667a@mail.kernel.org>
+In-Reply-To: <20260417192502.194548-11-jolsa@kernel.org>
+References: <20260417192502.194548-11-jolsa@kernel.org>
+Subject: Re: [PATCHv5 bpf-next 10/28] bpf: Add multi tracing attach types
 From: bot+bpf-ci@kernel.org
 To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: hengqi.chen@gmail.com,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 17 Apr 2026 20:22:37 +0000 (UTC)
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 17 Apr 2026 20:22:39 +0000 (UTC)
 
---===============3321761069462388994==
+--===============5287328911341442696==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 50103b3794fb..b97d9f68fc40 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 552bc5d9afbd..5f814e7101cf 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1154,6 +1154,8 @@ enum bpf_attach_type {
+>  	BPF_TRACE_KPROBE_SESSION,
+>  	BPF_TRACE_UPROBE_SESSION,
+>  	BPF_TRACE_FSESSION,
+> +	BPF_TRACE_FENTRY_MULTI,
+> +	BPF_TRACE_FEXIT_MULTI,
+>  	__MAX_BPF_ATTACH_TYPE
+>  };
 
-[ ... ]
+In the RFC version posted on February 4, 2026, Leon Hwang asked whether
+BPF_TRACE_FSESSION_MULTI should be added alongside BPF_TRACE_FENTRY_MULTI
+and BPF_TRACE_FEXIT_MULTI for consistency, since BPF_TRACE_FSESSION exists
+and is handled similarly to FENTRY/FEXIT.
 
-> @@ -827,14 +827,14 @@ static void bpf_trampoline_restore_args_stack(u32 *image, struct codegen_context
->  static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_image,
->  					 void *rw_image_end, void *ro_image,
->  					 const struct btf_func_model *m, u32 flags,
-> -					 struct bpf_tramp_links *tlinks,
-> +					 struct bpf_tramp_nodes *tnodes,
->  					 void *func_addr)
->  {
->  	int regs_off, func_meta_off, ip_off, run_ctx_off, retval_off;
->  	int nvr_off, alt_lr_off, r4_off = 0;
-> -	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-> -	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-> -	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-> +	struct bpf_tramp_nodes *fmod_ret = &tnodes[BPF_TRAMP_MODIFY_RETURN];
-> +	struct bpf_tramp_nodes *fentry = &tnodes[BPF_TRAMP_FENTRY];
-> +	struct bpf_tramp_nodes *fexit = &tnodes[BPF_TRAMP_FEXIT];
->  	int i, ret, nr_regs, retaddr_off, bpf_frame_size = 0;
->  	struct codegen_context codegen_ctx, *ctx;
->  	int cookie_off, cookie_cnt, cookie_ctx_off;
-> -	int fsession_cnt = bpf_fsession_cnt(tlinks);
-> +	int fsession_cnt = bpf_fsession_cnt(tnodes);
->  	u64 func_meta;
+Reference:
+https://lore.kernel.org/bpf/3015991d-2e9b-4bf4-9c17-26e00b5d5926@linux.dev/
 
-[ ... ]
+You acknowledged this with "good catch, will add it" in the same thread:
+https://lore.kernel.org/bpf/aYM-jeV50WaVik1b@krava/
 
-> @@ -906,7 +906,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
->  	}
->
->  	cookie_off = bpf_frame_size;
-> -	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
-> +	cookie_cnt = bpf_fsession_cookie_cnt(tnodes);
->  	bpf_frame_size += cookie_cnt * 8;
-                                             ^^^^^^
-
-Does this code compile? The refactoring renamed the parameter from 'tlinks'
-to 'tnodes', but this call to bpf_fsession_cookie_cnt still passes 'tlinks',
-which is no longer in scope. Should this be bpf_fsession_cookie_cnt(tnodes)?
-
->
->  	retval_off = bpf_frame_size;
-
-[ ... ]
-
-> @@ -1050,21 +1050,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
->
->  	cookie_ctx_off = (regs_off - cookie_off) / 8;
->
-> -	for (i = 0; i < fentry->nr_links; i++) {
-> -		if (bpf_prog_calls_session_cookie(fentry->links[i])) {
-> +	for (i = 0; i < fentry->nr_nodes; i++)
-> +		if (bpf_prog_calls_session_cookie(fentry->nodes[i])) {
->  			u64 meta = func_meta | (cookie_ctx_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
->
->  			store_func_meta(image, ctx, meta, func_meta_off);
->  			cookie_ctx_off--;
->  		}
->
-> -		if (invoke_bpf_prog(image, ro_image, ctx, fentry->links[i], regs_off, retval_off,
-> +		if (invoke_bpf_prog(image, ro_image, ctx, fentry->nodes[i], regs_off, retval_off,
->  				    run_ctx_off, flags & BPF_TRAMP_F_RET_FENTRY_RET))
->  			return -EINVAL;
->  	}
-
-Did the for-loop's opening brace get dropped by mistake? The loop header
-changed from:
-
-    for (i = 0; i < fentry->nr_links; i++) {
-
-to:
-
-    for (i = 0; i < fentry->nr_nodes; i++)
-
-The closing brace at line 1064 is still there, but now there's no matching
-opening brace. This creates two problems:
-
-1) The braces are unmatched, which should cause a compilation error.
-
-2) If the compiler somehow accepts this structure, the loop body would
-consist only of the first if-statement (the cookie handling), and the
-invoke_bpf_prog() call at line 1061 would execute AFTER the loop completes.
-At that point, i == fentry->nr_nodes, so fentry->nodes[i] would be an
-out-of-bounds access.
-
-The parallel fexit loop later in the file was correctly updated with both
-braces preserved.
-
->
-> -	if (fmod_ret->nr_links) {
-> -		branches = kcalloc(fmod_ret->nr_links, sizeof(u32), GFP_KERNEL);
-> +	if (fmod_ret->nr_nodes) {
-> +		branches = kcalloc(fmod_ret->nr_nodes, sizeof(u32), GFP_KERNEL);
-
-[ ... ]
+However, BPF_TRACE_FSESSION_MULTI was not added in any subsequent version
+through v5. Should BPF_TRACE_FSESSION_MULTI be included here for API
+consistency?
 
 
 ---
@@ -154,4 +81,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24583317711
---===============3321761069462388994==--
+--===============5287328911341442696==--
