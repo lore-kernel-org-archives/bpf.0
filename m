@@ -1,138 +1,147 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754A226158C
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 02:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4833B2857EE
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 03:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776393871; cv=none; b=DYh8pRJ4mm0+0596k54ffosVlsla1zlF1lrD1vRoHIrQ/+IJ23IqzNz4My5oTdUaAftthlqNs2ollAEwtcYefTtc9ql45VrRE61eZUmQf1mm8K3yMJ/Hqw+8IcAdA2rhz1KM7WeonIHft2UcEWf230bzb9rOwfG3bCYng/J0YVk=
+	t=1776395315; cv=none; b=QNa1ivdIRd//BeQ9H1W7l3oXToNonD8ohxGTC0WNWyOCrMzUATsy9YWwxo6H2hpk4K+5b8mrhVl1IfRFIMn7ApSvdDDFR0XDEZ75NaHZPEy6YHpmwYGw0qoNlUxitFL5NroP5btjNjQIW/RRoJ3n2cUKIjgXfe7KRtKwwu/LFrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776393871; c=relaxed/simple;
-	bh=jzABcSaSqpM9aDL5CV4XBeoe9jOOv4UbXdZhfHL2GsU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eP+rk/aB3EfI1iA2Me7yMaC6xphxRkZtInPeyQrmLIkcrdOOLhYlYd4HTL3yvkhii+nDYUL0Tl2F2tvAm7lvtSVgftnSiLReBf1qrezrbTi2Plr9Nw/Gu/asEt5uLpcOLqRKWB78mh0wlL8Z3zX/z5qq4JetsT2ghlvuoDSnV1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FxJPuUx2; arc=none smtp.client-ip=95.215.58.170
+	s=arc-20240116; t=1776395315; c=relaxed/simple;
+	bh=qPlTbEZw35AsBE/G7ZHRttLjCnYveS+K3cvQbHTG8xk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XBuEnKvoTCEDMlxumEwrdrxi3VII+D9LKP+sUZa9Z91UEry9EOtk23BZneJD6hMjTPe2TdWQRlkua27XHhFh8pxyG7/+Eedcxg1R+cRCGed333QqBDXofhhJO04gXKQNMLZTknzsWmIL89FMESxXfgCa/gvM2Z1ASooST8l0loc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FJimC2q6; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FxJPuUx2"
-Message-ID: <ce2019d0-c127-4c0a-8d2a-f373a68d1bd2@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FJimC2q6"
+Message-ID: <d3560ae4d662400e64b1cc72b84e3836b7bc371a.camel@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776393857;
+	t=1776395302;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GhyqLmxrfpiB9Kg4xW6jUc4n1FOcmNDlAeTxwpau2IY=;
-	b=FxJPuUx2aMLHRTnvt7uIlBLwZx1dW2wbeQSbTSxz+aicICgaowi+CYcFNEqX+KX0dIGxE/
-	IC/sm8Ai5sN/JL9Bw6NXB9l8+SSwUfYZ8JrXeS2xwXWMG4A9dHoyIKE1DljqwwjD8PQo1V
-	f6/dXP96dK2wK9D3G3srrFGs+/6BpYU=
-Date: Fri, 17 Apr 2026 10:43:53 +0800
+	bh=7RBHgDM72E4FFRUPPk/y4OrCekuqa2O/ftWhf5CuOtM=;
+	b=FJimC2q6T7NSgxyJH739fNQrfVEGxPCogVc/rCWcdC3Z5b7MkYez+QRdKhbMXJTr3pPEhk
+	VGy9xapTeyEHv3OKImdvFDakF8dLrX2x5yxYlCOTMlOBhud8DUA9fuwcVZh1PvhzmBJxc1
+	+mAso4Ufu3IYv8aB0QJeeQWU8Ezqs98=
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr
+ opt callbacks
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
+ ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ davem@davemloft.net,  edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org,  shuah@kernel.org,
+ jiayuan.chen@linux.dev, bpf@vger.kernel.org,  netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
+Date: Fri, 17 Apr 2026 11:07:50 +0800
+In-Reply-To: <2026416184330.-HAW.martin.lau@linux.dev>
+References: <20260416112308.1820332-1-kafai.wan@linux.dev>
+	 <20260416112308.1820332-3-kafai.wan@linux.dev>
+	 <2026416184330.-HAW.martin.lau@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2 1/2] bpf: Reject TCP_NODELAY in TCP header option
- callbacks
-To: KaFai Wan <kafai.wan@linux.dev>, martin.lau@linux.dev,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- jiayuan.chen@linux.dev, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu
- <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>
-References: <20260416112308.1820332-1-kafai.wan@linux.dev>
- <20260416112308.1820332-2-kafai.wan@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260416112308.1820332-2-kafai.wan@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
+On Thu, 2026-04-16 at 12:06 -0700, Martin KaFai Lau wrote:
+> On Thu, Apr 16, 2026 at 07:23:08PM +0800, KaFai Wan wrote:
+> > index 56685fc03c7e..2d738c0c4259 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> > @@ -513,6 +513,59 @@ static void misc(void)
+> > =C2=A0	bpf_link__destroy(link);
+> > =C2=A0}
+> > =C2=A0
+> > +static void hdr_sockopt(void)
+> > +{
+> > +	const char send_msg[] =3D "MISC!!!";
+> > +	char recv_msg[sizeof(send_msg)];
+> > +	const unsigned int nr_data =3D 2;
+> > +	struct bpf_link *link;
+> > +	struct sk_fds sk_fds;
+> > +	int i, ret, true_val =3D 1;
+> > +
+> > +	lport_linum_map_fd =3D bpf_map__fd(misc_skel->maps.lport_linum_map);
+> > +
+> > +	link =3D bpf_program__attach_cgroup(misc_skel->progs.misc_hdr_sockopt=
+, cg_fd);
+> > +	if (!ASSERT_OK_PTR(link, "attach_cgroup(misc_hdr_sockopt)"))
+> > +		return;
+> > +
+> > +	if (sk_fds_connect(&sk_fds, false)) {
+> > +		bpf_link__destroy(link);
+> > +		return;
+> > +	}
+> > +
+> > +	ret =3D setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val,=
+ sizeof(true_val));
+> > +	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY) active"))
+> > +		goto check_linum;
+> > +
+> > +	ret =3D setsockopt(sk_fds.passive_fd, SOL_TCP, TCP_NODELAY, &true_val=
+, sizeof(true_val));
+>=20
+> Why are these two setsockopt(TCP_NODELAY) calls needed?
+>=20
+> Instead of creating a new "void hdr_sockopt(void)", can the test be done =
+in the
+> existing "void misc(void)" by doing bpf_setsockopt(TCP_NODELAY) in the
+> misc_estab() bpf prog?
 
-On 4/16/26 7:23 PM, KaFai Wan wrote:
-> A BPF_SOCK_OPS program can enable
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
-> bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB or
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
->
-> In these callbacks, bpf_setsockopt(TCP_NODELAY) can reach
-> __tcp_sock_set_nodelay(), which can call tcp_push_pending_frames().
->
->  From BPF_SOCK_OPS_HDR_OPT_LEN_CB, tcp_push_pending_frames() can call
-> tcp_current_mss(), which calls tcp_established_options() and re-enters
-> bpf_skops_hdr_opt_len().
->
-> BPF_SOCK_OPS_HDR_OPT_LEN_CB
->    -> bpf_setsockopt(TCP_NODELAY)
->      -> tcp_push_pending_frames()
->        -> tcp_current_mss()
->          -> tcp_established_options()
->            -> bpf_skops_hdr_opt_len()
->              -> BPF_SOCK_OPS_HDR_OPT_LEN_CB
->
->  From BPF_SOCK_OPS_WRITE_HDR_OPT_CB, tcp_push_pending_frames() can call
-> tcp_write_xmit(), which calls tcp_transmit_skb().  That path recomputes
-> header option length through tcp_established_options() and
-> bpf_skops_hdr_opt_len() before re-entering bpf_skops_write_hdr_opt().
->
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
->    -> bpf_setsockopt(TCP_NODELAY)
->      -> tcp_push_pending_frames()
->        -> tcp_write_xmit()
->          -> tcp_transmit_skb()
->            -> tcp_established_options()
->              -> bpf_skops_hdr_opt_len()
->            -> bpf_skops_write_hdr_opt()
->              -> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
->
-> This leads to unbounded recursion and can overflow the kernel stack.
->
-> Reject TCP_NODELAY with -EOPNOTSUPP in bpf_sock_ops_setsockopt()
-> when bpf_setsockopt() is called from
-> BPF_SOCK_OPS_HDR_OPT_LEN_CB or BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
->
-> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn/
-> Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
-> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> ---
->   net/core/filter.c | 5 +++++
->   1 file changed, 5 insertions(+)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index fcfcb72663ca..911ff04bca5a 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -5833,6 +5833,11 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
->   	if (!is_locked_tcp_sock_ops(bpf_sock))
->   		return -EOPNOTSUPP;
->   
-> +	if ((bpf_sock->op == BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
-> +	     bpf_sock->op == BPF_SOCK_OPS_WRITE_HDR_OPT_CB) &&
-> +	    IS_ENABLED(CONFIG_INET) && level == SOL_TCP && optname == TCP_NODELAY)
-> +		return -EOPNOTSUPP;
-> +
->   	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen);
->   }
->   
+Oh, I see.=C2=A0I meant to test on both active and passive side. We can onl=
+y test on active side in the
+existing "void misc(void)".
+>=20
+> The PASSIVE_ESTABLISHED_CB can do the bpf_setsockopt(TCP_NODELAY, 0)
+> if it wants to keep the same expectation on Nagle. The
+> BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB
+> can do bpf_setsockopt(TCP_NODELAY, 1) to test recursion and
+> the error return value.
+>=20
+> > =C2=A0void test_tcp_hdr_options(void)
+> > diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_option=
+s.c
+> > b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> > index d487153a839d..a8cf7c4e7ed2 100644
+> > --- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> > +++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> > @@ -28,6 +28,12 @@ unsigned int nr_data =3D 0;
+> > =C2=A0unsigned int nr_syn =3D 0;
+> > =C2=A0unsigned int nr_fin =3D 0;
+> > =C2=A0unsigned int nr_hwtstamp =3D 0;
+> > +unsigned int nr_hdr_sockopt_estab =3D 0;
+> > +unsigned int nr_hdr_sockopt_estab_err =3D 0;
+> > +unsigned int nr_hdr_sockopt_len =3D 0;
+> > +unsigned int nr_hdr_sockopt_len_err =3D 0;
+> > +unsigned int nr_hdr_sockopt_write =3D 0;
+> > +unsigned int nr_hdr_sockopt_write_err =3D 0;
+>=20
+> nr_hdr_sockopt_estab, nr_hdr_sockopt_len, and nr_hdr_sockopt_write
+> are unnecessary. These tests have already been covered in some ways.
 
-A simple comment is recommended:
+yes, they are unnecessary in existing misc_estab()
+>=20
+> Mostly a nit. The new counters are used in both connections. Note the
+> existing nr_xxx is exclusively used in either active or passive,
+> so there is no parallel counting in practice.
+>=20
+> Instead of counting, just use a bool nodelay_est_ok,
+> nodelay_hdr_len_err, nodelay_write_err and assert them
+> to be true in userspace.
 
-/* TCP_NODELAY triggers tcp_push_pending_frames() and re-enters these 
-callbacks. */
+indeed. will fix these in next version.
 
-
-Also like Martin pointed before, BPF_SOCK_OPS_HDR_OPT_LEN_CB / 
-BPF_SOCK_OPS_WRITE_HDR_OPT_CB
-
-can only be produced under CONFIG_INET so IS_ENABLED(CONFIG_INET) is dead.
-
+--=20
+Thanks,
+KaFai
