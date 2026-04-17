@@ -1,141 +1,118 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [84.16.66.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44563A16B4
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD423603E7
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776448151; cv=none; b=WuEB82z00OTn3Hlqh7qLuaDr7kO054oeNA5xCJrFqj8x0apcdHIDQZbqhIznPR9jjbplHuOvR3q11mU6Hdwao0Aa1YqBXjECAPqW9wkXycUz73r4F7NZXjzpqBlQrG0pXtdJiHOFkQOJU7s9Whal77gyzMKmqd0ZL/omEYPx4Rk=
+	t=1776448933; cv=none; b=fNS88RFpX9q+ZpDV8+cAQL+jG/9gIkyorfETa9Jcjqa+PAGW50vkzUuYFzi0BG27iEvE8O5ZmF3rK8g89iXxXApxd1Y1xI2UFSK5JGR3vu7V2pci1bTo3Ir89kFeHPfOC0eOAOx680qPhE/LJZoN+JV35IC4d3g7dbmniIm10Gk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776448151; c=relaxed/simple;
-	bh=o3SkpCZp2IYyOv/Ch4F0MD/wO+LSvMUhY5h0puJbO2A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kjYIhXxSClotH4Y3mGr5TPVgseO/nrxZe3VqIhX98S1L7PpYFF5Q+LTGgUt2xqCdE6WLL7Uycs+n9N4f6SguZ7McP7c/f1Oc/88cvVG8mhTwctPs9DVhCKALGVkTg+dF2VQk82yedCrt58ABP8XBQbb0S3Mo0GciheeZVxDmdac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sp3pjX96; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776448933; c=relaxed/simple;
+	bh=rSePFDHMeZxfVHKVi3pScGW0ErFh34Ga+BiLPTwp4/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dg4VeP2JaD0xkf2LL+cFz6FfS5dIR2+bKuT6NoTi4BoXrFB6tQFOrROyvkgHcvEgPixVB/hO80KZX9JTQJMS9JvAUFYthmN/EPl59VxRk7F+5akjFG4Ah7z3SrfnXC6t/ZLCejkHKy4qH59NZN0TLTe4ckZwfMnpiPuFr561lo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=X0FJahOp; arc=none smtp.client-ip=84.16.66.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sp3pjX96"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82f2766905fso446334b3a.3
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 10:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776448142; x=1777052942; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8TA/MNIel6VK9u9WqtfYVsZvbCaFEmcRqjySnlQxqgQ=;
-        b=Sp3pjX96rVIKSALyS/3AcOQ27rwFIXdvvusMYuHAHpa2llMWx69A884nFHLFfeqEea
-         t87U+8aGAMGxRKmjTmSOn0kM5YUC91SI1GJb0Wk+GyVyAXOHbCStMeWhhdp/dWxMvLru
-         gkk+aHuu5eYVBqw+N7H7sUi0PdiMoJI2OIaeUxql6/fKEnnvLxBuGXsYwdIqCRKOwYnX
-         XLor+QVqhkrFt3MlXhcgbNlwEWArlDzrIyZ638dg7uBAkBLrhCawUlXXX4fmeNwLXtY2
-         IPbZu0fY6Vcs5Z/MFXTTPTNXIplLgOGfhiy8C65mlXeGPQT9mgdhZhhpEIPGBnj/njzs
-         Gxlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776448142; x=1777052942;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8TA/MNIel6VK9u9WqtfYVsZvbCaFEmcRqjySnlQxqgQ=;
-        b=ErvFtG19BbhQceUdYvrKvecWKG8J7IjNAMzOc2VQ5viDQpaY2GwyYg+il58GauqXmr
-         1AAjZl0t1togK2XsALSlonKYuYTtGZ7OVA475U65s8uZPlQh6QVfuRQWThiqboba6bjR
-         TnPlCf6PFWd8Q+CWMKdXTzyE+j7A4fR75u/3qXWxqDi3Sa9YsJjUt468CsZGXZMmY1ya
-         u4BDnkDkTUATrKOR0VFKgKw9NqQwP5XxfA6K+PQR4FAgIZDD6O+/AzMz3rdNJ7bz+Sfw
-         yc4VS27YocTVx5ITJStRiz+qWxnYLwCb2mKfZj/9Gmo/MdGPnycz4Tmle03PM3BFlxMf
-         OwyQ==
-X-Gm-Message-State: AOJu0YyvmbRlKoQRw+3ExnC3TS0yQAb/Zpl8n5rgu5dN4nphMuVT+xIG
-	eywWh97rWKa8yXtV9pRK3mV0Cyzc/XnxnATFdalmJ0+Hq2sGDk/CbNcg02wCtA==
-X-Gm-Gg: AeBDieugotnBR1JVb4CuD7ZqR88e497nRKXxE6z+lv/hvFTYgSB9HwSzE9CmZ90UESm
-	5NAIHWp/kOAlBhpnsfdsCQXHYGrH1ch2TafVRPelPO1HFq8aMaquBL58MYcEdLyyLWY2tpg4fie
-	LKhqkYQMSCsUoSeeucYU/Ew4GtwIhl3rP7u3eVoHYdFxwTNgpJGF0ToIrrAuewWf2giVDT3X/fc
-	V0sm/az2gw7Hh9BxlHIxT4HBaeiPa7v9eOcKj7jkHdijSIRQuwnDwUIQGzRHN1srSDQmxUAluxT
-	MMyeOCQ9QBfOFsmfIGq/db0aT5Yn1xxlaSxR/rqpSH9xf8slHJEXLSBdwaBOYNNxB/Fy8oQ1Yl4
-	4JVN8ls75FMvgA4k+/Ri8xbK9/by1t+BOS7KoPTKOqYH3UrAPkw+v2qbRWtS3+PgcQIqedEvRqN
-	BqkhUfh542pMOb6Vvms+EvLosS
-X-Received: by 2002:a05:6a00:a15:b0:829:8942:2ca4 with SMTP id d2e1a72fcca58-82f8c838f04mr4206842b3a.19.1776448141736;
-        Fri, 17 Apr 2026 10:49:01 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:44::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec06cbfsm3229727b3a.58.2026.04.17.10.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 10:49:01 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@kernel.org,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf v1 1/1] bpf: Dissociate struct_ops program with map if map_update fails
-Date: Fri, 17 Apr 2026 10:49:00 -0700
-Message-ID: <20260417174900.2895486-1-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="X0FJahOp"
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4fy2lF14Z0z4Gb;
+	Fri, 17 Apr 2026 20:02:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1776448920;
+	bh=Lz+16VLXjCg00b0MHkrfi/NqmCMJJKDK6YyvO3rUux0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X0FJahOpUZ2cviXAj22eZH7cwPDAuVwELvyogD6wucTuGAqr5LY5wbMxjRm9TtCOb
+	 ynoSOXUmR2hzlsm9MmPJQJK2i8aUJCF1TEnU6Pms5bIHa8zVdycJE+m3nMKuikNmQE
+	 szn4F5KmshQEvHlnlACmAvAQZib2cDRBlWZIk7a8=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4fy2lC2zKVzNrH;
+	Fri, 17 Apr 2026 20:01:59 +0200 (CEST)
+Date: Fri, 17 Apr 2026 20:01:50 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Song Liu <song@kernel.org>
+Cc: Justin Suess <utilityemal77@gmail.com>, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org, paul@paul-moore.com, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, gnoack@google.com, 
+	jack@suse.cz, jmorris@namei.org, serge@hallyn.com, yonghong.song@linux.dev, 
+	martin.lau@linux.dev, m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com, 
+	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
+Message-ID: <20260417.aeCheeru9The@digikod.net>
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
+ <20260407200157.3874806-9-utilityemal77@gmail.com>
+ <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
+ <aeFaQXkKNHFeE-oC@suesslenovo>
+ <CAPhsuW648HdcCbXWMHaJ4uirPWq2WX3Ggx3AGMU6CGzhNYUREg@mail.gmail.com>
+ <aeI_CXj6F-nI_DCL@suesslenovo>
+ <20260417.ohgoh0Eecome@digikod.net>
+ <CAPhsuW4g3Q4rK8GD=wCYi0iAGhcHcdh-ynsvC44f8rE8OuTqTg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW4g3Q4rK8GD=wCYi0iAGhcHcdh-ynsvC44f8rE8OuTqTg@mail.gmail.com>
+X-Infomaniak-Routing: alpha
 
-Currently, when bpf_struct_ops_map_update_elem() fails, the programs'
-st_ops_assoc will remain set. They may become dangling pointers if the
-map is freed later, but they will never be dereferenced since the
-struct_ops attachment did not succeed. However, if one of the programs
-is subsequently attached as part of another struct_ops map, its
-st_ops_assoc will be poisoned even though its old st_ops_assoc was stale
-from a failed attachment.
+On Fri, Apr 17, 2026 at 09:10:31AM -0700, Song Liu wrote:
+> On Fri, Apr 17, 2026 at 8:18 AM Mickaël Salaün <mic@digikod.net> wrote:
+> >
+> > On Fri, Apr 17, 2026 at 10:09:13AM -0400, Justin Suess wrote:
+> [...]
+> > > > A new type of map for each FD referenced kernel type is non-starter.
+> > > > It is impossible to add UAPI for a specific use case.
+> >
+> > This new map type is only about one file descriptor type, similarly to
+> > socket FDs.  From a UAPI point of view, it looks clean and safe,
+> > especially to deal with underlying object lifetime (e.g. reference
+> > tracking).
+> 
+> We have changed the UAPI policy. New program type, new map type
+> will not be added for a single use case.
 
-Fix the spurious poisoned st_ops_assoc by dissociating struct_ops
-programs with a map if the attachment fails. Move
-bpf_prog_assoc_struct_ops() to after *plink++ to make sure
-bpf_prog_disassoc_struct_ops() will not miss a program when iterating
-st_map->links.
+Ok, I didn't know.
 
-Note that, dissociating a program from a map requires some attention as
-it must not reset a poisoned st_ops_assoc or a st_ops_assoc pointing to
-another map. The former is already guarded in
-bpf_prog_disassoc_struct_ops(). The latter also will not happen since
-st_ops_assoc of programs in st_map->links are set by
-bpf_prog_assoc_struct_ops(), which can only be poisoned or pointing to
-the current map.
+> 
+> > > >
+> > > You've convinced me. I could see a lot of problems if everyone wanting
+> > > to add their specialized maps, it would be difficult to maintain.
+> >
+> > Is there another way to properly handle kernel object lifetime (not tied
+> > to the caller) and pass them as file descriptor?
+> 
+> bpf_kptr gives same life time promise.
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- kernel/bpf/bpf_struct_ops.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Ok, that could work if we can transform an FD to a kptr.
 
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 05b366b821c3..521cb9d7e8c7 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -811,9 +811,6 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 			goto reset_unlock;
- 		}
- 
--		/* Poison pointer on error instead of return for backward compatibility */
--		bpf_prog_assoc_struct_ops(prog, &st_map->map);
--
- 		link = kzalloc_obj(*link, GFP_USER);
- 		if (!link) {
- 			bpf_prog_put(prog);
-@@ -824,6 +821,9 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 			      &bpf_struct_ops_link_lops, prog, prog->expected_attach_type);
- 		*plink++ = &link->link;
- 
-+		/* Poison pointer on error instead of return for backward compatibility */
-+		bpf_prog_assoc_struct_ops(prog, &st_map->map);
-+
- 		ksym = kzalloc_obj(*ksym, GFP_USER);
- 		if (!ksym) {
- 			err = -ENOMEM;
-@@ -906,6 +906,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- reset_unlock:
- 	bpf_struct_ops_map_free_ksyms(st_map);
- 	bpf_struct_ops_map_free_image(st_map);
-+	bpf_struct_ops_map_dissoc_progs(st_map);
- 	bpf_struct_ops_map_put_progs(st_map);
- 	memset(uvalue, 0, map->value_size);
- 	memset(kvalue, 0, map->value_size);
--- 
-2.52.0
+> 
+> > >
+> > > It's probably best to keep the specialized map types to core kernel
+> > > interfaces only that are unlikely to change.
+> >
+> > File descriptors are a stable interface.
+> 
+> Maybe we can add a new map type that can handle file descriptor of
+> any type.
 
+Good idea, that would be much more generic indeed.  Maybe we could
+add a new file_operations function specific to BPF so that each file
+descriptor type can make their type supported by this new map type while
+making sure only tested/reviewed FD type can be added to this map?
+Something like file_operation.to_bpf_kptr(struct file *file)?
+
+> I haven't thought about all the details. Maybe we don't need
+> a new map type for this either. Instead, some new kfunc may be
+> sufficient to make bpf_kptr work.
+> 
+> OTOH, adding a new map type just for landlock rulesets is not gonna
+> happen.
+> 
+> Thanks,
+> Song
+> 
