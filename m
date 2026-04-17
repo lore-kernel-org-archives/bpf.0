@@ -1,584 +1,127 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BC5349AE0
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 03:48:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CC21EE7C6
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 04:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776397728; cv=none; b=lRyedJaPff97F2404/XN9uof0JJ4j7fM6Sz6yHGAobf20yDIOEL69gCAstMTyCwZbpQfbfl7Awhh1SNLPm5h8LQFkqIKez8rsvh0NSwPtnN+I1z6n+DKh5GBXPOATBj4PbCebNy5Ck+kio1SSOHGIQmfz0xJcBthxdyELJ2HBxo=
+	t=1776398881; cv=none; b=BkAjy/1xg8cGcFlLpTTBPFDe/jZyI42zRbYN8nVqAxzEkGsvQsaTcf15UX6GwxDu1wHFGlalchDbxvXsyq+kC3kiEcXNff5Q2Y2mK+E9Xn2ERMr/c2KLOrCKXZ5tXkIaMlkm99HMipGGj3b41uPp21Y5aAGwty14YvOpzIMemAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776397728; c=relaxed/simple;
-	bh=m2oWzX0WHrOu7/k4zHjs4v4oSNSzIXDTmFGkGA73gr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ud1oKYEz0nCcJ+BZmzgGH8Ck6rvnyWolNSWJxI4wRMu+nEnv0fM7Wn8fs96sFOx5uiZoPeEEF0A21f3FdfL2k3K9H7FYWNqHFTwoe36Ci4A4D2kVDigiDLN+gnq6Icd2FAiWdJLRKD/jZRw4+HLhoPso31/no6cGoFhq7IQUeuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 7FB73403C25A2; Thu, 16 Apr 2026 20:48:38 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v5 16/16] selftests/bpf: Add verifier tests for stack argument validation
-Date: Thu, 16 Apr 2026 20:48:38 -0700
-Message-ID: <20260417034838.2638137-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260417034658.2625353-1-yonghong.song@linux.dev>
-References: <20260417034658.2625353-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1776398881; c=relaxed/simple;
+	bh=IrDYmuGwN/+bfVNXOCy5MywtddbDKdG3kKV7d4ZYCLo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ewpuA2fzsiTDmTDDYypdyJ9UwII654e7JFHtzGJLtHg+maoFbQ2dYAR3ZWamQoqxx8USZIUoYeu777LQ063AxgqhzJv3y6vU43N6+f9n+VHaHWy1lCYt/0+NOO3OJ3mZxe4Ze1di7lnhTatdCmtJiSHVnTNIMmlFqFaOZxJlzTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAwBUVBw; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAwBUVBw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5345C19425;
+	Fri, 17 Apr 2026 04:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776398880;
+	bh=IrDYmuGwN/+bfVNXOCy5MywtddbDKdG3kKV7d4ZYCLo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=cAwBUVBwCfcxRF4WNXY9CCTbPtWnOihzZFCqwGeZVOJG1sN0vmN5PG9AKqFSIdlLq
+	 INFPP8JH2Rw5fZDOlEeAyLixHGRN+Z9/I9OoxUFfxphthj6iyTvB+7JPE/oMKmZzPV
+	 PBnhanFMKdAJGdGorUO25t+KKCmb9QDvqQ+k4xrcq3B8juPDNlu6NbVKsECQc+T1BL
+	 gOhXexSexGk1zR/JXx7SXZ5ie6teDaPAcZKaeJtu362SjFbRBydUaatWECuiruWuzv
+	 Juz+e8T/RS3t0OwzXw2lGH7c34UYybRsqA5HTIl6dc6TkkD9QpOQoL/GtZbV+kdfBo
+	 MAZVPMn9dAQfA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 10/16] bpf: Reject stack arguments if tail
+ call reachable
+Reply-To: sashiko@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260417034749.2630580-1-yonghong.song@linux.dev>
+References: <20260417034749.2630580-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 17 Apr 2026 04:08:00 +0000
+Message-Id: <20260417040800.A5345C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-Add inline-asm based verifier tests that exercise stack argument
-validation logic directly.
+Sashiko AI review found 2 potential issue(s):
+- [Critical] False negative allowing tail calls and stack arguments togethe=
+r, leading to JIT memory corruption
+- [High] State leak in verifier DFS causing false positive rejections of va=
+lid BPF programs
+--
 
-Positive tests:
-  - subprog call with 6 arg's
-  - Two sequential calls to different subprogs (6-arg and 7-arg)
-  - Share a r11 store for both branches
-  - Sequential calls reuse stack arg's
+commit df24720ae892549300f1910df635621a3875dbdf
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-Negative tests =E2=80=94 verifier rejection:
-  - Read from uninitialized incoming stack arg slot
-  - Gap in outgoing slots: only r11-16 written, r11-8 missing
-  - Sub-8-byte stack arg write (4 bytes instead of 8)
-  - Write at r11-80, exceeding max 7 stack args
-  - Missing store on one branch with a shared store
+bpf: Reject stack arguments if tail call reachable
 
-Negative tests =E2=80=94 pointer/ref tracking:
-  - Pruning type mismatch: one branch stores PTR_TO_STACK, the
-    other stores a scalar, callee dereferences =E2=80=94 must not prune
-  - Release invalidation: bpf_sk_release invalidates a socket
-    pointer stored in a stack arg slot
-  - Packet pointer invalidation: bpf_skb_pull_data invalidates
-    a packet pointer stored in a stack arg slot
-  - Null propagation: PTR_TO_MAP_VALUE_OR_NULL stored in stack
-    arg slot, null branch attempts dereference via callee
+This commit updates the verifier to reject BPF programs if they contain both
+tail calls and stack arguments. This is enforced during the maximum stack
+depth check traversal.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_stack_arg.c  | 463 ++++++++++++++++++
- 2 files changed, 465 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
-c
+> Tailcalls are been deprecated. So reject stack arguments
+> if tail call is in the way.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index a96b25ebff23..aef21cf2987b 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -91,6 +91,7 @@
- #include "verifier_sockmap_mutate.skel.h"
- #include "verifier_spill_fill.skel.h"
- #include "verifier_spin_lock.skel.h"
-+#include "verifier_stack_arg.skel.h"
- #include "verifier_stack_ptr.skel.h"
- #include "verifier_store_release.skel.h"
- #include "verifier_subprog_precision.skel.h"
-@@ -238,6 +239,7 @@ void test_verifier_sock_addr(void)            { RUN(v=
-erifier_sock_addr); }
- void test_verifier_sockmap_mutate(void)       { RUN(verifier_sockmap_mut=
-ate); }
- void test_verifier_spill_fill(void)           { RUN(verifier_spill_fill)=
-; }
- void test_verifier_spin_lock(void)            { RUN(verifier_spin_lock);=
- }
-+void test_verifier_stack_arg(void)            { RUN(verifier_stack_arg);=
- }
- void test_verifier_stack_ptr(void)            { RUN(verifier_stack_ptr);=
- }
- void test_verifier_store_release(void)        { RUN(verifier_store_relea=
-se); }
- void test_verifier_subprog_precision(void)    { RUN(verifier_subprog_pre=
-cision); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-new file mode 100644
-index 000000000000..d212b6c3cac7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -0,0 +1,463 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, long long);
-+	__type(value, long long);
-+} map_hash_8b SEC(".maps");
-+
-+#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
-+
-+__noinline __used
-+static int subprog_6args(int a, int b, int c, int d, int e, int f)
-+{
-+	return a + b + c + d + e + f;
-+}
-+
-+__noinline __used
-+static int subprog_7args(int a, int b, int c, int d, int e, int f, int g=
-)
-+{
-+	return a + b + c + d + e + f + g;
-+}
-+
-+__noinline __used
-+static int subprog_8args(int a, int b, int c, int d, int e, int f, int g=
-, int h)
-+{
-+	return a + b + c + d + e + f + g + h;
-+}
-+
-+__noinline __used
-+static long subprog_deref_arg6(long a, long b, long c, long d, long e, l=
-ong *f)
-+{
-+	return *f;
-+}
-+
-+SEC("tc")
-+__description("stack_arg: subprog with 6 args")
-+__success
-+__arch_x86_64
-+__naked void stack_arg_6args(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: two subprogs with >5 args")
-+__success
-+__arch_x86_64
-+__naked void stack_arg_two_subprogs(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"call subprog_6args;"
-+		"r6 =3D r0;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 16) =3D 30;"
-+		"*(u64 *)(r11 - 8) =3D 20;"
-+		"call subprog_7args;"
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: read from uninitialized stack arg slot")
-+__failure
-+__arch_x86_64
-+__msg("invalid read from stack arg")
-+__naked void stack_arg_read_uninitialized(void)
-+{
-+	asm volatile (
-+		"r0 =3D *(u64 *)(r11 + 8);"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: gap at offset -8, only wrote -16")
-+__failure
-+__arch_x86_64
-+__msg("stack arg#6 not properly initialized")
-+__naked void stack_arg_gap_at_minus8(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 16) =3D 30;"
-+		"call subprog_7args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: incorrect size of stack arg write")
-+__failure
-+__arch_x86_64
-+__msg("stack arg write must be 8 bytes, got 4")
-+__naked void stack_arg_not_written(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u32 *)(r11 - 8) =3D 30;"
-+		"call subprog_6args;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pruning with different stack arg types")
-+__failure
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__arch_x86_64
-+__msg("R1 invalid mem access")
-+__naked void stack_arg_pruning_type_mismatch(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r6 =3D r0;"
-+		/* local =3D 0 on program stack */
-+		"r7 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r7;"
-+		/* Branch based on random value */
-+		"if r6 s> 3 goto l0_%=3D;"
-+		/* Path 1: store stack pointer to outgoing arg6 */
-+		"r1 =3D r10;"
-+		"r1 +=3D -8;"
-+		"*(u64 *)(r11 - 8) =3D r1;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: store scalar to outgoing arg6 */
-+		"*(u64 *)(r11 - 8) =3D 42;"
-+	"l1_%=3D:"
-+		/* Call subprog that dereferences arg6 */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call subprog_deref_arg6;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: release_reference invalidates stack arg slot")
-+__failure
-+__arch_x86_64
-+__msg("R1 invalid sock access")
-+__naked void stack_arg_release_ref(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		/* struct bpf_sock_tuple tuple =3D {} */
-+		"r2 =3D 0;"
-+		"*(u32 *)(r10 - 8) =3D r2;"
-+		"*(u64 *)(r10 - 16) =3D r2;"
-+		"*(u64 *)(r10 - 24) =3D r2;"
-+		"*(u64 *)(r10 - 32) =3D r2;"
-+		"*(u64 *)(r10 - 40) =3D r2;"
-+		"*(u64 *)(r10 - 48) =3D r2;"
-+		/* sk =3D bpf_sk_lookup_tcp(ctx, &tuple, sizeof(tuple), 0, 0) */
-+		"r1 =3D r6;"
-+		"r2 =3D r10;"
-+		"r2 +=3D -48;"
-+		"r3 =3D %[sizeof_bpf_sock_tuple];"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call %[bpf_sk_lookup_tcp];"
-+		/* r0 =3D sk (PTR_TO_SOCK_OR_NULL) */
-+		"if r0 =3D=3D 0 goto l0_%=3D;"
-+		/* Store sock ref to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r0;"
-+		/* Release the reference =E2=80=94 invalidates the stack arg slot */
-+		"r1 =3D r0;"
-+		"call %[bpf_sk_release];"
-+		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_sk_lookup_tcp),
-+		  __imm(bpf_sk_release),
-+		  __imm_const(sizeof_bpf_sock_tuple, sizeof(struct bpf_sock_tuple))
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: pkt pointer in stack arg slot invalidated afte=
-r pull_data")
-+__failure
-+__arch_x86_64
-+__msg("invalid access to packet")
-+__naked void stack_arg_stale_pkt_ptr(void)
-+{
-+	asm volatile (
-+		"r6 =3D r1;"
-+		"r7 =3D *(u32 *)(r6 + %[__sk_buff_data]);"
-+		"r8 =3D *(u32 *)(r6 + %[__sk_buff_data_end]);"
-+		/* check pkt has at least 1 byte */
-+		"r0 =3D r7;"
-+		"r0 +=3D 1;"
-+		"if r0 > r8 goto l0_%=3D;"
-+		/* Store valid pkt pointer to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r7;"
-+		/* bpf_skb_pull_data invalidates all pkt pointers */
-+		"r1 =3D r6;"
-+		"r2 =3D 0;"
-+		"call %[bpf_skb_pull_data];"
-+		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_skb_pull_data),
-+		  __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
-+		  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)=
-)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: null propagation rejects deref on null branch"=
-)
-+__failure
-+__arch_x86_64
-+__msg("R1 invalid mem access")
-+__naked void stack_arg_null_propagation_fail(void)
-+{
-+	asm volatile (
-+		"r1 =3D 0;"
-+		"*(u64 *)(r10 - 8) =3D r1;"
-+		/* r0 =3D bpf_map_lookup_elem(&map_hash_8b, &key) */
-+		"r2 =3D r10;"
-+		"r2 +=3D -8;"
-+		"r1 =3D %[map_hash_8b] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		/* Store PTR_TO_MAP_VALUE_OR_NULL to outgoing arg6 slot */
-+		"*(u64 *)(r11 - 8) =3D r0;"
-+		/* null check on r0 */
-+		"if r0 !=3D 0 goto l0_%=3D;"
-+		/*
-+		 * On null branch, outgoing slot is SCALAR(0).
-+		 * Call subprog that dereferences arg6 =E2=80=94 should fail.
-+		 */
-+		"r1 =3D 0;"
-+		"r2 =3D 0;"
-+		"r3 =3D 0;"
-+		"r4 =3D 0;"
-+		"r5 =3D 0;"
-+		"call subprog_deref_arg6;"
-+	"l0_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_hash_8b)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: missing store on one branch")
-+__failure
-+__arch_x86_64
-+__msg("stack arg#6 not properly initialized")
-+__naked void stack_arg_missing_store_one_branch(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write arg7 (r11-16) before branch */
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 0 goto l0_%=3D;"
-+		/* Path 1: write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: missing arg6 store, call should fail */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+	"l1_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: share a store for both branches")
-+__success __retval(0)
-+__arch_x86_64
-+__naked void stack_arg_shared_store(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write arg7 (r11-16) before branch */
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"call %[bpf_get_prandom_u32];"
-+		"if r0 > 0 goto l0_%=3D;"
-+		/* Path 1: write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		"goto l1_%=3D;"
-+	"l0_%=3D:"
-+		/* Path 2: also write arg6 and call */
-+		"*(u64 *)(r11 - 8) =3D 30;"
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+	"l1_%=3D:"
-+		"r0 =3D 0;"
-+		"exit;"
-+		:: __imm(bpf_get_prandom_u32)
-+		: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: write beyond max outgoing depth")
-+__failure
-+__arch_x86_64
-+__msg("stack arg write offset -80 exceeds max 7 stack args")
-+__naked void stack_arg_write_beyond_max(void)
-+{
-+	asm volatile (
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		/* Write to offset -80, way beyond any callee's needs */
-+		"*(u64 *)(r11 - 80) =3D 99;"
-+		"*(u64 *)(r11 - 16) =3D 20;"
-+		"*(u64 *)(r11 - 8) =3D 10;"
-+		"call subprog_7args;"
-+		"r0 =3D 0;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+SEC("tc")
-+__description("stack_arg: sequential calls reuse slots")
-+__success __retval(56)
-+__arch_x86_64
-+__naked void stack_arg_sequential_calls(void)
-+{
-+	asm volatile (
-+		/* call1: subprog_7args(1,2,3,4,5,6,7) =3D 28 */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"*(u64 *)(r11 - 8) =3D 6;"
-+		"*(u64 *)(r11 - 16) =3D 7;"
-+		"call subprog_7args;"
-+		"r6 =3D r0;"
-+		/* call2: reuse stack arg slots from call1,
-+		 * subprog_7args(1,2,3,4,5,6,7) =3D 28
-+		 */
-+		"r1 =3D 1;"
-+		"r2 =3D 2;"
-+		"r3 =3D 3;"
-+		"r4 =3D 4;"
-+		"r5 =3D 5;"
-+		"call subprog_7args;"
-+		/* total: 28 + 28 =3D 56 */
-+		"r0 +=3D r6;"
-+		"exit;"
-+		::: __clobber_all
-+	);
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("stack_arg is not supported by compiler or jit, use a dumm=
-y test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") =3D "GPL";
+This isn't a bug, but there is a grammatical error here. "are been" should
+likely be "have been".
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7a65b532e84a8..739c3127520c3 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5662,6 +5662,11 @@ static int check_max_stack_depth_subprog(struct bp=
+f_verifier_env *env, int idx,
+>  				verbose(env, "cannot tail call within exception cb\n");
+>  				return -EINVAL;
+>  			}
+> +			if (subprog[tmp].incoming_stack_arg_depth ||
+> +			    subprog[tmp].outgoing_stack_arg_depth) {
+> +				verbose(env, "tail_calls are not allowed in programs with stack args=
+\n");
+> +				return -EINVAL;
+> +			}
+
+Looking at the earlier parts of check_max_stack_depth_subprog(), the local
+variable tail_call_reachable only appears to be set to true when jumping
+into a callee that has a tail call:
+
+    if (subprog[idx].has_tail_call)
+        tail_call_reachable =3D true;
+
+If the main program (subprog[0]) natively contains a tail call,
+tail_call_reachable would remain false, causing this entire check block to
+be skipped.
+
+Does this logic successfully catch the case where the main program itself
+contains a tail call and also uses stack arguments?
+
+If this escapes the verifier, the JIT might emit prologue tail call
+instructions (pushing 24 bytes on x86) while calculating stack argument
+offsets assuming no tail call pushes, overwriting the BPF program stack.
+
+Could this regression lead to memory corruption in the JIT?
+
+When the traversal pops a frame to return to the caller and jumps back to
+continue_func, the tail_call_reachable variable is not reset to false:
+
+    /* pop caller idx from callee */
+    idx =3D dinfo[idx].caller;
+    ...
+    goto continue_func;
+
+If the verifier traverses a subprogram with a tail call, returns, and then
+traverses a completely unrelated sibling subprogram that uses stack
+arguments, it seems it would incorrectly evaluate tail_call_reachable as
+true and reject the valid sibling.
+
+Is there a state leak in this DFS traversal that could cause false positive
+rejections of valid BPF programs?
+
+>  			subprog[tmp].tail_call_reachable =3D true;
+>  		}
+>  	if (subprog[0].tail_call_reachable)
+
 --=20
-2.52.0
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417034658.2625=
+353-1-yonghong.song@linux.dev?part=3D10
