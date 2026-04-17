@@ -1,141 +1,198 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239BE394499
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 19:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ACA43C9ED6
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 19:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776453381; cv=none; b=LLbHXqJdPn7IRSr4SSAbZuH9cN3ylD8Jk8bxI6vUIwEeVrnN96iI4JQdwA1/I22J2ZMzdgyCTcAFB9+xiMn9mWxbgjFJu27GEUe7HvZA2FtSSuh2wFb5y5JAVZjrPb8iCEk0CZJavrO0IDlHvAYGp8BiaJ6snF1vMWcyCulypiI=
+	t=1776453476; cv=none; b=Real27/WJG34La1IxACnDPvH9P3vUDWygJ/U5MG+01TJjujYpNIm1M6Kh4qCWWP/85+ty9IefFo+ZaW76eb7SNbGxL9wAbLu9B5Zn1is0PG1xP5oDWaRg+EVDinUzkgirFAke+FLIf9A3hqurBKpgIJV+gbi3HMX1jxxhJ+nBe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776453381; c=relaxed/simple;
-	bh=6lNwomoMH95ZwDKuPcGI9KhFdJlDZzsZgMK39xKu/Gg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=KSxglxOuRgmGqz1SoAOXeYDaKO0Rh6RF3VYyHrTc6afn/R51mJCsP9LcxLEltCHSBJ4nNHSxBeSxbgqaF3NBtlH0Ur9ARM5OTFbmX9BVIxghgbDVHXFNObtypzp1X+Tm/4V4+oPWwX4R+CLmE3mrRWIEBlehb3ngmOmZbyOMPaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ePf7wp46; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776453476; c=relaxed/simple;
+	bh=de+cgeiRloRqiMe4wUivFxwt1KqtqUuvg8OBq9NZKi0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZUt2Cljj4z3WMGycqZ3GbdgF7dnxVaS4MoLk30a0IqjMZszvqdh9r7r5IBqvLARbRh70cQLI6rlETxEEvOtv84XMA0TAytgxlYWk6AvtqVv/geRHYhEsL2QzpmUSywTYBcyCpMLPVKyApiivzE02R9ggbJWrXfphsAT7y5SNUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=Sx8fcCLW; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePf7wp46"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so15424305e9.2
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 12:16:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Sx8fcCLW"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8a3b0242631so11085536d6.3
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 12:17:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776453377; x=1777058177; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jurXrci8whaaLuN/Uf4qLRtjZxrLgVjTLMZVKIbvuXo=;
-        b=ePf7wp46dNeKM1ORHX6SOAFrvYI2Cldn6Nyweial912FLtbgctD/lSEJOhgApx1+gl
-         sg0HE3yeKBaoeyCcEdPV3Xy+KIN29hmg5jPCK9qkTwBx6B4ANJPY+cefnxBrfx6Q4ofy
-         nrLIm1qji8HO+K32bQh81rNfxVOmI5R7WaDtVDsk5fwPQ1RVqSiKmVft6TK3Nq+pyUA7
-         69VuKlJmpJm78Ot2WXFHSrm3dWVWLdf60LoqPjEnO8HToiKgN7REAXotuoVzwn/68LGR
-         kt/gdAFKbx0nYi4bUNBQvm5nj+VBKnBFaaLgY7RBxrZQFsV7mzQKgbLIBVgFQCiWvou0
-         Khkw==
+        d=ziepe.ca; s=google; t=1776453471; x=1777058271; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4EAYiUx134wz4kkjk1jnBH2zllAceLFfLUvioLTQuWg=;
+        b=Sx8fcCLWseq3/lgxypDZO6saM5K9gzfIKNypH3NUSGbT5dqx7sAGtNZe4sRWAbtSKo
+         kYlLDdv/LSV9Lz4MqvSZUrFT/0zy6GOc9/LN5By5UfPTbS/hQIZ5X9Hy/1Bu9tVkAh1S
+         3mcpURKlwyMKqI2sF0iBTmG4qejHM4Wm525Mio/t0pj2Wgfd+SXl9IJQLHY3/hdZZhJP
+         6B1OI7GtaiSQ+hWTESH7hcWeaHbPmNt5kp2p22y6VagKOfmpcI2BS+3CeRAPJ/kDnH/l
+         PIFct8tdk/bNU9F5+Kzs/tDxkUIlecnXOJUDLpVGSW3EPUOrEFsDmEl0ZVdeGVWVGxYB
+         ZAcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776453377; x=1777058177;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jurXrci8whaaLuN/Uf4qLRtjZxrLgVjTLMZVKIbvuXo=;
-        b=NxLU7ueghJuh+FLyrl1enVMcaDk8BTWXxdeZHIPaD6xuLMVBU7PjxrtR3tW93u4ha7
-         f3GPmlTN9rQoI9vq2bvaaLebzjoIMXGYd3ZdLhuabNwTp+ZwR0dkNTxni+effmstvpFd
-         zlXIlPbGH8x+0CKd/HZ7JgX8DsmxOhSGJxuwMHXq5GGM8Rb1y3E7IMN5TOz9Yq3+HT/4
-         gN+BRHPLUM7Y/UJlLpsrjEh59l3pLTAXwj8IeHu3k4xk010sjFCsex7j4OCW52sl4qD/
-         IoJ3mnp0qYSMcW4Fl7WDaBW8AnA6wC732Ue8xUU5h1fwckc6q0SwOUzRfi1KTJNzjnnd
-         Y+Cg==
-X-Forwarded-Encrypted: i=1; AFNElJ+RAaPRwrOIrTfGsJJWl67VeDqMsMzuTdQEBCV9NcpsPbfEmeoAhEkRLdz7vlOcr6lanKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFIkTMCQL0VuS/aD4q/ABMXoVEoWrAfYbOpUg4lJJS+mWD92tK
-	bzHVrTM6mu3n4yZlFo0tQ7oETuZLqJUpCP/TYfm5qTMDjTvbqWC8Tr1k
-X-Gm-Gg: AeBDietm12NNLKql5JgORUT9deDO7RVe/V7uoWweXO8PZOFLx8zXFUKfXuyPmLUDytr
-	Umu5EaMwVltl8QgrOHE1ROUrAkx45FP8h6NTUdU11lMLX9UvNkBkMcfVIwKfN/Dy5n9bLCn3xst
-	sGD52jQKEi7FAyitej3zPsP0BU1XuqtVKiS1EU0FqWyu3AIapLZHQxShEEaOW/H49pTd23XkAdB
-	p4pdMgN47ayGh8GIteCsVVRFV9qdpPsdHqpxyFmDVES9uyq6kHrkEXozV4XyUOCtf2q969usu4R
-	cXYJepreXWHJD7epimiqhnW/gz24HqaWRv43+vgDbcbkIeMFe+Ls0psN69qOy1p3dtR+cIqJxLE
-	aUxgvAMwGP+XI0niJ0TtEUtk3+K3QpomeXZm5m6Pn0s5hASRvcejSKPVqILewN36LA0GCFi41TV
-	6EYOUmNSSweMXRlC59N56EbBPKmbxcqCesF4wzrsgO0x+zK0lg0etYdNrugvgz3kRIny4oh5O1w
-	msmkhqg7o3agZS2wCEcbg==
-X-Received: by 2002:a05:600c:888b:b0:480:1d0b:2d32 with SMTP id 5b1f17b1804b1-488fb74bccbmr48106525e9.12.1776453377331;
-        Fri, 17 Apr 2026 12:16:17 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc1393f5sm60893885e9.9.2026.04.17.12.16.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2026 12:16:16 -0700 (PDT)
-Message-ID: <4426b0f7-589a-44b9-9bc9-4522f6a23d52@gmail.com>
-Date: Fri, 17 Apr 2026 20:16:16 +0100
+        d=1e100.net; s=20251104; t=1776453471; x=1777058271;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4EAYiUx134wz4kkjk1jnBH2zllAceLFfLUvioLTQuWg=;
+        b=OkDn8bD4YsKDOiuBN+H08jEdlohufqJ8pAjoFKOk9zJEGrSfHxsaTyYw20Fvj3/efQ
+         Iuo+Y2TayT41LDBDUHvNIfsNFhVwL60zDH+KADqXdeRofvZ0BVyErk5+J5SPJyZCQDTU
+         bUNP8iRbRcbtjVPy2EDw6007YlYix2WzJARK4Tgb3jNWQfpaRVENVPNGhqstr/RzDtMi
+         gH7xGTyy65tHhYWnz7Y2OMqQBn4LS+bNrC4yfdm4QbdjI5LOPqzMp06LAjgGYITukGaS
+         ZRqYMLekFpEf7CQ4yMz9CSkDOWE6dFJ7amsUD1+dPTKEmx2KqRgsUu9cqhH2G7kss3IE
+         Z0dA==
+X-Forwarded-Encrypted: i=1; AFNElJ/U6zi3pZV/jNx/hcr5iSG8Ijkt5MZAjeeua+te4BqwXBsNRoAu6h77fGS5DgcPKomyD8Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkWM2nEbOwpg673Ie2zOK3tmqjffLjWIfPzLSObGVVydMhy7rk
+	fVSvQviKZsihlGbirU2lxUjyQyj0pjQq7rjD2IsfEPyltUmDcFd1OXSvNa2IM4/YKeE=
+X-Gm-Gg: AeBDiev4IW86X2pc1aUqVZAuNxWYO9BDMvoA92LwqHSjY2mfOf2Hiek2Hr2IFLpx3uq
+	HbMLqJaoFWYgDj6zvSFTEWSRDQXBEeMXGT8gmG+wbEIbRHrZqlzbZSup9unMgKyt3gHclq5sFzb
+	I7y23+sMEp+RLkYpzOqr15tYaw6oB03hOc8FGTGm1V3lHugetk6zrIUMKKJ3FTQjXjijs/vECgw
+	V5VM7djTa8RF/4kbDWeinu4VMtwRZQlqGAXluCjDUqA/rrOnOWRdahxDqEBzNzKlFlx+KODDuXI
+	Sit59r9yLgRtddwph/ehffb/7sq/OqehASlhmzfmGr6joS+hDmzQfywcXF487lEGVMT+MA6k9rA
+	Ul8cZQPcoGK06xak7sH3WLrqHHxAWRYM2qktFG7X6bk6y9LTzy7f63aaffHn8GN7XDuBsCOP2VA
+	8TOx2PvOGtHz60TvjuXpdgjCSxFuiWYTnDfcuf/Ee98GlZ7jCZuJM47NtibWEUEAod4JhXGWgwu
+	fXLatI5S7NOofOR
+X-Received: by 2002:a05:6214:2a46:b0:8b0:2d20:ff79 with SMTP id 6a1803df08f44-8b02d2100femr46126906d6.27.1776453470830;
+        Fri, 17 Apr 2026 12:17:50 -0700 (PDT)
+Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02ae86947sm26222946d6.37.2026.04.17.12.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2026 12:17:50 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wDohJ-0000000DV61-2ye0;
+	Fri, 17 Apr 2026 16:17:49 -0300
+Date: Fri, 17 Apr 2026 16:17:49 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Leon Romanovsky <leon@kernel.org>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260417191749.GK2577880@ziepe.ca>
+References: <20260409124553.GB720371@unreal>
+ <CAHC9VhT1X4HX4bGrK=mEzu=g=mZ-Wg-LDXVgZVe-e6oM+W9aHg@mail.gmail.com>
+ <20260412090006.GA21470@unreal>
+ <CAHC9VhRnYXjg+vE9a8PeykbXk91is12zYLaO7EFdfZPKMxDfPA@mail.gmail.com>
+ <20260413164220.GP3694781@ziepe.ca>
+ <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+ <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
+ <20260415134705.GG2577880@ziepe.ca>
+ <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] libbpf: Report error when a negative kprobe offset is
- specified
-To: Aaron Tomlin <atomlin@atomlin.com>, bpf@vger.kernel.org
-References: <20260417184627.1259158-1-atomlin@atomlin.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260417184627.1259158-1-atomlin@atomlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
 
-
-
-On 4/17/26 7:46 PM, Aaron Tomlin wrote:
-> In attach_kprobe(), the parsing logic uses sscanf() to extract the
-> target function name and offset from the section definition. Currently,
-> if a user specifies a negative offset (e.g., SEC("kprobe/func+-100")),
-> the input is not explicitly caught and reported as an error.
+On Wed, Apr 15, 2026 at 05:40:04PM -0400, Paul Moore wrote:
+> > The NIC doesn't know anything more than the kernel to call the LSM
+> > hook. It can't magically generate the label the admin wants to use any
+> > better than the kernel can.
 > 
-> This commit updates the logic to explicitly notify the user when a
-> negative integer is provided. To facilitate this check, the offset
-> variable is changed from unsigned long to long so that sscanf()
-> can accurately capture a negative input for evaluation.
-> 
-> If a negative offset is detected, the loader will now print an
-> informative warning stating that the offset must be non-negative,
-> and return -EINVAL.
-> 
-> Additionally, free(func) is called in this new error path to prevent
-> a memory leak, as the function name string is dynamically allocated
-> by sscanf().
-> 
-> Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
-> ---
->   src/libbpf.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/src/libbpf.c b/src/libbpf.c
-> index 42bdba4..cd250fe 100644
-> --- a/src/libbpf.c
+> The NIC presumably knows how to parse the firmware request and extract
+> whatever security relevant info is needed to pass to the kernel so the
+> driver can make an access control request.
 
-The upstream of the libbpf is linux kernel repository (tools/lib/bpf). 
-Is this patch for libbpf github repo? Please resend for linux kernel.
+Not in practice, we'd have to agree on how to describe the "security relevant
+info" and that won't happen..
 
-pw-bot: cr
+> Leon mentioned that different firmware revisions would have different
+> parameters for a given opcode, and that one would need to inspect
+> those parameters to properly filter the command.  Is that not true, or
+> am I misreading or misunderstanding Leon's comments?
 
-> +++ b/src/libbpf.c
-> @@ -12271,7 +12271,7 @@ error:
->   static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf_link **link)
->   {
->   	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, opts);
-> -	unsigned long offset = 0;
-> +	long offset = 0;
->   	const char *func_name;
->   	char *func;
->   	int n;
-> @@ -12293,6 +12293,13 @@ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf
->   		pr_warn("kprobe name is invalid: %s\n", func_name);
->   		return -EINVAL;
->   	}
-> +
-> +	if (offset < 0) {
-> +		free(func);
-> +		pr_warn("kprobe offset must be a non-negative integer: %li\n", offset);
-> +		return -EINVAL;
-> +	}
-> +
->   	if (opts.retprobe && offset != 0) {
->   		free(func);
->   		pr_warn("kretprobes do not support offset specification\n");
+They are ABI stable, so there will be rules about future changes that
+old software can follow to ignore or reject future things it doesn't
+understand.
 
+> > > The access control point itself represents the requested
+> > > operation.  This is possible because the number of networking
+> > > operations on a given packet is well defined and fairly limited; at a
+> > > high level the packet is either being sent from the node, received by
+> > > the node, or is passing through the node.
+> >
+> > I think we have the same split, fwctl send/recive analog is also very
+> > limited.
+> 
+> Sure, but I thought the goal was to enforce access controls on the
+> firmware requests based on the opcodes/parameters contained within the
+> firmware request blob/mailbox?  
+
+Yes, that's the goal. It is the same as iptables being able to
+identify that a send system call has a packet that is http or dns. I'd
+like to have a fwctl RPC ioctl system call identify if the RPC packet
+is A or B.
+
+> > Deep inspection on the packet blob determines the secmark.
+> 
+> ... and this would be done by your BPF classifier, yes?
+
+BPF would be one option. We could probably also meaningfully do a
+fixed set of matching functions (ie pkt_data[X] == A then MATCH) more
+like iptables does if that is somehow relevant to LSM.
+ 
+> > LSM takes the secmark and determines if the access control point
+> > accept/rejects.
+> 
+> At this point I think it would be helpful to write out the
+> subject-access-object triple for an example operation and explain how
+> an LSM could obtain each component of the access request.
+
+I think I am talking about this:
+
+app_1 FWCTL_RPC op_unpriv_t
+app_2 FWCTL_RPC op_priv_t
+
+- app_x broadly comes from the process executing the ioctl
+
+- FWCTL_RPC identifies the IOCTL userspace called to send the RPC
+  packet
+
+- op_X_t is the result of the classifier inspecting the RPC
+  packet. Admin tells the classifier to return op_X_t similar to
+  how --selctx does for iptables.
+
+For sketch purposes I've used the words priv/unpriv as something an
+admin might want to setup. As I said above the actual buckets and
+mapping would have to decided by the local admin.
+
+> > Same as for networking. Admin understands, admin defines, kernel is
+> > just a programmable classifier.
+> 
+> Are you able to define all of the firmware request operations at this
+> point in time?  That is my largest concern at this point, and perhaps
+> the answer is a simple "yes", but I haven't seen it yet.
+
+We can identify all the IOCTL points where the RPC packet will be
+delivered to the kernel (send/recv/etc)
+
+We cannot pre-identify all the mlx_XXX_op_t's an admin might want to
+use.
+
+The same way secmark cannot pre-identify all the XXX_packet_t's.
+
+Jason
