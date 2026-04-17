@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB46B349AE0
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 03:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3184169AD2
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 03:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776397647; cv=none; b=cpW3kqoKkcLqVt/89xkDYAOBEy+nHN+RDXTLdcCbsOkvvf6uoi2WkCVbVvhoIe4Hnm3s04uhnheBcE7Nh7sdvnYsjeELEBEKSeFE2xVDQG8jnc/SUb3xAIibOgSearMxFC8tn/NzxCwmqtH8o9WsV8Mlz7HawC12DrZO12+4OUM=
+	t=1776397649; cv=none; b=o6T6IPcadZFAe6CL228YZXnzMVM54dR++kNK7B6uXRnAJ0b3QuwpDgmFtt7fyTHxZyN4jfnfrLtbKCS+7EO2tzotm+lBrwZaa58GrQdrVo4MyrfxjpQkhF/VJ/dddgGrmz8++ZdbcWMpV5MMTpXvvffCZ+mCkVaAiBJnvkX0L8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776397647; c=relaxed/simple;
-	bh=fBvfc26ik5o1fH4ICTBAMk1xY9cmN/PLfwxPTEgKKBc=;
+	s=arc-20240116; t=1776397649; c=relaxed/simple;
+	bh=WKpUnNkFQ6+DZ5yP8uC2bcPKbqTqxSUAJwJLcPzo29w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nTaexlkq2nQLfyuipU7+izJeMg1nufRoPjJ7V4/S8cUkKLjSDlnFlk7aCtrvWB8YmFdNKD9zBpAk5PyclqMHqOtvSxk7wh1xZnkhW/ts1ISwStlf0raN7QBW6LNzW8jm7FNV6p9jLJkuOhslrprH04lQSd15KH7C9Pm00VPohxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=gtvBkI0aR6fLmI2XnKuA5X3VCcHhGn+vMYc+pDI+x9OkpHRVcjJ0ESRZjTkLpIw1nZYkeQJxAVT4dULcb1Td2QKo4N7OosfWMagY8C6+ua+fNJcmcAtDPm2flaTxtPjWx4N4tKTW6pQy9UujD8CYoXvuRi1P9poeXAdKoHtV71k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 3BD58403C23AD; Thu, 16 Apr 2026 20:47:24 -0700 (PDT)
+	id 0262F403C2375; Thu, 16 Apr 2026 20:47:13 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v5 05/16] bpf: Introduce bpf register BPF_REG_PARAMS
-Date: Thu, 16 Apr 2026 20:47:24 -0700
-Message-ID: <20260417034724.2628054-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v5 03/16] bpf: Refactor to handle memory and size together
+Date: Thu, 16 Apr 2026 20:47:13 -0700
+Message-ID: <20260417034713.2627100-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260417034658.2625353-1-yonghong.song@linux.dev>
 References: <20260417034658.2625353-1-yonghong.song@linux.dev>
@@ -38,281 +38,233 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The newly-added register BPF_REG_PARAMS corresponds to bpf
-register R11 in llvm. R11 is used as the base for stack arguments
-so it won't mess out R10 based stacks. The kernel internal
-register BPF_REG_AX was R11 previously. With this change,
-BPF_REG_AX will be R12.
+Similar to the previous patch, try to pass bpf_reg_state from caller
+to callee. Both mem_reg and size_reg are passed to helper functions.
+This is important for stack arguments as they may be beyond registers 1-5=
+.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/filter.h                        |  5 +-
- kernel/bpf/core.c                             |  4 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    | 14 ++--
- .../bpf/progs/verifier_bpf_fastcall.c         | 24 +++----
- .../selftests/bpf/progs/verifier_may_goto_1.c | 12 ++--
- .../selftests/bpf/progs/verifier_sdiv.c       | 64 +++++++++----------
- 6 files changed, 62 insertions(+), 61 deletions(-)
+ kernel/bpf/verifier.c | 59 ++++++++++++++++++++++---------------------
+ 1 file changed, 30 insertions(+), 29 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index f552170eacf4..ae094328d973 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -58,8 +58,9 @@ struct ctl_table_header;
- #define BPF_REG_H	BPF_REG_9	/* hlen, callee-saved */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2bedaa193d54..7a7024d94cf0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6932,12 +6932,12 @@ static int check_stack_range_initialized(
+ 	return 0;
+ }
 =20
- /* Kernel hidden auxiliary/helper register. */
--#define BPF_REG_AX		MAX_BPF_REG
--#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 1)
-+#define BPF_REG_PARAMS		MAX_BPF_REG
-+#define BPF_REG_AX		(MAX_BPF_REG + 1)
-+#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
- #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
+-static int check_helper_mem_access(struct bpf_verifier_env *env, int reg=
+no,
++static int check_helper_mem_access(struct bpf_verifier_env *env, struct =
+bpf_reg_state *reg, int regno,
+ 				   int access_size, enum bpf_access_type access_type,
+ 				   bool zero_size_allowed,
+ 				   struct bpf_call_arg_meta *meta)
+ {
+-	struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regno];
++	struct bpf_reg_state *regs =3D cur_regs(env);
+ 	u32 *max_access;
 =20
- /* unused opcode to mark special call to bpf_tail_call() helper */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 066b86e7233c..e7e97ffa2a8b 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1299,8 +1299,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn=
- *from,
- 	u32 imm_rnd =3D get_random_u32();
- 	s16 off;
+ 	switch (base_type(reg->type)) {
+@@ -7020,15 +7020,17 @@ static int check_helper_mem_access(struct bpf_ver=
+ifier_env *env, int regno,
+ /* verify arguments to helpers or kfuncs consisting of a pointer and an =
+access
+  * size.
+  *
+- * @regno is the register containing the access size. regno-1 is the reg=
+ister
+- * containing the pointer.
++ * @mem_regno is the register containing the pointer, mem_regno+1 is the=
+ register
++ * containing the access size.
+  */
+ static int check_mem_size_reg(struct bpf_verifier_env *env,
+-			      struct bpf_reg_state *reg, u32 regno,
++			      struct bpf_reg_state *mem_reg,
++			      struct bpf_reg_state *size_reg, u32 mem_regno,
+ 			      enum bpf_access_type access_type,
+ 			      bool zero_size_allowed,
+ 			      struct bpf_call_arg_meta *meta)
+ {
++	int size_regno =3D mem_regno + 1;
+ 	int err;
 =20
--	BUILD_BUG_ON(BPF_REG_AX  + 1 !=3D MAX_BPF_JIT_REG);
--	BUILD_BUG_ON(MAX_BPF_REG + 1 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_PARAMS + 2 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_AX + 1 !=3D MAX_BPF_JIT_REG);
+ 	/* This is used to refine r0 return value bounds for helpers
+@@ -7039,37 +7041,37 @@ static int check_mem_size_reg(struct bpf_verifier=
+_env *env,
+ 	 * out. Only upper bounds can be learned because retval is an
+ 	 * int type and negative retvals are allowed.
+ 	 */
+-	meta->msize_max_value =3D reg->umax_value;
++	meta->msize_max_value =3D size_reg->umax_value;
 =20
- 	/* Constraints on AX register:
- 	 *
-diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools=
-/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-index 469e92869523..83d870e32239 100644
---- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-@@ -69,19 +69,19 @@ static struct test_case test_cases[] =3D {
- #if defined(__x86_64__) || defined(__aarch64__)
- 	{
- 		N(SCHED_CLS, struct __sk_buff, tstamp),
--		.read  =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w11 & 0x4 goto pc+1;"
-+		.read  =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w12 & 0x4 goto pc+1;"
- 			 "goto pc+4;"
--			 "if w11 & 0x3 goto pc+1;"
-+			 "if w12 & 0x3 goto pc+1;"
- 			 "goto pc+2;"
- 			 "$dst =3D 0;"
- 			 "goto pc+1;"
- 			 "$dst =3D *(u64 *)($ctx + sk_buff::tstamp);",
--		.write =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w11 & 0x4 goto pc+1;"
-+		.write =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w12 & 0x4 goto pc+1;"
- 			 "goto pc+2;"
--			 "w11 &=3D -4;"
--			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r11;"
-+			 "w12 &=3D -4;"
-+			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r12;"
- 			 "*(u64 *)($ctx + sk_buff::tstamp) =3D $src;",
- 	},
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/=
-tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index fb4fa465d67c..0d9e167555b5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -630,13 +630,13 @@ __xlated("...")
- __xlated("4: r0 =3D &(void __percpu *)(r0)")
- __xlated("...")
- /* may_goto expansion starts */
--__xlated("6: r11 =3D *(u64 *)(r10 -24)")
--__xlated("7: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("8: r11 -=3D 1")
--__xlated("9: if r11 !=3D 0x0 goto pc+2")
--__xlated("10: r11 =3D -24")
-+__xlated("6: r12 =3D *(u64 *)(r10 -24)")
-+__xlated("7: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("8: r12 -=3D 1")
-+__xlated("9: if r12 !=3D 0x0 goto pc+2")
-+__xlated("10: r12 =3D -24")
- __xlated("11: call unknown")
--__xlated("12: *(u64 *)(r10 -24) =3D r11")
-+__xlated("12: *(u64 *)(r10 -24) =3D r12")
- /* may_goto expansion ends */
- __xlated("13: *(u64 *)(r10 -8) =3D r1")
- __xlated("14: exit")
-@@ -668,13 +668,13 @@ __xlated("1: *(u64 *)(r10 -16) =3D")
- __xlated("2: r1 =3D 1")
- __xlated("3: call bpf_get_smp_processor_id")
- /* may_goto expansion starts */
--__xlated("4: r11 =3D *(u64 *)(r10 -24)")
--__xlated("5: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("6: r11 -=3D 1")
--__xlated("7: if r11 !=3D 0x0 goto pc+2")
--__xlated("8: r11 =3D -24")
-+__xlated("4: r12 =3D *(u64 *)(r10 -24)")
-+__xlated("5: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("6: r12 -=3D 1")
-+__xlated("7: if r12 !=3D 0x0 goto pc+2")
-+__xlated("8: r12 =3D -24")
- __xlated("9: call unknown")
--__xlated("10: *(u64 *)(r10 -24) =3D r11")
-+__xlated("10: *(u64 *)(r10 -24) =3D r12")
- /* may_goto expansion ends */
- __xlated("11: *(u64 *)(r10 -8) =3D r1")
- __xlated("12: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/to=
-ols/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index 6d1edaef9213..4bdf4256a41e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -81,13 +81,13 @@ __arch_s390x
- __arch_arm64
- __xlated("0: *(u64 *)(r10 -16) =3D 65535")
- __xlated("1: *(u64 *)(r10 -8) =3D 0")
--__xlated("2: r11 =3D *(u64 *)(r10 -16)")
--__xlated("3: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("4: r11 -=3D 1")
--__xlated("5: if r11 !=3D 0x0 goto pc+2")
--__xlated("6: r11 =3D -16")
-+__xlated("2: r12 =3D *(u64 *)(r10 -16)")
-+__xlated("3: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("4: r12 -=3D 1")
-+__xlated("5: if r12 !=3D 0x0 goto pc+2")
-+__xlated("6: r12 =3D -16")
- __xlated("7: call unknown")
--__xlated("8: *(u64 *)(r10 -16) =3D r11")
-+__xlated("8: *(u64 *)(r10 -16) =3D r12")
- __xlated("9: r0 =3D 1")
- __xlated("10: r0 =3D 2")
- __xlated("11: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/te=
-sting/selftests/bpf/progs/verifier_sdiv.c
-index fd59d57e8e37..95f3239ce228 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -778,10 +778,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 0x8000000000000000")
- __xlated("2: r3 =3D -1")
- __xlated("3: r4 =3D r2")
--__xlated("4: r11 =3D r3")
--__xlated("5: r11 +=3D 1")
--__xlated("6: if r11 > 0x1 goto pc+4")
--__xlated("7: if r11 =3D=3D 0x0 goto pc+1")
-+__xlated("4: r12 =3D r3")
-+__xlated("5: r12 +=3D 1")
-+__xlated("6: if r12 > 0x1 goto pc+4")
-+__xlated("7: if r12 =3D=3D 0x0 goto pc+1")
- __xlated("8: r2 =3D 0")
- __xlated("9: r2 =3D -r2")
- __xlated("10: goto pc+1")
-@@ -812,10 +812,10 @@ __success __retval(-5)
- __arch_x86_64
- __xlated("0: r2 =3D 5")
- __xlated("1: r3 =3D -1")
--__xlated("2: r11 =3D r3")
--__xlated("3: r11 +=3D 1")
--__xlated("4: if r11 > 0x1 goto pc+4")
--__xlated("5: if r11 =3D=3D 0x0 goto pc+1")
-+__xlated("2: r12 =3D r3")
-+__xlated("3: r12 +=3D 1")
-+__xlated("4: if r12 > 0x1 goto pc+4")
-+__xlated("5: if r12 =3D=3D 0x0 goto pc+1")
- __xlated("6: r2 =3D 0")
- __xlated("7: r2 =3D -r2")
- __xlated("8: goto pc+1")
-@@ -890,10 +890,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -2147483648")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+4")
--__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+4")
-+__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
- __xlated("7: w2 =3D 0")
- __xlated("8: w2 =3D -w2")
- __xlated("9: goto pc+1")
-@@ -925,10 +925,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -5")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+4")
--__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+4")
-+__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
- __xlated("7: w2 =3D 0")
- __xlated("8: w2 =3D -w2")
- __xlated("9: goto pc+1")
-@@ -1004,10 +1004,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 0x8000000000000000")
- __xlated("2: r3 =3D -1")
- __xlated("3: r4 =3D r2")
--__xlated("4: r11 =3D r3")
--__xlated("5: r11 +=3D 1")
--__xlated("6: if r11 > 0x1 goto pc+3")
--__xlated("7: if r11 =3D=3D 0x1 goto pc+3")
-+__xlated("4: r12 =3D r3")
-+__xlated("5: r12 +=3D 1")
-+__xlated("6: if r12 > 0x1 goto pc+3")
-+__xlated("7: if r12 =3D=3D 0x1 goto pc+3")
- __xlated("8: w2 =3D 0")
- __xlated("9: goto pc+1")
- __xlated("10: r2 s%=3D r3")
-@@ -1034,10 +1034,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 5")
- __xlated("1: r3 =3D -1")
- __xlated("2: r4 =3D r2")
--__xlated("3: r11 =3D r3")
--__xlated("4: r11 +=3D 1")
--__xlated("5: if r11 > 0x1 goto pc+3")
--__xlated("6: if r11 =3D=3D 0x1 goto pc+3")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: r12 +=3D 1")
-+__xlated("5: if r12 > 0x1 goto pc+3")
-+__xlated("6: if r12 =3D=3D 0x1 goto pc+3")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: r2 s%=3D r3")
-@@ -1108,10 +1108,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -2147483648")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+3")
--__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+3")
-+__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%=3D w3")
-@@ -1140,10 +1140,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -5")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+3")
--__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+3")
-+__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%=3D w3")
+ 	/* The register is SCALAR_VALUE; the access check happens using
+ 	 * its boundaries. For unprivileged variable accesses, disable
+ 	 * raw mode so that the program is required to initialize all
+ 	 * the memory that the helper could just partially fill up.
+ 	 */
+-	if (!tnum_is_const(reg->var_off))
++	if (!tnum_is_const(size_reg->var_off))
+ 		meta =3D NULL;
+=20
+-	if (reg->smin_value < 0) {
++	if (size_reg->smin_value < 0) {
+ 		verbose(env, "R%d min value is negative, either use unsigned or 'var &=
+=3D const'\n",
+-			regno);
++			size_regno);
+ 		return -EACCES;
+ 	}
+=20
+-	if (reg->umin_value =3D=3D 0 && !zero_size_allowed) {
++	if (size_reg->umin_value =3D=3D 0 && !zero_size_allowed) {
+ 		verbose(env, "R%d invalid zero-sized read: u64=3D[%lld,%lld]\n",
+-			regno, reg->umin_value, reg->umax_value);
++			size_regno, size_reg->umin_value, size_reg->umax_value);
+ 		return -EACCES;
+ 	}
+=20
+-	if (reg->umax_value >=3D BPF_MAX_VAR_SIZ) {
++	if (size_reg->umax_value >=3D BPF_MAX_VAR_SIZ) {
+ 		verbose(env, "R%d unbounded memory access, use 'var &=3D const' or 'if=
+ (var < const)'\n",
+-			regno);
++			size_regno);
+ 		return -EACCES;
+ 	}
+-	err =3D check_helper_mem_access(env, regno - 1, reg->umax_value,
++	err =3D check_helper_mem_access(env, mem_reg, mem_regno, size_reg->umax=
+_value,
+ 				      access_type, zero_size_allowed, meta);
+ 	if (!err)
+-		err =3D mark_chain_precision(env, regno);
++		err =3D mark_chain_precision(env, size_regno);
+ 	return err;
+ }
+=20
+@@ -7094,8 +7096,8 @@ static int check_mem_reg(struct bpf_verifier_env *e=
+nv, struct bpf_reg_state *reg
+=20
+ 	int size =3D base_type(reg->type) =3D=3D PTR_TO_STACK ? -(int)mem_size =
+: mem_size;
+=20
+-	err =3D check_helper_mem_access(env, regno, size, BPF_READ, true, NULL)=
+;
+-	err =3D err ?: check_helper_mem_access(env, regno, size, BPF_WRITE, tru=
+e, NULL);
++	err =3D check_helper_mem_access(env, reg, regno, size, BPF_READ, true, =
+NULL);
++	err =3D err ?: check_helper_mem_access(env, reg, regno, size, BPF_WRITE=
+, true, NULL);
+=20
+ 	if (may_be_null)
+ 		*reg =3D saved_reg;
+@@ -7103,16 +7105,15 @@ static int check_mem_reg(struct bpf_verifier_env =
+*env, struct bpf_reg_state *reg
+ 	return err;
+ }
+=20
+-static int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct=
+ bpf_reg_state *reg,
+-				    u32 regno)
++static int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct=
+ bpf_reg_state *mem_reg,
++				    struct bpf_reg_state *size_reg, u32 mem_regno)
+ {
+-	struct bpf_reg_state *mem_reg =3D &cur_regs(env)[regno - 1];
+ 	bool may_be_null =3D type_may_be_null(mem_reg->type);
+ 	struct bpf_reg_state saved_reg;
+ 	struct bpf_call_arg_meta meta;
+ 	int err;
+=20
+-	WARN_ON_ONCE(regno < BPF_REG_2 || regno > BPF_REG_5);
++	WARN_ON_ONCE(mem_regno > BPF_REG_4);
+=20
+ 	memset(&meta, 0, sizeof(meta));
+=20
+@@ -7121,8 +7122,8 @@ static int check_kfunc_mem_size_reg(struct bpf_veri=
+fier_env *env, struct bpf_reg
+ 		mark_ptr_not_null_reg(mem_reg);
+ 	}
+=20
+-	err =3D check_mem_size_reg(env, reg, regno, BPF_READ, true, &meta);
+-	err =3D err ?: check_mem_size_reg(env, reg, regno, BPF_WRITE, true, &me=
+ta);
++	err =3D check_mem_size_reg(env, mem_reg, size_reg, mem_regno, BPF_READ,=
+ true, &meta);
++	err =3D err ?: check_mem_size_reg(env, mem_reg, size_reg, mem_regno, BP=
+F_WRITE, true, &meta);
+=20
+ 	if (may_be_null)
+ 		*mem_reg =3D saved_reg;
+@@ -8586,7 +8587,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 			return -EFAULT;
+ 		}
+ 		key_size =3D meta->map.ptr->key_size;
+-		err =3D check_helper_mem_access(env, regno, key_size, BPF_READ, false,=
+ NULL);
++		err =3D check_helper_mem_access(env, reg, regno, key_size, BPF_READ, f=
+alse, NULL);
+ 		if (err)
+ 			return err;
+ 		if (can_elide_value_nullness(meta->map.ptr->map_type)) {
+@@ -8613,7 +8614,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 			return -EFAULT;
+ 		}
+ 		meta->raw_mode =3D arg_type & MEM_UNINIT;
+-		err =3D check_helper_mem_access(env, regno, meta->map.ptr->value_size,
++		err =3D check_helper_mem_access(env, reg, regno, meta->map.ptr->value_=
+size,
+ 					      arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ,
+ 					      false, meta);
+ 		break;
+@@ -8657,7 +8658,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 		 */
+ 		meta->raw_mode =3D arg_type & MEM_UNINIT;
+ 		if (arg_type & MEM_FIXED_SIZE) {
+-			err =3D check_helper_mem_access(env, regno, fn->arg_size[arg],
++			err =3D check_helper_mem_access(env, reg, regno, fn->arg_size[arg],
+ 						      arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ,
+ 						      false, meta);
+ 			if (err)
+@@ -8667,13 +8668,13 @@ static int check_func_arg(struct bpf_verifier_env=
+ *env, u32 arg,
+ 		}
+ 		break;
+ 	case ARG_CONST_SIZE:
+-		err =3D check_mem_size_reg(env, reg, regno,
++		err =3D check_mem_size_reg(env, reg_state(env, regno - 1), reg, regno =
+- 1,
+ 					 fn->arg_type[arg - 1] & MEM_WRITE ?
+ 					 BPF_WRITE : BPF_READ,
+ 					 false, meta);
+ 		break;
+ 	case ARG_CONST_SIZE_OR_ZERO:
+-		err =3D check_mem_size_reg(env, reg, regno,
++		err =3D check_mem_size_reg(env, reg_state(env, regno - 1), reg, regno =
+- 1,
+ 					 fn->arg_type[arg - 1] & MEM_WRITE ?
+ 					 BPF_WRITE : BPF_READ,
+ 					 true, meta);
+@@ -12407,7 +12408,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 			const struct btf_param *size_arg =3D &args[i + 1];
+=20
+ 			if (!bpf_register_is_null(buff_reg) || !is_kfunc_arg_nullable(meta->b=
+tf, buff_arg)) {
+-				ret =3D check_kfunc_mem_size_reg(env, size_reg, regno + 1);
++				ret =3D check_kfunc_mem_size_reg(env, buff_reg, size_reg, regno);
+ 				if (ret < 0) {
+ 					verbose(env, "arg#%d arg#%d memory, len pair leads to invalid memor=
+y access\n", i, i + 1);
+ 					return ret;
 --=20
 2.52.0
 
