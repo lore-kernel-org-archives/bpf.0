@@ -1,106 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE8538C421
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 11:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F390138C425;
+	Fri, 17 Apr 2026 11:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776425108; cv=none; b=mXC8a+knyfILht60ROPF/W0r5K5CQl72SnQ6fna+W0yfyrxTrjww3niLd3MmjRSkeCDhAsEuE9MVt4k7t3OuPiIZmX2Ko3iFhKCTL0eWee+rIPI0+Jt6IQ1cSvMHz+L8PoApC9wXyiElnw/lDAbUy+3pwSJgA4gxOP0BHeRY84A=
+	t=1776425745; cv=none; b=A3Mtw6BLszQyGSAeFYi3oX8JwSyH3AD34TumR8AjCTpTF6I1n2hBuJxxkt8A+sQgzEXXpYqm1VoZtjXH173coinoVpyUmMablhvdJBhz3mHi3jLD0CLW6oZKmnntk97q8yErCcSyKQS70M7o/RQ9WQKxGxbRWQ2jMYcEz9t+3sA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776425108; c=relaxed/simple;
-	bh=beE2I8wKPsK6hlJSq+isJy35oqH4MH8LqUcuVqVZ/UA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PtB/4Z7sOvVvoaURriQ1E3YyMKuzIEEVFdbeu2lO0bsJPA05R4FwzKiFbWGUQK5j+z3GgO6RP9S1okCigFOnZrIZye483ZKxeuax/Dxwh565Px7XvswtL6vQiVVZrfJ+KYuDKV4PUNzS7pae7zpVLHHPfFvtWVk9H+mIE2mR+/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=clqRclnh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776425745; c=relaxed/simple;
+	bh=yaLi+pPKFLesf9YkmUGUzc/99nPFkjXVoRBb2PLTIHs=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=cMohe+2v7raBSTkjFeVQpkgLPQUYbR+BT2rVxvDf1x/lGVtHSqC5i6AujgNLSnnxjpoLg0kGcMd2zKwKSqPIjEjA7W52JBWR9gAH94fXNBUMgjz1FVnbfM1ObSxcgCt314oDEjqlGGq7T0mg1f+S2KmYUOc+H8olP6FluFTZta4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=X9onB+0b; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="clqRclnh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99D7C19425;
-	Fri, 17 Apr 2026 11:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776425107;
-	bh=beE2I8wKPsK6hlJSq+isJy35oqH4MH8LqUcuVqVZ/UA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=clqRclnhElNXX8gafaPKHgK42/G9GwEU/8NEFpmw5c7DulWUgPTGBsKYoSXd9n2JY
-	 M1tXp/ihhZ5n5z6AfY54nUzh+RtDACcwJVVOMSjDqoGSxbkPlnJ8KkvzCQ157OEeqw
-	 0hNjLzG56GK/Ngy8KGfiktqKuizQyhzMJQzCyp+T+WGh5yHSPhC0bAMeFZQL7AnMhl
-	 EIlkqR4kndlMVSF1x2nlY4sb55K5NGStOyL0mox7h/nwyVjw1YvfRN8P+x3QpTeVZF
-	 0MECe+wg80YXJcqyRiR9K2tusqXqpfYRdJLoV8YFKvHzQer6qRebJNAmHMJ0gWfI6n
-	 EQLRbsCzlxW/Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf, arm32: Reject BPF_PSEUDO_CALL in the JIT
-Reply-To: sashiko@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260417103004.3552500-1-puranjay@kernel.org>
-References: <20260417103004.3552500-1-puranjay@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Apr 2026 11:25:07 +0000
-Message-Id: <20260417112507.A99D7C19425@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="X9onB+0b"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=tzLF4tlkAquTuc7Xn6vW+kZMywIBi9NS5115os3UQU8=; b=X9onB+0bHsKFHXH3V3uar/3pFV
+	k65hBE9hBSLM7RU+tlzZ6dAOP7VvqZ5zRf8cX0PitPmTHQ0tjV+x8PTKPdcRURtg9X7Pvc4PvSJrI
+	XzHyk5+sfYQ52CSa3XlTZDTe8epFjitZGOykP4mZb60dF7s/E2zEVEVtyudHYhnxA1V8fyucnwbhI
+	NsQKuQ+Vasn62yjgnRe5prnbTjbx+dzKKIy/0o5FbtHbf4P2ADKYPEgDiPJZqnWi2zsUBwbuZVIiv
+	ch/z0XW3+pG1CFIxuEpKxY4bWE/W0FutTqBysvFxlshCgYc+k/ZWcepHi2HnclDN3SBJ6sJPoEIg9
+	8BtxH8ug==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wDhU5-0000Wa-1v;
+	Fri, 17 Apr 2026 13:35:41 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wDhU5-000KDH-1C;
+	Fri, 17 Apr 2026 13:35:41 +0200
+Message-ID: <528fdba5-e593-45ed-97fd-fc29907a3ec6@iogearbox.net>
+Date: Fri, 17 Apr 2026 13:35:40 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: XDP BPF JIT memory leak on armv7
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: Puranjay Mohan <puranjay12@gmail.com>, Jonas Rebmann <jre@pengutronix.de>
+Cc: Alexei Starovoitov <ast@kernel.org>, Russell King
+ <linux@armlinux.org.uk>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel@pengutronix.de
+References: <b63e9174-7a3d-4e22-8294-16df07a4af89@pengutronix.de>
+ <96a56535-6016-402e-ad25-237427c2caaf@iogearbox.net>
+ <CANk7y0h8F2rhosKzHuf7eewuwCofjNLut0pQ=v-gehHdMcT0Bw@mail.gmail.com>
+ <afb5bbb7-3ad7-4632-9909-4c003f8ea44a@pengutronix.de>
+ <CANk7y0h42MFVGpTwNxGPRnUbW6r7uB8EqWR-PGWAd7UJVLqSOw@mail.gmail.com>
+ <8a34a3da-45c3-4968-9c51-0ecb865d8f9f@iogearbox.net>
+Content-Language: en-US
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <8a34a3da-45c3-4968-9c51-0ecb865d8f9f@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27974/Fri Apr 17 08:24:08 2026)
 
-Sashiko AI review found 2 potential issue(s):
-- [High] The patch leaves the memory leak unpatched for BPF programs utiliz=
-ing callbacks (BPF_PSEUDO_FUNC).
-- [Low] The patch introduces a C90 'declaration after statement' violation =
-that will cause build failures on stable backports.
---
-
-commit 5b49d0ae3429d9aefefa73b4cf12e6c41845458c
-Author: Puranjay Mohan <puranjay@kernel.org>
-
-bpf, arm32: Reject BPF_PSEUDO_CALL in the JIT
-
-The ARM32 BPF JIT does not support subprograms. This patch rejects
-BPF_PSEUDO_CALL early in the JIT to prevent leaking a JIT binary
-allocation during the second pass in bpf_jit_subprogs().
-
-Link: https://lore.kernel.org/bpf/b63e9174-7a3d-4e22-8294-16df07a4af89@peng=
-utronix.de
-
-> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-> index deeb8f292454b..91fef10e88bc4 100644
-> --- a/arch/arm/net/bpf_jit_32.c
-> +++ b/arch/arm/net/bpf_jit_32.c
-> @@ -2047,6 +2047,8 @@ static int build_insn(const struct bpf_insn *insn, =
-struct jit_ctx *ctx)
->  	/* function call */
->  	case BPF_JMP | BPF_CALL:
->  	{
-> +		if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
-> +			goto notyet;
->  		const s8 *r0 =3D bpf2a32[BPF_REG_0];
->  		const s8 *r1 =3D bpf2a32[BPF_REG_1];
->  		const s8 *r2 =3D bpf2a32[BPF_REG_2];
-
-Will this cause a build failure on older stable branches?
-
-This patch is a bugfix tagged for stable backports, but placing code before
-declarations violates the -Wdeclaration-after-statement rule enforced in
-kernels before 6.5. Should the check be moved below the local variable
-declarations?
-
-Also, does this leave the memory leak unpatched for programs utilizing
-callbacks like BPF_PSEUDO_FUNC?
-
-When a program uses a callback, the verifier creates a subprogram. During t=
-he
-first JIT pass, the ARM32 JIT ignores insn->src_reg and compiles the
-instruction successfully as a 64-bit immediate load.
-
-Because the first pass succeeds, bpf_jit_subprogs() executes its second pas=
-s,
-allocates a new binary, overwrites prog->bpf_func, and aborts with -ENOTSUP=
-P,
-leaking the first allocation exactly as it did before this patch.
-
-Is an equivalent rejection needed for BPF_PSEUDO_FUNC in the
-BPF_LD | BPF_IMM | BPF_DW handler?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417103004.3552=
-500-1-puranjay@kernel.org?part=3D1
+On 4/17/26 1:24 PM, Daniel Borkmann wrote:
+> On 4/17/26 11:56 AM, Puranjay Mohan wrote:
+>>> On 2026-04-16 16:36, Daniel Borkmann wrote:
+>>>> I don't have access to arm32, but it looks like its completely missing the
+>>>> ability to do BPF to BPF calls.. you would need something like the below
+>>>> (uncompiled / untested).
+>>>
+>>> Applying your Patch to latest master leads to a paging error [1] and
+>>> segmentation fault in xdp_program__attach when I run
+>>> ./xdp_pass_user -d lo
+>>>
+>>>> I think the problem is that BPF to BPF calls are not supported but the
+>>>> JIT doesn't reject them as well, so the best way to fix this would be
+>>>> to do:
+>>>>
+>>>> diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+>>>> index deeb8f292454..91fef10e88bc 100644
+>>>> --- a/arch/arm/net/bpf_jit_32.c
+>>>> +++ b/arch/arm/net/bpf_jit_32.c
+>>>> @@ -2047,6 +2047,8 @@ static int build_insn(const struct bpf_insn
+>>>> *insn, struct jit_ctx *ctx)
+>>>>           /* function call */
+>>>>           case BPF_JMP | BPF_CALL:
+>>>>           {
+>>>> +               if (insn->src_reg == BPF_PSEUDO_CALL)
+>>>> +                       goto notyet;
+>>>>                   const s8 *r0 = bpf2a32[BPF_REG_0];
+>>>>                   const s8 *r1 = bpf2a32[BPF_REG_1];
+>>>>                   const s8 *r2 = bpf2a32[BPF_REG_2];
+>>>>
+>>>> This will cause the memory to be freed properly.
+>>>
+>>> This works for me and resolves the issue.
+>>>
+>>> Tested-by: Jonas Rebmann <jre@pengutronix.de>
+>>
+>> Thanks for testing, let me send the patch to the list.
+> 
+> Sounds good, I think it might also be worth to check the other
+> JITs which are not mainstream to see if they have the extra
+> pass and if not then adding similar not-yet bailout to them.
+Could probably be done in one sweep via a similar mechanism we
+have for kfuncs (bpf_jit_supports_kfunc_call), then verifier
+can also print a more meaningful message to the user.
