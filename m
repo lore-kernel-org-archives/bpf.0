@@ -1,136 +1,76 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A46231A23
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 02:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D43C1C695;
+	Fri, 17 Apr 2026 02:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776391612; cv=none; b=LLjjWaYEI13LyehhuYbU4pgnJmYWyhbLiONJFHqrt3F1MEiUECDv6HEA2UZSNwBR1OxOszK9i081cabZHBzrmAivl4/bJU3zUjhSXXiwF9nGTKZk6KiVV1vLSj3YetMk8KkhvTWcGo1NFA7WXLApWWiNRFgfGh7BCyTMcXSFKjg=
+	t=1776391719; cv=none; b=GaLKRAbXNa/wOXOa0SNgFgJZVKugjochq+DK3/7Ya2H0yikIIt7VHVuxvzq2IbLNU4ZSYgmxe/T2CcaeFfqnFW4sWpIeVGGWtO6Kk2x4u4dG8Ee0MN/X/sWYIZ2esaMQHAyilfg3+25/yS5M5CWMxAnrnHlveT1YNMRaeSLoESI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776391612; c=relaxed/simple;
-	bh=IgaENIdhWhvAOTEAWBv+mmptGFaaCY3lf7A25U2Ievo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c4/KY4UyPi8/xfGecatfb8SaGJoOMCEM/WtveJmWcqw2/4AmcZfHwAqVU3EnngYcnLgm8NgDFrz/BBpqFOaZKkTXiJDXU9ae5r1X4GQvfoYEzwA9RGLe75QYpsFPhmmsnA0a66pfGY8M0FTvLAS7LdtdT9/KtY05maPtz8i2H3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MTmnaMS5; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776391719; c=relaxed/simple;
+	bh=AcRid5prjAQXvUSeIkmfK4VJfuY3OU39hoa0Ru3vYj0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BCKIl9ZNyWhDk8dTfUvqLS+HF7voPZTEaVr9S4I32ljXcfyhLMTw+4Q1tITLA/nHcMubK+4HPSQypHxJCO/GYlpvqC0uZTl1KHdikQZCm0blH2hU1XGPmr6zxMfiw0hYckdWoZ8TeRurzbjlEMnJjrkUeXuw5FTJFy1gPVxia0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kTJAkF33; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MTmnaMS5"
-Message-ID: <d4460398-2f11-42e3-80d1-588931ea2f17@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776391608;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VQJbJ5Z0KhaIA3bQwoWMT/+Xairtq16m8wHI3nTbmos=;
-	b=MTmnaMS5QAEiYpbTp8Eae3a6QiIpDMISvMjXCrgIeM9NEbt9cLGr1crAr0bDVl/1J9vL3F
-	DAIIqpBXfjv5IHFtxqTZbTCRRRh54Kt3dIyFXZ5anOGFk4TEHK0qTgfKwz8FsYUbPzvrvr
-	e3VlZsZZKSf5AtkQvtS0dNEIyUM/wCs=
-Date: Fri, 17 Apr 2026 10:06:43 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kTJAkF33"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E96C2BCAF;
+	Fri, 17 Apr 2026 02:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776391719;
+	bh=AcRid5prjAQXvUSeIkmfK4VJfuY3OU39hoa0Ru3vYj0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=kTJAkF33ZkfgARlXaqE5jH3i1puexRKtjGK5S4H7MjqjzLk4DOmXlpBgL8EWhJdOR
+	 6+CJxbIczNH6Qr47jp1q29tC/tVUX26LHffwaCvso7WWxvsmZNl+dFhI1Zrgmga5be
+	 VUK07xIBRbUReIw1dZg05JBBjIaW3PZrXxMCSpU4IxB8rWUTZrsObS6/4swfkeT9Ey
+	 pAOGrI/iVwUfzpych8P/teOFi4hTXZk+H05Ym9Cy1h1m199voGIzcxia+kxOAFWL49
+	 xpxAPNu+1shCq8YRzzwSjV8fW+tMRoWExOJeJrVWr2VoydrE/73+ZAknD5gxbvAWyd
+	 J5egRT7HHe2Yw==
+Date: Thu, 16 Apr 2026 19:08:37 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Aditya Garg <gargaditya@linux.microsoft.com>
+Cc: kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+ decui@microsoft.com, longli@microsoft.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ kotaranov@microsoft.com, horms@kernel.org, ssengar@linux.microsoft.com,
+ jacob.e.keller@intel.com, dipayanroy@linux.microsoft.com,
+ ernis@linux.microsoft.com, shirazsaleem@microsoft.com, kees@kernel.org,
+ sbhatta@marvell.com, leitao@debian.org, netdev@vger.kernel.org,
+ linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org, gargaditya@microsoft.com
+Subject: Re: [PATCH net-next 0/2] net: mana: Avoid queue struct allocation
+ failure under memory fragmentation
+Message-ID: <20260416190837.6b060bbe@kernel.org>
+In-Reply-To: <20260414151456.687506-1-gargaditya@linux.microsoft.com>
+References: <20260414151456.687506-1-gargaditya@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 7/8] selftests/bpf: Add tests to verify global
- percpu data
-Content-Language: en-US
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260414132421.63409-8-leon.hwang@linux.dev>
- <20260414214525.589E8C2BCB6@smtp.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260414214525.589E8C2BCB6@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 15/4/26 05:45, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] The tests use the raw CPU ID to index into the densely packed `percpu_data` array, which will cause an out-of-bounds read and test failures on systems with sparse CPU masks.
-> --
-> 
-> commit a7c2685b539ebc816cdb05decab1d7a8a4e1328e
-> Author: Leon Hwang <leon.hwang@linux.dev>
->     
-> selftests/bpf: Add tests to verify global percpu data
->     
-> This commit adds new selftests to verify the behavior of global percpu data
-> by checking map initial values, struct pointers, and looking up elements from
-> global percpu data maps.
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> 
-> [ ... ]
-> 
->> +static void test_global_percpu_data_init(void)
->> +{
-> 
-> [ ... ]
-> 
->> +	err = bpf_map__lookup_elem(map, &key, sizeof(key), percpu_data,
->> +				   elem_sz * num_cpus, 0);
->> +	if (!ASSERT_OK(err, "bpf_map__lookup_elem"))
->> +		goto out;
->> +
->> +	for (i = 0; i < num_online; i++) {
->> +		if (!online[i])
->> +			continue;
->> +
->> +		data = (void *)percpu_data + elem_sz * i;
-> 
-> Will this logic cause an out-of-bounds read on systems with sparse CPU masks?
-> 
-> When reading a per-CPU map using bpf_map__lookup_elem(), the kernel packs the
-> per-CPU values densely into the output buffer by iterating over the possible
-> CPU mask.
-> 
-> The test allocates num_cpus (the total count of possible CPUs) elements for
-> the output buffer, but then iterates over the raw CPU IDs using i and uses i
-> as an index into the densely packed array.
-> 
-> On systems with sparse CPU masks (for example, where CPUs 0 and 100 are
-> possible/online), num_cpus will be 2. When the loop reaches i = 100, it
-> appears it will attempt to access percpu_data + elem_sz * 100, reading past
-> the bounds of the allocated memory.
-> 
-> Could we maintain a separate index counter that increments only for possible
-> CPUs to match the kernel's dense packing behavior?
-> 
-> [ ... ]
-> 
->> +static void test_global_percpu_data_lskel(void)
->> +{
-> 
-> [ ... ]
-> 
->> +	err = bpf_map_lookup_elem(map_fd, &key, percpu_data);
->> +	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
->> +		goto out;
->> +
->> +	for (i = 0; i < num_online; i++) {
->> +		if (!online[i])
->> +			continue;
->> +
->> +		data = (void *)percpu_data + elem_sz * i;
-> 
-> Does this loop have the same bounds checking issue as mentioned above?
-> 
-> If i is a raw CPU ID on a system with a sparse CPU mask, this calculation
-> could exceed the bounds of the percpu_data buffer.
-> 
+On Tue, 14 Apr 2026 08:13:28 -0700 Aditya Garg wrote:
+> The MANA driver can fail to load on systems with high memory
+> utilization because several allocations in the queue setup paths
+> require large physically contiguous blocks via kmalloc. Under memory
+> fragmentation these high-order allocations may fail, preventing the
+> driver from creating queues at probe time or when reconfiguring
+> channels, ring parameters or MTU at runtime.
 
-Yep, agree with the review.
+## Form letter - net-next-closed
 
-Instead of lookup values across all possible CPUs, it should lookup
-value on specified CPU using BPF_F_CPU, because the test only runs on
-online CPUs.
+We have already submitted our pull request with net-next material for v7.1,
+and therefore net-next is closed for new drivers, features, code refactoring
+and optimizations. We are currently accepting bug fixes only.
 
-Thanks,
-Leon
+Please repost when net-next reopens after Apr 27th.
 
+RFC patches sent for review only are obviously welcome at any time.
+
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+-- 
+pw-bot: defer
+pv-bot: closed
