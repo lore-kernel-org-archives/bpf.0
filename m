@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008131E531
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 04:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3C756472
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 04:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776400727; cv=none; b=RCg6wP03tzZ4BboCyJKz78+OA1ufZlZ9cB2VWAxTxGXBtFeJNqabw4gnC1aitgs3dfJyvO3J7hKAOYtKktH/dNUrsSNf/vBXTjfO8MHffXCmKmhboz7Yp0biLiRcFDXsZN8kShmlLXoJGW6hAaedIwR8rYct6cbqPmPrj8kxW0E=
+	t=1776400847; cv=none; b=BXISz0dYRQXHDOfL5PaysdJhWiZi72sSl+9tmtWmw6W/FFRu1jjf/8pRbQ4Ds1s+Tbeh9rTEWFje0jCE/c1mEYzSt+WCXUqX9EdVJYGSNQAUYTw+Dz22vrv5yQeuGVzKkEXd+FCga2RAHbLBRcKETayGp3umhbP76bja9QtYzA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776400727; c=relaxed/simple;
-	bh=n7SIxW71I0R1WTFgSOmCk7Ju58sriVEPsXSK1zkOfvQ=;
+	s=arc-20240116; t=1776400847; c=relaxed/simple;
+	bh=fu6mtZBbHIp5zjFepK36A/iYjsiAs1J47Ua2XKPbppo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cAU7eEGE0khAxaRK1NjC33RszFi4ETEaWgPIKxwFO/D3QlIdrppOSqbokJ69vokIqKnSVk5yOGTtLqho5erEu5xiSMwDPUfMQJbiw2K2/ERaHdmjHv5FpKg/442FDkY2NpEZemK/kFcJMXrUQkB1wTYM/yx8qbJ3hlTGt0NCezU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dv77fzfY; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=Ib5ufxmijkugG0mjApYr45qcbJoE1eNGoXpnKmisf8LFvIfyW2bdA1IcKmzxh+o4R1kxKiEUc2c4g6yLyzQGJCbB17VoMo6WqXt1Uk/HtjEwxUf6XsfFHWFkjhfrLpsMjZu2uXhbV7LarbujDJ0+HQKGKIpGtsi7E3TcWejk2UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jPEVsA49; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dv77fzfY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CFEC2BCB0;
-	Fri, 17 Apr 2026 04:38:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jPEVsA49"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63861C19425;
+	Fri, 17 Apr 2026 04:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776400726;
-	bh=n7SIxW71I0R1WTFgSOmCk7Ju58sriVEPsXSK1zkOfvQ=;
+	s=k20201202; t=1776400847;
+	bh=fu6mtZBbHIp5zjFepK36A/iYjsiAs1J47Ua2XKPbppo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=dv77fzfYknyTF7m+dYdgQFC+1Zp7pqM6DPXYAyE/flIB01SbFuk3t+tiKnguRzhPt
-	 f5UlLwQk1D0eOOoF0NVCcYbWEFKP1Z/SKD86l6tu89NMIOuU4tEeCEe9R8pKej1hzg
-	 l7pSxTGV9v3UE5WynvR0I6vx1GsptdofhhzBpOmv4aaC8ZuvpzUTdLHlQH+FWQ2Dzy
-	 Pejdp5fXb/Di3RGpAG5agmOQHxUPzqLf9Q6Px6DwCPwyUp0imKPxjUaY3W7ncLaRm7
-	 3ev6DLSxNNC4WuLKbtvffa90KQkk0oZzipPGp0aZ1jJK5dgzKtdNkPHKWYSWme0cWY
-	 Z0IlIeskTIRFQ==
+	b=jPEVsA49bmPiJxX4V4/SD+nxuJqe9cJKIc+ECmffwO2JJoXBwezx7fKxAcrNHrcqC
+	 UblmUL0cAGw0qfoULAI2LRlcdXRBUigfPsrwmxoAzV5qzQsij9UEf5MfZ6r+Q9ItBO
+	 /OiIe38VGcDRklHEuK3apaq5Pk/iL28/rINHIbJq0UI2AxwjsQu7bIE+2ScIIOalcl
+	 +H8sa9Tq9Q3o1pZjI0OjT3AqHYYGK3dYKPn06WrOH/m3ds30qFDGZPWJviinBhkhH8
+	 UUv5Zz3KEfV79EAYCslMiNrJxVidF1+I234P/pSD+mBrRIPMifzxv4HQTdUeLYCnS/
+	 h8OuEig6aOs8A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 16/16] selftests/bpf: Add verifier tests for
- stack argument validation
+Subject: Re: [PATCH bpf-next v5 11/16] bpf: Support stack arguments for
+ kfunc calls
 Reply-To: sashiko@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260417034838.2638137-1-yonghong.song@linux.dev>
-References: <20260417034838.2638137-1-yonghong.song@linux.dev>
+In-Reply-To: <20260417034754.2630932-1-yonghong.song@linux.dev>
+References: <20260417034754.2630932-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Apr 2026 04:38:45 +0000
-Message-Id: <20260417043846.66CFEC2BCB0@smtp.kernel.org>
+Date: Fri, 17 Apr 2026 04:40:46 +0000
+Message-Id: <20260417044047.63861C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,189 +45,112 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 3 potential issue(s):
-- [Medium] Negative verifier tests for stack arguments use inherently inval=
-id memory accesses, causing them to pass even if the verifier has bugs.
-- [Medium] `stack_arg_read_uninitialized` reads from `r11 + 8` instead of a=
- valid negative offset, failing to properly test uninitialized stack argume=
-nt slots.
-- [Low] Unused `subprog_8args` function defined in the test file.
+- [Critical] Precision tracking (`mark_chain_precision`) is incorrectly byp=
+assed or misapplied for kfunc scalar arguments passed via the stack, allowi=
+ng malicious BPF programs to bypass verifier safety checks through state pr=
+uning.
+- [High] `get_kfunc_arg_reg()` fetches lookahead stack arguments without bo=
+unds checking, leading to an out-of-bounds memory read or NULL pointer dere=
+ference when resolving memory sizes.
+- [High] Overwriting `insn->off` in `bpf_fixup_kfunc_call` destroys the BTF=
+ file descriptor index, breaking module kfunc calls on architectures that u=
+se JIT far calls.
 --
 
-commit 24b1eb352e7d04e7c35a9fbc88c6b91d08b17832
+commit 15b2d48bd7c1080e972b83211cc9794ac2ba763f
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-selftests/bpf: Add verifier tests for stack argument validation
+bpf: Support stack arguments for kfunc calls
 
-This commit adds inline-asm based verifier tests to directly exercise
-stack argument validation logic.
+Extend the stack argument mechanism to kfunc calls, allowing kfuncs
+with more than 5 parameters to receive additional arguments via the
+r11-based stack arg area.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
-ls/testing/selftests/bpf/progs/verifier_stack_arg.c
-> new file mode 100644
-> index 0000000000000..d212b6c3cac75
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 739c3127520c3..a3f307909e401 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> +__noinline __used
-> +static int subprog_8args(int a, int b, int c, int d, int e, int f, int g=
-, int h)
+> @@ -11653,6 +11659,19 @@ bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_=
+call_arg_meta *meta)
+>  	return meta->func_id =3D=3D special_kfunc_list[KF_bpf_xdp_pull_data];
+>  }
+> =20
+> +static struct bpf_reg_state *get_kfunc_arg_reg(struct bpf_verifier_env *=
+env, int argno)
 > +{
-> +	return a + b + c + d + e + f + g + h;
+> +	struct bpf_func_state *caller;
+> +	int spi;
+> +
+> +	if (argno < MAX_BPF_FUNC_REG_ARGS)
+> +		return &cur_regs(env)[argno + 1];
+> +
+> +	caller =3D cur_func(env);
+> +	spi =3D out_arg_spi(caller, argno - MAX_BPF_FUNC_REG_ARGS);
+> +	return &caller->stack_arg_regs[spi];
 > +}
 
-Is subprog_8args intended to be used in any of the tests? It does not seem
-to be called anywhere in this file.
+Does get_kfunc_arg_reg() need to verify that spi is within bounds and the
+stack slot is initialized?
+
+When verifying pointer arguments that have a trailing size argument
+(KF_ARG_PTR_TO_MEM_SIZE), the verifier looks ahead at argno + 1. If a BPF
+program maliciously omits the stack size argument, could spi exceed
+caller->stack_arg_depth and lead to an out-of-bounds memory read?
 
 [ ... ]
 
-> +SEC("tc")
-> +__description("stack_arg: read from uninitialized stack arg slot")
-> +__failure
-> +__arch_x86_64
-> +__msg("invalid read from stack arg")
-> +__naked void stack_arg_read_uninitialized(void)
-> +{
-> +	asm volatile (
-> +		"r0 =3D *(u64 *)(r11 + 8);"
-> +		"r0 =3D 0;"
-> +		"exit;"
-> +		::: __clobber_all
-> +	);
-> +}
+> @@ -12394,9 +12435,11 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>  						reg_arg_name(env, argno));
+>  					return -EINVAL;
+>  				}
+> -				ret =3D mark_chain_precision(env, regno);
+> -				if (ret < 0)
+> -					return ret;
+> +				if (regno > 0) {
+> +					ret =3D mark_chain_precision(env, regno);
+> +					if (ret < 0)
+> +						return ret;
+> +				}
 
-Should this read from r11 - 8 instead? Since outgoing stack arguments are
-at negative offsets from r11, reading from r11 + 8 is out of bounds and
-might be rejected for the wrong reason, rather than testing an uninitialized
-but valid stack argument slot.
+Stack arguments use regno =3D -1, so it seems mark_chain_precision() is byp=
+assed
+for scalar constants and size arguments passed on the stack.
 
-[ ... ]
-
-> +__noinline __used
-> +static long subprog_deref_arg6(long a, long b, long c, long d, long e, l=
-ong *f)
-> +{
-> +	return *f;
-> +}
+If precision tracking is bypassed, could the verifier's state equivalence l=
+ogic
+consider states with different scalar values in these stack slots as equiva=
+lent
+and incorrectly prune them?
 
 [ ... ]
 
-> +SEC("tc")
-> +__description("stack_arg: release_reference invalidates stack arg slot")
-> +__failure
-> +__arch_x86_64
-> +__msg("R1 invalid sock access")
-> +__naked void stack_arg_release_ref(void)
-> +{
-> +	asm volatile (
-[ ... ]
-> +		/* Release the reference =E2=80=94 invalidates the stack arg slot */
-> +		"r1 =3D r0;"
-> +		"call %[bpf_sk_release];"
-> +		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-> +		"r1 =3D 1;"
-> +		"r2 =3D 2;"
-> +		"r3 =3D 3;"
-> +		"r4 =3D 4;"
-> +		"r5 =3D 5;"
-> +		"call subprog_deref_arg6;"
+> @@ -20145,6 +20209,16 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+>  	if (!bpf_jit_supports_far_kfunc_call())
+>  		insn->imm =3D BPF_CALL_IMM(desc->addr);
+> =20
+> +	/*
+> +	 * After resolving the kfunc address, insn->off is no longer needed
+> +	 * for BTF fd index. Repurpose it to store the number of stack args
+> +	 * so the JIT can marshal them.
+> +	 */
+> +	if (desc->func_model.nr_args > MAX_BPF_FUNC_REG_ARGS)
+> +		insn->off =3D desc->func_model.nr_args - MAX_BPF_FUNC_REG_ARGS;
+> +	else
+> +		insn->off =3D 0;
 
-Can this test pass even if the verifier fails to invalidate the stack slot?
+For architectures where bpf_jit_supports_far_kfunc_call() returns true
+(such as s390x, loongarch, and powerpc), they resolve the address later
+using bpf_get_kfunc_addr(), which requires the BTF file descriptor index
+stored in insn->off.
 
-subprog_deref_arg6() performs an 8-byte read on the argument. Since BPF
-sockets only allow up to 4-byte reads, an 8-byte read is always invalid.
-If the reference isn't correctly invalidated, the valid socket pointer
-will still be rejected with "R1 invalid sock access".
-
-To properly test the invalidation, should the subprogram perform a valid
-4-byte read instead?
-
-[ ... ]
-
-> +SEC("tc")
-> +__description("stack_arg: pkt pointer in stack arg slot invalidated afte=
-r pull_data")
-> +__failure
-> +__arch_x86_64
-> +__msg("invalid access to packet")
-> +__naked void stack_arg_stale_pkt_ptr(void)
-> +{
-> +	asm volatile (
-> +		"r6 =3D r1;"
-> +		"r7 =3D *(u32 *)(r6 + %[__sk_buff_data]);"
-> +		"r8 =3D *(u32 *)(r6 + %[__sk_buff_data_end]);"
-> +		/* check pkt has at least 1 byte */
-> +		"r0 =3D r7;"
-> +		"r0 +=3D 1;"
-> +		"if r0 > r8 goto l0_%=3D;"
-> +		/* Store valid pkt pointer to outgoing arg6 slot */
-> +		"*(u64 *)(r11 - 8) =3D r7;"
-> +		/* bpf_skb_pull_data invalidates all pkt pointers */
-> +		"r1 =3D r6;"
-> +		"r2 =3D 0;"
-> +		"call %[bpf_skb_pull_data];"
-> +		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
-> +		"r1 =3D 1;"
-> +		"r2 =3D 2;"
-> +		"r3 =3D 3;"
-> +		"r4 =3D 4;"
-> +		"r5 =3D 5;"
-> +		"call subprog_deref_arg6;"
-
-Similarly, does this properly test packet pointer invalidation? The test
-verifies 1 byte of the packet pointer, but subprog_deref_arg6() reads 8 byt=
-es.
-If bpf_skb_pull_data() fails to invalidate the pointer, the 8-byte read wou=
-ld
-still be rejected as out-of-bounds, yielding the expected "invalid access to
-packet" message.
-
-Should the packet bounds check verify at least 8 bytes so that a valid read=
- is
-guaranteed if the pointer isn't invalidated?
-
-[ ... ]
-
-> +SEC("tc")
-> +__description("stack_arg: null propagation rejects deref on null branch")
-> +__failure
-> +__arch_x86_64
-> +__msg("R1 invalid mem access")
-> +__naked void stack_arg_null_propagation_fail(void)
-> +{
-> +	asm volatile (
-[ ... ]
-> +		"call %[bpf_map_lookup_elem];"
-> +		/* Store PTR_TO_MAP_VALUE_OR_NULL to outgoing arg6 slot */
-> +		"*(u64 *)(r11 - 8) =3D r0;"
-> +		/* null check on r0 */
-> +		"if r0 !=3D 0 goto l0_%=3D;"
-> +		/*
-> +		 * On null branch, outgoing slot is SCALAR(0).
-> +		 * Call subprog that dereferences arg6 =E2=80=94 should fail.
-> +		 */
-> +		"r1 =3D 0;"
-> +		"r2 =3D 0;"
-> +		"r3 =3D 0;"
-> +		"r4 =3D 0;"
-> +		"r5 =3D 0;"
-> +		"call subprog_deref_arg6;"
-
-Does the __msg() substring match accept the wrong failure mode here?
-Dereferencing an unrefined PTR_TO_MAP_VALUE_OR_NULL yields "R1 invalid mem
-access 'map_value_or_null'", while dereferencing SCALAR yields "R1 invalid =
-mem
-access 'scalar'".
-
-The substring match "R1 invalid mem access" accepts both, allowing the test=
- to
-pass even if null propagation fails and the register is still tracked as a =
-map
-pointer. Should it match the exact scalar error, or perhaps test the non-nu=
-ll
-branch for success instead?
+If insn->off is overwritten here, could it destroy the BTF file descriptor
+index and break module kfunc calls during JIT compilation?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417034658.2625=
-353-1-yonghong.song@linux.dev?part=3D16
+353-1-yonghong.song@linux.dev?part=3D11
