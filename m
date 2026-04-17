@@ -1,162 +1,158 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020084.outbound.protection.outlook.com [52.101.196.84])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CF9282F18
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 18:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776451595; cv=fail; b=h/1VnExZY0R7JSaXoYQ+F/zA+LJaadn5wZ8/9+TUla3FzITpn95IXcud1nf5qAlesb+FRIejKDh+oW+SjEG73+HvaKHz+Dn4i7r9OdFjVcQeHQwrZHOCcmvzflxN7Wflp448SlqC/oUzTF2VGSo+MoFjquSTv/XI0xNAuiGoVFY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776451595; c=relaxed/simple;
-	bh=umGSuby4sEfoWQLDT0RcJYoX002NBgfIpYkJTGnES8w=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=osMQR3V8QiBoa0aWHnVxwxVafeK/GrcNNGDkuIxRwNZy3OqWqSeRtIcUsi2QJ/pOUkAWfGRBv7E9VagE73HuCObzk6CzDKDuipLumFva2AYznMyqWn1zm8QYAjV5n7+6nQdIXMaCHqYs5Ur49QE6xo7Y7wYO9fZ5JZQPWdrEitc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.196.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Djtf37DhbD2XzyHH4bbB+VVuZJnwEhVfySa+cxe9pnGnIrvqn/vVwLjUKs9kPGNaBRXAwuW056wiTbA1hJzSBaFq3P1V7f4AB59FyEA6Dq5ORrdTcxxB0ecgjETF8Q9pMfevbF6EW8TG5inI0kHCbzN4aRhy12MC9Be/wpMklk6DB1PLVunV/2gLc44ibl0rewCGpCVBc47+WtHaVxzyzwj3KPyRlPNP8UoM+GxcafyxnrVCB+LLbLrsM8VCVmQV1loxTGpA5Bs1DmHMfXtfbxXfqWyRkkM/bh/cCoyWkhFFtdsobvbRmotJGmBmaNEW1FV3RiLu3FLLRNvIHEdLyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/hVgxsVbXcI/AOoS8N3hsYIJbUaGMD8kZR4WEPRzWQs=;
- b=fEbkbjbJNemf/K6BYMOs2qVpbgJud8Rk3M9prG2TVbGc1O4mBU7lMPjM5esJsJ4rnWL8CCX/979cmWg+E97RHzVecsxcn1GN9tYQd2X9+FjfgWGLeTZMrw8pWBJFHHnCrWSVjvWFuX380wP4Ge9D6epBW5kGF/dDNazRogGZg9xN7LecDnGV7fnALXFwqDY3v/HJ+h1sUGnpEuRJIuGvQSFu4VMsLy8oJo/KOt+qvx2XEg0ZCsxacsIlPCog5mNvoIOOjJpoOH1rTu6lWGQzJmYzmElabJeoU2C3iTXRTCUqoSRuIiDlb8CsIz1jkwgtTAN1nrO10KbfIzU4Q3tKBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by LO0P123MB5942.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:242::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9745.42; Fri, 17 Apr
- 2026 18:46:30 +0000
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf%2]) with mapi id 15.20.9769.046; Fri, 17 Apr 2026
- 18:46:30 +0000
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: bpf@vger.kernel.org
-Cc: atomlin@atomlin.com
-Subject: [PATCH] libbpf: Report error when a negative kprobe offset is specified
-Date: Fri, 17 Apr 2026 14:46:27 -0400
-Message-ID: <20260417184627.1259158-1-atomlin@atomlin.com>
-X-Mailer: git-send-email 2.51.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0179.namprd03.prod.outlook.com
- (2603:10b6:208:32f::33) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:70::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4779E242D6C
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 19:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776452773; cv=none; b=TFytDiWrdBxpTnFmwHRC0TaHsp/B2bTWWLY2v4oug4myzNQ2F0IsJgmZdpbYPSnC3NumhzGniYlWBRGP96bPVUKkiqwfljECq+lNLSyUbFxZdlB6QVvmkws9JnGJZZ+5AK9ouWnaTQ/NxISTUO7kjqt5OJSZJXQKcj6c92B6BA0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776452773; c=relaxed/simple;
+	bh=oiwNIeQ+/soz/GMdcWJ1DChG9aTiTISpONG7hWVSAuE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tVEmVxLTe62uuAYMo9ShJpVH+gWJ+YsaWfxEpVKUCX7RybBKiSGCwzpZayXPLjh/ik1cv3EDCdUNmTbnBn8kFgjyw/F28h/WTRROFT+XcamqzHRTMKMSrjPdO2OsthEkVMNukQE+YJVncUb5EagQdKfl6CgBwhlQsf2kKATWwhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ozOK7Bcd; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ozOK7Bcd"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so15111305e9.2
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 12:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776452769; x=1777057569; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J6SLK5eDHl4RX3XXdt4XzP0BAoRN6edvAAQ6upqBPYs=;
+        b=ozOK7BcdIWmAHoxCujaFVLyvp1EgYSTUedIJsE+CawlO73vhLcFlwyeX8QYkh/VZko
+         LZqTr7EAPTgE+ggUPZLP5BfwlzXA7qBzxznXHMOpZAj5lBghnOoiIeZWqUnJWCFqgpGi
+         s4RBj6f9GW9BW40LRYpBLGJTdHhUYmNAdQUCw2vKE2HSdeHQDXBjv0Pl4bfSGw/rh1sI
+         mWyPmpczuPHxTBsbXvlNWtaxg4fPTjcfMbKMoBs19WqsuAN+Zyn1bfwq8IJRYPmvfbza
+         3F6J6RpSNXLZg+IcEmOX1OZXSTVJwuYI8RgcjlodCSpiSmMMeG4ViHPZKHrIFCntMYud
+         Oxcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776452769; x=1777057569;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J6SLK5eDHl4RX3XXdt4XzP0BAoRN6edvAAQ6upqBPYs=;
+        b=Sxvj69OmvSqrN15FcQ2I7MNmfgwQ/HvvVIEj+mgbd3OT+bxP16sRLiC2SVdNQcPaFK
+         yVQDlHBIxbN/QD/zOiZ0O1mEjBh6e22cPVTsb7Cbj8CyP2JP1sObiNb8mcUsUoMMx6M+
+         sks2EHdKg7Xp/boli4WKkh6ridkK+dkmwaUV/mvNPY6dmroN3alqvYtcRZEb+z5TekHt
+         geBCeyPjZMvzlANG/W4KTXScqIfXtMOl+ANohdefvPLp7vdYGbMdOFEeNbBdZDB+KIRv
+         C2BKBC7Mt2HoIdZDHK1w4GCK8gieW74PNZC1pSrobvwMEq+kCHvtIR1AK9D/BSiUxTlF
+         uRdg==
+X-Forwarded-Encrypted: i=1; AFNElJ+2wOQVpYvtuvCjjrSbbVbW1uvcxHJg4xmSTQBeh02A0QyKVtO3d1VOYli7KvBZFmFdjeo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKqESsLFTd97KHU/NaJhHzIEt5UfIFU600ZMYmxOd8PtSiibyN
+	T90K1uilqDVo/ed43RAWrTP8CTPN9Fq6/9+GHPcrw/SMX0hSc2kuow3l
+X-Gm-Gg: AeBDieuJ5so+ibjlHwwIxXqbiAg5HS2zo8756lBGSaNwbeXqd+Z3nqNbpuMwhYZjFKH
+	kd8x5ck20ANdr35Yq9/o0wkh9HPtrJrrdHimCu8FvH1XMTP0Vv+T90+brcu+Oldk1YIMp1xu6Ya
+	FcK1b/hXPhZMMGa46hb9W3rlwg2y8gJVH9Gcm39r4Ax0tjx2nM2iLwwjUpZX4MH7YnDIiWHbD4m
+	o59Vdr1KpbjwSlnKEpUJpmUCl5p6j6QbGgh5bxSwEe2TLhGh0G69NwA6cOSwB9nUhky25chHv9Q
+	9Q8eN9H/vXnyptO2rkC/5WQ8WE5yn/iZL4sFh0WFEzwOY4xJGNPh9FoEY+05pkZk29y6CuUk5ZF
+	V8rss180HlOEPG23/0U2N+sQnhyClFgcWhgbMAFg9ucsRfkeUGSPIRaMxmNQRPktJaM72ryN6e3
+	OXKYp6CjuuXqBgtsaiw7twLHxmn0atGhvl/GZffLf4k96V2tz4HVvJXMeMcGZUvmQwEO/3jNA/n
+	sJLHqu1H0l+KUTEN0oOCg==
+X-Received: by 2002:a5d:5cc4:0:b0:43c:fc5c:aa0b with SMTP id ffacd0b85a97d-43fe3e13c5fmr4949881f8f.42.1776452769020;
+        Fri, 17 Apr 2026 12:06:09 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1249sm5697762f8f.5.2026.04.17.12.06.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Apr 2026 12:06:08 -0700 (PDT)
+Message-ID: <57c7dabe-6467-4e8c-b066-0cb62625286d@gmail.com>
+Date: Fri, 17 Apr 2026 20:06:07 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO0P123MB5942:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0bdf8bb7-faf8-4dfb-43c7-08de9cb1a37b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|1800799024|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	MfqzJyBlz8xtntBBMSTcjZevg0LnO95CdxFrS8y4li+PZrGI/o6Sl1gL2YULO5w+AjCbTKgWOuepmOl1toP/VrLY3lS2aAdKeHKz6CStbsNQ0uud9IP3WZbdHqcG5QWohm00YpqlHt/n5la6ANPKsvEbpiajjSlr9wVnzSKjQbIVw3NwpiFfUo3tSvBO6iBj/Lj0hvj4oVXuI0jGoZDZD0DejFhkTv5gMt5JiLHS1nsM4FumAa9UoXzVHFcjOilqzZo8HRrp2q7yWmQk+IuxtzSxnFNq8ThEP+0JVjVbc2wmGApWWb1Ph2j71KNtjqrtRM3eLKkWForrn3UWhbooPW6FmpbBxY19hpSjMZKZkIgyZsUGUHEb658EcDD1Dku/V1gD2io6Ic1a4kGH9mXs3rUPsh8RpVM2tXMvjR/YpEf9IqZMOrZ/F0eSVwwsAU1PRStbAkPFvEoSSUkEugbA4/y3TX6ZozYRils7sRrlwWHLhlUOa26wOyb4YAwS5suQExeslDtB644eB7yw9Sz8nHv/djCugrtrM5V92NA7nz/EmNnOiRnkmBlSYUP8VUS4vUy1832ABzaro39IxiBpphDSvxBB4aKOTq1tJoN8eRXcCAAjs4/dZ/Hgt+Dzj9UToxX6M41UXl5lSiZR1Ycw35PhphkFVPHhzYMD9SVT1ZKzN8HT6x8jYqPak063nNBcg0gtzD8q3oCKV3Bg2wWTnXWyqJhJ8wN81laeptpjOFc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(18002099003)(56012099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Hm7uYthsc3wg+vDHikpIf8x1xLL19Tw5ipCMPLxvGLDRMtDZ/ecPq9NM8/M0?=
- =?us-ascii?Q?JLom9tqEu6pIFzc8GEfELdmhCq0an5jqvBfsLztEu8PjGfxb25f+Up73HOCC?=
- =?us-ascii?Q?u82APPUYG/T51mAjQREe6CNXgfok/dsSe/CLy6IdkNc2IoOLUQgaiIDT7iTg?=
- =?us-ascii?Q?8Sj5SzL+jWCqEHPJv9ytLyxnIV/Xvie1uMkWqEw72ZmtLFOkMSgCas036mu6?=
- =?us-ascii?Q?TQMSlihwIvuXZHwditcYMkK1pNjLB2oTvsVSG2OujphdoyFUCsUuS9Ov2LvM?=
- =?us-ascii?Q?k2iCLj7KpTW4103TD/IXR5wtgIHrHOtklvU/gPtgHF6WBfQcZlwB/g9oaYmU?=
- =?us-ascii?Q?hRswLBY/GcGEtn99ygk49hf8JisvUCVx3sJnHlzDcOAJGIQ7p+T6KV8zTRid?=
- =?us-ascii?Q?YvaVtgDZ0cnk/eIwHWBdqYLUfK+fI6Nyqo49vkSkYMmoW5JGxPxVmq2WIv92?=
- =?us-ascii?Q?VNNmmLakiJHVh9y6HVXyv+dXkUpqwV+ZDgMKC7nUajQHOx+XBm9eoHpTp+RX?=
- =?us-ascii?Q?KxDDiXqODvv4DdE2+TgfGeqPBf6g7dlAD+JYeAfOif3AS7Xst1PtbpXFLtbs?=
- =?us-ascii?Q?AqaEVUc3BGISHU390Tg/qrqF6jedYWMYp4hZZbI8FEOTep1fjUxS3NHOdpq9?=
- =?us-ascii?Q?wT3l5oepFlSvlFslQVfRXxeEZclI8ULxqcKVXMddTNR2D9tEKkL3J/AsSU7c?=
- =?us-ascii?Q?tbLe1uvL3ks4sR9JBBJTN5z2We7BS63vb97kWwxL7p+tuk6qaYYAve2fJUnE?=
- =?us-ascii?Q?sBrepWgRfQhWAgU9wGreDg+bJi3jqAVeQyWqGSJWwYb21K8IQNuy0T7CzWQX?=
- =?us-ascii?Q?AJxamyhpz7FFR87gmLidrQTvZhM27fJSolddNs2B/CPRPdeFWrkY6AdkWCpX?=
- =?us-ascii?Q?NAEEm9NeHQoxz/2H1ITqzixispEE9ErlhEHwKxdrRvxL5Pl5tMhg+V1lJ0Dj?=
- =?us-ascii?Q?xRKYWN6lKpxbdbaCeoTlv0R3GwbFMfXJsSCxvPUzY2CPK6RJ/WTKnl8YGpvm?=
- =?us-ascii?Q?PgjCo0KxGHOFN+EE+Yzt3iCDEa0e/c8CYkhnwbg1zgzgQDgM5CLXdCP2e79r?=
- =?us-ascii?Q?yXypaF8+dRARSjahVKlz9x34xc58CDQgL6mhb+hGFava7veALMaeYXu/Yb14?=
- =?us-ascii?Q?QN6AedCRkFKUDPczlZnsa1GSvqBlyp4QW48LVeDwkN0tfdDGDOH90RRN92Y3?=
- =?us-ascii?Q?dBEcuaeVNmHDQDfKBL90VpR94x88IR3Sxulra8VDbL1QSVY9gdBeQjulGcU3?=
- =?us-ascii?Q?RP1no7rlap2S2fBcvBOWytOEluJ9cDj9HjejuMwHN0SspdABYSX3x4tj5fiY?=
- =?us-ascii?Q?ZJzL7Y3xURw/weTw1czd5qm4n/zPKDvALcPrLDlottFk2vpSGSpZOMdDSMm+?=
- =?us-ascii?Q?f+mOeTF4Rd4pdpGzsXCAqY38m9KEWtBAzu7Kvjic5EhCr2f9Log1ajIw9Zgh?=
- =?us-ascii?Q?EMmEqAjX9GdPE0yNMuq5o/zUjgU1C4SuhGl//g9n9CXCedVgQcbuy+UIIjKQ?=
- =?us-ascii?Q?oC0rbDsCwiYi9p0E4ip0oLd/kUp/L9G2Bb7uC0xRZViF/5MqA96DE9paGqAg?=
- =?us-ascii?Q?Hiv8qTGYuSCCZMxE3vQ60NKRqNpmTQp2z5PdS+FQSo/gL1cfjuJ0Lwpsw9Xj?=
- =?us-ascii?Q?uQiVbZ51radrEtK5vK9xiH2rnOPvPvQi6Spvxn+L2N7yWMJlTdLjtXT6IuwI?=
- =?us-ascii?Q?1kRCRBCbNOcvQCWqdRbkuv0Aljk1O9ZS7HjoghOtdswmrA2753+pCNhKfF9J?=
- =?us-ascii?Q?rDp4CB0V7A=3D=3D?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bdf8bb7-faf8-4dfb-43c7-08de9cb1a37b
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2026 18:46:30.0209
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UDbM/RLQusVc3fvZJRy9uNzU1LVTu3THVjHO0eew9gXaGu455xupBmrWutYkAW3vwa6ZTaW6iIL74mBUmMtBUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB5942
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 bpf-next 5/6] selftests/bpf: Fix up __u16 vlen
+ assumptions
+To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, qmo@kernel.org,
+ bpf@vger.kernel.org
+References: <20260417143023.1551481-1-alan.maguire@oracle.com>
+ <20260417143023.1551481-6-alan.maguire@oracle.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260417143023.1551481-6-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In attach_kprobe(), the parsing logic uses sscanf() to extract the
-target function name and offset from the section definition. Currently,
-if a user specifies a negative offset (e.g., SEC("kprobe/func+-100")),
-the input is not explicitly caught and reported as an error.
 
-This commit updates the logic to explicitly notify the user when a
-negative integer is provided. To facilitate this check, the offset
-variable is changed from unsigned long to long so that sscanf()
-can accurately capture a negative input for evaluation.
 
-If a negative offset is detected, the loader will now print an
-informative warning stating that the offset must be non-negative,
-and return -EINVAL.
+On 4/17/26 3:30 PM, Alan Maguire wrote:
+> Fix up a few cases where we assume vlen is 16 bits.
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
 
-Additionally, free(func) is called in this new error path to prevent
-a memory leak, as the function name string is dynamically allocated
-by sscanf().
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 
-Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
----
- src/libbpf.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/src/libbpf.c b/src/libbpf.c
-index 42bdba4..cd250fe 100644
---- a/src/libbpf.c
-+++ b/src/libbpf.c
-@@ -12271,7 +12271,7 @@ error:
- static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf_link **link)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, opts);
--	unsigned long offset = 0;
-+	long offset = 0;
- 	const char *func_name;
- 	char *func;
- 	int n;
-@@ -12293,6 +12293,13 @@ static int attach_kprobe(const struct bpf_program *prog, long cookie, struct bpf
- 		pr_warn("kprobe name is invalid: %s\n", func_name);
- 		return -EINVAL;
- 	}
-+
-+	if (offset < 0) {
-+		free(func);
-+		pr_warn("kprobe offset must be a non-negative integer: %li\n", offset);
-+		return -EINVAL;
-+	}
-+
- 	if (opts.retprobe && offset != 0) {
- 		free(func);
- 		pr_warn("kretprobes do not support offset specification\n");
--- 
-2.51.0
+>   tools/testing/selftests/bpf/prog_tests/btf.c             | 2 +-
+>   tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c | 3 +--
+>   tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c     | 3 +--
+>   tools/testing/selftests/bpf/test_progs.c                 | 2 +-
+>   4 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+> index 0cc347e32db3..a9de328a8697 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+> @@ -8092,7 +8092,7 @@ static struct btf_dedup_test dedup_tests[] = {
+>   static int btf_type_size(const struct btf_type *t)
+>   {
+>   	int base_size = sizeof(struct btf_type);
+> -	__u16 vlen = BTF_INFO_VLEN(t->info);
+> +	__u32 vlen = BTF_INFO_VLEN(t->info);
+>   	__u16 kind = BTF_INFO_KIND(t->info);
+>   
+>   	switch (kind) {
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+> index 5bc15bb6b7ce..6bc31236805c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+> @@ -487,9 +487,8 @@ static void test_split_module(void)
+>   	for (i = 0; i < ARRAY_SIZE(mod_funcs); i++) {
+>   		const struct btf_param *p;
+>   		const struct btf_type *t;
+> -		__u16 vlen;
+> +		__u32 vlen, j;
+>   		__u32 id;
+> -		int j;
+>   
+>   		id = btf__find_by_name_kind(btf1, mod_funcs[i], BTF_KIND_FUNC);
+>   		if (!ASSERT_GE(id, nr_base_types, "func_id"))
+> diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+> index 469e92869523..5064aeb8fe67 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+> @@ -253,8 +253,7 @@ static int find_field_offset_aux(struct btf *btf, int btf_id, char *field_name,
+>   {
+>   	const struct btf_type *type = btf__type_by_id(btf, btf_id);
+>   	const struct btf_member *m;
+> -	__u16 mnum;
+> -	int i;
+> +	__u32 mnum, i;
+>   
+>   	if (!type) {
+>   		PRINT_FAIL("Can't find btf_type for id %d\n", btf_id);
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index 7fe16b5131b1..cc14b13e23fe 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+> @@ -1257,7 +1257,7 @@ int get_bpf_max_tramp_links_from(struct btf *btf)
+>   	const struct btf_type *t;
+>   	__u32 i, type_cnt;
+>   	const char *name;
+> -	__u16 j, vlen;
+> +	__u32 j, vlen;
+>   
+>   	for (i = 1, type_cnt = btf__type_cnt(btf); i < type_cnt; i++) {
+>   		t = btf__type_by_id(btf, i);
 
