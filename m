@@ -1,108 +1,141 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E176435F189
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:22:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44563A16B4
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776446564; cv=none; b=jhgK3fTY3Y146dT2kGkolGyx9VXyLdRYTPHP38Zi51QOhZVbbHcp2h4yRTBp3kb8614JIoRlgnfiyLVCsYK5j17NFW68FU8NxYQr64SMA4xzVnGGbeO/NpkQeh/VoDLRC0eGG8SQRNRwkWdDgO71OO7SCNwyhEQX35zg5N4rSH0=
+	t=1776448151; cv=none; b=WuEB82z00OTn3Hlqh7qLuaDr7kO054oeNA5xCJrFqj8x0apcdHIDQZbqhIznPR9jjbplHuOvR3q11mU6Hdwao0Aa1YqBXjECAPqW9wkXycUz73r4F7NZXjzpqBlQrG0pXtdJiHOFkQOJU7s9Whal77gyzMKmqd0ZL/omEYPx4Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776446564; c=relaxed/simple;
-	bh=zKYCpWOZr1bz6RbA+dNa0pIvU5r/RGqVdCYgv/PANHA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XYBdhelbhNsqu4z9q9iafVcuOtKYudgjqnlCqeCPBuH5oNNuwernkAA/LSxQzGzxWC0dlTnKwlErBoGOCkcfHiTCYpxbnU2x1PVghM/KUf29XcqfbuxpTedS2qWpVypri5MG80aZr2A41YUGoOfGZTvO0+vJM7MBCQviYKisVSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gd9HdD/o; arc=none smtp.client-ip=209.85.128.49
+	s=arc-20240116; t=1776448151; c=relaxed/simple;
+	bh=o3SkpCZp2IYyOv/Ch4F0MD/wO+LSvMUhY5h0puJbO2A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kjYIhXxSClotH4Y3mGr5TPVgseO/nrxZe3VqIhX98S1L7PpYFF5Q+LTGgUt2xqCdE6WLL7Uycs+n9N4f6SguZ7McP7c/f1Oc/88cvVG8mhTwctPs9DVhCKALGVkTg+dF2VQk82yedCrt58ABP8XBQbb0S3Mo0GciheeZVxDmdac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sp3pjX96; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gd9HdD/o"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso9118665e9.3
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 10:22:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sp3pjX96"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-82f2766905fso446334b3a.3
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 10:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776446561; x=1777051361; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jbqatp0qHepZF3d8fjmGE/KljlJeUlBWWbHvGa0ch0w=;
-        b=gd9HdD/ogjm6ffUDXBTW7Bce9SGh5cesJ6vJqmsG4NfBN73hXM0nb1f1UYE1/ZeeiZ
-         Jz0uOsu4ik6ySiBScUrT4kEK24h+rNWBRpfJfZJNBUzSS8qFnfMJQ/OWOmwYpXdfpNEy
-         ooSEPzrDnoPhSRWSoRT8uifdUWHP3NV9HtGkDByf2QAukBcfF6vUIx5ZFxEBMVBR7a5c
-         ps494FNNQbMwi0fju3yvucUkdA70DMFwJw9u9YvLjdwsKvjrMkPb877FsuYlW1s90+7j
-         bhV/+8LKulVeAMElKjLNkGyFdeyB/45BTXgvFm3FHjWKMA/YYWabAhD2Fv5Vl6cxnsu6
-         txcQ==
+        d=gmail.com; s=20251104; t=1776448142; x=1777052942; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8TA/MNIel6VK9u9WqtfYVsZvbCaFEmcRqjySnlQxqgQ=;
+        b=Sp3pjX96rVIKSALyS/3AcOQ27rwFIXdvvusMYuHAHpa2llMWx69A884nFHLFfeqEea
+         t87U+8aGAMGxRKmjTmSOn0kM5YUC91SI1GJb0Wk+GyVyAXOHbCStMeWhhdp/dWxMvLru
+         gkk+aHuu5eYVBqw+N7H7sUi0PdiMoJI2OIaeUxql6/fKEnnvLxBuGXsYwdIqCRKOwYnX
+         XLor+QVqhkrFt3MlXhcgbNlwEWArlDzrIyZ638dg7uBAkBLrhCawUlXXX4fmeNwLXtY2
+         IPbZu0fY6Vcs5Z/MFXTTPTNXIplLgOGfhiy8C65mlXeGPQT9mgdhZhhpEIPGBnj/njzs
+         Gxlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776446561; x=1777051361;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jbqatp0qHepZF3d8fjmGE/KljlJeUlBWWbHvGa0ch0w=;
-        b=U+t/1CGupX5a4OgmN5auh5yWtcuZ5UADzGLb4gqThRxCCPR7mUVJcpCEcstZ2ukgO7
-         DDkbksRDuUP48qK2bGdinqugwM0Ey62V5UyC/EYdn2wNegP440lT91Cc+AICOwglQd5r
-         dqabWCOW2Bf3V6Gyp7kD65g2mx8sV00wyrBEIr4/N+RHv7483nmEg7lWbj0+prX2w0Hx
-         Dy4KdQjU3HFdGa5TbKNu5MaFG/8/iNhuJ9xXTY03+GmFKScCoSV5E1c7FaQ8gU4LeItR
-         amsIzsN/fpp0roQlOqnguzYI2fJc4lrvKlRM0ZdXcPu/UkDQHRFaqen0TKP+Su6TvtoW
-         7mTg==
-X-Forwarded-Encrypted: i=1; AFNElJ9FOd7tpuf4/sYT9SnRltfFjRMboh7eJkWiXXFT+C4Cm9hFkveQVtEQ2PjMWmrpoZmvVHc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXXZNFAkc+GC9PTLY14T6vkMwn5vtMUPqp/DKLN52fJTQKHBtS
-	5PANtf11iTNRSJdZ+kXpjADT+gMxTwzwb/5tfbRVB0+HZ+6DaCRjrCHg
-X-Gm-Gg: AeBDievQ2V2fBgigtfVX5oXd9bAdmPay57R97gTke1KzOexI58yetQHn8L+syY8C7dw
-	HjQkGjuRHOWcBZboQpvZOAVIo6h9Uq0hsWuvYUNZpzuyvrmHpdlRGxmBpKv4Uf8lrH6OXCGnVHk
-	DdAq1r74uoVhnfIenwPsH+PMGHehEFDQtcq7ie/5eAzTBsOFoAkfTaSNLN0CY428KpJIHTRfxuu
-	fbqd5yJk6YIvMFMkMKkGiaxSPXXSAr7S0sSIFZeAVYTsFGt15tgWnjG0IGsAQW+fGtykNUbR4LC
-	cbuwFGX7GjOaRiarnfhp7Xt7aoEcyyACPB66/N/AwtWLb7eop3B1MP2AUNUis4gJEXR4ukcrrcl
-	CVXujQ1Y0WQ5z0/jkxKnWSVikeK6vUtJi9FpskKq8ottmfssRzdkcBfFK8PyGP0yphmxBY9lgOY
-	6Tg1ZYk9XELhLPUgezsS6bpLP4u4mT/6S3tvjQ7lI2V7mEHPvb3Ldkpyvgo5zwdcepS/4BtUJmJ
-	cfTjqpBpjXQ+K7Yoy+oryPwudp1pAy9
-X-Received: by 2002:a05:600c:a00f:b0:486:fe83:8621 with SMTP id 5b1f17b1804b1-488fb788924mr59982755e9.23.1776446560959;
-        Fri, 17 Apr 2026 10:22:40 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1365sm6324879f8f.7.2026.04.17.10.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2026 10:22:40 -0700 (PDT)
-Message-ID: <337f2570-acb2-4b31-8c4f-86ba4cbdfe65@gmail.com>
-Date: Fri, 17 Apr 2026 18:22:39 +0100
+        d=1e100.net; s=20251104; t=1776448142; x=1777052942;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8TA/MNIel6VK9u9WqtfYVsZvbCaFEmcRqjySnlQxqgQ=;
+        b=ErvFtG19BbhQceUdYvrKvecWKG8J7IjNAMzOc2VQ5viDQpaY2GwyYg+il58GauqXmr
+         1AAjZl0t1togK2XsALSlonKYuYTtGZ7OVA475U65s8uZPlQh6QVfuRQWThiqboba6bjR
+         TnPlCf6PFWd8Q+CWMKdXTzyE+j7A4fR75u/3qXWxqDi3Sa9YsJjUt468CsZGXZMmY1ya
+         u4BDnkDkTUATrKOR0VFKgKw9NqQwP5XxfA6K+PQR4FAgIZDD6O+/AzMz3rdNJ7bz+Sfw
+         yc4VS27YocTVx5ITJStRiz+qWxnYLwCb2mKfZj/9Gmo/MdGPnycz4Tmle03PM3BFlxMf
+         OwyQ==
+X-Gm-Message-State: AOJu0YyvmbRlKoQRw+3ExnC3TS0yQAb/Zpl8n5rgu5dN4nphMuVT+xIG
+	eywWh97rWKa8yXtV9pRK3mV0Cyzc/XnxnATFdalmJ0+Hq2sGDk/CbNcg02wCtA==
+X-Gm-Gg: AeBDieugotnBR1JVb4CuD7ZqR88e497nRKXxE6z+lv/hvFTYgSB9HwSzE9CmZ90UESm
+	5NAIHWp/kOAlBhpnsfdsCQXHYGrH1ch2TafVRPelPO1HFq8aMaquBL58MYcEdLyyLWY2tpg4fie
+	LKhqkYQMSCsUoSeeucYU/Ew4GtwIhl3rP7u3eVoHYdFxwTNgpJGF0ToIrrAuewWf2giVDT3X/fc
+	V0sm/az2gw7Hh9BxlHIxT4HBaeiPa7v9eOcKj7jkHdijSIRQuwnDwUIQGzRHN1srSDQmxUAluxT
+	MMyeOCQ9QBfOFsmfIGq/db0aT5Yn1xxlaSxR/rqpSH9xf8slHJEXLSBdwaBOYNNxB/Fy8oQ1Yl4
+	4JVN8ls75FMvgA4k+/Ri8xbK9/by1t+BOS7KoPTKOqYH3UrAPkw+v2qbRWtS3+PgcQIqedEvRqN
+	BqkhUfh542pMOb6Vvms+EvLosS
+X-Received: by 2002:a05:6a00:a15:b0:829:8942:2ca4 with SMTP id d2e1a72fcca58-82f8c838f04mr4206842b3a.19.1776448141736;
+        Fri, 17 Apr 2026 10:49:01 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:44::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec06cbfsm3229727b3a.58.2026.04.17.10.49.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2026 10:49:01 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v1 1/1] bpf: Dissociate struct_ops program with map if map_update fails
+Date: Fri, 17 Apr 2026 10:49:00 -0700
+Message-ID: <20260417174900.2895486-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v10 2/6] bpf: Add bpf_prog_run_array_sleepable()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin Lau <kafai@meta.com>, Kernel Team <kernel-team@meta.com>,
- Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260415-sleepable_tracepoints-v10-0-161f40b33dd7@meta.com>
- <20260415-sleepable_tracepoints-v10-2-161f40b33dd7@meta.com>
- <DHU7408DLITK.2DC76VINL2F7K@gmail.com>
- <CAADnVQ+6udrUD-xW96ZJkz3UkEq8JZAdFiMgB=f5jfFaYVjJ5g@mail.gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAADnVQ+6udrUD-xW96ZJkz3UkEq8JZAdFiMgB=f5jfFaYVjJ5g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Currently, when bpf_struct_ops_map_update_elem() fails, the programs'
+st_ops_assoc will remain set. They may become dangling pointers if the
+map is freed later, but they will never be dereferenced since the
+struct_ops attachment did not succeed. However, if one of the programs
+is subsequently attached as part of another struct_ops map, its
+st_ops_assoc will be poisoned even though its old st_ops_assoc was stale
+from a failed attachment.
 
+Fix the spurious poisoned st_ops_assoc by dissociating struct_ops
+programs with a map if the attachment fails. Move
+bpf_prog_assoc_struct_ops() to after *plink++ to make sure
+bpf_prog_disassoc_struct_ops() will not miss a program when iterating
+st_map->links.
 
-On 4/16/26 3:40 PM, Alexei Starovoitov wrote:
-> On Wed, Apr 15, 2026 at 6:41 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> One more thing..
-> Please go back to my 'do your homework' request from v9
-> and answer the question why it's not safe to do bpf_prog_run
-> on dummy prog like this patch does.
-> I missed it yesterday and only complained about the waste of cpu cycles.
-> It's more than that.
-> 
-> Do not send v11.
+Note that, dissociating a program from a map requires some attention as
+it must not reset a poisoned st_ops_assoc or a st_ops_assoc pointing to
+another map. The former is already guarded in
+bpf_prog_disassoc_struct_ops(). The latter also will not happen since
+st_ops_assoc of programs in st_map->links are set by
+bpf_prog_assoc_struct_ops(), which can only be poisoned or pointing to
+the current map.
 
-I see that very similar bug was fixed in 7dc211c1159d ("bpf: Fix invalid 
-prog->stats access when update_effective_progs fails"), the problem is 
-the same - NULL field access on the dummy prog. So the approach to just 
-allow dummy to run further is fragile, because other NULL fields may be 
-accessed.
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ kernel/bpf/bpf_struct_ops.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 05b366b821c3..521cb9d7e8c7 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -811,9 +811,6 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 			goto reset_unlock;
+ 		}
+ 
+-		/* Poison pointer on error instead of return for backward compatibility */
+-		bpf_prog_assoc_struct_ops(prog, &st_map->map);
+-
+ 		link = kzalloc_obj(*link, GFP_USER);
+ 		if (!link) {
+ 			bpf_prog_put(prog);
+@@ -824,6 +821,9 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 			      &bpf_struct_ops_link_lops, prog, prog->expected_attach_type);
+ 		*plink++ = &link->link;
+ 
++		/* Poison pointer on error instead of return for backward compatibility */
++		bpf_prog_assoc_struct_ops(prog, &st_map->map);
++
+ 		ksym = kzalloc_obj(*ksym, GFP_USER);
+ 		if (!ksym) {
+ 			err = -ENOMEM;
+@@ -906,6 +906,7 @@ static long bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ reset_unlock:
+ 	bpf_struct_ops_map_free_ksyms(st_map);
+ 	bpf_struct_ops_map_free_image(st_map);
++	bpf_struct_ops_map_dissoc_progs(st_map);
+ 	bpf_struct_ops_map_put_progs(st_map);
+ 	memset(uvalue, 0, map->value_size);
+ 	memset(kvalue, 0, map->value_size);
+-- 
+2.52.0
+
