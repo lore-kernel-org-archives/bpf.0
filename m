@@ -1,114 +1,136 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4932DB798
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 04:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A662B3624B9
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 04:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776400210; cv=none; b=TXY3ty4YbBPW4a5tYcfD62x2eLxdlDgZdVwCSDVYpDgRn5Au0vWrLWa53wa3rHGJcOePySyyhDfs9FzMAtqlY+vUBv7ZfT/L67xryGmbDoR+WPag8uvHiGTFhuaLlKIAwWzYwB/QQfGXdEpZf4oGdPs2rvBEFPGqbdN2uY9ceEk=
+	t=1776400212; cv=none; b=DjaY0xu6xx9WBGyYFXTQwKZPn02OHaw4F2Zpgb4OUDjIwg2a3fZO3l1eCnRwaNvnzEUiuUy6tAmQpe7gLJ8IOlAYEr9HyUfjx6VjbsswHfXXi7RKyFX1mpueHuCrYwUV7BX4ZrKbsHUBa8ebW9bKwgQDm0AumlCVw0sgrXf6bgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776400210; c=relaxed/simple;
-	bh=bWOz9tJfPM+87ktE6k5HUNo7Q8jvfwm93qQ7YqYOrlU=;
+	s=arc-20240116; t=1776400212; c=relaxed/simple;
+	bh=jvFCxOtcKkhJ78fU8G7YXtTmwlKsOGpmfKv12NDwFVQ=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=CzWuX4g1Xyopxz1498q7uYP318KYvOCoQSy5xVIB93gxxegTKexn7srP9l7/NgdBKCNR9hHYbOde20He9Dd1w58WPpljq/Ion8h1bCUPdIRgQo+plBQHtFKkxmVp82qjXit313ygFo83N/yuba+JuIO5wlUNJPTwHwA2mdX40bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hDEigL9y; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=h7qZNVUdQDaD0F/Kiv5waUXxOOIy3oQKYO1SWFz+NrlPuQf2r7MhofYnPZOevYDVvbcU3XDTo1FU+lpPMHBHIuxNn1cHiOkGjprUKN8bwQBQVo8lBA+vfATHB8XqvpeO+A6rzswq/uh8AcwV5a6GIAICkvCEb7V0kzugN3cn8qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgnKx310; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hDEigL9y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 904A0C19425;
-	Fri, 17 Apr 2026 04:30:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgnKx310"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AEE3C19425;
+	Fri, 17 Apr 2026 04:30:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776400210;
-	bh=bWOz9tJfPM+87ktE6k5HUNo7Q8jvfwm93qQ7YqYOrlU=;
+	s=k20201202; t=1776400212;
+	bh=jvFCxOtcKkhJ78fU8G7YXtTmwlKsOGpmfKv12NDwFVQ=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=hDEigL9yge6phhLORoZy1UfVLCsFKBvZcfANy/ZPB6ljAqIjGy59V60kPzvi3oqO3
-	 yWcpD90n1kur5UPqL7WUeyYwPt5i6vybeUEEe4YOyTF6Hplh1TnwwtbDaOgTLAea5W
-	 8+O05NtKfSqPg+iPmgAwYBclFz4kW+ENz3UUCoo/SvKUUE90H1qhSpH/ZfN6OcqWwg
-	 56s7W1MdD3RMyoH6X4xrn/1TctJL1QYpWilO3QxXBH+7ZZFmkL6farVFqXHuJewEOd
-	 cGLp8tCF97OZijPCKrSLPDpRFTgTh9Bdr3P5x5rwei9r2MwPfQcqiTvSm08uIYRTkO
-	 n9Pqjkutdoqfg==
-Content-Type: multipart/mixed; boundary="===============7444265718960743378=="
+	b=kgnKx3104s2fJbEsytxg3X3ZT+g9jxS32Xz8wneMMRsNnNarOjOyUNvQgVc9H+za7
+	 x8B1QuKfAb3flk9s2h/gMmCmVyWydqOqqyfVdptKAlDCvmzwhSq/XjfTYFsasHKXNA
+	 uLqlCSeKBBBN4+wHq98BmrXnuh2dncbIxv7KJ7jkNB4x/esgNEFeeHN2PXpISlEn5+
+	 PuZ25abX1r1RnNsUfPNRIgimc7YCeqeBOMJG9+y9DLwqx4ist+y8rDIjRQdLA/vKHR
+	 MRER6ksMvO3GrFGyEbHfMvzif5sUPxXtiGTjjIqkHJ2/dGT6cq9Dp1wtdNYMrBYeSt
+	 08RGruM9yD5gA==
+Content-Type: multipart/mixed; boundary="===============3911593946012350801=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <96af03177041a83cc1cb9c4795d95de986a364e4715dedce11b90f4b44a8bfd0@mail.kernel.org>
-In-Reply-To: <20260417034749.2630580-1-yonghong.song@linux.dev>
-References: <20260417034749.2630580-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 10/16] bpf: Reject stack arguments if tail call reachable
+Message-Id: <0384d4ba23e7f159c6e80c79a64b4dcd2186fa97b53ae7b2eb721a9cd3156775@mail.kernel.org>
+In-Reply-To: <20260417034729.2629367-1-yonghong.song@linux.dev>
+References: <20260417034729.2629367-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v5 06/16] bpf: Limit the scope of BPF_REG_PARAMS usage
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 17 Apr 2026 04:30:10 +0000 (UTC)
+Date: Fri, 17 Apr 2026 04:30:12 +0000 (UTC)
 
---===============7444265718960743378==
+--===============3911593946012350801==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> commit b77ef401ea17eab379f390ca5d89aeab4b271ca7
-> Author: Yonghong Song <yonghong.song@linux.dev>
-> Date:   Thu Apr 16 20:47:49 2026 -0700
->
->     bpf: Reject stack arguments if tail call reachable
->
->     Tailcalls are been deprecated. So reject stack arguments
->     if tail call is in the way.
+> diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+> index db73c4740b1e..09db7fdb370f 100644
+> --- a/kernel/bpf/const_fold.c
+> +++ b/kernel/bpf/const_fold.c
 
-The commit message has a grammatical error: "Tailcalls are been deprecated"
-should be either "have been" or "are being".
+[ ... ]
 
-Also, is the claim that tail calls are deprecated accurate? Based on earlier
-mailing list discussion, the restriction exists because tail calls and stack
-arguments require incompatible stack frame handling, not because tail calls
-are being deprecated. Could the commit message be more precise about the
-actual technical reason for the restriction?
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index 1fb4c511db5a..993d7e543e9f 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
 
-This also appears to be a bug fix for the stack arguments feature. Should
-this include a Fixes tag for the original stack arguments commit?
+[ ... ]
 
-Suggested: Fixes: 21229535935384b01e3cef3c117233b23b2f3902 ("bpf: Support
-stack arguments for bpf functions")
-
->
->     Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7a65b532e84a..739c3127520c 100644
+> index ff0c55d80311..f25a56cfabac 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -5662,6 +5662,11 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  				verbose(env, "cannot tail call within exception cb\n");
->  				return -EINVAL;
->  			}
-> +			if (subprog[tmp].incoming_stack_arg_depth ||
-> +			    subprog[tmp].outgoing_stack_arg_depth) {
-> +				verbose(env, "tail_calls are not allowed in programs with stack args\n");
+> @@ -18487,13 +18487,22 @@ static int check_and_resolve_insns(struct bpf_verifier_env *env)
+>  		return err;
+>
+>  	for (i = 0; i < insn_cnt; i++, insn++) {
+> +		u8 class = BPF_CLASS(insn->code);
+> +		u8 mode = BPF_MODE(insn->code);
+> +
+>  		if (insn->dst_reg >= MAX_BPF_REG) {
+> -			verbose(env, "R%d is invalid\n", insn->dst_reg);
+> -			return -EINVAL;
+> +			if (insn->dst_reg != BPF_REG_PARAMS ||
+> +			    !((class == BPF_ST  || class == BPF_STX) && mode == BPF_MEM)) {
+> +				verbose(env, "R%d is invalid\n", insn->dst_reg);
 > +				return -EINVAL;
 > +			}
->  			subprog[tmp].tail_call_reachable = true;
 >  		}
->  	if (subprog[0].tail_call_reachable)
+>  		if (insn->src_reg >= MAX_BPF_REG) {
+> -			verbose(env, "R%d is invalid\n", insn->src_reg);
+> -			return -EINVAL;
+> +			if (insn->src_reg != BPF_REG_PARAMS || class != BPF_LDX ||
+> +			    mode != BPF_MEM) {
+> +				verbose(env, "R%d is invalid\n", insn->src_reg);
+> +				return -EINVAL;
+> +			}
+>  		}
+>  		if (insn[0].code == (BPF_LD | BPF_IMM | BPF_DW)) {
+>  			struct bpf_insn_aux_data *aux;
 
-When the traversal pops a frame to return to the caller and jumps back to
-continue_func, is the tail_call_reachable variable reset to false?
+Can these instructions with BPF_REG_PARAMS trigger out-of-bounds accesses
+in subsequent verification functions? The regs array in struct
+bpf_func_state is declared as regs[MAX_BPF_REG] with MAX_BPF_REG=11,
+giving valid indices 0-10.
 
-Looking at the broader context of check_max_stack_depth_subprog(), after
-processing a callee, the code pops back to the caller:
+When instructions with src_reg=BPF_REG_PARAMS (11) reach check_load_mem():
 
-    /* pop caller idx from callee */
-    idx = dinfo[idx].caller;
+kernel/bpf/verifier.c:check_load_mem() {
     ...
-    goto continue_func;
+    src_reg_type = regs[insn->src_reg].type;
+    ...
+}
 
-If the verifier traverses a subprogram with a tail call, returns, and then
-traverses a completely unrelated sibling subprogram that uses stack
-arguments, would it incorrectly evaluate tail_call_reachable as true and
-reject the valid sibling?
+This performs regs[11] which is one past the end of the array.
 
-Is there a state leak in this DFS traversal that could cause false positive
-rejections of valid BPF programs?
+Similarly, when instructions with dst_reg=BPF_REG_PARAMS reach
+__check_reg_arg():
+
+kernel/bpf/verifier.c:__check_reg_arg() {
+    ...
+    reg = &regs[regno];
+    ...
+}
+
+The commit message states "array-based register tracking indexed by
+register number would cause out-of-bounds accesses. So do early return
+if needed." However, the patch adds early returns in const_fold.c and
+liveness.c but not in the main verification path functions like
+check_load_mem() or __check_reg_arg().
+
+The fix appears to arrive in subsequent commit 212295359353 ("bpf:
+Support stack arguments for bpf functions"). Between this commit and
+that fix, could user-provided BPF programs with BPF_REG_PARAMS
+instructions trigger out-of-bounds memory access in the kernel verifier?
+
+This commit also lacks a Fixes: tag. The suggested tag would be:
+
+Fixes: 595885eced33 ("bpf: Introduce bpf register BPF_REG_PARAMS")
 
 
 ---
@@ -116,4 +138,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24546989054
---===============7444265718960743378==--
+--===============3911593946012350801==--
