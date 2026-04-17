@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DC23CBE9C;
-	Fri, 17 Apr 2026 19:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EA036AB76;
+	Fri, 17 Apr 2026 19:26:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776453949; cv=none; b=jNfD8awrRD9RoKnt/KUZrjghUC2KYIcJaH/y89SDXLUKSqbg2qfOkoto2StRtUy0twHRn8gx3J388i/0od4izL42OjXbbl/nqiKsoFC+gGmATfUwMcHr9AmlYRKEcApVa5MZt1ykKYrCQOgRoRdZFV4pfKwkzwP4hv02ZQBtpkM=
+	t=1776453961; cv=none; b=NxDKfwJgsDL6RkiefCQPp+uTW9kkXUfKzZwBGAPwTV4unXFrSah33inEZhJZWzVwDVa0BsB937ylGMlUftu8u884yYr5uwEIi10GJcnowDIhk1njneP2tbriZuq+mf1L1IOWFIRfnt+BakQ3abeH+sYAADAI5KrXfKrzkCo7K6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776453949; c=relaxed/simple;
-	bh=BAdsJHK8KMf+V9rAazwzDWD2lmvQe8O89AAllw4uu3s=;
+	s=arc-20240116; t=1776453961; c=relaxed/simple;
+	bh=H2uI5VZ7GW7WHx9KC8i9TSb5q9dCC339RWv/xNPD9h8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R7Vpsc6UwtjJlKCOqfrdhm9s/NtBSpG7XBKTA911uJBTEdKFkGBQGvAxZkskvZM49JGsLP98BICGoV66uxCrrxWqzOi1TOZEDFk350I/xgFvcnar6z2fxxEiO+ki2J3vBI9gSyVuXDa8dlJzemA8I8mo41zMGFPlbhXisPp4Ors=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I3JGaIx7; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=KfSiHTjFD/lf5dSinnJdPgPkFlLBQZcVn5NK0URKGhzNeT3pv0Tr4PQBlSTMoQeK2zDzLrMJ9bDxOmCXLXcckXgCf0tmXUbOTBqH89SLc9VFKLsgpTpr4hw1fJlXKmLP2Kd4IVBgIVrjKNts8Pfa8hvLYLEFUtz8YhviuTCY3sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDag240/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I3JGaIx7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF862C19425;
-	Fri, 17 Apr 2026 19:25:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDag240/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 145F6C19425;
+	Fri, 17 Apr 2026 19:25:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776453948;
-	bh=BAdsJHK8KMf+V9rAazwzDWD2lmvQe8O89AAllw4uu3s=;
+	s=k20201202; t=1776453961;
+	bh=H2uI5VZ7GW7WHx9KC8i9TSb5q9dCC339RWv/xNPD9h8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=I3JGaIx7G9zLpDUgyUDxjPokecokDuPcNSzn/jh41Jdyz+0lpTl19+jsZMl3E7yfr
-	 uCtLn5pVEBsUNJ59jR2qw4J0jfKeMWAHqowzV7Uz5tM5/X72bm/XKC1YBjcrEYdOE3
-	 c5JuZA5v9Ia3nFR+QonZOmAFT89E6KjzfoYp8VGn6Bn8kg7h76fH39gCY4kSyNLvpb
-	 pQeeu+IqBB5qC0d+ApRWBLoMYv598R5q6MKZjgnmItIvyN6Uz8BVCATHMpkpoGB90b
-	 NaipkMz71ZdmW85N96EH4RscXLQm+q9stBMclR5J2ForBiNXwNI0cd75UggJ2i7/jg
-	 XALgUAVUNLVnw==
+	b=CDag240/A6g8P+p2+dkkEhcM+2r24u3povHsscT1pu4AT8lJ6627fOCYrM1B4uMd4
+	 5pVKTEsIMm1vJR+bBmx4aOfxWfOFnteuqROrqMFwGFqAZyGTSskPkMSdrIQn3fi0dw
+	 /5jyUbYEczLzxXCcf7NBPCDfeVCZkc3PeVGx90FZfwuJgVqx+UwcQmZTa5PiPV+eTP
+	 CtO6+VimOisg2an6Ld5sa5/1K0Kmqh4IobeAOr4nkw55997o2ghSCWtBBjkmDF2v98
+	 hDsKXePXWZDXaJVfvrrRdFZZwf4EGSJZOISeIiz1wTSBBy1BZ7dm/phtc2WMVZQujc
+	 fv03q2OKVPKog==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCHv5 bpf-next 03/28] ftrace: Add add_ftrace_hash_entry function
-Date: Fri, 17 Apr 2026 21:24:37 +0200
-Message-ID: <20260417192502.194548-4-jolsa@kernel.org>
+Subject: [PATCHv5 bpf-next 04/28] bpf: Use mutex lock pool for bpf trampolines
+Date: Fri, 17 Apr 2026 21:24:38 +0200
+Message-ID: <20260417192502.194548-5-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260417192502.194548-1-jolsa@kernel.org>
 References: <20260417192502.194548-1-jolsa@kernel.org>
@@ -52,69 +52,245 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Renaming __add_hash_entry to add_ftrace_hash_entry and making it global,
-it will be used in following changes outside ftrace.c object.
+Adding mutex lock pool that replaces bpf trampolines mutex.
 
+For tracing_multi link coming in following changes we need to lock all
+the involved trampolines during the attachment. This could mean thousands
+of mutex locks, which is not convenient.
+
+As suggested by Andrii we can replace bpf trampolines mutex with mutex
+pool, where each trampoline is hash-ed to one of the locks from the pool.
+
+It's better to lock all the pool mutexes (32 at the moment) than
+thousands of them.
+
+There is 48 (MAX_LOCK_DEPTH) lock limit allowed to be simultaneously
+held by task, so we need to keep 32 mutexes (5 bits) in the pool, so
+when we lock them all in following changes the lockdep won't scream.
+
+Removing the mutex_is_locked in bpf_trampoline_put, because we removed
+the mutex from bpf_trampoline.
+
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/ftrace.h | 2 ++
- kernel/trace/ftrace.c  | 9 ++++-----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ include/linux/bpf.h     |  2 --
+ kernel/bpf/trampoline.c | 76 ++++++++++++++++++++++++++++-------------
+ 2 files changed, 52 insertions(+), 26 deletions(-)
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index dc93dd332b07..b42697084fae 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -415,6 +415,8 @@ struct ftrace_hash *alloc_ftrace_hash(int size_bits);
- void free_ftrace_hash(struct ftrace_hash *hash);
- struct ftrace_func_entry *add_ftrace_hash_entry_direct(struct ftrace_hash *hash,
- 						       unsigned long ip, unsigned long direct);
-+void add_ftrace_hash_entry(struct ftrace_hash *hash, struct ftrace_func_entry *entry);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0136a108d083..801b78b31d9b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1335,8 +1335,6 @@ struct bpf_trampoline {
+ 	/* hlist for trampoline_ip_table */
+ 	struct hlist_node hlist_ip;
+ 	struct ftrace_ops *fops;
+-	/* serializes access to fields of this trampoline */
+-	struct mutex mutex;
+ 	refcount_t refcnt;
+ 	u32 flags;
+ 	u64 key;
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index f02254a21585..eb4ea78ff77f 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -30,6 +30,34 @@ static struct hlist_head trampoline_ip_table[TRAMPOLINE_TABLE_SIZE];
+ /* serializes access to trampoline tables */
+ static DEFINE_MUTEX(trampoline_mutex);
+ 
++/*
++ * We keep 32 trampoline locks (5 bits) in the pool, because there is
++ * 48 (MAX_LOCK_DEPTH) locks limit allowed to be simultaneously held
++ * by task. Each lock has its own lockdep key to keep it simple.
++ */
++#define TRAMPOLINE_LOCKS_BITS 5
++#define TRAMPOLINE_LOCKS_TABLE_SIZE (1 << TRAMPOLINE_LOCKS_BITS)
 +
- unsigned long ftrace_hash_count(struct ftrace_hash *hash);
- void ftrace_hash_remove(struct ftrace_hash *hash);
++static struct {
++	struct mutex mutex;
++	struct lock_class_key key;
++} trampoline_locks[TRAMPOLINE_LOCKS_TABLE_SIZE];
++
++static struct mutex *select_trampoline_lock(struct bpf_trampoline *tr)
++{
++	return &trampoline_locks[hash_64((u64)(uintptr_t) tr, TRAMPOLINE_LOCKS_BITS)].mutex;
++}
++
++static void trampoline_lock(struct bpf_trampoline *tr)
++{
++	mutex_lock(select_trampoline_lock(tr));
++}
++
++static void trampoline_unlock(struct bpf_trampoline *tr)
++{
++	mutex_unlock(select_trampoline_lock(tr));
++}
++
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex);
  
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 5119d01ef322..7d57aa6e92e2 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -1198,8 +1198,7 @@ ftrace_lookup_ip(struct ftrace_hash *hash, unsigned long ip)
- 	return __ftrace_lookup_ip(hash, ip);
- }
+@@ -69,9 +97,9 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, unsigned long ip,
  
--static void __add_hash_entry(struct ftrace_hash *hash,
--			     struct ftrace_func_entry *entry)
-+void add_ftrace_hash_entry(struct ftrace_hash *hash, struct ftrace_func_entry *entry)
- {
- 	struct hlist_head *hhd;
- 	unsigned long key;
-@@ -1221,7 +1220,7 @@ add_ftrace_hash_entry_direct(struct ftrace_hash *hash, unsigned long ip, unsigne
+ 	if (cmd == FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY_SELF) {
+ 		/* This is called inside register_ftrace_direct_multi(), so
+-		 * tr->mutex is already locked.
++		 * trampoline's mutex is already locked.
+ 		 */
+-		lockdep_assert_held_once(&tr->mutex);
++		lockdep_assert_held_once(select_trampoline_lock(tr));
  
- 	entry->ip = ip;
- 	entry->direct = direct;
--	__add_hash_entry(hash, entry);
-+	add_ftrace_hash_entry(hash, entry);
- 
- 	return entry;
- }
-@@ -1477,7 +1476,7 @@ static struct ftrace_hash *__move_hash(struct ftrace_hash *src, int size)
- 		hhd = &src->buckets[i];
- 		hlist_for_each_entry_safe(entry, tn, hhd, hlist) {
- 			remove_hash_entry(src, entry);
--			__add_hash_entry(new_hash, entry);
-+			add_ftrace_hash_entry(new_hash, entry);
- 		}
+ 		/* Instead of updating the trampoline here, we propagate
+ 		 * -EAGAIN to register_ftrace_direct(). Then we can
+@@ -91,7 +119,7 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, unsigned long ip,
  	}
- 	return new_hash;
-@@ -5360,7 +5359,7 @@ int ftrace_func_mapper_add_ip(struct ftrace_func_mapper *mapper,
- 	map->entry.ip = ip;
- 	map->data = data;
  
--	__add_hash_entry(&mapper->hash, &map->entry);
-+	add_ftrace_hash_entry(&mapper->hash, &map->entry);
+ 	/* The normal locking order is
+-	 *    tr->mutex => direct_mutex (ftrace.c) => ftrace_lock (ftrace.c)
++	 *    select_trampoline_lock(tr) => direct_mutex (ftrace.c) => ftrace_lock (ftrace.c)
+ 	 *
+ 	 * The following two commands are called from
+ 	 *
+@@ -99,12 +127,12 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, unsigned long ip,
+ 	 *   cleanup_direct_functions_after_ipmodify
+ 	 *
+ 	 * In both cases, direct_mutex is already locked. Use
+-	 * mutex_trylock(&tr->mutex) to avoid deadlock in race condition
+-	 * (something else is making changes to this same trampoline).
++	 * mutex_trylock(select_trampoline_lock(tr)) to avoid deadlock in race condition
++	 * (something else holds the same pool lock).
+ 	 */
+-	if (!mutex_trylock(&tr->mutex)) {
+-		/* sleep 1 ms to make sure whatever holding tr->mutex makes
+-		 * some progress.
++	if (!mutex_trylock(select_trampoline_lock(tr))) {
++		/* sleep 1 ms to make sure whatever holding select_trampoline_lock(tr)
++		 * makes some progress.
+ 		 */
+ 		msleep(1);
+ 		return -EAGAIN;
+@@ -129,7 +157,7 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, unsigned long ip,
+ 		break;
+ 	}
+ 
+-	mutex_unlock(&tr->mutex);
++	trampoline_unlock(tr);
+ 	return ret;
+ }
+ #endif
+@@ -359,7 +387,6 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key, unsigned long ip)
+ 	head = &trampoline_ip_table[hash_64(tr->ip, TRAMPOLINE_HASH_BITS)];
+ 	hlist_add_head(&tr->hlist_ip, head);
+ 	refcount_set(&tr->refcnt, 1);
+-	mutex_init(&tr->mutex);
+ 	for (i = 0; i < BPF_TRAMP_MAX; i++)
+ 		INIT_HLIST_HEAD(&tr->progs_hlist[i]);
+ out:
+@@ -844,9 +871,9 @@ int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+ {
+ 	int err;
+ 
+-	mutex_lock(&tr->mutex);
++	trampoline_lock(tr);
+ 	err = __bpf_trampoline_link_prog(link, tr, tgt_prog);
+-	mutex_unlock(&tr->mutex);
++	trampoline_unlock(tr);
+ 	return err;
+ }
+ 
+@@ -887,9 +914,9 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+ {
+ 	int err;
+ 
+-	mutex_lock(&tr->mutex);
++	trampoline_lock(tr);
+ 	err = __bpf_trampoline_unlink_prog(link, tr, tgt_prog);
+-	mutex_unlock(&tr->mutex);
++	trampoline_unlock(tr);
+ 	return err;
+ }
+ 
+@@ -999,12 +1026,12 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+ 	if (!tr)
+ 		return  -ENOMEM;
+ 
+-	mutex_lock(&tr->mutex);
++	trampoline_lock(tr);
+ 
+ 	shim_link = cgroup_shim_find(tr, bpf_func);
+ 	if (shim_link && !IS_ERR(bpf_link_inc_not_zero(&shim_link->link.link))) {
+ 		/* Reusing existing shim attached by the other program. */
+-		mutex_unlock(&tr->mutex);
++		trampoline_unlock(tr);
+ 		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+ 		return 0;
+ 	}
+@@ -1024,16 +1051,16 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+ 	shim_link->trampoline = tr;
+ 	/* note, we're still holding tr refcnt from above */
+ 
+-	mutex_unlock(&tr->mutex);
++	trampoline_unlock(tr);
  
  	return 0;
+ err:
+-	mutex_unlock(&tr->mutex);
++	trampoline_unlock(tr);
+ 
+ 	if (shim_link)
+ 		bpf_link_put(&shim_link->link.link);
+ 
+-	/* have to release tr while _not_ holding its mutex */
++	/* have to release tr while _not_ holding pool mutex for trampoline */
+ 	bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+ 
+ 	return err;
+@@ -1054,9 +1081,9 @@ void bpf_trampoline_unlink_cgroup_shim(struct bpf_prog *prog)
+ 	if (WARN_ON_ONCE(!tr))
+ 		return;
+ 
+-	mutex_lock(&tr->mutex);
++	trampoline_lock(tr);
+ 	shim_link = cgroup_shim_find(tr, bpf_func);
+-	mutex_unlock(&tr->mutex);
++	trampoline_unlock(tr);
+ 
+ 	if (shim_link)
+ 		bpf_link_put(&shim_link->link.link);
+@@ -1074,14 +1101,14 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
+ 	if (!tr)
+ 		return NULL;
+ 
+-	mutex_lock(&tr->mutex);
++	trampoline_lock(tr);
+ 	if (tr->func.addr)
+ 		goto out;
+ 
+ 	memcpy(&tr->func.model, &tgt_info->fmodel, sizeof(tgt_info->fmodel));
+ 	tr->func.addr = (void *)tgt_info->tgt_addr;
+ out:
+-	mutex_unlock(&tr->mutex);
++	trampoline_unlock(tr);
+ 	return tr;
  }
+ 
+@@ -1094,7 +1121,6 @@ void bpf_trampoline_put(struct bpf_trampoline *tr)
+ 	mutex_lock(&trampoline_mutex);
+ 	if (!refcount_dec_and_test(&tr->refcnt))
+ 		goto out;
+-	WARN_ON_ONCE(mutex_is_locked(&tr->mutex));
+ 
+ 	for (i = 0; i < BPF_TRAMP_MAX; i++)
+ 		if (WARN_ON_ONCE(!hlist_empty(&tr->progs_hlist[i])))
+@@ -1380,6 +1406,8 @@ static int __init init_trampolines(void)
+ 		INIT_HLIST_HEAD(&trampoline_key_table[i]);
+ 	for (i = 0; i < TRAMPOLINE_TABLE_SIZE; i++)
+ 		INIT_HLIST_HEAD(&trampoline_ip_table[i]);
++	for (i = 0; i < TRAMPOLINE_LOCKS_TABLE_SIZE; i++)
++		__mutex_init(&trampoline_locks[i].mutex, "trampoline_lock", &trampoline_locks[i].key);
+ 	return 0;
+ }
+ late_initcall(init_trampolines);
 -- 
 2.53.0
 
