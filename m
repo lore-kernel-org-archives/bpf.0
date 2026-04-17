@@ -1,43 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97843AA4E4
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 08:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B90F3B2FDB
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 09:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776414810; cv=none; b=HUBD+7oeaWLRRGrmVRxF6HjvxSRZsaHQwh0LTiEaVAV+hb7Fe/kqLZDL1Fkf/aCrt0AbuVhobiKQq8GfKJIt4exN7DWKG6vbsRccngcgLjCPpe+X5eVscXEMCmPJm8aXsQtFVZI9zhQeHQX/HwJuCJxsFjKra6IF5faiU21OL4s=
+	t=1776417671; cv=none; b=g92lJfm7NSxKKupF0JnLt4E+txXxyiliF9aAyMEJ3WMKBNC9nNTe6UGZWWyxTRLF8Tt1+H4oOq0Qcr8uRRWMq54Bjh1X30+g6Nbapi6lYUlA2yQVZbASiNlZLt9NkvJpqGCFlQ2AUQpVGxfShBO5AYU3HQjWij8z619FgksOXZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776414810; c=relaxed/simple;
-	bh=tro7p1fxGtfztjIPDcoX3PawG8nL9YMnYcebcUHHzMs=;
+	s=arc-20240116; t=1776417671; c=relaxed/simple;
+	bh=p+kb8a+1NUeM4zSYS3PkTA3ZNeUXeZVAEsUWKhViPG8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SCHDtTQF9BrfYIp8jn7kutMtdNSKW9Gi57SzJxJXr0yEizOz5+d1gIrLXZ6aiUbNQs3wGbneEIqOeofc/J4bUUmmZ8EqmhVpwy4M5UA3gaGtukA0rZarU9qK14wxigCYMP++QWW0Z4Wak+YcOcz0rwCmzs9skOchfiaODoil6p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eutFUJI7; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=iiD+AttEVDIZ7N362o8/VIgcv1A2arDykb1vHw6SkNp1VT1hIgy2cHzsNQodGPFD4AoF6C3QYC3bHmA5k9SeZyYrmEn8Cfv+bu+i0Rgky3IpolNH0ZMmO5pk4gZ1qjMM7/iHanbc2sQYJUEo3UuKY8ZyVA0b0XQZXq93YY8BOLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cGAfW0LZ; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eutFUJI7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D85C19425;
-	Fri, 17 Apr 2026 08:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776414810;
-	bh=tro7p1fxGtfztjIPDcoX3PawG8nL9YMnYcebcUHHzMs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eutFUJI7Ff4z9GFi3dl9WI8zhLQ9KVoRN51EPplh7GgnJFK772uZo83GXRAT0qMy+
-	 sHLs5PLsg1dC77oZ3Y6Nk41WVDvQIFlf9FXIne9MMlFNbLvpeDY6iQGVSA49kQyyrP
-	 lUu8VK0lw/FTCZ66TycVUbdQd4BkGC2xHi0viU150sussuJDNjkB2xOtLhZMVqr6Vf
-	 UNZ97u3cbRWWBMq3YrKTFdJC3DmXxdG2ZJUf9Is2+jr8UTvNP/N9ks0p0JbQt86pkY
-	 n2FO1Xn49aXqT4wKGd9K7laUYtTWejh/VcXwFB0T3GR8oCtbMJvQ1fe76JdUdpamIA
-	 vgmAUFiNSsn4g==
-From: Antoine Tenart <atenart@kernel.org>
-To: andrii@kernel.org,
-	eddyz87@gmail.com
-Cc: Antoine Tenart <atenart@kernel.org>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cGAfW0LZ"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776417665;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aApQ4BnXH/mvehRPOqxUVM/gIH07lZCfXG1pxvKAvo4=;
+	b=cGAfW0LZw7+tflTPECEYh0sDsnJlrgjoBRJmrZwq+DDoi5Lki9D+TZhS2HG8QTMOxGHi4b
+	qJN4F3bl13gOyD29ruC9Wk2V3zu2C4jRCVSvFp4CID1ghMvSZy/CQWStOKBfppZH4f8F8v
+	V9WyFUII/nermPDdu+v85TXw6NOCcXA=
+From: KaFai Wan <kafai.wan@linux.dev>
+To: martin.lau@linux.dev,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	jiayuan.chen@linux.dev,
+	kafai.wan@linux.dev,
 	bpf@vger.kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf v2 2/2] selftests/bpf: ensure typedef are deduplicated in split BTF
-Date: Fri, 17 Apr 2026 10:33:18 +0200
-Message-ID: <20260417083319.32716-2-atenart@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260417083319.32716-1-atenart@kernel.org>
-References: <20260417083319.32716-1-atenart@kernel.org>
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Quan Sun <2022090917019@std.uestc.edu.cn>,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>
+Subject: [PATCH bpf v3 1/2] bpf: Reject TCP_NODELAY in TCP header option callbacks
+Date: Fri, 17 Apr 2026 17:20:34 +0800
+Message-ID: <20260417092035.2299913-2-kafai.wan@linux.dev>
+In-Reply-To: <20260417092035.2299913-1-kafai.wan@linux.dev>
+References: <20260417092035.2299913-1-kafai.wan@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,138 +66,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-If a typedef is defined both in a base and in a split BTF, after
-deduplication a single instance should be found in the base BTF.
+A BPF_SOCK_OPS program can enable
+BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
+bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB or
+BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
 
-Suggested-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
+In these callbacks, bpf_setsockopt(TCP_NODELAY) can reach
+__tcp_sock_set_nodelay(), which can call tcp_push_pending_frames().
+
+From BPF_SOCK_OPS_HDR_OPT_LEN_CB, tcp_push_pending_frames() can call
+tcp_current_mss(), which calls tcp_established_options() and re-enters
+bpf_skops_hdr_opt_len().
+
+BPF_SOCK_OPS_HDR_OPT_LEN_CB
+  -> bpf_setsockopt(TCP_NODELAY)
+    -> tcp_push_pending_frames()
+      -> tcp_current_mss()
+        -> tcp_established_options()
+          -> bpf_skops_hdr_opt_len()
+            -> BPF_SOCK_OPS_HDR_OPT_LEN_CB
+
+From BPF_SOCK_OPS_WRITE_HDR_OPT_CB, tcp_push_pending_frames() can call
+tcp_write_xmit(), which calls tcp_transmit_skb().  That path recomputes
+header option length through tcp_established_options() and
+bpf_skops_hdr_opt_len() before re-entering bpf_skops_write_hdr_opt().
+
+BPF_SOCK_OPS_WRITE_HDR_OPT_CB
+  -> bpf_setsockopt(TCP_NODELAY)
+    -> tcp_push_pending_frames()
+      -> tcp_write_xmit()
+        -> tcp_transmit_skb()
+          -> tcp_established_options()
+            -> bpf_skops_hdr_opt_len()
+          -> bpf_skops_write_hdr_opt()
+            -> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
+
+This leads to unbounded recursion and can overflow the kernel stack.
+
+Reject TCP_NODELAY with -EOPNOTSUPP in bpf_sock_ops_setsockopt()
+when bpf_setsockopt() is called from
+BPF_SOCK_OPS_HDR_OPT_LEN_CB or BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
+
+Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn/
+Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
+Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
+ net/core/filter.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Since v1:
-- Added this patch.
-
- .../bpf/prog_tests/btf_dedup_split.c          | 48 ++++++++++++-------
- 1 file changed, 32 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
-index 5bc15bb6b7ce..0db7707ae90d 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
-@@ -20,18 +20,22 @@ static void test_split_simple() {
- 	btf__add_struct(btf1, "s1", 4);			/* [3] struct s1 { */
- 	btf__add_field(btf1, "f1", 1, 0, 0);		/*      int f1; */
- 							/* } */
-+	btf__add_typedef(btf1, "t1", 1);		/* [4] typedef int */
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 5fa9189eb772..96849f4c1fbc 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5833,6 +5833,12 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+ 	if (!is_locked_tcp_sock_ops(bpf_sock))
+ 		return -EOPNOTSUPP;
  
- 	VALIDATE_RAW_BTF(
- 		btf1,
- 		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
- 		"[2] PTR '(anon)' type_id=1",
- 		"[3] STRUCT 's1' size=4 vlen=1\n"
--		"\t'f1' type_id=1 bits_offset=0");
-+		"\t'f1' type_id=1 bits_offset=0",
-+		"[4] TYPEDEF 't1' type_id=1");
- 
- 	ASSERT_STREQ(btf_type_c_dump(btf1), "\
- struct s1 {\n\
- 	int f1;\n\
--};\n\n", "c_dump");
-+};\n\
-+\n\
-+typedef int t1;\n\n", "c_dump");
- 
- 	btf2 = btf__new_empty_split(btf1);
- 	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
-@@ -49,39 +53,46 @@ struct s1 {\n\
- 	ASSERT_EQ(btf_is_int(t), true, "int_kind");
- 	ASSERT_STREQ(btf__str_by_offset(btf2, t->name_off), "int", "int_name");
- 
--	btf__add_struct(btf2, "s2", 16);		/* [4] struct s2 {	*/
--	btf__add_field(btf2, "f1", 6, 0, 0);		/*      struct s1 f1;	*/
--	btf__add_field(btf2, "f2", 5, 32, 0);		/*      int f2;		*/
-+	btf__add_struct(btf2, "s2", 16);		/* [5] struct s2 {	*/
-+	btf__add_field(btf2, "f1", 7, 0, 0);		/*      struct s1 f1;	*/
-+	btf__add_field(btf2, "f2", 6, 32, 0);		/*      int f2;		*/
- 	btf__add_field(btf2, "f3", 2, 64, 0);		/*      int *f3;	*/
- 							/* } */
- 
- 	/* duplicated int */
--	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [5] int */
-+	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [6] int */
- 
- 	/* duplicated struct s1 */
--	btf__add_struct(btf2, "s1", 4);			/* [6] struct s1 { */
--	btf__add_field(btf2, "f1", 5, 0, 0);		/*      int f1; */
-+	btf__add_struct(btf2, "s1", 4);			/* [7] struct s1 { */
-+	btf__add_field(btf2, "f1", 6, 0, 0);		/*      int f1; */
- 							/* } */
- 
-+	/* duplicated typedef t1 */
-+	btf__add_typedef(btf2, "t1", 6);		/* [8] typedef int */
++	/* TCP_NODELAY triggers tcp_push_pending_frames() and re-enters these callbacks. */
++	if ((bpf_sock->op == BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
++	     bpf_sock->op == BPF_SOCK_OPS_WRITE_HDR_OPT_CB) &&
++	    level == SOL_TCP && optname == TCP_NODELAY)
++		return -EOPNOTSUPP;
 +
- 	VALIDATE_RAW_BTF(
- 		btf2,
- 		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
- 		"[2] PTR '(anon)' type_id=1",
- 		"[3] STRUCT 's1' size=4 vlen=1\n"
- 		"\t'f1' type_id=1 bits_offset=0",
--		"[4] STRUCT 's2' size=16 vlen=3\n"
--		"\t'f1' type_id=6 bits_offset=0\n"
--		"\t'f2' type_id=5 bits_offset=32\n"
-+		"[4] TYPEDEF 't1' type_id=1",
-+		"[5] STRUCT 's2' size=16 vlen=3\n"
-+		"\t'f1' type_id=7 bits_offset=0\n"
-+		"\t'f2' type_id=6 bits_offset=32\n"
- 		"\t'f3' type_id=2 bits_offset=64",
--		"[5] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
--		"[6] STRUCT 's1' size=4 vlen=1\n"
--		"\t'f1' type_id=5 bits_offset=0");
-+		"[6] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[7] STRUCT 's1' size=4 vlen=1\n"
-+		"\t'f1' type_id=6 bits_offset=0",
-+		"[8] TYPEDEF 't1' type_id=6");
+ 	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen);
+ }
  
- 	ASSERT_STREQ(btf_type_c_dump(btf2), "\
- struct s1 {\n\
- 	int f1;\n\
- };\n\
- \n\
-+typedef int t1;\n\
-+\n\
- struct s1___2 {\n\
- 	int f1;\n\
- };\n\
-@@ -90,7 +101,9 @@ struct s2 {\n\
- 	struct s1___2 f1;\n\
- 	int f2;\n\
- 	int *f3;\n\
--};\n\n", "c_dump");
-+};\n\
-+\n\
-+typedef int t1___2;\n\n", "c_dump");
- 
- 	err = btf__dedup(btf2, NULL);
- 	if (!ASSERT_OK(err, "btf_dedup"))
-@@ -102,7 +115,8 @@ struct s2 {\n\
- 		"[2] PTR '(anon)' type_id=1",
- 		"[3] STRUCT 's1' size=4 vlen=1\n"
- 		"\t'f1' type_id=1 bits_offset=0",
--		"[4] STRUCT 's2' size=16 vlen=3\n"
-+		"[4] TYPEDEF 't1' type_id=1",
-+		"[5] STRUCT 's2' size=16 vlen=3\n"
- 		"\t'f1' type_id=3 bits_offset=0\n"
- 		"\t'f2' type_id=1 bits_offset=32\n"
- 		"\t'f3' type_id=2 bits_offset=64");
-@@ -112,6 +126,8 @@ struct s1 {\n\
- 	int f1;\n\
- };\n\
- \n\
-+typedef int t1;\n\
-+\n\
- struct s2 {\n\
- 	struct s1 f1;\n\
- 	int f2;\n\
 -- 
-2.53.0
+2.43.0
 
