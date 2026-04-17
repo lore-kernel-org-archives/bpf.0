@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525193CE498;
-	Fri, 17 Apr 2026 19:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA0F3CE497;
+	Fri, 17 Apr 2026 19:30:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776454199; cv=none; b=TYJ7JDV6cWU97h7Mvu1fyJEtPxFc3+9hpdDP/1m57f3NWBSduawNjG2dU2RgZIRBCSTTpegut2849U0bU1XClz9bYG7GNliwqR2wFRah+Sb5r37ZbakgAi9iWIS/bqo9KdcSye12H5L+Pd5MElRi3G5mMaYWYoKjFx/9uIJRTEU=
+	t=1776454209; cv=none; b=FjncJzLumMtb6qxQWj78Mc3uNRegNe5p7DdMY76focRl9+Fo70Sei+Hc2/tii3tyr3t9O0Krfb7nk9RCzejJ2egyAA90ESzvXJdkv6XVo/bNC9EQ20uyluoL+4puW0RPBsxJs9++79drRhaISvc4kDcqJoJzCYggDsmSHFlXR5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776454199; c=relaxed/simple;
-	bh=xNbrbwo8pdQKGcFGGkxJbcQGRaBZc16XkLhMdxtw/Xk=;
+	s=arc-20240116; t=1776454209; c=relaxed/simple;
+	bh=HLrJ0Lj4dW7CxKf506IomO6Qaze1kbXi8uNOBbMRjBA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jQBsdhvTwPiVDJYj2z1yp4DYYEKlP918ts6KkqymgY3WxIfL/5An/X5YZzJ8stKVfZL2bYmREVo9f+JgIhfKwhSb9bC027pBiywDrkChradtXjystK0dLOF6zmf3ZQqPgHHXqXBbx+FRRY7S1Dj4dvcoqapEvIQYlUlqmcwk48E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FfNuoyTQ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=G3MnT/8/wGzVbxUI29CgD+hPxZY6Ogz960dzZmMN1wCZHHDy3sfg0+Ci7RpPqWJSwO08jIO4bZyN18v7ILe/aNAhAk2EZuGTfjAEYs+qew1bCZ6Gaq9cWg4XndG7FgIQ08MQ7bq7O+ZRrnmIqQ3ooTSZaA7502nOhWWkt8+4fRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hLpfYbYV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FfNuoyTQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60014C19425;
-	Fri, 17 Apr 2026 19:29:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hLpfYbYV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832A8C19425;
+	Fri, 17 Apr 2026 19:30:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776454199;
-	bh=xNbrbwo8pdQKGcFGGkxJbcQGRaBZc16XkLhMdxtw/Xk=;
+	s=k20201202; t=1776454209;
+	bh=HLrJ0Lj4dW7CxKf506IomO6Qaze1kbXi8uNOBbMRjBA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FfNuoyTQmOrH/3jrC8GXModBgMcU6tuTgBCHT9UKtHLclo3Q6xD1ISgz8re0jrl4r
-	 niGGDqgC0d75cLPO7anX1jBaQY7AQJk7h4wvSrXF1Ymjys+oEJvLIqMxwBHyF+gopu
-	 p21OCK1s7LVl6c/Wnpkbq+jr0W5CfRVLBDcQE0mrBZsKlBQ5L4rUS8loc31Wa2tkk7
-	 Mz4ArrzNutsGkTxKGAXrZKEq9n8fiA8g8jGnR+hUeilKga42Gnk7iEfuaDBBXSZnl3
-	 i0o38rf6ce8HbraEfZcEx7iSLSIJCLFF8eGBx1tmVOZ2s1FhUIot68wkwdMVraYE1N
-	 ZBTTJJhSM/MvQ==
+	b=hLpfYbYVLry+Q02NAM8JRsul5XDXGsv9tQB60UiFqoxELiQLYkvvkzRBQsXYt9+sF
+	 hEDO6TsnEgFvQBOXhfrvQuTFo5mfTwN7Ej40vQNrzHg9SNtvmcVQqBX7tVQ6CfhOLs
+	 o9TtTOqIJ0kTeDRHjsSuR0vUX60ZfEDFqxTRVDAK/Z5mdm/Q0DkWo+C+iZJKwOYnqD
+	 MlC6yqQ9zoFTkzTM9Gk824GPLC51AsGNV0+KQuKo3roP3Cu8y7jag2KNy8LqR5hfv2
+	 snRtpw1SlefD+Htu7RiUeIieU7g15E91+gioKuRuIkALBp1w1Hqv/mAjADkdy3nqej
+	 0KTa2OUpIGk4g==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCHv5 bpf-next 27/28] selftests/bpf: Add tracing multi attach benchmark test
-Date: Fri, 17 Apr 2026 21:25:01 +0200
-Message-ID: <20260417192502.194548-28-jolsa@kernel.org>
+Subject: [PATCHv5 bpf-next 28/28] selftests/bpf: Add tracing multi attach rollback tests
+Date: Fri, 17 Apr 2026 21:25:02 +0200
+Message-ID: <20260417192502.194548-29-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260417192502.194548-1-jolsa@kernel.org>
 References: <20260417192502.194548-1-jolsa@kernel.org>
@@ -52,159 +52,262 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding benchmark test that attaches to (almost) all allowed tracing
-functions and display attach/detach times.
+Adding tests for the rollback code when the tracing_multi
+link won't get attached, covering 2 reasons:
 
-  # ./test_progs -t tracing_multi_bench_attach -v
-  bpf_testmod.ko is already unloaded.
-  Loading bpf_testmod.ko...
-  Successfully loaded bpf_testmod.ko.
-  serial_test_tracing_multi_bench_attach:PASS:btf__load_vmlinux_btf 0 nsec
-  serial_test_tracing_multi_bench_attach:PASS:tracing_multi_bench__open_and_load 0 nsec
-  serial_test_tracing_multi_bench_attach:PASS:get_syms 0 nsec
-  serial_test_tracing_multi_bench_attach:PASS:bpf_program__attach_tracing_multi 0 nsec
-  serial_test_tracing_multi_bench_attach: found 51186 functions
-  serial_test_tracing_multi_bench_attach: attached in   1.295s
-  serial_test_tracing_multi_bench_attach: detached in   0.243s
-  #507     tracing_multi_bench_attach:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-  Successfully unloaded bpf_testmod.ko.
+  - wrong btf id passed by user, where all previously allocated
+    trampolines will be released
+  - trampoline for requested function is fully attached (has already
+    maximum programs attached) and the link fails, the rollback code
+    needs to release all previously link-ed trampolines and release
+    them
 
-Exporting skip_entry as is_unsafe_function and using it in the test.
+We need the bpf_fentry_test* unattached for the tests to pass,
+so the rollback tests are serial.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- .../selftests/bpf/prog_tests/tracing_multi.c  | 100 ++++++++++++++++++
- .../selftests/bpf/progs/tracing_multi_bench.c |  12 +++
- tools/testing/selftests/bpf/trace_helpers.c   |   6 +-
- tools/testing/selftests/bpf/trace_helpers.h   |   1 +
- 4 files changed, 116 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+ .../selftests/bpf/prog_tests/tracing_multi.c  | 212 ++++++++++++++++++
+ .../bpf/progs/tracing_multi_rollback.c        |  43 ++++
+ 2 files changed, 255 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_rollback.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index 2edb3797970b..aef811479930 100644
+index aef811479930..b76e21422573 100644
 --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
 +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -9,6 +9,7 @@
- #include "tracing_multi_intersect.skel.h"
+@@ -10,6 +10,7 @@
  #include "tracing_multi_session.skel.h"
  #include "tracing_multi_fail.skel.h"
-+#include "tracing_multi_bench.skel.h"
+ #include "tracing_multi_bench.skel.h"
++#include "tracing_multi_rollback.skel.h"
  #include "trace_helpers.h"
  
  static __u64 bpf_fentry_test_cookies[] = {
-@@ -585,6 +586,105 @@ static void test_attach_api_fails(void)
- 	free(ids2);
+@@ -685,6 +686,217 @@ void serial_test_tracing_multi_bench_attach(void)
+ 	btf__free(btf);
  }
  
-+void serial_test_tracing_multi_bench_attach(void)
++static void tracing_multi_rollback_run(struct tracing_multi_rollback *skel)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	int err, prog_fd;
++
++	prog_fd = bpf_program__fd(skel->progs.test_fentry);
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	ASSERT_OK(err, "test_run");
++
++	/* make sure the rollback code did not leave any program attached */
++	ASSERT_EQ(skel->bss->test_result_fentry, 0, "test_result_fentry");
++	ASSERT_EQ(skel->bss->test_result_fexit, 0, "test_result_fexit");
++}
++
++static void test_rollback_put(void)
 +{
 +	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-+	struct tracing_multi_bench *skel = NULL;
-+	long attach_start_ns, attach_end_ns;
-+	long detach_start_ns, detach_end_ns;
-+	double attach_delta, detach_delta;
-+	struct bpf_link *link = NULL;
-+	size_t i, cap = 0, cnt = 0;
-+	struct ksyms *ksyms = NULL;
-+	void *root = NULL;
++	struct tracing_multi_rollback *skel = NULL;
++	size_t cnt = FUNCS_CNT;
 +	__u32 *ids = NULL;
-+	__u32 nr, type_id;
-+	struct btf *btf;
 +	int err;
 +
-+#ifndef __x86_64__
-+	test__skip();
-+	return;
-+#endif
-+
-+	btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
++	skel = tracing_multi_rollback__open();
++	if (!ASSERT_OK_PTR(skel, "tracing_multi_rollback__open"))
 +		return;
 +
-+	skel = tracing_multi_bench__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_multi_bench__open_and_load"))
++	bpf_program__set_autoload(skel->progs.test_fentry, true);
++	bpf_program__set_autoload(skel->progs.test_fexit, true);
++
++	err = tracing_multi_rollback__load(skel);
++	if (!ASSERT_OK(err, "tracing_multi_rollback__load"))
 +		goto cleanup;
 +
-+	if (!ASSERT_OK(bpf_get_ksyms(&ksyms, true), "get_syms"))
++	ids = get_ids(bpf_fentry_test, cnt, NULL);
++	if (!ASSERT_OK_PTR(ids, "get_ids"))
 +		goto cleanup;
 +
-+	/* Get all ftrace 'safe' symbols.. */
-+	for (i = 0; i < ksyms->filtered_cnt; i++) {
-+		if (!tsearch(&ksyms->filtered_syms[i], &root, compare)) {
-+			ASSERT_FAIL("tsearch failed");
-+			goto cleanup;
-+		}
-+	}
-+
-+	/* ..and filter them through BTF and btf_type_is_traceable_func. */
-+	nr = btf__type_cnt(btf);
-+	for (type_id = 1; type_id < nr; type_id++) {
-+		const struct btf_type *type;
-+		const char *str;
-+
-+		type = btf__type_by_id(btf, type_id);
-+		if (!type)
-+			break;
-+
-+		if (BTF_INFO_KIND(type->info) != BTF_KIND_FUNC)
-+			continue;
-+
-+		str = btf__name_by_offset(btf, type->name_off);
-+		if (!str)
-+			break;
-+
-+		if (!tfind(&str, &root, compare))
-+			continue;
-+
-+		if (!btf_type_is_traceable_func(btf, type))
-+			continue;
-+
-+		err = libbpf_ensure_mem((void **) &ids, &cap, sizeof(*ids), cnt + 1);
-+		if (err)
-+			goto cleanup;
-+
-+		ids[cnt++] = type_id;
-+	}
++	/*
++	 * Mangle last id to trigger rollback, which needs to do put
++	 * on get-ed trampolines.
++	 */
++	ids[9] = 0;
 +
 +	opts.ids = ids;
 +	opts.cnt = cnt;
 +
-+	attach_start_ns = get_time_ns();
-+	link = bpf_program__attach_tracing_multi(skel->progs.bench, NULL, &opts);
-+	attach_end_ns = get_time_ns();
++	skel->bss->pid = getpid();
 +
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tracing_multi"))
++	skel->links.test_fentry = bpf_program__attach_tracing_multi(skel->progs.test_fentry,
++						NULL, &opts);
++	if (!ASSERT_ERR_PTR(skel->links.test_fentry, "bpf_program__attach_tracing_multi"))
 +		goto cleanup;
 +
-+	detach_start_ns = get_time_ns();
-+	bpf_link__destroy(link);
-+	detach_end_ns = get_time_ns();
++	skel->links.test_fexit = bpf_program__attach_tracing_multi(skel->progs.test_fexit,
++						NULL, &opts);
++	if (!ASSERT_ERR_PTR(skel->links.test_fexit, "bpf_program__attach_tracing_multi"))
++		goto cleanup;
 +
-+	attach_delta = (attach_end_ns - attach_start_ns) / 1000000000.0;
-+	detach_delta = (detach_end_ns - detach_start_ns) / 1000000000.0;
-+
-+	printf("%s: found %lu functions\n", __func__, cnt);
-+	printf("%s: attached in %7.3lfs\n", __func__, attach_delta);
-+	printf("%s: detached in %7.3lfs\n", __func__, detach_delta);
++	/* We don't really attach any program, but let's make sure. */
++	tracing_multi_rollback_run(skel);
 +
 +cleanup:
-+	tracing_multi_bench__destroy(skel);
-+	tdestroy(root, tdestroy_free_nop);
-+	free_kallsyms_local(ksyms);
++	tracing_multi_rollback__destroy(skel);
 +	free(ids);
-+	btf__free(btf);
++}
++
++static void fillers_cleanup(struct tracing_multi_rollback **skels, int cnt)
++{
++	int i;
++
++	for (i = 0; i < cnt; i++)
++		tracing_multi_rollback__destroy(skels[i]);
++
++	free(skels);
++}
++
++static struct tracing_multi_rollback *extra_load_and_link(void)
++{
++	struct tracing_multi_rollback *skel;
++	int err;
++
++	skel = tracing_multi_rollback__open();
++	if (!ASSERT_OK_PTR(skel, "tracing_multi_rollback__open"))
++		goto cleanup;
++
++	bpf_program__set_autoload(skel->progs.extra, true);
++
++	err = tracing_multi_rollback__load(skel);
++	if (!ASSERT_OK(err, "tracing_multi_rollback__load"))
++		goto cleanup;
++
++	skel->links.extra = bpf_program__attach_trace(skel->progs.extra);
++	if (!ASSERT_OK_PTR(skel->links.extra, "bpf_program__attach_trace"))
++		goto cleanup;
++
++	return skel;
++
++cleanup:
++	tracing_multi_rollback__destroy(skel);
++	return NULL;
++}
++
++static struct tracing_multi_rollback **fillers_load_and_link(int max)
++{
++	struct tracing_multi_rollback **skels, *skel;
++	int i, err;
++
++	skels = calloc(max + 1, sizeof(*skels));
++	if (!ASSERT_OK_PTR(skels, "calloc"))
++		return NULL;
++
++	for (i = 0; i < max; i++) {
++		skel = skels[i] = tracing_multi_rollback__open();
++		if (!ASSERT_OK_PTR(skels[i], "tracing_multi_rollback__open"))
++			goto cleanup;
++
++		bpf_program__set_autoload(skel->progs.filler, true);
++
++		err = tracing_multi_rollback__load(skel);
++		if (!ASSERT_OK(err, "tracing_multi_rollback__load"))
++			goto cleanup;
++
++		skel->links.filler = bpf_program__attach_trace(skel->progs.filler);
++		if (!ASSERT_OK_PTR(skels[i]->links.filler, "bpf_program__attach_trace"))
++			goto cleanup;
++	}
++
++	return skels;
++
++cleanup:
++	fillers_cleanup(skels, i + 1);
++	return NULL;
++}
++
++static void test_rollback_unlink(void)
++{
++	struct tracing_multi_rollback *skel = NULL, *extra;
++	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
++	struct tracing_multi_rollback **fillers;
++	size_t cnt = FUNCS_CNT;
++	__u32 *ids = NULL;
++	int err, max;
++
++	max = get_bpf_max_tramp_links();
++	if (!ASSERT_GE(max, 1, "bpf_max_tramp_links"))
++		return;
++
++	/* Attach maximum allowed programs to bpf_fentry_test10 */
++	fillers = fillers_load_and_link(max);
++	if (!ASSERT_OK_PTR(fillers, "fillers_load_and_link"))
++		return;
++
++	extra = extra_load_and_link();
++	if (!ASSERT_OK_PTR(extra, "extra_load_and_link"))
++		goto cleanup;
++
++	skel = tracing_multi_rollback__open();
++	if (!ASSERT_OK_PTR(skel, "tracing_multi_rollback__open"))
++		goto cleanup;
++
++	bpf_program__set_autoload(skel->progs.test_fentry, true);
++	bpf_program__set_autoload(skel->progs.test_fexit, true);
++
++	/*
++	 * Attach tracing_multi link on bpf_fentry_test1-10, which will
++	 * fail on bpf_fentry_test10 function, because it already has
++	 * maximum allowed programs attached.
++	 *
++	 * The rollback needs to unlink already link-ed trampolines and
++	 * put all of them.
++	 */
++	err = tracing_multi_rollback__load(skel);
++	if (!ASSERT_OK(err, "tracing_multi_rollback__load"))
++		goto cleanup;
++
++	ids = get_ids(bpf_fentry_test, cnt, NULL);
++	if (!ASSERT_OK_PTR(ids, "get_ids"))
++		goto cleanup;
++
++	opts.ids = ids;
++	opts.cnt = cnt;
++
++	skel->bss->pid = getpid();
++
++	skel->links.test_fentry = bpf_program__attach_tracing_multi(skel->progs.test_fentry,
++						NULL, &opts);
++	if (!ASSERT_ERR_PTR(skel->links.test_fentry, "bpf_program__attach_tracing_multi"))
++		goto cleanup;
++
++	skel->links.test_fexit = bpf_program__attach_tracing_multi(skel->progs.test_fexit,
++						NULL, &opts);
++	if (!ASSERT_ERR_PTR(skel->links.test_fexit, "bpf_program__attach_tracing_multi"))
++		goto cleanup;
++
++	tracing_multi_rollback_run(skel);
++
++cleanup:
++	fillers_cleanup(fillers, max);
++	tracing_multi_rollback__destroy(extra);
++	tracing_multi_rollback__destroy(skel);
++	free(ids);
++}
++
++void serial_test_tracing_multi_attach_rollback(void)
++{
++	if (test__start_subtest("put"))
++		test_rollback_put();
++	if (test__start_subtest("unlink"))
++		test_rollback_unlink();
 +}
 +
  void test_tracing_multi_test(void)
  {
  #ifndef __x86_64__
-diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_bench.c b/tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_rollback.c b/tools/testing/selftests/bpf/progs/tracing_multi_rollback.c
 new file mode 100644
-index 000000000000..beae946cb8c4
+index 000000000000..a49d1d841f3a
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_multi_bench.c
-@@ -0,0 +1,12 @@
++++ b/tools/testing/selftests/bpf/progs/tracing_multi_rollback.c
+@@ -0,0 +1,43 @@
 +// SPDX-License-Identifier: GPL-2.0
 +#include <vmlinux.h>
 +#include <bpf/bpf_helpers.h>
@@ -212,52 +315,42 @@ index 000000000000..beae946cb8c4
 +
 +char _license[] SEC("license") = "GPL";
 +
-+SEC("fentry.multi")
-+int BPF_PROG(bench)
++int pid = 0;
++
++__u64 test_result_fentry = 0;
++__u64 test_result_fexit = 0;
++
++SEC("?fentry.multi")
++int BPF_PROG(test_fentry)
++{
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	test_result_fentry++;
++	return 0;
++}
++
++SEC("?fexit.multi")
++int BPF_PROG(test_fexit)
++{
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	test_result_fexit++;
++	return 0;
++}
++
++SEC("?fentry/bpf_fentry_test1")
++int BPF_PROG(extra)
 +{
 +	return 0;
 +}
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index 0e63daf83ed5..8de0b60766de 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -548,7 +548,7 @@ static const char * const trace_blacklist[] = {
- 	"bpf_get_numa_node_id",
- };
- 
--static bool skip_entry(char *name)
-+bool is_unsafe_function(const char *name)
- {
- 	int i;
- 
-@@ -651,7 +651,7 @@ int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel)
- 		free(name);
- 		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
- 			continue;
--		if (skip_entry(name))
-+		if (is_unsafe_function(name))
- 			continue;
- 
- 		ks = search_kallsyms_custom_local(ksyms, name, search_kallsyms_compare);
-@@ -728,7 +728,7 @@ int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel)
- 		free(name);
- 		if (sscanf(buf, "%p %ms$*[^\n]\n", &addr, &name) != 2)
- 			continue;
--		if (skip_entry(name))
-+		if (is_unsafe_function(name))
- 			continue;
- 
- 		if (cnt == max_cnt) {
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index d5bf1433675d..01c8ecc45627 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -63,4 +63,5 @@ int read_build_id(const char *path, char *build_id, size_t size);
- int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel);
- int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel);
- 
-+bool is_unsafe_function(const char *name);
- #endif
++
++SEC("?fentry/bpf_fentry_test10")
++int BPF_PROG(filler)
++{
++	return 0;
++}
 -- 
 2.53.0
 
