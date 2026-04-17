@@ -1,183 +1,108 @@
-Received: from mail-dl1-f68.google.com (mail-dl1-f68.google.com [74.125.82.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584E83101C0
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 16:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E25344024
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 16:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776442072; cv=none; b=p3vUzU9DvIKsa/oxvTkvZr29V2Uap+DLtl8FM/Ceh4LXEKV1CQtIkJYQWQP0k98LT2d8x0v0UFmH04SUBhsLeL/NKp0/Zxd8h5SGNykL8vCXK9RiwPhMIughy28vB0y2RVJPF36kttrxRBbewFwUj5IShE8V5+d1hIOX5ArbTrI=
+	t=1776442243; cv=none; b=gJyzZC1rKP+Yr7fa1qIPfCf8Al0d/GKA/5NSykgctdU3AjeYkFUdjMr0pP/mBg9NIOnZlCh09uV9xmskC5EAfA3iQJGkQyk95sXDIUU5cFV4a6fnB8fKV/DoAdbGxdmk3VexWB/f0R28mBJYXzepsJIvL0Akya/B9rTLMe7+NA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776442072; c=relaxed/simple;
-	bh=opigBZBRqB0aL406pyipEFNwsfbbb3bcFx/Zmeh0VIE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=QDamZNVlTNCIxpw+0Km+MwiosQmbzCQZZvvtAhKobr8/Oq6u+s+AWXr37vkRClvVcCTkyZwQp3KxhrEc3a3lZCP73Fd6YteRin3eNjOUribFiOTChcN2v+KHupw8MgYmywIwuFQtSIGfK1B5aMfvbAD5bcMLnYbPUxwcvkjqphA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=r6KEcAD3; arc=none smtp.client-ip=74.125.82.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1776442243; c=relaxed/simple;
+	bh=XuJXEpu0aKvc85JG7EApCC3CRfSpOkMFDMwAyfRfCeo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xznm++qts2Hto+comqtmkvu/xnTSTDD8nH6CMfQuOLXOo6uQ51Rl1o0sxXQ4Vf6LNtR0jNpepaTDkUI/mTpEohWagYGa7FKVotLvZ6oBrOM7jpA4eu49pVO6jVAH51ETqUY6W8ocQtgvQ8HjMWMxBXp3Gwl5niTAuhtlVT4MMSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uO+y02bx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="r6KEcAD3"
-Received: by mail-dl1-f68.google.com with SMTP id a92af1059eb24-12c7212836bso1548014c88.0
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 09:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776442070; x=1777046870; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CItbSBANkqGwGgclCHY8cS/h9tRrPXe0wuFz1XeZXG0=;
-        b=r6KEcAD3LUQWwM7RO0QL8c9JF2s1JlemTQ0GcRHIBJuXVhtp8sjr4GcvCZYGT4huM1
-         /5ON7QNwXJ2cth9Oi0hz9PB8MaqJ6Cufev6RO3M4H31fHAM8oTvY3rTlnROWl2nXo39+
-         3OyCH8JAlCEQklvfWKV42s1atJFt1eyWZjQ97h/adxfa5cuxeZtJmtf57axjcLUq9Tpf
-         f1fUS8tzvqMYyLEnA/lIRjg8DKlJwannKqK+MYJrqTiW990frwdphCV1Zjvci9nEtizc
-         N/F9VtR344hIH6nlrsSwgDwPmfWLdLxUF6aq74jj2njLYfxLPbHZnT4625zFnsBu4gDO
-         3T8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776442070; x=1777046870;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CItbSBANkqGwGgclCHY8cS/h9tRrPXe0wuFz1XeZXG0=;
-        b=K4fAdmBzdesezSe1qRMKXEcfovoYvWNEvOjkUAk2incLRQDvol/P7RkSu3O4s+uXDG
-         fqh3yJn1G9SBefpfN6sOOfUv1QFtRbprXJ8CKRaPkG4430cwTw8xNmMbiYePlTvfj/UV
-         JwtNQXKIusm6CWB9t43b/XoIG4LNAaNqUruNfufj4+6aG5qdn0bhT3tSypWh02fJTV5l
-         J1jK3ioIhroPqXh51leVQ8d+M8srtCuV9jUW/oplSbJtPby3AvC05YGzaxyj7LBtdGY/
-         yeHxfe9Ez+IUvRMtAiFw3euKHsJ4eCYS4UCaDkZVDmHVH06FC/Ie8Ijf/pehSizuXpFz
-         OBsA==
-X-Gm-Message-State: AOJu0YyQzs67XcPCtIoMHDC6qVBf3tW7Y+4es708I/8lxZ1pWFZDGhqM
-	jUXsHGRdgEdeeEuHTs2vZ+ISTOqLg+a2MMIzo1+2a/WaZKD4dbV2u6KnW0EiHNnj14I=
-X-Gm-Gg: AeBDietV15V5yEdTl/cGu3amW8XC/e/GwoJQjiWBNiVMDbZDpi3jwPVd13kYu1eQBy4
-	QQ/AQ75AfviK6vnSxvgmMVIdP/+EUNvEaqun44b+7j1NJmmC1uUHyWqSnnf2duoWy6+wBfpl/ha
-	KCw4P9i7rHKd5hZqnUEAqUg7oy2K55qAztXTMjumz+hpWrB2E9CW9PFcCTy0HKRAK+xHyGIsR1t
-	ieLb1OPWxIn3yrOTc5vT/bZFtQyNmGKpbUdOSHroLi9ASW/PyWUf+PRMPTNJ9kVYC7FXLqOeRw4
-	OXAH97pw6iUWtpZA0qdpiFOP1cLMsndlmdZMUFOHpqlIubEDKTA+wRnzxVKwvA60r3nZ9rHQazt
-	rZu7UcHhXdYqtRMJbKFpfzkW3RUzexppWWgQIntaER6BsoaTGK6B13guKNL3deNdUaKxKeK4Mnz
-	U+lmuDLitJhw3XScY=
-X-Received: by 2002:a05:7022:69a:b0:12c:4928:e57f with SMTP id a92af1059eb24-12c73fa3e3cmr1554706c88.25.1776442070145;
-        Fri, 17 Apr 2026 09:07:50 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::5d38])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c749c422csm2690775c88.3.2026.04.17.09.07.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2026 09:07:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uO+y02bx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3304C2BCFC
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 16:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776442243;
+	bh=XuJXEpu0aKvc85JG7EApCC3CRfSpOkMFDMwAyfRfCeo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uO+y02bxIUtTOEFtMbmbQQl9yNDwhh96BoV5fW6tjDiZU5cMzJtJKj6R4YUXc4aPa
+	 z2J5Ru76+e1/XSmjfTXyzltS4KBsW/1uQYLAp/tv5mOHYzeLIguqac9+vRLJtaQmr7
+	 tMNzl84rKZ7ZdPedFQvhTD0uAYYNEBbHp6yHBJdfq9qjc5eXxPSoG5SkMemYE5pnkR
+	 i7xTpNBApijI0ZHJgNv0tHL513eI9TvKs+aSNZV3kFFIFjqkTn2JKQXO+DWOA+3GVs
+	 JCpfVkaZwW+iaZWOSGfvJWQwEQJqZkajfmjaOy+6e9BqlFES6O/RptxVhaFQMjYMcN
+	 L1Z4vrK1RDXQg==
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-8a3b0242631so8748386d6.3
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 09:10:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8P3cKeA2/Jlw3L/1mDTK3cRuCx8abAvAiK4/18xiAqSUdMlD4s4pmiU1pXdJHoGXIg7wg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXR396dgJ/KEfSK0q7nwze4drm6+W8jLVYOYLO9N76y5Dg2u2U
+	lXiBII5IgUTkZU6x2MASVM/tHk/pEPetkhH6ZVCnIPcDY6RwMznqKUx2Rc7aXo64C4jA8KuBmEU
+	J0PxVutG8V0j0C+5VRHNQz/ss1yhMr7k=
+X-Received: by 2002:a05:6214:2f03:b0:8ac:af0d:c101 with SMTP id
+ 6a1803df08f44-8b027fd9d3fmr54364896d6.10.1776442242620; Fri, 17 Apr 2026
+ 09:10:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260407200157.3874806-1-utilityemal77@gmail.com>
+ <20260407200157.3874806-9-utilityemal77@gmail.com> <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
+ <aeFaQXkKNHFeE-oC@suesslenovo> <CAPhsuW648HdcCbXWMHaJ4uirPWq2WX3Ggx3AGMU6CGzhNYUREg@mail.gmail.com>
+ <aeI_CXj6F-nI_DCL@suesslenovo> <20260417.ohgoh0Eecome@digikod.net>
+In-Reply-To: <20260417.ohgoh0Eecome@digikod.net>
+From: Song Liu <song@kernel.org>
+Date: Fri, 17 Apr 2026 09:10:31 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4g3Q4rK8GD=wCYi0iAGhcHcdh-ynsvC44f8rE8OuTqTg@mail.gmail.com>
+X-Gm-Features: AQROBzDGBSiT121PHW-UB_rcUdN4Gaz5rncLKRCi24TJMuRNJwq28aGp4x7Zpn0
+Message-ID: <CAPhsuW4g3Q4rK8GD=wCYi0iAGhcHcdh-ynsvC44f8rE8OuTqTg@mail.gmail.com>
+Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: Justin Suess <utilityemal77@gmail.com>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, kpsingh@kernel.org, paul@paul-moore.com, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, 
+	gnoack@google.com, jack@suse.cz, jmorris@namei.org, serge@hallyn.com, 
+	yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, 
+	eddyz87@gmail.com, john.fastabend@gmail.com, sdf@fomichev.me, 
+	skhan@linuxfoundation.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 17 Apr 2026 12:07:47 -0400
-Message-Id: <DHVK5NSN5J8Y.3C7JM4JRTAPND@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <song@kernel.org>
-Subject: Re: [PATCH bpf-next v7 3/9] selftests/bpf: Move
- bpf_arena_spin_lock.h to the top level
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260412174546.18684-1-emil@etsalapatis.com>
- <20260412174546.18684-4-emil@etsalapatis.com>
- <CAP01T77VRccr1feG4uiyWu0zAPf4oDFMJTVBdyBLfpKTf87GZQ@mail.gmail.com>
-In-Reply-To: <CAP01T77VRccr1feG4uiyWu0zAPf4oDFMJTVBdyBLfpKTf87GZQ@mail.gmail.com>
 
-On Sun Apr 12, 2026 at 3:31 PM EDT, Kumar Kartikeya Dwivedi wrote:
-> On Sun, 12 Apr 2026 at 19:45, Emil Tsalapatis <emil@etsalapatis.com> wrot=
-e:
->>
->> The bpf_arena_spin_lock.h header is useful for all programs and not
->> just the selftests. Move it to the top level of the BPF selftests
->> to make it more readily accessible.
->>
+On Fri, Apr 17, 2026 at 8:18=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
 >
-> Please add something to the log to explain why __weak is needed, as
-> indicated in https://lore.kernel.org/bpf/CAP01T77GwHgS04TM8yTODyiXh2VJq-=
-=3DL0FPoRvjpfF4dc6T9zw@mail.gmail.com.
-
-Will do.
-
+> On Fri, Apr 17, 2026 at 10:09:13AM -0400, Justin Suess wrote:
+[...]
+> > > A new type of map for each FD referenced kernel type is non-starter.
+> > > It is impossible to add UAPI for a specific use case.
 >
-> Also, since we discussed already, why not move this to libarena?
+> This new map type is only about one file descriptor type, similarly to
+> socket FDs.  From a UAPI point of view, it looks clean and safe,
+> especially to deal with underlying object lifetime (e.g. reference
+> tracking).
+
+We have changed the UAPI policy. New program type, new map type
+will not be added for a single use case.
+
+> > >
+> > You've convinced me. I could see a lot of problems if everyone wanting
+> > to add their specialized maps, it would be difficult to maintain.
 >
+> Is there another way to properly handle kernel object lifetime (not tied
+> to the caller) and pass them as file descriptor?
 
-I left it as (imminent) followup work to make libarena completely=20
-self-contained but it makes sense to add it from the very beginning.
-I'll add move the headers in these patches.
+bpf_kptr gives same life time promise.
 
->> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
->> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> Acked-by: Song Liu <song@kernel.org>
->> ---
->>  .../selftests/bpf/{progs =3D> }/bpf_arena_spin_lock.h        | 4 ++--
->>  tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c   | 7 -------
->>  tools/testing/selftests/bpf/progs/arena_spin_lock.c        | 2 +-
->>  3 files changed, 3 insertions(+), 10 deletions(-)
->>  rename tools/testing/selftests/bpf/{progs =3D> }/bpf_arena_spin_lock.h =
-(99%)
->>
->> diff --git a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h b/t=
-ools/testing/selftests/bpf/bpf_arena_spin_lock.h
->> similarity index 99%
->> rename from tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
->> rename to tools/testing/selftests/bpf/bpf_arena_spin_lock.h
->> index f90531cf3ee5..680c9e6cb35d 100644
->> --- a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
->> +++ b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
->> @@ -107,7 +107,7 @@ struct arena_qnode {
->>  #define _Q_LOCKED_VAL          (1U << _Q_LOCKED_OFFSET)
->>  #define _Q_PENDING_VAL         (1U << _Q_PENDING_OFFSET)
->>
->> -struct arena_qnode __arena qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
->> +struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_N=
-ODES];
->>
->>  static inline u32 encode_tail(int cpu, int idx)
->>  {
->> @@ -240,7 +240,7 @@ static __always_inline int arena_spin_trylock(arena_=
-spinlock_t __arena *lock)
->>         return likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LO=
-CKED_VAL));
->>  }
->>
->> -__noinline
->> +__noinline __weak
->>  int arena_spin_lock_slowpath(arena_spinlock_t __arena __arg_arena *lock=
-, u32 val)
->>  {
->>         struct arena_mcs_spinlock __arena *prev, *next, *node0, *node;
->> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c b/=
-tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
->> index 693fd86fbde6..acb9d53b5973 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
->> @@ -5,13 +5,6 @@
->>  #include <sys/sysinfo.h>
->>
->>  struct __qspinlock { int val; };
->> -typedef struct __qspinlock arena_spinlock_t;
->> -
->> -struct arena_qnode {
->> -       unsigned long next;
->> -       int count;
->> -       int locked;
->> -};
->>
->>  #include "arena_spin_lock.skel.h"
->>
->> diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools=
-/testing/selftests/bpf/progs/arena_spin_lock.c
->> index 086b57a426cf..6c04e7707644 100644
->> --- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
->> +++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
->> @@ -4,7 +4,7 @@
->>  #include <bpf/bpf_tracing.h>
->>  #include <bpf/bpf_helpers.h>
->>  #include "bpf_misc.h"
->> -#include "bpf_arena_spin_lock.h"
->> +#include "../bpf_arena_spin_lock.h"
->>
->>  struct {
->>         __uint(type, BPF_MAP_TYPE_ARENA);
->> --
->> 2.53.0
->>
+> >
+> > It's probably best to keep the specialized map types to core kernel
+> > interfaces only that are unlikely to change.
+>
+> File descriptors are a stable interface.
 
+Maybe we can add a new map type that can handle file descriptor of
+any type. I haven't thought about all the details. Maybe we don't need
+a new map type for this either. Instead, some new kfunc may be
+sufficient to make bpf_kptr work.
+
+OTOH, adding a new map type just for landlock rulesets is not gonna
+happen.
+
+Thanks,
+Song
