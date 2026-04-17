@@ -1,79 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6CF355F33
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E176435F189
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776446442; cv=none; b=s4vFm/tkpoXq00vZ1wetKqDawUq4kouF0aet8jltFgmm/5C4UTBYMKgwz0cdbdAkZfU5qowtYLxwaXnXvQT1+pNtDV9ml52Ep7yGKkj+jSxoyKSaIv2ZcMr540nvkZvqC53OIrPHbBp7RX9kGG+kI2zVef53go33E5DB5T6eAcE=
+	t=1776446564; cv=none; b=jhgK3fTY3Y146dT2kGkolGyx9VXyLdRYTPHP38Zi51QOhZVbbHcp2h4yRTBp3kb8614JIoRlgnfiyLVCsYK5j17NFW68FU8NxYQr64SMA4xzVnGGbeO/NpkQeh/VoDLRC0eGG8SQRNRwkWdDgO71OO7SCNwyhEQX35zg5N4rSH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776446442; c=relaxed/simple;
-	bh=ogz1Fu2a8c9OHV42LwF1nEd+HjHje1xFXcT0DGB8UsY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=g09sTH4tXPiJra282RZFbKxcPV3Tw5LtnpqmkrW/hifRHD+l43WOneK23nQIegABNw8CQ4Qwygc++aW2t7rzURnGAOXhgRDKWiN48E1Xj5zcG1pmOycaKbK0WLWXsS4uclbLaOKuyH/ZUYTeZMsTB1QFmENYdfQNQMXJ8BP6zZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kh/n0wr0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776446564; c=relaxed/simple;
+	bh=zKYCpWOZr1bz6RbA+dNa0pIvU5r/RGqVdCYgv/PANHA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XYBdhelbhNsqu4z9q9iafVcuOtKYudgjqnlCqeCPBuH5oNNuwernkAA/LSxQzGzxWC0dlTnKwlErBoGOCkcfHiTCYpxbnU2x1PVghM/KUf29XcqfbuxpTedS2qWpVypri5MG80aZr2A41YUGoOfGZTvO0+vJM7MBCQviYKisVSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gd9HdD/o; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kh/n0wr0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1147AC19425;
-	Fri, 17 Apr 2026 17:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776446442;
-	bh=ogz1Fu2a8c9OHV42LwF1nEd+HjHje1xFXcT0DGB8UsY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kh/n0wr0oJ3fkbjoP3F1t0yLLLtSSrWia5J9/xUr/Dp9/rJuxxMJ1T8ccCWTFuepV
-	 yrANxytcNnTjgj8d1bW4jMNNe/wmrCDTqgZo5kNDUUxtpIouiEjFCDS12/7fPjW+ua
-	 8Si9FhyWY6kq00SsMVFUH+1n2Ps2UDOcPKX4eBIJntyKW3RipHfXXaL8gSyts5gmae
-	 +dPl93iPyW5I4LMp4aLgbuz6sD7C3qjn9GqhuIBAoSfTY57yw8NnM5u4GEC720Sugm
-	 KdBYFbI2DFJezQxsHrlcgiZzhmfzYey877aWQcuXrs/ABoSJUNYUCiHkl/zB69ySST
-	 uLnXUB/W3d3Og==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9E6C380CEE6;
-	Fri, 17 Apr 2026 17:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gd9HdD/o"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso9118665e9.3
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 10:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776446561; x=1777051361; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Jbqatp0qHepZF3d8fjmGE/KljlJeUlBWWbHvGa0ch0w=;
+        b=gd9HdD/ogjm6ffUDXBTW7Bce9SGh5cesJ6vJqmsG4NfBN73hXM0nb1f1UYE1/ZeeiZ
+         Jz0uOsu4ik6ySiBScUrT4kEK24h+rNWBRpfJfZJNBUzSS8qFnfMJQ/OWOmwYpXdfpNEy
+         ooSEPzrDnoPhSRWSoRT8uifdUWHP3NV9HtGkDByf2QAukBcfF6vUIx5ZFxEBMVBR7a5c
+         ps494FNNQbMwi0fju3yvucUkdA70DMFwJw9u9YvLjdwsKvjrMkPb877FsuYlW1s90+7j
+         bhV/+8LKulVeAMElKjLNkGyFdeyB/45BTXgvFm3FHjWKMA/YYWabAhD2Fv5Vl6cxnsu6
+         txcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776446561; x=1777051361;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jbqatp0qHepZF3d8fjmGE/KljlJeUlBWWbHvGa0ch0w=;
+        b=U+t/1CGupX5a4OgmN5auh5yWtcuZ5UADzGLb4gqThRxCCPR7mUVJcpCEcstZ2ukgO7
+         DDkbksRDuUP48qK2bGdinqugwM0Ey62V5UyC/EYdn2wNegP440lT91Cc+AICOwglQd5r
+         dqabWCOW2Bf3V6Gyp7kD65g2mx8sV00wyrBEIr4/N+RHv7483nmEg7lWbj0+prX2w0Hx
+         Dy4KdQjU3HFdGa5TbKNu5MaFG/8/iNhuJ9xXTY03+GmFKScCoSV5E1c7FaQ8gU4LeItR
+         amsIzsN/fpp0roQlOqnguzYI2fJc4lrvKlRM0ZdXcPu/UkDQHRFaqen0TKP+Su6TvtoW
+         7mTg==
+X-Forwarded-Encrypted: i=1; AFNElJ9FOd7tpuf4/sYT9SnRltfFjRMboh7eJkWiXXFT+C4Cm9hFkveQVtEQ2PjMWmrpoZmvVHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXXZNFAkc+GC9PTLY14T6vkMwn5vtMUPqp/DKLN52fJTQKHBtS
+	5PANtf11iTNRSJdZ+kXpjADT+gMxTwzwb/5tfbRVB0+HZ+6DaCRjrCHg
+X-Gm-Gg: AeBDievQ2V2fBgigtfVX5oXd9bAdmPay57R97gTke1KzOexI58yetQHn8L+syY8C7dw
+	HjQkGjuRHOWcBZboQpvZOAVIo6h9Uq0hsWuvYUNZpzuyvrmHpdlRGxmBpKv4Uf8lrH6OXCGnVHk
+	DdAq1r74uoVhnfIenwPsH+PMGHehEFDQtcq7ie/5eAzTBsOFoAkfTaSNLN0CY428KpJIHTRfxuu
+	fbqd5yJk6YIvMFMkMKkGiaxSPXXSAr7S0sSIFZeAVYTsFGt15tgWnjG0IGsAQW+fGtykNUbR4LC
+	cbuwFGX7GjOaRiarnfhp7Xt7aoEcyyACPB66/N/AwtWLb7eop3B1MP2AUNUis4gJEXR4ukcrrcl
+	CVXujQ1Y0WQ5z0/jkxKnWSVikeK6vUtJi9FpskKq8ottmfssRzdkcBfFK8PyGP0yphmxBY9lgOY
+	6Tg1ZYk9XELhLPUgezsS6bpLP4u4mT/6S3tvjQ7lI2V7mEHPvb3Ldkpyvgo5zwdcepS/4BtUJmJ
+	cfTjqpBpjXQ+K7Yoy+oryPwudp1pAy9
+X-Received: by 2002:a05:600c:a00f:b0:486:fe83:8621 with SMTP id 5b1f17b1804b1-488fb788924mr59982755e9.23.1776446560959;
+        Fri, 17 Apr 2026 10:22:40 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1365sm6324879f8f.7.2026.04.17.10.22.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Apr 2026 10:22:40 -0700 (PDT)
+Message-ID: <337f2570-acb2-4b31-8c4f-86ba4cbdfe65@gmail.com>
+Date: Fri, 17 Apr 2026 18:22:39 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v10 2/6] bpf: Add bpf_prog_run_array_sleepable()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin Lau <kafai@meta.com>, Kernel Team <kernel-team@meta.com>,
+ Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260415-sleepable_tracepoints-v10-0-161f40b33dd7@meta.com>
+ <20260415-sleepable_tracepoints-v10-2-161f40b33dd7@meta.com>
+ <DHU7408DLITK.2DC76VINL2F7K@gmail.com>
+ <CAADnVQ+6udrUD-xW96ZJkz3UkEq8JZAdFiMgB=f5jfFaYVjJ5g@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAADnVQ+6udrUD-xW96ZJkz3UkEq8JZAdFiMgB=f5jfFaYVjJ5g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf: Validate node_id in arena_alloc_pages()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177644640955.76123.2613760344901893868.git-patchwork-notify@kernel.org>
-Date: Fri, 17 Apr 2026 17:20:09 +0000
-References: <20260417152135.1383754-1-puranjay@kernel.org>
-In-Reply-To: <20260417152135.1383754-1-puranjay@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, puranjay12@gmail.com, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, mykyta.yatsenko5@gmail.com,
- kernel-team@meta.com
 
-Hello:
 
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 17 Apr 2026 08:21:33 -0700 you wrote:
-> arena_alloc_pages() accepts a plain int node_id and forwards it through
-> the entire allocation chain without any bounds checking.
+On 4/16/26 3:40 PM, Alexei Starovoitov wrote:
+> On Wed, Apr 15, 2026 at 6:41 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> One more thing..
+> Please go back to my 'do your homework' request from v9
+> and answer the question why it's not safe to do bpf_prog_run
+> on dummy prog like this patch does.
+> I missed it yesterday and only complained about the waste of cpu cycles.
+> It's more than that.
 > 
-> Validate node_id before passing it down the allocation chain in
-> arena_alloc_pages().
-> 
-> Fixes: 317460317a02 ("bpf: Introduce bpf_arena.")
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> 
-> [...]
+> Do not send v11.
 
-Here is the summary with links:
-  - [bpf] bpf: Validate node_id in arena_alloc_pages()
-    https://git.kernel.org/bpf/bpf/c/2845989f2eba
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I see that very similar bug was fixed in 7dc211c1159d ("bpf: Fix invalid 
+prog->stats access when update_effective_progs fails"), the problem is 
+the same - NULL field access on the dummy prog. So the approach to just 
+allow dummy to run further is fragile, because other NULL fields may be 
+accessed.
