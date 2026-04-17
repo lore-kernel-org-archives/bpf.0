@@ -1,124 +1,183 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f68.google.com (mail-dl1-f68.google.com [74.125.82.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162492C3248
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 16:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584E83101C0
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 16:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776442064; cv=none; b=vFECVvD7DAkBeW+VV2SMPsRHr1eW6Q9eVOP7ReVTbe9ywD1hMOT55b4fvG+0PE4bkDMPykorfuqFuToSoc1jc+ebLFwwn8sJyGBBgOgEXpWT9GGRSHb7d5HW0E2ji2KyE3xrpyL2LA1UMVvBu+ugQeTzXMbOwFO1uh+jx0szzXE=
+	t=1776442072; cv=none; b=p3vUzU9DvIKsa/oxvTkvZr29V2Uap+DLtl8FM/Ceh4LXEKV1CQtIkJYQWQP0k98LT2d8x0v0UFmH04SUBhsLeL/NKp0/Zxd8h5SGNykL8vCXK9RiwPhMIughy28vB0y2RVJPF36kttrxRBbewFwUj5IShE8V5+d1hIOX5ArbTrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776442064; c=relaxed/simple;
-	bh=nulA4mj4+UQdm5g3raviTfCEHgpZLSlwhDZtYYW7pmA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=muERXNR/TJewG5GVFFXkh8SLZ4AG+rdDq6x6Eop39YRBTPbPeDcJXts2tQPHa9i2V2Wj6tNviZR5kjmqSJWBMVUCZBEg73gEf+xINhCyD58L51KeZfx7lAcl7bKTGRzwg/8314aFbCTbzgS2ZL8AcRkh4S6ahEUACCItMd/BcYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=js8Qn5lJ; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776442072; c=relaxed/simple;
+	bh=opigBZBRqB0aL406pyipEFNwsfbbb3bcFx/Zmeh0VIE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=QDamZNVlTNCIxpw+0Km+MwiosQmbzCQZZvvtAhKobr8/Oq6u+s+AWXr37vkRClvVcCTkyZwQp3KxhrEc3a3lZCP73Fd6YteRin3eNjOUribFiOTChcN2v+KHupw8MgYmywIwuFQtSIGfK1B5aMfvbAD5bcMLnYbPUxwcvkjqphA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=r6KEcAD3; arc=none smtp.client-ip=74.125.82.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="js8Qn5lJ"
-Message-ID: <b332207a-abd8-402a-9ce1-c1f502ed1fca@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776442060;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Fvbgx03+qk8xfotWRd4EmEXgxaFer2/vBE0LyGuEiQs=;
-	b=js8Qn5lJHUcLSBLiHtitMfdukLsOTuujqdl0FMUI/+PoOG8cODLuwqE8s7qI2hwKkuT46C
-	Fwfw2jPu8RlQhob6wq4HTXZCEiVcNkKalVyIuwyw+9Ewz056NPSnQqm6qBccdefv+/m50f
-	l64OI3HuUt8cp5STTRFcH0PcDuCuLwU=
-Date: Sat, 18 Apr 2026 00:07:24 +0800
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="r6KEcAD3"
+Received: by mail-dl1-f68.google.com with SMTP id a92af1059eb24-12c7212836bso1548014c88.0
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 09:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776442070; x=1777046870; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CItbSBANkqGwGgclCHY8cS/h9tRrPXe0wuFz1XeZXG0=;
+        b=r6KEcAD3LUQWwM7RO0QL8c9JF2s1JlemTQ0GcRHIBJuXVhtp8sjr4GcvCZYGT4huM1
+         /5ON7QNwXJ2cth9Oi0hz9PB8MaqJ6Cufev6RO3M4H31fHAM8oTvY3rTlnROWl2nXo39+
+         3OyCH8JAlCEQklvfWKV42s1atJFt1eyWZjQ97h/adxfa5cuxeZtJmtf57axjcLUq9Tpf
+         f1fUS8tzvqMYyLEnA/lIRjg8DKlJwannKqK+MYJrqTiW990frwdphCV1Zjvci9nEtizc
+         N/F9VtR344hIH6nlrsSwgDwPmfWLdLxUF6aq74jj2njLYfxLPbHZnT4625zFnsBu4gDO
+         3T8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776442070; x=1777046870;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CItbSBANkqGwGgclCHY8cS/h9tRrPXe0wuFz1XeZXG0=;
+        b=K4fAdmBzdesezSe1qRMKXEcfovoYvWNEvOjkUAk2incLRQDvol/P7RkSu3O4s+uXDG
+         fqh3yJn1G9SBefpfN6sOOfUv1QFtRbprXJ8CKRaPkG4430cwTw8xNmMbiYePlTvfj/UV
+         JwtNQXKIusm6CWB9t43b/XoIG4LNAaNqUruNfufj4+6aG5qdn0bhT3tSypWh02fJTV5l
+         J1jK3ioIhroPqXh51leVQ8d+M8srtCuV9jUW/oplSbJtPby3AvC05YGzaxyj7LBtdGY/
+         yeHxfe9Ez+IUvRMtAiFw3euKHsJ4eCYS4UCaDkZVDmHVH06FC/Ie8Ijf/pehSizuXpFz
+         OBsA==
+X-Gm-Message-State: AOJu0YyQzs67XcPCtIoMHDC6qVBf3tW7Y+4es708I/8lxZ1pWFZDGhqM
+	jUXsHGRdgEdeeEuHTs2vZ+ISTOqLg+a2MMIzo1+2a/WaZKD4dbV2u6KnW0EiHNnj14I=
+X-Gm-Gg: AeBDietV15V5yEdTl/cGu3amW8XC/e/GwoJQjiWBNiVMDbZDpi3jwPVd13kYu1eQBy4
+	QQ/AQ75AfviK6vnSxvgmMVIdP/+EUNvEaqun44b+7j1NJmmC1uUHyWqSnnf2duoWy6+wBfpl/ha
+	KCw4P9i7rHKd5hZqnUEAqUg7oy2K55qAztXTMjumz+hpWrB2E9CW9PFcCTy0HKRAK+xHyGIsR1t
+	ieLb1OPWxIn3yrOTc5vT/bZFtQyNmGKpbUdOSHroLi9ASW/PyWUf+PRMPTNJ9kVYC7FXLqOeRw4
+	OXAH97pw6iUWtpZA0qdpiFOP1cLMsndlmdZMUFOHpqlIubEDKTA+wRnzxVKwvA60r3nZ9rHQazt
+	rZu7UcHhXdYqtRMJbKFpfzkW3RUzexppWWgQIntaER6BsoaTGK6B13guKNL3deNdUaKxKeK4Mnz
+	U+lmuDLitJhw3XScY=
+X-Received: by 2002:a05:7022:69a:b0:12c:4928:e57f with SMTP id a92af1059eb24-12c73fa3e3cmr1554706c88.25.1776442070145;
+        Fri, 17 Apr 2026 09:07:50 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::5d38])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c749c422csm2690775c88.3.2026.04.17.09.07.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Apr 2026 09:07:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 5/8] bpf: Update per-CPU maps using
- BPF_F_ALL_CPUS flag
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, yonghong.song@linux.dev, song@kernel.org,
- eddyz87@gmail.com, qmo@kernel.org, dxu@dxuuu.xyz, kernel-patches-bot@fb.com
-References: <20260414132421.63409-1-leon.hwang@linux.dev>
- <20260414132421.63409-6-leon.hwang@linux.dev>
- <l6hz6k6ecgmgcwsqt63ozobbzeryupq5os5oay42tlyqom776d@z6gq7eq44eua>
- <3578a97a-bb70-4644-ab9c-4cf95be533e2@linux.dev>
-Content-Language: en-US
-In-Reply-To: <3578a97a-bb70-4644-ab9c-4cf95be533e2@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Date: Fri, 17 Apr 2026 12:07:47 -0400
+Message-Id: <DHVK5NSN5J8Y.3C7JM4JRTAPND@etsalapatis.com>
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
+ <daniel@iogearbox.net>, <eddyz87@gmail.com>, <song@kernel.org>
+Subject: Re: [PATCH bpf-next v7 3/9] selftests/bpf: Move
+ bpf_arena_spin_lock.h to the top level
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260412174546.18684-1-emil@etsalapatis.com>
+ <20260412174546.18684-4-emil@etsalapatis.com>
+ <CAP01T77VRccr1feG4uiyWu0zAPf4oDFMJTVBdyBLfpKTf87GZQ@mail.gmail.com>
+In-Reply-To: <CAP01T77VRccr1feG4uiyWu0zAPf4oDFMJTVBdyBLfpKTf87GZQ@mail.gmail.com>
 
-On 2026/4/17 09:33, Leon Hwang wrote:
-> On 15/4/26 10:21, Alexei Starovoitov wrote:
->> On Tue, Apr 14, 2026 at 09:24:17PM +0800, Leon Hwang wrote:
->>> When updating per-CPU maps via the lightweight skeleton loader, use
->>> a single value slot across all CPUs. This avoids two potential issues
->>> when updating on an M-CPU kernel with N cached slots (N < M), especially
->>> when N is much smaller than M:
->>>
->>> 1) The update may trigger a page fault when copying data from the last
->>>    slot, as the read may go beyond the allocated buffer.
->>> 2) The update may copy unexpected data from slots [N, M-1].
->>>
->>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->>> ---
->>>  kernel/bpf/syscall.c | 15 +++++++++++++++
->>>  1 file changed, 15 insertions(+)
->>>
->>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->>> index b73b25c63073..f0f3785ef57d 100644
->>> --- a/kernel/bpf/syscall.c
->>> +++ b/kernel/bpf/syscall.c
->>> @@ -1785,6 +1785,21 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
->>>  		goto err_put;
->>>  	}
->>>  
->>> +	/*
->>> +	 * When updating per-CPU maps via the lightweight skeleton
->>> +	 * loader, use a single value slot across all CPUs. This avoids
->>> +	 * two potential issues when updating on an M-CPU kernel with
->>> +	 * N cached slots (N < M), especially when N is much smaller
->>> +	 * than M:
->>> +	 * 1) The update may trigger a page fault when copying data from
->>> +	 *    the last slot, as the read may go beyond the allocated
->>> +	 *    buffer.
->>> +	 * 2) The update may copy unexpected data from slots [N, M-1].
->>> +	 */
->>> +	if (bpfptr_is_kernel(uattr) && bpf_map_supports_cpu_flags(map->map_type) &&
->>> +	    !(attr->flags & (BPF_F_CPU | BPF_F_ALL_CPUS)))
->>> +		attr->flags |= BPF_F_ALL_CPUS;
+On Sun Apr 12, 2026 at 3:31 PM EDT, Kumar Kartikeya Dwivedi wrote:
+> On Sun, 12 Apr 2026 at 19:45, Emil Tsalapatis <emil@etsalapatis.com> wrot=
+e:
 >>
->> This looks like a hack. It's not addressing the actual bug.
->> If there is a bug submit it separately with fixes tag.
-> 
-> Sure, will verify whether it is a bug. If it is, will fix it with
-> separate patch.
-> 
+>> The bpf_arena_spin_lock.h header is useful for all programs and not
+>> just the selftests. Move it to the top level of the BPF selftests
+>> to make it more readily accessible.
+>>
+>
+> Please add something to the log to explain why __weak is needed, as
+> indicated in https://lore.kernel.org/bpf/CAP01T77GwHgS04TM8yTODyiXh2VJq-=
+=3DL0FPoRvjpfF4dc6T9zw@mail.gmail.com.
 
-By implementing two selftests [1] against syscall progs and lightweight
-skeleton, it is not a real issue.
+Will do.
 
-The assuming oob reading might occur when updating percpu_array map
-using a small value buffer for syscall progs. However, the oob reading
-won't make kernel panic, because copy kernel memory using
-copy_from_kernel_nofault(). However, as for lskel, the oob reading
-doesn't occur, even set value size as 32000 and update percpu_array map
-using an int.
+>
+> Also, since we discussed already, why not move this to libarena?
+>
 
-The assuming issue #2 that copies unexpected data is true for both
-syscall progs and lskel. However, I think it's users' responsibility to
-correctly update percpu_array map using big enough value data.
+I left it as (imminent) followup work to make libarena completely=20
+self-contained but it makes sense to add it from the very beginning.
+I'll add move the headers in these patches.
 
-In conclusion, I'll drop this patch from this series, and won't send
-separate patch because it is not a bug.
-
-[1] https://github.com/Asphaltt/bpf/commits/bpf/lskel-oob/v1/
-
-Thanks,
-Leon
-
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>> Acked-by: Song Liu <song@kernel.org>
+>> ---
+>>  .../selftests/bpf/{progs =3D> }/bpf_arena_spin_lock.h        | 4 ++--
+>>  tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c   | 7 -------
+>>  tools/testing/selftests/bpf/progs/arena_spin_lock.c        | 2 +-
+>>  3 files changed, 3 insertions(+), 10 deletions(-)
+>>  rename tools/testing/selftests/bpf/{progs =3D> }/bpf_arena_spin_lock.h =
+(99%)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h b/t=
+ools/testing/selftests/bpf/bpf_arena_spin_lock.h
+>> similarity index 99%
+>> rename from tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
+>> rename to tools/testing/selftests/bpf/bpf_arena_spin_lock.h
+>> index f90531cf3ee5..680c9e6cb35d 100644
+>> --- a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
+>> +++ b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
+>> @@ -107,7 +107,7 @@ struct arena_qnode {
+>>  #define _Q_LOCKED_VAL          (1U << _Q_LOCKED_OFFSET)
+>>  #define _Q_PENDING_VAL         (1U << _Q_PENDING_OFFSET)
+>>
+>> -struct arena_qnode __arena qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
+>> +struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_N=
+ODES];
+>>
+>>  static inline u32 encode_tail(int cpu, int idx)
+>>  {
+>> @@ -240,7 +240,7 @@ static __always_inline int arena_spin_trylock(arena_=
+spinlock_t __arena *lock)
+>>         return likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LO=
+CKED_VAL));
+>>  }
+>>
+>> -__noinline
+>> +__noinline __weak
+>>  int arena_spin_lock_slowpath(arena_spinlock_t __arena __arg_arena *lock=
+, u32 val)
+>>  {
+>>         struct arena_mcs_spinlock __arena *prev, *next, *node0, *node;
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c b/=
+tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+>> index 693fd86fbde6..acb9d53b5973 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/arena_spin_lock.c
+>> @@ -5,13 +5,6 @@
+>>  #include <sys/sysinfo.h>
+>>
+>>  struct __qspinlock { int val; };
+>> -typedef struct __qspinlock arena_spinlock_t;
+>> -
+>> -struct arena_qnode {
+>> -       unsigned long next;
+>> -       int count;
+>> -       int locked;
+>> -};
+>>
+>>  #include "arena_spin_lock.skel.h"
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools=
+/testing/selftests/bpf/progs/arena_spin_lock.c
+>> index 086b57a426cf..6c04e7707644 100644
+>> --- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+>> +++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+>> @@ -4,7 +4,7 @@
+>>  #include <bpf/bpf_tracing.h>
+>>  #include <bpf/bpf_helpers.h>
+>>  #include "bpf_misc.h"
+>> -#include "bpf_arena_spin_lock.h"
+>> +#include "../bpf_arena_spin_lock.h"
+>>
+>>  struct {
+>>         __uint(type, BPF_MAP_TYPE_ARENA);
+>> --
+>> 2.53.0
+>>
 
