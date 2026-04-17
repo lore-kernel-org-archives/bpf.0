@@ -1,119 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0362938C2A3
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 10:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FD83B8BC5;
+	Fri, 17 Apr 2026 10:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776421832; cv=none; b=asQjfLURFAiDBlADqSQlXAAeoXD+WXKcu61SRHd8uJ0EpnrO0usW5qnfrWQkfZW0KAklxDAbzC93PXjPC2d160IapmJ6fNnyh1NdpcHOiaSWAGvQxLFGIQ9LbU47Vlp5/s2f0E6a856Tqoc/QMED2+mFnUNTAzjvMOShS20vAsg=
+	t=1776422755; cv=none; b=OVXPhURVlxnbmrCD5C75AJUO5gFAo9w3zmVn4P2WsLYDqvt+/al6Mj8EIP1PX98O1PveP/wpCH6FRIDQu3EnyN7WJtABPQAppszfWZN3MI6NPRD8InfRysD6T6UKQhAgJKbZTNSp2D96tC3mTmlBFaxpVGwuoHnAePy8CXT5FEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776421832; c=relaxed/simple;
-	bh=2E4d1qouBPXWGfdzHg/+sJ/fKFP5VEVndh+tz3UYOQo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jhs9JwUxejuHjcBw5AXbZWlMUkK9nL/UXdxz5Rv5z13lyMdBehkc8VOytq1piOQNdTNEM/wg3sP5pGRMNtaY+7W5tgynmktz79lCrQn2tmii1uFp/6QWJPfXdjSVXPVzlhGhs/ZILNib6iO0nJDLOf/VCBGL3A/ZxfhzPQgK+A4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7PT3mhb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776422755; c=relaxed/simple;
+	bh=0VRL0cpLJ+qES0oZbNjlAL/FiePH+bQn1HvWNYQ7Fz8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=jN6fYiuwreeapzE9qF7n7Kzse6WSkx82KMp6Q7iVshvOp37gi0KnEgYoxn1iU6SR+HnIkjOzsQ+cnC9KlknNt+/NkXOdfwzlD9U+eKYFYICrEEP1GuOLWYq1Y/SmBHaw/fc1Svrj1Nf7nSDYjBNHgjMeHafNcdDTa77CtusL+mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l/DWVYQV; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7PT3mhb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 744DAC19425;
-	Fri, 17 Apr 2026 10:30:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776421831;
-	bh=2E4d1qouBPXWGfdzHg/+sJ/fKFP5VEVndh+tz3UYOQo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=u7PT3mhbdOslKrKsXaF7exF4cOmFaso6kJ2h7mDwokYiJ+cHmAw18Ng0QQTieDaWN
-	 4gIKZT87Y+D/+FdDPD1twGXHrktYfY70F3d0/6ES9a2pjTElF5qPIAa5Z5deyjfuY7
-	 6esmP3oSM9XVTSiK8RhcVneHCjZlVyLVLv66edYnfVNzfDzHFvIjaZ/2ylY2xL5Thv
-	 f2voW9UeaoAKgSGguTlTj56Gmu/U1XwFznGly4UmntVbBdS0+g0R3Oh/+jMLnh49bu
-	 inAtGQ5GJ7ok+bN0lrmIs4urIQqLbT7IxhdMb3matqIu9QI0ArLiEtgEzZLuecSPIm
-	 dSWE434p/2tKA==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Jonas Rebmann <jre@pengutronix.de>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	kernel@pengutronix.de
-Subject: [PATCH bpf-next] bpf, arm32: Reject BPF_PSEUDO_CALL in the JIT
-Date: Fri, 17 Apr 2026 03:30:02 -0700
-Message-ID: <20260417103004.3552500-1-puranjay@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l/DWVYQV"
+Message-ID: <9d8f345e-e3aa-428d-8484-8127387bb4a4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776422741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TX419zoOiGLPA/HkUNw0XGLgQfe+SD1cqA8DukbVfYA=;
+	b=l/DWVYQV/EMiKjrRUIH1rDNxFlRC62ccAcD9M3jpilGTVBLiGKOkFHMGahAuxby3XNgdwh
+	fmf8HkF9S5ONFOjHvmqq2c3OEa33cnmZ1D4SIQeUvv/19zfqN/RftnlUZ1cX/Ygakeo6c8
+	NlbPQI/G+Lm1OJE124oh4JAqX+5DPsA=
+Date: Fri, 17 Apr 2026 18:45:07 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr opt
+ callbacks
+To: KaFai Wan <kafai.wan@linux.dev>, martin.lau@linux.dev,
+ daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
+ ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ jiayuan.chen@linux.dev, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260417092035.2299913-1-kafai.wan@linux.dev>
+ <20260417092035.2299913-3-kafai.wan@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260417092035.2299913-3-kafai.wan@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-The ARM32 BPF JIT does not support BPF-to-BPF function calls
-(subprogram calls). When insn->src_reg == BPF_PSEUDO_CALL, the
-imm field contains a pc-relative offset to another BPF function,
-not a helper function index.
 
-When a program containing BPF-to-BPF calls is loaded, the verifier
-invokes bpf_jit_subprogs() which calls bpf_int_jit_compile() for each
-subprogram. Since ARM32 does not reject BPF_PSEUDO_CALL, the JIT
-silently emits code for the call using the wrong address computation:
+On 4/17/26 5:20 PM, KaFai Wan wrote:
+> Add a sockops selftest for the TCP_NODELAY restriction in
+> BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
+>
+> With BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG enabled,
+> bpf_setsockopt(TCP_NODELAY) returns -EOPNOTSUPP from
+> BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB, avoiding
+> unbounded recursion and kernel stack overflow.
+>
+> Other cases continue to work as before, including
+> BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB and user space
+> setsockopt(TCP_NODELAY).
+>
+> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 
-    func = __bpf_call_base + imm
 
-where imm is actually a pc-relative subprogram offset, producing
-a bogus function pointer. Because build_body() reports success,
-bpf_jit_binary_alloc() is reached and a JIT image is allocated.
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-ARM32 also lacks the jit_data/extra_pass mechanism needed for
-the second JIT pass in bpf_jit_subprogs(). On the second pass,
-bpf_int_jit_compile() performs a full fresh compilation,
-allocating a new JIT binary and overwriting prog->bpf_func. The
-first allocation is never freed. bpf_jit_subprogs() then detects
-the function pointer changed and aborts with -ENOTSUPP, but the
-original JIT binary has already been leaked. Each program
-load/unload cycle leaks one JIT binary allocation, as reported
-by kmemleak:
 
-    unreferenced object 0xbf0a1000 (size 4096):
-      backtrace:
-        bpf_jit_binary_alloc+0x64/0xfc
-        bpf_int_jit_compile+0x14c/0x348
-        bpf_jit_subprogs+0x4fc/0xa60
+A little nit below, no need to resend.
 
-Fix this by rejecting BPF_PSEUDO_CALL early in build_insn(),
-falling through to the existing 'notyet' path. This causes
-build_body() to fail before any JIT binary is allocated, so
-bpf_int_jit_compile() returns the original program unjitted.
-bpf_jit_subprogs() then sees !prog->jited and cleanly falls
-back to the interpreter.
+> ---
+>   .../selftests/bpf/prog_tests/tcp_hdr_options.c    | 12 +++++++++++-
+>   .../bpf/progs/test_misc_tcp_hdr_options.c         | 15 ++++++++++++++-
+>   2 files changed, 25 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> index 56685fc03c7e..7b9dbbb84316 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> @@ -461,7 +461,7 @@ static void misc(void)
+>   	const unsigned int nr_data = 2;
+>   	struct bpf_link *link;
+>   	struct sk_fds sk_fds;
+> -	int i, ret;
+> +	int i, ret, true_val = 1;
+>   
 
-Fixes: 1c2a088a6626 ("bpf: x64: add JIT support for multi-function programs")
-Reported-by: Jonas Rebmann <jre@pengutronix.de>
-Closes: https://lore.kernel.org/bpf/b63e9174-7a3d-4e22-8294-16df07a4af89@pengutronix.de
-Tested-by: Jonas Rebmann <jre@pengutronix.de>
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- arch/arm/net/bpf_jit_32.c | 2 ++
- 1 file changed, 2 insertions(+)
+NIT: please follow the reverse xmas tree variable ordering
 
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index deeb8f292454..91fef10e88bc 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -2047,6 +2047,8 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	/* function call */
- 	case BPF_JMP | BPF_CALL:
- 	{
-+		if (insn->src_reg == BPF_PSEUDO_CALL)
-+			goto notyet;
- 		const s8 *r0 = bpf2a32[BPF_REG_0];
- 		const s8 *r1 = bpf2a32[BPF_REG_1];
- 		const s8 *r2 = bpf2a32[BPF_REG_2];
 
-base-commit: 1f5ffc672165ff851063a5fd044b727ab2517ae3
--- 
-2.52.0
+>   	lport_linum_map_fd = bpf_map__fd(misc_skel->maps.lport_linum_map);
+>   
+> @@ -477,6 +477,10 @@ static void misc(void)
+>   		return;
+>   	}
+>   
+> +	ret = setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
+> +	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY)"))
+> +		goto check_linum;
+> +
+>   	for (i = 0; i < nr_data; i++) {
+>   		/* MSG_EOR to ensure skb will not be combined */
+>   		ret = send(sk_fds.active_fd, send_msg, sizeof(send_msg),
+> @@ -507,6 +511,12 @@ static void misc(void)
+>   
+>   	ASSERT_EQ(misc_skel->bss->nr_hwtstamp, 0, "nr_hwtstamp");
+>   
+> +	ASSERT_TRUE(misc_skel->data->nodelay_est_ok, "unexpected nodelay_est_ok");
+> +
+> +	ASSERT_TRUE(misc_skel->data->nodelay_hdr_len_err, "unexpected nodelay_hdr_len_err");
+> +
+> +	ASSERT_TRUE(misc_skel->data->nodelay_write_hdr_err, "unexpected nodelay_write_hdr_err");
+> +
+
+NIT: It's would be misleading if you run ./test_progs with "-v"
+misc:PASS:unexpected nodelay_est_ok 0 nsec
+
+"PASS:unexpected" ?
+
+>   check_linum:
+>   	ASSERT_FALSE(check_error_linum(&sk_fds), "check_error_linum");
+>   	sk_fds_close(&sk_fds);
+> diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> index d487153a839d..a02e28d9db2e 100644
+> --- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> +++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> @@ -29,6 +29,10 @@ unsigned int nr_syn = 0;
+>   unsigned int nr_fin = 0;
+>   unsigned int nr_hwtstamp = 0;
+>   
+> +bool nodelay_est_ok = true;
+> +bool nodelay_hdr_len_err = true;
+> +bool nodelay_write_hdr_err = true;
+
+I prefer "nodelay_hdr_len_reject"
+
 
