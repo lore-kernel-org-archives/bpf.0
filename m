@@ -1,334 +1,100 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93AE822AE65
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 16:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B789C231832
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 16:55:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776444706; cv=none; b=K+IWB31mqlPlPdyn1dZApGk2JcAhKQGIxlQHnikyMZIt1cw/cy7k/CZwHdSD+ClE37ZW3soSjEyKb8JVxlAFV6z2OY85m2bVpt+jFRtwpZNPYleaubFvXDFtvUXdPRRHHfn9r75vGBf+cTvIZ6HlwhFBDqn3QoH7JpTO05vBZsA=
+	t=1776444915; cv=none; b=sRpLm/3XcBIhNrT8TtepeBIXOO/tSGFco0vFAyxI4Y8BnmGVcOUe4vHW/FQKXXYkkOscR/olz1G7s1WrozUoW8UlwX34A3nQ5YbS9VRI4rbnwvIv7NVBfI59m4lg2FLuyHk49QI0btLVCywc6SkVhf8jWCh9Kc21Ifog5RH8gys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776444706; c=relaxed/simple;
-	bh=XQPvDOUBqGL5yLrbPZgix+AzB7PlZi0qZZ57sPKCqh0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BzXLfX9x1LkNDEdXZT3cadV6kj96l+ljDyWoYN9/OgJp2EeGbQjyrltJwUfFIZAZJ4QdW77mGM6eqGp9pt6BEX3yVoP1re7CFGZq313GUboAPfG1HPSyjBw545quuF6yo6slzqHCF8l4si+jkwGIHjj3sVINDDDdApaw5819EfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iK/QAaUW; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776444915; c=relaxed/simple;
+	bh=/lAPLi6sJX1zv35koxs4BTxe7oIjxkNkiaphK6wNLVs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pVF4AzQbSoaUamD1eutgSRUvNsoyWmB5Hxvftap1f9y9xQzKOKJZ+bYxcougVXYytmoM0ahd/SlRNcIc4z5PQA3Mnt/0IOcgQp5n2KjF9pwyTYtiC2JvRacb+PYscEYoO2xOe+kGT7w4UzmKFDhtS0wLJTDtl4FQDIMQnb85rK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hahIdCcP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iK/QAaUW"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-79ee5037d44so13707297b3.0
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 09:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776444703; x=1777049503; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1mthWbvJo8IBMcus1WaUcDoRStgqS1tIgAGD3vbm8lg=;
-        b=iK/QAaUWyE51ITaxDsZRqBs8saimtkvfYnXoy33HzFrRI0O2t3xMkkLfFSNomVgqKf
-         4lI9avgV46WZ+9pngLLtyuS4TqfQU+Xb8GNHQIMYuLFU1AONqneCfAemzlMHt0L2b3YG
-         BHLdRM4aN9CY92OsOnCQ0/uaffCdafmFoV3sINboOuU2SKieN3AuYZeaDZHv8E92L2O1
-         hmnoIOUX6jA14MKWDfJXJjB5qcv3EWNUyzWzRhaO+Q2mSEelNF8PoWpdJdyAon1tSY9U
-         8M3HUk4DbDlADCHLaFu0bT3o5CzN2I9b6WnL3hqIKcyAcu4RY9V5pFJlNoYWRzULuLXO
-         Hukw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776444703; x=1777049503;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1mthWbvJo8IBMcus1WaUcDoRStgqS1tIgAGD3vbm8lg=;
-        b=HIg4wOOsSPxzJeVwVIDFpjdr+Hyh2+zdptTijQqysTlJsn4xDaKw/m69D/yuwFFnnc
-         16iKsLXd9rly1HvMVJa6AcPCFir4UbbVjD2vun+04jvWKAR8jWoyFtslpAUnTc2BiKEe
-         AQ3PXOMLR/qkVADk3lm9DpLnLXkOnMRSyazrBNPfrtvtGSYSDFVx3hyOMQuZI3mHPJ/Z
-         +f6T8oR24FrqfY58z4B7ILU3z4fRtSFtKSav8Gac9MZ3UNR+SH3rBLZkhfzhGhL4kKK+
-         j96tu4jG7+ZJ3MvtTdl4utNPw5OsqOVjLawywG11eiMcLHENPUaRrlDPFU/4n8nz8848
-         la9A==
-X-Forwarded-Encrypted: i=1; AFNElJ8ZLqCQdkCvxR6HqlkS9T18os7fGhZc9d0hgFpofuqjky/Qh7N8t3TEPteBAFcnRaCjSYM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEQBSJUoZJK4qEuczVabJGKhaOn3gBSndIE/EL2BiwPMcHuDON
-	DM8RwPNN0R5K0/QJiJOXO46FGinYqPnA04dtbbWsNijKfAFqweAs0157
-X-Gm-Gg: AeBDieuvyTfi/fyfe3GQpH8KB8Hr1UUOf46ATqoBXFYJOHfeLwOSVm9DmNrsJSCq++M
-	FXO9FJ3QHgZx3AhU4tpmyd1vUAGTlBcDwyP2Ie5CrWrykz7NB8oW+Yr0XHxRu0YUsa4uCzs+/RO
-	LX35WnAe3pZ3+vCrIOcE6uRH4h8M4mKVmDwiRQJ3o3XvbXrt49MOdOTWbKX+Et9tgDDE1UgigtZ
-	7zs/LloM8sDE81UkAQxS5i8zLcOJxHkHSyqA2kKpwEM1fNpBLTsaUqB6NWZt2abRuheBUShY32Z
-	uSLHcQzDsi2Fp2I9Y4dKJrcPNj3UF7VgPACq/BUbOMrqbDQYSK4K/LqOBLoll0vYcMunlI6QiQH
-	K5uBrlRUpc3qe5xrtnNkerhHgBPXkYb8W8PVqnN5T9qmH64cfIVqxa3ktzJls2tFepm3xJF1v0B
-	JfgvZI4NY3/c5F2rZQHkB4qvJWloKV2x6Uqd3GxgT7hUAhi2aBz/XiD4OkK6k/Op20yoGC
-X-Received: by 2002:a05:690c:9990:b0:7b9:f136:56d8 with SMTP id 00721157ae682-7b9f1365e67mr19384947b3.30.1776444703340;
-        Fri, 17 Apr 2026 09:51:43 -0700 (PDT)
-Received: from suesslenovo ([129.222.87.6])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7b9ee99bb32sm8723277b3.30.2026.04.17.09.51.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 09:51:42 -0700 (PDT)
-Date: Fri, 17 Apr 2026 12:51:40 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: Song Liu <song@kernel.org>, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, kpsingh@kernel.org, paul@paul-moore.com,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org,
-	gnoack@google.com, jack@suse.cz, jmorris@namei.org,
-	serge@hallyn.com, yonghong.song@linux.dev, martin.lau@linux.dev,
-	m@maowtm.org, eddyz87@gmail.com, john.fastabend@gmail.com,
-	sdf@fomichev.me, skhan@linuxfoundation.org, bpf@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 08/20] bpf: Add Landlock ruleset map type
-Message-ID: <aeJlHIoSjVPmccDx@suesslenovo>
-References: <20260407200157.3874806-1-utilityemal77@gmail.com>
- <20260407200157.3874806-9-utilityemal77@gmail.com>
- <CAPhsuW7zzXXd6-d86B-rpGr-wfSzmEoCYNKhTMP_pXnybtA27A@mail.gmail.com>
- <aeFaQXkKNHFeE-oC@suesslenovo>
- <CAPhsuW648HdcCbXWMHaJ4uirPWq2WX3Ggx3AGMU6CGzhNYUREg@mail.gmail.com>
- <aeI_CXj6F-nI_DCL@suesslenovo>
- <20260417.ohgoh0Eecome@digikod.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hahIdCcP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63952C19425;
+	Fri, 17 Apr 2026 16:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776444915;
+	bh=/lAPLi6sJX1zv35koxs4BTxe7oIjxkNkiaphK6wNLVs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=hahIdCcPaGZV4xhVdgvmjCQ73KcHhHWMVj72XvEIiL90If4CmJkWfS37U6e+9jZ9o
+	 F2+3lqQ8Og7sg9sk3LNM6gtsvjpcF64xHkCpMZkhmM5/CM+S8/ttdNsHRQQZwvZDNv
+	 SM6Eju/DNhneABIzMz5M7nFYxc8mkJ2qR1MKtYkXCApnbP8jKidcci8iHafWBFp+3c
+	 qQHGOBqchkmZAIU5VHljauEgwZq8qz2WpISOr60obtNcOA18+kQCueZChmP3h1bhW6
+	 UtP3spdqu3avlTC7iQ6tM8P6U6ZxU9/j2BQjT1A978sNjhWw19McSICJ+ZVeW2xk9+
+	 5nqqYzt6wyh5w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: Validate node_id in arena_alloc_pages()
+Reply-To: sashiko@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260417152135.1383754-1-puranjay@kernel.org>
+References: <20260417152135.1383754-1-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 17 Apr 2026 16:55:14 +0000
+Message-Id: <20260417165515.63952C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260417.ohgoh0Eecome@digikod.net>
 
-On Fri, Apr 17, 2026 at 05:18:05PM +0200, Mickaël Salaün wrote:
-> On Fri, Apr 17, 2026 at 10:09:13AM -0400, Justin Suess wrote:
-> > On Thu, Apr 16, 2026 at 04:47:40PM -0700, Song Liu wrote:
-> > > On Thu, Apr 16, 2026 at 2:53 PM Justin Suess <utilityemal77@gmail.com> wrote:
-> > > [...]
-> > > > I don't think we can pass the FD number via a map, since the FD is
-> > > > process specific. And it needs to be done in a way where we can lookup
-> > > > the specific ruleset the FD points to safely.
-> > > >
-> > > > So we'd need some other way to load the ruleset from a file descriptor,
-> > > > either through a new userspace side BPF call or similar mechanism.
-> > > >
-> > > > Is there some other common pattern for FDs --> kptr I can follow?
-> > > 
-> > > I didn't find an exact example like this. There must be a way to achieve
-> > > this. In the worst case, we can add a kfunc for this.
-> > >
-> > 
-> > I think new kfunc is a doable approach. I could make a kfunc taking a struct
-> > *task_struct and an FD that looks up a landlock ruleset within a given
-> > task that returns a trusted kptr.
-> > 
-> > Something like:
-> > 
-> > struct bpf_landlock_ruleset* bpf_landlock_get_ruleset_from_fd(struct
-> > task_struct* task, int fd)
+Sashiko AI review found 2 potential issue(s):
+- [High] This problem wasn't introduced by this patch, but apply_to_page_ra=
+nge() is called within an atomic critical section with IRQs disabled.
+- [Medium] Validation of user-provided NUMA node ID uses node_online() inst=
+ead of node_state(..., N_MEMORY).
+--
 
-Thanks Mickaël and Song,
+commit 312a17d46d0e6285c5b29bc93a445829df8c62c7
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-There are definitely pros and cons to both approaches.
+bpf: Validate node_id in arena_alloc_pages()
 
-I think it would be OK to have a dedicated map and indeed cleaner from
-the userspace side since there would be no intermediate step to find the
-task and lookup the fd since that would be handled by the map_ops.
+This commit validates the node_id parameter before passing it down the
+allocation chain in arena_alloc_pages().
 
-Cons of the new map type:
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 9c68c9b0b24ad..523c3a61063bf 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -562,6 +562,10 @@ static long arena_alloc_pages(struct bpf_arena *aren=
+a, long uaddr, long page_cnt
+>  	u32 uaddr32;
+>  	int ret, i;
+> =20
+> +	if (node_id !=3D NUMA_NO_NODE &&
+> +	    ((unsigned int)node_id >=3D nr_node_ids || !node_online(node_id)))
+> +		return 0;
+> +
 
-The main issue is with the new map type is then we are limited to the
-specific data structure we define in the map. For instance if we want
-to use a hash or other data structure instead of an array to store
-rulesets, we'd need to define variants of the landlock map type for
-all data structures.
+Should this check use node_state(node_id, N_MEMORY) instead of
+node_online(node_id)?
 
-So this kind of bungles the "data structure" and "data type" layers.
+A node can be online but memory-less, such as CPU-only nodes. Passing a
+memory-less node down the allocation chain could ignore the user's
+placement intent and cause unexpected allocator fallback.
 
-Pros of the new map type:
+This issue isn't introduced by this patch, but looking at the surrounding
+code in arena_alloc_pages(), is it safe to call apply_to_page_range()
+while holding a raw spinlock?
 
-The ruleset_fd conversion would be implicitly handled by the map_ops.
-Userspace could insert the fd and bpf would not have to deal with it at
-all.
+arena_alloc_pages()
+    if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+        goto out_free_pages;
+    ...
+    while (remaining) {
+        ...
+        ret =3D apply_to_page_range(...);
 
-Cons of bpf_landlock_get_ruleset_from_fd:
+Since apply_to_page_range() can sleep when allocating page table entries,
+could this cause a sleeping function called from invalid context panic since
+the spinlock disables interrupts?
 
-Awkward conversion step. We need to find the task of the original
-ruleset creator and recieve the fd before looking it up and converting
-it to a kptr to the bpf_landlock_ruleset.
-
-Pros of bpf_landlock_get_ruleset_from_fd:
-
-We can use any existing map data structure to store our kptrs.
-
-Not having a dedicated map type simplifies implementation.
-
-...
-
-Appreciate the feedback from both of you.
-> 
-> That looks like a hack that would not handle FD's (object) lifetime
-> (e.g. what happen when the task is gone?).
->
-
-If we take an underlying reference on the ruleset backing the fd, then the fd
-being closed shouldn't matter right?
-
-This is how the lifetime management works for that
-bpf_landlock_get_ruleset_from fd, in my draft implementation prior to
-the RFC:
-
-  /**
-   * bpf_landlock_get_ruleset_from_fd - acquire a Landlock ruleset from a task FD
-   * @task: task owning the file descriptor table to look up
-   * @fd: Landlock ruleset file descriptor in @task
-   *
-   * Returns: a referenced opaque Landlock ruleset, or NULL if the FD lookup or
-   * validation fails.
-   */
-  __bpf_kfunc struct bpf_landlock_ruleset *
-  bpf_landlock_get_ruleset_from_fd(struct task_struct *task, int fd)
-  {
-  	struct landlock_ruleset *ruleset;
-    /* does landlock_get_ruleset and increments refcount */
-  	ruleset = landlock_get_task_ruleset_from_fd(task, fd, FMODE_CAN_READ);
-  	if (IS_ERR(ruleset))
-  		return NULL;
-  
-  	return (struct bpf_landlock_ruleset *)ruleset;
-  }
-
-The landlock_get_task_ruleset_from_fd increments the usage with
-landlock_get_ruleset. (This may sleep, so it must be tagged with
-KF_SLEEPABLE)
-
-If the fd is closed before landlock_get_ruleset_from_fd, then null is returned.
-The verifier will force the program to do the null check b/c of KF_RET_NULL.
-
-__kptr also have destructor kfuncs. So if we get the reference in
-bpf_landlock_get_ruleset_from_fd with landlock_get_ruleset_from_fd, and
-put the reference to the ruleset.
-
-The destructor path looks like this:
-
-  /* Define ID for destructor * /
-  BTF_ID_LIST(bpf_landlock_dtor_ids)
-  BTF_ID(struct, bpf_landlock_ruleset)
-  BTF_ID(func, bpf_landlock_put_ruleset_dtor)
-  ...
-  /**
-  * bpf_landlock_put_ruleset - put a Landlock ruleset
-  * @ruleset: Landlock ruleset to put
-  */
-  __bpf_kfunc void
-  bpf_landlock_put_ruleset(const struct bpf_landlock_ruleset *ruleset)
-  {
-	  landlock_put_ruleset((struct landlock_ruleset *)ruleset);
-  }
-
-  __bpf_kfunc void bpf_landlock_put_ruleset_dtor(void *ruleset)
-  {
-	  bpf_landlock_put_ruleset(ruleset);
-  }
-
-  static int __init bpf_landlock_kfunc_init(void)
-  {
-  	const struct btf_id_dtor_kfunc bpf_landlock_dtors[] = {
-  		{
-  			.btf_id = bpf_landlock_dtor_ids[0],
-  			.kfunc_btf_id = bpf_landlock_dtor_ids[1],
-  		},
-  	};
-  	int ret;
-  
-  	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-  					&bpf_landlock_kfunc_set);
-  	if (ret)
-  		return ret;
-  
-  	return register_btf_id_dtor_kfuncs(bpf_landlock_dtors,
-  					   ARRAY_SIZE(bpf_landlock_dtors),
-  					   THIS_MODULE);
-  }
-
-Good reminder I need to include a test making sure the ruleset
-remains valid after the FD and/or task is closed. :)
-
-> Why not using proper typing with a dedicated map?
-> 
-
-I may be misunderstanding, but from what I see, a __kptr DOES give
-proper typing, __kptr is an annotation not a type.
-
-This is what it would look like in an BPF_MAP_TYPE_ARRAY.
-
-    struct ruleset_kptr_value {
-	    struct bpf_landlock_ruleset __kptr * ruleset;
-    };
-
-    struct {
-	      __uint(type, BPF_MAP_TYPE_ARRAY);
-	      __uint(max_entries, 1);
-	      __type(key, __u32);
-	      __type(value, struct ruleset_kptr_value);
-    } ruleset_kptr_map SEC(".maps");
-
-So we get proper typing from what I see. (It's not like a __kptr is a
-special void*, it has a type)
-
-> > 
-> > And tagging it with KF_ACQUIRE + KF_RET_NULL.
-> > 
-> > Then keep the existing kfunc for putting the ruleset and enforcing it on
-> > a struct linux_binprm.
-> > 
-> > The BPF program would need to get a reference to a task struct
-> > of the program creating the rulesets with bpf_task_from_pid for
-> > instance. Then they could use the task_struct with another plain integer
-> > map to store FD numbers and then use the rulesets or store them in a map
-> > of __kptr objects for later usage.
-> > 
-> > Would this be more acceptable?
-> > > > Basically the pattern I need is userspace must create the file
-> > > > descriptor, BPF converts that FD into a refcounted kernel object, and
-> > > > even if userspace closes the FD BPF needs to hold a reference on the
-> > > > underlying ruleset structure.
-> > > >
-> > > > (In this patch this was accomplished through the map_ops)
-> > > >
-> > > > Let me know what you think Song. I do understand the benefit of having a
-> > > > __kptr instead, the refcounting is all there, and it would allow storing
-> > > > rulesets in multiple map types. (and one less map type to maintain).
-> > > 
-> > > A new type of map for each FD referenced kernel type is non-starter.
-> > > It is impossible to add UAPI for a specific use case.
-> 
-> This new map type is only about one file descriptor type, similarly to
-> socket FDs.  From a UAPI point of view, it looks clean and safe,
-> especially to deal with underlying object lifetime (e.g. reference
-> tracking).
-> 
-> > >
-> > You've convinced me. I could see a lot of problems if everyone wanting
-> > to add their specialized maps, it would be difficult to maintain.
-> 
-> Is there another way to properly handle kernel object lifetime (not tied
-
-The answer the the lifetime part is yes.
-
-The kptr destructors and the landlock ruleset refcounting give us that
-abstraction. (along with the KF_ACQUIRE/KF_RELEASE annotations and
-destructor implementation)
-
-> to the caller) and pass them as file descriptor?
-This "pass them as a file descriptor" is the tricky part. It would be
-very convenient if we could send the fd to bpf from userspace and have
-it be implicitly converted (like in the BPF_MAP_TYPE_LANDLOCK_RULESET
-implementation) in one step, but I just don't see a way to do that with
-the bpf_landlock_get_ruleset_from_fd kfunc approach.
-> 
-> > 
-> > It's probably best to keep the specialized map types to core kernel
-> > interfaces only that are unlikely to change.
-> 
-> File descriptors are a stable interface.
->
-No that's correct. I cede that point :)
-> > 
-> > > Thanks,
-> > > Song
-> > > 
-> > > > Mickaël, do you have any thoughts on this? I have v2 basically ready,
-> > > > although it uses the BPF_MAP_TYPE_LANDLOCK_RULESET it changes a lot on
-> > > > the Landlock side.
-> > 
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417152135.1383=
+754-1-puranjay@kernel.org?part=3D1
