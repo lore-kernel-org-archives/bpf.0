@@ -1,78 +1,106 @@
-Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B50737186A
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 06:54:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C028A374731;
+	Fri, 17 Apr 2026 07:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776408882; cv=none; b=evL8cP7MtXoJFr3bVlmymlMNQUucsc5SiJ/1x2wuETwDEV4PWWfcHku4snmjshLoyQLlMksq2FcUwSG7ay8YZSc3pDJ3YbUQ59cqLTjxlgNHD74nIG0GlNxsyaiMafXzFjelcqIiK9XdxMdg/7L9tKgcG5XqCsmfPiCx/HGJ3Ic=
+	t=1776411109; cv=none; b=VwlVZgD6nZinBCBKzondjcbDmksPeWagzb0Rbdof/g5r9IgCZ0x3q5Zbo4rBAbyd0ntEnedI52E3FZt3qZXpZmZ0o+/FvKeGaTDOp5QafOwzS7isQ1LvKUcAGo2HxO07FFAeYYMHkWNddZeNvCv5GQo/wJzfu4hbu9/PVtPvDC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776408882; c=relaxed/simple;
-	bh=EeB0sB4jfiNc5ZxzMeHEnwVZR9LSTcb+7BgA6eh9b6Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KoSkiCQs7TzHZuNxjRoCv1jivMXAhRNh4hOb/+2uEPrFcJYO/SwZ5i6ug+IVKOz7+27fzHOsgzboKrxkbhb+1e9HX+4uPjgqdQT3DVJLXAp8nkJn08F4O/WATaBr8Qbqao66FN55zpXGFc4Jo3SdGOKB/4fVuJOA89Voi4TrNxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=C20W6kJP; arc=none smtp.client-ip=180.181.231.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="C20W6kJP"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
-	from:content-type:reply-to; bh=nj9WjNgZe8RFcxQHAiMacZuT0UZkIp8H8yQorTIlWDc=; 
-	b=C20W6kJPIGqX8+Hnx4UsQYK7l8AZ2pL3RLWDDz8LYFJuqbsp9ScqCDMAhgdpk6MgepK8mpM5mDg
-	BChPdrYUiOJjLkLDfW9kJaRoOO9A5O30NCyPteJP0lzB3n1xT+GKNyS8klaXOqq36m8Z8nRZw/Yjn
-	B3kWOLvzH7aJsAellVAGrpv72ON6sbEP1DVTNOg2UCzt3vNRHKo8bpOUiLm0f6IqHDN+WpSCwQiuA
-	Kser7YUjVidn4OdkHDsMMbvmHtAEsLzgCICDm76mGpt4oasHOcqI8B0L8ThmJ5yX4RYmeOWnCldrX
-	NwoZxo2Xmolps1o+EUwk02b/bfVWqU9Hsi9Q==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1wDd5x-006jql-2Z;
-	Fri, 17 Apr 2026 14:54:30 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 17 Apr 2026 14:54:29 +0800
-Date: Fri, 17 Apr 2026 14:54:29 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	s=arc-20240116; t=1776411109; c=relaxed/simple;
+	bh=Vy6i0ztIiBL4BIBnnzcQh/WXpG0AV/ZxLj6vFAIJrEI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ah9Eysl1PnCsue2UbATsY5NKQfNVTRNrb8pXbeT0l3gc9jv7nnnNNdK/xkWYsxDA2WlmJ4AGRSH0x+G8MONLEQ5hDiMgKLyZ34VmLi24C315kpjVCcFZTt0G+GE9feVyTmnyf42BsX+56KAutBXjhlvAuBH7wQ/MNzR48tqlMgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [111.196.245.116])
+	by APP-05 (Coremail) with SMTP id zQCowADXZQnS4eFp983XDQ--.39919S2;
+	Fri, 17 Apr 2026 15:31:30 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>,
-	Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <yatsenko@meta.com>
-Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
-Message-ID: <aeHZJUw-ZRA3ZWVE@gondor.apana.org.au>
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
- <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
- <CAADnVQJCpJ0bTVPQ0LwoNubsK7-HsdePWgdMz8DX=v9cjgvyKQ@mail.gmail.com>
- <aeBxQn8ATaNuEF4X@gondor.apana.org.au>
- <DHUN1UJ0DLBC.3UC7SXBAV2FOW@gmail.com>
- <96b6f76e-1dc9-4d54-9f92-8586796ef607@gmail.com>
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH] bpf: crypto: reject unterminated type and algorithm names
+Date: Fri, 17 Apr 2026 15:31:28 +0800
+Message-ID: <20260417073128.91029-1-pengpeng@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96b6f76e-1dc9-4d54-9f92-8586796ef607@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowADXZQnS4eFp983XDQ--.39919S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFyDCw4UAr4xurWrCw1rWFg_yoW8GryUpF
+	yFg34Dtw4DJrs7CFyxWr48ZryrA34SvFy3GFZ5W34Fkrn0qr97WF1Ikryavr1Yqa1Ykr1F
+	vrWkArWY9347ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
+	nIWIevJa73UjIFyTuYvjTRKE_MDUUUU
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 
-On Thu, Apr 16, 2026 at 04:10:35PM +0100, Mykyta Yatsenko wrote:
->
-> There is a problem though is the get_next_key interface:
-> 
-> int get_next_key(struct bpf_map *map, void *key, void *next_key)
+bpf_crypto_ctx_create() validates the overall size of
+struct bpf_crypto_params, but it does not verify that the fixed-width
+type[14] and algo[128] fields are NUL-terminated before passing them to
+string consumers.
 
-Any chance of changing the interface?
+A caller can therefore fill either field without a terminator and cause
+bpf_crypto_get_type(), has_algo(), or alloc_tfm() to read past the end
+of the fixed buffer.
 
-If not then perhaps a better solution is to use a linked list
-in conjunction with rhashtable.  It'll cost a little bit of
-extra memory, but really provides you with the ideal solution
-for what you're trying to do.
+Reject parameter blocks whose type or algorithm name does not contain a
+terminating NUL within the advertised field width.
 
-Cheers,
+Fixes: 3e1c6f35409f ("bpf: make common crypto API for TC/XDP programs")
+Cc: stable@vger.kernel.org
+
+Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+---
+ kernel/bpf/crypto.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 51f89cecefb4..8732689803a6 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -155,6 +155,12 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 		return NULL;
+ 	}
+ 
++	if (strnlen(params->type, sizeof(params->type)) == sizeof(params->type) ||
++	    strnlen(params->algo, sizeof(params->algo)) == sizeof(params->algo)) {
++		*err = -EINVAL;
++		return NULL;
++	}
++
+ 	type = bpf_crypto_get_type(params->type);
+ 	if (IS_ERR(type)) {
+ 		*err = PTR_ERR(type);
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.50.1 (Apple Git-155)
+
