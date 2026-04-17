@@ -1,226 +1,233 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A073835BDB2
-	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 04:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008131E531
+	for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 04:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776400525; cv=none; b=Kp02xZr7e4dQBOwi1ojBMT9M/iFGYWOpRgpV/NpYbyrpMPuaPRgGERkhybsuJgTbeUA699TzCHSZL3mNivhTa6JhDy3IbNImdEojVAayKfPmrwO/uvWrC62hJNm0HjtP487XM2wXHwM7w9HL18SDUbdJtN7FyFtgEheiuzml9ts=
+	t=1776400727; cv=none; b=RCg6wP03tzZ4BboCyJKz78+OA1ufZlZ9cB2VWAxTxGXBtFeJNqabw4gnC1aitgs3dfJyvO3J7hKAOYtKktH/dNUrsSNf/vBXTjfO8MHffXCmKmhboz7Yp0biLiRcFDXsZN8kShmlLXoJGW6hAaedIwR8rYct6cbqPmPrj8kxW0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776400525; c=relaxed/simple;
-	bh=C+5Xl+Kdj+3ac1o7INQNkrf+75kijR0gIbzD0erYzcM=;
+	s=arc-20240116; t=1776400727; c=relaxed/simple;
+	bh=n7SIxW71I0R1WTFgSOmCk7Ju58sriVEPsXSK1zkOfvQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=o2n0g8IuVO7XGMsnzYJ1XfaZrjnLnFfbY9iy3S0Si3lY3KgGEo8iF4zaZWGokG1Zr/oYGxSgDHwTl8SCj/XqJ6SJnR/k6ZSFFhvKxjaFXeZ7oqvcokuasUUcsPa8fS74zsR14DuAViXmT5n3xlhHSYMS+vEO5roakjVJo0mrrT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=finG8nsu; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=cAU7eEGE0khAxaRK1NjC33RszFi4ETEaWgPIKxwFO/D3QlIdrppOSqbokJ69vokIqKnSVk5yOGTtLqho5erEu5xiSMwDPUfMQJbiw2K2/ERaHdmjHv5FpKg/442FDkY2NpEZemK/kFcJMXrUQkB1wTYM/yx8qbJ3hlTGt0NCezU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dv77fzfY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="finG8nsu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAF1C2BCB6;
-	Fri, 17 Apr 2026 04:35:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dv77fzfY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CFEC2BCB0;
+	Fri, 17 Apr 2026 04:38:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776400525;
-	bh=C+5Xl+Kdj+3ac1o7INQNkrf+75kijR0gIbzD0erYzcM=;
+	s=k20201202; t=1776400726;
+	bh=n7SIxW71I0R1WTFgSOmCk7Ju58sriVEPsXSK1zkOfvQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=finG8nsuo33mHwL/KEim06gnMaidAbmHUB9K8kKbHzC2c4q00OQrbO8A5aYp/2KCp
-	 3ZCfBWZSxheyvQZZnBuC7I8kEuk2lzdkRr4sWoYHMQPa3XKyLsXvFPD29Cy1CPsv0z
-	 qh71yu2vV4L+J3V4I8dU83z0w2udolCuoaTntCHQJIjh6PEZlPInLzo2WPF7gAkxyB
-	 Y4VDEMpG1qXDc5D89HN8ySgzK9FX2kOoOJp99hBzdTfjKvj72E7b4wSu2sOWgMaz4o
-	 PyrRZQwre5sYufdV/f1YQ25nmw/rUbphOrcy8uQ+i7uub2/mPuzIgMd+VQnZ/VhNnY
-	 h5xrU7ebibh+A==
+	b=dv77fzfYknyTF7m+dYdgQFC+1Zp7pqM6DPXYAyE/flIB01SbFuk3t+tiKnguRzhPt
+	 f5UlLwQk1D0eOOoF0NVCcYbWEFKP1Z/SKD86l6tu89NMIOuU4tEeCEe9R8pKej1hzg
+	 l7pSxTGV9v3UE5WynvR0I6vx1GsptdofhhzBpOmv4aaC8ZuvpzUTdLHlQH+FWQ2Dzy
+	 Pejdp5fXb/Di3RGpAG5agmOQHxUPzqLf9Q6Px6DwCPwyUp0imKPxjUaY3W7ncLaRm7
+	 3ev6DLSxNNC4WuLKbtvffa90KQkk0oZzipPGp0aZ1jJK5dgzKtdNkPHKWYSWme0cWY
+	 Z0IlIeskTIRFQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 08/16] bpf: Support stack arguments for bpf
- functions
+Subject: Re: [PATCH bpf-next v5 16/16] selftests/bpf: Add verifier tests for
+ stack argument validation
 Reply-To: sashiko@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260417034739.2629927-1-yonghong.song@linux.dev>
-References: <20260417034739.2629927-1-yonghong.song@linux.dev>
+In-Reply-To: <20260417034838.2638137-1-yonghong.song@linux.dev>
+References: <20260417034838.2638137-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 17 Apr 2026 04:35:24 +0000
-Message-Id: <20260417043525.6DAF1C2BCB6@smtp.kernel.org>
+Date: Fri, 17 Apr 2026 04:38:45 +0000
+Message-Id: <20260417043846.66CFEC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 5 potential issue(s):
-- [Critical] Verifier State Leakage in `copy_stack_state` when reusing stat=
-es.
-- [Critical] Security / Liveness Tracking Bypass via `stack_arg_regs`.
-- [Critical] Use-After-Free via Type Mismatch in `bpf_get_spilled_stack_arg=
-()`.
-- [Medium] Unnecessary Rejection of Valid Programs due to Dead Code Elimina=
-tion.
-- [Low] Missing Parentheses in `bpf_get_spilled_stack_arg` Macro.
+Sashiko AI review found 3 potential issue(s):
+- [Medium] Negative verifier tests for stack arguments use inherently inval=
+id memory accesses, causing them to pass even if the verifier has bugs.
+- [Medium] `stack_arg_read_uninitialized` reads from `r11 + 8` instead of a=
+ valid negative offset, failing to properly test uninitialized stack argume=
+nt slots.
+- [Low] Unused `subprog_8args` function defined in the test file.
 --
 
-commit 6ec4a3fcb5e83a95626cd2bb13a60b2283e1c3e2
+commit 24b1eb352e7d04e7c35a9fbc88c6b91d08b17832
 Author: Yonghong Song <yonghong.song@linux.dev>
-bpf: Support stack arguments for bpf functions
 
-This commit adds support for passing more than 5 arguments to BPF subprogra=
-ms
-by utilizing a dedicated stack area accessed via register r11. It introduces
-new fields to track incoming and outgoing stack arguments for bounds checki=
-ng
-and precise verifier path tracking.
+selftests/bpf: Add verifier tests for stack argument validation
 
-Link: https://github.com/llvm/llvm-project/pull/189060
+This commit adds inline-asm based verifier tests to directly exercise
+stack argument validation logic.
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -508,6 +513,17 @@ struct bpf_verifier_state {
->  	     iter < frame->allocated_stack / BPF_REG_SIZE;		\
->  	     iter++, reg =3D bpf_get_spilled_reg(iter, frame, mask))
-> =20
-> +#define bpf_get_spilled_stack_arg(slot, frame, mask)                   \
-> +	(((slot < frame->stack_arg_depth / BPF_REG_SIZE) &&             \
-> +	  ((1 << frame->stack_arg_regs[slot].type) & (mask))) \
-> +	 ? &frame->stack_arg_regs[slot] : NULL)
-
-Is there a type mismatch in this check?
-
-The mask parameter here is passed as 1 << STACK_SPILL, but
-frame->stack_arg_regs[slot].type is an enum bpf_reg_type, not an enum
-bpf_stack_slot_type.
-
-For pointer types, this expression can evaluate to 0. This would cause the
-iterator to silently skip pointers stored in the stack argument area. If an
-acquired reference is dropped via release_reference(), the copy in the stack
-argument area wouldn't be invalidated, potentially allowing a use-after-free
-if a program subsequently reads the spilled pointer back from r11.
-
-Also, this isn't a bug, but should the slot parameter be enclosed in
-parentheses to prevent operator precedence issues if a complex expression
-is passed in the future?
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/too=
+ls/testing/selftests/bpf/progs/verifier_stack_arg.c
+> new file mode 100644
+> index 0000000000000..d212b6c3cac75
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
 
 [ ... ]
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1266,9 +1275,20 @@ int bpf_fixup_call_args(struct bpf_verifier_env *e=
-nv)
-[ ... ]
-> +	for (i =3D 0; i < env->subprog_cnt; i++) {
-> +		struct bpf_subprog_info *subprog =3D &env->subprog_info[i];
-> +
-> +		if (subprog->max_out_stack_arg_depth > subprog->outgoing_stack_arg_dep=
-th) {
-> +			verbose(env,
-> +				"func#%d writes stack arg slot at depth %u, but calls only require %=
-u bytes\n",
-> +				i, subprog->max_out_stack_arg_depth, subprog->outgoing_stack_arg_dep=
-th);
-> +			return -EINVAL;
-> +		}
-> +	}
 
-Could this reject valid programs if the compiler hoists a stack argument
-store above a branch that is later eliminated as dead code?
-
-If the compiler optimizes a store above a conditional check,
-max_out_stack_arg_depth would be updated. However, if the configuration
-constants cause the branch containing the actual function call to be
-eliminated, outgoing_stack_arg_depth would remain 0, leading to a rejection
-of a safe verification path.
-
-[ ... ]
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -1340,6 +1340,20 @@ static int copy_stack_state(struct bpf_func_state =
-*dst, const struct bpf_func_st
->  		return -ENOMEM;
-> =20
->  	dst->allocated_stack =3D src->allocated_stack;
-> +
-> +	/* copy stack args state */
-> +	n =3D src->stack_arg_depth / BPF_REG_SIZE;
-> +	if (n) {
-> +		dst->stack_arg_regs =3D copy_array(dst->stack_arg_regs, src->stack_arg=
-_regs, n,
-> +					     sizeof(struct bpf_reg_state),
-> +					     GFP_KERNEL_ACCOUNT);
-> +		if (!dst->stack_arg_regs)
-> +			return -ENOMEM;
-> +
-> +		dst->stack_arg_depth =3D src->stack_arg_depth;
-> +		dst->incoming_stack_arg_depth =3D src->incoming_stack_arg_depth;
-> +		dst->out_stack_arg_mask =3D src->out_stack_arg_mask;
-> +	}
->  	return 0;
->  }
-
-Does this skip clearing the destination's stack argument fields if the sour=
-ce
-state has no stack arguments?
-
-If src->stack_arg_depth is 0, dst->stack_arg_depth, out_stack_arg_mask, and
-incoming_stack_arg_depth are not updated. When the verifier reuses an
-existing state during pop_stack() via bpf_copy_verifier_state(), the
-destination state might incorrectly inherit a stale stack argument
-initialization mask from a previously evaluated path.
-
-Could this allow a program to initialize stack arguments on one branch, and
-then safely perform a function call on a different branch without proper
-initialization?
-
-[ ... ]
-> @@ -4424,6 +4467,123 @@ static int check_stack_write(struct bpf_verifier_=
-env *env,
-[ ... ]
-> +static int check_stack_arg_write(struct bpf_verifier_env *env, struct bp=
-f_func_state *state,
-> +				 int off, int value_regno)
+> +__noinline __used
+> +static int subprog_8args(int a, int b, int c, int d, int e, int f, int g=
+, int h)
 > +{
-[ ... ]
-> +	cur =3D env->cur_state->frame[env->cur_state->curframe];
-> +	if (value_regno >=3D 0) {
-> +		state->stack_arg_regs[spi] =3D cur->regs[value_regno];
-> +	} else {
-> +		/* BPF_ST: store immediate, treat as scalar */
-> +		struct bpf_reg_state *arg =3D &state->stack_arg_regs[spi];
-> +
-> +		arg->type =3D SCALAR_VALUE;
-> +		__mark_reg_known(arg, env->prog->insnsi[env->insn_idx].imm);
-> +	}
-> +	state->out_stack_arg_mask |=3D BIT(idx);
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Read a value from the incoming stack arg area.
-> + * off is a positive offset from r11 (e.g. +8 for arg6, +16 for arg7).
-> + * Callers ensure off > 0, 8-byte aligned, and size is BPF_REG_SIZE.
-> + */
-> +static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf=
-_func_state *state,
-> +				int off, int dst_regno)
-> +{
-[ ... ]
-> +	arg =3D &state->stack_arg_regs[spi];
-> +	cur =3D env->cur_state->frame[env->cur_state->curframe];
-> +
-> +	if (is_spillable_regtype(arg->type))
-> +		copy_register_state(&cur->regs[dst_regno], arg);
-> +	else
-> +		mark_reg_unknown(env, cur->regs, dst_regno);
-> +	return 0;
+> +	return a + b + c + d + e + f + g + h;
 > +}
 
-Does this bypass liveness tracking for stack arguments?
+Is subprog_8args intended to be used in any of the tests? It does not seem
+to be called anywhere in this file.
 
-Because the state is copied directly without calling mark_reg_read(), the
-live field of stack arguments is never marked as read.
+[ ... ]
 
-During state pruning, stack_arg_safe() delegates to regsafe(), which
-contains a fast-path that unconditionally returns true if the old state's
-register was never marked as read. Could this cause the verifier to
-aggressively prune verification paths even if they contain completely
-different and potentially unsafe stack arguments?
+> +SEC("tc")
+> +__description("stack_arg: read from uninitialized stack arg slot")
+> +__failure
+> +__arch_x86_64
+> +__msg("invalid read from stack arg")
+> +__naked void stack_arg_read_uninitialized(void)
+> +{
+> +	asm volatile (
+> +		"r0 =3D *(u64 *)(r11 + 8);"
+> +		"r0 =3D 0;"
+> +		"exit;"
+> +		::: __clobber_all
+> +	);
+> +}
+
+Should this read from r11 - 8 instead? Since outgoing stack arguments are
+at negative offsets from r11, reading from r11 + 8 is out of bounds and
+might be rejected for the wrong reason, rather than testing an uninitialized
+but valid stack argument slot.
+
+[ ... ]
+
+> +__noinline __used
+> +static long subprog_deref_arg6(long a, long b, long c, long d, long e, l=
+ong *f)
+> +{
+> +	return *f;
+> +}
+
+[ ... ]
+
+> +SEC("tc")
+> +__description("stack_arg: release_reference invalidates stack arg slot")
+> +__failure
+> +__arch_x86_64
+> +__msg("R1 invalid sock access")
+> +__naked void stack_arg_release_ref(void)
+> +{
+> +	asm volatile (
+[ ... ]
+> +		/* Release the reference =E2=80=94 invalidates the stack arg slot */
+> +		"r1 =3D r0;"
+> +		"call %[bpf_sk_release];"
+> +		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
+> +		"r1 =3D 1;"
+> +		"r2 =3D 2;"
+> +		"r3 =3D 3;"
+> +		"r4 =3D 4;"
+> +		"r5 =3D 5;"
+> +		"call subprog_deref_arg6;"
+
+Can this test pass even if the verifier fails to invalidate the stack slot?
+
+subprog_deref_arg6() performs an 8-byte read on the argument. Since BPF
+sockets only allow up to 4-byte reads, an 8-byte read is always invalid.
+If the reference isn't correctly invalidated, the valid socket pointer
+will still be rejected with "R1 invalid sock access".
+
+To properly test the invalidation, should the subprogram perform a valid
+4-byte read instead?
+
+[ ... ]
+
+> +SEC("tc")
+> +__description("stack_arg: pkt pointer in stack arg slot invalidated afte=
+r pull_data")
+> +__failure
+> +__arch_x86_64
+> +__msg("invalid access to packet")
+> +__naked void stack_arg_stale_pkt_ptr(void)
+> +{
+> +	asm volatile (
+> +		"r6 =3D r1;"
+> +		"r7 =3D *(u32 *)(r6 + %[__sk_buff_data]);"
+> +		"r8 =3D *(u32 *)(r6 + %[__sk_buff_data_end]);"
+> +		/* check pkt has at least 1 byte */
+> +		"r0 =3D r7;"
+> +		"r0 +=3D 1;"
+> +		"if r0 > r8 goto l0_%=3D;"
+> +		/* Store valid pkt pointer to outgoing arg6 slot */
+> +		"*(u64 *)(r11 - 8) =3D r7;"
+> +		/* bpf_skb_pull_data invalidates all pkt pointers */
+> +		"r1 =3D r6;"
+> +		"r2 =3D 0;"
+> +		"call %[bpf_skb_pull_data];"
+> +		/* Call subprog that dereferences arg6 =E2=80=94 should fail */
+> +		"r1 =3D 1;"
+> +		"r2 =3D 2;"
+> +		"r3 =3D 3;"
+> +		"r4 =3D 4;"
+> +		"r5 =3D 5;"
+> +		"call subprog_deref_arg6;"
+
+Similarly, does this properly test packet pointer invalidation? The test
+verifies 1 byte of the packet pointer, but subprog_deref_arg6() reads 8 byt=
+es.
+If bpf_skb_pull_data() fails to invalidate the pointer, the 8-byte read wou=
+ld
+still be rejected as out-of-bounds, yielding the expected "invalid access to
+packet" message.
+
+Should the packet bounds check verify at least 8 bytes so that a valid read=
+ is
+guaranteed if the pointer isn't invalidated?
+
+[ ... ]
+
+> +SEC("tc")
+> +__description("stack_arg: null propagation rejects deref on null branch")
+> +__failure
+> +__arch_x86_64
+> +__msg("R1 invalid mem access")
+> +__naked void stack_arg_null_propagation_fail(void)
+> +{
+> +	asm volatile (
+[ ... ]
+> +		"call %[bpf_map_lookup_elem];"
+> +		/* Store PTR_TO_MAP_VALUE_OR_NULL to outgoing arg6 slot */
+> +		"*(u64 *)(r11 - 8) =3D r0;"
+> +		/* null check on r0 */
+> +		"if r0 !=3D 0 goto l0_%=3D;"
+> +		/*
+> +		 * On null branch, outgoing slot is SCALAR(0).
+> +		 * Call subprog that dereferences arg6 =E2=80=94 should fail.
+> +		 */
+> +		"r1 =3D 0;"
+> +		"r2 =3D 0;"
+> +		"r3 =3D 0;"
+> +		"r4 =3D 0;"
+> +		"r5 =3D 0;"
+> +		"call subprog_deref_arg6;"
+
+Does the __msg() substring match accept the wrong failure mode here?
+Dereferencing an unrefined PTR_TO_MAP_VALUE_OR_NULL yields "R1 invalid mem
+access 'map_value_or_null'", while dereferencing SCALAR yields "R1 invalid =
+mem
+access 'scalar'".
+
+The substring match "R1 invalid mem access" accepts both, allowing the test=
+ to
+pass even if null propagation fails and the register is still tracked as a =
+map
+pointer. Should it match the exact scalar error, or perhaps test the non-nu=
+ll
+branch for success instead?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417034658.2625=
-353-1-yonghong.song@linux.dev?part=3D8
+353-1-yonghong.song@linux.dev?part=3D16
