@@ -1,43 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1E41917F0
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 03:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED554192D97
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 04:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776484347; cv=none; b=JSDmyT+2whS2yLHFanKiPwiVvLWZojxsZXsASkEM34ONGFdor9XiKeehXJmoSd884aaUuG6EwDUnFlq8XmR83uYdWO5G2h0pLKqlu1/ZpKPXfv4hQeAFdFrberhrKw5NvkAGUpNZ89va0DKuEA5smJcfT6nLYokMrd/WkzWYCZs=
+	t=1776485350; cv=none; b=bGGCdYRwr6GTLJmN2XI57EhdKKZAJ9y5kQHqUh8FbNWKCQYbViRvTqpcylrx0WZJl9/G77hU07iyGYUz5BQWumGRj0QK8wnv+qP74S9tic0Sz/8A3KDeNSbVRItPJy6VAg1gaB7i+4ieoX3KZWkwZGd10NBub8DaXulFqhPJ6V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776484347; c=relaxed/simple;
-	bh=WLK8PVI/mJZAs76yF2kohWY8XVDwws7cheZLIe51IHo=;
+	s=arc-20240116; t=1776485350; c=relaxed/simple;
+	bh=zwTr4cFeWKCIEL95wAOWOkOg9yGT8vX/UbXuS3HCn34=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=K5ltPMOnlfc+nV9aBaA1X+SKGtv1oofSH1YHzoBAga9qJ0m2/Cnvqm0szdeG0a3mF8NCRwHLq70sBXR/ne3nNbplILvbuTTOJq0XUgtiae16vD3q++r7CiG+l/3i2rgGmnAsnwckzjjNbrcHcUXPgROMaGs09Tf17ztzn0Or2f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BCc8ils8; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=XZeUy9i9Ha310eUGnJ00yjjMZRlwyGczyOExS4pkT5N/V2Lq9u+XPG3tBYoDeaWL2avAHL5tHcyuweGEEUz36fzLC9fnZfv6REPS70P+V3Wrz+jWi8qfVyyh3E54EpAnQvl4cMCoCFJFxBiHmC4+IC2vTbsW/4enpsjJcagrccI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgQbtGOZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BCc8ils8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 168AEC19424;
-	Sat, 18 Apr 2026 03:52:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgQbtGOZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F3B7C19424;
+	Sat, 18 Apr 2026 04:09:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776484347;
-	bh=WLK8PVI/mJZAs76yF2kohWY8XVDwws7cheZLIe51IHo=;
+	s=k20201202; t=1776485349;
+	bh=zwTr4cFeWKCIEL95wAOWOkOg9yGT8vX/UbXuS3HCn34=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=BCc8ils81bUmZI80d/JUf/U6iOaoBVUzZbX7kRcc4u1/DhV/kKYeiZXGBf2HjOpyW
-	 0wneO6N2Xpzlz4qBADWtm0sxzD6VZqSoTNJQCchBFoFHJINXJObssavmtWaGRQ/7dk
-	 aI/vOroiuljjro3if/C/k64QBuW1FbSwMuRa+mbuxFgqO3er+uCi6ZuGDz7y8AMfBI
-	 2Zq0/noGpcYd5E7fCdfoErZ31yCvMy4j7IxtUfL9tGtMPHrFWZN3tYgzxnbQ9iGBcW
-	 fmVs5bEB1M4/RAt58hu/2sFyK+2dRNKMxEHpy56V8RE4LhhBNxCclB/IeokQ3FDic4
-	 Sz9BkbVEjsZzA==
+	b=WgQbtGOZhEJ3daaRUfxtG9MdEZYCZIor5Fe2ypuwjEZO2bnmpGVhSz7g3WneBdrs/
+	 K3wQWViQ2H4TiBf9mOgMDPu3KgnmcBetFsmoxEpzzY+Y27qMOUeZAttfPh0UfUm62O
+	 0Py5Z/ifqmb4KxbblUvbvJDoj3zvUDT8HczMhvwgLB1GsHrWVLTLmTMWfTlvP8gSrT
+	 Id889Rcw6m1qLHpf7gykpZJAU8LSRoTPoXYvjl7au8O6hCf0pBKolNBAQ5lg43BFRo
+	 I+y574bJDWrSe6QhTxwTmI4BiPQhWtXGYiLJr/QIjarNYJDNUIdXKZq9pNxk8g7luj
+	 HC0nd/lezCvFg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv5 bpf-next 04/28] bpf: Use mutex lock pool for bpf
- trampolines
+Subject: Re: [PATCHv5 bpf-next 10/28] bpf: Add multi tracing attach types
 Reply-To: sashiko@lists.linux.dev
 To: "Jiri Olsa" <jolsa@kernel.org>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260417192502.194548-5-jolsa@kernel.org>
-References: <20260417192502.194548-5-jolsa@kernel.org>
+In-Reply-To: <20260417192502.194548-11-jolsa@kernel.org>
+References: <20260417192502.194548-11-jolsa@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 18 Apr 2026 03:52:26 +0000
-Message-Id: <20260418035227.168AEC19424@smtp.kernel.org>
+Date: Sat, 18 Apr 2026 04:09:08 +0000
+Message-Id: <20260418040909.5F3B7C19424@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,57 +44,66 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 2 potential issue(s):
-- [High] False sharing in the shared mutex pool causes spurious `mutex_tryl=
-ock` failures, leading to random `-EAGAIN` errors and trampoline state corr=
-uption.
-- [Medium] The `trampoline_locks` mutex pool is initialized in `late_initca=
-ll`, creating an uninitialized lock hazard for early boot BPF usage.
+- [High] FENTRY_MULTI and FEXIT_MULTI programs can bypass verifier bounds c=
+hecks and read out-of-bounds kernel stack memory by directly accessing the =
+`ctx` array.
+- [High] bpf_multi_func lacks the __used attribute, causing it to be optimi=
+zed out by Clang LTO, which completely breaks the feature at runtime.
 --
 
-Note: Due to system recitation restrictions, the standard inline-quoted
-patch format has been altered. The findings are summarized below in a
-free-form format without direct code quotes.
+Note: The format of this review has been altered due to system recitation
+restrictions. Direct quoting of the patch diff has been omitted, and the
+findings are provided as a free-form summary.
 
-commit 8bee21cb8aa45a6b2275c87c16fbbd2fd1953e75
+commit ca84efa8f86b1acb8cf0bd98e80446dbd7c92e12
 Author: Jiri Olsa <jolsa@kernel.org>
+Subject: bpf: Add multi tracing attach types
 
-bpf: Use mutex lock pool for bpf trampolines
+This commit introduces new multi-tracing attach types BPF_TRACE_FENTRY_MULTI
+and BPF_TRACE_FEXIT_MULTI, along with base verifier support. It uses a dummy
+function bpf_multi_func for initial verification before the specific link
+attachment happens.
 
-This commit replaces the per-trampoline mutex with a 32-bucket static mutex
-pool. This allows upcoming tracing_multi features to lock all involved
-trampolines simultaneously without exceeding the maximum lock depth.
+Can this approach lead to out-of-bounds kernel stack memory reads?=20
 
+Since the initial verification is done against bpf_multi_func, which is=20
+defined with 6 arguments, the verifier will statically permit direct contex=
+t=20
+accesses up to ctx[5] (and ctx[6] for the return value in FEXIT_MULTI).=20
+However, when the program is attached to a real function at runtime, the=20
+trampoline allocates the context array on the kernel stack based on the=20
+target function's actual argument count.=20
 
-In bpf_tramp_ftrace_ops_func(), mutex_trylock() is used on the selected
-trampoline pool lock to avoid deadlocks with direct_mutex. Because multiple
-trampolines now share the same lock, could this lead to spurious trylock
-failures if an unrelated trampoline happens to hash to the same bucket?
+If the target function has fewer than 6 arguments, would reading ctx[5] rea=
+d=20
+past the allocated context array and leak memory from the caller's stack=20
+frame? Additionally, would reading ctx[6] for the return value return=20
+unrelated stack memory instead of the actual return value, since the=20
+trampoline places the return value dynamically? Does the verifier need to=20
+explicitly reject direct memory accesses to the context array for these=20
+program types and enforce the use of bounds-checked helpers like=20
+bpf_get_func_arg()?
 
-If the trylock fails, the function returns -EAGAIN. Does this mean
-concurrent ftrace or kprobe registrations might randomly fail due to false
-sharing?
+Is it possible for Clang LTO to optimize out the bpf_multi_func function=20
+entirely?=20
 
-Also, when the upcoming tracing_multi feature locks all 32 mutexes at once,
-wouldn't that deterministically abort any concurrent ftrace IPMODIFY
-registrations system-wide?
+The dummy function is defined without a __used or __attribute__((retain))=20
+attribute, and the BTF_ID_LIST_GLOBAL_SINGLE macro only embeds the function=
+=20
+name in an inline assembly section without generating a C-level reference.=
+=20
+In kernel builds with Link Time Optimization enabled, could the compiler=20
+eliminate this function as dead code?
 
-Finally, if this trylock failure happens during unregistration, could ftrace
-cleanup routines ignore the -EAGAIN, potentially leaving the
-BPF_TRAMP_F_SHARE_IPMODIFY flag permanently set and corrupting the
-trampoline state?
-
-
-Regarding the pool initialization, the new trampoline_locks array is
-initialized in init_trampolines(), which runs as a late_initcall.
-
-Since the static array resides in the bss section and is only zero-initiali=
-zed
-before this phase, what happens if early boot BPF components (like early BPF
-LSM policies) try to attach or modify a trampoline before late_initcall?
-
-Will this result in calling mutex_lock() on an uninitialized mutex, leading
-to crashes or lockdep warnings when CONFIG_DEBUG_MUTEXES is enabled?
+If this occurs, pahole would not generate BTF data for it, leaving the BTF=
+=20
+ID as 0. Would this result in the verifier's bpf_check_attach_target()=20
+unconditionally rejecting multi-tracing program loads by throwing a missing=
+=20
+btf_id error? Should a __used attribute be added to the function definition=
+=20
+to prevent this?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417192502.1945=
-48-5-jolsa@kernel.org?part=3D1
+48-11-jolsa@kernel.org?part=3D1
