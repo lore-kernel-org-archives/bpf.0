@@ -1,117 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1FBC2FF
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 01:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D237A95E
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 01:20:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776474264; cv=none; b=Xpc9/MxD1ETAam28Jum4hHpw3dOsqNvVLBJyuxubpWGx/hOOCCbvZljVcuZepBBabvNAsRkgVQR+Aa+PfxxtpEgnIVf+9dkwOhKvN1zEu0ai0pkZgG0YdBGF3Et+GaX+yBVoTANGVIfrT5JqtVRfkm7FnkObUtN6rZfhvjwXpAc=
+	t=1776475227; cv=none; b=oIgKEzca/pf/Whyltdi/kOo/L9cvXl322JNwBTN6SaNMbo7lFaGDrEyJyxwjI25N6YWamei5cezK9us0iSjBWNH1oCCNkpHph/wwjU78DNTHYTNQUOkHFD3DdSfJoEt7nE4dU82857wRiZ7o1aHmWBTUtd9QsCMfssqruCqbPMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776474264; c=relaxed/simple;
-	bh=qD4mWCUF2fY4TWdb8hKq15HWfSc+uVWApvk141vaC3U=;
+	s=arc-20240116; t=1776475227; c=relaxed/simple;
+	bh=wf8ESFYwXGdNPwqn3O9CuWkHSCltvDg5u0f7vdS8MaU=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RAx9k36e6MvEKCqmSFz7j2sVTRdjOktcH7M84Q7Xke2rGE+DU2P7L3urNrd7bfUEFMnBt2pVlCC7v4oShL4UdM+VJCPJ+2HQ0/oHjArYiRkLwJynmyTN8x7z4R+D0IE904tBj9QKxVIMOidoK+n7p0QOz5pPnrPj9N4bqe1AefI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eP71GQHx; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=cXb0+yctBDQXY8vwbXbOrrFOTi0AMUejbZyhg4Ji7FUn/guL87lDI3/7zYl8KO5jJDtxlMwoyhFZzaAXtmDxLGS4R0HqsgS6GTB0BBWLV3BfyhX+BGIJ6L/6N8TC20Hn7iP5JHsXkIJ+u7W/SquYSIDOiIgmadUGl0QkOfkIiVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dt1UOMTp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eP71GQHx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D623C19425;
-	Sat, 18 Apr 2026 01:04:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dt1UOMTp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C74DC19425;
+	Sat, 18 Apr 2026 01:20:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776474263;
-	bh=qD4mWCUF2fY4TWdb8hKq15HWfSc+uVWApvk141vaC3U=;
+	s=k20201202; t=1776475226;
+	bh=wf8ESFYwXGdNPwqn3O9CuWkHSCltvDg5u0f7vdS8MaU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=eP71GQHxfsotQDtKLDGUIL8XX5DiRRAbA8IqlILV3P3VqH6IzHKkyhdfQacBnhvyy
-	 6qilzv/mnJWY4oB3ELUm9iM32TyswIhkHniZd6OiEV9vUb9ILb9sMWvco8e3Ga8GfY
-	 mnADQhTtQhdRHvkFlp6FxxrFByELhIsDPMnPax1CQ03vPBmR/IhbBlG6orpUeC4u3V
-	 JqetmCwxtOUWNHmCV/tgz7V3cNzuCNx84NBnbqNlmhZ5QtWPC/eZKX6aVUGz+eiuiX
-	 c4RQZSNpKrTim8j7arkAD89X/45PYSLS1cwrVrI1NKsPdnAfOdtwGEyxbeAJv5yogu
-	 1HuzgQKr1Gztg==
-Content-Type: multipart/mixed; boundary="===============5822537336994928138=="
+	b=Dt1UOMTpB9xmag9mhX1mS5nTw9qAYezVDpwJx/u+PKrz0LDBQdoHBWB17n51mqFOx
+	 kxNtpiAiXaqEVHgEgSEOJl6H3etp8Bzg2t3Hb0tfbhqlG4QvBWQyVbFmK4+s3ejQGB
+	 IcFXRRwuxc4+5YNcfEB5uKxtNqMrbjfJ25w35lrdbSiaar7IzsZTc1VW0Tq75o++5g
+	 cq165ltfF9KqWkF15IjkYw1eAS2Da5Q4dj5gVxvyParkfPTQ+sXuzXoNMrVsgGTaRZ
+	 J0lZN7PSowXJrCh8TW+9q7I7pKlopQ8qtWwz9kwEwlD/6ktr7SeN8mBqHgz73A2W6e
+	 9vqLSBjSPSbEg==
+Content-Type: multipart/mixed; boundary="===============1871624355894805191=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <567ac7cd59c86c94cb33ef18e4e39dec988bf6ef968301ee359f6ee401cbbedf@mail.kernel.org>
-In-Reply-To: <20260417034749.2630580-1-yonghong.song@linux.dev>
-References: <20260417034749.2630580-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 10/16] bpf: Reject stack arguments if tail call reachable
+Message-Id: <51f25fcf1ab708a8cdb69e6d0a0dccf440304394f4673046d703256a5c832878@mail.kernel.org>
+In-Reply-To: <20260417034823.2632289-1-yonghong.song@linux.dev>
+References: <20260417034823.2632289-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v5 13/16] bpf,x86: Implement JIT support for stack arguments
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 18 Apr 2026 01:04:23 +0000 (UTC)
+Date: Sat, 18 Apr 2026 01:20:26 +0000 (UTC)
 
---===============5822537336994928138==
-Content-Type: text/plain; charset="us-ascii"
+--===============1871624355894805191==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 
-> bpf: Reject stack arguments if tail call reachable
->
-> Tailcalls are been deprecated. So reject stack arguments
+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvbmV0L2JwZl9qaXRfY29tcC5jIGIvYXJjaC94ODYvbmV0
+L2JwZl9qaXRfY29tcC5jCj4gaW5kZXggMzI4NjRkYmMyYzRlLi4yNWI0MzU3ZGUwMjMgMTAwNjQ0
+Cj4gLS0tIGEvYXJjaC94ODYvbmV0L2JwZl9qaXRfY29tcC5jCj4gKysrIGIvYXJjaC94ODYvbmV0
+L2JwZl9qaXRfY29tcC5jCgpbIC4uLiBdCgo+IEBAIC0yMTI5LDEyICsyMjIyLDI2IEBAIHN0YXRp
+YyBpbnQgZG9faml0KHN0cnVjdCBicGZfcHJvZyAqYnBmX3Byb2csIGludCAqYWRkcnMsIHU4ICpp
+bWFnZSwgdTggKnJ3X2ltYWdlCj4gIAkJCQlFTUlUMSgweEM3KTsKPiAgCQkJZ290byBzdDsKPiAg
+CQljYXNlIEJQRl9TVCB8IEJQRl9NRU0gfCBCUEZfRFc6Cj4gKwkJCWlmIChkc3RfcmVnID09IEJQ
+Rl9SRUdfUEFSQU1TICYmIGluc24tPm9mZiA9PSAtOCkgewo+ICsJCQkJLyogQXJnIDY6IHN0b3Jl
+IGltbWVkaWF0ZSBpbiByOSByZWdpc3RlciAqLwo+ICsJCQkJZW1pdF9tb3ZfaW1tNjQoJnByb2cs
+IFg4Nl9SRUdfUjksIGltbTMyID4+IDMxLCAodTMyKWltbTMyKTsKPiArCQkJCWJyZWFrOwo+ICsJ
+CQl9Cj4gIAkJCUVNSVQyKGFkZF8xbW9kKDB4NDgsIGRzdF9yZWcpLCAweEM3KTsKPgo+IC1zdDoJ
+CQlpZiAoaXNfaW1tOChpbnNuLT5vZmYpKQo+IC0JCQkJRU1JVDIoYWRkXzFyZWcoMHg0MCwgZHN0
+X3JlZyksIGluc24tPm9mZik7Cj4gK3N0OgkJCWluc25fb2ZmID0gaW5zbi0+b2ZmOwo+ICsJCQlp
+ZiAoZHN0X3JlZyA9PSBCUEZfUkVHX1BBUkFNUykgewo+ICsJCQkJLyogQXJncyA3KzogcmV2ZXJz
+ZSBCUEYgbmVnYXRpdmUgb2Zmc2V0cyB0bwo+ICsJCQkJICogeDg2IHBvc2l0aXZlIHJzcCBvZmZz
+ZXRzLgo+ICsJCQkJICogQlBGIG9mZj0tMTYg4oaSIFtyc3ArMF0sIG9mZj0tMjQg4oaSIFtyc3Ar
+OF0sIC4uLgo+ICsJCQkJICovCj4gKwkJCQlpbnNuX29mZiA9IG91dGdvaW5nX2FyZ19iYXNlIC0g
+b3V0Z29pbmdfcnNwIC0gaW5zbl9vZmYgLSAxNjsKPiArCQkJCWRzdF9yZWcgPSBCUEZfUkVHX0ZQ
+Owo+ICsJCQl9Cj4gKwkJCWlmIChpc19pbW04KGluc25fb2ZmKSkKPiArCQkJCUVNSVQyKGFkZF8x
+cmVnKDB4NDAsIGRzdF9yZWcpLCBpbnNuX29mZik7Cj4gIAkJCWVsc2UKPiAtCQkJCUVNSVQxX29m
+ZjMyKGFkZF8xcmVnKDB4ODAsIGRzdF9yZWcpLCBpbnNuLT5vZmYpOwo+ICsJCQkJRU1JVDFfb2Zm
+MzIoYWRkXzFyZWcoMHg4MCwgZHN0X3JlZyksIGluc25fb2ZmKTsKClRoZSBzcGVjaWFsIGNhc2Ug
+Zm9yIGFyZyA2IGF0IG9mZnNldCAtOCBpcyBvbmx5IGltcGxlbWVudGVkIGZvcgpCUEZfU1QgfCBC
+UEZfTUVNIHwgQlBGX0RXLiBXaGF0IGhhcHBlbnMgd2l0aCBzbWFsbGVyIGFjY2VzcyBzaXplcwoo
+QlBGX0IsIEJQRl9ILCBCUEZfVyk/CgpMb29raW5nIGF0IHRoZSBjb2RlIGZsb3csIGlmIGEgQlBG
+X1NUIHdpdGggc2l6ZSBCL0gvVyB0YXJnZXRzCmRzdF9yZWcgPT0gQlBGX1JFR19QQVJBTVMgYXQg
+b2Zmc2V0IC04LCBleGVjdXRpb24gd291bGQgZmFsbCB0aHJvdWdoCnRvIHRoZSBzdDogbGFiZWwu
+IFRoZSBvZmZzZXQgdHJhbnNsYXRpb24gZm9ybXVsYSB3b3VsZCB0aGVuIGJlIGFwcGxpZWQ6Cgog
+ICAgaW5zbl9vZmYgPSBvdXRnb2luZ19hcmdfYmFzZSAtIG91dGdvaW5nX3JzcCAtICgtOCkgLSAx
+NgogICAgICAgICAgICAgPSBvdXRnb2luZ19hcmdfYmFzZSAtIG91dGdvaW5nX3JzcCAtIDgKCkZv
+ciBleGFtcGxlLCB3aXRoIG91dGdvaW5nX2FyZ19iYXNlID0gLTQwIGFuZCBvdXRnb2luZ19yc3Ag
+PSAwLAp0aGlzIHlpZWxkcyAtMzIsIHdoaWNoIHdvdWxkIGF0dGVtcHQgdG8gd3JpdGUgYXQgW3Ji
+cCAtIDMyXSwgb3V0c2lkZQp0aGUgZGVzaWduYXRlZCBvdXRnb2luZyBhcmd1bWVudCBhcmVhIGF0
+IFtyc3BdLgoKRG9lcyB0aGlzIGFsbG93IHdyaXRpbmcgb3V0LW9mLWJvdW5kcyBiZWxvdyB0aGUg
+c3RhY2sgcG9pbnRlciBpbnN0ZWFkCm9mIHVwZGF0aW5nIFI5PwoKUmVmZXJlbmNlOiBodHRwczov
+L2xvcmUua2VybmVsLm9yZy9icGYvMjAyNjA0MTcwNDQ0NDMuNjZEMzdDMTk0MjVAc210cC5rZXJu
+ZWwub3JnLwoKPiBAQCAtMjE0NCw3ICsyMjUxLDE3IEBAIHN0OgkJCWlmIChpc19pbW04KGluc24t
+Pm9mZikpCj4gIAkJY2FzZSBCUEZfU1RYIHwgQlBGX01FTSB8IEJQRl9IOgo+ICAJCWNhc2UgQlBG
+X1NUWCB8IEJQRl9NRU0gfCBCUEZfVzoKPiAgCQljYXNlIEJQRl9TVFggfCBCUEZfTUVNIHwgQlBG
+X0RXOgo+IC0JCQllbWl0X3N0eCgmcHJvZywgQlBGX1NJWkUoaW5zbi0+Y29kZSksIGRzdF9yZWcs
+IHNyY19yZWcsIGluc24tPm9mZik7Cj4gKwkJCWlmIChkc3RfcmVnID09IEJQRl9SRUdfUEFSQU1T
+ICYmIGluc24tPm9mZiA9PSAtOCkgewo+ICsJCQkJLyogQXJnIDY6IHN0b3JlIHJlZ2lzdGVyIHZh
+bHVlIGluIHI5ICovCj4gKwkJCQlFTUlUX21vdihYODZfUkVHX1I5LCBzcmNfcmVnKTsKPiArCQkJ
+CWJyZWFrOwo+ICsJCQl9Cj4gKwkJCWluc25fb2ZmID0gaW5zbi0+b2ZmOwo+ICsJCQlpZiAoZHN0
+X3JlZyA9PSBCUEZfUkVHX1BBUkFNUykgewo+ICsJCQkJaW5zbl9vZmYgPSBvdXRnb2luZ19hcmdf
+YmFzZSAtIG91dGdvaW5nX3JzcCAtIGluc25fb2ZmIC0gMTY7Cj4gKwkJCQlkc3RfcmVnID0gQlBG
+X1JFR19GUDsKPiArCQkJfQoKVGhlIG9mZnNldCB0cmFuc2xhdGlvbiBmb3JtdWxhIHN1YnRyYWN0
+cyB0aGUgQlBGIG9mZnNldCwgd2hpY2ggcmV2ZXJzZXMKdGhlIGFkZHJlc3NpbmcgZGlyZWN0aW9u
+LiBXaGlsZSB0aGlzIGNvcnJlY3RseSBtYXBzIDgtYnl0ZSBhbGlnbmVkIHNsb3QKYmFzZXMgKGUu
+Zy4sIC0xNiDihpIgcnNwKzAsIC0yNCDihpIgcnNwKzgpLCBjYW4gaXQgaGFuZGxlIHBhcnRpYWwg
+d3JpdGVzCndpdGhpbiB0aG9zZSBzbG90cz8KCkZvciBpbnN0YW5jZSwgaWYgYSBwcm9ncmFtIHdy
+aXRlcyB0byB0aGUgdXBwZXIgMzIgYml0cyBvZiBhcmcgNyBhdCBCUEYKb2Zmc2V0IC0xMjoKCiAg
+ICBpbnNuX29mZiA9IG91dGdvaW5nX2FyZ19iYXNlIC0gb3V0Z29pbmdfcnNwIC0gKC0xMikgLSAx
+NgogICAgICAgICAgICAgPSBvdXRnb2luZ19hcmdfYmFzZSAtIG91dGdvaW5nX3JzcCAtIDQKCldp
+dGggb3V0Z29pbmdfYXJnX2Jhc2UgPSAtNDAgYW5kIG91dGdvaW5nX3JzcCA9IDAsIHRoaXMgY29t
+cHV0ZXMgdG8KLTM2LCBtYXBwaW5nIHRoZSBhY2Nlc3MgdG8gW3JicCAtIDM2XSBpbnN0ZWFkIG9m
+IFtyc3AgKyA0XS4KCkRvZXMgdGhpcyBmb3JtdWxhIHByb2R1Y2Ugb3V0LW9mLWJvdW5kcyBhY2Nl
+c3NlcyBiZWxvdyB0aGUgc3RhY2sgcG9pbnRlcgpmb3IgcGFydGlhbCB3cml0ZXM/CgpSZWZlcmVu
+Y2U6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2JwZi8yMDI2MDQxNzA0NDQ0My42NkQzN0MxOTQy
+NUBzbXRwLmtlcm5lbC5vcmcvCgpbIC4uLiBdCgo+IEBAIC0yMjQzLDYgKzIzNjAsMTkgQEAgc3Q6
+CQkJaWYgKGlzX2ltbTgoaW5zbi0+b2ZmKSkKPiAgCQljYXNlIEJQRl9MRFggfCBCUEZfUFJPQkVf
+TUVNU1ggfCBCUEZfSDoKPiAgCQljYXNlIEJQRl9MRFggfCBCUEZfUFJPQkVfTUVNU1ggfCBCUEZf
+VzoKPiAgCQkJaW5zbl9vZmYgPSBpbnNuLT5vZmY7Cj4gKwkJCWlmIChzcmNfcmVnID09IEJQRl9S
+RUdfUEFSQU1TKSB7Cj4gKwkJCQlpZiAoaW5zbl9vZmYgPT0gOCkgewo+ICsJCQkJCS8qIEluY29t
+aW5nIGFyZyA2OiByZWFkIGZyb20gcjkgKi8KPiArCQkJCQlFTUlUX21vdihkc3RfcmVnLCBYODZf
+UkVHX1I5KTsKPiArCQkJCQlicmVhazsKPiArCQkJCX0KPiArCQkJCXNyY19yZWcgPSBCUEZfUkVH
+X0ZQOwo+ICsJCQkJLyoKPiArCQkJCSAqIEluY29taW5nIGFyZ3MgNys6IG5hdGl2ZV9vZmYgPT0g
+YnBmX29mZgo+ICsJCQkJICogKHIxMSsxNiDihpIgW3JicCsxNl0sIHIxMSsyNCDihpIgW3JicCsy
+NF0sIC4uLikKPiArCQkJCSAqIE5vIG9mZnNldCBhZGp1c3RtZW50IG5lZWRlZC4KPiArCQkJCSAq
+Lwo+ICsJCQl9CgpXaGVuIHJlYWRpbmcgaW5jb21pbmcgYXJnIDYgd2l0aCBzbWFsbGVyIGFjY2Vz
+cyBzaXplcyAoQlBGX0xEWCB8CkJQRl9NRU0gfCBCUEZfQi9IL1cpLCB0aGUgY29kZSBwZXJmb3Jt
+cyBhIGZ1bGwgNjQtYml0IG1vdmUgZnJvbSBSOQp0byB0aGUgZGVzdGluYXRpb24gcmVnaXN0ZXI6
+CgogICAgRU1JVF9tb3YoZHN0X3JlZywgWDg2X1JFR19SOSk7CgpGb3Igc3ViLTY0LWJpdCBhcmd1
+bWVudHMsIGFyZSB0aGUgdXBwZXIgYml0cyBvZiBSOSBndWFyYW50ZWVkIHRvIGJlCnplcm8/IElm
+IG5vdCwgY291bGQgdGhpcyBtb3ZlIGdhcmJhZ2UgZGF0YSBpbnRvIHRoZSB1cHBlciBiaXRzIG9m
+CmRzdF9yZWcsIGJ5cGFzc2luZyB0aGUgdmVyaWZpZXIncyBzdHJpY3QgYm91bmRzIHRyYWNraW5n
+IHdoaWNoIGV4cGVjdHMKdmFsdWVzIHRvIHN0YXkgd2l0aGluIHRoZWlyIGRlY2xhcmVkIHJhbmdl
+cyAoZS5nLiwgWzAsIDI1NV0gZm9yCmJ5dGVzKT8KClJlZmVyZW5jZTogaHR0cHM6Ly9sb3JlLmtl
+cm5lbC5vcmcvYnBmLzIwMjYwNDE3MDQ0NDQzLjY2RDM3QzE5NDI1QHNtdHAua2VybmVsLm9yZy8K
+ClRoZSBKSVQgdHJhbnNsYXRpb24gYXNzdW1lcyB0aGF0IExEWCBvcGVyYXRpb25zIHRhcmdldCBp
+bmNvbWluZwphcmd1bWVudHMgKHBvc2l0aXZlIG9mZnNldHMgZnJvbSByMTEpIGFuZCBTVFgvU1Qg
+b3BlcmF0aW9ucyB0YXJnZXQKb3V0Z29pbmcgYXJndW1lbnRzIChuZWdhdGl2ZSBvZmZzZXRzIGZy
+b20gcjExKS4gSXMgdGhpcyBhc3N1bXB0aW9uCmFsd2F5cyB2YWxpZD8KCkNvbnNpZGVyIHRoZXNl
+IHNjZW5hcmlvczoKClNjZW5hcmlvIDE6IEEgcHJvZ3JhbSB3cml0ZXMgdG8gYW4gb3V0Z29pbmcg
+YXJndW1lbnQgc2xvdCBhdApbcjExIC0gMTZdIHZpYSBTVFgsIHRoZW4gcmVhZHMgaXQgYmFjayB2
+aWEgTERYLiBUaGUgSklUIHdvdWxkOgogIC0gU3RvcmU6IGFwcGx5IG91dGdvaW5nIHRyYW5zbGF0
+aW9uIOKGkiBbcnNwICsgMF0KICAtIExvYWQ6IGFwcGx5IGluY29taW5nIHRyYW5zbGF0aW9uIOKG
+kiBbcmJwICsgMTZdIChkaWZmZXJlbnQgbG9jYXRpb24pCgpUaGUgbG9hZCB3b3VsZCByZWFkIGZy
+b20gdGhlIEJQRiBwcm9ncmFtIHN0YWNrIGFyZWEgcmF0aGVyIHRoYW4gdGhlCm91dGdvaW5nIGFy
+Z3VtZW50IGFyZWEsIHBvdGVudGlhbGx5IHJldHVybmluZyB1bmluaXRpYWxpemVkIGRhdGEuCgpT
+Y2VuYXJpbyAyOiBBIHByb2dyYW0gYXR0ZW1wdHMgdG8gbW9kaWZ5IGFuIGluY29taW5nIGFyZ3Vt
+ZW50IGF0CltyMTEgKyAxNl0gdmlhIFNUWC4gVGhlIEpJVCB3b3VsZCBhcHBseSB0aGUgb3V0Z29p
+bmcgdHJhbnNsYXRpb246CgogICAgaW5zbl9vZmYgPSBvdXRnb2luZ19hcmdfYmFzZSAtIG91dGdv
+aW5nX3JzcCAtIDE2IC0gMTYKICAgICAgICAgICAgID0gb3V0Z29pbmdfYXJnX2Jhc2UgLSBvdXRn
+b2luZ19yc3AgLSAzMgoKV2l0aCBvdXRnb2luZ19hcmdfYmFzZSA9IC00MCBhbmQgb3V0Z29pbmdf
+cnNwID0gMCwgdGhpcyB5aWVsZHMgLTcyLAp3cml0aW5nIHRvIFtyYnAgLSA3Ml0sIHdoaWNoIGNv
+dWxkIGJlIG91dC1vZi1ib3VuZHMgYmVsb3cgdGhlIGFsbG9jYXRlZApzdGFjayBhcmVhLgoKRG9l
+cyB0aGUgdmVyaWZpZXIgZW5mb3JjZSBhIGNvbnN0cmFpbnQgdGhhdCByZWFkcyBjYW4gb25seSB0
+YXJnZXQKcG9zaXRpdmUgcjExIG9mZnNldHMgYW5kIHdyaXRlcyBjYW4gb25seSB0YXJnZXQgbmVn
+YXRpdmUgcjExIG9mZnNldHM/CgpSZWZlcmVuY2U6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2Jw
+Zi8yMDI2MDQxNzA0NDQ0My42NkQzN0MxOTQyNUBzbXRwLmtlcm5lbC5vcmcvCgoKLS0tCkFJIHJl
+dmlld2VkIHlvdXIgcGF0Y2guIFBsZWFzZSBmaXggdGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkg
+aXQncyBub3QgYSBidWcuClNlZTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3Zt
+dGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1ZGUvUkVBRE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0
+cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL2JwZi9hY3Rpb25zL3J1bnMvMjQ1OTI1NjI1
+NjQ=
 
-This isn't a bug, but there's a grammar error: 'are been' should be
-'have been' or 'are being'.
-
-The commit message states that "Tailcalls are been deprecated." Is this
-claim accurate?
-
-Based on earlier mailing list discussion, the restriction exists because
-tail calls and stack arguments require incompatible stack frame handling,
-not because tail calls are being deprecated.
-
-Could the commit message be more precise about the actual technical reason
-for the restriction?
-
-This commit appears to fix a bug but lacks a Fixes: tag. The suggested tag
-would be:
-
-Fixes: 13ee5d67a7c9 ("bpf: Support stack arguments for bpf functions")
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7a65b532e84a..739c3127520c 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5662,6 +5662,11 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  				verbose(env, "cannot tail call within exception cb\n");
->  				return -EINVAL;
->  			}
-> +			if (subprog[tmp].incoming_stack_arg_depth ||
-> +			    subprog[tmp].outgoing_stack_arg_depth) {
-> +				verbose(env, "tail_calls are not allowed in programs with stack args\n");
-> +				return -EINVAL;
-> +			}
->  			subprog[tmp].tail_call_reachable = true;
->  		}
->  	if (subprog[0].tail_call_reachable)
-
-When the DFS traversal in check_max_stack_depth_subprog() pops a frame to
-return to the caller (moving from a child subprogram back to its parent),
-is the tail_call_reachable variable reset to false?
-
-Looking at the code, tail_call_reachable is initialized at the function
-start but appears to persist across the entire traversal. Consider this
-scenario:
-
-1. The verifier traverses a subprogram that contains a tail call, setting
-   tail_call_reachable = true
-2. The traversal returns to the parent (pops the frame via idx =
-   dinfo[idx].caller)
-3. The traversal then visits a sibling subprogram that uses stack arguments
-
-In this scenario, wouldn't tail_call_reachable still be true from step 1,
-causing the check in the new code to incorrectly reject the sibling
-subprogram even though it has no tail calls in its own call chain?
-
-This could cause false positive rejections of valid BPF programs where one
-subprogram uses tail calls and a completely unrelated sibling subprogram
-uses stack arguments.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24592562564
---===============5822537336994928138==--
+--===============1871624355894805191==--
