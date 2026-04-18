@@ -1,208 +1,154 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF971AAE17
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 20:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19E12DCF6C
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 21:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.66
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776544838; cv=pass; b=DuBJrrpaleTUy6le8jueYRVdIlZwZoAH3XXY9l5jMXvgjZtBcmq1rgM2tJXg/vTPtmhSBr5hSZDaVvf2UxoWNZDEGMa0vP+tZC6ft6eity8FymbcsqH7iLbaxEHXm5PbJtP/klAh3wh7iZq6M9xWugy9XJ54yIsvj8/flHUG0bg=
+	t=1776546004; cv=pass; b=bzybuReLXqWIpsP351tO5Mf/0kMxjp4HHSmZqskvgmUPgt1walfYdE+MMF4wkPoFxf/1m8ctHfdMd2iP33HytJ1W6S3jm/WknJapZBbF/ljsH0pXRS8VwEbo7nkP2DeN9BGFa9bPeF+bLE4qgJ78b//4B1foKO1zj0UitwCpviE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776544838; c=relaxed/simple;
-	bh=7B50zB8QbeX3uPVK9cZOsdCqcRSAMBb3zwUUFGmV4Xw=;
+	s=arc-20240116; t=1776546004; c=relaxed/simple;
+	bh=otR+0uIsh1RGcAJvbjgadtuvVlaOvwcem9nCzBdotGc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jwHQkWZN9vX3Hfw+D7FHBjaokK62Zv+hhbByLji2/RLe7kMk4Z7KL50zfLv0nkb0fp6l4axSyJnDX73U6t0tllDM2fzIyxz35FQsPYd4/QihxtTiSXZn1XYh/rTMI/6lW9mGaacJ1NiRLtLNkj+B6bGvergIuRulhRHieMMpsyU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OtgGd+FO; arc=pass smtp.client-ip=209.85.128.66
+	 To:Cc:Content-Type; b=K9epgB9j6v0CccqQ+CcE094+APnxpBSDxjZ+UoFNjU0FLLt1UseCm59QIWH3BZ4SeC+tJ5IEs6OgKWxoj8VC8LkD7buJt5JWtBZcjN92VYR/mFuuQjeTMkyf2/s8dC9KBYEASEam/OSmK97tx2aUkPk0WLT98tU3uqUpK0QNXzs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GWrTMfJY; arc=pass smtp.client-ip=209.85.221.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OtgGd+FO"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-488b00ed86fso18587425e9.3
-        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 13:40:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776544835; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GWrTMfJY"
+Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-43fe3e22e33so1141450f8f.0
+        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 14:00:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776546001; cv=none;
         d=google.com; s=arc-20240605;
-        b=NKh9k8fv0HfMdjsA9QZ3heYDNwjJ5uCfzVkG2htO/FRq9oUsyTte/cQx3FftCAUpGm
-         KIdx9r6x2iId3TyVv+7bXo2qLUFvWrtfq1A+lyZqCm/q2NcRGWQvnE2PKj/oOWLeO5PD
-         K2KTy4r+PJ4KM6+HOlWg5nAulKzkfrWYEgqUBTBSvs6ZvFbzbnafCfZxJdYjR/BfDzcK
-         uzlYFmQaUvgG/yT3umqaXq7VeclE+hoK/djiEw57iFk7Ts7Vve8+5ofcrwl/ywMgVDym
-         RFVXwCOP6DPTU+sLGhwSvF5T1VIeNGeeBpyHX5CXIqsCR/V2wfTHwtuD7zNWwhnsYfTd
-         ft5g==
+        b=aKTmPxFJsaNx6NKK82s7aZwtBlL3W2A0fFUE/rULywORzfl8NT+L0LAMpgkDGc7irE
+         m9csdFJHUEU/kJypjO19W8YPeAm0jsdCrHTNYUL8/ulyvdJvWjboU5wcoFzBTkyfCjUp
+         BOEWAGHifKVCjQOqxnpR+sBnFBfomLb2wBLBdaCIv8NjHdoxnk7CY/SnVG6ly+0VP3aZ
+         IMRvY9jUM5D2e9mrSth/GFNtUIdl1ns8Uo4mYu8rABzUSoVdVO0qhdjN7lrIoeaoiCyg
+         MAtnLIG67h0BJ+mvynTzbS5+yo/KYhrgkaujjUzeh0Zq8UBG655lilgI+BqbQIpcKYVi
+         E+Pg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=d9I9a7XO9dtIiXmk5hGZfJcYVs5rx/AVNZYg2EtQcA8=;
-        fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
-        b=hHhdaKYp6Ui+5FONnR/9ugCW52aihVe8x7AYeoVRXTkdUreUEHfqTZ782SvCo4PLUw
-         m+d7ClSX8n+GkG1sbtvVqoZMhIO984W1LCqgStt44/X77gFR4SO6VY+MZZiWlSAiO4xM
-         Wg7BegU4gJs2IyCdMkehsUiNFPLv4of/YR3RgPi6+BXMWb6zLqLARdYXYBupHV+nlRI9
-         bhT3N4wtZ78jKE2h7m/KN57QfuwPi/H0uAYU765DLllOxsO4HEKipwLnF7qS4+l1TZ1k
-         4lXPAgreSR5u58qva5PeC4Scxt2NlfqtMVvXwxtkK3stxPGr3O6XFm2QR7sr8LixQZJK
-         CQBA==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=4hP7GmAPXuLcIJddQKNmWXWlH2vIU+tAuH/qZAjzeQ0=;
+        fh=zblyZrDBxpdN6pL+9otm0S5RJ68xoocYmmuuoEd++SA=;
+        b=f7Wu5WrMYxMyByb5Tc4vmLfFd2llqP7eCziw/hzP7kpM0QTfaXSw3iiceGxGivmUch
+         vAfBNnirzH6WHnY1I5lYoMzgLmTCMqDV6POpeO/1Bkt7nwPdJMcwmUctlWyZAkfBf38w
+         o/tCSx2+03+al7Vg/670Ua/3cJiVRSn/5iTblFjO7LbnTVjqH5QdaqfuWG6GpoQLMLRV
+         xnbq8ZxHACS5e8+Ql7tRQlOXV+FuCs/N/NOkJan7/l58QiF1+kCxSotEgNj8es7ox4Zk
+         WQtZQr1z33tBPDXDxwATEfe8CowGkkKdpE0ZdaHvlinYq1GgX2SnMekl0jdYKHOC3Ghp
+         mTsA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776544835; x=1777149635; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d9I9a7XO9dtIiXmk5hGZfJcYVs5rx/AVNZYg2EtQcA8=;
-        b=OtgGd+FOo0tGMLIP5R7xCTOzaXkdG6DY6LoAlemPkVjKBte4Grt7fDA5mpUaWJBDw9
-         3ekY/Sh3MdSI9Y9oyCoN/pGGaLTU3+q02JKXtLMPPR+qHLKBx62gUgRwebI6/XPCzwQc
-         kkcord+M/+f03920qpnfmLfTs6v3yJDvXLn9QA/UPzSzO8LqgshF5IFiIt+G3q4ftAG4
-         O3IPL8k5P3uqYL+VnjJwbmIO6JNYuHETEgTiu4WJZ6O0l7iwu84Th1SBxyVovUbm1ldU
-         HGyFrV9ns6uhS1WtWWli7Hm/kO+TtCA3XTINFKbA+JcKaqQzgFKOGlokC40geUg4tN/N
-         OCSQ==
+        d=gmail.com; s=20251104; t=1776546001; x=1777150801; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hP7GmAPXuLcIJddQKNmWXWlH2vIU+tAuH/qZAjzeQ0=;
+        b=GWrTMfJYj4Y8v24gSJCp9uyqVtE9WRahKtmcmTWI4GgSWO9XCfGdyWRPoK0ftx8spt
+         rLrAPhLhsVGKWmXnKoAMVe0HD4WzGTqgpI1lUF3BHyJaPIgNg9h9FjRirQlzWSPiGoA3
+         7cjyszNxKMNZbtspOS0XQiQX6XVkCTHI+wCK3EMSFtfTBlARiICXNS67rp4K4OPXF2Xs
+         b8gpl91GQFMcRuVhm/uMhV6ICbpOnLo9HdBIYN3/ckZpONuboWaTk1/L/y9xcmtDKNgD
+         zltte/0IP0f8w/mrLZr9hv2C2Ll0uM4tsUknRxx3kDifD/tyP3guhR27Un+Fo7UR5IgR
+         5DOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776544835; x=1777149635;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=d9I9a7XO9dtIiXmk5hGZfJcYVs5rx/AVNZYg2EtQcA8=;
-        b=PajyQ73YpV/HbP/dY1uQYEynKHLHhmRbvs0AiCtLfGt7OFKVEXGxpl/SRErJNvgB50
-         MGBA0f21cWdj9CQRHaDKtiQd0MugW3zo7MdXzTEnKfl4Y7Vzj3SVxnAROed+oSgIY24p
-         Ek20JhlO7xdtOHHTWnkYFvbLFZnlPL+iCUk10iJ29F4sW8KTk1VxoBJmlvOIOdW9aLn4
-         NqV563nEWsxTQ/CgvhakR9HLfpW4YWrx30DJUNPtUCckIWcM2mfY7qzWoesFKoo9bf42
-         CJRhdL2hu4DDkC2r9kkanAVTwdwDTE60M43tVupuVOyN6SHHZ2kIdaDlx8O1ZPM8HumT
-         U93w==
-X-Gm-Message-State: AOJu0YzdBLoNq8+Jv5BYb4GrMBOXvkIIUL+vTzA1hk55Gj1flgOqRx+O
-	MQ5mnvlMJzR+1uF8A8ngZ2eRArKGW0EAdFWWcpvWVEUDj6oNd+/2anNsFhfLZ2ol8oTvLBOL2Po
-	60ZA8DVBAuVAZjwLlcUidsP/CUsDXQIU=
-X-Gm-Gg: AeBDiesva28pAXLpy/a28iCnnJrCu5vTj2PxlBXU1iYIjlFy7z74nPTFJN/VR80e3i+
-	LQCJiTMeg8KPM4OY+mLAQWtuPyUPHAvrzfm8Nxuck256KeFqF9Qh5OLAW//T99ka+cc+f+uQzOG
-	KkE1HpjC4WhI9vpn3vsljGEK17V+1NzlMdazngaGSYaMrXTcQMX9qKVgpz8r6TgQA1diFnF+Uwb
-	fb/RVMMtXTpwhon+5t8Zc8cGKRFWsspt4aUtOXYjiTA0DQDwH6pL7wrJzC7KQjMGLnqLLgqpqkU
-	6gCONtnUg4BOXJ7gpq+EHoI6x10RipSei26vQrRR7l6c22K9mMbYNcUDWI5/xTCwp1o/uLZRyk6
-	hxDIjZj66ahwiP8FDh7mAmtS+9JWkm1G/gQiEh2n6DXZMFTeynYo=
-X-Received: by 2002:a05:6000:144c:b0:43d:6a0c:9571 with SMTP id
- ffacd0b85a97d-43fe3dd339emr11882591f8f.11.1776544835102; Sat, 18 Apr 2026
- 13:40:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776546001; x=1777150801;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4hP7GmAPXuLcIJddQKNmWXWlH2vIU+tAuH/qZAjzeQ0=;
+        b=HVm5RRzFjQMS3P4V/x+UiIAR7ULxdv0oUK1F5lC/A1k8+TCTnB/5V2ju5QobIgQYYf
+         xy8mEFB5PiKa6ONZ0yYrpRIMz8zch+T9nyp2LrhzwsFuhJLxUjvJaUmDVSEOfAV/xq3O
+         LcpjF03LJ6PJplgbHViVvdl6Qpi3n5Dv4JyoWUKdcJelCFQ0y1mISf0yWCc3DsqOkw8H
+         2H4GUyPxijRz+it5Q3PYh6YZQbEn9a92LFaP2SUOYfdClt6UKKcRa6hf+Ryz6oSFa7jX
+         NDYmwtGH59mK3Qa1L2RQINhP4Djlte2wS9+tQbOlAElZzPeik11Ai64xx2UWFBT73dso
+         z6kg==
+X-Gm-Message-State: AOJu0YzLSeYmqIPX1Jr523CDvQ82cAlnnSDMa5vZQfy7a0zz4Hj38I+z
+	3uGc4S5iT+sAu9tQGmYdIFrvmAkRXGIj4yEpwQhmSly/7pn+auLvWHwxDmgjDVhtOfH6pd9T7aW
+	gIZ3rw78nKPJB090+QtGBBzwDQLw7xsc=
+X-Gm-Gg: AeBDieuXeno1SML6tTqMRd6fiIWJCLLn6fHUP4cvD5Xax61noDMQOhPwyV1MNuWTdJm
+	69zRF6zYx7yuIBMPGkqedJtsCRtDCEPlD1m4/x2LQz9msSKYuYusUGcmoiKISKTbgCnLKbSWyvk
+	syfVHxMzYAHGHWVxKZDN+WvdihLk7RZQI+V75y4I3fj7GGeZXgp67eHIxx9P8MUCSW0kUrHNp0l
+	7936xu8m1R4HpoyFWxTopPiQl2al021kKI2GVUBbI9QXGfvA+C3pdFDPfeUonCb91A6kSHZ7jj6
+	16UxhLjUvUHYcpGsqm0jK6nlW0P6TRmOVR6ORFj0Rdh9NbWEFTOEeYsz58hTSnkKFiH2SZt51aG
+	VGxLrjcOG8o+vwZidbZGklH8EZRRp2QvHJaH4TRYs/gl8iPHX5p4=
+X-Received: by 2002:a05:6000:2890:b0:43d:75ec:26f7 with SMTP id
+ ffacd0b85a97d-43fe3e08f96mr11884719f8f.29.1776546001072; Sat, 18 Apr 2026
+ 14:00:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260418171701.610025-5-memxor@gmail.com> <20260418184552.8C983C19424@smtp.kernel.org>
-In-Reply-To: <20260418184552.8C983C19424@smtp.kernel.org>
+References: <20260414191014.1218567-1-ameryhung@gmail.com>
+In-Reply-To: <20260414191014.1218567-1-ameryhung@gmail.com>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Sat, 18 Apr 2026 21:39:55 +0100
-X-Gm-Features: AQROBzAYafRlGmIgiWv38zJIHVmqJb4mIj0aS1xylho8uw7ZrXlAdTce3vbfJsY
-Message-ID: <CAP01T75a_-GkmOvQSjcsziSTEFYgn8X-_zn8haLvh4OhoJ0f1A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Test verifier warning logging
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Date: Sat, 18 Apr 2026 21:59:22 +0100
+X-Gm-Features: AQROBzCyiIlogAYg3NujVMIxH1AeXIFjwOtU3t2f6D-0ZK19k4NTcKkw2VyTik8
+Message-ID: <CAP01T75TZ85xmd3HKeK_+o4WOMj9xTgg189qkJMygBzDLLjofw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/1] bpf: Refactor dynptr mutability tracking
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
+	yatsenko@meta.com, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, 18 Apr 2026 at 19:45, <sashiko-bot@kernel.org> wrote:
+On Tue, 14 Apr 2026 at 20:10, Amery Hung <ameryhung@gmail.com> wrote:
 >
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] The custom `libbpf_print_cb` unconditionally buffers all log l=
-evels into a fixed 4096-byte buffer, which will inevitably overflow during =
-skeleton load and silently drop the expected verifier warnings.
-> --
+> Redefine dynptr mutability and fix inconsistency in the verifier and
+> kfunc signatures. Dynptr mutability is at two levels. The first is
+> the bpf_dynptr structure and the second is the memory the dynptr points
+> to. The verifer currently tracks the mutability of the bpf_dynptr struct
+> through helper and kfunc prototypes, where "const struct bpf_dynptr *"
+> means the structure itself is immutable. The second level is tracked
+> in upper bit of bpf_dynptr->size in runtime and is not changed in this
+> patch.
 >
-> commit 602c54794881684bfce8f29591c7e680ab7d51fe
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> There are two type of inconsistency in the verfier regarding the
+> mutability of the bpf_dynptr struct. First, there are many existing
+> kfuncs whose prototypes are wrong. For example, bpf_dynptr_adjust()
+> mutates a dynptr's start and offset but marks the argument as a const
+> pointer. At the same time many other kfuncs that does not mutate the
+> dynptr but mark themselves as mutable. Second, the verifier currently
+> does not honor the const qualifier in kfunc prototypes as it determines
+> whether tagging the arg_type with MEM_RDONLY or not based on the register
+> state.
 >
-> selftests/bpf: Test verifier warning logging
+> Since all the verifier care is to prevent CONST_PTR_TO_DYNPTR from
+> being destroyed in callback and global subprogram, redefine the
+> mutability at the bpf_dynptr level to just bpf_dynptr_kern->data. Then,
+> explicitly prohibit passing CONST_PTR_TO_DYNPTR to an argument tagged
+> with MEM_UNINIT or OBJ_RELEASE. The mutability of a dynptr's view is not
+> really interesting so drop MEM_RDONLY annotation for dynptr from the
+> helpers and kfuncs. Plus, if the mutability of the entire bpf_dynptr
+> were to be done correctly, it would kill the bpf_dynptr_adjust() usage
+> in callback and global subporgram.
 >
-> This commit adds test coverage for explicit verifier warning logging and
-> libbpf's default warning flush path while keeping the warning bit private
-> to the test.
+> Implementation wise
 >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args=
-.c b/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args.c
-> > index 5e4793c9c29a0..f92a27d764557 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_implicit_args.c
-> > @@ -4,7 +4,99 @@
-> >  #include <test_progs.h>
-> >  #include "kfunc_implicit_args.skel.h"
-> >
-> > +#define TEST_BPF_LOG_LEVEL_WARN      (1U << 4)
-> > +
-> > +static size_t libbpf_log_pos;
-> > +static char libbpf_log_buf[4096];
-> > +static bool libbpf_log_error;
-> > +
-> > +static int libbpf_print_cb(enum libbpf_print_level level, const char *=
-fmt, va_list args)
-> > +{
-> > +     int emitted_cnt;
-> > +     size_t left_cnt;
-> > +
-> > +     (void)level;
-> > +
-> > +     left_cnt =3D sizeof(libbpf_log_buf) - libbpf_log_pos;
-> > +     emitted_cnt =3D vsnprintf(libbpf_log_buf + libbpf_log_pos, left_c=
-nt, fmt, args);
-> > +     if (emitted_cnt < 0 || emitted_cnt + 1 > left_cnt) {
-> > +             libbpf_log_error =3D true;
-> > +             return 0;
-> > +     }
+> - First, make sure all kfunc arg are correctly tagged: Tag the dynptr
+>   argument of bpf_dynptr_file_discard() with OBJ_RELEASE.
+> - Then, in process_dynptr_func(), make sure CONST_PTR_TO_DYNPTR cannot
+>   be passed to argument tagged with MEM_UNINIT or OBJ_RELEASE. For
+>   MEM_UNINIT, it is already checked by is_dynptr_reg_valid_uninit().
+>   For OBJ_RELEASE, check against OBJ_RELEASE instead of MEM_RDONLY and
+>   drop a now identical check in unmark_stack_slots_dynptr().
+> - Remove the mutual exclusive check between MEM_UNINIT and MEM_RDONLY,
+>   but don't add a MEM_UNINIT and OBJ_RELEASE version as it is obviously
+>   wrong.
 >
-> Since libbpf generates a high volume of LIBBPF_DEBUG and LIBBPF_INFO mess=
-ages
-> during object load, will this unconditionally buffer all log levels and o=
-verflow
-> the 4096-byte buffer before the load completes?
+> Note that while this patch stops following the C semantic for the
+> mutability of bpf_dynptr, the prototype of kfuncs are still fixed to
+> maintain the correct C semantics in the implementation. Adding or
+> removing the const qualifier does not break backward compatibility.
+> In addition, fix kfuncs dropping the const qualifier when casting the
+> opaque bpf_dynptr to bpf_dynptr_kern.
 >
-> If the buffer overflows, libbpf_log_error becomes true and subsequent mes=
-sages
-> (including the expected verifier warnings flushed at the end of the load)=
- will
-> be discarded.
+> In test_kfunc_dynptr_param.c, initialize dynptr to 0 to avoid
+> -Wuninitialized-const-pointer warning.
 >
-> Should this callback filter out non-warning levels to avoid filling the b=
-uffer
-> too quickly?
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+>
+> ---
 
-Perhaps, I will check and adjust if necessary.
-
->
-> [ ... ]
->
-> > +static void test_default_warning_flush(void)
-> > +{
-> > +     libbpf_print_fn_t old_print_cb =3D libbpf_set_print(libbpf_print_=
-cb);
-> > +     struct kfunc_implicit_args *skel =3D NULL;
-> > +     int err;
-> > +
-> > +     libbpf_log_pos =3D 0;
-> > +     libbpf_log_buf[0] =3D '\0';
-> > +     libbpf_log_error =3D false;
-> > +
-> > +     skel =3D kfunc_implicit_args__open();
-> > +     if (!ASSERT_OK_PTR(skel, "skel_open"))
-> > +             goto cleanup;
-> > +
-> > +     select_legacy_impl_prog(skel);
-> > +
-> > +     err =3D kfunc_implicit_args__load(skel);
-> > +     ASSERT_OK(err, "skel_load");
-> > +     ASSERT_FALSE(libbpf_log_error, "libbpf_log_error");
->
-> Will this assertion predictably fail due to the buffer overflow mentioned
-> above?
-
-No, it's a non-common case.
-
->
-> > +     ASSERT_OK_PTR(strstr(libbpf_log_buf, "-- BEGIN PROG LOAD WARNINGS=
- --"), "warn_banner");
-> > +     ASSERT_OK_PTR(strstr(libbpf_log_buf,
-> > +                          "uses deprecated kfunc bpf_kfunc_implicit_ar=
-g_legacy_impl()"),
-> > +                   "warn_msg");
-> > +     ASSERT_NULL(strstr(libbpf_log_buf, "-- BEGIN PROG LOAD LOG --"), =
-"no_verbose_log");
-> > +
-> > +cleanup:
-> > +     kfunc_implicit_args__destroy(skel);
-> > +     libbpf_set_print(old_print_cb);
-> > +}
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260418171701.61=
-0025-1-memxor@gmail.com?part=3D4
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
