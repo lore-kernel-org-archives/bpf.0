@@ -1,155 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA1324DD15
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 00:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6827118A6A8
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 00:52:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776473553; cv=none; b=nFDtvlYTNAxNipklTjov0ILrjGPVvWJsmjc/GJ2KLuXARrbMSpX0P5Dah6iNVHlcJ4gqUcDpFae4KYdI1Nf2xjR+xHaupirTjP1cfFvzZMaiYj5o9ebTF8urm9QwE+Svuc5JNs5NchvoJNzN/FsY8tqLNFH71q2zfwTvI7kqBbk=
+	t=1776473560; cv=none; b=qVMQHOW+fWGZGgnPGpAvxL63+WeEpMlcY3Nqi91dL8FySEx0twQ8rDPyLICFv/MTC9UvlGrnYM77vF0al0KVRUY+vY3pgkpSA11N1A3QP5LeRhzJ2VVkkTbCBbwPBRqFzjKXDEu8CBTG4ITOJejPXOktmgaVbPO8bmfdpFibwYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776473553; c=relaxed/simple;
-	bh=6Dye8Z+Dw3pTenolINz4TGuai0UfrYAxNXdnL602RFo=;
+	s=arc-20240116; t=1776473560; c=relaxed/simple;
+	bh=BrcTcPM8k8m8Godpf1wQcQPVc8Vyf8pWoKHOVmrMWCY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=R0QV6rx7YWL7F11Ns7zTm9XK3SGPu0zCHVi6+0RRcGMuTTkch1vrZx6PQRLa+RHTcjCaj52QHdapVIf4FB5eljXeScmqUh4kWgHN6aiPZhkPrWu5U5/VX/2f6Rzrm8YehStp/TWvduCg1EGdjCTfaQ0BrzMGxXdIbfl/OEvOGBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mg2mGZTr; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=XmeM0V8QqtBoZIy+jHU1FjCJcAP1GXwvxDQ5/J2yKXtAG8AmB1HCLetKGd2TjJ5BlKHb/aXiIP/3Xnzz82WMPEMLRDgsyEzZrYVTnkEWjabqrBaN4/zkx0RksJhepctwV6K39vmsDW8A/3JAh+Vl9ysCkN1BVp2m4r69/4S/AlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gmN+Wxlu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mg2mGZTr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E547FC19425;
-	Sat, 18 Apr 2026 00:52:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gmN+Wxlu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE22C19425;
+	Sat, 18 Apr 2026 00:52:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776473553;
-	bh=6Dye8Z+Dw3pTenolINz4TGuai0UfrYAxNXdnL602RFo=;
+	s=k20201202; t=1776473560;
+	bh=BrcTcPM8k8m8Godpf1wQcQPVc8Vyf8pWoKHOVmrMWCY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=mg2mGZTr1duR/35lo2KCah4i1889zoO++/e/85qF2xkxILUXeGQ7VNSugbZp9Ba1n
-	 g+eNewK3+NVR+x13PyPyuEaYs1lKu3hbgGnUlYDNM4YMum9h8a9LCK2EEP9zts11Ih
-	 aG3FW2E7aearN59/jY+qsedOLGXG5ucXq8dkyoHYC9sa1ZsmkkBS/DnEA3cfYsWlCQ
-	 cxvApIRsoLCEg9rpq87UqDu3+reHwUPDHrTQ/gm11kSWG0127gX0w9+b3WeaQAfRmr
-	 NPGEdpIN7JfpFy/ey1EBwD6o1sR7V9CbkPhY2cxqiOxKNUJMwg001zmC46F6jk3FK1
-	 LjDj5L0RVRlcg==
-Content-Type: multipart/mixed; boundary="===============6144979094748847023=="
+	b=gmN+WxluwLob8FY6TWXKKu8P3ImGKNAxZy7pr2nEQUD4mhCjFm7ui4cU693WMfZsM
+	 6VVeJIlaFAwuE9DppgdzpqOK4pxmtbBlBjhcVeGfUi8oX/T942yJOs0yHndpMlAsZs
+	 F5DhSNWYmPOFu5tuYJWyaWLL2dqHDP/gWEB54vnc10zbDNBSDxOeDrrKlkJSE3d/kT
+	 lWrij3uo3Y0KZ20Z3WmyRuFU6wwqalN1wz3rffEmcUb9GqFUbxSvw1rhsvlWn0AnDb
+	 t1vFp7Jpu0PWEV0iIbFXRM/NL1QZMg8HKn/Ts2nGUnoKOdZ9Ak/XFSHrTKRN0f+4Ix
+	 jMr61p5DhXuaA==
+Content-Type: multipart/mixed; boundary="===============7287181267751871159=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dead6f19825ee2a62cbe082df2ce2ec6ecd65455dcbadf1776628316807fbef3@mail.kernel.org>
-In-Reply-To: <20260417034838.2638137-1-yonghong.song@linux.dev>
-References: <20260417034838.2638137-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 16/16] selftests/bpf: Add verifier tests for stack argument validation
+Message-Id: <690707ccb6647cb641ed5069473393dc7b862b7e34d8f67a4949556aec627a15@mail.kernel.org>
+In-Reply-To: <20260417034744.2630316-1-yonghong.song@linux.dev>
+References: <20260417034744.2630316-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v5 09/16] bpf: Reject stack arguments in non-JITed programs
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 18 Apr 2026 00:52:32 +0000 (UTC)
+Date: Sat, 18 Apr 2026 00:52:40 +0000 (UTC)
 
---===============6144979094748847023==
-Content-Type: text/plain; charset="utf-8"
+--===============7287181267751871159==
+Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdmVy
-aWZpZXIuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3ZlcmlmaWVy
-LmMKPiBpbmRleCBhOTZiMjVlYmZmMjMuLmFlZjIxY2YyOTg3YiAxMDA2NDQKPiAtLS0gYS90b29s
-cy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy92ZXJpZmllci5jCj4gKysrIGIvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdmVyaWZpZXIuYwoKWyAuLi4gXQoK
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVy
-X3N0YWNrX2FyZy5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dzL3ZlcmlmaWVy
-X3N0YWNrX2FyZy5jCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwMDAu
-LmQyMTJiNmMzY2FjNwo+IC0tLSAvZGV2L251bGwKPiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9icGYvcHJvZ3MvdmVyaWZpZXJfc3RhY2tfYXJnLmMKPiBAQCAtMCwwICsxLDQ2MyBAQAo+
-ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMAo+ICsvKiBDb3B5cmlnaHQgKGMp
-IDIwMjYgTWV0YSBQbGF0Zm9ybXMsIEluYy4gYW5kIGFmZmlsaWF0ZXMuICovCj4gKwo+ICsjaW5j
-bHVkZSA8bGludXgvYnBmLmg+Cj4gKyNpbmNsdWRlIDxicGYvYnBmX2hlbHBlcnMuaD4KPiArI2lu
-Y2x1ZGUgImJwZl9taXNjLmgiCgpbIC4uLiBdCgo+ICtfX25vaW5saW5lIF9fdXNlZAo+ICtzdGF0
-aWMgaW50IHN1YnByb2dfOGFyZ3MoaW50IGEsIGludCBiLCBpbnQgYywgaW50IGQsIGludCBlLCBp
-bnQgZiwgaW50IGcsIGludCBoKQo+ICt7Cj4gKwlyZXR1cm4gYSArIGIgKyBjICsgZCArIGUgKyBm
-ICsgZyArIGg7Cj4gK30KCklzIHN1YnByb2dfOGFyZ3MgaW50ZW5kZWQgdG8gYmUgdXNlZCBpbiBh
-bnkgb2YgdGhlIHRlc3RzPyBJdCBkb2VzIG5vdApzZWVtIHRvIGJlIGNhbGxlZCBhbnl3aGVyZSBp
-biB0aGlzIGZpbGUuCgpSZWZlcmVuY2U6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2JwZi8yMDI2
-MDQxNzA0Mzg0Ni42NkNGRUMyQkNCMEBzbXRwLmtlcm5lbC5vcmcvCgpbIC4uLiBdCgo+ICtTRUMo
-InRjIikKPiArX19kZXNjcmlwdGlvbigic3RhY2tfYXJnOiByZWFkIGZyb20gdW5pbml0aWFsaXpl
-ZCBzdGFjayBhcmcgc2xvdCIpCj4gK19fZmFpbHVyZQo+ICtfX2FyY2hfeDg2XzY0Cj4gK19fbXNn
-KCJpbnZhbGlkIHJlYWQgZnJvbSBzdGFjayBhcmciKQo+ICtfX25ha2VkIHZvaWQgc3RhY2tfYXJn
-X3JlYWRfdW5pbml0aWFsaXplZCh2b2lkKQo+ICt7Cj4gKwlhc20gdm9sYXRpbGUgKAo+ICsJCSJy
-MCA9ICoodTY0ICopKHIxMSArIDgpOyIKPiArCQkicjAgPSAwOyIKPiArCQkiZXhpdDsiCj4gKwkJ
-Ojo6IF9fY2xvYmJlcl9hbGwKPiArCSk7Cj4gK30KClNob3VsZCB0aGlzIHJlYWQgZnJvbSByMTEg
-LSA4IGluc3RlYWQ/IFNpbmNlIG91dGdvaW5nIHN0YWNrIGFyZ3VtZW50cwphcmUgYXQgbmVnYXRp
-dmUgb2Zmc2V0cyBmcm9tIHIxMSwgcmVhZGluZyBmcm9tIHIxMSArIDggaXMgb3V0IG9mIGJvdW5k
-cwphbmQgbWlnaHQgYmUgcmVqZWN0ZWQgZm9yIHRoZSB3cm9uZyByZWFzb24sIHJhdGhlciB0aGFu
-IHRlc3RpbmcgYW4KdW5pbml0aWFsaXplZCBidXQgdmFsaWQgc3RhY2sgYXJndW1lbnQgc2xvdC4K
-ClJlZmVyZW5jZTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnBmLzIwMjYwNDE3MDQzODQ2LjY2
-Q0ZFQzJCQ0IwQHNtdHAua2VybmVsLm9yZy8KClsgLi4uIF0KCj4gK1NFQygidGMiKQo+ICtfX2Rl
-c2NyaXB0aW9uKCJzdGFja19hcmc6IHJlbGVhc2VfcmVmZXJlbmNlIGludmFsaWRhdGVzIHN0YWNr
-IGFyZyBzbG90IikKPiArX19mYWlsdXJlCj4gK19fYXJjaF94ODZfNjQKPiArX19tc2coIlIxIGlu
-dmFsaWQgc29jayBhY2Nlc3MiKQo+ICtfX25ha2VkIHZvaWQgc3RhY2tfYXJnX3JlbGVhc2VfcmVm
-KHZvaWQpCj4gK3sKClsgLi4uIF0KCj4gKwkJLyogUmVsZWFzZSB0aGUgcmVmZXJlbmNlIOKAlCBp
-bnZhbGlkYXRlcyB0aGUgc3RhY2sgYXJnIHNsb3QgKi8KPiArCQkicjEgPSByMDsiCj4gKwkJImNh
-bGwgJVticGZfc2tfcmVsZWFzZV07Igo+ICsJCS8qIENhbGwgc3VicHJvZyB0aGF0IGRlcmVmZXJl
-bmNlcyBhcmc2IOKAlCBzaG91bGQgZmFpbCAqLwo+ICsJCSJyMSA9IDE7Igo+ICsJCSJyMiA9IDI7
-Igo+ICsJCSJyMyA9IDM7Igo+ICsJCSJyNCA9IDQ7Igo+ICsJCSJyNSA9IDU7Igo+ICsJCSJjYWxs
-IHN1YnByb2dfZGVyZWZfYXJnNjsiCgpDYW4gdGhpcyB0ZXN0IHBhc3MgZXZlbiBpZiB0aGUgdmVy
-aWZpZXIgZmFpbHMgdG8gaW52YWxpZGF0ZSB0aGUgc3RhY2sKc2xvdD8gc3VicHJvZ19kZXJlZl9h
-cmc2KCkgcGVyZm9ybXMgYW4gOC1ieXRlIHJlYWQgb24gdGhlIGFyZ3VtZW50LgpTaW5jZSBCUEYg
-c29ja2V0cyBvbmx5IGFsbG93IHVwIHRvIDQtYnl0ZSByZWFkcywgYW4gOC1ieXRlIHJlYWQgaXMK
-YWx3YXlzIGludmFsaWQuCgpJZiB0aGUgcmVmZXJlbmNlIGlzbid0IGNvcnJlY3RseSBpbnZhbGlk
-YXRlZCwgdGhlIHZhbGlkIHNvY2tldCBwb2ludGVyCndpbGwgc3RpbGwgYmUgcmVqZWN0ZWQgd2l0
-aCAiUjEgaW52YWxpZCBzb2NrIGFjY2VzcyIuCgpUbyBwcm9wZXJseSB0ZXN0IHRoZSBpbnZhbGlk
-YXRpb24sIHNob3VsZCB0aGUgc3VicHJvZ3JhbSBwZXJmb3JtIGEgdmFsaWQKNC1ieXRlIHJlYWQg
-aW5zdGVhZD8KClJlZmVyZW5jZTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnBmLzIwMjYwNDE3
-MDQzODQ2LjY2Q0ZFQzJCQ0IwQHNtdHAua2VybmVsLm9yZy8KClsgLi4uIF0KCj4gK1NFQygidGMi
-KQo+ICtfX2Rlc2NyaXB0aW9uKCJzdGFja19hcmc6IHBrdCBwb2ludGVyIGluIHN0YWNrIGFyZyBz
-bG90IGludmFsaWRhdGVkIGFmdGVyIHB1bGxfZGF0YSIpCj4gK19fZmFpbHVyZQo+ICtfX2FyY2hf
-eDg2XzY0Cj4gK19fbXNnKCJpbnZhbGlkIGFjY2VzcyB0byBwYWNrZXQiKQo+ICtfX25ha2VkIHZv
-aWQgc3RhY2tfYXJnX3N0YWxlX3BrdF9wdHIodm9pZCkKPiArewo+ICsJYXNtIHZvbGF0aWxlICgK
-PiArCQkicjYgPSByMTsiCj4gKwkJInI3ID0gKih1MzIgKikocjYgKyAlW19fc2tfYnVmZl9kYXRh
-XSk7Igo+ICsJCSJyOCA9ICoodTMyICopKHI2ICsgJVtfX3NrX2J1ZmZfZGF0YV9lbmRdKTsiCj4g
-KwkJLyogY2hlY2sgcGt0IGhhcyBhdCBsZWFzdCAxIGJ5dGUgKi8KPiArCQkicjAgPSByNzsiCj4g
-KwkJInIwICs9IDE7Igo+ICsJCSJpZiByMCA+IHI4IGdvdG8gbDBfJT07Igo+ICsJCS8qIFN0b3Jl
-IHZhbGlkIHBrdCBwb2ludGVyIHRvIG91dGdvaW5nIGFyZzYgc2xvdCAqLwo+ICsJCSIqKHU2NCAq
-KShyMTEgLSA4KSA9IHI3OyIKPiArCQkvKiBicGZfc2tiX3B1bGxfZGF0YSBpbnZhbGlkYXRlcyBh
-bGwgcGt0IHBvaW50ZXJzICovCj4gKwkJInIxID0gcjY7Igo+ICsJCSJyMiA9IDA7Igo+ICsJCSJj
-YWxsICVbYnBmX3NrYl9wdWxsX2RhdGFdOyIKPiArCQkvKiBDYWxsIHN1YnByb2cgdGhhdCBkZXJl
-ZmVyZW5jZXMgYXJnNiDigJQgc2hvdWxkIGZhaWwgKi8KPiArCQkicjEgPSAxOyIKPiArCQkicjIg
-PSAyOyIKPiArCQkicjMgPSAzOyIKPiArCQkicjQgPSA0OyIKPiArCQkicjUgPSA1OyIKPiArCQki
-Y2FsbCBzdWJwcm9nX2RlcmVmX2FyZzY7IgoKU2ltaWxhcmx5LCBkb2VzIHRoaXMgcHJvcGVybHkg
-dGVzdCBwYWNrZXQgcG9pbnRlciBpbnZhbGlkYXRpb24/IFRoZSB0ZXN0CnZlcmlmaWVzIDEgYnl0
-ZSBvZiB0aGUgcGFja2V0IHBvaW50ZXIsIGJ1dCBzdWJwcm9nX2RlcmVmX2FyZzYoKSByZWFkcwo4
-IGJ5dGVzLgoKSWYgYnBmX3NrYl9wdWxsX2RhdGEoKSBmYWlscyB0byBpbnZhbGlkYXRlIHRoZSBw
-b2ludGVyLCB0aGUgOC1ieXRlIHJlYWQKd291bGQgc3RpbGwgYmUgcmVqZWN0ZWQgYXMgb3V0LW9m
-LWJvdW5kcywgeWllbGRpbmcgdGhlIGV4cGVjdGVkICJpbnZhbGlkCmFjY2VzcyB0byBwYWNrZXQi
-IG1lc3NhZ2UuCgpTaG91bGQgdGhlIHBhY2tldCBib3VuZHMgY2hlY2sgdmVyaWZ5IGF0IGxlYXN0
-IDggYnl0ZXMgc28gdGhhdCBhIHZhbGlkCnJlYWQgaXMgZ3VhcmFudGVlZCBpZiB0aGUgcG9pbnRl
-ciBpc24ndCBpbnZhbGlkYXRlZD8KClJlZmVyZW5jZTogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
-YnBmLzIwMjYwNDE3MDQzODQ2LjY2Q0ZFQzJCQ0IwQHNtdHAua2VybmVsLm9yZy8KClsgLi4uIF0K
-Cj4gK1NFQygidGMiKQo+ICtfX2Rlc2NyaXB0aW9uKCJzdGFja19hcmc6IG51bGwgcHJvcGFnYXRp
-b24gcmVqZWN0cyBkZXJlZiBvbiBudWxsIGJyYW5jaCIpCj4gK19fZmFpbHVyZQo+ICtfX2FyY2hf
-eDg2XzY0Cj4gK19fbXNnKCJSMSBpbnZhbGlkIG1lbSBhY2Nlc3MiKQo+ICtfX25ha2VkIHZvaWQg
-c3RhY2tfYXJnX251bGxfcHJvcGFnYXRpb25fZmFpbCh2b2lkKQo+ICt7Cj4gKwlhc20gdm9sYXRp
-bGUgKAo+ICsJCSJyMSA9IDA7Igo+ICsJCSIqKHU2NCAqKShyMTAgLSA4KSA9IHIxOyIKPiArCQkv
-KiByMCA9IGJwZl9tYXBfbG9va3VwX2VsZW0oJm1hcF9oYXNoXzhiLCAma2V5KSAqLwo+ICsJCSJy
-MiA9IHIxMDsiCj4gKwkJInIyICs9IC04OyIKPiArCQkicjEgPSAlW21hcF9oYXNoXzhiXSBsbDsi
-Cj4gKwkJImNhbGwgJVticGZfbWFwX2xvb2t1cF9lbGVtXTsiCj4gKwkJLyogU3RvcmUgUFRSX1RP
-X01BUF9WQUxVRV9PUl9OVUxMIHRvIG91dGdvaW5nIGFyZzYgc2xvdCAqLwo+ICsJCSIqKHU2NCAq
-KShyMTEgLSA4KSA9IHIwOyIKPiArCQkvKiBudWxsIGNoZWNrIG9uIHIwICovCj4gKwkJImlmIHIw
-ICE9IDAgZ290byBsMF8lPTsiCj4gKwkJLyoKPiArCQkgKiBPbiBudWxsIGJyYW5jaCwgb3V0Z29p
-bmcgc2xvdCBpcyBTQ0FMQVIoMCkuCj4gKwkJICogQ2FsbCBzdWJwcm9nIHRoYXQgZGVyZWZlcmVu
-Y2VzIGFyZzYg4oCUIHNob3VsZCBmYWlsLgo+ICsJCSAqLwo+ICsJCSJyMSA9IDA7Igo+ICsJCSJy
-MiA9IDA7Igo+ICsJCSJyMyA9IDA7Igo+ICsJCSJyNCA9IDA7Igo+ICsJCSJyNSA9IDA7Igo+ICsJ
-CSJjYWxsIHN1YnByb2dfZGVyZWZfYXJnNjsiCgpEb2VzIHRoZSBfX21zZygpIHN1YnN0cmluZyBt
-YXRjaCBhY2NlcHQgdGhlIHdyb25nIGZhaWx1cmUgbW9kZSBoZXJlPwpEZXJlZmVyZW5jaW5nIGFu
-IHVucmVmaW5lZCBQVFJfVE9fTUFQX1ZBTFVFX09SX05VTEwgeWllbGRzICJSMSBpbnZhbGlkCm1l
-bSBhY2Nlc3MgJ21hcF92YWx1ZV9vcl9udWxsJyIsIHdoaWxlIGRlcmVmZXJlbmNpbmcgU0NBTEFS
-IHlpZWxkcwoiUjEgaW52YWxpZCBtZW0gYWNjZXNzICdzY2FsYXInIi4KClRoZSBzdWJzdHJpbmcg
-bWF0Y2ggIlIxIGludmFsaWQgbWVtIGFjY2VzcyIgYWNjZXB0cyBib3RoLCBhbGxvd2luZyB0aGUK
-dGVzdCB0byBwYXNzIGV2ZW4gaWYgbnVsbCBwcm9wYWdhdGlvbiBmYWlscyBhbmQgdGhlIHJlZ2lz
-dGVyIGlzIHN0aWxsCnRyYWNrZWQgYXMgYSBtYXAgcG9pbnRlci4KClNob3VsZCBpdCBtYXRjaCB0
-aGUgZXhhY3Qgc2NhbGFyIGVycm9yLCBvciBwZXJoYXBzIHRlc3QgdGhlIG5vbi1udWxsCmJyYW5j
-aCBmb3Igc3VjY2VzcyBpbnN0ZWFkPwoKUmVmZXJlbmNlOiBodHRwczovL2xvcmUua2VybmVsLm9y
-Zy9icGYvMjAyNjA0MTcwNDM4NDYuNjZDRkVDMkJDQjBAc210cC5rZXJuZWwub3JnLwoKCi0tLQpB
-SSByZXZpZXdlZCB5b3VyIHBhdGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkg
-d2h5IGl0J3Mgbm90IGEgYnVnLgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hl
-cy92bXRlc3QvYmxvYi9tYXN0ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVuIHN1bW1hcnk6
-IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9ydW5zLzI0NTky
-NTYyNTY0
+> bpf: Reject stack arguments in non-JITed programs
+>
+> The interpreter does not understand the bpf register r11
+> (BPF_REG_PARAMS) used for stack argument addressing. So
+> reject interpreter usage if stack arguments are used either
+> in the main program or any subprogram.
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
---===============6144979094748847023==--
+Should this include a Fixes tag? The commit addresses a bug introduced
+in commit 13ee5d67a7c9 ("bpf: Support stack arguments for bpf functions").
+Additionally, bot+bpf-ci@kernel.org noted in v5 review on lore that this
+commit fixes a bug but lacks the tag:
+
+https://lore.kernel.org/bpf/9b0ca90ef418abe68516e5570b953bbbee79f418c1550255784baf8422e9e3c0@mail.kernel.org/
+
+Suggested: Fixes: 13ee5d67a7c9 ("bpf: Support stack arguments for bpf functions")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24592562564
+--===============7287181267751871159==--
