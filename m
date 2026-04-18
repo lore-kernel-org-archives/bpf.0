@@ -1,97 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB06384256
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 14:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19283603FE
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 14:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776521012; cv=none; b=Q5HgmJx/PGTf/iBDH+CcyWCPBLWDwZjsIhVWlNFrEbEA3ppX4NHPf7y8q5ZOhTFwcyaQGjnGmaLy+bX4ZyGnUok7uqGQpOmY1mEJnT0JqkBzG514BlpRQp00uQAGG5lEAF1lFhKemKZqc5fGXg/SfdYLwQbESzKI00E/ULaBaJM=
+	t=1776521013; cv=none; b=f2IAJhhq9HSeoqJ4vtwRG76nZwjyrycXtrQOZggPIRLs8zGL7sMyt+6fnPkasA5Vwbl784GwTRusWpQ5mW4XPrvPd+55wCUr/m1GF8CEdloYzHVsL25gV5PoZungRzDGAxunJsJFPGQDpsHP1A3WkPIX6ZDaRj/LkhSXqEtuERU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776521012; c=relaxed/simple;
-	bh=qPvNEikHjzqmXy0O9aiIhkNQbZMiv4YfBZUz90mtGHk=;
+	s=arc-20240116; t=1776521013; c=relaxed/simple;
+	bh=vOZhslUpocbWj1UgipaEhJbaz2/rHR9INg8lvsvAwdo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=nGNgmns7eX64iBf0fpdsgnuq6YP6VWBRGnuOr0HUbYslmJ4BPjQj5F/NBP+YPvO14S+IOLbtQZnrea5mDFAFJPCzFnPoQnBp7+3PKPeQJH7f2aBRHKLyFx/3o76ZdHuCmgHHZn2VxKA0iOmVp+DxpscGB0nnUc0+R0hbS4fwoe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V72jV84w; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=IrtFSkEwD+gIJAeS5Q6qyPys9buhAMA20HvDAWkEsvUuq8+r12p7s0DOXULrcGoF6d0T9p5/9L8Bh5DWcCy8sQt8Z90MOLicoamJs3wDN9zXwxHfgifGETJgtL5UIJuNKr4Xv5meG0EZppFTzxfReWJvYM72FwajgaIX9oWazhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pSOuCIS/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V72jV84w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE28C2BCB4;
-	Sat, 18 Apr 2026 14:03:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pSOuCIS/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52988C2BCB5;
+	Sat, 18 Apr 2026 14:03:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776521012;
-	bh=qPvNEikHjzqmXy0O9aiIhkNQbZMiv4YfBZUz90mtGHk=;
+	s=k20201202; t=1776521013;
+	bh=vOZhslUpocbWj1UgipaEhJbaz2/rHR9INg8lvsvAwdo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=V72jV84wFzUXFCvcD6jSeOfaKbPOiCRHAXkffm/HioRq9rJPerWMVFENybsiZGOR7
-	 W+lHQouj83FaPJfEkwTFa1wW1hqjojTlHmDZsRz3+U4WkGtMzQu56ltqK+OE7Hvn+/
-	 254eUot3zVx8piVHUu7/Y6OMky3TIgVJwxsXqOPYunSB3ntsy9zKv8+iIgPRG4VQbq
-	 1577bS1yS5WQlaV191JEeyVOxGndFNw/3sCtpi8IwEPcAmmT8Rc37nrka0NzA33sSd
-	 Qv4BzrSKN8HTnP/AIGy1afgmFPcMZ8zMDV9G/Ec9l2BwRIyavITlr8FGez48RlKs55
-	 A9gj86ZthxkNw==
-Content-Type: multipart/mixed; boundary="===============0546296290627441763=="
+	b=pSOuCIS/HVPqJ6m7IxC7TyZsXQyXMN4NSybTJcXkF42co7Oalu7Ao4CviIReEmNec
+	 8ZZQ2Skh4JJ2Fsg860eaSSnvGYC0JD/aVAPQ+H/GVTVuWudpF3q98vVSusdYyCQhSC
+	 CrbR3n7MkoYAN3C2mprrT0nFfGlAvn+Fi4M5AtCDxq3qVh8KAWbyz0zrPtRRLVKEME
+	 XvXK6CoRIfl9SXoHNHfiy02WtPLEoS7qlXrxvBBVyeIO3pJiZV3VU8C8Nbf67Q5qZE
+	 nB9VzSoQv93DlCK1rkyubFV96ZCi54frwUNKfepUIqw/V0RIZGQFu4nNtXm8ZVSh+m
+	 wuUXCH3bOUG7g==
+Content-Type: multipart/mixed; boundary="===============0299323232534219728=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <bc06bc710ed78082e1d8017a6a638bb27a7b3f6f9b21f76d62233351c5001aa1@mail.kernel.org>
-In-Reply-To: <20260418131614.1501848-4-puranjay@kernel.org>
-References: <20260418131614.1501848-4-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v13 3/6] bpf: add bpf_cpu_time_counter_to_ns kfunc
+Message-Id: <487174243d5c463f634958f2aed21647f913ba5fbd58556f55da10e4f3176886@mail.kernel.org>
+In-Reply-To: <20260418131614.1501848-7-puranjay@kernel.org>
+References: <20260418131614.1501848-7-puranjay@kernel.org>
+Subject: Re: [PATCH bpf-next v13 6/6] bpf, arm64: Add JIT support for cpu time counter kfuncs
 From: bot+bpf-ci@kernel.org
 To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mykyta.yatsenko5@gmail.com,xukuohai@huaweicloud.com,vadim.fedorenko@linux.dev,catalin.marinas@arm.com,will@kernel.org,kernel-team@meta.com,vadfed@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 18 Apr 2026 14:03:31 +0000 (UTC)
+Cc: puranjay@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mykyta.yatsenko5@gmail.com,xukuohai@huaweicloud.com,vadim.fedorenko@linux.dev,catalin.marinas@arm.com,will@kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 18 Apr 2026 14:03:33 +0000 (UTC)
 
---===============0546296290627441763==
-Content-Type: text/plain; charset="us-ascii"
+--===============0299323232534219728==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 7cda5589107b..a8956eb867ef 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -10,6 +10,7 @@
->  #include <linux/if_vlan.h>
->  #include <linux/bitfield.h>
->  #include <linux/bpf.h>
-> +#include <linux/clocksource.h>
->  #include <linux/memory.h>
->  #include <linux/sort.h>
->  #include <asm/extable.h>
+PiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9uZXQvYnBmX2ppdF9jb21wLmMgYi9hcmNoL2FybTY0
+L25ldC9icGZfaml0X2NvbXAuYwo+IGluZGV4IDA4MTZjNDBmYzdhZi4uN2RhNzUwN2FiNDMxIDEw
+MDY0NAo+IC0tLSBhL2FyY2gvYXJtNjQvbmV0L2JwZl9qaXRfY29tcC5jCj4gKysrIGIvYXJjaC9h
+cm02NC9uZXQvYnBmX2ppdF9jb21wLmMKClsgLi4uIF0KCj4gQEAgLTE1NzEsMTAgKzE1NzMsNTQg
+QEAgc3RhdGljIGludCBidWlsZF9pbnNuKGNvbnN0IHN0cnVjdCBicGZfdmVyaWZpZXJfZW52ICpl
+bnYsIGNvbnN0IHN0cnVjdCBicGZfaW5zbgo+ICAJY2FzZSBCUEZfSk1QIHwgQlBGX0NBTEw6Cj4g
+IAl7Cj4gIAkJY29uc3QgdTggcjAgPSBicGYyYTY0W0JQRl9SRUdfMF07Cj4gKwkJY29uc3QgdTgg
+cjEgPSBicGYyYTY0W0JQRl9SRUdfMV07Cj4gKwkJY29uc3QgczMyIGltbSA9IGluc24tPmltbTsK
+PiAgCQlib29sIGZ1bmNfYWRkcl9maXhlZDsKPiAgCQl1NjQgZnVuY19hZGRyOwo+ICAJCXUzMiBj
+cHVfb2Zmc2V0Owo+Cj4gKwkJLyogSW5saW5lIGtmdW5jIGJwZl9nZXRfY3B1X3RpbWVfY291bnRl
+cigpICovCj4gKwkJaWYgKGluc24tPnNyY19yZWcgPT0gQlBGX1BTRVVET19LRlVOQ19DQUxMICYm
+Cj4gKwkJICAgIGltbSA9PSBCUEZfQ0FMTF9JTU0oYnBmX2dldF9jcHVfdGltZV9jb3VudGVyKSAm
+Jgo+ICsJCSAgICBicGZfaml0X2lubGluZXNfa2Z1bmNfY2FsbChpbW0pKSB7Cj4gKwkJCS8qCj4g
+KwkJCSAqIFdpdGggRUNWIChBUk12OC42KyksIENOVFZDVFNTX0VMMCBpcyBzZWxmLQo+ICsJCQkg
+KiBzeW5jaHJvbml6aW5nIOKAlCBubyBJU0IgbmVlZGVkLiAgV2l0aG91dCBFQ1YsCj4gKwkJCSAq
+IGFuIElTQiBpcyByZXF1aXJlZCBiZWZvcmUgcmVhZGluZyBDTlRWQ1RfRUwwCj4gKwkJCSAqIHRv
+IHByZXZlbnQgc3BlY3VsYXRpdmUvb3V0LW9mLW9yZGVyIHJlYWRzLgo+ICsJCQkgKgo+ICsJCQkg
+KiBNYXRjaGVzIGFyY2hfdGltZXJfcmVhZF9jbnR2Y3RfZWwwKCkuCj4gKwkJCSAqLwo+ICsJCQlp
+ZiAoY3B1c19oYXZlX2NhcChBUk02NF9IQVNfRUNWKSkgewo+ICsJCQkJZW1pdChBNjRfTVJTX0NO
+VFZDVFNTX0VMMChyMCksIGN0eCk7Cj4gKwkJCX0gZWxzZSB7Cj4gKwkJCQllbWl0KEE2NF9JU0Is
+IGN0eCk7Cj4gKwkJCQllbWl0KEE2NF9NUlNfQ05UVkNUX0VMMChyMCksIGN0eCk7Cj4gKwkJCX0K
+PiArCQkJYnJlYWs7Cj4gKwkJfQo+ICsKPiArCQkvKiBJbmxpbmUga2Z1bmMgYnBmX2NwdV90aW1l
+X2NvdW50ZXJfdG9fbnMoKSAqLwo+ICsJCWlmIChpbnNuLT5zcmNfcmVnID09IEJQRl9QU0VVRE9f
+S0ZVTkNfQ0FMTCAmJgo+ICsJCSAgICBpbW0gPT0gQlBGX0NBTExfSU1NKGJwZl9jcHVfdGltZV9j
+b3VudGVyX3RvX25zKSAmJgo+ICsJCSAgICBicGZfaml0X2lubGluZXNfa2Z1bmNfY2FsbChpbW0p
+KSB7Cj4gKwkJCXUzMiBmcmVxID0gYXJjaF90aW1lcl9nZXRfY250ZnJxKCk7Cj4gKwo+ICsJCQlp
+ZiAoZnJlcSA9PSBOU0VDX1BFUl9TRUMpIHsKPiArCQkJCS8qIDEgR0h6IGNvdW50ZXI6IDEgdGlj
+ayA9IDEgbnMsIGlkZW50aXR5ICovCj4gKwkJCQllbWl0KEE2NF9NT1YoMSwgcjAsIHIxKSwgY3R4
+KTsKPiArCQkJfSBlbHNlIHsKPiArCQkJCXUzMiBtdWx0LCBzaGlmdDsKPiArCj4gKwkJCQljbG9j
+a3NfY2FsY19tdWx0X3NoaWZ0KCZtdWx0LCAmc2hpZnQsIGZyZXEsIE5TRUNfUEVSX1NFQywgMzYw
+MCk7Cj4gKwkJCQllbWl0X2E2NF9tb3ZfaSgxLCB0bXAsIG11bHQsIGN0eCk7CiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5eXl4KCkNhbiBt
+dWx0IGJlIHNpZ24tZXh0ZW5kZWQgaGVyZT8gTG9va2luZyBhdCB0aGUgZGVjbGFyYXRpb24gb2Yg
+bXVsdAphcyB1MzIsIHdoZW4gaXQgaGFzIGJpdCAzMSBzZXQgKG11bHQgPj0gMHg4MDAwMDAwMCks
+IHRoZSBpbXBsaWNpdApjb252ZXJzaW9uIHRvIHMzMiBpbiBlbWl0X2E2NF9tb3ZfaSAod2hpY2gg
+dGFrZXMgJ2NvbnN0IHMzMiB2YWwnKQptYWtlcyB0aGUgdmFsdWUgbmVnYXRpdmUuCgpJbiBlbWl0
+X2E2NF9tb3ZfaToKCiAgdTE2IGhpID0gdmFsID4+IDE2OyAgICAgIC8qIGFyaXRobWV0aWMgc2hp
+ZnQgd2hlbiB2YWwgaXMgczMyIG5lZ2F0aXZlICovCiAgdTE2IGxvID0gdmFsICYgMHhmZmZmOwog
+IGlmIChoaSAmIDB4ODAwMCkgewogICAgLi4uCiAgICBlbWl0KEE2NF9NT1ZOKGlzNjQsIHJlZywg
+KHUxNil+aGksIDE2KSwgY3R4KTsgIC8qIGlzNjQ9MSA9PiA2NC1iaXQgTU9WTiAqLwogICAgLi4u
+CiAgfQoKRm9yIGlzNjQ9MSwgTU9WTiBzZXRzIHRoZSBmdWxsIDY0LWJpdCByZWdpc3RlciB0byB+
+KGltbSA8PCBzaGlmdCksIHNvCnRoZSB1cHBlciAzMiBiaXRzIGJlY29tZSAweEZGRkZGRkZGLiBG
+b3IgZXhhbXBsZSwgbXVsdCA9IDB4RkEwMDAwMDAKd291bGQgeWllbGQgdG1wID0gMHhGRkZGRkZG
+Rl9GQTAwMDAwMCBpbnN0ZWFkIG9mIDB4MDAwMDAwMDBfRkEwMDAwMDAuClRoZSBzdWJzZXF1ZW50
+IDY0LWJpdCBNVUwgd291bGQgdGhlbiBtdWx0aXBseSBieSB0aGlzIHNpZ24tZXh0ZW5kZWQKdmFs
+dWUuCgpUaGlzIGNhbiBoYXBwZW4gd2hlbiBjbG9ja3NfY2FsY19tdWx0X3NoaWZ0IHByb2R1Y2Vz
+IG11bHQgPj0gMl4zMS4gVGhlCmFsZ29yaXRobSBpbiBrZXJuZWwvdGltZS9jbG9ja3NvdXJjZS5j
+IGtlZXBzIHNmdGFjYyBhdCAzMiB3aGVuZXZlcgptYXhzZWMqZnJvbSA8IDJeMzIsIGkuZS4sIHdo
+ZW5ldmVyIGFyY2hfdGltZXJfZ2V0X2NudGZycSgpIHJldHVybnMgYQp2YWx1ZSBsZXNzIHRoYW4g
+YWJvdXQgMSwxOTMsMDQ2IEh6LiBJbiB0aGF0IHJlZ2ltZSBtdWx0IGNhbiBvY2N1cHkgdGhlCmZ1
+bGwgdTMyIHJhbmdlLCBpbmNsdWRpbmcgdmFsdWVzIHdpdGggYml0IDMxIHNldCAoZS5nLiwgZm9y
+IGZyZXEgPT0gMQpNSHosIG11bHQgPSAweEZBMDAwMDAwKS4KCldoaWxlIGRyaXZlcnMvY2xvY2tz
+b3VyY2UvYXJtX2FyY2hfdGltZXIuYyBvbmx5IHdhcm5zIGZvcgphcmNoX3RpbWVyX3JhdGUgPCAx
+MDAwMDAwIGFuZCBkb2VzIG5vdCByZWplY3Qgc3VjaCByYXRlcywgYSBwbGF0Zm9ybQpjb25maWd1
+cmVkIHdpdGggQ05URlJRX0VMMCBiZWxvdyBhYm91dCAxLjIgTUh6IHdvdWxkIGV4ZWN1dGUgdGhp
+cyBjb2RlCnBhdGguCgpPdGhlciB1c2VzIG9mIGVtaXRfYTY0X21vdl9pKDEsIC4uLikgaW4gdGhp
+cyBmaWxlIHBhc3MgczMyCm9mZnNldHMvaW1tcyB3aGVyZSBzaWduLWV4dGVuc2lvbiBpcyBkZXNp
+cmVkLiBGb3IgdGhlIHUzMiBtdWx0IHZhbHVlCnplcm8tZXh0ZW5zaW9uIGlzIHJlcXVpcmVkLgoK
+PiArCQkJCWVtaXQoQTY0X01VTCgxLCByMCwgcjEsIHRtcCksIGN0eCk7Cj4gKwkJCQlpZiAoc2hp
+ZnQpCj4gKwkJCQkJZW1pdChBNjRfTFNSKDEsIHIwLCByMCwgc2hpZnQpLCBjdHgpOwo+ICsJCQl9
+Cj4gKwkJCWJyZWFrOwo+ICsJCX0KPiArCgpbIC4uLiBdCgoKLS0tCkFJIHJldmlld2VkIHlvdXIg
+cGF0Y2guIFBsZWFzZSBmaXggdGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBi
+dWcuClNlZTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21h
+c3Rlci9jaS9jbGF1ZGUvUkVBRE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIu
+Y29tL2tlcm5lbC1wYXRjaGVzL2JwZi9hY3Rpb25zL3J1bnMvMjQ2MDU3NTU2MjE=
 
-[ ... ]
-
-> diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-> index ca208378c979..da61bc5585aa 100644
-> --- a/arch/x86/net/bpf_jit_comp32.c
-> +++ b/arch/x86/net/bpf_jit_comp32.c
-> @@ -12,6 +12,7 @@
->  #include <linux/netdevice.h>
->  #include <linux/filter.h>
->  #include <linux/if_vlan.h>
-> +#include <linux/clocksource.h>
->  #include <asm/cacheflush.h>
->  #include <asm/set_memory.h>
->  #include <asm/nospec-branch.h>
-
-This isn't a bug, but the include appears to be unused in
-bpf_jit_comp32.c. During review of v11 on the mailing list, Alexei
-Starovoitov noted that the 32-bit JIT implementation was questionable and
-should be dropped entirely:
-
-https://lore.kernel.org/bpf/CAADnVQLYT5SV+tS2ycLteBMYOc12C=X7iHZ=RjhyVzuY=6=8Uw@mail.gmail.com/
-
-The 32-bit JIT implementation was indeed removed, but this header include
-remained. Would it make sense to remove the unused include from
-bpf_jit_comp32.c?
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24605755621
---===============0546296290627441763==--
+--===============0299323232534219728==--
