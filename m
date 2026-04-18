@@ -1,67 +1,66 @@
-Received: from mail-oo1-f68.google.com (mail-oo1-f68.google.com [209.85.161.68])
+Received: from mail-oi1-f196.google.com (mail-oi1-f196.google.com [209.85.167.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 219491B4F0A
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 17:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78ABC1B4F0A
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 17:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776532630; cv=none; b=gQjbUA+yEPQ5CheE36RsbqsIj16GIPGUW6heUWXllTvAaEddfnI4SdHtO7HhSKTSm67ck5VC3fFUd4BgiaL3pxY0ngQ40WmuF7JociBNCKIRXCGj1Hxj4BwJXPHC0WNzUSdeYxqlYjYRpd/MnLZ4Gg+oN4LQBaGDwzxVHC/JEww=
+	t=1776532633; cv=none; b=nsRs+zuaAmZDHFqiFMNPxNwPYb/6eKd2LgC0Z0dDYyXKY1AaKRPtPO/zL3vewaIZKYPmnzUNESeBjxgEJYwLCAiUexwadHokFan3yp9IBSpdflZXz7SLMFynMiCwQ8dg+zv2pHFopL5f/p9nLb8AsEBOF0ZdLJUOgUy3aX3gT+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776532630; c=relaxed/simple;
-	bh=T5VTzDKnEDmyAshDfRVx3ycUn+tXEGnQD5pDffeLeFM=;
+	s=arc-20240116; t=1776532633; c=relaxed/simple;
+	bh=4DeF5LD/bFSXRd/ZVsWu7irKhi9iGjHSF9nq2LGFf1E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HtUBoszh580DLzfRWDpEGYRkpdbd2ydG6yYun3V1dnQ6jXijCCfZzzq+QJa2XQfihEiFPFUSbYoMx8W1Vez0VWpVEo658rX85o43cChVK77PTUQrHYEH6P2mFifsD2U/d3kknp0x6OgvG0dJUnb6Gsn/Okqxe2356vdlRyLAiBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afrrEPjM; arc=none smtp.client-ip=209.85.161.68
+	 MIME-Version; b=PMCinuUSkpSp6FD+v5qDmju4T2bdiDe2j8szDdO46dRFJ5yW3DGhU849nP1dIjUzzFLGBqvhjvCnYahqqOLzM6UJaOr2MPZiVBrt4OWiAvAgCMCg6/iJw0gHvphnZEeHQqTcyCGfJY2OE/+FiYeUy55WrDEs3Tw2gJ8NoFRBGRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nArw6/wL; arc=none smtp.client-ip=209.85.167.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afrrEPjM"
-Received: by mail-oo1-f68.google.com with SMTP id 006d021491bc7-66f747175d8so841178eaf.0
-        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 10:17:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nArw6/wL"
+Received: by mail-oi1-f196.google.com with SMTP id 5614622812f47-471bf5157d7so805080b6e.3
+        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 10:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776532627; x=1777137427; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776532631; x=1777137431; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ewPSjR0Aa2p04575IY8ofuP6yOfyfBsxpIVWQwD88fM=;
-        b=afrrEPjMeVuY8m96vaWbmtXDB3sAruvKKCQLk8YFzCKp/ZSpklKLo+3wltSMsn3KAw
-         BTReCI1WDPi2BKxakKseCS/PusvTJIePHw2pAVMj9i6cQpvLkXvsf+I2Ay0uQGOsEStz
-         yaRRptZDYQHrBIsvUUNBOlmtDY4YIcjZPltMFiIfR/RTdDhy5VLGE6+s1K36yfp+hmy+
-         xhCx2/2wLBRIlmlOEyVE7q3Xhp+ay/u4PzPqE0re9daIrKbfO9h841CAXKlZ0SqQUSqY
-         iNZXuMqb1Co+boT2mzVx8yZAjqyllvRDHNANw/Bu6Eb8eQv6/k1wPYX90uJi/8PnZq61
-         1nSg==
+        bh=zP18WHRY7hIIgdyoqHAN4cd9mBBpSz8B4d8U2qBe8x0=;
+        b=nArw6/wL8MoaAt9mAr9KUZr+PT9LWKGb8mrxXm4Az/Hfk6WgFMasVMrfXpZErOXGks
+         LhGcBOD8YTfsKZfVT5foSmvpUFdKcyQ5TWCeN1YgmqKiEG2PTKPXL3d6kMfEcX30nAUk
+         7elhnQDh/cbiAKU3ukipla4kiX5VlOyZuRXPN7vFCm9Sg3FlhqlAX1cQrcfQb3qa7vVD
+         I2AqQpOXNeHU6l5BwRisoGQc5tGePfg5iE4u5G5qVUypAD9OlDbAUAAW9zxP7HduXno7
+         3IElerBMBNW2T2NRjrgMhKUaos90e3stChmemPjUs/n/007gkyP9mocPiNAL4e/4MgqD
+         4OdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776532627; x=1777137427;
+        d=1e100.net; s=20251104; t=1776532631; x=1777137431;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ewPSjR0Aa2p04575IY8ofuP6yOfyfBsxpIVWQwD88fM=;
-        b=PkEZjh2BRtjjI6gQkZ/uRmjbieuO2uk57rpZiMC3y0P7W5DJBoGFF4ErYfclnolldQ
-         fqPJmyj5QDKCL8gA8v65DrM1gRA1W4hYyqZFLHWDDHPGhXtMNfGQWoGyHBN73Hr7RJ13
-         toAMXluinmW++qIo75TKYrTc4cOJNkGNyR3pkiYJWN9wmnvEq4h3hYMDvl+/MBeoZDcE
-         umHr7Sc14s1B4EVFj71Qx+8UivbgE5u35QVWB81ufGu49WR+UzSzoVqZfhI0pLe+7JEk
-         qkEDUU5JkTir4OpS59kE5rdWgr8Zno7znPc8Nx9Vz3OaTha9HvyFZThKdpiZkvpw35gf
-         46pQ==
-X-Gm-Message-State: AOJu0Yww8aATaR8a9TYqZi1eODcRd/UwIWkrhYKBv6nqKNnwEzwNUbpD
-	tHmEGR7kEPIdYYhS3ot3/j45A8XqJuDYPWtGOlCjHIhgR8zgOLvXsrsEladbpOo3yNCK0g==
-X-Gm-Gg: AeBDies8z+rHK/NWCFPt71H8LX4KJ898drpoohe1jjgShm2DJIlx2BbiArZPvhzrFPv
-	wVaMeyVCMjdVmzUokleMKEJ5GsxPhoRKDvFVGaVykekGHS87yVxBh4OMRGmqegU3qwe2CKC/CZQ
-	RzW1F6PmVikGbujWADmlooW2Bhjy4G0sc7tFAxFSgAw4RMTQighhWSGZbrGgP/Gne4PsMY7BbpS
-	ajA7dyFMKvoUZVKGrtsMXv5LuDEaJRiqXmdmSSvnudgyJiv3lToQeDTjcAp6LtFG5r3tAk7m3KR
-	iJTHgXHecGJaHF+AQvlvpCP3leUDi4RtUrjB8/VG6QFEDrt1Ls4+onAo1Bz/8E4k8V+sRdmkB0o
-	k7x49sG913MpwGPRJzlPo9ppfjmtE+oB3FL2BjicZmzDyjMJPc9gmqcEuPqUNiIJ8et7jSn4VTy
-	Alycvr6MS4YQMZEVv60ARAkvpKLeEplH6cAvwr4XpOWBvyJBCh/0WrSSL0cYK+dDnN8a4hp0oAB
-	mqateX+xYe61Wq2T9Ne0YCLbBXnCwbR1wGJD919yn+8
-X-Received: by 2002:a05:6820:825:b0:680:322:4f36 with SMTP id 006d021491bc7-69462e759d7mr4140307eaf.25.1776532627521;
-        Sat, 18 Apr 2026 10:17:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:49::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42b930bca47sm3826891fac.7.2026.04.18.10.17.05
+        bh=zP18WHRY7hIIgdyoqHAN4cd9mBBpSz8B4d8U2qBe8x0=;
+        b=gMraP5u+kNOlHTZL2mkn1kDnfL7rHOGFvlwkUOLRqZeC/Njlkc6AMIvLjylYriulCp
+         7T5gGMOw+ZX0y9GyelgY6rFAx7Rgfj4jXn3GRJN0BH7jXcMuRGBcWtM8uYlMtkXK9k06
+         KKyl0Ft0ldBXz7GyiBBlSmQtY8kTAFyCtcWUavzD5PK9nzHpr/JzsZ5QPdaZOHjOJIDI
+         gRmNp5FKeD7NSTCBalgiW6KOFrWVPTkR+X4xAIZiTcQy38Jwiqtb1a5riqqhhC3yii4Z
+         2Mkud48Xz07AfwUqwVHkqpk4EwSOSB1IsXq/YHBbkpH2IztnHsld4OdfkH4Wso4yGJEO
+         uLjA==
+X-Gm-Message-State: AOJu0YxcMcohu9+D9UNgvgT0iKNAFYQWRA7lg6QQhmREHm8FTnqVAbvI
+	twUDpZttpwTUBiXaH5CP1EE8Op43qreYu8x02d35PhhwekFLrIqLJ2+zVFkS6fuBSSiDeQ==
+X-Gm-Gg: AeBDiescTIEEcsY1gMGNiuC3sR7FYplqBQWj9KL8osa7DeV6yqoXpMwpax1Kc0Ipk11
+	F47/xQcaHMg+o5SXmndMvez+p9FamPIou10P3iVwBiAL5UwOzFoAaHY+2yYglxNj+/xRfe/h4zd
+	BArXwntT/lSJaZbW3t+fyBKaOtRmkiTFcqGK7BudgAg5hF5D1yJmOmUn6pWWqwoTNBJKaapn8QQ
+	YsOTFIdr4YvIXyQVkCLgHmpdVcyALJtcAj3hbmmwuMabPsCQt1MY2u+87R5f5PCgXngg6OPwFBb
+	4ky0mA5GFgZ974ZPYZnSPGxmbr2ZSP6bRk2+2LYQHGrNiBW6qnWcYYyujF1hg469tKSNHIbXvqi
+	8TIJ8qpf9ouca6GGjMmlmLg1IXWZAtWGry2Zy+8VIqMrrMkwfYJqj9tCSHns9YPOk3sQb7jmC0d
+	+jQ7uu/EMjTAq2P0ZDVc2nLbcNJ4K3NECV+xY9v3WOPAG3g52u2FqOGD81RniQvpvXOLkOxsY/w
+	T2kWRyzQbes8K9ltB5JRhpyN4VbwoKVvxKMAbbrUtk=
+X-Received: by 2002:a05:6808:19a6:b0:463:cf6b:982a with SMTP id 5614622812f47-4799c9b1d26mr3823950b6e.22.1776532630856;
+        Sat, 18 Apr 2026 10:17:10 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:2::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-479a02630a6sm3332722b6e.15.2026.04.18.10.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2026 10:17:06 -0700 (PDT)
+        Sat, 18 Apr 2026 10:17:09 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Vineet Gupta <vineet.gupta@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
@@ -69,9 +68,9 @@ Cc: Vineet Gupta <vineet.gupta@linux.dev>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 2/4] bpf: Introduce __bpf_kfunc_mark_deprecated annotation
-Date: Sat, 18 Apr 2026 19:16:57 +0200
-Message-ID: <20260418171701.610025-3-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 3/4] libbpf: Request verifier warnings for object loads
+Date: Sat, 18 Apr 2026 19:16:58 +0200
+Message-ID: <20260418171701.610025-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260418171701.610025-1-memxor@gmail.com>
 References: <20260418171701.610025-1-memxor@gmail.com>
@@ -81,290 +80,203 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12551; h=from:subject; bh=T5VTzDKnEDmyAshDfRVx3ycUn+tXEGnQD5pDffeLeFM=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPxnmx14cvaFvvm+m7+cNzx7u9zRrttLtjabJhznPuTqd76 LiubjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEwkpobhf1ZFgfq53Gdvvxofkr5wQL y1vFCQQfLo2Y5fhturWvIndTL8FXzcNl3BJf57tv9knsRrdseP/pm0YdHG3/2BSQ2z+iam8gIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7385; h=from:subject; bh=4DeF5LD/bFSXRd/ZVsWu7irKhi9iGjHSF9nq2LGFf1E=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPxnmz/KYyPdm/s4H/mHVjabBnK5Hm8pqPCc73zDNGER5M/ rOPuKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwET6JzL8z1x6e0GLRs8pt6ei/ruVHk qKxorzqpiyufb5H/zzV8LhJiPDt2K9+NA/y68wXP7s51y631Nl2dX0V+xN60+eVItZLl/ECAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Documentation for KF_DEPRECATED documents the expectations and
-recommendations for deprecating existing kfuncs. Until now, such a flag
-never materialized. Unlike other kfunc flags, more context needs to be
-carried with such a flag, thus we introduce __bpf_kfunc_mark_deprecated
-as a replacement for the (non-existent) kfunc flag which takes a
-replacement kfunc to provide recommendations to the user.
+On kernels supporting BPF_LOG_LEVEL_WARN, have libbpf request verifier
+warnings for BPF object program loads by ORing in the warning bit.  This
+keeps the existing log_level=0 retry semantics for verbose logs, while
+still surfacing verifier warnings for successful loads.
 
-Apply it to all existing impl-suffixed kfuncs that are preserved for
-backwards compatibility for a few kernel releases, after we introduced
-versions with KF_IMPLICIT_ARGS.
+When libbpf owns the log buffer, use a small buffer for warning-only
+loads and flush captured warnings through the print callback. Detect
+support by probing for BPF_FEAT_VERIFIER_WARNINGS in enum bpf_features,
+and document the updated kernel_log_level behavior.
 
-Note that this is only supported by LLVM-compiled kernels as of writing,
-since GCC does not support for BTF declaration tags.
-
-Cc: Vineet Gupta <vineet.gupta@linux.dev>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- Documentation/bpf/kfuncs.rst                  | 42 ++++++++++---------
- include/linux/bpf_verifier.h                  |  1 +
- include/linux/btf.h                           |  5 +++
- include/linux/compiler_types.h                | 14 ++++++-
- kernel/bpf/helpers.c                          |  8 ++++
- kernel/bpf/verifier.c                         | 41 ++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  1 +
- 7 files changed, 90 insertions(+), 22 deletions(-)
+ tools/lib/bpf/features.c        | 56 +++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c          | 25 ++++++++++-----
+ tools/lib/bpf/libbpf.h          |  7 +++--
+ tools/lib/bpf/libbpf_internal.h |  2 ++
+ 4 files changed, 80 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 47d60011d8eb..5beef4432a8d 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -344,22 +344,23 @@ RCU protection but do not take RCU protected arguments.
- 
- .. _KF_deprecated_flag:
- 
--2.5.8 KF_DEPRECATED flag
--------------------------
--
--The KF_DEPRECATED flag is used for kfuncs which are scheduled to be
--changed or removed in a subsequent kernel release. A kfunc that is
--marked with KF_DEPRECATED should also have any relevant information
--captured in its kernel doc. Such information typically includes the
--kfunc's expected remaining lifespan, a recommendation for new
--functionality that can replace it if any is available, and possibly a
--rationale for why it is being removed. When verifier warning logging is
--requested, the verifier will emit a warning when a BPF program uses a
--deprecated kfunc.
--
--Note that while on some occasions, a KF_DEPRECATED kfunc may continue to be
--supported and have its KF_DEPRECATED flag removed, it is likely to be far more
--difficult to remove a KF_DEPRECATED flag after it's been added than it is to
-+2.5.8 Deprecated kfunc annotation
-+---------------------------------
-+
-+The ``__bpf_kfunc_mark_deprecated(replacement)`` annotation is used for
-+kfuncs which are scheduled to be changed or removed in a subsequent
-+kernel release. A kfunc annotated with
-+``__bpf_kfunc_mark_deprecated(replacement)`` should also have any
-+relevant information captured in its kernel doc. Such information
-+typically includes the kfunc's expected remaining lifespan, a
-+recommendation for new functionality that can replace it if any is
-+available, and possibly a rationale for why it is being removed. When
-+verifier warning logging is requested, the verifier will emit a warning
-+when a BPF program uses such a deprecated kfunc.
-+
-+Note that while on some occasions, a deprecated kfunc may continue to be
-+supported and have its deprecation annotation removed, it is likely to be far
-+more difficult to remove such an annotation after it's been added than it is to
- prevent it from being added in the first place. As described in
- :ref:`BPF_kfunc_lifecycle_expectations`, users that rely on specific kfuncs are
- encouraged to make their use-cases known as early as possible, and participate
-@@ -534,10 +535,11 @@ maintainer if it turns out that the kfunc is actually being used.
- 
- It's expected that the common case will be that kfuncs will go through a
- deprecation period rather than being changed or removed without warning. As
--described in :ref:`KF_deprecated_flag`, the kfunc framework provides the
--KF_DEPRECATED flag to kfunc developers to signal to users that a kfunc has been
--deprecated. Once a kfunc has been marked with KF_DEPRECATED, the following
--procedure is followed for removal:
-+described in :ref:`KF_deprecated_flag`, the kfunc framework provides
-+the ``__bpf_kfunc_mark_deprecated(replacement)`` annotation to signal to users
-+that a kfunc has been deprecated and to identify the replacement kfunc. Once a
-+kfunc has been marked deprecated, the following procedure is followed for
-+removal:
- 
- 1. Any relevant information for deprecated kfuncs is documented in the kfunc's
-    kernel docs. This documentation will typically include the kfunc's expected
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 515afcb83ec7..b70081fe24d8 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1461,6 +1461,7 @@ struct bpf_kfunc_desc {
- 	u32 func_id;
- 	s32 imm;
- 	u16 offset;
-+	bool warned_deprecated;
- 	unsigned long addr;
- };
- 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 48108471c5b1..c75ecef67096 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -88,6 +88,11 @@
-  */
- #define __bpf_kfunc __used __retain __noclone noinline
- 
-+#define BPF_KFUNC_DECL_TAG_DEPRECATED "bpf:kfunc:deprecated:"
-+
-+#define __bpf_kfunc_mark_deprecated(replacement) \
-+	BTF_DECL_TAG(BPF_KFUNC_DECL_TAG_DEPRECATED __stringify(replacement))
-+
- #define __bpf_kfunc_start_defs()					       \
- 	__diag_push();							       \
- 	__diag_ignore_all("-Wmissing-declarations",			       \
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index e8fd77593b68..ba5b20e30d4d 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -35,10 +35,20 @@
-  * see https://github.com/rust-lang/rust-bindgen/issues/2244.
-  */
- #if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
--	__has_attribute(btf_type_tag) && !defined(__BINDGEN__)
--# define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
-+	!defined(__BINDGEN__)
-+# if __has_attribute(btf_type_tag)
-+#  define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
-+# else
-+#  define BTF_TYPE_TAG(value) /* nothing */
-+# endif
-+# if __has_attribute(btf_decl_tag)
-+#  define BTF_DECL_TAG(value) __attribute__((btf_decl_tag(value)))
-+# else
-+#  define BTF_DECL_TAG(value) /* nothing */
-+# endif
- #else
- # define BTF_TYPE_TAG(value) /* nothing */
-+# define BTF_DECL_TAG(value) /* nothing */
- #endif
- 
- #include <linux/compiler-context-analysis.h>
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 2bb60200c266..69b4eae257a1 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2343,6 +2343,7 @@ __bpf_kfunc void *bpf_obj_new(u64 local_type_id__k, struct btf_struct_meta *meta
- 	return p;
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index 4f19a0d79b0c..78f07866db12 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -208,6 +208,59 @@ static int probe_kern_btf_type_tag(int token_fd)
+ 					     strs, sizeof(strs), token_fd));
  }
  
-+__bpf_kfunc_mark_deprecated(bpf_obj_new)
- __bpf_kfunc void *bpf_obj_new_impl(u64 local_type_id__k, void *meta__ign)
- {
- 	return bpf_obj_new(local_type_id__k, meta__ign);
-@@ -2367,6 +2368,7 @@ __bpf_kfunc void *bpf_percpu_obj_new(u64 local_type_id__k, struct btf_struct_met
- 	return bpf_mem_alloc(&bpf_global_percpu_ma, size);
- }
- 
-+__bpf_kfunc_mark_deprecated(bpf_percpu_obj_new)
- __bpf_kfunc void *bpf_percpu_obj_new_impl(u64 local_type_id__k, void *meta__ign)
- {
- 	return bpf_percpu_obj_new(local_type_id__k, meta__ign);
-@@ -2410,6 +2412,7 @@ __bpf_kfunc void bpf_obj_drop(void *p__alloc, struct btf_struct_meta *meta)
- 	__bpf_obj_drop_impl(p, meta ? meta->record : NULL, false);
- }
- 
-+__bpf_kfunc_mark_deprecated(bpf_obj_drop)
- __bpf_kfunc void bpf_obj_drop_impl(void *p__alloc, void *meta__ign)
- {
- 	return bpf_obj_drop(p__alloc, meta__ign);
-@@ -2428,6 +2431,7 @@ __bpf_kfunc void bpf_percpu_obj_drop(void *p__alloc, struct btf_struct_meta *met
- 	bpf_mem_free_rcu(&bpf_global_percpu_ma, p__alloc);
- }
- 
-+__bpf_kfunc_mark_deprecated(bpf_percpu_obj_drop)
- __bpf_kfunc void bpf_percpu_obj_drop_impl(void *p__alloc, void *meta__ign)
- {
- 	bpf_percpu_obj_drop(p__alloc, meta__ign);
-@@ -2460,6 +2464,7 @@ __bpf_kfunc void *bpf_refcount_acquire(void *p__refcounted_kptr, struct btf_stru
- 	return (void *)p__refcounted_kptr;
- }
- 
-+__bpf_kfunc_mark_deprecated(bpf_refcount_acquire)
- __bpf_kfunc void *bpf_refcount_acquire_impl(void *p__refcounted_kptr, void *meta__ign)
- {
- 	return bpf_refcount_acquire(p__refcounted_kptr, meta__ign);
-@@ -2514,6 +2519,7 @@ __bpf_kfunc int bpf_list_push_front(struct bpf_list_head *head,
- 	return __bpf_list_add(n, head, false, meta ? meta->record : NULL, off);
- }
- 
-+__bpf_kfunc_mark_deprecated(bpf_list_push_front)
- __bpf_kfunc int bpf_list_push_front_impl(struct bpf_list_head *head,
- 					 struct bpf_list_node *node,
- 					 void *meta__ign, u64 off)
-@@ -2543,6 +2549,7 @@ __bpf_kfunc int bpf_list_push_back(struct bpf_list_head *head,
- 	return __bpf_list_add(n, head, true, meta ? meta->record : NULL, off);
- }
- 
-+__bpf_kfunc_mark_deprecated(bpf_list_push_back)
- __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
- 					struct bpf_list_node *node,
- 					void *meta__ign, u64 off)
-@@ -2683,6 +2690,7 @@ __bpf_kfunc int bpf_rbtree_add(struct bpf_rb_root *root,
- 	return __bpf_rbtree_add(root, n, (void *)less, meta ? meta->record : NULL, off);
- }
- 
-+__bpf_kfunc_mark_deprecated(bpf_rbtree_add)
- __bpf_kfunc int bpf_rbtree_add_impl(struct bpf_rb_root *root, struct bpf_rb_node *node,
- 				    bool (less)(struct bpf_rb_node *a, const struct bpf_rb_node *b),
- 				    void *meta__ign, u64 off)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8de2a4e5f5de..1f3b44f47949 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12987,6 +12987,45 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- static int process_bpf_exit_full(struct bpf_verifier_env *env,
- 				 bool *do_print_state, bool exception_exit);
- 
-+static void warn_for_deprecated_kfuncs(struct bpf_verifier_env *env,
-+				       struct bpf_kfunc_call_arg_meta *meta,
-+				       int insn_idx, s16 offset)
++static bool btf_type_has_enum_value(const struct btf *btf, const struct btf_type *t,
++				    const char *value_name)
 +{
-+	const struct bpf_line_info *linfo;
-+	const char *replacement;
-+	const struct btf_type *t;
-+	struct bpf_kfunc_desc *desc;
-+	const char *file;
-+	int line_num;
++	int i, vlen = btf_vlen(t);
 +
-+	if (!env->prog->aux->btf)
-+		return;
++	if (btf_is_enum(t)) {
++		const struct btf_enum *e = btf_enum(t);
 +
-+	t = btf_type_by_id(meta->btf, meta->func_id);
-+	replacement = btf_find_decl_tag_value(meta->btf, t, -1, BPF_KFUNC_DECL_TAG_DEPRECATED);
-+	if (IS_ERR(replacement) || str_is_empty(replacement))
-+		return;
++		for (i = 0; i < vlen; i++, e++) {
++			if (strcmp(btf__name_by_offset(btf, e->name_off), value_name) == 0)
++				return true;
++		}
++	} else if (btf_is_enum64(t)) {
++		const struct btf_enum64 *e = btf_enum64(t);
 +
-+	desc = find_kfunc_desc(env->prog, meta->func_id, offset);
-+	if (!desc || desc->warned_deprecated)
-+		return;
-+
-+	linfo = bpf_find_linfo(env->prog, insn_idx);
-+	if (linfo) {
-+		bpf_get_linfo_file_line(env->prog->aux->btf, linfo, &file, NULL, &line_num);
-+		warn(env, "%s:%d (insn #%d) uses deprecated kfunc %s(), which will be removed.\n",
-+		     file, line_num, insn_idx, meta->func_name);
-+	} else {
-+		warn(env, "(insn #%d) uses deprecated kfunc %s(), which will be removed.\n",
-+		     insn_idx, meta->func_name);
++		for (i = 0; i < vlen; i++, e++) {
++			if (strcmp(btf__name_by_offset(btf, e->name_off), value_name) == 0)
++				return true;
++		}
 +	}
 +
-+	warn(env, "Switch to kfunc %s() instead.\n", replacement);
-+	warn(env, "For older kernels, choose the correct kfunc using bpf_ksym_exists().\n");
-+
-+	desc->warned_deprecated = true;
++	return false;
 +}
 +
- static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			    int *insn_idx_p)
- {
-@@ -13016,6 +13055,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 
- 	insn_aux->is_iter_next = bpf_is_iter_next_kfunc(&meta);
- 
-+	warn_for_deprecated_kfuncs(env, &meta, insn_idx, insn->off);
++static int probe_kern_verifier_warnings(int token_fd)
++{
++	const struct btf_type *t;
++	struct btf *btf;
++	bool found = false;
++	__s32 type_id;
 +
- 	if (!insn->off &&
- 	    (insn->imm == special_kfunc_list[KF_bpf_res_spin_lock] ||
- 	     insn->imm == special_kfunc_list[KF_bpf_res_spin_lock_irqsave])) {
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index d876314a4d67..5a57a92a8f8c 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1252,6 +1252,7 @@ __bpf_kfunc int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args, st
++	(void)token_fd;
++
++	btf = btf__load_vmlinux_btf();
++	if (libbpf_get_error(btf))
++		return 0;
++
++	type_id = btf__find_by_name_kind(btf, "bpf_features", BTF_KIND_ENUM);
++	if (type_id < 0)
++		type_id = btf__find_by_name_kind(btf, "bpf_features", BTF_KIND_ENUM64);
++	if (type_id < 0) {
++		btf__free(btf);
++		return 0;
++	}
++
++	t = btf__type_by_id(btf, type_id);
++	if (t)
++		found = btf_type_has_enum_value(btf, t, "BPF_FEAT_VERIFIER_WARNINGS");
++
++	btf__free(btf);
++	return found;
++}
++
+ static int probe_kern_array_mmap(int token_fd)
+ {
+ 	LIBBPF_OPTS(bpf_map_create_opts, opts,
+@@ -669,6 +722,9 @@ static struct kern_feature_desc {
+ 	[FEAT_BTF_TYPE_TAG] = {
+ 		"BTF_KIND_TYPE_TAG support", probe_kern_btf_type_tag,
+ 	},
++	[FEAT_VERIFIER_WARNINGS] = {
++		"BPF_LOG_LEVEL_WARN verifier warnings", probe_kern_verifier_warnings,
++	},
+ 	[FEAT_MEMCG_ACCOUNT] = {
+ 		"memcg-based memory accounting", probe_memcg_account,
+ 	},
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 3a80a018fc7d..c7b00c097698 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7841,12 +7841,17 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ {
+ 	LIBBPF_OPTS(bpf_prog_load_opts, load_attr);
+ 	const char *prog_name = NULL;
++	const size_t warn_log_buf_size = 4096;
+ 	size_t log_buf_size = 0;
+ 	char *log_buf = NULL, *tmp;
+ 	bool own_log_buf = true;
+ 	__u32 log_level = prog->log_level;
++	bool supports_verifier_warnings = kernel_supports(obj, FEAT_VERIFIER_WARNINGS);
+ 	int ret, err;
  
- __bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
-+__bpf_kfunc_mark_deprecated(bpf_kfunc_implicit_arg_legacy)
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
++	if (supports_verifier_warnings)
++		log_level |= 16;
++
+ 	/* Be more helpful by rejecting programs that can't be validated early
+ 	 * with more meaningful and actionable error message.
+ 	 */
+@@ -7921,10 +7926,9 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 	}
  
- /* hook targets */
+ retry_load:
+-	/* if log_level is zero, we don't request logs initially even if
+-	 * custom log_buf is specified; if the program load fails, then we'll
+-	 * bump log_level to 1 and use either custom log_buf or we'll allocate
+-	 * our own and retry the load to get details on what failed
++	/* If verifier warning logging is supported, we can request warnings
++	 * even without verbose logging. If the program load fails, retry with
++	 * log_level=1 to get details on what failed.
+ 	 */
+ 	if (log_level) {
+ 		if (prog->log_buf) {
+@@ -7936,7 +7940,9 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 			log_buf_size = obj->log_size;
+ 			own_log_buf = false;
+ 		} else {
+-			log_buf_size = max((size_t)BPF_LOG_BUF_SIZE, log_buf_size * 2);
++			log_buf_size = max(log_level == 16 ? warn_log_buf_size :
++					   (size_t)BPF_LOG_BUF_SIZE,
++					   log_buf_size * 2);
+ 			tmp = realloc(log_buf, log_buf_size);
+ 			if (!tmp) {
+ 				ret = -ENOMEM;
+@@ -7954,7 +7960,10 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 
+ 	ret = bpf_prog_load(prog->type, prog_name, license, insns, insns_cnt, &load_attr);
+ 	if (ret >= 0) {
+-		if (log_level && own_log_buf) {
++		if (log_level == 16 && load_attr.log_true_size && own_log_buf) {
++			pr_warn("prog '%s': -- BEGIN PROG LOAD WARNINGS --\n%s-- END PROG LOAD WARNINGS --\n",
++				prog->name, log_buf);
++		} else if (log_level && own_log_buf) {
+ 			pr_debug("prog '%s': -- BEGIN PROG LOAD LOG --\n%s-- END PROG LOAD LOG --\n",
+ 				 prog->name, log_buf);
+ 		}
+@@ -7981,8 +7990,8 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 		goto out;
+ 	}
+ 
+-	if (log_level == 0) {
+-		log_level = 1;
++	if (log_level == (supports_verifier_warnings ? 16 : 0)) {
++		log_level = 1 | (supports_verifier_warnings ? 16 : 0);
+ 		goto retry_load;
+ 	}
+ 	/* On ENOSPC, increase log buffer size and retry, unless custom
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index bba4e8464396..598c6daa822b 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -194,8 +194,11 @@ struct bpf_object_open_opts {
+ 	/*
+ 	 * Log level can be set independently from log buffer. Log_level=0
+ 	 * means that libbpf will attempt loading BTF or program without any
+-	 * logging requested, but will retry with either its own or custom log
+-	 * buffer, if provided, and log_level=1 on any error.
++	 * verbose logging requested, but will retry with either its own or
++	 * custom log buffer, if provided, and log_level=1 on any error. On
++	 * kernels supporting verifier warning logging, libbpf will also
++	 * request warning messages for successful program loads by default
++	 * when log_level=0.
+ 	 * And vice versa, setting log_level>0 will request BTF or prog
+ 	 * loading with verbose log from the first attempt (and as such also
+ 	 * for successfully loaded BTF or program), and the actual log buffer
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 3781c45b46d3..b2460982d6ca 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -378,6 +378,8 @@ enum kern_feature_id {
+ 	FEAT_BTF_DECL_TAG,
+ 	/* BTF_KIND_TYPE_TAG support */
+ 	FEAT_BTF_TYPE_TAG,
++	/* Kernel supports BPF_LOG_LEVEL_WARN for verifier warnings */
++	FEAT_VERIFIER_WARNINGS,
+ 	/* memcg-based accounting for BPF maps and progs */
+ 	FEAT_MEMCG_ACCOUNT,
+ 	/* BPF cookie (bpf_get_attach_cookie() BPF helper) support */
 -- 
 2.52.0
 
