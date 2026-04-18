@@ -1,170 +1,152 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D2B1514F8
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 17:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EA12BE7AB
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 17:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776532324; cv=none; b=QRgjXNDm9DCqPV6WFmwMBbO3+Vf3XfoX39FAN923YHUo0QoRKnQkLtHpDW2FW6puHLFPQUk+RghyCcRcEPLRYFLViExTgAxSHmf67ZjqIMvNx3qxXm2BL8lfeA358JpY6hrMt/HmT387l6gQJs96lR6BT4JyKUzS+omU4c/YXRk=
+	t=1776532625; cv=none; b=NLzouyJmxHFCOcO6NXy2PqioezYSq7ZqCU4MxyN9dcqIRu/gDpIVECUrg5pc7ktfohi7fd3UrF081uJArR43m3GQX+HJ2gS6E7JJxiiY3h14re4kubXxNQxyMoXDGkGHB8JLUmUzM9oHgnhxAUrtJCm7EkL8Y+ljEARYRYJeaok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776532324; c=relaxed/simple;
-	bh=uWb+F+wKP3JFrEI+z4YWmziqc5seW0t39bQDleZ8vIg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jxgoYNGQcD7GPbG7/Kr90BYAVLJEcWwqkVaTXc+sBG1cIiL9vN4fG4ZSK2z9C91E0XzTB6so5PNOZdJC7p1EOzh5aDOWW3IggAe0Q9FBjkFjCtqF6z7bIQ/XDCel6CvK6LN5CMLJYn9o8oDJPDRTR9LYzHqCH9V+dhqUaDuwhDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hdEUMSj2; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776532625; c=relaxed/simple;
+	bh=p9MFfZgnK951TYx7pyfQJD0PNZxLWlqhIB0nEfB6Vdk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A9/R2nie4Nqm4yxnw/gTFYUGBxPooYcOWmLBbsSCL7O07gYLmfPqa28NC7iuOrAPw+x/vWbYoh28u58URz0lIYTUUILtIXSltvvvCforMGOQRid7Mb/pkutvpmcQi/b091urHJoayeU1VADWR/KOx4MQR9CkXnIh8Ciy0vwMsM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TZEcsG7j; arc=none smtp.client-ip=209.85.210.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hdEUMSj2"
-Message-ID: <5950f60d-2820-4032-8063-bd759221783a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776532321;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a9W5rEYvm2wcrObVxMRQ8z95MDXBnTntnAhDpOnNnhU=;
-	b=hdEUMSj2fJ0Runtra3wExo+sLzbdopU0j9hS+DKrRYDGZF5SB7wVYKKhPJfQtijP7V3H+L
-	w78BxkvzFGFZnDnYMm06j6sVcVkbF4djyqwammL+O1n2TU81Dhe2eaPIAU30b+AdYYwjJA
-	HdwcF8Pdv8CMpSiCvXW4BYj/fo+9Rv0=
-Date: Sat, 18 Apr 2026 10:11:48 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TZEcsG7j"
+Received: by mail-ot1-f65.google.com with SMTP id 46e09a7af769-7d9e22176a7so958735a34.1
+        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 10:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776532622; x=1777137422; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9iE29ggsoKuLZxlrbhimxoIwFR9qI0zjmXRCa6tZJ2Y=;
+        b=TZEcsG7jZ6HRcYbQ4f8CCJKLQE+YfqOeCOxUv6ozX9NiAp9fLv9AAvZ6WnvmEaf538
+         4BTehS+vImUGVXQnpuEi1g2ynsgRke5XYRD8eFcnyw1OLOrFkNwyN8ENzK1tIxemW++m
+         IVxqrmFxc7ZCi9wGZrfwuvr2ZaIVSA7fS7xt91em70nRzgQtW2d3Xc91BLEIAaD0bPHH
+         d8Bd60AIs15q3eWaZpbp3lSytk0GOF712X6FO+ccmW6Rp7DMDxRIR7ClG7jpFb2fIDsM
+         +mTmat4tGF7aICq9opKpMj0cAG5eVlItejslJmlCk7+M4hclS/4MnQGeN+iutYhqap5q
+         zZOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776532622; x=1777137422;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9iE29ggsoKuLZxlrbhimxoIwFR9qI0zjmXRCa6tZJ2Y=;
+        b=WCBupyRpGKzeNTsyRGNK8mKe7da/OmatxzrSqhhRF7FsPJBwK8jf5qBELZsG3H9P1z
+         jXX97bvt0220af68o6uusw0qckGxeCgiu+JdBQue+pM0BYDP+LQ0dJUJU7fcXYE/tYyY
+         jkdf8z7GQqyaHlanUSFaYRVTYKgpaN6IGXFLpGcKkWuzPkwx7T4pmm1idfxkRukoFdtZ
+         mxhtrqdhpZe8Ukzu+SMKWOdNCBl2QRP0U7+gKoMqSnXvA+nEZbPMszotn+QMWHrQW0BV
+         +A6WCyNtPn+n5o9WXuiCnX901QRUejyo2EMDbtq/3RnjvjHieFEDZwIyxvwamZDvjB8X
+         k7PA==
+X-Gm-Message-State: AOJu0Yx8iqFWUk5/DxB3XBNrqy8uuGhLpJjxAJIhv0CMoS1tBj6iEn1t
+	6GZhenSxcmuJmPE+TcdGbOikxU/ya5g9nw+X5En0VHU/NBF9b0FNB2ekRIGaLm5al2I=
+X-Gm-Gg: AeBDieuuiURCPATPu8bMlK04rdtmO9PqryYwxevln2baeTuLKmsnii65gJyEufMrLwN
+	pcL0qHTOVDgdW/B+97zOBeX/GlrRUBD5XhXWliKnl5k4owgaR3NlDJXXDv8Bw3ypw18jGNEjZ01
+	DGcKXBOPQdTIZZuxcWulSwB+7BCZyKW2XKr0KABOGAXt3FvTnjzeRqeOI3kd+i7ebQ441d7EGiq
+	zkehnLLv8+blaDNN8UH57dbwrZmPs7aPwSoy3fyciwUtKuWKmMxJQWv1+jqoMwawWZKRhepR7Zv
+	43GLf6Mgjgo17lJORFBzITiv2vNpqpMoyjp9Og+MKT3Etj7follQIA6/vJrsbymZAqMKLVCgnJw
+	r11eZVXMEKclMYhCmkQcb+b4fwpaKbtkZIw1gL50Etx82F8gNeJtT+yigt6MiPhtxvYYVotE0nB
+	Ks4ZwM0l2wJLTLPQcrOgcAxfl5W7kUXmvPn4Wm7Ggvr78fU6ELkcdjlbmMScKGNBQkyyiftl3nZ
+	+9UDFeCQSVGP1ofEVhfA3bWBvqaL21An117mFXL4zup
+X-Received: by 2002:a05:6830:6acc:b0:7d7:4a7d:fd40 with SMTP id 46e09a7af769-7dc9525302amr4587197a34.22.1776532622434;
+        Sat, 18 Apr 2026 10:17:02 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:74::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc9751915asm4065008a34.8.2026.04.18.10.17.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Apr 2026 10:17:01 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/4] Add support to emit verifier warnings
+Date: Sat, 18 Apr 2026 19:16:55 +0200
+Message-ID: <20260418171701.610025-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 08/16] bpf: Support stack arguments for bpf
- functions
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
- eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260417034739.2629927-1-yonghong.song@linux.dev>
- <c0706191c8a93441ee218ba6e6f277e4172f2dd8e4e44c6ff722640ed3a45bbe@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <c0706191c8a93441ee218ba6e6f277e4172f2dd8e4e44c6ff722640ed3a45bbe@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2979; h=from:subject; bh=p9MFfZgnK951TYx7pyfQJD0PNZxLWlqhIB0nEfB6Vdk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIfPxnqz/G2UO11WmHVseelYntmr6HTurhwnCpRcVn/rYz/23 fKZFRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACYiM4/hF7NAmc7HB7nhAo4xXRnLV1 hbsLrP+XDX3l1qx3KV0Durwhj+SpRYTps0ZaKko16WGN+s5FrNjRKGnEtvZF98dIGnky+QCQA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
+
+Currently, there are only two ways of communicating information to the user
+when a program is verified, success or failure with a verbose verifier log.
+Some information is meant to be more discretionary, e.g. warning about use of
+kfuncs that are deprecated, and may be removed in future kernel releases.
+
+An example is shown below.
+
+$ ./test_progs -t kfunc_implicit_args/test_kfunc_implicit_arg_legacy_impl -v
+...
+2: (b7) r3 = 0                        ; R3=0
+3: (85) call bpf_kfunc_implicit_arg_legacy_impl#114683
+kfunc_implicit_args.c:40 (insn #3) uses deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
+Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
+For older kernels, choose the correct kfunc using bpf_ksym_exists().
+4: R0=scalar()
+4: (95) exit
+...
+
+With verbose logging, the deprecation warnings are printed inline in the
+verifier log. When no log level is chosen, the warning is printed in a
+block, as follows:
+
+libbpf: prog 'test_kfunc_implicit_arg_legacy_impl': -- BEGIN PROG LOAD WARNINGS --
+kfunc_implicit_args.c:40 (insn #3) uses deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
+Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
+For older kernels, choose the correct kfunc using bpf_ksym_exists().
+-- END PROG LOAD WARNINGS --
+
+Changelog:
+----------
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260408021359.3786905-1-memxor@gmail.com
+
+ * Use log_level BPF_LOG_LEVEL_WARN bit to request warning logs.
+ * Add a selftest.
+ * Drop KF_DEPRECATED.
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260329212534.3270005-1-memxor@gmail.com
+
+ * Use BTF tags and kfunc flags for deprecation warnings.
+ * Reuse verifier log to deliver log messages. (Alexei)
+ * Make the mechanism declarative without kfunc lists in verifier.c.
+
+Kumar Kartikeya Dwivedi (4):
+  bpf: Add support for verifier warning messages
+  bpf: Introduce __bpf_kfunc_mark_deprecated annotation
+  libbpf: Request verifier warnings for object loads
+  selftests/bpf: Test verifier warning logging
+
+ Documentation/bpf/kfuncs.rst                  | 40 ++++----
+ include/linux/bpf_verifier.h                  | 12 ++-
+ include/linux/btf.h                           |  5 +
+ include/linux/compiler_types.h                | 14 ++-
+ kernel/bpf/helpers.c                          |  8 ++
+ kernel/bpf/log.c                              |  2 +-
+ kernel/bpf/verifier.c                         | 62 ++++++++++++-
+ tools/lib/bpf/features.c                      | 56 +++++++++++
+ tools/lib/bpf/libbpf.c                        | 25 +++--
+ tools/lib/bpf/libbpf.h                        |  7 +-
+ tools/lib/bpf/libbpf_internal.h               |  2 +
+ .../bpf/prog_tests/kfunc_implicit_args.c      | 92 +++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  1 +
+ 13 files changed, 291 insertions(+), 35 deletions(-)
 
 
-
-On 4/16/26 9:43 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 7bbd62c51bb5c..e0341fa0b0f7c 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
-> [ ... ]
->
->> @@ -508,6 +513,17 @@ struct bpf_func_state {
->>   	u32 callback_depth;
->>   	u32 async_entry_cnt;
->>
->> +	/* Stack argument tracking for current function. */
->> +	struct bpf_reg_state *stack_arg_regs;	/* Stack arg register states */
->> +	u32 stack_arg_depth;			/* Depth of stack_arg_regs array */
->> +	u32 incoming_stack_arg_depth;		/* Incoming stack arg count (callee) */
->> +	u64 out_stack_arg_mask;			/* Outgoing stack arg mask (caller) */
->> +};
->> +
->> +#define bpf_get_spilled_stack_arg(slot, frame, mask)			\
->> +	(((slot < frame->stack_arg_depth / BPF_REG_SIZE) &&		\
->> +	  ((1 << frame->stack_arg_regs[slot].type) & (mask)))	\
->> +	 ? &frame->stack_arg_regs[slot] : NULL)
-> Does this macro work correctly? The existing bpf_get_spilled_reg macro
-> filters on frame->stack[slot].slot_type[], which is drawn from the
-> STACK_* enum (STACK_SPILL, STACK_ITER, etc.) and callers pass masks
-> like (1 << STACK_SPILL) | (1 << STACK_ITER).
->
-> This new macro filters on bpf_reg_state.type which is from a completely
-> different enum bpf_reg_type (SCALAR_VALUE, PTR_TO_BTF_ID, etc.) with
-> type modifier bits (PTR_MAYBE_NULL = BIT(8), PTR_TRUSTED = BIT(20),
-> etc.).
->
-> For example, check_kfunc_call() in the rcu_unlock path uses:
->
->      u32 clear_mask = (1 << STACK_SPILL) | (1 << STACK_ITER);
->      ...
->      bpf_for_each_reg_in_vstate_mask(env->cur_state, state, reg,
->                                      clear_mask, ...);
->
-> A stack-arg slot holding a MEM_RCU-tagged register would have
-> reg->type including MEM_RCU (BIT(13)). Then (1 << 13) = 0x2000, and
-> 0x2000 & clear_mask (0x22) = 0, so the slot is skipped and MEM_RCU is
-> not cleared on rcu_unlock.
->
-> Additionally, when n >= 32 (for modifier bits like PTR_TRUSTED at
-> BIT(20)), the shift (1 << n) invokes undefined behavior in C.
->
-> Should this use a different approach to filter stack arg slots, perhaps
-> based on initialization status (type != NOT_INIT)?
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 32cc59810e14d..30f2d1f06a988 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> @@ -1340,6 +1340,20 @@ static int copy_stack_state(struct bpf_func_state *dst,
->>   			goto out_free_stack;
->>   	}
->>
->> +	n = src->stack_arg_depth / BPF_REG_SIZE;
->> +	if (n) {
->> +		dst->stack_arg_regs = copy_array(dst->stack_arg_regs, src->stack_arg_regs, n,
->> +						 sizeof(struct bpf_reg_state),
->> +						 GFP_KERNEL_ACCOUNT);
->> +		if (!dst->stack_arg_regs)
->> +			return -ENOMEM;
->> +
->> +		dst->stack_arg_depth = src->stack_arg_depth;
->> +		dst->incoming_stack_arg_depth = src->incoming_stack_arg_depth;
->> +		dst->out_stack_arg_mask = src->out_stack_arg_mask;
->> +	}
->> +
->> +	return 0;
-> What happens when src->stack_arg_depth == 0 but dst has non-zero
-> values from prior work?
->
-> The stack_arg_depth, incoming_stack_arg_depth, out_stack_arg_mask, and
-> stack_arg_regs fields come after the 'stack' field in struct
-> bpf_func_state, so the preceding memcpy(dst, src, offsetof(..., stack))
-> in copy_func_state does not overwrite them.
->
-> When n == 0, the assignments to dst->stack_arg_depth,
-> dst->incoming_stack_arg_depth, and dst->out_stack_arg_mask are skipped,
-> leaving stale values in dst.
->
-> This can be triggered via:
->
-> 1. Frame starts with stack_arg_depth = 0, out_stack_arg_mask = 0
-> 2. check_cond_jmp_op calls push_stack which saves this state
-> 3. Verifier continues on one branch; BPF_ST/BPF_STX writes to r11-8,
->     r11-16 cause check_stack_arg_write to call grow_stack_arg_slots,
->     setting stack_arg_depth = 16 and out_stack_arg_mask = BIT(0)|BIT(1)
-> 4. Branch ends; pop_stack calls bpf_copy_verifier_state which calls
->     copy_stack_state with src->stack_arg_depth == 0
-> 5. Because n == 0, the assignment block is skipped, and dst retains
->     stack_arg_depth = 16 and out_stack_arg_mask = BIT(0)|BIT(1)
-> 6. The other branch never writes r11-8 or r11-16, but when it calls a
->     subprog, set_callee_state checks:
->     if ((caller->out_stack_arg_mask & req_mask) != req_mask)
->     The stale mask makes this check pass incorrectly
->
-> Would the verifier accept a call with uninitialized stack args on that
-> second branch? Should these fields be assigned unconditionally, similar
-> to how allocated_stack is handled earlier in this function?
-
-The same issue as in the previous comment. Will fix.
-
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24546989054
+base-commit: eb0d6d97c27c29cd7392c8fd74f46edf7dff7ec2
+-- 
+2.52.0
 
