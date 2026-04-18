@@ -1,176 +1,200 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F4E1F4CB3
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 11:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776510448; cv=pass; b=Mwexa/e79r3KtJDqtoF44XwTKnISJYgc8UKtm4YDB23MvGCGP3LS97tf7l0XXpAm4Am06tgXgiub5X1NutUv/DcWo3tSCHAtRHjLdAP8Y+c8hPt0RDPXfZ9k+ZswaZBHTb/Jx77VjQ4jNAMGHumQ94h+59Wa+5+Z2nJ0pTx/joQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776510448; c=relaxed/simple;
-	bh=2KMY10Aw1i9kS7+kOOY1zUbpUZXi9Dr79ju1rqbd09o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sq4gi/BflyPxZz8OeRezQjXmLogXucOc70W48TQj4yNep3GsJb2D4cH+Evroq6TYP9oyQrvtVd2Q+BIe+E+gFkgB+fz92E4QyZGxrPGxxgz4asmSJrT+MVc+oulcEznGpDeLfdZSr9rfyVj2R/rCSI09MOrXgtqN5nqV7ASEudo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n1/fj1C6; arc=pass smtp.client-ip=209.85.221.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A29175A96
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 13:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776518192; cv=none; b=AkZi1GNYQwmK/k27mKx8UTyeQYOFd1qu1MgAWsSszc8Jh8ZVpZMg0oRgyptuGfSFRF8fvTu5V6ryljIIW8oCvrw8rLeQ9XDV44dlH0Zg2cprWTQkBgkfj4zjTg1l1UkIFGJO6B+C/4VWS0Y+ZTOnm2eRAg5knmbDFPdphEPT2tM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776518192; c=relaxed/simple;
+	bh=phw9DBoCLbtlGCxj37mT08U/PsgxThvZMkDXZKhak8Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TndC3EAeATwSMJ4yBvfANUo0vXE9AFyxFXfRs27qwfM1Zyv9ELfXqxqQ+MgyUIAJa90VhupzEhVwZtVikqyfVD5Kn+orPZABwXWH0ftiHyxBlmaSvSFxpQxVMFZ1rk6+PO3ISPyX5QZdlbDwxR+HYU0uQrjZBHZ5//ZdsRFWoDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoYM+oHz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n1/fj1C6"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-43eb012ac4fso878200f8f.0
-        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 04:07:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776510446; cv=none;
-        d=google.com; s=arc-20240605;
-        b=doZX9w3cHHcK/+xpCwterX9A68wJ1WZ5oD8JFBRTRFuVSK3gxMBYpKDYMFe0sM9sAR
-         DK1wDlCK0L2UfTB9NpX0oiRxNxFOYiP+wTV7u70Qq46ZBH6YKrKWil/CV333s5od7PAk
-         WPZ9df+fU1QSLyf20xr14Kqlrh4mkGVcqRUn1CpiGs/q0ITp3I01S7NCLkRwQA+dlhLc
-         Ny2jRLBmw/BMPPX7XiteGPYP5CU9XxQfATbk4l+F0fjH4/0t6lfGe5JvEUaFncyygBan
-         HQyEcMyBovfVwMzM0gOkeINglbqQWU5rzVUpj1fPNwCYNF0vYpI/Dp7ogacSxJpiteID
-         oBbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=XcpucQ8CNaBk0jS985T+c/26ZYeKxe0kmY/R7U9Ehxk=;
-        fh=aNrAQtSaA5ARnjt9jUNjEHO5rsiFrt0ivL8kgZMZ9Lw=;
-        b=CT+tDRA5XKMIwWjjI1awd3ZMK2+zb8q6tZ+25kue5kxNZkQJYPRlZYzV6SAJJ+WRUH
-         9kztVunbDAqySgLgevwqIotmL3h4EdcxraO7ZIzcCtLyj418tEgbOJ/53FCw7Xqi4tMZ
-         R46vPM7GdwPy27A34IpYyfg7XxYXraYMwhYXLhY2fMB7B4SD2A7QzQ7CubGYdYdp261/
-         NNzlsaJRotkkXtEHLsSlVZ2EzbFnFuXlZIlE1Lb5uohyWHGCWpoOKyqpKlMct8d0+jZm
-         POUtoy0qJGgyxqBGkKpJLcpIFX06cNbsmFVP6uF2XYwu9TDHKCJLt2/WssVuu7GX3HQT
-         Olug==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776510446; x=1777115246; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XcpucQ8CNaBk0jS985T+c/26ZYeKxe0kmY/R7U9Ehxk=;
-        b=n1/fj1C6SDEFWKhnrRQ53ExuBiF5X1udtWy2MKlUbVq1f0Nl1Qd8bOWIlQ8K92dMr4
-         2ByhzF/76uqPScRpsd/4NCO8NK24pD0kjnPCzRoQMg2UDqUUbwcfCYHXNqrpXOuOenfP
-         wlfPki6qsQpr89v3fQBH0IjInDpnC93vPxiCD0mwNSXnnkbXQG5ekz+4cwaLsdv2rzps
-         8NwOtjpeeeBhsMyShc+j0zHn6l57+AYUBi1b0ZQ9Xfy4ump9a/gqdejj8owcBwjYanZG
-         58gIxTOe3fQZE0f5jeINwCXHGIbbosIhSwWcFzT3agIzluxEig/1sfo2urqwGMoK3yTv
-         iLPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776510446; x=1777115246;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XcpucQ8CNaBk0jS985T+c/26ZYeKxe0kmY/R7U9Ehxk=;
-        b=TdGeBlrbntxyYn9w60yoQ7kr7pgViGNoFF7pWKw35aDaoXoAtSuEMh0Wv3SL4kssWo
-         kD8JfizeUkeOwe3cynFEK0EbnDJJoJg4glvPkbvQaJ0HiyXxV6kvYkSb1Ct85tSzMq3U
-         B8y1WL3YiDU5vGoSlZ2jxRm83J/1FuFxEKcygAeAhdRNz1h6gl8un7epR7lmbvwen6Ao
-         HBdf5jdrXT6CtIcRJh49kfBKu3MDq+A4R1q5drHNVPCJ2/diiEmHLV6H8FW+uOKNbIfj
-         71cwyPvPmf0ysUJO+r3Mc3/fc5FMJ1XCtGZOq/28zQX5zBcc0o1TWirahbY/2pup2rh9
-         hRhw==
-X-Gm-Message-State: AOJu0Yy6qsdmgd6vNTCBI/jusKjGIAZLU0PuNExlYzzIlOfgC58loRX1
-	aJHUfO0gBXjs4Iv8QTP2SukdfE+uuW6Rkl9c9u6EnDwesB8myX94WW3xQZQRc7yMJoYY4Zm65+S
-	7YWaj/NoBnUrhiykPanODDYu6dOeOaj35tOobi8heAg==
-X-Gm-Gg: AeBDiesub17+3UMzfVOPJ3O2s8QEyKhhZ1Vh4qrX9BPsrmipRJm8t3MDR9M+Q8XjG2U
-	4PMVnIIGxl4wx2gX4r/ZdY6j8ycXcWAJYx/NJu+OJXOuSx8q+PVEhVnIuKC21CEjIjyZZGNNkr3
-	YipN3KuZb+kO976gcrzSyd/ljB5VUi+osovM5uacj+ffS4BYqIELEu1HAHRE12Typr8uGpGOQFu
-	plqVMdysOGEGmvDPqYw8sV45T5XKmQEEfn+w0uQ3/wYzt3rlj//Dj9x1F6/oQ7w7u1lpwqe/fEr
-	vno8wGB6hmqKOT5g8hwBY0kXWmDUL5xVwddUFuLIUSFJ5U51p79ERnXjLwrJuWxhQ9Z5sUmeBSZ
-	oOLwEUjKbCgGNGhUHjQ8zgx23M5p/PAVqLcTLWg==
-X-Received: by 2002:a05:6000:2013:b0:43d:c95c:4259 with SMTP id
- ffacd0b85a97d-43fe3e07216mr9681115f8f.30.1776510445550; Sat, 18 Apr 2026
- 04:07:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoYM+oHz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2ACC19424;
+	Sat, 18 Apr 2026 13:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776518191;
+	bh=phw9DBoCLbtlGCxj37mT08U/PsgxThvZMkDXZKhak8Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=MoYM+oHz5Oy3moQgnV499kmW8IJIYfoeNQ7k05KEaQZx11uIGhejjVX1RROptpzWH
+	 gRAJ8oCJHpF0TxphdRXFDpXj55A+HEWQ1Cwnp9nyDfvUEm7uF654z6/DGQx/kGkZF2
+	 +wT3OMhEtjWMBlOPKKvIO3dvIO2QR1E33FyJxgihB26atnEju3XAtA9JAmPYsnGaW4
+	 AGfkY9Zf9sm3dU7fg8miR/YWeX4B6H2NCK9QtkSM/Bb78IgaQAr5IVism+zMyqDFls
+	 egKegCmOIFMecKaB6vaG8HpkLZ3Ovb/vAjgOGuuTjZVOXRVbcghX7UnalTP2v2psMF
+	 m7ho7d6rDmBag==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v13 0/6] bpf: add cpu time counter kfuncs
+Date: Sat, 18 Apr 2026 06:15:58 -0700
+Message-ID: <20260418131614.1501848-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260408021359.3786905-1-memxor@gmail.com> <1a7aea41-cc64-4277-a08d-1cee1ad6024b@gmail.com>
- <66a977bb-cfe4-4bac-990e-2b91512c354a@gmail.com>
-In-Reply-To: <66a977bb-cfe4-4bac-990e-2b91512c354a@gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Sat, 18 Apr 2026 12:06:48 +0100
-X-Gm-Features: AQROBzBpKEQQUWWaGRMhPkaMSV3yIiGxCBLqSUrLnPwWiI3BY-AY7deXZtOKOKg
-Message-ID: <CAP01T76wkwaXSmLpAS3GtK4VKELzgkeYxozcxFav+C1F7LTYTg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/6] Add support to emit verifier warnings
-To: Leon Hwang <hffilwlqm@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, 8 Apr 2026 at 16:30, Leon Hwang <hffilwlqm@gmail.com> wrote:
->
-> On 2026/4/8 22:55, Leon Hwang wrote:
-> >
-> >
-> > On 2026/4/8 10:13, Kumar Kartikeya Dwivedi wrote:
-> >> Currently, there are only two ways of communicating information to the user
-> >> when a program is verified, success or failure with a verbose verifier log.
-> >> Some information is meant to be more discretionary, e.g. warning about use of
-> >> kfuncs that are deprecated, and may be removed in future kernel releases.
-> >>
-> >> An example is shown below.
-> >>
-> >> $ ./test_progs -t kfunc_implicit_args/test_kfunc_implicit_arg_legacy_impl -v
-> >> ...
-> >> 2: (b7) r3 = 0                        ; R3=0
-> >> 3: (85) call bpf_kfunc_implicit_arg_legacy_impl#114683
-> >> kfunc_implicit_args.c:40 (insn #3) uses deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
-> >> Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
-> >> For older kernels, choose the correct kfunc using bpf_ksym_exists().
-> >> 4: R0=scalar()
-> >> 4: (95) exit
-> >> ...
-> >>
-> >> With verbose logging, the deprecation warnings are printed inline in the
-> >> verifier log. When no log level is chosen, the warning is printed in a
-> >> block, as follows:
-> >>
-> >> libbpf: prog 'test_kfunc_implicit_arg_legacy_impl': -- BEGIN PROG LOAD WARNINGS --
-> >> kfunc_implicit_args.c:40 (insn #3) uses deprecated kfunc bpf_kfunc_implicit_arg_legacy_impl(), which will be removed.
-> >> Switch to kfunc bpf_kfunc_implicit_arg_legacy() instead.
-> >> For older kernels, choose the correct kfunc using bpf_ksym_exists().
-> >> -- END PROG LOAD WARNINGS --
-> >>
-> >> The set was tested with and without kernel changes applied, so that we
-> >> could conclude that libbpf feature detection works correctly and
-> >> backwards compatibility is not violated on older kernels. Still, it
-> >> would be helpful if other reviewers could recheck all assumptions and
-> >> make sure I didn't miss any corner case.
-> >>
-> >> One case I need more opinions on: log_buf.c passes log_buf with
-> >> log_level=0 and expects it to be empty, with newer libbpf that won't be
-> >> true on older kernels anymore. I don't think this is something that
-> >> needs to be addressed, but explicitly noting it here since I saw that
-> >> test fail when testing new libbpf on older kernels. The kernel will now
-> >> populate such log_buf will "processed N insns ..." log since on failure
-> >> libbpf will retry with log_level=1, so unless applications are relying
-> >> on log_buf to be empty for correctness it should be ok.
-> >>
-> >
-> > Since I'm going to add common attributes [1] support for BPF syscall,
-> > how about reporting the warnings via the common attributes? Even though,
-> > the original intent of common attributes support for BPF_LOAD was
-> BPF_LOAD -> BPF_PROG_LOAD
->
-> Also, common attributes support for BPF_BTF_LOAD was to report logs,
-> similar to btf_log_* in union bpf_attr.
->
-> If to report the warnings via common attributes for BPF_PROG_LOAD, we
-> should rethink the purpose of common attributes support for BPF_BTF_LOAD.
->
-> > report the verifier log too.
-> >
-> > [1]
-> https://lore.kernel.org/bpf/20260216150445.68278-1-leon.hwang@linux.dev/
+This patchset adds 2 kfuncs to provide a way to precisely measure the
+time spent running some code. The first patch provides a way to get cpu
+cycles counter which is used to feed CLOCK_MONOTONIC_RAW. On x86
+architecture it is effectively rdtsc_ordered() function. On arm64, it is
+JITed to a read of CNTVCT_EL0 with ordering or CNTVCTSS_EL0, depending
+on cpu support.
 
-It can be used when present, I will switch to a warning bit in the log
-level in the next version. But I don't think we need to rethink
-anything. If we want warnings for other objects they can use the log
-level's warning bit to supply those to user space as well. When you
-add support you already have to figure out how to merge those in
-bpf_attr and common attributes.
+The second patch adds a kfunc to convert cpu cycles to nanoseconds using
+shift/mult constants discovered by kernel. The main use-case for this
+kfunc is to convert deltas of timestamp counter values into nanoseconds.
+It is not supposed to get CLOCK_MONOTONIC_RAW values as offset part is
+skipped. JIT version is done for x86 and arm64 for now, on other
+architectures it falls back to get CLOCK_MONOTONIC_RAW values.
 
-> >
-> > Thanks,
-> > Leon
-> >
->
->
+The reason to have these functions is to avoid overhead added by
+a bpf_ktime_get_ns() call in case of benchmarking, when two timestamps
+are taken to get delta value. With both functions being JITed, the
+overhead is minimal and the result has better precision. New functions
+can be used to benchmark BPF code directly in the program, or can be
+used in kprobe/uprobe to store timestamp counter in the session cookie
+and then in kretprobe/uretprobe the delta can be calculated and
+converted into nanoseconds.
+
+These will be used in under-development BPF benchmarks, the first of
+which is available at [1].
+
+Pre-requriement for this patch is to adjust CONFIG_BPF_JIT to depend on
+CONFIG_BPF_SYSCALL as it simplify things and it's actually a long
+overdue patch.
+
+Selftests are also added to check whether the JIT implementation is
+correct and to show the simplest usage example.
+
+[1] https://github.com/puranjaymohan/bpf/commits/bpf_bench/
+
+Change log:
+v12: https://lore.kernel.org/bpf/20250319163638.3607043-1-vadfed@meta.com/
+Changes in v13:
+- Added support for arm64
+- Rebased on latest bpf-next/master
+- Changed the word helper to kfunc in the commit message to not confuse
+  with bpf helpers.
+
+v11 -> v12:
+* drop x86_32 JIT implementation because previous implementation of
+  mul_u64_u32_shr() was not fully correct and the amount of work to
+	properly implement it in asm is not worth the result.
+* add comment explaining stablility of shift and mult values
+* add comment explaining the reasoning behind CLOCK_MONOTONIC_RAW
+  usage in fallback mode
+* drop KF_FASTCALL tag from bpf_get_cpu_time_counter() as it cannot
+  be implemented as fastcall in the verifier
+* re-implement verifier checks for possible JIT of kfuncs
+* adjust selftests to use JIT code for x86_64 and verifier inlining
+  for arm64
+v10 -> v11:
+* add missing IS_ENABLED(CONFIG_BPF_SYSCALL)
+* reword "cycles" -> "counter"
+v9 -> v10:
+* rework fallback implementation to avoid using vDSO data from
+  kernel space.
+* add comment about using "LFENCE; RDTSC" instead of "RDTSCP"
+* guard x86 JIT implementation to be sure that TSC is enabled and
+  stable
+* v9 link:
+  https://lore.kernel.org/bpf/20241123005833.810044-1-vadfed@meta.com/
+v8 -> v9:
+* rewording of commit messages, no code changes
+* move change log from each patch into cover letter
+v7 -> v8:
+* rename kfuncs again to bpf_get_cpu_time_counter() and
+  bpf_cpu_time_counter_to_ns()
+* use cyc2ns_read_begin()/cyc2ns_read_end() to get mult and shift
+  constants in bpf_cpu_time_counter_to_ns()
+v6 -> v7:
+* change boot_cpu_has() to cpu_feature_enabled() (Borislav)
+* return constant clock_mode in __arch_get_hw_counter() call
+v5 -> v6:
+* added cover letter
+* add comment about dropping S64_MAX manipulation in jitted
+  implementation of rdtsc_oredered (Alexey)
+* add comment about using 'lfence;rdtsc' variant (Alexey)
+* change the check in fixup_kfunc_call() (Eduard)
+* make __arch_get_hw_counter() call more aligned with vDSO
+  implementation (Yonghong)
+v4 -> v5:
+* use #if instead of #ifdef with IS_ENABLED
+v3 -> v4:
+* change name of the helper to bpf_get_cpu_cycles (Andrii)
+* Hide the helper behind CONFIG_GENERIC_GETTIMEOFDAY to avoid exposing
+  it on architectures which do not have vDSO functions and data
+* reduce the scope of check of inlined functions in verifier to only 2,
+  which are actually inlined.
+* change helper name to bpf_cpu_cycles_to_ns.
+* hide it behind CONFIG_GENERIC_GETTIMEOFDAY to avoid exposing on
+  unsupported architectures.
+v2 -> v3:
+* change name of the helper to bpf_get_cpu_cycles_counter to
+  explicitly mention what counter it provides (Andrii)
+* move kfunc definition to bpf.h to use it in JIT.
+* introduce another kfunc to convert cycles into nanoseconds as
+  more meaningful time units for generic tracing use case (Andrii)
+v1 -> v2:
+* Fix incorrect function return value type to u64
+* Introduce bpf_jit_inlines_kfunc_call() and use it in
+	mark_fastcall_pattern_for_call() to avoid clobbering in case
+	of running programs with no JIT (Eduard)
+* Avoid rewriting instruction and check function pointer directly
+	in JIT (Alexei)
+* Change includes to fix compile issues on non x86 architectures
+
+Puranjay Mohan (1):
+  bpf, arm64: Add JIT support for cpu time counter kfuncs
+
+Vadim Fedorenko (5):
+  bpf: adjust BPF JIT dependency to BPF_SYSCALL
+  bpf: add bpf_get_cpu_time_counter kfunc
+  bpf: add bpf_cpu_time_counter_to_ns kfunc
+  selftests/bpf: add selftest to check bpf_get_cpu_time_counter jit
+  selftests/bpf: add usage example for cpu time counter kfuncs
+
+ arch/arm64/include/asm/insn.h                 |   2 +
+ arch/arm64/net/bpf_jit.h                      |   4 +
+ arch/arm64/net/bpf_jit_comp.c                 |  54 ++++++
+ arch/x86/net/bpf_jit_comp.c                   |  72 ++++++++
+ arch/x86/net/bpf_jit_comp32.c                 |   2 +
+ include/linux/bpf.h                           |   4 +
+ include/linux/filter.h                        |   1 +
+ kernel/bpf/Kconfig                            |   2 +-
+ kernel/bpf/core.c                             |  11 ++
+ kernel/bpf/helpers.c                          |  17 ++
+ kernel/bpf/verifier.c                         |  14 +-
+ .../bpf/prog_tests/test_cpu_cycles.c          |  35 ++++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/test_cpu_cycles.c     |  25 +++
+ .../selftests/bpf/progs/verifier_cpu_cycles.c | 168 ++++++++++++++++++
+ 15 files changed, 408 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_cpu_cycles.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_cpu_cycles.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c
+
+
+base-commit: eb0d6d97c27c29cd7392c8fd74f46edf7dff7ec2
+-- 
+2.52.0
+
