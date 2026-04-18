@@ -1,121 +1,135 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A18F2580E1
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 00:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137CC192B75
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 00:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776473153; cv=none; b=vAIOhiCKKMtAupl28v9QOQTb2ar3/DIGZHqaAkZWG270Qx2dz0Iv5XQdFAnp9SuFlUQisZPJWKnQXXgb9TRsnSouhph0MVgE5vHlp5O+ppMdGAbW7BBtTT/JgvCObBps37RkR1hE3UgrA1lzugqw4Ful94iOyv7tVt3hAs2cDZg=
+	t=1776473552; cv=none; b=GFULofdbomMGKEtOXjaz2A1myJ4lgPm2MjSPwOK6LY0QsHE9aj0YU98mzosYjsYNlhyzCWlNOgOz4d80ES4CnMYthseQZEf+xmCdfuu0DOK57JcJbk0+celtyRoFEtV9U9q+DQvRFIRP0COBAhga9CYeMVUpSOzFcYXPVcDZobA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776473153; c=relaxed/simple;
-	bh=fbdigxQumNfX0PKqBopq6vWR2YRTWxKM8HuJ2xjqgiY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=B6pCMGr6Chdr4hMwsyairY4UJ7LuzKZexEvLlBpNRkbc02eREQwz5SxBktL59D3qzzfI03l/kRcH7ZCmfxp7x0hpumbsvGCNTNJup8AGYtlQA9yiUCddPzf3JjZprnwb3l8DGMB5MHgL+rqG6eiMF0hL1bERfXfpSa/vYE1QVYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hvJ7MHNm; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776473552; c=relaxed/simple;
+	bh=ucXx9A33ld2k5JHJHOFLcct7aKg0ByaH7L4Iaf0iX8k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uAdOiUqrN1CqiIOEVXpALRVN92sG86QMMBE1U9hvbp4M0ZXnU3DkO7N2pejxhBvJ1cFw3I6St8xGSnz+tQAFGGSEP0ikXYW21IMtOSB8FPO9RNDtnF91IqizE0PdqjcRn8xWj48drY8T3GF48/XkrSEFcx9V0bbK1Ye45zxiMP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rFLxDJVQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hvJ7MHNm"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2b0afa0210bso5944755ad.2
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 17:45:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776473151; x=1777077951; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fbdigxQumNfX0PKqBopq6vWR2YRTWxKM8HuJ2xjqgiY=;
-        b=hvJ7MHNmjyJbPlIJcdz5psMPs8+Tz9xNXtzhI66FyLDKx7YC4fSqzcTtpE+1AXBq9d
-         wsvHgEEsjlEQJFkGdpOi8GmsGzsungHRpiaYM/pUj/qbKo1UqBlhei1zmtSF9XyzWJZ0
-         wd3WCPgNd8m8mEKa/KguXA+wtKagT6A3sZVjQ94z+AK94ygdZl66e+PhTLvfAhvjP1f3
-         9AXRFSyrxZ9q3FIuoE32RzaQq1l3Hi1kdzbX5md8KI8Ye/DO62jvpK0e/K7vcecdJ2of
-         aXf7+Dhl67IfvAkvzqTyCK/jCZJLQdmF9MCSdNkfP0jsLU6+KuEfY9OkPX7AAEMp79cl
-         Q4fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776473151; x=1777077951;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fbdigxQumNfX0PKqBopq6vWR2YRTWxKM8HuJ2xjqgiY=;
-        b=F/MnrVyideMYsVMvqp9Yg+D3hx6ApoI4GGzp2vO6KICMecBXhHTHszrWgoSVpdgfmx
-         lUM1dV7N3iv3qM9lFdpzphVaPOMO/TTJPrNmbx8y1UDNSAPZlsizYyJQx2nzrcg+Quh/
-         ghR3xNiIgng1rAcvrGq9q9j+q6d5lp+0TgyocXqMWFPYSN9Z91bnvkBmgkBu7Fg64KZa
-         MsAtRsiG0hXHrxSIbkXUWKFex53NE7InuAgJBqWflWa1nNLa1YJFI3IeVWnnzKJOILyO
-         9XUb8mulIcDdaSK/KuvZ4HU70MPv3H2A/bIAqbUlQurOs83k/RkkXYtzjG3GFaS0mAQU
-         5C0Q==
-X-Gm-Message-State: AOJu0YzrU3950+2aoIfjnAKaf1vBMEEhvRtg3SAUoPe/iRt+OsSuBcwO
-	Fp7+7j5Vg1rfd2jaTvvIPfYsHZcX3fOM8NWc8Pl/4GWM9ppt3cnETC7DWO3kBg==
-X-Gm-Gg: AeBDieuvq8vqlrQsXmWsBimkNDFPP2zd+Agxpj6EEx0WlRuvxNBzGSpx8DZgGB1Nall
-	SMSsJcLiXk/rXSHVsOQbR/voZ5ChvD3JSFXzKU11zI2cuwHudVXXWNECDCitMmXF6jo6wwmVLiw
-	2asKYh9rh6FYQIojw3e5dmDaJKuixW1l1jWNdVdaC3H/+bGy6jfAJxOFlp0tOAwjxJcm8bBx2IZ
-	KB6EXxWwsL7EZ2kPTA9P9Vcxy41SoYsKFDAIzppVgiu4cC1X/pkwU8SHv195a6jbMZxgGWDLNoJ
-	P5E+9EXsCfDxhAkudGb/NMROV5W8sqsB75MypXmYY/xLqaGxpnn6sj4e/6t76MBOVZwB3IjuPPs
-	BcPFyEd0xYhfvG1Z38bIm1+mase6a/njrbv++mVAgve7cJBHcqH1KEmBLeXD3iaVxwy9R3/qFTN
-	S/ZXMz/UsLcTGq7Vsdc1/SkLO24mc054lyca+mm2165bEYTqbK09U0LvSi2kr9tOE=
-X-Received: by 2002:a17:902:b689:b0:2b4:6080:d4d0 with SMTP id d9443c01a7336-2b5f9f3ca81mr38637375ad.22.1776473151372;
-        Fri, 17 Apr 2026 17:45:51 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa17632sm32598535ad.24.2026.04.17.17.45.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 17:45:51 -0700 (PDT)
-Message-ID: <aa9704461f816bb90e2648d7ed2ed40268d63215.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf/verifier: Use intersection checks when
- simulating to detect dead branches
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Paul
- Chaignon	 <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,
- Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
- <santosh.nagarakatte@rutgers.edu>
-Date: Fri, 17 Apr 2026 17:45:48 -0700
-In-Reply-To: <CAM=Ch04tB7sXD_qmK-5NZ-aQZutJ6bYmciU+hzZZ8yJx-hbwLg@mail.gmail.com>
-References: <20260415160728.657270-1-harishankar.vishwanathan@gmail.com>
-	 <20260415160728.657270-2-harishankar.vishwanathan@gmail.com>
-	 <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
-	 <CAM=Ch05O+m3gAAz=EW=ZPrhnTMrrMJ51ryMkwROnfkBMVVxnaw@mail.gmail.com>
-	 <f79d58337ec3628a52d41a09e2c35e598ab656f4.camel@gmail.com>
-	 <CAM=Ch07jcncdAA1D-uh66OuVXnROF72k8gunJy2cSMuvJNP+nw@mail.gmail.com>
-	 <f622c0166e9c1809184673c1bffda7e43ae495ea.camel@gmail.com>
-	 <ea37be7028d20e962816ff10631da383b5910c57.camel@gmail.com>
-	 <CAM=Ch04tB7sXD_qmK-5NZ-aQZutJ6bYmciU+hzZZ8yJx-hbwLg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rFLxDJVQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A39C19425;
+	Sat, 18 Apr 2026 00:52:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776473551;
+	bh=ucXx9A33ld2k5JHJHOFLcct7aKg0ByaH7L4Iaf0iX8k=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=rFLxDJVQlGMulcupXYuLnFZgsWdeq9RN7wt2hwU3A/+EliTeifK6cHsM8aGMinzVi
+	 Hpv4KLX/9kvjA9URyQd8BoaOHga1H6aFVDyw4/QfJne9A1SRywXdY43lAcISwt7XQf
+	 SH8f180T81+jgdEG7ZYCP6eIXBPgSoiSiL3yqI1H0cAi3I+U+ETk/nsEOFsHKANOgG
+	 5ZxTSetVTG4gI4i1XzqxvKJMOTxHdV5UKo0ifFABSnQYBHMi63U4zSDv4py1pGo5g7
+	 HmbNCK5Tz4OBaQ1QXTiBgEJfySR3j23E8RESBZqnlSRAb9PutieCNiwlHWQhOWwajr
+	 +teFa4Iz1V7cg==
+Content-Type: multipart/mixed; boundary="===============4289354194805889544=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <d2b0749bcda92318766fe34d4df9492abd3990c2d8235a3fa552865206488b27@mail.kernel.org>
+In-Reply-To: <20260417034833.2636781-1-yonghong.song@linux.dev>
+References: <20260417034833.2636781-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v5 15/16] selftests/bpf: Add negative test for greater-than-8-byte kfunc stack argument
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 18 Apr 2026 00:52:31 +0000 (UTC)
 
-On Fri, 2026-04-17 at 20:38 -0400, Harishankar Vishwanathan wrote:
-> On Fri, Apr 17, 2026 at 7:19=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Fri, 2026-04-17 at 14:17 -0700, Eduard Zingerman wrote:
-> > > On Fri, 2026-04-17 at 01:34 -0400, Harishankar Vishwanathan wrote:
-> > >=20
-> [...]
-> >=20
-> > Pushed complete find_witness() implementation in [1].
-> > cbmc verification passes.
->=20
-> Just saw this. I shared my complete implementation in another email reply
-> as well.
->=20
-> > In any case, please let me know what you think.
->=20
-> I think the ideas are essentially similar. We can decide which one to
-> proceed with.
+--===============4289354194805889544==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thank you for sharing the code. Indeed very similar logic.
-I was under impression that you don't like the witness idea hence
-proceeded on my own. Would have deferred to you if not for that.
-Tbh, my version looks a bit shorter/simpler.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg_fail.c b/tools/testing/selftests/bpf/prog_tests/stack_arg_fail.c
+> new file mode 100644
+> index 000000000000..328a79edee45
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/stack_arg_fail.c
+> @@ -0,0 +1,24 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +
+> +#include <test_progs.h>
+> +#include "stack_arg_fail.skel.h"
+> +
+> +void test_stack_arg_fail(void)
+> +{
+> +	struct stack_arg_fail *skel;
+> +
+> +	skel = stack_arg_fail__open();
+> +	if (!ASSERT_OK_PTR(skel, "open"))
+> +		return;
+> +
+> +	if (!skel->rodata->has_stack_arg) {
+> +		test__skip();
+> +		goto out;
+> +	}
+> +
+> +	ASSERT_ERR(stack_arg_fail__load(skel), "load_should_fail");
 
-> Alternatively, might we also consider continuing with the pairwise
-> intersection?
+Could this generic error assertion mask the actual verifier rejection reason?
 
-Since we have the complete intersection logic now and it is about the
-same size as pairwise, I think we should use the complete intersection
-version.
+If the program fails to load due to an unrelated issue, such as a missing
+BTF, a syntax error, or the architecture-dependent size mismatch described
+below, the test will incorrectly report success because it only checks that
+the load operation failed.
+
+Would it be better to refactor this test to use the standard test_loader
+infrastructure (via RUN_TESTS) with __failure and __msg annotations in the
+BPF program? That would ensure the rejection is explicitly due to the
+argument size limit.
+
+> +
+> +out:
+> +	stack_arg_fail__destroy(skel);
+> +}
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> index 2c1cb118f886..2a40f80b074a 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> @@ -50,6 +50,11 @@ struct prog_test_pass2 {
+>  	} x;
+>  };
+>
+> +struct prog_test_big_arg {
+> +	long a;
+> +	long b;
+> +};
+
+Does this structure achieve the intended >8 byte size on 32-bit architectures?
+
+When the test kernel module is compiled on a 32-bit host, long is 32-bit,
+making the struct exactly 8 bytes. Since the BPF target always treats long
+as a 64-bit integer, this makes the struct 16 bytes in the BPF program.
+
+This size discrepancy between the BPF program's BTF and the host kernel's
+BTF might cause the verifier to reject the load for a BTF size mismatch
+rather than the intended stack argument limit.
+
+Could these fields use explicitly sized types like __u64 to ensure the
+struct is consistently larger than 8 bytes across all architectures?
+
+> +
+>  struct prog_test_fail1 {
+>  	void *p;
+>  	int x;
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24592562564
+--===============4289354194805889544==--
