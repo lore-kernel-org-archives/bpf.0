@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D75371898
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 08:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0512BAF7
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 09:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776502720; cv=none; b=op0nfYixe1Io9SBtqtsU02DlHskdi3iuQrXBU7lQU141QedYhsYuIiswaYpGMXu8VlyuVh6IvUxBmb+ptmF5T67eIyv26DMhY9VR+udOWjFXilsDlm0jzqDCyQMBd0ZcHByCm73e6UuhMWbDTYtxF5nnbCaG0VzMBPxOlHrq0ao=
+	t=1776504156; cv=none; b=lawI+Z/2+B6BauBhxDhzjVA8csXx26tZ9qXPy/pJlAj+OvDqjhb7l0VXbX+Dv8yv7QQTqNLyfed3w2WeqWuGkI3jI3v3HRrINc0YK+qW5kGzCMF08jfXIienAC00eEPP89mIIAvWYmP1VGPSYERNolA66hyZPYw6n6TBtfIB81U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776502720; c=relaxed/simple;
-	bh=A2C7fUhpsU97e5BBgMmlvP62B4h6UYXpUs8KSs9Dsiw=;
+	s=arc-20240116; t=1776504156; c=relaxed/simple;
+	bh=9sroYPfd5oOTCYi5MHZk95YviKuiCk6B3xyar7PP3xU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jVp+ILyC6UE83lQdoQz97wmdKx5I2hcS1kDSadCUOMNkESIZWDmR3xKXO6crCdaI22KrwCInWGZKej9xEDpLv0SDTI/rW+UDMg42B7PF1pF8bqaFa1sffQ1ewR2WC/vWYoJE1KZSfw0Fuaj4jSn0yI5dvcRelgeEhUKh88ArcIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KioMhmDc; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=lPiGaEsjPE2OtaRSDsZcTnMOv2h0g+6HmD5EuNwIzXDkWGKPRfLs1WbmoQrmhuUWy/a/zcbwt0B51xYt3wSK6vrEZoukZoqnoDgvc4ooSaDbvNWLyEvNraM17pIqasDr3eJPiHT5nYGoDSDnJqhVkTJMigf+tCwldnf2LGhm+Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4Jxj+uW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KioMhmDc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC19C19424;
-	Sat, 18 Apr 2026 08:58:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4Jxj+uW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98444C19424;
+	Sat, 18 Apr 2026 09:22:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776502719;
-	bh=A2C7fUhpsU97e5BBgMmlvP62B4h6UYXpUs8KSs9Dsiw=;
+	s=k20201202; t=1776504155;
+	bh=9sroYPfd5oOTCYi5MHZk95YviKuiCk6B3xyar7PP3xU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=KioMhmDcF2jiQ36axEyg2xKjpShgShAcqN9A7hId0L4idlI1WylpiwWnN0DcP6G4d
-	 mtBY43caa8I+xoxoSTVcDQiPVPBiZHQfhIEWW/o5E2ojG5rIL3MoWzxjSewLKJDnvu
-	 SMmo18/x4Z9Pakx9ETsrB9hf8BskF4C0dLKEPhHzdHsiIflhFx/PTVpRC+BnTucUzn
-	 dUB7TSMsr0DkwBFaXiJztj0YElxmQefVfLOMu67CkzUqVDfELbrRt21iGYaJPFyNxK
-	 NUeRuSbYBKagYyNaU6jIp+ZGJokFAqpFlti7jzCdW9WRcYXlDZfidMlQtc8D43ISAa
-	 bAZIHVxXE14Lw==
+	b=L4Jxj+uWAW9BPklL6ko6j2O8ZOxYphIOB4/octcha07RXwm8GRRCfAVI6VKRh4Op8
+	 W0K3Z7d5zOkN9nqPzaiXEollT3UNRZHF/D5LgE7rMjK5cwnLKXupcmD6CCpDyKIxbM
+	 k8BivhG0qemO6QG6wOkvYZYTF2Nlg7mOip4E2sWsjSongtDdw4jf+qIAahY6YZXt8c
+	 pyfKFQUFGjFjHPtQzMt11jHkwN+n6EExEnvcyVlPkikshfikHEnd3zX4Pr3lnGq6qd
+	 Maqb7NsXOcjT8sI0FsoJS7JZtx//C5uv9kqCymMMlr4IbamlvJ/hneSf75+S4Qp0gZ
+	 t/fO2mLZq495A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv5 bpf-next 13/28] bpf: Add support for tracing multi
- link
+Subject: Re: [PATCH bpf v3 1/2] bpf: Reject TCP_NODELAY in TCP header option
+ callbacks
 Reply-To: sashiko@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
+To: "KaFai Wan" <kafai.wan@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260417192502.194548-14-jolsa@kernel.org>
-References: <20260417192502.194548-14-jolsa@kernel.org>
+In-Reply-To: <20260417092035.2299913-2-kafai.wan@linux.dev>
+References: <20260417092035.2299913-2-kafai.wan@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 18 Apr 2026 08:58:39 +0000
-Message-Id: <20260418085839.ADC19C19424@smtp.kernel.org>
+Date: Sat, 18 Apr 2026 09:22:35 +0000
+Message-Id: <20260418092235.98444C19424@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,66 +45,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 1 potential issue(s):
-- [Low] The patch references several undeclared identifiers and incomplete =
-types, causing compilation failures.
+- [High] The patch prevents an infinite recursion causing a kernel stack ov=
+erflow by rejecting TCP_NODELAY in specific BPF_SOCK_OPS callbacks. However=
+, it fails to address the exact same recursion vulnerability achievable via=
+ bpf_sk_setsockopt in a BPF TCP congestion control algorithm (BPF_PROG_TYPE=
+_STRUCT_OPS).
 --
 
-commit fc7697083b71bebef41d2da3a91ca2a0741ad6f0
-Author: Jiri Olsa <jolsa@kernel.org>
+commit 4ff4d98f6b4e3c3d90f9268761de84573f49fd86
+Author: KaFai Wan <kafai.wan@linux.dev>
 
-bpf: Add support for tracing multi link
+bpf: Reject TCP_NODELAY in TCP header option callbacks
 
-Adding a new link to allow attaching a BPF program to multiple function
-BTF IDs, represented by struct bpf_tracing_multi_link.
+This patch rejects bpf_setsockopt(TCP_NODELAY) when called from
+BPF_SOCK_OPS_HDR_OPT_LEN_CB or BPF_SOCK_OPS_WRITE_HDR_OPT_CB to prevent
+unbounded recursion and kernel stack overflow.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index a3c0214ca9341..da3e01dd7ee9a 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-[ ... ]
-> @@ -5748,6 +5748,8 @@ static int link_create(union bpf_attr *attr, bpfptr=
-_t uattr)
->  			ret =3D bpf_iter_link_attach(attr, uattr, prog);
->  		else if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
->  			ret =3D cgroup_bpf_link_attach(attr, prog);
-> +		else if (is_tracing_multi(prog->expected_attach_type))
-> +			ret =3D bpf_tracing_multi_attach(prog, attr);
+Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@st=
+d.uestc.edu.cn/
 
-Is is_tracing_multi() defined anywhere? It doesn't appear to be declared
-in this patch or the existing kernel tree, which could lead to a build
-failure.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index fcfcb72663ca3..eae2f2c542716 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -5833,6 +5833,12 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_soc=
+k_ops_kern *, bpf_sock,
+>  	if (!is_locked_tcp_sock_ops(bpf_sock))
+>  		return -EOPNOTSUPP;
+> =20
+> +	/* TCP_NODELAY triggers tcp_push_pending_frames() and re-enters these c=
+allbacks. */
+> +	if ((bpf_sock->op =3D=3D BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
+> +	     bpf_sock->op =3D=3D BPF_SOCK_OPS_WRITE_HDR_OPT_CB) &&
+> +	    level =3D=3D SOL_TCP && optname =3D=3D TCP_NODELAY)
+> +		return -EOPNOTSUPP;
 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index af7079aa0f36d..df06a733a2e71 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-[ ... ]
-> +static void bpf_tracing_multi_link_release(struct bpf_link *link)
-> +{
-> +	struct bpf_tracing_multi_link *tr_link =3D
-> +		container_of(link, struct bpf_tracing_multi_link, link);
+Does this same recursion vulnerability exist for BPF TCP congestion control
+algorithms using BPF_PROG_TYPE_STRUCT_OPS?
+
+If a BPF congestion control algorithm invokes bpf_setsockopt(TCP_NODELAY)
+from its cwnd_event callback when handling CA_EVENT_TX_START, could it
+trigger the same unbounded recursion?
+
+When the kernel transmits the first packet of a data train via
+tcp_transmit_skb(), it invokes tcp_event_data_sent(). Because
+tp->packets_out is not incremented until later, tcp_packets_in_flight(tp)
+evaluates to 0, triggering tcp_ca_event(sk, CA_EVENT_TX_START).
+
+If the BPF program then calls bpf_setsockopt(TCP_NODELAY), it would result
+in this call chain:
+
+tcp_transmit_skb()
+  tcp_event_data_sent() -> invokes CA_EVENT_TX_START
+    cwnd_event()
+      bpf_setsockopt(TCP_NODELAY)
+        tcp_push_pending_frames()
+          tcp_write_xmit()
+
+Since the outer tcp_transmit_skb() hasn't finished, the send head hasn't
+advanced. Wouldn't tcp_write_xmit() see the same SKB, attempt to transmit
+it again, and re-enter tcp_transmit_skb() causing an infinite recursion?
+
+Should the restriction on TCP_NODELAY be enforced at a broader level, such
+as inside _bpf_setsockopt(), to protect contexts holding the socket lock
+during TX paths?
+
 > +
-> +	WARN_ON_ONCE(bpf_trampoline_multi_detach(link->prog, tr_link));
-> +}
-
-Where is struct bpf_tracing_multi_link defined? It seems to be an
-incomplete type here.=20
-
-Similarly, bpf_trampoline_multi_detach() doesn't appear to be declared in
-this patch. Will this cause compilation errors when dereferencing or
-calling these?
-
-[ ... ]
-> +	err =3D bpf_link_prime(&link->link, &link_primer);
-> +	if (err)
-> +		goto error;
-> +
-> +	link->nodes_cnt =3D cnt;
-> +
-> +	err =3D bpf_trampoline_multi_attach(prog, ids, link);
-
-Does bpf_trampoline_multi_attach() also miss a declaration?
+>  	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen);
+>  }
+>
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417192502.1945=
-48-14-jolsa@kernel.org?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417092035.2299=
+913-1-kafai.wan@linux.dev?part=3D1
