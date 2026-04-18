@@ -1,63 +1,63 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E8056472
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 04:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE21433557B
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 04:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776488241; cv=none; b=a/SXTN96r+7/CCsSekpAMesTKTWa8SdWx+iimMfdNtTpc/lr2CVnB+DdM1OZralEjpBNXVGiL+aA1wO5J1KDLJVRL6J4yiNdF3wzYJrgiKNJmbjLu+9fQT/ZKh6fsQ3JNBpdSBlpc3lnwJyJ7ccj6MHRpoTmuIYwoE3/o0IyL4A=
+	t=1776488247; cv=none; b=qsiuviap9ti3uUexAqYU23JgzRUEAJT1TbQMgnGuCW9WWspiEDnxwew3HtM+BwxBzCz/6l2XZ/OEcZN1ZJ7lrblcguu0Q7v5pBf3qKeOoj9g90EKCq+hcMmhsFoUjiF3V9T0srxXrk+X2S19YjjzXrFa7OxR35YTvpnMwYW9S8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776488241; c=relaxed/simple;
-	bh=dScuvfHSx2J0xfD/1KNmlZxr1BZbYBHGYWf1vTYdj10=;
+	s=arc-20240116; t=1776488247; c=relaxed/simple;
+	bh=noCuVUbIZS87iKo2soZQK++66nTPA97Hb0ZZSl1yh4c=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XtpMz7Epv4S/FkcnHIthzUHd84aArYTSS1D8wDafpjRorfdpAbL9tQCsWMnrY4X5VlWwgS5f8z6eTS9r17dYjb6UMudj6lEK38PUdGpzQeXLRe01OU2V07cT1vYFGbvLFFMk/Pam2lb/O1lHIHBRrkhKyBr86IRt88ln3Pcx1bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LGVGQEx4; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version; b=lLqF0jsDekIOF9f8hAMYGyUjH0lDfdeodimROAivqVD+ZojE56M2CmbCD1JlbeA/XyubJhnjerbvV5P6PDrzVZnDlCB0/pI6Zv0qNFBBaYQebbbUj9X0Vso6STy1ZrIm8zyoip7ZZ7Qq+W9bGUtLX+Onzs9668KITiQ3Ja10g08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HV+oVsiS; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LGVGQEx4"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35e576110adso955151a91.0
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 21:57:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HV+oVsiS"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-356337f058aso891076a91.2
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 21:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776488239; x=1777093039; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776488245; x=1777093045; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DwiOwC2HPJ2+KxMqshI4D9/LD5MVKo0WgUCuW5jJwyY=;
-        b=LGVGQEx4gVZZvaDwnhujW+jHILDV0EzApvg72okn5LBQUAvy9X0P9c/fwmV+bGEf5M
-         z0ioM/eOVzZG4WXbGxxjDP5GlQs9R6l6j0lwREQxKAsamChw5kofGzddZjJ02rMOi0EW
-         hu1xtIcczQ6jIrbAhga6FU47O/VYsaVqVAGc9k8xRl1XRQd1u1WY9IkK7AoHmKodIjxn
-         b4+3UJ5/tk+EXdkvFRYuYWvyicfqgB1jTBcvAp2jVqeTuYCqj31fZfSdzKD6V/hTIQ8D
-         T8LxG1SwDCKMEhaAPOusMeMnkNbhfCqUlkb9oBuVWdJF3ghwm8gXkQw7745NsO8P+InN
-         hc0w==
+        bh=M7fYuN5x2Np/CFxQoQV61Iy8WpLzu2WAC3PFJmjW8IU=;
+        b=HV+oVsiSFw0VpyRxOcDe5TSVvWFCqV3+uGtt1fJi0vFJUOuSgiWRl+7jpG/yIA9dtY
+         CPkfycJpaaD7Uh3z9X6x9durrJszTxyObZeETNPAt5OMpcynZlHk+w02qbdrVNn93UH+
+         yKwHnfuXOpK2cElsTG1s58RJe/I3sAczToB9jEsDY2vUTXcG5g3dCdKiS2HjSdYORpPc
+         e9hjpE68MIKKILL7bPSKywwiU6Bz9c/r+CpsifsJlVNu95WJr8LZ9/Cy/D5nnSe2MrkY
+         4uHvy422SduGbVJaQzERV5HbhguKa6unCOKuLTPk0qLsEXw/RrRIJaVQ8RwXKwvMzOsZ
+         GDGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776488239; x=1777093039;
+        d=1e100.net; s=20251104; t=1776488245; x=1777093045;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=DwiOwC2HPJ2+KxMqshI4D9/LD5MVKo0WgUCuW5jJwyY=;
-        b=nhYvtI5ydBOc339szTbS9dgRzUKSE2wYpqXyng4eat33eP0GLCKYDrKJJjw3IRs3H/
-         mTa8g/7uhF/1/0t/2DPZJd6MR1OXSG96XQN2k+SiMNsyLbhW7tVlKdcJMcF1/CyaXeGR
-         eCFJ+6T/9SX+mPUq1/DcKZ8b7s83n8wBxaFXYElj92d8Lg21vY+cJxei98DVqwo4MhV2
-         m03zmGC8NMXU9ZZ10XyU2Rcyz7A8DX60h/5KVQcIBAgBlU68BCgkalGN5xBLMaBxWwbS
-         Wvraxed+vfyXVESWFJtY9Gf3Gv/mlmYG9MIDKA3/SQzUMBTCdiCHrS3wqLEeWsBFDp+5
-         Oweg==
-X-Gm-Message-State: AOJu0YwKKJAXTID2qc20Rb3vSQvldYvnw7hyV7PV1g0DCO0wv8jQ4Rmj
-	0UoC9v8pdyP31BNJJ+UGsWN89pO755FpGSf8PJWKdLChDeLjoDixDjmr
-X-Gm-Gg: AeBDietYGYWozi6qm3lEk2UnbYVnbgHfCiM8fDY6m5pkt/XbbphbM34GcchuJ8yH6Bk
-	kSxT442lQkKo1tbzGMW0EaffaibVE3o4p9VvK/i8b+LdYVGDHO+61n0k15qTr8eFPJHWywj6dP5
-	wu+vJGqH0diGSqtdaNqf3T+DL18bgc/q1iCf9qB0VIRvl0/+rB5npQogUTQAd346r1+kqmCcCtd
-	YOMRuXUGL28q/cPYd18yTDSSTv2ToyIYdRYqLjwvnyYXIlKVdVUk9VVnv7otZyHMmualMjPqfQT
-	xnZAX+y7El9jMd0+2svxc+VmAg15R1WkmcPssSSGxYaajQxn07DQ1oSfRK/G10utJ3QH+Of2vP/
-	mqb6qhYCLhKFTIGdyRQDeodyYhLIJSgy+RHmd9XutjCBPLhylXI/N28W1ghH8jWS0BsfUj/aZ86
-	HFZ1HX6xY1kqdxRHcR4Y4OC+ED11Ea5g3hMLt1k5oSYXx8evZvopiTvb/NmqhPChP1czigE92pN
-	pXWnnpLGVKCQna+Fd+Y
-X-Received: by 2002:a17:90b:2e4e:b0:35e:579a:7e9a with SMTP id 98e67ed59e1d1-36140204c56mr4522874a91.7.1776488239269;
-        Fri, 17 Apr 2026 21:57:19 -0700 (PDT)
+        bh=M7fYuN5x2Np/CFxQoQV61Iy8WpLzu2WAC3PFJmjW8IU=;
+        b=O5qetoFTCkymdRMUxotCA0SECs1+QTDB6+nN282da4aF0GPI/8cdaAwe6bHfXWkmKq
+         EkSNmni9w8ZCOBJIFGCtvty2vDDfkKV59ZM5l7CgBjiFFOBmRmuijfbml215uz0/keOO
+         /3CLmBcx1KOcm2Axe/sZj0y3o1MwfW/XP9+RpgTpRKCTCYI4pcEmUmO2e0bBcT4XMLfO
+         xRRGUFFKQyr+hQ/sy1SYcaoEm+h2o6byDnDkw0F9r732AvKLnLOapCAeD14P3CSw1KRV
+         N7DhiS5RstiGdk/i5peuvc5A9MomM2ZwdTD4sFyNqV4xJZE3f5chzKa2/RqEvZ+00jAY
+         ulTw==
+X-Gm-Message-State: AOJu0YzEsYU2i7ZAaL7AQz42/W85lwDP7mN/2vQrjduAMXidZa94FmQS
+	31nOMX8eR0wNl8GPWDJNNxAewF9bmvYCdmCFcZ8RKAwfZ/dwd/GiocVh
+X-Gm-Gg: AeBDieu6NQwgHDnJVAJzGQdxUHJsTvSeryjH+MnCV+QwEjQ2Wevcol053cyGlpzjaGt
+	cHiS+08vMfQnPzynOE43TslzKg8jXHoZBJ9+oZfHu7qhXgu5lkNLUitQfZFD/3Yd/AY8gIumIyH
+	pQJmhotcVBcCPeRB4eP9hQdiTHit4zXQtxMkbFvbyL937qQjdxIpnu3FfaDAxvhZhAK495xVeNa
+	NDIqe7fPHUjY3gCcbO2GXmsefznw9enPojg6EBzkQ1A9ZdW6IQsF3Qe3IzbEPTcseXNJqBu9pMa
+	VLOAS/CYx1p+uY44xNWICttWj/GSXLiVWUI1smKeft8tCSCbsKqjAtBjPTN2AkRQR+tuR07BhNz
+	wZiJKD1CYe7ilgc7BqeQZYNk1biKKl8zw2PLQJdMZktTIpj+yqxH+ZvejZ4zPo4jmbQcEAlIV06
+	bJtf3zoIhr7E9fW3ridnxLBThCqQf2QgOMS9riNPy1CMVJKzWRAe7pf+t88LDmXofc+a1e/KnEW
+	XYD52g8FQ==
+X-Received: by 2002:a17:90b:4c52:b0:35f:b647:d98a with SMTP id 98e67ed59e1d1-361403c3412mr6182207a91.5.1776488245131;
+        Fri, 17 Apr 2026 21:57:25 -0700 (PDT)
 Received: from KERNELXING-MC1.tencent.com ([2408:8207:1924:8520:35f1:286f:2ada:eed0])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3614195a92asm3502377a91.10.2026.04.17.21.57.13
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3614195a92asm3502377a91.10.2026.04.17.21.57.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 21:57:18 -0700 (PDT)
+        Fri, 17 Apr 2026 21:57:24 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -77,9 +77,9 @@ To: davem@davemloft.net,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net 2/4] xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
-Date: Sat, 18 Apr 2026 12:56:42 +0800
-Message-Id: <20260418045644.28612-3-kerneljasonxing@gmail.com>
+Subject: [PATCH net 3/4] xsk: handle NULL dereference of the skb without frags issue
+Date: Sat, 18 Apr 2026 12:56:43 +0800
+Message-Id: <20260418045644.28612-4-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260418045644.28612-1-kerneljasonxing@gmail.com>
 References: <20260418045644.28612-1-kerneljasonxing@gmail.com>
@@ -93,43 +93,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Xing <kernelxing@tencent.com>
 
-Fix it by explicitly adding kfree_skb() before returning back to its
-caller.
+When a first descriptor (xs->skb == NULL) triggers -EOVERFLOW in
+xsk_build_skb_zerocopy (e.g., MAX_SKB_FRAGS exceeded), the free_err
+EOVERFLOW handler unconditionally dereferences xs->skb via
+xsk_inc_num_desc(xs->skb) and xsk_drop_skb(xs->skb), causing a NULL
+pointer dereference.
 
-How to reproduce it in virtio_net:
-1. the current skb is the first one (which means xs->skb is NULL) and
-   hit the limit MAX_SKB_FRAGS.
-2. xsk_build_skb_zerocopy() returns -EOVERFLOW.
-3. the caller xsk_build_skb() clears skb by using 'skb = NULL;'. This
-   is why bug can be triggered.
-4. there is no chance to free this skb anymore.
+In the patch 2/4, the skb is already freed by kfree_skb() inside
+xsk_build_skb_zerocopy for the first-descriptor case, so we only need
+to do the bookkeeping: cancel the one reserved CQ slot and account for
+the single invalid descriptor.
 
-Note that if in this case the xs->skb is not NULL, xsk_build_skb() will
-call xsk_drop_skb(xs->skb) to do the right thing.
+Guard the existing xsk_inc_num_desc/xsk_drop_skb calls with an
+xs->skb check (for the continuation case), and add an else branch
+for the first-descriptor case that manually cancels the CQ slot and
+increments invalid_descs by one.
 
 Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
 Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
- net/xdp/xsk.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/xdp/xsk.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 8fcde34aec7b..5d3dbb118730 100644
+index 5d3dbb118730..2918b773aa84 100644
 --- a/net/xdp/xsk.c
 +++ b/net/xdp/xsk.c
-@@ -778,8 +778,11 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
- 	addr = buffer - pool->addrs;
+@@ -898,9 +898,14 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+ 		kfree_skb(skb);
  
- 	for (copied = 0, i = skb_shinfo(skb)->nr_frags; copied < len; i++) {
--		if (unlikely(i >= MAX_SKB_FRAGS))
-+		if (unlikely(i >= MAX_SKB_FRAGS)) {
-+			if (!xs->skb)
-+				kfree_skb(skb);
- 			return ERR_PTR(-EOVERFLOW);
+ 	if (err == -EOVERFLOW) {
+-		/* Drop the packet */
+-		xsk_inc_num_desc(xs->skb);
+-		xsk_drop_skb(xs->skb);
++		if (xs->skb) {
++			/* Drop the packet */
++			xsk_inc_num_desc(xs->skb);
++			xsk_drop_skb(xs->skb);
++		} else {
++			xsk_cq_cancel_locked(xs->pool, 1);
++			xs->tx->invalid_descs++;
 +		}
- 
- 		page = pool->umem->pgs[addr >> PAGE_SHIFT];
- 		get_page(page);
+ 		xskq_cons_release(xs->tx);
+ 	} else {
+ 		/* Let application retry */
 -- 
 2.41.3
 
