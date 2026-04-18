@@ -1,135 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8155522259F;
-	Sat, 18 Apr 2026 05:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CEB2628D;
+	Sat, 18 Apr 2026 06:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776491947; cv=none; b=MN9WxwNjrJrhVgZKzkZJHQ5XzRgitsnG6n/yT1TwOttXPYoFm+IPUQzrxSSNPTXI2NjJKSlwSOPNaFuu8w49O+SRqQYdfwoC7K1G6JiTKbA0GZ9ouVxL8l0hhVbA/c9pmRAkCQZqoSY8HTqr7ZgIxHabs4KNzmWbWYi5aKRLD/A=
+	t=1776492650; cv=none; b=WZpVdchRZM4oH3jlaxMR8ixY+6ZcawASKGqDj3JHUOpcJS8rqEew0UM6DpEVtTmotNgpCFpnzFmzEMxuG0W4jJPZXCrgJwQbjqQpKmpO4qfyYyjjoXqmjfYGZUNJL2D4Frit/y4O9RWWzA/5FgvHA3jmGx6//VVJcOZLiIoxQ+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776491947; c=relaxed/simple;
-	bh=DjvpuVm6vJcY7bDx5YI4kmp4dLJuHPN92Em3UWCXaTc=;
+	s=arc-20240116; t=1776492650; c=relaxed/simple;
+	bh=NaZZsmLXUd8hYy5rmHRFvFVJMt0j2DAivE8Ef0a0g6E=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gwG1ZCBo7663FceqbJOyQyPHTqii26DLQeZDUNru5bH28Fl3ZoL55l5r3zjjw/Joe1mJoKvymrLfttXRdhCz74r4qp/M5XTJ5FAetVcHe0QxLnQEbQ7T9o/eIAmTV3W9dbzQZSo32wSQutBIwSjMO57eJyqpEZHeXFjq1cW28QM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Un/mQ4u+; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=Y3cor9wv+EIDwZXOg/oCBIUCLkUHHmFziwyp2ghQmi85lXzIwsRHCCkmFumAjwyWoIbrAQ/nNjpOz/q+7Gx5IN+OWYwS+sjYK19//1IDrnRtDhCr3O9ERlvXWufmjWW1EL1slDpb9NjdX2Ir9jxYrvle8WLR6sB6ce4A2SbrD6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dNHyQpjc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Un/mQ4u+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA7AC19424;
-	Sat, 18 Apr 2026 05:59:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dNHyQpjc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FF3C19424;
+	Sat, 18 Apr 2026 06:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776491947;
-	bh=DjvpuVm6vJcY7bDx5YI4kmp4dLJuHPN92Em3UWCXaTc=;
+	s=k20201202; t=1776492649;
+	bh=NaZZsmLXUd8hYy5rmHRFvFVJMt0j2DAivE8Ef0a0g6E=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Un/mQ4u+4OLnW4uXVMHdaTEDRTnacpHybJx8dxVmi9lqfz77nxedNUn36I3ZgTfNS
-	 0bLDIvfYOLL5pInGMKW+X7UhSD7bKF/E/s9WoEUhkpAph6scwN0r78YSinVyhQ3b2U
-	 gETWWppSTOA0Jg/LWzNPNEs00eFyLp22EWq4eUm43f5fzU3pZgO7/6cer44HoEZrKO
-	 iy7V42d8mx3W12yjfZMFpwhIrUMRDoRCqfIlQWr9h9gsXPDGjjDeAnayH6rXd7uqjK
-	 MhJupK/mI5HYfc3FWESYlfeBynf821AuWiZRhOsiiCNPxvUwHQ6sG3dzI6L/cNbVQk
-	 d4VYGyCD4IXLg==
-Content-Type: multipart/mixed; boundary="===============7115338192684722360=="
+	b=dNHyQpjc9EhZiLVW/X78zeQCsVMBJ8AawJeDjgtPpvPaNgjSzzTeQNjtQ0jbxdJrX
+	 rYA4fpu19eKhjlAXu6XEYyvZ0LAHOjtC67SoZmdKR4HShMyrQs29FkbfHaoy4M040P
+	 iyFAsSixO96K81ZrCFldTBXghEEPdX7LD1cGqxCGIyRALZG8rgJ1BxSY2BEldOB+3t
+	 GxN7Lr5ceD6auEzk8TBC+pfNNNfpHkUGCrEl1/zPT2s58RK/nGbcEX2QDV9sdiaAaj
+	 LuDdc40tjCa+qSicyld2DyhC/Lp/oLN9S273BDmw/qGyqe09TrItLWzHsITUIHqYoU
+	 Fpy6Vb4Guy5wA==
+Content-Type: multipart/mixed; boundary="===============0886689944044384329=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7634d754f187df27c83d722c7bcd4ac73c06d13e1ebbc778b4a6d8fe296032c9@mail.kernel.org>
-In-Reply-To: <20260417192502.194548-20-jolsa@kernel.org>
-References: <20260417192502.194548-20-jolsa@kernel.org>
-Subject: Re: [PATCHv5 bpf-next 19/28] libbpf: Add btf_type_is_traceable_func function
+Message-Id: <040e57105845536dc2bb598fd51ebe9e0f7cc986efe497bef78870424c993579@mail.kernel.org>
+In-Reply-To: <20260417192502.194548-22-jolsa@kernel.org>
+References: <20260417192502.194548-22-jolsa@kernel.org>
+Subject: Re: [PATCHv5 bpf-next 21/28] selftests/bpf: Add tracing multi skel/pattern/ids attach tests
 From: bot+bpf-ci@kernel.org
 To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
 Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 18 Apr 2026 05:59:06 +0000 (UTC)
+Date: Sat, 18 Apr 2026 06:10:49 +0000 (UTC)
 
---===============7115338192684722360==
+--===============0886689944044384329==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index fc08ac6bcdde..49368ee161b1 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> new file mode 100644
+> index 000000000000..52d3339b430a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> @@ -0,0 +1,256 @@
 
 [ ... ]
 
-> +static int btf_get_type_size(const struct btf *btf, __u32 type_id,
-> +			     const struct btf_type **ret_type)
+> +static __u32 *get_ids(const char * const funcs[], int funcs_cnt, const char *mod)
 > +{
-> +	const struct btf_type *t;
+> +	struct btf *btf, *vmlinux_btf = NULL;
+> +	__u32 nr, type_id, cnt = 0;
+> +	void *root = NULL;
+> +	__u32 *ids = NULL;
+> +	int i, err = 0;
 > +
-> +	*ret_type = btf__type_by_id(btf, 0);
-> +	if (!type_id)
-> +		return 0;
-> +	t = btf__type_by_id(btf, type_id);
-> +	while (t && btf_type_is_modifier(t))
-> +		t = btf__type_by_id(btf, t->type);
-
-Does this loop need a maximum resolution depth limit?
-
-If a malformed BTF object contains a circular modifier reference
-(e.g., typedef A -> const B -> typedef A), could this loop spin
-indefinitely and cause a hang?
-
-> +	if (!t)
-> +		return -EINVAL;
-> +	*ret_type = t;
-> +	if (btf_is_ptr(t))
-> +		return sizeof(void *);
-
-Does this correctly calculate the pointer size for cross-architecture
-analysis?
-
-Since libbpf is a user-space library that may process BTF blobs from
-different architectures (like a 64-bit tool processing a 32-bit BPF
-object), will hardcoding sizeof(void *) return the host's pointer size
-instead of the target's pointer size?
-
-Would using btf__pointer_size(btf) be more appropriate here?
-
-> +	if (btf_is_int(t) || btf_is_any_enum(t) || btf_is_struct(t) || btf_is_union(t))
-> +		return t->size;
-> +	return -EINVAL;
-> +}
+> +	btf = btf__load_vmlinux_btf();
+> +	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
+> +		return NULL;
 > +
-> +bool btf_type_is_traceable_func(const struct btf *btf, const struct btf_type *t)
-> +{
-> +	const struct btf_param *args;
-> +	const struct btf_type *proto;
-> +	__u32 i, nargs;
-> +	int ret;
-> +
-> +	proto = btf_type_by_id(btf, t->type);
+> +	if (mod) {
+> +		vmlinux_btf = btf;
+> +		btf = btf__load_module_btf(mod, vmlinux_btf);
+> +		if (!ASSERT_OK_PTR(btf, "btf__load_module_btf")) {
+> +			btf__free(vmlinux_btf);
+                        ^^^^
 
-Could this cause an out-of-bounds read if t is not a function type?
+Does this code double-free vmlinux_btf when btf__load_module_btf() fails?
 
-Because the type and size fields share a union in struct btf_type,
-passing a type like BTF_KIND_STRUCT causes its size to be misinterpreted
-as a type ID.
+When btf__load_module_btf(mod, vmlinux_btf) fails, the error path at
+ASSERT_OK_PTR calls btf__free(vmlinux_btf) and then jumps to the out:
+label:
 
-The internal btf_type_by_id() helper skips bounds checking. If the
-interpreted ID exceeds the BTF type array bounds, it might read past the
-end of the array and return a garbage pointer, which would then be
-dereferenced in the next line.
-
-Should this verify !btf_is_func(t) first, and use the bounds-checked
-public API btf__type_by_id() along with a NULL check for proto?
-
-> +	if (BTF_INFO_KIND(proto->info) != BTF_KIND_FUNC_PROTO)
-> +		return false;
+> +			goto out;
+> +		}
+> +	}
 
 [ ... ]
 
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-> index 3781c45b46d3..a9845f57e56c 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -250,6 +250,7 @@ const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id, _
->  const struct btf_header *btf_header(const struct btf *btf);
->  void btf_set_base_btf(struct btf *btf, const struct btf *base_btf);
->  int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **id_map);
-> +bool btf_type_is_traceable_func(const struct btf *btf, const struct btf_type *t);
+> +out:
+> +	tdestroy(root, tdestroy_free_nop);
+> +	btf__free(vmlinux_btf);
+        ^^^^
+
+which calls btf__free(vmlinux_btf) again on the same pointer.
+
+Multiple reviewers (bot+bpf-ci@kernel.org and sashiko-bot@kernel.org) raised
+this concern in v5. The fix should either set vmlinux_btf=NULL after the
+first free or return directly without going to the out label.
+
+Reference: https://lore.kernel.org/bpf/1ab81cf709ce7d536a898695ffad30c15c8a6a7bf48dcb7271239952dd270315@mail.kernel.org/
+
+> +	ids = calloc(funcs_cnt, sizeof(ids[0]));
+> +	if (!ids)
+> +		goto out;
+> +
+> +	/*
+> +	 * We sort function names by name and search them
+> +	 * below for each function.
+> +	 */
+> +	for (i = 0; i < funcs_cnt; i++) {
+> +		if (!tsearch(&funcs[i], &root, compare)) {
+> +			ASSERT_FAIL("tsearch failed");
+                        ^^^^
+
+When tsearch() fails, should err be set to -1 before the goto?
+
+Currently when tsearch() fails, we jump to out, but err is still 0.
+Because err is 0, the cleanup block below won't free ids and will
+instead return the partially or fully zero-initialized array:
+
+> +			goto out;
+> +		}
+> +	}
+
+[ ... ]
+
+> +	if (err) {
+> +		free(ids);
+> +		ids = NULL;
+> +	}
+
+This can lead to incorrect test behavior. The fix should set err=-1
+before the goto out statement.
+
+Reference: https://lore.kernel.org/bpf/20260418033438.03847C19424@smtp.kernel.org/
+
+[ ... ]
 
 
 ---
@@ -137,4 +143,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24598000047
---===============7115338192684722360==--
+--===============0886689944044384329==--
