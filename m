@@ -1,33 +1,33 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A8125771
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 17:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703FF2C0F81
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 18:04:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776535040; cv=none; b=sQ85NSyLzaNSztL7gn3VYobAP/qqSoKke4+WKQzeGB7QzIJPlejvYBXz7GZNa8M9HjaXtOeHmI2T9vIah9NkdPs53ZwaSo+vGPastkjz5URD9KKo1YkxB0qeas5aEQal7xKkRZamBwndx9A03uLjvrspFMhjVxBffXJ6Nm9M9M4=
+	t=1776535495; cv=none; b=o7l9azV7aQDvugYc+YJsftac+L2xsNIGdkSv8iGyRAdon5uRCvLaXo/+pvPNUFLoEfh1+CtLboX5q3xAbbXuxXOMqKT4H5WhSuH5KxsgwF/O+YwkDET+7zOYGYfDGXIcGSrI5Asb+OsE2Vjss+gD1BQcWkSL+Q1XxwsfwOT/+l8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776535040; c=relaxed/simple;
-	bh=Uds63RVdl5GjWGsrGzptx1daVKluG2IWhTKx5autbUc=;
+	s=arc-20240116; t=1776535495; c=relaxed/simple;
+	bh=Np4LgwQ5hhU16/T1cpqbVti1yeyrR61KbbHp5g6Hp/k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UxRKmxmj/Hd/emBhEexHsSLRa3wocAmcrbozQDFQXhMSzYKVhWE0IOQ4kpixD7FRone2Dpg8er+D6LqPrs83mjQpIUll88ZCVn0lZNhC+p8mHtkwJgFM6VvBNTIMZlOm2eMuqPOrQNSWiMFBtnBP3HZJ08pyIvRwgbx29cedrG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vlw6zr8u; arc=none smtp.client-ip=95.215.58.189
+	 In-Reply-To:Content-Type; b=E49fP4AV+g9dbyHe5YqmGEgV8/2XJJd5uZ7T27E63lBfXslUfVqg8DWrir6SDXDBfMyNxecLfnY8Wzp8rvjmtX6PP8QDLMkjUJ7ycuSnPq3uDzu7bOp4BaJHLQthepeH9K4sgpMvDqfopuNWi2SLtNc8u9vi046Rp2FA9vR9RdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NCYKDlOy; arc=none smtp.client-ip=95.215.58.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vlw6zr8u"
-Message-ID: <bb1a896a-bc92-42a7-9019-017aa77b6b7e@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NCYKDlOy"
+Message-ID: <0c5bbdea-a1be-4ab0-973b-197a3b15d959@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776535036;
+	t=1776535491;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=txx1RIqsTARKANrY7lL7BWzWTiTnuK1LtCjTVR11U/A=;
-	b=Vlw6zr8ut9oTdxFjPS0WcrPYq9a6j1DVzgXoRVj/KeKQ1u80o3KqTezbmNyLcYH0cEl9tV
-	hkr/Gq9jHnaZUG9L6qNP2fW0+3z4WaVflihHEHyqiJieg9rg9rZOjtlXmubBC8N8Wf27Oq
-	Z2Y7MMKIncwE8JnfZsiAVF4On59bATU=
-Date: Sat, 18 Apr 2026 10:57:01 -0700
+	bh=QS1uEd/ViBeu8C7L6l/XwPB7XS6L7OjGx65iPeyc/Ms=;
+	b=NCYKDlOyTWksTBCshONk16v17nC1gcQDnnbZKf+DHcJQ060AGNdF/9Ngh7PWCqkHnEke9N
+	5xOhT4CC6MNq7WBOMhjniStvrhxzUSiN7+BPQqEa2gFrby5U/U+5u6fEZTqc3Yl90DBmvD
+	ub6zhWRRElzPP9u2ObJ2X6hQoghDthI=
+Date: Sat, 18 Apr 2026 11:04:15 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,20 +42,96 @@ Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
  eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
 References: <20260417034754.2630932-1-yonghong.song@linux.dev>
- <e5a6e801c10994cc2e03b0cd57e76152eb234493a6b7395a9859feade4a6575b@mail.kernel.org>
+ <9ed0516c340a9717f644ca8d69a474f94774ddbdf4cb39b0b932029612871d35@mail.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <e5a6e801c10994cc2e03b0cd57e76152eb234493a6b7395a9859feade4a6575b@mail.kernel.org>
+In-Reply-To: <9ed0516c340a9717f644ca8d69a474f94774ddbdf4cb39b0b932029612871d35@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 4/16/26 9:43 PM, bot+bpf-ci@kernel.org wrote:
+On 4/17/26 6:04 PM, bot+bpf-ci@kernel.org wrote:
 >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
 >> --- a/kernel/bpf/verifier.c
 >> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>
+>> @@ -11653,6 +11659,19 @@ bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_call_arg_meta *meta)
+>> +static struct bpf_reg_state *get_kfunc_arg_reg(struct bpf_verifier_env *env, int argno)
+>> +{
+>> +	struct bpf_func_state *caller;
+>> +	int spi;
+>> +
+>> +	if (argno < MAX_BPF_FUNC_REG_ARGS)
+>> +		return &cur_regs(env)[argno + 1];
+>> +
+>> +	caller = cur_func(env);
+>> +	spi = out_arg_spi(caller, argno - MAX_BPF_FUNC_REG_ARGS);
+>> +	return &caller->stack_arg_regs[spi];
+>> +}
+> Can the verifier crash here?  Looking at get_kfunc_arg_reg, when
+> argno >= MAX_BPF_FUNC_REG_ARGS, the function returns
+> &caller->stack_arg_regs[spi] without checking whether stack_arg_regs
+> is NULL.
+>
+> The stack_arg_regs array is only allocated by grow_stack_arg_slots,
+> which is called from check_stack_arg_write when the program writes
+> outgoing stack args via r11.  If a malformed BPF program invokes a
+> kfunc without emitting any stack stores beforehand, stack_arg_regs
+> will remain NULL.
+>
+> Consider get_kfunc_ptr_arg_type calling get_kfunc_arg_reg to peek at
+> argument i+1 when checking for buffer+__sz pairs:
+>
+> kernel/bpf/verifier.c:get_kfunc_ptr_arg_type() {
+>      if (argno + 1 < nargs &&
+>          (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1],
+>                                  get_kfunc_arg_reg(env, argno + 1)) ||
+>           ...
+> }
+>
+> When argno=4 (pointer in r5) and argno+1=5 (size in first stack slot),
+> get_kfunc_arg_reg(env, 5) enters the stack-arg branch and dereferences
+> caller->stack_arg_regs even though it may be NULL.  If the arg type is
+> a scalar (which __sz/__szk suffixes imply), is_kfunc_arg_mem_size will
+> try to read reg->type, causing a NULL pointer dereference.
+>
+> The is_stack_arg_slot_initialized gate you added in check_kfunc_args
+> only fires when the loop reaches i=5; by then the peek at i=4 has
+> already dereferenced the NULL pointer.
+>
+> Should get_kfunc_arg_reg verify that stack_arg_regs is non-NULL and
+> spi < stack_arg_depth/BPF_REG_SIZE before returning the pointer?
+> Alternatively, should check_kfunc_call add an out_stack_arg_mask
+> pre-check mirroring the bpf-to-bpf gate that prevents
+> check_func_arg_reg_off from reading uninitialized stack slots?
+
+Good points. Indeed we should check validity of spi in
+   spi = out_arg_spi(caller, argno - MAX_BPF_FUNC_REG_ARGS)
+
+Will fix.
+
+>
+>> @@ -11660,8 +11679,6 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
+>>   		       const char *ref_tname, const struct btf_param *args,
+>>   		       int argno, int nargs, struct bpf_reg_state *reg)
+>>   {
+>> -	u32 regno = argno + 1;
+>> -	struct bpf_reg_state *regs = cur_regs(env);
+>>   	bool arg_mem_size = false;
+>>
+>>   	if (meta->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
+>> @@ -11670,8 +11687,8 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
+>>   		return KF_ARG_PTR_TO_CTX;
+>>
+>>   	if (argno + 1 < nargs &&
+>> -	    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1]) ||
+>> -	     is_kfunc_arg_const_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1])))
+>> +	    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], get_kfunc_arg_reg(env, argno + 1)) ||
+>> +	     is_kfunc_arg_const_mem_size(meta->btf, &args[argno + 1], get_kfunc_arg_reg(env, argno + 1))))
+>>   		arg_mem_size = true;
 > [ ... ]
 >
 >> @@ -20145,6 +20209,16 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
@@ -72,57 +148,42 @@ On 4/16/26 9:43 PM, bot+bpf-ci@kernel.org wrote:
 >> +	else
 >> +		insn->off = 0;
 >> +
-> Is insn->off really "no longer needed for BTF fd index" after this
-> point? Looking at bpf_jit_find_kfunc_model() in kernel/bpf/fixups.c,
-> the function is called during JIT compilation from every BPF JIT backend
-> that supports kfunc calls (x86_32, s390, riscv64, ppc64, loongarch).
+> This concern was raised by the bpf-ci bot and sashiko-bot in the v5
+> review thread but does not appear to have been addressed.
 >
-> It performs a bsearch on the kfunc_tab keyed by (insn->imm, insn->off)
-> using kfunc_desc_cmp_by_imm_off:
+> Overwriting insn->off destroys the BTF file descriptor index required
+> by bpf_jit_find_kfunc_model() for module kfunc lookups.  Looking at
+> the bsearch in kernel/bpf/fixups.c, it uses (insn->imm, insn->off) as
+> the key:
 >
-> kernel/bpf/fixups.c:kfunc_desc_cmp_by_imm_off() {
->      ...
->      if (a->imm != b->imm)
->          return a->imm < b->imm ? -1 : 1;
->      if (a->offset != b->offset)
->          return a->offset < b->offset ? -1 : 1;
->      return 0;
+> kernel/bpf/fixups.c:bpf_jit_find_kfunc_model() {
+>      key.addr = insn->imm;
+>      key.offset = insn->off;
+>      entry = bsearch(&key, tab, tab_count, sizeof(*tab), kfunc_addr_cmp);
 > }
 >
-> The desc->offset was populated from the original insn->off during
-> bpf_add_kfunc_call(), where for module kfuncs it is a non-zero BTF fd
-> index.
+> For module kfuncs, insn->off stores a non-zero btf_fd_idx set during
+> find_kfunc_desc.  After this patch overwrites it with the stack arg
+> count (or 0), the bsearch will fail to find descriptors that were
+> stored with offset=btf_fd_idx.
 >
-> The call order is:
->
-> bpf_check()
->    -> bpf_do_misc_fixups()
->       -> bpf_fixup_kfunc_call()  (overwrites insn->off to 0 or stack_arg_count)
->    -> bpf_prog_select_runtime()
->       -> bpf_int_jit_compile()
->          -> arch JIT
->             -> bpf_jit_find_kfunc_model()  (reads insn->off for bsearch key)
->
-> After this patch, for a kfunc with 5 or fewer args that lives in a
-> module (non-zero btf_fd_idx), insn->off is zeroed, and the bsearch will
-> fail to find the entry that was stored with offset=btf_fd_idx.
->
-> For kfuncs with more than 5 args, the new value of insn->off (stack arg
-> count) also will not match desc->offset (btf_fd_idx or 0), so module
-> kfuncs with stack args are also broken, and vmlinux kfuncs with more
-> than 5 args get a nonzero insn->off that no longer matches
-> desc->offset=0.
+> This breaks module kfunc calls on architectures using JIT far calls
+> (s390x, loongarch, powerpc) for any module kfunc with 5 or fewer args
+> (insn->off zeroed) or with more than 5 args (insn->off now contains
+> the stack arg count instead of btf_fd_idx, still mismatching
+> desc->offset).  Vmlinux kfuncs with more than 5 args also get a
+> nonzero insn->off that no longer matches desc->offset=0.
 >
 > Can the stack arg count be communicated to the JIT without clobbering
 > the btf_fd_idx that bsearch still keys on?
-
-The above code is dead code. Will remove.
-
+>
+> The original concern was raised here:
+> https://lore.kernel.org/bpf/e5a6e801c10994cc2e03b0cd57e76152eb234493a6b7395a9859feade4a6575b@mail.kernel.org/
 >
 >
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24546989054
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24592562564
 
