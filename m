@@ -1,153 +1,208 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCADD2AD10
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 16:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59752AF1D
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 16:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776528400; cv=none; b=EdK3LIEuEvoothOs9GMcwZ2/QHNt2BVbywyiKfthOb4dLGQKyHnFyHaZqwVs5BJni8ryZWUGeh3DhIFXdkZyBqSJkH4xOY285rBfm5DGF099/inpYQC7BxGQWoFgpUUyclVmDKEzyb0wQ8HDeUg16bI5aQyr7az4Dg8aFbRObW8=
+	t=1776530365; cv=none; b=MDRdPlWUxjWX1hqzfePB7YLUwQPYKQXoQ9Ib+jZEa62TMtXfmotnJoCE2CAye3rmfOlyIswEuRlEi+/7u5McdccHK9xLZ8AMZU+R47rTlrVEJYBpdKVnRa+6iMJkkwZoXfoaQWlfPA4JQGG818vVxD45cPJag5dUeMS6EQP9ZRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776528400; c=relaxed/simple;
-	bh=tn6VG3rZkjsluJOYJ4JfqxIqE9osDiRL6pFKGceoJ/g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CWZfncMUiYwp5Z6qo7wITMB3oBm+S5+wB2DssgJIpQnW5691u0+K/O4nZioShSx5f5uhegRPZ9zEFPb/eXuVZWwPPK5bblteSHvK5DUbTkQjRNVVMfxJAJCcczXjuaCf1L6xzeKi+PLO82ini6YB0oSdIih6JAW9K7YKUp4l6JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tgibkN7k; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776530365; c=relaxed/simple;
+	bh=9IwEp0wFmLzyspdG3dmrGCv8JnFqH5Y1PlV8ugEWvBo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LpRg36AbI+Wv9m4UdFo66UozLMw1QebO2lMLCuatQBAr+/+PRCEqfEMCbkubUKarXO0vppRWwDbpdN0xBUCkoq8cro00RLrCYCe2xq9eFRqxkl5rve+jS48umeaJs7myqxnBrE/crrJSRyROHy8cT1fHRmWPh8ByHXRmi7kFIgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oRFueieZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tgibkN7k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E16DC19424;
-	Sat, 18 Apr 2026 16:06:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oRFueieZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 033C5C19424;
+	Sat, 18 Apr 2026 16:39:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776528400;
-	bh=tn6VG3rZkjsluJOYJ4JfqxIqE9osDiRL6pFKGceoJ/g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=tgibkN7kAGwJd91hzlBgiLG7iTsjimSN6kr+ZMzSSMN8nIilSM4jT0dHoYgA5qHI5
-	 7IGtXoU2hrR5T6DBW+0YD+F4dx3DkDW08yJl3sPF5QnLqQkFC2nOcpS9rjokkyZpaK
-	 e+oNLvKTq8Di9iI3oupdg9vxs95YksCuewtDtxHSfK2JKEZ/y+6pNURNt8a6BeOUSM
-	 MMpfDlDJSKjU869MIDMU7zLtHDG8875N0cBEpCCro8/PG+R9LO3uKD1W0i0zqkj2LN
-	 Lrv/ZsxIEiYJjmixfTRW0LzQbrdqv8UNbdBA3G9DzYXwjF/hDCmsu/eDU4FsDEQXx3
-	 hIL/W7A/wk8lw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v13 6/6] bpf, arm64: Add JIT support for cpu
- time counter kfuncs
-Reply-To: sashiko@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260418131614.1501848-7-puranjay@kernel.org>
-References: <20260418131614.1501848-7-puranjay@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 18 Apr 2026 16:06:39 +0000
-Message-Id: <20260418160640.6E16DC19424@smtp.kernel.org>
+	s=k20201202; t=1776530365;
+	bh=9IwEp0wFmLzyspdG3dmrGCv8JnFqH5Y1PlV8ugEWvBo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=oRFueieZvnoxBwx3qfXbddR8Xc2/zAe+IVP/jlJQ3tz8+tmr8tsk+Q7uEG7eDrPJ3
+	 d4VZ2NtJTh2ONidBXq8xsl7V5cNHlxvThUyqr4cEnY969nrj5Y5nb3MkLwMuEeG3IL
+	 BOeBQdu0TanI/gUXUKj/3Oc4j4pEXIjpPVZnufL+BtVId6DwAfQwAUL5w7faYgoBop
+	 4CuYiNOixW/RSn3huR+ZPIUTxYc4Gd+tTA2cz0R9qZkqrIAYny25uJLPZMsFKnqDT5
+	 +fil10aTIfAoKeS8ff+noQdo2s0qYu9sDwIZ1vAuuB6f8tLIkpCvUB1/srNsytPysv
+	 43Ef8o/1wEWhQ==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "Jose E .
+ Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com, Martin KaFai Lau
+ <martin.lau@kernel.org>, Puranjay Mohan <puranjay12@gmail.com>
+Subject: Re: [PATCH bpf-next v5 00/16] bpf: Support stack arguments for BPF
+ functions and kfuncs
+In-Reply-To: <20260417034658.2625353-1-yonghong.song@linux.dev>
+References: <20260417034658.2625353-1-yonghong.song@linux.dev>
+Date: Sat, 18 Apr 2026 17:39:19 +0100
+Message-ID: <m2v7do1avc.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-Sashiko AI review found 4 potential issue(s):
-- [Critical] Division by zero kernel panic during JIT compilation due to di=
-rect read of cntfrq_el0.
-- [High] Implicit sign-extension of the 32-bit multiplier corrupts nanoseco=
-nd conversions.
-- [Medium] Unconditional JIT inlining of timer read bypasses hardware errat=
-a workarounds.
-- [Medium] Silent 64-bit math overflow for duration measurements exceeding =
-1 hour.
+Yonghong Song <yonghong.song@linux.dev> writes:
+
+> Currently, bpf function calls and kfunc's are limited by 5 reg-level
+> parameters. For function calls with more than 5 parameters,
+> developers can use always inlining or pass a struct pointer
+> after packing more parameters in that struct. But there is
+> no workaround for kfunc if more than 5 parameters is needed.
+>
+> This patch set lifts the 5-argument limit by introducing stack-based
+> argument passing for BPF functions and kfunc's, coordinated with
+> compiler support in LLVM [1]. The compiler emits loads/stores through
+> a new bpf register r11 (BPF_REG_PARAMS) to pass arguments beyond
+> the 5th, keeping the stack arg area separate from the r10-based program
+> stack. The maximum number of arguments is capped at MAX_BPF_FUNC_ARGS
+> (12), which is sufficient for the vast majority of use cases.
+>
+> In verifier, r11 based stores can survive bpf-to-bpf and kfunc
+> calls. For example
+>       *(u64 *)(r11 - 8) = r6;
+>       *(u64 *)(r11 - 16) = r7;
+>       call bar1;                // arg6 = r6, arg7 = r7
+>       call bar2;                // reuses same arg6, arg7 without re-storing
+
+Argument registers are caller saved, that means if the x86 JIT will use
+R9 for the arg6 and call bar1, it can clobber it (by calling a helper or
+another bpf-to-bpf call) and then bar2 will receive clobbered value for
+arg6 because it did not reload it.
+
+This only works for caller saved registers like arg5 (R8 on x86-64) (R5
+on bpf) because R5 (BPF) is caller saved and compiler will make sure to
+save R5 before the call. But for stacked arguments, compiler models them
+as stack memory and if the JIT models them as a register to follow
+calling convention, they need to be saved/reloaded before calls. 
+
+Let me explain with an example, if you apply this patch to the selftests:
+
+-- >8 --
+
+From 52924eb28056fe8a2321b1cadf9409f6ca90603d Mon Sep 17 00:00:00 2001
+From: Puranjay Mohan <puranjay@kernel.org>
+Date: Sat, 18 Apr 2026 09:11:06 -0700
+Subject: [PATCH] selftests/bpf: Add test for stack arg register clobbering
+
+Add verifier test stack_arg_reuse_across_inner_call which uses inline
+asm to store stack args, call a subprog that internally calls another
+subprog with different stack arg values (100, 200 instead of 6, 7),
+then reuse the original stores for a second call without re-storing.
+
+This exposes JIT bugs where stack arg registers (x5-x7 on arm64, R9
+on x86) are clobbered by the inner call but not refreshed before
+the second call.
+
+Correct result: 315 + 28 = 343.
+Clobbered result: 315 + 315 = 630. (on arm64)
+
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index 41ce950ea40e..0c6b433404e8 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -462,6 +462,62 @@ __naked void stack_arg_sequential_calls(void)
+        );
+ }
+
++/*
++ * subprog_7args_inner_call takes 7 args like subprog_7args, but
++ * internally calls subprog_7args with different stack arg values
++ * (100, 200).  This clobbers whatever the JIT placed in the stack
++ * arg registers (x5-x7 on arm64, R9 on x86).
++ */
++__noinline __used
++static int subprog_7args_with_inner_call(int a, int b, int c, int d,
++                                        int e, int f, int g)
++{
++       return subprog_7args(a, b, c, d, e, 100, 200);
++}
++
++SEC("tc")
++__description("stack_arg: store reuse across inner call")
++__success __retval(343)
++__arch_x86_64
++__arch_arm64
++__naked void stack_arg_reuse_across_inner_call(void)
++{
++       asm volatile (
++               /* call1: subprog_7args_inner_call(1,2,3,4,5,6,7)
++                * internally calls subprog_7args(1,2,3,4,5,100,200)=315
++                * which clobbers stack arg registers with 100, 200.
++                * Returns 315.
++                */
++               "r1 = 1;"
++               "r2 = 2;"
++               "r3 = 3;"
++               "r4 = 4;"
++               "r5 = 5;"
++               "*(u64 *)(r11 - 8) = 6;"
++               "*(u64 *)(r11 - 16) = 7;"
++               "call subprog_7args_with_inner_call;"
++               "r6 = r0;" /* 315 */
++               /* call2: reuse r11 stores from call1 (no re-store).
++                * subprog_7args(1,2,3,4,5,6,7) should return 28.
++                * If clobbered: subprog_7args(1,2,3,4,5,100,200)=315.
++                */
++               "r1 = 1;"
++               "r2 = 2;"
++               "r3 = 3;"
++               "r4 = 4;"
++               "r5 = 5;"
++               /*
++                * the 6th and 7th arg should be 6, 7 as set above.
++                * But the inner call in subprog_7args_inner_call clobbered
++                * them and reusing again without a re-store will be wrong.
++                */
++               "call subprog_7args;" /* should return 28, but will be 315 due to clobber */
++               "r0 += r6;" /* should have 315 + 28 = 343 but will be 315 + 315 = 630 */
++               "exit;"
++               ::: __clobber_all
++       );
++}
++
+ #else
+
+ SEC("socket")
 --
+2.52.0
 
-commit f282b55d9d2af467b0a51264b002bf14ff3648fc
-Author: Puranjay Mohan <puranjay@kernel.org>
+-- 8< --
 
-    bpf, arm64: Add JIT support for cpu time counter kfuncs
+If I run this arm64 (I have a patch to add support)
 
-This commit adds ARM64 JIT inlining for the bpf_get_cpu_time_counter() and
-bpf_cpu_time_counter_to_ns() kfuncs. It emits instructions to read the
-architected timer directly and perform the nanosecond conversion.
+I get:
+run_subtest:PASS:obj_open_mem 0 nsec
+run_subtest:PASS:unexpected_load_failure 0 nsec
+do_prog_test_run:PASS:bpf_prog_test_run 0 nsec
+run_subtest:FAIL:1313 Unexpected retval: 630 != 343
+#631/14  verifier_stack_arg/stack_arg: store reuse across inner
+call:FAIL
 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 0816c40fc7af9..7da7507ab4315 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -1571,10 +1573,54 @@ static int build_insn(const struct bpf_verifier_e=
-nv *env, const struct bpf_insn
-[ ... ]
-> +		/* Inline kfunc bpf_get_cpu_time_counter() */
-> +		if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
-> +		    imm =3D=3D BPF_CALL_IMM(bpf_get_cpu_time_counter) &&
-> +		    bpf_jit_inlines_kfunc_call(imm)) {
-> +			/*
-> +			 * With ECV (ARMv8.6+), CNTVCTSS_EL0 is self-
-> +			 * synchronizing =E2=80=94 no ISB needed.  Without ECV,
-> +			 * an ISB is required before reading CNTVCT_EL0
-> +			 * to prevent speculative/out-of-order reads.
-> +			 *
-> +			 * Matches arch_timer_read_cntvct_el0().
-> +			 */
-> +			if (cpus_have_cap(ARM64_HAS_ECV)) {
-> +				emit(A64_MRS_CNTVCTSS_EL0(r0), ctx);
-> +			} else {
-> +				emit(A64_ISB, ctx);
-> +				emit(A64_MRS_CNTVCT_EL0(r0), ctx);
-> +			}
-> +			break;
-> +		}
+And on x86 it will be:
+  - Second call gets R9 = 100 (clobbered), [rsp+0] = 7 (survives, because subprog get's own stack slot)
+  - subprog_7args(1,2,3,4,5, 100, 7) = 122 instead of 28
+  - Total: 315 + 122 = 437 instead of 343
 
-Does this unconditional JIT inlining bypass the hardware errata workarounds?
+^^ this is not tested just a theoretical looking at x86 JIT code added
+in this patchset that used R9 for sixth argument.
 
-The generic C implementation of bpf_get_cpu_time_counter() uses
-ktime_get_raw_fast_ns(), which safely respects the out-of-line workaround
-framework (CONFIG_ARM_ARCH_TIMER_OOL_WORKAROUND). By blindly emitting the
-MRS CNTVCT_EL0 (or CNTVCTSS_EL0) instructions, could BPF programs receive
-unstable and corrupted timestamps on affected hardware?
+So, I think the fix it to make the JITs keep the 6th arg (x86) and
+(6,7,8)th arg (arm64) on the stack and re-load them before every call.
+Or the compiler should treat all r11 stack slots like caller saved stack
+and reload them.
 
-> +		/* Inline kfunc bpf_cpu_time_counter_to_ns() */
-> +		if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
-> +		    imm =3D=3D BPF_CALL_IMM(bpf_cpu_time_counter_to_ns) &&
-> +		    bpf_jit_inlines_kfunc_call(imm)) {
-> +			u32 freq =3D arch_timer_get_cntfrq();
+Please let me know if my analysis is correct or maybe my arm64 jit
+implementation is broken.
 
-Could this cause a division-by-zero kernel panic during JIT compilation?
-
-On platforms with broken firmware, the cntfrq_el0 register is often left
-uninitialized (0), and the kernel relies on a device tree fallback.
-If arch_timer_get_cntfrq() returns 0, will clocks_calc_mult_shift() below
-execute a do_div(tmp, freq) and crash the system during BPF program load?
-
-> +			if (freq =3D=3D NSEC_PER_SEC) {
-> +				/* 1 GHz counter: 1 tick =3D 1 ns, identity */
-> +				emit(A64_MOV(1, r0, r1), ctx);
-> +			} else {
-> +				u32 mult, shift;
-> +
-> +				clocks_calc_mult_shift(&mult, &shift, freq, NSEC_PER_SEC, 3600);
-> +				emit_a64_mov_i(1, tmp, mult, ctx);
-
-Does emit_a64_mov_i() implicitly sign-extend the 32-bit multiplier?
-
-The emit_a64_mov_i() function takes a signed s32 value as its argument.
-For systems with slower timer frequencies, clocks_calc_mult_shift() can
-compute a large unsigned 32-bit multiplier whose most significant bit is
-set. Will this cause the unsigned multiplier to be implicitly cast to a
-negative number and sign-extended to 64 bits, corrupting the subsequent
-multiplication?
-
-> +				emit(A64_MUL(1, r0, r1, tmp), ctx);
-
-Will this simple 64-bit multiplication silently overflow for duration
-measurements exceeding one hour?
-
-Since clocks_calc_mult_shift() is called with maxsec =3D 3600 (1 hour), the
-multiplier is calculated such that delta_ticks * mult fits within 64 bits
-up to that duration. For longer durations, could this simple 64-bit
-multiplication wrap around, returning falsely small or corrupted nanosecond
-durations, unlike the 128-bit math used in the generic kernel timekeeping?
-
-> +				if (shift)
-> +					emit(A64_LSR(1, r0, r0, shift), ctx);
-> +			}
-> +			break;
-> +		}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260418131614.1501=
-848-1-puranjay@kernel.org?part=3D6
+Thanks,
+Puranjay
