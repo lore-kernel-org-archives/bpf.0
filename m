@@ -1,120 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A957325F7B9
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 00:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480D4245019
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 00:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776473563; cv=none; b=DdzfTbsEcFWEnpKn5Xu7pa0wFABr/7SrfjczC7PVxIC9Z9YsF/jUN8dHxIL+OoN2R/tZTvEwyJ16ngilYpIT7jkrZsi4AWU8l4sXUhvO8pK/jR5dXs6MTKTROX0aFS5+t2a1Fyg8TMTegR46TE5j4PkTJhr4cGfBSOS3LrgmMPw=
+	t=1776473565; cv=none; b=cfr1N9xZyKEKNEacYU5jTdbzv5D4ACVyFLDTpIqIvXsAEv+wly37J6/soamaT4SVs9w2jgZ4hC3SOxS01EUJL5lRlGtxgQ52fzbKSTIPklKRqyADppBVndrPCGd/8D4c9AuiqzubMHJT7gaMbO7HEYDr3btkkBmQq96RCn6f8QQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776473563; c=relaxed/simple;
-	bh=u4bjoRcq/QS2V13LLlLq9zIXovwMkj3JVZY+BjaOjt8=;
+	s=arc-20240116; t=1776473565; c=relaxed/simple;
+	bh=H1a2St9Ybbl1UrsF1dHwsFZEr/K6PyKA6gePRMOzixE=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=di3xki3kGOCNlYF2bwFz2fIYskHR3vLzlO7d1NpwWymKxJDwYsF1DjFHJuF+huZLATuQYcrutzBCDuab+cmI9VozE7WttzzrKqaZaRZk+u5iUqhwHC5JKrQscB8uOixkNgGA0f6iiHYf6PwyZ/bD3LTgEFqRzD3F4kI4TIfzmVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJQCfpUT; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=MadO77gkv1o09yD63NgBpdjyxYNYNNCuwGuKAne0eGUNL7+qLaP9Ds/IfMAXwiyAomlVTwnkFWVkcOXQvlOpMjgNkaPB2ArMjtLwDYQoiUTwsV0sNhtSTygp0rCMffV57d6ws/WwCpw2nYXIdXWL7JONw9hQhkATblFt10m7k38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ExTl6xim; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJQCfpUT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2452BC19425;
-	Sat, 18 Apr 2026 00:52:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ExTl6xim"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5120C19425;
+	Sat, 18 Apr 2026 00:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776473563;
-	bh=u4bjoRcq/QS2V13LLlLq9zIXovwMkj3JVZY+BjaOjt8=;
+	s=k20201202; t=1776473564;
+	bh=H1a2St9Ybbl1UrsF1dHwsFZEr/K6PyKA6gePRMOzixE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=LJQCfpUTBVxgYS1m39q1sQLDS8Cu0LlCZSXXf53zLn42KeaMY8mC34FUPhUH36eLI
-	 Wo0d/RbhppL38Rgb7n5DwO82q7+H6U/NILTRyOPLaPvqxaskA6HFGvUXCezonTEidc
-	 dfqAWHd32ekK+6Z2P9gPe7fFY7Y+H18P/esbDatZFn3nBJvmBSi0vb7YFvRO7MGld2
-	 4wwPpJFDn43oPNtwhcq/pdF0vkEO0YNhbeJtwEE7SU9wvqHXnB2jvoFbeeI1WQfziO
-	 omTA96T0P7mB5hg92MkI2SaHkfukG0KjgxUm4UNqcbzbMqGVkM2dFxVU1GEZVbe5jX
-	 KO0GeDVxo7fIg==
-Content-Type: multipart/mixed; boundary="===============9051206681955690236=="
+	b=ExTl6ximy+EY0IN/ioTb22w6xiFFLgcXo8NTrX/lphP7W1cPavC1t4lvxomoShbdM
+	 uU8uzgIRkTB01rsfoZtRGf+rL1Zr0779oegzRo/0RjMyjTRHPNGQCSI/RAhk0NBLZi
+	 MTOyyfJ+rtzyVbqgFY64vkQuztzIaBSUy913I+HCg7LhYCW5Maesa8znTWw7/I4Fz8
+	 vaC1fIy6d/4nexMTwaxD0oDkGUk5EwJXxncYb5GuI4ju7N1cKZmmN4ClDorau+9GK8
+	 ymQnYGeDd6WoW8e34+cHnUzLVNqYyzZ0pD7rSzA6z/VC18tapgrPms3vvKj4LhRcpl
+	 5ZkztnFtlr4EQ==
+Content-Type: multipart/mixed; boundary="===============5858879229129043948=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b043233260f364926181102a9a5f5c5e0a8b339554403fe73f7518cf52d3a72a@mail.kernel.org>
-In-Reply-To: <20260417034828.2634626-1-yonghong.song@linux.dev>
-References: <20260417034828.2634626-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v5 14/16] selftests/bpf: Add tests for BPF function stack arguments
+Message-Id: <dce4ce2de406cbd89d8c9a50bee1bee3d5701b3b1d77da8bb2c8d9c9d90b279b@mail.kernel.org>
+In-Reply-To: <20260417034713.2627100-1-yonghong.song@linux.dev>
+References: <20260417034713.2627100-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v5 03/16] bpf: Refactor to handle memory and size together
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 18 Apr 2026 00:52:43 +0000 (UTC)
+Date: Sat, 18 Apr 2026 00:52:44 +0000 (UTC)
 
---===============9051206681955690236==
+--===============5858879229129043948==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg.c b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
-> new file mode 100644
-> index 000000000000..130eaf1c4a78
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
-> @@ -0,0 +1,133 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +
-> +#include <test_progs.h>
-> +#include <network_helpers.h>
-> +#include "stack_arg.skel.h"
-> +#include "stack_arg_kfunc.skel.h"
-> +
-> +static void run_subtest(struct bpf_program *prog, int expected)
-> +{
-> +	int err, prog_fd;
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts,
-> +		.data_in = &pkt_v4,
-> +		.data_size_in = sizeof(pkt_v4),
-> +		.repeat = 1,
-> +	);
-> +
-> +	prog_fd = bpf_program__fd(prog);
-> +	err = bpf_prog_test_run_opts(prog_fd, &topts);
-> +	ASSERT_OK(err, "test_run");
-> +	ASSERT_EQ(topts.retval, expected, "retval");
-> +}
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2bedaa193d54..7a7024d94cf0 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> +static void test_async_cb_many(void)
-> +{
-> +	struct stack_arg *skel;
-> +
-> +	skel = stack_arg__open();
-> +	if (!ASSERT_OK_PTR(skel, "open"))
-> +		return;
-> +
-> +	if (!skel->rodata->has_stack_arg) {
-> +		test__skip();
-> +		goto out;
-> +	}
-> +
-> +	if (!ASSERT_OK(stack_arg__load(skel), "load"))
-> +		goto out;
-> +
-> +	run_subtest(skel->progs.test_async_cb_many_args, 0);
-> +
-> +out:
-> +	stack_arg__destroy(skel);
-> +}
+> @@ -7020,15 +7020,17 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+>  /* verify arguments to helpers or kfuncs consisting of a pointer and an access
+>   * size.
+>   *
+> - * @regno is the register containing the access size. regno-1 is the register
+> - * containing the pointer.
+> + * @mem_regno is the register containing the pointer, mem_regno+1 is the register
+> + * containing the access size.
+>   */
+>  static int check_mem_size_reg(struct bpf_verifier_env *env,
+> -			      struct bpf_reg_state *reg, u32 regno,
+> +			      struct bpf_reg_state *mem_reg,
+> +			      struct bpf_reg_state *size_reg, u32 mem_regno,
+>  			      enum bpf_access_type access_type,
+>  			      bool zero_size_allowed,
+>  			      struct bpf_call_arg_meta *meta)
+>  {
+> +	int size_regno = mem_regno + 1;
+>  	int err;
+>
+>  	/* This is used to refine r0 return value bounds for helpers
 
-Does this test adequately verify the asynchronous timer callback
-execution and its result?
+The refactoring passes size_reg as a parameter to prepare for stack
+arguments, but this code still hardcodes size_regno as mem_regno + 1.
+Does this assumption hold when stack arguments are used, where the size
+might not be at mem_regno + 1?
 
-Since run_subtest() only runs the program and asserts the return value
-is 0, the skeleton is immediately destroyed afterward. The timer
-callback might not have time to execute and could be canceled during map
-destruction.
+Looking at how mark_chain_precision() is called later in this function:
 
-The result of the callback (timer_result) is never verified in
-userspace. Should there be a polling loop waiting for the timer to fire,
-followed by an assertion checking that skel->bss->timer_result == 360?
+>  	err = check_helper_mem_access(env, mem_reg, mem_regno, size_reg->umax_value,
+>  				      access_type, zero_size_allowed, meta);
+>  	if (!err)
+> -		err = mark_chain_precision(env, regno);
+> +		err = mark_chain_precision(env, size_regno);
 
-Reference: https://lore.kernel.org/bpf/20260417042017.CF065C19425@smtp.kernel.org/
+The incorrect size_regno value would cause mark_chain_precision() to mark
+the wrong register for precision tracking. For example, if the memory
+pointer is passed in R5 and the size is in a stack slot, mem_regno would
+be 5, making size_regno 6. This would incorrectly backtrack BPF_REG_6
+instead of the stack slot containing the size argument.
 
-[ ... ]
+Could this break verifier state pruning when the commit message's stated
+goal of handling "stack arguments as they may be beyond registers 1-5" is
+implemented?
 
 
 ---
@@ -122,4 +105,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24592562564
---===============9051206681955690236==--
+--===============5858879229129043948==--
