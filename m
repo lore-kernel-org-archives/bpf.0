@@ -1,109 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED554192D97
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 04:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B30033DEFC
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 04:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776485350; cv=none; b=bGGCdYRwr6GTLJmN2XI57EhdKKZAJ9y5kQHqUh8FbNWKCQYbViRvTqpcylrx0WZJl9/G77hU07iyGYUz5BQWumGRj0QK8wnv+qP74S9tic0Sz/8A3KDeNSbVRItPJy6VAg1gaB7i+4ieoX3KZWkwZGd10NBub8DaXulFqhPJ6V8=
+	t=1776488230; cv=none; b=HpGt9JVpNIlQ42L89a4kHI2ObXCKlDuQluYv/PeNsyDjmBZ5vWW3MVaAVixnpTYPCH7nGzJkZO4WDvQ8Fzgl7NlIP/slMtHrGT2Vq8eFOwiiK6FwfVhvZ7tcGcwRsIyBBAXs4+jqemiDpDBiIZSLOMhOQMHS8ydtOXUlZtmhkQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776485350; c=relaxed/simple;
-	bh=zwTr4cFeWKCIEL95wAOWOkOg9yGT8vX/UbXuS3HCn34=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XZeUy9i9Ha310eUGnJ00yjjMZRlwyGczyOExS4pkT5N/V2Lq9u+XPG3tBYoDeaWL2avAHL5tHcyuweGEEUz36fzLC9fnZfv6REPS70P+V3Wrz+jWi8qfVyyh3E54EpAnQvl4cMCoCFJFxBiHmC4+IC2vTbsW/4enpsjJcagrccI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgQbtGOZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776488230; c=relaxed/simple;
+	bh=PO+dYX/F8E6E3r4GYYIN8Sci3WTYu9lNvD2ARzd+ONY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tF55FZfJ/1YnjUpgr1JqYBSXE3L4ZAGn59GrV1EUsFribpbn5iiBVxnTxEU7BVZzAZ57P0oUwr9HOnE4ufqocsXXSCoqzPBdu73aDCR7Nm/gl5n+D/RdJq6w+jFB4WUb3ZB4Tb5p0qVryW8mJPtDwVkm9cLcPuLky+T9OskrDWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bI4VE0Jx; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgQbtGOZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F3B7C19424;
-	Sat, 18 Apr 2026 04:09:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776485349;
-	bh=zwTr4cFeWKCIEL95wAOWOkOg9yGT8vX/UbXuS3HCn34=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=WgQbtGOZhEJ3daaRUfxtG9MdEZYCZIor5Fe2ypuwjEZO2bnmpGVhSz7g3WneBdrs/
-	 K3wQWViQ2H4TiBf9mOgMDPu3KgnmcBetFsmoxEpzzY+Y27qMOUeZAttfPh0UfUm62O
-	 0Py5Z/ifqmb4KxbblUvbvJDoj3zvUDT8HczMhvwgLB1GsHrWVLTLmTMWfTlvP8gSrT
-	 Id889Rcw6m1qLHpf7gykpZJAU8LSRoTPoXYvjl7au8O6hCf0pBKolNBAQ5lg43BFRo
-	 I+y574bJDWrSe6QhTxwTmI4BiPQhWtXGYiLJr/QIjarNYJDNUIdXKZq9pNxk8g7luj
-	 HC0nd/lezCvFg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv5 bpf-next 10/28] bpf: Add multi tracing attach types
-Reply-To: sashiko@lists.linux.dev
-To: "Jiri Olsa" <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260417192502.194548-11-jolsa@kernel.org>
-References: <20260417192502.194548-11-jolsa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 18 Apr 2026 04:09:08 +0000
-Message-Id: <20260418040909.5F3B7C19424@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bI4VE0Jx"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-35da1af3e10so1432163a91.3
+        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 21:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776488228; x=1777093028; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QXV8vxINpWlyXocdw7x8mtClIUb+GRxRnLWTH5Veis4=;
+        b=bI4VE0JxCvpuRU4axQDDFlFgQYa3tX+P8BNfDQvA3K5jvQS4zIfOvy9lcb0ldUszj6
+         8JvP6dVN1akbeiju+NZTE8zHMyfpsmqAa1Ry7mnZJUByCLVFL8NodbTTQuyzqw6wTLy3
+         cufzm6wLGfoW1Du+PfSAcIEtrdz4xbUzUUSA8GkpkTNArp7SwD0YtFLiu8GVE59CI2FB
+         f+QqqWZzz8oDQCYP2udytGFQ6r7KiQpUaVgM2s5sjozRHYEI0zPDpuJWhWsZp7dalNGz
+         //D0laylsCnkPYCKmozTFVUsxFdmkEPfVTLv+f2QXrrwKkgZAaqnXfqbISl2XlBWbH6a
+         Rz1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776488228; x=1777093028;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QXV8vxINpWlyXocdw7x8mtClIUb+GRxRnLWTH5Veis4=;
+        b=SCF084Qkfn31Vpi3vPwDC+DxIjHNkQQC+ruY8+1OTYf4lpXW3BphLOkM33nnypIR7i
+         Ogfwli9mMgHHgoCkRzRMfNTwsNHHd1/49stkRSTArVnLdTd7pNAmxtiUIbJ9kzXRj5eD
+         1ZYT3O6nVsHA0WrcdqDzHmXh4cG1ld9MlKiMi7UV8T2PHyjvBGLMIPwv/2Ev3vL/6Z8c
+         OMOfd1AKJ+TuBGMFhLgK+L4MtyzdRG7UwfgXldXu3GuiUpPEQI1PthAZzrIGVRvFZOrc
+         USFCv8s7pnCFkMoGP9WQO3MsMQumddbp/zR4kVshgZWtwE2tbvOmKOUl0Bf8SHGQDNyg
+         aLgQ==
+X-Gm-Message-State: AOJu0YzZ1V8STLIQ+VgvOPjaxxQWjPPZGSRoCcXMjc0WlVidvWcdnc63
+	5f2VIlhKVwoLR2ckX9cY/FbDYCmZgiyQhAl4yEUR+ywXZGbgrEEPx0FX
+X-Gm-Gg: AeBDieuESbPzguP6cdlimdwW+hUjZhJwBeQIE43RFk/+nnRE3ShEjcW3xAx2kX3BGF9
+	qOlgF4gFxln4M/4o75GPYrlumDy+eLsIren8PM9kENXvUsBtTmUiLq7ozBbVDVxIAYVFXzmyMhs
+	FXyCFiB2m/0s5OUFmN4YeB2oawcbYFjYCyEScep4W1DpsET4qzpQsgMZ3Nr4+PDmhL4WqrdyUms
+	lWTge3YF3tPKDM8DdZPZ/Wk2WbDYHptEHqZ1wViaXIAgnimy1sWR9914rrC4KXbm+W9MR6Y83/w
+	Zy8K2OpGHe3OdRmbR8dYyPy/jpld/AS9fAfOBvh5D4oCyN2i7Z9dAifUrVN4r9u3LZQBSwpG31i
+	qWNK/AOxgNAxAC7UZpC51zSRfm1EZHIq8RScNHvK9zWx5G1954eyYP2QQhhcfSiAiZFt1YO7ZHu
+	qRd9+rSQ1ky/BxMAL/cHge1THP8W+BXgavDGuQhr+4MIHiGFqBnj85RdEWV0heQjt8dupu7eqQg
+	SWFnis5mw==
+X-Received: by 2002:a17:90a:d607:b0:35c:30a8:330 with SMTP id 98e67ed59e1d1-361402339f2mr5898880a91.0.1776488227780;
+        Fri, 17 Apr 2026 21:57:07 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([2408:8207:1924:8520:35f1:286f:2ada:eed0])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3614195a92asm3502377a91.10.2026.04.17.21.57.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2026 21:57:07 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net 0/4] xsk: fix bugs around xsk skb allocation
+Date: Sat, 18 Apr 2026 12:56:40 +0800
+Message-Id: <20260418045644.28612-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Sashiko AI review found 2 potential issue(s):
-- [High] FENTRY_MULTI and FEXIT_MULTI programs can bypass verifier bounds c=
-hecks and read out-of-bounds kernel stack memory by directly accessing the =
-`ctx` array.
-- [High] bpf_multi_func lacks the __used attribute, causing it to be optimi=
-zed out by Clang LTO, which completely breaks the feature at runtime.
---
+From: Jason Xing <kernelxing@tencent.com>
 
-Note: The format of this review has been altered due to system recitation
-restrictions. Direct quoting of the patch diff has been omitted, and the
-findings are provided as a free-form summary.
+There are four extremely rare issues around xsk_build_skb(). Two of them
+were founded by Sashiko[1].
 
-commit ca84efa8f86b1acb8cf0bd98e80446dbd7c92e12
-Author: Jiri Olsa <jolsa@kernel.org>
-Subject: bpf: Add multi tracing attach types
+[1]: https://lore.kernel.org/all/20260415082654.21026-1-kerneljasonxing@gmail.com/
 
-This commit introduces new multi-tracing attach types BPF_TRACE_FENTRY_MULTI
-and BPF_TRACE_FEXIT_MULTI, along with base verifier support. It uses a dummy
-function bpf_multi_func for initial verification before the specific link
-attachment happens.
+Jason Xing (4):
+  xsk: avoid skb leak in XDP_TX_METADATA case
+  xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
+  xsk: handle NULL dereference of the skb without frags issue
+  xsk: fix use-after-free of xs->skb in xsk_build_skb()  free_err path
 
-Can this approach lead to out-of-bounds kernel stack memory reads?=20
+ net/xdp/xsk.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-Since the initial verification is done against bpf_multi_func, which is=20
-defined with 6 arguments, the verifier will statically permit direct contex=
-t=20
-accesses up to ctx[5] (and ctx[6] for the return value in FEXIT_MULTI).=20
-However, when the program is attached to a real function at runtime, the=20
-trampoline allocates the context array on the kernel stack based on the=20
-target function's actual argument count.=20
+-- 
+2.41.3
 
-If the target function has fewer than 6 arguments, would reading ctx[5] rea=
-d=20
-past the allocated context array and leak memory from the caller's stack=20
-frame? Additionally, would reading ctx[6] for the return value return=20
-unrelated stack memory instead of the actual return value, since the=20
-trampoline places the return value dynamically? Does the verifier need to=20
-explicitly reject direct memory accesses to the context array for these=20
-program types and enforce the use of bounds-checked helpers like=20
-bpf_get_func_arg()?
-
-Is it possible for Clang LTO to optimize out the bpf_multi_func function=20
-entirely?=20
-
-The dummy function is defined without a __used or __attribute__((retain))=20
-attribute, and the BTF_ID_LIST_GLOBAL_SINGLE macro only embeds the function=
-=20
-name in an inline assembly section without generating a C-level reference.=
-=20
-In kernel builds with Link Time Optimization enabled, could the compiler=20
-eliminate this function as dead code?
-
-If this occurs, pahole would not generate BTF data for it, leaving the BTF=
-=20
-ID as 0. Would this result in the verifier's bpf_check_attach_target()=20
-unconditionally rejecting multi-tracing program loads by throwing a missing=
-=20
-btf_id error? Should a __used attribute be added to the function definition=
-=20
-to prevent this?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260417192502.1945=
-48-11-jolsa@kernel.org?part=3D1
