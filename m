@@ -1,33 +1,33 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889301514F8
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 17:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D2B1514F8
+	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 17:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776532262; cv=none; b=KdZ4FQtJnKP062OpokufH/sRW+WDtZFR6lAhpC3CNkSpOrpXHQKPn7gBm9l9LUrPNfqhHxLcqihs4A34BOWuamN6zLIIXNInmdJms+bi/2rDglQFffiTGMg8OtfsVAQhgEXnhP9GYGMxDTfmt2mjK31nmhnPKkXP2yeMRCOq38A=
+	t=1776532324; cv=none; b=QRgjXNDm9DCqPV6WFmwMBbO3+Vf3XfoX39FAN923YHUo0QoRKnQkLtHpDW2FW6puHLFPQUk+RghyCcRcEPLRYFLViExTgAxSHmf67ZjqIMvNx3qxXm2BL8lfeA358JpY6hrMt/HmT387l6gQJs96lR6BT4JyKUzS+omU4c/YXRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776532262; c=relaxed/simple;
-	bh=8x2bzh+ihWnmJK0FnV2lp9dPZP3BnV2Hz1VZw3VDTxk=;
+	s=arc-20240116; t=1776532324; c=relaxed/simple;
+	bh=uWb+F+wKP3JFrEI+z4YWmziqc5seW0t39bQDleZ8vIg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T4ZGV/GG1U4WQq8vwAXsVOCu449H26is8Y1kb3P8MYtMsRwo/Zpu6pc0045md8LmFQMYCnY7Qd8leq2TlFO9oWQrwa75/VY8yHTs1oDFWvNe56610Hx6bn/pnWQatyIPrG0oChI47S0aNcOfDL7jxb6oXJDeii6UNeTaw6iCXZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q6T0YN3T; arc=none smtp.client-ip=91.218.175.183
+	 In-Reply-To:Content-Type; b=jxgoYNGQcD7GPbG7/Kr90BYAVLJEcWwqkVaTXc+sBG1cIiL9vN4fG4ZSK2z9C91E0XzTB6so5PNOZdJC7p1EOzh5aDOWW3IggAe0Q9FBjkFjCtqF6z7bIQ/XDCel6CvK6LN5CMLJYn9o8oDJPDRTR9LYzHqCH9V+dhqUaDuwhDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hdEUMSj2; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q6T0YN3T"
-Message-ID: <86aa2e9c-c612-4a96-9d76-1dde1b396e16@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hdEUMSj2"
+Message-ID: <5950f60d-2820-4032-8063-bd759221783a@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776532258;
+	t=1776532321;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8qXYV9vMW71yG4WmxcgT9G2bib9M6dnMYMZHRa2rLtU=;
-	b=Q6T0YN3TqGCOLJxD0k0heo3Ve3EOcn3J7O+FcvWy2ZBCjn2d/e7Awns8yfZogYPaEX0y6P
-	ndNiL3CIBvvtLwb514gn0mRM72ymbgRpc3ZhwDNJdhwdyK1/sQFFEqtaIBXJP9+6oFN/qE
-	upWOM604V3Kgv1JCmupZG2N+cMsoPEQ=
-Date: Sat, 18 Apr 2026 10:10:53 -0700
+	bh=a9W5rEYvm2wcrObVxMRQ8z95MDXBnTntnAhDpOnNnhU=;
+	b=hdEUMSj2fJ0Runtra3wExo+sLzbdopU0j9hS+DKrRYDGZF5SB7wVYKKhPJfQtijP7V3H+L
+	w78BxkvzFGFZnDnYMm06j6sVcVkbF4djyqwammL+O1n2TU81Dhe2eaPIAU30b+AdYYwjJA
+	HdwcF8Pdv8CMpSiCvXW4BYj/fo+9Rv0=
+Date: Sat, 18 Apr 2026 10:11:48 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,129 +37,86 @@ MIME-Version: 1.0
 Subject: Re: [PATCH bpf-next v5 08/16] bpf: Support stack arguments for bpf
  functions
 Content-Language: en-GB
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
+ eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
 References: <20260417034739.2629927-1-yonghong.song@linux.dev>
- <20260417043525.6DAF1C2BCB6@smtp.kernel.org>
+ <c0706191c8a93441ee218ba6e6f277e4172f2dd8e4e44c6ff722640ed3a45bbe@mail.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260417043525.6DAF1C2BCB6@smtp.kernel.org>
+In-Reply-To: <c0706191c8a93441ee218ba6e6f277e4172f2dd8e4e44c6ff722640ed3a45bbe@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 4/16/26 9:35 PM, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 5 potential issue(s):
-> - [Critical] Verifier State Leakage in `copy_stack_state` when reusing states.
-> - [Critical] Security / Liveness Tracking Bypass via `stack_arg_regs`.
-> - [Critical] Use-After-Free via Type Mismatch in `bpf_get_spilled_stack_arg()`.
-> - [Medium] Unnecessary Rejection of Valid Programs due to Dead Code Elimination.
-> - [Low] Missing Parentheses in `bpf_get_spilled_stack_arg` Macro.
-> --
->
-> commit 6ec4a3fcb5e83a95626cd2bb13a60b2283e1c3e2
-> Author: Yonghong Song <yonghong.song@linux.dev>
-> bpf: Support stack arguments for bpf functions
->
-> This commit adds support for passing more than 5 arguments to BPF subprograms
-> by utilizing a dedicated stack area accessed via register r11. It introduces
-> new fields to track incoming and outgoing stack arguments for bounds checking
-> and precise verifier path tracking.
->
-> Link: https://github.com/llvm/llvm-project/pull/189060
->
+On 4/16/26 9:43 PM, bot+bpf-ci@kernel.org wrote:
 >> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 7bbd62c51bb5c..e0341fa0b0f7c 100644
 >> --- a/include/linux/bpf_verifier.h
 >> +++ b/include/linux/bpf_verifier.h
->> @@ -508,6 +513,17 @@ struct bpf_verifier_state {
->>   	     iter < frame->allocated_stack / BPF_REG_SIZE;		\
->>   	     iter++, reg = bpf_get_spilled_reg(iter, frame, mask))
->>   
->> +#define bpf_get_spilled_stack_arg(slot, frame, mask)                   \
->> +	(((slot < frame->stack_arg_depth / BPF_REG_SIZE) &&             \
->> +	  ((1 << frame->stack_arg_regs[slot].type) & (mask))) \
->> +	 ? &frame->stack_arg_regs[slot] : NULL)
-> Is there a type mismatch in this check?
->
-> The mask parameter here is passed as 1 << STACK_SPILL, but
-> frame->stack_arg_regs[slot].type is an enum bpf_reg_type, not an enum
-> bpf_stack_slot_type.
->
-> For pointer types, this expression can evaluate to 0. This would cause the
-> iterator to silently skip pointers stored in the stack argument area. If an
-> acquired reference is dropped via release_reference(), the copy in the stack
-> argument area wouldn't be invalidated, potentially allowing a use-after-free
-> if a program subsequently reads the spilled pointer back from r11.
->
-> Also, this isn't a bug, but should the slot parameter be enclosed in
-> parentheses to prevent operator precedence issues if a complex expression
-> is passed in the future?
-
-Yes, it is a bug. Will fix.
-
->
 > [ ... ]
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
->> @@ -1266,9 +1275,20 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
-> [ ... ]
->> +	for (i = 0; i < env->subprog_cnt; i++) {
->> +		struct bpf_subprog_info *subprog = &env->subprog_info[i];
+>
+>> @@ -508,6 +513,17 @@ struct bpf_func_state {
+>>   	u32 callback_depth;
+>>   	u32 async_entry_cnt;
+>>
+>> +	/* Stack argument tracking for current function. */
+>> +	struct bpf_reg_state *stack_arg_regs;	/* Stack arg register states */
+>> +	u32 stack_arg_depth;			/* Depth of stack_arg_regs array */
+>> +	u32 incoming_stack_arg_depth;		/* Incoming stack arg count (callee) */
+>> +	u64 out_stack_arg_mask;			/* Outgoing stack arg mask (caller) */
+>> +};
 >> +
->> +		if (subprog->max_out_stack_arg_depth > subprog->outgoing_stack_arg_depth) {
->> +			verbose(env,
->> +				"func#%d writes stack arg slot at depth %u, but calls only require %u bytes\n",
->> +				i, subprog->max_out_stack_arg_depth, subprog->outgoing_stack_arg_depth);
->> +			return -EINVAL;
->> +		}
->> +	}
-> Could this reject valid programs if the compiler hoists a stack argument
-> store above a branch that is later eliminated as dead code?
+>> +#define bpf_get_spilled_stack_arg(slot, frame, mask)			\
+>> +	(((slot < frame->stack_arg_depth / BPF_REG_SIZE) &&		\
+>> +	  ((1 << frame->stack_arg_regs[slot].type) & (mask)))	\
+>> +	 ? &frame->stack_arg_regs[slot] : NULL)
+> Does this macro work correctly? The existing bpf_get_spilled_reg macro
+> filters on frame->stack[slot].slot_type[], which is drawn from the
+> STACK_* enum (STACK_SPILL, STACK_ITER, etc.) and callers pass masks
+> like (1 << STACK_SPILL) | (1 << STACK_ITER).
 >
-> If the compiler optimizes a store above a conditional check,
-> max_out_stack_arg_depth would be updated. However, if the configuration
-> constants cause the branch containing the actual function call to be
-> eliminated, outgoing_stack_arg_depth would remain 0, leading to a rejection
-> of a safe verification path.
-
-We should be okay here. btf_check_func_arg_match() ensures func prototype
-matches the number of outgoing parameters. Otherwise, it will fail:
-
-                 if (i >= MAX_BPF_FUNC_REG_ARGS) {
-                         struct bpf_func_state *caller = cur_func(env);
-                         int spi = out_arg_spi(caller, i - MAX_BPF_FUNC_REG_ARGS);
-                                 
-                         /*
-                          * The compiler may constant-fold stack arg values into the
-                          * callee, eliminating the r11 stores. The BTF still declares
-                          * these parameters, but no outgoing stack slots exist.
-                          */
-                         if (spi >= (caller->stack_arg_depth / BPF_REG_SIZE)) {
-                                 verbose(env, "stack %s not found in caller state\n",
-                                         reg_arg_name(env, argno));
-                                 return -EINVAL;
-                         }
-                 }
-
+> This new macro filters on bpf_reg_state.type which is from a completely
+> different enum bpf_reg_type (SCALAR_VALUE, PTR_TO_BTF_ID, etc.) with
+> type modifier bits (PTR_MAYBE_NULL = BIT(8), PTR_TRUSTED = BIT(20),
+> etc.).
 >
-> [ ... ]
+> For example, check_kfunc_call() in the rcu_unlock path uses:
+>
+>      u32 clear_mask = (1 << STACK_SPILL) | (1 << STACK_ITER);
+>      ...
+>      bpf_for_each_reg_in_vstate_mask(env->cur_state, state, reg,
+>                                      clear_mask, ...);
+>
+> A stack-arg slot holding a MEM_RCU-tagged register would have
+> reg->type including MEM_RCU (BIT(13)). Then (1 << 13) = 0x2000, and
+> 0x2000 & clear_mask (0x22) = 0, so the slot is skipped and MEM_RCU is
+> not cleared on rcu_unlock.
+>
+> Additionally, when n >= 32 (for modifier bits like PTR_TRUSTED at
+> BIT(20)), the shift (1 << n) invokes undefined behavior in C.
+>
+> Should this use a different approach to filter stack arg slots, perhaps
+> based on initialization status (type != NOT_INIT)?
+>
 >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 32cc59810e14d..30f2d1f06a988 100644
 >> --- a/kernel/bpf/verifier.c
 >> +++ b/kernel/bpf/verifier.c
->> @@ -1340,6 +1340,20 @@ static int copy_stack_state(struct bpf_func_state *dst, const struct bpf_func_st
->>   		return -ENOMEM;
->>   
->>   	dst->allocated_stack = src->allocated_stack;
->> +
->> +	/* copy stack args state */
+> [ ... ]
+>
+>> @@ -1340,6 +1340,20 @@ static int copy_stack_state(struct bpf_func_state *dst,
+>>   			goto out_free_stack;
+>>   	}
+>>
 >> +	n = src->stack_arg_depth / BPF_REG_SIZE;
 >> +	if (n) {
 >> +		dst->stack_arg_regs = copy_array(dst->stack_arg_regs, src->stack_arg_regs, n,
->> +					     sizeof(struct bpf_reg_state),
->> +					     GFP_KERNEL_ACCOUNT);
+>> +						 sizeof(struct bpf_reg_state),
+>> +						 GFP_KERNEL_ACCOUNT);
 >> +		if (!dst->stack_arg_regs)
 >> +			return -ENOMEM;
 >> +
@@ -167,77 +124,47 @@ matches the number of outgoing parameters. Otherwise, it will fail:
 >> +		dst->incoming_stack_arg_depth = src->incoming_stack_arg_depth;
 >> +		dst->out_stack_arg_mask = src->out_stack_arg_mask;
 >> +	}
->>   	return 0;
->>   }
-> Does this skip clearing the destination's stack argument fields if the source
-> state has no stack arguments?
->
-> If src->stack_arg_depth is 0, dst->stack_arg_depth, out_stack_arg_mask, and
-> incoming_stack_arg_depth are not updated. When the verifier reuses an
-> existing state during pop_stack() via bpf_copy_verifier_state(), the
-> destination state might incorrectly inherit a stale stack argument
-> initialization mask from a previously evaluated path.
->
-> Could this allow a program to initialize stack arguments on one branch, and
-> then safely perform a function call on a different branch without proper
-> initialization?
-
-Yes, you are right. dst->stack_arg_depth etc. should not under condition 'if (n)'.
-
->
-> [ ... ]
->> @@ -4424,6 +4467,123 @@ static int check_stack_write(struct bpf_verifier_env *env,
-> [ ... ]
->> +static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_state *state,
->> +				 int off, int value_regno)
->> +{
-> [ ... ]
->> +	cur = env->cur_state->frame[env->cur_state->curframe];
->> +	if (value_regno >= 0) {
->> +		state->stack_arg_regs[spi] = cur->regs[value_regno];
->> +	} else {
->> +		/* BPF_ST: store immediate, treat as scalar */
->> +		struct bpf_reg_state *arg = &state->stack_arg_regs[spi];
 >> +
->> +		arg->type = SCALAR_VALUE;
->> +		__mark_reg_known(arg, env->prog->insnsi[env->insn_idx].imm);
->> +	}
->> +	state->out_stack_arg_mask |= BIT(idx);
 >> +	return 0;
->> +}
->> +
->> +/*
->> + * Read a value from the incoming stack arg area.
->> + * off is a positive offset from r11 (e.g. +8 for arg6, +16 for arg7).
->> + * Callers ensure off > 0, 8-byte aligned, and size is BPF_REG_SIZE.
->> + */
->> +static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_state *state,
->> +				int off, int dst_regno)
->> +{
-> [ ... ]
->> +	arg = &state->stack_arg_regs[spi];
->> +	cur = env->cur_state->frame[env->cur_state->curframe];
->> +
->> +	if (is_spillable_regtype(arg->type))
->> +		copy_register_state(&cur->regs[dst_regno], arg);
->> +	else
->> +		mark_reg_unknown(env, cur->regs, dst_regno);
->> +	return 0;
->> +}
-> Does this bypass liveness tracking for stack arguments?
+> What happens when src->stack_arg_depth == 0 but dst has non-zero
+> values from prior work?
+>
+> The stack_arg_depth, incoming_stack_arg_depth, out_stack_arg_mask, and
+> stack_arg_regs fields come after the 'stack' field in struct
+> bpf_func_state, so the preceding memcpy(dst, src, offsetof(..., stack))
+> in copy_func_state does not overwrite them.
+>
+> When n == 0, the assignments to dst->stack_arg_depth,
+> dst->incoming_stack_arg_depth, and dst->out_stack_arg_mask are skipped,
+> leaving stale values in dst.
+>
+> This can be triggered via:
+>
+> 1. Frame starts with stack_arg_depth = 0, out_stack_arg_mask = 0
+> 2. check_cond_jmp_op calls push_stack which saves this state
+> 3. Verifier continues on one branch; BPF_ST/BPF_STX writes to r11-8,
+>     r11-16 cause check_stack_arg_write to call grow_stack_arg_slots,
+>     setting stack_arg_depth = 16 and out_stack_arg_mask = BIT(0)|BIT(1)
+> 4. Branch ends; pop_stack calls bpf_copy_verifier_state which calls
+>     copy_stack_state with src->stack_arg_depth == 0
+> 5. Because n == 0, the assignment block is skipped, and dst retains
+>     stack_arg_depth = 16 and out_stack_arg_mask = BIT(0)|BIT(1)
+> 6. The other branch never writes r11-8 or r11-16, but when it calls a
+>     subprog, set_callee_state checks:
+>     if ((caller->out_stack_arg_mask & req_mask) != req_mask)
+>     The stale mask makes this check pass incorrectly
+>
+> Would the verifier accept a call with uninitialized stack args on that
+> second branch? Should these fields be assigned unconditionally, similar
+> to how allocated_stack is handled earlier in this function?
 
-This will be addressed in liveness.c.
+The same issue as in the previous comment. Will fix.
 
 >
-> Because the state is copied directly without calling mark_reg_read(), the
-> live field of stack arguments is never marked as read.
 >
-> During state pruning, stack_arg_safe() delegates to regsafe(), which
-> contains a fast-path that unconditionally returns true if the old state's
-> register was never marked as read. Could this cause the verifier to
-> aggressively prune verification paths even if they contain completely
-> different and potentially unsafe stack arguments?
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 >
-I think we should be okay. mark_reg_unknown will mark register as SCALAR_VALUE.
-It will do pruning properly in regsafe().
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24546989054
 
