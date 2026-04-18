@@ -1,140 +1,140 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9141E2EBB9E
-	for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 04:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8155522259F;
+	Sat, 18 Apr 2026 05:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776488253; cv=none; b=u042qwu0yO/8BM68rPeXyXZ7OnL7Ee7RxPg6QgONVnMBKdi+iiQ8lFGHGFEA01OkU1YgYiHtbfSjAtm9bsy29jOj56Z1ojEBGvHkKCxOAe/9FCw+7ikefYmXvzidKhrDzdGWWgB2DIk+qgJpOiz+BavgvO2dLQsXV8xLi2Jc+fk=
+	t=1776491947; cv=none; b=MN9WxwNjrJrhVgZKzkZJHQ5XzRgitsnG6n/yT1TwOttXPYoFm+IPUQzrxSSNPTXI2NjJKSlwSOPNaFuu8w49O+SRqQYdfwoC7K1G6JiTKbA0GZ9ouVxL8l0hhVbA/c9pmRAkCQZqoSY8HTqr7ZgIxHabs4KNzmWbWYi5aKRLD/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776488253; c=relaxed/simple;
-	bh=3DIIIIQ8qtWzRzN1t+hW53HRIAOPy5kzr//rkIeFXPo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Cp66ndCyR6g1H1DyljVzdBa5LYQ/67n68qNgvbc2T4WbJRZRklN7nVp6hFWJstEGCzZe6R7m98RWaoghd4pl6ILj13P2C/nQU9F8CSq9G2vql7bXjuNQCUhWZNlx4X28nmhBJ6//4occavXrvrYwH4NNTcuSlf3e+tjClW04fZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qf7Pxihm; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776491947; c=relaxed/simple;
+	bh=DjvpuVm6vJcY7bDx5YI4kmp4dLJuHPN92Em3UWCXaTc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=gwG1ZCBo7663FceqbJOyQyPHTqii26DLQeZDUNru5bH28Fl3ZoL55l5r3zjjw/Joe1mJoKvymrLfttXRdhCz74r4qp/M5XTJ5FAetVcHe0QxLnQEbQ7T9o/eIAmTV3W9dbzQZSo32wSQutBIwSjMO57eJyqpEZHeXFjq1cW28QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Un/mQ4u+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qf7Pxihm"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-358ed696623so615312a91.0
-        for <bpf@vger.kernel.org>; Fri, 17 Apr 2026 21:57:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776488251; x=1777093051; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bPVULVHS7ZbCg3hexureS08Z0+NT0ceqMqy/MCX2QIg=;
-        b=Qf7Pxihm3gWvvXowugsFy3j3ndO59ZAtG98rG/eDoZrYiJJ5aySxLyio/hRjLb+D6M
-         05m07HJbSPJz/cxavpdWOddbNIUQyVvvyv7B6gy51M5E0A0itefXSkx2JI0bd/90lW2P
-         vZr3eQkKmUqgGnVhR4QKReli/R4PFvh1U0DZLjrZrF96NiE2iw44Rn/rP0j1jcWt01Lb
-         LjF8QAxfPOJ0K0cyiBugBwpdNoxO17gAew+FKbROrpbkesp+dayDPwcQjS91NfYAHFTr
-         bjYNbtqqEWSMIMyShKgjtFGI/J5HxGVRkF/n/cxLrzPfPZWSqTfchV0p1EjX1E/goGIb
-         J92Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776488251; x=1777093051;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bPVULVHS7ZbCg3hexureS08Z0+NT0ceqMqy/MCX2QIg=;
-        b=RBwLZNXbh3Vzs1aJcEBGvBJqR7Nmh5gfn8gLeMjHlcbOoJo1JiN3oKgbSMM1pRD5BV
-         V5jTjuj0PqzSGkWF9avNXiEFjhOySsCoteFPNGeaRA+7J/FVFi/yS/GR6Y+SfQ5zmisl
-         tiYLNX+YGg7KWH2rXB0vAIIcgbHr7HNtQJsW/OR54hUUoUF8WJl8ZE6bjw4lGIi20dsl
-         RvXeEdkXjJGoZky4wmnVx3kC5KNoqdNfZNQ5R6ME9ejbTRr7AnbeWsTxVfzcGrwPZ6sZ
-         MClWJyrBDt8BmOxOEYQVYene+dwMF77hN504UJa/6aC69qB7ojdOPhin7hThpnSr1RKJ
-         21zw==
-X-Gm-Message-State: AOJu0Yy/4D1uyXq7mj/xTOSegFtraL3U6CfzpqjqDjF/54eE34buqy1U
-	X1Q6UyO4PX+x4kMOqDAqwjKuW7huYygJ0rRh7bbs+P45qw70g6fboJbP
-X-Gm-Gg: AeBDieuh15WzBc6FTyENU3ZKlnDD9Ty7OzYCrzcsYFhCtVIb07yUR+zQaUH91fdyUga
-	OvUWBuByo4XtPTCTYCCg1qL2P8poPuC1fkTdb3O0ARFgTdSJIRKy2OGcst9h8az8wn4kP4WRzhp
-	9eRHp64A2C8Al7Bxb/o4V3SEwtqWG9vvzVRh+Nz4m2mtEkCP+J7WI+QcWG1JO9P8bmO6MOLTYCs
-	Q4z8SyrgEQ52Esl9XvxJf3d5IqlRZA9S6oXfA/FqjRU6B9eWNJIgfe5XV43cbZOMNoJGWY9uol+
-	ZOBuqgo+6pa9a2i9Vna5Dtg5CQcC5okI38RbpPGNWCgpvkgb3TZW9ofyxCCt4V8fdLRghgnYOV3
-	VrxfcPMhYpczdpbBupvzP4zZegHtQaqZzdl1dqb9FaxWzTJS+M1m2h5aN6TJNK+/bMpx9iRyNt2
-	QQTWl4v6ZX+eOp6iE4LnEu41FUMuypNQxHUcYQv+TqbI7m7lnXD+DUUdu7/hDQkOSALNgr03UGR
-	5QrfNrnow==
-X-Received: by 2002:a17:90b:52cf:b0:35f:ba3f:e04e with SMTP id 98e67ed59e1d1-361403f1165mr5993151a91.11.1776488250835;
-        Fri, 17 Apr 2026 21:57:30 -0700 (PDT)
-Received: from KERNELXING-MC1.tencent.com ([2408:8207:1924:8520:35f1:286f:2ada:eed0])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3614195a92asm3502377a91.10.2026.04.17.21.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2026 21:57:30 -0700 (PDT)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	bjorn@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	jonathan.lemon@gmail.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net 4/4] xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
-Date: Sat, 18 Apr 2026 12:56:44 +0800
-Message-Id: <20260418045644.28612-5-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20260418045644.28612-1-kerneljasonxing@gmail.com>
-References: <20260418045644.28612-1-kerneljasonxing@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Un/mQ4u+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA7AC19424;
+	Sat, 18 Apr 2026 05:59:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776491947;
+	bh=DjvpuVm6vJcY7bDx5YI4kmp4dLJuHPN92Em3UWCXaTc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=Un/mQ4u+4OLnW4uXVMHdaTEDRTnacpHybJx8dxVmi9lqfz77nxedNUn36I3ZgTfNS
+	 0bLDIvfYOLL5pInGMKW+X7UhSD7bKF/E/s9WoEUhkpAph6scwN0r78YSinVyhQ3b2U
+	 gETWWppSTOA0Jg/LWzNPNEs00eFyLp22EWq4eUm43f5fzU3pZgO7/6cer44HoEZrKO
+	 iy7V42d8mx3W12yjfZMFpwhIrUMRDoRCqfIlQWr9h9gsXPDGjjDeAnayH6rXd7uqjK
+	 MhJupK/mI5HYfc3FWESYlfeBynf821AuWiZRhOsiiCNPxvUwHQ6sG3dzI6L/cNbVQk
+	 d4VYGyCD4IXLg==
+Content-Type: multipart/mixed; boundary="===============7115338192684722360=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <7634d754f187df27c83d722c7bcd4ac73c06d13e1ebbc778b4a6d8fe296032c9@mail.kernel.org>
+In-Reply-To: <20260417192502.194548-20-jolsa@kernel.org>
+References: <20260417192502.194548-20-jolsa@kernel.org>
+Subject: Re: [PATCHv5 bpf-next 19/28] libbpf: Add btf_type_is_traceable_func function
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 18 Apr 2026 05:59:06 +0000 (UTC)
 
-From: Jason Xing <kernelxing@tencent.com>
+--===============7115338192684722360==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-When xsk_build_skb() processes multi-buffer packets in copy mode, the
-first descriptor stores data into the skb linear area without adding
-any frags, so nr_frags stays at 0. The caller then sets xs->skb = skb
-to accumulate subsequent descriptors.
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index fc08ac6bcdde..49368ee161b1 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
-If a continuation descriptor fails (e.g. alloc_page returns NULL with
--EAGAIN), we jump to free_err where the condition:
+[ ... ]
 
-  if (skb && !skb_shinfo(skb)->nr_frags)
-      kfree_skb(skb);
+> +static int btf_get_type_size(const struct btf *btf, __u32 type_id,
+> +			     const struct btf_type **ret_type)
+> +{
+> +	const struct btf_type *t;
+> +
+> +	*ret_type = btf__type_by_id(btf, 0);
+> +	if (!type_id)
+> +		return 0;
+> +	t = btf__type_by_id(btf, type_id);
+> +	while (t && btf_type_is_modifier(t))
+> +		t = btf__type_by_id(btf, t->type);
 
-evaluates to true because nr_frags is still 0 (the first descriptor
-used the linear area, not frags). This frees the skb while xs->skb
-still points to it, creating a dangling pointer. On the next transmit
-attempt or socket close, xs->skb is dereferenced, causing a
-use-after-free or double-free.
+Does this loop need a maximum resolution depth limit?
 
-Fix by adding a !xs->skb check to the condition, ensuring we only free
-skbs that were freshly allocated in this call (xs->skb is NULL) and
-never free an in-progress multi-buffer skb that the caller still
-references.
+If a malformed BTF object contains a circular modifier reference
+(e.g., typedef A -> const B -> typedef A), could this loop spin
+indefinitely and cause a hang?
 
-Closes: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@gmail.com/
-Fixes: 6b9c129c2f93 ("xsk: remove @first_frag from xsk_build_skb()")
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> +	if (!t)
+> +		return -EINVAL;
+> +	*ret_type = t;
+> +	if (btf_is_ptr(t))
+> +		return sizeof(void *);
+
+Does this correctly calculate the pointer size for cross-architecture
+analysis?
+
+Since libbpf is a user-space library that may process BTF blobs from
+different architectures (like a 64-bit tool processing a 32-bit BPF
+object), will hardcoding sizeof(void *) return the host's pointer size
+instead of the target's pointer size?
+
+Would using btf__pointer_size(btf) be more appropriate here?
+
+> +	if (btf_is_int(t) || btf_is_any_enum(t) || btf_is_struct(t) || btf_is_union(t))
+> +		return t->size;
+> +	return -EINVAL;
+> +}
+> +
+> +bool btf_type_is_traceable_func(const struct btf *btf, const struct btf_type *t)
+> +{
+> +	const struct btf_param *args;
+> +	const struct btf_type *proto;
+> +	__u32 i, nargs;
+> +	int ret;
+> +
+> +	proto = btf_type_by_id(btf, t->type);
+
+Could this cause an out-of-bounds read if t is not a function type?
+
+Because the type and size fields share a union in struct btf_type,
+passing a type like BTF_KIND_STRUCT causes its size to be misinterpreted
+as a type ID.
+
+The internal btf_type_by_id() helper skips bounds checking. If the
+interpreted ID exceeds the BTF type array bounds, it might read past the
+end of the array and return a garbage pointer, which would then be
+dereferenced in the next line.
+
+Should this verify !btf_is_func(t) first, and use the bounds-checked
+public API btf__type_by_id() along with a NULL check for proto?
+
+> +	if (BTF_INFO_KIND(proto->info) != BTF_KIND_FUNC_PROTO)
+> +		return false;
+
+[ ... ]
+
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+> index 3781c45b46d3..a9845f57e56c 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -250,6 +250,7 @@ const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id, _
+>  const struct btf_header *btf_header(const struct btf *btf);
+>  void btf_set_base_btf(struct btf *btf, const struct btf *base_btf);
+>  int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **id_map);
+> +bool btf_type_is_traceable_func(const struct btf *btf, const struct btf_type *t);
+
+
 ---
- net/xdp/xsk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 2918b773aa84..22c7a92e0734 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -894,7 +894,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 	return skb;
- 
- free_err:
--	if (skb && !skb_shinfo(skb)->nr_frags)
-+	if (skb && !xs->skb && !skb_shinfo(skb)->nr_frags)
- 		kfree_skb(skb);
- 
- 	if (err == -EOVERFLOW) {
--- 
-2.41.3
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24598000047
+--===============7115338192684722360==--
