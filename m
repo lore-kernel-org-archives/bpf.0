@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C25F282F24
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA0427FD44
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776616445; cv=none; b=uxO6oA/IEKWC3sujHZw8E2GOiG74IPUswEv+8Jj1oLHlGOC3FlTYkxg8mytdlZj2Z0hVVXb3iV2DAbzHS8mFmrfDCBmlCUVjOq/7poazCHUG8nXH+khbkU57EIYHVDWnehgwZ+f0OWy9QXOWD0PU9mVx6/ICwIFg7sl5NCRX89Q=
+	t=1776616452; cv=none; b=cUjAxV2FbzXFNHHqA8lJMPAV3b8tpvCDDi7pYGMyxUWl4vPQXD07HWg3f+MgwWHQuS/GvsyyHxesAdbdGc4SfKbpTviqnEHJ3nRBTXBmKMXJU6+ZI/I6goTK3FVuxVvjR+OduzxaL08KUoHmcDWH/uGa+hAhHz1ANAn7N+jiybk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776616445; c=relaxed/simple;
-	bh=D7cWQ9Ou0x3hmNrxsVMXzc/BI1fz2L3ImtxHqMYZGEE=;
+	s=arc-20240116; t=1776616452; c=relaxed/simple;
+	bh=yclkMf5CkDhmC1LIGSDEQx9B5XvRElmZrZAOyJcejwc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LxAGohdvCQi44pvasDKZ6OA9+s8wq6yxDOD3AveUReiMA09MtEpv8KeZ9hhNicEJMSFgs05MmAP8T9KDOht/v7ynq5RoF2MyYR13nU7e2L6WAk7VwVpm+3PFzRY62qcE1gIdY5oubAPAKUkw+g3lJ5BPt0rtZqXH+53ye3C/Ur8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=WKOLMQc4GOKVEhBXJsNTTamvH1Y8c+1hVGKZVoZ5sNqjZRKDcKnUWnL17t2Uqt4A6bFGn+dSN3pqCoL1Qy2X+LoC6SaYZnDlWrVd31OIt2KKIqiXpdDZ3fl7GxcJJFICUQ0N9rBAtWbqcWTJ/yrjeNw8ngik5av3rSHghFJD+UE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 5E55B42DD4DF7; Sun, 19 Apr 2026 09:33:57 -0700 (PDT)
+	id 79E2A42DD4E18; Sun, 19 Apr 2026 09:34:02 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v6 08/17] bpf: Reject stack arguments in non-JITed programs
-Date: Sun, 19 Apr 2026 09:33:57 -0700
-Message-ID: <20260419163357.734345-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 09/17] bpf: Track r11 registers in const_fold and liveness
+Date: Sun, 19 Apr 2026 09:34:02 -0700
+Message-ID: <20260419163402.734987-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260419163316.731019-1-yonghong.song@linux.dev>
 References: <20260419163316.731019-1-yonghong.song@linux.dev>
@@ -38,50 +38,90 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The interpreter does not understand the bpf register r11
-(BPF_REG_PARAMS) used for stack argument addressing. So
-reject interpreter usage if stack arguments are used either
-in the main program or any subprogram.
+Since BPF_REG_PARAMS (r11) is beyond MAX_BPF_REG (r11), using it as an
+array index into the register tracking arrays in const_fold.c and
+liveness.c could cause out-of-bounds accesses.
+
+When dst_reg is BPF_REG_PARAMS (BPF_ST/BPF_STX storing to the stack
+arg area), no tracked register state changes, so an early return is
+sufficient.
+
+When src_reg is BPF_REG_PARAMS (BPF_LDX loading from the stack arg
+area), dst_reg is a normal register that gets overwritten. Simply
+returning early would leave dst_reg with stale state from a prior
+path, which could cause incorrect constant folding or liveness
+analysis. Mark dst_reg as unknown/none before returning to prevent
+this.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/core.c   | 2 +-
- kernel/bpf/fixups.c | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ kernel/bpf/const_fold.c | 14 ++++++++++++--
+ kernel/bpf/liveness.c   | 14 ++++++++++++--
+ 2 files changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ae10b9ca018d..ec8523e6e4eb 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2599,7 +2599,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct b=
-pf_verifier_env *env, struct
- 		goto finalize;
+diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+index db73c4740b1e..41e5a406432c 100644
+--- a/kernel/bpf/const_fold.c
++++ b/kernel/bpf/const_fold.c
+@@ -51,13 +51,23 @@ static void const_reg_xfer(struct bpf_verifier_env *e=
+nv, struct const_arg_info *
+ 			   struct bpf_insn *insn, struct bpf_insn *insns, int idx)
+ {
+ 	struct const_arg_info unknown =3D { .state =3D CONST_ARG_UNKNOWN, .val =
+=3D 0 };
+-	struct const_arg_info *dst =3D &ci_out[insn->dst_reg];
+-	struct const_arg_info *src =3D &ci_out[insn->src_reg];
++	struct const_arg_info *dst, *src;
+ 	u8 class =3D BPF_CLASS(insn->code);
+ 	u8 mode =3D BPF_MODE(insn->code);
+ 	u8 opcode =3D BPF_OP(insn->code) | BPF_SRC(insn->code);
+ 	int r;
 =20
- 	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
--	    bpf_prog_has_kfunc_call(fp))
-+	    bpf_prog_has_kfunc_call(fp) || fp->aux->stack_arg_depth)
- 		jit_needed =3D true;
-=20
- 	if (!bpf_prog_select_interpreter(fp))
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index c4e0224ad2f2..3c9a82823913 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1411,6 +1411,12 @@ int bpf_fixup_call_args(struct bpf_verifier_env *e=
-nv)
- 		verbose(env, "calling kernel functions are not allowed in non-JITed pr=
-ograms\n");
- 		return -EINVAL;
- 	}
-+	for (i =3D 0; i < env->subprog_cnt; i++) {
-+		if (env->subprog_info[i].incoming_stack_arg_depth) {
-+			verbose(env, "stack args are not supported in non-JITed programs\n");
-+			return -EINVAL;
-+		}
++	/* Stack arguments using BPF_REG_PARAMS are outside the tracked registe=
+r set. */
++	if (insn->dst_reg >=3D MAX_BPF_REG)
++		return;
++	if (insn->src_reg >=3D MAX_BPF_REG) {
++		if (class =3D=3D BPF_LDX)
++			ci_out[insn->dst_reg] =3D unknown;
++		return;
 +	}
- 	if (env->subprog_cnt > 1 && env->prog->aux->tail_call_reachable) {
- 		/* When JIT fails the progs with bpf2bpf calls and tail_calls
- 		 * have to be rejected, since interpreter doesn't support them yet.
++
++	dst =3D &ci_out[insn->dst_reg];
++	src =3D &ci_out[insn->src_reg];
+ 	switch (class) {
+ 	case BPF_ALU:
+ 	case BPF_ALU64:
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 332e6e003f27..87022da94f3a 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -1068,11 +1068,21 @@ static void arg_track_xfer(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn,
+ 	int depth =3D instance->depth;
+ 	u8 class =3D BPF_CLASS(insn->code);
+ 	u8 code =3D BPF_OP(insn->code);
+-	struct arg_track *dst =3D &at_out[insn->dst_reg];
+-	struct arg_track *src =3D &at_out[insn->src_reg];
++	struct arg_track *dst, *src;
+ 	struct arg_track none =3D { .frame =3D ARG_NONE };
+ 	int r;
+=20
++	/* Stack arguments using BPF_REG_PARAMS are outside the tracked registe=
+r set. */
++	if (insn->dst_reg >=3D MAX_BPF_REG)
++		return;
++	if (insn->src_reg >=3D MAX_BPF_REG) {
++		if (class =3D=3D BPF_LDX)
++			at_out[insn->dst_reg] =3D none;
++		return;
++	}
++
++	dst =3D &at_out[insn->dst_reg];
++	src =3D &at_out[insn->src_reg];
+ 	if (class =3D=3D BPF_ALU64 && BPF_SRC(insn->code) =3D=3D BPF_K) {
+ 		if (code =3D=3D BPF_MOV) {
+ 			*dst =3D none;
 --=20
 2.52.0
 
