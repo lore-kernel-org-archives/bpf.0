@@ -1,136 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6CB2ECEAE
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 04:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587D0372ED5
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 04:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776574704; cv=none; b=LBx9RFHAL4rvpLqrBy2qZrsSRm8C72H8N9foBMsMMMUgc96nL2sw8QyfMc99leSclP8gM5QC9r9fvFj1LpbXIHKctYVAWRoBomKSLEVPbMHO7D78QF6FDC+qCExY3S0k/7ZkEMiq2D5jkqFsBF6QJiWZ9qwQy2vdwkUGqYz4xN8=
+	t=1776574705; cv=none; b=lKO7A8Dqi42gJ13jBgdnXkVG8IVpQz4+l44VAEZQZIYVHnVniI/W1e8D7CF5c6zce/3bB5+vfWv4RrTJJG6PWehxlQaGW8mS1LW7AL4F9mXCFUxQGV/TVRtPIUIoPjd4uORYZqhuzl1M07pthrcZ8u6QF0VETPd/LUEboDnfII8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776574704; c=relaxed/simple;
-	bh=Y8enpvDedvqSjn1eHoARJe3ZBX2XZixtD6IlshKAt0E=;
+	s=arc-20240116; t=1776574705; c=relaxed/simple;
+	bh=VcbjKBaSVOqcrY0XslqDSCY4Jc7GWrsL6mrJa2J7ROs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=tNer5qzCJf7DQJr3z9KKJXvJjD9qKYDhjrWvoiwowAmxz8q7ZoF8QPhMBohf260mvnBtV93j/YVc9UJS39ueuJ8jGJfTUTsP9Wv+8tvFL4Qy6F80eYFbGoVNOgR7+TAf0ZCDmKX4FiHLeXNbJEb9Or8LJzYIitPFzNDmM1S4rOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mmddhfdX; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=RuGy4fG+usLGVzJpbQGFP1xPBNbkmsDkNCpBf0kzcssbU17Bz2Y8yr7AVDU8ilgA02qpkdWatihHJBPPhUUeJ8j/2060SWO1vgpdDzRcg80+BNJz2jOMaFgHY/ee44onHy7XdgJlucdsdy/q4soZ/5F6Xo/w6lYXmKfN5TiQujs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MQvFKnJo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mmddhfdX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0402FC2BCAF;
-	Sun, 19 Apr 2026 04:58:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MQvFKnJo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9E5EC2BCAF;
+	Sun, 19 Apr 2026 04:58:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776574704;
-	bh=Y8enpvDedvqSjn1eHoARJe3ZBX2XZixtD6IlshKAt0E=;
+	s=k20201202; t=1776574705;
+	bh=VcbjKBaSVOqcrY0XslqDSCY4Jc7GWrsL6mrJa2J7ROs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=mmddhfdXMKIZFchWkebBQne3/2UwdhvIeBJ+fsCLjXbRXzvC418EGCYsa3rigk9kH
-	 4lTRTjL9pC0NB8KjtUcTFvelz25PJiW5+yw3zrd2CgXuTjTFzTvBHcD/MhCDuwFpA6
-	 NnUb9jw37KBZklDOktMO6d/cc/4JEcsFZeCLhxHYWelM/UeewCxzpMBzA7XCqsyRT2
-	 fRU+GsdqKChTt4//Vz8SHqGte8oGa6eHkZyAt1pnrgGdtmsq9Gh1X8jfn8ky/Vn/xv
-	 P2mxoytYLoS6u74mXnhZhcEzs79bAE7HRL7b9ZjVgTPTWtNe9vDJlX14ZHdC56pYCH
-	 FTWOIvel9u2hg==
+	b=MQvFKnJoBPyEA77k8iyjwVWfA5TfDcDearrEa3X43j3heklTEqjhRtrB8k0Su5i95
+	 iG7AGPWuY7Owfwf6CCtfJ7KEhafZjg9OCjWOe22MAMNRHaOs4MejeGpZXSt7gURNhy
+	 5K4tTcGVWlZf0wRlZRMFQ9qtasKRASun266VKSShcpgI2Lpd/zvs4Bx+92fXoPJZAx
+	 anOdg47LNh7PEQq1R84uEb66UoBrGhQwhBdbO9e19zWnkGQqSsAru/a3DGy6aViXKD
+	 lHh3A4oApSJhsX6etcES8q/QTxjsztmyWTYmh0LS/q889txEOpIsh+tuC17Sspd8yn
+	 y/4S4xcZsyHaQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 3/4] xsk: handle NULL dereference of the skb without
- frags issue
+Subject: Re: [PATCH net 4/4] xsk: fix use-after-free of xs->skb in
+ xsk_build_skb() free_err path
 Reply-To: sashiko@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260418045644.28612-4-kerneljasonxing@gmail.com>
-References: <20260418045644.28612-4-kerneljasonxing@gmail.com>
+In-Reply-To: <20260418045644.28612-5-kerneljasonxing@gmail.com>
+References: <20260418045644.28612-5-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 19 Apr 2026 04:58:23 +0000
-Message-Id: <20260419045824.0402FC2BCAF@smtp.kernel.org>
+Date: Sun, 19 Apr 2026 04:58:24 +0000
+Message-Id: <20260419045824.D9E5EC2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 2 potential issue(s):
-- [Critical] Calling `kfree_skb(skb)` without clearing the SKB destructor c=
-auses Completion Queue (CQ) ring corruption and false completions.
-- [High] Use-after-free of `xs->skb` in the continuation path when an error=
- like `-EAGAIN` occurs.
+Sashiko AI review found 3 potential issue(s):
+- [High] Calling `kfree_skb(skb)` in `free_err` after `xsk_skb_init_misc()`=
+ triggers premature CQ submission and corrupts Queue invariants.
+- [High] Memory leak of `xsk_addr` when `alloc_page()` fails during multi-b=
+uffer packet processing.
+- [High] On 32-bit architectures, `xsk_skb_destructor_set_addr()` truncates=
+ the 64-bit UMEM offset, corrupting the Completion Queue address.
 --
 
-commit 1c728000f884ce0a536d9c1fd763eb0c560ada51
+commit e60e7fb34b1c59698d11da732db02bb3302ab41a
 Author: Jason Xing <kerneljasonxing@gmail.com>
 
-xsk: handle NULL dereference of the skb without frags issue
+xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
 
-This commit addresses a NULL pointer dereference in the error path of
-xsk_build_skb_zerocopy() by checking if xs->skb is valid before
-dereferencing it during -EOVERFLOW handling. It also adds an alternative
-branch to handle bookkeeping for the first-descriptor case.
+When xsk_build_skb() processes multi-buffer packets in copy mode, the
+first descriptor stores data into the skb linear area without adding any
+frags. If a continuation descriptor fails, the error path frees the skb
+while xs->skb still points to it. This patch adds a check to ensure we
+only free skbs that were freshly allocated in this call.
+
+Link: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@gm=
+ail.com/
 
 > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 3d6c6caa7ff82..2f00f188533c1 100644
+> index 2f00f188533c1..470f6d25ddb93 100644
 > --- a/net/xdp/xsk.c
 > +++ b/net/xdp/xsk.c
-> @@ -978,9 +978,14 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock=
- *xs,
+> @@ -974,7 +974,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock =
+*xs,
+>  	return skb;
+> =20
+>  free_err:
+> -	if (skb && !skb_shinfo(skb)->nr_frags)
+> +	if (skb && !xs->skb && !skb_shinfo(skb)->nr_frags)
 >  		kfree_skb(skb);
 
-Can this lead to a use-after-free on xs->skb?=20
+This isn't a regression introduced by this patch, but could calling
+kfree_skb() here trigger a premature completion queue submission?
 
-In the non-zerocopy path, if the first descriptor is linear, nr_frags remai=
-ns
-0 and the caller __xsk_generic_xmit() stores the SKB in xs->skb.
+If xsk_skb_metadata() fails earlier in the function, the skb destructor
+is already set to xsk_destruct_skb by xsk_skb_init_misc().
 
-During the next iteration for a continuation descriptor, if an error like
--EAGAIN occurs (e.g., from alloc_page()), the code jumps to the free_err
-label. The cleanup logic if (skb && !skb_shinfo(skb)->nr_frags) would
-evaluate to true, freeing the entire SKB.
+Freeing the skb here synchronously invokes xsk_destruct_skb(), which
+submits the completion to user space and increments the queue producer.
+The error path then executes xsk_cq_cancel_locked(), which decrements the
+cached producer.
 
-The function then returns -EAGAIN, leaving the freed SKB pointer in xs->skb.
-On the next application retry, the code could dereference the freed xs->skb.
+Will this permanently desync the completion queue invariants and report a
+successful completion for a failed transmission? Would it be safer to
+clear the skb destructor before freeing it?
 
-Note that this regression is fixed later in the patch series by commit 'xsk:
-fix use-after-free of xs->skb in xsk_build_skb() free_err path'.
+Also, is there a potential memory leak of the xsk_addr struct when
+alloc_page() fails during multi-buffer packet processing?
 
-Also, could calling kfree_skb(skb) without clearing the SKB destructor cause
-Completion Queue (CQ) ring corruption and false completions?
+When processing a continuation descriptor, an xsk_addr struct is
+dynamically allocated and stored in skb_shinfo(skb)->destructor_arg
+with num_descs set to 1. If the subsequent alloc_page() fails, the code
+jumps here to free_err and returns -EAGAIN, leaving the partial packet
+in xs->skb for a retry.
 
-In xsk_build_skb_zerocopy(), xsk_skb_init_misc() sets
-skb->destructor =3D xsk_destruct_skb. When an error occurs on the first
-descriptor (e.g., xsk_skb_metadata() returning -EINVAL), kfree_skb(skb) is
-called.
+If the socket is closed instead of retrying, xsk_drop_skb() is called on
+xs->skb, which calls xsk_consume_skb(). Inside xsk_consume_skb(), the
+cleanup logic uses this condition:
 
-Because the destructor is not overridden with sock_wfree (like
-xsk_consume_skb() does), kfree_skb(skb) triggers xsk_destruct_skb(), which
-submits the descriptor to the CQ and increments q->ring->producer.
+    if (unlikely(num_descs > 1))
 
+Since num_descs is exactly 1, the condition fails. Does this permanently
+leak the xsk_addr memory?
+
+Finally, does xsk_skb_destructor_set_addr() truncate the 64-bit umem
+offset on 32-bit architectures?
+
+The inline storage attempts to cast the address to uintptr_t:
+
+    skb_shinfo(skb)->destructor_arg =3D (void *)((uintptr_t)addr | 0x1UL);
+
+On 32-bit architectures, uintptr_t is 32 bits, which drops the upper 32
+bits of the u64 addr. In af_xdp unaligned mode, the chunk offset is
+stored in bits 48-63.
+
+Could this truncation lose the offset entirely, causing
+xsk_skb_destructor_get_addr() to retrieve a truncated address and
+submit it to the user-space completion queue?
+
+> =20
 >  	if (err =3D=3D -EOVERFLOW) {
-> -		/* Drop the packet */
-> -		xsk_inc_num_desc(xs->skb);
-> -		xsk_drop_skb(xs->skb);
-> +		if (xs->skb) {
-> +			/* Drop the packet */
-> +			xsk_inc_num_desc(xs->skb);
-> +			xsk_drop_skb(xs->skb);
-> +		} else {
-> +			xsk_cq_cancel_locked(xs->pool, 1);
-> +			xs->tx->invalid_descs++;
-> +		}
->  		xskq_cons_release(xs->tx);
->  	} else {
->  		/* Let application retry */
->  		xsk_cq_cancel_locked(xs->pool, 1);
->  	}
-
-The error handling paths then call xsk_cq_cancel_locked(), which decrements
-the reservation counter q->cached_prod.
-
-Does decrementing the reservation while the actual producer pointer has
-advanced break queue accounting?
-
-The kernel calculates available space using cached_prod; this artificial
-underflow could cause the queue to over-report free space, allowing the
-producer to silently overwrite unread user-space CQ entries.
-
-Furthermore, in the -EINVAL path, does the invalid descriptor generate a
-false completion to user space without being released from the TX ring? When
-the application reuses the completed buffer, could the kernel retransmit the
-same descriptor on retry, causing a use-after-free and data corruption?
+>  		if (xs->skb) {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260418045644.2861=
-2-1-kerneljasonxing@gmail.com?part=3D3
+2-1-kerneljasonxing@gmail.com?part=3D4
