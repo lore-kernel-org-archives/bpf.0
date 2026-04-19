@@ -1,67 +1,69 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C6713777E
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 03:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B2B12F585
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 04:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776571200; cv=none; b=JZ9BlvIqk8yfjt+MKo5RYgs3AhY7wECtzP/2yz8NIYhb61l7dJY36NDHFhsEs/3xOgyPjIYfEOS0BVECXRu64UrE2ISKYOmeL6sCN5zDLLV3TxNQOWtbeBJjCje1XXDUEOrvNrB5vanUB2DtMdO0OrGhwcGkSVdt3/JVLCuulWY=
+	t=1776571480; cv=none; b=Du85Zjy7su0y7xrJUaFgdX261zqfVyWCyvvs9vDUSMXXzJBPqWR5C+oBQ7sDiuC51wb4LzyaytcH8ZT+aVkywocs3g7he+A0ziIHIBIvPQ3X6ydvBJuOrqoLWiJFvHyoBSpTryPT/J8uQ/KsiSndWFskh7ZsnTAQB3Ew8sCSjGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776571200; c=relaxed/simple;
+	s=arc-20240116; t=1776571480; c=relaxed/simple;
 	bh=u9M8XJ+TuJc+FvvsgLZJVLKmaQWgnQjZ4K3dES/btwo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fV5u6ZLvDHmMd+5SHSexUD0smcMgJgV9OII6Um0EkD6vBftvW9PJTe0VMoPAiH2LTmGNGXSBEX5voamTjKQ8jhgGMhehPDb2/TEcM22C+zfavnhOg7YL1kCoyymKBCL1WKrL9thqs709KJcePD1DSKWhvhRFRg2g3N/p+nsCCRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZpXft9+f; arc=none smtp.client-ip=209.85.216.47
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ya+dR3AUMSqnuumvfccJvF9YmF64n01KVxVfSUaGHF0MoB5nBSHRoI10Apl5uWUFS9P13qIgPU0s7bOACu5gZI315U5fsLtakbN1S6iV+fF7OZWHRrAiju1Fn5t6fJSI19YYz8fSKoNzNZqXqk0QO/3OYzxv9b106MIpOha/Yx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c4gWllS/; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZpXft9+f"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-35fbca04006so1036507a91.1
-        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 20:59:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c4gWllS/"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-35fc2b18363so2308928a91.0
+        for <bpf@vger.kernel.org>; Sat, 18 Apr 2026 21:04:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776571199; x=1777175999; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776571478; x=1777176278; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=N/atA6Y4AEYftjpIDt7SezrAfNPMwZ6QVT88PjQLPRM=;
-        b=ZpXft9+fBUb5xYYB15m6ZE3u9KwSjFRM/3ad728RMgesNN+kSFUB6AHCRey+VQ+bTN
-         5ErA4yeW5ecUFU9dwiU3ic6hj2xaV5n6s44HHpkfEO3reB0H4AshhhS4zs1imDTm5a0q
-         sFLvw9hX1XYHM8/qpdP3/79gQFiKOyDmsNywtXt8dI/kxo5ANHs6q3gN0e0euoCIAx4I
-         X3Q5GhrwhM++NUbaQb80I/rRt+g8DOm/HIuIzyiEMv0M1HmY8Cs2P5HqT0u+1Zdsut6g
-         cm4+eDUTUfyGCt6WvvPvQJOkmMC0KfNCJqGp/kjUKgyuZztMG5iIiAjhkz3wuWhSDbNS
-         iVPA==
+        b=c4gWllS/SBMP/+lKRScE+ysI/lfM5vcMeEPs0cJUGQ+8hiGhTbdVOziv06EHuORdaS
+         QQKA+y/m3CkPYp/OIqqXWv03sVkHGU6Mp+k8LftF8MVe77k9F7cULdvplrnEDG3u7gvw
+         QiGAUVRLOj6o7AHJEOWu/VAU4p0EPr9Vii+yF/77tx1KZlUo58wGoKk2Ij3gxtIE5FJr
+         thwwyoXPFph1jEzWj1d559s/ZZY4iFfs4cXMp4kczU+R4vhGyQESU1lxsoNHmE/jBlUn
+         cWgURNUbnlXRDb4SKmHwGhik+wozZDhoXTdkw7LWQ7KsxCAfanzhxcgKSxxHNKClilmi
+         kzrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776571199; x=1777175999;
+        d=1e100.net; s=20251104; t=1776571478; x=1777176278;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
         bh=N/atA6Y4AEYftjpIDt7SezrAfNPMwZ6QVT88PjQLPRM=;
-        b=Faoe4MuiJC9z86Dqz7k17+cYiaZ0td9WH9oipxjQGwRfEawjKwGAPvCPDFCpHcsN6B
-         OvumYkr7iXv/DBuBt6jNZTBre/oWN2bA5Yy4FrWBlx3GIpq5RNrvKEbKgU/oLrz//V1W
-         xN0tdPADjcycwWWbwfLgzpIKNka9pAyZYLs69z+ncKgkMsWsB7jl4wOJwZsVA4qp+aTd
-         0wG9AqjtfRUU+f+A3laTyyHfk+XAg+EvJdSwdyXP1jz2U/P1RxfzTeuQmz6vPl4Za3IB
-         ssCB60BOoucUeJq5YMHrjw0k/+2OW0cgi5uVI5yhklab0joaZQQ3z4eP/RM0jlvfNsng
-         Vs+A==
-X-Gm-Message-State: AOJu0YxUQYjUhPhKyKaeiICuoiBPUSD2OHNrfvwuLHZSLZFvg5BAXLb5
-	lGEaWSmPw+znahAooVfHythD1fL+uawtRhpdOfCLzxcPQsgMg33EZlgC
-X-Gm-Gg: AeBDieuwkE9JNjP3rA9cFCsdi24aBsDQ9Y8z1USRnMmyHv20VbOvQichkJXt/pC8KH2
-	69F5yE+SwYTZKFDXykrqWSgt1V9aJtxrQRBRVaadMV8oahlZZuuTGr+se+SWiFNV7tfTqs9l5QX
-	6QRzqcP4zUbdPC59pthzItudUsDZEfPQrnHZk1LdpC3IlPyI1AeN3e7a+z9urI/E8PceRs/D0iM
-	jGasp8Fikp4sg+jGbYLeGbFyiuaTyiw3i9oznCEzgNO9OhHYaYXhSsnFKNhnkGsqqbr3TzN0cD7
-	TFTJXR2lFJTVGZS4tPcOtl5sVq905hKPY+DKikOO9wwOqtgNaqCfKp3LU+sXTdt9WVLSVyEc6pq
-	pxCtInUb7oTeO7Etq9SyyYs+dy+HdvxiwrEDWOPBqV6UPZEp2Cb5p4X5Th7LH8uBfY1J8sgiOnD
-	HSgriePL+4HevY2W6tmIqNFctDpyP/0vFCCxQ=
-X-Received: by 2002:a17:90b:3e88:b0:359:f77f:8cff with SMTP id 98e67ed59e1d1-3614048e396mr9233870a91.19.1776571198830;
-        Sat, 18 Apr 2026 20:59:58 -0700 (PDT)
+        b=qhJTS6mZi7gFqq+h+NdHBlAoeVltK9JfprfAdmnnoSFoGYXWZntMZqOzFEitPh+reb
+         JSFPFxxnsrrTPCv6Fz/Lia6HPmg/p9JYQwITI9f2sROC6PFT5WvylPudd55/rHzSF7jP
+         yc8GAFItuwrhP3r/5uyHcbx90bJqLxf/kLAs2S588Q0CcCBi4OlzXTtFPXyOp4aLXhM2
+         9XtTRNZ6aNC1J0LcmT/Tmzbn8umn6K6A4PaDvjb+Ah5eZHs+Awx2v0+PkbxAB4AVfvVm
+         yhw/oRgtJeA10S1l9ReX/EKQnl14KBsTea6gYlypg7DSjdFXkTOawiKtLSpL3i4RZeJI
+         dqeA==
+X-Gm-Message-State: AOJu0YzsS2Q047KACXnxrWqzMqfbKNXFWgKyEex48ZSkexgQwTJ3akCA
+	RA+v3KWmr9HbFTGmsAutPa4LYGe7efOubV96+6TUPdUlCsMSyUHjQ+Fue2eM1EiO
+X-Gm-Gg: AeBDievP6IgOnBuZ4xhOsax3mUyfjc6H8lH1xWDhd8R4Yb7sscv/uQd29mdNMx2D2/W
+	qj8VJZn5VREx0CsRggWIOryTaVcLgsF5818ckHudr9EP/ltVMBO0p3gRZz96V/DEyiURV/YuDaU
+	3WYBddZyhfdC5dD0OjYT6B/Y/y4H1iDkRAfW2Nk256/a20W2mwcrt8evHJEpL29jYL11nzrc9Q1
+	Awxi4YRedpHxvW/wGAsVsfmV5yXETYMwo4pkOri9FbwQKBgdizJLvJTSczZg4WcJi6O4wZx0Uij
+	FMUVM0D5s1nZSc305q1EppSngMt8j3/ACjtLPyQRVt9iYpynTHiQtJjsDYsSrGTC4A9worzuLnQ
+	svkdj2IDVFSJ7LJDvoQi8PS1Qvf1xMGrkOv836wMso17+ZrOH49GBfLXMz2MabBOHhqUVuqj6p2
+	He69S90zvrGh5t2H91jaDLxs2TMJDMfp+wLjE=
+X-Received: by 2002:a17:902:cec8:b0:2b0:5b4e:370c with SMTP id d9443c01a7336-2b5f9f8b3ccmr96681785ad.32.1776571478177;
+        Sat, 18 Apr 2026 21:04:38 -0700 (PDT)
 Received: from fedora ([2401:4900:8838:1107:4b02:340c:af49:3bdc])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3613f5766c4sm3355358a91.0.2026.04.18.20.59.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5faa30134sm64212825ad.30.2026.04.18.21.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Apr 2026 20:59:58 -0700 (PDT)
+        Sat, 18 Apr 2026 21:04:37 -0700 (PDT)
 From: Avinash Pal <avinashpal441@gmail.com>
-To: avinashpal441@gmail.com
-Cc: bpf@vger.kernel.org,
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
 	netdev@vger.kernel.org
 Subject: [PATCH] bpf: verifier: fix NULL deref in map_kptr_match_type() for scalar regs
-Date: Sun, 19 Apr 2026 09:29:48 +0530
-Message-ID: <20260419035948.9498-1-avinashpal441@gmail.com>
+Date: Sun, 19 Apr 2026 09:34:26 +0530
+Message-ID: <20260419040426.9672-1-avinashpal441@gmail.com>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
