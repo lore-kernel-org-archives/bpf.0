@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE215478D
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:34:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F1A2D63E5
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776616466; cv=none; b=D9vt2/fzUsQLxUCy/GyqpJqoo9QwibW47t+56UTbnPAiVqpkufLtuCHD9YY54iFmTLF/TJwIcSoM/zkyJuV7lum7yBxTlGxcqfs15oY/zFd4W+crCqw0DOEIp+4ix041etY5qRR/oXzm5wuMzHVNSSsMfGCYutPcNiolsMU/nq0=
+	t=1776616469; cv=none; b=D3O8jNky9zmJrDEjZrwzwMjx4xzTsPtMB+tAybtM2M3iJ/jhb5l3fBBC+aTlInLHsQB/aAT7/NV9emszea4ZzxBsnUrn3PoWFOxfquBADics7S/aucRoflGpJtS6bXclFPycp5p/z6fHMCOwRl8QwBSYikQMhWnbCUGhMR4HOXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776616466; c=relaxed/simple;
-	bh=4i3ETf6klcceIXjBahAHK1XVwU6hAzyYZf3k1R5UwYA=;
+	s=arc-20240116; t=1776616469; c=relaxed/simple;
+	bh=AMeeDMsuO7PPGp1JGbck2kxd7vJ4z4mwNZGUqCkT64A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qL4xCtv7gzYClWfTwlzT8MGQobb/NUeDhQENArtOiUIJV0utaGcyTNUQMxBsr7BrzVSR+FB0ktSuxDwbvMy5aiwMoQ2KVHJ4FLITs7ccVu4/o7mjnPslUlIfPrxahzOm2xAC9DpaV6sifzzj5Uk/xaPUPzCex29gTWkYGtJxfN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=DZ7R5CcSRU0STkmT5c9A6zJMi84cqUOr3CcDRKL8tD69wEtwKISgAlNM1oSXFiLGUaIiSaQFKAi96rAoiwaRxMyfbeO3xp0ZFuHi3DqPqncYPGzoJftgAxV6qDFjX6PL/JKsRcjJUNIdNN83AksYv++C3pA6esMvLw7juLcVxn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id B078442DD4E65; Sun, 19 Apr 2026 09:34:12 -0700 (PDT)
+	id E699742DD4EB3; Sun, 19 Apr 2026 09:34:22 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v6 11/17] bpf: Enable r11 based insns
-Date: Sun, 19 Apr 2026 09:34:12 -0700
-Message-ID: <20260419163412.736133-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 13/17] bpf: Reject stack arguments if tail call reachable
+Date: Sun, 19 Apr 2026 09:34:22 -0700
+Message-ID: <20260419163422.738397-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260419163316.731019-1-yonghong.song@linux.dev>
 References: <20260419163316.731019-1-yonghong.song@linux.dev>
@@ -38,56 +38,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-BPF_REG_PARAMS (r11) is used for stack argument accesses and
-the following are the only insns with r11 presence:
-    - BPF_LDX | BPF_MEM | BPF_DW (load incoming stack arg)
-    - BPF_STX | BPF_MEM | BPF_DW (store register to outgoing stack arg)
-    - BPF_ST  | BPF_MEM | BPF_DW (store immediate to outgoing stack arg)
-
-The LLVM compiler [1] implemented the above BPF_REG_PARAMS
-insns.
-
-  [1] https://github.com/llvm/llvm-project/pull/189060
+Tailcalls have been deprecated. So reject stack arguments
+if tail call is in the way.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e952ebcc2f8f..2a346e4f28e1 100644
+index 13f1fd788092..af8975049883 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -18791,13 +18791,24 @@ static int check_and_resolve_insns(struct bpf_v=
-erifier_env *env)
- 		return err;
+@@ -5519,6 +5519,11 @@ struct bpf_subprog_call_depth_info {
+ 	int frame; /* # of consecutive static call stack frames on top of stack=
+ */
+ };
 =20
- 	for (i =3D 0; i < insn_cnt; i++, insn++) {
-+		u8 class =3D BPF_CLASS(insn->code);
-+		u8 mode =3D BPF_MODE(insn->code);
-+		u8 size =3D BPF_SIZE(insn->code);
++static bool subprog_has_stack_args(const struct bpf_subprog_info *si)
++{
++	return si->incoming_stack_arg_depth || si->outgoing_stack_arg_depth;
++}
 +
- 		if (insn->dst_reg >=3D MAX_BPF_REG) {
--			verbose(env, "R%d is invalid\n", insn->dst_reg);
--			return -EINVAL;
-+			if (insn->dst_reg !=3D BPF_REG_PARAMS ||
-+			    (class !=3D BPF_ST  && class !=3D BPF_STX) ||
-+			     mode !=3D BPF_MEM || size !=3D BPF_DW) {
-+				verbose(env, "R%d is invalid\n", insn->dst_reg);
+ /* starting from main bpf function walk all instructions of the function
+  * and recursively walk all callees that given function can call.
+  * Ignore jump and exit insns.
+@@ -5672,14 +5677,23 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx,
+ 	 * this info will be utilized by JIT so that we will be preserving the
+ 	 * tail call counter throughout bpf2bpf calls combined with tailcalls
+ 	 */
+-	if (tail_call_reachable)
++	if (tail_call_reachable) {
+ 		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
+ 			if (subprog[tmp].is_exception_cb) {
+ 				verbose(env, "cannot tail call within exception cb\n");
+ 				return -EINVAL;
+ 			}
++			if (subprog_has_stack_args(&subprog[tmp])) {
++				verbose(env, "tail_calls are not allowed in programs with stack args=
+\n");
 +				return -EINVAL;
 +			}
+ 			subprog[tmp].tail_call_reachable =3D true;
  		}
- 		if (insn->src_reg >=3D MAX_BPF_REG) {
--			verbose(env, "R%d is invalid\n", insn->src_reg);
--			return -EINVAL;
-+			if (insn->src_reg !=3D BPF_REG_PARAMS ||
-+			    insn->code !=3D (BPF_LDX | BPF_MEM | BPF_DW)) {
-+				verbose(env, "R%d is invalid\n", insn->src_reg);
-+				return -EINVAL;
-+			}
- 		}
- 		if (insn[0].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW)) {
- 			struct bpf_insn_aux_data *aux;
++	} else if (!idx && subprog[0].has_tail_call && subprog_has_stack_args(&=
+subprog[0])) {
++		verbose(env, "tail_calls are not allowed in programs with stack args\n=
+");
++		return -EINVAL;
++	}
++
+ 	if (subprog[0].tail_call_reachable)
+ 		env->prog->aux->tail_call_reachable =3D true;
+=20
 --=20
 2.52.0
 
