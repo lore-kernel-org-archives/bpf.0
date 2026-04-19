@@ -1,20 +1,21 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496683C1F
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9258440DFA4
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776616411; cv=none; b=n4Y2a14emGU7SBkK4LcZkj3zKSlaKyixD8XefYZ7hlbjDkXSmjZOjJY3ZHOn152bOVklhCc7XiQv3yGFInEXc2uy0/G8JbtLYmXj+sehNS3xKZoJ/itlgPatl9/etYgqsAyEkqeZ1NHT1aQ2ZXr9T6rE84mcQROxOBq8+xcvV8A=
+	t=1776616422; cv=none; b=K5GP7CaRUNA97Yhbn2c2+/wFoSWZOtYj9UwFTIvN1C8A7NDK3tRme4N/CH1UpU+2EzrbZqyuEDOeR97q41xCtA5C77/T3wukRuqHB7i8ugPMFNyDEnM5QYNoYVTPJN/M62KnjDC+X765QztXgbKKhxpPPYu9F+Ndt5w/4djV5aQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776616411; c=relaxed/simple;
-	bh=WiiaoqshVDMaUmKCjVhsEFok4BVEBe9vna1kw88ea5g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QmsPTEX6oBZRT1vTdt2D4NWFoLUlgsrFYlyEHkttLur0euy/Dkd3cMFF1hHdvrFvP/dDwb8R8B2zW9VHMobqB1CiOWMSJLEalEz/quUIVZBdKBNN0Dwfpfy9b2Cy4aj/EWqiAcLoTDQYQB1mM1hDS2QxyuLSZUK/q9YgX9plYs0=
+	s=arc-20240116; t=1776616422; c=relaxed/simple;
+	bh=qo5h5GYBghm1uZWqfMyLI4Ram8ZezrgASSO1/MRI8kg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TJ6jecdIX8FuKkBZOZCdxok+uA3R+tspv0W8x5ElAAbrmVm9afWNBbu+6ktndLSZCITZfBcJ8SGc1GIfPPup32yipwqoIVXCAsaK/xEiSavvhEUR2a+5VeF2uEYUJjHtct/5xTtlkUWoQsrZ+z9E2yvauGXQ/xZXjTFUpAhQ9uQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 733E642DD4D18; Sun, 19 Apr 2026 09:33:16 -0700 (PDT)
+	id A97C542DD4D4E; Sun, 19 Apr 2026 09:33:26 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,257 +24,1036 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v6 00/17] bpf: Support stack arguments for BPF functions and kfuncs
-Date: Sun, 19 Apr 2026 09:33:16 -0700
-Message-ID: <20260419163316.731019-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 02/17] bpf: Refactor to avoid redundant calculation of bpf_reg_state
+Date: Sun, 19 Apr 2026 09:33:26 -0700
+Message-ID: <20260419163326.732489-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260419163316.731019-1-yonghong.song@linux.dev>
+References: <20260419163316.731019-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Currently, bpf function calls and kfunc's are limited by 5 reg-level
-parameters. For function calls with more than 5 parameters,
-developers can use always inlining or pass a struct pointer
-after packing more parameters in that struct although it may have
-some inconvenience. But there is no workaround for kfunc if more
-than 5 parameters is needed.
+In many cases, once a bpf_reg_state is defined, it can pass to
+callee's. Otherwise, callee will need to get bpf_reg_state again
+based on regno. More importantly, this is needed for later stack
+arguments for kfuncs since the register state for stack arguments does
+not have a corresponding regno. So it makes sense to pass reg state
+for callee's.
 
-This patch set lifts the 5-argument limit by introducing stack-based
-argument passing for BPF functions and kfunc's, coordinated with
-compiler support in LLVM [1]. The compiler emits loads/stores through
-a new bpf register r11 (BPF_REG_PARAMS) to pass arguments beyond
-the 5th, keeping the stack arg area separate from the r10-based program
-stack. The current maximum number of arguments is capped at
-MAX_BPF_FUNC_ARGS (12), which is sufficient for the vast majority of
-use cases.
+The following is the only change to avoid compilation warning:
+   static int sanitize_check_bounds(struct bpf_verifier_env *env,
+                                   const struct bpf_insn *insn,
+  -                                const struct bpf_reg_state *dst_reg)
+  +                                struct bpf_reg_state *dst_reg)
 
-All kfunc/bpf-function arguments are caller saved, including stack
-arguments. For register arguments (r1-r5), the verifier already marks
-them as clobbered after each call. For stack arguments, the verifier
-invalidates all outgoing stack arg slots immediately after a call,
-requiring the compiler to re-store them before any subsequent call.
-This follows the native calling convention where all function
-parameters are caller saved.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 213 ++++++++++++++++++------------------------
+ 1 file changed, 93 insertions(+), 120 deletions(-)
 
-The x86_64 JIT translates r11-relative accesses to RBP-relative
-native instructions. Each function's stack allocation is extended
-by 'max_outgoing' bytes to hold the outgoing arg area below the
-callee-saved registers. This makes implementation easier as the r10
-can be reused for stack argument access. At both BPF-to-BPF and kfunc
-calls, outgoing args are pushed onto the expected calling convention
-locations directly. The incoming parameters can directly get the value
-from caller.
-
-To support kfunc stack arguments, before doing any stack arguments,
-existing codes are refactored/modified to use bpf_reg_state as much
-as possible instead of using regno, and to pass a non-negative argno,
-encoded to support both registers and stack arguments, as a single
-variable.
-
-Global subprogs with >5 args are not yet supported. Only x86_64
-is supported for now.
-
-For the rest of patches, patches 1-4 make changes to make it
-easy for future stack arguments for kfuncs. Patches 5-8
-supports bpf-to-bpf stack arguments. Patch 9 rejects interpreter
-for stack arguments. Patch 10 rejects subprogs if tailcall reachable.
-Patch 11 adds stack argument support for kfuncs. Patch 12 enables
-stack arguments for x86_64 and Patch 13 implements the x86_64 JIT.
-Patches 14-16 are some test cases.
-
-  [1] https://github.com/llvm/llvm-project/pull/189060
-
-Note:
-  - The patch set is on top of the following commit:
-    eb0d6d97c27c  Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/l=
-inux/kernel/git/bpf/bpf
-  - This patch set requires latest llvm23 compiler. It is possible that a=
- build
-    failure may appear:
-      /home/yhs/work/bpf-next/scripts/mod/modpost.c:59:13: error: variabl=
-e 'extra_warn' set but not used [-Werror,-Wunused-but-set-global]
-             59 | static bool extra_warn;
-                |             ^
-          1 error generated.
-    In this case, the following hack can workaround the build issue:
-      --- a/Makefile
-      +++ b/Makefile
-      @@ -467,7 +467,7 @@ KERNELDOC       =3D $(srctree)/tools/docs/kerne=
-l-doc
-       export KERNELDOC
-
-       KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-pro=
-totypes \
-      -                        -O2 -fomit-frame-pointer -std=3Dgnu11
-      +                        -O2 -fomit-frame-pointer -std=3Dgnu11 -Wno=
--unused-but-set-global
-       KBUILD_USERCFLAGS  :=3D $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
-       KBUILD_USERLDFLAGS :=3D $(USERLDFLAGS)
-
-Changelogs:
-  v5 -> v6:
-    - v5: https://lore.kernel.org/bpf/20260417034658.2625353-1-yonghong.s=
-ong@linux.dev/
-    - Do stack arguments invalidation after bpf function or kfunc all. Th=
-is is to
-      following native achitecture calling convention.
-    - Fix some r11 related issues in const_fold, liveness and insn checki=
-ng.
-    - Fix a few places for precision marking for stack arguments. All the=
-se cases
-      have const value and mark them as precise.
-    - Unconditionally copy some incoming/outgoing stat.
-    - Fix a missing tailcall case with main prog having tailcall and ther=
-e is no
-      other subprog's.
-    - Add and fix tests as suggested in v5.
-    - Reorder some patches, e.g., preparing stack arguments in bpf functi=
-ons,
-      disabling JIT, before allowing proper r11 usage.
-  v4 -> v5:
-    - v4: https://lore.kernel.org/bpf/20260412045826.254200-1-yonghong.so=
-ng@linux.dev/
-    - Use r11 instead of r12, llvm also updated with r11.
-    - Change int type 'reg_or_arg' to u32 'argno' where 'argno' encodes t=
-o support
-      both bpf registers and stack arguments.
-    - Track per-state bitmask 'out_stack_arg_mask' for r11 based stores, =
-so at any
-      particular call, it knows what stores are available. This is import=
-ant since
-      stores may be in different basic block.
-    - Previously after each call, all store slots are invalidated. This p=
-atches
-      disabled such invalidation.
-    - Ensure r11 reg only appearing in allowed insns. Also avoid r11 for =
-reg tracking
-      purpose.
-    - Make stack_arg_regs more similar to regular reg's (struct bpf_reg_s=
-tate *)..
-    - Reorder r11 based stores from 'arg6:off:-24, arg7:off:-16, arg8:off=
-:-8" to
-      "arg6:off:-8, arg7:off:-16, arg8:off:-24".
-    - Add a few more tests, including e.g., two callee's with different n=
-umber of
-      stack arguments, shared r11-stores in different branches, etc.
-
-  v3 -> v4:
-    - v3: https://lore.kernel.org/bpf/20260405172505.1329392-1-yonghong.s=
-ong@linux.dev/
-    - Refactor/Modify codes to make it easier for later kfunc stack argum=
-ent support
-    - Invalidate outgoing slots immediately after the call to prevent reu=
-se
-    - Fix interaction between stack argument PTR_TO_STACK and dead slot p=
-oisoning
-    - Reject stack arguments if tail call reachable
-    - Disable private stack if stack argument is used
-    - Allocate outgoing stack argument region after callee saved register=
-s, and this
-      simplifies the JITed code a lot.
-  v2 -> v3:
-    - v2: https://lore.kernel.org/bpf/20260405165300.826241-1-yonghong.so=
-ng@linux.dev/
-    - Fix selftest stack_arg_gap_at_minus8().
-    - Fix a few 'UTF-8' issues.
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20260402012727.3916819-1-yonghong.s=
-ong@linux.dev/
-    - Add stack_arg_safe() to do pruning for stack arguments.
-    - Fix an issue with KF_ARG_PTR_TO_MEM_SIZE. Since a faked register is
-      used, added verification log to indicate the start and end of such
-      faked register usage.
-    - For x86_64 JIT, copying incoming parameter values directly from cal=
-ler's stack.
-    - Add test cases with stack arguments e.g. mem, mem+size, dynptr, ite=
-r, etc.
-
-Yonghong Song (17):
-  bpf: Remove unused parameter from check_map_kptr_access()
-  bpf: Refactor to avoid redundant calculation of bpf_reg_state
-  bpf: Refactor to handle memory and size together
-  bpf: Prepare verifier logs for upcoming kfunc stack arguments
-  bpf: Introduce bpf register BPF_REG_PARAMS
-  bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
-  bpf: Support stack arguments for bpf functions
-  bpf: Reject stack arguments in non-JITed programs
-  bpf: Track r11 registers in const_fold and liveness
-  bpf: Prepare architecture JIT support for stack arguments
-  bpf: Enable r11 based insns
-  bpf: Support stack arguments for kfunc calls
-  bpf: Reject stack arguments if tail call reachable
-  bpf,x86: Implement JIT support for stack arguments
-  selftests/bpf: Add tests for BPF function stack arguments
-  selftests/bpf: Add tests for stack argument validation
-  selftests/bpf: Add verifier tests for stack argument validation
-
- arch/x86/net/bpf_jit_comp.c                   |  154 +-
- include/linux/bpf.h                           |    7 +
- include/linux/bpf_verifier.h                  |   29 +-
- include/linux/filter.h                        |    6 +-
- kernel/bpf/btf.c                              |   20 +-
- kernel/bpf/const_fold.c                       |   14 +-
- kernel/bpf/core.c                             |   11 +-
- kernel/bpf/fixups.c                           |   28 +-
- kernel/bpf/liveness.c                         |   14 +-
- kernel/bpf/states.c                           |   41 +
- kernel/bpf/verifier.c                         | 1233 ++++++++++++-----
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |   22 +-
- .../selftests/bpf/prog_tests/cb_refs.c        |    2 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    |   14 +-
- .../selftests/bpf/prog_tests/kfunc_call.c     |    2 +-
- .../selftests/bpf/prog_tests/linked_list.c    |    4 +-
- .../selftests/bpf/prog_tests/stack_arg.c      |  139 ++
- .../selftests/bpf/prog_tests/stack_arg_fail.c |   10 +
- .../selftests/bpf/prog_tests/verifier.c       |    2 +
- .../selftests/bpf/progs/cgrp_kfunc_failure.c  |   14 +-
- .../selftests/bpf/progs/cpumask_failure.c     |   10 +-
- .../testing/selftests/bpf/progs/dynptr_fail.c |   22 +-
- .../selftests/bpf/progs/file_reader_fail.c    |    4 +-
- tools/testing/selftests/bpf/progs/irq.c       |    4 +-
- tools/testing/selftests/bpf/progs/iters.c     |    6 +-
- .../selftests/bpf/progs/iters_state_safety.c  |   14 +-
- .../selftests/bpf/progs/iters_testmod.c       |    4 +-
- .../selftests/bpf/progs/iters_testmod_seq.c   |    4 +-
- .../selftests/bpf/progs/map_kptr_fail.c       |    2 +-
- .../selftests/bpf/progs/percpu_alloc_fail.c   |    4 +-
- .../testing/selftests/bpf/progs/rbtree_fail.c |    6 +-
- .../bpf/progs/refcounted_kptr_fail.c          |    2 +-
- tools/testing/selftests/bpf/progs/stack_arg.c |  254 ++++
- .../selftests/bpf/progs/stack_arg_fail.c      |  124 ++
- .../selftests/bpf/progs/stack_arg_kfunc.c     |  164 +++
- .../testing/selftests/bpf/progs/stream_fail.c |    2 +-
- .../selftests/bpf/progs/task_kfunc_failure.c  |   18 +-
- .../selftests/bpf/progs/task_work_fail.c      |    6 +-
- .../selftests/bpf/progs/test_bpf_nf_fail.c    |    8 +-
- .../bpf/progs/test_kfunc_dynptr_param.c       |    2 +-
- .../bpf/progs/test_kfunc_param_nullable.c     |    2 +-
- .../selftests/bpf/progs/verifier_bits_iter.c  |    4 +-
- .../bpf/progs/verifier_bpf_fastcall.c         |   24 +-
- .../selftests/bpf/progs/verifier_may_goto_1.c |   12 +-
- .../bpf/progs/verifier_ref_tracking.c         |    6 +-
- .../selftests/bpf/progs/verifier_sdiv.c       |   64 +-
- .../selftests/bpf/progs/verifier_stack_arg.c  |  433 ++++++
- .../selftests/bpf/progs/verifier_vfs_reject.c |    8 +-
- .../testing/selftests/bpf/progs/wq_failures.c |    2 +-
- .../selftests/bpf/test_kmods/bpf_testmod.c    |   73 +
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   26 +
- tools/testing/selftests/bpf/verifier/calls.c  |   14 +-
- 52 files changed, 2533 insertions(+), 561 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stack_arg_fail=
-.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_stack_arg.=
-c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 0f9da0f6220b..514fee971f96 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3938,13 +3938,13 @@ static int check_stack_write_fixed_off(struct bpf=
+_verifier_env *env,
+ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+ 				     /* func where register points to */
+ 				     struct bpf_func_state *state,
+-				     int ptr_regno, int off, int size,
++				     struct bpf_reg_state *ptr_reg, int off, int size,
+ 				     int value_regno, int insn_idx)
+ {
+ 	struct bpf_func_state *cur; /* state of the current function */
+ 	int min_off, max_off;
+ 	int i, err;
+-	struct bpf_reg_state *ptr_reg =3D NULL, *value_reg =3D NULL;
++	struct bpf_reg_state *value_reg =3D NULL;
+ 	struct bpf_insn *insn =3D &env->prog->insnsi[insn_idx];
+ 	bool writing_zero =3D false;
+ 	/* set if the fact that we're writing a zero is used to let any
+@@ -3953,7 +3953,6 @@ static int check_stack_write_var_off(struct bpf_ver=
+ifier_env *env,
+ 	bool zero_used =3D false;
+=20
+ 	cur =3D env->cur_state->frame[env->cur_state->curframe];
+-	ptr_reg =3D &cur->regs[ptr_regno];
+ 	min_off =3D ptr_reg->smin_value + off;
+ 	max_off =3D ptr_reg->smax_value + off + size;
+ 	if (value_regno >=3D 0)
+@@ -4250,7 +4249,7 @@ enum bpf_access_src {
+ 	ACCESS_HELPER =3D 2,  /* the access is performed by a helper */
+ };
+=20
+-static int check_stack_range_initialized(struct bpf_verifier_env *env,
++static int check_stack_range_initialized(struct bpf_verifier_env *env, s=
+truct bpf_reg_state *reg,
+ 					 int regno, int off, int access_size,
+ 					 bool zero_size_allowed,
+ 					 enum bpf_access_type type,
+@@ -4274,18 +4273,16 @@ static struct bpf_reg_state *reg_state(struct bpf=
+_verifier_env *env, int regno)
+  * offset; for a fixed offset check_stack_read_fixed_off should be used
+  * instead.
+  */
+-static int check_stack_read_var_off(struct bpf_verifier_env *env,
++static int check_stack_read_var_off(struct bpf_verifier_env *env, struct=
+ bpf_reg_state *reg,
+ 				    int ptr_regno, int off, int size, int dst_regno)
+ {
+-	/* The state of the source register. */
+-	struct bpf_reg_state *reg =3D reg_state(env, ptr_regno);
+ 	struct bpf_func_state *ptr_state =3D bpf_func(env, reg);
+ 	int err;
+ 	int min_off, max_off;
+=20
+ 	/* Note that we pass a NULL meta, so raw access will not be permitted.
+ 	 */
+-	err =3D check_stack_range_initialized(env, ptr_regno, off, size,
++	err =3D check_stack_range_initialized(env, reg, ptr_regno, off, size,
+ 					    false, BPF_READ, NULL);
+ 	if (err)
+ 		return err;
+@@ -4307,10 +4304,9 @@ static int check_stack_read_var_off(struct bpf_ver=
+ifier_env *env,
+  * can be -1, meaning that the read value is not going to a register.
+  */
+ static int check_stack_read(struct bpf_verifier_env *env,
+-			    int ptr_regno, int off, int size,
++			    struct bpf_reg_state *reg, int ptr_regno, int off, int size,
+ 			    int dst_regno)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, ptr_regno);
+ 	struct bpf_func_state *state =3D bpf_func(env, reg);
+ 	int err;
+ 	/* Some accesses are only permitted with a static offset. */
+@@ -4346,7 +4342,7 @@ static int check_stack_read(struct bpf_verifier_env=
+ *env,
+ 		 * than fixed offset ones. Note that dst_regno >=3D 0 on this
+ 		 * branch.
+ 		 */
+-		err =3D check_stack_read_var_off(env, ptr_regno, off, size,
++		err =3D check_stack_read_var_off(env, reg, ptr_regno, off, size,
+ 					       dst_regno);
+ 	}
+ 	return err;
+@@ -4363,10 +4359,9 @@ static int check_stack_read(struct bpf_verifier_en=
+v *env,
+  * The caller must ensure that the offset falls within the maximum stack=
+ size.
+  */
+ static int check_stack_write(struct bpf_verifier_env *env,
+-			     int ptr_regno, int off, int size,
++			     struct bpf_reg_state *reg, int off, int size,
+ 			     int value_regno, int insn_idx)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, ptr_regno);
+ 	struct bpf_func_state *state =3D bpf_func(env, reg);
+ 	int err;
+=20
+@@ -4379,16 +4374,15 @@ static int check_stack_write(struct bpf_verifier_=
+env *env,
+ 		 * than fixed offset ones.
+ 		 */
+ 		err =3D check_stack_write_var_off(env, state,
+-						ptr_regno, off, size,
++						reg, off, size,
+ 						value_regno, insn_idx);
+ 	}
+ 	return err;
+ }
+=20
+-static int check_map_access_type(struct bpf_verifier_env *env, u32 regno=
+,
++static int check_map_access_type(struct bpf_verifier_env *env, struct bp=
+f_reg_state *reg, u32 regno,
+ 				 int off, int size, enum bpf_access_type type)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	struct bpf_map *map =3D reg->map_ptr;
+ 	u32 cap =3D bpf_map_flags_to_cap(map);
+=20
+@@ -4408,17 +4402,15 @@ static int check_map_access_type(struct bpf_verif=
+ier_env *env, u32 regno,
+ }
+=20
+ /* check read/write into memory region (e.g., map value, ringbuf sample,=
+ etc) */
+-static int __check_mem_access(struct bpf_verifier_env *env, int regno,
++static int __check_mem_access(struct bpf_verifier_env *env, struct bpf_r=
+eg_state *reg, int regno,
+ 			      int off, int size, u32 mem_size,
+ 			      bool zero_size_allowed)
+ {
+ 	bool size_ok =3D size > 0 || (size =3D=3D 0 && zero_size_allowed);
+-	struct bpf_reg_state *reg;
+=20
+ 	if (off >=3D 0 && size_ok && (u64)off + size <=3D mem_size)
+ 		return 0;
+=20
+-	reg =3D &cur_regs(env)[regno];
+ 	switch (reg->type) {
+ 	case PTR_TO_MAP_KEY:
+ 		verbose(env, "invalid access to map key, key_size=3D%d off=3D%d size=3D=
+%d\n",
+@@ -4448,13 +4440,10 @@ static int __check_mem_access(struct bpf_verifier=
+_env *env, int regno,
+ }
+=20
+ /* check read/write into a memory region with possible variable offset *=
+/
+-static int check_mem_region_access(struct bpf_verifier_env *env, u32 reg=
+no,
++static int check_mem_region_access(struct bpf_verifier_env *env, struct =
+bpf_reg_state *reg, u32 regno,
+ 				   int off, int size, u32 mem_size,
+ 				   bool zero_size_allowed)
+ {
+-	struct bpf_verifier_state *vstate =3D env->cur_state;
+-	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
+-	struct bpf_reg_state *reg =3D &state->regs[regno];
+ 	int err;
+=20
+ 	/* We may have adjusted the register pointing to memory region, so we
+@@ -4475,7 +4464,7 @@ static int check_mem_region_access(struct bpf_verif=
+ier_env *env, u32 regno,
+ 			regno);
+ 		return -EACCES;
+ 	}
+-	err =3D __check_mem_access(env, regno, reg->smin_value + off, size,
++	err =3D __check_mem_access(env, reg, regno, reg->smin_value + off, size=
+,
+ 				 mem_size, zero_size_allowed);
+ 	if (err) {
+ 		verbose(env, "R%d min value is outside of the allowed memory range\n",
+@@ -4492,7 +4481,7 @@ static int check_mem_region_access(struct bpf_verif=
+ier_env *env, u32 regno,
+ 			regno);
+ 		return -EACCES;
+ 	}
+-	err =3D __check_mem_access(env, regno, reg->umax_value + off, size,
++	err =3D __check_mem_access(env, reg, regno, reg->umax_value + off, size=
+,
+ 				 mem_size, zero_size_allowed);
+ 	if (err) {
+ 		verbose(env, "R%d max value is outside of the allowed memory range\n",
+@@ -4796,19 +4785,16 @@ static u32 map_mem_size(const struct bpf_map *map=
+)
+ }
+=20
+ /* check read/write into a map element with possible variable offset */
+-static int check_map_access(struct bpf_verifier_env *env, u32 regno,
++static int check_map_access(struct bpf_verifier_env *env, struct bpf_reg=
+_state *reg, u32 regno,
+ 			    int off, int size, bool zero_size_allowed,
+ 			    enum bpf_access_src src)
+ {
+-	struct bpf_verifier_state *vstate =3D env->cur_state;
+-	struct bpf_func_state *state =3D vstate->frame[vstate->curframe];
+-	struct bpf_reg_state *reg =3D &state->regs[regno];
+ 	struct bpf_map *map =3D reg->map_ptr;
+ 	u32 mem_size =3D map_mem_size(map);
+ 	struct btf_record *rec;
+ 	int err, i;
+=20
+-	err =3D check_mem_region_access(env, regno, off, size, mem_size, zero_s=
+ize_allowed);
++	err =3D check_mem_region_access(env, reg, regno, off, size, mem_size, z=
+ero_size_allowed);
+ 	if (err)
+ 		return err;
+=20
+@@ -4904,10 +4890,9 @@ static bool may_access_direct_pkt_data(struct bpf_=
+verifier_env *env,
+ 	}
+ }
+=20
+-static int check_packet_access(struct bpf_verifier_env *env, u32 regno, =
+int off,
++static int check_packet_access(struct bpf_verifier_env *env, struct bpf_=
+reg_state *reg, u32 regno, int off,
+ 			       int size, bool zero_size_allowed)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	int err;
+=20
+ 	if (reg->range < 0) {
+@@ -4915,7 +4900,7 @@ static int check_packet_access(struct bpf_verifier_=
+env *env, u32 regno, int off,
+ 		return -EINVAL;
+ 	}
+=20
+-	err =3D check_mem_region_access(env, regno, off, size, reg->range, zero=
+_size_allowed);
++	err =3D check_mem_region_access(env, reg, regno, off, size, reg->range,=
+ zero_size_allowed);
+ 	if (err)
+ 		return err;
+=20
+@@ -4970,7 +4955,7 @@ static int __check_ctx_access(struct bpf_verifier_e=
+nv *env, int insn_idx, int of
+ 	return -EACCES;
+ }
+=20
+-static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, =
+u32 regno,
++static int check_ctx_access(struct bpf_verifier_env *env, int insn_idx, =
+struct bpf_reg_state *reg, u32 regno,
+ 			    int off, int access_size, enum bpf_access_type t,
+ 			    struct bpf_insn_access_aux *info)
+ {
+@@ -4980,12 +4965,10 @@ static int check_ctx_access(struct bpf_verifier_e=
+nv *env, int insn_idx, u32 regn
+ 	 */
+ 	bool var_off_ok =3D is_var_ctx_off_allowed(env->prog);
+ 	bool fixed_off_ok =3D !env->ops->convert_ctx_access;
+-	struct bpf_reg_state *regs =3D cur_regs(env);
+-	struct bpf_reg_state *reg =3D regs + regno;
+ 	int err;
+=20
+ 	if (var_off_ok)
+-		err =3D check_mem_region_access(env, regno, off, access_size, U16_MAX,=
+ false);
++		err =3D check_mem_region_access(env, reg, regno, off, access_size, U16=
+_MAX, false);
+ 	else
+ 		err =3D __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
+ 	if (err)
+@@ -5011,10 +4994,9 @@ static int check_flow_keys_access(struct bpf_verif=
+ier_env *env, int off,
+ }
+=20
+ static int check_sock_access(struct bpf_verifier_env *env, int insn_idx,
+-			     u32 regno, int off, int size,
++			     struct bpf_reg_state *reg, u32 regno, int off, int size,
+ 			     enum bpf_access_type t)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	struct bpf_insn_access_aux info =3D {};
+ 	bool valid;
+=20
+@@ -5977,12 +5959,11 @@ static bool type_is_trusted_or_null(struct bpf_ve=
+rifier_env *env,
+ }
+=20
+ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+-				   struct bpf_reg_state *regs,
++				   struct bpf_reg_state *regs, struct bpf_reg_state *reg,
+ 				   int regno, int off, int size,
+ 				   enum bpf_access_type atype,
+ 				   int value_regno)
+ {
+-	struct bpf_reg_state *reg =3D regs + regno;
+ 	const struct btf_type *t =3D btf_type_by_id(reg->btf, reg->btf_id);
+ 	const char *tname =3D btf_name_by_offset(reg->btf, t->name_off);
+ 	const char *field_name =3D NULL;
+@@ -6134,12 +6115,11 @@ static int check_ptr_to_btf_access(struct bpf_ver=
+ifier_env *env,
+ }
+=20
+ static int check_ptr_to_map_access(struct bpf_verifier_env *env,
+-				   struct bpf_reg_state *regs,
++				   struct bpf_reg_state *regs, struct bpf_reg_state *reg,
+ 				   int regno, int off, int size,
+ 				   enum bpf_access_type atype,
+ 				   int value_regno)
+ {
+-	struct bpf_reg_state *reg =3D regs + regno;
+ 	struct bpf_map *map =3D reg->map_ptr;
+ 	struct bpf_reg_state map_reg;
+ 	enum bpf_type_flag flag =3D 0;
+@@ -6228,11 +6208,10 @@ static int check_stack_slot_within_bounds(struct =
+bpf_verifier_env *env,
+  * 'off' includes `regno->offset`, but not its dynamic part (if any).
+  */
+ static int check_stack_access_within_bounds(
+-		struct bpf_verifier_env *env,
++		struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		int regno, int off, int access_size,
+ 		enum bpf_access_type type)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	struct bpf_func_state *state =3D bpf_func(env, reg);
+ 	s64 min_off, max_off;
+ 	int err;
+@@ -6320,12 +6299,11 @@ static void add_scalar_to_reg(struct bpf_reg_stat=
+e *dst_reg, s64 val)
+  * if t=3D=3Dwrite && value_regno=3D=3D-1, some unknown value is stored =
+into memory
+  * if t=3D=3Dread && value_regno=3D=3D-1, don't care what we read from m=
+emory
+  */
+-static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, =
+u32 regno,
++static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, =
+struct bpf_reg_state *reg, u32 regno,
+ 			    int off, int bpf_size, enum bpf_access_type t,
+ 			    int value_regno, bool strict_alignment_once, bool is_ldsx)
+ {
+ 	struct bpf_reg_state *regs =3D cur_regs(env);
+-	struct bpf_reg_state *reg =3D regs + regno;
+ 	int size, err =3D 0;
+=20
+ 	size =3D bpf_size_to_bytes(bpf_size);
+@@ -6342,7 +6320,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 			return -EACCES;
+ 		}
+=20
+-		err =3D check_mem_region_access(env, regno, off, size,
++		err =3D check_mem_region_access(env, reg, regno, off, size,
+ 					      reg->map_ptr->key_size, false);
+ 		if (err)
+ 			return err;
+@@ -6356,10 +6334,10 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, u32 regn
+ 			verbose(env, "R%d leaks addr into map\n", value_regno);
+ 			return -EACCES;
+ 		}
+-		err =3D check_map_access_type(env, regno, off, size, t);
++		err =3D check_map_access_type(env, reg, regno, off, size, t);
+ 		if (err)
+ 			return err;
+-		err =3D check_map_access(env, regno, off, size, false, ACCESS_DIRECT);
++		err =3D check_map_access(env, reg, regno, off, size, false, ACCESS_DIR=
+ECT);
+ 		if (err)
+ 			return err;
+ 		if (tnum_is_const(reg->var_off))
+@@ -6428,7 +6406,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 		 * instructions, hence no need to check bounds in that case.
+ 		 */
+ 		if (!rdonly_untrusted)
+-			err =3D check_mem_region_access(env, regno, off, size,
++			err =3D check_mem_region_access(env, reg, regno, off, size,
+ 						      reg->mem_size, false);
+ 		if (!err && value_regno >=3D 0 && (t =3D=3D BPF_READ || rdonly_mem))
+ 			mark_reg_unknown(env, regs, value_regno);
+@@ -6446,7 +6424,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 			return -EACCES;
+ 		}
+=20
+-		err =3D check_ctx_access(env, insn_idx, regno, off, size, t, &info);
++		err =3D check_ctx_access(env, insn_idx, reg, regno, off, size, t, &inf=
+o);
+ 		if (!err && t =3D=3D BPF_READ && value_regno >=3D 0) {
+ 			/* ctx access returns either a scalar, or a
+ 			 * PTR_TO_PACKET[_META,_END]. In the latter
+@@ -6483,15 +6461,15 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, u32 regn
+=20
+ 	} else if (reg->type =3D=3D PTR_TO_STACK) {
+ 		/* Basic bounds checks. */
+-		err =3D check_stack_access_within_bounds(env, regno, off, size, t);
++		err =3D check_stack_access_within_bounds(env, reg, regno, off, size, t=
+);
+ 		if (err)
+ 			return err;
+=20
+ 		if (t =3D=3D BPF_READ)
+-			err =3D check_stack_read(env, regno, off, size,
++			err =3D check_stack_read(env, reg, regno, off, size,
+ 					       value_regno);
+ 		else
+-			err =3D check_stack_write(env, regno, off, size,
++			err =3D check_stack_write(env, reg, off, size,
+ 						value_regno, insn_idx);
+ 	} else if (reg_is_pkt_pointer(reg)) {
+ 		if (t =3D=3D BPF_WRITE && !may_access_direct_pkt_data(env, NULL, t)) {
+@@ -6504,7 +6482,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 				value_regno);
+ 			return -EACCES;
+ 		}
+-		err =3D check_packet_access(env, regno, off, size, false);
++		err =3D check_packet_access(env, reg, regno, off, size, false);
+ 		if (!err && t =3D=3D BPF_READ && value_regno >=3D 0)
+ 			mark_reg_unknown(env, regs, value_regno);
+ 	} else if (reg->type =3D=3D PTR_TO_FLOW_KEYS) {
+@@ -6524,7 +6502,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 				regno, reg_type_str(env, reg->type));
+ 			return -EACCES;
+ 		}
+-		err =3D check_sock_access(env, insn_idx, regno, off, size, t);
++		err =3D check_sock_access(env, insn_idx, reg, regno, off, size, t);
+ 		if (!err && value_regno >=3D 0)
+ 			mark_reg_unknown(env, regs, value_regno);
+ 	} else if (reg->type =3D=3D PTR_TO_TP_BUFFER) {
+@@ -6533,10 +6511,10 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, u32 regn
+ 			mark_reg_unknown(env, regs, value_regno);
+ 	} else if (base_type(reg->type) =3D=3D PTR_TO_BTF_ID &&
+ 		   !type_may_be_null(reg->type)) {
+-		err =3D check_ptr_to_btf_access(env, regs, regno, off, size, t,
++		err =3D check_ptr_to_btf_access(env, regs, reg, regno, off, size, t,
+ 					      value_regno);
+ 	} else if (reg->type =3D=3D CONST_PTR_TO_MAP) {
+-		err =3D check_ptr_to_map_access(env, regs, regno, off, size, t,
++		err =3D check_ptr_to_map_access(env, regs, reg, regno, off, size, t,
+ 					      value_regno);
+ 	} else if (base_type(reg->type) =3D=3D PTR_TO_BUF &&
+ 		   !type_may_be_null(reg->type)) {
+@@ -6605,7 +6583,7 @@ static int check_load_mem(struct bpf_verifier_env *=
+env, struct bpf_insn *insn,
+ 	/* Check if (src_reg + off) is readable. The state of dst_reg will be
+ 	 * updated by this call.
+ 	 */
+-	err =3D check_mem_access(env, env->insn_idx, insn->src_reg, insn->off,
++	err =3D check_mem_access(env, env->insn_idx, regs + insn->src_reg, insn=
+->src_reg, insn->off,
+ 			       BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
+ 			       strict_alignment_once, is_ldsx);
+ 	err =3D err ?: save_aux_ptr_type(env, src_reg_type,
+@@ -6635,7 +6613,7 @@ static int check_store_reg(struct bpf_verifier_env =
+*env, struct bpf_insn *insn,
+ 	dst_reg_type =3D regs[insn->dst_reg].type;
+=20
+ 	/* Check if (dst_reg + off) is writeable. */
+-	err =3D check_mem_access(env, env->insn_idx, insn->dst_reg, insn->off,
++	err =3D check_mem_access(env, env->insn_idx, regs + insn->dst_reg, insn=
+->dst_reg, insn->off,
+ 			       BPF_SIZE(insn->code), BPF_WRITE, insn->src_reg,
+ 			       strict_alignment_once, false);
+ 	err =3D err ?: save_aux_ptr_type(env, dst_reg_type, false);
+@@ -6646,6 +6624,7 @@ static int check_store_reg(struct bpf_verifier_env =
+*env, struct bpf_insn *insn,
+ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 			    struct bpf_insn *insn)
+ {
++	struct bpf_reg_state *dst_reg;
+ 	int load_reg;
+ 	int err;
+=20
+@@ -6707,13 +6686,15 @@ static int check_atomic_rmw(struct bpf_verifier_e=
+nv *env,
+ 		load_reg =3D -1;
+ 	}
+=20
++	dst_reg =3D cur_regs(env) + insn->dst_reg;
++
+ 	/* Check whether we can read the memory, with second call for fetch
+ 	 * case to simulate the register fill.
+ 	 */
+-	err =3D check_mem_access(env, env->insn_idx, insn->dst_reg, insn->off,
++	err =3D check_mem_access(env, env->insn_idx, dst_reg, insn->dst_reg, in=
+sn->off,
+ 			       BPF_SIZE(insn->code), BPF_READ, -1, true, false);
+ 	if (!err && load_reg >=3D 0)
+-		err =3D check_mem_access(env, env->insn_idx, insn->dst_reg,
++		err =3D check_mem_access(env, env->insn_idx, dst_reg, insn->dst_reg,
+ 				       insn->off, BPF_SIZE(insn->code),
+ 				       BPF_READ, load_reg, true, false);
+ 	if (err)
+@@ -6725,7 +6706,7 @@ static int check_atomic_rmw(struct bpf_verifier_env=
+ *env,
+ 			return err;
+ 	}
+ 	/* Check whether we can write into the same memory. */
+-	err =3D check_mem_access(env, env->insn_idx, insn->dst_reg, insn->off,
++	err =3D check_mem_access(env, env->insn_idx, dst_reg, insn->dst_reg, in=
+sn->off,
+ 			       BPF_SIZE(insn->code), BPF_WRITE, -1, true, false);
+ 	if (err)
+ 		return err;
+@@ -6814,11 +6795,10 @@ static int check_atomic(struct bpf_verifier_env *=
+env, struct bpf_insn *insn)
+  * read offsets are marked as read.
+  */
+ static int check_stack_range_initialized(
+-		struct bpf_verifier_env *env, int regno, int off,
++		struct bpf_verifier_env *env, struct bpf_reg_state *reg, int regno, in=
+t off,
+ 		int access_size, bool zero_size_allowed,
+ 		enum bpf_access_type type, struct bpf_call_arg_meta *meta)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	struct bpf_func_state *state =3D bpf_func(env, reg);
+ 	int err, min_off, max_off, i, j, slot, spi;
+ 	/* Some accesses can write anything into the stack, others are
+@@ -6840,7 +6820,7 @@ static int check_stack_range_initialized(
+ 		return -EACCES;
+ 	}
+=20
+-	err =3D check_stack_access_within_bounds(env, regno, off, access_size, =
+type);
++	err =3D check_stack_access_within_bounds(env, reg, regno, off, access_s=
+ize, type);
+ 	if (err)
+ 		return err;
+=20
+@@ -6971,7 +6951,7 @@ static int check_helper_mem_access(struct bpf_verif=
+ier_env *env, int regno,
+ 	switch (base_type(reg->type)) {
+ 	case PTR_TO_PACKET:
+ 	case PTR_TO_PACKET_META:
+-		return check_packet_access(env, regno, 0, access_size,
++		return check_packet_access(env, reg, regno, 0, access_size,
+ 					   zero_size_allowed);
+ 	case PTR_TO_MAP_KEY:
+ 		if (access_type =3D=3D BPF_WRITE) {
+@@ -6979,12 +6959,12 @@ static int check_helper_mem_access(struct bpf_ver=
+ifier_env *env, int regno,
+ 				reg_type_str(env, reg->type));
+ 			return -EACCES;
+ 		}
+-		return check_mem_region_access(env, regno, 0, access_size,
++		return check_mem_region_access(env, reg, regno, 0, access_size,
+ 					       reg->map_ptr->key_size, false);
+ 	case PTR_TO_MAP_VALUE:
+-		if (check_map_access_type(env, regno, 0, access_size, access_type))
++		if (check_map_access_type(env, reg, regno, 0, access_size, access_type=
+))
+ 			return -EACCES;
+-		return check_map_access(env, regno, 0, access_size,
++		return check_map_access(env, reg, regno, 0, access_size,
+ 					zero_size_allowed, ACCESS_HELPER);
+ 	case PTR_TO_MEM:
+ 		if (type_is_rdonly_mem(reg->type)) {
+@@ -6994,7 +6974,7 @@ static int check_helper_mem_access(struct bpf_verif=
+ier_env *env, int regno,
+ 				return -EACCES;
+ 			}
+ 		}
+-		return check_mem_region_access(env, regno, 0,
++		return check_mem_region_access(env, reg, regno, 0,
+ 					       access_size, reg->mem_size,
+ 					       zero_size_allowed);
+ 	case PTR_TO_BUF:
+@@ -7014,16 +6994,16 @@ static int check_helper_mem_access(struct bpf_ver=
+ifier_env *env, int regno,
+ 					   max_access);
+ 	case PTR_TO_STACK:
+ 		return check_stack_range_initialized(
+-				env,
++				env, reg,
+ 				regno, 0, access_size,
+ 				zero_size_allowed, access_type, meta);
+ 	case PTR_TO_BTF_ID:
+-		return check_ptr_to_btf_access(env, regs, regno, 0,
++		return check_ptr_to_btf_access(env, regs, reg, regno, 0,
+ 					       access_size, BPF_READ, -1);
+ 	case PTR_TO_CTX:
+ 		/* Only permit reading or writing syscall context using helper calls. =
+*/
+ 		if (is_var_ctx_off_allowed(env->prog)) {
+-			int err =3D check_mem_region_access(env, regno, 0, access_size, U16_M=
+AX,
++			int err =3D check_mem_region_access(env, reg, regno, 0, access_size, =
+U16_MAX,
+ 							  zero_size_allowed);
+ 			if (err)
+ 				return err;
+@@ -7186,11 +7166,10 @@ enum {
+  * env->cur_state->active_locks remembers which map value element or all=
+ocated
+  * object got locked and clears it after bpf_spin_unlock.
+  */
+-static int process_spin_lock(struct bpf_verifier_env *env, int regno, in=
+t flags)
++static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_re=
+g_state *reg, int regno, int flags)
+ {
+ 	bool is_lock =3D flags & PROCESS_SPIN_LOCK, is_res_lock =3D flags & PRO=
+CESS_RES_LOCK;
+ 	const char *lock_str =3D is_res_lock ? "bpf_res_spin" : "bpf_spin";
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	struct bpf_verifier_state *cur =3D env->cur_state;
+ 	bool is_const =3D tnum_is_const(reg->var_off);
+ 	bool is_irq =3D flags & PROCESS_LOCK_IRQ;
+@@ -7303,11 +7282,10 @@ static int process_spin_lock(struct bpf_verifier_=
+env *env, int regno, int flags)
+ }
+=20
+ /* Check if @regno is a pointer to a specific field in a map value */
+-static int check_map_field_pointer(struct bpf_verifier_env *env, u32 reg=
+no,
++static int check_map_field_pointer(struct bpf_verifier_env *env, struct =
+bpf_reg_state *reg, u32 regno,
+ 				   enum btf_field_type field_type,
+ 				   struct bpf_map_desc *map_desc)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	bool is_const =3D tnum_is_const(reg->var_off);
+ 	struct bpf_map *map =3D reg->map_ptr;
+ 	u64 val =3D reg->var_off.value;
+@@ -7357,26 +7335,26 @@ static int check_map_field_pointer(struct bpf_ver=
+ifier_env *env, u32 regno,
+ 	return 0;
+ }
+=20
+-static int process_timer_func(struct bpf_verifier_env *env, int regno,
++static int process_timer_func(struct bpf_verifier_env *env, struct bpf_r=
+eg_state *reg, int regno,
+ 			      struct bpf_map_desc *map)
+ {
+ 	if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
+ 		verbose(env, "bpf_timer cannot be used for PREEMPT_RT.\n");
+ 		return -EOPNOTSUPP;
+ 	}
+-	return check_map_field_pointer(env, regno, BPF_TIMER, map);
++	return check_map_field_pointer(env, reg, regno, BPF_TIMER, map);
+ }
+=20
+-static int process_timer_helper(struct bpf_verifier_env *env, int regno,
++static int process_timer_helper(struct bpf_verifier_env *env, struct bpf=
+_reg_state *reg, int regno,
+ 				struct bpf_call_arg_meta *meta)
+ {
+-	return process_timer_func(env, regno, &meta->map);
++	return process_timer_func(env, reg, regno, &meta->map);
+ }
+=20
+-static int process_timer_kfunc(struct bpf_verifier_env *env, int regno,
++static int process_timer_kfunc(struct bpf_verifier_env *env, struct bpf_=
+reg_state *reg, int regno,
+ 			       struct bpf_kfunc_call_arg_meta *meta)
+ {
+-	return process_timer_func(env, regno, &meta->map);
++	return process_timer_func(env, reg, regno, &meta->map);
+ }
+=20
+ static int process_kptr_func(struct bpf_verifier_env *env, int regno,
+@@ -7452,10 +7430,9 @@ static int process_kptr_func(struct bpf_verifier_e=
+nv *env, int regno,
+  * Helpers which do not mutate the bpf_dynptr set MEM_RDONLY in their ar=
+gument
+  * type, and declare it as 'const struct bpf_dynptr *' in their prototyp=
+e.
+  */
+-static int process_dynptr_func(struct bpf_verifier_env *env, int regno, =
+int insn_idx,
++static int process_dynptr_func(struct bpf_verifier_env *env, struct bpf_=
+reg_state *reg, int regno, int insn_idx,
+ 			       enum bpf_arg_type arg_type, int clone_ref_obj_id)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	int err;
+=20
+ 	if (reg->type !=3D PTR_TO_STACK && reg->type !=3D CONST_PTR_TO_DYNPTR) =
+{
+@@ -7498,7 +7475,7 @@ static int process_dynptr_func(struct bpf_verifier_=
+env *env, int regno, int insn
+=20
+ 		/* we write BPF_DW bits (8 bytes) at a time */
+ 		for (i =3D 0; i < BPF_DYNPTR_SIZE; i +=3D 8) {
+-			err =3D check_mem_access(env, insn_idx, regno,
++			err =3D check_mem_access(env, insn_idx, reg, regno,
+ 					       i, BPF_DW, BPF_WRITE, -1, false, false);
+ 			if (err)
+ 				return err;
+@@ -7568,10 +7545,9 @@ static bool is_kfunc_arg_iter(struct bpf_kfunc_cal=
+l_arg_meta *meta, int arg_idx,
+ 	return btf_param_match_suffix(meta->btf, arg, "__iter");
+ }
+=20
+-static int process_iter_arg(struct bpf_verifier_env *env, int regno, int=
+ insn_idx,
++static int process_iter_arg(struct bpf_verifier_env *env, struct bpf_reg=
+_state *reg, int regno, int insn_idx,
+ 			    struct bpf_kfunc_call_arg_meta *meta)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	const struct btf_type *t;
+ 	int spi, err, i, nr_slots, btf_id;
+=20
+@@ -7603,7 +7579,7 @@ static int process_iter_arg(struct bpf_verifier_env=
+ *env, int regno, int insn_id
+ 		}
+=20
+ 		for (i =3D 0; i < nr_slots * 8; i +=3D BPF_REG_SIZE) {
+-			err =3D check_mem_access(env, insn_idx, regno,
++			err =3D check_mem_access(env, insn_idx, reg, regno,
+ 					       i, BPF_DW, BPF_WRITE, -1, false, false);
+ 			if (err)
+ 				return err;
+@@ -8042,12 +8018,11 @@ static const struct bpf_reg_types *compatible_reg=
+_types[__BPF_ARG_TYPE_MAX] =3D {
+ 	[ARG_PTR_TO_DYNPTR]		=3D &dynptr_types,
+ };
+=20
+-static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
++static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_s=
+tate *reg, u32 regno,
+ 			  enum bpf_arg_type arg_type,
+ 			  const u32 *arg_btf_id,
+ 			  struct bpf_call_arg_meta *meta)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	enum bpf_reg_type expected, type =3D reg->type;
+ 	const struct bpf_reg_types *compatible;
+ 	int i, j, err;
+@@ -8390,7 +8365,7 @@ static int check_reg_const_str(struct bpf_verifier_=
+env *env,
+ 		return -EACCES;
+ 	}
+=20
+-	err =3D check_map_access(env, regno, 0,
++	err =3D check_map_access(env, reg, regno, 0,
+ 			       map->value_size - reg->var_off.value, false,
+ 			       ACCESS_HELPER);
+ 	if (err)
+@@ -8526,7 +8501,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 	    base_type(arg_type) =3D=3D ARG_PTR_TO_SPIN_LOCK)
+ 		arg_btf_id =3D fn->arg_btf_id[arg];
+=20
+-	err =3D check_reg_type(env, regno, arg_type, arg_btf_id, meta);
++	err =3D check_reg_type(env, reg, regno, arg_type, arg_btf_id, meta);
+ 	if (err)
+ 		return err;
+=20
+@@ -8664,11 +8639,11 @@ static int check_func_arg(struct bpf_verifier_env=
+ *env, u32 arg,
+ 			return -EACCES;
+ 		}
+ 		if (meta->func_id =3D=3D BPF_FUNC_spin_lock) {
+-			err =3D process_spin_lock(env, regno, PROCESS_SPIN_LOCK);
++			err =3D process_spin_lock(env, reg, regno, PROCESS_SPIN_LOCK);
+ 			if (err)
+ 				return err;
+ 		} else if (meta->func_id =3D=3D BPF_FUNC_spin_unlock) {
+-			err =3D process_spin_lock(env, regno, 0);
++			err =3D process_spin_lock(env, reg, regno, 0);
+ 			if (err)
+ 				return err;
+ 		} else {
+@@ -8677,7 +8652,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 		}
+ 		break;
+ 	case ARG_PTR_TO_TIMER:
+-		err =3D process_timer_helper(env, regno, meta);
++		err =3D process_timer_helper(env, reg, regno, meta);
+ 		if (err)
+ 			return err;
+ 		break;
+@@ -8712,7 +8687,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 					 true, meta);
+ 		break;
+ 	case ARG_PTR_TO_DYNPTR:
+-		err =3D process_dynptr_func(env, regno, insn_idx, arg_type, 0);
++		err =3D process_dynptr_func(env, reg, regno, insn_idx, arg_type, 0);
+ 		if (err)
+ 			return err;
+ 		break;
+@@ -9371,7 +9346,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
+fier_env *env, int subprog,
+ 			if (ret)
+ 				return ret;
+=20
+-			ret =3D process_dynptr_func(env, regno, -1, arg->arg_type, 0);
++			ret =3D process_dynptr_func(env, reg, regno, -1, arg->arg_type, 0);
+ 			if (ret)
+ 				return ret;
+ 		} else if (base_type(arg->arg_type) =3D=3D ARG_PTR_TO_BTF_ID) {
+@@ -9382,7 +9357,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
+fier_env *env, int subprog,
+ 				continue;
+=20
+ 			memset(&meta, 0, sizeof(meta)); /* leave func_id as zero */
+-			err =3D check_reg_type(env, regno, arg->arg_type, &arg->btf_id, &meta=
+);
++			err =3D check_reg_type(env, reg, regno, arg->arg_type, &arg->btf_id, =
+&meta);
+ 			err =3D err ?: check_func_arg_reg_off(env, reg, regno, arg->arg_type)=
+;
+ 			if (err)
+ 				return err;
+@@ -10340,18 +10315,18 @@ static int check_helper_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn
+ 	if (err)
+ 		return err;
+=20
++	regs =3D cur_regs(env);
++
+ 	/* Mark slots with STACK_MISC in case of raw mode, stack offset
+ 	 * is inferred from register state.
+ 	 */
+ 	for (i =3D 0; i < meta.access_size; i++) {
+-		err =3D check_mem_access(env, insn_idx, meta.regno, i, BPF_B,
++		err =3D check_mem_access(env, insn_idx, regs + meta.regno, meta.regno,=
+ i, BPF_B,
+ 				       BPF_WRITE, -1, false, false);
+ 		if (err)
+ 			return err;
+ 	}
+=20
+-	regs =3D cur_regs(env);
+-
+ 	if (meta.release_regno) {
+ 		err =3D -EINVAL;
+ 		if (arg_type_is_dynptr(fn->arg_type[meta.release_regno - BPF_REG_1])) =
+{
+@@ -11355,11 +11330,10 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env =
+*env,
+ 		       struct bpf_kfunc_call_arg_meta *meta,
+ 		       const struct btf_type *t, const struct btf_type *ref_t,
+ 		       const char *ref_tname, const struct btf_param *args,
+-		       int argno, int nargs)
++		       int argno, int nargs, struct bpf_reg_state *reg)
+ {
+ 	u32 regno =3D argno + 1;
+ 	struct bpf_reg_state *regs =3D cur_regs(env);
+-	struct bpf_reg_state *reg =3D &regs[regno];
+ 	bool arg_mem_size =3D false;
+=20
+ 	if (meta->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
+@@ -11526,10 +11500,9 @@ static int process_kf_arg_ptr_to_btf_id(struct b=
+pf_verifier_env *env,
+ 	return 0;
+ }
+=20
+-static int process_irq_flag(struct bpf_verifier_env *env, int regno,
++static int process_irq_flag(struct bpf_verifier_env *env, struct bpf_reg=
+_state *reg, int regno,
+ 			     struct bpf_kfunc_call_arg_meta *meta)
+ {
+-	struct bpf_reg_state *reg =3D reg_state(env, regno);
+ 	int err, kfunc_class =3D IRQ_NATIVE_KFUNC;
+ 	bool irq_save;
+=20
+@@ -11554,7 +11527,7 @@ static int process_irq_flag(struct bpf_verifier_e=
+nv *env, int regno,
+ 			return -EINVAL;
+ 		}
+=20
+-		err =3D check_mem_access(env, env->insn_idx, regno, 0, BPF_DW, BPF_WRI=
+TE, -1, false, false);
++		err =3D check_mem_access(env, env->insn_idx, reg, regno, 0, BPF_DW, BP=
+F_WRITE, -1, false, false);
+ 		if (err)
+ 			return err;
+=20
+@@ -12142,7 +12115,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 		ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+ 		ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+=20
+-		kf_arg_type =3D get_kfunc_ptr_arg_type(env, meta, t, ref_t, ref_tname,=
+ args, i, nargs);
++		kf_arg_type =3D get_kfunc_ptr_arg_type(env, meta, t, ref_t, ref_tname,=
+ args, i, nargs, reg);
+ 		if (kf_arg_type < 0)
+ 			return kf_arg_type;
+=20
+@@ -12307,7 +12280,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 				}
+ 			}
+=20
+-			ret =3D process_dynptr_func(env, regno, insn_idx, dynptr_arg_type, cl=
+one_ref_obj_id);
++			ret =3D process_dynptr_func(env, reg, regno, insn_idx, dynptr_arg_typ=
+e, clone_ref_obj_id);
+ 			if (ret < 0)
+ 				return ret;
+=20
+@@ -12332,7 +12305,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 					return -EINVAL;
+ 				}
+ 			}
+-			ret =3D process_iter_arg(env, regno, insn_idx, meta);
++			ret =3D process_iter_arg(env, reg, regno, insn_idx, meta);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+@@ -12509,7 +12482,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 				verbose(env, "arg#%d doesn't point to a map value\n", i);
+ 				return -EINVAL;
+ 			}
+-			ret =3D check_map_field_pointer(env, regno, BPF_WORKQUEUE, &meta->map=
+);
++			ret =3D check_map_field_pointer(env, reg, regno, BPF_WORKQUEUE, &meta=
+->map);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+@@ -12518,7 +12491,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 				verbose(env, "arg#%d doesn't point to a map value\n", i);
+ 				return -EINVAL;
+ 			}
+-			ret =3D process_timer_kfunc(env, regno, meta);
++			ret =3D process_timer_kfunc(env, reg, regno, meta);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+@@ -12527,7 +12500,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 				verbose(env, "arg#%d doesn't point to a map value\n", i);
+ 				return -EINVAL;
+ 			}
+-			ret =3D check_map_field_pointer(env, regno, BPF_TASK_WORK, &meta->map=
+);
++			ret =3D check_map_field_pointer(env, reg, regno, BPF_TASK_WORK, &meta=
+->map);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+@@ -12536,7 +12509,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 				verbose(env, "arg#%d doesn't point to an irq flag on stack\n", i);
+ 				return -EINVAL;
+ 			}
+-			ret =3D process_irq_flag(env, regno, meta);
++			ret =3D process_irq_flag(env, reg, regno, meta);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+@@ -12557,7 +12530,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_kfunc_call_
+ 			if (meta->func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqs=
+ave] ||
+ 			    meta->func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_unlock_ir=
+qrestore])
+ 				flags |=3D PROCESS_LOCK_IRQ;
+-			ret =3D process_spin_lock(env, regno, flags);
++			ret =3D process_spin_lock(env, reg, regno, flags);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
+@@ -13691,7 +13664,7 @@ static int check_stack_access_for_ptr_arithmetic(
+=20
+ static int sanitize_check_bounds(struct bpf_verifier_env *env,
+ 				 const struct bpf_insn *insn,
+-				 const struct bpf_reg_state *dst_reg)
++				 struct bpf_reg_state *dst_reg)
+ {
+ 	u32 dst =3D insn->dst_reg;
+=20
+@@ -13708,7 +13681,7 @@ static int sanitize_check_bounds(struct bpf_verif=
+ier_env *env,
+ 			return -EACCES;
+ 		break;
+ 	case PTR_TO_MAP_VALUE:
+-		if (check_map_access(env, dst, 0, 1, false, ACCESS_HELPER)) {
++		if (check_map_access(env, dst_reg, dst, 0, 1, false, ACCESS_HELPER)) {
+ 			verbose(env, "R%d pointer arithmetic of map value goes out of range, =
+"
+ 				"prohibited for !root\n", dst);
+ 			return -EACCES;
+@@ -17594,7 +17567,7 @@ static int do_check_insn(struct bpf_verifier_env =
+*env, bool *do_print_state)
+=20
+ 		dst_reg_type =3D cur_regs(env)[insn->dst_reg].type;
+=20
+-		err =3D check_mem_access(env, env->insn_idx, insn->dst_reg,
++		err =3D check_mem_access(env, env->insn_idx, cur_regs(env) + insn->dst=
+_reg, insn->dst_reg,
+ 				       insn->off, BPF_SIZE(insn->code),
+ 				       BPF_WRITE, -1, false, false);
+ 		if (err)
 --=20
 2.52.0
 
