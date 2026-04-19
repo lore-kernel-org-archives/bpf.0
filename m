@@ -1,93 +1,93 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F1F5478D
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 14:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AFF41917CD
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 14:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776607809; cv=pass; b=CpuZQhe1dHd6MJgW8NE3VRoRgLvMxMe1zXgtwupC4gg71UbbuWbTByv9bvw5YjT4kPySN4Gu2GY68p/k+q48hYYUgEPz6n3RX5h8QKTYTvpP+rfttYGNA7L1av0dBU9oUN1YbQSy2Hj3RpEEHSvtOcnvsuLMPpXHVYAB1IblFms=
+	t=1776608641; cv=pass; b=FUzs04wOY+0UzUM9NYZP9mGjHLZhso/CWGnw6y57nt5uFcQTKOnP5VLS+pFVQfkDZoOCVOufCXlMhGDC6XJkYnN4Qmz7yyLU5FRoErCRcS5BSV9etbctHLekAvKJcBu2TMPiEGprtkaUmh4GndCbIqcpExyz6FpPXT124EX7mUc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776607809; c=relaxed/simple;
-	bh=FTki9bCzEbIWjDU0LcxyaxfwDRIFHTIRbOOJ3Rc3s+4=;
+	s=arc-20240116; t=1776608641; c=relaxed/simple;
+	bh=5vWDgxO2UffpKS7zIH+0K8t5jTehWEnK5R86hF2Ikr0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YQBllPLMhmG4KJRd09vdCc4AmHtPW7AOwKxBWKec46SC8ZaeB3zGrW0004AbfHEm26A3gSWkZWaMBUY7qcyuw1mjGHKLFUPxIZLdqFL4mRUucFoqrfTtANm0LPcyzONGn0Rt/5XUApZpmI3PMwrHBP8q8M6i3CXbGs9ysCXo7Pg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eJmQib6T; arc=pass smtp.client-ip=209.85.167.51
+	 To:Cc:Content-Type; b=mSpxObH0DMiLtB1bV4W+AHatr5Ncw279+OTmIZVB4wvFCzKQqtHewwPq6pFnIYGcDd/oxcsWrmLencrhaHIt4QGkFpJZ3Y05JmMVP1GymUYpwsxRR4lk0INBqGweeV+mqpUUzChc9QqqwvBVrn12vGgFhV+XsH5UEt699eLLsT0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JAsyr3GF; arc=pass smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eJmQib6T"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5a3cc771c26so1808897e87.3
-        for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 07:10:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776607806; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JAsyr3GF"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5a40b2d268bso1771608e87.3
+        for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 07:23:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776608638; cv=none;
         d=google.com; s=arc-20240605;
-        b=dlcs1eVkpv84GCEDee3PVOcZAgKZ3DRV6gkM6iu8o+6KBvBL8R47RgUsv9gac0g5pw
-         7Ui8Mim36PbgA+I3S/pXL5xRiK2F+EzpuIMefr3xf1cu1LA71tgSkYCzzAqjIHbtLNAd
-         a3EEOplQBxENefElU5ST/C+0mAGEGEsWkCx882rNxMNMsmf+B004AEnALOHmgHYpAXag
-         tDpnJVylk6nVPMI+N/Q9Yun2m3Hi0htCZx9a3eYFKSwKhWWHJD2UMxxQdQ3CZN5JZnSc
-         fs0PpRuGAkotGodSpqMHOOyW/A32o2miJrB5j5tPKPbITuCrsezRbiikcf8I8GsA5exA
-         N4Vw==
+        b=exDnTuVvtDRuWJD2kthHqT03n3Zm5XMVRQo1ME1GPcx+6jYOjNRx1ZFdDmFLGquN72
+         il5dfPk6KFMjvh/n4lHXMtwLTczrg9VxDHEt5AFZ58cNsDnOO3JVyWXcbFL26q1Ts6WD
+         fnscEFvakvrkSsUxneq1IBBYVKm1I92af8tqWj/Pkd3osDPfI9rZhMvUr9NHEV6X4WIy
+         lJWdrkFabql4TdYOWMz9CGED3UMW3V+WtV9bKHpt2QNoANVOp85P4bt5fsG44NyYxF2t
+         VO1rgITiDH1lGfgsu9ro9GtdjaKkG9vuA4GcSH3VIvReTfmjJ/XHX+mrJVnOfEX+FUOC
+         tXgw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=P7lkofk80y5ASD7Y3pVbAIezkpP2DV7oPOOMIxhfpcw=;
+        bh=eDyWThTcQJX4agFw15Ew3AfKnI9O2+hPJiJ8JlGIJTw=;
         fh=7pQPbM1mTaKjUbZ75iTISJbipA72wUVZwkXXTYMxzFw=;
-        b=e1Y5k9KL4yMhDj6sGJiAy2b1Rq16wO65cwarKyrK/hGOw8jWS0dO3xwI6dUURr4/6G
-         8+3zDa+mX4dzhJZdzorAz5gXdrb5eO8STkSH4AiTrDGTjrV+cL17wzaLQWILWPqVN7Xf
-         zvn8cXcRpPT7Pg7RcqBCSACo9xrZdXCERcDbSenfzfshBoDo5ZVUeAX4Qfsfa8yrDDOX
-         hMoa3bgmT2O50J+BrAjsgAkDV3yJ4soLrs9+yjhbjLlpHZZtbBtuIA/nYCuUKHdyCCel
-         wPux2cRM4A+jQj7YQIu9GSiDVaEjiMRj9hpysu2D0dG6c+1iIipfaLjW+J3LhfqMAZ9x
-         RPsg==;
+        b=avBdI2SxA/0Me+WlcZoVSUfBGqJDbNiLORNrWlBe5bv1S/uPvVztr4tSmK2lVK2fnF
+         bk+dKg8Gy7UpJPYthyrALUmKmyfrrHHyemDbCKdpIm8l4hepyePoHXAUP/pMNPzdjLNF
+         qiwU+PiipBTbGA/DVAVsjdetPM+j4ZLxxiPlcgLPILP/zTkmeGViBbNF+wBqTuYCBFhJ
+         wYHTIb3hJWN5fDd/V0PCpCclnu8kHZhUqSf5YLT8MSwu9QUeKRBl8+G+zGgSyGzAKBWQ
+         Zf0PHCIjfhOAveTH7e7dx084WuvaI2sFpPHK/WEJCLTsrgrii1wco+LDw7ZTy4pklKr9
+         TLOA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776607806; x=1777212606; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776608638; x=1777213438; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P7lkofk80y5ASD7Y3pVbAIezkpP2DV7oPOOMIxhfpcw=;
-        b=eJmQib6TqEaUYt+SfRwfrilmlM0LC4D2K5/TQsNYBOin77VTkOECwjVrzTck4qM9Dv
-         NLyv+tYyGgDb3/GtWzPH5eSK2PXBX/CYJq7yJCqBwsG3SErWU2FlQkPU/Nok/e0P/H77
-         1NwWJxKCl49PVhthLrGlhat8wzn5UQ2YYVcoDb/FnvMb3GDAPxj3UQ2+a4qzoWFxsWeU
-         UtSeh5+se7SzRnXzez6kyFECMHPpNdt5cjM3qpnfIbGjeponUz82k/2z6BrTtrX2W0X9
-         Jw07MPSYwc7kRoDCrjKmx1+wrALqT6r13l+QCgoYLqjgec6w9ncSR+KihSFmAUeTj8y6
-         wzHA==
+        bh=eDyWThTcQJX4agFw15Ew3AfKnI9O2+hPJiJ8JlGIJTw=;
+        b=JAsyr3GFfqOoGh2Aj21PS0HJJpcxVOBR02TITRmhpbaBeNksStKX+CXMJhsS4sOp6i
+         u3LWSBoc4VFP29F81PILEr3NA1IVGoXJRvRRDolEGKj+Oe5Olnr/jfS+9C8T5Y3k4+29
+         pow2zsH1qTJyXVkXWnviYQbil4lxl5mKIwboErcihwdhzZeRpGl1l5qSDvs6I++M9Api
+         JklwD1ekb7yCsrvnCeUtTMK842o+UxYwyD/vGjY2W8o/ApshdYsR8DLykvz76pyIaurI
+         JyZeRopfdr5lzJO8fdzM9KGNWSFy9grPefqIjj0GpJGJa8gsN3lJh39c7Iw+3TcI3qfG
+         /ZuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776607806; x=1777212606;
+        d=1e100.net; s=20251104; t=1776608638; x=1777213438;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=P7lkofk80y5ASD7Y3pVbAIezkpP2DV7oPOOMIxhfpcw=;
-        b=SFmgJM6tOBEYw6BBERpmI/1bWBmZ4uEBm8oCHgTJhc+20IKo9xB5irU+T9m+iqxuyv
-         3dvep0c/QnB9qAs4SjxbvInPX3+Pg72IfdLxjV1dlLI4VVUPBmkbszOkdU3eekxBXVfH
-         scTmVUcSe4nYw29EAcyKn4YYytw35Z3wWsFycO2ZjuawoCfqaL8qnEBqWHA+XQNYzIxn
-         BHnPSUSnFwjsYeRifiWbDb7VmRPZfIggLqd291FnsAlcYwSRwfj0vm5nqylg6WH0ArcF
-         f+O5F9dDWPmDVYfQGRdbFDZMIWo2u9H80k25uWh4OVjU17/oHAvcs5ShED6w8LKwB9F5
-         TvKA==
-X-Gm-Message-State: AOJu0Yyp7YviIRrNT+y30X/lV5PGvMIBahsef75O7IW4AFWrDh/0oC2Q
-	C+XNGJzvmyvSWlPZZ+xRT1OodtRLNRaUDpEq2oXgpIwPG6+GrSQplOE2PAlc20kxbAPXOdkE08z
-	KRy1myJEpRER3brP5NsCrPvZT+QKUiUX9H5NMCYX7XA==
-X-Gm-Gg: AeBDiesG2oaVrdujoOBeDYmVkvChOgiYppbgWCxwvkp5vQFFtf5Qk83em5Zn95yJur+
-	yqMJ56tAeVJNGM0R8/+TvN/R7lTTl/as2XGtxetxXqXw2Oq5ioK7EOUSCuFg1AtKib0PgBrvwEc
-	fj1WnAy1pM5PP13nkM+fjUQrfXIPURe+xTfoST6sYJhbImVkC1ptFzzTchP8PJLa7E0sEEravx/
-	9ASmZV7Ss5kxWs4SImYf7o4Fx3uacKwnGiCWE9PdAYwW9kzgkDCXWcCjNLz7NgUKdtqt7H7HJIp
-	2OR7hNDtXYrmPO2pkg==
-X-Received: by 2002:a05:6512:6c7:b0:5a2:c766:13bb with SMTP id
- 2adb3069b0e04-5a4172cc01dmr3031631e87.18.1776607805655; Sun, 19 Apr 2026
- 07:10:05 -0700 (PDT)
+        bh=eDyWThTcQJX4agFw15Ew3AfKnI9O2+hPJiJ8JlGIJTw=;
+        b=YpnJkk6dC21jVD/lGKJGktMQKTGuHyoFi+in4Eg1jNLwMyVkhqTM+ZQLCtEylNtFQp
+         cQCgkjQiBGkS//fQVV1laFpZyLlvsjA1H9JUvb5ASK18cP4UBPWdzSXemFYC7Vq/6ffj
+         Y6iTjv1xS37X72RfsalH4GEjrh2aghQkH0UW1jjDGhgAjWKoTGAAvTZoeyCgzaM3Evly
+         qAQj82kWDO/9XrgjlawZ7VFCVmjtQOpw+zEvbpnmlTdx5MBGy/6qSf7eE7P0LoXrNW0s
+         OY49RJ39byLGK2XthUIfmH+gg6iRVjqpvKEwV76wzwYY1ZRDRHJYuXHgWetTglUGSofE
+         yfkA==
+X-Gm-Message-State: AOJu0YyeiP5Pbd7KACGj2mSc2lbCwHZ/gUHQNXomCUqr2A5LU4oqcS3H
+	xewDhykkN/9ZcHW7ZH7LDn1Vf11MA0kgU5QS8gvtpA6A4OycuyxQ1xnljSShgdlvoW2rVJHwtL+
+	au4GFUK9M/oVyisefhxlPfUNfYqBeDcQ=
+X-Gm-Gg: AeBDiescQsrTTgABYzVEWdrxH3YR1O8aEUD0d4N+ddxz0uJYOvI5RyG5ahu+p39PWQ7
+	HfOyEIe8HIwUohlvT8pK6I+ePvlhagYW9jnIgK+EYu9OqOirg4r0Xt1mPuMqYtJQgOVl1ChOnhF
+	bi5umsrgi9SqxU1Wg0Mp/ierGS/PMrDBFDAGik/F2/lePno3uZ36jVTodqYS1Er7+dLlFUnPD3Y
+	n1qQMOuF8hcZLEDUIEXyw88uHe9kVfjQY2iJelOObskdbncOD17EE5tvF5Pn/j7uxo/eOce07sM
+	A+dE8fx/6zjkunodmg==
+X-Received: by 2002:a05:6512:33c8:b0:5a4:2b2:75e3 with SMTP id
+ 2adb3069b0e04-5a4172cd812mr2838260e87.18.1776608638160; Sun, 19 Apr 2026
+ 07:23:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260418045644.28612-4-kerneljasonxing@gmail.com> <20260419045824.0402FC2BCAF@smtp.kernel.org>
-In-Reply-To: <20260419045824.0402FC2BCAF@smtp.kernel.org>
+References: <20260418045644.28612-5-kerneljasonxing@gmail.com> <20260419045824.D9E5EC2BCAF@smtp.kernel.org>
+In-Reply-To: <20260419045824.D9E5EC2BCAF@smtp.kernel.org>
 From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sun, 19 Apr 2026 22:09:28 +0800
-X-Gm-Features: AQROBzAj5QfNvzo4HfvcWfY23xgvR6EoL_oTEqTN7mHZ9WtLplKGMNuQ-ks4tVk
-Message-ID: <CAL+tcoBoKKDXKgMJucehEZnRkXOZm9EgR6RqQ2pH3SNzWDDHDQ@mail.gmail.com>
-Subject: Re: [PATCH net 3/4] xsk: handle NULL dereference of the skb without
- frags issue
+Date: Sun, 19 Apr 2026 22:23:20 +0800
+X-Gm-Features: AQROBzDKamq6XkjHwX1UKcPaOBGSgjCckPrWxlYvJMrYhvVx2Tr9Hbf7__1T1gM
+Message-ID: <CAL+tcoCJ5LXR_mBhRfegN6-Oo7yNtf=akTcw13nfhLAfhVbHAg@mail.gmail.com>
+Subject: Re: [PATCH net 4/4] xsk: fix use-after-free of xs->skb in
+ xsk_build_skb() free_err path
 To: sashiko@lists.linux.dev
 Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -95,111 +95,129 @@ Content-Transfer-Encoding: quoted-printable
 
 On Sun, Apr 19, 2026 at 12:58=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
-> Sashiko AI review found 2 potential issue(s):
-> - [Critical] Calling `kfree_skb(skb)` without clearing the SKB destructor=
- causes Completion Queue (CQ) ring corruption and false completions.
-> - [High] Use-after-free of `xs->skb` in the continuation path when an err=
-or like `-EAGAIN` occurs.
+> Sashiko AI review found 3 potential issue(s):
+> - [High] Calling `kfree_skb(skb)` in `free_err` after `xsk_skb_init_misc(=
+)` triggers premature CQ submission and corrupts Queue invariants.
+> - [High] Memory leak of `xsk_addr` when `alloc_page()` fails during multi=
+-buffer packet processing.
+> - [High] On 32-bit architectures, `xsk_skb_destructor_set_addr()` truncat=
+es the 64-bit UMEM offset, corrupting the Completion Queue address.
 > --
 >
-> commit 1c728000f884ce0a536d9c1fd763eb0c560ada51
+> commit e60e7fb34b1c59698d11da732db02bb3302ab41a
 > Author: Jason Xing <kerneljasonxing@gmail.com>
 >
-> xsk: handle NULL dereference of the skb without frags issue
+> xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
 >
-> This commit addresses a NULL pointer dereference in the error path of
-> xsk_build_skb_zerocopy() by checking if xs->skb is valid before
-> dereferencing it during -EOVERFLOW handling. It also adds an alternative
-> branch to handle bookkeeping for the first-descriptor case.
+> When xsk_build_skb() processes multi-buffer packets in copy mode, the
+> first descriptor stores data into the skb linear area without adding any
+> frags. If a continuation descriptor fails, the error path frees the skb
+> while xs->skb still points to it. This patch adds a check to ensure we
+> only free skbs that were freshly allocated in this call.
+>
+> Link: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@=
+gmail.com/
 >
 > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 3d6c6caa7ff82..2f00f188533c1 100644
+> > index 2f00f188533c1..470f6d25ddb93 100644
 > > --- a/net/xdp/xsk.c
 > > +++ b/net/xdp/xsk.c
-> > @@ -978,9 +978,14 @@ static struct sk_buff *xsk_build_skb(struct xdp_so=
-ck *xs,
+> > @@ -974,7 +974,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_soc=
+k *xs,
+> >       return skb;
+> >
+> >  free_err:
+> > -     if (skb && !skb_shinfo(skb)->nr_frags)
+> > +     if (skb && !xs->skb && !skb_shinfo(skb)->nr_frags)
 > >               kfree_skb(skb);
 >
-> Can this lead to a use-after-free on xs->skb?
+> This isn't a regression introduced by this patch, but could calling
+> kfree_skb() here trigger a premature completion queue submission?
 >
-> In the non-zerocopy path, if the first descriptor is linear, nr_frags rem=
-ains
-> 0 and the caller __xsk_generic_xmit() stores the SKB in xs->skb.
+> If xsk_skb_metadata() fails earlier in the function, the skb destructor
+> is already set to xsk_destruct_skb by xsk_skb_init_misc().
+>
+> Freeing the skb here synchronously invokes xsk_destruct_skb(), which
+> submits the completion to user space and increments the queue producer.
+> The error path then executes xsk_cq_cancel_locked(), which decrements the
+> cached producer.
+>
+> Will this permanently desync the completion queue invariants and report a
+> successful completion for a failed transmission? Would it be safer to
+> clear the skb destructor before freeing it?
 
-Patch 4 already handles this.
+Ack, the same discussion again.
 
 >
-> During the next iteration for a continuation descriptor, if an error like
-> -EAGAIN occurs (e.g., from alloc_page()), the code jumps to the free_err
-> label. The cleanup logic if (skb && !skb_shinfo(skb)->nr_frags) would
-> evaluate to true, freeing the entire SKB.
+> Also, is there a potential memory leak of the xsk_addr struct when
+> alloc_page() fails during multi-buffer packet processing?
 >
-> The function then returns -EAGAIN, leaving the freed SKB pointer in xs->s=
-kb.
-> On the next application retry, the code could dereference the freed xs->s=
-kb.
+> When processing a continuation descriptor, an xsk_addr struct is
+> dynamically allocated and stored in skb_shinfo(skb)->destructor_arg
+> with num_descs set to 1. If the subsequent alloc_page() fails, the code
+> jumps here to free_err and returns -EAGAIN, leaving the partial packet
+> in xs->skb for a retry.
 >
-> Note that this regression is fixed later in the patch series by commit 'x=
-sk:
-> fix use-after-free of xs->skb in xsk_build_skb() free_err path'.
+> If the socket is closed instead of retrying, xsk_drop_skb() is called on
+> xs->skb, which calls xsk_consume_skb(). Inside xsk_consume_skb(), the
+> cleanup logic uses this condition:
 >
-> Also, could calling kfree_skb(skb) without clearing the SKB destructor ca=
-use
-> Completion Queue (CQ) ring corruption and false completions?
+>     if (unlikely(num_descs > 1))
 >
-> In xsk_build_skb_zerocopy(), xsk_skb_init_misc() sets
-> skb->destructor =3D xsk_destruct_skb. When an error occurs on the first
-> descriptor (e.g., xsk_skb_metadata() returning -EINVAL), kfree_skb(skb) i=
+> Since num_descs is exactly 1, the condition fails. Does this permanently
+> leak the xsk_addr memory?
+
+Right. See the following inline reply.
+
+>
+> Finally, does xsk_skb_destructor_set_addr() truncate the 64-bit umem
+> offset on 32-bit architectures?
+>
+> The inline storage attempts to cast the address to uintptr_t:
+>
+>     skb_shinfo(skb)->destructor_arg =3D (void *)((uintptr_t)addr | 0x1UL)=
+;
+>
+> On 32-bit architectures, uintptr_t is 32 bits, which drops the upper 32
+> bits of the u64 addr. In af_xdp unaligned mode, the chunk offset is
+> stored in bits 48-63.
+>
+> Could this truncation lose the offset entirely, causing
+> xsk_skb_destructor_get_addr() to retrieve a truncated address and
+> submit it to the user-space completion queue?
+
+Right. It can happen!
+
+Brilliant, sashiko found another two pre-existing bugs here! I'm so
+shocked at sashiko that handles the extremely complicated path so
+well. It's really useful to capture the bug beforehand.
+
+I will include the corresponding two separate patches to fix the same
+problematic commit:
+commit 0ebc27a4c67d44e5ce88d21cdad8201862b78837
+Author: Fernando Fernandez Mancera <fmancera@suse.de>
+Date:   Mon Nov 24 18:14:09 2025 +0100
+
+    xsk: avoid data corruption on cq descriptor number
+
+    Since commit 30f241fcf52a ("xsk: Fix immature cq descriptor
+    production"), the descriptor number is stored in skb control block and
+    xsk_cq_submit_addr_locked() relies on it to put the umem addrs onto
+    pool's completion queue.
+
+    skb control block shouldn't be used for this purpose as after transmit
+    xsk doesn't have control over it and other subsystems could use it. Thi=
 s
-> called.
->
-> Because the destructor is not overridden with sock_wfree (like
-> xsk_consume_skb() does), kfree_skb(skb) triggers xsk_destruct_skb(), whic=
-h
-> submits the descriptor to the CQ and increments q->ring->producer.
->
-> >       if (err =3D=3D -EOVERFLOW) {
-> > -             /* Drop the packet */
-> > -             xsk_inc_num_desc(xs->skb);
-> > -             xsk_drop_skb(xs->skb);
-> > +             if (xs->skb) {
-> > +                     /* Drop the packet */
-> > +                     xsk_inc_num_desc(xs->skb);
-> > +                     xsk_drop_skb(xs->skb);
-> > +             } else {
-> > +                     xsk_cq_cancel_locked(xs->pool, 1);
-> > +                     xs->tx->invalid_descs++;
-> > +             }
-> >               xskq_cons_release(xs->tx);
-> >       } else {
-> >               /* Let application retry */
-> >               xsk_cq_cancel_locked(xs->pool, 1);
-> >       }
->
-> The error handling paths then call xsk_cq_cancel_locked(), which decremen=
-ts
-> the reservation counter q->cached_prod.
->
-> Does decrementing the reservation while the actual producer pointer has
-> advanced break queue accounting?
->
-> The kernel calculates available space using cached_prod; this artificial
-> underflow could cause the queue to over-report free space, allowing the
-> producer to silently overwrite unread user-space CQ entries.
->
-> Furthermore, in the -EINVAL path, does the invalid descriptor generate a
-> false completion to user space without being released from the TX ring? W=
-hen
-> the application reuses the completed buffer, could the kernel retransmit =
-the
-> same descriptor on retry, causing a use-after-free and data corruption?
-
-For the above two issues, yes, we've discussed in the previous patch :)
+    leads to the following kernel panic due to a NULL pointer dereference.
 
 Thanks,
 Jason
 
 >
+> >
+> >       if (err =3D=3D -EOVERFLOW) {
+> >               if (xs->skb) {
+>
 > --
 > Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260418045644.28=
-612-1-kerneljasonxing@gmail.com?part=3D3
+612-1-kerneljasonxing@gmail.com?part=3D4
