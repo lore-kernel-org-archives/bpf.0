@@ -1,126 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B502F84F
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 17:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E922F84F
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 17:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776618492; cv=none; b=j/Xh8yoatxn5k352sjbmYhGjd7xfob7RWJZ3XHivH17yki9Xod/8lbiRrlyg6gQD+bFzLcSSVl58VdUIEtsdybHiMgllJFui2jatIVSegKcYJ/nmzmuDd3suGSup0lgxj+rUBZ0tsybu3n3G3BmX4Qde0QTGEYBIprjsMZiFut8=
+	t=1776618498; cv=none; b=vAHkZp3Xxx6KA83hCKvF7Kx3vXWmnMOwNulH22rYrQ7OEgi2DsdISu3empYhjd8cA3eZ3MrPYHg5XIfR6kOndaauLrBBcAnCpOODsjE2atDG4XAcZl9izDHMLw+lg0HaPeJmFZJtkse9y81ehJBRGGBusfcC3WUeVqpriT0ludE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776618492; c=relaxed/simple;
-	bh=179aHEH2iTddkmQXKv+WWko6WMJgBP5kwX/Rsrylszc=;
+	s=arc-20240116; t=1776618498; c=relaxed/simple;
+	bh=4Zj+TWu8bHLzIJr7lLJrxTOINdeW7SkXNyrOcWrkYRo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RtuyH9Xx9DNlTsiyYlIshwF0ye4XqIHwSeZC4F05aUEwLtMzYDWbf3swEtXbAe23Dpre4WybWWepoOM9UixXMm1m5FMlFPcT6gGVoO02Gz20sm5HjQocEhXfj/A+rjPbSu//FjJXKC7fQzl3XXFnJz8k1n4wHqtOA5kuejnqDVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3vTks/l; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=o59Tdw6PBL4iv/fQLp7RomAd5d7c4FeoHSpir6nQ1xNalKFj3CjnMfeqXrzGRVnmVkYiGrIdbS9oaQII5vLhDnRRhKvMAPvCUqIAjEn75AsSywGgeqobneZ5iWJYq6PifUr6qkZTMWGG0eVYaNuVZyQOxu7MIHPeET6eq95RXgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ffCfr2rv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3vTks/l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16705C2BCAF;
-	Sun, 19 Apr 2026 17:08:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ffCfr2rv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8136C2BCAF;
+	Sun, 19 Apr 2026 17:08:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776618492;
-	bh=179aHEH2iTddkmQXKv+WWko6WMJgBP5kwX/Rsrylszc=;
+	s=k20201202; t=1776618498;
+	bh=4Zj+TWu8bHLzIJr7lLJrxTOINdeW7SkXNyrOcWrkYRo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=g3vTks/lj7mEKBPxMYfGGfoncFZ4pABY4JZKlaeFc9J/rtZogN1wqJbrTdt3j4XOg
-	 L/UfqjTtqJbjW5OKFwcH9hzEV6PQONdXhTwVclxM3gqcoSp3mA+01SXqgqt5YAUm6u
-	 Kje0OcvMaRYKvtB2SIDDpZDQz/b+zG9/5tIyq8S94rsFiT6xGEXk59+d3Lz/0fpiZo
-	 x18Y0q4cvvO3wAg25+U0lgVH3b0QOHlH0LOZt2xLYsa64V90xQC+DUNcC++oylHxuL
-	 RkjhYgIfIMP7IY0d1DfD1DhknOn1mhXw9WX2M7cML4DlPyGEJVbGv+b9C0FUM+NhSX
-	 +bKBo8p1QSFNA==
+	b=ffCfr2rvyw81k28c1q6nsV1RtKgAM2OKv1MAi6aI4/TisNgJJ0JkoqHlMokNakyWb
+	 xQ4DbXo2FI1MuM8lr1eBSpnehfaJ02sAaH2oMYd78M+p1e8b1ySBWhAz5bOP0lMujq
+	 dt3r71D0ck956nYliTs423b/Mjj6B6+hoOatduCcA+xniuKozjM6f7/TDb0azsBW4t
+	 8AXYCOEK38Q+d2X5TvsSO5CW47GHhGoDpybPtHn2U33KgzSGSQt+ctPnQTwM0Vm2ph
+	 Ta19rBKa4Ye4dUXxoeCclGjUazLT/B4jgIahgPeOb9fg3D/jv8sR0t41WymAmR+GPx
+	 7Chhi32MYTrJw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 13/17] bpf: Reject stack arguments if tail
- call reachable
+Subject: Re: [PATCH bpf-next v6 12/17] bpf: Support stack arguments for
+ kfunc calls
 Reply-To: sashiko@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260419163422.738397-1-yonghong.song@linux.dev>
-References: <20260419163422.738397-1-yonghong.song@linux.dev>
+In-Reply-To: <20260419163417.736887-1-yonghong.song@linux.dev>
+References: <20260419163417.736887-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 19 Apr 2026 17:08:11 +0000
-Message-Id: <20260419170812.16705C2BCAF@smtp.kernel.org>
+Date: Sun, 19 Apr 2026 17:08:17 +0000
+Message-Id: <20260419170817.D8136C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [High] The verifier incorrectly rejects perfectly valid subprograms with =
-stack arguments due to an order-dependent state leak of `tail_call_reachabl=
-e` during the call graph traversal.
+Sashiko AI review found 2 potential issue(s):
+- [Critical] Loss of precision tracking for scalar stack arguments due to m=
+odifying a local copy (`tmp_reg`).
+- [Critical] Bypassing `mark_chain_precision` for stack arguments breaks da=
+ta-flow backtracking, enabling unsafe state pruning.
 --
 
-commit 2677e39a30cc9fcf44cadb1927d1362ad39f7b4e
+commit 96adcc4832214af51212820f2056565abaf42a32
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Reject stack arguments if tail call reachable
+bpf: Support stack arguments for kfunc calls
 
-This commit deprecates tailcalls in the presence of stack arguments,
-rejecting subprograms with stack arguments if a tail call is reachable.
+Extend the stack argument mechanism to kfunc calls, allowing kfuncs
+with more than 5 parameters to receive additional arguments via the
+r11-based stack arg area.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 13f1fd7880921..af89750498836 100644
+> index 2a346e4f28e15..13f1fd7880921 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -7314,8 +7322,12 @@ static int check_mem_size_reg(struct bpf_verifier_=
+env *env,
+>  	}
+>  	err =3D check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax=
+_value,
+>  				      access_type, zero_size_allowed, meta);
+> -	if (!err && !is_stack_argno(size_argno))
+> -		err =3D mark_chain_precision(env, size_argno);
+> +	if (!err) {
+> +		if (is_stack_argno(size_argno))
+> +			size_reg->precise =3D true;
+> +		else
+> +			err =3D mark_chain_precision(env, size_argno);
+> +	}
+>  	return err;
+>  }
+
+Does setting size_reg->precise =3D true without calling mark_chain_precisio=
+n()
+break data-flow backtracking?
+
+If only the current state's flag is set, parent states and the source
+registers that populated the stack argument will not be marked precise.
+Could this lead to the verifier incorrectly pruning states if execution pat=
+hs
+merge before the stack store?
 
 [ ... ]
-
-> @@ -5672,14 +5677,23 @@ static int check_max_stack_depth_subprog(struct b=
-pf_verifier_env *env, int idx,
->  	 * this info will be utilized by JIT so that we will be preserving the
->  	 * tail call counter throughout bpf2bpf calls combined with tailcalls
->  	 */
-> -	if (tail_call_reachable)
-> +	if (tail_call_reachable) {
->  		for (tmp =3D idx; tmp >=3D 0; tmp =3D dinfo[tmp].caller) {
->  			if (subprog[tmp].is_exception_cb) {
->  				verbose(env, "cannot tail call within exception cb\n");
+> @@ -12373,20 +12400,44 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_kfunc_call_
+[ ... ]
+>  		if (i < MAX_BPF_FUNC_REG_ARGS) {
+>  			reg =3D &regs[i + 1];
+>  		} else {
+>  			/* Retrieve the reg state from the outgoing stack arg slot. */
+>  			struct bpf_func_state *caller =3D cur_func(env);
+>  			int spi =3D out_arg_spi(caller, i - MAX_BPF_FUNC_REG_ARGS);
+> =20
+>  			if (!is_stack_arg_slot_initialized(caller, spi)) {
+>  				verbose(env, "stack %s not properly initialized\n",
+>  					reg_arg_name(env, argno));
 >  				return -EINVAL;
 >  			}
-> +			if (subprog_has_stack_args(&subprog[tmp])) {
-> +				verbose(env, "tail_calls are not allowed in programs with stack args=
-\n");
-> +				return -EINVAL;
-> +			}
-
-Can this leak the tail_call_reachable state across disjoint call graph bran=
-ches?
-
-In check_max_stack_depth_subprog(), tail_call_reachable is a local variable
-that seems to act as an accumulator. If the main program first calls subpro=
-gram A
-(which has a tail call) and subsequently calls subprogram B (which has stack
-arguments but no tail call), tail_call_reachable remains true while travers=
-ing B.
-
-When the traversal finishes subprogram B, this newly added check evaluates =
-the
-current call stack (main -> B). Since tail_call_reachable leaked from the m=
-ain
--> A traversal, and subprogram B has stack arguments, the check would false=
-ly
-reject the program.
-
-Conversely, if the bytecode is ordered so that B is called before A,
-tail_call_reachable would be false while traversing B, allowing the program=
- to
-load successfully.
-
-Does this introduce an unpredictable, order-dependent functional regression?
-
->  			subprog[tmp].tail_call_reachable =3D true;
+> =20
+>  			tmp_reg =3D caller->stack_arg_regs[spi];
+>  			reg =3D &tmp_reg;
+>  			regno =3D -1;
 >  		}
-> +	} else if (!idx && subprog[0].has_tail_call && subprog_has_stack_args(&=
-subprog[0])) {
-> +		verbose(env, "tail_calls are not allowed in programs with stack args\n=
-");
-> +		return -EINVAL;
-> +	}
-> +
->  	if (subprog[0].tail_call_reachable)
->  		env->prog->aux->tail_call_reachable =3D true;
->
+[ ... ]
+> @@ -12413,9 +12464,13 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>  						reg_arg_name(env, argno));
+>  					return -EINVAL;
+>  				}
+> -				ret =3D mark_chain_precision(env, regno);
+> -				if (ret < 0)
+> -					return ret;
+> +				if (regno < 0) {
+> +					reg->precise =3D true;
+> +				} else {
+> +					ret =3D mark_chain_precision(env, regno);
+> +					if (ret < 0)
+> +						return ret;
+> +				}
+>  				meta->arg_constant.found =3D true;
+>  				meta->arg_constant.value =3D reg->var_off.value;
+
+Does setting reg->precise =3D true here modify a local copy instead of the =
+actual
+verifier state?
+
+Since reg points to tmp_reg for stack arguments:
+
+        tmp_reg =3D caller->stack_arg_regs[spi];
+        reg =3D &tmp_reg;
+
+it seems that reg->precise =3D true will only update the block-scoped tmp_r=
+eg,
+leaving the real state in caller->stack_arg_regs[spi] untouched. Could this
+cause the verifier to lose track of precision requirements for scalar
+constraints?
+
+Additionally, similar to check_mem_size_reg() above, bypassing
+mark_chain_precision() for stack arguments appears to skip backtracking
+entirely.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419163316.7310=
-19-1-yonghong.song@linux.dev?part=3D13
+19-1-yonghong.song@linux.dev?part=3D12
