@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EA82D5C8E
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BCF2D5C8E
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776616470; cv=none; b=evAG4EzG3rf/b2KbEQDaA2dfjfjXXTtt8ffrhY8NlvsbsiU0qKWJ4g/2klkDs3X/IqPPIjowdKTCEBiKrkY4ND1ssJXOnAhSUNLgSxsatqn+e+xTyNK9qiPvn7KzPpJkw37/7SIPl5O44vZ/3utBdqKh3VsDgLrKtNBuEheTypE=
+	t=1776616472; cv=none; b=kQfn6SNq45uXyd9gMZYTBq4qsGPe6pIM8kBVwJ2A0gxZtyhRKZxiCZmPyztUdaER/CQ1gFRN8n7agyh8g0xjCnAnSLoY47N1RpJZ5K2wnhusWM7M3k0b6muFLRwnQG6tDYHS2zuyrirnbzJqBi5c5xXHqE54O1LUFBRQIkAwpms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776616470; c=relaxed/simple;
-	bh=4jS62xZiAwLRRa2Oaw7fb8EaEec0pSFoyErcvlk2ASE=;
+	s=arc-20240116; t=1776616472; c=relaxed/simple;
+	bh=jck5nCuU71aPOkTRatxwRO0HM3D3OYhNKbpA/m8EQ7Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B0NCET0lNGJO5W0RuFKbnfMjv1TfKm7P+o8uWgYYoIhJ33ml6BHv9PlZQnIIM/m5omiOyYOUB+No0ojfuBql6NUEjHlvwqD+P6jaGyTVQsam9nGCqznRtbaGL4LIDWH+voNlzNCYbGH2bK9hN+f2/XoWGbruRaSxk8ILBZmVcWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version:Content-Type; b=YtRUMC7dAuLvTwJRMj/CG+n8TT/wgCKWzYGxiP26stGCoa/bnm6TsiSOefKaWINjixYdF+2Ri1Sbry6VqeBZpVab4I6RQZpSWYv3sUYNHb7Rj7BhTV3AGwr9zy4T20cq4K8gohSNzy1nDkDM0OcwAHvtM1wM2hqCwFqmcEnxkus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CBDFF42DD4E8E; Sun, 19 Apr 2026 09:34:17 -0700 (PDT)
+	id 0598342DD4EEE; Sun, 19 Apr 2026 09:34:30 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v6 12/17] bpf: Support stack arguments for kfunc calls
-Date: Sun, 19 Apr 2026 09:34:17 -0700
-Message-ID: <20260419163417.736887-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 14/17] bpf,x86: Implement JIT support for stack arguments
+Date: Sun, 19 Apr 2026 09:34:28 -0700
+Message-ID: <20260419163429.739002-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260419163316.731019-1-yonghong.song@linux.dev>
 References: <20260419163316.731019-1-yonghong.song@linux.dev>
@@ -36,345 +36,309 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Extend the stack argument mechanism to kfunc calls, allowing kfuncs
-with more than 5 parameters to receive additional arguments via the
-r11-based stack arg area.
+Add x86_64 JIT support for BPF functions and kfuncs with more than
+5 arguments. The extra arguments are passed through a stack area
+addressed by register r11 (BPF_REG_PARAMS) in BPF bytecode,
+which the JIT translates to native code.
 
-For kfuncs, the caller is a BPF program and the callee is a kernel
-function. The BPF program writes outgoing args at negative r11
-offsets, following the same convention as BPF-to-BPF calls:
+The JIT follows the x86-64 calling convention for both BPF-to-BPF
+and kfunc calls:
+  - Arg 6 is passed in the R9 register
+  - Args 7+ are passed on the stack
 
-  Outgoing: r11 - 8 (arg6), ..., r11 - N*8 (last arg)
+Incoming arg 6 (BPF r11+8) is translated to a MOV from R9 rather
+than a memory load. Incoming args 7+ (BPF r11+16, r11+24, ...) map
+directly to [rbp + 16], [rbp + 24], ..., matching the x86-64 stack
+layout after CALL + PUSH RBP, so no offset adjustment is needed.
 
-The following is an example:
+The verifier guarantees that neither tail_call_reachable nor
+priv_stack is set when stack args exist, so R9 is always
+available. When BPF bytecode writes to the arg-6 stack slot
+(offset -8), the JIT emits a MOV into R9 instead of a memory store.
+Outgoing args 7+ are placed at [rsp] in a pre-allocated area below
+callee-saved registers, using:
+  native_off =3D outgoing_arg_base - outgoing_rsp - bpf_off - 16
 
-  int foo(int a1, int a2, int a3, int a4, int a5, int a6, int a7) {
-    ...
-    kfunc1(a1, a2, a3, a4, a5, a6, a7, a8);
-    ...
-    kfunc2(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-    ...
-  }
+The native x86_64 stack layout with stack arguments:
 
-   Caller (foo), generated by llvm
-   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
-   Incoming (positive offsets):
-     r11+8:  [incoming arg 6]
-     r11+16: [incoming arg 7]
-
-   Outgoing for kfunc1 (negative offsets):
-     r11-8:  [outgoing arg 6]
-     r11-16: [outgoing arg 7]
-     r11-24: [outgoing arg 8]
-
-   Outgoing for kfunc2 (negative offsets):
-     r11-8:  [outgoing arg 6]
-     r11-16: [outgoing arg 7]
-     r11-24: [outgoing arg 8]
-     r11-32: [outgoing arg 9]
-
-Later JIT will marshal outgoing arguments to the native calling
-convention for kfunc1() and kfunc2().
-
-There are two places where meta->release_regno needs to keep
-regno for later releasing the reference. Also, 'cur_aux(env)->arg_prog =3D=
- regno'
-is also keeping regno for later fixup. Since stack arguments don't have a=
- valid
-register number (regno is set to -1), these three cases are rejected for =
-now
-if the argument is on the stack.
+  high address
+  +-------------------------+
+  | incoming stack arg N    |  [rbp + 16 + (N-7)*8]  (from caller)
+  | ...                     |
+  | incoming stack arg 7    |  [rbp + 16]
+  +-------------------------+
+  | return address          |  [rbp + 8]
+  | saved rbp               |  [rbp]
+  +-------------------------+
+  | BPF program stack       |  (round_up(stack_depth, 8) bytes)
+  +-------------------------+
+  | callee-saved regs       |  (r12, rbx, r13, r14, r15 as needed)
+  +-------------------------+
+  | outgoing arg M          |  [rsp + (M-7)*8]
+  | ...                     |
+  | outgoing arg 7          |  [rsp]
+  +-------------------------+  rsp
+  low address
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 127 ++++++++++++++++++++++++++++++++++--------
- 1 file changed, 103 insertions(+), 24 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 154 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 148 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2a346e4f28e1..13f1fd788092 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4502,6 +4502,14 @@ static int check_stack_arg_access(struct bpf_verif=
-ier_env *env,
- 	return 0;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index ea9e707e8abf..06f33fef1e8e 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -390,6 +390,34 @@ static void pop_callee_regs(u8 **pprog, bool *callee=
+_regs_used)
+ 	*pprog =3D prog;
  }
 =20
-+/* Check whether a stack arg slot has been properly initialized. */
-+static bool is_stack_arg_slot_initialized(struct bpf_func_state *state, =
-int spi)
++/* add rsp, depth */
++static void emit_add_rsp(u8 **pprog, u16 depth)
 +{
-+	if (spi >=3D (int)(state->stack_arg_depth / BPF_REG_SIZE))
-+		return false;
-+	return state->stack_arg_regs[spi].type !=3D NOT_INIT;
++	u8 *prog =3D *pprog;
++
++	if (!depth)
++		return;
++	if (is_imm8(depth))
++		EMIT4(0x48, 0x83, 0xC4, depth); /* add rsp, imm8 */
++	else
++		EMIT3_off32(0x48, 0x81, 0xC4, depth); /* add rsp, imm32 */
++	*pprog =3D prog;
 +}
 +
- static int out_arg_idx_from_off(int off)
++/* sub rsp, depth */
++static void emit_sub_rsp(u8 **pprog, u16 depth)
++{
++	u8 *prog =3D *pprog;
++
++	if (!depth)
++		return;
++	if (is_imm8(depth))
++		EMIT4(0x48, 0x83, 0xEC, depth); /* sub rsp, imm8 */
++	else
++		EMIT3_off32(0x48, 0x81, 0xEC, depth); /* sub rsp, imm32 */
++	*pprog =3D prog;
++}
++
+ static void emit_nops(u8 **pprog, int len)
  {
- 	return -off / BPF_REG_SIZE - 1;
-@@ -7314,8 +7322,12 @@ static int check_mem_size_reg(struct bpf_verifier_=
-env *env,
- 	}
- 	err =3D check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax=
-_value,
- 				      access_type, zero_size_allowed, meta);
--	if (!err && !is_stack_argno(size_argno))
--		err =3D mark_chain_precision(env, size_argno);
-+	if (!err) {
-+		if (is_stack_argno(size_argno))
-+			size_reg->precise =3D true;
-+		else
-+			err =3D mark_chain_precision(env, size_argno);
-+	}
- 	return err;
- }
-=20
-@@ -7358,8 +7370,6 @@ static int check_kfunc_mem_size_reg(struct bpf_veri=
-fier_env *env, struct bpf_reg
- 	u32 argno =3D make_argno(mem_argno);
+ 	u8 *prog =3D *pprog;
+@@ -1664,16 +1692,45 @@ static int do_jit(struct bpf_verifier_env *env, s=
+truct bpf_prog *bpf_prog, int *
+ 	int i, excnt =3D 0;
+ 	int ilen, proglen =3D 0;
+ 	u8 *ip, *prog =3D temp;
++	u16 stack_arg_depth, incoming_stack_arg_depth, outgoing_stack_arg_depth=
+;
++	u16 outgoing_rsp;
+ 	u32 stack_depth;
++	int callee_saved_size;
++	s32 outgoing_arg_base;
  	int err;
 =20
--	WARN_ON_ONCE(mem_argno > BPF_REG_3);
--
- 	memset(&meta, 0, sizeof(meta));
+ 	stack_depth =3D bpf_prog->aux->stack_depth;
++	stack_arg_depth =3D bpf_prog->aux->stack_arg_depth;
++	incoming_stack_arg_depth =3D bpf_prog->aux->incoming_stack_arg_depth;
++	outgoing_stack_arg_depth =3D stack_arg_depth - incoming_stack_arg_depth=
+;
+ 	priv_stack_ptr =3D bpf_prog->aux->priv_stack_ptr;
+ 	if (priv_stack_ptr) {
+ 		priv_frame_ptr =3D priv_stack_ptr + PRIV_STACK_GUARD_SZ + round_up(sta=
+ck_depth, 8);
+ 		stack_depth =3D 0;
+ 	}
 =20
- 	if (may_be_null) {
-@@ -11667,6 +11677,21 @@ bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_=
-call_arg_meta *meta)
- 	return meta->func_id =3D=3D special_kfunc_list[KF_bpf_xdp_pull_data];
++	/*
++	 * Follow x86-64 calling convention for both BPF-to-BPF and
++	 * kfunc calls:
++	 *   - Arg 6 is passed in R9 register
++	 *   - Args 7+ are passed on the stack at [rsp]
++	 *
++	 * Incoming arg 6 is read from R9 (BPF r11+8 =E2=86=92 MOV from R9).
++	 * Incoming args 7+ are read from [rbp + 16], [rbp + 24], ...
++	 * (BPF r11+16, r11+24, ... map directly with no offset change).
++	 *
++	 * The verifier guarantees that neither tail_call_reachable nor
++	 * priv_stack is set when outgoing stack args exist, so R9 is
++	 * always available.
++	 *
++	 * Stack layout (high to low):
++	 *   [rbp + 16 + ...]    incoming stack args 7+ (from caller)
++	 *   [rbp + 8]           return address
++	 *   [rbp]               saved rbp
++	 *   [rbp - prog_stack]  program stack
++	 *   [below]             callee-saved regs
++	 *   [below]             outgoing args 7+ (=3D rsp)
++	 */
+ 	arena_vm_start =3D bpf_arena_get_kern_vm_start(bpf_prog->aux->arena);
+ 	user_vm_start =3D bpf_arena_get_user_vm_start(bpf_prog->aux->arena);
+=20
+@@ -1700,6 +1757,42 @@ static int do_jit(struct bpf_verifier_env *env, st=
+ruct bpf_prog *bpf_prog, int *
+ 			push_r12(&prog);
+ 		push_callee_regs(&prog, callee_regs_used);
+ 	}
++
++	/* Compute callee-saved register area size. */
++	callee_saved_size =3D 0;
++	if (bpf_prog->aux->exception_boundary || arena_vm_start)
++		callee_saved_size +=3D 8; /* r12 */
++	if (bpf_prog->aux->exception_boundary) {
++		callee_saved_size +=3D 4 * 8; /* rbx, r13, r14, r15 */
++	} else {
++		int j;
++
++		for (j =3D 0; j < 4; j++)
++			if (callee_regs_used[j])
++				callee_saved_size +=3D 8;
++	}
++	/*
++	 * Base offset from rbp for translating BPF outgoing args 7+
++	 * to native offsets. BPF uses negative offsets from r11
++	 * (r11-8 for arg6, r11-16 for arg7, ...) while x86 uses
++	 * positive offsets from rsp ([rsp+0] for arg7, [rsp+8] for
++	 * arg8, ...). Arg 6 goes to R9 directly.
++	 *
++	 * The translation reverses direction:
++	 *   native_off =3D outgoing_arg_base - outgoing_rsp - bpf_off - 16
++	 *
++	 * Note that tail_call_reachable is guaranteed to be false when
++	 * stack args exist, so tcc pushes need not be accounted for.
++	 */
++	outgoing_arg_base =3D -(round_up(stack_depth, 8) + callee_saved_size);
++
++	/*
++	 * Allocate outgoing stack arg area for args 7+ only.
++	 * Arg 6 goes into r9 register, not on stack.
++	 */
++	outgoing_rsp =3D outgoing_stack_arg_depth > 8 ?  outgoing_stack_arg_dep=
+th - 8 : 0;
++	emit_sub_rsp(&prog, outgoing_rsp);
++
+ 	if (arena_vm_start)
+ 		emit_mov_imm64(&prog, X86_REG_R12,
+ 			       arena_vm_start >> 32, (u32) arena_vm_start);
+@@ -1721,7 +1814,7 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+ 		u8 b2 =3D 0, b3 =3D 0;
+ 		u8 *start_of_ldx;
+ 		s64 jmp_offset;
+-		s16 insn_off;
++		s32 insn_off;
+ 		u8 jmp_cond;
+ 		u8 *func;
+ 		int nops;
+@@ -2134,12 +2227,26 @@ static int do_jit(struct bpf_verifier_env *env, s=
+truct bpf_prog *bpf_prog, int *
+ 				EMIT1(0xC7);
+ 			goto st;
+ 		case BPF_ST | BPF_MEM | BPF_DW:
++			if (dst_reg =3D=3D BPF_REG_PARAMS && insn->off =3D=3D -8) {
++				/* Arg 6: store immediate in r9 register */
++				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31, (u32)imm32);
++				break;
++			}
+ 			EMIT2(add_1mod(0x48, dst_reg), 0xC7);
+=20
+-st:			if (is_imm8(insn->off))
+-				EMIT2(add_1reg(0x40, dst_reg), insn->off);
++st:			insn_off =3D insn->off;
++			if (dst_reg =3D=3D BPF_REG_PARAMS) {
++				/* Args 7+: reverse BPF negative offsets to
++				 * x86 positive rsp offsets.
++				 * BPF off=3D-16 =E2=86=92 [rsp+0], off=3D-24 =E2=86=92 [rsp+8], ...
++				 */
++				insn_off =3D outgoing_arg_base - outgoing_rsp - insn_off - 16;
++				dst_reg =3D BPF_REG_FP;
++			}
++			if (is_imm8(insn_off))
++				EMIT2(add_1reg(0x40, dst_reg), insn_off);
+ 			else
+-				EMIT1_off32(add_1reg(0x80, dst_reg), insn->off);
++				EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
+=20
+ 			EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
+ 			break;
+@@ -2149,7 +2256,17 @@ st:			if (is_imm8(insn->off))
+ 		case BPF_STX | BPF_MEM | BPF_H:
+ 		case BPF_STX | BPF_MEM | BPF_W:
+ 		case BPF_STX | BPF_MEM | BPF_DW:
+-			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn->off);
++			if (dst_reg =3D=3D BPF_REG_PARAMS && insn->off =3D=3D -8) {
++				/* Arg 6: store register value in r9 */
++				EMIT_mov(X86_REG_R9, src_reg);
++				break;
++			}
++			insn_off =3D insn->off;
++			if (dst_reg =3D=3D BPF_REG_PARAMS) {
++				insn_off =3D outgoing_arg_base - outgoing_rsp - insn_off - 16;
++				dst_reg =3D BPF_REG_FP;
++			}
++			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
+ 			break;
+=20
+ 		case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+@@ -2248,6 +2365,19 @@ st:			if (is_imm8(insn->off))
+ 		case BPF_LDX | BPF_PROBE_MEMSX | BPF_H:
+ 		case BPF_LDX | BPF_PROBE_MEMSX | BPF_W:
+ 			insn_off =3D insn->off;
++			if (src_reg =3D=3D BPF_REG_PARAMS) {
++				if (insn_off =3D=3D 8) {
++					/* Incoming arg 6: read from r9 */
++					EMIT_mov(dst_reg, X86_REG_R9);
++					break;
++				}
++				src_reg =3D BPF_REG_FP;
++				/*
++				 * Incoming args 7+: native_off =3D=3D bpf_off
++				 * (r11+16 =E2=86=92 [rbp+16], r11+24 =E2=86=92 [rbp+24], ...)
++				 * No offset adjustment needed.
++				 */
++			}
+=20
+ 			if (BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEM ||
+ 			    BPF_MODE(insn->code) =3D=3D BPF_PROBE_MEMSX) {
+@@ -2736,6 +2866,8 @@ st:			if (is_imm8(insn->off))
+ 				if (emit_spectre_bhb_barrier(&prog, ip, bpf_prog))
+ 					return -EINVAL;
+ 			}
++			/* Deallocate outgoing args 7+ area. */
++			emit_add_rsp(&prog, outgoing_rsp);
+ 			if (bpf_prog->aux->exception_boundary) {
+ 				pop_callee_regs(&prog, all_callee_regs_used);
+ 				pop_r12(&prog);
+@@ -3743,7 +3875,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
+rifier_env *env, struct bpf_pr
+ 		prog->aux->jit_data =3D jit_data;
+ 	}
+ 	priv_stack_ptr =3D prog->aux->priv_stack_ptr;
+-	if (!priv_stack_ptr && prog->aux->jits_use_priv_stack) {
++	/*
++	 * x86-64 uses R9 for both private stack frame pointer and arg 6,
++	 * so disable private stack when stack args are present.
++	 */
++	if (!priv_stack_ptr && prog->aux->jits_use_priv_stack &&
++	    prog->aux->stack_arg_depth =3D=3D 0) {
+ 		/* Allocate actual private stack size with verifier-calculated
+ 		 * stack size plus two memory guards to protect overflow and
+ 		 * underflow.
+@@ -3910,6 +4047,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
  }
 =20
-+static struct bpf_reg_state *get_kfunc_arg_reg(struct bpf_verifier_env *=
-env, int argno)
++bool bpf_jit_supports_stack_args(void)
 +{
-+	struct bpf_func_state *caller;
-+	int spi;
-+
-+	if (argno < MAX_BPF_FUNC_REG_ARGS)
-+		return &cur_regs(env)[argno + 1];
-+
-+	caller =3D cur_func(env);
-+	spi =3D out_arg_spi(caller, argno - MAX_BPF_FUNC_REG_ARGS);
-+	if (spi >=3D caller->stack_arg_depth / BPF_REG_SIZE)
-+		return NULL;
-+	return &caller->stack_arg_regs[spi];
++	return true;
 +}
 +
- static enum kfunc_ptr_arg_type
- get_kfunc_ptr_arg_type(struct bpf_verifier_env *env,
- 		       struct bpf_kfunc_call_arg_meta *meta,
-@@ -11674,8 +11699,6 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *e=
-nv,
- 		       const char *ref_tname, const struct btf_param *args,
- 		       int argno, int nargs, struct bpf_reg_state *reg)
+ void *bpf_arch_text_copy(void *dst, void *src, size_t len)
  {
--	u32 regno =3D argno + 1;
--	struct bpf_reg_state *regs =3D cur_regs(env);
- 	bool arg_mem_size =3D false;
-=20
- 	if (meta->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
-@@ -11683,10 +11706,14 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env =
-*env,
- 	    meta->func_id =3D=3D special_kfunc_list[KF_bpf_session_cookie])
- 		return KF_ARG_PTR_TO_CTX;
-=20
--	if (argno + 1 < nargs &&
--	    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1=
-]) ||
--	     is_kfunc_arg_const_mem_size(meta->btf, &args[argno + 1], &regs[reg=
-no + 1])))
--		arg_mem_size =3D true;
-+	if (argno + 1 < nargs) {
-+		struct bpf_reg_state *next_reg =3D get_kfunc_arg_reg(env, argno + 1);
-+
-+		if (next_reg &&
-+		    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], next_reg) ||
-+		     is_kfunc_arg_const_mem_size(meta->btf, &args[argno + 1], next_reg=
-)))
-+			arg_mem_size =3D true;
-+	}
-=20
- 	/* In this function, we verify the kfunc's BTF as per the argument type=
-,
- 	 * leaving the rest of the verification with respect to the register
-@@ -12358,9 +12385,9 @@ static int check_kfunc_args(struct bpf_verifier_e=
-nv *env, struct bpf_kfunc_call_
-=20
- 	args =3D (const struct btf_param *)(meta->func_proto + 1);
- 	nargs =3D btf_type_vlen(meta->func_proto);
--	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
-+	if (nargs > MAX_BPF_FUNC_ARGS) {
- 		verbose(env, "Function %s has %d > %d args\n", func_name, nargs,
--			MAX_BPF_FUNC_REG_ARGS);
-+			MAX_BPF_FUNC_ARGS);
- 		return -EINVAL;
- 	}
- 	if (nargs > MAX_BPF_FUNC_REG_ARGS && !bpf_jit_supports_stack_args()) {
-@@ -12373,20 +12400,44 @@ static int check_kfunc_args(struct bpf_verifier=
-_env *env, struct bpf_kfunc_call_
- 	 * verifier sees.
- 	 */
- 	for (i =3D 0; i < nargs; i++) {
--		struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[i + 1];
-+		struct bpf_reg_state *regs =3D cur_regs(env), *reg;
- 		const struct btf_type *t, *ref_t, *resolve_ret;
- 		enum bpf_arg_type arg_type =3D ARG_DONTCARE;
- 		u32 argno =3D make_argno(i);
--		u32 regno =3D i + 1, ref_id, type_size;
-+		struct bpf_reg_state tmp_reg;
-+		int regno =3D i + 1;
-+		u32 ref_id, type_size;
- 		bool is_ret_buf_sz =3D false;
- 		int kf_arg_type;
-=20
-+		if (i < MAX_BPF_FUNC_REG_ARGS) {
-+			reg =3D &regs[i + 1];
-+		} else {
-+			/* Retrieve the reg state from the outgoing stack arg slot. */
-+			struct bpf_func_state *caller =3D cur_func(env);
-+			int spi =3D out_arg_spi(caller, i - MAX_BPF_FUNC_REG_ARGS);
-+
-+			if (!is_stack_arg_slot_initialized(caller, spi)) {
-+				verbose(env, "stack %s not properly initialized\n",
-+					reg_arg_name(env, argno));
-+				return -EINVAL;
-+			}
-+
-+			tmp_reg =3D caller->stack_arg_regs[spi];
-+			reg =3D &tmp_reg;
-+			regno =3D -1;
-+		}
-+
- 		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
- 			/* Reject repeated use bpf_prog_aux */
- 			if (meta->arg_prog) {
- 				verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
- 				return -EFAULT;
- 			}
-+			if (regno < 0) {
-+				verbose(env, "%s prog->aux cannot be a stack argument\n", reg_arg_na=
-me(env, argno));
-+				return -EINVAL;
-+			}
- 			meta->arg_prog =3D true;
- 			cur_aux(env)->arg_prog =3D regno;
- 			continue;
-@@ -12413,9 +12464,13 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
- 						reg_arg_name(env, argno));
- 					return -EINVAL;
- 				}
--				ret =3D mark_chain_precision(env, regno);
--				if (ret < 0)
--					return ret;
-+				if (regno < 0) {
-+					reg->precise =3D true;
-+				} else {
-+					ret =3D mark_chain_precision(env, regno);
-+					if (ret < 0)
-+						return ret;
-+				}
- 				meta->arg_constant.found =3D true;
- 				meta->arg_constant.value =3D reg->var_off.value;
- 			} else if (is_kfunc_arg_scalar_with_name(btf, &args[i], "rdonly_buf_s=
-ize")) {
-@@ -12438,9 +12493,13 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
- 				}
-=20
- 				meta->r0_size =3D reg->var_off.value;
--				ret =3D mark_chain_precision(env, regno);
--				if (ret)
--					return ret;
-+				if (regno < 0) {
-+					reg->precise =3D true;
-+				} else {
-+					ret =3D mark_chain_precision(env, regno);
-+					if (ret)
-+						return ret;
-+				}
- 			}
- 			continue;
- 		}
-@@ -12466,8 +12525,13 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
- 				return -EFAULT;
- 			}
- 			meta->ref_obj_id =3D reg->ref_obj_id;
--			if (is_kfunc_release(meta))
-+			if (is_kfunc_release(meta)) {
-+				if (regno < 0) {
-+					verbose(env, "%s release arg cannot be a stack argument\n", reg_arg=
-_name(env, argno));
-+					return -EINVAL;
-+				}
- 				meta->release_regno =3D regno;
-+			}
- 		}
-=20
- 		ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
-@@ -12626,6 +12690,10 @@ static int check_kfunc_args(struct bpf_verifier_=
-env *env, struct bpf_kfunc_call_
- 				dynptr_arg_type |=3D DYNPTR_TYPE_FILE;
- 			} else if (meta->func_id =3D=3D special_kfunc_list[KF_bpf_dynptr_file=
-_discard]) {
- 				dynptr_arg_type |=3D DYNPTR_TYPE_FILE;
-+				if (regno < 0) {
-+					verbose(env, "%s release arg cannot be a stack argument\n", reg_arg=
-_name(env, argno));
-+					return -EINVAL;
-+				}
- 				meta->release_regno =3D regno;
- 			} else if (meta->func_id =3D=3D special_kfunc_list[KF_bpf_dynptr_clon=
-e] &&
- 				   (dynptr_arg_type & MEM_UNINIT)) {
-@@ -12780,9 +12848,9 @@ static int check_kfunc_args(struct bpf_verifier_e=
-nv *env, struct bpf_kfunc_call_
- 			break;
- 		case KF_ARG_PTR_TO_MEM_SIZE:
- 		{
--			struct bpf_reg_state *buff_reg =3D &regs[regno];
-+			struct bpf_reg_state *buff_reg =3D reg;
- 			const struct btf_param *buff_arg =3D &args[i];
--			struct bpf_reg_state *size_reg =3D &regs[regno + 1];
-+			struct bpf_reg_state *size_reg =3D get_kfunc_arg_reg(env, i + 1);
- 			const struct btf_param *size_arg =3D &args[i + 1];
-=20
- 			if (!bpf_register_is_null(buff_reg) || !is_kfunc_arg_nullable(meta->b=
-tf, buff_arg)) {
-@@ -13686,7 +13754,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
-=20
- 	nargs =3D btf_type_vlen(meta.func_proto);
- 	args =3D (const struct btf_param *)(meta.func_proto + 1);
--	for (i =3D 0; i < nargs; i++) {
-+	for (i =3D 0; i < min_t(int, nargs, MAX_BPF_FUNC_REG_ARGS); i++) {
- 		u32 regno =3D i + 1;
-=20
- 		t =3D btf_type_skip_modifiers(desc_btf, args[i].type, NULL);
-@@ -13697,6 +13765,17 @@ static int check_kfunc_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
- 			mark_btf_func_reg_size(env, regno, t->size);
- 	}
-=20
-+	/* Track outgoing stack arg depth for kfuncs with >5 args */
-+	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
-+		struct bpf_func_state *caller =3D cur_func(env);
-+		struct bpf_subprog_info *caller_info =3D &env->subprog_info[caller->su=
-bprogno];
-+		u16 kfunc_stack_arg_depth =3D (nargs - MAX_BPF_FUNC_REG_ARGS) * BPF_RE=
-G_SIZE;
-+
-+		if (kfunc_stack_arg_depth > caller_info->outgoing_stack_arg_depth)
-+			caller_info->outgoing_stack_arg_depth =3D kfunc_stack_arg_depth;
-+		invalidate_outgoing_stack_args(caller);
-+	}
-+
- 	if (bpf_is_iter_next_kfunc(&meta)) {
- 		err =3D process_iter_next_call(env, insn_idx, &meta);
- 		if (err)
+ 	if (text_poke_copy(dst, src, len) =3D=3D NULL)
 --=20
 2.52.0
 
