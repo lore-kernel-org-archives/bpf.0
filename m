@@ -1,78 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D03615B0EC
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 15:20:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB79253B42
+	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 16:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776612040; cv=none; b=M54YKO4+wi0TA/kR2ZlhtBkp/n9bDtwLheCp+kwr9Wruf+XglU4TqBfKIW2EJUNUvwyKm3CXT1dpZ+sr5fAy2y5EnAMp2Boe99XQtGtT6jnqpJtbsxo7ccH4JcoUNYtq6qHtsF9iSbixGzD7yT9ywvX3KKfDvI5F/OgfuBp738U=
+	t=1776616410; cv=none; b=p1NaE6wZenX5lPtwVUg89f1e0wqQrTZEKnxHSiGAan23H+Ucf7OurQtQ/FU3+dCfAPElfBUn5jCIpa43ENlAL9FX0a1YnI8CK94qm7ZESEggy5LUNDY1OVB/dI747hWrezakrli3Gc4TV8BzJzmUlF2XWpcNQ9tlvN0hXFvdlDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776612040; c=relaxed/simple;
-	bh=QF/q6JT6BRmno7nDq2nhSWfg0vKoVJAFXwvCISFAask=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=niIxIJd3HiYcUSn5C1QqENpnpVPCT9P5rTdsWi9fCbuz0rOSagKq5jU9bxx0vNxBBEWpWxuwkroskmE2VC39DO1FvlC23Exz28FR9Eo5ttLlYVLB4bHTGnDWebE9pXdlLUOmdfZy4XijxbF+kt+uNMVZT3AbLtnDlPxRQNzsPQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hgwvl9uV; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hgwvl9uV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4386C2BCAF;
-	Sun, 19 Apr 2026 15:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776612039;
-	bh=QF/q6JT6BRmno7nDq2nhSWfg0vKoVJAFXwvCISFAask=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Hgwvl9uVRiBlRzmJe9/9LNB833mjXaQ0Y3QOZqzwZA4thRRA/ts2dZ8xxp2SXAXG9
-	 AVvDhoaDc4zXiF6S0YmEmiIzgTp5iw7kI0EdiHXepFskrcvULs9ZTvtg0T4UodH4sD
-	 Ee1HwT8oroWK12St7K5by1TVS6SQJY9RoQfFJzUp1lNB7xJI0i57g6r3fbkChtDCZq
-	 C7wTCk2w96BzGA2QRX1INg68rQC35yYv3k0v+s4wuWD/pKee4rLE8NVgAw0HkN5eKb
-	 w/fmNtOndJNXA0TQ5DifY1GjeiZZx+c93L/9ADNlkWDpiiTzV/56GJH2JnqIhJd9hY
-	 yOpT7tY0LYWzQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CD38380CEF9;
-	Sun, 19 Apr 2026 15:20:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1776616410; c=relaxed/simple;
+	bh=YDjCvPVVnRyWJYf/8B3OQdypQ3laVxkir80SDpgKH0M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Unsv6CBR8RB3Agbsgy9jQDEL4ug93FsZ4L+/MDe+/YpX6cBNoOGLk2UTrSdYPAixARYNRL/kV2h9sbP8rM/qtofr3hGOtoOJQAfR00pumLBAgj9gJsAZti0vfFWvFrW0CcjVHU0VdEODqkfrEggpvrMD4Cs/VHpK7w1WpalUH1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 8DE3542DD4D36; Sun, 19 Apr 2026 09:33:21 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v6 01/17] bpf: Remove unused parameter from check_map_kptr_access()
+Date: Sun, 19 Apr 2026 09:33:21 -0700
+Message-ID: <20260419163321.732300-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260419163316.731019-1-yonghong.song@linux.dev>
+References: <20260419163316.731019-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 1/1] bpf: Refactor dynptr mutability tracking
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177661200533.792430.5113320175620829361.git-patchwork-notify@kernel.org>
-Date: Sun, 19 Apr 2026 15:20:05 +0000
-References: <20260414191014.1218567-1-ameryhung@gmail.com>
-In-Reply-To: <20260414191014.1218567-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@kernel.org, yatsenko@meta.com, kernel-team@meta.com
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+The parameter 'regno' in check_map_kptr_access() is unused. Remove it.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 14 Apr 2026 12:10:14 -0700 you wrote:
-> Redefine dynptr mutability and fix inconsistency in the verifier and
-> kfunc signatures. Dynptr mutability is at two levels. The first is
-> the bpf_dynptr structure and the second is the memory the dynptr points
-> to. The verifer currently tracks the mutability of the bpf_dynptr struct
-> through helper and kfunc prototypes, where "const struct bpf_dynptr *"
-> means the structure itself is immutable. The second level is tracked
-> in upper bit of bpf_dynptr->size in runtime and is not changed in this
-> patch.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v3,1/1] bpf: Refactor dynptr mutability tracking
-    https://git.kernel.org/bpf/bpf-next/c/31f61ac33032
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 69d75515ed3f..0f9da0f6220b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4719,7 +4719,7 @@ static int mark_uptr_ld_reg(struct bpf_verifier_env=
+ *env, u32 regno,
+ 	return 0;
+ }
+=20
+-static int check_map_kptr_access(struct bpf_verifier_env *env, u32 regno=
+,
++static int check_map_kptr_access(struct bpf_verifier_env *env,
+ 				 int value_regno, int insn_idx,
+ 				 struct btf_field *kptr_field)
+ {
+@@ -6366,7 +6366,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 			kptr_field =3D btf_record_find(reg->map_ptr->record,
+ 						     off + reg->var_off.value, BPF_KPTR | BPF_UPTR);
+ 		if (kptr_field) {
+-			err =3D check_map_kptr_access(env, regno, value_regno, insn_idx, kptr=
+_field);
++			err =3D check_map_kptr_access(env, value_regno, insn_idx, kptr_field)=
+;
+ 		} else if (t =3D=3D BPF_READ && value_regno >=3D 0) {
+ 			struct bpf_map *map =3D reg->map_ptr;
+=20
+--=20
+2.52.0
 
