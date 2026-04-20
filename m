@@ -1,130 +1,119 @@
-Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867A133D6E1
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 15:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA2822541C
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 15:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776699847; cv=none; b=DxAIe+/tYEYLw47MsU1zcxLiMGcHUl7xjP/Zjfl2KEoY2ao6IFiQmEL/YIsk1RJHiAOKgKCZHIipbgShk4VLBNeeoY0FZM6I87rAyCojP/lzwLU7CDABbPjxRPl8RAxLt9//Zt9usgkxH+hYlQkC0+uDlErxYimHVvODDWmOZNE=
+	t=1776700013; cv=none; b=CVZtTCT8EUsFgQpD4GVeHlRYjxXCUISBZRMcL5qio4Q9ukf9aRnQAfkvv00aEJ0+b0JvMdxCJnQV312gbNcboxnRsgMqwRyiIRKRDcNna5cy6GYrvuZaWwcu0UKmoHQn3VPQ1V9RapScxkdC4dS6BsDoPvcg5EJYU7ZaaQy8Xzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776699847; c=relaxed/simple;
-	bh=1k1hp7u43c9TkJzzlgOWfZ4UDE8HfeeU5PBzOa6ytCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DyDCPqAQwopoYxx5YjHOYfmIN7L3z1f4WQvNeixvbMt8Es2VnwJN2o6GlKgdATqlpupDTOpMSsDV4b7TWypMbfQrEb9ho0TJSIDzH6D3dATyo0nTZEsinmz4luNOG4Ccs09z7KrZYzsb3q8ZjzEOiZdQ6y9uZ1sXGX58CW5lDgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ddaCCu1m; arc=none smtp.client-ip=209.85.210.65
+	s=arc-20240116; t=1776700013; c=relaxed/simple;
+	bh=hqOLsJxXBWZHEazuHyU2+GRfDrdpRWZZEjbMUveb1fU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=BJPt2H4GBY72mZ5FlQUl7L4mMOu5gpl8+xKRUIQBmBVtP71CltB9x2X1vF9S0HegaOZLCnteUf6OjQBJGse8fwF/r8OEdANtq1Hmi8B6W7JflM3e1Ye/q7fI3vQzSLhnFCgiDacm3n19WzhMSMS8hbFGDQF91AYV7tX/nGSq3jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZDzA1nM; arc=none smtp.client-ip=209.85.210.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ddaCCu1m"
-Received: by mail-ot1-f65.google.com with SMTP id 46e09a7af769-7d7fdb922a5so2891042a34.3
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 08:44:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZDzA1nM"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7dcd17e19b6so219810a34.1
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 08:46:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776699845; x=1777304645; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HMCNN46uzvkkx+pdzNFwcf4+qGVUVpMcwYXyw94YpJA=;
-        b=ddaCCu1mxfBzDYB2X/p0fburKPAT65PTMdudfokAeUhIlkTD4afM8MFwjvCsf3Cs6U
-         iZYZJqq8dpZwcIJvzVdqYE0SoifFK+oFiSasZoVVXVT0ozrc+/pBG6lkhAYjjPgIwD8G
-         2yTjPsH/2nlHlQ38YI3F15Q+fO4BMWE9aYHS4UTpgXDnq/oLWxCxfuXDcoathnrmCSrr
-         SP0Z0F7/6mGnqoGNbjPR2yXwp8jNpu3SJMjv0SJj6oQBRoC3pXI5Xn4Jj5/7fiydOzF4
-         f661Go+L7Po5qbqE4r30R+Oz0MK4ZjDNS3oFzRRfzscNdS1f0Zaw3GQwiAxSNKbUGXsu
-         nBzA==
+        d=gmail.com; s=20251104; t=1776700011; x=1777304811; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hqOLsJxXBWZHEazuHyU2+GRfDrdpRWZZEjbMUveb1fU=;
+        b=CZDzA1nMYcBXDI5O04ABJu9vjDMPpVygESROI5p65W3DJDhmUHHmfLfHBmlgGKDaec
+         wC5iKDFopGy5rb2zwhiEWgf3apCUSE9B2gM0C6FlJ5f6wLep39YM9GPFcP0VAlBTFmNk
+         AKKy7+LfnBfq/y2M8wELUzHBLzD5pWPaDScCPRFyETmXcB9rndkPPA1ZPVQp2/0cqQ7I
+         j3LH19orYtj6ZcKGRYpwMPp9p7tj0CpOw36DVwrvIZd7BZWHD9j6g3XIangcG8PGbpi1
+         8I+ZpyIFkpyfTMnw3U6WoOWwD0pqOh+A9gUuhV+9+cPQzMd6q52iIwtB7HKIoXh1KFcz
+         GwJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776699845; x=1777304645;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HMCNN46uzvkkx+pdzNFwcf4+qGVUVpMcwYXyw94YpJA=;
-        b=rHTWU8kx8RnjuoT4+lljpd78md/c9/ZMbGtGNNwzGFXfxewIpc+pLheZPG2LjCexDh
-         jV9c26Egmv0BO8DTWVVjDe3jbLjGMal94IYFnxICyjLBYPng5AxlF+kbIz8vpCbXh2xV
-         14ppbccuM3VraRXvtxqSpUsMtch6Tb3p+CUklYG3gqQYCo9fNNDnaJTFPkeS7wT6aCz4
-         epJVWrYGCx4XrfzokCiazycbWJ+aRwi9Ikhm5j39xAWAuR2/ksXJIKTkm3+dTaCzs6EO
-         A+qtNBT1P6ygCaSmHCm7PTK00EtiXf9ur7+Gi3R05oK2hZcePbJghKPaaYibpM49lznH
-         zlrw==
-X-Forwarded-Encrypted: i=1; AFNElJ9WClro81qfgqdEuUD0sLel/S6dWGbFPY123to5vAd67/+P0IHFAPG3wgpsxmK8uyjCkMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzygP0d6F2X0+hW8ioMYn/IUkvK2b/uj8ujucEhQp18VWatEm3I
-	J1ZgfMtX2SIAdn21eYoFxAUQOkp+9cGFpruXDCPwlcUup6tBZP//3NhR
-X-Gm-Gg: AeBDievxEhhoeNZ4OtecLRXeWt0Bmi6U/5JYuN6622U60jYUMdbr+rvJY/iVNZ7wCh9
-	5Wz4mZoR5XSusCOygJjZwW4CvjUvOVQiseqJcPhNb6ZF38NdIt2zwi7dOOSR4iDrgiulZXgN7N5
-	7S3BZE04aodpOiaZCvCDafNKSNGLOvspssoVeH/m0Kmkf9FNJDX8kEgrPmjcbkpv7qbPARvPsF4
-	BQCNkkmyGRJ5oqcPZSf/F2IpBtHPBo/1Bad4fApc9zuzN+ND/auYkrOsOL0VtiNlYd1yw/qNyWU
-	wwzU2jGU00B3rKIXTCegX5aEi9XJTgXW+YQq6JuWjG1MthnJD2+d5UAIqgIgprU7O7gT0s9B8ar
-	rpHW4Nqg1sTmoSXeiDqBbZcmCtxx2Etb4VWX2r0F2oouQyzdCRchuE4aZmsCg86bo959odVU3nc
-	3MYPCqGZNWxyH9zMVisHw7VzVC4bjVPL7w95igmA==
-X-Received: by 2002:a05:6830:310d:b0:7dc:283:8988 with SMTP id 46e09a7af769-7dc951f3503mr8846792a34.19.1776699845320;
-        Mon, 20 Apr 2026 08:44:05 -0700 (PDT)
-Received: from localhost ([2a03:2880:12ff:7::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc975034e7sm8780521a34.6.2026.04.20.08.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 08:44:04 -0700 (PDT)
-Date: Mon, 20 Apr 2026 08:44:04 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
-	andrew+netdev@lunn.ch, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net 2/4] xsk: free the skb when hitting the upper bound
- MAX_SKB_FRAGS
-Message-ID: <aeZJh5O7oWG6zYXt@devvm17672.vll0.facebook.com>
-References: <20260418045644.28612-1-kerneljasonxing@gmail.com>
- <20260418045644.28612-3-kerneljasonxing@gmail.com>
+        d=1e100.net; s=20251104; t=1776700011; x=1777304811;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hqOLsJxXBWZHEazuHyU2+GRfDrdpRWZZEjbMUveb1fU=;
+        b=oUQDqgCrceS7Afh9zVOb4iE/cOnCP0mz9JCPITK21GrFP0+cABpEEcNXM315AfPh72
+         uTngezKslontJNTAXxfyzgoIGuEB6lmZ0HkHMOcAXabC1WgIaqPfGWxehfQUHRakbp7o
+         /5bbGocKLCsO/kkYdQ34kt4TiU07CZNBz01EoljT5bZ/FMFlftKe2QAJVVpNEka4s6Z5
+         Air0wT1cVGxDoSyjLyztmDblAi5MJ+0tzhlpGkIA4Kc2K1hoYEtv9LHJLTJ0fX0tkXD/
+         sCl/3KwDofttzRKVKBAYAsWEGv/Q4lILY6nVotnyx9NAN84cudWoHUkZbi+ZBoMGkWNd
+         eIUA==
+X-Forwarded-Encrypted: i=1; AFNElJ+ZE4ttNVmC0sQkfvTSNFGQsi6LEg9jUfw2z6NUb7Tflz+I/h44IoxuO/nzaPyAuvt79XE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWLpoKCGKZi01cpDCVoSJt/khiznk/WoUABCqWXUgVJRwheMeF
+	NFeJMAY+q70OhaOBycA6EG8XDAXi81vo7pOu8glHIPQIi7ftGmMGwwkO
+X-Gm-Gg: AeBDieseu1zyOTmOHn57VHEwlRGRfv3yMoummNxbtYHfNnQ2dlZLdmX0qRJeRv5GJEA
+	DagauaPVJ0G6S5kLd4AmqQXo+g6xfoFFnIEa41zT/XFN4fTF5fUOseuDgVMuSgLd2xPGhYAuNNn
+	AVUAeiEDOUeCsnV3AS+rfhbsGRmPh+Shq5dDIoIHFrKIgHsdY01WvQ8GjhwXyD+o+7T0WXhyjM+
+	JkFfag/mXtFr9qg4mp44CYYEacDKNVWWr7tsusqp3cj1BEzz4bsAzsJ/GK8FbMng9/w3VlA4PUu
+	9zww22xr8t7TBrRijTJPuAvWjAKy/UqGv6/7fgk2PLfxXwDnWrCTmqyRF0uJQLesEM0szqhcQsD
+	xAjZjCElPHdQMJk2L46RcqY2tbTeIbolcAx1Dfaz/7mbT4767zQqlcMU7+bOK3It7WpR8B6fu5A
+	pUyDfb6wVo/usbYhitSNk1/RG0WqlLyD34/S8zZuy3w7z9DsYbUiB3GYzNs+Po4SWdFGIk3uS/d
+	j8tT7FEJXd4lGOtKQvKqubeBuD4
+X-Received: by 2002:a05:6820:6ad0:b0:67e:4140:768c with SMTP id 006d021491bc7-69462e216c5mr7610520eaf.2.1776700011165;
+        Mon, 20 Apr 2026 08:46:51 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69464ea14ddsm6480142eaf.6.2026.04.20.08.46.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Apr 2026 08:46:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260418045644.28612-3-kerneljasonxing@gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 20 Apr 2026 08:46:49 -0700
+Message-Id: <DHY3L8BVS4E4.2GLGKFH7NORVW@gmail.com>
+Subject: Re: [PATCH bpf-next v10 2/6] bpf: Add
+ bpf_prog_run_array_sleepable()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, "bpf"
+ <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Martin Lau" <kafai@meta.com>, "Kernel Team" <kernel-team@meta.com>,
+ "Eduard" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Steven Rostedt"
+ <rostedt@goodmis.org>
+Cc: "Mykyta Yatsenko" <yatsenko@meta.com>
+X-Mailer: aerc
+References: <20260415-sleepable_tracepoints-v10-0-161f40b33dd7@meta.com>
+ <20260415-sleepable_tracepoints-v10-2-161f40b33dd7@meta.com>
+ <DHU7408DLITK.2DC76VINL2F7K@gmail.com>
+ <CAADnVQ+6udrUD-xW96ZJkz3UkEq8JZAdFiMgB=f5jfFaYVjJ5g@mail.gmail.com>
+ <337f2570-acb2-4b31-8c4f-86ba4cbdfe65@gmail.com>
+In-Reply-To: <337f2570-acb2-4b31-8c4f-86ba4cbdfe65@gmail.com>
 
-On 04/18, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
-> 
-> Fix it by explicitly adding kfree_skb() before returning back to its
-> caller.
-> 
-> How to reproduce it in virtio_net:
-> 1. the current skb is the first one (which means xs->skb is NULL) and
->    hit the limit MAX_SKB_FRAGS.
-> 2. xsk_build_skb_zerocopy() returns -EOVERFLOW.
-> 3. the caller xsk_build_skb() clears skb by using 'skb = NULL;'. This
->    is why bug can be triggered.
-> 4. there is no chance to free this skb anymore.
-> 
-> Note that if in this case the xs->skb is not NULL, xsk_build_skb() will
-> call xsk_drop_skb(xs->skb) to do the right thing.
-> 
-> Fixes: cf24f5a5feea ("xsk: add support for AF_XDP multi-buffer on Tx path")
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
->  net/xdp/xsk.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 8fcde34aec7b..5d3dbb118730 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -778,8 +778,11 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
->  	addr = buffer - pool->addrs;
->  
->  	for (copied = 0, i = skb_shinfo(skb)->nr_frags; copied < len; i++) {
-> -		if (unlikely(i >= MAX_SKB_FRAGS))
-> +		if (unlikely(i >= MAX_SKB_FRAGS)) {
-> +			if (!xs->skb)
-> +				kfree_skb(skb);
->  			return ERR_PTR(-EOVERFLOW);
-> +		}
->  
->  		page = pool->umem->pgs[addr >> PAGE_SHIFT];
->  		get_page(page);
-> -- 
-> 2.41.3
-> 
+On Fri Apr 17, 2026 at 10:22 AM PDT, Mykyta Yatsenko wrote:
+>
+>
+> On 4/16/26 3:40 PM, Alexei Starovoitov wrote:
+>> On Wed, Apr 15, 2026 at 6:41=E2=80=AFPM Alexei Starovoitov
+>> <alexei.starovoitov@gmail.com> wrote:
+>> One more thing..
+>> Please go back to my 'do your homework' request from v9
+>> and answer the question why it's not safe to do bpf_prog_run
+>> on dummy prog like this patch does.
+>> I missed it yesterday and only complained about the waste of cpu cycles.
+>> It's more than that.
+>>=20
+>> Do not send v11.
+>
+> I see that very similar bug was fixed in 7dc211c1159d ("bpf: Fix invalid=
+=20
+> prog->stats access when update_effective_progs fails"), the problem is=20
+> the same - NULL field access on the dummy prog. So the approach to just=
+=20
+> allow dummy to run further is fragile, because other NULL fields may be=
+=20
+> accessed.
 
-As mentioned for patch 1, need to do something with that
-xsk_skb_init_misc... Otherwise we hit destructor with xsk_cq_submit_addr_locked
-here as well
+exactly. so far we've hit 'active =3D=3D NULL' and 'stats =3D=3D NULL',
+and 'stats =3D=3D NULL' had to be workaround-ed like that in that commit.
+There is also 'aux'. I hope it's not used at run-time, but let's not take c=
+hances.
+Filter dummy prog as immediate skip.
