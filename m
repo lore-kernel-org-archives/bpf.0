@@ -1,85 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA17384227
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 23:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DF939F187
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 23:45:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776726809; cv=none; b=o/ST4sStb3/bMbsy20fnkX+yr6gzY9yLeJixAi2SkBxoJ0z3NfGhgEKZ+CwPvojvj7CputrTs0rUVKg8TdQ0mRyxgNu9ZNAT14bTe+0RAUkG0M6mE1ZQ34K2YWfmHwRppFvjTGyEVhgY5P5znDvjyC+FRPY3uo9lKOhV/9mHgsE=
+	t=1776728713; cv=none; b=jKcImQufjS5gepJ14ey+rjRI5uFICuSV8oReTC4XSSihMTXfKlZpo94aFsDu1mhPQxxTQWIpTbQCzLZoHexzGozR4iAfP18Q5B6HiAxY+c+X2ZZbHmeAmwqxe9REd0s8fKRwOdASJDwxtIfzzNizeec0qRNrmHHPbCeJeMk0sj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776726809; c=relaxed/simple;
-	bh=/DL2a1YiI+9Smr2FpBbvvpYrBxIsDAT+LtDzIjfvt60=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=B95Qlvk2im94pzLqNJRY9IrlyJkvl1IKnFSnYzekf63ndalyMn2yBTU4QuX1G+TvEB+e9wyU0nZPOZd5cG8kR1rTgl7tzcQX+FGVFpbI9kV2NQWbOwyEsRe2qykJVkq5hkgzJ2QzI6LUTjXz0gYoqq8p0gDbG5RzzKf3cuhyTiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJujXEMg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776728713; c=relaxed/simple;
+	bh=SFXlExNtsx9rc9zTtORp34qIJUbnwK5l1GPZ6ntRPEs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KEmZrGJcR9HHF+Xv2MIb5h3PhJz5SDZ4qRHnLPNCliftEqq9dufwRBX3rZ/Te0a6fT9A/S8dCIMOK/NsLErNMRR6yFH+sEhhHwwsEWeQUYfzL7K7Pbm/osFMsMI1lFNgfeIX19+avNh/DIt9Y1vJiU3LYHssCrfcWH36zXiD1Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FTBKvEf+; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJujXEMg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FC7C19425;
-	Mon, 20 Apr 2026 23:13:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776726808;
-	bh=/DL2a1YiI+9Smr2FpBbvvpYrBxIsDAT+LtDzIjfvt60=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=CJujXEMgfanYNCFxIPrwP0XLdmpwPbSXZ05ZYXUXFBK3OgC7CF0Xt6xNUJfAhxJbK
-	 v+iLpH3n0odGnLIV0R+WmDuVUNrV0Hoh8lmzWEZ2ZTx6sLZhQn14w6vnU/1pV94iaC
-	 Vz/3RUI5+JN4COCIKHOC1REf2x3cI4/GUruiNycfc03yPIR9Eao6AZauJ9r3ThVqdS
-	 raM93i8AiJ7A5X4Kz8gNIKiWSh4/ZGp8v3pWhuq7kVjqgL8EVQfFJeCZEGniYa1Jlm
-	 TdjXmzBSf+WAse9xlLtuAiYzQ5zRrpmS+lnOpa1OcCslJsEMQvP5qyCGHd6Hj+dBGu
-	 zoBY628FkTm7w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in
- file_reader
-Reply-To: sashiko@lists.linux.dev
-To: "Jerome Marchand" <jmarchan@redhat.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420134637.2513867-1-jmarchan@redhat.com>
-References: <20260420134637.2513867-1-jmarchan@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Apr 2026 23:13:27 +0000
-Message-Id: <20260420231328.68FC7C19425@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FTBKvEf+"
+Message-ID: <19bb22a1-0594-497d-b25c-889b4c5f00a3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776728706;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SFXlExNtsx9rc9zTtORp34qIJUbnwK5l1GPZ6ntRPEs=;
+	b=FTBKvEf+ou8hFImKIYNU0PNw9qwRrFncchoVs0hfM2CiCtXvCp69YLIAtivF92Btowclsp
+	1sb7NPGN9JNHK8RBZbJdQL9xftf8Lu97Un3QFB5aCAe54Ovw4bkPFAWVkdBHQF5bcZZ9sj
+	w+Od/HcF7gtWNSkbCOxhS7xNUwE8kH4=
+Date: Mon, 20 Apr 2026 16:44:58 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v6 00/17] bpf: Support stack arguments for BPF
+ functions and kfuncs
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+ Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260419163316.731019-1-yonghong.song@linux.dev>
+ <m2mryx1vwi.fsf@kernel.org> <21aad67d-97b8-4ffd-8b4a-747ee8b917be@linux.dev>
+ <CANk7y0iU-u2=Rmi88DbHz_L87ERpXvUR0EormKqo==9KPh0MvQ@mail.gmail.com>
+ <CAADnVQLw3LEh0sn-3F5dkns60rFvHe=0kKV7WCL9GPeCRP3Pdg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQLw3LEh0sn-3F5dkns60rFvHe=0kKV7WCL9GPeCRP3Pdg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Sashiko AI review found 1 potential issue(s):
-- [Low] The newly promoted global variable `addr` is declared without the `=
-static` keyword, polluting the global namespace.
---
 
-commit e2c581de007abac2e6985b4f49f6c9786c3263b0
-Author: Jerome Marchand <jmarchan@redhat.com>
 
-selftests/bpf: Page out as late a possible in file_reader
+On 4/20/26 2:49 PM, Alexei Starovoitov wrote:
+> On Mon, Apr 20, 2026 at 1:25 PM Puranjay Mohan <puranjay12@gmail.com> wrote:
+>>
+>> Okay, doing it separately is better I guess, I will wait for your
+>> patches to land and then resend the arm64 support.
+> Just combine them into one patchset, so that CI tests it all together.
 
-The file_reader/on_open_expect_fault fails consistently on my system.
-This commit moves the call to madvise(MADV_PAGEOUT) to just before
-attaching the program to minimize the risk of having those pages pulled
-back in.
+Okay, will do.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/file_reader.c b/tools=
-/testing/selftests/bpf/prog_tests/file_reader.c
-> index 5cde32b35da44..48aae7ea0e4bb 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/file_reader.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/file_reader.c
-> @@ -10,6 +10,7 @@
-> =20
->  const char *user_ptr =3D "hello world";
->  char file_contents[256000];
-> +void *addr;
-
-This isn't a bug, but BPF selftests link all prog_tests/*.c files together
-into a single test_progs executable.
-
-Since modern compilers use -fno-common by default, could this un-prefixed
-global variable cause a multiple definition linker error if another test
-introduces a global variable with the same name?
-
-Should addr be declared as static to safely restrict its linkage to
-file_reader.c?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420134637.2513=
-867-1-jmarchan@redhat.com?part=3D1
