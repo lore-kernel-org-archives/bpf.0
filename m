@@ -1,146 +1,80 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E26F3A1A5F;
-	Mon, 20 Apr 2026 14:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA333A7F6F
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 14:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776695257; cv=none; b=FNab4GkmlWuc2ZG72qRz6G4+SZAQsBBQEJSmojBpacUB11vWHJkNvHHi7w/HLCxs0hOsELwPmF7ZtVlxD+d2odKE+fuWLV8VQq5a7RcxIpB3jG3wQPHvcXpmckNyAGQfuaLB8xAui9AUJDGduavvb/l9OEp8eWcO3U/Zd9LhiJk=
+	t=1776695443; cv=none; b=C13AaAhOPy3hRBj5npK0UGV43dY1H2rrD1EZe+Xvc9GZJBg713MT0OJlJ4zRY3K2fRW9DBfbORa02RF7f4iYThSSVA7cD7mVlulLUcfO1ad9FrvwUnBB9roUQnNmfNvQCY4OiHeZlNA6lKRpXIs544x1hBLt17fcj+X8oJN8qdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776695257; c=relaxed/simple;
-	bh=7iZB9lVR4tjlUQWISf4C9RaUtnMV6A5tolEZjLKPmq0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
-	 References:In-Reply-To; b=MusF8iwW64mgnR/q0PuO72hAW3Q32MsJkOWybXfMxHvzTZ4lHctawTF3BdRO5Whykz5riDgFd8/z5MFkiiDKaLg/qTPModZdPX25iOy0Ab6d22JsJNqiZwodo8v1zq85egH/k6uWtIEsWLoiQguTd7294v81oHnib3JqzFn9Zuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cQx3iAWh; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1776695443; c=relaxed/simple;
+	bh=V83Q8nlBKoJGnJbVuhpG9Pat1GfIfRvBfwFogd5tokU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=DBwlG8hrh7UxkXZc7m8hAwSpqcm4r1lypnN9RQiI2vU+fhgogXTxuestHAZ19wv90gY1hLlNRuh29Hzaye+zQa196RBUsQ6XVZQ5J5t0diiaeg/t4F+fhykHXbKx2qGO1PHjpiafaenxTtBM3/tgLgrtQ9niar/sk/aPY+i0KPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQz/UpO6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cQx3iAWh"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 7518B4E42A74;
-	Mon, 20 Apr 2026 14:27:33 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 4520E5FFA5;
-	Mon, 20 Apr 2026 14:27:33 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D76FA104609E1;
-	Mon, 20 Apr 2026 16:27:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776695251; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=7iZB9lVR4tjlUQWISf4C9RaUtnMV6A5tolEZjLKPmq0=;
-	b=cQx3iAWhs/KPT6ZKsayEJ77QUJ33XBAG/t0wnqcTpu3msayl+KXgWefDzyP6FHZbfakEkZ
-	mUR9idudII95auF9BStFdEyg/ZfrWZJCELMf6aEJ9nJnKcF3lYW4yWiIbwvmeXqGWTpGmf
-	6EF//PlEz9TgQjwnfV7Im08Tdi8PN2MJhTmQrHK3ZcYqVN+h4i1NR1PcJfySN2cwnhClDq
-	928UAmnD/sIgSbP085aDV8aYk/2N8juRaUClIP5Mya/PjkZy+fiJZcnNXxg9mz4R2m4w41
-	IRTL6ZhZmOioqx+JmCYgjuunP3yDG68/rxphRxpBvUN8z7Kr2df9dCBqhog1xw==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQz/UpO6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916FCC19425;
+	Mon, 20 Apr 2026 14:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776695442;
+	bh=V83Q8nlBKoJGnJbVuhpG9Pat1GfIfRvBfwFogd5tokU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=IQz/UpO6AZrKHHn3MqjVQDPqd80yeNAkKe2i+x0XMJd4xqqO0sywzWyHqUbCOySqZ
+	 Z4gyUWZ6p8m7enfbrjfmpYcjUpT/wkxJIKjcOLywtERmp0Kk3QoEzhG0sCHWQSbyvD
+	 BUB9P6oUJJOkKT6lLyigWApFFzN975TU2iPz8KF7XU69RBlgujlDl08sCqEH+sqosj
+	 Mav4VYa8R2AymTMdyAdhltzKG6rT3w2qiVHR//Ji3mxPnJ2Ni93L5g0Qu0sKsXtOYR
+	 rEDkQAryTFxYFsag4UDt3GTM5Z6SN5EuKW2byuCFW/prZxGrCqihbwroZNysI3tNG0
+	 hiEUnRDY6QARw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CCE33930001;
+	Mon, 20 Apr 2026 14:30:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Apr 2026 16:27:19 +0200
-Message-Id: <DHY1WD3EUHEE.2R8PQXVKW6FO4@bootlin.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Andrey Konovalov"
- <andreyknvl@gmail.com>
-Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
-Cc: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, "David Ahern" <dsahern@kernel.org>, "Thomas
- Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, "Borislav
- Petkov" <bp@alien8.de>, "Dave Hansen" <dave.hansen@linux.intel.com>, "X86
- ML" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, "Shuah Khan"
- <shuah@kernel.org>, "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>, "Andrey Ryabinin"
- <ryabinin.a.a@gmail.com>, "Alexander Potapenko" <glider@google.com>,
- "Dmitry Vyukov" <dvyukov@google.com>, "Vincenzo Frascino"
- <vincenzo.frascino@arm.com>, "Andrew Morton" <akpm@linux-foundation.org>,
- <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
- <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
- Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
- <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-1-1a5831230821@bootlin.com>
- <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
- <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
- <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
- <CA+fCnZd31GzdpEqR8VhfK4JtUKyyRMgbBoAbeGACJgm7WvB6Vw@mail.gmail.com>
- <CAADnVQKv5y+gq=TnOAEXSqgBRpmHNjwqCfxpLaw5XkcbQ+23bg@mail.gmail.com>
- <CA+fCnZe-b0Qqbo5gGv3HN20twquQETDfYYkE1r9tPr9zUFbW9Q@mail.gmail.com>
- <CAADnVQKuptG_opA12O=Xb9_+cHf3f=ycAZdfUp17P2HBYQzdsg@mail.gmail.com>
-In-Reply-To: <CAADnVQKuptG_opA12O=Xb9_+cHf3f=ycAZdfUp17P2HBYQzdsg@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] selftests/bpf: fix off-by-one in
+ bpf_cpumask_populate
+ related selftest
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177669540735.1675250.12765294087027123937.git-patchwork-notify@kernel.org>
+Date: Mon, 20 Apr 2026 14:30:07 +0000
+References: <20260420093734.2400330-1-mattbobrowski@google.com>
+In-Reply-To: <20260420093734.2400330-1-mattbobrowski@google.com>
+To: Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com
 
-On Mon Apr 20, 2026 at 12:51 AM CEST, Alexei Starovoitov wrote:
-> On Sun, Apr 19, 2026 at 2:49=E2=80=AFPM Andrey Konovalov <andreyknvl@gmai=
-l.com> wrote:
->>
->> On Tue, Apr 14, 2026 at 5:58=E2=80=AFPM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->> >
->> > I think we're talking past each other.
->> > We're not interested in KASAN_SW_TAGS or KASAN_HW_TAGS.
->> > We're not going to modify arm64 JIT at all.
->> >
->> > This is purely KASAN_GENRIC and only on x86-64.
->> > JIT will emit exactly what compilers emit for generic
->> > which is __asan_load/store. This is as stable ABI as it can get
->> > and we don't want to deviate from it.
->>
->> OK, I supposed that's fair. You did throw me off point with your
->> performance comment. But if you decide to add SW_TAGS support at some
->> point, I think this discussion needs to be revisited.
->>
->> But please add a comment saying that those functions are only exposed
->> for BPF JIT and they are not supposed to be used by other parts of the
->> kernel. And in case you do end up adding a new config option, guard
->> the public declarations by a corresponding ifdef.
->
-> I feel concerns of misuse are overblown.
-> Being in include/linux/kasan.h doesn't make them free-for-all
-> all of a sudden, but if you prefer we can just copy paste:
-> +void __asan_load1(void *p);
-> +void __asan_store1(void *p);
-> into bpf_jit_comp.c
+Hello:
 
-That's actually what I initially went with when working on this, but it
-did look a bit fragile, and suspected that I would rather be asked to expor=
-t
-them properly through a dedicated header. I'm fine with putting back the
-manual declarations in jit comp, though.
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
->
->> > The goal here is to find bugs in the verifier.
->> > If something got past it, that shouldn't have,
->> > kasan generic on x86-64 is enough.
->>
->> FWIW, I suspect HW_TAGS KASAN already just works with JITed BPF code.
->
-> Ohh. Good point. Looks like modern arm64 cpus in public clouds
-> don't have that enabled, so one would need pixel phone to
-> catch verifier bugs via hw_tags.
-> So we still need this x86-specific jit kasan.
-> I guess eventually it can be removed when hw_tags support is widespread.
+On Mon, 20 Apr 2026 09:37:34 +0000 you wrote:
+> The test_populate test uses >= instead of > when checking if the
+> runtime nr_cpus exceeds the bit capacity of a cpumask_t.
+> 
+> On a system where the physical CPU core count perfectly matches the
+> CONFIG_NR_CPUS upper bound (e.g. nr_cpus = 512 and CONFIG_NR_CPUS =
+> 512), the condition nr_cpus >= CPUMASK_TEST_MASKLEN * 8 evaluates to
+> true (512 >= 512). This incorrectly causes the test to fail with an
+> error value of 3.
+> 
+> [...]
 
+Here is the summary with links:
+  - [bpf-next] selftests/bpf: fix off-by-one in bpf_cpumask_populate related selftest
+    https://git.kernel.org/bpf/bpf-next/c/0aa6378695b8
 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
