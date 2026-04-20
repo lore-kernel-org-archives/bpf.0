@@ -1,176 +1,111 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456822D7812
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 05:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5533538229B
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 06:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776664370; cv=none; b=bPjjum9n8EJh+3q8jGkB7/bVYxZXER4n0kxwiUeeCFBthDoOeGdcoRa8P9VzzpQhJca6ORlyPDYGzRb3O1SuFFu4TvBKpKasrOK1Cbyq0b9tT5CakKW5H+XF5slxFq7wSd96/uE5srlUyXHOkI8G8XKRoxaMKzhHYt6OumLk9ww=
+	t=1776665688; cv=none; b=QydYZi+ubx48r/aDe8jsxk0l6wzUJIbfXmE2FUZwKk2XORDpSs+/8pa58QzIupO/7Qt5WF/RNB2KoHg9xjQMhW9O3btkLsaYTBeY8BKpaL59a9EtC5Gvsg4y6En8Hbke4or//uBqyd8+YBJXh16EzpvNwhFvyATaPAKBPylxn28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776664370; c=relaxed/simple;
-	bh=P9Ea85k2ipmaCPdLoOcKf9QW0R2Vs93tj4N1mcnC5xY=;
+	s=arc-20240116; t=1776665688; c=relaxed/simple;
+	bh=XuHEqy100BftAVlBJdvW9DVb6fg1wvB279gQtkjHb38=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pmr2Vp+07y2z0uYADv6sYfC5MZpz2skFT7XKyQoa84mTlwq4Ko54YDIejXi/V8XsXtKhCwBU3yH4cBpxEXpnnhxg6yfiepWVhbaXepH1Va9tCWjtPoQYs5sEKnHW7VsWSZxqKIdmBui4Ytae2mVKLH4oLjNp2oKXqz9g0pMUGjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rLJJbVJc; arc=none smtp.client-ip=95.215.58.186
+	 In-Reply-To:Content-Type; b=Bdxe3hSK8kOz50jXAOi2Me2uJIKzR9RgAZxp866d5//J12uBcKbCxJDZkNwirJuma7xMZ5VqhNRbKU/kCOJ8iN4Ynp0vG1cqS0+l7WW0u3qKeq5DLSkyBKWNs3EaEDYD51c08LIlnVAZ1ILdUGlDMrYNUOp33ByKMvj0g3hXN2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L+wBdzYs; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rLJJbVJc"
-Message-ID: <c1ea0f04-f902-4f6c-9249-3348f729f0cc@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L+wBdzYs"
+Message-ID: <f93b6608-105d-4019-8254-fc89f58dc98f@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776664366;
+	t=1776665675;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+yuCXDIUaeRW08M8i0mkAdfDh//QKZbNWx3y/KuUFsQ=;
-	b=rLJJbVJcNdU5m/B0Xl5bpIH9526JGewXfXedwrky13TBEScWUhqfyvqePZtICRO/CNcvbF
-	CNHvJ9GC1ii99HV9uoTYuspEum1rKEHYSCvz8mPqQ6JrAw5Rtz994ixThZNwiAvm2PG2Ko
-	PXw8dG4sYszOjhEt2kkSMOX1CJ5HMRU=
-Date: Sun, 19 Apr 2026 22:52:22 -0700
+	bh=lgYWeIja0bWfYK9dliaPLtzchWx5gzqPJr6ntKeKoSw=;
+	b=L+wBdzYsmpinfXowuRwNKEF9jzTz+LKPrqG604276VqWJUj4OMSwnTPaWmiTdnpKjOBANv
+	E5VqswYadsnMo9F+bCKf+6sn2VcD6L7l4COZr0D7KQW0lICWOMEmzWsDgGa6p+0GqcW8ZP
+	8w1g5RdyxZ8VplA6jbEuRIFPqWmDQ4A=
+Date: Sun, 19 Apr 2026 23:14:24 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v6 15/17] selftests/bpf: Add tests for BPF
- function stack arguments
+Subject: Re: [PATCH bpf-next v6 17/17] selftests/bpf: Add verifier tests for
+ stack argument validation
 Content-Language: en-GB
 To: sashiko@lists.linux.dev
 Cc: bpf@vger.kernel.org
-References: <20260419163435.740110-1-yonghong.song@linux.dev>
- <20260419171509.541CBC2BCAF@smtp.kernel.org>
+References: <20260419163445.740437-1-yonghong.song@linux.dev>
+ <20260419172100.A89FEC2BCAF@smtp.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260419171509.541CBC2BCAF@smtp.kernel.org>
+In-Reply-To: <20260419172100.A89FEC2BCAF@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 4/19/26 10:15 AM, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 3 potential issue(s):
-> - [Medium] The `test_async_cb_many` test uses an extremely short `usleep(50)` to wait for a BPF timer callback to execute, leading to potential flakiness.
-> - [Low] The block comment for `global_two_callees` incorrectly refers to the function as `bar`.
-> - [Low] The `bpf_iter_testmod_seq_next` kfunc is incorrectly declared with an `int *` return type in `stack_arg_kfunc.c`.
+On 4/19/26 10:21 AM, sashiko-bot@kernel.org wrote:
+> Sashiko AI review found 1 potential issue(s):
+> - [Medium] Test fragility in `subprog_deref_arg6` error matching due to compiler register allocation
 > --
 >
-> commit 63c1c9ef99d02448833e84a39ecb212ccaaf5b80
+> commit 3936b0a6dea45627278be80c25b20ff18f2821d4
 > Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> selftests/bpf: Add tests for BPF function stack arguments
->      
-> This commit adds selftests covering stack argument passing for both BPF-to-BPF
-> subprog calls and kfunc calls with more than 5 arguments.
+> selftests/bpf: Add verifier tests for stack argument validation
 >
->> diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg.c b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
+> This commit adds inline-asm based verifier tests to exercise BPF stack
+> argument validation logic directly, including both positive and negative
+> tests for tracking pointers, references, and null propagation.
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
 >> new file mode 100644
->> index 0000000000000..d61bac33f8092
+>> index 0000000000000..66dd11840a63e
 >> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
 > [ ... ]
 >
->> +static void test_async_cb_many(void)
+>> +__noinline __used
+>> +static long subprog_deref_arg6(long a, long b, long c, long d, long e, long *f)
 >> +{
->> +	struct stack_arg *skel;
->> +
->> +	skel = stack_arg__open();
->> +	if (!ASSERT_OK_PTR(skel, "open"))
->> +		return;
->> +
->> +	if (!skel->rodata->has_stack_arg) {
->> +		test__skip();
->> +		goto out;
->> +	}
->> +
->> +	if (!ASSERT_OK(stack_arg__load(skel), "load"))
->> +		goto out;
->> +
->> +	run_subtest(skel->progs.test_async_cb_many_args, 0);
->> +
->> +	/* Wait for the timer callback to fire and verify the result.
->> +	 * 10+20+30+40+50+60+70+80 = 360
->> +	 */
->> +	usleep(50);
->> +	ASSERT_EQ(skel->bss->timer_result, 360, "timer_result");
-> Is 50 microseconds enough time to reliably wait for the timer callback to
-> execute?
->
-> In CI environments or heavily loaded virtualization systems, might the
-> scheduling and softirq execution be delayed by more than a fraction of a
-> millisecond? If the timer does not fire in exactly that short window, the
-> test would incorrectly read a timer_result of 0 and fail.
->
-> Would it be more robust to use a polling loop or a significantly larger
-> timeout to avoid flaky tests?
-
-I am using the same 'usleep(50)' in prog_tests/timer.c:
-
-         timer__detach(timer_skel);
-
-         usleep(50); /* 10 usecs should be enough, but give it extra */
-         /* check that timer_cb1() was executed 10+10 times */
-	...
-
-So I think 50 us should be okay.
-
->
+>> +	return *f;
+>> +}
 > [ ... ]
 >
->> diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testing/selftests/bpf/progs/stack_arg.c
->> new file mode 100644
->> index 0000000000000..8c198ee952ff4
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/stack_arg.c
+>> +SEC("tc")
+>> +__description("stack_arg: pruning with different stack arg types")
+>> +__failure
+>> +__flag(BPF_F_TEST_STATE_FREQ)
+>> +__arch_x86_64
+>> +__msg("R1 invalid mem access 'scalar'")
+> Does this hardcode an assumption about Clang's register allocation?
+
+Yes, it is possible that clang may pick a different register.
+So as you suggested, I will use regex like below:
+	__msg("R{{[0-9]}} invalid mem access 'scalar'")
+which should fix the issue.
+
+>
+> Since subprog_deref_arg6 is standard C rather than a __naked inline
+> assembly function, the compiler determines which register is used to
+> dereference f. If a future LLVM version chooses a different register, the
+> tests will fail because the verifier error will mention the new register
+> instead of R1.
+>
+> Could these tests use __regex to match the register dynamically, or be
+> rewritten so subprog_deref_arg6 is a __naked function to guarantee the
+> register choice?
+>
+>> +__naked void stack_arg_pruning_type_mismatch(void)
+>> +{
+>> +	asm volatile (
+>> +		"call %[bpf_get_prandom_u32];"
 > [ ... ]
->
->> +/* bar calls foo1 (3 stack args) and foo2 (5 stack args).
->> + * The outgoing stack arg area is sized for foo2 (the larger callee).
->> + * Stores for foo1 are a subset of the area used by foo2.
->> + * Result: foo1(1,2,3,4,5,6,7,8) + foo2(1,2,3,4,5,6,7,8,9,10) = 36 + 55 = 91
->> + *
->> + * Pass a-e through so the compiler can't constant-fold the stack args away.
->> + */
->> +__noinline int global_two_callees(int a, int b, int c, int d, int e)
-> This isn't a bug, but the comment refers to a function named bar, while the
-> function being described is actually named global_two_callees.
-
-Thanks. Will fix.
-
->
-> [ ... ]
->
->> diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
->> new file mode 100644
->> index 0000000000000..6cc404d578639
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-> [ ... ]
->
->> +#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
->> +
->> +const volatile bool has_stack_arg = true;
->> +
->> +struct bpf_iter_testmod_seq {
->> +	u64 :64;
->> +	u64 :64;
->> +};
->> +
->> +extern int bpf_iter_testmod_seq_new(struct bpf_iter_testmod_seq *it, s64 value, int cnt) __ksym;
->> +extern int *bpf_iter_testmod_seq_next(struct bpf_iter_testmod_seq *it) __ksym;
-> Does bpf_iter_testmod_seq_next() actually return an int pointer?
-
-This one
-	+extern int *bpf_iter_testmod_seq_next(struct bpf_iter_testmod_seq *it) __ksym;
-is dead code. Will remove.
-
->
-> Looking at the corresponding kfunc definition in bpf_testmod.c, the function
-> appears to return an s64 pointer. Although this function isn't actively called
-> in this test file (which prevents a BTF verifier failure here), could the
-> mismatched return type declaration cause confusion or subtle issues in the
-> future?
 >
 
