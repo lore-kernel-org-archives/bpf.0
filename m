@@ -1,66 +1,66 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA39351C07
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 16:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47756378D87
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 16:52:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776703061; cv=none; b=t51KlvTUG386idMZNEkMgNFMHfSFR+6b8PY1WxbZjsFFNCV/t0B/68K/HDT0oWGZgxDRxHI2dqZc6nwIrXI1xlO3PV8fHUxjvfedwrPrMmKHfotCBEqYvSZLxpW+MmwbWcH0P3p6e6AIlFpxYUKRUl3rgNZbULrf85sQo1xCt2o=
+	t=1776703936; cv=none; b=kmuG5fs1nb2r4D+JU4Sl0sLA15Lfn3JmFIxIxyhv7gZo/Fz0RHaEYkByMHUFUDsXfTlqvc3ctwkaA1Xv2ycvY51MwPGjkiC1oMlTSOhbbSw9yOy1/DZMgm3sDiXeZznOI9kkXUR+lkM6ZIQSXwX1x3QN7WQyfvUrw5IsnWONcds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776703061; c=relaxed/simple;
-	bh=U0pPkb+V042ftOFQeZ1VYketskD+hg9UpumQHgAN9Cc=;
+	s=arc-20240116; t=1776703936; c=relaxed/simple;
+	bh=Kxi+WBS9YMy1saAUSaYtPzYaZTtXBUg1DFgRCzPc8ik=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oWV8lkbbNZph1HQZDxDTHj96nDLlSkMOBM8kPHZbh8uZHBrbpqHdwaIYnfU9Xm41JIDdl0JrAq525WNlJD12DwUYgyBVPyx946KMbWdJKmKZC66khr42+a/OfrDXhAdTej5A/ljUvfDmzhPF6Wyd+EiNZCaHMDCC2mdqMtjr1zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mZH17Sl+; arc=none smtp.client-ip=209.85.221.46
+	 In-Reply-To:Content-Type; b=XErpBRH62BmoPpcUQrZedVUJZa7HbXbatEZTDaiG+obMPNUh4tAzre3NUnwvf5JcpXZBUQq/+B3blKENvxxg5al/Hlf3sigJou1HRRsN2hVYhYKu60ta/gKzPp1lscohhXjEo6IL3ABIr4eujD5bRV5d35ahx3rXq07bXZBURjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrVUYNDz; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mZH17Sl+"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43eb012ac4fso2004724f8f.0
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 09:37:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrVUYNDz"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488ad135063so26481205e9.0
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 09:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776703058; x=1777307858; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776703933; x=1777308733; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fpu14+FwOLSco0+WafBRBGwHPCgYQx+qtjEGV2+nwDA=;
-        b=mZH17Sl+V1zJwUYF9ghaa//DGyQN0bzDG+u9WRrWzdODPHCkMxv2HpMfx1X4EdCa8T
-         p+MuW3Hc/AzDVJoHqSaHl6WzACHEEUtJpVNT9zb87WkYdgJHfo9WCS0/RLcWlUPBaNb+
-         tUso6qYPJgVOcFhrRQ/jJfmPdpyv5i0TeV9JkfzszSuRMTzV3/F/nyRZ2aG5blMAVZ8F
-         iBXJwnmVLNA48+kXQY3MP0UosaL7gh8naO0BeUK05QdFyqSmipdm99935XofwOg9JQAl
-         inQI/MJhsxqbPHXFslShuGB+suJOqX+7+AmWAuT7Q9CHoKNiQURAukvHpn3rDp0LYb6J
-         4WnQ==
+        bh=X7WVV2rXlZkPThmov5vqqJDurN8/X/UV4KgQra6/Gw8=;
+        b=VrVUYNDzT9mAzVMIBiXkSuHzsGk8zvrEymZtR+ULtO3PDH3kkJmX1kSGN9VAL0+mpo
+         Z/YoRwBTYeQ4covL8X1ewfWlmxi+TuEKKixKXzvLqU7ePkfeWUa7MoWSDwieSyVZbvPN
+         vL3SRb7scVuXY6CEM5gVZZQ2Hj8XQIIE4rNJW+WyKOOGtiKb6VBpx8/LBlU4RqxlFO1T
+         qtN2FWW7LG5Vq6m5o15mSjB2O6zJCVgn3ylXrzpWG/pBYHYTYp3S4pb9vPf0HbyK/xbz
+         +7P1TKNCbumYoCElJZ+3f17sAw0Z+YuC1KtPuRsdm/PFWt/LqKryAOruuLAFU91Zi8ZH
+         xUcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776703058; x=1777307858;
+        d=1e100.net; s=20251104; t=1776703933; x=1777308733;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fpu14+FwOLSco0+WafBRBGwHPCgYQx+qtjEGV2+nwDA=;
-        b=BSoIK2xwb2KcSzk1Bpxw0KDFffZEI8o142UmyFj0Ny8eFwk4mY/15HiuUqPkKkcy6Q
-         MuXCuVoDM2Xrn1sIYJgON/zLt448qjHLYT3FJ0686qlDU7Tu1JsK6/NyIj0YulIVfyDE
-         F2xqD1mAS5SR+m0myIAhZ7/Okz57I4lFlXsmvv0QvqRJQIeZKGb21kNHEjaz5X0UKuBQ
-         i3SlFta7L3eL24pfs2ZKtklGdS5UkxNnVwHZmJqFQLh3RkXb7LJ3JJuD81Qq4UqUewmC
-         CIkKn6cxDck7k48FBXldMcZs9UNWjk8Jra05FsopBdb6ba+l4d/wi0+/EZzXjZ1ulSc/
-         PMQg==
-X-Forwarded-Encrypted: i=1; AFNElJ/34hVMYyaYbeEzNSwTm+eXMMZ2HPV5P4PwZ5VH+TAVAgwvpXyMLji7EMVifKaqaFdYCrA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPONFC9Jy27Cc0M5uXvydDkKYk+Cp/iFqYh3Dgj2rVzg1ZrCl1
-	+0sak9sg7M1t/1R+PWpzw0SBUUGttPSGsF1TAdv1jiwxmmUQlCOEHDrQ
-X-Gm-Gg: AeBDieurn7vtdQsRRdv5jUeBDlfGbuWR3ypDbd24IvXmNHS8Z+tcD60pffhEVwl4RDh
-	r/1Athgu0CvDx2NEGESGfeGG81GQWkjG140sPW41tNCVE8keMyc6uz4ERIFZ1f5b46ehAzJMb5s
-	A+zFXSHw/eXb82ZM77+TqyynZWfZPjBkuMUuk6WIwBsBgXsN1ITDKdCwzpVOm1qQwSwwcf/lGO+
-	9M7YgUbg5SmGaiwmuVYeKLWht6lskk4TE+qAqfxs1CENQlI52Jl5Xewf9NUOib779TmYA5TFuGe
-	7zdCc+Tcl81OJ9Jfy7N5xeDZVrZpAFraTfo/GWkcnBbi58hzps/KeqBtzVFjLeiZBSHK2u59EeR
-	8EOCe3J5HmvAL/tWdSIpl2e4CH06ysBuraMowFbR4cXIvz0hIxcqrSFRLdH8Gw4vR/vjbSP4V3T
-	TVyGdi6dyRxvI1ryNOUrLF5n3PHa5JujnoBpkJmMb5DolyF+Y8hkkPxLSNg1t1zHr3LgYh6Q==
-X-Received: by 2002:a05:600c:3423:b0:488:fd7e:1063 with SMTP id 5b1f17b1804b1-488fd7e1253mr106824685e9.29.1776703057854;
-        Mon, 20 Apr 2026 09:37:37 -0700 (PDT)
+        bh=X7WVV2rXlZkPThmov5vqqJDurN8/X/UV4KgQra6/Gw8=;
+        b=DxC/V6j3ty8ttgjsa49Cwu1S95PEWdTn5F8goxmQoebMq046/OQM+MT8r8tillOEgy
+         aIBUPAEcxPJZeV1ga/j33AIWaTWGUJSt4/rkE3MONT/QyWg6jmnmPfVC+miZj5YkhvBw
+         /P30kqR3USsmBOnBq0zlmzPLqI92vSy2Y76wb06fOhHnq+6sbfkZvpORn7A0qtrlqcv8
+         lhfvHEhWY4UXDQ6hE6CdfxS4OROjMk12m02SSrS4QzqvWIhwHw27EQJeTJFTivBpTcuH
+         u+sTtmchSwJ2T5L52xQRd+GMcsfoTf1LjL1DI9RPCcsmaFAi1NZ4PmFoLkKvlSwwpJOf
+         /RkQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+KU7Nc4NA3sT8P/ML2xgiY78CWhSE0Z5DJuvaep7PFHqkmnN+rD5s/K/WNBBIuF4jbo+k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDtKlxzZni1opezPQ2k5qSj8kQfuGkv597a04KI39lQnl9k6aV
+	xpmQnEICEJQ+5CPofWpDhCH3mF4GjsXHA05Hzi1s2YIi2al6FpkchxMm
+X-Gm-Gg: AeBDieuX72ZGxisExA4WfPGgvPCgGBNYCepb1UrsIUH1y8oZTjkexwgMh92e00RWhJc
+	dancZMlooGxVXS+sTzXzxoiGDfYJNCeXisbWCm8gGXK1dKEdkaN/qkxjojXi5XqulPrBsQiXfW4
+	AClpoSsHEfkVNBsEQvc1P3su3ig21c++kII9LxeF1wQiN7nouQO4b5qCqFy7rw17oBi8062I2fP
+	yeNTafsCbQIB2KAW8hjengGGbAzaQ3SCy/lMsEU+ezSjgON+V5od4iHraKobxNN2LL4lH7tRUia
+	fOTclUpnwyKnvC11pKcWWjL3Phy/OVcds3NaURcEX6WODXdtJSHQsx50Hj/PI8sBEyxPdSLP2/z
+	yhF5kOCdM3MC1NIgeqdtY7SthqkHU1DWSrzS/GAy6gjmz78T+tBiGi2U1HAO8t01gNDD9aaWGGm
+	mlMJ75UqFeghOgnuhmgz28xUqoiHRY9jBq8R6+kHpgIZiQZPxXmbUDax3jUavKRMg7hQ0PGw==
+X-Received: by 2002:a05:600c:a40a:b0:489:1ba8:5bf0 with SMTP id 5b1f17b1804b1-4891ba85dc1mr67435325e9.21.1776703932396;
+        Mon, 20 Apr 2026 09:52:12 -0700 (PDT)
 Received: from ?IPV6:2a03:83e0:1126:4:5432:2d05:ea5:f7f7? ([2620:10d:c092:500::6:8ffd])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4890009e759sm228960045e9.6.2026.04.20.09.37.37
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb11b4sm31219009f8f.2.2026.04.20.09.52.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Apr 2026 09:37:37 -0700 (PDT)
-Message-ID: <cf77ad2b-6ecb-4a0d-8ae9-75b62e253eb8@gmail.com>
-Date: Mon, 20 Apr 2026 17:37:36 +0100
+        Mon, 20 Apr 2026 09:52:12 -0700 (PDT)
+Message-ID: <f02fd939-85f7-414a-8b03-a9ebe56c7660@gmail.com>
+Date: Mon, 20 Apr 2026 17:52:11 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,87 +68,105 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next v2 00/18] bpf: Introduce resizable hash map
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>,
- Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260408-rhash-v2-0-3b3675da1f6e@meta.com>
- <ad8Fr4jDKvp-oxAw@gondor.apana.org.au>
- <CAADnVQJCpJ0bTVPQ0LwoNubsK7-HsdePWgdMz8DX=v9cjgvyKQ@mail.gmail.com>
- <aeBxQn8ATaNuEF4X@gondor.apana.org.au> <DHUN1UJ0DLBC.3UC7SXBAV2FOW@gmail.com>
- <96b6f76e-1dc9-4d54-9f92-8586796ef607@gmail.com>
- <aeHZJUw-ZRA3ZWVE@gondor.apana.org.au>
- <4c0e73e1-43c3-48a3-ab89-239fed7e6c23@gmail.com>
- <aeLTlNbM1rH31D4L@gondor.apana.org.au>
- <af4b850f-ac88-4c99-8d66-00e40efbd4d7@gmail.com>
- <DHY3HII4WSJS.Z7A2V8PWG22W@gmail.com>
- <68e0580a-4002-4b9c-a003-7cf85560d791@gmail.com>
- <CAADnVQ+_gYx2AiqqtmyXhB8qgioKN3t1H-TgeMMWZzv15Jt14A@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in file_reader
+To: Jerome Marchand <jmarchan@redhat.com>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260420134637.2513867-1-jmarchan@redhat.com>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAADnVQ+_gYx2AiqqtmyXhB8qgioKN3t1H-TgeMMWZzv15Jt14A@mail.gmail.com>
+In-Reply-To: <20260420134637.2513867-1-jmarchan@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-
-
-On 4/20/26 5:06 PM, Alexei Starovoitov wrote:
-> On Mon, Apr 20, 2026 at 8:50 AM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
->>
->>
->>
->> On 4/20/26 4:41 PM, Alexei Starovoitov wrote:
->>> On Mon Apr 20, 2026 at 4:45 AM PDT, Mykyta Yatsenko wrote:
->>>>
->>>>
->>>> On 4/18/26 1:43 AM, Herbert Xu wrote:
->>>>> On Fri, Apr 17, 2026 at 04:16:34PM +0100, Mykyta Yatsenko wrote:
->>>>>>
->>>>>> Changing interface is practically not possible - this comes from the bpf
->>>>>> syscall.
->>>>>> Linked list solution: we probably can't afford it performance-wise, it's not
->>>>>> worth it to pay for the linked list maintenance in insert/delete operations,
->>>>>> to make traversals work well.
->>>>>
->>>>> What performance penalty? The linked list is just a pair of pointers.
->>>>>
->>>>> Memory-wise it'll be two extra pointers per node.
->>>>>
->>>>> Cheers,
->>>>
->>>> I'm concerned about pointer chasing, when we inserting a new element to
->>>> the list or removing existing, we'll need to update pointers of the
->>>> neighboring elements. It'll be nice to measure it, of course, let me try
->>>> to prototype it.
->>>
->>> hold on. let's not overcomplicate things.
->>> We only need to notice that resize happened, right?
->>> In such case just ad generation counter and let resize increment it.
->>> If it changed in our iterator -> ERESTARTSYS.
->>> EAGAIN doesn't quite fit, since it implies that immediate operation can be
->>> retried, while here the iterator need to be destroyed and recreated.
->>
->> I think that won't work with get_next_key() because we don't know what
->> generation previous key was read (in API we just get prev_key and return
->> next key).
+On 4/20/26 2:46 PM, Jerome Marchand wrote:
+> The file_reader/on_open_expect_fault fails consistently on my system.
+> It expects a page fault on first dynptr read of some range the exe
+> file of the current process because it has paged out that page range
+> earlier. However a lot can happen to that range (which depending on
+> the actual memory layout could contain text section, data section,
+> sections )related to dynamic linking...) between the moment it was
+> paged out and the moment the bpf program expected to hit a pagefault
+> actually run.
 > 
-> The first one starts with key==NULL.
+> A bit of instrumentation with mincore() shows that pages from that
+> range were accessed several times before the program is run. In
+> particular the call of file_reader__load() seems to fault all the
+> range in.
+> 
+> Move the call to madvise(MADV_PAGEOUT) to just before attaching the
+> program to minimize the risk of having those page pulled back in from
+> under our feet.
+> 
+> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+> ---
 
-If we iterate entire map in one go, we can detect resize, agreed. But if 
-user just randomly calls bpf_map_get_next_key(), we cannot really detect 
-resizes, because we don't even know when iteration started - it may not 
-even be an iteration, but just an odd bpf_map_get_next_key().
-I think we can handle resizes next way:
-  - map_get_next_key(): leave as is, can't detect resize or even if 
-resize matters.
-  - map_for_each_callback(), iter_seq_info(): error out if resize takes 
-place mid iteration.
-  - batch ops: store generation counter in the bpf_attr, so on resuming, 
-we can detect if there was resize.
+Thank you for the patch, the change looks good. Does it fail 
+consistently on 4K page size?
 
+Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+
+>   .../selftests/bpf/prog_tests/file_reader.c    | 22 +++++++++----------
+>   1 file changed, 10 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/file_reader.c b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+> index 5cde32b35da44..48aae7ea0e4bb 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/file_reader.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+> @@ -10,6 +10,7 @@
+>   
+>   const char *user_ptr = "hello world";
+>   char file_contents[256000];
+> +void *addr;
+>   
+>   void *get_executable_base_addr(void)
+>   {
+> @@ -26,8 +27,7 @@ void *get_executable_base_addr(void)
+>   static int initialize_file_contents(void)
+>   {
+>   	int fd, page_sz = sysconf(_SC_PAGESIZE);
+> -	ssize_t n = 0, cur, off;
+> -	void *addr;
+> +	ssize_t n = 0, cur;
+>   
+>   	fd = open("/proc/self/exe", O_RDONLY);
+>   	if (!ASSERT_OK_FD(fd, "Open /proc/self/exe\n"))
+> @@ -52,16 +52,6 @@ static int initialize_file_contents(void)
+>   	/* page-align base file address */
+>   	addr = (void *)((unsigned long)addr & ~(page_sz - 1));
+>   
+> -	/*
+> -	 * Page out range 0..512K, use 0..256K for positive tests and
+> -	 * 256K..512K for negative tests expecting page faults
+> -	 */
+> -	for (off = 0; off < sizeof(file_contents) * 2; off += page_sz) {
+> -		if (!ASSERT_OK(madvise(addr + off, page_sz, MADV_PAGEOUT),
+> -			       "madvise pageout"))
+> -			return errno;
+> -	}
+> -
+>   	return 0;
+>   }
+>   
+> @@ -90,6 +80,14 @@ static void run_test(const char *prog_name)
+>   	if (!ASSERT_OK(err, "file_reader__load"))
+>   		goto cleanup;
+>   
+> +	/*
+> +	 * Page out range 0..512K, use 0..256K for positive tests and
+> +	 * 256K..512K for negative tests expecting page faults
+> +	 */
+> +	if (!ASSERT_OK(madvise(addr, sizeof(file_contents) * 2, MADV_PAGEOUT),
+> +		       "madvise pageout"))
+> +		goto cleanup;
+> +
+>   	err = file_reader__attach(skel);
+>   	if (!ASSERT_OK(err, "file_reader__attach"))
+>   		goto cleanup;
 
