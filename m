@@ -1,127 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2E23806B2
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 04:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AF440DFBD
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 04:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776657955; cv=none; b=MqeoOksum8PwIars7dTR5O5AtSrFaphp1t9AzyS+it8wrGPfQSbMaEDKuAHzmayntWW9nZ7SpB+6qE3ENNMT5LYJUUn5cC7RCLQngNg/aYIHXt5FN479yXIuvgs5luFfXBRVMVYI8oKxnb/3kJZRnuwD1u+5xlFpt1bVT4ZwWaE=
+	t=1776659019; cv=none; b=gVfM5EgBor82IqkIicuNWgwljGpuazZwhcymIXDycqHgQgyb2JXFGdhPW6RJNdBeSioyvZsggrV4yBHpgV6ScTZStyfmryNq/SIgTvrTArWrShWvMAZN/IGJ9qXIcuo088aV7NxsRHZtN1XyB0r9dEaXSMiT8y0YrL/pJS6wFxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776657955; c=relaxed/simple;
-	bh=LWGI2c6f+xOxw0O46cMe57bsbdV3nnADBzMhrOpnZEc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=niCYhJw7qrxywhGhrapP/nwAKyHJet9/SgBEP+wG5xwpvyPI3IR5FnA0kAi7CuJgFBFIcOdrKYhUXpEaYXpMsXkse4TNpiemA+Bd8LeWZMRE3u6+mH+fH4m9KMiZpkMsT5G+RppwRF/0MxH+GZx12prBaQZoXkv+8cf/4D8ocwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oS5BIcMS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776659019; c=relaxed/simple;
+	bh=8EeZQF3ZFmG/UaoKRoLD6q7Vz6AAb5FLXqLMHNO4GlQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nek+R2CdtH37c0DpBlWXHw59d5RTijiplSIXM0l5y2qJVt/nWTXl28kDMunzZfgQK94m3RVufIuKfdUT7KNFib/JgvVRoWLIUZO3YDUhZjF+SGTeSpwY/0mRaujHTMjjTIGPVM4HTUsjySrK05t6Hl0Pbx2m85WtyLFiEgwPo2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=f5LOYTfR; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oS5BIcMS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA41C19425;
-	Mon, 20 Apr 2026 04:05:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776657954;
-	bh=LWGI2c6f+xOxw0O46cMe57bsbdV3nnADBzMhrOpnZEc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=oS5BIcMSPMoUfC4/mL7MWWAy8KJbzi6Ev0LIh7uBrp7ksoZRGQDE6+J09meAB+1/w
-	 PDUPZSQgzD3YESt9T4M56Xg0oU084Y8LGnv0wxsCS2aYdRjjWcrapWppNv1VbPgtjM
-	 HITQ82LRf7ZXDGGmjRyUmAe2aFF648Jxj3ZieuPCp/nv3OR4mbDC091EHFieu/+fIA
-	 nBAo1S2Z8v1FRdM8+P1WjkQsHt9HMKwqwgsIM9R3Ih0KlAYAFKSjpBXPXQrj7osI+W
-	 SSRw/Qz9TExJwALXR7xPBN+EDMVOEquL/M7eK2wudapzdXAzi6nLTIoNydKOLuxwtf
-	 KwSLq4XMDjXdw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf: verifier: fix NULL deref in map_kptr_match_type()
- for scalar regs
-Reply-To: sashiko@lists.linux.dev
-To: "Avinash Pal" <avinashpal441@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260419040426.9672-1-avinashpal441@gmail.com>
-References: <20260419040426.9672-1-avinashpal441@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Apr 2026 04:05:54 +0000
-Message-Id: <20260420040554.9BA41C19425@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="f5LOYTfR"
+Message-ID: <8582cfa9-b1ae-411e-893c-aa2d3b0e1012@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776659006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9abRJ72j4QFXz3H6EEWTK80D4I2r4KirAFIUEiOX+mE=;
+	b=f5LOYTfRREnnTuTWCVL7I0ZI0Wd63zlf7NbC8N4ft6jWcTD0pM5ibUSYOBcYzmC90xXpFP
+	k0cuH81xxSsTfukTme6OJDhVG9VAsKivb5xZ/xt2kMkZ6SeEJ9oOfHOoJqlcpKPJplDqw7
+	R7Wp491h6FJk2I8kyclAQPo6+0nW534=
+Date: Sun, 19 Apr 2026 21:23:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v6 08/17] bpf: Reject stack arguments in
+ non-JITed programs
+Content-Language: en-GB
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260419163357.734345-1-yonghong.song@linux.dev>
+ <20260419182148.BD42FC2BCAF@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260419182148.BD42FC2BCAF@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Type confusion and non-deterministic behavior by accessing union m=
-ember `reg->btf` before validating register type.
-- [Low] Compiler warning due to mixed declarations and executable code.
---
 
-commit e1d023d433c4be96ed8eba9f6b8df2ec2929d841
-Author: Avinash Pal <avinashpal441@gmail.com>
 
-bpf: verifier: fix NULL deref in map_kptr_match_type() for scalar regs
+On 4/19/26 11:21 AM, sashiko-bot@kernel.org wrote:
+> Sashiko AI review found 2 potential issue(s):
+> - [High] The loop in `bpf_fixup_call_args()` incorrectly rejects main BPF programs with >5 arguments in their BTF signature when JIT is disabled, even though main programs do not actually use stack arguments.
+> - [High] Standalone global functions with stack arguments can incorrectly fall back to the interpreter if JIT compilation fails, leading to a kernel panic.
+> --
+>
+> commit f56b0fedf39a845476910805e073f6b2d3a4ad82
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf: Reject stack arguments in non-JITed programs
+>
+> The interpreter does not understand the bpf register r11 (BPF_REG_PARAMS)
+> used for stack argument addressing. So reject interpreter usage if stack
+> arguments are used either in the main program or any subprogram.
+>
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index ae10b9ca018df..ec8523e6e4eb4 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+>> @@ -2599,7 +2599,7 @@ struct bpf_prog *__bpf_prog_select_runtime(struct bpf_verifier_env *env, struct
+>>   		goto finalize;
+>>   
+>>   	if (IS_ENABLED(CONFIG_BPF_JIT_ALWAYS_ON) ||
+>> -	    bpf_prog_has_kfunc_call(fp))
+>> +	    bpf_prog_has_kfunc_call(fp) || fp->aux->stack_arg_depth)
+>>   		jit_needed = true;
+> When loading a standalone global function (env->subprog_cnt <= 1) with >5
+> arguments, bpf_jit_subprogs() sets fp->aux->stack_arg_depth to 0 (the
+> outgoing_stack_arg_depth). If JIT is requested, bpf_fixup_call_args() will
+> exit early, bypassing the newly added loop that checks
+> incoming_stack_arg_depth.
+>
+> Because fp->aux->stack_arg_depth has been cleared to 0, jit_needed evaluates
+> to false here.
 
-This commit attempts to fix a NULL pointer dereference in
-map_kptr_match_type() by adding an early return if reg->btf is NULL.
-It targets a crash that occurs when storing a scalar value into a kptr slot.
+I think the below change should fix the problem.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D221372
+-       if (env->subprog_cnt <= 1)
++       if (env->subprog_cnt <= 1) {
++               env->prog->aux->stack_arg_depth = env->subprog_info[0].outgoing_stack_arg_depth
++                       + env->subprog_info[0].incoming_stack_arg_depth;
+                 return 0;
++       }
 
-> For scalar registers reg->btf is NULL. map_kptr_match_type() passes
-> this directly to btf_is_kernel(), which performs a container_of()-based
-> offset access and triggers a general protection fault:
+In the above scenaio, env->prog->aux->stack_arg_depth will not be 0, so jit_needed
+evaluates to true.
 
-Since base_type(reg->type) !=3D PTR_TO_BTF_ID evaluates to true for scalars,
-wouldn't the code jump to bad_type before ever reaching btf_is_kernel()?
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 69d75515ed3f7..15b8f71074f93 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -4545,6 +4545,18 @@ static int map_kptr_match_type(struct bpf_verifier=
-_env *env,
->  			       struct btf_field *kptr_field,
->  			       struct bpf_reg_state *reg, u32 regno)
->  {
-> +	/*
-> +	 * If the source register has no BTF type (e.g. it is a scalar),
-> +	 * it cannot possibly match a kptr slot. Reject early to avoid
-> +	 * passing a NULL reg->btf to btf_is_kernel(), which would cause
-> +	 * a NULL pointer dereference inside that function.
-> +	 */
-> +	if (!reg->btf) {
-> +		verbose(env, "R%d is not a pointer, cannot store into kptr slot\n",
-> +			regno);
-> +		return -EACCES;
-> +	}
-> +
+>
+> If JIT compilation subsequently fails (e.g., due to memory limits or
+> unsupported instructions), does the kernel silently fall back to the
+> interpreter instead of rejecting the program?
+>
+> If executed, the interpreter encounters instructions utilizing BPF_REG_PARAMS
+> (r11, mapped to regs[11]), which is initialized to 0 in the interpreter's
+> stack frame. Could dereferencing this register to read stack arguments
+> result in a NULL pointer dereference and cause a kernel panic?
+>
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index c4e0224ad2f2e..3c9a82823913e 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+>> @@ -1411,6 +1411,12 @@ int bpf_fixup_call_args(struct bpf_verifier_env *env)
+>>   		verbose(env, "calling kernel functions are not allowed in non-JITed programs\n");
+>>   		return -EINVAL;
+>>   	}
+>> +	for (i = 0; i < env->subprog_cnt; i++) {
+>> +		if (env->subprog_info[i].incoming_stack_arg_depth) {
+> When verifying the main BPF program (i = 0), if the provided BTF signature
+> has >5 arguments, the verifier sets
+> env->subprog_info[0].incoming_stack_arg_depth > 0.
 
-Does placing this executable code before the variable declarations trigger a
--Wdeclaration-after-statement compiler warning?
+We can ignore i = 0. The first subprog is the main prog, we can skip it.
 
->  	const char *targ_name =3D btf_type_name(kptr_field->kptr.btf, kptr_fiel=
-d->kptr.btf_id);
->  	int perm_flags;
->  	const char *reg_name =3D "";
+>
+> Although the verifier subsequently realizes this signature doesn't match the
+> expected single ctx argument and marks the BTF info as unreliable, it never
+> clears the incoming_stack_arg_depth.
+>
+> Because this loop starts at i = 0 and unconditionally checks
+> incoming_stack_arg_depth, will it reject the entire program if JIT is
+> disabled (e.g., via sysctl net.core.bpf_jit_enable=0), even though main
+> programs do not actually use stack arguments?
+>
+> Does this break backwards compatibility for existing valid BPF programs with
+> 6+ argument BTF signatures that used to load successfully?
+>
+>> +			verbose(env, "stack args are not supported in non-JITed programs\n");
+>> +			return -EINVAL;
+>> +		}
+>> +	}
 
-In struct bpf_reg_state, btf is part of a union:
-
-struct bpf_reg_state {
-    ...
-    union {
-        int range;
-        ...
-        struct {
-            struct btf *btf;
-            u32 btf_id;
-        };
-        ...
-    };
-    ...
-};
-
-By checking !reg->btf at the top of the function, does this read an inactive
-union member before validating the register type?
-
-For instance, if the register is a PTR_TO_PACKET with range =3D=3D 0, could
-reg->btf incorrectly evaluate to NULL here and return -EACCES instead of sa=
-fely
-falling through to the bad_type check below?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419040426.9672=
--1-avinashpal441@gmail.com?part=3D1
