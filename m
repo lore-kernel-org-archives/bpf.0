@@ -1,86 +1,90 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50D337A48B;
-	Mon, 20 Apr 2026 08:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0789338238C
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 08:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776672188; cv=fail; b=k9CWTHhzBomX0qdEr7YucSX64cSfix23M/JXmQSqADCyxlpD0zwYUw2m5cNZ5WxtYepMvFQCsaCy0TWV1b8t2uvNYoMKnXCVeC9mApvqEHwTtG5EK2WvlAp3ZrT48n1HFB5L6i0xSMuucdxmW1KX7a+g2AnxuBWCavwots1pzxQ=
+	t=1776672605; cv=fail; b=YxqUIjG11a1U8jvL0Bb5+j+PzvachhJ5ZMGeyIAJEc2045xdR8S9x+bJEwEL6zbCA4xqfEAs76+h0rqDltL6XJEPR9ZCgEY9y1kg+O3btrWlVcyWoCfCwvk1hu6ujYDPjwJwSDPHrKnppbTPwUzxaZ1tDpMREnLd7TVPV0AY2Vo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776672188; c=relaxed/simple;
-	bh=lkfeIAvUG6vN1EfLK43LfV0dskNSCzhh5WL4XRQ+WNM=;
+	s=arc-20240116; t=1776672605; c=relaxed/simple;
+	bh=oTWdN6J9xH3oE9enIbotS48OMY83QyK73JFa5EXdTqA=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=FATcc3QGHv+OS+xNVdKo8yRnwhFv0fvFgXA9F9S/zUzv04NDtnPP2WpWmneH2B5ufBQSWGakXawk9tkoBd/waHYaIKtAlEXCclTYcGG3J/7KMSHXfORhL22aFPN1b7qxfORBU7HoPbPuR8H41sa034dWQYtwR6aSL/8tFxBTwuw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lLuwf9jq; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=PFIxfly9; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Type:MIME-Version; b=bDtxgX1Ca3XSGpxTnmxP9qKygUirR2KvSEtXgdPHmtLlZPO/Tgmq0RNHpkTKB9+QUoRZLkCmowcUfIBoJnnGkOLRHNXXpuYFxBlPojvyWI2L4QUegj5rxWkL/2hegCiiNKajrXGNqI6rHOqa5Zu2aou+fr1DRRbBfn7lImMBTCU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=EmmmcojK; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=vpOVN/jh; arc=fail smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lLuwf9jq";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="PFIxfly9"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63K0MWR23303455;
-	Mon, 20 Apr 2026 08:03:00 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="EmmmcojK";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="vpOVN/jh"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63K0AGLo4065153;
+	Mon, 20 Apr 2026 08:09:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=o6ynZgTDJX3+P6ZYEfSJ7TOeOm90E0piBeFvfzwgre8=; b=
-	lLuwf9jqEyi6n9RPujr0LIeMAh/CLJhDeoHrLra4Nh97QUVP60kYXKNpReKeZ85v
-	wSO3fLGY+zUWdIDCNhYbpWrYlUCQtGHNXkYh7mcJJVaPASGJOqaXOiN1RniOniAt
-	jpKdkclucbOsW3QTVAPZikR6lgWH36VJ5wwOQR2aJ4GeP4WFqSxznjFrYI2jGiTP
-	wL9/g2kiJIYLQQcPcagXtYPjnsq3Lhhsygj6idUaWxoB389Uzq1bZtOkZEtCAyvM
-	l/ZcMka5PV38vo9Cog7MoccjYS0vLcBPf8yP+HT1jeA2bfMtOXYkalt4lSWh2cff
-	8hKTk+xsXLz77PZLx2ZTaQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dm27vtsnv-1
+	corp-2025-04-25; bh=21SFXgNdw6NyOJj74fV7a0Xys3t3Sb0rS7uZBB2y0zo=; b=
+	EmmmcojKhuqLTfz0ITEYXpF3mAmLFW5iDuznoy0a2tVTKZYzfCe9julGTVmeuwgo
+	T8XCDgf/Nuj+05lgX55FJbGwwKoi7MEvOdO/VHG5qcDvt2VLitTHEowRyyc+AQXH
+	C0mW3XBjaZIiWhzPmnaNjTREcptxtnPXE9Fof0JU1/GB6w7UtmlAx9njs1g7flvD
+	GYvfuxJrR2IFbvrflUkFdETS7d+PJGcN6Z7M1wruwSLc/CS5tzTFXmCTNEbS3fZH
+	ip3GBuLIP/qOgHdmWszDDUI7jAM6npxWUunATf160W6cP4VzsRrxu3FOrtlhCDEB
+	5LLvKK5ov1plqXILoclaUg==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dm2a5tupp-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 20 Apr 2026 08:03:00 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63K81H10039369;
-	Mon, 20 Apr 2026 08:02:58 GMT
-Received: from ph7pr06cu001.outbound.protection.outlook.com (mail-westus3azon11010057.outbound.protection.outlook.com [52.101.201.57])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dn1cm2u5h-1
+	Mon, 20 Apr 2026 08:09:22 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63K81GAu017524;
+	Mon, 20 Apr 2026 08:09:22 GMT
+Received: from mw6pr02cu001.outbound.protection.outlook.com (mail-westus2azon11012058.outbound.protection.outlook.com [52.101.48.58])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dn1bmb8a6-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 20 Apr 2026 08:02:58 +0000 (GMT)
+	Mon, 20 Apr 2026 08:09:21 +0000 (GMT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xZhuwlpjdlyN8uXDaO/YKCTsmLmREx6bUnGDlQBgAonAUe5PRVTGxbVFctXi4KT2NmkiPmFb6r/iq1yHomgh0Nwp/t5DU+R7Apk0iksUtCpO5zmzCtg2akf+frqS7iuQ4iaNcYC4J9ihGo6N+Pn4gy9x+iQiG1A1TBsZ9rr9m626Gs9XvJ9Z+c1k09FN/mBUETdnTQ0zpCGYo2PIAvMF8vwXUUjfr8Z/7dilgOViS85BInxw4DoVOmnGJ0gu2viw7H3gdU7V5WJ2gsyZD0txfwfvGUUUTklQlKTMXRyfNNJsgnkTjtplD53pyRzhHdz5ouuosKvtEXTv6cEeh+c1Xg==
+ b=K4fJpkyIcQGOx1mabLhQJM9F5JNcpcEIlUi13v9sHxzdbRYKQN6s7WHvDM82700EbjrCBtvkjMnefJagiHu6ze/N2f+nlhdC1dIJJDxTx2hrJJYoAw9F2kTyUvkGd+5QjrVjqnOkseAGJeFd1FKmQFMpGTiNg/9rvP8HYAG6jtGEVdYcvOe6+4qkzckEmETWMsCFWhwi4VFbvFAmwQK6lIXdzox373DPFJs6tI4NRQLbDrBIzzJZHQ9N+MYdXFcCdfGYI4vgs1NQdhXvV2Xxoj0C5nOVjgHDGHOMiq3e7ez9ZYKTf0PLSvqf7y18enUhtI74MnWfpZhc6EG+jiAjqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o6ynZgTDJX3+P6ZYEfSJ7TOeOm90E0piBeFvfzwgre8=;
- b=OSkUuZ2Q8CHKEPKJGxAReZ+8k4St06LZr2RYbLQT/ScjnJRWbTsGlJQSdptl6FtTs9YW0rM/wc6CUQwhM/n3Cp1Hse1x86mju87iR7RJPHUSpqp9sfe1r+3Qw7XiG+7OVc/Uf4dnp566eluB2UjLx9Q+TucFe4FfkgLfOCZP+MmF/BvK1eg9IX3Y+m4EiotWZGINTDZN85ma1HKAdm28Ueq+e2VA5u/GPSv91Y6N/0b0M0g1mLEPliDKYTH9lgw0qDb1wBf27m1eXa11CDTAv9TyyE4vLEXp/yyos3lCkb64WmkdlErx/vajAraktsb6G8/3b+hYNnUiPmz8njd6kQ==
+ bh=21SFXgNdw6NyOJj74fV7a0Xys3t3Sb0rS7uZBB2y0zo=;
+ b=LZ/7DgnwNdUYTtAlWnZK6KcTsZyOw0lAQ6IxHnXOe4d2bbyBQUNg7s5U/cQ03A10zqkgxU9PoHLNJLBOi4YbSgYMd6k0cRHoZfiTRy0NO2gth95q7rfq/OMPxMelRT0g+IEtzWylACqEX39WsjcoLzRlBpumNnhts7eJROsdjeNheS8MlupUqE+A6updeZtc5g0UmBUBZzsHP6Kr49BVLnRuMpbw3Lq7ozhL1gNte5OXawi+Sphx2VMMnQBwerE9ZhkgL8iungMlkAXrCHxtKCxOiPPWHQMGjEU8+Bl7f0h5jMkR30WjEW6M8YV9kVRQfXj5m3AlL0Hk8fY7z667/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o6ynZgTDJX3+P6ZYEfSJ7TOeOm90E0piBeFvfzwgre8=;
- b=PFIxfly9YSO+7y2jXTCP7FG4TFwm0pPgKESWN9xPZbM4z9zXAk73uGNYJjD8M5WRG+ByqgAWmqTeEkBwI9tM8dARwR+O12AVHf3Xtw6qbnr4vgKR40FQ1pjrrEm2OdHyAM1zn9HWPqZrA32O+jV8IVkm44fN+v2Crl/1idXuWSU=
+ bh=21SFXgNdw6NyOJj74fV7a0Xys3t3Sb0rS7uZBB2y0zo=;
+ b=vpOVN/jhIjKVFH+VTCyo3cLPqllBgYy8N3BahsiJwGNsJqWJwOWbhDduFsloGUGQoUT12wfVOlOCEYRuOZgTNYGceR22hJAh5vV5UwORFoJRu8l6WJJVQGEh+UxEMM29+szVRTCrlMLQBVsy5cK1pMiaY3ScP3iTfZdbmO7H+/8=
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by DM6PR10MB4314.namprd10.prod.outlook.com (2603:10b6:5:216::23) with
+ by CH3PR10MB7283.namprd10.prod.outlook.com (2603:10b6:610:12f::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9818.32; Mon, 20 Apr
- 2026 08:02:55 +0000
+ 2026 08:09:17 +0000
 Received: from BN0PR10MB4901.namprd10.prod.outlook.com
  ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
  ([fe80::19a8:41b4:f519:1b79%3]) with mapi id 15.20.9818.032; Mon, 20 Apr 2026
- 08:02:55 +0000
-Message-ID: <40708ab6-7a2a-4c7a-8943-88f25c13036c@oracle.com>
-Date: Mon, 20 Apr 2026 09:02:48 +0100
+ 08:09:16 +0000
+Message-ID: <4c95e885-1b21-4e25-b9c5-b6a2c37bcf1c@oracle.com>
+Date: Mon, 20 Apr 2026 09:09:10 +0100
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 bpf-next 2/6] libbpf: Adjust btf_vlen() to return a
- __u32
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260417143023.1551481-3-alan.maguire@oracle.com>
- <20260417170712.74E77C19425@smtp.kernel.org>
+Subject: Re: [PATCH v3 bpf-next 6/6] Documentation/bpf: Update btf doc with
+ updated vlen, kind sizes
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+        yonghong.song@linux.dev, jolsa@kernel.org, qmo@kernel.org,
+        mykyta.yatsenko5@gmail.com, bpf@vger.kernel.org, martin.lau@kernel.org,
+        clm@meta.com, ihor.solodrai@linux.dev
+References: <20260417143023.1551481-7-alan.maguire@oracle.com>
+ <0c04590254c3cf4a4a53803c5c8d613bf2ad288b3eaf2a641794f78d4bf0d5c9@mail.kernel.org>
 Content-Language: en-GB
 From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260417170712.74E77C19425@smtp.kernel.org>
+In-Reply-To: <0c04590254c3cf4a4a53803c5c8d613bf2ad288b3eaf2a641794f78d4bf0d5c9@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0108.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:191::23) To BN0PR10MB4901.namprd10.prod.outlook.com
+X-ClientProxiedBy: LO6P265CA0008.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:339::18) To BN0PR10MB4901.namprd10.prod.outlook.com
  (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -89,203 +93,155 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|DM6PR10MB4314:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d884364-494c-48e7-dbaf-08de9eb33a7c
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|CH3PR10MB7283:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a2f47e4-5905-4718-84c0-08de9eb41d61
+X-LD-Processed: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|56012099003|22082099003|18002099003;
+ BCL:0;ARA:13230040|7416014|376014|366016|1800799024|56012099003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	pgKPCODK2x97K4rfrN2T8OTRClPFaXvOeGEIrFjf7Rk7SwnoWJjHpE31WybfQ2XmA6h1kMOea04dr0HuSOLE8ePMqOFOA38+9YLarbKbVml7ZAY5vJmWGdDbSR7b+leIC8m0Gmrsdymj4QxLOnQFupo9MVWB1INEZOOXDaLPzraMOqXlZaNATMxSUVtnaZe/ungwPQdOik9F6wA+QZuiv/7ivS0y8ua8e5C3Tgqr8X69cX51a+ZUhP7j662QiGmwOgWg1uG90DiWsvUbdHgNXUdj0EZvIm34hXRnAzlgXkR23O0fBqGixMPHi1Q4nWgCiONEIQ+7/UHDSpMoNyHg8mVuTPGOTSxxgD9Cl43XSB4kihXt4zFaZ9Qtxe1BKGmpMwA0XhaXL5Dg2vwSVTC+yG/T9eI1AVAwM84P8HMRtt0VRPHSiqMwl2f3FTJNetob6uxs4ss1cf/irORKXnKofMuTLGHoUpx92p0dup/azQpgXZrZ6vgR3keI9zOC6wX/sHCqsmDcXItt/e/ZshPI8KY2vc7ARpqmHIgyCwRo723C19xC/UZ5qsrfVVJptJ8DPoTqs2/8/1CFUEqpY2cK4Lua9B3B04ZKBcFqRtXxT44M9jFTCuHS45zFWf5ML25QM6TbWC1LfigHkf/VNzZScHrSiuAkAbVK8iQcZFs6s19gVAs+NTghef/FxqtdcKVki0tdgqSJU6W9GA6Ku36rO/PK7aAN7/pyK6VlAD9WuKc=
+ IsJp/mjfvBnj8dj38YP8Ma6KqJpT1r2u/ck9PHWuZbu+ewPc1Sq7UWIBANB9zI2ZL4jFsGMdVaZDZhkO5Wj9A0MAtzL8bUsuKEiK5p9FhVl/v4WPaZrp8P652xf46MqUD8WdmUGiozfOLV6HtZYqkV8bszpN1t7z46WgmkmALa2r7iJXg8FECBPHDigczQ20OIM0fWC1fo0Ww/xETDBL5+xyg8hPZqzL4xFcyPIT0kFTqSgEnB5SbY2cdm0FsNyEewduS57Zi2C/qSysxGG2UBAjPWQrusMve8IdIt0gnPzwjKcfhHJGMDcynJfeK1sgLZvRNNzq4Qmf5AfgzTyPqFlu26GaOxHF0If6t6/e2GmgIrhfjVcMxM6Bpv+nivQI25aI3kwqVuz9mkETQ6Ic1WAQCNbOlJC9UU+Ys9OUSu5VBDxGxENe3PM3J0VWMdMyG0Cp7r9H5FA7DjT1x5Cta7OKmCw+JJNakgwHpyob5awzuSYFV2/iGowS18CtOmx+hOAznWLpYedtLNIulvk5eoObAZ7qHR7Y34MkRJp3i9kM3w37Q9x5qlLzZuEYYnaIj3JpqFRZOSCJmqiigCOmQzw30pixfzV0Gww3TTIqaZUVkhtohrI9s5MZlrGIa90uX5aBkrn/yjJVtrEAtSRcJ+MgPBkbtvCmCjVSqyqsTqPlMaT8v9uXYIgt6EfcWq8rfPflwxZjWpU/XMG5pmYKdY+feVBujXezD7a/+uLd37klvkn2lwGDkiwihmivM21z
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TXNnSEtLWFdHRFJRTW1MZytVYU1aeXloN0FDb3BCbklUU1pKUmFIeXhuWWVR?=
- =?utf-8?B?OUoxaE5XZ21yR0Nmb2VNVmJ6Z1lmU2ZzK1dILytjTUhOZWNrUzVkQ2tKVUZu?=
- =?utf-8?B?QnJoT3JwSHZXaC8ralBELzgvTFQ0Y0Jrb3U4YUdic0g0MkdtSHNhOCtFUHFx?=
- =?utf-8?B?TVZESm1USVpTMTl1RGQ4eVpyZy8zNHM2UHIwUjBTWmIzclpYTEFVT3dZMXI4?=
- =?utf-8?B?TklGUVJDRk13RmFaUmVHR2RES0xZeXpETXIxbktOQVJuNFNqbGVkYmRwZzMw?=
- =?utf-8?B?dDNEUERkYW96T1U5eHAwSkJsU2RaYy80b0FzRzNyeHZYTjJzeGwxSklqQ3VH?=
- =?utf-8?B?SWpCSWJiaXQ3aGdMRDFkSjJKcDdYWkVYOEdTMU9HRGNsTmlkR3JLREM4bW02?=
- =?utf-8?B?dlAraUw4Q2lFM1lnMGZMTjhUMDJOcXZXK01TQnQrRkNXSUo3TUxWV3hNa0Iw?=
- =?utf-8?B?c1RueTFqNm1PK1U0TW9MTTg2Vy9jR2dWSHpaR3puSnZZOEFCeG5QeVRyRXRC?=
- =?utf-8?B?QUpYUGQrTEc3N0VkaHNKZkU0Z0xJRTB5UnlXTUo5dGxMWVJxUnpYQXZGZ2pE?=
- =?utf-8?B?eSt5Q1lUODFhR3FsK0FoYVh3QjBwTElQbU1hSzhldHJ2WlBFMFNrVHZwZnJP?=
- =?utf-8?B?Z3JlaEJwQURpYStSelF4MmQrRkhqN1VkZlhqTW9oemswbDZ4bVA3Y2NiRDNF?=
- =?utf-8?B?c3daaXlobEJGQ2NjazFBdEN6bjFJQ0VuZGszU3NpMTVlSnhGdjZzVkJsMjJM?=
- =?utf-8?B?YjNZcjBibksyYWpxd01QQ3crUlpwM0JBYzM3eFpkdmFjaEZLWnVVSzFNQnIw?=
- =?utf-8?B?ekxGY1NYb1Nrc1Rwazc1R0VESUtkTExqai9HT0k1ZVdtdzV5MktCRGtYeTBr?=
- =?utf-8?B?eHkyVnpnZFdKQWdGOFdqOEZnOERqbFRMeHRrbXJuUFZsM2N6T1htbUQyQ29n?=
- =?utf-8?B?NGNGVHphR3JqVHhKMDArTmFlUUNhYXBvSXU0V2JCVlJxd3Y4eHA2MDJSUm9E?=
- =?utf-8?B?QnovRnBJTDdPN1BrZmFpRVMydDlSQnBkVjhKTEd0Y0ZXM2RuZFl4U3VBRURh?=
- =?utf-8?B?bFcvRDRqMXA2ZmRvbVJyTk42UVlycm5tdE51Z0JtUFRZbXZuWFVQZVlGTG9X?=
- =?utf-8?B?TlYzMFlpKytXRENTclZXRVVLM3RSbGh3TFMwZkRUa0luSmNJOXdsSHQ1R3Fz?=
- =?utf-8?B?bk9BNmhlL2NKUno4MFQ0dUFkbndXc0JxbTFJVXU2L3dwMUVNL1hoT0RTK3Fs?=
- =?utf-8?B?NFQyOEJDWEk0N0s5WFlHTUpaQyt5ZVdWcDhXQ3RyQ3B2Y2JscGtlWkhGc0U2?=
- =?utf-8?B?elRDWFhFYmh5VUNEMzh2aTFSVWlXU1hzQm5sWHgrNlBZbi8xR0I5VHkvL3Uz?=
- =?utf-8?B?b3FtWXMwRUVLQ3QrSEFDbk1oN2JNZlZhaWJ4MVc4cWJERDA3ZjFwNGhURG5N?=
- =?utf-8?B?YWtGT1NnaWViOHJJZlpTNHpXdXFja1F3SGtFY2x2ZXdVYUV5VjZ0RUhyYlFw?=
- =?utf-8?B?Z0RSeXZiU1M1c0xKRVdoVGxZMG94QXFnYWhwVnZkVlBPSFgwUGExMDUrTTZR?=
- =?utf-8?B?aCt4eVhZaFg3STJLcEliSWFjUTFiVTI5Wjk3Sjluc0tkdWREbFlmeTBPNVFw?=
- =?utf-8?B?SXpBYmpONjdUSVpkbnBNSE5QVm1mbXZtZ3FwbDk0ZUFIZm13MkJ5Rm5Kc0Vs?=
- =?utf-8?B?MlZIZjl2SDV3Y2lSajgxYW52a0R2TXUyMUVHU3lrcFZVanhCSk1hUTFDWURr?=
- =?utf-8?B?MXlKbEtVNWorRy9YQ0k2UVlDK0RlcHNacFVHYjVwZVZhNXRoS0h2eERTM2hv?=
- =?utf-8?B?SXlMQjdaazhYWk9XUEgxVzRIOTIwUDAzVHNKSEdyZ1l3c3BRa0FvUnVYL25x?=
- =?utf-8?B?L254L2VVRDRzOTlIQWdqNlFvQlRpbXY0eWYwcVBQR0VZS0dQSDdMRWlUd2hs?=
- =?utf-8?B?c2YxandIN3BzQnhPaisvdGhJQXVCaGYvSzNVdWpKWURtNEt5SlZZRDVZcGV0?=
- =?utf-8?B?cUhua3oveUdtTXR5anFMK0d4ZkNKdUF3cStOWDNyV2ljUlh2R2ZVeWZNajNC?=
- =?utf-8?B?WDFYUXcycUN6RFJJOUdyM0VpRldUSE5HOEFlVDNhS3NWNmNkVW43TlFtL0lP?=
- =?utf-8?B?QW9XTFppVDlPUkdBejJyWmNadHlCUlhkdVRHdWVZbFJyREhVd3JYRXdDdzlM?=
- =?utf-8?B?NUlHa011VmllUnBWNmFlMUdIby8vamcxT0psZVVCSSs3UTVTWVlvMk9jWGtD?=
- =?utf-8?B?VFNIaFRQaUtyR2Fua1dGellXdERLWW16eFVIUG12TjRoMUJZVmRMcnhpRUR4?=
- =?utf-8?B?Qys1dDdwT0kzMEdaT1d4UFF0WjJKOSsxWVZsZnNYajVBNXNxa04vMFJlQklQ?=
- =?utf-8?Q?aM4uPghBNdYfbono=3D?=
+ =?utf-8?B?ZVJZekJmYi95MGp1dlJta2NsblJyUEV3Qk9UeU1Zc1RvZ0tEUFkvRGFheG4r?=
+ =?utf-8?B?ckgrMjhvTlJsb3hSVEY5Tk82dnlkUFhvbWlITUJTLzJsRWZiYXlLL2RjblVm?=
+ =?utf-8?B?aEVLRDRDSU5DTnEwTlZyTDIzQUM3azZPV1U0KzZ3RjIxaFVHRnBSNnAwbkEw?=
+ =?utf-8?B?VEg2QXgzLzBzYXVsaVZHVlhWbnlNUGM2RjAyR2NOc0pnS1BtYUJneDVvanc4?=
+ =?utf-8?B?b2tGVVRYWlg1d2FiZC9IUkN2ZUNCdjlRU3VKL3M2dmVjMjdTT0VTeVRIVUJt?=
+ =?utf-8?B?V05DWmE0U0syY0x0OHNFaXdRanp1Wkh3OUFVR0cwTzhkT3B4VmtUTlJKMllv?=
+ =?utf-8?B?Z210Y3A1ZHpUZWhqZjd0REorZklXTkl4am9URnJHZC82alhBdzd1SDd5VzRC?=
+ =?utf-8?B?ZUpqWktVQW5qdVVVbENKdXpuK2JWam8xVUtQc1lZM2FYZnVIZ3FxNmJzbmxG?=
+ =?utf-8?B?SlpKT1BFSy9CZGc5aEVKNFFQV2JuVS9aaXFzbXBUTnl4eVFabDZpa0pnZ1Nv?=
+ =?utf-8?B?cENFV2JOTHFCQXhXRVR5eXhtVmdwczVYVE5KREw0M3RVaVJvT0sxbzMydE4z?=
+ =?utf-8?B?aGpRQkgwYXArT1BRaG5hR0FnTHBYcjhkQmVYdGpmbVhTWDhYcWxBUFEyUlUy?=
+ =?utf-8?B?OEE5U1FwZDB6clF1YUZPclFxVzhlZ29Ha1pJT0RSTnVMZW9ITStNbVBUWTJw?=
+ =?utf-8?B?SHluMVVVeTdDUGJzSGVVZkovQkJBenFsOTVoL3JVdWpNMm5BS3BtaVgzZE1W?=
+ =?utf-8?B?VCtqbVVkOWhnZWdkOER3NHhjekNNbW43R0h2cGFGdXZUUktudUlsTEpndUtj?=
+ =?utf-8?B?TGV6RkJ6alhvbFQzM3I4eWV3aEJVa3FJMWQyTHp6RmF0Y1JiWjBpVklZZXZD?=
+ =?utf-8?B?N2psbTd6NjZwa1FFV0tXdGFsT1lUREs5eGZUT0dGei9WazgxdVhXcjc1WWFk?=
+ =?utf-8?B?Z1FaclA5bXRjSWJJODZQeFZCakVDZHZmeHEvRnlPT2JGRHozWTE4UHhEQVhu?=
+ =?utf-8?B?Z1dpQVloL1pCcnBvL1AyN1F4M2VNd0ZqaGE0TzhrNjhocy9OU0JuWjhkWXpU?=
+ =?utf-8?B?NU54NEVHalNIcUJpQUFsbU4xNFFJa3A1U0NINVpyVVBCTjQvZHBLcGxKOGFj?=
+ =?utf-8?B?SEk5R3pWZjZraElqN3Z4N0xxVnEzbUlMN1hPUnhRSkNGS1l2cERyVm1ZZ2tC?=
+ =?utf-8?B?NzZkNUdOZzl1VVFuN3B5Kys2Y2g2RVdYSlJDSGh1NXZuaVF2NTlhS2RNcERw?=
+ =?utf-8?B?NVVXWWNJQURXWDd2bGJ2RXJjN1FhQkZQOGxxeUhzeEVXLzFhNktkbklucEF3?=
+ =?utf-8?B?ZkJ2Z05Yb0xXMnJCaCs5RWw5ZXN3U0YyYWZ5RndJZURPWDNqVkIvT0NSQ1dj?=
+ =?utf-8?B?NjNNbUh2anlDbVJFc2JUb3JqUE5GakN5dm0yd0g2eWcwTnBiWTV0ZXlWRWgx?=
+ =?utf-8?B?K0RreHpqZ2dJV1gzU0xVOHFHWThJVWU4T3p6ZzQwckJ2b29Ja3lDLzhZWUFJ?=
+ =?utf-8?B?VzVZSlFxc3NhM1E0WDAyK2o2U3dsdzNFTWNaLzFzN0NxS3crVDN4d2J0OEg1?=
+ =?utf-8?B?NmhPTkthSWJDSjI5ZW4rTXkxZ1l0NWF1RDhjVVdOMU9JOWhFRGRQa3c4bjB3?=
+ =?utf-8?B?WmFwdHJsNmEyNmJWTTZ3Y3JHOTdqellPeUVHTEtQbUZQRXpSYng1RFNTRHpo?=
+ =?utf-8?B?eDNFKy9DTkJhanByQ1VCcU5UZmx0QWJGMHBiS0dwNEU5YVc4dGMzM1ZyRlA0?=
+ =?utf-8?B?NFpmVUtLc2l5K2UrWTkyTnE4VFJTZ25vVEVGN0FSSkp1cWVxYVZoVWtHK1lU?=
+ =?utf-8?B?TUR3WGtmb2hDekVMaGdWakRqdEQ0emZUcUhodFFiMHlaQTBuNUhDK1dxZWNn?=
+ =?utf-8?B?THlCT3Z1UUFTU2UyUHFYM3RIczdBVUZYdmYzV2ZmRXZHeG1pOVlqc0JlN0pv?=
+ =?utf-8?B?dlpLV1FxK2V6b3NLeDlqZVF5Y1JqKzVKRGhlbmVYT3hxencxUUwzTFlSdk92?=
+ =?utf-8?B?Rm01UUtCOTNKdjN0RER6T1ltSDloUjVhWE4xR1lNWHJMWEFESFFycEZkb3cx?=
+ =?utf-8?B?QzVoaUF1aUkxUDNtdW5RdldoTUphd2hQOGRaemNYNEhlSEd0YUlkSUROV3Jt?=
+ =?utf-8?B?SWVpWmZUZTYzeThZSTdXcGI4eEdESHkxNkVWMkFVZlRoeHhIeDV3NzZFRElW?=
+ =?utf-8?B?MktJOU5JMjQyN0JlcWo2NWdIRTE1OThEMG5oWEEyU0RhUDF2V3pBb1lrakgv?=
+ =?utf-8?B?R05hNVh5ZUpRNjFrRXFBK2s5bFB2Q2JTZ0tiZG1obUJueHVlN2VYRFo2VkVE?=
+ =?utf-8?B?WHZZQzd4aE5oTWk5U1BNM1dHVmFGdFJHU0FWejFvN09FTUNWMUlTZz09?=
 X-Exchange-RoutingPolicyChecked:
-	DT/knPSyL47iXI86U+AGGiNBjHmPV1g5T8i94ThJnLGyUkl6e9m+GxkV8kMg24cIeDNddGd+gfgVRXbkZ+RK2aoleu5xEemY8kOX1KHzQrCY+fIc6NzeTiGRozdE2y29B3w1ysbYmQmf3A6UwOly/EODbjdsGdAQlA346/B5WsiDCEE+t8t9Gg22zSYf3weMSC0MpK5beavF4/YTnBirvusXCg5baNinf0e5MW8deCv4bF9MZTOZTnOcQdQF+634GOlMnRcGa4NO5VLzMbEfdL+DT3zkA+0fsOSip7S2onxLsNwA3cqGavJK01zSBkIw0dr0KANi2euIzKygoU2/9Q==
+	f8ksw/5pvecSFKGGTX3cfIfnul1nWwXl0kPHc2aCOuIi1RuRbGHnuP5mS8aqLR3qCMtz8PBwaDPpgCUOyhqc1uFLDBvLL4D69+Md5ZWL5ZDiAYzYJ2ieaPI85zx58oXZYJD3S4/uvCkhQnAIEh5tJnrxbJ9y2QbW0X2GGzi02N7pbMeHnz7h+kZ9hx7fr+70B1SdDXbvaNoBE6sEoEQiTGd4hJncx4MwPtf/OjVebrJ5QB/oJVAVOLlXGvmUpGQenANPhBHvzOqvPl5MjpEnTVtP4tnQwMywMSqgxxRr9WyQfvtc9H1LEU45oeRvDwdjMOQeUtJ6OtYjdv3r2Zoi2g==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	BkBtr3qANyV70iHvS82nmn5swiA1k80P3CUGM7trUQ/qFj6CMqf7D5HL9S+z9GKAWP8gbgUSsfKMCTLyn5vqYC31IVaDf+FpxGCJ+bV5kG/McUOavuRNSyRx7ehM3cWptjq0lxumT8mRP8IaV9Efatkq2pFY37crsF//tmzB3Gn9CIG7CUnWilreynX3xQyqq46EGF/IMCm8L2EeEw7i4CVfeOHTTI5vZOUy/6x361l7IFrxy7tYE+qJuwywYZiFrkfyCVxWNlVMJmkmOTIj8oVgR825vphr7mhIOvZ5F/hMWKdnha9mMZhUgSGIOs8LpZ5Q3rgWB7Mg5XXcfnD1rbhNBE5q+Mxu/f4ZA6oASvJImoh6gJL1IhxLFx3Q2h64gDQTnJ+oVgcyCmsVt8wbWnMAVbx4klD+xrS/nxcC+D7b6jxInDhyH/GJl4tQDvYRrFF65Ei3j3/KewtpDLK7KWYA/gWPNcYxMzcg9yAPxJJwKR3Pvz1vc3L6XHAXa5+UKeaJFcKktfkErTLGNgIwXX9eb5INhHi0PW5oDxBXlm58IVKR0NthjBR2aXFoPVOWWG9KJuxlF+6ts5NPB1QPs2j7rFnH+acL0+W8lY8/+X0=
+	89uHRcFJzg5JRvxgl7FcV9S3Eee7lJFGXgrQojxJSO7oHgpsoP/Ni0o7wpG9BR6IhTaHDf6ATy7CiM2Hu6kaeGSSvmVVD0gtTjw7jjzDzNtvcQ5x0hTTLZPgcl1Af6m/I41cGEs9THKlj5UT1EU3ntUvyoKbEe/IVAvEStmItAa+lxSMqKp60DpIixL0FzWR2bFMJVjiVSZQIvvCWLV1vWafZSZmPnQc5/fDwN6FD5RX7NKG27Jj5PJproJ0/NVaLIrmf9jtGLTWzemFP39RASZBfjCo82WKA9VZqqw6tjsnRAX7GXAkZsC8Izev2g1/KAP60ud/ugoRNFJRzbNBex9ktOINEBvSR38P7AIKYAL/3AUW6FTk26kY7Tt024JqH/GBfluaDkPIcH/rNVLqaBm2a+zyxvEOGdtTiX1kUqgjmt8gwsyt5bAZeYBcARZjSBGdHk1RBQGfFubkX8LU9gl7Ac+MiCBzaUgWPqNAoxdb4AUxiyvS5nqpxWs+uaWmxp10t1g+iGMyX1vthGct1HOhMS6MVrI6HLt7Ov5lKthgainXyiUPtDGd8xNTTXn2ToL9u0X4manzzE/dSLiCEeyPsaSHwv6xAa/TthnNIOo=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d884364-494c-48e7-dbaf-08de9eb33a7c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a2f47e4-5905-4718-84c0-08de9eb41d61
 X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2026 08:02:55.6364
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2026 08:09:16.5146
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: psehRr9AXs287qZj1+NuT56qnNxM3OL9OFpYQuMCU4OgOa88/WwLxkq4wkg82P+Y3+YmFOTlgpgrztS01WmpEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4314
+X-MS-Exchange-CrossTenant-UserPrincipalName: 34h6rnn/12nc4CLP5fBepO2GUT12H0ohUOuDiz9G9Qmvn0LxFB/CyTbC4lQ0PUgBTtWsBcNLgUEJUzA6um6gkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7283
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-20_01,2026-04-17_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- spamscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999
- malwarescore=0 bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2604070000 definitions=main-2604200077
-X-Authority-Analysis: v=2.4 cv=JYCMa0KV c=1 sm=1 tr=0 ts=69e5ddb4 b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+X-Authority-Analysis: v=2.4 cv=U46iy+ru c=1 sm=1 tr=0 ts=69e5df32 b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
  a=A5OVakUREuEA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=VwQbUJbxAAAA:8
- a=yPCof4ZbAAAA:8 a=gmCHMQMrHhq7dcJSX5IA:9 a=QEXdDO2ut3YA:10 cc=ntf
- awl=host:13825
-X-Proofpoint-ORIG-GUID: fByLzMKIwW7wnH-gBx1JFJuOYGED30xb
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDA3NyBTYWx0ZWRfX4rm3THAE2S9S
- bi4eDoFVhnogVVhQ4n3N2/S73PW0iHkLBRne/aLS3noxFvTxTxTxe6ZD5hBMwZKf7hdj9nLqLU/
- DX01gbN22G0V0BqzgdqHtEfeVJ7aKbPnA/9A0YawtNKP0ygAqpSdxiZjifjZMPb+t5k5CHMZJEg
- xwgJRpYI3J5KMX2gAYVrkY3lpdAevKGXvt0uhwCgqQrgHDsQXmdmn7tQQrCV0hyxoWYeeyrmOkK
- nOAgI6M7CtmTXKnYtLPuO+dDCy/LLB0ELLipFgVQIQoXmrR7ajMSr7EvAY1cinvsf6oKEthEVDZ
- Ax1Jg7aTcrc2zSwhYSNytPBuqEl70MFXVbdNElNyGRiDEG3t/isE8znNhNhyyiOn/Ry5M66GX+O
- 2I96esBxQtIlnv9/p/DfBhT8nJxNSqw2rvPYeZV1iTjJdH+agTT0eVVynOTAWuDYvnD01FUrUzq
- AUAN+qR+moQhJkrx4WoEyCfbeFJPlwhd0p5Ud65E=
-X-Proofpoint-GUID: fByLzMKIwW7wnH-gBx1JFJuOYGED30xb
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=3I1J8UUJPc9JN9BFgKH3:22 a=iFABrAoMAAAA:20
+ a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=p7JGKH7OCm9RanBsCsIA:9 a=QEXdDO2ut3YA:10
+ a=bA3UWDv6hWIuX7UZL3qL:22 cc=ntf awl=host:12291
+X-Proofpoint-ORIG-GUID: eVFi1t7d3NPq-6GWcQl-9D8Mb-jrp2Z5
+X-Proofpoint-GUID: eVFi1t7d3NPq-6GWcQl-9D8Mb-jrp2Z5
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDA3NyBTYWx0ZWRfX2p8qoG1REXN/
+ sxLfWd5txrT43tJRX/rCx4dqsH8ereCulPgZ1tnYA8mqxfaA6lfUS+CKnd+9QPV3MQ24tes3DEg
+ 256audIslwGVkOgnXR10gapf8uQlXXLQed7fBxrmx9sBTZE8u9ctlml0nty/yh6sGAh4x7W5FAY
+ XBbO4DxF4CaR/zavQ7vQ4Hs9PcEJqbDyY+WFoFT6PRmsWcQpPql3pueviEQvddJZzneCWkaX+m4
+ jrfcflwyP36jNiID+o7l/4+t8qXpQBqe6hAn7zWdRcl/apjnnPwvcQY6/4QbWj3RZmI2aAx7Odg
+ BIF57+wJnIF4gFvVbYwfaOY5Sunw72mvoQTAothYvl0FcqnJJBlsVxlqODRL+dfWCDJOuSB1/w7
+ PIl94sOtHdWAn55AcTwgNXuTfVQE3e3ruB24uZbaT3bEOryJWepVoRe6782K5vc6xXk77DgTAXj
+ WsN9hipCwYzPQAtoYVrgDAMaHp3SNUSbdJShxtYI=
 
-On 17/04/2026 18:07, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [High] On 32-bit systems, `btf_parse_type_sec()` is vulnerable to pointer arithmetic wrap-around due to missing strict bounds checking, allowing an attacker-crafted BTF layout to bypass safety checks and cause out-of-bounds memory access.
-> --
+On 17/04/2026 16:39, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+>> index 3b60583f5db2..3f05f17990ad 100644
+>> --- a/Documentation/bpf/btf.rst
+>> +++ b/Documentation/bpf/btf.rst
+>> @@ -97,10 +97,8 @@ Each type contains the following common data::
+>>      struct btf_type {
+>>          __u32 name_off;
+>>          /* "info" bits arrangement
+>> -         * bits  0-15: vlen (e.g. # of struct's members)
+>> -         * bits 16-23: unused
+>> -         * bits 24-28: kind (e.g. int, ptr, array...etc)
+>> -         * bits 29-30: unused
+>> +         * bits  0-23: vlen (e.g. # of struct's members)
+>> +         * bits 24-30: kind (e.g. int, ptr, array...etc)
 > 
-> commit 0d6d9306686384cb94334ae8845f954db44a9f74
-> Author: Alan Maguire <alan.maguire@oracle.com>
+> Does the kind field documentation accurately match the UAPI implementation?
+> The UAPI defines BTF_INFO_KIND as:
 > 
-> libbpf: Adjust btf_vlen() to return a __u32
+>     #define BTF_INFO_KIND(info)     (((info) >> 24) & 0x7f)
 > 
-> Now that vlen is 24 bits, btf_vlen() must return a __u32.
-> Adjust use cases in libbpf accordingly.  Also add error
-> handling to avoid vlen overflow in btf_type_inc_vlen().
+> The mask 0x7f is 7 bits, which means kind occupies bits 24-30. This
+> documentation shows "bits 24-30" which appears correct.
 > 
->> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
->> index ceb57b46a8782..267904939098c 100644
->> --- a/tools/lib/bpf/btf.c
->> +++ b/tools/lib/bpf/btf.c
->> @@ -421,7 +421,7 @@ static int btf_type_size_unknown(const struct btf *btf, const struct btf_type *t
->>  {
->>  	__u32 l_cnt = btf->hdr.layout_len / sizeof(struct btf_layout);
->>  	struct btf_layout *l = btf->layout;
->> -	__u16 vlen = btf_vlen(t);
->> +	__u32 vlen = btf_vlen(t);
->>  	__u32 kind = btf_kind(t);
-> 
-> Can this lead to a pointer arithmetic wrap-around regression on 32-bit
-> systems?
-> 
-> The size is calculated later in this function using unsigned 32-bit
-> arithmetic and returned as a signed int:
-> 
->     return sizeof(struct btf_type) + l[kind].info_sz + vlen * l[kind].elem_sz;
-> 
-> An attacker could provide a custom layout with an artificially large elem_sz
-> (e.g., 2,000,000,000). For a type with vlen = 1, the calculated size fits
-> within a positive signed 32-bit int and is returned as a valid positive
-> type_size.
-> 
-> When btf_parse_type_sec() checks if next_type + type_size > end_type, it
-> evaluates this using 32-bit pointer arithmetic. If next_type is located high
-> in the address space, adding 2,000,000,000 wraps around the 32-bit boundary
-> to a numerically smaller low address, incorrectly passing the bounds check.
-> 
-> This causes next_type to advance to the wrapped address, allowing subsequent
-> loop iterations to read arbitrary memory and potentially cause out-of-bounds
-> accesses or crashes.
-> 
-> While this parser logic issue predates this patch, should we address it here
-> by safely checking the offset instead? For example:
-> 
->     if ((size_t)type_size > (size_t)((char *)end_type - (char *)next_type))
-> 
+> However, checking the actual implementation confirms the kind field uses
+> only 7 bits (0x7f mask), leaving bit 31 exclusively for kind_flag.
+>
 
-Ok so I think the suggestion is the following in btf_parse_type_sec() is the problem:
-
-		type_size = btf_type_size(btf, next_type);
-                if (type_size < 0)
-                        return type_size;
-                if (next_type + type_size > end_type) {
-
-...specifically the addition of next_type to type_size in the last line above.
-A sufficiently high type_size will cause an address wrap on 32-bit systems and
-we end up not triggering the bounds check. That seems like an existing issue to
-me; even the example cited describes a vlen of 1 with a large elem_sz from the
-layout section.
-
-The proposed solution seems to be to check if type_size falls outside of the
-remaining space in the types section. It might make sense to do that check locally
-in btf_type_size_unknown() instead for clarity and safety. Something like the
-following:
-
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 267904939098..7d0dfb2810e9 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -420,9 +420,11 @@ static int btf_parse_layout_sec(struct btf *btf)
- static int btf_type_size_unknown(const struct btf *btf, const struct btf_type *t)
- {
-        __u32 l_cnt = btf->hdr.layout_len / sizeof(struct btf_layout);
-+       const void *end_type = btf->types_data + btf->hdr.type_len;
-        struct btf_layout *l = btf->layout;
-        __u32 vlen = btf_vlen(t);
-        __u32 kind = btf_kind(t);
-+       int type_size;
+maybe I'm misreading this (I've reread it several times) but I think the AI has
+misfired here; it's seems be questioning whether the docs match the UAPI change
+while at the same time confirming they match the UAPI change. Again I may be
+missing something...
  
-        /* Fall back to base BTF if needed as they share layout information */
-        if (!l) {
-@@ -448,7 +450,13 @@ static int btf_type_size_unknown(const struct btf *btf, const struct btf_type *t
-                return -EINVAL;
-        }
- 
--       return sizeof(struct btf_type) + l[kind].info_sz + vlen * l[kind].elem_sz;
-+       type_size = sizeof(struct btf_type) + l[kind].info_sz + vlen * l[kind].elem_sz;
-+       if ((size_t)type_size > (size_t)(end_type - (const void *)t)) {
-+               pr_debug("Overflow in type size %d for kind %u\n",
-+                        type_size, kind);
-+               return -EINVAL;
-+       }
-+       return type_size;
- }
+> 
+> Should the documentation have removed the "bits 16-23: unused" description?
+> The previous documentation listed bits 16-23 as unused, but after expanding
+> vlen to bits 0-23, these bits are now part of vlen. The current bit
+> allocation is:
+> 
+>     - Bits 0-23: vlen (24 bits)
+>     - Bits 24-30: kind (7 bits)
+>     - Bit 31: kind_flag (1 bit)
+> 
+> The patch removes the "bits 16-23: unused" line from the struct comment,
+> which correctly reflects that these bits are now part of the expanded vlen
+> field.
+> 
+>>           * bit     31: kind_flag, currently used by
+>>           *             struct, union, enum, fwd, enum64,
+>>           *             decl_tag and type_tag
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24570998051
 
-Given that this problem exists separate from the extended vlen series, might make more
-sense to send a separate patch targeting the bpf tree for this issue.
-
-Alan
