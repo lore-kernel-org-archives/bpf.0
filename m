@@ -1,115 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B83F389104;
-	Mon, 20 Apr 2026 11:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8A2298CA5;
+	Mon, 20 Apr 2026 11:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776683972; cv=none; b=niGtQmRAthzcLG3PcHLyAWziroSPDaY4ulOs4KP1Io0JtPbAG76GG5b9pIPXwwUf7XVt8izTmoOAHEehE1GN8yW0fhHHGQbeq6AoTVu+ACD5uJYabXKhnJPlGsNhWT+9g4pjDAlGMDp1ZzUbt4jKNWr22xvTQZAC7MUPmn+nK8Y=
+	t=1776684972; cv=none; b=AnGvlG9LlKXMpM1JMxjC7ISuv4V1ebRNSXl1WM44iI18ge2YwFA0osql70OPWt/SEIvmsx79dN2VW0po2GE8rlxUg2+HZfZlrY3YoABCw2k3MC7xSTzJb4KaZ/ACBwDSfBGFwD2fCrmTcLWpsJ2v4GxEZPYx5zjGIwdNSxjMiLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776683972; c=relaxed/simple;
-	bh=QoPpCYnKOnxEtUrEBQlNFbWr46OKQxzg3W37bMiiQxk=;
+	s=arc-20240116; t=1776684972; c=relaxed/simple;
+	bh=HGpoCHM50rdfgpFlGuZ3vT4pQo6a/gxkLdwuP4MT6rE=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pu9Wp0p9DnelG/e8Q+eeYnD0537MSOWw5zuim2C8JcPwLtt7mE77NeAtDNIk/ENUR00pK9b/nLpiQ0zoAuRHgs3vVnRm3IR6Uv/lj9EEIrg8Xmq5VJG37ApZNsrzcqFmibo5J4U+RADNqbm5TEe3BerL8ziRW28dS1aE1Dubn3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=apGeFT3C; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=hrL4lnuEkwG3JY6zIeHsDqaoaC4HFK7NsFx7KhDGNjysmeXMbWEHVLgeMIYdbl9lCI4EsLtu/S0zdQv0eNKh0Je+OOw3sBNu/nKonqxyDc7AfqgT515h1wykCpJBo5UoTOBjypU6kseuIuDq63bgPfe7Iq2Ssjk1l0vmmMEsC0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uem6msaO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="apGeFT3C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D82FCC2BCB7;
-	Mon, 20 Apr 2026 11:19:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uem6msaO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FDC3C19425;
+	Mon, 20 Apr 2026 11:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776683972;
-	bh=QoPpCYnKOnxEtUrEBQlNFbWr46OKQxzg3W37bMiiQxk=;
+	s=k20201202; t=1776684972;
+	bh=HGpoCHM50rdfgpFlGuZ3vT4pQo6a/gxkLdwuP4MT6rE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=apGeFT3CizDvdwPjjsfObX3cqRqnjKuXehU/nZ0xNAL1iKIvPEHSoksVTIyAx3fIx
-	 N0udW3e2lC53xMOmROW85bHe7cbGs02Q6XlHY36qpQInt2jDYToOjFP6DUC0FwHUy3
-	 nCuO3qavS4nBG5pP/x3Z/EjTouVwesHBKqwGhngc1R1VCUMLeR3l//k2UtDGa4nbyh
-	 P02vt/H/sPMz05eHoQE/FETb8sC+eIOf/3KMuqq/gqx9YKIkWswh0B+ssprJUGK8xq
-	 g3q9IcbfMvCYeO2uiiIdT9+/HDxaoo9cRGYQxWgK6+epvpbQPuqt3vSbeQDFu6+YKj
-	 FZ7JEJ5QyEXQQ==
-Content-Type: multipart/mixed; boundary="===============6895311269325606216=="
+	b=uem6msaOVXuc+4VK5IUxlhY6ptFIr2JR/P5SmK2b+uAv0ZyaYY9U5y3C+e6NwFFuQ
+	 9KuNUdJ08eFbCsP7M8umrFw6VYXL/SSlh5z+ceJuvJW3JLldkXnU0CmqEpPMUC5EkU
+	 sInQCCfXqiVbZyWg9vEcv7sAgfZ3W+7dLjDEbe9/EQeBCkZObY6rhuU5Vadd0e/EcK
+	 U50IZp2tw2oGvZr1tHi4J0hlEPoWDMpL8p3ovRWX/ChnnuthDR5pKDufGNrT5S51kd
+	 M0l/+wUxiODh5ea99Yl8j7E1qQjad7B18+yRMy8xFklFjVngz8/JlAQVFrvJzj65Lz
+	 ircMEUv4ovwUg==
+Content-Type: multipart/mixed; boundary="===============0537590972006115725=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <82df2b6834553e3f2da26e5ee1f1b880f8a1af073e6fd88894a4839c66b7b121@mail.kernel.org>
-In-Reply-To: <20260420104051.1528843-6-nhudson@akamai.com>
-References: <20260420104051.1528843-6-nhudson@akamai.com>
-Subject: Re: [PATCH v5 5/6] bpf: clear decap tunnel GSO state in skb_adjust_room
+Message-Id: <c0aa7f264055f44ac4c93aa4718473e89ed13b8bb11de3179ed40d2f88a99257@mail.kernel.org>
+In-Reply-To: <20260420105816.72168-2-mahe.tardy@gmail.com>
+References: <20260420105816.72168-2-mahe.tardy@gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/6] net: move netfilter nf_reject_fill_skb_dst to core ipv4
 From: bot+bpf-ci@kernel.org
-To: nhudson@akamai.com,bpf@vger.kernel.org,netdev@vger.kernel.org,willemb@google.com,martin.lau@linux.dev
-Cc: nhudson@akamai.com,mtottenh@akamai.com,aglasgal@akamai.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 20 Apr 2026 11:19:31 +0000 (UTC)
+To: mahe.tardy@gmail.com,mahe.tardy@gmail.com
+Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,ast@kernel.org,bpf@vger.kernel.org,coreteam@netfilter.org,daniel@iogearbox.net,fw@strlen.de,john.fastabend@gmail.com,lkp@intel.com,martin.lau@linux.dev,netdev@vger.kernel.org,netfilter-devel@vger.kernel.org,oe-kbuild-all@lists.linux.dev,pablo@netfilter.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 20 Apr 2026 11:36:12 +0000 (UTC)
 
---===============6895311269325606216==
+--===============0537590972006115725==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3666,6 +3666,39 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
->  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
->  			skb_increase_gso_size(shinfo, len_diff);
+> diff --git a/include/net/route.h b/include/net/route.h
+> index f90106f383c5..ec2466fd0bec 100644
+> --- a/include/net/route.h
+> +++ b/include/net/route.h
+> @@ -173,6 +173,7 @@ struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
+>  				    const struct sock *sk);
+>  struct dst_entry *ipv4_blackhole_route(struct net *net,
+>  				       struct dst_entry *dst_orig);
+> +int ip_route_reply_fetch_dst(struct sk_buff *skb);
 >
-> +		/* Selective GSO flag clearing based on decap type.
-> +		 * Only clear the flags for the tunnel layer being removed.
-> +		 */
+>  static inline struct rtable *ip_route_output_key(struct net *net, struct flowi4 *flp)
+>  {
 
-This isn't a bug, but the opening /* should be on its own line following BPF
-subsystem convention for multi-line comments.
+[ ... ]
 
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> +		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +					 SKB_GSO_UDP_TUNNEL_CSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-> +					      SKB_GSO_UDP_TUNNEL_CSUM);
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-> +		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-> +			shinfo->gso_type &= ~(SKB_GSO_GRE |
-> +					      SKB_GSO_GRE_CSUM);
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-> +			shinfo->gso_type &= ~SKB_GSO_IPXIP4;
-> +		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-> +		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-> +			shinfo->gso_type &= ~SKB_GSO_IPXIP6;
+> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+> index bc1296f0ea69..7091ef936073 100644
+> --- a/net/ipv4/route.c
+> +++ b/net/ipv4/route.c
+> @@ -2945,6 +2945,21 @@ struct rtable *ip_route_output_flow(struct net *net, struct flowi4 *flp4,
+>  }
+>  EXPORT_SYMBOL_GPL(ip_route_output_flow);
+>
+> +int ip_route_reply_fetch_dst(struct sk_buff *skb)
+> +{
+> +	struct rtable *rt;
+> +	struct flowi4 fl4 = {
+> +		.daddr = ip_hdr(skb)->saddr
+> +	};
 > +
-> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-> +		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-> +			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-> +						  SKB_GSO_UDP_TUNNEL_CSUM |
-> +						  SKB_GSO_GRE |
-> +						  SKB_GSO_GRE_CSUM |
-> +						  SKB_GSO_IPXIP4 |
-> +						  SKB_GSO_IPXIP6 |
-> +						  SKB_GSO_ESP)))
-> +				if (skb->encapsulation)
-> +					skb->encapsulation = 0;
-> +		}
+> +	rt = ip_route_output_key(dev_net(skb->dev), &fl4);
+> +	if (IS_ERR(rt))
+> +		return PTR_ERR(rt);
+> +	skb_dst_set(skb, &rt->dst);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(ip_route_reply_fetch_dst);
 
-All of this new GSO flag clearing logic is added inside the if (skb_is_gso(skb))
-block in bpf_skb_net_shrink(). Does this mean non-GSO packets bypass the
-decapsulation state clearing?
+Is ip_route_reply_fetch_dst() actually needed before calling icmp_send()?
 
-BPF programs can call bpf_skb_adjust_room() to decapsulate non-GSO packets
-as well. If a non-GSO packet undergoes decapsulation with the tunnel headers
-stripped, but skb->encapsulation remains set, could this cause downstream
-network stack components to misinterpret the packet as still being
-encapsulated?
+Martin KaFai Lau raised this question in v3 of the patch series and
+noted that icmpv6_send() does its own route lookup and doesn't use
+skb_dst() of the original skb. He also pointed out that at
+cgroup/egress, skb->_skb_refdst should already be set.
 
-> +
->  		/* Header must be checked, and gso_segs recomputed. */
->  		shinfo->gso_type |= SKB_GSO_DODGY;
->  		shinfo->gso_segs = 0;
+Looking at icmpv6_send(), the fl6.{daddr,saddr} are filled and passed
+to icmpv6_route_lookup, which performs the reverse/invert route lookup.
+The function doesn't appear to use skb_dst() of the original skb.
+
+Since this patch moves ip_route_reply_fetch_dst() from netfilter to
+core specifically for the BPF kfunc, can you clarify why this routing
+step is necessary? Does the kfunc not work without
+ip[6]_route_reply_fetch_dst()?
+
+Reference: https://lore.kernel.org/bpf/df4b0996-3e88-4ea4-983b-82866455a6fc@linux.dev/
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24662733093
---===============6895311269325606216==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24663313503
+--===============0537590972006115725==--
