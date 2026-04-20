@@ -1,101 +1,206 @@
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF08330675
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 15:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724E9330646
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 15:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776699553; cv=none; b=E8DcCHk8iRWdQwhUDiQQ2Sv4aGeDMHt+9B4i1pTR97JOMfV2MEY3cxertREeG67/7uEqi/Iv6Fmf/6QpRbg3O2lHdre3KQBl40/Vag0zjYnh9ZSXF7DitxzpwRwUUYoVJnePpaXLoc8IfBEsran/p6yam8V2EQZexmrsVDv7TAI=
+	t=1776699714; cv=none; b=aH+6RBP5Tz3qLUp013Sali30TuOV1DmLhWJnee+a0/mpIlI5OCHZvr3YF/zdrItQi2M7xyMDOLpBhXWF+gYYaxYvN15XETEYGuXGgIE0eFdItuIkwmVpmoI9Pmn2hm01G87S2pFTxVJdnp9cRhx3mG2ImxbGgaXvrhi3V9++MGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776699553; c=relaxed/simple;
-	bh=CwSTe/qpL7qzlOFyJ/vTT7KDpK5GmaxHom12OT3uCF0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=WMKi60dthMvWzgXfr1ABLYq0oujJpNTpitdFa1+TWDrnWRecyHm3wacJH5IYjdAeMhDrZsYcs610lf+5pIs36ISVCCv2N5cLKHWiEZoiqq44Nb/W9/jMdWG3M2IBqtRjMjak6zyJwmBED/cbKis10uu2LB9Nc/6QQfKd0fHJ7xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mwyvmJwZ; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776699714; c=relaxed/simple;
+	bh=BmYluBKHomZCV1NftbHt6P8P2+R/tChf6ZsdjbOspHI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WLbULoST0CjzC6gfD3MQtPZUaibt+Mvp7hJ0i2Lf9bZe2/nZdGKgBele9XnprvDSMHIJvmekNpmyw9afO5BsL9kebA7SblWT0yZZkmZIao6EGvzVuxJMfipeu3aMlzpKN/bEXlGZSax2rq2YLKMfckPvMb0mMUECZuP0VaVY7KE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZd24WsT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mwyvmJwZ"
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-40efc77933fso2180661fac.3
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 08:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776699551; x=1777304351; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NoFFQuLpG5Mt/AIKiw49NZtReeh7XqzcSdVHqZoLYZY=;
-        b=mwyvmJwZrLqAQYaDty+MxTpTWg7NqjQEgBS5enDE8SnDbyqDVHQ5j8AqWAqIXFRrMI
-         /ItLq0ACvjdeeSomPIEm/9z/5p0eqJmzz4P5km8B4k/K0m/mZBEDD6segH1mHaUgZ0U7
-         H3PUlaHtITbfgHey0BSQIcCYH7JrFP85mjicM1/hb4QsL4Pm3X7U9ahr4svLZ1I3RQmU
-         RrcgldRqyQlJUkWHnye2EzcB4zHSHAZP/Mjl0dIg+DNoE0X9vj5GZWGJY34URLmDIxhJ
-         czb2NhxePucaWkO1C8K463GxXc/xGLKX2PbZFkAeBei7Azy4sj5BuSULkhjJpgBTm2LW
-         qIBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776699551; x=1777304351;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NoFFQuLpG5Mt/AIKiw49NZtReeh7XqzcSdVHqZoLYZY=;
-        b=phkCS3Qg31KaV0UIbNXWqAWsa+2uvfhlH17Bg7zkSD+K9bNMwwHZeliANhOJ/ypVXh
-         e9zkYHNkjW2tAxu1zdagphvMzQeFA0f+EN8jSTWw1qyY+O15llPHkK6aAgQ7GFWEtxxm
-         TgLHG1gc158N735W8kdES8+b5Dues3BHjbqM3iI7rtkN9acigKCPiVgftmox1nZy6cLk
-         5QVZzjleNIGXUMjkbX8+Jh3j7iRPmUZuuUyy1Np4W1lzB5n5bWKVHLH6l07fuFSSj/bP
-         SCYxp1K/dNvYS+PZxdzVDBfC0XzxAJqZuM+xYpVh7y8rYS1hy6uVQ0yqTI097ZhzB87q
-         p0Kg==
-X-Gm-Message-State: AOJu0YyvulBgEDSgxu3C1I0XGaherTdHevttJb9HHtqA3sE1384PSWcb
-	T/05AuQ1asp/U7pcbYC2lMZmnwOGBxM17+BeSCg9UIO6JEYX/jeoJ59BEnFLMQ==
-X-Gm-Gg: AeBDiesd7y4lC/6VEVejels3nO+UNniAz8tNGlivwalFmciDaICsDOhgrdyKKTrGwg4
-	IZVxwcsvrD0CiCagUJGQTLDoovWzBKLp81IVXsizhp9+IHZpgmTYYMlif4V6+W2KqCefxot3zhF
-	MwTOJY58NBMCV4M1p1i+LF+K3RIocJFCz0YACIAdAJynXP7/oF5B3L3fizXTZEU/5VRWhi+/rCm
-	6YWft8zuLlUpp8eW73vbFd/uzMR4D1sPmXWaXTXhUbrFtgcUxAizlxbKmzFmtysV2rkgaQJlPam
-	npUFEBx4Y/Zp/i21SkFOnovcdAdyvcLOKRmB2t//R0d670hQnZCXdRTg8d1e7C0JQ3zDFfICx7w
-	M/6FyppoJ51f90JVSa06be3asOB+eftO4Rf0U4fuNJBjWv7Vwa3UyjknHhFGtALzzUSBcJ7ELpr
-	6i96bSwvEeGu634F6nuWufdeN/3hWGcYRMORWy+2WuzX7SNygui545MaE9myKOOFT5tRZzE+G5J
-	7dP2o2y3bjYvphcf6SnBJZi7i8pS64DicPPyhc=
-X-Received: by 2002:a05:6871:758a:b0:42b:ea6d:a8ed with SMTP id 586e51a60fabf-42bea6dda31mr3493259fac.20.1776699550939;
-        Mon, 20 Apr 2026 08:39:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:73::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42b930480bbsm8353573fac.4.2026.04.20.08.39.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Apr 2026 08:39:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZd24WsT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FDBC19425;
+	Mon, 20 Apr 2026 15:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776699714;
+	bh=BmYluBKHomZCV1NftbHt6P8P2+R/tChf6ZsdjbOspHI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=PZd24WsTs33lRfS0meCg+7piltArgeJE+y+aN9z0bjmeRSL/4rE6BPxJyxKwvRDkr
+	 ApG7OlOi1yV+Qgd1SPryZag3b69PKXBoI41PsqhfvSydT806KAbTWiDSAVCdVk1PnW
+	 4jXIW53BlmHvOHr4mR3stXCEsSYXv2vQpeDyhifj1/czPERUZJhNzlkRI58Y7nH1pI
+	 KMJbff55HZrRGuxEZmRcW8e3mjiJA+GHY5HHUWQ20mnW2wunJ6wQV8JbG0jVJnxrSl
+	 E9v+nQS84ekwMAugzXLhvW6l1AXT/z0950/SDm5B20cY5GQ5aNOBjsPH61bBA1m9K2
+	 cK1n24Tnpav7g==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "Jose E .
+ Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com, Martin KaFai Lau
+ <martin.lau@kernel.org>, Puranjay Mohan <puranjay12@gmail.com>
+Subject: Re: [PATCH bpf-next v6 00/17] bpf: Support stack arguments for BPF
+ functions and kfuncs
+In-Reply-To: <20260419163316.731019-1-yonghong.song@linux.dev>
+References: <20260419163316.731019-1-yonghong.song@linux.dev>
+Date: Mon, 20 Apr 2026 16:41:49 +0100
+Message-ID: <m2mryx1vwi.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Apr 2026 08:39:08 -0700
-Message-Id: <DHY3FCU01RAG.1AACAGEQVBFCY@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Alan Maguire" <alan.maguire@oracle.com>, <sashiko@lists.linux.dev>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH v3 bpf-next 2/6] libbpf: Adjust btf_vlen() to return a
- __u32
-X-Mailer: aerc
-References: <20260417143023.1551481-3-alan.maguire@oracle.com>
- <20260417170712.74E77C19425@smtp.kernel.org>
- <40708ab6-7a2a-4c7a-8943-88f25c13036c@oracle.com>
-In-Reply-To: <40708ab6-7a2a-4c7a-8943-88f25c13036c@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Mon Apr 20, 2026 at 1:02 AM PDT, Alan Maguire wrote:
-> -       return sizeof(struct btf_type) + l[kind].info_sz + vlen * l[kind]=
-.elem_sz;
-> +       type_size =3D sizeof(struct btf_type) + l[kind].info_sz + vlen * =
-l[kind].elem_sz;
-> +       if ((size_t)type_size > (size_t)(end_type - (const void *)t)) {
-> +               pr_debug("Overflow in type size %d for kind %u\n",
-> +                        type_size, kind);
-> +               return -EINVAL;
-> +       }
-> +       return type_size;
->  }
+Yonghong Song <yonghong.song@linux.dev> writes:
+
+> Currently, bpf function calls and kfunc's are limited by 5 reg-level
+> parameters. For function calls with more than 5 parameters,
+> developers can use always inlining or pass a struct pointer
+> after packing more parameters in that struct although it may have
+> some inconvenience. But there is no workaround for kfunc if more
+> than 5 parameters is needed.
 >
-> Given that this problem exists separate from the extended vlen series, mi=
-ght make more
-> sense to send a separate patch targeting the bpf tree for this issue.
+> This patch set lifts the 5-argument limit by introducing stack-based
+> argument passing for BPF functions and kfunc's, coordinated with
+> compiler support in LLVM [1]. The compiler emits loads/stores through
+> a new bpf register r11 (BPF_REG_PARAMS) to pass arguments beyond
+> the 5th, keeping the stack arg area separate from the r10-based program
+> stack. The current maximum number of arguments is capped at
+> MAX_BPF_FUNC_ARGS (12), which is sufficient for the vast majority of
+> use cases.
+>
+> All kfunc/bpf-function arguments are caller saved, including stack
+> arguments. For register arguments (r1-r5), the verifier already marks
+> them as clobbered after each call. For stack arguments, the verifier
+> invalidates all outgoing stack arg slots immediately after a call,
+> requiring the compiler to re-store them before any subsequent call.
+> This follows the native calling convention where all function
+> parameters are caller saved.
+>
+> The x86_64 JIT translates r11-relative accesses to RBP-relative
+> native instructions. Each function's stack allocation is extended
+> by 'max_outgoing' bytes to hold the outgoing arg area below the
+> callee-saved registers. This makes implementation easier as the r10
+> can be reused for stack argument access. At both BPF-to-BPF and kfunc
+> calls, outgoing args are pushed onto the expected calling convention
+> locations directly. The incoming parameters can directly get the value
+> from caller.
+>
+> To support kfunc stack arguments, before doing any stack arguments,
+> existing codes are refactored/modified to use bpf_reg_state as much
+> as possible instead of using regno, and to pass a non-negative argno,
+> encoded to support both registers and stack arguments, as a single
+> variable.
+>
+> Global subprogs with >5 args are not yet supported. Only x86_64
+> is supported for now.
+>
+> For the rest of patches, patches 1-4 make changes to make it
+> easy for future stack arguments for kfuncs. Patches 5-8
+> supports bpf-to-bpf stack arguments. Patch 9 rejects interpreter
+> for stack arguments. Patch 10 rejects subprogs if tailcall reachable.
+> Patch 11 adds stack argument support for kfuncs. Patch 12 enables
+> stack arguments for x86_64 and Patch 13 implements the x86_64 JIT.
+> Patches 14-16 are some test cases.
+>
+>   [1] https://github.com/llvm/llvm-project/pull/189060
+>
+> Note:
+>   - The patch set is on top of the following commit:
+>     eb0d6d97c27c  Merge tag 'bpf-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+>   - This patch set requires latest llvm23 compiler. It is possible that a build
+>     failure may appear:
+>       /home/yhs/work/bpf-next/scripts/mod/modpost.c:59:13: error: variable 'extra_warn' set but not used [-Werror,-Wunused-but-set-global]
+>              59 | static bool extra_warn;
+>                 |             ^
+>           1 error generated.
+>     In this case, the following hack can workaround the build issue:
+>       --- a/Makefile
+>       +++ b/Makefile
+>       @@ -467,7 +467,7 @@ KERNELDOC       = $(srctree)/tools/docs/kernel-doc
+>        export KERNELDOC
+>
+>        KBUILD_USERHOSTCFLAGS := -Wall -Wmissing-prototypes -Wstrict-prototypes \
+>       -                        -O2 -fomit-frame-pointer -std=gnu11
+>       +                        -O2 -fomit-frame-pointer -std=gnu11 -Wno-unused-but-set-global
+>        KBUILD_USERCFLAGS  := $(KBUILD_USERHOSTCFLAGS) $(USERCFLAGS)
+>        KBUILD_USERLDFLAGS := $(USERLDFLAGS)
+>
+> Changelogs:
+>   v5 -> v6:
+>     - v5: https://lore.kernel.org/bpf/20260417034658.2625353-1-yonghong.song@linux.dev/
+>     - Do stack arguments invalidation after bpf function or kfunc all. This is to
+>       following native achitecture calling convention.
+>     - Fix some r11 related issues in const_fold, liveness and insn checking.
+>     - Fix a few places for precision marking for stack arguments. All these cases
+>       have const value and mark them as precise.
+>     - Unconditionally copy some incoming/outgoing stat.
+>     - Fix a missing tailcall case with main prog having tailcall and there is no
+>       other subprog's.
+>     - Add and fix tests as suggested in v5.
+>     - Reorder some patches, e.g., preparing stack arguments in bpf functions,
+>       disabling JIT, before allowing proper r11 usage.
+>   v4 -> v5:
+>     - v4: https://lore.kernel.org/bpf/20260412045826.254200-1-yonghong.song@linux.dev/
+>     - Use r11 instead of r12, llvm also updated with r11.
+>     - Change int type 'reg_or_arg' to u32 'argno' where 'argno' encodes to support
+>       both bpf registers and stack arguments.
+>     - Track per-state bitmask 'out_stack_arg_mask' for r11 based stores, so at any
+>       particular call, it knows what stores are available. This is important since
+>       stores may be in different basic block.
+>     - Previously after each call, all store slots are invalidated. This patches
+>       disabled such invalidation.
+>     - Ensure r11 reg only appearing in allowed insns. Also avoid r11 for reg tracking
+>       purpose.
+>     - Make stack_arg_regs more similar to regular reg's (struct bpf_reg_state *)..
+>     - Reorder r11 based stores from 'arg6:off:-24, arg7:off:-16, arg8:off:-8" to
+>       "arg6:off:-8, arg7:off:-16, arg8:off:-24".
+>     - Add a few more tests, including e.g., two callee's with different number of
+>       stack arguments, shared r11-stores in different branches, etc.
+>
+>   v3 -> v4:
+>     - v3: https://lore.kernel.org/bpf/20260405172505.1329392-1-yonghong.song@linux.dev/
+>     - Refactor/Modify codes to make it easier for later kfunc stack argument support
+>     - Invalidate outgoing slots immediately after the call to prevent reuse
+>     - Fix interaction between stack argument PTR_TO_STACK and dead slot poisoning
+>     - Reject stack arguments if tail call reachable
+>     - Disable private stack if stack argument is used
+>     - Allocate outgoing stack argument region after callee saved registers, and this
+>       simplifies the JITed code a lot.
+>   v2 -> v3:
+>     - v2: https://lore.kernel.org/bpf/20260405165300.826241-1-yonghong.song@linux.dev/
+>     - Fix selftest stack_arg_gap_at_minus8().
+>     - Fix a few 'UTF-8' issues.
+>   v1 -> v2:
+>     - v1: https://lore.kernel.org/bpf/20260402012727.3916819-1-yonghong.song@linux.dev/
+>     - Add stack_arg_safe() to do pruning for stack arguments.
+>     - Fix an issue with KF_ARG_PTR_TO_MEM_SIZE. Since a faked register is
+>       used, added verification log to indicate the start and end of such
+>       faked register usage.
+>     - For x86_64 JIT, copying incoming parameter values directly from caller's stack.
+>     - Add test cases with stack arguments e.g. mem, mem+size, dynptr, iter, etc.
+>
+> Yonghong Song (17):
+>   bpf: Remove unused parameter from check_map_kptr_access()
+>   bpf: Refactor to avoid redundant calculation of bpf_reg_state
+>   bpf: Refactor to handle memory and size together
+>   bpf: Prepare verifier logs for upcoming kfunc stack arguments
+>   bpf: Introduce bpf register BPF_REG_PARAMS
+>   bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
+>   bpf: Support stack arguments for bpf functions
+>   bpf: Reject stack arguments in non-JITed programs
+>   bpf: Track r11 registers in const_fold and liveness
+>   bpf: Prepare architecture JIT support for stack arguments
+>   bpf: Enable r11 based insns
+>   bpf: Support stack arguments for kfunc calls
+>   bpf: Reject stack arguments if tail call reachable
+>   bpf,x86: Implement JIT support for stack arguments
+>   selftests/bpf: Add tests for BPF function stack arguments
+>   selftests/bpf: Add tests for stack argument validation
+>   selftests/bpf: Add verifier tests for stack argument validation
+>
 
-Make sense to me. Use check_add_overflow() when you do.
-Are you still planning to respin the set ? or is it good to go?
+This set looks good to me overall:
 
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
+
+I added support for arm64 in https://lore.kernel.org/all/20260420153603.4097618-1-puranjay@kernel.org/
+Please incorporate it into your series if you do another version.
+
+Thanks,
+Puranjay
