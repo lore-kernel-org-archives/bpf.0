@@ -1,87 +1,161 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF4438737D
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 20:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFC5946C
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 21:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776717840; cv=none; b=SdBUWg27N2DHXA43eaMPKXKjnFAeC54X3VnSoXvhW+BvnyQJk5hkyeVKA+Zwqe1Agp5BtGDeOWdZdDCmQPqrlgrXqCqpAuEYld/sl1BWoLoS8zCT3JIAEdtV2danIAn8trN+M/H40VzRhu1CQ5BWX+zu8Z6oR0F26mSBhPoIaJ4=
+	t=1776719221; cv=none; b=bQnN7ePCGtOjog8jppAaOHINB7o8sYkkCPdzTtm0s7pCxH09uZyGe74j1XurrY4jpUzCCNXfkzbbHn6QKNKmpaxXD2OSMN055RcztMDzZSnHLGUI40EVAA98kr471jIfQAZ8o/tRUcRAuLke+CgiMBzQn918vmryEwzKk1dCPJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776717840; c=relaxed/simple;
-	bh=Bhe7pfgl/AFu6WLydL6w9J5N3ApXPzLXHG9nFzZ4fmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dpnbl5hyAw4C7tE/dFiD08U61r+ZNUF1FUZfTSFkQ9eWHuMyZraiimLLnkca1HBCeQonLSE3kDlnqKRJcxw7ZzhDNqRJsdEGm7qQyiapZTgeTg6FEFbGUvuTBsHksYqG96trd+VJJbGrYJAhzqvKvmz41iZaR/iyLRIsk1e0uVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X+xowDQe; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776719221; c=relaxed/simple;
+	bh=3cHSBmpcX2nJUlq6LI6ZlG++JUm8OwWAydtl2xnsHXA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=SGmfDeIgtw5Yo9IjLKo6HaCMs+0hWNUrr33dPdLVyO6IzHjYNFs+CIjoHMDDy5E009UalVc89YhmuG8lEJ3vtbroUxFA/zUXsmVOTi2lMtTUchaC92j0PRxKSK6VsQS2BUJBAonlWRKxV1BwWbfxVI4aT3m7OSw/EzfxxRTYkjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r4wHmTxz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X+xowDQe"
-Date: Mon, 20 Apr 2026 13:43:36 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776717826;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ihWIIczfSlnxjYYCRII7UJ70yxUYqdVRkPZC4QRKtXo=;
-	b=X+xowDQe7i2RsriG3BR8r3i1s1dXQVN7OeBZeqF4YpX9aziNxjkGZv2I0i5dX/z7sLVTRY
-	qbiNjbmWozQoFwhw82fHiRn/vZsm4CcckBZ1ilyB5jGUg+IXoFxkoMW7rkDyutUtUWnpIa
-	/3WCpfYXqzkVUA7tfwfEtojl47bbgjA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Werner Kasselman <werner@verivus.ai>
-Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "andrii@kernel.org" <andrii@kernel.org>, 
-	"ast@kernel.org" <ast@kernel.org>, "brakmo@fb.com" <brakmo@fb.com>, 
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "davem@davemloft.net" <davem@davemloft.net>, 
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "edumazet@google.com" <edumazet@google.com>, 
-	"haoluo@google.com" <haoluo@google.com>, "horms@kernel.org" <horms@kernel.org>, 
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "jolsa@kernel.org" <jolsa@kernel.org>, 
-	"kpsingh@kernel.org" <kpsingh@kernel.org>, "kuba@kernel.org" <kuba@kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>, 
-	"sdf@fomichev.me" <sdf@fomichev.me>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
-	"jiayuan.chen@linux.dev" <jiayuan.chen@linux.dev>, "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/2] bpf: guard sock_ops rtt_min against non-locked
- tcp_sock
-Message-ID: <202642020410.q7GJ.martin.lau@linux.dev>
-References: <20260417023119.3830723-1-werner@verivus.com>
- <20260417023119.3830723-3-werner@verivus.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r4wHmTxz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CEBFC19425;
+	Mon, 20 Apr 2026 21:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776719221;
+	bh=3cHSBmpcX2nJUlq6LI6ZlG++JUm8OwWAydtl2xnsHXA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=r4wHmTxzr5yX81l7dOirPPYfEBStSR+DwH7IxMT0HJT5unDQCuVyuO0M+PGsNSLZD
+	 GUieA3z2aXa4NIRxPv1FTYxCok5P0ZGRFWtOfIqkFBRpKV8e9r3EIgb4bh5q5I+xEL
+	 bhmdVDWgccXfcGdUqSlwr/gia2Uf1QdUCwK8i/LxL6l9HbAZv/J/XB1jBCyHo75NDo
+	 U/H5Vygas3WzyJ5ZrwkPngbSFOuTEHbakH5E2tc2AsHqKp7BkwpphcM0dw+7VRysjc
+	 IeDsJwgRySK5xJvYPR840Es+kvjCTX3ToufFfzxhbngtAW74r7inrHSi6mOPgCiBAY
+	 r7Xvf3NpZO/Tg==
+Content-Type: multipart/mixed; boundary="===============8674614109493422119=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260417023119.3830723-3-werner@verivus.com>
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <925d5bae9468149379825bf0c7ce4a7c3ce2373f3ff53c06482de72229558b0e@mail.kernel.org>
+In-Reply-To: <20260420203306.3107246-3-utilityemal77@gmail.com>
+References: <20260420203306.3107246-3-utilityemal77@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add test for map-stored struct file kptrs
+From: bot+bpf-ci@kernel.org
+To: utilityemal77@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bpf@vger.kernel.org,mic@digikod.net,utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 20 Apr 2026 21:07:01 +0000 (UTC)
 
-On Fri, Apr 17, 2026 at 02:31:26AM +0000, Werner Kasselman wrote:
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index e8ad062f63bc..9c43193a5c39 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -10827,14 +10827,12 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
->  			     sizeof(struct minmax));
->  		BUILD_BUG_ON(sizeof(struct minmax) <
->  			     sizeof(struct minmax_sample));
-> +		BUILD_BUG_ON(offsetof(struct tcp_sock, rtt_min) +
-> +			     offsetof(struct minmax_sample, v) > S16_MAX);
+--===============8674614109493422119==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This doesn't look like a test that is added by human.
-Will sizeof(tcp_sock) ever reach S16_MAX? It is unnecessarily defensive and
-inconsistent with other tcp_sock field loads.
+> selftests/bpf: Add test for map-stored struct file kptrs
+>
+> Add tests for map-stored struct file referenced kptrs.
+>
+> Add a test storing a referenced kptr in a map. The referenced pointer is
+> acquired by get_task_exe_file in this case.
+>
+> Add a test that verifies that the struct file reference remains valid
+> when the original file descriptor is closed, by checking the extented
+> attributes on it after completion. Trigger this validation manually by
+                                                               ^^^^^^^^^
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c b/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
-> index 343d92c4df30..1aea4c97d5d3 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+There's a typo here: 'extented' should be 'extended'.
 
-Separate the test in its own patch.
+> hooking file_open and opening dev null.
+>
+> Validation is done with xattrs.
+>
+> Add a test verifying that attempting to insert unreferenced struct file
+> pointers into the map is rejected by the verifier.
+>
+> Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 
-Also tag and add revision to subject, "[PATCH v3 bpf...]".
-Take a look at how other patches are posted in the bpf mailing list.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/refcounted_kptr_file.c b/tools/testing/selftests/bpf/prog_tests/refcounted_kptr_file.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/refcounted_kptr_file.c
 
-pw-bot: cr
+[ ... ]
+
+> @@ -0,0 +1,246 @@
+
+[ ... ]
+
+> +	while (1) {
+> +		ssize_t bytes_read;
+> +
+> +		bytes_read = read(src_fd, buf, sizeof(buf));
+> +		if (bytes_read < 0) {
+> +			if (errno == EINTR)
+> +				continue;
+> +			err = -errno;
+> +			goto out;
+> +		}
+> +
+> +		if (!bytes_read)
+> +			break;
+> +
+> +		err = write_full(dst_fd, buf, bytes_read);
+> +		if (err) {
+> +			/* Remove partially written destination file so it
+> +			 * doesn't linger on disk.
+> +			 */
+
+Can this comment follow the BPF multi-line comment style? The opening /*
+should be on its own line:
+
+/*
+ * Remove partially written destination file so it
+ * doesn't linger on disk.
+ */
+
+> +			unlink(dst_path);
+> +			goto out;
+> +		}
+> +	}
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_file.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_file.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_file.c
+
+[ ... ]
+
+> @@ -0,0 +1,152 @@
+
+[ ... ]
+
+> +	task = bpf_get_current_task_btf();
+> +	file = bpf_get_task_exe_file(task);
+> +	if (!file) {
+> +		file_kptr_err = 2;
+> +		return 0;
+> +	}
+> +
+> +	/* Exec can open multiple files while the new image is being installed.
+> +	 * Only stash the child's final executable, which we identify by the test
+> +	 * xattr.
+> +	 */
+
+Can this comment follow the BPF multi-line comment style? The opening /*
+should be on its own line:
+
+/*
+ * Exec can open multiple files while the new image is being installed.
+ * Only stash the child's final executable, which we identify by the test
+ * xattr.
+ */
+
+> +	ret = bpf_dynptr_from_mem(file_kptr_probe_value,
+> +				  sizeof(file_kptr_probe_value), 0,
+> +				  &value_ptr);
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24689427455
+--===============8674614109493422119==--
