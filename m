@@ -1,63 +1,63 @@
-Received: from mail-oa1-f67.google.com (mail-oa1-f67.google.com [209.85.160.67])
+Received: from mail-ot1-f68.google.com (mail-ot1-f68.google.com [209.85.210.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF2E392C26
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 19:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D853C2769
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 19:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776714547; cv=none; b=ezm4LcXIzx0OPy3lLPNrRymFeZZKv13DjQwZvLgHqLyYIBP94jrIJn37dzKvJQ42EVZELj9dJrmBmw+vwPMOvUpKXYy15pA6lfSB4bfhm1A0u0YB59i+Qya8DrwVTcq5u90h8O69AhC1PVWRBY1xK2b8bq3dz5EL6PltuxVQhrk=
+	t=1776715140; cv=none; b=I4YfqzN6u9/+sHHee+Cvgjnf4JVLLGTgL97MAQMyulB54X0YCgJ4yUw1jCbeAPxPW8B7zU9MVT+RC06xPqyt22KKKUzbP20ugqOecKAzDlr2qiOXHV7J1eI2sFsn4iIYoCklpD1Hy7DoTKJwlRuyy4ICzYhUOXYiDc8Q3icvQ2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776714547; c=relaxed/simple;
-	bh=RvxmqShgoNfRbdSrDMGgU9v3sO/CSHCNP0968kgV2bY=;
+	s=arc-20240116; t=1776715140; c=relaxed/simple;
+	bh=OqfcjPH2Fxdkfzmesm3GzxbAIVnkDk6RVYecl4hDHW4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bk2zgbEXEOdRVqVTlhjuxh4IE4VGqS84Iye3BkuRBiyJ3hYumjp8PguoVqm0rQw+fmdxamXR6CnkOUCf1f6ddK/bXxXYJAiIVsOl6wi2HPcS7RB2+aGO4ibKeFEJJXBmn8d/z79YdTNOknNkrQQhuJVOUx20fU4drNO9AJmgX44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eipjT9dI; arc=none smtp.client-ip=209.85.160.67
+	 Content-Type:Content-Disposition:In-Reply-To; b=tq+wUOwQ7CeJqzNlDdk9vnxdkOh1REt9MNG7pow6aG1el7sOzZHBl2gfGHR1L5nYCiMsP73TlNyf4KxarzZ+9PJTpTlxmi6xyRAKRNpdgnFsn/sZQVAQNlrnHiWwe7CowfCyFl6yyo7aVz84QhZTzVGUHWTjYKs4cNTUv3ZPP6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P74aiY5k; arc=none smtp.client-ip=209.85.210.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eipjT9dI"
-Received: by mail-oa1-f67.google.com with SMTP id 586e51a60fabf-415c8a4d2e6so1367476fac.0
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 12:49:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P74aiY5k"
+Received: by mail-ot1-f68.google.com with SMTP id 46e09a7af769-7dbe437b072so2034854a34.2
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 12:58:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776714545; x=1777319345; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776715138; x=1777319938; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v6sEVNyktJT3zTdcB1bcpogzWQ9r6pcoZ/Pg+Jhahbc=;
-        b=eipjT9dIk2LWfawcTMue8OU2TtOSQjmu2kW0LoBIx7v1yCZYFVB0fcwcHUG0yKtc3C
-         iL9LOD8PQgGaO8RIJAvOpOi/Tafzhjnl+eokvdKjUE4f59oYziu1Z9ZIeALeHkvbcyFV
-         dm28ydDIcNpdtGmkphnfYPfNGNnG9tD6LZnGaSJw0oXK0k/1mYsuX6g34D1adzhFSFoF
-         hHzljpNUH3MEYxYDSMtqI7YdPsiQdPy8ucxMBSeDU5zZwV0skEcoHLql9ZaN6OuBYWzc
-         +tEhSqt3E3g9REdVkmtC7MKC/lQWePcLyKWAzuqtgB6uycKrAe++Ns8Khv+dHOz9l4q3
-         b3rQ==
+        bh=E3IZOIb/3skvvHsXAgrxfqUKygtLsE7kkkf3vBFlT4Y=;
+        b=P74aiY5kc9QMMwekPGGkDMh3ZuvnXEaAffRzAOuWgizQnSQAiHMfs/tBihQO9dxxox
+         SXnOeljg1d2DQkn5dXhaud+UIO/BdAChSU/AAnfca8B8AgH0vCMqI+1TYeEpbzwORXqV
+         V2HsoBYpG/YoONSq0uh0euGuWSCA/pK4yBuw/SXqIY2/EkAB4qg74O/R1JYTUrJcLhOR
+         E++VrA/GhdJKqgkwSxCGNDPqhNpSeHW76YCAIPVDVMNYUklvMGG4w54Am+edkJAUN83Y
+         uSEdgzKxv+a+d6P9nfwTQKVQFBgGedLlqAMw4lmCL89BUOhxNhe9vWZpkyvKyto7telZ
+         UKOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776714545; x=1777319345;
+        d=1e100.net; s=20251104; t=1776715138; x=1777319938;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v6sEVNyktJT3zTdcB1bcpogzWQ9r6pcoZ/Pg+Jhahbc=;
-        b=qtNAJLKbUY5k60XhtZxUtSzYUEZNMit0LdQNmyKojVF9DF9rFCSY8pWvIGRxQZE4Xi
-         iyMvEhI8gJwReVCYIrdcddAmOFhw+B8Z1H4qlS2Mglbrid6mUTOTwHVsXghtlpano0QW
-         nny/oLluIZSSYDAcje3dHiMbYhMLju2dp+4p3CZVhzXuaOmE3oFb1pzYP6mx02RT9oNS
-         JbZY25dwYVF+pdRgNGfiUBAW5gC7ZjCEFcXaoJrqy9JrpseJjviE7PeQVfM0BWYBkQNQ
-         aI1cWNMME3hFHJkB3WM76SE712YCBicEMoNY5bUt00simtMrwlolUKhoM2cz4f83pXjF
-         YTEQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+CPsi/FKa3DDrmdurlSvbsVhtiYKiojyzRmjYkyGvM9HozjxInTTYD/+bFsAtsm4Zna74=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMVTbtzl6UfN+fgQqd28IzOiPME0ZWaDSRqSZq3TwktWfib/S3
-	t3g72TNYuMU6HeB8E9APuPSuNz5WuRNghay5knbypz2SzBPwuzuVhYJi
-X-Gm-Gg: AeBDiests0ZLT1FoxHFZ7pyBowDhBax3tAFzmGaYYUzPlU82+74I9aIpo+sXR8dw8fn
-	lvB1KNmeEBxuS/vQd6JG19dRIhD4p23KkrryAPjmYdDTs9iY+WymrTDFgV1tWt7M4zuYXWmMAbA
-	sSzfK7+B8vK/UdlUrrPywn5ca0GBNDLFa8Q+xsFz5xAlAKddbidoxlwlncs+4LYPzmS2XFShXG1
-	u3dyZ/7IeWv0ibVKpaSQVK5puK7iZ9VYZNZcBxIYRmrcH46fqDUPmFSKP3K7J3/BTvEZMJRtmhS
-	qzQa+/gQS0mGVHTVLZtjUK54Df09IvpafSmekc8Mt7fCTvod5uNxC6TnH5667RjT8b7kYXeM7+1
-	vj6601fk3vXRFzU8aDG3/ocUdxfUQQgkc7fuECjjMr7xh5tVp+oRde+LMHLWLWQG7V/UkX9Bs7C
-	Nms76G8cGaaxlPhn4cEyCBQaQaOmroitmOoEmZEQ==
-X-Received: by 2002:a05:6820:55c2:10b0:693:7a6f:b317 with SMTP id 006d021491bc7-69462e20f32mr5089979eaf.9.1776714544742;
-        Mon, 20 Apr 2026 12:49:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:12ff:6::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69464fe6d3esm6324400eaf.14.2026.04.20.12.49.04
+        bh=E3IZOIb/3skvvHsXAgrxfqUKygtLsE7kkkf3vBFlT4Y=;
+        b=gJb7Zk1pw5Ks7K4ReF80yig63d/5ohS4McKIYceOoIvi8U1EGF/9zdGo5YTjWCSwH1
+         KSDFgLY3FsbRtvn1nEIvsq5S7vjqcUMVevKIV33Xq2Cf9wXVhgn595d+FCVuyWsAm8FN
+         XR1waYx7Av3aK+FG8T5FD9Ny6JWJsDmE/3LgDGbWtO+yPp6+yvLpbKzToGllViLW331J
+         eZYatMvWTBNXAe26DH0Vx68/erIGwO8CY+6ks/22MysvmjlOwm9Z7fozQ8LUHkmKJzNz
+         YZo3C2HLNIEjUjB8tXuYXokg/SvIEtXUOD2AK6EWc03xF/AYw3KlcdlBXt3+UDXM4Cwl
+         3Wfw==
+X-Forwarded-Encrypted: i=1; AFNElJ8Hvr7yFUyYs8OlANWB77bLdMZS2exP6H5J1pAJyCUQf8btgqC5YZoclBd7i4zzdZ1VSoY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXbRwDIW49K+ZvwyytilMPDaZbv9hItrxS2Euaf3uS8AESjdoA
+	mnHIlbzxTC3aysV6YZbiMvVeF6MC7U/GuxLyV6+pZs0++bNRE9X3BYex
+X-Gm-Gg: AeBDievWK+X5jDBnL045xdokPSD6UIbGMndvjfHU7oKzcm0YJCAK2D8SPTH954+T8rP
+	D6B5NE1LRIeiGKumXEjdO3kwG4pLBpkbaN4P5j0uS/5XvW4Ox/3agSejQTRbcZ9IZ06pj5rz41+
+	tnYJLvmQs76B+r2nRmTzPGHpDeJgDmHYtGhIwAN/vYnCjG7cUHNsRL8zM0EtrP5vLGs7RQwr/0f
+	FT90U/k/m15mvfvSQ6UinwrJI0UNDDU5X4jBQxO/puh05hYj71EhsaCyTx8W7MY3D4PO6dL56iu
+	QTAi6LtjPU5mOZyX4wNr/YpTDVj/Zqws9nMHdWWLzrrYFUwjxBJVPKrMd0vJOl7VFMWR7WfjvJn
+	yaCOzUMKQrjLdMSEJeNtGOx0QD+rqc0PTItol8BNH4AP/ssi2x1HnFeb1JvH9xEYh77Vkn4lFfj
+	sCBdTo2jDbJ9IfQxR2NeSmGROQ54uOhqwEPDsXhQ==
+X-Received: by 2002:a05:6820:210f:b0:694:84e9:4a35 with SMTP id 006d021491bc7-69484e94b74mr2900269eaf.46.1776715137756;
+        Mon, 20 Apr 2026 12:58:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:1::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6949127c1e2sm980623eaf.15.2026.04.20.12.58.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 12:49:04 -0700 (PDT)
-Date: Mon, 20 Apr 2026 12:49:03 -0700
+        Mon, 20 Apr 2026 12:58:57 -0700 (PDT)
+Date: Mon, 20 Apr 2026 12:58:56 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: Jason Xing <kerneljasonxing@gmail.com>
 Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
@@ -65,11 +65,11 @@ Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
 	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
 	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org, 
 	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net v2 8/8] xsk: fix u64 descriptor address truncation on
- 32-bit architectures
-Message-ID: <aeaCzchKwsp_LWyA@devvm17672.vll0.facebook.com>
+Subject: Re: [PATCH net v2 7/8] xsk: fix xsk_addrs slab leak on multi-buffer
+ error path
+Message-ID: <aeaFeyOTtxgY2Kus@devvm17672.vll0.facebook.com>
 References: <20260420082805.14844-1-kerneljasonxing@gmail.com>
- <20260420082805.14844-9-kerneljasonxing@gmail.com>
+ <20260420082805.14844-8-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,28 +78,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260420082805.14844-9-kerneljasonxing@gmail.com>
+In-Reply-To: <20260420082805.14844-8-kerneljasonxing@gmail.com>
 
 On 04/20, Jason Xing wrote:
 > From: Jason Xing <kernelxing@tencent.com>
 > 
-> In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bit
-> descriptor address into skb_shinfo(skb)->destructor_arg (void *) via a
-> uintptr_t cast:
+> When xsk_build_skb() / xsk_build_skb_zerocopy() sees the first
+> continuation descriptor, it promotes destructor_arg from an inlined
+> address to a freshly allocated xsk_addrs (num_descs = 1). The counter
+> is bumped to >= 2 only at the very end of a successful build (by calling
+> xsk_inc_num_desc()).
 > 
->     skb_shinfo(skb)->destructor_arg = (void *)((uintptr_t)addr | 0x1UL);
+> If the build fails in between (e.g. alloc_page() returns NULL with
+> -EAGAIN, or the MAX_SKB_FRAGS overflow hits), we jump to free_err, skip
+> calling xsk_inc_num_desc() to increment num_descs and leave the half-built
+> skb attached to xs->skb for the app to retry. The skb now has
+> 1) destructor_arg = a real xsk_addrs pointer,
+> 2) num_descs = 1
 > 
-> On 32-bit architectures uintptr_t is 32 bits, so the upper 32 bits of
-> the descriptor address are silently dropped. In XDP_ZEROCOPY unaligned
-> mode the chunk offset is encoded in bits 48-63 of the descriptor
-> address (XSK_UNALIGNED_BUF_OFFSET_SHIFT = 48), meaning the offset is
-> lost entirely. The completion queue then returns a truncated address to
-> userspace, making buffer recycling impossible.
+> If the app never retries and just close()s the socket, xsk_release()
+> calls xsk_drop_skb() -> xsk_consume_skb(), which decides whether to
+> free xsk_addrs by testing num_descs > 1:
 > 
-> Fix this by handling the 32-bit case directly in
-> xsk_skb_destructor_set_addr(): when !CONFIG_64BIT, allocate an xsk_addrs
-> struct (the same path already used for multi-descriptor SKBs) to store
-> the full u64 address.
+>     if (unlikely(num_descs > 1))
+>         kmem_cache_free(xsk_tx_generic_cache, destructor_arg);
+> 
+> Because num_descs is exactly 1 the branch is skipped and the
+> xsk_addrs object is leaked to the xsk_tx_generic_cache slab.
+> 
+> Fix it by directly testing if destructor_arg is still addr. Or else it
+> is modified and used to store the newly allocated memory from
+> xsk_tx_generic_cache regardless of increment of num_desc, which we
+> need to handle.
+> 
+> Closes: https://lore.kernel.org/all/20260419045824.D9E5EC2BCAF@smtp.kernel.org/
+> Fixes: 0ebc27a4c67d ("xsk: avoid data corruption on cq descriptor number")
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+>  net/xdp/xsk.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 9236ec32b54a..6b17974ca825 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -605,7 +605,7 @@ static void xsk_cq_submit_addr_locked(struct xsk_buff_pool *pool,
+>  	spin_lock_irqsave(&pool->cq_prod_lock, flags);
+>  	idx = xskq_get_prod(pool->cq);
+>  
+> -	if (unlikely(num_descs > 1)) {
+> +	if (unlikely(!xsk_skb_destructor_is_addr(skb))) {
+>  		xsk_addr = (struct xsk_addrs *)skb_shinfo(skb)->destructor_arg;
+>  
+>  		for (i = 0; i < num_descs; i++) {
+> @@ -660,7 +660,7 @@ static void xsk_consume_skb(struct sk_buff *skb)
+>  	u32 num_descs = xsk_get_num_desc(skb);
+>  	struct xsk_addrs *xsk_addr;
+>  
+> -	if (unlikely(num_descs > 1)) {
+> +	if (unlikely(!xsk_skb_destructor_is_addr(skb))) {
+>  		xsk_addr = (struct xsk_addrs *)skb_shinfo(skb)->destructor_arg;
+>  		kmem_cache_free(xsk_tx_generic_cache, xsk_addr);
+>  	}
+> -- 
+> 2.41.3
+> 
 
-Is it easier to make XSK `depends on 64BIT` to avoid dealing with that? Does
-anybody seriously run af_xdp on 32 bit systems?
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
