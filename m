@@ -1,260 +1,186 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FB53C5DBB;
-	Mon, 20 Apr 2026 14:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46CB3CAE71
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 14:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776694831; cv=none; b=WK/dQDvUqj+uFuT1Y9nrrWj1nbsicrLwnzKkcRNdO0c22taf7FpXzJqbLxiKTYicoN6tBEvNNprh6hklxBMnz1vHzarFtFIAv6w/PuI35CHVCpC1rq/GvxBJyiLIyEUtcMaDBI7ae5lyinmnl/VXGI8NAdE/WFIzi5fRLhydHvo=
+	t=1776694876; cv=none; b=VjOKQ+xjISQpRQfroFOzQ6LIKD97RhBvGKKODAtC6GRqBG4VSDK3Q+QVAfaAmZtsw+scHCAC9e7ahAl1gH05tyjxe8kdr/FyJHYrkIg+X/MylhbComIzC2ia3iMibb4AzNYSedGwi32pMKxP8dghS0KQV6WYgh4apw8JXiU5crw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776694831; c=relaxed/simple;
-	bh=DQpMBpbdwf1ceR1dJT5ItLD2PSzn7mF09QyJP3gysPM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eC4BQlH8sOTbWBzX791a3P+AH9LHmlpf5Y1rBaj9x6XduMItB4no2DW/h1EfoIfFaQuRabAMpKHMnQ5R6sDKI6xe90umGIIM6A7i0yO4fwXb2XssP2x6RK5UKLreUdu2SROkA2rcxob856ujffLZDpNiSaNj+mLAp+8VvmP+YdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DiN6eadb; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776694876; c=relaxed/simple;
+	bh=3LSYplLreYqdrEEacxHpD4l3Wy6uwORxMyV8UTwIIoE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r0qmSVaPxwAFQYuaIus5cLsdDwdG7vQSK/dNGqF8AtjjAoV5tm/uEqR6x4in37zp/neT628xl1VBA0K5+Q5oPrBaGvpC6lPhDqOYSNdxQId56C9yESh6RjcfMxMO6nU7A5Y6mE3Q2KtHDcNPK4GXFv6OaC8sfgKgYydnOo3YIQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AD1Z0Gqw; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DiN6eadb"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776694827;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rCBHfH8rWBufugUOHs5AklVA1O2TKv4wvvEyyydlwWo=;
-	b=DiN6eadbzd0Gl1jK9Q4kRZ9Lj7+HKP5lFrDLgeyy9NVVjVOM77FdGa+tkCj1b241wz0L9T
-	0W/kh2AYsDLKk9N2CJzKB0sXTx0aKWfHyEALLhgLpL0E+cVFVHRwEr9gF/iDXWRfePeb52
-	iuEJdY3NdbUs7PnQdxEaUNv0iGL8w0I=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Seth Forshee <sforshee@kernel.org>,
-	Yuichiro Tsuji <yuichtsu@amazon.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v12 8/8] selftests/bpf: Add tests to verify map create failure log
-Date: Mon, 20 Apr 2026 22:18:04 +0800
-Message-ID: <20260420141804.27179-9-leon.hwang@linux.dev>
-In-Reply-To: <20260420141804.27179-1-leon.hwang@linux.dev>
-References: <20260420141804.27179-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AD1Z0Gqw"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4891e5b9c1fso8954365e9.2
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 07:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776694873; x=1777299673; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OEXxlv8BImKZUhebuilBAJ2jXt3hQ6Gumy7BXoBLO4E=;
+        b=AD1Z0GqwJEwSF4JOScjc/RDELUqb9ypkcUgKE4ok8BfwrqyluJPLz+VDoUscsi+Mg7
+         hy4ihSgLlTHIp8w9/QTFm1R4HapjEmV4n+6Tj7aeZdNPRFdKqdz72uCcGZBP7PE3zbil
+         yMbbwBBZkYKIKnqOKU9fSdepnGoSIre7XlHq2PeT4AWbYgN8n79tDnqy2beYb2bY2yUD
+         18h96eCDXXP5qd9s5l+Ve3oEUXHnBDMw5zg+GdXIJlrBp4L23lhFUFniLujiyu+mdll/
+         aa1C9z5K7Ls3fNHRQrkLBj41pr4N0d3+uv0smAQRJAgNGwftPAN4LQhTnQcwaSukXELk
+         p6sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776694873; x=1777299673;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OEXxlv8BImKZUhebuilBAJ2jXt3hQ6Gumy7BXoBLO4E=;
+        b=gTUbXnoS1xscA2Yrt7kt+ryHZk/N1h4WlhOKmCZrkzL4pNfcDuMH8JzzfqJ70Nhr2x
+         0+d9bOoLObx/PnVIVm1tsoBWuqGG4eQpBzWEaLDpZ4Mz9wROCKBYk9fws5Bgh+IYEl9t
+         /HSM+Ynfwzfj+ZnTWsWXj4JAjsDiY7g94m0L4hFT4FxwtI5YoSHXuWtTuOBPeRNnWHbe
+         Vyj45GfRz4lJ4KqJHuIsWnpIhotRmBJml9oSJhQc8kSM/gCo31QrIGEFZS/A+EyMXsgG
+         3W0s6GDQ0T4JXbI3MQLivzTAYdu7E74Md6rC0F/JRDea7lChFjPfgKw0ud+FIlQiZpSA
+         ZEbQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+TovaBH1LnF7dnu+cmkwDMldG0PJTJB63yqEZD7Jw71AbajCZjcP+Dp2/dMNPnvfc4q3g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJitXfiM2Gfw5LuLs3MfHCS9c0lgz+EQr/RuROzzq9LeTKyPNV
+	XJ7bvv6GMcZVMOel3Ena1ciLTjNF3n9z+UcKVJimgqJ5bWjHA2ILY/Ux
+X-Gm-Gg: AeBDieudO5Vl3u2Gnx21g7+M+Rjzb73WXXS5NySru8YkK6VZ6VKjwSGHqGaualnRK20
+	B5lE3kswy53l1m0t11VSYQ/VeEAN4dd0o7432ApGR83aOUVZasqhqilwmJJhdjtqhCDxUaXURgW
+	j81MZQSI3W5QWm3bEa2+0nU70zQUh/MPTNusad2+Q6hIqvx25CWiIPnR6G3C20dD0qPGrPGWh6S
+	XgFuIyms+VxQRIDLhJgU4GHgyWH2m6MeTw11Q1ygq2518Sd3+xhE3UYxnuAUkSigN9asjsn/0h9
+	1ZSb817dBgA8hmZT8IX04V6ZEubvKXV4l1pIXkUFskW34vGpVC+w9EIbn3t7Qxscpv8F3s3gZNf
+	LK3NWJulqg1TGcjcjHcaghfhblrDy7VaQgFO2RRfRJEPssEGaLFDKlE0/r+jJ5vlIoP4zohOhzt
+	aoMkNwPi/zWw83UqhzlvtBvSt52TPVHEWSoZlVIfrqhbmgfeXwTXMPpdOFi16xrE9CM3oSnwWrC
+	Lh7jCGD
+X-Received: by 2002:a05:600c:a116:b0:486:af22:4a2a with SMTP id 5b1f17b1804b1-488fb74a447mr145774805e9.7.1776694872707;
+        Mon, 20 Apr 2026 07:21:12 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:5432:2d05:ea5:f7f7? ([2620:10d:c092:500::6:8ffd])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4891b46cffasm102223545e9.13.2026.04.20.07.21.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Apr 2026 07:21:12 -0700 (PDT)
+Message-ID: <e8fa6144-b295-46a8-8cec-72e84579a98e@gmail.com>
+Date: Mon, 20 Apr 2026 15:21:11 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 2/4] bpf: Introduce
+ __bpf_kfunc_mark_deprecated annotation
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Vineet Gupta <vineet.gupta@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai
+ <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
+References: <20260418171701.610025-1-memxor@gmail.com>
+ <20260418171701.610025-3-memxor@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260418171701.610025-3-memxor@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add tests to verify that the kernel reports the expected error messages
-and correct log_true_size when map creation fails.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/map_init.c       | 166 ++++++++++++++++++
- 1 file changed, 166 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/testing/selftests/bpf/prog_tests/map_init.c
-index 14a31109dd0e..5c61c8e37306 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
-@@ -212,3 +212,169 @@ void test_map_init(void)
- 	if (test__start_subtest("pcpu_lru_map_init"))
- 		test_pcpu_lru_map_init();
- }
-+
-+static void test_map_create(enum bpf_map_type map_type, const char *map_name,
-+			    struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	const int key_size = 4, value_size = 4, max_entries = 1;
-+	char log_buf[128];
-+	int fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts);
-+
-+	log_buf[0] = '\0';
-+	log_opts.buf = log_buf;
-+	log_opts.size = sizeof(log_buf);
-+	log_opts.level = 1;
-+	opts->log_opts = &log_opts;
-+	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_STREQ(log_buf, exp_msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(exp_msg) + 1, "true_size");
-+}
-+
-+static void test_map_create_array(struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test_map_create", opts, exp_msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_struct_ops(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id can only be used with struct_ops maps.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_kv_type_id(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id is mutually exclusive with btf_key_type_id and btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create(BPF_MAP_TYPE_STRUCT_OPS, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_value_type_id(void)
-+{
-+	const char *msg = "Invalid btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_extra(void)
-+{
-+	const char *msg = "Invalid map_extra.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_extra = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_numa_node(void)
-+{
-+	const char *msg = "Invalid numa_node.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_NUMA_NODE,
-+		    .numa_node = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_type(void)
-+{
-+	const char *msg = "Invalid map_type.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(__MAX_BPF_MAP_TYPE, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_token_fd(void)
-+{
-+	const char *msg = "Invalid map_token_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_TOKEN_FD,
-+		    .token_fd = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_name(void)
-+{
-+	const char *msg = "Invalid map_name.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test-!@#", &opts, msg);
-+}
-+
-+static void test_invalid_btf_fd(void)
-+{
-+	const char *msg = "Invalid btf_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_fd = -1,
-+		    .btf_key_type_id = 1,
-+		    .btf_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_1(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	const char *hash = "DEADCODE";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash = hash,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_2(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash_size = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+void test_map_create_failure(void)
-+{
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_struct_ops"))
-+		test_invalid_vmlinux_value_type_id_struct_ops();
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_kv_type_id"))
-+		test_invalid_vmlinux_value_type_id_kv_type_id();
-+	if (test__start_subtest("invalid_value_type_id"))
-+		test_invalid_value_type_id();
-+	if (test__start_subtest("invalid_map_extra"))
-+		test_invalid_map_extra();
-+	if (test__start_subtest("invalid_numa_node"))
-+		test_invalid_numa_node();
-+	if (test__start_subtest("invalid_map_type"))
-+		test_invalid_map_type();
-+	if (test__start_subtest("invalid_token_fd"))
-+		test_invalid_token_fd();
-+	if (test__start_subtest("invalid_map_name"))
-+		test_invalid_map_name();
-+	if (test__start_subtest("invalid_btf_fd"))
-+		test_invalid_btf_fd();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_1"))
-+		test_excl_prog_hash_size_1();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_2"))
-+		test_excl_prog_hash_size_2();
-+}
--- 
-2.53.0
+On 4/18/26 6:16 PM, Kumar Kartikeya Dwivedi wrote:
+> Documentation for KF_DEPRECATED documents the expectations and
+> recommendations for deprecating existing kfuncs. Until now, such a flag
+> never materialized. Unlike other kfunc flags, more context needs to be
+> carried with such a flag, thus we introduce __bpf_kfunc_mark_deprecated
+> as a replacement for the (non-existent) kfunc flag which takes a
+> replacement kfunc to provide recommendations to the user.
+> 
+> Apply it to all existing impl-suffixed kfuncs that are preserved for
+> backwards compatibility for a few kernel releases, after we introduced
+> versions with KF_IMPLICIT_ARGS.
+> 
+> Note that this is only supported by LLVM-compiled kernels as of writing,
+> since GCC does not support for BTF declaration tags.
+> 
+> Cc: Vineet Gupta <vineet.gupta@linux.dev>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>   Documentation/bpf/kfuncs.rst                  | 42 ++++++++++---------
+>   include/linux/bpf_verifier.h                  |  1 +
+>   include/linux/btf.h                           |  5 +++
+>   include/linux/compiler_types.h                | 14 ++++++-
+>   kernel/bpf/helpers.c                          |  8 ++++
+>   kernel/bpf/verifier.c                         | 41 ++++++++++++++++++
+>   .../selftests/bpf/test_kmods/bpf_testmod.c    |  1 +
+>   7 files changed, 90 insertions(+), 22 deletions(-)
+> 
+...
+> +static void warn_for_deprecated_kfuncs(struct bpf_verifier_env *env,
+> +				       struct bpf_kfunc_call_arg_meta *meta,
+> +				       int insn_idx, s16 offset)
+> +{
+> +	const struct bpf_line_info *linfo;
+> +	const char *replacement;
+> +	const struct btf_type *t;
+> +	struct bpf_kfunc_desc *desc;
+> +	const char *file;
+> +	int line_num;
+> +
+> +	if (!env->prog->aux->btf)
+> +		return;
+> +
+> +	t = btf_type_by_id(meta->btf, meta->func_id);
+> +	replacement = btf_find_decl_tag_value(meta->btf, t, -1, BPF_KFUNC_DECL_TAG_DEPRECATED);
+> +	if (IS_ERR(replacement) || str_is_empty(replacement))
+> +		return;
+> +
+> +	desc = find_kfunc_desc(env->prog, meta->func_id, offset);
+> +	if (!desc || desc->warned_deprecated)
+> +		return;
+> +
+> +	linfo = bpf_find_linfo(env->prog, insn_idx);
+> +	if (linfo) {
+> +		bpf_get_linfo_file_line(env->prog->aux->btf, linfo, &file, NULL, &line_num);
+> +		warn(env, "%s:%d (insn #%d) uses deprecated kfunc %s(), which will be removed.\n",
+> +		     file, line_num, insn_idx, meta->func_name);
+> +	} else {
+> +		warn(env, "(insn #%d) uses deprecated kfunc %s(), which will be removed.\n",
+> +		     insn_idx, meta->func_name);
+> +	}
+> +
+> +	warn(env, "Switch to kfunc %s() instead.\n", replacement);
+> +	warn(env, "For older kernels, choose the correct kfunc using bpf_ksym_exists().\n");
+
+Is it right to reference bpf_ksym_exists() macro from the verifier log, 
+what if user does not use bpf_helpers.h header?
+
+> +
+> +	desc->warned_deprecated = true;
+> +}
+> +
+>   static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>   			    int *insn_idx_p)
+>   {
+> @@ -13016,6 +13055,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>   
+>   	insn_aux->is_iter_next = bpf_is_iter_next_kfunc(&meta);
+>   
+> +	warn_for_deprecated_kfuncs(env, &meta, insn_idx, insn->off);
+> +
+>   	if (!insn->off &&
+>   	    (insn->imm == special_kfunc_list[KF_bpf_res_spin_lock] ||
+>   	     insn->imm == special_kfunc_list[KF_bpf_res_spin_lock_irqsave])) {
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index d876314a4d67..5a57a92a8f8c 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> @@ -1252,6 +1252,7 @@ __bpf_kfunc int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args, st
+>   
+>   __bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
+>   __bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
+> +__bpf_kfunc_mark_deprecated(bpf_kfunc_implicit_arg_legacy)
+>   __bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
+>   
+>   /* hook targets */
 
