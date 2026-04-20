@@ -1,103 +1,127 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8B837F8CF
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 04:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2E23806B2
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 04:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776657815; cv=none; b=H80mJuO0hOTQar6xyPOqez5+nbo798q76z/5nrn1vbcec5iCTPTaRCZeuMehYU5jcCRNcI4lJIksZFRRaozMMNA8GtioN9JuTHGFL1WEY/CjwPV3pH3KRMFvWOlkBkKlFi/3lMeQL8QqolRfsUeeaJB7DJMU1dkZLbjEdsb5MeI=
+	t=1776657955; cv=none; b=MqeoOksum8PwIars7dTR5O5AtSrFaphp1t9AzyS+it8wrGPfQSbMaEDKuAHzmayntWW9nZ7SpB+6qE3ENNMT5LYJUUn5cC7RCLQngNg/aYIHXt5FN479yXIuvgs5luFfXBRVMVYI8oKxnb/3kJZRnuwD1u+5xlFpt1bVT4ZwWaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776657815; c=relaxed/simple;
-	bh=4mT3dFg7/3gOalW2PBSx7RyeKxDvyW5mKVZhJlH+DtI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vA66xUzgserVnu/rA3EL/OwS71Y02/ZH159o+bIJOS8i65m9v0NtLOqo8/h1YwHJ/XToHkjahA5PLM3FygvBpZi7H4wdqtTLU2BiNnaK77pTOdY/CzuvuV67YwnYUzTvVs8bIj9jzrPXfvkQ14MD15swQfHah0O/LbOIbRUWeQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fzWzx6VPTzKHMT9
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 12:03:09 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id E1C8640601
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 12:03:26 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with SMTP id Syh0CgCHam+NpeVpJBEzBA--.30887S2;
-	Mon, 20 Apr 2026 12:03:26 +0800 (CST)
-Message-ID: <e1e83e9e-8161-4096-8163-21ff3c9ae629@huaweicloud.com>
-Date: Mon, 20 Apr 2026 12:03:25 +0800
+	s=arc-20240116; t=1776657955; c=relaxed/simple;
+	bh=LWGI2c6f+xOxw0O46cMe57bsbdV3nnADBzMhrOpnZEc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=niCYhJw7qrxywhGhrapP/nwAKyHJet9/SgBEP+wG5xwpvyPI3IR5FnA0kAi7CuJgFBFIcOdrKYhUXpEaYXpMsXkse4TNpiemA+Bd8LeWZMRE3u6+mH+fH4m9KMiZpkMsT5G+RppwRF/0MxH+GZx12prBaQZoXkv+8cf/4D8ocwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oS5BIcMS; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oS5BIcMS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BA41C19425;
+	Mon, 20 Apr 2026 04:05:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776657954;
+	bh=LWGI2c6f+xOxw0O46cMe57bsbdV3nnADBzMhrOpnZEc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=oS5BIcMSPMoUfC4/mL7MWWAy8KJbzi6Ev0LIh7uBrp7ksoZRGQDE6+J09meAB+1/w
+	 PDUPZSQgzD3YESt9T4M56Xg0oU084Y8LGnv0wxsCS2aYdRjjWcrapWppNv1VbPgtjM
+	 HITQ82LRf7ZXDGGmjRyUmAe2aFF648Jxj3ZieuPCp/nv3OR4mbDC091EHFieu/+fIA
+	 nBAo1S2Z8v1FRdM8+P1WjkQsHt9HMKwqwgsIM9R3Ih0KlAYAFKSjpBXPXQrj7osI+W
+	 SSRw/Qz9TExJwALXR7xPBN+EDMVOEquL/M7eK2wudapzdXAzi6nLTIoNydKOLuxwtf
+	 KwSLq4XMDjXdw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpf: verifier: fix NULL deref in map_kptr_match_type()
+ for scalar regs
+Reply-To: sashiko@lists.linux.dev
+To: "Avinash Pal" <avinashpal441@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260419040426.9672-1-avinashpal441@gmail.com>
+References: <20260419040426.9672-1-avinashpal441@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Apr 2026 04:05:54 +0000
+Message-Id: <20260420040554.9BA41C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v13 6/6] bpf, arm64: Add JIT support for cpu time
- counter kfuncs
-Content-Language: en-US
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- kernel-team@meta.com
-References: <20260418131614.1501848-1-puranjay@kernel.org>
- <20260418131614.1501848-7-puranjay@kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260418131614.1501848-7-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgCHam+NpeVpJBEzBA--.30887S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrur48ZF48GFWxtF4kKw1rWFg_yoWktwb_Wr
-	n3tF97Way7Xrsa9F17G3W3XFZ3A392yryktrW0gFWIv3W7J3yDJrykXr98uFnYga1fXrnx
-	Wrs3Zw4SvFnxujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 4/18/2026 9:16 PM, Puranjay Mohan wrote:
-> Add ARM64 JIT inlining for bpf_get_cpu_time_counter() and
-> bpf_cpu_time_counter_to_ns() kfuncs.
-> 
-> bpf_get_cpu_time_counter() is JIT-inlined as:
-> 
->    ISB                       // serialize instruction stream
->    MRS Xn, CNTVCT_EL0        // read architected timer counter
-> 
-> The ISB before the MRS is required for ordering, matching the kernel's
-> arch_timer_read_cntvct_el0() implementation.
-> 
-> On newer CPUs it will be JITed to:
-> 
->    MRS Xn, CNTVCTSS_EL0      // self-synchronized (ISB not needed)
-> 
-> bpf_cpu_time_counter_to_ns() is JIT-inlined using mult/shift constants
-> computed at JIT time from the architected timer frequency (CNTFRQ_EL0):
-> 
->    MOV Xtmp, #mult           // load conversion multiplier
->    MUL Xn, Xarg, Xtmp        // delta_ticks * mult
->    LSR Xn, Xn, #shift        // >> shift = nanoseconds
-> 
-> On systems with a 1GHz counter (e.g., Neoverse-V2), mult=1 and shift=0,
-> so the conversion collapses to a single MOV (identity).
-> 
+Sashiko AI review found 2 potential issue(s):
+- [High] Type confusion and non-deterministic behavior by accessing union m=
+ember `reg->btf` before validating register type.
+- [Low] Compiler warning due to mixed declarations and executable code.
+--
 
-ISB triggers pipeline flush and instruction refetch. Since it is a really heavy
-operation, I think We should collect performance data to verify whether the
-jited instructions are actually faster than the original bpf_ktime_get_ns().
+commit e1d023d433c4be96ed8eba9f6b8df2ec2929d841
+Author: Avinash Pal <avinashpal441@gmail.com>
 
+bpf: verifier: fix NULL deref in map_kptr_match_type() for scalar regs
+
+This commit attempts to fix a NULL pointer dereference in
+map_kptr_match_type() by adding an early return if reg->btf is NULL.
+It targets a crash that occurs when storing a scalar value into a kptr slot.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D221372
+
+> For scalar registers reg->btf is NULL. map_kptr_match_type() passes
+> this directly to btf_is_kernel(), which performs a container_of()-based
+> offset access and triggers a general protection fault:
+
+Since base_type(reg->type) !=3D PTR_TO_BTF_ID evaluates to true for scalars,
+wouldn't the code jump to bad_type before ever reaching btf_is_kernel()?
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 69d75515ed3f7..15b8f71074f93 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4545,6 +4545,18 @@ static int map_kptr_match_type(struct bpf_verifier=
+_env *env,
+>  			       struct btf_field *kptr_field,
+>  			       struct bpf_reg_state *reg, u32 regno)
+>  {
+> +	/*
+> +	 * If the source register has no BTF type (e.g. it is a scalar),
+> +	 * it cannot possibly match a kptr slot. Reject early to avoid
+> +	 * passing a NULL reg->btf to btf_is_kernel(), which would cause
+> +	 * a NULL pointer dereference inside that function.
+> +	 */
+> +	if (!reg->btf) {
+> +		verbose(env, "R%d is not a pointer, cannot store into kptr slot\n",
+> +			regno);
+> +		return -EACCES;
+> +	}
+> +
+
+Does placing this executable code before the variable declarations trigger a
+-Wdeclaration-after-statement compiler warning?
+
+>  	const char *targ_name =3D btf_type_name(kptr_field->kptr.btf, kptr_fiel=
+d->kptr.btf_id);
+>  	int perm_flags;
+>  	const char *reg_name =3D "";
+
+In struct bpf_reg_state, btf is part of a union:
+
+struct bpf_reg_state {
+    ...
+    union {
+        int range;
+        ...
+        struct {
+            struct btf *btf;
+            u32 btf_id;
+        };
+        ...
+    };
+    ...
+};
+
+By checking !reg->btf at the top of the function, does this read an inactive
+union member before validating the register type?
+
+For instance, if the register is a PTR_TO_PACKET with range =3D=3D 0, could
+reg->btf incorrectly evaluate to NULL here and return -EACCES instead of sa=
+fely
+falling through to the bad_type check below?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419040426.9672=
+-1-avinashpal441@gmail.com?part=3D1
