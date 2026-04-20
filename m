@@ -1,161 +1,129 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9725030BF67
-	for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 22:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776639103; cv=pass; b=OAicHK5zEuKKZIxbFeOHEXJNQKcRMSZjpRdlsuAvnd2rC1jqDItoOXRFUU3bHE+5oXQh7q/rU7h3+BskU5fJvugBL063OvxuaEIhGGuQZTFKQYz9c/tsTz+z+J3rsBLeuE+rSdw9CZo4N0dfWi0sHQx9PlQ6tzIR+m7SjLMdIHE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776639103; c=relaxed/simple;
-	bh=nGI8q1vIW2YCqL8DB2swQpMBunXNj9M7QpTu5vxe99c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t9GcjMkzimXN1QLy38o41hxeHCgt9j7SQJs36p4zBJfikojPhP1TTIxerqu0jg8R9bG1UPfv4L8vNhytgalgswbnCAaSBtsYQkZPPrIGe/fTXi2vTUzCVHNrBOFTq4KsFhgh9ppkcpgeEjwmjwt5jmueg+uvTS0HC2ksD9jIJ3Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIVyWv+N; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE0E13D51E
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 04:00:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776657638; cv=none; b=nibu3YQGLRKWe9/OJ4YiMlImlvCkkYFKqW9jQp3AesdciAm5IWiXv9Yfj91PByX/RPjXkAqwQhbOMphisqOdCzEGDEkB66WRMrp93EkzkUeMZaPWz6jnxf8QDIuoDdR/ZeaoLLFfpb6QVocSotYtmiJB73iip9jLfUOaD9pdMYQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776657638; c=relaxed/simple;
+	bh=VABlcxgdaMr+0sV+51KEnnYOMCrRZF4if7ZFD5uf4KI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=EPQ9iYXte3hJ8i1kkICmzN2JyQvbqfylHuff34Ya/nLvGL6zcsZmzMBBWgVuFUkb+mPQWI0CQEfGpSlOLaGOuvq2xkVlrw0O+udv2Vjt81gfkBENWhbyn2e+FSRtQCxpevvwpLjD/V/qdHJjH/rri8tvu26o3ZVEfG40zdvuEzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PMyNetD3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIVyWv+N"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43cfbd17589so1754347f8f.0
-        for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 15:51:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776639100; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Ac3tUAOZrMEsbjRwTXedAqMjl32ZOhtcme2qTVxb8BsXqjjNwJEXL9ih2mAknaGXqp
-         DMK8H9NHKOgQGj4PVwiLWBmtnVPMaUOler9Nk4F0TVa+GtLaJlkGtJ58E5qtfOXyTnkN
-         SNOkyzU3cckbOR92pGy1zRbZfAmVNNCTbkgJ+z7HfSSxyb2Yu/Am1OrHwm5WDUeVxs1w
-         nioUgHoKE6F+rduyoIrQq89262HSrlAiY9XgSEuC7gF3yexw+edNCUVzQNNhM8ieRyFd
-         WqSOcw1D85XbvLPOaSZ23L9imIHXEJLF5uiRv1F5Tdb82YYWmsx4JZOo5jCJJAQJZ+kV
-         I9kQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nGI8q1vIW2YCqL8DB2swQpMBunXNj9M7QpTu5vxe99c=;
-        fh=1h85ZoyzfYBWqDarArU7/pG2qXnocBpgVcQ06xjQ3/s=;
-        b=hEt6/fJGzyHyFoYusM8e3XmyZX2uzlFehO4Ja6fqieErS/cFlO46MUS6WEq/fyYOcN
-         50jRUOeTvSr/JSRmB/g8LUJwNg9wLniYMqVThRzsh5xXzYe/p0LeZJgcmn8EAeR7EgR5
-         gmLJWgwqZKBUa5COw2oBSk3AXZpmFlib8jHIbzyiBbcn2BiF1G+BZ9YhuStmrXCBm11z
-         GYi8FXJa9dvs11beKvxWW/DbjXrm4nBERnKRhY81E7NWtI9YTEZg1u64iqK+Ga4TsGGz
-         spOVTmbiPTqdGpFQZu7gqDgUVvprWT0w8nE+8DTyZlRCihavdAg/jdSaqvS2MCv7nN6k
-         k9/A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776639100; x=1777243900; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nGI8q1vIW2YCqL8DB2swQpMBunXNj9M7QpTu5vxe99c=;
-        b=PIVyWv+NVODk1fM6YRVoPCmpL9zUGbaduJRw4E4FoAIegZ+uqMEy9ajZ7vRe5i/8N+
-         RT36e8bOpdX9w73YACH/l0FcEzpiJaZbl7xGoROLu5Q/LnEJ8rZ3Mt8JKc5Pajbb+qnF
-         pHHG8o8xDfgi4ZgoAibFk2eVuMZf9wCPxXFBXKcgJsGLpAtCQg9jpRnSv7l0KGYzx9gc
-         mw0kJUbWR4s0+qaiBqMamkwWwAQrjkcbjRoQPeeYL9jTYaeelFQDGyXHhEijC3J2I8Cf
-         hwxUMXRFR1zLB6O0gi72EtXG75ami26eD2t1jPZW5QUxbx+Q8nPooW8yXDDOzwVJ67vH
-         kxSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776639100; x=1777243900;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nGI8q1vIW2YCqL8DB2swQpMBunXNj9M7QpTu5vxe99c=;
-        b=UB34m5uJypQae/ZTVh0Ihc2qVoGTvlcTTgmuYx2hAxf/+lWvY1Lrp6qRjD+WndRAVt
-         iEseB914dtb238cHbgpK35/jEnif8dJAEG6BlQpkE4Tsb4R6UN6AD7YZzmY1xG1KLHkI
-         Rkm8Jej59XmzxZ5Ja2Uey9kcAIUw8pgi6knYObLjkDzulh1lkyM24wchyFTzUvsemsbu
-         tG523PVCakMxfdqRcyi3jBcr5AoiWR0sTeTzrQGhVEFlFwsoKZ2i6+stVApWO8ULDohW
-         xuxSRZVefDdydamlqnR4Z8AW8EDMz7ou6Wc3VO13tyqlFikluYCc3eyw7D2ShTN1g3Wk
-         KWrA==
-X-Forwarded-Encrypted: i=1; AFNElJ+wdlkzEgadKcYLKvQ2Goe2IKmGaHdX5owsOmu7MeeEj/1t8aUXG1NX4a8FjgyHqyS1KPg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIk8T0Zb5vx87UkoTJSBM+YW+TIDZ4yaKhX2PvncBdSOyW0wZP
-	1ex+7X4BzlH431eWHxEOBcqmDAqOqjt+TQaK+2fVppVxMB2kTmjAjQjhe/zsFYH+qD0Fgtk6sUU
-	cI5Qv/GwrxzwV13cRjXeIK8TVbCY58I4=
-X-Gm-Gg: AeBDievpg6u2I936dg4K2L6X/M9EdzOb/arNtEaOrcjR+/7N4wIzFYaUHrpagR7HyiS
-	e+c/Ab4CVX34UPxG7Y+T1ZXGCGdLyqKf4fN0qnIlW3I442FI+hhubpnxqwLZ1oI/51SGQUn3R3z
-	miv5mQpAAUCe6QUKANSyvyHsFNK+nM2Aje5oYNMf/bWICwTgAVQ4vU+Tuw1yipyvcC3nmNQnKkS
-	65FtUuu3FfmWU/01ey7VqbB0plvMtEv/OR4We0m/PcKaGzk72Dp3KO8XHoJJbsWxdmkzvx7+2vp
-	Z9ZTcfjh/QCpEnZMy1ojzTcgm3D6CCSWHFWSgiHU3sZi4+ztOCE8yjPo24057VE28fCY0mRFWCm
-	5JD0+4auh3NUqH4AdvKFMCcrW82gRCmevNdq2
-X-Received: by 2002:a05:6000:22ca:b0:43d:7883:87ce with SMTP id
- ffacd0b85a97d-43fe3dfd265mr15420059f8f.34.1776639099627; Sun, 19 Apr 2026
- 15:51:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PMyNetD3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5396BC19425;
+	Mon, 20 Apr 2026 04:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776657638;
+	bh=VABlcxgdaMr+0sV+51KEnnYOMCrRZF4if7ZFD5uf4KI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=PMyNetD31F3sGpwBq4mObU2VO+97I0CvSbXJLdIna83cUSl2bTi2Q/L1gRN17jHE7
+	 nP91XCsI50ypQ6VgYgOSbWSKT6S90OrSOhrNx7QFg/s2pU584ye2rRz04ua7TlHqqf
+	 wieEqra1oJdaf6lDJg0Fp6oKBp+SMM+Y1IjPbegPSq2cPLi3Egdchie+FjJ1Yqr5gj
+	 4PzFq2TNFWXIG5tNbaQRTjmboNXc55dPEDMxVe0c+xyuuPJB8cHJvwL6fqoOrz9xLt
+	 I/hqXxhVQdXZ9P+8bVSw8TmFbHkoz4k/wuIcZsalK61IJ9Gj4qPaFTXcWmBeRrOohu
+	 /QQ3jC2/+C75g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] bpf: verifier: fix NULL deref in map_kptr_match_type()
+ for scalar regs
+Reply-To: sashiko@lists.linux.dev
+To: "Avinash Pal" <avinashpal441@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260419035948.9498-1-avinashpal441@gmail.com>
+References: <20260419035948.9498-1-avinashpal441@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Apr 2026 04:00:37 +0000
+Message-Id: <20260420040038.5396BC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com> <20260413-kasan-v1-1-1a5831230821@bootlin.com>
- <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
- <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com> <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
- <CA+fCnZd31GzdpEqR8VhfK4JtUKyyRMgbBoAbeGACJgm7WvB6Vw@mail.gmail.com>
- <CAADnVQKv5y+gq=TnOAEXSqgBRpmHNjwqCfxpLaw5XkcbQ+23bg@mail.gmail.com> <CA+fCnZe-b0Qqbo5gGv3HN20twquQETDfYYkE1r9tPr9zUFbW9Q@mail.gmail.com>
-In-Reply-To: <CA+fCnZe-b0Qqbo5gGv3HN20twquQETDfYYkE1r9tPr9zUFbW9Q@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 19 Apr 2026 15:51:28 -0700
-X-Gm-Features: AQROBzDew-foTfJLq_z3E45rMJ3PdE7WT5G5Kb1cNLd7o7s_NLhMVNDGxKf8D94
-Message-ID: <CAADnVQKuptG_opA12O=Xb9_+cHf3f=ycAZdfUp17P2HBYQzdsg@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, ebpf@linuxfoundation.org, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Xu Kuohai <xukuohai@huawei.com>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	kasan-dev <kasan-dev@googlegroups.com>, linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Apr 19, 2026 at 2:49=E2=80=AFPM Andrey Konovalov <andreyknvl@gmail.=
-com> wrote:
->
-> On Tue, Apr 14, 2026 at 5:58=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > I think we're talking past each other.
-> > We're not interested in KASAN_SW_TAGS or KASAN_HW_TAGS.
-> > We're not going to modify arm64 JIT at all.
-> >
-> > This is purely KASAN_GENRIC and only on x86-64.
-> > JIT will emit exactly what compilers emit for generic
-> > which is __asan_load/store. This is as stable ABI as it can get
-> > and we don't want to deviate from it.
->
-> OK, I supposed that's fair. You did throw me off point with your
-> performance comment. But if you decide to add SW_TAGS support at some
-> point, I think this discussion needs to be revisited.
->
-> But please add a comment saying that those functions are only exposed
-> for BPF JIT and they are not supposed to be used by other parts of the
-> kernel. And in case you do end up adding a new config option, guard
-> the public declarations by a corresponding ifdef.
+Sashiko AI review found 2 potential issue(s):
+- [Medium] Invalid union access and type punning due to unverified `reg->bt=
+f` read.
+- [Medium] Flawed bug diagnosis; patch addresses a structurally unreachable=
+ code path.
+--
 
-I feel concerns of misuse are overblown.
-Being in include/linux/kasan.h doesn't make them free-for-all
-all of a sudden, but if you prefer we can just copy paste:
-+void __asan_load1(void *p);
-+void __asan_store1(void *p);
-into bpf_jit_comp.c
+commit ce0e8cc557a90340c0553cc6fd6f929375190b78
+Author: Avinash Pal <avinashpal441@gmail.com>
 
-> > The goal here is to find bugs in the verifier.
-> > If something got past it, that shouldn't have,
-> > kasan generic on x86-64 is enough.
+bpf: verifier: fix NULL deref in map_kptr_match_type() for scalar regs
+
+This commit adds an early NULL check for the register BTF field in
+map_kptr_match_type() to prevent an alleged NULL pointer dereference
+when a scalar value is evaluated.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D221372
+
+> Call chain:
+>   check_store_reg()
+>     -> check_mem_access()
+>        -> check_map_kptr_access()
+>           -> map_kptr_match_type()
+>              -> btf_is_kernel(reg->btf)   <-- NULL deref
 >
-> FWIW, I suspect HW_TAGS KASAN already just works with JITed BPF code.
+> For scalar registers reg->btf is NULL. map_kptr_match_type() passes
+> this directly to btf_is_kernel(), which performs a container_of()-based
+> offset access and triggers a general protection fault:
 
-Ohh. Good point. Looks like modern arm64 cpus in public clouds
-don't have that enabled, so one would need pixel phone to
-catch verifier bugs via hw_tags.
-So we still need this x86-specific jit kasan.
-I guess eventually it can be removed when hw_tags support is widespread.
+Is this sequence actually possible in the unpatched code?
+
+Looking at map_kptr_match_type(), the base register type is checked
+before btf_is_kernel() is ever called:
+
+    if (base_type(reg->type) !=3D PTR_TO_BTF_ID)
+        goto bad_type;
+
+    if (btf_is_kernel(reg->btf)) {
+        ...
+
+For a scalar register, base_type(reg->type) evaluates to SCALAR_VALUE,
+causing it to fail the PTR_TO_BTF_ID check and jump to the bad_type label
+without evaluating btf_is_kernel(reg->btf).
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 69d75515ed3f7..15b8f71074f93 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -4545,6 +4545,18 @@ static int map_kptr_match_type(struct bpf_verifier=
+_env *env,
+>  			       struct btf_field *kptr_field,
+>  			       struct bpf_reg_state *reg, u32 regno)
+>  {
+> +	/*
+> +	 * If the source register has no BTF type (e.g. it is a scalar),
+> +	 * it cannot possibly match a kptr slot. Reject early to avoid
+> +	 * passing a NULL reg->btf to btf_is_kernel(), which would cause
+> +	 * a NULL pointer dereference inside that function.
+> +	 */
+> +	if (!reg->btf) {
+
+Is it safe to access reg->btf before verifying the register type?
+
+In struct bpf_reg_state, the btf pointer is part of an anonymous union
+and shares memory with fields used by other register types, such as
+range for PTR_TO_PACKET or mem_size for PTR_TO_MEM.
+
+If a non-BTF register is evaluated and its aliased memory happens to be 0
+(for example, a packet pointer with range =3D=3D 0), could this incorrectly
+trigger the early exit with -EACCES? This would bypass the expected type
+mismatch handling and -EINVAL return code in the bad_type block.
+
+> +		verbose(env, "R%d is not a pointer, cannot store into kptr slot\n",
+> +			regno);
+> +		return -EACCES;
+> +	}
+> +
+>  	const char *targ_name =3D btf_type_name(kptr_field->kptr.btf, kptr_fiel=
+d->kptr.btf_id);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419035948.9498=
+-1-avinashpal441@gmail.com?part=3D1
