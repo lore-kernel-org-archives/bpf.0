@@ -1,112 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [67.231.157.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D42BE395DB4
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 10:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46FB214204;
+	Mon, 20 Apr 2026 10:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.157.127
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776680200; cv=none; b=e0r3VFTjRvyGREQ6GGEygPSMp9N0wghSEVNTeTWtVsMJt5DHfhOo3TsTVEBl6zIqkGUTjZGhael29ogxbdJFvQWrsSwWgDJWPAVkG6x9z5rMfTMvH4uMY7e0Ob7wmapqhPBK1OpG/538EqJcdggyyonarE9IVQUYYhI0HoEKcMo=
+	t=1776681666; cv=none; b=ia1ya0mE+ubTLwGkyXCrY6B5s0M2UpC8+17vgkiWbrdf/dsmKvnJ2tQRaJnOmokEii7RKF1kaLIW0NYK++5mKA3QkelgtU7WQHYWnLwC1eai+1CUnx9IJS1Qe1Ms97Eb+vFuRqju+yy1d8MfuCBQV9/VP4KElu2A0+eIpWBvUus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776680200; c=relaxed/simple;
-	bh=fzWSsgO4f/GdqjiTLOqTFb5H54PKYba4VqFOp8XRlbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BwQ9IElHdK8Kdm6f4jCi2HZTJXdXhVaPEzQOYVks0ZpXJt31TDVuYnkRj+OBXJAxdHM18Edq89v+bbTmy1EFu37SFMYejFkY9476CPd96U5rAQt867rN+6pggYSmAo7ifPK4148TdK6QQnzWWjnj0o98vgI9g4vlDLTW/KhPYuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2BRjvjl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776681666; c=relaxed/simple;
+	bh=Pf677KovmnUk65KEriz0KIpiNlnDgtwneJAk/RSS+7c=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JG5yV15zPO2EXHe1DUeuSvJR7MD5srRay2SA0DrF+pUd+k2HN89SrJKmVIeGClXzU0pFkTBNkphaAnDnjXNozqQhbFIu3bcEFEWtbYWRjyHaw7oH0X463vI/Wpp6baKUOOhQLuAo3PkLMp6rjEdsrEnfikXyAMHjOyAGZgSy7bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=nGdM8Fcc; arc=none smtp.client-ip=67.231.157.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2BRjvjl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024A7C19425;
-	Mon, 20 Apr 2026 10:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776680200;
-	bh=fzWSsgO4f/GdqjiTLOqTFb5H54PKYba4VqFOp8XRlbA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D2BRjvjlm+Ijdoiku2z7SklesvpgK+VMgb83+XGCxF/4MWZy5K8OJfkssOLGwPbaW
-	 ykNjCS7P1IZwpMLKuvRWabe33FO9EhTELWJw97X7KVHXxn/e5kobHkH2c4kcFgle5D
-	 l4tU2zEw1lRL7jzgyY6jryd11MNrmXG2qFs9g44s0fmjl9wL/+htfStdAU/hzAIkW3
-	 R2iY5h2gQ3EuYkmnzYlJMu+i9PDyRpYIvckQI3mXCFb5IMhxI/QFLWKkmnX5vptIo1
-	 bumx9PKlFSgjZlPj8PTSKIQ10DBplYrLYn9CEUCHNrgy687lDxDvqXb3TIkE5vjf4+
-	 kjXOCxeP7T/8A==
-Date: Mon, 20 Apr 2026 11:16:34 +0100
-From: Will Deacon <will@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Catalin Marinas <catalin.marinas@arm.com>, kernel-team@meta.com,
-	maz@kernel.org
-Subject: Re: [PATCH bpf-next v13 6/6] bpf, arm64: Add JIT support for cpu
- time counter kfuncs
-Message-ID: <aeX9Alsyk1Cb2QLG@willie-the-truck>
-References: <20260418131614.1501848-1-puranjay@kernel.org>
- <20260418131614.1501848-7-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="nGdM8Fcc"
+Received: from pps.filterd (m0122330.ppops.net [127.0.0.1])
+	by mx0b-00190b01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63K9fMe43923168;
+	Mon, 20 Apr 2026 11:40:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=jan2016.eng; bh=WRwFF0ak/kYmOvxu8pvV8fXOqllXynyOp
+	w9YqXc5VjU=; b=nGdM8FccvIJ6v9RStvTCMXQwV1wySOWOCN/jZIl5ne5ylrxv9
+	FbmFA+fH5ZR/Lo8e36MG3e1HtdSHVvGGsgnZ1GSwIJcbRrPwyc20kePfLoVI5Jiw
+	GpNhXJnVO2PO7SGIlh3+WBzYvmWIQhUG4DAifree+BO809CLkedi3tzWWHPSD0zo
+	G5lt31C/ZB/gjaRNyRIdD0RxdSkWGh+7L7qHjiTRbzz51Os1Mz4d0XTZvXUVajlW
+	wYKHsV+IGzGtddfep3McAdygLgj0EogzA/305yT/Aqj6nhirhdL5HMoktGOyzCUY
+	m6T/UcdBcaJNHRR3LjcyLgXuw7Ib8OuH/icEg==
+Received: from prod-mail-ppoint6 (prod-mail-ppoint6.akamai.com [184.51.33.61])
+	by mx0b-00190b01.pphosted.com (PPS) with ESMTPS id 4dm1ktcgt5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Apr 2026 11:40:54 +0100 (BST)
+Received: from pps.filterd (prod-mail-ppoint6.akamai.com [127.0.0.1])
+	by prod-mail-ppoint6.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63KAQhM3031228;
+	Mon, 20 Apr 2026 06:40:54 -0400
+Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
+	by prod-mail-ppoint6.akamai.com (PPS) with ESMTP id 4dm59tqd1q-1;
+	Mon, 20 Apr 2026 06:40:53 -0400 (EDT)
+Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
+	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id D1ED78A;
+	Mon, 20 Apr 2026 10:40:52 +0000 (UTC)
+From: Nick Hudson <nhudson@akamai.com>
+To: bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
+        Anna Glasgall <aglasgal@akamai.com>
+Subject: [PATCH bpf-next v5 0/6] bpf: decap flags and GSO state updates
+Date: Mon, 20 Apr 2026 11:40:45 +0100
+Message-Id: <20260420104051.1528843-1-nhudson@akamai.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260418131614.1501848-7-puranjay@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-20_02,2026-04-17_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=940 phishscore=0 lowpriorityscore=0
+ adultscore=0 bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2604070000 definitions=main-2604200101
+X-Proofpoint-ORIG-GUID: MAsql27h9d6O5u7AoM0sQIHf7vhJbvDO
+X-Authority-Analysis: v=2.4 cv=Eaj4hvmC c=1 sm=1 tr=0 ts=69e602b6 cx=c_pps
+ a=WPLAOKU3JHlOa4eSsQmUFQ==:117 a=WPLAOKU3JHlOa4eSsQmUFQ==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
+ a=4xFXqd-_BHBjZVyr95gr:22 a=X7Ea-ya5AAAA:8 a=1oy85zK9C34BhurvvrYA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDEwMyBTYWx0ZWRfXzc6zodESEFdH
+ Xh9IxmcIa5B0Xyk/qSmCfazyFXO4HVhnVjzQY9+LrVc6kPXfBzIaPJ9lFp2yJd9SU1eUeSnpD5t
+ mXDDJNMT80+fqNdvREEb74Mle7zKPUae+XZybbqz1ONWzuPlatr+cmPozWvhSeu0uEklHl+us9Y
+ blDARmWazlJMFWTxEPB16eY1RbyHNDNqR9t1ukhrOAyQvpovKpy1uNCmPGVzRWasRm0cSGTNk8m
+ jkyR9JSKK3fu7F4Eq5LjQuGVQ8XAY0K5oQF9J+tPMDTKNb2/7O2z4sBY4MKiZMyS7Zk2b9lobZN
+ 3aX0cbbNKsVESi4saBOrDaT1Sv3bQySYSelONDKpeI/dV1ioUgOZN6zJ981hgZi/8oDTYyfXnpx
+ zeb7envKQG0Hw7MaByvEGaB0F7657TsKD6JlDqzTtlW7FS04oJ5p6B+0Nk7XYFFPwCAIkkwQCoM
+ Df+AeEdsyn4xehnoKjg==
+X-Proofpoint-GUID: MAsql27h9d6O5u7AoM0sQIHf7vhJbvDO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-20_02,2026-04-17_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501 clxscore=1015
+ adultscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604170000 definitions=main-2604200103
 
-[+ Marc]
 
-On Sat, Apr 18, 2026 at 06:16:04AM -0700, Puranjay Mohan wrote:
-> Add ARM64 JIT inlining for bpf_get_cpu_time_counter() and
-> bpf_cpu_time_counter_to_ns() kfuncs.
-> 
-> bpf_get_cpu_time_counter() is JIT-inlined as:
-> 
->   ISB                       // serialize instruction stream
->   MRS Xn, CNTVCT_EL0        // read architected timer counter
-> 
-> The ISB before the MRS is required for ordering, matching the kernel's
-> arch_timer_read_cntvct_el0() implementation.
+This series extends bpf_skb_adjust_room() with decapsulation-specific
+flags and tunnel GSO state updates for decap use cases.
 
-Careful here: this will _not_ order counter accesses against normal
-memory barriers (e.g. smp_mb(), acquire/release). If you need that, then
-you need something like arch_counter_enforce_ordering(), which we do
-have in __arch_counter_get_cntvct().
+Motivation
+----------
 
-Furthermore, using the virtual counter may expose you to situations
-where a guest value for CNTVOFF is installed (e.g. during the VCPU run
-loop). Given all the contexts in which BPF can run, this worries me a
-little as you might end up seeing a non-monotonic view of time between
-BPF programs.
+When BPF decapsulates tunneled packets, skb GSO state needs to be
+updated to match the removed tunnel layer. This includes clearing the
+corresponding tunnel GSO type bits and resetting encapsulation state
+once no tunnel GSO flags remain.
 
-> On newer CPUs it will be JITed to:
-> 
->   MRS Xn, CNTVCTSS_EL0      // self-synchronized (ISB not needed)
-> 
-> bpf_cpu_time_counter_to_ns() is JIT-inlined using mult/shift constants
-> computed at JIT time from the architected timer frequency (CNTFRQ_EL0):
-> 
->   MOV Xtmp, #mult           // load conversion multiplier
->   MUL Xn, Xarg, Xtmp        // delta_ticks * mult
->   LSR Xn, Xn, #shift        // >> shift = nanoseconds
-> 
-> On systems with a 1GHz counter (e.g., Neoverse-V2), mult=1 and shift=0,
-> so the conversion collapses to a single MOV (identity).
+Series Overview
+---------------
 
-Do you have any performance numbers to show that this is worthwhile
-compared to calling a helper wrapping __arch_counter_get_cntvct().
+- Name the adjust_room flag enum for CO-RE lookups.
+- Refactor adjust_room helper masks for maintainable validation logic.
+- Add new DECAP flags to UAPI.
+- Add guard rails for incompatible/invalid decap flag combinations.
+- Implement decap GSO flag clearing.
+- Add selftests to validate decap GSO state transitions.
 
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->  arch/arm64/include/asm/insn.h                 |  2 +
->  arch/arm64/net/bpf_jit.h                      |  4 ++
->  arch/arm64/net/bpf_jit_comp.c                 | 54 +++++++++++++++++++
->  .../selftests/bpf/progs/verifier_cpu_cycles.c | 50 ++++++++++++++++-
->  4 files changed, 109 insertions(+), 1 deletion(-)
+Changes v4 -> v5:
+- Patch 5: Remove explicit clearing of encap_hdr_csum and
+  remcsum_offload on UDP decap, per review feedback.
+- Patch 6: Remove SKB_GSO_TUNNEL_REMCSUM from SKB_GSO_UDP_TUNNEL_MASK
+  in selftests, and minor test improvements.
 
-Aren't you conveniently ignoring CPU errata here? I suspect this needs
-to be predicated on the absence of those, in a similar way to how the
-vDSO deals with the 'vsdo_clockmode'.
+Changes v3 -> v4:
+- Patch 5: drop SKB_GSO_TUNNEL_REMCSUM handling from this series.
+- Patch 5: clear encap_hdr_csum and remcsum_offload directly on UDP
+  decap.
 
-Will
+Changes v2 -> v3:
+- Add a new selftests patch to validate decap GSO state behavior.
+- Reorder the series so helper-mask refactoring precedes UAPI DECAP
+  flag additions.
+- Refresh patch 2 and patch 3 split to keep refactoring
+  behavior-neutral.
+- Patch 5: add decap tunnel GSO-state checks in "bpf: clear decap
+  tunnel GSO state in skb_adjust_room" (per Gemini/sashiko).
+
+Changes v1 -> v2:
+- Patch 3: decap flag acceptance intentionally remains L3-only while
+  adding helper masks.
+- Patch 4: decap with L4/IPXIP support enabled with guard rails.
+
+Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+Signed-off-by: Nick Hudson <nhudson@akamai.com>
+
+Nick Hudson (6):
+  bpf: name the enum for BPF_FUNC_skb_adjust_room flags
+  bpf: refactor masks for ADJ_ROOM flags and encap validation
+  bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel decapsulation
+  bpf: allow new DECAP flags and add guard rails
+  bpf: clear decap tunnel GSO state in skb_adjust_room
+  selftests/bpf: tc_tunnel validate decap GSO state
+
+ include/uapi/linux/bpf.h                      |  36 +++++-
+ net/core/filter.c                             | 118 +++++++++++++++---
+ tools/include/uapi/linux/bpf.h                |  36 +++++-
+ .../selftests/bpf/progs/test_tc_tunnel.c      |  58 +++++++++
+ 4 files changed, 225 insertions(+), 23 deletions(-)
+
+-- 
+2.34.1
+
