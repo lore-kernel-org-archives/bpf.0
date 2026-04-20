@@ -1,132 +1,246 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MEUPR01CU001.outbound.protection.outlook.com (mail-australiasoutheastazon11020128.outbound.protection.outlook.com [52.101.152.128])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B822147F9
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 22:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776724887; cv=none; b=QEiXWQJrYoCb0IwgMh4Wf8bN59wr80PP5WhPV+FQWU5eixFBUj6jc8wHca2lfKd64aTPdt5kjswKNHekZCYRw91fEgSkXse5Rvix5QWb6OKePQS1CU/1a5bHI5MUoUWdGrGv1J0gEZUdQ9Q+wEr0pN+7GpUsOg9rU2cGGaKpgkY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776724887; c=relaxed/simple;
-	bh=8JTUYLp4c0/mZiYFwbA9+5xl3HTe7go6PAo4jEdOYtA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Zizzr/277um7eWWM1Zf+C+lax+lUAdMwOktkQ0uaHCDhUxOBcadln6paTIQdzile6bTgSqjL4oBw8cf8lA/B8/VGnXbeaFo4ZvIFwAJAkkcoObvnzZEjyKCR952ht/85qJoncOEUM7gvpkhF1TuVlmLf71Q5GxpCz8/+gvlM9XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+GXh1W8; arc=none smtp.client-ip=74.125.82.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EE5346A0D;
+	Mon, 20 Apr 2026 23:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.152.128
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776726042; cv=fail; b=ks6UdzWuAmtAzrp6MHqyO3vdjkLznLWqgl4MgF00CzykxA6EN3sMRtAklZgpBtoCNurAcwJ2883qCtkMJ/PgYjQAufvN0NOZ5PRsB6ySF40pM6wFy9U3q2BxOfkJZ2RPuIiDHklbLKfHt+sd6Rwt9p9Z9UIdLh9GhnJPKBqfjYU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776726042; c=relaxed/simple;
+	bh=H5UAgjHf9uI82jAHCu5sWb5x9v/l4kLKUsUOJNZrRI4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=qCtHis4EH98qn5JjHKDiGh3lJq0aERt2alAHToPuAetqrIBCwDifCcPyvX7T81ZlVkuGUVR+ffBoMfbMyDEbkBst+jp3mizbh1jXQcVyKsfJ2uDHAHutCkYtT+jaTRmbCHJLTEp8X+pjRV7r9zv+TTKggUOTUjd8zS97L1+Mam4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=verivus.ai; spf=pass smtp.mailfrom=verivus.ai; dkim=fail (2048-bit key) header.d=verivus.ai header.i=@verivus.ai header.b=YJdmuw+c reason="signature verification failed"; arc=fail smtp.client-ip=52.101.152.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=verivus.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verivus.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+GXh1W8"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2d891442388so5116907eec.0
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 15:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776724885; x=1777329685; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8JTUYLp4c0/mZiYFwbA9+5xl3HTe7go6PAo4jEdOYtA=;
-        b=S+GXh1W8ckq8EpDQeUkIYS6QXijRIZkjZeZboHMrxm0j+/zWM/eZrmtiNrgMEhwsmR
-         d/9bqXvawqUkDvq19d2WigorUQYvNonvx/c/SNM3cPS4R3VNxKRB35EZj5odByAusagR
-         WkQ2+L5iWkwyKYW11sV+sHKQug76cmCqOfaz3dhBUV/S4sCEFXPZNfCLgNtC4OjvNPIG
-         xHUBdmYe0zhqvh0qfk4JIGV/1m8U+tfSPcX+LvyT9iZtX8lblb86EWkHHoBRHEG4grNa
-         0XAl1TXZi3blslGzBiE/Cj5QfaHn/IuNq9Uyk+E9D5UWluv6iX7dw9POTHP3d21NTI/w
-         y9pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776724885; x=1777329685;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8JTUYLp4c0/mZiYFwbA9+5xl3HTe7go6PAo4jEdOYtA=;
-        b=VzLPEDhWwn1acL+BFVjo72cjaOyJ7bA1OnIMzMJk20Ft12TLRtaXiEUJRO5oMmFVjl
-         3/WJfh4LiKPUcgpVK/VxkGZ8m3vgrarHefn/eQPzAxMVG+F+gBnlXb+1xUBsHQC6YTYM
-         dP4nXXsFIxcAh8VpIh8z6knhiBQlz0V1tOou/JyuYArEIUIccrFBfxBAMdtdBuWND9dH
-         Du9sK709i9+QHbyE3bSLPMpgFMdPm8T7SEH2Uh2lD14cc8Vj6HuUqkNXZNCRI0HtDrxY
-         myvqo/MLNQZBnwzz1rKV7SKJf2K2vzVrps3OUO8NrWt7a2wuNbLbgado6UNIhUmYODmT
-         QHIw==
-X-Gm-Message-State: AOJu0Yz3//MglYNLY4a+lfaT/me+aBcn2Nrei9iDLs4wwRWzKCAYEQcc
-	L7DoL1fOQrtr/2+gbfAAhGGbQ4V+XquBmOkUznjlnrE7ob0Frm7azWPJ
-X-Gm-Gg: AeBDievrGzOPPCoxblEVeGXV7irkY++xsodgLsjfc0JhhjMrhjRDQf/m1N4AqmI170m
-	qM0rDYp5UfzkMXRHnbRUo2gN4djJBdp7A//R786vvqRtU0q8KllZzJuNBsFBrOMhDzPfhEhPI0a
-	4pgu6TS+KMLMf+h/b/uN1Q3mWBiXAg0jK83ILthOqhUT+zzynMfh55jBe9wKLFPX2ShDGqPK2lc
-	WI2YiqXkVIWd3J73RATLta1VHLozTA7Nla8emnunOW7mWLwYqUCSb0x8NGdm33rbEYRucIbnsWa
-	aZqq+fZOGiqxuVWnAC/t6HGbCER2+7nyKjhmE36hN7P90t1WvDKEigqoEtobdH4R/RlHJvflYX8
-	eFu+CwBd9cIkfKZUx1bEhqMDmG6IpsTrTfYdyJT7UVlPp5vQeMubcERWye7mT2KVa7UaVnXRKMz
-	nqe+lxZbNtdei0+KG3esjvA7o2AyTyTwoM2cyM4ivB8VkLlicXwxUlomHoK8+ran3SBXpED7c4b
-	kgHqQ+INrRF24VW8VE=
-X-Received: by 2002:a05:7300:748f:b0:2cc:600d:2ffa with SMTP id 5a478bee46e88-2e4788392c3mr7835887eec.16.1776724884773;
-        Mon, 20 Apr 2026 15:41:24 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:3def:75fe:cbcb:86a8? ([2620:10d:c090:500::3:5edd])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53d2cfc1dsm15949305eec.22.2026.04.20.15.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 15:41:24 -0700 (PDT)
-Message-ID: <b44b4b9333cc099882c919145306381ab01d747c.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf/verifier: Use intersection checks when
- simulating to detect dead branches
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Paul
- Chaignon	 <paul.chaignon@gmail.com>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,
- Srinivas Narayana <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
- <santosh.nagarakatte@rutgers.edu>
-Date: Mon, 20 Apr 2026 15:41:22 -0700
-In-Reply-To: <CAM=Ch079=-6advVJAaEv8U5-N3_nZY39qf_5c7s0krU02oEa7A@mail.gmail.com>
-References: <20260415160728.657270-1-harishankar.vishwanathan@gmail.com>
-	 <20260415160728.657270-2-harishankar.vishwanathan@gmail.com>
-	 <2ec3db2d2960d9c13577d630306f16873ebb53e5.camel@gmail.com>
-	 <CAM=Ch05O+m3gAAz=EW=ZPrhnTMrrMJ51ryMkwROnfkBMVVxnaw@mail.gmail.com>
-	 <f79d58337ec3628a52d41a09e2c35e598ab656f4.camel@gmail.com>
-	 <CAM=Ch07jcncdAA1D-uh66OuVXnROF72k8gunJy2cSMuvJNP+nw@mail.gmail.com>
-	 <f622c0166e9c1809184673c1bffda7e43ae495ea.camel@gmail.com>
-	 <ea37be7028d20e962816ff10631da383b5910c57.camel@gmail.com>
-	 <CAM=Ch04tB7sXD_qmK-5NZ-aQZutJ6bYmciU+hzZZ8yJx-hbwLg@mail.gmail.com>
-	 <aa9704461f816bb90e2648d7ed2ed40268d63215.camel@gmail.com>
-	 <CAM=Ch079=-6advVJAaEv8U5-N3_nZY39qf_5c7s0krU02oEa7A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=verivus.ai header.i=@verivus.ai header.b="YJdmuw+c"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gKpTZvk1pL3ihhiefcCFjL4cVoVhaF3/ijXsbS0XbzHsD1qpxjSJPzPzvgka/6pja3TuCIG8CG52Nm5iyKCfKSjIbo3NEwqe2HMhicvFFLUT+j7AD71AVJKsIEGJIC3e4a7OSVanzRziGpLx+ekXKWX4ePAzn4tEARxW5dmfLoKkE6SCEzhZ4OlCJW4AShvz6wACMUyAPzBv+LaqTI6jy1xcA7MmwYsxdpNYizV9ocM1EA20/RgsyZbHYJsfNys/4PoQOXhb8iFGFxtoENOH0BQpjQp6LnY2QAEt9GwdRHWI0kRfxWadjpmBYxEKtXv6Anci5lFkMtrqq3p/o+fGJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zgSKX2JGb9pbQxxbM5Vsgw7XCqtN44RD5ubLAVD9/Vc=;
+ b=WtWv0LzwgslfT8AxqRLf1dQziHTbc58XTXYuedbSVmYrcojOR5eshNcuTMRz3aBLa2tJymO9dj9mo/aaX0D2uEACU2ndyXP5KmJ/QaLMYabmK7QKUWyf0qkNpUOUxJ2imizYjyfzCINbbNYasr0p0CvErH3R3MTbvTTDofgB8QjWvhp4aUHGhlNaT3FknS5/FESAYZJGEu0l63rvUh0FgCn5Lgj1Yo31KjWYELibJoDutzjfBLohPivnXfnMv8bj+S4QHYBezZamo2kZKOoLQgyMgqYFtoba+g2nv9j7kDmvND5yZfBugcDYAdHMX5tYRz4ZWo4b7WL/otpVGF4STg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=verivus.ai; dmarc=pass action=none header.from=verivus.ai;
+ dkim=pass header.d=verivus.ai; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verivus.ai;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zgSKX2JGb9pbQxxbM5Vsgw7XCqtN44RD5ubLAVD9/Vc=;
+ b=YJdmuw+cJRGCOMPyxuHjeceTTCf36Kbk+8ohGogb2AYIG2xugJHAHjPqJHVWFz6dAcP+LPetlcqNezfulEep/v3RZ2jmm1YvxKO5zb1DA0ArYF/+KQ+m01MenRXDve1NLZm6TLWOBeTJfX+FDzva91/IsIMlZ/ypsTRS163NgDHkETe3WLUlsjRs7fY3L57QHkMu14hxueUQ7szXVSH6JI8i9O+ZQgLK7NX0Ck2vtJdL2f6dCzosx21MSyCAPqUvHa0jgkiNx4YqmO5U54J57VJetYap8uNA77QcEOl0MRyj2jBWCZdAcqD2gxu7oRBFxRnkLXUR7gsGZt4c1mwGsw==
+Received: from ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22a::5)
+ by SY9P300MB1562.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:2d9::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.16; Mon, 20 Apr
+ 2026 23:00:35 +0000
+Received: from ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::1e3f:9cb9:4a95:b5a2]) by ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::1e3f:9cb9:4a95:b5a2%5]) with mapi id 15.20.9846.016; Mon, 20 Apr 2026
+ 23:00:35 +0000
+From: Werner Kasselman <werner@verivus.ai>
+To: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+CC: "stable@vger.kernel.org" <stable@vger.kernel.org>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri
+ Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Lawrence Brakmo
+	<brakmo@fb.com>, open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH bpf v5 1/2] bpf: guard sock_ops rtt_min against non-locked
+ tcp_sock
+Thread-Topic: [PATCH bpf v5 1/2] bpf: guard sock_ops rtt_min against
+ non-locked tcp_sock
+Thread-Index: AQHc0Rl/8WgPcQzHMUKTt2q5fhMTww==
+Date: Mon, 20 Apr 2026 23:00:35 +0000
+Message-ID: <20260420230030.2802408-2-werner@verivus.com>
+References: <20260417023119.3830723-1-werner@verivus.com>
+ <20260420230030.2802408-1-werner@verivus.com>
+In-Reply-To: <20260420230030.2802408-1-werner@verivus.com>
+Accept-Language: en-AU, en-AT, en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: git-send-email 2.43.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=verivus.ai;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: ME0P300MB0853:EE_|SY9P300MB1562:EE_
+x-ms-office365-filtering-correlation-id: d2a2decf-e2ae-4184-e030-08de9f30a197
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|1800799024|366016|376014|18002099003|38070700021|22082099003|56012099003;
+x-microsoft-antispam-message-info:
+ tO3A83oW9wnfDUdV2UTA+mgyan2F8ZYy/oI9htJutNN+z1PmWIzTx7OINYobJtJLduwcdfkdJIu9a9gajtm3dAiHZ2DlFMwFPor5VOWMvo1ChR+KC31IenHbMlF4xaXCG1jJiL6qeq7gxQAYBFFCWI0XMkLxRKlOmGxmaCumURC+Fiie6JdIui1ycaUnpwjYVJk18tlTKCBI+gEn+wqJqx5sBHHrvEP5VUEhBCjAFlHGGV4r7iqGzfFMl5BoOIRBJDA6zsgdpjxCqBrx0jbkYRBoCUxnNvLTJ7P9YaQqYqgww8HqsrwrMKxklFPy7dgEHkw5r8tCK1FBqW9uPih9Q3cpaorF6Z7q2k7ST1wd04oGwRYhVrmK9PmtUDVJUz3HeJL8qcnbOt9JBFMH9KS9D7dIhJQS6puCcPsGGzlMca/UOxbes99Eng8ZRMTVIsvgiVPnZmt9SoJgHUpxQ6iQreO0ixUGjSTeJ11B/HS7lCntVHhfHtqMwsuSxYHdWwB4nNC4XoJUWdsWlh+E964XbpppBTkHNRDskZTJYBo0eEZum8IktfjxoBs5rVv5zTolNh+LiDyuRFcpQTHvp5p1pMrhl4bnZ9KVa52S2IwZTVKUHDjTOAdVTlNrivliYBKL91RzBE94Y+mM3SBBZLpoy0+1vuTiF2z/E0NBvVzW5QCtqguuuuG+LjEKNvPg6as23weeWUp9i+41XuWsMnQFRks369L05w11xHk/2vST85j7VeTBYvw0Kdrk5Co4rLAJhEBOJsHmHXakQcJkdUX3q4q/5P/MNHqYtL0Dk2d1PvM=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(376014)(18002099003)(38070700021)(22082099003)(56012099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?0ClBA92wpqBTarYGf6EsfaFWcQYxWdYDCwUPdJSbQ4/2UcxC/913MtgF7J?=
+ =?iso-8859-1?Q?TCeR4AOP0ZZoAMaq0ah2HrfkvlcyhMe4ER6fJ2tmsFsfFLxCENvCpY7pop?=
+ =?iso-8859-1?Q?reSvnY/qrqICLkh4F6tjrs56d9i+5ReaQPr76BusjOr5/ImL7qHdsCo/5N?=
+ =?iso-8859-1?Q?+vFjl0ehdwtFOTRZ1gLX9U2Ams475uzJ8VTy9LmJDXVgiKnB1V4Q6cxiQf?=
+ =?iso-8859-1?Q?tXtHYmdt9oOOnxQ1DKOT/Oz/RjAOyKoh5o29gS8oDc1EV0sNye3/rxZj1h?=
+ =?iso-8859-1?Q?n+N+K9+hnZ8Wsu8cmJM8StyLzuRfz5eQNWxhEusDOlrgrdQYfpo/EJR2GW?=
+ =?iso-8859-1?Q?7oqiFlrGcPp+Qsk1PEtqOPmovKcG8t5Znd56ZJPf6YBdiRj5aUJTJ1PgU5?=
+ =?iso-8859-1?Q?NCIdJkHyP0OG2iam+4ES+zlxINyXhLaCNCZ9mLAbOT1t+Wu9JkP7ANfP8Z?=
+ =?iso-8859-1?Q?ioMfY4OfUs6KSpfXK+BoMR1fTDFQ59roWAsmSThFufU+5jBL3a0HAsMw+2?=
+ =?iso-8859-1?Q?8YqL9ZHZhH97n8vQ7JGsY36VeqS4J4cfPEhnqDOyBuAgwJNVsncOCXljUb?=
+ =?iso-8859-1?Q?B4z8pF5bmRMZH67q6nuOxzh3Uls7VBD6rSU80r78MkHUFLxRWP0dI4vd2z?=
+ =?iso-8859-1?Q?Qj5tGRjXNgwcRZwSsaj4GgIWq2a0HZg/iuecjbxbQQYq5bwaHwu/j0NRNc?=
+ =?iso-8859-1?Q?8rNGFxoeFZZCKWniE6QODcxtWQnUF0T9qkdc3286HUOcC/PA3K2SYb4C7Y?=
+ =?iso-8859-1?Q?wheHH6pNcc31Url4Z9zKHdGRpBRsXQj9oDxM7BH8qq7mekFeghLwXcyKRg?=
+ =?iso-8859-1?Q?vFLjPMwRVBYO0loQ9kNcJ2j88iGg3kn8dPWdv21LKGY0kFBnRfkMHPgVAy?=
+ =?iso-8859-1?Q?4q/4Yg+hE6q/y6J2Qq7kVOuKeuFSHnf4SppIA7nBKcec8P/tGyPnQVBpqv?=
+ =?iso-8859-1?Q?etiLI3k2zJWFoF9dumsC0WJWAKv6qOumsNPJ9OP795puub8GnT3Qft+eNU?=
+ =?iso-8859-1?Q?voHiV8TtbY7topk0BSzv0pj3ni9IjULLvtJmOJhA8coFX2e3GSTtnJrG+5?=
+ =?iso-8859-1?Q?sTTNNxREuwffTABDQpHyB3Sj+8Ca0IRHEtyu+jcWm1udKsfL7lmx16H3ku?=
+ =?iso-8859-1?Q?YO1gKOvdhlQ+eXXwAXklwlpOi9BLBBv4mJA7x6CfC5mkYHKZigJ5DsL8fJ?=
+ =?iso-8859-1?Q?jm+t11mZFLeFMgLYTMLB4fF4tZ9mkGI0LeqBSY2YYEyS4QoLVQ74DJKinr?=
+ =?iso-8859-1?Q?Iht/Zc0hBNEH5m8ReshZDVD54KiX1TO32iluen+SD+JU/1ug5SvcXUP1xq?=
+ =?iso-8859-1?Q?aBUh/3L3bzmmbb5B1fIAV4fBURSsv7jTsPPCQJ1eNT8cEhCh/7lCm3Nvjw?=
+ =?iso-8859-1?Q?XfeEtzwhKAS5s/TdqyaD3GbBvJ067DF1s6fjGzluObHHZOS3ZrfQWMEvYo?=
+ =?iso-8859-1?Q?mOVa5LURISERIN+B7vlv+6q+CvmhQ3G/uxnDwT5TDhNMFur2TJb11SRWT0?=
+ =?iso-8859-1?Q?pMsFPNTXMh65VPokAwcHCIVNB4vUDIhIswKySDH+qYb8jNQqcD8PLvpc+4?=
+ =?iso-8859-1?Q?jF0w0s5fcMdzdIXO6PcLsHSIDlDHTq6PC8RWAmzKHbqGu3hDvnQxtlNuY6?=
+ =?iso-8859-1?Q?NXkTKbFtvz7yHMT9uqRyjfRC5phgvUNCxW8zykOVnG16HXEkF49r5BpIMM?=
+ =?iso-8859-1?Q?3wtnDafxX/Ge4b4aoak6my8KBcrSjBqj2QzKFPQdI4vd3ktS6vK3OVudAN?=
+ =?iso-8859-1?Q?J+E7bulWlaWj2B5y1ANavUQC7kfEA5yiPAWQJVSRflsSH02K4849YfbJjf?=
+ =?iso-8859-1?Q?E7a3ahNCEQ=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-OriginatorOrg: verivus.ai
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: ME0P300MB0853.AUSP300.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2a2decf-e2ae-4184-e030-08de9f30a197
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Apr 2026 23:00:35.1095
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ccdcedb0-4edc-4cc8-9791-c44ee6610030
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Dum4xsmsaWJ+2fLQx+YBmSikR0+0u2otu+NAfPur+i9siwLX6mS1OE20dJBUT19CY76/xcdA2oN7isZz0yJSSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY9P300MB1562
 
-On Mon, 2026-04-20 at 18:35 -0400, Harishankar Vishwanathan wrote:
-> On Fri, Apr 17, 2026 at 8:45=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > On Fri, 2026-04-17 at 20:38 -0400, Harishankar Vishwanathan wrote:
-> > > On Fri, Apr 17, 2026 at 7:19=E2=80=AFPM Eduard Zingerman <eddyz87@gma=
-il.com> wrote:
-> > > >=20
-> > > > On Fri, 2026-04-17 at 14:17 -0700, Eduard Zingerman wrote:
-> > > > > On Fri, 2026-04-17 at 01:34 -0400, Harishankar Vishwanathan wrote=
-:
-> > > > >=20
-> > > [...]
-> > > >=20
->=20
-> > Thank you for sharing the code. Indeed very similar logic.
-> > I was under impression that you don't like the witness idea hence
-> > proceeded on my own. Would have deferred to you if not for that.
->=20
-> I suppose I didn't look at it like "witness generation", but rather an
-> "allwise intersection exists". Turns out of course, that both ideas
-> are essentially similar. Also figured I should finish verifying and then
-> share my implementation.
->=20
-> > Tbh, my version looks a bit shorter/simpler.
->=20
-> Agree yours is shorter. But I found the individual
-> computations in my implementation easier to follow.
-
-find_witness_aux() might be a bit packed, but I like the successive
-subdivision into cases more than ranges accumulation into array.
-
-> [...]
->=20
-> I can follow up with a v2, which includes ideas from both, probably close=
-r
-> to your version.
-
-Sure, please follow-up.
+sock_ops_convert_ctx_access() reads rtt_min without the is_locked_tcp_sock =
+guard used for every other tcp_sock field. On request_sock-backed sock_ops =
+callbacks, sk points at a tcp_request_sock and the converted load reads pas=
+t the end of the allocation.=0A=
+=0A=
+Extract the guarded tcp_sock field load sequence into SOCK_OPS_LOAD_TCP_SOC=
+K_FIELD() and use it for the rtt_min access after computing the sub-field o=
+ffset with offsetof(struct minmax_sample, v). Reusing the shared helper kee=
+ps rtt_min aligned with the other guarded tcp_sock field loads and preserve=
+s the dst_reg =3D=3D src_reg failure path that zeros the destination regist=
+er when the guard fails.=0A=
+=0A=
+Found via AST-based call-graph analysis using sqry.=0A=
+=0A=
+Fixes: 44f0e43037d3 ("bpf: Add support for reading sk_state and more")=0A=
+Cc: stable@vger.kernel.org=0A=
+Signed-off-by: Werner Kasselman <werner@verivus.com>=0A=
+---=0A=
+ net/core/filter.c | 36 ++++++++++++++++++------------------=0A=
+ 1 file changed, 18 insertions(+), 18 deletions(-)=0A=
+=0A=
+diff --git a/net/core/filter.c b/net/core/filter.c=0A=
+index fcfcb72663ca..2e7c33d00749 100644=0A=
+--- a/net/core/filter.c=0A=
++++ b/net/core/filter.c=0A=
+@@ -10535,12 +10535,10 @@ static u32 sock_ops_convert_ctx_access(enum bpf_a=
+ccess_type type,=0A=
+ 	struct bpf_insn *insn =3D insn_buf;=0A=
+ 	int off;=0A=
+ =0A=
+-/* Helper macro for adding read access to tcp_sock or sock fields. */=0A=
+-#define SOCK_OPS_GET_FIELD(BPF_FIELD, OBJ_FIELD, OBJ)			      \=0A=
++/* Helper macro for adding guarded read access to tcp_sock fields. */=0A=
++#define SOCK_OPS_LOAD_TCP_SOCK_FIELD(FIELD_SIZE, FIELD_OFFSET)		      \=0A=
+ 	do {								      \=0A=
+ 		int fullsock_reg =3D si->dst_reg, reg =3D BPF_REG_9, jmp =3D 2;     \=0A=
+-		BUILD_BUG_ON(sizeof_field(OBJ, OBJ_FIELD) >		      \=0A=
+-			     sizeof_field(struct bpf_sock_ops, BPF_FIELD));   \=0A=
+ 		if (si->dst_reg =3D=3D reg || si->src_reg =3D=3D reg)		      \=0A=
+ 			reg--;						      \=0A=
+ 		if (si->dst_reg =3D=3D reg || si->src_reg =3D=3D reg)		      \=0A=
+@@ -10548,7 +10546,7 @@ static u32 sock_ops_convert_ctx_access(enum bpf_acc=
+ess_type type,=0A=
+ 		if (si->dst_reg =3D=3D si->src_reg) {			      \=0A=
+ 			*insn++ =3D BPF_STX_MEM(BPF_DW, si->src_reg, reg,	      \=0A=
+ 					  offsetof(struct bpf_sock_ops_kern,  \=0A=
+-					  temp));			      \=0A=
++						   temp));		      \=0A=
+ 			fullsock_reg =3D reg;				      \=0A=
+ 			jmp +=3D 2;					      \=0A=
+ 		}							      \=0A=
+@@ -10562,24 +10560,31 @@ static u32 sock_ops_convert_ctx_access(enum bpf_a=
+ccess_type type,=0A=
+ 		if (si->dst_reg =3D=3D si->src_reg)				      \=0A=
+ 			*insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,	      \=0A=
+ 				      offsetof(struct bpf_sock_ops_kern,      \=0A=
+-				      temp));				      \=0A=
++					       temp));			      \=0A=
+ 		*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(			      \=0A=
+ 						struct bpf_sock_ops_kern, sk),\=0A=
+ 				      si->dst_reg, si->src_reg,		      \=0A=
+ 				      offsetof(struct bpf_sock_ops_kern, sk));\=0A=
+-		*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(OBJ,		      \=0A=
+-						       OBJ_FIELD),	      \=0A=
++		*insn++ =3D BPF_LDX_MEM(FIELD_SIZE,			      \=0A=
+ 				      si->dst_reg, si->dst_reg,		      \=0A=
+-				      offsetof(OBJ, OBJ_FIELD));	      \=0A=
++				      FIELD_OFFSET);			      \=0A=
+ 		if (si->dst_reg =3D=3D si->src_reg)	{			      \=0A=
+ 			*insn++ =3D BPF_JMP_A(2);				      \=0A=
+ 			*insn++ =3D BPF_LDX_MEM(BPF_DW, reg, si->src_reg,	      \=0A=
+ 				      offsetof(struct bpf_sock_ops_kern,      \=0A=
+-				      temp));				      \=0A=
++					       temp));			      \=0A=
+ 			*insn++ =3D BPF_MOV64_IMM(si->dst_reg, 0);	      \=0A=
+ 		}							      \=0A=
+ 	} while (0)=0A=
+ =0A=
++#define SOCK_OPS_GET_FIELD(BPF_FIELD, OBJ_FIELD, OBJ)			      \=0A=
++	do {								      \=0A=
++		BUILD_BUG_ON(sizeof_field(OBJ, OBJ_FIELD) >		      \=0A=
++			     sizeof_field(struct bpf_sock_ops, BPF_FIELD));   \=0A=
++		SOCK_OPS_LOAD_TCP_SOCK_FIELD(BPF_FIELD_SIZEOF(OBJ, OBJ_FIELD),\=0A=
++					     offsetof(OBJ, OBJ_FIELD));       \=0A=
++	} while (0)=0A=
++=0A=
+ #define SOCK_OPS_GET_SK()							      \=0A=
+ 	do {								      \=0A=
+ 		int fullsock_reg =3D si->dst_reg, reg =3D BPF_REG_9, jmp =3D 1;     \=0A=
+@@ -10822,14 +10827,9 @@ static u32 sock_ops_convert_ctx_access(enum bpf_ac=
+cess_type type,=0A=
+ 			     sizeof(struct minmax));=0A=
+ 		BUILD_BUG_ON(sizeof(struct minmax) <=0A=
+ 			     sizeof(struct minmax_sample));=0A=
+-=0A=
+-		*insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(=0A=
+-						struct bpf_sock_ops_kern, sk),=0A=
+-				      si->dst_reg, si->src_reg,=0A=
+-				      offsetof(struct bpf_sock_ops_kern, sk));=0A=
+-		*insn++ =3D BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,=0A=
+-				      offsetof(struct tcp_sock, rtt_min) +=0A=
+-				      sizeof_field(struct minmax_sample, t));=0A=
++		off =3D offsetof(struct tcp_sock, rtt_min) +=0A=
++		      offsetof(struct minmax_sample, v);=0A=
++		SOCK_OPS_LOAD_TCP_SOCK_FIELD(BPF_W, off);=0A=
+ 		break;=0A=
+ =0A=
+ 	case offsetof(struct bpf_sock_ops, bpf_sock_ops_cb_flags):=0A=
+-- =0A=
+2.43.0=0A=
