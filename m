@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01D7345749
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 11:18:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE7633AD8A
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 11:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776683894; cv=none; b=BFGEs+4gPI4GF32OgSgfeKkMWUNbduXPUQuX1u46JTKVeXVJjeBfS9GltTIMEg0wfOLM35M3MF+lskPwXztSuE+aUuTj8WDlwn1ejgZ0KoJINSKRT/mRUw8rgyO9fNM63qdG03qV2UBa7Aqv1+1YlXYrApl+8AHQT1nPj+GLKPg=
+	t=1776683901; cv=none; b=K/Vgtk44T966gauIltvfCAGHNSLtwvQNMwg95tq4/pQy/+kAlZHxGrR+QdQcscxG+tKIzSD4pimdOQJ/kLP2h8VN+fPwvswyb+170FaavA5BVswjwSK9ZQcJr2kB9WzJWH3Mkj8Um6XSiHdZck3qnX06LJnCxKJJH7T05gf/WfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776683894; c=relaxed/simple;
-	bh=bA/5jh547l1kCgnWUMbt447V37vlyDk0oWWsUbstYb0=;
+	s=arc-20240116; t=1776683901; c=relaxed/simple;
+	bh=wyO3GOrZrM21QViD6EBER9nP0PWc2MiD1vsmYu3Jzto=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dsyPmN+vMcGO/PkfeYOt/5rgIfEb8ZH+It3O23Gci5QBia49AR6nlQYQ6J/U7VdkaWm8OjTKjil8zen48Q0ChwBwcTG4oeKkIpFhg5O1TRmjm76RTYUEamVh3SpQrL+4c1xjJOaDRofn/qu5sKO5ccBbewW5hz4urKFf1KK1Xao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQvsZfos; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=KvP8BtT+nsgnift6BxSOWP3DJUu3Ojz/rkIj9y92ewsYvof6Cz0qR4tGlgs5ozb6MWe3qUUY0xox61ojc/mT1UlyQdQMsAllcthLVfRKJAUCM+VDKN2iM9i9CXO9nw8iv8VBNGHJSjvliJSPKWmrGBXxsKYFp2xrdWIWXkkBMrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSZaxXxF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQvsZfos"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B05C19425;
-	Mon, 20 Apr 2026 11:18:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSZaxXxF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25253C19425;
+	Mon, 20 Apr 2026 11:18:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776683894;
-	bh=bA/5jh547l1kCgnWUMbt447V37vlyDk0oWWsUbstYb0=;
+	s=k20201202; t=1776683901;
+	bh=wyO3GOrZrM21QViD6EBER9nP0PWc2MiD1vsmYu3Jzto=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gQvsZfossQK3l+wI0O1KO/jnP7toH192w6rpFHvsXgWSOx8rs8Hzd7z8LBMiHzqB6
-	 aJU5Vi9sRImAsVHwLfCSQgdbty2kcHeK8MI2h6k4kAZO4HcZERDkBIHBQ3IMFt6Ckr
-	 hNvkTjgjKqDj8ljgFhYuaV0afuXCdWy/O/chF7dr8S7yYWbPaX3KXG090Su1jSo8JX
-	 0xJFFc4qXXZjYz/jXKonQWCWAglVusqSAtFIiGFKfRh+cpYABgWlgh0aD8Ye5/6WLL
-	 gDc7EkBQIXa0iinHGFTkVeWP6rGm3qBQiBEzfiSILQb3oLBtyuJaEyn25DK88jjQvo
-	 32YMiL3dc1YDg==
+	b=ZSZaxXxF4KnvuzuhxLlbckZFUEU9kfl/gGTPhwHNVIvczzY2ABNRGTs8XBglXQzr/
+	 SlSz+rZGhBv2kjQkB3CRCHqlCC6IZcF+1wqI/u2pqU0tsYb90aKo1MmZK37+6HJR5f
+	 4L0PgxmQYAePBHcp5m1g6+jqVLzC7DTRdnypGrPlnOp2ZizWSupPHyCwx9iRsUTu4d
+	 TG3cisIGWA0IVzkHUSTdi1EbZSwi3pUa/zztijVPh0yFOS8qhEKPDNXf48fOL5lOkD
+	 xJqNs6NuY05ifBALGHQ/NhwoN55TjqRZTA2Wu8/yUH2o1SFWYWqnuJBIidGSmGLVWL
+	 bW0rYUVfDVZow==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -42,9 +42,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Nikhil Dixit Limaye <ndixit@meta.com>,
 	"Nikita V. Shirokov" <tehnerd@tehnerd.com>,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next 4/6] selftests/bpf: Add XDP load-balancer BPF program
-Date: Mon, 20 Apr 2026 04:17:04 -0700
-Message-ID: <20260420111726.2118636-5-puranjay@kernel.org>
+Subject: [RFC PATCH bpf-next 5/6] selftests/bpf: Add XDP load-balancer benchmark driver
+Date: Mon, 20 Apr 2026 04:17:05 -0700
+Message-ID: <20260420111726.2118636-6-puranjay@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260420111726.2118636-1-puranjay@kernel.org>
 References: <20260420111726.2118636-1-puranjay@kernel.org>
@@ -54,686 +54,1254 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add the BPF datapath for the XDP load-balancer benchmark, a
-simplified L4 load-balancer inspired by katran.
+Wire up the userspace side of the XDP load-balancer benchmark.
 
-The pipeline: L3/L4 parse -> VIP lookup -> per-CPU LRU connection
-table or consistent-hash fallback -> real server lookup -> per-VIP
-and per-real stats -> IPIP/IP6IP6 encapsulation.  TCP SYN forces
-the consistent-hash path (skipping LRU); TCP RST skips LRU insert
-to avoid polluting the table.
+24 scenarios cover the full code-path matrix: TCP/UDP, IPv4/IPv6,
+cross-AF encap, LRU hit/miss/diverse/cold, consistent-hash bypass,
+SYN/RST flag handling, and early exits (unknown VIP, non-IP, ICMP,
+fragments, IP options).
 
-process_packet() is marked __noinline so that the BENCH_BPF_LOOP
-reset block (which strips encapsulation) operates on valid packet
-pointers after bpf_xdp_adjust_head().
+Before benchmarking each scenario validates correctness: the output
+packet is compared byte-for-byte against a pre-built expected packet
+and BPF map counters are checked against the expected values.
+
+Usage:
+  sudo ./bench -a -w3 -p1 xdp-lb --scenario tcp-v4-lru-hit
+  sudo ./bench xdp-lb --list-scenarios
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- .../selftests/bpf/progs/xdp_lb_bench.c        | 653 ++++++++++++++++++
- 1 file changed, 653 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/xdp_lb_bench.c
+ tools/testing/selftests/bpf/Makefile          |    2 +
+ tools/testing/selftests/bpf/bench.c           |    4 +
+ .../selftests/bpf/benchs/bench_xdp_lb.c       | 1160 +++++++++++++++++
+ 3 files changed, 1166 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 20244b78677f..6b3e1cc129c8 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -866,6 +866,7 @@ $(OUTPUT)/bench_htab_mem.o: $(OUTPUT)/htab_mem_bench.skel.h
+ $(OUTPUT)/bench_bpf_crypto.o: $(OUTPUT)/crypto_bench.skel.h
+ $(OUTPUT)/bench_sockmap.o: $(OUTPUT)/bench_sockmap_prog.skel.h
+ $(OUTPUT)/bench_lpm_trie_map.o: $(OUTPUT)/lpm_trie_bench.skel.h $(OUTPUT)/lpm_trie_map.skel.h
++$(OUTPUT)/bench_xdp_lb.o: $(OUTPUT)/xdp_lb_bench.skel.h bench_bpf_timing.h
+ $(OUTPUT)/bench_bpf_timing.o: bench_bpf_timing.h
+ $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
+ $(OUTPUT)/bench: LDLIBS += -lm
+@@ -890,6 +891,7 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 		 $(OUTPUT)/bench_sockmap.o \
+ 		 $(OUTPUT)/bench_lpm_trie_map.o \
+ 		 $(OUTPUT)/bench_bpf_timing.o \
++		 $(OUTPUT)/bench_xdp_lb.o \
+ 		 $(OUTPUT)/usdt_1.o \
+ 		 $(OUTPUT)/usdt_2.o \
+ 		 #
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index aa146f6f873b..94c617a802ea 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -286,6 +286,7 @@ extern struct argp bench_trigger_batch_argp;
+ extern struct argp bench_crypto_argp;
+ extern struct argp bench_sockmap_argp;
+ extern struct argp bench_lpm_trie_map_argp;
++extern struct argp bench_xdp_lb_argp;
+ 
+ static const struct argp_child bench_parsers[] = {
+ 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
+@@ -302,6 +303,7 @@ static const struct argp_child bench_parsers[] = {
+ 	{ &bench_crypto_argp, 0, "bpf crypto benchmark", 0 },
+ 	{ &bench_sockmap_argp, 0, "bpf sockmap benchmark", 0 },
+ 	{ &bench_lpm_trie_map_argp, 0, "LPM trie map benchmark", 0 },
++	{ &bench_xdp_lb_argp, 0, "XDP load-balancer benchmark", 0 },
+ 	{},
+ };
+ 
+@@ -575,6 +577,7 @@ extern const struct bench bench_lpm_trie_insert;
+ extern const struct bench bench_lpm_trie_update;
+ extern const struct bench bench_lpm_trie_delete;
+ extern const struct bench bench_lpm_trie_free;
++extern const struct bench bench_xdp_lb;
+ 
+ static const struct bench *benchs[] = {
+ 	&bench_count_global,
+@@ -653,6 +656,7 @@ static const struct bench *benchs[] = {
+ 	&bench_lpm_trie_update,
+ 	&bench_lpm_trie_delete,
+ 	&bench_lpm_trie_free,
++	&bench_xdp_lb,
+ };
+ 
+ static void find_benchmark(void)
+diff --git a/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c b/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
 new file mode 100644
-index 000000000000..ca6a60e7ccd7
+index 000000000000..f5c85b027d1c
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-@@ -0,0 +1,653 @@
++++ b/tools/testing/selftests/bpf/benchs/bench_xdp_lb.c
+@@ -0,0 +1,1160 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+#include <stddef.h>
-+#include <stdbool.h>
-+#include <linux/bpf.h>
++#include <argp.h>
++#include <string.h>
++#include <arpa/inet.h>
 +#include <linux/if_ether.h>
 +#include <linux/ip.h>
 +#include <linux/ipv6.h>
 +#include <linux/in.h>
 +#include <linux/tcp.h>
 +#include <linux/udp.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include "bpf_compiler.h"
++#include "bench.h"
++#include "bench_bpf_timing.h"
++#include "xdp_lb_bench.skel.h"
 +#include "xdp_lb_bench_common.h"
-+#include "bench_bpf_timing.bpf.h"
++#include "bpf_util.h"
 +
-+#ifndef IPPROTO_FRAGMENT
-+#define IPPROTO_FRAGMENT 44
-+#endif
++#define IP4(a, b, c, d) (((__u32)(a) << 24) | ((__u32)(b) << 16) | ((__u32)(c) << 8) | (__u32)(d))
 +
-+/* jhash helpers */
++#define IP6(a, b, c, d)  { (__u32)(a), (__u32)(b), (__u32)(c), (__u32)(d) }
 +
-+static inline __u32 rol32(__u32 word, unsigned int shift)
++#define TNL_DST		IP4(192, 168, 1, 2)
++#define REAL_INDEX	1
++#define REAL_INDEX_V6	2
++#define MAX_PKT_SIZE	256
++#define IP_MF		0x2000
++
++static const __u32 tnl_dst_v6[4] = { 0xfd000000, 0, 0, 2 };
++
++static const __u8 lb_mac[ETH_ALEN]	= {0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
++static const __u8 client_mac[ETH_ALEN]	= {0x11, 0x22, 0x33, 0x44, 0x55, 0x66};
++static const __u8 router_mac[ETH_ALEN]	= {0xde, 0xad, 0xbe, 0xef, 0x00, 0x01};
++
++enum scenario_id {
++	S_TCP_V4_LRU_HIT,
++	S_TCP_V4_CH,
++	S_TCP_V6_LRU_HIT,
++	S_TCP_V6_CH,
++	S_UDP_V4_LRU_HIT,
++	S_UDP_V6_LRU_HIT,
++	S_TCP_V4V6_LRU_HIT,
++	S_TCP_V4_LRU_DIVERSE,
++	S_TCP_V4_CH_DIVERSE,
++	S_TCP_V6_LRU_DIVERSE,
++	S_TCP_V6_CH_DIVERSE,
++	S_UDP_V4_LRU_DIVERSE,
++	S_TCP_V4_LRU_MISS,
++	S_UDP_V4_LRU_MISS,
++	S_TCP_V4_LRU_WARMUP,
++	S_TCP_V4_SYN,
++	S_TCP_V4_RST_MISS,
++	S_PASS_V4_NO_VIP,
++	S_PASS_V6_NO_VIP,
++	S_PASS_V4_ICMP,
++	S_PASS_NON_IP,
++	S_DROP_V4_FRAG,
++	S_DROP_V4_OPTIONS,
++	S_DROP_V6_FRAG,
++	NUM_SCENARIOS,
++};
++
++enum lru_miss_type {
++	LRU_MISS_AUTO = 0,	/* compute from scenario flags (default) */
++	LRU_MISS_NONE,		/* 0 misses (all LRU hits) */
++	LRU_MISS_ALL,		/* batch_iters+1 misses (every op misses) */
++	LRU_MISS_FIRST,	/* 1 miss (first miss, then hits) */
++};
++
++#define S_BASE_ENCAP_V4							\
++	.expected_retval = XDP_TX, .expect_encap = true,		\
++	.tunnel_dst = TNL_DST
++
++#define S_BASE_ENCAP_V6							\
++	.expected_retval = XDP_TX, .expect_encap = true,		\
++	.is_v6 = true, .encap_v6_outer = true,				\
++	.tunnel_dst_v6 = { 0xfd000000, 0, 0, 2 }
++
++#define S_BASE_ENCAP_V4V6						\
++	.expected_retval = XDP_TX, .expect_encap = true,		\
++	.encap_v6_outer = true,						\
++	.tunnel_dst_v6 = { 0xfd000000, 0, 0, 2 }
++
++struct test_scenario {
++	const char *name;
++	const char *description;
++	int         expected_retval;
++	bool        expect_encap;
++	bool        is_v6;
++	__u32       vip_addr;
++	__u32       src_addr;
++	__u32       tunnel_dst;
++	__u32       vip_addr_v6[4];
++	__u32       src_addr_v6[4];
++	__u32       tunnel_dst_v6[4];
++	__u16       dst_port;
++	__u16       src_port;
++	__u8        ip_proto;
++	__u32       vip_flags;
++	__u32       vip_num;
++	bool        prepopulate_lru;
++	bool        set_frag;
++	__u16       eth_proto;
++	bool        encap_v6_outer;
++	__u32       flow_mask;
++	bool        cold_lru;
++	bool        set_syn;
++	bool        set_rst;
++	bool        set_ip_options;
++	__u32       fixed_batch_iters;	/* 0 = auto-calibrate, >0 = use this value */
++	enum lru_miss_type lru_miss;	/* expected LRU miss pattern */
++};
++
++static const struct test_scenario scenarios[NUM_SCENARIOS] = {
++	/* Single-flow baseline */
++	[S_TCP_V4_LRU_HIT] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-lru-hit",
++		.description = "IPv4 TCP, LRU hit, IPIP encap",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 2, 1), .src_port = 12345,
++		.prepopulate_lru = true, .lru_miss = LRU_MISS_NONE,
++	},
++	[S_TCP_V4_CH] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-ch",
++		.description = "IPv4 TCP, CH (LRU bypass), IPIP encap",
++		.vip_addr    = IP4(10, 10, 1, 2), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 2, 2), .src_port = 54321,
++		.vip_flags   = F_LRU_BYPASS, .vip_num = 1,
++		.lru_miss    = LRU_MISS_ALL,
++	},
++	[S_TCP_V6_LRU_HIT] = {
++		S_BASE_ENCAP_V6, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v6-lru-hit",
++		.description = "IPv6 TCP, LRU hit, IP6IP6 encap",
++		.vip_addr_v6 = IP6(0xfd000100, 0, 0, 1), .dst_port = 80,
++		.src_addr_v6 = IP6(0xfd000200, 0, 0, 1), .src_port = 12345,
++		.vip_num     = 10,
++		.prepopulate_lru = true, .lru_miss = LRU_MISS_NONE,
++	},
++	[S_TCP_V6_CH] = {
++		S_BASE_ENCAP_V6, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v6-ch",
++		.description = "IPv6 TCP, CH (LRU bypass), IP6IP6 encap",
++		.vip_addr_v6 = IP6(0xfd000100, 0, 0, 2), .dst_port = 80,
++		.src_addr_v6 = IP6(0xfd000200, 0, 0, 2), .src_port = 54321,
++		.vip_flags   = F_LRU_BYPASS, .vip_num = 12,
++		.lru_miss    = LRU_MISS_ALL,
++	},
++	[S_UDP_V4_LRU_HIT] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_UDP,
++		.name        = "udp-v4-lru-hit",
++		.description = "IPv4 UDP, LRU hit, IPIP encap",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 443,
++		.src_addr    = IP4(10, 10, 3, 1), .src_port = 11111,
++		.vip_num     = 2,
++		.prepopulate_lru = true, .lru_miss = LRU_MISS_NONE,
++	},
++	[S_UDP_V6_LRU_HIT] = {
++		S_BASE_ENCAP_V6, .ip_proto = IPPROTO_UDP,
++		.name        = "udp-v6-lru-hit",
++		.description = "IPv6 UDP, LRU hit, IP6IP6 encap",
++		.vip_addr_v6 = IP6(0xfd000100, 0, 0, 1), .dst_port = 443,
++		.src_addr_v6 = IP6(0xfd000200, 0, 0, 3), .src_port = 22222,
++		.vip_num     = 14,
++		.prepopulate_lru = true, .lru_miss = LRU_MISS_NONE,
++	},
++	[S_TCP_V4V6_LRU_HIT] = {
++		S_BASE_ENCAP_V4V6, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4v6-lru-hit",
++		.description = "IPv4 TCP, LRU hit, IPv4-in-IPv6 encap",
++		.vip_addr    = IP4(10, 10, 1, 4), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 2, 4), .src_port = 12347,
++		.vip_num     = 13,
++		.prepopulate_lru = true, .lru_miss = LRU_MISS_NONE,
++	},
++
++	/* Diverse flows (4K src addrs) */
++	[S_TCP_V4_LRU_DIVERSE] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-lru-diverse",
++		.description = "IPv4 TCP, diverse flows, warm LRU",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 2, 1), .src_port = 12345,
++		.prepopulate_lru = true, .flow_mask = 0xFFF,
++		.lru_miss    = LRU_MISS_NONE,
++	},
++	[S_TCP_V4_CH_DIVERSE] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-ch-diverse",
++		.description = "IPv4 TCP, diverse flows, CH (LRU bypass)",
++		.vip_addr    = IP4(10, 10, 1, 2), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 2, 2), .src_port = 54321,
++		.vip_flags   = F_LRU_BYPASS, .vip_num = 1,
++		.flow_mask   = 0xFFF, .lru_miss = LRU_MISS_ALL,
++	},
++	[S_TCP_V6_LRU_DIVERSE] = {
++		S_BASE_ENCAP_V6, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v6-lru-diverse",
++		.description = "IPv6 TCP, diverse flows, warm LRU",
++		.vip_addr_v6 = IP6(0xfd000100, 0, 0, 1), .dst_port = 80,
++		.src_addr_v6 = IP6(0xfd000200, 0, 0, 1), .src_port = 12345,
++		.vip_num     = 10,
++		.prepopulate_lru = true, .flow_mask = 0xFFF,
++		.lru_miss    = LRU_MISS_NONE,
++	},
++	[S_TCP_V6_CH_DIVERSE] = {
++		S_BASE_ENCAP_V6, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v6-ch-diverse",
++		.description = "IPv6 TCP, diverse flows, CH (LRU bypass)",
++		.vip_addr_v6 = IP6(0xfd000100, 0, 0, 2), .dst_port = 80,
++		.src_addr_v6 = IP6(0xfd000200, 0, 0, 2), .src_port = 54321,
++		.vip_flags   = F_LRU_BYPASS, .vip_num = 12,
++		.flow_mask   = 0xFFF, .lru_miss = LRU_MISS_ALL,
++	},
++	[S_UDP_V4_LRU_DIVERSE] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_UDP,
++		.name        = "udp-v4-lru-diverse",
++		.description = "IPv4 UDP, diverse flows, warm LRU",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 443,
++		.src_addr    = IP4(10, 10, 3, 1), .src_port = 11111,
++		.vip_num     = 2,
++		.prepopulate_lru = true, .flow_mask = 0xFFF,
++		.lru_miss    = LRU_MISS_NONE,
++	},
++
++	/* LRU stress */
++	[S_TCP_V4_LRU_MISS] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-lru-miss",
++		.description = "IPv4 TCP, LRU miss (16M flow space), CH lookup",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 2, 1), .src_port = 12345,
++		.flow_mask   = 0xFFFFFF, .cold_lru = true,
++		.lru_miss    = LRU_MISS_FIRST,
++	},
++	[S_UDP_V4_LRU_MISS] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_UDP,
++		.name        = "udp-v4-lru-miss",
++		.description = "IPv4 UDP, LRU miss (16M flow space), CH lookup",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 443,
++		.src_addr    = IP4(10, 10, 3, 1), .src_port = 11111,
++		.vip_num     = 2,
++		.flow_mask   = 0xFFFFFF, .cold_lru = true,
++		.lru_miss    = LRU_MISS_FIRST,
++	},
++	[S_TCP_V4_LRU_WARMUP] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-lru-warmup",
++		.description = "IPv4 TCP, 4K flows, ~50% LRU miss",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 2, 1), .src_port = 12345,
++		.flow_mask   = 0xFFF, .cold_lru = true,
++		.fixed_batch_iters = 6500,
++		.lru_miss    = LRU_MISS_FIRST,
++	},
++
++	/* TCP flags */
++	[S_TCP_V4_SYN] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-syn",
++		.description = "IPv4 TCP SYN, skip LRU, CH + LRU insert",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 8, 2), .src_port = 60001,
++		.set_syn     = true, .lru_miss = LRU_MISS_ALL,
++	},
++	[S_TCP_V4_RST_MISS] = {
++		S_BASE_ENCAP_V4, .ip_proto = IPPROTO_TCP,
++		.name        = "tcp-v4-rst-miss",
++		.description = "IPv4 TCP RST, CH lookup, no LRU insert",
++		.vip_addr    = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr    = IP4(10, 10, 8, 1), .src_port = 60000,
++		.flow_mask   = 0xFFFFFF, .cold_lru = true,
++		.set_rst     = true, .lru_miss = LRU_MISS_ALL,
++	},
++
++	/* Early exits */
++	[S_PASS_V4_NO_VIP] = {
++		.name            = "pass-v4-no-vip",
++		.description     = "IPv4 TCP, unknown VIP, XDP_PASS",
++		.expected_retval = XDP_PASS,
++		.ip_proto        = IPPROTO_TCP,
++		.vip_addr        = IP4(10, 10, 9, 9), .dst_port = 80,
++		.src_addr        = IP4(10, 10, 4, 1), .src_port = 33333,
++	},
++	[S_PASS_V6_NO_VIP] = {
++		.name            = "pass-v6-no-vip",
++		.description     = "IPv6 TCP, unknown VIP, XDP_PASS",
++		.expected_retval = XDP_PASS, .is_v6 = true,
++		.ip_proto        = IPPROTO_TCP,
++		.vip_addr_v6     = IP6(0xfd009900, 0, 0, 1), .dst_port = 80,
++		.src_addr_v6     = IP6(0xfd000400, 0, 0, 1), .src_port = 33333,
++	},
++	[S_PASS_V4_ICMP] = {
++		.name            = "pass-v4-icmp",
++		.description     = "IPv4 ICMP, non-TCP/UDP protocol, XDP_PASS",
++		.expected_retval = XDP_PASS,
++		.ip_proto        = IPPROTO_ICMP,
++		.vip_addr        = IP4(10, 10, 1, 1),
++		.src_addr        = IP4(10, 10, 6, 1),
++	},
++	[S_PASS_NON_IP] = {
++		.name            = "pass-non-ip",
++		.description     = "Non-IP (ARP), earliest XDP_PASS exit",
++		.expected_retval = XDP_PASS,
++		.eth_proto       = ETH_P_ARP,
++	},
++	[S_DROP_V4_FRAG] = {
++		.name            = "drop-v4-frag",
++		.description     = "IPv4 fragmented, XDP_DROP",
++		.expected_retval = XDP_DROP, .ip_proto = IPPROTO_TCP,
++		.vip_addr        = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr        = IP4(10, 10, 5, 1), .src_port = 44444,
++		.set_frag        = true,
++	},
++	[S_DROP_V4_OPTIONS] = {
++		.name            = "drop-v4-options",
++		.description     = "IPv4 with IP options (ihl>5), XDP_DROP",
++		.expected_retval = XDP_DROP, .ip_proto = IPPROTO_TCP,
++		.vip_addr        = IP4(10, 10, 1, 1), .dst_port = 80,
++		.src_addr        = IP4(10, 10, 7, 1), .src_port = 55555,
++		.set_ip_options  = true,
++	},
++	[S_DROP_V6_FRAG] = {
++		.name            = "drop-v6-frag",
++		.description     = "IPv6 fragment extension header, XDP_DROP",
++		.expected_retval = XDP_DROP, .is_v6 = true,
++		.ip_proto        = IPPROTO_TCP,
++		.vip_addr_v6     = IP6(0xfd000100, 0, 0, 1), .dst_port = 80,
++		.src_addr_v6     = IP6(0xfd000500, 0, 0, 1), .src_port = 44444,
++		.set_frag        = true,
++	},
++};
++
++#define MAX_ENCAP_SIZE	(MAX_PKT_SIZE + sizeof(struct ipv6hdr))
++
++static __u8  pkt_buf[NUM_SCENARIOS][MAX_PKT_SIZE];
++static __u32 pkt_len[NUM_SCENARIOS];
++static __u8  expected_buf[NUM_SCENARIOS][MAX_ENCAP_SIZE];
++static __u32 expected_len[NUM_SCENARIOS];
++
++static int lru_inner_fds[BENCH_NR_CPUS];
++static int nr_inner_maps;
++
++static struct ctx {
++	struct xdp_lb_bench *skel;
++	struct bpf_bench_timing timing;
++	int prog_fd;
++} ctx;
++
++static struct {
++	int   scenario;
++	bool  machine_readable;
++} args = {
++	.scenario = -1,
++};
++
++static __u16 ip_checksum(const void *hdr, int len)
 +{
-+	return (word << shift) | (word >> ((-shift) & 31));
-+}
-+
-+#define __jhash_mix(a, b, c)			\
-+{						\
-+	a -= c;  a ^= rol32(c, 4);  c += b;	\
-+	b -= a;  b ^= rol32(a, 6);  a += c;	\
-+	c -= b;  c ^= rol32(b, 8);  b += a;	\
-+	a -= c;  a ^= rol32(c, 16); c += b;	\
-+	b -= a;  b ^= rol32(a, 19); a += c;	\
-+	c -= b;  c ^= rol32(b, 4);  b += a;	\
-+}
-+
-+#define __jhash_final(a, b, c)			\
-+{						\
-+	c ^= b; c -= rol32(b, 14);		\
-+	a ^= c; a -= rol32(c, 11);		\
-+	b ^= a; b -= rol32(a, 25);		\
-+	c ^= b; c -= rol32(b, 16);		\
-+	a ^= c; a -= rol32(c, 4);		\
-+	b ^= a; b -= rol32(a, 14);		\
-+	c ^= b; c -= rol32(b, 24);		\
-+}
-+
-+#define JHASH_INITVAL 0xdeadbeef
-+
-+static inline __u32 __jhash_nwords(__u32 a, __u32 b, __u32 c, __u32 initval)
-+{
-+	a += initval;
-+	b += initval;
-+	c += initval;
-+	__jhash_final(a, b, c);
-+	return c;
-+}
-+
-+static inline __u32 jhash_2words(__u32 a, __u32 b, __u32 initval)
-+{
-+	return __jhash_nwords(a, b, 0, initval + JHASH_INITVAL + (2 << 2));
-+}
-+
-+static inline __u32 jhash2_4words(const __u32 *k, __u32 initval)
-+{
-+	__u32 a, b, c;
-+
-+	a = b = c = JHASH_INITVAL + (4 << 2) + initval;
-+
-+	a += k[0]; b += k[1]; c += k[2];
-+	__jhash_mix(a, b, c);
-+
-+	a += k[3];
-+	__jhash_final(a, b, c);
-+
-+	return c;
-+}
-+
-+static __always_inline void ipv4_csum(struct iphdr *iph)
-+{
-+	__u16 *next_iph = (__u16 *)iph;
++	const __u16 *p = hdr;
 +	__u32 csum = 0;
 +	int i;
 +
-+	__pragma_loop_unroll_full
-+	for (i = 0; i < (int)(sizeof(*iph) >> 1); i++)
-+		csum += *next_iph++;
++	for (i = 0; i < len / 2; i++)
++		csum += p[i];
 +
-+	csum = (csum & 0xffff) + (csum >> 16);
-+	csum = (csum & 0xffff) + (csum >> 16);
-+	iph->check = ~csum;
++	while (csum >> 16)
++		csum = (csum & 0xffff) + (csum >> 16);
++
++	return ~csum;
 +}
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 64);
-+	__type(key, struct vip_definition);
-+	__type(value, struct vip_meta);
-+} vip_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, BENCH_NR_CPUS);
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_LRU_HASH);
-+		__type(key, struct flow_key);
-+		__type(value, struct real_pos_lru);
-+		__uint(max_entries, DEFAULT_LRU_SIZE);
-+	});
-+} lru_mapping SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, CH_RINGS_SIZE);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} ch_rings SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, MAX_REALS);
-+	__type(key, __u32);
-+	__type(value, struct real_definition);
-+} reals SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, STATS_SIZE);
-+	__type(key, __u32);
-+	__type(value, struct lb_stats);
-+} stats SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, MAX_REALS);
-+	__type(key, __u32);
-+	__type(value, struct lb_stats);
-+} reals_stats SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct ctl_value);
-+} ctl_array SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct vip_definition);
-+} vip_miss_stats SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, MAX_REALS);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} lru_miss_stats SEC(".maps");
-+
-+volatile __u32 flow_mask;
-+volatile __u32 cold_lru;
-+__u32 batch_gen;
-+
-+/*
-+ * old_eth MUST be read BEFORE writing the outer header because
-+ * bpf_xdp_adjust_head makes them overlap.
-+ */
-+static __always_inline int encap_v4(struct xdp_md *xdp, __be32 saddr, __be32 daddr,
-+				    __u16 payload_len, const __u8 *dst_mac)
++static void htonl_v6(__be32 dst[4], const __u32 src[4])
 +{
-+	struct ethhdr *new_eth, *old_eth;
-+	void *data, *data_end;
-+	struct iphdr *iph;
++	int i;
 +
-+	if (bpf_xdp_adjust_head(xdp, -(int)sizeof(struct iphdr)))
-+		return -1;
-+
-+	data     = (void *)(long)xdp->data;
-+	data_end = (void *)(long)xdp->data_end;
-+
-+	new_eth = data;
-+	iph     = data + sizeof(struct ethhdr);
-+	old_eth = data + sizeof(struct iphdr);
-+
-+	if (new_eth + 1 > data_end || old_eth + 1 > data_end || iph + 1 > data_end)
-+		return -1;
-+
-+	__builtin_memcpy(new_eth->h_source, old_eth->h_dest, sizeof(new_eth->h_source));
-+	__builtin_memcpy(new_eth->h_dest, dst_mac, sizeof(new_eth->h_dest));
-+	new_eth->h_proto = bpf_htons(ETH_P_IP);
-+
-+	__builtin_memset(iph, 0, sizeof(*iph));
-+	iph->version  = 4;
-+	iph->ihl      = sizeof(*iph) >> 2;
-+	iph->protocol = IPPROTO_IPIP;
-+	iph->tot_len  = bpf_htons(payload_len + sizeof(*iph));
-+	iph->ttl      = 64;
-+	iph->saddr    = saddr;
-+	iph->daddr    = daddr;
-+	ipv4_csum(iph);
-+
-+	return 0;
++	for (i = 0; i < 4; i++)
++		dst[i] = htonl(src[i]);
 +}
 +
-+static __always_inline int encap_v6(struct xdp_md *xdp, const __be32 saddr[4],
-+				    const __be32 daddr[4], __u8 nexthdr,
-+				    __u16 payload_len, const __u8 *dst_mac)
++static void build_flow_key(struct flow_key *fk, const struct test_scenario *sc)
 +{
-+	struct ethhdr *new_eth, *old_eth;
-+	void *data, *data_end;
-+	struct ipv6hdr *ip6h;
-+
-+	if (bpf_xdp_adjust_head(xdp, -(int)sizeof(struct ipv6hdr)))
-+		return -1;
-+
-+	data     = (void *)(long)xdp->data;
-+	data_end = (void *)(long)xdp->data_end;
-+
-+	new_eth = data;
-+	ip6h    = data + sizeof(struct ethhdr);
-+	old_eth = data + sizeof(struct ipv6hdr);
-+
-+	if (new_eth + 1 > data_end || old_eth + 1 > data_end || ip6h + 1 > data_end)
-+		return -1;
-+
-+	__builtin_memcpy(new_eth->h_source, old_eth->h_dest, sizeof(new_eth->h_source));
-+	__builtin_memcpy(new_eth->h_dest, dst_mac, sizeof(new_eth->h_dest));
-+	new_eth->h_proto = bpf_htons(ETH_P_IPV6);
-+
-+	__builtin_memset(ip6h, 0, sizeof(*ip6h));
-+	ip6h->version     = 6;
-+	ip6h->nexthdr     = nexthdr;
-+	ip6h->payload_len = bpf_htons(payload_len);
-+	ip6h->hop_limit   = 64;
-+	__builtin_memcpy(&ip6h->saddr, saddr, sizeof(ip6h->saddr));
-+	__builtin_memcpy(&ip6h->daddr, daddr, sizeof(ip6h->daddr));
-+
-+	return 0;
++	memset(fk, 0, sizeof(*fk));
++	if (sc->is_v6) {
++		htonl_v6(fk->srcv6, sc->src_addr_v6);
++		htonl_v6(fk->dstv6, sc->vip_addr_v6);
++	} else {
++		fk->src = htonl(sc->src_addr);
++		fk->dst = htonl(sc->vip_addr);
++	}
++	fk->proto = sc->ip_proto;
++	fk->port16[0] = htons(sc->src_port);
++	fk->port16[1] = htons(sc->dst_port);
 +}
 +
-+static __always_inline void update_stats(void *map, __u32 key, __u16 bytes)
++static void build_l4(const struct test_scenario *sc, __u8 *p, __u32 *off)
 +{
-+	struct lb_stats *st = bpf_map_lookup_elem(map, &key);
++	if (sc->ip_proto == IPPROTO_TCP) {
++		struct tcphdr tcp = {};
 +
-+	if (st) {
-+		st->v1 += 1;
-+		st->v2 += bytes;
++		tcp.source = htons(sc->src_port);
++		tcp.dest   = htons(sc->dst_port);
++		tcp.doff   = 5;
++		tcp.syn    = sc->set_syn ? 1 : 0;
++		tcp.rst    = sc->set_rst ? 1 : 0;
++		tcp.window = htons(8192);
++		memcpy(p + *off, &tcp, sizeof(tcp));
++		*off += sizeof(tcp);
++	} else if (sc->ip_proto == IPPROTO_UDP) {
++		struct udphdr udp = {};
++
++		udp.source = htons(sc->src_port);
++		udp.dest   = htons(sc->dst_port);
++		udp.len    = htons(sizeof(udp) + 16);
++		memcpy(p + *off, &udp, sizeof(udp));
++		*off += sizeof(udp);
 +	}
 +}
 +
-+static __always_inline void count_action(int action)
++static void build_packet(int idx)
 +{
-+	struct lb_stats *st;
-+	__u32 key;
++	const struct test_scenario *sc = &scenarios[idx];
++	__u8 *p = pkt_buf[idx];
++	struct ethhdr eth = {};
++	__u16 proto;
++	__u32 off = 0;
 +
-+	if (action == XDP_TX)
-+		key = STATS_XDP_TX;
-+	else if (action == XDP_PASS)
-+		key = STATS_XDP_PASS;
++	memcpy(eth.h_dest, lb_mac, ETH_ALEN);
++	memcpy(eth.h_source, client_mac, ETH_ALEN);
++
++	if (sc->eth_proto)
++		proto = sc->eth_proto;
++	else if (sc->is_v6)
++		proto = ETH_P_IPV6;
 +	else
-+		key = STATS_XDP_DROP;
++		proto = ETH_P_IP;
 +
-+	st = bpf_map_lookup_elem(&stats, &key);
-+	if (st)
-+		st->v1 += 1;
-+}
++	eth.h_proto = htons(proto);
++	memcpy(p, &eth, sizeof(eth));
++	off += sizeof(eth);
 +
-+static __always_inline bool is_under_flood(void)
-+{
-+	__u32 key = STATS_NEW_CONN;
-+	struct lb_stats *conn_st = bpf_map_lookup_elem(&stats, &key);
-+	__u64 cur_time;
-+
-+	if (!conn_st)
-+		return true;
-+
-+	cur_time = bpf_ktime_get_ns();
-+	if ((cur_time - conn_st->v2) > ONE_SEC) {
-+		conn_st->v1 = 1;
-+		conn_st->v2 = cur_time;
-+	} else {
-+		conn_st->v1 += 1;
-+		if (conn_st->v1 > MAX_CONN_RATE)
-+			return true;
++	if (proto != ETH_P_IP && proto != ETH_P_IPV6) {
++		memcpy(p + off, "bench___payload!", 16);
++		off += 16;
++		pkt_len[idx] = off;
++		return;
 +	}
-+	return false;
++
++	if (sc->is_v6) {
++		struct ipv6hdr ip6h = {};
++		__u32 ip6_off = off;
++
++		ip6h.version  = 6;
++		ip6h.nexthdr  = sc->set_frag ? 44 : sc->ip_proto;
++		ip6h.hop_limit = 64;
++		htonl_v6((__be32 *)&ip6h.saddr, sc->src_addr_v6);
++		htonl_v6((__be32 *)&ip6h.daddr, sc->vip_addr_v6);
++		off += sizeof(ip6h);
++
++		if (sc->set_frag) {
++			memset(p + off, 0, 8);
++			p[off] = sc->ip_proto;
++			off += 8;
++		}
++
++		build_l4(sc, p, &off);
++
++		memcpy(p + off, "bench___payload!", 16);
++		off += 16;
++
++		ip6h.payload_len = htons(off - ip6_off - sizeof(ip6h));
++		memcpy(p + ip6_off, &ip6h, sizeof(ip6h));
++	} else {
++		struct iphdr iph = {};
++		__u32 ip_off = off;
++
++		iph.version  = 4;
++		iph.ihl      = sc->set_ip_options ? 6 : 5;
++		iph.ttl      = 64;
++		iph.protocol = sc->ip_proto;
++		iph.saddr    = htonl(sc->src_addr);
++		iph.daddr    = htonl(sc->vip_addr);
++		iph.frag_off = sc->set_frag ? htons(IP_MF) : 0;
++		off += sizeof(iph);
++
++		if (sc->set_ip_options) {
++			/* NOP option padding (4 bytes = 1 word) */
++			__u32 nop = htonl(0x01010101);
++
++			memcpy(p + off, &nop, sizeof(nop));
++			off += sizeof(nop);
++		}
++
++		build_l4(sc, p, &off);
++
++		memcpy(p + off, "bench___payload!", 16);
++		off += 16;
++
++		iph.tot_len = htons(off - ip_off);
++		iph.check   = ip_checksum(&iph, sizeof(iph));
++		memcpy(p + ip_off, &iph, sizeof(iph));
++	}
++
++	pkt_len[idx] = off;
 +}
 +
-+static __always_inline struct real_definition *
-+connection_table_lookup(void *lru_map, struct flow_key *flow, __u32 *out_pos)
++static void populate_vip(struct xdp_lb_bench *skel, const struct test_scenario *sc)
 +{
-+	struct real_pos_lru *dst_lru;
-+	struct real_definition *real;
++	struct vip_definition key = {};
++	struct vip_meta val = {};
++	int err;
++
++	if (sc->is_v6)
++		htonl_v6(key.vipv6, sc->vip_addr_v6);
++	else
++		key.vip = htonl(sc->vip_addr);
++	key.port  = htons(sc->dst_port);
++	key.proto = sc->ip_proto;
++	val.flags   = sc->vip_flags;
++	val.vip_num = sc->vip_num;
++
++	err = bpf_map_update_elem(bpf_map__fd(skel->maps.vip_map), &key, &val, BPF_ANY);
++	if (err) {
++		fprintf(stderr, "vip_map [%s]: %s\n", sc->name, strerror(errno));
++		exit(1);
++	}
++}
++
++static void create_per_cpu_lru_maps(struct xdp_lb_bench *skel)
++{
++	int outer_fd = bpf_map__fd(skel->maps.lru_mapping);
++	unsigned int nr_cpus = bpf_num_possible_cpus();
++	int i, inner_fd, err;
++	__u32 cpu;
++
++	if (nr_cpus > BENCH_NR_CPUS)
++		nr_cpus = BENCH_NR_CPUS;
++
++	for (i = 0; i < (int)nr_cpus; i++) {
++		LIBBPF_OPTS(bpf_map_create_opts, opts);
++
++		inner_fd = bpf_map_create(BPF_MAP_TYPE_LRU_HASH, "lru_inner",
++					  sizeof(struct flow_key),
++					  sizeof(struct real_pos_lru),
++					  DEFAULT_LRU_SIZE, &opts);
++		if (inner_fd < 0) {
++			fprintf(stderr, "lru_inner[%d]: %s\n", i, strerror(errno));
++			exit(1);
++		}
++
++		cpu = i;
++		err = bpf_map_update_elem(outer_fd, &cpu, &inner_fd, BPF_ANY);
++		if (err) {
++			fprintf(stderr, "lru_mapping[%d]: %s\n", i, strerror(errno));
++			close(inner_fd);
++			exit(1);
++		}
++
++		lru_inner_fds[i] = inner_fd;
++	}
++
++	nr_inner_maps = nr_cpus;
++}
++
++static void populate_lru(const struct test_scenario *sc, __u32 real_idx)
++{
++	struct real_pos_lru lru = { .pos = real_idx };
++	struct flow_key fk;
++	int i, err;
++
++	build_flow_key(&fk, sc);
++
++	/* Insert into every per-CPU inner LRU so the entry is found
++	 * regardless of which CPU runs the BPF program.
++	 */
++	for (i = 0; i < nr_inner_maps; i++) {
++		err = bpf_map_update_elem(lru_inner_fds[i], &fk, &lru, BPF_ANY);
++		if (err) {
++			fprintf(stderr, "lru_inner[%d] [%s]: %s\n", i, sc->name,
++				strerror(errno));
++			exit(1);
++		}
++	}
++}
++
++static void populate_maps(struct xdp_lb_bench *skel)
++{
++	struct real_definition real_v4 = {};
++	struct real_definition real_v6 = {};
++	struct ctl_value cval = {};
++	__u32 key, real_idx = REAL_INDEX;
++	int ch_fd, err, i;
++
++	if (scenarios[args.scenario].expect_encap)
++		populate_vip(skel, &scenarios[args.scenario]);
++
++	ch_fd = bpf_map__fd(skel->maps.ch_rings);
++	for (i = 0; i < CH_RINGS_SIZE; i++) {
++		__u32 k = i;
++
++		err = bpf_map_update_elem(ch_fd, &k, &real_idx, BPF_ANY);
++		if (err) {
++			fprintf(stderr, "ch_rings[%d]: %s\n", i, strerror(errno));
++			exit(1);
++		}
++	}
++
++	memcpy(cval.mac, router_mac, ETH_ALEN);
++	key = 0;
++	err = bpf_map_update_elem(bpf_map__fd(skel->maps.ctl_array), &key, &cval, BPF_ANY);
++	if (err) {
++		fprintf(stderr, "ctl_array: %s\n", strerror(errno));
++		exit(1);
++	}
++
++	key = REAL_INDEX;
++	real_v4.dst = htonl(TNL_DST);
++	htonl_v6(real_v4.dstv6, tnl_dst_v6);
++	err = bpf_map_update_elem(bpf_map__fd(skel->maps.reals), &key, &real_v4, BPF_ANY);
++	if (err) {
++		fprintf(stderr, "reals[%d]: %s\n", REAL_INDEX, strerror(errno));
++		exit(1);
++	}
++
++	key = REAL_INDEX_V6;
++	htonl_v6(real_v6.dstv6, tnl_dst_v6);
++	real_v6.flags = F_IPV6;
++	err = bpf_map_update_elem(bpf_map__fd(skel->maps.reals), &key, &real_v6, BPF_ANY);
++	if (err) {
++		fprintf(stderr, "reals[%d]: %s\n", REAL_INDEX_V6, strerror(errno));
++		exit(1);
++	}
++
++	create_per_cpu_lru_maps(skel);
++
++	if (scenarios[args.scenario].prepopulate_lru) {
++		const struct test_scenario *sc = &scenarios[args.scenario];
++		__u32 ridx = sc->encap_v6_outer ? REAL_INDEX_V6 : REAL_INDEX;
++
++		populate_lru(sc, ridx);
++	}
++
++	if (scenarios[args.scenario].expect_encap) {
++		const struct test_scenario *sc = &scenarios[args.scenario];
++		struct vip_definition miss_vip = {};
++
++		if (sc->is_v6)
++			htonl_v6(miss_vip.vipv6, sc->vip_addr_v6);
++		else
++			miss_vip.vip = htonl(sc->vip_addr);
++		miss_vip.port = htons(sc->dst_port);
++		miss_vip.proto = sc->ip_proto;
++
++		key = 0;
++		err = bpf_map_update_elem(bpf_map__fd(skel->maps.vip_miss_stats),
++					  &key, &miss_vip, BPF_ANY);
++		if (err) {
++			fprintf(stderr, "vip_miss_stats: %s\n", strerror(errno));
++			exit(1);
++		}
++	}
++}
++
++static void build_expected_packet(int idx)
++{
++	const struct test_scenario *sc = &scenarios[idx];
++	__u8 *p = expected_buf[idx];
++	const __u8 *in = pkt_buf[idx];
++	__u32 in_len = pkt_len[idx];
++	__u32 off = 0;
++	__u32 inner_len = in_len - sizeof(struct ethhdr);
++
++	if (sc->expected_retval == XDP_DROP) {
++		expected_len[idx] = 0;
++		return;
++	}
++
++	if (sc->expected_retval == XDP_PASS) {
++		memcpy(p, in, in_len);
++		expected_len[idx] = in_len;
++		return;
++	}
++
++	{
++		struct ethhdr eth = {};
++
++		memcpy(eth.h_dest, router_mac, ETH_ALEN);
++		memcpy(eth.h_source, lb_mac, ETH_ALEN);
++		eth.h_proto = htons(sc->encap_v6_outer ? ETH_P_IPV6 : ETH_P_IP);
++		memcpy(p, &eth, sizeof(eth));
++		off += sizeof(eth);
++	}
++
++	if (sc->encap_v6_outer) {
++		struct ipv6hdr ip6h = {};
++		__u8 nexthdr = sc->is_v6 ? IPPROTO_IPV6 : IPPROTO_IPIP;
++
++		ip6h.version     = 6;
++		ip6h.nexthdr     = nexthdr;
++		ip6h.payload_len = htons(inner_len);
++		ip6h.hop_limit   = 64;
++
++		create_encap_ipv6_src(htons(sc->src_port),
++				      sc->is_v6 ? htonl(sc->src_addr_v6[0])
++						: htonl(sc->src_addr),
++				      (__be32 *)&ip6h.saddr);
++		htonl_v6((__be32 *)&ip6h.daddr, sc->tunnel_dst_v6);
++
++		memcpy(p + off, &ip6h, sizeof(ip6h));
++		off += sizeof(ip6h);
++	} else {
++		struct iphdr iph = {};
++
++		iph.version  = 4;
++		iph.ihl      = sizeof(iph) >> 2;
++		iph.protocol = IPPROTO_IPIP;
++		iph.tot_len  = htons(inner_len + sizeof(iph));
++		iph.ttl      = 64;
++		iph.saddr    = create_encap_ipv4_src(htons(sc->src_port),
++						     htonl(sc->src_addr));
++		iph.daddr    = htonl(sc->tunnel_dst);
++		iph.check    = ip_checksum(&iph, sizeof(iph));
++
++		memcpy(p + off, &iph, sizeof(iph));
++		off += sizeof(iph);
++	}
++
++	memcpy(p + off, in + sizeof(struct ethhdr), inner_len);
++	off += inner_len;
++
++	expected_len[idx] = off;
++}
++
++static void print_hex_diff(const char *name, const __u8 *got, __u32 got_len,
++			   const __u8 *exp, __u32 exp_len)
++{
++	__u32 max_len = got_len > exp_len ? got_len : exp_len;
++	__u32 i, ndiffs = 0;
++
++	fprintf(stderr, "  [%s] got %u bytes, expected %u bytes\n",
++		name, got_len, exp_len);
++
++	for (i = 0; i < max_len && ndiffs < 8; i++) {
++		__u8 g = i < got_len ? got[i] : 0;
++		__u8 e = i < exp_len ? exp[i] : 0;
++
++		if (g != e || i >= got_len || i >= exp_len) {
++			fprintf(stderr, "    offset 0x%03x: got 0x%02x  expected 0x%02x\n",
++				i, g, e);
++			ndiffs++;
++		}
++	}
++
++	if (ndiffs >= 8 && i < max_len)
++		fprintf(stderr, "    ... (more differences)\n");
++}
++
++static void read_stat(int stats_fd, __u32 key, __u64 *v1_out, __u64 *v2_out)
++{
++	struct lb_stats values[BENCH_NR_CPUS];
++	unsigned int nr_cpus = bpf_num_possible_cpus();
++	__u64 v1 = 0, v2 = 0;
++	unsigned int i;
++
++	if (nr_cpus > BENCH_NR_CPUS)
++		nr_cpus = BENCH_NR_CPUS;
++
++	if (bpf_map_lookup_elem(stats_fd, &key, values) == 0) {
++		for (i = 0; i < nr_cpus; i++) {
++			v1 += values[i].v1;
++			v2 += values[i].v2;
++		}
++	}
++
++	*v1_out = v1;
++	*v2_out = v2;
++}
++
++static void reset_stats(int stats_fd)
++{
++	struct lb_stats zeros[BENCH_NR_CPUS];
 +	__u32 key;
 +
-+	dst_lru = bpf_map_lookup_elem(lru_map, flow);
-+	if (!dst_lru)
-+		return NULL;
-+
-+	/* UDP connections use atime-based timeout instead of FIN/RST */
-+	if (flow->proto == IPPROTO_UDP) {
-+		__u64 cur_time = bpf_ktime_get_ns();
-+
-+		if (cur_time - dst_lru->atime > LRU_UDP_TIMEOUT)
-+			return NULL;
-+		dst_lru->atime = cur_time;
-+	}
-+
-+	key = dst_lru->pos;
-+	*out_pos = key;
-+	real = bpf_map_lookup_elem(&reals, &key);
-+	return real;
++	memset(zeros, 0, sizeof(zeros));
++	for (key = 0; key < STATS_SIZE; key++)
++		bpf_map_update_elem(stats_fd, &key, zeros, BPF_ANY);
 +}
 +
-+static __always_inline bool get_packet_dst(struct real_definition **real,
-+					   struct flow_key *flow,
-+					   struct vip_meta *vip_info,
-+					   bool is_v6, void *lru_map,
-+					   bool is_rst, __u32 *out_pos)
++static bool validate_counters(int idx)
 +{
-+	bool under_flood;
-+	__u32 hash, ch_key;
-+	__u32 *ch_val;
-+	__u32 real_pos;
++	const struct test_scenario *sc = &scenarios[idx];
++	int stats_fd = bpf_map__fd(ctx.skel->maps.stats);
++	__u64 xdp_tx, xdp_pass, xdp_drop, lru_pkts, lru_misses, tcp_misses;
++	__u64 dummy;
++	/*
++	 * BENCH_BPF_LOOP runs batch_iters timed + 1 untimed iteration.
++	 * Each iteration calls process_packet → count_action, so all
++	 * counters are incremented (batch_iters + 1) times.
++	 */
++	__u64 n = ctx.timing.batch_iters + 1;
++	bool pass = true;
 +
-+	under_flood = is_under_flood();
++	read_stat(stats_fd, STATS_XDP_TX, &xdp_tx, &dummy);
++	read_stat(stats_fd, STATS_XDP_PASS, &xdp_pass, &dummy);
++	read_stat(stats_fd, STATS_XDP_DROP, &xdp_drop, &dummy);
++	read_stat(stats_fd, STATS_LRU, &lru_pkts, &lru_misses);
++	read_stat(stats_fd, STATS_LRU_MISS, &tcp_misses, &dummy);
 +
-+	if (is_v6) {
-+		__u32 src_hash = jhash2_4words((__u32 *)flow->srcv6, MAX_VIPS);
-+
-+		hash = jhash_2words(src_hash, flow->ports, CH_RING_SIZE);
-+	} else {
-+		hash = jhash_2words(flow->src, flow->ports, CH_RING_SIZE);
++	if (sc->expected_retval == XDP_TX && xdp_tx != n) {
++		fprintf(stderr, "  [%s] COUNTER FAIL: STATS_XDP_TX=%llu, expected %llu\n",
++			sc->name, (unsigned long long)xdp_tx,
++			(unsigned long long)n);
++		pass = false;
++	}
++	if (sc->expected_retval == XDP_PASS && xdp_pass != n) {
++		fprintf(stderr, "  [%s] COUNTER FAIL: STATS_XDP_PASS=%llu, expected %llu\n",
++			sc->name, (unsigned long long)xdp_pass,
++			(unsigned long long)n);
++		pass = false;
++	}
++	if (sc->expected_retval == XDP_DROP && xdp_drop != n) {
++		fprintf(stderr, "  [%s] COUNTER FAIL: STATS_XDP_DROP=%llu, expected %llu\n",
++			sc->name, (unsigned long long)xdp_drop,
++			(unsigned long long)n);
++		pass = false;
 +	}
 +
-+	ch_key = CH_RING_SIZE * vip_info->vip_num + hash % CH_RING_SIZE;
-+	ch_val = bpf_map_lookup_elem(&ch_rings, &ch_key);
-+	if (!ch_val)
-+		return false;
-+	real_pos = *ch_val;
++	if (!sc->expect_encap)
++		goto out;
 +
-+	*real = bpf_map_lookup_elem(&reals, &real_pos);
-+	if (!(*real))
-+		return false;
-+
-+	if (!(vip_info->flags & F_LRU_BYPASS) && !under_flood && !is_rst) {
-+		struct real_pos_lru new_lru = { .pos = real_pos };
-+
-+		if (flow->proto == IPPROTO_UDP)
-+			new_lru.atime = bpf_ktime_get_ns();
-+		bpf_map_update_elem(lru_map, flow, &new_lru, BPF_ANY);
++	if (lru_pkts != n) {
++		fprintf(stderr, "  [%s] COUNTER FAIL: STATS_LRU.v1=%llu, expected %llu\n",
++			sc->name, (unsigned long long)lru_pkts,
++			(unsigned long long)n);
++		pass = false;
 +	}
 +
-+	*out_pos = real_pos;
++	{
++		__u64 expected_misses;
++
++		switch (sc->lru_miss) {
++		case LRU_MISS_NONE:
++			expected_misses = 0;
++			break;
++		case LRU_MISS_ALL:
++			expected_misses = n;
++			break;
++		case LRU_MISS_FIRST:
++			expected_misses = 1;
++			break;
++		default:
++			/* LRU_MISS_AUTO: compute from scenario flags */
++			if (sc->prepopulate_lru && !sc->set_syn)
++				expected_misses = 0;
++			else if (sc->set_syn || sc->set_rst ||
++				 (sc->vip_flags & F_LRU_BYPASS))
++				expected_misses = n;
++			else if (sc->cold_lru)
++				expected_misses = 1;
++			else
++				expected_misses = n;
++			break;
++		}
++
++		if (lru_misses != expected_misses) {
++			fprintf(stderr, "  [%s] COUNTER FAIL: LRU misses=%llu, expected %llu\n",
++				sc->name, (unsigned long long)lru_misses,
++				(unsigned long long)expected_misses);
++			pass = false;
++		}
++	}
++
++	if (sc->ip_proto == IPPROTO_TCP && lru_misses > 0) {
++		if (tcp_misses != lru_misses) {
++			fprintf(stderr, "  [%s] COUNTER FAIL: TCP LRU misses=%llu, expected %llu\n",
++				sc->name, (unsigned long long)tcp_misses,
++				(unsigned long long)lru_misses);
++			pass = false;
++		}
++	}
++
++out:
++	reset_stats(stats_fd);
++	return pass;
++}
++
++static const char *xdp_action_str(int action)
++{
++	switch (action) {
++	case XDP_DROP:	return "XDP_DROP";
++	case XDP_PASS:	return "XDP_PASS";
++	case XDP_TX:	return "XDP_TX";
++	default:	return "UNKNOWN";
++	}
++}
++
++static bool validate_scenario(int idx)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	const struct test_scenario *sc = &scenarios[idx];
++	__u8 out[MAX_ENCAP_SIZE];
++	int err;
++
++	topts.data_in = pkt_buf[idx];
++	topts.data_size_in = pkt_len[idx];
++	topts.data_out = out;
++	topts.data_size_out = sizeof(out);
++	topts.repeat = 1;
++
++	err = bpf_prog_test_run_opts(ctx.prog_fd, &topts);
++	if (err) {
++		fprintf(stderr, "  [%s] FAIL: test_run: %s\n", sc->name, strerror(errno));
++		return false;
++	}
++
++	if ((int)topts.retval != sc->expected_retval) {
++		fprintf(stderr, "  [%s] FAIL: retval %s, expected %s\n",
++			sc->name, xdp_action_str(topts.retval),
++			xdp_action_str(sc->expected_retval));
++		return false;
++	}
++
++	/*
++	 * Compare output packet when it's deterministic.
++	 * Skip for XDP_DROP (no output) and cold_lru (source IP poisoned).
++	 */
++	if (sc->expected_retval != XDP_DROP && !sc->cold_lru) {
++		if (topts.data_size_out != expected_len[idx] ||
++		    memcmp(out, expected_buf[idx], expected_len[idx]) != 0) {
++			fprintf(stderr, "  [%s] FAIL: output packet mismatch\n",
++				sc->name);
++			print_hex_diff(sc->name, out, topts.data_size_out,
++				       expected_buf[idx], expected_len[idx]);
++			return false;
++		}
++	}
++
++	if (!validate_counters(idx))
++		return false;
++
++	if (!args.machine_readable)
++		printf("  [%s] PASS  (%s) %s\n",
++		       sc->name, xdp_action_str(sc->expected_retval), sc->description);
 +	return true;
 +}
 +
-+static __always_inline void update_vip_lru_miss_stats(struct vip_definition *vip,
-+						      bool is_v6, __u32 real_idx)
++static int find_scenario(const char *name)
 +{
-+	struct vip_definition *miss_vip;
-+	__u32 key = 0;
-+	__u32 *cnt;
++	int i;
 +
-+	miss_vip = bpf_map_lookup_elem(&vip_miss_stats, &key);
-+	if (!miss_vip)
-+		return;
-+
-+	if (is_v6) {
-+		if (miss_vip->vipv6[0] != vip->vipv6[0] ||
-+		    miss_vip->vipv6[1] != vip->vipv6[1] ||
-+		    miss_vip->vipv6[2] != vip->vipv6[2] ||
-+		    miss_vip->vipv6[3] != vip->vipv6[3])
-+			return;
-+	} else {
-+		if (miss_vip->vip != vip->vip)
-+			return;
++	for (i = 0; i < NUM_SCENARIOS; i++) {
++		if (strcmp(scenarios[i].name, name) == 0)
++			return i;
 +	}
-+
-+	if (miss_vip->port != vip->port || miss_vip->proto != vip->proto)
-+		return;
-+
-+	cnt = bpf_map_lookup_elem(&lru_miss_stats, &real_idx);
-+	if (cnt)
-+		*cnt += 1;
++	return -1;
 +}
 +
-+static __noinline int process_packet(struct xdp_md *xdp)
++static void xdp_lb_validate(void)
 +{
-+	void *data     = (void *)(long)xdp->data;
-+	void *data_end = (void *)(long)xdp->data_end;
-+	struct ethhdr *eth = data;
-+	struct real_definition *dst = NULL;
-+	struct vip_definition vip_def = {};
-+	struct ctl_value *cval;
-+	struct flow_key flow = {};
-+	struct vip_meta *vip_info;
-+	struct lb_stats *data_stats;
-+	struct udphdr *uh;
-+	__be32 tnl_src[4];
-+	void *lru_map;
-+	void *l4;
-+	__u16 payload_len;
-+	__u32 real_pos = 0, cpu_num, key;
-+	__u8 proto;
-+	int action = XDP_DROP;
-+	bool is_v6, is_syn = false, is_rst = false;
++	if (env.consumer_cnt != 0) {
++		fprintf(stderr, "benchmark doesn't support consumers\n");
++		exit(1);
++	}
++	if (bpf_num_possible_cpus() > BENCH_NR_CPUS) {
++		fprintf(stderr, "too many CPUs (%d > %d), increase BENCH_NR_CPUS\n",
++			bpf_num_possible_cpus(), BENCH_NR_CPUS);
++		exit(1);
++	}
++}
 +
-+	if (eth + 1 > data_end)
-+		goto out;
++static void xdp_lb_run_once(void *unused __always_unused)
++{
++	int idx = args.scenario;
 +
-+	if (eth->h_proto == bpf_htons(ETH_P_IPV6)) {
-+		is_v6 = true;
-+	} else if (eth->h_proto == bpf_htons(ETH_P_IP)) {
-+		is_v6 = false;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in      = pkt_buf[idx],
++		.data_size_in = pkt_len[idx],
++		.repeat       = 1,
++	);
++
++	bpf_prog_test_run_opts(ctx.prog_fd, &topts);
++}
++
++static void xdp_lb_setup(void)
++{
++	struct xdp_lb_bench *skel;
++	int err;
++
++	if (args.scenario < 0) {
++		fprintf(stderr, "--scenario is required. Use --list-scenarios to see options.\n");
++		exit(1);
++	}
++
++	setup_libbpf();
++
++	skel = xdp_lb_bench__open();
++	if (!skel) {
++		fprintf(stderr, "failed to open skeleton\n");
++		exit(1);
++	}
++
++	err = xdp_lb_bench__load(skel);
++	if (err) {
++		fprintf(stderr, "failed to load skeleton: %s\n", strerror(-err));
++		xdp_lb_bench__destroy(skel);
++		exit(1);
++	}
++
++	ctx.skel    = skel;
++	ctx.prog_fd = bpf_program__fd(skel->progs.xdp_lb_bench);
++
++	build_packet(args.scenario);
++	build_expected_packet(args.scenario);
++
++	populate_maps(skel);
++
++	BENCH_TIMING_INIT(&ctx.timing, skel, 0);
++	ctx.timing.machine_readable = args.machine_readable;
++
++	if (scenarios[args.scenario].fixed_batch_iters) {
++		ctx.timing.batch_iters = scenarios[args.scenario].fixed_batch_iters;
++		skel->bss->batch_iters = ctx.timing.batch_iters;
++		if (!args.machine_readable)
++			printf("Using fixed batch_iters=%u (scenario requirement)\n",
++			       ctx.timing.batch_iters);
 +	} else {
-+		action = XDP_PASS;
-+		goto out;
++		bpf_bench_calibrate(&ctx.timing, xdp_lb_run_once, NULL);
 +	}
 +
-+	if (is_v6) {
-+		struct ipv6hdr *ip6h = (void *)(eth + 1);
++	env.duration_sec = 600;
 +
-+		if (ip6h + 1 > data_end)
-+			goto out;
-+		if (ip6h->nexthdr == IPPROTO_FRAGMENT)
-+			goto out;
-+
-+		payload_len = sizeof(struct ipv6hdr) + bpf_ntohs(ip6h->payload_len);
-+		proto = ip6h->nexthdr;
-+
-+		__builtin_memcpy(flow.srcv6, &ip6h->saddr, sizeof(flow.srcv6));
-+		__builtin_memcpy(flow.dstv6, &ip6h->daddr, sizeof(flow.dstv6));
-+		__builtin_memcpy(vip_def.vipv6, &ip6h->daddr, sizeof(vip_def.vipv6));
-+		l4 = (void *)(ip6h + 1);
-+	} else {
-+		struct iphdr *iph = (void *)(eth + 1);
-+
-+		if (iph + 1 > data_end)
-+			goto out;
-+		if (iph->ihl != 5)
-+			goto out;
-+		if (iph->frag_off & bpf_htons(PCKT_FRAGMENTED))
-+			goto out;
-+
-+		payload_len = bpf_ntohs(iph->tot_len);
-+		proto = iph->protocol;
-+
-+		flow.src    = iph->saddr;
-+		flow.dst    = iph->daddr;
-+		vip_def.vip = iph->daddr;
-+		l4 = (void *)(iph + 1);
++	/*
++	 * Enable cold_lru before validation so LRU miss counters are
++	 * correct.  flow_mask is left disabled during validation to keep
++	 * the output packet deterministic for memcmp.  Scenarios with
++	 * cold_lru skip packet comparison since the source IP is poisoned.
++	 *
++	 * The cold_lru XOR alternates the source address between a
++	 * poisoned value and the original each iteration.  Seed the LRU
++	 * with one run so the original flow is present; validation then
++	 * sees exactly 1 miss (the new poisoned flow) regardless of
++	 * whether calibration ran.
++	 */
++	if (scenarios[args.scenario].cold_lru) {
++		skel->bss->cold_lru = 1;
++		xdp_lb_run_once(NULL);
 +	}
 +
-+	/* TCP and UDP share the same port layout at offset 0 */
-+	if (proto != IPPROTO_TCP && proto != IPPROTO_UDP) {
-+		action = XDP_PASS;
-+		goto out;
++	reset_stats(bpf_map__fd(skel->maps.stats));
++
++	if (!args.machine_readable)
++		printf("Validating scenario '%s' (batch_iters=%u):\n",
++		       scenarios[args.scenario].name, ctx.timing.batch_iters);
++
++	if (!validate_scenario(args.scenario)) {
++		fprintf(stderr, "\nValidation FAILED - aborting benchmark\n");
++		exit(1);
 +	}
 +
-+	uh = l4;
-+	if ((void *)(uh + 1) > data_end)
-+		goto out;
-+	flow.port16[0] = uh->source;
-+	flow.port16[1] = uh->dest;
-+
-+	if (proto == IPPROTO_TCP) {
-+		struct tcphdr *th = l4;
-+
-+		if ((void *)(th + 1) > data_end)
-+			goto out;
-+		is_syn = th->syn;
-+		is_rst = th->rst;
++	if (scenarios[args.scenario].flow_mask) {
++		skel->bss->flow_mask = scenarios[args.scenario].flow_mask;
++		if (!args.machine_readable)
++			printf("  Flow diversity: %u unique src addrs (mask 0x%x)\n",
++			       scenarios[args.scenario].flow_mask + 1,
++			       scenarios[args.scenario].flow_mask);
 +	}
++	if (scenarios[args.scenario].cold_lru && !args.machine_readable)
++		printf("  Cold LRU: enabled (per-batch generation)\n");
 +
-+	flow.proto    = proto;
-+	vip_def.port  = flow.port16[1];
-+	vip_def.proto = proto;
++	if (!args.machine_readable)
++		printf("\nBenchmarking: %s\n\n", scenarios[args.scenario].name);
++}
 +
-+	vip_info = bpf_map_lookup_elem(&vip_map, &vip_def);
-+	if (!vip_info) {
-+		action = XDP_PASS;
-+		goto out;
-+	}
++static void *xdp_lb_producer(void *input)
++{
++	int idx = args.scenario;
 +
-+	key = STATS_LRU;
-+	data_stats = bpf_map_lookup_elem(&stats, &key);
-+	if (!data_stats)
-+		goto out;
-+	data_stats->v1 += 1;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in      = pkt_buf[idx],
++		.data_size_in = pkt_len[idx],
++		.repeat       = 1,
++	);
 +
-+	cpu_num = bpf_get_smp_processor_id();
-+	lru_map = bpf_map_lookup_elem(&lru_mapping, &cpu_num);
-+	if (!lru_map)
-+		goto out;
++	while (true)
++		bpf_prog_test_run_opts(ctx.prog_fd, &topts);
 +
-+	if (!(vip_info->flags & F_LRU_BYPASS) && !is_syn)
-+		dst = connection_table_lookup(lru_map, &flow, &real_pos);
++	return NULL;
++}
 +
-+	if (!dst) {
-+		if (flow.proto == IPPROTO_TCP) {
-+			struct lb_stats *miss_st;
++static void xdp_lb_measure(struct bench_res *res)
++{
++	bpf_bench_timing_measure(&ctx.timing, res);
++}
 +
-+			key = STATS_LRU_MISS;
-+			miss_st = bpf_map_lookup_elem(&stats, &key);
-+			if (miss_st)
-+				miss_st->v1 += 1;
++static void xdp_lb_report_final(struct bench_res res[], int res_cnt)
++{
++	bpf_bench_timing_report(&ctx.timing,
++				scenarios[args.scenario].name,
++				scenarios[args.scenario].description);
++}
++
++enum {
++	ARG_SCENARIO         = 9001,
++	ARG_LIST_SCENARIOS   = 9002,
++	ARG_MACHINE_READABLE = 9003,
++};
++
++static const struct argp_option opts[] = {
++	{ "scenario", ARG_SCENARIO, "NAME", 0,
++	  "Scenario to benchmark (required)" },
++	{ "list-scenarios", ARG_LIST_SCENARIOS, NULL, 0,
++	  "List available scenarios and exit" },
++	{ "machine-readable", ARG_MACHINE_READABLE, NULL, 0,
++	  "Print only a machine-readable RESULT line" },
++	{},
++};
++
++static error_t parse_arg(int key, char *arg, struct argp_state *state)
++{
++	int i;
++
++	switch (key) {
++	case ARG_SCENARIO:
++		args.scenario = find_scenario(arg);
++		if (args.scenario < 0) {
++			fprintf(stderr, "unknown scenario: '%s'\n", arg);
++			fprintf(stderr, "use --list-scenarios to see options\n");
++			argp_usage(state);
 +		}
-+
-+		if (!get_packet_dst(&dst, &flow, vip_info, is_v6,
-+				    lru_map, is_rst, &real_pos))
-+			goto out;
-+
-+		update_vip_lru_miss_stats(&vip_def, is_v6, real_pos);
-+		data_stats->v2 += 1;
++		break;
++	case ARG_LIST_SCENARIOS:
++		printf("Available scenarios:\n");
++		for (i = 0; i < NUM_SCENARIOS; i++)
++			printf("  %-20s  %s\n", scenarios[i].name, scenarios[i].description);
++		exit(0);
++	case ARG_MACHINE_READABLE:
++		args.machine_readable = true;
++		break;
++	default:
++		return ARGP_ERR_UNKNOWN;
 +	}
 +
-+	key = 0;
-+	cval = bpf_map_lookup_elem(&ctl_array, &key);
-+	if (!cval)
-+		goto out;
-+
-+	update_stats(&stats, vip_info->vip_num, payload_len);
-+	update_stats(&reals_stats, real_pos, payload_len);
-+
-+	if (is_v6) {
-+		create_encap_ipv6_src(flow.port16[0], flow.srcv6[0], tnl_src);
-+		if (encap_v6(xdp, tnl_src, dst->dstv6, IPPROTO_IPV6, payload_len, cval->mac))
-+			goto out;
-+	} else if (dst->flags & F_IPV6) {
-+		create_encap_ipv6_src(flow.port16[0], flow.src, tnl_src);
-+		if (encap_v6(xdp, tnl_src, dst->dstv6, IPPROTO_IPIP, payload_len, cval->mac))
-+			goto out;
-+	} else {
-+		if (encap_v4(xdp, create_encap_ipv4_src(flow.port16[0], flow.src),
-+			     dst->dst, payload_len, cval->mac))
-+			goto out;
-+	}
-+
-+	action = XDP_TX;
-+
-+out:
-+	count_action(action);
-+	return action;
-+}
-+
-+static __always_inline int strip_encap(struct xdp_md *xdp, const struct ethhdr *saved_eth)
-+{
-+	void *data = (void *)(long)xdp->data;
-+	void *data_end = (void *)(long)xdp->data_end;
-+	struct ethhdr *eth = data;
-+	int hdr_sz;
-+
-+	if (eth + 1 > data_end)
-+		return -1;
-+
-+	hdr_sz = (eth->h_proto == bpf_htons(ETH_P_IPV6))
-+		 ? (int)sizeof(struct ipv6hdr)
-+		 : (int)sizeof(struct iphdr);
-+
-+	if (bpf_xdp_adjust_head(xdp, hdr_sz))
-+		return -1;
-+
-+	data     = (void *)(long)xdp->data;
-+	data_end = (void *)(long)xdp->data_end;
-+	eth      = data;
-+
-+	if (eth + 1 > data_end)
-+		return -1;
-+
-+	__builtin_memcpy(eth, saved_eth, sizeof(*saved_eth));
 +	return 0;
 +}
 +
-+static __always_inline void randomize_src(struct xdp_md *xdp, int saddr_off, __u32 *rand_state)
-+{
-+	void *data     = (void *)(long)xdp->data;
-+	void *data_end = (void *)(long)xdp->data_end;
-+	__u32 *saddr   = data + saddr_off;
++const struct argp bench_xdp_lb_argp = {
++	.options = opts,
++	.parser  = parse_arg,
++};
 +
-+	*rand_state ^= *rand_state << 13;
-+	*rand_state ^= *rand_state >> 17;
-+	*rand_state ^= *rand_state << 5;
-+
-+	if ((void *)(saddr + 1) <= data_end)
-+		*saddr = *rand_state & flow_mask;
-+}
-+
-+SEC("xdp")
-+int xdp_lb_bench(struct xdp_md *xdp)
-+{
-+	void *data     = (void *)(long)xdp->data;
-+	void *data_end = (void *)(long)xdp->data_end;
-+	struct ethhdr *eth = data;
-+	struct ethhdr saved_eth;
-+	__u32 rand_state = 0;
-+	__u32 batch_hash = 0;
-+	int saddr_off = 0;
-+	bool is_v6;
-+
-+	if (eth + 1 > data_end)
-+		return XDP_DROP;
-+
-+	__builtin_memcpy(&saved_eth, eth, sizeof(saved_eth));
-+
-+	is_v6 = (saved_eth.h_proto == bpf_htons(ETH_P_IPV6));
-+
-+	saddr_off = sizeof(struct ethhdr) +
-+		    (is_v6 ? offsetof(struct ipv6hdr, saddr)
-+			   : offsetof(struct iphdr, saddr));
-+
-+	if (flow_mask)
-+		rand_state = bpf_get_prandom_u32() | 1;
-+
-+	if (cold_lru) {
-+		__u32 *saddr = data + saddr_off;
-+
-+		batch_gen++;
-+		batch_hash = (batch_gen ^ bpf_get_smp_processor_id()) *
-+			     KNUTH_HASH_MULT;
-+		if ((void *)(saddr + 1) <= data_end)
-+			*saddr ^= batch_hash;
-+	}
-+
-+	return BENCH_BPF_LOOP(
-+		process_packet(xdp),
-+		({
-+			if (__bench_result == XDP_TX) {
-+				if (strip_encap(xdp, &saved_eth))
-+					return XDP_DROP;
-+				if (rand_state)
-+					randomize_src(xdp, saddr_off,
-+						      &rand_state);
-+			}
-+			if (cold_lru) {
-+				void *d = (void *)(long)xdp->data;
-+				void *de = (void *)(long)xdp->data_end;
-+				__u32 *__sa = d + saddr_off;
-+
-+				if ((void *)(__sa + 1) <= de)
-+					*__sa ^= batch_hash;
-+			}
-+		})
-+	);
-+}
-+
-+char _license[] SEC("license") = "GPL";
++const struct bench bench_xdp_lb = {
++	.name            = "xdp-lb",
++	.argp            = &bench_xdp_lb_argp,
++	.validate        = xdp_lb_validate,
++	.setup           = xdp_lb_setup,
++	.producer_thread = xdp_lb_producer,
++	.measure         = xdp_lb_measure,
++	.report_final    = xdp_lb_report_final,
++};
 -- 
 2.52.0
 
