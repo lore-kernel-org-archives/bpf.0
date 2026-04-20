@@ -1,96 +1,146 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED3339936E
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 18:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979773BADAE
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 18:47:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776710220; cv=none; b=BnCPlC8/DH63AGnzO9tJesNDPLrfaqwNHG3ZhEJefKSlNb/M3zrL3sJBXo840STX+LoI5F/L4TY1oerVjHbvCL2YJnP5ubjuzNSD0H3sD78Kf7/zMTUXc9CsKsrHM/GNZyZJrcR8n6xxWv/FUMaGprjSb1v2EbcXHcR78jGjxew=
+	t=1776710835; cv=none; b=jNGwmTAQfpr+yRxi9xhX9UfCbbwSuVUoLbm/9Vt1caHE2Kkat+96ePLTa2M6oBx9cn/krhiq2BvUhL+14f1nK6fZ3aYur4FJq875i/M8Qhd2ubQBKqdK3ze1r1FAGEF7RqXmOVEaATIQRwz5KuIFJQG1UeaJIKY3REb0XAfRf70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776710220; c=relaxed/simple;
-	bh=CBBSoO9kTtLxzHRoa4Ab9jE/HH2VINcAEfP4EjjDQPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qQUi28tSgG9xQ+SgovIsoa8lC2dXgATGMQiMSQUmkR7oWVmJMRRYlSz/42HVSfVLllq4q5iljfms5Jt3i9QzUTSGDZddjfgIL6RaHK6N9q3O2rB/6geDwr6vitYctkOVS/xbqGTWwOGuffp++2FIvYp0PJcIunY805739orjSm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=s8w5mWsX; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776710835; c=relaxed/simple;
+	bh=vW02KOU5qndWFI5Kbr8zih/4D7EhB9UqxDCMlU5uBtE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dp+wq4um+3bgiA+iv7hrwvdpFzIVH7ejKqbjd4cARbFFspXP75NxovLjvuTbqqEkUGO9LmRDPbGnlEIYj2XVeCgreFOoGv3gu/EH2rMHnj2knWfiJ0m7LiHlJ1v2TpXkUMQAIDLOxKVejnkqUU2eweOR/apH6UBbBQYfSAr6YUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7VfrFoP; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s8w5mWsX"
-Date: Mon, 20 Apr 2026 11:36:32 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776710206;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iemELGgB+ZL7KFZ21IfvD3tE3IwlqkufHa9FGi9Rq/M=;
-	b=s8w5mWsXpYVJTyMrsqnwl8ny9bR1qXKZP1Xko919KsJfHehzySLyRqSagj1FqR1i1bJ4Fo
-	W+0G1U8N3BLH87E7/lWwOuT+TnTS0Z6jiMCVy35G6RvR4/Up7BAEPFA56KxNC7n1KA6Jdm
-	NgcFF4IfncuuMPWPreMgGoA9nss3cnI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Weiming Shi <bestswngs@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Amery Hung <ameryhung@gmail.com>, Leon Hwang <leon.hwang@linux.dev>, Kees Cook <kees@kernel.org>, 
-	Fushuai Wang <wangfushuai@baidu.com>, Menglong Dong <menglong8.dong@gmail.com>, netdev@vger.kernel.org, 
-	bpf@vger.kernel.org, Xiang Mei <xmei5@asu.edu>
-Subject: Re: [PATCH bpf] bpf: Fix NULL pointer dereference in
- bpf_sk_storage_clone and diag paths
-Message-ID: <2026420182243.zAiN.martin.lau@linux.dev>
-References: <20260420161432.3919396-2-bestswngs@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7VfrFoP"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2b2d3a9e149so20525225ad.1
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 11:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776710829; x=1777315629; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9zb1CzXElV/JafdZJDqAqdzrpLqJEbxaPbWiaVDaWpI=;
+        b=c7VfrFoPzfksxrVeKnfwPUcPAmNou4e30BlJP8q8rgwgTE7Km/f0qOvDPrg48NUD4A
+         Ym4ST+iPmDXhx106c+h9+yOATQxcAHbhkmYv5COGGsPnydF6P8KkVWWRFv09tU8cwOOQ
+         AH/nGvpXtlicD6RD60yjSU1dqv2/JefDTop/WAOv2DNGXuohlY50pYL65EMQobiPWn+A
+         smwJzNdlldSs0S2yxZLynHC1hElB0aOanRjrzhTdPVzcF1oFhG7M51QJm8Q2975g49Bx
+         Gx6ULK+NYFsQFd2uFvcTPGaiWntWRGabg3kYai0q4yz1sSkKGUoc4V/QoqVJvIOJHwJB
+         PQOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776710829; x=1777315629;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9zb1CzXElV/JafdZJDqAqdzrpLqJEbxaPbWiaVDaWpI=;
+        b=ROLCYxGSiRg3BzRa1Caf0zpNQpCdqV0xgAbhS+EUm1xkfGInaW857gFXaLeGqefG6p
+         eh1uxMcKzayNdyfJrCLtFxvqFug49NnW2HImumwfq/glTCaQR+fUeqATaZgWvKbLxABV
+         HC4yjXI6EWtF0oGokaZ+0BsOSfLOIYt6rN8vtuBIe1oyX4XTl1IGh7ZS2gWLyIWNH6Q+
+         +hsvc8UsZiK/wpNqyk3ANOYxqB3m0EP6bIgA0QsRPocV8rbPqHYkaOua72XXecu1XBpz
+         oglTjLXurV4txOsDbBXPbJTnbgxVKeuaG+bZrU3SALtz6aj7aEGXeqH2p+3nYNdw7e7b
+         mGjw==
+X-Forwarded-Encrypted: i=1; AFNElJ/aVg4k1VGhtTToYVt3Wp6O2m8Jm3rjzhgrTUA2DLU7E0/Horu+LfJIgM+WWoRnjYaaFuE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyD9HoovDqUT4KJpbKcmZS2V7mwKCc6JAHcaSyotryJiMpLQNn+
+	nQ581VpPh412SpGoHF1P5yNLenPxYppxjf0CUkF8MTelhHiedAo1bCKs
+X-Gm-Gg: AeBDieuB2iNI9WwCV2ZtSyX/lW26QiTBJjLgYumPQkMWeAYwNV6JS9VQrbobX0ooTmq
+	Au5lZk2liYqhrg/bnT4SOJlMPMDamNXVYo1q2nNwGdzXOMvrFhtTPjsxvA3rswMl11mJB0F73mv
+	iUk9ez/VbPr48xhiHS+EsyuD5t7yW2e259L8u8DYrdyco7pMCcdyiq3zFlTDVa5kNiReuo6CcwT
+	YUrlc0szAMF0sJy33aah1Uo33aFgc5DxKBzNCg/YqvwpN+zfRAgt5cgPPkVaxDbshINdxYjb7wg
+	L5dtt1lqI6VZ33Zvy5NJrKEjar4Ps05R/28o/TRzPiVzK5tKtr/M0B3Ldk3QLmQsQhk8jYSo0E1
+	MvrkKnEfs3iYnWzwFmZwAttXZxgOVUP69S7OszoZQ4tzCD7gnPgefFKom82TKBrQ0/ut5sHeY71
+	nR2GRCkK/Rl6Lz5ka/+WVYTspCnXub3pMtjn2glTVkfQ==
+X-Received: by 2002:a17:903:11c3:b0:2ae:5346:d4e6 with SMTP id d9443c01a7336-2b5f9ef78e0mr130724395ad.28.1776710828613;
+        Mon, 20 Apr 2026 11:47:08 -0700 (PDT)
+Received: from archlinux ([205.254.163.40])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab0d0f8sm103913295ad.47.2026.04.20.11.47.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2026 11:47:08 -0700 (PDT)
+From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org
+Cc: mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	tycho@kernel.org,
+	suchitkarunakaran@gmail.com,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] perf/lock: enable end-timestamp accounting for cgroup aggregation
+Date: Tue, 21 Apr 2026 00:16:56 +0530
+Message-ID: <20260420184656.331306-1-suchitkarunakaran@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260420161432.3919396-2-bestswngs@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 20, 2026 at 09:14:33AM -0700, Weiming Shi wrote:
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index f8338acebf077..3b487280f50fa 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -172,7 +172,7 @@ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
->  		struct bpf_map *map;
->  
->  		smap = rcu_dereference(SDATA(selem)->smap);
-> -		if (!(smap->map.map_flags & BPF_F_CLONE))
-> +		if (!smap || !(smap->map.map_flags & BPF_F_CLONE))
->  			continue;
->  
->  		/* Note that for lockless listeners adding new element
-> @@ -547,6 +547,8 @@ static int diag_get(struct bpf_local_storage_data *sdata, struct sk_buff *skb)
->  		return -EMSGSIZE;
->  
->  	smap = rcu_dereference(sdata->smap);
-> +	if (!smap)
-> +		goto errout;
+update_lock_stat() handles lock contentions that start but never reach a
+contention_end event (e.g., locks still held when profiling stops), but
+previously treated LOCK_AGGR_CGROUP as a no-op due to missing cgroup
+context in userspace; fix this by adding a cgroup_id field to
+struct tstamp_data, recording it at contention_begin using
+get_current_cgroup_id() when aggr_mode == LOCK_AGGR_CGROUP, and using
+ts_data->cgroup_id to build the aggregation key in update_lock_stat(),
+matching the contention_end behavior in BPF and ensuring correct
+attribution of incomplete events.
 
-You need to study it more thoroughly and the code around it
-instead of rushing to fix a problem discovered by AI/bot (?).
+Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+---
+ tools/perf/util/bpf_lock_contention.c          | 4 ++--
+ tools/perf/util/bpf_skel/lock_contention.bpf.c | 2 ++
+ tools/perf/util/bpf_skel/lock_data.h           | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-This is now treated as an -EMSGSIZE error by diag_get().
+diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+index cbd7435579fe..1a5bd2ff8ee4 100644
+--- a/tools/perf/util/bpf_lock_contention.c
++++ b/tools/perf/util/bpf_lock_contention.c
+@@ -463,8 +463,8 @@ static void update_lock_stat(int map_fd, int pid, u64 end_ts,
+ 		stat_key.lock_addr_or_cgroup = ts_data->lock;
+ 		break;
+ 	case LOCK_AGGR_CGROUP:
+-		/* TODO */
+-		return;
++		stat_key.lock_addr_or_cgroup = ts_data->cgroup_id;
++		break;
+ 	default:
+ 		return;
+ 	}
+diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+index 96e7d853b9ed..d0e2cad02fa3 100644
+--- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
++++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+@@ -536,6 +536,8 @@ int contention_begin(u64 *ctx)
+ 	pelem->timestamp = bpf_ktime_get_ns();
+ 	pelem->lock = (__u64)ctx[0];
+ 	pelem->flags = (__u32)ctx[1];
++	if (aggr_mode == LOCK_AGGR_CGROUP)
++		pelem->cgroup_id = get_current_cgroup_id();
+ 
+ 	if (needs_callstack) {
+ 		u32 i = 0;
+diff --git a/tools/perf/util/bpf_skel/lock_data.h b/tools/perf/util/bpf_skel/lock_data.h
+index 28c5e5aced7f..652e114e6b87 100644
+--- a/tools/perf/util/bpf_skel/lock_data.h
++++ b/tools/perf/util/bpf_skel/lock_data.h
+@@ -13,6 +13,7 @@ struct owner_tracing_data {
+ struct tstamp_data {
+ 	u64 timestamp;
+ 	u64 lock;
++	u64 cgroup_id;
+ 	u32 flags;
+ 	s32 stack_id;
+ };
+-- 
+2.53.0
 
->  	if (nla_put_u32(skb, SK_DIAG_BPF_STORAGE_MAP_ID, smap->map.id))
->  		goto errout;
->  
-> @@ -599,6 +601,8 @@ static int bpf_sk_storage_diag_put_all(struct sock *sk, struct sk_buff *skb,
->  	saved_len = skb->len;
->  	hlist_for_each_entry_rcu(selem, &sk_storage->list, snode) {
->  		smap = rcu_dereference(SDATA(selem)->smap);
-> +		if (!smap)
-> +			continue;
->  		diag_size += nla_value_size(smap->map.value_size);
->  
->  		if (nla_stgs && diag_get(SDATA(selem), skb))
-
-... and here it will eventually return an -EMSGSIZE to the user space
-which is incorrect. Pass the smap to diag_get instead.
-
-pw-bot: cr
