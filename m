@@ -1,149 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FAB239A7EC
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 10:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027CC38A733
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 10:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776681853; cv=none; b=X5Lb/PI/mtb9VrPysBt1FJgKTSZXdRk29ytwMXTw0V1lVSWSoe79jsu0xuyVlTpZa/EkRGxQSmcAVwMYpoFsoQBFbxFXPeZ6MF6F5vLKNnKyiodOUDqxTRFMs4lIkkr8KPENQFH/FjdtPqBS7OOQEaOFJ4rnSgLn3Oubo80aBpU=
+	t=1776682713; cv=none; b=VUfB/Rz5Mc/v6oSAIooqfatEqX8qOqtoI+RMw0kCuaLQtmKVzyjUrE2org3e12/cfk+gdQvPHu6cPKN3OLKaAQKWPxJbukvujpopNI86CbctozYoYJK9djywB3pLSizXJLyLPP15PeCXGHsvBWM7NPH0FS+qVypIAhzyA1F7R8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776681853; c=relaxed/simple;
-	bh=sCv1hVZNq0VWhETm89fXt9Usc7Qr7cK3/Frw8lB2C0k=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VW4Z+4+tVWGR4Ysfr6HGwW8AWvJLKGQjTus/oUm5IWDe/wpvpnx3LgQYFmhibfK5RHxX/m3/vooPAGWdRWtLr0p+dpq6NC76gFJ+pIEloifqhCFE8qmlcyx3z1C0YNokUWE7c3lA5lP02mH3huKYK7kJBSLC7yg0Kr9bEqL/WjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/qMESO8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776682713; c=relaxed/simple;
+	bh=jeNe6hoVFvSWp1WGUu4CvjQgGHlygFkkp2Jz+ownf9E=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Oro3u6O9syvl1mYqz+GRzGvZ4afsEqL9Mxgg0R7M13Du02HTFAOt+I6m3Y4J8zt3Kv07fH1ET6jQRD3mXnvb4LztRzAcUodrxhZqCxK1LM2VXP8vhvWWRi3iHSFkftXSMdjrX6AkbOyOdrpz0Xj775vMU4PYGUAllDVSksjd2w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TqqLys1i; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/qMESO8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45973C19425;
-	Mon, 20 Apr 2026 10:44:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776681853;
-	bh=sCv1hVZNq0VWhETm89fXt9Usc7Qr7cK3/Frw8lB2C0k=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=W/qMESO8jYCmDVAfRoKMJ6fJ31opGQK35+c4McQTGMGMLenKGZrudK2fWcAXxaGLn
-	 Vl+RrqGJ4Di0ADFlWZ53zmG/0+3MTYCfaxKA2VoQBoGkF8udgBeVjbw4zlcgK5hDLA
-	 gHZhsWREJvFrGvbbSO97/FZf8Cum+EI1hPrQzy058Wqa57fJ0J4hVuK6GupAwBkm1k
-	 VpX9FoRDNScoJ1kftULBVJSlLECh0MA3bZ84oxRFstFZbeDdjtaP39ztaC0oo75S2s
-	 aAutkf7MhKaA3+CkC6KwPQX5GLikp65nzxGdVdo0ojyOWJBcP7bY70JFaOKG3P6hTt
-	 sVkE91pUrGwEA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wEm6s-0000000D1qi-3itN;
-	Mon, 20 Apr 2026 10:44:10 +0000
-Date: Mon, 20 Apr 2026 11:44:10 +0100
-Message-ID: <86pl3t29ol.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>, Will Deacon <will@kernel.org>
-Cc: 	bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v13 6/6] bpf, arm64: Add JIT support for cpu time counter kfuncs
-In-Reply-To: <aeX9Alsyk1Cb2QLG@willie-the-truck>
-References: <20260418131614.1501848-1-puranjay@kernel.org>
-	<20260418131614.1501848-7-puranjay@kernel.org>
-	<aeX9Alsyk1Cb2QLG@willie-the-truck>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TqqLys1i"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488e1a8ac40so38967435e9.2
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 03:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776682710; x=1777287510; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mSip2mFo5UpUa5K/ga6S7Tqbsc6g4uU5VZLY4tip40A=;
+        b=TqqLys1iJM4sTOPZfTjaqobStjkvZ/Zpiln+pUcYqaiSTBaK8amwfTrhA5c3N4DP/A
+         yqEtJdQ2jnXB8Do28HaagK3G+WSgmqcNdOvZ6jGEqOul3tlAnFtLPTOV7OID865vcU8n
+         u641aYqnr7amhEY9t5qBHFtnXWlE88jhRB52ThSCGm1fJ3v5YOf114t4JNabJ0G+pTSX
+         DCCy8ajmrI48NF+FQE07lw7UXRKESBeCWDU1OjJ2nqIqHxKeNa2+B2I5gOX5BqzXt/BL
+         J1k/XwXmNeO6CmQGksPfr3QbDMphxDIgllEjAXtfSEXCKtqZm5v8h7NE+C0OEcOKmBm9
+         PNTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776682710; x=1777287510;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mSip2mFo5UpUa5K/ga6S7Tqbsc6g4uU5VZLY4tip40A=;
+        b=rA7qsAwz/28WNlx8MuCfuPpwO9T6iZj/s+cuOmc7EODSWp1CTDs5eyiYnBheSysLlL
+         aclBvKgKy31IOZC+N964XZzLsDb5o8VUc4qEZtztJ/U4wzSClg+jkqsSDHdIVmKQWG4t
+         7GsG0/HsVD0WLiwRHIZzeyBkyepvFmNlC2XgPmw508/lx5yWBcYJriJqTuuabnRtNzrG
+         lm5iuOlAzGkgMTHVjnDk6ScmeU4YKv0xKHnXoVDoHX+rdZBF2RtUCeQLMs5/g16UiyuA
+         tyvHXnofj44AN9+eB0K8uFDh5xKIUdSwgYa0SbmBcSCzuWC6laY+JTsI/PPzVjg/2xnt
+         NpaQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Dutz+bgyfYZcRTcJdZtf/t70RrM9ebbM0E0VV9RR7zS72gS11r0Lbm6xE4jQcmOYjyk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB5K8+fYucHHOd5pdCeL1KDvYFv4WWRtK+gN1moPOQvJucWCB7
+	GI7/A5ypxW6mc9OfE3E6R15zz/c1uWG6JRcFxOqpNSg/nqtGPfmLzsV6XgBw5slHEAg=
+X-Gm-Gg: AeBDiev6DdsXxgwqWBKIxiwpOxaWMaaMv9RXSe7K8uSz325k7ajjvqNsMG8t75cuZ/C
+	OF+wrgff6caTfiDjFkw+HkDqAtwd69pare94IDiAiEgrC+ZBYsro1/zfBiqIb6yIhqCmRhKKVTX
+	9V+SBGtPCTtEG610nSUFIzuATFvM+aJITPB1vEv3uzv7tL4gyt30B7JAeR8iaEk6LT2tIgdDuC0
+	gglixqjMJVXEo+xjAcYH70D5Re1tUfbm0z62jxFG0BXfCJVDY8H5FCSCGGc1mq1tjH5wMz6ry6u
+	Fc1/S/0k8FrZQT35Qzchlq2fQavrMqRcH76fIbAYf2BPk8ls+yuAp0vz6zYdiDrhYHMbsfylo6W
+	9DNDur0V8Ro1Ug4pVijzbt13M14U6Mhy0YV7QVBFKbse0UuEYDeWNOIobfHn1qOY3cki/pY1ncp
+	/2zl/FaOzyFXODSGHK2wnurddyHRfykTTbCsQpKg==
+X-Received: by 2002:a05:600c:c108:b0:488:a82f:bbb6 with SMTP id 5b1f17b1804b1-488fb78e576mr125872725e9.27.1776682710104;
+        Mon, 20 Apr 2026 03:58:30 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.local ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-488fc1cfbf2sm290929495e9.15.2026.04.20.03.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2026 03:58:29 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: mahe.tardy@gmail.com
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	coreteam@netfilter.org,
+	daniel@iogearbox.net,
+	fw@strlen.de,
+	john.fastabend@gmail.com,
+	lkp@intel.com,
+	martin.lau@linux.dev,
+	netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	oe-kbuild-all@lists.linux.dev,
+	pablo@netfilter.org
+Subject: [PATCH bpf-next v4 0/6] bpf: add icmp_send_unreach kfunc
+Date: Mon, 20 Apr 2026 10:58:10 +0000
+Message-Id: <20260420105816.72168-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <aI0MkNvWlE4FXMV8@gmail.com>
+References: <aI0MkNvWlE4FXMV8@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: puranjay@kernel.org, will@kernel.org, bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org, eddyz87@gmail.com, memxor@gmail.com, mykyta.yatsenko5@gmail.com, xukuohai@huaweicloud.com, vadim.fedorenko@linux.dev, catalin.marinas@arm.com, kernel-team@meta.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 20 Apr 2026 11:16:34 +0100,
-Will Deacon <will@kernel.org> wrote:
-> 
-> [+ Marc]
-> 
-> On Sat, Apr 18, 2026 at 06:16:04AM -0700, Puranjay Mohan wrote:
-> > Add ARM64 JIT inlining for bpf_get_cpu_time_counter() and
-> > bpf_cpu_time_counter_to_ns() kfuncs.
-> > 
-> > bpf_get_cpu_time_counter() is JIT-inlined as:
-> > 
-> >   ISB                       // serialize instruction stream
-> >   MRS Xn, CNTVCT_EL0        // read architected timer counter
-> > 
-> > The ISB before the MRS is required for ordering, matching the kernel's
-> > arch_timer_read_cntvct_el0() implementation.
-> 
-> Careful here: this will _not_ order counter accesses against normal
-> memory barriers (e.g. smp_mb(), acquire/release). If you need that, then
-> you need something like arch_counter_enforce_ordering(), which we do
-> have in __arch_counter_get_cntvct().
-> 
-> Furthermore, using the virtual counter may expose you to situations
-> where a guest value for CNTVOFF is installed (e.g. during the VCPU run
-> loop). Given all the contexts in which BPF can run, this worries me a
-> little as you might end up seeing a non-monotonic view of time between
-> BPF programs.
+Hello,
 
-Yup, and this will catch you out in subtle ways depending on whether
-the host runs at EL2 or not.
+This is v4 of adding the icmp_send_unreach kfunc, as suggested during
+LSF/MM/BPF 2025[^1]. The goal is to allow cgroup_skb programs to
+actively reject east-west traffic, similarly to what is possible to do
+with netfilter reject target.
 
-The kernel (mostly) avoids this pitfall by picking the physical
-counter for sched_clock() when running at EL2, so that it isn't
-directly affected by CNTVOFF_EL2.
+The first step to implement this is using ICMP control messages, with
+the ICMP_DEST_UNREACH type with various code ICMP_NET_UNREACH,
+ICMP_HOST_UNREACH, ICMP_PROT_UNREACH, etc. This is easier to implement
+than a TCP RST reply and will already hint the client TCP stack to abort
+the connection and not retry extensively.
 
-I suspect that you'll need something similar if you insist on a
-globally monotonic view of the counter.
+Note that this is different than the sock_destroy kfunc, that along
+calls tcp_abort and thus sends a reset, destroying the underlying
+socket.
 
->
-> > On newer CPUs it will be JITed to:
-> > 
-> >   MRS Xn, CNTVCTSS_EL0      // self-synchronized (ISB not needed)
-> > 
-> > bpf_cpu_time_counter_to_ns() is JIT-inlined using mult/shift constants
-> > computed at JIT time from the architected timer frequency (CNTFRQ_EL0):
+Caveats of this kfunc design are that a program can call this function N
+times, thus send N ICMP unreach control messages and that the program
+can return from the BPF filter with pass leading to a potential
+confusing situation where the TCP connection was established while the
+client received ICMP_DEST_UNREACH messages.
 
-And what happens when CNTFRQ_EL0 is not populated, as it is the case
-on a lot of stupidly integrated HW? The kernel has a fallback, but you
-don't seem to make use of it here.
+Initially, this kfunc was added only to cgroup_skb programs, Alexei
+suggested not creating its own kfunc set and adding it to the more
+global bpf_kfunc_set_skb. Now that recursion is handled and I realized,
+thanks to Martin, that fetching the dst route might be only useful in
+situation in which the packet was not yet routed, I decided to extend
+the kfunc to more program types and route the packet only if needed.
 
-> >
-> >   MOV Xtmp, #mult           // load conversion multiplier
-> >   MUL Xn, Xarg, Xtmp        // delta_ticks * mult
-> >   LSR Xn, Xn, #shift        // >> shift = nanoseconds
-> > 
-> > On systems with a 1GHz counter (e.g., Neoverse-V2), mult=1 and shift=0,
-> > so the conversion collapses to a single MOV (identity).
-> 
-> Do you have any performance numbers to show that this is worthwhile
-> compared to calling a helper wrapping __arch_counter_get_cntvct().
-> 
-> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/insn.h                 |  2 +
-> >  arch/arm64/net/bpf_jit.h                      |  4 ++
-> >  arch/arm64/net/bpf_jit_comp.c                 | 54 +++++++++++++++++++
-> >  .../selftests/bpf/progs/verifier_cpu_cycles.c | 50 ++++++++++++++++-
-> >  4 files changed, 109 insertions(+), 1 deletion(-)
-> 
-> Aren't you conveniently ignoring CPU errata here? I suspect this needs
-> to be predicated on the absence of those, in a similar way to how the
-> vDSO deals with the 'vsdo_clockmode'.
+v2 updates:
+- fix a build error from a missing function call rename;
+- avoid changing return line in bpf_kfunc_init;
+- return SK_DROP from the kfunc (similarly to bpf_redirect);
+- check the return value in the selftest.
 
-And I'm afraid this still is the common case...
+v3 update:
+- fix an undefined reference build error.
 
-	M.
+v4 updates:
+- prevent the kfunc to be called recursively and add a test (thanks to
+  Martin).
+- do not fetch dst route when unnecessary (thanks to Martin).
+- extend the test for IPv6 (thanks to Martin).
+- use SK_DROP in examples and use non blocking sockets for testing
+  (thanks to Martin).
+- test when the kfunc returns -EINVAL (thanks to Jordan).
+- add the kfunc to bpf_kfunc_set_skb as suggested by Alexei.
+- guard the IPv4 parts with IS_ENABLED(CONFIG_INET).
+- fix a wrong initial value for client_fd (thanks to Yonghong).
+- add documentation to the kfunc.
+- to Jordan: I couldn't include <linux/icmp.h> because of redefines from
+  <network_helpers.h>.
 
--- 
-Without deviation from the norm, progress is not possible.
+[^1]: https://lwn.net/Articles/1022034/
+
+Mahe Tardy (6):
+  net: move netfilter nf_reject_fill_skb_dst to core ipv4
+  net: move netfilter nf_reject6_fill_skb_dst to core ipv6
+  bpf: add bpf_icmp_send_unreach kfunc
+  selftests/bpf: add icmp_send_unreach kfunc tests
+  selftests/bpf: add icmp_send_unreach kfunc IPv6 tests
+  selftests/bpf: add icmp_send_unreach_recursion test
+
+ include/net/ip6_route.h                       |   2 +
+ include/net/route.h                           |   1 +
+ net/core/filter.c                             |  85 ++++++++
+ net/ipv4/netfilter/nf_reject_ipv4.c           |  19 +-
+ net/ipv4/route.c                              |  15 ++
+ net/ipv6/netfilter/nf_reject_ipv6.c           |  17 +-
+ net/ipv6/route.c                              |  18 ++
+ .../bpf/prog_tests/icmp_send_unreach_kfunc.c  | 202 ++++++++++++++++++
+ .../selftests/bpf/progs/icmp_send_unreach.c   | 100 +++++++++
+ 9 files changed, 426 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
+ create mode 100644 tools/testing/selftests/bpf/progs/icmp_send_unreach.c
+
+--
+2.34.1
+
