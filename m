@@ -1,80 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA333A7F6F
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 14:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE62330D54;
+	Mon, 20 Apr 2026 14:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776695443; cv=none; b=C13AaAhOPy3hRBj5npK0UGV43dY1H2rrD1EZe+Xvc9GZJBg713MT0OJlJ4zRY3K2fRW9DBfbORa02RF7f4iYThSSVA7cD7mVlulLUcfO1ad9FrvwUnBB9roUQnNmfNvQCY4OiHeZlNA6lKRpXIs544x1hBLt17fcj+X8oJN8qdM=
+	t=1776696992; cv=none; b=bt4MHjogMGqvbOfZvZhq5KIhumtgRGT6rROh1d2Iinu3o7k/cqgShUqfB3zHPByi+m+3Ar4i1LSywBo0Bun+4tTvi2t4eEn0Fg33IgNuf7p6UUWWrtEEtzfTpVZgS1LF7rapDdtBCNV1LV6P1VV93JmYTJglEVewF/oMbJZ7mO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776695443; c=relaxed/simple;
-	bh=V83Q8nlBKoJGnJbVuhpG9Pat1GfIfRvBfwFogd5tokU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=DBwlG8hrh7UxkXZc7m8hAwSpqcm4r1lypnN9RQiI2vU+fhgogXTxuestHAZ19wv90gY1hLlNRuh29Hzaye+zQa196RBUsQ6XVZQ5J5t0diiaeg/t4F+fhykHXbKx2qGO1PHjpiafaenxTtBM3/tgLgrtQ9niar/sk/aPY+i0KPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQz/UpO6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776696992; c=relaxed/simple;
+	bh=dVGg36Jm3JOJj4RJsnXuw53h3TjAmab9ykPPMa0dbBo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=s3mymZ9PHma+9vvP+qTOCZ9JmgktDFrvRRIr+0sEn1NJtCOk3wtx2KfLhIJdN4KJYX8v+4TbNkPQ+DCP3GOiwNuI9957P7IpboOz2H7b9Ga5/88dvFbgBATsvgLIPzIOzkj76CFzvx1FLG4MmZxufMGgsLMzHyiG4jMQWmLLp1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBmfdrTI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQz/UpO6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916FCC19425;
-	Mon, 20 Apr 2026 14:30:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBmfdrTI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E67C19425;
+	Mon, 20 Apr 2026 14:56:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776695442;
-	bh=V83Q8nlBKoJGnJbVuhpG9Pat1GfIfRvBfwFogd5tokU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=IQz/UpO6AZrKHHn3MqjVQDPqd80yeNAkKe2i+x0XMJd4xqqO0sywzWyHqUbCOySqZ
-	 Z4gyUWZ6p8m7enfbrjfmpYcjUpT/wkxJIKjcOLywtERmp0Kk3QoEzhG0sCHWQSbyvD
-	 BUB9P6oUJJOkKT6lLyigWApFFzN975TU2iPz8KF7XU69RBlgujlDl08sCqEH+sqosj
-	 Mav4VYa8R2AymTMdyAdhltzKG6rT3w2qiVHR//Ji3mxPnJ2Ni93L5g0Qu0sKsXtOYR
-	 rEDkQAryTFxYFsag4UDt3GTM5Z6SN5EuKW2byuCFW/prZxGrCqihbwroZNysI3tNG0
-	 hiEUnRDY6QARw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CCE33930001;
-	Mon, 20 Apr 2026 14:30:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1776696992;
+	bh=dVGg36Jm3JOJj4RJsnXuw53h3TjAmab9ykPPMa0dbBo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=TBmfdrTIcSZKH7RUNjd0zGVAFS0u38OHQkPW1dquVEj8IfYFDDCv35dojnhGW2Bic
+	 mjvAGXhEomF4Dx0YPk3P9CbjlHWPe8hM0krwJNgcsrIPZC9dXwR7TP1eS1pWgswAol
+	 lmdMd4QjsFMRVDTn9CoW5Pd0BJrVkur5ldFl4PO5QrdQmYYSrI1RHYTBqOEgJ5QTDY
+	 SsTRZFQQhbzpVPM63QYdW2rJPpCpQ2M1iU3DAaqWmGZsNnc7T27UtsP3WU4uOgnZyz
+	 gklPEaDlClWtw9q+0iL7LbDGXH/OqTxkZzA3K+CVnDlS10tQmTLR/2uBLoTf5ZJVbY
+	 Ah4T0EFJCN+vQ==
+Content-Type: multipart/mixed; boundary="===============1167874149647582553=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix off-by-one in
- bpf_cpumask_populate
- related selftest
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177669540735.1675250.12765294087027123937.git-patchwork-notify@kernel.org>
-Date: Mon, 20 Apr 2026 14:30:07 +0000
-References: <20260420093734.2400330-1-mattbobrowski@google.com>
-In-Reply-To: <20260420093734.2400330-1-mattbobrowski@google.com>
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com
+Message-Id: <a007ad07d6c91fc692fe29e0a57f1f6059f27eb4d147cb987d01f955b76d3c36@mail.kernel.org>
+In-Reply-To: <20260420141804.27179-6-leon.hwang@linux.dev>
+References: <20260420141804.27179-6-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v12 5/8] bpf: Add syscall common attributes support for btf_load
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,brauner@kernel.org,sforshee@kernel.org,yuichtsu@amazon.com,aalbersh@redhat.com,leon.hwang@linux.dev,willemb@google.com,kerneljasonxing@gmail.com,chen.dylane@linux.dev,yatsenko@meta.com,memxor@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,rongtao@cestc.cn,linux-kernel@vger.kernel.org,linux-api@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 20 Apr 2026 14:56:31 +0000 (UTC)
 
-Hello:
+--===============1167874149647582553==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This patch was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 1eb15a51c7dc..06aea4e499a1 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
 
-On Mon, 20 Apr 2026 09:37:34 +0000 you wrote:
-> The test_populate test uses >= instead of > when checking if the
-> runtime nr_cpus exceeds the bit capacity of a cpumask_t.
-> 
-> On a system where the physical CPU core count perfectly matches the
-> CONFIG_NR_CPUS upper bound (e.g. nr_cpus = 512 and CONFIG_NR_CPUS =
-> 512), the condition nr_cpus >= CPUMASK_TEST_MASKLEN * 8 evaluates to
-> true (512 >= 512). This incorrectly causes the test to fail with an
-> error value of 3.
-> 
-> [...]
+[ ... ]
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: fix off-by-one in bpf_cpumask_populate related selftest
-    https://git.kernel.org/bpf/bpf-next/c/0aa6378695b8
+> @@ -6317,7 +6317,12 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+>  		err = bpf_raw_tracepoint_open(&attr);
+>  		break;
+>  	case BPF_BTF_LOAD:
+> -		err = bpf_btf_load(&attr, uattr, size);
+> +		if (size >= offsetofend(union bpf_attr, btf_log_true_size))
+> +			offsetof_log_true_size = offsetof(union bpf_attr, btf_log_true_size);
+> +		err = bpf_log_attr_init(&attr_log, attr.btf_log_buf, attr.btf_log_size,
+> +					attr.btf_log_level, offsetof_log_true_size, uattr,
+> +					&attr_common, uattr_common, size_common);
+> +		err = err ?: bpf_btf_load(&attr, uattr, &attr_log);
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Should the log_true_size offset be set only for user space calls? In v10
+review, Andrii Nakryiko noted that log_true_size should only be set for
+user space, not kernel space calls.
+
+https://lore.kernel.org/bpf/CAEf4BzY3GA+860RODLaXqqO3j5AgJ24pmKU1yv3+gHJpy0DvNA@mail.gmail.com/
+
+The current code does not check uattr.is_kernel before setting
+offsetof_log_true_size. This could cause issues when bpf_sys_bpf() calls
+__sys_bpf() with KERNEL_BPFPTR, as it would attempt to write log_true_size
+to a kernel pointer instead of a user space pointer.
+
+>  		break;
+>  	case BPF_BTF_GET_FD_BY_ID:
+>  		err = bpf_btf_get_fd_by_id(&attr);
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24672239158
+--===============1167874149647582553==--
