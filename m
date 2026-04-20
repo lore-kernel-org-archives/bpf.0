@@ -1,404 +1,220 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9703AD51A;
-	Mon, 20 Apr 2026 13:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572203A75A7
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 13:18:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776690996; cv=none; b=j7wmm0Li/nyv6EZwh7Xg3EBR0TqkyimGNK5MwguXbaFGPDllphWgroPIl7WPK+wE6QX0vI2etJX7mVbeH2xeaDDSf4ZCYT/Opg/wwbT1fkL6NIfNAVOVLfvg879uONMPNCKAEgGG73xoleIho3orWLk/N0Geu9Eb0yT6Dd/fL1E=
+	t=1776691094; cv=none; b=dlUAt5DDUomgxoXkoN6jYfffV9qugxrVpfuwUMJXNVm1yfmJSCHkNtuvU/T07wn+g8RIXKH346OH3F0PNaZcfYAGkVR8MBhT8FGPfpqPJD4P7tQNd5NLT/wQv3D1ZPy0ZKkcVGKetjNGkMudwJMkiQsmBqr0zeM+xDpwADnd/i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776690996; c=relaxed/simple;
-	bh=g6eSYJ1kKTsnlDXoUs+hi4LXrpzGwhbtMCS740mFErQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r1xvrft+2wiR31XOzOmaafP27QmZN5Wb+t5s70tCx1dKr5J8ox3yPspwyyTHhp48Xv3EuJ8fYdqqnOdkjsfDXVwLgGn2huWXQVqa88Ebt3Z2UAhQvXnHlsm21mnkCRJTuX1uebQPlKnCJqGoDEh9MOpumV4RTkfs3Qn7JR6UVlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOTKVnee; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776691094; c=relaxed/simple;
+	bh=md4FjVSLV+aJ6Y1MmYtZs3XlkoHVCPdmFdBNzbOU0Ts=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iNCFYiNAbO4lYdaz6VFXcYF/2rgEZRM/BuPE7Uocy3JNlpmRxef0RqOHexFO/+bFLii1Q5IcjTbl9KK+PbwDrkdeIchNIOBnykKZye4N9LDNv08WwKQZsM1dYIgcAXctEA13+lXJcj7omXat8qWsFjMfRwWW1ReHe5Nrp5fH1nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FW15U+mN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOTKVnee"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB99C2BCC4;
-	Mon, 20 Apr 2026 13:16:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FW15U+mN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2E1C2BCB4;
+	Mon, 20 Apr 2026 13:18:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776690996;
-	bh=g6eSYJ1kKTsnlDXoUs+hi4LXrpzGwhbtMCS740mFErQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NOTKVneetI0Zzlv/5rpEOE3iAOAwKvnT+b9/Pd2ZDrnOml2rzWJ56FT7tGNtfVWWl
-	 vT3dfxPJ2eur7Xc6QLEADvJjj7IiP2Tog30QkGqaPwUauEjNNI39eZ9jAS1egVCqQa
-	 ZoJHJb8xvOKwQPbhhJDyCYjD01PeOW3VTRU901Bw+9cUNwWHCGx63rxwhd5p0O+GvM
-	 TG8eSh6twpD3UEvRZghLEvflqhgLZLesyAe0HxOn1hr63PG1P1TTTBiGhF3whWqZJs
-	 0MkUpfgmViIb63AAp+ijd/Hrus63sNE27ieVYU+6FpvhRK3P6KRJruj3u6M0VOMPZ7
-	 DC6Np3GyrNPjQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Michal Luczaj <mhal@rbox.co>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Sasha Levin <sashal@kernel.org>,
-	john.fastabend@gmail.com,
-	jakub@cloudflare.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 7.0-6.6] bpf, sockmap: Annotate af_unix sock:: Sk_state data-races
-Date: Mon, 20 Apr 2026 09:08:19 -0400
-Message-ID: <20260420131539.986432-33-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260420131539.986432-1-sashal@kernel.org>
-References: <20260420131539.986432-1-sashal@kernel.org>
+	s=k20201202; t=1776691094;
+	bh=md4FjVSLV+aJ6Y1MmYtZs3XlkoHVCPdmFdBNzbOU0Ts=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=FW15U+mNgOopZb2po5ySDZuEH1cONOL4Z59D8DgMDpIpQpmrIYyifzVIcrvIF3BR5
+	 4TDB2HhLnOMtURmXEe9YwhTHZEOy0bBbZPxT8SjXCUk9UXrQ8c8byeeyEJbmKKfi2J
+	 icQsSvfjWyhSdz0TouT1LEB6yuNDSWzZXAsLvjUj0hsnIZft9a7yQx9Z7xfarKXe+U
+	 CZX2AUJGs0y/TOT6hrSYUBYUZxZUUd+JgUdHr9KQRET+wa7iitLZwe1yZCWMz55dzJ
+	 uXzOiXSlUOeodPYrKH7Ev5cUQj4bxAY9mNdOZahDM93NZRX0sDpjS5n6t+oLMlBKJ8
+	 sFOJk+xvrQLNg==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH bpf-next 2/6] selftests/bpf: Add BPF batch-timing
+ library
+Reply-To: sashiko@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260420111726.2118636-3-puranjay@kernel.org>
+References: <20260420111726.2118636-3-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 20 Apr 2026 13:18:13 +0000
+Message-Id: <20260420131814.1E2E1C2BCB4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 7.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-From: Michal Luczaj <mhal@rbox.co>
-
-[ Upstream commit a25566084e391348385a72dd507e0cc0c268dd5d ]
-
-sock_map_sk_state_allowed() and sock_map_redirect_allowed() read af_unix
-socket sk_state locklessly.
-
-Use READ_ONCE(). Note that for sock_map_redirect_allowed() change affects
-not only af_unix, but all non-TCP sockets (UDP, af_vsock).
-
-Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Link: https://patch.msgid.link/20260414-unix-proto-update-null-ptr-deref-v4-1-2af6fe97918e@rbox.co
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-Now I have enough context. Let me compile my analysis.
-
-## Phase 1: Commit Message Forensics
-
-**Step 1.1 - Subject Line Parse:**
-- Subsystem: `bpf, sockmap:`
-- Action verb: "Annotate" (not "fix")
-- Summary: Adds READ_ONCE() to two lockless reads of af_unix sk_state in
-  sock_map.c
-
-Record: bpf/sockmap subsystem, annotation (data race), adds READ_ONCE()
-to sk_state reads
-
-**Step 1.2 - Tags:**
-- `Suggested-by: Kuniyuki Iwashima` (networking/af_unix expert)
-- `Suggested-by: Martin KaFai Lau` (BPF maintainer)
-- `Signed-off-by: Michal Luczaj` (original author)
-- `Signed-off-by: Martin KaFai Lau` (maintainer applied)
-- `Reviewed-by: Jiayuan Chen`
-- `Reviewed-by: Kuniyuki Iwashima`
-- `Link:` to v4 on patch.msgid.link
-- **No** Fixes: tag
-- **No** Cc: stable
-- **No** syzbot/KCSAN report
-
-Record: Strong review endorsement (both suggesters are reviewers); no
-Fixes:/stable tags; no concrete bug report cited.
-
-**Step 1.3 - Body Text:**
-The commit explicitly acknowledges that `sock_map_sk_state_allowed()`
-and `sock_map_redirect_allowed()` read sk_state "locklessly". Change
-uses READ_ONCE(). Notes the redirect_allowed change also affects UDP and
-af_vsock. No crash/panic/reproducer described in body — it's purely a
-data race annotation.
-
-Record: Describes data race (paired writer uses WRITE_ONCE); no user-
-visible symptom documented.
-
-**Step 1.4 - Hidden fix?**
-"Annotate data-races" is standard kernel terminology for adding
-READ_ONCE/WRITE_ONCE pairings. This is a recognized synchronization bug
-fix pattern per KCSAN/C11 memory model, even without a concrete crash.
-
-## Phase 2: Diff Analysis
-
-**Step 2.1 - Inventory:** Single file `net/core/sock_map.c`, 2 lines
-changed (2 insertions, 2 deletions). Two functions modified:
-`sock_map_redirect_allowed()` and `sock_map_sk_state_allowed()`. Minimal
-surgical scope.
-
-**Step 2.2 - Code flow:** Before/after behavior is identical modulo
-compiler: READ_ONCE prevents load tearing/reordering/fusion by the
-compiler for lockless reads.
-
-**Step 2.3 - Bug mechanism:** Category (b) Synchronization. This is a
-completion of a WRITE_ONCE/READ_ONCE pair: writer side at
-`net/unix/af_unix.c:1775` uses `WRITE_ONCE(sk->sk_state,
-TCP_ESTABLISHED)` in `unix_stream_connect()`, but sock_map.c readers
-were plain reads — a data race per kernel/C11 rules.
-
-**Step 2.4 - Fix quality:** Obviously correct. Zero regression risk —
-READ_ONCE is a compiler barrier with no runtime cost on aligned reads.
-
-## Phase 3: Git History
-
-**Step 3.1 - Blame:** The affected lines originated from:
-- `sock_map_redirect_allowed`: commit `122e6c79efe1c2` (Cong Wang, 2021)
-- `sock_map_sk_state_allowed` af_unix branch: commit `8d6650646ce49e`
-  (John Fastabend, Dec 2023 - fixing syzkaller null ptr deref in
-  unix_bpf)
-
-The af_unix branch of sock_map_sk_state_allowed was added in v6.8 (Dec
-2023).
-
-**Step 3.2 - Fixes tag:** No Fixes: tag on this patch. The series' patch
-5/5 has `Fixes: c63829182c37 ("af_unix: Implement
-->psock_update_sk_prot()")` — the null-ptr-deref is fixed there, not
-here.
-
-**Step 3.3 - File history:** Recent active development on sock_map.c.
-This is patch 1/5 of a series fixing a null-ptr-deref that crashes via
-`unix_stream_bpf_update_proto+0xa0`. Patch 5/5 is the actual crash fix.
-
-**Step 3.4 - Author's role:** Michal Luczaj is an active vsock/unix
-contributor. Martin KaFai Lau (BPF maintainer) applied it. Kuniyuki
-Iwashima is the af_unix expert.
-
-**Step 3.5 - Dependencies:** This patch is independent of the rest of
-the series — it touches separate code than patches 2-5. No dependencies.
-
-## Phase 4: Mailing List Research
-
-**Step 4.1 - Original submission:** Found v3 on lore/yhbt and v4
-referenced in the commit (20260414-unix-proto-update-null-ptr-deref-v4).
-Series: `[PATCH bpf v3 0/5] bpf, sockmap: Fix af_unix null-ptr-deref in
-proto update`.
-
-**Step 4.2 - Reviewers:** Networking maintainers (Paolo, Jakub,
-Kuniyuki, Eric Dumazet), BPF maintainers (Martin, Alexei, Daniel),
-af_unix expert Kuniyuki explicitly reviewed and ACKed this patch.
-
-**Step 4.3 - Bug report:** The series is motivated by a NULL ptr deref
-crash (shown in patch 5/5's commit message) but THIS specific patch has
-no explicit crash reporter. Kuniyuki notes: "Actually TCP path also
-needs READ_ONCE(), but I think it's okay for now since this series
-focuses on AF_UNIX" — confirming this is the known-pattern data race
-annotation.
-
-**Step 4.4 - Series context:** This is 1/5 of a series:
-1. (this one) READ_ONCE annotations
-2. Refactor to sock_map_sk_{acquire,release}() helpers
-3. Fix af_unix iter deadlock (has Fixes: tag)
-4. Selftest
-5. Adapt sockmap for af_unix locking (has Fixes: tag — the actual null-
-   ptr-deref fix)
-
-**Step 4.5 - Stable discussion:** No explicit stable nomination. Author
-himself noted patch 5/5's locking would make this READ_ONCE redundant
-for the af_unix path, but the patch was kept as a minimal standalone
-hardening.
-
-## Phase 5: Code Semantic Analysis
-
-**Step 5.1 - Functions modified:** `sock_map_redirect_allowed()`,
-`sock_map_sk_state_allowed()`
-
-**Step 5.2 - Callers:**
-- `sock_map_redirect_allowed()`: 4 callers — `bpf_sk_redirect_map`,
-  `bpf_msg_redirect_map`, `bpf_sk_redirect_hash`,
-  `bpf_msg_redirect_hash`. Called from BPF programs at runtime (hot
-  path).
-- `sock_map_sk_state_allowed()`: 2 callers in `sock_map_update_elem_sys`
-  and `sock_map_update_elem` — invoked on BPF_MAP_UPDATE_ELEM syscall.
-
-**Step 5.3 - Callees:** Just reads sk->sk_state and does bitmask
-comparison.
-
-**Step 5.4 - Reachability:** Reachable from userspace via bpf() syscall
-(BPF_MAP_UPDATE_ELEM) and from BPF programs redirecting sockets —
-CONFIRMED reachable.
-
-**Step 5.5 - Similar patterns:** Found the same pattern in
-`net/unix/diag.c` (commit `0aa3be7b3e1f8 "af_unix: Annotate data-races
-around sk->sk_state in UNIX_DIAG"`) — had Fixes: tags and went to
-**ALL** stable trees: 5.10, 5.15, 6.1, 6.6, 6.12, 6.17, 6.18. Strong
-precedent.
-
-## Phase 6: Cross-referencing Stable Trees
-
-**Step 6.1 - Code in stable:**
-- `sock_map_redirect_allowed()`: Present in ALL active stable trees
-  (5.10, 5.15, 6.1, 6.6, 6.12, 6.17, 6.18)
-- `sock_map_sk_state_allowed()` af_unix branch (hunk 2): Only in 6.6.y
-  and newer (added in v6.8 by backport of 8d6650646ce49)
-
-**Step 6.2 - Backport complications:** Hunk 1
-(sock_map_redirect_allowed) applies to all trees. Hunk 2
-(sock_map_sk_state_allowed af_unix branch) only applies to 6.6+ where
-the af_unix branch exists. Minor adjustment for older trees (drop hunk
-2). Clean for 6.6+.
-
-**Step 6.3 - Related fixes in stable:** Precedent 0aa3be7b3e1f8 is in
-ALL stable trees — shows the same type of annotation is routinely
-accepted.
-
-## Phase 7: Subsystem Context
-
-**Step 7.1 - Subsystem:** `net/core/sock_map.c` = networking core + BPF.
-IMPORTANT criticality (BPF sockmap used in user-space networking stacks
-like Cilium).
-
-**Step 7.2 - Activity:** Actively developed subsystem with recent bug
-fixes.
-
-## Phase 8: Impact Assessment
-
-**Step 8.1 - Affected users:** BPF sockmap users on systems with af_unix
-BPF usage, and any users with BPF programs using
-sk_redirect/msg_redirect on non-TCP sockets.
-
-**Step 8.2 - Trigger:** Concurrent BPF_MAP_UPDATE_ELEM on a socket
-that's undergoing state change (e.g., unix_stream_connect). On most
-archs with aligned int reads, load tearing is unlikely, but compiler
-fusion/reordering is possible. KCSAN would flag this.
-
-**Step 8.3 - Failure mode:** Without READ_ONCE alone, theoretical
-compiler-induced mis-behavior (torn/fused reads of sk_state leading to
-wrong state checks). The concrete null-ptr-deref described in the series
-is NOT fixed by this patch alone — that's fixed by patch 5/5. Severity:
-LOW-MEDIUM for this patch in isolation.
-
-**Step 8.4 - Risk/benefit:**
-- Risk: ~zero (READ_ONCE is a compiler barrier; no runtime change on
-  aligned reads)
-- Benefit: Completes WRITE_ONCE/READ_ONCE pair, silences KCSAN, hardens
-  against compiler edge cases
-
-## Phase 9: Final Synthesis
-
-**Evidence FOR backporting:**
-- Fixes a genuine data race (plain read paired with WRITE_ONCE on the
-  writer)
-- Very small, surgical, obviously correct (2 lines)
-- Strong reviewer endorsement (Kuniyuki, Jiayuan, Martin)
-- Strong precedent: `0aa3be7b3e1f8` (identical pattern) was accepted
-  into ALL stable trees with Fixes: tags
-- Zero regression risk
-
-**Evidence AGAINST backporting:**
-- No Fixes: tag on THIS specific patch
-- No Cc: stable tag
-- No concrete syzbot/KCSAN report cited
-- By itself, does NOT fix the null-ptr-deref (that's patch 5/5)
-- Author acknowledged patch 5/5's proper locking would make this
-  redundant on af_unix path
-- "Annotation only" — preventive rather than curative for the crash
-
-**Stable Rules checklist:**
-1. Obviously correct and tested? YES (trivial READ_ONCE; reviewed by
-   multiple maintainers)
-2. Fixes a real bug? YES (data race per C11/kernel rules) but not a
-   user-visible crash alone
-3. Important issue? MEDIUM (data race without concrete trigger)
-4. Small and contained? YES (2 lines)
-5. No new features/APIs? YES
-6. Applies to stable? Mostly — hunk 2 needs 6.6+ but hunk 1 applies
-   everywhere
-
-**Decision analysis:** This is a borderline case. The patch itself is
-pure annotation with no concrete user-visible crash fix in isolation.
-However, the precedent (0aa3be7b3e1f8) strongly shows this annotation
-pattern IS routinely accepted into stable, including down to 5.10.y. The
-patch is 2 lines, zero-risk, and completes a real WRITE_ONCE/READ_ONCE
-pair. The Kuniyuki review noting "TCP path also needs READ_ONCE()"
-indicates this is a recognized pattern.
-
-Given:
-- The precedent of identical-pattern commits going to all stable trees
-- Zero regression risk
-- Real (if benign) data race being fixed
-- Strong review from domain experts
-
-## Verification
-
-- [Phase 1] Parsed tags: no Fixes:, no Cc: stable, but strong Reviewed-
-  by from networking maintainer Kuniyuki and BPF maintainer Martin KaFai
-  Lau
-- [Phase 2] Diff analysis: exactly 2 lines changed, adds READ_ONCE() to
-  2 lockless sk_state reads
-- [Phase 2] Verified writer pairs with WRITE_ONCE at
-  net/unix/af_unix.c:1556, 1775 in unix_stream_connect
-- [Phase 3] git blame: affected code introduced by 122e6c79efe1c2 (2021)
-  and 8d6650646ce49e (Dec 2023, v6.8)
-- [Phase 3] git show c63829182c37: confirmed Fixes: target from patch
-  5/5 is from 2021 (widely in stable)
-- [Phase 4] Found lore discussion on yhbt.net showing full series thread
-- [Phase 4] Confirmed this is patch 1/5; real null-ptr-deref crash is
-  fixed by patch 5/5
-- [Phase 4] Kuniyuki review comment: "Actually TCP path also needs
-  READ_ONCE()" — confirms this is an incremental fix of a broader race
-  pattern
-- [Phase 5] grep sock_map_redirect_allowed: 4 callers in sockmap BPF
-  redirect hooks
-- [Phase 5] grep sock_map_sk_state_allowed: 2 callers in
-  BPF_MAP_UPDATE_ELEM paths
-- [Phase 5] Found precedent commit 0aa3be7b3e1f8 ("af_unix: Annotate
-  data-races around sk->sk_state in UNIX_DIAG") — same pattern
-- [Phase 6] Verified code presence in stable trees: redirect_allowed
-  exists in all; state_allowed af_unix branch only in 6.6+ (6.6, 6.12,
-  6.17, 6.18 checked)
-- [Phase 6] Confirmed precedent 0aa3be7b3e1f8 backported to
-  linux-5.10.y, 5.15.y, 6.1.y, 6.6.y, 6.12.y, 6.17.y, 6.18.y — all
-  active stable trees
-- [Phase 8] Failure mode: data race (compiler-level), severity LOW-
-  MEDIUM in isolation
-- UNVERIFIED: Whether the v4 of the series has been applied to mainline
-  (appears not yet, as I couldn't locate the commit SHA in local
-  mainline snapshot — checked bpf-next and linus-next/master)
-- UNVERIFIED: Whether the rest of the series (patches 2-5) will also go
-  through autoselection
-
-The patch is 2 lines of low-risk data race annotation with strong
-precedent for acceptance into all active stable trees. While it doesn't
-fix the null-ptr-deref in isolation (that's patch 5/5), it genuinely
-completes a WRITE_ONCE/READ_ONCE pair and silences KCSAN. Stable
-maintainers routinely accept these annotations, as evidenced by
-`0aa3be7b3e1f8` being in every active stable tree including 5.10.y.
-
-**YES**
-
- net/core/sock_map.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index b0e96337a2698..02a68be3002a2 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -530,7 +530,7 @@ static bool sock_map_redirect_allowed(const struct sock *sk)
- 	if (sk_is_tcp(sk))
- 		return sk->sk_state != TCP_LISTEN;
- 	else
--		return sk->sk_state == TCP_ESTABLISHED;
-+		return READ_ONCE(sk->sk_state) == TCP_ESTABLISHED;
- }
- 
- static bool sock_map_sk_is_suitable(const struct sock *sk)
-@@ -543,7 +543,7 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
- 	if (sk_is_tcp(sk))
- 		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
- 	if (sk_is_stream_unix(sk))
--		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
-+		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
- 	if (sk_is_vsock(sk) &&
- 	    (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET))
- 		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
--- 
-2.53.0
 
+Sashiko AI review found 6 potential issue(s):
+- [Medium] The BPF timing macros rely on undeclared kfuncs `bpf_get_cpu_tim=
+e_counter()` and `bpf_cpu_time_counter_to_ns()` which do not exist in the k=
+ernel.
+- [Medium] Integer division truncation in `compute_batch_iters` completely =
+breaks calibration for fast operations (< 1 ns/op).
+- [Medium] The `BENCH_BPF_LOOP` macro leaks state across BPF program execut=
+ions by omitting the `reset` step on the final untimed iteration.
+- [Medium] The `machine_readable` field in `struct bpf_bench_timing` is lef=
+t uninitialized by the `BENCH_TIMING_INIT` macro.
+- [Medium] The BPF program updates the per-CPU `timing_idx` array using a n=
+on-atomic read-modify-write pattern, causing TOCTOU races.
+- [Medium] Userspace lacks memory barriers when toggling `timing_enabled` a=
+nd clearing the BSS arrays, allowing store reordering on weakly-ordered arc=
+hitectures.
+--
+
+commit 09663b9e30e128fd77353ff1616f5777a20d0dbc
+Author: Puranjay Mohan <puranjay@kernel.org>
+
+selftests/bpf: Add BPF batch-timing library
+
+This commit adds a reusable timing library for BPF benchmarks to allow prec=
+ise
+per-operation measurements inside BPF programs.
+
+> diff --git a/tools/testing/selftests/bpf/bench_bpf_timing.h b/tools/testi=
+ng/selftests/bpf/bench_bpf_timing.h
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/bench_bpf_timing.h
+
+[ ... ]
+
+> +#define BENCH_TIMING_INIT(t, skel, iters) do {				\
+> +	(t)->samples =3D (skel)->bss->timing_samples;			\
+> +	(t)->idx =3D (skel)->bss->timing_idx;				\
+> +	(t)->timing_enabled =3D &(skel)->bss->timing_enabled;		\
+> +	(t)->batch_iters_bss =3D &(skel)->bss->batch_iters;		\
+> +	(t)->batch_iters =3D (iters);					\
+> +	(t)->target_samples =3D 200;					\
+> +	(t)->nr_cpus =3D env.nr_cpus;					\
+> +	(t)->warmup_ticks =3D 0;						\
+> +	(t)->done =3D false;						\
+> +} while (0)
+
+Is there a reason machine_readable is omitted from this initialization? If
+the struct is allocated on the stack by a benchmark driver, could this resu=
+lt
+in unpredictable output formatting due to reading uninitialized memory?
+
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c b/tool=
+s/testing/selftests/bpf/benchs/bench_bpf_timing.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/benchs/bench_bpf_timing.c
+
+[ ... ]
+
+> +static void reset_timing(struct bpf_bench_timing *t)
+> +{
+> +	*t->timing_enabled =3D 0;
+> +	memset(t->samples, 0,
+> +	       sizeof(__u64) * BENCH_NR_CPUS * BENCH_NR_SAMPLES);
+> +	memset(t->idx, 0, sizeof(__u32) * BENCH_NR_CPUS);
+> +}
+
+Does this need CPU memory barriers to prevent hardware reordering? While
+timing_enabled is volatile, weakly-ordered architectures like arm64 might
+reorder the memory stores across the flag toggle. This could allow backgrou=
+nd
+BPF executions to write samples while the arrays are being zeroed.
+
+[ ... ]
+
+> +void bpf_bench_calibrate(struct bpf_bench_timing *t,
+> +			 bpf_bench_run_fn run_fn, void *run_ctx)
+> +{
+> +	__u64 elapsed, per_op_ns;
+> +	__u64 time_n, time_2n;
+> +	double ratio;
+> +
+> +	elapsed =3D measure_elapsed(t, run_fn, run_ctx, CALIBRATE_SEED_BATCH, C=
+ALIBRATE_RUNS);
+
+[ ... ]
+
+> +	per_op_ns =3D elapsed / CALIBRATE_SEED_BATCH;
+> +	t->batch_iters =3D compute_batch_iters(per_op_ns);
+
+Will this truncation break calibration for operations taking less than 1 ns?
+If the total elapsed time for 100 iterations is under 100 ns, per_op_ns
+evaluates to 0.
+
+This would force compute_batch_iters() to return CALIBRATE_MIN_BATCH (100)
+instead of scaling up to reach the 10 ms target.
+
+> diff --git a/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h b/t=
+ools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bench_bpf_timing.bpf.h
+
+[ ... ]
+
+> +extern __u64 bpf_get_cpu_time_counter(void) __weak __ksym;
+> +extern __u64 bpf_cpu_time_counter_to_ns(__u64 counter) __weak __ksym;
+
+Do these kfuncs exist in the kernel source? It does not appear they are
+introduced in this patch series.
+
+If they are missing, won't libbpf resolve them to 0, causing the verifier to
+reject the program or causing executions to record 0 elapsed time?
+
+[ ... ]
+
+> +static __always_inline void bench_record_sample(__u64 elapsed_ns)
+> +{
+> +	__u32 cpu, idx;
+> +
+> +	if (!timing_enabled)
+> +		return;
+> +
+> +	cpu =3D bpf_get_smp_processor_id() & BENCH_CPU_MASK;
+> +	idx =3D timing_idx[cpu];
+> +
+> +	if (idx >=3D BENCH_NR_SAMPLES)
+> +		return;
+> +
+> +	timing_samples[cpu][idx] =3D elapsed_ns;
+> +	timing_idx[cpu] =3D idx + 1;
+> +}
+
+Can this read-modify-write pattern cause lost samples or out-of-bounds writ=
+es?
+If machines have more than 256 logical CPUs, BENCH_CPU_MASK will alias
+multiple CPUs to the same index.
+
+Concurrent thread executions could race and overwrite the index, potentially
+corrupting the timing statistics.
+
+[ ... ]
+
+> +/*
+> + * @body:  expression to time; return value (int) stored in __bench_resu=
+lt.
+> + * @reset: undo body's side-effects so each iteration starts identically.
+> + *         May reference __bench_result.  Use ({}) for empty reset.
+> + *
+> + * Runs batch_iters timed iterations, then one untimed iteration whose
+> + * return value the macro evaluates to (for validation).
+> + */
+> +#define BENCH_BPF_LOOP(body, reset) ({					\
+> +	__u64 __bench_start =3D bpf_get_cpu_time_counter();		\
+> +	int __bench_result;						\
+> +									\
+> +	bpf_repeat(batch_iters) {					\
+> +		__bench_result =3D (body);				\
+> +		reset;							\
+> +	}								\
+> +									\
+> +	bench_record_sample(bpf_cpu_time_counter_to_ns(			\
+> +		bpf_get_cpu_time_counter() - __bench_start));		\
+> +									\
+> +	__bench_result =3D (body);					\
+> +	__bench_result;							\
+> +})
+
+Should the final untimed iteration also evaluate the reset expression?
+
+Without calling reset here, any side effects from the last body execution
+(like memory allocations or map modifications) will leak into the next
+program invocation and could violate benchmark isolation.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420111726.2118=
+636-1-puranjay@kernel.org?part=3D2
