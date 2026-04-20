@@ -1,62 +1,64 @@
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5AC275B1A
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 20:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36B0275B1A
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 20:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776717256; cv=none; b=XGKH9HrDJwGfjlULuwsUacvKiyQGzgIDlC9DLKtDZLTQ8lUK6RayJ7hW8IjTUsS65JRkXAOV+/aa7bdyJAtW/oWHNHDHRgXyJ6wlmBU8NbqLZQ86qxcS7K9TxE4UKj+/YRnfGzP16JPk1CvZWh1teLotnJGYz3l3PIGhzyIEWSo=
+	t=1776717258; cv=none; b=ESl2+IDfzpS2Zh5NHjw9GziGV4hN9Cy6ZhJMr8dFj9SBNx4RiD0UXvfOWAgKiIYnun92oHnlgZwiWknJh29W6pOP0h4RdCRNs5Bg1U3XZo85wR3a7XOQNfmK8aul19BFya5+5PzGu+dxeupfIYZ6so77FSkZeh4iHrTT4H3xQM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776717256; c=relaxed/simple;
-	bh=PDqeiom2m+MSqld0lQIyBc5Sao/iUUWTvj2TcJ7JiOM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lY4tGdFtpoR+EaZ9jjWng2sg4lUss/lXu7rRYzCL6tFaYudslocItrS7YEC1WTj1L1PFFXvxCDPk6s2IBdtX+D5KxW7cqTOUqgdf22+tHsGIXebv4vUMxnOeWuQXqYr6hY5uyOaNcMMO8LHcCSGd4FRbnyxubmPDZaiNu7BdzrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQ0duuNA; arc=none smtp.client-ip=74.125.224.53
+	s=arc-20240116; t=1776717258; c=relaxed/simple;
+	bh=Uz8hpLu1nmDvYgSHXMdJ0unlL/S3cWb9g1d3BVB+OHU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=n7NeB71Homj9XpSqH6T1nzSjXZpeKhDd98uHbV1upp6rz0u0vnSeMxEiKIzkQ2R37s4AbA7pxRrUeUKwN09Fq0Sx3aXiz28v3Qx4gNcTQul30MPn5DvEHAtebgAY8U6bC51peKCIZSOVqbeItplbkWA5421tnO2BOhdMLffmnJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NYvNLX1v; arc=none smtp.client-ip=74.125.224.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQ0duuNA"
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-65075c2ba66so2203384d50.1
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 13:34:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NYvNLX1v"
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-6501725d888so2785968d50.0
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 13:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776717254; x=1777322054; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IDx3Ks3i/24PrFwCTkn8aAiTFZamVdc9q4/U3VM8mfw=;
-        b=UQ0duuNACshfiEDlq1Zn82TfTtPWqNezP/0p1VwYXhXA3XrV6IRbJ/sLnNHE+KzCvH
-         zVqivXlBh+fwc/U17sxZkHpiq586DfgSRMJf2ICQcRf6nSCh/8RQjD0waOg32BlKO38B
-         10LIP6a8OeiBlbLpPsWBdGybDz4HPtKUdIS+nM3C4PKT5bhVo2OiAr/x6T0z0U0v/yIo
-         RTtIYki1ohXLjzyq625VuRjsMl6SXXGvw3bEU87q4plt4uAByIpADuWjmI5eUHvSSdtp
-         6wjfRxRYeuf3BZM5yYQUbqTNPNSUHA3rpOCjHpoJC4iR/PaGZJWGQ1/vFOfz9ljix47G
-         htJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776717254; x=1777322054;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1776717257; x=1777322057; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IDx3Ks3i/24PrFwCTkn8aAiTFZamVdc9q4/U3VM8mfw=;
-        b=ba1jXfwaQpbmhgrs2XtPYmToLpgun+EI/uyl97JmKPxMif3ckrDU0AUzl/OZTazmSA
-         i4kLlsKkdisIuliIZ8vNKVt/XeomyfsUKhzxlgUOazDc3hVA0r6md6BCP3+LjUUiRhS2
-         50q1RKTrLlzW8zrWMll4I69uVLB2M1nrCVSMyUMsiAirkJmPxWLYuaWxEqtdPOpDXr2z
-         cGqsI23NnNN9MZYOXyDv4+yOkuPcJC1MThkDwUylbK+pmlYVe1Wg6EYHIHqT4wv+wDaB
-         wr+vkFoWSyoG/k/RZASha2ikfdox2yvkLG/tR3vHKyh2ZqyPZ1rqPEtl8eBdJn8fwe4o
-         w0rw==
-X-Forwarded-Encrypted: i=1; AFNElJ8xJUYOGhYTMyDTF4CPexzdgIcG6R0CcKOzBhVweGVg78+lrZqv1xnhm3Rjykznhs1dOtQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/rYKU5xRGwSeFbY1X9o/Sk5+gst1qBIKuYwk+HzTUNdPA7P4n
-	KB2tfd11hpbIkIS0N7oeBwaRlt7+UISS4w9d7dDEwt1luh+vO2U/Jqqb
-X-Gm-Gg: AeBDieuAcEhKZkWUNi9kG3PotnvKKZdWvH2HTNsDrJM5Cr0679KvYtiCFiUGzkXThHK
-	1JX5gzSh0TcZJmVK01/MwPpnZIcptf8Ld039yfr+b6IWELENakCA6sOuEdGiOtj+lrnR6tIzBoR
-	MpjOg693e3YrodAxYyn//hzkK+B0jDKFvRIj93l4WWDonwGlkGge3HrWCmgfx7w+7Y6AzmkK8Oj
-	MF2NHkaEpXxDYimMDe5gcsJlgwS2LsmlS4x/B+B5m6cSiOqyg9XrF3fCqxlH/WHEcpwZaklAI/q
-	nq4CQPHnncsFV/9eDcjK1Usoz25LMHu0CvHrO427IIKiEi/HenAk8Rz+PnhJNuZYxLRKXbyw/s6
-	ggfm1NH3Fo6hOB3NqvHk8Et4GX/dvSQkWQrY3zJ9faHmJRDijKTQDX0jXTj0WdDbe4k7cGOllun
-	mFpU21zuSMCwJk79gJpic/LteyqBDMHCYEZqpItkTtBHjzUhPYIfntrvoyebEFKKNnL02y7Ioyt
-	xKU3R5KOVI=
-X-Received: by 2002:a05:690e:484e:b0:653:f75:b7aa with SMTP id 956f58d0204a3-653107e2044mr9666234d50.13.1776717254224;
-        Mon, 20 Apr 2026 13:34:14 -0700 (PDT)
+        bh=yBigbolsro5p/iAF/WdfzlyYllCz/Maz2yDyCMFMbnQ=;
+        b=NYvNLX1vU2Kq+hgaUpZt+ufv79IKPqwjr+/lc2gE0SyGeHYRJYf2uFQAKQH34UQ82q
+         4qXNihggJx4mZhjFoXD4997UsxN7osqwDbHlNHEj/5oshU14EsNX+miXkKd0J3pmBqla
+         KBpWxR3QU3V+3GsV2enJUWHWCNPYgbitRf31JQT6XHz9go1v0UuxDdFRrtLIQD6zHpxF
+         4Oz7uwtLdUNJ+YaJx/u75B4Ux1DJHXZ2L9gAnqEnVll418AKd1MkJS+RQVCurOvPw4u8
+         QpEf2Tiy4Tqe5gREbAv2UYUVdF805QY78uck8cDSwsVBWmbOir+5iCCS2OtPyYihPhwt
+         ql3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776717257; x=1777322057;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yBigbolsro5p/iAF/WdfzlyYllCz/Maz2yDyCMFMbnQ=;
+        b=jhQLow2UI6FffaIcxdpCpZvp3YkipzASaM0GY2rQPRsycimll2AP0eRen+9B0ir0+C
+         UBEWzLRjSYiJyjElvGPH5pndAakFMVg+ScRdC0B/qSHJbCyFAnM0TatxtEGFTk64DeYh
+         Zg2GyGE0fHIsXUffBaKAESTl4T8i+OCbjfpWY/ikQEZQltGLtYTAtJU7NzvnK05t0BBR
+         pIRbLK2nXQzoMdmfg1wks2knA4ZhGKRNzZvI/bEvGo51CUXN+txEU3a/6kXSGeSZBk/C
+         TJWIsWGNTIoAnOK+FTJJon5SSbCEfzkkttMd2+H9AwSsVpynFgshPN2gpF31t/wl0ASC
+         taRw==
+X-Forwarded-Encrypted: i=1; AFNElJ/nheM5N4QcFcxQUV0doR6YEBHTpe4NyJI8lV2L5bLe5EZOAROetAj2KL/lxKVF5LMm90k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyieQB5X6CyQWm1+yiy6KL+2jT7QQXWUjHx8pIxo5bPCCQzfM2D
+	iJfS/QtCIagz1bbuDCuHiHg9TYzLBZUc0RSD3A6WeyFe7hhNUDUl0gSR
+X-Gm-Gg: AeBDietl0A+cL+4wwX0yS/BmqZ1iUYKNmb/vp1rwKA92JnH9VaynVLCZgHOl+ez3/P+
+	36LSOip1QGkCYoiObJjtT/n0jm46/Njgol90TMQXgDJ1hsM7At4XjWHqTr3VNw/keE5kc2IXKm5
+	NmN5Icbr6gZYTyZDVWS4gEZCo7T0Kgq5owoSVQbqFRJfiR5d+4wOOIUSdVzhUFVCM6/FI7qX73N
+	2eQf7S++ECHJaC8ke9li6U5/c2aY+z8Sb2JKs6bmdMOS9/zFe9r8UyocTlEvtO/Gwqo6cM/UPXx
+	oNVlGZbSoyeHez7xukKdFSC/MGZ/Ulgj5EGgBXXIqKSO3TWcT5jyR8T0JE6FJRKF1jxEBhx3Cht
+	qN3E0BzJ99Zai1kPZjKE93FvMXgO+Z1EHkstccz0kSquyJeU98boGF/SPPM+QkHj/5ipAx3AcU9
+	mWKgttTf4q1ZUJe7PX8+MNov5wlsfkyudRxzgdx/p4ubXmCnxMOY3zBfcQWz0WmDI1kjk36JfrO
+	XXBxLuNumlgAXEb2cRdNA==
+X-Received: by 2002:a05:690e:488a:b0:651:c53a:ffd9 with SMTP id 956f58d0204a3-65310b30793mr10120630d50.56.1776717256593;
+        Mon, 20 Apr 2026 13:34:16 -0700 (PDT)
 Received: from zenbox.prizrak.me ([2600:1700:18fb:6011:adde:1cbf:87f2:a99c])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65314e81399sm5702955d50.14.2026.04.20.13.34.13
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65314e81399sm5702955d50.14.2026.04.20.13.34.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 13:34:13 -0700 (PDT)
+        Mon, 20 Apr 2026 13:34:16 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -70,10 +72,12 @@ Cc: martin.lau@linux.dev,
 	bpf@vger.kernel.org,
 	mic@digikod.net,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next 0/2] Allow storing referenced struct file kptrs in BPF maps
-Date: Mon, 20 Apr 2026 16:33:04 -0400
-Message-ID: <20260420203306.3107246-1-utilityemal77@gmail.com>
+Subject: [PATCH bpf-next 1/2] bpf: Implement dtor for struct file BTF ID
+Date: Mon, 20 Apr 2026 16:33:05 -0400
+Message-ID: <20260420203306.3107246-2-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260420203306.3107246-1-utilityemal77@gmail.com>
+References: <20260420203306.3107246-1-utilityemal77@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,42 +86,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello,
+Implement a destructor for struct file allowing it to be stored in a map
+as a referenced kptr.
 
-This series adds a destructor for struct file, enabling it to be used as a
-referenced kptr in BPF maps.
+This dtor is analogous to bpf_put_file, and calls fput to release the
+reference.
 
-The destructor mirrors bpf_put_file() semantics and releases the reference
-via fput(). This allows pointers returned from kfuncs such as
-bpf_get_task_exe_file() to be safely stored and later reused with helpers
-and kfuncs that operate on struct file.
+Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+---
+ kernel/bpf/helpers.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-This fills a gap compared to bpf_dynptr_from_file(), where the resulting
-dynptr can be stored in a map, but cannot be passed to kfuncs expecting
-a struct file *.
-
-Use cases include caching file references across events and deferring
-processing while keeping the underlying file alive.
-
-Patch 1 adds the struct file kptr destructor and wires it into the BTF
-kfunc sets.
-
-Patch 2 adds selftests covering successful use and verifier rejection of
-unreferenced pointers.
-
-Justin Suess (2):
-  bpf: Implement dtor for struct file BTF ID
-  selftests/bpf: Add test for map-stored struct file kptrs
-
- kernel/bpf/helpers.c                          |  16 +-
- .../bpf/prog_tests/refcounted_kptr_file.c     | 246 ++++++++++++++++++
- .../bpf/progs/refcounted_kptr_file.c          | 152 +++++++++++
- .../bpf/progs/refcounted_kptr_file_fail.c     |  35 +++
- 4 files changed, 448 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/refcounted_kptr_file.c
- create mode 100644 tools/testing/selftests/bpf/progs/refcounted_kptr_file.c
- create mode 100644 tools/testing/selftests/bpf/progs/refcounted_kptr_file_fail.c
-
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index baa12b24bb64..4739e2bf0f31 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -20,6 +20,7 @@
+ #include <linux/proc_ns.h>
+ #include <linux/sched/task.h>
+ #include <linux/security.h>
++#include <linux/fs.h>
+ #include <linux/btf_ids.h>
+ #include <linux/bpf_mem_alloc.h>
+ #include <linux/kasan.h>
+@@ -2752,6 +2753,13 @@ __bpf_kfunc void bpf_task_release_dtor(void *p)
+ }
+ CFI_NOSEAL(bpf_task_release_dtor);
+ 
++__bpf_kfunc void bpf_file_release_dtor(void *file)
++{
++	fput((struct file *)file);
++}
++
++CFI_NOSEAL(bpf_file_release_dtor);
++
+ #ifdef CONFIG_CGROUPS
+ /**
+  * bpf_cgroup_acquire - Acquire a reference to a cgroup. A cgroup acquired by
+@@ -4763,6 +4771,8 @@ static const struct btf_kfunc_id_set generic_kfunc_set = {
+ BTF_ID_LIST(generic_dtor_ids)
+ BTF_ID(struct, task_struct)
+ BTF_ID(func, bpf_task_release_dtor)
++BTF_ID(struct, file)
++BTF_ID(func, bpf_file_release_dtor)
+ #ifdef CONFIG_CGROUPS
+ BTF_ID(struct, cgroup)
+ BTF_ID(func, bpf_cgroup_release_dtor)
+@@ -4874,11 +4884,15 @@ static int __init kfunc_init(void)
+ 			.btf_id       = generic_dtor_ids[0],
+ 			.kfunc_btf_id = generic_dtor_ids[1]
+ 		},
+-#ifdef CONFIG_CGROUPS
+ 		{
+ 			.btf_id       = generic_dtor_ids[2],
+ 			.kfunc_btf_id = generic_dtor_ids[3]
+ 		},
++#ifdef CONFIG_CGROUPS
++		{
++			.btf_id       = generic_dtor_ids[4],
++			.kfunc_btf_id = generic_dtor_ids[5]
++		},
+ #endif
+ 	};
+ 
 -- 
 2.53.0
 
