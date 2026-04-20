@@ -1,64 +1,63 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA2822541C
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 15:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C9533262B
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 15:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776700013; cv=none; b=CVZtTCT8EUsFgQpD4GVeHlRYjxXCUISBZRMcL5qio4Q9ukf9aRnQAfkvv00aEJ0+b0JvMdxCJnQV312gbNcboxnRsgMqwRyiIRKRDcNna5cy6GYrvuZaWwcu0UKmoHQn3VPQ1V9RapScxkdC4dS6BsDoPvcg5EJYU7ZaaQy8Xzw=
+	t=1776700197; cv=none; b=F6DjkpyjtNgmAGa611yVEuvAMV5jC1u4Dl1V1DR5yVWzw1a6KZpJTiZqyrT/MWekO42SiiXgQPp4pJ4fuTn5S9O6LwyXw2wbMG6Hr/uqq8HfK3UpxZm361aLA2uesSQgUEwOoZYr4BMaJDuvDJ1UmXE6MQCfXZb45YFLv4ZqLm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776700013; c=relaxed/simple;
-	bh=hqOLsJxXBWZHEazuHyU2+GRfDrdpRWZZEjbMUveb1fU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=BJPt2H4GBY72mZ5FlQUl7L4mMOu5gpl8+xKRUIQBmBVtP71CltB9x2X1vF9S0HegaOZLCnteUf6OjQBJGse8fwF/r8OEdANtq1Hmi8B6W7JflM3e1Ye/q7fI3vQzSLhnFCgiDacm3n19WzhMSMS8hbFGDQF91AYV7tX/nGSq3jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CZDzA1nM; arc=none smtp.client-ip=209.85.210.46
+	s=arc-20240116; t=1776700197; c=relaxed/simple;
+	bh=N5e+O7600IiCxXeHMVqB+507A/2Oser6vrTYiRYSnT8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ZdzsdGZ8qoVcMC/8oEpu8VkrZAnafPfTv5/M2sR09PPYgQteu3KgsHcr9Qi6O7FipPpxWi8knIgYsjBfQfd2ubZ0NUN9PTY/meQNQgT6pSSiTsjW5+4eY8q54lPXSm3OHN8WcLd58g+zD1bDK5x0hIUCqbbRwqzlBlbm2Y+rNvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OI2QV0gx; arc=none smtp.client-ip=209.85.210.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZDzA1nM"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7dcd17e19b6so219810a34.1
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 08:46:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OI2QV0gx"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7dbe07d3ec3so1596478a34.0
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 08:49:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776700011; x=1777304811; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=gmail.com; s=20251104; t=1776700195; x=1777304995; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hqOLsJxXBWZHEazuHyU2+GRfDrdpRWZZEjbMUveb1fU=;
-        b=CZDzA1nMYcBXDI5O04ABJu9vjDMPpVygESROI5p65W3DJDhmUHHmfLfHBmlgGKDaec
-         wC5iKDFopGy5rb2zwhiEWgf3apCUSE9B2gM0C6FlJ5f6wLep39YM9GPFcP0VAlBTFmNk
-         AKKy7+LfnBfq/y2M8wELUzHBLzD5pWPaDScCPRFyETmXcB9rndkPPA1ZPVQp2/0cqQ7I
-         j3LH19orYtj6ZcKGRYpwMPp9p7tj0CpOw36DVwrvIZd7BZWHD9j6g3XIangcG8PGbpi1
-         8I+ZpyIFkpyfTMnw3U6WoOWwD0pqOh+A9gUuhV+9+cPQzMd6q52iIwtB7HKIoXh1KFcz
-         GwJw==
+        bh=/UJiob3GxfT5FNIDJCcLo/pjhEnWnGQgX7Sa/bHklps=;
+        b=OI2QV0gxzD/BWcUYQ3Fpm0r0Sy2BOOVwY62fKS5ciaVD9GdUN57YFB7qasAyhNlX/o
+         r8RJTCx8q3lenhDoRYfytOthw2cr2gi8y+RtWppgL7l/zd63WUtXzjBGHlNTB7d7lnt9
+         DDwyh8n7UYre9G6KXfqliyXrrpraBNrJ4uWKgteC6CjhXwFYzGWbQ3ULu9kKNO0Ho8OU
+         sUEn31TAi3g933xoRcdjYkPrcE5k5wq+h/EyoVB355yDSLbKtH3gIiPGYCnLJAgci7S8
+         vIFeQgpaJ4M/BUD1Pc9HTVu+V1EF+hFflqdGdzhkd+5G8UN2C8AoYSoNq9lnuzNsSi9K
+         dqoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776700011; x=1777304811;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1776700195; x=1777304995;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hqOLsJxXBWZHEazuHyU2+GRfDrdpRWZZEjbMUveb1fU=;
-        b=oUQDqgCrceS7Afh9zVOb4iE/cOnCP0mz9JCPITK21GrFP0+cABpEEcNXM315AfPh72
-         uTngezKslontJNTAXxfyzgoIGuEB6lmZ0HkHMOcAXabC1WgIaqPfGWxehfQUHRakbp7o
-         /5bbGocKLCsO/kkYdQ34kt4TiU07CZNBz01EoljT5bZ/FMFlftKe2QAJVVpNEka4s6Z5
-         Air0wT1cVGxDoSyjLyztmDblAi5MJ+0tzhlpGkIA4Kc2K1hoYEtv9LHJLTJ0fX0tkXD/
-         sCl/3KwDofttzRKVKBAYAsWEGv/Q4lILY6nVotnyx9NAN84cudWoHUkZbi+ZBoMGkWNd
-         eIUA==
-X-Forwarded-Encrypted: i=1; AFNElJ+ZE4ttNVmC0sQkfvTSNFGQsi6LEg9jUfw2z6NUb7Tflz+I/h44IoxuO/nzaPyAuvt79XE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWLpoKCGKZi01cpDCVoSJt/khiznk/WoUABCqWXUgVJRwheMeF
-	NFeJMAY+q70OhaOBycA6EG8XDAXi81vo7pOu8glHIPQIi7ftGmMGwwkO
-X-Gm-Gg: AeBDieseu1zyOTmOHn57VHEwlRGRfv3yMoummNxbtYHfNnQ2dlZLdmX0qRJeRv5GJEA
-	DagauaPVJ0G6S5kLd4AmqQXo+g6xfoFFnIEa41zT/XFN4fTF5fUOseuDgVMuSgLd2xPGhYAuNNn
-	AVUAeiEDOUeCsnV3AS+rfhbsGRmPh+Shq5dDIoIHFrKIgHsdY01WvQ8GjhwXyD+o+7T0WXhyjM+
-	JkFfag/mXtFr9qg4mp44CYYEacDKNVWWr7tsusqp3cj1BEzz4bsAzsJ/GK8FbMng9/w3VlA4PUu
-	9zww22xr8t7TBrRijTJPuAvWjAKy/UqGv6/7fgk2PLfxXwDnWrCTmqyRF0uJQLesEM0szqhcQsD
-	xAjZjCElPHdQMJk2L46RcqY2tbTeIbolcAx1Dfaz/7mbT4767zQqlcMU7+bOK3It7WpR8B6fu5A
-	pUyDfb6wVo/usbYhitSNk1/RG0WqlLyD34/S8zZuy3w7z9DsYbUiB3GYzNs+Po4SWdFGIk3uS/d
-	j8tT7FEJXd4lGOtKQvKqubeBuD4
-X-Received: by 2002:a05:6820:6ad0:b0:67e:4140:768c with SMTP id 006d021491bc7-69462e216c5mr7610520eaf.2.1776700011165;
-        Mon, 20 Apr 2026 08:46:51 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4e::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69464ea14ddsm6480142eaf.6.2026.04.20.08.46.49
+        bh=/UJiob3GxfT5FNIDJCcLo/pjhEnWnGQgX7Sa/bHklps=;
+        b=Wvquk50rJYzWQ6hARyOQC7x+fucyt24SL+Cu8vXG9dIxbbNrEGKKMHMtXAP6llCAQa
+         JvlRvjccRDT67Ai1m5qKzPo1LG3nYK0ZQ/S3By97qa2o3Un6cwuCT/pwHJvjow7nbr9G
+         69DH+6buBGbzo/gPW2/Y/HGfqWzhxSj/aypwgMxsY2MUc6+RU5ApFVlc+yvpcOW5nxtK
+         2p71BxG1xRNtAdAnJVog0WFBG+8lMcPLSpiGGnO4P2Zq9byK3FoDW+NE6BnE1OzR+PTG
+         H69wIeS+SbSZQ45Whz4RsoYRQm8KtTL0l7HcSl7llw/eG4JgT2t9kvqIt8Gixrx+ck7N
+         DYMw==
+X-Gm-Message-State: AOJu0YxkLg6XVhkZMGo+xE/6gbXDp14JyahfepyWU+RefUM3bXzQvMDu
+	QNcz4HbTDST0SJwmMnZYquN9YvRMCuwvbSgM3lcOAsdrS7KnusZdMRKn
+X-Gm-Gg: AeBDiet8m9/2ScAOuQTE1gsu7lnS7FYGPEKeGda6TSmh3B3KQSmAaMNLq6VgpBYKwxx
+	5FHdpEAa7VuKwqYmp5qrjxFGBgH189/OH1lQhKx8ON8DRG3N6L2APeG1V/PbgX4TrpE5CB8JS66
+	yDiR1k4zsmYRKIe0GNF3fvLB5wZlScKYtNVRBHCm5gH2oNxKU4QPt2KmSmbJKNFP0+R97SP43TD
+	zyqnLNqy4HLeqpjXodxsQIJA8EezNqtHVveI0ALKJb8pmX/ZaYVY6cHZ2DTPt7yjC5ibA/wGHu7
+	siWFin8HSnDvrWBnMaob2s4mNxK+Qp1UpVmg37s6j2cXtyIw8ngrcoHqUOw75k1puxKZAF97qTm
+	DATFsorIR2V3uqumfBKRhfr6jcLzb8Eg6C3uRwROTIn8AjFIj86WYhT8fuXngh3WWRSEWnKWpao
+	zuutq0MmajVF+SEYrafJM5/rc8yAJn3KqjhrvLmEEI9vivLJkT+ADapepwWpucrBZ56+uct7TYd
+	pQOf1tHZtJgBP2leb0ZF0RmqL4R
+X-Received: by 2002:a05:6830:81ce:b0:7dc:c7aa:22c7 with SMTP id 46e09a7af769-7dcc7aa28ffmr1737892a34.0.1776700195132;
+        Mon, 20 Apr 2026 08:49:55 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:44::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc975b0591sm8776278a34.19.2026.04.20.08.49.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Apr 2026 08:46:50 -0700 (PDT)
+        Mon, 20 Apr 2026 08:49:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,53 +66,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 20 Apr 2026 08:46:49 -0700
-Message-Id: <DHY3L8BVS4E4.2GLGKFH7NORVW@gmail.com>
-Subject: Re: [PATCH bpf-next v10 2/6] bpf: Add
- bpf_prog_run_array_sleepable()
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, "bpf"
- <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
+Date: Mon, 20 Apr 2026 08:49:53 -0700
+Message-Id: <DHY3NL1SEU8M.3D81XSXXQRRWK@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
  Nakryiko" <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Martin Lau" <kafai@meta.com>, "Kernel Team" <kernel-team@meta.com>,
- "Eduard" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- "Peter Zijlstra" <peterz@infradead.org>, "Steven Rostedt"
- <rostedt@goodmis.org>
-Cc: "Mykyta Yatsenko" <yatsenko@meta.com>
+ "Martin KaFai Lau" <martin.lau@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v3 3/4] libbpf: Request verifier warnings for
+ object loads
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Mykyta Yatsenko"
+ <mykyta.yatsenko5@gmail.com>
 X-Mailer: aerc
-References: <20260415-sleepable_tracepoints-v10-0-161f40b33dd7@meta.com>
- <20260415-sleepable_tracepoints-v10-2-161f40b33dd7@meta.com>
- <DHU7408DLITK.2DC76VINL2F7K@gmail.com>
- <CAADnVQ+6udrUD-xW96ZJkz3UkEq8JZAdFiMgB=f5jfFaYVjJ5g@mail.gmail.com>
- <337f2570-acb2-4b31-8c4f-86ba4cbdfe65@gmail.com>
-In-Reply-To: <337f2570-acb2-4b31-8c4f-86ba4cbdfe65@gmail.com>
+References: <20260418171701.610025-1-memxor@gmail.com>
+ <20260418171701.610025-4-memxor@gmail.com>
+ <d3e3a02f-8948-4952-b0e9-6e289fe09a41@gmail.com>
+ <CAP01T74ne=kN2+C8Yxqov-2an=mMo8+OSAKXxe9Vqim1qu1WYg@mail.gmail.com>
+In-Reply-To: <CAP01T74ne=kN2+C8Yxqov-2an=mMo8+OSAKXxe9Vqim1qu1WYg@mail.gmail.com>
 
-On Fri Apr 17, 2026 at 10:22 AM PDT, Mykyta Yatsenko wrote:
+On Mon Apr 20, 2026 at 8:23 AM PDT, Kumar Kartikeya Dwivedi wrote:
+> On Mon, 20 Apr 2026 at 15:57, Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>>
+>> On 4/18/26 6:16 PM, Kumar Kartikeya Dwivedi wrote:
+>> > On kernels supporting BPF_LOG_LEVEL_WARN, have libbpf request verifier
+>> > warnings for BPF object program loads by ORing in the warning bit.  Th=
+is
+>> > keeps the existing log_level=3D0 retry semantics for verbose logs, whi=
+le
+>> > still surfacing verifier warnings for successful loads.
+>> >
+>> > When libbpf owns the log buffer, use a small buffer for warning-only
+>> > loads and flush captured warnings through the print callback. Detect
+>> > support by probing for BPF_FEAT_VERIFIER_WARNINGS in enum bpf_features=
+,
+>> > and document the updated kernel_log_level behavior.
+>> >
+>> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>> > ---
+>> [...]
+>> > @@ -7954,7 +7960,10 @@ static int bpf_object_load_prog(struct bpf_obje=
+ct *obj, struct bpf_program *prog
+>> >
+>> >       ret =3D bpf_prog_load(prog->type, prog_name, license, insns, ins=
+ns_cnt, &load_attr);
+>> >       if (ret >=3D 0) {
+>> > -             if (log_level && own_log_buf) {
+>> > +             if (log_level =3D=3D 16 && load_attr.log_true_size && ow=
+n_log_buf) {
+>> > +                     pr_warn("prog '%s': -- BEGIN PROG LOAD WARNINGS =
+--\n%s-- END PROG LOAD WARNINGS --\n",
+>> > +                             prog->name, log_buf);
+>>
+>> I'm not sure if this block makes sense to me: we only print warnings
+>> banner is warnings is the only requested log type, but we print no
+>> banner if warnings are requested with other log level, also different
+>> log_levels: pr_warn() vs pr_debug().
+>>
 >
->
-> On 4/16/26 3:40 PM, Alexei Starovoitov wrote:
->> On Wed, Apr 15, 2026 at 6:41=E2=80=AFPM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->> One more thing..
->> Please go back to my 'do your homework' request from v9
->> and answer the question why it's not safe to do bpf_prog_run
->> on dummy prog like this patch does.
->> I missed it yesterday and only complained about the waste of cpu cycles.
->> It's more than that.
->>=20
->> Do not send v11.
->
-> I see that very similar bug was fixed in 7dc211c1159d ("bpf: Fix invalid=
-=20
-> prog->stats access when update_effective_progs fails"), the problem is=20
-> the same - NULL field access on the dummy prog. So the approach to just=
-=20
-> allow dummy to run further is fragile, because other NULL fields may be=
-=20
-> accessed.
+> With other log levels, it becomes part of regular verifier output, if
+> requested. By default, we want to print them on success at a higher
+> log level upon success so they appear, even if the user didn't request
+> verbose logs in the log buffer.
+> Since the default case only generates warnings, we change the banner,
+> but keep it as-is for other scenarios. Does that make sense?
 
-exactly. so far we've hit 'active =3D=3D NULL' and 'stats =3D=3D NULL',
-and 'stats =3D=3D NULL' had to be workaround-ed like that in that commit.
-There is also 'aux'. I hope it's not used at run-time, but let's not take c=
-hances.
-Filter dummy prog as immediate skip.
+I'm not a fan of banner either.
+Screaming BEGIN and END is imo too verbose. I would skip it altogether.
+And probably would have removed it from existing 2 places in libbpf.
