@@ -1,46 +1,46 @@
 Received: from mx0b-00190b01.pphosted.com (mx0b-00190b01.pphosted.com [67.231.157.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90A0388E60;
-	Mon, 20 Apr 2026 10:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5688F39BFE6;
+	Mon, 20 Apr 2026 10:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.157.127
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776681685; cv=none; b=lr/pmLd10+9qh6KRkY7pt0x4cgp+KqW3xB7LUoKsLHUyfXfO7x84rgWoQyLjEJv3ev7iy+jOmRQEnOPNBz4GE5vOj5K/hib/P7A9wCDet2Ccz3FjbNS6CMo1dbsbDEnwV0rSOHQq0z6ewrQ3yRlESNLkZYVt7Itggvh3cwV3KYY=
+	t=1776681688; cv=none; b=jHtaKqb99r6vnkXesmDzyy+q6k9VksB+RGaPl4ZVQg9cV3AtYAFxwq0hYtx7ATF2FbrdoVqrab7+iyeVO0OuhPTgv0ZJPn+ISED5zgdjeOQG0JHS2OmYmuQ4Cf9m7nKoVLYAxvTG8htKK5GMDGk8qeWXFW1dBaWjy+wBpzhA4VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776681685; c=relaxed/simple;
-	bh=N1YdOtoqIsOGwsIq9cpjJegYjbmtN52XnpDjMP44Oc8=;
+	s=arc-20240116; t=1776681688; c=relaxed/simple;
+	bh=iw3pkpi0rpWv34W0Zy1IDNbxE46IPAKhAcqKQwIkudY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=u6XqJ9xKUKxkTXiSfgDH4XCHnH8kv0bnORYpfRmGBdt8tfVyUTbvcIQlz68uxMlNUZIOK0RHNRGC4yy2HlpxKS6iZDj5ZaRbQV5iIcBDSZ2JZQGFH7Eloq2V4AK7Af2QEZBZ529WGBtpYIitE8Q4sotqlOWO1mstVmEIuGo6Juk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=YtScSdQT; arc=none smtp.client-ip=67.231.157.127
+	 MIME-Version; b=S2poJKU7ZQdOAbEQXulBXi530NSCy6jLvhCg2AExzPcwlowl4TX36/3NKRETVYtAytbWz3vueMN4SROY+DloKF5f2uBUiHff7wMn4k6AZY+6/hLwOFd1PAC31dxPaL62v+jtrq4CG8qKqy1T2EVODGLWB/wWKvc+2/AA0Ij11y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=SR+yiB+R; arc=none smtp.client-ip=67.231.157.127
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="YtScSdQT"
-Received: from pps.filterd (m0050096.ppops.net [127.0.0.1])
-	by m0050096.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 63K62f9M781500;
-	Mon, 20 Apr 2026 11:41:05 +0100
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="SR+yiB+R"
+Received: from pps.filterd (m0122331.ppops.net [127.0.0.1])
+	by mx0b-00190b01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63K5qlub4070610;
+	Mon, 20 Apr 2026 11:41:03 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=jan2016.eng; bh=1m1xtIrOA
-	vNLpNM8XVd2uRTL0JS8S9yyEHtB7LESLCw=; b=YtScSdQTt3ObM402qXfDQi3Ku
-	hSEc8141v1bwMShrjQ1835xQxUyUQFzsN+mE8OoEiMSv7jHv0KdztEMca61AHw2L
-	75y+Pv0KRi4d/5bE6Eh/Wva7+o/HgJrAgQxcdGQThBGjAIsIXra8wofED1TVLfkw
-	amxSmigZmFhBapSCEOxNDbl3xnfFqgo0aCp8Dxn4tGbxoj0nQFRoylq1EeR6n883
-	BIHz6A0JjXYFTy2DQ83DmsfFMoBHYTP2hGflT6UjA9sJKdNvDrr+2/C/t0DIqOlz
-	WolWZNZ45tEGh0J+YQHzbiaqQZw6pXFJX6kp09sSqUoELEdvrYDfy8UzijReA==
-Received: from prod-mail-ppoint6 (prod-mail-ppoint6.akamai.com [184.51.33.61])
-	by m0050096.ppops.net-00190b01. (PPS) with ESMTPS id 4dm2c5vy64-1
+	:mime-version:references:subject:to; s=jan2016.eng; bh=tvzeqXY17
+	UbphjoJsIOIquKsB7eKxzv9kuXvY8AZYjc=; b=SR+yiB+Rs/77x+c64J++6YZXf
+	Y9qKQR82eGoQ5xpfBn31VP9ufjQyeHZT7b5j88isG5WH/PaaO+IUkA3ymQDQ4Xka
+	c89US3zIjvZh5Z/ZIAL8qVibpJqVk9p5ocAv7o2X55fxVSKWzLjg6se6U0IVAaS0
+	Ubogmi5QHkXUpNizcec1qt8pQvLO08/fib7+AyqhL3VOXPK28seErSyJ3oPflg0N
+	hbTTGOUP/0F44bBbQM4OyPwrjdcyP+v0IpXe5ZGnzYLwFRiXbpRSIubUwWZC7WZN
+	JzrFP8iEzI6wluZ+rYeuZLUVXHGWJsM5mn6Ne8msV4sVEd6rGvpi2VQZl44NQ==
+Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18])
+	by mx0b-00190b01.pphosted.com (PPS) with ESMTPS id 4dkxtrdqxh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 20 Apr 2026 11:41:04 +0100 (BST)
-Received: from pps.filterd (prod-mail-ppoint6.akamai.com [127.0.0.1])
-	by prod-mail-ppoint6.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63KAQx59031290;
-	Mon, 20 Apr 2026 06:41:04 -0400
+	Mon, 20 Apr 2026 11:41:02 +0100 (BST)
+Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
+	by prod-mail-ppoint1.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63KABenD011853;
+	Mon, 20 Apr 2026 06:41:02 -0400
 Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
-	by prod-mail-ppoint6.akamai.com (PPS) with ESMTP id 4dm59tqd20-1;
-	Mon, 20 Apr 2026 06:41:04 -0400 (EDT)
+	by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 4dm59tfe72-1;
+	Mon, 20 Apr 2026 06:41:01 -0400 (EDT)
 Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
-	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id 3971D83;
-	Mon, 20 Apr 2026 10:41:02 +0000 (UTC)
+	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id 36B938D;
+	Mon, 20 Apr 2026 10:40:58 +0000 (UTC)
 From: Nick Hudson <nhudson@akamai.com>
 To: bpf@vger.kernel.org, netdev@vger.kernel.org,
         Willem de Bruijn <willemb@google.com>,
@@ -52,12 +52,10 @@ Cc: Nick Hudson <nhudson@akamai.com>, Max Tottenham <mtottenh@akamai.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Eduard Zingerman <eddyz87@gmail.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 5/6] bpf: clear decap tunnel GSO state in skb_adjust_room
-Date: Mon, 20 Apr 2026 11:40:50 +0100
-Message-Id: <20260420104051.1528843-6-nhudson@akamai.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 3/6] bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel decapsulation
+Date: Mon, 20 Apr 2026 11:40:48 +0100
+Message-Id: <20260420104051.1528843-4-nhudson@akamai.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260420104051.1528843-1-nhudson@akamai.com>
 References: <20260420104051.1528843-1-nhudson@akamai.com>
@@ -71,46 +69,46 @@ Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-20_02,2026-04-17_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- adultscore=0 bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2604070000 definitions=main-2604200101
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDEwMyBTYWx0ZWRfXyZfANB+fBUBk
- 3bN0wLByflUvG7Dnorui4VmQVT3cJmQvw0d1N0OVSLJfrULZ0fnAecgfBRTw7gvfcL53qneBDEl
- 1xNe0MFjJXG9oLqpttg6oAjV3Qsz12TdsMa7L+PJePEsHpA7rZzddytwJ3q7eixUeL8YZbKU2H9
- 6mo/h74uXOpfI5z9UANQp11+JxNnauhAT4KfBBs6558RL4w5BoJuxXfiVpN2ZLHSM3x2IMvgWvE
- NKNi2ZrV0YlgxaWe+bPsphN0qyd4mN2bIQiiigw5zUi0ivr6x/BkCa57Z4q5N5yqm3O35EVkxCF
- ewtyZ7Dohpzeiltoi7BBNtYo+7w5CQjDmzYb6xFbstynA/d7R4pUJkfYakDeEoUmIBiZ7B7cNhW
- dOQ74LXrNLkIbI3MgUAQXQmR1edN3YWh4l62zyf8rPQi2ow28S0W9xN2MoaXGPFv9oMTwZsSCc+
- jnlZdHPXubDxW/MNB5g==
-X-Authority-Analysis: v=2.4 cv=WaU8rUhX c=1 sm=1 tr=0 ts=69e602c1 cx=c_pps
- a=WPLAOKU3JHlOa4eSsQmUFQ==:117 a=WPLAOKU3JHlOa4eSsQmUFQ==:17
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ adultscore=0 phishscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=596 suspectscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2604070000 definitions=main-2604200099
+X-Proofpoint-GUID: XBGK0q8qpQYiNYtDHlNLXol5-jGHssVx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDEwMyBTYWx0ZWRfX3ACW7QQg01H6
+ 6G0hG36Rmwii2LjmvSi8xcvCtUfWOGj+3tdLxLLT9noq4WvLo7o2SaYxHV5oNR8u38cuKPD5r8o
+ zEXQnM2uLu9zDP77QJ359VyAULITRXZ5znBW5Lm3fyf/abPAT3oW75Awc3goeKDt2SaZoLM+2qR
+ vqpzLA2iLinQgZ3WF4EzE0fqIqziLTCOp9McLH9pZzIlV21Hx/W0r+QXH6zulDDmWSOM5kmRBJ7
+ b1YCGjlV5XbgnTCTAlHHMzFPpk1kYnYF6xuwLnyzm1L/+sotk/aFort6Nh+jOMR1ut5wcfgVYC0
+ NwzLvI6MIX2nH4P98G1ttnPioqH7GsuKchk8bNH/5kYI8qbGsZiJd+PLPHYoX9Td++y7aq/boWV
+ CnIsBIdE79+bXxexUt5ephIUr2Bc+0n4yAI8Ql/wG5AySfUd0YMlXykp+TyYNykk0YeJr48qpLd
+ R1+AvSQiUaOgQ69iyrw==
+X-Authority-Analysis: v=2.4 cv=G70s1dk5 c=1 sm=1 tr=0 ts=69e602be cx=c_pps
+ a=StLZT/nZ0R8Xs+spdojYmg==:117 a=StLZT/nZ0R8Xs+spdojYmg==:17
  a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
- a=8P__5Em-pwOPtXrf4HJ0:22 a=X7Ea-ya5AAAA:8 a=adxPj1HbavDh4lNgp2AA:9
-X-Proofpoint-GUID: OiWB4rNNTjDTt7KkYf6VlYgUeui0hkkG
-X-Proofpoint-ORIG-GUID: OiWB4rNNTjDTt7KkYf6VlYgUeui0hkkG
+ a=VcQvXEo1OZcA_IiPcy3B:22 a=X7Ea-ya5AAAA:8 a=KfGVUnEDJfcTcdlxACkA:9
+X-Proofpoint-ORIG-GUID: XBGK0q8qpQYiNYtDHlNLXol5-jGHssVx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-20_02,2026-04-17_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 adultscore=0
- impostorscore=0 bulkscore=0 phishscore=0 malwarescore=0 clxscore=1015
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ malwarescore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 adultscore=0 spamscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2604170000 definitions=main-2604200103
 
-On shrink in bpf_skb_adjust_room(), clear tunnel-specific GSO flags
-according to the decapsulation flags:
+Add new bpf_skb_adjust_room() decapsulation flags:
 
-- BPF_F_ADJ_ROOM_DECAP_L4_UDP clears SKB_GSO_UDP_TUNNEL{,_CSUM}
-- BPF_F_ADJ_ROOM_DECAP_L4_GRE clears SKB_GSO_GRE{,_CSUM}
-- BPF_F_ADJ_ROOM_DECAP_IPXIP4 clears SKB_GSO_IPXIP4
-- BPF_F_ADJ_ROOM_DECAP_IPXIP6 clears SKB_GSO_IPXIP6
+- BPF_F_ADJ_ROOM_DECAP_L4_GRE
+- BPF_F_ADJ_ROOM_DECAP_L4_UDP
+- BPF_F_ADJ_ROOM_DECAP_IPXIP4
+- BPF_F_ADJ_ROOM_DECAP_IPXIP6
 
-When all tunnel-related GSO bits are cleared, also clear
-skb->encapsulation.
+These flags let BPF programs describe which tunnel layer is being
+removed, so later changes can update tunnel-related GSO state
+accordingly during decapsulation.
 
-Handle the ESP inside a UDP tunnel case where encapsulation should remain
-set.
+This patch only introduces the UAPI flag definitions and helper
+documentation.
 
 Co-developed-by: Max Tottenham <mtottenh@akamai.com>
 Signed-off-by: Max Tottenham <mtottenh@akamai.com>
@@ -118,53 +116,114 @@ Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
 Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
 Signed-off-by: Nick Hudson <nhudson@akamai.com>
 ---
- net/core/filter.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ include/uapi/linux/bpf.h       | 34 ++++++++++++++++++++++++++++++++--
+ tools/include/uapi/linux/bpf.h | 34 ++++++++++++++++++++++++++++++++--
+ 2 files changed, 64 insertions(+), 4 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 7f8d43420afb..1cc89b9c8cac 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3667,6 +3667,39 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
- 		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
- 			skb_increase_gso_size(shinfo, len_diff);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c021ed8d7b44..4a53e731c554 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3010,8 +3010,34 @@ union bpf_attr {
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
+  *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
+- *		  Indicate the new IP header version after decapsulating the outer
+- *		  IP header. Used when the inner and outer IP versions are different.
++ *		  Indicate the new IP header version after decapsulating the
++ *		  outer IP header. Used when the inner and outer IP versions
++ *		  are different. These flags only trigger a protocol change
++ *		  without clearing any tunnel-specific GSO flags.
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
++ *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
++ *		  when decapsulating a GRE tunnel.
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
++ *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
++ *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
++ *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
++ *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
++ *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
++ *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
++ *		  or IPv4-in-IPv6).
++ *
++ *		When using the decapsulation flags above, the skb->encapsulation
++ *		flag is automatically cleared if all tunnel-specific GSO flags
++ *		(SKB_GSO_UDP_TUNNEL, SKB_GSO_UDP_TUNNEL_CSUM, SKB_GSO_GRE,
++ *		SKB_GSO_GRE_CSUM, SKB_GSO_IPXIP4, SKB_GSO_IPXIP6) have been
++ *		removed from the packet. This handles cases where all tunnel
++ *		layers have been decapsulated.
+  *
+  * 		A call to this helper is susceptible to change the underlying
+  * 		packet buffer. Therefore, at load time, all checks on pointers
+@@ -6221,6 +6247,10 @@ enum bpf_adj_room_flags {
+ 	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
+ 	BPF_F_ADJ_ROOM_DECAP_L3_IPV4	= (1ULL << 7),
+ 	BPF_F_ADJ_ROOM_DECAP_L3_IPV6	= (1ULL << 8),
++	BPF_F_ADJ_ROOM_DECAP_L4_GRE	= (1ULL << 9),
++	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
++	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
++	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
+ };
  
-+		/* Selective GSO flag clearing based on decap type.
-+		 * Only clear the flags for the tunnel layer being removed.
-+		 */
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-+		    (shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-+					 SKB_GSO_UDP_TUNNEL_CSUM)))
-+			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
-+					      SKB_GSO_UDP_TUNNEL_CSUM);
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-+		    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-+			shinfo->gso_type &= ~(SKB_GSO_GRE |
-+					      SKB_GSO_GRE_CSUM);
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-+		    (shinfo->gso_type & SKB_GSO_IPXIP4))
-+			shinfo->gso_type &= ~SKB_GSO_IPXIP4;
-+		if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-+		    (shinfo->gso_type & SKB_GSO_IPXIP6))
-+			shinfo->gso_type &= ~SKB_GSO_IPXIP6;
-+
-+		/* Clear encapsulation flag only when no tunnel GSO flags remain */
-+		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-+			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
-+			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
-+						  SKB_GSO_UDP_TUNNEL_CSUM |
-+						  SKB_GSO_GRE |
-+						  SKB_GSO_GRE_CSUM |
-+						  SKB_GSO_IPXIP4 |
-+						  SKB_GSO_IPXIP6 |
-+						  SKB_GSO_ESP)))
-+				if (skb->encapsulation)
-+					skb->encapsulation = 0;
-+		}
-+
- 		/* Header must be checked, and gso_segs recomputed. */
- 		shinfo->gso_type |= SKB_GSO_DODGY;
- 		shinfo->gso_segs = 0;
+ enum {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index ca35ed622ed5..f4c2fbd8fe68 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3010,8 +3010,34 @@ union bpf_attr {
+  *
+  *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
+  *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
+- *		  Indicate the new IP header version after decapsulating the outer
+- *		  IP header. Used when the inner and outer IP versions are different.
++ *		  Indicate the new IP header version after decapsulating the
++ *		  outer IP header. Used when the inner and outer IP versions
++ *		  are different. These flags only trigger a protocol change
++ *		  without clearing any tunnel-specific GSO flags.
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
++ *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
++ *		  when decapsulating a GRE tunnel.
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
++ *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
++ *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
++ *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
++ *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
++ *
++ *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
++ *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
++ *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
++ *		  or IPv4-in-IPv6).
++ *
++ *		When using the decapsulation flags above, the skb->encapsulation
++ *		flag is automatically cleared if all tunnel-specific GSO flags
++ *		(SKB_GSO_UDP_TUNNEL, SKB_GSO_UDP_TUNNEL_CSUM, SKB_GSO_GRE,
++ *		SKB_GSO_GRE_CSUM, SKB_GSO_IPXIP4, SKB_GSO_IPXIP6) have been
++ *		removed from the packet. This handles cases where all tunnel
++ *		layers have been decapsulated.
+  *
+  * 		A call to this helper is susceptible to change the underlying
+  * 		packet buffer. Therefore, at load time, all checks on pointers
+@@ -6221,6 +6247,10 @@ enum bpf_adj_room_flags {
+ 	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
+ 	BPF_F_ADJ_ROOM_DECAP_L3_IPV4	= (1ULL << 7),
+ 	BPF_F_ADJ_ROOM_DECAP_L3_IPV6	= (1ULL << 8),
++	BPF_F_ADJ_ROOM_DECAP_L4_GRE	= (1ULL << 9),
++	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
++	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
++	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
+ };
+ 
+ enum {
 -- 
 2.34.1
 
