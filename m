@@ -1,65 +1,65 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C463C2765
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 19:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E143C553A
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 19:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776714165; cv=none; b=cTRy8t5EqsDpZUUe9AuOiSk1yEyW5ZtrllQVnqDD4rGK4np1CY1zIWnX2qsOIvzdMz3y4HZzimentGu1ZZxwyb+jfaYUF5Kd68v5uTNXvYPMrAiLET3DLPC+8qFe3bFqlO4ViDY9F0BBAdulm9A1T/qWkBaVKAymqQ7HC7SN36Q=
+	t=1776714256; cv=none; b=RM2gg7BqUTsEF2zTrPhvP6yxLLXhk4mIc5IqubsGt1O43HNpLIGpUAWDnAEkBGxgDr/PuIqbhu0VpUKVeo6fKBr/kXlTDaZXB3aZj/hF04E/U20Irh6TjbwOewJWDuC5zU7RuUqlzvh8n0N+w6Ud0jKUF2gwsIYQk+extXrK4ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776714165; c=relaxed/simple;
-	bh=gGhv5aBvag8GkJJw8oK+HvN5ptj86XyPHMattSfFigo=;
+	s=arc-20240116; t=1776714256; c=relaxed/simple;
+	bh=SS4Yt3zFzImyyeOq4jcHWSPrcqDrkh4/v4ZlbJcO+xA=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=ICITDK0qqGQDP4bAET8gOWIYIu4rvOamiSGkuczmjU4FaH9VBh42+LLfayAgtliACRRzrmjWrQH4ixBFnxC0q1kXhr2Ioyoctsh3dWBBSvtjjgXccEvdADyAYpXCjnqJqAKlnW4i51FsVLiToOSB/VssGy9O/5dw9EJOQEyKnkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ioJuHZ+j; arc=none smtp.client-ip=209.85.128.176
+	 Mime-Version:Content-Type; b=AsquxyJfQFJDVnOEHqpSLyPUFtytI6E8UilxayzOPXc0tg+nefit8Dy796Fp/475L/hNjfkqgroozeIvXHGhcd2n6LnTBdZAF4UYIAv7FOnbrrNFFuAvESBhuYRD1b507W0M33r38etDPg+7dLocvaAd5ApHOe5FK75wm+RiWkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V9BKgjEf; arc=none smtp.client-ip=74.125.224.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ioJuHZ+j"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-78fc4425b6bso26538697b3.1
-        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 12:42:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V9BKgjEf"
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-651bf4a4140so3567793d50.0
+        for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 12:44:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776714163; x=1777318963; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776714254; x=1777319054; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ar9A5QrYRWGb5NIZabW3eNiZEMmSWnS35Z/zWd2ipnM=;
-        b=ioJuHZ+jKiUhtlsNSOyP3QlO4YWFOh20tActa3Kup9u2YnAy5zNVLxuYYRAeKcAc1l
-         sX3MeNQFoCigoYRqXNB373NG/iQVAhrotHG5wsmPUES/UE59cNaSz9jSa8mAjDzTvpZY
-         rCnLpv/i7T6wbWZZ70HC8zF7spr3wFQwzr2vPdiooaRgQgplZoaCxPCybss+1EpILpty
-         6CP84QEcyJc6fyyx/Uh45pHH4RCQ1efS3KyoGmjuXXbphWfFJDUdsoIDcpgvH2VgVcWU
-         I+bGIVjKGb2eJuRrLi/dv9azrTqFonXSNUaZy6XVNPwyCVSRndjvYX0+sTBQ/FtLqNlT
-         T3kQ==
+        bh=e0ZPEi4qQzDtpNwH8vlSQQ5rqmko0ODy6PBRiyAMQkQ=;
+        b=V9BKgjEfchSp8tkqQZ4moMzjp/rIHnE+icTZM29dJt6hR1Oi7LejriM3J8t8JT9zg2
+         A4OPL3T1seoHqVeZi7yCFkfy873Cp5tzQq65wSVPJ/VhLoyAwIWKEpezU57qEJ8o6Nqr
+         WMu1gmz2xnO3w8+JII+d/RFONcP52Iwdg3lFWvmO0vD6plHfwsnNY2NOiRmeUo4S/r4J
+         YdtslDkp0UBuGd2rbVLlRkaTeW7C7TqM6DjsfE+UF53soDu3XJ/BmBnhIXPzPXqMxlNC
+         h5P6nLSGo6WQ/uElOF1el+a3CBp9cl/BScFw6cYCxzUhcl0AhpDJBpZMYC1yAwDgjyDd
+         qKkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776714163; x=1777318963;
+        d=1e100.net; s=20251104; t=1776714254; x=1777319054;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ar9A5QrYRWGb5NIZabW3eNiZEMmSWnS35Z/zWd2ipnM=;
-        b=SeKFNzNvpWkaUZmLsxbW2teYtrDa59HJ2X6//hXvoIXjb6WkSySVGidrG5XawPAkhA
-         1+Z3Z1HFhZsPAYCaxR/Pb/cHmbH6NPTeznClt/0XqrZBOTDPsJTEhwLzwt5f/4X3IE9K
-         uwSLMLdmWG8pzXoZEr6wuPJG38RnEduyFqhgWBahe8fgiINjLETLs6iLz7+oUK9R4zlZ
-         Rtb+PhECKIHkn0pu1Nh3xZuV64lcQ9cHtFQ5QsO0NaOXPc62rYy0rEoD9jiJsytaDnVV
-         stCzSpWFSB/d1Kk9vtrrqae4zciURUMXxke1ameGdxHxM7FOrm5sXElkm3K81vBYWnYq
-         lE0g==
-X-Forwarded-Encrypted: i=1; AFNElJ9sSh1w8xdjJE1iV4eXEXGkjBfP+LOFWLDrBFQIwdX1z/EmarUFurYumxRUo8tTkBfAVk8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4VFik4UQeX0QNUQgxYhrkx737L/DCppgkQchThil8zybrdIkB
-	ijz/dgv3Y1UNEsm5NL9LYcKRNtDSmKgLnycTG/ar6Hf/ifdQeNMFqA3z
-X-Gm-Gg: AeBDietpsyNg736YeJFK5xLdrVKY8jfsEG4kdEMAoznfJ10aBbxhX/owGyDksd2mX4U
-	R7iSixd6DEzp+TV80BH8A0Kgf3kgS35E23Y0wiSRTD8+Y5hFhanv/tVZsdm24e1/Ztf2YGAGZQh
-	G6s3aJlxdVYke9uhhkGMK0KofByyIju0K+DBmsy+2Kj6nGogATAqVw248gT9fIv2/eqtQRA3ueR
-	+tGfjEVJ/s0/JpDUX80EmyWg6LjYT4czUjn3XwYRO6qtBimhkClyD2FNIpTydbtHz4NGtEYbXP/
-	x8BxTRabFG/j9DYLnWwtWpP3U2jBAc8k+SyAL2+CbU67XtIQtHzSOkkYDPNRCiAuDO2m++7KzFT
-	1+HqJbDpFHox97Q3jjqOYNMtTjaRFvAtx/QJkYsQLkEF47Ky4NJxyXqrLYmmXkhIbsFRLBmbs9Y
-	wet2YwG6dliFQdMQn4lZ5X37fkf/ehN7WS7AA/UVKHPD4pJnfT1KpgvNgPW3ayFSp++QYD3MERq
-	QKUDoxPKxEY/7wBA09hHmvnmw==
-X-Received: by 2002:a05:690c:9201:b0:79c:ff02:a048 with SMTP id 00721157ae682-7b9ece6ad3fmr142245957b3.4.1776714162988;
-        Mon, 20 Apr 2026 12:42:42 -0700 (PDT)
+        bh=e0ZPEi4qQzDtpNwH8vlSQQ5rqmko0ODy6PBRiyAMQkQ=;
+        b=ft0E2YZcT10qmdn7dBjErttDVGJAWVBG4Lm+C3U0Y5RGk6GFKcnOPGkBjU3Tyz4tAd
+         H1DrNZApnfK9Wt1vglFQeRjkJB699064thN6u7IxiasZjUqhttkyHDQ7DgpDv14bIKFs
+         loqnUzAScHANFL4qi8tZK9zUX2lxrRCi73y8riHSWLaDsDq/6G+C44B4hEbsrO27LQuC
+         LNDwR9kx3OyPxeKEytqpqPJrW0RHwEvRir1LE2K6ynJICZBvs27rrLSTpf+fJo2SAk+s
+         sPZQOJ6BhhAw4ndW2aAmLDXjaSn8gu/kdG76jsknco+IXRgwRK8OyStaNNJqLd83htLn
+         9sEg==
+X-Forwarded-Encrypted: i=1; AFNElJ97CVoFubP4biFIDpLdSRI9JjjzSgv88+OtWpagBGII02Q460wgGLDA1ZHa7IOLHx3JvEI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydxcjotRAfro1pA2xz2M+8JPK43ZwFpCDT+Nh5zmVsmmYL5mTz
+	am1ok6jvl+f9/5NCvfKI41xIZG/BvkOo9vkd15i6S53AixsImXmoprW5
+X-Gm-Gg: AeBDiev1b/kIOh//LqyyGG/2rZjGUdHbRUWJ8e0KgocGzjGH9iQSLuxggsdWeaJtEWX
+	13JUfQIVlmHBcdJZI6LwIFCSyloQLT3g59ikY14522jAJaZYjQLzio0fUD5ZgTCAjLkYiZek12R
+	0ftv36eNEjvQC74ttdJkEy3PVswa0fZZZMhDQKDGpit6rEJVjcsiHzEVHmoR9HEBeDs3J8HR8EX
+	lN3D5gLON8KHPE7ahmtkBlXfDyf7x7uhGfwv1gxkU83wfltHUk+wXqIgSOcuS0i1Acv5aJX3h1f
+	M+u4MxnBlmhjhRVqHG7HnIltwN0Ii8uT8maI2VawLLHZbZIYX5qSHb25cyPtWwt17ApYXFkwDUu
+	Lf7ZyzraohRMzXoGmTqHnhCgPC8KwbvE0vMkhhrgVHgRzdUgVOJiXt3B3up+skzR9cR0oDLKn9m
+	p51KTnUdDESzVmU1RvLYRC0TUDu1WvZAwdUvzQ8jJVD89OP9oW9J5E6Cli6kbJgGeg2jGqoufrQ
+	iJjUpTPKUI0dk4=
+X-Received: by 2002:a05:690e:130e:b0:64e:bfdf:454 with SMTP id 956f58d0204a3-6531056e7bcmr14161558d50.0.1776714253941;
+        Mon, 20 Apr 2026 12:44:13 -0700 (PDT)
 Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7b9ee89b259sm47551907b3.2.2026.04.20.12.42.41
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65314b63174sm5737205d50.6.2026.04.20.12.44.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 12:42:41 -0700 (PDT)
-Date: Mon, 20 Apr 2026 15:42:40 -0400
+        Mon, 20 Apr 2026 12:44:12 -0700 (PDT)
+Date: Mon, 20 Apr 2026 15:44:11 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Nick Hudson <nhudson@akamai.com>, 
  bpf@vger.kernel.org, 
@@ -69,22 +69,18 @@ To: Nick Hudson <nhudson@akamai.com>,
 Cc: Nick Hudson <nhudson@akamai.com>, 
  Max Tottenham <mtottenh@akamai.com>, 
  Anna Glasgall <aglasgal@akamai.com>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
  Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
  Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
  Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
  linux-kernel@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.29f88e1183282@gmail.com>
-In-Reply-To: <20260420104051.1528843-3-nhudson@akamai.com>
+Message-ID: <willemdebruijn.kernel.33c89b87c9822@gmail.com>
+In-Reply-To: <20260420104051.1528843-4-nhudson@akamai.com>
 References: <20260420104051.1528843-1-nhudson@akamai.com>
- <20260420104051.1528843-3-nhudson@akamai.com>
-Subject: Re: [PATCH v5 2/6] bpf: refactor masks for ADJ_ROOM flags and encap
- validation
+ <20260420104051.1528843-4-nhudson@akamai.com>
+Subject: Re: [PATCH v5 3/6] bpf: add BPF_F_ADJ_ROOM_DECAP_* flags for tunnel
+ decapsulation
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,16 +92,19 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Nick Hudson wrote:
-> Refactor the helper masks for bpf_skb_adjust_room() flags to simplify
-> validation logic and introduce:
+> Add new bpf_skb_adjust_room() decapsulation flags:
 > 
-> - BPF_F_ADJ_ROOM_ENCAP_MASK
-> - BPF_F_ADJ_ROOM_DECAP_MASK
+> - BPF_F_ADJ_ROOM_DECAP_L4_GRE
+> - BPF_F_ADJ_ROOM_DECAP_L4_UDP
+> - BPF_F_ADJ_ROOM_DECAP_IPXIP4
+> - BPF_F_ADJ_ROOM_DECAP_IPXIP6
 > 
-> Refactor existing validation checks in bpf_skb_net_shrink()
-> and bpf_skb_adjust_room() to use the new masks (no behavior change).
+> These flags let BPF programs describe which tunnel layer is being
+> removed, so later changes can update tunnel-related GSO state
+> accordingly during decapsulation.
 > 
-> This is in preparation for supporting the new decap flags.
+> This patch only introduces the UAPI flag definitions and helper
+> documentation.
 > 
 > Co-developed-by: Max Tottenham <mtottenh@akamai.com>
 > Signed-off-by: Max Tottenham <mtottenh@akamai.com>
