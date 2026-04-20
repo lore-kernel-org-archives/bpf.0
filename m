@@ -1,121 +1,176 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989343783CC
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 05:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456822D7812
+	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 05:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776663930; cv=none; b=OP8YgtNbi4RHIgK1WTwwsc8UsU5ezlt0osIFxSNtbL4i7ZDNjYUa2bL3XoBDZlvchXtaDFm9pVahuMqqXOEHu4i/YihQBv2wgtl+vZ66uCk3PKgekq0RB2JE+Njlv+RdRNbTZo+XnXOJIZr7OzfARaMpmpBp+aonwKZKrDQUhu0=
+	t=1776664370; cv=none; b=bPjjum9n8EJh+3q8jGkB7/bVYxZXER4n0kxwiUeeCFBthDoOeGdcoRa8P9VzzpQhJca6ORlyPDYGzRb3O1SuFFu4TvBKpKasrOK1Cbyq0b9tT5CakKW5H+XF5slxFq7wSd96/uE5srlUyXHOkI8G8XKRoxaMKzhHYt6OumLk9ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776663930; c=relaxed/simple;
-	bh=MgTfL4hcReOYBI5Tm5H0TniZgVEW/A1hJFqIRwsnFd0=;
+	s=arc-20240116; t=1776664370; c=relaxed/simple;
+	bh=P9Ea85k2ipmaCPdLoOcKf9QW0R2Vs93tj4N1mcnC5xY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ec4mhV3M8LebleP3Hi0EDy5HCt3S/XbQrcs9JVfsW5/gvf08qJixX2bGxPmpwGOJA76J6Yggw5g+5Ww3RhhaKYzQFc7/dxY0W5A1fhF+yraIDQoFBEDLH4nDn907u9T6sO7MJiByPr1tslnqsARpx2FIHox99pjtXn2k5ORW0iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iMLBJZ7r; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=pmr2Vp+07y2z0uYADv6sYfC5MZpz2skFT7XKyQoa84mTlwq4Ko54YDIejXi/V8XsXtKhCwBU3yH4cBpxEXpnnhxg6yfiepWVhbaXepH1Va9tCWjtPoQYs5sEKnHW7VsWSZxqKIdmBui4Ytae2mVKLH4oLjNp2oKXqz9g0pMUGjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rLJJbVJc; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iMLBJZ7r"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-35da1af3e10so2572109a91.3
-        for <bpf@vger.kernel.org>; Sun, 19 Apr 2026 22:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776663929; x=1777268729; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tJIF/OkmYP+1od9OnWg/0GXVniINWQBKYZWI269j2LU=;
-        b=iMLBJZ7rJCoj2R0PWFYw+ff2sHHnQLyOqNEbMZ3IrRTHIKhTfMuQbQPxBRpIPB0x5s
-         qp4NQBEg33ZZyA1JVcLuXePay+TQs9O3TsQFnaClo2fBj4RFGVUxDcpH6GfWhR8iVjIq
-         7/6B/nJyQXBoUSNpDNCyZxKskCFlLgz4OGIHyvwFEXb/8kxXTNgJZuNp1gfGF7mZxja/
-         LW0EvV9v0Kt2R0zl1x/ADdZo/TbnqwHJCRwoPnaY1RnHnKVPOtWiKdl30kGViVP1gCyK
-         qzrH5F6lthyNQ2CO7uyGpgiwisip0+LIAn5xAnxZPJS/kQ5MS3i9PLne005cWdSkYlCT
-         uZyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776663929; x=1777268729;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tJIF/OkmYP+1od9OnWg/0GXVniINWQBKYZWI269j2LU=;
-        b=HlexQGzdXTAgN42fu9FpCY1czmbeIl4cckFXDNMtbEi6i6Zo5i5IpsK6+7le97aOeU
-         34+5tlqTWpej1v3cRdO+dXv64XtGaXtYthMlgDZJqrtzpmt6rNK/YvYuTmvn7YQ4rlzh
-         oHrGD0xgcJR6ZFoZGn5km+KTWtRi59h7CVluScIjDQpTPlVOAH3lsE0n/OFXV8VIUjSx
-         ehpATl2Z16UQ32KPxmi1Gy+krHynOuYWPnI1hYCarVdZiszwcg1NmIWGtyXGa/nOBCU0
-         xHqfQyCPjPrfkfB7EjyEL0fzTDSlANSDld1IXD/LcZSy0qY07C9AuTkdaU8yO2IziKI3
-         +tag==
-X-Gm-Message-State: AOJu0YzOtcUBbl+I/XcoGLmB8cgl90qadUaSi8cokSYx6IqJ5qNQyCAF
-	bTsNADK6d/tW+/Bchi/aoeWqbDSm0vq6sKkExcvxU5HtfjfSNhL+sWR8
-X-Gm-Gg: AeBDiesl0WoIdSoVt9LV/cBEWKxVuDHhZoqJEtqiIw57K+QuxN8zXhm2cXfJKGaXAmf
-	mJaFcbRwT7KPOxY1YdXyb/cyH02xV1kY8kPbMrV7H5CYz5sinqXYMUMoCa1VSLg/gRu8BXYfoZD
-	5hMYeZQu7ZXPYNs0hoEQCkDvGvDsfusaF4FHgkQ1hMJ6cerrVuPeu8+15FinyndqqbAoT7W+3AB
-	1PTNYLu4CQfm3Cgw9+qUJapglWxokBHaA5VesjMmtvRo/faXgXIk3Xz0wGzNdTAWoBwt6Ll6MT/
-	aOQdi2dHkXsu1UN3+LLZfdummTy61ZMAP3AQlkYpziYf4R3442W8YxdwvJU95gCdfnaYW6N8cfN
-	/6zeVh4s5dnhI2BWw5NpFy6nlp2hPBo2TdQEbaPqtMOuN6+3EGPsv+urOx002C2AAA3TEY0Rfq0
-	6DE/EL5EqVck6YXE+ofEjaCn80yZDuugvkXSIBPNvqiKFSefyB
-X-Received: by 2002:a17:90b:3c8d:b0:35d:93ff:284f with SMTP id 98e67ed59e1d1-36140462afcmr12973259a91.15.1776663928900;
-        Sun, 19 Apr 2026 22:45:28 -0700 (PDT)
-Received: from [10.22.65.66] ([122.11.166.8])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3613fb7118esm4579541a91.4.2026.04.19.22.45.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Apr 2026 22:45:28 -0700 (PDT)
-Message-ID: <e3e40b8b-9fff-4cb0-869e-fcaeb6b307ac@gmail.com>
-Date: Mon, 20 Apr 2026 13:45:23 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rLJJbVJc"
+Message-ID: <c1ea0f04-f902-4f6c-9249-3348f729f0cc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776664366;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+yuCXDIUaeRW08M8i0mkAdfDh//QKZbNWx3y/KuUFsQ=;
+	b=rLJJbVJcNdU5m/B0Xl5bpIH9526JGewXfXedwrky13TBEScWUhqfyvqePZtICRO/CNcvbF
+	CNHvJ9GC1ii99HV9uoTYuspEum1rKEHYSCvz8mPqQ6JrAw5Rtz994ixThZNwiAvm2PG2Ko
+	PXw8dG4sYszOjhEt2kkSMOX1CJ5HMRU=
+Date: Sun, 19 Apr 2026 22:52:22 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 0/6] Add support to emit verifier warnings
-Content-Language: en-US
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai
- <ihor.solodrai@linux.dev>, kkd@meta.com, kernel-team@meta.com
-References: <20260408021359.3786905-1-memxor@gmail.com>
- <1a7aea41-cc64-4277-a08d-1cee1ad6024b@gmail.com>
- <66a977bb-cfe4-4bac-990e-2b91512c354a@gmail.com>
- <CAP01T76wkwaXSmLpAS3GtK4VKELzgkeYxozcxFav+C1F7LTYTg@mail.gmail.com>
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <CAP01T76wkwaXSmLpAS3GtK4VKELzgkeYxozcxFav+C1F7LTYTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH bpf-next v6 15/17] selftests/bpf: Add tests for BPF
+ function stack arguments
+Content-Language: en-GB
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260419163435.740110-1-yonghong.song@linux.dev>
+ <20260419171509.541CBC2BCAF@smtp.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260419171509.541CBC2BCAF@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 18/4/26 19:06, Kumar Kartikeya Dwivedi wrote:
-> On Wed, 8 Apr 2026 at 16:30, Leon Hwang <hffilwlqm@gmail.com> wrote:
->>
->> On 2026/4/8 22:55, Leon Hwang wrote:
->>>
-[...]
->>>
->>> Since I'm going to add common attributes [1] support for BPF syscall,
->>> how about reporting the warnings via the common attributes? Even though,
->>> the original intent of common attributes support for BPF_LOAD was
->> BPF_LOAD -> BPF_PROG_LOAD
->>
->> Also, common attributes support for BPF_BTF_LOAD was to report logs,
->> similar to btf_log_* in union bpf_attr.
->>
->> If to report the warnings via common attributes for BPF_PROG_LOAD, we
->> should rethink the purpose of common attributes support for BPF_BTF_LOAD.
->>
->>> report the verifier log too.
->>>
->>> [1]
->> https://lore.kernel.org/bpf/20260216150445.68278-1-leon.hwang@linux.dev/
-> 
-> It can be used when present, I will switch to a warning bit in the log
-> level in the next version. But I don't think we need to rethink
-> anything. If we want warnings for other objects they can use the log
-> level's warning bit to supply those to user space as well. When you
-> add support you already have to figure out how to merge those in
-> bpf_attr and common attributes.
-> 
-Make sense.
 
-Thanks,
-Leon
+
+On 4/19/26 10:15 AM, sashiko-bot@kernel.org wrote:
+> Sashiko AI review found 3 potential issue(s):
+> - [Medium] The `test_async_cb_many` test uses an extremely short `usleep(50)` to wait for a BPF timer callback to execute, leading to potential flakiness.
+> - [Low] The block comment for `global_two_callees` incorrectly refers to the function as `bar`.
+> - [Low] The `bpf_iter_testmod_seq_next` kfunc is incorrectly declared with an `int *` return type in `stack_arg_kfunc.c`.
+> --
+>
+> commit 63c1c9ef99d02448833e84a39ecb212ccaaf5b80
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> selftests/bpf: Add tests for BPF function stack arguments
+>      
+> This commit adds selftests covering stack argument passing for both BPF-to-BPF
+> subprog calls and kfunc calls with more than 5 arguments.
+>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/stack_arg.c b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
+>> new file mode 100644
+>> index 0000000000000..d61bac33f8092
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/stack_arg.c
+> [ ... ]
+>
+>> +static void test_async_cb_many(void)
+>> +{
+>> +	struct stack_arg *skel;
+>> +
+>> +	skel = stack_arg__open();
+>> +	if (!ASSERT_OK_PTR(skel, "open"))
+>> +		return;
+>> +
+>> +	if (!skel->rodata->has_stack_arg) {
+>> +		test__skip();
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (!ASSERT_OK(stack_arg__load(skel), "load"))
+>> +		goto out;
+>> +
+>> +	run_subtest(skel->progs.test_async_cb_many_args, 0);
+>> +
+>> +	/* Wait for the timer callback to fire and verify the result.
+>> +	 * 10+20+30+40+50+60+70+80 = 360
+>> +	 */
+>> +	usleep(50);
+>> +	ASSERT_EQ(skel->bss->timer_result, 360, "timer_result");
+> Is 50 microseconds enough time to reliably wait for the timer callback to
+> execute?
+>
+> In CI environments or heavily loaded virtualization systems, might the
+> scheduling and softirq execution be delayed by more than a fraction of a
+> millisecond? If the timer does not fire in exactly that short window, the
+> test would incorrectly read a timer_result of 0 and fail.
+>
+> Would it be more robust to use a polling loop or a significantly larger
+> timeout to avoid flaky tests?
+
+I am using the same 'usleep(50)' in prog_tests/timer.c:
+
+         timer__detach(timer_skel);
+
+         usleep(50); /* 10 usecs should be enough, but give it extra */
+         /* check that timer_cb1() was executed 10+10 times */
+	...
+
+So I think 50 us should be okay.
+
+>
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testing/selftests/bpf/progs/stack_arg.c
+>> new file mode 100644
+>> index 0000000000000..8c198ee952ff4
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/stack_arg.c
+> [ ... ]
+>
+>> +/* bar calls foo1 (3 stack args) and foo2 (5 stack args).
+>> + * The outgoing stack arg area is sized for foo2 (the larger callee).
+>> + * Stores for foo1 are a subset of the area used by foo2.
+>> + * Result: foo1(1,2,3,4,5,6,7,8) + foo2(1,2,3,4,5,6,7,8,9,10) = 36 + 55 = 91
+>> + *
+>> + * Pass a-e through so the compiler can't constant-fold the stack args away.
+>> + */
+>> +__noinline int global_two_callees(int a, int b, int c, int d, int e)
+> This isn't a bug, but the comment refers to a function named bar, while the
+> function being described is actually named global_two_callees.
+
+Thanks. Will fix.
+
+>
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+>> new file mode 100644
+>> index 0000000000000..6cc404d578639
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+> [ ... ]
+>
+>> +#if defined(__TARGET_ARCH_x86) && defined(__BPF_FEATURE_STACK_ARGUMENT)
+>> +
+>> +const volatile bool has_stack_arg = true;
+>> +
+>> +struct bpf_iter_testmod_seq {
+>> +	u64 :64;
+>> +	u64 :64;
+>> +};
+>> +
+>> +extern int bpf_iter_testmod_seq_new(struct bpf_iter_testmod_seq *it, s64 value, int cnt) __ksym;
+>> +extern int *bpf_iter_testmod_seq_next(struct bpf_iter_testmod_seq *it) __ksym;
+> Does bpf_iter_testmod_seq_next() actually return an int pointer?
+
+This one
+	+extern int *bpf_iter_testmod_seq_next(struct bpf_iter_testmod_seq *it) __ksym;
+is dead code. Will remove.
+
+>
+> Looking at the corresponding kfunc definition in bpf_testmod.c, the function
+> appears to return an s64 pointer. Although this function isn't actively called
+> in this test file (which prevents a BTF verifier failure here), could the
+> mismatched return type declaration cause confusion or subtle issues in the
+> future?
+>
 
