@@ -1,100 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1993A380B
-	for <bpf@vger.kernel.org>; Mon, 20 Apr 2026 21:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83BB38229E;
+	Mon, 20 Apr 2026 21:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776720140; cv=none; b=tAkXqjepGZRLoYb4FcptdZ45qgQ+Wl5tcQ8PGb+tjLNEPGVt6mQEohZ7av/GdsfdA1ramAYCjxi2DAA1bDxmnUPg/K531qhnwq8bn8fdiaaHzgYlpV9C/oqJ1hH6CcpTOzpfSCNcFpBrIWX8GGwtsdf7KfZ7/GZc3/+47vmtv+Y=
+	t=1776720423; cv=none; b=lR5atO5eQrrxT5CXH/fW6yZ+wLgH2qz9faNDiFwXAmgUChslAtoiu0+HQpmacCORe/8YJ/9aylKcZ4zyD6SKK4V3fz9seDvEwB3S7VLAGW/kI6Lh37uwAeCc9TYsd01nplAO0adi19Qgo+HpXOF/8ZBtuGP7z2qVmMLev2ReJmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776720140; c=relaxed/simple;
-	bh=8Ip6MOhvWXUj6WLmycSlGI8h7MjEEImQac68rcbTYPU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WfUg/g4tSmwgYzeOHwm5tLhZXrGV7MsfIdcT8VcJyMt5tZV3MNFJKizREYSJVVl21Jk+MXDDWpDk9NWCM/lkPOKzK8rpYGa/z12LtoyDec8z+tK5Efb7HbuMeIN3ER0ru5MR5H0wgws8PYLQFWEHFr9eXvuQ62mogaAFDOqvwVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hBniTkz/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776720423; c=relaxed/simple;
+	bh=U/zamC7l5coah0AXiwtU750a8aLe1fvytQTEg+NxQQw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RrHS3FyDkTeFHzhxGw59RCD3bbZKEpmC+EID7WT3tvZ4q+GE7E7XAEBQyNof07XMFC/5CXSVPKg7kv/X+0uBuQXY/jm3xTzFNZvs8G62qIBdnbholSFiCXlaB2FXwcHgFk8pYvgYJcuJmud65170ur33ukXnlZxR+JPIF4uuOQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TtndzpSQ; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hBniTkz/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F26C2BCB0;
-	Mon, 20 Apr 2026 21:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776720140;
-	bh=8Ip6MOhvWXUj6WLmycSlGI8h7MjEEImQac68rcbTYPU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=hBniTkz/rGxZDYt6d1bq6rQ3O88cL3Ixc+mVd712BIaCybbNQDx3kpR+ehpQjo/xj
-	 x5n9E7tOXLLuF1454mrl1SD31uw+6RtxVqXO5WIwQjiPx4C26SKHzceWCXX2rnMTPn
-	 Z1TlR33TL1XEAzu/S+vQJe9CfIdOYPCyogejxtFfh3ovhLlzs0KRP7/XKiNF+XaP4D
-	 MeBIQRME588FiGjMQ/HbNhuzcKkMpnscebVBpR6g3Qc//1cwH2huEmKhMPFSY5wiS1
-	 ngz2agtnI1t6ZKQyyEVT4iA7dxm3vSM/bDeUaBYp2h+3gxDJNW7+8yXhW3pLReQx0S
-	 NNRwdLA2pAcYQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH AUTOSEL 7.0-5.10] bpf: Do not increment tailcall count
- when prog is NULL
-Reply-To: sashiko@lists.linux.dev
-To: "Sasha Levin" <sashal@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420132314.1023554-191-sashal@kernel.org>
-References: <20260420132314.1023554-191-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 20 Apr 2026 21:22:19 +0000
-Message-Id: <20260420212220.13F26C2BCB0@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="TtndzpSQ"
+Received: from narnia.corp.microsoft.com (unknown [40.78.12.246])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 9F26F20B6F01;
+	Mon, 20 Apr 2026 14:26:59 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9F26F20B6F01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1776720420;
+	bh=m4eJF28gnCHuiGq82w5fw+WD1bCrxt+Hhgudym7HBNo=;
+	h=From:To:Subject:Date:From;
+	b=TtndzpSQhhkxgzQBLcfRVxbLUY+wLp4iNt7LBWGJ4wOnpKw4eXBFFd8bTletZ2gpE
+	 zOFzZluFyz7HEy78cn+SFs28W2nD83ZhvveFf+aTn0ztB3njGzxd0iiWHl0NX59SY9
+	 uvzA2JuxjhTxlW8MzmKf5si1rqKfaYTI/0eKw+Es=
+From: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>,
+	"Jonathan Corbet" <corbet@lwn.net>,
+	"Paul Moore" <paul@paul-moore.com>,
+	"James Morris" <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	"Andrew Morton" <akpm@linux-foundation.org>,
+	James.Bottomley@HansenPartnership.com,
+	dhowells@redhat.com,
+	"Fan Wu" <wufan@kernel.org>,
+	"Ryan Foster" <foster.ryan.r@gmail.com>,
+	"Randy Dunlap" <rdunlap@infradead.org>,
+	linux-security-module@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	"Song Liu" <song@kernel.org>
+Subject: [PATCH v5 00/10] Reintroduce Hornet LSM
+Date: Mon, 20 Apr 2026 14:26:32 -0700
+Message-ID: <20260420212653.438685-1-bboscaccy@linux.microsoft.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Sashiko AI review found 1 potential issue(s):
-- [High] Incomplete fix creating BPF architectural divergence: the tail cal=
-l counter is still incremented before the NULL check in multiple BPF JIT im=
-plementations.
---
+This patch series introduces the next iteration of the Hornet LSM.
+Hornet’s goal is to provide a secure and extensible in-kernel
+signature verification mechanism for eBPF programs.
 
-commit df5323d5a23d7d76d6c427c88e1a292e4d37a90e
-Author: Hari Bathini <hbathini@linux.ibm.com>
+Hornet addresses concerns from users who require strict audit trails and
+verification guarantees for eBPF programs, especially in
+security-sensitive environments. Many production systems need assurance
+that only authorized, unmodified eBPF programs are loaded into the
+kernel. Hornet provides this assurance through cryptographic signature
+verification.
 
-bpf: Do not increment tailcall count when prog is NULL
+The currently accepted loader-plus-map signature verification scheme,
+mandated by Alexei and KP, is simple to implement and generally
+acceptable if users and administrators are satisfied with it. However,
+verifying both the loader and the maps offers additional benefits
+beyond verifying the loader alone:
 
-This commit updates the BPF interpreter to increment the tail call
-counter only after verifying the target program exists. This prevents
-failing tail calls from exhausting the limit.
+1. Security and Audit Integrity
 
-Link: https://lore.kernel.org/r/20260220062959.195101-1-hbathini@linux.ibm.=
-com
+A key advantage is that the LSM hook for authorizing BPF program loads
+can operate after signature verification. This ensures:
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 7b675a451ec8e..67eb12b637a5d 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2087,12 +2087,12 @@ static u64 ___bpf_prog_run(u64 *regs, const struc=
-t bpf_insn *insn)
->  		if (unlikely(tail_call_cnt >=3D MAX_TAIL_CALL_CNT))
->  			goto out;
-> =20
-> -		tail_call_cnt++;
-> -
->  		prog =3D READ_ONCE(array->ptrs[index]);
->  		if (!prog)
->  			goto out;
-> =20
-> +		tail_call_cnt++;
-> +
+* Access control decisions are based on verified signature status.
+* Accurate system state measurement and logging.
+* Log entries claiming a verified signature are truthful, avoiding
+  misleading records where only the loader was verified while the actual
+  BPF program verification occurs later without logging.
 
-Does this change introduce a semantic divergence between the BPF
-interpreter and various BPF JIT implementations?
+2. TOCTOU Attack Prevention
 
-While this updates the interpreter, multiple JIT implementations (such as
-x86-32, ARM32, s390x, and RISC-V 64) appear to still modify the tail call
-counter before performing the prog =3D=3D NULL check.
+The current map hash implementation may be vulnerable to a TOCTOU
+attack because it allows unfrozen maps to cache a previously
+calculated hash. The accepted “trusted loader” scheme cannot detect
+this and may permit loading altered maps.
 
-For example, if the JIT generated code updates the counter before the NULL
-check, and does not revert it on the fall-through path, the counter will
-remain modified.
+3. Supply Chain Integrity
 
-Will a BPF program making many failed tail calls now exhaust its 33-call
-limit when JIT-compiled on these architectures, but not when running under
-the interpreter?
+Verify that eBPF programs and their associated map data have not been
+modified since they were built and signed, in the kernel proper, may
+aid in protecting against supply chain attacks.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420132314.1023=
-554-191-sashal@kernel.org?part=3D1
+This approach addresses concerns from users who require strict audit
+trails and verification guarantees, especially in security-sensitive
+environments. Map hashes for extended verification are passed via the
+existing PKCS#7 UAPI and verified by the crypto subsystem. Hornet then
+calculates the program’s verification state.  Hornet itself does not
+enforce a policy on whether unsigned or partially signed programs
+should be rejected. It delegates that decision to downstream LSMs
+hook, making it a composable building block in a larger security
+architecture.
+
+Changes in V5:
+- Added IPE documentation
+
+Link to V4: https://lore.kernel.org/linux-security-module/20260416173500.176716-1-bboscaccy@linux.microsoft.com/
+
+Changes in V4:
+- IPE integration
+- Arbitrary keyring support
+
+Link to V3: https://lore.kernel.org/linux-security-module/20260326060655.2550595-1-bboscaccy@linux.microsoft.com/
+
+Changes in V3:
+- Updated for signed attribute patch series changes
+- Added some new result enum values
+- Minor documentation clarification
+- Misc style fixes
+- Added missing signed-off-by tags
+
+Link to V2: https://lore.kernel.org/linux-security-module/20260227233930.2418522-1-bboscaccy@linux.microsoft.com/
+
+Changes in V2:
+- Addressed possible TocTou races in hash verification
+- Improved documentation and tooling
+- Added Alexie's nack
+
+Link to RFC: https://lore.kernel.org/linux-security-module/20251211021257.1208712-1-bboscaccy@linux.microsoft.com/
+
+Blaise Boscaccy (6):
+  lsm: security: Add additional enum values for bpf integrity checks
+  security: Hornet LSM
+  hornet: Introduce gen_sig
+  hornet: Add a light skeleton data extractor scripts
+  selftests/hornet: Add a selftest for the Hornet LSM
+  ipe: Add BPF program load policy enforcement via Hornet integration
+
+James Bottomley (3):
+  crypto: pkcs7: add flag for validated trust on a signed info block
+  crypto: pkcs7: add ability to extract signed attributes by OID
+  crypto: pkcs7: add tests for pkcs7_get_authattr
+
+Paul Moore (1):
+  lsm: framework for BPF integrity verification
+
+ Documentation/admin-guide/LSM/Hornet.rst     | 321 +++++++++++++++
+ Documentation/admin-guide/LSM/index.rst      |   1 +
+ Documentation/admin-guide/LSM/ipe.rst        | 162 +++++++-
+ Documentation/security/ipe.rst               |  39 ++
+ MAINTAINERS                                  |   9 +
+ certs/system_keyring.c                       |   1 +
+ crypto/asymmetric_keys/Makefile              |   4 +-
+ crypto/asymmetric_keys/pkcs7_aa.asn1         |  18 +
+ crypto/asymmetric_keys/pkcs7_key_type.c      |  44 ++-
+ crypto/asymmetric_keys/pkcs7_parser.c        |  81 ++++
+ crypto/asymmetric_keys/pkcs7_parser.h        |   1 +
+ crypto/asymmetric_keys/pkcs7_trust.c         |   1 +
+ include/crypto/pkcs7.h                       |   4 +
+ include/linux/lsm_hook_defs.h                |   5 +
+ include/linux/oid_registry.h                 |   3 +
+ include/linux/security.h                     |  28 ++
+ include/uapi/linux/lsm.h                     |   1 +
+ scripts/Makefile                             |   1 +
+ scripts/hornet/Makefile                      |   5 +
+ scripts/hornet/extract-insn.sh               |  27 ++
+ scripts/hornet/extract-map.sh                |  27 ++
+ scripts/hornet/extract-skel.sh               |  27 ++
+ scripts/hornet/gen_sig.c                     | 392 +++++++++++++++++++
+ scripts/hornet/write-sig.sh                  |  27 ++
+ security/Kconfig                             |   3 +-
+ security/Makefile                            |   1 +
+ security/hornet/Kconfig                      |  11 +
+ security/hornet/Makefile                     |   7 +
+ security/hornet/hornet.asn1                  |  13 +
+ security/hornet/hornet_lsm.c                 | 346 ++++++++++++++++
+ security/ipe/Kconfig                         |  14 +
+ security/ipe/audit.c                         |  15 +
+ security/ipe/eval.c                          |  73 +++-
+ security/ipe/eval.h                          |   5 +
+ security/ipe/hooks.c                         |  37 ++
+ security/ipe/hooks.h                         |  11 +
+ security/ipe/ipe.c                           |   3 +
+ security/ipe/policy.h                        |  14 +
+ security/ipe/policy_parser.c                 |  27 ++
+ security/security.c                          |  75 +++-
+ tools/testing/selftests/Makefile             |   1 +
+ tools/testing/selftests/hornet/Makefile      |  63 +++
+ tools/testing/selftests/hornet/loader.c      |  21 +
+ tools/testing/selftests/hornet/trivial.bpf.c |  33 ++
+ 44 files changed, 1994 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/admin-guide/LSM/Hornet.rst
+ create mode 100644 crypto/asymmetric_keys/pkcs7_aa.asn1
+ create mode 100644 scripts/hornet/Makefile
+ create mode 100755 scripts/hornet/extract-insn.sh
+ create mode 100755 scripts/hornet/extract-map.sh
+ create mode 100755 scripts/hornet/extract-skel.sh
+ create mode 100644 scripts/hornet/gen_sig.c
+ create mode 100755 scripts/hornet/write-sig.sh
+ create mode 100644 security/hornet/Kconfig
+ create mode 100644 security/hornet/Makefile
+ create mode 100644 security/hornet/hornet.asn1
+ create mode 100644 security/hornet/hornet_lsm.c
+ create mode 100644 tools/testing/selftests/hornet/Makefile
+ create mode 100644 tools/testing/selftests/hornet/loader.c
+ create mode 100644 tools/testing/selftests/hornet/trivial.bpf.c
+
+-- 
+2.53.0
+
