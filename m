@@ -1,221 +1,139 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BE5377004
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B470937649B
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776789071; cv=none; b=F07BFC5lP/jJwE2UWTipRt5oONv9mi8hekxk23EmKxLHwLt0RneqJ4c7LqjnPFPOqd4B/9LupbP0wfPB/nyNv4CFjKBqAG/yLXJASeTLYFQqQjaOAmmCArVKZoZZSAgjgvNurBlGv/Wxu4srKRDYWrBvd8Ss0h9qke3QH1Jr3sw=
+	t=1776789191; cv=none; b=kTgJ00DcXUJAU8MePTotpmfV6q/72P22tq+wKNTKqH6WoaKmq5LgtyruzaX6OmLytV/TPeOwje/QJB7FY6iuP2Jo3QiJwijhKmmPPjRWdxieWD+fHEzEm5G0L7n0v9cVSBUU0LO2e0ihSkWXaUVWdrFZB5yBy7a33C+SppkChvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776789071; c=relaxed/simple;
-	bh=sdGOibwiTUlGb9HHFRJY6kF15dopnn55unT/vgkUwM0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VugLLIPmJPaBDElz6cot0edTh0OP0Es9bcH3wQADnOd/yQ8mSQBFtH5lDmxlxM1Mi+ljkSN+8GRgG2teHRilXNxn0jpaqpiYrUAEJpQyZSy2Y3S2MgLvpKKuz96H4KEWdCOWwP9FHNoTN/TGuIuVe4AQ8uGG4fGpByIuxoz67xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wAbIWwei; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1776789191; c=relaxed/simple;
+	bh=/DnMv5jLUQeMWhOzoJWB2OVrEz8rOyFszqWQ0ldQHWA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=b6bILszA3rABY9ufUrmviVo8cgY5Eb6OHRstoVHelJWtYpUbz8ZN4cFZj81aenqb8VGVMFO4vc5qhHB4eBiHEG7zMZ1VD0sVTRPFRB/UkkyULlBxi+rb3G5sCaR/0WKpDe1alVJdX3BeSgdUQr5QaQPPxpnrI49IZp9cIfX8lY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMIZBxFy; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wAbIWwei"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f6b984b3aso2464987b3a.3
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:31:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMIZBxFy"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-35d95017a68so2959587a91.3
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:33:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776789069; x=1777393869; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rjgkwxA0RLtfuWNBMEJF4TxxPjAXkNJh9XTaeAVjQ5Q=;
-        b=wAbIWweiU5J0kFeFtBIno1wC06uAKpVUf+IrIfjY2vLNygg9uNaYO+AFQpXSHGgYgS
-         QfZziwnQ/uZSaafDR5H7QAcl5I7DdCQ3mvkLoI/DYTRBuk9YPFGwTlBjddryxEsr7HxI
-         mEeBoVQzMCVp32QpEr1UceptJWIsCwby0Kdg8IWQXsM1evgurdg9sP8FLsq0Ux5sUn9B
-         7QQcrUBgUUPZ6xWfxj3dtTwfZbk43XUx7GCwUkvhjCtAYXxJaz+lt4AU+BOfyrLcXcf2
-         XwkwQwLF0FlSCXoJSpf21CbZGS4wx3QwuJOQGb5ZfYIxVa4NRIOYZD0y5dnJ1nQ48Vx2
-         if1w==
+        d=gmail.com; s=20251104; t=1776789190; x=1777393990; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Nj7tOO1s3hi6CyC91SIBs4RccfALj6+5qr4s1uQVfNw=;
+        b=NMIZBxFyh3+8FqBqsFNUvQwKWgO/qC2FXfR4tZc1BJUUG++FIal0em0FcBZtIPLybS
+         k1yrjDq7GZTvioF5uYsxpOKX9EbozbIZTMnARXVKRyyT0b4TivabZ35CdhqtLXyAladA
+         BZdRY4oxoi1nVjX7qtWd8wW1fxbxGaK3sU73mjtIQwGatcWbIyVkpTVFlsFSS1LK46r3
+         hUerwXoNVvMM1sEKHpdmLv7CeHAYNFjLqsHhKuvUYPlM0X5Uo91MxzrVM/FqsvLqzT6r
+         FxlThh6L9YOfWqg+wHdMiBZFgcrI032atSNE3Nbvo6qcZwxCsmi0A1snpA2D/6Jx+kcl
+         Alqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776789069; x=1777393869;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rjgkwxA0RLtfuWNBMEJF4TxxPjAXkNJh9XTaeAVjQ5Q=;
-        b=eXdFr4dP856LKB2+5PVj7Ej4Yc12eOMcX0SwWpR//5eCi3Y9w/Ljzf8EqeJtfjF7T7
-         5gvtigTidPm5D9nC2G4RvR3NLCTUKJeSpepfWu2CTxY776xg+ZxacJ8Ce/Z/Ha+4zEWe
-         6RcSCUq73pHPuAjz0veXiljaR31pDoZdzL+gg58W3qw0wIWqqUAvthEba75KEZfbMhTj
-         oaqaLgtW+XJRaw4Iro18kCXwjT5zvwLAlPE0rGEANhjL7HX+ME9XJg9yIxERIBxm6PPK
-         o2LGeZcFreqqYfU1OVZGMgNKOXMViqNKI680Am20jPpCb6zvs9pjQ+rr63pPcUzfo0wF
-         ME3A==
-X-Forwarded-Encrypted: i=1; AFNElJ+sFkKQH3scuNDOebDEklDziMUt8pLbRMuOvwo8i8RtAYysY7xUFzmuEKZGA3dC6OFQ46Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzgSQg3a4b8sCgthyL7yLVnh0VMgF37RAvz4GytpQRuxDdcZpi5
-	CKgVDCJedSSB8m3pE0WBiUb/VV0WqhHGCRhx/VCbYH676+YsQGW6ajfx9enTrX3OPHKUQl0Yl8G
-	Q6MJiSQ==
-X-Received: from pfbhk7.prod.google.com ([2002:a05:6a00:8787:b0:82f:f2d:5b4d])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2d8d:b0:82c:1cd0:2f5e
- with SMTP id d2e1a72fcca58-82f8c96eb30mr20038023b3a.44.1776789068848; Tue, 21
- Apr 2026 09:31:08 -0700 (PDT)
-Date: Tue, 21 Apr 2026 09:31:07 -0700
-In-Reply-To: <20260410151746.61150-11-kalyazin@amazon.com>
+        d=1e100.net; s=20251104; t=1776789190; x=1777393990;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nj7tOO1s3hi6CyC91SIBs4RccfALj6+5qr4s1uQVfNw=;
+        b=VsviLeknxn3DAXZmBnPB1PzLnnfH5xcye4OiXKM7ERTp/lgJG0dc37YuRXMtL/On26
+         YLH0apo8fzvQxMZaewEcV9HL9CEgaejAQhl+tK0OsfSiLpmWFO0oNBtBDN74haaRp/ZO
+         VzwepfO85SS9RR6Drb/w61MNTRO9DKQ9vPqunuiyZFyU3vSlocBptUI05XmnBu94MltD
+         8l4EFkIjlqa0MyAV9hetpPLiXqllR+x1K/1FrDtQ29nblEcT74YaLlA0peNyifiisr8L
+         h/G4pJ/h0JzAncpYYbW9H83i0wMhSvfdKAla1WQjrTkXTHb29f4QB9aRFUGeUEWZ9she
+         b76w==
+X-Forwarded-Encrypted: i=1; AFNElJ8yH6AxPsoU+5ZkqUyv0+451f5xHl4lAWjgfedYwVE/xe1Jt8JWjOsIz4OTwbi+Nq6hf7g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUu4R7wGTRWjK3EoFbyrzCzt05FyzSTPxGWlnvEyNCzVC8mGQJ
+	WK8KRLykko8XjZkX7KNQWCoHeGwk09gTz3v8bI/CCphpbJWvJcDFS8Zu
+X-Gm-Gg: AeBDieuOOAxb63lvzM5hj2nPq2RWzqkdHbZFnmgqxHuHIjOIiWn+s1Xt3NXZI5akxs7
+	uKW2k8yH6yRbLV+0VCxWYCNHQT3I2DIBrCmNpTgI/SBQbymotlzaU52r4H/GRlUBG4IDo8e/PKC
+	ZrocWSK8DcWIEduKUQjEdVnNur7Y8gN5ZAFCA543ictqcdAHfzxwNXEj+SWJITc+xvYSWj8Vwad
+	vGgit3Z1NxMkNbi/OSv9+2N0yuMMoYv69pZxuymKtAkjHwXtA/B/gVE5k+4sl+l3ux2T3d8Q74J
+	710a1Zr10tW7MSOK7xJQGzyiiBu1bjZW+J9+gWyes48pGg1pRF6g8/BPhg8umkiqB4Cy94tBYsb
+	Wjrpy2KJhVPMTMLFc7NCIe9OJkx/wcCfqmsOuHPY2VrmQhYDX2/HDrEHP3pdBIGR1cWmlr97wlr
+	jex8Fxf8K3OvsJkZmjDqkjzFKYYFZ/GNrhGvuKpi8Uwv5l8puMe58U8eTpwuHGIUY=
+X-Received: by 2002:a17:90b:384e:b0:35b:952c:43b9 with SMTP id 98e67ed59e1d1-3614040b2c7mr19596855a91.10.1776789189966;
+        Tue, 21 Apr 2026 09:33:09 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-361410cc196sm14593972a91.17.2026.04.21.09.33.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 09:33:09 -0700 (PDT)
+Message-ID: <b9b278f28ff94dc3207624d304be1080584603a7.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] bpf: replace min/max fields with
+ struct cnum{32,64}
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
+	ast@kernel.org, andrii@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
+	yonghong.song@linux.dev, shung-hsi.yu@suse.com, paul.chaignon@gmail.com, 
+	harishankar.vishwanathan@gmail.com
+Date: Tue, 21 Apr 2026 09:33:06 -0700
+In-Reply-To: <DHYYQ6F0ZVAB.1FNAHDCF3WHKX@gmail.com>
+References: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
+	 <DHYYQ6F0ZVAB.1FNAHDCF3WHKX@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260410151746.61150-1-kalyazin@amazon.com> <20260410151746.61150-11-kalyazin@amazon.com>
-Message-ID: <aeemS2wm38Cm4qAf@google.com>
-Subject: Re: [PATCH v12 10/16] KVM: guest_memfd: Add flag to remove from
- direct map
-From: Sean Christopherson <seanjc@google.com>
-To: Nikita Kalyazin <kalyazin@amazon.co.uk>
-Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "kernel@xen0n.name" <kernel@xen0n.name>, 
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
-	"corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>, 
-	"joey.gouly@arm.com" <joey.gouly@arm.com>, "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
-	"will@kernel.org" <will@kernel.org>, "tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>, 
-	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, 
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>, 
-	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>, 
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>, 
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@kernel.org" <vbabka@kernel.org>, 
-	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, 
-	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
-	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>, 
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
-	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>, 
-	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
-	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>, 
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>, 
-	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, 
-	"coxu@redhat.com" <coxu@redhat.com>, "ackerleytng@google.com" <ackerleytng@google.com>, 
-	"yosry@kernel.org" <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>, 
-	"maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com" <tabba@google.com>, 
-	"prsampat@amd.com" <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>, 
-	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>, 
-	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, 
-	"alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "dev.jain@arm.com" <dev.jain@arm.com>, 
-	"gor@linux.ibm.com" <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>, 
-	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>, 
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
-	"thuth@redhat.com" <thuth@redhat.com>, 
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, 
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com" <urezki@gmail.com>, 
-	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>, 
-	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>, 
-	"jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>, 
-	"pavel@kernel.org" <pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>, 
-	"yangyicong@hisilicon.com" <yangyicong@hisilicon.com>, "vannapurve@google.com" <vannapurve@google.com>, 
-	"jackmanb@google.com" <jackmanb@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>, 
-	Jack Thomson <jackabt@amazon.co.uk>, Takahiro Itazuri <itazur@amazon.co.uk>, 
-	Derek Manwaring <derekmn@amazon.com>, Nikita Kalyazin <nikita.kalyazin@linux.dev>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 
-On Fri, Apr 10, 2026, Nikita Kalyazin wrote:
-> From: Patrick Roy <patrick.roy@linux.dev>
-> 
-> Add GUEST_MEMFD_FLAG_NO_DIRECT_MAP flag for KVM_CREATE_GUEST_MEMFD()
-> ioctl. When set, guest_memfd folios will be removed from the direct map
-> after preparation, with direct map entries only restored when the folios
-> are freed.
-> 
-> To ensure these folios do not end up in places where the kernel cannot
-> deal with them, set AS_NO_DIRECT_MAP on the guest_memfd's struct
-> address_space if GUEST_MEMFD_FLAG_NO_DIRECT_MAP is requested.
-> 
-> Note that this flag causes removal of direct map entries for all
-> guest_memfd folios independent of whether they are "shared" or "private"
-> (although current guest_memfd only supports either all folios in the
-> "shared" state, or all folios in the "private" state if
-> GUEST_MEMFD_FLAG_MMAP is not set). The usecase for removing direct map
-> entries of also the shared parts of guest_memfd are a special type of
-> non-CoCo VM where, host userspace is trusted to have access to all of
-> guest memory, but where Spectre-style transient execution attacks
-> through the host kernel's direct map should still be mitigated.  In this
-> setup, KVM retains access to guest memory via userspace mappings of
-> guest_memfd, which are reflected back into KVM's memslots via
-> userspace_addr. This is needed for things like MMIO emulation on x86_64
-> to work.
-> 
-> Direct map entries are zapped right before guest or userspace mappings
-> of gmem folios are set up, e.g. in kvm_gmem_fault_user_mapping() or
-> kvm_gmem_get_pfn() [called from the KVM MMU code].
+On Tue, 2026-04-21 at 09:10 -0700, Alexei Starovoitov wrote:
+> On Tue Apr 21, 2026 at 3:28 AM PDT, Eduard Zingerman wrote:
+> >=20
+> > Debug metrics
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >=20
+> > To understand the practical impact of the precision trade-offs,
+> > two debug counters were added (here [3]):
+> >=20
+> > - isec_overapprox: counts how many times cnum_intersect() in
+> >   conditional branch refinement had to collapse two disjoint arcs into
+> >   one, losing precision that the signed/unsigned pair could represent.
+> >=20
+> > - crossing_poles: counts how many times an ALU operation produces a
+> >   cnum that crosses both the unsigned (0/U_MAX) and signed
+> >   (S_MAX/S_MIN) boundaries simultaneously. Such cnums cannot be
+> >   represented as a pair of signed and unsigned ranges.
+> >=20
+> > Across 6683 programs:
+> > - crossing_poles fires 551K times for 21% of programs.
+> > - isec_overapprox fires 119K times for 12% of programs,
+>=20
+> so cnums win 551k times and lose 119k ?
 
-...
+Yes
 
-> +#define KVM_GMEM_FOLIO_NO_DIRECT_MAP BIT(0)
-> +
-> +static bool kvm_gmem_folio_no_direct_map(struct folio *folio)
-> +{
-> +	return ((u64)folio->private) & KVM_GMEM_FOLIO_NO_DIRECT_MAP;
-> +}
-> +
-> +static int kvm_gmem_folio_zap_direct_map(struct folio *folio)
-> +{
-> +	int r = 0;
-> +
-> +	VM_WARN_ON_FOLIO(!folio_test_locked(folio), folio);
-> +
-> +	if (WARN_ON_ONCE(!(GMEM_I(folio_inode(folio))->flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP)))
-> +		return -EINVAL;
-> +
-> +	if (kvm_gmem_folio_no_direct_map(folio))
-> +		goto out;
-> +
-> +	r = folio_zap_direct_map(folio);
-> +	if (!r)
-> +		folio->private = (void *)((u64)folio->private | KVM_GMEM_FOLIO_NO_DIRECT_MAP);
-> +
-> +out:
-> +	return r;
-> +}
-> +
-> +static void kvm_gmem_folio_restore_direct_map(struct folio *folio)
-> +{
-> +	folio_restore_direct_map(folio);
-> +	folio->private = (void *)((u64)folio->private & ~KVM_GMEM_FOLIO_NO_DIRECT_MAP);
-> +}
+> >   most programs have only 1-5 hits. The bulk comes from a few large
+> >   sched_ext and profiling programs.
+>=20
+> and most losses are in sched_ext, yet overall it's a win:
+>=20
+>  scx_rusty.bpf.o  rusty_enqueue         39842      22053  -17789 (-44.65%=
+)
+>  scx_rusty.bpf.o  rusty_stopping        37738      19949  -17789 (-47.14%=
+)
+>  scx_wd40.bpf.o   wd40_stopping         37729      19880  -17849 (-47.31%=
+)
 
-Making guest_memfd responsible for zapping and restoring the direct map on a per-
-folio basis feels wrong given the addition of AS_NO_DIRECT_MAP.  I especially don't
-like that the "rules" for when an AS_NO_DIRECT_MAP folio has a direct map will vary
-based on the owner, and even within an owner (e.g. guest_memfd) will be ad hoc.
+Yes
 
-E.g. as per the series to add guest_memfd write() support[*]:
+> > - 801 programs have crossing_poles > 0 with isec_overapprox =3D 0.
+> > - 202 programs have isec_overapprox > 0 with crossing_poles =3D 0.
+>=20
+> similar wins vs losses story ?
 
-  When direct map removal is implemented [2]
-   - write() will not be allowed to access pages that have already
-     been removed from direct map
-   - on completion, write() will remove the populated pages from
-     direct map
+Yes, is similar to the ratio for win/loss.
+But it was counted when general win/loss summary was computed.
+I guess, the main takeaway is that crossing_poles happens more often
+than isec_overapprox and it can lead to some overall performance wins.
+I thought about forking additional states if an over-approximation
+is about to happen, but didn't to the experiment.
 
-That's pretty gross ABI, because with KVM_GMEM_FOLIO_NO_DIRECT_MAP, userspace can
-write() exactly once.  To re-write memory, I assume userspace would need to do a
-PUNCH_HOLE or truncate.
-
-What's preventing us from handling this automagically in e.g. filemap_add_folio()
-and filemap_remove_folio()?  Then the usage rules are pretty straightforward: the
-kernel must *always* assume the direct map is invalid for folios from
-AS_NO_DIRECT_MAP mappings.
-
-Then if KVM needs to utilize a kernel mapping, e.g. in kvm_gmem_populate(), KVM
-could use dedicated variants of kmap_local_xxx() to deal with a local mapping for
-a folio/page without a direct map.  Or, KVM could simply disallow the specific
-sequence that would require KVM to do the memcpy (I'm pretty sure we can do that
-with in-place shared=>private conversion support).
-
-I realize that could throw a big wrench into write() performance, but IMO, before
-merging either series, we need a complete story for exactly how this will all fit
-together, in a maintainable fashion and with sane ABI.
-
-[*] https://lore.kernel.org/all/20251114151828.98165-1-kalyazin@amazon.com
+>=20
+> I think even without wins we have to adopt cnum-s mainly for memory
+> savings. Once we move to model where do_check_insn() is a transfer
+> function the memory savings will become more important.
