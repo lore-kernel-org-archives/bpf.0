@@ -1,122 +1,188 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30EF3845A7;
-	Tue, 21 Apr 2026 07:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4700C39446D;
+	Tue, 21 Apr 2026 08:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776755717; cv=none; b=bS03R5X375pYg5eEKww0z824rSfYHK+Fzu8zpt8DxRvYEOaAnX/6tjis1aJ+dUvvp/HkR4f85tDl+fOqShgnSBKsn3u+1TQgZSH0zVjf/6D+YjET87BthtdsqVMReSa/YfAqdlPjMM3pTOJlzujWyvnlUu/NCBp4H8WEa87jL8Q=
+	t=1776760129; cv=none; b=APTk4dhRcSn+g44bSZpnqWr3tgqRWSQ+JCqnASg/Eqklgm8+GoraWxsD1YIZUjESYBXQHPdiNIYZBoGYKHaDKuVIImMgdXfbYa3kdA5jOp4AHPNzUA9JDmpS+Xx1elgeH+ZXYy1BXD5d6lAHGR8WHeXy2ab1IpX79+917jWCXN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776755717; c=relaxed/simple;
-	bh=1NNOk+eJmvh1fUcjXPKrED58fI60eQJmGrCvZy20t20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NiF2w46LCh2EjcmdIykShgNVly0ScuztrnFzd+0n/5Gq2KNYMN2+A8gc6q43iaQGnAx17CQwZkTWKWQS3LsOUQFUh7XWEQpwAsMakfWNjMMsHSmPk/BVBP58DGEOl/Rg1GGSNCuWABFdxCbWcDGpbqwehwkbWv0vICQvtCoQL8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=NWOrOna/; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1776760129; c=relaxed/simple;
+	bh=0kkbFYs28tq82k7Xb8Kxwalq0Tlu7xnGoxTLb0ZTNeo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e6pdi9H2342ossCkvbIumzqXb/SEhBn3zG9Vu0gwEa99xXIiaCIAk74X6kRtkcViPzvQz8Q+75DvFB97y6vOPC/xQXDK0IlgzLPkl7pltgob3tNeDz086bFf17uOsEIMyyQ4VLfwEMYxSQIE0+xARNCsRNcmwglgB4DphjnNgPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=b/enU9GW; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="NWOrOna/"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D75825E0;
-	Tue, 21 Apr 2026 00:15:09 -0700 (PDT)
-Received: from arm.com (unknown [10.57.89.2])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AC763F641;
-	Tue, 21 Apr 2026 00:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1776755714; bh=1NNOk+eJmvh1fUcjXPKrED58fI60eQJmGrCvZy20t20=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NWOrOna/dqHHHBSoqj2cEZEw0sLpi1/1pm0lCfVz8K6R2FiWuRNyoI7Z20V4DhUuF
-	 ympOETtLPJZy5MwKNn7U8N/X6X/httaAaprbWCkpbjb5xPt9BX7gdKminZXWiXFKeY
-	 CkVLJXELaKau+8XS2XwBwOafpy1r0idm19UWq/Gs=
-Date: Tue, 21 Apr 2026 08:15:07 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: "Okanovic, Haris" <harisokn@amazon.com>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"xueshuai@linux.alibaba.com" <xueshuai@linux.alibaba.com>,
-	"david.laight.linux@gmail.com" <david.laight.linux@gmail.com>,
-	"boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-	"memxor@gmail.com" <memxor@gmail.com>,
-	"ashok.bhat@arm.com" <ashok.bhat@arm.com>,
-	"zhenglifeng1@huawei.com" <zhenglifeng1@huawei.com>,
-	"konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-	"cl@gentwo.org" <cl@gentwo.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"rdunlap@infradead.org" <rdunlap@infradead.org>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"arnd@arndb.de" <arnd@arndb.de>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"will@kernel.org" <will@kernel.org>,
-	"mark.rutland@arm.com" <mark.rutland@arm.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v11 12/14] cpuidle/poll_state: Wait for need-resched via
- tif_need_resched_relaxed_wait()
-Message-ID: <aecj-8In0A-G9OGN@arm.com>
-References: <20260408122538.3610871-1-ankur.a.arora@oracle.com>
- <20260408122538.3610871-13-ankur.a.arora@oracle.com>
- <a374b23f8b03f850a874d46bc78411fb99483ca2.camel@amazon.com>
- <87mryxh67j.fsf@oracle.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="b/enU9GW"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63KJgnN12037786;
+	Tue, 21 Apr 2026 08:27:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=S37y6H
+	E7oOJ4CNhNQJ8fCZpfyA4jum10NN4frBS0PCM=; b=b/enU9GW2mN3NHfq5I40+J
+	yH8Jqw9uJBlV4dTdBU7tcEgO6iup7Q3QE5YY5sfaI+A0j/ASnR45eDJoFDHyoiVJ
+	CjZajRXWfCd4u5PBKOn1zW/Sl+MbEG1ilAOecqGYpk08gK4DoTblfrFWCitxmyUL
+	Bs9sP1rN6/dFGzbTuXiN3A1W42+bWiH6qlwEt9ranzl6TdIDloWUM+kds60UTEli
+	jAim5bX5ak2cxyJpvGJKEkz/yBQQUVSxf0cQuvcHOLD1zk5sXpFbISeBlNRSuAeC
+	wOuUTrIqZqYGhtEenYDt4nMdQRBvs9T3yqcnIbcG4rXcPAnVHZGLgxzASX8QYhvQ
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dm2h9jnv7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Apr 2026 08:27:53 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63L8KFKo008086;
+	Tue, 21 Apr 2026 08:27:52 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dmn9jyxwr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 21 Apr 2026 08:27:52 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63L8Rl2p12255652
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 21 Apr 2026 08:27:47 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A135C20043;
+	Tue, 21 Apr 2026 08:27:47 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F358F20040;
+	Tue, 21 Apr 2026 08:27:45 +0000 (GMT)
+Received: from [9.52.200.195] (unknown [9.52.200.195])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 21 Apr 2026 08:27:45 +0000 (GMT)
+Message-ID: <9115d2bc-781b-4e5f-9772-c0ebeecac91b@linux.ibm.com>
+Date: Tue, 21 Apr 2026 10:27:45 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mryxh67j.fsf@oracle.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 04/18] unwind_user/sframe: Add support for reading
+ .sframe contents
+To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
+        Steven Rostedt <rostedt@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Michal Hocko
+ <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Indu Bhagat <ibhagatgnu@gmail.com>
+References: <20260127150554.2760964-1-jremus@linux.ibm.com>
+ <20260127150554.2760964-5-jremus@linux.ibm.com>
+Content-Language: en-US
+From: Jens Remus <jremus@linux.ibm.com>
+Organization: IBM Deutschland Research & Development GmbH
+In-Reply-To: <20260127150554.2760964-5-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: 1goWuCKfC-7KiyC8K84-VTn1qdBVnTzk
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIxMDA4MCBTYWx0ZWRfXx0veQ28IaQW6
+ fPpGKE4AGs52FLXRq6Os3Xi7WV4PA62uhAW5W5FYHNjTyGzvxoBYcO+upsEji4XkUq45iwHMnPa
+ 5uXe82pmmIHwh8j+XiOtB3QJgqbgEAJ3/nZGi3mxK1KJ8xn//G3zAIbnMl7vegYyhLS6kqtnFKl
+ UU2LTeYDnNT9Ug9l0P9gDNLYsSWZdKb/n/eZpr/dZGX/UWb9W7Iw7+6d+M3hOlEbUTgFoPPTf/2
+ FrAHbNm5p95qGcAThxOl52GrNE+iDowxuLDF6IRTKCHY2sv+z/Zumc5muCysXEGiyY2cVHjB199
+ jr78obbMbd8xZJFoIlqxqqucb3hiNVm6TM/4K4Nc3rhgwrnMGBZ8FwBTnptCyruvZ4upXzRvruZ
+ kztMNtG3p4Wrl882vpsH1sm+AsvYQMTYbE4Y8O0wTJn8ajhxRFAYSvMhcqqUW+7D4yplyA5jpbq
+ mezHHgL1OpRdsRhZwTA==
+X-Authority-Analysis: v=2.4 cv=XLYAjwhE c=1 sm=1 tr=0 ts=69e7350a cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=rIsWgEjAf_fsY0NmbdQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: GDOmWqtYOiKgBotIL32-m-aTBWQC6JcH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-21_01,2026-04-20_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 bulkscore=0 impostorscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604070000
+ definitions=main-2604210080
 
-On Mon, Apr 20, 2026 at 10:50:08AM -0700, Ankur Arora wrote:
-> Okanovic, Haris <harisokn@amazon.com> writes:
-> > On Wed, 2026-04-08 at 17:55 +0530, Ankur Arora wrote:
-> >> The inner loop in poll_idle() polls over the thread_info flags,
-> >> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
-> >> exits once the condition is met, or if the poll time limit has
-> >> been exceeded.
-> >>
-> >> To minimize the number of instructions executed in each iteration,
-> >> the time check is rate-limited. In addition, each loop iteration
-> >> executes cpu_relax() which on certain platforms provides a hint to
-> >> the pipeline that the loop busy-waits, allowing the processor to
-> >> reduce power consumption.
-> >>
-> >> Switch over to tif_need_resched_relaxed_wait() instead, since that
-> >> provides exactly that.
-> >>
-> >> However, since we want to minimize power consumption in idle, building
-> >> of cpuidle/poll_state.c continues to depend on CONFIG_ARCH_HAS_CPU_RELAX
-> >> as that serves as an indicator that the platform supports an optimized
-> >> version of tif_need_resched_relaxed_wait() (via
-> >> smp_cond_load_acquire_timeout()).
-> >>
-> >> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> Cc: linux-pm@vger.kernel.org
-> >> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-> >> Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
-> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-[...]
-> > Tested atop latest mainline d60bc1401 with the rest of your haltpoll
-> > changes from separate thread: ~10% improvement in `perf sched bench
-> > pipe` micro and ~4-6% throughput improvements in mysql, postgresql,
-> > cassandra, and memcached in under-loaded configurations. Tested on
-> > AWS Graviton3 and Graviton4, ARM Neoverse V1 and V2 cores
-> > respectively.
-> >
-> > I hope this series can merge soon. It's been stuck in review for more
-> > than 2 years.
-> >
-> > Tested-by: Haris Okanovic <harisokn@amazon.com>
+On 1/27/2026 4:05 PM, Jens Remus wrote:
+> From: Josh Poimboeuf <jpoimboe@kernel.org>
 > 
-> Thanks Haris. Yeah, I don't think there are any open issues left on
-> this.
+> In preparation for using sframe to unwind user space stacks, add an
+> sframe_find() interface for finding the sframe information associated
+> with a given text address.
+> 
+> For performance, use user_read_access_begin() and the corresponding
+> unsafe_*() accessors.  Note that use of pr_debug() in uaccess-enabled
+> regions would break noinstr validation, so there aren't any debug
+> messages yet.  That will be added in a subsequent commit.
+> 
+> Link: https://lore.kernel.org/all/77c0d1ec143bf2a53d66c4ecb190e7e0a576fbfd.1737511963.git.jpoimboe@kernel.org/
+> Link: https://lore.kernel.org/all/b35ca3a3-8de5-4d32-8d30-d4e562f6b0de@linux.ibm.com/
+> 
+> [ Jens Remus: Add initial support for SFrame V3 (limited to regular
+> FDEs).  Add support for PC-relative FDE function start offset.  Simplify
+> logic by using an internal FDE representation.  Rename struct sframe_fre
+> to sframe_fre_internal to align with struct sframe_fde_internal.
+> Cleanup includes.  Fix checkpatch errors "spaces required around that
+> ':'". ]
 
-I agree, though an ack from the atomic infrastructure people on the
-generic bits would be nice.
+> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
 
+> +static __always_inline int __read_fde(struct sframe_section *sec,
+> +				      unsigned int fde_num,
+> +				      struct sframe_fde_internal *fde)
+> +{
+> +	unsigned long fde_addr, fda_addr, func_addr;
+> +	struct sframe_fde_v3 _fde;
+> +	struct sframe_fda_v3 _fda;
+> +
+> +	fde_addr = sec->fdes_start + (fde_num * sizeof(struct sframe_fde_v3));
+> +	unsafe_copy_from_user(&_fde, (void __user *)fde_addr,
+> +			      sizeof(struct sframe_fde_v3), Efault);
+> +
+> +	func_addr = fde_addr + _fde.func_start_off;
+> +	if (func_addr < sec->text_start || func_addr > sec->text_end)
+
+sec->text_end points after the last byte of the .text section.
+Therefore the check for whether FDE function start address is within the
+section must be:
+
+	if (func_addr < sec->text_start || func_addr >= sec->text_end)
+
+> +		return -EINVAL;
+
+Regards,
+Jens
 -- 
-Catalin
+Jens Remus
+Linux on Z Development (D3303)
+jremus@de.ibm.com / jremus@linux.ibm.com
+
+IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
+IBM Data Privacy Statement: https://www.ibm.com/privacy/
+
