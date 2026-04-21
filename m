@@ -1,102 +1,102 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE7E3DC4A6;
-	Tue, 21 Apr 2026 18:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E2435972
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 19:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776796805; cv=none; b=UrcuqsjdBVeO8T/XUxcc6U2P48E2GgkK7WD/BaeqaF4tSdQsrHA3k10lkng0XCvgWTThwhNczqgYYcDebZnsZ+spKeJ4BkQOGBCaBD4I4UuVcj32qcEFowSqV2Rk1Gjju7r0s0fXXO13YlNcsoJVKvrsQM0KzJl7XHA7y38MKIU=
+	t=1776798189; cv=none; b=WbYCuRA1bqesdZ+LRAdyAOQP1vHT6yuLZuc9rcweqwHP60BgAxmsfxxWM03M8TBEOsaYJllkqHmIPp/GDUsDoHhaEOxDeA1Wtwn7jpWegFLwx6g+Ht4Oe3mVhUTKZOsLOwdTI89+dPqyb/0eNo6CDsvoCHef9C5siRzt5KEl7i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776796805; c=relaxed/simple;
-	bh=hR9w0ZwRSBV8FS5s0cQgmLvMB6qT8ow21OS/g1uvucE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
-	 References:In-Reply-To; b=X3mYkk4MVKmcCsYMuHbGc99xC5kIAczTMMhoex28NqcbDDcqft8lNrvTb5fT6Q0i0eHiLDH05g00DKh53iG0Od6yD+WdEJwDLS8rX/ki+MEHOY+sQ36wLQRkQZBxoN8hRDyU0ZKTzcqkIan6bAni+Q8dbJRoNIF1nlqKHQ07aW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=W03jPU6v; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1776798189; c=relaxed/simple;
+	bh=Nrkhe8S7dqRhrunkbA2Vb/R9quyEaV9FLxaSDCxCgik=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Pwh+g5/GKl3Z2PH8PUx7x/8sORo7N+5xObWD28dhuC0N2DOu9/Nr7P0sQlWQ+josBRTQPr0Y6+DlLqlvh80cake1PXtiTtKcox861ToxoIrFkLLnekkaocD1CHE2TrgDCqJXyB4dbI+b2wnZVJNU2XDNb6aF/K4i+ttHkmuFpHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=egBwByyG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="W03jPU6v"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id A77C0C5C9B3;
-	Tue, 21 Apr 2026 18:40:39 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 22B3A600D2;
-	Tue, 21 Apr 2026 18:39:59 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 49E101046085F;
-	Tue, 21 Apr 2026 20:39:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776796797; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=hR9w0ZwRSBV8FS5s0cQgmLvMB6qT8ow21OS/g1uvucE=;
-	b=W03jPU6veJWiofjBlPVaRXLhUhjBDldWhVhcmR/qtoJMPaKhVTZBr7nBu/8zy5ZjXP5iHa
-	eBnJWzW6Vne/bCVjybEsmqzGpUnHL5HkXz90OMj7J5FLLUtHIYU1Fu162hPj5OHqQh6Vyw
-	58MU4vG2k3lYm8XjXkYNSmFBDDhiAd2ij2uiLivBUoUAzTBYDbuyjlbSCYfSKW4AogSOfi
-	u7KtIy+AuZmtz2QJRc7wsLlGlUkUXduxKSCGVAqghowRqzkBjTF9bKMHIQu4bk3lIf8RJ/
-	lnE+WO6lXkIiU4pzCuBrCrHTp1StiohZ6MH3FZ9TRy+rDTZFd1SUw2jCNsBvmA==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="egBwByyG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AD6C2BCB0;
+	Tue, 21 Apr 2026 19:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776798189;
+	bh=Nrkhe8S7dqRhrunkbA2Vb/R9quyEaV9FLxaSDCxCgik=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=egBwByyG/SmwfInZ0xNt4LVqSJO87A0WYww88hoZ/lKoVOVef8aK349fF9ijqIB6J
+	 FfAsVZrxMDYKAxK9YVtX8WNHuh9E/W4RcwxnqgGirqrbFRNaTpm7bA+uDMYDMyrkUm
+	 lBM0106QdKDBLf8YfsxcSSU5/XYv+ASN4rhbKPa65eINmaRD+FAprTDS02N5V3m3Gm
+	 9HVdcGDRZVXP1h4FQTbeBHdJaoXErcV41ZkI2JUjbzyetDzh11aUBsckoSSijBqKto
+	 cFXa4hPF3wF8vQFeKZfY/HwV5RIbT8cDXoYtRJxpWJWwC8ZiBA8Q/MPIXhNclQ/wjQ
+	 38eKupqZt4UWg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 5.10.y] bpf, sockmap: Fix an infinite loop error when
+ len is 0 in tcp_bpf_recvmsg_parser()
+Reply-To: sashiko@lists.linux.dev
+To: "Vasiliy Kovalev" <kovalev@altlinux.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260421132839.38703-1-kovalev@altlinux.org>
+References: <20260421132839.38703-1-kovalev@altlinux.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 21 Apr 2026 19:03:07 +0000
+Message-Id: <20260421190309.22AD6C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 21 Apr 2026 20:39:50 +0200
-Message-Id: <DHZ1W95EQ4NC.2U9U2Z5YLCXWY@bootlin.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Paul Chaignon" <paul.chaignon@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: drop xdping tool
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "David S.
- Miller" <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Jesper
- Dangaard Brouer" <hawk@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>,
- <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <linux-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <netdev@vger.kernel.org>, "Alan Maguire" <alan.maguire@oracle.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260417-xdping-v1-1-9b0ce0e7adf8@bootlin.com>
- <aefAHLdVZaOmf1Os@mail.gmail.com>
-In-Reply-To: <aefAHLdVZaOmf1Os@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Paul,
-thanks for the feedback.
+Sashiko AI review found 1 potential issue(s):
+- [High] Unconditional early return for `len =3D=3D 0` in `tcp_bpf_recvmsg(=
+)` breaks UAPI semantics by masking socket errors, returning 0 instead of `=
+-EAGAIN` for non-blocking sockets, and bypassing state checks.
+--
 
-On Tue Apr 21, 2026 at 8:21 PM CEST, Paul Chaignon wrote:
-> On Fri, Apr 17, 2026 at 05:33:02PM +0200, Alexis Lothor=C3=A9 (eBPF Found=
-ation) wrote:
+commit 17cc1ee5a157715faa482ac2a4f167f9022cb333
+Author: Liu Jian <liujian56@huawei.com>
 
-[...]
+bpf, sockmap: Fix an infinite loop error when len is 0 in tcp_bpf_recvmsg_p=
+arser()
 
->> Drop test_xdping.sh and the corresponding xdping.c userspace part. Keep
->> the ebpf part (xdping_kern.c), as it is used by another test integrated
->> in test_progs (btf_dump)
->
-> The xdping_kern object file is just used in bpf_dump to check we can
-> parse the license as expected. You can replace that by any other test
-> with a GPL license (ex., btf_type_tag_percpu.bpf.o) and remove
-> xdping_kern.c.
+This commit addresses a soft lockup issue where a 0-length recvmsg causes
+an infinite loop in tcp_bpf_recvmsg_parser(). It fixes the issue by returni=
+ng
+0 early when the length is 0.
 
-Indeed. I'll let a bit of time in case anyone finally advocates to make
-xdping stay, otherwise I'll send a v2 making the btf_dump test use
-another prog meant to stay, so that I can also drop the xdping_kern
-prog.
+Link: https://lore.kernel.org/bpf/20230303080946.1146638-1-liujian56@huawei=
+.com
 
-Thanks,
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -277,6 +277,9 @@ static int tcp_bpf_recvmsg(struct sock *sk, struct ms=
+ghdr *msg, size_t len,
+>  	if (unlikely(flags & MSG_ERRQUEUE))
+>  		return inet_recv_error(sk, msg, len, addr_len);
+> =20
+> +	if (!len)
+> +		return 0;
 
-Alexis
+Does this unconditional early return bypass necessary socket state checks?
+
+In the standard Linux TCP implementation, a 0-length receive is not an
+immediate no-op. For instance, if the socket is non-blocking and empty,
+tcp_recvmsg() normally returns -EAGAIN. If the socket has a pending error,
+it returns that error, and if the socket is in TCP_LISTEN, it returns
+-ENOTCONN.
+
+By unconditionally returning 0 here, a non-blocking recv(0) on an empty
+socket will return 0 instead of -EAGAIN. Since a 0 return value typically
+indicates EOF (connection closed) to userspace applications, could this
+cause applications to incorrectly assume the connection was closed and
+drop it?
+
+Would it be safer to delegate 0-length reads to the standard TCP
+implementation by returning tcp_recvmsg() here instead, ensuring that
+the existing UAPI error semantics are preserved?
+
+> +
+>  	psock =3D sk_psock_get(sk);
+>  	if (unlikely(!psock))
+>  		return tcp_recvmsg(sk, msg, len, nonblock, flags, addr_len);
 
 --=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421132839.3870=
+3-1-kovalev@altlinux.org?part=3D1
