@@ -1,131 +1,102 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31973A168B
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 22:15:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776809707; cv=pass; b=fsmDNfnxni8NSv4Wd/6Ihs4gC7dkUS2sOsXHhPaeyiiHCbTJDj5ReM8NdTu1tqUYFovU82b4IowwAbHOrrYk0Fdx1WoDnccwZB1cpRa9a/gMlh+8W2kUWXe9Rz1x+SQoDrnGpQoMWXvr8Oe7C7DXniz0O/oCCZH9XhQpb4DU7B8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776809707; c=relaxed/simple;
-	bh=r9YiUiySMiRJh9aThR6CiNe12ewJmvjGzxDuXa4PXJI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FI+wkxUaZ1prxGGyltB1v8UZNI77WJK4YaTy/b1UMSpc0EANuWuJ5EcYOzQuA54QZHaff+eu0sd9cR1rHLmVkce/ARMH7vwAI7DB/4lY4HtVlBWp1tLwY2r5vzz7tOnbX/xBAsqMeAanHYnO3dMCErvU3wORAg89fECHgnXoK6s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SyW40bs3; arc=pass smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0CE3A63EB
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 22:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776809814; cv=none; b=q4Aarn5Th/XyDF1YHCI+otdLu7am+JD6tcd+scKk6rtGRBk3GJkisrIJms1W6O3QKcSxRKLN2dLNDDw8UiaBRXcOfobDeReAHjP0KaPGu9qCjNKJVzi2VaPJ+pr1UfgEA8nhg9vbCWJMxXbMF47tVyfu/QgYrIMfNvP1ocCt5vg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776809814; c=relaxed/simple;
+	bh=euBu2N68Y6Y91IeVX4SmCqIP0+NVF/RllhtH6xqhv4c=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RoKLI3LPrHA0Fb4vmORE1aOmd5OP26oPCX9MsdOvUIEI6R1wrUZitgRps1DoCjMWEyfsfSAVp+NFiV10yIaZKj331XlQNR14JaN0wuosNi5Q0T341oyKxL54v1DMSKjYAGc+V4xuZPWzvLmMGKzwgm6Mx7QVKI9GmV2vOhzMBBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGFo5VWy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SyW40bs3"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43cfde3c3f3so4998239f8f.3
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 15:15:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776809704; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Bme3A5LB8OW8kHVzZwYVQnYqG6Dov0CTPR9swBh1AHAIN+69ILb92rafJSWsuCets0
-         5y9Ce+bSW1jM9mn4uLyM8THH+Rjy6y/xOJw1xuQWEvuQDKXPTowc15a8TyZJNlNV+px8
-         PuAzkiIkeUKCJ6IvFQ6S7cgJdZ3V5Wy6MOCQGzf542bzS2FXDWHUYQD2xSTBvqW0pN6B
-         4vUuJ3yg3z+6hJgP/Ye0DuZ2zwKUQbVHzKqjUGsVe8wLcHzg9FjmdHNj9XFyzZCSj2f8
-         ZWIGmhV0wp8TTBPkLK6zCN5aCoXHdrfHSH/oHZrtE2U+Y4P9Pwg7yx+n+lPSZgPL306J
-         5nlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=r9YiUiySMiRJh9aThR6CiNe12ewJmvjGzxDuXa4PXJI=;
-        fh=mWg43Vpiouy7NPX1XAzPBXU2Jf77YWyzdu6NgZe8RJ0=;
-        b=bLBFc0MvIS2TgeBLEbdFlYxLKxjYrZgeXdrQdJrBrU7U5rbm7CpXcNPMeetjET7zTX
-         lsTKiVBlLIwrbQSGQWvagZp+kxNoZwj2gGEQenxY64/xeHlSFbZr994VoLD/Ygf37odd
-         qYvo74xN/EgV7X7302XIVhByQekfTp5ba5xhgBJK1dI59hTyg+SL3BLnxQcn3/uS2Ddc
-         JLuJUOhRn7WPVGltTQKWDSBxpt0/68EGzbNTGCXfiVsTR83FVn8r5nq34hBOtIU1jKzG
-         qkxo/y32j3gewjdyI6lhJ4RJW0Ao4Dd2Pq1me5sIH8nMVCUxkPyVJdLzUT942ZOEpwkQ
-         oP5w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776809704; x=1777414504; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r9YiUiySMiRJh9aThR6CiNe12ewJmvjGzxDuXa4PXJI=;
-        b=SyW40bs3pvYSD6Zxq35BIsvasL9iCLeKK8i6S7Q3M4KBXnv6E49eW6UMlqGKayZPg/
-         fh7emUQW+vCw6/DICpkj7Dxzt5rA9b5TwgfO5SKnzLxf1UmRwalNMDOeI0h/15qxkuW7
-         w9FUloddTQJ8X4DGmkhCVrf3K/VEjEf84O7WmlukVbEVw8/BvqHQWI05UtVWPhYpCqwk
-         QJxy90OskjJgOGHh9pVTbIHbV8T6UAzNzv8a/DCpL1pN+WYLN5vb4dxU9888FyuFCV2g
-         tCbIuwVt74wcfrqRAFASm1oCamBQlMseOBSCfXePu6iO3RK86zV801og3mKEcLhr30QD
-         J/jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776809704; x=1777414504;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=r9YiUiySMiRJh9aThR6CiNe12ewJmvjGzxDuXa4PXJI=;
-        b=UKNy3K7gVokQ02nbgUfT5WSLCFIG1Ei43vHQ+ht+OpGO72CXC0E+7ZN/V1jFGx34C3
-         Tzp5wnL3O8rSy0O923VLV/R7jct1Jf1DV/5D7i6Cr5wojGnf0DXf4dqZe1v3dLPPVJTh
-         yrZSXi0QnSzo8/9/HKGSI99cGYVLxUJGIJjha9H7XqFHUcHU0BNZcdJpC6BCM/XY3XDU
-         Zh7wxK/8Ui4f1RiJj0FzcZOK4+0oSrLSEAwGXqVIQ/t6JhGaFo652e+RaN6ekJQFDyll
-         HVEZfKeHuWrp1q5BBb/ZUcLebsGZs0ecSgaq7wBP5VycK0xIF9tv2jaBCLt2WB7N3c1E
-         NHTQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8DYxpI6SDabreMxW5qSjHIfT00BkwDlE6KS2OE+mjtf8E5Ypiku2HWjLsE1HNkz4miRGc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJOuD74h0taZPnunOPxswUh0bKr3+/W3R8lCdxCdVDObKNoK3a
-	jdMdQOCGBawMz0lb/qEPa12GxQii81/31FMhfgcj/0d85/kb0ZV5vY6reQh+nAl4p0HlOKNYcZn
-	JEWQl3tR/thGay5KhPlOkzlc4Ozedcrw=
-X-Gm-Gg: AeBDieumD3/llNQscwGssj1DlHhJxkldP12oS5HeDqjtXjNUneSy/91gvgzr0M14g1/
-	UHj3tQZp0BmXWkwWo1eWWyXvUp66Q3BZr+DZx+zaVa+7DpIIJ16VAacF/ysUR57TzzGr31bC6us
-	Qwd74dK6E/VrlM++UIH5nFttulrM+oUjv8F5qWf9DNqoj5pX4NPh9PnGOzIg6jO3FcWft6dvl5p
-	zkX8G/EqC/Dxy9Le01KvAYerna0wdRkxQDSuK6OBi64Mbq1ala3njTq4tU0RcMdrwR8s0y3rqUb
-	VALWeWjIbcRyGSeseGqtKxkWepkT5uuA/bGyu7nrzRiwNHRVKFTmSJWsms76ldo0iuvmU65HBEz
-	9iv/h95cHkMgKbKkdqBN3fhdRlcTdT3H9050c
-X-Received: by 2002:a05:6000:1a86:b0:441:1df5:480c with SMTP id
- ffacd0b85a97d-4411df54848mr8169717f8f.42.1776809704286; Tue, 21 Apr 2026
- 15:15:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGFo5VWy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75221C2BCB0;
+	Tue, 21 Apr 2026 22:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776809813;
+	bh=euBu2N68Y6Y91IeVX4SmCqIP0+NVF/RllhtH6xqhv4c=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=JGFo5VWyKDNSabLeds8EXpMIfpAKEbI2BwGP/KR701gRd4fbjVEDuQTSE7QCO4fuO
+	 xhgCbeU6Q4mk8BDW4qBSHMnBWVe2cTOTajeXbAVD7LRIn6q+GuTGp9nLLPow5xTGLN
+	 dEuQVVuoYrFsvp59Ketr+rwPOZlwLRdOOui6naBNhFwaOU3sEttVgc8sTopaZdIW4Y
+	 4mqS2wQqKoEk5gup46sH3nkxjnFmKF36aIwyD7Qu3YQe42qGzHtT/9U+b0Rhc/GcJA
+	 D0gYECEh4YJxyKokreFvosvG0v4zBug9JV/4OJryrW8QofP84jFASTavNrSUH4/Qsr
+	 bznq7lz0/LZCg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v8 8/8] selftests/bpf: Reuse stderr parsing for
+ libarena ASAN tests
+Reply-To: sashiko@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260421165037.4736-9-emil@etsalapatis.com>
+References: <20260421165037.4736-9-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 21 Apr 2026 22:16:51 +0000
+Message-Id: <20260421221653.75221C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
- <aefnIw1Tx_2r5nkS@CMGLRV3> <CAADnVQJQxa+fHM9X8COc60ZMcxF0DMhWbtArg_gPynpbbg55TQ@mail.gmail.com>
- <CAHC9VhSo-M1wK2s2P0B+2F0pJqNguW7Kj-g63anp1xCMSBLa6Q@mail.gmail.com>
-In-Reply-To: <CAHC9VhSo-M1wK2s2P0B+2F0pJqNguW7Kj-g63anp1xCMSBLa6Q@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 21 Apr 2026 15:14:52 -0700
-X-Gm-Features: AQROBzBdesRGwaAbHppflZu2UlSyoGakl7XBoNVRSXZffbkUa2RMfex5iK5obzM
-Message-ID: <CAADnVQL33TOWFmxcWod3BCgmMXSQ=cEp6NCcxgQaJL0C7+Z9zA@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
- programs via BPF kfuncs
-To: Paul Moore <paul@paul-moore.com>, Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Frederick Lawler <fred@cloudflare.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, audit@vger.kernel.org, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 21, 2026 at 3:10=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
->
-> > It's still Nack.
->
-> Based solely on the diffstat and a quick look, this appears to be an
-> LSM patchset, not necessarily a BPF patchset; yes, there are kfuncs,
-> but they are LSM/audit kfuncs and not core BPF functionality.
-> Regardless, I want to see how the LSS presentation is received before
-> worrying about this too much, but your NACK has been noted.
+Sashiko AI review found 1 potential issue(s):
+- [Medium] The `verify_test_stderr()` function ignores unprivileged stderr =
+test tags (`__stderr_unpriv`), silently skipping their verification.
+--
 
-Paul,
+commit a614a51f0e77c17b24ea2c75a95abb7cf65988a1
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-told you countless times LSM cannot touch BPF bits without
-explicit Ack.
+selftests/bpf: Reuse stderr parsing for libarena ASAN tests
 
-So, no, you cannot add bpf kfuncs in random places in the kernel
-And, no, you cannot call bpf internals through bpf_map_ops, etc.
+This commit adds code to directly test the output of libarena ASAN tests by
+reusing testing infrastructure from BPF streams. It introduces a new
+verify_test_stderr() helper and test tags to validate stderr output against
+expected messages.
+
+> diff --git a/tools/testing/selftests/bpf/libarena/include/test_progs_comp=
+at.h b/tools/testing/selftests/bpf/libarena/include/test_progs_compat.h
+> new file mode 100644
+> index 0000000000000..9d431376c42f2
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/include/test_progs_compat.h
+[ ... ]
+> +#define __stderr(msg)		__test_tag("test_expect_stderr=3D" msg)
+> +#define __stderr_unpriv(msg)	__test_tag("test_expect_stderr_unpriv=3D" m=
+sg)
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/se=
+lftests/bpf/test_loader.c
+> index c4c34cae61027..ee637809a1d4e 100644
+> --- a/tools/testing/selftests/bpf/test_loader.c
+> +++ b/tools/testing/selftests/bpf/test_loader.c
+[ ... ]
+> +void verify_test_stderr(struct bpf_object *obj, struct bpf_program *prog)
+> +{
+> +	struct test_spec spec =3D {};
+> +
+> +	if (parse_test_spec(NULL, obj, prog, &spec))
+> +		return;
+> +
+> +	verify_stderr(bpf_program__fd(prog), &spec.priv.stderr);
+
+Does this code ignore unprivileged stderr test tags?
+
+It appears that verify_test_stderr() hardcodes the use of &spec.priv.stderr.
+Since it lacks an unprivileged parameter to select the unprivileged spec,
+any expected messages specified via __stderr_unpriv() might be silently
+ignored.
+
+> +	free_test_spec(&spec);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421165037.4736=
+-1-emil@etsalapatis.com?part=3D8
