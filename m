@@ -1,169 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD77135C193
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 11:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDE1299923
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 11:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776770005; cv=none; b=lPX5ZNb2JqwyyskWTUoCOFnY4cas96cIbattsLFyOUzsSiDMP7651Uj4rqPj/v7PKsx+g1SZAIu1DlMfZ5/zLqhoEnPYBxkeKnlPJxYzjp/iz1q6YXx6q8kOYR+UdzelXfx8AuNbQwZfawJeRawSpIgObk7snuNe6gYqvIxw0wQ=
+	t=1776770201; cv=none; b=cb1HX/dABirSOXkI0vDD0U5aoTngy9/2ets3vEu/EVBHpGFE0rq+mnVkO3MX6XJCl4DdmepKXjhenPngtLCKp60LCp2SpqOGAW1NgCPHCdpWVhnoQ4bQi9KH0qsmC4MthlUb08VXhExzJaPNwRfTUIx+Kx1f6S78cDC0fkFLAF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776770005; c=relaxed/simple;
-	bh=r+4ndBprULq01dd5C6U6AA7SFZeXs/V3B4q0gYuKqVI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FIh8AHfkbNlvT6Qqa8LTFV1cyEa0DMaPfKZFhhi4OecXXL6bli573Dpqu9T1gxZsOYBSH8aanV4X9ChiYhjyH2BWI486NhiEgBMqz2i8xn4Y//t/t+WSl4dXvjpAUSTxkeWfinf3TxtZFtU+KgE++0AnOEksSXQ6XIdTuVBNwjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebMgZ5Hw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776770201; c=relaxed/simple;
+	bh=KBu+nM3FVkIWAoDmC/pns5kMzR3gWeRr27I5ghFCnzo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=FuMkg6k14LMRWI8QxlPlS1ErD/LdB8+EdH3H/s14e7/UaXVe4HQHnMHTGr8BffHHXOw23RdPUh3wUPBBBalYLWHL+ERgijJceyqP6ELh2iQF/Qjl7O2UvPSf8hfBkuzcJPkdVOdY+a99vnjMZwDkoqu3v4yOOaDtr9lsYc0ZL3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XPwkMky/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebMgZ5Hw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FDAC2BCB0;
-	Tue, 21 Apr 2026 11:13:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XPwkMky/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C15DCC2BCB0;
+	Tue, 21 Apr 2026 11:16:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776770005;
-	bh=r+4ndBprULq01dd5C6U6AA7SFZeXs/V3B4q0gYuKqVI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=ebMgZ5HwJLkXVTbK7XzD4co+sWTopbXJMh/OkkGVzfM/zByCOKAGUQSiwBM8XdXzm
-	 Ibz6VissrkP9m6WwyoYefFmUvG/vb9PkM1PTZXrzKwZA2AHFi40SKI0QTDRtILOUQH
-	 LtepzYrjEbvAyIB2WdkfQXBe+sn6jdXcqDNpwpHfZXrQvHbtEvPOGISuVAKAslDxeJ
-	 nG9bPjEtW8qWOBNOtVNJqGO8EIXf6tP2IH+BFl4TGxclTUL0DewXJS1bDUbLzff6xk
-	 xB6eGFJdPH69tX5Yatu/UZqwEHj7E5ahn+dvGRtiuoZdrrhPzlMvWUrjiQAE48zXe8
-	 xxtZ7pNctUZvA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: add
- icmp_send_unreach_recursion test
-Reply-To: sashiko@lists.linux.dev
-To: "Mahe Tardy" <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420105816.72168-7-mahe.tardy@gmail.com>
-References: <20260420105816.72168-7-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 11:13:24 +0000
-Message-Id: <20260421111325.61FDAC2BCB0@smtp.kernel.org>
+	s=k20201202; t=1776770201;
+	bh=KBu+nM3FVkIWAoDmC/pns5kMzR3gWeRr27I5ghFCnzo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=XPwkMky/E8cPeAz6zPP1gMKjiQHyNQvbqAjZJ9O796roahq8XwUyirip8ZztYqfwe
+	 pXYrQEE4rZmQkw1Sho9OT7fI2nQmTh+vLIBwp6QcKNomWqSVazBGvG+0GaiMrUkhJ7
+	 OZjdb85nd9j7u+5k8uvyvRdzbUj+hkXa/rrhcpgz8AJTTTlNn7yYPH8ph0nwQ7UJYh
+	 xMLUcTYdTmnM8uBN8TZcLuoDJlINNiDGmZFbfhJBUbJYG3YcycHdh27IRFutB9sMTa
+	 CZxHpyitGuIn3tD5qYXtGig7aG4WGOwt4n/A3UEWUQBfgKadYp93zUTwbKkLl1qElH
+	 KKVBHhdHPMI3w==
+Content-Type: multipart/mixed; boundary="===============8931602688692496884=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <51aa84cd661657f0b12201551f3b6b327f45fb577362eb0b2b122daa99163e4f@mail.kernel.org>
+In-Reply-To: <20260421-cnums-everywhere-rfc-v1-v1-1-8f8e98537f48@gmail.com>
+References: <20260421-cnums-everywhere-rfc-v1-v1-1-8f8e98537f48@gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] bpf: representation and basic operations on circular numbers
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,shung-hsi.yu@suse.com,paul.chaignon@gmail.com,harishankar.vishwanathan@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 21 Apr 2026 11:16:40 +0000 (UTC)
 
-Sashiko AI review found 3 potential issue(s):
-- [High] The `recursion` BPF program drops all unrelated IPv4 traffic on th=
-e system, causing severe network disruption and test flakiness.
-- [Medium] The test leaks the cgroup testing environment by failing to call=
- `cleanup_cgroup_environment()`.
-- [Medium] The assignment to `rec_kfunc_rets` relies on an indeterminately =
-sequenced evaluation order, making the test brittle and compiler-dependent.
---
+--===============8931602688692496884==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-commit 61d5cc3970ae5880f18e7f23d796670f691dcd7f
-Author: Mahe Tardy <mahe.tardy@gmail.com>
+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9jbnVtLmggYi9pbmNsdWRlL2xpbnV4L2NudW0u
+aAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAwLi42ZmUzZjQ2MTFj
+NWUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvaW5jbHVkZS9saW51eC9jbnVtLmgKPiBAQCAtMCww
+ICsxLDc2IEBACgpbIC4uLiBdCgo+ICtzdHJ1Y3QgY251bTMyIHsKPiArCXUzMiBiYXNlOwo+ICsJ
+dTMyIHNpemU7Cj4gK307Cj4gKwo+ICsjZGVmaW5lIENOVU0zMl9VTkJPVU5ERUQgKChzdHJ1Y3Qg
+Y251bTMyKXsgLmJhc2UgPSAwLCAuc2l6ZSA9IFUzMl9NQVggfSkKPiArI2RlZmluZSBDTlVNMzJf
+RU1QVFkgKChzdHJ1Y3QgY251bTMyKXsgLmJhc2UgPSBVMzJfTUFYLCAuc2l6ZSA9IFUzMl9NQVgg
+fSkKClsgLi4uIF0KCj4gK3N0cnVjdCBjbnVtNjQgewo+ICsJdTY0IGJhc2U7Cj4gKwl1NjQgc2l6
+ZTsKPiArfTsKPiArCj4gKyNkZWZpbmUgQ05VTTY0X1VOQk9VTkRFRCAoKHN0cnVjdCBjbnVtNjQp
+eyAuYmFzZSA9IDAsIC5zaXplID0gVTY0X01BWCB9KQo+ICsjZGVmaW5lIENOVU02NF9FTVBUWSAo
+KHN0cnVjdCBjbnVtNjQpeyAuYmFzZSA9IFU2NF9NQVgsIC5zaXplID0gVTY0X01BWCB9KQoKWyAu
+Li4gXQoKPiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi9jbnVtLmMgYi9rZXJuZWwvYnBmL2NudW0u
+Ywo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMDAwLi4zOGE4MDVhNmZj
+MmEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIva2VybmVsL2JwZi9jbnVtLmMKPiBAQCAtMCwwICsx
+LDExNCBAQAoKWyAuLi4gXQoKPiArc3RydWN0IGNudW0zMiBjbnVtMzJfZnJvbV9jbnVtNjQoc3Ry
+dWN0IGNudW02NCBjbnVtKQo+ICt7Cj4gKwlpZiAoY251bS5zaXplID4gVTMyX01BWCkKPiArCQly
+ZXR1cm4gKHN0cnVjdCBjbnVtMzIpeyAuYmFzZSA9IDAsIC5zaXplID0gVTMyX01BWCB9Owo+ICsJ
+ZWxzZQo+ICsJCXJldHVybiAoc3RydWN0IGNudW0zMil7IC5iYXNlID0gKHUzMiljbnVtLmJhc2Us
+IC5zaXplID0gY251bS5zaXplIH07Cj4gK30KCkNhbiBjbnVtMzJfZnJvbV9jbnVtNjQoKSByZXR1
+cm4gQ05VTTMyX0VNUFRZIGZvciBhIHZhbGlkIG5vbi1lbXB0eSBpbnB1dD8KCldoZW4gdGhlIGlu
+cHV0IGhhcyBjbnVtLnNpemUgPT0gVTMyX01BWCBhbmQgKHUzMiljbnVtLmJhc2UgPT0gVTMyX01B
+WCwgdGhlCmVsc2UgYnJhbmNoIHJldHVybnMgeyAuYmFzZSA9IFUzMl9NQVgsIC5zaXplID0gVTMy
+X01BWCB9LCB3aGljaCBlcXVhbHMKQ05VTTMyX0VNUFRZIGJ5dGUtZm9yLWJ5dGUuCgpGb3IgZXhh
+bXBsZSwgdGhlIGlucHV0IHsgLmJhc2UgPSAweEZGRkZGRkZGLCAuc2l6ZSA9IDB4RkZGRkZGRkYg
+fQpyZXByZXNlbnRzIHRoZSB1NjQgcmFuZ2UgWzB4RkZGRkZGRkYgLi4gMHgxRkZGRkZGRkVdIGNv
+bnRhaW5pbmcgZXhhY3RseQoyXjMyIHZhbHVlcy4gRXZlcnkgdTMyIHZhbHVlIGFwcGVhcnMgYXMg
+dGhlIGxvdyAzMiBiaXRzIG9mIHNvbWUgdmFsdWUgaW4KdGhpcyByYW5nZSwgc28gdGhlIGNvcnJl
+Y3QgMzItYml0IHByb2plY3Rpb24gaXMgdGhlIGZ1bGwgdTMyIHJhbmdlLCBub3QKRU1QVFkuCgpN
+b3JlIGdlbmVyYWxseSwgYW55IGNudW02NCB3aXRoIHNpemUgPT0gVTMyX01BWCBhbmQgKHUzMili
+YXNlID09IFUzMl9NQVgKKHN1Y2ggYXMgezB4MV9GRkZGRkZGRiwgVTMyX01BWH0gb3IgezB4RkZG
+Rl9GRkZGLCBVMzJfTUFYfSkgdHJpZ2dlcnMgdGhpcwpjb2xsaXNpb24uCgpJbiB0aGUgcGxhbm5l
+ZCBmb2xsb3ctdXAgY29tbWl0IHRoYXQgdXNlcyB0aGlzIGZ1bmN0aW9uLCB0aGUgY2FsbCBjaGFp
+biBpczoKCnJlZy0+cjMyID0gY251bTMyX2ludGVyc2VjdChyZWctPnIzMiwgY251bTMyX2Zyb21f
+Y251bTY0KHJlZy0+cjY0KSk7CgpTaW5jZSBjbnVtMzJfaW50ZXJzZWN0KF8sIEVNUFRZKSByZXR1
+cm5zIEVNUFRZLCBhIHJlZ2lzdGVyIHdob3NlIHI2NCBsYW5kcwpvbiB0aGlzIHNoYXBlIHdvdWxk
+IGhhdmUgaXRzIHIzMiBjb2xsYXBzZWQgdG8gRU1QVFkuIFRoZSB2ZXJpZmllciB3b3VsZAp0aGVu
+IHRyZWF0IHRoZSByZWdpc3RlciBhcyBoYXZpbmcgbm8gcmVhY2hhYmxlIDMyLWJpdCB2YWx1ZXMs
+IHdoaWNoIGNvdWxkCmxlYWQgdG8gdW5zb3VuZCBwcnVuaW5nLgoKVGhlIGNvbW1pdCBtZXNzYWdl
+IHN0YXRlcyB0aGF0IG9wZXJhdGlvbnMgY29ycmVjdG5lc3Mgd2FzIHZlcmlmaWVkIHVzaW5nCkNC
+TUMsIGJ1dCB0aGlzIGNvcm5lciBjYXNlIGFwcGVhcnMgdG8gaGF2ZSBiZWVuIG1pc3NlZCBieSB0
+aGUgbW9kZWwtY2hlY2tlcgpoYXJuZXNzLgoKPiArLyoKPiArICogU3VwcG9zZSAnYScgYW5kICdi
+JyBhcmUgbGFpZCBvdXQgYXMgZm9sbG93czoKPiArICoKClsgLi4uIF0KCj4gKyAqCj4gKyAqIElu
+IHN1Y2ggYSBjYXNlIGl0IGlzIHBvc3NpYmxlIHRvIGluZmVyIGEgbW9yZSB0aWdodCByZXByZXNl
+bnRhdGlvbiB0Cj4gKyAqIHN1Y2ggdGhhdCDiiIAgdiDiiIggYSwgKHUzMilhIOKIiCBiOiB2IOKI
+iCB0Lgo+ICsgKi8KClRoZSBDSSBib3QgaWRlbnRpZmllZCBhIGJ1ZyBpbiB0aGlzIHNwZWNpZmlj
+YXRpb24gY29tbWVudCBkdXJpbmcgdGhlIHYxCnJldmlldzogdGhlIGNvbmRpdGlvbiBzaG91bGQg
+YmUgJyh1MzIpdiDiiIggYicgbm90ICcodTMyKWEg4oiIIGInLiBBcyB3cml0dGVuLAp0aGUgY29u
+ZGl0aW9uICh1MzIpYSBkb2VzIG5vdCBkZXBlbmQgb24gdiwgd2hpY2ggbWFrZXMgdGhlIHF1YW50
+aWZpZXIKdHJpdmlhbC4gWW91IGFja25vd2xlZGdlZCB0aGlzIHdhcyBpbmNvcnJlY3QgYW5kIGNv
+bmZpcm1lZCBpdCBzaG91bGQgYmUKJyh1MzIpdiDiiIggYicsIGJ1dCB0aGlzIGhhcyBub3QgYmVl
+biBjb3JyZWN0ZWQgaW4gdGhlIGN1cnJlbnQgdmVyc2lvbi4KClJlZmVyZW5jZTogaHR0cHM6Ly9s
+b3JlLmtlcm5lbC5vcmcvYnBmLzdmYzA0ZmNhMDQ2N2M1OTk2OWY4NjU4ZjY5NTViYTdlYzNiNzZi
+NzMxN2ExZDE3Y2ZhNjRiZGU3ZTNlODcyNDlAbWFpbC5rZXJuZWwub3JnLwoKPiArc3RydWN0IGNu
+dW02NCBjbnVtNjRfY251bTMyX2ludGVyc2VjdChzdHJ1Y3QgY251bTY0IGEsIHN0cnVjdCBjbnVt
+MzIgYikKPiArewoKWyAuLi4gXQoKCi0tLQpBSSByZXZpZXdlZCB5b3VyIHBhdGNoLiBQbGVhc2Ug
+Zml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVnLgpTZWU6IGh0dHBz
+Oi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0ZXIvY2kvY2xhdWRl
+L1JFQURNRS5tZAoKQ0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0
+Y2hlcy9icGYvYWN0aW9ucy9ydW5zLzI0NzE3OTY4ODM2
 
-selftests/bpf: add icmp_send_unreach_recursion test
-
-This test is similar to icmp_send_unreach_kfunc but checks that, in case
-of recursion, meaning that the BPF program calling the kfunc was
-re-triggered by the icmp_send done by the kfunc, the kfunc will stop
-early and return -EBUSY.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfu=
-nc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
-> index 047bfd4d80f75..a4f4324b2b99d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
-[ ... ]
-> @@ -157,3 +159,44 @@ void test_icmp_send_unreach_kfunc(void)
->  	icmp_send_unreach__destroy(skel);
->  	close(cgroup_fd);
->  }
-> +
-> +void test_icmp_send_unreach_recursion(void)
-> +{
-[ ... ]
-> +	if (setup_cgroup_environment()) {
-> +		fprintf(stderr, "Failed to setup cgroup environment\n");
-> +		goto cleanup;
-> +	}
-> +
-> +	cgroup_fd =3D get_root_cgroup();
-> +	if (!ASSERT_GE(cgroup_fd, 0, "get_root_cgroup"))
-> +		goto cleanup;
-> +
-> +	skel->links.recursion =3D
-> +		bpf_program__attach_cgroup(skel->progs.recursion, cgroup_fd);
-
-Since this test manually invokes setup_cgroup_environment(), shouldn't there
-be a corresponding call to cleanup_cgroup_environment() in the cleanup path?
-
-By bypassing the test__join_cgroup() wrapper, the test framework won't
-automatically clean up the cgroup state, leaving the test worker in a modif=
-ied
-mount namespace which might cause subsequent tests to fail.
-
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/icmp_send_unreach.c b/tool=
-s/testing/selftests/bpf/progs/icmp_send_unreach.c
-> index 112b9cbfab6fe..9aca7c0b12e1f 100644
-> --- a/tools/testing/selftests/bpf/progs/icmp_send_unreach.c
-> +++ b/tools/testing/selftests/bpf/progs/icmp_send_unreach.c
-[ ... ]
-> @@ -67,4 +70,31 @@ int egress(struct __sk_buff *skb)
->  	return SK_DROP;
->  }
-> =20
-> +SEC("cgroup_skb/egress")
-> +int recursion(struct __sk_buff *skb)
-> +{
-> +	void *data =3D (void *)(long)skb->data;
-> +	void *data_end =3D (void *)(long)skb->data_end;
-> +	struct iphdr *iph;
-> +
-> +	iph =3D data;
-> +	if ((void *)(iph + 1) > data_end || iph->version !=3D 4)
-> +		return SK_PASS;
-> +
-
-Because this BPF program is attached to the system-wide root cgroup, will t=
-his
-unconditionally drop all unrelated IPv4 traffic on the system?
-
-Unlike the egress program which explicitly filters for IPPROTO_TCP and
-SERVER_IP, this program intercepts all outbound IPv4 traffic, drops it
-(returning SK_DROP), and sends ICMP errors.
-
-This could disrupt host networking and cause test flakiness if background
-traffic concurrently increments rec_count. Could the BPF program be updated
-to explicitly filter for the test's traffic?
-
-> +	/* This call will provoke a recursion: the ICMP package generated by the
-> +	 * kfunc will re-trigger this program since we are in the root cgroup in
-> +	 * which the kernel ICMP socket belongs. However when re-entering the
-> +	 * kfunc, it should return EBUSY.
-> +	 */
-> +	rec_kfunc_rets[rec_count & 1] =3D
-> +		bpf_icmp_send_unreach(skb, unreach_code);
-
-Is it possible for the array index (rec_count & 1) to be evaluated before t=
-he
-function call returns?
-
-In C, the evaluation order of the left-hand side and right-hand side of an
-assignment is not sequenced. If the compiler evaluates the array index befo=
-re
-the function call, both the outer and inner executions could use
-rec_count =3D=3D 0. This would cause the outer execution to overwrite the i=
-nner
-execution's -EBUSY result with 0.
-
-Would it be safer to store the kfunc return value in a local variable before
-assigning it to the array?
-
-> +	__sync_fetch_and_add(&rec_count, 1);
-> +
-> +	/* Let the first ICMP error message pass */
-> +	if (iph->protocol =3D=3D IPPROTO_ICMP)
-> +		return SK_PASS;
-> +
-> +	return SK_DROP;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420105816.7216=
-8-1-mahe.tardy@gmail.com?part=3D6
+--===============8931602688692496884==--
