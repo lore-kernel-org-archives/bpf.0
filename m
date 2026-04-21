@@ -1,125 +1,143 @@
-Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1573A453D
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 22:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776810235; cv=none; b=kRnDWUsApTX6UUSPNc/OxnKSYSMV97CEFMt+wBITbJ0DzIk4UQp9zTi5UPXAeIYa++K6OExUVQw1Nd42EeqwY7f+SH3pgAY8FCPUek/FoauZ/p7GthTp8S7eoNXsOAl+LhpCFfPlkPXp7Hvc4Fzky9zjbe4Li43gJvHGu8OU3No=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776810235; c=relaxed/simple;
-	bh=sgxlv1Gy4m4rsCqWOlyOFq+BVwQIC9aK9+QByuoBKgI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gxQ//d3c3AMWfjZc3Brx+ThchKyDuDe34PXZVES5T8sld9kh09CeVrN54Mqgxscgfe58OQCVSBjbv/fwuLgj63qL2WMgczacIRoRhBzK9sata3ctfihSuhqWxzbzrQSknplvNoxoJgHwsKNajylwzhRdpBfJlCE6o5pr5JqBxT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tGMYyIp0; arc=none smtp.client-ip=209.85.167.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5973A63F7
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 22:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776811811; cv=pass; b=NPTDD/8zIBSAmqt4BSEBLUbVlDbW0HaBKCO4hWWaRL4ly6A6knRet/f+VEh8j9hyxpRsXCnObC+Y4YrnS2wIVU8mcVRgRL5e1DU8hIA8K6uQlb5yFCgXZd0hfFubam47jqnwczYt+YQu8/nA6qD1Ge+zSRVsVctvFdyC0l6sfoc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776811811; c=relaxed/simple;
+	bh=RMm1B3gm6JHZLgId0qeTHFr/hRq1ZH8dqi5UXmGTaKE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=scyP2N4N5JenLd2tZ6UMt03A773EqG5WDcnfPVnqXJQRmjOCxCW0ZhrbqEbF9JHB1w+WcJcMgvDddOEf0rhgh6JkGNEA/mNYVln2U0Yp0BvefX6dcBfVoJfM7gIhyQ0xDuURb7emMqxR0lqm4ofWmkV1mJWneP+x7cbi3Z9BCG0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=T75RJCJi; arc=pass smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tGMYyIp0"
-Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-479d4df9035so1453736b6e.0
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 15:23:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="T75RJCJi"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b24fede2acso30496945ad.3
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 15:50:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776811810; cv=none;
+        d=google.com; s=arc-20240605;
+        b=DzKxza/PtoPvKAVrqDsOB705JNeWLpiq1PZZfm5qWlMSwHjoDSo2f9usdyND8tlgd4
+         RFTwfjQYO/nKEGMvaBJIztLjhS6n1OYeoMi8rbnjGAVlbFhD0YIqxNenC4N5+9HXiYae
+         m278Ap/au7aJjT2e8nACHKoXTRv+Ops5vDbH/V8Hoxcm9qWhE1rJt9d1XFt1zMussHwZ
+         pHC/keLxdueUDlnuAGiXwxpg75sTUwvC678mXe0Twqv4etWHIUSILEKM9ocUX2tSvAfq
+         h3w6LJL3n2D3+6YOHbn7U7obP7K/6qWixUIfRtmP75Zag5HKe8eZ5Y9XIwZxZ9pDd5/c
+         X/gA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RMm1B3gm6JHZLgId0qeTHFr/hRq1ZH8dqi5UXmGTaKE=;
+        fh=3oNZAcS2GzXO773bbuuRev/Wx4PyBqwi8U08RTk4qqg=;
+        b=NxLGebomjDhsI+2dHikwEw9KJDR65PMcVyGkeM5xavX3qGv8RlplJOfMDNm8tA1w2C
+         i5+JxiO6+ZhE1GTZ6oRp9EpKr2DperOawqOdavI0kVmtQzl2IO7zm/y2G1n+M+4NSwLk
+         fUrz1g1ut352tfPwS/GABMZAbjoGlnvQO81Pfs8x9CFCW/KyZcoJrDRsEGVBH/6nDGxl
+         kFqoDIzUdh7rfllD7lwIZG2wxgd/y6ae12/83oRmr69vNhhM4kriJWt1VLDeUEYsRSth
+         LDEMSfb/QV0rkUjJ5rmgIt3nDL1T2AayGwGxAA34TCG+Tv/QQC3zI6D/hsD35a0ZlO6Y
+         /NEg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776810232; x=1777415032; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lKoAeQw3fgOsyloCGOYdd/7n6rBcnHophybPgqTIkU8=;
-        b=tGMYyIp0O11x1j55iLJCIGvJU28dQap3Y7yqipAhblBl5grCmQA7TlUk5QncCtQNZy
-         DSO6DFNeVHan1jHgz7nHcbIsfFlpmU5/PeriByy+rEjFXbvKNPYizvt/PDzapPgwU53y
-         zEPD02hL0w9p7I5U31IG6y5GH0X2qmzAWWuwIFwOtTsnay1UvTL0a/DWSPbSviodt9Hf
-         Da8oZjkOkAYbgVl7Wcu/cosqNYrHGqAq8QwIEqU+dsZCOJY34TFAFMlIwzD9OL8mNleC
-         YkT/fSpWjuNJKD59Ou62u9id9JuvjsAtcAxzmCncbommTZjGLIdBq1Ing/XFyBEa+XHu
-         b4Tw==
+        d=paul-moore.com; s=google; t=1776811810; x=1777416610; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RMm1B3gm6JHZLgId0qeTHFr/hRq1ZH8dqi5UXmGTaKE=;
+        b=T75RJCJi/8g+lGjFoandwtXi2tVESI3/UIugg6CRYqICGsXnA9F0jWXhxoqU8IWIix
+         UUL1wb9ZPHEFuoCB2QNnaCXPyBEmsUoQ5MFscAFA9HtA0KQ2MMZsGK2/EgFFLhXx00io
+         bW6Bj7J/heMT7bxY3FrLeZFRmAE+WjVebBYr38MRBfNrf5nYqEJpja8Kl+XDGoopdYY7
+         l2omqBX4MIBqbMIeVia3qbeIx1X/VPODFuQ77ZgOtL3PLa3dtg4VrPzniZrXba79Du/m
+         nLZLwwz76lyTwSQHVYHkg1IXngrYczlDySkLNVsfgoZUcXrT+/GTwHT8DKX83WEk/Yyq
+         2rHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776810232; x=1777415032;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lKoAeQw3fgOsyloCGOYdd/7n6rBcnHophybPgqTIkU8=;
-        b=VwPcfPts/FeJPmu5mJAOixS8+ErGySCKEY5RdJLT3b839vJjoSGVwqhL12dnUjacau
-         Lv/1Ckj533JwD+UbH5tnBqt+KVzLfBUDVCXAWmG9KgwwdibcQVm9PiiZr/vsPMvDb5ai
-         yxpVUc4H7+IPNuOCoWDgjC5OA8SA2lgtFIwYV0eIzD7PR7vwFheal9nYPjsNIZ+Tk+4y
-         TexYxi0RiR3qNrlkGBjIFnzyxfN/K8y7+CSqMTdmXVnZZOGeJW6WAYGs3eU75i2JmlmA
-         17C/nQ0PFMDXtaDnycRgGAmYuC9g54nsWN/e/gMBArN7cJYO6tgHUy42t3+zil87XVq3
-         TV9w==
-X-Forwarded-Encrypted: i=1; AFNElJ/pwogZKJnAIUT4XhgtRtu9n0TcQKf3MbIXZhCUtBILyFhQ48aELK7s2eL1h4Un7UzSLU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJi48vBzr3KCQSxWB8sM5W4kpKgzG4VxqzecknJH6J4sN3yTxY
-	OPyk+fthir0m7TDw3drjboBpLvcdUxtIe3rxNsV92zGP5Q0XkC+hnTG6
-X-Gm-Gg: AeBDieuy6JYP/S8AVSptHlTaJ+SyhV2aZV2OH+SmyBv0wU7AcwG5IokwTJ9+iQFK8yG
-	mvxwqiOQR+6QT/azDr04XL9GuRaA6JYzrn7llclwy2QiLU12ROefCK+shGt81Ii+laBEZadkudR
-	Yck0utjs4cSgG3ffs/9Z3E4wzcDLkreE72KFhFx3ACuvEOGRHTsO9aGY/VPVN4J2bqgP/LxReIZ
-	+8IkoZwzrYqDZpi8JPia/fmW9FCfD7ohtYMJKMgaYVyS1maWf4KwgXugHu6O9ZHDFiG6faWopG5
-	J0IdON1nR3+eqrWLFkaoiIyXsAkt0LXd11ckS1hxvzenuvrNx3YYoQq/WO7iXPJm0tE+gNtvTmb
-	BS/+oVl2PJUZeFrn/veM2KCZa6K992t1nwqwFOc8WE/z0CJTlMBLVK1OerlutCymT8dQelJq7zA
-	fnkmATLr4nFmz4iXjM6/zEqCaO48s=
-X-Received: by 2002:a05:6808:1a19:b0:475:be2f:c56b with SMTP id 5614622812f47-4799bc82da9mr9234418b6e.3.1776810232611;
-        Tue, 21 Apr 2026 15:23:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:12ff:8::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc975b0591sm12293852a34.19.2026.04.21.15.23.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 15:23:52 -0700 (PDT)
-Date: Tue, 21 Apr 2026 15:23:51 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net v2 8/8] xsk: fix u64 descriptor address truncation on
- 32-bit architectures
-Message-ID: <aef4XHnqR2cs5U1O@devvm17672.vll0.facebook.com>
-References: <20260420082805.14844-1-kerneljasonxing@gmail.com>
- <20260420082805.14844-9-kerneljasonxing@gmail.com>
- <aeaCzchKwsp_LWyA@devvm17672.vll0.facebook.com>
- <CAL+tcoCxQ8cU+wr7eJsMH+FPMcp+vQ4J4BdSdsVqyTRqN8q9LQ@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1776811810; x=1777416610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RMm1B3gm6JHZLgId0qeTHFr/hRq1ZH8dqi5UXmGTaKE=;
+        b=GsYKF/bJWv3bi0r+ajurLEIQLK3mLS1ML/seKt4ShCIdosBPGsgUyhT/tu4s3QRHmY
+         /996Pr+GZz7rGM5X/y+WDo8cKtK/W2dQfYXP/ODUXjmK84QCptqwjce78mQYRGpUroW7
+         HDzlgIzgWv9YhCFU6kynWMqKdx0vg/GOgwTAzKsSUb202HUFXPVztsB2O+pnF99F+zPD
+         1Y6/b/2goUd/zMM+O4qNGVFzvBe3bXY3faoBRfT9L0gYl+K+n8ARSdi3LfTIgGd4jAwB
+         WXkDm6K1VDny3+/IKadcePHFlcTMUn4MQkb7JKNVErmmpi3LBqCJdW4mUerjOSLMgE/6
+         +0lQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+Ip0JW/xNtzwNcDQE3YywqWBzEwHqrMHq11fNVNUNs+ZlDht/ojCC/gcUndD/jbbZ+Vo0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzgvi9+k11Jp47w7GEr4qSRYmwPtPDA87dW5eKoZYTKfLenz1U4
+	5d2hxJFbuHccfPinsVKwCPNRglm7+XKi+w0ONCdpD2VfKhX130V5zFh1OCfFIynw7pW0h9Ov+DU
+	8Lp0AOb39RFAtCTKzEDVMS6O2Q1Sn7GRKUJE+slrR
+X-Gm-Gg: AeBDietO8BUAxSYZVq4L5oUhMhwIwYRVpHBDUcWPwKY7LgLJ7eoWQjjEMs8VAY7RkKa
+	jVv6njeUPevPU44iuQX+Y9pDVe1SRnrTgnJxQv2k+sdpBK/fQGMgeAJPpFPAcNGISaRJaCBN1Os
+	ExmDY7QkU0kT7TrDmHkR4GneAjJS2Yh1f67OdBFEKkIJ6kapNXrwZSwk+wtaaiplUEkN6YNg+2M
+	KRttvgJkgV4vxoKJNXnn/6yrcD47KFNwel38DMjBCw7M7tMDbTYnBW5lN9f10d3PTtn24b8oQIV
+	PPMDneltb+HjZdlj8g==
+X-Received: by 2002:a17:902:be0a:b0:2b2:481b:de68 with SMTP id
+ d9443c01a7336-2b5f9f8f446mr154652785ad.35.1776811809715; Tue, 21 Apr 2026
+ 15:50:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL+tcoCxQ8cU+wr7eJsMH+FPMcp+vQ4J4BdSdsVqyTRqN8q9LQ@mail.gmail.com>
+References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
+ <aefnIw1Tx_2r5nkS@CMGLRV3> <CAADnVQJQxa+fHM9X8COc60ZMcxF0DMhWbtArg_gPynpbbg55TQ@mail.gmail.com>
+ <CAHC9VhSo-M1wK2s2P0B+2F0pJqNguW7Kj-g63anp1xCMSBLa6Q@mail.gmail.com> <CAADnVQL33TOWFmxcWod3BCgmMXSQ=cEp6NCcxgQaJL0C7+Z9zA@mail.gmail.com>
+In-Reply-To: <CAADnVQL33TOWFmxcWod3BCgmMXSQ=cEp6NCcxgQaJL0C7+Z9zA@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 21 Apr 2026 18:49:57 -0400
+X-Gm-Features: AQROBzC8n0JJ9DjsWU-7Puv6JCDhA7IZFjxayYVxpNJDKTQHihIrjlR17p1FK3w
+Message-ID: <CAHC9VhSKvC+p5j5Pe1YKB-=vRkRA81K3kp97Q6-H5K+kvYa0AQ@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
+ programs via BPF kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Frederick Lawler <fred@cloudflare.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, audit@vger.kernel.org, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 04/21, Jason Xing wrote:
-> On Tue, Apr 21, 2026 at 3:49 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
+On Tue, Apr 21, 2026 at 6:15=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Tue, Apr 21, 2026 at 3:10=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
 > >
-> > On 04/20, Jason Xing wrote:
-> > > From: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bit
-> > > descriptor address into skb_shinfo(skb)->destructor_arg (void *) via a
-> > > uintptr_t cast:
-> > >
-> > >     skb_shinfo(skb)->destructor_arg = (void *)((uintptr_t)addr | 0x1UL);
-> > >
-> > > On 32-bit architectures uintptr_t is 32 bits, so the upper 32 bits of
-> > > the descriptor address are silently dropped. In XDP_ZEROCOPY unaligned
-> > > mode the chunk offset is encoded in bits 48-63 of the descriptor
-> > > address (XSK_UNALIGNED_BUF_OFFSET_SHIFT = 48), meaning the offset is
-> > > lost entirely. The completion queue then returns a truncated address to
-> > > userspace, making buffer recycling impossible.
-> > >
-> > > Fix this by handling the 32-bit case directly in
-> > > xsk_skb_destructor_set_addr(): when !CONFIG_64BIT, allocate an xsk_addrs
-> > > struct (the same path already used for multi-descriptor SKBs) to store
-> > > the full u64 address.
+> > > It's still Nack.
 > >
-> > Is it easier to make XSK `depends on 64BIT` to avoid dealing with that? Does
-> 
-> Of course, it would be super easy. Actually the initial version looks
-> like this. One line of coder is simply enough.
-> 
-> > anybody seriously run af_xdp on 32 bit systems?
-> 
-> But my worry as you guess is if there exists a 32 bit system? I doubt
-> it. That's why I put some effort into adding the compatibility code to
-> cover the case. Good news is that it doesn't add any side effects of
-> the 64 bit system since they are protected under IS_ENABLED condition.
+> > Based solely on the diffstat and a quick look, this appears to be an
+> > LSM patchset, not necessarily a BPF patchset; yes, there are kfuncs,
+> > but they are LSM/audit kfuncs and not core BPF functionality.
+> > Regardless, I want to see how the LSS presentation is received before
+> > worrying about this too much, but your NACK has been noted.
+>
+> Paul,
+>
+> told you countless times LSM cannot touch BPF bits without
+> explicit Ack.
 
-If someone complains, we can follow up? af_xdp is all u64 everywhere,
-including uapi, I doubt someone is using it on 32 bit systems. We don't
-test this part on 32 bit systems on nipa either..
+Based on a quick glance it doesn't appear that Fred's patches touch
+BPF bits, they simply supply kfuncs for users to use in their BPF
+programs.
+
+> So, no, you cannot add bpf kfuncs in random places in the kernel
+
+I see plenty of places outside of kernel/bpf that define kfuncs.
+
+> And, no, you cannot call bpf internals through bpf_map_ops, etc.
+
+It doesn't appear that Fred is doing that in his patches.
+
+--=20
+paul-moore.com
