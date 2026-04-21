@@ -1,79 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31064335555
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 18:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9AA37CD4C
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 18:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776794803; cv=none; b=OUHO8GpuJCkRTuvG+seV+Z7i6/hlpJTSP4EVDhzG/xuyZk2izd8KDSxMLmJh+fWV/jINLYINBrhaJQDv7uE9jp+g2FxMRr1pEPkpGjj6kS0rXncymxv97udz4zOj9jmkRmCoxz1eMl4/Ad0Hdae370zbJC73ZMUG//jip52zp64=
+	t=1776794975; cv=none; b=gCipKxtK4WboKTm8j7toEr+r9GjxADxEhxseoRNSfaGxYgJCiPLN/YfBSQtwHzu4H3KcxgSSixzysM+iw+F8pkiJmKrB+++AjtDtiDO/VS0ka8k+Sb7dxGLrH7y2W6QZNT6wqq++Y0HuuiAm6QIs+dM6EuhWQUiSiuc51p8g0fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776794803; c=relaxed/simple;
-	bh=S18JnJi/l3K5CaCchti+tDxcMJjP09W6o4DOsrvO5BY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=jRQMWqN7KusIuBvgCYFMphQ0mY04XMC3KnknbYIFHuXgbwZ57QqQ/9SLUlpjn5xY8Xavzqc+SpyCoa58gb7ItEkKZEDbWgvN8uK34+upK+P8UN8zcDppegx0H+m84DGBVBi2aTkilYUuvxwHRnC/kt7kFELQKEHBFjTMJ64VPJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=euVdEhKD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776794975; c=relaxed/simple;
+	bh=8dxZvT81dw5mL6kYssZUDmNIpqDjtKl+OZs+E+PycPc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=i1OTzWX5sjWCiJahZMI9DcTFfpCW4O9jgIDuUjnWE98yx7e7wbOWjWoUMoT7Maqd9dCdGcULq6sGjrFUsAXGAocMbo9agHseqCSBHa/Cw7SnQ1n4IdWoEfmvDPjudye8TqGro46DFHat7J6VGaTvfpnn8iV+c++drIRjQ4uH6Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hk+JWmXv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="euVdEhKD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9687BC2BCB0;
-	Tue, 21 Apr 2026 18:06:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hk+JWmXv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAADBC2BCB0;
+	Tue, 21 Apr 2026 18:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776794802;
-	bh=S18JnJi/l3K5CaCchti+tDxcMJjP09W6o4DOsrvO5BY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=euVdEhKD0fqOMfU8D42bIhzlG1Csab7KOrPbjVShmCwMQJirBMc08IS+iVnyVa7Mi
-	 Z7HCmJgncHozZg1w9BLXfWU5l38T8fsWW3gRUQ70w5AJ9hKsdFXnUD7NNTE+apGkiF
-	 kZ4mIX7+AMVSxmEwWfpRJqyv0zZifEMXzDGt+/hUQg39RP0fDwLDutnPWwZZ6LlCu5
-	 rDFmH4nLPT61BEOxSJLKjWTP68MyXpyYBVtxm3qkq46wVdLb3TgMxjk+zZZkVoG9O4
-	 j5iw4oxtj8/cG4sVDyzec8qrO71cXq6Dmel8lwGvDJcFxpaYWFREtrK7VIe9Odq+nh
-	 OP3Nob/kUMzHA==
-Content-Type: multipart/mixed; boundary="===============6414921442221134341=="
+	s=k20201202; t=1776794974;
+	bh=8dxZvT81dw5mL6kYssZUDmNIpqDjtKl+OZs+E+PycPc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=hk+JWmXvQYn7HO3AfXTTZoQHAYgJoMLsn2zqZJSjjhkJ3zAFV93/LxbEep6foxQMr
+	 giPKoeWFGk1t2kDSwEqFyJnzVSPpRhXjQ8qM7Gz+q6PI7JxMkoRpHmIZL2xNZ1MY0E
+	 nBYr7hwLxQB+maTo2qqdy+redqlcBFhdbj1VNvue8CBdRhpYT66X8k8Y5iqcdd0qLL
+	 SR4QestmeYWWaln24V18uEMEmVomuNhj1YuUWZxPvA77H4UnYSvOqMOzJyE/p9a81R
+	 5k+li5l6++u4x/pDufQB8YgfYUaLLn17z0htw0NUiwaiuRKrx09xY/HqHJWK+wAcCP
+	 OQiPLq2uYrwFg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: Fix NULL pointer dereference in
+ bpf_sk_storage_clone and diag paths
+Reply-To: sashiko@lists.linux.dev
+To: "Weiming Shi" <bestswngs@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260420161432.3919396-2-bestswngs@gmail.com>
+References: <20260420161432.3919396-2-bestswngs@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 21 Apr 2026 18:09:34 +0000
+Message-Id: <20260421180934.AAADBC2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <154d4ed659716997501257309218648961b1f25de606e411a8f84cf16b95cc5a@mail.kernel.org>
-In-Reply-To: <20260421171937.3508679-1-yonghong.song@linux.dev>
-References: <20260421171937.3508679-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 2/9] bpf: Fix tail_call_reachable leak
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,jose.marchesi@oracle.com,kernel-team@fb.com,martin.lau@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 21 Apr 2026 18:06:42 +0000 (UTC)
 
---===============6414921442221134341==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Sashiko AI review found 1 potential issue(s):
+- [Medium] diag_get() returns -EMSGSIZE when a storage element is concurren=
+tly deleted, which falsely signals an out-of-buffer condition to the netlin=
+k subsystem.
+--
 
+commit 522b6760e7969af1ad0bb15843d5c06084d686f7
+Author: Weiming Shi <bestswngs@gmail.com>
 
-commit 697f215251be114235dcf2ec469f425797a26a51
-Author: Yonghong Song <yonghong.song@linux.dev>
+bpf: Fix NULL pointer dereference in bpf_sk_storage_clone and diag paths
 
-bpf: Fix tail_call_reachable leak
+This commit addresses a NULL pointer dereference in bpf_sk_storage_clone
+and diagnostic paths by adding checks for when a concurrent RCU reader
+observes a storage element with a NULL smap.
 
-This commit fixes a leak of the local tail_call_reachable flag across
-sibling subprogs during the DFS traversal in
-check_max_stack_depth_subprog(), which caused the JIT to emit
-unnecessary tail call counter preservation code for subprogs that
-could not be reached via a tail call path.
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> index 14eb7812bda4a..3e21d79558154 100644
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
 
-Should this commit carry a Fixes: tag? The buggy pattern (set
-tail_call_reachable to true on push, never reset on pop, then mark all
-currently-on-stack frames) appears to have been introduced by commit
-ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in
-JIT") which originally added tail_call_reachable tracking to the
-stack-depth DFS.
+[ ... ]
 
-Something like:
+> @@ -544,6 +544,8 @@ static int diag_get(struct bpf_local_storage_data *sd=
+ata, struct sk_buff *skb)
+>  		return -EMSGSIZE;
+> =20
+>  	smap =3D rcu_dereference(sdata->smap);
+> +	if (!smap)
+> +		goto errout;
 
-    Fixes: ebf7d1f508a7 ("bpf, x64: rework pro/epilogue and tailcall handling in JIT")
+When a storage element is concurrently deleted, smap evaluates to NULL here
+and goes to errout, which returns -EMSGSIZE.
 
+In netlink diagnostics, doesn't -EMSGSIZE specifically signal an
+out-of-buffer condition?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Could propagating -EMSGSIZE for a concurrently deleted element cause socket
+dumps to unnecessarily abort the current message and retry, or cause
+exact-match diagnostic queries to falsely fail with an EMSGSIZE error
+returned to userspace?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24736686700
---===============6414921442221134341==--
+Would it be better to return 0 after cancelling the nested attribute to
+gracefully skip the deleted element, or perhaps pass the already validated
+smap from the caller directly into diag_get()?
+
+>  	if (nla_put_u32(skb, SK_DIAG_BPF_STORAGE_MAP_ID, smap->map.id))
+>  		goto errout;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420161432.3919=
+396-2-bestswngs@gmail.com?part=3D1
