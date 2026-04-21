@@ -1,87 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC45E347C6
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 01:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F223CDF76
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 01:31:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776734249; cv=none; b=NzUN3Mf2OcHZjeUUHcN05uo0vNHxpu5H10kUeC7yQU9cX2BiZPiDwLOngOF8gDz50ks+UoXtqLUp18vLsNWRNuortWLFwR+7IwueVTe5ouxidqMYpHRjZktSbihuGo/BgVTiKkmWu5Purt2R2TQi8+tPRlSrupYwGTO9D7qRTLs=
+	t=1776735092; cv=none; b=mNtsdTTTkhwyGepwGlGJqD4W9szCgoygnuGVsPeZAUWZ9jJl8T2x/VvkhTV9XeYcElQVN+/xvcSAjXSWPEjgblOicambBtbQAmQCNScvQamBMRu39ka+a3dPyfZTL+/mJYUNHWvM6OxWgqB7PbRjCI1aC2k/dluiRNMeAdaMg10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776734249; c=relaxed/simple;
-	bh=O1F7dJaFSzJR6VKySvNzV3K8karEFrgn5nwyd1CBkXI=;
+	s=arc-20240116; t=1776735092; c=relaxed/simple;
+	bh=NisxC+hpohkcoI+wvlQpwTvxtnVy0J9729kxsWX4Zf0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JhkzPdWEtSUyTxXxzX1QOtyrU+v4KzM0XZSoZHNJc67WBqGd//rJk9775oXkzxE1qNfn59/K7d/I94JBNnwmvg+McaNmoBeGA+0VId2TakC8DpmX00tMKUhLZaiVAbQbqV8Pmr5sGqlVldI0bPuEeb47S/wBPFXOkPZI6HGv1FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYTlR0P1; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=rQj2YxT0fsElNZmuTyWIHR02REmjGxMQiGkVI9EDCt2rrKkNXjJf0ITVdk2GVGJJheNbocZ9rcjCFuBcxDbOY6MUgHGB746YCPjBw5mlavCCkjo3qFXepFcnJJk/+FGmUzgour//65k4VAgV21XFZlq6ym8eDOK3agwLW962uwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hLYMmJX8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYTlR0P1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD73C19425;
-	Tue, 21 Apr 2026 01:17:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hLYMmJX8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80787C19425;
+	Tue, 21 Apr 2026 01:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776734249;
-	bh=O1F7dJaFSzJR6VKySvNzV3K8karEFrgn5nwyd1CBkXI=;
+	s=k20201202; t=1776735091;
+	bh=NisxC+hpohkcoI+wvlQpwTvxtnVy0J9729kxsWX4Zf0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=iYTlR0P19wqAmqym9pZGbnP/5JfaEz36Hf8h5bjK4eyafmvR6R7j/XcJVWwdXTqiV
-	 00dyL1lo/Gqs0SOpvfUu/L41dpC5Jw9viMwENw5Rb5fzQzyjXMYheNQaBukRr4bEF4
-	 PECUh6P4aZIdZXHbLdD9T21Bk+/7jsPCSfzIANJ+UPeWdMKMxZdIple5hhHo9VpL1H
-	 3Jf4zagbgNO4pG0H9TnoZuSFTh5cPgNGJhAopoHBJI6cv6ByRSG2QdI/zia9xv8fKl
-	 rInSxXizE5ADBDzn6BKl/N+lks7GELU3YIwgk9Bd4fLKN1gl16jKAdFMj8gi/+QRE5
-	 RmSnBCJgdDznA==
+	b=hLYMmJX8yIDsUaNx7QFc4eI5WULmzKg8nipOWeu6B8PmGXOIgEAGTtn+32a5oecPq
+	 mS4wv/ven3xYAWBG/HRGI77WtAKHfSipbRiuNxwQX5Nj5z+FsZ79RofuGlSK3egRFf
+	 XgjXrrnIroDoeqEOqCoFOxA+CzsdHepHfiYPs1BhCBdpwdEctmh7Mt7OFWmWK9j/AS
+	 czsSWvzNk4ExACIB50KZg+4FpOX47+WEw6dXrjCXtdHKs0bhEzYIfHLJ5GAqoRnD5t
+	 EZwkzeNfYhUZ83Tu1bU/pnXMU4OMzFt+hVPiIjwUqKkA7TB7yeG2XTFfIR0iJa+bmq
+	 XcEGAmojDDvOA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 01/10] crypto: pkcs7: add flag for validated trust on
- a signed info block
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add test for map-stored
+ struct file kptrs
 Reply-To: sashiko@lists.linux.dev
-To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
+To: "Justin Suess" <utilityemal77@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420212653.438685-2-bboscaccy@linux.microsoft.com>
-References: <20260420212653.438685-2-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260420203306.3107246-3-utilityemal77@gmail.com>
+References: <20260420203306.3107246-3-utilityemal77@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 01:17:28 +0000
-Message-Id: <20260421011729.4BD73C19425@smtp.kernel.org>
+Date: Tue, 21 Apr 2026 01:31:30 +0000
+Message-Id: <20260421013131.80787C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [Low] `verify_pkcs7_message_sig` is exported using `EXPORT_SYMBOL` but re=
-quires a GPL-only structure, creating an inconsistent API boundary.
+Sashiko AI review found 2 potential issue(s):
+- [High] Wrapping `RUN_TESTS()` inside `test__start_subtest()` breaks subte=
+st filtering and creates dummy subtests.
+- [Low] Zombie process leak if an error occurs before `waitpid()`.
 --
 
-commit 6419b567f8141f60cbee1c62c6b8f2a8760edbda
-Author: James Bottomley <James.Bottomley@HansenPartnership.com>
+commit a0fbd925d86bff9e8b40a48dc8cff998dbbb50fc
+Author: Justin Suess <utilityemal77@gmail.com>
 
-crypto: pkcs7: add flag for validated trust on a signed info block
+selftests/bpf: Add test for map-stored struct file kptrs
 
-This commit allows consumers to check if a PKCS#7 signed info block has
-passed trust validation by adding a verified flag. It also exports
-verify_pkcs7_message_sig so other modules can obtain a trusted PKCS#7
-object.
+This commit adds tests for map-stored referenced struct file pointers. It
+verifies that the file reference remains valid after the original file
+descriptor is closed, and checks that unreferenced struct file pointers are
+rejected by the verifier.
 
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index e0761436ec7f4..9bda49295bd02 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -380,6 +380,7 @@ int verify_pkcs7_message_sig(const void *data, size_t=
- len,
->  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
->  	return ret;
->  }
-> +EXPORT_SYMBOL(verify_pkcs7_message_sig);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/refcounted_kptr_file.=
+c b/tools/testing/selftests/bpf/prog_tests/refcounted_kptr_file.c
+> new file mode 100644
+> index 0000000000000..173121377040c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/refcounted_kptr_file.c
+[ ... ]
+> +	skel->bss->file_kptr_insert_pid =3D child_pid;
+> +	err =3D write_full(pipefd[1], "1", 1);
+> +	if (!ASSERT_OK(err, "start_child"))
+> +		goto out;
 
-Is this intended to be EXPORT_SYMBOL instead of EXPORT_SYMBOL_GPL?=20
+If an error occurs here and the code jumps to the out label, does it leave
+the child process as a zombie?
 
-The function requires a parsed struct pkcs7_message as an argument, but the
-only function that parses and allocates this structure, pkcs7_parse_message=
-(),
-is exported as EXPORT_SYMBOL_GPL.=20
+It looks like the cleanup path closes the pipe file descriptors which causes
+the child to read EOF and exit, but waitpid() isn't called in the cleanup
+path.
 
-This seems to create an inconsistent API boundary where non-GPL modules are
-permitted to use this function but cannot legitimately obtain the necessary
-input object to do so. Other related APIs in the PKCS#7 and keyring
-verification subsystems also use EXPORT_SYMBOL_GPL.
+[ ... ]
+> +void test_refcounted_kptr_file(void)
+> +{
+> +	if (test__start_subtest("holds_ref_after_close"))
+> +		run_refcounted_file_kptr_success();
+> +
+> +	if (test__start_subtest("reject_unref_ctx_file"))
+> +		RUN_TESTS(refcounted_kptr_file_fail);
+> +}
+
+Can wrapping RUN_TESTS() inside test__start_subtest() break test filtering?
+
+RUN_TESTS() internally parses the skeleton and creates its own subtests for
+each BPF program by calling test__start_subtest_with_desc().
+
+Since the selftests framework doesn't support nested subtests, if a user
+filters for the inner program name (like -t refcounted_kptr_file/stash_unre=
+f_ctx_file),
+the outer test__start_subtest() will not match the filter and will skip
+RUN_TESTS() completely.
+
+Should RUN_TESTS() be called unconditionally at the top level of the test
+function instead?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420212653.4386=
-85-1-bboscaccy@linux.microsoft.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420203306.3107=
+246-1-utilityemal77@gmail.com?part=3D2
