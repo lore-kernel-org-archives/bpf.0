@@ -1,180 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325B82AE78
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 17:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B332F25F0
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 17:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776791912; cv=none; b=kTozE1guKj4Rui+Ket5ocD02R6PK/z7p9FGd5P4j0lTJ4YFTCCVKhielxmVYmvtilfz6Z7WWjwjz4RkXs0m6f+76tFPln+tKbd8+LxoAenxxxYehSzXHs18r8RSX8lXh90SFwqrIC84J+crn/BZiw9unYfhsiNMBSGJaXptISws=
+	t=1776791984; cv=none; b=BUIA0G8QmZq4nexRGj3wk73b3wBH234PD2oMhwTwNEkujOFr7N7uxsbHfLz+B9o7hZMIN1FgPqXbKf4/gnSdfNKtgJflti7pSXRkvlNnxWE547B9fn7PbjYKCmjl/CwWx00lDviC4VoZAi1hPIQ+q95OZD4ldTa+NImtF64qfq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776791912; c=relaxed/simple;
-	bh=LA5Mymi5WlGDvCtb5Ih1LotxlsfbuMckFJ4yBe6jLUU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=DISmKUUPVXHjJnUlG0GkDC8jdwniUdnqoeLVi3YSAEmw55fFfVcLKlM8RP01WQQkxmzbgIuKfxCqNMBq8Dhm7MSHdqmLWJyQYrVNxfeMpLe4wwMVwlWrTnspL26vt8ae+dG3/946/PXM43BtFkFGaczhwPYwU6wYW1RIyQnd5Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eZT66ZGO; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eZT66ZGO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3881BC2BCB5;
-	Tue, 21 Apr 2026 17:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776791910;
-	bh=LA5Mymi5WlGDvCtb5Ih1LotxlsfbuMckFJ4yBe6jLUU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=eZT66ZGOSvMXzf9UcoWwWhWf2UjmxhjkF2zfby7pyHlFJGpIhwUIRRM6e9gnFO80L
-	 EzsG0K2kQSqOS4jBg/egdnBjik5Ewgg1i+L8BxqagNQ2G5CzmL+BMum9xQE5CopVgF
-	 YWLieGrThqOoZSLyIlKnaF4oUPDNlHoeZreyObqTtrzTpzNRyiedARiuOrvVd4iHD1
-	 KjNwu5YGTE/a000VjJ8mDtK0zFnpqgtTz/lzCB+4yvsbLKYHsSzN/rVhD4T6DHFjPa
-	 lUANf1vS5M451aSKWBQKrOTFvj0h9wz+pfWbHXY1rki/OeORXoSbLcSxZ8RYwcFdfQ
-	 i5T2po5ECrNmw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC bpf-next 1/4] bpf: representation and basic
- operations on circular numbers
-Reply-To: sashiko@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260421-cnums-everywhere-rfc-v1-v1-1-8f8e98537f48@gmail.com>
-References: <20260421-cnums-everywhere-rfc-v1-v1-1-8f8e98537f48@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 17:18:29 +0000
-Message-Id: <20260421171830.3881BC2BCB5@smtp.kernel.org>
+	s=arc-20240116; t=1776791984; c=relaxed/simple;
+	bh=c64p/Td5d3cwbCdIrpE9fXB/v/RgwX+pyGX336r+wS0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QefigEo6fn07Xe+lz8iGXXBOQnCHDXGC/x4f+tH7msFd1d0mofCMp7p3xt6IFmeo3Y/vA1dAMLoi46Q7EizRiIp4boyUtW7o5GF817BRHBtN5RKuaTjuOzIxiPCtWLGY8/NLfxed0oxaYNySJKZ/62e8DcDmI8VcJTFNv7ROgb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 1E6BD44B27912; Tue, 21 Apr 2026 10:19:27 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next 0/9] bpf: Prepare to support stack arguments
+Date: Tue, 21 Apr 2026 10:19:27 -0700
+Message-ID: <20260421171927.3507554-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-Sashiko AI review found 4 potential issue(s):
-- [Critical] `FN(cut)` emits wrapped chunks causing `FN(mk_mul_u)` to compu=
-te unsound narrow bounds.
-- [Critical] `cnum32_from_cnum64()` can return a struct mathematically equi=
-valent to the `CNUM32_EMPTY` sentinel.
-- [High] Unconditional use of `__int128` breaks compilation on 32-bit archi=
-tectures.
-- [Medium] Missing emptiness checks in `cnum64_cnum32_intersect` and `cnum3=
-2_from_cnum64` resurrect unreachable states.
---
+The patch set prepares to support stack arguments for bpf functions
+and kfunc's. The major changes include:
+  - Avoid redundant calculation of bpf_reg_state. For stack
+    arguments, there exists no corresponding register number.
+  - Refactor check_kfunc_mem_size_reg() to have bpf_reg_state's
+    for both mem_reg and size_reg.
+  - Allow verifier logs to print stack arguments if there is no
+    corresponding register.
 
-commit 5ab536543671bb2cd6865196d88e96f87d1e7888
-Author: Eduard Zingerman <eddyz87@gmail.com>
+Please see individual patches for details.
 
-bpf: representation and basic operations on circular numbers
+Yonghong Song (9):
+  bpf: Remove unused parameter from check_map_kptr_access()
+  bpf: Fix tail_call_reachable leak
+  bpf: Remove WARN_ON_ONCE in check_kfunc_mem_size_reg()
+  bpf: Refactor to avoid redundant calculation of bpf_reg_state
+  bpf: Refactor to handle memory and size together
+  bpf: Rename existing argno to arg
+  bpf: Prepare verifier logs for upcoming kfunc stack arguments
+  bpf: Introduce bpf register BPF_REG_PARAMS
+  bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
 
-This commit introduces cnum32 and cnum64 representations for unified
-signed and unsigned numeric ranges in the BPF verifier. It includes
-functions for intersection, multiplication, and range conversion to
-refine bounds deductions.
-
-Link: https://lore.kernel.org/all/ZTZxoDJJbX9mrQ9w@u94a/
-Link: https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
-Link: https://github.com/eddyz87/cnum-verif/tree/master
-
-> diff --git a/kernel/bpf/cnum.c b/kernel/bpf/cnum.c
-> new file mode 100644
-> index 0000000000000..38a805a6fc2a9
-> --- /dev/null
-> +++ b/kernel/bpf/cnum.c
-[ ... ]
-> +struct cnum32 cnum32_from_cnum64(struct cnum64 cnum)
-> +{
-
-Are we missing a check for empty inputs here? If an empty 64-bit range is
-passed, does this code convert it directly into an unbounded 32-bit range?
-
-> +	if (cnum.size > U32_MAX)
-> +		return (struct cnum32){ .base =3D 0, .size =3D U32_MAX };
-> +	else
-> +		return (struct cnum32){ .base =3D (u32)cnum.base, .size =3D cnum.size =
-};
-> +}
-
-Could this else branch return a value mathematically identical to the
-CNUM32_EMPTY sentinel?
-
-If a valid 64-bit range has a size of U32_MAX and a base ending in
-0xFFFFFFFF, this would return { .base =3D 0xFFFFFFFF, .size =3D 0xFFFFFFFF =
-}.
-Would the verifier then incorrectly assume this code path is dead and
-prune it?
-
-[ ... ]
-> +struct cnum64 cnum64_cnum32_intersect(struct cnum64 a, struct cnum32 b)
-> +{
-
-Does this function need to verify if the input ranges are empty before
-operating on them? If the variable a is empty, could the arithmetic below
-return a non-empty, garbage range, effectively resurrecting dead code paths?
-
-> +	/*
-> +	 * To simplify reasoning, rotate the circles so that [virtual] a1 starts
-> +	 * at u32 boundary, b1 represents b in this new frame of reference.
-> +	 */
-> +	struct cnum32 b1 =3D { b.base - (u32)a.base, b.size };
-[ ... ]
-> diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
-> new file mode 100644
-> index 0000000000000..28dcb79ba6950
-> --- /dev/null
-> +++ b/kernel/bpf/cnum_defs.h
-[ ... ]
-> +#if T =3D=3D 32
-> +#define ut2 u64
-> +#define st2 s64
-> +#define utt u32
-> +#define stt s32
-> +#define EMPTY CNUM32_EMPTY
-> +#elif T =3D=3D 64
-> +#define ut2 unsigned __int128
-> +#define st2 signed __int128
-
-Will the unconditional use of unsigned __int128 and signed __int128 break
-compilation on 32-bit architectures? Since the BPF subsystem and verifier
-are built on 32-bit kernels when CONFIG_BPF_SYSCALL is enabled, this
-might cause widespread build failures.
-
-> +#define utt u64
-> +#define stt s64
-> +#define EMPTY CNUM64_EMPTY
-> +#else
-> +#error "Unsupported T value, cannot define ut2/st2"
-> +#endif
-[ ... ]
-> +static int FN(cut)(struct cnum_t a, struct cnum_t chunks[3])
-> +{
-> +	int ncuts =3D 0;
-> +
-> +	if (FN(srange_overflow)(a)) {
-> +		chunks[ncuts++] =3D FN(from_urange)(a.base, ST_MAX);
-> +		a =3D FN(from_urange)(ST_MIN, a.base + a.size);
-> +	}
-
-Can this splitting logic emit wrapped chunks that cause bound deductions
-to underflow?
-
-When an arc crosses both boundaries, this splits it first at ST_MAX. The
-resulting first chunk crosses the unsigned boundary 0.
-
-When passed to FN(mul_chunk) with a multiplier, it falls into the fallback
-branch utilizing FN(mk_mul_u):
-
-static struct cnum_t FN(mk_mul_u)(utt a, utt b, utt c, utt d)
-{
-        ut2 size =3D (ut2)c * d - (ut2)a * b;
-
-Because the chunk wraps, its unsigned start is mathematically greater than
-its end. Does this cause the subtraction to severely underflow in unsigned
-arithmetic, producing an artificially tight size that misses valid
-runtime products?
-
-> +	if (FN(urange_overflow)(a)) {
-> +		chunks[ncuts++] =3D FN(from_urange)(a.base, UT_MAX);
-> +		a =3D FN(from_urange)(0, a.base + a.size);
-> +	}
-> +	chunks[ncuts++] =3D a;
-> +	return ncuts;
-> +}
-[ ... ]
+ include/linux/bpf.h                           |   5 +
+ include/linux/bpf_verifier.h                  |   1 +
+ include/linux/filter.h                        |   5 +-
+ kernel/bpf/core.c                             |   4 +-
+ kernel/bpf/verifier.c                         | 813 ++++++++++--------
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c |  22 +-
+ .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
+ .../selftests/bpf/prog_tests/ctx_rewrite.c    |  14 +-
+ .../selftests/bpf/prog_tests/kfunc_call.c     |   2 +-
+ .../selftests/bpf/prog_tests/linked_list.c    |   4 +-
+ .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  14 +-
+ .../selftests/bpf/progs/cpumask_failure.c     |  10 +-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |  22 +-
+ .../selftests/bpf/progs/file_reader_fail.c    |   4 +-
+ tools/testing/selftests/bpf/progs/irq.c       |   4 +-
+ tools/testing/selftests/bpf/progs/iters.c     |   6 +-
+ .../selftests/bpf/progs/iters_state_safety.c  |  14 +-
+ .../selftests/bpf/progs/iters_testmod.c       |   4 +-
+ .../selftests/bpf/progs/iters_testmod_seq.c   |   4 +-
+ .../selftests/bpf/progs/map_kptr_fail.c       |   2 +-
+ .../selftests/bpf/progs/percpu_alloc_fail.c   |   4 +-
+ .../testing/selftests/bpf/progs/rbtree_fail.c |   6 +-
+ .../bpf/progs/refcounted_kptr_fail.c          |   2 +-
+ .../testing/selftests/bpf/progs/stream_fail.c |   2 +-
+ .../selftests/bpf/progs/task_kfunc_failure.c  |  18 +-
+ .../selftests/bpf/progs/task_work_fail.c      |   6 +-
+ .../selftests/bpf/progs/test_bpf_nf_fail.c    |   8 +-
+ .../bpf/progs/test_kfunc_dynptr_param.c       |   2 +-
+ .../bpf/progs/test_kfunc_param_nullable.c     |   2 +-
+ .../selftests/bpf/progs/verifier_bits_iter.c  |   4 +-
+ .../bpf/progs/verifier_bpf_fastcall.c         |  24 +-
+ .../selftests/bpf/progs/verifier_may_goto_1.c |  12 +-
+ .../bpf/progs/verifier_ref_tracking.c         |   6 +-
+ .../selftests/bpf/progs/verifier_sdiv.c       |  64 +-
+ .../selftests/bpf/progs/verifier_vfs_reject.c |   8 +-
+ .../testing/selftests/bpf/progs/wq_failures.c |   2 +-
+ tools/testing/selftests/bpf/verifier/calls.c  |  14 +-
+ 37 files changed, 604 insertions(+), 536 deletions(-)
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421-cnums-ever=
-ywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com?part=3D1
+2.52.0
+
