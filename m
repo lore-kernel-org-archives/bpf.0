@@ -1,128 +1,129 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83437364931
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 03:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C9A383C70
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 03:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776741722; cv=none; b=BnB5APNbo447iqMMzZANK2ECClzazy4mPDS3wTKh6zjc9q3YHeRjyrhiYfvse8iTIJKpcptzn+w8Q68F3c9uu6rsz6urEXTcowb9Mu1rUJ9c0OAZrjyAc93JBXfckJCFps87R9dvT9Pi361qCT5MD9z377H3cRiVX/wVSM31fME=
+	t=1776741797; cv=none; b=dOWGUB+1lB8E38Pa/hGhQXAmrUQ1tU26VCHb3VbO+3ovkOnjCIMV33Z3oAQU2V54ojDC335rX1xJALFfhPl5w2Ujvyu/NBThCuo2xU9qEsVgPAsc/CU2X5TWHB2qz38zY3AJzRKViu2HoSYfaDpVuX6T0XzLLj4lReecDaN8rL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776741722; c=relaxed/simple;
-	bh=J73dGupcaQh+HDl/V7HHrcCZFL1QupSS256ZdmyF88Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H+jJoqAo3FAps+E113gjrKkLzwFZ0oDwCxktFfC0LxF0hSmYMgKxpwxHlhYWOLhP7GQLX9WL7OPmd9tlrK9dijs/8NiXZHsBp8DWcmN4Sy5+B2l+h1aVCxNxJVvvR0APx7o+ZFy1DKYCD1g6E2uWK74HQU0CHhBhgtru+04up8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=AI1x65Af; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1776741797; c=relaxed/simple;
+	bh=/Op4bqrwzPQUnu10bVS1K0p2V4C0ThrEiVUR/+IoIeM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RHJUEfDzdN5tax1Urc/qsjCH5G/LvBgx6CW7GKvPfC7+8/CEmNbdSI65rH92s3D6xnYuHvEenNk8RIx+PWR9jWsEYdClRy1szwPIkupei7+cXgVjdGLctXuYcGWpHWFf5Uu1O3hsf7ViwjBEhmlIvaNg3DeC2EAoPDO3LqluHcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BsEIb1Sq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="AI1x65Af"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=+i3S30UCECDHFf2aWiyav3l9pWVUeZbRoGfN5HJrahM=;
-	b=AI1x65AfX6umX4/+sj2enxgXJ8bnwDq8fNU7LCS4bw6OCOmrXeabDXSVeK+HAD
-	68YeaZIvXfOXxWwfQ1On3o6GHiipFUglO7KDNvhpze2sAySj13bHGdKijiSkbUTh
-	RSuKNUSCx1atJ1qYJeQSmOHp3eQC1mUunnCjPBf7TP9Ow=
-Received: from [10.54.24.32] (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgCXRaw47eZpTzwXAw--.74S2;
-	Tue, 21 Apr 2026 11:21:31 +0800 (CST)
-Message-ID: <062b1b3b-dedd-422b-83a6-1ca78d7270f7@163.com>
-Date: Tue, 21 Apr 2026 11:21:27 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BsEIb1Sq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37923C2BCB3;
+	Tue, 21 Apr 2026 03:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776741797;
+	bh=/Op4bqrwzPQUnu10bVS1K0p2V4C0ThrEiVUR/+IoIeM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=BsEIb1SqmRcle/fvtU+GEuAj7Tt9QCFnas90dx/4exPGYY630MTI0hjjhgdvBfLmb
+	 0prE0jhz2EwJlwF4fCRIX29ecmFh/ndz9PBkGjWDJwDpqPEu3mpS9gVrcsESOh6VIh
+	 Hc+QvExt+wOSsVx/uStmJRWa92CoHx1gy1li6yzxvIibxA8tuDYpNc76+JogJAB3Tp
+	 algNVBz7QPj+XBLq6+3C1uwPCgDgNF2lw4wtI3YSQSFz8LxcpoTDLmVM0n1hxo5F6t
+	 /WFpQHTjByyQuxZaBFnziBz5FFv4ja7UQNJp3skfdb2ZgJFRw4Sd1pEsCMfEVPp9dY
+	 CzjGwY7pk7gBw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v5 10/10] ipe: Add BPF program load policy enforcement
+ via Hornet integration
+Reply-To: sashiko@lists.linux.dev
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260420212653.438685-11-bboscaccy@linux.microsoft.com>
+References: <20260420212653.438685-11-bboscaccy@linux.microsoft.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 21 Apr 2026 03:23:16 +0000
+Message-Id: <20260421032317.37923C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 bpf] sockmap: Fix sk_psock_drop() race vs
- sock_map_{unhash,close,destroy}().
-To: sashiko@lists.linux.dev, Kuniyuki Iwashima <kuniyu@google.com>
-Cc: bpf@vger.kernel.org
-References: <20260420194846.1089595-1-kuniyu@google.com>
- <20260421011357.70974C19425@smtp.kernel.org>
-From: Jiayuan Chen <mrpre@163.com>
-In-Reply-To: <20260421011357.70974C19425@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgCXRaw47eZpTzwXAw--.74S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCw4xKF1fGw1kXF1fXFW5KFg_yoW5ZFyfpr
-	n5CayUK3W8JFy2qws5Za1UXr18ta1rJF1Yk3WUua4rZr1fGw4S9FW3XFyYy3WI9rs7Ca1U
-	XrnxWrykC39xuaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi22NtUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbC7BudRWnm7TvU2wAA35
 
+Sashiko AI review found 1 potential issue(s):
+- [Low] Compilation failure in `evaluate_property()` when `CONFIG_IPE_PROP_=
+BPF_SIGNATURE` is disabled due to unconditional access to `ctx->bpf_kernel`.
+--
 
-On 4/21/26 9:13 AM, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [High] The newly introduced unbounded `goto retry;` loops in `sock_map_unhash()`, `sock_map_destroy()`, and `sock_map_close()` can cause a hard lockup (deadlock) due to softirq preemption or priority inversion.
-> --
->
-> commit 08b24da207c576eef44ad9d88356dbd6600ab733
-> Author: Kuniyuki Iwashima <kuniyu@google.com>
-> sockmap: Fix sk_psock_drop() race vs sock_map_{unhash,close,destroy}().
->
-> This commit fixes a race condition where sk_psock_drop() might not have
-> finished restoring sk->sk_prot even if sk_psock_get() fails to bump the
-> refcount. It adds a retry loop to sock_map_unhash(), sock_map_destroy(),
-> and sock_map_close() when sk_psock_get() returns NULL but the protocol
-> hooks haven't been restored yet.
->
-> Closes: https://lore.kernel.org/bpf/69cec5ef.050a0220.2dbe29.0009.GAE@google.com/
->
->> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
->> index 02a68be3002a2..99e3789492a09 100644
->> --- a/net/core/sock_map.c
->> +++ b/net/core/sock_map.c
-> [ ... ]
->> @@ -1652,20 +1657,25 @@ void sock_map_destroy(struct sock *sk)
->>   	void (*saved_destroy)(struct sock *sk);
->>   	struct sk_psock *psock;
->>   
->> +retry:
->>   	rcu_read_lock();
->>   	psock = sk_psock_get(sk);
->>   	if (unlikely(!psock)) {
->>   		rcu_read_unlock();
->>   		saved_destroy = READ_ONCE(sk->sk_prot)->destroy;
->> +		if (unlikely(saved_destroy == sock_map_destroy))
->> +			goto retry;
-> Can this unbounded retry loop cause a hard lockup due to softirq preemption
-> or priority inversion?
->
-> If sk_psock_put() is called from process context with bottom-halves enabled
-> (such as from sock_map_close() after release_sock()), an interrupt could
-> preempt the thread immediately after refcount_dec_and_test(&psock->refcnt)
-> drops to 0 but before sk_psock_drop() disables BH.
->
-> If a network interrupt fires on the same CPU, NET_RX_SOFTIRQ may process a
-> packet (such as an RST) that triggers socket destruction via:
-> tcp_done() -> inet_csk_destroy_sock() -> sk->sk_prot->destroy()
->
-> Since sk_psock_drop() has not yet restored the protocol, sk->sk_prot->destroy
-> is still sock_map_destroy().
->
-> When sock_map_destroy() calls sk_psock_get(), it returns NULL because the
-> refcount is exactly 0. The code then falls into the !psock branch, sees that
-> sk->sk_prot->destroy is still sock_map_destroy(), and jumps to retry.
->
-> Because the softirq spins infinitely in this tight loop and never yields the
-> CPU, the preempted process context can never execute sk_psock_drop(),
-> resulting in a permanent hard lockup.
+commit f674a6cd60a4a820baf0e01920f42c00f9ad8225
+Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 
+ipe: Add BPF program load policy enforcement via Hornet integration
 
-sock_map_close(sk)
-|___ sk_psock_put(sk, psock)   <- refcnt-hits-0 window lives here
-|___ saved_close == tcp_close
-       |__tcp_close
-             |____ sock_orphan   <- SOCK_DEAD set here
-             |____(later) inet_csk_destroy_sock
+Add support for the bpf_prog_load_post_integrity LSM hook, enabling IPE
+to make policy decisions about BPF program loading based on integrity
+verdicts provided by the Hornet LSM.
 
-At the exact instant the refcnt can be observed at 0 with
-sk_prot not yet restored, SOCK_DEAD is guaranteed not to be set.
+> diff --git a/security/ipe/eval.c b/security/ipe/eval.c
+> index 21439c5be3364..9a6d583fea125 100644
+> --- a/security/ipe/eval.c
+> +++ b/security/ipe/eval.c
 
-So I think AI is not correct.
+[ ... ]
 
-> A similar priority inversion deadlock could also occur on PREEMPT_RT if the
-> thread calling sk_psock_drop() is preempted by a higher-priority task.
->
+> @@ -297,6 +342,32 @@ static bool evaluate_property(const struct ipe_eval_=
+ctx *const ctx,
+>  		return evaluate_fsv_sig_false(ctx);
+>  	case IPE_PROP_FSV_SIG_TRUE:
+>  		return evaluate_fsv_sig_true(ctx);
+> +	case IPE_PROP_BPF_SIG_NONE:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_NONE);
+> +	case IPE_PROP_BPF_SIG_OK:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_OK);
+> +	case IPE_PROP_BPF_SIG_UNSIGNED:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_UNSIGNED);
+> +	case IPE_PROP_BPF_SIG_PARTIALSIG:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_PARTIALSIG);
+> +	case IPE_PROP_BPF_SIG_UNKNOWNKEY:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_UNKNOWNKEY);
+> +	case IPE_PROP_BPF_SIG_UNEXPECTED:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_UNEXPECTED);
+> +	case IPE_PROP_BPF_SIG_FAULT:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_FAULT);
+> +	case IPE_PROP_BPF_SIG_BADSIG:
+> +		return evaluate_bpf_sig(ctx, LSM_INT_VERDICT_BADSIG);
+> +	case IPE_PROP_BPF_KEYRING_BUILTIN:
+> +		return evaluate_bpf_keyring(ctx, 0);
+> +	case IPE_PROP_BPF_KEYRING_SECONDARY:
+> +		return evaluate_bpf_keyring(ctx, (s32)(unsigned long)VERIFY_USE_SECOND=
+ARY_KEYRING);
+> +	case IPE_PROP_BPF_KEYRING_PLATFORM:
+> +		return evaluate_bpf_keyring(ctx, (s32)(unsigned long)VERIFY_USE_PLATFO=
+RM_KEYRING);
+> +	case IPE_PROP_BPF_KERNEL_FALSE:
+> +		return !ctx->bpf_kernel;
+> +	case IPE_PROP_BPF_KERNEL_TRUE:
+> +		return ctx->bpf_kernel;
 
+Will this cause a build failure when CONFIG_IPE_PROP_BPF_SIGNATURE is disab=
+led?
+
+In security/ipe/eval.h, the bpf_kernel field in struct ipe_eval_ctx is
+protected by #ifdef CONFIG_IPE_PROP_BPF_SIGNATURE:
+
+struct ipe_eval_ctx {
+...
+#ifdef CONFIG_IPE_PROP_BPF_SIGNATURE
+	enum lsm_integrity_verdict bpf_verdict;
+	s32 bpf_keyring_id;
+	bool bpf_kernel;
+#endif /* CONFIG_IPE_PROP_BPF_SIGNATURE */
+};
+
+However, evaluate_property() unconditionally accesses ctx->bpf_kernel for
+IPE_PROP_BPF_KERNEL_FALSE and IPE_PROP_BPF_KERNEL_TRUE. If the kernel is
+configured without CONFIG_IPE_PROP_BPF_SIGNATURE (for example, if
+CONFIG_SECURITY_HORNET is disabled), it appears the build will fail due to
+the missing struct member.
+
+>  	default:
+>  		return false;
+>  	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420212653.4386=
+85-1-bboscaccy@linux.microsoft.com?part=3D10
