@@ -1,106 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9772345CCA
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3A7345CCA
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776764424; cv=none; b=hf6NdDbR4qk8aRSmIXX+hEcjtlMPvemzJQ52HxwN3WBdmrSFjO6h+QPzzA+3SINyOCD4WaaSzYJs0F8lS3Ve0BGBqrOxmRpTFitdFdSO6W3hCnZo5XwFe9Ls1E4xWAzEF35v7GG98hr9ksA1IjjsqCEE6mCZT9GvVnjvBjTdpCM=
+	t=1776764425; cv=none; b=Kz6oynwfQoVC4VyC5FeykbsIhk/s1A6t1aFtfdOsLpsQyAG/iuQohd44zFUoXGW9nWqFBCpNTR6Ta4y8Hi6rbh9Yf/93Ml/fdXEOPyazsUk/gKJHQ3Qc+p6ZaEv/dtiaGBJxDG1eRPXu9c8/s8+kHtmvkvdGoJ+7V3d6UsgZQu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776764424; c=relaxed/simple;
-	bh=tCDC2/9iRtOMmve+brU/ALMcLIFTP5+b8sbRLrQ1Y8o=;
+	s=arc-20240116; t=1776764425; c=relaxed/simple;
+	bh=Fo6/M1gJ1APu+irFynuHUcygAYdMMaUZhfA0vyF8pAs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XQLs0YS3Tg3Rzjggb0+6zE8Alnbn9LloTvCb8fO+ZxJ5BAzzEN5XbuI1U6CXoBCu09+3OHNHxSdZoYPvIeyM48WuHUrTMaA92sAij5XYLbBCEHdvFyMxrlUWCQSBH2i5wpMwZOsIFF+gvss1czL5kBShahyJoZBwXOTn8Trt01w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDJK2nam; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=opxfUsyov1Vw8e8NsXHp3y7Rk3YMUr4mlunJIB0cJkK7lZFmepXYWmIsaqONWwm299H5K9IFxRtte9/B6+R3H8646t/lP2JCaAKB8Xuf4Zr9bxEhTbdBwk02x+t9TB1bhgmxHtgl0gDqHiR+dVTPoTnTtpAReQ+TTzEjOVS18oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWQkq2Gv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDJK2nam"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E8EBC2BCB0;
-	Tue, 21 Apr 2026 09:40:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWQkq2Gv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 684A0C2BCB0;
+	Tue, 21 Apr 2026 09:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776764424;
-	bh=tCDC2/9iRtOMmve+brU/ALMcLIFTP5+b8sbRLrQ1Y8o=;
+	s=k20201202; t=1776764425;
+	bh=Fo6/M1gJ1APu+irFynuHUcygAYdMMaUZhfA0vyF8pAs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=jDJK2namcG8hswqf2wNB3vSpB9M4A21F54KIZ79mubZ0Ca04UuzESkx16CbyyBiRz
-	 i8gp8hGgKIV4JPg8wIUuP5+6JgF82LSVbzNNO9oaG1ehrvLOuzx5kQSZd2zku0v8kc
-	 BantpWScbKzk1FmmxnSe2sVTvxaMITE2mvGSNMuk6pPEQMYF1U3M7JW81XSmv+U7+0
-	 3tPUhBAQMXIGQA4qTTs9CkwajGvsnKvTWnPN37LgNo37ZlSIflvUcXW82k5Eyaq54l
-	 9Tq9n1PHzMhqqm0X0mQyzvP/RxNttO9UTxmDWmGdtqLTuYkN/LZ4i/MA97JQ9tuQAz
-	 lt8599JX6e9cQ==
+	b=VWQkq2Gv7zLrOlSEX+bfYITn7/pvsWyAsMrpl5mT8WnLJ2Of7M795lmIfbKpqfsRx
+	 hiwUHuY+NZKZ1N7zWXMeAwi+7Tbv+bUWKdsrXQgHh9fa/Vj3gL8SzALy53TVQvhi8g
+	 U45yp69Bkbb0dI6r44xa+qGC7ltAlTF09P8dA/YsHd4CsBsOu32irQvHaoHchYcwKn
+	 tLYoRySVQVMBOVBNhBpBMXB83j2NlIh0pdKjKlqQCvGIENsJ1Ae7TWgPhptaw2uPif
+	 02SuGOYydCi4yJb+4aktiXUyX6CyX9yVkVB8QOvQC19dbhTZiSSVd95EvE5KnEoLLz
+	 5Uj/ZSreadI5g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2 3/8] xsk: fix use-after-free of xs->skb in
- xsk_build_skb() free_err path
+Subject: Re: [PATCH net v2 5/8] xsk: avoid skb leak in XDP_TX_METADATA case
 Reply-To: sashiko@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420082805.14844-4-kerneljasonxing@gmail.com>
-References: <20260420082805.14844-4-kerneljasonxing@gmail.com>
+In-Reply-To: <20260420082805.14844-6-kerneljasonxing@gmail.com>
+References: <20260420082805.14844-6-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 09:40:23 +0000
-Message-Id: <20260421094024.5E8EBC2BCB0@smtp.kernel.org>
+Date: Tue, 21 Apr 2026 09:40:24 +0000
+Message-Id: <20260421094025.684A0C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [Critical] Dangling `xs->skb` pointer on `-EOVERFLOW` error path leading =
-to Use-After-Free.
+Sashiko AI review found 2 potential issue(s):
+- [Critical] Time-of-Check to Time-of-Use (TOCTOU) vulnerability in `xsk_sk=
+b_metadata` allows unprivileged users to bypass bounds checks and cause out=
+-of-bounds memory accesses.
+- [High] Software checksumming calculation fails completely because `skb_ch=
+ecksum_help()` is invoked on an incomplete and non-linear SKB.
 --
 
-commit 4ce0cecf5e8e18bd369c02242f70a42cc8fbdf03
+commit aef1b3344bd952f39b1181e046ab7d9ce77fbc8a
 Author: Jason Xing <kerneljasonxing@gmail.com>
 
-xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
+xsk: avoid skb leak in XDP_TX_METADATA case
 
-This commit aims to fix a use-after-free in the xsk_build_skb() error
-handling path by ensuring we only free newly allocated skbs when a
-continuation descriptor fails. It prevents freeing an in-progress
-multi-buffer skb by adding a check for !xs->skb before kfree_skb(skb).
+This commit explicitly adds a call to kfree_skb() (via
+xsk_drop_untrans_skb) when xsk_skb_metadata() returns an error, preventing
+an skb leak if metadata processing fails.
 
-Link: https://lore.kernel.org/all/20260415082654.21026-4-kerneljasonxing@gm=
-ail.com/
+Link: https://lore.kernel.org/all/20260415085204.3F87AC19424@smtp.kernel.or=
+g/
 
 > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 55b448abb8178..fd5432fb807e1 100644
 > --- a/net/xdp/xsk.c
 > +++ b/net/xdp/xsk.c
-> @@ -969,7 +969,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock =
-*xs,
-[ ... ]
->  free_err:
-> -	if (skb && !skb_shinfo(skb)->nr_frags)
-> +	if (skb && !xs->skb && !skb_shinfo(skb)->nr_frags)
->  		kfree_skb(skb);
-> =20
->  	if (err =3D=3D -EOVERFLOW) {
+> @@ -829,8 +829,10 @@ static struct sk_buff *xsk_build_skb_zerocopy(struct=
+ xdp_sock *xs,
+>  		xsk_skb_init_misc(skb, xs, desc->addr);
+>  		if (desc->options & XDP_TX_METADATA) {
+>  			err =3D xsk_skb_metadata(skb, buffer, desc, pool, hr);
 
-Does this patch leave a use-after-free on the -EOVERFLOW error path?
+While looking at this metadata handling, I noticed a couple of pre-existing
+regressions.
 
-When xsk_build_skb() handles a continuation descriptor and encounters an
--EOVERFLOW error, it jumps to free_err and enters this block. Looking at the
-subsequent code in xsk_build_skb():
+Will skb_checksum_help() always fail when called here?
 
-	if (err =3D=3D -EOVERFLOW) {
-		if (xs->skb) {
-			/* Drop the packet */
-			xsk_inc_num_desc(xs->skb);
-			xsk_drop_skb(xs->skb);
-		} else {
+xsk_skb_metadata() is called right after allocating the SKB but before any
+payload fragments are appended via skb_fill_page_desc() further down in
+xsk_build_skb_zerocopy(). This means skb->len and skb_headlen(skb) are 0.
 
-The xsk_drop_skb(xs->skb) call consumes and frees the socket buffer, but
-xs->skb is never set to NULL.
+If software checksumming is enabled, xsk_skb_metadata() calls
+skb_checksum_help(skb). Since skb_headlen(skb) is 0, won't the check
+offset >=3D skb_headlen(skb) in skb_checksum_help() always evaluate to true,
+triggering a warning and causing the packet to be dropped?
 
-Because xsk_build_skb() returns ERR_PTR(-EOVERFLOW), the caller
-__xsk_generic_xmit() intercepts this error and continues its transmission
-loop without aborting.
+Also, can a user-space program modify the checksum metadata concurrently?
 
-On the next iteration, __xsk_generic_xmit() would pass the dangling xs->skb
-pointer back into xsk_build_skb(), which will dereference the freed memory
-when checking skb_shinfo(skb)->nr_frags.
+In xsk_skb_metadata(), the metadata is read directly from the UMEM buffer,
+which is shared memory mapped into user-space:
 
-Should xs->skb be cleared to NULL after calling xsk_drop_skb() here?
+net/xdp/xsk.c:xsk_skb_metadata() {
+    ...
+	if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
+		if (unlikely(meta->request.csum_start +
+			     meta->request.csum_offset +
+			     sizeof(__sum16) > desc->len))
+			return -EINVAL;
+
+		skb->csum_start =3D hr + meta->request.csum_start;
+		skb->csum_offset =3D meta->request.csum_offset;
+    ...
+}
+
+The bounds check does not use READ_ONCE(). Could a user-space application
+modify meta->request.csum_start and meta->request.csum_offset between the
+check and the assignment? If so, it might bypass the bounds check and speci=
+fy
+arbitrarily large offsets, causing out-of-bounds writes when the hardware
+inserts the checksum.
+
+> -			if (unlikely(err))
+> +			if (unlikely(err)) {
+> +				xsk_drop_untrans_skb(skb);
+>  				return ERR_PTR(err);
+> +			}
+>  		}
+>  	} else {
+>  		struct xsk_addrs *xsk_addr;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420082805.1484=
-4-1-kerneljasonxing@gmail.com?part=3D3
+4-1-kerneljasonxing@gmail.com?part=3D5
