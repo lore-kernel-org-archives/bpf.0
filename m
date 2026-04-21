@@ -1,224 +1,367 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE4D2BE621
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 22:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A4734A799
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 22:10:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776809274; cv=none; b=KZv1uHLhOZOAbvhIGxGCzA/ow10taWjbpgKiUIjWHcWZkNzVixzCnMrOUutj2vhwOEFjTu+6epZszAfQBwR0wNwYgaE00sk1PiFC4WI1Ker7ELLBPcRiwGJpR+e+0ShFwtnRfBD9xeFNRoAPPCjn1YVXY0dvKLgfNH1hK+NjLik=
+	t=1776809421; cv=none; b=T7Rc1AAm2Xzqmva/4Db3bmM3qDgUtNw4lN60Zd/6eKz81f8UiYsZKKao/prqSiDlm/G0wssQhL3/PXN4M9wkFUn2xihDQf10QqSvKmJT5p/qy3hqr2kOzfOMM79ZlxSSNdOSyJ295uscJvx1JVI/sfoO8EimN7kfSVWVHNhznUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776809274; c=relaxed/simple;
-	bh=FYawrbvv4ttUX4fza/GLSDvzmH0x6UjpDWn3B1smFB0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=J8zzIJGmBoRDe2+WHdrI4oARKqPxrNk+3Zv/NOh+AQ13muruQr9DcWnwyQH/U1QoCY5xdba2oEOHBCnfdzkO8vVSRRcwDXsfro+gm4Rreo44+NYAdUoZ8zKACtbj+ml+81YyAG+Jnitxl1dGu4WDIARtkO/3jZWuRXF4dWw/JS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qyyJNHq+; arc=none smtp.client-ip=209.85.210.46
+	s=arc-20240116; t=1776809421; c=relaxed/simple;
+	bh=A4EbM69PCzH98uK2YmSWNKgyHlc0RT50WZOWM0EMlyo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=omXXhSbWo+sHCfKDc0+uuuCXgFpHUP6kntugvGAhs4Z7Ogzs17F8uP6Y80O13jBTPaTC0AAlkBbvRg5UjC81JAEFhq+Rg2rIKHgv5m7JaDk/8H+IxX/mWoBX2fcKx2gzNtePomSQbbuh5WTrfV7JwhfkYWaWeO6RalAaN69kIdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xte5q1t2; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qyyJNHq+"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7dbb6c072f1so4022250a34.2
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 15:07:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xte5q1t2"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a871daa98fso31414425ad.1
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 15:10:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776809272; x=1777414072; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oz6srP16uADBYAvRZr2xjOhHhYbUHg4cvwC3Umpktb4=;
-        b=qyyJNHq+UsQm+8tTCeXkL8z1QWDxhphhlHbwdIfQ6OnrcBwrT/mNoVWwwCGzRGcN0h
-         t0Y2XS+FXVA28EMiZHUJ5sI6y4zZME4F7hFNFYH3i7ryCF0TvzfyJIbnx6uNlbeMxWB3
-         W2fwKFbOOFbcOYG8xA8zVQ67/OP4/IRtR3MGSs8AkITCqUsPgSzsRlYsgy40dT0sqYvC
-         hDuU/vUuaWNzn5wbD94P6WILPAM41FQtXVhoRJe8H7/R9ON6c5fPcfuzxhiAsC9hflbI
-         PoOs4Oqxwdw9t+j6K1XqazekD8DwFYPR8P2BYbn1OUdm0fN2ArF9kkNhCoqtmQaHE17U
-         PyVA==
+        d=gmail.com; s=20251104; t=1776809419; x=1777414219; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dRFfJzI3mXxx5DYsy7GXSTL1HeC6NdyTi4+o9y/7gRs=;
+        b=Xte5q1t2ouwGR46p3RZJQ2NtJFOGhhYmnRdXhIJZYAgwUp3dni9Ozg2/+EKBg7dYbt
+         SGogh6b7pZd971Svjb2+7OaTnLkAB8x1DkhUlmZG1OlgJl0fVIhXG6rqvhrStyN3hEOg
+         SnyZw31u0hw2JHndPo5tgVHa/qxQa8dAZmvw301e6SQgfJpRpIslRSM+z+dfp13yyhj1
+         G0UbzmoqBHhha8WrgwVmeB0bMhP3M2mejzyLotRTKqazPdPyeaQmV4O9tK9KiBRt09uS
+         BZzHpJeH5txV1abhqITm5VrB6hzLdDaGCA82h/stbihsrgf/icBBXZTrO6Kdr1WYLQBL
+         a6ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776809272; x=1777414072;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oz6srP16uADBYAvRZr2xjOhHhYbUHg4cvwC3Umpktb4=;
-        b=ltAm0y5b/ALr+XBvfZSC/R8kYwB0gVoQz5IaUS7XfKyPGFMRxUagJFM876cBPgHfKM
-         6O1srdS3QjJ58F+bjynbNGT0JteGRUCOE69BC0OdhGk9NzFoBE8u61afKI1t25Y48V7p
-         gBlhYdNujaWT9oTQsFeFtC2BCArZRrSxVdR5ieXTTCzebgUF355DsxgVccFUV/7fsaFk
-         cXkzFEuuhx5K8lgci2QaV4ffeMLtrH8HyIigqrcSk/H2nrhJx6tuIQp8NQRLKAAATQ73
-         fqcJvj0RLJM3Rni+0ZrHKrnIeEG5AeIXyQFYXIHiFUHofMtBnubAR3MvlFXEYdSoRcWs
-         NjUw==
-X-Forwarded-Encrypted: i=1; AFNElJ9G8xQH9AGmO1bSMtVwh0bU2Evim50XTaFmSE36Q9GB58KhM6gjO2SM7p9/pXSZe3YYqv0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcTAZq/UZEI9PYwKVceM1qT1Qw+fTvoj3poczCMm/7AiweJzcU
-	ydS2mnqU6qYnP9qjkeohh9YtR2ATItjeSdZQR2r30eWCJxZIKgMwnQrS
-X-Gm-Gg: AeBDietI3ha9WPCL3R6bu4HtXDL2xeP+X6Gy1n6rzi4xeLXCcGe2ElW5mmaswcsIYrp
-	EvWhYxQm1f5acwR3V3lTSE4w++OgFhwbvCtDGF159MmclDhT2py/rTyWVRIa2Nes0iKVhSubE0B
-	z/0pfd6/cJkr43vC3QMrkQ4PIKp4oNYmVH3F2cNB0/ApP9RiEoritEhI6PNtmaCjVHp1qlTyLW4
-	sGrEP4EA87SeKjUnX2kC3G0w1nEm7UYqqvueLgu6RYeH1MVkjEsGTtNSni/ccLcC0mtBqUcM1vD
-	DCiZaFeclobbrGdUPiLhHPpxBSMd3YYWA7cgnb7MNaGidLDwY0psu9/2uijuEJWf4RFm/DPLioH
-	WWt77oQC2aqPgxHucwIt52XTzIVUV8/d2UTktwBh9iRf7IVz1HrJ/f9CxA8zs/nkGQv4LdfqO6v
-	Z9sf4t3N+JbiWf/43L+4S9aep8oIJWxuFpLlvO3vpsH0wd4ZMOxrLQA81mnyrvL/HJ2zXGBEifC
-	hVUjchUpc6/8MU188VG7dfJ/v1j
-X-Received: by 2002:a05:6830:6a8c:b0:7d7:e59c:80e6 with SMTP id 46e09a7af769-7dc9513c4ccmr12918152a34.12.1776809271713;
-        Tue, 21 Apr 2026 15:07:51 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:43::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc9751a2f9sm12143977a34.12.2026.04.21.15.07.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2026 15:07:51 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776809419; x=1777414219;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dRFfJzI3mXxx5DYsy7GXSTL1HeC6NdyTi4+o9y/7gRs=;
+        b=RQvMN8xszj3Fqp+r/ptYtqOKycuO878r/r+9ogs2ePr7hUnFsT/N/t070CEKUHuyM+
+         DgCDVKgDfZdNg18Fg8qL/g73gmA+waRLpuquljknPdRQAHPeAhs7SXjyCSMqtZ9n2kvG
+         vtF2xJHL8sVLc02LvRmyKvFFD9hXATdZDL27ITKvOaiJ2/M5h4fD3dlti5A/HE0gCb1F
+         yHajPmJ6aLZJADSeTo0c8pym9oxQaDtIsRMwYuvP/Y9tLbtFnBr15YfKBVTPc+vhUT8i
+         VOxCb439u0ExCrWaE+0F8e61k7fLM9x17rINgrJTBAPWlKOofNtOepxOKniJViolM8cd
+         yQmQ==
+X-Gm-Message-State: AOJu0YykPe78Jgu4hjyJBaZi07i7zXN6AZkHroLKFJP60jPa3y+b18LD
+	fDOp6kuN9uP/sRJNYqr/mGWwPOqhXYWgdORe3dZeNz0P5YkKDzuKzIhsnB8uvA==
+X-Gm-Gg: AeBDies43zIYTqpka5M2maQRanBuqEt9c0TF8dK7YQfkQTcf8nEHvKvltuAAfRUrDAb
+	5c5V1pz2NEAiK1qWyMLjteXmJumMvEabhPvTdlTPMvcoUIEyiza3PjyculobEiHb1Po2F5I/AhV
+	cV6IAIGdN3/Y1MazjLhFv4AtbkmzeCFFAb/+V30L2RD/WZa5F5jKQ1RMYdJgKoce2m6hIsNC2mt
+	67aNgR+6gJgILKOj3Woa+Uw2Il9L3xBV/RjGWRLyV2mdcaS1MxhSSsnheq2jM/WIgwFrS7mInxX
+	idl0pZHnJ22ggBLHqim+c9zENelQq6B4YeOclDOVezhWFBsna4X6kHgchWtOEc58z1SD53isFDt
+	DUUJ9ZuQ//DJMyvsgalG/lbRFHrmOeHe2iKAD7UswjvruUuN2AahIpc8Yu/Gnwwvd2hJtstYrJS
+	8+0vEA3BgMlISfy8ROn2Ip4B1D
+X-Received: by 2002:a17:903:1ae5:b0:2b2:ec46:dfd4 with SMTP id d9443c01a7336-2b5f9f1eb04mr221342415ad.22.1776809418688;
+        Tue, 21 Apr 2026 15:10:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:5b::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab0cd18sm154433065ad.45.2026.04.21.15.10.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 15:10:18 -0700 (PDT)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	mykyta.yatsenko5@gmail.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/9] Refactor verifier object relationship tracking
+Date: Tue, 21 Apr 2026 15:10:07 -0700
+Message-ID: <20260421221016.2967924-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 21 Apr 2026 15:07:49 -0700
-Message-Id: <DHZ6BHVW9CVO.1MNKDGSAXI76Z@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Jose E .
- Marchesi" <jose.marchesi@oracle.com>, <kernel-team@fb.com>, "Martin KaFai
- Lau" <martin.lau@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next 7/9] bpf: Prepare verifier logs for upcoming
- kfunc stack arguments
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260421171927.3507554-1-yonghong.song@linux.dev>
- <20260421172002.3510514-1-yonghong.song@linux.dev>
-In-Reply-To: <20260421172002.3510514-1-yonghong.song@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Tue Apr 21, 2026 at 10:20 AM PDT, Yonghong Song wrote:
-> This change prepares verifier log reporting for upcoming kfunc stack
-> argument support.
->
-> Today verifier log code mostly assumes that an argument can be described
-> directly by a register number. That works for arguments passed in `R1`
-> to `R5`, but it does not work once kfunc arguments can also be
-> passed on the stack.
->
-> Introduce an internal `argno` representation such that register-passed
-> arguments keep using their real register numbers, while stack-passed
-> arguments use an encoded value above a dedicated base.
-> `reg_arg_name()` converts this representation into either `R%d` or
-> `*(R11-off)` when emitting verifier logs. If a particular `argno`
-> is corresponding to a stack argument, print `*(R11-off)`. Otherwise,
-> print `R%d`. Here R11 presents the base of stack arguments.
->
-> This keeps existing logs readable for register arguments and allows the
-> same log sites to handle future stack arguments without open-coding
-> special cases.
->
-> Update selftests accordingly.
->
-> Acked-by: Puranjay Mohan <puranjay@kernel.org>
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  include/linux/bpf_verifier.h                  |   1 +
->  kernel/bpf/verifier.c                         | 640 ++++++++++--------
->  .../testing/selftests/bpf/prog_tests/bpf_nf.c |  22 +-
->  .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
->  .../selftests/bpf/prog_tests/kfunc_call.c     |   2 +-
->  .../selftests/bpf/prog_tests/linked_list.c    |   4 +-
->  .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  14 +-
->  .../selftests/bpf/progs/cpumask_failure.c     |  10 +-
->  .../testing/selftests/bpf/progs/dynptr_fail.c |  22 +-
->  .../selftests/bpf/progs/file_reader_fail.c    |   4 +-
->  tools/testing/selftests/bpf/progs/irq.c       |   4 +-
->  tools/testing/selftests/bpf/progs/iters.c     |   6 +-
->  .../selftests/bpf/progs/iters_state_safety.c  |  14 +-
->  .../selftests/bpf/progs/iters_testmod.c       |   4 +-
->  .../selftests/bpf/progs/iters_testmod_seq.c   |   4 +-
->  .../selftests/bpf/progs/map_kptr_fail.c       |   2 +-
->  .../selftests/bpf/progs/percpu_alloc_fail.c   |   4 +-
->  .../testing/selftests/bpf/progs/rbtree_fail.c |   6 +-
->  .../bpf/progs/refcounted_kptr_fail.c          |   2 +-
->  .../testing/selftests/bpf/progs/stream_fail.c |   2 +-
->  .../selftests/bpf/progs/task_kfunc_failure.c  |  18 +-
->  .../selftests/bpf/progs/task_work_fail.c      |   6 +-
->  .../selftests/bpf/progs/test_bpf_nf_fail.c    |   8 +-
->  .../bpf/progs/test_kfunc_dynptr_param.c       |   2 +-
->  .../bpf/progs/test_kfunc_param_nullable.c     |   2 +-
->  .../selftests/bpf/progs/verifier_bits_iter.c  |   4 +-
->  .../bpf/progs/verifier_ref_tracking.c         |   6 +-
->  .../selftests/bpf/progs/verifier_vfs_reject.c |   8 +-
->  .../testing/selftests/bpf/progs/wq_failures.c |   2 +-
->  tools/testing/selftests/bpf/verifier/calls.c  |  14 +-
->  30 files changed, 464 insertions(+), 375 deletions(-)
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index b148f816f25b..d5b4303315dd 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -913,6 +913,7 @@ struct bpf_verifier_env {
->  	 * e.g., in reg_type_str() to generate reg_type string
->  	 */
->  	char tmp_str_buf[TMP_STR_BUF_LEN];
-> +	char tmp_arg_name[32];
->  	struct bpf_insn insn_buf[INSN_BUF_SIZE];
->  	struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
->  	struct bpf_scc_callchain callchain_buf;
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 18ab92581452..82568a427211 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -1742,6 +1742,44 @@ static struct bpf_verifier_state *push_stack(struc=
-t bpf_verifier_env *env,
->  	return &elem->st;
->  }
-> =20
-> +#define STACK_ARGNO_BASE 100
-> +
-> +static bool is_stack_argno(int argno)
-> +{
-> +	return argno > STACK_ARGNO_BASE;
-> +}
-> +
-> +/* arg starts at 1 */
-> +static u32 make_argno(u32 arg)
-> +{
-> +	if (arg <=3D MAX_BPF_FUNC_REG_ARGS)
-> +		return arg;
-> +	return STACK_ARGNO_BASE + arg;
-> +}
+Hi all,
 
-You can remove this and simplify everything further by
+This patchset cleans up dynptr handling, refactors object relationship
+tracking in the verifier by introducing parent_id, and fixes dynptr
+use-after-free bugs where file/skb dynptrs are not invalidated when
+the parent referenced object is freed.
 
-static bool is_stack_argno(int argno)
-{
-	return argno > MAX_BPF_FUNC_REG_ARGS;
-}
 
-> +
-> +static u32 arg_from_argno(int argno)
-> +{
-> +	if (is_stack_argno(argno))
-> +		return argno - STACK_ARGNO_BASE;
-> +	return argno;
-> +}
+* Motivation *
 
-remove as well.
+In BPF qdisc programs, an skb can be freed through kfuncs. However,
+since dynptr does not track the parent referenced object (e.g., skb),
+the verifier does not invalidate the dynptr after the skb is freed,
+resulting in use-after-free. The same issue also affects file dynptr.
 
-and a comment like:
+The figure below shows the current state of object tracking. The
+verifier tracks objects using three fields: id for nullness tracking,
+ref_obj_id for lifetime tracking, and dynptr_id for tracking the parent
+dynptr of a slice (PTR_TO_MEM only). While dynptr_id links slices to
+their parent dynptr, there is no field that links a dynptr back to its
+parent skb. When the skb is freed via release_reference(ref_obj_id=1),
+only objects with ref_obj_id=1 are invalidated. Since skb dynptr is
+non-referenced (ref_obj_id=0), the dynptr and its derived slices remain
+accessible.
 
-/*
- * switch (argno) {
- * case 1: R1
- * case 5: R5
- * case 6: *(u64 *)(R11 +- 8)
- * case 7: *(u64 *)(R11 +- 16)
- */
+Current: object (id, ref_obj_id, dynptr_id)
+  id         = unique id of the object (for nullness tracking)
+  ref_obj_id = id of the referenced object (for lifetime tracking)
+  dynptr_id  = id of the parent dynptr (only for PTR_TO_MEM slices)
 
-> +static const char *reg_arg_name(struct bpf_verifier_env *env, int argno)
-> +{
-> +	char *buf =3D env->tmp_arg_name;
-> +	int len =3D sizeof(env->tmp_arg_name);
-> +	u32 arg;
-> +
-> +	if (!is_stack_argno(argno)) {
-> +		snprintf(buf, len, "R%d", argno);
-> +		return buf;
-> +	}
-> +
-> +	arg =3D arg_from_argno(argno);
+                      skb (0,1,0)
+                             ^
+                             ! No link from dynptr to skb
+                             +-------------------------------+
+                             |           bpf_dynptr_clone    |
+                 dynptr A (2,0,0)                dynptr C (4,0,0)
+                           ^                               ^
+        bpf_dynptr_slice   |                               |
+                           |                               |
+              slice B (3,0,2)                 slice D (5,0,4)
 
-gone
 
-> +	snprintf(buf, len, "*(R11-%u)", (arg - MAX_BPF_FUNC_REG_ARGS) * BPF_REG=
-_SIZE);
-> +	return buf;
-> +}
+* Why not simply use ref_obj_id to track the parent? *
+
+A natural first approach is to link dynptr to its parent by sharing
+the parent's ref_obj_id and propagating it to slices. Now, releasing
+the skb via release_reference(ref_obj_id=1) correctly invalidates all
+derived objects.
+
+Attempted fix: share parent's ref_obj_id
+
+                      skb (0,1,0)
+                             ^
+                             +-------------------------------+
+                             |           bpf_dynptr_clone    |
+                 dynptr A (2,1,0)                dynptr C (4,1,0)
+                           ^                               ^
+        bpf_dynptr_slice   |                               |
+                           |                               |
+              slice B (3,1,2)                 slice D (5,1,4)
+
+
+However, this approach does not generalize to all dynptr types.
+Referenced dynptrs such as file dynptr acquire their own ref_obj_id to
+track the dynptr's lifetime. Since ref_obj_id is already
+used for the dynptr's own reference, it cannot also be used to point to
+the parent file object. While it is possible to add specialized handling
+for individual dynptr types [0], it adds complexity and does not
+generalize.
+
+An alternative approach is to avoid introducing a new field and instead
+repurpose ref_obj_id as parent_id by folding lifetime tracking into id
+[1]. In this design, each object is represented as (id, ref_obj_id)
+where id is used for both nullness and lifetime tracking, and ref_obj_id
+tracks the parent object's id.
+
+Attempted: object (id, ref_obj_id)
+  id         = id of the object (for nullness and lifetime tracking)
+  ref_obj_id = id of the parent object
+  '          = id is referenced
+
+                        skb (1',0)
+                             ^
+        bpf_dynptr_from_skb  +-------------------------------+
+                             |      bpf_dynptr_clone(A, C)   |
+                 dynptr A (2,1')                 dynptr C (4,1')
+                           ^                               ^
+        bpf_dynptr_slice   |                               |
+                           |                               |
+                slice B (3,2)                   slice D (5,4)
+
+However, this design cannot express the relationship between referenced
+socket pointers and their casted counterparts. After pointer casting,
+the original and casted pointers need the same lifetime (same ref_obj_id
+in the current design) but different nullness (different id). The casted
+pointer may be NULL even if the original is valid. With id serving as
+the only field for both nullness and lifetime, and ref_obj_id repurposed
+as parent, there is no way to express "different identity, same
+lifetime."
+
+Referenced socket pointer (expressed using current design):
+
+                                C = ptr_casting_function(A)
+                ptr A (1,1,0)                     ptr C (2,1,0)
+                         ^                                 ^
+                         |                                 |
+                        ptr C may be NULL even if ptr A is valid
+                        but they have the same lifetime
+
+
+* New Design: parent_id *
+
+To track precise object relationships, u32 parent_id is added to
+bpf_reg_state. A child object's parent_id points to the parent
+object's id. This replaces the PTR_TO_MEM-specific dynptr_id, and
+does not increase the size of bpf_reg_state on 64-bit machines as
+there is existing padding.
+
+After: object (id, ref_obj_id, parent_id)
+  id         = unique id of the object (for nullness tracking)
+  ref_obj_id = id of the referenced object; objects with the same
+               ref_obj_id share the same lifetime
+  parent_id  = id of the parent object; points to parent's id
+               (for object relationship tracking)
+
+                          skb (1,1,0)
+                               ^
+          bpf_dynptr_from_skb  +-------------------------------+
+                               |      bpf_dynptr_clone(A, C)   |
+                 dynptr A (2,0,1)               dynptr C (4,0,1)
+                           ^                              ^
+        bpf_dynptr_slice   |                              |
+                           |                              |
+              slice B (3,0,2)                slice D (5,0,4)
+                       ^
+  bpf_dynptr_from_mem  |
+  (NOT allowed yet)    |
+         dynptr E (6,0,3)
+
+With parent_id, the verifier can precisely track object trees. When the
+skb is freed, the verifier traverses the tree rooted at skb (id=1) and
+invalidates all descendants — dynptr A, dynptr C, and their slices.
+When dynptr A is destroyed by overwriting the stack slot, only dynptr A
+and its children (slice B, dynptr E) are invalidated; skb, dynptr C,
+and slice D remain valid.
+
+For referenced dynptr (e.g., file dynptr), the original and its clones
+share the same ref_obj_id so they are all invalidated together when any
+one of them is released. For non-referenced dynptr (e.g., skb dynptr),
+clones live independently since they have ref_obj_id=0.
+
+To avoid recursive call chains when releasing objects (e.g.,
+release_reference() -> unmark_stack_slots_dynptr() ->
+release_reference()), release_reference() now uses stack-based DFS to
+find and invalidate all registers and stack slots with matching id or
+ref_obj_id and all descendants whose parent_id matches. Currently, it
+skips id == 0, which could be a valid id (e.g., pkt pointer by reading
+ctx). Future work may start assigning > 0 id to them. This does not
+affect the current use cases where skb and file parents are both given
+id > 0.
+
+
+* Preserving reg->id after null-check *
+
+For parent_id tracking to work, child objects need to refer to the
+parent's id. This requires two preparatory changes: assigning reg->id
+when reading referenced kptrs from program context (patch 2), and
+preserving reg->id of pointer objects after null-check (patch 3).
+Previously, null-check would clear reg->id, making it impossible for
+children to reference the parent afterward. The latter causes a slight
+increase in verified states for some programs. One selftest object
+sees +19 states (+5.01%). For Meta BPF objects, the increase is
+also minor, with the largest being +34 states (+3.63%).
+
+
+* Object relationship in different scenarios (for reference) *
+
+The figures below show how the new design handles all four combinations
+of referenced/non-referenced dynptr with referenced/non-referenced
+parent. The relationship between slices and dynptrs is omitted as it
+is the same across all cases. The main difference is how cloned dynptrs
+are represented. Since bpf_dynptr_clone() does not initialize a new
+reference, clones of referenced dynptrs share the same ref_obj_id and
+must be invalidated together. For non-referenced dynptrs, the original
+and clones live independently.
+
+(1) Non-referenced dynptr with referenced parent (e.g., skb in Qdisc):
+
+                          skb (1,1,0)
+                               ^
+          bpf_dynptr_from_skb  +-------------------------------+
+                               |      bpf_dynptr_clone(A, C)   |
+                 dynptr A (2,0,1)                dynptr C (4,0,1)
+
+(2) Non-referenced dynptr with non-referenced parent (e.g., skb in TC,
+    always valid):
+
+      bpf_dynptr_from_skb
+                                  bpf_dynptr_clone(A, C)
+             dynptr A (1,0,0)                  dynptr C (2,0,0)
+
+                         dynptr A and C live independently
+
+(3) Referenced dynptr with referenced parent:
+
+                     file (1,1,0)
+                           ^ ^
+     bpf_dynptr_from_file  | +-------------------------------+
+                           |       bpf_dynptr_clone(A, C)    |
+             dynptr A (2,3,1)                  dynptr C (4,3,1)
+                         ^                                 ^
+                         |                                 |
+                         dynptr A and C have the same lifetime
+
+(4) Referenced dynptr with non-referenced parent:
+
+ bpf_ringbuf_reserve_dynptr
+                                  bpf_dynptr_clone(A, C)
+             dynptr A (1,1,0)                  dynptr C (2,1,0)
+                         ^                                 ^
+                         |                                 |
+                         dynptr A and C have the same lifetime
+
+
+[0] https://lore.kernel.org/bpf/20250414161443.1146103-2-memxor@gmail.com/
+[1] https://github.com/ameryhung/bpf/commits/obj_relationship_v2_no_parent_id/
+
+
+Changelog:
+
+v2 -> v3
+  - Rebase to bpf-next/master
+  - Update veristat numbers
+  - Update commit msg to explain multiple dropped checks (Mykyta, Andrii)
+  - Reuse idmap as idstack in release_reference() and check for
+    duplicate id (Mykyta, Andrii)
+  - Change to use RUN_TEST for qdisc dynptr selftest (Eduard) 
+  Link: https://lore.kernel.org/bpf/20260307064439.3247440-1-ameryhung@gmail.com/  
+
+v1 -> v2
+  - Redesign: Use object (id, ref_obj_id, parent_id) instead of
+    (id, ref_obj_id) as it cannot express ptr casting without
+    introducing specialized code to handle the case
+  - Use stack-based DFS to release objects to avoid recursion (Andrii)
+  - Keep reg->id after null check
+  - Add dynptr cleanup
+  - Fix dynptr kfunc arg type determination
+  - Add a file dynptr UAF selftest
+  Link: https://lore.kernel.org/bpf/20260202214817.2853236-1-ameryhung@gmail.com/
+
+---
+
+Amery Hung (9):
+  bpf: Unify dynptr handling in the verifier
+  bpf: Assign reg->id when getting referenced kptr from ctx
+  bpf: Preserve reg->id of pointer objects after null-check
+  bpf: Refactor object relationship tracking and fix dynptr UAF bug
+  bpf: Remove redundant dynptr arg check for helper
+  selftests/bpf: Test creating dynptr from dynptr data and slice
+  selftests/bpf: Test using dynptr after freeing the underlying object
+  selftests/bpf: Test using slice after invalidating dynptr clone
+  selftests/bpf: Test using file dynptr after the reference on file is
+    dropped
+
+ include/linux/bpf_verifier.h                  |  34 +-
+ kernel/bpf/log.c                              |   4 +-
+ kernel/bpf/states.c                           |   9 +-
+ kernel/bpf/verifier.c                         | 461 ++++++------------
+ .../selftests/bpf/prog_tests/bpf_qdisc.c      |   8 +
+ ..._qdisc_dynptr_use_after_invalidate_clone.c |  75 +++
+ .../progs/bpf_qdisc_fail__invalid_dynptr.c    |  68 +++
+ ...f_qdisc_fail__invalid_dynptr_cross_frame.c |  74 +++
+ .../bpf_qdisc_fail__invalid_dynptr_slice.c    |  70 +++
+ .../testing/selftests/bpf/progs/dynptr_fail.c |  48 +-
+ .../selftests/bpf/progs/file_reader_fail.c    |  60 +++
+ .../selftests/bpf/progs/user_ringbuf_fail.c   |   4 +-
+ 12 files changed, 593 insertions(+), 322 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_dynptr_use_after_invalidate_clone.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_cross_frame.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_slice.c
+
+-- 
+2.52.0
+
