@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07AFF8F4A
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 01:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC45E347C6
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 01:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776734038; cv=none; b=dACAILN8/JXMAMReJifb3Inkx2u8nelvlGA69T513QdaWquEkwVP9mHo8hmJnJodLlbFS3qjlyTiMxKFUVKX/jyW8DwhJEcMZ4mQ7U9yDQJtoInTW/U16eyv0GF+QIKvUAlWuaKbup0qMAXDvXo1qNWTyFD/1UUEZ6MEp9vKd1I=
+	t=1776734249; cv=none; b=NzUN3Mf2OcHZjeUUHcN05uo0vNHxpu5H10kUeC7yQU9cX2BiZPiDwLOngOF8gDz50ks+UoXtqLUp18vLsNWRNuortWLFwR+7IwueVTe5ouxidqMYpHRjZktSbihuGo/BgVTiKkmWu5Purt2R2TQi8+tPRlSrupYwGTO9D7qRTLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776734038; c=relaxed/simple;
-	bh=M9tEa/WBK7/AbdJ+xxgFEuWsKfbKesTBGeYVvCpGs/M=;
+	s=arc-20240116; t=1776734249; c=relaxed/simple;
+	bh=O1F7dJaFSzJR6VKySvNzV3K8karEFrgn5nwyd1CBkXI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=S+srBFaYEydbAgH/imN9Lsw4LuaZR2ANWyuVLbP8nTTTjP5VRUScczByKftlmRSmn8MX3QRrjgmCrzqEtk7+ZxTWR3vJvx8U4Cup00NTNsWawvHXlaE2RteHo8SdJCiRElORRKFNf/OV08zSyyj9mDgH6JFllE5/L/KiK0RJX74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOLu6jhA; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=JhkzPdWEtSUyTxXxzX1QOtyrU+v4KzM0XZSoZHNJc67WBqGd//rJk9775oXkzxE1qNfn59/K7d/I94JBNnwmvg+McaNmoBeGA+0VId2TakC8DpmX00tMKUhLZaiVAbQbqV8Pmr5sGqlVldI0bPuEeb47S/wBPFXOkPZI6HGv1FY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYTlR0P1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOLu6jhA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70974C19425;
-	Tue, 21 Apr 2026 01:13:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYTlR0P1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD73C19425;
+	Tue, 21 Apr 2026 01:17:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776734037;
-	bh=M9tEa/WBK7/AbdJ+xxgFEuWsKfbKesTBGeYVvCpGs/M=;
+	s=k20201202; t=1776734249;
+	bh=O1F7dJaFSzJR6VKySvNzV3K8karEFrgn5nwyd1CBkXI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=eOLu6jhA3YEaXuQv3KEss6iEJKEgXV+LgrzSTMItqAAzc/sNL8gxYPZu+qXdbKWjL
-	 OrUGKeIU1fIiPBmzy0woq8mREc2sq+fPTwQzygt078QfBpTt6sC2I5WQQysu28pWfo
-	 aHMwAMq253x2IfYs07zI/0McYYpAH+OgndwCabrKejJ8q99RBX5+RiOz8fZE9H8bz4
-	 x+9kz8j2bXrpgbwANbGGRWTKEiuLLqjLa8uE0hEWZDuQljq2zCZ2i0mcFpelmNVoYg
-	 22yQtQZLpvcK9C+0lMZmLLxBtd3bJsC34p44+OTsKtrsJ7C7PR0XtggsFVzmdEejNp
-	 1l3MtpXknNOFg==
+	b=iYTlR0P19wqAmqym9pZGbnP/5JfaEz36Hf8h5bjK4eyafmvR6R7j/XcJVWwdXTqiV
+	 00dyL1lo/Gqs0SOpvfUu/L41dpC5Jw9viMwENw5Rb5fzQzyjXMYheNQaBukRr4bEF4
+	 PECUh6P4aZIdZXHbLdD9T21Bk+/7jsPCSfzIANJ+UPeWdMKMxZdIple5hhHo9VpL1H
+	 3Jf4zagbgNO4pG0H9TnoZuSFTh5cPgNGJhAopoHBJI6cv6ByRSG2QdI/zia9xv8fKl
+	 rInSxXizE5ADBDzn6BKl/N+lks7GELU3YIwgk9Bd4fLKN1gl16jKAdFMj8gi/+QRE5
+	 RmSnBCJgdDznA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf] sockmap: Fix sk_psock_drop() race vs
- sock_map_{unhash,close,destroy}().
+Subject: Re: [PATCH v5 01/10] crypto: pkcs7: add flag for validated trust on
+ a signed info block
 Reply-To: sashiko@lists.linux.dev
-To: "Kuniyuki Iwashima" <kuniyu@google.com>
+To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420194846.1089595-1-kuniyu@google.com>
-References: <20260420194846.1089595-1-kuniyu@google.com>
+In-Reply-To: <20260420212653.438685-2-bboscaccy@linux.microsoft.com>
+References: <20260420212653.438685-2-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 01:13:56 +0000
-Message-Id: <20260421011357.70974C19425@smtp.kernel.org>
+Date: Tue, 21 Apr 2026 01:17:28 +0000
+Message-Id: <20260421011729.4BD73C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,69 +45,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 1 potential issue(s):
-- [High] The newly introduced unbounded `goto retry;` loops in `sock_map_un=
-hash()`, `sock_map_destroy()`, and `sock_map_close()` can cause a hard lock=
-up (deadlock) due to softirq preemption or priority inversion.
+- [Low] `verify_pkcs7_message_sig` is exported using `EXPORT_SYMBOL` but re=
+quires a GPL-only structure, creating an inconsistent API boundary.
 --
 
-commit 08b24da207c576eef44ad9d88356dbd6600ab733
-Author: Kuniyuki Iwashima <kuniyu@google.com>
-sockmap: Fix sk_psock_drop() race vs sock_map_{unhash,close,destroy}().
+commit 6419b567f8141f60cbee1c62c6b8f2a8760edbda
+Author: James Bottomley <James.Bottomley@HansenPartnership.com>
 
-This commit fixes a race condition where sk_psock_drop() might not have
-finished restoring sk->sk_prot even if sk_psock_get() fails to bump the
-refcount. It adds a retry loop to sock_map_unhash(), sock_map_destroy(),
-and sock_map_close() when sk_psock_get() returns NULL but the protocol
-hooks haven't been restored yet.
+crypto: pkcs7: add flag for validated trust on a signed info block
 
-Closes: https://lore.kernel.org/bpf/69cec5ef.050a0220.2dbe29.0009.GAE@googl=
-e.com/
+This commit allows consumers to check if a PKCS#7 signed info block has
+passed trust validation by adding a verified flag. It also exports
+verify_pkcs7_message_sig so other modules can obtain a trusted PKCS#7
+object.
 
-> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> index 02a68be3002a2..99e3789492a09 100644
-> --- a/net/core/sock_map.c
-> +++ b/net/core/sock_map.c
-[ ... ]
-> @@ -1652,20 +1657,25 @@ void sock_map_destroy(struct sock *sk)
->  	void (*saved_destroy)(struct sock *sk);
->  	struct sk_psock *psock;
-> =20
-> +retry:
->  	rcu_read_lock();
->  	psock =3D sk_psock_get(sk);
->  	if (unlikely(!psock)) {
->  		rcu_read_unlock();
->  		saved_destroy =3D READ_ONCE(sk->sk_prot)->destroy;
-> +		if (unlikely(saved_destroy =3D=3D sock_map_destroy))
-> +			goto retry;
+> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> index e0761436ec7f4..9bda49295bd02 100644
+> --- a/certs/system_keyring.c
+> +++ b/certs/system_keyring.c
+> @@ -380,6 +380,7 @@ int verify_pkcs7_message_sig(const void *data, size_t=
+ len,
+>  	pr_devel("<=3D=3D%s() =3D %d\n", __func__, ret);
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL(verify_pkcs7_message_sig);
 
-Can this unbounded retry loop cause a hard lockup due to softirq preemption
-or priority inversion?
+Is this intended to be EXPORT_SYMBOL instead of EXPORT_SYMBOL_GPL?=20
 
-If sk_psock_put() is called from process context with bottom-halves enabled
-(such as from sock_map_close() after release_sock()), an interrupt could
-preempt the thread immediately after refcount_dec_and_test(&psock->refcnt)
-drops to 0 but before sk_psock_drop() disables BH.
+The function requires a parsed struct pkcs7_message as an argument, but the
+only function that parses and allocates this structure, pkcs7_parse_message=
+(),
+is exported as EXPORT_SYMBOL_GPL.=20
 
-If a network interrupt fires on the same CPU, NET_RX_SOFTIRQ may process a
-packet (such as an RST) that triggers socket destruction via:
-tcp_done() -> inet_csk_destroy_sock() -> sk->sk_prot->destroy()
-
-Since sk_psock_drop() has not yet restored the protocol, sk->sk_prot->destr=
-oy
-is still sock_map_destroy().
-
-When sock_map_destroy() calls sk_psock_get(), it returns NULL because the
-refcount is exactly 0. The code then falls into the !psock branch, sees that
-sk->sk_prot->destroy is still sock_map_destroy(), and jumps to retry.
-
-Because the softirq spins infinitely in this tight loop and never yields the
-CPU, the preempted process context can never execute sk_psock_drop(),
-resulting in a permanent hard lockup.
-
-A similar priority inversion deadlock could also occur on PREEMPT_RT if the
-thread calling sk_psock_drop() is preempted by a higher-priority task.
+This seems to create an inconsistent API boundary where non-GPL modules are
+permitted to use this function but cannot legitimately obtain the necessary
+input object to do so. Other related APIs in the PKCS#7 and keyring
+verification subsystems also use EXPORT_SYMBOL_GPL.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420194846.1089=
-595-1-kuniyu@google.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420212653.4386=
+85-1-bboscaccy@linux.microsoft.com?part=3D1
