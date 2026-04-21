@@ -1,63 +1,63 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B8A37E2FA
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA9D533D6
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776790256; cv=none; b=k/kF8z44eFsF163SEcKXgUzciTog9pRinWPuTd5Zh1yH6BZVyVAyc7yjUB85DmnCd/dppTJPz8fIN+M6j80Reu/1hH4uJShl1xAlAxoluuYIqYNpyl5PPVDV8j37j9lVXPuaBL0SiW2a6K42oj6aGCTveTuGwKtlTsOpyapG/3M=
+	t=1776790257; cv=none; b=gtFQ1xf77PvcLw2/MGTTb018Ke4HRFpKRlnIUeAtbKXOs55jPrqIx+R92kH41TQJ6baMkhmD3uCWUCsHcvlvqKLQTE7ep6VLGPjCjuYK6b8STX50NM7tDFcfhDdqXHg3EWjXPQyks40kvIsnAmljHtnAurp/XcGksBMcq7ITVZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776790256; c=relaxed/simple;
-	bh=AUI2FVJ+K/ZC2xK3tIv2rXKY0BRbEl4apsOMaDkJL8U=;
+	s=arc-20240116; t=1776790257; c=relaxed/simple;
+	bh=wBVzE0YiFRzFmGcdNGeG08pvE5VCoG+FG6OR/Y5ZECk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XToYGKDpUbfAQMs95xmgqGYgBD7X0PNLgnaG/s8P8liDpr9lSw83iHdYzCy4xPTx5ErQIC25bAEbHBVlJW2k5DEQ8urVQKj5wsXRmYSSFFO4otejwYC8mOjLkxApFO8jokvaBXqG7C0/SQ079uRSDW0tnoxUgNUlrEovVlE3zC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=GsRLvX3X; arc=none smtp.client-ip=74.125.82.42
+	 MIME-Version; b=alEqho98FHqWOURGtUE/qYggPuBCgOXQuLOd7giMErW+0VxH8meVHJkblruBP9NLjohQXcMwY7SNyPzH6b3Y4R0W4X6kvcS2/hknHEvpqRFISPaGoJfqO6wvbd2ltBtzMwMAwFyL2EYVx/E8ufzckg1x2r6t24LtvEJ3Pl9g+Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=i28cX+yp; arc=none smtp.client-ip=74.125.82.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="GsRLvX3X"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-1279eced0b9so6471459c88.0
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:50:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="i28cX+yp"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12c8f9846c8so3164635c88.0
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:50:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776790252; x=1777395052; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1776790253; x=1777395053; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rp0N2+tbCAeZWeluucf4owdIWervGqDRLwsP2bxn9hM=;
-        b=GsRLvX3Xx2rsPt1Z+OBk0OfKHqzDPwkFhStrgComo8LEGLlcpRWYKvu+gFmsjCYKSJ
-         zOh0KnnJRknSzfc6R8+K64D0079sRcTGourKkzGREk0VVnUeaGZZ7rZZtbMa8Wl74hsP
-         IozhXV9PFSAzLB8rIAPO3+izbZeZR2j2TbonhJXd3+TOZ4owRZ9wY/HYRTRkqpZwpKDw
-         KeIjRWHm5YMYCQ0xUjg95Z1oS1XBEHGeizga9sTovwAq+Ulq09Tho39UntUcDIuID/6G
-         RBggiXzTOGT4f5sWqzZD4b7//saA4tfvFoB6JZhB8RU84SsfRSK4fbHdsB5J1gvp/XiI
-         FF2g==
+        bh=WKRj+yWil7siAgVLYl1cN496dUY16Ak7ydfQm7oVR34=;
+        b=i28cX+ypAbV+kFNIpmfYDwXzNpzbt/ogiz4HCVJYugaFX4Sl1TLKREIA1WYxhy+Co0
+         n+GFDV51XbwaTiXNM3E97r8HaAa12z0KIw8c/6fgtCr390hjYj4hojjl4oJQcpR8Q26+
+         eXZWUTfUszkcgv1nQUXYV9k/C4ZURYYj0EBdwFlSq74UTfM3jBeMMHa2ZPgjY/P8OrRt
+         SafBAFQtb2kFQYo6wsaQbnTaHw49QINFvXMjWvwzzRylnB2Xc38Xoq1Y/CNgti8wok4I
+         yiPoqbFaaipxlZpJL/NY+obSF9/fyZiUTBs5eXGFpJ3Xfe2EWEaZ9OZQzqmzMpj8tAW5
+         0hEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776790252; x=1777395052;
+        d=1e100.net; s=20251104; t=1776790253; x=1777395053;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Rp0N2+tbCAeZWeluucf4owdIWervGqDRLwsP2bxn9hM=;
-        b=OEIOWyNrxFfujipzpigLdS4eJDALJoMnaazeATHl6/VvfYue5hyIvAmuumOCcKKXO+
-         T80W1pUzHFurT6FuVsW0qmoYfEII4+QTzDCxURjC2EynmH+MLYn5ocy/A5VPueDIvusm
-         V5uW6SP3nxROqd5lbcvKCFf3Hrf+Qo3wDpDDm92A3Y/n7/ylRv0j7K2+jPnVOu6pFVPv
-         6snVMk1Cgj0CCKbhvdJfB8XRv/oreA97MUtwSy34nSjjmjjCUKsI1h1AvDEL09RhdDLP
-         sKmr8d1YpSPwN40g1TtfHzkEOf+tbrDlMKDabUvkV55GKSxL5Kz/asQCvuknPAGx67QJ
-         alCQ==
-X-Gm-Message-State: AOJu0YzVzAotDjJtsf0Tcd3lnLnq4+iK0tCgr8Xugfzg4AfmGBAETDEx
-	21ETj+s4aIfWai8HAFqtxlJ3F2uVAlmZo4YtYRWcadmHwx65Me/Fo38mt/MvTA4i6+EvMbxBeXr
-	bjkZh0ElzYyz8
-X-Gm-Gg: AeBDieu9sNsA7u7VX3ii7fMnt+jDfvHzX7x1sEoI85BAwWOOX3CRn/Ls8FC+wN70p5M
-	wltCH7HS1xc6yy66T0xtdCfAbLeWM6VbH0pb9++/NgsAOE+ZfFvx7hw94yyCFftIG7zNJekSRJ4
-	L9ZIAYAhLa/mknc4yaEzhgqtTHnhAED3HIZWD/hQ3DjtbXRokktka4siUkvehpTYMYa+WtravDi
-	kOws7MQk+yXZDvzOEwdmQ4sf1ElomzbPKTWvz50wqPVE8MCTDOOzWC0r3+cucltViVPxK61KUy1
-	/IDePR8hmG/6Da5Ifxz7H9Ws97LTahIu9soRf9gjNKm2KbJuX+06GAI8fyID8u9Nca6eMB49O4Z
-	rPqCH4TX0aA/mAH98+zI8klc9HaDaXCgtvb7/F986HbXRK5HxRlBN7DzjTNuFxWjHlb/5XVHr2y
-	Dj/xIIwPpoooKP3n25VSnHIEv1xyz9Og==
-X-Received: by 2002:a05:7301:3d19:b0:2d1:9b35:4ed3 with SMTP id 5a478bee46e88-2e4874ea1f2mr11201498eec.28.1776790251488;
-        Tue, 21 Apr 2026 09:50:51 -0700 (PDT)
+        bh=WKRj+yWil7siAgVLYl1cN496dUY16Ak7ydfQm7oVR34=;
+        b=jWL6XU83qjjzEoSbOYpT7YWOydKNSrZ3wCLFM3NYuRsHRCV2tHYWk9h0MNNRAJZLm5
+         VDalaaG85tpN76mfoskEyF4apZ0+/+8/i8Ng3cDnF0OyQfHdw/VcPEIqXQe4PZh7vj52
+         qty+XYwxCGEeszDbX0amQSI4p2Ilc7flCtAT0U59TZSth0J/xSCtfesZf7PJWRqbEQWi
+         pg3e3Ws05aZN7Xzzdqk7Nr+fjwhg21sSE1l2uk5WyEa0JVtPWNXCmjZ02vtQLvpdxby2
+         Ekt1rgzDrbwQCoGqptfDI5YCugrpc9kXoPx2Rie/LpIwqmem2uPjylVJKs4XEr79HVQb
+         8Zmw==
+X-Gm-Message-State: AOJu0YzRsRb4BFaloXyXJ7PX7elkWOaN/bwR/k9oIoTxzSFUPFGnNSUE
+	45BW13CUitPwI0/bdQuDgZPg0IfviiRMqy9vopC+te4U1hEaPOIvdi5qcNMhHifYPx1z4/Meb/h
+	v+4/ZRh3bbD5m
+X-Gm-Gg: AeBDievPWG+EOOL1v3qec/dLBaTAd6TIzRPMEBI6u2P0sZMB1uLDxX9/4jbRNrKavtF
+	lt/AJYYhlEPwdEPX3SER8fVOn17e9seTrlj0vm8xeX6Mpkgu/BIiW/wGQl4zHXdBN1tV6VN65Wq
+	r4DhNwUPR7D8qjeaRLpg4QrzVroBgSMhnYTQlB0RXK/dhsnB1/gWZXJPh/p7KrhOdFovDJiFbuC
+	i2rTc+ZtYPFRIO93Ttp8YIQ+8aorcte/z0rh9ZsCLUi4FyEdfXnciHn+n5ttpBCa3dMg2JZosEQ
+	+BH4+HTOfs7hEkFPYJ4M7Zi7+xb6XkoTOIVf0qICmZAFDH3jAooRPJrB8nM9/71lXAFEzHmfkCa
+	CgcQDdNpDvBOwe92FCxa3R6CY46O3BmtoafCf23SqjpEZXNSXJc64RL19TaGfNbknI1W81OSMmJ
+	VQbeq+3fgyyN66bh91pFMzZW7sWJKbCg==
+X-Received: by 2002:a05:7300:fb94:b0:2c5:220c:5670 with SMTP id 5a478bee46e88-2e4646ccd74mr9249012eec.2.1776790252866;
+        Tue, 21 Apr 2026 09:50:52 -0700 (PDT)
 Received: from krios.corp.tfbnw.net ([2620:10d:c090:600::8110])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53a4a8018sm24514993eec.8.2026.04.21.09.50.50
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53a4a8018sm24514993eec.8.2026.04.21.09.50.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 09:50:51 -0700 (PDT)
+        Tue, 21 Apr 2026 09:50:52 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	song@kernel.org,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v8 7/8] selftests/bpf: Add selftests for libarena buddy allocator
-Date: Tue, 21 Apr 2026 12:50:36 -0400
-Message-ID: <20260421165037.4736-8-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v8 8/8] selftests/bpf: Reuse stderr parsing for libarena ASAN tests
+Date: Tue, 21 Apr 2026 12:50:37 -0400
+Message-ID: <20260421165037.4736-9-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260421165037.4736-1-emil@etsalapatis.com>
 References: <20260421165037.4736-1-emil@etsalapatis.com>
@@ -81,728 +81,198 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce selftests for the buddy allocator with and without
-ASAN. Add the libarena selftests both to the libarena test
-runner and to test_progs, so that they are a) available when
-libarena is pulled as a standalone library, and b) exercised
-along with all other test programs in this directory.
+Add code to directly test the output of libarena ASAN tests.
+The code reuses testing infrastructure originally for BPF streams
+to verify that ASAN emits call stacks when the selftests trigger
+a memory error.
 
-ASAN for libarena requires LLVM 22. Add logic in the top-level
-selftests Makefile to only compile the ASAN variant if the
-compiler supports it, otherwise skip the test.
+Since stderr() testing uses logic from test_progs, it is only
+available on the test_progs-based selftest runner. The standalone
+runner still uses internal ASAN state to verify access errors are
+triaged as expected.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- tools/testing/selftests/bpf/Makefile          |  17 +-
- .../bpf/libarena/include/selftest_helpers.h   |   7 +
- .../bpf/libarena/selftests/selftest.c         |   7 +
- .../libarena/selftests/st_asan_buddy.bpf.c    | 241 ++++++++++++++++++
- .../bpf/libarena/selftests/st_buddy.bpf.c     | 208 +++++++++++++++
- .../selftests/bpf/prog_tests/libarena.c       |  62 +++++
- .../selftests/bpf/prog_tests/libarena_asan.c  |  87 +++++++
- 7 files changed, 628 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/libarena_asan.c
+ .../bpf/libarena/include/test_progs_compat.h  | 15 ++++++
+ .../libarena/selftests/st_asan_buddy.bpf.c    | 18 +++++++
+ .../selftests/bpf/prog_tests/libarena_asan.c  |  2 +
+ tools/testing/selftests/bpf/test_loader.c     | 51 ++++++++++++++-----
+ tools/testing/selftests/bpf/test_progs.h      |  2 +
+ 5 files changed, 76 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/test_progs_compat.h
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index a5743cfacc22..3efb26774a97 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -79,6 +79,12 @@ ifneq ($(shell $(CLANG) --target=bpf -mcpu=help 2>&1 | grep 'v4'),)
- CLANG_CPUV4 := 1
- endif
- 
-+# Check whether clang supports BPF address sanitizer (requires LLVM 22+)
-+CLANG_HAS_ARENA_ASAN := $(shell echo 'int x;' | \
-+	$(CLANG) --target=bpf -fsanitize=kernel-address \
-+	-mllvm -asan-shadow-addr-space=1 \
-+	-x c -c - -o /dev/null 2>/dev/null && echo 1)
+diff --git a/tools/testing/selftests/bpf/libarena/include/test_progs_compat.h b/tools/testing/selftests/bpf/libarena/include/test_progs_compat.h
+new file mode 100644
+index 000000000000..9d431376c42f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/libarena/include/test_progs_compat.h
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#pragma once
 +
- # Order correspond to 'make run_tests' order
- TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
- 	test_sockmap \
-@@ -765,6 +771,14 @@ LIBARENA_SKEL := libarena/libarena.skel.h
- $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
- 	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
- 
-+ifneq ($(CLANG_HAS_ARENA_ASAN),)
-+LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
-+CFLAGS += -DHAS_BPF_ARENA_ASAN
++#ifdef __BPF__
 +
-+$(LIBARENA_ASAN_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
-+	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS)
-+endif
++/* Selftests use these tags for compatibility with test_progs. */
++#define __test_tag(tag)		__attribute__((btf_decl_tag("comment:" XSTR(__COUNTER__) ":" tag)))
++#define __stderr(msg)		__test_tag("test_expect_stderr=" msg)
++#define __stderr_unpriv(msg)	__test_tag("test_expect_stderr_unpriv=" msg)
 +
- # Define test_progs test runner.
- TRUNNER_TESTS_DIR := prog_tests
- TRUNNER_BPF_PROGS_DIR := progs
-@@ -789,7 +803,8 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
- 			 ip_check_defrag_frags.h	\
- 			 bpftool_helpers.c	\
- 			 usdt_1.c usdt_2.c	\
--			 $(LIBARENA_SKEL)
-+			 $(LIBARENA_SKEL)	\
-+			 $(LIBARENA_ASAN_SKEL)
- TRUNNER_LIB_SOURCES := find_bit.c
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
- 		       $(OUTPUT)/liburandom_read.so			\
-diff --git a/tools/testing/selftests/bpf/libarena/include/selftest_helpers.h b/tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
-index 8fe8a65266e7..e9fb76d187f2 100644
---- a/tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
-+++ b/tools/testing/selftests/bpf/libarena/include/selftest_helpers.h
-@@ -130,3 +130,10 @@ static inline int libarena_asan_init(int arena_get_base_fd,
- 		return ret;
- 	return opts.retval;
- }
++#define XSTR(s) STR(s)
++#define STR(s) #s
 +
-+static inline bool libarena_must_setup_alloc(struct bpf_program *prog)
-+{
-+	const char *name = bpf_program__name(prog);
-+
-+	return !strstr(name, "test_buddy");
-+}
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-index 4c95c36aa097..d1d37b8bf9e3 100644
---- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-+++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-@@ -102,6 +102,13 @@ static int init_arena(selftest *skel)
- static int run_test(selftest *skel, struct bpf_program *prog)
- {
- 	int prog_fd;
-+	int ret;
-+
-+	if (libarena_must_setup_alloc(prog)) {
-+		ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_buddy_reset));
-+		if (ret)
-+			return ret;
-+	}
- 
- 	prog_fd = bpf_program__fd(prog);
- 	if (prog_fd < 0)
++#endif
 diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
-new file mode 100644
-index 000000000000..4b995cce2730
---- /dev/null
+index 4b995cce2730..4c1eef263e88 100644
+--- a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
 +++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
-@@ -0,0 +1,241 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <common.h>
-+
-+#include <asan.h>
-+#include <buddy.h>
-+
-+extern buddy_t buddy;
-+
-+#ifdef BPF_ARENA_ASAN
-+
-+#include "st_asan_common.h"
-+
-+static __always_inline int asan_test_buddy_oob_single(size_t alloc_size)
-+{
-+	u8 __arena *mem;
-+	int ret, i;
-+
-+	ret = asan_validate();
-+	if (ret < 0)
-+		return ret;
-+
-+	mem = buddy_alloc(&buddy, alloc_size);
-+	if (!mem) {
-+		arena_stdout("buddy_alloc failed for size %lu", alloc_size);
-+		return -ENOMEM;
-+	}
-+
-+	ret = asan_validate();
-+	if (ret < 0)
-+		return ret;
-+
-+	for (i = zero; i < alloc_size && can_loop; i++) {
-+		mem[i] = 0xba;
-+		ret = asan_validate_addr(false, &mem[i]);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	mem[alloc_size] = 0xba;
-+	ret = asan_validate_addr(true, &mem[alloc_size]);
-+	if (ret < 0)
-+		return ret;
-+
-+	buddy_free(&buddy, mem);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Factored out because asan_validate_addr is complex enough to cause
-+ * verification failures if verified with the rest of asan_test_buddy_uaf_single.
-+ */
-+__weak int asan_test_buddy_byte(u8 __arena __arg_arena *mem, int i, bool freed)
-+{
-+	int ret;
-+
-+	/* The header in freed blocks doesn't get poisoned. */
-+	if (freed && BUDDY_HEADER_OFF <= i &&
-+		i < BUDDY_HEADER_OFF + sizeof(struct buddy_header))
-+		return 0;
-+
-+	mem[i] = 0xba;
-+	ret = asan_validate_addr(freed, &mem[i]);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+__weak int asan_test_buddy_uaf_single(size_t alloc_size)
-+{
-+	u8 __arena *mem;
-+	int ret;
-+	int i;
-+
-+	mem = buddy_alloc(&buddy, alloc_size);
-+	if (!mem) {
-+		arena_stdout("buddy_alloc failed for size %lu", alloc_size);
-+		return -ENOMEM;
-+	}
-+
-+	ret = asan_validate();
-+	if (ret < 0)
-+		return ret;
-+
-+	for (i = zero; i < alloc_size && can_loop; i++) {
-+		ret = asan_test_buddy_byte(mem, i, false);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = asan_validate();
-+	if (ret < 0)
-+		return ret;
-+
-+	buddy_free(&buddy, mem);
-+
-+	for (i = zero; i < alloc_size && can_loop; i++) {
-+		ret = asan_test_buddy_byte(mem, i, true);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+struct buddy_blob {
-+	volatile u8 mem[48];
-+	u8 oob;
-+};
-+
-+static __always_inline int asan_test_buddy_blob_single(void)
-+{
-+	volatile struct buddy_blob __arena *blob;
-+	const size_t alloc_size = sizeof(struct buddy_blob) - 1;
-+	int ret;
-+
-+	blob = buddy_alloc(&buddy, alloc_size);
-+	if (!blob)
-+		return -ENOMEM;
-+
-+	blob->mem[0] = 0xba;
-+	ret = asan_validate_addr(false, &blob->mem[0]);
-+	if (ret < 0)
-+		return ret;
-+
-+	blob->mem[47] = 0xba;
-+	ret = asan_validate_addr(false, &blob->mem[47]);
-+	if (ret < 0)
-+		return ret;
-+
-+	blob->oob = 0;
-+	ret = asan_validate_addr(true, &blob->oob);
-+	if (ret < 0)
-+		return ret;
-+
-+	buddy_free(&buddy, (void __arena *)blob);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__weak int asan_test_buddy_oob(void)
-+{
-+	size_t sizes[] = {
-+		7, 8, 17, 18, 64, 256, 317, 512, 1024,
-+	};
-+	int ret, i;
-+
-+	ret = buddy_init(&buddy);
-+	if (ret) {
-+		arena_stdout("buddy_init failed with %d", ret);
-+		return ret;
-+	}
-+
-+	for (i = zero; i < sizeof(sizes) / sizeof(sizes[0]) && can_loop; i++) {
-+		ret = asan_test_buddy_oob_single(sizes[i]);
-+		if (ret) {
-+			arena_stdout("%s:%d Failed for size %lu", __func__,
-+				   __LINE__, sizes[i]);
-+			buddy_destroy(&buddy);
-+			return ret;
-+		}
-+	}
-+
-+	buddy_destroy(&buddy);
-+
-+	ret = asan_validate();
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__weak int asan_test_buddy_uaf(void)
-+{
-+	size_t sizes[] = { 16, 32, 64, 128, 256, 512, 1024, 16384 };
-+	int ret, i;
-+
-+	ret = buddy_init(&buddy);
-+	if (ret) {
-+		arena_stdout("buddy_init failed with %d", ret);
-+		return ret;
-+	}
-+
-+	for (i = zero; i < sizeof(sizes) / sizeof(sizes[0]) && can_loop; i++) {
-+		ret = asan_test_buddy_uaf_single(sizes[i]);
-+		if (ret) {
-+			arena_stdout("%s:%d Failed for size %lu", __func__,
-+				   __LINE__, sizes[i]);
-+			buddy_destroy(&buddy);
-+			return ret;
-+		}
-+	}
-+
-+	buddy_destroy(&buddy);
-+
-+	ret = asan_validate();
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__weak int asan_test_buddy_blob(void)
-+{
-+	const int iters = 10;
-+	int ret, i;
-+
-+	ret = buddy_init(&buddy);
-+	if (ret) {
-+		arena_stdout("buddy_init failed with %d", ret);
-+		return ret;
-+	}
-+
-+	for (i = zero; i < iters && can_loop; i++) {
-+		ret = asan_test_buddy_blob_single();
-+		if (ret) {
-+			arena_stdout("%s:%d Failed on iteration %d", __func__,
-+				   __LINE__, i);
-+			buddy_destroy(&buddy);
-+			return ret;
-+		}
-+	}
-+
-+	buddy_destroy(&buddy);
-+
-+	ret = asan_validate();
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+#endif
-+
-+__weak char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
-new file mode 100644
-index 000000000000..b12d18790fa5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
-@@ -0,0 +1,208 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <common.h>
-+
-+#include <asan.h>
-+#include <buddy.h>
-+
-+extern buddy_t buddy;
-+
-+struct segarr_entry {
-+	u8 __arena *block;
-+	size_t sz;
-+	u8 poison;
-+};
-+
-+#define SEGARRLEN (512)
-+static struct segarr_entry __arena segarr[SEGARRLEN];
-+static void __arena *ptrs[17];
-+size_t __arena alloc_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517 };
-+size_t __arena alloc_multiple_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517, 2099 };
-+size_t __arena alloc_free_sizes[] = { 3, 17, 64, 129, 256, 333, 512, 517 };
-+size_t __arena alignment_sizes[] = { 1, 3, 7, 8, 9, 15, 16, 17, 31,
-+				     32, 64, 100, 128, 255, 256, 512, 1000 };
-+
-+SEC("syscall")
-+__weak int test_buddy_create(void)
-+{
-+	const int iters = 10;
-+	int ret, i;
-+
-+	for (i = zero; i < iters && can_loop; i++) {
-+		ret = buddy_init(&buddy);
-+		if (ret)
-+			return ret;
-+
-+		ret = buddy_destroy(&buddy);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__weak int test_buddy_alloc(void)
-+{
-+	void __arena *mem;
-+	int ret, i;
-+
-+	for (i = zero; i < 8 && can_loop; i++) {
-+		ret = buddy_init(&buddy);
-+		if (ret)
-+			return ret;
-+
-+		mem = buddy_alloc(&buddy, alloc_sizes[i]);
-+		if (!mem) {
-+			buddy_destroy(&buddy);
-+			return -ENOMEM;
-+		}
-+
-+		buddy_destroy(&buddy);
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__weak int test_buddy_alloc_free(void)
-+{
-+	const int iters = 800;
-+	void __arena *mem;
-+	int ret, i;
-+
-+	ret = buddy_init(&buddy);
-+	if (ret)
-+		return ret;
-+
-+	for (i = zero; i < iters && can_loop; i++) {
-+		mem = buddy_alloc(&buddy, alloc_free_sizes[(i * 5) % 8]);
-+		if (!mem) {
-+			buddy_destroy(&buddy);
-+			return -ENOMEM;
-+		}
-+
-+		buddy_free(&buddy, mem);
-+	}
-+
-+	buddy_destroy(&buddy);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__weak int test_buddy_alloc_multiple(void)
-+{
-+	int ret, j;
-+	u32 i, idx;
-+	u8 __arena *mem;
-+	size_t sz;
-+	u8 poison;
-+
-+	ret = buddy_init(&buddy);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Cycle through each size, allocating an entry in the
-+	 * segarr. Continue for SEGARRLEN iterations. For every
-+	 * allocation write down the size, use the current index
-+	 * as a poison value, and log it with the pointer in the
-+	 * segarr entry. Use the poison value to poison the entire
-+	 * allocated memory according to the size given.
-+	 */
-+	for (i = zero; i < SEGARRLEN && can_loop; i++) {
-+		sz = alloc_multiple_sizes[i % 9];
-+		poison = (u8)i;
-+
-+		mem = buddy_alloc(&buddy, sz);
-+		if (!mem) {
-+			buddy_destroy(&buddy);
-+			arena_stdout("%s:%d", __func__, __LINE__);
-+			return -ENOMEM;
-+		}
-+
-+		segarr[i].block = mem;
-+		segarr[i].sz = sz;
-+		segarr[i].poison = poison;
-+
-+		for (j = zero; j < sz && can_loop; j++) {
-+			mem[j] = poison;
-+			if (mem[j] != poison) {
-+				buddy_destroy(&buddy);
-+				return -EINVAL;
-+			}
-+		}
-+	}
-+
-+	/*
-+	 * Go to (i * 17) % SEGARRLEN, and free the block pointed to.
-+	 * Before freeing, check all bytes have the poisoned value
-+	 * corresponding to the element. If any values are unexpected,
-+	 * return an error. Skip some elements to test destroying the
-+	 * buddy allocator while data is still allocated.
-+	 */
-+	for (i = 10; i < SEGARRLEN && can_loop; i++) {
-+		idx = (i * 17) % SEGARRLEN;
-+
-+		mem = segarr[idx].block;
-+		sz = segarr[idx].sz;
-+		poison = segarr[idx].poison;
-+
-+		for (j = zero; j < sz && can_loop; j++) {
-+			if (mem[j] != poison) {
-+				buddy_destroy(&buddy);
-+				arena_stdout("%s:%d %lx %u vs %u", __func__,
-+					   __LINE__, &mem[j], mem[j], poison);
-+				return -EINVAL;
-+			}
-+		}
-+
-+		buddy_free(&buddy, mem);
-+	}
-+
-+	buddy_destroy(&buddy);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__weak int test_buddy_alignment(void)
-+{
-+	int ret, i;
-+
-+	ret = buddy_init(&buddy);
-+	if (ret)
-+		return ret;
-+
-+	/* Allocate various sizes and check alignment */
-+	for (i = zero; i < 17 && can_loop; i++) {
-+		ptrs[i] = buddy_alloc(&buddy, alignment_sizes[i]);
-+		if (!ptrs[i]) {
-+			arena_stdout("alignment test: alloc failed for size %lu",
-+				   alignment_sizes[i]);
-+			buddy_destroy(&buddy);
-+			return -ENOMEM;
-+		}
-+
-+		/* Check 8-byte alignment */
-+		if ((u64)ptrs[i] & 0x7) {
-+			arena_stdout(
-+				"alignment test: ptr %llx not 8-byte aligned (size %lu)",
-+				(u64)ptrs[i], alignment_sizes[i]);
-+			buddy_destroy(&buddy);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	/* Free all allocations */
-+	for (i = zero; i < 17 && can_loop; i++)
-+		buddy_free(&buddy, ptrs[i]);
-+
-+	buddy_destroy(&buddy);
-+
-+	return 0;
-+}
-+
-+__weak char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/prog_tests/libarena.c b/tools/testing/selftests/bpf/prog_tests/libarena.c
-new file mode 100644
-index 000000000000..e051e2c3d2c2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/libarena.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+#include <unistd.h>
-+
-+#include "libarena/include/common.h"
-+#include "libarena/include/asan.h"
-+#include "libarena/include/buddy.h"
-+#include "libarena/include/selftest_helpers.h"
-+
-+#include "libarena/libarena.skel.h"
-+
-+static void run_libarena_test(struct libarena *skel, struct bpf_program *prog,
-+		const char *name)
-+{
-+	int ret;
-+
-+	if (libarena_must_setup_alloc(prog)) {
-+		ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_buddy_reset));
-+		if (!ASSERT_OK(ret, "arena_buddy_reset"))
-+			return;
-+	}
-+
-+	ret = libarena_run_prog(bpf_program__fd(prog));
-+
-+	ASSERT_OK(ret, name);
-+
-+}
-+
-+void test_libarena(void)
-+{
-+	struct libarena *skel;
-+	struct bpf_program *prog;
-+	int ret;
-+
-+	skel = libarena__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	ret = libarena__attach(skel);
-+	if (!ASSERT_OK(ret, "attach"))
-+		goto out;
-+
-+	ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_alloc_reserve));
-+	if (!ASSERT_OK(ret, "arena_alloc_reserve"))
-+		goto out;
-+
-+	bpf_object__for_each_program(prog, skel->obj) {
-+		const char *name = bpf_program__name(prog);
-+
-+		if (!libarena_is_test_prog(name))
-+			continue;
-+
-+		if (!test__start_subtest(name))
-+			continue;
-+
-+		run_libarena_test(skel, prog, name);
-+	}
-+
-+out:
-+	libarena__destroy(skel);
-+}
+@@ -6,6 +6,9 @@
+ #include <asan.h>
+ #include <buddy.h>
+ 
++/* Required for parsing the ASAN call stacks. */
++#include <test_progs_compat.h>
++
+ extern buddy_t buddy;
+ 
+ #ifdef BPF_ARENA_ASAN
+@@ -142,6 +145,11 @@ static __always_inline int asan_test_buddy_blob_single(void)
+ }
+ 
+ SEC("syscall")
++__stderr("Memory violation for address {{.*}} for write of size 1")
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
+ __weak int asan_test_buddy_oob(void)
+ {
+ 	size_t sizes[] = {
+@@ -175,6 +183,11 @@ __weak int asan_test_buddy_oob(void)
+ }
+ 
+ SEC("syscall")
++__stderr("Memory violation for address {{.*}} for write of size 1")
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
+ __weak int asan_test_buddy_uaf(void)
+ {
+ 	size_t sizes[] = { 16, 32, 64, 128, 256, 512, 1024, 16384 };
+@@ -206,6 +219,11 @@ __weak int asan_test_buddy_uaf(void)
+ }
+ 
+ SEC("syscall")
++__stderr("Memory violation for address {{.*}} for write of size 1")
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
+ __weak int asan_test_buddy_blob(void)
+ {
+ 	const int iters = 10;
 diff --git a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
-new file mode 100644
-index 000000000000..4e54949b1e3a
---- /dev/null
+index 4e54949b1e3a..46e73cf77540 100644
+--- a/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
 +++ b/tools/testing/selftests/bpf/prog_tests/libarena_asan.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
+@@ -25,6 +25,8 @@ static void run_libarena_asan_test(struct libarena_asan *skel,
+ 
+ 	ret = libarena_run_prog(bpf_program__fd(prog));
+ 	ASSERT_OK(ret, name);
 +
-+#ifdef HAS_BPF_ARENA_ASAN
-+#include <unistd.h>
-+
-+#include "libarena/include/common.h"
-+#include "libarena/include/asan.h"
-+#include "libarena/include/buddy.h"
-+#include "libarena/include/selftest_helpers.h"
-+
-+#include "libarena/libarena_asan.skel.h"
-+
-+static void run_libarena_asan_test(struct libarena_asan *skel,
-+		struct bpf_program *prog, const char *name)
++	verify_test_stderr(skel->obj, prog);
+ }
+ 
+ static void run_test(void)
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index c4c34cae6102..ee637809a1d4 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -93,7 +93,7 @@ void test_loader_fini(struct test_loader *tester)
+ 	free(tester->log_buf);
+ }
+ 
+-static void free_msgs(struct expected_msgs *msgs)
++void free_msgs(struct expected_msgs *msgs)
+ {
+ 	int i;
+ 
+@@ -789,6 +789,43 @@ static void emit_stderr(const char *stderr, bool force)
+ 	fprintf(stdout, "STDERR:\n=============\n%s=============\n", stderr);
+ }
+ 
++static void verify_stderr(int prog_fd, struct expected_msgs *msgs)
 +{
++	LIBBPF_OPTS(bpf_prog_stream_read_opts, ropts);
++	char *buf;
 +	int ret;
 +
-+	if (libarena_must_setup_alloc(prog)) {
-+		ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_buddy_reset));
-+		if (!ASSERT_OK(ret, "arena_buddy_reset"))
-+			return;
-+	}
-+
-+	ret = libarena_run_prog(bpf_program__fd(prog));
-+	ASSERT_OK(ret, name);
-+}
-+
-+static void run_test(void)
-+{
-+	struct libarena_asan *skel;
-+	struct bpf_program *prog;
-+	int ret;
-+
-+	skel = libarena_asan__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++	if (!msgs->cnt)
 +		return;
 +
-+	ret = libarena_asan__attach(skel);
-+	if (!ASSERT_OK(ret, "attach"))
-+		goto out;
++	buf = malloc(TEST_LOADER_LOG_BUF_SZ);
++	if (!ASSERT_OK_PTR(buf, "malloc"))
++		return;
 +
-+	ret = libarena_run_prog(bpf_program__fd(skel->progs.arena_alloc_reserve));
-+	if (!ASSERT_OK(ret, "arena_alloc_reserve"))
-+		goto out;
-+
-+	ret = libarena_asan_init(
-+		bpf_program__fd(skel->progs.arena_get_base),
-+		bpf_program__fd(skel->progs.asan_init),
-+		(1ULL << 32) / sysconf(_SC_PAGESIZE));
-+	if (!ASSERT_OK(ret, "libarena_asan_init"))
-+		goto out;
-+
-+	bpf_object__for_each_program(prog, skel->obj) {
-+		const char *name = bpf_program__name(prog);
-+
-+		if (!libarena_is_asan_test_prog(name))
-+			continue;
-+
-+		if (!test__start_subtest(name))
-+			continue;
-+
-+		run_libarena_asan_test(skel, prog, name);
++	ret = bpf_prog_stream_read(prog_fd, 2, buf, TEST_LOADER_LOG_BUF_SZ - 1,
++				    &ropts);
++	if (ret > 0) {
++		buf[ret] = '\0';
++		emit_stderr(buf, false);
++		validate_msgs(buf, msgs, emit_stderr);
++	} else {
++		ASSERT_GT(ret, 0, "stderr stream read");
 +	}
 +
-+out:
-+	libarena_asan__destroy(skel);
++	free(buf);
 +}
 +
-+#endif /* HAS_BPF_ARENA_ASAN */
-+
-+/*
-+ * Run the test depending on whether LLVM can compile arena ASAN
-+ * programs.
-+ */
-+void test_libarena_asan(void)
++void verify_test_stderr(struct bpf_object *obj, struct bpf_program *prog)
 +{
-+#ifdef HAS_BPF_ARENA_ASAN
-+	run_test();
-+#else
-+	test__skip();
-+#endif
++	struct test_spec spec = {};
 +
-+	return;
++	if (parse_test_spec(NULL, obj, prog, &spec))
++		return;
++
++	verify_stderr(bpf_program__fd(prog), &spec.priv.stderr);
++	free_test_spec(&spec);
 +}
 +
+ static void emit_stdout(const char *bpf_stdout, bool force)
+ {
+ 	if (!force && env.verbosity == VERBOSE_NONE)
+@@ -1314,17 +1351,7 @@ void run_subtest(struct test_loader *tester,
+ 			goto tobj_cleanup;
+ 		}
+ 
+-		if (subspec->stderr.cnt) {
+-			err = get_stream(2, bpf_program__fd(tprog),
+-					 tester->log_buf, tester->log_buf_sz);
+-			if (err <= 0) {
+-				PRINT_FAIL("Unexpected retval from get_stream(): %d, errno = %d\n",
+-					   err, errno);
+-				goto tobj_cleanup;
+-			}
+-			emit_stderr(tester->log_buf, false /*force*/);
+-			validate_msgs(tester->log_buf, &subspec->stderr, emit_stderr);
+-		}
++		verify_stderr(bpf_program__fd(tprog), &subspec->stderr);
+ 
+ 		if (subspec->stdout.cnt) {
+ 			err = get_stream(1, bpf_program__fd(tprog),
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 1a44467f4310..37955a8ad385 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -563,5 +563,7 @@ struct expected_msgs {
+ 
+ void validate_msgs(const char *log_buf, struct expected_msgs *msgs,
+ 		   void (*emit_fn)(const char *buf, bool force));
++void free_msgs(struct expected_msgs *msgs);
++void verify_test_stderr(struct bpf_object *obj, struct bpf_program *prog);
+ 
+ #endif /* __TEST_PROGS_H */
 -- 
 2.53.0
 
