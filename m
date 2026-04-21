@@ -1,142 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59BEE156F45;
-	Tue, 21 Apr 2026 00:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17BA11EA65
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 00:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776732313; cv=none; b=CvvMZGkbr9aKjXd8CM+L02aDzunCeqNloKD6xpUw8ox5dgWKjviED8ZQ+T4SOJNYfts/g3mxLPVjS6EyoB+oVp+VvQj9QGiqdUpYPv7IJhc1siZVXXw5kyQsSQVVEoaLd8ehJvJNO51JVmpirKK34XKbr2eXW7RGF4qDoqYNBQE=
+	t=1776732445; cv=none; b=S10PQELMjX++huBRENj1OZeAl6x1QDIDCC+PlCfoWdpEOdm0SYxFE7cjFk4eOVBRxO+RTUJrRCmwfn7o2Q5Kgdhf+ZLI72wyDZPuOKLV+gclqh1oe5f7Rd+huYjDYYY0d6MR6RtMi3ObV9A22v8ng+wnwdv5h9bNmJMzXqV3niA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776732313; c=relaxed/simple;
-	bh=zZCiWNX58ldRE9uO6niC7LJKoDQSavu2WQtxZGKPslM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pmiWvCqrUdpJ3efznbIRjY2LinhTOp+gZPiBDtYGI4xbTtKEG1s5xt8tKDM4B1o6i18l5YwzshlUvhMB+5O/sSVJkYA5suJBplHJyLxvFKVSW/jSZ77KTKE35eqz516+7BiZU64dJ/9aCRKHFZ41IG8QFe+sk8yIM2LTC7cf6Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XXGKBwgz; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XXGKBwgz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE13C19425;
-	Tue, 21 Apr 2026 00:45:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776732313;
-	bh=zZCiWNX58ldRE9uO6niC7LJKoDQSavu2WQtxZGKPslM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=XXGKBwgzfs1bBU1pRpN4Jyp+L7NYXy+jmXYb8fbkiMRQv/BwDrun3F5Q6byxj7Jjq
-	 PGnjEJ5DwjeAD3NKspUZY8Ey67YtaGMMJKtGcuyiP7TFPmRUkowQATxIQQeyX2VNFj
-	 B+uU6FUr8x1cWxX2k2DGEOgLvzrqkL3fO6rNvVRg7ES8xuRpS4Omh0hVQ9eURjoQXA
-	 mxvAswsvI5OOAfDyhXBZz51qROOeSdDVvECN5kw0eDA0TwN3rYhzW8mKoelNWmyy6a
-	 ctp5IC8Er5LicC3zHFZDIFplNE/9bRGAFeOszTDv+LD95rFbz9mEB2i0O2YaWXbk0a
-	 gzMjgtwx6jy8Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] perf/lock: enable end-timestamp accounting for cgroup
- aggregation
-Reply-To: sashiko@lists.linux.dev
-To: "Suchit Karunakaran" <suchitkarunakaran@gmail.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260420184656.331306-1-suchitkarunakaran@gmail.com>
-References: <20260420184656.331306-1-suchitkarunakaran@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 00:45:12 +0000
-Message-Id: <20260421004512.CDE13C19425@smtp.kernel.org>
+	s=arc-20240116; t=1776732445; c=relaxed/simple;
+	bh=f1a2hvGWC9ppM0mCrlz6TeECsoZUfQy9vgXC2YKYcXA=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=SLJIKhpjc1XYQ11jmP00Vt35R7WdhMrcky2OPJLUUtwZfgqYwe/cvPpwmAYrMCOaAOxI3O4PHzdN8QGBGHP7R6Ltu+L+WlLvCpi/bX699R4s2EB0eDUvcW+a7xNHLQwUUXVo+v/RlUYfokkXBvEFokdEQpMb1GPDw0oA/WsHaY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [113.200.148.30])
+	by gateway (Coremail) with SMTP id _____8BxNegXyeZpcU8CAA--.2782S3;
+	Tue, 21 Apr 2026 08:47:20 +0800 (CST)
+Received: from [10.130.40.83] (unknown [113.200.148.30])
+	by front1 (Coremail) with SMTP id qMiowJBxSeAVyeZpvJ1xAA--.19499S3;
+	Tue, 21 Apr 2026 08:47:17 +0800 (CST)
+Subject: Re: [PATCH RFC bpf-next 2/2] selftests/bpf: Add LoongArch support for
+ get_preempt_count()
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260420111516.19982-3-yangtiezhu@loongson.cn>
+ <20260420133532.4973DC2BCB4@smtp.kernel.org>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <800726d7-7f09-40ee-a3ae-faf879364bdf@loongson.cn>
+Date: Tue, 21 Apr 2026 08:47:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <20260420133532.4973DC2BCB4@smtp.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJBxSeAVyeZpvJ1xAA--.19499S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ur1UGrWDur1xGrWUWFW3urX_yoW8ur47pF
+	yfCayqyr48Jay2gw17Jws5uF1ftw1kWa95Gr95K3y2kw15trWrWrWxWrWayw13Z34Fgr40
+	v3s2gw4avF4DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Jr0_Gr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67
+	vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
+	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc4
+	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
+	xVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
+	1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUrNtxDUUU
+	U
 
-Sashiko AI review found 2 potential issue(s):
-- [High] Incomplete spinlock and rwlock contentions are silently dropped fo=
-r LOCK_AGGR_CGROUP because account_end_timestamp() skips the per-CPU tstamp=
- map.
-- [Medium] Inconsistent cgroup attribution between complete and incomplete =
-lock contentions when a task migrates cgroups.
---
+On 2026/4/20 下午9:35, sashiko-bot@kernel.org wrote:
+> Sashiko AI review found 1 potential issue(s):
+> - [High] BPF programs including `bpf_experimental.h` will fail to compile on LoongArch due to a non-existent `thread_info` field in `struct task_struct`.
+> --
+> 
+> commit 82453686fe5eacd9f219e2a050dc016b297cfc79
+> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
+> 
+> selftests/bpf: Add LoongArch support for get_preempt_count()
+> 
+> This commit adds LoongArch support for get_preempt_count() in the BPF
+> experimental helpers. It enables bpf_in_interrupt() and related macros to
+> work properly on LoongArch systems.
+> 
+>> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+>> index e5c039bc44cb4..5847bbf12d240 100644
+>> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+>> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+>> @@ -507,6 +507,8 @@ static inline int get_preempt_count(void)
+>>   	return bpf_get_lowcore()->preempt_count;
+>>   #elif defined(bpf_target_riscv)
+>>   	return bpf_get_current_task_btf()->thread_info.preempt_count;
+>> +#elif defined(bpf_target_loongarch)
+>> +	return bpf_get_current_task_btf()->thread_info.preempt_count;
+> 
+> Will this compile successfully on LoongArch?
+> 
+> Since LoongArch does not select CONFIG_THREAD_INFO_IN_TASK, struct
+> thread_info is allocated on the kernel stack rather than being embedded
+> within struct task_struct. Because of this, the generated BTF and vmlinux.h
+> for LoongArch will not contain a thread_info field in task_struct.
+> 
+> Could this lead to a compiler error indicating that there is no member named
+> thread_info in struct task_struct when building BPF selftests?
 
-commit 7ba25dc647534f97eb1ae9f34c6c8d38e7fef074
-Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+As mentioned in the cover letter, it needs to apply the kernel patch
+"LoongArch: Implement CONFIG_THREAD_INFO_IN_TASK" [1] before testing.
 
-perf/lock: enable end-timestamp accounting for cgroup aggregation
+[1] 
+https://lore.kernel.org/loongarch/20260420102907.4617-1-yangtiezhu@loongson.cn/
 
-This commit adds a cgroup_id field to struct tstamp_data to properly account
-for incomplete lock contention events when aggregating by cgroup. It records
-the cgroup ID at contention_begin and uses it to build the aggregation key
-in userspace.
+Thanks,
+Tiezhu
 
-> diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_=
-lock_contention.c
-> index cbd7435579fea..1a5bd2ff8ee4c 100644
-> --- a/tools/perf/util/bpf_lock_contention.c
-> +++ b/tools/perf/util/bpf_lock_contention.c
-> @@ -463,8 +463,8 @@ static void update_lock_stat(int map_fd, int pid, u64=
- end_ts,
->  		stat_key.lock_addr_or_cgroup =3D ts_data->lock;
->  		break;
->  	case LOCK_AGGR_CGROUP:
-> -		/* TODO */
-> -		return;
-> +		stat_key.lock_addr_or_cgroup =3D ts_data->cgroup_id;
-> +		break;
-
-Does this fully enable end-timestamp accounting for cgroup aggregation
-on per-CPU locks like spinlocks and rwlocks?
-
-Looking at account_end_timestamp() in tools/perf/util/bpf_lock_contention.c,
-there is an early return that skips the per-CPU tstamp map:
-
-static void account_end_timestamp(struct lock_contention *con)
-{
-	...
-	/* Now it'll check per-cpu tstamp map which doesn't have TID. */
-	if (aggr_mode =3D=3D LOCK_AGGR_TASK || aggr_mode =3D=3D LOCK_AGGR_CGROUP)
-		return;
-
-	total_cpus =3D cpu__max_cpu().cpu;
-	ts_fd =3D bpf_map__fd(skel->maps.tstamp_cpu);
-	...
-}
-
-Since account_end_timestamp() skips iterating over skel->maps.tstamp_cpu
-when aggr_mode is LOCK_AGGR_CGROUP, are all incomplete contentions for
-spinlocks and rwlocks still silently dropped?
-
-[ ... ]
-
-> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/=
-util/bpf_skel/lock_contention.bpf.c
-> index 96e7d853b9edf..d0e2cad02fa36 100644
-> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> @@ -536,6 +536,8 @@ int contention_begin(u64 *ctx)
->  	pelem->timestamp =3D bpf_ktime_get_ns();
->  	pelem->lock =3D (__u64)ctx[0];
->  	pelem->flags =3D (__u32)ctx[1];
-> +	if (aggr_mode =3D=3D LOCK_AGGR_CGROUP)
-> +		pelem->cgroup_id =3D get_current_cgroup_id();
-
-If a task migrates to a different cgroup while blocked on a lock, could this
-lead to inconsistent attribution between complete and incomplete contention=
-s?
-
-The cgroup ID is statically recorded here at contention_begin() and used by
-userspace for incomplete events.
-
-However, contention_end() continues to dynamically resolve the cgroup ID:
-
-SEC("tp_btf/contention_end")
-int contention_end(u64 *ctx)
-{
-	...
-	case LOCK_AGGR_CGROUP:
-		key.lock_addr_or_cgroup =3D get_current_cgroup_id();
-		break;
-	...
-}
-
-Would it be more consistent for contention_end() to also use the statically
-recorded pelem->cgroup_id, ensuring that both completed and incomplete even=
-ts
-attribute the contention time to the exact same cgroup?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420184656.3313=
-06-1-suchitkarunakaran@gmail.com?part=3D1
