@@ -1,159 +1,82 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF103D646C
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 13:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0F63D330E;
+	Tue, 21 Apr 2026 13:24:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776776730; cv=none; b=SjGyItQwn9dJzk6UQi5llN6Xia0lIZlXbwh/20yaZX9bovhVgPfWnRDbSyquDQn2g31ft/BBB1mPoRrAsrhpdbljC3dfegtzscOlG/H1jo8mTeUt4EYbQqgQDjs14KafZZnRckKsuCwszIrBC58SoxPr1zNfxlKbPPgwwGFiQ+Y=
+	t=1776777878; cv=none; b=YZuPOPJcLtBJjXt5nzQGy0fkFL3g4UwHMGcQMsYvBnc5yZZsccCPj/PpzTa4fKT2I4fPUQPRHhuAYeVYd+f39vN0kKdoYlUalbsTskN8ckfNyia0/M0oVpsk0D7xEBdL05opXz2fS4IuEj1g6qI5MaXR/k1EHtGakuLgjfiwi/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776776730; c=relaxed/simple;
-	bh=ryuOGLNpZGoO4SmrDC5WEay+GG5hhmzBR082PoEkLq8=;
+	s=arc-20240116; t=1776777878; c=relaxed/simple;
+	bh=nKXqCfcmgI/4F53LIA4YsI1i1dRcu3SCWL74z0ilyuY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ueik9i/ix4+j0u8n78VSNVwvzXyj4u4hhImmzx7lQUNotPg7HESNyMHKM2uq8JCXDrj8vFbCWOBTu6WJlFa+cHnxiPUwj+jNUuCaU1n3DWUK1Ka7xUxxqVBsp8oQ3m0SrpixsuJkK3lh5/vUVJCyfptzZWnlKDSWA/GSgPHcb3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4g0Mxy246tzYQtL3
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 21:04:22 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 8B945405D2
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 21:05:18 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP1 (Coremail) with SMTP id cCh0CgBnU_4NdudpXKvTBA--.8506S2;
-	Tue, 21 Apr 2026 21:05:18 +0800 (CST)
-Message-ID: <ea1d6de6-55b0-4478-94e3-83733788e7c9@huaweicloud.com>
-Date: Tue, 21 Apr 2026 21:05:17 +0800
+	 In-Reply-To:Content-Type; b=ZVuxOKoWzmbey4+xlOg9E1k5HsKHt7Sz8YGyZsaERgj+DVvcRi0boBL1X34ti7VkwdvKQoalSe4zNy06yfdMkzUvk0ksPglpP62EO9/M+fxZ2AWnhQNFl6TWeXHt605mqePAT3WqbhzOS4U49IYVPrb0qbT9yCyVwnfiNghkHIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [117.22.85.157])
+	by gateway (Coremail) with SMTP id _____8Bx0eqLeudpe3wCAA--.9175S3;
+	Tue, 21 Apr 2026 21:24:27 +0800 (CST)
+Received: from [192.168.0.111] (unknown [117.22.85.157])
+	by front1 (Coremail) with SMTP id qMiowJCx_8KGeudpkf1xAA--.20229S3;
+	Tue, 21 Apr 2026 21:24:26 +0800 (CST)
+Message-ID: <4a6c89b6-72a8-a80b-1f7c-9a620ed24505@loongson.cn>
+Date: Tue, 21 Apr 2026 21:25:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Uninitialized Stack Variable / NULL Pointer Dereference in
- __sys_socket_create via BPF LSM hooks
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v3 0/5] LoongArch: BPF: Support more atomic instructions
 Content-Language: en-US
-To: Kuniyuki Iwashima <kuniyu@google.com>, mattbobrowski@google.com
-Cc: 2022090917019@std.uestc.edu.cn, M202472210@hust.edu.cn,
- bpf@vger.kernel.org, daniel@iogearbox.net, dddddd@hust.edu.cn,
- dzm91@hust.edu.cn, edumazet@google.com,
- hust-os-kernel-patches@googlegroups.com, jiayuan.chen@linux.dev
-References: <aedAqdeuVqLq4hDQ@google.com>
- <20260421100231.1834988-1-kuniyu@google.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260421100231.1834988-1-kuniyu@google.com>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260413040506.26640-1-yangtiezhu@loongson.cn>
+ <CAAhV-H59RuXDEqLe7UNDYssvMFXqZ2YZuW4gOUqdscPQZpqibg@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+In-Reply-To: <CAAhV-H59RuXDEqLe7UNDYssvMFXqZ2YZuW4gOUqdscPQZpqibg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBnU_4NdudpXKvTBA--.8506S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF48Wry7JFWDXFWxJryxKrg_yoW5CF1fpr
-	48Gr9rAr4qya9Fgry3tan3AFWay3Wjq3y2k3s5Ar10yw4DJrnaqa45KrWUurWakFykJw10
-	vr429F4qv3y2qFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:qMiowJCx_8KGeudpkf1xAA--.20229S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUU9ab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+	67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+	ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E
+	87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+	AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+	07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+	1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+	JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+	1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
+	cSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UUUUU==
 
-On 4/21/2026 5:59 PM, Kuniyuki Iwashima wrote:
-
-[...]
-
-> I think the issue here is that __sock_create() handles
-> a positive retval as error only for two LSM hooks,
-> security_socket_create() and security_socket_post_create(),
-> which is different from __sys_socket_create()'s expectation.
+On 4/21/26 20:38, Huacai Chen wrote:
+> Hi, Tiezhu,
 > 
-> sock_create()(_kern()) callers are supposed to check the retval
-> first before accessing the passed &sock pointer, so I don't
-> think leaving it uninitialised itself is a problem and I'd
-> rather ignore >0 value as allowed.
-> 
-> And I found a good place in verifier to reject the repro.
-> 
-> ---8<---
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 9e4980128151..19cc4ed8c389 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -10448,6 +10448,11 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->   				verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
->   				return -EINVAL;
->   			}
-> +
-> +			if (regs[BPF_REG_1].s32_max_value > 0) {
-> +				verbose(env, "BPF_LSM_CGROUP can't return a positive value!\n");
-> +				return -EINVAL;
-> +			}
->   		}
->   		break;
->   	case BPF_FUNC_dynptr_data:
-> diff --git a/net/socket.c b/net/socket.c
-> index 22a412fdec07..d40aea527f66 100644
-> --- a/net/socket.c
-> +++ b/net/socket.c
-> @@ -1617,7 +1617,7 @@ int __sock_create(struct net *net, int family, int type, int protocol,
->   	}
->   
->   	err = security_socket_create(family, type, protocol, kern);
-> -	if (err)
-> +	if (err < 0)
->   		return err;
->   
->   	/*
-> @@ -1685,7 +1685,7 @@ int __sock_create(struct net *net, int family, int type, int protocol,
->   	 */
->   	module_put(pf->owner);
->   	err = security_socket_post_create(sock, family, type, protocol, kern);
-> -	if (err)
-> +	if (err < 0)
->   		goto out_sock_release;
->   	*res = sock;
->   
-> ---8<---
-> 
->
+> Maybe we need V4? If so, please submit as soon as possible.
 
-Since the value set by bpf_set_retval() is the actual LSM hook return value,
-I think we should check it directly against the hook’s valid return range,
-rather than making a specific change for the socket_create hook.
+For now, TBH, I do not want to do that.
 
-The diff below should work:
+Patch #1 is OK.
 
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10449,6 +10449,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
-         case BPF_FUNC_set_retval:
-                 if (prog_type == BPF_PROG_TYPE_LSM &&
-                     env->prog->expected_attach_type == BPF_LSM_CGROUP) {
-+                       struct bpf_reg_state *reg;
-+                       struct bpf_retval_range range;
-+
-                         if (!env->prog->aux->attach_func_proto->type) {
-                                 /* Make sure programs that attach to void
-                                  * hooks don't try to modify return value.
-@@ -10456,6 +10459,13 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
-                                 verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
-                                 return -EINVAL;
-                         }
-+
-+                       reg = reg_state(env, BPF_REG_1);
-+                       bpf_lsm_get_retval_range(env->prog, &range);
-+                       if (!retval_range_within(range, reg)) {
-+                               verbose_invalid_scalar(env, reg, range, "At bpf_set_retval", "R1");
-+                               return -EINVAL;
-+                       }
-                 }
-                 break;
-         case BPF_FUNC_dynptr_data:
+Patch #2 is OK.
+
+Patch #3 is OK according to Wang Rui's reply.
+
+Patch #4 has no big problems, the current testcases passed,
+I am not sure whether it has problem, I can fix it if there
+is a real problem, maybe it needs to update the testcase first.
+
+patch #5 is OK, hope you can replace "usable" with "enable" in
+the patch subject and commit message when applying.
+
+Thanks,
+Tiezhu
 
