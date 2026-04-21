@@ -1,21 +1,21 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAEF2F25F5
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 17:20:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B898C2FB0A3
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 17:20:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776792012; cv=none; b=qA0pEUZZBQQoXGle/SarV0SnWN1WJVFh35yYhxJ/1OMCMi6ndzTOerdqG1IAvDLnpBW7meOtKW3mjnHpu77F9WAsX+z4j2j9kuRDHh/E08GkfDyRriO4tcs/RP0BhpYbKvTP3yLat4gJgSw+2fWxCujAW4eJyeo63aJad3A5er8=
+	t=1776792015; cv=none; b=MgJbNo2pEWbWLE58J0vnvzlQ0CAykIindcbojBXgaOv/glQwzkxOont2GnnApY+IPhtQ42mTEFwOLVd/pH0wFjHROas4wkOCMpjgQdw5hKCPVt1Q4q70OXuqiUwBnvfD6BcqKo2vfBoHbyD9iimUqZIPIfHF2H3LW5DaSlEbIQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776792012; c=relaxed/simple;
-	bh=ZN6t63KvxRAOdDXT4H1/J3uIJnSoG2Lt5F5AQdbm0U4=;
+	s=arc-20240116; t=1776792015; c=relaxed/simple;
+	bh=Cxap3dWdBB3ykUnr/0tCxUNeuEgLEjDTVk5N7S96Kw8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BdHvYwG5TnW9abxyHFVmPKt9iHuA1LRwz6qHJlFo8zOY3rkgYyIeiqtAbcTRp6nyOG15n1JqR5XVktUA50JMtzElcfGyF6sZ32boPW5ankB8b38qthgH6hCzcXd2r2bLIN0cIzTzREvDBN7w+PRWPoerx3HD+v7UZTcnbXiQirU=
+	 MIME-Version; b=BNDE883J0zbD7/GHY1AZxPdBrMyqsaFEaegb6MeMmCtysFJhF5CmpiJls8FJpFF63oy6WoMR9jElqctLnd6sa6tgn4bK1+WKSh3WwHxBtB3dgeL3talWtdy32F0Obh+gqa2Dfj0zMZg9wMy/SnjAwvy3pY7B8tpgmXxrWu7BtjQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id BD14E44B279BB; Tue, 21 Apr 2026 10:19:57 -0700 (PDT)
+	id F362B44B27A1D; Tue, 21 Apr 2026 10:20:07 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,10 +23,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 6/9] bpf: Rename existing argno to arg
-Date: Tue, 21 Apr 2026 10:19:57 -0700
-Message-ID: <20260421171957.3509719-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH bpf-next 8/9] bpf: Introduce bpf register BPF_REG_PARAMS
+Date: Tue, 21 Apr 2026 10:20:07 -0700
+Message-ID: <20260421172007.3512280-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260421171927.3507554-1-yonghong.song@linux.dev>
 References: <20260421171927.3507554-1-yonghong.song@linux.dev>
@@ -38,179 +39,286 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-To support stack arguments, in later patches, argno will represent
-both registers and stack arguments. To avoid confusion, rename
-existing argno to arg.
+Introduce BPF_REG_PARAMS as a dedicated BPF register for stack
+argument accesses. It occupies the BPF register number 11 (R11),
+which is used as the base pointer for the stack argument area,
+keeping it separate from the R10-based (BPF_REG_FP) program stack.
 
+The kernel-internal hidden register BPF_REG_AX previously occupied
+slot 11 (MAX_BPF_REG). With BPF_REG_PARAMS taking that slot,
+BPF_REG_AX moves to slot 12 and MAX_BPF_EXT_REG increases
+accordingly.
+
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 54 +++++++++++++++++++++----------------------
- 1 file changed, 27 insertions(+), 27 deletions(-)
+ include/linux/filter.h                        |  5 +-
+ kernel/bpf/core.c                             |  4 +-
+ .../selftests/bpf/prog_tests/ctx_rewrite.c    | 14 ++--
+ .../bpf/progs/verifier_bpf_fastcall.c         | 24 +++----
+ .../selftests/bpf/progs/verifier_may_goto_1.c | 12 ++--
+ .../selftests/bpf/progs/verifier_sdiv.c       | 64 +++++++++----------
+ 6 files changed, 62 insertions(+), 61 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e389442a3f5c..18ab92581452 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11301,9 +11301,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *e=
-nv,
- 		       struct bpf_kfunc_call_arg_meta *meta,
- 		       const struct btf_type *t, const struct btf_type *ref_t,
- 		       const char *ref_tname, const struct btf_param *args,
--		       int argno, int nargs, struct bpf_reg_state *reg)
-+		       int arg, int nargs, struct bpf_reg_state *reg)
- {
--	u32 regno =3D argno + 1;
-+	u32 regno =3D arg + 1;
- 	struct bpf_reg_state *regs =3D cur_regs(env);
- 	bool arg_mem_size =3D false;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 1ec6d5ba64cc..b77d0b06db6e 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -58,8 +58,9 @@ struct ctl_table_header;
+ #define BPF_REG_H	BPF_REG_9	/* hlen, callee-saved */
 =20
-@@ -11312,9 +11312,9 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *e=
-nv,
- 	    meta->func_id =3D=3D special_kfunc_list[KF_bpf_session_cookie])
- 		return KF_ARG_PTR_TO_CTX;
+ /* Kernel hidden auxiliary/helper register. */
+-#define BPF_REG_AX		MAX_BPF_REG
+-#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 1)
++#define BPF_REG_PARAMS		MAX_BPF_REG
++#define BPF_REG_AX		(MAX_BPF_REG + 1)
++#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
+ #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
 =20
--	if (argno + 1 < nargs &&
--	    (is_kfunc_arg_mem_size(meta->btf, &args[argno + 1], &regs[regno + 1=
-]) ||
--	     is_kfunc_arg_const_mem_size(meta->btf, &args[argno + 1], &regs[reg=
-no + 1])))
-+	if (arg + 1 < nargs &&
-+	    (is_kfunc_arg_mem_size(meta->btf, &args[arg + 1], &regs[regno + 1])=
- ||
-+	     is_kfunc_arg_const_mem_size(meta->btf, &args[arg + 1], &regs[regno=
- + 1])))
- 		arg_mem_size =3D true;
+ /* unused opcode to mark special call to bpf_tail_call() helper */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 8b018ff48875..ae10b9ca018d 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1299,8 +1299,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn=
+ *from,
+ 	u32 imm_rnd =3D get_random_u32();
+ 	s16 off;
 =20
- 	/* In this function, we verify the kfunc's BTF as per the argument type=
-,
-@@ -11322,68 +11322,68 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env =
-*env,
- 	 * type to our caller. When a set of conditions hold in the BTF type of
- 	 * arguments, we resolve it to a known kfunc_ptr_arg_type.
- 	 */
--	if (btf_is_prog_ctx_type(&env->log, meta->btf, t, resolve_prog_type(env=
-->prog), argno))
-+	if (btf_is_prog_ctx_type(&env->log, meta->btf, t, resolve_prog_type(env=
-->prog), arg))
- 		return KF_ARG_PTR_TO_CTX;
+-	BUILD_BUG_ON(BPF_REG_AX  + 1 !=3D MAX_BPF_JIT_REG);
+-	BUILD_BUG_ON(MAX_BPF_REG + 1 !=3D MAX_BPF_JIT_REG);
++	BUILD_BUG_ON(BPF_REG_PARAMS + 2 !=3D MAX_BPF_JIT_REG);
++	BUILD_BUG_ON(BPF_REG_AX + 1 !=3D MAX_BPF_JIT_REG);
 =20
--	if (is_kfunc_arg_nullable(meta->btf, &args[argno]) && bpf_register_is_n=
-ull(reg) &&
-+	if (is_kfunc_arg_nullable(meta->btf, &args[arg]) && bpf_register_is_nul=
-l(reg) &&
- 	    !arg_mem_size)
- 		return KF_ARG_PTR_TO_NULL;
-=20
--	if (is_kfunc_arg_alloc_obj(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_alloc_obj(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_ALLOC_BTF_ID;
-=20
--	if (is_kfunc_arg_refcounted_kptr(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_refcounted_kptr(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_REFCOUNTED_KPTR;
-=20
--	if (is_kfunc_arg_dynptr(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_dynptr(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_DYNPTR;
-=20
--	if (is_kfunc_arg_iter(meta, argno, &args[argno]))
-+	if (is_kfunc_arg_iter(meta, arg, &args[arg]))
- 		return KF_ARG_PTR_TO_ITER;
-=20
--	if (is_kfunc_arg_list_head(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_list_head(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_LIST_HEAD;
-=20
--	if (is_kfunc_arg_list_node(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_list_node(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_LIST_NODE;
-=20
--	if (is_kfunc_arg_rbtree_root(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_rbtree_root(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_RB_ROOT;
-=20
--	if (is_kfunc_arg_rbtree_node(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_rbtree_node(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_RB_NODE;
-=20
--	if (is_kfunc_arg_const_str(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_const_str(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_CONST_STR;
-=20
--	if (is_kfunc_arg_map(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_map(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_MAP;
-=20
--	if (is_kfunc_arg_wq(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_wq(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_WORKQUEUE;
-=20
--	if (is_kfunc_arg_timer(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_timer(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_TIMER;
-=20
--	if (is_kfunc_arg_task_work(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_task_work(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_TASK_WORK;
-=20
--	if (is_kfunc_arg_irq_flag(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_irq_flag(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_IRQ_FLAG;
-=20
--	if (is_kfunc_arg_res_spin_lock(meta->btf, &args[argno]))
-+	if (is_kfunc_arg_res_spin_lock(meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_RES_SPIN_LOCK;
-=20
- 	if ((base_type(reg->type) =3D=3D PTR_TO_BTF_ID || reg2btf_ids[base_type=
-(reg->type)])) {
- 		if (!btf_type_is_struct(ref_t)) {
- 			verbose(env, "kernel function %s args#%d pointer type %s %s is not su=
-pported\n",
--				meta->func_name, argno, btf_type_str(ref_t), ref_tname);
-+				meta->func_name, arg, btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
- 		}
- 		return KF_ARG_PTR_TO_BTF_ID;
- 	}
-=20
--	if (is_kfunc_arg_callback(env, meta->btf, &args[argno]))
-+	if (is_kfunc_arg_callback(env, meta->btf, &args[arg]))
- 		return KF_ARG_PTR_TO_CALLBACK;
-=20
- 	/* This is the catch all argument type of register types supported by
-@@ -11394,7 +11394,7 @@ get_kfunc_ptr_arg_type(struct bpf_verifier_env *e=
-nv,
- 	if (!btf_type_is_scalar(ref_t) && !__btf_type_is_scalar_struct(env, met=
-a->btf, ref_t, 0) &&
- 	    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
- 		verbose(env, "arg#%d pointer type %s %s must point to %sscalar, or str=
-uct with scalar\n",
--			argno, btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
-+			arg, btf_type_str(ref_t), ref_tname, arg_mem_size ? "void, " : "");
- 		return -EINVAL;
- 	}
- 	return arg_mem_size ? KF_ARG_PTR_TO_MEM_SIZE : KF_ARG_PTR_TO_MEM;
-@@ -11405,7 +11405,7 @@ static int process_kf_arg_ptr_to_btf_id(struct bp=
-f_verifier_env *env,
- 					const struct btf_type *ref_t,
- 					const char *ref_tname, u32 ref_id,
- 					struct bpf_kfunc_call_arg_meta *meta,
--					int argno)
-+					int arg)
- {
- 	const struct btf_type *reg_ref_t;
- 	bool strict_type_match =3D false;
-@@ -11464,7 +11464,7 @@ static int process_kf_arg_ptr_to_btf_id(struct bp=
-f_verifier_env *env,
- 	taking_projection =3D btf_is_projection_of(ref_tname, reg_ref_tname);
- 	if (!taking_projection && !struct_same) {
- 		verbose(env, "kernel function %s args#%d expected pointer to %s %s but=
- R%d has a pointer to %s %s\n",
--			meta->func_name, argno, btf_type_str(ref_t), ref_tname, argno + 1,
-+			meta->func_name, arg, btf_type_str(ref_t), ref_tname, arg + 1,
- 			btf_type_str(reg_ref_t), reg_ref_tname);
- 		return -EINVAL;
- 	}
+ 	/* Constraints on AX register:
+ 	 *
+diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools=
+/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+index 5064aeb8fe67..2c3124092b73 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
++++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+@@ -69,19 +69,19 @@ static struct test_case test_cases[] =3D {
+ #if defined(__x86_64__) || defined(__aarch64__)
+ 	{
+ 		N(SCHED_CLS, struct __sk_buff, tstamp),
+-		.read  =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "if w11 & 0x4 goto pc+1;"
++		.read  =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
++			 "if w12 & 0x4 goto pc+1;"
+ 			 "goto pc+4;"
+-			 "if w11 & 0x3 goto pc+1;"
++			 "if w12 & 0x3 goto pc+1;"
+ 			 "goto pc+2;"
+ 			 "$dst =3D 0;"
+ 			 "goto pc+1;"
+ 			 "$dst =3D *(u64 *)($ctx + sk_buff::tstamp);",
+-		.write =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "if w11 & 0x4 goto pc+1;"
++		.write =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
++			 "if w12 & 0x4 goto pc+1;"
+ 			 "goto pc+2;"
+-			 "w11 &=3D -4;"
+-			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r11;"
++			 "w12 &=3D -4;"
++			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r12;"
+ 			 "*(u64 *)($ctx + sk_buff::tstamp) =3D $src;",
+ 	},
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/=
+tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+index fb4fa465d67c..0d9e167555b5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+@@ -630,13 +630,13 @@ __xlated("...")
+ __xlated("4: r0 =3D &(void __percpu *)(r0)")
+ __xlated("...")
+ /* may_goto expansion starts */
+-__xlated("6: r11 =3D *(u64 *)(r10 -24)")
+-__xlated("7: if r11 =3D=3D 0x0 goto pc+6")
+-__xlated("8: r11 -=3D 1")
+-__xlated("9: if r11 !=3D 0x0 goto pc+2")
+-__xlated("10: r11 =3D -24")
++__xlated("6: r12 =3D *(u64 *)(r10 -24)")
++__xlated("7: if r12 =3D=3D 0x0 goto pc+6")
++__xlated("8: r12 -=3D 1")
++__xlated("9: if r12 !=3D 0x0 goto pc+2")
++__xlated("10: r12 =3D -24")
+ __xlated("11: call unknown")
+-__xlated("12: *(u64 *)(r10 -24) =3D r11")
++__xlated("12: *(u64 *)(r10 -24) =3D r12")
+ /* may_goto expansion ends */
+ __xlated("13: *(u64 *)(r10 -8) =3D r1")
+ __xlated("14: exit")
+@@ -668,13 +668,13 @@ __xlated("1: *(u64 *)(r10 -16) =3D")
+ __xlated("2: r1 =3D 1")
+ __xlated("3: call bpf_get_smp_processor_id")
+ /* may_goto expansion starts */
+-__xlated("4: r11 =3D *(u64 *)(r10 -24)")
+-__xlated("5: if r11 =3D=3D 0x0 goto pc+6")
+-__xlated("6: r11 -=3D 1")
+-__xlated("7: if r11 !=3D 0x0 goto pc+2")
+-__xlated("8: r11 =3D -24")
++__xlated("4: r12 =3D *(u64 *)(r10 -24)")
++__xlated("5: if r12 =3D=3D 0x0 goto pc+6")
++__xlated("6: r12 -=3D 1")
++__xlated("7: if r12 !=3D 0x0 goto pc+2")
++__xlated("8: r12 =3D -24")
+ __xlated("9: call unknown")
+-__xlated("10: *(u64 *)(r10 -24) =3D r11")
++__xlated("10: *(u64 *)(r10 -24) =3D r12")
+ /* may_goto expansion ends */
+ __xlated("11: *(u64 *)(r10 -8) =3D r1")
+ __xlated("12: exit")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/to=
+ols/testing/selftests/bpf/progs/verifier_may_goto_1.c
+index 6d1edaef9213..4bdf4256a41e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
++++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+@@ -81,13 +81,13 @@ __arch_s390x
+ __arch_arm64
+ __xlated("0: *(u64 *)(r10 -16) =3D 65535")
+ __xlated("1: *(u64 *)(r10 -8) =3D 0")
+-__xlated("2: r11 =3D *(u64 *)(r10 -16)")
+-__xlated("3: if r11 =3D=3D 0x0 goto pc+6")
+-__xlated("4: r11 -=3D 1")
+-__xlated("5: if r11 !=3D 0x0 goto pc+2")
+-__xlated("6: r11 =3D -16")
++__xlated("2: r12 =3D *(u64 *)(r10 -16)")
++__xlated("3: if r12 =3D=3D 0x0 goto pc+6")
++__xlated("4: r12 -=3D 1")
++__xlated("5: if r12 !=3D 0x0 goto pc+2")
++__xlated("6: r12 =3D -16")
+ __xlated("7: call unknown")
+-__xlated("8: *(u64 *)(r10 -16) =3D r11")
++__xlated("8: *(u64 *)(r10 -16) =3D r12")
+ __xlated("9: r0 =3D 1")
+ __xlated("10: r0 =3D 2")
+ __xlated("11: exit")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/te=
+sting/selftests/bpf/progs/verifier_sdiv.c
+index fd59d57e8e37..95f3239ce228 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
+@@ -778,10 +778,10 @@ __arch_x86_64
+ __xlated("0: r2 =3D 0x8000000000000000")
+ __xlated("2: r3 =3D -1")
+ __xlated("3: r4 =3D r2")
+-__xlated("4: r11 =3D r3")
+-__xlated("5: r11 +=3D 1")
+-__xlated("6: if r11 > 0x1 goto pc+4")
+-__xlated("7: if r11 =3D=3D 0x0 goto pc+1")
++__xlated("4: r12 =3D r3")
++__xlated("5: r12 +=3D 1")
++__xlated("6: if r12 > 0x1 goto pc+4")
++__xlated("7: if r12 =3D=3D 0x0 goto pc+1")
+ __xlated("8: r2 =3D 0")
+ __xlated("9: r2 =3D -r2")
+ __xlated("10: goto pc+1")
+@@ -812,10 +812,10 @@ __success __retval(-5)
+ __arch_x86_64
+ __xlated("0: r2 =3D 5")
+ __xlated("1: r3 =3D -1")
+-__xlated("2: r11 =3D r3")
+-__xlated("3: r11 +=3D 1")
+-__xlated("4: if r11 > 0x1 goto pc+4")
+-__xlated("5: if r11 =3D=3D 0x0 goto pc+1")
++__xlated("2: r12 =3D r3")
++__xlated("3: r12 +=3D 1")
++__xlated("4: if r12 > 0x1 goto pc+4")
++__xlated("5: if r12 =3D=3D 0x0 goto pc+1")
+ __xlated("6: r2 =3D 0")
+ __xlated("7: r2 =3D -r2")
+ __xlated("8: goto pc+1")
+@@ -890,10 +890,10 @@ __arch_x86_64
+ __xlated("0: w2 =3D -2147483648")
+ __xlated("1: w3 =3D -1")
+ __xlated("2: w4 =3D w2")
+-__xlated("3: r11 =3D r3")
+-__xlated("4: w11 +=3D 1")
+-__xlated("5: if w11 > 0x1 goto pc+4")
+-__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
++__xlated("3: r12 =3D r3")
++__xlated("4: w12 +=3D 1")
++__xlated("5: if w12 > 0x1 goto pc+4")
++__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
+ __xlated("7: w2 =3D 0")
+ __xlated("8: w2 =3D -w2")
+ __xlated("9: goto pc+1")
+@@ -925,10 +925,10 @@ __arch_x86_64
+ __xlated("0: w2 =3D -5")
+ __xlated("1: w3 =3D -1")
+ __xlated("2: w4 =3D w2")
+-__xlated("3: r11 =3D r3")
+-__xlated("4: w11 +=3D 1")
+-__xlated("5: if w11 > 0x1 goto pc+4")
+-__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
++__xlated("3: r12 =3D r3")
++__xlated("4: w12 +=3D 1")
++__xlated("5: if w12 > 0x1 goto pc+4")
++__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
+ __xlated("7: w2 =3D 0")
+ __xlated("8: w2 =3D -w2")
+ __xlated("9: goto pc+1")
+@@ -1004,10 +1004,10 @@ __arch_x86_64
+ __xlated("0: r2 =3D 0x8000000000000000")
+ __xlated("2: r3 =3D -1")
+ __xlated("3: r4 =3D r2")
+-__xlated("4: r11 =3D r3")
+-__xlated("5: r11 +=3D 1")
+-__xlated("6: if r11 > 0x1 goto pc+3")
+-__xlated("7: if r11 =3D=3D 0x1 goto pc+3")
++__xlated("4: r12 =3D r3")
++__xlated("5: r12 +=3D 1")
++__xlated("6: if r12 > 0x1 goto pc+3")
++__xlated("7: if r12 =3D=3D 0x1 goto pc+3")
+ __xlated("8: w2 =3D 0")
+ __xlated("9: goto pc+1")
+ __xlated("10: r2 s%=3D r3")
+@@ -1034,10 +1034,10 @@ __arch_x86_64
+ __xlated("0: r2 =3D 5")
+ __xlated("1: r3 =3D -1")
+ __xlated("2: r4 =3D r2")
+-__xlated("3: r11 =3D r3")
+-__xlated("4: r11 +=3D 1")
+-__xlated("5: if r11 > 0x1 goto pc+3")
+-__xlated("6: if r11 =3D=3D 0x1 goto pc+3")
++__xlated("3: r12 =3D r3")
++__xlated("4: r12 +=3D 1")
++__xlated("5: if r12 > 0x1 goto pc+3")
++__xlated("6: if r12 =3D=3D 0x1 goto pc+3")
+ __xlated("7: w2 =3D 0")
+ __xlated("8: goto pc+1")
+ __xlated("9: r2 s%=3D r3")
+@@ -1108,10 +1108,10 @@ __arch_x86_64
+ __xlated("0: w2 =3D -2147483648")
+ __xlated("1: w3 =3D -1")
+ __xlated("2: w4 =3D w2")
+-__xlated("3: r11 =3D r3")
+-__xlated("4: w11 +=3D 1")
+-__xlated("5: if w11 > 0x1 goto pc+3")
+-__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
++__xlated("3: r12 =3D r3")
++__xlated("4: w12 +=3D 1")
++__xlated("5: if w12 > 0x1 goto pc+3")
++__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
+ __xlated("7: w2 =3D 0")
+ __xlated("8: goto pc+1")
+ __xlated("9: w2 s%=3D w3")
+@@ -1140,10 +1140,10 @@ __arch_x86_64
+ __xlated("0: w2 =3D -5")
+ __xlated("1: w3 =3D -1")
+ __xlated("2: w4 =3D w2")
+-__xlated("3: r11 =3D r3")
+-__xlated("4: w11 +=3D 1")
+-__xlated("5: if w11 > 0x1 goto pc+3")
+-__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
++__xlated("3: r12 =3D r3")
++__xlated("4: w12 +=3D 1")
++__xlated("5: if w12 > 0x1 goto pc+3")
++__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
+ __xlated("7: w2 =3D 0")
+ __xlated("8: goto pc+1")
+ __xlated("9: w2 s%=3D w3")
 --=20
 2.52.0
 
