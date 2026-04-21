@@ -1,113 +1,148 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB550284693
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 19:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776798862; cv=pass; b=JFk5R41P40ayuKtK89/gnyEDacRf/CX/Ce5DlHBkFDsWawesGMnBxq0AAGCCopQEwJGnSTLuh78UNC7nqXoJmPMuCCgvDtpBthrOx/EVSDC5oidtnFhNHCkOqj4CgVOMJsKaDS9vhKPHcVL8FC6Jrrh4azXv6eaPC94UKAt19yk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776798862; c=relaxed/simple;
-	bh=vdgE8kA4HbCB/vOl08y8ppNFCyhCXUWAqC7obAYsbO8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=apUXZTZIZq0t29KwenaCvIOC1AO8C8yIQv4WvUbPQ6BY9+ckmCKlEdei39dC/g7cnWZ1H/41QRJlHl3Ev5mmDXttMqQ0kM5LvKBY0WUkKa/L07DlSzNpG5pWNXJcFlIaia1V5NMoYMoYN2pqEgk5LprxQk/78+/VEnNK/oWjucU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIMpSbrZ; arc=pass smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A2C372EE0
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 19:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776800307; cv=none; b=LvUvpb0aAFDhK0qlUiyyWGyz1QAdP+Dw2HRVc7WeFWmgn6KSsbJBHxRk3P8NaRgFeRjzYTl2Hd/D23BHJKZrBlaTB6yLKaFIlT2B4ei/qu2ZECNXjNcBJONMySsuVhrsDpg1HeS4/Hus6t3H2mo0JzSwvUJojlpCtk+fhWh0FcU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776800307; c=relaxed/simple;
+	bh=T31XkmK3RYAHLWgtLcpdoMfs6Ligmd+vlyTVMJlJYnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eRxKzJNzsr6Qn5Mrkye3XMbOtfGqLPpQ5ymtGvvEPrWaMSW0ObkpmPWM3kqq9KAhyJlOzMJHq4ALWInLHxIC0UsPgellvYMg/6oSeBVeRHLdMJPXuOVZgpgMVjTWA1RcgZsP4NPg3nbvrHQW3G+WI5GNCpZDygS9Fq2XQIB5Et0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5AHof+7; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIMpSbrZ"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-488e1a8ac40so58558335e9.2
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 12:14:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776798859; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SJrAz7rkx3GnFKAp1THGFnvNqVLfM4/Lz/YVkcnStg1aOUZwK74l1tSEfDq3IdAtKv
-         nY/zZKBQbO09Q58uCAib70+RPNdRrldFqoiDh2HCQFns3royiqpLlg4ffI38X6lR9tKd
-         DVPQXyFxY9tq2Y/eW8IL51o1ZA7fym1peclDk9teBAPoPfHeHE1Ss4U+2ENhRsdAgTOC
-         ZJ8LNcYc1HFiey3RvpLCPkVvt0FWGPpHwIDoJAe+dGEznth/+u5dPPC/zuu7V7VJY29c
-         OTX3FwzNvPEJwwyuarZcqJ9B2vc9eRyl3CHbCqxputaR3WBcVlB57TUPFUjiHy+hqGDu
-         oIDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=8QuIbpmmSDmAbmPC11YMTkT11Y9iFNyls3uv9pOhJXQ=;
-        fh=PvYPcwWkAFTdNDlHuRMEXK4H0X8YFjGgiYsXgOFIKvA=;
-        b=IYjOmTSs9cPfpNJmWcQ9dpHa9enyg58eBKmLApq3oSsp8FRcBIUmUSR3ieO+XZldaW
-         /HvKdM+BKXIWFNwOIVeLN46mh1o7Ha9ghXiW7YLqg9soxGtn++6iEhf2613udYg6/duU
-         HJD6aurqACrinfSQ3B8qwwpYiNnsswIXY6O8KzaByOh4sYXGo1PxJSYtBu3h0/FCFo/E
-         MrN8BPC4KWCWQ5siXDHaeVHcPlzFAnyMIEhCCcdMnQlvTu/ikHK4O13mvI3QdPVJ86pU
-         v/PpYFRj/H/uAMlbjLbrVQfn/QTGP0DwbKuqRlcvX7nECF+A7dnM6hrReBDeV6hGYMDH
-         Ajfw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5AHof+7"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-79a60975dc5so49539887b3.0
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 12:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776798859; x=1777403659; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8QuIbpmmSDmAbmPC11YMTkT11Y9iFNyls3uv9pOhJXQ=;
-        b=JIMpSbrZJqjwotMuAqzCwOzZf8BIgUZsk0lawEFpT42mVgi5QWu/e0km4Q0tJN3C40
-         cLjYXlAS1ltxQWEQsrRXTKLI7EIG58sM+lwdvU7uy/XoxFcjbarHCX0kjYVIj54OR/xQ
-         gbzvfCkZ+fSzKugaTdRuLNH9Z9RFCjrcl2CODaT0NUcEJjzNh3Jo6Z6O2hbpI8vQq16S
-         BYaH1AsmqoinTjOJaIBH5Coh+bdLBXnGTTQiHpSNVHVA05kGQgVrgQjR0aK+20velBpZ
-         aHVYteKoQYrtM7dkAEdnQY7VLDaM2U9Pd6NTAWHJZzh7w62A+QrmjirOwNxXBZQ+1j4g
-         nsqg==
+        d=gmail.com; s=20251104; t=1776800305; x=1777405105; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2e0TKxjpXGN0t5xUf6j3MFPELJVwvbaTnpZJeQDZ8C8=;
+        b=j5AHof+7rgliQIt+IU9fTcfRzwl9Jg2RC3DtSkr5JsIcdIkULgcYp69ntb4/XycrcG
+         VUNX9VjN0N5REJ40ez+YOR/8zVxpJKGAl5kyWAOWFT6+TBYNhFy/DTw4cEDlqHSzWP2v
+         mH2Kk8KApEklWz4R2//TP0GQlquQ0Ets8APW/K56ukw+Wkv0xNrssBUPAM5xP4XfaYZw
+         RZmhhGijUPN27RgTOjvSOa0PN/mZf7fSZcA3v4w0jMOKkEwwLsp+CnxaDixRWCP0SYht
+         xr/3R8h/e6p9cUD3/95BN00U/hN1t+yV4fuw5jN1y3K+7ZN3XdG33HKsJaXMFnQXgUxI
+         6ilg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776798859; x=1777403659;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8QuIbpmmSDmAbmPC11YMTkT11Y9iFNyls3uv9pOhJXQ=;
-        b=n4V5th6K2lB5W3auM8p2kyyCNZmXx9dAjE9LZ52Ou7oFt3bozZim0fc5uP9ZoriI2E
-         xu+pKFaVhXUK5A5aJzBu8w0X+qMbddBe2fi8LyDBc7wRZZs1028jmp0KtKkPtIHEJB1H
-         7l+sc+xASv/TqjPM2l9mmKL2vcP9Y+fRNDvrdZow2RDbZzJMfZz3/cqIqjw4JNOtJS2j
-         291JUp1x8uqo9YGJIUP8jO3si/WEbltpfFofTSN0JawYSV9IOpAw66xbAUbH0kEUGOR3
-         h2QF9n2h4WmFL5JKlTjWXsjTAUO/FCSlAoQTGPkRPwP9Y3hxjZH8+iW+MF/GsrF1MF9s
-         SeNQ==
-X-Gm-Message-State: AOJu0Yx265qh0TT7JPWJWFLnobEo+8h+1P7HUw7BZ6gRUmv+lRFGYijM
-	plOGLO6w5puMyLDY1lfb+deIEglK8B73xOZ2BwqaaNU9dJiIVX7kdbZqKjMN4MjcFlL1LtAzM5G
-	FrhF9IaXGZdPucg1UZR+kQ+Tq+urKES0=
-X-Gm-Gg: AeBDiesMnoVmy53JmYAqmE2Sbwk72Dr6o454Eq7QoqkLTzzNO5sUwlbtHRn4+tIqoTt
-	EnMXv9FHBtUwZOHDL6GafSJtbkZYMESrTca4fr3jg+OfPZzoOY/K056lrDTOXHQIHeGnhqincB4
-	t/2jzuhnD7MvkFxihw0/chPxXaP+XR2PicV+wulzWlW0W2H3is5zoBVcj1gxP4uwWtmr6ZqF+xg
-	9rNKw+HC9gwATF71ZHKaft76oeUhUmDzMj2zoWsI6cHLiCvh1yPysRnEG4xC4vaskU7cJhgNFNL
-	wAuSZ8dRkSu76MfbE3cAyaNRkWfMAWnPmF353hPiwrFp0vu52zDFmi8gs7ifaYh7TrPqz+E2G/k
-	1QHHEGwhZ8wHINZNoRu4WoFwpLOFo9vc6oMyJQ9joy1kQ+hgy7fVu6k8MjNiHbbS0zEo=
-X-Received: by 2002:a05:600c:c4ab:b0:487:1fb4:7e1 with SMTP id
- 5b1f17b1804b1-488fb7864c3mr280263825e9.22.1776798858977; Tue, 21 Apr 2026
- 12:14:18 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776800305; x=1777405105;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2e0TKxjpXGN0t5xUf6j3MFPELJVwvbaTnpZJeQDZ8C8=;
+        b=q3u7iIUjvSFJurjIesN541ZPsoL23SjpP0cM5dsy44TR1ScVqRF7/pPZ2v+8P3FLZc
+         5MmXgOlC0r7JIGdijo1KArcVGbFY1DEEHp5mfqZZs0uU17VGF7r7StmJcoWtvP+HrmWJ
+         DFlkPW0ycMrGRnZ/Zi7wGzKTv7AHuamMJxmJRCvG7YyX/VIOA1JxHfbBCnTRKIlyZuEU
+         IPbnVMuZe8Btnv58T7yrE2arQor/3CCkAHkupzjlz+2qM/BEPzukTO4LcVFBIu18hOb/
+         wclEaYroyGvtKd/OGFvJZyEnWL/7BsUpI1SfjIjmy56Q59VSbA8zhgkmo7dThhnRcNi+
+         HYgQ==
+X-Gm-Message-State: AOJu0YzKzCIneVLnUIJ89LpV8xLHC8LSt1KdfrNAQ/rEAkSciWRlnQ6T
+	wRjXhsba+Kr80twPogC/6D+n2fnpY6Kq+YrYPr1EeMm1WqyD4VEJ43MSX1Cj4A==
+X-Gm-Gg: AeBDievmHxsr+9c4iVCIzigaQGbaI0S+jnObW0kEI+Z/FRSyWmI/OFkX/y4jasL9QtU
+	MPTNONZ0BB4nvruqP1qm0wP+f4ZtjQ45b12B4B1/9zFur6KwqukkaHNymNugoIeRe5pqKrbaLwo
+	WWOtjwRHmqT8g9Jb6HkX9pSpbjOMrqStqsfE3Zlm9P1WIWiU91g3ENYWKZGlkAoLEZ4Q8VhR3D3
+	45jrid7B8KE0hkKgMESYP+W1ZHvrkAJDhBBZpx25U+qya1Lr1eAwL5AqHZJK7kqKJnITAW8hy5K
+	d1QAr+MDGMpNl/rbHqNP0YdZZFUTUfszvYGMwy0F9mgvHn3innoH3lxKSHabtieJlu0We90CpWj
+	dD+avdeoQLQYIF7tCWYvTyJtXMCesNzU7eGCUyChgdzLW2QSFiLwSKSpz2dmQYK/wYSkHe3HD3u
+	X9LhuV53I6Y9GDCFRT9I0Z9Jge/AGv+/kR5cgQddoEPkfTKtAhbsFx634gvUIWSm3nQOdT
+X-Received: by 2002:a05:690c:c4e9:b0:7ba:f1a2:a470 with SMTP id 00721157ae682-7baf1a2a7a2mr97154747b3.1.1776800305008;
+        Tue, 21 Apr 2026 12:38:25 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:2ac1:99d4:1cef:9896])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7b9ee99b964sm59521487b3.23.2026.04.21.12.38.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 12:38:24 -0700 (PDT)
+Date: Tue, 21 Apr 2026 15:38:23 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: Implement dtor for struct file BTF ID
+Message-ID: <aefSL_kZ8GSbpdfH@zenbox>
+References: <20260420203306.3107246-2-utilityemal77@gmail.com>
+ <20260421010536.17FB1C19425@smtp.kernel.org>
+ <aebef2Mz9fLoChwK@zenbox>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260421171927.3507554-1-yonghong.song@linux.dev>
-In-Reply-To: <20260421171927.3507554-1-yonghong.song@linux.dev>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 21 Apr 2026 21:13:42 +0200
-X-Gm-Features: AQROBzD4pEU8Ii2JF-Mb3pXU4nsGyQqLTtwIVsb17l2eWwj1IZU9P1zcPXzVvJ0
-Message-ID: <CAP01T77n_5z5v8LHPjwqJq+5O8ewZZ42diw4thr59ycR3VkUMw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/9] bpf: Prepare to support stack arguments
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aebef2Mz9fLoChwK@zenbox>
 
-On Tue, 21 Apr 2026 at 19:22, Yonghong Song <yonghong.song@linux.dev> wrote:
+On Mon, Apr 20, 2026 at 10:18:39PM -0400, Justin Suess wrote:
+> On Tue, Apr 21, 2026 at 01:05:35AM +0000, sashiko-bot@kernel.org wrote:
+> > Sashiko AI review found 1 potential issue(s):
+> > - [High] bpf_file_release_dtor() directly calls fput(), which is unsafe in NMI context and can lead to a system deadlock.
+> > --
+> > 
+> > commit b9990bf55467191e86e004a62cdb84e6dc71b794
+> > Author: Justin Suess <utilityemal77@gmail.com>
+> > 
+> > bpf: Implement dtor for struct file BTF ID
+> > 
+> > This commit implements a destructor for struct file, allowing it to be stored
+> > in a BPF map as a referenced kptr. The destructor calls fput() to release
+> > the reference.
+> > 
+> > > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > > index 2bb60200c2665..ee5ceb82e4f81 100644
+> > > --- a/kernel/bpf/helpers.c
+> > > +++ b/kernel/bpf/helpers.c
+> > [ ... ]
+> > > @@ -2752,6 +2753,13 @@ __bpf_kfunc void bpf_task_release_dtor(void *p)
+> > >  }
+> > >  CFI_NOSEAL(bpf_task_release_dtor);
+> > >  
+> > > +__bpf_kfunc void bpf_file_release_dtor(void *file)
+> > > +{
+> > > +	fput((struct file *)file);
+> > > +}
+> > 
+> > Is it safe to call fput() here?
+> >
+> > BPF programs can update or delete map elements from NMI context (for example,
+> > in BPF_PROG_TYPE_PERF_EVENT programs), which will synchronously invoke this
+> > destructor.
+> > 
+> > When fput() is called in an interrupt context, it adds the file to the
+> > delayed_fput_list and calls schedule_delayed_work(). However,
+> > schedule_delayed_work() is not NMI-safe, as it attempts to acquire spinlocks
+> > such as the workqueue pool lock and timer_base->lock.
+> > 
+> > If the NMI interrupted a context that already held one of these locks, won't
+> > this result in a hard deadlock?
+> > 
+> > Would it be better to defer releasing the struct file using an NMI-safe
+> > mechanism, similar to how other BPF destructors handle this?
+> > 
+> BPF_PROG_TYPE_PERF_EVENT allows the kfunc bpf_put_file which also just
+> calls fput().
+> 
+> So if calling fput in BPF_PROG_TYPE_PERF_EVENT is safe for
+> bpf_put_file, why would it be unsafe in a dtor running in the same
+> context?
 >
-> The patch set prepares to support stack arguments for bpf functions
-> and kfunc's. The major changes include:
->   - Avoid redundant calculation of bpf_reg_state. For stack
->     arguments, there exists no corresponding register number.
->   - Refactor check_kfunc_mem_size_reg() to have bpf_reg_state's
->     for both mem_reg and size_reg.
->   - Allow verifier logs to print stack arguments if there is no
->     corresponding register.
->
-> Please see individual patches for details.
+Disregard.
 
-For the set:
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+The AI was partially correct, but my course of investigation revealed a
+real bug / reproducible deadlock in upstream.
 
-> [...]
+In addition to my patch having an NMI unsafe dtor, the existing dtors
+are also unsafe in NMI handlers.
+
+I was able to make a reliable reproducer that deadlocks the kernel with
+the task_struct dtor on upstream (without this patch).
+
+I'll send the full report in a bit.
+
+Justin
+> > -- 
+> > Sashiko AI review · https://sashiko.dev/#/patchset/20260420203306.3107246-1-utilityemal77@gmail.com?part=1
