@@ -1,148 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CEF35C193
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 11:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F033F35C193
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 11:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776770003; cv=none; b=fTqUSeIskATSHX8HbrGa2NVlR1V3EpmYxFhW64oK6rUIwRerR7r8yhptxzmblPwDGkb6nTp/lpVlrk9B8p32jgVwZInKgFSli2nWcWp9ttnAyyWeAa31ESaQWlAKCtnH9KO7ektXzgCcXZyHBCxeL9Q4yma8UA+os0RhfQtucb0=
+	t=1776770005; cv=none; b=G0Pd3SEX3UWCxZIoJArJFCFdQEQr51bOukeDUzGWKi4hO3gH9+z/Cl4dgQjuXctDjN0ERrVxK2UKdYpulyD/S02Jmujd7pNuajUyfjLSeNGqx8dIPPVLNgkQqJar+sPO5QK0gA5OSlqKhzEFsEkRAS7/mvqt3MWOopQhymeY6s8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776770003; c=relaxed/simple;
-	bh=hxpCI17Jdo3htD0jqnXezKEuWiNiDQuL3svfvwvoyK0=;
+	s=arc-20240116; t=1776770005; c=relaxed/simple;
+	bh=lH+61DXYdj5W8uY9OQCRRyzuoPGchFxI/oD15zsqu90=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d+r1hyCxle6TEtwEEyDaEYZ4SCyp7dd+JuBhpgEelOQhTVlYhqZVePDMZ+f9Bs1x3xM6IIIocZtnmq6XCIl0h0H1fp5unlAi83yCv4diD1RosAVobGZHgmsqvI8cGGVxx7mQQom4TgsObCSnGa7mebNzcC7ExERbMG7c83qEX3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iDCRYKuF; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=YeI1tolqRXskafl3YajvCVhff8tmAmap5ejgvnkrTXz5AM0C3xWP7IvZKbBFveIdC461dQ2/0hxh71BOCRy+y1sjQWA8CS+f1bmitYBxvESkj25pmMBUFvKfnNdmEcVRKQBVrkkVO/At46GLzSdgvHJo/lJFJnicCarzuGJyBLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiSGH/o7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iDCRYKuF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641C5C2BCB0;
-	Tue, 21 Apr 2026 11:13:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiSGH/o7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B4A7C2BCB0;
+	Tue, 21 Apr 2026 11:13:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776770003;
-	bh=hxpCI17Jdo3htD0jqnXezKEuWiNiDQuL3svfvwvoyK0=;
+	s=k20201202; t=1776770004;
+	bh=lH+61DXYdj5W8uY9OQCRRyzuoPGchFxI/oD15zsqu90=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=iDCRYKuFUCQy3Ar1KcEJKix35uHUVTiQCjHfgfx2V0tnPUhOs4tD8+ns8aeKWz8oU
-	 dObx/CZrSD03osMXaXKL8K7LzV/J/p1BKmbiFWansUaLDHT+Lx6rByVM41F/He+ZFn
-	 u0bSKI6+HwL5raEUokli5wroN2DSjCSo7EntgNIJosoxU+sbVxl/CVhftrKgiLeFFR
-	 uJ3NEtUVYIwwTPvEn+POclu74EjEzwwYTTl9/jxDSyoN9LnkaMGEiJUWCjXR91EEAC
-	 d0YE51ZTqtnDxMruML6feBu0lFfbM0APQBVe0rPMQL9ieP/YAt5DFGQqXRIk5x8U+t
-	 kYaFLtJgzSkHA==
+	b=PiSGH/o73gTtpzEG4dH4/E6N/FfwSn+FaU0KvdmnWedvh/caEbCFay3+8/CWAeCjc
+	 /qntrOpFraPfUzcimQcYtxN0Bs0mX/ZU2Cr4bt/L+szCgmArRRaxP06XzFFTO6ocMe
+	 Wjhp6IGhvvzeYK/tIm6aLrAhW+sbyIpzEoFtyNOo4qsthTOVuuVmY7nAnsselt9DCy
+	 FrMLmAXqKbPu/xe0Fg+oQtkOQ+GAOWGsV9idMLotXBvE/GImEq0KbMDvNruggkTOUU
+	 dXQ3pPFsszCzKIX2TJgiu3rzqfgjWkddg2swDxJGfL6Fh7OvhvEkBmTBq8MlpGTYl9
+	 dT3WW2bSg1q0w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 4/6] selftests/bpf: add icmp_send_unreach
- kfunc tests
+Subject: Re: [PATCH bpf-next v4 5/6] selftests/bpf: add icmp_send_unreach
+ kfunc IPv6 tests
 Reply-To: sashiko@lists.linux.dev
 To: "Mahe Tardy" <mahe.tardy@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420105816.72168-5-mahe.tardy@gmail.com>
-References: <20260420105816.72168-5-mahe.tardy@gmail.com>
+In-Reply-To: <20260420105816.72168-6-mahe.tardy@gmail.com>
+References: <20260420105816.72168-6-mahe.tardy@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 11:13:22 +0000
-Message-Id: <20260421111323.641C5C2BCB0@smtp.kernel.org>
+Date: Tue, 21 Apr 2026 11:13:23 +0000
+Message-Id: <20260421111324.6B4A7C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 4 potential issue(s):
-- [Medium] Race condition leading to test flakiness due to missing `poll()`=
- before `recvmsg(MSG_ERRQUEUE)`.
-- [Medium] Hardcoded server port can cause test collisions during parallel =
-execution.
-- [Low] Improper use of `ASSERT_EQ` for flow control and swapped assertion =
-tags in `read_icmp_errqueue`.
-- [Low] Factually incorrect comment regarding `SERVER_IP` byte order.
+Sashiko AI review found 1 potential issue(s):
+- [Medium] Hardcoded little-endian value for IPv6 address comparison causes=
+ test failure on big-endian architectures.
 --
 
-commit 954da1124af043d103f7e4f4435358fccf26853c
+commit 27121b4497956027b4ace73b50126b8070a214c3
 Author: Mahe Tardy <mahe.tardy@gmail.com>
 
-selftests/bpf: add icmp_send_unreach kfunc tests
+selftests/bpf: add icmp_send_unreach kfunc IPv6 tests
 
-This commit adds tests for the icmp_send_unreach kfunc. It sets up a client
-and server, uses a cgroup egress program to trigger an ICMP unreachable
-message, and reads the error queue to confirm the correct code is received.
+This commit extends the existing IPv4 icmp_send_unreach kfunc tests to
+support IPv6.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfu=
-nc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
-> new file mode 100644
-> index 0000000000000..24d5e01cfe804
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
-[ ... ]
-> @@ -0,0 +1,136 @@
-[ ... ]
-> +#define TIMEOUT_MS 1000
-> +#define SRV_PORT 54321
-
-Can this cause intermittent bind() failures when selftests are run in
-parallel? Since tests often execute concurrently, hardcoding a fixed port
-like 54321 might collide with other tests or system processes. Could we
-bind to port 0 to allow the OS to assign an ephemeral port, retrieve it via
-getsockname(), and pass it to the BPF program dynamically?
-
-[ ... ]
-> +static void read_icmp_errqueue(int sockfd, int expected_code)
-> +{
-[ ... ]
-> +	struct msghdr msg =3D {
-> +		.msg_control =3D ctrl_buf,
-> +		.msg_controllen =3D sizeof(ctrl_buf),
-> +	};
-> +
-> +	n =3D recvmsg(sockfd, &msg, MSG_ERRQUEUE);
-
-Could this read the error queue before the ICMP message has been processed?
-
-The non-blocking connect() returns -EINPROGRESS, and the ICMP unreachable
-message is generated by the BPF program and processed asynchronously by
-softirqs. Under heavy load, if the softirq processing is deferred, could
-recvmsg() execute before the error queue is populated and cause a spurious
--EAGAIN failure?
-
-Would it be safer to use poll() or select() to wait for the POLLERR event
-on the socket before attempting the read?
-
-> +	if (!ASSERT_GE(n, 0, "recvmsg_errqueue"))
-> +		return;
-> +
-> +	cm =3D CMSG_FIRSTHDR(&msg);
-> +	if (!ASSERT_NEQ(cm, NULL, "cm_firsthdr_null"))
-> +		return;
-> +
-> +	for (; cm; cm =3D CMSG_NXTHDR(&msg, cm)) {
-> +		if (!ASSERT_EQ(cm->cmsg_level, IPPROTO_IP, "cmsg_type") ||
-> +		    !ASSERT_EQ(cm->cmsg_type, IP_RECVERR, "cmsg_level"))
-> +			continue;
-
-Does using ASSERT_EQ here cause the test to fail immediately if an unexpect=
-ed
-but benign control message is encountered? In BPF selftests, if ASSERT_EQ
-evaluates to false, it logs a failure and marks the test as failed instead
-of just skipping the message.
-
-Also, it looks like the tags might be swapped. "cmsg_type" is used to label
-the cm->cmsg_level check, and "cmsg_level" is used for the cm->cmsg_type
-check.
-
-[ ... ]
 > diff --git a/tools/testing/selftests/bpf/progs/icmp_send_unreach.c b/tool=
 s/testing/selftests/bpf/progs/icmp_send_unreach.c
-> new file mode 100644
-> index 0000000000000..6fc5595f08aa9
-> --- /dev/null
+> index 6fc5595f08aa9..112b9cbfab6fe 100644
+> --- a/tools/testing/selftests/bpf/progs/icmp_send_unreach.c
 > +++ b/tools/testing/selftests/bpf/progs/icmp_send_unreach.c
-[ ... ]
-> @@ -0,0 +1,36 @@
-[ ... ]
-> +#define SERVER_PORT 54321
-> +/* 127.0.0.1 in network byte order */
-> +#define SERVER_IP 0x7F000001
+> @@ -6,6 +6,11 @@
+>  #define SERVER_PORT 54321
+>  /* 127.0.0.1 in network byte order */
+>  #define SERVER_IP 0x7F000001
+> +/* ::1 in network byte order */
+> +#define SERVER_IP6_0 0x00000000
+> +#define SERVER_IP6_1 0x00000000
+> +#define SERVER_IP6_2 0x00000000
+> +#define SERVER_IP6_3 0x01000000
 
-This isn't a bug since the code correctly calls bpf_htonl(SERVER_IP) later,
-but the comment appears to be incorrect. The value 0x7F000001 represents
-127.0.0.1 in host byte order, not network byte order.
+Does this hardcoded value assume a little-endian architecture?
+
+Since the IPv6 loopback address ::1 in network byte order ends with 0x01,
+reading the last 4 bytes as a 32-bit integer yields 0x01000000 on
+little-endian systems, but 0x00000001 on big-endian systems like s390x.
+
+> @@ -16,17 +21,46 @@ int egress(struct __sk_buff *skb)
+[ ... ]
+> +		if (ip6h->daddr.in6_u.u6_addr32[0] !=3D SERVER_IP6_0 ||
+> +		    ip6h->daddr.in6_u.u6_addr32[1] !=3D SERVER_IP6_1 ||
+> +		    ip6h->daddr.in6_u.u6_addr32[2] !=3D SERVER_IP6_2 ||
+> +		    ip6h->daddr.in6_u.u6_addr32[3] !=3D SERVER_IP6_3)
+> +			return SK_PASS;
+
+Will this comparison fail on big-endian systems, causing the BPF program to
+erroneously ignore the loopback packets?
+
+Could we use bpf_htonl(1) or similar here instead, so the test passes
+regardless of the host's endianness?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420105816.7216=
-8-1-mahe.tardy@gmail.com?part=3D4
+8-1-mahe.tardy@gmail.com?part=3D5
