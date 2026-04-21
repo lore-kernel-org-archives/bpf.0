@@ -1,85 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403303A7580;
-	Tue, 21 Apr 2026 22:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D7936D51F
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 23:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776811944; cv=none; b=UUfpdnBC7QdELhB9231Kq96hseHsXHnebdty+WLoFtB206N+t5mrHOsTjS0BTRQBrYPt/Z/Cp35vLgR10aIwe1IQL58elQCtd853Tuy99UgnMUjd1MBKSsFoN4zA9ZF9lMCJ/oYxN29vYXHOo0vAOEmanld+9VlIxnguoSLNKCk=
+	t=1776812443; cv=none; b=qqUTWbmo5eA/K326TfZQQruR5oMbIup5FiLFclfuGg9DG6Z9gRvB8NdOyIV+Yg7MfaxEulNihwgvUTkPFGqETnJe7h3d0mEbxYmr+l1y2CO7HM1TP1/ObmiYRdE5RkCNd/IRhaqQvrMJ9KAKSc5HgywpY8yaE1g0j6z7qNm+uKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776811944; c=relaxed/simple;
-	bh=ZGmej5pdVLGzwTKJ/MVuh7ABN9ypk9m9cO3XcT8o8JQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VYRFBuCe4WE5MnUM5RSpkq98TOOcefxFNrLXnvqodTnkkkf+s4xGkNQ6PDutGk6rggkQNrW0fTa5Jrs9Cvyi65f7z2j7MAV1Wybh++WgPJnTPw1Rc87etGtfR3rehiaFg+kzEfDAsqPYbbDEudTW614SWi7Bb3kihtiC6p6PeqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XU24hZQn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776812443; c=relaxed/simple;
+	bh=SrwTwrfcakfm8KlIbLxUGVRV7G3fFfsel2xTVoF4YZs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uRFUv9ePfQ00hqmDwYHhJ7ZPt2d0NhRMNK7IYnYNB3yNwCNH6XdZtbT52cuMMJGARDrhI9Hi1vxbfIRvxBL31UaoEvyKS4wjszvcJKZ0y4VCotn1QYqnlUjCyW7faxvpIKMNZE3AUtB548dAy7GbuSpI5OCwAn+qocsAQDxLFr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sXWDwxdn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XU24hZQn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7962CC2BCB0;
-	Tue, 21 Apr 2026 22:52:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sXWDwxdn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9846FC2BCB0;
+	Tue, 21 Apr 2026 23:00:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776811943;
-	bh=ZGmej5pdVLGzwTKJ/MVuh7ABN9ypk9m9cO3XcT8o8JQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=XU24hZQnLc6rsRksZO80llGgpTP9BneMkLU/AznW3bcD4TNWRGBo2fzpdzLgVfSEw
-	 E+53QNycyvmnQWcRAx+TZdMXK0zIP6iCvBen8rOAa7XKaS0WK7kW4a8ZwFFxdUW6mr
-	 6nU8dsgjJNuxathi8EjRWxNLssVZPXOqu5FQR9697JE64NNo2m8LuA07NJV4CGpvo4
-	 L0aERE8PtAPk1SUIgTBk8QTslH7LrL0vRPdExuLTzYk6G48g2qgPk5DZqOqeIBETIb
-	 pRIIoiMEp+kx63GEAiIsyJSpUZ9XypEAaTcvhndJ+UOIIbeiETmqI22sQOpVJrivav
-	 AQqsdjuLoN4PA==
-Content-Type: multipart/mixed; boundary="===============0354082449293124802=="
+	s=k20201202; t=1776812442;
+	bh=SrwTwrfcakfm8KlIbLxUGVRV7G3fFfsel2xTVoF4YZs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=sXWDwxdnzDPjati6Gi4H0+g4fcoei7upipGJ30DUkowHvevONUAelVqKjqbfye+6r
+	 QS/Z11QAR/JMPEJzsv3m1zLy0BmaHTcwez2N+CgvrlkUE0ksUA9lvE4glLO9Hb+J5S
+	 Ue3ehSvsyP4wg24+d+WLsH067+yzuE05GOA4wHS72F/kWYutspr3oBOzZZ24eR1gra
+	 K3J2/MkVb/dC5FVW0yRH3g7oIRIqHdpGn97OuSDvMWFdtgpmGCzJgQFqmDaPZgMrMz
+	 NGgaAEk/vmSX4owVKedC3j7TS7PZe5iggOYccGfEvs2FIxR5v5ZOI5UOBaKJSKFv3t
+	 bto0/VMS27wYw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D9E393020A;
+	Tue, 21 Apr 2026 23:00:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <682487c0e8bd32678ad92c5e94f18dd78e45d7b3132e11bc5c1a4d4285a05369@mail.kernel.org>
-In-Reply-To: <20260421221016.2967924-2-ameryhung@gmail.com>
-References: <20260421221016.2967924-2-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/9] bpf: Unify dynptr handling in the verifier
-From: bot+bpf-ci@kernel.org
-To: ameryhung@gmail.com,bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@kernel.org,mykyta.yatsenko5@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 21 Apr 2026 22:52:23 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] s390/bpf: inline smp_processor_id and
+ current_task
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177681240559.3038431.3671881704528464406.git-patchwork-notify@kernel.org>
+Date: Tue, 21 Apr 2026 23:00:05 +0000
+References: <20260414142930.528751-1-max@linux.ibm.com>
+In-Reply-To: <20260414142930.528751-1-max@linux.ibm.com>
+To: Maxim Khmelevskii <max@linux.ibm.com>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ bpf@vger.kernel.org, iii@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+ agordeev@linux.ibm.com
 
---===============0354082449293124802==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index b148f816f25b..dc0cff59246d 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -1319,6 +1319,12 @@ struct bpf_map_desc {
->  	int uid;
->  };
->
-> +struct bpf_dynptr_desc {
-> +	enum bpf_dynptr_type type;
-> +	u32 id;
-> +	u32 ref_obj_id;
-> +};
-> +
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-This isn't a bug, but as noted by Mykyta Yatsenko in v2 review, the new struct
-bpf_dynptr_desc could benefit from a comment explaining what the ref_obj_id
-field is for.
+On Tue, 14 Apr 2026 16:29:26 +0200 you wrote:
+> Inline these calls in bpf jit:
+>  - bpf_get_smp_processor_id()
+>  - bpf_get_current_task()
+>  - bpf_get_current_task_btf()
+> 
+> s390 has a 8 KiB per-CPU prefix area in the CPU's
+> virtual address space, called the lowcore. It is a
+> struct that contains the cpu number and a pointer
+> to the current task. These are exactly the values
+> returned by the BPF helpers.
+> 
+> [...]
 
-While you mentioned in your response that comments for id, ref_obj_id, and
-parent_id will be added in a later refactor patch (#6) since these fields
-apply to all objects tracked by the verifier, the struct currently lacks this
-inline documentation. Could this documentation be added now to help readers
-understand the field's purpose?
+Here is the summary with links:
+  - [bpf-next] s390/bpf: inline smp_processor_id and current_task
+    https://git.kernel.org/bpf/bpf-next/c/9012cf2491e3
 
-Reference: https://lore.kernel.org/bpf/87ikb2tkta.fsf@gmail.com/
-
-[ ... ]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24749741787
---===============0354082449293124802==--
