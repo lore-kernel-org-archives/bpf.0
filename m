@@ -1,242 +1,166 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096123CFF46
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 13:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F1D1A6828
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 13:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776779325; cv=pass; b=GYkPRDLkF9LLAWV1n3EqHMDabudtArAPXpG5zLbunMi+Y0t3b1WCzzasC88ubp0i0gPUyTs47My4I1XiHTnywTIaEU3s3PrYp2D/oDyFCHcXD7M2vemoeOTok6R+J88F0qfiyWUvj3KSbtg6+f6RkC5FgtIl5QSSNu4ZL5shkB0=
+	t=1776779653; cv=pass; b=Ne1MQZNGOily056yQ3/aBhXVOyeNRz8miFP43NfDM5oI/IoNm3fdnkgoc5SLEu7gq3A4zXE/qxt7AAWhW2/twUsBS3Wrzq9hPYryBrc2ng8DyNnastpbVqiJARtut4kUrGcM5Pua4e9SGOQpVNveFqakYq43aaI2C0iX5XYu+jE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776779325; c=relaxed/simple;
-	bh=3RJ3qPQCvtjaq3hzpgJUM5Kv98atQsuowUFk48E9osA=;
+	s=arc-20240116; t=1776779653; c=relaxed/simple;
+	bh=6v9hXkwbfTuR7Bp5PDEPEtAB3PzOFxBdNLqPa13nNto=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mNRPbVrO+MuBgMV0LogCYzel1EtWFX20SmoTfCasH2ygPzzvfl6YOXmi3J1yg0hoLlZ/18mXobGHjkD7rc4SAPruxXbs3XbmDJD0DmRjFaAJ3JC5qsANfHrrnLyDvUMsY47+iKwd/LUl6kST2U+WaEtSXq3ReQP0mh8/noj1l+Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SDwNfgmR; arc=pass smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=KDAIkZcvlhAHXlxUUnAavMN/v0Z16jQhXCdDfyp2/hznluiyvsxZCeGWn3wsJYE21hMEwnHxfyW9qCzFMN6bz/VkhLc36l55b5zkzLJSnzFW6stMBrNQoH5Qyf818gZCXlyVUoxmBjchQGiQobvTEMxTcmqHH9I3+AQQoEYpQCA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKV+P8IZ; arc=pass smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SDwNfgmR"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so27478205e9.0
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 06:48:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776779322; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKV+P8IZ"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43d73422431so3668818f8f.2
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 06:54:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776779650; cv=none;
         d=google.com; s=arc-20240605;
-        b=DclxiLluGqVDrw1yB1fO0Ys95vNXMgQyXjR5H3xGYk3p1PA+QE0m0iiqteNkhvAg0G
-         4oWx8Znd+HWXuogeoSYJY7aIHVytNkRTLtiLFkXU+5oIAELTNdFTgXWdTBHj79A1l231
-         bsSJJNNUAI5ULlt3Z7HpFwK1fSBpFxRQniafjf6L3imAVm5CkFji3W+GHMOPPqbTXdeN
-         TO6aYJa/1928M6z8yH+yQznmizdfFUtYUG1a8TaO35XinsPFBDDgd44auYJTM/f1WYNP
-         KPBHc/l4lZ7rO8EFVpnZLKtL4Kp2A1kmQYmC8M4sbHjWpBDHHjOUqVfaTDjM2BMN8UWN
-         A6uQ==
+        b=OGfGC5r5ZcTgzkiM7cxz+d2cuFEcd4csCHpBRdjSluATrFY8oqdH3bmLBVZim0L9j3
+         u3H0N7mvYDTbfwPheAnhEgub+BkOCqVYGrSmJr23hqdmIW3iYklWHwoDRtCv9nv0Qh25
+         PnU2oe8iccXZZuXNwIseGtDCszlG/aSQfRzKRrBsqb0RmK6orq8uZAQqSEVxwm/uun6x
+         GIMVG9SSGe59JSzI9mPH9mf2cUg2KLPV5klBz5U1JKnELYyKOI9BZXvUDiWugGaDf6oZ
+         r1bVPg88y3g0dgqYZlrHFkq3gg4fm3borGH/nPSupvnO0KC5d4NWmUH7ckh8YCB7vzU7
+         +QRg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=YcwNNbCaC0VdXPkXaz9KyFuRXOspFj6q3Bxd5R9SMd4=;
-        fh=wi89WQjOF2HvnYB0v50Lj11/w784Fae/K3mXW7+OEdE=;
-        b=lzmkVWZ3h2n70miwPqvi6g23PhGEEFJC6/k+6DogjTeExospMxZlQyqiXW3XpCu0W+
-         +53ix0H15GUc19hWn15StMTCvI0uN1cWlpjOvKktDdQSidPkqHQBr5yNdgpGsJj7S++j
-         XWniAOBj2ly4qjVRb11G6AJve7Isj2DGFVnTokesSxBpCHFHvtQi6bxlGyKOn7J38zaK
-         6fGOGXrjb/qWfoL3EtLu3CT3MmRu04+kvuEArxxcEmdKw7QLsppnw7F9mUr7MbZ8RJfw
-         Cuv2CzTfYms7jDc3H9JE/D6QLL7E5rqj3JUwh3Gnq3s/XxHyIl55SSvTmSIHeKKR7Ugv
-         hrdQ==;
+        bh=BlfqCNW/FSeVJzbOG+jGMfxmKYm1QRHmd46Cb7BacKU=;
+        fh=mSx45Ie9hdO1AXjTRA5R70BfnIv6fntYbNMIBQYhNnE=;
+        b=krunO/pqpwo8sCts0q+ccHl9BLDbnSiL7aba7i6SoCbv/84pBrmPo3unf/KyLUPnx1
+         j18a7yxpxoJJyMNTFnQjaCyBNaZgrMMzu0NclCFWBOjuCja8R8UVnT/35oxrEpHuXhMs
+         vHL3vpvrF8MJTitLAJ3hss9/cd6e102j4wx4puokJU1EZ9sfYMSrgXnA6lqoHlpFmPru
+         jcUX/Fd1z27EybjdxDF2FuSAO6ReWqFBwMPdsqnkWn1spBaV6STxsZbY+H6QU9PQp7oI
+         VufqTnhccj0w/3A8ou301VFqn+DS6rceobOI6LsCR2ylnIS6ZDy0WN2XX7y+1Ov+3LFK
+         UNRw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776779322; x=1777384122; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776779650; x=1777384450; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YcwNNbCaC0VdXPkXaz9KyFuRXOspFj6q3Bxd5R9SMd4=;
-        b=SDwNfgmR/wsYTgWpJszbt1fauUnWW7Dt409WZTTlnAFt5kkgdP2McDQXWE6wTeP395
-         mygHEQJpkUKUWqUeEtk2MQ9LFyInyDMy3JabANykaukmTEmoxSbt766fyUctKfk3mgPW
-         XHAeLgYzbCCeOO80IIxT4iy5TEStdLy6ybUPQobbY5kAi4Gk1bsrVHHLH58cI37fA8x6
-         LckiWWC88bVn+qGE8JbylLCNasa4J7upU9ZlHcFv4cZbLD9adP0+nZmxW7a4ibvnBXOy
-         Xx4E435Z4nrLmHfpENnS8xG8dMsUTMDXuuJeZhoN2RQFKvpST2PnPRHuRUmnP4r4eCRa
-         jOnQ==
+        bh=BlfqCNW/FSeVJzbOG+jGMfxmKYm1QRHmd46Cb7BacKU=;
+        b=hKV+P8IZoZRwi/SxbTrwsAObDXdt5pY/gV61zSSaSUyguf22brjmgj4ZslrIKvfD7k
+         Bg319z6ANlWTqVEKmr1zDsuLGQzhzGW7NHw3uIiMSkW+8DCNIX7N2NmaLuGsRMuywMKD
+         3wNYg6p2uElOLmnfi85WnLEQVm2gHJsbYK+nTKyWbQlqlKJhvZWkhA1b2bPQSuQe8XqY
+         G997+GwwIn3bpdiT08bTEGU1NhPTH82DrW7NyeqB4saEDr19/bh0lXeYXtg/FaWEx+L2
+         R8323Bh+aS9gQ0BOyIvAijAvSdBqPH6xF0PzXiAXvVnCx9UChU4/EawJwVh67N04npOl
+         1SeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776779322; x=1777384122;
+        d=1e100.net; s=20251104; t=1776779650; x=1777384450;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=YcwNNbCaC0VdXPkXaz9KyFuRXOspFj6q3Bxd5R9SMd4=;
-        b=fRoVpfrURz6PrGYLBKc84dXrI4Ng8tiqHnxwOujakcRdlky7rfo29zVJzOIi+sHujd
-         Vpn/jsFW76IVQUxBHSMPyBgl6YYZnGp+/EutqT8kwkEQXQ6xxjOCm84uqQWHM86sFKKA
-         QD4TmJh2CjCoO2kVpxSZZqo23EcSz2gMybtJyq9dZX1Opv19OpBCYDeuuLUsw2jc0jyx
-         cWCrRtvVZ/TZ/3Unf9QybAjmWh20W5OFeiI3g8HrKUmR5h2jVO+hqSF+mml+2rQakD2u
-         NpvX6JIEhUZqwGdZvA01Eqhh7r4XpFpoiH2KMIWbebmL94D1VHdRSi/8B2FRqqSEZmNx
-         avZw==
-X-Gm-Message-State: AOJu0YxUOhQuZqU3HurWzK2frZyDuaK+Yv6C8aV4pIxyjIxlohwiLFz7
-	cuuW+k2T/1paHzOUd2NthQn5reudNXBYUoIYiGcyZJRpwvgg5eWsj1P8rs3gmNPGZpKpF45gYlV
-	yw8MwfgFdciS2Ncvt6ejE8Q7ceI9L4Xo=
-X-Gm-Gg: AeBDiesfWcI+BPbIrDJDgyzx8pkcAUb63uaxYP/LlxQZ3CmI7LhNUdLNjeQFg2zGlZY
-	7DHlkEUKQuamTRC7j9OThxvhnsX4h7Okc+qJ6ZSfFtDsJJQUtmDznq6XL8kd08Tl0omOmSrhecy
-	Ew2+g437vN9m1UwxcWysejYmR9RVAV/LWrqeh02Rj+eavkZCXLdR7FBzZ9f/QFTbsd/fJwjQ9L1
-	fjOUG8T+Ey3LVbIQwMc9WppRA+YP1ChI1AgycDMtPhUb4Fki6E8/SuObRKfHrJX6EcSDcHMUWPN
-	sLYHztK6+Z/fGgvyjRkVpQtfr73x4Ia6gC5HCdzybzU2IsTJabppRZ1VK1jOQGspbsP0oxZRavk
-	oZwaLsoH2w7bcsSWz4pqGRr1Z43Cd7TGzfXgz
-X-Received: by 2002:a05:600c:1554:b0:488:9bf8:7f17 with SMTP id
- 5b1f17b1804b1-488fb77810bmr269856645e9.14.1776779322092; Tue, 21 Apr 2026
- 06:48:42 -0700 (PDT)
+        bh=BlfqCNW/FSeVJzbOG+jGMfxmKYm1QRHmd46Cb7BacKU=;
+        b=dUjPgkmxiZ/UqZqVhGlKUIVCdl9GN+fYiyn0uoC9zhNLDwNzrJnneDBhtB13bkmt+z
+         VvfsIUJZXt3hjZInvoZV/gSaHSkZshqxVA9GISgW3HeYwPdRCOaB1QeY3XV5WmVVniqJ
+         AByptD600PRS1RWvWq8vY2+0V5a0YW7ipzdee/fES3JBvoR1j+JGEcJF050pLVJ++ShC
+         6KCDzpsFZ1cyRwdRcjR1n45aoBLf4tmjrOpnOY/G1vAFjYbNG4NkxVbZlcRCWCR6r7n1
+         kcfz+C9ANW7OaXbaTCj+5Oz0u9raN/XGT/kbxAMEPPlHqnBnZ2l3CL7IBKTKCfijMKoB
+         1Wgw==
+X-Gm-Message-State: AOJu0Yzf0Iee5HzVJt6PDA/Ll8kUM/pkIxMwoeWTVYLgyAbMBkeRWyQ5
+	okU6NLEBZOtNAS4DTtGaiBMjc+ni2h1959h0xaDceb7+4zs0tB74nWqru6lAbudHMHhfuR3hg1n
+	mUMBpCdR5mUdyEEZ5g66OHiyhFA/nglaMWh31
+X-Gm-Gg: AeBDiesX4FRydFHbvNgBFhwrIM0gN+qIaVxkZAnguAKzyPZX5b2/AxGzG88DLKKV9oC
+	Wfdvzs8d3gL/UAQ485q+AZZgJGSHuKfaDo2P2R6ZBQOMEBRvdMzIKjMZeLKhcgU0w6uc/sR0Eli
+	fAiGVpjo1TOnspe9eIClXYWP+DK7NUlvk5ai5Cu8hzbSAmQjiK0fguJWstfl1dobV70EG+dMJ9m
+	NHePS0OF9mrUs2D2kqovOQRA0OAsbGn9XK61bZ1x1B75VjqisxQn696K/t7X1aOUiUW4RgH4z+v
+	kdvjvSXdErt2UoG1evLl1FWSKryg1TrzAai0z50kup59L4k0pEoS1RhbFU3Rn1U9+fcxMB+7Z8W
+	ZURnbJIcnEEU0fI6u1Puo33nkrEViXOzY4an/
+X-Received: by 2002:a5d:5f82:0:b0:437:711c:8754 with SMTP id
+ ffacd0b85a97d-43fe3dc842bmr28527313f8f.7.1776779649652; Tue, 21 Apr 2026
+ 06:54:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260419163316.731019-1-yonghong.song@linux.dev>
- <20260419163336.733654-1-yonghong.song@linux.dev> <DHYE574ZW4D7.2RNZPHN9QHT8@gmail.com>
- <2259b511-ca71-46a5-a416-8ea6ff0785b6@linux.dev>
-In-Reply-To: <2259b511-ca71-46a5-a416-8ea6ff0785b6@linux.dev>
+References: <20260420153603.4097618-1-puranjay@kernel.org> <20260420153603.4097618-3-puranjay@kernel.org>
+ <CAADnVQJ_D6XyvMHPr59dxZSgFY3+6UayhcWrDC-U2k-Epv-9eA@mail.gmail.com> <CANk7y0gNqm7U_0Kc6ZP9jd19gHKScOaTVDa4yxkxTVDonM0iUA@mail.gmail.com>
+In-Reply-To: <CANk7y0gNqm7U_0Kc6ZP9jd19gHKScOaTVDa4yxkxTVDonM0iUA@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 21 Apr 2026 06:48:30 -0700
-X-Gm-Features: AQROBzBBTn-7UhFUyclqbKm1Tu22OuEVlwXMJjK3VYD5z72MidC-sxXUk0l7CCg
-Message-ID: <CAADnVQ+fb4mY4ermo5GBtz1jx7kB4xsDGE23m2G8qEQa261VNg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 04/17] bpf: Prepare verifier logs for upcoming
- kfunc stack arguments
-To: Yonghong Song <yonghong.song@linux.dev>
+Date: Tue, 21 Apr 2026 06:53:58 -0700
+X-Gm-Features: AQROBzDOw5Wnk3onvAJHz6qXwZ-uXC7yQdgyNnhy8J7Zkrt3nHngFVmkI6QtdTk
+Message-ID: <CAADnVQ+uNGK_XKwb09d+xHZk_5-RWk=4_ZQTaQP24ej4+Gc8HA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf, arm64: Add JIT support for stack arguments
+To: Puranjay Mohan <puranjay12@gmail.com>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>, Kernel Team <kernel-team@fb.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 20, 2026 at 11:07=E2=80=AFPM Yonghong Song <yonghong.song@linux=
-.dev> wrote:
+On Tue, Apr 21, 2026 at 4:53=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
+m> wrote:
 >
->
->
-> On 4/20/26 5:03 PM, Alexei Starovoitov wrote:
-> > On Sun Apr 19, 2026 at 9:33 AM PDT, Yonghong Song wrote:
-> >> This change prepares verifier log reporting for upcoming kfunc stack
-> >> argument support.
-> >>
-> >> Today verifier log code mostly assumes that an argument can be describ=
-ed
-> >> directly by a register number. That works for arguments passed in `R1`
-> >> to `R5`, but it does not work once kfunc arguments can also be
-> >> passed on the stack.
-> >>
-> >> Introduce an internal `argno` representation such that register-passed
-> >> arguments keep using their real register numbers, while stack-passed
-> >> arguments use an encoded value above a dedicated base.
-> >> `reg_arg_name()` converts this representation into either `R%d` or
-> >> `*(R11-off)` when emitting verifier logs. If a particular `argno`
-> >> is corresponding to a stack argument, print `*(R11-off)`. Otherwise,
-> >> print `R%d`. Here R11 presents the base of stack arguments.
-> >>
-> >> This keeps existing logs readable for register arguments and allows th=
-e
-> >> same log sites to handle future stack arguments without open-coding
-> >> special cases.
-> >>
-> >> Update selftests accordingly.
-> >>
-> >> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> >> ---
-> >>   include/linux/bpf_verifier.h                  |   1 +
-> >>   kernel/bpf/verifier.c                         | 649 ++++++++++------=
---
-> >>   .../testing/selftests/bpf/prog_tests/bpf_nf.c |  22 +-
-> >>   .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
-> >>   .../selftests/bpf/prog_tests/kfunc_call.c     |   2 +-
-> >>   .../selftests/bpf/prog_tests/linked_list.c    |   4 +-
-> >>   .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  14 +-
-> >>   .../selftests/bpf/progs/cpumask_failure.c     |  10 +-
-> >>   .../testing/selftests/bpf/progs/dynptr_fail.c |  22 +-
-> >>   .../selftests/bpf/progs/file_reader_fail.c    |   4 +-
-> >>   tools/testing/selftests/bpf/progs/irq.c       |   4 +-
-> >>   tools/testing/selftests/bpf/progs/iters.c     |   6 +-
-> >>   .../selftests/bpf/progs/iters_state_safety.c  |  14 +-
-> >>   .../selftests/bpf/progs/iters_testmod.c       |   4 +-
-> >>   .../selftests/bpf/progs/iters_testmod_seq.c   |   4 +-
-> >>   .../selftests/bpf/progs/map_kptr_fail.c       |   2 +-
-> >>   .../selftests/bpf/progs/percpu_alloc_fail.c   |   4 +-
-> >>   .../testing/selftests/bpf/progs/rbtree_fail.c |   6 +-
-> >>   .../bpf/progs/refcounted_kptr_fail.c          |   2 +-
-> >>   .../testing/selftests/bpf/progs/stream_fail.c |   2 +-
-> >>   .../selftests/bpf/progs/task_kfunc_failure.c  |  18 +-
-> >>   .../selftests/bpf/progs/task_work_fail.c      |   6 +-
-> >>   .../selftests/bpf/progs/test_bpf_nf_fail.c    |   8 +-
-> >>   .../bpf/progs/test_kfunc_dynptr_param.c       |   2 +-
-> >>   .../bpf/progs/test_kfunc_param_nullable.c     |   2 +-
-> >>   .../selftests/bpf/progs/verifier_bits_iter.c  |   4 +-
-> >>   .../bpf/progs/verifier_ref_tracking.c         |   6 +-
-> >>   .../selftests/bpf/progs/verifier_vfs_reject.c |   8 +-
-> >>   .../testing/selftests/bpf/progs/wq_failures.c |   2 +-
-> >>   tools/testing/selftests/bpf/verifier/calls.c  |  14 +-
-> >>   30 files changed, 474 insertions(+), 374 deletions(-)
-> >>
-> >> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier=
-.h
-> >> index b148f816f25b..9fbbddc40d21 100644
-> >> --- a/include/linux/bpf_verifier.h
-> >> +++ b/include/linux/bpf_verifier.h
-> >> @@ -913,6 +913,7 @@ struct bpf_verifier_env {
-> >>       * e.g., in reg_type_str() to generate reg_type string
-> >>       */
-> >>      char tmp_str_buf[TMP_STR_BUF_LEN];
-> >> +    char tmp_reg_arg_name_buf[32];
-> > the name is too long.
-> > Just tmp_arg_name ?
+> On Tue, Apr 21, 2026 at 3:58=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> >>      struct bpf_insn insn_buf[INSN_BUF_SIZE];
-> >>      struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
-> >>      struct bpf_scc_callchain callchain_buf;
-> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> >> index 3716d9688d00..6aa4dc161a56 100644
-> >> --- a/kernel/bpf/verifier.c
-> >> +++ b/kernel/bpf/verifier.c
-> >> @@ -1751,6 +1751,55 @@ static struct bpf_verifier_state *push_stack(st=
-ruct bpf_verifier_env *env,
-> >>      return &elem->st;
-> >>   }
-> >>
-> >> +/*
-> >> + * Unified argument number encoding for verifier log messages.
-> >> + * Register args (arg_idx 0-4) use their register number (R1-R5).
-> >> + * Stack args (arg_idx 5+) are encoded as STACK_ARGNO_BASE + arg_idx
-> >> + * to avoid collision with register numbers. reg_arg_name() decodes
-> >> + * this back to a human-readable string like "*(R11-8)" for logs.
-> >> + */
-> >> +#define STACK_ARGNO_BASE 100
-> >> +
-> >> +static bool is_stack_argno(int argno)
-> >> +{
-> >> +    return argno >=3D STACK_ARGNO_BASE;
-> >> +}
-> >> +
-> >> +static u32 make_argno(u32 arg_idx)
-> >> +{
-> >> +    if (arg_idx < MAX_BPF_FUNC_REG_ARGS)
-> >> +            return BPF_REG_1 + arg_idx;
-> >> +    return STACK_ARGNO_BASE + arg_idx;
-> >> +}
-> >> +
-> >> +static u32 arg_idx_from_argno(int argno)
-> >> +{
-> >> +    if (is_stack_argno(argno))
-> >> +            return argno - STACK_ARGNO_BASE;
-> >> +    return argno - BPF_REG_1;
-> >> +}
-> >> +
-> >> +static int next_argno(int argno)
-> >> +{
-> >> +    return make_argno(arg_idx_from_argno(argno) + 1);
-> >> +}
-> > I don't like this +1, -1 dance all around. Makes the whole thing
-> > hard to follow.
-> > Keep argno starting at 1. So old regno =3D=3D argno.
+> > On Mon, Apr 20, 2026 at 8:36=E2=80=AFAM Puranjay Mohan <puranjay@kernel=
+.org> wrote:
+> > >
+> >
+> > nice and clean. I like how it maps to arm64 calling convention.
+> >
+> > > +       if (prog->aux->stack_arg_depth > prog->aux->incoming_stack_ar=
+g_depth) {
+> > > +               u16 outgoing =3D prog->aux->stack_arg_depth - prog->a=
+ux->incoming_stack_arg_depth;
+> > > +               int nr_on_stack =3D outgoing / sizeof(u64) - NR_STACK=
+_ARG_REGS;
+> > > +
+> > > +               if (nr_on_stack > 0)
+> > > +                       ctx.stack_arg_size =3D round_up(nr_on_stack *=
+ sizeof(u64), 16);
+> > > +       }
+> >
+> > I'm struggling to understand this part.
+> > Why do this when this func calls more than what callee passed in?
+> > Looks fishy. I'd like to see selftests with more than 6,7,8 args.
+> > Because only then this logic will kick in?
 >
-> The above make_argno() returns an argno having regno =3D=3D argno
-> for regno 1-5.
+> Your confusion stems from the naming of "incoming_stack_arg_depth" and
+> "stack_arg_depth" (this should be called total_stack_arg_depth in my
+> opinion)
+>
+> So, if you see fixups.c
+>
+>                 func[i]->aux->incoming_stack_arg_depth =3D
+> env->subprog_info[i].incoming_stack_arg_depth;
+>                 func[i]->aux->stack_arg_depth =3D
+> env->subprog_info[i].incoming_stack_arg_depth +
+>
+> env->subprog_info[i].outgoing_stack_arg_depth;
+>
+> prog->aux->stack_arg_depth doesn't store outgoing stack depth, rather
+> it has the sum of both incoming and outgoing, that means if a func
+> doesn't call any function with more than 5 arguments but receives more
+> than five arguments, incoming_stack_arg_depth will be equal to
+> stack_arg_depth.
 
-No. It doesn't.
+Ohh. That's indeed all too confusing.
+See my response to Yonghong.
+I think stack_arg_depth should mean outgoing
+and incoming_stack_arg_depth should mean incoming only and
+it shouldn't be even used by JIT.
+That memory was allocated by caller, so to JIT this callee
+the conversion of r11+const is straightforward and no checks necessary.
 
-it does:
+> if (prog->aux->stack_arg_depth > prog->aux->incoming_stack_arg_depth)
+>
+> This check is for - "Does this function call any function with more
+> than 5 arguments", if yes, is it more than 8? if yes allocate stack
+> space, otherwise stack space is not needed because argument 6,7,8 can
+> live in arm64 registers.
 
-+static u32 make_argno(u32 arg_idx)
-+{
-+    if (arg_idx < MAX_BPF_FUNC_REG_ARGS)
-+            return BPF_REG_1 + arg_idx;
-
-so for argno =3D=3D 0 it returns 1 and that's my objection.
-Make argno starting at 1.
+I think it should really be one check based on stack_arg_depth.
