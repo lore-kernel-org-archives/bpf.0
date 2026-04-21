@@ -1,158 +1,221 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCFD267B07
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776788957; cv=pass; b=BtpI/3LLPBWtlO4Hmkpf7ietWawJXwOtpX0LIoGY5972trs+ou9pApeIihe9nkUxTM8xg126+wV7IMy/C6YIDbM9m/mIw9tkldkadypopBhN+nV+asVgpCZ4r6OKtYS5ZjQHbSgdU3XFo4kq9OVBIR9j/+rUkDdtOzNibaZJWDc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776788957; c=relaxed/simple;
-	bh=nCF+1un+lGenxIgZVRGeii/JzzuN9IQd1W11H+yrdes=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jOtPhXh0DjoEIxQK61/6/ep6ttrkfcTb4XxiU0iF4FQoLBWUrBhnlb3miCPjR9NkOv02l4kSfO+u958DI5HPUsn0k6O/6gI4hHXAbFPk8w6vBuiGQZCqK6uqG7wOsDaobWlp23IPIHGV3SrsBiCuOTN+1xML0waGLm79WbDl1io=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=phoXAwmz; arc=pass smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2BE5377004
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776789071; cv=none; b=F07BFC5lP/jJwE2UWTipRt5oONv9mi8hekxk23EmKxLHwLt0RneqJ4c7LqjnPFPOqd4B/9LupbP0wfPB/nyNv4CFjKBqAG/yLXJASeTLYFQqQjaOAmmCArVKZoZZSAgjgvNurBlGv/Wxu4srKRDYWrBvd8Ss0h9qke3QH1Jr3sw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776789071; c=relaxed/simple;
+	bh=sdGOibwiTUlGb9HHFRJY6kF15dopnn55unT/vgkUwM0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=VugLLIPmJPaBDElz6cot0edTh0OP0Es9bcH3wQADnOd/yQ8mSQBFtH5lDmxlxM1Mi+ljkSN+8GRgG2teHRilXNxn0jpaqpiYrUAEJpQyZSy2Y3S2MgLvpKKuz96H4KEWdCOWwP9FHNoTN/TGuIuVe4AQ8uGG4fGpByIuxoz67xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wAbIWwei; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="phoXAwmz"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-79db5e18ac6so55705387b3.1
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:29:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776788955; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aGlbNQuZzbb7TZfk+5eRH6pzCdVsQj0QDFVbfvUK0mOy3rRcAK8el9/LTDgoq9172x
-         nMO0+2gXAT0TDed7nWNRyOdBg6Vh9A9h8QavEc2NUuT4VE7ABBh8Bw3/caHCuQ/ts1Qi
-         haAt8tdt3blIQC3PkCUS5KrY86mLx/T3Mb5vUPxmuaNoR0I4/dfGdG+s21ZPKNp3MCIf
-         jM5crTazdE7VgRXyM6h996Aa7kSPOK5VyEtSRqM1zj+6ck31j2zHZwlIoZnIZva1Tnti
-         Mj4T9zTnqfJGiXRHOZD9zk4Bk05twtf0Mh/R6jnQkEv+HFpes66NO4O11APLS0oy8sHi
-         YUjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=xaRQcetDxlzLKskdLR137Weekycfdm7Q7GRuYQIPPqU=;
-        fh=yD4UMK0L47/I9dQQcEHBnD6tDn3jQHaZlSuFA9/a1u8=;
-        b=LJVgvpDp7cw1NZuwfD0DLGrHO+ugHL9BTpNYq3p1+E6sO5foJXQ/T3ZDeW4wCIFtZg
-         fkTbgwKKBK/ciRhGx8jt9orsy/wzf8t4GKFfTYShwsMPI91THZgK22o1U7VgJ3p3HipL
-         vufapWKzppv1MKP7bDmOec5MNTnLsr503sZvMOP5oSCWbgIxt3E9g5ll9NgbmnEl+ogA
-         JTS1g0ksMjWqxkUz1qmelBexvcg+B/UO+G/BXAFCVDcGtxA4te5+qx+t2Wf7LLoJTU5U
-         NeSPrH8dxdEUtlU4g6qngwYm0h4u74fdSvK7MYRcsCaSN3DRZ4K8i00tUqE+Ybpyyg0K
-         3aEQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wAbIWwei"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f6b984b3aso2464987b3a.3
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776788955; x=1777393755; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xaRQcetDxlzLKskdLR137Weekycfdm7Q7GRuYQIPPqU=;
-        b=phoXAwmzYg6qvzarMt49/30aRAa4xLFI836iLr664Z8XCH+KdN5T/3elpa3E86qk97
-         MVWjUPx/ccPgBGUewsHw+EOZ/xkSftAtaXqiZiwH4Q/gxhitT7O37WrVgEGekZJiThNC
-         BdXVz5WO571o2SvWz0NBaqWjkcViXVOwFIrt3ozAGbiosIlM15uKTW/YWEODYEO69hR9
-         WOz7ei+gxidWdtNbF+EfuU4MQSYHq05XmSYmrp65dLtL7uRskO8G27XUCvUQHmofGLAZ
-         f9cXpj6Jh4m6ySL3vQbBMIsLaA9PcszH8MODTr5rzBKuhK8hIhoirTveBK0qPBlNtI5c
-         XLmQ==
+        d=google.com; s=20251104; t=1776789069; x=1777393869; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rjgkwxA0RLtfuWNBMEJF4TxxPjAXkNJh9XTaeAVjQ5Q=;
+        b=wAbIWweiU5J0kFeFtBIno1wC06uAKpVUf+IrIfjY2vLNygg9uNaYO+AFQpXSHGgYgS
+         QfZziwnQ/uZSaafDR5H7QAcl5I7DdCQ3mvkLoI/DYTRBuk9YPFGwTlBjddryxEsr7HxI
+         mEeBoVQzMCVp32QpEr1UceptJWIsCwby0Kdg8IWQXsM1evgurdg9sP8FLsq0Ux5sUn9B
+         7QQcrUBgUUPZ6xWfxj3dtTwfZbk43XUx7GCwUkvhjCtAYXxJaz+lt4AU+BOfyrLcXcf2
+         XwkwQwLF0FlSCXoJSpf21CbZGS4wx3QwuJOQGb5ZfYIxVa4NRIOYZD0y5dnJ1nQ48Vx2
+         if1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776788955; x=1777393755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xaRQcetDxlzLKskdLR137Weekycfdm7Q7GRuYQIPPqU=;
-        b=ITOtiLQ23Bbld8aQAgOaGqgCUV3UoawBYJhAPphcav4PvdjH6rS6MnnfIo59SkXKp2
-         HPwO7mgq6/o76A+YS92NCIBsYKY/sSEfHXwMUeYcq3Ir+OfabbD1128XRQdkgbsyveye
-         /xe5ZUN/OgqN78MgytLcNp4ybiZneNkfelojWwUOwsaaLP/4qR+bjwfPQKlfGmQUOILZ
-         seWX8i9hOXRGc1DaLBfG9YVuxRmcyismNyPeqk1EXWFBSlWbgjvukdqfWWKtjw5jMXKE
-         HaXLPgOK40wL70F8r62ENdYxF7Hf24pVCMKc2x8ztzYQ9TMb6zYutQHy+PP6lCIa/8wo
-         bmEw==
-X-Forwarded-Encrypted: i=1; AFNElJ/f7cs4RQOOuD+2s4rX+4mYIcgQVmQzk1CiFihcQBJlBxqyQrb3wTxx3G0ddr9Mc7SQbz4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqBNaxhPKvlmtbBvLGkMxgX9YkMfiaZWr6x+DoQnYUPaBgGV6h
-	6m6vewMVGzkYBMqsiIMogVERv4Z+y3p0EIhLbhs/qhwTe/h1/hPp3UPF/HgDUQq89s3zfgTNKrM
-	9Lgz8JsSwmhcgcI4hpm19KflvZnlCm/w=
-X-Gm-Gg: AeBDievxl4D0U9ifjw0V6zzFSdBMPT6625IRArafMGRv439g4Jqgorb34vhgB43rv2C
-	brl5LiZs4+PpZoUMCR8wIERAX6wc1frd32rM61w4Lect4F77kelDrIswgdHQNsGqh4fB4hJWAuB
-	cFCIvGaR8OPYO8XbWzfxs+f2aKTy5N6tmciGkl/1XSSGeFjBbwW/g1t5b9HOQL8sb0/LFu3033Z
-	5wDoiA3ppIUOozqZvM1PCr4e+YlaUqaycaW/kXAVp4I5MEGfHxmhZazITTsOmuuWMywbR38LEmv
-	7KvOe2KbBItn+2uJOvjWeEdm
-X-Received: by 2002:a05:690e:1914:b0:651:c41c:80ce with SMTP id
- 956f58d0204a3-653119894a8mr14903838d50.16.1776788955294; Tue, 21 Apr 2026
- 09:29:15 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776789069; x=1777393869;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rjgkwxA0RLtfuWNBMEJF4TxxPjAXkNJh9XTaeAVjQ5Q=;
+        b=eXdFr4dP856LKB2+5PVj7Ej4Yc12eOMcX0SwWpR//5eCi3Y9w/Ljzf8EqeJtfjF7T7
+         5gvtigTidPm5D9nC2G4RvR3NLCTUKJeSpepfWu2CTxY776xg+ZxacJ8Ce/Z/Ha+4zEWe
+         6RcSCUq73pHPuAjz0veXiljaR31pDoZdzL+gg58W3qw0wIWqqUAvthEba75KEZfbMhTj
+         oaqaLgtW+XJRaw4Iro18kCXwjT5zvwLAlPE0rGEANhjL7HX+ME9XJg9yIxERIBxm6PPK
+         o2LGeZcFreqqYfU1OVZGMgNKOXMViqNKI680Am20jPpCb6zvs9pjQ+rr63pPcUzfo0wF
+         ME3A==
+X-Forwarded-Encrypted: i=1; AFNElJ+sFkKQH3scuNDOebDEklDziMUt8pLbRMuOvwo8i8RtAYysY7xUFzmuEKZGA3dC6OFQ46Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgSQg3a4b8sCgthyL7yLVnh0VMgF37RAvz4GytpQRuxDdcZpi5
+	CKgVDCJedSSB8m3pE0WBiUb/VV0WqhHGCRhx/VCbYH676+YsQGW6ajfx9enTrX3OPHKUQl0Yl8G
+	Q6MJiSQ==
+X-Received: from pfbhk7.prod.google.com ([2002:a05:6a00:8787:b0:82f:f2d:5b4d])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2d8d:b0:82c:1cd0:2f5e
+ with SMTP id d2e1a72fcca58-82f8c96eb30mr20038023b3a.44.1776789068848; Tue, 21
+ Apr 2026 09:31:08 -0700 (PDT)
+Date: Tue, 21 Apr 2026 09:31:07 -0700
+In-Reply-To: <20260410151746.61150-11-kalyazin@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260421155024.997077-2-bestswngs@gmail.com> <cc500964d83d95307126b05cc7557309b498bafce0c514fa3f1656dd6413ce71@mail.kernel.org>
-In-Reply-To: <cc500964d83d95307126b05cc7557309b498bafce0c514fa3f1656dd6413ce71@mail.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 21 Apr 2026 09:29:03 -0700
-X-Gm-Features: AQROBzC0QupDF4QkVKXKjJ8cS1W-C8_sxM8tSkEEgO-pFajTN62MPAl8x7WV48Q
-Message-ID: <CAMB2axO5rZP2bzj5X9uDsVZshXoxEXLZt64P0CuEvwGficHfBg@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] bpf: Fix NULL pointer dereference in
- bpf_sk_storage_clone and diag paths
-To: bot+bpf-ci@kernel.org
-Cc: bestswngs@gmail.com, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, martin.lau@kernel.org, 
-	ast@kernel.org, leon.hwang@linux.dev, kees@kernel.org, wangfushuai@baidu.com, 
-	menglong8.dong@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	xmei5@asu.edu, andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
-	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260410151746.61150-1-kalyazin@amazon.com> <20260410151746.61150-11-kalyazin@amazon.com>
+Message-ID: <aeemS2wm38Cm4qAf@google.com>
+Subject: Re: [PATCH v12 10/16] KVM: guest_memfd: Add flag to remove from
+ direct map
+From: Sean Christopherson <seanjc@google.com>
+To: Nikita Kalyazin <kalyazin@amazon.co.uk>
+Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "kernel@xen0n.name" <kernel@xen0n.name>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>, 
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org" <oupton@kernel.org>, 
+	"joey.gouly@arm.com" <joey.gouly@arm.com>, "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
+	"yuzenghui@huawei.com" <yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
+	"will@kernel.org" <will@kernel.org>, "tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>, 
+	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, 
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>, 
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@kernel.org" <vbabka@kernel.org>, 
+	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, 
+	"ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>, 
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>, 
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>, 
+	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "riel@surriel.com" <riel@surriel.com>, 
+	"ryan.roberts@arm.com" <ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>, 
+	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org" <kas@kernel.org>, 
+	"coxu@redhat.com" <coxu@redhat.com>, "ackerleytng@google.com" <ackerleytng@google.com>, 
+	"yosry@kernel.org" <yosry@kernel.org>, "ajones@ventanamicro.com" <ajones@ventanamicro.com>, 
+	"maobibo@loongson.cn" <maobibo@loongson.cn>, "tabba@google.com" <tabba@google.com>, 
+	"prsampat@amd.com" <prsampat@amd.com>, "wu.fei9@sanechips.com.cn" <wu.fei9@sanechips.com.cn>, 
+	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>, 
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, 
+	"alex@ghiti.fr" <alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "dev.jain@arm.com" <dev.jain@arm.com>, 
+	"gor@linux.ibm.com" <gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>, 
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>, 
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>, 
+	"thuth@redhat.com" <thuth@redhat.com>, 
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>, 
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com" <urezki@gmail.com>, 
+	"zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>, 
+	"gerald.schaefer@linux.ibm.com" <gerald.schaefer@linux.ibm.com>, 
+	"jiayuan.chen@shopee.com" <jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>, 
+	"pavel@kernel.org" <pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>, 
+	"yangyicong@hisilicon.com" <yangyicong@hisilicon.com>, "vannapurve@google.com" <vannapurve@google.com>, 
+	"jackmanb@google.com" <jackmanb@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>, 
+	Jack Thomson <jackabt@amazon.co.uk>, Takahiro Itazuri <itazur@amazon.co.uk>, 
+	Derek Manwaring <derekmn@amazon.com>, Nikita Kalyazin <nikita.kalyazin@linux.dev>
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Apr 21, 2026 at 9:24=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> > index 14eb7812bda4..b2cd2b0292cb 100644
-> > --- a/net/core/bpf_sk_storage.c
-> > +++ b/net/core/bpf_sk_storage.c
->
-> [ ... ]
->
-> > @@ -596,6 +596,8 @@ static int bpf_sk_storage_diag_put_all(struct sock =
-*sk, struct sk_buff *skb,
-> >       saved_len =3D skb->len;
-> >       hlist_for_each_entry_rcu(selem, &sk_storage->list, snode) {
-> >               smap =3D rcu_dereference(SDATA(selem)->smap);
-> > +             if (!smap)
-> > +                     continue;
-> >               diag_size +=3D nla_value_size(smap->map.value_size);
-> >
-> >               if (nla_stgs && diag_get(SDATA(selem), skb))
->
-> Martin KaFai Lau pointed out in the v1 review that the NULL check for
-> smap doesn't fully address the race condition. The issue is that
-> diag_get() will re-dereference sdata->smap independently:
->
-> net/core/bpf_sk_storage.c:diag_get() {
->     ...
->     smap =3D rcu_dereference(sdata->smap);
->     ...
-> }
->
-> Between the NULL check above and the call to diag_get(), smap could
-> become NULL again, leading to the same race condition.
->
-> Martin suggested passing smap as a parameter to diag_get() to avoid
-> the second dereference. This would ensure diag_get() uses the same
-> smap pointer that was already checked.
->
-> Could the fix be updated to pass smap to diag_get() as Martin
-> suggested?
->
-> Reference: https://lore.kernel.org/bpf/2026420182243.zAiN.martin.lau@linu=
-x.dev/
->
+On Fri, Apr 10, 2026, Nikita Kalyazin wrote:
+> From: Patrick Roy <patrick.roy@linux.dev>
+> 
+> Add GUEST_MEMFD_FLAG_NO_DIRECT_MAP flag for KVM_CREATE_GUEST_MEMFD()
+> ioctl. When set, guest_memfd folios will be removed from the direct map
+> after preparation, with direct map entries only restored when the folios
+> are freed.
+> 
+> To ensure these folios do not end up in places where the kernel cannot
+> deal with them, set AS_NO_DIRECT_MAP on the guest_memfd's struct
+> address_space if GUEST_MEMFD_FLAG_NO_DIRECT_MAP is requested.
+> 
+> Note that this flag causes removal of direct map entries for all
+> guest_memfd folios independent of whether they are "shared" or "private"
+> (although current guest_memfd only supports either all folios in the
+> "shared" state, or all folios in the "private" state if
+> GUEST_MEMFD_FLAG_MMAP is not set). The usecase for removing direct map
+> entries of also the shared parts of guest_memfd are a special type of
+> non-CoCo VM where, host userspace is trusted to have access to all of
+> guest memory, but where Spectre-style transient execution attacks
+> through the host kernel's direct map should still be mitigated.  In this
+> setup, KVM retains access to guest memory via userspace mappings of
+> guest_memfd, which are reflected back into KVM's memslots via
+> userspace_addr. This is needed for things like MMIO emulation on x86_64
+> to work.
+> 
+> Direct map entries are zapped right before guest or userspace mappings
+> of gmem folios are set up, e.g. in kvm_gmem_fault_user_mapping() or
+> kvm_gmem_get_pfn() [called from the KVM MMU code].
 
-CI is right. Please pass smap to diag_get() as Martin suggested. It
-will be the caller's responsibility to do rcu_dereference() and
-null-check it. Note that there are more than one caller to diag_get().
+...
 
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/247325=
-81685
+> +#define KVM_GMEM_FOLIO_NO_DIRECT_MAP BIT(0)
+> +
+> +static bool kvm_gmem_folio_no_direct_map(struct folio *folio)
+> +{
+> +	return ((u64)folio->private) & KVM_GMEM_FOLIO_NO_DIRECT_MAP;
+> +}
+> +
+> +static int kvm_gmem_folio_zap_direct_map(struct folio *folio)
+> +{
+> +	int r = 0;
+> +
+> +	VM_WARN_ON_FOLIO(!folio_test_locked(folio), folio);
+> +
+> +	if (WARN_ON_ONCE(!(GMEM_I(folio_inode(folio))->flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP)))
+> +		return -EINVAL;
+> +
+> +	if (kvm_gmem_folio_no_direct_map(folio))
+> +		goto out;
+> +
+> +	r = folio_zap_direct_map(folio);
+> +	if (!r)
+> +		folio->private = (void *)((u64)folio->private | KVM_GMEM_FOLIO_NO_DIRECT_MAP);
+> +
+> +out:
+> +	return r;
+> +}
+> +
+> +static void kvm_gmem_folio_restore_direct_map(struct folio *folio)
+> +{
+> +	folio_restore_direct_map(folio);
+> +	folio->private = (void *)((u64)folio->private & ~KVM_GMEM_FOLIO_NO_DIRECT_MAP);
+> +}
+
+Making guest_memfd responsible for zapping and restoring the direct map on a per-
+folio basis feels wrong given the addition of AS_NO_DIRECT_MAP.  I especially don't
+like that the "rules" for when an AS_NO_DIRECT_MAP folio has a direct map will vary
+based on the owner, and even within an owner (e.g. guest_memfd) will be ad hoc.
+
+E.g. as per the series to add guest_memfd write() support[*]:
+
+  When direct map removal is implemented [2]
+   - write() will not be allowed to access pages that have already
+     been removed from direct map
+   - on completion, write() will remove the populated pages from
+     direct map
+
+That's pretty gross ABI, because with KVM_GMEM_FOLIO_NO_DIRECT_MAP, userspace can
+write() exactly once.  To re-write memory, I assume userspace would need to do a
+PUNCH_HOLE or truncate.
+
+What's preventing us from handling this automagically in e.g. filemap_add_folio()
+and filemap_remove_folio()?  Then the usage rules are pretty straightforward: the
+kernel must *always* assume the direct map is invalid for folios from
+AS_NO_DIRECT_MAP mappings.
+
+Then if KVM needs to utilize a kernel mapping, e.g. in kvm_gmem_populate(), KVM
+could use dedicated variants of kmap_local_xxx() to deal with a local mapping for
+a folio/page without a direct map.  Or, KVM could simply disallow the specific
+sequence that would require KVM to do the memcpy (I'm pretty sure we can do that
+with in-place shared=>private conversion support).
+
+I realize that could throw a big wrench into write() performance, but IMO, before
+merging either series, we need a complete story for exactly how this will all fit
+together, in a maintainable fashion and with sane ABI.
+
+[*] https://lore.kernel.org/all/20251114151828.98165-1-kalyazin@amazon.com
