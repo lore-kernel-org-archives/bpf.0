@@ -1,20 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B332F25F0
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 17:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E08279334
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 17:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776791984; cv=none; b=BUIA0G8QmZq4nexRGj3wk73b3wBH234PD2oMhwTwNEkujOFr7N7uxsbHfLz+B9o7hZMIN1FgPqXbKf4/gnSdfNKtgJflti7pSXRkvlNnxWE547B9fn7PbjYKCmjl/CwWx00lDviC4VoZAi1hPIQ+q95OZD4ldTa+NImtF64qfq8=
+	t=1776791987; cv=none; b=qVMQte9fZxy8akKzgDKT3G8HP2Nw6iRI4NKRlY1Sz3xP6HpegfnHnfaU+g0M6zbUCGLSBJKkxBF40vyFmnHTNcMRQaY387WwG73ojwASAY+EUdV2k1GPqs19eR28x1r3EP2bSBjwrF6YutAp948SRrsgVUoOsHdcHS8CWOYlqsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776791984; c=relaxed/simple;
-	bh=c64p/Td5d3cwbCdIrpE9fXB/v/RgwX+pyGX336r+wS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QefigEo6fn07Xe+lz8iGXXBOQnCHDXGC/x4f+tH7msFd1d0mofCMp7p3xt6IFmeo3Y/vA1dAMLoi46Q7EizRiIp4boyUtW7o5GF817BRHBtN5RKuaTjuOzIxiPCtWLGY8/NLfxed0oxaYNySJKZ/62e8DcDmI8VcJTFNv7ROgb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	s=arc-20240116; t=1776791987; c=relaxed/simple;
+	bh=CKh3A3ERdXZKbq5RyiFgao6qwj3XsokL8qaJgk4SLR4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BdZkPZXMp3HfKge295hHMl8ryzYxBc7SkzSmnr3j3RCGeqPEwFLcTtyjBywQYBR7eqrsmMTw0f3Yo7/ZHl8curvdUe4MFM0eX1vyYCa4pkMNUuMSeaN1ywsRKoZozJegUldSf6HtXGpNUP9M3AfTKdTTzHkO5hOHf51TX8X1XnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 1E6BD44B27912; Tue, 21 Apr 2026 10:19:27 -0700 (PDT)
+	id 38B0444B27930; Tue, 21 Apr 2026 10:19:32 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,11 +23,14 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
 	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next 0/9] bpf: Prepare to support stack arguments
-Date: Tue, 21 Apr 2026 10:19:27 -0700
-Message-ID: <20260421171927.3507554-1-yonghong.song@linux.dev>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>
+Subject: [PATCH bpf-next 1/9] bpf: Remove unused parameter from check_map_kptr_access()
+Date: Tue, 21 Apr 2026 10:19:32 -0700
+Message-ID: <20260421171932.3508283-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260421171927.3507554-1-yonghong.song@linux.dev>
+References: <20260421171927.3507554-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,67 +39,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The patch set prepares to support stack arguments for bpf functions
-and kfunc's. The major changes include:
-  - Avoid redundant calculation of bpf_reg_state. For stack
-    arguments, there exists no corresponding register number.
-  - Refactor check_kfunc_mem_size_reg() to have bpf_reg_state's
-    for both mem_reg and size_reg.
-  - Allow verifier logs to print stack arguments if there is no
-    corresponding register.
+The parameter 'regno' in check_map_kptr_access() is unused. Remove it.
 
-Please see individual patches for details.
+Acked-by: Puranjay Mohan <puranjay@kernel.org>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yonghong Song (9):
-  bpf: Remove unused parameter from check_map_kptr_access()
-  bpf: Fix tail_call_reachable leak
-  bpf: Remove WARN_ON_ONCE in check_kfunc_mem_size_reg()
-  bpf: Refactor to avoid redundant calculation of bpf_reg_state
-  bpf: Refactor to handle memory and size together
-  bpf: Rename existing argno to arg
-  bpf: Prepare verifier logs for upcoming kfunc stack arguments
-  bpf: Introduce bpf register BPF_REG_PARAMS
-  bpf: Reuse MAX_BPF_FUNC_ARGS for maximum number of arguments
-
- include/linux/bpf.h                           |   5 +
- include/linux/bpf_verifier.h                  |   1 +
- include/linux/filter.h                        |   5 +-
- kernel/bpf/core.c                             |   4 +-
- kernel/bpf/verifier.c                         | 813 ++++++++++--------
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |  22 +-
- .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    |  14 +-
- .../selftests/bpf/prog_tests/kfunc_call.c     |   2 +-
- .../selftests/bpf/prog_tests/linked_list.c    |   4 +-
- .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  14 +-
- .../selftests/bpf/progs/cpumask_failure.c     |  10 +-
- .../testing/selftests/bpf/progs/dynptr_fail.c |  22 +-
- .../selftests/bpf/progs/file_reader_fail.c    |   4 +-
- tools/testing/selftests/bpf/progs/irq.c       |   4 +-
- tools/testing/selftests/bpf/progs/iters.c     |   6 +-
- .../selftests/bpf/progs/iters_state_safety.c  |  14 +-
- .../selftests/bpf/progs/iters_testmod.c       |   4 +-
- .../selftests/bpf/progs/iters_testmod_seq.c   |   4 +-
- .../selftests/bpf/progs/map_kptr_fail.c       |   2 +-
- .../selftests/bpf/progs/percpu_alloc_fail.c   |   4 +-
- .../testing/selftests/bpf/progs/rbtree_fail.c |   6 +-
- .../bpf/progs/refcounted_kptr_fail.c          |   2 +-
- .../testing/selftests/bpf/progs/stream_fail.c |   2 +-
- .../selftests/bpf/progs/task_kfunc_failure.c  |  18 +-
- .../selftests/bpf/progs/task_work_fail.c      |   6 +-
- .../selftests/bpf/progs/test_bpf_nf_fail.c    |   8 +-
- .../bpf/progs/test_kfunc_dynptr_param.c       |   2 +-
- .../bpf/progs/test_kfunc_param_nullable.c     |   2 +-
- .../selftests/bpf/progs/verifier_bits_iter.c  |   4 +-
- .../bpf/progs/verifier_bpf_fastcall.c         |  24 +-
- .../selftests/bpf/progs/verifier_may_goto_1.c |  12 +-
- .../bpf/progs/verifier_ref_tracking.c         |   6 +-
- .../selftests/bpf/progs/verifier_sdiv.c       |  64 +-
- .../selftests/bpf/progs/verifier_vfs_reject.c |   8 +-
- .../testing/selftests/bpf/progs/wq_failures.c |   2 +-
- tools/testing/selftests/bpf/verifier/calls.c  |  14 +-
- 37 files changed, 604 insertions(+), 536 deletions(-)
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 185210b73385..a768359b22cb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4710,7 +4710,7 @@ static int mark_uptr_ld_reg(struct bpf_verifier_env=
+ *env, u32 regno,
+ 	return 0;
+ }
+=20
+-static int check_map_kptr_access(struct bpf_verifier_env *env, u32 regno=
+,
++static int check_map_kptr_access(struct bpf_verifier_env *env,
+ 				 int value_regno, int insn_idx,
+ 				 struct btf_field *kptr_field)
+ {
+@@ -6357,7 +6357,7 @@ static int check_mem_access(struct bpf_verifier_env=
+ *env, int insn_idx, u32 regn
+ 			kptr_field =3D btf_record_find(reg->map_ptr->record,
+ 						     off + reg->var_off.value, BPF_KPTR | BPF_UPTR);
+ 		if (kptr_field) {
+-			err =3D check_map_kptr_access(env, regno, value_regno, insn_idx, kptr=
+_field);
++			err =3D check_map_kptr_access(env, value_regno, insn_idx, kptr_field)=
+;
+ 		} else if (t =3D=3D BPF_READ && value_regno >=3D 0) {
+ 			struct bpf_map *map =3D reg->map_ptr;
+=20
 --=20
 2.52.0
 
