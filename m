@@ -1,213 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FEF6363C45
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 03:04:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286EC37BE81
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 03:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776740698; cv=none; b=CyKTa5KfSMRN7Wy3LCK00DkpfNXIlE5gTviLhSiuu6EA6dxgAe4jqTpW0R3yWbD2h6RAk2cUg4jO7rX3sMXrm6wuUV5U+FLhbIwQlb1hY7D2sHcjLoheXy+M9fVWGi6ahCKZkexk8W/HT+gX+4FQS/BDIVReA9O0QG+HXYnO/2U=
+	t=1776740799; cv=none; b=r3VNalhoORdLVBtyuGIbKSw3Pth2o2e2lLiLmpaUDUh8VvrP30HkFNd6ax1MhaDfczMyYDTs8oGF1wRVhL8FlmIiBGYRV6F+PkTYczqihcjrmdAgAgMymtq/mj9gPhTAWWy/46uDV2AY8/cp6sly4RY2ZdsPePCh+YQMJPixdHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776740698; c=relaxed/simple;
-	bh=AfFUUR3UpSbNCjRjoXy1WRjALk61jW8gfIBkSQ9vcNY=;
+	s=arc-20240116; t=1776740799; c=relaxed/simple;
+	bh=ezMwEMLGAhcGTdQ8X9wIqNhUP1mkpwmf7k0v/U06VK8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iI8bssGhHRycUc6Ldq+YKsP1TeZ8tEn2BiJ1G+rqmo2sF+usj5tPjMw5Lv2yEHBmg77IYyvls2en/pDOEqCPfWtsec5Y1oOaDzMZLoXvBErxOUzXdy8nZFXlS7aRhdEadRQTl5+PZfqqXyVj3at7S/fGNq/870cgRIKkOHwzgcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEVMol0H; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=VI3uJAOSc6GyYN8Roi98UMjwtTFiZ9XLSh2/G8xsaLhpa1xM525fveTBr9FYvgivd7sFD+6AmJGGJ45q6QiCR4XVOIKOpn//2K/0yjv/Q+aRi82HQedkNJXL96Ur/XPkpTD+U+vdlPxoG4KgZPA5fyK1JRhg9/WfNZej1xiel7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfZ+lRX6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEVMol0H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C77C19425;
-	Tue, 21 Apr 2026 03:04:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfZ+lRX6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF502C2BCB6;
+	Tue, 21 Apr 2026 03:06:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776740697;
-	bh=AfFUUR3UpSbNCjRjoXy1WRjALk61jW8gfIBkSQ9vcNY=;
+	s=k20201202; t=1776740798;
+	bh=ezMwEMLGAhcGTdQ8X9wIqNhUP1mkpwmf7k0v/U06VK8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=gEVMol0HpD+RO8QZcQlRVNOqrtvH2/+PIOhy14EI2cHX/DEgX7WIC00IWJmQspq87
-	 VjX8hbpKav8KbWKuixHmVUIMYFXPAY11EGgUsBkdWWmAjLtLfJKUuyvBT1cf6xslEP
-	 L2A9q+W11lmdIVb+M9lnNFql4ClSIpCXqq3Xw7udFgq3o4aS+R6J+en2vXWM2jdn/Y
-	 0dSgqnzl6upPfL+6wAdwIc6ycucvV7oWNkYay6FCNb/GWEc0wItkljVT4MtL1Lr+Vh
-	 nSNrlme/ew1IwZVbflN947pxwjnyukJ0sXt0Ur93mXs6sSNjP1mmNuvj6s5dNZDZjU
-	 iQwu3j7B1XSPA==
+	b=jfZ+lRX6SiZrH4ZXiQES2haKCs16RRyZ3pKX9nwaKUq3CbjniclcL0u5Oj41yTtQx
+	 L45bXVOWpXiF81K8jvL/JoMEYnvn6BkbaySrnPZ5JDsq8C+U3G3GIgITxRAfHbw24x
+	 5EInVdCQq6X0/bBwzoYd7V7hfjcgXXB9DUBUACIYtBHlGaNJnADhp0bFF3REatVQ2T
+	 3+x2sx1ehKgNV4qYY26mSt2V+5llsu29jPiREl2s1rGg9FUXHCALHhJjoqlRBrt3Su
+	 1yrr/lsZ/B9wvxTKHtI8zUO8NYhB3ncLn3yjXn39QW3sFtRxvO+zARlE+L9MfEcb/B
+	 bYuHUqyYN8Lmg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 09/10] selftests/hornet: Add a selftest for the
- Hornet LSM
+Subject: Re: [PATCH v5 08/10] hornet: Add a light skeleton data extractor
+ scripts
 Reply-To: sashiko@lists.linux.dev
 To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420212653.438685-10-bboscaccy@linux.microsoft.com>
-References: <20260420212653.438685-10-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260420212653.438685-9-bboscaccy@linux.microsoft.com>
+References: <20260420212653.438685-9-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 03:04:56 +0000
-Message-Id: <20260421030457.74C77C19425@smtp.kernel.org>
+Date: Tue, 21 Apr 2026 03:06:38 +0000
+Message-Id: <20260421030638.AF502C2BCB6@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 7 potential issue(s):
-- [High] Use of deprecated `bpf_probe_read_str` to read a user-space pointe=
-r.
-- [High] Hardcoded dependency on the host's `/sys/kernel/btf/vmlinux`.
-- [High] Custom Makefile rules are bypassed due to `$(OUTPUT)/` prefix mism=
-atch.
-- [High] Linking against the host system's `libbpf` instead of the in-tree =
-library.
-- [High] Unconditional hardcoded dependency on kernel signing keys.
-- [Medium] The selftest fails to verify Hornet's negative enforcement capab=
-ilities.
-- [Medium] BPF selftest `loader.c` uses raw conditionals instead of `ASSERT=
-_*()` macros.
+Sashiko AI review found 4 potential issue(s):
+- [High] Payload data corruption due to grep matching multiple lines and pr=
+intf format string reuse.
+- [Medium] Scripts fail to preprocess headers because gcc is invoked withou=
+t include paths.
+- [Medium] Pipeline failure when processing BPF programs with empty map dat=
+a.
+- [Low] Copy-paste error in usage text and unsafe unquoted variable usage.
 --
 
-commit 162ecc15ea5091af09f42092fc7aa704f31709fa
+commit 5d4574520f6f666709ea15ecc132a023d9222886
 Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 
-selftests/hornet: Add a selftest for the Hornet LSM
-   =20
-This selftest contains a testcase that utilizes light skeleton eBPF
-loaders and exercises hornet's map validation.
+hornet: Add a light skeleton data extractor scripts
 
-> diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/self=
-tests/hornet/Makefile
-> new file mode 100644
-> index 0000000000000..432bce59f54e7
+This commit introduces bash scripts to extract instructions and map data fr=
+om
+autogenerated eBPF light skeleton headers. These payloads can be used for
+signing light skeleton binaries.
+
+> diff --git a/scripts/hornet/extract-insn.sh b/scripts/hornet/extract-insn=
+.sh
+> new file mode 100755
+> index 0000000000000..52338f057ff6b
 > --- /dev/null
-> +++ b/tools/testing/selftests/hornet/Makefile
-
+> +++ b/scripts/hornet/extract-insn.sh
 [ ... ]
+> +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
+> +    usage
+> +else
+> +    printf $(gcc -E $1 | grep "opts_insn" | \
+> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
+> +fi
 
-> +TEST_GEN_PROGS :=3D loader
-> +TEST_GEN_FILES :=3D vmlinux.h loader.h trivial.bpf.o map.bin sig.bin ins=
-n.bin signed_loader.h
-> +$(TEST_GEN_PROGS): LDLIBS +=3D -lbpf
+Will this corrupt the binary payload if grep matches multiple lines?
 
-Could this link against the host operating system's libbpf.so instead of the
-locally built in-tree library?
+Skeleton headers generated by bpftool typically contain additional
+references like opts.insns_sz =3D sizeof(opts_insn) - 1; and
+opts.insns =3D (void *)opts_insn;.
 
-It looks like it lacks the -L$(BPFDIR) library search path. If the host
-machine doesn't have libbpf-dev installed, the build might fail, or it could
-link against an outdated version.
+Because the $(...) command substitution is unquoted, Bash will split the
+output into multiple arguments. Since printf doesn't receive format
+specifiers, it will reuse the binary payload as the format string for each
+extra argument (such as sizeof, -, 1), repeating the payload multiple times
+in the output.
 
-[ ... ]
+Also, because EXPECTED_ARGS=3D1 is strictly enforced, users cannot pass -I
+flags. Since the generated headers unconditionally include <bpf/bpf.h> and
+<bpf/skel_internal.h>, will gcc -E fail and terminate before emitting the
+target variables if those headers are not in the default system include pat=
+h?
 
-> +vmlinux.h:
-> +	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+Could $1 be quoted as "$1" to prevent failures when the file path
+contains spaces?
 
-Does this hardcode a dependency on the host's running kernel instead of the
-target kernel being compiled?
-
-This would break cross-compilation and fail the build entirely on host
-machines without CONFIG_DEBUG_INFO_BTF enabled in their running kernel.
-Should it use the in-tree $(VMLINUX_BTF) provided by the build infrastructu=
-re?
-
-[ ... ]
-
-> +sig.bin: insn.bin map.bin $(OUTPUT)/gen_sig
-> +	$(OUTPUT)/gen_sig --key $(CERTDIR)/signing_key.pem --cert $(CERTDIR)/si=
-gning_key.x509 \
-> +		--data insn.bin --add map.bin:0 --out sig.bin
-
-Will this unconditionally fail if the kernel configuration lacks
-CONFIG_MODULE_SIG?
-
-The Makefile hardcodes the use of signing_key.pem and signing_key.x509, whi=
-ch
-might not exist. Should the test gracefully detect the absence of the requi=
-red
-keys and skip the build or execution instead of failing the entire pipeline?
-
-> +
-> +signed_loader.h: sig.bin
-> +	$(SCRIPTSDIR)/write-sig.sh loader.h sig.bin > $@
-> +
-> +loader: loader.c signed_loader.h
-> +	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
-
-Could this custom rule be bypassed because it lacks the $(OUTPUT)/ prefix?
-
-The include ../lib.mk transforms TEST_GEN_PROGS by prefixing it with
-$(OUTPUT)/. When make attempts to build $(OUTPUT)/loader, it might fall back
-to its default pattern rule.
-
-This would omit the -I include paths, the -lbpf linker flag, and the
-dependency on signed_loader.h, leading to compilation failures.
-
-Also, similar to the LDLIBS addition above, this uses -lbpf without specify=
-ing
-the in-tree path.
-
-> diff --git a/tools/testing/selftests/hornet/loader.c b/tools/testing/self=
-tests/hornet/loader.c
-> new file mode 100644
-> index 0000000000000..f27580c7262b3
+> diff --git a/scripts/hornet/extract-map.sh b/scripts/hornet/extract-map.sh
+> new file mode 100755
+> index 0000000000000..c309f505c6238
 > --- /dev/null
-> +++ b/tools/testing/selftests/hornet/loader.c
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> +
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <stddef.h>
-> +#include <sys/resource.h>
-> +#include <bpf/libbpf.h>
-> +#include <errno.h>
-> +#include  "signed_loader.h"
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	struct trivial *skel;
-> +
-> +	skel =3D trivial__open_and_load();
+> +++ b/scripts/hornet/extract-map.sh
+[ ... ]
+> +function usage() {
+> +    echo "Sample script for extracting instructions"
 
-The commit message states this "exercises hornet's map validation", but this
-solely loads a valid, signed skeleton.
+This isn't a bug, but should this say "extracting map data" instead of
+"instructions" since this is the map extractor script?
 
-Are there any negative tests to verify that the LSM actually blocks invalid
-loads? If the Hornet LSM fails open or is disabled, this test might falsely
-pass.
-
-> +	if (!skel)
-> +		return -1;
-
-Should this use the modern ASSERT_*() macros like ASSERT_OK_PTR() instead of
-raw conditionals?
-
-Using raw conditionals silently bypasses the standard testing reporting
-infrastructure.
-
-> +
-> +	trivial__destroy(skel);
-> +	return 0;
+> +    echo "autogenerated eBPF lskel headers"
+> +    echo ""
+> +    echo "USAGE: header_file"
+> +    exit
 > +}
-> diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing=
-/selftests/hornet/trivial.bpf.c
-> new file mode 100644
-> index 0000000000000..d38c5b53ff932
-> --- /dev/null
-> +++ b/tools/testing/selftests/hornet/trivial.bpf.c
-
 [ ... ]
 
-> +SEC("tracepoint/syscalls/sys_enter_unlinkat")
-> +int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
-> +{
-> +	char filename[128] =3D { 0 };
-> +	struct task_struct *task;
-> +	unsigned long start_time =3D 0;
-> +	int pid =3D bpf_get_current_pid_tgid() >> 32;
-> +	char *pathname_ptr =3D (char *) BPF_CORE_READ(ctx, args[1]);
-> +
-> +	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
+> diff --git a/scripts/hornet/extract-skel.sh b/scripts/hornet/extract-skel=
+.sh
+> new file mode 100755
+> index 0000000000000..6550a86b89917
+> --- /dev/null
+> +++ b/scripts/hornet/extract-skel.sh
+[ ... ]
+> +if [ $ARGC -ne $EXPECTED_ARGS ] ; then
+> +    usage
+> +else
+> +    printf $(gcc -E $1 | grep "static const char opts_$2" | \
+> +		 awk -F"=3D" '{print $2}' | sed 's/;\+$//' | sed 's/\"//g')
+> +fi
 
-Can this silently fail on architectures with strict user/kernel address spa=
-ce
-separation (like x86 with SMAP enabled)?
+If a BPF program uses no maps, the extracted skeleton will declare
+static const char opts_data[] =3D "";. The awk and sed pipeline will strip
+the quotes, resulting in an empty command substitution.
 
-The sys_enter_unlinkat tracepoint receives pathname from user space in
-args[1], but bpf_probe_read_str() is deprecated and meant for kernel-space
-pointers. Should this use bpf_probe_read_user_str() instead?
+Since calling printf without arguments triggers a shell usage error
+(bash: printf: usage: printf [-v var] format [arguments]) and returns a
+non-zero exit status, will this break automated pipelines for map-less
+BPF programs?
+
+Additionally, since extract-skel.sh avoids the multiple-match issue by using
+a stricter grep pattern (grep "static const char opts_$2"), does this make
+extract-insn.sh and extract-map.sh redundant?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420212653.4386=
-85-1-bboscaccy@linux.microsoft.com?part=3D9
+85-1-bboscaccy@linux.microsoft.com?part=3D8
