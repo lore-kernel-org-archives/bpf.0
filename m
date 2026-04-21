@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47FB35C193
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 11:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CEF35C193
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 11:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776770002; cv=none; b=mMrDOyOF9769YlI8JZdwuUwIaU8hCArz8czQlFlEzIvKXurCB25yPBts/dzU2yct49yFeSYe0vdv7AqHzT702b8atEQS64AAcZ6ezTSVqHk814ddwI6JQMfo83vXGossnc6GjaZrMCq1Hv6/Hqzppg45jKWigELV1v3uOJK1dX0=
+	t=1776770003; cv=none; b=fTqUSeIskATSHX8HbrGa2NVlR1V3EpmYxFhW64oK6rUIwRerR7r8yhptxzmblPwDGkb6nTp/lpVlrk9B8p32jgVwZInKgFSli2nWcWp9ttnAyyWeAa31ESaQWlAKCtnH9KO7ektXzgCcXZyHBCxeL9Q4yma8UA+os0RhfQtucb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776770002; c=relaxed/simple;
-	bh=4l4u+eG8SEJKlzkZnb1orh6pDI8+rzByglXCdtCrte0=;
+	s=arc-20240116; t=1776770003; c=relaxed/simple;
+	bh=hxpCI17Jdo3htD0jqnXezKEuWiNiDQuL3svfvwvoyK0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=c+KRRSZKZa/w1Yw/Sky3SWTlNH84LAg6DouQ1SflYZTOXRVSLPRh+okWoXxC6MFHzUgRp4PYp6dO6sDzt6DfZSykHsIfRxF2m6BPLCkN1mZpsFOvWCsg3PCA26OntQRfoCcTvzgqo2cS8eUsiB/eV1FWwlK0V0OkKsYI6gKyObY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g4K/E+Wg; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=d+r1hyCxle6TEtwEEyDaEYZ4SCyp7dd+JuBhpgEelOQhTVlYhqZVePDMZ+f9Bs1x3xM6IIIocZtnmq6XCIl0h0H1fp5unlAi83yCv4diD1RosAVobGZHgmsqvI8cGGVxx7mQQom4TgsObCSnGa7mebNzcC7ExERbMG7c83qEX3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iDCRYKuF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g4K/E+Wg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC9BC2BCB0;
-	Tue, 21 Apr 2026 11:13:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iDCRYKuF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641C5C2BCB0;
+	Tue, 21 Apr 2026 11:13:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776770002;
-	bh=4l4u+eG8SEJKlzkZnb1orh6pDI8+rzByglXCdtCrte0=;
+	s=k20201202; t=1776770003;
+	bh=hxpCI17Jdo3htD0jqnXezKEuWiNiDQuL3svfvwvoyK0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=g4K/E+Wg7H8pYez06cMJoM3fjvbsliIfTAlcEUJ77AKk52ELKRMrLak1gx+smiQHb
-	 6F7npe446PB7cZXCgufTsMQeGt5Sm0ZfBjRDoFE+9NGi6OkX/fyRubAgOY/RD7bzR/
-	 tzfebcvGfUS18xv/LwOqm3XXxzSZj2PbKsY2+m9yqSU3DuUhzYxY/9w5iG07LBNnB/
-	 sIbQKFhHe62+5unQyM5OipLfHapHXsWqHou/cg1+Eus81PveNo5whXRhMsZ/f/oA1f
-	 9/Bl6ABcS7f3Hbn/kQm8EDMOuRfK5rrKD1ZXiVjXkYJyyp4TGOeUS8F6tHl20gxwMx
-	 2lCDQ61qW0Dbw==
+	b=iDCRYKuFUCQy3Ar1KcEJKix35uHUVTiQCjHfgfx2V0tnPUhOs4tD8+ns8aeKWz8oU
+	 dObx/CZrSD03osMXaXKL8K7LzV/J/p1BKmbiFWansUaLDHT+Lx6rByVM41F/He+ZFn
+	 u0bSKI6+HwL5raEUokli5wroN2DSjCSo7EntgNIJosoxU+sbVxl/CVhftrKgiLeFFR
+	 uJ3NEtUVYIwwTPvEn+POclu74EjEzwwYTTl9/jxDSyoN9LnkaMGEiJUWCjXR91EEAC
+	 d0YE51ZTqtnDxMruML6feBu0lFfbM0APQBVe0rPMQL9ieP/YAt5DFGQqXRIk5x8U+t
+	 kYaFLtJgzSkHA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 3/6] bpf: add bpf_icmp_send_unreach kfunc
+Subject: Re: [PATCH bpf-next v4 4/6] selftests/bpf: add icmp_send_unreach
+ kfunc tests
 Reply-To: sashiko@lists.linux.dev
 To: "Mahe Tardy" <mahe.tardy@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420105816.72168-4-mahe.tardy@gmail.com>
-References: <20260420105816.72168-4-mahe.tardy@gmail.com>
+In-Reply-To: <20260420105816.72168-5-mahe.tardy@gmail.com>
+References: <20260420105816.72168-5-mahe.tardy@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 11:13:21 +0000
-Message-Id: <20260421111322.6CC9BC2BCB0@smtp.kernel.org>
+Date: Tue, 21 Apr 2026 11:13:22 +0000
+Message-Id: <20260421111323.641C5C2BCB0@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,139 +45,104 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Sashiko AI review found 4 potential issue(s):
-- [Critical] Unchecked `skb->dev` leads to a guaranteed NULL pointer derefe=
-rence and kernel panic.
-- [High] Missing SKB header linearization and bounds validation before acce=
-ssing IP/IPv6 headers.
-- [High] Uninitialized SKB control block (`skb->cb`) causes memory corrupti=
-on and info leaks via IP options parsing.
-- [High] Ad-hoc synchronization with the per-CPU flag `bpf_icmp_send_in_pro=
-gress` causes false-positive failures and bypasses recursion protection und=
-er preemption.
+- [Medium] Race condition leading to test flakiness due to missing `poll()`=
+ before `recvmsg(MSG_ERRQUEUE)`.
+- [Medium] Hardcoded server port can cause test collisions during parallel =
+execution.
+- [Low] Improper use of `ASSERT_EQ` for flow control and swapped assertion =
+tags in `read_icmp_errqueue`.
+- [Low] Factually incorrect comment regarding `SERVER_IP` byte order.
 --
 
-commit 26bc7aced36645f274275d44dc5bb1fd8f53f864
+commit 954da1124af043d103f7e4f4435358fccf26853c
 Author: Mahe Tardy <mahe.tardy@gmail.com>
 
-bpf: add bpf_icmp_send_unreach kfunc
+selftests/bpf: add icmp_send_unreach kfunc tests
 
-This commit introduces the bpf_icmp_send_unreach kfunc to allow BPF programs
-to send ICMP destination unreachable messages. It clones the original SKB to
-ensure the packet can still proceed unmodified if desired, and includes a
-per-CPU flag to prevent recursion.
+This commit adds tests for the icmp_send_unreach kfunc. It sets up a client
+and server, uses a cgroup egress program to trigger an ICMP unreachable
+message, and reads the error queue to confirm the correct code is received.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfu=
+nc.c b/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
+> new file mode 100644
+> index 0000000000000..24d5e01cfe804
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/icmp_send_unreach_kfunc.c
+[ ... ]
+> @@ -0,0 +1,136 @@
+[ ... ]
+> +#define TIMEOUT_MS 1000
+> +#define SRV_PORT 54321
+
+Can this cause intermittent bind() failures when selftests are run in
+parallel? Since tests often execute concurrently, hardcoding a fixed port
+like 54321 might collide with other tests or system processes. Could we
+bind to port 0 to allow the OS to assign an ephemeral port, retrieve it via
+getsockname(), and pass it to the BPF program dynamically?
 
 [ ... ]
-
-> +static DEFINE_PER_CPU(bool, bpf_icmp_send_in_progress);
-> +
-> +/**
-> + * bpf_icmp_send_unreach - Send ICMP destination unreachable error
-
-[ ... ]
-
-> +__bpf_kfunc int bpf_icmp_send_unreach(struct __sk_buff *__skb, int code)
+> +static void read_icmp_errqueue(int sockfd, int expected_code)
 > +{
-> +	struct sk_buff *skb =3D (struct sk_buff *)__skb;
-> +	struct sk_buff *nskb;
-> +	bool *in_progress;
+[ ... ]
+> +	struct msghdr msg =3D {
+> +		.msg_control =3D ctrl_buf,
+> +		.msg_controllen =3D sizeof(ctrl_buf),
+> +	};
 > +
-> +	in_progress =3D this_cpu_ptr(&bpf_icmp_send_in_progress);
-> +	if (*in_progress)
-> +		return -EBUSY;
+> +	n =3D recvmsg(sockfd, &msg, MSG_ERRQUEUE);
 
-BPF programs can run in preemptible contexts, such as when running with
-migrate_disable() and rcu_read_lock(). Is it possible for a task to be
-preempted between checking and setting this flag, or while icmp_send() is
-executing?
+Could this read the error queue before the ICMP message has been processed?
 
-If another task runs on the same CPU while the flag is set, it might
-incorrectly fail to send an ICMP message. Alternatively, could a race allow
-the recursion protection to be bypassed entirely if tasks interleave their
-reads and writes to this flag?
+The non-blocking connect() returns -EINPROGRESS, and the ICMP unreachable
+message is generated by the BPF program and processed asynchronously by
+softirqs. Under heavy load, if the softirq processing is deferred, could
+recvmsg() execute before the error queue is populated and cause a spurious
+-EAGAIN failure?
 
+Would it be safer to use poll() or select() to wait for the POLLERR event
+on the socket before attempting the read?
+
+> +	if (!ASSERT_GE(n, 0, "recvmsg_errqueue"))
+> +		return;
 > +
-> +	switch (skb->protocol) {
-> +#if IS_ENABLED(CONFIG_INET)
-> +	case htons(ETH_P_IP):
-> +		if (code < 0 || code > NR_ICMP_UNREACH)
-> +			return -EINVAL;
+> +	cm =3D CMSG_FIRSTHDR(&msg);
+> +	if (!ASSERT_NEQ(cm, NULL, "cm_firsthdr_null"))
+> +		return;
 > +
-> +		nskb =3D skb_clone(skb, GFP_ATOMIC);
-> +		if (!nskb)
-> +			return -ENOMEM;
-> +
-> +		if (!skb_dst(nskb) && ip_route_reply_fetch_dst(nskb) < 0) {
+> +	for (; cm; cm =3D CMSG_NXTHDR(&msg, cm)) {
+> +		if (!ASSERT_EQ(cm->cmsg_level, IPPROTO_IP, "cmsg_type") ||
+> +		    !ASSERT_EQ(cm->cmsg_type, IP_RECVERR, "cmsg_level"))
+> +			continue;
 
-This kfunc is registered in bpf_kfunc_check_set_skb, exposing it to program
-types like SOCKET_FILTER or SK_SKB. In these contexts, socket buffers
-frequently have neither a destination entry (skb_dst is NULL) nor an
-assigned network device (skb->dev is NULL).
+Does using ASSERT_EQ here cause the test to fail immediately if an unexpect=
+ed
+but benign control message is encountered? In BPF selftests, if ASSERT_EQ
+evaluates to false, it logs a failure and marks the test as failed instead
+of just skipping the message.
 
-When ip_route_reply_fetch_dst() executes, it calls dev_net(skb->dev). Does
-this lead to a NULL pointer dereference if the network device is not set?
+Also, it looks like the tags might be swapped. "cmsg_type" is used to label
+the cm->cmsg_level check, and "cmsg_level" is used for the cm->cmsg_type
+check.
 
-Additionally, BPF programs can arbitrarily modify the SKB length, and the
-network header might reside in the non-linear paged area. Does this code
-need to call pskb_network_may_pull() or similar to ensure the headers are
-linearized?
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/icmp_send_unreach.c b/tool=
+s/testing/selftests/bpf/progs/icmp_send_unreach.c
+> new file mode 100644
+> index 0000000000000..6fc5595f08aa9
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/icmp_send_unreach.c
+[ ... ]
+> @@ -0,0 +1,36 @@
+[ ... ]
+> +#define SERVER_PORT 54321
+> +/* 127.0.0.1 in network byte order */
+> +#define SERVER_IP 0x7F000001
 
-ip_route_reply_fetch_dst() blindly dereferences ip_hdr(skb)->saddr, which
-might result in out-of-bounds reads if the header is not safely in the
-linear data area.
-
-> +			kfree_skb(nskb);
-> +			return -EHOSTUNREACH;
-> +		}
-> +
-> +		*in_progress =3D true;
-> +		icmp_send(nskb, ICMP_DEST_UNREACH, code, 0);
-
-skb_clone() copies the original SKB's control block (skb->cb) verbatim. In
-hooks like TC, this area contains subsystem-specific data.
-
-icmp_send() casts this control block to struct inet_skb_parm via IPCB().
-If the copied control block data happens to set opt.optlen > 0, will
-__ip_options_echo() attempt to parse IP options using arbitrary offsets?
-
-Does the new SKB's control block need to be zeroed before passing it to
-the ICMP send functions to prevent reading uninitialized values?
-
-> +		*in_progress =3D false;
-> +		kfree_skb(nskb);
-> +		break;
-> +#endif
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +	case htons(ETH_P_IPV6):
-> +		if (code < 0 || code > ICMPV6_REJECT_ROUTE)
-> +			return -EINVAL;
-> +
-> +		nskb =3D skb_clone(skb, GFP_ATOMIC);
-> +		if (!nskb)
-> +			return -ENOMEM;
-> +
-> +		if (!skb_dst(nskb) && ip6_route_reply_fetch_dst(nskb) < 0) {
-
-The same concerns about skb->dev being NULL and the need for IPv6 header
-linearization apply here before calling ip6_route_reply_fetch_dst().
-
-> +			kfree_skb(nskb);
-> +			return -EHOSTUNREACH;
-> +		}
-> +
-> +		*in_progress =3D true;
-> +		icmpv6_send(nskb, ICMPV6_DEST_UNREACH, code, 0);
-
-Similarly, does nskb->cb need to be zeroed before calling icmpv6_send()?
-
-> +		*in_progress =3D false;
-> +		kfree_skb(nskb);
-> +		break;
-> +#endif
+This isn't a bug since the code correctly calls bpf_htonl(SERVER_IP) later,
+but the comment appears to be incorrect. The value 0x7F000001 represents
+127.0.0.1 in host byte order, not network byte order.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420105816.7216=
-8-1-mahe.tardy@gmail.com?part=3D3
+8-1-mahe.tardy@gmail.com?part=3D4
