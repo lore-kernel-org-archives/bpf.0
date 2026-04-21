@@ -1,64 +1,64 @@
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D5E1E2614
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E4F34E746
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 16:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776787856; cv=none; b=Sth22INVwjVDYpRlHAfY3rjEL1zOWqZWdvllHvfIIoddMqQIn7RDnciwsf+LT0N5/3GyZCndcrTgKC+CNHXG993rpbRgAo5vSams1Hb9GEMzWr8EgEE0UwTkCVYWoQVPkcOg+541bf0+4pJJTD7QrGXhKY2gm9rKYLkLpxCYPsg=
+	t=1776788585; cv=none; b=ljzlqf28jecl8lPMbD3uU2Ep3310RSDzWHMXi2Ehy7yXyJljuXBg8W1Fj2Gv3w3NPghBhObqADJRIUFZ83uqpJDbhoT0lv+3pPcGgtOH5GArhA7v5rPYthDDTZf9N10vPy5i8D7KFoi6ZxyOvJvj8V9tku3uzIk4H+WXLzj+/zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776787856; c=relaxed/simple;
-	bh=qCC5hSOMe/AlmNbrZ9nLMkG3sz8wvkzb1FVsUePXCBo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=fAoZcwSvWOAKQ+1DIcvnlfWdNLa9Pe37s5+F3JmL3jwbJ8wiX/MBDMfGHSIkxviQb1bNUVx2UwwrohRE7lKMOdWw1ocIQzhir5CSLw0n2LQ5J/66Jq9be0qhVkjKSs0XEvrFOeGRXecrTWIL2pijEcx2Hn4L/uFrr03knbYwCFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rv2ZyWvP; arc=none smtp.client-ip=209.85.167.169
+	s=arc-20240116; t=1776788585; c=relaxed/simple;
+	bh=FluqA9Z1585luOqKpG6brmlNk0SxUiT15guNdVL6v6k=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=A3taR6dcIRNi5wMfH1oHJDNHDLvUye2YzwCMNMXrTOlNKj5PJUGLaG4JCcGrGHdarVgRukubU3YRln9VvGcA4zd+3toQXRv2ucN+PEbSd4Pfvuemv/zTszvLfntdwtQYlhlOgCDEZvzrj60E83yhyt90gXMDrfreFSVnX7r2IkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X2AZfj8p; arc=none smtp.client-ip=209.85.160.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rv2ZyWvP"
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-45f053b7b90so2526952b6e.0
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:10:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X2AZfj8p"
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-404254ffe8aso3075245fac.0
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 09:23:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776787853; x=1777392653; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1776788583; x=1777393383; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KlePGMUlJ76+PKDU/NhCfOzFaD2adBfoLGFykuoGKWw=;
-        b=Rv2ZyWvPZl5gDECGVM2eIPeJsuulgnjtcs9X41ptwf+jo+EpH7hsm7UAMmlo1Ff3gN
-         Yots2hnV0wNhmQQdnGF1P8hHzKDaP9mJb2lyapuRPji08lQMi9qJKIUZy1zluubcivTq
-         nD+LwPIb3f+K263leSJzjg/A5HV0IODG+lBCdrvTf1FPEgsKA9JIiYFPG5+GorAWtLC8
-         HvTvWuO9R4u4yTwO65YVewvEpykHl3ALZPxopkZlyCUkv8+/jhXkcMfE71CEH2DZxtgx
-         Mto+dN+0AettrUlwwtTL3DDplRXFyjSI60iZHRXeV8xrE6m8xxo/N6/4NW70oaWdS2O6
-         oBKw==
+        bh=qYXSGEWsmPfO4gVweI3GLIYXxe1T9Z2+cDZaQRslPGk=;
+        b=X2AZfj8pmJcFL0xFxI6rAljJFiq72dAnHPPNbQucvaVmVFfooR4JcdeBQpQgRnfQv8
+         Q9yx3IBsiVfzjvjIkCqoB54n9/N0PwQCJShoJKU2hZxzBqNhbLnssqFmlfOJ9sE2B2rc
+         tBaANmnRKXaNASLxrxwwCXEW1scW2weJNyc64+1PiJ3saUfnkBnQGMV8BDPtx45Ls5J1
+         zfrWvMLpaYOBvEcO6g8f9mAha5HA5JNKGiGrLgOQtKfWdh0G8EQ+2IZHZ+iuI6HxXjVz
+         NG5c+eEurZuzss+uyuEMid4RtjXgYUZ4zhRBKDvS93uCQVePnDuGghsci7U0suCGBvCq
+         /lOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776787853; x=1777392653;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1776788583; x=1777393383;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KlePGMUlJ76+PKDU/NhCfOzFaD2adBfoLGFykuoGKWw=;
-        b=Sxj4GXU7cZ/soVk5n3j4gThAvJu9jUUyewrvdTXZvZ+Wsvm72JRPuzWJBSftKygO/q
-         ZpMzTV7QiCNVdawg4fHHcBGSTNR2icfW7u4EPWxSoPB7AfDhV1uOVy6Es74Ng2RdxufM
-         tHn82pV6WDK2R0iObIjtZiSM0OwgHd71TsglPYT3P/16ok8PzfaPe7KaxOh2THqvPVlX
-         YyB6uE6i3MQZB2JPJswl/S0v39Xk9fpXm3AsrBjU9MDzA/R6THTecsY8c2218Az5jf5a
-         yxJv6DJkkHIbaQswKhW8J6qbh1/fGnpwXb2/a+COgViZR+TAcasJi5qeeW9EmPnvr4LQ
-         0rBQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+htt27OImX65EBInXFsRheXMTJ+USGg84Hqx7jRBDtsNj7fdZIuyJGN7V4lwxmrp1CJY4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHbeMRkqRGTP3RRYQPk/EKW7fphBVFOHskeSUerg2sW/g77zQM
-	bK2UQ2L5XxopazxbxUbZFGzz0E0eRTeoJbBHoT83pFtW3D6OhRgbtNgC
-X-Gm-Gg: AeBDieuG+FF8jVLYlJUBFHqa0sfmMlpGTZzNq32Q1wYRpvkmNbVMlm93sUy3CPpQw1I
-	3FWW6bopZWo1sSR2OJGJvCZbfHqkCWabL5iMOB8e9NCK3ylnlx9rkjR45F2DOVk3g5S2lmyG4L1
-	KttrJBMO4zmtCyPONjPI/kO/60j+/gQl5n212BuBjICDP4ErTAZzJeaAisNPPUgAwan+PKFg5yz
-	5Ys1COOW7ExSep5TFHsbIHCv+6yW1+Cd0aCELrNxHmqvXSnXdiGBlAEFGl6TnOqFD7PsfYyTfYM
-	P/ekJsjr28WS1C9GaFHm7hqevRlgrdSrm+AA5ykTKWeiT6J7nYz41VT41JvW0QSbIAYgpp35bIN
-	aiGBu8y7OMnKzp9VzDh2sq4ZfC4O4KzpeGk5YVutghwgw3HKzuFxLKo0nVVmw7AX7JEYq5+IrCh
-	jibDqXUBbo43DIe1AkRAOOI+xK8yLLiPmAsS71r8PRuID/ZeDM4XU4wbZmb7ZcQGemSXnqC0uKT
-	KazBkRWoBe+dQw1ZM5w8MT81uiOFPSBnyr5U34=
-X-Received: by 2002:a05:6808:f89:b0:479:f928:44ec with SMTP id 5614622812f47-479f9378c6dmr773316b6e.42.1776787853621;
-        Tue, 21 Apr 2026 09:10:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:45::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dcd56bd0e4sm3243257a34.2.2026.04.21.09.10.51
+        bh=qYXSGEWsmPfO4gVweI3GLIYXxe1T9Z2+cDZaQRslPGk=;
+        b=RW9WnyGMSS9hwtiT9N1XiFcX6yKb7lUSswM0dinE3F5s65zy+FZ7TnjjSSL2rwNECC
+         guqkEFCeI/NKMw2HM/PPJPimwOFdW/v7LuuDyC78r88hgYs+PG1+pBr9pahT8rfpIUdu
+         TWD0v3rpdHZxUkaYX93Ywc5drGePTtNBp+Jsb5tRWubU0se7Hs4AjoQWpWl7u5lMUwK0
+         4KYos6djw3mFGQRg39Rfx7yW7VKn8F9kLQvECoNVOb/EsyWivM728iTy2KJ11kBux4l7
+         kJnXlcSnvhKxUCymTrau7rc7qIKXz2y9Cczo7Z5sjcDeAXHf9LOt7bGLzQe8yjDFWzZH
+         CCYw==
+X-Forwarded-Encrypted: i=1; AFNElJ9a2D9AP1fBv1NBVaalPZxIpfBMNCBs7SG3LvDZJmbf5yKu4oP8f5T3Jmtx4K3vKSTPVsc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/H2SwmgucGe4qMQEl2rT+jCYCCpEdxkCdWiTy9hyqDOhBLcgj
+	iW9PuTX6E5xG9V9fCZUyMKGLghKy/oUfKA6TjeFwi2Is6NUftk6Rgbpr
+X-Gm-Gg: AeBDievgKgc8PsUfsBFAqOXDbaPWRKnXFU0n1PXNB0GR63GbDsrI8YhGYCnk/Q7hP1j
+	q3GiC/abRfTjqolpMFs4DGUzilCc2mafOjR0dTrRD1CsW1wHDu/Wy+VvTNKi75uj1zk4WoTYilB
+	qvri+W3LFRmC1AZwr4NAGvqmYM/29HFxIYpWCdYe5vuKi0Xaj+VOiDE9aI2K2eFJ8sq7sLA2Pbk
+	T5g7VztYpNUif7plQavBjECaKs4f+ukXDPWiwNMoqIH31/3fXXYhAObRYAWhm9gCFv0+VtX+aVP
+	UluIsOUA6uLWZfIdK/dhgSElZq3oXprArxDAvZz8phYeM7M+Fz2rV684BRCm6NM/WnE6sRpNcHR
+	7Im0uGffCyAq33NJvM+hRs1qb+lhGQpQVLX7eoK0rCemiUrtxaPwxe1KV/d/lv2aUp6ZSXLN/yv
+	TEgRZseePkpBFBUGe3YqomVY0mBDYi4vKqH1XRNqGSidqbyZQ5lccRpJ5H/LvA4H/lJi7X1r6Cl
+	ssnMf3pcYxBVnm1ni7/sXZO9IX/YVXPbgU=
+X-Received: by 2002:a05:6871:d207:b0:3e8:9b72:5cda with SMTP id 586e51a60fabf-42a99890765mr9825186fac.11.1776788582894;
+        Tue, 21 Apr 2026 09:23:02 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42b93048e4dsm10842986fac.2.2026.04.21.09.23.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2026 09:10:52 -0700 (PDT)
+        Tue, 21 Apr 2026 09:23:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,58 +67,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 21 Apr 2026 09:10:51 -0700
-Message-Id: <DHYYQ6F0ZVAB.1FNAHDCF3WHKX@gmail.com>
-Cc: <daniel@iogearbox.net>, <martin.lau@linux.dev>, <kernel-team@fb.com>,
- <yonghong.song@linux.dev>, <shung-hsi.yu@suse.com>,
- <paul.chaignon@gmail.com>, <harishankar.vishwanathan@gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/4] bpf: replace min/max fields with
+Date: Tue, 21 Apr 2026 09:23:01 -0700
+Message-Id: <DHYYZHXEVG03.VESM7HY6A8ON@gmail.com>
+Subject: Re: [PATCH RFC bpf-next 3/4] bpf: replace min/max fields with
  struct cnum{32,64}
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
  <ast@kernel.org>, <andrii@kernel.org>
+Cc: <daniel@iogearbox.net>, <martin.lau@linux.dev>, <kernel-team@fb.com>,
+ <yonghong.song@linux.dev>, <shung-hsi.yu@suse.com>,
+ <paul.chaignon@gmail.com>, <harishankar.vishwanathan@gmail.com>
 X-Mailer: aerc
 References: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
-In-Reply-To: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
+ <20260421-cnums-everywhere-rfc-v1-v1-3-8f8e98537f48@gmail.com>
+In-Reply-To: <20260421-cnums-everywhere-rfc-v1-v1-3-8f8e98537f48@gmail.com>
 
 On Tue Apr 21, 2026 at 3:28 AM PDT, Eduard Zingerman wrote:
->
-> Debug metrics
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> To understand the practical impact of the precision trade-offs,
-> two debug counters were added (here [3]):
->
-> - isec_overapprox: counts how many times cnum_intersect() in
->   conditional branch refinement had to collapse two disjoint arcs into
->   one, losing precision that the signed/unsigned pair could represent.
->
-> - crossing_poles: counts how many times an ALU operation produces a
->   cnum that crosses both the unsigned (0/U_MAX) and signed
->   (S_MAX/S_MIN) boundaries simultaneously. Such cnums cannot be
->   represented as a pair of signed and unsigned ranges.
->
-> Across 6683 programs:
-> - crossing_poles fires 551K times for 21% of programs.
-> - isec_overapprox fires 119K times for 12% of programs,
+> =20
+>  static void scalar32_min_max_udiv(struct bpf_reg_state *dst_reg,
+> @@ -14119,7 +13548,6 @@ static void scalar32_min_max_udiv(struct bpf_reg_=
+state *dst_reg,
+>  			 reg_u32_max(dst_reg) / src_val);
+> =20
+>  	/* Reset other ranges/tnum to unbounded/unknown. */
+> -	reg_set_srange32(dst_reg, S32_MIN, S32_MAX);
+>  	reset_reg64_and_tnum(dst_reg);
+>  }
 
-so cnums win 551k times and lose 119k ?
+div/mod don't need special cnum_div ?
 
->   most programs have only 1-5 hits. The bulk comes from a few large
->   sched_ext and profiling programs.
+> @@ -15861,38 +15209,54 @@ static void regs_refine_cond_op(struct bpf_reg_=
+state *reg1, struct bpf_reg_state
+>  		break;
+>  	case BPF_JLE:
+>  		if (is_jmp32) {
+> -			reg_set_urange32(reg1, reg_u32_min(reg1), min(reg_u32_max(reg1), reg_=
+u32_max(reg2)));
+> -			reg_set_urange32(reg2, max(reg_u32_min(reg1), reg_u32_min(reg2)), reg=
+_u32_max(reg2));
+> +			lo32 =3D cnum32_from_urange(0, reg_u32_max(reg2));
+> +			hi32 =3D cnum32_from_urange(reg_u32_min(reg1), U32_MAX);
+> +			reg1->r32 =3D cnum32_intersect(reg1->r32, lo32);
+> +			reg2->r32 =3D cnum32_intersect(reg2->r32, hi32);
+>  		} else {
+> -			reg_set_urange64(reg1, reg_umin(reg1), min(reg_umax(reg1), reg_umax(r=
+eg2)));
+> -			reg_set_urange64(reg2, max(reg_umin(reg1), reg_umin(reg2)), reg_umax(=
+reg2));
+> +			lo =3D cnum64_from_urange(0, reg_umax(reg2));
+> +			hi =3D cnum64_from_urange(reg_umin(reg1), U64_MAX);
+> +			reg1->r64 =3D cnum64_intersect(reg1->r64, lo);
+> +			reg2->r64 =3D cnum64_intersect(reg2->r64, hi);
 
-and most losses are in sched_ext, yet overall it's a win:
+Maybe a helper like:
+cnum64_intersect_with_range(&reg1->r64, 0, reg_umax(reg2));
+?
 
- scx_rusty.bpf.o  rusty_enqueue         39842      22053  -17789 (-44.65%)
- scx_rusty.bpf.o  rusty_stopping        37738      19949  -17789 (-47.14%)
- scx_wd40.bpf.o   wd40_stopping         37729      19880  -17849 (-47.31%)
+Also I found only one case:
+dst_reg->r64 =3D cnum64_intersect(u, s);
 
-> - 801 programs have crossing_poles > 0 with isec_overapprox =3D 0.
-> - 202 programs have isec_overapprox > 0 with crossing_poles =3D 0.
-
-similar wins vs losses story ?
-
-I think even without wins we have to adopt cnum-s mainly for memory
-savings. Once we move to model where do_check_insn() is a transfer
-function the memory savings will become more important.
+all others dst and src are the same.
+So maybe:
+cnum64_intersect(&dst_reg->r64, ..);
+as a main helper and __cnum64_intersect(r->r64, ...) as a subhelper that re=
+turns cnum?
 
