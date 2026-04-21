@@ -1,195 +1,105 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8E43115A5
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 15:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9F926A08F
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 15:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776786107; cv=none; b=YOWTg9xvQ48w2zVecI3OztnpkhsaEziysQQcupCnuTWIBcKN+Wbzqbdt0GperwJEQaoc2KVJM4Bxove9Tbei85uD7RPcUDNUPkceYFbvNB6nwvEuak59soYZq4mAfawQdpRgpBAZM49qlTCDwJ2nHZpc2lwr4ECZdLwzEJpm4xs=
+	t=1776786377; cv=none; b=U+jF1JApKId8iUdwhhHRAMg2J3AMVswA7EmqXEEc9wR17YIdK1onYuP0a9JZyNQEz0445Gf6wy2EYXxAyvG+1h3BzgMUOJtdYrOCrWlxDe9YObQ16FoQybDHS49bqO1B9f0agPU4kARxxrTjF8+JeCYawH7Rfm5PNODcXIV78wM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776786107; c=relaxed/simple;
-	bh=2iAmJJeGfxpWOt9NDR3SgwLXHWpF7sBj7FBYyyP6ick=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qEHOiNIK/UQkofZceBg8jV6PZ5fH65V57F77AjLaHTgk+Z7k2vVjbT0GTk9y5H3aqEAHmpHutMCv/2Vx1b5A8jQweKVuY6F72NRltNKksOLp1/iYouOogCvxMvEiC9exAHH8kV18QAyKqtT1Eb/ZWvh8vrXqhgUEFUt7ORgylnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=brrViA0/; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776786377; c=relaxed/simple;
+	bh=fwm8O7fO3NFhQaUriCmhWV7ohqm4cnZTfrgqa2DuRs0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=POqvJn1eg7yud4XG6/uN1XhNhQ1IzDr07QT0mlwqIDJPyb9S3h7NtZco1lEmKLMcaSxUWan52j1pqZqBVmN8iy/2TDOKKanR3KMwREtXGDKWJzNYbRoxDzGFaQkhhERxGWXyB9WQScEFsYADcXVs+2RxuyOMtsy9mKYzu33zydY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XnC9Jspb; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="brrViA0/"
-Message-ID: <cba1d567-84db-4597-8e7a-a2203f1209d6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776786100;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=piWjMPLLd+qpMVnS1fcDVIVavbm2JG4HwknidPrqY/0=;
-	b=brrViA0//CrmmGgKUiCdkz+g4/cqaezk/yP/8hySskjPWlrN8eYlovib5HK53zHhwqEpK3
-	kTpWrfNBOzgvfBZijOX0PRRHrjAaxqlh1vTbw1y/rXaPtYRgn8R9awkB2B8P/8eXSSfA8n
-	R5US0dvszv/6bvrn452PX2oJsFzL0BU=
-Date: Tue, 21 Apr 2026 08:41:34 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XnC9Jspb"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7dcdca9dd6cso567391a34.3
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 08:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776786373; x=1777391173; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tMOfOMru40MWOZI1yWY91Y8nlbljDzDRYHEsnCEWZxA=;
+        b=XnC9JspbOeKkaNLZIsRRCpRtZAAVAg9zSeXmcY3EeY76y+OqPEfghWncEeQrq69TLq
+         P4JlHbpUPto63x9bjTgPNNmUYzVqr/gFY5s/z+atqECI3yboSGoFGQvj1qPfCWc6rvNU
+         iZMmxUG7VVNyUu9XcII+hfCajRsS0Un8CEjveR+IEERfG2O5qmMewjpT2666aLQL/lwY
+         UnG0mR8s+Oq1D+4EM3LuujkWfwzZLpMMTFCpRcNSEuDRX+oCdMYnk5yMjhMzEZH8djvu
+         +9oW08ksw0TlPe0xhHxpck5kT7DcK6tw904Pnu1PuqkoUhtlAFkPRaEGt6Lv/UsX+MPf
+         WZ/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776786373; x=1777391173;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tMOfOMru40MWOZI1yWY91Y8nlbljDzDRYHEsnCEWZxA=;
+        b=pfxc9mum8ICvJ7u2jKZfcAEvXuRl2OA+oBlAdXsKoeHN/ULaK9Ax4MP2WpnUa5bnpe
+         mnUaqG32u13M6Q9SKSEW3SDj7pnc2bBCo3HwOmjzwWHL0Q1AIoIf3j0/61rgebAINHle
+         OGDdfnIlgJNAxd4HTJ8RnnkE99LKKkSkp9LAUJJRAzvdOxmRltJgbevpYnCYsU/bNuRi
+         11i+RP/XwTRpWs1p794TxU4V0jfCpAa4xTryCPsSq0r5X8lrYI4XQDAGRAnvJ2I0ZfDr
+         iZA+Y0IwhoBH8PuTcHqoEsPLPKS7dHO4QwxOGrW5rlBjDcJF+jWX1/8hC7SII2Jq6UCl
+         PLGw==
+X-Gm-Message-State: AOJu0Yyuepuaa2QnkIy4OaXfpNSYGVrAwRutAfI9lAaKFCnlC/y7xTae
+	xu+UtYGGtiRqY3aUNsTNDqyjd5BuLcyG/GjwoqLo8CMrTM2F1XGL24AH
+X-Gm-Gg: AeBDiesoSRcvtiOswBxNPF4GPTFcNBsUQu81KpVgqfRUd4q7aa5foRw7dBRVOANKof/
+	rn6aDQJ+0D44fKJEv6G8ZLj7avXN6AZrgpYA4IgdwlbaJNYKI0CavGhJYTAYunTVrgHnyD8VRll
+	C8nYZuKZ/9iO2EGoEP6OM9JZV57fcHKnMf0/N4K3VGi44q+P9dWv46flMyBdK19ua4vs2yTNqBl
+	G93i74hM1kUuMLD82WEjsfA8NBuT42vePWPRI4RUmx/p+PM2LUVCcakEtO9s9U/Dly3kTSN9jpr
+	i0xTd8W7Ahu9cGybskvpHvWUMM/vHDFmWS64ipt11u8iXbSjBunmD5A7Xy/gPSahJkFZjgjqyqc
+	+2A6lmpy/rHsu6tkxc2+a7zmbNGX1Wbzz+jW3P64VHimCzrU5lg+XVTv9FDg5t6bdk53DqUtpo0
+	pDAKgjkRjCAwjyGZ+Jb9LIWSI1Sd8tmSOVt03z41s0L6+c4blWw8jkBBPLAZ9eFMUZjQAJF1ILE
+	4ykwj3iXfmO8nnsdXr4JHQ47WAF
+X-Received: by 2002:a05:6830:67f6:b0:7d7:5559:3d1c with SMTP id 46e09a7af769-7dc94f961d0mr11803157a34.1.1776786372850;
+        Tue, 21 Apr 2026 08:46:12 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc975033acsm11418725a34.1.2026.04.21.08.46.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Apr 2026 08:46:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v6 04/17] bpf: Prepare verifier logs for upcoming
- kfunc stack arguments
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "Jose E . Marchesi" <jose.marchesi@oracle.com>,
- Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 21 Apr 2026 08:46:11 -0700
+Message-Id: <DHYY7AN4MZGJ.3FU2NLXWT7NX@gmail.com>
+Cc: "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+ "Kernel Team" <kernel-team@fb.com>, "Martin KaFai Lau"
+ <martin.lau@kernel.org>
+Subject: Re: [PATCH bpf-next v6 04/17] bpf: Prepare verifier logs for
+ upcoming kfunc stack arguments
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>
+X-Mailer: aerc
 References: <20260419163316.731019-1-yonghong.song@linux.dev>
  <20260419163336.733654-1-yonghong.song@linux.dev>
  <DHYE574ZW4D7.2RNZPHN9QHT8@gmail.com>
  <2259b511-ca71-46a5-a416-8ea6ff0785b6@linux.dev>
  <CAADnVQ+fb4mY4ermo5GBtz1jx7kB4xsDGE23m2G8qEQa261VNg@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAADnVQ+fb4mY4ermo5GBtz1jx7kB4xsDGE23m2G8qEQa261VNg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+ <cba1d567-84db-4597-8e7a-a2203f1209d6@linux.dev>
+In-Reply-To: <cba1d567-84db-4597-8e7a-a2203f1209d6@linux.dev>
 
-
-
-On 4/21/26 6:48 AM, Alexei Starovoitov wrote:
-> On Mon, Apr 20, 2026 at 11:07 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+On Tue Apr 21, 2026 at 8:41 AM PDT, Yonghong Song wrote:
 >>
+>> it does:
 >>
->> On 4/20/26 5:03 PM, Alexei Starovoitov wrote:
->>> On Sun Apr 19, 2026 at 9:33 AM PDT, Yonghong Song wrote:
->>>> This change prepares verifier log reporting for upcoming kfunc stack
->>>> argument support.
->>>>
->>>> Today verifier log code mostly assumes that an argument can be described
->>>> directly by a register number. That works for arguments passed in `R1`
->>>> to `R5`, but it does not work once kfunc arguments can also be
->>>> passed on the stack.
->>>>
->>>> Introduce an internal `argno` representation such that register-passed
->>>> arguments keep using their real register numbers, while stack-passed
->>>> arguments use an encoded value above a dedicated base.
->>>> `reg_arg_name()` converts this representation into either `R%d` or
->>>> `*(R11-off)` when emitting verifier logs. If a particular `argno`
->>>> is corresponding to a stack argument, print `*(R11-off)`. Otherwise,
->>>> print `R%d`. Here R11 presents the base of stack arguments.
->>>>
->>>> This keeps existing logs readable for register arguments and allows the
->>>> same log sites to handle future stack arguments without open-coding
->>>> special cases.
->>>>
->>>> Update selftests accordingly.
->>>>
->>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>>> ---
->>>>    include/linux/bpf_verifier.h                  |   1 +
->>>>    kernel/bpf/verifier.c                         | 649 ++++++++++--------
->>>>    .../testing/selftests/bpf/prog_tests/bpf_nf.c |  22 +-
->>>>    .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
->>>>    .../selftests/bpf/prog_tests/kfunc_call.c     |   2 +-
->>>>    .../selftests/bpf/prog_tests/linked_list.c    |   4 +-
->>>>    .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  14 +-
->>>>    .../selftests/bpf/progs/cpumask_failure.c     |  10 +-
->>>>    .../testing/selftests/bpf/progs/dynptr_fail.c |  22 +-
->>>>    .../selftests/bpf/progs/file_reader_fail.c    |   4 +-
->>>>    tools/testing/selftests/bpf/progs/irq.c       |   4 +-
->>>>    tools/testing/selftests/bpf/progs/iters.c     |   6 +-
->>>>    .../selftests/bpf/progs/iters_state_safety.c  |  14 +-
->>>>    .../selftests/bpf/progs/iters_testmod.c       |   4 +-
->>>>    .../selftests/bpf/progs/iters_testmod_seq.c   |   4 +-
->>>>    .../selftests/bpf/progs/map_kptr_fail.c       |   2 +-
->>>>    .../selftests/bpf/progs/percpu_alloc_fail.c   |   4 +-
->>>>    .../testing/selftests/bpf/progs/rbtree_fail.c |   6 +-
->>>>    .../bpf/progs/refcounted_kptr_fail.c          |   2 +-
->>>>    .../testing/selftests/bpf/progs/stream_fail.c |   2 +-
->>>>    .../selftests/bpf/progs/task_kfunc_failure.c  |  18 +-
->>>>    .../selftests/bpf/progs/task_work_fail.c      |   6 +-
->>>>    .../selftests/bpf/progs/test_bpf_nf_fail.c    |   8 +-
->>>>    .../bpf/progs/test_kfunc_dynptr_param.c       |   2 +-
->>>>    .../bpf/progs/test_kfunc_param_nullable.c     |   2 +-
->>>>    .../selftests/bpf/progs/verifier_bits_iter.c  |   4 +-
->>>>    .../bpf/progs/verifier_ref_tracking.c         |   6 +-
->>>>    .../selftests/bpf/progs/verifier_vfs_reject.c |   8 +-
->>>>    .../testing/selftests/bpf/progs/wq_failures.c |   2 +-
->>>>    tools/testing/selftests/bpf/verifier/calls.c  |  14 +-
->>>>    30 files changed, 474 insertions(+), 374 deletions(-)
->>>>
->>>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->>>> index b148f816f25b..9fbbddc40d21 100644
->>>> --- a/include/linux/bpf_verifier.h
->>>> +++ b/include/linux/bpf_verifier.h
->>>> @@ -913,6 +913,7 @@ struct bpf_verifier_env {
->>>>        * e.g., in reg_type_str() to generate reg_type string
->>>>        */
->>>>       char tmp_str_buf[TMP_STR_BUF_LEN];
->>>> +    char tmp_reg_arg_name_buf[32];
->>> the name is too long.
->>> Just tmp_arg_name ?
->>>
->>>>       struct bpf_insn insn_buf[INSN_BUF_SIZE];
->>>>       struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
->>>>       struct bpf_scc_callchain callchain_buf;
->>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>> index 3716d9688d00..6aa4dc161a56 100644
->>>> --- a/kernel/bpf/verifier.c
->>>> +++ b/kernel/bpf/verifier.c
->>>> @@ -1751,6 +1751,55 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
->>>>       return &elem->st;
->>>>    }
->>>>
->>>> +/*
->>>> + * Unified argument number encoding for verifier log messages.
->>>> + * Register args (arg_idx 0-4) use their register number (R1-R5).
->>>> + * Stack args (arg_idx 5+) are encoded as STACK_ARGNO_BASE + arg_idx
->>>> + * to avoid collision with register numbers. reg_arg_name() decodes
->>>> + * this back to a human-readable string like "*(R11-8)" for logs.
->>>> + */
->>>> +#define STACK_ARGNO_BASE 100
->>>> +
->>>> +static bool is_stack_argno(int argno)
->>>> +{
->>>> +    return argno >= STACK_ARGNO_BASE;
->>>> +}
->>>> +
->>>> +static u32 make_argno(u32 arg_idx)
->>>> +{
->>>> +    if (arg_idx < MAX_BPF_FUNC_REG_ARGS)
->>>> +            return BPF_REG_1 + arg_idx;
->>>> +    return STACK_ARGNO_BASE + arg_idx;
->>>> +}
->>>> +
->>>> +static u32 arg_idx_from_argno(int argno)
->>>> +{
->>>> +    if (is_stack_argno(argno))
->>>> +            return argno - STACK_ARGNO_BASE;
->>>> +    return argno - BPF_REG_1;
->>>> +}
->>>> +
->>>> +static int next_argno(int argno)
->>>> +{
->>>> +    return make_argno(arg_idx_from_argno(argno) + 1);
->>>> +}
->>> I don't like this +1, -1 dance all around. Makes the whole thing
->>> hard to follow.
->>> Keep argno starting at 1. So old regno == argno.
->> The above make_argno() returns an argno having regno == argno
->> for regno 1-5.
-> No. It doesn't.
+>> +static u32 make_argno(u32 arg_idx)
+>> +{
+>> +    if (arg_idx < MAX_BPF_FUNC_REG_ARGS)
+>> +            return BPF_REG_1 + arg_idx;
+>>
+>> so for argno =3D=3D 0 it returns 1 and that's my objection.
+>> Make argno starting at 1.
 >
-> it does:
->
-> +static u32 make_argno(u32 arg_idx)
-> +{
-> +    if (arg_idx < MAX_BPF_FUNC_REG_ARGS)
-> +            return BPF_REG_1 + arg_idx;
->
-> so for argno == 0 it returns 1 and that's my objection.
-> Make argno starting at 1.
+> Okay. Will do.
 
-Okay. Will do.
-
+To move things forward please resend the first 6 patches only.
+So we can make sure that they're in a good shape and land them first.
 
