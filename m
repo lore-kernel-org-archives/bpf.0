@@ -1,128 +1,141 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DEB397E91
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 08:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB57331203
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 08:55:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776761732; cv=none; b=j9HcGfAywMloUd79vLbXmUIQtICDKbnkToUSklE7xmYEwanwXKBEWFB62VybHxBAcFWRE0fckgDgfzgDaViaHqBRSVuhELr4F6fqMtIepgKMHHrV3ZlJkrF+GV4FbTInkhypAUMLHV+t/CSrzCLVlCg3khUObKeTPAPyjk6zSO8=
+	t=1776761743; cv=none; b=Bp7Y58khUuifjJlJLT4TK9vL1K6xi6tFXqlhMZJiZQy93Hgd173b9pm428DmJ4mUvmr2Op9NTDqLMlcsTpQErsbEp+Yqb3and/yhtqgm4lE/WKdUucF03QSlmQ+GvCvLLk3Kq5ZY709l2pIKdQu0RwWk5YIRtdqbPK/fx+dcezE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776761732; c=relaxed/simple;
-	bh=zp8m0hZfqXYdsZ8Gpssb//3/JgQgTLa24jkQvLUpf3o=;
+	s=arc-20240116; t=1776761743; c=relaxed/simple;
+	bh=6McYy461bijCUAFHC5l3ji/PR6N+L3vcGNyzVKEBb+o=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XWk3IwJMM54I8R9X9E/hwAogxztNlngqBAJ0SXP/WP2fX1sC2hVJongzLn+Kq0Bqfz+qGZ4z69a7ltVQB2h4aWE+fWK0cWK1oymJIGG+2fr1xVASGsMMLuUzWVI76pZj4CBNECTPByiDZ6UKeNBqtU/nK3K2LRPbeH9o2QpIiHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LThFAbjs; arc=none smtp.client-ip=209.85.128.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=jCwXUocyVUAcA7R/WCHhVH8awwR14vU38kJ7605VcBBRD82Qx6NM+cjI+auFMOIGbUXDWIXmh7njWA8B20pKPzl6neqxtke2LjjOVvOjIaja9ughRHPEIkgg6voQK1diTsMZz8jhc0IWIJmArWnOsUbk3R7z4+m0Bup0V9zPADA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JGDvJAIW; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LThFAbjs"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488ab2db91aso53245145e9.3
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 01:55:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JGDvJAIW"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43d734223e4so2697423f8f.0
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 01:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776761729; x=1777366529; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cDeAb0ooy5qQHA5qWOHd2pXo48UvQ+5ANorl5Zuk5Uo=;
-        b=LThFAbjsyMAQ0b5zNpcUjvatr1t3/3w9OTqTlXYc7SffylrT8g/aVvG/FmYUUy4MGy
-         nOPcsuYZS+I+nUjMdMZ7pB9y/wYuP9AF1DQNlx//PJVo1kjsLg3aCaLqwuW3KOv6ai3m
-         /sxkJ6LR63i9vCCbpkp6QQX37hj/RMcFu9FXElML+/5Hz5efg8VaJOGcjnCKbTkFAEQE
-         TcqWHcT18PwFD9cgF5794Q8G93QCWo5w8hyKPlkQXZsTuTYgA/Q1SyDN0vev+mKB3uRd
-         itqmDERyUKTFk/ZjfwZtJuvJhkWQ+G1Q2bCaS6X+j+D1QvMQBbOIvIVqIyb8WwQQ3jST
-         1k2A==
+        d=gmail.com; s=20251104; t=1776761741; x=1777366541; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+ddKnE6lkkUQV3xtljOGxMa6CIyS9sv5i2KFEzVc9Jc=;
+        b=JGDvJAIWIdPYzqzJmd1YwP0R1gZuyMV54TMHkMm93Y0VGilCumHeZJnA0IRDasTYxE
+         KqvuvBBh0WiRwt7RLeRESMTkjVN1LkfMIZWEIb1aXxyJx0URqpo4YfBDaLz+aR1Lsajz
+         Y4I+pHJ0HmhnaNN1vJA2Tn2tCKF8qD22mcxbUHzZJdM6xhMokPSfxiXFiYtIZPm/KDYy
+         +wrqFMSkKTNsDAUAMdmuhqxw/4r6Wzh/qrHCI9zLfOYzHZe6JFTkWEPWq1yr1RzHs48f
+         OQ20Byx7/gre5XD5sxPj+3rF6mqz8yO61ZB8fo3qVIhoabwkOXxEm0yG8X7kMfuWAxsm
+         6LkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776761729; x=1777366529;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cDeAb0ooy5qQHA5qWOHd2pXo48UvQ+5ANorl5Zuk5Uo=;
-        b=Le0SiZdDtMdwTQUPadJdc35QOCXrpcco85pxSQWEKp5IOmJ5VeeLtRKy0KaXfeCIFq
-         kyQy3PmvsHdG4Y/YI1KJl2j42+xiZi8Z/BM9oPvyhmYzaijOt5njbSmVRBY6tKq9yqxY
-         PjTJBKMyDILpjjDAbnXRXfo+wAvm8/SlQNjp6ANhmHBKnIzyf7M4GcpsL6OKA5tyn9Rn
-         t4zg6y6UNR4bGOfoJrMtthLjMv4M7edbBmBlO3Z8VEdr312iGxKy7BxRf8R0cY9GCPo8
-         ATdtSnYMpD5vzGyW8jrNS8b/6z4TY1cfudJHlsHbnQLIf/wxQ+INqcxsmmy+nLcTc2Ou
-         2J/g==
-X-Forwarded-Encrypted: i=1; AFNElJ+kLgqe5SUn9vzZX2I1lhKbn44hnblN6GEz6D4eevrCkGPt9WyCGCHFDKVhY2h6t30N2nQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTnUoO1JlRJC/IKfrM+f2hoVZAUP5GZj8Qv5oOFY9M0LHjwhTa
-	Pcf2WBbfCc/Skp0NiLLcIHWWJFhw+j5v8qKEeEMDJQeRcFqWc+IFbXnwWA1/Iunw
-X-Gm-Gg: AeBDiesrjuVbG6KaiiT+5HihiNcL5cPz97uS5BWb1cJxMtzNca2YmaDDrdbBkfDa4py
-	+JsoI6gQ9q+h03QTppg+BhSIQk9TvPSAAtbI6gu4LaclK8zVrMHu2ao0IozsL0y8e/6B2y7ILtt
-	/PN1UPTF0B6DrcY/mI43Kg2GXeFxBwP8RVl4rtUzFYT+JlrDqhqtjlFf463vMx4FyL0lIpQbUx1
-	zFu5R1CQZ/SD3di0Bt5kWrf22N1/6L2UB449Pim1IuWQbzIxUrXsja+iScnApDN5yfPugQsKPv6
-	QgzT7ETKSTDQnt26GwCVK7PSaI7xehA331ppIO19Tmo3qSfvxuAp5YizwhjfoWxbHgsFvks/G+N
-	+kvhwYKAxd69vTHXKHV+P2S+yKhguaJbnNvLZoSVMF5/Wl0SdA2igEJnHbv4lkUhHQ8cwCw3KP7
-	MljR0Y+DKbJG9M9LpAZw==
-X-Received: by 2002:a05:600c:a30b:b0:488:a639:b772 with SMTP id 5b1f17b1804b1-488fb7467e9mr172104105e9.7.1776761729296;
-        Tue, 21 Apr 2026 01:55:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776761741; x=1777366541;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ddKnE6lkkUQV3xtljOGxMa6CIyS9sv5i2KFEzVc9Jc=;
+        b=Bpnsri00S2VPiPuAT1+JQOyVGL53uDKUWw8n8yHtjCDgyUqDN/A5bvbMH6wXF1zVd2
+         ars0X6XXkOM6hF2yF2D78ALjFjmwKw4igbakX3fcLpl4sYjTuUnzzLGpQmz3JMB00Ob0
+         UOz1SenJvGPBQEw18yu62glg4+KAgWtgoMIyucTV3DKdBJX5/vOJJW0BevFXOD+Ob/nP
+         O7jhFmMXMg88PBbWOphV36JqIpo6AOh0t4oLQc2RNGQ2I9Pe3YoBgB27/qhzC0PBppDN
+         fdf6z+5Ti1z4ou8SSstlET4DH5fvbSyv4aUEfettgmjQi5uY3ObmKB8DURvyfz6D/0e3
+         NsoA==
+X-Gm-Message-State: AOJu0YxNpPcDjMZ6zVqnFNrF9hykWjGB8OvlOwq2lLggfy3Gk8VlzdBM
+	3joxuQSIUa8CaDweU3Ce5oL6D9NrW18CLT5jMI1rui+JhKJWjBSrLOL0
+X-Gm-Gg: AeBDievwbPsu65mf7230uWEnBIXbRfTpW+nXaq9zAsTDpwCtF02TFiS6YXEfL/eJhDl
+	WE8yBZrrSSS9r7JVS/6Q7X2SiA0CLCPUyBGpq4Z8nSWGeCFy196+CauwRKnJMXbfmWurEGnSibh
+	n7xxqUR3DtnwtY+3+gW32/j4vs3l6cYUQXWTfSKNuJ5i7kW7nBZ+u01lLamxdR+Lp4b12bUUc2Q
+	PsLHgT3V6eL+0BuP7qPIKc44fky9cK4tfkWG9lMe5hpZ52mw6zoSNNHuFol4HYwTXJePWpVLUsI
+	/oLE2HtoTDJu4Xs5vnC3g1BdGX3rlfBAeiaRLOZ9l7aXsWRTGfgPm1zuX2JqMWc+T3drjklcUnj
+	BcpafgJbyixN1NrmLzlmOFdnp/ypuUcEY2NBRGzS+HdY5gK7eHSmix/leDBFmwYIJlwyZe3oGLv
+	TFW2xmT7Q=
+X-Received: by 2002:a5d:6f14:0:b0:43d:7086:b03 with SMTP id ffacd0b85a97d-43fe4032b76mr22123952f8f.1.1776761740677;
+        Tue, 21 Apr 2026 01:55:40 -0700 (PDT)
 Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fb72d365sm169553525e9.1.2026.04.21.01.55.28
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4c221cdsm35812714f8f.0.2026.04.21.01.55.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 01:55:28 -0700 (PDT)
+        Tue, 21 Apr 2026 01:55:40 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 21 Apr 2026 10:55:26 +0200
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	hengqi.chen@gmail.com, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, kafai@fb.com, eddyz87@gmail.com,
-	songliubraving@fb.com, yhs@fb.com, menglong8.dong@gmail.com,
-	rostedt@kernel.org, martin.lau@kernel.org, yonghong.song@linux.dev,
-	clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCHv5 bpf-next 08/28] bpf: Add struct bpf_tramp_node object
-Message-ID: <aec7fuUhFjKLt6iQ@krava>
-References: <20260417192502.194548-9-jolsa@kernel.org>
- <fb38d0f3976f2225ae9781d2292bb79f4d787183360f050c08de3b4490790974@mail.kernel.org>
+Date: Tue, 21 Apr 2026 10:55:38 +0200
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCHv5 bpf-next 10/28] bpf: Add multi tracing attach types
+Message-ID: <aec7isklARy8JbqP@krava>
+References: <20260417192502.194548-11-jolsa@kernel.org>
+ <20260418040909.5F3B7C19424@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <fb38d0f3976f2225ae9781d2292bb79f4d787183360f050c08de3b4490790974@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260418040909.5F3B7C19424@smtp.kernel.org>
 
-On Sat, Apr 18, 2026 at 06:10:55AM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> > index 50103b3794fb..b97d9f68fc40 100644
-> > --- a/arch/powerpc/net/bpf_jit_comp.c
-> > +++ b/arch/powerpc/net/bpf_jit_comp.c
+On Sat, Apr 18, 2026 at 04:09:08AM +0000, sashiko-bot@kernel.org wrote:
+> Sashiko AI review found 2 potential issue(s):
+> - [High] FENTRY_MULTI and FEXIT_MULTI programs can bypass verifier bounds checks and read out-of-bounds kernel stack memory by directly accessing the `ctx` array.
+> - [High] bpf_multi_func lacks the __used attribute, causing it to be optimized out by Clang LTO, which completely breaks the feature at runtime.
+> --
 > 
-> [ ... ]
+> Note: The format of this review has been altered due to system recitation
+> restrictions. Direct quoting of the patch diff has been omitted, and the
+> findings are provided as a free-form summary.
 > 
-> > @@ -827,14 +827,14 @@ static void bpf_trampoline_restore_args_stack(u32 *image, struct codegen_context
-> >  static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_image,
-> >  					 void *rw_image_end, void *ro_image,
-> >  					 const struct btf_func_model *m, u32 flags,
-> > -					 struct bpf_tramp_links *tlinks,
-> > +					 struct bpf_tramp_nodes *tnodes,
-> >  					 void *func_addr)
-> >  {
-> >  	int regs_off, func_meta_off, ip_off, run_ctx_off, retval_off;
-> >  	int nvr_off, alt_lr_off, r4_off = 0;
-> > -	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-> > -	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-> > -	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-> > +	struct bpf_tramp_nodes *fmod_ret = &tnodes[BPF_TRAMP_MODIFY_RETURN];
-> > +	struct bpf_tramp_nodes *fentry = &tnodes[BPF_TRAMP_FENTRY];
-> > +	struct bpf_tramp_nodes *fexit = &tnodes[BPF_TRAMP_FEXIT];
-> >  	int i, ret, nr_regs, retaddr_off, bpf_frame_size = 0;
-> >  	struct codegen_context codegen_ctx, *ctx;
-> >  	int cookie_off, cookie_cnt, cookie_ctx_off;
-> > -	int fsession_cnt = bpf_fsession_cnt(tlinks);
-> > +	int fsession_cnt = bpf_fsession_cnt(tnodes);
->                                             ^^^^^
+> commit ca84efa8f86b1acb8cf0bd98e80446dbd7c92e12
+> Author: Jiri Olsa <jolsa@kernel.org>
+> Subject: bpf: Add multi tracing attach types
 > 
-> This line wasn't actually updated in the diff. The parameter was renamed from
-> tlinks to tnodes, but this call site still references the old name. Does this
-> compile?
+> This commit introduces new multi-tracing attach types BPF_TRACE_FENTRY_MULTI
+> and BPF_TRACE_FEXIT_MULTI, along with base verifier support. It uses a dummy
+> function bpf_multi_func for initial verification before the specific link
+> attachment happens.
 > 
-> The same issue appears later in the function:
+> Can this approach lead to out-of-bounds kernel stack memory reads? 
 > 
-> >  	cookie_off = bpf_frame_size;
-> > -	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
-> > +	cookie_cnt = bpf_fsession_cookie_cnt(tnodes);
+> Since the initial verification is done against bpf_multi_func, which is 
+> defined with 6 arguments, the verifier will statically permit direct context 
+> accesses up to ctx[5] (and ctx[6] for the return value in FEXIT_MULTI). 
+> However, when the program is attached to a real function at runtime, the 
+> trampoline allocates the context array on the kernel stack based on the 
+> target function's actual argument count. 
+> 
+> If the target function has fewer than 6 arguments, would reading ctx[5] read 
+> past the allocated context array and leak memory from the caller's stack 
+> frame? Additionally, would reading ctx[6] for the return value return 
+> unrelated stack memory instead of the actual return value, since the 
+> trampoline places the return value dynamically? Does the verifier need to 
+> explicitly reject direct memory accesses to the context array for these 
+> program types and enforce the use of bounds-checked helpers like 
+> bpf_get_func_arg()?
 
-ugh, it clashed with latest update for fsession,
-and I skip the build test for some reason, will fix
+ok, seems like we need to disable the direct access
+
+> 
+> Is it possible for Clang LTO to optimize out the bpf_multi_func function 
+> entirely? 
+> 
+> The dummy function is defined without a __used or __attribute__((retain)) 
+> attribute, and the BTF_ID_LIST_GLOBAL_SINGLE macro only embeds the function 
+> name in an inline assembly section without generating a C-level reference. 
+> In kernel builds with Link Time Optimization enabled, could the compiler 
+> eliminate this function as dead code?
+> 
+> If this occurs, pahole would not generate BTF data for it, leaving the BTF 
+> ID as 0. Would this result in the verifier's bpf_check_attach_target() 
+> unconditionally rejecting multi-tracing program loads by throwing a missing 
+> btf_id error? Should a __used attribute be added to the function definition 
+> to prevent this?
+
+I did not check with LTO, will check and probably add that attribute
 
 jirka
+
+> 
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260417192502.194548-11-jolsa@kernel.org?part=1
