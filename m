@@ -1,175 +1,213 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5C2332623
-	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 03:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FEF6363C45
+	for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 03:04:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776740586; cv=none; b=ERhDf64CtUkbCXQ23bbUka3L7vZlWDKNE9TG7B34fHqovP58MKp3rTR+cvbXl4FljbKusOC5Kgj4tJTx4nupTd/Tn96RJN7k3oDwR/xYWTlAroE54zLWbXnenYI+L+ml28e9xkPiQ1ZlR7fskuZQv7dbG8wwvTxfF/1yaaf206k=
+	t=1776740698; cv=none; b=CyKTa5KfSMRN7Wy3LCK00DkpfNXIlE5gTviLhSiuu6EA6dxgAe4jqTpW0R3yWbD2h6RAk2cUg4jO7rX3sMXrm6wuUV5U+FLhbIwQlb1hY7D2sHcjLoheXy+M9fVWGi6ahCKZkexk8W/HT+gX+4FQS/BDIVReA9O0QG+HXYnO/2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776740586; c=relaxed/simple;
-	bh=byiO81E6MX9h/njLlgv5IvYDC1ITDmOLRbJNiZDtRck=;
+	s=arc-20240116; t=1776740698; c=relaxed/simple;
+	bh=AfFUUR3UpSbNCjRjoXy1WRjALk61jW8gfIBkSQ9vcNY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bGN9w0OiM3q2C7qissQY5WUj5xM4zodNiVRkbLNBYCRttp1tItvV/1JvWjuUlOD5Wt3acfgcD9/hb4iqQVg0wZEz6/QIL9gzGXbP1ON6P1Ly+wYJDnoJ4oMJw+ibz+ClGpNynnlmoEJtwoGRvAvhZzPasuYJ60Q3zgXVcnrzHeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1wkIZko; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=iI8bssGhHRycUc6Ldq+YKsP1TeZ8tEn2BiJ1G+rqmo2sF+usj5tPjMw5Lv2yEHBmg77IYyvls2en/pDOEqCPfWtsec5Y1oOaDzMZLoXvBErxOUzXdy8nZFXlS7aRhdEadRQTl5+PZfqqXyVj3at7S/fGNq/870cgRIKkOHwzgcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEVMol0H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1wkIZko"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957A9C19425;
-	Tue, 21 Apr 2026 03:03:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEVMol0H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74C77C19425;
+	Tue, 21 Apr 2026 03:04:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776740585;
-	bh=byiO81E6MX9h/njLlgv5IvYDC1ITDmOLRbJNiZDtRck=;
+	s=k20201202; t=1776740697;
+	bh=AfFUUR3UpSbNCjRjoXy1WRjALk61jW8gfIBkSQ9vcNY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=I1wkIZko19QA+3Kz0IP1aozBE6Q8Ezfe/Be/aYSjdSuDzaVH/WcV7E8BQiJk1mac0
-	 M9vwx+g0+x/DqE3BxgSD84xGIdy9ChkebiMyGXilO+6BWV6/O6a67vOikZIAUwrcLL
-	 3eI2pVI8KxR5lJWJO3doui0F4DdSqYOyE7mllF6WJDIpGx9wr/c9Rbn7QC2s14L2PU
-	 CvLq0vqrKxzM5z6G7zrRzFPqGJJP4GksPdCXS8HiFd2ZVC3hmzknYGPhfzENp1TmoO
-	 WN18IyvKGiJxUJFYmbnyG3U1aiCAiArCNURnxO/Bq9NUtB9Bkyh/rFKqhlSGwHiUKZ
-	 y5dJhCNpJpJ7w==
+	b=gEVMol0HpD+RO8QZcQlRVNOqrtvH2/+PIOhy14EI2cHX/DEgX7WIC00IWJmQspq87
+	 VjX8hbpKav8KbWKuixHmVUIMYFXPAY11EGgUsBkdWWmAjLtLfJKUuyvBT1cf6xslEP
+	 L2A9q+W11lmdIVb+M9lnNFql4ClSIpCXqq3Xw7udFgq3o4aS+R6J+en2vXWM2jdn/Y
+	 0dSgqnzl6upPfL+6wAdwIc6ycucvV7oWNkYay6FCNb/GWEc0wItkljVT4MtL1Lr+Vh
+	 nSNrlme/ew1IwZVbflN947pxwjnyukJ0sXt0Ur93mXs6sSNjP1mmNuvj6s5dNZDZjU
+	 iQwu3j7B1XSPA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 07/10] hornet: Introduce gen_sig
+Subject: Re: [PATCH v5 09/10] selftests/hornet: Add a selftest for the
+ Hornet LSM
 Reply-To: sashiko@lists.linux.dev
 To: "Blaise Boscaccy" <bboscaccy@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260420212653.438685-8-bboscaccy@linux.microsoft.com>
-References: <20260420212653.438685-8-bboscaccy@linux.microsoft.com>
+In-Reply-To: <20260420212653.438685-10-bboscaccy@linux.microsoft.com>
+References: <20260420212653.438685-10-bboscaccy@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 21 Apr 2026 03:03:05 +0000
-Message-Id: <20260421030305.957A9C19425@smtp.kernel.org>
+Date: Tue, 21 Apr 2026 03:04:56 +0000
+Message-Id: <20260421030457.74C77C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 5 potential issue(s):
-- [High] Infinite loop during argument parsing on architectures with unsign=
-ed char.
-- [Medium] Ignored return value of `sha256()` causes use of uninitialized m=
-emory.
-- [Medium] Stack buffer overflow when parsing '--add' arguments.
-- [Medium] Missing NULL pointer checks for OpenSSL allocations.
-- [Medium] Unchecked return value of `ASN1_item_i2d()`.
+Sashiko AI review found 7 potential issue(s):
+- [High] Use of deprecated `bpf_probe_read_str` to read a user-space pointe=
+r.
+- [High] Hardcoded dependency on the host's `/sys/kernel/btf/vmlinux`.
+- [High] Custom Makefile rules are bypassed due to `$(OUTPUT)/` prefix mism=
+atch.
+- [High] Linking against the host system's `libbpf` instead of the in-tree =
+library.
+- [High] Unconditional hardcoded dependency on kernel signing keys.
+- [Medium] The selftest fails to verify Hornet's negative enforcement capab=
+ilities.
+- [Medium] BPF selftest `loader.c` uses raw conditionals instead of `ASSERT=
+_*()` macros.
 --
 
-commit 72bf19e54c723e2a7111cbc219bbeb6e98977318
+commit 162ecc15ea5091af09f42092fc7aa704f31709fa
 Author: Blaise Boscaccy <bboscaccy@linux.microsoft.com>
 
-hornet: Introduce gen_sig
+selftests/hornet: Add a selftest for the Hornet LSM
+   =20
+This selftest contains a testcase that utilizes light skeleton eBPF
+loaders and exercises hornet's map validation.
 
-This commit introduces the gen_sig tool. It creates a pkcs#7 signature of a
-data payload and appends a signed attribute containing a set of hashes.
-
-> diff --git a/scripts/hornet/gen_sig.c b/scripts/hornet/gen_sig.c
-> index 0000000000000..f966516ebc99b
+> diff --git a/tools/testing/selftests/hornet/Makefile b/tools/testing/self=
+tests/hornet/Makefile
+> new file mode 100644
+> index 0000000000000..432bce59f54e7
 > --- /dev/null
-> +++ b/scripts/hornet/gen_sig.c
+> +++ b/tools/testing/selftests/hornet/Makefile
 
 [ ... ]
 
-> +static void add_hash(MAP_SET *set, unsigned char *buffer, int buffer_len=
-, int index)
-> +{
-> +	HORNET_MAP *map =3D NULL;
+> +TEST_GEN_PROGS :=3D loader
+> +TEST_GEN_FILES :=3D vmlinux.h loader.h trivial.bpf.o map.bin sig.bin ins=
+n.bin signed_loader.h
+> +$(TEST_GEN_PROGS): LDLIBS +=3D -lbpf
+
+Could this link against the host operating system's libbpf.so instead of the
+locally built in-tree library?
+
+It looks like it lacks the -L$(BPFDIR) library search path. If the host
+machine doesn't have libbpf-dev installed, the build might fail, or it could
+link against an outdated version.
+
+[ ... ]
+
+> +vmlinux.h:
+> +	$(BPFTOOL) btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+
+Does this hardcode a dependency on the host's running kernel instead of the
+target kernel being compiled?
+
+This would break cross-compilation and fail the build entirely on host
+machines without CONFIG_DEBUG_INFO_BTF enabled in their running kernel.
+Should it use the in-tree $(VMLINUX_BTF) provided by the build infrastructu=
+re?
+
+[ ... ]
+
+> +sig.bin: insn.bin map.bin $(OUTPUT)/gen_sig
+> +	$(OUTPUT)/gen_sig --key $(CERTDIR)/signing_key.pem --cert $(CERTDIR)/si=
+gning_key.x509 \
+> +		--data insn.bin --add map.bin:0 --out sig.bin
+
+Will this unconditionally fail if the kernel configuration lacks
+CONFIG_MODULE_SIG?
+
+The Makefile hardcodes the use of signing_key.pem and signing_key.x509, whi=
+ch
+might not exist. Should the test gracefully detect the absence of the requi=
+red
+keys and skip the build or execution instead of failing the entire pipeline?
+
 > +
-> +	map =3D HORNET_MAP_new();
-> +	ASN1_INTEGER_set(map->index, index);
+> +signed_loader.h: sig.bin
+> +	$(SCRIPTSDIR)/write-sig.sh loader.h sig.bin > $@
+> +
+> +loader: loader.c signed_loader.h
+> +	$(CC) $(CFLAGS) -I$(LIBDIR) -I$(APIDIR) $< -o $@ -lbpf
 
-map is allocated via HORNET_MAP_new(), but the return value is not checked
-for NULL before dereferencing it in ASN1_INTEGER_set(). Should we handle
-potential allocation failures here?
+Could this custom rule be bypassed because it lacks the $(OUTPUT)/ prefix?
 
-[ ... ]
+The include ../lib.mk transforms TEST_GEN_PROGS by prefixing it with
+$(OUTPUT)/. When make attempts to build $(OUTPUT)/loader, it might fall back
+to its default pattern rule.
 
+This would omit the -I include paths, the -lbpf linker flag, and the
+dependency on signed_loader.h, leading to compilation failures.
+
+Also, similar to the LDLIBS addition above, this uses -lbpf without specify=
+ing
+the in-tree path.
+
+> diff --git a/tools/testing/selftests/hornet/loader.c b/tools/testing/self=
+tests/hornet/loader.c
+> new file mode 100644
+> index 0000000000000..f27580c7262b3
+> --- /dev/null
+> +++ b/tools/testing/selftests/hornet/loader.c
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+> +
+> +#include <stdio.h>
+> +#include <unistd.h>
+> +#include <stddef.h>
+> +#include <sys/resource.h>
+> +#include <bpf/libbpf.h>
+> +#include <errno.h>
+> +#include  "signed_loader.h"
+> +
 > +int main(int argc, char **argv)
 > +{
+> +	struct trivial *skel;
+> +
+> +	skel =3D trivial__open_and_load();
+
+The commit message states this "exercises hornet's map validation", but this
+solely loads a valid, signed skeleton.
+
+Are there any negative tests to verify that the LSM actually blocks invalid
+loads? If the Hornet LSM fails open or is disabled, this test might falsely
+pass.
+
+> +	if (!skel)
+> +		return -1;
+
+Should this use the modern ASSERT_*() macros like ASSERT_OK_PTR() instead of
+raw conditionals?
+
+Using raw conditionals silently bypasses the standard testing reporting
+infrastructure.
+
+> +
+> +	trivial__destroy(skel);
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/hornet/trivial.bpf.c b/tools/testing=
+/selftests/hornet/trivial.bpf.c
+> new file mode 100644
+> index 0000000000000..d38c5b53ff932
+> --- /dev/null
+> +++ b/tools/testing/selftests/hornet/trivial.bpf.c
 
 [ ... ]
 
-> +	int i;
-> +	char opt;
+> +SEC("tracepoint/syscalls/sys_enter_unlinkat")
+> +int handle_enter_unlink(struct trace_event_raw_sys_enter *ctx)
+> +{
+> +	char filename[128] =3D { 0 };
+> +	struct task_struct *task;
+> +	unsigned long start_time =3D 0;
+> +	int pid =3D bpf_get_current_pid_tgid() >> 32;
+> +	char *pathname_ptr =3D (char *) BPF_CORE_READ(ctx, args[1]);
 > +
-> +	const char *short_opts =3D "C:K:P:O:A:Sh";
-> +
-> +	static const struct option long_opts[] =3D {
-> +		{"cert", required_argument, 0, 'C'},
-> +		{"key",  required_argument, 0, 'K'},
-> +		{"pass",  required_argument, 0, 'P'},
-> +		{"out",  required_argument, 0, 'O'},
-> +		{"data",  required_argument, 0, 'D'},
-> +		{"add",  required_argument, 0, 'A'},
-> +		{"help",    no_argument,       0, 'h'},
-> +		{0, 0, 0, 0}
-> +	};
-> +
-> +	while ((opt =3D getopt_long_only(argc, argv, short_opts, long_opts, NUL=
-L)) !=3D -1) {
+> +	bpf_probe_read_str(filename, sizeof(filename), pathname_ptr);
 
-getopt_long_only() returns an int. If it returns -1, and opt is a char,
-architectures where char is unsigned by default (like ARM or PowerPC) will
-evaluate opt as 255.
+Can this silently fail on architectures with strict user/kernel address spa=
+ce
+separation (like x86 with SMAP enabled)?
 
-Since 255 !=3D -1, will this cause an infinite loop during argument parsing=
- on
-those platforms?
-
-> +		switch (opt) {
-> +		case 'C':
-> +			cert_path =3D optarg;
-> +			break;
-
-[ ... ]
-
-> +		case 'A':
-> +			if (strchr(optarg, ':')) {
-> +				hashes[hash_count].file =3D strsep(&optarg, ":");
-> +				hashes[hash_count].index =3D atoi(optarg);
-> +				hash_count++;
-
-The hashes array is defined with a fixed size of MAX_HASHES. Does this code
-need to check if hash_count is less than MAX_HASHES before writing to the
-array to prevent a stack buffer overflow if too many arguments are provided?
-
-[ ... ]
-
-> +	si =3D CMS_add1_signer(cms_out, signer, pkey, EVP_sha256(), flags);
-> +	ERR(!si, "add signer failed");
-> +
-> +	set =3D MAP_SET_new();
-> +	set->maps =3D sk_HORNET_MAP_new_null();
-
-MAP_SET_new() and sk_HORNET_MAP_new_null() can return NULL if memory
-allocation fails. Since set->maps dereferences set immediately, can this
-result in a segmentation fault under memory pressure?
-
-> +
-> +	for (i =3D 0; i < hash_count; i++) {
-> +		sha256(hashes[i].file, hash_buffer, &hash_len);
-> +		add_hash(set, hash_buffer, hash_len, hashes[i].index);
-> +	}
-
-The return value of sha256() is ignored here. If the file cannot be opened,
-sha256() will fail, leaving hash_buffer and hash_len uninitialized.
-
-Will this lead to an out-of-bounds read of uninitialized stack memory when
-passed to add_hash()?
-
-> +
-> +	oid =3D OBJ_txt2obj("2.25.316487325684022475439036912669789383960", 1);
-> +	if (!oid) {
-> +		ERR_print_errors_fp(stderr);
-> +		DIE("create oid failed");
-> +	}
-> +
-> +	der_len =3D ASN1_item_i2d((ASN1_VALUE *)set, &der, ASN1_ITEM_rptr(MAP_S=
-ET));
-> +	CMS_signed_add1_attr_by_OBJ(si, oid, V_ASN1_SEQUENCE, der, der_len);
-
-ASN1_item_i2d() returns a negative value on failure. Since der_len is passed
-directly to CMS_signed_add1_attr_by_OBJ() without checking for errors, could
-this cause issues by passing a negative length to the OpenSSL routine?
+The sys_enter_unlinkat tracepoint receives pathname from user space in
+args[1], but bpf_probe_read_str() is deprecated and meant for kernel-space
+pointers. Should this use bpf_probe_read_user_str() instead?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260420212653.4386=
-85-1-bboscaccy@linux.microsoft.com?part=3D7
+85-1-bboscaccy@linux.microsoft.com?part=3D9
