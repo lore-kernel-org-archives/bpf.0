@@ -1,195 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26E83314AE
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 09:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91398364023
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 10:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776851642; cv=none; b=OMMHuvTLOSxY5UtjAt6LL3K8Yu1BtcJScP5ub7/8Leh4XJzj063uPi5IA6e5m3XQ+0M+17jbSk38/+HcLQ0UilqD+oBUNkHAojtWBpPiodQt8gqvX/nLakDx/exhyQbVUGkBJLD/ewp8rtfHyKrxD8o0VdGUyEX0JpT09mB3ZFg=
+	t=1776853956; cv=none; b=o/o9wbjc6wyyEPlA5/hwVeUG21AojTS2iTsajVZ5zS0deXKoRNXRuxwH+clARhQlg+SbZdbld/hd/sKvz0b7FMSezi9baP5xeGQiLM9xSt/8ifX7QCe1+laPBHt+gU89utNY9qD5l1aKKMNWGPzL2ylkdruBM/ozz8N3qEZaUus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776851642; c=relaxed/simple;
-	bh=K+2iJAZ4fESDDY4zfceASK8k+6Tt/T9HCP4s8SDeOKY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XsO2Km9to8NA/0d/VhwldwQXGimoln9kWWqMsnQU0OTO7ztHsFsWX/110Onm24NlSWBe5O5QJiUjgVquS/OUNum9qewjZd0Metp97v2hLosGcPJH3JcjAMnWNf+myl6owmMwIilwQsuh7C+MEBCv6yx9JbMsQNQGXWmYI4jT2Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gx9h9Wz4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776853956; c=relaxed/simple;
+	bh=rPyltYtdFtSXabiO3D+4FDsHFvbhzaKsIQrLl13Y0lQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EVXuEkhohdvxTc0BAOJYNZM0c/HPHOJDY5xtMJGTT53qe7onKA8WhIwAIsuBLdwiPexqIpdoJmIlOpHIBUgLoGSuZnW96PjHM0Sv9gUmvBnhfE+c/okiv1lC0wmUscAP3Z6WT7FVbSOdissF1AsHy+ncjiJ6kmCaGyXLriRZD2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PzK0NjZf; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gx9h9Wz4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F619C2BCB4;
-	Wed, 22 Apr 2026 09:54:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776851642;
-	bh=K+2iJAZ4fESDDY4zfceASK8k+6Tt/T9HCP4s8SDeOKY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Gx9h9Wz4dC0wuKUWe+BvvQht5oGAdQh7COlADqL2yrplVW+2E4lDP7bUix8tY2KR1
-	 w9FCYFhKYNMLkSedU7pUF/EqqgI0miEVKH75fyC5H8tj4d+KCIq0k5TFcg2u+PkyZb
-	 LXuahH7+cxQaDSw14vT9ZsdBoBrbxBGhscES0MS9xfBxZoAEFbhIzcTU2QnnCRGQ/w
-	 2IlOAVPJatT5joLYLVJekrtKmDUxfqW41dsUmoYvPT72AQHNf7c3WniGgsNEygyZPB
-	 hqT55q3t5uHM+NpjitoXDHuFywRy8PTWWPN4iOfp8obCi82sXG6iwdJo9SV/VFGB3x
-	 UJHAzTRaUFG+w==
-Content-Type: multipart/mixed; boundary="===============8613132370443475542=="
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PzK0NjZf"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63M9IZi73475151;
+	Wed, 22 Apr 2026 10:32:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=KUPEiUFaAM7rTzTAYydUFNrzYliWP
+	zPO+4bgD3jiSqU=; b=PzK0NjZfwJzeZRioVPdSuwqJsuRUQ357Q565kgZZLcGkY
+	TsHL2k2lEHnMq7EgYQ03RqAvmqtrI5jMVSVFUa4/Ma4BKWgeaFND7cKtG+qU6wDh
+	OxvWB2rdu8DrkvUoSngb7+Jqj+4R1LwHBVbIcM21/aXkMa3UyeYNS/vQo6e085l/
+	Sr3ZNpjDMGw9hsJInvekRvLiUuG7KCAMuWKf7/uGrvUb6hxm/4hKmCItypjnck6C
+	x/3NQ4SaijQUXAVwCPDhyn/8cifDH/z+lluNAaruN7O06XujxslRFffPuTMLrZ8Z
+	Rq6NlL0Sr9Kk1bb5cquzsklLHAJOsh9Ole/7/4+iw==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4dpenm13kx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 22 Apr 2026 10:32:10 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 63MAVGRH008423;
+	Wed, 22 Apr 2026 10:32:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4dpjjq2de0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 22 Apr 2026 10:32:09 +0000 (GMT)
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 63MAW9wk012468;
+	Wed, 22 Apr 2026 10:32:09 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-55-237.vpn.oracle.com [10.154.55.237])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4dpjjq2dce-1;
+	Wed, 22 Apr 2026 10:32:09 +0000 (GMT)
+From: Alan Maguire <alan.maguire@oracle.com>
+To: andrii@kernel.org, ast@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
+        song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+        sashiko <sashiko-bot@kernel.org>
+Subject: [PATCH bpf] libbpf: Fix type size overflow in btf_type_size_unknown
+Date: Wed, 22 Apr 2026 11:32:06 +0100
+Message-ID: <20260422103206.533695-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9d23e38b3959d82eb6990913dee39f1f1b095528cfe2957caea4fe359ab01832@mail.kernel.org>
-In-Reply-To: <20260421084806.1785541-1-kuniyu@google.com>
-References: <20260421084806.1785541-1-kuniyu@google.com>
-Subject: Re: Uninitialized Stack Variable / NULL Pointer Dereference in __sys_socket_create via BPF LSM hooks
-From: bot+bpf-ci@kernel.org
-To: kuniyu@google.com,2022090917019@std.uestc.edu.cn
-Cc: M202472210@hust.edu.cn,bpf@vger.kernel.org,daniel@iogearbox.net,dddddd@hust.edu.cn,dzm91@hust.edu.cn,edumazet@google.com,hust-os-kernel-patches@googlegroups.com,jiayuan.chen@linux.dev,kuniyu@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 22 Apr 2026 09:54:02 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-22_01,2026-04-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ spamscore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2604200000 definitions=main-2604220100
+X-Authority-Analysis: v=2.4 cv=Xbu5Co55 c=1 sm=1 tr=0 ts=69e8a3ab b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=EIcjfB9IiI4px24ztqRk:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
+ a=FmWz4CEXBMvvugAi-Q0A:9 cc=ntf awl=host:12291
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIyMDEwMCBTYWx0ZWRfX46wOrheY5Uyi
+ d/cqlqex1MteZ8+SeGlocfpTV9QQZOWm5jRgimwwRknLpsmdRZyQULTRzlFQr8S8vToxt4vPEPH
+ QbFBIEhT7IoO5pA0ba0FWOXvEeA1vMbvp5kbQyXWp2woyvcEjRgaHC3Hx6FkOagGg0Tdi4ZbsEw
+ LJXdoc3QgPbImbIQXipHmiKhHMtXdr2rVDX89kYVvuW90sW3fCKBgCCM3jiithUEu3sLX9At+RX
+ SOxwV+qkGg7MtZ2DTolq1wGAKpvvMDUikiCBSH6BrXvSTm3iUmDD/p7O8vnP32FoGEJ7xYlRKD2
+ A/q3iNJS5Y6xi+a2nYACVhL2g8b98CvM/i5V0X6ckWH3fHJnAg8romSXMzXYz8XQ8IzXObGGU8d
+ drVizJbosDFpipCjs6TQxa/ToEi2zMH3i7jfSaWeyjoUsaguH6EGivRwcsmdmUAcuvIw/eKdkiQ
+ WC2jkbaaKvg4XG3tc/M4uEltabQyjbR+xBMmPPvo=
+X-Proofpoint-GUID: EpcvorCuUrEjIj1Ep2VKQMjQZQabsgP7
+X-Proofpoint-ORIG-GUID: EpcvorCuUrEjIj1Ep2VKQMjQZQabsgP7
 
---===============8613132370443475542==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+A layout section with a large elem_sz/vlen can lead to a 32-bit
+overflow in btf_parse_type_sec() at the point where a large
+type_size is added to the next_type [1]; a sufficiently large type_size
+on a 32-bit system could lead to the bounds check
 
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index c5c925f00202..c4b9e9d4de92 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -87,6 +87,13 @@ BTF_ID(func, bpf_lsm_socket_socketpair)
->  #endif
->  BTF_SET_END(bpf_lsm_unlocked_sockopt_hooks)
->
-> +BTF_SET_START(bpf_lsm_negative_set_retval_hooks)
-> +#ifdef CONFIG_SECURITY_NETWORK
-> +BTF_ID(func, bpf_lsm_socket_create)
-> +#endif
-> +BTF_SET_END(bpf_lsm_negative_set_retval_hooks)
+	if (next_type + type_size > end_type)
 
-Should bpf_lsm_socket_post_create be included in this whitelist as well?
-The same exploit pattern applies to security_socket_post_create() in
-sock_create_lite(). If a BPF_LSM_CGROUP program attached to
-bpf_lsm_socket_post_create calls bpf_set_retval(1) using the unguarded
-helper from cgroup_common_func_proto, the positive return propagates out
-and sock_create_lite() releases the socket:
+not triggering (since next_type + type_size wraps to a value low
+in the 32-bit address space).  This would lead to a bad value for
+next_type when we add the type size.  Avoid this by ensuring that
+the type_size we return from btf_type_size_unknown() falls within
+the range of <current type, end_type>.
 
-    err = security_socket_post_create(...);
-    if (err) goto out_release;
+[1] https://lore.kernel.org/bpf/20260417170712.74E77C19425@smtp.kernel.org/
 
-    out_release:
-        sock_release(sock);
-
-then sets *res to NULL and returns the positive err to kernel_accept():
-
-    err = sock_create_lite(...);
-    if (err < 0) goto done;
-
-The positive err is not caught, so kernel_accept() continues to
-ops->accept(sock, *newsock, ...) with *newsock being NULL, triggering a
-NULL pointer dereference in the protocol's accept handler.
-
-This is the same class of vulnerability your commit addresses.
-
-The commit message notes: "I guess all (most?) places suppose LSM to return
-0 or a negative value, and the btf_id_set_contains() check would be
-unnecessary?" - this suggests the issue may be more widespread than just
-bpf_lsm_socket_create.
-
-> +
-> +
->  #ifdef CONFIG_CGROUP_BPF
->  void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
->  			     bpf_func_t *bpf_func)
-> @@ -221,12 +228,37 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
->  	.arg1_type	= ARG_PTR_TO_CTX,
->  };
->
-> +BPF_CALL_1(bpf_lsm_set_retval, int, retval)
-> +{
-> +	struct bpf_cg_run_ctx *ctx;
-> +
-> +	if (retval > 0)
-> +		return -EINVAL;
-> +
-> +	ctx = container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
-> +	ctx->retval = retval;
-> +
-> +	return 0;
-> +}
-> +
-> +const struct bpf_func_proto bpf_lsm_set_retval_proto = {
-> +	.func		= bpf_lsm_set_retval,
-> +	.gpl_only	= false,
-> +	.ret_type	= RET_INTEGER,
-> +	.arg1_type	= ARG_ANYTHING,
-> };
->
->  static const struct bpf_func_proto *
->  bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->  {
->  	const struct bpf_func_proto *func_proto;
->
->  	if (prog->expected_attach_type == BPF_LSM_CGROUP) {
-> +		if (func_id == BPF_FUNC_set_retval &&
-> +		    btf_id_set_contains(&bpf_lsm_negative_set_retval_hooks,
-> +					prog->aux->attach_btf_id))
-> +			return &bpf_lsm_set_retval_proto;
-> +
->  		func_proto = cgroup_common_func_proto(func_id, prog);
->  		if (func_proto)
->  			return func_proto;
-
-The retval > 0 guard is only applied to hooks in
-bpf_lsm_negative_set_retval_hooks. For any BPF_LSM_CGROUP program
-attached to hooks not in that set, bpf_lsm_func_proto falls through
-to cgroup_common_func_proto which returns the unguarded
-bpf_set_retval_proto that unconditionally writes any integer (including
-positive values) into ctx->retval.
-
-The commit message describes the root cause as a generic issue wherever
-security_* callers use "if (err < 0)" instead of "if (err)". The fix
-protects a single hook but leaves the unsafe bpf_set_retval_proto
-reachable for all other BPF_LSM_CGROUP hooks.
-
-Would it be safer to unconditionally reject retval > 0 for all
-BPF_LSM_CGROUP contexts, or alternatively fix the underlying socket
-layer return-value checks?
-
+Reported-by: sashiko <sashiko-bot@kernel.org>
+Fixes: 2ecbe53e0e991 ("libbpf: Use layout to compute an unknown kind size")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
+ tools/lib/bpf/btf.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-The commit lacks a Fixes: tag. This fixes a major security vulnerability
-(NULL pointer dereference/privilege escalation) introduced when
-bpf_set_retval() was enabled for BPF_LSM_CGROUP hooks without validating
-that positive return values could skip allocation while appearing to
-succeed.
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index ceb57b46a878..d48ac5460d1d 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -420,9 +420,11 @@ static int btf_parse_layout_sec(struct btf *btf)
+ static int btf_type_size_unknown(const struct btf *btf, const struct btf_type *t)
+ {
+ 	__u32 l_cnt = btf->hdr.layout_len / sizeof(struct btf_layout);
++	const void *end_type = btf->types_data + btf->hdr.type_len;
+ 	struct btf_layout *l = btf->layout;
+ 	__u16 vlen = btf_vlen(t);
+ 	__u32 kind = btf_kind(t);
++	int type_size;
+ 
+ 	/* Fall back to base BTF if needed as they share layout information */
+ 	if (!l) {
+@@ -448,7 +450,13 @@ static int btf_type_size_unknown(const struct btf *btf, const struct btf_type *t
+ 		return -EINVAL;
+ 	}
+ 
+-	return sizeof(struct btf_type) + l[kind].info_sz + vlen * l[kind].elem_sz;
++	type_size = sizeof(struct btf_type) + l[kind].info_sz + vlen * l[kind].elem_sz;
++	if ((size_t)type_size > (size_t)(end_type - (const void *)t)) {
++		pr_debug("Overflow in type size %d for kind %u\n",
++			 type_size, kind);
++		return -EINVAL;
++	}
++	return type_size;
+ }
+ 
+ static int btf_type_size(const struct btf *btf, const struct btf_type *t)
+-- 
+2.39.3
 
-Suggested: Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
-
-The commit also lacks a Signed-off-by: tag from the author, which is
-required per Documentation/process/submitting-patches.rst.
-
----
-
-Two review comments from the v1 discussion have not been addressed:
-
-Matt Bobrowski suggested also making __sys_socket_create() more
-defensive by initializing sock to NULL and checking both return code
-and pointer validity after sock_create(). This would protect against
-failures from any source (BPF, other LSMs, or bugs in protocol family
-->create() functions). The current patch only implements the BPF-side
-fix.
-
-Reference: https://lore.kernel.org/bpf/aedAqdeuVqLq4hDQ@google.com/
-
-Xu Kuohai suggested checking the return value directly against the
-hook's valid return range using bpf_lsm_get_retval_range() in the
-verifier, rather than making a socket_create-specific change. This
-approach would validate retval for all LSM hooks. Matt Bobrowski agreed
-this should be added as a separate patch. The current implementation
-only checks for positive values in the helper function itself, not in
-the verifier.
-
-Reference: https://lore.kernel.org/bpf/ea1d6de6-55b0-4478-94e3-83733788e7c9@huaweicloud.com/
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24770372681
---===============8613132370443475542==--
