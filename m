@@ -1,160 +1,129 @@
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345BF397690
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 02:54:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776826501; cv=pass; b=rhtq7QNOLKTR0YVJssWt5CsO2+vkIL59skIYy8DI2WMlA7RK1yhwkKeolfSf8IGEILcHr8Ipnx+kojgNwWD42R+ZSd6v5urkhy39D2VM2NMZKNcp3E8xBgsN9FG+rMmpsRciYaesBWvbNsOsO5g8CZLwYWnDURdN5Uikn6tM/G0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776826501; c=relaxed/simple;
-	bh=5B8p+QDUxXae132Fq/olL0Df/Jc61502WZG8qooebxM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uZvpbKoqCx9YMQccTQewVYgS+IO3CwDmNwYG6p6pHwdx27D2wEryWa8q6H0MWkVU08chwGMz4HGqY5fWWzeYPnVOTx7M3g7Wgz1xzZLcb60DHlxKl0D2AAsuvIAEpuByUzeUjkAhVbCvWTH2Dkniymf5VuE6H2F3DZgfLTpfj1I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D/dtEV60; arc=pass smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614563A3E9A
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 03:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776829020; cv=none; b=k2od+Li60Ls8fr+gf5UVtZBKO0pLTAwT7ZEJOIQfO1mg5Y9F7AOymry2xI01mflqOvw9866sSENWFIrWmcduun85mGkXezuJXccG58xWlhdQxsHRxFsgFDjmH0VUyQ6N63jDDUh6pCeIoWRyPQdHJbgOWU9DtpjLs1E20tFCjYE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776829020; c=relaxed/simple;
+	bh=SqobOYcr+p6ZEe1n5wRVQPGdL4P3Hm39eN3EOFs5zkg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TL475c/bKuDR8Li1dRu9BVfiXXVUsIqTiz/c8+HkflrGgO2B8J8n6euman9JUP0n0FLBBCPHBfFykx2/IaQOO1V8wlcJxPT4MrZ1xXXsgR4btaperdOnUDi9mwkjsj/v/Ecpz0OXMnPLm4K6ofk4GqqgEUP5IDcNPha20yNv4fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyEUNVGT; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D/dtEV60"
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5a3fcb2c718so4143109e87.0
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 19:54:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776826494; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lFB3ag4xnhHMLq/ZDfeb1ONJghopZGvzLDPUh2lzrDEeJMEwbrste9nR24Q/1JqPlm
-         QldsEjLs/cvX8fHwJVNck47ZeFWNB3r1H0oYyb1KsOV9Jo2t3IX6wjKIcr3gRSVQlSdT
-         FieePWPtcC5d0a1TKeydh5DN92T95l1hfijdFC36TahyPtMT+KZFi1tRbqkKl9yeqLCv
-         vcnB5SzMYl3KJ1gINRranojX2GTAggEj3n3OlKZWFDCf/4prXTO+wdzFs/wqjzxA3R8G
-         NmFBbGVgWbLvSrUJU1Cf2U+RbrPvAjMkyPF1tt6uYREVwFZ7g+ZxSg4kSxr/ca4l1jeO
-         lfNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OG7eT7g8H7j0h83hkzwInJ6CPJnFxfvuaf/IIwu8WPE=;
-        fh=2uvtnr7QxlZP6Yi1QZq8XWEmmK0YnWOimVX3JW2nI/M=;
-        b=bvBXwzbJNUFJ1wOPJ8GLxPqr5vXbyYhE/bZeo/WGdXlMz+4OtZ0VBzZlZrJ+6kDIKI
-         orhhQi7NhOyT0o/lvLDPumtZ0aeSJa5vxD/mFFieE14ZxjDgrWz97G8IQ5Rn+dtPeXri
-         /ZOHjz2pxO1UWhqFEbKlmYeqiPZxPyBT5n8wt0QtEjiouJ5sr+ju+HQRqf6A46+K+KHI
-         TW059Mp0zQkMNbVI1XO0O4clS2uprdELOJUWQUpfO9Ge6Gn7bVNdQlOADlD253oJksyG
-         fTVTAlMOSIxh6CGUm9+3VxYRcgfVu2s4OUWn9caHcSy+DSu1vid56EBcCiewXwDaKnaE
-         42Tg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyEUNVGT"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82f351ca23cso2465991b3a.2
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 20:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776826494; x=1777431294; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OG7eT7g8H7j0h83hkzwInJ6CPJnFxfvuaf/IIwu8WPE=;
-        b=D/dtEV60ZtyfzKCFbJV1Rz5c782y6UMxQu4J/EMDtymOw1ihuX4HQoVXVsnL0vwUyv
-         D7VWXLxRQqIa0/DUJy7shZ596s0anxAJ7wyMoURxDwHwYuvf2na5VjkdfhhV6LJo0lCo
-         QmZYB/iVwSfltbsFLNDFFKFFzIeETXEOfq/ivTAPTSoKIotLvA4v4cKkONJpa6USzCxD
-         x1pmgLGigOtBA/SvnISjoO4c5OPpAUt5mA77q5TdPtFhnZYzdARsoxSVHU/lPs82/uS0
-         q1ZlY/7RPvP7Qm8zsBwle9XJwfvZ1gYPER8sAV4U0wrbAQz6uKZIc5PyPA3EKsjdSSOX
-         8p/g==
+        d=gmail.com; s=20251104; t=1776829019; x=1777433819; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=epvGnzFq8uZMGM4fcIZGE8+8PvZa4WBZ1uiBJMM4bHQ=;
+        b=fyEUNVGThNvZJyvpWgt1DzI9t+/FqAk+A6duRpmN0X6oM65Bb3+ue4utn6o1TaFvsl
+         ah3G1+0gGqWac0Wflqi9Q0YJMUogggMQnuzAJ/3qkjjgv2S/P5j0wBD6krb171VwNpAl
+         WCH+8E3E+8QBlpX4WZqS6p7/2k0xbBhri3fWHlw9xEnlRHaClVwbactplUpUHj5/NycM
+         Ec3Xd9Tnoc9+tW31CalSVwmY0JECIEjejwzQAxdzamBBcHUJLWDvS6WHdoCjUmgmcYa9
+         +i05fZ/qjLl5qzOTKERHMl/yNABr4k8LKfRFEXIRT8Bl5HqUznEURR2mHTeVQRxY7Iy+
+         4iVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776826494; x=1777431294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OG7eT7g8H7j0h83hkzwInJ6CPJnFxfvuaf/IIwu8WPE=;
-        b=Zf4y+ZdV9DbStO8x8g4MSCMPW4tlqG/41gBCX8LcM/GEluUg/mZ/BmQunvfroVv6zU
-         FAYGWvUcglMUKnS7plV0VCyXuUPwN3vBm1Dm2cT1HKuvekCet/RRoMwCXeg8aFMvzpqC
-         xvjG2hDF7oN8KPY6Aopm23KzXvqGLL80qFGFkAQNoUnIIOjTEHP1Oxr022jM2TD4ZP5x
-         bnMRca3o3VYC0ANb4hqMTG6fxI6pH4ZOrxNOmfBREVSjMVVE8cTLoJAlu0H0IfV9p1cG
-         eXLCjCHrlLawQR5fym+VLkBznTfm1hhb5Qk/7uBcMtxx24WrcHw1TmO7+EoM39oz7qFC
-         xtJA==
-X-Forwarded-Encrypted: i=1; AFNElJ93bQJhJBWA0fRC3Z6qtTLlBZ+cBwD3XQOCo2Q9k0PJGezlUHatSSQGQDcr3sXdY/VDois=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzORn0/eW+s60wLCs6rmbMyjnVQmNt4ezojas5+/1PqaiyNkHRg
-	+J+fIwhb9N61bgJqSthFhTQWpmy3oSJNSrSRKKrxcBZVzTTBlWH2KWA2VhMaMj8wrv74cNbFDGU
-	pGWtoCeTaU2CIMohq/jd13Z4m3jD8Ihw=
-X-Gm-Gg: AeBDieszFmXBfrpm8DHscsCBJERBJv2rms5jNG7/+t3EiLUuuU8NtPZUccY9CQuHMj1
-	ZiT5lpjqAngDN/Asr3v1c+IHF+IscA8QV9KUPDxWJQdWCrPNFhyp751RVF87sAfunplcFuQim/Z
-	kANsOUrqcqiImsSnUs8CWwqIY59n0DVjZi31Hjv668ogJuDPgCJycnVmLqBebh0D8k0dhaCYNpe
-	9rbHG3SQStuGY6RTQfBfStkvd/36Xp26nooLsgrg7O0V8e2zR15lifY94sS/ZmaNZHRVrte5KOo
-	2fGmV+9SDPaQUT0SV0vOcj0qn0gfzg==
-X-Received: by 2002:a05:6512:108d:b0:5a4:6dd:87 with SMTP id
- 2adb3069b0e04-5a4172ca7f0mr5866475e87.2.1776826494007; Tue, 21 Apr 2026
- 19:54:54 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776829019; x=1777433819;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=epvGnzFq8uZMGM4fcIZGE8+8PvZa4WBZ1uiBJMM4bHQ=;
+        b=MFsyzWnECi939xBdfFgrzcW8SDmyNP4S5hqo2Ki2fTd6Zht8A3rJ+ZSpzbXeqTBdtj
+         Y3m8sGg8Kp2F9sJQYGDsaeJGNeDLXq3xZwFM00R4dzW8NB7S7soZeSNxWXm2IQ9ALtMF
+         /YqW8hKE7EivCfsQNLMUlc7iXMob90ZhW0nDQ8L36fcJhwHefPSz0MOuIY6MXbl+o18k
+         BvKqYB5txaAUhImywA/Dft8MrJ5IxuhX5NC5SoXITaJBOTsI53SkXUOGjR4+wUkrImUe
+         wzOCKUCxAeffcQ9ZCsoT7pOF8tTz2ryHj5w9FadSVcgtu5E5ep4XPFmrsknrAtYboLKX
+         W4nw==
+X-Gm-Message-State: AOJu0YyT2DiQB/l40zMIphPVjecSZyRcF6rRbwXWdTn3tX/TBWAVHYIP
+	3bjmK2cCjaYIXgxma78u76ytrdG/ZfTIRlX4MvBgxVx1TZtLGJOVLyh8
+X-Gm-Gg: AeBDiesVH6X9tGdp4UcsS3gHeAveXMe2auBhp+UaicYikrvCWeUgmrjHlUvvdYDjUDb
+	Gg4aopA/vMVSVip3+X4NBMqnV4SXyPcEiOgDWQOoDx82Wzi+V72LNek9V0fnk6eI+u77RzJLPir
+	8ITMKBbR5+pKSHupJDd2rNyYehGQECvLjQdYc3MaNhM6F0njMFlHBZrCoZ2MPRVHYjdeud1Yx5l
+	pmUoRR59HWr3hmgsGYfdpLxKVvrL0XLJ/xcHAju2rp4tah9lTk/hn8hqdXZgC2MNOPdR87EGoaS
+	mMkYm+AtxM2KrMWrElGEr0Duyfwxi1LvGs9WqReVXHUNf2LwQjgz4xsAS17OEaJqyMU7NbQPpk8
+	aejORkxHHFxkSKS76GzTM2tPTfGKNmfRa/Z+F0JrMaDeNkl56VXl8bsq3TwK7wtKMvm8Mt3KNf9
+	yalx0eQFJgkGorLZgcshKVl6AOwqZqy0vAN7Nm/aMkxoXZeBwbyRD3d4QmKso8CCrO9dYc7e/HQ
+	3ih1RTl
+X-Received: by 2002:a05:6a00:4b56:b0:82f:5154:d1d9 with SMTP id d2e1a72fcca58-82f8c82e20dmr19444119b3a.6.1776829018589;
+        Tue, 21 Apr 2026 20:36:58 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([43.132.141.25])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8e981c07sm18355473b3a.1.2026.04.21.20.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 20:36:57 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net v3 0/8] xsk: fix bugs around xsk skb allocation
+Date: Wed, 22 Apr 2026 11:36:42 +0800
+Message-Id: <20260422033650.68457-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260420082805.14844-1-kerneljasonxing@gmail.com>
- <20260420082805.14844-9-kerneljasonxing@gmail.com> <aeaCzchKwsp_LWyA@devvm17672.vll0.facebook.com>
- <CAL+tcoCxQ8cU+wr7eJsMH+FPMcp+vQ4J4BdSdsVqyTRqN8q9LQ@mail.gmail.com> <aef4XHnqR2cs5U1O@devvm17672.vll0.facebook.com>
-In-Reply-To: <aef4XHnqR2cs5U1O@devvm17672.vll0.facebook.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 22 Apr 2026 10:54:16 +0800
-X-Gm-Features: AQROBzDfQhIVaSKFF0sXfFlijZMZ5nryThbH6nQqDrBrxgUtb9-hDG926vitTvQ
-Message-ID: <CAL+tcoArQEuVPGGKEg5f82W=Ar35PxDDCtKso_O+RTogK=LT3g@mail.gmail.com>
-Subject: Re: [PATCH net v2 8/8] xsk: fix u64 descriptor address truncation on
- 32-bit architectures
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
-	john.fastabend@gmail.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 22, 2026 at 6:23=E2=80=AFAM Stanislav Fomichev <sdf.kernel@gmai=
-l.com> wrote:
->
-> On 04/21, Jason Xing wrote:
-> > On Tue, Apr 21, 2026 at 3:49=E2=80=AFAM Stanislav Fomichev <sdf.kernel@=
-gmail.com> wrote:
-> > >
-> > > On 04/20, Jason Xing wrote:
-> > > > From: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bit
-> > > > descriptor address into skb_shinfo(skb)->destructor_arg (void *) vi=
-a a
-> > > > uintptr_t cast:
-> > > >
-> > > >     skb_shinfo(skb)->destructor_arg =3D (void *)((uintptr_t)addr | =
-0x1UL);
-> > > >
-> > > > On 32-bit architectures uintptr_t is 32 bits, so the upper 32 bits =
-of
-> > > > the descriptor address are silently dropped. In XDP_ZEROCOPY unalig=
-ned
-> > > > mode the chunk offset is encoded in bits 48-63 of the descriptor
-> > > > address (XSK_UNALIGNED_BUF_OFFSET_SHIFT =3D 48), meaning the offset=
- is
-> > > > lost entirely. The completion queue then returns a truncated addres=
-s to
-> > > > userspace, making buffer recycling impossible.
-> > > >
-> > > > Fix this by handling the 32-bit case directly in
-> > > > xsk_skb_destructor_set_addr(): when !CONFIG_64BIT, allocate an xsk_=
-addrs
-> > > > struct (the same path already used for multi-descriptor SKBs) to st=
-ore
-> > > > the full u64 address.
-> > >
-> > > Is it easier to make XSK `depends on 64BIT` to avoid dealing with tha=
-t? Does
-> >
-> > Of course, it would be super easy. Actually the initial version looks
-> > like this. One line of coder is simply enough.
-> >
-> > > anybody seriously run af_xdp on 32 bit systems?
-> >
-> > But my worry as you guess is if there exists a 32 bit system? I doubt
-> > it. That's why I put some effort into adding the compatibility code to
-> > cover the case. Good news is that it doesn't add any side effects of
-> > the 64 bit system since they are protected under IS_ENABLED condition.
->
-> If someone complains, we can follow up? af_xdp is all u64 everywhere,
-> including uapi, I doubt someone is using it on 32 bit systems. We don't
-> test this part on 32 bit systems on nipa either..
+From: Jason Xing <kernelxing@tencent.com>
 
-Great! Then it saves me some time :)
+There are rare issues around xsk_build_skb(). Some of them
+were founded by Sashiko[1][2].
 
-Thanks,
-Jason
+[1]: https://lore.kernel.org/all/20260415082654.21026-1-kerneljasonxing@gmail.com/
+[2]: https://lore.kernel.org/all/20260418045644.28612-1-kerneljasonxing@gmail.com/
+
+---
+v3
+Link: https://lore.kernel.org/all/20260420082805.14844-1-kerneljasonxing@gmail.com/
+1. use !xs->skb as the indicator of first frag in patch 3 (Stan)
+2. move init skb after it's allocated successfully, so patch 4,5,6 have
+   been adjusted accordingly (Stan)
+3. do not support 32-bit arch (Stan)
+4. add acked-by tags (Stan)
+
+v2
+Link: https://lore.kernel.org/all/20260418045644.28612-1-kerneljasonxing@gmail.com/#t
+1. add four patches spotted by sashiko to fix buggy pre-existing
+behavior
+2. adjust the order of 8 patches.
+
+
+Jason Xing (8):
+  xsk: reject sw-csum UMEM binding to IFF_TX_SKB_NO_LINEAR devices
+  xsk: handle NULL dereference of the skb without frags issue
+  xsk: fix use-after-free of xs->skb in xsk_build_skb() free_err path
+  xsk: prevent CQ desync when freeing half-built skbs in xsk_build_skb()
+  xsk: avoid skb leak in XDP_TX_METADATA case
+  xsk: free the skb when hitting the upper bound MAX_SKB_FRAGS
+  xsk: fix xsk_addrs slab leak on multi-buffer error path
+  xsk: don't support AF_XDP on 32-bit architectures
+
+ net/xdp/Kconfig         |  2 +-
+ net/xdp/xsk.c           | 31 ++++++++++++++++++++-----------
+ net/xdp/xsk_buff_pool.c |  3 +++
+ 3 files changed, 24 insertions(+), 12 deletions(-)
+
+-- 
+2.41.3
+
