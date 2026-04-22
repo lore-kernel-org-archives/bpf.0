@@ -1,286 +1,101 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9421834678C
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 23:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433001D6DA9
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 23:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776899381; cv=none; b=FYrKei+SUCnbnQMQcIzBbpVh9FmeTQpHqAqL1Jj7K8R96anU6k2ItNhab64D6hLmR5/V/9KSR41yek2m2rHcD3UrZK+qDCgNgbvyafpHvIBDhTmkI9ux9eU9YKd1epMp/wp8Em62jqN2lU6XRBUaueLnLuAaZpkbhi0l2drQxoU=
+	t=1776900262; cv=none; b=tOT0tbBg+7yPfbTqnzS9QfsNc6JafryoH64uVLlOzwfarv0c06SbvS+vZXBejBzMpXjUpKn+QTSC1R/tX8zlGDzRI384z9yr1gAelpkIfPdwe0Mstma3HjwmcipDkQCkCqCy0gZQDm8OCN8CQ2eOCkEpGP+5TuCRLRgGEfLzPvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776899381; c=relaxed/simple;
-	bh=5AkVbbngonKpiOiGE2KQTBrG2rPIX2zSOk8j02uR1M8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LGIAh+dZCyBt38YWMxfxgVVptZuC23dfLR5mdzPUSb7pZS58xzgtoJ5xj714RWhJ2MMqVD4lNyjXSsuxTvKI36c2vZV66rMcuYfUOLVHZqyRvDx9DaLH3JFWeY23Qsbo+v+3hgw9sMHE53mBMvqAsZQekERPekJZvBrkFEHAw5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=te5Xk7VR; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776900262; c=relaxed/simple;
+	bh=dO5ceCHRyFcG9tsPv/Uy5m+t2oSiu8qdhOWY0CG+Ixc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PLmP84cSkrVs3tie03cHW3DS9pJHOHIkJiDS6yV7/FecOQSujyBOx29ll/THVPa0bJVhA4udp4QUZEmk3CGvs6jOg1pp6ObpyjnvSR0vhxUBzv/kOlyKYxGI6wQAADnZowT+mlJyae13D37BcxIjLy/fF+O6DqWSe8wvBVEoaNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NRJs9z6H; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="te5Xk7VR"
-Message-ID: <2ad13b46-a291-4dd1-bf6d-3c9ca9319eea@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776899376;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bdU7g6GqRMNCeeZfPi5WUbdTl4qeZatEzwfzA7VLNAM=;
-	b=te5Xk7VRZ6ojrsLWuZde5XCcCfJjJoUyebf4rhtszwXRHBWzwn1squy5mxKRi0HvI1b0YA
-	8e6uK+SH9VH3zvvb5MhvZeHGTf/twthzaNSFEK71yvh8KKhFHjjV9R2oakLqTV688PQccs
-	W4pOhllRB/gQ2mxBiiRO3f5jXKFek/0=
-Date: Wed, 22 Apr 2026 16:09:15 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NRJs9z6H"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b6ce6d1d3dcso2250011a12.3
+        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 16:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776900261; x=1777505061; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=20Hp+mzF4LGGtn1pS9b/voWfhrJdUMGJ7yQHT8sztDA=;
+        b=NRJs9z6HBoFQLyYKltpHme0KhSIixIB+dGngGianrnzGJhluQVZaqohv99ExsZZQun
+         hhS37I8526O+xAbneFBEYWyyud2cI+THI41yitJYqTJ5fCR301N/dOkL0DRzdvJUCohF
+         e4IYdxnPa75xRJhGXUUX2h1cF0CPa9M2quIC95lEF/5VoOgRzmRWy/r66Bw+BWgIk5A1
+         jba19JLhlDgp3YBErJD1lRjhhpJgyWQrO08MMR/JrMsribAhRp/gm2w5dV5recPSxCq5
+         u20euoo4U8T9XMNhEgDdsaR3dtiDwHITUTS8JwzFdcxi78pyKrBmbo9ZAA80yqHtvmXc
+         hlHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776900261; x=1777505061;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=20Hp+mzF4LGGtn1pS9b/voWfhrJdUMGJ7yQHT8sztDA=;
+        b=NpwMT5vhZ2gqcp9u62c0EP4aPcaiC1DFTy6u6VUvkH3oQDWIncAY8NycKXMfieKtJq
+         Sjg3245/TI7+ipiJA1akCt1vrAsmlfC1CLIAnRSAlyQj9p/FCXxqpSMnuiX57SXOzVS2
+         GJOwGjIoBPattYSoK1xlos99vf9QOWIFQ1T1GxbSULrt+Drn61Yt47RKXfErmF5q6VRG
+         dNevdSmPnp4i2uAfyYhxdVU7aey93EaWpkxRhIcSsluDeOorMWi3t35O9Vz8+jfWMOWq
+         Ahe9WV78kZS2iV7THuL/xEmmj6eKRr64ZsC97Vf33RgordnyT5EMtGQYoIR+J3LkpGoJ
+         DY6Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+NUAm6ffYuHTlXzQneAK0cRc5dhvTBVUd4wmIq43X3TU6PJ7JEbaTLQmU2IDlB/Z6GngY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnZXR1UOTn7LmJ7hSlS96QyfXJbdx9t/DnFwDwLJfMRjdZciv0
+	3Sd2SbZumv6qo6MYfxhoJrJzpl4gZDZW2vQ7cgGH0CqVAItqxeMjRxab
+X-Gm-Gg: AeBDiesRdppeqFhP6uL8YtoJtNygb7oz1wWZ8Yqd+MRYWZtLZvxl6wsnw1mIswZN1by
+	HhmhXW6pVBJVvnt3MrvfReYQPMkvmsaPCYoZ6pxRG39CSGNLtImI3mdJb6vGz7xX5jHrCM4zbN+
+	NAVWqX+u5BpN8/BqhOFe6scQXnYusOPV8tdhUbC8NFrRHn6tv6gkqlmwOvu/ElyDM9IE3Huv8CB
+	E14IAR1Cmueyw80lnDtKygys1zQIFxxB1seHS4NTLPRV/qUwoV7fTIngp2DoHYn3MeyTQ2pseng
+	1ujXGD4xR04lzGtrWMFye6b0TYISAjzkUkDON1aZzSLYPdioyJuCxxFoJYWs6dpiEECTSY2ipsD
+	kGbtf1F9x8QRZRqPp8wa0xoSHVoy2rdhrS+nKW7eqsKyW7+KGX9rOXMBDvhYVjPKIwKol4Od//3
+	7FfeMaZnprzSyM4Mvz5oC49HOuKynadsijw4mOaxni1RYk+0Sg1s6V
+X-Received: by 2002:a05:6a20:2591:b0:398:c0ba:9ceb with SMTP id adf61e73a8af0-3a08d6eb0a9mr27188226637.12.1776900260501;
+        Wed, 22 Apr 2026 16:24:20 -0700 (PDT)
+Received: from VM-0-17-ubuntu.. ([119.28.83.143])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7976f920e1sm13776248a12.2.2026.04.22.16.24.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2026 16:24:19 -0700 (PDT)
+From: Hengqi Chen <hengqi.chen@gmail.com>
+X-Google-Original-From: Hengqi Chen <chenhengqi@outlook.com>
+To: chenhuacai@kernel.org,
+	yangtiezhu@loongson.cn,
+	vincent.mc.li@gmail.com,
+	menglong8.dong@gmail.com
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Subject: [PATCH v2 0/2] bpf: fsession support for LoongArch
+Date: Thu, 23 Apr 2026 07:24:05 +0800
+Message-Id: <20260422232407.3862942-1-chenhengqi@outlook.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 7/9] bpf: Prepare verifier logs for upcoming
- kfunc stack arguments
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
- eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260422054224.3127905-1-yonghong.song@linux.dev>
- <25c10a6b1a6f9703f2b2c943ab42245cb9de30d2004eb301d85d9de0ca6ca7b3@mail.kernel.org>
- <715fcb76-c1ba-44e2-9b6f-e3133f2a5610@linux.dev>
- <cb70fcff-2e3e-4132-ada7-7af4e8a4ab35@linux.dev>
- <DI00R3E7C8FD.1U98NQCWU1BW4@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DI00R3E7C8FD.1U98NQCWU1BW4@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+From: Hengqi Chen <hengqi.chen@gmail.com>
 
+This small set implements fsession support for LoongArch.
 
-On 4/22/26 2:58 PM, Alexei Starovoitov wrote:
-> On Wed Apr 22, 2026 at 8:37 AM PDT, Yonghong Song wrote:
->>
->> On 4/22/26 7:57 AM, Yonghong Song wrote:
->>>
->>> On 4/21/26 11:25 PM, bot+bpf-ci@kernel.org wrote:
->>>>> diff --git a/include/linux/bpf_verifier.h
->>>>> b/include/linux/bpf_verifier.h
->>>>> index b148f816f25b..d5b4303315dd 100644
->>>>> --- a/include/linux/bpf_verifier.h
->>>>> +++ b/include/linux/bpf_verifier.h
->>>>> @@ -913,6 +913,7 @@ struct bpf_verifier_env {
->>>>>         * e.g., in reg_type_str() to generate reg_type string
->>>>>         */
->>>>>        char tmp_str_buf[TMP_STR_BUF_LEN];
->>>>> +    char tmp_arg_name[32];
->>>>>        struct bpf_insn insn_buf[INSN_BUF_SIZE];
->>>>>        struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
->>>>>        struct bpf_scc_callchain callchain_buf;
->>>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>>>> index c777a294302a..e7f5f0bb499b 100644
->>>>> --- a/kernel/bpf/verifier.c
->>>>> +++ b/kernel/bpf/verifier.c
->>>>> @@ -261,6 +261,30 @@ struct bpf_kfunc_meta {
->>>>>
->>>>>    struct btf *btf_vmlinux;
->>>>>
->>>>> +typedef struct argno {
->>>>> +    int argno;
->>>>> +} argno_t;
->>>>> +
->>>>> +static argno_t argno_from_reg(u32 regno)
->>>>> +{
->>>>> +    return (argno_t){ .argno = regno };
->>>>> +}
->>>>> +
->>>>> +static argno_t argno_from_arg(u32 arg)
->>>>> +{
->>>>> +    return (argno_t){ .argno = -arg };
->>>>> +}
->>>>> +
->>>>> +static int reg_from_argno(argno_t a)
->>>>> +{
->>>>> +    return a.argno >= 0 ? a.argno : -1;
->>>>> +}
->>>>> +
->>>>> +static int arg_from_argno(argno_t a)
->>>>> +{
->>>>> +    return a.argno < 0 ? -a.argno : -1;
->>>>> +}
->>>> [ ... ]
->>>>
->>>>> @@ -7026,8 +7068,8 @@ static int check_helper_mem_access(struct
->>>>> bpf_verifier_env *env, struct bpf_reg_
->>>>>     */
->>>>>    static int check_mem_size_reg(struct bpf_verifier_env *env,
->>>>>                      struct bpf_reg_state *mem_reg,
->>>>> -                  struct bpf_reg_state *size_reg, u32 mem_regno,
->>>>> -                  u32 size_regno, enum bpf_access_type access_type,
->>>>> +                  struct bpf_reg_state *size_reg, argno_t mem_argno,
->>>>> +                  argno_t size_argno, enum bpf_access_type
->>>>> access_type,
->>>>>                      bool zero_size_allowed,
->>>>>                      struct bpf_call_arg_meta *meta)
->>>>>    {
->>>> [ ... ]
->>>>
->>>>> @@ -7052,31 +7094,31 @@ static int check_mem_size_reg(struct
->>>>> bpf_verifier_env *env,
->>>>>            meta = NULL;
->>>>>
->>>>>        if (size_reg->smin_value < 0) {
->>>>> -        verbose(env, "R%d min value is negative, either use
->>>>> unsigned or 'var &= const'\n",
->>>>> -            size_regno);
->>>>> +        verbose(env, "%s min value is negative, either use unsigned
->>>>> or 'var &= const'\n",
->>>>> +            reg_arg_name(env, size_argno));
->>>>>            return -EACCES;
->>>>>        }
->>>>>
->>>>>        if (size_reg->umin_value == 0 && !zero_size_allowed) {
->>>>> -        verbose(env, "R%d invalid zero-sized read: u64=[%lld,%lld]\n",
->>>>> -            size_regno, size_reg->umin_value, size_reg->umax_value);
->>>>> +        verbose(env, "%s invalid zero-sized read: u64=[%lld,%lld]\n",
->>>>> +            reg_arg_name(env, size_argno), size_reg->umin_value,
->>>>> size_reg->umax_value);
->>>>>            return -EACCES;
->>>>>        }
->>>>>
->>>>>        if (size_reg->umax_value >= BPF_MAX_VAR_SIZ) {
->>>>> -        verbose(env, "R%d unbounded memory access, use 'var &=
->>>>> const' or 'if (var < const)'\n",
->>>>> -            size_regno);
->>>>> +        verbose(env, "%s unbounded memory access, use 'var &=
->>>>> const' or 'if (var < const)'\n",
->>>>> +            reg_arg_name(env, size_argno));
->>>>>            return -EACCES;
->>>>>        }
->>>>> -    err = check_helper_mem_access(env, mem_reg, mem_regno,
->>>>> size_reg->umax_value,
->>>>> +    err = check_helper_mem_access(env, mem_reg, mem_argno,
->>>>> size_reg->umax_value,
->>>>>                          access_type, zero_size_allowed, meta);
->>>>>        if (!err)
->>>>> -        err = mark_chain_precision(env, size_regno);
->>>>> +        err = mark_chain_precision(env, reg_from_argno(size_argno));
->>>>>        return err;
->>>>>    }
->>>>                                        ^^^^^^^
->>>>
->>>> Does mark_chain_precision(env, reg_from_argno(size_argno)) properly
->>>> handle
->>>> kfunc size arguments?
->>>>
->>>> Before this patch, check_mem_size_reg() was called with size_regno
->>>> being a
->>>> u32 register number. For kfuncs with KF_ARG_PTR_TO_MEM_SIZE, the
->>>> pre-patch
->>>> call at check_kfunc_args was check_kfunc_mem_size_reg(env, reg,
->>>> size_reg,
->>>> regno, regno+1), passing real register numbers like R2..R5.
->>>>
->>>> After this patch, check_kfunc_args constructs size_argno via
->>>> argno_from_arg(i+2) for the size parameter of a KF_ARG_PTR_TO_MEM_SIZE
->>>> pair. The argno_from_arg() helper creates a negative encoding (-.argno).
->>>> When reg_from_argno(size_argno) is called, it checks a.argno >= 0 and
->>>> returns -1 for negative values.
->>>>
->>>> mark_chain_precision(env, -1) then reaches bpf_mark_chain_precision in
->>>> backtrack.c, where the "if (regno >= 0)" guard causes it to skip marking
->>>> the register, and the subsequent "if (bt_empty(bt)) return 0;" silently
->>>> returns success without doing any precision tracking.
->>>>
->>>> For helpers, this works correctly because check_func_arg calls
->>>> check_mem_size_reg with argno_from_reg(regno), which produces a
->>>> non-negative
->>>> encoding that reg_from_argno() correctly extracts back to the register
->>>> number.
->>>>
->>>> Can you verify whether the loss of precision tracking for kfunc size
->>>> registers might cause programs that previously verified to hit the
->>>> BPF_COMPLEXITY_LIMIT_INSNS threshold? Kfuncs with __sz/__szk size
->>>> arguments are widely used in-tree.
->>> This is indeed a problem.
->>> Function check_mem_size_reg() is the one which does
->>>     mark_chain_precision(env, reg_from_argno(size_argno))
->>>
->>>
->>> There are two callers for check_mem_size_reg():
->>>     - check_kfunc_mem_size_reg() <- check_kfunc_args
->>>       so arg_from_argno() should be used here to get the value
->>>     - check_func_arg() <- check_helper_call()
->>>       in this case, since helper_call is fixed at most 5 registers,
->>>       so argno_from_reg() is used in check_func_arg(), so later
->>>       on it should use reg_from_argno() should be used to get value.
->>>
->>> There are two options to fix:
->>>   1. do proper check like
->>>      int reg_val = reg_from_argno(size_regno);
->>>      if (reg_val >= 0)
->>>        mark_chain_precision(env, reg_val);
->>>      else
->>>        mark_chain_precision(env, arg_from_argno(size_regno));
->>>
->>> 2. for arguments in check_helper_call(), we also use
->>>     arg_from_argno() instead of reg_from_argno().
->>>     This way, we can just do
->>>        mark_chain_precision(env, arg_from_argno(size_regno));
->>>
->>> Not sure which is preferred or there are some other better alternatives.
->> The following should work.
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index e7f5f0bb499b..2ead411b949d 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -7112,8 +7112,12 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
->>           }
->>           err = check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax_value,
->>                                         access_type, zero_size_allowed, meta);
->> -       if (!err)
->> -               err = mark_chain_precision(env, reg_from_argno(size_argno));
->> +       if (!err) {
->> +               int regno = reg_from_argno(size_argno);
->> +
->> +               regno = regno >= 0 ? regno : arg_from_argno(size_argno);
->> +               err = mark_chain_precision(env, regno);
->> +       }
-> Both options are not great and
-> regno = arg >= 0 ? arg : reg_from_argno(argno);
-> in reg_arg_name() points to the same issue.
->
-> I think it should be:
-> static int reg_from_argno(argno_t a)
-> {
->     if (a.argno >= 0)
->        return a.argno;
->     if (a.argno >= -MAX_BPF_FUNC_REG_ARGS)
->        return -a.argno;
->     return -1;
-> }
->
-> whether arg_from_argno() should do similar logic is something to think about.
+Patch 1 introduces a helper named emit_store_stack_imm64().
+Patch 2 implements fsession support.
 
-I think the following arg_from_argno() should be okay:
+changelog:
+v1->v2:
+  * rebase against latest loongarch-next branch
+  * drop patch 3, selftest is enabled by default
+  * add Reviewed-by tag
 
-static int arg_from_argno(argno_t a)
-{
-         if (a.argno < 0)
-                 return -a.argno;
-         return -1;
-}
+Hengqi Chen (2):
+  LoongArch: BPF: Introduce emit_store_stack_imm64() helper
+  LoongArch: BPF: Add fsession support for trampolines
 
-In some cases, there is a need to get an arg_idx which will be
-used for an array element. e.g.,
+ arch/loongarch/net/bpf_jit.c | 99 ++++++++++++++++++++++++++++--------
+ 1 file changed, 79 insertions(+), 20 deletions(-)
 
-process_iter_arg(..., argno, ...)
-    ...
-    u32 arg_idx = arg_from_argno(argno) - 1;
-    ...
-    btf_id = btf_check_iter_arg(meta->btf, meta->func_proto, arg_idx);
-
-btf_check_iter_arg(..., arg_idx)
-    ...
-    arg = &btf_params(func)[arg_idx];
-    ...
-
+--
+2.43.5
