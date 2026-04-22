@@ -1,73 +1,170 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206842737E3
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE6334A3AC
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 16:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776873510; cv=none; b=EbqkXB3P+e/u04JipW1JbHXqPOWMsu80K4Y7iauoDCAiHnmhxbCcpYapPSV9/zFRAuzINuHnWnO6IoYFhFujMqPw57zBFJ+WYMKs5nKZXPZI2SVWlIKiyAECr3xUrSrK02Js3payRCTklX/XFBNr65pA8ZVGIJyGI7JiiPtUE7w=
+	t=1776873972; cv=none; b=DEUi+MoB40TI7CG8AxXUHIekq1UjkHyZZ2zpV2UYsFbTShmKab1zR4PC6wHvg339YfG931n751zn++Sp85Li7azK/UFgPIFuCit8auXkbUXd7KdTGzFrMD+lKAuPUuElufKc69WRSdOf6SpGKRoKjY2Ijkmu5AYTmAWsAcfKh2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776873510; c=relaxed/simple;
-	bh=CYYUE7sycUT9B5COCbdnWOw4VUWmbOq88Cn6CT2xcE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W3phc+1EqVSJeBNe6zHA7/c6TaJ/0gIq0O2c6J0dR3zEzKFDYkXNPahGptoQv5yy/hMZuxcNbYe8vgMfYbTTbYLHj6Z0PAB1nGIbLEJiqlMPh9/CcGGEWygXf3XRfDbK6BbhM5iS0tyYIzkRYBLDBerh3O5iF3FPLhtZsEEkfdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 8F8431401CD;
-	Wed, 22 Apr 2026 15:58:17 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 438D318;
-	Wed, 22 Apr 2026 15:58:15 +0000 (UTC)
-Date: Wed, 22 Apr 2026 11:58:16 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, memxor@gmail.com, peterz@infradead.org, Mykyta Yatsenko
- <yatsenko@meta.com>
-Subject: Re: [PATCH bpf-next v11 3/6] bpf: Add sleepable support for classic
- tracepoint programs
-Message-ID: <20260422115816.22c7f39f@gandalf.local.home>
-In-Reply-To: <20260421-sleepable_tracepoints-v11-3-d8ff138d6f05@meta.com>
-References: <20260421-sleepable_tracepoints-v11-0-d8ff138d6f05@meta.com>
-	<20260421-sleepable_tracepoints-v11-3-d8ff138d6f05@meta.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1776873972; c=relaxed/simple;
+	bh=8nrncI0b3MfZ0b4cQQe2KIvUt8Ue5oypaj72/hFZA6E=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=PxS/1LiJZYPHCC7VyTiCCwy25IKbTjtNKqJygE0MxNQ77ty3b0stmXMqSMLoAzQUlMMAnxr5doCxhqiT9cAL33WzLOdx49ccsbCzbSBr8CaGEcXhnDhVPzaymt/7w++egGZ6MJxqkxMnSgEH6PQnPvF76XbzxNMhnITndkpkc4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8rfD/Ke; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8rfD/Ke"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F33C19425;
+	Wed, 22 Apr 2026 16:06:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776873972;
+	bh=8nrncI0b3MfZ0b4cQQe2KIvUt8Ue5oypaj72/hFZA6E=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=I8rfD/KeOTX1uZPEWfwQAVB/oJiNBaXYk5hzIOVAbIcjmYVD6bwGdqQpNyo1rGKFP
+	 PbVNob7aZneoYNz+ugUOPrmL7rDlm94LgupAgErtSJqoGsfkNQoqIBFnGt2sS5EArY
+	 vcKALC+jU9gVkyN8TvURUQW3yzzuES4oO/28s36UCLB2GCt/JyWXBzb8gYFgqFcmUq
+	 /fdIEAgftu/LtkVvHziE7lJ/Y8LgJYGdz1srTc0gHdVxbyfODLDUCFLQtnT9lIs8nC
+	 MeI/lBmygW7KjZ3sH4qbrnle737Ou9bRuqHcUpJoK5R5Dfnrale9d7jvbTE47Cw/Mv
+	 6wMilORsCJJFA==
+Content-Type: multipart/mixed; boundary="===============2422465214652397599=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <e93b3ecc3e3406ac70466f8083544d896295f6fbb3f07c8e5a059fa25f8f19b2@mail.kernel.org>
+In-Reply-To: <20260422-sleepable_tracepoints-v12-2-744bf0e3b311@meta.com>
+References: <20260422-sleepable_tracepoints-v12-2-744bf0e3b311@meta.com>
+Subject: Re: [PATCH bpf-next v12 2/6] bpf: Add bpf_prog_run_array_sleepable()
+From: bot+bpf-ci@kernel.org
+To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,peterz@infradead.org,rostedt@goodmis.org
+Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 22 Apr 2026 16:06:12 +0000 (UTC)
+
+--===============2422465214652397599==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 8e5kno7f78xa311zbexgdicgi4kka59b
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 438D318
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+tIgrSDazaPhXcns2NDe6j+n5xqryQjMo=
-X-HE-Tag: 1776873495-800091
-X-HE-Meta: U2FsdGVkX18KNdqcAOnBRYe1YH3kX26hDznUukIyM4Jx3TQCGjdV2ThbtiER6BKb+jbYnPMeIHBD8PIp7nMjLzrkCc/46z7Ah4ZBtWldCj12n6DTvmW0HmBoTttvurBvbraKocObXIGDG2Y3Ief2YjcSqiscGc26gqGshwdFplRiQs1Z39TzMOi29eU2nRxgZOXI1Pg6STzqPnTxmSGW5SGJQnrRIEdagVYpUllIVTwwvia6mf+mhGKaKEAkT7CR1Yp2Xho20EA4EsPIFBx0YN7o2Q+V8Ankr710480ry72lPsCymgIyQdGP0vq78InHEaFneiZcIv5zXkix0UvDHQXJa+pcrIsP0+7vHVZjDurZM8mdOfxPvQNbWkVUWUlM7q7prHDtLycFXnnJTJjaIfz7kWvXe1RiNlRDYUq560cQxVVHcJTf+9EBCDAf5BEejyYcE4+p6qwouXnaKg4gzwNLZjGKvf5qzQpj3QW/LnKwVvq2DQ3MIAJBrg8j/AyiWrflKHDtY90=
 
-On Tue, 21 Apr 2026 10:14:19 -0700
-Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3079,6 +3079,56 @@ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+>  void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
+>  void bpf_prog_report_arena_violation(bool write, unsigned long addr, unsigned long fault_ip);
+>
+> +static __always_inline u32
+> +bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
+> +			     const void *ctx, bpf_prog_run_fn run_prog)
+> +{
+> +	const struct bpf_prog_array_item *item;
+> +	struct bpf_prog *prog;
+> +	struct bpf_run_ctx *old_run_ctx;
+> +	struct bpf_trace_run_ctx run_ctx;
+> +	u32 ret = 1;
+> +
+> +	if (unlikely(!array))
+> +		return ret;
+> +
+> +	migrate_disable();
+> +
+> +	run_ctx.is_uprobe = false;
+> +
+> +	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+> +	item = &array->items[0];
+> +	while ((prog = READ_ONCE(item->prog))) {
+> +		/* Skip dummy_bpf_prog placeholder (len == 0) */
+> +		if (unlikely(!prog->len)) {
+> +			item++;
+> +			continue;
+> +		}
+> +
+> +		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+> +			bpf_prog_inc_misses_counter(prog);
+> +			bpf_prog_put_recursion_context(prog);
+> +			item++;
+> +			continue;
+> +		}
+> +
+> +		run_ctx.bpf_cookie = item->bpf_cookie;
+> +
+> +		if (prog->sleepable) {
+> +			guard(rcu)();
+> +			ret &= run_prog(prog, ctx);
+> +		} else {
+> +			ret &= run_prog(prog, ctx);
+> +		}
 
-> To: Peter Zijlstra <peterz@infradead.org>
-> To: Steven Rostedt <rostedt@goodmis.org>
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com> # for BPF bits
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  include/linux/trace_events.h  |   6 +++
->  kernel/events/core.c          |   9 ++++
->  kernel/trace/bpf_trace.c      |  28 +++++++++++
->  kernel/trace/trace_syscalls.c | 110 ++++++++++++++++++++++--------------------
->  4 files changed, 101 insertions(+), 52 deletions(-)
+The sleepable/non-sleepable branches appear inverted relative to
+bpf_prog_run_array_uprobe(). In the uprobe sibling at
+include/linux/bpf.h:2491-2526, classic RCU is acquired only for
+non-sleepable programs:
 
-This only touches the perf functions of trace_syscalls.c. If Peter et.al.
-is fine with this change, then so am I.
+  while ((prog = READ_ONCE(item->prog))) {
+      if (!prog->sleepable)
+          rcu_read_lock();
+      run_ctx.bpf_cookie = item->bpf_cookie;
+      ret &= run_prog(prog, ctx);
+      item++;
+      if (!prog->sleepable)
+          rcu_read_unlock();
+  }
 
-Acked-by: Steven Rostedt <rostedt@goodmis.org>
+Here, the condition takes classic RCU (guard(rcu)() expands to
+rcu_read_lock()/rcu_read_unlock() via DEFINE_LOCK_GUARD_0 in
+include/linux/rcupdate.h:1181) around sleepable programs while taking no
+RCU read-side lock for non-sleepable ones.
 
--- Steve
+Sleepable BPF programs are designed to fault and sleep. Executing them
+inside a classic RCU read-side critical section violates the RCU
+requirement that classic readers must not block. On CONFIG_PREEMPT_RCU=n
+kernels this can cause RCU stalls.
 
-P.S. So strange not adding "(Google)" to my tags anymore ;-)
+Meanwhile, non-sleepable BPF programs often rely on classic-RCU-protected
+structures (like classic RCU-protected map entries). Invoking them with no
+classic RCU read-side critical section weakens protection. The caller added
+in the subsequent commit 864dee5d55d1 holds only guard(rcu_tasks_trace)(),
+so no outer classic RCU protects these accesses.
+
+Should the condition be inverted to match the uprobe pattern?
+
+This was raised by Alexei Starovoitov in v11 review:
+https://lore.kernel.org/bpf/DHZ4I3RWVVCU.16XRZX1HPFI8K@gmail.com/
+
+Alexei suggested in his April 21st comment:
+
+  "Why grab rcu_read_lock() and undo it?
+  imo it would be cleaner and faster to do
+  bpf_prog_get_recursion_context() here ...
+
+  ... and then here:
+  if (!prog->sleepable) {
+    guard(rcu)();
+    ret &= run_prog(prog, ctx);
+  } else {
+    ret &= run_prog(prog, ctx);
+  }"
+
+Was this feedback addressed in v12?
+
+> +
+> +		bpf_prog_put_recursion_context(prog);
+> +		item++;
+> +	}
+> +	bpf_reset_run_ctx(old_run_ctx);
+> +	migrate_enable();
+> +	return ret;
+> +}
+> +
+>  #else /* !CONFIG_BPF_SYSCALL */
+>  static inline struct bpf_prog *bpf_prog_get(u32 ufd)
+>  {
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24787752194
+--===============2422465214652397599==--
