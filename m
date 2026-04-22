@@ -1,108 +1,160 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B7C33688E
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 02:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD503148C9;
+	Wed, 22 Apr 2026 02:41:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776824733; cv=none; b=scGbu8CXJz2ar24//pB43QSf0cAv3ngzE9+7gHccGR5HgjHRq8SSQP8cbX/mVfo3w/oVhuBqaRSt9iagmWLdJ8pxPHh7ue8KWCUzFxF3oVVavvoBgEIRQ4OsMwErt14AQDsToNXXfF5YVEL9/FCu23jWxhFUf+OZkBi+gSbN16U=
+	t=1776825660; cv=none; b=OTMWuUe49JNnE4oUDyp/STUsmFypaf+otFYc9JNYmcEuvj+cNXIc7hAQJLUEv4kbuXKeH7eHsaeX31aSCf7/9GasUGlPBbnrdfL8BLqv8DaR0DbI9a3FPts5G+2CUBSO6HLOH/YvdTKF0dFOTnrGS0C9zbFf+xV0UP3tbj902yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776824733; c=relaxed/simple;
-	bh=hNxnrjGfiv8PYZSG6bMkmzMfbbBFZ0pMMjOJNa/ntHE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rhsQ7f9vftuSEE69pECMgv1BJRybuJylQiOkCLEhLZTAoe4t3tpjAGEAWgRsFpBek6TwqSzLF2yVoFNk6iqxd0Ns+zfDx5R7ncXueS4dqr8zvMfH+cbH6XJSKqGEnaLHCWfsoolFcPdWLw7cOtAxcxsn2COO2DsPCFuoBn2uJV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b63N7AgP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776825660; c=relaxed/simple;
+	bh=bKu9cPgYERopw0PQgTINDBcTh6EB/aziLsJ1miFX1LQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L+6CTfAfM+H9FjgsnqxgOHnGLexZaETMxQW1TTZ9zMLrwcKqA59EhuZrTdCGHVV3ck955CpAQ8UUEiGTK3rJz1/8i6vdOGYTEheG7i3UFNyAL07O73OB5xtdl1D9Y/pi8mYWax8Bp1NEVLE5p3ZaUe0wMQ5l/vLv1oyoiWCNVh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lb4MGnQ7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b63N7AgP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1664C2BCB0;
-	Wed, 22 Apr 2026 02:25:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lb4MGnQ7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED021C2BCB0;
+	Wed, 22 Apr 2026 02:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776824730;
-	bh=hNxnrjGfiv8PYZSG6bMkmzMfbbBFZ0pMMjOJNa/ntHE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=b63N7AgPmwISoUmFOsXQ4HlRgNmCVde7qKWicEIDDAZcCEKSHjtYiG67Pnj1GRGPW
-	 S9jYJ8yPmdCLrHeYqTXGWRUVqILBaNTcaHrO79CUfOPHp2LpvQ8EYRDR/5UxsAmaKk
-	 O+JTVMLYYY/ouiz2TgA3gWWmoQrquQMcrMn3JOkA4q0j5hXcVt3HDiQMvZFEsQ/tFU
-	 yQydh99zsUX3Pho83a+PhY4tofERIqt/hr26leS3bxIPFg53Xd0ugQQNzJ7LXmsgg/
-	 p7or40R2lfA1EuEMhwgKz+w4Lw4KoF0XhDIXPGn2j26hRC5iB2huiec3rg5rENphwj
-	 G2W1SLgJwLbeQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] [v4, net-next] net: ethernet: ti-cpsw: fix linking
- built-in code to modules
-Reply-To: sashiko@lists.linux.dev
-To: "Arnd Bergmann" <arnd@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260402184726.3746487-2-arnd@kernel.org>
-References: <20260402184726.3746487-2-arnd@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 02:25:30 +0000
-Message-Id: <20260422022530.C1664C2BCB0@smtp.kernel.org>
+	s=k20201202; t=1776825659;
+	bh=bKu9cPgYERopw0PQgTINDBcTh6EB/aziLsJ1miFX1LQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lb4MGnQ7IUicomGOoNsXKG6wNL1Q8DdaoVGu+hv0YKOSKP3dyelTb8fdNq93Eq1WC
+	 laZ1joIJf40dQRkyaqgYdIJ8y7CnxlxkM2wox5i3TKNASb5mW7FIDlOrTctxh8ChV0
+	 Pu1B48a9nb7iHTaTSFf1h8fMRZVPntFG4VEj4FS0paDqw5nUMCz2OlFVdppGhEP3hP
+	 2wjrhckgJLXmmRDowH7tnH+y5XObtdWl00u3P/x3LNoF2LyOmqe2886FCeYCkXU7Js
+	 C6mXx2yWOHLF80eAA5r9x+tvVg1Rn9cZeXyf4iKsmUyfNQtpwPQ7aFIdm/e7Md6u8o
+	 ZkXxlpR1qNjGw==
+Date: Tue, 21 Apr 2026 19:40:57 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	james.clark@linaro.org, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] perf/lock: Fix non-atomic max/time and min_time updates
+ in contention_data
+Message-ID: <aeg1ORW2I-YLvpFL@google.com>
+References: <20260419182754.143225-1-suchitkarunakaran@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260419182754.143225-1-suchitkarunakaran@gmail.com>
 
-Sashiko AI review found 4 potential issue(s):
-- [Critical] Shared global function pointer `cpsw_slave_index` causes use-a=
-fter-free and out-of-bounds access across modules.
-- [High] Shared global mutable array `ale_controls` causes hardware state c=
-orruption across different devices.
-- [High] Userspace ABI breakage due to silent module rename of `ti_davinci_=
-emac.ko` to `davinci_emac.ko`.
-- [Low] Swapped EXPORT_SYMBOL_GPL macros for `cpsw_hwtstamp_set` and `cpsw_=
-hwtstamp_get` under `!CONFIG_TI_CPTS`.
---
+Hello,
 
-Note: The format of this review is altered to provide a free-form summary
-of findings due to quoting/recitation restrictions.
+On Sun, Apr 19, 2026 at 11:57:54PM +0530, Suchit Karunakaran wrote:
+> The update_contention_data() had a FIXME noting that max_time and
+> min_time updates lacked atomicity. Two CPUs could simultaneously
+> read a stale value, pass the comparison check and race on the
+> write-back, with the smaller value potentially overwriting the
+> larger one and silently corrupting the statistics.
+> 
+> Fix this by replacing the bare conditional assignments with a
+> bpf_loop()-based CAS retry loop. Each field tracks its own
+> convergence independently via max_done/min_done flags in cas_ctx,
+> so a successful CAS on one field is never retried even if the
+> other field needs more attempts.
 
-commit bddbb0ecb5a5bfa6e8eb526f950b6ccd9620d793
-Author: Arnd Bergmann <arnd@arndb.de>
-net: ethernet: ti-cpsw: fix linking built-in code to modules
+Interesting!
 
-This commit changes the build system to create separate standalone modules
-for shared CPSW driver components. It aims to resolve Kbuild warnings about
-objects being linked into multiple modules by exporting symbols and creating
-shared modules like ti-cpsw-common.ko, ti-cpsw-priv.ko, and ti-cpsw-ale.ko.
-Link: https://lore.kernel.org/lkml/20240417084400.3034104-1-arnd@kernel.org/
+It looks like bpf_loop() is added at v5.17 - more than 4 years ago.
+Then I think it's ok to have it now.
 
-Looking at the extraction of cpsw_priv.c into the shared ti-cpsw-priv.ko
-module, does this introduce a use-after-free regression on the global
-cpsw_slave_index function pointer?
+> 
+> Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
 
-This pointer is now shared system-wide across multiple drivers. If both
-the older and newer cpsw drivers initialize and overwrite this global
-pointer with their own module-specific functions, will unloading the
-last loaded module leave a dangling pointer?
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-If the remaining driver attempts to access it, could it lead to a panic
-or an out-of-bounds array access on cpsw->slaves?
+Thanks,
+Namhyung
 
-Similarly, in the new ti-cpsw-ale.ko module, can the shared ale_controls
-global array cause state corruption across different devices?
-
-The ale_controls array is mutated at runtime during cpsw_ale_create()
-based on device-specific parameters. Since it is no longer isolated per
-driver, if a device like the am65-cpsw-nuss probes and mutates the global
-array offsets, do subsequent standard CPSW devices end up using these
-incorrect offsets?
-
-In the drivers/net/ethernet/ti/Makefile, does changing the module target
-from ti_davinci_emac.o to davinci_emac.o cause a userspace ABI regression?
-
-Because the object name changed, Kbuild will now produce davinci_emac.ko
-instead of the historic ti_davinci_emac.ko. Could this break modprobe
-configurations or initramfs scripts that expect the old module name?
-
-Finally, in cpsw_priv.c under the !CONFIG_TI_CPTS block, this isn't a bug,
-but are the export macros swapped?
-
-The EXPORT_SYMBOL_GPL(cpsw_hwtstamp_set) macro is placed directly after
-the cpsw_hwtstamp_get() stub, and EXPORT_SYMBOL_GPL(cpsw_hwtstamp_get)
-is placed after the cpsw_hwtstamp_set() stub.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260402184726.3746=
-487-1-arnd@kernel.org?part=3D2
+> ---
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  | 50 +++++++++++++++++--
+>  1 file changed, 45 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> index 96e7d853b9ed..5c8431be674a 100644
+> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> @@ -175,6 +175,13 @@ struct mm_struct___new {
+>  	struct rw_semaphore mmap_lock;
+>  } __attribute__((preserve_access_index));
+>  
+> +struct cas_ctx {
+> +	struct contention_data *data;
+> +	u64 duration;
+> +	int max_done;
+> +	int min_done;
+> +};
+> +
+>  extern struct kmem_cache *bpf_get_kmem_cache(u64 addr) __ksym __weak;
+>  
+>  /* control flags */
+> @@ -486,16 +493,49 @@ static inline s32 get_owner_stack_id(u64 *stacktrace)
+>  	return -1;
+>  }
+>  
+> +static long cas_min_max_cb(u64 idx, void *arg)
+> +{
+> +	struct cas_ctx *ctx = arg;
+> +
+> +	if (!ctx->max_done) {
+> +		u64 old_max = ctx->data->max_time;
+> +
+> +		if (old_max >= ctx->duration) {
+> +			ctx->max_done = 1;
+> +		} else {
+> +			u64 r = __sync_val_compare_and_swap(
+> +				&ctx->data->max_time, old_max, ctx->duration);
+> +			if (r == old_max)
+> +				ctx->max_done = 1;
+> +		}
+> +	}
+> +
+> +	if (!ctx->min_done) {
+> +		u64 old_min = ctx->data->min_time;
+> +
+> +		if (old_min <= ctx->duration) {
+> +			ctx->min_done = 1;
+> +		} else {
+> +			u64 r = __sync_val_compare_and_swap(
+> +				&ctx->data->min_time, old_min, ctx->duration);
+> +			if (r == old_min)
+> +				ctx->min_done = 1;
+> +		}
+> +	}
+> +
+> +	return (ctx->max_done && ctx->min_done) ? 1 : 0;
+> +}
+> +
+>  static inline void update_contention_data(struct contention_data *data, u64 duration, u32 count)
+>  {
+>  	__sync_fetch_and_add(&data->total_time, duration);
+>  	__sync_fetch_and_add(&data->count, count);
+>  
+> -	/* FIXME: need atomic operations */
+> -	if (data->max_time < duration)
+> -		data->max_time = duration;
+> -	if (data->min_time > duration)
+> -		data->min_time = duration;
+> +	struct cas_ctx ctx = {
+> +		.data     = data,
+> +		.duration = duration,
+> +		.max_done = 0,
+> +		.min_done = 0,
+> +	};
+> +	bpf_loop(64, cas_min_max_cb, &ctx, 0);
+>  }
+>  
+>  static inline void update_owner_stat(u32 id, u64 duration, u32 flags)
+> -- 
+> 2.53.0
+> 
