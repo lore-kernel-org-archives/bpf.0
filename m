@@ -1,187 +1,140 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D0E328B7A
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 21:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776892848; cv=none; b=UTmr30EjNqX31LPU4CycnIxpTC77w9GBHjjsFBaaBJNWcizYjS7iJb+L0bw4OwcFdt+g1vx3MCKenxuA5AGcXX4cLMZ4Q5ne8YrvFaWUkPQIFFK76FeO5m8PmsRZFqvPG61TRiTN0qp49D3+Yt8/bx9hLJXxay3ExHaySV7Zx+U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776892848; c=relaxed/simple;
-	bh=Xp+unCXJF+qg5R5kKdjuVWl4Qwgj6mFbAQZnJe93BQU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jLGthes6hyKvrvs/UND5F8c+nD7+ZCSXQAkZxBz9LHh2dPzuyDROBZJUzFWex3od7BVLO17BT1gtJ/BxRTzpUd2n5tz9s1Hzhsyooq0DFVNxdnwrq8HiRfr49cm5o/rohb1lXSDjj/bkzx2eI7hAr7u0UVHivjVPK3w2XlxyEE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=A18F5LgI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=aC4Fieuj; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=A18F5LgI; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=aC4Fieuj; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5030328B7A
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 21:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776892893; cv=pass; b=e6rdlYuYZp3wd8hjqOwLCT9NqNy94dEDwvho30eZENSlmnl6n61XWn81Ow9kohat51dmc1zREGzJCsqZmaLyPTwVnn52YMBw0FoosTMi/i+K2yNDzTQKYGCH5KVGRE9xtXI3ZGcoDPeDIIdwlto9HpuT5iDY5qnoLWy6rU4w8cA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776892893; c=relaxed/simple;
+	bh=9zguB9XlBxZ6vFmLEIJe1T+7HqRL81DEg3F1nGal+lw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ap+bhIynOIByt0S+o+H7771LBjim4KSOCEqVLWmkp6RvtwpiEJi05ytRf032RTPypbmMm0c7tdTPXyt8uZrSYFaOwbz4bBWvD81ORixk5FsIOyGJXhFjVs9wdoRQjMIYoDXjAvMSn7vO2EU6wgbjOHMsFYR/9Ay4MlDk6TWApDQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o/+nCvji; arc=pass smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="A18F5LgI";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="aC4Fieuj";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="A18F5LgI";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="aC4Fieuj"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 342426A82F;
-	Wed, 22 Apr 2026 21:20:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1776892845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VZO6ZnC4bI2xQTtqyBvQ90Buju/Kx0J4Jj+4V23LnNI=;
-	b=A18F5LgIc9D8wlsTVA2sbqyB7CuSr51zDS/M+c4zj9Z9fHrE8NIKN8aqkBBx2ts6Ycqge+
-	YAhcUuDyw7R7VUL4NEwwVd0Tui9EDUJT6tW/z7DnHy65BLoLiQx5suvH/+phvKo7U1///P
-	qys2ykaviZJvH5D0ubRBS/0m8UeFAso=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1776892845;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VZO6ZnC4bI2xQTtqyBvQ90Buju/Kx0J4Jj+4V23LnNI=;
-	b=aC4FieujGugYGxSgCDyGt8h+sHTZQqmNU00jQ1VfULZS9LhbL+f1x6bvfEL738uU+RdfBa
-	WmbrdCvB9N8XDbDg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1776892845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VZO6ZnC4bI2xQTtqyBvQ90Buju/Kx0J4Jj+4V23LnNI=;
-	b=A18F5LgIc9D8wlsTVA2sbqyB7CuSr51zDS/M+c4zj9Z9fHrE8NIKN8aqkBBx2ts6Ycqge+
-	YAhcUuDyw7R7VUL4NEwwVd0Tui9EDUJT6tW/z7DnHy65BLoLiQx5suvH/+phvKo7U1///P
-	qys2ykaviZJvH5D0ubRBS/0m8UeFAso=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1776892845;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VZO6ZnC4bI2xQTtqyBvQ90Buju/Kx0J4Jj+4V23LnNI=;
-	b=aC4FieujGugYGxSgCDyGt8h+sHTZQqmNU00jQ1VfULZS9LhbL+f1x6bvfEL738uU+RdfBa
-	WmbrdCvB9N8XDbDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E631D593AF;
-	Wed, 22 Apr 2026 21:20:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id IdetMaw76WkbdAAAD6G6ig
-	(envelope-from <krisman@suse.de>); Wed, 22 Apr 2026 21:20:44 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Ali Raza <elirazamumtaz@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>,  io-uring@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  bpf@vger.kernel.org,  Pavel Begunkov
- <asml.silence@gmail.com>
-Subject: Re: [PATCH] io_uring: fix missing submitter_task ownership check in
- bpf_io_reg()
-In-Reply-To: <20260422-master-v1-1-e82f47558345@gmail.com> (Ali Raza's message
-	of "Wed, 22 Apr 2026 20:53:05 +0500")
-References: <20260422-master-v1-1-e82f47558345@gmail.com>
-Date: Wed, 22 Apr 2026 17:20:39 -0400
-Message-ID: <87eck6ofo8.fsf@mailhost.krisman.be>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o/+nCvji"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4891c0620bcso33747515e9.1
+        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 14:21:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776892890; cv=none;
+        d=google.com; s=arc-20240605;
+        b=AZdKsNwBzmdl19PnsTz90OeFe5nTmt50MFBItjqbYFakgkML8dFmFe6XDB5z1I/NHX
+         uDn+Xmf7/tBi5bunNvHlpJleBia5mrUUWNQAPakUJ2s926fO8kSb85wIMr5vj8usnP/z
+         VWJRkzxAff/ntK3WO6bvBDaTuq+YEch1ZoRGHHIz+8AukYfRx+IAnKGfoTTB1U0fJy3Y
+         wpGTk7WWMgAvf4BNvr9aZHicAvA5WftOoTCnsq+7hB+y7Fz9mNG3j0t7v78y0wicnuL6
+         kdkJFNp+rQMf/XSsDu+1CIcDsAT8CbkK1P6yFZP+iJsEbxTD5/+AqjyRCoaWRD3kqJtR
+         vwdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NZuBKfQ2MgYFhVF7PmHxZk/nfgb4kJA+rMrnGSvhZOs=;
+        fh=TGKH9mD8wBw6dzqUmkN32u3sLRXs0+cF+AICTv6RX9E=;
+        b=eWC/6LJl8DTBMCUgItclaCgTmP5gHPx6r6kDsNUJoLCOoGviwhMWo+hzsNztvzmMdA
+         OOEDis9tC0vPA2izwgEsg6nvs7hqsYtnYsW+sYDS+8qtFrupsqota1G/iyhruxQvXLsH
+         q/GUEG442sfvKnP+Ln9usl2LTpHuYlj4GgJotwox/323T73FdZ2esu23dVzd4g3NtHGw
+         DiDx5svgiGulwBexQF6kpZMTA6+Qd041Pkrr3ToEcg0cY4T7/3xDdcts+gIWqFYMW2B+
+         HBYDaZ5dOP2g8t6H7Is4VfZq1XFnPRtV+4bLqoYD8rABMtu21xR/NpG6JA9PngOfb8V9
+         +T+w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776892890; x=1777497690; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NZuBKfQ2MgYFhVF7PmHxZk/nfgb4kJA+rMrnGSvhZOs=;
+        b=o/+nCvjibiiD/2Gf006phWN/GEl/Ug1+VSvj/Wzal2BvpUFCQl98dMvKP7yHSi6UwA
+         7dFOPCRojepDj4uieYG9n3T25XlbuSSlzk+4MV3gX4bMJzXIResjp0IoPqz1ZGtfbKW+
+         mRLw4Lj531+xK0L7LPNq3889wROB5dMASZZKyMXnDYRvvPWhD2Km2HgWegF/MQURLCf2
+         rwfvEA/U4AaNPkW5BvikSCAN6L2mHM5wXyNmFDpcVgbVWPyKGICnVUNHGsOGZGywX1rF
+         XnbolghlDJ7qYaY88kV9UL1JrQ4orTDtcxEbc5tFLu6q9pmfm1+Vh64NTd0PpEnN0zBs
+         ++3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776892890; x=1777497690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NZuBKfQ2MgYFhVF7PmHxZk/nfgb4kJA+rMrnGSvhZOs=;
+        b=Qm8ABM2AsHsU5KTcs2JeIPSY7tMtVaHZ7aBtFBcMk59kvKHkvajcSHZa/1pmxHHNOR
+         kwofqyyZmDt4kUQeWseeI/SPRb8U33hxB4D7l/xS3RIknImolh8MSBQrk/m3PBHyj3/p
+         baoaQ8AV6foE9rvBCaaRxTyqcTR5LKqUu10jCFP7AYfji4xwJoiIczz9Bz3ok92/Jde+
+         IIXumrMLUfdvHIJpfadUlk/KrEXEyagPtUeXh6MxmH51iXlNnBo8vtUrp8Y2X7nCo55W
+         hOogQP7OhVzVeoSbtUYpT72znJY7cWrvs7EUdG2nGRt5e8Wk0enLXIUDFha0TLnxTq5B
+         ER9A==
+X-Forwarded-Encrypted: i=1; AFNElJ9xYrV//Fk2NNj7kaYE/DFQqBaGP60H2r5RKRZihId7fa2TWpdywFs1NXaxXFntjCvPm3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhKBKh/mXorqiauJT+Pnzk2IQD0nOHPVEstxkUdL7t+/IjMm/O
+	OMexq3D//EgHt73hPLYwF4ePy3OExD9yAlarN4Mf6Ztt+G2jXwtJWfKolGd1SYEi6EXFBqPtjiz
+	TzK9EVgKTOlIBEzgsh/hkk/2aY73/9Rg=
+X-Gm-Gg: AeBDies6Azzg91ep9Bt1GpzDAFVmaP0aNH2SLimY2h4WGeX7W9Dyncof2GLw7bLigP4
+	FeD27H2K0Z33R7DFThclF4WXPwijCtBClfBS/3E9xYhu/ycfieUo+7AnOhpq/kNz0xKrgyY1R0g
+	otqWsDcLy/1uCuDKk655PLLCXkh+rafF3lQ4fUTi7CM68B5M4PllQUAhKCIDLYIPxe/9VYtDmUM
+	2HGr0mzhKfLSoABLketGlUkoCOPSITTuDdHPZZ7XHKGmUb9c0I5u4vxwKnmg3fauzwibvIZX5Kp
+	BZCfZUBf8r3JDSEjTmbA5Y4+HJ5NX/jcXJwO8Jtubf+kHcwmxvfSKHGtBxCk8zogXVSeS6ZNHgT
+	ORAS2VGPaN7qEv1bwT6FlJDeUQSgUcWfTmkOX
+X-Received: by 2002:a05:600c:8b8c:b0:489:1d74:56d with SMTP id
+ 5b1f17b1804b1-4891d7406famr223100405e9.29.1776892889976; Wed, 22 Apr 2026
+ 14:21:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Score: -4.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.dk,vger.kernel.org,gmail.com];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCPT_COUNT_FIVE(0.00)[6]
-X-Spam-Flag: NO
+References: <20260422183757.15069-1-suchitkarunakaran@gmail.com>
+In-Reply-To: <20260422183757.15069-1-suchitkarunakaran@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 22 Apr 2026 14:21:18 -0700
+X-Gm-Features: AQROBzBKSX92AyAmrbDljEpz9q61ZOj6nh6Etsr8XmHktjELlJWEXlMnmFrN-Mw
+Message-ID: <CAADnVQ+=iEmyf-=T=V0oW2aK+dgx4S0CbAAPi4pSg=DnaHNFoA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: replace bpf_probe_read_kernel with direct access
+To: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Ali Raza <elirazamumtaz@gmail.com> writes:
-
-> bpf_io_reg() installs a BPF struct_ops loop_step on any io_uring ring
-> the caller holds a file descriptor for.  io_uring_ctx_get_file() only
-> validates that the fd resolves to an io_uring file; it does not verify
-> the caller has authority over the ring's submitter_task.
+On Wed, Apr 22, 2026 at 11:38=E2=80=AFAM Suchit Karunakaran
+<suchitkarunakaran@gmail.com> wrote:
 >
-> A parallel path in io_uring_register() already enforces this:
+> Use direct field access instead of bpf_probe_read_kernel() for
+> nlk->groups[0] and inode->i_ino, and clean up related code.
 >
->     if (ctx->submitter_task && ctx->submitter_task != current)
->         return -EEXIST;  /* register.c:733 */
-
-How is this a protection?  I thought ctx->submitter_task is about
-IORING_SETUP_SINGLE_ISSUER. there is no permission or capability over
-it against other processes.
-
-> Without the equivalent check in bpf_io_reg(), a local user with
-> CAP_PERFMON can exploit IORING_SETUP_R_DISABLED -- which defers
-
-I'd argue this is a non-issue.  If you have CAP_PERFMON, you are able to
-mess with the process in many ways beyond this.  Otherwise, how a
-process would be able to get the fd in the first place?
-
-> submitter_task assignment until IORING_REGISTER_ENABLE_RINGS -- to
-> install a loop_step on a ring before a more-privileged process becomes
-> its submitter_task.  The loop_step then executes in the privileged
-> process's task context and can issue arbitrary io_uring operations
-> (IORING_OP_WRITE, IORING_OP_READ, IORING_OP_SPLICE) against that
-> process's open file table.  This provides a cross-privilege io_uring
-> execution primitive that can serve as a component in a privilege
-> escalation chain when combined with a vector that induces a privileged
-> process to adopt an attacker-controlled ring.
+> Removes obsolete FIXME comments and unused variable.
 >
-> Affected: v7.1-rc1+ with CONFIG_IO_URING_BPF_OPS=y.
-> Requires: IORING_SETUP_DEFER_TASKRUN | IORING_SETUP_SINGLE_ISSUER.
->
-> Add the ownership check in io_install_bpf(), which is called under
-> uring_lock, matching the locking context of the register.c check.
->
-> Signed-off-by: Ali Raza <elirazamumtaz@gmail.com>
-> Cc: Pavel Begunkov <asml.silence@gmail.com>
+> Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
 > ---
->  io_uring/bpf-ops.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../testing/selftests/bpf/progs/bpf_iter_netlink.c  | 13 ++-----------
+>  1 file changed, 2 insertions(+), 11 deletions(-)
 >
-> diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
-> index 937e48bef40b..cac11c929297 100644
-> --- a/io_uring/bpf-ops.c
-> +++ b/io_uring/bpf-ops.c
-> @@ -162,6 +162,8 @@ static int io_install_bpf(struct io_ring_ctx *ctx, struct io_uring_bpf_ops *ops)
->  		return -EOPNOTSUPP;
->  	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN))
->  		return -EOPNOTSUPP;
-> +	if (ctx->submitter_task && ctx->submitter_task != current)
-> +		return -EPERM;
->  
->  	if (ctx->bpf_ops)
->  		return -EBUSY;
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> index 00b2ceae81fb..5930bf8899d2 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> @@ -17,7 +17,6 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+>         struct seq_file *seq =3D ctx->meta->seq;
+>         struct netlink_sock *nlk =3D ctx->sk;
+>         unsigned long group, ino;
+> -       struct inode *inode;
+>         struct socket *sk;
+>         struct sock *s;
 >
-> ---
-> base-commit: bea8d77e45a8b77f2beca1affc9aa7ed28f39b17
-> change-id: 20260422-master-d96fe0e8bb3c
->
-> Best regards,
-> --  
->
-> Ali Raza <elirazamumtaz@gmail.com>
->
+> @@ -35,10 +34,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+>         if (!nlk->groups)  {
+>                 group =3D 0;
+>         } else {
+> -               /* FIXME: temporary use bpf_probe_read_kernel here, needs
+> -                * verifier support to do direct access.
+> -                */
+> -               bpf_probe_read_kernel(&group, sizeof(group), &nlk->groups=
+[0]);
 
--- 
-Gabriel Krisman Bertazi
+Please stop sending patches to remove TODO and FIXME.
+
+pw-bot: cr
