@@ -1,66 +1,66 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38BA370D6B
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 19:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57618325495
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 19:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776886956; cv=none; b=G7yVx8p6K94UqQqPonJjdOxpF/IJa6jCB1jVuc/B/zLPZAdvo58CqGk11/x+gLJtfRo8MKaJasfR/KrhmROD7jJWCKUme39i1k0HRXboD53qx+Qr6ZOW4AsjeWNFJK3PQRgyIW5dRY4ZJ+n5IQVhJTw4tIvL9dcx+TuyXMV0kLI=
+	t=1776886957; cv=none; b=DjNMLdXHIaYsAV+fTcT+AgSekriy36OMcVo1/vFc+Y+h6LBnD0fci1x1XoWWj+K9EbgoT8nyhjCzu4l/DO0OaqRCDmoxiWr6q7rulMUQg/izG8vExeCTjoLpsGZNWFJ5TA1SFJF9ueAe0NblxjYtfPbOzmHc5CIpWHE6DmZULVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776886956; c=relaxed/simple;
-	bh=+SaPuX5M5TsULTI24qI/PzgrfyH8QWL/gtsCwfhWgUQ=;
+	s=arc-20240116; t=1776886957; c=relaxed/simple;
+	bh=XgyUBlKA/SvuOVrqUhiqb18u9uwZKEC2TeZtLRo83dk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qsZIwgQJYgarcpwinr7WdjTeHmju0EWcTSL1jg/KQcq1Rasgb/JM1mt4m9gKW03UTRTkIT5zjHykaibplxzG879F9DqvrvAn70k9Q19dboPqLxUq2guxmwwLUIcoemh1UfImz4LLX8GKEhEKMpo+B/1/HOh7EEAwiZwhaST1EEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LwBJBJx6; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:To:Cc; b=RpVzLHEt7hEWV1507CMcL8/Sv+/gz40GHSXYFzmsQPWTmMJ7JBodMxPcvF0TSiDesCxeeNnDaz6qG+L9fm0yVEDBsLmNl+gcKXQzj5gj20xCuO3geIGzuhbsEwgPJ/MSakcS7+CyRGJ3PdE818CgJuuJo0nZWna80SxU662pL4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pQWprYvs; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LwBJBJx6"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso61146385e9.1
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 12:42:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pQWprYvs"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-488e1a8ac40so72765915e9.2
+        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 12:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776886953; x=1777491753; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776886955; x=1777491755; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DG7r+fX7s1omhIGpgcAgCpvP8cdsVkiDmcfQ39W2x2o=;
-        b=LwBJBJx6lLQpUMTmkka3CywsxZ0P17MlfYMMqTJo7vCpAhSLSv1wbXslZEOpeS5ub4
-         +e5d83GbMn4eJvVCWOteaEGG/OFdok+lkr6UDt9q/eo1nyyVPCW45PX9B6uk/fH5hWEV
-         s9uDbXP3w008Y3FkvIV10aRFZIb6RiwOamXnTGb1Dvm8SBlJneZ/hwb3IX1wlJssE2gU
-         +NT91Vyt+BINkjXJhTSkjglEA/K/IBL3+WaOGj2b8oQ5EgI0lmfRLsTBDOxXWS/P/lv+
-         J4xl3Ss8ZIZEEDTZ4Kwvkl2eOXlOvG8sj0U7xMZMCzAXx8Wypu1Gyuf4lHpVpNn3+C9+
-         +Qrw==
+        bh=Fqn33ovWYUYt1PkZ0Hy1fijLCC6tpmEKrNph35+cmnk=;
+        b=pQWprYvsj24MbegOWLNEdZJNVLMkDxJso8mrVmlYu4aj2nvr2V0YHaO7J/xydZLDIj
+         8WVy5HI6ReVOO98fKCgvloDWHATRVXpTBDRc+YEZ4KHHGu5RcD0/8ywYEQR34UM+/Ykq
+         W8dlj02mE6TNzazKtmZX3xq/BkCkZjnTZkmdtE5nIT2AdfMit22BEvXcsbcXg2bc2mOC
+         hXjqypXjrWaJ+hh8s78RPZha32wkKqsuQ5VnwttzZu895TTYNb3fJ8wbWycRjzadm+Lz
+         FWRbpMUrBsS1eWJeWXPBLWY2yecrRFNlYcxZyMP15F1Ym42JzsBgqDTFUl3t2KRmz7+I
+         k/VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776886953; x=1777491753;
+        d=1e100.net; s=20251104; t=1776886955; x=1777491755;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=DG7r+fX7s1omhIGpgcAgCpvP8cdsVkiDmcfQ39W2x2o=;
-        b=LKydmY1Zt56w16dBxx91Pbv/IysHvsq8WKhMm4QGHqNxjjDnV40h4HQj1Us7fsjVTZ
-         KmAB9rYzLpWrTDKJh9dIC+tND046jPj1MTdRKyw5iSOKUHzqi/CiwXNJMQXCoXWeDbVW
-         ADvdpCe0klbxbUwcoqaVqhbdPzugHvvXtm8BMqMh6XltnV52ES22mumSVEnMLZNdDliS
-         yJTrjLsVdB73QI9jJHG+2lDLa2icHjCz2rtRF7LW66cnP10xnmqEjDTXIihR8xgopV75
-         h6X4WFiMcyxT6FhNnldk+Il4h2dhV7ifVBTnqy8jf0lULLKf9/pgR7nubZZNbxcD8riI
-         ZLkQ==
-X-Gm-Message-State: AOJu0YzkUMFQMOS3h4tqaERzg8K8dKZi3lJ9ZgZY8sVm+jl3sHTCZjJM
-	Wmcid+GQJfjQlM3eYdu6E/tmix0W1ylG1I/b2Jmt6yjd7a9qxHSh1tbD
-X-Gm-Gg: AeBDieuoIn5GKOuEbdNO+GA2CM1lyMULsVkRePFnYD0kkEE5RSvh6osg5idYLovt1Px
-	1RU7YaMslxo6nXuafjrJdQDFETmgEr1r1Hzp0YPidB2aOQft3oxFqbzev4WX0KXrGT4UDLHsC0V
-	zfTwynAuAZfkJj1C2Q03Q4h+6BmzfJBKWGGEXaaRGgUfZasrQ1dmSz0CmDjkqX/nCKC1s+eWaVs
-	tY+jB/MS1/ODk+gqX5JRNgFp8czZObSwRKilo9yvgyy6/tqpOjSeFN7pA2D8UqdyCw/yHEgu8BL
-	D1aTB7MpE1iR1Um2GZagSi+0z1ImDM18YyD310tKDPdgNZJzm6RlKeOuSOWCmv8lEWouU9LkSpQ
-	pt10zlB/r20i4lknC7MUR5mJl6BmUzYd5Ojm2zB8CYHVm0f23ru9xiBx9HvSDrwrxAHcFPKKOlJ
-	OnIPyRvL8w7QOEzRYne4sGd8oL
-X-Received: by 2002:a05:600c:b96:b0:48a:5339:a46 with SMTP id 5b1f17b1804b1-48a53390f6cmr145082415e9.9.1776886953139;
-        Wed, 22 Apr 2026 12:42:33 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:72::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc10777csm532272175e9.8.2026.04.22.12.42.32
+        bh=Fqn33ovWYUYt1PkZ0Hy1fijLCC6tpmEKrNph35+cmnk=;
+        b=YoCSF+Bf894TppoVGr1C/aMIL0LEDE0jf7pwPsdcWLD425pyMAnkL7yRKVbu1jffFP
+         jfTD0pbSjYEOsvI8S9p7GfFJd8vCI57JP3YsfGWqzu85oDND6FzltYHGZxKv+tUmkIso
+         Tt9MXAyVEGtxs4dSrW4My0FjKRdffFEAqA7faUllhyau+GLMC/9txoVsuI4v27CNYn5P
+         fxyxVjog/y/NcV16YeuQlxf0hICdV+gsGJaokWTlayxxuQ3ScBP0RdmRWC/Hc3Iz6iW5
+         +c8DhXfzFE4ATGrVs1hHfpw89OAQvwTvWxHieR2GlTH9gXIw9HSCh/XBumSbfK96wvoT
+         aTkQ==
+X-Gm-Message-State: AOJu0YwZsJ3OP5EJ5mjPu23U6Ld0N26kHz+YFuYE4ZAl0FGzIIC/qYS+
+	qYriwrGbfCtLIA3akxrUnYQfP2c2gsZlRFreZIAglYlMipLf+bD7d1TQ
+X-Gm-Gg: AeBDiespAe7iv2YBuxD6M0QDWjmygnCHyjrkHu+3+2kzUuu6hJhs4FwEXBKcfVN1aPs
+	pte4NCKQN52PJm0OWi8kerZ0hqVTyWKHJt70E3w/FEjAPILQlD6ina+5pKK+TZcSTaIsQU0lt0H
+	7Lf7kjBNcQAb9kL3ZuSLMftNoNo3KnAat0hQxNx6samHaQT8+Sj2t4b4ZKVgwwWqkUGiurtkE9O
+	LTidAoEmz8R2sI1pi7T2NFIXEL0c+efyGb9akHwQ+N1rjWHxYitZ+mUddLOFcaC5KAiDY+CRyGn
+	U+nOfVKG0zA+QXEqWdR7nqLHdb8Qd5mRK1L0zvboeoOODsi4mjHZeRMA3IPkS62Kl3DCzjeIVSU
+	ZnQ/j/FZ1gq2Tzoy70S9Jzp8//rctTjGBTLusjO7GEj7ih9GYDs0S5tcmdIpt/1wrBwQrEfQ8RX
+	nYoPKMk4oxeM8vfD0QdituOZk=
+X-Received: by 2002:a05:600c:4e4f:b0:488:d6eb:e63c with SMTP id 5b1f17b1804b1-488fb778703mr345899585e9.15.1776886954737;
+        Wed, 22 Apr 2026 12:42:34 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:4::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc0f8193sm423985815e9.1.2026.04.22.12.42.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 12:42:32 -0700 (PDT)
+        Wed, 22 Apr 2026 12:42:34 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 22 Apr 2026 12:41:09 -0700
-Subject: [PATCH bpf-next v13 4/6] bpf: Verifier support for sleepable
- tracepoint programs
+Date: Wed, 22 Apr 2026 12:41:10 -0700
+Subject: [PATCH bpf-next v13 5/6] libbpf: Add section handlers for
+ sleepable tracepoints
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260422-sleepable_tracepoints-v13-4-99005dff21ef@meta.com>
+Message-Id: <20260422-sleepable_tracepoints-v13-5-99005dff21ef@meta.com>
 References: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
 In-Reply-To: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -78,103 +78,169 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  rostedt@goodmis.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776886944; l=3405;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776886944; l=5451;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=Ac5+kVuTHMmxd2jh/8dcKeAz+KyadOU0D2xIptU5iu8=;
- b=loU/W1hjIHY5qN/OcpHNMK9319zCR4ZkhbivzJf2r7V+sPY4zI0ejoUt4jaXvY4zXeBKv4iW3
- cS912QvTcI0A7d0ODuGBfX8P7plfU8wTJrHedT45HV9z/6nhm/WKYDg
+ bh=IqH3vgtfffkawvb69tDUekNeo+OyiI8tuSlpVBnywb8=;
+ b=EkNXCssNhecXTsH/4/fI1xIRbr1bxP5ke3qC3miYCGDPIH1QtAiZXtwU/9GhZXDmDC7jZu+og
+ +x8yzXLGM4yA+bCaaIf6iObPR9qSF9zUnFhshtUpC3ab38Mu845BpdY
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Allow BPF_PROG_TYPE_RAW_TRACEPOINT, BPF_PROG_TYPE_TRACEPOINT, and
-BPF_TRACE_RAW_TP (tp_btf) programs to be sleepable by adding them
-to can_be_sleepable().
+Add SEC_DEF entries for sleepable tracepoint variants:
+  - "tp_btf.s+"     for sleepable BTF-based raw tracepoints
+  - "raw_tp.s+"     for sleepable raw tracepoints
+  - "raw_tracepoint.s+" (alias)
+  - "tp.s+"         for sleepable classic tracepoints
+  - "tracepoint.s+" (alias)
 
-For BTF-based raw tracepoints (tp_btf), add a load-time check in
-bpf_check_attach_target() that rejects sleepable programs attaching
-to non-faultable tracepoints with a descriptive error message.
-
-For raw tracepoints (raw_tp), add an attach-time check in
-bpf_raw_tp_link_attach() that rejects sleepable programs on
-non-faultable tracepoints. The attach-time check is needed because
-the tracepoint name is not known at load time for raw_tp.
-
-The attach-time check for classic tracepoints (tp) in
-__perf_event_set_bpf_prog() was added in the previous patch.
-
-Replace the verbose error message that enumerates allowed program
-types with a generic "Program of this type cannot be sleepable"
-message, since the list of sleepable-capable types keeps growing.
+Extract sec_name_match_prefix() to share the prefix matching logic
+between attach_tp() and attach_raw_tp(), eliminating duplicated
+loops and hardcoded strcmp() checks for bare section names.
 
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- kernel/bpf/syscall.c  |  5 +++++
- kernel/bpf/verifier.c | 13 +++++++++++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c | 88 ++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 57 insertions(+), 31 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a3c0214ca934..3b1f0ba02f61 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4281,6 +4281,11 @@ static int bpf_raw_tp_link_attach(struct bpf_prog *prog,
- 	if (!btp)
- 		return -ENOENT;
- 
-+	if (prog->sleepable && !tracepoint_is_faultable(btp->tp)) {
-+		bpf_put_raw_tracepoint(btp);
-+		return -EINVAL;
-+	}
-+
- 	link = kzalloc_obj(*link, GFP_USER);
- 	if (!link) {
- 		err = -ENOMEM;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 185210b73385..5b4806fdb648 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19267,6 +19267,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		btp = bpf_get_raw_tracepoint(tname);
- 		if (!btp)
- 			return -EINVAL;
-+		if (prog->sleepable && !tracepoint_is_faultable(btp->tp)) {
-+			bpf_log(log, "Sleepable program cannot attach to non-faultable tracepoint %s\n",
-+				tname);
-+			bpf_put_raw_tracepoint(btp);
-+			return -EINVAL;
-+		}
- 		fname = kallsyms_lookup((unsigned long)btp->bpf_func, NULL, NULL, NULL,
- 					trace_symbol);
- 		bpf_put_raw_tracepoint(btp);
-@@ -19483,6 +19489,7 @@ static bool can_be_sleepable(struct bpf_prog *prog)
- 		case BPF_MODIFY_RETURN:
- 		case BPF_TRACE_ITER:
- 		case BPF_TRACE_FSESSION:
-+		case BPF_TRACE_RAW_TP:
- 			return true;
- 		default:
- 			return false;
-@@ -19490,7 +19497,9 @@ static bool can_be_sleepable(struct bpf_prog *prog)
- 	}
- 	return prog->type == BPF_PROG_TYPE_LSM ||
- 	       prog->type == BPF_PROG_TYPE_KPROBE /* only for uprobes */ ||
--	       prog->type == BPF_PROG_TYPE_STRUCT_OPS;
-+	       prog->type == BPF_PROG_TYPE_STRUCT_OPS ||
-+	       prog->type == BPF_PROG_TYPE_RAW_TRACEPOINT ||
-+	       prog->type == BPF_PROG_TYPE_TRACEPOINT;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 83aae7a39d36..ab2071fdd3e8 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10018,11 +10018,16 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("netkit/peer",		SCHED_CLS, BPF_NETKIT_PEER, SEC_NONE),
+ 	SEC_DEF("tracepoint+",		TRACEPOINT, 0, SEC_NONE, attach_tp),
+ 	SEC_DEF("tp+",			TRACEPOINT, 0, SEC_NONE, attach_tp),
++	SEC_DEF("tracepoint.s+",	TRACEPOINT, 0, SEC_SLEEPABLE, attach_tp),
++	SEC_DEF("tp.s+",		TRACEPOINT, 0, SEC_SLEEPABLE, attach_tp),
+ 	SEC_DEF("raw_tracepoint+",	RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
+ 	SEC_DEF("raw_tp+",		RAW_TRACEPOINT, 0, SEC_NONE, attach_raw_tp),
++	SEC_DEF("raw_tracepoint.s+",	RAW_TRACEPOINT, 0, SEC_SLEEPABLE, attach_raw_tp),
++	SEC_DEF("raw_tp.s+",		RAW_TRACEPOINT, 0, SEC_SLEEPABLE, attach_raw_tp),
+ 	SEC_DEF("raw_tracepoint.w+",	RAW_TRACEPOINT_WRITABLE, 0, SEC_NONE, attach_raw_tp),
+ 	SEC_DEF("raw_tp.w+",		RAW_TRACEPOINT_WRITABLE, 0, SEC_NONE, attach_raw_tp),
+ 	SEC_DEF("tp_btf+",		TRACING, BPF_TRACE_RAW_TP, SEC_ATTACH_BTF, attach_trace),
++	SEC_DEF("tp_btf.s+",		TRACING, BPF_TRACE_RAW_TP, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
+ 	SEC_DEF("fentry+",		TRACING, BPF_TRACE_FENTRY, SEC_ATTACH_BTF, attach_trace),
+ 	SEC_DEF("fmod_ret+",		TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF, attach_trace),
+ 	SEC_DEF("fexit+",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF, attach_trace),
+@@ -13152,25 +13157,61 @@ struct bpf_link *bpf_program__attach_tracepoint(const struct bpf_program *prog,
+ 	return bpf_program__attach_tracepoint_opts(prog, tp_category, tp_name, NULL);
  }
  
- static int check_attach_btf_id(struct bpf_verifier_env *env)
-@@ -19512,7 +19521,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 	}
++/*
++ * Match section name against a prefix array. Returns pointer past
++ * "prefix/" on match, empty string for bare sections (exact prefix
++ * match), or NULL if no prefix matches.
++ */
++static const char *sec_name_match_prefix(const char *sec_name,
++					 const char *const *prefixes,
++					 size_t n)
++{
++	size_t i;
++
++	for (i = 0; i < n; i++) {
++		size_t pfx_len;
++
++		if (!str_has_pfx(sec_name, prefixes[i]))
++			continue;
++
++		pfx_len = strlen(prefixes[i]);
++		if (sec_name[pfx_len] == '\0')
++			return sec_name + pfx_len;
++
++		if (sec_name[pfx_len] != '/' || sec_name[pfx_len + 1] == '\0')
++			continue;
++
++		return sec_name + pfx_len + 1;
++	}
++	return NULL;
++}
++
+ static int attach_tp(const struct bpf_program *prog, long cookie, struct bpf_link **link)
+ {
++	static const char *const prefixes[] = {
++		"tp.s",
++		"tp",
++		"tracepoint.s",
++		"tracepoint",
++	};
+ 	char *sec_name, *tp_cat, *tp_name;
++	const char *match;
  
- 	if (prog->sleepable && !can_be_sleepable(prog)) {
--		verbose(env, "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable\n");
-+		verbose(env, "Program of this type cannot be sleepable\n");
+ 	*link = NULL;
+ 
+-	/* no auto-attach for SEC("tp") or SEC("tracepoint") */
+-	if (strcmp(prog->sec_name, "tp") == 0 || strcmp(prog->sec_name, "tracepoint") == 0)
++	match = sec_name_match_prefix(prog->sec_name, prefixes, ARRAY_SIZE(prefixes));
++	if (!match) {
++		pr_warn("prog '%s': invalid section name '%s'\n", prog->name, prog->sec_name);
++		return -EINVAL;
++	}
++	if (!match[0]) /* bare section name no autoattach */
+ 		return 0;
+ 
+ 	sec_name = strdup(prog->sec_name);
+ 	if (!sec_name)
+ 		return -ENOMEM;
+ 
+-	/* extract "tp/<category>/<name>" or "tracepoint/<category>/<name>" */
+-	if (str_has_pfx(prog->sec_name, "tp/"))
+-		tp_cat = sec_name + sizeof("tp/") - 1;
+-	else
+-		tp_cat = sec_name + sizeof("tracepoint/") - 1;
++	tp_cat = sec_name + (match - prog->sec_name);
+ 	tp_name = strchr(tp_cat, '/');
+ 	if (!tp_name) {
+ 		free(sec_name);
+@@ -13234,37 +13275,22 @@ static int attach_raw_tp(const struct bpf_program *prog, long cookie, struct bpf
+ 		"raw_tracepoint",
+ 		"raw_tp.w",
+ 		"raw_tracepoint.w",
++		"raw_tp.s",
++		"raw_tracepoint.s",
+ 	};
+-	size_t i;
+-	const char *tp_name = NULL;
++	const char *match;
+ 
+ 	*link = NULL;
+ 
+-	for (i = 0; i < ARRAY_SIZE(prefixes); i++) {
+-		size_t pfx_len;
+-
+-		if (!str_has_pfx(prog->sec_name, prefixes[i]))
+-			continue;
+-
+-		pfx_len = strlen(prefixes[i]);
+-		/* no auto-attach case of, e.g., SEC("raw_tp") */
+-		if (prog->sec_name[pfx_len] == '\0')
+-			return 0;
+-
+-		if (prog->sec_name[pfx_len] != '/')
+-			continue;
+-
+-		tp_name = prog->sec_name + pfx_len + 1;
+-		break;
+-	}
+-
+-	if (!tp_name) {
+-		pr_warn("prog '%s': invalid section name '%s'\n",
+-			prog->name, prog->sec_name);
++	match = sec_name_match_prefix(prog->sec_name, prefixes, ARRAY_SIZE(prefixes));
++	if (!match) {
++		pr_warn("prog '%s': invalid section name '%s'\n", prog->name, prog->sec_name);
  		return -EINVAL;
  	}
++	if (!match[0])
++		return 0;
+ 
+-	*link = bpf_program__attach_raw_tracepoint(prog, tp_name);
++	*link = bpf_program__attach_raw_tracepoint(prog, match);
+ 	return libbpf_get_error(*link);
+ }
  
 
 -- 
