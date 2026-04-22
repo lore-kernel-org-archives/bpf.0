@@ -1,66 +1,107 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D91347FFE
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 21:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785862D3EF2
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 21:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776891817; cv=none; b=r9zN8CsNBvZdsLqRFaI3v+0C4IxZngAeEo+3SWzAc6hG6y/nPYuyD8MG+9KbhbH1JQ1tPNCK+hoqIFD0NhwI0Ex8G/Fib4Ml2dplUWGO+nS2WcM4I+4CliIfhuv+wW1wALU4m5Tu30/ZRTJJowr9/SBsWC3YXHvBJjLZo7h3MUw=
+	t=1776891933; cv=none; b=rk7eizTwwZ8fIpVPQjBDciwikIy1tAmZ6k9kgS77WuN8VPnC7Kv6Ak3Xwtl7otJffJs1/HhAa/7X94DmHYcxCrVHTz5+TV1tciEjD+bWwlxyLjrk16fOksuIYrZKJZpzARLqZr/oUYS0oDgrVPnK+s5Y5y0DAHfSA7o/+v6jO/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776891817; c=relaxed/simple;
-	bh=XWLOYO1gKbrrrBDEFkh8O1EcFuPow71n79j2gD5SDlA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Av9GEBxz1c1Y8FgZO4hntIFMYZvfRLqRcgDy6wAFWfCxLM9cmgVi2Ej/C7kuomJxE/JNUCwFb7/Af1rlfG6EndEgjsH+vOSy/WXnoKnKJCzBghUwghRkmp3k78D4l+FtIW+0hfVazbIrPAoEwD0Ur0dMlZ8XLnjgQUX5TlNJffA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqdPfp8j; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776891933; c=relaxed/simple;
+	bh=DODawgWOJGNx/xfdNaM+WfUXZt1N+0Qdlh3wRvy8OYg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=gkuHscG6/qWgvtS1bI5aUiM76LIne3GKX5qIUGRFEmnw3/87cvD9e6evhfCvhS6hVTT5JD+PYh+qqWOAPDnZfEMnKIH4gfd8sqRBJoc4Sv11WRBgohQAopkSMFetNXcRkr7GXrg9+SqZvjuzTA7N4gF5hsB2Ql2SZDEplYsO0mI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NfzPwhel; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqdPfp8j"
-Date: Wed, 22 Apr 2026 14:03:14 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776891803;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RYkjy4WCea2cSCblSBZyO98tvVtY1skLCklo2d0JXqM=;
-	b=RqdPfp8jkNesnz71XLeUWehb1/ED5gNVGRrMoDkXFwa3EONIQXLPt/Cp98x3clQzJW7h66
-	rd/60f+flZHorRlAq1WcLYfv1K800LusVLxNF4a8TJhuVSjGENYmgVl3ph8K5P5HXnO72A
-	dXe87x8k7amX3pyNhDZGdoqmbe6k+6w=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Werner Kasselman <werner@verivus.ai>
-Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "stable@vger.kernel.org" <stable@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Lawrence Brakmo <brakmo@fb.com>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v5 1/2] bpf: guard sock_ops rtt_min against
- non-locked tcp_sock
-Message-ID: <2026422205858.dBi3.martin.lau@linux.dev>
-References: <20260417023119.3830723-1-werner@verivus.com>
- <20260420230030.2802408-1-werner@verivus.com>
- <20260420230030.2802408-2-werner@verivus.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfzPwhel"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1245DC19425;
+	Wed, 22 Apr 2026 21:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776891933;
+	bh=DODawgWOJGNx/xfdNaM+WfUXZt1N+0Qdlh3wRvy8OYg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
+	b=NfzPwhelCOi/KzGQlCiXr9UzXli0nw9AbRz/qU2UYP/DY06MYHu7kdGltgeHerToo
+	 3OeFHUJ7NehDAtZuPbal7jVhKqdc0v9/umToswWLbTa2vbHvK10uzrjVcKsZvqMy84
+	 lTchdCRC0KjwKlurmL1m+chrQH4/00VOle7qnsVR6MCfgihVUVPSq5aUqwLkrhB8nd
+	 RULuqj6JcMk57Tqr1x9vO1YCv8uUnir179+2tKCrlDY2OeR3/tkgv4TpkXHecmcfrR
+	 jHdlEGsvEirP3QF/O9zn5Ev51+iYxQs49I5Svcn88sra1qs9v2EOHeZErxRZvy0uFg
+	 wIaWEIzy2Cgpg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] io_uring: fix missing submitter_task ownership check in
+ bpf_io_reg()
+Reply-To: sashiko@lists.linux.dev
+To: "Ali Raza" <elirazamumtaz@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260422-master-v1-1-e82f47558345@gmail.com>
+References: <20260422-master-v1-1-e82f47558345@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 22 Apr 2026 21:05:32 +0000
+Message-Id: <20260422210533.1245DC19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260420230030.2802408-2-werner@verivus.com>
-X-Migadu-Flow: FLOW_OUT
 
-On Mon, Apr 20, 2026 at 11:00:35PM +0000, Werner Kasselman wrote:
-> sock_ops_convert_ctx_access() reads rtt_min without the is_locked_tcp_sock guard used for every other tcp_sock field. On request_sock-backed sock_ops callbacks, sk points at a tcp_request_sock and the converted load reads past the end of the allocation.
-> 
-> Extract the guarded tcp_sock field load sequence into SOCK_OPS_LOAD_TCP_SOCK_FIELD() and use it for the rtt_min access after computing the sub-field offset with offsetof(struct minmax_sample, v). Reusing the shared helper keeps rtt_min aligned with the other guarded tcp_sock field loads and preserves the dst_reg == src_reg failure path that zeros the destination register when the guard fails.
+Sashiko AI review found 2 potential issue(s):
+- [Critical] Incomplete fix for privilege escalation via deferred `submitte=
+r_task` in `io_install_bpf()`
+- [Medium] Denial of Service via user-triggerable WARN_ON_ONCE for missing =
+`ops->loop_step`
+--
 
-I think some formatting instruction was not given to the AI this time and
-no human bothered to look at the formatting of the commit message
-before posting?
+commit 0ef4622575dbd984db4b264672ee9cc5b456a439
+Author: Ali Raza <elirazamumtaz@gmail.com>
+
+io_uring: fix missing submitter_task ownership check in bpf_io_reg()
+
+This commit attempts to fix a cross-privilege execution vulnerability in
+bpf_io_reg() where an attacker could install a malicious BPF loop_step
+on a deferred ring before a privileged process adopts it.
+
+> diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
+> index 937e48bef40bc..cac11c9292971 100644
+> --- a/io_uring/bpf-ops.c
+> +++ b/io_uring/bpf-ops.c
+> @@ -162,6 +162,8 @@ static int io_install_bpf(struct io_ring_ctx *ctx, st=
+ruct io_uring_bpf_ops *ops)
+>  		return -EOPNOTSUPP;
+>  	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN))
+>  		return -EOPNOTSUPP;
+> +	if (ctx->submitter_task && ctx->submitter_task !=3D current)
+> +		return -EPERM;
+
+The commit message states that the vulnerability involves exploiting
+IORING_SETUP_R_DISABLED, which defers submitter_task assignment. If the
+ring is disabled, wouldn't ctx->submitter_task initially be NULL?
+
+Because the check uses ctx->submitter_task && ..., the short-circuit
+evaluation will evaluate to false and bypass the permission check entirely
+when the submitter task is NULL. Does this allow the attacker to still
+successfully install the BPF operations during the deferred assignment
+window?
+
+Should this explicitly reject registration if the submitter task is not
+yet established, for example by checking:
+if (!ctx->submitter_task || ctx->submitter_task !=3D current)?
+
+> =20
+>  	if (ctx->bpf_ops)
+>  		return -EBUSY;
+
+Looking a few lines further down in io_install_bpf():
+
+	if (WARN_ON_ONCE(!ops->loop_step))
+		return -EINVAL;
+
+Since ops->loop_step comes from a user-provided BPF struct_ops map, can a
+local user intentionally omit it to trigger this warning?
+
+On systems configured with panic_on_warn=3D1, could this be used to trigger
+a denial of service? Would it be safer to use a standard conditional
+return without the warning macro?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422-master-v1-=
+1-e82f47558345@gmail.com?part=3D1
