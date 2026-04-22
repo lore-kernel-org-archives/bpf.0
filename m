@@ -1,66 +1,65 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917F02E06EA
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 19:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06FB347BA9
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 19:42:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776886951; cv=none; b=kL6LJUTCBPyNtiQOWwNlJdmMG2nyVMhkbSxUGjI7AXESk5T/V59O9RIs5VPI2U/qQ1HxBe8jFau0cTG64U8uvkCHnrxMM+pCuY+S/oRvakZ+HbHe020DIrJKvs0QgsjyfGMdRPtyW3I9b/Hvc50B/p9XIc+LXZXOaVqwM5DaKH0=
+	t=1776886953; cv=none; b=Jlp+1ao+CG25/pBQ3tYGhDrI9QKHA760+53DVasJe0v27EwU6i4bcJ5p9kZJvppWV46DtRND7LoLr1loOyLogfOdvy3FTuWnwwkh54r6NdTfBFdpdkG3vdpdAuZdy5U7TNk+60UHl0+nXnfRGiJ4MKQCs1pJvJen+sUt5EAHieg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776886951; c=relaxed/simple;
-	bh=C7qbsP7dactKUzWMniUqLSmXGpKCE6FlAZrrq5NECmw=;
+	s=arc-20240116; t=1776886953; c=relaxed/simple;
+	bh=VMtFsT+n5X6ar5kIS9YTKC5980+/W5waB/REB4IA5qo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Bv9D0+R1Br46d7v92vcaytdnwFYgJQ8QwlTtQABfkcjHlTujqzlLJ/0h4zy5ELhsmrr2nEUhQiNbl11QL/pXor72ILNI2jWkKmNYuaFCaEXeWecZMQEftYUiaH3njjxGs0Ln9s7cPM1ckj2GYRlvgUEwHvkySbSyd6/ft77Iymo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6DROrZh; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:To:Cc; b=pv06GQ504CvvyzvWrAi32ToP3xlc2z5nsy9YrVKTJbTblGl11KmBywZrVL5dCMq7i7Y3AcVHMl6Z0NGjToGsvgC6Txg8dMBih19+CRgwHSe5FSrkeXbdSGg5MvOeZPz19C5LUHkOcsZx2ikzuXRGg4581DVx6TJf+u427S6bvHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F+tg+ol/; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6DROrZh"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so95372745e9.2
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 12:42:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F+tg+ol/"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43d0deb7ad5so4803705f8f.2
+        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 12:42:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776886948; x=1777491748; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776886950; x=1777491750; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8phqV9SLEcqCOyGTd2OpaTZYEx+kV+mXMt9fsMGOdOI=;
-        b=V6DROrZhAYV9tCxyE7NU9W1EenDi5fg+7NU6McXmoPGoshp5C4YvXlJ3ARYlycBBsi
-         4RscS/c40fTH9pI0HHkb4YUvwqoecB1oNqVnP897rb0XHpBOE1/Fe02k/6p7NgMb2KuQ
-         adN5GWQHfpwy5yiQ7LHWBKoDBZU+vBBDCW+ih3VOwNyuds+2Pgy51s9jm8dA6bQ8D5wW
-         XGv4K08O67AgeNMNlm3jRu3ers1sm/8mpvVc17qqWLw9Bs+hV+SXzn2VnHJF1cU6kWpj
-         QqEVX/cQBuwZCkDZAQIdZDzTpXHxCnvc3LxUuG6m5mKb5JWeZPa/1RyghE5lJFv0fyY/
-         JLzw==
+        bh=lDDO98B8peT4kpTcd8nPt+peTSiWaJwm2AqPG2c7HzA=;
+        b=F+tg+ol/d/DVasPHvYLo+S5wbtxFMawwRGmYq2kAroQ+VaI1cN5FTpTZhTnW53j/PR
+         Kq+D0M/YIxCjgAPcww+a6bFYnYr5Y3ccDAkJWOm6nVdVjbBA4L916F/pvoLScUAQpw7v
+         qfPB9T3r13J8iwAydrV+iAA2feA06T3nel3h6b92i5jlboDMz5MGXVvquTA6Wv2n+dfw
+         rNvTjmq9qJKN++RoP/FItXms/+iuI976TGfPEAxvrr08MWbN2+IMdGUZebuo6oafvxhi
+         /5TUEoE6GBxh2S05P/utz2hH7qD0UiqRABe6d+RV473hZexQ62gWEXYWOdM8S6LQFHnC
+         NopQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776886948; x=1777491748;
+        d=1e100.net; s=20251104; t=1776886950; x=1777491750;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=8phqV9SLEcqCOyGTd2OpaTZYEx+kV+mXMt9fsMGOdOI=;
-        b=FwUCE2QcS6+Ls1ZUSktS5m/ZYXryeVifmnl1raU+8D9Py0oFrecp9SFjUvnerJ/LyJ
-         f0pXWINdHD6ZppZxpn0mQdjhX/r71RgrT1UvJheLpWQC1ouon7r4Pne5M20eptS3Uqqe
-         J9GJUi91swokw97DBtYifYHXKCtSC3i2NNH8pOzs/wRhHxJFnp0ks01eRsx+O5fEe+as
-         CDKg+t4LJIzDeugTMsHIgGJqvsYb+x0HoUVY2hK3jl7IpODVclql6CoqnBGEtrLBnUrI
-         DWRhq+bNXDO0kUQoeTVpssS2uBKCKAi5p73sCWWNBbaLJvZTRBZ2brvTxwHABrP1q2tK
-         jZwA==
-X-Gm-Message-State: AOJu0YwXgIE3ESSJ93UoLJeUk/WFOF+mEJ0NdjtxAxX95ceumDHEBa1u
-	qtLIb4n0H50l1h8V5ScXKUadIDXWdd+lDgytlWxexTTIyKt3Z5dBTadT
-X-Gm-Gg: AeBDievJUHpTm4NTMkoFPWMkVJIsPhtSEmHwhtfnS4TLCsfHRhYoupj0b0MtrIM/bn0
-	/NLZozhjN+riTb2RYTBiwb55MV/xO1N5BCkjkjrOgckHf7ld8kPUjLPCwlWsDH9uG+bljz9bn5V
-	VqR112PvsohPglZmsVFTRa3QQ1lQfjLFCySM3QS7L2Xx4U99IG8rg1ZdhvH2Gu9jrW4NwvbTNR+
-	UK5v/Xhon+KD/eEPRGhxwAaNceJbGhXucr3DKa/CZpO9db6cGZXvIdjhGY/ZP1jpxVHJDAg9LCa
-	lBk+edkke40rrkLjwG/HMX3tcu1lj5w4m8wsyk2Xyj/fttWyK4TuFy6sQQsxWYur9UBUU+HI4ZB
-	gZvgWFBla+CYXTEFc2RNxPNSztpE1BeakJqIz31XL28XGB1Y5RvphnFlqREtr+Q3VAQry0fAm1z
-	BcqUkrdVD86HxhCI93CFaYpeS2
-X-Received: by 2002:a05:600d:8408:b0:485:46fd:7887 with SMTP id 5b1f17b1804b1-488fb74c61fmr266826895e9.13.1776886947712;
-        Wed, 22 Apr 2026 12:42:27 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:71::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc0f8188sm492212985e9.2.2026.04.22.12.42.27
+        bh=lDDO98B8peT4kpTcd8nPt+peTSiWaJwm2AqPG2c7HzA=;
+        b=pPlhQskvjcnzetxnNWoUahga0Q7XjHs4LW4CvCPIsQhCK3DNbCU/8xwTtpMQFlkSnq
+         Ol+aukOuEPb5nRG2BBni8Efv2FZ/54O8x+LXphJvLqdd9NkXexxuXDvspR1jK9kBadd4
+         cggEbSzBUG+WqAYKjfQAoL347IdwJ9KIiTnb1pMp/IeTmTKAjG4jPGKU2DibPvBDyA8j
+         CLYnZHZDI62dXpRsqn1zbg73mHP5ZN51HIyHeGiachB3IJbHglrlch1A81F6Evu+2NPY
+         LKoGQgxQVWtRo2M98EeX/bZU2TDVZxaSFtTNY+vq1cWcvqbx5G725T6pOR9ZVazc3buk
+         pyJw==
+X-Gm-Message-State: AOJu0YxU2/oFyYn9KhFt/fYsOawOp391YI5mnFEA15gx3CpX//cVrUsC
+	mv/bqPiXayBcjcFVqEUUbr8p+CBphgwm63RzF3YM6yvBLjSOZIfuhBQf
+X-Gm-Gg: AeBDiet3RyPMiTnp3XiSwHiwNBMO03uqhwJgvZkp6DveN1vfxPjt2xffgB68yQddlAZ
+	3uVQdVSwHv5gJk+TkZAxNKy/ASlA49M0Y/Ld2VDwi7WrUitHNRU7w95Vz51xZLjWI7EAaX07tr7
+	9zPNOw6k8ckOR3V7u/pgXhiA53ANqFG3n6L0jJZmmQysdg3wE9MuyvVITyVU3Frd8XQ5i+gVBH1
+	66DlEiJw/M4xDr4czO8Rcq56m9KV7ZWtFzQXA13MNUP+qeMVm4zv3+5C37VErv9WuRXifQsv6EL
+	nQEjt0lB9KZ1uy4K16cdFmnqCqRJAx0Z8KcVGlK2PXq9lDNQKiT69kcdHGaoLbmcP7refMGLLM3
+	gwXW82Dwa0EzSHlb1psEzzT/lZxCE/6nKmRRRUxCkSvBttnsya+/tYBJjSs8aUhD4ftvsyq/mZX
+	KXVFq3TLksBiq3iqn6VndJLBw=
+X-Received: by 2002:a05:6000:25c4:b0:43b:8f56:1e1d with SMTP id ffacd0b85a97d-43fe3dc10demr37130558f8f.13.1776886949712;
+        Wed, 22 Apr 2026 12:42:29 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4e59f97sm52941990f8f.37.2026.04.22.12.42.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 12:42:27 -0700 (PDT)
+        Wed, 22 Apr 2026 12:42:29 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 22 Apr 2026 12:41:06 -0700
-Subject: [PATCH bpf-next v13 1/6] bpf: Add sleepable support for raw
- tracepoint programs
+Date: Wed, 22 Apr 2026 12:41:07 -0700
+Subject: [PATCH bpf-next v13 2/6] bpf: Add bpf_prog_run_array_sleepable()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,7 +68,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260422-sleepable_tracepoints-v13-1-99005dff21ef@meta.com>
+Message-Id: <20260422-sleepable_tracepoints-v13-2-99005dff21ef@meta.com>
 References: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
 In-Reply-To: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -78,204 +77,97 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  rostedt@goodmis.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776886944; l=6207;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776886944; l=2504;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=tCcV2LN6OqH112mRvVMqaHyVGkIUsmc5w5uH6YMCZpo=;
- b=MyTdvh/JOkITIXt6bgWrcskl1LDHWdf+bNe5JVZHcPtLyICZNbJpm5Fx9YnPkubYllyUE+eOK
- WrZCvQgnbBtDvf4xybp1/I+oyaaLDlhifMbMGL+9W8G4KXfTLoLxboN
+ bh=KzTwCQ0wWVgkeuW4DVHudpEBxw4vAcTGMbCDX8BSmEc=;
+ b=ZyrNbBPNkDhSsh3zaDbyWIbbgmk7AI2NJ8H+Fw3ZvuOAOhUxI6mpIlKSrZe1pIE8OgKW6Ga5M
+ qW859ch3xEiDXEffiTa3hom80+svDQce/+GdHK3TbN5Dmc4HCBiDrsk
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Rework __bpf_trace_run() to support sleepable BPF programs by using
-explicit RCU flavor selection, following the uprobe_prog_run() pattern.
+Add bpf_prog_run_array_sleepable() for running BPF program arrays
+on faultable tracepoints. Unlike bpf_prog_run_array_uprobe(), it
+includes per-program recursion checking for private stack safety
+and hardcodes is_uprobe to false.
 
-For sleepable programs, use rcu_read_lock_tasks_trace() for lifetime
-protection with migrate_disable(). For non-sleepable programs, use the
-regular rcu_read_lock_dont_migrate().
+Skip dummy_bpf_prog at the top of the loop. When
+bpf_prog_array_delete_safe() replaces a detached program with
+dummy_bpf_prog on allocation failure, the dummy is statically
+allocated and has NULL active, stats, and aux fields. Identify
+it by prog->len == 0, since every real program has at least one
+instruction.
 
-Remove the preempt_disable_notrace/preempt_enable_notrace pair from
-the faultable tracepoint BPF probe wrapper in bpf_probe.h, since
-migration protection and RCU locking are now handled per-program
-inside __bpf_trace_run().
-
-Adapt bpf_prog_test_run_raw_tp() for sleepable programs: reject
-BPF_F_TEST_RUN_ON_CPU since sleepable programs cannot run in hardirq
-or preempt-disabled context, and call __bpf_prog_test_run_raw_tp()
-directly instead of via smp_call_function_single(). Rework
-__bpf_prog_test_run_raw_tp() to select RCU flavor per-program and
-add per-program recursion context guard for private stack safety.
+Keep bpf_prog_run_array_uprobe() unchanged for uprobe callers.
 
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- include/trace/bpf_probe.h |  2 --
- kernel/trace/bpf_trace.c  | 20 ++++++++++++---
- net/bpf/test_run.c        | 65 ++++++++++++++++++++++++++++++++++++-----------
- 3 files changed, 67 insertions(+), 20 deletions(-)
+ include/linux/bpf.h | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 9391d54d3f12..d1de8f9aa07f 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -58,9 +58,7 @@ static notrace void							\
- __bpf_trace_##call(void *__data, proto)					\
- {									\
- 	might_fault();							\
--	preempt_disable_notrace();					\
- 	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));	\
--	preempt_enable_notrace();					\
- }
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 3cb6b9e70080..d3aea3931b85 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3079,6 +3079,56 @@ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+ void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
+ void bpf_prog_report_arena_violation(bool write, unsigned long addr, unsigned long fault_ip);
  
- #undef DECLARE_EVENT_SYSCALL_CLASS
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index e916f0ccbed9..7276c72c1d31 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2072,11 +2072,19 @@ void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
- static __always_inline
- void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
- {
-+	struct srcu_ctr __percpu *scp = NULL;
- 	struct bpf_prog *prog = link->link.prog;
-+	bool sleepable = prog->sleepable;
- 	struct bpf_run_ctx *old_run_ctx;
- 	struct bpf_trace_run_ctx run_ctx;
- 
--	rcu_read_lock_dont_migrate();
-+	if (sleepable) {
-+		scp = rcu_read_lock_tasks_trace();
-+		migrate_disable();
-+	} else {
-+		rcu_read_lock_dont_migrate();
-+	}
++static __always_inline u32
++bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
++			     const void *ctx, bpf_prog_run_fn run_prog)
++{
++	const struct bpf_prog_array_item *item;
++	struct bpf_prog *prog;
++	struct bpf_run_ctx *old_run_ctx;
++	struct bpf_trace_run_ctx run_ctx;
++	u32 ret = 1;
 +
- 	if (unlikely(!bpf_prog_get_recursion_context(prog))) {
- 		bpf_prog_inc_misses_counter(prog);
- 		goto out;
-@@ -2085,12 +2093,18 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
- 	run_ctx.bpf_cookie = link->cookie;
- 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
- 
--	(void) bpf_prog_run(prog, args);
-+	(void)bpf_prog_run(prog, args);
- 
- 	bpf_reset_run_ctx(old_run_ctx);
- out:
- 	bpf_prog_put_recursion_context(prog);
--	rcu_read_unlock_migrate();
++	if (unlikely(!array))
++		return ret;
 +
-+	if (sleepable) {
-+		migrate_enable();
-+		rcu_read_unlock_tasks_trace(scp);
-+	} else {
-+		rcu_read_unlock_migrate();
-+	}
- }
- 
- #define UNPACK(...)			__VA_ARGS__
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 2bc04feadfab..c9aea7052ba7 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -748,14 +748,35 @@ static void
- __bpf_prog_test_run_raw_tp(void *data)
- {
- 	struct bpf_raw_tp_test_run_info *info = data;
-+	struct srcu_ctr __percpu *scp = NULL;
- 	struct bpf_trace_run_ctx run_ctx = {};
- 	struct bpf_run_ctx *old_run_ctx;
- 
- 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
- 
--	rcu_read_lock();
-+	if (info->prog->sleepable) {
-+		scp = rcu_read_lock_tasks_trace();
-+		migrate_disable();
-+	} else {
-+		rcu_read_lock();
-+	}
++	migrate_disable();
 +
-+	if (unlikely(!bpf_prog_get_recursion_context(info->prog))) {
-+		bpf_prog_inc_misses_counter(info->prog);
-+		goto out;
-+	}
++	run_ctx.is_uprobe = false;
 +
- 	info->retval = bpf_prog_run(info->prog, info->ctx);
--	rcu_read_unlock();
-+
-+out:
-+	bpf_prog_put_recursion_context(info->prog);
-+
-+	if (info->prog->sleepable) {
-+		migrate_enable();
-+		rcu_read_unlock_tasks_trace(scp);
-+	} else {
-+		rcu_read_unlock();
-+	}
- 
- 	bpf_reset_run_ctx(old_run_ctx);
- }
-@@ -783,6 +804,13 @@ int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
- 	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 && cpu != 0)
- 		return -EINVAL;
- 
-+	/*
-+	 * Sleepable programs cannot run with preemption disabled or in
-+	 * hardirq context (smp_call_function_single), reject the flag.
-+	 */
-+	if (prog->sleepable && (kattr->test.flags & BPF_F_TEST_RUN_ON_CPU))
-+		return -EINVAL;
-+
- 	if (ctx_size_in) {
- 		info.ctx = memdup_user(ctx_in, ctx_size_in);
- 		if (IS_ERR(info.ctx))
-@@ -791,24 +819,31 @@ int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
- 		info.ctx = NULL;
- 	}
- 
-+	info.retval = 0;
- 	info.prog = prog;
- 
--	current_cpu = get_cpu();
--	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 ||
--	    cpu == current_cpu) {
-+	if (prog->sleepable) {
- 		__bpf_prog_test_run_raw_tp(&info);
--	} else if (cpu >= nr_cpu_ids || !cpu_online(cpu)) {
--		/* smp_call_function_single() also checks cpu_online()
--		 * after csd_lock(). However, since cpu is from user
--		 * space, let's do an extra quick check to filter out
--		 * invalid value before smp_call_function_single().
--		 */
--		err = -ENXIO;
- 	} else {
--		err = smp_call_function_single(cpu, __bpf_prog_test_run_raw_tp,
--					       &info, 1);
-+		current_cpu = get_cpu();
-+		if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 ||
-+		    cpu == current_cpu) {
-+			__bpf_prog_test_run_raw_tp(&info);
-+		} else if (cpu >= nr_cpu_ids || !cpu_online(cpu)) {
-+			/*
-+			 * smp_call_function_single() also checks cpu_online()
-+			 * after csd_lock(). However, since cpu is from user
-+			 * space, let's do an extra quick check to filter out
-+			 * invalid value before smp_call_function_single().
-+			 */
-+			err = -ENXIO;
-+		} else {
-+			err = smp_call_function_single(cpu,
-+						       __bpf_prog_test_run_raw_tp,
-+						       &info, 1);
++	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
++	item = &array->items[0];
++	while ((prog = READ_ONCE(item->prog))) {
++		/* Skip dummy_bpf_prog placeholder (len == 0) */
++		if (unlikely(!prog->len)) {
++			item++;
++			continue;
 +		}
-+		put_cpu();
- 	}
--	put_cpu();
- 
- 	if (!err &&
- 	    copy_to_user(&uattr->test.retval, &info.retval, sizeof(u32)))
++
++		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
++			bpf_prog_inc_misses_counter(prog);
++			bpf_prog_put_recursion_context(prog);
++			item++;
++			continue;
++		}
++
++		run_ctx.bpf_cookie = item->bpf_cookie;
++
++		if (!prog->sleepable) {
++			guard(rcu)();
++			ret &= run_prog(prog, ctx);
++		} else {
++			ret &= run_prog(prog, ctx);
++		}
++
++		bpf_prog_put_recursion_context(prog);
++		item++;
++	}
++	bpf_reset_run_ctx(old_run_ctx);
++	migrate_enable();
++	return ret;
++}
++
+ #else /* !CONFIG_BPF_SYSCALL */
+ static inline struct bpf_prog *bpf_prog_get(u32 ufd)
+ {
 
 -- 
 2.52.0
