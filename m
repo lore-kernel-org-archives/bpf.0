@@ -1,65 +1,66 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E0126299
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 19:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917F02E06EA
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 19:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776886949; cv=none; b=E3H0Wmns8/zC6lRCrQqWThSTPv2sG5aGoMpt8y/MmOVXkIJCstdZX4lVwZK82N7eH30Rw1L8gvghH6GfuHAWiACfTTOSdi600E2Gpws8olJdwhU8mq2D/8VUOCUfsgDEvkZOLjQ5H6PNooXWH7AyLFkNP5eULiIkrBlrQzBBTcw=
+	t=1776886951; cv=none; b=kL6LJUTCBPyNtiQOWwNlJdmMG2nyVMhkbSxUGjI7AXESk5T/V59O9RIs5VPI2U/qQ1HxBe8jFau0cTG64U8uvkCHnrxMM+pCuY+S/oRvakZ+HbHe020DIrJKvs0QgsjyfGMdRPtyW3I9b/Hvc50B/p9XIc+LXZXOaVqwM5DaKH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776886949; c=relaxed/simple;
-	bh=na9W9joWQ4F18Q8aj4gshE/o9TRup0bFoZ9JF8QQse8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ZVh1CHqkTb6K6OvzBkBzUF0aZWNTsG4t887oxoTT71Ba+VX5tVHsYvIc/+8S4y6P4wUzAs47tZx7zrwxpxm+kMIcpYI3YSTXALazFWLc3TcFpPOlaW58j2eU3LTphKziT2bPUWOePAB3qQOWEB9Z2Svt7gr9544AoRH84qHOAac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e2aY+Shb; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1776886951; c=relaxed/simple;
+	bh=C7qbsP7dactKUzWMniUqLSmXGpKCE6FlAZrrq5NECmw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Bv9D0+R1Br46d7v92vcaytdnwFYgJQ8QwlTtQABfkcjHlTujqzlLJ/0h4zy5ELhsmrr2nEUhQiNbl11QL/pXor72ILNI2jWkKmNYuaFCaEXeWecZMQEftYUiaH3njjxGs0Ln9s7cPM1ckj2GYRlvgUEwHvkySbSyd6/ft77Iymo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V6DROrZh; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2aY+Shb"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4891e5b9c1fso38570725e9.2
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 12:42:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6DROrZh"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-488b0e1b870so95372745e9.2
+        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 12:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776886946; x=1777491746; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3rxj5d+sjsfNqhQ/eswb1/whpxOAswI259Z6Dtwry2U=;
-        b=e2aY+ShbZi4Cu7LhKk0GRfWqJiYUXzgw3zhUW3eBLjf9EB12D5Db7VQmJXKmwYQ6r2
-         aa2YugCgnrDCdmzqC/WbYIbDujPM7Wj62W/f4k5pj2/EzjKopUrMbXb22NjfPFN/AJrg
-         ZHEHyBOztpfgbSqTR3/6A0lIURFNPLqhNNeju/J4GdYObN4P4WKj8PuVxgEB5T420Ioe
-         DPm4yfjxf/vtfLYL81fnwCNPMtRfRTw3VKYlmOYug83gryJeQDOc6hzD9E4czJKiPoVQ
-         GvJyo/29xjscFbqd/y2OKMME9OQO0cu4z723ptwSC+KC7vvL61eX3TdURn2rBJiZy58h
-         RnPw==
+        d=gmail.com; s=20251104; t=1776886948; x=1777491748; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8phqV9SLEcqCOyGTd2OpaTZYEx+kV+mXMt9fsMGOdOI=;
+        b=V6DROrZhAYV9tCxyE7NU9W1EenDi5fg+7NU6McXmoPGoshp5C4YvXlJ3ARYlycBBsi
+         4RscS/c40fTH9pI0HHkb4YUvwqoecB1oNqVnP897rb0XHpBOE1/Fe02k/6p7NgMb2KuQ
+         adN5GWQHfpwy5yiQ7LHWBKoDBZU+vBBDCW+ih3VOwNyuds+2Pgy51s9jm8dA6bQ8D5wW
+         XGv4K08O67AgeNMNlm3jRu3ers1sm/8mpvVc17qqWLw9Bs+hV+SXzn2VnHJF1cU6kWpj
+         QqEVX/cQBuwZCkDZAQIdZDzTpXHxCnvc3LxUuG6m5mKb5JWeZPa/1RyghE5lJFv0fyY/
+         JLzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776886946; x=1777491746;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3rxj5d+sjsfNqhQ/eswb1/whpxOAswI259Z6Dtwry2U=;
-        b=DndnCL9wsWmI6SKDCMggwJJoAxzhA+0nrQHCWvzapUeJlignClKfxie+6KIZX2nsD/
-         FDWjZhzSq9xEKIjJoJovWxJyKgC5tptwl/BvJzUpqT0Qm6pB6JtXoEw1M1t/xH7p79is
-         DogX4PjCxu9cT5sJDNkg9+uV5jy9PjkTuxUrIoWn7WiWGqlz7Ld5xKnWP/9OZgd0E9dH
-         IVDNynR0Je4yYrymADUj5zzGN7n12f+C6lxq0wrOjfEY3z+hxlTczgjjwcVZ6NUkkYaA
-         jBaDwGFxQsq4m9aleL9fMUgo/s8hying6Ru6JnHYTKroTxjB8VKTZebmZBIJ4mZztb9o
-         vzxw==
-X-Gm-Message-State: AOJu0Yzvur8QGBn438SzIRHMz4ndki0/aRsnpxWRzs7fHZqpjeX3eA0q
-	yS5tIYRk4BsLmm2T4PIrX5QmjtslVVKLvKrpcytNYtQ09FRpl3ZSmoMe
-X-Gm-Gg: AeBDiesOg7+YITmtKc6a3T4FgJfkwe+9sULz1AgiWpYkc+vKHqZDd1rTaY2u8MB7bEv
-	D/qRuBkXxnbzfFqTM/sf1U13EhFUGRsiCxuN+dAwrssjU1H0SFkbileVQPq36ed8yvFNX9A6YBt
-	cAdK0rDG9FXgXFuVNiewjFHGLQdf8MiTZySzVzR56pvmIwxGZ5bsKe+uADwdztrSoVQgVPc/KVa
-	xSCaH6JTbvCIDX0MmrIn8UphJb6MNIchkf77aFN3hh8Uh+XAxn2eOuTBxNCaLk4ZGT+gkKnLGgd
-	J45kkGrEFt29h+ijZCOoaD0KUWCtbYolAyKPaKWFKSA71hKwcJOaUDyF9B7R5gMBXUs4VVAK8g7
-	M89nXMvdATa2IOZUpCd/qWlUjTR+LwG81+GEUCXLXjQ/MntSlmW9K0eTyfI/Ya6yO6dzD+6qraE
-	ToUNTLy1SIJ2fwwjielqusJqlH
-X-Received: by 2002:a05:600c:a30a:b0:48a:581c:ead with SMTP id 5b1f17b1804b1-48a581c113cmr81903155e9.10.1776886946313;
-        Wed, 22 Apr 2026 12:42:26 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:41::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4891bb3d121sm417549875e9.14.2026.04.22.12.42.25
+        d=1e100.net; s=20251104; t=1776886948; x=1777491748;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8phqV9SLEcqCOyGTd2OpaTZYEx+kV+mXMt9fsMGOdOI=;
+        b=FwUCE2QcS6+Ls1ZUSktS5m/ZYXryeVifmnl1raU+8D9Py0oFrecp9SFjUvnerJ/LyJ
+         f0pXWINdHD6ZppZxpn0mQdjhX/r71RgrT1UvJheLpWQC1ouon7r4Pne5M20eptS3Uqqe
+         J9GJUi91swokw97DBtYifYHXKCtSC3i2NNH8pOzs/wRhHxJFnp0ks01eRsx+O5fEe+as
+         CDKg+t4LJIzDeugTMsHIgGJqvsYb+x0HoUVY2hK3jl7IpODVclql6CoqnBGEtrLBnUrI
+         DWRhq+bNXDO0kUQoeTVpssS2uBKCKAi5p73sCWWNBbaLJvZTRBZ2brvTxwHABrP1q2tK
+         jZwA==
+X-Gm-Message-State: AOJu0YwXgIE3ESSJ93UoLJeUk/WFOF+mEJ0NdjtxAxX95ceumDHEBa1u
+	qtLIb4n0H50l1h8V5ScXKUadIDXWdd+lDgytlWxexTTIyKt3Z5dBTadT
+X-Gm-Gg: AeBDievJUHpTm4NTMkoFPWMkVJIsPhtSEmHwhtfnS4TLCsfHRhYoupj0b0MtrIM/bn0
+	/NLZozhjN+riTb2RYTBiwb55MV/xO1N5BCkjkjrOgckHf7ld8kPUjLPCwlWsDH9uG+bljz9bn5V
+	VqR112PvsohPglZmsVFTRa3QQ1lQfjLFCySM3QS7L2Xx4U99IG8rg1ZdhvH2Gu9jrW4NwvbTNR+
+	UK5v/Xhon+KD/eEPRGhxwAaNceJbGhXucr3DKa/CZpO9db6cGZXvIdjhGY/ZP1jpxVHJDAg9LCa
+	lBk+edkke40rrkLjwG/HMX3tcu1lj5w4m8wsyk2Xyj/fttWyK4TuFy6sQQsxWYur9UBUU+HI4ZB
+	gZvgWFBla+CYXTEFc2RNxPNSztpE1BeakJqIz31XL28XGB1Y5RvphnFlqREtr+Q3VAQry0fAm1z
+	BcqUkrdVD86HxhCI93CFaYpeS2
+X-Received: by 2002:a05:600d:8408:b0:485:46fd:7887 with SMTP id 5b1f17b1804b1-488fb74c61fmr266826895e9.13.1776886947712;
+        Wed, 22 Apr 2026 12:42:27 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:71::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc0f8188sm492212985e9.2.2026.04.22.12.42.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 12:42:25 -0700 (PDT)
+        Wed, 22 Apr 2026 12:42:27 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v13 0/6] bpf: Add support for sleepable tracepoint
- programs
-Date: Wed, 22 Apr 2026 12:41:05 -0700
-Message-Id: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
+Date: Wed, 22 Apr 2026 12:41:06 -0700
+Subject: [PATCH bpf-next v13 1/6] bpf: Add sleepable support for raw
+ tracepoint programs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,179 +69,214 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFEk6WkC/33STWrDMBAF4KsYraMyP5IsZ9V7lFIka9QY0iTYx
- qSE3L3EXUS4qOuBb3hv5qYmGQeZ1L65qVGWYRrOJ7VvkHeN6g/h9Cl6SGrfKAJyQOj0dBS5hHi
- Uj3kMvVzOw2meNHsMggbBWlC7Rl1GycN1hd9UvGR9kuus3neNOgzTfB6/140LrfNfm2zFXkiDB
- mZIISdnIb9+yRxe+vPXCi78RBixhrAGzdLFmMTGRLRBTIlwDTEadJLYO++Dc5E3iC2RWlWL1aC
- 9tWSTtJjIbhBXIGRqiHsgGEPkYDj/QdoSsf8hFNFTCr0E3MbxBcJQQ/wDESY2rs0cYIN0T8RgF
- ek0aGmxE+eMeNNvEIRSqeZB0KDRYTYQmVNqtwwWDFVfBfFxZp8zsk8uw7ZcpJKhKvP429aYmEE
- 4MmLB3O/3H/rqvhl8AwAA
-X-Change-ID: 20260216-sleepable_tracepoints-381ae1410550
+Message-Id: <20260422-sleepable_tracepoints-v13-1-99005dff21ef@meta.com>
+References: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
+In-Reply-To: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
  eddyz87@gmail.com, memxor@gmail.com, peterz@infradead.org, 
  rostedt@goodmis.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776886944; l=7380;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776886944; l=6207;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=na9W9joWQ4F18Q8aj4gshE/o9TRup0bFoZ9JF8QQse8=;
- b=sXWNCuW3DWLkEV1fYQ6/uTcSVdx9lPj7YUisvBZTaYSgZILxWZ3Ux4/Og/V85sz3/ZqJz22iL
- m5IxGf3Kz9XDVX9QhzOPZMeJNXPKEsaKVy3SIO3qX7VxkurznLOlK68
+ bh=tCcV2LN6OqH112mRvVMqaHyVGkIUsmc5w5uH6YMCZpo=;
+ b=MyTdvh/JOkITIXt6bgWrcskl1LDHWdf+bNe5JVZHcPtLyICZNbJpm5Fx9YnPkubYllyUE+eOK
+ WrZCvQgnbBtDvf4xybp1/I+oyaaLDlhifMbMGL+9W8G4KXfTLoLxboN
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-This series adds support for sleepable BPF programs attached to raw
-tracepoints (tp_btf, raw_tp) and classic tracepoints (tp).
-The motivation is to allow BPF programs on syscall
-tracepoints to use sleepable helpers such as bpf_copy_from_user(),
-enabling reliable user memory reads that can page-fault.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-This series removes restriction for faultable tracepoints:
+Rework __bpf_trace_run() to support sleepable BPF programs by using
+explicit RCU flavor selection, following the uprobe_prog_run() pattern.
 
-Patch 1 modifies __bpf_trace_run() to support sleepable programs.
+For sleepable programs, use rcu_read_lock_tasks_trace() for lifetime
+protection with migrate_disable(). For non-sleepable programs, use the
+regular rcu_read_lock_dont_migrate().
 
-Patch 2 introduces bpf_prog_run_array_sleepable() to support new usecase.
+Remove the preempt_disable_notrace/preempt_enable_notrace pair from
+the faultable tracepoint BPF probe wrapper in bpf_probe.h, since
+migration protection and RCU locking are now handled per-program
+inside __bpf_trace_run().
 
-Patch 3 adds sleepable support for classic tracepoints
-(BPF_PROG_TYPE_TRACEPOINT) by introducing trace_call_bpf_faultable()
-and restructuring perf_syscall_enter/exit() to run BPF programs in
-faultable context.
+Adapt bpf_prog_test_run_raw_tp() for sleepable programs: reject
+BPF_F_TEST_RUN_ON_CPU since sleepable programs cannot run in hardirq
+or preempt-disabled context, and call __bpf_prog_test_run_raw_tp()
+directly instead of via smp_call_function_single(). Rework
+__bpf_prog_test_run_raw_tp() to select RCU flavor per-program and
+add per-program recursion context guard for private stack safety.
 
-Patch 4 allows BPF_TRACE_RAW_TP, BPF_PROG_TYPE_RAW_TRACEPOINT, and
-BPF_PROG_TYPE_TRACEPOINT programs to be loaded as sleepable, with
-load-time and attach-time checks to reject sleepable programs on
-non-faultable tracepoints.
-
-Patch 5 adds libbpf SEC_DEF handlers: tp_btf.s, raw_tp.s,
-raw_tracepoint.s, tp.s, and tracepoint.s.
-
-Patch 6 adds selftests covering tp_btf.s, raw_tp.s, and tp.s positive
-cases using bpf_copy_from_user() plus negative tests for non-faultable
-tracepoints.
-
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Changes in v13:
-- Invert if (prog->sleepable) check in bpf_prog_run_array_sleepable()
-- Link to v12: https://patch.msgid.link/20260422-sleepable_tracepoints-v12-0-744bf0e3b311@meta.com
+ include/trace/bpf_probe.h |  2 --
+ kernel/trace/bpf_trace.c  | 20 ++++++++++++---
+ net/bpf/test_run.c        | 65 ++++++++++++++++++++++++++++++++++++-----------
+ 3 files changed, 67 insertions(+), 20 deletions(-)
 
-Changes in v12:
-- Style improvement in the bpf_prog_run_array_sleepable(): use guard(rcu)(), remove
-unnecessary defensive programming artifacts.
-- Link to v11: https://patch.msgid.link/20260421-sleepable_tracepoints-v11-0-d8ff138d6f05@meta.com
+diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+index 9391d54d3f12..d1de8f9aa07f 100644
+--- a/include/trace/bpf_probe.h
++++ b/include/trace/bpf_probe.h
+@@ -58,9 +58,7 @@ static notrace void							\
+ __bpf_trace_##call(void *__data, proto)					\
+ {									\
+ 	might_fault();							\
+-	preempt_disable_notrace();					\
+ 	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));	\
+-	preempt_enable_notrace();					\
+ }
+ 
+ #undef DECLARE_EVENT_SYSCALL_CLASS
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index e916f0ccbed9..7276c72c1d31 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2072,11 +2072,19 @@ void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
+ static __always_inline
+ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
+ {
++	struct srcu_ctr __percpu *scp = NULL;
+ 	struct bpf_prog *prog = link->link.prog;
++	bool sleepable = prog->sleepable;
+ 	struct bpf_run_ctx *old_run_ctx;
+ 	struct bpf_trace_run_ctx run_ctx;
+ 
+-	rcu_read_lock_dont_migrate();
++	if (sleepable) {
++		scp = rcu_read_lock_tasks_trace();
++		migrate_disable();
++	} else {
++		rcu_read_lock_dont_migrate();
++	}
++
+ 	if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+ 		bpf_prog_inc_misses_counter(prog);
+ 		goto out;
+@@ -2085,12 +2093,18 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
+ 	run_ctx.bpf_cookie = link->cookie;
+ 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+ 
+-	(void) bpf_prog_run(prog, args);
++	(void)bpf_prog_run(prog, args);
+ 
+ 	bpf_reset_run_ctx(old_run_ctx);
+ out:
+ 	bpf_prog_put_recursion_context(prog);
+-	rcu_read_unlock_migrate();
++
++	if (sleepable) {
++		migrate_enable();
++		rcu_read_unlock_tasks_trace(scp);
++	} else {
++		rcu_read_unlock_migrate();
++	}
+ }
+ 
+ #define UNPACK(...)			__VA_ARGS__
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2bc04feadfab..c9aea7052ba7 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -748,14 +748,35 @@ static void
+ __bpf_prog_test_run_raw_tp(void *data)
+ {
+ 	struct bpf_raw_tp_test_run_info *info = data;
++	struct srcu_ctr __percpu *scp = NULL;
+ 	struct bpf_trace_run_ctx run_ctx = {};
+ 	struct bpf_run_ctx *old_run_ctx;
+ 
+ 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+ 
+-	rcu_read_lock();
++	if (info->prog->sleepable) {
++		scp = rcu_read_lock_tasks_trace();
++		migrate_disable();
++	} else {
++		rcu_read_lock();
++	}
++
++	if (unlikely(!bpf_prog_get_recursion_context(info->prog))) {
++		bpf_prog_inc_misses_counter(info->prog);
++		goto out;
++	}
++
+ 	info->retval = bpf_prog_run(info->prog, info->ctx);
+-	rcu_read_unlock();
++
++out:
++	bpf_prog_put_recursion_context(info->prog);
++
++	if (info->prog->sleepable) {
++		migrate_enable();
++		rcu_read_unlock_tasks_trace(scp);
++	} else {
++		rcu_read_unlock();
++	}
+ 
+ 	bpf_reset_run_ctx(old_run_ctx);
+ }
+@@ -783,6 +804,13 @@ int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
+ 	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 && cpu != 0)
+ 		return -EINVAL;
+ 
++	/*
++	 * Sleepable programs cannot run with preemption disabled or in
++	 * hardirq context (smp_call_function_single), reject the flag.
++	 */
++	if (prog->sleepable && (kattr->test.flags & BPF_F_TEST_RUN_ON_CPU))
++		return -EINVAL;
++
+ 	if (ctx_size_in) {
+ 		info.ctx = memdup_user(ctx_in, ctx_size_in);
+ 		if (IS_ERR(info.ctx))
+@@ -791,24 +819,31 @@ int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
+ 		info.ctx = NULL;
+ 	}
+ 
++	info.retval = 0;
+ 	info.prog = prog;
+ 
+-	current_cpu = get_cpu();
+-	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 ||
+-	    cpu == current_cpu) {
++	if (prog->sleepable) {
+ 		__bpf_prog_test_run_raw_tp(&info);
+-	} else if (cpu >= nr_cpu_ids || !cpu_online(cpu)) {
+-		/* smp_call_function_single() also checks cpu_online()
+-		 * after csd_lock(). However, since cpu is from user
+-		 * space, let's do an extra quick check to filter out
+-		 * invalid value before smp_call_function_single().
+-		 */
+-		err = -ENXIO;
+ 	} else {
+-		err = smp_call_function_single(cpu, __bpf_prog_test_run_raw_tp,
+-					       &info, 1);
++		current_cpu = get_cpu();
++		if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) == 0 ||
++		    cpu == current_cpu) {
++			__bpf_prog_test_run_raw_tp(&info);
++		} else if (cpu >= nr_cpu_ids || !cpu_online(cpu)) {
++			/*
++			 * smp_call_function_single() also checks cpu_online()
++			 * after csd_lock(). However, since cpu is from user
++			 * space, let's do an extra quick check to filter out
++			 * invalid value before smp_call_function_single().
++			 */
++			err = -ENXIO;
++		} else {
++			err = smp_call_function_single(cpu,
++						       __bpf_prog_test_run_raw_tp,
++						       &info, 1);
++		}
++		put_cpu();
+ 	}
+-	put_cpu();
+ 
+ 	if (!err &&
+ 	    copy_to_user(&uattr->test.retval, &info.retval, sizeof(u32)))
 
-Changes in v11:
-- Avoid running dummy prog in the bpf_prog_run_array_sleepable()
-- Migrate selftests from nanosleep() to getcwd() to avoid issues with the
-different struct layouts.
-- Link to v10: https://patch.msgid.link/20260415-sleepable_tracepoints-v10-0-161f40b33dd7@meta.com
-
-Changes in v10:
-- Guard per-prog recursion check in bpf_prog_run_array_sleepable()
-  with prog->active NULL check, following the same pattern as
-  commit 7dc211c1159d for prog->stats. dummy_bpf_prog has NULL
-  active field and can appear in the array via
-  bpf_prog_array_delete_safe() fallback on allocation failure.
-- Link to v9: https://patch.msgid.link/20260410-sleepable_tracepoints-v9-0-e719e664e84c@meta.com
-
-Changes in v9:
-- Fixed "classic raw tracepoints" to "raw tracepoints (tp_btf, raw_tp)"
-in commit message
-- Added bpf_prog_get_recursion_context() guard to
-__bpf_prog_test_run_raw_tp() to protect per-CPU private stack from
-concurrent sleepable test runs
-- Added new bpf_prog_run_array_sleepable() without is_uprobe parameter,
-remove all changes in bpf_prog_run_array_uprobe()
-- Refactored attach_tp() to use prefix array uniformly (matching
-attach_raw_tp() pattern), removing hardcoded strcmp() bare-name checks.
-- Recursion check in __bpf_prog_test_run_raw_tp()
-- Refactored selftests
-- Link to v8: https://patch.msgid.link/20260330-sleepable_tracepoints-v8-0-2e323467f3a0@meta.com
-
-Changes in v8:
-- Fix sleepable tracepoint support in bpf_prog_test_run() (Kumar, sashiko)
-- Link to v7: https://patch.msgid.link/20260325-sleepable_tracepoints-v6-0-2b182dacea13@meta.com
-
-Changes in v7:
-- Add recursion check (bpf_prog_get_recursion_context()) to make sure
-private stack is safe when sleepable program is preempted by itself
-(Alexei, Kumar)
-- Use combined rcu_read_lock_dont_migrate() instead of separate
-rcu_read_lock()/migrate_disable() calls for non-sleepable path (Alexei)
-- Link to v6: https://lore.kernel.org/bpf/20260324-sleepable_tracepoints-v6-0-81bab3a43f25@meta.com/
-
-Changes in v6:
-- Remove recursion check from trace_call_bpf_faultable(), sleepable
-tracepoints are called from syscall enter/exit, no recursion is
-possible.(Kumar)
-- Refactor bpf_prog_run_array_uprobe() to support tracepoints
-usecase cleanly (Kumar)
-- Link to v5: https://lore.kernel.org/r/20260316-sleepable_tracepoints-v5-0-85525de71d25@meta.com
-
-Changes in v5:
-- Addressed AI review: zero initialize struct pt_regs in
-perf_call_bpf_enter(); changed handling tp.s and tracepoint.s in
-attach_tp() in libbpf.
-- Updated commit messages
-- Link to v4: https://lore.kernel.org/r/20260313-sleepable_tracepoints-v4-0-debc688a66b3@meta.com
-
-Changes in v4:
-- Follow uprobe_prog_run() pattern with explicit rcu_read_lock_trace()
-  instead of relying on outer rcu_tasks_trace lock
-- Add sleepable support for classic raw tracepoints (raw_tp.s)
-- Add sleepable support for classic tracepoints (tp.s) with new
-  trace_call_bpf_faultable() and restructured perf_syscall_enter/exit()
-- Add raw_tp.s, raw_tracepoint.s, tp.s, tracepoint.s SEC_DEF handlers
-- Replace growing type enumeration in error message with generic
-  "program of this type cannot be sleepable"
-- Use PT_REGS_PARM1_SYSCALL (non-CO-RE) in BTF test
-- Add classic raw_tp and classic tracepoint sleepable tests
-- Link to v3: https://lore.kernel.org/r/20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com
-
-Changes in v3:
-  - Moved faultable tracepoint check from attach time to load time in
-    bpf_check_attach_target(), providing a clear verifier error message
-  - Folded preempt_disable removal into the sleepable execution path
-    patch
-  - Used RUN_TESTS() with __failure/__msg for negative test case instead
-    of explicit userspace program
-  - Reduced series from 6 patches to 4
-  - Link to v2: https://lore.kernel.org/r/20260225-sleepable_tracepoints-v2-0-0330dafd650f@meta.com
-
-Changes in v2:
-  - Address AI review points - modified the order of the patches
-  - Link to v1: https://lore.kernel.org/bpf/20260218-sleepable_tracepoints-v1-0-ec2705497208@meta.com/
-
----
-Mykyta Yatsenko (6):
-      bpf: Add sleepable support for raw tracepoint programs
-      bpf: Add bpf_prog_run_array_sleepable()
-      bpf: Add sleepable support for classic tracepoint programs
-      bpf: Verifier support for sleepable tracepoint programs
-      libbpf: Add section handlers for sleepable tracepoints
-      selftests/bpf: Add tests for sleepable tracepoint programs
-
- include/linux/bpf.h                                |  50 ++++++++
- include/linux/trace_events.h                       |   6 +
- include/trace/bpf_probe.h                          |   2 -
- kernel/bpf/syscall.c                               |   5 +
- kernel/bpf/verifier.c                              |  13 +-
- kernel/events/core.c                               |   9 ++
- kernel/trace/bpf_trace.c                           |  48 ++++++-
- kernel/trace/trace_syscalls.c                      | 110 ++++++++--------
- net/bpf/test_run.c                                 |  65 +++++++---
- tools/lib/bpf/libbpf.c                             |  88 ++++++++-----
- .../bpf/prog_tests/sleepable_tracepoints.c         | 142 +++++++++++++++++++++
- .../bpf/progs/test_sleepable_tracepoints.c         | 112 ++++++++++++++++
- .../bpf/progs/test_sleepable_tracepoints_fail.c    |  18 +++
- tools/testing/selftests/bpf/verifier/sleepable.c   |  17 ++-
- 14 files changed, 578 insertions(+), 107 deletions(-)
----
-base-commit: 05103382104b8ffc701f7b2c79379a0361ecad30
-change-id: 20260216-sleepable_tracepoints-381ae1410550
-
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+-- 
+2.52.0
 
