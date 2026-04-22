@@ -1,145 +1,131 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A659B30F92D
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 14:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776869295; cv=pass; b=fVmyGAP1o+f8xGZXNy0GCoPNyee8OPaDG90mbFOuT5GKcnIlkbkpYZ9i8si7ZSbt4VjIrtqCECPHMCyvTKIwFTDSlhFi1nS7mrnnqdhyxrrefPqrp1oQpuirHnEI7ortwXTN/ij5iutrUoEQGWNr+N2nM+ujvoZWnycJwVUp6VE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776869295; c=relaxed/simple;
-	bh=tfnBijA/tHgHM0lSvhKY7uny8mkDHsaIhjWoI77S9Es=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cyDXJLO3R4Am8/IZpi2ExfGkgm2D1OnzvXJPdPHoEeFIGdBR3qPcHOlqIW3vuXT+aHam4j9HkfQfGVNjcaUxEKh+5zsDtgq0DOGMiqMPkwjGriJ65cY7epZeUCOLwGZobUSq+P7sPAuS9uQKiFH8n1V73FQaer5IKQkgTfcBC1Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bb1ShRys; arc=pass smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bb1ShRys"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-441209fb77eso1347169f8f.1
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 07:48:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776869292; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ir/tJrkqm/TFmK0KCeSr4yTNRmldJB4nwubCVnM9IvvZROvTnpvvaG7QnIUnd3z2Rf
-         qPOm7GfH76KUI0M2rK/XahSExED9WA2KZnxGFcvBzV7ASqMkVTOjQhq7DC4Dwo+hlNau
-         BEIzbDfj3WnH0ydvz9jcNYQvchkBXJnV/c/Lv1Ov/QoSxUyIyJwyxrwhY8OqrprkXoAY
-         RL59OeRk5Eml3Qm0UbQkLhxlDLtNQDJeDoaVoZdF45MlzQXytCYt0+HMjjjY9wIRRJu8
-         Dlu91k9lXz6osRSbGIA2ZLONGHOT82QScRwc6wsiNJeQid6b1wPXEuZog5rsFdAXMbFJ
-         RB5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tfnBijA/tHgHM0lSvhKY7uny8mkDHsaIhjWoI77S9Es=;
-        fh=dg78twL9218laqEf/oCjNt53/L3I1UuUQlFQEkpMH6M=;
-        b=gH2lQsrx3Q6MxOv+iB1LOisKLVychQtnTi3ZfflTYVuEeo2W5nMRLeQ5hy1Rd5QIqL
-         D8MxQDPbjVxgvK9At+31DkJtPn+rCm4NK/v8JG7aK5Iphplv4OZ4oa4EJptkZ1FSWANz
-         e3txNcpMQOuSty57F4oUcRpjgbbeclgWtBhIja+QX8jrfy8V+UDknn+MtJ971k2wgXxf
-         4IJPYuEgZv6ANvdOTJLL8XJwjwWdJdts5ehlt9XndVwB+iwavPjXKuUFg+QNm/h07Lfj
-         auA+2va0r8re7dRyFRuKxcbxLFJVL6Jzr0rJ0R37nyofT2BSjYCV7peCJDBON1qwwAHS
-         rpOA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776869292; x=1777474092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tfnBijA/tHgHM0lSvhKY7uny8mkDHsaIhjWoI77S9Es=;
-        b=bb1ShRysobJfv/guBXGH2tIQfvbJBdXF37+QGzOj6A0jZcum/r49058R8xu4XpGfk1
-         MaxgLaeXFrngS6o48HliqwXVOUOhfWNflD3LXRspe9YhVzxR1AcbKW9pljOMbzeL4yxO
-         vLVbWAB+nKgn90E85+kPvheBuhUPnNS2oTeBazDiWElY3wOKGCBl8C/NjbA5FnVcImRO
-         RoUGscdYiQR64jcqkyKdaeY0RygSVzEu1xUW5ctXCsgYcHEt1MLusjO+28jwXtpMkMs+
-         mf1oIo0UcRoDwuNgfN5Wgclg+XaMwQV5gOTBhEt5DEc1WEh4YdlZQmAbiBRpK+2odnY/
-         b2tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776869292; x=1777474092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tfnBijA/tHgHM0lSvhKY7uny8mkDHsaIhjWoI77S9Es=;
-        b=CeM3sbxIswMMD6lcNrOqhOgVuVNqwClgXIGpAB9GImuib1A1HAwVFSHpQVwTQo7LZT
-         lNHsrp0k9sHgpyJvAaaxiwufAmKbdC3Av4a8c4TX3JIlJJOGjShqow2EkAAO1kfQJKuR
-         WQLtko7HqvYEC+fIaOXAnc8VEeIJfYdE7CM8W3DJJ5dGZu/NCZvwdKtNReNT0XUNkiob
-         DarZHYqfD9vyYKZ1bbxR1BrfUi7CZceUDvOA/5L6/gMiSkEPkleJFM+Qd5weomiyKyzM
-         loTtA0hVNRNgNAlNvntDKzLCrmv6zWEK9V8o+hJuo7kIpO4+kjBqjy0pNOcnt9h/62Gb
-         q+sw==
-X-Forwarded-Encrypted: i=1; AFNElJ9hJweeYOW8MDICzpknPcdxGllyVtFwqLeVrb+K05afRy9QxJwemzhZ4pSkKvz9fdMPof0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1x6xgfnQyKA7Iya2AlX9no6sdc5CVaHKiU1TCJwwUaiz1uf7n
-	XrjnzezXpz4JFUp3geYcEdJCLWIW1dA56LZ/absRtJN9B1MMKU7c4LKWvENw2wQsxVeu1PgoZW/
-	j5IobmeVda5YBp75mYGPOtrQQYZkLuS8=
-X-Gm-Gg: AeBDietmFicEiliWSWw32Ks7zdlIG43wnyjXU+aHgK5ngXe7ADq5fLOVnRV1YtlUnoJ
-	ueP5YqmYxZbe08EtMFa5dlbAgGSE1btnwIsmy/+erIp37+CG3Qn5W3dHPdQi2389O6wpNcrgoZi
-	1foXSQcMUwtWqEfMl9sNq8db4mmTZGO9lpkRWlYM9NdnD9k/uO99rCVNgjprHdqjWmhNUsLCTGW
-	IF8qVSIp3RRiiGVle++HW/nZWVHOg1UOMWcKtGL/jZHv+e6BbhwYyDoljo9LKzJ+xOG1f19nnXh
-	g60l1sBYZ9dODxg1jq77WjrdWw0ZYSqmsKesktyTy8uG9Lhry1x5Kg+oLhg+RbuwSAqyxXWdYfa
-	KypOJHRAbsRS55ChAIDK+lNHNSz8zmnTgk8dy
-X-Received: by 2002:a05:6000:2dc6:b0:43d:7512:6f7b with SMTP id
- ffacd0b85a97d-43fe3f35785mr36196268f8f.5.1776869291840; Wed, 22 Apr 2026
- 07:48:11 -0700 (PDT)
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5F4732143F
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 14:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776869485; cv=none; b=ZcZKLce5/z0PeT7IcRwthaEq633zViQ0W5DElFZbgPUS3c34wDOeGkKUzSaNJo1jFwYD5WBc5fmP8ZfL96u4WZTJYwTVsrSYI4pWTBeuDoKeVhH7TLvd/0yLrTQ/cG3/DaiWIUxmtFt4hWnQkOV0cTF0am99g8y9VcPizy9RG8c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776869485; c=relaxed/simple;
+	bh=XEbJCPnw70P1lfyoygj79b+TwbVjaKsI2Ap6a8bh258=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CWpc8G3IZrJm0WeRqrKs9bZ3IGzNTsguEkJp/X/57Mck6+d/c05IB4ZDBfKAxNI71Y51L4aAFZWZ8NnfCkYfRyY37PsoIe7R0f6zUHp4LqmcrQ5WD0nY/mhh82bEUPoSkq1kwyz0Q2Mgn3Ovew9r/BEV9Nz5Kc2B3e3JIHpkSag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.163.215])
+	by mtasvr (Coremail) with SMTP id _____wAHSaVA4OhpATmmAA--.1129S3;
+	Wed, 22 Apr 2026 22:50:41 +0800 (CST)
+Received: from [10.162.163.215] (unknown [10.162.163.215])
+	by mail-app2 (Coremail) with SMTP id zC_KCgAnmM084OhpgL7PAA--.63223S3;
+	Wed, 22 Apr 2026 22:50:37 +0800 (CST)
+Message-ID: <9d47111a-61c8-491b-8750-63fb79968125@zju.edu.cn>
+Date: Wed, 22 Apr 2026 22:50:36 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <acLbnMAPrHCpoIpr@laps> <20260325011853.657295-1-sashal@kernel.org>
- <c7a8310e-501f-48a8-8ad5-0a40d8b3836b@oracle.com>
-In-Reply-To: <c7a8310e-501f-48a8-8ad5-0a40d8b3836b@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 22 Apr 2026 07:48:00 -0700
-X-Gm-Features: AQROBzA3qHbWnHv7v7Pdc9rqcoF99lBmBFrCQdAyyZbQ78QmK7wYiCIv_i6_yA8
-Message-ID: <CAADnVQKshVai_srj_X_T-1AG3QH=VHymDO7Z4JowLcbC+jjReg@mail.gmail.com>
-Subject: Re: [RFC] btf: split core BTF parsing out of BPF subsystem into kernel/btf/
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Sasha Levin <sashal@kernel.org>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Alexey Dobriyan <adobriyan@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Borislav Petkov <bp@alien8.de>, bpf <bpf@vger.kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Gow <davidgow@google.com>, Helge Deller <deller@gmx.de>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Juergen Gross <jgross@suse.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	"Luis R. Rodriguez" <mcgrof@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Petr Mladek <pmladek@suse.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC bpf-next 0/4] bpf: replace min/max fields with struct
+ cnum{32,64}
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, shung-hsi.yu@suse.com, paul.chaignon@gmail.com,
+ harishankar.vishwanathan@gmail.com, Shenghao Yuan
+ <shenghaoyuan0928@163.com>, Tianci Cao <ziye@zju.edu.cn>
+References: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:zC_KCgAnmM084OhpgL7PAA--.63223S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgkJCmnn0w2RGgAAsX
+X-CM-DELIVERINFO: =?B?HDm8sAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9PWZDtKbJ3nvWeRFH2IROYSRWHnTQ9udUftt3vzTPp6WhIIIUpTpl80iul6UwwueLInR
+	FB6fs10b/PVh/m2u8ucj7BFBYeGEZcwsVArc7WMgsIGQdbkFf/75BthVoY3g0g==
+X-Coremail-Antispam: 1Uk129KBj93XoWxuF1DGF48Ww4DCF17CFW8KrX_yoW5ArWUpF
+	Z5Gw18Xw1kJ34rCa40y3yxZr1IyFZ5X39Fqr1rt3sYy3Z8J34vqryS93yY9Fyxu3s3Arya
+	vryYq3srZwn0vFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Sb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
+	xan2IY04v7MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+	7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+	8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
+	CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
+	1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+	daVFxhVjvjDU0xZFpf9x07je9a9UUUUU=
 
-On Wed, Apr 22, 2026 at 3:44=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 25/03/2026 01:18, Sasha Levin wrote:
-> > Move BTF type format parsing and inspection code out of the BPF
-> > subsystem into its own kernel/bf/ directory, separating core BTF
-> > functionality from BPF-specific extensions.
-> >
-> > CONFIG_DEBUG_INFO_BTF currently depends on CONFIG_BPF_SYSCALL, which
-> > prevents embedded, automotive, and safety-critical environments from
-> > using BTF. These platforms often disable BPF for security and size
-> > reasons but would benefit from BTF type information for crash
-> > diagnostics and debugging.
-> >
->
-> I had a go at a refactor in this area too, and it's pretty tricky. How ab=
-out
-> we start with a smaller goal; making /sys/kernel/btf available to userspa=
-ce
-> on systems without CONFIG_BPF_SYSCALL? This would just involve a small re=
-factor
-> of the BTF module-related stuff in kernel/bpf/btf.c, moving it to btf_mod=
-ule.c
-> or similar say. No need to split out BTF parsing APIs from those actively=
- used in
-> validating BPF etc, since a non-BPF_SYSCALL system would not need to pars=
-e BTF
-> in the kernel (just make it available in sysfs.
+Hi Eduard, Alexei, and everyone,
 
-Small refactor is ok, but in general I'm not interested
-in complicating code for systems without CONFIG_BPF_SYSCALL.
+On 4/21/26 6:28 PM, Eduard Zingerman wrote:
+> This RFC replaces s64, u64, s32, u32 scalar range domains tracked by
+> verifier by a pair of circular numbers (cnums): one for 64-bit domain
+> and another for 32-bit domain. Each cnum represents a range as a
+> single arc on the circular number line, from which signed and unsigned
+> bounds are derived on demand. See also wrapped intervals
+> representation as in [1].
+> 
+> The use of such representation simplifies arithmetic and conditions
+> handling in verifier.c and allows to express 32 <-> 64 bit deductions
+> in a more mathematically rigorous way.
+> 
+> [1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
+Thanks for the great RFC. Replacing the heuristic min/max bounds with
+a rigorous cnum domain is a fantastic step forward for the verifier.
+
+We had previously considered proposing a similar replacement of
+the range tracker with wrapped interval analysis (wint), based on
+the same TOPLAS'15 paper. However, we held off, fearing the added
+complexity might be rejected. That's why we are thrilled to see
+this RFC and would love to contribute to this effort:
+
+1. Implementation of division, modulo, and other missing ALU ops
+
+We noticed the discussion regarding the complexity of div/mod on cnum.
+We have previously implemented [1] the full suite of abstract operations
+for wint in Rust (including add/sub/mul/div/mod and bitwise ops).
+This was built for potential integration into Solana BPF and is
+heavily inspired by a recent paper [2].
+
+[1] https://github.com/OpenSourceVerif/Wrapped-Interval-for-Rust
+[2] https://dl.acm.org/doi/pdf/10.1145/3728905
+
+The algorithms for div and mod are indeed complex but entirely viable.
+We are very interested in collaborating to port these extended ALU
+operations into the kernel C implementation.
+
+2. Machine-checked proofs via theorem prover(s)
+
+While CBMC is excellent for checking bounded C-level implementation
+details and catching integer bugs, model checking is inherently
+constrained by its bounds.
+
+To complement this, we have used the Rocq theorem prover to provide
+deductive, algebraic proofs for the soundness and completeness of
+wint's operations over int64. This is still a work in progress;
+currently, we have completed the proofs for:
+- the soundness and completeness of wint's add and sub operation
+- the soundness of wint's join operation
+
+We believe this can strengthen the theoretical foundation of cnum.
+
+We are also exploring the use of Z3 to automate the soundness proofs
+for these abstract operations. Furthermore, we are actively researching
+the soundness of the reduced product between tnum and wint (cnum),
+which we hope will eventually serve as the theoretical guarantee
+for the safe collaboration between tnum and cnum in the verifier.
+
+Thanks for pushing this forward! Any discussion is welcome.
+
+Best,
+Yazhou
+
