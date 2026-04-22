@@ -1,116 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C5219CD1B
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 22:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C2E223DE7
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 22:05:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776895352; cv=none; b=Hhxcu6MKpgaHe36HzsTqAVj1NutBtISUAnYJj/xdt7vOVvIRrZYLOkuE8k2RZg2UyxGwh7B58aSCgC0OC1NO9IxZnftrAf7BP3TaTKzyu6IEPP286InmrFyKs0ZdwTKILrH9/bomPxRZrwmuUivwk9H74EwVZkbp/W3QbzrdNhY=
+	t=1776895528; cv=none; b=LulVJ/mkzYGc7Yly6dWinFbhPRyBwt7roDvyIK3cfgDmhzB27kpQmMst/Phpaapej9hpiJugDDElr8dgklTZ1tg9QSWzZvQdZ5uETBn0J1daQvSkI70fIIISHUGn0dOuNSzUI00FwEnnddyGY5HPzcAyxNz0CDd3+rmsWNpau7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776895352; c=relaxed/simple;
-	bh=qw82GKGKxyWVe9N7bTJC99BwbcUgKdlfk6HqKBauFXQ=;
+	s=arc-20240116; t=1776895528; c=relaxed/simple;
+	bh=u9kfH2bbAUtMhePNCpvGigccnbDCJuBRA3baUxwOVEU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fbW3IULHoqbDGUkiSVSHTOYQ9T6wVY+pcxXkOD2B1YXvBJOS0CyQA16Dl1sASvV61oFSyaym8442jGqvnlL/SE6S4PvNIc6PoSMfce6F/AHrbcxhwI94c8k1yZE+uDugurT3aPce2wqGNZVqq9OKPIXlglxPnZMDi0A1DOiODWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pC33B6aB; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=fYo3Cv1O+vPpPMn/ll0yZFYSwQIHcQdJU6v35OkaS44OqFPPbU17ogerLNxh21QJA53LEAXcZbZHCPADK0wmg1YE9UfpEHwcwCr5w0mTliLMtNq8VpIilw4E7kHuaV3Mni931VpP1dX1azvpLovT97SMedNdFmp3cfALm3foBTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NnPgK3uR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pC33B6aB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8141C19425;
-	Wed, 22 Apr 2026 22:02:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NnPgK3uR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1FA4C19425;
+	Wed, 22 Apr 2026 22:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776895351;
-	bh=qw82GKGKxyWVe9N7bTJC99BwbcUgKdlfk6HqKBauFXQ=;
+	s=k20201202; t=1776895527;
+	bh=u9kfH2bbAUtMhePNCpvGigccnbDCJuBRA3baUxwOVEU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=pC33B6aBY5pYnRdfxKmuBT+52rgf7vO6aREzY9IiZe8fxK/VBFseFdEBjCHhGeSZ+
-	 f/NZWvlw0Ja6zztnIjwbVCD68dtuIH/mLODYUiJGpy9WxI7SoombUon+4DUGvjHML1
-	 6wqQJJqBV+Q5T7BPCRtUkyLE0A1AwdGvh5j38e6TXt5+hft92C0oCeUrfgl/vbI4ZJ
-	 ACKcdoxxmRP1F7MRjlADUBANVtSQ4n99uizrVEsnkqSoH+g61ZF3GfbnO8EJVxjRyI
-	 rwa6rLj6ykLqcML3Q3C2FR5m9lM17EZC4MsFO5UzE/Ff2/5Yehn7dv4QnB1lqIPmlj
-	 bPemEfIHUn4cA==
+	b=NnPgK3uRKho2uOJl5yO7YCIkcMdoXGUZKLOvSWfL12SZFv1Ls02TaW3/nZ5YFi9N+
+	 NGQbyRLnhm9DTaqKIMfAjH1+C0GzFPeKBY0tkaZfkllX7tknuN0xymjz7GmvJbzvtD
+	 kdJ8pOMqpoPEBvW/prjioFCCj63R/w3qUNVanDNABI8+uORF5IJpPKTY+mZFJ/XK33
+	 OgkwJd4qI6k5Ggjzr8z/7zwhaX1SP0Wl618VqsMO4BslxMtYMxU5ugbPJYoMng+uN4
+	 5ghFo2Pjl4HJr/U9Okjtg8+sCggweeX4y8q4qI2olIdfDw9J2I2a+wwVIfGGiLW7bb
+	 V2EK2fGePU8Kw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v12 2/6] bpf: Add
- bpf_prog_run_array_sleepable()
+Subject: Re: [PATCH] selftests/bpf: replace bpf_probe_read_kernel with
+ direct access
 Reply-To: sashiko@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
+To: "Suchit Karunakaran" <suchitkarunakaran@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260422-sleepable_tracepoints-v12-2-744bf0e3b311@meta.com>
-References: <20260422-sleepable_tracepoints-v12-2-744bf0e3b311@meta.com>
+In-Reply-To: <20260422183757.15069-1-suchitkarunakaran@gmail.com>
+References: <20260422183757.15069-1-suchitkarunakaran@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 22:02:31 +0000
-Message-Id: <20260422220231.A8141C19425@smtp.kernel.org>
+Date: Wed, 22 Apr 2026 22:05:27 +0000
+Message-Id: <20260422220527.C1FA4C19425@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [Critical] Inverted RCU lock logic in bpf_prog_run_array_sleepable() caus=
-es use-after-free and 'sleeping in atomic' panics
+Sashiko AI review found 2 potential issue(s):
+- [Medium] BPF verifier will reject the program due to an out-of-bounds acc=
+ess on `SOCK_INODE(sk)->i_ino`.
+- [Medium] BPF verifier will reject the program due to an invalid memory ac=
+cess when dereferencing `nlk->groups[0]`.
 --
 
-commit bed1594e26a509b74cbf793566b3e03eca1cc31d
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+commit 9c46bc4644e11b2c3abf78e2ca55fa73028182f8
+Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
 
-bpf: Add bpf_prog_run_array_sleepable()
+selftests/bpf: replace bpf_probe_read_kernel with direct access
 
-This commit adds a new function to run BPF program arrays on faultable
-tracepoints. It includes per-program recursion checking for private stack
-safety and identifies dummy placeholder programs by checking if the length
-is zero.
+Use direct field access instead of bpf_probe_read_kernel() for
+nlk->groups[0] and inode->i_ino, and clean up related code.
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index b4b703c90ca94..c909fee369c2d 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> index 00b2ceae81fb0..5930bf8899d21 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> @@ -35,10 +34,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+>  	if (!nlk->groups)  {
+>  		group =3D 0;
+>  	} else {
+> -		/* FIXME: temporary use bpf_probe_read_kernel here, needs
+> -		 * verifier support to do direct access.
+> -		 */
+> -		bpf_probe_read_kernel(&group, sizeof(group), &nlk->groups[0]);
+> +		group =3D nlk->groups[0];
 
-[ ... ]
+Does the verifier know the size of the memory pointed to by nlk->groups?
 
-> @@ -3079,6 +3079,56 @@ void bpf_dynptr_set_null(struct bpf_dynptr_kern *p=
-tr);
->  void bpf_dynptr_set_rdonly(struct bpf_dynptr_kern *ptr);
->  void bpf_prog_report_arena_violation(bool write, unsigned long addr, uns=
-igned long fault_ip);
-> =20
-> +static __always_inline u32
-> +bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
-> +			     const void *ctx, bpf_prog_run_fn run_prog)
-> +{
+The groups field in struct netlink_sock is a pointer to a scalar
+(unsigned long *). When the BPF program reads this pointer from the struct,
+the verifier tracks it as a generic pointer with a known memory size of 0,
+because BTF does not encode the size of the dynamically allocated array.
 
-[ ... ]
+Will the direct array access nlk->groups[0] be rejected by the verifier's
+bounds check?
 
-> +		run_ctx.bpf_cookie =3D item->bpf_cookie;
-> +
-> +		if (prog->sleepable) {
-> +			guard(rcu)();
-> +			ret &=3D run_prog(prog, ctx);
-> +		} else {
-> +			ret &=3D run_prog(prog, ctx);
-> +		}
+>  	}
+>  	BPF_SEQ_PRINTF(seq, "%-10u %08x %-8d %-8d %-5d %-8d ",
+>  		       nlk->portid, (u32)group,
+> @@ -50,12 +46,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+>  	if (!sk) {
+>  		ino =3D 0;
+>  	} else {
+> -		/* FIXME: container_of inside SOCK_INODE has a forced
+> -		 * type conversion, and direct access cannot be used
+> -		 * with current verifier.
+> -		 */
+> -		inode =3D SOCK_INODE(sk);
+> -		bpf_probe_read_kernel(&ino, sizeof(ino), &inode->i_ino);
+> +		ino =3D SOCK_INODE(sk)->i_ino;
 
-Should the guard(rcu)() logic be inverted here?=20
+Will the verifier reject this as an out-of-bounds access?
 
-Sleepable BPF programs are permitted to block and sleep to handle page
-faults, but holding the RCU read lock while sleeping is generally not
-permitted and can lead to scheduling while atomic panics.
+The SOCK_INODE macro relies on container_of to cast a struct socket pointer
+to a struct socket_alloc. In BPF, standard C pointer arithmetic does not
+implicitly update the BTF type tracked by the verifier.
 
-Conversely, executing non-sleepable BPF programs without the RCU read lock
-could lead to use-after-free regressions, as they rely on the execution
-environment holding the RCU lock to safely access RCU-protected memory and
-dynamically sized maps.
+The verifier will still track sk as a struct socket, but with an added
+offset. Because vfs_inode sits after socket in struct socket_alloc,
+accessing i_ino uses an offset that exceeds sizeof(struct socket).
 
-Could this be changed to if (!prog->sleepable) to match the pattern used in
-bpf_prog_run_array_uprobe()?
+Should this use bpf_core_cast(sk, struct socket_alloc) to update the
+verifier's tracked BTF type instead?
 
-> +
-> +		bpf_prog_put_recursion_context(prog);
-> +		item++;
-> +	}
-> +	bpf_reset_run_ctx(old_run_ctx);
-> +	migrate_enable();
-> +	return ret;
-> +}
+>  	}
+>  	BPF_SEQ_PRINTF(seq, "%-8u %-8lu\n", s->sk_drops.counter, ino);
+>
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422-sleepable_=
-tracepoints-v12-0-744bf0e3b311@meta.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260422183757.1506=
+9-1-suchitkarunakaran@gmail.com?part=3D1
