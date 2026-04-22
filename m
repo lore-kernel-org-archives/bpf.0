@@ -1,33 +1,25 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB9C35BDDC;
-	Wed, 22 Apr 2026 15:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 400D42737E3
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776872467; cv=none; b=tfnTDrr1/6kDdhKfA4+9Qbd891fDp6jZKq0H2vPGxVyTb7r5rg4UplgVAUWnWce7hta5/WqhVngi8FUC3AgK8nD3WjT78RshH8MF7PsaWFixeAKVDHp00BJIga51KOgX0hjGH9cFpzMPVgo861iY6jhRzN8bpa2UTKbZ2+4Z4JM=
+	t=1776872849; cv=none; b=QCR6D3yLi7/Ks5Wj3/DsYtMDmvl9Qdq+WRfx1fECrFu9slxcgcwRVq8vzA3a1grlzM1MCiawR3J58UjWVQXviDJgP9fuPyRIaS5MkvMYHHJ6dI5n6M1IDVSTzsoJEG21VWgm4BIY9525rtfnwQWyLwRFs6P/kH0BwGKyCv90pTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776872467; c=relaxed/simple;
-	bh=ln99j809Xlgb1TVVaK781ShvBIpWYucpEq0YmWkv7cg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=KEP8ACXZCMWzCbbjICVCEngnue48G1eJ7GUy6Zss0I/tcGNQFMRThQrJRfwAUok4lh6kqblW8cFdmTQXAHbl7M1xvSebDD8z5VX4+6xXr11U/fBb9nHulor6Cd9HC1WDPzgzPGnhYGRBokPOs504qXgog7AoqOw6IZKD0CTlPe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=onO0Nlc/; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="onO0Nlc/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59AE6C2BCB4;
-	Wed, 22 Apr 2026 15:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776872465;
-	bh=ln99j809Xlgb1TVVaK781ShvBIpWYucpEq0YmWkv7cg=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=onO0Nlc/nk7YTDIqGbgnXNpJjll12ljJadcE9efFOZ1L6bWS0RwvqQO2tz/b9Dnnr
-	 NiofkzGKgo+YZLGhKHotNT6Lu523l0BYAy4jIo+eLGpDoypAm8MhxQpJZzrNbVMoJc
-	 2Mhs3qR18Exc1sI+0Y8+d5ZvLDcZ3/ECnveEoCZK5s9RHSKtCQF1Q6Z4FfcrPCIps4
-	 90KQVNgcKr9ivqUW0VceMydeOC4jPNmmRSuoVRFmEGAOzGd7CHOVmvIoNqI7gDNk1c
-	 ImpQGOtypVmRbzHDg00h4B1EBw+IjappiousTVo3gJjNDmCFnoq5+v8UAobtFSF44e
-	 ksFom+ZNip7+Q==
-Message-ID: <1a9020b7-bb30-4ccf-a37e-44aae05db05d@kernel.org>
-Date: Wed, 22 Apr 2026 17:40:57 +0200
+	s=arc-20240116; t=1776872849; c=relaxed/simple;
+	bh=Peitl/EGooQwjNnqWzbr3bdufGA8nKEFapG62eF0qzw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gYGT0yqNDusDN8QBRdbciMEW2bvt9Sn+dr3/xXJTdc+uM1htuErqviYIeNcTR5WrlVlhHHfpq0knenxPNaPQm+zdM4TNPq5XdNky+83eZLNhMRx55F14t8LCajy+OGeIdEflKqpAFZIpQbmZ4UJYk0NwvfttF3UFY6QxciX5170=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.162.163.215])
+	by mtasvr (Coremail) with SMTP id _____wBHbKZ_7ehpV5amAA--.3356S3;
+	Wed, 22 Apr 2026 23:47:12 +0800 (CST)
+Received: from [10.162.163.215] (unknown [10.162.163.215])
+	by mail-app2 (Coremail) with SMTP id zC_KCgBn18x_7ehp_efPAA--.63533S3;
+	Wed, 22 Apr 2026 23:47:11 +0800 (CST)
+Message-ID: <ac3fda86-909b-420c-9d80-282554669371@zju.edu.cn>
+Date: Wed, 22 Apr 2026 23:47:11 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,80 +27,114 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/3] mm: Free contiguous order-0 pages efficiently
-To: Ryan Roberts <ryan.roberts@arm.com>,
- Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Zi Yan <ziy@nvidia.com>, Uladzislau Rezki <urezki@gmail.com>,
- Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>,
- Vishal Moola <vishal.moola@gmail.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, david.hildenbrand@arm.com
-References: <20260401101634.2868165-1-usama.anjum@arm.com>
- <0a8ba718-7ff2-4876-9154-9dd5d404df3e@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
+Subject: Re: [PATCH bpf-next v7 3/3] selftests/bpf: Add test for large offset
+ bpf-to-bpf call
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260421144504.823756-4-tangyazhou@zju.edu.cn>
+ <20260421210253.5AB2AC2BCB0@smtp.kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <0a8ba718-7ff2-4876-9154-9dd5d404df3e@arm.com>
-Content-Type: text/plain; charset=UTF-8
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <20260421210253.5AB2AC2BCB0@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:zC_KCgBn18x_7ehp_efPAA--.63533S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgsJCmnn0w2TlAAAsZ
+X-CM-DELIVERINFO: =?B?1daGiwXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9LL0UKc+KPB+cdozqO9FXghDKs6RqwUMWuNE/GkeA1S3GRTHctHm9be4OCXM9WHNS/V6
+	Ory4tMEQEqlP18yZxIfUY2x6B7umbjykKbFJmiPRZG8c+brQvM0+232J8bbLjQ==
+X-Coremail-Antispam: 1Uk129KBj93XoWxZr15ZF17Wr13XryUJw48KrX_yoW5WrW8pF
+	yfta45KF4xGFW7Krn7Z3yDWFySvwsrAa4jkFn5Jr98A3s8Xr1Ikrs3Kw4Uua42kr4ku3WS
+	vF4jgasI9w1kAFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI4
+	8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
+	wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjx
+	v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
+	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
+	AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1wL05UUUUU==
 
-On 4/22/26 15:42, Ryan Roberts wrote:
-> Hi Andrew,
+
+
+On 4/22/26 5:02 AM, sashiko-bot@kernel.org wrote:
+> Sashiko AI review found 1 potential issue(s):
+> - [Medium] The selftest causes a kernel panic on unfixed kernels (when JIT is disabled), which disrupts CI pipelines and bisection workflows.
+> --
 > 
-> Small nudge on this series; I believe it has all appropriate A-b/R-b tags and no
-> outstanding actions. Is it ready to go into mm-new?
+> commit c0593c5f6291ee1a846f9c17858890ded3cd8ea4
+> Author: Yazhou Tang <tangyazhou518@outlook.com>
+> 
+> selftests/bpf: Add test for large offset bpf-to-bpf call
+> 
+> This commit adds a BPF selftest to verify that the verifier and JIT correctly
+> handle bpf-to-bpf calls with relative jump offsets exceeding the s16 boundary.
+> It uses a large inline assembly block to force the verifier to process a jump
+> exceeding the standard limit.
+> 
+>> - Before the fix, the verifier rewrites the call instruction with a truncated
+>>    offset (here 32768 -> -32768) and lets it pass. When the program is executed,
+>>    the call instruction causes a kernel panic due to an invalid jump target.
+> 
+> Is it safe to introduce a test that causes a kernel panic on unpatched kernels?
+> 
+> While reproducing the bug is the test's goal, crashing the kernel is highly
+> disruptive for CI systems and git bisect workflows that run the testsuite on
+> older or unpatched kernel trees.
 
-I assume Andrew will pick this up when the merge window closes -- or let use
-know if there are conflicts and he would need a resend :)
+This point is valid. Although the upstream CI typically runs with JIT enabled,
+causing a kernel panic when JIT is disabled is definitely something we should avoid.
 
--- 
-Cheers,
+>> diff --git a/tools/testing/selftests/bpf/progs/call_large_imm.c b/tools/testing/selftests/bpf/progs/call_large_imm.c
+>> new file mode 100644
+>> index 0000000000000..7cdf1e6d80d8d
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/call_large_imm.c
+> 
+> [ ... ]
+> 
+>> +static __attribute__((noinline)) void padding_subprog(void)
+>> +{
+>> +	asm volatile ("					\
+>> +		r0 = 0;					\
+>> +		.rept 32765;				\
+>> +		r0 += 0;				\
+>> +		.endr;					\
+>> +	" ::: "r0");
+>> +}
+>> +
+>> +static __attribute__((noinline)) int target_subprog(void)
+>> +{
+>> +	/* A volatile variable is used here to prevent optimization. */
+>> +	volatile int magic_ret = 3;
+>> +	return magic_ret;
+>> +}
+>> +
+>> +SEC("syscall")
+>> +int call_large_imm_test(void *ctx)
+>> +{
+>> +	if (zero)
+>> +		padding_subprog();
+>> +	return target_subprog();
+>> +}
+> 
+> Could the test be redesigned to fail gracefully?
+> 
+> If the large padding block were placed before the call instruction, the
+> call site would be at a large positive offset. A truncated negative jump
+> (-32768) would then land safely inside the valid padding instructions instead
+> of jumping out of bounds of the program.
+> 
+> The execution would then fall through and return an incorrect value, causing
+> ASSERT_EQ(opts.retval, 3) in the runner to cleanly fail without bringing down
+> the system.
+> 
 
-David
+This approach is indeed more elegant and safer. I will redesign the selftest
+as suggested for next version.
+
