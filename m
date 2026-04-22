@@ -1,37 +1,73 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F16A2E2663
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 05:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE3C322522
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 05:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776836563; cv=none; b=WwsI7t247RrdqzfWl3hibU+WMPy06G2jj4nNM7BSvdeWGU6qTfGgIwtmYUTKDdUAcMXIAeBXkWGfhZs/li091Y5E8QF3VCfpsWy+Eor130ZwzyOcbA6xo2jvB1aJ7qTI9ImmpP1kDTj0LQiw2ZJItUDNbnvqFNDy4I1/Pj1ZCHc=
+	t=1776836699; cv=none; b=Zw1di5c6Vct3BXdll/Fgnz9LZPReFOmiKh/CVZCmEZn4MGqIVEo1cVYF87tlcXk129Fjvb8wi5KVJCuQjGrqDK/uA7Cqo75rwFqFRoRraF0HILucQ7d9FNs4ZsBqYJ+VpO/9T6wbnT/cdXXXI1FkG2ohM3njTpHgI4MCKlHA/fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776836563; c=relaxed/simple;
-	bh=PaWuUoPPLFLvXanMsgerV2P2oAlE1Wq7d1siL0kSgio=;
+	s=arc-20240116; t=1776836699; c=relaxed/simple;
+	bh=q8QsP94Tuz9LxVQKLJFRDLizKYKNuCgNutEHx/2mtpY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uA12EJom+0spJ1A0xkYg8iU5H55FxBgHFOj4KMMZXzBkEvLpF6IE75e1tm9Y9HVtCSkAjqx+mRIp+UwI6CnOnAApnEO5xY6wsVV014ceE9f+uYR8JWDr89EX5AiHW5ZTBlbVEqUdJUacI1V87iW8rsPaLi077BjEleI/ncGsWaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 0471144D08476; Tue, 21 Apr 2026 22:42:30 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"Jose E . Marchesi" <jose.marchesi@oracle.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v2 8/9] bpf: Introduce bpf register BPF_REG_PARAMS
-Date: Tue, 21 Apr 2026 22:42:29 -0700
-Message-ID: <20260422054229.3128677-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260422054149.3124342-1-yonghong.song@linux.dev>
-References: <20260422054149.3124342-1-yonghong.song@linux.dev>
+	 MIME-Version; b=B86CJ3h9Ry0AvnHwzzJ5fHd+B7yI/XWMBbAWd0/oqtKTqjkn8OUV9p88zgSCbKk5MH1DRRcjQXF1Q2Hhx+hvquZUb+OXEPDmu9ekjZQAO/3kCVSZsHw1f2w2wJ4nUv91VyDNROpTsRDoFVxhzs3mwRC5WjPzcxh0F2DjmS0ccP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=te9p3ndQ; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="te9p3ndQ"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776836684;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DphR6/tgae6M2+ZT3YzkrNihU4uPDcwRHKi0iD5AePY=;
+	b=te9p3ndQEZOmoxo4uyjWj7rEinR0W6tTJtaQx8lMoUjgOSfnH93g5rOzHle/5MpiLTJ4kW
+	mQL33QnrNynSUO+ke82lLm++hTuXXxvPkf3sMC/2wrxfirCQKSN0T4Xwfz6ps9B46Uwb7C
+	VyL+giOoxHjpsdMGIY6tO5+zZd4SzZU=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bot+bpf-ci@kernel.org
+Cc: Leon Hwang <leon.hwang@linux.dev>,
+	bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	brauner@kernel.org,
+	sforshee@kernel.org,
+	yuichtsu@amazon.com,
+	aalbersh@redhat.com,
+	willemb@google.com,
+	kerneljasonxing@gmail.com,
+	chen.dylane@linux.dev,
+	yatsenko@meta.com,
+	memxor@gmail.com,
+	a.s.protopopov@gmail.com,
+	ameryhung@gmail.com,
+	rongtao@cestc.cn,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com,
+	martin.lau@kernel.org,
+	clm@meta.com,
+	ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next v12 6/8] bpf: Add syscall common attributes support for map_create
+Date: Wed, 22 Apr 2026 13:44:27 +0800
+Message-ID: <20260422054429.389475-1-leon.hwang@linux.dev>
+In-Reply-To: <caa1b9f532b97e8cbcf9b2c00fc5d39d038066d08993ab4c12bba5a6cf971528@mail.kernel.org>
+References: <20260420141804.27179-7-leon.hwang@linux.dev>  <caa1b9f532b97e8cbcf9b2c00fc5d39d038066d08993ab4c12bba5a6cf971528@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -39,288 +75,118 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+X-Migadu-Flow: FLOW_OUT
 
-Introduce BPF_REG_PARAMS as a dedicated BPF register for stack
-argument accesses. It occupies the BPF register number 11 (R11),
-which is used as the base pointer for the stack argument area,
-keeping it separate from the R10-based (BPF_REG_FP) program stack.
-
-The kernel-internal hidden register BPF_REG_AX previously occupied
-slot 11 (MAX_BPF_REG). With BPF_REG_PARAMS taking that slot,
-BPF_REG_AX moves to slot 12 and MAX_BPF_EXT_REG increases
-accordingly.
-
-Acked-by: Puranjay Mohan <puranjay@kernel.org>
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- include/linux/filter.h                        |  5 +-
- kernel/bpf/core.c                             |  4 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    | 14 ++--
- .../bpf/progs/verifier_bpf_fastcall.c         | 24 +++----
- .../selftests/bpf/progs/verifier_may_goto_1.c | 12 ++--
- .../selftests/bpf/progs/verifier_sdiv.c       | 64 +++++++++----------
- 6 files changed, 62 insertions(+), 61 deletions(-)
-
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 1ec6d5ba64cc..b77d0b06db6e 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -58,8 +58,9 @@ struct ctl_table_header;
- #define BPF_REG_H	BPF_REG_9	/* hlen, callee-saved */
-=20
- /* Kernel hidden auxiliary/helper register. */
--#define BPF_REG_AX		MAX_BPF_REG
--#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 1)
-+#define BPF_REG_PARAMS		MAX_BPF_REG
-+#define BPF_REG_AX		(MAX_BPF_REG + 1)
-+#define MAX_BPF_EXT_REG		(MAX_BPF_REG + 2)
- #define MAX_BPF_JIT_REG		MAX_BPF_EXT_REG
-=20
- /* unused opcode to mark special call to bpf_tail_call() helper */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 8b018ff48875..ae10b9ca018d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1299,8 +1299,8 @@ static int bpf_jit_blind_insn(const struct bpf_insn=
- *from,
- 	u32 imm_rnd =3D get_random_u32();
- 	s16 off;
-=20
--	BUILD_BUG_ON(BPF_REG_AX  + 1 !=3D MAX_BPF_JIT_REG);
--	BUILD_BUG_ON(MAX_BPF_REG + 1 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_PARAMS + 2 !=3D MAX_BPF_JIT_REG);
-+	BUILD_BUG_ON(BPF_REG_AX + 1 !=3D MAX_BPF_JIT_REG);
-=20
- 	/* Constraints on AX register:
- 	 *
-diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools=
-/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-index 5064aeb8fe67..2c3124092b73 100644
---- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
-@@ -69,19 +69,19 @@ static struct test_case test_cases[] =3D {
- #if defined(__x86_64__) || defined(__aarch64__)
- 	{
- 		N(SCHED_CLS, struct __sk_buff, tstamp),
--		.read  =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w11 & 0x4 goto pc+1;"
-+		.read  =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w12 & 0x4 goto pc+1;"
- 			 "goto pc+4;"
--			 "if w11 & 0x3 goto pc+1;"
-+			 "if w12 & 0x3 goto pc+1;"
- 			 "goto pc+2;"
- 			 "$dst =3D 0;"
- 			 "goto pc+1;"
- 			 "$dst =3D *(u64 *)($ctx + sk_buff::tstamp);",
--		.write =3D "r11 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
--			 "if w11 & 0x4 goto pc+1;"
-+		.write =3D "r12 =3D *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
-+			 "if w12 & 0x4 goto pc+1;"
- 			 "goto pc+2;"
--			 "w11 &=3D -4;"
--			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r11;"
-+			 "w12 &=3D -4;"
-+			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) =3D r12;"
- 			 "*(u64 *)($ctx + sk_buff::tstamp) =3D $src;",
- 	},
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/=
-tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index fb4fa465d67c..0d9e167555b5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -630,13 +630,13 @@ __xlated("...")
- __xlated("4: r0 =3D &(void __percpu *)(r0)")
- __xlated("...")
- /* may_goto expansion starts */
--__xlated("6: r11 =3D *(u64 *)(r10 -24)")
--__xlated("7: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("8: r11 -=3D 1")
--__xlated("9: if r11 !=3D 0x0 goto pc+2")
--__xlated("10: r11 =3D -24")
-+__xlated("6: r12 =3D *(u64 *)(r10 -24)")
-+__xlated("7: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("8: r12 -=3D 1")
-+__xlated("9: if r12 !=3D 0x0 goto pc+2")
-+__xlated("10: r12 =3D -24")
- __xlated("11: call unknown")
--__xlated("12: *(u64 *)(r10 -24) =3D r11")
-+__xlated("12: *(u64 *)(r10 -24) =3D r12")
- /* may_goto expansion ends */
- __xlated("13: *(u64 *)(r10 -8) =3D r1")
- __xlated("14: exit")
-@@ -668,13 +668,13 @@ __xlated("1: *(u64 *)(r10 -16) =3D")
- __xlated("2: r1 =3D 1")
- __xlated("3: call bpf_get_smp_processor_id")
- /* may_goto expansion starts */
--__xlated("4: r11 =3D *(u64 *)(r10 -24)")
--__xlated("5: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("6: r11 -=3D 1")
--__xlated("7: if r11 !=3D 0x0 goto pc+2")
--__xlated("8: r11 =3D -24")
-+__xlated("4: r12 =3D *(u64 *)(r10 -24)")
-+__xlated("5: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("6: r12 -=3D 1")
-+__xlated("7: if r12 !=3D 0x0 goto pc+2")
-+__xlated("8: r12 =3D -24")
- __xlated("9: call unknown")
--__xlated("10: *(u64 *)(r10 -24) =3D r11")
-+__xlated("10: *(u64 *)(r10 -24) =3D r12")
- /* may_goto expansion ends */
- __xlated("11: *(u64 *)(r10 -8) =3D r1")
- __xlated("12: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/to=
-ols/testing/selftests/bpf/progs/verifier_may_goto_1.c
-index 6d1edaef9213..4bdf4256a41e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
-@@ -81,13 +81,13 @@ __arch_s390x
- __arch_arm64
- __xlated("0: *(u64 *)(r10 -16) =3D 65535")
- __xlated("1: *(u64 *)(r10 -8) =3D 0")
--__xlated("2: r11 =3D *(u64 *)(r10 -16)")
--__xlated("3: if r11 =3D=3D 0x0 goto pc+6")
--__xlated("4: r11 -=3D 1")
--__xlated("5: if r11 !=3D 0x0 goto pc+2")
--__xlated("6: r11 =3D -16")
-+__xlated("2: r12 =3D *(u64 *)(r10 -16)")
-+__xlated("3: if r12 =3D=3D 0x0 goto pc+6")
-+__xlated("4: r12 -=3D 1")
-+__xlated("5: if r12 !=3D 0x0 goto pc+2")
-+__xlated("6: r12 =3D -16")
- __xlated("7: call unknown")
--__xlated("8: *(u64 *)(r10 -16) =3D r11")
-+__xlated("8: *(u64 *)(r10 -16) =3D r12")
- __xlated("9: r0 =3D 1")
- __xlated("10: r0 =3D 2")
- __xlated("11: exit")
-diff --git a/tools/testing/selftests/bpf/progs/verifier_sdiv.c b/tools/te=
-sting/selftests/bpf/progs/verifier_sdiv.c
-index fd59d57e8e37..95f3239ce228 100644
---- a/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_sdiv.c
-@@ -778,10 +778,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 0x8000000000000000")
- __xlated("2: r3 =3D -1")
- __xlated("3: r4 =3D r2")
--__xlated("4: r11 =3D r3")
--__xlated("5: r11 +=3D 1")
--__xlated("6: if r11 > 0x1 goto pc+4")
--__xlated("7: if r11 =3D=3D 0x0 goto pc+1")
-+__xlated("4: r12 =3D r3")
-+__xlated("5: r12 +=3D 1")
-+__xlated("6: if r12 > 0x1 goto pc+4")
-+__xlated("7: if r12 =3D=3D 0x0 goto pc+1")
- __xlated("8: r2 =3D 0")
- __xlated("9: r2 =3D -r2")
- __xlated("10: goto pc+1")
-@@ -812,10 +812,10 @@ __success __retval(-5)
- __arch_x86_64
- __xlated("0: r2 =3D 5")
- __xlated("1: r3 =3D -1")
--__xlated("2: r11 =3D r3")
--__xlated("3: r11 +=3D 1")
--__xlated("4: if r11 > 0x1 goto pc+4")
--__xlated("5: if r11 =3D=3D 0x0 goto pc+1")
-+__xlated("2: r12 =3D r3")
-+__xlated("3: r12 +=3D 1")
-+__xlated("4: if r12 > 0x1 goto pc+4")
-+__xlated("5: if r12 =3D=3D 0x0 goto pc+1")
- __xlated("6: r2 =3D 0")
- __xlated("7: r2 =3D -r2")
- __xlated("8: goto pc+1")
-@@ -890,10 +890,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -2147483648")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+4")
--__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+4")
-+__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
- __xlated("7: w2 =3D 0")
- __xlated("8: w2 =3D -w2")
- __xlated("9: goto pc+1")
-@@ -925,10 +925,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -5")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+4")
--__xlated("6: if w11 =3D=3D 0x0 goto pc+1")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+4")
-+__xlated("6: if w12 =3D=3D 0x0 goto pc+1")
- __xlated("7: w2 =3D 0")
- __xlated("8: w2 =3D -w2")
- __xlated("9: goto pc+1")
-@@ -1004,10 +1004,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 0x8000000000000000")
- __xlated("2: r3 =3D -1")
- __xlated("3: r4 =3D r2")
--__xlated("4: r11 =3D r3")
--__xlated("5: r11 +=3D 1")
--__xlated("6: if r11 > 0x1 goto pc+3")
--__xlated("7: if r11 =3D=3D 0x1 goto pc+3")
-+__xlated("4: r12 =3D r3")
-+__xlated("5: r12 +=3D 1")
-+__xlated("6: if r12 > 0x1 goto pc+3")
-+__xlated("7: if r12 =3D=3D 0x1 goto pc+3")
- __xlated("8: w2 =3D 0")
- __xlated("9: goto pc+1")
- __xlated("10: r2 s%=3D r3")
-@@ -1034,10 +1034,10 @@ __arch_x86_64
- __xlated("0: r2 =3D 5")
- __xlated("1: r3 =3D -1")
- __xlated("2: r4 =3D r2")
--__xlated("3: r11 =3D r3")
--__xlated("4: r11 +=3D 1")
--__xlated("5: if r11 > 0x1 goto pc+3")
--__xlated("6: if r11 =3D=3D 0x1 goto pc+3")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: r12 +=3D 1")
-+__xlated("5: if r12 > 0x1 goto pc+3")
-+__xlated("6: if r12 =3D=3D 0x1 goto pc+3")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: r2 s%=3D r3")
-@@ -1108,10 +1108,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -2147483648")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+3")
--__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+3")
-+__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%=3D w3")
-@@ -1140,10 +1140,10 @@ __arch_x86_64
- __xlated("0: w2 =3D -5")
- __xlated("1: w3 =3D -1")
- __xlated("2: w4 =3D w2")
--__xlated("3: r11 =3D r3")
--__xlated("4: w11 +=3D 1")
--__xlated("5: if w11 > 0x1 goto pc+3")
--__xlated("6: if w11 =3D=3D 0x1 goto pc+4")
-+__xlated("3: r12 =3D r3")
-+__xlated("4: w12 +=3D 1")
-+__xlated("5: if w12 > 0x1 goto pc+3")
-+__xlated("6: if w12 =3D=3D 0x1 goto pc+4")
- __xlated("7: w2 =3D 0")
- __xlated("8: goto pc+1")
- __xlated("9: w2 s%=3D w3")
---=20
-2.52.0
-
+On Mon, 20 Apr 2026 14:56:33 +0000 (UTC), bot+bpf-ci@kernel.org wrote:=0D
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h=
+=0D
+>> index dbe321aa8591..34500f81db6e 100644=0D
+>> --- a/include/linux/bpf_verifier.h=0D
+>> +++ b/include/linux/bpf_verifier.h=0D
+>> @@ -710,6 +710,9 @@ struct bpf_log_attr {=0D
+>> int bpf_log_attr_init(struct bpf_log_attr *log, u64 log_buf, u32 log_siz=
+e, u32 log_level,=0D
+>> u32 offsetof_log_true_size, bpfptr_t uattr, struct bpf_common_attr *comm=
+on,=0D
+>> bpfptr_t uattr_common, u32 size_common);=0D
+>> +struct bpf_verifier_log *bpf_log_attr_create_vlog(struct bpf_log_attr *=
+attr_log,=0D
+>> +						  struct bpf_common_attr *common, bpfptr_t uattr,=0D
+>> +						  u32 size);=0D
+>> int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct bpf_verifier=
+_log *log);=0D
+>>=0D
+>> #define BPF_MAX_SUBPROGS 256=0D
+>> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c=0D
+>> index dffe3a0180a7..5a977a52ef61 100644=0D
+>> --- a/kernel/bpf/log.c=0D
+>> +++ b/kernel/bpf/log.c=0D
+>> @@ -860,6 +860,36 @@ int bpf_log_attr_init(struct bpf_log_attr *log, u64=
+ log_buf, u32 log_size, u32 l=0D
+>> return 0;=0D
+>> }=0D
+>>=0D
+>> +=0D
+=0D
+NIT: should drop this dup blank line.=0D
+=0D
+>> +struct bpf_verifier_log *bpf_log_attr_create_vlog(struct bpf_log_attr *=
+attr_log,=0D
+>> +						  struct bpf_common_attr *common, bpfptr_t uattr,=0D
+>> +						  u32 size)=0D
+>> +{=0D
+>> +	struct bpf_verifier_log *log;=0D
+>> +	int err;=0D
+>> +=0D
+>> +	memset(attr_log, 0, sizeof(*attr_log));=0D
+>> +	attr_log->uattr =3D uattr;=0D
+>> +	if (size >=3D offsetofend(struct bpf_common_attr, log_true_size))=0D
+>> +		attr_log->offsetof_true_size =3D offsetof(struct bpf_common_attr, log=
+_true_size);=0D
+>> +=0D
+>> +	if (!common->log_buf)=0D
+>> +		return NULL;=0D
+>=0D
+> Does this skip validation that bpf_log_attr_init() performs?=0D
+>=0D
+> The sibling helper bpf_log_attr_init() validates struct bpf_common_attr=0D
+> fields via bpf_verifier_log_attr_valid() unconditionally:=0D
+>=0D
+> kernel/bpf/log.c:bpf_log_attr_init() {=0D
+>     if (!bpf_verifier_log_attr_valid(common->log_level, ubuf_common, comm=
+on->log_size) ||=0D
+>         !bpf_verifier_log_attr_valid(log_level, ubuf, log_size))=0D
+>         return -EINVAL;=0D
+> }=0D
+>=0D
+> This returns -EINVAL for combinations like (log_buf=3D=3D0 && log_size!=
+=3D0)=0D
+> or (log_buf=3D=3D0 && log_level!=3D0), enforced by:=0D
+>=0D
+> kernel/bpf/log.c:bpf_verifier_log_attr_valid() {=0D
+>     /* ubuf and len_total should both be specified (or not) together */=0D
+>     if (!!log_buf !=3D !!log_size)=0D
+>         return false;=0D
+>     if (log_buf && log_level =3D=3D 0)=0D
+>         return false;=0D
+>     if (log_level & ~BPF_LOG_MASK)=0D
+>         return false;=0D
+>     if (log_size > UINT_MAX >> 2)=0D
+>         return false;=0D
+> }=0D
+>=0D
+> When bpf_log_attr_create_vlog() returns early because common->log_buf =3D=
+=3D 0,=0D
+> these four checks are skipped entirely. When common->log_buf !=3D 0, the=
+=0D
+> checks run later via bpf_vlog_init().=0D
+>=0D
+> This creates an ABI validation inconsistency: BPF_PROG_LOAD and BPF_BTF_L=
+OAD=0D
+> reject (log_buf=3D=3D0 && log_size!=3D0) with -EINVAL, but BPF_MAP_CREATE=
+=0D
+> silently accepts it. Userspace passing the same invalid attribute=0D
+> combination receives different results depending on the syscall command.=
+=0D
+>=0D
+> Should bpf_log_attr_create_vlog() call=0D
+> bpf_verifier_log_attr_valid(common->log_level, u64_to_user_ptr(common->lo=
+g_buf), common->log_size)=0D
+> before the early return, and return ERR_PTR(-EINVAL) on failure?=0D
+>=0D
+=0D
+It was intentional.=0D
+=0D
+Like the bpf_log(log, ...) use in this patch, if log_buf is not provided,=0D
+there's nowhere to store the log msg. Thereafter, no need to alloc the log=
+=0D
+object.=0D
+=0D
+It seems cheap to alloc the 1KiB+ log object. So it would be fine to drop=0D
+this early check, and let bpf_vlog_init() validate them instead.=0D
+=0D
+Thanks,=0D
+Leon=0D
+=0D
+>> +=0D
+[...]=0D
