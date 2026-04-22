@@ -1,131 +1,229 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5F4732143F
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 14:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA23310620
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 14:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776869485; cv=none; b=ZcZKLce5/z0PeT7IcRwthaEq633zViQ0W5DElFZbgPUS3c34wDOeGkKUzSaNJo1jFwYD5WBc5fmP8ZfL96u4WZTJYwTVsrSYI4pWTBeuDoKeVhH7TLvd/0yLrTQ/cG3/DaiWIUxmtFt4hWnQkOV0cTF0am99g8y9VcPizy9RG8c=
+	t=1776869849; cv=none; b=eCUTte0bkLKulxRvZHgwHNatRRL46kmshLex7h1bV5ctkYkt5tds84wqqLf37094qTv8+SCLI/5eNwVtBgGP6nDqCBoAUY7y1V62DO4+TfWu6+YgjBi9YSidTh5LqzEPZuNwLeUhKbCG6qaUbaVgGZyCjDVEEv4BWSEBD1QZip0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776869485; c=relaxed/simple;
-	bh=XEbJCPnw70P1lfyoygj79b+TwbVjaKsI2Ap6a8bh258=;
+	s=arc-20240116; t=1776869849; c=relaxed/simple;
+	bh=VFtKqFd6Ub1V3kCKBpEOpiLP69I9pbP0iva0+QbJyC8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CWpc8G3IZrJm0WeRqrKs9bZ3IGzNTsguEkJp/X/57Mck6+d/c05IB4ZDBfKAxNI71Y51L4aAFZWZ8NnfCkYfRyY37PsoIe7R0f6zUHp4LqmcrQ5WD0nY/mhh82bEUPoSkq1kwyz0Q2Mgn3Ovew9r/BEV9Nz5Kc2B3e3JIHpkSag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.164.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wAHSaVA4OhpATmmAA--.1129S3;
-	Wed, 22 Apr 2026 22:50:41 +0800 (CST)
-Received: from [10.162.163.215] (unknown [10.162.163.215])
-	by mail-app2 (Coremail) with SMTP id zC_KCgAnmM084OhpgL7PAA--.63223S3;
-	Wed, 22 Apr 2026 22:50:37 +0800 (CST)
-Message-ID: <9d47111a-61c8-491b-8750-63fb79968125@zju.edu.cn>
-Date: Wed, 22 Apr 2026 22:50:36 +0800
+	 In-Reply-To:Content-Type; b=Ee2OaqMoG1vCnlLrCGDIe8JDQG+x9BF8EWFCqKz08NjwyRaqT0OpN5EbSjPcbq6fwQKaudTzVykS1yeNhERLFpIjpigzHhehfwtv352sex7wx2Pat4G/Gr6aNRTjKuAHoUokNUVEOfKMJHa5HrDvAzmc7egYhO/OhSOfFYV4Wss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ANB5xVNY; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ANB5xVNY"
+Message-ID: <715fcb76-c1ba-44e2-9b6f-e3133f2a5610@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776869845;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c0xjKL43Hp2skj73MTE9oMAaW5ZJR8jpa26CJqVQKFw=;
+	b=ANB5xVNYe+IL+HCfn8hjGQQG2v6qxHNiwAh6yvx27Agw7iiubrTSnlilpY3kcXhPyp9QA6
+	gVhXyPI2bfa9ywGERjk6Mh1BkGX9k98yGuJKkOLNzbNZ0zzqXKrnPjN0DZwa3mBaPNEeXw
+	zGj8xXdrpugZE4xZ8Uus6WXSUPvVeg8=
+Date: Wed, 22 Apr 2026 07:57:19 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next 0/4] bpf: replace min/max fields with struct
- cnum{32,64}
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
- yonghong.song@linux.dev, shung-hsi.yu@suse.com, paul.chaignon@gmail.com,
- harishankar.vishwanathan@gmail.com, Shenghao Yuan
- <shenghaoyuan0928@163.com>, Tianci Cao <ziye@zju.edu.cn>
-References: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
+Subject: Re: [PATCH bpf-next v2 7/9] bpf: Prepare verifier logs for upcoming
+ kfunc stack arguments
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
+ eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260422054224.3127905-1-yonghong.song@linux.dev>
+ <25c10a6b1a6f9703f2b2c943ab42245cb9de30d2004eb301d85d9de0ca6ca7b3@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <25c10a6b1a6f9703f2b2c943ab42245cb9de30d2004eb301d85d9de0ca6ca7b3@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zC_KCgAnmM084OhpgL7PAA--.63223S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgkJCmnn0w2RGgAAsX
-X-CM-DELIVERINFO: =?B?HDm8sAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9PWZDtKbJ3nvWeRFH2IROYSRWHnTQ9udUftt3vzTPp6WhIIIUpTpl80iul6UwwueLInR
-	FB6fs10b/PVh/m2u8ucj7BFBYeGEZcwsVArc7WMgsIGQdbkFf/75BthVoY3g0g==
-X-Coremail-Antispam: 1Uk129KBj93XoWxuF1DGF48Ww4DCF17CFW8KrX_yoW5ArWUpF
-	Z5Gw18Xw1kJ34rCa40y3yxZr1IyFZ5X39Fqr1rt3sYy3Z8J34vqryS93yY9Fyxu3s3Arya
-	vryYq3srZwn0vFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU9Sb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
-	xan2IY04v7MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
-	7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-	8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-	CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-	1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-	daVFxhVjvjDU0xZFpf9x07je9a9UUUUU=
+X-Migadu-Flow: FLOW_OUT
 
-Hi Eduard, Alexei, and everyone,
 
-On 4/21/26 6:28 PM, Eduard Zingerman wrote:
-> This RFC replaces s64, u64, s32, u32 scalar range domains tracked by
-> verifier by a pair of circular numbers (cnums): one for 64-bit domain
-> and another for 32-bit domain. Each cnum represents a range as a
-> single arc on the circular number line, from which signed and unsigned
-> bounds are derived on demand. See also wrapped intervals
-> representation as in [1].
-> 
-> The use of such representation simplifies arithmetic and conditions
-> handling in verifier.c and allows to express 32 <-> 64 bit deductions
-> in a more mathematically rigorous way.
-> 
-> [1] https://jorgenavas.github.io/papers/ACM-TOPLAS-wrapped.pdf
-Thanks for the great RFC. Replacing the heuristic min/max bounds with
-a rigorous cnum domain is a fantastic step forward for the verifier.
 
-We had previously considered proposing a similar replacement of
-the range tracker with wrapped interval analysis (wint), based on
-the same TOPLAS'15 paper. However, we held off, fearing the added
-complexity might be rejected. That's why we are thrilled to see
-this RFC and would love to contribute to this effort:
+On 4/21/26 11:25 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index b148f816f25b..d5b4303315dd 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -913,6 +913,7 @@ struct bpf_verifier_env {
+>>   	 * e.g., in reg_type_str() to generate reg_type string
+>>   	 */
+>>   	char tmp_str_buf[TMP_STR_BUF_LEN];
+>> +	char tmp_arg_name[32];
+>>   	struct bpf_insn insn_buf[INSN_BUF_SIZE];
+>>   	struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
+>>   	struct bpf_scc_callchain callchain_buf;
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index c777a294302a..e7f5f0bb499b 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -261,6 +261,30 @@ struct bpf_kfunc_meta {
+>>
+>>   struct btf *btf_vmlinux;
+>>
+>> +typedef struct argno {
+>> +	int argno;
+>> +} argno_t;
+>> +
+>> +static argno_t argno_from_reg(u32 regno)
+>> +{
+>> +	return (argno_t){ .argno = regno };
+>> +}
+>> +
+>> +static argno_t argno_from_arg(u32 arg)
+>> +{
+>> +	return (argno_t){ .argno = -arg };
+>> +}
+>> +
+>> +static int reg_from_argno(argno_t a)
+>> +{
+>> +	return a.argno >= 0 ? a.argno : -1;
+>> +}
+>> +
+>> +static int arg_from_argno(argno_t a)
+>> +{
+>> +	return a.argno < 0 ? -a.argno : -1;
+>> +}
+> [ ... ]
+>
+>> @@ -7026,8 +7068,8 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, struct bpf_reg_
+>>    */
+>>   static int check_mem_size_reg(struct bpf_verifier_env *env,
+>>   			      struct bpf_reg_state *mem_reg,
+>> -			      struct bpf_reg_state *size_reg, u32 mem_regno,
+>> -			      u32 size_regno, enum bpf_access_type access_type,
+>> +			      struct bpf_reg_state *size_reg, argno_t mem_argno,
+>> +			      argno_t size_argno, enum bpf_access_type access_type,
+>>   			      bool zero_size_allowed,
+>>   			      struct bpf_call_arg_meta *meta)
+>>   {
+> [ ... ]
+>
+>> @@ -7052,31 +7094,31 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
+>>   		meta = NULL;
+>>
+>>   	if (size_reg->smin_value < 0) {
+>> -		verbose(env, "R%d min value is negative, either use unsigned or 'var &= const'\n",
+>> -			size_regno);
+>> +		verbose(env, "%s min value is negative, either use unsigned or 'var &= const'\n",
+>> +			reg_arg_name(env, size_argno));
+>>   		return -EACCES;
+>>   	}
+>>
+>>   	if (size_reg->umin_value == 0 && !zero_size_allowed) {
+>> -		verbose(env, "R%d invalid zero-sized read: u64=[%lld,%lld]\n",
+>> -			size_regno, size_reg->umin_value, size_reg->umax_value);
+>> +		verbose(env, "%s invalid zero-sized read: u64=[%lld,%lld]\n",
+>> +			reg_arg_name(env, size_argno), size_reg->umin_value, size_reg->umax_value);
+>>   		return -EACCES;
+>>   	}
+>>
+>>   	if (size_reg->umax_value >= BPF_MAX_VAR_SIZ) {
+>> -		verbose(env, "R%d unbounded memory access, use 'var &= const' or 'if (var < const)'\n",
+>> -			size_regno);
+>> +		verbose(env, "%s unbounded memory access, use 'var &= const' or 'if (var < const)'\n",
+>> +			reg_arg_name(env, size_argno));
+>>   		return -EACCES;
+>>   	}
+>> -	err = check_helper_mem_access(env, mem_reg, mem_regno, size_reg->umax_value,
+>> +	err = check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax_value,
+>>   				      access_type, zero_size_allowed, meta);
+>>   	if (!err)
+>> -		err = mark_chain_precision(env, size_regno);
+>> +		err = mark_chain_precision(env, reg_from_argno(size_argno));
+>>   	return err;
+>>   }
+>                                       ^^^^^^^
+>
+> Does mark_chain_precision(env, reg_from_argno(size_argno)) properly handle
+> kfunc size arguments?
+>
+> Before this patch, check_mem_size_reg() was called with size_regno being a
+> u32 register number. For kfuncs with KF_ARG_PTR_TO_MEM_SIZE, the pre-patch
+> call at check_kfunc_args was check_kfunc_mem_size_reg(env, reg, size_reg,
+> regno, regno+1), passing real register numbers like R2..R5.
+>
+> After this patch, check_kfunc_args constructs size_argno via
+> argno_from_arg(i+2) for the size parameter of a KF_ARG_PTR_TO_MEM_SIZE
+> pair. The argno_from_arg() helper creates a negative encoding (-.argno).
+> When reg_from_argno(size_argno) is called, it checks a.argno >= 0 and
+> returns -1 for negative values.
+>
+> mark_chain_precision(env, -1) then reaches bpf_mark_chain_precision in
+> backtrack.c, where the "if (regno >= 0)" guard causes it to skip marking
+> the register, and the subsequent "if (bt_empty(bt)) return 0;" silently
+> returns success without doing any precision tracking.
+>
+> For helpers, this works correctly because check_func_arg calls
+> check_mem_size_reg with argno_from_reg(regno), which produces a non-negative
+> encoding that reg_from_argno() correctly extracts back to the register
+> number.
+>
+> Can you verify whether the loss of precision tracking for kfunc size
+> registers might cause programs that previously verified to hit the
+> BPF_COMPLEXITY_LIMIT_INSNS threshold? Kfuncs with __sz/__szk size
+> arguments are widely used in-tree.
 
-1. Implementation of division, modulo, and other missing ALU ops
+This is indeed a problem.
+Function check_mem_size_reg() is the one which does
+    mark_chain_precision(env, reg_from_argno(size_argno))
 
-We noticed the discussion regarding the complexity of div/mod on cnum.
-We have previously implemented [1] the full suite of abstract operations
-for wint in Rust (including add/sub/mul/div/mod and bitwise ops).
-This was built for potential integration into Solana BPF and is
-heavily inspired by a recent paper [2].
 
-[1] https://github.com/OpenSourceVerif/Wrapped-Interval-for-Rust
-[2] https://dl.acm.org/doi/pdf/10.1145/3728905
+There are two callers for check_mem_size_reg():
+    - check_kfunc_mem_size_reg() <- check_kfunc_args
+      so arg_from_argno() should be used here to get the value
+    - check_func_arg() <- check_helper_call()
+      in this case, since helper_call is fixed at most 5 registers,
+      so argno_from_reg() is used in check_func_arg(), so later
+      on it should use reg_from_argno() should be used to get value.
 
-The algorithms for div and mod are indeed complex but entirely viable.
-We are very interested in collaborating to port these extended ALU
-operations into the kernel C implementation.
+There are two options to fix:
+  1. do proper check like
+     int reg_val = reg_from_argno(size_regno);
+     if (reg_val >= 0)
+       mark_chain_precision(env, reg_val);
+     else
+       mark_chain_precision(env, arg_from_argno(size_regno));
 
-2. Machine-checked proofs via theorem prover(s)
+2. for arguments in check_helper_call(), we also use
+    arg_from_argno() instead of reg_from_argno().
+    This way, we can just do
+       mark_chain_precision(env, arg_from_argno(size_regno));
 
-While CBMC is excellent for checking bounded C-level implementation
-details and catching integer bugs, model checking is inherently
-constrained by its bounds.
+Not sure which is preferred or there are some other better alternatives.
 
-To complement this, we have used the Rocq theorem prover to provide
-deductive, algebraic proofs for the soundness and completeness of
-wint's operations over int64. This is still a work in progress;
-currently, we have completed the proofs for:
-- the soundness and completeness of wint's add and sub operation
-- the soundness of wint's join operation
-
-We believe this can strengthen the theoretical foundation of cnum.
-
-We are also exploring the use of Z3 to automate the soundness proofs
-for these abstract operations. Furthermore, we are actively researching
-the soundness of the reduced product between tnum and wint (cnum),
-which we hope will eventually serve as the theoretical guarantee
-for the safe collaboration between tnum and cnum in the verifier.
-
-Thanks for pushing this forward! Any discussion is welcome.
-
-Best,
-Yazhou
+>
+>>   static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+>> -			 u32 regno, u32 mem_size)
+>> +			 argno_t argno, u32 mem_size)
+>>   {
+> [ ... ]
+>
+>> @@ -7157,7 +7199,7 @@ enum {
+>>    * env->cur_state->active_locks remembers which map value element or allocated
+>>    * object got locked and clears it after bpf_spin_unlock.
+>>    */
+>> -static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state *reg, int regno, int flags)
+>> +static int process_spin_lock(struct bpf_verifier_env *env, struct bpf_reg_state *reg, argno_t argno, int flags)
+>>   {
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24762480405
 
