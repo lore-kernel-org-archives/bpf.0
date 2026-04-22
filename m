@@ -1,124 +1,310 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBCD630F938
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.237.72.81
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62A1334A3DC
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:37:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776872003; cv=none; b=BcSF/soCU3pdAbuwlA85mp3/cLIO7AwAnoa4x2eS9N88oIWJVpFHK/6n30mrcUlBEvkza+36wgFaw2AP0rhKcCr4hXRz5S9O6N2fx8cypF3+vM4n7dahSAG+IH1nMIn8Oih+CAZAWXMKv24MzArhwQiO3GT1LSvI3nH973g0cWw=
+	t=1776872240; cv=none; b=ByqlCJcnKPHIEvI6qXGbtFKc9ZqTiVSh3jckpvaV4iCRh5SwRrAJmfHS5Qp15Pt+UELTmNKZWPmx49CYq+q6tKpg3YiOF166fWOBTb8B/uWkFgs7BtGlWAQC9PwsoCU4uT/eUcpQfLPmfIY6Zi2MtsIjMIcQPP3bPDIb3XgPbiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776872003; c=relaxed/simple;
-	bh=XlFSrGpKRZwx64dhnng+IMVZAFgvoncijSqVCiEKHH0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O4IZ4VDms0cCXmTaV/uGwsVUFAnsLCfqRm+N+jh2gytTgm7wU8w/oV9Z5PDADhKjrWIGYcAE94sN+FPO9N1uqdHgl4uPUcLC57nLOBIK1D5EvG1Bu+9S1jIO8vvLvis0acQr1E9iplPRNMX5qO44nkDbi7FD8/6wqf5g10sXRUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=52.237.72.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wD3dTw46uhplYCmAA--.3137S3;
-	Wed, 22 Apr 2026 23:33:12 +0800 (CST)
-Received: from [10.162.163.215] (unknown [10.162.163.215])
-	by mail-app1 (Coremail) with SMTP id yy_KCgB3eaM46uhpK1SkAA--.350S3;
-	Wed, 22 Apr 2026 23:33:12 +0800 (CST)
-Message-ID: <5c172edc-3323-4fbc-ad16-24c1109e4b05@zju.edu.cn>
-Date: Wed, 22 Apr 2026 23:33:12 +0800
+	s=arc-20240116; t=1776872240; c=relaxed/simple;
+	bh=hVUNr+AHRhG8HRRTiiYIJWGJ0QFq3risJOVYhmT2Tc4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=gVjg1ZgaGvhAqN9jlox2PAERkvDNixGWzB6r1NGWDrip09GkIHQwiubTumMZg0/H+QxJuADE5zfAXjnr7umS+oD/S7igcPqmTZY5oqKFwiuy8yP9Vp+T+B9XwYFHa/UGV+vXVO7J7oSwS7zebxi07AmmG+oOjyq2iE3RwdUgZKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=msnMzuti; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="msnMzuti"
+Message-ID: <cb70fcff-2e3e-4132-ada7-7af4e8a4ab35@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776872235;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DUDI2JUkX7GvKviG/0JrDQcejTEHxEo5zRPJDLayB/M=;
+	b=msnMzutioyosOZzSjpv0mdPFlvHBJh/Ot5HNzfu6ffQFmRdgn7qzK5dykNAPSw9OHS9SLQ
+	KmCGk//HQkuIWMtS9w3lGckxO6XXiGnCzbJ0XmEdRm4SPkXYRTGRu8jilmRZOmqwAHE3Nh
+	kCnkqsAov6WmWUsDMDVXgNbRGFMQHIk=
+Date: Wed, 22 Apr 2026 08:37:09 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 2/3] bpf: Fix s16 truncation for large
- bpf-to-bpf call offsets
-To: sashiko@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260421144504.823756-3-tangyazhou@zju.edu.cn>
- <20260421204648.B573FC2BCB0@smtp.kernel.org>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <20260421204648.B573FC2BCB0@smtp.kernel.org>
+Subject: Re: [PATCH bpf-next v2 7/9] bpf: Prepare verifier logs for upcoming
+ kfunc stack arguments
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ jose.marchesi@oracle.com, kernel-team@fb.com, martin.lau@kernel.org,
+ eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260422054224.3127905-1-yonghong.song@linux.dev>
+ <25c10a6b1a6f9703f2b2c943ab42245cb9de30d2004eb301d85d9de0ca6ca7b3@mail.kernel.org>
+ <715fcb76-c1ba-44e2-9b6f-e3133f2a5610@linux.dev>
+In-Reply-To: <715fcb76-c1ba-44e2-9b6f-e3133f2a5610@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:yy_KCgB3eaM46uhpK1SkAA--.350S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAg4JCmnn0w6TGgAAsV
-X-CM-DELIVERINFO: =?B?a0VR8wXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9HJ05lIkNOUgLnhdlL20wRVRCJvYJlrQNF5F0uKdCau5Py86DXEXw9fD3iArbkeiAUPI
-	RoGwRXmqtSOBY1rJNqSM6002mYEWZq3xZZB6jvj4wutqzY4mz7p39tDa1d/Qrw==
-X-Coremail-Antispam: 1Uk129KBj93XoW7WF17XFWkWFy8Zr1rAr4UKFX_yoW8tFy8pa
-	y5Ga4Ikr4UXr4aka47tF4DCay5trZrC3WjgF15try3tr42grnrKr17KF4Sga43Jr1q9F1v
-	qr4jvwna9w1DZrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxAIw28IcxkI7VAKI4
-	8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-	wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUXVWUAwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-	v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-	Y4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267
-	AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1wL05UUUUU==
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
 
-On 4/22/26 4:46 AM, sashiko-bot@kernel.org wrote:
-> Sashiko AI review found 1 potential issue(s):
-> - [Medium] bpftool's control-flow graph generator (cfg.c) was not updated to reflect the `insn->off` and `insn->imm` swap for BPF_PSEUDO_CALL, which will break visual dumps.
-> --
-> 
-> commit bbf026d16d77a3e1debc60ea3a7b2fef7d7def5e
-> Author: Yazhou Tang <tangyazhou518@outlook.com>
-> 
-> bpf: Fix s16 truncation for large bpf-to-bpf call offsets
-> 
-> This commit fixes an s16 truncation issue for large bpf-to-bpf call
-> offsets when JIT is disabled or falls back to the interpreter.
-> It does this by using the off field to store the interpreter function
-> index and the imm field to pass the original offset.
-> The related dumper code was also updated to adapt to this change.
-> 
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 300e4e2519318..8947ef74f6a88 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
->> @@ -1250,9 +1250,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->>   		}
->>   		if (!bpf_pseudo_call(insn))
->>   			continue;
->> -		insn->off = env->insn_aux_data[i].call_imm;
->> -		subprog = bpf_find_subprog(env, i + insn->off + 1);
->> -		insn->imm = subprog;
->> +		insn->imm = env->insn_aux_data[i].call_imm;
->> +		subprog = bpf_find_subprog(env, i + insn->imm + 1);
->> +		insn->off = subprog;
->>   	}
-> 
-> Since insn->imm and insn->off are now swapped for exported translated
-> programs, should tools/bpf/bpftool/cfg.c also be updated?
-> 
-> It looks like cfg_partition_funcs() currently relies on cur->off to
-> calculate the target subprogram start when generating the control-flow
-> graph:
-> 
-> tools/bpf/bpftool/cfg.c:cfg_partition_funcs() {
->          ...
-> 	for (; cur < end; cur++) {
-> 		if (cur->code != (BPF_JMP | BPF_CALL))
-> 			continue;
-> 		if (cur->src_reg != BPF_PSEUDO_CALL)
-> 			continue;
-> 		func = cfg_append_func(cfg, cur + cur->off + 1);
-> 		if (!func)
-> 			return true;
-> 	}
->          ...
-> }
-> 
-> Because cur->off now holds the subprogram index instead of the jump offset,
-> could this point to the wrong instruction and cause a corrupted graph or
-> out-of-bounds memory access during bpftool prog dump xlated visual?
-> 
+On 4/22/26 7:57 AM, Yonghong Song wrote:
+>
+>
+> On 4/21/26 11:25 PM, bot+bpf-ci@kernel.org wrote:
+>>> diff --git a/include/linux/bpf_verifier.h 
+>>> b/include/linux/bpf_verifier.h
+>>> index b148f816f25b..d5b4303315dd 100644
+>>> --- a/include/linux/bpf_verifier.h
+>>> +++ b/include/linux/bpf_verifier.h
+>>> @@ -913,6 +913,7 @@ struct bpf_verifier_env {
+>>>        * e.g., in reg_type_str() to generate reg_type string
+>>>        */
+>>>       char tmp_str_buf[TMP_STR_BUF_LEN];
+>>> +    char tmp_arg_name[32];
+>>>       struct bpf_insn insn_buf[INSN_BUF_SIZE];
+>>>       struct bpf_insn epilogue_buf[INSN_BUF_SIZE];
+>>>       struct bpf_scc_callchain callchain_buf;
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index c777a294302a..e7f5f0bb499b 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>> @@ -261,6 +261,30 @@ struct bpf_kfunc_meta {
+>>>
+>>>   struct btf *btf_vmlinux;
+>>>
+>>> +typedef struct argno {
+>>> +    int argno;
+>>> +} argno_t;
+>>> +
+>>> +static argno_t argno_from_reg(u32 regno)
+>>> +{
+>>> +    return (argno_t){ .argno = regno };
+>>> +}
+>>> +
+>>> +static argno_t argno_from_arg(u32 arg)
+>>> +{
+>>> +    return (argno_t){ .argno = -arg };
+>>> +}
+>>> +
+>>> +static int reg_from_argno(argno_t a)
+>>> +{
+>>> +    return a.argno >= 0 ? a.argno : -1;
+>>> +}
+>>> +
+>>> +static int arg_from_argno(argno_t a)
+>>> +{
+>>> +    return a.argno < 0 ? -a.argno : -1;
+>>> +}
+>> [ ... ]
+>>
+>>> @@ -7026,8 +7068,8 @@ static int check_helper_mem_access(struct 
+>>> bpf_verifier_env *env, struct bpf_reg_
+>>>    */
+>>>   static int check_mem_size_reg(struct bpf_verifier_env *env,
+>>>                     struct bpf_reg_state *mem_reg,
+>>> -                  struct bpf_reg_state *size_reg, u32 mem_regno,
+>>> -                  u32 size_regno, enum bpf_access_type access_type,
+>>> +                  struct bpf_reg_state *size_reg, argno_t mem_argno,
+>>> +                  argno_t size_argno, enum bpf_access_type 
+>>> access_type,
+>>>                     bool zero_size_allowed,
+>>>                     struct bpf_call_arg_meta *meta)
+>>>   {
+>> [ ... ]
+>>
+>>> @@ -7052,31 +7094,31 @@ static int check_mem_size_reg(struct 
+>>> bpf_verifier_env *env,
+>>>           meta = NULL;
+>>>
+>>>       if (size_reg->smin_value < 0) {
+>>> -        verbose(env, "R%d min value is negative, either use 
+>>> unsigned or 'var &= const'\n",
+>>> -            size_regno);
+>>> +        verbose(env, "%s min value is negative, either use unsigned 
+>>> or 'var &= const'\n",
+>>> +            reg_arg_name(env, size_argno));
+>>>           return -EACCES;
+>>>       }
+>>>
+>>>       if (size_reg->umin_value == 0 && !zero_size_allowed) {
+>>> -        verbose(env, "R%d invalid zero-sized read: u64=[%lld,%lld]\n",
+>>> -            size_regno, size_reg->umin_value, size_reg->umax_value);
+>>> +        verbose(env, "%s invalid zero-sized read: u64=[%lld,%lld]\n",
+>>> +            reg_arg_name(env, size_argno), size_reg->umin_value, 
+>>> size_reg->umax_value);
+>>>           return -EACCES;
+>>>       }
+>>>
+>>>       if (size_reg->umax_value >= BPF_MAX_VAR_SIZ) {
+>>> -        verbose(env, "R%d unbounded memory access, use 'var &= 
+>>> const' or 'if (var < const)'\n",
+>>> -            size_regno);
+>>> +        verbose(env, "%s unbounded memory access, use 'var &= 
+>>> const' or 'if (var < const)'\n",
+>>> +            reg_arg_name(env, size_argno));
+>>>           return -EACCES;
+>>>       }
+>>> -    err = check_helper_mem_access(env, mem_reg, mem_regno, 
+>>> size_reg->umax_value,
+>>> +    err = check_helper_mem_access(env, mem_reg, mem_argno, 
+>>> size_reg->umax_value,
+>>>                         access_type, zero_size_allowed, meta);
+>>>       if (!err)
+>>> -        err = mark_chain_precision(env, size_regno);
+>>> +        err = mark_chain_precision(env, reg_from_argno(size_argno));
+>>>       return err;
+>>>   }
+>>                                       ^^^^^^^
+>>
+>> Does mark_chain_precision(env, reg_from_argno(size_argno)) properly 
+>> handle
+>> kfunc size arguments?
+>>
+>> Before this patch, check_mem_size_reg() was called with size_regno 
+>> being a
+>> u32 register number. For kfuncs with KF_ARG_PTR_TO_MEM_SIZE, the 
+>> pre-patch
+>> call at check_kfunc_args was check_kfunc_mem_size_reg(env, reg, 
+>> size_reg,
+>> regno, regno+1), passing real register numbers like R2..R5.
+>>
+>> After this patch, check_kfunc_args constructs size_argno via
+>> argno_from_arg(i+2) for the size parameter of a KF_ARG_PTR_TO_MEM_SIZE
+>> pair. The argno_from_arg() helper creates a negative encoding (-.argno).
+>> When reg_from_argno(size_argno) is called, it checks a.argno >= 0 and
+>> returns -1 for negative values.
+>>
+>> mark_chain_precision(env, -1) then reaches bpf_mark_chain_precision in
+>> backtrack.c, where the "if (regno >= 0)" guard causes it to skip marking
+>> the register, and the subsequent "if (bt_empty(bt)) return 0;" silently
+>> returns success without doing any precision tracking.
+>>
+>> For helpers, this works correctly because check_func_arg calls
+>> check_mem_size_reg with argno_from_reg(regno), which produces a 
+>> non-negative
+>> encoding that reg_from_argno() correctly extracts back to the register
+>> number.
+>>
+>> Can you verify whether the loss of precision tracking for kfunc size
+>> registers might cause programs that previously verified to hit the
+>> BPF_COMPLEXITY_LIMIT_INSNS threshold? Kfuncs with __sz/__szk size
+>> arguments are widely used in-tree.
+>
+> This is indeed a problem.
+> Function check_mem_size_reg() is the one which does
+>    mark_chain_precision(env, reg_from_argno(size_argno))
+>
+>
+> There are two callers for check_mem_size_reg():
+>    - check_kfunc_mem_size_reg() <- check_kfunc_args
+>      so arg_from_argno() should be used here to get the value
+>    - check_func_arg() <- check_helper_call()
+>      in this case, since helper_call is fixed at most 5 registers,
+>      so argno_from_reg() is used in check_func_arg(), so later
+>      on it should use reg_from_argno() should be used to get value.
+>
+> There are two options to fix:
+>  1. do proper check like
+>     int reg_val = reg_from_argno(size_regno);
+>     if (reg_val >= 0)
+>       mark_chain_precision(env, reg_val);
+>     else
+>       mark_chain_precision(env, arg_from_argno(size_regno));
+>
+> 2. for arguments in check_helper_call(), we also use
+>    arg_from_argno() instead of reg_from_argno().
+>    This way, we can just do
+>       mark_chain_precision(env, arg_from_argno(size_regno));
+>
+> Not sure which is preferred or there are some other better alternatives.
 
-This is a valid point. I will fix this issue in next version.
+The following should work.
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e7f5f0bb499b..2ead411b949d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7112,8 +7112,12 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
+         }
+         err = check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax_value,
+                                       access_type, zero_size_allowed, meta);
+-       if (!err)
+-               err = mark_chain_precision(env, reg_from_argno(size_argno));
++       if (!err) {
++               int regno = reg_from_argno(size_argno);
++
++               regno = regno >= 0 ? regno : arg_from_argno(size_argno);
++               err = mark_chain_precision(env, regno);
++       }
+         return err;
+  }
+
+In the future with stack argument supported, we can do
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e7f5f0bb499b..f6b5d09b7520 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7112,8 +7112,17 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
+         }
+         err = check_helper_mem_access(env, mem_reg, mem_argno, size_reg->umax_value,
+                                       access_type, zero_size_allowed, meta);
+-       if (!err)
+-               err = mark_chain_precision(env, reg_from_argno(size_argno));
++       if (!err) {
++               int regno = reg_from_argno(size_argno);
++               int arg = arg_from_argno(size_argno);
++
++               if (arg > MAX_BPF_FUNC_REG_ARGS) {
++                       mark_chain_precision_batch(env, verifier_state);
++               } else {
++                       regno = regno >= 0 ? regno : arg;
++                       err = mark_chain_precision(env, regno);
++               }
++       }
+         return err;
+  }
+
+If there are other similar mark_chain_precision() like above,
+we can have a helper to avoid code duplication. There should
+not be too many cases like this.
+
+>
+>>
+>>>   static int check_mem_reg(struct bpf_verifier_env *env, struct 
+>>> bpf_reg_state *reg,
+>>> -             u32 regno, u32 mem_size)
+>>> +             argno_t argno, u32 mem_size)
+>>>   {
+>> [ ... ]
+>>
+>>> @@ -7157,7 +7199,7 @@ enum {
+>>>    * env->cur_state->active_locks remembers which map value element 
+>>> or allocated
+>>>    * object got locked and clears it after bpf_spin_unlock.
+>>>    */
+>>> -static int process_spin_lock(struct bpf_verifier_env *env, struct 
+>>> bpf_reg_state *reg, int regno, int flags)
+>>> +static int process_spin_lock(struct bpf_verifier_env *env, struct 
+>>> bpf_reg_state *reg, argno_t argno, int flags)
+>>>   {
+>> [ ... ]
+>>
+>>
+>> ---
+>> AI reviewed your patch. Please fix the bug or email reply why it's 
+>> not a bug.
+>> See: 
+>> https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>>
+>> CI run summary: 
+>> https://github.com/kernel-patches/bpf/actions/runs/24762480405
+>
+>
 
