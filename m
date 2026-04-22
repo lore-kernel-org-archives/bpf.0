@@ -1,40 +1,42 @@
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E97381B1F;
-	Wed, 22 Apr 2026 16:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1EA37FF68;
+	Wed, 22 Apr 2026 16:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776874844; cv=none; b=iAQrZqugL13N53p8yC3deBbMTS5mp6J5GtUXF5niqXdIBMN4CA/y3if6O226CJLSMzMQJZi+390BrVBOuod/GkS3m3HBe9a2Cp0wBmam4/QqxigxqIoPjmJHniNrSw+htwVFRdR1/5QrBXUIeUNEIHcSpAYnPZEfLSxhDn8//F0=
+	t=1776874845; cv=none; b=XQYBXSdp52fI54k1gqfjxtRf06Cb83mpZm+oO58EkIDErXCpn7P1ut8r8GGGwWacEtSJAJ/EhOG+Ho2u7BxMu6GQjD9sNOln8v22iWMhVRwiUa0V3PwWzwx9aggkVAMScFpx7yd534+goU48WsTFx73h1Vt0BaMW2prpjjnZiJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776874844; c=relaxed/simple;
-	bh=ExMb8tPfJaxiXp7EK5rVlIce8SGOms3XQd1VKKJnWp8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=I3a21t2oKTrv9vGkXuQ6/Gj87rT6Iw0tn0gN60YM1GhNCSmn9nijIPqMpcuRFr+elbZWQLSly8YdgA9H61msYBpEtZCnoC+uaMvdyOCyLJkWZPJttk1cZdWBRoWGzUkyBdFnecZ33388CIjP7QkZELQTOOihdFUy7Ihudiq96F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=epuFpuUM; arc=none smtp.client-ip=185.171.202.116
+	s=arc-20240116; t=1776874845; c=relaxed/simple;
+	bh=6/OMqD+59TuORkuwHoA/SFCxiAHmkdbLz9aAfiTuwLc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SnHN4hAXcIzDbQg1qlLpYSsAa17zlGsiKQKgenAKjPiHT6Z9LFoqOSz94GAXFn9LPV0oDtiTInqgbEokTgr3Chg5OVo7MCQHH/eHhLDcVtGvdrfR99cz6Qe2in5hEOGCCCvhE0M1zPzbqvUcG+uW+7T0M+47kbnuflmAKeCs6QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SxQ4fz7N; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="epuFpuUM"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SxQ4fz7N"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 6A6FEC5C1A5;
-	Wed, 22 Apr 2026 16:21:21 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 8A769C5B1AC;
+	Wed, 22 Apr 2026 16:21:23 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7C9415FA8F;
-	Wed, 22 Apr 2026 16:20:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 850F8104609C6;
-	Wed, 22 Apr 2026 18:20:33 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id AA25B5FA8F;
+	Wed, 22 Apr 2026 16:20:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AE355104608C5;
+	Wed, 22 Apr 2026 18:20:39 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1776874839; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=SGggjXuf/8yJ4S+r8+IzMPFkAtuvtsjqGUGqH58wndw=;
-	b=epuFpuUMRUqS+/m9b6NMb0OYCedrKngThlXBA1bQaAsebyBe7DUKwLvscvkvp39097afSi
-	LeVJLo2JzL3vtVuQ2C3tHFOSt6CclJeO4YW68hDo/U6HMTrgvVo1AONHnKSYdVBq0yzlFu
-	2ULzFH8a1e/6Fyf91x5TLS69l783q8wXrwt8f1CVkBHbt6XiM1BZ/eU7udr06PpZ9U1xwK
-	o4vOoPXbqaVFxt2XFZ5PISuNnuKdiThXGumVqOmdGYgOexSuqUxk9I+E8tsL/Z78Qbjr/T
-	btUOuHu241ipSqb7vusQD4E3QMoeSQNA54iRlIx9zmcg0dutSvWGpcL//PoQ/Q==
+	t=1776874841; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=/OeQaPHqgxOT0nI16nQdUnS3gmk63KqT0dFXD3w7yZ4=;
+	b=SxQ4fz7NUAZBTDtaJecUlJqQlga5tLD/ljcSe5zjWI5wSxT9J1Pr30P4/cmBUoHC1PDeos
+	hFuh89yrE01a0HKZU8ypIWnpZelBMyRJt+ZxbMahAaKh3Cak+EtZ7q+LKE937zxgIkhLXW
+	ogqG4r+UnxGqYSSB0CWXoYnFHPyHZzvkCzKEkbx2Yc+WMqj3tSlP0b/Fe+McayUlaGcx0o
+	H8gIK1ApmgRXlGHRwLc4roq3t9OyU1jcOn5H2eU2sYad8Wdp1P7plboL0BrsJ4n0EqDR/l
+	BfX3ZPlmoGBi8BxkoZMHqCSKg9MTMsluUogtn2RbEmRic1YeRGoDTo17AUcKDg==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf-next v2 0/2] selftests/bpf: drop xdping tool
-Date: Wed, 22 Apr 2026 18:20:23 +0200
-Message-Id: <20260422-xdping-v2-0-c0f8ccedcf91@bootlin.com>
+Date: Wed, 22 Apr 2026 18:20:24 +0200
+Subject: [PATCH bpf-next v2 1/2] selftests/bpf: make btf_dump use xdp_dummy
+ rather than xdping_kern
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -43,11 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/12Nyw6CMBREf4XctTVtlefK/zAsaLmFa7Rt2kowh
- H8XcOdyMmfOLBAxEEZosgUCThTJ2S3IUwZ67OyAjPotg+Sy4FdRsrn3ZAeWa4km74pLVdewwT6
- gofkQ3UF5wyzOCdpfE9/qgTrtnp0dKSYXPsfnJI7Fv34STLBacY0cy6431U05l55kz9q9oF3X9
- Qv93sXDugAAAA==
-X-Change-ID: 20260417-xdping-5c2ef5a63899
+Message-Id: <20260422-xdping-v2-1-c0f8ccedcf91@bootlin.com>
+References: <20260422-xdping-v2-0-c0f8ccedcf91@bootlin.com>
+In-Reply-To: <20260422-xdping-v2-0-c0f8ccedcf91@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -63,66 +63,36 @@ Cc: ebpf@linuxfoundation.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  netdev@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
- Alan Maguire <alan.maguire@oracle.com>
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello,
+In order to prepare xdping tool removal from the BPF selftests
+directory, make the btf_dump test use another BPF program for the btf
+datasec dump test. Use xdp_dummy.bpf.o, as it is already used by various
+other tests.
 
-this is the v2 of the small series dropping xdping tool. This removal is
-part of the larger effort aiming to tidy the bpf selftests directory.
-This new revision updates btf_dump test to make it use another bpf
-program rather than xdping_kern so that we can drop it as well.
-
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v2:
-- make btf_dump use xdp_dummy rather than xdping_kern
-- and so, drop xdping_kern at the same time as the xdping tool
-- collect Alan's RB
-- Link to v1: https://patch.msgid.link/20260417-xdping-v1-1-9b0ce0e7adf8@bootlin.com
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Shuah Khan <shuah@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: ebpf@linuxfoundation.org
-Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index f1642794f70e..9f1b50e07a29 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -1027,8 +1027,8 @@ static void test_btf_dump_datasec_data(char *str)
+ 	char license[4] = "GPL";
+ 	struct btf_dump *d;
+ 
+-	btf = btf__parse("xdping_kern.bpf.o", NULL);
+-	if (!ASSERT_OK_PTR(btf, "xdping_kern.bpf.o BTF not found"))
++	btf = btf__parse("xdp_dummy.bpf.o", NULL);
++	if (!ASSERT_OK_PTR(btf, "xdp_dummy.bpf.o BTF not found"))
+ 		return;
+ 
+ 	d = btf_dump__new(btf, btf_dump_snprintf, str, NULL);
 
----
-Alexis Lothoré (eBPF Foundation) (2):
-      selftests/bpf: make btf_dump use xdp_dummy rather than xdping_kern
-      selftests/bpf: drop xdping tool
-
- tools/testing/selftests/bpf/.gitignore            |   1 -
- tools/testing/selftests/bpf/Makefile              |   3 -
- tools/testing/selftests/bpf/prog_tests/btf_dump.c |   4 +-
- tools/testing/selftests/bpf/progs/xdping_kern.c   | 183 ----------------
- tools/testing/selftests/bpf/test_xdping.sh        | 103 ---------
- tools/testing/selftests/bpf/xdping.c              | 254 ----------------------
- tools/testing/selftests/bpf/xdping.h              |  13 --
- 7 files changed, 2 insertions(+), 559 deletions(-)
----
-base-commit: b7fb68124aa80db90394236a9a4a6add12f4425d
-change-id: 20260417-xdping-5c2ef5a63899
-
-Best regards,
---  
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+-- 
+2.53.0
 
