@@ -1,101 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B105A37CD5F
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 16:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A533815C5
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 16:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776876183; cv=none; b=NyqO+/GiqhC8yCktO71WelRCRCh514ozjzcB4mOYo+saiQa2lrAqP9xLKCc7zqqXzHrvvWc02ra0m2mGCV1llVtqKTw+0rkG+4UxRSSuEwTzP6YUxhDw9JDgX6yyRDdDVzRyDAs0vmI5K4k/IJodcw4g6kYYD9WW+cDquPcp0nY=
+	t=1776876184; cv=none; b=jpH3uI7MvTu2hROhR74HJkt/uAZABwyq17LVHxYqkfwF6f8AaDnTICf3UtlPYVbOvgkxFORGtKLZYHpSOTV+UaVURX2CcGFs7uSxNqdO70hy0ZsM1T3ILmFAGTzFC6VBX0SZlck2rIfOIHWaquaCLY+9nzH7kWTzAjI4T2RdjkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776876183; c=relaxed/simple;
-	bh=4Mun20cppC5tI3fTqM5+TZPhHzhTUNNEfAuoZOSH8Hs=;
+	s=arc-20240116; t=1776876184; c=relaxed/simple;
+	bh=sV+pHvX4a+mbnHKf1o4SBN69SuDc3eC0iTUpR/G1z2g=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ul8Hhwt9UgFAN5coTVkyq27DolWT1NmVpg06OeiEUOajVOJ+z3OftGaHmyLVdRdRREsng+RolckCmt9cp4/EjziB/BSITHr89/4cpmw5Mc51wYc+9iwfdle4olSmNLLQT0/1IshmleJXXCW3w8pcLsEVX9jFvN5gmMzJ26iZhQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qwy7479Z; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=qSl8MGBgmzag7URMao9QTghKK8K/+djS6fzpjWmjCKHx8V+moBCOGYWUz4tUPqJthiJdzVIbntfRdXujHKXtm+fSyl6DfWkTtxMdOjadjLTZTFRsUlQkTk+StHXKw3bS6HssK3ylXOiiSSm2eT1BZRUB+B7PfsfNuqAS/qLlc7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nwhtnbji; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qwy7479Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 475A8C19425;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nwhtnbji"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1CE3C2BCAF;
 	Wed, 22 Apr 2026 16:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776876183;
-	bh=4Mun20cppC5tI3fTqM5+TZPhHzhTUNNEfAuoZOSH8Hs=;
+	s=k20201202; t=1776876184;
+	bh=sV+pHvX4a+mbnHKf1o4SBN69SuDc3eC0iTUpR/G1z2g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=qwy7479ZoidlCElQjcfZEe4J1pXbxjcxtf46w3Q8iOUyQ1Fj4S3u9jLn4dfFv/PRk
-	 xxLANDLcWUsRZsBTCmfi7SDclGTp/ZuVHfk3lCY8lVZlnHYH4PLMph2EJlJhcol6OV
-	 X8LGhF7ryP71JQ4nXjFydgak1OrWTTDDF2a7oL9cJfIazMExvNfDHBc2m2QgCxhUKK
-	 NHODGxC3j6ke3cvztF2Fuie0id2xx9AfvIQ7DxCaZMQ+9737lOiBuJDcvnSLipnviu
-	 fLPgUt1gWjPSp4yCHjj9OboHm3R2r5kfcDNslWrBpmE0uXpw3v9MIcZKmLosftNFTW
-	 kpmOeXr6X3TBw==
+	b=NwhtnbjiLDo9Xu1zlVIbJcLoN+gU9akxUJzuBfhYyo5W1gGFZorMx+SJ+CCR6KUyT
+	 /vm117YWUeYSwKxGV1lIWt/VeOPhOiDu/wMb3g432N2aVkUjuxgHQwqNKJtEbiYRPl
+	 xniEPqZRflt2CiHoiVB/XpcINAVDkPl2bN+Fh6PdaWP27KyYEL1bbj96ajT+g56MDH
+	 tn6Iciz3paR3E5OKqQ33IQRrYCishAPMgD2gDLK4iZzCjnKkIFMOaqOinIWVwMACgS
+	 zVALS0y3dJ91+2mV9//TrWaNxXiTCqlx2/r/UXuZfOrRrCggdjejTFUja2o+NCcED+
+	 YahOjbrdjqxaw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2] bpf: Fix NULL pointer dereference in
- bpf_sk_storage_clone and diag paths
+Subject: Re: [PATCH bpf-next v4 4/4] selftests/bpf: Verify bpf-tcp-cc
+ rejects TCP_NODELAY
 Reply-To: sashiko@lists.linux.dev
-To: "Weiming Shi" <bestswngs@gmail.com>
+To: "KaFai Wan" <kafai.wan@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260421155024.997077-2-bestswngs@gmail.com>
-References: <20260421155024.997077-2-bestswngs@gmail.com>
+In-Reply-To: <20260421155804.135786-5-kafai.wan@linux.dev>
+References: <20260421155804.135786-5-kafai.wan@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 22 Apr 2026 16:43:02 +0000
-Message-Id: <20260422164303.475A8C19425@smtp.kernel.org>
+Date: Wed, 22 Apr 2026 16:43:03 +0000
+Message-Id: <20260422164303.F1CE3C2BCAF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Sashiko AI review found 1 potential issue(s):
-- [High] The NULL pointer dereference fix in the diag paths is incomplete d=
-ue to a Time-Of-Check to Time-Of-Use (TOCTOU) race condition in `diag_get()=
-`.
+Sashiko AI review found 2 potential issue(s):
+- [Medium] Test logic allows vacuous passes if BPF callbacks are never exec=
+uted.
+- [Low] Type mismatch for `bpf_setsockopt` return value.
 --
 
-commit 89ba4092c0928afed16ec4db32d2b5ffaa88889b
-Author: Weiming Shi <bestswngs@gmail.com>
+commit 8a4ced8128582d3995376457598fd25202c0468a
+Author: KaFai Wan <kafai.wan@linux.dev>
 
-bpf: Fix NULL pointer dereference in bpf_sk_storage_clone and diag paths
+selftests/bpf: Verify bpf-tcp-cc rejects TCP_NODELAY
 
-This commit adds NULL checks for the storage map pointer in
-bpf_sk_storage_clone() and bpf_sk_storage_diag_put_all() to prevent a
-NULL pointer dereference when racing with a concurrent storage map removal.
+This commit adds a bpf_tcp_ca selftest to verify that the TCP_NODELAY
+restriction is properly enforced in bpf-tcp-cc. It updates bpf_cubic to
+exercise the init() and cwnd_event_tx_start() callbacks, ensuring both
+reject the option with -EOPNOTSUPP.
 
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index 14eb7812bda4a..b2cd2b0292cb6 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_cubic.c b/tools/testin=
+g/selftests/bpf/progs/bpf_cubic.c
+> index ce18a4db813fa..b941ab3ebad57 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_cubic.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_cubic.c
 
 [ ... ]
 
-> @@ -596,6 +596,8 @@ static int bpf_sk_storage_diag_put_all(struct sock *s=
-k, struct sk_buff *skb,
->  	saved_len =3D skb->len;
->  	hlist_for_each_entry_rcu(selem, &sk_storage->list, snode) {
->  		smap =3D rcu_dereference(SDATA(selem)->smap);
-> +		if (!smap)
-> +			continue;
->  		diag_size +=3D nla_value_size(smap->map.value_size);
+> @@ -170,10 +171,17 @@ static void bictcp_hystart_reset(struct sock *sk)
+>  	ca->sample_cnt =3D 0;
+>  }
 > =20
->  		if (nla_stgs && diag_get(SDATA(selem), skb))
+> +bool nodelay_init_reject =3D true;
+> +bool nodelay_cwnd_event_tx_start_reject =3D true;
 
-Can this still trigger a NULL pointer dereference due to a race condition?
+Can this test pass vacuously? Since these boolean variables are statically
+initialized to true and the callbacks update them using a bitwise AND, the
+userspace assertions will pass even if the callbacks are never executed.
 
-If a concurrent unlinking operation sets the storage map pointer to NULL
-after the check above, but before diag_get() executes, it looks like
-diag_get() could still read the NULL pointer:
+Would it be safer to add explicit execution counters (like the existing
+bpf_cubic_acked_called) to ensure the callbacks actually run during the
+test workload?
 
-net/core/bpf_sk_storage.c:diag_get() {
-    ...
-    smap =3D rcu_dereference(sdata->smap);
-    if (nla_put_u32(skb, SK_DIAG_BPF_STORAGE_MAP_ID, smap->map.id))
-    ...
-}
+> +
+>  SEC("struct_ops")
+>  void BPF_PROG(bpf_cubic_init, struct sock *sk)
+>  {
+>  	struct bpf_bictcp *ca =3D inet_csk_ca(sk);
+> +	int true_val =3D 1, ret;
+> +
+> +	ret =3D bpf_setsockopt(sk, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true=
+_val));
 
-Because rcu_dereference() re-fetches the pointer from memory, it could now
-return NULL, leading to a crash on the smap->map.id access.
+This isn't a bug since we only expect a small negative constant here, but
+bpf_setsockopt() returns a long. Could assigning the return value to an int
+cause unintended truncation issues in the future?
 
-Would it be safer to pass the already-validated smap pointer directly to
-diag_get() as an argument, or add a NULL check inside diag_get() itself?
+> +	nodelay_init_reject &=3D ret =3D=3D -EOPNOTSUPP;
+> =20
+>  	bictcp_reset(ca);
+>
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421155024.9970=
-77-2-bestswngs@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260421155804.1357=
+86-1-kafai.wan@linux.dev?part=3D4
