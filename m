@@ -1,63 +1,63 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F26C53A451E
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 03:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F76C3A3E9A
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 03:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776829052; cv=none; b=mbe0GY73p9B6Ebpi5BCrNGF94eObvrwLzl/LeZnBf+J3p7v1tOyqudLsrkP4bSjIibyvOF7htMxArYLSiyBFfEk4Dy1yJIO0OikBYi6LOZ1ZMsUmEdZ6qX4TinsROps604x59rKsuHSOiUwNsGRQ6nt9t/rSGwMCqfzsTyYU1zk=
+	t=1776829056; cv=none; b=AI2eGrtXwsyL/nz0FMDxET0DmHkWmDCCeefTlo2+AHMtUQpCpvzGEaSd9Dmxkofd1yomN2Sl1YNV0lOWjqItmo6JGhEyfBrYbZW7Q789MlmWKpAGhEZXQQn0sleByxPNH8hUu+ypDMxS7HPAStMOPyg334fv/x1aFaTlhmReFLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776829052; c=relaxed/simple;
-	bh=qJ7NePAuIUwSLIZNZpWGMB5Cq1VU+wbzlMIu4vvi22w=;
+	s=arc-20240116; t=1776829056; c=relaxed/simple;
+	bh=zre60K07SneaVEDnlumeqWETssPMwhdZUrCSxPquNPk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gKvaNbd0c5M4PFDwgj1tJICuIc10GhtIY9E2pRFOvvAslgocb49SMUhGeqzqVjwTK8HHttV8wJ1rNDqOJE57b10Sm4flZhb5CFbEZEVG/+1nPVi7H1j0hfbdExdJlqxHaH2vvC/zESYDRbzXOofgOXlqq8ulWgb1HWqjZmGdBAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oXzL8be8; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=XfMWE0YRQD7iCstP4xBB/MU6TKob1Ukwyor9X1KnPwKIwjAXMGVGkz9k7efi03YXr5IsGfbIFXOpePlgRuU/rtVLo5ShEBkyUNVqJLLoWl+vB6o/SRxrULYcGgLy7WHikd0fphZDn17/j5OrbxKm2GsEbaj2rt9z1tegmLb+iI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BSnd1dRp; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oXzL8be8"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-827270d50d4so4589317b3a.3
-        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 20:37:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BSnd1dRp"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82fcd0aa2dbso702444b3a.0
+        for <bpf@vger.kernel.org>; Tue, 21 Apr 2026 20:37:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776829050; x=1777433850; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776829055; x=1777433855; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3ioBSLv9hdXd5czi0wkoeJKm7t22FgolQo5/iE0ARes=;
-        b=oXzL8be8wJdt3qqBlDe/E0XfJ5xOAa8HE8pfaWA30gbEwEZUqa/UbrW5Ii5vAmmpm3
-         jKATStlBJfEUC1FcggYNUD04/OLCcwZxDhV4k48ZOgMs8jFKeUUYoQuIyU8zc72MsqPM
-         7FuswiiDxHsdoePshJAXavRNUzppnoFtxLJrM6LkEDtBV4xqI0TTGWktdUPc1jSXbvIH
-         3zvSCePyCABbw2JT4CDqdRybwsSPu2SB/FfRafam0IgZws6XgAT+ep7PgNGXojQ9BMn/
-         uw5oQe6PorGxtZz32xjQ9Uzbe6z7imE5WrPdCJV8zb+/oT7qRstVGEJUVSJwJpcJJ+zY
-         QZMw==
+        bh=O1Miu0qXqAhnqzY+X70yibbH5j2Y+ZT2djf8HDzTjHI=;
+        b=BSnd1dRpq0jT98gWfP71yw6v716PXltpko85Nf6e2chbC4k3CckVzi8ScYrkOv4QGu
+         OYRYFoRFsBooTlz01zGHIiT31gyCn8L8dPjYHwKNGIwUCe9isiy2ULouj3fOzTF/QHxD
+         yeEJ/SQqrEHJ8iGKL707zhsDlClBTmvFe3LF1E84B3N9m18HP0hXzzD387SOvrCq9wC/
+         z3YSi/Tni+49WBxVXLVDfsxa1ploKP1Sqwr9xFFaeif0/v4nSZGCcElkYTBkKvlHOyyj
+         9UIbcCpOEpYOShyTksooGOh+nYu+LpLaYQnNHfzAO0NvgTa3ysJSfCeP7s//okp417Kj
+         Nixw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776829050; x=1777433850;
+        d=1e100.net; s=20251104; t=1776829055; x=1777433855;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=3ioBSLv9hdXd5czi0wkoeJKm7t22FgolQo5/iE0ARes=;
-        b=odRmyEdWvzGnPvxEaCtWqTMKJzDQqbfbkS8ACK+K90SlT2XYHGK9nfzPSArAPSmHMv
-         k7p17cdlwwroHbDaaKvdg2hIcAuyp/MFtNGQzI+FbtK8GBAndLKMEPThvEXi5T1zRRDA
-         phfqkXIl8H2X1KMl120e0n/eEhjuKzddJY7JyxTSWiMsSNmyOPj3+uNX2TjO2nkwYzDD
-         Zb9e7/6uNBjr0nsR3Ntw29z0LHrsxnq6v2NvUnN7LUcWOtR6XlFrPoHsls22IrIP8fID
-         y6Zk9MGAYn2pYJSuWZyqGJjx73fcVFNqyuTfINVJa11/yFisDySUd0JG3BSJOMDhG7tk
-         HWvQ==
-X-Gm-Message-State: AOJu0YzihWAc4JkB58+3aYkD61N2KYcA0LsTZ4+BItbUc6xYJv2dcpfM
-	rwO6q3lDFJHisGNsMthrReskJH3rUE0ArQBxDCvn1Z30VMNi0ZRbBQCs
-X-Gm-Gg: AeBDieuSY7ej27blVOUdUmVWEAwSf9025aJeqSMgfpPGRnWEN+T1AcMgLT0adGpFF/n
-	FO2PW+9LbkCuGI+0mMr3K3C6gwcHiHs9IP/WrHQ9uHTWwOnJEe2yErV6HV5IwpuL61Q4R8wJqk2
-	47PZszSHq3xv440r29Tne33vgUPlcuwa3dKCh+VkO3aNNuUPKQIuHqcLhNWfgh0Ax1Dx+0ERptR
-	LJb7e59wZOp57vwfq2XTqcB8CmioKO/VTmzIFWm6JwTXN2xTcGv0SG2z9xatbpyZDJbh001vamD
-	xEgKMbqeHyA4r8i1UuLL3blbqBWZsQjdsPxZ9xshRPLFAfcO08YjRcHQdB4pCxk/VvyStbRLwp9
-	jrSDMEJKXs90cFzIEZjeg4wlTqKD2phzkW+0ybVLOnEgIaB3WMER+8oKxpPHCnCmDiLV/nk1zVp
-	YNsvUDqk3ef9V0jB7uFlMJHwaOpdx3LpRg7mVlm273yEI2EwHG8fIuXK8Vs9uBVV8PlYYMOnX5G
-	JCaIrwX
-X-Received: by 2002:a05:6a00:2e15:b0:82f:f4d:23c1 with SMTP id d2e1a72fcca58-82f8c943269mr20693707b3a.44.1776829050199;
-        Tue, 21 Apr 2026 20:37:30 -0700 (PDT)
+        bh=O1Miu0qXqAhnqzY+X70yibbH5j2Y+ZT2djf8HDzTjHI=;
+        b=DQLPGtD76YxQSBXACu2sToILEpJOPfAEZL1pQWSShKHN5IzXXDHidGWzpfk+24n4VQ
+         6yCyUETXCjOIFlqF7VKY7YRtoK49Lb3aJbL1JtbMsSWUitYHMV7yGTeGD0et/rmck3IS
+         EizbzODgNr3qn7/k60ezkEgLJqx5NJr6Z3f0E6Hsv6CNXTrSCZq/fsI1KXo1AsFjfMai
+         +Rfb79kDeUgyTt43qIb5c3zI9dxWNAjjybeC+EiI4OcEvK2FUHIesIWsHvjoaoeAMI4S
+         H4KpvRCrBlap6cXizk+qQuu7MCAWESrOua0kJZNDcMMcv4H6+QgL0zUe9VAUItasj3h7
+         9DZA==
+X-Gm-Message-State: AOJu0YxgQLaSVU7lPB1MXmsD3tnKZ8QhecZDHIkOGkn3lPLHAYxs2QCz
+	gXsdGPAH0w5jFSvI9WCodV8xrwvPwjmOc+2ezIaRvn7SuFh12K7BWSHg
+X-Gm-Gg: AeBDievbztnrnUcRxjQRqs4lBb05AtEA4i/fgd4I3MiYC3iTWpfvt9cReMrVXAzbzUT
+	DgNBnabWl/I1vXdHvR9Uv0bRmaQ8juXRQmS01lnfKPlXN+XER30hY8YPXhnABECUqt5ymrYTfsX
+	qf43k2RNowQ4uw99oHj2jEqfudkZFKCse0LpOpJ4DLK0/aUWTodidrDfwBSjzmUeiArLlZqn/hj
+	ZBlW6G0zwohfZKrmQppf4JYmUnoWyLT74PNOaIByn8I6mzxLOEttjbURMicRsRVlqcFGBm1eRZU
+	7ButF963OXYk+0d640NZEKIP6V8VnAntX7gKxVIARJfCcP40n+KaFpf50Lc2K7HWLiBnK1w9i8d
+	yP6yqISO11euALfbVpXa0QiVHKN8AO0QvzP/fFMcDXC8Sao+2Xo+OEqP5uMfg+7wyl2lRfxzJgQ
+	PtYeoqymPeNNB2y4QILWgrFj09CQ9c82HJAHd/UZzzN6alnkC/S7tR6hEVp160vlm5cvTQ4j9xQ
+	pOVH2hR
+X-Received: by 2002:a05:6a00:2d88:b0:829:6f7d:3086 with SMTP id d2e1a72fcca58-82f8b3aff42mr18281441b3a.11.1776829054634;
+        Tue, 21 Apr 2026 20:37:34 -0700 (PDT)
 Received: from KERNELXING-MB0.tencent.com ([43.132.141.25])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8e981c07sm18355473b3a.1.2026.04.21.20.37.25
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8e981c07sm18355473b3a.1.2026.04.21.20.37.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 20:37:29 -0700 (PDT)
+        Tue, 21 Apr 2026 20:37:34 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -75,9 +75,9 @@ To: davem@davemloft.net,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH net v3 7/8] xsk: fix xsk_addrs slab leak on multi-buffer error path
-Date: Wed, 22 Apr 2026 11:36:49 +0800
-Message-Id: <20260422033650.68457-8-kerneljasonxing@gmail.com>
+Subject: [PATCH net v3 8/8] xsk: don't support AF_XDP on 32-bit architectures
+Date: Wed, 22 Apr 2026 11:36:50 +0800
+Message-Id: <20260422033650.68457-9-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260422033650.68457-1-kerneljasonxing@gmail.com>
 References: <20260422033650.68457-1-kerneljasonxing@gmail.com>
@@ -91,64 +91,43 @@ Content-Transfer-Encoding: 8bit
 
 From: Jason Xing <kernelxing@tencent.com>
 
-When xsk_build_skb() / xsk_build_skb_zerocopy() sees the first
-continuation descriptor, it promotes destructor_arg from an inlined
-address to a freshly allocated xsk_addrs (num_descs = 1). The counter
-is bumped to >= 2 only at the very end of a successful build (by calling
-xsk_inc_num_desc()).
+In copy mode TX, xsk_skb_destructor_set_addr() stores the 64-bit
+descriptor address into skb_shinfo(skb)->destructor_arg (void *) via a
+uintptr_t cast:
 
-If the build fails in between (e.g. alloc_page() returns NULL with
--EAGAIN, or the MAX_SKB_FRAGS overflow hits), we jump to free_err, skip
-calling xsk_inc_num_desc() to increment num_descs and leave the half-built
-skb attached to xs->skb for the app to retry. The skb now has
-1) destructor_arg = a real xsk_addrs pointer,
-2) num_descs = 1
+    skb_shinfo(skb)->destructor_arg = (void *)((uintptr_t)addr | 0x1UL);
 
-If the app never retries and just close()s the socket, xsk_release()
-calls xsk_drop_skb() -> xsk_consume_skb(), which decides whether to
-free xsk_addrs by testing num_descs > 1:
+On 32-bit architectures uintptr_t is 32 bits, so the upper 32 bits of
+the descriptor address are silently dropped. In XDP_ZEROCOPY unaligned
+mode the chunk offset is encoded in bits 48-63 of the descriptor
+address (XSK_UNALIGNED_BUF_OFFSET_SHIFT = 48), meaning the offset is
+lost entirely. The completion queue then returns a truncated address to
+userspace, making buffer recycling impossible.
 
-    if (unlikely(num_descs > 1))
-        kmem_cache_free(xsk_tx_generic_cache, destructor_arg);
-
-Because num_descs is exactly 1 the branch is skipped and the
-xsk_addrs object is leaked to the xsk_tx_generic_cache slab.
-
-Fix it by directly testing if destructor_arg is still addr. Or else it
-is modified and used to store the newly allocated memory from
-xsk_tx_generic_cache regardless of increment of num_desc, which we
-need to handle.
+Since we hear no one is using AF_XDP on 32-bit arch, we decided to
+strictly stop supporting it at compile time.
 
 Closes: https://lore.kernel.org/all/20260419045824.D9E5EC2BCAF@smtp.kernel.org/
 Fixes: 0ebc27a4c67d ("xsk: avoid data corruption on cq descriptor number")
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Suggested-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Jason Xing <kernelxing@tencent.com>
 ---
- net/xdp/xsk.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/xdp/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 5e6326e076ab..ed96f6ec8ff2 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -605,7 +605,7 @@ static void xsk_cq_submit_addr_locked(struct xsk_buff_pool *pool,
- 	spin_lock_irqsave(&pool->cq_prod_lock, flags);
- 	idx = xskq_get_prod(pool->cq);
- 
--	if (unlikely(num_descs > 1)) {
-+	if (unlikely(!xsk_skb_destructor_is_addr(skb))) {
- 		xsk_addr = (struct xsk_addrs *)skb_shinfo(skb)->destructor_arg;
- 
- 		for (i = 0; i < num_descs; i++) {
-@@ -660,7 +660,7 @@ static void xsk_consume_skb(struct sk_buff *skb)
- 	u32 num_descs = xsk_get_num_desc(skb);
- 	struct xsk_addrs *xsk_addr;
- 
--	if (unlikely(num_descs > 1)) {
-+	if (unlikely(!xsk_skb_destructor_is_addr(skb))) {
- 		xsk_addr = (struct xsk_addrs *)skb_shinfo(skb)->destructor_arg;
- 		kmem_cache_free(xsk_tx_generic_cache, xsk_addr);
- 	}
+diff --git a/net/xdp/Kconfig b/net/xdp/Kconfig
+index 71af2febe72a..819aa5795f50 100644
+--- a/net/xdp/Kconfig
++++ b/net/xdp/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ config XDP_SOCKETS
+ 	bool "XDP sockets"
+-	depends on BPF_SYSCALL
++	depends on BPF_SYSCALL && 64BIT
+ 	default n
+ 	help
+ 	  XDP sockets allows a channel between XDP programs and
 -- 
 2.41.3
 
