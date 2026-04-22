@@ -1,184 +1,139 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BDC175A79
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 22:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776897964; cv=pass; b=Wmpu29yP8yaMdd2jgKLvLj8/416qCUIIqmTplCCvDM73wBuAPTyPFhyRfTMZuXdglL+Ff/uihrMfWqC1EyJ8RYv47M9eBd99qvOv5fZaE9qgFMhcyb2sqPGmZBmbRJTxsud+LdI1X3F2jgKKF1t3SsKb3rbgGSdJgIcbsxzWhtU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776897964; c=relaxed/simple;
-	bh=A/Qoxx4G2gmi5Rql7zyl/GJMT37HnSL/uR/rJUOHfos=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=brItgcE35NPmXPkPobwA9BL0dc5TvNcwLW3NSU5beaQh6v5OKyAvsqu2c9HzbBhfyWRCG8cXqEAKAgWLfA45txum8MKPBv19E1Ddg0pwcGDSa//CTys9OpTqaVOPrz2ic/mT+R07MtI+2sCC0manzoYIabxxwiDxOnTwBEIRLBw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S9XqroqH; arc=pass smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA1D2BEC55
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 22:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776898001; cv=none; b=o6FOBSccihvBKxjOWEqlwHUH/np96MpQTsfxE4ZgOtaHnfGwjUJ0ugbA9rOV40ebFeOuK7eudceJ0pGs3cM0dkRczE86Jld6BPVQUtk3hwQQjVM1q9Bz1f+bumRu7IUcfMtvQnk2mCQRrgfTmWZFbGjXQ3gLpUnsP3lP25sZuLk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776898001; c=relaxed/simple;
+	bh=F7TJBzFZwZLMVJ/+7nHLGSi3U67GV5N2TOeyd0Ipg54=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LIFeCC6SJWTauhmnBnA/hnL6MVJylPuDOXCpgfUY7RHiw0l14TR0+MMHoIC10W3+n2ZYMwhTpnwHZZ7HgyPN99R3TREh+lpYu/JoZOGIbHPBjOX+JCnJzHVtk4sHxMowvZhhESN145ul4QrWCsI+ieL2QCGBjF50IqN2QOIF4Rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hf+BJfiG; arc=none smtp.client-ip=74.125.82.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S9XqroqH"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7bb0d18c7f9so16078027b3.0
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:45:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776897954; cv=none;
-        d=google.com; s=arc-20240605;
-        b=g/SOTc2NmlTeFBco4R87OIjrwEHWKsiy5GlCku8id+z/OExiilGJpUmKA5eVOrjW9U
-         SzzbK2MWPoopnhYklRfd47FW/HNwkhANrnw65EvjOnH4Lq/RHp3LcucsyGwfzGJkFh/0
-         rPINEcsPzV1aVbNgFw/mrHKtk8NKLjkxh4bkQDc9Kg4L5B+gk+pyIfSeTNpzLekV9dMP
-         HAYDfgkXlhKv9075junRetKFWFfC3e5jifHe1IlvI8nIvm4YjP0O+QfBEniuIVKCO3TI
-         xfYBTZnzU7v4FWqkTpNRx7m51MaOFU6tr0FV11z59OhKt1Yn1naxS5OUxDagBAJ6qU/f
-         2j1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=072Izvm4+mNTHXaNnuS5DC7zjKMyy2O2f09dKfQvUGE=;
-        fh=bCoLUvtAu1D3hCyKghQ3VLRStVvdR9Sgh3Xhk/87lZg=;
-        b=IPfMynf9pjsE26V8fUqCQGC89qYwa6C5w8LKFpGeEa5LfDaEwhHLnp5PO3iDLXIdLy
-         92RhPzZqH+Rh+Uf/Pw5fMQ0Y4lpLjqQVc1WC0S+qPMG1Bg3X8PoolaIwqGM+2JZTIwQ9
-         YaOD6ggz8RN2CuKg78W0wOMWvIX4yucVIKDklCYjG1exRfQ8IM4jULQ8RCoxOwNPocBF
-         rCXF/YGCHW6JhaFme/k6lkVWn1qJk+woYcY/YFJJzMlJYBBIoBGDdKP78wjkjb8CpMaC
-         gFkVI9/TyigPiNng++mqCdLfAbafiFxUawE3ZF7hN6xCuTV5eHxejKQcUHw8epHpI3HJ
-         dEJw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hf+BJfiG"
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2d868d014a5so5855273eec.1
+        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:46:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776897954; x=1777502754; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=072Izvm4+mNTHXaNnuS5DC7zjKMyy2O2f09dKfQvUGE=;
-        b=S9XqroqHMVacfdMnxlqDC15ZoxmMG201vrP74+zA4vhqLevtyHnj9rXLlSnh++AJcE
-         UnrZiiy+LJvke/Hba2lbLyci9Q3sP4D6xewcjKCESXLw3OVmo7dqvEXwD5ZkUUzGJvtq
-         2b0hkUvWAvNyJ0sDo1hk1qeb1C/mqyNhZyTCcsZV+YszNHI6ejVG4NOOssBVOCuCoZxM
-         0u9XuRQhHT3VeqSYykOvgIcmG3pr12olys/QUYAJY2R0G/XP9uquXwbbSrIkuCXgd4CY
-         zzeRXqfihsWdBGTe7VLDot3+Axfu8WUCQvJbEU9dESowCz5HhfahZjr7v5vgPS/vh+vw
-         A/mQ==
+        d=gmail.com; s=20251104; t=1776898000; x=1777502800; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=9RSghCmV6ZXfFUAOGVeKtkj3rRXQVbd2GMNzi4ARfNw=;
+        b=hf+BJfiGAk7s8ETUeNSdLf0f0Ymry+JbeaaKh74NmquXnw/DdY81EYzFyLEDtlIXYs
+         Ej37jFJo0q6p3FE/raeiu894aUElR5XRHvjLloy6UYd0OHW1QNzFuHmuwkYKTynEkUX5
+         /E4kYjATN2ntTWBiucJpSXqVqOHFmE1eHBLfwHDfEJcxs5UKON1h4DoUbJA9jvwAbjM8
+         NgWbssooGBWYBgchFi56zB3nMxnEah08cLw1+Ol5W6gKLV8/qkLj7D38Q/M3etZYH73Z
+         aLTXEhAKWvrLsZBx1XuZoCeIPmpte8RDK7J9Jo6SVx+66AS50s3+Ad3tn2M2KwZgTGib
+         s0NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776897954; x=1777502754;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=072Izvm4+mNTHXaNnuS5DC7zjKMyy2O2f09dKfQvUGE=;
-        b=fhNvWloMSv2m6Vy7DogYNBhs/2ZaWB+qKMSmRtzQJlt5bvPJjOnMSFcuw02ACCpojW
-         K3R+sVepsj2Ye1ktL38D/fVW2F4YDRMuoQtZ8XFFjwPk2cydkEzYus2jPUWzCUclLNPY
-         GaNEKdM4nJitFE956Q2NU6r/s93TiktC0yuPMFtXWWaKhkPoVVTIoUqbYoLAvdXwzLxX
-         51SqEH/VzGm3ZJMUICHyGbxg0hua9LudeozzEGHM477A3NrdQA5Yu9EakjDJpeRHLBGN
-         JFuI7aA9RLrTMqYa8nPiX1vKe4r+1n+dtu16sKDx68NcZPDiwQlcg8rCUdM1yxV2fv9O
-         Z7jQ==
-X-Gm-Message-State: AOJu0YxUXtj2WvLp6zdbs2uVhp4t13AyS8D9Z48N534JuTxKpbZCkGl5
-	7SqPrEQL5+nUzAPCH80TSzIwk2P2adoPDKQggxlgNIQH35FL1zAkoE+Doe3Rywj1Y6u49kNDIHq
-	Vp/zxpaoOqBsaC/BBRcRSXqTNtkuh9mE=
-X-Gm-Gg: AeBDiesUwEcL7I41KxKoEEglq5L+hA6L8N2FQhwL77AjbSkLqNm+gSKH8vGOkHOXxbm
-	omutQkX+QpXLuHAQk+A/uhD3kJCc+yyrIWnke4+mrZO7Xm7RZ2AaPbFYjI8g+GmkPrHY95Xjxch
-	gI+xCvPvU+dx0nR7xnyr2Gh9Wyv5J9SF6/87xl6psCFTZzjdwCYAdZd1ogN84umceX/3f2PRlzx
-	6A+Rn29VdZj+1KR3vv7MwhrQXoruzbmZb9g0YZQnNl9fI7LUG8zla+tY192lE5vDp70TtrxE/7o
-	pZ3ed4NAPOwyVevcat4a6gbqUysn
-X-Received: by 2002:a05:690c:4d0a:b0:7b7:29e4:7dcc with SMTP id
- 00721157ae682-7b9ecfdc8d4mr268661087b3.39.1776897954202; Wed, 22 Apr 2026
- 15:45:54 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776898000; x=1777502800;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9RSghCmV6ZXfFUAOGVeKtkj3rRXQVbd2GMNzi4ARfNw=;
+        b=GFfOGcWo6Gus7reQ84xsmcIIBfogfBl645WVphPSwiURpPzGUauCSGtIMiaN/5tYnc
+         st0wtg2YbQCc8WUjDr9xTNMvBKmW7Rm4l55p/W+Gi9ovcFg5iLfKY0kYy2gc//XMZseq
+         DokkRhmQP/RrfjL8f8o4Cq6XzK7gLu2ZjJ8T0H+OfELFb73op76AD7Vzr4zkdVEjGm/1
+         2we7FHa41hpoXPRZRJcmH/uCRiqwlPLqh6Djvw2g90X/RF9XqjEIhCvF+pSmPBQTMECB
+         61zYKJpL5+Cg0V3ArJz4pzNpvJRB0aBsT5QL5bJKwbA/prak8i/fxGKavWdA6aKIhyjZ
+         ikWA==
+X-Forwarded-Encrypted: i=1; AFNElJ+KrAH05+Bvv7QIiStn5FTHIED5g2c9Yh+xUJco+pqPGWVZmOPSrNbhSxYbRm5KYCwJJHM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKY57XA4SQRoQiM4aDB4v+p3OgU8eTYmWiGu2sHPHYe9HCtwbu
+	yuxRJpwXZOQWwVtWGhgLpf/p6mv036Uynp7lwkt/O7r0E38EDOoy3aoB
+X-Gm-Gg: AeBDiescbrRZuH3f3e01+BOKQWSS74sK3UqyyM7as4k7tM682t74UxpQ8aZ3BsC4MSf
+	dxxMlMtSS9iqgxkaGYhTr431OzB8cfdwOKtpdFaNonryc9IFkPOo4qEzGV0WttIzaByzm0Vj+1U
+	KqgARjEgEt8Ne85phbA86h0mdNb9982T31YmqEKSbHIqcu29b8UAWaiPHhY+NPeriorTBfJ1CJL
+	RjDs+woHSWn4ADjD+ez0HSAt6wH5rsE7drIcDFYaA8rNIl6NsSFYz0jziUooJSdvkWo1iyIfpue
+	NUDFM0QV/v8sKLLfwjB4P+j+96YiiqZTh1nCFu+8CVOiaEuKKO27wy2a0Dn/rYKOQwl5YaAq4S9
+	EKolj5yb3qMPcs/YElrlN77YwcxdM2PKubo+wEP4BLEgVa/BPv7mbFZx9VTPZwSAQv7ue/vSvGg
+	Umud+Tm3TgnTy/a03/o8i5sgQJjYMkohAqA6yPyn1rQqitjszzYwo0MQEnBobYz2P4i/y5i6S5o
+	thTdukLw42AZvaU9SoU
+X-Received: by 2002:a05:7300:fb97:b0:2d8:71c2:255d with SMTP id 5a478bee46e88-2e47873aad0mr11689328eec.14.1776897999473;
+        Wed, 22 Apr 2026 15:46:39 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:1053:1d3b:d6cb:4350? ([2620:10d:c090:500::2:bea8])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53d9b056fsm33363023eec.29.2026.04.22.15.46.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2026 15:46:38 -0700 (PDT)
+Message-ID: <9e477e253c202b10ed611213e4fc9a7017bfc51d.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/9] bpf: Preserve reg->id of pointer
+ objects after null-check
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bot+bpf-ci@kernel.org, ameryhung@gmail.com, bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ 	daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org, 
+	mykyta.yatsenko5@gmail.com, kernel-team@meta.com, ast@kernel.org, 
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Date: Wed, 22 Apr 2026 15:46:36 -0700
+In-Reply-To: <d5679e6f2b458bb8771f83e6985247befd68fbab894a0d2a09797f0ec3a90efe@mail.kernel.org>
+References: <20260421221016.2967924-4-ameryhung@gmail.com>
+	 <d5679e6f2b458bb8771f83e6985247befd68fbab894a0d2a09797f0ec3a90efe@mail.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260421221016.2967924-1-ameryhung@gmail.com> <20260421221016.2967924-3-ameryhung@gmail.com>
- <9237d7b35463c79863488e3f2180239aab679049.camel@gmail.com>
-In-Reply-To: <9237d7b35463c79863488e3f2180239aab679049.camel@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 22 Apr 2026 15:45:43 -0700
-X-Gm-Features: AQROBzAXsM892ROEM1DlXvqbk7JLvZJKqyM159SJgbzOPsMyx6s4VJcBDmdaM9Q
-Message-ID: <CAMB2axMzeQs3WzFd1PZFB=DgR6d2ye4qzHKhATK2895ryzAEog@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/9] bpf: Assign reg->id when getting
- referenced kptr from ctx
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, mykyta.yatsenko5@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Apr 22, 2026 at 2:46=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Tue, 2026-04-21 at 15:10 -0700, Amery Hung wrote:
-> > Assign reg->id when getting referenced kptr from read program context
-> > to be consistent with R0 of KF_ACQUIRE kfunc. skb dynptr will track the
-> > referenced skb in qdisc programs using a new field reg->parent_id in
-> > a later patch.
-> >
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > ---
-> >  kernel/bpf/verifier.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
+On Tue, 2026-04-21 at 22:52 +0000, bot+bpf-ci@kernel.org wrote:
 > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 41e4ea41c72e..93003a2a96b0 100644
+> > index 93003a2a96b0..0313b7d5f6c9 100644
 > > --- a/kernel/bpf/verifier.c
 > > +++ b/kernel/bpf/verifier.c
-> > @@ -6448,8 +6448,6 @@ static int check_mem_access(struct bpf_verifier_e=
-nv *env, int insn_idx, u32 regn
-> >                       } else {
-> >                               mark_reg_known_zero(env, regs,
-> >                                                   value_regno);
-> > -                             if (type_may_be_null(info.reg_type))
-> > -                                     regs[value_regno].id =3D ++env->i=
-d_gen;
-> >                               /* A load of ctx field could have differe=
-nt
-> >                                * actual load size with the one encoded =
-in the
-> >                                * insn. When the dst is PTR, it is for s=
-ure not
-> > @@ -6459,8 +6457,11 @@ static int check_mem_access(struct bpf_verifier_=
-env *env, int insn_idx, u32 regn
-> >                               if (base_type(info.reg_type) =3D=3D PTR_T=
-O_BTF_ID) {
-> >                                       regs[value_regno].btf =3D info.bt=
-f;
-> >                                       regs[value_regno].btf_id =3D info=
-.btf_id;
-> > +                                     regs[value_regno].id =3D info.ref=
-_obj_id;
-> >                                       regs[value_regno].ref_obj_id =3D =
-info.ref_obj_id;
-> >                               }
->
-> Hi Amery,
->
-> Could you please help me double-check my understanding of this change?
->
-> It adds a new behavior, if struct_ops method parameter is annotated
-> with __ref, then if a field is read from such struct_ops context
-> the destination register would now have it's .id =3D=3D ref_obj_id
-> allocated for the parameter at the beginning of do_check().
-> E.g. for `rB =3D *(T *)(rA + off)`, if `rA` is a pointer to struct_ops
-> context and parameter corresponding to `off` has `__ref` annotation
-> the `rB.id` will be assigned, contrary to old behavior, when it remained =
-0.
->
+> > @@ -15886,15 +15886,10 @@ static void mark_ptr_or_null_reg(struct bpf_f=
+unc_state *state,
+> >=20
+> > =C2=A0		mark_ptr_not_null_reg(reg);
+> >=20
+> > -		if (!reg_may_point_to_spin_lock(reg)) {
+> > -			/* For not-NULL ptr, reg->ref_obj_id will be reset
+> > -			 * in release_reference().
+> > -			 *
+> > -			 * reg->id is still used by spin_lock ptr. Other
+> > -			 * than spin_lock ptr type, reg->id can be reset.
+> > -			 */
+> > -			reg->id =3D 0;
+> > -		}
+> > +		/*
+> > +		 * reg->id is preserved for object relationship tracking
+> > +		 * and spin_lock lock state tracking
+> > +		 */
+>=20
+> How does preserving reg->id interact with reg_is_init_pkt_pointer()?
+>=20
+> In v2 review, Alexei Starovoitov raised this concern: "That pointer has
+> to have id =3D=3D 0". Eduard Zingerman responded that dropping the id =3D=
+=3D 0
+> check should be fine, but this change was not made in v3.
+>=20
+> The function reg_is_init_pkt_pointer() still checks reg->id =3D=3D 0:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0return reg->type =3D=3D which &&
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg->id=
+ =3D=3D 0 &&
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0reg->of=
+f =3D=3D 0 &&
+>=20
+> With this patch, if a PTR_TO_PACKET register goes through null-checking
+> in mark_ptr_or_null_reg(), it will now preserve its reg->id instead of
+> resetting it to 0. Would this cause reg_is_init_pkt_pointer() to
+> incorrectly return false for init packet pointers?
+>=20
+> Reference: https://lore.kernel.org/bpf/CAADnVQLCKi_QL1FeybW+6MH6FAOAoRJyW=
+06UvtX3my3yNSH5eQ@mail.gmail.com/
+>=20
+> > =C2=A0	}
+> > =C2=A0}
 
-Right
-
-> This change in behavior, however, becomes visible only after the
-> changes to release_reference() later in the series.
-> There the `rB.id` is used to initiate `mark_reg_invalid(env, reg)` for
-> the `rB`.
->
-
-I probably should mention it in the commit message. The purpose of the
-patch is to make the implementation consistent with the design:
-parent_id tracks the id of the parent objects.
-
-Without this patch, it should still work since in this case ref_obj_id
-always equals to id. When release_reference() is called on a
-KF_RELEASE kfunc, the children objects will still be invalidated
-correctly.
-
-> Are the above observations correct?
->
-> > +                             if (type_may_be_null(info.reg_type) && !r=
-egs[value_regno].id)
-> > +                                     regs[value_regno].id =3D ++env->i=
-d_gen;
-> >                       }
-> >                       regs[value_regno].type =3D info.reg_type;
-> >               }
+Bot concern is bogus here, reg_is_init_pkt_pointer() is called only
+for PTR_TO_PACKET. mark_ptr_or_null_reg() checks for
+type_may_be_null(reg->type), meaning that for it to trigger one would
+need a register of type PTR_TO_PACKET | PTR_MAYBE_NULL.
+It appears there is no way to construct such type at the moment.
