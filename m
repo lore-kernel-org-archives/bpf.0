@@ -1,81 +1,80 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC3A366060
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 21:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36D82D6407;
+	Wed, 22 Apr 2026 21:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776893326; cv=none; b=WQScr4BOyFyClvEHlvHm/DzhGr6PkIcxxCJSAXGWPJkrVfP0dTfJm8VK1g4/xdM3mRU4PGqp358PkCf4PWiTTwdXR54GLzlYlirGyBuXroX2RR/dsFnoOBgUK9ScmBc95buaVhy/btYfIpLilt/c0raFaqWMc/ko68LSDyByx+I=
+	t=1776893444; cv=none; b=frLBzY89esM5t9nYhvnEBSgFyf1xZ1XwaicaVBtVUt7by+Fqc2t62XH2JOVyEz8SlwJEOQotjtoaayZxKHvyz5KZ5Kgm4/CcQ3JPoKY1cXgqVFCoOlOWd8PlMS2PehILdgGOeJm3t08lDLqUt66scztSTX+pXkr6BYN0Q3kJSq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776893326; c=relaxed/simple;
-	bh=CquhhgFGSv6ftFYUJJC2CdtpiGXTjxEJ9Q/L2qjH8iU=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=BtjieEC3YAJ+3sjuXMvQ00GRbFU2ycyldHlvY1ULnLGXBMGRF52OvZh82p7n8UxH1NZ1ltnTJ6PpBu3q7STFH1RYGZT8+uxk9pU4kJW8+s+OENq6flORS3OVOM2Cy/0WxyL5u+jdcTaH05gvQI+FTf6AxpzUFHcHIvqJY8YAVoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=daA1nv4E; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776893444; c=relaxed/simple;
+	bh=Itkh848k0Dmsyn5wght7EMx2QMJVBYyDBSXSJueFdj0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Lg18mtvo5CMg7BA1NzROLfxs/J1Wqu4F+KpLd0ak173tS4azjt/4oayd+nWhPs+48nsesHGNmyPVREUfpTdX4wAzlZIlUQIWByK1v/7swYAorxR9tQdpS2eGOtoB2fSN0CI/taF/31U8V/EUIWTsswXy5GMWAOU6Bg0qJc/OXfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hFMz14XH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="daA1nv4E"
-Content-Type: text/plain; charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776893313;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Cgpza/ygVqVA9S3quWs8Q35TCmfB+GLC9CQWXkpoesk=;
-	b=daA1nv4EjYnSQLIE7dEMjIdoIMZC+orNAQvKRf1ByycCi4bPaBGaW2hGTdZwDfyOdXa2qb
-	0glFoOF2Dq6n0hpicGLRRDEUCYyZl+PTLFy5IJHVTiLMpzuAZq8Q2iKR/VLZKTaJzprZpO
-	1cwVSZV6Ayy/jV1maIfiGf0YJyB+YWs=
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hFMz14XH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A60C2BCB6;
+	Wed, 22 Apr 2026 21:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776893443;
+	bh=Itkh848k0Dmsyn5wght7EMx2QMJVBYyDBSXSJueFdj0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=hFMz14XHTxXW1Z+xY0s0cxkVxWF3H/mgIgfE0tMCclHTQ4Wm9uF+phJXn0KCvYRnG
+	 /7/o+xSM3msPD//VF5H7DeFH2G0AJ1i7s2aHHltJkAheaOG997gkDnA6rQe/F8g7fV
+	 BMypb5NTyMs+iZZRkGhOYynJQlOOIo4+LXax597fM/TAqOr7wjJVWLfIlh1rvgjYnF
+	 BhV3MFBD7r1mY5hXxMPfhXhpZPpZzzc+kFBK7JxdRjjuNzzuAuG+TzTiBSUDMvPXyz
+	 5v/Pkkr6710glr6pIAH8TGX7ZQgqwW+rewOoOM1mDOZOrZbAO5eLbpWqjbFgcPdwvS
+	 icPih0bzy73hg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02E903809A85;
+	Wed, 22 Apr 2026 21:30:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: LSF/MM/BPF: 2026: Call for Proposals
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roman Gushchin <roman.gushchin@linux.dev>
-In-Reply-To: <81033e57-99e5-43f1-a6c3-c363e96f9c9f@acm.org>
-Date: Wed, 22 Apr 2026 14:28:17 -0700
-Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org,
- bpf@vger.kernel.org, lsf-pc@lists.linux-foundation.org,
- linux-kernel@vger.kernel.org
-Message-Id: <32CD853E-921D-4EEA-B1D0-4E4A7537861A@linux.dev>
-References: <81033e57-99e5-43f1-a6c3-c363e96f9c9f@acm.org>
-To: Bart Van Assche <bvanassche@acm.org>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf/selftests: fix uprobe_multi usage
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177689340581.4044244.17385542984883270612.git-patchwork-notify@kernel.org>
+Date: Wed, 22 Apr 2026 21:30:05 +0000
+References: <20260421-uprobe_multi_usage-v1-1-4c51675955e6@bootlin.com>
+In-Reply-To: <20260421-uprobe_multi_usage-v1-1-4c51675955e6@bootlin.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org,
+	=?utf-8?q?otlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
+ thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-I suggest LSFMMBPFLLM :)
+Hello:
 
-> On Apr 22, 2026, at 1:30=E2=80=AFPM, Bart Van Assche <bvanassche@acm.org> w=
-rote:
->=20
-> =EF=BB=BFOn 1/10/26 5:24 AM, Christian Brauner wrote:
->> The annual Linux Storage, Filesystem, Memory Management, and BPF
->> (LSF/MM/BPF) Summit for 2026 will be held May 4=E2=80=936, 2026 in Zagreb=
-,
->> Croatia.
->> LSF/MM/BPF is an invitation-only technical workshop to map out
->> improvements to the Linux storage, filesystem, BPF, and memory
->> management subsystems that will make their way into the mainline
->> kernel within the coming years.
->> LSF/MM/BPF 2026 will be a three-day, stand-alone conference with four
->> subsystem-specific tracks, cross-track discussions, as well as BoF and
->> hacking sessions. Please check out:
->>           https://events.linuxfoundation.org/lsfmmbpf/
->> for further details on the venue and hotels.
->=20
-> Thank you Christian for being one of the organizers of the
-> LSF/MM/BPF summit. Will a schedule be made available before the summit
-> starts? A link to the 2024 schedule is available at
-> https://lore.kernel.org/all/20240510212132.83346-1-sj@kernel.org/.
->=20
-> Thanks,
->=20
-> Bart.
->=20
->=20
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Tue, 21 Apr 2026 16:33:29 +0200 you wrote:
+> uprobe_multi usage message not in sync with the list of subtests it
+> actually supports.
+> 
+> Add the missing subtests in the help message.
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] bpf/selftests: fix uprobe_multi usage
+    https://git.kernel.org/bpf/bpf-next/c/7f843c0584f4
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
