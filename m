@@ -1,152 +1,242 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C591A9FAB
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776870651; cv=pass; b=sWHdxruInBIF9PTtQh+/Di6viDR6z4//aDIwZqjlWRzvFz/gyiY9BLNo7bsf4NXglN8E8fAea6rRKIzUFcomEU5L+nwTZswKP5NxNmBlVxvJ5uDAj09jyXWNL0Kq8VPZmwYp8H9UeUtX9lVupSE2piuIgNh0xw5W2VxwTeXpCMA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776870651; c=relaxed/simple;
-	bh=7rhfog0QjQcYCGLyWi4Zu/zV+Xz+1PgIXxFJ+7VOryE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U63ByA70AqER4xk0A4dotIWSt1VIAQc3mOI2vQal0qRYgAMjeQmymMe0xD+u6lW9OEn1yQQIoo2itwTuRpK/I6X/WjjzEi8Dmsk4I2qPjxQh0cKzGAerr9GJPDuPSIBazjtwVjLJ+mKi3EjbrqGu+5vMtCsFsNO8LKTnf/T9qJ0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y1OI1iuR; arc=pass smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C068279DC9
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 15:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776871647; cv=none; b=p66PudTx7b8NuhISxXA5D4I3GdaT9l9SI15Ypb8xNdyQnGZ50bDXnRGXQ98j1GDjrrldeprFf9b3nBXsRTYy07UyuYaOcxfglk9ZR6rIrztolTjQvIvRqUNyULDzGLEm3Y6k4UUNUbMSK/MhBvrZVDH1yuZz354Ia0FeLwZ4pBg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776871647; c=relaxed/simple;
+	bh=aPWShDH14HQxMJ8iA4Rk79fiAE8TWTCKBpmFbYoREsA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mHijJZQnUhuSktFvkqbZB1rjKwc/pnZsQzNiQejSWAp97cB3xO8e8FgufBH5JjgVahK3c4iCU/ZQJ/ZOyjlq6HHePKjiCQGu4MvZ6rwHg8z7RBMntxCFbysbs1eo2B5dOd9DYcTVnkPmzkqCV9QpHcpE8kxBx4cgV6/fKJESkSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhuhhc5K; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1OI1iuR"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4896c22fcbaso29905385e9.0
-        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 08:10:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776870648; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BCKTZpPxO2AeIH22O5skqckc0ZbWBt1atBFhAAFxYSovOhD/jzBsHgYCoDERcTQJC4
-         WbxGmDJv/siMja0ZOHbFzx8CqfRjhJ6vhSteha0wqLTx1OuRuWmHnuifaf9wUkJDKc8G
-         P67zscRPhNYslznyOWhLa3JizB7dNswYokMB2J/J+MQk9bLKiAgIC7r07vewlu2Vaphx
-         7+j5ltRbNyIeYHegAfcJjk192NC2HrvEIt2S/BMJJ55WzL4nd3EfRYwNHdgWIv+Q9M7Q
-         wTnirv/WTqz8KeZLa0dwxZUjQSyA5+Gk/ug23EIRo6taPiFYhhA+KsZAuyTS3niNWvjG
-         9wNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wCFBCv0UWIValjobDqGb4niUzAyCJI7kTXsU6ccE94k=;
-        fh=PxQg8y8+X9G8Fdf7UWomuGom8qfjF0IC1k1yuMznwfo=;
-        b=h6ZieeqCMYQyP2aJEViaatADmLKe+b8B+5pxjqlZnMZIhCqAwBAo6MBl4Q0F6XyMvL
-         nHz6/64AB1Q53nTFyEdmn85yfXnUSJ900Ak2YhDhI9C9Xm8v0ZdM4QmU/ggEv+I6v1qq
-         v+xEIwetEpoP3pqp667vlowV1XRcZxDlGs6UTWPWFQsynd38L1tgu2L207upgnpxhjOO
-         fChPcFeXyEkM4dJ9ch65B5z++qU8hraaaBli/gVDBnvqAXUDD6kd3VZ1VbBhLEeQ3T/7
-         0WjG4YAtEvprRo89m74Fw19ZihVmIa+fX3nYxtSk0VoqNUcYxhf/hEDbh0UUKsWgM6D8
-         3Hkg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhuhhc5K"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488af9fdaa7so34549535e9.1
+        for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 08:27:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776870648; x=1777475448; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wCFBCv0UWIValjobDqGb4niUzAyCJI7kTXsU6ccE94k=;
-        b=Y1OI1iuRUBLpbf40CFilGvDdEFjNs9ZNs5sZ9t0BagTqYSJGpU1ToXhxYU8wogevS7
-         Jo51dMT7hZNmf8Oo3tAwO3n7llk2TjvdI9DpR3oMd2SeMYj0H9Hm0iMjqY5VHHAamsVn
-         kAF8/oHsvfE2CdesCsiOKxlcz9rKek6Hek4WfgLZsFfV+AvFHiaG+u+5hTzw2MYo+ct2
-         AYnsVOvMaTDJwETElsXpZKarrUziQppXtwDXUvgNMyyzun5D8YNP8vyZSZ3GjSU6zJC0
-         PTMJuH4SIeScDBWTOHd1ZCVx9iCYnS75cmSgS3E2eDhAy5FmDsyBH5/u+ZQys3n/nOlZ
-         roOQ==
+        d=gmail.com; s=20251104; t=1776871644; x=1777476444; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zygoRxfQBmCSeTnzguZsVEzKKMzemsAdhmP9KVzh9mQ=;
+        b=hhuhhc5KMScBpKpBYzwT8QFikLo+pTMW51c0SKtzXQ26m2bvRQYsRY9LGN1KR0+STK
+         vu0/Bv8KqjJfOZtkcNswtVyXPxhWmCOCDzxBYWYPWM9hoq5viUD7BooYDODnCe7kt37m
+         2QCBouTgLFqHdzTE3bSckwt4BJ/mKp9PuMljHgGH6yN4nUp/0RiVGJRmgrTka+JDxF9Q
+         zede8K2kbEAzxhXUlF4hfbFM0rRALPult87Cyw3/JPGFVKJwo1mwe3UQtnKKP/2rsuT0
+         0PFO3V2JfZf5XAkX+9SzmeqDojhoshgrrDgDMtHqwuQO869SvzPjSEBEq7IFQcctR2Oy
+         P1sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776870648; x=1777475448;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wCFBCv0UWIValjobDqGb4niUzAyCJI7kTXsU6ccE94k=;
-        b=ByvoAZswpF9dVUWdwO1X+p8wgHjxaJ/fy+LQ7Rhc3vUfZGxKYHOVgVfX2fP/dYd28z
-         gmY7/zwmwrXYc8oEEmCS5v0Nz2gAn0tHQRt33xmB2VtReQkUVf2j4QUpEQQxjaxweMbP
-         VXtG1csjK0vD2pL9g8EUe/VW3HOqQspZlVNxRjw+tXUAweFZCwex+X2npBOmHOnpfowd
-         zPbW7CNdl3c0bDytaK9SkwVLycUNxWHasMPu1EgXa3IxbR38Oz1nY9AlMuUVihqn4QBK
-         iU5vvM+m3TKPMbqq4nqBcDhSiEhB01kpQzCygvWuZSevyOnvPgtkjbtBE7l0PmfZATle
-         czbA==
-X-Forwarded-Encrypted: i=1; AFNElJ/VvpUoyxQbp0g2X0ZVpJiSJzKHbh9Y1QVEwmVgeBMj64uCG0KIKngAxezotoPCixWgML4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyNu/DSLfIZ23vTrgO/XbgknHn2KMlOK3Cj0r88FoIT2rNtOWQ
-	rC1dW2Ga72U6vmBhasgZWfIWQiriFcdONDoLrlNyprmlpaN0a3hW2AWfdWGZwREhPd4APFAk8mq
-	5IpWcckmjbxa+uuVJxVG13uBL0li+C2I=
-X-Gm-Gg: AeBDietBlhJsb2cf4a51XjVxVEgO65VSLVwdupy5nnhQauUN58mOBcRZ2SPfczu4JJf
-	2u6YdbQ/48JZko12Y3IVmeqW4QHuzCen7e9+OKmQDk19CgsIGxIR2xGyaklxlUkTbd8ka0myfIG
-	T3RLGjWnEI/YUplRraomlGVb36uZV7q5zRz9pdFmHZtNFJy66qU8/sxrXn+CVvZFVoti2eGjB8S
-	fx2rWm/+yDX39ayUY2jKBbbQCZCE7L4pD1nDuLFWkuAaWd/ProN3/2hMdJAjl4VK0v5uAMuWy4u
-	jKr/EH6/qdW3tBHtNpIFVdxeCHA93W9M4lU9kTvwyPZBQM2L1bkMxTwRMZns+dVms1u34ByJ78c
-	Lnuv8GcMZYKJyacltiAp4MtYHXbbB2oe0jsZN
-X-Received: by 2002:a05:600c:4e4c:b0:48a:58ae:9938 with SMTP id
- 5b1f17b1804b1-48a58ae9f69mr87984845e9.19.1776870648179; Wed, 22 Apr 2026
- 08:10:48 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776871644; x=1777476444;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zygoRxfQBmCSeTnzguZsVEzKKMzemsAdhmP9KVzh9mQ=;
+        b=CZ57LvCtwYFrXiI031MPVNo1A1JdWxfyh+79bZr4ivdx8MRMCvzUZ3JbHICKZdQGKE
+         qyu2JwCRY8MQ96h11REEPLG8OdSbZeQzDaHZKMeHrPDedQR2g8uPoRTrgYXSCBlAYN0G
+         /OiQujEXcmvXi5mUeVceOBcv/YeOCNscI8ZvFnZC7DMxZYGUh6Ie0wDw+M+2aSUub8yB
+         87Ovz9/HoicEMMI9cJyuT3offU3+/whupn+Ke113PosdZofOu/LXJLKCSvEndr1n3wC9
+         IuUi/mAm9kKIvGsGZXPhIpHvALnZDcrgIukrC9Bk99YbKPC9L/aDHEC1m8mQ1JtE5tJN
+         W+WQ==
+X-Gm-Message-State: AOJu0YzJoJa2+ju4nxtR5ilvvp9i3Dh4Z9E+Gc289CjI55UGX7XwQdT+
+	fk7HB8nf3nTAGPvKFRRSKL3eIPGseX9Udmq0r3DEeGD55tbyUmkgcF4E
+X-Gm-Gg: AeBDietMEIPkhhDWf18NRh0/MeVaDGY56DHGyNqUwPHCCGwNXCP1lFdEDGg/tHmDcoh
+	ghsJfKQtYFkIMr8Pjy+H71+WmM5xPGIbw6JlVZWNEQbkpOxSrt94IM+RS2B3bMSmlCPDij2M5u8
+	MBe1Ge7+DiCO8yjEiys9Jon8uTx/ax6GGcuN2IMrE+EEpzpQGzX0jP8QJ1+VmlqiscD7u6D3BCd
+	ubGKcmBLC1cPH7f27ECZnnTgZ+/nEhknYFgX3JKjGoE3gdUfPEps5Hrp1vlujvMh9DSlH/fmPB9
+	Yo2IwDaS0uCz/LNvdecDiHE1Doqlxb6fvC1mEYKVfjbohpbP/mEHWVdGgJ80NssneEjKJJITo90
+	lbC1pvg+1qeY5dJ03FeiREEbruvB5Y5jEdaFPaI+qguqVyhkCBemkd1g+absQN3OPjBmoLVf4H4
+	EzMxHTz7JlsSeekxoqowrNdYI=
+X-Received: by 2002:a05:600c:8b84:b0:480:1c69:9d36 with SMTP id 5b1f17b1804b1-488fb76e4aamr359582885e9.17.1776871643830;
+        Wed, 22 Apr 2026 08:27:23 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:8::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc1cfbf2sm469654505e9.15.2026.04.22.08.27.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2026 08:27:23 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v12 0/6] bpf: Add support for sleepable tracepoint
+ programs
+Date: Wed, 22 Apr 2026 08:27:05 -0700
+Message-Id: <20260422-sleepable_tracepoints-v12-0-744bf0e3b311@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260422103206.533695-1-alan.maguire@oracle.com>
- <c2e8527a-0cae-47a5-8c43-2ae2c08bc1ab@gmail.com> <f2b3e9c5-c896-45d6-bcda-58c9634f61ab@oracle.com>
-In-Reply-To: <f2b3e9c5-c896-45d6-bcda-58c9634f61ab@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 22 Apr 2026 08:10:36 -0700
-X-Gm-Features: AQROBzCJQ9YcnRMVZy8dpRHxoLjW0BNj5xFU2NEn9s8d759qK9Kq6mE2tbXLn2o
-Message-ID: <CAADnVQJ8=6dpUnUeDgja_v-fzX0nC-TxozmsRbDKym_Z9j3EHw@mail.gmail.com>
-Subject: Re: [PATCH bpf] libbpf: Fix type size overflow in btf_type_size_unknown
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	sashiko <sashiko-bot@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMno6GkC/33SwWrDMAwG4FcJPldDsmzH7WnvMcawY3kNdElIQ
+ ugofffR7NCQ4Z0Fn/h/6aYmGVuZ1Km6qVGWdmr7Tp0q0odKNefQfQq0SZ0qpVE71ORguogMIV7
+ kYx5DI0PfdvME7CkIGUJrUR0qNYyS2+sKv6k4ZOjkOqv3Q6XO7TT34/e6cdHr/NfWtmAvGhCQG
+ VPIyVnMr18yh5em/1rBhZ8IE5UQBgSWY4xJbExa7xCzRbiEGEBIEhvnfXAu8g6xW6RU1WIBwVu
+ rbZKakrY7xG0QbUqIeyAUQ+RgOP9B6i1i/0N0JK9TaCTQPo7fIIwlxD8QYc3G1ZkD7pDjEzFUR
+ I6AIDUdxTkj3jQ7hHCrFPMQAgI5ygYjc0r1nqENo4uvQvQ4s8+Z2CeXcVvu/X7/AQPwbLs1AwA
+ A
+X-Change-ID: 20260216-sleepable_tracepoints-381ae1410550
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+ eddyz87@gmail.com, memxor@gmail.com, peterz@infradead.org, 
+ rostedt@goodmis.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776871642; l=7190;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=aPWShDH14HQxMJ8iA4Rk79fiAE8TWTCKBpmFbYoREsA=;
+ b=118Z7V24Ha+H+g5jDyCftFU+i/5uGzjbCgmR9djL9FeSlf+zQ9GSDHUKxJIzasmMPI4BwDYYT
+ aWnERdptjNqCNtsZQSH9bOHsFMUVaO0sHnglgCX5t2wDnXy7QUFYnxn
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-On Wed, Apr 22, 2026 at 8:07=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> On 22/04/2026 15:19, Mykyta Yatsenko wrote:
-> > On 4/22/26 11:32 AM, Alan Maguire wrote:
-> >> A layout section with a large elem_sz/vlen can lead to a 32-bit
-> >> overflow in btf_parse_type_sec() at the point where a large
-> >> type_size is added to the next_type [1]; a sufficiently large type_siz=
-e
-> >> on a 32-bit system could lead to the bounds check
-> >>
-> >>     if (next_type + type_size > end_type)
-> >>
-> >> not triggering (since next_type + type_size wraps to a value low
-> >> in the 32-bit address space).  This would lead to a bad value for
-> >> next_type when we add the type size.  Avoid this by ensuring that
-> >> the type_size we return from btf_type_size_unknown() falls within
-> >> the range of <current type, end_type>.
-> >>
-> >> [1] https://lore.kernel.org/bpf/20260417170712.74E77C19425@smtp.kernel=
-.org/
-> >>
-> >> Reported-by: sashiko <sashiko-bot@kernel.org>
-> >> Fixes: 2ecbe53e0e991 ("libbpf: Use layout to compute an unknown kind s=
-ize")
-> >> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> >> ---
-> >
-> > Beginner question: how does targeting bpf tree helps libbpf patch, it's=
- not available unless we sync to github and release a new libbpf version, i=
-sn't it?
-> > I would rebase this on bpf-next: it does not apply cleanly on bpf-next =
-and dealing with conflicts for this change does not sound amazing.
-> >
->
-> Sure, happy to do this if it makes things easier. In this case the bug di=
-d exist prior to
-> the vlen expansion work, but only for a short period of time. As I unders=
-tand it bpf fixes
-> are resynced regularly with bpf-next, but that does require merging. In t=
-his case the merge should
-> be straightforward I think, but if maintainers would prefer a bpf-next-ta=
-rgeted patch I'll do that
-> instead. Thanks!
+This series adds support for sleepable BPF programs attached to raw
+tracepoints (tp_btf, raw_tp) and classic tracepoints (tp).
+The motivation is to allow BPF programs on syscall
+tracepoints to use sleepable helpers such as bpf_copy_from_user(),
+enabling reliable user memory reads that can page-fault.
 
-Mykyta's point is that 'bpf' tree is for kernel fixes.
-We send libbpf fixes to bpf tree only when they're part of
-kernel fixes and they have to go together.
-Not the case here.
+This series removes restriction for faultable tracepoints:
 
-pw-bot: cr
+Patch 1 modifies __bpf_trace_run() to support sleepable programs.
+
+Patch 2 introduces bpf_prog_run_array_sleepable() to support new usecase.
+
+Patch 3 adds sleepable support for classic tracepoints
+(BPF_PROG_TYPE_TRACEPOINT) by introducing trace_call_bpf_faultable()
+and restructuring perf_syscall_enter/exit() to run BPF programs in
+faultable context.
+
+Patch 4 allows BPF_TRACE_RAW_TP, BPF_PROG_TYPE_RAW_TRACEPOINT, and
+BPF_PROG_TYPE_TRACEPOINT programs to be loaded as sleepable, with
+load-time and attach-time checks to reject sleepable programs on
+non-faultable tracepoints.
+
+Patch 5 adds libbpf SEC_DEF handlers: tp_btf.s, raw_tp.s,
+raw_tracepoint.s, tp.s, and tracepoint.s.
+
+Patch 6 adds selftests covering tp_btf.s, raw_tp.s, and tp.s positive
+cases using bpf_copy_from_user() plus negative tests for non-faultable
+tracepoints.
+
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+Changes in v12:
+- Style improvement in the bpf_prog_run_array_sleepable(): use guard(rcu)(), remove
+unnecessary defensive programming artifacts.
+- Link to v11: https://patch.msgid.link/20260421-sleepable_tracepoints-v11-0-d8ff138d6f05@meta.com
+
+Changes in v11:
+- Avoid running dummy prog in the bpf_prog_run_array_sleepable()
+- Migrate selftests from nanosleep() to getcwd() to avoid issues with the
+different struct layouts.
+- Link to v10: https://patch.msgid.link/20260415-sleepable_tracepoints-v10-0-161f40b33dd7@meta.com
+
+Changes in v10:
+- Guard per-prog recursion check in bpf_prog_run_array_sleepable()
+  with prog->active NULL check, following the same pattern as
+  commit 7dc211c1159d for prog->stats. dummy_bpf_prog has NULL
+  active field and can appear in the array via
+  bpf_prog_array_delete_safe() fallback on allocation failure.
+- Link to v9: https://patch.msgid.link/20260410-sleepable_tracepoints-v9-0-e719e664e84c@meta.com
+
+Changes in v9:
+- Fixed "classic raw tracepoints" to "raw tracepoints (tp_btf, raw_tp)"
+in commit message
+- Added bpf_prog_get_recursion_context() guard to
+__bpf_prog_test_run_raw_tp() to protect per-CPU private stack from
+concurrent sleepable test runs
+- Added new bpf_prog_run_array_sleepable() without is_uprobe parameter,
+remove all changes in bpf_prog_run_array_uprobe()
+- Refactored attach_tp() to use prefix array uniformly (matching
+attach_raw_tp() pattern), removing hardcoded strcmp() bare-name checks.
+- Recursion check in __bpf_prog_test_run_raw_tp()
+- Refactored selftests
+- Link to v8: https://patch.msgid.link/20260330-sleepable_tracepoints-v8-0-2e323467f3a0@meta.com
+
+Changes in v8:
+- Fix sleepable tracepoint support in bpf_prog_test_run() (Kumar, sashiko)
+- Link to v7: https://patch.msgid.link/20260325-sleepable_tracepoints-v6-0-2b182dacea13@meta.com
+
+Changes in v7:
+- Add recursion check (bpf_prog_get_recursion_context()) to make sure
+private stack is safe when sleepable program is preempted by itself
+(Alexei, Kumar)
+- Use combined rcu_read_lock_dont_migrate() instead of separate
+rcu_read_lock()/migrate_disable() calls for non-sleepable path (Alexei)
+- Link to v6: https://lore.kernel.org/bpf/20260324-sleepable_tracepoints-v6-0-81bab3a43f25@meta.com/
+
+Changes in v6:
+- Remove recursion check from trace_call_bpf_faultable(), sleepable
+tracepoints are called from syscall enter/exit, no recursion is
+possible.(Kumar)
+- Refactor bpf_prog_run_array_uprobe() to support tracepoints
+usecase cleanly (Kumar)
+- Link to v5: https://lore.kernel.org/r/20260316-sleepable_tracepoints-v5-0-85525de71d25@meta.com
+
+Changes in v5:
+- Addressed AI review: zero initialize struct pt_regs in
+perf_call_bpf_enter(); changed handling tp.s and tracepoint.s in
+attach_tp() in libbpf.
+- Updated commit messages
+- Link to v4: https://lore.kernel.org/r/20260313-sleepable_tracepoints-v4-0-debc688a66b3@meta.com
+
+Changes in v4:
+- Follow uprobe_prog_run() pattern with explicit rcu_read_lock_trace()
+  instead of relying on outer rcu_tasks_trace lock
+- Add sleepable support for classic raw tracepoints (raw_tp.s)
+- Add sleepable support for classic tracepoints (tp.s) with new
+  trace_call_bpf_faultable() and restructured perf_syscall_enter/exit()
+- Add raw_tp.s, raw_tracepoint.s, tp.s, tracepoint.s SEC_DEF handlers
+- Replace growing type enumeration in error message with generic
+  "program of this type cannot be sleepable"
+- Use PT_REGS_PARM1_SYSCALL (non-CO-RE) in BTF test
+- Add classic raw_tp and classic tracepoint sleepable tests
+- Link to v3: https://lore.kernel.org/r/20260311-sleepable_tracepoints-v3-0-3e9bbde5bd22@meta.com
+
+Changes in v3:
+  - Moved faultable tracepoint check from attach time to load time in
+    bpf_check_attach_target(), providing a clear verifier error message
+  - Folded preempt_disable removal into the sleepable execution path
+    patch
+  - Used RUN_TESTS() with __failure/__msg for negative test case instead
+    of explicit userspace program
+  - Reduced series from 6 patches to 4
+  - Link to v2: https://lore.kernel.org/r/20260225-sleepable_tracepoints-v2-0-0330dafd650f@meta.com
+
+Changes in v2:
+  - Address AI review points - modified the order of the patches
+  - Link to v1: https://lore.kernel.org/bpf/20260218-sleepable_tracepoints-v1-0-ec2705497208@meta.com/
+
+---
+Mykyta Yatsenko (6):
+      bpf: Add sleepable support for raw tracepoint programs
+      bpf: Add bpf_prog_run_array_sleepable()
+      bpf: Add sleepable support for classic tracepoint programs
+      bpf: Verifier support for sleepable tracepoint programs
+      libbpf: Add section handlers for sleepable tracepoints
+      selftests/bpf: Add tests for sleepable tracepoint programs
+
+ include/linux/bpf.h                                |  50 ++++++++
+ include/linux/trace_events.h                       |   6 +
+ include/trace/bpf_probe.h                          |   2 -
+ kernel/bpf/syscall.c                               |   5 +
+ kernel/bpf/verifier.c                              |  13 +-
+ kernel/events/core.c                               |   9 ++
+ kernel/trace/bpf_trace.c                           |  48 ++++++-
+ kernel/trace/trace_syscalls.c                      | 110 ++++++++--------
+ net/bpf/test_run.c                                 |  65 +++++++---
+ tools/lib/bpf/libbpf.c                             |  88 ++++++++-----
+ .../bpf/prog_tests/sleepable_tracepoints.c         | 142 +++++++++++++++++++++
+ .../bpf/progs/test_sleepable_tracepoints.c         | 112 ++++++++++++++++
+ .../bpf/progs/test_sleepable_tracepoints_fail.c    |  18 +++
+ tools/testing/selftests/bpf/verifier/sleepable.c   |  17 ++-
+ 14 files changed, 578 insertions(+), 107 deletions(-)
+---
+base-commit: 05103382104b8ffc701f7b2c79379a0361ecad30
+change-id: 20260216-sleepable_tracepoints-381ae1410550
+
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
+
