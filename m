@@ -1,90 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A2F35E925
-	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 21:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D91347FFE
+	for <bpf@vger.kernel.org>; Wed, 22 Apr 2026 21:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776891654; cv=none; b=WJm7SQuJTF8xuRZoXee2BwtjCRqNVDiBnYS1H39AcGyfid1xJuhad72W5mpUuEGZy0QfOfLDZEp7Oc6PS5L9j9MT3o7QFizPTtfPjxjJf384RKjnwdBodQi0FZ9kqPAJxFWBCsF8ZP/2SnWhYJ6Ll+2DQC2MzX9bQVbUZxNEeB4=
+	t=1776891817; cv=none; b=r9zN8CsNBvZdsLqRFaI3v+0C4IxZngAeEo+3SWzAc6hG6y/nPYuyD8MG+9KbhbH1JQ1tPNCK+hoqIFD0NhwI0Ex8G/Fib4Ml2dplUWGO+nS2WcM4I+4CliIfhuv+wW1wALU4m5Tu30/ZRTJJowr9/SBsWC3YXHvBJjLZo7h3MUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776891654; c=relaxed/simple;
-	bh=RplETUdxM96ZAjUf/e+pRg7oQEhnt1ARSKgvL5fbKWU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gHjxvKjf1p3qgAy6a9n7cfuU5/yNwL8kU/22MkUeA9dKg8dA24/7Xm75xeW02Wcf9RRreOtmNzKnTcFD4OORk0weKUhd8CnZXIaLv8mrKmE8vUxBKRM32I9AWVj0UB2UH3y2xO9njFsETDQkrMc17jjXBhXYwJXcOtdW2YNNOeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fIIOi5vM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776891817; c=relaxed/simple;
+	bh=XWLOYO1gKbrrrBDEFkh8O1EcFuPow71n79j2gD5SDlA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Av9GEBxz1c1Y8FgZO4hntIFMYZvfRLqRcgDy6wAFWfCxLM9cmgVi2Ej/C7kuomJxE/JNUCwFb7/Af1rlfG6EndEgjsH+vOSy/WXnoKnKJCzBghUwghRkmp3k78D4l+FtIW+0hfVazbIrPAoEwD0Ur0dMlZ8XLnjgQUX5TlNJffA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqdPfp8j; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIIOi5vM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D35BC19425;
-	Wed, 22 Apr 2026 21:00:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776891654;
-	bh=RplETUdxM96ZAjUf/e+pRg7oQEhnt1ARSKgvL5fbKWU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=fIIOi5vM+qEvOfFsWmpI3sJHyGLNHzP6dlSvpFzDf268L0uVps5xHFTqz+14OYRq2
-	 G46uuxOZ5sxLmm4hDrU6yrBys1ofuO004GKdvb0+tjM61UrnCdepu652zqfQENH/zX
-	 DLqu2gnd/lKxB2n/esxvlqqQ5uuhZ3XtETKks+djPbFaXCrudN+V6LgI4TN68kJcF4
-	 ywe3rUSWJHKZtfntlv3D0sHeTn8uEUgefxbS0882Ud1faRkIi+XezuXQrhCM1SfYQK
-	 UG6yeBvG3zfOiiv5UF0AhNtVh30rpwQ+t9Akmle8IoHPjvcv5HyE0uuZ0rxAT72/yb
-	 rFeHqc6iLP5bw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CE693809A84;
-	Wed, 22 Apr 2026 21:00:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqdPfp8j"
+Date: Wed, 22 Apr 2026 14:03:14 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776891803;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RYkjy4WCea2cSCblSBZyO98tvVtY1skLCklo2d0JXqM=;
+	b=RqdPfp8jkNesnz71XLeUWehb1/ED5gNVGRrMoDkXFwa3EONIQXLPt/Cp98x3clQzJW7h66
+	rd/60f+flZHorRlAq1WcLYfv1K800LusVLxNF4a8TJhuVSjGENYmgVl3ph8K5P5HXnO72A
+	dXe87x8k7amX3pyNhDZGdoqmbe6k+6w=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Werner Kasselman <werner@verivus.ai>
+Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "stable@vger.kernel.org" <stable@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Lawrence Brakmo <brakmo@fb.com>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf v5 1/2] bpf: guard sock_ops rtt_min against
+ non-locked tcp_sock
+Message-ID: <2026422205858.dBi3.martin.lau@linux.dev>
+References: <20260417023119.3830723-1-werner@verivus.com>
+ <20260420230030.2802408-1-werner@verivus.com>
+ <20260420230030.2802408-2-werner@verivus.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v13 0/6] bpf: Add support for sleepable
- tracepoint
- programs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177689161630.4034798.5996538156641439944.git-patchwork-notify@kernel.org>
-Date: Wed, 22 Apr 2026 21:00:16 +0000
-References: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
-In-Reply-To: <20260422-sleepable_tracepoints-v13-0-99005dff21ef@meta.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, memxor@gmail.com, peterz@infradead.org,
- rostedt@goodmis.org, yatsenko@meta.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260420230030.2802408-2-werner@verivus.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
-
-On Wed, 22 Apr 2026 12:41:05 -0700 you wrote:
-> This series adds support for sleepable BPF programs attached to raw
-> tracepoints (tp_btf, raw_tp) and classic tracepoints (tp).
-> The motivation is to allow BPF programs on syscall
-> tracepoints to use sleepable helpers such as bpf_copy_from_user(),
-> enabling reliable user memory reads that can page-fault.
+On Mon, Apr 20, 2026 at 11:00:35PM +0000, Werner Kasselman wrote:
+> sock_ops_convert_ctx_access() reads rtt_min without the is_locked_tcp_sock guard used for every other tcp_sock field. On request_sock-backed sock_ops callbacks, sk points at a tcp_request_sock and the converted load reads past the end of the allocation.
 > 
-> This series removes restriction for faultable tracepoints:
-> 
-> [...]
+> Extract the guarded tcp_sock field load sequence into SOCK_OPS_LOAD_TCP_SOCK_FIELD() and use it for the rtt_min access after computing the sub-field offset with offsetof(struct minmax_sample, v). Reusing the shared helper keeps rtt_min aligned with the other guarded tcp_sock field loads and preserves the dst_reg == src_reg failure path that zeros the destination register when the guard fails.
 
-Here is the summary with links:
-  - [bpf-next,v13,1/6] bpf: Add sleepable support for raw tracepoint programs
-    https://git.kernel.org/bpf/bpf-next/c/439ebd5b5708
-  - [bpf-next,v13,2/6] bpf: Add bpf_prog_run_array_sleepable()
-    https://git.kernel.org/bpf/bpf-next/c/12628ffaf98b
-  - [bpf-next,v13,3/6] bpf: Add sleepable support for classic tracepoint programs
-    https://git.kernel.org/bpf/bpf-next/c/57918341dd19
-  - [bpf-next,v13,4/6] bpf: Verifier support for sleepable tracepoint programs
-    https://git.kernel.org/bpf/bpf-next/c/8cfb77d30920
-  - [bpf-next,v13,5/6] libbpf: Add section handlers for sleepable tracepoints
-    https://git.kernel.org/bpf/bpf-next/c/0cd420a6f40c
-  - [bpf-next,v13,6/6] selftests/bpf: Add tests for sleepable tracepoint programs
-    https://git.kernel.org/bpf/bpf-next/c/8a20655749c6
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I think some formatting instruction was not given to the AI this time and
+no human bothered to look at the formatting of the commit message
+before posting?
