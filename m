@@ -1,49 +1,49 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB4A86329;
-	Thu, 23 Apr 2026 06:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BC6307481;
+	Thu, 23 Apr 2026 06:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776924981; cv=none; b=JU1awYtLasI9eaCKtptLDl7sTeo0iP//Pxam1MlzrAcQ3RJ3/1Vzr7Tx7AUs7DOzSj6A0o0vGDVskOGapYfy8EGZPcup3kYFGb+CY/vScBJPASKliq6gOY0xFHBrEe84KzMy+klLnDUlkWTrmInMKFRH5OMEmF69VtavJ3P9sGQ=
+	t=1776924997; cv=none; b=PWgfPD556+SgzloEHdtRHNcbmyqjnmSaX9w7Nuemkl3a4T6G0gIbfuck9Kpi91jM7Q8e4Bzew+Q5apDyRKIn+4qD0b0ld3liRnaa0wBqIS8ZkDPk2AC2vhdNS7wz8TQWzmSJQxHOvz24p0NNvVjyr9AH4UXLeZ2Z+Bxd20gH7OI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776924981; c=relaxed/simple;
-	bh=YsdvlQqeVior0g/k+WAElPcnRGxse6gI8p2joQTg8Fc=;
+	s=arc-20240116; t=1776924997; c=relaxed/simple;
+	bh=ru4xmAG5090zMTorvzBMO3CkMmXYAyYQWFiIdf/Og8c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NporuhXMeEBX7yQrelz3u+loRsM6nOtKimJKAEQAwc5n1NdCpWrPyT2RoHI1q6bV8KsfMm+v/CBHX50kpGA3asLbLcjS7n5JLEExPj8/ZtaB8mODQ8z3KqoEMbpigOuxm4KMqxnF0YhLG6fKm7fyBiFlNeNinJ8HpDlDvRLjMgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dxt2zyw6; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=QZDxxFEhcgGic5uIjhT3aZ5HFmDKdevUXQtS+7cmJ1O7Ep4tmqMcXIa9voz2D3kuReH/CXcB2F9jkIPFS6dasOI8gyGGGD6ugDqCszKaXEWz+Wi4hSRnzSfeUZm6N6qxw1Xu7UU2M/A2UmQRJ2Ovn5Dwo+abp8MnoXb/v3LsGXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fZ/fDlZX; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dxt2zyw6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fZ/fDlZX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776924980; x=1808460980;
+  t=1776924996; x=1808460996;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YsdvlQqeVior0g/k+WAElPcnRGxse6gI8p2joQTg8Fc=;
-  b=Dxt2zyw6hfzn1wl3YkcGJHa1/3yiteqRGt9YJG1BHKkVQ5jk5E4BkBYt
-   nwJsl7ajfwJdI0SFePaY/nOj78EJhEtToUfkTLbC1/UvotrfQ5KSPO5OK
-   Cu2tFaI+9KCf5UwjTd57PWQ0aJW/wrePM8t1OOzeHkpS1O/fBPtNwYaA0
-   WWNl4ZsN9smJu/lbwxrP4H0n+uE3DKWYW3lmsBGRAHGCBgXUl7jL+ElrU
-   KP7GP7rid/VGTg0vWktTEIYU7Txg14uy4dKaYJ9xhO2R3HmWiRd4Z43ON
-   6NLU0dv8eub90yQg8ApjCCKHQDAVQ4uNV8L2ILWy+KG+qSN3R/F+XCoDl
+  bh=ru4xmAG5090zMTorvzBMO3CkMmXYAyYQWFiIdf/Og8c=;
+  b=fZ/fDlZXcTiZJSn9o0187r7CkOtRXpI8NAnaSgQVQbdTI7U/Pm1EuYXL
+   CVkPWbzmyc8+zBDVHz+Z9k+8ALXy/cvH88rJEqH8hbCMR+NVYZx8uY3cT
+   EjYmaRtvPwQ4ogphU05po+8lVV0muP5A6k7rQbxFZcvsl/R6CI6+FvLEB
+   buHWZWw1Bf/IwMGDAvTzla75XVzcUXWLqMjr3ypVOQ0Gj4rBEEwGR2CH2
+   QygnmU/j24142FbBlhiFo+33ZKkQyoa4ZEToIdAz9bNpdKoVIQ7cGKJhF
+   Ym7DrBbwRYnyNTruqIYM5CxZTMxkNSeo7aau9t9ZVS7mH6i1jQXicZozL
    A==;
-X-CSE-ConnectionGUID: AxD11cf0Tqiekk+r6Rzkig==
-X-CSE-MsgGUID: hi3C3KLzSvKxg9eGipCzKw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77947654"
+X-CSE-ConnectionGUID: cLNLjd/FST6nxXG+osyhKw==
+X-CSE-MsgGUID: Z3x7wzwCRL2YXQlBGnscXw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="80473325"
 X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="77947654"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 23:16:19 -0700
-X-CSE-ConnectionGUID: EhSLhq+OQHuTHCn3oUw5hQ==
-X-CSE-MsgGUID: p+msgnavRSqnUze2Ca456g==
+   d="scan'208";a="80473325"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 23:16:36 -0700
+X-CSE-ConnectionGUID: DQ9toAe3RKe2uxdSk+RHtQ==
+X-CSE-MsgGUID: vc0uzW6MSh6AQBEKp9IpbA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="229385102"
+   d="scan'208";a="237551256"
 Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 23:16:18 -0700
-Date: Wed, 22 Apr 2026 23:16:18 -0700
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 23:16:35 -0700
+Date: Wed, 22 Apr 2026 23:16:34 -0700
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 To: x86@kernel.org, Jon Kohler <jon@nutanix.com>,
 	Nikolay Borisov <nik.borisov@suse.com>,
@@ -78,9 +78,9 @@ Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
 	Asit Mallick <asit.k.mallick@intel.com>,
 	Tao Zhang <tao1.zhang@intel.com>, bpf@vger.kernel.org,
 	netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: [PATCH v11 06/12] x86/vmscape: Use write_ibpb() instead of
- indirect_branch_prediction_barrier()
-Message-ID: <20260422-vmscape-bhb-v11-6-b18e0cf32af4@linux.intel.com>
+Subject: [PATCH v11 07/12] static_call: Define
+ EXPORT_STATIC_CALL_FOR_MODULES()
+Message-ID: <20260422-vmscape-bhb-v11-7-b18e0cf32af4@linux.intel.com>
 X-Mailer: b4 0.16-dev
 References: <20260422-vmscape-bhb-v11-0-b18e0cf32af4@linux.intel.com>
 Precedence: bulk
@@ -93,35 +93,61 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20260422-vmscape-bhb-v11-0-b18e0cf32af4@linux.intel.com>
 
-indirect_branch_prediction_barrier() is a wrapper to write_ibpb(), which
-also checks if the CPU supports IBPB. For VMSCAPE, call to
-indirect_branch_prediction_barrier() is only possible when CPU supports
-IBPB.
+There is EXPORT_STATIC_CALL_TRAMP() that hides the static key from all
+modules. But there is no equivalent of EXPORT_SYMBOL_FOR_MODULES() to
+restrict symbol visibility to only certain modules.
 
-Simply call write_ibpb() directly to avoid unnecessary alternative
-patching.
+Add EXPORT_STATIC_CALL_FOR_MODULES(name, mods) that wraps both the key and
+the trampoline with EXPORT_SYMBOL_FOR_MODULES(), allowing only a limited
+set of modules to see and update the static key.
 
-Suggested-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Jon Kohler <jon@nutanix.com>
-Reviewed-by: Nikolay Borisov <nik.borisov@suse.com>
+The immediate user is KVM, in the following commit.
+
+checkpatch reported below warnings with this change that I believe don't
+apply in this case:
+
+  include/linux/static_call.h:219: WARNING: Non-declarative macros with multiple statements should be enclosed in a do - while loop
+  include/linux/static_call.h:220: WARNING: EXPORT_SYMBOL(foo); should immediately follow its function/variable
+
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- arch/x86/include/asm/entry-common.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/static_call.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/include/asm/entry-common.h b/arch/x86/include/asm/entry-common.h
-index c45858db16c9..78b143673ca7 100644
---- a/arch/x86/include/asm/entry-common.h
-+++ b/arch/x86/include/asm/entry-common.h
-@@ -97,7 +97,7 @@ static inline void arch_exit_to_user_mode_prepare(struct pt_regs *regs,
- 	/* Avoid unnecessary reads of 'x86_predictor_flush_exit_to_user' */
- 	if (cpu_feature_enabled(X86_FEATURE_IBPB_EXIT_TO_USER) &&
- 	    this_cpu_read(x86_predictor_flush_exit_to_user)) {
--		indirect_branch_prediction_barrier();
-+		write_ibpb();
- 		this_cpu_write(x86_predictor_flush_exit_to_user, false);
- 	}
- }
+diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+index 78a77a4ae0ea..b610afd1ed55 100644
+--- a/include/linux/static_call.h
++++ b/include/linux/static_call.h
+@@ -216,6 +216,9 @@ extern long __static_call_return0(void);
+ #define EXPORT_STATIC_CALL_GPL(name)					\
+ 	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+ 	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
++#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
++	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
++	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+ 
+ /* Leave the key unexported, so modules can't change static call targets: */
+ #define EXPORT_STATIC_CALL_TRAMP(name)					\
+@@ -276,6 +279,9 @@ extern long __static_call_return0(void);
+ #define EXPORT_STATIC_CALL_GPL(name)					\
+ 	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name));			\
+ 	EXPORT_SYMBOL_GPL(STATIC_CALL_TRAMP(name))
++#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
++	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods);		\
++	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_TRAMP(name), mods)
+ 
+ /* Leave the key unexported, so modules can't change static call targets: */
+ #define EXPORT_STATIC_CALL_TRAMP(name)					\
+@@ -346,6 +352,8 @@ static inline int static_call_text_reserved(void *start, void *end)
+ 
+ #define EXPORT_STATIC_CALL(name)	EXPORT_SYMBOL(STATIC_CALL_KEY(name))
+ #define EXPORT_STATIC_CALL_GPL(name)	EXPORT_SYMBOL_GPL(STATIC_CALL_KEY(name))
++#define EXPORT_STATIC_CALL_FOR_MODULES(name, mods)			\
++	EXPORT_SYMBOL_FOR_MODULES(STATIC_CALL_KEY(name), mods)
+ 
+ #endif /* CONFIG_HAVE_STATIC_CALL */
+ 
 
 -- 
 2.34.1
