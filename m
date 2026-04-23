@@ -1,124 +1,79 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DAAB340A76
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 11:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC6A2FD7BC;
+	Thu, 23 Apr 2026 11:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776943570; cv=none; b=pLQjCcpg0UXIyQH7nHH1aZC9u+uqOtKlNtD+fKBYa9gEo/Pbd8JXpE5hIwQ7FUmjiEggQHx1jaS6C979Lg0fdui0ZNzrbuEKcYMnJpPO3XDkvywmoFJKtVeett9+p3ALQ3shQqVJT0QPo0MHFxG6vQ3dEZ8aOkCmyBn7YWmb7o0=
+	t=1776944820; cv=none; b=jEZRX4N6U4Of6T4Rqv85olCudXwtyMFkPk1+WsFAacB90zofwTwxo9yBmDdZUDQ2X7Lm9EmhOAE4iJqHnVFeJgib02MFVuQn9pXtbQd1dS0N6e2ocOFCVr9MANM0q4Ih2FpKalzGTDAeejJ+rXZ35py9XRwYitoRa0IefwrluC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776943570; c=relaxed/simple;
-	bh=gWhsZ7A6OAJHZXOLsX1CYn69oaTJs0fZGt+loZzPFg4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MItbYNev1pcspT+B0Sw/p//79hqFaOx7hMr5WLs8LC6fgrJdQraXOZ6xBn1QJSiTFDzBpnne4uYsEq+hiE9i7zX4rsP8HJWb05S2v+f7oSOTZCN7tmbWg++diE8XdwZdGnnwGMAGrhJrhBvHPcNfbrBHLPSBi8EwY8/2Ym0R540=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nzOh6IIK; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1776944820; c=relaxed/simple;
+	bh=lAH+tMgsReb5YVC0CmXAwj1oMmvhUfKDEdN5ypoXL7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PbCfqZ58WYHmhxLKouG736JIRBhpFGj5+wMcqZJpowuSVRvm2X1VgZeMLwnYee2XKThyGcspD/fjKZYeK1BcSZhXAlv9I5xxx3Xq4YiKsaD+6N5UK2DUPPufoMYlKTJ9pKtJk588YObOR3XDnzh7OZUoqEuKFRcDaV6/cxtYoEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VR1KrBY9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nzOh6IIK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=wgIen2v+MDc7ya6jPJxlqhDzIe69FhwYdwvZh9M7XAU=;
-	b=nzOh6IIK6Byuwy6FPjVTc8h9MhhupFcOK6ROaNpBNEiS+Igt8L55ofW2xXO4m7
-	SFiISoOe+uopSE5BfQ7igCqhnY/knsJruU/Iy3FJbDz9k7iGkssjVXvlNMR6rFbE
-	kTlJF8B0Wgmzduz5RuYG85mHQFO0xbyYUq1u2Yqaz19I0=
-Received: from [10.193.191.26] (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgBn_JJOAeppaE0sBA--.31S2;
-	Thu, 23 Apr 2026 19:24:05 +0800 (CST)
-Message-ID: <b67c42e6-27d4-455b-9db6-7eed719e007c@163.com>
-Date: Thu, 23 Apr 2026 19:23:56 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VR1KrBY9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA02C2BCAF;
+	Thu, 23 Apr 2026 11:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776944820;
+	bh=lAH+tMgsReb5YVC0CmXAwj1oMmvhUfKDEdN5ypoXL7A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VR1KrBY9S+BKA8k7jOQ4sG8OyVJgAf6WtmbQeHmDYORbAMCr5fh7SpjfbTE9eZZxN
+	 rzHKzoxMGlqJJ6utbOn/T4Sg/BVYFXnKlhovHu8Hnk7nwTRdzPnxczM8ncMLTxEa6I
+	 /wlmNFzw1+ZOcQ1W26d+BcC9P5CfcCJA+EMtq0sjeFT9AB9b0m6Iv/3V0CegpKOGx5
+	 1208mxBZFaUodfH8KMVxqvI0AsIzojqJrDysFUAKn835F3B5vL8ltK63r7S484cONZ
+	 uECR5DDXheZKCldg6TyodnS/qboWOInXZISKyaXrr7Qv9jezXVe3Vx6epCT3FOHNwp
+	 CU3ro1rSzVU1A==
+Date: Thu, 23 Apr 2026 13:46:54 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-block@vger.kernel.org, linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, bpf@vger.kernel.org, lsf-pc@lists.linux-foundation.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: LSF/MM/BPF: 2026: Call for Proposals
+Message-ID: <20260423-auseinander-steigen-b80ee53079a8@brauner>
+References: <20260110-lsfmm-2026-cfp-ae970765d60e@brauner>
+ <81033e57-99e5-43f1-a6c3-c363e96f9c9f@acm.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC bpf-next 0/4] bpf: replace min/max fields with struct
- cnum{32,64}
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Yazhou Tang <tangyazhou@zju.edu.cn>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>,
- Yonghong Song <yonghong.song@linux.dev>, Shung-Hsi Yu
- <shung-hsi.yu@suse.com>, Paul Chaignon <paul.chaignon@gmail.com>,
- Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
- Tianci Cao <ziye@zju.edu.cn>
-References: <20260421-cnums-everywhere-rfc-v1-v1-0-8f8e98537f48@gmail.com>
- <9d47111a-61c8-491b-8750-63fb79968125@zju.edu.cn>
- <DHZRWV9NZOPX.1PD401F76IUT9@gmail.com>
- <7a7f3455-3cb2-42a8-a1a1-47ba40ee1a2f@zju.edu.cn>
- <CAADnVQ+2O2zgdy11+vxE6dOp+3Br4zZBysHF-Hne7cP+eeucnQ@mail.gmail.com>
-From: shenghao yuan <shenghaoyuan0928@163.com>
-In-Reply-To: <CAADnVQ+2O2zgdy11+vxE6dOp+3Br4zZBysHF-Hne7cP+eeucnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgBn_JJOAeppaE0sBA--.31S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1xJw4rXF47Ww1UJw1UZFb_yoW5Gr1fpF
-	ZxJFs0kF4kJ39F9F92v3yavFyYva1xJFWUurn5GrW5A39IqrySvryxKr45ua4xG3Z3W347
-	trW2vF98Za45A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UewZcUUUUU=
-X-CM-SenderInfo: xvkh0w5kdr53ldqqmjqy6rljoofrz/xtbCzhVqa2nqAVX87AAA3d
+In-Reply-To: <81033e57-99e5-43f1-a6c3-c363e96f9c9f@acm.org>
 
-Hi Alexei,
-
-On 2026/4/23 0:13, Alexei Starovoitov wrote:
-> On Wed, Apr 22, 2026 at 8:32 AM Yazhou Tang <tangyazhou@zju.edu.cn> wrote:
->>
->> Hi Alexei,
->>
->> Thanks for the quick response!
->>
->> On 4/22/26 11:03 PM, Alexei Starovoitov wrote:
->>> On Wed Apr 22, 2026 at 7:50 AM PDT, Yazhou Tang wrote:
->>>> This was built for potential integration into Solana BPF and is
->>>
->>> we were thinking about adding these insns as well
->>>
->>> uhmul64_imm   dst = ((u128)dst * (u128)imm)>>64       0x77    BPF_PQR BPF_UHMUL | BPF_K       v2
->>> uhmul64_reg   dst = ((u128)dst * (u128)src)>>64       0x7f    BPF_PQR BPF_UHMUL | BPF_X       v2
->>> shmul64_imm   dst = ((i128)dst * (i128)imm)>>64       0x87    BPF_PQR BPF_SHMUL | BPF_K       v2
->>> shmul64_reg   dst = ((i128)dst * (i128)src)>>64       0x8f    BPF_PQR BPF_SHMUL | BPF_X       v2
->>>
->>> if you have kernel patches for that please share.
->>
->> We haven't implemented the interpreter and JIT backends for these
->> new uhmul64 and shmul64 instructions yet. However, we are actually
->> very familiar with these specific high-half multiplication
->> instructions, as they are already implemented in Solana BPF
->> (which we work closely with).
->>
->> We would absolutely love to take this on for the Linux kernel.
->> We can prepare the implementation across several RFC patchsets,
->> which will include:
->>
->> 1. Verifier: The value analysis for these new uhmul/shmul instructions
->>      using tnum and the upcoming cnum, backed by our formal proofs.
->> 2. Interpreter: The core implementation in kernel/bpf/core.c for
->>      these 4 instructions.
->> 3. JIT support starting with x86_64 (and subsequently arm64, etc.).
->>
->> (Note: We assume the LLVM frontend/backend support for emitting
->> these instructions might be handled separately, but we are happy
->> to provide the kernel-side implementation first).
->>
->> For the initial RFC, we plan to focus on the first two parts
->> (the Interpreter and Verifier semantics) to establish the groundwork.
+On Wed, Apr 22, 2026 at 01:29:56PM -0700, Bart Van Assche wrote:
+> On 1/10/26 5:24 AM, Christian Brauner wrote:
+> > The annual Linux Storage, Filesystem, Memory Management, and BPF
+> > (LSF/MM/BPF) Summit for 2026 will be held May 4–6, 2026 in Zagreb,
+> > Croatia.
+> > 
+> > LSF/MM/BPF is an invitation-only technical workshop to map out
+> > improvements to the Linux storage, filesystem, BPF, and memory
+> > management subsystems that will make their way into the mainline
+> > kernel within the coming years.
+> > 
+> > LSF/MM/BPF 2026 will be a three-day, stand-alone conference with four
+> > subsystem-specific tracks, cross-track discussions, as well as BoF and
+> > hacking sessions. Please check out:
+> > 
+> >            https://events.linuxfoundation.org/lsfmmbpf/
+> > 
+> > for further details on the venue and hotels.
 > 
-> We need to see end-to-end first. Which means LLVM + x86 JIT.
-> You can skip the interpreter completely.
-> The verifier needs to check safety of the operations,
-> but updates to cnum/tnum should be conservative. Just mark as unbounded.
-> No need for formal proofs or cnum work.
+> Thank you Christian for being one of the organizers of the
+> LSF/MM/BPF summit. Will a schedule be made available before the summit
+> starts? A link to the 2024 schedule is available at
+> https://lore.kernel.org/all/20240510212132.83346-1-sj@kernel.org/.
 
-Regarding new eBPF insns topic, we will give an end-to-end solution in the
-next RFC proposal once a prototype is ready. Please let me know if there
-are any additional points you would like to highlight, discuss, or share.
+The preliminary schedule is accessible here:
 
-Alternatively, we can have a deeper discussion when the prototype is ready.
+https://docs.google.com/spreadsheets/d/1mGEdDrWskp7Ua91jGXzquQGinorcD58DAVXhOiRp2Gg/edit?gid=1852749899#gid=1852749899
 
-Best wishes,
-Shenghao and Yazhou
-
+It just hasn't been liked on the website yet.
