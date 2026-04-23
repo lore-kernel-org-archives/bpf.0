@@ -1,218 +1,233 @@
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA162D23A6;
-	Thu, 23 Apr 2026 22:46:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728B037702B
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 22:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776984412; cv=none; b=N16DyVp2q26rLvfIV1e4riNjgmmKE6KpAROnTpah90AOVBBFTqDo0HBhpZjA4BZuRW3AsIW4s20EvyYdi6hEoMqqbARUW6o8gPZqpF3ySh4sM3K3hDuMaZr3M/IH0gB8dNtbX3DX7qRKHn/dSWmEbZ2L47tfvAL45MrQLlK4S7Q=
+	t=1776984691; cv=none; b=cDqELwctsD8BIlNQWWu7w2NymCUhwzSdoPE5JeNn7MvD84nEc2g4BrC1uv7tipEsp4dI08uucwWGK5uIANrAyNg1eAPW+/AO48hqfOQneg6aXU2HtxymPSEfeIMyK1WT+ZlVdRVhCrQjv49Kj3cJ/isoaYB6i6HBzS5krgo1ZFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776984412; c=relaxed/simple;
-	bh=4SbV4uHU0godCT1/3NGT36CdwDD9N3zEjz7VsiGEAZo=;
-	h=From:Date:Message-ID:To:Cc:Subject:In-Reply-To:References; b=YJGfA42sI03M5lR+tBSI6dypXTmSYZLhgrrNG0Hx/JHwfW/+Oqcvk6EebciPkVm2Kf76alLU6pMZk43Ct0p/G3uCEy2eMFtoqXY7f0Hhq9LxZEw+5FiSTyYzbrWjzMvSEdJ3iBjbMBlbmnHivjB27FtTgmuM+VmYIQuGBzy0BXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from 05-bpf-crypto-v2.eml (unknown [111.196.245.116])
-	by APP-05 (Coremail) with SMTP id zQCowADndwtMoeppMXtsDg--.13949S2;
-	Fri, 24 Apr 2026 06:46:37 +0800 (CST)
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Date: Thu, 23 Apr 2026 23:34:00 +0800
-Message-ID: <20260424070105.1-bpf-crypto-v2-pengpeng@iscas.ac.cn>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org, pengpeng@iscas.ac.cn
-Subject: [PATCH v2] bpf: crypto: snapshot params before string validation
-In-Reply-To: <20260417073128.91029-1-pengpeng@iscas.ac.cn>
-References: <20260417073128.91029-1-pengpeng@iscas.ac.cn>
-X-CM-TRANSID:zQCowADndwtMoeppMXtsDg--.13949S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3WF1Duw4UWr17Jw4kGr1ftFb_yoW7Cryrpa
-	4rW3yqk34rJr47Cry8XF4rZr1rAFyxZF13GrW5GF15KF9xXr92gF1IkrWUZFy3Xa9xWw1Y
-	yrZYk3yUuw13J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK6x804I0_JFv_Gryl8cAvFVAK0II2c7
-	xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE
-	2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjc
-	xK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr
-	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
-	rcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRMv31DUUUU
-X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
+	s=arc-20240116; t=1776984691; c=relaxed/simple;
+	bh=e9MfDyXwYaJ/aO4M5Cb9Rn2CBNJ/FcZoKFJvLAZtXmQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=o/hliYNskj0wizIciC6voTrdtaa+S4JgFQ6WBzo6aaGjakTen52UscRB13sPAFaMcQpe0kptyHavWabiCS1Td3avOUWtG+rMLdj404Hh1tjkjPtKjcojIf7Pt7v5fhENDd/3K+/BH3YmwnLZlVKPFU/Pjan6gVQmGslj9l1NkBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqanBhxc; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqanBhxc"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-362ddc1de56so668571a91.1
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 15:51:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776984687; x=1777589487; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zRWMw5VSTAJILnLr0n8Ol9m5yWC5GJz5TAzV/Evk7Mg=;
+        b=jqanBhxcC5COZ/3bWhA/OBIoC2oIgVu+9ayKpMyDN4jh2r0vHT5ydTMDnSI5StVuAc
+         /QW/ArIcGhh59weh9TyU2RuzcxuviN+6OJQ6KyFYw7JgOAXPrbk+md3UpVM954yRPe3U
+         q8osuS52muEARW55AcmlJ25gDtEwnwyiy38FSLn0r004LgfVi6/jAUCFslNfggB2UpJe
+         JH0ZVBoPKH00BWTHr+vwXwgnDW5c2Ko5jQfntAh089pzKI1IRIx5WeN4L5T5qnTLbpAX
+         tDQDsEGFEN24vbJZfuyrrCp6tBghy9TeuSDr/Pd5NEwqPDyWxd/a+s4aWybR1BqszYJQ
+         tl9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776984687; x=1777589487;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zRWMw5VSTAJILnLr0n8Ol9m5yWC5GJz5TAzV/Evk7Mg=;
+        b=iJX4/ylcEtTwu4GHgH+LFs/vwW2BCEKsJz+fidefq2Q5W/LegI51MhqbqpEwgmOGmg
+         J2QOCDSwf2xwg89AXICuy8ExZpACSPL9fWmkoj7SK5mi1QQ4dcR3BmuoelX5dSPEoHUu
+         2OEYWfkKnLzchfzu7Q0Q6Ec/0Q7bozEEZhTO51/11qPbCiht2yMppDtgkM38wEIek/A2
+         3voGJRtquipexcAlbzhvqN1J7T4mi+kv9s3FDm+Ape2v4B3aWPKc3usGdzD/Yrlf0uKl
+         bOQPrALzvHDnunO3OIImDk/Gjl9iI7xu9Od1t4BJlW6SYPC+HMXaF8OzKy2Y0XpMzoV+
+         bgTw==
+X-Gm-Message-State: AOJu0YwgcHdhcBXbiCfl/RxgYAP/vMehu030jo6gquNCYAJq5BxMbnz6
+	W93LTesKEhVGsIHAT638tiVN8ars6MCqITp8uj6YZVeTsXKvD49lu5zHPk34L8Oj
+X-Gm-Gg: AeBDietwcilLMJHFsGqZhIrIdSSAbT/VkgE6vmxg7VEMdIXnnCzeizEOSCORbT92Jlj
+	ehlBiKeZ9d4bxc/8mJVPxGHC3e1NjlrU/nDUBdg1ABCI+KQwxJwim0X5/8ci0DLaePK3KB7rsYO
+	iBGYI/Ehzy9Fi+rat9FvOtVn/4ago/LORvJqGdUcLD02pmbqQ8LKBnxdXm9dnY6P00C9ndlScPD
+	JD3lvOwVjdYaVhKAfe4TRgd5POE69605WxuNGkqNY86zIKQOUDSQIXybtw+cgowuXjCEDd2H/dt
+	DdrAE99xtkmuF0wdAaNeaUVTceKx1zDovrTxRDQ7jJ0Z9JPrTU83cVf3jgt4RUUbTZYXPpQq5cu
+	WiBUo6t70eZiSgDvloNNyURStiG5xjn+Wc5oNrciQP2kZ6a/PURvv3Y+ema+eJ/Dex+9H1LOKKn
+	JLIwLGqWM8e4yoBcd5yojJSf0Rg37J6bpA8Lii4pUii0Ep++rvC7fiDks0y1ctAUg=
+X-Received: by 2002:a17:90b:3d0f:b0:35f:b5df:463 with SMTP id 98e67ed59e1d1-36140469b62mr27636560a91.14.1776984687464;
+        Thu, 23 Apr 2026 15:51:27 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-361410b998fsm21195718a91.13.2026.04.23.15.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 15:51:27 -0700 (PDT)
+Message-ID: <0c47b0b7ea476647746806c46fded4353be885f7.camel@gmail.com>
+Subject: Re: [PATCH RFC bpf-next 1/4] bpf: representation and basic
+ operations on circular numbers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: sashiko@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Date: Thu, 23 Apr 2026 15:51:24 -0700
+In-Reply-To: <20260421171830.3881BC2BCB5@smtp.kernel.org>
+References: <20260421-cnums-everywhere-rfc-v1-v1-1-8f8e98537f48@gmail.com>
+	 <20260421171830.3881BC2BCB5@smtp.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-bpf_crypto_ctx_create() receives a BPF-supplied params pointer. The
-current selftests use static initializers, but BPF programs can also
-build the struct in writable BPF memory before calling the kfunc. The
-verifier checks that the memory is accessible; it does not prove that
-the fixed type[] and algo[] fields are NUL-terminated strings.
+On Tue, 2026-04-21 at 17:18 +0000, sashiko-bot@kernel.org wrote:
 
-Copy the params once into a local snapshot, validate the reserved fields
-and fixed-width strings there, and then use the same snapshot for all
-later checks and crypto API calls. This also keeps key_len and authsize
-stable across validation and use if params points at mutable BPF memory.
+[...]
 
-Add a selftest that fills algo[] completely and expects -EINVAL.
+> > diff --git a/kernel/bpf/cnum_defs.h b/kernel/bpf/cnum_defs.h
+> > new file mode 100644
+> > index 0000000000000..28dcb79ba6950
+> > --- /dev/null
+> > +++ b/kernel/bpf/cnum_defs.h
+> [ ... ]
+> > +#if T =3D=3D 32
+> > +#define ut2 u64
+> > +#define st2 s64
+> > +#define utt u32
+> > +#define stt s32
+> > +#define EMPTY CNUM32_EMPTY
+> > +#elif T =3D=3D 64
+> > +#define ut2 unsigned __int128
+> > +#define st2 signed __int128
+>
+> Will the unconditional use of unsigned __int128 and signed __int128 break
+> compilation on 32-bit architectures? Since the BPF subsystem and verifier
+> are built on 32-bit kernels when CONFIG_BPF_SYSCALL is enabled, this
+> might cause widespread build failures.
 
-Fixes: 3e1c6f35409f ("bpf: make common crypto API for TC/XDP programs")
-Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
----
-Changes since v1:
-- copy struct bpf_crypto_params into a local snapshot before validation
-- use the snapshot for all string, key_len and authsize checks and uses
-- add a BPF selftest for an unterminated algorithm name
+Forgoing __int128 would require something along the following lines:
 
-diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-index 51f89cecefb4..e2dc3dfb4d85 100644
---- a/kernel/bpf/crypto.c
-+++ b/kernel/bpf/crypto.c
-@@ -147,31 +147,46 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
- 		      int *err)
- {
- 	const struct bpf_crypto_type *type;
-+	struct bpf_crypto_params params_copy;
- 	struct bpf_crypto_ctx *ctx;
- 
--	if (!params || params->reserved[0] || params->reserved[1] ||
--	    params__sz != sizeof(struct bpf_crypto_params)) {
-+	if (!params || params__sz != sizeof(params_copy)) {
- 		*err = -EINVAL;
- 		return NULL;
- 	}
- 
--	type = bpf_crypto_get_type(params->type);
-+	params_copy = *params;
-+
-+	if (params_copy.reserved[0] || params_copy.reserved[1]) {
-+		*err = -EINVAL;
-+		return NULL;
-+	}
-+
-+	if (strnlen(params_copy.type, sizeof(params_copy.type)) ==
-+	    sizeof(params_copy.type) ||
-+	    strnlen(params_copy.algo, sizeof(params_copy.algo)) ==
-+	    sizeof(params_copy.algo)) {
-+		*err = -EINVAL;
-+		return NULL;
-+	}
-+
-+	type = bpf_crypto_get_type(params_copy.type);
- 	if (IS_ERR(type)) {
- 		*err = PTR_ERR(type);
- 		return NULL;
- 	}
- 
--	if (!type->has_algo(params->algo)) {
-+	if (!type->has_algo(params_copy.algo)) {
- 		*err = -EOPNOTSUPP;
- 		goto err_module_put;
- 	}
- 
--	if (!!params->authsize ^ !!type->setauthsize) {
-+	if (!!params_copy.authsize ^ !!type->setauthsize) {
- 		*err = -EOPNOTSUPP;
- 		goto err_module_put;
- 	}
- 
--	if (!params->key_len || params->key_len > sizeof(params->key)) {
-+	if (!params_copy.key_len || params_copy.key_len > sizeof(params_copy.key)) {
- 		*err = -EINVAL;
- 		goto err_module_put;
- 	}
-@@ -183,19 +198,19 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
- 	}
- 
- 	ctx->type = type;
--	ctx->tfm = type->alloc_tfm(params->algo);
-+	ctx->tfm = type->alloc_tfm(params_copy.algo);
- 	if (IS_ERR(ctx->tfm)) {
- 		*err = PTR_ERR(ctx->tfm);
- 		goto err_free_ctx;
- 	}
- 
--	if (params->authsize) {
--		*err = type->setauthsize(ctx->tfm, params->authsize);
-+	if (params_copy.authsize) {
-+		*err = type->setauthsize(ctx->tfm, params_copy.authsize);
- 		if (*err)
- 			goto err_free_tfm;
- 	}
- 
--	*err = type->setkey(ctx->tfm, params->key, params->key_len);
-+	*err = type->setkey(ctx->tfm, params_copy.key, params_copy.key_len);
- 	if (*err)
- 		goto err_free_tfm;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-index 42bd07f7218d..044711e7263a 100644
---- a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-+++ b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-@@ -117,6 +117,19 @@ void test_crypto_sanity(void)
- 	udp_test_port = skel->data->udp_test_port;
- 	memcpy(skel->bss->key, crypto_key, sizeof(crypto_key));
- 	snprintf(skel->bss->algo, 128, "%s", algo);
-+
-+	pfd = bpf_program__fd(skel->progs.skb_crypto_setup_bad_algo);
-+	if (!ASSERT_GT(pfd, 0, "skb_crypto_setup_bad_algo fd"))
-+		goto fail;
-+
-+	err = bpf_prog_test_run_opts(pfd, &opts);
-+	if (!ASSERT_OK(err, "skb_crypto_setup_bad_algo") ||
-+	    !ASSERT_OK(opts.retval, "skb_crypto_setup_bad_algo retval"))
-+		goto fail;
-+
-+	if (!ASSERT_OK(skel->bss->status, "skb_crypto_setup_bad_algo status"))
-+		goto fail;
-+
- 	pfd = bpf_program__fd(skel->progs.skb_crypto_setup);
- 	if (!ASSERT_GT(pfd, 0, "skb_crypto_setup fd"))
- 		goto fail;
-diff --git a/tools/testing/selftests/bpf/progs/crypto_sanity.c b/tools/testing/selftests/bpf/progs/crypto_sanity.c
-index dfd8a258f14a..32977b797042 100644
---- a/tools/testing/selftests/bpf/progs/crypto_sanity.c
-+++ b/tools/testing/selftests/bpf/progs/crypto_sanity.c
-@@ -82,6 +82,34 @@ int skb_crypto_setup(void *ctx)
- 	return 0;
- }
- 
-+SEC("syscall")
-+int skb_crypto_setup_bad_algo(void *ctx)
-+{
-+	struct bpf_crypto_params params = {
-+		.type = "skcipher",
-+		.key_len = 16,
-+	};
-+	struct bpf_crypto_ctx *cctx;
-+	int err = 0;
-+
-+	status = 0;
-+
-+	__builtin_memset(params.algo, 'a', sizeof(params.algo));
-+	__builtin_memcpy(&params.key, key, sizeof(key));
-+
-+	cctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
-+	if (cctx) {
-+		bpf_crypto_ctx_release(cctx);
-+		status = -EIO;
-+		return 0;
-+	}
-+
-+	if (err != -EINVAL)
-+		status = err;
-+
-+	return 0;
-+}
-+
- SEC("tc")
- int decrypt_sanity(struct __sk_buff *skb)
- {
--- 
-2.50.1 (Apple Git-155)
+  /* *result =3D c*d - a*b, if fits in u32; all operands unsigned */
+  static bool check_mul_u32_u32_sub(u32 a, u32 b, u32 c, u32 d, u32 *result=
+)
+  {
+          u64 size =3D (u64)c * d - (u64)a * b;
 
+          if (size > U32_MAX)
+                  return false;
+          *result =3D size;
+          return true;
+  }
+
+  /* *result =3D c*d - a*b, if fits in u32; all operands signed */
+  static bool check_mul_s32_s32_sub(s32 a, s32 b, s32 c, s32 d, u32 *result=
+)
+  {
+          s64 size =3D (s64)c * d - (s64)a * b;
+
+          if (size > U32_MAX)
+                  return false;
+          *result =3D size;
+          return true;
+  }
+
+  /* Return (s128)a * b >> shift */
+  static s64 mul_s64_s64_shr(s64 a, s64 b, unsigned int shift)
+  {
+          return mul_s64_u64_shr(a, abs(b), shift) * (b < 0 ? -1 : 1);
+  }
+
+  /* *result =3D c*d - a*b, if fits in u64; all operands unsigned */
+  static bool check_mul_u64_u64_sub(u64 a, u64 b, u64 c, u64 d, u64 *result=
+)
+  {
+          u64 cd_hi =3D mul_u64_u64_shr(c, d, 64);
+          u64 cd_lo =3D c * d;
+          u64 ab_hi =3D mul_u64_u64_shr(a, b, 64);
+          u64 ab_lo =3D a * b;
+          u64 borrow =3D cd_lo < ab_lo;
+          u64 hi =3D cd_hi - ab_hi - borrow;
+
+          if (hi !=3D 0)
+                  return false;
+          *result =3D cd_lo - ab_lo;
+          return true;
+  }
+
+  /* *result =3D c*d - a*b, if fits in u64; all operands signed */
+  static bool check_mul_s64_s64_sub(s64 a, s64 b, s64 c, s64 d, u64 *result=
+)
+  {
+          s64 cd_hi =3D mul_s64_s64_shr(c, d, 64);
+          u64 cd_lo =3D (u64)c * (u64)d;
+          s64 ab_hi =3D mul_s64_s64_shr(a, b, 64);
+          u64 ab_lo =3D (u64)a * (u64)b;
+          u64 borrow =3D cd_lo < ab_lo;
+          s64 hi =3D cd_hi - ab_hi - borrow;
+
+          if (hi !=3D 0)
+                  return false;
+          *result =3D cd_lo - ab_lo;
+          return true;
+  }
+
+For use in mk_mul_{u,s}. This is on top of the following functions:
+- cnum{32,64}_gap
+- cnum{32,64}_extend
+- cnum{32,64}_bigger
+- cnum{32,64}_union
+- cnum{32,64}_cut
+- cnum{32,64}_mk_mul_{u,s}
+- cnum{32,64}_mul_chunk
+- cnum{32,64}_mul
+
+Overall +230 lines of non-trivial code.
+I did some work to consolidate existing checks in [1], and was unable
+to get union, cut and mul_chunk verified for 32-bit and 64-bit domains,
+cbmc does not converge to an answer. I'm a bit hesitant regarding
+brute-force 8-bit domain verification: there were a few non-trivial
+bugs in check_mul because of C implicit cast rules and 8-bit testing
+did not reveal them. Looks like a theorem prover is needed indeed.
+
+[1] https://github.com/eddyz87/cnum-verif/tree/consolidated-checks
+
+I tried reinstating the old mul implementation:
+
+  static void scalar_min_max_mul(struct bpf_reg_state *dst_reg,
+                                  struct bpf_reg_state *src_reg)
+  {
+          s64 smin =3D reg_smin(dst_reg);
+          s64 smax =3D reg_smax(dst_reg);
+          u64 umin =3D reg_umin(dst_reg);
+          u64 umax =3D reg_umax(dst_reg);
+          s64 tmp_prod[4];
+ =20
+          if (check_mul_overflow(umax, reg_umax(src_reg), &umax) ||
+              check_mul_overflow(umin, reg_umin(src_reg), &umin)) {
+                  /* Overflow possible, we know nothing */
+                  umin =3D 0;
+                  umax =3D U64_MAX;
+          }
+          if (check_mul_overflow(smin, reg_smin(src_reg), &tmp_prod[0]) ||
+              check_mul_overflow(smin, reg_smax(src_reg), &tmp_prod[1]) ||
+              check_mul_overflow(smax, reg_smin(src_reg), &tmp_prod[2]) ||
+              check_mul_overflow(smax, reg_smax(src_reg), &tmp_prod[3])) {
+                  /* Overflow possible, we know nothing */
+                  smin =3D S64_MIN;
+                  smax =3D S64_MAX;
+          } else {
+                  smin =3D min_array(tmp_prod, 4);
+                  smax =3D max_array(tmp_prod, 4);
+          }
+ =20
+          dst_reg->r64 =3D cnum64_intersect(cnum64_from_urange(umin, umax),
+                                          cnum64_from_srange(smin, smax));
+  }
+
+As it still handles cases like [+-a, +-b] x [+-b, +-d] reasonably well
+for bounded a, b, c, d. As a result:
+- no tests failed
+- no difference in veristat results.
+
+Therefore, for v2 I'll drop cnum{32,64}_mul completely and defer to
+the old code (or move it inside cnum_defs.h to avoid code duplication).
+
+
+[...]
