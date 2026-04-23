@@ -1,127 +1,86 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2D6495E5
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 10:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE27B378826
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 10:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776938451; cv=none; b=ADz2kPAxMy03dl+89zSN3dURidVGOixSQY3raff/zswjLX29DDsn64jfoK6SFaIV2VBtMq1lhB5V3Rn9VOaMQBKrMJfXO23NhkdPoAsLX8gYqJDF7JTj3VQNGESbr2g6f1SYKwDn5nWX74ny4cT7AkF12QVcPksuIfIFQ+FEhTI=
+	t=1776938712; cv=none; b=hxNS5HS5Kfup4MSobeU5NxgEBN2L+0Sntjld73tYUfnukPWnACfOuJqB+OLUC5Wz30qGSnRxgQO5XvHRjvbbZFa79NkpIxNk7zcQUSOm53GjqFd2fqDYQa5V2rW8IySCVrZUUwyWNSm+Wh1VTzvwvmRxTAlKGAcNvmgQcaeBZ2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776938451; c=relaxed/simple;
-	bh=6YSRFx/xLUfwsStb1hOKtfHOIBZE0clVGW0Gy0xvhGc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ekZjOm2qt0JeNSM3fXm7sXW8hIG9Jdv8/vF0MqM8l8nppiqgY/HatlcKQ4sZ4NzcLU9N2jNhtMEXfQlX+Vyf4sjwVLX2iNtRWf/7PbDNkzJhnYLFcfs3lqn2kCvFdN+a9O1loNNGdY68a8V1czR8sh5VWOTV3/WeIveAQ7m6e0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rJpsT7o0; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1776938712; c=relaxed/simple;
+	bh=i1zkuOfK2oa60zamft2ydH2wOZPL7jVwfZn3W8QrczY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=onwX8EvrhQU4hrmhEoV9CZSh+5c6c0kT/NcHLsmyGN2CRiow+aou4C+LDfa0uAFCAtQ0sIaN1ETTkqNgAQmCqlrj3ozaugEC/kW/3Qq5FQwS8JWgRxOVPYaqE243uq3n/++OxqzbXPcstFeacsHTpFplRahBwVcuRKpcZhxtM6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BI56fI0J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rJpsT7o0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=1sRmxUIkJG+hj/Rc5f5WwbTnwNnoECnWRHUdSGe3FhU=; b=rJpsT7o0J5kdc/DUwJ39RpXrLq
-	DLbQf618Xevm+wxJdFXWHAEr+7uk+CM0x9VJNsogIdBK+PjzUXGaPsaLw8EprQxuye9EOyMZc4xGs
-	iiz9gR2h3RK03YV12A14k0BklcisilrhwPQrvGqGhu2ltFczKuoD7BQ37bVAt7BgjMypfam73DnOm
-	wKZtNEhgYO5ITm3POnu7sJ29hrp11P2oQuXMysQYnq21DUOwSoRkOzQ9mhTmU9gAVIkyHX35odzqp
-	fnX9x7CNP3K0wvpR20cZZ66w7nVmXSw/b0H7K3P2GXRQYnPD5eS+FRZSJobA0LAyXL3vXt4v1UCDc
-	gB+LR5nA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wFqrS-0000000DE0Y-2COT;
-	Thu, 23 Apr 2026 10:00:42 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1B0CD300BD2; Thu, 23 Apr 2026 12:00:42 +0200 (CEST)
-Date: Thu, 23 Apr 2026 12:00:42 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-	kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com,
-	memxor@gmail.com, rostedt@goodmis.org,
-	Mykyta Yatsenko <yatsenko@meta.com>
-Subject: Re: [PATCH bpf-next v11 2/6] bpf: Add bpf_prog_run_array_sleepable()
-Message-ID: <20260423100042.GC3126523@noisy.programming.kicks-ass.net>
-References: <20260421-sleepable_tracepoints-v11-0-d8ff138d6f05@meta.com>
- <20260421-sleepable_tracepoints-v11-2-d8ff138d6f05@meta.com>
- <DHZ4I3RWVVCU.16XRZX1HPFI8K@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BI56fI0J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E0BC2BCB5
+	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 10:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776938712;
+	bh=i1zkuOfK2oa60zamft2ydH2wOZPL7jVwfZn3W8QrczY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BI56fI0JWqhYIOV4jr6a4CGNeLHtGRYeaJtvSzU2IdPkmYCt4JhOzd+glu41b1gV6
+	 47LdApGPFXc7XbYOcGFNMW4iUtDmGUrdNPKPoWyMRT7B1KYeoiYasMK5YKQZpoq/F9
+	 TJraiW8L3CDESN8eTRx/u6f/PHkDo0N84gogsP9Kwpgc/swS0cizcTi2QHWpBKa+3c
+	 1FoUbCMw3k6MtUF8zlhAMPbAUp6qw5PXRHg0Sz5oFi1McglZMTu/6UUR0IRHzCcFNX
+	 2kaX0IV719INEInrVNAwoM5WwtX2arTflxZvSCMpOqQeuWdNDuvVTPAOoTSg1bD/Q6
+	 4ZsuiwHQXP4xA==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ba51e69988aso843449566b.0
+        for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 03:05:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8Wp2HS8zpUzN8CMSpvEvmiR/Iw7m0fwUw/oUrx1+5KLcDB3ClPbFvCEBZ323Jf8Ajvj+A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn9EpaJoWq+QTg+RbakZbfUCi1rXhYa1f1n3sV344uhMt5sQI7
+	OvB3tAmo0MoDkuZ0LeUtlQ8oxmRMsa9OhFDmV66FbAgdLM3IV5s5i6g0cJWQiU1u0EIwpkx76/j
+	l+Z7qkpaCVpE31QqVOX/Di6N2koGTxlY=
+X-Received: by 2002:a17:907:9484:b0:bac:6b01:8925 with SMTP id
+ a640c23a62f3a-bac6b018b2bmr96646266b.22.1776938711131; Thu, 23 Apr 2026
+ 03:05:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DHZ4I3RWVVCU.16XRZX1HPFI8K@gmail.com>
+References: <20260422232407.3862942-1-chenhengqi@outlook.com>
+In-Reply-To: <20260422232407.3862942-1-chenhengqi@outlook.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 23 Apr 2026 18:05:24 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6sL7xO4+rLpWphuBkwoChMDb-7RiFuFaWmK62QeXbD7Q@mail.gmail.com>
+X-Gm-Features: AQROBzAVHDkmi1gh8ADEhpZiygd4AOvh3N2wjkUzubnaYiehT2gnF4DtSTbc45U
+Message-ID: <CAAhV-H6sL7xO4+rLpWphuBkwoChMDb-7RiFuFaWmK62QeXbD7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] bpf: fsession support for LoongArch
+To: Hengqi Chen <hengqi.chen@gmail.com>
+Cc: yangtiezhu@loongson.cn, vincent.mc.li@gmail.com, menglong8.dong@gmail.com, 
+	loongarch@lists.linux.dev, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 21, 2026 at 01:42:25PM -0700, Alexei Starovoitov wrote:
-> > +static __always_inline u32
-> > +bpf_prog_run_array_sleepable(const struct bpf_prog_array *array,
-> > +			     const void *ctx, bpf_prog_run_fn run_prog)
-> > +{
-> > +	const struct bpf_prog_array_item *item;
-> > +	struct bpf_prog *prog;
-> > +	struct bpf_run_ctx *old_run_ctx;
-> > +	struct bpf_trace_run_ctx run_ctx;
-> > +	u32 ret = 1;
-> > +
-> > +	might_fault();
-> > +	RCU_LOCKDEP_WARN(!rcu_read_lock_trace_held(), "no rcu lock held");
-> 
-> The only caller of this function is in the next patch trace_call_bpf_faultable()
-> that does 
-> +	might_fault();
-> +	guard(rcu_tasks_trace)();
-> 
-> imo above two lines are redunant.
-> We can defensive programming when another caller appears.
-> 
-> > +
-> > +	if (unlikely(!array))
-> > +		return ret;
-> > +
-> > +	migrate_disable();
-> > +
-> > +	run_ctx.is_uprobe = false;
-> > +
-> > +	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
-> > +	item = &array->items[0];
-> > +	while ((prog = READ_ONCE(item->prog))) {
-> > +		/* Skip dummy_bpf_prog placeholder (len == 0) */
-> > +		if (unlikely(!prog->len)) {
-> > +			item++;
-> > +			continue;
-> > +		}
-> > +
-> > +		if (!prog->sleepable)
-> > +			rcu_read_lock();
-> > +
-> > +		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
-> > +			bpf_prog_inc_misses_counter(prog);
-> > +			bpf_prog_put_recursion_context(prog);
-> > +			if (!prog->sleepable)
-> > +				rcu_read_unlock();
-> 
-> Why grab rcu_read_lock() and undo it?
-> imo it would be cleaner and faster to do 
-> bpf_prog_get_recursion_context() here ...
-> 
-> > +			item++;
-> > +			continue;
-> > +		}
-> > +
-> > +		run_ctx.bpf_cookie = item->bpf_cookie;
-> > +		ret &= run_prog(prog, ctx);
-> 
-> ... and then here:
-> if (!prog->sleepable) {
->   guard(rcu)();
->   ret &= run_prog(prog, ctx);
-> } else {
->   ret &= run_prog(prog, ctx);
-> }
+Applied with small modifications, hope it still works well.
 
-Right, but the whole thing is called bpf_prog_run_array_sleepable(), why
-are we doing silly things like this instead of hard assuming things
-are sleepable and calling it a day?
+Huacai
+
+On Thu, Apr 23, 2026 at 7:24=E2=80=AFAM Hengqi Chen <hengqi.chen@gmail.com>=
+ wrote:
+>
+> From: Hengqi Chen <hengqi.chen@gmail.com>
+>
+> This small set implements fsession support for LoongArch.
+>
+> Patch 1 introduces a helper named emit_store_stack_imm64().
+> Patch 2 implements fsession support.
+>
+> changelog:
+> v1->v2:
+>   * rebase against latest loongarch-next branch
+>   * drop patch 3, selftest is enabled by default
+>   * add Reviewed-by tag
+>
+> Hengqi Chen (2):
+>   LoongArch: BPF: Introduce emit_store_stack_imm64() helper
+>   LoongArch: BPF: Add fsession support for trampolines
+>
+>  arch/loongarch/net/bpf_jit.c | 99 ++++++++++++++++++++++++++++--------
+>  1 file changed, 79 insertions(+), 20 deletions(-)
+>
+> --
+> 2.43.5
