@@ -1,114 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5000C263F4A
-	for <bpf@vger.kernel.org>; Thu, 23 Apr 2026 23:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A62D34D90E;
+	Thu, 23 Apr 2026 23:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776985953; cv=none; b=ZJg3GhsUwgxBpsmrWBOUQ0NluyUW5qnAOEuvfxYSg/graLOmENIGdlQobP6FDpUAIzznbYd/D3SWP6cLfWWd5YoTTBhALjg62xXo+6EcJsQt7H2AEly63egAHNSp/TysKzgl5P1QLnUKRyFH2IL/kCwZ+c5gbkQ6jWMgW2rYj9Y=
+	t=1776986782; cv=none; b=t1Qk+yO+gOk7AmM8yqr4T3shRPocj1O0WYHWnfJmMkRdOA3XQuSg7Ka9GNGm3dZZ4mWgJFFPxK+5DW2sCWHUP78kFz/HdH0HCAaT7ZjMx2zDdGKm01yIbkxm1l3dQeZS3ibVjbTo/4sDwzeERxtPx1+ukRdSVTaZf1I9bUUXWas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776985953; c=relaxed/simple;
-	bh=jmSM14PyT5GeBytIH/HziUJ3I3CHILernO+bnIfjbvU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uQGSErRpV+JJbU6//YxAm4ioXMfhcF1qGX3IoiLl8nCz7mty1XDYSM6gV+ZpHrW6vHWrvc1eqBGwYAcGjG+ymlnIOfwJhbo+r8co0SMNdSBvfNrTcvVx1f4dLChUx+XfD6YigB2HhvKzVnXe9FXxgZyj+ZJELZRC/K6eacj0wYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rsc5BdOa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776986782; c=relaxed/simple;
+	bh=vMJQBa5zmzOAcaZtVAWU6wleEYJ5jJl9bsl9eKfiVzg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U5uMr2ZfidaZh9CAcW9xie0wOLU1t6GG4Fmt4fZlFt+lGxVv9PIG6YLNX+O+CmvuJaVuhYZoPa3YePut9swGq9jvIBf8KZtqCKB9JIscyUdaf0bczxkB5ut2QEYZsXPfEfHag1MqZFfUQkNANRdfWiQrtQLR9d4VsbzPGle6rqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q85Pf2c3; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rsc5BdOa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8AE5C2BCAF;
-	Thu, 23 Apr 2026 23:12:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776985953;
-	bh=jmSM14PyT5GeBytIH/HziUJ3I3CHILernO+bnIfjbvU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=rsc5BdOa77YF7KN8sLBsATPsqThmTQMMmeirRzP0zdPcp3J1wH8OD+VLc+iDuHOhy
-	 M3WPz5ZPSN0PACL6O4ZkF6mh60zUJWf1449bkdHLtfqqWvXslwfjbOGLHB1Gg5s2de
-	 bal5nJ9n0hLKFM8mWHlvz7+TEEQeb52liMn59wei5n68byxF0Tp333A0cqUvgAsqyM
-	 TQyND30xB8GEZq+3uhDNONoAL93lPUL5SPktOP0ZaHfjUQqicVxFdgE6Cjo5yf4rQs
-	 UrxSgld63EbgBkdH0lgl0LcNoLIqGjuFl7Kox0gUChU36KszujJnY21aMxcxoubz8r
-	 H2+JNwbcDhU5g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] bpf: crypto: snapshot params before string
- validation
-Reply-To: sashiko@lists.linux.dev
-To: "Pengpeng Hou" <pengpeng@iscas.ac.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260424070105.1-bpf-crypto-v2-pengpeng@iscas.ac.cn>
-References: <20260424070105.1-bpf-crypto-v2-pengpeng@iscas.ac.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 23 Apr 2026 23:12:32 +0000
-Message-Id: <20260423231232.C8AE5C2BCAF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q85Pf2c3"
+Message-ID: <a739cf27-a65a-40da-830d-edda27bfa6b7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776986777;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bycuOgk3I1MKhMIM80x+6ULtiN6q6gNeSnWYfwMp2UQ=;
+	b=Q85Pf2c3c+FeYg1SoeAxmKVmNYmFRy5EPFvL8r7Ld8slAdmuqei/5BBGZqFglkUiiMOy2Z
+	MfYNQ15FZq4HzXDe2ZfGA8LHPBweQJSLvIaxmRuqJ+WAfrUrugHSRImkzObKBglbNmpvwG
+	3wrJVtgivZKCi5yjrw0ltpfsKWcwbgY=
+Date: Thu, 23 Apr 2026 16:25:50 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+To: Chengkaitao <pilgrimtao@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, leon.hwang@linux.dev,
+ Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, memxor@gmail.com
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Chengkaitao <chengkaitao@kylinos.cn>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20260329140506.9595-1-pilgrimtao@gmail.com>
+ <20260329140506.9595-2-pilgrimtao@gmail.com>
+ <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
+ <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
+ <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev>
+ <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
+ <82148eb1-f270-48f1-8900-e0becc6384e8@linux.dev>
+ <CAAWJmAZQHmgKXgr0xN5sHWUGyu43xLyg4eG7yBrMDi7YALrKsw@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAAWJmAZQHmgKXgr0xN5sHWUGyu43xLyg4eG7yBrMDi7YALrKsw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Sashiko AI review found 2 potential issue(s):
-- [Medium] Cryptographic key material is left on the kernel stack without b=
-eing zeroized.
-- [Low] Unnecessary and technically incorrect file descriptor validation fo=
-r a skeleton-generated program.
---
+On 4/9/26 7:53 PM, Chengkaitao wrote:
+> On Wed, Apr 8, 2026 at 2:41 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> On 4/4/26 3:38 AM, Chengkaitao wrote:
+>>>
+>>> It pushes us to untangle messy verifier safety cases and make them modular,
+>>> so they can be expressed as parameters to BPF_VERIF_KFUNC_DEF
+>>
+>> Again, I agree with the premise that verifier safety checks could
+>> become more modular where possible. But I think we should first
+>> separate two questions:
+>>
+>> 1. What kfunc properties should be declared centrally?
+>> 2. Where that declaration should live?
+>>
+>> While I'd like to answer (1) with "all of them", I am not convinced
+>> the answer to (2) is .BTF_ids or BTF. A better C side declarative
+>> representation would give us most of the benefit here without making
+>> the BTF tooling more complex.
+>>
+>> Here is how I think we should move forward:
+>>
+>>   1. Your bpf_list_* work is orthogonal to BTF_ID refactoring, so it's
+>>   reasonable to first focus on landing it without changes to generic
+>>   kfunc handling.
+> 
+> There is no consensus on whether the patch below should exist at all.
+> [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using table-driven ...
 
-commit 4025cf60c980030df8d7712c14d6f5b70e1660b8
-Author: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Hi Kaitao,
 
-bpf: crypto: snapshot params before string validation
+I think this refactoring patch should be dropped from the series.
+For now use the established pattern with special_kfunc_list, and don't
+introduce new _impl kfuncs.
 
-This commit updates bpf_crypto_ctx_create() to snapshot the BPF-provided
-parameters into a local stack variable before validating them. This prevents
-issues where BPF programs might modify the memory during validation. It also
-adds a selftest for testing invalid crypto algorithms.
+> 
+> Should we drop it entirely, or limit its scope to the is_bpf_* helpers
+> that contain a large number of btf_id == special_kfunc_list[*]-style
+> checks—for example by reverting to v8 or an earlier revision?
 
-> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-> index 51f89cecefb4dc..e2dc3dfb4d8540 100644
-> --- a/kernel/bpf/crypto.c
-> +++ b/kernel/bpf/crypto.c
-[ ... ]
-> @@ -147,31 +147,46 @@ bpf_crypto_ctx_create(const struct bpf_crypto_param=
-s *params, u32 params__sz,
->  		      int *err)
->  {
->  	const struct bpf_crypto_type *type;
-> +	struct bpf_crypto_params params_copy;
->  	struct bpf_crypto_ctx *ctx;
-[ ... ]
-> +	params_copy =3D *params;
+I don't think "reverting to v8" will work. Since you've sent v9
+significant changes to the verifier.c have been landed, so you have
+some rebase work to do anyways.  I suggest you minimize unnecessary
+refactoring in this series, and focus on bpf_list_* api extension.
 
-Does this leave plain-text cryptographic keys on the kernel stack?
+pw-bot: cr
 
-The struct bpf_crypto_params contains key material. By copying the caller's
-structure into the local params_copy variable, the key is placed on the
-stack. Should params_copy be cleared using memzero_explicit() before the
-function returns on both success and error paths to prevent potential
-information leaks?
+Thanks, and apologies for slow reply.
 
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c b/too=
-ls/testing/selftests/bpf/prog_tests/crypto_sanity.c
-> index 42bd07f7218dc3..044711e7263a8f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
-[ ... ]
-> @@ -117,6 +117,19 @@ void test_crypto_sanity(void)
->  	udp_test_port =3D skel->data->udp_test_port;
->  	memcpy(skel->bss->key, crypto_key, sizeof(crypto_key));
->  	snprintf(skel->bss->algo, 128, "%s", algo);
-> +
-> +	pfd =3D bpf_program__fd(skel->progs.skb_crypto_setup_bad_algo);
-> +	if (!ASSERT_GT(pfd, 0, "skb_crypto_setup_bad_algo fd"))
 
-Is this file descriptor check necessary?
+> https://lore.kernel.org/all/20260316112843.78657-2-pilgrimtao@gmail.com/
+> 
+> cc: Alexei Starovoitov, Emil Tsalapatis, Leon Hwang, Mykyta Yatsenko,
+>       Kumar Kartikeya Dwivedi
+> 
+>>   2. I plan to send patches (soon) for resolve_btfids, and then for
+>>   BTF_ID macrology to eliminate the enum + array pattern. You are
+>>   welcome to join the discussion and review / test the patches.
+>>
+>>   3. After all of the above lands, we can come back to the general
+>>   BTF_ID / kfunc handling discussion. If you are interested in
+>>   developing this further, I suggest to re-think the approach and come
+>>   up with a "single kfunc metadata definition" that doesn't require
+>>   significant changes in .BTF_ids section layout.
+>>
+>> A slightly off-topic comment: the usage of `_impl` pattern for kfuncs
+>> should be considered deprecated. Any new kfuncs that work with
+>> verifier-supplied arguments should use KF_IMPLICIT_ARGS mechanism.  So
+>> the `bpf_list_add_impl` in your seires should only have one version:
+>> `bpf_list_add` marked with KF_IMPLICIT_ARGS flag.
+> 
 
-After a successful skeleton open_and_load(), the skeleton-generated program
-fields are guaranteed to contain valid file descriptors, making manual
-validation redundant.
-
-Additionally, 0 is a valid file descriptor in Linux. If the test program
-received FD 0, using ASSERT_GT(pfd, 0) would incorrectly cause the test to
-fail. Could this be removed?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260424070105.1-bp=
-f-crypto-v2-pengpeng@iscas.ac.cn?part=3D1
